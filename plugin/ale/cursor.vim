@@ -53,6 +53,10 @@ function! ale#cursor#TruncatedEcho(message)
 endfunction
 
 function! ale#cursor#EchoCursorWarning()
+    if !exists('b:ale_loclist')
+        return
+    endif
+
     let pos = getcurpos()
 
     let index = s:BinarySearch(b:ale_loclist, pos[1], pos[2])

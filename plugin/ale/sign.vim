@@ -26,7 +26,9 @@ sign define ALEWarningSign text=-- texthl=ALEWarningSign
 
 " This function will set the signs which show up on the left.
 function! ale#sign#SetSigns(loclist)
-    sign unplace *
+    let buffer = bufnr('%')
+
+    exec 'sign unplace * buffer=' . buffer
 
     for i in range(0, len(a:loclist) - 1)
         let obj = a:loclist[i]
