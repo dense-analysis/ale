@@ -15,4 +15,4 @@ follow later.
 
 ## Known Bugs
 
-1. Warnings are cleared when a syntax error is hit with eslint.
+(None at the moment)
