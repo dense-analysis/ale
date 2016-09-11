@@ -13,6 +13,14 @@ let s:linters = {}
 let s:job_linter_map = {}
 let s:job_output_map = {}
 
+function! s:GetFunction(string_or_ref)
+    if type(a:string_or_ref) == type('')
+        return function(a:string_or_ref)
+    endif
+
+    return a:string_or_ref
+endfunction
+
 function! s:ClearJob(job)
     let linter = s:job_linter_map[a:job]
 
@@ -73,7 +81,7 @@ function! s:HandleExit(job)
 
     call s:ClearJob(a:job)
 
-    let linter_loclist = function(linter.callback)(output)
+    let linter_loclist = s:GetFunction(linter.callback)(output)
 
     if b:ale_should_reset_loclist
         let b:ale_should_reset_loclist = 0
@@ -114,20 +122,29 @@ function! s:ApplyLinter(linter)
         call s:ClearJob(a:linter.job)
     endif
 
+    let buffer = bufnr('%')
+
+    if has_key(a:linter, 'command_callback')
+        " If there is a callback for generating a command, call that instead.
+        let command = s:GetFunction(a:linter.command_callback)(buffer)
+    else
+        let command = a:linter.command
+    endif
+
     if has('nvim')
-        let a:linter.job = jobstart(a:linter.command, {
+        let a:linter.job = jobstart(command, {
         \   'on_stdout': 's:GatherOutputNeoVim',
         \   'on_exit': 's:HandleExitNeoVim',
         \})
     else
         " Vim 8 will read the stdin from the file's buffer.
-        let a:linter.job = job_start(a:linter.command, {
+        let a:linter.job = job_start(command, {
         \   'out_mode': 'nl',
         \   'err_mode': 'nl',
         \   'out_cb': function('s:GatherOutputVim'),
         \   'close_cb': function('s:HandleExitVim'),
         \   'in_io': 'buffer',
-        \   'in_buf': bufnr('%'),
+        \   'in_buf': buffer,
         \})
 
         call ch_close_in(job_getchannel(a:linter.job))
@@ -165,10 +182,15 @@ function! ALEAddLinter(filetype, linter)
         let s:linters[a:filetype] = []
     endif
 
-    call add(s:linters[a:filetype], {
-    \   'command': a:linter.command,
-    \   'callback': a:linter.callback,
-    \})
+    let new_linter = {'callback': a:linter.callback}
+
+    if has_key(a:linter, 'command_callback')
+        let new_linter.command_callback = a:linter.command_callback
+    else
+        let new_linter.command = a:linter.command
+    endif
+
+    call add(s:linters[a:filetype], new_linter)
 endfunction
 
 function! ALEGetLinters(filetype)
