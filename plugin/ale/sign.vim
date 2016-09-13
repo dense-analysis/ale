@@ -30,14 +30,36 @@ function! ale#sign#SetSigns(loclist)
 
     exec 'sign unplace * buffer=' . buffer
 
-    for i in range(0, len(a:loclist) - 1)
-        let obj = a:loclist[i]
+    let signlist = []
+
+    for obj in a:loclist
+        let should_append = 1
+
+        if len(signlist) > 0 && signlist[-1].lnum == obj.lnum
+            " We can't add the same line twice, because signs must be
+            " unique per line.
+            let should_append = 0
+
+            if signlist[-1].type ==# 'W' && obj.type ==# 'E'
+                " If we had a warning previously, but now have an error,
+                " we replace the object to set an error instead.
+                let signlist[-1] = obj
+            endif
+        endif
+
+        if should_append
+            call add(signlist, obj)
+        endif
+    endfor
+
+    for i in range(0, len(signlist) - 1)
+        let obj = signlist[i]
         let name = obj['type'] ==# 'W' ? 'ALEWarningSign' : 'ALEErrorSign'
 
         let sign_line = 'sign place ' . (i + 1)
             \. ' line=' . obj['lnum']
             \. ' name=' . name
-            \. ' buffer=' . obj['bufnr']
+            \. ' buffer=' . buffer
 
         exec sign_line
     endfor
