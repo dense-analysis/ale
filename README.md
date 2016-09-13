@@ -21,8 +21,9 @@ follow later.
 | JavaScript | [eslint](http://eslint.org/) |
 
 If you would like to see support for more languages and tools, please
-[create an issue](ale/issues) or [create a pull request](ale/pulls). If
-your tool can read from stdin or you have code to suggest which is good,
+[create an issue](https://github.com/w0rp/ale/issues) 
+or [create a pull request](https://github.com/w0rp/ale/pulls). 
+If your tool can read from stdin or you have code to suggest which is good,
 support can be happily added for more tools.
 
 ## Known Bugs
