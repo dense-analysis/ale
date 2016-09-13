@@ -223,7 +223,7 @@ function! ALELint(delay)
 endfunction
 
 " Load all of the linters for each filetype.
-runtime ale_linters/*/*.vim
+runtime! ale_linters/*/*.vim
 
 if !has('nvim') && !(has('timers') && has('job') && has('channel'))
     echoerr 'ALE requires NeoVim or Vim 8 with +timers +job +channel'
