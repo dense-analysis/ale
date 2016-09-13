@@ -7,11 +7,23 @@ ALE makes use of NeoVim and Vim 8 job control functions and timers to
 run linters on the contents of text buffers and return errors as
 text is changed in Vim. This allows for displaying warnings and
 errors in files being edited in Vim before file has been saved
-back to disk.
+back to disk. In other words, this plugin allows you to lint while you type.
 
 **NOTE:** This Vim plugin has been written pretty quickly so far,
 and is still in rapid development. Documentation and stable APIs will
 follow later.
+
+## Supported Languages and Tools
+
+| Language | Tools |
+| -------- | ----- |
+| Python | [flake8](http://flake8.pycqa.org/en/latest/) |
+| JavaScript | [eslint](http://eslint.org/) |
+
+If you would like to see support for more languages and tools, please
+[create an issue](ale/issues) or [create a pull request](ale/pulls). If
+your tool can read from stdin or you have code to suggest which is good,
+support can be happily added for more tools.
 
 ## Known Bugs
 
