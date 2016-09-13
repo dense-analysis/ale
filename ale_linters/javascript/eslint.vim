@@ -16,7 +16,7 @@ function! ale_linters#javascript#eslint#Handle(lines)
         let l:match = matchlist(line, pattern)
 
         if len(l:match) == 0
-            break
+            continue
         endif
 
         let text = l:match[3]
