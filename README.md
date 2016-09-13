@@ -17,8 +17,8 @@ follow later.
 
 | Language | Tools |
 | -------- | ----- |
-| Python | [flake8](http://flake8.pycqa.org/en/latest/) |
 | JavaScript | [eslint](http://eslint.org/) |
+| Python | [flake8](http://flake8.pycqa.org/en/latest/) |
 
 If you would like to see support for more languages and tools, please
 [create an issue](https://github.com/w0rp/ale/issues)
