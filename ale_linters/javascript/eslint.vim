@@ -4,7 +4,7 @@ endif
 
 let g:loaded_ale_linters_javascript_eslint = 1
 
-function! ale_linters#javascript#eslint#Handle(lines)
+function! ale_linters#javascript#eslint#Handle(buffer, lines)
     " Matches patterns line the following:
     "
     " <text>:47:14: Missing trailing comma. [Warning/comma-dangle]
@@ -29,7 +29,7 @@ function! ale_linters#javascript#eslint#Handle(lines)
 
         " vcol is Needed to indicate that the column is a character.
         call add(output, {
-        \   'bufnr': bufnr('%'),
+        \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
         \   'vcol': 0,
         \   'col': l:match[2] + 0,

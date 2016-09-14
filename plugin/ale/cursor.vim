@@ -53,16 +53,20 @@ function! ale#cursor#TruncatedEcho(message)
 endfunction
 
 function! ale#cursor#EchoCursorWarning()
-    if !exists('b:ale_loclist')
+    let buffer = bufnr('%')
+
+    if !has_key(g:ale_buffer_loclist_map, buffer)
         return
     endif
 
+    let loclist = g:ale_buffer_loclist_map[buffer]
+
     let pos = getcurpos()
 
-    let index = s:BinarySearch(b:ale_loclist, pos[1], pos[2])
+    let index = s:BinarySearch(loclist, pos[1], pos[2])
 
     if index >= 0
-        call ale#cursor#TruncatedEcho(b:ale_loclist[index]['text'])
+        call ale#cursor#TruncatedEcho(loclist[index]['text'])
     else
         echo
     endif

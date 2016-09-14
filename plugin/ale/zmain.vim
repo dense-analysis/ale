@@ -1,7 +1,3 @@
-" Always set buffer variables for each buffer
-let b:ale_should_reset_loclist = 0
-let b:ale_loclist = []
-
 if exists('g:loaded_ale_zmain')
     finish
 endif
@@ -10,8 +6,21 @@ let g:loaded_ale_zmain = 1
 
 let s:lint_timer = -1
 let s:linters = {}
+
+" Stores information for each job including:
+"
+" linter: The linter dictionary for the job.
+" buffer: The buffer number for the job.
+" output: The array of lines for the ouptut of the job.
+let s:job_info_map = {}
+
 let s:job_linter_map = {}
+let s:job_buffer_map = {}
 let s:job_output_map = {}
+
+" Globals which each part of the plugin should use.
+let g:ale_buffer_loclist_map = {}
+let g:ale_buffer_should_reset_map = {}
 
 function! s:GetFunction(string_or_ref)
     if type(a:string_or_ref) == type('')
@@ -22,7 +31,7 @@ function! s:GetFunction(string_or_ref)
 endfunction
 
 function! s:ClearJob(job)
-    let linter = s:job_linter_map[a:job]
+    let linter = s:job_info_map[a:job].linter
 
     if has('nvim')
         call jobstop(a:job)
@@ -30,17 +39,16 @@ function! s:ClearJob(job)
         call job_stop(a:job)
     endif
 
-    call remove(s:job_output_map, a:job)
-    call remove(s:job_linter_map, a:job)
+    call remove(s:job_info_map, a:job)
     call remove(linter, 'job')
 endfunction
 
 function! s:GatherOutput(job, data)
-    if !has_key(s:job_output_map, a:job)
+    if !has_key(s:job_info_map, a:job)
         return
     endif
 
-    call extend(s:job_output_map[a:job], a:data)
+    call extend(s:job_info_map[a:job].output, a:data)
 endfunction
 
 function! s:GatherOutputNeoVim(job, data, event)
@@ -72,36 +80,39 @@ function! s:LocItemCompare(left, right)
 endfunction
 
 function! s:HandleExit(job)
-    if !has_key(s:job_linter_map, a:job)
+    if !has_key(s:job_info_map, a:job)
         return
     endif
 
-    let linter = s:job_linter_map[a:job]
-    let output = s:job_output_map[a:job]
+    let job_info = s:job_info_map[a:job]
 
     call s:ClearJob(a:job)
 
-    let linter_loclist = s:GetFunction(linter.callback)(output)
+    let linter = job_info.linter
+    let output = job_info.output
+    let buffer = job_info.buffer
 
-    if b:ale_should_reset_loclist
-        let b:ale_should_reset_loclist = 0
-        let b:ale_loclist = []
+    let linter_loclist = s:GetFunction(linter.callback)(buffer, output)
+
+    if g:ale_buffer_should_reset_map[buffer]
+        let g:ale_buffer_should_reset_map[buffer] = 0
+        let g:ale_buffer_loclist_map[buffer] = []
     endif
 
     " Add the loclist items from the linter.
-    call extend(b:ale_loclist, linter_loclist)
+    call extend(g:ale_buffer_loclist_map[buffer], linter_loclist)
 
     " Sort the loclist again.
     " We need a sorted list so we can run a binary search against it
     " for efficient lookup of the messages in the cursor handler.
-    call sort(b:ale_loclist, 's:LocItemCompare')
+    call sort(g:ale_buffer_loclist_map[buffer], 's:LocItemCompare')
 
     if g:ale_set_loclist
-        call setloclist(0, b:ale_loclist)
+        call setloclist(0, g:ale_buffer_loclist_map[buffer])
     endif
 
     if g:ale_set_signs
-        call ale#sign#SetSigns(b:ale_loclist)
+        call ale#sign#SetSigns(buffer, g:ale_buffer_loclist_map[buffer])
     endif
 
     " Mark line 200, column 17 with a squiggly line or something
@@ -116,17 +127,15 @@ function! s:HandleExitVim(channel)
     call s:HandleExit(ch_getjob(a:channel))
 endfunction
 
-function! s:ApplyLinter(linter)
+function! s:ApplyLinter(buffer, linter)
     if has_key(a:linter, 'job')
         " Stop previous jobs for the same linter.
         call s:ClearJob(a:linter.job)
     endif
 
-    let buffer = bufnr('%')
-
     if has_key(a:linter, 'command_callback')
         " If there is a callback for generating a command, call that instead.
-        let command = s:GetFunction(a:linter.command_callback)(buffer)
+        let command = s:GetFunction(a:linter.command_callback)(a:buffer)
     else
         let command = a:linter.command
     endif
@@ -144,14 +153,17 @@ function! s:ApplyLinter(linter)
         \   'out_cb': function('s:GatherOutputVim'),
         \   'close_cb': function('s:HandleExitVim'),
         \   'in_io': 'buffer',
-        \   'in_buf': buffer,
+        \   'in_buf': a:buffer,
         \})
 
         call ch_close_in(job_getchannel(a:linter.job))
     endif
 
-    let s:job_linter_map[a:linter.job] = a:linter
-    let s:job_output_map[a:linter.job] = []
+    let s:job_info_map[a:linter.job] = {
+    \   'linter': a:linter,
+    \   'buffer': a:buffer,
+    \   'output': [],
+    \}
 
     if has('nvim')
         " For NeoVim, we have to send the text in the buffer to the command.
@@ -164,12 +176,24 @@ function! s:TimerHandler(...)
     let filetype = &filetype
     let linters = ALEGetLinters(filetype)
 
+    let buffer = bufnr('%')
+
     " Set a variable telling us to clear the loclist later.
-    let b:ale_should_reset_loclist = 1
+    let g:ale_buffer_should_reset_map[buffer] = 1
 
     for linter in linters
-        call s:ApplyLinter(linter)
+        call s:ApplyLinter(buffer, linter)
     endfor
+endfunction
+
+function s:BufferCleanup(buffer)
+    if has_key(g:ale_buffer_should_reset_map, a:buffer)
+        call remove(g:ale_buffer_should_reset_map, a:buffer)
+    endif
+
+    if has_key(g:ale_buffer_loclist_map, a:buffer)
+        call remove(g:ale_buffer_loclist_map, a:buffer)
+    endif
 endfunction
 
 function! ALEAddLinter(filetype, linter)
@@ -244,3 +268,9 @@ if g:ale_lint_on_enter
         autocmd BufEnter * call ALELint(0)
     augroup END
 endif
+
+" Clean up buffers automatically when they are unloaded.
+augroup ALEBuffferCleanup
+    autocmd!
+    autocmd BufUnload * call s:BufferCleanup('<abuf>')
+augroup END

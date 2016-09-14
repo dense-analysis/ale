@@ -25,10 +25,8 @@ sign define ALEErrorSign text=>> texthl=ALEErrorSign
 sign define ALEWarningSign text=-- texthl=ALEWarningSign
 
 " This function will set the signs which show up on the left.
-function! ale#sign#SetSigns(loclist)
-    let buffer = bufnr('%')
-
-    exec 'sign unplace * buffer=' . buffer
+function! ale#sign#SetSigns(buffer, loclist)
+    exec 'sign unplace * buffer=' . a:buffer
 
     let signlist = []
 
@@ -59,7 +57,7 @@ function! ale#sign#SetSigns(loclist)
         let sign_line = 'sign place ' . (i + 1)
             \. ' line=' . obj['lnum']
             \. ' name=' . name
-            \. ' buffer=' . buffer
+            \. ' buffer=' . a:buffer
 
         exec sign_line
     endfor

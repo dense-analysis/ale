@@ -4,7 +4,7 @@ endif
 
 let g:loaded_ale_linters_python_flake8 = 1
 
-function! ale_linters#python#flake8#Handle(lines)
+function! ale_linters#python#flake8#Handle(buffer, lines)
     " Matches patterns line the following:
     "
     " stdin:6:6: E111 indentation is not a multiple of four
@@ -26,7 +26,7 @@ function! ale_linters#python#flake8#Handle(lines)
 
         " vcol is Needed to indicate that the column is a character.
         call add(output, {
-        \   'bufnr': bufnr('%'),
+        \   'bufnr': a:buffer,
         \   'lnum': line,
         \   'vcol': 0,
         \   'col': column,
