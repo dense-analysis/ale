@@ -141,20 +141,36 @@ function! s:ApplyLinter(buffer, linter)
     endif
 
     if has('nvim')
-        let a:linter.job = jobstart(command, {
-        \   'on_stdout': 's:GatherOutputNeoVim',
-        \   'on_exit': 's:HandleExitNeoVim',
-        \})
+        if a:linter.output_stream ==# 'stderr'
+            " Read from stderr instead of stdout.
+            let a:linter.job = jobstart(command, {
+            \   'on_stderr': 's:GatherOutputNeoVim',
+            \   'on_exit': 's:HandleExitNeoVim',
+            \})
+        else
+            let a:linter.job = jobstart(command, {
+            \   'on_stdout': 's:GatherOutputNeoVim',
+            \   'on_exit': 's:HandleExitNeoVim',
+            \})
+        endif
     else
-        " Vim 8 will read the stdin from the file's buffer.
-        let a:linter.job = job_start(command, {
+        let job_options = {
         \   'out_mode': 'nl',
         \   'err_mode': 'nl',
-        \   'out_cb': function('s:GatherOutputVim'),
         \   'close_cb': function('s:HandleExitVim'),
         \   'in_io': 'buffer',
         \   'in_buf': a:buffer,
-        \})
+        \}
+
+        if a:linter.output_stream ==# 'stderr'
+            " Read from stderr instead of stdout.
+            let job_options.err_cb = function('s:GatherOutputVim')
+        else
+            let job_options.out_cb = function('s:GatherOutputVim')
+        endif
+
+        " Vim 8 will read the stdin from the file's buffer.
+        let a:linter.job = job_start(l:command, l:job_options)
 
         call ch_close_in(job_getchannel(a:linter.job))
     endif
@@ -182,6 +198,18 @@ function! s:TimerHandler(...)
     let g:ale_buffer_should_reset_map[buffer] = 1
 
     for linter in linters
+        " Check if a given linter has a program which can be executed.
+        if has_key(linter, 'executable_callback')
+            let l:executable = s:GetFunction(linter.executable_callback)(buffer)
+        else
+            let l:executable = linter.executable
+        endif
+
+        if !executable(l:executable)
+            " The linter's program cannot be executed, so skip it.
+            continue
+        endif
+
         call s:ApplyLinter(buffer, linter)
     endfor
 endfunction
@@ -197,22 +225,34 @@ function s:BufferCleanup(buffer)
 endfunction
 
 function! ALEAddLinter(filetype, linter)
-    " Check if the linter program is executable before adding it.
-    if !executable(a:linter.executable)
-        return
-    endif
-
     if !has_key(s:linters, a:filetype)
         let s:linters[a:filetype] = []
     endif
 
-    let new_linter = {'callback': a:linter.callback}
+    let new_linter = {
+    \   'name': a:linter.name,
+    \   'callback': a:linter.callback,
+    \}
+
+    if has_key(a:linter, 'executable_callback')
+        let new_linter.executable_callback = a:linter.executable_callback
+    else
+        let new_linter.executable = a:linter.executable
+    endif
 
     if has_key(a:linter, 'command_callback')
         let new_linter.command_callback = a:linter.command_callback
     else
         let new_linter.command = a:linter.command
     endif
+
+    if has_key(a:linter, 'output_stream')
+        let new_linter.output_stream = a:linter.output_stream
+    else
+        let new_linter.output_stream = 'stdout'
+    endif
+
+    " TODO: Assert the value of the output_stream to be something sensible.
 
     call add(s:linters[a:filetype], new_linter)
 endfunction

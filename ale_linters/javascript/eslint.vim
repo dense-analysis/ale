@@ -43,6 +43,7 @@ function! ale_linters#javascript#eslint#Handle(buffer, lines)
 endfunction
 
 call ALEAddLinter('javascript', {
+\   'name': 'eslint',
 \   'executable': 'eslint',
 \   'command': 'eslint -f unix --stdin',
 \   'callback': 'ale_linters#javascript#eslint#Handle',

@@ -19,6 +19,8 @@ follow later.
 
 | Language | Tools |
 | -------- | ----- |
+| Bash | -n flag |
+| Bourne Shell | -n flag |
 | JavaScript | [eslint](http://eslint.org/) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/) |
 
