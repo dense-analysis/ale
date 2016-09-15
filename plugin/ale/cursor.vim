@@ -52,7 +52,7 @@ function! ale#cursor#TruncatedEcho(message)
     echo truncated_message
 endfunction
 
-function! ale#cursor#EchoCursorWarning()
+function! ale#cursor#EchoCursorWarning(...)
     let buffer = bufnr('%')
 
     if !has_key(g:ale_buffer_loclist_map, buffer)
@@ -72,9 +72,20 @@ function! ale#cursor#EchoCursorWarning()
     endif
 endfunction
 
+let s:cursor_timer = -1
+
+function! ale#cursor#EchoCursorWarningWithDelay()
+    if s:cursor_timer != -1
+        call timer_stop(s:cursor_timer)
+        let s:cursor_timer = -1
+    endif
+
+    let s:cursor_timer = timer_start(10, function('ale#cursor#EchoCursorWarning'))
+endfunction
+
 if g:ale_echo_cursor
     augroup ALECursorGroup
         autocmd!
-        autocmd CursorMoved * call ale#cursor#EchoCursorWarning()
+        autocmd CursorMoved,CursorHold * call ale#cursor#EchoCursorWarningWithDelay()
     augroup END
 endif
