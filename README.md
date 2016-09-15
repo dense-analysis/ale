@@ -25,8 +25,8 @@ name. That seems to be the fairest way to arrange this table.
 
 | Language | Tools |
 | -------- | ----- |
-| Bash | -n flag |
-| Bourne Shell | -n flag |
+| Bash | [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set) |
+| Bourne Shell | [-n flag](http://linux.die.net/man/1/sh) |
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/) |
 | Ruby   | [rubocop](https://github.com/bbatsov/rubocop) |
