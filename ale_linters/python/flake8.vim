@@ -21,7 +21,7 @@ function! ale_linters#python#flake8#Handle(buffer, lines)
         let line = l:match[1] + 0
         let column = l:match[2] + 0
         let code = l:match[3]
-        let text = l:match[4]
+        let text = code . ': ' . l:match[4]
         let type = code[0] ==# 'E' ? 'E' : 'W'
 
         if code ==# 'W291' && !g:ale_warn_about_trailing_whitespace
