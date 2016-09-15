@@ -1,3 +1,5 @@
+" Author: Chris Kyrouac - https://github.com/fijshion
+
 if exists('g:loaded_ale_linters_ruby_rubocop')
     finish
 endif
@@ -38,6 +40,7 @@ function! ale_linters#ruby#rubocop#Handle(buffer, lines)
 endfunction
 
 call ALEAddLinter('ruby', {
+\   'name': 'rubocop',
 \   'executable': 'rubocop',
 \   'command': 'rubocop --format emacs --stdin _',
 \   'callback': 'ale_linters#ruby#rubocop#Handle',

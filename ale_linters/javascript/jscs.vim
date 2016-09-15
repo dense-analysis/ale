@@ -1,3 +1,5 @@
+" Author: Chris Kyrouac - https://github.com/fijshion
+
 if exists('g:loaded_ale_linters_javascript_jscs')
     finish
 endif
@@ -41,6 +43,7 @@ function! ale_linters#javascript#jscs#Handle(buffer, lines)
 endfunction
 
 call ALEAddLinter('javascript', {
+\   'name': 'jscs',
 \   'executable': 'jscs',
 \   'command': 'jscs -r unix -n -',
 \   'callback': 'ale_linters#javascript#jscs#Handle',
