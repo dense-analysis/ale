@@ -24,6 +24,11 @@ function! ale_linters#python#flake8#Handle(buffer, lines)
         let text = l:match[4]
         let type = code[0] ==# 'E' ? 'E' : 'W'
 
+        if code ==# 'W291' && !g:ale_warn_about_trailing_whitespace
+            " Skip warnings for trailing whitespace if the option is off.
+            continue
+        endif
+
         " vcol is Needed to indicate that the column is a character.
         call add(output, {
         \   'bufnr': a:buffer,

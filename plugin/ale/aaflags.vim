@@ -40,3 +40,8 @@ endif
 if !exists('g:ale_echo_cursor')
     let g:ale_echo_cursor = 1
 endif
+
+" This flag can be set to 0 to disable warnings for trailing whitespace
+if !exists('g:ale_warn_about_trailing_whitespace')
+    let g:ale_warn_about_trailing_whitespace = 1
+endif
