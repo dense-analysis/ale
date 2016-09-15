@@ -17,11 +17,17 @@ follow later.
 
 ## Supported Languages and Tools
 
+<!--
+Keep the table rows sorted alphabetically by the language name,
+and the tools in the tools column sorted alphabetically by the tool
+name. That seems to be the fairest way to arrange this table.
+-->
+
 | Language | Tools |
 | -------- | ----- |
 | Bash | -n flag |
 | Bourne Shell | -n flag |
-| JavaScript | [eslint](http://eslint.org/) |
+| JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/) |
 | Ruby   | [rubocop](https://github.com/bbatsov/rubocop) |
 
