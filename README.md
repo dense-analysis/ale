@@ -23,6 +23,7 @@ follow later.
 | Bourne Shell | -n flag |
 | JavaScript | [eslint](http://eslint.org/) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/) |
+| Ruby   | [rubocop](https://github.com/bbatsov/rubocop) |
 
 If you would like to see support for more languages and tools, please
 [create an issue](https://github.com/w0rp/ale/issues)
