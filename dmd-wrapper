@@ -1,0 +1,16 @@
+#!/bin/bash -eu
+
+# This script wraps DMD so we can get something which is capable of reading
+# D code from stdin.
+
+temp_file=`mktemp`
+mv "$temp_file" "$temp_file".d
+temp_file="$temp_file".d
+
+trap "rm $temp_file" EXIT
+
+while read line; do
+    echo "$line" >> "$temp_file"
+done
+
+dmd "$@" "$temp_file"
