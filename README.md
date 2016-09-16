@@ -27,7 +27,7 @@ name. That seems to be the fairest way to arrange this table.
 | -------- | ----- |
 | Bash | [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set) |
 | Bourne Shell | [-n flag](http://linux.die.net/man/1/sh) |
-| JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/) |
+| JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/) |
 | Ruby   | [rubocop](https://github.com/bbatsov/rubocop) |
 
