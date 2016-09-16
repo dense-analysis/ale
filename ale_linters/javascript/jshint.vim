@@ -1,3 +1,5 @@
+" Author: Chris Kyrouac - https://github.com/fijshion
+
 if exists('g:loaded_ale_linters_javascript_jshint')
     finish
 endif
@@ -49,6 +51,7 @@ function! ale_linters#javascript#jshint#Handle(buffer, lines)
 endfunction
 
 call ALEAddLinter('javascript', {
+\   'name': 'jshint',
 \   'executable': 'jshint',
 \   'command': 'jshint --reporter unix --config ' . g:ale_jshint_config_loc . ' -',
 \   'callback': 'ale_linters#javascript#jshint#Handle',
