@@ -1,4 +1,4 @@
-" Author: Chris Kyrouac - https://github.com/fijshion
+" Author: ynonp - https://github.com/ynonp
 
 if exists('g:loaded_ale_linters_ruby_rubocop')
     finish
