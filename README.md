@@ -17,6 +17,9 @@ follow later.
 
 ## Supported Languages and Tools
 
+This plugin supports the following languages and tools. All available
+tools will be run in combination, so they can be complementary.
+
 <!--
 Keep the table rows sorted alphabetically by the language name,
 and the tools in the tools column sorted alphabetically by the tool
