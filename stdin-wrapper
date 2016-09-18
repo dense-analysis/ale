@@ -1,0 +1,23 @@
+#!/bin/bash -eu
+
+# This script implements a wrapper for any program which does not accept
+# stdin input on most Unix machines. The input to the script is read to a
+# temporary file, and the first argument sets a particular file extension
+# for the temporary file.
+#
+# All of the following arguments are read as command to run.
+
+file_extension="$1"
+shift
+
+temp_file=`mktemp`
+mv "$temp_file" "$temp_file$file_extension"
+temp_file="$temp_file$file_extension"
+
+trap "rm $temp_file" EXIT
+
+while read; do
+    echo "$REPLY" >> "$temp_file"
+done
+
+"$@" "$temp_file"

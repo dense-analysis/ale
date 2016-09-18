@@ -9,8 +9,8 @@ temp_file="$temp_file".d
 
 trap "rm $temp_file" EXIT
 
-while read line; do
-    echo "$line" >> "$temp_file"
+while read; do
+    echo "$REPLY" >> "$temp_file"
 done
 
 # Read imports from DUB.
@@ -24,7 +24,7 @@ while [ "$path" != '/' ]; do
 
         cd "$path"
 
-         while read import_line; do
+        while read import_line; do
             import_line_options="$import_line_options -I$import_line"
         done <<< "$(dub describe --import-paths)"
 
