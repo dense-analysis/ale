@@ -31,14 +31,14 @@ name. That seems to be the fairest way to arrange this table.
 | Bash | [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set) |
 | Bourne Shell | [-n flag](http://linux.die.net/man/1/sh) |
 | C | [gcc](https://gcc.gnu.org/) |
-| D | [dmd](https://dlang.org/dmd-linux.html)\* |
+| D | [dmd](https://dlang.org/dmd-linux.html)^ |
 | Fortran | [gcc](https://gcc.gnu.org/) |
-| Haskell | [ghc](https://www.haskell.org/ghc/)\* |
+| Haskell | [ghc](https://www.haskell.org/ghc/)^ |
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/) |
 | Ruby   | [rubocop](https://github.com/bbatsov/rubocop) |
 
-*\** *Supported only on Unix machines via a wrapper script.*
+*^ Supported only on Unix machines via a wrapper script.*
 
 If you would like to see support for more languages and tools, please
 [create an issue](https://github.com/w0rp/ale/issues)
