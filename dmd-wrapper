@@ -13,4 +13,27 @@ while read line; do
     echo "$line" >> "$temp_file"
 done
 
-dmd "$@" "$temp_file"
+# Read imports from DUB.
+original_path="$(readlink -m .)"
+path="$original_path"
+import_line_options=''
+
+# We need to look for variable configuration files in parent directories.
+while [ "$path" != '/' ]; do
+    if [ -f "$path/dub.sdl" ] || [ -f "$path/dub.json" ] || [ -f "$path/package.json" ]; then
+
+        cd "$path"
+
+         while read import_line; do
+            import_line_options="$import_line_options -I$import_line"
+        done <<< "$(dub describe --import-paths)"
+
+        cd "$original_path"
+
+        break
+    fi
+
+    path="$(dirname "$path")"
+done
+
+dmd $import_line_options "$@" "$temp_file"
