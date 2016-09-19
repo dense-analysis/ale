@@ -7,6 +7,10 @@ let g:loaded_ale_zmain = 1
 let s:lint_timer = -1
 let s:linters = {}
 
+if !exists('g:ale_linters')
+    let g:ale_linters = {}
+endif
+
 " Stores information for each job including:
 "
 " linter: The linter dictionary for the job.
@@ -260,6 +264,17 @@ endfunction
 function! ALEGetLinters(filetype)
     if !has_key(s:linters, a:filetype)
         return []
+    endif
+
+    if has_key(g:ale_linters, a:filetype)
+        let linters = []
+        " Filter loaded linters according to list of linters specified in option
+        for linter in s:linters[a:filetype]
+            if index(g:ale_linters[a:filetype], linter.name) != -1
+                call add(linters, linter)
+            endif
+        endfor
+        return linters
     endif
 
     return s:linters[a:filetype]
