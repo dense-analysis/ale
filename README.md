@@ -15,6 +15,62 @@ In other words, this plugin allows you to lint while you type.
 and is still in rapid development. Documentation and stable APIs will
 follow later.
 
+## Installation
+
+To install this plugin, you should use one of the following methods.
+For Windows users, replace usage of the Unix `~/.vim` directory with
+`%USERPROFILE%\_vim`, or another directory if you have configured
+Vim differently. On Windows, your `~/.vimrc` file will be similarly
+stored in `%USERPROFILE%\_vimrc`.
+
+### Installation with Pathogen
+
+To install this module with [Pathogen](https://github.com/tpope/vim-pathogen),
+you should clone this repository to your bundle directory, and ensure
+you have the line `execute pathogen#infect()` in your `~/.vimrc` file.
+You can run the following commands in your terminal to do so:
+
+```bash
+cd ~/.vim/bundle
+git clone https://github.com/w0rp/ale.git
+```
+
+### Installation with Vundle
+
+You can install this plugin using [Vundle](https://github.com/VundleVim/Vundle.vim)
+by using the github repository URL for cloning the repository.
+
+```vim
+Plugin 'https://github.com/w0rp/ale.git'
+```
+
+See the Vundle documentation for more information.
+
+### Installation manually
+
+For installation without a package manager, you can clone this git repository
+into a bundle directory as with pathogen, and add the repository to your
+runtime path yourself. First clone the repository.
+
+```bash
+cd ~/.vim/bundle
+git clone https://github.com/w0rp/ale.git
+```
+
+Then, modify your `~/.vimrc` file to add this plugin to your runtime path.
+
+```vim
+set nocompatible
+filetype off
+
+let &runtimepath.=',~/.vim/bundle/ale'
+
+filetype plugin on
+```
+
+Because the author of this plugin is a weird nerd, this is his preferred
+installation method.
+
 ## Supported Languages and Tools
 
 This plugin supports the following languages and tools. All available
