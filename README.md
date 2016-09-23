@@ -108,7 +108,7 @@ You can install this plugin using [Vundle](https://github.com/VundleVim/Vundle.v
 by using the github repository URL for cloning the repository.
 
 ```vim
-Plugin 'https://github.com/w0rp/ale.git'
+Plugin 'w0rp/ale'
 ```
 
 See the Vundle documentation for more information.
