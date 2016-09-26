@@ -83,7 +83,7 @@ Each directory within corresponds to a particular filetype in Vim, and each file
 in each directory corresponds to the name of a particular linter.
 
 ### Always showing gutter
-To prevent left gutter to disappear when there is no errors set
+You can keep the sign gutter open at all times by setting the g:ale_sign_column_always to 1
 
 ```vim
 let g:ale_sign_column_always = 1
