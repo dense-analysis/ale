@@ -4,8 +4,6 @@ endif
 
 let g:loaded_ale_sign = 1
 
-let g:ale_sign_column_always = 0
-
 if !hlexists('ALEErrorSign')
     highlight link ALErrorSign error
 endif

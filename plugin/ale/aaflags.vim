@@ -45,3 +45,8 @@ endif
 if !exists('g:ale_warn_about_trailing_whitespace')
     let g:ale_warn_about_trailing_whitespace = 1
 endif
+
+" This flag can be set to 1 to keep sign gutter always open
+if !exists('g:ale_sign_column_always')
+    let g:ale_sign_column_always = 0
+endif
