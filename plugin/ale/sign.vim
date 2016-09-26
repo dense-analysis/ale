@@ -4,6 +4,8 @@ endif
 
 let g:loaded_ale_sign = 1
 
+let g:ale_sign_column_always = 0
+
 if !hlexists('ALEErrorSign')
     highlight link ALErrorSign error
 endif
@@ -50,6 +52,8 @@ function! ale#sign#SetSigns(buffer, loclist)
         endif
     endfor
 
+    call ale#sign#InsertDummy(len(signlist))
+
     for i in range(0, len(signlist) - 1)
         let obj = signlist[i]
         let name = obj['type'] ==# 'W' ? 'ALEWarningSign' : 'ALEErrorSign'
@@ -62,3 +66,12 @@ function! ale#sign#SetSigns(buffer, loclist)
         exec sign_line
     endfor
 endfunction
+
+" Show signd gutter if there is no signs and g:ale_sign_column_alwas is set to 1
+function! ale#sign#InsertDummy(no_signs)
+    if g:ale_sign_column_always == 1 && a:no_signs == 0
+        sign define ale_keep_open_dummy
+        execute 'sign place 9999 line=1 name=ale_keep_open_dummy buffer=' . bufnr('')
+    endif
+endfunction
+
