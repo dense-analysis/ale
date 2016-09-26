@@ -104,6 +104,9 @@ git clone https://github.com/w0rp/ale.git
 
 ### Installation with Vundle
 
+You can install this plugin using [Vundle](https://github.com/VundleVim/Vundle.vim)
+by using the path on GitHub for this repository.
+
 ```vim
 Plugin 'w0rp/ale'
 ```
