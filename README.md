@@ -82,6 +82,14 @@ This plugin will look for linters in the [`ale_linters`](ale_linters) directory.
 Each directory within corresponds to a particular filetype in Vim, and each file
 in each directory corresponds to the name of a particular linter.
 
+### Always showing gutter
+You can keep the sign gutter open at all times by setting the g:ale_sign_column_always to 1
+
+```vim
+let g:ale_sign_column_always = 1
+```
+
+
 ## Installation
 
 To install this plugin, you should use one of the following methods.
