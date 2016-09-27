@@ -40,6 +40,12 @@ function! s:ClearJob(job)
     if has('nvim')
         call jobstop(a:job)
     else
+        " We must close the channel for reading the buffer if it is open
+        " when stopping a job. Otherwise, we will get errors in the status line.
+        if ch_status(job_getchannel(a:job)) ==# 'open'
+            call ch_close_in(job_getchannel(a:job))
+        endif
+
         call job_stop(a:job)
     endif
 
@@ -175,8 +181,6 @@ function! s:ApplyLinter(buffer, linter)
 
         " Vim 8 will read the stdin from the file's buffer.
         let a:linter.job = job_start(l:command, l:job_options)
-
-        call ch_close_in(job_getchannel(a:linter.job))
     endif
 
     let s:job_info_map[a:linter.job] = {
