@@ -5,7 +5,7 @@ endif
 let g:loaded_ale_sign = 1
 
 if !hlexists('ALEErrorSign')
-    highlight link ALErrorSign error
+    highlight link ALEErrorSign error
 endif
 
 if !hlexists('ALEWarningSign')
