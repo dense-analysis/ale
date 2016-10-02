@@ -20,9 +20,15 @@ if !hlexists('ALEWarning')
     highlight link ALEWarning SpellCap
 endif
 
+" Global variables for signs
+let g:ale_sign_error = get(g:, 'ale_sign_error', '>>')
+let g:ale_sign_warning = get(g:, 'ale_sign_error', '--')
+
 " Signs show up on the left for error markers.
-sign define ALEErrorSign text=>> texthl=ALEErrorSign
-sign define ALEWarningSign text=-- texthl=ALEWarningSign
+execute 'sign define ALEErrorSign text=' . g:ale_sign_error
+			\	. ' texthl=ALEErrorSign'
+execute 'sign define ALEWarningSign text=' . g:ale_sign_warning
+			\	. ' texthl=ALEWarningSign'
 
 " This function will set the signs which show up on the left.
 function! ale#sign#SetSigns(buffer, loclist)
