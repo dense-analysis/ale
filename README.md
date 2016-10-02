@@ -31,6 +31,7 @@ name. That seems to be the fairest way to arrange this table.
 | Bash | [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set) |
 | Bourne Shell | [-n flag](http://linux.die.net/man/1/sh) |
 | C | [gcc](https://gcc.gnu.org/) |
+| CoffeeScript | [coffeelint](https://www.npmjs.com/package/coffeelint) |
 | D | [dmd](https://dlang.org/dmd-linux.html)^ |
 | Fortran | [gcc](https://gcc.gnu.org/) |
 | Haskell | [ghc](https://www.haskell.org/ghc/)^ |
