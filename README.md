@@ -36,6 +36,7 @@ name. That seems to be the fairest way to arrange this table.
 | Python | [flake8](http://flake8.pycqa.org/en/latest/) |
 | Ruby   | [rubocop](https://github.com/bbatsov/rubocop) |
 | Vim | [vint](https://github.com/Kuniwak/vint)^ |
+| Yaml | [yamllint](https://yamllint.readthedocs.io/)^ |
 
 *^ Supported only on Unix machines via a wrapper script.*
 
