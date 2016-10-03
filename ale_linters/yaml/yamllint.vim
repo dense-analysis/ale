@@ -8,8 +8,8 @@ let g:loaded_ale_linters_yaml_yamllint = 1
 
 function! ale_linters#yaml#yamllint#Handle(buffer, lines)
     " Matches patterns line the following:
-    " something.yaml: line 2, col 1, Error - Expected RBRACE at line 2, col 1. (errors)
-    "
+    " something.yaml:1:1: [warning] missing document start "---" (document-start)
+    " something.yml:2:1: [error] syntax error: expected the node content, but found '<stream end>'
     let pattern = '^.*:\(\d\+\):\(\d\+\): \[\(error\|warning\)\] \(.\+\)$'
     let output = []
 

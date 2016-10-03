@@ -39,7 +39,7 @@ name. That seems to be the fairest way to arrange this table.
 | SASS/SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint) |
 | TypeScript | [tslint](https://github.com/palantir/tslint)^ |
 | Vim | [vint](https://github.com/Kuniwak/vint)^ |
-| Yaml | [yamllint](https://yamllint.readthedocs.io/)^ |
+| YAML | [yamllint](https://yamllint.readthedocs.io/)^ |
 
 *^ Supported only on Unix machines via a wrapper script.*
 
