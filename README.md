@@ -11,10 +11,6 @@ back to a filesystem.
 
 In other words, this plugin allows you to lint while you type.
 
-**NOTE:** This Vim plugin has been written pretty quickly so far,
-and is still in rapid development. Documentation and stable APIs will
-follow later.
-
 ## Supported Languages and Tools
 
 This plugin supports the following languages and tools. All available
