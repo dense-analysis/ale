@@ -1,3 +1,6 @@
+" Author: w0rp <devw0rp@gmail.com>
+" Description: gcc linter for c files
+
 if exists('g:loaded_ale_linters_c_gcc')
     finish
 endif

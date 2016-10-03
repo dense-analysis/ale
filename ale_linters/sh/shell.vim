@@ -1,3 +1,6 @@
+" Author: w0rp <devw0rp@gmail.com>
+" Description: Lints sh files using bash -n
+
 if exists('g:loaded_ale_linters_sh_shell')
     finish
 endif
