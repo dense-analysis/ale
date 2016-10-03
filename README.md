@@ -24,7 +24,7 @@ name. That seems to be the fairest way to arrange this table.
 
 | Language | Tools |
 | -------- | ----- |
-| Bash | [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set) |
+| Bash | [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set), [shellcheck](https://www.shellcheck.net/) |
 | Bourne Shell | [-n flag](http://linux.die.net/man/1/sh), [shellcheck](https://www.shellcheck.net/) |
 | C | [gcc](https://gcc.gnu.org/) |
 | CoffeeScript | [coffeelint](https://www.npmjs.com/package/coffeelint) |
