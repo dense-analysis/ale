@@ -1,4 +1,5 @@
 " Author: Chris Kyrouac - https://github.com/fijshion
+" Description: JSHint for Javascript files
 
 if exists('g:loaded_ale_linters_javascript_jshint')
     finish

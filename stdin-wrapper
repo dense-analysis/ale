@@ -1,12 +1,12 @@
 #!/bin/bash -eu
 
-# This script implements a wrapper for any program which does not accept
-# stdin input on most Unix machines. The input to the script is read to a
-# temporary file, and the first argument sets a particular file extension
-# for the temporary file.
-#
-# All of the following arguments are read as command to run.
+# Author: w0rp <devw0rp@gmail.com>
+# Description: This script implements a wrapper for any program which does not accept
+#   stdin input on most Unix machines. The input to the script is read to a
+#   temporary file, and the first argument sets a particular file extension
+#   for the temporary file.
 
+# All of the following arguments are read as command to run.
 file_extension="$1"
 shift
 

@@ -1,4 +1,5 @@
 " Author: ynonp - https://github.com/ynonp
+" Description: rubocop for Ruby files
 
 if exists('g:loaded_ale_linters_ruby_rubocop')
     finish

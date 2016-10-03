@@ -1,3 +1,7 @@
+" Author: w0rp <devw0rp@gmail.com>
+" Description: Main entry point for this plugin
+"   Loads linters and manages lint jobs
+
 if exists('g:loaded_ale_zmain')
     finish
 endif

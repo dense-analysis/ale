@@ -1,4 +1,5 @@
 " Author: Chris Kyrouac - https://github.com/fijshion
+" Description: jscs for JavaScript files
 
 if exists('g:loaded_ale_linters_javascript_jscs')
     finish

@@ -1,3 +1,6 @@
+" Author: w0rp <devw0rp@gmail.com>
+" Description: Echoes lint message for the current line, if any
+
 if exists('g:loaded_ale_cursor')
     finish
 endif

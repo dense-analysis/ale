@@ -1,3 +1,6 @@
+" Author: w0rp <devw0rp@gmail.com>
+" Description: eslint for JavaScript files
+
 if exists('g:loaded_ale_linters_javascript_eslint')
     finish
 endif

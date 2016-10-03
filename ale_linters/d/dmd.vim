@@ -1,3 +1,6 @@
+" Author: w0rp <devw0rp@gmail.com>
+" Description: "dmd for D files"
+
 if exists('g:loaded_ale_linters_d_dmd')
     finish
 endif

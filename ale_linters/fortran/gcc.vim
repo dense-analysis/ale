@@ -1,3 +1,6 @@
+" Author: w0rp <devw0rp@gmail.com>
+" Description: gcc for Fortran files
+
 if exists('g:loaded_ale_linters_fortran_gcc')
     finish
 endif
