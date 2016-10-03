@@ -34,6 +34,7 @@ name. That seems to be the fairest way to arrange this table.
 | Haskell | [ghc](https://www.haskell.org/ghc/)^ |
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/) |
 | JSON | [jsonlint](http://zaa.ch/jsonlint/) |
+| PHP | [php -l](https://secure.php.net/) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/) |
 | Ruby   | [rubocop](https://github.com/bbatsov/rubocop) |
 | SASS/SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint) |
