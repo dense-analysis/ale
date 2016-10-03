@@ -35,6 +35,7 @@ name. That seems to be the fairest way to arrange this table.
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/) |
 | Ruby   | [rubocop](https://github.com/bbatsov/rubocop) |
+| Sass/Scss   | [sass-lint](https://www.npmjs.com/package/sass-lint) |
 | Vim | [vint](https://github.com/Kuniwak/vint)^ |
 
 *^ Supported only on Unix machines via a wrapper script.*
