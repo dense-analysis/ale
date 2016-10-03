@@ -1,0 +1,13 @@
+" Author: Prashanth Chandra <coolshanth94@gmail.com>
+" Description: This simple test case checks that the test infrastructure is working correctly
+
+Given (Some string):
+  Hello
+
+Do:
+  yyp
+
+Expect:
+  Hello
+  Hello
+

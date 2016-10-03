@@ -1,0 +1,21 @@
+sudo: required
+
+before_script: |
+  git clone https://github.com/junegunn/vader.vim.git
+
+  git clone https://github.com/vim/vim
+  cd vim
+  ./configure --with-features=huge
+  make
+  sudo make install
+  cd -
+
+script: |
+  /usr/local/bin/vim -Nu <(cat << VIMRC
+  filetype off
+  set rtp+=vader.vim
+  set rtp+=.
+  set rtp+=after
+  filetype plugin indent on
+  syntax enable
+  VIMRC) -c 'Vader! test/*' > /dev/null
