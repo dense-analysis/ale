@@ -1,7 +1,8 @@
 #!/bin/bash -eu
 
-# This script wraps DMD so we can get something which is capable of reading
-# D code from stdin.
+# Author: w0rp <devw0rp@gmail.com>
+# Description: This script wraps DMD so we can get something which is capable of reading
+#   D code from stdin.
 
 temp_file=`mktemp`
 mv "$temp_file" "$temp_file".d
