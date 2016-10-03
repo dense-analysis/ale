@@ -16,7 +16,7 @@ temp_file="$temp_file$file_extension"
 
 trap "rm $temp_file" EXIT
 
-while read; do
+while read -r; do
     echo "$REPLY" >> "$temp_file"
 done
 
