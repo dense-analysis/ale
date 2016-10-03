@@ -48,3 +48,10 @@ call ALEAddLinter('javascript', {
 \   'command': 'eslint -f unix --stdin',
 \   'callback': 'ale_linters#javascript#eslint#Handle',
 \})
+
+call ALEAddLinter('javascript.jsx', {
+\   'name': 'eslint',
+\   'executable': 'eslint',
+\   'command': 'eslint -f unix --stdin',
+\   'callback': 'ale_linters#javascript#eslint#Handle',
+\})
