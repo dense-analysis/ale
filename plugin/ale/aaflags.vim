@@ -1,6 +1,6 @@
-" This file sets up configuration settings for the ALE plugin.
-" Flags can be set in vimrc files and so on to disable particular features,
-" etc.
+" Author: w0rp <devw0rp@gmail.com>
+" Description: This file sets up configuration settings for the ALE plugin.
+"   Flags can be set in vimrc files and so on to disable particular features
 
 if exists('g:loaded_ale_flags')
     finish

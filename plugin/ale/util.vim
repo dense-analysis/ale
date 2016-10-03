@@ -1,3 +1,6 @@
+" Author: w0rp <devw0rp@gmail.com>
+" Description: Contains miscellaneous functions
+
 if exists('g:loaded_ale_util')
     finish
 endif
