@@ -28,5 +28,3 @@ call ALEAddLinter('sh', {
 \   'command': 'shellcheck ' . s:exclude_option . ' -f gcc -',
 \   'callback': 'ale#handlers#HandleGCCFormat',
 \})
-
-echo 'shellcheck' . s:exclude_option . '-f gcc -'
