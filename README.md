@@ -28,6 +28,7 @@ name. That seems to be the fairest way to arrange this table.
 | Bourne Shell | [-n flag](http://linux.die.net/man/1/sh), [shellcheck](https://www.shellcheck.net/) |
 | C | [gcc](https://gcc.gnu.org/) |
 | CoffeeScript | [coffeelint](https://www.npmjs.com/package/coffeelint) |
+| CSS | [csslint](http://csslint.net/)^ |
 | D | [dmd](https://dlang.org/dmd-linux.html)^ |
 | Fortran | [gcc](https://gcc.gnu.org/) |
 | Haskell | [ghc](https://www.haskell.org/ghc/)^ |
