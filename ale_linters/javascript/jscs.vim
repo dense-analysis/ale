@@ -48,3 +48,10 @@ call ALEAddLinter('javascript', {
 \   'command': 'jscs -r unix -n -',
 \   'callback': 'ale_linters#javascript#jscs#Handle',
 \})
+
+call ALEAddLinter('javascript.jsx', {
+\   'name': 'jscs',
+\   'executable': 'jscs',
+\   'command': 'jscs -r unix -n -',
+\   'callback': 'ale_linters#javascript#jscs#Handle',
+\})

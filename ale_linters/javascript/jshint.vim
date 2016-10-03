@@ -56,3 +56,10 @@ call ALEAddLinter('javascript', {
 \   'command': 'jshint --reporter unix --config ' . g:ale_jshint_config_loc . ' -',
 \   'callback': 'ale_linters#javascript#jshint#Handle',
 \})
+
+call ALEAddLinter('javascript.jsx', {
+\   'name': 'jshint',
+\   'executable': 'jshint',
+\   'command': 'jshint --reporter unix --config ' . g:ale_jshint_config_loc . ' -',
+\   'callback': 'ale_linters#javascript#jshint#Handle',
+\})
