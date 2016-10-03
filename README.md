@@ -29,7 +29,7 @@ name. That seems to be the fairest way to arrange this table.
 | Language | Tools |
 | -------- | ----- |
 | Bash | [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set) |
-| Bourne Shell | [-n flag](http://linux.die.net/man/1/sh) |
+| Bourne Shell | [-n flag](http://linux.die.net/man/1/sh), [shellcheck](https://www.shellcheck.net/) |
 | C | [gcc](https://gcc.gnu.org/) |
 | CoffeeScript | [coffeelint](https://www.npmjs.com/package/coffeelint) |
 | D | [dmd](https://dlang.org/dmd-linux.html)^ |
