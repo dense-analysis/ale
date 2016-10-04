@@ -67,6 +67,7 @@ A full list of options supported for configuring this plugin in your
 vimrc file for all given linters is as follows:
 
 | Option | Description | Default |
+| ------ | ----------- | ------- |
 | `g:ale_linters` | a dictionary of linters to whitelist | _not set_ |
 | `g:ale_lint_on_text_changed` | lint while typing  | `1` |
 | `g:ale_lint_delay` | milliseconds to wait before linting | `100` |
