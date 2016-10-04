@@ -157,7 +157,7 @@ function! s:ApplyLinter(buffer, linter)
     if command =~# '%s'
         " If there is a '%s' in the command string, replace it with the name
         " of the file.
-        let command = printf(command, shellescape(getbufinfo(a:buffer)[0].name))
+        let command = printf(command, shellescape(fnamemodify(bufname(a:buffer), ':p')))
     endif
 
     if has('nvim')
