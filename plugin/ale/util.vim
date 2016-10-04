@@ -19,3 +19,8 @@ function! s:FindWrapperScript()
 endfunction
 
 let g:ale#util#stdin_wrapper = s:FindWrapperScript()
+
+" Return the number of lines for a given buffer.
+function! ale#util#GetLineCount(buffer)
+    return len(getbufline(a:buffer, 1, '$'))
+endfunction

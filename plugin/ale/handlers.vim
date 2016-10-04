@@ -49,12 +49,6 @@ function! ale#handlers#HandleCSSLintFormat(buffer, lines)
     " so you can actually read the error type.
     let pattern = '^.*: line \(\d\+\), col \(\d\+\), \(Error\|Warning\) - \(.\+\) (\([^)]\+\))$'
     let output = []
-    " Some errors have line numbers beyond the end of the file,
-    " so we need to adjust them so they set the error at the last line
-    " of the file instead.
-    "
-    " TODO: Find a faster way to compute this.
-    let last_line_number = len(getbufline(a:buffer, 1, '$'))
 
     for line in a:lines
         let l:match = matchlist(line, pattern)
@@ -74,7 +68,7 @@ function! ale#handlers#HandleCSSLintFormat(buffer, lines)
         " vcol is Needed to indicate that the column is a character.
         call add(output, {
         \   'bufnr': a:buffer,
-        \   'lnum': min([l:match[1] + 0, last_line_number]),
+        \   'lnum': l:match[1] + 0,
         \   'vcol': 0,
         \   'col': l:match[2] + 0,
         \   'text': text,

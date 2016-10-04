@@ -93,6 +93,19 @@ function! s:LocItemCompare(left, right)
     return 0
 endfunction
 
+function! s:FixLoclist(buffer, loclist)
+    " Some errors have line numbers beyond the end of the file,
+    " so we need to adjust them so they set the error at the last line
+    " of the file instead.
+    let last_line_number = ale#util#GetLineCount(a:buffer)
+
+    for item in a:loclist
+        if item.lnum > last_line_number
+            let item.lnum = last_line_number
+        endif
+    endfor
+endfunction
+
 function! s:HandleExit(job)
     if !has_key(s:job_info_map, a:job)
         return
@@ -107,6 +120,9 @@ function! s:HandleExit(job)
     let buffer = job_info.buffer
 
     let linter_loclist = s:GetFunction(linter.callback)(buffer, output)
+
+    " Make some adjustments to the loclists to fix common problems.
+    call s:FixLoclist(buffer, linter_loclist)
 
     if g:ale_buffer_should_reset_map[buffer]
         let g:ale_buffer_should_reset_map[buffer] = 0
