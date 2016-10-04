@@ -61,10 +61,26 @@ programs for checking the syntax and semantics of your programs. By default,
 linters will be re-run in the background to check your syntax when you open
 new buffers or as you make edits to your files.
 
-This plugin offers a variety of global flags for turning options on or off,
-all of which are given defaults and described in the [flags](plugin/ale/aaflags.vim)
-file. Linting on open, setting of signs, populating the loclist, and so forth may
-all be configured as desired.
+### Options
+
+A full list of options supported for configuring this plugin in your
+vimrc file for all given linters is as follows:
+
+| Option | Description | Default |
+| `g:ale_linters` | a dictionary of linters to whitelist | _not set_ |
+| `g:ale_lint_on_text_changed` | lint while typing  | `1` |
+| `g:ale_lint_delay` | milliseconds to wait before linting | `100` |
+| `g:ale_lint_on_enter` | lint when opening a file  | `1` |
+| `g:ale_lint_on_save` | lint when saving a file  | `0` |
+| `g:ale_set_loclist` | set the loclist with errors | `1` |
+| `g:ale_set_signs` | set gutter signs with error markers | `has('signs')` |
+| `g:ale_sign_column_always` | always show the sign gutter | `0` |
+| `g:ale_sign_error` | the text to use for errors in the gutter | `'>>'` |
+| `g:ale_sign_warning` | the text to use for warnings in the gutter | `'--'` |
+| `g:ale_sign_offset` | an offset for sign ids | `1000000` |
+| `g:ale_sign_dummy_id` | the id for keeping the gutter open | `10000000` |
+| `g:ale_echo_cursor` | echo errors when the cursor is over them | `1` |
+| `g:ale_warn_about_trailing_whitespace` | enable trailing whitespace warnings for some linters | `1` |
 
 ### Selecting Particular Linters
 
@@ -90,7 +106,7 @@ in each directory corresponds to the name of a particular linter.
 
 ### Always showing gutter
 
-You can keep the sign gutter open at all times by setting the g:ale_sign_column_always to 1
+You can keep the sign gutter open at all times by setting the `g:ale_sign_column_always` to 1
 
 ```vim
 let g:ale_sign_column_always = 1
@@ -104,7 +120,6 @@ Use these options to specify what text should be used for signs:
 let g:ale_sign_error = '>>'
 let g:ale_sign_warning = '--'
 ```
-
 
 ## Installation
 
