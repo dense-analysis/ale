@@ -327,8 +327,6 @@ function! ALELint(delay)
     if a:delay > 0
         let s:lint_timer = timer_start(a:delay, function('s:TimerHandler'))
     else
-        " Show empty gutter if g:ale_sign_column_always = 1
-        call ale#sign#InsertDummy(0)
         call s:TimerHandler()
     endif
 endfunction

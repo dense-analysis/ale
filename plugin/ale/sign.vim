@@ -26,17 +26,43 @@ endif
 " Global variables for signs
 let g:ale_sign_error = get(g:, 'ale_sign_error', '>>')
 let g:ale_sign_warning = get(g:, 'ale_sign_error', '--')
+" An offset which can be set for sign IDs.
+" This ID can be changed depending on what IDs are set for other plugins.
+let g:ale_sign_offset = get(g:, 'ale_sign_offset', 1000000)
+let g:ale_sign_dummy_id = get(g:, 'ale_sign_dummy_id', 10000000)
 
 " Signs show up on the left for error markers.
 execute 'sign define ALEErrorSign text=' . g:ale_sign_error
-			\	. ' texthl=ALEErrorSign'
+\   . ' texthl=ALEErrorSign'
 execute 'sign define ALEWarningSign text=' . g:ale_sign_warning
-			\	. ' texthl=ALEWarningSign'
+\   . ' texthl=ALEWarningSign'
 
-" This function will set the signs which show up on the left.
-function! ale#sign#SetSigns(buffer, loclist)
-    exec 'sign unplace * buffer=' . a:buffer
+function! ale#sign#FindCurrentSigns(buffer)
+    " Matches output like :
+    " line=4  id=1  name=ALEErrorSign
+    let pattern = 'id=\(\d\+\) \+name=ALE\(Warning\|Error\)Sign'
 
+    redir => output
+       silent exec 'sign place buffer=' . a:buffer
+    redir END
+
+    let id_list = []
+
+    for line in split(output, "\n")
+        let match = matchlist(line, pattern)
+
+        if len(match) > 0
+            call add(id_list, match[1] + 0)
+        endif
+    endfor
+
+    return id_list
+endfunction
+
+" Given a loclist, combine the loclist into a list of signs such that only
+" one sign appears per line. Error lines will take precedence.
+" The loclist will have been previously sorted.
+function! ale#sign#CombineSigns(loclist)
     let signlist = []
 
     for obj in a:loclist
@@ -59,13 +85,31 @@ function! ale#sign#SetSigns(buffer, loclist)
         endif
     endfor
 
+    return signlist
+endfunction
+
+" This function will set the signs which show up on the left.
+function! ale#sign#SetSigns(buffer, loclist)
+    let signlist = ale#sign#CombineSigns(a:loclist)
+
+    " Insert a dummy sign if one is missing.
+    " We will only insert the dummy sign at most once.
     call ale#sign#InsertDummy(len(signlist))
 
+    " Find the current signs with the markers we use.
+    let current_id_list = ale#sign#FindCurrentSigns(a:buffer)
+
+    " Remove those markers.
+    for current_id in current_id_list
+        exec 'sign unplace ' . current_id . ' buffer=' . a:buffer
+    endfor
+
+    " Now set all of the signs.
     for i in range(0, len(signlist) - 1)
         let obj = signlist[i]
         let name = obj['type'] ==# 'W' ? 'ALEWarningSign' : 'ALEErrorSign'
 
-        let sign_line = 'sign place ' . (i + 1)
+        let sign_line = 'sign place ' . (i + g:ale_sign_offset)
             \. ' line=' . obj['lnum']
             \. ' name=' . name
             \. ' buffer=' . a:buffer
@@ -74,11 +118,14 @@ function! ale#sign#SetSigns(buffer, loclist)
     endfor
 endfunction
 
-" Show signd gutter if there is no signs and g:ale_sign_column_alwas is set to 1
+" Show sign gutter if there are no signs and g:ale_sign_column_always is set to 1
 function! ale#sign#InsertDummy(no_signs)
     if g:ale_sign_column_always == 1 && a:no_signs == 0
-        sign define ale_keep_open_dummy
-        execute 'sign place 9999 line=1 name=ale_keep_open_dummy buffer=' . bufnr('')
+        sign define ALEDummySign
+        execute 'sign place '
+        \   .  g:ale_sign_dummy_id
+        \   . ' line=1 name=ALEDummySign buffer='
+        \   . bufnr('')
     endif
 endfunction
 

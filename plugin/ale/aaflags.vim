@@ -33,7 +33,8 @@ endif
 
 " This flag can be set to 0 to disable setting signs.
 if !exists('g:ale_set_signs')
-    let g:ale_set_signs = 1
+    " Enable the flag by default if the 'signs' feature exists.
+    let g:ale_set_signs = has('signs')
 endif
 
 " This flag can be set to 0 to disable echoing when the cursor moves.
