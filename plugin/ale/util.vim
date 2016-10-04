@@ -24,3 +24,9 @@ let g:ale#util#stdin_wrapper = s:FindWrapperScript()
 function! ale#util#GetLineCount(buffer)
     return len(getbufline(a:buffer, 1, '$'))
 endfunction
+
+" Given a buffer and a filename, find the nearest file by searching upwards
+" through the paths relative to the given buffer.
+function! ale#util#FindNearestFile(buffer, filename)
+    return findfile(a:filename, fnamemodify(bufname(a:buffer), ':p') . ';')
+endfunction

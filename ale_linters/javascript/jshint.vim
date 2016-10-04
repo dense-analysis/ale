@@ -7,10 +7,26 @@ endif
 
 let g:loaded_ale_linters_javascript_jshint = 1
 
-" Set this to the location of the jshint configuration file
-if !exists('g:ale_jshint_config_loc')
-    let g:ale_jshint_config_loc = '.jshintrc'
-endif
+function! ale_linters#javascript#jshint#GetCommand(buffer)
+    " Set this to the location of the jshint configuration file to
+    " use a fixed location for .jshintrc
+    if exists('g:ale_jshint_config_loc')
+        let jshint_config = g:ale_jshint_config_loc
+    else
+        " Look for the JSHint config in parent directories.
+        let jshint_config = ale#util#FindNearestFile(a:buffer, '.jshintrc')
+    endif
+
+    let command = 'jshint --reporter unix'
+
+    if jshint_config
+        let command .= ' --config ' . shellescape(jshint_config)
+    endif
+
+    let command .= ' -'
+
+    return command
+endfunction
 
 function! ale_linters#javascript#jshint#Handle(buffer, lines)
     " Matches patterns line the following:
@@ -54,13 +70,13 @@ endfunction
 call ALEAddLinter('javascript', {
 \   'name': 'jshint',
 \   'executable': 'jshint',
-\   'command': 'jshint --reporter unix --config ' . g:ale_jshint_config_loc . ' -',
+\   'command_callback': 'ale_linters#javascript#jshint#GetCommand',
 \   'callback': 'ale_linters#javascript#jshint#Handle',
 \})
 
 call ALEAddLinter('javascript.jsx', {
 \   'name': 'jshint',
 \   'executable': 'jshint',
-\   'command': 'jshint --reporter unix --config ' . g:ale_jshint_config_loc . ' -',
+\   'command_callback': 'ale_linters#javascript#jshint#GetCommand',
 \   'callback': 'ale_linters#javascript#jshint#Handle',
 \})
