@@ -354,6 +354,13 @@ if g:ale_lint_on_enter
     augroup END
 endif
 
+if g:ale_lint_on_save
+    augroup ALERunOnSaveGroup
+        autocmd!
+        autocmd BufWrite * call ALELint(0)
+    augroup END
+endif
+
 " Clean up buffers automatically when they are unloaded.
 augroup ALEBuffferCleanup
     autocmd!

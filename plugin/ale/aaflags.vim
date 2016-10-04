@@ -20,6 +20,9 @@ let g:ale_lint_delay = get(g:, 'ale_lint_delay', 100)
 " This flag can be set to 0 to disable linting when the buffer is entered.
 let g:ale_lint_on_enter = get(g:, 'ale_lint_on_enter', 1)
 
+" This flag can be set to 1 to enable linting when a buffer is written.
+let g:ale_lint_on_save = get(g:, 'ale_lint_on_save', 0)
+
 " This flag can be set to 0 to disable setting the loclist.
 let g:ale_set_loclist = get(g:, 'ale_set_loclist', 1)
 
