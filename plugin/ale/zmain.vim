@@ -154,6 +154,12 @@ function! s:ApplyLinter(buffer, linter)
         let command = a:linter.command
     endif
 
+    if command =~# '%s'
+        " If there is a '%s' in the command string, replace it with the name
+        " of the file.
+        let command = printf(command, shellescape(getbufinfo(a:buffer)[0].name))
+    endif
+
     if has('nvim')
         if a:linter.output_stream ==# 'stderr'
             " Read from stderr instead of stdout.

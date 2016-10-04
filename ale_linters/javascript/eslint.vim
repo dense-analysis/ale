@@ -10,9 +10,9 @@ let g:loaded_ale_linters_javascript_eslint = 1
 function! ale_linters#javascript#eslint#Handle(buffer, lines)
     " Matches patterns line the following:
     "
-    " <text>:47:14: Missing trailing comma. [Warning/comma-dangle]
-    " <text>:56:41: Missing semicolon. [Error/semi]
-    let pattern = '^<text>:\(\d\+\):\(\d\+\): \(.\+\) \[\(.\+\)\]'
+    " /path/to/some-filename.js:47:14: Missing trailing comma. [Warning/comma-dangle]
+    " /path/to/some-filename.js:56:41: Missing semicolon. [Error/semi]
+    let pattern = '^.*:\(\d\+\):\(\d\+\): \(.\+\) \[\(.\+\)\]$'
     let output = []
 
     for line in a:lines
@@ -48,13 +48,13 @@ endfunction
 call ALEAddLinter('javascript', {
 \   'name': 'eslint',
 \   'executable': 'eslint',
-\   'command': 'eslint -f unix --stdin',
+\   'command': 'eslint -f unix --stdin --stdin-filename %s',
 \   'callback': 'ale_linters#javascript#eslint#Handle',
 \})
 
 call ALEAddLinter('javascript.jsx', {
 \   'name': 'eslint',
 \   'executable': 'eslint',
-\   'command': 'eslint -f unix --stdin',
+\   'command': 'eslint -f unix --stdin --stdin-filename %s',
 \   'callback': 'ale_linters#javascript#eslint#Handle',
 \})
