@@ -34,6 +34,7 @@ name. That seems to be the fairest way to arrange this table.
 | D | [dmd](https://dlang.org/dmd-linux.html)^ |
 | Fortran | [gcc](https://gcc.gnu.org/) |
 | Haskell | [ghc](https://www.haskell.org/ghc/)^ |
+| HTML | [tidy](http://www.html-tidy.org/) |
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/) |
 | JSON | [jsonlint](http://zaa.ch/jsonlint/) |
 | PHP | [php -l](https://secure.php.net/) |
