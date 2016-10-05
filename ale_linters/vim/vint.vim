@@ -1,5 +1,4 @@
-" Author: w0rp <devw0rp@gmail.com>
-" Modified by: KabbAmine <amine.kabb@gmail.com>
+" Author: w0rp <devw0rp@gmail.com>, KabbAmine <amine.kabb@gmail.com>
 " Description: This file adds support for checking Vim code with Vint.
 
 if exists('g:loaded_ale_linters_vim_vint')
