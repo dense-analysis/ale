@@ -6,6 +6,7 @@ if exists('g:loaded_ale_sign')
 endif
 
 let g:loaded_ale_sign = 1
+let b:dummy_sign_set_map = {}
 
 if !hlexists('ALEErrorSign')
     highlight link ALEErrorSign error
@@ -41,7 +42,8 @@ sign define ALEDummySign
 function! ale#sign#FindCurrentSigns(buffer)
     " Matches output like :
     " line=4  id=1  name=ALEErrorSign
-    let pattern = 'id=\(\d\+\) \+name=ALE\(Warning\|Error\)Sign'
+    " строка=1  id=1000001  имя=ALEErrorSign
+    let pattern = 'id=\(\d\+\).*=ALE\(Warning\|Error\)Sign'
 
     redir => output
        silent exec 'sign place buffer=' . a:buffer
@@ -94,10 +96,14 @@ function! ale#sign#SetSigns(buffer, loclist)
     let signlist = ale#sign#CombineSigns(a:loclist)
 
     if len(signlist) > 0 || g:ale_sign_column_always
-        " Insert a dummy sign if one is missing.
-        execute 'sign place ' .  g:ale_sign_offset
-        \   . ' line=1 name=ALEDummySign buffer='
-        \   . a:buffer
+        if !get(g:ale_buffer_sign_dummy_map, a:buffer, 0)
+            " Insert a dummy sign if one is missing.
+            execute 'sign place ' .  g:ale_sign_offset
+            \   . ' line=1 name=ALEDummySign buffer='
+            \   . a:buffer
+
+            let g:ale_buffer_sign_dummy_map[a:buffer] = 1
+        endif
     endif
 
     " Find the current signs with the markers we use.
@@ -122,6 +128,10 @@ function! ale#sign#SetSigns(buffer, loclist)
     endfor
 
     if !g:ale_sign_column_always && len(signlist) > 0
-        execute 'sign unplace ' . g:ale_sign_offset . ' buffer=' . a:buffer
+        if get(g:ale_buffer_sign_dummy_map, a:buffer, 0)
+            execute 'sign unplace ' . g:ale_sign_offset . ' buffer=' . a:buffer
+
+            let g:ale_buffer_sign_dummy_map[a:buffer] = 0
+        endif
     endif
 endfunction

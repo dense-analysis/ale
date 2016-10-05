@@ -29,6 +29,7 @@ let s:job_output_map = {}
 " Globals which each part of the plugin should use.
 let g:ale_buffer_loclist_map = {}
 let g:ale_buffer_should_reset_map = {}
+let g:ale_buffer_sign_dummy_map = {}
 
 function! s:GetFunction(string_or_ref)
     if type(a:string_or_ref) == type('')
@@ -255,6 +256,10 @@ function s:BufferCleanup(buffer)
 
     if has_key(g:ale_buffer_loclist_map, a:buffer)
         call remove(g:ale_buffer_loclist_map, a:buffer)
+    endif
+
+    if has_key(g:ale_buffer_sign_dummy_map, a:buffer)
+        call remove(g:ale_buffer_sign_dummy_map, a:buffer)
     endif
 endfunction
 
