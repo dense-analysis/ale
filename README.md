@@ -40,7 +40,8 @@ name. That seems to be the fairest way to arrange this table.
 | PHP | [php -l](https://secure.php.net/) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/) |
 | Ruby   | [rubocop](https://github.com/bbatsov/rubocop) |
-| SASS/SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint) |
+| SASS | [sass-lint](https://www.npmjs.com/package/sass-lint) |
+| SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint) |
 | TypeScript | [tslint](https://github.com/palantir/tslint)^ |
 | Vim | [vint](https://github.com/Kuniwak/vint)^ |
 | YAML | [yamllint](https://yamllint.readthedocs.io/)^ |
