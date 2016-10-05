@@ -93,10 +93,12 @@ endfunction
 function! ale#sign#SetSigns(buffer, loclist)
     let signlist = ale#sign#CombineSigns(a:loclist)
 
-    " Insert a dummy sign if one is missing.
-    execute 'sign place ' .  g:ale_sign_dummy_id
-    \   . ' line=1 name=ALEDummySign buffer='
-    \   . a:buffer
+    if len(signlist) > 0 || g:ale_sign_column_always
+        " Insert a dummy sign if one is missing.
+        execute 'sign place ' .  g:ale_sign_dummy_id
+        \   . ' line=1 name=ALEDummySign buffer='
+        \   . a:buffer
+    endif
 
     " Find the current signs with the markers we use.
     let current_id_list = ale#sign#FindCurrentSigns(a:buffer)
@@ -119,7 +121,7 @@ function! ale#sign#SetSigns(buffer, loclist)
         exec sign_line
     endfor
 
-    if !g:ale_sign_column_always
+    if !g:ale_sign_column_always && len(signlist) > 0
         execute 'sign unplace ' . g:ale_sign_dummy_id . ' buffer=' . a:buffer
     endif
 endfunction
