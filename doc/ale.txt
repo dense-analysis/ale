@@ -1,0 +1,322 @@
+*ale.txt*  For Vim version 8.0.  Last change: 2016 October 5
+*ale*
+
+ALE - Asychronous Lint Engine
+
+===============================================================================
+CONTENTS                                                         *ale-contents*
+
+  1. Introduction...........................................|ale-introduction|
+  2. Supported Languages & Tools............................|ale-support|
+  3. Global Options.........................................|ale-options|
+  4. API....................................................|ale-api|
+  5. Contact................................................|ale-contact|
+
+===============================================================================
+1. Introduction                                              *ale-introduction*
+
+ALE provides the means to run linters asynchronously in Vim in a variety of
+languages and tools. ALE sends the contents of buffers to linter programs
+using the |job-control| features available in Vim 8 and NeoVim. For Vim 8,
+Vim must be compiled with the |job| and |channel| and |timer| features
+as a minimum.
+
+ALE supports the following key features:
+
+1. Running linters when text is changed.
+2. Running linters when files are opened.
+3. Running linters when files are saved. (When a global flag is set.)
+4. Populating the |loclist| with warning and errors.
+5. Setting |signs| with warnings and errors for error markers.
+6. Using |echo| to show error messages when the cursor moves.
+
+===============================================================================
+2. Supported Languages & Tools                                    *ale-support*
+
+The following languages and tools are supported.
+
+* Bash: 'shell' (-n flag), 'shellcheck'
+* Bourne Shell: 'shell' (-n flag), 'shellcheck'
+* C: 'gcc'
+* CoffeeScript: 'coffelint'
+* CSS: 'csslint'
+* D: 'dmd'
+* Fortran: 'gcc'
+* Haskell: 'ghc'
+* HTML: 'tidy'
+* JavaScript: 'eslint', 'jscs', 'jshint'
+* JSON: 'jsonlint'
+* PHP: 'php' (-l flag)
+* Python: 'flake8'
+* Ruby: 'rubocop'
+* SASS: 'sasslint'
+* SCSS: 'sasslint', 'scsslint'
+* TypeScript: 'tslint'
+* Vim: 'vint'
+* YAML: 'yamllint'
+
+===============================================================================
+3. Global Options                                                 *ale-options*
+
+g:ale_linters                                                   *g:ale_linters*
+
+Type: |Dictionary|
+Default: unset
+
+  The |g:ale_linters| option sets a |Dictionary| mapping a filetype
+  to a |List| of linter programs to be run when checking particular filetypes.
+  By default, this dictionary will not be set at all, and all possible
+  linter programs will be run for a given filetype, if the linter programs
+  are found to be |executable|.
+
+  This option can be used to enable only a particular set of linters for a
+  file. For example, you can enable only 'eslint' for JavaScript files: >
+    let g:ale_linters = {'javascript': ['eslint']}
+<
+  If you want to disable all linters for a particular filetype, you can pass
+  an empty list of linters as the value: >
+    let g:ale_linters = {'javascript': []}
+<
+
+g:ale_lint_on_text_changed                         *g:ale_lint_on_text_changed*
+
+Type: |Number|
+Default: `1`
+
+By default, ALE will check files with the various supported programs when
+text is changed by using the |TextChanged| event. If this behaviour is not
+desired, then this option can be disabled by setting it to 0. The
+|g:ale_lint_delay| variable will be used to set a |timer_start()| on a delay,
+and each change to a file will continue to call |timer_stop()| and
+|timer_start()| repeatedly until the timer ticks by, and the linters will be
+run. The checking of files will run in the background, so it should not
+inhibit editing files.
+
+
+g:ale_lint_delay                                             *g:ale_lint_delay*
+
+Type: |Number|
+Default: `200`
+
+This variable controls the milliseconds delay after which the linters will be
+run after text is changed. This option is only meaningful with the
+|g:ale_lint_on_text_changed| variable set to `1`.
+
+
+g:ale_lint_on_enter                                       *g:ale_lint_on_enter*
+
+Type: |Number|
+Default: `1`
+
+When this option is set to `1`, the |BufEnter| event will be used to apply
+linters when buffers are first opened. If this is not desired, this variable
+can be set to `0` in your vimrc file to disable this behaviour.
+
+
+g:ale_lint_on_save                                         *g:ale_lint_on_save*
+
+Type: |Number|
+Default: `0`
+
+This option will make ALE run the linters whenever a file is saved when it
+it set to `1` in your vimrc file. This option can be used in combination
+with the |g:ale_lint_on_enter| and |g:ale_lint_on_text_changed| options
+to make ALE only check files after that have been saved, if that is what
+is desired.
+
+
+g:ale_set_loclist                                           *g:ale_set_loclist*
+
+Type: |Number|
+Default: `1`
+
+When this option is set to `1`, the |loclist| will be populate with any warnings
+and errors which are found by ALE. This feature can be used to implement
+jumping between errors through typical use of |lnext| and |lprev|.
+
+
+g:ale_set_signs                                               *g:ale_set_signs*
+
+Type: |Number|
+Default: `has('signs')`
+
+When this option is set to `1`, the |sign| column will be populated with signs
+marking where errors and warnings appear in the file. The 'ALEErrorSign'
+and 'ALEWarningSign' highlight groups will be used to provide highlighting
+for the signs. The text used for signs can be customised with the
+|g:ale_sign_error| and |g:ale_sign_warning| options.
+
+
+g:ale_sign_column_always                             *g:ale_sign_column_always*
+
+Type: |Number|
+Default: `0`
+
+By default, the sign gutter will disappear when all warnings and errors have
+been fixed for a file. When this option is set to `1`, the sign column will
+remain open. This can be preferable if you don't want the text in your file
+to move around as you edit a file.
+
+
+g:ale_sign_error                                             *g:ale_sign_error*
+
+Type: |String|
+Default: `'>>'`
+
+This string can be changed to change the characters used for the sign gutter
+for lines which at least one error on them. Lines with both errors and
+warnings on them will show the error marker, as errors take precedence.
+
+
+g:ale_sign_warning                                         *g:ale_sign_warning*
+
+Type: |String|
+Default: `'--'`
+
+This string can be changed to change the characters used for the sign gutter
+for lines which at least one warning on them.
+
+
+g:ale_sign_offset                                           *g:ale_sign_offset*
+
+Type: |Number|
+Default: `1000000`
+
+This variable controls offset from which numeric IDs will be generated
+for new signs. Signs cannot share the same ID values, so when two Vim plugins
+set signs at the same time, the IDs have to be configured such that they do
+not conflict with one another. If the IDs used by ALE are found to conflict
+with some other plugin, this offset value can be changed, and hopefully
+both plugins will work together. See |sign-place| for more information
+on how signs are set.
+
+
+g:ale_echo_cursor                                           *g:ale_echo_cursor*
+
+Type: |Number|
+Default: `1`
+
+When this option is set to `1`, a truncated message will be echoed when
+a cursor is near a warning or error. ALE will attempt to find the warning
+or error at a column nearest to the cursor when the cursor is resting
+on a line which contains a warning or error. This option can be set to `0`
+to disable this behaviour.
+
+
+g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
+
+Type: |Number|
+Default: `1`
+
+When this option is set to `1`, warnings relating to trailing whitespace on
+lines will be shown in signs, the loclist, and echo messages, etc. If these
+errors are found to be too irritating while edits are being made, and
+you have configured Vim to automatically remove trailing whitespace, then
+you can disable these warnings for some linters by setting this option to `0`.
+
+Not all linters may respect this option. If a linter does not, please
+file a bug report, and it may be possible to add such support.
+
+===============================================================================
+4. API                                                                *ale-api*
+
+ALELint(delay)                                                      *ALELint()*
+  Run linters for the current buffer, based on the filetype of the buffer,
+  with a given `delay`. A `delay` of `0` will run the linters immediately.
+  The linters will always be run in the background. Calling this function
+  again from the same buffer
+
+ALEAddLinter(filetype, linter)                                 *ALEAddLinter()*
+  Given a |String| for a filetype and a |Dictionary| Describing a linter
+  configuration, add a linter for the given filetype. The dictionaries each
+  offer the following options:
+
+  `name`                   The name of the linter. These names will be used by
+                         |g:ale_linters| option for enabling/disabling
+                         particular linters.
+
+                         This argument is required.
+
+  `callback`               A |String| or |Funcref| for a callback function
+                         accepting two arguments (buffer, lines), for a
+                         buffer number the output is for, and the lines of
+                         output from a linter.
+
+                         This callback function should return a |List| of
+                         |Dictionary| objects in the format accepted by
+                         |setqflist()|. The |List| will be sorted by line and
+                         then column order so it can be searched with a binary
+                         search by in future before being passed on to the
+                         |loclist|, etc.
+
+                         This argument is required.
+
+  `executable`             A |String| naming the executable itself which
+                         will be run.  This value will be used to check if the
+                         program requested is installed or not.
+
+                         Either this or the `executable_callback` argument
+                         must be provided.
+
+  `executable_callback  `  A |String| or |Funcref| for a callback function
+                         accepting a buffer number. A |String| should be
+                         returned for the executable to check. This can be
+                         used in place of `executable` when more complicated
+                         processing is needed.
+
+  `command`                A |String| for an  executable to run asynchronously.
+                         This command will be fed the lines from the buffer to
+                         check, and will produce the lines of output given to
+                         the `callback`.
+
+                         Either this or the `command_callback` argument must
+                         be provided.
+
+  `command_callback`       A |String| or |Funcref| for a callback function
+                         accepting a buffer number. A |String| should be
+                         returned for a command to run. This can be used in
+                         place of `command` when more complicated processing
+                         is needed.
+
+  `output_stream`          A |String| for the output stream the lines of output
+                         should be read from for the command which is run. The
+                         accepted values are `'stdout'` and `'stderr'`. This
+                         argument defaults to `'stdout'`. This argument can be
+                         set for linter programs which output their errors and
+                         warnings to the stderr stream instead of stdout.
+
+  Some programs for checking for errors are not capable of receiving input
+  from stdin, as is required by ALE. To remedy this, a wrapper script is
+  provided named in the variable |g:ale#util#stdin_wrapper|. This variable
+  can be called with the regular arguments for any command to forward data
+  from stdin to the program, by way of creating a temporary file. The first
+  argument to the stdin wrapper must be a file extension to save the temporary
+  file with, and the following arguments are the command as normal.
+  For example: >
+  'command': g:ale#util#stdin_wrapper . ' .hs ghc -fno-code -v0',
+<
+
+ALEGetLinters(filetype)                                       *ALEGetLinters()*
+  Return all of linters configured for a given filetype as a |List| of
+  |Dictionary| values in the format specified by |ALEAddLinter()|.
+
+g:ale#util#stdin_wrapper                             *g:ale#util#stdin_wrapper*
+  This variable names a wrapper script for sending stdin input to programs
+  which cannot accept input via stdin. See |ALEAddLinter| for more.
+
+===============================================================================
+5. Contact                                                        *ale-contact*
+
+If you like this plugin, and wish to get in touch, check out the GitHub
+page for issues and more at https://github.com/w0rp/ale
+
+If you wish to contact the author of this plugin directly, please feel
+free to send an email to devw0rp@gmail.com.
+
+
+Please drink responsibly, or not at all, which is ironically the preference
+of w0rp, who is teetotal.
+
+
+
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
