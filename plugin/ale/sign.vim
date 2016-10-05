@@ -36,6 +36,7 @@ execute 'sign define ALEErrorSign text=' . g:ale_sign_error
 \   . ' texthl=ALEErrorSign'
 execute 'sign define ALEWarningSign text=' . g:ale_sign_warning
 \   . ' texthl=ALEWarningSign'
+sign define ALEDummySign
 
 function! ale#sign#FindCurrentSigns(buffer)
     " Matches output like :
@@ -93,8 +94,9 @@ function! ale#sign#SetSigns(buffer, loclist)
     let signlist = ale#sign#CombineSigns(a:loclist)
 
     " Insert a dummy sign if one is missing.
-    " We will only insert the dummy sign at most once.
-    call ale#sign#InsertDummy(len(signlist))
+    execute 'sign place ' .  g:ale_sign_dummy_id
+    \   . ' line=1 name=ALEDummySign buffer='
+    \   . a:buffer
 
     " Find the current signs with the markers we use.
     let current_id_list = ale#sign#FindCurrentSigns(a:buffer)
@@ -116,16 +118,8 @@ function! ale#sign#SetSigns(buffer, loclist)
 
         exec sign_line
     endfor
-endfunction
 
-" Show sign gutter if there are no signs and g:ale_sign_column_always is set to 1
-function! ale#sign#InsertDummy(no_signs)
-    if g:ale_sign_column_always == 1 && a:no_signs == 0
-        sign define ALEDummySign
-        execute 'sign place '
-        \   .  g:ale_sign_dummy_id
-        \   . ' line=1 name=ALEDummySign buffer='
-        \   . bufnr('')
+    if !g:ale_sign_column_always
+        execute 'sign unplace ' . g:ale_sign_dummy_id . ' buffer=' . a:buffer
     endif
 endfunction
-
