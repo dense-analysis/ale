@@ -81,7 +81,6 @@ vimrc file for all given linters is as follows:
 | `g:ale_sign_error` | the text to use for errors in the gutter | `'>>'` |
 | `g:ale_sign_warning` | the text to use for warnings in the gutter | `'--'` |
 | `g:ale_sign_offset` | an offset for sign ids | `1000000` |
-| `g:ale_sign_dummy_id` | the id for keeping the gutter open | `10000000` |
 | `g:ale_echo_cursor` | echo errors when the cursor is over them | `1` |
 | `g:ale_warn_about_trailing_whitespace` | enable trailing whitespace warnings for some linters | `1` |
 

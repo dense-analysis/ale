@@ -28,8 +28,8 @@ let g:ale_sign_error = get(g:, 'ale_sign_error', '>>')
 let g:ale_sign_warning = get(g:, 'ale_sign_warning', '--')
 " An offset which can be set for sign IDs.
 " This ID can be changed depending on what IDs are set for other plugins.
+" The dummy sign will use the ID exactly equal to the offset.
 let g:ale_sign_offset = get(g:, 'ale_sign_offset', 1000000)
-let g:ale_sign_dummy_id = get(g:, 'ale_sign_dummy_id', 10000000)
 
 " Signs show up on the left for error markers.
 execute 'sign define ALEErrorSign text=' . g:ale_sign_error
@@ -95,7 +95,7 @@ function! ale#sign#SetSigns(buffer, loclist)
 
     if len(signlist) > 0 || g:ale_sign_column_always
         " Insert a dummy sign if one is missing.
-        execute 'sign place ' .  g:ale_sign_dummy_id
+        execute 'sign place ' .  g:ale_sign_offset
         \   . ' line=1 name=ALEDummySign buffer='
         \   . a:buffer
     endif
@@ -113,7 +113,7 @@ function! ale#sign#SetSigns(buffer, loclist)
         let obj = signlist[i]
         let name = obj['type'] ==# 'W' ? 'ALEWarningSign' : 'ALEErrorSign'
 
-        let sign_line = 'sign place ' . (i + g:ale_sign_offset)
+        let sign_line = 'sign place ' . (i + g:ale_sign_offset + 1)
             \. ' line=' . obj['lnum']
             \. ' name=' . name
             \. ' buffer=' . a:buffer
@@ -122,6 +122,6 @@ function! ale#sign#SetSigns(buffer, loclist)
     endfor
 
     if !g:ale_sign_column_always && len(signlist) > 0
-        execute 'sign unplace ' . g:ale_sign_dummy_id . ' buffer=' . a:buffer
+        execute 'sign unplace ' . g:ale_sign_offset . ' buffer=' . a:buffer
     endif
 endfunction
