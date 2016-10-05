@@ -71,7 +71,7 @@ vimrc file for all given linters is as follows:
 | ------ | ----------- | ------- |
 | `g:ale_linters` | a dictionary of linters to whitelist | _not set_ |
 | `g:ale_lint_on_text_changed` | lint while typing  | `1` |
-| `g:ale_lint_delay` | milliseconds to wait before linting | `100` |
+| `g:ale_lint_delay` | milliseconds to wait before linting | `200` |
 | `g:ale_lint_on_enter` | lint when opening a file  | `1` |
 | `g:ale_lint_on_save` | lint when saving a file  | `0` |
 | `g:ale_set_loclist` | set the loclist with errors | `1` |

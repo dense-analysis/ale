@@ -350,7 +350,7 @@ endif
 if g:ale_lint_on_enter
     augroup ALERunOnEnterGroup
         autocmd!
-        autocmd BufEnter * call ALELint(0)
+        autocmd BufEnter * call ALELint(10)
     augroup END
 endif
 

@@ -15,7 +15,7 @@ let g:ale_lint_on_text_changed = get(g:, 'ale_lint_on_text_changed', 1)
 " execution of a linter when text is changed. The timeout will be set and
 " cleared each time text is changed, so repeated edits won't trigger the
 " jobs for linting until enough time has passed after editing is done.
-let g:ale_lint_delay = get(g:, 'ale_lint_delay', 100)
+let g:ale_lint_delay = get(g:, 'ale_lint_delay', 200)
 
 " This flag can be set to 0 to disable linting when the buffer is entered.
 let g:ale_lint_on_enter = get(g:, 'ale_lint_on_enter', 1)
