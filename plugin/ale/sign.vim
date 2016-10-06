@@ -1,3 +1,4 @@
+scriptencoding utf-8
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Draws error and warning signs into signcolumn
 
@@ -70,6 +71,11 @@ function! ale#sign#CombineSigns(loclist)
 
     for obj in a:loclist
         let should_append = 1
+
+        if obj.lnum < 1
+            " Skip warnings and errors at line 0, etc.
+            continue
+        endif
 
         if len(signlist) > 0 && signlist[-1].lnum == obj.lnum
             " We can't add the same line twice, because signs must be
