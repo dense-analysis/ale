@@ -6,11 +6,13 @@ ALE - Asychronous Lint Engine
 ===============================================================================
 CONTENTS                                                         *ale-contents*
 
-  1. Introduction...........................................|ale-introduction|
-  2. Supported Languages & Tools............................|ale-support|
-  3. Global Options.........................................|ale-options|
-  4. API....................................................|ale-api|
-  5. Contact................................................|ale-contact|
+  1. Introduction...................................|ale-introduction|
+  2. Supported Languages & Tools....................|ale-support|
+  3. Global Options.................................|ale-options|
+  4. Linter Specific Options........................|ale-linter-options|
+    4.1. eslint................................ ....|ale-linter-options-eslint|
+  5. API............................................|ale-api|
+  6. Contact........................................|ale-contact|
 
 ===============================================================================
 1. Introduction                                              *ale-introduction*
@@ -218,7 +220,24 @@ Not all linters may respect this option. If a linter does not, please
 file a bug report, and it may be possible to add such support.
 
 ===============================================================================
-4. API                                                                *ale-api*
+4. Linter Specific Options                                 *ale-linter-options*
+
+Some linters have specific options which can be configured for each of them,
+for customising their behaviour.
+
+-------------------------------------------------------------------------------
+4.1. eslint
+
+g:ale_javascript_eslint_executable         *g:ale_javascript_eslint_executable*
+
+Type: |String|
+Default: `'eslint'`
+
+This variable can be changed to change the path to eslint. If you have
+eslint_d installed, you can set this option to use eslint_d instead.
+
+===============================================================================
+5. API                                                                *ale-api*
 
 ALELint(delay)                                                      *ALELint()*
   Run linters for the current buffer, based on the filetype of the buffer,
@@ -305,7 +324,7 @@ g:ale#util#stdin_wrapper                             *g:ale#util#stdin_wrapper*
   which cannot accept input via stdin. See |ALEAddLinter| for more.
 
 ===============================================================================
-5. Contact                                                        *ale-contact*
+6. Contact                                                        *ale-contact*
 
 If you like this plugin, and wish to get in touch, check out the GitHub
 page for issues and more at https://github.com/w0rp/ale

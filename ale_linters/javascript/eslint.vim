@@ -7,6 +7,9 @@ endif
 
 let g:loaded_ale_linters_javascript_eslint = 1
 
+let g:ale_javascript_eslint_executable =
+\   get(g:, 'ale_javascript_eslint_executable', 'eslint')
+
 function! ale_linters#javascript#eslint#Handle(buffer, lines)
     " Matches patterns line the following:
     "
@@ -48,14 +51,14 @@ endfunction
 
 call ALEAddLinter('javascript', {
 \   'name': 'eslint',
-\   'executable': 'eslint',
-\   'command': 'eslint -f unix --stdin --stdin-filename %s',
+\   'executable': g:ale_javascript_eslint_executable,
+\   'command': g:ale_javascript_eslint_executable . ' -f unix --stdin --stdin-filename %s',
 \   'callback': 'ale_linters#javascript#eslint#Handle',
 \})
 
 call ALEAddLinter('javascript.jsx', {
 \   'name': 'eslint',
-\   'executable': 'eslint',
-\   'command': 'eslint -f unix --stdin --stdin-filename %s',
+\   'executable': g:ale_javascript_eslint_executable,
+\   'command': g:ale_javascript_eslint_executable . ' -f unix --stdin --stdin-filename %s',
 \   'callback': 'ale_linters#javascript#eslint#Handle',
 \})
