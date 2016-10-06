@@ -22,11 +22,16 @@ function! ale_linters#haskell#ghc#Handle(buffer, lines)
     for line in a:lines
         if len(matchlist(line, pattern)) > 0
             call add(corrected_lines, line)
-            call add(corrected_lines, '')
+            if line !~ ': error:$'
+                call add(corrected_lines, '')
+            endif
         elseif line == ''
             call add(corrected_lines, line)
         else
             if len(corrected_lines) > 0
+                if corrected_lines[-1] =~ ': error:$'
+                    let line = substitute(line, '\v^\s+', ' ', '')
+                endif
                 let corrected_lines[-1] .= line
             endif
         endif
@@ -58,5 +63,13 @@ call ALEAddLinter('haskell', {
 \   'output_stream': 'stderr',
 \   'executable': 'ghc',
 \   'command': g:ale#util#stdin_wrapper . ' .hs ghc -fno-code -v0',
+\   'callback': 'ale_linters#haskell#ghc#Handle',
+\})
+
+call ALEAddLinter('haskell', {
+\   'name': 'stack-ghc',
+\   'output_stream': 'stderr',
+\   'executable': 'stack',
+\   'command': g:ale#util#stdin_wrapper . ' .hs stack ghc -- -fno-code -v0',
 \   'callback': 'ale_linters#haskell#ghc#Handle',
 \})
