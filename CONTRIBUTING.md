@@ -27,7 +27,7 @@ If you want to credit multiple authors, you can comma separate them.
 " Author: John Smith <john.smith@gmail.com>, Jane Doe <https://jane-doe.info>
 ```
 
-# 2.1. Adding a new linter
+# 2.1. Adding a New Linter
 
 If you add a new linter, look for existing handlers first in the [handlers.vim](plugin/ale/handlers.vim) file. One of the handlers
 there may already be able to handle your lines of output. If you find that your new linter replicates an existing error handler,
