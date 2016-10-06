@@ -19,8 +19,8 @@ function! ale_linters#javascript#jshint#GetCommand(buffer)
 
     let command = 'jshint --reporter unix'
 
-    if jshint_config
-        let command .= ' --config ' . shellescape(jshint_config)
+    if !empty(jshint_config)
+        let command .= ' --config ' . fnameescape(jshint_config)
     endif
 
     let command .= ' -'
