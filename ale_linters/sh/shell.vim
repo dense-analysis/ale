@@ -30,25 +30,25 @@ function! ale_linters#sh#shell#GetExecutable(buffer)
     if len(banglines) == 1
         if strpart(banglines[0], 0, 2) == '#!'
             let parts = filter(split(strpart(banglines[0], 2), ' '), "v:val != ''")
-			if len(parts) > 0 
-				if strpart(parts[0], len(parts[0]) - 3) == 'env'
-				   let parts = parts[1:]
-				endif
-				if len(parts) > 0
-					let tmp = ale_linters#sh#shell#ParseShebang(parts)
-				else
-					let tmp = ''
-				endif
-				if strpart(tmp, 0, 1) != '/' && tmp != ''
-					let res = systemlist('which ' . tmp)
-					if len(res) > 0
-						let tmp = res[0]
-					endif
-				endif
-				if tmp != ''
-					let shell = tmp
-				endif
-			endif
+            if len(parts) > 0 
+                if strpart(parts[0], len(parts[0]) - 3) == 'env'
+                   let parts = parts[1:]
+                endif
+                if len(parts) > 0
+                    let tmp = ale_linters#sh#shell#ParseShebang(parts)
+                else
+                    let tmp = ''
+                endif
+                if strpart(tmp, 0, 1) != '/' && tmp != ''
+                    let res = systemlist('which ' . tmp)
+                    if len(res) > 0
+                        let tmp = res[0]
+                    endif
+                endif
+                if tmp != ''
+                    let shell = tmp
+                endif
+            endif
         endif
     endif
 
