@@ -46,7 +46,7 @@ The following languages and tools are supported.
 * HTML: 'tidy'
 * JavaScript: 'eslint', 'jscs', 'jshint'
 * JSON: 'jsonlint'
-* PHP: 'php' (-l flag)
+* PHP: 'php' (-l flag), 'phpcs'
 * Python: 'flake8'
 * Ruby: 'rubocop'
 * SASS: 'sasslint'
