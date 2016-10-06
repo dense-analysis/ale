@@ -23,7 +23,8 @@ function! ale_linters#javascript#eslint#Handle(buffer, lines)
         endif
 
         let text = l:match[3]
-        let marker_parts = l:match[4]
+        let marker = l:match[4]
+        let marker_parts = split(marker, '/')
         let type = marker_parts[0]
 
         if len(marker_parts) == 2
