@@ -42,6 +42,7 @@ name. That seems to be the fairest way to arrange this table.
 | Ruby   | [rubocop](https://github.com/bbatsov/rubocop) |
 | SASS | [sass-lint](https://www.npmjs.com/package/sass-lint) |
 | SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint) |
+| Scala | [scalac](http://scala-lang.org) |
 | TypeScript | [tslint](https://github.com/palantir/tslint)^ |
 | Vim | [vint](https://github.com/Kuniwak/vint)^ |
 | YAML | [yamllint](https://yamllint.readthedocs.io/)^ |
