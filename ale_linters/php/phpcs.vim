@@ -11,8 +11,8 @@ function! ale_linters#php#phpcs#GetCommand(buffer)
     let command = 'phpcs -s --report=emacs --stdin-path=%s'
 
     " This option can be set to change the standard used by phpcs
-    if exists('g:ale_linters_php_phpcs_standard')
-        let command .= ' --standard=' . g:ale_linters_php_phpcs_standard
+    if exists('g:ale_php_phpcs_standard')
+        let command .= ' --standard=' . g:ale_php_phpcs_standard
     endif
 
     return command
