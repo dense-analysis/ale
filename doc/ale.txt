@@ -324,10 +324,12 @@ ALEAddLinter(filetype, linter)                                 *ALEAddLinter()*
 
   `output_stream`          A |String| for the output stream the lines of output
                          should be read from for the command which is run. The
-                         accepted values are `'stdout'` and `'stderr'`. This
-                         argument defaults to `'stdout'`. This argument can be
-                         set for linter programs which output their errors and
-                         warnings to the stderr stream instead of stdout.
+                         accepted values are `'stdout'`, `'stderr'`, and
+                         `'both'`. This argument defaults to `'stdout'`. This
+                         argument can be set for linter programs which output
+                         their errors and warnings to the stderr stream
+                         instead of stdout. The option `'both'` will read
+                         from both stder and stdout at the same time.
 
   Some programs for checking for errors are not capable of receiving input
   from stdin, as is required by ALE. To remedy this, a wrapper script is

@@ -39,7 +39,7 @@ endfunction
 call ALEAddLinter('php', {
 \   'name': 'php',
 \   'executable': 'php',
-\   'output_stream': 'stderr',
+\   'output_stream': 'both',
 \   'command': 'php -l --',
 \   'callback': 'ale_linters#php#php#Handle',
 \})

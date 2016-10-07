@@ -184,6 +184,12 @@ function! s:ApplyLinter(buffer, linter)
             \   'on_stderr': 's:GatherOutputNeoVim',
             \   'on_exit': 's:HandleExitNeoVim',
             \})
+        elseif a:linter.output_stream ==# 'both'
+            let a:linter.job = jobstart(command, {
+            \   'on_stdout': 's:GatherOutputNeoVim',
+            \   'on_stderr': 's:GatherOutputNeoVim',
+            \   'on_exit': 's:HandleExitNeoVim',
+            \})
         else
             let a:linter.job = jobstart(command, {
             \   'on_stdout': 's:GatherOutputNeoVim',
@@ -201,6 +207,10 @@ function! s:ApplyLinter(buffer, linter)
 
         if a:linter.output_stream ==# 'stderr'
             " Read from stderr instead of stdout.
+            let job_options.err_cb = function('s:GatherOutputVim')
+        elseif a:linter.output_stream ==# 'both'
+            " Read from both streams.
+            let job_options.out_cb = function('s:GatherOutputVim')
             let job_options.err_cb = function('s:GatherOutputVim')
         else
             let job_options.out_cb = function('s:GatherOutputVim')
