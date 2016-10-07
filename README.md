@@ -39,6 +39,7 @@ name. That seems to be the fairest way to arrange this table.
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/) |
 | JSON | [jsonlint](http://zaa.ch/jsonlint/) |
 | PHP | [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer) |
+| Pug | [pug-lint](https://github.com/pugjs/pug-lint) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/) |
 | Ruby   | [rubocop](https://github.com/bbatsov/rubocop) |
 | SASS | [sass-lint](https://www.npmjs.com/package/sass-lint) |

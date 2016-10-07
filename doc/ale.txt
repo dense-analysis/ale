@@ -52,6 +52,7 @@ The following languages and tools are supported.
 * JavaScript: 'eslint', 'jscs', 'jshint'
 * JSON: 'jsonlint'
 * PHP: 'php' (-l flag), 'phpcs'
+* Pug: 'pug-lint'
 * Python: 'flake8'
 * Ruby: 'rubocop'
 * SASS: 'sasslint'
