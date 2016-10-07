@@ -128,19 +128,19 @@ let g:ale_sign_warning = '--'
 
 ### Statusline
 
-You can use `ALEGetStatusLine()` to integrate ALE into vim statusline.  
+You can use `ALEGetStatusLine()` to integrate ALE into vim statusline.
 To enable it, you should have in your `statusline` settings
 
 ```vim
 %{ALEGetStatusLine()}
 ```
 
-When errors are detected a string showing the number of errors will be shown.  
+When errors are detected a string showing the number of errors will be shown.
 You can customize the output format using the global list `g:ale_statusline_format` where:
 
 - The 1st element is for errors
 - The 2nd element is for warnings
-- The 3rd element is for when no erros are detected
+- The 3rd element is for when no errors are detected
 
 e.g
 
@@ -148,7 +148,7 @@ e.g
 let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
 ```
 
-![Statusline with issues](img/issues.png)  
+![Statusline with issues](img/issues.png)
 ![Statusline with no issues](img/no_issues.png)
 
 ## Installation

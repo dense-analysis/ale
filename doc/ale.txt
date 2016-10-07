@@ -231,7 +231,7 @@ Default: `['%d error(s)', '%d warning(s)', 'OK']`
 This variable defines the format of |`ALEGetStatusLine()`| output.
 - The 1st element is for errors
 - The 2nd element is for warnings
-- The 3rd element is for when no erros are detected
+- The 3rd element is for when no errors are detected
 
 ===============================================================================
 4. Linter Specific Options                                 *ale-linter-options*
