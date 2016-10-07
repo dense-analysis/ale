@@ -1,4 +1,4 @@
-*ale.txt*  For Vim version 8.0.  Last change: 2016 October 5
+*ale.txt*  For Vim version 8.0.  Last change: 2016 October 7
 *ale*
 
 ALE - Asychronous Lint Engine
@@ -219,6 +219,16 @@ you can disable these warnings for some linters by setting this option to `0`.
 Not all linters may respect this option. If a linter does not, please
 file a bug report, and it may be possible to add such support.
 
+g:ale_statusline_format                               *g:ale_statusline_format*
+
+Type: |List|
+Default: `['%d error(s)', '%d warning(s)', 'OK']`
+
+This variable defines the format of |`ALEGetStatusLine()`| output.
+- The 1st element is for errors
+- The 2nd element is for warnings
+- The 3rd element is for when no erros are detected
+
 ===============================================================================
 4. Linter Specific Options                                 *ale-linter-options*
 
@@ -318,6 +328,12 @@ ALEAddLinter(filetype, linter)                                 *ALEAddLinter()*
 ALEGetLinters(filetype)                                       *ALEGetLinters()*
   Return all of linters configured for a given filetype as a |List| of
   |Dictionary| values in the format specified by |ALEAddLinter()|.
+
+ALEGetStatusLine()                                           *ALEGetStatusLine()*
+  Return a formatted string that can be added to the statusline.
+	The output's format is defined in |`g:ale_statusline_format`|.
+  To enable it, the following should be present in your |statusline| settings: >
+  %{ALEGetStatusLine()}
 
 g:ale#util#stdin_wrapper                             *g:ale#util#stdin_wrapper*
   This variable names a wrapper script for sending stdin input to programs

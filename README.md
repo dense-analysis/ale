@@ -3,7 +3,7 @@
 ALE (Asynchronous Lint Engine) is a plugin for providing linting in NeoVim
 and Vim 8 while you edit your text files.
 
-![linting example](example.gif?raw=true)
+![linting example](img/example.gif?raw=true)
 
 ALE makes use of NeoVim and Vim 8 job control functions and timers to
 run linters on the contents of text buffers and return errors as
@@ -83,6 +83,7 @@ vimrc file for all given linters is as follows:
 | `g:ale_sign_offset` | an offset for sign ids | `1000000` |
 | `g:ale_echo_cursor` | echo errors when the cursor is over them | `1` |
 | `g:ale_warn_about_trailing_whitespace` | enable trailing whitespace warnings for some linters | `1` |
+| `g:ale_statusline_format` | String format to use in statusline flag | `['%d error(s)', '%d warning(s)', 'OK']` |
 
 ### Selecting Particular Linters
 
@@ -122,6 +123,31 @@ Use these options to specify what text should be used for signs:
 let g:ale_sign_error = '>>'
 let g:ale_sign_warning = '--'
 ```
+
+### Statusline
+
+You can use `ALEGetStatusLine()` to integrate ALE into vim statusline.  
+To enable it, you should have in your `statusline` settings
+
+```vim
+%{ALEGetStatusLine()}
+```
+
+When errors are detected a string showing the number of errors will be shown.  
+You can customize the output format using the global list `g:ale_statusline_format` where:
+
+- The 1st element is for errors
+- The 2nd element is for warnings
+- The 3rd element is for when no erros are detected
+
+e.g
+
+```vim
+let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
+```
+
+![Statusline with issues](img/issues.png)  
+![Statusline with no issues](img/no_issues.png)
 
 ## Installation
 
