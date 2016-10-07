@@ -11,6 +11,7 @@ CONTENTS                                                         *ale-contents*
   3. Global Options.................................|ale-options|
   4. Linter Specific Options........................|ale-linter-options|
     4.1. eslint................................ ....|ale-linter-options-eslint|
+    4.2. phpcs......................................|ale-linter-options-phpcs|
   5. API............................................|ale-api|
   6. Contact........................................|ale-contact|
 
@@ -235,6 +236,18 @@ Default: `'eslint'`
 
 This variable can be changed to change the path to eslint. If you have
 eslint_d installed, you can set this option to use eslint_d instead.
+
+-------------------------------------------------------------------------------
+4.2. phpcs                                           *ale-linter-options-phpcs*
+
+g:ale_php_phpcs_standard                             *g:ale_php_phpcs_standard*
+
+Type: |String|
+Default: `''`
+
+This variable can be set to specify the coding standard used by phpcs. If
+no coding standard is specified, phpcs will default to checking against the
+PEAR coding standard, or the standard you have set as the default.
 
 ===============================================================================
 5. API                                                                *ale-api*
