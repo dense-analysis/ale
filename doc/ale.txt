@@ -10,8 +10,9 @@ CONTENTS                                                         *ale-contents*
   2. Supported Languages & Tools....................|ale-support|
   3. Global Options.................................|ale-options|
   4. Linter Specific Options........................|ale-linter-options|
-    4.1. eslint................................ ....|ale-linter-options-eslint|
+    4.1. eslint.....................................|ale-linter-options-eslint|
     4.2. phpcs......................................|ale-linter-options-phpcs|
+    4.3. c-gcc......................................|ale-linter-options-c-gcc|
   5. API............................................|ale-api|
   6. Contact........................................|ale-contact|
 
@@ -227,7 +228,7 @@ Some linters have specific options which can be configured for each of them,
 for customising their behaviour.
 
 -------------------------------------------------------------------------------
-4.1. eslint
+4.1. eslint                                         *ale-linter-options-eslint*
 
 g:ale_javascript_eslint_executable         *g:ale_javascript_eslint_executable*
 
@@ -248,6 +249,16 @@ Default: `''`
 This variable can be set to specify the coding standard used by phpcs. If
 no coding standard is specified, phpcs will default to checking against the
 PEAR coding standard, or the standard you have set as the default.
+
+-------------------------------------------------------------------------------
+4.3. c-gcc                                           *ale-linter-options-c-gcc*
+
+g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
+
+Type: |String|
+Default: `'-Wall'`
+
+This variable can be change to modify flags given to gcc.
 
 ===============================================================================
 5. API                                                                *ale-api*
