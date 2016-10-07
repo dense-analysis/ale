@@ -228,7 +228,7 @@ Some linters have specific options which can be configured for each of them,
 for customising their behaviour.
 
 -------------------------------------------------------------------------------
-4.1. eslint
+4.1. eslint                                         *ale-linter-options-eslint*
 
 g:ale_javascript_eslint_executable         *g:ale_javascript_eslint_executable*
 
