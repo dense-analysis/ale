@@ -44,6 +44,7 @@ The following languages and tools are supported.
 * C: 'gcc'
 * CoffeeScript: 'coffelint'
 * CSS: 'csslint'
+* Cython (pyrex filetype): 'cython'
 * D: 'dmd'
 * Fortran: 'gcc'
 * Haskell: 'ghc'

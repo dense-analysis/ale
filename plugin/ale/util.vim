@@ -30,3 +30,10 @@ endfunction
 function! ale#util#FindNearestFile(buffer, filename)
     return findfile(a:filename, fnamemodify(bufname(a:buffer), ':p') . ';')
 endfunction
+
+" A null file for sending output to nothing.
+let g:ale#util#nul_file = '/dev/null'
+
+if has('win32')
+    let g:ale#util#nul_file = 'nul'
+endif
