@@ -31,7 +31,7 @@ name. That seems to be the fairest way to arrange this table.
 | C | [gcc](https://gcc.gnu.org/) |
 | CoffeeScript | [coffeelint](https://www.npmjs.com/package/coffeelint) |
 | CSS | [csslint](http://csslint.net/)^ |
-| Cython (pyrex filetype) | [cython](http://cython.org/) |
+| Cython (pyrex filetype) | [cython](http://cython.org/)^ |
 | D | [dmd](https://dlang.org/dmd-linux.html)^ |
 | Fortran | [gcc](https://gcc.gnu.org/) |
 | Haskell | [ghc](https://www.haskell.org/ghc/)^ |
