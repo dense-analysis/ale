@@ -36,3 +36,10 @@ consider pulling it up into the [handlers.vim](plugin/ale/handlers.vim) file, an
 When you add a linter, make sure the language for the linter and the linter itself are present in the table in the
 [README.md](README.md) file and in the Vim [help file](doc/ale.txt). The programs and linters are sorted alphabetically in the
 table and list.
+
+# 2.2. Adding New Options
+
+If you add new options to the plugin, make sure to document those new options in the [README.md](README.md) file, and also
+in the [help file](doc/ale.txt). Follow the format of other options in each. Global options should appear in the README 
+file, and in the relevant section in the help file, and options specific to a particular linter should go in the section
+for that linter.
