@@ -13,6 +13,10 @@ function! s:FindWrapperScript()
         let path = expand(parent . '/' . 'stdin-wrapper')
 
         if filereadable(path)
+            if has('win32')
+                return path . '.exe'
+            endif
+
             return path
         endif
     endfor

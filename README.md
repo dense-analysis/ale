@@ -30,11 +30,11 @@ name. That seems to be the fairest way to arrange this table.
 | Bourne Shell | [-n flag](http://linux.die.net/man/1/sh), [shellcheck](https://www.shellcheck.net/) |
 | C | [gcc](https://gcc.gnu.org/) |
 | CoffeeScript | [coffeelint](https://www.npmjs.com/package/coffeelint) |
-| CSS | [csslint](http://csslint.net/)^ |
-| Cython (pyrex filetype) | [cython](http://cython.org/)^ |
+| CSS | [csslint](http://csslint.net/) |
+| Cython (pyrex filetype) | [cython](http://cython.org/) |
 | D | [dmd](https://dlang.org/dmd-linux.html)^ |
 | Fortran | [gcc](https://gcc.gnu.org/) |
-| Haskell | [ghc](https://www.haskell.org/ghc/)^ |
+| Haskell | [ghc](https://www.haskell.org/ghc/) |
 | HTML | [tidy](http://www.html-tidy.org/) |
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/) |
 | JSON | [jsonlint](http://zaa.ch/jsonlint/) |
@@ -44,9 +44,9 @@ name. That seems to be the fairest way to arrange this table.
 | SASS | [sass-lint](https://www.npmjs.com/package/sass-lint) |
 | SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint) |
 | Scala | [scalac](http://scala-lang.org) |
-| TypeScript | [tslint](https://github.com/palantir/tslint)^ |
-| Vim | [vint](https://github.com/Kuniwak/vint)^ |
-| YAML | [yamllint](https://yamllint.readthedocs.io/)^ |
+| TypeScript | [tslint](https://github.com/palantir/tslint) |
+| Vim | [vint](https://github.com/Kuniwak/vint) |
+| YAML | [yamllint](https://yamllint.readthedocs.io/) |
 
 *^ Supported only on Unix machines via a wrapper script.*
 
