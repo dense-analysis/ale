@@ -33,6 +33,12 @@ let g:ale_sign_warning = get(g:, 'ale_sign_warning', '--')
 " The dummy sign will use the ID exactly equal to the offset.
 let g:ale_sign_offset = get(g:, 'ale_sign_offset', 1000000)
 
+" sign bar color
+let g:ale_sign_term_color = get(g:, 'ale_sign_term_color', 'lightgrey')
+let g:ale_sign_term_color_no_error = get(g:, 'ale_sign_term_color_no_error', 'green')
+let g:ale_sign_gui_color = get(g:, 'ale_sign_gui_color', 'lightgrey')
+let g:ale_sign_gui_color_no_error = get(g:, 'ale_sign_gui_color_no_error', 'green')
+
 " Signs show up on the left for error markers.
 execute 'sign define ALEErrorSign text=' . g:ale_sign_error
 \   . ' texthl=ALEErrorSign'
@@ -120,6 +126,13 @@ function! ale#sign#SetSigns(buffer, loclist)
         exec 'sign unplace ' . current_id . ' buffer=' . a:buffer
     endfor
 
+	" set colot of SignColumn
+	if len(signlist) > 0
+		execute ':highlight SignColumn ctermbg=' . g:ale_sign_term_color . ' guibg=' .g:ale_sign_gui_color
+	else
+		execute ':highlight SignColumn ctermbg=' . g:ale_sign_gui_color_no_error . ' guibg=' . g:ale_sign_gui_color_no_error
+	endif
+
     " Now set all of the signs.
     for i in range(0, len(signlist) - 1)
         let obj = signlist[i]
@@ -134,6 +147,7 @@ function! ale#sign#SetSigns(buffer, loclist)
     endfor
 
     if !g:ale_sign_column_always && len(signlist) > 0
+    " if len(signlist) > 0
         if get(g:ale_buffer_sign_dummy_map, a:buffer, 0)
             execute 'sign unplace ' . g:ale_sign_offset . ' buffer=' . a:buffer
 

@@ -84,6 +84,10 @@ vimrc file for all given linters is as follows:
 | `g:ale_sign_offset` | an offset for sign ids | `1000000` |
 | `g:ale_echo_cursor` | echo errors when the cursor is over them | `1` |
 | `g:ale_warn_about_trailing_whitespace` | enable trailing whitespace warnings for some linters | `1` |
+| `g:ale_sign_term_color` | color of the sign bar in term | `lightgrey` |
+| `g:ale_sign_term_color_no_error` | color of the sign bar in term when no errors are found (only visible with g:ale_sign_column_always=1) | `green` |
+| `g:ale_sign_gui_color` | color of the sign bar in GUI | `lightgrey` |
+| `g:ale_sign_gui_color_no_error` | color of the sign bar in GUI when no errors are found (only visible with g:ale_sign_column_always=1) | `green` |
 
 ### Selecting Particular Linters
 
