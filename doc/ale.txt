@@ -55,6 +55,7 @@ The following languages and tools are supported.
 * Ruby: 'rubocop'
 * SASS: 'sasslint'
 * SCSS: 'sasslint', 'scsslint'
+* Scala: 'scalac'
 * TypeScript: 'tslint'
 * Vim: 'vint'
 * YAML: 'yamllint'
