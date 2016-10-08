@@ -25,7 +25,7 @@ function! ale_linters#scala#scalac#Handle(buffer, lines)
         endif
 
         let text = l:match[3]
-        let type = l:match[2] == 'error' ? 'E' : 'W'
+        let type = l:match[2] ==# 'error' ? 'E' : 'W'
         let col = 0
         if ln + 1 < len(a:lines)
             let col = stridx(a:lines[ln + 1], '^')

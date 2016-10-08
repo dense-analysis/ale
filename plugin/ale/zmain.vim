@@ -107,7 +107,7 @@ function! s:FixLoclist(buffer, loclist)
 endfunction
 
 function! s:HandleExit(job)
-    if a:job == 'no process'
+    if a:job ==# 'no process'
         " Stop right away when the job is not valid in Vim 8.
         return
     endif
@@ -249,7 +249,7 @@ function! s:ApplyLinter(buffer, linter)
     endif
 
     " Only proceed if the job is being run.
-    if has('nvim') || (job != 'no process' && job_status(job) == 'run')
+    if has('nvim') || (job !=# 'no process' && job_status(job) ==# 'run')
         let a:linter.job = job
 
         " Store the ID for the job in the map to read back again.
@@ -271,7 +271,7 @@ function! s:ApplyLinter(buffer, linter)
             let input = join(getbufline(a:buffer, 1, '$'), "\n") . "\n"
             let channel = job_getchannel(job)
 
-            if ch_status(channel) == 'open'
+            if ch_status(channel) ==# 'open'
                 call ch_sendraw(channel, input)
                 call ch_close_in(channel)
             endif

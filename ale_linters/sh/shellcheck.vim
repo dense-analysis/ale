@@ -16,7 +16,7 @@ if !exists('g:ale_linters_sh_shellcheck_exclusions')
     let g:ale_linters_sh_shellcheck_exclusions = ''
 endif
 
-if g:ale_linters_sh_shellcheck_exclusions != ''
+if g:ale_linters_sh_shellcheck_exclusions !=# ''
     let s:exclude_option = '-e ' .  g:ale_linters_sh_shellcheck_exclusions
 else
     let s:exclude_option = ''

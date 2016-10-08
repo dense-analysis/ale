@@ -22,14 +22,14 @@ function! ale_linters#haskell#ghc#Handle(buffer, lines)
     for line in a:lines
         if len(matchlist(line, pattern)) > 0
             call add(corrected_lines, line)
-            if line !~ ': error:$'
+            if line !~# ': error:$'
                 call add(corrected_lines, '')
             endif
-        elseif line == ''
+        elseif line ==# ''
             call add(corrected_lines, line)
         else
             if len(corrected_lines) > 0
-                if corrected_lines[-1] =~ ': error:$'
+                if corrected_lines[-1] =~# ': error:$'
                     let line = substitute(line, '\v^\s+', ' ', '')
                 endif
                 let corrected_lines[-1] .= line
