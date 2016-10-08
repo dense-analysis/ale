@@ -19,12 +19,8 @@ endif
 "
 " linter: The linter dictionary for the job.
 " buffer: The buffer number for the job.
-" output: The array of lines for the ouptut of the job.
+" output: The array of lines for the output of the job.
 let s:job_info_map = {}
-
-let s:job_linter_map = {}
-let s:job_buffer_map = {}
-let s:job_output_map = {}
 
 " Globals which each part of the plugin should use.
 let g:ale_buffer_loclist_map = {}
@@ -40,7 +36,8 @@ function! s:GetFunction(string_or_ref)
 endfunction
 
 function! s:ClearJob(job)
-    let linter = s:job_info_map[a:job].linter
+    let job_id = s:GetJobID(a:job)
+    let linter = s:job_info_map[job_id].linter
 
     if has('nvim')
         call jobstop(a:job)
@@ -54,16 +51,18 @@ function! s:ClearJob(job)
         call job_stop(a:job)
     endif
 
-    call remove(s:job_info_map, a:job)
+    call remove(s:job_info_map, job_id)
     call remove(linter, 'job')
 endfunction
 
 function! s:GatherOutput(job, data)
-    if !has_key(s:job_info_map, a:job)
+    let job_id = s:GetJobID(a:job)
+
+    if !has_key(s:job_info_map, job_id)
         return
     endif
 
-    call extend(s:job_info_map[a:job].output, a:data)
+    call extend(s:job_info_map[job_id].output, a:data)
 endfunction
 
 function! s:GatherOutputNeoVim(job, data, event)
@@ -108,11 +107,13 @@ function! s:FixLoclist(buffer, loclist)
 endfunction
 
 function! s:HandleExit(job)
-    if !has_key(s:job_info_map, a:job)
+    let job_id = s:GetJobID(a:job)
+
+    if !has_key(s:job_info_map, job_id)
         return
     endif
 
-    let job_info = s:job_info_map[a:job]
+    let job_info = s:job_info_map[job_id]
 
     call s:ClearJob(a:job)
 
@@ -148,6 +149,17 @@ function! s:HandleExit(job)
 
     " Mark line 200, column 17 with a squiggly line or something
     " matchadd('ALEError', '\%200l\%17v')
+endfunction
+
+function! s:GetJobID(job)
+    if has('nvim')
+        "In NeoVim, job values are just IDs.
+        return a:job
+    endif
+
+    " In Vim 8, the job is a special variable, and we open a channel for each
+    " job. We'll use the ID of the channel instead as the job ID.
+    return ch_info(job_getchannel(a:job)).id
 endfunction
 
 function! s:HandleExitNeoVim(job, data, event)
@@ -227,7 +239,8 @@ function! s:ApplyLinter(buffer, linter)
         let a:linter.job = job_start(l:command, l:job_options)
     endif
 
-    let s:job_info_map[a:linter.job] = {
+    " Store the ID for the job in the map to read back again.
+    let s:job_info_map[s:GetJobID(a:linter.job)] = {
     \   'linter': a:linter,
     \   'buffer': a:buffer,
     \   'output': [],
