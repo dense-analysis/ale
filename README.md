@@ -1,5 +1,4 @@
-# ALE - Asynchronous Lint Engine
-[![Build Status](https://travis-ci.org/w0rp/ale.svg?branch=master)](https://travis-ci.org/w0rp/ale)
+# ALE - Asynchronous Lint Engine [![Build Status](https://travis-ci.org/w0rp/ale.svg?branch=master)](https://travis-ci.org/w0rp/ale)
 
 ALE (Asynchronous Lint Engine) is a plugin for providing linting in NeoVim
 and Vim 8 while you edit your text files.
