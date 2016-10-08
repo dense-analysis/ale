@@ -59,6 +59,7 @@ The following languages and tools are supported.
 * SCSS: 'sasslint', 'scsslint'
 * Scala: 'scalac'
 * TypeScript: 'tslint'
+* Verilog: 'iverilog'
 * Vim: 'vint'
 * YAML: 'yamllint'
 
