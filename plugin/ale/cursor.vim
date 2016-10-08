@@ -49,10 +49,17 @@ function! ale#cursor#TruncatedEcho(message)
     " Remove any newlines in the message.
     let message = substitute(message, "\n", '', 'g')
 
-    let truncated_message = join(split(message, '\zs')[:&columns - 2], '')
+    " We need to turn T for truncated messages on for shortmess,
+    " and then then we need to reset the option back to what it was.
+    let shortmess_options = &shortmess
 
-    " Echo the message truncated to fit without creating a prompt.
-    echo truncated_message
+    try
+        " Echo the message truncated to fit without creating a prompt.
+        set shortmess+=T
+        exec "norm :echomsg message\n"
+    finally
+        let &shortmess = shortmess_options
+    endtry
 endfunction
 
 function! ale#cursor#EchoCursorWarning(...)
