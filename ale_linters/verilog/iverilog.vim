@@ -11,7 +11,7 @@ function! ale_linters#verilog#iverilog#Handle(buffer, lines)
     " tb_me_top.v:17: syntax error
     " memory_single_port.v:2: syntax error
     " tb_me_top.v:17: error: Invalid module instantiation
-    let pattern =   '^[^:]\+:\(\d\+\): \(warning\|error\|syntax error\)\(: \(.\+\)\)\?'
+    let pattern = '^[^:]\+:\(\d\+\): \(warning\|error\|syntax error\)\(: \(.\+\)\)\?'
     let output = []
 
     for line in a:lines
@@ -20,7 +20,6 @@ function! ale_linters#verilog#iverilog#Handle(buffer, lines)
         if len(l:match) == 0
             continue
         endif
-
 
         let line = l:match[1] + 0
         let type = l:match[2] ==# 'warning' ? 'W' : 'E'
