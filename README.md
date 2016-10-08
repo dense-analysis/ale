@@ -29,7 +29,7 @@ name. That seems to be the fairest way to arrange this table.
 | Bash | [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set), [shellcheck](https://www.shellcheck.net/) |
 | Bourne Shell | [-n flag](http://linux.die.net/man/1/sh), [shellcheck](https://www.shellcheck.net/) |
 | C | [gcc](https://gcc.gnu.org/) |
-| C++ (cpp filetype)| [gcc](https://gcc.gnu.org/) |
+| C++ (filetype cpp)| [gcc](https://gcc.gnu.org/) |
 | CoffeeScript | [coffeelint](https://www.npmjs.com/package/coffeelint) |
 | CSS | [csslint](http://csslint.net/) |
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
@@ -47,6 +47,7 @@ name. That seems to be the fairest way to arrange this table.
 | SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint) |
 | Scala | [scalac](http://scala-lang.org) |
 | TypeScript | [tslint](https://github.com/palantir/tslint) |
+| Verilog | [iverilog](https://github.com/steveicarus/iverilog) |
 | Vim | [vint](https://github.com/Kuniwak/vint) |
 | YAML | [yamllint](https://yamllint.readthedocs.io/) |
 
