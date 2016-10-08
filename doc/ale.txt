@@ -13,6 +13,7 @@ CONTENTS                                                         *ale-contents*
     4.1. eslint.....................................|ale-linter-options-eslint|
     4.2. phpcs......................................|ale-linter-options-phpcs|
     4.3. c-gcc......................................|ale-linter-options-c-gcc|
+    4.4. cpp-gcc....................................|ale-linter-options-cpp-gcc|
   5. API............................................|ale-api|
   6. Contact........................................|ale-contact|
 
@@ -42,6 +43,7 @@ The following languages and tools are supported.
 * Bash: 'shell' (-n flag), 'shellcheck'
 * Bourne Shell: 'shell' (-n flag), 'shellcheck'
 * C: 'gcc'
+* Cpp: 'gcc'
 * CoffeeScript: 'coffelint'
 * CSS: 'csslint'
 * Cython (pyrex filetype): 'cython'
@@ -267,6 +269,16 @@ PEAR coding standard, or the standard you have set as the default.
 4.3. c-gcc                                           *ale-linter-options-c-gcc*
 
 g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
+
+Type: |String|
+Default: `'-Wall'`
+
+This variable can be change to modify flags given to gcc.
+
+-------------------------------------------------------------------------------
+4.4. cpp-gcc                                       *ale-linter-options-cpp-gcc*
+
+g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
 
 Type: |String|
 Default: `'-Wall'`
