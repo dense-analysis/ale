@@ -15,6 +15,7 @@ CONTENTS                                                         *ale-contents*
     4.3. c-gcc..................................|ale-linter-options-c-gcc|
     4.4. cpp-gcc................................|ale-linter-options-cpp-gcc|
     4.5. fortran-gcc............................|ale-linter-options-fortran-gcc|
+    4.6. html-tidy..............................|ale-linter-options-html-tidy|
   5. API........................................|ale-api|
   6. Contact....................................|ale-contact|
 
@@ -296,6 +297,35 @@ Default: `'-Wall'`
 
 This variable can be changed to modify flags given to gcc.
 
+-------------------------------------------------------------------------------
+4.6. html-tidy                                   *ale-linter-options-html-tidy*
+
+g:ale_html_tidy_executable                         *g:ale_html_tidy_executable*
+
+Type: |String|
+Default: `'tidy'`
+
+This variable can be changed to change the path to tidy.
+
+
+g:ale_html_tidy_args                                     *g:ale_html_tidy_args*
+
+Type: |String|
+Default: '-q -e -language en'
+
+This variable can be changed to change the arguments provide to the
+executable.
+
+
+File encoding
+The linter will auto-detect the file encoding and provide the good option to
+the executable. If it can't detect the file encoding, it will fall back to
+utf8.
+
+The recognize file encoding are the following :
+ascii, big5, cp1252 (win1252), cp850 (ibm858), cp932 (shiftjis),
+iso-2022-jp (iso-2022), latin1, macroman (mac), sjis (shiftjis), utf-16le,
+utf-16, utf-8
 ===============================================================================
 5. API                                                                *ale-api*
 
