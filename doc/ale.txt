@@ -50,7 +50,7 @@ The following languages and tools are supported.
 * D: 'dmd'
 * Fortran: 'gcc'
 * Haskell: 'ghc'
-* HTML: 'tidy'
+* HTML: 'HTMLHint', 'tidy'
 * JavaScript: 'eslint', 'jscs', 'jshint'
 * JSON: 'jsonlint'
 * PHP: 'php' (-l flag), 'phpcs'
