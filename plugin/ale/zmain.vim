@@ -215,11 +215,10 @@ function! s:ApplyLinter(buffer, linter)
         endif
     else
         let job_options = {
+        \   'in_mode': 'nl',
         \   'out_mode': 'nl',
         \   'err_mode': 'nl',
         \   'close_cb': function('s:HandleExitVim'),
-        \   'in_io': 'buffer',
-        \   'in_buf': a:buffer,
         \}
 
         if a:linter.output_stream ==# 'stderr'
@@ -238,14 +237,19 @@ function! s:ApplyLinter(buffer, linter)
             " othwerwise %PATHTEXT% will not be used to programs ending int
             " .cmd, .bat, .exe, etc.
             let l:command = 'cmd /c ' . l:command
+        else
+            " On Unix machines, we can send the Vim buffer directly.
+            " This is faster than reading the lines ourselves.
+            let job_options.in_io = 'buffer'
+            let job_options.in_buf = a:buffer
         endif
 
         " Vim 8 will read the stdin from the file's buffer.
         let job = job_start(l:command, l:job_options)
     endif
 
-    " Sometimes the job can be failed to be created at all in Vim 8.
-    if job != 'no process'
+    " Only proceed if the job is being run.
+    if has('nvim') || (job != 'no process' && job_status(job) == 'run')
         let a:linter.job = job
 
         " Store the ID for the job in the map to read back again.
@@ -256,9 +260,21 @@ function! s:ApplyLinter(buffer, linter)
         \}
 
         if has('nvim')
-            " For NeoVim, we have to send the text in the buffer to the command.
-            call jobsend(a:linter.job, join(getline(1, '$'), "\n") . "\n")
-            call jobclose(a:linter.job, 'stdin')
+            " In NeoVim, we have to send the buffer lines ourselves.
+            let input = join(getbufline(a:buffer, 1, '$'), "\n") . "\n"
+
+            call jobsend(job, input)
+            call jobclose(job, 'stdin')
+        elseif has('win32')
+            " On Windows, we have to send the buffer lines ourselves,
+            " as there are issues with Windows and 'in_buf'
+            let input = join(getbufline(a:buffer, 1, '$'), "\n") . "\n"
+            let channel = job_getchannel(job)
+
+            if ch_status(channel) == 'open'
+                call ch_sendraw(channel, input)
+                call ch_close_in(channel)
+            endif
         endif
     endif
 endfunction
@@ -395,7 +411,7 @@ endif
 if g:ale_lint_on_enter
     augroup ALERunOnEnterGroup
         autocmd!
-        autocmd BufEnter,BufRead * call ALELint(0)
+        autocmd BufEnter,BufRead * call ALELint(100)
     augroup END
 endif
 
