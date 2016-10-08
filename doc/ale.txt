@@ -43,7 +43,7 @@ The following languages and tools are supported.
 * Bash: 'shell' (-n flag), 'shellcheck'
 * Bourne Shell: 'shell' (-n flag), 'shellcheck'
 * C: 'gcc'
-* C++ (filetype cpp): 'gcc'
+* C++ (cpp filetype): 'gcc'
 * CoffeeScript: 'coffelint'
 * CSS: 'csslint'
 * Cython (pyrex filetype): 'cython'

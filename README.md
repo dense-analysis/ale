@@ -29,7 +29,7 @@ name. That seems to be the fairest way to arrange this table.
 | Bash | [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set), [shellcheck](https://www.shellcheck.net/) |
 | Bourne Shell | [-n flag](http://linux.die.net/man/1/sh), [shellcheck](https://www.shellcheck.net/) |
 | C | [gcc](https://gcc.gnu.org/) |
-| C++ (filetype cpp)| [gcc](https://gcc.gnu.org/) |
+| C++ (cpp filetype)| [gcc](https://gcc.gnu.org/) |
 | CoffeeScript | [coffeelint](https://www.npmjs.com/package/coffeelint) |
 | CSS | [csslint](http://csslint.net/) |
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
