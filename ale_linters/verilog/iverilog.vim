@@ -29,7 +29,7 @@ function! ale_linters#verilog#iverilog#Handle(buffer, lines)
         \   'bufnr': a:buffer,
         \   'lnum': line,
         \   'vcol': 0,
-        \   'col': 0,
+        \   'col': 1,
         \   'text': text,
         \   'type': type,
         \   'nr': -1,
