@@ -216,6 +216,13 @@ function! s:ApplyLinter(buffer, linter)
             let job_options.out_cb = function('s:GatherOutputVim')
         endif
 
+        if has('win32')
+            " job_start commands on Windows have to be run with cmd /c,
+            " othwerwise %PATHTEXT% will not be used to programs ending int
+            " .cmd, .bat, .exe, etc.
+            let l:command = 'cmd /c ' . l:command
+        endif
+
         " Vim 8 will read the stdin from the file's buffer.
         let a:linter.job = job_start(l:command, l:job_options)
     endif
