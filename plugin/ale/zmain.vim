@@ -107,6 +107,11 @@ function! s:FixLoclist(buffer, loclist)
 endfunction
 
 function! s:HandleExit(job)
+    if a:job == 'no process'
+        " Stop right away when the job is not valid in Vim 8.
+        return
+    endif
+
     let job_id = s:GetJobID(a:job)
 
     if !has_key(s:job_info_map, job_id)
@@ -192,18 +197,18 @@ function! s:ApplyLinter(buffer, linter)
     if has('nvim')
         if a:linter.output_stream ==# 'stderr'
             " Read from stderr instead of stdout.
-            let a:linter.job = jobstart(command, {
+            let job = jobstart(command, {
             \   'on_stderr': 's:GatherOutputNeoVim',
             \   'on_exit': 's:HandleExitNeoVim',
             \})
         elseif a:linter.output_stream ==# 'both'
-            let a:linter.job = jobstart(command, {
+            let job = jobstart(command, {
             \   'on_stdout': 's:GatherOutputNeoVim',
             \   'on_stderr': 's:GatherOutputNeoVim',
             \   'on_exit': 's:HandleExitNeoVim',
             \})
         else
-            let a:linter.job = jobstart(command, {
+            let job = jobstart(command, {
             \   'on_stdout': 's:GatherOutputNeoVim',
             \   'on_exit': 's:HandleExitNeoVim',
             \})
@@ -236,20 +241,25 @@ function! s:ApplyLinter(buffer, linter)
         endif
 
         " Vim 8 will read the stdin from the file's buffer.
-        let a:linter.job = job_start(l:command, l:job_options)
+        let job = job_start(l:command, l:job_options)
     endif
 
-    " Store the ID for the job in the map to read back again.
-    let s:job_info_map[s:GetJobID(a:linter.job)] = {
-    \   'linter': a:linter,
-    \   'buffer': a:buffer,
-    \   'output': [],
-    \}
+    " Sometimes the job can be failed to be created at all in Vim 8.
+    if job != 'no process'
+        let a:linter.job = job
 
-    if has('nvim')
-        " For NeoVim, we have to send the text in the buffer to the command.
-        call jobsend(a:linter.job, join(getline(1, '$'), "\n") . "\n")
-        call jobclose(a:linter.job, 'stdin')
+        " Store the ID for the job in the map to read back again.
+        let s:job_info_map[s:GetJobID(job)] = {
+        \   'linter': a:linter,
+        \   'buffer': a:buffer,
+        \   'output': [],
+        \}
+
+        if has('nvim')
+            " For NeoVim, we have to send the text in the buffer to the command.
+            call jobsend(a:linter.job, join(getline(1, '$'), "\n") . "\n")
+            call jobclose(a:linter.job, 'stdin')
+        endif
     endif
 endfunction
 
