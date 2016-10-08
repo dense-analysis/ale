@@ -3,7 +3,7 @@
 ALE (Asynchronous Lint Engine) is a plugin for providing linting in NeoVim
 and Vim 8 while you edit your text files.
 
-![linting example](example.gif?raw=true)
+![linting example](img/example.gif?raw=true)
 
 ALE makes use of NeoVim and Vim 8 job control functions and timers to
 run linters on the contents of text buffers and return errors as
@@ -30,22 +30,24 @@ name. That seems to be the fairest way to arrange this table.
 | Bourne Shell | [-n flag](http://linux.die.net/man/1/sh), [shellcheck](https://www.shellcheck.net/) |
 | C | [gcc](https://gcc.gnu.org/) |
 | CoffeeScript | [coffeelint](https://www.npmjs.com/package/coffeelint) |
-| CSS | [csslint](http://csslint.net/)^ |
+| CSS | [csslint](http://csslint.net/) |
+| Cython (pyrex filetype) | [cython](http://cython.org/) |
 | D | [dmd](https://dlang.org/dmd-linux.html)^ |
 | Fortran | [gcc](https://gcc.gnu.org/) |
-| Haskell | [ghc](https://www.haskell.org/ghc/)^ |
+| Haskell | [ghc](https://www.haskell.org/ghc/) |
 | HTML | [tidy](http://www.html-tidy.org/) |
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/) |
 | JSON | [jsonlint](http://zaa.ch/jsonlint/) |
 | PHP | [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer) |
+| Pug | [pug-lint](https://github.com/pugjs/pug-lint) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/) |
 | Ruby   | [rubocop](https://github.com/bbatsov/rubocop) |
 | SASS | [sass-lint](https://www.npmjs.com/package/sass-lint) |
 | SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint) |
 | Scala | [scalac](http://scala-lang.org) |
-| TypeScript | [tslint](https://github.com/palantir/tslint)^ |
-| Vim | [vint](https://github.com/Kuniwak/vint)^ |
-| YAML | [yamllint](https://yamllint.readthedocs.io/)^ |
+| TypeScript | [tslint](https://github.com/palantir/tslint) |
+| Vim | [vint](https://github.com/Kuniwak/vint) |
+| YAML | [yamllint](https://yamllint.readthedocs.io/) |
 
 *^ Supported only on Unix machines via a wrapper script.*
 
@@ -84,6 +86,7 @@ vimrc file for all given linters is as follows:
 | `g:ale_sign_offset` | an offset for sign ids | `1000000` |
 | `g:ale_echo_cursor` | echo errors when the cursor is over them | `1` |
 | `g:ale_warn_about_trailing_whitespace` | enable trailing whitespace warnings for some linters | `1` |
+| `g:ale_statusline_format` | String format to use in statusline flag | `['%d error(s)', '%d warning(s)', 'OK']` |
 
 ### Selecting Particular Linters
 
@@ -123,6 +126,31 @@ Use these options to specify what text should be used for signs:
 let g:ale_sign_error = '>>'
 let g:ale_sign_warning = '--'
 ```
+
+### Statusline
+
+You can use `ALEGetStatusLine()` to integrate ALE into vim statusline.
+To enable it, you should have in your `statusline` settings
+
+```vim
+%{ALEGetStatusLine()}
+```
+
+When errors are detected a string showing the number of errors will be shown.
+You can customize the output format using the global list `g:ale_statusline_format` where:
+
+- The 1st element is for errors
+- The 2nd element is for warnings
+- The 3rd element is for when no errors are detected
+
+e.g
+
+```vim
+let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
+```
+
+![Statusline with issues](img/issues.png)
+![Statusline with no issues](img/no_issues.png)
 
 ## Installation
 

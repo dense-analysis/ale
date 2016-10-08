@@ -2,6 +2,7 @@
 
 1. [Guidelines](#guidelines)
 2. [Creating Pull Requests](#pull-requests)
+3. [Creating Pull Requests](#compiling)
 
 <a name="guidelines"></a>
 
@@ -40,6 +41,21 @@ table and list.
 # 2.2. Adding New Options
 
 If you add new options to the plugin, make sure to document those new options in the [README.md](README.md) file, and also
-in the [help file](doc/ale.txt). Follow the format of other options in each. Global options should appear in the README 
+in the [help file](doc/ale.txt). Follow the format of other options in each. Global options should appear in the README
 file, and in the relevant section in the help file, and options specific to a particular linter should go in the section
 for that linter.
+
+<a name="compiling"></a>
+
+# 3. Compiling the Windows stdin wrapper
+
+To compile the stdin wrapper program for Windows, when updating the D program, you will need to compile the program with
+[LDC](https://github.com/ldc-developers/ldc) in release mode. Download and install the Community edition of Visual Studio
+from [the Visual Studio website](https://www.visualstudio.com/downloads/) first before installing LDC. LDC typically comes in
+a ZIP you can just extract somewhere.
+
+Make sure to compile with the 32-bit architecture flag, otherwise the EXE will not run on 32-bit machines.
+
+```
+ldc2 -m32 -Oz -release stdin_wrapper.d -of=stdin-wrapper.exe
+```

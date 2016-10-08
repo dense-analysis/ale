@@ -39,3 +39,12 @@ let g:ale_warn_about_trailing_whitespace =
 
 " This flag can be set to 1 to keep sign gutter always open
 let g:ale_sign_column_always = get(g:, 'ale_sign_column_always', 0)
+
+" String format for statusline
+" Its a list where:
+" * The 1st element is for errors
+" * The 2nd element is for warnings
+" * The 3rd element is when there are no errors
+let g:ale_statusline_format = get(g:, 'ale_statusline_format', 
+\   ['%d error(s)', '%d warning(s)', 'OK']
+\)
