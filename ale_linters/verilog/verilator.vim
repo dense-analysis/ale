@@ -1,3 +1,6 @@
+" Author: Masahiro H https://github.com/mshr-h
+" Description: verilator for verilog files
+
 if exists('g:loaded_ale_linters_verilog_verilator')
     finish
 endif
