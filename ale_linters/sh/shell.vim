@@ -39,7 +39,7 @@ function! ale_linters#sh#shell#Handle(buffer, lines)
     "
     " bash: line 13: syntax error near unexpected token `d'
     " sh: 11: Syntax error: "(" unexpected
-    let pattern = '^[^:]\+: \%(line \|\)\(\d\+\): \(.\+\)'
+    let pattern = '^[^:]\+: \%(\w\+ \|\)\(\d\+\): \(.\+\)'
     let output = []
 
     for line in a:lines
