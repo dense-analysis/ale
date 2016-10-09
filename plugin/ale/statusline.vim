@@ -2,7 +2,7 @@
 " Description: Statusline related function(s)
 
 function! ALEGetStatusLine() abort
-    " Returns a formatted string that can be integrated in the 
+    " Returns a formatted string that can be integrated in the
     " statusline
 
     let buf = bufnr('%')
