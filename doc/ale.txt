@@ -74,8 +74,8 @@ The following languages and tools are supported.
 
 g:ale_linters                                                   *g:ale_linters*
 
-Type: |Dictionary|
-Default: unset
+  Type: |Dictionary|
+  Default: unset
 
   The |g:ale_linters| option sets a |Dictionary| mapping a filetype
   to a |List| of linter programs to be run when checking particular filetypes.
@@ -94,8 +94,8 @@ Default: unset
 
 g:ale_lint_on_text_changed                         *g:ale_lint_on_text_changed*
 
-Type: |Number|
-Default: `1`
+  Type: |Number|
+  Default: `1`
 
   By default, ALE will check files with the various supported programs when
   text is changed by using the |TextChanged| event. If this behaviour is not
@@ -109,8 +109,8 @@ Default: `1`
 
 g:ale_lint_delay                                             *g:ale_lint_delay*
 
-Type: |Number|
-Default: `200`
+  Type: |Number|
+  Default: `200`
 
   This variable controls the milliseconds delay after which the linters will
   be run after text is changed. This option is only meaningful with the
@@ -119,8 +119,8 @@ Default: `200`
 
 g:ale_lint_on_enter                                       *g:ale_lint_on_enter*
 
-Type: |Number|
-Default: `1`
+  Type: |Number|
+  Default: `1`
 
   When this option is set to `1`, the |BufEnter| and |BufRead| events will be
   used to apply linters when buffers are first opened. If this is not desired,
@@ -130,8 +130,8 @@ Default: `1`
 
 g:ale_lint_on_save                                         *g:ale_lint_on_save*
 
-Type: |Number|
-Default: `0`
+  Type: |Number|
+  Default: `0`
 
   This option will make ALE run the linters whenever a file is saved when it
   it set to `1` in your vimrc file. This option can be used in combination
@@ -142,8 +142,8 @@ Default: `0`
 
 g:ale_set_loclist                                           *g:ale_set_loclist*
 
-Type: |Number|
-Default: `1`
+  Type: |Number|
+  Default: `1`
 
   When this option is set to `1`, the |loclist| will be populate with any
   warnings and errors which are found by ALE. This feature can be used to
@@ -152,8 +152,8 @@ Default: `1`
 
 g:ale_set_signs                                               *g:ale_set_signs*
 
-Type: |Number|
-Default: `has('signs')`
+  Type: |Number|
+  Default: `has('signs')`
 
   When this option is set to `1`, the |sign| column will be populated with
   signs marking where errors and warnings appear in the file. The
@@ -164,8 +164,8 @@ Default: `has('signs')`
 
 g:ale_sign_column_always                             *g:ale_sign_column_always*
 
-Type: |Number|
-Default: `0`
+  Type: |Number|
+  Default: `0`
 
   By default, the sign gutter will disappear when all warnings and errors have
   been fixed for a file. When this option is set to `1`, the sign column will
@@ -175,8 +175,8 @@ Default: `0`
 
 g:ale_sign_error                                             *g:ale_sign_error*
 
-Type: |String|
-Default: `'>>'`
+  Type: |String|
+  Default: `'>>'`
 
   This string can be changed to change the characters used for the sign gutter
   for lines which at least one error on them. Lines with both errors and
@@ -185,8 +185,8 @@ Default: `'>>'`
 
 g:ale_sign_warning                                         *g:ale_sign_warning*
 
-Type: |String|
-Default: `'--'`
+  Type: |String|
+  Default: `'--'`
 
   This string can be changed to change the characters used for the sign gutter
   for lines which at least one warning on them.
@@ -194,8 +194,8 @@ Default: `'--'`
 
 g:ale_sign_offset                                           *g:ale_sign_offset*
 
-Type: |Number|
-Default: `1000000`
+  Type: |Number|
+  Default: `1000000`
 
   This variable controls offset from which numeric IDs will be generated for
   new signs. Signs cannot share the same ID values, so when two Vim plugins
@@ -208,8 +208,8 @@ Default: `1000000`
 
 g:ale_echo_cursor                                           *g:ale_echo_cursor*
 
-Type: |Number|
-Default: `1`
+  Type: |Number|
+  Default: `1`
 
   When this option is set to `1`, a truncated message will be echoed when a
   cursor is near a warning or error. ALE will attempt to find the warning or
@@ -220,8 +220,8 @@ Default: `1`
 
 g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
 
-Type: |Number|
-Default: `1`
+  Type: |Number|
+  Default: `1`
 
   When this option is set to `1`, warnings relating to trailing whitespace on
   lines will be shown in signs, the loclist, and echo messages, etc. If these
@@ -235,8 +235,8 @@ Default: `1`
 
 g:ale_statusline_format                               *g:ale_statusline_format*
 
-Type: |List|
-Default: `['%d error(s)', '%d warning(s)', 'OK']`
+  Type: |List|
+  Default: `['%d error(s)', '%d warning(s)', 'OK']`
 
   This variable defines the format of |`ALEGetStatusLine()`| output.
   - The 1st element is for errors
@@ -255,8 +255,8 @@ for customising their behaviour.
 
 g:ale_javascript_eslint_executable         *g:ale_javascript_eslint_executable*
 
-Type: |String|
-Default: `'eslint'`
+  Type: |String|
+  Default: `'eslint'`
 
   This variable can be changed to change the path to eslint. If you have
   eslint_d installed, you can set this option to use eslint_d instead.
@@ -267,8 +267,8 @@ Default: `'eslint'`
 
 g:ale_php_phpcs_standard                             *g:ale_php_phpcs_standard*
 
-Type: |String|
-Default: `''`
+  Type: |String|
+  Default: `''`
 
   This variable can be set to specify the coding standard used by phpcs. If no
   coding standard is specified, phpcs will default to checking against the
@@ -280,8 +280,8 @@ Default: `''`
 
 g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
 
-Type: |String|
-Default: `'-Wall'`
+  Type: |String|
+  Default: `'-Wall'`
 
   This variable can be change to modify flags given to gcc.
 
@@ -291,8 +291,8 @@ Default: `'-Wall'`
 
 g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
 
-Type: |String|
-Default: `'-Wall'`
+  Type: |String|
+  Default: `'-Wall'`
 
   This variable can be changed to modify flags given to gcc.
 
@@ -302,8 +302,8 @@ Default: `'-Wall'`
 
 g:ale_linters_sh_shell_default_shell     *g:ale_linters_sh_shell_default_shell*
 
-Type: |String|
-Default: The current shell (`$SHELL`) or `'bash'` if that cannot be read.
+  Type: |String|
+  Default: The current shell (`$SHELL`) or `'bash'` if that cannot be read.
 
   When ALE runs the linter for shells with the `-n` flag, it will attempt to
   read the shell from the shebang (`#!`) line from the shell script to
@@ -316,8 +316,8 @@ Default: The current shell (`$SHELL`) or `'bash'` if that cannot be read.
 
 g:ale_fortran_gcc_options                           *g:ale_fortran_gcc_options*
 
-Type: |String|
-Default: `'-Wall'`
+  Type: |String|
+  Default: `'-Wall'`
 
   This variable can be changed to modify flags given to gcc.
 
@@ -327,16 +327,16 @@ Default: `'-Wall'`
 
 g:ale_html_tidy_executable                         *g:ale_html_tidy_executable*
 
-Type: |String|
-Default: `'tidy'`
+  Type: |String|
+  Default: `'tidy'`
 
   This variable can be changed to change the path to tidy.
 
 
 g:ale_html_tidy_args                                     *g:ale_html_tidy_args*
 
-Type: |String|
-Default: `'-q -e -language en'`
+  Type: |String|
+  Default: `'-q -e -language en'`
 
   This variable can be changed to change the arguments provided to the
   executable.
@@ -436,7 +436,7 @@ ALEGetLinters(filetype)                                       *ALEGetLinters()*
   |Dictionary| values in the format specified by |ALEAddLinter()|.
 
 
-ALEGetStatusLine()                                           *ALEGetStatusLine()*
+ALEGetStatusLine()                                         *ALEGetStatusLine()*
   Return a formatted string that can be added to the statusline.
   The output's format is defined in |`g:ale_statusline_format`|.
   To enable it, the following should be present in your |statusline| settings: >
