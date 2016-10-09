@@ -14,6 +14,7 @@ CONTENTS                                                         *ale-contents*
     4.2. phpcs......................................|ale-linter-options-phpcs|
     4.3. c-gcc......................................|ale-linter-options-c-gcc|
     4.4. cpp-gcc....................................|ale-linter-options-cpp-gcc|
+    4.5. shell......................................|ale-linter-options-shell|
   5. API............................................|ale-api|
   6. Contact........................................|ale-contact|
 
@@ -285,6 +286,19 @@ Type: |String|
 Default: `'-Wall'`
 
 This variable can be changed to modify flags given to gcc.
+
+-------------------------------------------------------------------------------
+4.5. shell                                           *ale-linter-options-shell*
+
+g:ale_linters_sh_shell_default_shell     *g:ale_linters_sh_shell_default_shell*
+
+Type: |String|
+Default: The current shell (`$SHELL`) or `'bash'` if that cannot be read.
+
+When ALE runs the linter for shells with the `-n` flag, it will attempt to
+read the shell from the shebang (`#!`) line from the shell script to
+determine the shell program to run. When this detection fails, this variable
+will be used instead.
 
 ===============================================================================
 5. API                                                                *ale-api*
