@@ -13,6 +13,14 @@ if !exists('g:ale_linters_sh_shell_default_shell')
     let g:ale_linters_sh_shell_default_shell = 'bash'
 endif
 
+function! ale_linters#sh#shell#ParseShebang(parts)
+    if strpart(a:parts[0], 0, 1) == '-' && len(a:parts) > 1
+        ale_linters#sh#shell#ParseShebang(a:parts[1:])
+    else
+        return a:parts[0]
+    endif
+endfunction
+
 function! ale_linters#sh#shell#GetExecutable(buffer)
     let shell = g:ale_linters_sh_shell_default_shell
 
@@ -20,10 +28,27 @@ function! ale_linters#sh#shell#GetExecutable(buffer)
 
     " Take the shell executable from the hashbang, if we can.
     if len(banglines) == 1
-        let bangmatch = matchlist(banglines[0], '^#!\([^ ]\+\)')
-
-        if len(bangmatch) > 0
-            let shell = bangmatch[1]
+        if strpart(banglines[0], 0, 2) == '#!'
+            let parts = filter(split(strpart(banglines[0], 2), ' '), "v:val != ''")
+            if len(parts) > 0 
+                if strpart(parts[0], len(parts[0]) - 3) == 'env'
+                   let parts = parts[1:]
+                endif
+                if len(parts) > 0
+                    let tmp = ale_linters#sh#shell#ParseShebang(parts)
+                else
+                    let tmp = ''
+                endif
+                if strpart(tmp, 0, 1) != '/' && tmp != ''
+                    let res = systemlist('which ' . tmp)
+                    if len(res) > 0
+                        let tmp = res[0]
+                    endif
+                endif
+                if tmp != ''
+                    let shell = tmp
+                endif
+            endif
         endif
     endif
 
