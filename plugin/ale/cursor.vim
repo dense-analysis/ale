@@ -63,6 +63,11 @@ function! ale#cursor#TruncatedEcho(message)
 endfunction
 
 function! ale#cursor#EchoCursorWarning(...)
+    " Only echo the warnings in normal mode, otherwise we will get problems.
+    if mode() !=# 'n'
+        return
+    endif
+
     let buffer = bufnr('%')
 
     if !has_key(g:ale_buffer_loclist_map, buffer)
