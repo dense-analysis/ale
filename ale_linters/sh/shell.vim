@@ -10,7 +10,11 @@ let g:loaded_ale_linters_sh_shell = 1
 " This option can be changed to change the default shell when the shell
 " cannot be taken from the hashbang line.
 if !exists('g:ale_linters_sh_shell_default_shell')
-    let g:ale_linters_sh_shell_default_shell = 'bash'
+    let g:ale_linters_sh_shell_default_shell = fnamemodify($SHELL, ':t')
+
+    if g:ale_linters_sh_shell_default_shell ==# ''
+        let g:ale_linters_sh_shell_default_shell = 'bash'
+    endif
 endif
 
 function! ale_linters#sh#shell#GetExecutable(buffer)
