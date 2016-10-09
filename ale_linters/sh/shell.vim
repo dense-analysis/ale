@@ -14,20 +14,18 @@ if !exists('g:ale_linters_sh_shell_default_shell')
 endif
 
 function! ale_linters#sh#shell#GetExecutable(buffer)
-    let shell = g:ale_linters_sh_shell_default_shell
-
     let banglines = getbufline(a:buffer, 1)
 
     " Take the shell executable from the hashbang, if we can.
-    if len(banglines) == 1
-        let bangmatch = matchlist(banglines[0], '^#!\([^ ]\+\)')
-
-        if len(bangmatch) > 0
-            let shell = bangmatch[1]
-        endif
+    if len(banglines) == 1 && banglines[0] =~# '^#!'
+        for possible_shell in ['bash', 'tcsh', 'csh', 'zsh', 'sh']
+            if banglines[0] =~# possible_shell . '\s*$'
+                return possible_shell
+            endif
+        endfor
     endif
 
-    return shell
+    return g:ale_linters_sh_shell_default_shell
 endfunction
 
 function! ale_linters#sh#shell#GetCommand(buffer)
