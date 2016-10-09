@@ -10,24 +10,29 @@ let g:loaded_ale_linters_sh_shell = 1
 " This option can be changed to change the default shell when the shell
 " cannot be taken from the hashbang line.
 if !exists('g:ale_linters_sh_shell_default_shell')
-    let g:ale_linters_sh_shell_default_shell = 'bash'
+    let g:ale_linters_sh_shell_default_shell = fnamemodify($SHELL, ':t')
+
+    if g:ale_linters_sh_shell_default_shell ==# ''
+        let g:ale_linters_sh_shell_default_shell = 'bash'
+    endif
 endif
 
 function! ale_linters#sh#shell#GetExecutable(buffer)
-    let shell = g:ale_linters_sh_shell_default_shell
-
     let banglines = getbufline(a:buffer, 1)
 
     " Take the shell executable from the hashbang, if we can.
-    if len(banglines) == 1
-        let bangmatch = matchlist(banglines[0], '^#!\([^ ]\+\)')
+    if len(banglines) == 1 && banglines[0] =~# '^#!'
+        " Remove options like -e, etc.
+        let line = substitute(banglines[0], '--\?[a-zA-Z0-9]\+', '', 'g')
 
-        if len(bangmatch) > 0
-            let shell = bangmatch[1]
-        endif
+        for possible_shell in ['bash', 'tcsh', 'csh', 'zsh', 'sh']
+            if line =~# possible_shell . '\s*$'
+                return possible_shell
+            endif
+        endfor
     endif
 
-    return shell
+    return g:ale_linters_sh_shell_default_shell
 endfunction
 
 function! ale_linters#sh#shell#GetCommand(buffer)
