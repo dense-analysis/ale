@@ -100,7 +100,10 @@ function! s:FixLoclist(buffer, loclist)
     let last_line_number = ale#util#GetLineCount(a:buffer)
 
     for item in a:loclist
-        if item.lnum > last_line_number
+        if item.lnum == 0
+            " When errors appear at line 0, put them at line 1 instead.
+            let item.lnum = 1
+        elseif item.lnum > last_line_number
             let item.lnum = last_line_number
         endif
     endfor
