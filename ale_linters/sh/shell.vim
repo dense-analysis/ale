@@ -18,8 +18,11 @@ function! ale_linters#sh#shell#GetExecutable(buffer)
 
     " Take the shell executable from the hashbang, if we can.
     if len(banglines) == 1 && banglines[0] =~# '^#!'
+        " Remove options like -e, etc.
+        let line = substitute(banglines[0], '--\?[a-zA-Z0-9]\+', '', 'g')
+
         for possible_shell in ['bash', 'tcsh', 'csh', 'zsh', 'sh']
-            if banglines[0] =~# possible_shell . '\s*$'
+            if line =~# possible_shell . '\s*$'
                 return possible_shell
             endif
         endfor
