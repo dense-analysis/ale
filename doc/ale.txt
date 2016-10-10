@@ -11,13 +11,13 @@ CONTENTS                                                         *ale-contents*
   3. Global Options.............................|ale-options|
   4. Linter Specific Options....................|ale-linter-options|
     4.1. eslint.................................|ale-linter-options-eslint|
-    4.2. phpcs..................................|ale-linter-options-phpcs|
-    4.3. c-gcc..................................|ale-linter-options-c-gcc|
-    4.4. cpp-gcc................................|ale-linter-options-cpp-gcc|
-    4.5. shell..................................|ale-linter-options-shell|
-    4.6. fortran-gcc............................|ale-linter-options-fortran-gcc|
-    4.7. html-tidy..............................|ale-linter-options-html-tidy|
-    4.8. jshint.................................|ale-linter-options-jshint|
+    4.2. jshint.................................|ale-linter-options-jshint|
+    4.3. phpcs..................................|ale-linter-options-phpcs|
+    4.4. html-tidy..............................|ale-linter-options-html-tidy|
+    4.5. c-gcc..................................|ale-linter-options-c-gcc|
+    4.6. cpp-gcc................................|ale-linter-options-cpp-gcc|
+    4.7. fortran-gcc............................|ale-linter-options-fortran-gcc|
+    4.8. shell..................................|ale-linter-options-shell|
     4.9. shellcheck.............................|ale-linter-options-shellcheck|
   5. API........................................|ale-api|
   6. Contact....................................|ale-contact|
@@ -334,7 +334,18 @@ g:ale_javascript_eslint_executable         *g:ale_javascript_eslint_executable*
 
 
 -------------------------------------------------------------------------------
-4.2. phpcs                                           *ale-linter-options-phpcs*
+4.2. jshint                                         *ale-linter-options-jshint*
+
+g:ale_javascript_jshint_executable         *g:ale_javascript_jshint_executable*
+
+  Type: |String|
+  Default: `'jshint'`
+
+  This variable can be changed to change the path to jshint.
+
+
+-------------------------------------------------------------------------------
+4.3. phpcs                                           *ale-linter-options-phpcs*
 
 g:ale_php_phpcs_standard                             *g:ale_php_phpcs_standard*
 
@@ -347,54 +358,7 @@ g:ale_php_phpcs_standard                             *g:ale_php_phpcs_standard*
 
 
 -------------------------------------------------------------------------------
-4.3. c-gcc                                           *ale-linter-options-c-gcc*
-
-g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
-
-  Type: |String|
-  Default: `'-Wall'`
-
-  This variable can be change to modify flags given to gcc.
-
-
--------------------------------------------------------------------------------
-4.4. cpp-gcc                                       *ale-linter-options-cpp-gcc*
-
-g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
-
-  Type: |String|
-  Default: `'-Wall'`
-
-  This variable can be changed to modify flags given to gcc.
-
-
--------------------------------------------------------------------------------
-4.5. shell                                           *ale-linter-options-shell*
-
-g:ale_linters_sh_shell_default_shell     *g:ale_linters_sh_shell_default_shell*
-
-  Type: |String|
-  Default: The current shell (`$SHELL`) or `'bash'` if that cannot be read.
-
-  When ALE runs the linter for shells with the `-n` flag, it will attempt to
-  read the shell from the shebang (`#!`) line from the shell script to
-  determine the shell program to run. When this detection fails, this variable
-  will be used instead.
-
-
--------------------------------------------------------------------------------
-4.6. fortran-gcc                               *ale-linter-options-fortran-gcc*
-
-g:ale_fortran_gcc_options                           *g:ale_fortran_gcc_options*
-
-  Type: |String|
-  Default: `'-Wall'`
-
-  This variable can be changed to modify flags given to gcc.
-
-
--------------------------------------------------------------------------------
-4.7. html-tidy                                   *ale-linter-options-html-tidy*
+4.4. html-tidy                                   *ale-linter-options-html-tidy*
 
 g:ale_html_tidy_executable                         *g:ale_html_tidy_executable*
 
@@ -421,14 +385,51 @@ g:ale_html_tidy_args                                     *g:ale_html_tidy_args*
 
 
 -------------------------------------------------------------------------------
-4.8. jshint                                         *ale-linter-options-jshint*
+4.5. c-gcc                                           *ale-linter-options-c-gcc*
 
-g:ale_javascript_jshint_executable         *g:ale_javascript_jshint_executable*
+g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
 
   Type: |String|
-  Default: `'jshint'`
+  Default: `'-Wall'`
 
-  This variable can be changed to change the path to jshint.
+  This variable can be change to modify flags given to gcc.
+
+
+-------------------------------------------------------------------------------
+4.6. cpp-gcc                                       *ale-linter-options-cpp-gcc*
+
+g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
+
+  Type: |String|
+  Default: `'-Wall'`
+
+  This variable can be changed to modify flags given to gcc.
+
+
+-------------------------------------------------------------------------------
+4.7. fortran-gcc                               *ale-linter-options-fortran-gcc*
+
+g:ale_fortran_gcc_options                           *g:ale_fortran_gcc_options*
+
+  Type: |String|
+  Default: `'-Wall'`
+
+  This variable can be changed to modify flags given to gcc.
+
+
+-------------------------------------------------------------------------------
+4.8. shell                                           *ale-linter-options-shell*
+
+g:ale_linters_sh_shell_default_shell     *g:ale_linters_sh_shell_default_shell*
+
+  Type: |String|
+  Default: The current shell (`$SHELL`) or `'bash'` if that cannot be read.
+
+  When ALE runs the linter for shells with the `-n` flag, it will attempt to
+  read the shell from the shebang (`#!`) line from the shell script to
+  determine the shell program to run. When this detection fails, this variable
+  will be used instead.
+
 
 -------------------------------------------------------------------------------
 4.9. shellchek                                  *ale-linter-options-shellcheck*
@@ -439,6 +440,7 @@ g:ale_linters_sh_shellckeck_exclusions *g:ale_linters_sh_shellckeck_exclusions*
   Default: `''`
 
   Set this variable to exclude test for shellcheck (-e option);
+
 
 ===============================================================================
 5. API                                                                *ale-api*
