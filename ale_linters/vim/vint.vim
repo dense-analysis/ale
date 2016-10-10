@@ -7,7 +7,7 @@ endif
 
 let g:loaded_ale_linters_vim_vint = 1
 
-let s:format = '-f "{file_path}:{line_number}:{column_number}: {severity}: {description} (see {reference})'
+let s:format = '-f "{file_path}:{line_number}:{column_number}: {severity}: {description} (see {reference})"'
 
 call ale#linter#Define('vim', {
 \   'name': 'vint',
