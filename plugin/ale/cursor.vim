@@ -10,7 +10,9 @@ let g:loaded_ale_cursor = 1
 " Return a formatted message according to g:ale_echo_msg_format variable
 function! s:GetMessage(linter, type, text) abort
     let msg = g:ale_echo_msg_format
-    let type = a:type ==# 'E' ? 'Error' : 'Warning'
+    let type = a:type ==# 'E'
+    \   ? g:ale_echo_msg_error_str
+    \   : g:ale_echo_msg_warning_str
     " Capitalize the 1st character
     let text = toupper(a:text[0]) . a:text[1:-1]
 
