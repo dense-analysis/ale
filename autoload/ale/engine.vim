@@ -199,6 +199,9 @@ function! ale#engine#Invoke(buffer, linter) abort
             " .cmd, .bat, .exe, etc.
             let l:command = 'cmd /c ' . l:command
         else
+            " Execute the command with the shell, to fix escaping issues.
+            let l:command = split(&shell) + split(&shellcmdflag) + [l:command]
+
             " On Unix machines, we can send the Vim buffer directly.
             " This is faster than reading the lines ourselves.
             let job_options.in_io = 'buffer'
