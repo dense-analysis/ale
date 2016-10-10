@@ -2,16 +2,16 @@
 " Description: Contains miscellaneous functions
 
 function! s:FindWrapperScript() abort
-    for parent in split(&runtimepath, ',')
+    for l:parent in split(&runtimepath, ',')
         " Expand the path to deal with ~ issues.
-        let path = expand(parent . '/' . 'stdin-wrapper')
+        let l:path = expand(l:parent . '/' . 'stdin-wrapper')
 
-        if filereadable(path)
+        if filereadable(l:path)
             if has('win32')
-                return path . '.exe'
+                return l:path . '.exe'
             endif
 
-            return path
+            return l:path
         endif
     endfor
 endfunction

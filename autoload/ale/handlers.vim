@@ -10,17 +10,17 @@ function! ale#handlers#HandleGCCFormat(buffer, lines) abort
     " <stdin>:8:5: warning: conversion lacks type at end of format [-Wformat=]
     " <stdin>:10:27: error: invalid operands to binary - (have ‘int’ and ‘char *’)
     " -:189:7: note: $/${} is unnecessary on arithmetic variables. [SC2004]
-    let pattern = '^.\+:\(\d\+\):\(\d\+\): \([^:]\+\): \(.\+\)$'
-    let output = []
+    let l:pattern = '^.\+:\(\d\+\):\(\d\+\): \([^:]\+\): \(.\+\)$'
+    let l:output = []
 
-    for line in a:lines
-        let l:match = matchlist(line, pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             continue
         endif
 
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
         \   'vcol': 0,
@@ -31,7 +31,7 @@ function! ale#handlers#HandleGCCFormat(buffer, lines) abort
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
 
 function! ale#handlers#HandleCSSLintFormat(buffer, lines) abort
@@ -42,35 +42,35 @@ function! ale#handlers#HandleCSSLintFormat(buffer, lines) abort
     "
     " These errors can be very massive, so the type will be moved to the front
     " so you can actually read the error type.
-    let pattern = '^.*: line \(\d\+\), col \(\d\+\), \(Error\|Warning\) - \(.\+\) (\([^)]\+\))$'
-    let output = []
+    let l:pattern = '^.*: line \(\d\+\), col \(\d\+\), \(Error\|Warning\) - \(.\+\) (\([^)]\+\))$'
+    let l:output = []
 
-    for line in a:lines
-        let l:match = matchlist(line, pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             continue
         endif
 
-        let text = l:match[4]
-        let type = l:match[3]
-        let errorGroup = l:match[5]
+        let l:text = l:match[4]
+        let l:type = l:match[3]
+        let l:errorGroup = l:match[5]
 
         " Put the error group at the front, so we can see what kind of error
         " it is on small echo lines.
-        let text = '(' . errorGroup . ') ' . text
+        let l:text = '(' . l:errorGroup . ') ' . l:text
 
         " vcol is Needed to indicate that the column is a character.
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
         \   'vcol': 0,
         \   'col': l:match[2] + 0,
-        \   'text': text,
-        \   'type': type ==# 'Warning' ? 'W' : 'E',
+        \   'text': l:text,
+        \   'type': l:type ==# 'Warning' ? 'W' : 'E',
         \   'nr': -1,
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
