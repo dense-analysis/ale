@@ -7,6 +7,21 @@ endif
 
 let g:loaded_ale_cursor = 1
 
+" Return a formatted message according to g:ale_echo_msg_format variable
+function! s:GetMessage(linter, type, text) abort
+    let msg = g:ale_echo_msg_format
+    let type = a:type ==# 'E' ? 'Error' : 'Warning'
+    " Capitalize the 1st character
+    let text = toupper(a:text[0]) . a:text[1:-1]
+
+    " Replace handlers if they exist
+    for [k, v] in items({'linter': a:linter, 'severity': type})
+        let msg = substitute(msg, '\V%' . k . '%', v, '')
+    endfor
+
+    return printf(msg, text)
+endfunction
+
 " This function will perform a binary search to find a message from the
 " loclist to echo when the cursor moves.
 function! s:BinarySearch(loclist, line, column)
@@ -81,7 +96,9 @@ function! ale#cursor#EchoCursorWarning(...)
     let index = s:BinarySearch(loclist, pos[1], pos[2])
 
     if index >= 0
-        call ale#cursor#TruncatedEcho(loclist[index]['text'])
+        let l = loclist[index]
+        let msg = s:GetMessage(l.linter_name, l.type, l.text)
+        call ale#cursor#TruncatedEcho(msg)
     else
         echo
     endif
