@@ -137,6 +137,11 @@ function! s:HandleExit(job)
     " Make some adjustments to the loclists to fix common problems.
     call s:FixLoclist(buffer, linter_loclist)
 
+    " Remember which linter returned these items for later use.
+    for obj in linter_loclist
+        let obj.linter_name = linter.name
+    endfor
+
     if g:ale_buffer_should_reset_map[buffer]
         let g:ale_buffer_should_reset_map[buffer] = 0
         let g:ale_buffer_loclist_map[buffer] = []

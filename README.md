@@ -76,20 +76,23 @@ vimrc file for all given linters is as follows:
 
 | Option | Description | Default |
 | ------ | ----------- | ------- |
-| `g:ale_linters` | a dictionary of linters to whitelist | _not set_ |
-| `g:ale_lint_on_text_changed` | lint while typing  | `1` |
+| `g:ale_echo_cursor` | echo errors when the cursor is over them | `1` |
+| `g:ale_echo_msg_format` | string format to use for the echoed message | `'%s'` |
+| `g:ale_echo_msg_error_str` | string used for error severity in echoed message | `'Error'` |
+| `g:ale_echo_msg_warning_str` | string used for warning severity in echoed message | `'Warning'` |
 | `g:ale_lint_delay` | milliseconds to wait before linting | `200` |
+| `g:ale_linters` | a dictionary of linters to whitelist | _not set_ |
 | `g:ale_lint_on_enter` | lint when opening a file  | `1` |
 | `g:ale_lint_on_save` | lint when saving a file  | `0` |
+| `g:ale_lint_on_text_changed` | lint while typing  | `1` |
 | `g:ale_set_loclist` | set the loclist with errors | `1` |
 | `g:ale_set_signs` | set gutter signs with error markers | `has('signs')` |
 | `g:ale_sign_column_always` | always show the sign gutter | `0` |
 | `g:ale_sign_error` | the text to use for errors in the gutter | `'>>'` |
-| `g:ale_sign_warning` | the text to use for warnings in the gutter | `'--'` |
 | `g:ale_sign_offset` | an offset for sign ids | `1000000` |
-| `g:ale_echo_cursor` | echo errors when the cursor is over them | `1` |
+| `g:ale_sign_warning` | the text to use for warnings in the gutter | `'--'` |
+| `g:ale_statusline_format` | string format to use in statusline flag | `['%d error(s)', '%d warning(s)', 'OK']` |
 | `g:ale_warn_about_trailing_whitespace` | enable trailing whitespace warnings for some linters | `1` |
-| `g:ale_statusline_format` | String format to use in statusline flag | `['%d error(s)', '%d warning(s)', 'OK']` |
 
 ### Selecting Particular Linters
 
@@ -154,6 +157,30 @@ let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
 
 ![Statusline with issues](img/issues.png)
 ![Statusline with no issues](img/no_issues.png)
+
+
+### Customize echoed message
+
+There are 3 global options that allow customizing the echoed message.
+
+- `g:ale_echo_msg_format` where:
+  * `%s` is the error message itself
+  * `%linter%` is the linter name
+  * `%severity` is the severity type
+- `g:ale_echo_msg_error_str` is the string used for error severity.
+- `g:ale_echo_msg_warning_str` is the string used for warning severity.
+
+So for example this:
+
+```vim
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_error_str = 'W'
+let g:ale_echo_msg_fomat = '[%linter%] %s [%severity%]'
+```
+
+Will give you:
+
+![Echoed message](img/echo.png)
 
 ## Installation
 
