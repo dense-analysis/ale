@@ -57,12 +57,10 @@ function! ale#linter#get(filetype) abort
         execute 'runtime! ale_linters/' . a:filetype . '/*.vim'
     endif
 
-    if has_key(s:linters, a:filetype)
-        " If we found a linter, return it now.
-        return s:linters[a:filetype]
-    else
-        " If we couldn't load a linter, blacklist it in the future.
-        let g:ale_linters[a:filetype] = []
-        return []
+    if !has_key(s:linters, a:filetype)
+        " If we couldn't load any linters, let everyone know.
+        let s:linters[a:filetype] = []
     endif
+
+    return s:linters[a:filetype]
 endfunction
