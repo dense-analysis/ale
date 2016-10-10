@@ -1,12 +1,6 @@
-scriptencoding utf-8
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Draws error and warning signs into signcolumn
 
-if exists('g:loaded_ale_sign')
-    finish
-endif
-
-let g:loaded_ale_sign = 1
 let b:dummy_sign_set_map = {}
 
 if !hlexists('ALEErrorSign')

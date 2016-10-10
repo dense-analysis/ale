@@ -7,7 +7,7 @@ endif
 
 let g:loaded_ale_linters_css_csslint = 1
 
-call ALEAddLinter('css', {
+call ale#linter#define('css', {
 \   'name': 'csslint',
 \   'executable': 'csslint',
 \   'command': g:ale#util#stdin_wrapper . ' .css csslint --format=compact',

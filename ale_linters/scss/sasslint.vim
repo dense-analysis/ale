@@ -6,7 +6,7 @@ endif
 
 let g:loaded_ale_linters_scss_sasslint = 1
 
-call ALEAddLinter('scss', {
+call ale#linter#define('scss', {
 \   'name': 'sasslint',
 \   'executable': 'sass-lint',
 \   'command': g:ale#util#stdin_wrapper . ' .scss sass-lint -v -q -f compact',

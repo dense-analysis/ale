@@ -67,14 +67,14 @@ function! ale_linters#javascript#jshint#Handle(buffer, lines)
     return output
 endfunction
 
-call ALEAddLinter('javascript', {
+call ale#linter#define('javascript', {
 \   'name': 'jshint',
 \   'executable': 'jshint',
 \   'command_callback': 'ale_linters#javascript#jshint#GetCommand',
 \   'callback': 'ale_linters#javascript#jshint#Handle',
 \})
 
-call ALEAddLinter('javascript.jsx', {
+call ale#linter#define('javascript.jsx', {
 \   'name': 'jshint',
 \   'executable': 'jshint',
 \   'command_callback': 'ale_linters#javascript#jshint#GetCommand',

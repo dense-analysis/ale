@@ -44,7 +44,7 @@ function! ale_linters#verilog#verilator#Handle(buffer, lines)
     return output
 endfunction
 
-call ALEAddLinter('verilog', {
+call ale#linter#define('verilog', {
 \   'name': 'verilator',
 \   'output_stream': 'stderr',
 \   'executable': 'verilator',

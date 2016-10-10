@@ -288,11 +288,30 @@ g:ale_statusline_format                               *g:ale_statusline_format*
   Type: |List|
   Default: `['%d error(s)', '%d warning(s)', 'OK']`
 
-  This variable defines the format of |`ALEGetStatusLine()`| output.
+  This variable defines the format of |`ale#statusline#status()`| output.
   - The 1st element is for errors
   - The 2nd element is for warnings
   - The 3rd element is for when no errors are detected
 
+g:airline#extensions#ale#enabled             *g:airline#extensions#ale#enabled*
+
+  Type: |Number|
+  Default: `1`
+
+  Enables or disables the |airline|'s native extension for ale, which displays
+  warnings and errors in the status line, prefixed by
+  |airline#extensions#ale#error_symbol| and
+  |airline#extensions#ale#warning_symbol|.
+
+g:airline#extensions#ale#enabled             *g:airline#extensions#ale#enabled*
+
+  Type: |Number|
+  Default: `1`
+
+  Enables or disables the |airline|'s native extension for ale, which displays
+  warnings and errors in the status line, prefixed by
+  |airline#extensions#ale#error_symbol| and
+  |airline#extensions#ale#warning_symbol|.
 
 ===============================================================================
 4. Linter Specific Options                                 *ale-linter-options*
@@ -402,14 +421,14 @@ g:ale_html_tidy_args                                     *g:ale_html_tidy_args*
 ===============================================================================
 5. API                                                                *ale-api*
 
-ALELint(delay)                                                      *ALELint()*
+ale#queue(delay)                                                  *ale#queue()*
   Run linters for the current buffer, based on the filetype of the buffer,
   with a given `delay`. A `delay` of `0` will run the linters immediately.
   The linters will always be run in the background. Calling this function
   again from the same buffer
 
 
-ALEAddLinter(filetype, linter)                                 *ALEAddLinter()*
+ale#linter#define(filetype, linter)                       *ale#linter#define()*
   Given a |String| for a filetype and a |Dictionary| Describing a linter
   configuration, add a linter for the given filetype. The dictionaries each
   offer the following options:
@@ -481,21 +500,21 @@ ALEAddLinter(filetype, linter)                                 *ALEAddLinter()*
   'command': g:ale#util#stdin_wrapper . ' .hs ghc -fno-code -v0',
 <
 
-ALEGetLinters(filetype)                                       *ALEGetLinters()*
+ale#linter#get(filetype)                                     *ale#linter#get()*
   Return all of linters configured for a given filetype as a |List| of
-  |Dictionary| values in the format specified by |ALEAddLinter()|.
+  |Dictionary| values in the format specified by |ale#linter#define()|.
 
 
-ALEGetStatusLine()                                         *ALEGetStatusLine()*
+ale#statusline#status()                               *ale#statusline#status()*
   Return a formatted string that can be added to the statusline.
   The output's format is defined in |`g:ale_statusline_format`|.
   To enable it, the following should be present in your |statusline| settings: >
-  %{ALEGetStatusLine()}
+  %{ale#statusline#status()}
 
 
 g:ale#util#stdin_wrapper                             *g:ale#util#stdin_wrapper*
   This variable names a wrapper script for sending stdin input to programs
-  which cannot accept input via stdin. See |ALEAddLinter| for more.
+  which cannot accept input via stdin. See |ale#linter#define| for more.
 
 
 ===============================================================================

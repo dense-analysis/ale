@@ -37,7 +37,7 @@ function! ale_linters#perl#perlcritic#Handle(buffer, lines)
     return output
 endfunction
 
-call ALEAddLinter('perl', {
+call ale#linter#define('perl', {
 \   'name': 'perlcritic',
 \   'executable': 'perlcritic',
 \   'output_stream': 'sdtout',

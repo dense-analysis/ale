@@ -34,7 +34,7 @@ function! ale_linters#pyrex#cython#Handle(buffer, lines)
     return output
 endfunction
 
-call ALEAddLinter('pyrex', {
+call ale#linter#define('pyrex', {
 \   'name': 'cython',
 \   'output_stream': 'stderr',
 \   'executable': 'cython',

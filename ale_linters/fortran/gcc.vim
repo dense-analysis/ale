@@ -60,7 +60,7 @@ function! ale_linters#fortran#gcc#Handle(buffer, lines)
     return output
 endfunction
 
-call ALEAddLinter('fortran', {
+call ale#linter#define('fortran', {
 \   'name': 'gcc',
 \   'output_stream': 'stderr',
 \   'executable': 'gcc',

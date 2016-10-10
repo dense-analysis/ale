@@ -7,7 +7,7 @@ endif
 
 let g:loaded_ale_linters_coffee_coffee = 1
 
-call ALEAddLinter('coffee', {
+call ale#linter#define('coffee', {
 \   'name': 'coffee',
 \   'executable': 'coffee',
 \   'command': 'coffee -cp -s',

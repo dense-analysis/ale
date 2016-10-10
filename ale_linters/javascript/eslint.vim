@@ -49,14 +49,14 @@ function! ale_linters#javascript#eslint#Handle(buffer, lines)
     return output
 endfunction
 
-call ALEAddLinter('javascript', {
+call ale#linter#define('javascript', {
 \   'name': 'eslint',
 \   'executable': g:ale_javascript_eslint_executable,
 \   'command': g:ale_javascript_eslint_executable . ' -f unix --stdin --stdin-filename %s',
 \   'callback': 'ale_linters#javascript#eslint#Handle',
 \})
 
-call ALEAddLinter('javascript.jsx', {
+call ale#linter#define('javascript.jsx', {
 \   'name': 'eslint',
 \   'executable': g:ale_javascript_eslint_executable,
 \   'command': g:ale_javascript_eslint_executable . ' -f unix --stdin --stdin-filename %s',

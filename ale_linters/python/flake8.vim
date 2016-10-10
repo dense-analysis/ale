@@ -47,7 +47,7 @@ function! ale_linters#python#flake8#Handle(buffer, lines)
     return output
 endfunction
 
-call ALEAddLinter('python', {
+call ale#linter#define('python', {
 \   'name': 'flake8',
 \   'executable': 'flake8',
 \   'command': 'flake8 -',
