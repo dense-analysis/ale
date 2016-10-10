@@ -407,9 +407,9 @@ endfunction
 " Load all of the linters for each filetype.
 runtime! ale_linters/*/*.vim
 
-if !has('nvim') && !(has('timers') && has('job') && has('channel'))
-    echoerr 'ALE requires NeoVim or Vim 8 with +timers +job +channel'
-    echoerr 'ALE will not be run automatically'
+if !g:ale_has_required_features
+    echoerr 'ALE requires NeoVim >= 0.1.5 or Vim 8 with +timers +job +channel'
+    echoerr 'Please update your editor appropriately.'
     finish
 endif
 

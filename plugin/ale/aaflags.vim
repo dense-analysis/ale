@@ -8,6 +8,13 @@ endif
 
 let g:loaded_ale_flags = 1
 
+" A flag for detecting if the required features are set.
+if has('nvim')
+    let g:ale_has_required_features = has('timers')
+else
+    let g:ale_has_required_features = has('timers') && has('job') && has('channel')
+endif
+
 " This flag can be set to 0 to disable linting when text is changed.
 let g:ale_lint_on_text_changed = get(g:, 'ale_lint_on_text_changed', 1)
 
@@ -45,7 +52,7 @@ let g:ale_sign_column_always = get(g:, 'ale_sign_column_always', 0)
 " * The 1st element is for errors
 " * The 2nd element is for warnings
 " * The 3rd element is when there are no errors
-let g:ale_statusline_format = get(g:, 'ale_statusline_format', 
+let g:ale_statusline_format = get(g:, 'ale_statusline_format',
 \   ['%d error(s)', '%d warning(s)', 'OK']
 \)
 

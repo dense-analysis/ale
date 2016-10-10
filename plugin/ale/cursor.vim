@@ -117,7 +117,7 @@ function! ale#cursor#EchoCursorWarningWithDelay()
     let s:cursor_timer = timer_start(10, function('ale#cursor#EchoCursorWarning'))
 endfunction
 
-if g:ale_echo_cursor
+if g:ale_has_required_features && g:ale_echo_cursor
     augroup ALECursorGroup
         autocmd!
         autocmd CursorMoved,CursorHold * call ale#cursor#EchoCursorWarningWithDelay()
