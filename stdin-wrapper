@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/usr/bin/env bash
 
 # Author: w0rp <devw0rp@gmail.com>
 # Description: This script implements a wrapper for any program which does not accept
@@ -10,11 +10,8 @@
 file_extension="$1"
 shift
 
-temp_file=`mktemp`
-mv "$temp_file" "$temp_file$file_extension"
-temp_file="$temp_file$file_extension"
-
-trap "rm $temp_file" EXIT
+temp_file=$(mktemp --tmpdir "ale-XXXXXXXXX$file_extension")
+trap 'rm $temp_file' EXIT
 
 while read -r; do
     echo "$REPLY" >> "$temp_file"
