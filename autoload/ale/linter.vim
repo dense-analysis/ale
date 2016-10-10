@@ -1,3 +1,7 @@
+" Author: w0rp <devw0rp@gmail.com>
+" Description: Linter registration and lazy-loading
+"   Retrieves linters as requested by the engine, loading them if needed.
+
 let s:linters = {}
 
 function! ale#linter#define(filetype, linter) abort

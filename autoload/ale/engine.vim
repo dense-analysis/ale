@@ -1,6 +1,6 @@
-" These versions of Vim have bugs with the 'in_buf' option, so the buffer
-" must be sent via getbufline() instead.
-let s:has_in_buf_bugs = has('win32') || has('gui_macvim')
+" Author: w0rp <devw0rp@gmail.com>
+" Description: Backend execution and job management
+"   Executes linters in the background, using NeoVim or Vim 8 jobs
 
 " Stores information for each job including:
 "
@@ -194,10 +194,8 @@ function! ale#engine#invoke(buffer, linter) abort
             " othwerwise %PATHTEXT% will not be used to programs ending int
             " .cmd, .bat, .exe, etc.
             let l:command = 'cmd /c ' . l:command
-        endif
-
-        if !s:has_in_buf_bugs
-            " On some Unix machines, we can send the Vim buffer directly.
+        else
+            " On Unix machines, we can send the Vim buffer directly.
             " This is faster than reading the lines ourselves.
             let job_options.in_io = 'buffer'
             let job_options.in_buf = a:buffer
@@ -224,7 +222,7 @@ function! ale#engine#invoke(buffer, linter) abort
 
             call jobsend(job, input)
             call jobclose(job, 'stdin')
-        elseif s:has_in_buf_bugs
+        elseif has('win32')
             " On some Vim versions, we have to send the buffer data ourselves.
             let input = join(getbufline(a:buffer, 1, '$'), "\n") . "\n"
             let channel = job_getchannel(job)
