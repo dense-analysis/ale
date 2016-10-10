@@ -439,7 +439,7 @@ g:ale_linters_sh_shellckeck_exclusions *g:ale_linters_sh_shellckeck_exclusions*
   Type: |String|
   Default: `''`
 
-  Set this variable to exclude test for shellcheck (-e option);
+  Set this variable to exclude test(s) for shellcheck (-e/--exclude option).
 
 
 ===============================================================================
