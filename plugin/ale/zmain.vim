@@ -10,6 +10,9 @@ let g:loaded_ale_zmain = 1
 
 let s:lint_timer = -1
 let s:linters = {}
+" These versions of Vim have bugs with the 'in_buf' option, so the buffer
+" must be sent via getbufline() instead.
+let s:has_in_buf_bugs = has('win32') || has('gui_macvim')
 
 if !exists('g:ale_linters')
     let g:ale_linters = {}
@@ -240,8 +243,10 @@ function! s:ApplyLinter(buffer, linter)
             " othwerwise %PATHTEXT% will not be used to programs ending int
             " .cmd, .bat, .exe, etc.
             let l:command = 'cmd /c ' . l:command
-        else
-            " On Unix machines, we can send the Vim buffer directly.
+        endif
+
+        if !s:has_in_buf_bugs
+            " On some Unix machines, we can send the Vim buffer directly.
             " This is faster than reading the lines ourselves.
             let job_options.in_io = 'buffer'
             let job_options.in_buf = a:buffer
@@ -268,9 +273,8 @@ function! s:ApplyLinter(buffer, linter)
 
             call jobsend(job, input)
             call jobclose(job, 'stdin')
-        elseif has('win32')
-            " On Windows, we have to send the buffer lines ourselves,
-            " as there are issues with Windows and 'in_buf'
+        elseif s:has_in_buf_bugs
+            " On some Vim versions, we have to send the buffer data ourselves.
             let input = join(getbufline(a:buffer, 1, '$'), "\n") . "\n"
             let channel = job_getchannel(job)
 
