@@ -68,14 +68,14 @@ function! ale#cursor#TruncatedEcho(message)
 
     " We need to turn T for truncated messages on for shortmess,
     " and then then we need to reset the option back to what it was.
-    let shortmess_options = &shortmess
+    let shortmess_options = getbufvar('%', '&shortmess')
 
     try
         " Echo the message truncated to fit without creating a prompt.
-        set shortmess+=T
+        setlocal shortmess+=T
         exec "norm :echomsg message\n"
     finally
-        let &shortmess = shortmess_options
+        call setbufvar('%', '&shortmess', shortmess_options)
     endtry
 endfunction
 
