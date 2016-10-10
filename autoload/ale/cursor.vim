@@ -1,12 +1,6 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Echoes lint message for the current line, if any
 
-if exists('g:loaded_ale_cursor')
-    finish
-endif
-
-let g:loaded_ale_cursor = 1
-
 " Return a formatted message according to g:ale_echo_msg_format variable
 function! s:GetMessage(linter, type, text) abort
     let msg = g:ale_echo_msg_format
