@@ -11,7 +11,7 @@ function! ale_linters#php#php#Handle(buffer, lines)
     " Matches patterns like the following:
     "
     " Parse error: parse error in - on line 7
-    let pattern = 'Parse error: \(.\+\) on line \(\d\+\)'
+    let pattern = 'Parse error:\s\+\(.\+\) on line \(\d\+\)'
     let output = []
 
     for line in a:lines

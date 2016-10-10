@@ -10,7 +10,7 @@ function! ale_linters#json#jsonlint#Handle(buffer, lines)
     " Matches patterns like the following:
     " line 2, col 15, found: 'STRING' - expected: 'EOF', '}', ',', ']'.
 
-    let pattern = 'line \(\d\+\), col \(\d*\), \(.\+\)'
+    let pattern = '^line \(\d\+\), col \(\d*\), \(.\+\)$'
     let output = []
 
     for line in a:lines
