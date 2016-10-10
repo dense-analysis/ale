@@ -1,6 +1,6 @@
 let s:linters = {}
 
-function! ale#linter#define(filetype, linter)
+function! ale#linter#define(filetype, linter) abort
     if !has_key(s:linters, a:filetype)
         let s:linters[a:filetype] = []
     endif
@@ -33,7 +33,7 @@ function! ale#linter#define(filetype, linter)
     call add(s:linters[a:filetype], new_linter)
 endfunction
 
-function! ale#linter#get(filetype)
+function! ale#linter#get(filetype) abort
     if has_key(s:linters, a:filetype)
         return s:linters[a:filetype]
     endif
@@ -41,10 +41,10 @@ function! ale#linter#get(filetype)
     if has_key(g:ale_linters, a:filetype)
         " Filter loaded linters according to list of linters specified in option.
         for linter in g:ale_linters[a:filetype]
-            execute "runtime! ale_linters/".a:filetype."/".linter.".vim"
+            execute 'runtime! ale_linters/'.a:filetype.'/'.linter.'.vim'
         endfor
     else
-        execute "runtime! ale_linters/".a:filetype."/*.vim"
+        execute 'runtime! ale_linters/'.a:filetype.'/*.vim'
     endif
 
     return [] " Yes, we miss the first run, but it avoids some code duplication.

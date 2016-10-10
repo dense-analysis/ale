@@ -1,7 +1,7 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Contains miscellaneous functions
 
-function! s:FindWrapperScript()
+function! s:FindWrapperScript() abort
     for parent in split(&runtimepath, ',')
         " Expand the path to deal with ~ issues.
         let path = expand(parent . '/' . 'stdin-wrapper')
@@ -26,17 +26,17 @@ if has('win32')
 endif
 
 " Return the number of lines for a given buffer.
-function! ale#util#GetLineCount(buffer)
+function! ale#util#GetLineCount(buffer) abort
     return len(getbufline(a:buffer, 1, '$'))
 endfunction
 
 " Given a buffer and a filename, find the nearest file by searching upwards
 " through the paths relative to the given buffer.
-function! ale#util#FindNearestFile(buffer, filename)
+function! ale#util#FindNearestFile(buffer, filename) abort
     return findfile(a:filename, fnamemodify(bufname(a:buffer), ':p') . ';')
 endfunction
 
-function! ale#util#GetFunction(string_or_ref)
+function! ale#util#GetFunction(string_or_ref) abort
     if type(a:string_or_ref) == type('')
         return function(a:string_or_ref)
     endif
@@ -44,7 +44,7 @@ function! ale#util#GetFunction(string_or_ref)
     return a:string_or_ref
 endfunction
 
-function! ale#util#FixLocList(buffer, loclist)
+function! ale#util#FixLocList(buffer, loclist) abort
     " Some errors have line numbers beyond the end of the file,
     " so we need to adjust them so they set the error at the last line
     " of the file instead.
@@ -60,7 +60,7 @@ function! ale#util#FixLocList(buffer, loclist)
     endfor
 endfunction
 
-function! ale#util#LocItemCompare(left, right)
+function! ale#util#LocItemCompare(left, right) abort
     if a:left['lnum'] < a:right['lnum']
         return -1
     endif

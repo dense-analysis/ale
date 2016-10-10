@@ -5,7 +5,7 @@
 " output: The array of lines for the output of the job.
 let s:job_info_map = {}
 
-function! ale#engine#GetJobID(job)
+function! ale#engine#GetJobID(job) abort
     if has('nvim')
         "In NeoVim, job values are just IDs.
         return a:job
@@ -16,7 +16,7 @@ function! ale#engine#GetJobID(job)
     return ch_info(job_getchannel(a:job)).id
 endfunction
 
-function! ale#engine#ClearJob(job)
+function! ale#engine#ClearJob(job) abort
     let job_id = ale#engine#GetJobID(a:job)
     let linter = s:job_info_map[job_id].linter
 
@@ -36,7 +36,7 @@ function! ale#engine#ClearJob(job)
     call remove(linter, 'job')
 endfunction
 
-function! s:GatherOutput(job, data)
+function! s:GatherOutput(job, data) abort
     let job_id = ale#engine#GetJobID(a:job)
 
     if !has_key(s:job_info_map, job_id)
@@ -46,15 +46,15 @@ function! s:GatherOutput(job, data)
     call extend(s:job_info_map[job_id].output, a:data)
 endfunction
 
-function! ale#engine#GatherOutputVim(channel, data)
+function! ale#engine#GatherOutputVim(channel, data) abort
     call s:GatherOutput(ch_getjob(a:channel), [a:data])
 endfunction
 
-function! ale#engine#GatherOutputNeoVim(job, data, event)
+function! ale#engine#GatherOutputNeoVim(job, data, event) abort
     call s:GatherOutput(a:job, a:data)
 endfunction
 
-function! s:HandleExit(job)
+function! s:HandleExit(job) abort
     if a:job ==# 'no process'
         " Stop right away when the job is not valid in Vim 8.
         return
@@ -104,15 +104,15 @@ function! s:HandleExit(job)
     " matchadd('ALEError', '\%200l\%17v')
 endfunction
 
-function! ale#engine#HandleExitNeoVim(job, data, event)
+function! ale#engine#HandleExitNeoVim(job, data, event) abort
     call s:HandleExit(a:job)
 endfunction
 
-function! ale#engine#HandleExitVim(channel)
+function! ale#engine#HandleExitVim(channel) abort
     call s:HandleExit(ch_getjob(a:channel))
 endfunction
 
-function! ale#engine#ApplyLinter(buffer, linter)
+function! ale#engine#ApplyLinter(buffer, linter) abort
     if has_key(a:linter, 'job')
         " Stop previous jobs for the same linter.
         call ale#engine#ClearJob(a:linter.job)

@@ -4,7 +4,7 @@
 
 let s:lint_timer = -1
 
-function! ale#queue(delay)
+function! ale#queue(delay) abort
     if s:lint_timer != -1
         call timer_stop(s:lint_timer)
         let s:lint_timer = -1
@@ -23,7 +23,7 @@ function! ale#queue(delay)
     endif
 endfunction
 
-function! ale#lint(...)
+function! ale#lint(...) abort
     let buffer = bufnr('%')
     let linters = ale#linter#get(&filetype)
 
