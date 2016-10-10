@@ -1,7 +1,7 @@
-*ale.txt*  For Vim version 8.0.  Last change: 2016 October 7
+*ale.txt*  For Vim version 8.0.  Last change: 2016 October 10
 *ale*
 
-ALE - Asychronous Lint Engine
+ALE - Asynchronous Lint Engine
 
 ===============================================================================
 CONTENTS                                                         *ale-contents*
@@ -157,7 +157,7 @@ g:ale_set_signs                                               *g:ale_set_signs*
 
   When this option is set to `1`, the |sign| column will be populated with
   signs marking where errors and warnings appear in the file. The
-  'ALEErrorSign' and 'ALEWarningSign' highlight groups will be used to provide
+  `ALEErrorSign` and `ALEWarningSign` highlight groups will be used to provide
   highlighting for the signs. The text used for signs can be customised with
   the |g:ale_sign_error| and |g:ale_sign_warning| options.
 
@@ -216,6 +216,29 @@ g:ale_echo_cursor                                           *g:ale_echo_cursor*
   error at a column nearest to the cursor when the cursor is resting on a line
   which contains a warning or error. This option can be set to `0` to disable
   this behaviour.
+  The format of the message can be customizable in |g:ale_echo_msg_format|.
+
+
+g:ale_echo_msg_format                                    *g:ale_echo_msg_format*
+
+  Type: |String|
+  Default: `%s`
+
+  This variable defines the format of the echoed message. The `%s` is the
+  error message itself, and it can contain the following handlers:
+  - `%linter%` for linter's name
+  - `%severity%` for the type of severity
+  Note |`g:ale_echo_cursor`| should be setted to 1
+
+
+g:ale_echo_msg_error_str                              *g:ale_echo_msg_error_str*
+
+  Type: |String|
+  Default: `Error`
+
+  The string used for error severity in the echoed message.
+  Note |`g:ale_echo_cursor`| should be setted to 1
+  Note |`g:ale_echo_msg_format`| should contain the `%severity%` handler
 
 
 g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
