@@ -10,7 +10,7 @@
 file_extension="$1"
 shift
 
-temp_file=$(mktemp --tmpdir "ale-XXX$file_extension")
+temp_file=$(mktemp --tmpdir "ale-XXXXXXXXX$file_extension")
 trap 'rm $temp_file' EXIT
 
 while read -r; do
