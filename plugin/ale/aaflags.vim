@@ -48,3 +48,12 @@ let g:ale_sign_column_always = get(g:, 'ale_sign_column_always', 0)
 let g:ale_statusline_format = get(g:, 'ale_statusline_format', 
 \   ['%d error(s)', '%d warning(s)', 'OK']
 \)
+
+" String format for the echoed message
+" A %s is mandatory
+" It can contain 2 handlers: %linter%, %severity%
+let g:ale_echo_msg_format = get(g:, 'ale_echo_msg_format', '%s')
+
+" Strings used for severity in the echoed message
+let g:ale_echo_msg_error_str = get(g:, 'ale_echo_msg_error_str', 'Error')
+let g:ale_echo_msg_warning_str = get(g:, 'ale_echo_msg_warning_str', 'Warning')

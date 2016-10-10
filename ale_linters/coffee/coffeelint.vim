@@ -27,7 +27,7 @@ function! ale_linters#coffee#coffeelint#Handle(buffer, lines)
         let line = l:match[1] + 0
         let column = 1
         let type = l:match[3] ==# 'error' ? 'E' : 'W'
-        let text = l:match[3] . ': ' . l:match[4]
+        let text = l:match[4]
 
         " vcol is needed to indicate that the column is a character
         call add(output, {
