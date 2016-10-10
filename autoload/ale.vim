@@ -43,7 +43,6 @@ function! ale#lint(...) abort
             continue
         endif
 
-        call ale#engine#ApplyLinter(buffer, linter)
+        call ale#engine#invoke(buffer, linter)
     endfor
 endfunction
-

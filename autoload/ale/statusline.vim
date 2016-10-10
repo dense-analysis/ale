@@ -37,4 +37,3 @@ function! ale#statusline#status() abort
 
     return res
 endfunction
-

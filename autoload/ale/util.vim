@@ -44,22 +44,6 @@ function! ale#util#GetFunction(string_or_ref) abort
     return a:string_or_ref
 endfunction
 
-function! ale#util#FixLocList(buffer, loclist) abort
-    " Some errors have line numbers beyond the end of the file,
-    " so we need to adjust them so they set the error at the last line
-    " of the file instead.
-    let last_line_number = ale#util#GetLineCount(a:buffer)
-
-    for item in a:loclist
-        if item.lnum == 0
-            " When errors appear at line 0, put them at line 1 instead.
-            let item.lnum = 1
-        elseif item.lnum > last_line_number
-            let item.lnum = last_line_number
-        endif
-    endfor
-endfunction
-
 function! ale#util#LocItemCompare(left, right) abort
     if a:left['lnum'] < a:right['lnum']
         return -1

@@ -73,11 +73,6 @@ let g:ale_echo_msg_format = get(g:, 'ale_echo_msg_format', '%s')
 let g:ale_echo_msg_error_str = get(g:, 'ale_echo_msg_error_str', 'Error')
 let g:ale_echo_msg_warning_str = get(g:, 'ale_echo_msg_warning_str', 'Warning')
 
-" Globals which each part of the plugin should use.
-let g:ale_buffer_loclist_map = {}
-let g:ale_buffer_should_reset_map = {}
-let g:ale_buffer_sign_dummy_map = {}
-
 if g:ale_lint_on_text_changed
     augroup ALERunOnTextChangedGroup
         autocmd!
@@ -105,7 +100,15 @@ augroup ALEBufferCleanup
     autocmd BufUnload * call ale#cleanup#BufferCleanup('<abuf>')
 augroup END
 
-" Backwards Compatibility
+" Globals which each part of the plugin should use.
+let g:ale_buffer_loclist_map = {}
+let g:ale_buffer_should_reset_map = {}
+let g:ale_buffer_sign_dummy_map = {}
+
+" Backwards compatibility
 function! ALELint(delay)
     call ale#queue(a:delay)
+endfunction
+function! ALEGetStatusLine()
+    call ale#statusline#status()
 endfunction

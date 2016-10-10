@@ -34,19 +34,31 @@ function! ale#linter#define(filetype, linter) abort
 endfunction
 
 function! ale#linter#get(filetype) abort
+    if a:filetype ==# ''
+        " Empty filetype? Nothing to be done about that.
+        return []
+    endif
+
     if has_key(s:linters, a:filetype)
+        " We already loaded a linter, great!
         return s:linters[a:filetype]
     endif
 
     if has_key(g:ale_linters, a:filetype)
         " Filter loaded linters according to list of linters specified in option.
         for linter in g:ale_linters[a:filetype]
-            execute 'runtime! ale_linters/'.a:filetype.'/'.linter.'.vim'
+            execute 'runtime! ale_linters/' . a:filetype . '/' . linter . '.vim'
         endfor
     else
-        execute 'runtime! ale_linters/'.a:filetype.'/*.vim'
+        execute 'runtime! ale_linters/' . a:filetype . '/*.vim'
     endif
 
-    return [] " Yes, we miss the first run, but it avoids some code duplication.
+    if has_key(s:linters, a:filetype)
+        " If we found a linter, return it now.
+        return s:linters[a:filetype]
+    else
+        " If we couldn't load a linter, blacklist it in the future.
+        let g:ale_linters[a:filetype] = []
+        return []
+    endif
 endfunction
-

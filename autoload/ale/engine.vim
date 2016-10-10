@@ -1,3 +1,7 @@
+" These versions of Vim have bugs with the 'in_buf' option, so the buffer
+" must be sent via getbufline() instead.
+let s:has_in_buf_bugs = has('win32') || has('gui_macvim')
+
 " Stores information for each job including:
 "
 " linter: The linter dictionary for the job.
@@ -5,7 +9,7 @@
 " output: The array of lines for the output of the job.
 let s:job_info_map = {}
 
-function! ale#engine#GetJobID(job) abort
+function! s:GetJobID(job) abort
     if has('nvim')
         "In NeoVim, job values are just IDs.
         return a:job
@@ -16,8 +20,8 @@ function! ale#engine#GetJobID(job) abort
     return ch_info(job_getchannel(a:job)).id
 endfunction
 
-function! ale#engine#ClearJob(job) abort
-    let job_id = ale#engine#GetJobID(a:job)
+function! s:ClearJob(job) abort
+    let job_id = s:GetJobID(a:job)
     let linter = s:job_info_map[job_id].linter
 
     if has('nvim')
@@ -37,7 +41,7 @@ function! ale#engine#ClearJob(job) abort
 endfunction
 
 function! s:GatherOutput(job, data) abort
-    let job_id = ale#engine#GetJobID(a:job)
+    let job_id = s:GetJobID(a:job)
 
     if !has_key(s:job_info_map, job_id)
         return
@@ -46,11 +50,11 @@ function! s:GatherOutput(job, data) abort
     call extend(s:job_info_map[job_id].output, a:data)
 endfunction
 
-function! ale#engine#GatherOutputVim(channel, data) abort
+function! s:GatherOutputVim(channel, data) abort
     call s:GatherOutput(ch_getjob(a:channel), [a:data])
 endfunction
 
-function! ale#engine#GatherOutputNeoVim(job, data, event) abort
+function! s:GatherOutputNeoVim(job, data, event) abort
     call s:GatherOutput(a:job, a:data)
 endfunction
 
@@ -60,7 +64,7 @@ function! s:HandleExit(job) abort
         return
     endif
 
-    let job_id = ale#engine#GetJobID(a:job)
+    let job_id = s:GetJobID(a:job)
 
     if !has_key(s:job_info_map, job_id)
         return
@@ -68,7 +72,7 @@ function! s:HandleExit(job) abort
 
     let job_info = s:job_info_map[job_id]
 
-    call ale#engine#ClearJob(a:job)
+    call s:ClearJob(a:job)
 
     let linter = job_info.linter
     let output = job_info.output
@@ -77,7 +81,7 @@ function! s:HandleExit(job) abort
     let linter_loclist = ale#util#GetFunction(linter.callback)(buffer, output)
 
     " Make some adjustments to the loclists to fix common problems.
-    call ale#util#FixLocList(buffer, linter_loclist)
+    call s:FixLocList(buffer, linter_loclist)
 
     if g:ale_buffer_should_reset_map[buffer]
         let g:ale_buffer_should_reset_map[buffer] = 0
@@ -104,18 +108,34 @@ function! s:HandleExit(job) abort
     " matchadd('ALEError', '\%200l\%17v')
 endfunction
 
-function! ale#engine#HandleExitNeoVim(job, data, event) abort
+function! s:HandleExitNeoVim(job, data, event) abort
     call s:HandleExit(a:job)
 endfunction
 
-function! ale#engine#HandleExitVim(channel) abort
+function! s:HandleExitVim(channel) abort
     call s:HandleExit(ch_getjob(a:channel))
 endfunction
 
-function! ale#engine#ApplyLinter(buffer, linter) abort
+function! s:FixLocList(buffer, loclist) abort
+    " Some errors have line numbers beyond the end of the file,
+    " so we need to adjust them so they set the error at the last line
+    " of the file instead.
+    let last_line_number = ale#util#GetLineCount(a:buffer)
+
+    for item in a:loclist
+        if item.lnum == 0
+            " When errors appear at line 0, put them at line 1 instead.
+            let item.lnum = 1
+        elseif item.lnum > last_line_number
+            let item.lnum = last_line_number
+        endif
+    endfor
+endfunction
+
+function! ale#engine#invoke(buffer, linter) abort
     if has_key(a:linter, 'job')
         " Stop previous jobs for the same linter.
-        call ale#engine#ClearJob(a:linter.job)
+        call s:ClearJob(a:linter.job)
     endif
 
     if has_key(a:linter, 'command_callback')
@@ -135,19 +155,19 @@ function! ale#engine#ApplyLinter(buffer, linter) abort
         if a:linter.output_stream ==# 'stderr'
             " Read from stderr instead of stdout.
             let job = jobstart(command, {
-            \   'on_stderr': 'ale#engine#GatherOutputNeoVim',
-            \   'on_exit': 'ale#engine#HandleExitNeoVim',
+            \   'on_stderr': 's:GatherOutputNeoVim',
+            \   'on_exit': 's:HandleExitNeoVim',
             \})
         elseif a:linter.output_stream ==# 'both'
             let job = jobstart(command, {
-            \   'on_stdout': 'ale#engine#GatherOutputNeoVim',
-            \   'on_stderr': 'ale#engine#GatherOutputNeoVim',
-            \   'on_exit': 'ale#engine#HandleExitNeoVim',
+            \   'on_stdout': 's:GatherOutputNeoVim',
+            \   'on_stderr': 's:GatherOutputNeoVim',
+            \   'on_exit': 's:HandleExitNeoVim',
             \})
         else
             let job = jobstart(command, {
-            \   'on_stdout': 'ale#engine#GatherOutputNeoVim',
-            \   'on_exit': 'ale#engine#HandleExitNeoVim',
+            \   'on_stdout': 's:GatherOutputNeoVim',
+            \   'on_exit': 's:HandleExitNeoVim',
             \})
         endif
     else
@@ -155,18 +175,18 @@ function! ale#engine#ApplyLinter(buffer, linter) abort
         \   'in_mode': 'nl',
         \   'out_mode': 'nl',
         \   'err_mode': 'nl',
-        \   'close_cb': function('ale#engine#HandleExitVim'),
+        \   'close_cb': function('s:HandleExitVim'),
         \}
 
         if a:linter.output_stream ==# 'stderr'
             " Read from stderr instead of stdout.
-            let job_options.err_cb = function('ale#engine#GatherOutputVim')
+            let job_options.err_cb = function('s:GatherOutputVim')
         elseif a:linter.output_stream ==# 'both'
             " Read from both streams.
-            let job_options.out_cb = function('ale#engine#GatherOutputVim')
-            let job_options.err_cb = function('ale#engine#GatherOutputVim')
+            let job_options.out_cb = function('s:GatherOutputVim')
+            let job_options.err_cb = function('s:GatherOutputVim')
         else
-            let job_options.out_cb = function('ale#engine#GatherOutputVim')
+            let job_options.out_cb = function('s:GatherOutputVim')
         endif
 
         if has('win32')
@@ -174,8 +194,10 @@ function! ale#engine#ApplyLinter(buffer, linter) abort
             " othwerwise %PATHTEXT% will not be used to programs ending int
             " .cmd, .bat, .exe, etc.
             let l:command = 'cmd /c ' . l:command
-        else
-            " On Unix machines, we can send the Vim buffer directly.
+        endif
+
+        if !s:has_in_buf_bugs
+            " On some Unix machines, we can send the Vim buffer directly.
             " This is faster than reading the lines ourselves.
             let job_options.in_io = 'buffer'
             let job_options.in_buf = a:buffer
@@ -190,7 +212,7 @@ function! ale#engine#ApplyLinter(buffer, linter) abort
         let a:linter.job = job
 
         " Store the ID for the job in the map to read back again.
-        let s:job_info_map[ale#engine#GetJobID(job)] = {
+        let s:job_info_map[s:GetJobID(job)] = {
         \   'linter': a:linter,
         \   'buffer': a:buffer,
         \   'output': [],
@@ -202,9 +224,8 @@ function! ale#engine#ApplyLinter(buffer, linter) abort
 
             call jobsend(job, input)
             call jobclose(job, 'stdin')
-        elseif has('win32')
-            " On Windows, we have to send the buffer lines ourselves,
-            " as there are issues with Windows and 'in_buf'
+        elseif s:has_in_buf_bugs
+            " On some Vim versions, we have to send the buffer data ourselves.
             let input = join(getbufline(a:buffer, 1, '$'), "\n") . "\n"
             let channel = job_getchannel(job)
 
@@ -215,4 +236,3 @@ function! ale#engine#ApplyLinter(buffer, linter) abort
         endif
     endif
 endfunction
-
