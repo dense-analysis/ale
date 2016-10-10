@@ -16,32 +16,32 @@ function! ale_linters#verilog#verilator#Handle(buffer, lines)
     " %Warning-UNDRIVEN: test.v:3: Signal is not driven: clk
     " %Warning-UNUSED: test.v:4: Signal is not used: dout
     " %Warning-BLKSEQ: test.v:10: Blocking assignments (=) in sequential (flop or latch) block; suggest delayed assignments (<=).
-    let pattern = '^%\(Warning\|Error\)[^:]*:[^:]\+:\(\d\+\): \(.\+\)$'
-    let output = []
+    let l:pattern = '^%\(Warning\|Error\)[^:]*:[^:]\+:\(\d\+\): \(.\+\)$'
+    let l:output = []
 
-    for line in a:lines
-        let l:match = matchlist(line, pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             continue
         endif
 
-        let line = l:match[2] + 0
-        let type = l:match[1] ==# 'Error' ? 'E' : 'W'
-        let text = l:match[3]
+        let l:line = l:match[2] + 0
+        let l:type = l:match[1] ==# 'Error' ? 'E' : 'W'
+        let l:text = l:match[3]
 
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': a:buffer,
-        \   'lnum': line,
+        \   'lnum': l:line,
         \   'vcol': 0,
         \   'col': 1,
-        \   'text': text,
-        \   'type': type,
+        \   'text': l:text,
+        \   'type': l:type,
         \   'nr': -1,
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
 
 call ale#linter#Define('verilog', {

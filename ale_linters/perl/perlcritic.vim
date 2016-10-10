@@ -7,34 +7,34 @@ endif
 
 let g:loaded_ale_linters_perl_perlcritic = 1
 function! ale_linters#perl#perlcritic#Handle(buffer, lines)
-    let pattern = '\(.\+\) at \(.\+\) line \(\d\+\)'
-    let output = []
+    let l:pattern = '\(.\+\) at \(.\+\) line \(\d\+\)'
+    let l:output = []
 
-    for line in a:lines
-        let l:match = matchlist(line, pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             continue
         endif
 
-        let line = l:match[3]
-        let column = 1
-        let text = l:match[1]
-        let type = 'E'
+        let l:line = l:match[3]
+        let l:column = 1
+        let l:text = l:match[1]
+        let l:type = 'E'
 
         " vcol is Needed to indicate that the column is a character.
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': a:buffer,
-        \   'lnum': line,
+        \   'lnum': l:line,
         \   'vcol': 0,
-        \   'col': column,
-        \   'text': text,
-        \   'type': type,
+        \   'col': l:column,
+        \   'text': l:text,
+        \   'type': l:type,
         \   'nr': -1,
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
 
 call ale#linter#Define('perl', {
