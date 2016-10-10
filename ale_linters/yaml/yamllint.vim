@@ -23,7 +23,7 @@ function! ale_linters#yaml#yamllint#Handle(buffer, lines)
         let line = match[1] + 0
         let col = match[2] + 0
         let type = match[3]
-        let text = printf('[%s]%s', type, match[4])
+        let text = match[4]
 
         " vcol is Needed to indicate that the column is a character.
         call add(output, {
