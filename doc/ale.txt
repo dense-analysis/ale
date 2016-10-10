@@ -17,6 +17,7 @@ CONTENTS                                                         *ale-contents*
     4.5. shell..................................|ale-linter-options-shell|
     4.6. fortran-gcc............................|ale-linter-options-fortran-gcc|
     4.7. html-tidy..............................|ale-linter-options-html-tidy|
+    4.8. jshint.................................|ale-linter-options-jshint|
   5. API........................................|ale-api|
   6. Contact....................................|ale-contact|
 
@@ -398,6 +399,16 @@ g:ale_html_tidy_args                                     *g:ale_html_tidy_args*
   cp850 (ibm858), cp932 (shiftjis), iso-2022-jp (iso-2022), latin1, macroman
   (mac), sjis (shiftjis), utf-16le, utf-16, utf-8
 
+
+-------------------------------------------------------------------------------
+4.8. jshint                                         *ale-linter-options-jshint*
+
+g:ale_javascript_jshint_executable         *g:ale_javascript_jshint_executable*
+
+  Type: |String|
+  Default: `'jshint'`
+
+  This variable can be changed to change the path to jshint.
 
 ===============================================================================
 5. API                                                                *ale-api*

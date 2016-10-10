@@ -7,6 +7,9 @@ endif
 
 let g:loaded_ale_linters_javascript_jshint = 1
 
+let g:ale_javascript_jshint_executable =
+\   get(g:, 'ale_javascript_jshint_executable', 'jshint')
+
 function! ale_linters#javascript#jshint#GetCommand(buffer)
     " Set this to the location of the jshint configuration file to
     " use a fixed location for .jshintrc
@@ -17,7 +20,7 @@ function! ale_linters#javascript#jshint#GetCommand(buffer)
         let jshint_config = ale#util#FindNearestFile(a:buffer, '.jshintrc')
     endif
 
-    let command = 'jshint --reporter unix'
+    let command = g:ale_javascript_jshint_executable . ' --reporter unix'
 
     if !empty(jshint_config)
         let command .= ' --config ' . fnameescape(jshint_config)
@@ -69,14 +72,14 @@ endfunction
 
 call ALEAddLinter('javascript', {
 \   'name': 'jshint',
-\   'executable': 'jshint',
+\   'executable': g:ale_javascript_jshint_executable,
 \   'command_callback': 'ale_linters#javascript#jshint#GetCommand',
 \   'callback': 'ale_linters#javascript#jshint#Handle',
 \})
 
 call ALEAddLinter('javascript.jsx', {
 \   'name': 'jshint',
-\   'executable': 'jshint',
+\   'executable': g:ale_javascript_jshint_executable,
 \   'command_callback': 'ale_linters#javascript#jshint#GetCommand',
 \   'callback': 'ale_linters#javascript#jshint#Handle',
 \})
