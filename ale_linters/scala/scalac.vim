@@ -49,7 +49,7 @@ function! ale_linters#scala#scalac#Handle(buffer, lines)
     return output
 endfunction
 
-call ALEAddLinter('scala', {
+call ale#linter#Define('scala', {
 \   'name': 'scalac',
 \   'executable': 'scalac',
 \   'output_stream': 'stderr',

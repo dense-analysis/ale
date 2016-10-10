@@ -35,7 +35,7 @@ function! ale_linters#json#jsonlint#Handle(buffer, lines)
     return output
 endfunction
 
-call ALEAddLinter('json', {
+call ale#linter#Define('json', {
 \   'name': 'jsonlint',
 \   'executable': 'jsonlint',
 \   'output_stream': 'stderr',

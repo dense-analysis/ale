@@ -40,7 +40,7 @@ function! ale_linters#ruby#rubocop#Handle(buffer, lines)
     return output
 endfunction
 
-call ALEAddLinter('ruby', {
+call ale#linter#Define('ruby', {
 \   'name': 'rubocop',
 \   'executable': 'rubocop',
 \   'command': 'rubocop --format emacs --stdin _',

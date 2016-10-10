@@ -1,12 +1,6 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Echoes lint message for the current line, if any
 
-if exists('g:loaded_ale_cursor')
-    finish
-endif
-
-let g:loaded_ale_cursor = 1
-
 " Return a formatted message according to g:ale_echo_msg_format variable
 function! s:GetMessage(linter, type, text) abort
     let msg = g:ale_echo_msg_format
@@ -26,7 +20,7 @@ endfunction
 
 " This function will perform a binary search to find a message from the
 " loclist to echo when the cursor moves.
-function! s:BinarySearch(loclist, line, column)
+function! s:BinarySearch(loclist, line, column) abort
     let min = 0
     let max = len(a:loclist) - 1
     let last_column_match = -1
@@ -59,7 +53,7 @@ function! s:BinarySearch(loclist, line, column)
     endwhile
 endfunction
 
-function! ale#cursor#TruncatedEcho(message)
+function! ale#cursor#TruncatedEcho(message) abort
     let message = a:message
     " Change tabs to spaces.
     let message = substitute(message, "\t", ' ', 'g')
@@ -79,7 +73,7 @@ function! ale#cursor#TruncatedEcho(message)
     endtry
 endfunction
 
-function! ale#cursor#EchoCursorWarning(...)
+function! ale#cursor#EchoCursorWarning(...) abort
     " Only echo the warnings in normal mode, otherwise we will get problems.
     if mode() !=# 'n'
         return
@@ -108,7 +102,7 @@ endfunction
 
 let s:cursor_timer = -1
 
-function! ale#cursor#EchoCursorWarningWithDelay()
+function! ale#cursor#EchoCursorWarningWithDelay() abort
     if s:cursor_timer != -1
         call timer_stop(s:cursor_timer)
         let s:cursor_timer = -1

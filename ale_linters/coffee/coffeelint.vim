@@ -44,7 +44,7 @@ function! ale_linters#coffee#coffeelint#Handle(buffer, lines)
     return output
 endfunction
 
-call ALEAddLinter('coffee', {
+call ale#linter#Define('coffee', {
 \   'name': 'coffeelint',
 \   'executable': 'coffeelint',
 \   'command': 'coffeelint --stdin --reporter csv',

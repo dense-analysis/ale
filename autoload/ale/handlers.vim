@@ -4,13 +4,7 @@ scriptencoding utf-8
 "   linter which outputs warnings and errors in a format accepted by one of
 "   these functions can simply use one of these pre-defined error handlers.
 
-if exists('g:loaded_ale_handlers')
-    finish
-endif
-
-let g:loaded_ale_handlers = 1
-
-function! ale#handlers#HandleGCCFormat(buffer, lines)
+function! ale#handlers#HandleGCCFormat(buffer, lines) abort
     " Look for lines like the following.
     "
     " <stdin>:8:5: warning: conversion lacks type at end of format [-Wformat=]
@@ -40,7 +34,7 @@ function! ale#handlers#HandleGCCFormat(buffer, lines)
     return output
 endfunction
 
-function! ale#handlers#HandleCSSLintFormat(buffer, lines)
+function! ale#handlers#HandleCSSLintFormat(buffer, lines) abort
     " Matches patterns line the following:
     "
     " something.css: line 2, col 1, Error - Expected RBRACE at line 2, col 1. (errors)

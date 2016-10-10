@@ -36,7 +36,7 @@ function! ale_linters#php#php#Handle(buffer, lines)
     return output
 endfunction
 
-call ALEAddLinter('php', {
+call ale#linter#Define('php', {
 \   'name': 'php',
 \   'executable': 'php',
 \   'output_stream': 'both',

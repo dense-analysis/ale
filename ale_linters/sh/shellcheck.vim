@@ -22,7 +22,7 @@ else
     let s:exclude_option = ''
 endif
 
-call ALEAddLinter('sh', {
+call ale#linter#Define('sh', {
 \   'name': 'shellcheck',
 \   'executable': 'shellcheck',
 \   'command': 'shellcheck ' . s:exclude_option . ' -f gcc -',

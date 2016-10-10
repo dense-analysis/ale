@@ -71,7 +71,7 @@ function! ale_linters#html#tidy#Handle(buffer, lines) abort
     return output
 endfunction
 
-call ALEAddLinter('html', {
+call ale#linter#Define('html', {
 \   'name': 'tidy',
 \   'executable': g:ale_html_tidy_executable,
 \   'output_stream': 'stderr',

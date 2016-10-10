@@ -74,7 +74,7 @@ function! ale_linters#sh#shell#Handle(buffer, lines)
     return output
 endfunction
 
-call ALEAddLinter('sh', {
+call ale#linter#Define('sh', {
 \   'name': 'shell',
 \   'output_stream': 'stderr',
 \   'executable_callback': 'ale_linters#sh#shell#GetExecutable',

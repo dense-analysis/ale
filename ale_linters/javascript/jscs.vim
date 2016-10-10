@@ -43,14 +43,14 @@ function! ale_linters#javascript#jscs#Handle(buffer, lines)
     return output
 endfunction
 
-call ALEAddLinter('javascript', {
+call ale#linter#Define('javascript', {
 \   'name': 'jscs',
 \   'executable': 'jscs',
 \   'command': 'jscs -r unix -n -',
 \   'callback': 'ale_linters#javascript#jscs#Handle',
 \})
 
-call ALEAddLinter('javascript.jsx', {
+call ale#linter#Define('javascript.jsx', {
 \   'name': 'jscs',
 \   'executable': 'jscs',
 \   'command': 'jscs -r unix -n -',

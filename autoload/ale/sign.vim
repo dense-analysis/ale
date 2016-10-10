@@ -1,12 +1,7 @@
-scriptencoding utf-8
+scriptencoding utf8
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Draws error and warning signs into signcolumn
 
-if exists('g:loaded_ale_sign')
-    finish
-endif
-
-let g:loaded_ale_sign = 1
 let b:dummy_sign_set_map = {}
 
 if !hlexists('ALEErrorSign')
@@ -40,7 +35,7 @@ execute 'sign define ALEWarningSign text=' . g:ale_sign_warning
 \   . ' texthl=ALEWarningSign'
 sign define ALEDummySign
 
-function! ale#sign#FindCurrentSigns(buffer)
+function! ale#sign#FindCurrentSigns(buffer) abort
     " Matches output like :
     " line=4  id=1  name=ALEErrorSign
     " строка=1  id=1000001  имя=ALEErrorSign
@@ -66,7 +61,7 @@ endfunction
 " Given a loclist, combine the loclist into a list of signs such that only
 " one sign appears per line. Error lines will take precedence.
 " The loclist will have been previously sorted.
-function! ale#sign#CombineSigns(loclist)
+function! ale#sign#CombineSigns(loclist) abort
     let signlist = []
 
     for obj in a:loclist
@@ -98,7 +93,7 @@ function! ale#sign#CombineSigns(loclist)
 endfunction
 
 " This function will set the signs which show up on the left.
-function! ale#sign#SetSigns(buffer, loclist)
+function! ale#sign#SetSigns(buffer, loclist) abort
     let signlist = ale#sign#CombineSigns(a:loclist)
 
     if len(signlist) > 0 || g:ale_sign_column_always
