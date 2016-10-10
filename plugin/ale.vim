@@ -105,6 +105,13 @@ let g:ale_buffer_loclist_map = {}
 let g:ale_buffer_should_reset_map = {}
 let g:ale_buffer_sign_dummy_map = {}
 
+if g:ale_echo_cursor
+    augroup ALECursorGroup
+        autocmd!
+        autocmd CursorMoved,CursorHold * call ale#cursor#EchoCursorWarningWithDelay()
+    augroup END
+endif
+
 " Backwards compatibility
 function! ALELint(delay)
     call ale#Queue(a:delay)

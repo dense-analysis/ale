@@ -83,6 +83,10 @@ function! s:HandleExit(job) abort
     " Make some adjustments to the loclists to fix common problems.
     call s:FixLocList(buffer, linter_loclist)
 
+    for item in linter_loclist
+        let item.linter_name = linter.name
+    endfor
+
     if g:ale_buffer_should_reset_map[buffer]
         let g:ale_buffer_should_reset_map[buffer] = 0
         let g:ale_buffer_loclist_map[buffer] = []
