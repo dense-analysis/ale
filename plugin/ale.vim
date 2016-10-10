@@ -76,28 +76,28 @@ let g:ale_echo_msg_warning_str = get(g:, 'ale_echo_msg_warning_str', 'Warning')
 if g:ale_lint_on_text_changed
     augroup ALERunOnTextChangedGroup
         autocmd!
-        autocmd TextChanged,TextChangedI * call ale#queue(g:ale_lint_delay)
+        autocmd TextChanged,TextChangedI * call ale#Queue(g:ale_lint_delay)
     augroup END
 endif
 
 if g:ale_lint_on_enter
     augroup ALERunOnEnterGroup
         autocmd!
-        autocmd BufEnter,BufRead * call ale#queue(100)
+        autocmd BufEnter,BufRead * call ale#Queue(100)
     augroup END
 endif
 
 if g:ale_lint_on_save
     augroup ALERunOnSaveGroup
         autocmd!
-        autocmd BufWrite * call ale#queue(0)
+        autocmd BufWrite * call ale#Queue(0)
     augroup END
 endif
 
 " Clean up buffers automatically when they are unloaded.
 augroup ALEBufferCleanup
     autocmd!
-    autocmd BufUnload * call ale#cleanup#BufferCleanup('<abuf>')
+    autocmd BufUnload * call ale#cleanup#Buffer('<abuf>')
 augroup END
 
 " Globals which each part of the plugin should use.
@@ -107,8 +107,8 @@ let g:ale_buffer_sign_dummy_map = {}
 
 " Backwards compatibility
 function! ALELint(delay)
-    call ale#queue(a:delay)
+    call ale#Queue(a:delay)
 endfunction
 function! ALEGetStatusLine()
-    call ale#statusline#status()
+    call ale#statusline#Status()
 endfunction

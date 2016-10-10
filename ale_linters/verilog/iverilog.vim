@@ -42,7 +42,7 @@ function! ale_linters#verilog#iverilog#Handle(buffer, lines)
     return output
 endfunction
 
-call ale#linter#define('verilog', {
+call ale#linter#Define('verilog', {
 \   'name': 'iverilog',
 \   'output_stream': 'stderr',
 \   'executable': 'iverilog',

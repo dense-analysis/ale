@@ -58,7 +58,7 @@ function! ale_linters#haskell#ghc#Handle(buffer, lines)
     return output
 endfunction
 
-call ale#linter#define('haskell', {
+call ale#linter#Define('haskell', {
 \   'name': 'ghc',
 \   'output_stream': 'stderr',
 \   'executable': 'ghc',
@@ -66,7 +66,7 @@ call ale#linter#define('haskell', {
 \   'callback': 'ale_linters#haskell#ghc#Handle',
 \})
 
-call ale#linter#define('haskell', {
+call ale#linter#Define('haskell', {
 \   'name': 'stack-ghc',
 \   'output_stream': 'stderr',
 \   'executable': 'stack',

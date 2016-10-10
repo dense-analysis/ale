@@ -50,7 +50,7 @@ function! ale_linters#php#phpcs#Handle(buffer, lines)
     return output
 endfunction
 
-call ale#linter#define('php', {
+call ale#linter#Define('php', {
 \   'name': 'phpcs',
 \   'executable': 'phpcs',
 \   'command_callback': 'ale_linters#php#phpcs#GetCommand',

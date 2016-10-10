@@ -132,7 +132,7 @@ function! s:FixLocList(buffer, loclist) abort
     endfor
 endfunction
 
-function! ale#engine#invoke(buffer, linter) abort
+function! ale#engine#Invoke(buffer, linter) abort
     if has_key(a:linter, 'job')
         " Stop previous jobs for the same linter.
         call s:ClearJob(a:linter.job)

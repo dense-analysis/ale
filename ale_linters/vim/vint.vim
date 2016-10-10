@@ -9,7 +9,7 @@ let g:loaded_ale_linters_vim_vint = 1
 
 let s:format = '-f "{file_path}:{line_number}:{column_number}: {severity}: {description} (see {reference})'
 
-call ale#linter#define('vim', {
+call ale#linter#Define('vim', {
 \   'name': 'vint',
 \   'executable': 'vint',
 \   'command': g:ale#util#stdin_wrapper . ' .vim vint -w --no-color ' . s:format,

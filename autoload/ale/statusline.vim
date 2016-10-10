@@ -1,7 +1,7 @@
 " Author: KabbAmine <amine.kabb@gmail.com>
 " Description: Statusline related function(s)
 
-function! ale#statusline#status() abort
+function! ale#statusline#Status() abort
     " Returns a formatted string that can be integrated in the
     " statusline
 

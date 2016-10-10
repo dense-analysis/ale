@@ -12,7 +12,7 @@ if !exists('g:ale_c_gcc_options')
     let g:ale_c_gcc_options = '-Wall'
 endif
 
-call ale#linter#define('c', {
+call ale#linter#Define('c', {
 \   'name': 'gcc',
 \   'output_stream': 'stderr',
 \   'executable': 'gcc',

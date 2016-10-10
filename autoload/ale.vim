@@ -4,28 +4,28 @@
 
 let s:lint_timer = -1
 
-function! ale#queue(delay) abort
+function! ale#Queue(delay) abort
     if s:lint_timer != -1
         call timer_stop(s:lint_timer)
         let s:lint_timer = -1
     endif
 
-    let linters = ale#linter#get(&filetype)
+    let linters = ale#linter#Get(&filetype)
     if len(linters) == 0
         " There are no linters to lint with, so stop here.
         return
     endif
 
     if a:delay > 0
-        let s:lint_timer = timer_start(a:delay, function('ale#lint'))
+        let s:lint_timer = timer_start(a:delay, function('ale#Lint'))
     else
-        call ale#lint()
+        call ale#Lint()
     endif
 endfunction
 
-function! ale#lint(...) abort
+function! ale#Lint(...) abort
     let buffer = bufnr('%')
-    let linters = ale#linter#get(&filetype)
+    let linters = ale#linter#Get(&filetype)
 
     " Set a variable telling us to clear the loclist later.
     let g:ale_buffer_should_reset_map[buffer] = 1
@@ -43,6 +43,6 @@ function! ale#lint(...) abort
             continue
         endif
 
-        call ale#engine#invoke(buffer, linter)
+        call ale#engine#Invoke(buffer, linter)
     endfor
 endfunction

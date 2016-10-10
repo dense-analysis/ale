@@ -37,7 +37,7 @@ function! ale_linters#perl#perl#Handle(buffer, lines)
     return output
 endfunction
 
-call ale#linter#define('perl', {
+call ale#linter#Define('perl', {
 \   'name': 'perl',
 \   'executable': 'perl',
 \   'output_stream': 'both',

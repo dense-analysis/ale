@@ -40,7 +40,7 @@ function! ale_linters#yaml#yamllint#Handle(buffer, lines)
     return output
 endfunction
 
-call ale#linter#define('yaml', {
+call ale#linter#Define('yaml', {
 \   'name': 'yamllint',
 \   'executable': 'yamllint',
 \   'command': g:ale#util#stdin_wrapper . ' .yml yamllint -f parsable',

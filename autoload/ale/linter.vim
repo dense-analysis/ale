@@ -4,7 +4,7 @@
 
 let s:linters = {}
 
-function! ale#linter#define(filetype, linter) abort
+function! ale#linter#Define(filetype, linter) abort
     if !has_key(s:linters, a:filetype)
         let s:linters[a:filetype] = []
     endif
@@ -37,7 +37,7 @@ function! ale#linter#define(filetype, linter) abort
     call add(s:linters[a:filetype], new_linter)
 endfunction
 
-function! ale#linter#get(filetype) abort
+function! ale#linter#Get(filetype) abort
     if a:filetype ==# ''
         " Empty filetype? Nothing to be done about that.
         return []

@@ -41,7 +41,7 @@ function! ale_linters#scss#scsslint#Handle(buffer, lines)
     return output
 endfunction
 
-call ale#linter#define('scss', {
+call ale#linter#Define('scss', {
 \   'name': 'scsslint',
 \   'executable': 'scss-lint',
 \   'command': 'scss-lint --stdin-file-path=%s',

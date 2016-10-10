@@ -421,14 +421,14 @@ g:ale_html_tidy_args                                     *g:ale_html_tidy_args*
 ===============================================================================
 5. API                                                                *ale-api*
 
-ale#queue(delay)                                                  *ale#queue()*
+ale#Queue(delay)                                                  *ale#Queue()*
   Run linters for the current buffer, based on the filetype of the buffer,
   with a given `delay`. A `delay` of `0` will run the linters immediately.
   The linters will always be run in the background. Calling this function
   again from the same buffer
 
 
-ale#linter#define(filetype, linter)                       *ale#linter#define()*
+ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
   Given a |String| for a filetype and a |Dictionary| Describing a linter
   configuration, add a linter for the given filetype. The dictionaries each
   offer the following options:
@@ -500,12 +500,12 @@ ale#linter#define(filetype, linter)                       *ale#linter#define()*
   'command': g:ale#util#stdin_wrapper . ' .hs ghc -fno-code -v0',
 <
 
-ale#linter#get(filetype)                                     *ale#linter#get()*
+ale#linter#Get(filetype)                                     *ale#linter#Get()*
   Return all of linters configured for a given filetype as a |List| of
-  |Dictionary| values in the format specified by |ale#linter#define()|.
+  |Dictionary| values in the format specified by |ale#linter#Define()|.
 
 
-ale#statusline#status()                               *ale#statusline#status()*
+ale#statusline#Status()                               *ale#statusline#Status()*
   Return a formatted string that can be added to the statusline.
   The output's format is defined in |`g:ale_statusline_format`|.
   To enable it, the following should be present in your |statusline| settings: >
@@ -514,7 +514,7 @@ ale#statusline#status()                               *ale#statusline#status()*
 
 g:ale#util#stdin_wrapper                             *g:ale#util#stdin_wrapper*
   This variable names a wrapper script for sending stdin input to programs
-  which cannot accept input via stdin. See |ale#linter#define| for more.
+  which cannot accept input via stdin. See |ale#linter#Define()| for more.
 
 
 ===============================================================================

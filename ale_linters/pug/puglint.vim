@@ -35,7 +35,7 @@ function! ale_linters#pug#puglint#Handle(buffer, lines)
     return output
 endfunction
 
-call ale#linter#define('pug', {
+call ale#linter#Define('pug', {
 \   'name': 'puglint',
 \   'executable': 'pug-lint',
 \   'output_stream': 'stderr',

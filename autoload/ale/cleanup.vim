@@ -1,7 +1,7 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Utility functions related to cleaning state.
 
-function! ale#cleanup#BufferCleanup(buffer) abort
+function! ale#cleanup#Buffer(buffer) abort
     if has_key(g:ale_buffer_should_reset_map, a:buffer)
         call remove(g:ale_buffer_should_reset_map, a:buffer)
     endif

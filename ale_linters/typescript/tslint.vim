@@ -43,7 +43,7 @@ function! ale_linters#typescript#tslint#Handle(buffer, lines)
     return output
 endfunction
 
-call ale#linter#define('typescript', {
+call ale#linter#Define('typescript', {
 \   'name': 'tslint',
 \   'executable': 'tslint',
 \   'command': g:ale#util#stdin_wrapper . ' .ts tslint',

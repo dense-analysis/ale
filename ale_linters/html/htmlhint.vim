@@ -40,7 +40,7 @@ function! ale_linters#html#htmlhint#Handle(buffer, lines) abort
     return output
 endfunction
 
-call ale#linter#define('html', {
+call ale#linter#Define('html', {
 \   'name': 'htmlhint',
 \   'executable': 'htmlhint',
 \   'command': 'htmlhint --format=unix stdin',

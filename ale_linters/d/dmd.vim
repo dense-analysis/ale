@@ -61,7 +61,7 @@ function! ale_linters#d#dmd#Handle(buffer, lines)
     return output
 endfunction
 
-call ale#linter#define('d', {
+call ale#linter#Define('d', {
 \   'name': 'dmd',
 \   'output_stream': 'stderr',
 \   'executable': 'dmd',
