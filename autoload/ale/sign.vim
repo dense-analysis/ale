@@ -20,14 +20,6 @@ if !hlexists('ALEWarning')
     highlight link ALEWarning SpellCap
 endif
 
-" Global variables for signs
-let g:ale_sign_error = get(g:, 'ale_sign_error', '>>')
-let g:ale_sign_warning = get(g:, 'ale_sign_warning', '--')
-" An offset which can be set for sign IDs.
-" This ID can be changed depending on what IDs are set for other plugins.
-" The dummy sign will use the ID exactly equal to the offset.
-let g:ale_sign_offset = get(g:, 'ale_sign_offset', 1000000)
-
 " Signs show up on the left for error markers.
 execute 'sign define ALEErrorSign text=' . g:ale_sign_error
 \   . ' texthl=ALEErrorSign'
