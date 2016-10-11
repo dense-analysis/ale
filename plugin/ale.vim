@@ -130,5 +130,5 @@ function! ALELint(delay)
 endfunction
 
 function! ALEGetStatusLine()
-    call ale#statusline#Status()
+    return ale#statusline#Status()
 endfunction
