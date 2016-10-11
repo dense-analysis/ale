@@ -39,64 +39,64 @@ function! ale#sign#FindCurrentSigns(buffer) abort
     " Matches output like :
     " line=4  id=1  name=ALEErrorSign
     " строка=1  id=1000001  имя=ALEErrorSign
-    let pattern = 'id=\(\d\+\).*=ALE\(Warning\|Error\)Sign'
+    let l:pattern = 'id=\(\d\+\).*=ALE\(Warning\|Error\)Sign'
 
-    redir => output
+    redir => l:output
        silent exec 'sign place buffer=' . a:buffer
     redir END
 
-    let id_list = []
+    let l:id_list = []
 
-    for line in split(output, "\n")
-        let match = matchlist(line, pattern)
+    for l:line in split(l:output, "\n")
+        let l:match = matchlist(l:line, l:pattern)
 
-        if len(match) > 0
-            call add(id_list, match[1] + 0)
+        if len(l:match) > 0
+            call add(l:id_list, l:match[1] + 0)
         endif
     endfor
 
-    return id_list
+    return l:id_list
 endfunction
 
 " Given a loclist, combine the loclist into a list of signs such that only
 " one sign appears per line. Error lines will take precedence.
 " The loclist will have been previously sorted.
 function! ale#sign#CombineSigns(loclist) abort
-    let signlist = []
+    let l:signlist = []
 
-    for obj in a:loclist
-        let should_append = 1
+    for l:obj in a:loclist
+        let l:should_append = 1
 
-        if obj.lnum < 1
+        if l:obj.lnum < 1
             " Skip warnings and errors at line 0, etc.
             continue
         endif
 
-        if len(signlist) > 0 && signlist[-1].lnum == obj.lnum
+        if len(l:signlist) > 0 && l:signlist[-1].lnum == l:obj.lnum
             " We can't add the same line twice, because signs must be
             " unique per line.
-            let should_append = 0
+            let l:should_append = 0
 
-            if signlist[-1].type ==# 'W' && obj.type ==# 'E'
+            if l:signlist[-1].type ==# 'W' && l:obj.type ==# 'E'
                 " If we had a warning previously, but now have an error,
                 " we replace the object to set an error instead.
-                let signlist[-1] = obj
+                let l:signlist[-1] = l:obj
             endif
         endif
 
-        if should_append
-            call add(signlist, obj)
+        if l:should_append
+            call add(l:signlist, l:obj)
         endif
     endfor
 
-    return signlist
+    return l:signlist
 endfunction
 
 " This function will set the signs which show up on the left.
 function! ale#sign#SetSigns(buffer, loclist) abort
-    let signlist = ale#sign#CombineSigns(a:loclist)
+    let l:signlist = ale#sign#CombineSigns(a:loclist)
 
-    if len(signlist) > 0 || g:ale_sign_column_always
+    if len(l:signlist) > 0 || g:ale_sign_column_always
         if !get(g:ale_buffer_sign_dummy_map, a:buffer, 0)
             " Insert a dummy sign if one is missing.
             execute 'sign place ' .  g:ale_sign_offset
@@ -108,27 +108,27 @@ function! ale#sign#SetSigns(buffer, loclist) abort
     endif
 
     " Find the current signs with the markers we use.
-    let current_id_list = ale#sign#FindCurrentSigns(a:buffer)
+    let l:current_id_list = ale#sign#FindCurrentSigns(a:buffer)
 
     " Remove those markers.
-    for current_id in current_id_list
-        exec 'sign unplace ' . current_id . ' buffer=' . a:buffer
+    for l:current_id in l:current_id_list
+        exec 'sign unplace ' . l:current_id . ' buffer=' . a:buffer
     endfor
 
     " Now set all of the signs.
-    for i in range(0, len(signlist) - 1)
-        let obj = signlist[i]
-        let name = obj['type'] ==# 'W' ? 'ALEWarningSign' : 'ALEErrorSign'
+    for l:index in range(0, len(l:signlist) - 1)
+        let l:sign = l:signlist[l:index]
+        let l:type = l:sign['type'] ==# 'W' ? 'ALEWarningSign' : 'ALEErrorSign'
 
-        let sign_line = 'sign place ' . (i + g:ale_sign_offset + 1)
-            \. ' line=' . obj['lnum']
-            \. ' name=' . name
+        let l:sign_line = 'sign place ' . (l:index + g:ale_sign_offset + 1)
+            \. ' line=' . l:sign['lnum']
+            \. ' name=' . l:type
             \. ' buffer=' . a:buffer
 
-        exec sign_line
+        exec l:sign_line
     endfor
 
-    if !g:ale_sign_column_always && len(signlist) > 0
+    if !g:ale_sign_column_always && len(l:signlist) > 0
         if get(g:ale_buffer_sign_dummy_map, a:buffer, 0)
             execute 'sign unplace ' . g:ale_sign_offset . ' buffer=' . a:buffer
 

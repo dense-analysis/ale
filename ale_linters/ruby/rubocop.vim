@@ -12,32 +12,32 @@ function! ale_linters#ruby#rubocop#Handle(buffer, lines)
     "
     " <path>/_:47:14: 83:29: C: Prefer single-quoted strings when you don't
     " need string interpolation or special symbols.
-    let pattern = '\v_:(\d+):(\d+): (.): (.+)'
-    let output = []
+    let l:pattern = '\v_:(\d+):(\d+): (.): (.+)'
+    let l:output = []
 
-    for line in a:lines
-        let l:match = matchlist(line, pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             continue
         endif
 
-        let text = l:match[4]
-        let type = l:match[3]
+        let l:text = l:match[4]
+        let l:type = l:match[3]
 
         " vcol is Needed to indicate that the column is a character.
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
         \   'vcol': 0,
         \   'col': l:match[2] + 0,
-        \   'text': text,
-        \   'type': type ==# 'C' ? 'E' : 'W',
+        \   'text': l:text,
+        \   'type': l:type ==# 'C' ? 'E' : 'W',
         \   'nr': -1,
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
 
 call ale#linter#Define('ruby', {

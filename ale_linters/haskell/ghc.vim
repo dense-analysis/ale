@@ -11,40 +11,40 @@ function! ale_linters#haskell#ghc#Handle(buffer, lines)
     " Look for lines like the following.
     "
     " /dev/stdin:28:26: Not in scope: `>>>>>'
-    let pattern = '^[^:]\+:\(\d\+\):\(\d\+\): \(.\+\)$'
-    let output = []
+    let l:pattern = '^[^:]\+:\(\d\+\):\(\d\+\): \(.\+\)$'
+    let l:output = []
 
     " For some reason the output coming out of the GHC through the wrapper
     " script breaks the lines up in strange ways. So we have to join some
     " lines back together again.
-    let corrected_lines = []
+    let l:corrected_lines = []
 
-    for line in a:lines
-        if len(matchlist(line, pattern)) > 0
-            call add(corrected_lines, line)
-            if line !~# ': error:$'
-                call add(corrected_lines, '')
+    for l:line in a:lines
+        if len(matchlist(l:line, l:pattern)) > 0
+            call add(l:corrected_lines, l:line)
+            if l:line !~# ': error:$'
+                call add(l:corrected_lines, '')
             endif
-        elseif line ==# ''
-            call add(corrected_lines, line)
+        elseif l:line ==# ''
+            call add(l:corrected_lines, l:line)
         else
-            if len(corrected_lines) > 0
-                if corrected_lines[-1] =~# ': error:$'
-                    let line = substitute(line, '\v^\s+', ' ', '')
+            if len(l:corrected_lines) > 0
+                if l:corrected_lines[-1] =~# ': error:$'
+                    let l:line = substitute(l:line, '\v^\s+', ' ', '')
                 endif
-                let corrected_lines[-1] .= line
+                let l:corrected_lines[-1] .= l:line
             endif
         endif
     endfor
 
-    for line in corrected_lines
-        let l:match = matchlist(line, pattern)
+    for l:line in l:corrected_lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             continue
         endif
 
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
         \   'vcol': 0,
@@ -55,7 +55,7 @@ function! ale_linters#haskell#ghc#Handle(buffer, lines)
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
 
 call ale#linter#Define('haskell', {

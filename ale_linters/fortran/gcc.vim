@@ -18,33 +18,33 @@ function! ale_linters#fortran#gcc#Handle(buffer, lines)
     "
     " :21.34:
     " Error: Expected comma in I/O list at (1)
-    let line_marker_pattern = '^:\(\d\+\)\.\(\d\+\):$'
-    let message_pattern = '^\(Error\|Warning\): \(.\+\)$'
-    let looking_for_message = 0
-    let last_loclist_obj = {}
+    let l:line_marker_pattern = '^:\(\d\+\)\.\(\d\+\):$'
+    let l:message_pattern = '^\(Error\|Warning\): \(.\+\)$'
+    let l:looking_for_message = 0
+    let l:last_loclist_obj = {}
 
-    let output = []
+    let l:output = []
 
-    for line in a:lines
-        if looking_for_message
-            let l:match = matchlist(line, message_pattern)
+    for l:line in a:lines
+        if l:looking_for_message
+            let l:match = matchlist(l:line, l:message_pattern)
         else
-            let l:match = matchlist(line, line_marker_pattern)
+            let l:match = matchlist(l:line, l:line_marker_pattern)
         endif
 
         if len(l:match) == 0
             continue
         endif
 
-        if looking_for_message
-            let looking_for_message = 0
+        if l:looking_for_message
+            let l:looking_for_message = 0
 
             " Now we have the text, we can set it and add the error.
-            let last_loclist_obj.text = l:match[2]
-            let last_loclist_obj.type = l:match[1] ==# 'Warning' ? 'W' : 'E'
-            call add(output, last_loclist_obj)
+            let l:last_loclist_obj.text = l:match[2]
+            let l:last_loclist_obj.type = l:match[1] ==# 'Warning' ? 'W' : 'E'
+            call add(l:output, l:last_loclist_obj)
         else
-            let last_loclist_obj = {
+            let l:last_loclist_obj = {
             \   'bufnr': a:buffer,
             \   'lnum': l:match[1] + 0,
             \   'vcol': 0,
@@ -53,11 +53,11 @@ function! ale_linters#fortran#gcc#Handle(buffer, lines)
             \}
 
             " Start looking for the message and error type.
-            let looking_for_message = 1
+            let l:looking_for_message = 1
         endif
     endfor
 
-    return output
+    return l:output
 endfunction
 
 call ale#linter#Define('fortran', {

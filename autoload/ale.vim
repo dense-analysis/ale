@@ -10,8 +10,8 @@ function! ale#Queue(delay) abort
         let s:lint_timer = -1
     endif
 
-    let linters = ale#linter#Get(&filetype)
-    if len(linters) == 0
+    let l:linters = ale#linter#Get(&filetype)
+    if len(l:linters) == 0
         " There are no linters to lint with, so stop here.
         return
     endif
@@ -24,18 +24,18 @@ function! ale#Queue(delay) abort
 endfunction
 
 function! ale#Lint(...) abort
-    let buffer = bufnr('%')
-    let linters = ale#linter#Get(&filetype)
+    let l:buffer = bufnr('%')
+    let l:linters = ale#linter#Get(&filetype)
 
     " Set a variable telling us to clear the loclist later.
-    let g:ale_buffer_should_reset_map[buffer] = 1
+    let g:ale_buffer_should_reset_map[l:buffer] = 1
 
-    for linter in linters
+    for l:linter in l:linters
         " Check if a given linter has a program which can be executed.
-        if has_key(linter, 'executable_callback')
-            let l:executable = ale#util#GetFunction(linter.executable_callback)(buffer)
+        if has_key(l:linter, 'executable_callback')
+            let l:executable = ale#util#GetFunction(l:linter.executable_callback)(l:buffer)
         else
-            let l:executable = linter.executable
+            let l:executable = l:linter.executable
         endif
 
         if !executable(l:executable)
@@ -43,6 +43,6 @@ function! ale#Lint(...) abort
             continue
         endif
 
-        call ale#engine#Invoke(buffer, linter)
+        call ale#engine#Invoke(l:buffer, l:linter)
     endfor
 endfunction

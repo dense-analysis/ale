@@ -11,17 +11,17 @@ function! ale_linters#pug#puglint#Handle(buffer, lines)
     " Matches patterns like the following:
     "
     " temp.jade:6:1 The end of the string reached with no closing bracket ) found.
-    let pattern = '^.\+:\(\d\+\):\(\d\+\) \(.\+\)$'
-    let output = []
+    let l:pattern = '^.\+:\(\d\+\):\(\d\+\) \(.\+\)$'
+    let l:output = []
 
-    for line in a:lines
-        let l:match = matchlist(line, pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             continue
         endif
 
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
         \   'vcol': 0,
@@ -32,7 +32,7 @@ function! ale_linters#pug#puglint#Handle(buffer, lines)
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
 
 call ale#linter#Define('pug', {

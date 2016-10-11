@@ -14,21 +14,21 @@ function! ale_linters#javascript#jshint#GetCommand(buffer)
     " Set this to the location of the jshint configuration file to
     " use a fixed location for .jshintrc
     if exists('g:ale_jshint_config_loc')
-        let jshint_config = g:ale_jshint_config_loc
+        let l:jshint_config = g:ale_jshint_config_loc
     else
         " Look for the JSHint config in parent directories.
-        let jshint_config = ale#util#FindNearestFile(a:buffer, '.jshintrc')
+        let l:jshint_config = ale#util#FindNearestFile(a:buffer, '.jshintrc')
     endif
 
-    let command = g:ale_javascript_jshint_executable . ' --reporter unix'
+    let l:command = g:ale_javascript_jshint_executable . ' --reporter unix'
 
-    if !empty(jshint_config)
-        let command .= ' --config ' . fnameescape(jshint_config)
+    if !empty(l:jshint_config)
+        let l:command .= ' --config ' . fnameescape(l:jshint_config)
     endif
 
-    let command .= ' -'
+    let l:command .= ' -'
 
-    return command
+    return l:command
 endfunction
 
 function! ale_linters#javascript#jshint#Handle(buffer, lines)
@@ -38,36 +38,36 @@ function! ale_linters#javascript#jshint#Handle(buffer, lines)
     " stdin:60:5: Attempting to override 'test2' which is a constant.
     " stdin:57:10: 'test' is defined but never used.
     " stdin:57:1: 'function' is defined but never used.
-    let pattern = '^.\+:\(\d\+\):\(\d\+\): \(.\+\)'
-    let output = []
+    let l:pattern = '^.\+:\(\d\+\):\(\d\+\): \(.\+\)'
+    let l:output = []
 
-    for line in a:lines
-        let l:match = matchlist(line, pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             continue
         endif
 
-        let text = l:match[3]
-        let marker_parts = l:match[4]
+        let l:text = l:match[3]
+        let l:marker_parts = l:match[4]
 
-        if len(marker_parts) == 2
-            let text = text . ' (' . marker_parts[1] . ')'
+        if len(l:marker_parts) == 2
+            let l:text = l:text . ' (' . l:marker_parts[1] . ')'
         endif
 
         " vcol is Needed to indicate that the column is a character.
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
         \   'vcol': 0,
         \   'col': l:match[2] + 0,
-        \   'text': text,
+        \   'text': l:text,
         \   'type': 'E',
         \   'nr': -1,
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
 
 call ale#linter#Define('javascript', {

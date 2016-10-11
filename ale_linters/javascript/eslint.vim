@@ -15,38 +15,38 @@ function! ale_linters#javascript#eslint#Handle(buffer, lines)
     "
     " /path/to/some-filename.js:47:14: Missing trailing comma. [Warning/comma-dangle]
     " /path/to/some-filename.js:56:41: Missing semicolon. [Error/semi]
-    let pattern = '^.*:\(\d\+\):\(\d\+\): \(.\+\) \[\(.\+\)\]$'
-    let output = []
+    let l:pattern = '^.*:\(\d\+\):\(\d\+\): \(.\+\) \[\(.\+\)\]$'
+    let l:output = []
 
-    for line in a:lines
-        let l:match = matchlist(line, pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             continue
         endif
 
-        let text = l:match[3]
-        let marker = l:match[4]
-        let marker_parts = split(marker, '/')
-        let type = marker_parts[0]
+        let l:text = l:match[3]
+        let l:marker = l:match[4]
+        let l:marker_parts = split(l:marker, '/')
+        let l:type = l:marker_parts[0]
 
-        if len(marker_parts) == 2
-            let text = text . ' (' . marker_parts[1] . ')'
+        if len(l:marker_parts) == 2
+            let l:text = l:text . ' (' . l:marker_parts[1] . ')'
         endif
 
         " vcol is Needed to indicate that the column is a character.
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
         \   'vcol': 0,
         \   'col': l:match[2] + 0,
-        \   'text': text,
-        \   'type': type ==# 'Warning' ? 'W' : 'E',
+        \   'text': l:text,
+        \   'type': l:type ==# 'Warning' ? 'W' : 'E',
         \   'nr': -1,
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
 
 call ale#linter#Define('javascript', {

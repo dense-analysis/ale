@@ -14,32 +14,32 @@ function! ale_linters#verilog#iverilog#Handle(buffer, lines)
     " tb_me_top.v:17: syntax error
     " memory_single_port.v:2: syntax error
     " tb_me_top.v:17: error: Invalid module instantiation
-    let pattern = '^[^:]\+:\(\d\+\): \(warning\|error\|syntax error\)\(: \(.\+\)\)\?'
-    let output = []
+    let l:pattern = '^[^:]\+:\(\d\+\): \(warning\|error\|syntax error\)\(: \(.\+\)\)\?'
+    let l:output = []
 
-    for line in a:lines
-        let l:match = matchlist(line, pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             continue
         endif
 
-        let line = l:match[1] + 0
-        let type = l:match[2] ==# 'warning' ? 'W' : 'E'
-        let text = l:match[2] ==# 'syntax error' ? 'syntax error' : l:match[4]
+        let l:line = l:match[1] + 0
+        let l:type = l:match[2] ==# 'warning' ? 'W' : 'E'
+        let l:text = l:match[2] ==# 'syntax error' ? 'syntax error' : l:match[4]
 
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': a:buffer,
-        \   'lnum': line,
+        \   'lnum': l:line,
         \   'vcol': 0,
         \   'col': 1,
-        \   'text': text,
-        \   'type': type,
+        \   'text': l:text,
+        \   'type': l:type,
         \   'nr': -1,
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
 
 call ale#linter#Define('verilog', {

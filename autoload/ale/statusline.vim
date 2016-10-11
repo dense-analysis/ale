@@ -5,35 +5,35 @@ function! ale#statusline#Status() abort
     " Returns a formatted string that can be integrated in the
     " statusline
 
-    let buf = bufnr('%')
-    let bufLoclist = g:ale_buffer_loclist_map
+    let l:buffer = bufnr('%')
+    let l:loclist = g:ale_buffer_loclist_map
 
-    if !has_key(bufLoclist, buf)
+    if !has_key(l:loclist, l:buffer)
         return ''
     endif
 
-    let errors = 0
-    let warnings = 0
-    for e in bufLoclist[buf]
-        if e.type ==# 'E'
-            let errors += 1
+    let l:errors = 0
+    let l:warnings = 0
+    for l:entry in l:loclist[l:buffer]
+        if l:entry.type ==# 'E'
+            let l:errors += 1
         else
-            let warnings += 1
+            let l:warnings += 1
         endif
     endfor
 
-    let errors = errors ? printf(g:ale_statusline_format[0], errors) : ''
-    let warnings = warnings ? printf(g:ale_statusline_format[1], warnings) : ''
-    let no_errors = g:ale_statusline_format[2]
+    let l:errors = l:errors ? printf(g:ale_statusline_format[0], l:errors) : ''
+    let l:warnings = l:warnings ? printf(g:ale_statusline_format[1], l:warnings) : ''
+    let l:no_errors = g:ale_statusline_format[2]
 
     " Different formats if no errors or no warnings
-    if empty(errors) && empty(warnings)
-        let res = no_errors
-    elseif !empty(errors) && !empty(warnings)
-        let res = printf('%s %s', errors, warnings)
+    if empty(l:errors) && empty(l:warnings)
+        let l:res = l:no_errors
+    elseif !empty(l:errors) && !empty(l:warnings)
+        let l:res = printf('%s %s', l:errors, l:warnings)
     else
-        let res = empty(errors) ? warnings : errors
+        let l:res = empty(l:errors) ? l:warnings : l:errors
     endif
 
-    return res
+    return l:res
 endfunction

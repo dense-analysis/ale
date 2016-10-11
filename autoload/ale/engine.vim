@@ -21,8 +21,8 @@ function! s:GetJobID(job) abort
 endfunction
 
 function! s:ClearJob(job) abort
-    let job_id = s:GetJobID(a:job)
-    let linter = s:job_info_map[job_id].linter
+    let l:job_id = s:GetJobID(a:job)
+    let l:linter = s:job_info_map[l:job_id].linter
 
     if has('nvim')
         call jobstop(a:job)
@@ -36,18 +36,18 @@ function! s:ClearJob(job) abort
         call job_stop(a:job)
     endif
 
-    call remove(s:job_info_map, job_id)
-    call remove(linter, 'job')
+    call remove(s:job_info_map, l:job_id)
+    call remove(l:linter, 'job')
 endfunction
 
 function! s:GatherOutput(job, data) abort
-    let job_id = s:GetJobID(a:job)
+    let l:job_id = s:GetJobID(a:job)
 
-    if !has_key(s:job_info_map, job_id)
+    if !has_key(s:job_info_map, l:job_id)
         return
     endif
 
-    call extend(s:job_info_map[job_id].output, a:data)
+    call extend(s:job_info_map[l:job_id].output, a:data)
 endfunction
 
 function! s:GatherOutputVim(channel, data) abort
@@ -64,48 +64,48 @@ function! s:HandleExit(job) abort
         return
     endif
 
-    let job_id = s:GetJobID(a:job)
+    let l:job_id = s:GetJobID(a:job)
 
-    if !has_key(s:job_info_map, job_id)
+    if !has_key(s:job_info_map, l:job_id)
         return
     endif
 
-    let job_info = s:job_info_map[job_id]
+    let l:job_info = s:job_info_map[l:job_id]
 
     call s:ClearJob(a:job)
 
-    let linter = job_info.linter
-    let output = job_info.output
-    let buffer = job_info.buffer
+    let l:linter = l:job_info.linter
+    let l:output = l:job_info.output
+    let l:buffer = l:job_info.buffer
 
-    let linter_loclist = ale#util#GetFunction(linter.callback)(buffer, output)
+    let l:linter_loclist = ale#util#GetFunction(l:linter.callback)(l:buffer, l:output)
 
     " Make some adjustments to the loclists to fix common problems.
-    call s:FixLocList(buffer, linter_loclist)
+    call s:FixLocList(l:buffer, l:linter_loclist)
 
-    for item in linter_loclist
-        let item.linter_name = linter.name
+    for l:item in l:linter_loclist
+        let l:item.linter_name = l:linter.name
     endfor
 
-    if g:ale_buffer_should_reset_map[buffer]
-        let g:ale_buffer_should_reset_map[buffer] = 0
-        let g:ale_buffer_loclist_map[buffer] = []
+    if g:ale_buffer_should_reset_map[l:buffer]
+        let g:ale_buffer_should_reset_map[l:buffer] = 0
+        let g:ale_buffer_loclist_map[l:buffer] = []
     endif
 
     " Add the loclist items from the linter.
-    call extend(g:ale_buffer_loclist_map[buffer], linter_loclist)
+    call extend(g:ale_buffer_loclist_map[l:buffer], l:linter_loclist)
 
     " Sort the loclist again.
     " We need a sorted list so we can run a binary search against it
     " for efficient lookup of the messages in the cursor handler.
-    call sort(g:ale_buffer_loclist_map[buffer], 'ale#util#LocItemCompare')
+    call sort(g:ale_buffer_loclist_map[l:buffer], 'ale#util#LocItemCompare')
 
     if g:ale_set_loclist
-        call setloclist(0, g:ale_buffer_loclist_map[buffer])
+        call setloclist(0, g:ale_buffer_loclist_map[l:buffer])
     endif
 
     if g:ale_set_signs
-        call ale#sign#SetSigns(buffer, g:ale_buffer_loclist_map[buffer])
+        call ale#sign#SetSigns(l:buffer, g:ale_buffer_loclist_map[l:buffer])
     endif
 
     " Mark line 200, column 17 with a squiggly line or something
@@ -124,14 +124,14 @@ function! s:FixLocList(buffer, loclist) abort
     " Some errors have line numbers beyond the end of the file,
     " so we need to adjust them so they set the error at the last line
     " of the file instead.
-    let last_line_number = ale#util#GetLineCount(a:buffer)
+    let l:last_line_number = ale#util#GetLineCount(a:buffer)
 
-    for item in a:loclist
-        if item.lnum == 0
+    for l:item in a:loclist
+        if l:item.lnum == 0
             " When errors appear at line 0, put them at line 1 instead.
-            let item.lnum = 1
-        elseif item.lnum > last_line_number
-            let item.lnum = last_line_number
+            let l:item.lnum = 1
+        elseif l:item.lnum > l:last_line_number
+            let l:item.lnum = l:last_line_number
         endif
     endfor
 endfunction
@@ -144,38 +144,38 @@ function! ale#engine#Invoke(buffer, linter) abort
 
     if has_key(a:linter, 'command_callback')
         " If there is a callback for generating a command, call that instead.
-        let command = ale#util#GetFunction(a:linter.command_callback)(a:buffer)
+        let l:command = ale#util#GetFunction(a:linter.command_callback)(a:buffer)
     else
-        let command = a:linter.command
+        let l:command = a:linter.command
     endif
 
-    if command =~# '%s'
+    if l:command =~# '%s'
         " If there is a '%s' in the command string, replace it with the name
         " of the file.
-        let command = printf(command, shellescape(fnamemodify(bufname(a:buffer), ':p')))
+        let l:command = printf(l:command, shellescape(fnamemodify(bufname(a:buffer), ':p')))
     endif
 
     if has('nvim')
         if a:linter.output_stream ==# 'stderr'
             " Read from stderr instead of stdout.
-            let job = jobstart(command, {
+            let l:job = jobstart(l:command, {
             \   'on_stderr': 's:GatherOutputNeoVim',
             \   'on_exit': 's:HandleExitNeoVim',
             \})
         elseif a:linter.output_stream ==# 'both'
-            let job = jobstart(command, {
+            let l:job = jobstart(l:command, {
             \   'on_stdout': 's:GatherOutputNeoVim',
             \   'on_stderr': 's:GatherOutputNeoVim',
             \   'on_exit': 's:HandleExitNeoVim',
             \})
         else
-            let job = jobstart(command, {
+            let l:job = jobstart(l:command, {
             \   'on_stdout': 's:GatherOutputNeoVim',
             \   'on_exit': 's:HandleExitNeoVim',
             \})
         endif
     else
-        let job_options = {
+        let l:job_options = {
         \   'in_mode': 'nl',
         \   'out_mode': 'nl',
         \   'err_mode': 'nl',
@@ -184,13 +184,13 @@ function! ale#engine#Invoke(buffer, linter) abort
 
         if a:linter.output_stream ==# 'stderr'
             " Read from stderr instead of stdout.
-            let job_options.err_cb = function('s:GatherOutputVim')
+            let l:job_options.err_cb = function('s:GatherOutputVim')
         elseif a:linter.output_stream ==# 'both'
             " Read from both streams.
-            let job_options.out_cb = function('s:GatherOutputVim')
-            let job_options.err_cb = function('s:GatherOutputVim')
+            let l:job_options.out_cb = function('s:GatherOutputVim')
+            let l:job_options.err_cb = function('s:GatherOutputVim')
         else
-            let job_options.out_cb = function('s:GatherOutputVim')
+            let l:job_options.out_cb = function('s:GatherOutputVim')
         endif
 
         if has('win32')
@@ -204,20 +204,20 @@ function! ale#engine#Invoke(buffer, linter) abort
 
             " On Unix machines, we can send the Vim buffer directly.
             " This is faster than reading the lines ourselves.
-            let job_options.in_io = 'buffer'
-            let job_options.in_buf = a:buffer
+            let l:job_options.in_io = 'buffer'
+            let l:job_options.in_buf = a:buffer
         endif
 
         " Vim 8 will read the stdin from the file's buffer.
-        let job = job_start(l:command, l:job_options)
+        let l:job = job_start(l:command, l:job_options)
     endif
 
     " Only proceed if the job is being run.
-    if has('nvim') || (job !=# 'no process' && job_status(job) ==# 'run')
-        let a:linter.job = job
+    if has('nvim') || (l:job !=# 'no process' && job_status(l:job) ==# 'run')
+        let a:linter.job = l:job
 
         " Store the ID for the job in the map to read back again.
-        let s:job_info_map[s:GetJobID(job)] = {
+        let s:job_info_map[s:GetJobID(l:job)] = {
         \   'linter': a:linter,
         \   'buffer': a:buffer,
         \   'output': [],
@@ -225,18 +225,18 @@ function! ale#engine#Invoke(buffer, linter) abort
 
         if has('nvim')
             " In NeoVim, we have to send the buffer lines ourselves.
-            let input = join(getbufline(a:buffer, 1, '$'), "\n") . "\n"
+            let l:input = join(getbufline(a:buffer, 1, '$'), "\n") . "\n"
 
-            call jobsend(job, input)
-            call jobclose(job, 'stdin')
+            call jobsend(l:job, l:input)
+            call jobclose(l:job, 'stdin')
         elseif has('win32')
             " On some Vim versions, we have to send the buffer data ourselves.
-            let input = join(getbufline(a:buffer, 1, '$'), "\n") . "\n"
-            let channel = job_getchannel(job)
+            let l:input = join(getbufline(a:buffer, 1, '$'), "\n") . "\n"
+            let l:channel = job_getchannel(l:job)
 
-            if ch_status(channel) ==# 'open'
-                call ch_sendraw(channel, input)
-                call ch_close_in(channel)
+            if ch_status(l:channel) ==# 'open'
+                call ch_sendraw(l:channel, l:input)
+                call ch_close_in(l:channel)
             endif
         endif
     endif

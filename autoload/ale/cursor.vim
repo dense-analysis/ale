@@ -3,73 +3,73 @@
 
 " Return a formatted message according to g:ale_echo_msg_format variable
 function! s:GetMessage(linter, type, text) abort
-    let msg = g:ale_echo_msg_format
-    let type = a:type ==# 'E'
+    let l:msg = g:ale_echo_msg_format
+    let l:type = a:type ==# 'E'
     \   ? g:ale_echo_msg_error_str
     \   : g:ale_echo_msg_warning_str
     " Capitalize the 1st character
-    let text = toupper(a:text[0]) . a:text[1:-1]
+    let l:text = toupper(a:text[0]) . a:text[1:-1]
 
     " Replace handlers if they exist
-    for [k, v] in items({'linter': a:linter, 'severity': type})
-        let msg = substitute(msg, '\V%' . k . '%', v, '')
+    for [l:k, l:v] in items({'linter': a:linter, 'severity': l:type})
+        let l:msg = substitute(l:msg, '\V%' . l:k . '%', l:v, '')
     endfor
 
-    return printf(msg, text)
+    return printf(l:msg, l:text)
 endfunction
 
 " This function will perform a binary search to find a message from the
 " loclist to echo when the cursor moves.
 function! s:BinarySearch(loclist, line, column) abort
-    let min = 0
-    let max = len(a:loclist) - 1
-    let last_column_match = -1
+    let l:min = 0
+    let l:max = len(a:loclist) - 1
+    let l:last_column_match = -1
 
     while 1
-        if max < min
-            return last_column_match
+        if l:max < l:min
+            return l:last_column_match
         endif
 
-        let mid = (min + max) / 2
-        let obj = a:loclist[mid]
+        let l:mid = (l:min + l:max) / 2
+        let l:obj = a:loclist[l:mid]
 
         " Binary search to get on the same line
-        if a:loclist[mid]['lnum'] < a:line
-            let min = mid + 1
-        elseif a:loclist[mid]['lnum'] > a:line
-            let max = mid - 1
+        if a:loclist[l:mid]['lnum'] < a:line
+            let l:min = l:mid + 1
+        elseif a:loclist[l:mid]['lnum'] > a:line
+            let l:max = l:mid - 1
         else
-            let last_column_match = mid
+            let l:last_column_match = l:mid
 
             " Binary search to get the same column, or near it
-            if a:loclist[mid]['col'] < a:column
-                let min = mid + 1
-            elseif a:loclist[mid]['col'] > a:column
-                let max = mid - 1
+            if a:loclist[l:mid]['col'] < a:column
+                let l:min = l:mid + 1
+            elseif a:loclist[l:mid]['col'] > a:column
+                let l:max = l:mid - 1
             else
-                return mid
+                return l:mid
             endif
         endif
     endwhile
 endfunction
 
 function! ale#cursor#TruncatedEcho(message) abort
-    let message = a:message
+    let l:message = a:message
     " Change tabs to spaces.
-    let message = substitute(message, "\t", ' ', 'g')
+    let l:message = substitute(l:message, "\t", ' ', 'g')
     " Remove any newlines in the message.
-    let message = substitute(message, "\n", '', 'g')
+    let l:message = substitute(l:message, "\n", '', 'g')
 
     " We need to turn T for truncated messages on for shortmess,
     " and then then we need to reset the option back to what it was.
-    let shortmess_options = getbufvar('%', '&shortmess')
+    let l:shortmess_options = getbufvar('%', '&shortmess')
 
     try
         " Echo the message truncated to fit without creating a prompt.
         setlocal shortmess+=T
         exec "norm :echomsg message\n"
     finally
-        call setbufvar('%', '&shortmess', shortmess_options)
+        call setbufvar('%', '&shortmess', l:shortmess_options)
     endtry
 endfunction
 
@@ -79,22 +79,20 @@ function! ale#cursor#EchoCursorWarning(...) abort
         return
     endif
 
-    let buffer = bufnr('%')
+    let l:buffer = bufnr('%')
 
-    if !has_key(g:ale_buffer_loclist_map, buffer)
+    if !has_key(g:ale_buffer_loclist_map, l:buffer)
         return
     endif
 
-    let loclist = g:ale_buffer_loclist_map[buffer]
+    let l:pos = getcurpos()
+    let l:loclist = g:ale_buffer_loclist_map[l:buffer]
+    let l:index = s:BinarySearch(l:loclist, l:pos[1], l:pos[2])
 
-    let pos = getcurpos()
-
-    let index = s:BinarySearch(loclist, pos[1], pos[2])
-
-    if index >= 0
-        let l = loclist[index]
-        let msg = s:GetMessage(l.linter_name, l.type, l.text)
-        call ale#cursor#TruncatedEcho(msg)
+    if l:index >= 0
+        let l:loc = l:loclist[l:index]
+        let l:msg = s:GetMessage(l:loc.linter_name, l:loc.type, l:loc.text)
+        call ale#cursor#TruncatedEcho(l:msg)
     else
         echo
     endif

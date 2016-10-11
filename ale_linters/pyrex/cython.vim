@@ -5,11 +5,11 @@ function! ale_linters#pyrex#cython#Handle(buffer, lines)
     " Matches patterns line the following:
     "
     " test.pyx:13:25: Expected ':', found 'NEWLINE'
-    let pattern = '^.\+:\(\d\+\):\(\d\+\): \(.\+\)$'
-    let output = []
+    let l:pattern = '^.\+:\(\d\+\):\(\d\+\): \(.\+\)$'
+    let l:output = []
 
-    for line in a:lines
-        let l:match = matchlist(line, pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             continue
@@ -20,7 +20,7 @@ function! ale_linters#pyrex#cython#Handle(buffer, lines)
             continue
         endif
 
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
         \   'vcol': 0,
@@ -31,7 +31,7 @@ function! ale_linters#pyrex#cython#Handle(buffer, lines)
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
 
 call ale#linter#Define('pyrex', {
