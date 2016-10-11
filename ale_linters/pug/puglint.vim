@@ -7,38 +7,10 @@ endif
 
 let g:loaded_ale_linters_pug_puglint = 1
 
-function! ale_linters#pug#puglint#Handle(buffer, lines)
-    " Matches patterns like the following:
-    "
-    " temp.jade:6:1 The end of the string reached with no closing bracket ) found.
-    let l:pattern = '^.\+:\(\d\+\):\(\d\+\) \(.\+\)$'
-    let l:output = []
-
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
-            continue
-        endif
-
-        call add(l:output, {
-        \   'bufnr': a:buffer,
-        \   'lnum': l:match[1] + 0,
-        \   'vcol': 0,
-        \   'col': l:match[2] + 0,
-        \   'text': l:match[3],
-        \   'type': 'E',
-        \   'nr': -1,
-        \})
-    endfor
-
-    return l:output
-endfunction
-
 call ale#linter#Define('pug', {
 \   'name': 'puglint',
 \   'executable': 'pug-lint',
 \   'output_stream': 'stderr',
 \   'command': g:ale#util#stdin_wrapper . ' .pug pug-lint -r inline',
-\   'callback': 'ale_linters#pug#puglint#Handle',
+\   'callback': 'ale#handlers#HandleUnixFormatAsError',
 \})
