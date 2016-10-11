@@ -30,8 +30,11 @@ let g:ale_buffer_sign_dummy_map = {}
 
 " User Configuration
 
-" This list configures which linters are enabled for which languages.
+" This Dictionary configures which linters are enabled for which languages.
 let g:ale_linters = get(g:, 'ale_linters', {})
+
+" This Dictionary allows users to set up filetype aliases for new filetypes.
+let g:ale_linter_aliases = get(g:, 'ale_linter_aliases', {})
 
 " This flag can be set with a number of milliseconds for delaying the
 " execution of a linter when text is changed. The timeout will be set and

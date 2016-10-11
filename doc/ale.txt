@@ -80,22 +80,65 @@ The following languages and tools are supported.
 g:ale_linters                                                   *g:ale_linters*
 
   Type: |Dictionary|
-  Default: unset
+  Default: `{}`
 
   The |g:ale_linters| option sets a |Dictionary| mapping a filetype
   to a |List| of linter programs to be run when checking particular filetypes.
-  By default, this dictionary will not be set at all, and all possible
-  linter programs will be run for a given filetype, if the linter programs
-  are found to be |executable|.
+  Only the filetypes specified in the dictionary will be limited in terms
+  of which linters will be run.
 
+  This |Dictionary| will be merged with a default dictionary containing the
+  following values: >
+
+  {
+  \   'zsh': ['shell'],
+  \   'csh': ['shell'],
+  \}
+<
   This option can be used to enable only a particular set of linters for a
   file. For example, you can enable only 'eslint' for JavaScript files: >
-    let g:ale_linters = {'javascript': ['eslint']}
+
+  let g:ale_linters = {'javascript': ['eslint']}
 <
   If you want to disable all linters for a particular filetype, you can pass
   an empty list of linters as the value: >
-    let g:ale_linters = {'javascript': []}
+
+  let g:ale_linters = {'javascript': []}
 <
+  All linters available for a given filetype can be enabled by using the
+  string `'all'`: >
+
+  let g:ale_linters = {'c': 'all'}
+<
+
+g:ale_linter_aliases                                     *g:ale_linter_aliases*
+
+  Type: |Dictionary|
+  Default: `{}`
+
+  The |g:ale_linter_aliases| option can be used to set aliases from one
+  filetype to another. A given filetype can be mapped to use the linters
+  run for another given filetype.
+
+  This |Dictionary| will be merged with a default dictionary containing the
+  following values: >
+
+  {
+  \   'javscript.jsx': 'javascript',
+  \   'zsh': 'sh',
+  \   'csh': 'sh',
+  \}
+<
+  For example, if you wish to map a new filetype `'foobar'` to run the `'php'`
+  linters, you could set the following: >
+
+  let g:ale_linter_aliases = {'foobar': 'php'}
+<
+  When combined with the |g:ale_linters| option, the original filetype
+  (`'foobar'`) will be used for determining which linters to run,
+  not the aliased type (`'php'`). This allows an aliased type to run a
+  different set of linters from the type it is being mapped to.
+
 
 g:ale_buffer_loclist_map                             *g:ale_buffer_loclist_map*
 
@@ -555,6 +598,7 @@ ale#statusline#Status()                               *ale#statusline#Status()*
 g:ale#util#stdin_wrapper                             *g:ale#util#stdin_wrapper*
   This variable names a wrapper script for sending stdin input to programs
   which cannot accept input via stdin. See |ale#linter#Define()| for more.
+
 
 ===============================================================================
 6. Special Thanks                                           *ale-special-thanks*

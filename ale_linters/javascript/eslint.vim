@@ -55,10 +55,3 @@ call ale#linter#Define('javascript', {
 \   'command': g:ale_javascript_eslint_executable . ' -f unix --stdin --stdin-filename %s',
 \   'callback': 'ale_linters#javascript#eslint#Handle',
 \})
-
-call ale#linter#Define('javascript.jsx', {
-\   'name': 'eslint',
-\   'executable': g:ale_javascript_eslint_executable,
-\   'command': g:ale_javascript_eslint_executable . ' -f unix --stdin --stdin-filename %s',
-\   'callback': 'ale_linters#javascript#eslint#Handle',
-\})

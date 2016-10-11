@@ -13,10 +13,3 @@ call ale#linter#Define('javascript', {
 \   'command': 'jscs -r unix -n -',
 \   'callback': 'ale#handlers#HandleUnixFormatAsError',
 \})
-
-call ale#linter#Define('javascript.jsx', {
-\   'name': 'jscs',
-\   'executable': 'jscs',
-\   'command': 'jscs -r unix -n -',
-\   'callback': 'ale#handlers#HandleUnixFormatAsError',
-\})
