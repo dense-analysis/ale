@@ -33,6 +33,14 @@ let g:ale_buffer_sign_dummy_map = {}
 " This list configures which linters are enabled for which languages.
 let g:ale_linters = get(g:, 'ale_linters', {})
 
+" This list allows the user to override what selection of linters is loaded
+" for a filetype. The defaults are extended, instead of clobbered.
+let g:ale_load_overrides = extend({
+    \ 'javascript.jsx': 'javascript',
+    \ 'csh': 'sh',
+    \ 'zsh': 'sh'
+\}, get(g:, 'ale_load_overrides', {}))
+
 " This flag can be set with a number of milliseconds for delaying the
 " execution of a linter when text is changed. The timeout will be set and
 " cleared each time text is changed, so repeated edits won't trigger the
