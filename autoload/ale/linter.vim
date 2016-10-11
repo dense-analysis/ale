@@ -3,11 +3,6 @@
 "   Retrieves linters as requested by the engine, loading them if needed.
 
 let s:linters = {}
-let s:folder_aliases = {
-    \ 'javascript.jsx': 'javascript',
-    \ 'csh': 'sh',
-    \ 'zsh': 'sh'
-\}
 
 function! ale#linter#Define(...) abort
     let l:linter = a:000[-1]
@@ -57,9 +52,9 @@ function! ale#linter#Get(filetype) abort
         return s:linters[a:filetype]
     endif
 
-    if has_key(s:folder_aliases, a:filetype)
-        " We have an alias for this filetype, so just load that.
-        let l:folder = s:folder_aliases[a:filetype]
+    if has_key(g:ale_load_overrides, a:filetype)
+        " We've been told to load a different folder for this filetype.
+        let l:folder = g:ale_load_overrides[a:filetype]
     else
         let l:folder = a:filetype
     endif
