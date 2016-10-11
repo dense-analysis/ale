@@ -31,55 +31,16 @@ function! ale_linters#javascript#jshint#GetCommand(buffer)
     return l:command
 endfunction
 
-function! ale_linters#javascript#jshint#Handle(buffer, lines)
-    " Matches patterns line the following:
-    "
-    " stdin:57:9: Missing name in function declaration.
-    " stdin:60:5: Attempting to override 'test2' which is a constant.
-    " stdin:57:10: 'test' is defined but never used.
-    " stdin:57:1: 'function' is defined but never used.
-    let l:pattern = '^.\+:\(\d\+\):\(\d\+\): \(.\+\)'
-    let l:output = []
-
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
-            continue
-        endif
-
-        let l:text = l:match[3]
-        let l:marker_parts = l:match[4]
-
-        if len(l:marker_parts) == 2
-            let l:text = l:text . ' (' . l:marker_parts[1] . ')'
-        endif
-
-        " vcol is Needed to indicate that the column is a character.
-        call add(l:output, {
-        \   'bufnr': a:buffer,
-        \   'lnum': l:match[1] + 0,
-        \   'vcol': 0,
-        \   'col': l:match[2] + 0,
-        \   'text': l:text,
-        \   'type': 'E',
-        \   'nr': -1,
-        \})
-    endfor
-
-    return l:output
-endfunction
-
 call ale#linter#Define('javascript', {
 \   'name': 'jshint',
 \   'executable': g:ale_javascript_jshint_executable,
 \   'command_callback': 'ale_linters#javascript#jshint#GetCommand',
-\   'callback': 'ale_linters#javascript#jshint#Handle',
+\   'callback': 'ale#handlers#HandleUnixFormatAsError',
 \})
 
 call ale#linter#Define('javascript.jsx', {
 \   'name': 'jshint',
 \   'executable': g:ale_javascript_jshint_executable,
 \   'command_callback': 'ale_linters#javascript#jshint#GetCommand',
-\   'callback': 'ale_linters#javascript#jshint#Handle',
+\   'callback': 'ale#handlers#HandleUnixFormatAsError',
 \})

@@ -32,7 +32,7 @@ function! ale_linters#yaml#yamllint#Handle(buffer, lines)
         \   'vcol': 0,
         \   'col': l:col,
         \   'text': l:text,
-        \   'type': l:type ==# 'warning' ? 'W' : 'E',
+        \   'type': l:type ==# 'error' ? 'E' : 'W',
         \   'nr': -1,
         \})
     endfor

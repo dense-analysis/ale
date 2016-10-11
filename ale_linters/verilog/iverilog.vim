@@ -25,7 +25,7 @@ function! ale_linters#verilog#iverilog#Handle(buffer, lines)
         endif
 
         let l:line = l:match[1] + 0
-        let l:type = l:match[2] ==# 'warning' ? 'W' : 'E'
+        let l:type = l:match[2] =~# 'error' ? 'E' : 'W'
         let l:text = l:match[2] ==# 'syntax error' ? 'syntax error' : l:match[4]
 
         call add(l:output, {

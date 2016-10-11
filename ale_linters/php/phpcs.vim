@@ -42,7 +42,7 @@ function! ale_linters#php#phpcs#Handle(buffer, lines)
         \   'vcol': 0,
         \   'col': l:match[2] + 0,
         \   'text': l:text,
-        \   'type': l:type ==# 'warning' ? 'W' : 'E',
+        \   'type': l:type ==# 'error' ? 'E' : 'W',
         \   'nr': -1,
         \})
     endfor
