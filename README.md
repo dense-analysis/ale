@@ -35,6 +35,7 @@ name. That seems to be the fairest way to arrange this table.
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
 | D | [dmd](https://dlang.org/dmd-linux.html)^ |
 | Fortran | [gcc](https://gcc.gnu.org/) |
+| Go | [gofmt -e](https://golang.org/cmd/gofmt/), [go vet](https://golang.org/cmd/vet/), [golint](https://godoc.org/github.com/golang/lint) |
 | Haskell | [ghc](https://www.haskell.org/ghc/) |
 | HTML | [HTMLHint](http://htmlhint.com/), [tidy](http://www.html-tidy.org/) |
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/) |
