@@ -4,13 +4,15 @@ scriptencoding utf-8
 "   linter which outputs warnings and errors in a format accepted by one of
 "   these functions can simply use one of these pre-defined error handlers.
 
+let s:path_pattern = '[a-zA-Z]\?\\\?:\?[[:alnum:]/\.-]\+'
+
 function! s:HandleUnixFormat(buffer, lines, type) abort
     " Matches patterns line the following:
     "
     " file.go:27: missing argument for Printf("%s"): format reads arg 2, have only 1 args
     " file.go:53:10: if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)
     " file.go:5:2: expected declaration, found 'STRING' "log"
-    let l:pattern = '^[^:]\+:\(\d\+\):\?\(\d\+\)\?: \(.\+\)$'
+    let l:pattern = '^' . s:path_pattern . ':\(\d\+\):\?\(\d\+\)\?: \(.\+\)$'
     let l:output = []
 
     for l:line in a:lines
