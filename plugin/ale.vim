@@ -24,6 +24,7 @@ endif
 
 " Globals
 
+let g:ale_buffer_count_map = {}
 let g:ale_buffer_loclist_map = {}
 let g:ale_buffer_should_reset_map = {}
 let g:ale_buffer_sign_dummy_map = {}
@@ -98,7 +99,8 @@ let g:ale_echo_msg_error_str = get(g:, 'ale_echo_msg_error_str', 'Error')
 let g:ale_echo_msg_warning_str = get(g:, 'ale_echo_msg_warning_str', 'Warning')
 
 " This flag can be set to 0 to disable echoing when the cursor moves.
-if get(g:, 'ale_echo_cursor', 1)
+let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
+if g:ale_echo_cursor
     augroup ALECursorGroup
         autocmd!
         autocmd CursorMoved,CursorHold * call ale#cursor#EchoCursorWarningWithDelay()
@@ -120,10 +122,10 @@ let g:ale_warn_about_trailing_whitespace =
 
 " Housekeeping
 
-augroup ALECleanup
+augroup ALECleanupGroup
     autocmd!
     " Clean up buffers automatically when they are unloaded.
-    autocmd BufUnload * call ale#cleanup#Buffer('<abuf>')
+    autocmd BufUnload * call ale#cleanup#Buffer(expand('<abuf>'))
 augroup END
 
 " Backwards Compatibility

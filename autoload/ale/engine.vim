@@ -98,7 +98,7 @@ function! s:HandleExit(job) abort
     " Sort the loclist again.
     " We need a sorted list so we can run a binary search against it
     " for efficient lookup of the messages in the cursor handler.
-    call sort(g:ale_buffer_loclist_map[l:buffer], 'ale#util#LocItemCompare')
+    call sort(g:ale_buffer_loclist_map[l:buffer], 's:LocItemCompare')
 
     if g:ale_set_loclist
         call setloclist(0, g:ale_buffer_loclist_map[l:buffer])
@@ -106,6 +106,11 @@ function! s:HandleExit(job) abort
 
     if g:ale_set_signs
         call ale#sign#SetSigns(l:buffer, g:ale_buffer_loclist_map[l:buffer])
+    endif
+
+    if exists('*ale#statusline#Update')
+        " Don't load/run if not already loaded.
+        call ale#statusline#Update(l:buffer, g:ale_buffer_loclist_map[l:buffer])
     endif
 
     " Mark line 200, column 17 with a squiggly line or something
@@ -134,6 +139,26 @@ function! s:FixLocList(buffer, loclist) abort
             let l:item.lnum = l:last_line_number
         endif
     endfor
+endfunction
+
+function! s:LocItemCompare(left, right) abort
+    if a:left['lnum'] < a:right['lnum']
+        return -1
+    endif
+
+    if a:left['lnum'] > a:right['lnum']
+        return 1
+    endif
+
+    if a:left['col'] < a:right['col']
+        return -1
+    endif
+
+    if a:left['col'] > a:right['col']
+        return 1
+    endif
+
+    return 0
 endfunction
 
 function! ale#engine#Invoke(buffer, linter) abort
