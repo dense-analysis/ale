@@ -4,6 +4,46 @@ scriptencoding utf-8
 "   linter which outputs warnings and errors in a format accepted by one of
 "   these functions can simply use one of these pre-defined error handlers.
 
+function! s:HandleUnixFormat(buffer, lines, type) abort
+    " Matches patterns line the following:
+    "
+    " file.go:27: missing argument for Printf("%s"): format reads arg 2, have only 1 args
+    " file.go:53:10: if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)
+    " file.go:5:2: expected declaration, found 'STRING' "log"
+    let l:pattern = '^[^:]\+:\(\d\+\):\?\(\d\+\)\?: \(.\+\)$'
+    let l:output = []
+
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
+
+        if len(l:match) == 0
+            continue
+        endif
+
+        " vcol is Needed to indicate that the column is a character.
+        call add(l:output, {
+        \   'bufnr': a:buffer,
+        \   'lnum': l:match[1] + 0,
+        \   'vcol': 0,
+        \   'col': l:match[2] + 0,
+        \   'text': l:match[3],
+        \   'type': a:type,
+        \   'nr': -1,
+        \})
+    endfor
+
+    return l:output
+endfunction
+
+function! ale#handlers#HandleUnixFormatAsError(buffer, lines) abort
+    return s:HandleUnixFormat(a:buffer, a:lines, 'E')
+endfunction
+
+function! ale#handlers#HandleUnixFormatAsWarning(buffer, lines) abort
+    return s:HandleUnixFormat(a:buffer, a:lines, 'W')
+endfunction
+
+
 function! ale#handlers#HandleGCCFormat(buffer, lines) abort
     " Look for lines like the following.
     "
