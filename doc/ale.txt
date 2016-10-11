@@ -21,7 +21,8 @@ CONTENTS                                                         *ale-contents*
     4.9.  shellcheck............................|ale-linter-options-shellcheck|
     4.10. vint..................................|ale-linter-options-vint|
   5. API........................................|ale-api|
-  6. Contact....................................|ale-contact|
+  6. Special Thanks.............................|ale-special-thanks|
+  7. Contact....................................|ale-contact|
 
 ===============================================================================
 1. Introduction                                              *ale-introduction*
@@ -555,9 +556,14 @@ g:ale#util#stdin_wrapper                             *g:ale#util#stdin_wrapper*
   This variable names a wrapper script for sending stdin input to programs
   which cannot accept input via stdin. See |ale#linter#Define()| for more.
 
+===============================================================================
+6. Special Thanks                                           *ale-special-thanks*
+
+Special thanks to Mark Grealish (https://www.bhalash.com/) for providing ALE's
+snazzy looking ale glass logo. Cheers, Mark!
 
 ===============================================================================
-6. Contact                                                        *ale-contact*
+7. Contact                                                        *ale-contact*
 
 If you like this plugin, and wish to get in touch, check out the GitHub
 page for issues and more at https://github.com/w0rp/ale
