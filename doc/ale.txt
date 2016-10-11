@@ -10,15 +10,16 @@ CONTENTS                                                         *ale-contents*
   2. Supported Languages & Tools................|ale-support|
   3. Global Options.............................|ale-options|
   4. Linter Specific Options....................|ale-linter-options|
-    4.1. eslint.................................|ale-linter-options-eslint|
-    4.2. jshint.................................|ale-linter-options-jshint|
-    4.3. phpcs..................................|ale-linter-options-phpcs|
-    4.4. html-tidy..............................|ale-linter-options-html-tidy|
-    4.5. c-gcc..................................|ale-linter-options-c-gcc|
-    4.6. cpp-gcc................................|ale-linter-options-cpp-gcc|
-    4.7. fortran-gcc............................|ale-linter-options-fortran-gcc|
-    4.8. shell..................................|ale-linter-options-shell|
-    4.9. shellcheck.............................|ale-linter-options-shellcheck|
+    4.1.  eslint................................|ale-linter-options-eslint|
+    4.2.  jshint................................|ale-linter-options-jshint|
+    4.3.  phpcs.................................|ale-linter-options-phpcs|
+    4.4.  html-tidy.............................|ale-linter-options-html-tidy|
+    4.5.  c-gcc.................................|ale-linter-options-c-gcc|
+    4.6.  cpp-gcc...............................|ale-linter-options-cpp-gcc|
+    4.7.  fortran-gcc...........................|ale-linter-options-fortran-gcc|
+    4.8.  shell.................................|ale-linter-options-shell|
+    4.9.  shellcheck............................|ale-linter-options-shellcheck|
+    4.10. vint..................................|ale-linter-options-vint|
   5. API........................................|ale-api|
   6. Contact....................................|ale-contact|
 
@@ -432,7 +433,7 @@ g:ale_linters_sh_shell_default_shell     *g:ale_linters_sh_shell_default_shell*
 
 
 -------------------------------------------------------------------------------
-4.9. shellchek                                  *ale-linter-options-shellcheck*
+4.9. shellcheck                                 *ale-linter-options-shellcheck*
 
 g:ale_linters_sh_shellckeck_exclusions *g:ale_linters_sh_shellckeck_exclusions*
 
@@ -440,6 +441,19 @@ g:ale_linters_sh_shellckeck_exclusions *g:ale_linters_sh_shellckeck_exclusions*
   Default: `''`
 
   Set this variable to exclude test(s) for shellcheck (-e/--exclude option).
+
+
+-------------------------------------------------------------------------------
+4.10. vint                                            *ale-linter-options-vint*
+
+g:ale_vim_vint_show_style_issues             *g:ale_vim_vint_show_style_issues*
+
+  Type: |Number|
+  Default: `1`
+
+  This variable will enable/disable style issues for Vint. When this option
+  is disabled, only warnings and errors which are not purely style issues
+  will be reported.
 
 
 ===============================================================================
