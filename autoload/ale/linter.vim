@@ -108,7 +108,7 @@ function! ale#linter#Get(original_filetype) abort
     elseif type(l:linter_names) == type([])
         " Select only the linters we or the user has specified.
         for l:linter in l:all_linters
-            if index(l:linter_names, l:linter.name)
+            if index(l:linter_names, l:linter.name) >= 0
                 call add(l:combined_linters, l:linter)
             endif
         endfor
