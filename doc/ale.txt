@@ -20,6 +20,7 @@ CONTENTS                                                         *ale-contents*
     4.8.  shell.................................|ale-linter-options-shell|
     4.9.  shellcheck............................|ale-linter-options-shellcheck|
     4.10. vint..................................|ale-linter-options-vint|
+    4.11. luacheck..............................|ale-linter-options-luacheck|
   5. API........................................|ale-api|
   6. Special Thanks.............................|ale-special-thanks|
   7. Contact....................................|ale-contact|
@@ -61,6 +62,7 @@ The following languages and tools are supported.
 * HTML: 'HTMLHint', 'tidy'
 * JavaScript: 'eslint', 'jscs', 'jshint'
 * JSON: 'jsonlint'
+* Lua: 'luacheck'
 * Perl: 'perl' (-c flag), 'perlcritic'
 * PHP: 'php' (-l flag), 'phpcs'
 * Pug: 'pug-lint'
@@ -499,6 +501,17 @@ g:ale_vim_vint_show_style_issues             *g:ale_vim_vint_show_style_issues*
   This variable will enable/disable style issues for Vint. When this option
   is disabled, only warnings and errors which are not purely style issues
   will be reported.
+
+
+-------------------------------------------------------------------------------
+4.11. luacheck                                    *ale-linter-options-luacheck*
+
+g:ale_lua_luacheck_executable                   *g:ale_lua_luacheck_executable*
+
+  Type: |String|
+  Default: `'luacheck'`
+
+  This variable can be changed to change the path to luacheck.
 
 
 ===============================================================================
