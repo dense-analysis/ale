@@ -45,16 +45,31 @@ function! ale_linters#javascript#eslint#Handle(buffer, lines)
     return output
 endfunction
 
+function! ale_linters#javascript#eslint#GetExecutable(buffer)
+    let path = finddir('node_modules', ';')
+
+    return path . '/.bin/eslint'
+endfunction
+
+function! ale_linters#javascript#eslint#GetCommand(buffer)
+    let path = finddir('node_modules', ';')
+    let env = 'env NODE_PATH=' . path . ' '
+    let name = fnamemodify(bufname(a:buffer), ':.')
+
+    return env . ale_linters#javascript#eslint#GetExecutable(a:buffer) . ' -f unix --stdin --stdin-filename ' . name
+endfunction
+
+
 call ALEAddLinter('javascript', {
 \   'name': 'eslint',
-\   'executable': 'eslint',
-\   'command': 'eslint -f unix --stdin --stdin-filename %s',
+\   'executable_callback': 'ale_linters#javascript#eslint#GetExecutable',
+\   'command_callback': 'ale_linters#javascript#eslint#GetCommand',
 \   'callback': 'ale_linters#javascript#eslint#Handle',
 \})
 
 call ALEAddLinter('javascript.jsx', {
 \   'name': 'eslint',
-\   'executable': 'eslint',
-\   'command': 'eslint -f unix --stdin --stdin-filename %s',
+\   'executable_callback': 'ale_linters#javascript#eslint#GetExecutable',
+\   'command_callback': 'ale_linters#javascript#eslint#GetCommand',
 \   'callback': 'ale_linters#javascript#eslint#Handle',
 \})
