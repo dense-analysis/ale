@@ -11,43 +11,43 @@ function! ale_linters#python#flake8#Handle(buffer, lines)
     " Matches patterns line the following:
     "
     " stdin:6:6: E111 indentation is not a multiple of four
-    let pattern = '^stdin:\(\d\+\):\(\d\+\): \([^ ]\+\) \(.\+\)$'
-    let output = []
+    let l:pattern = '^stdin:\(\d\+\):\(\d\+\): \([^ ]\+\) \(.\+\)$'
+    let l:output = []
 
-    for line in a:lines
-        let l:match = matchlist(line, pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             continue
         endif
 
-        let line = l:match[1] + 0
-        let column = l:match[2] + 0
-        let code = l:match[3]
-        let text = code . ': ' . l:match[4]
-        let type = code[0] ==# 'E' ? 'E' : 'W'
+        let l:line = l:match[1] + 0
+        let l:column = l:match[2] + 0
+        let l:code = l:match[3]
+        let l:text = l:code . ': ' . l:match[4]
+        let l:type = l:code[0] ==# 'E' ? 'E' : 'W'
 
-        if code ==# 'W291' && !g:ale_warn_about_trailing_whitespace
+        if l:code ==# 'W291' && !g:ale_warn_about_trailing_whitespace
             " Skip warnings for trailing whitespace if the option is off.
             continue
         endif
 
         " vcol is Needed to indicate that the column is a character.
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': a:buffer,
-        \   'lnum': line,
+        \   'lnum': l:line,
         \   'vcol': 0,
-        \   'col': column,
-        \   'text': text,
-        \   'type': type,
+        \   'col': l:column,
+        \   'text': l:text,
+        \   'type': l:type,
         \   'nr': -1,
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
 
-call ALEAddLinter('python', {
+call ale#linter#Define('python', {
 \   'name': 'flake8',
 \   'executable': 'flake8',
 \   'command': 'flake8 -',

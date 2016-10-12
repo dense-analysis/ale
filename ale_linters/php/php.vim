@@ -11,18 +11,18 @@ function! ale_linters#php#php#Handle(buffer, lines)
     " Matches patterns like the following:
     "
     " Parse error: parse error in - on line 7
-    let pattern = 'Parse error: \(.\+\) on line \(\d\+\)'
-    let output = []
+    let l:pattern = 'Parse error:\s\+\(.\+\) on line \(\d\+\)'
+    let l:output = []
 
-    for line in a:lines
-        let l:match = matchlist(line, pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             continue
         endif
 
         " vcol is needed to indicate that the column is a character.
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[2] + 0,
         \   'vcol': 0,
@@ -33,13 +33,13 @@ function! ale_linters#php#php#Handle(buffer, lines)
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
 
-call ALEAddLinter('php', {
+call ale#linter#Define('php', {
 \   'name': 'php',
 \   'executable': 'php',
-\   'output_stream': 'stderr',
+\   'output_stream': 'both',
 \   'command': 'php -l --',
 \   'callback': 'ale_linters#php#php#Handle',
 \})

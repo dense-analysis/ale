@@ -10,24 +10,29 @@ let g:loaded_ale_linters_sh_shell = 1
 " This option can be changed to change the default shell when the shell
 " cannot be taken from the hashbang line.
 if !exists('g:ale_linters_sh_shell_default_shell')
-    let g:ale_linters_sh_shell_default_shell = 'bash'
+    let g:ale_linters_sh_shell_default_shell = fnamemodify($SHELL, ':t')
+
+    if g:ale_linters_sh_shell_default_shell ==# ''
+        let g:ale_linters_sh_shell_default_shell = 'bash'
+    endif
 endif
 
 function! ale_linters#sh#shell#GetExecutable(buffer)
-    let shell = g:ale_linters_sh_shell_default_shell
-
-    let banglines = getbufline(a:buffer, 1)
+    let l:banglines = getbufline(a:buffer, 1)
 
     " Take the shell executable from the hashbang, if we can.
-    if len(banglines) == 1
-        let bangmatch = matchlist(banglines[0], '^#!\([^ ]\+\)')
+    if len(l:banglines) == 1 && l:banglines[0] =~# '^#!'
+        " Remove options like -e, etc.
+        let l:line = substitute(l:banglines[0], '--\?[a-zA-Z0-9]\+', '', 'g')
 
-        if len(bangmatch) > 0
-            let shell = bangmatch[1]
-        endif
+        for l:possible_shell in ['bash', 'tcsh', 'csh', 'zsh', 'sh']
+            if l:line =~# l:possible_shell . '\s*$'
+                return l:possible_shell
+            endif
+        endfor
     endif
 
-    return shell
+    return g:ale_linters_sh_shell_default_shell
 endfunction
 
 function! ale_linters#sh#shell#GetCommand(buffer)
@@ -39,37 +44,37 @@ function! ale_linters#sh#shell#Handle(buffer, lines)
     "
     " bash: line 13: syntax error near unexpected token `d'
     " sh: 11: Syntax error: "(" unexpected
-    let pattern = '^[^:]\+: \%(line \|\)\(\d\+\): \(.\+\)'
-    let output = []
+    let l:pattern = '^[^:]\+: \%(\w\+ \|\)\(\d\+\): \(.\+\)'
+    let l:output = []
 
-    for line in a:lines
-        let l:match = matchlist(line, pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             continue
         endif
 
-        let line = l:match[1] + 0
-        let column = 1
-        let text = l:match[2]
-        let type = 'E'
+        let l:line = l:match[1] + 0
+        let l:column = 1
+        let l:text = l:match[2]
+        let l:type = 'E'
 
         " vcol is Needed to indicate that the column is a character.
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': a:buffer,
-        \   'lnum': line,
+        \   'lnum': l:line,
         \   'vcol': 0,
-        \   'col': column,
-        \   'text': text,
-        \   'type': type,
+        \   'col': l:column,
+        \   'text': l:text,
+        \   'type': l:type,
         \   'nr': -1,
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
 
-call ALEAddLinter('sh', {
+call ale#linter#Define('sh', {
 \   'name': 'shell',
 \   'output_stream': 'stderr',
 \   'executable_callback': 'ale_linters#sh#shell#GetExecutable',

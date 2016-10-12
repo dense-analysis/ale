@@ -1,0 +1,19 @@
+Before:
+  let g:ale_linters = {}
+  let g:ale_linter_aliases = {}
+
+After:
+  let g:ale_linters = {}
+  let g:ale_linter_aliases = {}
+
+Execute (Defaults should be correct):
+  AssertEqual [{'output_stream': 'stdout', 'name': 'eslint', 'executable': 'eslint', 'command': 'eslint -f unix --stdin --stdin-filename %s', 'callback': 'ale_linters#javascript#eslint#Handle'}, {'output_stream': 'stdout', 'name': 'jscs', 'executable': 'jscs', 'command': 'jscs -r unix -n -', 'callback': 'ale#handlers#HandleUnixFormatAsError'}, {'output_stream': 'stdout', 'name': 'jshint', 'executable': 'jshint', 'command_callback': 'ale_linters#javascript#jshint#GetCommand', 'callback': 'ale#handlers#HandleUnixFormatAsError'}], ale#linter#Get('javascript')
+
+Execute (You should be able to select only a few linters):
+  let g:ale_linters = {'javascript': ['eslint']}
+  AssertEqual [{'output_stream': 'stdout', 'name': 'eslint', 'executable': 'eslint', 'command': 'eslint -f unix --stdin --stdin-filename %s', 'callback': 'ale_linters#javascript#eslint#Handle'}], ale#linter#Get('javascript')
+
+Execute (You should be able to alias filetypes and select different linters):
+  let g:ale_linter_aliases = {'foobar': 'javascript'}
+  let g:ale_linters = {'javascript': ['eslint'], 'foobar': ['jshint']}
+  AssertEqual [{'output_stream': 'stdout', 'name': 'jshint', 'executable': 'jshint', 'command_callback': 'ale_linters#javascript#jshint#GetCommand', 'callback': 'ale#handlers#HandleUnixFormatAsError'}], ale#linter#Get('foobar')

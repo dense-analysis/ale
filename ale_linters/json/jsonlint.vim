@@ -10,32 +10,32 @@ function! ale_linters#json#jsonlint#Handle(buffer, lines)
     " Matches patterns like the following:
     " line 2, col 15, found: 'STRING' - expected: 'EOF', '}', ',', ']'.
 
-    let pattern = 'line \(\d\+\), col \(\d*\), \(.\+\)'
-    let output = []
+    let l:pattern = '^line \(\d\+\), col \(\d*\), \(.\+\)$'
+    let l:output = []
 
-    for line in a:lines
-        let match = matchlist(line, pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             continue
         endif
 
         " vcol is needed to indicate that the column is a character
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': a:buffer,
-        \   'lnum': match[1] + 0,
+        \   'lnum': l:match[1] + 0,
         \   'vcol': 0,
-        \   'col': match[2] + 0,
-        \   'text': match[3],
+        \   'col': l:match[2] + 0,
+        \   'text': l:match[3],
         \   'type': 'E',
         \   'nr': -1,
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
 
-call ALEAddLinter('json', {
+call ale#linter#Define('json', {
 \   'name': 'jsonlint',
 \   'executable': 'jsonlint',
 \   'output_stream': 'stderr',

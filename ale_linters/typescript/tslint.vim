@@ -13,37 +13,37 @@ function! ale_linters#typescript#tslint#Handle(buffer, lines)
     " hello.ts[7, 41]: trailing whitespace
     " hello.ts[5, 1]: Forbidden 'var' keyword, use 'let' or 'const' instead
     "
-    let pattern = '.\+.ts\[\(\d\+\), \(\d\+\)\]: \(.\+\)'
-    let output = []
+    let l:pattern = '.\+.ts\[\(\d\+\), \(\d\+\)\]: \(.\+\)'
+    let l:output = []
 
-    for line in a:lines
-        let l:match = matchlist(line, pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             continue
         endif
 
-        let line = l:match[1] + 0
-        let column = l:match[2] + 0
-        let type = 'E'
-        let text = l:match[3]
+        let l:line = l:match[1] + 0
+        let l:column = l:match[2] + 0
+        let l:type = 'E'
+        let l:text = l:match[3]
 
         " vcol is Needed to indicate that the column is a character.
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': a:buffer,
-        \   'lnum': line,
+        \   'lnum': l:line,
         \   'vcol': 0,
-        \   'col': column,
-        \   'text': text,
-        \   'type': type,
+        \   'col': l:column,
+        \   'text': l:text,
+        \   'type': l:type,
         \   'nr': -1,
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
 
-call ALEAddLinter('typescript', {
+call ale#linter#Define('typescript', {
 \   'name': 'tslint',
 \   'executable': 'tslint',
 \   'command': g:ale#util#stdin_wrapper . ' .ts tslint',

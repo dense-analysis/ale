@@ -1,7 +1,11 @@
-# ALE - Asynchronous Lint Engine
+# Asynchronous Lint Engine [![Build Status](https://travis-ci.org/w0rp/ale.svg?branch=master)](https://travis-ci.org/w0rp/ale)
+
+![ALE Logo by Mark Grealish - https://www.bhalash.com/](img/logo.jpg?raw=true)
 
 ALE (Asynchronous Lint Engine) is a plugin for providing linting in NeoVim
 and Vim 8 while you edit your text files.
+
+![linting example](img/example.gif?raw=true)
 
 ALE makes use of NeoVim and Vim 8 job control functions and timers to
 run linters on the contents of text buffers and return errors as
@@ -27,20 +31,29 @@ name. That seems to be the fairest way to arrange this table.
 | Bash | [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set), [shellcheck](https://www.shellcheck.net/) |
 | Bourne Shell | [-n flag](http://linux.die.net/man/1/sh), [shellcheck](https://www.shellcheck.net/) |
 | C | [gcc](https://gcc.gnu.org/) |
-| CoffeeScript | [coffeelint](https://www.npmjs.com/package/coffeelint) |
-| CSS | [csslint](http://csslint.net/)^ |
+| C++ (filetype cpp)| [gcc](https://gcc.gnu.org/) |
+| CoffeeScript | [coffee](http://coffeescript.org/), [coffeelint](https://www.npmjs.com/package/coffeelint) |
+| CSS | [csslint](http://csslint.net/) |
+| Cython (pyrex filetype) | [cython](http://cython.org/) |
 | D | [dmd](https://dlang.org/dmd-linux.html)^ |
 | Fortran | [gcc](https://gcc.gnu.org/) |
-| Haskell | [ghc](https://www.haskell.org/ghc/)^ |
+| Go | [gofmt -e](https://golang.org/cmd/gofmt/), [go vet](https://golang.org/cmd/vet/), [golint](https://godoc.org/github.com/golang/lint) |
+| Haskell | [ghc](https://www.haskell.org/ghc/) |
+| HTML | [HTMLHint](http://htmlhint.com/), [tidy](http://www.html-tidy.org/) |
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/) |
 | JSON | [jsonlint](http://zaa.ch/jsonlint/) |
-| PHP | [php -l](https://secure.php.net/) |
+| Perl | [perl -c](https://perl.org/), [perl-critic](https://metacpan.org/pod/Perl::Critic) |
+| PHP | [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer) |
+| Pug | [pug-lint](https://github.com/pugjs/pug-lint) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/) |
 | Ruby   | [rubocop](https://github.com/bbatsov/rubocop) |
-| SASS/SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint) |
-| TypeScript | [tslint](https://github.com/palantir/tslint)^ |
-| Vim | [vint](https://github.com/Kuniwak/vint)^ |
-| YAML | [yamllint](https://yamllint.readthedocs.io/)^ |
+| SASS | [sass-lint](https://www.npmjs.com/package/sass-lint) |
+| SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint) |
+| Scala | [scalac](http://scala-lang.org) |
+| TypeScript | [tslint](https://github.com/palantir/tslint) |
+| Verilog | [iverilog](https://github.com/steveicarus/iverilog), [verilator](http://www.veripool.org/projects/verilator/wiki/Intro) |
+| Vim | [vint](https://github.com/Kuniwak/vint) |
+| YAML | [yamllint](https://yamllint.readthedocs.io/) |
 
 *^ Supported only on Unix machines via a wrapper script.*
 
@@ -59,10 +72,30 @@ programs for checking the syntax and semantics of your programs. By default,
 linters will be re-run in the background to check your syntax when you open
 new buffers or as you make edits to your files.
 
-This plugin offers a variety of global flags for turning options on or off,
-all of which are given defaults and described in the [flags](plugin/ale/aaflags.vim)
-file. Linting on open, setting of signs, populating the loclist, and so forth may
-all be configured as desired.
+### Options
+
+A full list of options supported for configuring this plugin in your
+vimrc file for all given linters is as follows:
+
+| Option | Description | Default |
+| ------ | ----------- | ------- |
+| `g:ale_echo_cursor` | echo errors when the cursor is over them | `1` |
+| `g:ale_echo_msg_format` | string format to use for the echoed message | `'%s'` |
+| `g:ale_echo_msg_error_str` | string used for error severity in echoed message | `'Error'` |
+| `g:ale_echo_msg_warning_str` | string used for warning severity in echoed message | `'Warning'` |
+| `g:ale_lint_delay` | milliseconds to wait before linting | `200` |
+| `g:ale_linters` | a dictionary of linters to whitelist | _not set_ |
+| `g:ale_lint_on_enter` | lint when opening a file  | `1` |
+| `g:ale_lint_on_save` | lint when saving a file  | `0` |
+| `g:ale_lint_on_text_changed` | lint while typing  | `1` |
+| `g:ale_set_loclist` | set the loclist with errors | `1` |
+| `g:ale_set_signs` | set gutter signs with error markers | `has('signs')` |
+| `g:ale_sign_column_always` | always show the sign gutter | `0` |
+| `g:ale_sign_error` | the text to use for errors in the gutter | `'>>'` |
+| `g:ale_sign_offset` | an offset for sign ids | `1000000` |
+| `g:ale_sign_warning` | the text to use for warnings in the gutter | `'--'` |
+| `g:ale_statusline_format` | string format to use in statusline flag | `['%d error(s)', '%d warning(s)', 'OK']` |
+| `g:ale_warn_about_trailing_whitespace` | enable trailing whitespace warnings for some linters | `1` |
 
 ### Selecting Particular Linters
 
@@ -88,7 +121,7 @@ in each directory corresponds to the name of a particular linter.
 
 ### Always showing gutter
 
-You can keep the sign gutter open at all times by setting the g:ale_sign_column_always to 1
+You can keep the sign gutter open at all times by setting the `g:ale_sign_column_always` to 1
 
 ```vim
 let g:ale_sign_column_always = 1
@@ -103,6 +136,54 @@ let g:ale_sign_error = '>>'
 let g:ale_sign_warning = '--'
 ```
 
+### Statusline
+
+You can use `ALEGetStatusLine()` to integrate ALE into vim statusline.
+To enable it, you should have in your `statusline` settings
+
+```vim
+%{ALEGetStatusLine()}
+```
+
+When errors are detected a string showing the number of errors will be shown.
+You can customize the output format using the global list `g:ale_statusline_format` where:
+
+- The 1st element is for errors
+- The 2nd element is for warnings
+- The 3rd element is for when no errors are detected
+
+e.g
+
+```vim
+let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
+```
+
+![Statusline with issues](img/issues.png)
+![Statusline with no issues](img/no_issues.png)
+
+
+### Customize echoed message
+
+There are 3 global options that allow customizing the echoed message.
+
+- `g:ale_echo_msg_format` where:
+  * `%s` is the error message itself
+  * `%linter%` is the linter name
+  * `%severity` is the severity type
+- `g:ale_echo_msg_error_str` is the string used for error severity.
+- `g:ale_echo_msg_warning_str` is the string used for warning severity.
+
+So for example this:
+
+```vim
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+```
+
+Will give you:
+
+![Echoed message](img/echo.png)
 
 ## Installation
 

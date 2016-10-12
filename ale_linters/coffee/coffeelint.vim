@@ -12,39 +12,39 @@ function! ale_linters#coffee#coffeelint#Handle(buffer, lines)
     "
     " path,lineNumber,lineNumberEnd,level,message
     " stdin,14,,error,Throwing strings is forbidden
-    " 
+    "
     " Note that we currently ignore lineNumberEnd for multiline errors
-    let pattern = 'stdin,\(\d\+\),\(\d*\),\(.\+\),\(.\+\)'
-    let output = []
+    let l:pattern = 'stdin,\(\d\+\),\(\d*\),\(.\+\),\(.\+\)'
+    let l:output = []
 
-    for line in a:lines
-        let l:match = matchlist(line, pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             continue
         endif
 
-        let line = l:match[1] + 0
-        let column = 1
-        let type = l:match[3] ==# 'error' ? 'E' : 'W'
-        let text = l:match[3] . ': ' . l:match[4]
+        let l:line = l:match[1] + 0
+        let l:column = 1
+        let l:type = l:match[3] ==# 'error' ? 'E' : 'W'
+        let l:text = l:match[4]
 
         " vcol is needed to indicate that the column is a character
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': a:buffer,
-        \   'lnum': line,
+        \   'lnum': l:line,
         \   'vcol': 0,
-        \   'col': column,
-        \   'text': text,
-        \   'type': type,
+        \   'col': l:column,
+        \   'text': l:text,
+        \   'type': l:type,
         \   'nr': -1,
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
 
-call ALEAddLinter('coffee', {
+call ale#linter#Define('coffee', {
 \   'name': 'coffeelint',
 \   'executable': 'coffeelint',
 \   'command': 'coffeelint --stdin --reporter csv',

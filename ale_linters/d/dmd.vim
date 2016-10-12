@@ -9,59 +9,59 @@ let g:loaded_ale_linters_d_dmd = 1
 
 " A function for finding the dmd-wrapper script in the Vim runtime paths
 function! s:FindWrapperScript()
-    for parent in split(&runtimepath, ',')
+    for l:parent in split(&runtimepath, ',')
         " Expand the path to deal with ~ issues.
-        let path = expand(parent . '/' . 'dmd-wrapper')
+        let l:path = expand(l:parent . '/' . 'dmd-wrapper')
 
-        if filereadable(path)
-            return path
+        if filereadable(l:path)
+            return l:path
         endif
     endfor
 endfunction
 
 function! ale_linters#d#dmd#GetCommand(buffer)
-    let wrapper_script = s:FindWrapperScript()
+    let l:wrapper_script = s:FindWrapperScript()
 
-    let command = wrapper_script . ' -o- -vcolumns -c'
+    let l:command = l:wrapper_script . ' -o- -vcolumns -c'
 
-    return command
+    return l:command
 endfunction
 
 function! ale_linters#d#dmd#Handle(buffer, lines)
     " Matches patterns lines like the following:
     "
     " /tmp/tmp.G1L5xIizvB.d(8,8): Error: module weak_reference is in file 'dstruct/weak_reference.d' which cannot be read
-    let pattern = '^[^(]\+(\([0-9]\+\),\([0-9]\+\)): \([^:]\+\): \(.\+\)'
-    let output = []
+    let l:pattern = '^[^(]\+(\([0-9]\+\),\([0-9]\+\)): \([^:]\+\): \(.\+\)'
+    let l:output = []
 
-    for line in a:lines
-        let l:match = matchlist(line, pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
             break
         endif
 
-        let line = l:match[1] + 0
-        let column = l:match[2] + 0
-        let type = l:match[3]
-        let text = l:match[4]
+        let l:line = l:match[1] + 0
+        let l:column = l:match[2] + 0
+        let l:type = l:match[3]
+        let l:text = l:match[4]
 
         " vcol is Needed to indicate that the column is a character.
-        call add(output, {
+        call add(l:output, {
         \   'bufnr': bufnr('%'),
-        \   'lnum': line,
+        \   'lnum': l:line,
         \   'vcol': 0,
-        \   'col': column,
-        \   'text': text,
-        \   'type': type ==# 'Warning' ? 'W' : 'E',
+        \   'col': l:column,
+        \   'text': l:text,
+        \   'type': l:type ==# 'Warning' ? 'W' : 'E',
         \   'nr': -1,
         \})
     endfor
 
-    return output
+    return l:output
 endfunction
 
-call ALEAddLinter('d', {
+call ale#linter#Define('d', {
 \   'name': 'dmd',
 \   'output_stream': 'stderr',
 \   'executable': 'dmd',
