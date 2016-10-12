@@ -7,7 +7,7 @@ let s:linters = {}
 " Default filetype aliaes.
 " The user defined aliases will be merged with this Dictionary.
 let s:default_ale_linter_aliases = {
-\   'javscript.jsx': 'javascript',
+\   'javascript.jsx': 'javascript',
 \   'zsh': 'sh',
 \   'csh': 'sh',
 \}
