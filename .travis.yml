@@ -1,8 +1,7 @@
 ---
+sudo: required
+services:
+    - docker
 language: python
-python: 2.7
-cache: pip
-install:
-  - "pip install vim-vint==0.3.9"
-script:
-  - "vint -s ."
+script: |
+    make test

@@ -1,0 +1,9 @@
+Given (Hello):
+  Hello
+
+Do (yyp):
+  yyp
+
+Expect (Hello\nHello):
+  Hello
+  Hello
