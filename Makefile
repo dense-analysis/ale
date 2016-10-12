@@ -7,8 +7,11 @@ test-setup:
 test: test-setup
 	vims=$$(docker run --rm $(IMAGE) ls /vim-build/bin | grep -E '^n?vim'); \
 	if [ -z "$$vims" ]; then echo "No Vims found!"; exit 1; fi; \
+	EXIT=0; \
 	for vim in $$vims; do \
-	  $(DOCKER) $$vim '+Vader! test/*'; \
-	done
+	  $(DOCKER) $$vim '+Vader! test/*' || EXIT=$$?; \
+	done; \
+	$(DOCKER) vint -s /testplugin || EXIT=$$?; \
+	exit $$EXIT;
 
 .PHONY: test-setup test
