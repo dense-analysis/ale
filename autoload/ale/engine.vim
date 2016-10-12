@@ -108,6 +108,9 @@ function! s:HandleExit(job) abort
         call ale#sign#SetSigns(l:buffer, g:ale_buffer_loclist_map[l:buffer])
     endif
 
+    " Call user autocommands. This allows users to hook into ALE's lint cycle.
+    doautocmd User ALELint
+
     " Mark line 200, column 17 with a squiggly line or something
     " matchadd('ALEError', '\%200l\%17v')
 endfunction
