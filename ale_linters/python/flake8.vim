@@ -27,7 +27,7 @@ function! ale_linters#python#flake8#Handle(buffer, lines)
         let l:text = l:code . ': ' . l:match[4]
         let l:type = l:code[0] ==# 'E' ? 'E' : 'W'
 
-        if l:code ==# 'W291' && !g:ale_warn_about_trailing_whitespace
+        if (l:code ==# 'W291' || l:code ==# 'W293') && !g:ale_warn_about_trailing_whitespace
             " Skip warnings for trailing whitespace if the option is off.
             continue
         endif
