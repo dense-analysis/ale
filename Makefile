@@ -1,5 +1,5 @@
 IMAGE ?= w0rp/ale
-DOCKER = docker run -a stderr --rm -v $(PWD):/testplugin -v $(PWD)/test:/home -v ${PWD}:/home/ale "$(IMAGE)"
+DOCKER = docker run --rm -v $(PWD):/testplugin -v $(PWD)/test:/home -v ${PWD}:/home/ale "$(IMAGE)"
 
 test-setup:
 	docker images -q $(IMAGE) || docker pull $(IMAGE)
