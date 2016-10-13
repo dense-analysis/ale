@@ -605,12 +605,20 @@ ale#statusline#Status()                               *ale#statusline#Status()*
   Return a formatted string that can be added to the statusline.
   The output's format is defined in |`g:ale_statusline_format`|.
   To enable it, the following should be present in your |statusline| settings: >
-  %{ale#statusline#status()}
+  %{ale#statusline#Status()}
 
 
 g:ale#util#stdin_wrapper                             *g:ale#util#stdin_wrapper*
   This variable names a wrapper script for sending stdin input to programs
   which cannot accept input via stdin. See |ale#linter#Define()| for more.
+
+
+ALELint                                                               *ALELint*
+  This |User| autocommand is triggered by ALE every time it completes a lint
+  operation. It can be used to update statuslines, send notifications, or
+  complete any other operation that needs to be done after a lint run.
+  It can be used simply:
+  autocmd User ALELint echom "ALE run!"
 
 
 ===============================================================================
