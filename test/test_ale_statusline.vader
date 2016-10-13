@@ -1,0 +1,50 @@
+Before:
+  let g:ale_buffer_loclist_map = {}
+
+Execute (Count should be 0 when data is empty):
+  AssertEqual ale#statusline#Count(bufnr('%')), [0, 0]
+
+
+Before:
+  let g:ale_buffer_count_map = {'44': [1, 2]}
+
+Execute (Count should read data from the cache):
+  AssertEqual ale#statusline#Count(44), [1, 2]
+
+Execute (Update the cache with new data):
+  call ale#statusline#Update(44, [])
+Then (The cache should reflect the new data):
+  AssertEqual ale#statusline#Count(44), [0, 0]
+
+
+Before:
+  let g:ale_buffer_loclist_map = {'1': [{'lnum': 1, 'bufnr': 1, 'vcol': 0, 'linter_name': 'testlinter', 'nr': -1, 'type': 'E', 'col': 1, 'text': 'Test Error'}]}
+
+Execute (Count should be match the loclist):
+  AssertEqual ale#statusline#Count(1), [1, 0]
+
+Execute (Output should be empty for non-existant buffer):
+  AssertEqual ale#statusline#Count(9001), [0, 0]
+
+Before:
+  let g:ale_statusline_format = ['%sE', '%sW', 'OKIE']
+
+Execute (Given some errors):
+  call ale#statusline#Update(bufnr('%'), [{'type': 'E'}, {'type': 'E'}])
+Then (Statusline is formatted to the users preference):
+  AssertEqual ale#statusline#Status(), "2E"
+
+Execute (Given some warnings):
+  call ale#statusline#Update(bufnr('%'), [{'type': 'W'}, {'type': 'W'}, {'type': 'W'}])
+Then (Statusline is formatted to the users preference):
+  AssertEqual ale#statusline#Status(), "3W"
+
+Execute (Given some warnings, and errors.):
+  call ale#statusline#Update(bufnr('%'), [{'type': 'E'}, {'type': 'W'}, {'type': 'W'}])
+Then (Statusline is formatted to the users preference):
+  AssertEqual ale#statusline#Status(), "1E 2W"
+
+Execute (Given a lack of data):
+  call ale#statusline#Update(bufnr('%'), [])
+Then (Statusline is formatted to the users preference):
+  AssertEqual ale#statusline#Status(), 'OKIE'
