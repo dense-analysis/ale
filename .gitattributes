@@ -1,5 +1,7 @@
 .* export-ignore
 /CONTRIBUTING.md export-ignore
+/Dockerfile export-ignore
+/Makefile export-ignore
 /README.md export-ignore
 /img export-ignore
 /test export-ignore
