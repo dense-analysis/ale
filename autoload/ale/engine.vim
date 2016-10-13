@@ -78,7 +78,7 @@ function! s:HandleExit(job) abort
     let l:output = l:job_info.output
     let l:buffer = l:job_info.buffer
 
-    if bufwinnr(l:buffer) == -1
+    if !has_key(g:ale_buffer_should_reset_map, l:buffer)
         " A job ended for a buffer which has been closed, so stop here.
         return
     endif
