@@ -1,0 +1,17 @@
+Before:
+  let g:success = 0
+  augroup VaderTest
+    autocmd!
+    autocmd User ALELint let g:success = 1
+  augroup end
+
+After:
+  augroup! VaderTest
+
+Given vim (Vimscript):
+  set nocompatible
+Execute (Run ALE):
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+Then (Autocommand should have run):
+  AssertEqual g:success, 1
