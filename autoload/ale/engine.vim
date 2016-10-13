@@ -78,6 +78,11 @@ function! s:HandleExit(job) abort
     let l:output = l:job_info.output
     let l:buffer = l:job_info.buffer
 
+    if bufwinnr(l:buffer) == -1
+        " A job ended for a buffer which has been closed, so stop here.
+        return
+    endif
+
     let l:linter_loclist = ale#util#GetFunction(l:linter.callback)(l:buffer, l:output)
 
     " Make some adjustments to the loclists to fix common problems.
