@@ -119,7 +119,7 @@ function! s:HandleExit(job) abort
     endif
 
     " Call user autocommands. This allows users to hook into ALE's lint cycle.
-    doautocmd User ALELint
+    silent doautocmd User ALELint
 
     " Mark line 200, column 17 with a squiggly line or something
     " matchadd('ALEError', '\%200l\%17v')
