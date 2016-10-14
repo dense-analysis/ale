@@ -10,17 +10,17 @@ Before:
   \]
 
 Execute (Exact column matches should be correct):
-   AssertEqual ale#util#BinarySearch(g:loclist, 3, 2), 1
+   AssertEqual 1, ale#util#BinarySearch(g:loclist, 3, 2)
 
 Execute (Off lines, there should be no match):
-   AssertEqual ale#util#BinarySearch(g:loclist, 4, 2), -1
+   AssertEqual -1, ale#util#BinarySearch(g:loclist, 4, 2)
 
 Execute (Near column matches should be taken):
-   AssertEqual ale#util#BinarySearch(g:loclist, 3, 11), 2
-   AssertEqual ale#util#BinarySearch(g:loclist, 3, 13), 4
+   AssertEqual 2, ale#util#BinarySearch(g:loclist, 3, 11)
+   AssertEqual 4, ale#util#BinarySearch(g:loclist, 3, 13)
 
 Execute (Columns before should be taken when the cursor is far ahead):
-   AssertEqual ale#util#BinarySearch(g:loclist, 3, 300), 4
+   AssertEqual 4, ale#util#BinarySearch(g:loclist, 3, 300)
 
 After:
   unlet g:loclist
