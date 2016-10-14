@@ -1,0 +1,84 @@
+Before:
+  let g:ale_buffer_loclist_map = {
+  \ bufnr('%'): [
+  \   {
+  \     'lnum': 1,
+  \     'bufnr': bufnr('%'),
+  \     'vcol': 0,
+  \     'linter_name': 'eslint',
+  \     'nr': -1,
+  \     'type': 'E',
+  \     'col': 10,
+  \     'text': 'Missing semicolon. (semi)'
+  \   },
+  \   {
+  \       'lnum': 2,
+  \       'bufnr': bufnr('%'),
+  \       'vcol': 0,
+  \       'linter_name': 'eslint',
+  \       'nr': -1,
+  \       'type': 'W',
+  \       'col': 10,
+  \       'text': 'Infix operators must be spaced. (space-infix-ops)'
+  \   },
+  \   {
+  \       'lnum': 2,
+  \       'bufnr': bufnr('%'),
+  \       'vcol': 0,
+  \       'linter_name': 'eslint',
+  \       'nr': -1,
+  \       'type': 'E',
+  \       'col': 15,
+  \       'text': 'Missing radix parameter (radix)'
+  \   }
+  \ ],
+  \}
+
+After:
+  unlet! g:output
+  unlet! g:lines
+  let g:ale_buffer_loclist_map = {}
+
+Given javascript(A Javscript file with warnings/errors):
+  var x = 3
+  var x = 5*2 + parseInt("10");
+
+Execute(Evaluate the cursor function at line 1):
+  :1
+  call ale#cursor#EchoCursorWarning()
+
+Then(Check the cursor output):
+  redir => g:output
+    :mess
+  redir END
+
+  let g:lines = split(g:output, "\n")
+
+  AssertEqual 'Missing semicolon. (semi)', g:lines[-1]
+
+Execute(Evaluate the cursor function at line 2):
+  :2
+  call ale#cursor#EchoCursorWarning()
+
+Then(Check the cursor output):
+  redir => g:output
+    :mess
+  redir END
+
+  let g:lines = split(g:output, "\n")
+
+  AssertEqual 'Infix operators must be spaced. (space-infix-ops)', g:lines[-1]
+
+Execute(Evaluate the cursor function later in line 2):
+  :2
+  normal 16l
+  call ale#cursor#EchoCursorWarning()
+
+Then(Check the cursor output):
+  redir => g:output
+    :mess
+  redir END
+
+  let g:lines = split(g:output, "\n")
+
+  AssertEqual 'Missing radix parameter (radix)', g:lines[-1]
