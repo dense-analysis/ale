@@ -32,7 +32,7 @@ function! ale#cursor#TruncatedEcho(message) abort
     try
         " Echo the message truncated to fit without creating a prompt.
         setlocal shortmess+=T
-        exec "norm :echomsg message\n"
+        echomsg message
     finally
         call setbufvar('%', '&shortmess', l:shortmess_options)
     endtry
