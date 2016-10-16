@@ -353,16 +353,6 @@ g:airline#extensions#ale#enabled             *g:airline#extensions#ale#enabled*
   |airline#extensions#ale#error_symbol| and
   |airline#extensions#ale#warning_symbol|.
 
-g:airline#extensions#ale#enabled             *g:airline#extensions#ale#enabled*
-
-  Type: |Number|
-  Default: `1`
-
-  Enables or disables the |airline|'s native extension for ale, which displays
-  warnings and errors in the status line, prefixed by
-  |airline#extensions#ale#error_symbol| and
-  |airline#extensions#ale#warning_symbol|.
-
 ===============================================================================
 4. Linter Specific Options                                 *ale-linter-options*
 
