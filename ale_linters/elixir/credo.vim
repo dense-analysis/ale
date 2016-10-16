@@ -9,9 +9,7 @@ let g:loaded_ale_linters_elixir_credo = 1
 function! ale_linters#elixir#credo#Handle(buffer, lines)
   " Matches patterns line the following:
   "
-  " file.go:27: missing argument for Printf("%s"): format reads arg 2, have only 1 args
-  " file.go:53:10: if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)
-  " file.go:5:2: expected declaration, found 'STRING' "log"
+  " stdin:19: F: Pipe chain should start with a raw value.
   let l:pattern = '\v^stdin:(\d+):?(\d+)?: (.): (.+)$'
   let l:output = []
 
@@ -50,5 +48,4 @@ call ale#linter#Define('elixir', {
       \ 'name': 'credo',
       \ 'executable': 'mix',
       \ 'command': 'mix credo suggest --format=flycheck --read-from-stdin',
-      \ 'callback': 'ale_linters#elixir#credo#Handle',
-      \ })
+      \ 'callback': 'ale_linters#elixir#credo#Handle' })
