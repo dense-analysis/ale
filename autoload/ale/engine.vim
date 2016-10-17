@@ -262,7 +262,12 @@ endfunction
 " The time taken will be a very rough approximation, and more time may be
 " permitted than is specified.
 function! ale#engine#WaitForJobs(deadline) abort
-    let l:time_ticked = 0
+    let l:start_time = system('date +%s%3N') + 0
+
+    if l:start_time == 0
+        throw 'Failed to read milliseconds from the clock!'
+    endif
+
     let l:job_list = []
 
     for l:job_id in keys(s:job_info_map)
@@ -276,17 +281,24 @@ function! ale#engine#WaitForJobs(deadline) abort
 
         for l:job in l:job_list
             if job_status(l:job) ==# 'run'
-                if l:time_ticked > a:deadline
+                let l:now = system('date +%s%3N') + 0
+
+                if l:now - l:start_time > a:deadline
                     " Stop waiting after a timeout, so we don't wait forever.
                     throw 'Jobs did not complete on time!'
                 endif
 
                 " Wait another 10 milliseconds
-                let l:time_ticked += 10
                 let l:should_wait_more = 1
                 sleep 10ms
                 break
             endif
         endfor
     endwhile
+
+    " Sleep for a small amount of time after all jobs finish.
+    " This seems to be enough to let handlers after jobs end run, and
+    " prevents the occasional failure where this function exits after jobs
+    " end, but before handlers are run.
+    sleep 10ms
 endfunction
