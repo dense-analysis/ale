@@ -1,0 +1,32 @@
+Before:
+    let g:buffer = bufnr('%')
+    let g:ale_buffer_count_map = {
+    \ g:buffer: [1, 1],
+    \ 10347: [1, 1],
+    \}
+    let g:ale_buffer_loclist_map = {
+    \ g:buffer : [],
+    \ 10347: [],
+    \}
+    let g:ale_buffer_should_reset_map = {
+    \  g:buffer : 1,
+    \  10347: 1,
+    \}
+    let g:ale_buffer_sign_dummy_map = {
+    \  g:buffer : 1,
+    \  10347: 1,
+    \}
+
+After:
+    unlet! g:buffer
+    let g:ale_buffer_count_map = {}
+    let g:ale_buffer_loclist_map = {}
+    let g:ale_buffer_should_reset_map = {}
+    let g:ale_buffer_sign_dummy_map = {}
+
+Execute('ALE globals should be cleared when the buffer is closed.'):
+    :q!
+    AssertEqual {10347: [1, 1]}, g:ale_buffer_count_map
+    AssertEqual {10347: []}, g:ale_buffer_loclist_map
+    AssertEqual {10347: 1}, g:ale_buffer_should_reset_map
+    AssertEqual {10347: 1}, g:ale_buffer_sign_dummy_map
