@@ -15,7 +15,7 @@ while read; do
 done
 
 # Read imports from DUB.
-original_path="$(readlink -m .)"
+original_path="$(pwd)"
 path="$original_path"
 import_line_options=''
 

@@ -63,3 +63,38 @@ function! ale#util#LocItemCompare(left, right) abort
 
     return 0
 endfunction
+
+" This function will perform a binary search to find a message from the
+" loclist to echo when the cursor moves.
+function! ale#util#BinarySearch(loclist, line, column) abort
+    let l:min = 0
+    let l:max = len(a:loclist) - 1
+    let l:last_column_match = -1
+
+    while 1
+        if l:max < l:min
+            return l:last_column_match
+        endif
+
+        let l:mid = (l:min + l:max) / 2
+        let l:obj = a:loclist[l:mid]
+
+        " Binary search to get on the same line
+        if a:loclist[l:mid]['lnum'] < a:line
+            let l:min = l:mid + 1
+        elseif a:loclist[l:mid]['lnum'] > a:line
+            let l:max = l:mid - 1
+        else
+            let l:last_column_match = l:mid
+
+            " Binary search to get the same column, or near it
+            if a:loclist[l:mid]['col'] < a:column
+                let l:min = l:mid + 1
+            elseif a:loclist[l:mid]['col'] > a:column
+                let l:max = l:mid - 1
+            else
+                return l:mid
+            endif
+        endif
+    endwhile
+endfunction

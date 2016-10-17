@@ -1,0 +1,21 @@
+Before:
+  let g:loclist = [
+  \ {'lnum': 5, 'col': 5},
+  \ {'lnum': 5, 'col': 4},
+  \ {'lnum': 2, 'col': 10},
+  \ {'lnum': 3, 'col': 2},
+  \]
+
+Execute (Sort loclist with comparison function):
+  call sort(g:loclist, 'ale#util#LocItemCompare')
+
+Then (loclist item should be sorted):
+  AssertEqual [
+  \ {'lnum': 2, 'col': 10},
+  \ {'lnum': 3, 'col': 2},
+  \ {'lnum': 5, 'col': 4},
+  \ {'lnum': 5, 'col': 5},
+  \], g:loclist
+
+After:
+  unlet g:loclist

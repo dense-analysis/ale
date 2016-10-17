@@ -20,6 +20,7 @@ CONTENTS                                                         *ale-contents*
     4.8.  shell.................................|ale-linter-options-shell|
     4.9.  shellcheck............................|ale-linter-options-shellcheck|
     4.10. vint..................................|ale-linter-options-vint|
+    4.11. luacheck..............................|ale-linter-options-luacheck|
   5. API........................................|ale-api|
   6. Special Thanks.............................|ale-special-thanks|
   7. Contact....................................|ale-contact|
@@ -55,12 +56,14 @@ The following languages and tools are supported.
 * CSS: 'csslint'
 * Cython (pyrex filetype): 'cython'
 * D: 'dmd'
+* Elixir: 'credo'
 * Fortran: 'gcc'
 * Go: 'gofmt -e', 'go vet', 'golint'
 * Haskell: 'ghc'
 * HTML: 'HTMLHint', 'tidy'
 * JavaScript: 'eslint', 'jscs', 'jshint'
 * JSON: 'jsonlint'
+* Lua: 'luacheck'
 * Perl: 'perl' (-c flag), 'perlcritic'
 * PHP: 'php' (-l flag), 'phpcs'
 * Pug: 'pug-lint'
@@ -351,16 +354,6 @@ g:airline#extensions#ale#enabled             *g:airline#extensions#ale#enabled*
   |airline#extensions#ale#error_symbol| and
   |airline#extensions#ale#warning_symbol|.
 
-g:airline#extensions#ale#enabled             *g:airline#extensions#ale#enabled*
-
-  Type: |Number|
-  Default: `1`
-
-  Enables or disables the |airline|'s native extension for ale, which displays
-  warnings and errors in the status line, prefixed by
-  |airline#extensions#ale#error_symbol| and
-  |airline#extensions#ale#warning_symbol|.
-
 ===============================================================================
 4. Linter Specific Options                                 *ale-linter-options*
 
@@ -501,6 +494,17 @@ g:ale_vim_vint_show_style_issues             *g:ale_vim_vint_show_style_issues*
   will be reported.
 
 
+-------------------------------------------------------------------------------
+4.11. luacheck                                    *ale-linter-options-luacheck*
+
+g:ale_lua_luacheck_executable                   *g:ale_lua_luacheck_executable*
+
+  Type: |String|
+  Default: `'luacheck'`
+
+  This variable can be changed to change the path to luacheck.
+
+
 ===============================================================================
 5. API                                                                *ale-api*
 
@@ -592,12 +596,20 @@ ale#statusline#Status()                               *ale#statusline#Status()*
   Return a formatted string that can be added to the statusline.
   The output's format is defined in |`g:ale_statusline_format`|.
   To enable it, the following should be present in your |statusline| settings: >
-  %{ale#statusline#status()}
+  %{ale#statusline#Status()}
 
 
 g:ale#util#stdin_wrapper                             *g:ale#util#stdin_wrapper*
   This variable names a wrapper script for sending stdin input to programs
   which cannot accept input via stdin. See |ale#linter#Define()| for more.
+
+
+ALELint                                                               *ALELint*
+  This |User| autocommand is triggered by ALE every time it completes a lint
+  operation. It can be used to update statuslines, send notifications, or
+  complete any other operation that needs to be done after a lint run.
+  It can be used simply:
+  autocmd User ALELint echom "ALE run!"
 
 
 ===============================================================================

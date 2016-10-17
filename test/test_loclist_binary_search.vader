@@ -1,0 +1,26 @@
+Before:
+  let g:loclist = [
+  \ {'lnum': 2, 'col': 10},
+  \ {'lnum': 3, 'col': 2},
+  \ {'lnum': 3, 'col': 10},
+  \ {'lnum': 3, 'col': 12},
+  \ {'lnum': 3, 'col': 25},
+  \ {'lnum': 5, 'col': 4},
+  \ {'lnum': 5, 'col': 5},
+  \]
+
+Execute (Exact column matches should be correct):
+   AssertEqual 1, ale#util#BinarySearch(g:loclist, 3, 2)
+
+Execute (Off lines, there should be no match):
+   AssertEqual -1, ale#util#BinarySearch(g:loclist, 4, 2)
+
+Execute (Near column matches should be taken):
+   AssertEqual 2, ale#util#BinarySearch(g:loclist, 3, 11)
+   AssertEqual 4, ale#util#BinarySearch(g:loclist, 3, 13)
+
+Execute (Columns before should be taken when the cursor is far ahead):
+   AssertEqual 4, ale#util#BinarySearch(g:loclist, 3, 300)
+
+After:
+  unlet g:loclist

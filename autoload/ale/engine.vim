@@ -78,6 +78,11 @@ function! s:HandleExit(job) abort
     let l:output = l:job_info.output
     let l:buffer = l:job_info.buffer
 
+    if !has_key(g:ale_buffer_should_reset_map, l:buffer)
+        " A job ended for a buffer which has been closed, so stop here.
+        return
+    endif
+
     let l:linter_loclist = ale#util#GetFunction(l:linter.callback)(l:buffer, l:output)
 
     " Make some adjustments to the loclists to fix common problems.
@@ -107,6 +112,14 @@ function! s:HandleExit(job) abort
     if g:ale_set_signs
         call ale#sign#SetSigns(l:buffer, g:ale_buffer_loclist_map[l:buffer])
     endif
+
+    if exists('*ale#statusline#Update')
+        " Don't load/run if not already loaded.
+        call ale#statusline#Update(l:buffer, g:ale_buffer_loclist_map[l:buffer])
+    endif
+
+    " Call user autocommands. This allows users to hook into ALE's lint cycle.
+    silent doautocmd User ALELint
 
     " Mark line 200, column 17 with a squiggly line or something
     " matchadd('ALEError', '\%200l\%17v')

@@ -1,20 +1,12 @@
 " Author: KabbAmine <amine.kabb@gmail.com>
 " Description: Statusline related function(s)
 
-function! ale#statusline#Status() abort
-    " Returns a formatted string that can be integrated in the
-    " statusline
-
-    let l:buffer = bufnr('%')
-    let l:loclist = g:ale_buffer_loclist_map
-
-    if !has_key(l:loclist, l:buffer)
-        return ''
-    endif
-
+" Update the buffer error/warning count with data from loclist.
+function! ale#statusline#Update(buffer, loclist) abort
     let l:errors = 0
     let l:warnings = 0
-    for l:entry in l:loclist[l:buffer]
+
+    for l:entry in a:loclist
         if l:entry.type ==# 'E'
             let l:errors += 1
         else
@@ -22,11 +14,36 @@ function! ale#statusline#Status() abort
         endif
     endfor
 
-    let l:errors = l:errors ? printf(g:ale_statusline_format[0], l:errors) : ''
-    let l:warnings = l:warnings ? printf(g:ale_statusline_format[1], l:warnings) : ''
+    let g:ale_buffer_count_map[a:buffer] = [l:errors, l:warnings]
+endfunction
+
+" Returns a tuple of errors and warnings for use in third-party integrations.
+function! ale#statusline#Count(buffer) abort
+    " Cache is cold, so manually ask for an update.
+    if !has_key(g:ale_buffer_count_map, a:buffer)
+        call ale#statusline#Update(a:buffer, get(g:ale_buffer_loclist_map, a:buffer, []))
+    endif
+
+    return g:ale_buffer_count_map[a:buffer]
+endfunction
+
+" Returns a formatted string that can be integrated in the statusline.
+function! ale#statusline#Status() abort
+    let l:buffer = bufnr('%')
+
+    " Cache is cold, so manually ask for an update.
+    if !has_key(g:ale_buffer_count_map, l:buffer)
+        call ale#statusline#Update(l:buffer, get(g:ale_buffer_loclist_map, l:buffer, []))
+    endif
+
+    " Build strings based on user formatting preferences.
+    let l:errors = g:ale_buffer_count_map[l:buffer][0] ?
+      \ printf(g:ale_statusline_format[0], g:ale_buffer_count_map[l:buffer][0]) : ''
+    let l:warnings = g:ale_buffer_count_map[l:buffer][1] ?
+      \ printf(g:ale_statusline_format[1], g:ale_buffer_count_map[l:buffer][1]) : ''
     let l:no_errors = g:ale_statusline_format[2]
 
-    " Different formats if no errors or no warnings
+    " Different formats based on the combination of errors and warnings.
     if empty(l:errors) && empty(l:warnings)
         let l:res = l:no_errors
     elseif !empty(l:errors) && !empty(l:warnings)

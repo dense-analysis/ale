@@ -1,0 +1,142 @@
+Execute (Run HandleCSSLintFormat):
+  let g:loclist = ale#handlers#HandleCSSLintFormat(42, [
+  \ 'something.css: line 2, col 1, Error - Expected RBRACE at line 2, col 1. (errors)',
+  \ "something.css: line 2, col 5, Warning - Expected ... but found 'wat'. (known-properties)",
+  \])
+
+Then (The loclist should be correct):
+  AssertEqual [
+  \ {
+  \   'bufnr': 42,
+  \   'vcol': 0,
+  \   'nr': -1,
+  \   'lnum': 2,
+  \   'col': 1,
+  \   'type': 'E',
+  \   'text': '(errors) Expected RBRACE at line 2, col 1.',
+  \ },
+  \ {
+  \   'bufnr': 42,
+  \   'vcol': 0,
+  \   'nr': -1,
+  \   'lnum': 2,
+  \   'col': 5,
+  \   'type': 'W',
+  \   'text': "(known-properties) Expected ... but found 'wat'.",
+  \ },
+  \], g:loclist
+
+Execute (Run HandleGCCFormat):
+  let g:loclist = ale#handlers#HandleGCCFormat(42, [
+  \ '<stdin>:8:5: warning: conversion lacks type at end of format [-Wformat=]',
+  \ '<stdin>:10:27: error: invalid operands to binary - (have ‘int’ and ‘char *’)',
+  \])
+
+Then (The loclist should be correct):
+  AssertEqual [
+  \ {
+  \   'bufnr': 42,
+  \   'vcol': 0,
+  \   'nr': -1,
+  \   'lnum': 8,
+  \   'col': 5,
+  \   'type': 'W',
+  \   'text': 'conversion lacks type at end of format [-Wformat=]',
+  \ },
+  \ {
+  \   'bufnr': 42,
+  \   'vcol': 0,
+  \   'nr': -1,
+  \   'lnum': 10,
+  \   'col': 27,
+  \   'type': 'E',
+  \   'text': 'invalid operands to binary - (have ‘int’ and ‘char *’)',
+  \ },
+  \], g:loclist
+
+Execute (Run HandleUnixFormatAsError):
+  let g:loclist = ale#handlers#HandleUnixFormatAsError(42, [
+  \ 'file.go:27: missing argument for Printf("%s"): format reads arg 2, have only 1 args',
+  \ 'file.go:53:10: if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
+  \])
+
+Then (The loclist should be correct):
+  AssertEqual [
+  \ {
+  \   'bufnr': 42,
+  \   'vcol': 0,
+  \   'nr': -1,
+  \   'lnum': 27,
+  \   'col': 0,
+  \   'type': 'E',
+  \   'text': 'missing argument for Printf("%s"): format reads arg 2, have only 1 args',
+  \ },
+  \ {
+  \   'bufnr': 42,
+  \   'vcol': 0,
+  \   'nr': -1,
+  \   'lnum': 53,
+  \   'col': 10,
+  \   'type': 'E',
+  \   'text': 'if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
+  \ },
+  \], g:loclist
+
+Execute (Run HandleUnixFormatAsWarning):
+  let g:loclist = ale#handlers#HandleUnixFormatAsWarning(42, [
+  \ 'file.go:27: missing argument for Printf("%s"): format reads arg 2, have only 1 args',
+  \ 'file.go:53:10: if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
+  \])
+
+Then (The loclist should be correct):
+  AssertEqual [
+  \ {
+  \   'bufnr': 42,
+  \   'vcol': 0,
+  \   'nr': -1,
+  \   'lnum': 27,
+  \   'col': 0,
+  \   'type': 'W',
+  \   'text': 'missing argument for Printf("%s"): format reads arg 2, have only 1 args',
+  \ },
+  \ {
+  \   'bufnr': 42,
+  \   'vcol': 0,
+  \   'nr': -1,
+  \   'lnum': 53,
+  \   'col': 10,
+  \   'type': 'W',
+  \   'text': 'if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
+  \ },
+  \], g:loclist
+
+Execute (Run a Unix format function with a Windows path):
+  let g:loclist = ale#handlers#HandleUnixFormatAsError(42, [
+  \ 'C:\Users\w0rp\AppData\Local\Temp\Xyz123.go:27: foo',
+  \ 'C:\Users\w0rp\AppData\Local\Temp\Xyz123.go:53:10: foo',
+  \])
+
+Then (The loclist should be correct):
+  AssertEqual [
+  \ {
+  \   'bufnr': 42,
+  \   'vcol': 0,
+  \   'nr': -1,
+  \   'lnum': 27,
+  \   'col': 0,
+  \   'type': 'E',
+  \   'text': 'foo',
+  \ },
+  \ {
+  \   'bufnr': 42,
+  \   'vcol': 0,
+  \   'nr': -1,
+  \   'lnum': 53,
+  \   'col': 10,
+  \   'type': 'E',
+  \   'text': 'foo',
+  \ },
+  \], g:loclist
+
+After:
+  unlet g:loclist
