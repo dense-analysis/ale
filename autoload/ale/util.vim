@@ -33,7 +33,15 @@ endfunction
 " Given a buffer and a filename, find the nearest file by searching upwards
 " through the paths relative to the given buffer.
 function! ale#util#FindNearestFile(buffer, filename) abort
-    return findfile(a:filename, fnamemodify(bufname(a:buffer), ':p') . ';')
+    let l:buffer_filename = fnamemodify(bufname(a:buffer), ':p')
+
+    let l:relative_path = findfile(a:filename, l:buffer_filename . ';')
+
+    if !empty(l:relative_path)
+        return fnamemodify(l:relative_path, ':p')
+    endif
+
+    return ''
 endfunction
 
 function! ale#util#GetFunction(string_or_ref) abort
