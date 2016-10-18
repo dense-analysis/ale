@@ -4,15 +4,11 @@
 # Description: This script wraps DMD so we can get something which is capable of reading
 #   D code from stdin.
 
-temp_file=`mktemp`
-mv "$temp_file" "$temp_file".d
-temp_file="$temp_file".d
+temp_file=$(mktemp --tempdir "ale-dmd-XXXXXXXXXXXX.d")
 
-trap "rm $temp_file" EXIT
+trap 'rm $temp_file' EXIT
 
-while read; do
-    echo "$REPLY" >> "$temp_file"
-done
+cat - > "$temp_file"
 
 # Read imports from DUB.
 original_path="$(readlink -m .)"
