@@ -64,7 +64,7 @@ function! s:LoadLinters(filetype) abort
     endif
 
     " Load all linters for a given filetype.
-    execute 'runtime! ale_linters/' . a:filetype . '/*.vim'
+    execute 'silent! runtime! ale_linters/' . a:filetype . '/*.vim'
 
     if !has_key(s:linters, a:filetype)
         " If we couldn't load any linters, let everyone know.

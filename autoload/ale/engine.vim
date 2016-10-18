@@ -254,3 +254,51 @@ function! ale#engine#Invoke(buffer, linter) abort
         endif
     endif
 endfunction
+
+" This function can be called with a timeout to wait for all jobs to finish.
+" If the jobs to not finish in the given number of milliseconds,
+" an exception will be thrown.
+"
+" The time taken will be a very rough approximation, and more time may be
+" permitted than is specified.
+function! ale#engine#WaitForJobs(deadline) abort
+    let l:start_time = system('date +%s%3N') + 0
+
+    if l:start_time == 0
+        throw 'Failed to read milliseconds from the clock!'
+    endif
+
+    let l:job_list = []
+
+    for l:job_id in keys(s:job_info_map)
+        call add(l:job_list, s:job_info_map[l:job_id].linter.job)
+    endfor
+
+    let l:should_wait_more = 1
+
+    while l:should_wait_more
+        let l:should_wait_more = 0
+
+        for l:job in l:job_list
+            if job_status(l:job) ==# 'run'
+                let l:now = system('date +%s%3N') + 0
+
+                if l:now - l:start_time > a:deadline
+                    " Stop waiting after a timeout, so we don't wait forever.
+                    throw 'Jobs did not complete on time!'
+                endif
+
+                " Wait another 10 milliseconds
+                let l:should_wait_more = 1
+                sleep 10ms
+                break
+            endif
+        endfor
+    endwhile
+
+    " Sleep for a small amount of time after all jobs finish.
+    " This seems to be enough to let handlers after jobs end run, and
+    " prevents the occasional failure where this function exits after jobs
+    " end, but before handlers are run.
+    sleep 10ms
+endfunction

@@ -1,0 +1,17 @@
+Given javascript (Some JavaScript with problems):
+  var y = 3+3;
+  var y = 3
+
+Before:
+  let g:ale_buffer_loclist_map = {}
+  let g:expected_data = {bufnr('%'): [{'lnum': 1, 'bufnr': bufnr('%'), 'vcol': 0, 'linter_name': 'eslint', 'nr': -1, 'type': 'W', 'col': 10, 'text': 'Infix operators must be spaced. (space-infix-ops)'}, {'lnum': 2, 'bufnr': bufnr('%'), 'vcol': 0, 'linter_name': 'eslint', 'nr': -1, 'type': 'E', 'col': 10, 'text': 'Missing semicolon. (semi)'}]}
+
+After:
+  let g:ale_buffer_loclist_map = {}
+  unlet g:expected_data
+
+Execute(The loclist should be updated after linting is done):
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+
+  AssertEqual g:expected_data, g:ale_buffer_loclist_map
