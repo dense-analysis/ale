@@ -4,11 +4,10 @@
 # Description: This script wraps DMD so we can get something which is capable of reading
 #   D code from stdin.
 
-temp_file=$(mktemp --tempdir "ale-dmd-XXXXXXXXXXXX.d")
-
+temp_file=$(mktemp "ale-lint-dmd-XXXXXXXXX.d")
 trap 'rm $temp_file' EXIT
 
-cat - > "$temp_file"
+cat > "$temp_file"
 
 # Read imports from DUB.
 original_path="$(readlink -m .)"

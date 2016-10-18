@@ -12,9 +12,9 @@ set -e
 file_extension="$1"
 shift
 
-temp_file=$(mktemp --tmpdir "ale-XXXXXXXXX$file_extension")
+temp_file=$(mktemp "ale-XXXXXXXXX$file_extension")
 trap 'rm $temp_file' EXIT
 
-cat - > "$temp_file"
+cat > "$temp_file"
 
 "$@" "$temp_file"
