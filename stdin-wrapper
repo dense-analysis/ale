@@ -1,21 +1,28 @@
 #!/usr/bin/env bash
 
-# Author: w0rp <devw0rp@gmail.com>
+# Authors: w0rp <devw0rp@gmail.com>, hauleth <lukasz@niemier.pl>
 # Description: This script implements a wrapper for any program which does not accept
 #   stdin input on most Unix machines. The input to the script is read to a
 #   temporary file, and the first argument sets a particular file extension
 #   for the temporary file.
 
-set -ex
+set -e
 
 # All of the following arguments are read as command to run.
 file_extension="$1"
 shift
 
-temp_dir=$(mktemp -d "ale-lint-XXXXXXXXX")
-temp_file="$temp_dir/file$file_extension"
-trap 'rm -r $temp_dir' EXIT
+temp_file=$(mktemp "ale-lint-XXXXXXXXX$file_extension")
+rm "$temp_file"
+trap 'rm -r $temp_file' EXIT
 
+# In perfect world it wouldn't be needed, but some tools (`go vet`, I am looking
+# at you) do not fit in line and require filename ending. Otherwise it would be
+# simple as
+#
+#     "$@" /dev/stdin
+#
+# without all that hackery with copying `/dev/stdin`
 cp /dev/stdin "$temp_file"
 
-"$@" "$temp_file"
+exec "$@" "$temp_file"
