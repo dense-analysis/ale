@@ -6,6 +6,8 @@
 #   temporary file, and the first argument sets a particular file extension
 #   for the temporary file.
 
+set -x
+
 # All of the following arguments are read as command to run.
 file_extension="$1"
 shift
@@ -13,8 +15,6 @@ shift
 temp_file=$(mktemp --tmpdir "ale-XXXXXXXXX$file_extension")
 trap 'rm $temp_file' EXIT
 
-while read -r; do
-    echo "$REPLY" >> "$temp_file"
-done
+cat - > "$temp_file"
 
 "$@" "$temp_file"
