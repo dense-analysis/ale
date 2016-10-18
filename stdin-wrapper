@@ -6,15 +6,15 @@
 #   temporary file, and the first argument sets a particular file extension
 #   for the temporary file.
 
-set -e
+set -eu
 
 # All of the following arguments are read as command to run.
 file_extension="$1"
 shift
 
-temp_file=$(mktemp "ale-lint-XXXXXXXXX$file_extension")
-rm "$temp_file"
-trap 'rm -r $temp_file' EXIT
+temp_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
+temp_file="$temp_dir/file$file_extension"
+trap 'rm -r "$temp_dir"' EXIT
 
 # In perfect world it wouldn't be needed, but some tools (`go vet`, I am looking
 # at you) do not fit in line and require filename ending. Otherwise it would be

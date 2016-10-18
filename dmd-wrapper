@@ -1,33 +1,30 @@
-#!/bin/bash -eu
+#!/usr/bin/env bash
 
 # Author: w0rp <devw0rp@gmail.com>
 # Description: This script wraps DMD so we can get something which is capable of reading
 #   D code from stdin.
 
-temp_file=$(mktemp "ale-lint-dmd-XXXXXXXXX.d")
-trap 'rm $temp_file' EXIT
+set -eu
 
-cat > "$temp_file"
+traverse() {
+  path=$(pwd)
+  while [ "$path" != "/" ] \
+    && ! [[ -e "$path/dub.json" || -e "$path/dub.sdl" || -e "$path/package.json" ]]
+  do
+    path=$(dirname "$path")
+  done
+
+  echo "$path"
+}
+
+temp_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
+temp_file="$temp_dir/file.d"
+trap 'rm -r "$temp_dir"' EXIT
+
+cp /dev/stdin "$temp_file"
 
 # Read imports from DUB.
-original_path="$(pwd)"
-path="$original_path"
-import_line_options=''
+dub_root=$(traverse)
+import_line_options=$(dub describe --root="$dub_root" --import-paths | awk '{ print "-I" $0 }' || echo -n)
 
-# We need to look for variable configuration files in parent directories.
-while [ "$path" != '/' ]; do
-    if [ -f "$path/dub.sdl" ] || [ -f "$path/dub.json" ] || [ -f "$path/package.json" ]; then
-
-        pushd "$path"
-
-        import_line_options=$(dub describe --import-paths | awk '{ print "-I" $0 }')
-
-        popd
-
-        break
-    fi
-
-    path="$(dirname "$path")"
-done
-
-dmd $import_line_options "$@" "$temp_file"
+exec dmd $import_line_options "$@" "$temp_file"
