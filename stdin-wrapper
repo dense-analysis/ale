@@ -6,15 +6,16 @@
 #   temporary file, and the first argument sets a particular file extension
 #   for the temporary file.
 
-set -e
+set -ex
 
 # All of the following arguments are read as command to run.
 file_extension="$1"
 shift
 
-temp_file=$(mktemp "ale-XXXXXXXXX$file_extension")
-trap 'rm $temp_file' EXIT
+temp_dir=$(mktemp -d "ale-lint-XXXXXXXXX")
+temp_file="$temp_dir/file$file_extension"
+trap 'rm -r $temp_dir' EXIT
 
-cat > "$temp_file"
+cp /dev/stdin "$temp_file"
 
 "$@" "$temp_file"
