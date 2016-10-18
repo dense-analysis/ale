@@ -6,7 +6,7 @@
 #   temporary file, and the first argument sets a particular file extension
 #   for the temporary file.
 
-set -x
+set -e
 
 # All of the following arguments are read as command to run.
 file_extension="$1"
