@@ -1,8 +1,9 @@
 IMAGE ?= w0rp/ale
+CURRENT_IMAGE_ID = 107e4efc4267
 DOCKER_FLAGS = --rm -v $(PWD):/testplugin -v $(PWD)/test:/home "$(IMAGE)"
 
 test-setup:
-	docker images -q $(IMAGE) || docker pull $(IMAGE)
+	if [ `docker images -q $(IMAGE)` != $(CURRENT_IMAGE_ID) ]; then docker pull $(IMAGE); fi
 
 test: test-setup
 	@:; \
