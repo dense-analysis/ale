@@ -39,7 +39,7 @@ name. That seems to be the fairest way to arrange this table.
 | Elixir | [credo](https://github.com/rrrene/credo) |
 | Fortran | [gcc](https://gcc.gnu.org/) |
 | Go | [gofmt -e](https://golang.org/cmd/gofmt/), [go vet](https://golang.org/cmd/vet/), [golint](https://godoc.org/github.com/golang/lint) |
-| Haskell | [ghc](https://www.haskell.org/ghc/) |
+| Haskell | [ghc](https://www.haskell.org/ghc/), [hlint](https://hackage.haskell.org/package/hlint) |
 | HTML | [HTMLHint](http://htmlhint.com/), [tidy](http://www.html-tidy.org/) |
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/) |
 | JSON | [jsonlint](http://zaa.ch/jsonlint/) |
