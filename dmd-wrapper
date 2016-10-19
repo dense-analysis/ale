@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Author: w0rp <devw0rp@gmail.com>
+# Author: w0rp <devw0rp@gmail.com>, hauleth <lukasz@niemier.pl>
 # Description: This script wraps DMD so we can get something which is capable of reading
 #   D code from stdin.
 
