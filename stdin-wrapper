@@ -12,7 +12,7 @@ set -eu
 file_extension="$1"
 shift
 
-temp_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
+temp_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'ale_linter')
 temp_file="$temp_dir/file$file_extension"
 trap 'rm -r "$temp_dir"' EXIT
 
@@ -25,4 +25,4 @@ trap 'rm -r "$temp_dir"' EXIT
 # without all that hackery with copying `/dev/stdin`
 cp /dev/stdin "$temp_file"
 
-exec "$@" "$temp_file"
+"$@" "$temp_file"
