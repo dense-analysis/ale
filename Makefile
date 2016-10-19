@@ -3,7 +3,8 @@ CURRENT_IMAGE_ID = 107e4efc4267
 DOCKER_FLAGS = --rm -v $(PWD):/testplugin -v $(PWD)/test:/home "$(IMAGE)"
 
 test-setup:
-	if [ `docker images -q $(IMAGE)` != $(CURRENT_IMAGE_ID) ]; then docker pull $(IMAGE); fi
+	docker images -q w0rp/ale | grep ^$(CURRENT_IMAGE_ID) > /dev/null || \
+		docker pull $(IMAGE)
 
 test: test-setup
 	@:; \
