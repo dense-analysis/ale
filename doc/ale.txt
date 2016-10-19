@@ -59,7 +59,7 @@ The following languages and tools are supported.
 * Elixir: 'credo'
 * Fortran: 'gcc'
 * Go: 'gofmt -e', 'go vet', 'golint'
-* Haskell: 'ghc'
+* Haskell: 'ghc', 'hlint'
 * HTML: 'HTMLHint', 'tidy'
 * JavaScript: 'eslint', 'jscs', 'jshint'
 * JSON: 'jsonlint'
