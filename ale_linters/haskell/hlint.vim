@@ -8,7 +8,7 @@ endif
 let g:loaded_ale_linters_haskell_hlint = 1
 
 function! ale_linters#haskell#hlint#Handle(buffer, lines)
-    let l:errors = json_decode(join(a:lines, ""))
+    let l:errors = json_decode(join(a:lines, ''))
 
     let l:output = []
 
@@ -20,7 +20,7 @@ function! ale_linters#haskell#hlint#Handle(buffer, lines)
         \   'vcol': 0,
         \   'col': l:error.startColumn + 0,
         \   'text': l:error.severity . ': ' . l:error.hint,
-        \   'type': l:error.severity == 'Error' ? 'E' : 'W',
+        \   'type': l:error.severity ==# 'Error' ? 'E' : 'W',
         \})
     endfor
 
