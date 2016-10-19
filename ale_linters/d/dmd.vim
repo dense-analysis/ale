@@ -29,9 +29,9 @@ endfunction
 
 function! ale_linters#d#dmd#Handle(buffer, lines)
     " Matches patterns lines like the following:
-    "
+    " /tmp/tmp.qclsa7qLP7/file.d(1): Error: function declaration without return type. (Note that constructors are always named 'this')
     " /tmp/tmp.G1L5xIizvB.d(8,8): Error: module weak_reference is in file 'dstruct/weak_reference.d' which cannot be read
-    let l:pattern = '^[^(]\+(\([0-9]\+\),\([0-9]\+\)): \([^:]\+\): \(.\+\)'
+    let l:pattern = '^[^(]\+(\([0-9]\+\)\,\?\([0-9]*\)): \([^:]\+\): \(.\+\)'
     let l:output = []
 
     for l:line in a:lines
