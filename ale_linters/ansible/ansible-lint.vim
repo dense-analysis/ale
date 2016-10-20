@@ -1,4 +1,4 @@
-" Author: w0rp <devw0rp@gmail.com>
+" Author: Bjorn Neergaard <bjorn@neersighted.com>
 " Description: ansible-lint for ansible-yaml files
 
 if exists('g:loaded_ale_linters_ansible_ansiblelint')
