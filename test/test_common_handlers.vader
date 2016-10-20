@@ -138,5 +138,33 @@ Then (The loclist should be correct):
   \ },
   \], g:loclist
 
+Execute (Run HandleCppCheckFormat):
+  let g:loclist = ale#handlers#HandleCppCheckFormat(42, [
+  \ '[/tmp/test.c:5]: (style) Variable a is assigned a value that is never used.',
+  \ '[/tmp/test.c:12]: (error) Array a[10] accessed at index 10, which is out of bounds.'
+  \])
+
+Then (The loclist should be correct):
+  AssertEqual [
+  \ {
+  \   'bufnr': 42,
+  \   'vcol': 0,
+  \   'nr': -1,
+  \   'lnum': 5,
+  \   'col': 0,
+  \   'type': 'W',
+  \   'text': 'Variable a is assigned a value that is never used. (style)',
+  \ },
+  \ {
+  \   'bufnr': 42,
+  \   'vcol': 0,
+  \   'nr': -1,
+  \   'lnum': 12,
+  \   'col': 0,
+  \   'type': 'E',
+  \   'text': 'Array a[10] accessed at index 10, which is out of bounds. (error)',
+  \ },
+  \], g:loclist
+
 After:
   unlet g:loclist
