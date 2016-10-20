@@ -4,7 +4,7 @@ Given javascript (Some JavaScript with problems):
 
 Before:
   let g:ale_buffer_loclist_map = {}
-  let g:expected_data = {bufnr('%'): [{'lnum': 1, 'bufnr': bufnr('%'), 'vcol': 0, 'linter_name': 'eslint', 'nr': -1, 'type': 'W', 'col': 10, 'text': 'Infix operators must be spaced. (space-infix-ops)'}, {'lnum': 2, 'bufnr': bufnr('%'), 'vcol': 0, 'linter_name': 'eslint', 'nr': -1, 'type': 'E', 'col': 10, 'text': 'Missing semicolon. (semi)'}]}
+  let g:expected_data = {bufnr('%'): [{'lnum': 1, 'bufnr': bufnr('%'), 'vcol': 0, 'linter_name': 'eslint', 'nr': -1, 'type': 'W', 'col': 10, 'text': 'Infix operators must be spaced. [Warning/space-infix-ops]'}, {'lnum': 2, 'bufnr': bufnr('%'), 'vcol': 0, 'linter_name': 'eslint', 'nr': -1, 'type': 'E', 'col': 10, 'text': 'Missing semicolon. [Error/semi]'}]}
 
 After:
   let g:ale_buffer_loclist_map = {}

@@ -25,14 +25,8 @@ function! ale_linters#javascript#eslint#Handle(buffer, lines)
             continue
         endif
 
-        let l:text = l:match[3]
-        let l:marker = l:match[4]
-        let l:marker_parts = split(l:marker, '/')
-        let l:type = l:marker_parts[0]
-
-        if len(l:marker_parts) == 2
-            let l:text = l:text . ' (' . l:marker_parts[1] . ')'
-        endif
+        let l:type = split(l:match[4], '/')[0]
+        let l:text = l:match[3] . ' [' . l:match[4] . ']'
 
         " vcol is Needed to indicate that the column is a character.
         call add(l:output, {
