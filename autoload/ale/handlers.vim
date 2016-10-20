@@ -45,7 +45,6 @@ function! ale#handlers#HandleUnixFormatAsWarning(buffer, lines) abort
     return s:HandleUnixFormat(a:buffer, a:lines, 'W')
 endfunction
 
-
 function! ale#handlers#HandleGCCFormat(buffer, lines) abort
     " Look for lines like the following.
     "
@@ -75,6 +74,35 @@ function! ale#handlers#HandleGCCFormat(buffer, lines) abort
 
     return l:output
 endfunction
+
+function! ale#handlers#HandleCppCheckFormat(buffer, lines) abort
+    " Look for lines like the following.
+    "
+    " [test.cpp:5]: (error) Array 'a[10]' accessed at index 10, which is out of bounds
+    let l:pattern = '^\[.\{-}:\(\d\+\)\]: (\(.\{-}\)) \(.\+\)'
+    let l:output = []
+
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
+
+        if len(l:match) == 0
+            continue
+        endif
+
+        call add(l:output, {
+        \   'bufnr': a:buffer,
+        \   'lnum': l:match[1] + 0,
+        \   'vcol': 0,
+        \   'col': 0,
+        \   'text': l:match[3] . ' (' . l:match[2] . ')',
+        \   'type': l:match[2] ==# 'error' ? 'E' : 'W',
+        \   'nr': -1,
+        \})
+    endfor
+    return l:output
+
+endfunction
+
 
 function! ale#handlers#HandleCSSLintFormat(buffer, lines) abort
     " Matches patterns line the following:
