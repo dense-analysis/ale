@@ -21,6 +21,8 @@ CONTENTS                                                         *ale-contents*
     4.9.  shellcheck............................|ale-linter-options-shellcheck|
     4.10. vint..................................|ale-linter-options-vint|
     4.11. luacheck..............................|ale-linter-options-luacheck|
+    4.12. c-cppcheck............................|ale-linter-options-c-cppcheck|
+    4.13. cpp-cppcheck..........................|ale-linter-options-cpp-cppcheck|
   5. API........................................|ale-api|
   6. Special Thanks.............................|ale-special-thanks|
   7. Contact....................................|ale-contact|
@@ -50,8 +52,8 @@ The following languages and tools are supported.
 
 * Bash: 'shell' (-n flag), 'shellcheck'
 * Bourne Shell: 'shell' (-n flag), 'shellcheck'
-* C: 'gcc'
-* C++ (filetype cpp): 'gcc'
+* C: 'cppcheck', 'gcc'
+* C++ (filetype cpp): 'cppcheck', 'gcc'
 * CoffeeScript: 'coffee', 'coffelint'
 * CSS: 'csslint'
 * Cython (pyrex filetype): 'cython'
@@ -503,6 +505,28 @@ g:ale_lua_luacheck_executable                   *g:ale_lua_luacheck_executable*
   Default: `'luacheck'`
 
   This variable can be changed to change the path to luacheck.
+
+
+-------------------------------------------------------------------------------
+4.12. c-cppcheck                                  *ale-linter-options-c-cppcheck*
+
+g:ale_c_cppcheck_options                               *g:ale_c_cppcheck_options*
+
+  Type: |String|
+  Default: `'--enable=style'`
+
+  This variable can be changed to modify flags given to cppcheck.
+
+
+-------------------------------------------------------------------------------
+4.13. cpp-cppcheck                              *ale-linter-options-cpp-cppcheck*
+
+g:ale_cpp_cppcheck_options                           *g:ale_cpp_cppcheck_options*
+
+  Type: |String|
+  Default: `'--enable=style'`
+
+  This variable can be changed to modify flags given to cppcheck.
 
 
 ===============================================================================
