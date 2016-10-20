@@ -75,7 +75,7 @@ function! ale#handlers#HandleGCCFormat(buffer, lines) abort
     return l:output
 endfunction
 
-function! ale#handlers#HandleCppCheckFormat(buffer, lines)
+function! ale#handlers#HandleCppCheckFormat(buffer, lines) abort
     " Look for lines like the following.
     "
     " [test.cpp:5]: (error) Array 'a[10]' accessed at index 10, which is out of bounds
