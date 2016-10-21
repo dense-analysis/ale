@@ -432,7 +432,7 @@ g:ale_html_tidy_args                                     *g:ale_html_tidy_args*
 g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
 
   Type: |String|
-  Default: `'-Wall'`
+  Default: `'-std=c11 -Wall'`
 
   This variable can be change to modify flags given to gcc.
 
@@ -443,7 +443,7 @@ g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
 g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
 
   Type: |String|
-  Default: `'-Wall'`
+  Default: `'-std=c++14 -Wall'`
 
   This variable can be changed to modify flags given to gcc.
 
