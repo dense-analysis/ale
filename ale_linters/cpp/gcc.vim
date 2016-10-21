@@ -11,7 +11,14 @@ let g:loaded_ale_linters_cpp_gcc = 1
 if !exists('g:ale_cpp_gcc_options')
   " added c++14 standard support
   " POSIX thread and standard c++ thread and atomic library Linker
-    let g:ale_cpp_gcc_options = '-std=c++14 -ldl -lpthread -lm -latomic -Wall -Wextra -Wshadow -pedantic'
+  " let g:ale_cpp_gcc_options = '-std=c++1z' for c++17
+  " for previous version and default, you can just use
+  " let g:ale_cpp_gcc_options = '-Wall'
+  " for more see man pages of gcc
+  " $ man g++
+  " make sure g++ in your $PATH
+  " Add flags according to your requirements
+    let g:ale_cpp_gcc_options = '-std=c++14 -Wall'
 endif
 
 call ale#linter#Define('cpp', {
