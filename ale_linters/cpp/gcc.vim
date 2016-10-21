@@ -9,13 +9,15 @@ let g:loaded_ale_linters_cpp_gcc = 1
 
 " Set this option to change the GCC options for warnings for C.
 if !exists('g:ale_cpp_gcc_options')
-    let g:ale_cpp_gcc_options = '-Wall'
+  " added c++14 standard support
+  " POSIX thread and standard c++ thread and atomic library Linker
+    let g:ale_cpp_gcc_options = '-std=c++14 -ldl -lpthread -lm -latomic -Wall -Wextra -Wshadow -pedantic'
 endif
 
 call ale#linter#Define('cpp', {
-\   'name': 'gcc',
+\   'name': 'g++',
 \   'output_stream': 'stderr',
-\   'executable': 'gcc',
+\   'executable': 'g++',
 \   'command': 'gcc -S -x c++ -fsyntax-only '
 \       . g:ale_cpp_gcc_options
 \       . ' -',
