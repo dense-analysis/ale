@@ -50,6 +50,7 @@ ALE supports the following key features:
 
 The following languages and tools are supported.
 
+* Ansible: 'ansible-lint'
 * Bash: 'shell' (-n flag), 'shellcheck'
 * Bourne Shell: 'shell' (-n flag), 'shellcheck'
 * C: 'cppcheck', 'gcc'
