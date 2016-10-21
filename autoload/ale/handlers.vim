@@ -99,11 +99,11 @@ function! ale#handlers#HandleCppCheckFormat(buffer, lines) abort
         \   'nr': -1,
         \})
     endfor
-    return l:output
 
+    return l:output
 endfunction
 
-function! ale#handlers#HandlePEP8Format(buffer, lines)
+function! ale#handlers#HandlePEP8Format(buffer, lines) abort
     " Matches patterns line the following:
     "
     " Matches patterns line the following:

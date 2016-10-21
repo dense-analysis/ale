@@ -26,6 +26,34 @@ Then (The loclist should be correct):
   \ },
   \], g:loclist
 
+Execute (Run HandlePEP8Format):
+  let g:loclist = ale#handlers#HandlePEP8Format(42, [
+  \ "stdin:6:6: E111 indentation is not a multiple of four",
+  \ "test.yml:35: [EANSIBLE0002] Trailing whitespace",
+  \])
+
+Then (The loclist should be correct):
+  AssertEqual [
+  \ {
+  \   'bufnr': 42,
+  \   'vcol': 0,
+  \   'nr': -1,
+  \   'lnum': 6,
+  \   'col': 6,
+  \   'type': 'E',
+  \   'text': 'E111: indentation is not a multiple of four',
+  \ },
+  \ {
+  \   'bufnr': 42,
+  \   'vcol': 0,
+  \   'nr': -1,
+  \   'lnum': 35,
+  \   'col': 0,
+  \   'type': 'E',
+  \   'text': "EANSIBLE0002: Trailing whitespace",
+  \ },
+  \], g:loclist
+
 Execute (Run HandleGCCFormat):
   let g:loclist = ale#handlers#HandleGCCFormat(42, [
   \ '<stdin>:8:5: warning: conversion lacks type at end of format [-Wformat=]',
