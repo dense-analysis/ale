@@ -91,6 +91,7 @@ vimrc file for all given linters is as follows:
 | `g:ale_lint_on_enter` | lint when opening a file  | `1` |
 | `g:ale_lint_on_save` | lint when saving a file  | `0` |
 | `g:ale_lint_on_text_changed` | lint while typing  | `1` |
+| `g:ale_lint_in_normal_mode` | lint when leaving insert mode and changing text in normal mode  | `1` |
 | `g:ale_set_loclist` | set the loclist with errors | `1` |
 | `g:ale_set_signs` | set gutter signs with error markers | `has('signs')` |
 | `g:ale_sign_column_always` | always show the sign gutter | `0` |
