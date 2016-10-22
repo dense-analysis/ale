@@ -1,12 +1,6 @@
 " Author: Chris Kyrouac - https://github.com/fijshion
 " Description: JSHint for Javascript files
 
-if exists('g:loaded_ale_linters_javascript_jshint')
-    finish
-endif
-
-let g:loaded_ale_linters_javascript_jshint = 1
-
 let g:ale_javascript_jshint_executable =
 \   get(g:, 'ale_javascript_jshint_executable', 'jshint')
 

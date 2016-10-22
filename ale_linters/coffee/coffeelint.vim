@@ -1,12 +1,6 @@
 " Author: Prashanth Chandra https://github.com/prashcr
 " Description: coffeelint linter for coffeescript files
 
-if exists('g:loaded_ale_linters_coffee_coffeelint')
-    finish
-endif
-
-let g:loaded_ale_linters_coffee_coffeelint = 1
-
 function! ale_linters#coffee#coffeelint#Handle(buffer, lines)
     " Matches patterns like the following:
     "

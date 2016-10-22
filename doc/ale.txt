@@ -130,7 +130,6 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
   following values: >
 
   {
-  \   'javscript.jsx': 'javascript',
   \   'zsh': 'sh',
   \   'csh': 'sh',
   \}
@@ -615,6 +614,14 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
 ale#linter#Get(filetype)                                     *ale#linter#Get()*
   Return all of linters configured for a given filetype as a |List| of
   |Dictionary| values in the format specified by |ale#linter#Define()|.
+
+  Filetypes may be dot-seperated to invoke linters for multiple filetypes:
+  for instance, the filetype `javascript.jsx` will return linters for both the
+  `javascript` and `jsx` filetype.
+
+  Aliases may be defined in as described in |g:ale_linter_aliases|. Aliases
+  are applied after dot-seperated filetypes are broken up into their
+  components.
 
 
 ale#statusline#Status()                               *ale#statusline#Status()*

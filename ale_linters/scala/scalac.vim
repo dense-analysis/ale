@@ -2,12 +2,6 @@
 " Author: Zoltan Kalmar - https://github.com/kalmiz
 " Description: Basic scala support using scalac
 
-if exists('g:loaded_ale_linters_scala_scalac')
-    finish
-endif
-
-let g:loaded_ale_linters_scala_scalac = 1
-
 function! ale_linters#scala#scalac#Handle(buffer, lines)
     " Matches patterns line the following:
     "

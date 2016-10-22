@@ -1,11 +1,5 @@
 " Author: hauleth - https://github.com/haulethe
 
-if exists('g:loaded_ale_linters_elixir_credo')
-  finish
-endif
-
-let g:loaded_ale_linters_elixir_credo = 1
-
 function! ale_linters#elixir#credo#Handle(buffer, lines)
   " Matches patterns line the following:
   "

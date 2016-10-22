@@ -1,12 +1,6 @@
 " Author: jwilliams108 <https://github.com/jwilliams108>
 " Description: phpcs for PHP files
 
-if exists('g:loaded_ale_linters_php_phpcs')
-    finish
-endif
-
-let g:loaded_ale_linters_php_phpcs = 1
-
 function! ale_linters#php#phpcs#GetCommand(buffer)
     let l:command = 'phpcs -s --report=emacs --stdin-path=%s'
 

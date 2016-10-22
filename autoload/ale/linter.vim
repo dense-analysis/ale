@@ -7,7 +7,6 @@ let s:linters = {}
 " Default filetype aliaes.
 " The user defined aliases will be merged with this Dictionary.
 let s:default_ale_linter_aliases = {
-\   'javascript.jsx': 'javascript',
 \   'zsh': 'sh',
 \   'csh': 'sh',
 \}
@@ -18,6 +17,11 @@ let s:default_ale_linters = {
 \   'zsh': ['shell'],
 \   'csh': ['shell'],
 \}
+
+" Testing/debugging helper to unload all linters.
+function! ale#linter#Reset() abort
+    let s:linters = {}
+endfunction
 
 function! ale#linter#Define(filetype, linter) abort
     if !has_key(s:linters, a:filetype)
@@ -74,45 +78,52 @@ function! s:LoadLinters(filetype) abort
     return s:linters[a:filetype]
 endfunction
 
-function! ale#linter#Get(original_filetype) abort
-    " Try and get an aliased file type either from the user's Dictionary, or
-    " our default Dictionary, otherwise use the filetype as-is.
-    let l:filetype = get(
-    \   g:ale_linter_aliases,
-    \   a:original_filetype,
-    \   get(
-    \       s:default_ale_linter_aliases,
-    \       a:original_filetype,
-    \       a:original_filetype
-    \   )
-    \)
-
-    " Try and get a list of linters to run, using the original file type,
-    " not the aliased filetype. We have some linters to limit by default,
-    " and users may define their own list of linters to run.
-    let l:linter_names = get(
-    \   g:ale_linters,
-    \   a:original_filetype,
-    \   get(
-    \       s:default_ale_linters,
-    \       a:original_filetype,
-    \       'all'
-    \   )
-    \)
-
-    let l:all_linters = s:LoadLinters(l:filetype)
+function! ale#linter#Get(original_filetypes) abort
     let l:combined_linters = []
 
-    if type(l:linter_names) == type('') && l:linter_names ==# 'all'
-        let l:combined_linters = l:all_linters
-    elseif type(l:linter_names) == type([])
-        " Select only the linters we or the user has specified.
-        for l:linter in l:all_linters
-            if index(l:linter_names, l:linter.name) >= 0
-                call add(l:combined_linters, l:linter)
-            endif
-        endfor
-    endif
+    " Handle dot-seperated filetypes.
+    for l:original_filetype in split(a:original_filetypes, '\.')
+        " Try and get an aliased file type either from the user's Dictionary, or
+        " our default Dictionary, otherwise use the filetype as-is.
+        let l:filetype = get(
+        \   g:ale_linter_aliases,
+        \   l:original_filetype,
+        \   get(
+        \       s:default_ale_linter_aliases,
+        \       l:original_filetype,
+        \       l:original_filetype
+        \   )
+        \)
+
+        " Try and get a list of linters to run, using the original file type,
+        " not the aliased filetype. We have some linters to limit by default,
+        " and users may define their own list of linters to run.
+        let l:linter_names = get(
+        \   g:ale_linters,
+        \   l:original_filetype,
+        \   get(
+        \       s:default_ale_linters,
+        \       l:original_filetype,
+        \       'all'
+        \   )
+        \)
+
+        let l:all_linters = s:LoadLinters(l:filetype)
+        let l:filetype_linters = []
+
+        if type(l:linter_names) == type('') && l:linter_names ==# 'all'
+            let l:filetype_linters = l:all_linters
+        elseif type(l:linter_names) == type([])
+            " Select only the linters we or the user has specified.
+            for l:linter in l:all_linters
+                if index(l:linter_names, l:linter.name) >= 0
+                    call add(l:filetype_linters, l:linter)
+                endif
+            endfor
+        endif
+
+        call extend(l:combined_linters, l:filetype_linters)
+    endfor
 
     return l:combined_linters
 endfunction

@@ -1,12 +1,6 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Lints sh files using bash -n
 
-if exists('g:loaded_ale_linters_sh_shell')
-    finish
-endif
-
-let g:loaded_ale_linters_sh_shell = 1
-
 " This option can be changed to change the default shell when the shell
 " cannot be taken from the hashbang line.
 if !exists('g:ale_linters_sh_shell_default_shell')

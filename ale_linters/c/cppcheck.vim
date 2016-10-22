@@ -1,12 +1,6 @@
 " Author: Bart Libert <bart.libert@gmail.com>
 " Description: cppcheck linter for c files
 
-if exists('g:loaded_ale_linters_c_cppcheck')
-    finish
-endif
-
-let g:loaded_ale_linters_c_cppcheck = 1
-
 " Set this option to change the cppcheck options
 if !exists('g:ale_c_cppcheck_options')
     let g:ale_c_cppcheck_options = '--enable=style'

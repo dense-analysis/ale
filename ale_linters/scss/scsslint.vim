@@ -1,12 +1,6 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: This file add scsslint support for SCSS support
 
-if exists('g:loaded_ale_linters_scss_scsslint')
-    finish
-endif
-
-let g:loaded_ale_linters_scss_scsslint = 1
-
 function! ale_linters#scss#scsslint#Handle(buffer, lines)
     " Matches patterns like the following:
     "

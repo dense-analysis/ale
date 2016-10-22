@@ -1,12 +1,6 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: eslint for JavaScript files
 
-if exists('g:loaded_ale_linters_javascript_eslint')
-    finish
-endif
-
-let g:loaded_ale_linters_javascript_eslint = 1
-
 let g:ale_javascript_eslint_executable =
 \   get(g:, 'ale_javascript_eslint_executable', 'eslint')
 
