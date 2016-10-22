@@ -17,14 +17,21 @@ traverse() {
   echo "$path"
 }
 
+import_line_options() {
+  root="$(traverse)"
+
+  if [[ -e "$root/dub.json" || -e "$root/dub.sdl" || -e "$root/package.json" ]]
+  then
+    dub describe --root="$root" --import-paths | awk '{ print "-I" $0 }'
+  else
+    echo -n
+  fi
+}
+
 temp_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'ale_linters')
 temp_file="$temp_dir/file.d"
 trap 'rm -r "$temp_dir"' EXIT
 
 cp /dev/stdin "$temp_file"
 
-# Read imports from DUB.
-dub_root=$(traverse)
-import_line_options=$(dub describe --root="$dub_root" --import-paths | awk '{ print "-I" $0 }' || echo -n)
-
-dmd $import_line_options "$@" "$temp_file"
+dmd $(import_line_options) "$@" "$temp_file"
