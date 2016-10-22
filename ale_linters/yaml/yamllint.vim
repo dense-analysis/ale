@@ -1,11 +1,5 @@
 " Author: KabbAmine <amine.kabb@gmail.com>
 
-if exists('g:loaded_ale_linters_yaml_yamllint')
-    finish
-endif
-
-let g:loaded_ale_linters_yaml_yamllint = 1
-
 function! ale_linters#yaml#yamllint#Handle(buffer, lines)
     " Matches patterns line the following:
     " something.yaml:1:1: [warning] missing document start "---" (document-start)

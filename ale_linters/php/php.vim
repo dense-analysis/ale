@@ -1,12 +1,6 @@
 " Author: Spencer Wood <https://github.com/scwood>
 " Description: This file adds support for checking PHP with php-cli
 
-if exists('g:loaded_ale_linters_php_php')
-    finish
-endif
-
-let g:loaded_ale_linters_php_php = 1
-
 function! ale_linters#php#php#Handle(buffer, lines)
     " Matches patterns like the following:
     "

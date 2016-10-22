@@ -1,12 +1,6 @@
 " Author: Masahiro H https://github.com/mshr-h
 " Description: iverilog for verilog files
 
-if exists('g:loaded_ale_linters_verilog_iverilog')
-    finish
-endif
-
-let g:loaded_ale_linters_verilog_iverilog = 1
-
 function! ale_linters#verilog#iverilog#Handle(buffer, lines)
     " Look for lines like the following.
     "

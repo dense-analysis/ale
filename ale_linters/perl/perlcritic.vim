@@ -1,11 +1,6 @@
 " Author: Vincent Lequertier <https://github.com/SkySymbol>
 " Description: This file adds support for checking perl with perl critic
 
-if exists('g:loaded_ale_linters_perl_perlcritic')
-    finish
-endif
-
-let g:loaded_ale_linters_perl_perlcritic = 1
 function! ale_linters#perl#perlcritic#Handle(buffer, lines)
     let l:pattern = '\(.\+\) at \(.\+\) line \(\d\+\)'
     let l:output = []

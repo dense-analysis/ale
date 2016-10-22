@@ -1,12 +1,6 @@
 " Author: ynonp - https://github.com/ynonp
 " Description: rubocop for Ruby files
 
-if exists('g:loaded_ale_linters_ruby_rubocop')
-    finish
-endif
-
-let g:loaded_ale_linters_ruby_rubocop = 1
-
 function! ale_linters#ruby#rubocop#Handle(buffer, lines)
     " Matches patterns line the following:
     "

@@ -1,12 +1,6 @@
 " Author: Masahiro H https://github.com/mshr-h
 " Description: verilator for verilog files
 
-if exists('g:loaded_ale_linters_verilog_verilator')
-    finish
-endif
-
-let g:loaded_ale_linters_verilog_verilator = 1
-
 function! ale_linters#verilog#verilator#Handle(buffer, lines)
     " Look for lines like the following.
     "

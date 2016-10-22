@@ -1,12 +1,6 @@
 " Author: Prashanth Chandra https://github.com/prashcr
 " Description: tslint for TypeScript files
 
-if exists('g:loaded_ale_linters_typescript_tslint')
-    finish
-endif
-
-let g:loaded_ale_linters_typescript_tslint = 1
-
 function! ale_linters#typescript#tslint#Handle(buffer, lines)
     " Matches patterns like the following:
     "

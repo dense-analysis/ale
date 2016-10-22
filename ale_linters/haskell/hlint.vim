@@ -1,12 +1,6 @@
 " Author: jparoz <jesse.paroz@gmail.com>
 " Description: hlint for Haskell files
 
-if exists('g:loaded_ale_linters_haskell_hlint')
-    finish
-endif
-
-let g:loaded_ale_linters_haskell_hlint = 1
-
 function! ale_linters#haskell#hlint#Handle(buffer, lines)
     let l:errors = json_decode(join(a:lines, ''))
 

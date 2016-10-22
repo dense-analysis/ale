@@ -1,12 +1,6 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: gcc for Fortran files
 
-if exists('g:loaded_ale_linters_fortran_gcc')
-    finish
-endif
-
-let g:loaded_ale_linters_fortran_gcc = 1
-
 " Set this option to change the GCC options for warnings for Fortran.
 if !exists('g:ale_fortran_gcc_options')
     let g:ale_fortran_gcc_options = '-Wall'

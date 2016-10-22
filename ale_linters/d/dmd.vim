@@ -1,12 +1,6 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: "dmd for D files"
 
-if exists('g:loaded_ale_linters_d_dmd')
-    finish
-endif
-
-let g:loaded_ale_linters_d_dmd = 1
-
 " A function for finding the dmd-wrapper script in the Vim runtime paths
 function! s:FindWrapperScript()
     for l:parent in split(&runtimepath, ',')

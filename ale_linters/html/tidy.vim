@@ -1,12 +1,6 @@
 " Author: KabbAmine <amine.kabb@gmail.com>
 " Description: This file adds support for checking HTML code with tidy.
 
-if exists('g:loaded_ale_linters_html_tidy')
-    finish
-endif
-
-let g:loaded_ale_linters_html_tidy = 1
-
 " CLI options
 let g:ale_html_tidy_executable = get(g:, 'ale_html_tidy_executable', 'tidy')
 let g:ale_html_tidy_args = get(g:, 'ale_html_tidy_args', '-q -e -language en')

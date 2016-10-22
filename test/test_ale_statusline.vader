@@ -52,7 +52,7 @@ Execute (Given some warnings):
 Then (Statusline is formatted to the users preference):
   AssertEqual '3W', ale#statusline#Status()
 
-Execute (Given some warnings, and errors.):
+Execute (Given some warnings, and errors):
   call ale#statusline#Update(bufnr('%'), [{'type': 'E'}, {'type': 'W'}, {'type': 'W'}])
 
 Then (Statusline is formatted to the users preference):

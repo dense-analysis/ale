@@ -1,12 +1,6 @@
 " Author: Sol Bekic https://github.com/s-ol
 " Description: luacheck linter for lua files
 
-if exists('g:loaded_ale_linters_lua_luacheck')
-    finish
-endif
-
-let g:loaded_ale_linters_lua_luacheck = 1
-
 let g:ale_lua_luacheck_executable =
 \   get(g:, 'ale_lua_luacheck_executable', 'luacheck')
 

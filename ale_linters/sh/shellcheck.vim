@@ -2,12 +2,6 @@
 " Description: This file adds support for using the shellcheck linter with
 "   shell scripts.
 
-if exists('g:loaded_ale_linters_sh_shellcheck')
-    finish
-endif
-
-let g:loaded_ale_linters_sh_shellcheck = 1
-
 " This global variable can be set with a string of comma-seperated error
 " codes to exclude from shellcheck. For example:
 "
