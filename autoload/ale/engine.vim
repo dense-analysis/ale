@@ -105,16 +105,16 @@ function! s:HandleExit(job) abort
     " for efficient lookup of the messages in the cursor handler.
     call sort(g:ale_buffer_loclist_map[l:buffer], 'ale#util#LocItemCompare')
 
-    if g:ale_set_loclist
-        call setloclist(0, g:ale_buffer_loclist_map[l:buffer])
+    if g:ale_set_quickfix || g:ale_set_loclist
+        call ale#list#SetLists(g:ale_buffer_loclist_map[l:buffer])
     endif
 
     if g:ale_set_signs
         call ale#sign#SetSigns(l:buffer, g:ale_buffer_loclist_map[l:buffer])
     endif
 
+    " Don't load/run if not already loaded.
     if exists('*ale#statusline#Update')
-        " Don't load/run if not already loaded.
         call ale#statusline#Update(l:buffer, g:ale_buffer_loclist_map[l:buffer])
     endif
 
