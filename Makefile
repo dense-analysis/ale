@@ -1,3 +1,4 @@
+SHELL := /usr/bin/env bash
 IMAGE ?= w0rp/ale
 CURRENT_IMAGE_ID = 107e4efc4267
 DOCKER_FLAGS = --rm -v $(PWD):/testplugin -v $(PWD)/test:/home "$(IMAGE)"
@@ -25,7 +26,9 @@ test: test-setup
 	echo '========================================'; \
 	echo 'Vint warnings/errors follow:'; \
 	echo; \
+	set -o pipefail; \
 	docker run -a stdout $(DOCKER_FLAGS) vint -s /testplugin | sed s:^/testplugin/:: || EXIT=$$?; \
+	set +o pipefail; \
 	echo; \
 	echo; \
 	exit $$EXIT;
