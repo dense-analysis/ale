@@ -6,10 +6,14 @@
 
 set -eu
 
+check_dubfile() {
+  [[ -e "$1/dub.json" || -e "$1/dub.sdl" || -e "$1/package.json" ]]
+}
+
 traverse() {
   path=$(pwd)
   while [ "$path" != "/" ] \
-    && ! [[ -e "$path/dub.json" || -e "$path/dub.sdl" || -e "$path/package.json" ]]
+    && ! check_dubfile "$path"
   do
     path=$(dirname "$path")
   done
@@ -20,7 +24,7 @@ traverse() {
 import_line_options() {
   root="$(traverse)"
 
-  if [[ -e "$root/dub.json" || -e "$root/dub.sdl" || -e "$root/package.json" ]]
+  if check_dubfile "$root"
   then
     dub describe --root="$root" --import-paths | awk '{ print "-I" $0 }'
   else
