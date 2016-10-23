@@ -58,13 +58,13 @@ vim.command("let l:eclipse_classpath = '%s'" % classpath);
 
 EOF
 
-let s:eclipse_classpath = l:eclipse_classpath
+return l:eclipse_classpath
 endfunction
 
 function! ale_linters#java#javac#CheckEclipseClasspath()
 	" Eclipse .classpath parsing through python
 	if file_readable('.classpath')
-		let l:eclipse_classpath = ale_linters#java#javac#ParseEclipseClasspath()
+		let s:eclipse_classpath = ale_linters#java#javac#ParseEclipseClasspath()
 endif
 
 endfunction
@@ -89,8 +89,10 @@ function! ale_linters#java#javac#CleanupTmp()
     call delete(s:tmppath, 'rf')
 endfunction
 
-autocmd! BufEnter *.java call ale_linters#java#javac#CheckEclipseClasspath()
-autocmd! BufLeave *.java call ale_linters#java#javac#CleanupTmp()
+augroup java_ale_au
+	autocmd! BufEnter *.java call ale_linters#java#javac#CheckEclipseClasspath()
+	autocmd! BufLeave *.java call ale_linters#java#javac#CleanupTmp()
+augroup END
 
 call ale_linters#java#javac#CheckEclipseClasspath()
 call ale#linter#Define('java', {
