@@ -11,7 +11,7 @@ Execute (Define a linter):
 Then (Get the defined linter):
   AssertEqual [g:testlinter1], ale#linter#Get('testft')
 
-Execute (Define a couple linters, filtering one.):
+Execute (Define a couple linters, filtering one):
   call ale#linter#Define('testft', g:testlinter1)
   call ale#linter#Define('testft', g:testlinter2)
   let g:ale_linters = {'testft': ['testlinter1']}

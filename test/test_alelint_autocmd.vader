@@ -8,10 +8,10 @@ Before:
 After:
   augroup! VaderTest
 
-Given vim (Vimscript):
+Given vim (Some vimscript):
   set nocompatible
-Execute (Run ALE):
+Execute (Lint it):
   call ale#Lint()
   call ale#engine#WaitForJobs(2000)
-Then (Autocommand should have run):
+Then (Autocommands should have run):
   AssertEqual g:success, 1
