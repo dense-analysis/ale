@@ -9,6 +9,7 @@ let g:loaded_ale_linters_java_javac = 1
 let g:ale_java_javac_classpath = ''
 
 let s:eclipse_classpath = ''
+let s:tmppath = '/tmp/java_ale/'
 
 function! ale_linters#java#javac#Handle(buffer, lines) abort
     " Look for lines like the following.
@@ -69,7 +70,7 @@ endif
 endfunction
 
 function! ale_linters#java#javac#GetCommand(buffer)
-    let l:path = '/tmp/java_ale/' . expand('%:p:h')
+    let l:path = s:tmppath . expand('%:p:h')
     let l:file = expand('%:t')
     let l:buf = getline(1, '$')
 
@@ -85,7 +86,7 @@ function! ale_linters#java#javac#GetCommand(buffer)
 endfunction
 
 function! ale_linters#java#javac#CleanupTmp()
-    call delete('/tmp/java_ale/', 'rf')
+    call delete(s:tmppath, 'rf')
 endfunction
 
 autocmd! BufEnter *.java call ale_linters#java#javac#CheckEclipseClasspath()
