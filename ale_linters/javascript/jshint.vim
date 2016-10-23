@@ -4,17 +4,31 @@
 let g:ale_javascript_jshint_executable =
 \   get(g:, 'ale_javascript_jshint_executable', 'jshint')
 
-function! ale_linters#javascript#jshint#GetCommand(buffer)
-    " Set this to the location of the jshint configuration file to
-    " use a fixed location for .jshintrc
-    if exists('g:ale_jshint_config_loc')
-        let l:jshint_config = g:ale_jshint_config_loc
-    else
-        " Look for the JSHint config in parent directories.
-        let l:jshint_config = ale#util#FindNearestFile(a:buffer, '.jshintrc')
+let g:ale_javascript_jshint_use_global =
+\   get(g:, 'ale_javascript_jshint_use_global', 0)
+
+function! ale_linters#javascript#jshint#GetExecutable(buffer) abort
+    if g:ale_javascript_jshint_use_global
+        return g:ale_javascript_jshint_executable
     endif
 
-    let l:command = g:ale_javascript_jshint_executable . ' --reporter unix'
+    return ale#util#ResolveLocalPath(
+    \   a:buffer,
+    \   'node_modules/.bin/jshint',
+    \   g:ale_javascript_jshint_executable
+    \)
+endfunction
+
+function! ale_linters#javascript#jshint#GetCommand(buffer)
+    " Search for a local JShint config locaation, and default to a global one.
+    let l:jshint_config = ale#util#ResolveLocalPath(
+    \   a:buffer,
+    \   '.jshintrc',
+    \   get(g:, 'ale_jshint_config_loc', '')
+    \)
+
+    let l:command = ale_linters#javascript#jshint#GetExecutable(a:buffer)
+    let l:command .= ' --reporter unix'
 
     if !empty(l:jshint_config)
         let l:command .= ' --config ' . fnameescape(l:jshint_config)
@@ -27,7 +41,7 @@ endfunction
 
 call ale#linter#Define('javascript', {
 \   'name': 'jshint',
-\   'executable': g:ale_javascript_jshint_executable,
+\   'executable_callback': 'ale_linters#javascript#jshint#GetExecutable',
 \   'command_callback': 'ale_linters#javascript#jshint#GetCommand',
 \   'callback': 'ale#handlers#HandleUnixFormatAsError',
 \})
