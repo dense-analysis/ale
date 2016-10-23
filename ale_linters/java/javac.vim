@@ -64,9 +64,9 @@ return l:eclipse_classpath
 endfunction
 
 function! ale_linters#java#javac#CheckEclipseClasspath()
-	" Eclipse .classpath parsing through python
-	if file_readable('.classpath')
-		let s:eclipse_classpath = ale_linters#java#javac#ParseEclipseClasspath()
+    " Eclipse .classpath parsing through python
+    if file_readable('.classpath')
+        let s:eclipse_classpath = ale_linters#java#javac#ParseEclipseClasspath()
 endif
 
 endfunction
@@ -92,8 +92,8 @@ function! ale_linters#java#javac#CleanupTmp()
 endfunction
 
 augroup java_ale_au
-	autocmd! BufEnter *.java call ale_linters#java#javac#CheckEclipseClasspath()
-	autocmd! BufLeave *.java call ale_linters#java#javac#CleanupTmp()
+    autocmd! BufEnter *.java call ale_linters#java#javac#CheckEclipseClasspath()
+    autocmd! BufLeave *.java call ale_linters#java#javac#CleanupTmp()
 augroup END
 
 call ale_linters#java#javac#CheckEclipseClasspath()
