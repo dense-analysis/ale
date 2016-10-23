@@ -24,10 +24,8 @@ endif
 
 " Globals
 
-let g:ale_buffer_count_map = {}
 let g:ale_buffer_loclist_map = {}
-let g:ale_buffer_should_reset_map = {}
-let g:ale_buffer_sign_dummy_map = {}
+let g:ale_buffer_info = {}
 
 " User Configuration
 

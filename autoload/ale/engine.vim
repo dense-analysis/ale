@@ -20,7 +20,17 @@ function! s:GetJobID(job) abort
     return ch_info(job_getchannel(a:job)).id
 endfunction
 
-function! s:ClearJob(job) abort
+function! ale#engine#InitBufferInfo(buffer) abort
+    if !has_key(g:ale_buffer_info, a:buffer)
+        let g:ale_buffer_info[a:buffer] = {
+        \   'job_list': [],
+        \   'should_reset': 1,
+        \   'dummy_sign_set': 0,
+        \}
+    endif
+endfunction
+
+function! ale#engine#ClearJob(job) abort
     let l:job_id = s:GetJobID(a:job)
     let l:linter = s:job_info_map[l:job_id].linter
 
@@ -37,7 +47,26 @@ function! s:ClearJob(job) abort
     endif
 
     call remove(s:job_info_map, l:job_id)
-    call remove(l:linter, 'job')
+endfunction
+
+function! s:StopPreviousJobs(buffer, linter) abort
+    let l:new_job_list = []
+
+    for l:job in g:ale_buffer_info[a:buffer].job_list
+        let l:job_id = s:GetJobID(l:job)
+
+        if has_key(s:job_info_map, l:job_id)
+        \&& s:job_info_map[l:job_id].linter.name ==# a:linter.name
+            " Stop jobs which match the buffer and linter.
+            call ale#engine#ClearJob(l:job)
+        else
+            " Keep other jobs in the list.
+            call add(l:new_job_list, l:job)
+        endif
+    endfor
+
+    " Update the list, removing the previously run job.
+    let g:ale_buffer_info[a:buffer].job_list = l:new_job_list
 endfunction
 
 function! s:GatherOutput(job, data) abort
@@ -71,17 +100,11 @@ function! s:HandleExit(job) abort
     endif
 
     let l:job_info = s:job_info_map[l:job_id]
-
-    call s:ClearJob(a:job)
-
     let l:linter = l:job_info.linter
     let l:output = l:job_info.output
     let l:buffer = l:job_info.buffer
 
-    if !has_key(g:ale_buffer_should_reset_map, l:buffer)
-        " A job ended for a buffer which has been closed, so stop here.
-        return
-    endif
+    call s:StopPreviousJobs(l:buffer, l:linter)
 
     let l:linter_loclist = ale#util#GetFunction(l:linter.callback)(l:buffer, l:output)
 
@@ -92,8 +115,10 @@ function! s:HandleExit(job) abort
         let l:item.linter_name = l:linter.name
     endfor
 
-    if g:ale_buffer_should_reset_map[l:buffer]
-        let g:ale_buffer_should_reset_map[l:buffer] = 0
+    if g:ale_buffer_info[l:buffer].should_reset
+        " Set the flag for resetting the loclist to 0 again, so we won't
+        " empty the list later.
+        let g:ale_buffer_info[l:buffer].should_reset = 0
         let g:ale_buffer_loclist_map[l:buffer] = []
     endif
 
@@ -150,10 +175,8 @@ function! s:FixLocList(buffer, loclist) abort
 endfunction
 
 function! ale#engine#Invoke(buffer, linter) abort
-    if has_key(a:linter, 'job')
-        " Stop previous jobs for the same linter.
-        call s:ClearJob(a:linter.job)
-    endif
+    " Stop previous jobs for the same linter.
+    call s:StopPreviousJobs(a:buffer, a:linter)
 
     if has_key(a:linter, 'command_callback')
         " If there is a callback for generating a command, call that instead.
@@ -227,7 +250,8 @@ function! ale#engine#Invoke(buffer, linter) abort
 
     " Only proceed if the job is being run.
     if has('nvim') || (l:job !=# 'no process' && job_status(l:job) ==# 'run')
-        let a:linter.job = l:job
+        " Add the job to the list of jobs, so we can track them.
+        call add(g:ale_buffer_info[a:buffer].job_list, l:job)
 
         " Store the ID for the job in the map to read back again.
         let s:job_info_map[s:GetJobID(l:job)] = {
@@ -270,8 +294,8 @@ function! ale#engine#WaitForJobs(deadline) abort
 
     let l:job_list = []
 
-    for l:job_id in keys(s:job_info_map)
-        call add(l:job_list, s:job_info_map[l:job_id].linter.job)
+    for l:info in values(g:ale_buffer_info)
+        call extend(l:job_list, l:info.job_list)
     endfor
 
     let l:should_wait_more = 1

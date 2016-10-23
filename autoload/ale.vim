@@ -27,8 +27,11 @@ function! ale#Lint(...) abort
     let l:buffer = bufnr('%')
     let l:linters = ale#linter#Get(&filetype)
 
+    " Initialise the buffer information if needed.
+    call ale#engine#InitBufferInfo(l:buffer)
+
     " Set a variable telling us to clear the loclist later.
-    let g:ale_buffer_should_reset_map[l:buffer] = 1
+    let g:ale_buffer_info[l:buffer].should_reset = 1
 
     for l:linter in l:linters
         " Check if a given linter has a program which can be executed.
