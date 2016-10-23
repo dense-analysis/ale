@@ -42,6 +42,8 @@ function! ale_linters#java#javac#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#java#javac#ParseEclipseClasspath()
+let l:eclipse_classpath = ''
+
 python << EOF
 
 import xml.etree.ElementTree as ET, vim
