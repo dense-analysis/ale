@@ -370,8 +370,25 @@ g:ale_javascript_eslint_executable         *g:ale_javascript_eslint_executable*
   Type: |String|
   Default: `'eslint'`
 
-  This variable can be changed to change the path to eslint. If you have
-  eslint_d installed, you can set this option to use eslint_d instead.
+  ALE will first discover the eslint path in an ancestor node_modules
+  directory. If no such path exists, this variable will be used instead.
+
+  This variable can be set to change the path to eslint. If you have eslint_d
+  installed, you can set this option to use eslint_d instead.
+
+  If you wish to use only a globally installed version of eslint, set
+  |g:ale_javascript_eslint_use_global| to `1`.
+
+
+g:ale_javascript_eslint_use_global         *g:ale_javascript_eslint_use_global*
+
+  Type: |String|
+  Default: `0`
+
+  This variable controls whether or not ALE will search for a local path for
+  eslint first. If this variable is set to `1`, then ALE will always use the
+  global version of eslint, in preference to locally installed versions of
+  eslint in node_modules.
 
 
 -------------------------------------------------------------------------------

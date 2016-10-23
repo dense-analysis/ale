@@ -4,6 +4,26 @@
 let g:ale_javascript_eslint_executable =
 \   get(g:, 'ale_javascript_eslint_executable', 'eslint')
 
+let g:ale_javascript_eslint_use_global =
+\   get(g:, 'ale_javascript_eslint_use_global', 0)
+
+function! ale_linters#javascript#eslint#GetExecutable(buffer) abort
+    if g:ale_javascript_eslint_use_global
+        return g:ale_javascript_eslint_executable
+    endif
+
+    return ale#util#ResolveLocalPath(
+    \   a:buffer,
+    \   'node_modules/.bin/eslint',
+    \   g:ale_javascript_eslint_executable
+    \)
+endfunction
+
+function! ale_linters#javascript#eslint#GetCommand(buffer) abort
+    return ale_linters#javascript#eslint#GetExecutable(a:buffer)
+    \   . ' -f unix --stdin --stdin-filename %s'
+endfunction
+
 function! ale_linters#javascript#eslint#Handle(buffer, lines)
     " Matches patterns line the following:
     "
@@ -39,7 +59,7 @@ endfunction
 
 call ale#linter#Define('javascript', {
 \   'name': 'eslint',
-\   'executable': g:ale_javascript_eslint_executable,
-\   'command': g:ale_javascript_eslint_executable . ' -f unix --stdin --stdin-filename %s',
+\   'executable_callback': 'ale_linters#javascript#eslint#GetExecutable',
+\   'command_callback': 'ale_linters#javascript#eslint#GetCommand',
 \   'callback': 'ale_linters#javascript#eslint#Handle',
 \})

@@ -44,6 +44,21 @@ function! ale#util#FindNearestFile(buffer, filename) abort
     return ''
 endfunction
 
+" Given a buffer, a string to search for, an a global fallback for when
+" the search fails, look for a file in parent paths, and if that fails,
+" use the global fallback path instead.
+function! ale#util#ResolveLocalPath(buffer, search_string, global_fallback) abort
+    " Search for a locally installed file first.
+    let l:path = ale#util#FindNearestFile(a:buffer, a:search_string)
+
+    " If the serach fails, try the global executable instead.
+    if empty(l:path)
+        let l:path = a:global_fallback
+    endif
+
+    return l:path
+endfunction
+
 function! ale#util#GetFunction(string_or_ref) abort
     if type(a:string_or_ref) == type('')
         return function(a:string_or_ref)
