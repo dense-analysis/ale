@@ -1,10 +1,6 @@
 " Author: farenjihn <farenjihn@gmail.com>
 " Description: Lints java files using javac
 
-if exists('g:loaded_ale_linters_java_javac')
-    finish
-endif
-
 let g:loaded_ale_linters_java_javac = 1
 let g:ale_java_javac_classpath = ''
 
@@ -28,47 +24,47 @@ function! ale_linters#java#javac#Handle(buffer, lines) abort
         endif
 
         call add(l:output, {
-            \   'bufnr': a:buffer,
-            \   'lnum': l:match[1] + 0,
-            \   'vcol': 0,
-            \   'col': 1,
-            \   'text': l:match[2] . ':' . l:match[3],
-            \   'type': l:match[2] ==# 'error' ? 'E' : 'W',
-            \   'nr': -1,
-            \})
+        \   'bufnr': a:buffer,
+        \   'lnum': l:match[1] + 0,
+        \   'vcol': 0,
+        \   'col': 1,
+        \   'text': l:match[2] . ':' . l:match[3],
+        \   'type': l:match[2] ==# 'error' ? 'E' : 'W',
+        \   'nr': -1,
+        \})
     endfor
 
     return l:output
 endfunction
 
 function! ale_linters#java#javac#ParseEclipseClasspath()
-let l:eclipse_classpath = ''
+    let l:eclipse_classpath = ''
 
 python << EOF
 
-import xml.etree.ElementTree as ET, vim
-tree = ET.parse(".classpath")
-root = tree.getroot()
+    import xml.etree.ElementTree as ET, vim
+    tree = ET.parse(".classpath")
+    root = tree.getroot()
 
-classpath = ''
+    classpath = ''
 
-for child in root:
-    classpath += child.get("path")
-    classpath += ':'
+    for child in root:
+        classpath += child.get("path")
+        classpath += ':'
 
-vim.command("let l:eclipse_classpath = '%s'" % classpath);
+        vim.command("let l:eclipse_classpath = '%s'" % classpath);
 
+# Cannot indent this EOF token as per :h python
 EOF
 
-return l:eclipse_classpath
+    return l:eclipse_classpath
 endfunction
 
 function! ale_linters#java#javac#CheckEclipseClasspath()
     " Eclipse .classpath parsing through python
     if file_readable('.classpath')
         let s:eclipse_classpath = ale_linters#java#javac#ParseEclipseClasspath()
-endif
-
+    endif
 endfunction
 
 function! ale_linters#java#javac#GetCommand(buffer)
@@ -81,10 +77,10 @@ function! ale_linters#java#javac#GetCommand(buffer)
     call writefile(l:buf, l:path . '/' . l:file)
 
     return 'javac '
-        \ . '-Xlint '
-        \ . '-cp ' . s:eclipse_classpath . g:ale_java_javac_classpath . ':. '
-        \ . g:ale_java_javac_options
-        \ . ' ' . l:path . '/' . l:file
+    \ . '-Xlint '
+    \ . '-cp ' . s:eclipse_classpath . g:ale_java_javac_classpath . ':. '
+    \ . g:ale_java_javac_options
+    \ . ' ' . l:path . '/' . l:file
 endfunction
 
 function! ale_linters#java#javac#CleanupTmp()
