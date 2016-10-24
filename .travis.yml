@@ -2,6 +2,9 @@
 sudo: required
 services:
     - docker
+branches:
+    only:
+        - master
 language: python
 script: |
     make test
