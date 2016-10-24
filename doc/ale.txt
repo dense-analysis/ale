@@ -212,6 +212,15 @@ g:ale_lint_on_save                                         *g:ale_lint_on_save*
   desired.
 
 
+g:ale_lint_in_normal_mode                                   *g:ale_lint_in_normal_mode*
+
+  Type: |Number|
+  Default: `1`
+
+  This option will make ALE run the linters when leaving insert mode or when
+  making changes to the text in normal mode.
+
+
 g:ale_set_loclist                                           *g:ale_set_loclist*
 
   Type: |Number|

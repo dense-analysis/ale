@@ -70,6 +70,20 @@ if g:ale_lint_on_save
     augroup END
 endif
 
+" This flag can be set to 1 to enable linting when leaving insert mode.
+let g:ale_lint_in_normal_mode = get(g:, 'ale_lint_in_normal_mode', 0)
+if g:ale_lint_in_normal_mode
+    augroup ALERunOnInsertLeaveGroup
+        autocmd!
+        autocmd InsertLeave * call ale#Queue(0)
+    augroup END
+
+    augroup ALERunOnTextChangedNormalGroup
+        autocmd!
+        autocmd TextChanged * call ale#Queue(g:ale_lint_delay)
+    augroup END
+endif
+
 " This flag can be set to 0 to disable setting the loclist.
 let g:ale_set_loclist = get(g:, 'ale_set_loclist', 1)
 
