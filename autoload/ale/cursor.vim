@@ -58,8 +58,14 @@ function! ale#cursor#EchoCursorWarning(...) abort
         let l:loc = l:loclist[l:index]
         let l:msg = s:GetMessage(l:loc.linter_name, l:loc.type, l:loc.text)
         call ale#cursor#TruncatedEcho(l:msg)
+        let g:ale_buffer_info[l:buffer].echoed = 1
     else
-        echo
+        " We'll only clear the echoed message when moving off errors once,
+        " so we don't continually clear the echo line.
+        if get(g:ale_buffer_info[l:buffer], 'echoed')
+            echo
+            let g:ale_buffer_info[l:buffer].echoed = 0
+        endif
     endif
 endfunction
 
