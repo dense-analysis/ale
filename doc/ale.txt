@@ -23,9 +23,10 @@ CONTENTS                                                         *ale-contents*
     4.11. luacheck..............................|ale-linter-options-luacheck|
     4.12. c-cppcheck............................|ale-linter-options-c-cppcheck|
     4.13. cpp-cppcheck..........................|ale-linter-options-cpp-cppcheck|
-  5. API........................................|ale-api|
-  6. Special Thanks.............................|ale-special-thanks|
-  7. Contact....................................|ale-contact|
+  5. Commands/Keybinds..........................|ale-commands|
+  6. API........................................|ale-api|
+  7. Special Thanks.............................|ale-special-thanks|
+  8. Contact....................................|ale-contact|
 
 ===============================================================================
 1. Introduction                                              *ale-introduction*
@@ -549,7 +550,39 @@ g:ale_cpp_cppcheck_options                           *g:ale_cpp_cppcheck_options
 
 
 ===============================================================================
-5. API                                                                *ale-api*
+5. Commands/Keybinds                                             *ale-commands*
+
+ALEPrevious                                                       *ALEPrevious*
+ALEPreviousWrap                                               *ALEPreviousWrap*
+ALENext                                                               *ALENext*
+ALENextWrap                                                       *ALENextWrap*
+                                                      *ale-navigation-commands*
+
+  Move between warnings or errors in a buffer.
+
+  `ALEPrevious` and `ALENext` will stop at the top and bottom of a file, while
+  `ALEPreviousWrap` and `ALENextWrap` will wrap around the file to find
+  the last or first warning or error in the file, respectively.
+
+  The following |<Plug>| mappings are defined for the commands: >
+  <Plug>(ale_previous) - ALEPrevious
+  <Plug>(ale_previous_wrap) - ALEPreviousWrap
+  <Plug>(ale_next) - ALENext
+  <Plug>(ale_next_wrap) - ALENextWrap
+<
+  For example, these commands could be bound to the keys Ctrl + j
+  and Ctrl + k: >
+
+  " Map movement through errors without wrapping.
+  nmap <silent> <C-k> <Plug>(ale_previous)
+  nmap <silent> <C-j> <Plug>(ale_next)
+  " OR map keys to use wrapping.
+  nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+  nmap <silent> <C-j> <Plug>(ale_next_wrap)
+<
+
+===============================================================================
+6. API                                                                *ale-api*
 
 ale#Queue(delay)                                                  *ale#Queue()*
   Run linters for the current buffer, based on the filetype of the buffer,
@@ -671,13 +704,13 @@ ALELint                                                               *ALELint*
 
 
 ===============================================================================
-6. Special Thanks                                           *ale-special-thanks*
+7. Special Thanks                                           *ale-special-thanks*
 
 Special thanks to Mark Grealish (https://www.bhalash.com/) for providing ALE's
 snazzy looking ale glass logo. Cheers, Mark!
 
 ===============================================================================
-7. Contact                                                        *ale-contact*
+8. Contact                                                        *ale-contact*
 
 If you like this plugin, and wish to get in touch, check out the GitHub
 page for issues and more at https://github.com/w0rp/ale

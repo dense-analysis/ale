@@ -131,6 +131,18 @@ let g:ale_statusline_format = get(g:, 'ale_statusline_format',
 let g:ale_warn_about_trailing_whitespace =
 \   get(g:, 'ale_warn_about_trailing_whitespace', 1)
 
+" Define commands for moving through warnings and errors.
+command! ALEPrevious :call ale#loclist_jumping#Jump('before', 0)
+command! ALEPreviousWrap :call ale#loclist_jumping#Jump('before', 1)
+command! ALENext :call ale#loclist_jumping#Jump('after', 0)
+command! ALENextWrap :call ale#loclist_jumping#Jump('after', 1)
+
+" <Plug> mappings for commands
+nnoremap <silent> <Plug>(ale_previous) :ALEPrevious<Return>
+nnoremap <silent> <Plug>(ale_previous_wrap) :ALEPreviousWrap<Return>
+nnoremap <silent> <Plug>(ale_next) :ALENext<Return>
+nnoremap <silent> <Plug>(ale_next_wrap) :ALENextWrap<Return>
+
 " Housekeeping
 
 augroup ALECleanupGroup

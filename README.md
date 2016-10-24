@@ -30,6 +30,7 @@ In other words, this plugin allows you to lint while you type.
  4. [How can I show errors or warnings in my statusline?](#faq-statusline)
  5. [How can I change the format for echo messages?](#faq-echo-format)
  6. [How can I execute some code when ALE stops linting?](#faq-autocmd)
+ 7. [How can I navigate between errors quickly?](#faq-navigation)
 
 <a name="supported-languages"></a>
 
@@ -290,3 +291,19 @@ augroup YourGroup
     autocmd User ALELint call YourFunction()
 augroup END
 ```
+
+<a name="faq-navigation"></a>
+
+### 4.vii. How can I navigate between errors quickly?
+
+ALE offers some commands with `<Plug>` keybinds for moving between warnings and
+errors quickly. You can map the keys Ctrl+j and Ctrl+k to moving between errors
+for example:
+
+```vim
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
+```
+
+For more information, consult the online documentation with
+`:help ale-navigation-commands`.
