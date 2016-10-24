@@ -67,6 +67,7 @@ The following languages and tools are supported.
 * JavaScript: 'eslint', 'jscs', 'jshint'
 * JSON: 'jsonlint'
 * Lua: 'luacheck'
+* MATLAB: 'mlint'
 * Perl: 'perl' (-c flag), 'perlcritic'
 * PHP: 'php' (-l flag), 'phpcs'
 * Pug: 'pug-lint'
