@@ -1,10 +1,6 @@
 " Author: awlayton <alex@layton.in>
 " Description: mlint for MATLAB files
 
-if exists('g:loaded_ale_linters_matlab_mlint')
-    finish
-endif
-
 let g:loaded_ale_linters_matlab_mlint = 1
 
 let g:ale_matlab_mlint_executable =
@@ -30,7 +26,8 @@ function! ale_linters#matlab#mlint#Handle(buffer, lines)
         let l:code = l:match[3]
         let l:text = l:match[4]
 
-        " Suppress erroneous waring about file name
+        " Suppress erroneous waring about filename
+        " TODO: Enable this error when copying filename is supported
         if l:code ==# 'FNDEF'
             continue
         endif
@@ -54,6 +51,7 @@ call ale#linter#Define('matlab', {
 \   'name': 'mlint',
 \   'executable': 'mlint',
 \   'command': g:ale#util#stdin_wrapper .
-\       ' .m ' . g:ale_matlab_mlint_executable . ' -id 2>&1',
+\       ' .m ' . g:ale_matlab_mlint_executable . ' -id',
+\   'output_stream': 'stderr',
 \   'callback': 'ale_linters#matlab#mlint#Handle',
 \})
