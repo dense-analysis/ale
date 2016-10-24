@@ -45,6 +45,7 @@ name. That seems to be the fairest way to arrange this table.
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/) |
 | JSON | [jsonlint](http://zaa.ch/jsonlint/) |
 | Lua | [luacheck](https://github.com/mpeterv/luacheck) |
+| MATLAB | [mlint](https://www.mathworks.com/help/matlab/ref/mlint.html) |
 | Perl | [perl -c](https://perl.org/), [perl-critic](https://metacpan.org/pod/Perl::Critic) |
 | PHP | [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer) |
 | Pug | [pug-lint](https://github.com/pugjs/pug-lint) |
