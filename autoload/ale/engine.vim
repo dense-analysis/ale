@@ -104,6 +104,8 @@ function! s:HandleExit(job) abort
     let l:output = l:job_info.output
     let l:buffer = l:job_info.buffer
 
+    " Call the same function for stopping jobs again to clean up the job
+    " which just closed.
     call s:StopPreviousJobs(l:buffer, l:linter)
 
     let l:linter_loclist = ale#util#GetFunction(l:linter.callback)(l:buffer, l:output)
@@ -294,6 +296,7 @@ function! ale#engine#WaitForJobs(deadline) abort
 
     let l:job_list = []
 
+    " Gather all of the jobs from every buffer.
     for l:info in values(g:ale_buffer_info)
         call extend(l:job_list, l:info.job_list)
     endfor
