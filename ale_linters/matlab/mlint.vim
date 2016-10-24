@@ -1,8 +1,6 @@
 " Author: awlayton <alex@layton.in>
 " Description: mlint for MATLAB files
 
-let g:loaded_ale_linters_matlab_mlint = 1
-
 let g:ale_matlab_mlint_executable =
 \   get(g:, 'ale_matlab_mlint_executable', 'mlint')
 
