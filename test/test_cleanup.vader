@@ -1,9 +1,5 @@
 Before:
     let g:buffer = bufnr('%')
-    let g:ale_buffer_loclist_map = {
-    \ g:buffer : [],
-    \ 10347: [],
-    \}
 
     let g:ale_buffer_info = {
     \  g:buffer : {},
@@ -12,10 +8,8 @@ Before:
 
 After:
     unlet! g:buffer
-    let g:ale_buffer_loclist_map = {}
     let g:ale_buffer_info = {}
 
 Execute('ALE globals should be cleared when the buffer is closed.'):
     :q!
-    AssertEqual {10347: []}, g:ale_buffer_loclist_map
     AssertEqual {10347: {}}, g:ale_buffer_info

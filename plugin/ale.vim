@@ -22,9 +22,8 @@ if !s:ale_has_required_features
     finish
 endif
 
-" Globals
-
-let g:ale_buffer_loclist_map = {}
+" This global variable is used internally by ALE for tracking information for
+" each buffer which linters are being run against.
 let g:ale_buffer_info = {}
 
 " User Configuration

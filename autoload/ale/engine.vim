@@ -26,6 +26,7 @@ function! ale#engine#InitBufferInfo(buffer) abort
         \   'job_list': [],
         \   'should_reset': 1,
         \   'dummy_sign_set': 0,
+        \   'loclist': [],
         \}
     endif
 endfunction
@@ -121,28 +122,28 @@ function! s:HandleExit(job) abort
         " Set the flag for resetting the loclist to 0 again, so we won't
         " empty the list later.
         let g:ale_buffer_info[l:buffer].should_reset = 0
-        let g:ale_buffer_loclist_map[l:buffer] = []
+        let g:ale_buffer_info[l:buffer].loclist = []
     endif
 
     " Add the loclist items from the linter.
-    call extend(g:ale_buffer_loclist_map[l:buffer], l:linter_loclist)
+    call extend(g:ale_buffer_info[l:buffer].loclist, l:linter_loclist)
 
     " Sort the loclist again.
     " We need a sorted list so we can run a binary search against it
     " for efficient lookup of the messages in the cursor handler.
-    call sort(g:ale_buffer_loclist_map[l:buffer], 'ale#util#LocItemCompare')
+    call sort(g:ale_buffer_info[l:buffer].loclist, 'ale#util#LocItemCompare')
 
     if g:ale_set_loclist
-        call setloclist(0, g:ale_buffer_loclist_map[l:buffer])
+        call setloclist(0, g:ale_buffer_info[l:buffer].loclist)
     endif
 
     if g:ale_set_signs
-        call ale#sign#SetSigns(l:buffer, g:ale_buffer_loclist_map[l:buffer])
+        call ale#sign#SetSigns(l:buffer, g:ale_buffer_info[l:buffer].loclist)
     endif
 
     if exists('*ale#statusline#Update')
         " Don't load/run if not already loaded.
-        call ale#statusline#Update(l:buffer, g:ale_buffer_loclist_map[l:buffer])
+        call ale#statusline#Update(l:buffer, g:ale_buffer_info[l:buffer].loclist)
     endif
 
     " Call user autocommands. This allows users to hook into ALE's lint cycle.
@@ -279,6 +280,15 @@ function! ale#engine#Invoke(buffer, linter) abort
             endif
         endif
     endif
+endfunction
+
+" Given a buffer number, return the warnings and errors for a given buffer.
+function! ale#engine#GetLoclist(buffer) abort
+    if !has_key(g:ale_buffer_info, a:buffer)
+        return []
+    endif
+
+    return g:ale_buffer_info[a:buffer].loclist
 endfunction
 
 " This function can be called with a timeout to wait for all jobs to finish.

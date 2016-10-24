@@ -27,7 +27,7 @@ function! s:SetupCount(buffer) abort
 
     " Cache is cold, so manually ask for an update.
     if !has_key(g:ale_buffer_info[a:buffer], 'count')
-        call ale#statusline#Update(a:buffer, get(g:ale_buffer_loclist_map, a:buffer, []))
+        call ale#statusline#Update(a:buffer, g:ale_buffer_info[a:buffer].loclist)
     endif
 
     return 1

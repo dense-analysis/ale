@@ -26,7 +26,6 @@ Before:
 
 After:
   sign unplace *
-  let g:ale_buffer_loclist_map = {}
   let g:ale_buffer_info = {}
   delfunction g:CollectSigns
   unlet g:actual_sign_list
