@@ -17,19 +17,19 @@ In other words, this plugin allows you to lint while you type.
 
 ## Table of Contents
 
-1.   [Supported Languages and Tools](#supported-languages)
-2.   [Usage](#usage)
-3.   [Installation](#installation)
-3.1. [Installation with Pathogen](#installation-with-pathogen)
-3.2. [Installation with Vundle](#installation-with-vundle)
-3.3. [Manual Installation](#manual-installation)
-4.   [FAQ](#faq)
-4.1. [How do I disable particular linters?](#faq-disable-linters)
-4.2. [How can I keep the sign gutter open?](#faq-disable-linters)
-4.3. [How can I change the signs ALE uses?](#faq-change-signs)
-4.4. [How can I show errors or warnings in my statusline?](#faq-statusline)
-4.5. [How can I change the format for echo messages?](#faq-echo-format)
-4.6. [How can I execute some code when ALE stops linting?](#faq-autocmd)
+1. [Supported Languages and Tools](#supported-languages)
+2. [Usage](#usage)
+3. [Installation](#installation)
+ 1. [Installation with Pathogen](#installation-with-pathogen)
+ 2. [Installation with Vundle](#installation-with-vundle)
+ 3. [Manual Installation](#manual-installation)
+4. [FAQ](#faq)
+ 1. [How do I disable particular linters?](#faq-disable-linters)
+ 2. [How can I keep the sign gutter open?](#faq-disable-linters)
+ 3. [How can I change the signs ALE uses?](#faq-change-signs)
+ 4. [How can I show errors or warnings in my statusline?](#faq-statusline)
+ 5. [How can I change the format for echo messages?](#faq-echo-format)
+ 6. [How can I execute some code when ALE stops linting?](#faq-autocmd)
 
 <a name="supported-languages"></a>
 
@@ -114,7 +114,7 @@ stored in `%USERPROFILE%\_vimrc`.
 
 <a name="installation-with-pathogen"></a>
 
-### 3.1. Installation with Pathogen
+### 3.i. Installation with Pathogen
 
 To install this module with [Pathogen](https://github.com/tpope/vim-pathogen),
 you should clone this repository to your bundle directory, and ensure
@@ -128,7 +128,7 @@ git clone https://github.com/w0rp/ale.git
 
 <a name="installation-with-vundle"></a>
 
-### 3.2. Installation with Vundle
+### 3.ii. Installation with Vundle
 
 You can install this plugin using [Vundle](https://github.com/VundleVim/Vundle.vim)
 by using the path on GitHub for this repository.
@@ -141,7 +141,7 @@ See the Vundle documentation for more information.
 
 <a name="manual-installation"></a>
 
-### 3.3. Manual Installation
+### 3.iii. Manual Installation
 
 For installation without a package manager, you can clone this git repository
 into a bundle directory as with pathogen, and add the repository to your
@@ -180,7 +180,7 @@ installation method.
 
 <a name="faq-disable-linters"></a>
 
-### 4.1. How do I disable particular linters?
+### 4.i. How do I disable particular linters?
 
 By default, all available tools for all supported languages will be run.
 If you want to only select a subset of the tools, simply create a
@@ -204,7 +204,7 @@ in each directory corresponds to the name of a particular linter.
 
 <a name="faq-keep-signs"></a>
 
-### 4.2. How can I keep the sign gutter open?
+### 4.ii. How can I keep the sign gutter open?
 
 You can keep the sign gutter open at all times by setting the
 `g:ale_sign_column_always` to 1
@@ -215,7 +215,7 @@ let g:ale_sign_column_always = 1
 
 <a name="faq-change-signs"></a>
 
-### 4.3. How can I change the signs ALE uses?
+### 4.iii. How can I change the signs ALE uses?
 
 Use these options to specify what text should be used for signs:
 
@@ -226,7 +226,7 @@ let g:ale_sign_warning = '--'
 
 <a name="faq-statusline"></a>
 
-### 4.4. How can I show errors or warnings in my statusline?
+### 4.iv. How can I show errors or warnings in my statusline?
 
 You can use `ALEGetStatusLine()` to integrate ALE into vim statusline.
 To enable it, you should have in your `statusline` settings
@@ -253,7 +253,7 @@ let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
 
 <a name="faq-echo-format"></a>
 
-### 4.5. How can I change the format for echo messages?
+### 4.v. How can I change the format for echo messages?
 
 There are 3 global options that allow customizing the echoed message.
 
@@ -278,7 +278,7 @@ Will give you:
 
 <a name="faq-autocmd"></a>
 
-### 4.6. How can I execute some code when ALE stops linting?
+### 4.vi. How can I execute some code when ALE stops linting?
 
 ALE runs its own [autocmd](http://vimdoc.sourceforge.net/htmldoc/autocmd.html)
 event whenever has a linter has been successfully executed and processed. This
