@@ -25,35 +25,77 @@ function! ale#linter#Reset() abort
     let s:linters = {}
 endfunction
 
+function! s:IsCallback(value) abort
+    return type(a:value) == type('') || type(a:value) == type(function('type'))
+endfunction
+
+function! ale#linter#PreProcess(linter) abort
+    if type(a:linter) != type({})
+        throw 'The linter object must be a Dictionary'
+    endif
+
+    let l:obj = {
+    \   'name': get(a:linter, 'name'),
+    \   'callback': get(a:linter, 'callback'),
+    \}
+
+    if type(l:obj.name) != type('')
+        throw '`name` must be defined to name the linter'
+    endif
+
+    if !s:IsCallback(l:obj.callback)
+        throw '`callback` must be defined with a callback to accept output'
+    endif
+
+    if has_key(a:linter, 'executable_callback')
+        let l:obj.executable_callback = a:linter.executable_callback
+
+        if !s:IsCallback(l:obj.executable_callback)
+            throw '`executable_callback` must be a callback if defined'
+        endif
+    elseif has_key(a:linter, 'executable')
+        let l:obj.executable = a:linter.executable
+
+        if type(l:obj.executable) != type('')
+            throw '`executable` must be a string if defined'
+        endif
+    else
+        throw 'Either `executable` or `executable_callback` must be defined'
+    endif
+
+    if has_key(a:linter, 'command_callback')
+        let l:obj.command_callback = a:linter.command_callback
+
+        if !s:IsCallback(l:obj.command_callback)
+            throw '`command_callback` must be a callback if defined'
+        endif
+    elseif has_key(a:linter, 'command')
+        let l:obj.command = a:linter.command
+
+        if type(l:obj.command) != type('')
+            throw '`command` must be a string if defined'
+        endif
+    else
+        throw 'Either `command`, `executable_callback`, `command_chain` '
+        \   . 'must be defined'
+    endif
+
+    let l:obj.output_stream = get(a:linter, 'output_stream', 'stdout')
+
+    if type(l:obj.output_stream) != type('')
+    \|| index(['stdout', 'stderr', 'both'], l:obj.output_stream) < 0
+        throw "`output_stream` must be 'stdout', 'stderr', or 'both'"
+    endif
+
+    return l:obj
+endfunction
+
 function! ale#linter#Define(filetype, linter) abort
     if !has_key(s:linters, a:filetype)
         let s:linters[a:filetype] = []
     endif
 
-    let l:new_linter = {
-    \   'name': a:linter.name,
-    \   'callback': a:linter.callback,
-    \}
-
-    if has_key(a:linter, 'executable_callback')
-        let l:new_linter.executable_callback = a:linter.executable_callback
-    else
-        let l:new_linter.executable = a:linter.executable
-    endif
-
-    if has_key(a:linter, 'command_callback')
-        let l:new_linter.command_callback = a:linter.command_callback
-    else
-        let l:new_linter.command = a:linter.command
-    endif
-
-    if has_key(a:linter, 'output_stream')
-        let l:new_linter.output_stream = a:linter.output_stream
-    else
-        let l:new_linter.output_stream = 'stdout'
-    endif
-
-    " TODO: Assert the value of the output_stream to be something sensible.
+    let l:new_linter = ale#linter#PreProcess(a:linter)
 
     call add(s:linters[a:filetype], l:new_linter)
 endfunction
