@@ -70,8 +70,13 @@ if g:ale_lint_on_save
     augroup END
 endif
 
-" This flag can be set to 0 to disable setting the loclist.
+" These flags dictates if ale uses the quickfix or the loclist (loclist is the
+" default, quickfix overrides loclist).
+let g:ale_set_quickfix = get(g:, 'ale_set_quickfix', 0)
 let g:ale_set_loclist = get(g:, 'ale_set_loclist', 1)
+
+" This flag dictates if ale open the configured list (quickfix or loclist).
+let g:ale_open_list = get(g:, 'ale_open_list', 0)
 
 " This flag can be set to 0 to disable setting signs.
 " This is enabled by default only if the 'signs' feature exists.
@@ -86,7 +91,7 @@ let g:ale_sign_warning = get(g:, 'ale_sign_warning', '--')
 " The dummy sign will use the ID exactly equal to the offset.
 let g:ale_sign_offset = get(g:, 'ale_sign_offset', 1000000)
 
-" This flag can be set to 1 to keep sign gutter always open
+" This flag can be set to 1 to keep sign gutter always open.
 let g:ale_sign_column_always = get(g:, 'ale_sign_column_always', 0)
 
 " String format for the echoed message
@@ -94,7 +99,7 @@ let g:ale_sign_column_always = get(g:, 'ale_sign_column_always', 0)
 " It can contain 2 handlers: %linter%, %severity%
 let g:ale_echo_msg_format = get(g:, 'ale_echo_msg_format', '%s')
 
-" Strings used for severity in the echoed message
+" Strings used for severity in the echoed message.
 let g:ale_echo_msg_error_str = get(g:, 'ale_echo_msg_error_str', 'Error')
 let g:ale_echo_msg_warning_str = get(g:, 'ale_echo_msg_warning_str', 'Warning')
 
