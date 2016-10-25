@@ -64,6 +64,7 @@ function! ale#cursor#EchoCursorWarning(...) abort
 endfunction
 
 let s:cursor_timer = -1
+let s:last_pos = [0, 0, 0]
 
 function! ale#cursor#EchoCursorWarningWithDelay() abort
     if s:cursor_timer != -1
@@ -71,5 +72,14 @@ function! ale#cursor#EchoCursorWarningWithDelay() abort
         let s:cursor_timer = -1
     endif
 
-    let s:cursor_timer = timer_start(10, function('ale#cursor#EchoCursorWarning'))
+    let l:pos = getcurpos()[0:2]
+
+    " Check the current buffer, line, and column number against the last
+    " recorded position. If the position has actually changed, *then*
+    " we should echo something. Otherwise we can end up doing processing
+    " the echo message far too frequently.
+    if l:pos != s:last_pos
+        let s:last_pos = l:pos
+        let s:cursor_timer = timer_start(10, function('ale#cursor#EchoCursorWarning'))
+    endif
 endfunction
