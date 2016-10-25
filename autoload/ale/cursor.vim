@@ -46,12 +46,12 @@ function! ale#cursor#EchoCursorWarning(...) abort
 
     let l:buffer = bufnr('%')
 
-    if !has_key(g:ale_buffer_loclist_map, l:buffer)
+    if !has_key(g:ale_buffer_info, l:buffer)
         return
     endif
 
     let l:pos = getcurpos()
-    let l:loclist = g:ale_buffer_loclist_map[l:buffer]
+    let l:loclist = g:ale_buffer_info[l:buffer].loclist
     let l:index = ale#util#BinarySearch(l:loclist, l:pos[1], l:pos[2])
 
     if l:index >= 0

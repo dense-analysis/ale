@@ -2,19 +2,12 @@
 " Description: Utility functions related to cleaning state.
 
 function! ale#cleanup#Buffer(buffer) abort
-    if has_key(g:ale_buffer_count_map, a:buffer)
-        call remove(g:ale_buffer_count_map, a:buffer)
-    endif
+    if has_key(g:ale_buffer_info, a:buffer)
+        " When buffers are removed, clear all of the jobs.
+        for l:job in get(g:ale_buffer_info[a:buffer], 'job_list', [])
+            call ale#engine#ClearJob(l:job)
+        endfor
 
-    if has_key(g:ale_buffer_loclist_map, a:buffer)
-        call remove(g:ale_buffer_loclist_map, a:buffer)
-    endif
-
-    if has_key(g:ale_buffer_should_reset_map, a:buffer)
-        call remove(g:ale_buffer_should_reset_map, a:buffer)
-    endif
-
-    if has_key(g:ale_buffer_sign_dummy_map, a:buffer)
-        call remove(g:ale_buffer_sign_dummy_map, a:buffer)
+        call remove(g:ale_buffer_info, a:buffer)
     endif
 endfunction

@@ -7,11 +7,14 @@ Before:
 
 After:
   augroup! VaderTest
+  let g:ale_buffer_info = {}
 
 Given vim (Some vimscript):
   set nocompatible
+
 Execute (Lint it):
   call ale#Lint()
   call ale#engine#WaitForJobs(2000)
+
 Then (Autocommands should have run):
   AssertEqual g:success, 1

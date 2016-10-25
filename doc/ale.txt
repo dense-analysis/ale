@@ -147,23 +147,6 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
   different set of linters from the type it is being mapped to.
 
 
-g:ale_buffer_loclist_map                             *g:ale_buffer_loclist_map*
-
-  Type: |Dictionary|
-  Default: `{}`
-
-  This variable is used internally by ALE for tracking the warnings and
-  errors for a particular buffer. The dictionary maps a buffer number to
-  a |List| of |Dictionary| items in the format accepted by |setqflist()|,
-  with a minor addition of a `linter_name` for each object which describes
-  the linter which reported the warnings and errors. (A buffer may run
-  multiple linters in combination on the same filetype.)
-
-  NOTE: This variable should not be modified outside of the plugin itself,
-  but can be read in other plugins whenever information about the current
-  errors and warnings ALE is reporting is needed.
-
-
 g:ale_lint_on_text_changed                         *g:ale_lint_on_text_changed*
 
   Type: |Number|
@@ -573,6 +556,13 @@ ale#Queue(delay)                                                  *ale#Queue()*
   with a given `delay`. A `delay` of `0` will run the linters immediately.
   The linters will always be run in the background. Calling this function
   again from the same buffer
+
+
+ale#engine#GetLoclist(buffer)                         *ale#engine#GetLoclist()*
+
+  Given a buffer number, this function will rerurn the list of warnings and
+  errors reported by ALE for a given buffer in the format accepted by
+  |setqflist()|.
 
 
 ale#linter#Define(filetype, linter)                       *ale#linter#Define()*

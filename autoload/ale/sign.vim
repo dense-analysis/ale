@@ -89,13 +89,13 @@ function! ale#sign#SetSigns(buffer, loclist) abort
     let l:signlist = ale#sign#CombineSigns(a:loclist)
 
     if len(l:signlist) > 0 || g:ale_sign_column_always
-        if !get(g:ale_buffer_sign_dummy_map, a:buffer, 0)
+        if !g:ale_buffer_info[a:buffer].dummy_sign_set
             " Insert a dummy sign if one is missing.
             execute 'sign place ' .  g:ale_sign_offset
             \   . ' line=1 name=ALEDummySign buffer='
             \   . a:buffer
 
-            let g:ale_buffer_sign_dummy_map[a:buffer] = 1
+            let g:ale_buffer_info[a:buffer].dummy_sign_set = 1
         endif
     endif
 
@@ -121,10 +121,10 @@ function! ale#sign#SetSigns(buffer, loclist) abort
     endfor
 
     if !g:ale_sign_column_always && len(l:signlist) > 0
-        if get(g:ale_buffer_sign_dummy_map, a:buffer, 0)
+        if g:ale_buffer_info[a:buffer].dummy_sign_set
             execute 'sign unplace ' . g:ale_sign_offset . ' buffer=' . a:buffer
 
-            let g:ale_buffer_sign_dummy_map[a:buffer] = 0
+            let g:ale_buffer_info[a:buffer].dummy_sign_set = 0
         endif
     endif
 endfunction

@@ -1,49 +1,60 @@
 Before:
-  let g:ale_buffer_loclist_map = {}
+  let g:ale_statusline_format = ['%sE', '%sW', 'OKIE']
+
+After:
+  let g:ale_buffer_info = {}
 
 Execute (Count should be 0 when data is empty):
+  let g:ale_buffer_info = {}
   AssertEqual [0, 0], ale#statusline#Count(bufnr('%'))
 
-Before:
-  let g:ale_buffer_count_map = {'44': [1, 2]}
-
 Execute (Count should read data from the cache):
+  let g:ale_buffer_info = {'44': {'count': [1, 2]}}
   AssertEqual [1, 2], ale#statusline#Count(44)
 
-Execute (Update the cache with new data):
+Execute (The count should be correct after an update):
+  let g:ale_buffer_info = {'44': {}}
   call ale#statusline#Update(44, [])
-
-Then (The cache should reflect the new data):
   AssertEqual [0, 0], ale#statusline#Count(44)
 
-Before:
-  let g:ale_buffer_loclist_map = {'1': [{'lnum': 1, 'bufnr': 1, 'vcol': 0, 'linter_name': 'testlinter', 'nr': -1, 'type': 'E', 'col': 1, 'text': 'Test Error'}]}
-
 Execute (Count should be match the loclist):
-  AssertEqual [1, 0], ale#statusline#Count(1)
+  let g:ale_buffer_info = {
+  \ bufnr('%'): {
+  \   'loclist': [
+  \     {
+  \       'lnum': 1,
+  \       'bufnr': 1,
+  \       'vcol': 0,
+  \       'linter_name': 'testlinter',
+  \       'nr': -1,
+  \       'type': 'E',
+  \       'col': 1,
+  \       'text': 'Test Error',
+  \     },
+  \   ],
+  \ },
+  \}
+  AssertEqual [1, 0], ale#statusline#Count(bufnr('%'))
 
 Execute (Output should be empty for non-existant buffer):
   AssertEqual [0, 0], ale#statusline#Count(9001)
 
-Before:
-  let g:ale_statusline_format = ['%sE', '%sW', 'OKIE']
-
-Execute (Given some errors):
+Execute (Statusline is formatted to the users preference for just errors):
+  let g:ale_buffer_info = {bufnr('%'): {}}
   call ale#statusline#Update(bufnr('%'), [{'type': 'E'}, {'type': 'E'}])
-Then (Statusline is formatted to the users preference):
   AssertEqual '2E', ale#statusline#Status()
 
-Execute (Given some warnings):
+Execute (Statusline is formatted to the users preference for just warnings):
+  let g:ale_buffer_info = {bufnr('%'): {}}
   call ale#statusline#Update(bufnr('%'), [{'type': 'W'}, {'type': 'W'}, {'type': 'W'}])
-Then (Statusline is formatted to the users preference):
   AssertEqual '3W', ale#statusline#Status()
 
-Execute (Given some warnings, and errors):
+Execute (Statusline is formatted to the users preference for errors and warnings):
+  let g:ale_buffer_info = {bufnr('%'): {}}
   call ale#statusline#Update(bufnr('%'), [{'type': 'E'}, {'type': 'W'}, {'type': 'W'}])
-Then (Statusline is formatted to the users preference):
   AssertEqual '1E 2W', ale#statusline#Status()
 
-Execute (Given a lack of data):
+Execute (Statusline is formatted to the users preference for no errors or warnings):
+  let g:ale_buffer_info = {bufnr('%'): {}}
   call ale#statusline#Update(bufnr('%'), [])
-Then (Statusline is formatted to the users preference):
   AssertEqual 'OKIE', ale#statusline#Status()
