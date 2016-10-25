@@ -15,7 +15,25 @@ back to a filesystem.
 
 In other words, this plugin allows you to lint while you type.
 
-## Supported Languages and Tools
+## Table of Contents
+
+1.   [Supported Languages and Tools](#supported-languages)
+2.   [Usage](#usage)
+3.   [Installation](#installation)
+3.1. [Installation with Pathogen](#installation-with-pathogen)
+3.2. [Installation with Vundle](#installation-with-vundle)
+3.3. [Manual Installation](#manual-installation)
+4.   [FAQ](#faq)
+4.1. [How do I disable particular linters?](#faq-disable-linters)
+4.2. [How can I keep the sign gutter open?](#faq-disable-linters)
+4.3. [How can I change the signs ALE uses?](#faq-change-signs)
+4.4. [How can I show errors or warnings in my statusline?](#faq-statusline)
+4.5. [How can I change the format for echo messages?](#faq-echo-format)
+4.6. [How can I execute some code when ALE stops linting?](#faq-autocmd)
+
+<a name="supported-languages"></a>
+
+## 1. Supported Languages and Tools
 
 This plugin supports the following languages and tools. All available
 tools will be run in combination, so they can be complementary.
@@ -68,7 +86,9 @@ or [create a pull request](https://github.com/w0rp/ale/pulls).
 If your tool can read from stdin or you have code to suggest which is good,
 support can be happily added for more tools.
 
-## Usage
+<a name="usage"></a>
+
+## 2. Usage
 
 Once this plugin is installed, while editing your files in supported
 languages and tools which have been correctly installed,
@@ -77,32 +97,90 @@ programs for checking the syntax and semantics of your programs. By default,
 linters will be re-run in the background to check your syntax when you open
 new buffers or as you make edits to your files.
 
-### Options
+The behaviour of linting can be configured with a variety of options,
+documented in [the Vim help file](doc/ale.txt). For more information on the
+options ALE offers, consult `:help ale-options` for global options and `:help
+ale-linter-options` for options specified to particular linters.
 
-A full list of options supported for configuring this plugin in your
-vimrc file for all given linters is as follows:
+<a name="installation"></a>
 
-| Option | Description | Default |
-| ------ | ----------- | ------- |
-| `g:ale_echo_cursor` | echo errors when the cursor is over them | `1` |
-| `g:ale_echo_msg_format` | string format to use for the echoed message | `'%s'` |
-| `g:ale_echo_msg_error_str` | string used for error severity in echoed message | `'Error'` |
-| `g:ale_echo_msg_warning_str` | string used for warning severity in echoed message | `'Warning'` |
-| `g:ale_lint_delay` | milliseconds to wait before linting | `200` |
-| `g:ale_linters` | a dictionary of linters to whitelist | _not set_ |
-| `g:ale_lint_on_enter` | lint when opening a file  | `1` |
-| `g:ale_lint_on_save` | lint when saving a file  | `0` |
-| `g:ale_lint_on_text_changed` | lint while typing  | `1` |
-| `g:ale_set_loclist` | set the loclist with errors | `1` |
-| `g:ale_set_signs` | set gutter signs with error markers | `has('signs')` |
-| `g:ale_sign_column_always` | always show the sign gutter | `0` |
-| `g:ale_sign_error` | the text to use for errors in the gutter | `'>>'` |
-| `g:ale_sign_offset` | an offset for sign ids | `1000000` |
-| `g:ale_sign_warning` | the text to use for warnings in the gutter | `'--'` |
-| `g:ale_statusline_format` | string format to use in statusline flag | `['%d error(s)', '%d warning(s)', 'OK']` |
-| `g:ale_warn_about_trailing_whitespace` | enable trailing whitespace warnings for some linters | `1` |
+## 3. Installation
 
-### Selecting Particular Linters
+To install this plugin, you should use one of the following methods.
+For Windows users, replace usage of the Unix `~/.vim` directory with
+`%USERPROFILE%\_vim`, or another directory if you have configured
+Vim differently. On Windows, your `~/.vimrc` file will be similarly
+stored in `%USERPROFILE%\_vimrc`.
+
+<a name="installation-with-pathogen"></a>
+
+### 3.1. Installation with Pathogen
+
+To install this module with [Pathogen](https://github.com/tpope/vim-pathogen),
+you should clone this repository to your bundle directory, and ensure
+you have the line `execute pathogen#infect()` in your `~/.vimrc` file.
+You can run the following commands in your terminal to do so:
+
+```bash
+cd ~/.vim/bundle
+git clone https://github.com/w0rp/ale.git
+```
+
+<a name="installation-with-vundle"></a>
+
+### 3.2. Installation with Vundle
+
+You can install this plugin using [Vundle](https://github.com/VundleVim/Vundle.vim)
+by using the path on GitHub for this repository.
+
+```vim
+Plugin 'w0rp/ale'
+```
+
+See the Vundle documentation for more information.
+
+<a name="manual-installation"></a>
+
+### 3.3. Manual Installation
+
+For installation without a package manager, you can clone this git repository
+into a bundle directory as with pathogen, and add the repository to your
+runtime path yourself. First clone the repository.
+
+```bash
+cd ~/.vim/bundle
+git clone https://github.com/w0rp/ale.git
+```
+
+Then, modify your `~/.vimrc` file to add this plugin to your runtime path.
+
+```vim
+set nocompatible
+filetype off
+
+let &runtimepath.=',~/.vim/bundle/ale'
+
+filetype plugin on
+```
+
+You can add the following line to generate documentation tags automatically,
+if you don't have something similar already, so you can use the `:help` command
+to consult ALE's online documentation:
+
+```vim
+silent! helptags ALL
+```
+
+Because the author of this plugin is a weird nerd, this is his preferred
+installation method.
+
+<a name="faq"></a>
+
+## 4. FAQ
+
+<a name="faq-disable-linters"></a>
+
+### 4.1. How do I disable particular linters?
 
 By default, all available tools for all supported languages will be run.
 If you want to only select a subset of the tools, simply create a
@@ -124,15 +202,20 @@ This plugin will look for linters in the [`ale_linters`](ale_linters) directory.
 Each directory within corresponds to a particular filetype in Vim, and each file
 in each directory corresponds to the name of a particular linter.
 
-### Always showing gutter
+<a name="faq-keep-signs"></a>
 
-You can keep the sign gutter open at all times by setting the `g:ale_sign_column_always` to 1
+### 4.2. How can I keep the sign gutter open?
+
+You can keep the sign gutter open at all times by setting the
+`g:ale_sign_column_always` to 1
 
 ```vim
 let g:ale_sign_column_always = 1
 ```
 
-### Customize signs
+<a name="faq-change-signs"></a>
+
+### 4.3. How can I change the signs ALE uses?
 
 Use these options to specify what text should be used for signs:
 
@@ -141,7 +224,9 @@ let g:ale_sign_error = '>>'
 let g:ale_sign_warning = '--'
 ```
 
-### Statusline
+<a name="faq-statusline"></a>
+
+### 4.4. How can I show errors or warnings in my statusline?
 
 You can use `ALEGetStatusLine()` to integrate ALE into vim statusline.
 To enable it, you should have in your `statusline` settings
@@ -166,8 +251,9 @@ let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
 ![Statusline with issues](img/issues.png)
 ![Statusline with no issues](img/no_issues.png)
 
+<a name="faq-echo-format"></a>
 
-### Customize echoed message
+### 4.5. How can I change the format for echo messages?
 
 There are 3 global options that allow customizing the echoed message.
 
@@ -190,58 +276,17 @@ Will give you:
 
 ![Echoed message](img/echo.png)
 
-## Installation
+<a name="faq-autocmd"></a>
 
-To install this plugin, you should use one of the following methods.
-For Windows users, replace usage of the Unix `~/.vim` directory with
-`%USERPROFILE%\_vim`, or another directory if you have configured
-Vim differently. On Windows, your `~/.vimrc` file will be similarly
-stored in `%USERPROFILE%\_vimrc`.
+### 4.6. How can I execute some code when ALE stops linting?
 
-### Installation with Pathogen
-
-To install this module with [Pathogen](https://github.com/tpope/vim-pathogen),
-you should clone this repository to your bundle directory, and ensure
-you have the line `execute pathogen#infect()` in your `~/.vimrc` file.
-You can run the following commands in your terminal to do so:
-
-```bash
-cd ~/.vim/bundle
-git clone https://github.com/w0rp/ale.git
-```
-
-### Installation with Vundle
-
-You can install this plugin using [Vundle](https://github.com/VundleVim/Vundle.vim)
-by using the path on GitHub for this repository.
+ALE runs its own [autocmd](http://vimdoc.sourceforge.net/htmldoc/autocmd.html)
+event whenever has a linter has been successfully executed and processed. This
+autocmd event can be used to call arbitrary functions after ALE stops linting.
 
 ```vim
-Plugin 'w0rp/ale'
+augroup YourGroup
+    autocmd!
+    autocmd ALELint * call YourFunction()
+augroup END
 ```
-
-See the Vundle documentation for more information.
-
-### Manual Installation
-
-For installation without a package manager, you can clone this git repository
-into a bundle directory as with pathogen, and add the repository to your
-runtime path yourself. First clone the repository.
-
-```bash
-cd ~/.vim/bundle
-git clone https://github.com/w0rp/ale.git
-```
-
-Then, modify your `~/.vimrc` file to add this plugin to your runtime path.
-
-```vim
-set nocompatible
-filetype off
-
-let &runtimepath.=',~/.vim/bundle/ale'
-
-filetype plugin on
-```
-
-Because the author of this plugin is a weird nerd, this is his preferred
-installation method.
