@@ -284,9 +284,11 @@ ALE runs its own [autocmd](http://vimdoc.sourceforge.net/htmldoc/autocmd.html)
 event whenever has a linter has been successfully executed and processed. This
 autocmd event can be used to call arbitrary functions after ALE stops linting.
 
+This can be used to update your statusline, for example.
+
 ```vim
 augroup YourGroup
     autocmd!
-    autocmd ALELint * call YourFunction()
+    autocmd User ALELint call statusline#update()
 augroup END
 ```
