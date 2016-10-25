@@ -287,6 +287,6 @@ autocmd event can be used to call arbitrary functions after ALE stops linting.
 ```vim
 augroup YourGroup
     autocmd!
-    autocmd ALELint * call YourFunction()
+    autocmd User ALELint * call YourFunction()
 augroup END
 ```
