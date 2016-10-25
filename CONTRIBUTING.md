@@ -10,6 +10,11 @@
 
 Have fun, and work on whatever floats your boat. Take It Easy :tm:.
 
+When writing code, follow the [Google Vimscript Style Guide](https://google.github.io/styleguide/vimscriptguide.xml), and
+run `vint -s` on your files to check for most of what the guide mentions and more. If you install this plugin and install
+[Vint](https://github.com/Kuniwak/vint), it will check your code while you type.
+
+
 <a name="pull-requests"></a>
 
 # 2. Creating Pull Requests
