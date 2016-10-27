@@ -16,9 +16,25 @@ else
     let s:exclude_option = ''
 endif
 
+function! s:GetDialectArgument()
+    if exists('b:is_bash') && b:is_bash
+        return '-s bash'
+    elseif exists('b:is_sh') && b:is_sh
+        return '-s sh'
+    elseif exists('b:is_kornshell') && b:is_kornshell
+        return '-s ksh'
+    endif
+
+    return ''
+endfunction
+
+function! ale_linters#sh#shellcheck#GetCommand(buffer)
+  return 'shellcheck ' . s:exclude_option . ' ' . s:GetDialectArgument() . ' -f gcc -'
+endfunction
+
 call ale#linter#Define('sh', {
 \   'name': 'shellcheck',
 \   'executable': 'shellcheck',
-\   'command': 'shellcheck ' . s:exclude_option . ' -f gcc -',
+\   'command_callback': 'ale_linters#sh#shellcheck#GetCommand',
 \   'callback': 'ale#handlers#HandleGCCFormat',
 \})
