@@ -549,6 +549,17 @@ g:ale_cpp_cppcheck_options                           *g:ale_cpp_cppcheck_options
   This variable can be changed to modify flags given to cppcheck.
 
 
+-------------------------------------------------------------------------------
+4.14. htmlhint                                      *ale-linter-options-htmlhint*
+
+g:ale_html_htmlhint_options                         *g:ale_html_htmlhint_options*
+
+  Type: |String|
+  Default: `'--format=unix stdin'`
+
+  This variable can be changed to modify flags given to HTMLHint.
+
+
 ===============================================================================
 5. Commands/Keybinds                                             *ale-commands*
 
