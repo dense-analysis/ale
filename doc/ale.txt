@@ -23,6 +23,7 @@ CONTENTS                                                         *ale-contents*
     4.11. luacheck..............................|ale-linter-options-luacheck|
     4.12. c-cppcheck............................|ale-linter-options-c-cppcheck|
     4.13. cpp-cppcheck..........................|ale-linter-options-cpp-cppcheck|
+    4.14. htmlhint..............................|ale-linter-options-htmlhint|
   5. Commands/Keybinds..........................|ale-commands|
   6. API........................................|ale-api|
   7. Special Thanks.............................|ale-special-thanks|
