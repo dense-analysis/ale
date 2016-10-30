@@ -61,7 +61,7 @@ name. That seems to be the fairest way to arrange this table.
 | Go | [gofmt -e](https://golang.org/cmd/gofmt/), [go vet](https://golang.org/cmd/vet/), [golint](https://godoc.org/github.com/golang/lint) |
 | Haskell | [ghc](https://www.haskell.org/ghc/), [hlint](https://hackage.haskell.org/package/hlint) |
 | HTML | [HTMLHint](http://htmlhint.com/), [tidy](http://www.html-tidy.org/) |
-| JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/) |
+| JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/), [FlowType](https://flowtype.org/) |
 | JSON | [jsonlint](http://zaa.ch/jsonlint/) |
 | Lua | [luacheck](https://github.com/mpeterv/luacheck) |
 | Markdown | [mdl](https://github.com/mivok/markdownlint) |
