@@ -23,6 +23,7 @@ CONTENTS                                                         *ale-contents*
     4.11. luacheck..............................|ale-linter-options-luacheck|
     4.12. c-cppcheck............................|ale-linter-options-c-cppcheck|
     4.13. cpp-cppcheck..........................|ale-linter-options-cpp-cppcheck|
+    4.14. htmlhint..............................|ale-linter-options-htmlhint|
   5. Commands/Keybinds..........................|ale-commands|
   6. API........................................|ale-api|
   7. Special Thanks.............................|ale-special-thanks|
@@ -547,6 +548,17 @@ g:ale_cpp_cppcheck_options                           *g:ale_cpp_cppcheck_options
   Default: `'--enable=style'`
 
   This variable can be changed to modify flags given to cppcheck.
+
+
+-------------------------------------------------------------------------------
+4.14. htmlhint                                      *ale-linter-options-htmlhint*
+
+g:ale_html_htmlhint_options                         *g:ale_html_htmlhint_options*
+
+  Type: |String|
+  Default: `'--format=unix'`
+
+  This variable can be changed to modify flags given to HTMLHint.
 
 
 ===============================================================================
