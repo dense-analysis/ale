@@ -68,7 +68,7 @@ let g:ale_lint_on_enter = get(g:, 'ale_lint_on_enter', 1)
 if g:ale_lint_on_enter
     augroup ALERunOnEnterGroup
         autocmd!
-        call ALEAutoCMD('BufEnter,BufRead', 'ale#Queue(100)')
+        call ALEAutoCMD('BufEnter,BufRead', 'ale#Queue(300)')
     augroup END
 endif
 
