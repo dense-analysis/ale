@@ -27,31 +27,35 @@ endfunction
 function! ale_linters#javascript#flow#Handle(buffer, lines)
   let l:flow_output = json_decode(join(a:lines, ''))
 
-  let l:output = []
+  if l:flow_output
+    let l:output = []
 
-  for l:error in l:flow_output.errors
-    " Each error is broken up into parts
-    let l:text = ''
-    let l:line = 0
-    for l:message in l:error.message
-      " Comments have no line of column information
-      if l:message.line + 0
-        let l:line = l:message.line + 0
-      endif
-      let l:text = l:text . ' ' . l:message.descr
+    for l:error in l:flow_output.errors
+      " Each error is broken up into parts
+      let l:text = ''
+      let l:line = 0
+      for l:message in l:error.message
+        " Comments have no line of column information
+        if l:message.line + 0
+          let l:line = l:message.line + 0
+        endif
+        let l:text = l:text . ' ' . l:message.descr
+      endfor
+
+      call add(l:output, {
+      \   'bufnr': a:buffer,
+      \   'lnum': l:line,
+      \   'vcol': 0,
+      \   'col': 0,
+      \   'text': l:text,
+      \   'type': l:error.level ==# 'error' ? 'E' : 'W',
+      \})
     endfor
 
-    call add(l:output, {
-    \   'bufnr': a:buffer,
-    \   'lnum': l:line,
-    \   'vcol': 0,
-    \   'col': 0,
-    \   'text': l:text,
-    \   'type': l:error.level ==# 'error' ? 'E' : 'W',
-    \})
-  endfor
-
-  return l:output
+    return l:output
+  else
+    return []
+  endif
 endfunction
 
 call ale#linter#Define('javascript', {

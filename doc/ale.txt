@@ -11,7 +11,7 @@ CONTENTS                                                         *ale-contents*
   3. Global Options.............................|ale-options|
   4. Linter Specific Options....................|ale-linter-options|
     4.1.  eslint................................|ale-linter-options-eslint|
-    4.2.  flow..................................ale-linter-options-flow
+    4.2.  flow..................................|ale-linter-options-flow|
     4.3.  jshint................................|ale-linter-options-jshint|
     4.4.  phpcs.................................|ale-linter-options-phpcs|
     4.5.  html-tidy.............................|ale-linter-options-html-tidy|
@@ -379,9 +379,9 @@ g:ale_javascript_eslint_use_global         *g:ale_javascript_eslint_use_global*
   eslint in node_modules.
 
 -------------------------------------------------------------------------------
-4.2. flow                                         *ale-linter-options-flow*
+4.2. flow                                             *ale-linter-options-flow*
 
-g:ale_javascript_flow_executable         *g:ale_javascript_flow_executable*
+g:ale_javascript_flow_executable             *g:ale_javascript_flow_executable*
 
   Type: |String|
   Default: `'flow'`
@@ -393,7 +393,7 @@ g:ale_javascript_flow_executable         *g:ale_javascript_flow_executable*
   |g:ale_javascript_flow_use_global| to `1`.
 
 
-g:ale_javascript_flow_use_global         *g:ale_javascript_flow_use_global*
+g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
 
   Type: |String|
   Default: `0`
