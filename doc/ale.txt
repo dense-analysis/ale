@@ -389,9 +389,6 @@ g:ale_javascript_flow_executable         *g:ale_javascript_flow_executable*
   ALE will first discover the flow path in an ancestor node_modules
   directory. If no such path exists, this variable will be used instead.
 
-  This variable can be set to change the path to flow. If you have flow_d
-  installed, you can set this option to use flow_d instead.
-
   If you wish to use only a globally installed version of flow, set
   |g:ale_javascript_flow_use_global| to `1`.
 
