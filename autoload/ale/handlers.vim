@@ -4,7 +4,7 @@ scriptencoding utf-8
 "   linter which outputs warnings and errors in a format accepted by one of
 "   these functions can simply use one of these pre-defined error handlers.
 
-let s:path_pattern = '[a-zA-Z]\?\\\?:\?[[:alnum:]/\.-]\+'
+let s:path_pattern = '[a-zA-Z]\?\\\?:\?[[:alnum:]/\.\-_]\+'
 
 function! s:HandleUnixFormat(buffer, lines, type) abort
     " Matches patterns line the following:
