@@ -55,7 +55,7 @@ The following languages and tools are supported.
 * Ansible: 'ansible-lint'
 * Bash: 'shell' (-n flag), 'shellcheck'
 * Bourne Shell: 'shell' (-n flag), 'shellcheck'
-* C: 'cppcheck', 'gcc'
+* C: 'cppcheck', 'gcc', 'clang'
 * C++ (filetype cpp): 'cppcheck', 'gcc'
 * CoffeeScript: 'coffee', 'coffelint'
 * CSS: 'csslint'
@@ -559,6 +559,17 @@ g:ale_html_htmlhint_options                         *g:ale_html_htmlhint_options
   Default: `'--format=unix'`
 
   This variable can be changed to modify flags given to HTMLHint.
+
+
+-------------------------------------------------------------------------------
+4.5. c-gcc                                         *ale-linter-options-c-clang*
+
+g:ale_c_clang_options                                   *g:ale_c_clang_options*
+
+  Type: |String|
+  Default: `'-std=c11 -Wall'`
+
+  This variable can be change to modify flags given to clang.
 
 
 ===============================================================================
