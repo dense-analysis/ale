@@ -22,11 +22,15 @@ endfunction
 
 function! ale#engine#InitBufferInfo(buffer) abort
     if !has_key(g:ale_buffer_info, a:buffer)
+        " job_list will hold the list of jobs
+        " dummy_sign_set will tell us if we previously created a dummy sign.
+        " loclist holds the loclist items after all jobs have completed.
+        " new_loclist holds loclist items while jobs are being run.
         let g:ale_buffer_info[a:buffer] = {
         \   'job_list': [],
-        \   'should_reset': 1,
         \   'dummy_sign_set': 0,
         \   'loclist': [],
+        \   'new_loclist': [],
         \}
     endif
 endfunction
@@ -118,20 +122,23 @@ function! s:HandleExit(job) abort
         let l:item.linter_name = l:linter.name
     endfor
 
-    if g:ale_buffer_info[l:buffer].should_reset
-        " Set the flag for resetting the loclist to 0 again, so we won't
-        " empty the list later.
-        let g:ale_buffer_info[l:buffer].should_reset = 0
-        let g:ale_buffer_info[l:buffer].loclist = []
-    endif
-
     " Add the loclist items from the linter.
-    call extend(g:ale_buffer_info[l:buffer].loclist, l:linter_loclist)
+    call extend(g:ale_buffer_info[l:buffer].new_loclist, l:linter_loclist)
+
+    if !empty(g:ale_buffer_info[l:buffer].job_list)
+        " Wait for all jobs to complete before doing anything else.
+        return
+    endif
 
     " Sort the loclist again.
     " We need a sorted list so we can run a binary search against it
     " for efficient lookup of the messages in the cursor handler.
-    call sort(g:ale_buffer_info[l:buffer].loclist, 'ale#util#LocItemCompare')
+    call sort(g:ale_buffer_info[l:buffer].new_loclist, 'ale#util#LocItemCompare')
+
+    " Now swap the old and new loclists, after we have collected everything
+    " and sorted the list again.
+    let g:ale_buffer_info[l:buffer].loclist = g:ale_buffer_info[l:buffer].new_loclist
+    let g:ale_buffer_info[l:buffer].new_loclist = []
 
     if g:ale_set_loclist
         call setloclist(0, g:ale_buffer_info[l:buffer].loclist)

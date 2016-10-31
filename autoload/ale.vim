@@ -30,8 +30,8 @@ function! ale#Lint(...) abort
     " Initialise the buffer information if needed.
     call ale#engine#InitBufferInfo(l:buffer)
 
-    " Set a variable telling us to clear the loclist later.
-    let g:ale_buffer_info[l:buffer].should_reset = 1
+    " Clear the new loclist again, so we will work with all new items.
+    let g:ale_buffer_info[l:buffer].new_loclist = []
 
     for l:linter in l:linters
         " Check if a given linter has a program which can be executed.
