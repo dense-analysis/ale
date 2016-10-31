@@ -33,15 +33,6 @@ let g:ale_buffer_info = {}
 " filetypes which can cause issues.
 let g:ale_filetype_blacklist = ['nerdtree', 'unite']
 
-" This function lets you define autocmd commands which blacklist particular
-" filetypes.
-function! ALEAutoCMD(events, function_call)
-    execute 'autocmd '
-    \   . a:events
-    \   ' * if index(g:ale_filetype_blacklist, &filetype) < 0 | call '
-    \   . a:function_call
-endfunction
-
 " This Dictionary configures which linters are enabled for which languages.
 let g:ale_linters = get(g:, 'ale_linters', {})
 
@@ -59,7 +50,7 @@ let g:ale_lint_on_text_changed = get(g:, 'ale_lint_on_text_changed', 1)
 if g:ale_lint_on_text_changed
     augroup ALERunOnTextChangedGroup
         autocmd!
-        call ALEAutoCMD('TextChanged,TextChangedI', 'ale#Queue(g:ale_lint_delay)')
+        autocmd TextChanged,TextChangedI * call ale#Queue(g:ale_lint_delay)
     augroup END
 endif
 
@@ -68,7 +59,7 @@ let g:ale_lint_on_enter = get(g:, 'ale_lint_on_enter', 1)
 if g:ale_lint_on_enter
     augroup ALERunOnEnterGroup
         autocmd!
-        call ALEAutoCMD('BufEnter,BufRead', 'ale#Queue(300)')
+        autocmd BufEnter,BufRead * call ale#Queue(300)
     augroup END
 endif
 
@@ -77,7 +68,7 @@ let g:ale_lint_on_save = get(g:, 'ale_lint_on_save', 0)
 if g:ale_lint_on_save
     augroup ALERunOnSaveGroup
         autocmd!
-        call ALEAutoCMD('BufWrite', 'ale#Queue(0)')
+        autocmd BufWrite * call ale#Queue(0)
     augroup END
 endif
 
@@ -114,7 +105,7 @@ let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
 if g:ale_echo_cursor
     augroup ALECursorGroup
         autocmd!
-        call ALEAutoCMD('CursorMoved,CursorHold', 'ale#cursor#EchoCursorWarningWithDelay()')
+        autocmd CursorMoved,CursorHold * call ale#cursor#EchoCursorWarningWithDelay()
     augroup END
 endif
 
@@ -148,7 +139,7 @@ nnoremap <silent> <Plug>(ale_next_wrap) :ALENextWrap<Return>
 augroup ALECleanupGroup
     autocmd!
     " Clean up buffers automatically when they are unloaded.
-    call ALEAutoCMD('BufUnload', "ale#cleanup#Buffer(expand('<abuf>'))")
+    autocmd BufUnload * call ale#cleanup#Buffer(expand('<abuf>'))
 augroup END
 
 " Backwards Compatibility

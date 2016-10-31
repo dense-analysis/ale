@@ -1,0 +1,11 @@
+Given unite (A Unite.vim file):
+  anything
+
+After:
+  let g:ale_buffer_info = {}
+
+Execute(Running ALE on a blacklisted file shouldn't change anything):
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+
+  AssertEqual {}, g:ale_buffer_info

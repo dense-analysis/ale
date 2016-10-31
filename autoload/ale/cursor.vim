@@ -73,6 +73,11 @@ let s:cursor_timer = -1
 let s:last_pos = [0, 0, 0]
 
 function! ale#cursor#EchoCursorWarningWithDelay() abort
+    " Do nothing for blacklisted files.
+    if index(g:ale_filetype_blacklist, &filetype) >= 0
+        return
+    endif
+
     if s:cursor_timer != -1
         call timer_stop(s:cursor_timer)
         let s:cursor_timer = -1

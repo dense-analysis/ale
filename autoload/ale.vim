@@ -5,6 +5,11 @@
 let s:lint_timer = -1
 
 function! ale#Queue(delay) abort
+    " Do nothing for blacklisted files.
+    if index(g:ale_filetype_blacklist, &filetype) >= 0
+        return
+    endif
+
     if s:lint_timer != -1
         call timer_stop(s:lint_timer)
         let s:lint_timer = -1
@@ -24,6 +29,11 @@ function! ale#Queue(delay) abort
 endfunction
 
 function! ale#Lint(...) abort
+    " Do nothing for blacklisted files.
+    if index(g:ale_filetype_blacklist, &filetype) >= 0
+        return
+    endif
+
     let l:buffer = bufnr('%')
     let l:linters = ale#linter#Get(&filetype)
 
