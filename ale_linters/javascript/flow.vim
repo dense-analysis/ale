@@ -9,7 +9,7 @@ let g:ale_javascript_flow_use_global =
 
 function! ale_linters#javascript#flow#GetExecutable(buffer) abort
   if g:ale_javascript_flow_use_global
-    return g:ale_javascript_flow_use_global
+    return g:ale_javascript_flow_executable
   endif
 
   return ale#util#ResolveLocalPath(
@@ -27,7 +27,7 @@ endfunction
 function! ale_linters#javascript#flow#Handle(buffer, lines)
   let l:flow_output = json_decode(join(a:lines, ''))
 
-  if l:flow_output
+  if has_key(l:flow_output, 'errors')
     let l:output = []
 
     for l:error in l:flow_output.errors
