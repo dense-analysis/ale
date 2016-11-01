@@ -36,6 +36,8 @@ temp_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'ale_linters')
 temp_file="$temp_dir/file.d"
 trap 'rm -r "$temp_dir"' EXIT
 
-cp /dev/stdin "$temp_file"
+while read -r; do
+  echo "$REPLY" >> "$temp_file"
+done
 
 dmd $(import_line_options) "$@" "$temp_file"
