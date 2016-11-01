@@ -11,19 +11,20 @@ CONTENTS                                                         *ale-contents*
   3. Global Options.............................|ale-options|
   4. Linter Specific Options....................|ale-linter-options|
     4.1.  eslint................................|ale-linter-options-eslint|
-    4.2.  jshint................................|ale-linter-options-jshint|
-    4.3.  phpcs.................................|ale-linter-options-phpcs|
-    4.4.  html-tidy.............................|ale-linter-options-html-tidy|
-    4.5.  c-gcc.................................|ale-linter-options-c-gcc|
-    4.6.  cpp-gcc...............................|ale-linter-options-cpp-gcc|
-    4.7.  fortran-gcc...........................|ale-linter-options-fortran-gcc|
-    4.8.  shell.................................|ale-linter-options-shell|
-    4.9.  shellcheck............................|ale-linter-options-shellcheck|
-    4.10. vint..................................|ale-linter-options-vint|
-    4.11. luacheck..............................|ale-linter-options-luacheck|
-    4.12. c-cppcheck............................|ale-linter-options-c-cppcheck|
-    4.13. cpp-cppcheck..........................|ale-linter-options-cpp-cppcheck|
-    4.14. htmlhint..............................|ale-linter-options-htmlhint|
+    4.2.  flow..................................|ale-linter-options-flow|
+    4.3.  jshint................................|ale-linter-options-jshint|
+    4.4.  phpcs.................................|ale-linter-options-phpcs|
+    4.5.  html-tidy.............................|ale-linter-options-html-tidy|
+    4.6.  c-gcc.................................|ale-linter-options-c-gcc|
+    4.7.  cpp-gcc...............................|ale-linter-options-cpp-gcc|
+    4.8.  fortran-gcc...........................|ale-linter-options-fortran-gcc|
+    4.9.  shell.................................|ale-linter-options-shell|
+    4.10. shellcheck............................|ale-linter-options-shellcheck|
+    4.11. vint..................................|ale-linter-options-vint|
+    4.12. luacheck..............................|ale-linter-options-luacheck|
+    4.13. c-cppcheck............................|ale-linter-options-c-cppcheck|
+    4.14. cpp-cppcheck..........................|ale-linter-options-cpp-cppcheck|
+    4.15. htmlhint..............................|ale-linter-options-htmlhint|
   5. Commands/Keybinds..........................|ale-commands|
   6. API........................................|ale-api|
   7. Special Thanks.............................|ale-special-thanks|
@@ -66,7 +67,7 @@ The following languages and tools are supported.
 * Go: 'gofmt -e', 'go vet', 'golint'
 * Haskell: 'ghc', 'hlint'
 * HTML: 'HTMLHint', 'tidy'
-* JavaScript: 'eslint', 'jscs', 'jshint'
+* JavaScript: 'eslint', 'jscs', 'jshint', 'flow'
 * JSON: 'jsonlint'
 * Lua: 'luacheck'
 * Markdown: 'mdl'
@@ -377,9 +378,33 @@ g:ale_javascript_eslint_use_global         *g:ale_javascript_eslint_use_global*
   global version of eslint, in preference to locally installed versions of
   eslint in node_modules.
 
+-------------------------------------------------------------------------------
+4.2. flow                                             *ale-linter-options-flow*
+
+g:ale_javascript_flow_executable             *g:ale_javascript_flow_executable*
+
+  Type: |String|
+  Default: `'flow'`
+
+  ALE will first discover the flow path in an ancestor node_modules
+  directory. If no such path exists, this variable will be used instead.
+
+  If you wish to use only a globally installed version of flow, set
+  |g:ale_javascript_flow_use_global| to `1`.
+
+
+g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
+
+  Type: |String|
+  Default: `0`
+
+  This variable controls whether or not ALE will search for a local path for
+  flow first. If this variable is set to `1`, then ALE will always use the
+  global version of flow, in preference to locally installed versions of
+  flow in node_modules.
 
 -------------------------------------------------------------------------------
-4.2. jshint                                         *ale-linter-options-jshint*
+4.3. jshint                                         *ale-linter-options-jshint*
 
 g:ale_javascript_jshint_executable         *g:ale_javascript_jshint_executable*
 
@@ -407,7 +432,7 @@ g:ale_javascript_jshint_use_global         *g:ale_javascript_jshint_use_global*
 
 
 -------------------------------------------------------------------------------
-4.3. phpcs                                           *ale-linter-options-phpcs*
+4.4. phpcs                                           *ale-linter-options-phpcs*
 
 g:ale_php_phpcs_standard                             *g:ale_php_phpcs_standard*
 
@@ -420,7 +445,7 @@ g:ale_php_phpcs_standard                             *g:ale_php_phpcs_standard*
 
 
 -------------------------------------------------------------------------------
-4.4. html-tidy                                   *ale-linter-options-html-tidy*
+4.5. html-tidy                                   *ale-linter-options-html-tidy*
 
 g:ale_html_tidy_executable                         *g:ale_html_tidy_executable*
 
@@ -447,7 +472,7 @@ g:ale_html_tidy_args                                     *g:ale_html_tidy_args*
 
 
 -------------------------------------------------------------------------------
-4.5. c-gcc                                           *ale-linter-options-c-gcc*
+4.6. c-gcc                                           *ale-linter-options-c-gcc*
 
 g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
 
@@ -458,7 +483,7 @@ g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
 
 
 -------------------------------------------------------------------------------
-4.6. cpp-gcc                                       *ale-linter-options-cpp-gcc*
+4.7. cpp-gcc                                       *ale-linter-options-cpp-gcc*
 
 g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
 
@@ -469,7 +494,7 @@ g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
 
 
 -------------------------------------------------------------------------------
-4.7. fortran-gcc                               *ale-linter-options-fortran-gcc*
+4.8. fortran-gcc                               *ale-linter-options-fortran-gcc*
 
 g:ale_fortran_gcc_options                           *g:ale_fortran_gcc_options*
 
@@ -480,7 +505,7 @@ g:ale_fortran_gcc_options                           *g:ale_fortran_gcc_options*
 
 
 -------------------------------------------------------------------------------
-4.8. shell                                           *ale-linter-options-shell*
+4.9. shell                                           *ale-linter-options-shell*
 
 g:ale_linters_sh_shell_default_shell     *g:ale_linters_sh_shell_default_shell*
 
@@ -494,7 +519,7 @@ g:ale_linters_sh_shell_default_shell     *g:ale_linters_sh_shell_default_shell*
 
 
 -------------------------------------------------------------------------------
-4.9. shellcheck                                 *ale-linter-options-shellcheck*
+4.10. shellcheck                                 *ale-linter-options-shellcheck*
 
 g:ale_linters_sh_shellckeck_exclusions *g:ale_linters_sh_shellckeck_exclusions*
 
@@ -505,7 +530,7 @@ g:ale_linters_sh_shellckeck_exclusions *g:ale_linters_sh_shellckeck_exclusions*
 
 
 -------------------------------------------------------------------------------
-4.10. vint                                            *ale-linter-options-vint*
+4.11. vint                                            *ale-linter-options-vint*
 
 g:ale_vim_vint_show_style_issues             *g:ale_vim_vint_show_style_issues*
 
@@ -518,7 +543,7 @@ g:ale_vim_vint_show_style_issues             *g:ale_vim_vint_show_style_issues*
 
 
 -------------------------------------------------------------------------------
-4.11. luacheck                                    *ale-linter-options-luacheck*
+4.12. luacheck                                    *ale-linter-options-luacheck*
 
 g:ale_lua_luacheck_executable                   *g:ale_lua_luacheck_executable*
 
@@ -529,7 +554,7 @@ g:ale_lua_luacheck_executable                   *g:ale_lua_luacheck_executable*
 
 
 -------------------------------------------------------------------------------
-4.12. c-cppcheck                                  *ale-linter-options-c-cppcheck*
+4.13. c-cppcheck                                  *ale-linter-options-c-cppcheck*
 
 g:ale_c_cppcheck_options                               *g:ale_c_cppcheck_options*
 
@@ -540,7 +565,7 @@ g:ale_c_cppcheck_options                               *g:ale_c_cppcheck_options
 
 
 -------------------------------------------------------------------------------
-4.13. cpp-cppcheck                              *ale-linter-options-cpp-cppcheck*
+4.14. cpp-cppcheck                              *ale-linter-options-cpp-cppcheck*
 
 g:ale_cpp_cppcheck_options                           *g:ale_cpp_cppcheck_options*
 
@@ -551,7 +576,7 @@ g:ale_cpp_cppcheck_options                           *g:ale_cpp_cppcheck_options
 
 
 -------------------------------------------------------------------------------
-4.14. htmlhint                                      *ale-linter-options-htmlhint*
+4.15. htmlhint                                      *ale-linter-options-htmlhint*
 
 g:ale_html_htmlhint_options                         *g:ale_html_htmlhint_options*
 
