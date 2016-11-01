@@ -58,6 +58,7 @@ The following languages and tools are supported.
 * Bourne Shell: 'shell' (-n flag), 'shellcheck'
 * C: 'cppcheck', 'gcc', 'clang'
 * C++ (filetype cpp): 'cppcheck', 'gcc'
+* Chef: 'foodcritic'
 * CoffeeScript: 'coffee', 'coffelint'
 * CSS: 'csslint'
 * Cython (pyrex filetype): 'cython'

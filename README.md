@@ -52,6 +52,7 @@ name. That seems to be the fairest way to arrange this table.
 | Bourne Shell | [-n flag](http://linux.die.net/man/1/sh), [shellcheck](https://www.shellcheck.net/) |
 | C | [cppcheck](http://cppcheck.sourceforge.net), [gcc](https://gcc.gnu.org/), [clang](http://clang.llvm.org/)|
 | C++ (filetype cpp) | [cppcheck] (http://cppcheck.sourceforge.net), [gcc](https://gcc.gnu.org/)|
+| Chef | [foodcritic](http://www.foodcritic.io/) |
 | CoffeeScript | [coffee](http://coffeescript.org/), [coffeelint](https://www.npmjs.com/package/coffeelint) |
 | CSS | [csslint](http://csslint.net/) |
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
