@@ -1,5 +1,5 @@
 *ale.txt*  For Vim version 8.0.  Last change: 2016 October 10
-11;rgb:0000/0000/0000*ale*
+*ale*
 
 ALE - Asynchronous Lint Engine
 
