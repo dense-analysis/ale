@@ -25,6 +25,7 @@ CONTENTS                                                         *ale-contents*
     4.13. c-cppcheck............................|ale-linter-options-c-cppcheck|
     4.14. cpp-cppcheck..........................|ale-linter-options-cpp-cppcheck|
     4.15. htmlhint..............................|ale-linter-options-htmlhint|
+    4.16. c-clang...............................|ale-linter-options-c-clang|
   5. Commands/Keybinds..........................|ale-commands|
   6. API........................................|ale-api|
   7. Special Thanks.............................|ale-special-thanks|
@@ -588,9 +589,9 @@ g:ale_html_htmlhint_options                         *g:ale_html_htmlhint_options
 
 
 -------------------------------------------------------------------------------
-4.5. c-gcc                                         *ale-linter-options-c-clang*
+4.16. c-clang                                        *ale-linter-options-c-clang*
 
-g:ale_c_clang_options                                   *g:ale_c_clang_options*
+g:ale_c_clang_options                                     *g:ale_c_clang_options*
 
   Type: |String|
   Default: `'-std=c11 -Wall'`
