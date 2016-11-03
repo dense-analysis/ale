@@ -279,7 +279,7 @@ g:ale_echo_cursor                                           *g:ale_echo_cursor*
   The format of the message can be customizable in |g:ale_echo_msg_format|.
 
 
-g:ale_echo_msg_format                                    *g:ale_echo_msg_format*
+g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
 
   Type: |String|
   Default: `%s`
@@ -291,7 +291,7 @@ g:ale_echo_msg_format                                    *g:ale_echo_msg_format*
   Note |`g:ale_echo_cursor`| should be setted to 1
 
 
-g:ale_echo_msg_error_str                              *g:ale_echo_msg_error_str*
+g:ale_echo_msg_error_str                             *g:ale_echo_msg_error_str*
 
   Type: |String|
   Default: `Error`
@@ -301,7 +301,7 @@ g:ale_echo_msg_error_str                              *g:ale_echo_msg_error_str*
   Note |`g:ale_echo_msg_format`| should contain the `%severity%` handler
 
 
-g:ale_echo_msg_warning_str                          *g:ale_echo_msg_warning_str*
+g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
 
   Type: |String|
   Default: `Warning`
@@ -521,7 +521,7 @@ g:ale_linters_sh_shell_default_shell     *g:ale_linters_sh_shell_default_shell*
 
 
 -------------------------------------------------------------------------------
-4.10. shellcheck                                 *ale-linter-options-shellcheck*
+4.10. shellcheck                                *ale-linter-options-shellcheck*
 
 g:ale_linters_sh_shellckeck_exclusions *g:ale_linters_sh_shellckeck_exclusions*
 
@@ -556,20 +556,9 @@ g:ale_lua_luacheck_executable                   *g:ale_lua_luacheck_executable*
 
 
 -------------------------------------------------------------------------------
-4.13. c-cppcheck                                  *ale-linter-options-c-cppcheck*
+4.13. c-cppcheck                                *ale-linter-options-c-cppcheck*
 
-g:ale_c_cppcheck_options                               *g:ale_c_cppcheck_options*
-
-  Type: |String|
-  Default: `'--enable=style'`
-
-  This variable can be changed to modify flags given to cppcheck.
-
-
--------------------------------------------------------------------------------
-4.14. cpp-cppcheck                              *ale-linter-options-cpp-cppcheck*
-
-g:ale_cpp_cppcheck_options                           *g:ale_cpp_cppcheck_options*
+g:ale_c_cppcheck_options                             *g:ale_c_cppcheck_options*
 
   Type: |String|
   Default: `'--enable=style'`
@@ -578,9 +567,20 @@ g:ale_cpp_cppcheck_options                           *g:ale_cpp_cppcheck_options
 
 
 -------------------------------------------------------------------------------
-4.15. htmlhint                                      *ale-linter-options-htmlhint*
+4.14. cpp-cppcheck                            *ale-linter-options-cpp-cppcheck*
 
-g:ale_html_htmlhint_options                         *g:ale_html_htmlhint_options*
+g:ale_cpp_cppcheck_options                         *g:ale_cpp_cppcheck_options*
+
+  Type: |String|
+  Default: `'--enable=style'`
+
+  This variable can be changed to modify flags given to cppcheck.
+
+
+-------------------------------------------------------------------------------
+4.15. htmlhint                                    *ale-linter-options-htmlhint*
+
+g:ale_html_htmlhint_options                       *g:ale_html_htmlhint_options*
 
   Type: |String|
   Default: `'--format=unix'`
@@ -589,9 +589,9 @@ g:ale_html_htmlhint_options                         *g:ale_html_htmlhint_options
 
 
 -------------------------------------------------------------------------------
-4.16. c-clang                                        *ale-linter-options-c-clang*
+4.16. c-clang                                      *ale-linter-options-c-clang*
 
-g:ale_c_clang_options                                     *g:ale_c_clang_options*
+g:ale_c_clang_options                                   *g:ale_c_clang_options*
 
   Type: |String|
   Default: `'-std=c11 -Wall'`
@@ -754,7 +754,7 @@ ALELint                                                               *ALELint*
 
 
 ===============================================================================
-7. Special Thanks                                           *ale-special-thanks*
+7. Special Thanks                                          *ale-special-thanks*
 
 Special thanks to Mark Grealish (https://www.bhalash.com/) for providing ALE's
 snazzy looking ale glass logo. Cheers, Mark!
