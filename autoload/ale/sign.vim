@@ -31,7 +31,7 @@ function! ale#sign#FindCurrentSigns(buffer) abort
     " Matches output like :
     " line=4  id=1  name=ALEErrorSign
     " строка=1  id=1000001  имя=ALEErrorSign
-    let l:pattern = 'id=\(\d\+\).*=ALE\(Warning\|Error\)Sign'
+    let l:pattern = 'id=\(\d\+\).*=ALE\(Warning\|Error\|Dummy\)Sign'
 
     redir => l:output
        silent exec 'sign place buffer=' . a:buffer
@@ -88,26 +88,36 @@ endfunction
 function! ale#sign#SetSigns(buffer, loclist) abort
     let l:signlist = ale#sign#CombineSigns(a:loclist)
 
-    if len(l:signlist) > 0 || g:ale_sign_column_always
-        if !g:ale_buffer_info[a:buffer].dummy_sign_set
-            " Insert a dummy sign if one is missing.
-            execute 'sign place ' .  g:ale_sign_offset
-            \   . ' line=1 name=ALEDummySign buffer='
-            \   . a:buffer
-
-            let g:ale_buffer_info[a:buffer].dummy_sign_set = 1
-        endif
-    endif
-
-    " Find the current signs with the markers we use.
+    " Find the current markers
     let l:current_id_list = ale#sign#FindCurrentSigns(a:buffer)
+    let l:dummy_sign_set = 0
 
-    " Remove those markers.
+    " Check if we set the dummy sign already.
     for l:current_id in l:current_id_list
-        exec 'sign unplace ' . l:current_id . ' buffer=' . a:buffer
+        if l:current_id == g:ale_sign_offset
+            let l:dummy_sign_set = 1
+        endif
     endfor
 
-    " Now set all of the signs.
+    " If we haven't already set a dummy sign, and we have some previous signs
+    " or always want a dummy sign, then set one, to keep the sign column open.
+    if !l:dummy_sign_set && (len(l:signlist) > 0 || g:ale_sign_column_always)
+        execute 'sign place ' .  g:ale_sign_offset
+        \   . ' line=1 name=ALEDummySign buffer='
+        \   . a:buffer
+
+        let l:dummy_sign_set = 1
+    endif
+
+    " Now remove the previous signs. The dummy will hold the column open
+    " while we add the new signs, if we had signs before.
+    for l:current_id in l:current_id_list
+        if l:current_id != g:ale_sign_offset
+            exec 'sign unplace ' . l:current_id . ' buffer=' . a:buffer
+        endif
+    endfor
+
+    " Add the new signs,
     for l:index in range(0, len(l:signlist) - 1)
         let l:sign = l:signlist[l:index]
         let l:type = l:sign['type'] ==# 'W' ? 'ALEWarningSign' : 'ALEErrorSign'
@@ -120,11 +130,10 @@ function! ale#sign#SetSigns(buffer, loclist) abort
         exec l:sign_line
     endfor
 
-    if !g:ale_sign_column_always && len(l:signlist) > 0
-        if g:ale_buffer_info[a:buffer].dummy_sign_set
-            execute 'sign unplace ' . g:ale_sign_offset . ' buffer=' . a:buffer
-
-            let g:ale_buffer_info[a:buffer].dummy_sign_set = 0
-        endif
+    " Remove the dummy sign now we've updated the signs, unless we want
+    " to keep it, which will keep the sign column open even when there are
+    " no warnings or errors.
+    if l:dummy_sign_set && !g:ale_sign_column_always
+        execute 'sign unplace ' . g:ale_sign_offset . ' buffer=' . a:buffer
     endif
 endfunction

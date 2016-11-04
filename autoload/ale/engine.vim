@@ -23,12 +23,10 @@ endfunction
 function! ale#engine#InitBufferInfo(buffer) abort
     if !has_key(g:ale_buffer_info, a:buffer)
         " job_list will hold the list of jobs
-        " dummy_sign_set will tell us if we previously created a dummy sign.
         " loclist holds the loclist items after all jobs have completed.
         " new_loclist holds loclist items while jobs are being run.
         let g:ale_buffer_info[a:buffer] = {
         \   'job_list': [],
-        \   'dummy_sign_set': 0,
         \   'loclist': [],
         \   'new_loclist': [],
         \}
