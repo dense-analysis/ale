@@ -16,8 +16,6 @@ temp_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'ale_linter')
 temp_file="$temp_dir/file$file_extension"
 trap 'rm -r "$temp_dir"' EXIT
 
-while read -r; do
-  echo "$REPLY" >> "$temp_file"
-done
+cat > "$temp_file"
 
 "$@" "$temp_file"
