@@ -12,8 +12,6 @@ function! ale_linters#typescript#typecheck#Handle(buffer, lines)
 
     for l:line in a:lines
         let l:match = matchlist(l:line, l:pattern)
-        echom len(l:match)
-        echom join(l:match, ", ")
 
         if len(l:match) == 0
             continue
