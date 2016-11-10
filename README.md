@@ -75,7 +75,7 @@ name. That seems to be the fairest way to arrange this table.
 | SASS | [sass-lint](https://www.npmjs.com/package/sass-lint) |
 | SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint) |
 | Scala | [scalac](http://scala-lang.org) |
-| TypeScript | [tslint](https://github.com/palantir/tslint) |
+| TypeScript | [tslint](https://github.com/palantir/tslint), typecheck |
 | Verilog | [iverilog](https://github.com/steveicarus/iverilog), [verilator](http://www.veripool.org/projects/verilator/wiki/Intro) |
 | Vim | [vint](https://github.com/Kuniwak/vint) |
 | YAML | [yamllint](https://yamllint.readthedocs.io/) |

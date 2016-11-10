@@ -82,7 +82,7 @@ The following languages and tools are supported.
 * SASS: 'sasslint'
 * SCSS: 'sasslint', 'scsslint'
 * Scala: 'scalac'
-* TypeScript: 'tslint'
+* TypeScript: 'tslint', 'typecheck'
 * Verilog: 'iverilog', 'verilator'
 * Vim: 'vint'
 * YAML: 'yamllint'
