@@ -598,6 +598,17 @@ g:ale_c_clang_options                                   *g:ale_c_clang_options*
 
   This variable can be change to modify flags given to clang.
 
+-------------------------------------------------------------------------------
+4.17. python-flake8                          *ale-linter-options-python-flake8*
+
+g:ale_python_flake8_executable                 *g:ale_python_flake8_executable*
+
+  Type: |String|
+  Default: `'flake8'`
+
+  This variable can be changed to modify the executable used for flake8.
+  Useful alternative value: `'python3 -m flake8'`.
+
 
 ===============================================================================
 5. Commands/Keybinds                                             *ale-commands*

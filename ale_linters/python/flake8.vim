@@ -1,9 +1,21 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: flake8 for python files
 
+let g:ale_python_flake8_executable =
+\   get(g:, 'ale_python_flake8_executable', 'flake8')
+
+function! ale_linters#python#flake8#GetExecutable(buffer) abort
+    return g:ale_python_flake8_executable
+endfunction
+
+function! ale_linters#python#flake8#GetCommand(buffer) abort
+    return ale_linters#python#flake8#GetExecutable(a:buffer)
+    \   . ' -'
+endfunction
+
 call ale#linter#Define('python', {
 \   'name': 'flake8',
-\   'executable': 'flake8',
-\   'command': 'flake8 -',
+\   'executable_callback': 'ale_linters#python#flake8#GetExecutable',
+\   'command_callback': 'ale_linters#python#flake8#GetCommand',
 \   'callback': 'ale#handlers#HandlePEP8Format',
 \})
