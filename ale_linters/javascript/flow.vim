@@ -25,7 +25,11 @@ function! ale_linters#javascript#flow#GetCommand(buffer) abort
 endfunction
 
 function! ale_linters#javascript#flow#Handle(buffer, lines)
-  let l:flow_output = json_decode(join(a:lines, ''))
+  let l:str = join(a:lines, '')
+  if l:str == ''
+    return []
+  endif
+  let l:flow_output = json_decode(l:str)
 
   if has_key(l:flow_output, 'errors')
     let l:output = []
