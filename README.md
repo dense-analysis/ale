@@ -67,6 +67,7 @@ name. That seems to be the fairest way to arrange this table.
 | Lua | [luacheck](https://github.com/mpeterv/luacheck) |
 | Markdown | [mdl](https://github.com/mivok/markdownlint) |
 | MATLAB | [mlint](https://www.mathworks.com/help/matlab/ref/mlint.html) |
+| OCaml | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-integration-ocaml-merlin` for configuration instructions
 | Perl | [perl -c](https://perl.org/), [perl-critic](https://metacpan.org/pod/Perl::Critic) |
 | PHP | [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer) |
 | Pug | [pug-lint](https://github.com/pugjs/pug-lint) |
