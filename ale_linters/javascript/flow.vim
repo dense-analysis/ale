@@ -21,11 +21,15 @@ endfunction
 
 function! ale_linters#javascript#flow#GetCommand(buffer) abort
   return ale_linters#javascript#flow#GetExecutable(a:buffer)
-  \   . ' check-contents --respect-pragma --json --from ale'
+  \   . ' check-contents --respect-pragma --json --from ale %s'
 endfunction
 
 function! ale_linters#javascript#flow#Handle(buffer, lines)
-  let l:flow_output = json_decode(join(a:lines, ''))
+  let l:str = join(a:lines, '')
+  if l:str ==# ''
+    return []
+  endif
+  let l:flow_output = json_decode(l:str)
 
   if has_key(l:flow_output, 'errors')
     let l:output = []
@@ -34,19 +38,29 @@ function! ale_linters#javascript#flow#Handle(buffer, lines)
       " Each error is broken up into parts
       let l:text = ''
       let l:line = 0
+      let l:col = 0
       for l:message in l:error.message
         " Comments have no line of column information
-        if l:message.line + 0
-          let l:line = l:message.line + 0
+        if has_key(l:message, 'loc') && l:line ==# 0
+          let l:line = l:message.loc.start.line + 0
+          let l:col = l:message.loc.start.column + 0
         endif
-        let l:text = l:text . ' ' . l:message.descr
+        if l:text ==# ''
+          let l:text = l:message.descr . ':'
+        else
+          let l:text = l:text . ' ' . l:message.descr
+        endif
       endfor
+
+      if has_key(l:error, 'operation')
+        let l:text = l:text . ' See also: ' . l:error.operation.descr
+      endif
 
       call add(l:output, {
       \   'bufnr': a:buffer,
       \   'lnum': l:line,
       \   'vcol': 0,
-      \   'col': 0,
+      \   'col': l:col,
       \   'text': l:text,
       \   'type': l:error.level ==# 'error' ? 'E' : 'W',
       \})
