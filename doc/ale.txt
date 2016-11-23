@@ -26,10 +26,13 @@ CONTENTS                                                         *ale-contents*
     4.14. cpp-cppcheck..........................|ale-linter-options-cpp-cppcheck|
     4.15. htmlhint..............................|ale-linter-options-htmlhint|
     4.16. c-clang...............................|ale-linter-options-c-clang|
-  5. Commands/Keybinds..........................|ale-commands|
-  6. API........................................|ale-api|
-  7. Special Thanks.............................|ale-special-thanks|
-  8. Contact....................................|ale-contact|
+    4.17. python-flake8.........................|ale-linter-options-python-flake8|
+  5. Linter Integration Notes...................|ale-linter-integration|
+    5.1.  merlin................................|ale-linter-integration-ocaml-merlin|
+  6. Commands/Keybinds..........................|ale-commands|
+  7. API........................................|ale-api|
+  8. Special Thanks.............................|ale-special-thanks|
+  9. Contact....................................|ale-contact|
 
 ===============================================================================
 1. Introduction                                              *ale-introduction*
@@ -74,6 +77,7 @@ The following languages and tools are supported.
 * Lua: 'luacheck'
 * Markdown: 'mdl'
 * MATLAB: 'mlint'
+* OCaml: 'merlin' (see |ale-linter-integration-ocaml-merlin|)
 * Perl: 'perl' (-c flag), 'perlcritic'
 * PHP: 'php' (-l flag), 'phpcs'
 * Pug: 'pug-lint'
@@ -626,9 +630,21 @@ Python 3, you may want to set >
 after making sure it's installed for the appropriate Python versions (e.g.
 `python3 -m pip install --user flake8`).
 
+===============================================================================
+5. Linter Integration Notes                            *ale-linter-integration*
+
+Some linters may have requirements for some other plugins being installed.
+
+-------------------------------------------------------------------------------
+5.1. ocaml-merlin                                *ale-integration-ocaml-merlin*
+
+  To use merlin linter for OCaml source code you need to make sure Merlin for
+  Vim is correctly configured. See the corresponding Merlin wiki page for
+  detailed instructions
+  (https://github.com/the-lambda-church/merlin/wiki/vim-from-scratch).
 
 ===============================================================================
-5. Commands/Keybinds                                             *ale-commands*
+6. Commands/Keybinds                                             *ale-commands*
 
 ALEPrevious                                                       *ALEPrevious*
 ALEPreviousWrap                                               *ALEPreviousWrap*
@@ -660,7 +676,7 @@ ALENextWrap                                                       *ALENextWrap*
 <
 
 ===============================================================================
-6. API                                                                *ale-api*
+7. API                                                                *ale-api*
 
 ale#Queue(delay)                                                  *ale#Queue()*
   Run linters for the current buffer, based on the filetype of the buffer,
@@ -782,13 +798,13 @@ ALELint                                                               *ALELint*
 
 
 ===============================================================================
-7. Special Thanks                                          *ale-special-thanks*
+8. Special Thanks                                          *ale-special-thanks*
 
 Special thanks to Mark Grealish (https://www.bhalash.com/) for providing ALE's
 snazzy looking ale glass logo. Cheers, Mark!
 
 ===============================================================================
-8. Contact                                                        *ale-contact*
+9. Contact                                                        *ale-contact*
 
 If you like this plugin, and wish to get in touch, check out the GitHub
 page for issues and more at https://github.com/w0rp/ale
