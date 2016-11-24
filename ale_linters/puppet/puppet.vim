@@ -30,8 +30,9 @@ function! ale_linters#puppet#puppet#Handle(buffer, lines)
 endfunction
 
 call ale#linter#Define('puppet', {
-\   'name': 'puppet parser',
+\   'name': 'puppet',
 \   'executable': 'puppet',
+\   'output_stream': 'stderr',
 \   'command': g:ale#util#stdin_wrapper . '.pp puppet parser validate --color=false',
 \   'callback': 'ale_linters#puppet#puppet#Handle',
 \})
