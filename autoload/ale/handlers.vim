@@ -181,26 +181,3 @@ function! ale#handlers#HandleCSSLintFormat(buffer, lines) abort
 
     return l:output
 endfunction
-
-function! ale#handlers#HandleProselintFormat(buffer, lines) abort
-    " matches: txt.txt:1:2: hyperbolic.misc '!!!!!' is hyperbolic.
-
-    let l:pattern = '^.*\(\d\+\):\(\d\+\):\ \(.*\)$'
-    let l:output = []
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-        if len(l:match) == 0
-            continue
-        endif
-        call add(l:output, {
-                    \   'bufnr': a:buffer,
-                    \   'lnum': l:match[1],
-                    \   'vcol': 0,
-                    \   'col': l:match[2],
-                    \   'text': l:match[3],
-                    \   'type': 'W',
-                    \   'nr': -1,
-                    \})
-    endfor
-    return l:output
-endfunction

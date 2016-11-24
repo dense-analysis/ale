@@ -5,7 +5,7 @@ call ale#linter#Define('text', {
             \   'name': 'proselint',
             \   'executable': 'proselint',
             \   'command': g:ale#util#stdin_wrapper . ' .txt proselint',
-            \   'callback': 'ale#handlers#HandleProselintFormat',
+            \   'callback': 'ale#handlers#HandleUnixFormatAsWarning',
             \})
 
 
