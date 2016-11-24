@@ -69,7 +69,7 @@ The following languages and tools are supported.
 * D: 'dmd'
 * Elixir: 'credo'
 * Fortran: 'gcc'
-* Go: 'gofmt -e', 'go vet', 'golint'
+* Go: 'gofmt -e', 'go vet', 'golint', 'go build'
 * Haskell: 'ghc', 'hlint'
 * HTML: 'HTMLHint', 'tidy'
 * JavaScript: 'eslint', 'jscs', 'jshint', 'flow'
