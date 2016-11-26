@@ -27,6 +27,8 @@ CONTENTS                                                         *ale-contents*
     4.15. htmlhint..............................|ale-linter-options-htmlhint|
     4.16. c-clang...............................|ale-linter-options-c-clang|
     4.17. python-flake8.........................|ale-linter-options-python-flake8|
+    4.18. ruby-rubocop..........................|ale-linter-options-ruby-rubocop|
+    4.19. chktex................................|ale-linter-options-chktex|
   5. Linter Integration Notes...................|ale-linter-integration|
     5.1.  merlin................................|ale-linter-integration-ocaml-merlin|
   6. Commands/Keybinds..........................|ale-commands|
@@ -74,6 +76,7 @@ The following languages and tools are supported.
 * HTML: 'HTMLHint', 'tidy'
 * JavaScript: 'eslint', 'jscs', 'jshint', 'flow'
 * JSON: 'jsonlint'
+* LaTeX: 'chktex'
 * Lua: 'luacheck'
 * Markdown: 'mdl'
 * MATLAB: 'mlint'
@@ -640,6 +643,23 @@ g:ale_ruby_rubocop_options                         *g:ale_ruby_rubocop_options*
   Default: `''`
 
   This variable can be change to modify flags given to rubocop.
+
+-------------------------------------------------------------------------------
+4.19. chktex                                        *ale-linter-options-chktex*
+
+g:ale_tex_chktex_executable                       *g:ale_tex_chktex_executable*
+
+  Type: |String|
+  Default: `'chktex'`
+
+  This variable can be changed to change the path to chktex.
+
+g:ale_tex_chktex_options                             *g:ale_tex_chktex_options*
+
+  Type: |String|
+  Default: `'-I'`
+
+  This variable can be changed to modify flags given to chktex.
 
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*
