@@ -1,12 +1,9 @@
 " Author: poohzrn https://github.com/poohzrn
-" Description: proselint for tex
+" Description: proselint for tex files
 
 call ale#linter#Define('tex', {
-            \   'name': 'proselint',
-            \   'executable': 'proselint',
-            \   'command': g:ale#util#stdin_wrapper . ' .tex proselint',
-            \   'callback': 'ale#handlers#HandleUnixFormatAsWarning',
-            \})
-
-
-" vim:set et sw=4 ts=4 tw=78:
+\   'name': 'proselint',
+\   'executable': 'proselint',
+\   'command': g:ale#util#stdin_wrapper . ' .tex proselint',
+\   'callback': 'ale#handlers#HandleUnixFormatAsWarning',
+\})
