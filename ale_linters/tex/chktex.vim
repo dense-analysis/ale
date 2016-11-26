@@ -31,7 +31,7 @@ function! ale_linters#tex#chktex#Handle(buffer, lines) abort
   "
   " stdin:499:2:24:Delete this space to maintain correct pagereferences.
   " stdin:507:81:3:You should enclose the previous parenthesis with `{}'.
-  let l:pattern = '^stdin:\(\d\+\):\(\d\+\):\d\+:\(.\+\)$'
+  let l:pattern = '^stdin:\(\d\+\):\(\d\+\):\(\d\+\):\(.\+\)$'
   let l:output = []
 
   for l:line in a:lines
@@ -46,7 +46,7 @@ function! ale_linters#tex#chktex#Handle(buffer, lines) abort
     \   'lnum': l:match[1] + 0,
     \   'vcol': 0,
     \   'col': l:match[2] + 0,
-    \   'text': l:match[3],
+    \   'text': l:match[4] . ' (' . (l:match[3]+0) . ')',
     \   'type': 'W',
     \   'nr': -1
     \})
