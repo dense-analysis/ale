@@ -81,6 +81,7 @@ The following languages and tools are supported.
 * Perl: 'perl' (-c flag), 'perlcritic'
 * PHP: 'php' (-l flag), 'phpcs'
 * Pug: 'pug-lint'
+* Puppet: 'puppet', 'puppet-lint'
 * Python: 'flake8', 'pylint'
 * Ruby: 'rubocop'
 * SASS: 'sasslint'
