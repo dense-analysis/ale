@@ -34,10 +34,18 @@ function! ale_linters#ruby#rubocop#Handle(buffer, lines)
     return l:output
 endfunction
 
+" Set this option to change Rubocop options.
+if !exists('g:ale_ruby_rubocop_options')
+    " let g:ale_ruby_rubocop_options = '--lint'
+    let g:ale_ruby_rubocop_options = ''
+endif
+
 call ale#linter#Define('ruby', {
 \   'name': 'rubocop',
 \   'executable': 'rubocop',
-\   'command': 'rubocop --format emacs --stdin _',
+\   'command': 'rubocop --format emacs --stdin '
+\   . g:ale_ruby_rubocop_options
+\   . ' _',
 \   'callback': 'ale_linters#ruby#rubocop#Handle',
 \})
 
