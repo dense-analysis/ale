@@ -31,6 +31,7 @@ In other words, this plugin allows you to lint while you type.
  5. [How can I change the format for echo messages?](#faq-echo-format)
  6. [How can I execute some code when ALE stops linting?](#faq-autocmd)
  7. [How can I navigate between errors quickly?](#faq-navigation)
+ 8. [How can I run linters only when I save files?](#faq-lint-on-save)
 
 <a name="supported-languages"></a>
 
@@ -312,3 +313,21 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 For more information, consult the online documentation with
 `:help ale-navigation-commands`.
+
+<a name="faq-lint-on-save"></a>
+
+### 4.viii. How can I run linters only when I save files?
+
+ALE offers an option `g:ale_lint_on_save` for enabling running the linters
+when files are saved. If you wish to run linters when files are saved, not
+as you are editing files, then you can turn the option for linting
+when text is changed off too.
+
+```vim
+" Write this in your vimrc file
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 0
+" You can disable this option too
+" if you don't want linters to run on opening a file
+let g:ale_lint_on_enter = 0
+```
