@@ -631,6 +631,16 @@ Python 3, you may want to set >
 after making sure it's installed for the appropriate Python versions (e.g.
 `python3 -m pip install --user flake8`).
 
+-------------------------------------------------------------------------------
+4.18. ruby-rubocop                            *ale-linter-options-ruby-rubocop*
+
+g:ale_ruby_rubocop_options                         *g:ale_ruby_rubocop_options*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be change to modify flags given to rubocop.
+
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*
 
