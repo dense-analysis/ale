@@ -37,9 +37,16 @@ function! ale_linters#typescript#tslint#Handle(buffer, lines)
     return l:output
 endfunction
 
+function! ale_linters#typescript#tslint#BuildLintCommand(buffer_n) abort
+  let l:tsconfig_path = ale#util#FindNearestFile(a:buffer_n, 'tslint.json')
+  let l:tslint_options = empty(l:tsconfig_path) ? '' : '-c ' . l:tsconfig_path
+
+  return g:ale#util#stdin_wrapper . ' .ts tslint ' . l:tslint_options
+endfunction
+
 call ale#linter#Define('typescript', {
 \   'name': 'tslint',
 \   'executable': 'tslint',
-\   'command': g:ale#util#stdin_wrapper . ' .ts tslint',
+\   'command_callback': 'ale_linters#typescript#tslint#BuildLintCommand',
 \   'callback': 'ale_linters#typescript#tslint#Handle',
 \})
