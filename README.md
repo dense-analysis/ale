@@ -65,6 +65,7 @@ name. That seems to be the fairest way to arrange this table.
 | HTML | [HTMLHint](http://htmlhint.com/), [tidy](http://www.html-tidy.org/) |
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/), [FlowType](https://flowtype.org/) |
 | JSON | [jsonlint](http://zaa.ch/jsonlint/) |
+| LaTeX | [chktex](http://www.nongnu.org/chktex/), [lacheck](https://www.ctan.org/pkg/lacheck) |
 | Lua | [luacheck](https://github.com/mpeterv/luacheck) |
 | Markdown | [mdl](https://github.com/mivok/markdownlint), [proselint](http://proselint.com/)|
 | MATLAB | [mlint](https://www.mathworks.com/help/matlab/ref/mlint.html) |
