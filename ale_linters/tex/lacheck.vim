@@ -10,8 +10,7 @@ function! ale_linters#tex#lacheck#Handle(buffer, lines) abort
   " "book.tex", line 37: possible unwanted space at "{"
   " "book.tex", line 38: missing `\ ' after "etc."
 
-  " stdin-wrapper makes files like: /tmp/tmp.0hV8ww029I/file.tex
-  let l:pattern = '^".\+/file.tex", line \(\d\+\): \(.\+\)$'
+  let l:pattern = '^".\+", line \(\d\+\): \(.\+\)$'
   let l:output = []
 
   for l:line in a:lines
