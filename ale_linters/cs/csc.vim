@@ -9,8 +9,6 @@ function! ale_linters#cs#csc#Handle(buffer, lines) abort
     let l:pattern = '^.\+.cs(\(\d\+\),\(\d\+\)): \(.\+\): \(.\+\)'
     let l:output = []
 
-    echom string(a:lines)
-
     for l:line in a:lines
         let l:match = matchlist(l:line, l:pattern)
 
