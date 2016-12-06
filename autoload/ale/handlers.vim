@@ -181,3 +181,37 @@ function! ale#handlers#HandleCSSLintFormat(buffer, lines) abort
 
     return l:output
 endfunction
+
+function! ale#handlers#HandleStyleLintFormat(buffer, lines) abort
+    " Matches patterns line the following:
+    "
+    " src/main.css
+    "  108:10  ✖  Unexpected leading zero         number-leading-zero
+    "  116:20  ✖  Expected a trailing semicolon   declaration-block-trailing-semicolon
+    let l:pattern = '^.* \(\d\+\):\(\d\+\) \s\+\(\S\+\)\s\+ \(\u.\+\) \(.\+\)$'
+    let l:output = []
+
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
+
+        if len(l:match) == 0
+            continue
+        endif
+
+        let l:text = l:match[4]
+        let l:type = l:match[3]
+
+        " vcol is Needed to indicate that the column is a character.
+        call add(l:output, {
+        \   'bufnr': a:buffer,
+        \   'lnum': l:match[1] + 0,
+        \   'vcol': 0,
+        \   'col': l:match[2] + 0,
+        \   'text': l:text,
+        \   'type': l:type ==# '✖' ? 'E' : 'W',
+        \   'nr': -1,
+        \})
+    endfor
+
+    return l:output
+endfunction
