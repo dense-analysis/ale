@@ -55,7 +55,7 @@ name. That seems to be the fairest way to arrange this table.
 | C++ (filetype cpp) | [cppcheck] (http://cppcheck.sourceforge.net), [gcc](https://gcc.gnu.org/)|
 | Chef | [foodcritic](http://www.foodcritic.io/) |
 | CoffeeScript | [coffee](http://coffeescript.org/), [coffeelint](https://www.npmjs.com/package/coffeelint) |
-| CSS | [csslint](http://csslint.net/) |
+| CSS | [csslint](http://csslint.net/), [stylelint](https://github.com/stylelint/stylelint) |
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
 | D | [dmd](https://dlang.org/dmd-linux.html)^ |
 | Elixir | [credo](https://github.com/rrrene/credo) |
@@ -76,8 +76,8 @@ name. That seems to be the fairest way to arrange this table.
 | Puppet | [puppet](https://puppet.com), [puppet-lint](https://puppet-lint.com) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/), [pylint](https://www.pylint.org/) |
 | Ruby | [rubocop](https://github.com/bbatsov/rubocop) |
-| SASS | [sass-lint](https://www.npmjs.com/package/sass-lint) |
-| SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint) |
+| SASS | [sass-lint](https://www.npmjs.com/package/sass-lint), [stylelint](https://github.com/stylelint/stylelint) |
+| SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint), [stylelint](https://github.com/stylelint/stylelint) |
 | Scala | [scalac](http://scala-lang.org) |
 | Tex | [proselint](http://proselint.com/) |
 | Text | [proselint](http://proselint.com/) |
