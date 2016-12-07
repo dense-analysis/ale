@@ -127,6 +127,11 @@ function! ale#handlers#HandlePEP8Format(buffer, lines) abort
             continue
         endif
 
+        if l:code ==# 'I0011'
+            " Skip 'Locally disabling' message
+             continue
+        endif
+
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
