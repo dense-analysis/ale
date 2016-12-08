@@ -67,7 +67,7 @@ function! ale#handlers#HandleGCCFormat(buffer, lines) abort
         \   'vcol': 0,
         \   'col': l:match[2] + 0,
         \   'text': l:match[4],
-        \   'type': l:match[3] ==# 'error' ? 'E' : 'W',
+        \   'type': l:match[3] =~# 'error' ? 'E' : 'W',
         \   'nr': -1,
         \})
     endfor
