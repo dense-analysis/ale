@@ -42,7 +42,7 @@ function! ale_linters#kotlin#kotlinc#GetCommand(buffer)
     if g:ale_kotlin_kotlinc_sourcepath !=# ''
         let l:fname .= expand(g:ale_kotlin_kotlinc_sourcepath, 1) . ' '
     endif
-    let l:fname .= shellescape(expand('%', 1))
+    let l:fname .= shellescape(expand('#' . a:buffer . ':p'))
     let l:command .= l:kotlinc_opts . ' ' . l:fname
 
     return l:command
@@ -68,9 +68,11 @@ function! ale_linters#kotlin#kotlinc#Handle(buffer, lines)
 
         let l:bufnr = bufnr(l:file)
         let l:curbufnr = bufnr('%')
+        let l:buf_abspath = expand('#' . l:bufnr . ':p')
+        let l:curbuf_abspath = expand('#' . l:curbufnr . ':p')
 
         " Skip if file is not loaded
-        if l:bufnr == -1 || l:bufnr != l:curbufnr
+        if l:buf_abspath !=# l:curbuf_abspath
             continue
         endif
         let l:type_marker_str = l:type ==# 'warning' ? 'W' : 'E'
