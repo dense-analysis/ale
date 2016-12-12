@@ -66,10 +66,8 @@ function! ale_linters#kotlin#kotlinc#Handle(buffer, lines)
         let l:type = l:match[4]
         let l:text = l:match[5]
 
-        let l:bufnr = bufnr(l:file)
-        let l:curbufnr = bufnr('%')
-        let l:buf_abspath = expand('#' . l:bufnr . ':p')
-        let l:curbuf_abspath = expand('#' . l:curbufnr . ':p')
+        let l:buf_abspath = fnamemodify(l:file, ':p')
+        let l:curbuf_abspath = expand('#' . a:buffer . ':p')
 
         " Skip if file is not loaded
         if l:buf_abspath !=# l:curbuf_abspath
@@ -78,7 +76,7 @@ function! ale_linters#kotlin#kotlinc#Handle(buffer, lines)
         let l:type_marker_str = l:type ==# 'warning' ? 'W' : 'E'
 
         call add(l:output, {
-        \   'bufnr': l:bufnr,
+        \   'bufnr': a:buffer,
         \   'lnum': l:line,
         \   'vcol': 0,
         \   'col': l:column,
