@@ -71,6 +71,7 @@ The following languages and tools are supported.
 * Cython (pyrex filetype): 'cython'
 * D: 'dmd'
 * Elixir: 'credo'
+* Elm: 'elm-make'
 * Fortran: 'gcc'
 * Go: 'gofmt -e', 'go vet', 'golint'
 * Haskell: 'ghc', 'hlint'
