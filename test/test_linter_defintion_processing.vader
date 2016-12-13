@@ -1,0 +1,125 @@
+Execute (PreProcess should throw when the linter object is not a Dictionary):
+  AssertThrows call ale#linter#PreProcess('')
+  AssertEqual 'The linter object must be a Dictionary', g:vader_exception
+
+Execute (PreProcess should throw when there is no name):
+  AssertThrows call ale#linter#PreProcess({
+  \ 'callback': 'SomeFunction',
+  \ 'executable': 'echo',
+  \ 'command': 'echo',
+  \})
+  AssertEqual '`name` must be defined to name the linter', g:vader_exception
+
+Execute (PreProcess should throw when there is no callback):
+  AssertThrows call ale#linter#PreProcess({
+  \ 'name': 'foo',
+  \ 'executable': 'echo',
+  \ 'command': 'echo',
+  \})
+  AssertEqual '`callback` must be defined with a callback to accept output', g:vader_exception
+
+Execute (PreProcess should throw when then callback is not a function):
+  AssertThrows call ale#linter#PreProcess({
+  \ 'name': 'foo',
+  \ 'callback': 1,
+  \ 'executable': 'echo',
+  \ 'command': 'echo',
+  \})
+  AssertEqual '`callback` must be defined with a callback to accept output', g:vader_exception
+
+Execute (PreProcess should throw when there is no executable or executable_callback):
+  AssertThrows call ale#linter#PreProcess({
+  \ 'name': 'foo',
+  \ 'callback': 'SomeFunction',
+  \ 'command': 'echo',
+  \})
+  AssertEqual 'Either `executable` or `executable_callback` must be defined', g:vader_exception
+
+Execute (PreProcess should throw when executable is not a string):
+  AssertThrows call ale#linter#PreProcess({
+  \ 'name': 'foo',
+  \ 'callback': 'SomeFunction',
+  \ 'executable': 123,
+  \ 'command': 'echo',
+  \})
+  AssertEqual '`executable` must be a string if defined', g:vader_exception
+
+Execute (PreProcess should throw when executable_callback is not a callback):
+  AssertThrows call ale#linter#PreProcess({
+  \ 'name': 'foo',
+  \ 'callback': 'SomeFunction',
+  \ 'executable_callback': 123,
+  \ 'command': 'echo',
+  \})
+  AssertEqual '`executable_callback` must be a callback if defined', g:vader_exception
+
+Execute (PreProcess should throw when there is no command):
+  AssertThrows call ale#linter#PreProcess({
+  \ 'name': 'foo',
+  \ 'callback': 'SomeFunction',
+  \ 'executable': 'echo',
+  \})
+  AssertEqual 'Either `command`, `executable_callback`, `command_chain` must be defined', g:vader_exception
+
+Execute (PreProcess should throw when command is not a string):
+  AssertThrows call ale#linter#PreProcess({
+  \ 'name': 'foo',
+  \ 'callback': 'SomeFunction',
+  \ 'executable': 'echo',
+  \ 'command': [],
+  \})
+  AssertEqual '`command` must be a string if defined', g:vader_exception
+
+Execute (PreProcess should throw when command_callback is not a callback):
+  AssertThrows call ale#linter#PreProcess({
+  \ 'name': 'foo',
+  \ 'callback': 'SomeFunction',
+  \ 'executable': 'echo',
+  \ 'command_callback': 123,
+  \})
+  AssertEqual '`command_callback` must be a callback if defined', g:vader_exception
+
+Execute (PreProcess should when the output stream isn't a valid string):
+  AssertThrows call ale#linter#PreProcess({
+  \ 'name': 'foo',
+  \ 'callback': 'SomeFunction',
+  \ 'executable': 'echo',
+  \ 'command': 'echo',
+  \ 'output_stream': 'xxx',
+  \})
+  AssertEqual "`output_stream` must be 'stdout', 'stderr', or 'both'", g:vader_exception
+
+Execute (PreProcess should not throw when everything is correct):
+  call ale#linter#PreProcess({
+  \ 'name': 'foo',
+  \ 'callback': 'SomeFunction',
+  \ 'executable': 'echo',
+  \ 'command': 'echo',
+  \})
+
+Execute (PreProcess should accept an stdout output_stream):
+  call ale#linter#PreProcess({
+  \ 'name': 'foo',
+  \ 'callback': 'SomeFunction',
+  \ 'executable': 'echo',
+  \ 'command': 'echo',
+  \ 'output_stream': 'stdout',
+  \})
+
+Execute (PreProcess should accept an stderr output_stream):
+  call ale#linter#PreProcess({
+  \ 'name': 'foo',
+  \ 'callback': 'SomeFunction',
+  \ 'executable': 'echo',
+  \ 'command': 'echo',
+  \ 'output_stream': 'stderr',
+  \})
+
+Execute (PreProcess should accept a 'both' output_stream):
+  call ale#linter#PreProcess({
+  \ 'name': 'foo',
+  \ 'callback': 'SomeFunction',
+  \ 'executable': 'echo',
+  \ 'command': 'echo',
+  \ 'output_stream': 'both',
+  \})

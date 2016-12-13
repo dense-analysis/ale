@@ -106,10 +106,16 @@ function! s:HandleExit(job) abort
     let l:linter = l:job_info.linter
     let l:output = l:job_info.output
     let l:buffer = l:job_info.buffer
+    let l:next_chain_index = l:job_info.next_chain_index
 
     " Call the same function for stopping jobs again to clean up the job
     " which just closed.
     call s:StopPreviousJobs(l:buffer, l:linter)
+
+    if l:next_chain_index < len(get(l:linter, 'command_chain', []))
+        call s:InvokeChain(l:buffer, l:linter, l:next_chain_index, l:output)
+        return
+    endif
 
     let l:linter_loclist = ale#util#GetFunction(l:linter.callback)(l:buffer, l:output)
 
@@ -182,31 +188,27 @@ function! s:FixLocList(buffer, loclist) abort
     endfor
 endfunction
 
-function! ale#engine#Invoke(buffer, linter) abort
-    " Stop previous jobs for the same linter.
-    call s:StopPreviousJobs(a:buffer, a:linter)
-
-    if has_key(a:linter, 'command_callback')
-        " If there is a callback for generating a command, call that instead.
-        let l:command = ale#util#GetFunction(a:linter.command_callback)(a:buffer)
-    else
-        let l:command = a:linter.command
-    endif
+function! s:RunJob(command, generic_job_options) abort
+    let l:buffer = a:generic_job_options.buffer
+    let l:linter = a:generic_job_options.linter
+    let l:output_stream = a:generic_job_options.output_stream
+    let l:next_chain_index = a:generic_job_options.next_chain_index
+    let l:command = a:command
 
     if l:command =~# '%s'
         " If there is a '%s' in the command string, replace it with the name
         " of the file.
-        let l:command = printf(l:command, shellescape(fnamemodify(bufname(a:buffer), ':p')))
+        let l:command = printf(l:command, shellescape(fnamemodify(bufname(l:buffer), ':p')))
     endif
 
     if has('nvim')
-        if a:linter.output_stream ==# 'stderr'
+        if l:output_stream ==# 'stderr'
             " Read from stderr instead of stdout.
             let l:job = jobstart(l:command, {
             \   'on_stderr': 's:GatherOutputNeoVim',
             \   'on_exit': 's:HandleExitNeoVim',
             \})
-        elseif a:linter.output_stream ==# 'both'
+        elseif l:output_stream ==# 'both'
             let l:job = jobstart(l:command, {
             \   'on_stdout': 's:GatherOutputNeoVim',
             \   'on_stderr': 's:GatherOutputNeoVim',
@@ -226,10 +228,10 @@ function! ale#engine#Invoke(buffer, linter) abort
         \   'close_cb': function('s:HandleExitVim'),
         \}
 
-        if a:linter.output_stream ==# 'stderr'
+        if l:output_stream ==# 'stderr'
             " Read from stderr instead of stdout.
             let l:job_options.err_cb = function('s:GatherOutputVim')
-        elseif a:linter.output_stream ==# 'both'
+        elseif l:output_stream ==# 'both'
             " Read from both streams.
             let l:job_options.out_cb = function('s:GatherOutputVim')
             let l:job_options.err_cb = function('s:GatherOutputVim')
@@ -249,7 +251,7 @@ function! ale#engine#Invoke(buffer, linter) abort
             " On Unix machines, we can send the Vim buffer directly.
             " This is faster than reading the lines ourselves.
             let l:job_options.in_io = 'buffer'
-            let l:job_options.in_buf = a:buffer
+            let l:job_options.in_buf = l:buffer
         endif
 
         " Vim 8 will read the stdin from the file's buffer.
@@ -259,24 +261,25 @@ function! ale#engine#Invoke(buffer, linter) abort
     " Only proceed if the job is being run.
     if has('nvim') || (l:job !=# 'no process' && job_status(l:job) ==# 'run')
         " Add the job to the list of jobs, so we can track them.
-        call add(g:ale_buffer_info[a:buffer].job_list, l:job)
+        call add(g:ale_buffer_info[l:buffer].job_list, l:job)
 
         " Store the ID for the job in the map to read back again.
         let s:job_info_map[s:GetJobID(l:job)] = {
-        \   'linter': a:linter,
-        \   'buffer': a:buffer,
+        \   'linter': l:linter,
+        \   'buffer': l:buffer,
         \   'output': [],
+        \   'next_chain_index': l:next_chain_index,
         \}
 
         if has('nvim')
             " In NeoVim, we have to send the buffer lines ourselves.
-            let l:input = join(getbufline(a:buffer, 1, '$'), "\n") . "\n"
+            let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
 
             call jobsend(l:job, l:input)
             call jobclose(l:job, 'stdin')
         elseif has('win32')
             " On some Vim versions, we have to send the buffer data ourselves.
-            let l:input = join(getbufline(a:buffer, 1, '$'), "\n") . "\n"
+            let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
             let l:channel = job_getchannel(l:job)
 
             if ch_status(l:channel) ==# 'open'
@@ -285,6 +288,49 @@ function! ale#engine#Invoke(buffer, linter) abort
             endif
         endif
     endif
+endfunction
+
+function! s:InvokeChain(buffer, linter, chain_index, input) abort
+    let l:output_stream = get(a:linter, 'output_stream', 'stdout')
+
+    if has_key(a:linter, 'command_chain')
+        " Run a chain of commands, one asychronous command after the other,
+        " so that many programs can be run in a sequence.
+        let l:chain_item = a:linter.command_chain[a:chain_index]
+
+        " The chain item can override the output_stream option.
+        if has_key(l:chain_item)
+            let l:output_stream = l:chain_item.output_stream
+        endif
+
+        let l:callback = ale#util#GetFunction(a:linter.callback)
+
+        if a:chain_index == 0
+            " The first callback in the chain takes only a buffer number.
+            let l:command = l:callback(a:buffer)
+        else
+            " The second callback in the chain takes some input too.
+            let l:command = l:callback(a:buffer, a:input)
+        endif
+    elseif has_key(a:linter, 'command_callback')
+        " If there is a callback for generating a command, call that instead.
+        let l:command = ale#util#GetFunction(a:linter.command_callback)(a:buffer)
+    else
+        let l:command = a:linter.command
+    endif
+
+    call s:RunJob(l:command, {
+    \   'buffer': a:buffer,
+    \   'linter': a:linter,
+    \   'output_stream': l:output_stream,
+    \   'next_chain_index': a:chain_index + 1,
+    \})
+endfunction
+
+function! ale#engine#Invoke(buffer, linter) abort
+    " Stop previous jobs for the same linter.
+    call s:StopPreviousJobs(a:buffer, a:linter)
+    call s:InvokeChain(a:buffer, a:linter, 0, [])
 endfunction
 
 " Given a buffer number, return the warnings and errors for a given buffer.

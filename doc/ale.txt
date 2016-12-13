@@ -27,6 +27,9 @@ CONTENTS                                                         *ale-contents*
     4.15. htmlhint..............................|ale-linter-options-htmlhint|
     4.16. c-clang...............................|ale-linter-options-c-clang|
     4.17. python-flake8.........................|ale-linter-options-python-flake8|
+    4.18. ruby-rubocop..........................|ale-linter-options-ruby-rubocop|
+    4.19. chktex................................|ale-linter-options-chktex|
+    4.20. lacheck...............................|ale-linter-options-lacheck|
   5. Linter Integration Notes...................|ale-linter-integration|
     5.1.  merlin................................|ale-linter-integration-ocaml-merlin|
   6. Commands/Keybinds..........................|ale-commands|
@@ -64,16 +67,18 @@ The following languages and tools are supported.
 * C++ (filetype cpp): 'cppcheck', 'gcc'
 * Chef: 'foodcritic'
 * CoffeeScript: 'coffee', 'coffelint'
-* CSS: 'csslint'
+* CSS: 'csslint', 'stylelint'
 * Cython (pyrex filetype): 'cython'
 * D: 'dmd'
 * Elixir: 'credo'
+* Elm: 'elm-make'
 * Fortran: 'gcc'
 * Go: 'gofmt -e', 'go vet', 'golint', 'go build'
 * Haskell: 'ghc', 'hlint'
 * HTML: 'HTMLHint', 'tidy'
 * JavaScript: 'eslint', 'jscs', 'jshint', 'flow'
 * JSON: 'jsonlint'
+* LaTeX: 'chktex', 'lacheck'
 * Lua: 'luacheck'
 * Markdown: 'mdl'
 * MATLAB: 'mlint'
@@ -84,8 +89,8 @@ The following languages and tools are supported.
 * Puppet: 'puppet', 'puppet-lint'
 * Python: 'flake8', 'pylint'
 * Ruby: 'rubocop'
-* SASS: 'sasslint'
-* SCSS: 'sasslint', 'scsslint'
+* SASS: 'sasslint', 'stylelint'
+* SCSS: 'sasslint', 'scsslint', 'stylelint'
 * Scala: 'scalac'
 * TypeScript: 'tslint', 'typecheck'
 * Verilog: 'iverilog', 'verilator'
@@ -630,6 +635,43 @@ Python 3, you may want to set >
 
 after making sure it's installed for the appropriate Python versions (e.g.
 `python3 -m pip install --user flake8`).
+
+-------------------------------------------------------------------------------
+4.18. ruby-rubocop                            *ale-linter-options-ruby-rubocop*
+
+g:ale_ruby_rubocop_options                         *g:ale_ruby_rubocop_options*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be change to modify flags given to rubocop.
+
+-------------------------------------------------------------------------------
+4.19. chktex                                        *ale-linter-options-chktex*
+
+g:ale_tex_chktex_executable                       *g:ale_tex_chktex_executable*
+
+  Type: |String|
+  Default: `'chktex'`
+
+  This variable can be changed to change the path to chktex.
+
+g:ale_tex_chktex_options                             *g:ale_tex_chktex_options*
+
+  Type: |String|
+  Default: `'-I'`
+
+  This variable can be changed to modify flags given to chktex.
+
+------------------------------------------------------------------------------
+4.20. lacheck                                     *ale-linter-options-lacheck*
+
+g:ale_lacheck_executable                            *g:ale_lacheck_executable*
+
+  Type: |String|
+  Default: '`lacheck`'
+
+  This variable can be changed to change the path to lacheck.
 
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*

@@ -31,6 +31,7 @@ In other words, this plugin allows you to lint while you type.
  5. [How can I change the format for echo messages?](#faq-echo-format)
  6. [How can I execute some code when ALE stops linting?](#faq-autocmd)
  7. [How can I navigate between errors quickly?](#faq-navigation)
+ 8. [How can I run linters only when I save files?](#faq-lint-on-save)
 
 <a name="supported-languages"></a>
 
@@ -54,18 +55,20 @@ name. That seems to be the fairest way to arrange this table.
 | C++ (filetype cpp) | [cppcheck] (http://cppcheck.sourceforge.net), [gcc](https://gcc.gnu.org/)|
 | Chef | [foodcritic](http://www.foodcritic.io/) |
 | CoffeeScript | [coffee](http://coffeescript.org/), [coffeelint](https://www.npmjs.com/package/coffeelint) |
-| CSS | [csslint](http://csslint.net/) |
+| CSS | [csslint](http://csslint.net/), [stylelint](https://github.com/stylelint/stylelint) |
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
 | D | [dmd](https://dlang.org/dmd-linux.html)^ |
 | Elixir | [credo](https://github.com/rrrene/credo) |
+| Elm | [elm-make](https://github.com/elm-lang/elm-make) |
 | Fortran | [gcc](https://gcc.gnu.org/) |
 | Go | [gofmt -e](https://golang.org/cmd/gofmt/), [go vet](https://golang.org/cmd/vet/), [golint](https://godoc.org/github.com/golang/lint), [go build](https://golang.org/cmd/go/) |
 | Haskell | [ghc](https://www.haskell.org/ghc/), [hlint](https://hackage.haskell.org/package/hlint) |
 | HTML | [HTMLHint](http://htmlhint.com/), [tidy](http://www.html-tidy.org/) |
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/), [FlowType](https://flowtype.org/) |
 | JSON | [jsonlint](http://zaa.ch/jsonlint/) |
+| LaTeX | [chktex](http://www.nongnu.org/chktex/), [lacheck](https://www.ctan.org/pkg/lacheck) |
 | Lua | [luacheck](https://github.com/mpeterv/luacheck) |
-| Markdown | [mdl](https://github.com/mivok/markdownlint) |
+| Markdown | [mdl](https://github.com/mivok/markdownlint), [proselint](http://proselint.com/)|
 | MATLAB | [mlint](https://www.mathworks.com/help/matlab/ref/mlint.html) |
 | OCaml | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-integration-ocaml-merlin` for configuration instructions
 | Perl | [perl -c](https://perl.org/), [perl-critic](https://metacpan.org/pod/Perl::Critic) |
@@ -74,9 +77,11 @@ name. That seems to be the fairest way to arrange this table.
 | Puppet | [puppet](https://puppet.com), [puppet-lint](https://puppet-lint.com) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/), [pylint](https://www.pylint.org/) |
 | Ruby | [rubocop](https://github.com/bbatsov/rubocop) |
-| SASS | [sass-lint](https://www.npmjs.com/package/sass-lint) |
-| SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint) |
+| SASS | [sass-lint](https://www.npmjs.com/package/sass-lint), [stylelint](https://github.com/stylelint/stylelint) |
+| SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint), [stylelint](https://github.com/stylelint/stylelint) |
 | Scala | [scalac](http://scala-lang.org) |
+| Tex | [proselint](http://proselint.com/) |
+| Text | [proselint](http://proselint.com/) |
 | TypeScript | [tslint](https://github.com/palantir/tslint), typecheck |
 | Verilog | [iverilog](https://github.com/steveicarus/iverilog), [verilator](http://www.veripool.org/projects/verilator/wiki/Intro) |
 | Vim | [vint](https://github.com/Kuniwak/vint) |
@@ -310,3 +315,21 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 For more information, consult the online documentation with
 `:help ale-navigation-commands`.
+
+<a name="faq-lint-on-save"></a>
+
+### 4.viii. How can I run linters only when I save files?
+
+ALE offers an option `g:ale_lint_on_save` for enabling running the linters
+when files are saved. If you wish to run linters when files are saved, not
+as you are editing files, then you can turn the option for linting
+when text is changed off too.
+
+```vim
+" Write this in your vimrc file
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 0
+" You can disable this option too
+" if you don't want linters to run on opening a file
+let g:ale_lint_on_enter = 0
+```
