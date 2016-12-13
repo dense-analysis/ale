@@ -1,4 +1,5 @@
 " Author: buffalocoder - https://github.com/buffalocoder
+" Description: Elm linting in Ale. Closely follows the Syntastic checker in https://github.com/ElmCast/elm-vim.
 
 function! ale_linters#elm#make#Handle(buffer, lines)
     let l:output = []
@@ -23,35 +24,21 @@ function! ale_linters#elm#make#Handle(buffer, lines)
     return l:output
 endfunction
 
-" This function was copied from from https://github.com/ElmCast/elm-vim.
-" All credit goes to that project!
-" Returns the closest parent with an elm-package.json file.
-function! s:FindRootDirectory() abort
-    let l:elm_root = getbufvar('%', 'elmRoot')
-    if empty(l:elm_root)
-        let l:current_file = expand('%:p')
-        let l:dir_current_file = fnameescape(fnamemodify(l:current_file, ':h'))
-        let l:match = findfile('elm-package.json', l:dir_current_file . ';')
-        if empty(l:match)
-            let l:elm_root = ''
-        else
-            let l:elm_root = fnamemodify(l:match, ':p:h')
-        endif
-
-        if !empty(l:elm_root)
-            call setbufvar('%', 'elmRoot', l:elm_root)
-        endif
-    endif
-    return l:elm_root
-endfunction
-
 " Return the command to execute the linter in the projects directory.
 " If it doesn't, then this will fail when imports are needed.
 function! ale_linters#elm#make#GetCommand(buffer) abort
-    let l:root_dir = s:FindRootDirectory()
-    let l:dir_set_cmd = 'cd' . fnameescape(l:root_dir)
+    let l:elm_package = ale#util#FindNearestFile(a:buffer, 'elm-package.json')
+    if empty(l:elm_package)
+        let l:dir_set_cmd = ''
+    else
+        let l:root_dir = fnamemodify(l:elm_package, ':p:h')
+        let l:dir_set_cmd = 'cd ' . fnameescape(l:root_dir) . '; '
+    endif
 
-    return l:dir_set_cmd . '; elm-make --report=json %s --output='.shellescape(g:ale#util#nul_file)
+    let l:elm_cmd = 'elm-make --report=json --output='.shellescape(g:ale#util#nul_file)
+    let l:stdin_wrapper = g:ale#util#stdin_wrapper . ' .elm'
+
+    return l:dir_set_cmd . ' ' . l:stdin_wrapper . ' ' . l:elm_cmd
 endfunction
 
 call ale#linter#Define('elm', {
