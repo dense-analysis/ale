@@ -205,19 +205,19 @@ function! s:RunJob(command, generic_job_options) abort
         if l:output_stream ==# 'stderr'
             " Read from stderr instead of stdout.
             let l:job = jobstart(l:command, {
-            \   'on_stderr': 's:GatherOutputNeoVim',
-            \   'on_exit': 's:HandleExitNeoVim',
+            \   'on_stderr': function('s:GatherOutputNeoVim'),
+            \   'on_exit': function('s:HandleExitNeoVim'),
             \})
         elseif l:output_stream ==# 'both'
             let l:job = jobstart(l:command, {
-            \   'on_stdout': 's:GatherOutputNeoVim',
-            \   'on_stderr': 's:GatherOutputNeoVim',
-            \   'on_exit': 's:HandleExitNeoVim',
+            \   'on_stdout': function('s:GatherOutputNeoVim'),
+            \   'on_stderr': function('s:GatherOutputNeoVim'),
+            \   'on_exit': function('s:HandleExitNeoVim'),
             \})
         else
             let l:job = jobstart(l:command, {
-            \   'on_stdout': 's:GatherOutputNeoVim',
-            \   'on_exit': 's:HandleExitNeoVim',
+            \   'on_stdout': function('s:GatherOutputNeoVim'),
+            \   'on_exit': function('s:HandleExitNeoVim'),
             \})
         endif
     else
