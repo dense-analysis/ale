@@ -11,7 +11,7 @@ function! ale_linters#elm#make#Handle(buffer, lines)
             for l:error in l:errors
                 " Check if file is from the temp directory.
                 " Filters out any errors not related to the buffer.
-                if matchend(l:error.file, l:temp_dir) > 0
+                if l:error.file[0:len(l:temp_dir)-1] == l:temp_dir
                     call add(l:output, {
                     \    'bufnr': a:buffer,
                     \    'lnum': l:error.region.start.line,
@@ -37,7 +37,7 @@ function! ale_linters#elm#make#GetCommand(buffer) abort
         let l:dir_set_cmd = ''
     else
         let l:root_dir = fnamemodify(l:elm_package, ':p:h')
-        let l:dir_set_cmd = 'cd ' . fnameescape(l:root_dir) . '; '
+        let l:dir_set_cmd = 'cd ' . fnameescape(l:root_dir) . ' && '
     endif
 
     let l:elm_cmd = 'elm-make --report=json --output='.shellescape('/dev/null')
