@@ -29,9 +29,7 @@ function! ale_linters#haskell#ghc#Handle(buffer, lines)
             call add(l:corrected_lines, l:line)
         else
             if len(l:corrected_lines) > 0
-                if l:corrected_lines[-1] =~# ': error:$'
-                    let l:line = substitute(l:line, '\v^\s+', ' ', '')
-                endif
+                let l:line = substitute(l:line, '\v\s+', ' ', '')
                 let l:corrected_lines[-1] .= l:line
             endif
         endif
