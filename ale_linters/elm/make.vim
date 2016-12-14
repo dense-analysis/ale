@@ -3,20 +3,25 @@
 
 function! ale_linters#elm#make#Handle(buffer, lines)
     let l:output = []
+    let l:temp_dir = has('win32') ? $TMP : $TMPDIR
     for l:line in a:lines
         if l:line[0] ==# '['
             let l:errors = json_decode(l:line)
 
             for l:error in l:errors
-                call add(l:output, {
-                \    'bufnr': a:buffer,
-                \    'lnum': l:error.region.start.line,
-                \    'vcol': 0,
-                \    'col': l:error.region.start.column,
-                \    'type': (l:error.type ==? 'error') ? 'E' : 'W',
-                \    'text': l:error.overview,
-                \    'nr': -1,
-                \})
+                " Check if file is from the temp directory.
+                " Filters out any errors not related to the buffer.
+                if matchend(l:error.file, l:temp_dir) > 0
+                    call add(l:output, {
+                    \    'bufnr': a:buffer,
+                    \    'lnum': l:error.region.start.line,
+                    \    'vcol': 0,
+                    \    'col': l:error.region.start.column,
+                    \    'type': (l:error.type ==? 'error') ? 'E' : 'W',
+                    \    'text': l:error.overview,
+                    \    'nr': -1,
+                    \})
+                endif
             endfor
         endif
     endfor
