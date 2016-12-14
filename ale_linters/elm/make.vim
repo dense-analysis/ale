@@ -40,7 +40,7 @@ function! ale_linters#elm#make#GetCommand(buffer) abort
         let l:dir_set_cmd = 'cd ' . fnameescape(l:root_dir) . '; '
     endif
 
-    let l:elm_cmd = 'elm-make --report=json --output='.shellescape(g:ale#util#nul_file)
+    let l:elm_cmd = 'elm-make --report=json --output='.shellescape('/dev/null')
     let l:stdin_wrapper = g:ale#util#stdin_wrapper . ' .elm'
 
     return l:dir_set_cmd . ' ' . l:stdin_wrapper . ' ' . l:elm_cmd
