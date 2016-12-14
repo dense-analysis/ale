@@ -31,22 +31,11 @@ function! ale_linters#rust#rustc#rustc_command(buffer_number)
     " Try to guess the library search path. If the project is managed by cargo,
     " it's usually <project root>/target/debug/deps/ or
     " <project root>/target/release/deps/
-    let dir = fnamemodify(bufname(a:buffer_number), ':p:h')
-    let project_root = ''
-    while 1
-        if filereadable(dir . '/Cargo.toml')
-            let project_root = dir
-            break
-        endif
-        let parent = fnamemodify(dir, ':h')
-        if parent ==# dir   " we are at the file system's root
-            break
-        endif
-        let dir = parent
-    endwhile
+    let cargo_file = ale#util#FindNearestFile(a:buffer_number, 'Cargo.toml')
 
     let dependencies = ''
-    if project_root !=# ''
+    if cargo_file !=# ''
+        let project_root = fnamemodify(cargo_file, ':h')
         let dependencies = '-L ' . project_root . '/target/debug/deps -L ' .
                     \ project_root . '/target/release/deps'
     endif
