@@ -13,11 +13,12 @@ function! ale_linters#elm#make#Handle(buffer, lines)
                 " Check if file is from the temp directory.
                 " Filters out any errors not related to the buffer.
                 if l:is_windows
-                    let l:file_is_buffer = l:error.file[0:len(l:temp_dir)-1] ==? l:temp_dir
+                    let l:file_is_buffer = l:error.file[0:len(l:temp_dir) - 1] ==? l:temp_dir
                 else
-                    let l:file_is_buffer = l:error.file[0:len(l:temp_dir)-1] ==# l:temp_dir
+                    let l:file_is_buffer = l:error.file[0:len(l:temp_dir) - 1] ==# l:temp_dir
                 endif
-                if l:error.file[0:len(l:temp_dir)-1] == l:temp_dir
+
+                if l:file_is_buffer
                     call add(l:output, {
                     \    'bufnr': a:buffer,
                     \    'lnum': l:error.region.start.line,
