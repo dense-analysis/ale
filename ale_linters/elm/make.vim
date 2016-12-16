@@ -47,9 +47,9 @@ function! ale_linters#elm#make#GetCommand(buffer) abort
     endif
 
     " The elm-make compiler, at the time of this writing, uses '/dev/null' as
-    " a sort of flag to tell teh compiler not to generate an output file,
+    " a sort of flag to tell the compiler not to generate an output file,
     " which is why this is hard coded here.
-    " source: https://github.com/elm-lang/elm-make/blob/master/src/Flags.hs
+    " Source: https://github.com/elm-lang/elm-make/blob/master/src/Flags.hs
     let l:elm_cmd = 'elm-make --report=json --output='.shellescape('/dev/null')
     let l:stdin_wrapper = g:ale#util#stdin_wrapper . ' .elm'
 
