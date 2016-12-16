@@ -3,7 +3,8 @@
 
 function! ale_linters#elm#make#Handle(buffer, lines)
     let l:output = []
-    let l:temp_dir = has('win32') ? $TMP : $TMPDIR
+    let l:is_windows = has('win32')
+    let l:temp_dir = l:is_windows ? $TMP : $TMPDIR
     for l:line in a:lines
         if l:line[0] ==# '['
             let l:errors = json_decode(l:line)
@@ -11,6 +12,11 @@ function! ale_linters#elm#make#Handle(buffer, lines)
             for l:error in l:errors
                 " Check if file is from the temp directory.
                 " Filters out any errors not related to the buffer.
+                if l:is_windows
+                    let l:file_is_buffer = l:error.file[0:len(l:temp_dir)-1] ==? l:temp_dir
+                else
+                    let l:file_is_buffer = l:error.file[0:len(l:temp_dir)-1] ==# l:temp_dir
+                endif
                 if l:error.file[0:len(l:temp_dir)-1] == l:temp_dir
                     call add(l:output, {
                     \    'bufnr': a:buffer,
@@ -40,6 +46,10 @@ function! ale_linters#elm#make#GetCommand(buffer) abort
         let l:dir_set_cmd = 'cd ' . fnameescape(l:root_dir) . ' && '
     endif
 
+    " The elm-make compiler, at the time of this writing, uses '/dev/null' as
+    " a sort of flag to tell teh compiler not to generate an output file,
+    " which is why this is hard coded here.
+    " source: https://github.com/elm-lang/elm-make/blob/master/src/Flags.hs
     let l:elm_cmd = 'elm-make --report=json --output='.shellescape('/dev/null')
     let l:stdin_wrapper = g:ale#util#stdin_wrapper . ' .elm'
 
