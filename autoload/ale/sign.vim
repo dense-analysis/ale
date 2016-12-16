@@ -27,19 +27,26 @@ execute 'sign define ALEWarningSign text=' . g:ale_sign_warning
 \   . ' texthl=ALEWarningSign'
 sign define ALEDummySign
 
-function! ale#sign#FindCurrentSigns(buffer) abort
+" Read sign data for a buffer to a list of lines.
+function! ale#sign#ReadSigns(buffer) abort
+    redir => l:output
+       silent exec 'sign place buffer=' . a:buffer
+    redir end
+
+    return split(l:output, "\n")
+endfunction
+
+" Given a list of lines for sign output, return a list of sign IDs
+function! ale#sign#ParseSigns(line_list) abort
     " Matches output like :
     " line=4  id=1  name=ALEErrorSign
     " строка=1  id=1000001  имя=ALEErrorSign
+    " 行=1  識別子=1000001  名前=ALEWarningSign
     let l:pattern = '^.*=\d*  .*=\(\d\+\)  .*=ALE\(Warning\|Error\|Dummy\)Sign'
-
-    redir => l:output
-       silent exec 'sign place buffer=' . a:buffer
-    redir END
 
     let l:id_list = []
 
-    for l:line in split(l:output, "\n")
+    for l:line in a:line_list
         let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) > 0
@@ -48,6 +55,12 @@ function! ale#sign#FindCurrentSigns(buffer) abort
     endfor
 
     return l:id_list
+endfunction
+
+function! ale#sign#FindCurrentSigns(buffer) abort
+    let l:line_list = ale#sign#ReadSigns(a:buffer)
+
+    return ale#sign#ParseSigns(l:line_list)
 endfunction
 
 " Given a loclist, combine the loclist into a list of signs such that only
