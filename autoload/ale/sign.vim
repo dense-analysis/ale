@@ -31,7 +31,7 @@ function! ale#sign#FindCurrentSigns(buffer) abort
     " Matches output like :
     " line=4  id=1  name=ALEErrorSign
     " строка=1  id=1000001  имя=ALEErrorSign
-    let l:pattern = 'id=\(\d\+\).*=ALE\(Warning\|Error\|Dummy\)Sign'
+    let l:pattern = '^.*=\d*  .*=\(\d\+\)  .*=ALE\(Warning\|Error\|Dummy\)Sign'
 
     redir => l:output
        silent exec 'sign place buffer=' . a:buffer
