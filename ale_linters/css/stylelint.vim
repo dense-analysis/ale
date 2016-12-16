@@ -20,7 +20,7 @@ endfunction
 
 function! ale_linters#css#stylelint#GetCommand(buffer) abort
     return ale_linters#css#stylelint#GetExecutable(a:buffer)
-    \   . ' %s'
+    \   . ' --stdin-filename %s'
 endfunction
 
 call ale#linter#Define('css', {
