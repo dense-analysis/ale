@@ -2,8 +2,6 @@
 " Description: rustc for rust files
 
 if !exists('g:ale_rust_ignore_error_codes')
-    " set this e.g. to ['E0432', 'E0433'] to ignore some errors regarding
-    " failed imports
     let g:ale_rust_ignore_error_codes = []
 endif
 
@@ -23,8 +21,8 @@ function! ale_linters#rust#rustc#handle_rustc_errors(buffer_number, errorlines)
             continue
         endif
 
-        for span in error.spans 
-            if span.is_primary && 
+        for span in error.spans
+            if span.is_primary &&
                 \ (span.file_name ==# file_name || span.file_name ==# '<anon>')
                 call add(output, {
                             \ 'bufnr': a:buffer_number,
