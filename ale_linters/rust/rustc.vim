@@ -7,51 +7,51 @@ endif
 
 
 function! ale_linters#rust#rustc#handle_rustc_errors(buffer_number, errorlines)
-    let file_name = fnamemodify(bufname(a:buffer_number), ':t')
-    let output = []
-    for errorline in a:errorlines
+    let l:file_name = fnamemodify(bufname(a:buffer_number), ':t')
+    let l:output = []
+    for l:errorline in a:errorlines
         " ignore everything that is not Json
-        if errorline !~# '^{'
+        if l:errorline !~# '^{'
             continue
         endif
 
-        let error = json_decode(errorline)
+        let l:error = json_decode(l:errorline)
 
-        if !empty(error.code) && index(g:ale_rust_ignore_error_codes, error.code.code) > -1
+        if !empty(l:error.code) && index(g:ale_rust_ignore_error_codes, l:error.code.code) > -1
             continue
         endif
 
-        for span in error.spans
-            if span.is_primary &&
-                \ (span.file_name ==# file_name || span.file_name ==# '<anon>')
-                call add(output, {
+        for l:span in l:error.spans
+            if l:span.is_primary &&
+                \ (l:span.file_name ==# l:file_name || l:span.file_name ==# '<anon>')
+                call add(l:output, {
                             \ 'bufnr': a:buffer_number,
-                            \ 'lnum': span.line_start,
+                            \ 'lnum': l:span.line_start,
                             \ 'vcol': 0,
-                            \ 'col': span.byte_start,
+                            \ 'col': l:span.byte_start,
                             \ 'nr': -1,
-                            \ 'text': error.message,
-                            \ 'type': toupper(error.level[0]),
+                            \ 'text': l:error.message,
+                            \ 'type': toupper(l:error.level[0]),
                             \ })
             else
                 " when the error is caused in the expansion of a macro, we have
                 " to bury deeper
-                let root_cause = s:find_error_in_expansion(span, file_name)
-                if !empty(root_cause)
-                    call add(output, {
+                let l:root_cause = s:find_error_in_expansion(l:span, l:file_name)
+                if !empty(l:root_cause)
+                    call add(l:output, {
                                 \ 'bufnr': a:buffer_number,
-                                \ 'lnum': root_cause[0],
+                                \ 'lnum': l:root_cause[0],
                                 \ 'vcol': 0,
-                                \ 'col': root_cause[1],
+                                \ 'col': l:root_cause[1],
                                 \ 'nr': -1,
-                                \ 'text': error.message,
-                                \ 'type': toupper(error.level[0]),
+                                \ 'text': l:error.message,
+                                \ 'type': toupper(l:error.level[0]),
                                 \ })
                 endif
             endif
         endfor
     endfor
-    return output
+    return l:output
 endfunction
 
 
@@ -71,17 +71,17 @@ function! ale_linters#rust#rustc#rustc_command(buffer_number)
     " Try to guess the library search path. If the project is managed by cargo,
     " it's usually <project root>/target/debug/deps/ or
     " <project root>/target/release/deps/
-    let cargo_file = ale#util#FindNearestFile(a:buffer_number, 'Cargo.toml')
+    let l:cargo_file = ale#util#FindNearestFile(a:buffer_number, 'Cargo.toml')
 
-    if cargo_file !=# ''
-        let project_root = fnamemodify(cargo_file, ':h')
-        let dependencies = '-L ' . project_root . '/target/debug/deps -L ' .
-                    \ project_root . '/target/release/deps'
+    if l:cargo_file !=# ''
+        let l:project_root = fnamemodify(l:cargo_file, ':h')
+        let l:dependencies = '-L ' . l:project_root . '/target/debug/deps -L ' .
+                    \ l:project_root . '/target/release/deps'
     else
-        let dependencies = ''
+        let l:dependencies = ''
     endif
 
-    return 'rustc --error-format=json -Z no-trans ' . dependencies . ' -'
+    return 'rustc --error-format=json -Z no-trans ' . l:dependencies . ' -'
 endfunction
 
 
