@@ -92,6 +92,7 @@ The following languages and tools are supported.
 * SASS: 'sasslint', 'stylelint'
 * SCSS: 'sasslint', 'scsslint', 'stylelint'
 * Scala: 'scalac'
+* Swift: 'swiftlint'
 * TypeScript: 'tslint', 'typecheck'
 * Verilog: 'iverilog', 'verilator'
 * Vim: 'vint'

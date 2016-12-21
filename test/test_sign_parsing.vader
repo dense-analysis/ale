@@ -1,0 +1,8 @@
+Execute (Parsing English signs should work):
+  AssertEqual [1000001], ale#sign#ParseSigns(['Signs for app.js:', '    line=9  id=1000001  name=ALEWarningSign'])
+
+Execute (Parsing Russian signs should work):
+  AssertEqual [1000001], ale#sign#ParseSigns(['    строка=1  id=1000001  имя=ALEErrorSign'])
+
+Execute (Parsing Japanese signs should work):
+  AssertEqual [1000001], ale#sign#ParseSigns(['    行=1  識別子=1000001  名前=ALEWarningSign'])
