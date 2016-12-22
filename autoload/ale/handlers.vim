@@ -203,8 +203,8 @@ function! ale#handlers#HandleStyleLintFormat(buffer, lines) abort
             continue
         endif
 
-        let l:text = l:match[4]
-        let l:type = l:match[3]
+        let l:type = l:match[3] ==# '✖' ? 'E' : 'W'
+        let l:text = l:match[4] . '[' . l:match[5] . ']'
 
         " vcol is Needed to indicate that the column is a character.
         call add(l:output, {
@@ -213,7 +213,7 @@ function! ale#handlers#HandleStyleLintFormat(buffer, lines) abort
         \   'vcol': 0,
         \   'col': l:match[2] + 0,
         \   'text': l:text,
-        \   'type': l:type ==# '✖' ? 'E' : 'W',
+        \   'type': l:type,
         \   'nr': -1,
         \})
     endfor
