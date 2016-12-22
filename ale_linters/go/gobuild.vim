@@ -5,12 +5,13 @@ function! s:FindGobuildScript() abort
     return g:ale#util#stdin_wrapper . ' .go go build'
 endfunction
 
-let g:ale#util#stdin_gobuild = s:FindGobuildScript()
+let g:ale#util#gobuild_script =
+\   get(g:, 'ale_go_gobuild_script', s:FindGobuildScript())
 
 call ale#linter#Define('go', {
 \   'name': 'go build',
 \   'output_stream': 'stderr',
 \   'executable': 'go',
-\   'command': g:ale#util#stdin_gobuild,
+\   'command': g:ale#util#gobuild_script,
 \   'callback': 'ale#handlers#HandleUnixFormatAsError',
 \})
