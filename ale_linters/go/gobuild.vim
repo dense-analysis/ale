@@ -2,14 +2,7 @@
 " Description: go build for Go files
 
 function! s:FindGobuildScript() abort
-    for l:parent in split(&runtimepath, ',')
-        " Expand the path to deal with ~ issues.
-        let l:path = expand(l:parent . '/' . 'stdin-gobuild')
-
-        if filereadable(l:path)
-            return l:path . ' %s'
-        endif
-    endfor
+    return g:ale#util#stdin_wrapper . ' .go go build'
 endfunction
 
 let g:ale#util#stdin_gobuild = s:FindGobuildScript()
