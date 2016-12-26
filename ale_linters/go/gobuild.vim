@@ -2,7 +2,7 @@
 " Description: go build for Go files
 
 function! s:FindGobuildScript() abort
-    return g:ale#util#stdin_wrapper . ' .go go build'
+    return g:ale#util#stdin_wrapper . ' .go go build -o /dev/null'
 endfunction
 
 let g:ale#util#gobuild_script =
