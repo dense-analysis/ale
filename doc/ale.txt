@@ -722,7 +722,7 @@ g:ale_css_stylelint_use_global                   *g:ale_css_stylelint_use_global
   global version of stylelint, in preference to locally installed versions of
   stylelint in node_modules.
 
-g:ale_scss_stylelint_executable                 *g:ale_scss_stylelint_executable*
+g:ale_sass_stylelint_executable                 *g:ale_sass_stylelint_executable*
 
   Type: |String|
   Default: `'stylelint'`
@@ -731,10 +731,10 @@ g:ale_scss_stylelint_executable                 *g:ale_scss_stylelint_executable
   directory. If no such path exists, this variable will be used instead.
 
   If you wish to use only a globally installed version of stylelint, set
-  |g:ale_scss_stylelint_use_global| to `1`.
+  |g:ale_sass_stylelint_use_global| to `1`.
 
 
-g:ale_scss_stylelint_use_global                 *g:ale_scss_stylelint_use_global*
+g:ale_sass_stylelint_use_global                 *g:ale_sass_stylelint_use_global*
 
   Type: |String|
   Default: `0`
