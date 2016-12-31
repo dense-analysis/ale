@@ -75,7 +75,7 @@ name. That seems to be the fairest way to arrange this table.
 | PHP | [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer) |
 | Pug | [pug-lint](https://github.com/pugjs/pug-lint) |
 | Puppet | [puppet](https://puppet.com), [puppet-lint](https://puppet-lint.com) |
-| Python | [flake8](http://flake8.pycqa.org/en/latest/), [pylint](https://www.pylint.org/) |
+| Python | [flake8](http://flake8.pycqa.org/en/latest/), [pylint](https://www.pylint.org/), [mypy](http://mypy-lang.org/) |
 | Ruby | [rubocop](https://github.com/bbatsov/rubocop) |
 | SASS | [sass-lint](https://www.npmjs.com/package/sass-lint), [stylelint](https://github.com/stylelint/stylelint) |
 | SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint), [stylelint](https://github.com/stylelint/stylelint) |
