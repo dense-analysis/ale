@@ -35,7 +35,7 @@ endfunction
 call ale#linter#Define('perl', {
 \   'name': 'perlcritic',
 \   'executable': 'perlcritic',
-\   'output_stream': 'sdtout',
+\   'output_stream': 'stdout',
 \   'command': 'perlcritic --verbose 3 --nocolor',
 \   'callback': 'ale_linters#perl#perlcritic#Handle',
 \})
