@@ -3,20 +3,32 @@
 
 function! ale_linters#elm#make#Handle(buffer, lines)
     let l:output = []
+    let l:is_windows = has('win32')
+    let l:temp_dir = l:is_windows ? $TMP : $TMPDIR
     for l:line in a:lines
         if l:line[0] ==# '['
             let l:errors = json_decode(l:line)
 
             for l:error in l:errors
-                call add(l:output, {
-                \    'bufnr': a:buffer,
-                \    'lnum': l:error.region.start.line,
-                \    'vcol': 0,
-                \    'col': l:error.region.start.column,
-                \    'type': (l:error.type ==? 'error') ? 'E' : 'W',
-                \    'text': l:error.overview,
-                \    'nr': -1,
-                \})
+                " Check if file is from the temp directory.
+                " Filters out any errors not related to the buffer.
+                if l:is_windows
+                    let l:file_is_buffer = l:error.file[0:len(l:temp_dir) - 1] ==? l:temp_dir
+                else
+                    let l:file_is_buffer = l:error.file[0:len(l:temp_dir) - 1] ==# l:temp_dir
+                endif
+
+                if l:file_is_buffer
+                    call add(l:output, {
+                    \    'bufnr': a:buffer,
+                    \    'lnum': l:error.region.start.line,
+                    \    'vcol': 0,
+                    \    'col': l:error.region.start.column,
+                    \    'type': (l:error.type ==? 'error') ? 'E' : 'W',
+                    \    'text': l:error.overview,
+                    \    'nr': -1,
+                    \})
+                endif
             endfor
         endif
     endfor
@@ -32,10 +44,14 @@ function! ale_linters#elm#make#GetCommand(buffer) abort
         let l:dir_set_cmd = ''
     else
         let l:root_dir = fnamemodify(l:elm_package, ':p:h')
-        let l:dir_set_cmd = 'cd ' . fnameescape(l:root_dir) . '; '
+        let l:dir_set_cmd = 'cd ' . fnameescape(l:root_dir) . ' && '
     endif
 
-    let l:elm_cmd = 'elm-make --report=json --output='.shellescape(g:ale#util#nul_file)
+    " The elm-make compiler, at the time of this writing, uses '/dev/null' as
+    " a sort of flag to tell the compiler not to generate an output file,
+    " which is why this is hard coded here.
+    " Source: https://github.com/elm-lang/elm-make/blob/master/src/Flags.hs
+    let l:elm_cmd = 'elm-make --report=json --output='.shellescape('/dev/null')
     let l:stdin_wrapper = g:ale#util#stdin_wrapper . ' .elm'
 
     return l:dir_set_cmd . ' ' . l:stdin_wrapper . ' ' . l:elm_cmd

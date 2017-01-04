@@ -61,10 +61,10 @@ name. That seems to be the fairest way to arrange this table.
 | Elixir | [credo](https://github.com/rrrene/credo) |
 | Elm | [elm-make](https://github.com/elm-lang/elm-make) |
 | Fortran | [gcc](https://gcc.gnu.org/) |
-| Go | [gofmt -e](https://golang.org/cmd/gofmt/), [go vet](https://golang.org/cmd/vet/), [golint](https://godoc.org/github.com/golang/lint) |
+| Go | [gofmt -e](https://golang.org/cmd/gofmt/), [go vet](https://golang.org/cmd/vet/), [golint](https://godoc.org/github.com/golang/lint), [go build](https://golang.org/cmd/go/) |
 | Haskell | [ghc](https://www.haskell.org/ghc/), [hlint](https://hackage.haskell.org/package/hlint) |
 | HTML | [HTMLHint](http://htmlhint.com/), [tidy](http://www.html-tidy.org/) |
-| JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/), [FlowType](https://flowtype.org/) |
+| JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/), [flow](https://flowtype.org/) |
 | JSON | [jsonlint](http://zaa.ch/jsonlint/) |
 | LaTeX | [chktex](http://www.nongnu.org/chktex/), [lacheck](https://www.ctan.org/pkg/lacheck) |
 | Lua | [luacheck](https://github.com/mpeterv/luacheck) |
@@ -83,13 +83,14 @@ name. That seems to be the fairest way to arrange this table.
 | Scala | [scalac](http://scala-lang.org) |
 | Swift | [swiftlint](https://swift.org/) |
 | Tex | [proselint](http://proselint.com/) |
-| Text | [proselint](http://proselint.com/) |
+| Text^^ | [proselint](http://proselint.com/) |
 | TypeScript | [tslint](https://github.com/palantir/tslint), typecheck |
 | Verilog | [iverilog](https://github.com/steveicarus/iverilog), [verilator](http://www.veripool.org/projects/verilator/wiki/Intro) |
 | Vim | [vint](https://github.com/Kuniwak/vint) |
 | YAML | [yamllint](https://yamllint.readthedocs.io/) |
 
-*^ Supported only on Unix machines via a wrapper script.*
+* *^ Supported only on Unix machines via a wrapper script.*
+* *^^ No text linters are enabled by default.*
 
 If you would like to see support for more languages and tools, please
 [create an issue](https://github.com/w0rp/ale/issues)

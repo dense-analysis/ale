@@ -30,17 +30,32 @@ function! ale_linters#javascript#eslint#Handle(buffer, lines)
     " /path/to/some-filename.js:47:14: Missing trailing comma. [Warning/comma-dangle]
     " /path/to/some-filename.js:56:41: Missing semicolon. [Error/semi]
     let l:pattern = '^.*:\(\d\+\):\(\d\+\): \(.\+\) \[\(.\+\)\]$'
+    " This second pattern matches lines like the following:
+    "
+    " /path/to/some-filename.js:13:3: Parsing error: Unexpected token
+    let l:parsing_pattern = '^.*:\(\d\+\):\(\d\+\): \(.\+\)$'
     let l:output = []
 
     for l:line in a:lines
         let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) == 0
+            " Try the parsing pattern for parsing errors.
+            let l:match = matchlist(l:line, l:parsing_pattern)
+        endif
+
+        if len(l:match) == 0
             continue
         endif
 
-        let l:type = split(l:match[4], '/')[0]
-        let l:text = l:match[3] . ' [' . l:match[4] . ']'
+        let l:type = 'Error'
+        let l:text = l:match[3]
+
+        " Take the error type from the output if available.
+        if !empty(l:match[4])
+            let l:type = split(l:match[4], '/')[0]
+            let l:text .= ' [' . l:match[4] . ']'
+        endif
 
         " vcol is Needed to indicate that the column is a character.
         call add(l:output, {

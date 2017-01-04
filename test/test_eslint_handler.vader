@@ -1,0 +1,43 @@
+Execute(The eslint handler should parse lines correctly):
+  runtime ale_linters/javascript/eslint.vim
+
+  AssertEqual
+  \ [
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 47,
+  \     'vcol': 0,
+  \     'col': 14,
+  \     'text': 'Missing trailing comma. [Warning/comma-dangle]',
+  \     'type': 'W',
+  \     'nr': -1,
+  \   },
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 56,
+  \     'vcol': 0,
+  \     'col': 41,
+  \     'text': 'Missing semicolon. [Error/semi]',
+  \     'type': 'E',
+  \     'nr': -1,
+  \   },
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 13,
+  \     'vcol': 0,
+  \     'col': 3,
+  \     'text': 'Parsing error: Unexpected token',
+  \     'type': 'E',
+  \     'nr': -1,
+  \   },
+  \ ],
+  \ ale_linters#javascript#eslint#Handle(347, [
+  \   'This line should be ignored completely',
+  \   '/path/to/some-filename.js:47:14: Missing trailing comma. [Warning/comma-dangle]',
+  \   '/path/to/some-filename.js:56:41: Missing semicolon. [Error/semi]',
+  \   'This line should be ignored completely',
+  \   '/path/to/some-filename.js:13:3: Parsing error: Unexpected token',
+  \ ])
+
+After:
+  call ale#linter#Reset()

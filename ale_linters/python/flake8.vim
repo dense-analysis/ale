@@ -13,7 +13,7 @@ endfunction
 
 function! ale_linters#python#flake8#GetCommand(buffer) abort
     return ale_linters#python#flake8#GetExecutable(a:buffer)
-    \   . ' ' . g:ale_python_flake8_args . ' -'
+    \   . ' ' . g:ale_python_flake8_args . '--stdin-display-name %s -'
 endfunction
 
 call ale#linter#Define('python', {

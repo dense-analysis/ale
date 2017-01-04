@@ -15,9 +15,12 @@ let s:default_ale_linter_aliases = {
 
 " Default linters to run for particular filetypes.
 " The user defined linter selections will be merged with this Dictionary.
+"
+" No linters are used for plaintext files by default.
 let s:default_ale_linters = {
 \   'zsh': ['shell'],
 \   'csh': ['shell'],
+\   'text': [],
 \}
 
 " Testing/debugging helper to unload all linters.

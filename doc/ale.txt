@@ -30,7 +30,8 @@ CONTENTS                                                         *ale-contents*
     4.18. ruby-rubocop..........................|ale-linter-options-ruby-rubocop|
     4.19. chktex................................|ale-linter-options-chktex|
     4.20. lacheck...............................|ale-linter-options-lacheck|
-    4.21. rustc.................................|ale-linter-options-rustc|
+    4.21. stylelint.............................|ale-linter-options-stylelint|
+    4.22. rustc.................................|ale-linter-options-rustc|
   5. Linter Integration Notes...................|ale-linter-integration|
     5.1.  merlin................................|ale-linter-integration-ocaml-merlin|
     5.2. rust...................................|ale-integration-rust|
@@ -75,7 +76,7 @@ The following languages and tools are supported.
 * Elixir: 'credo'
 * Elm: 'elm-make'
 * Fortran: 'gcc'
-* Go: 'gofmt -e', 'go vet', 'golint'
+* Go: 'gofmt -e', 'go vet', 'golint', 'go build'
 * Haskell: 'ghc', 'hlint'
 * HTML: 'HTMLHint', 'tidy'
 * JavaScript: 'eslint', 'jscs', 'jshint', 'flow'
@@ -96,6 +97,8 @@ The following languages and tools are supported.
 * SCSS: 'sasslint', 'scsslint', 'stylelint'
 * Scala: 'scalac'
 * Swift: 'swiftlint'
+* Tex: 'proselint'
+* Text: 'proselint'
 * TypeScript: 'tslint', 'typecheck'
 * Verilog: 'iverilog', 'verilator'
 * Vim: 'vint'
@@ -601,6 +604,27 @@ g:ale_html_htmlhint_options                       *g:ale_html_htmlhint_options*
 
   This variable can be changed to modify flags given to HTMLHint.
 
+g:ale_html_htmlhint_executable                   *g:ale_html_htmlhint_executable*
+
+  Type: |String|
+  Default: `'htmlhint'`
+
+  ALE will first discover the htmlhint path in an ancestor node_modules
+  directory. If no such path exists, this variable will be used instead.
+
+  If you wish to use only a globally installed version of htmlhint, set
+  |g:ale_html_htmlhint_use_global| to `1`.
+
+
+g:ale_html_htmlhint_use_global                   *g:ale_html_htmlhint_use_global*
+
+  Type: |String|
+  Default: `0`
+
+  This variable controls whether or not ALE will search for a local path for
+  htmlhint first. If this variable is set to `1`, then ALE will always use the
+  global version of htmlhint, in preference to locally installed versions of
+  htmlhint in node_modules.
 
 -------------------------------------------------------------------------------
 4.16. c-clang                                      *ale-linter-options-c-clang*
@@ -677,8 +701,77 @@ g:ale_lacheck_executable                            *g:ale_lacheck_executable*
 
   This variable can be changed to change the path to lacheck.
 
+-------------------------------------------------------------------------------
+4.21. stylelint                                    *ale-linter-options-stylelint*
+
+g:ale_css_stylelint_executable                   *g:ale_css_stylelint_executable*
+
+  Type: |String|
+  Default: `'stylelint'`
+
+  ALE will first discover the stylelint path in an ancestor node_modules
+  directory. If no such path exists, this variable will be used instead.
+
+  If you wish to use only a globally installed version of stylelint, set
+  |g:ale_css_stylelint_use_global| to `1`.
+
+
+g:ale_css_stylelint_use_global                   *g:ale_css_stylelint_use_global*
+
+  Type: |String|
+  Default: `0`
+
+  This variable controls whether or not ALE will search for a local path for
+  stylelint first. If this variable is set to `1`, then ALE will always use the
+  global version of stylelint, in preference to locally installed versions of
+  stylelint in node_modules.
+
+g:ale_sass_stylelint_executable                 *g:ale_sass_stylelint_executable*
+
+  Type: |String|
+  Default: `'stylelint'`
+
+  ALE will first discover the stylelint path in an ancestor node_modules
+  directory. If no such path exists, this variable will be used instead.
+
+  If you wish to use only a globally installed version of stylelint, set
+  |g:ale_sass_stylelint_use_global| to `1`.
+
+
+g:ale_sass_stylelint_use_global                 *g:ale_sass_stylelint_use_global*
+
+  Type: |String|
+  Default: `0`
+
+  This variable controls whether or not ALE will search for a local path for
+  stylelint first. If this variable is set to `1`, then ALE will always use the
+  global version of stylelint, in preference to locally installed versions of
+  stylelint in node_modules.
+
+g:ale_scss_stylelint_executable                 *g:ale_scss_stylelint_executable*
+
+  Type: |String|
+  Default: `'stylelint'`
+
+  ALE will first discover the stylelint path in an ancestor node_modules
+  directory. If no such path exists, this variable will be used instead.
+
+  If you wish to use only a globally installed version of stylelint, set
+  |g:ale_scss_stylelint_use_global| to `1`.
+
+
+g:ale_scss_stylelint_use_global                 *g:ale_scss_stylelint_use_global*
+
+  Type: |String|
+  Default: `0`
+
+  This variable controls whether or not ALE will search for a local path for
+  stylelint first. If this variable is set to `1`, then ALE will always use the
+  global version of stylelint, in preference to locally installed versions of
+  stylelint in node_modules.
+
 ------------------------------------------------------------------------------
-4.21. rustc                                         *ale-linter-options-rustc*
+4.22. rustc                                         *ale-linter-options-rustc*
 
 g:ale_rust_ignore_error_codes                  *g:ale_rust_ignore_error_codes*
 

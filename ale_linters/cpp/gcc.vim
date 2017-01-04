@@ -15,12 +15,16 @@ if !exists('g:ale_cpp_gcc_options')
     let g:ale_cpp_gcc_options = '-std=c++14 -Wall'
 endif
 
+function! ale_linters#cpp#gcc#GetCommand(buffer) abort
+    return 'gcc -S -x c++ -fsyntax-only '
+    \      . g:ale_cpp_gcc_options . ' -'
+
+endfunction
+
 call ale#linter#Define('cpp', {
 \   'name': 'g++',
 \   'output_stream': 'stderr',
 \   'executable': 'g++',
-\   'command': 'gcc -S -x c++ -fsyntax-only '
-\       . g:ale_cpp_gcc_options
-\       . ' -',
+\   'command_callback': 'ale_linters#cpp#gcc#GetCommand',
 \   'callback': 'ale#handlers#HandleGCCFormat',
 \})

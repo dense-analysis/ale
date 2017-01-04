@@ -13,7 +13,7 @@ function! ale_linters#haskell#hlint#Handle(buffer, lines)
         \   'lnum': l:error.startLine + 0,
         \   'vcol': 0,
         \   'col': l:error.startColumn + 0,
-        \   'text': l:error.severity . ': ' . l:error.hint,
+        \   'text': l:error.severity . ': ' . l:error.hint . '. Found: ' . l:error.from . ' Why not: ' . l:error.to,
         \   'type': l:error.severity ==# 'Error' ? 'E' : 'W',
         \})
     endfor
