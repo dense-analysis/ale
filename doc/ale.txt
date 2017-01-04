@@ -84,7 +84,7 @@ The following languages and tools are supported.
 * MATLAB: 'mlint'
 * OCaml: 'merlin' (see |ale-linter-integration-ocaml-merlin|)
 * Perl: 'perl' (-c flag), 'perlcritic'
-* PHP: 'php' (-l flag), 'phpcs'
+* PHP: 'hack', 'php' (-l flag), 'phpcs'
 * Pug: 'pug-lint'
 * Puppet: 'puppet', 'puppet-lint'
 * Python: 'flake8', 'pylint'
