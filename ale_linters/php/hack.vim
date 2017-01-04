@@ -4,6 +4,7 @@
 function! ale_linters#php#hack#Handle(buffer, lines)
     let l:pattern = '^\(.*\):\(\d\+\):\(\d\+\),\(\d\+\): \(.\+])\)$'
     let l:output = []
+
     for l:line in a:lines
         let l:match = matchlist(l:line, l:pattern)
 
@@ -24,6 +25,7 @@ function! ale_linters#php#hack#Handle(buffer, lines)
         \   'type': 'E',
         \})
     endfor
+
     return l:output
 endfunction
 
