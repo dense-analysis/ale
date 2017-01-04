@@ -34,6 +34,6 @@ call ale#linter#Define('php', {
 \   'name': 'php',
 \   'executable': 'php',
 \   'output_stream': 'both',
-\   'command': 'php -l --',
+\   'command': 'php -l -d display_errors=1 --',
 \   'callback': 'ale_linters#php#php#Handle',
 \})
