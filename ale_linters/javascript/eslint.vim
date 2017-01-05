@@ -4,6 +4,9 @@
 let g:ale_javascript_eslint_executable =
 \   get(g:, 'ale_javascript_eslint_executable', 'eslint')
 
+let g:ale_javascript_eslint_options =
+\   get(g:, 'ale_javascript_eslint_options', '')
+
 let g:ale_javascript_eslint_use_global =
 \   get(g:, 'ale_javascript_eslint_use_global', 0)
 
@@ -21,6 +24,7 @@ endfunction
 
 function! ale_linters#javascript#eslint#GetCommand(buffer) abort
     return ale_linters#javascript#eslint#GetExecutable(a:buffer)
+    \   . ' ' . g:ale_javascript_eslint_options
     \   . ' -f unix --stdin --stdin-filename %s'
 endfunction
 

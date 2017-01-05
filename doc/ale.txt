@@ -383,6 +383,14 @@ g:ale_javascript_eslint_executable         *g:ale_javascript_eslint_executable*
   |g:ale_javascript_eslint_use_global| to `1`.
 
 
+g:ale_javascript_eslint_options               *g:ale_javascript_eslint_options*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to eslint.
+
+
 g:ale_javascript_eslint_use_global         *g:ale_javascript_eslint_use_global*
 
   Type: |String|
