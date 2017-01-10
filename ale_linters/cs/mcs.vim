@@ -22,7 +22,7 @@ function! ale_linters#cs#mcs#Handle(buffer, lines) abort
         \   'vcol': 0,
         \   'col': l:match[2] + 0,
         \   'text': l:match[3] . ': ' . l:match[4],
-        \   'type': l:match[3] =~ '^Error' ? 'E' : 'W',
+        \   'type': l:match[3] =~# '^error' ? 'E' : 'W',
         \   'nr': -1,
         \})
     endfor
