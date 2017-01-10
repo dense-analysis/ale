@@ -1,8 +1,8 @@
-if !exists('g:ale_cs_csc_options')
-    let g:ale_cs_csc_options = ''
+if !exists('g:ale_cs_mcs_options')
+    let g:ale_cs_mcs_options = ''
 endif
 
-function! ale_linters#cs#csc#Handle(buffer, lines) abort
+function! ale_linters#cs#mcs#Handle(buffer, lines) abort
     " Look for lines like the following.
     "
     " Tests.cs(12,29): error CSXXXX: ; expected
@@ -31,10 +31,10 @@ function! ale_linters#cs#csc#Handle(buffer, lines) abort
 endfunction
 
 call ale#linter#Define('cs',{
-\ 'name': 'csc',
+\ 'name': 'mcs',
 \ 'output_stream': 'stderr',
 \ 'executable': 'mcs',
-\ 'command': g:ale#util#stdin_wrapper . ' .cs mcs -unsafe --parse' . g:ale_cs_csc_options,
-\ 'callback': 'ale_linters#cs#csc#Handle',
+\ 'command': g:ale#util#stdin_wrapper . ' .cs mcs -unsafe --parse' . g:ale_cs_mcs_options,
+\ 'callback': 'ale_linters#cs#mcs#Handle',
 \ })
 
