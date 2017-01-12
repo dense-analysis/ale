@@ -30,8 +30,11 @@ CONTENTS                                                         *ale-contents*
     4.18. ruby-rubocop..........................|ale-linter-options-ruby-rubocop|
     4.19. chktex................................|ale-linter-options-chktex|
     4.20. lacheck...............................|ale-linter-options-lacheck|
+    4.21. stylelint.............................|ale-linter-options-stylelint|
+    4.22. rustc.................................|ale-linter-options-rustc|
   5. Linter Integration Notes...................|ale-linter-integration|
     5.1.  merlin................................|ale-linter-integration-ocaml-merlin|
+    5.2. rust...................................|ale-integration-rust|
   6. Commands/Keybinds..........................|ale-commands|
   7. API........................................|ale-api|
   8. Special Thanks.............................|ale-special-thanks|
@@ -88,6 +91,7 @@ The following languages and tools are supported.
 * Pug: 'pug-lint'
 * Puppet: 'puppet', 'puppet-lint'
 * Python: 'flake8', 'pylint'
+* Rust: 'rustc' (see |ale-integration-rust|)
 * Ruby: 'rubocop'
 * SASS: 'sasslint', 'stylelint'
 * SCSS: 'sasslint', 'scsslint', 'stylelint'
@@ -774,6 +778,19 @@ g:ale_scss_stylelint_use_global                 *g:ale_scss_stylelint_use_global
   global version of stylelint, in preference to locally installed versions of
   stylelint in node_modules.
 
+------------------------------------------------------------------------------
+4.22. rustc                                         *ale-linter-options-rustc*
+
+g:ale_rust_ignore_error_codes                  *g:ale_rust_ignore_error_codes*
+
+  Type: |List| of |String|s
+  Default: []
+
+  This variable can contain error codes which will be ignored. For example, to
+  ignore most errors regarding failed imports, put this in your .vimrc
+  >
+  let g:ale_rust_ignore_error_codes = ['E0432', 'E0433']
+
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*
 
@@ -786,6 +803,26 @@ Some linters may have requirements for some other plugins being installed.
   Vim is correctly configured. See the corresponding Merlin wiki page for
   detailed instructions
   (https://github.com/the-lambda-church/merlin/wiki/vim-from-scratch).
+
+-------------------------------------------------------------------------------
+5.2. rust                                                *ale-integration-rust*
+
+  Since Vim does not detect the rust file type out-of-the-box, you need the
+  runtime files for rust from here: https://github.com/rust-lang/rust.vim
+
+  Note that there are two possible linters for rust files:
+
+  1. rustc -- The Rust compiler is used to check the currently edited file.
+     So, if your project consists of multiple files, you will get some errors
+     when you use e.g. a struct which is defined in another file. You can use
+     |g:ale_rust_ignore_error_codes| to ignore some of these errors.
+  2. cargo -- If your project is managed by Cargo, the whole project is
+     checked. That means that all errors are properly shown, but cargo can
+     only operate on the files written on disk. That means it is highly
+     recommended to turn off |g:ale_lint_on_text_changed| and to turn on
+     |g:ale_lint_on_save|.
+
+  Also note that rustc 1.12. or later is needed.
 
 ===============================================================================
 6. Commands/Keybinds                                             *ale-commands*
