@@ -32,6 +32,7 @@ CONTENTS                                                         *ale-contents*
     4.20. lacheck...............................|ale-linter-options-lacheck|
     4.21. stylelint.............................|ale-linter-options-stylelint|
     4.22. rustc.................................|ale-linter-options-rustc|
+    4.23. python-pylint.........................|ale-linter-options-python-pylint|
   5. Linter Integration Notes...................|ale-linter-integration|
     5.1.  merlin................................|ale-linter-integration-ocaml-merlin|
     5.2. rust...................................|ale-integration-rust|
@@ -789,6 +790,34 @@ g:ale_rust_ignore_error_codes                  *g:ale_rust_ignore_error_codes*
   ignore most errors regarding failed imports, put this in your .vimrc
   >
   let g:ale_rust_ignore_error_codes = ['E0432', 'E0433']
+
+-------------------------------------------------------------------------------
+4.23. python-pylint                          *ale-linter-options-python-pylint*
+
+g:ale_python_pylint_executable                 *g:ale_python_pylint_executable*
+
+  Type: |String|
+  Default: `'pylint'`
+
+  This variable can be changed to modify the executable used for pylint.
+
+
+g:ale_python_pylint_args                             *g:ale_python_pylint_args*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to add command-line arguments to the pylint
+  invocation.
+
+For example, to dynamically switch between programs targeting Python 2 and
+Python 3, you may want to set >
+
+  let g:ale_python_pylint_executable = 'python3'   " or 'python' for Python 2
+  let g:ale_python_pylint_args = '-rcfile /path/to/pylint.rc'
+
+after making sure it's installed for the appropriate Python versions (e.g.
+`python3 -m pip install --user pylint`).
 
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*
