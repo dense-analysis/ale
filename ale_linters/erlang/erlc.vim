@@ -13,6 +13,11 @@ function! ale_linters#erlang#erlc#Handle(buffer, lines)
   let l:pattern_parse_transform = '\v(undefined parse transform .*)$'
   let l:output = []
 
+  let l:pattern_no_module_definition = '\v(no module definition)$'
+  let l:pattern_unused = '\v(.* is unused)$'
+
+  let l:is_hrl = expand('%:e') ==# 'hrl'
+
   for l:line in a:lines
     let l:match = matchlist(l:line, l:pattern)
     let l:match_parse_transform = matchlist(l:line, l:pattern_parse_transform)
@@ -44,6 +49,15 @@ function! ale_linters#erlang#erlc#Handle(buffer, lines)
     let l:line = l:match[2]
     let l:warning_or_text = l:match[3]
     let l:text = l:match[4]
+
+    " If this file is a header .hrl, ignore the following expected messages:
+    " - 'no module definition'
+    " - 'X is unused'
+    if l:is_hrl &&
+                \ (match(l:text, l:pattern_no_module_definition) != -1 ||
+                \  match(l:text, l:pattern_unused) != -1)
+        continue
+    endif
 
     if !empty(l:warning_or_text)
         let l:type = 'W'
