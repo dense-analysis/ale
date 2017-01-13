@@ -6,7 +6,10 @@ if !exists('g:ale_rust_ignore_error_codes')
 endif
 
 
-function! ale_linters#rust#rustc#handle_rustc_errors(buffer_number, errorlines)
+function! ale_linters#rust#rustc#HandleRustcErrors(buffer_number, errorlines) abort
+    " FIXME: Fix this linter
+    return []
+
     let l:file_name = fnamemodify(bufname(a:buffer_number), ':t')
     let l:output = []
 
@@ -37,7 +40,7 @@ function! ale_linters#rust#rustc#handle_rustc_errors(buffer_number, errorlines)
             else
                 " when the error is caused in the expansion of a macro, we have
                 " to bury deeper
-                let l:root_cause = s:find_error_in_expansion(l:span, l:file_name)
+                let l:root_cause = s:FindErrorInExpansion(l:span, l:file_name)
 
                 if !empty(l:root_cause)
                     call add(l:output, {
@@ -59,20 +62,20 @@ endfunction
 
 
 " returns: a list [lnum, col] with the location of the error or []
-function! s:find_error_in_expansion(span, file_name)
+function! s:FindErrorInExpansion(span, file_name) abort
     if a:span.file_name ==# a:file_name
         return [a:span.line_start, a:span.byte_start]
     endif
 
     if !empty(a:span.expansion)
-        return s:find_error_in_expansion(a:span.expansion.span, a:file_name)
+        return s:FindErrorInExpansion(a:span.expansion.span, a:file_name)
     endif
 
     return []
 endfunction
 
 
-function! ale_linters#rust#rustc#rustc_command(buffer_number)
+function! ale_linters#rust#rustc#RustcCommand(buffer_number) abort
     " Try to guess the library search path. If the project is managed by cargo,
     " it's usually <project root>/target/debug/deps/ or
     " <project root>/target/release/deps/
@@ -93,7 +96,7 @@ endfunction
 call ale#linter#Define('rust', {
 \   'name': 'rustc',
 \   'executable': 'rustc',
-\   'command_callback': 'ale_linters#rust#rustc#rustc_command',
-\   'callback': 'ale_linters#rust#rustc#handle_rustc_errors',
+\   'command_callback': 'ale_linters#rust#rustc#RustcCommand',
+\   'callback': 'ale_linters#rust#rustc#HandleRustcErrors',
 \   'output_stream': 'stderr',
 \})

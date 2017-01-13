@@ -91,7 +91,6 @@ The following languages and tools are supported.
 * Pug: 'pug-lint'
 * Puppet: 'puppet', 'puppet-lint'
 * Python: 'flake8', 'pylint'
-* Rust: 'rustc' (see |ale-integration-rust|)
 * Ruby: 'rubocop'
 * SASS: 'sasslint', 'stylelint'
 * SCSS: 'sasslint', 'scsslint', 'stylelint'

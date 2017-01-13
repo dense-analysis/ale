@@ -2,7 +2,7 @@
 " Description: rustc invoked by cargo for rust files
 
 
-function! ale_linters#rust#cargo#cargo_or_not_cargo(bufnr)
+function! ale_linters#rust#cargo#GetCargoExecutable(bufnr)
     if ale#util#FindNearestFile(a:bufnr, 'Cargo.toml') !=# ''
         return 'cargo'
     else
@@ -14,8 +14,8 @@ endfunction
 
 call ale#linter#Define('rust', {
 \   'name': 'cargo',
-\   'executable_callback': 'ale_linters#rust#cargo#cargo_or_not_cargo',
+\   'executable_callback': 'ale_linters#rust#cargo#GetCargoExecutable',
 \   'command': 'cargo rustc -- --error-format=json -Z no-trans',
-\   'callback': 'ale_linters#rust#rustc#handle_rustc_errors',
+\   'callback': 'ale_linters#rust#rustc#HandleRustcErrors',
 \   'output_stream': 'stderr',
 \})
