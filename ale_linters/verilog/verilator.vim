@@ -25,7 +25,7 @@ function! ale_linters#verilog#verilator#Handle(buffer, lines)
         let l:text = l:match[4]
         let l:file = l:match[2]
 
-        if(l:file =~ "_verilator_linted.v")
+        if(l:file =~# '_verilator_linted.v')
           call add(l:output, {
                 \   'bufnr': a:buffer,
                 \   'lnum': l:line,
