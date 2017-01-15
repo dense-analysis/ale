@@ -10,7 +10,7 @@ function! ale_linters#verilog#verilator#Handle(buffer, lines)
     " %Warning-UNDRIVEN: test.v:3: Signal is not driven: clk
     " %Warning-UNUSED: test.v:4: Signal is not used: dout
     " %Warning-BLKSEQ: test.v:10: Blocking assignments (=) in sequential (flop or latch) block; suggest delayed assignments (<=).
-    let l:pattern = '^%\(Warning\|Error\)[^:]*:[^:]\+:\(\d\+\): \(.\+\)$'
+    let l:pattern = '^%\(Warning\|Error\)[^:]*:\([^:]\+\):\(\d\+\): \(.\+\)$'
     let l:output = []
 
     for l:line in a:lines
@@ -20,19 +20,22 @@ function! ale_linters#verilog#verilator#Handle(buffer, lines)
             continue
         endif
 
-        let l:line = l:match[2] + 0
+        let l:line = l:match[3] + 0
         let l:type = l:match[1] ==# 'Error' ? 'E' : 'W'
-        let l:text = l:match[3]
+        let l:text = l:match[4]
+        let l:file = l:match[2]
 
-        call add(l:output, {
-        \   'bufnr': a:buffer,
-        \   'lnum': l:line,
-        \   'vcol': 0,
-        \   'col': 1,
-        \   'text': l:text,
-        \   'type': l:type,
-        \   'nr': -1,
-        \})
+        if(l:file =~# '_verilator_linted.v')
+          call add(l:output, {
+                \   'bufnr': a:buffer,
+                \   'lnum': l:line,
+                \   'vcol': 0,
+                \   'col': 1,
+                \   'text': l:text,
+                \   'type': l:type,
+                \   'nr': -1,
+                \})
+        endif
     endfor
 
     return l:output
@@ -42,6 +45,6 @@ call ale#linter#Define('verilog', {
 \   'name': 'verilator',
 \   'output_stream': 'stderr',
 \   'executable': 'verilator',
-\   'command': g:ale#util#stdin_wrapper . ' .v verilator --lint-only -Wall -Wno-DECLFILENAME',
+\   'command': g:ale#util#stdin_wrapper . ' _verilator_linted.v verilator --lint-only -Wall -Wno-DECLFILENAME',
 \   'callback': 'ale_linters#verilog#verilator#Handle',
 \})
