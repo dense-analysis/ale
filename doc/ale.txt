@@ -6,40 +6,41 @@ ALE - Asynchronous Lint Engine
 ===============================================================================
 CONTENTS                                                         *ale-contents*
 
-  1. Introduction...............................|ale-introduction|
-  2. Supported Languages & Tools................|ale-support|
-  3. Global Options.............................|ale-options|
-  4. Linter Specific Options....................|ale-linter-options|
-    4.1.  eslint................................|ale-linter-options-eslint|
-    4.2.  flow..................................|ale-linter-options-flow|
-    4.3.  jshint................................|ale-linter-options-jshint|
-    4.4.  phpcs.................................|ale-linter-options-phpcs|
-    4.5.  html-tidy.............................|ale-linter-options-html-tidy|
-    4.6.  c-gcc.................................|ale-linter-options-c-gcc|
-    4.7.  cpp-gcc...............................|ale-linter-options-cpp-gcc|
-    4.8.  fortran-gcc...........................|ale-linter-options-fortran-gcc|
-    4.9.  shell.................................|ale-linter-options-shell|
-    4.10. shellcheck............................|ale-linter-options-shellcheck|
-    4.11. vint..................................|ale-linter-options-vint|
-    4.12. luacheck..............................|ale-linter-options-luacheck|
-    4.13. c-cppcheck............................|ale-linter-options-c-cppcheck|
-    4.14. cpp-cppcheck..........................|ale-linter-options-cpp-cppcheck|
-    4.15. htmlhint..............................|ale-linter-options-htmlhint|
-    4.16. c-clang...............................|ale-linter-options-c-clang|
-    4.17. python-flake8.........................|ale-linter-options-python-flake8|
-    4.18. ruby-rubocop..........................|ale-linter-options-ruby-rubocop|
-    4.19. chktex................................|ale-linter-options-chktex|
-    4.20. lacheck...............................|ale-linter-options-lacheck|
-    4.21. stylelint.............................|ale-linter-options-stylelint|
-    4.22. rustc.................................|ale-linter-options-rustc|
-    4.23. python-pylint.........................|ale-linter-options-python-pylint|
-  5. Linter Integration Notes...................|ale-linter-integration|
-    5.1.  merlin................................|ale-linter-integration-ocaml-merlin|
-    5.2. rust...................................|ale-integration-rust|
-  6. Commands/Keybinds..........................|ale-commands|
-  7. API........................................|ale-api|
-  8. Special Thanks.............................|ale-special-thanks|
-  9. Contact....................................|ale-contact|
+  1. Introduction.........................|ale-introduction|
+  2. Supported Languages & Tools..........|ale-support|
+  3. Global Options.......................|ale-options|
+  4. Linter Specific Options..............|ale-linter-options|
+    4.1.  eslint..........................|ale-linter-options-eslint|
+    4.2.  flow............................|ale-linter-options-flow|
+    4.3.  jshint..........................|ale-linter-options-jshint|
+    4.4.  phpcs...........................|ale-linter-options-phpcs|
+    4.5.  html-tidy.......................|ale-linter-options-html-tidy|
+    4.6.  c-gcc...........................|ale-linter-options-c-gcc|
+    4.7.  cpp-gcc.........................|ale-linter-options-cpp-gcc|
+    4.8.  fortran-gcc.....................|ale-linter-options-fortran-gcc|
+    4.9.  shell...........................|ale-linter-options-shell|
+    4.10. shellcheck......................|ale-linter-options-shellcheck|
+    4.11. vint............................|ale-linter-options-vint|
+    4.12. luacheck........................|ale-linter-options-luacheck|
+    4.13. c-cppcheck......................|ale-linter-options-c-cppcheck|
+    4.14. cpp-cppcheck....................|ale-linter-options-cpp-cppcheck|
+    4.15. htmlhint........................|ale-linter-options-htmlhint|
+    4.16. c-clang.........................|ale-linter-options-c-clang|
+    4.17. python-flake8...................|ale-linter-options-python-flake8|
+    4.18. ruby-rubocop....................|ale-linter-options-ruby-rubocop|
+    4.19. chktex..........................|ale-linter-options-chktex|
+    4.20. lacheck.........................|ale-linter-options-lacheck|
+    4.21. stylelint.......................|ale-linter-options-stylelint|
+    4.22. rustc...........................|ale-linter-options-rustc|
+    4.23. python-mypy.....................|ale-linter-options-python-mypy|
+    4.24. python-pylint...................|ale-linter-options-python-pylint|
+  5. Linter Integration Notes.............|ale-linter-integration|
+    5.1.  merlin..........................|ale-linter-integration-ocaml-merlin|
+    5.2. rust.............................|ale-integration-rust|
+  6. Commands/Keybinds....................|ale-commands|
+  7. API..................................|ale-api|
+  8. Special Thanks.......................|ale-special-thanks|
+  9. Contact..............................|ale-contact|
 
 ===============================================================================
 1. Introduction                                              *ale-introduction*
@@ -92,7 +93,7 @@ The following languages and tools are supported.
 * PHP: 'hack', 'php' (-l flag), 'phpcs'
 * Pug: 'pug-lint'
 * Puppet: 'puppet', 'puppet-lint'
-* Python: 'flake8', 'pylint'
+* Python: 'flake8', 'mypy', 'pylint'
 * Ruby: 'rubocop'
 * SASS: 'sasslint', 'stylelint'
 * SCSS: 'sasslint', 'scsslint', 'stylelint'
@@ -458,7 +459,6 @@ g:ale_javascript_jshint_use_global         *g:ale_javascript_jshint_use_global*
   global version of jshint, in preference to locally installed versions of
   jshint in node_modules.
 
-
 -------------------------------------------------------------------------------
 4.4. phpcs                                           *ale-linter-options-phpcs*
 
@@ -470,7 +470,6 @@ g:ale_php_phpcs_standard                             *g:ale_php_phpcs_standard*
   This variable can be set to specify the coding standard used by phpcs. If no
   coding standard is specified, phpcs will default to checking against the
   PEAR coding standard, or the standard you have set as the default.
-
 
 -------------------------------------------------------------------------------
 4.5. html-tidy                                   *ale-linter-options-html-tidy*
@@ -498,7 +497,6 @@ g:ale_html_tidy_args                                     *g:ale_html_tidy_args*
   cp850 (ibm858), cp932 (shiftjis), iso-2022-jp (iso-2022), latin1, macroman
   (mac), sjis (shiftjis), utf-16le, utf-16, utf-8
 
-
 -------------------------------------------------------------------------------
 4.6. c-gcc                                           *ale-linter-options-c-gcc*
 
@@ -508,7 +506,6 @@ g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
   Default: `'-std=c11 -Wall'`
 
   This variable can be change to modify flags given to gcc.
-
 
 -------------------------------------------------------------------------------
 4.7. cpp-gcc                                       *ale-linter-options-cpp-gcc*
@@ -520,7 +517,6 @@ g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
 
   This variable can be changed to modify flags given to gcc.
 
-
 -------------------------------------------------------------------------------
 4.8. fortran-gcc                               *ale-linter-options-fortran-gcc*
 
@@ -530,7 +526,6 @@ g:ale_fortran_gcc_options                           *g:ale_fortran_gcc_options*
   Default: `'-Wall'`
 
   This variable can be changed to modify flags given to gcc.
-
 
 -------------------------------------------------------------------------------
 4.9. shell                                           *ale-linter-options-shell*
@@ -545,7 +540,6 @@ g:ale_linters_sh_shell_default_shell     *g:ale_linters_sh_shell_default_shell*
   determine the shell program to run. When this detection fails, this variable
   will be used instead.
 
-
 -------------------------------------------------------------------------------
 4.10. shellcheck                                *ale-linter-options-shellcheck*
 
@@ -555,7 +549,6 @@ g:ale_linters_sh_shellckeck_exclusions *g:ale_linters_sh_shellckeck_exclusions*
   Default: `''`
 
   Set this variable to exclude test(s) for shellcheck (-e/--exclude option).
-
 
 -------------------------------------------------------------------------------
 4.11. vint                                            *ale-linter-options-vint*
@@ -569,7 +562,6 @@ g:ale_vim_vint_show_style_issues             *g:ale_vim_vint_show_style_issues*
   is disabled, only warnings and errors which are not purely style issues
   will be reported.
 
-
 -------------------------------------------------------------------------------
 4.12. luacheck                                    *ale-linter-options-luacheck*
 
@@ -579,7 +571,6 @@ g:ale_lua_luacheck_executable                   *g:ale_lua_luacheck_executable*
   Default: `'luacheck'`
 
   This variable can be changed to change the path to luacheck.
-
 
 -------------------------------------------------------------------------------
 4.13. c-cppcheck                                *ale-linter-options-c-cppcheck*
@@ -591,7 +582,6 @@ g:ale_c_cppcheck_options                             *g:ale_c_cppcheck_options*
 
   This variable can be changed to modify flags given to cppcheck.
 
-
 -------------------------------------------------------------------------------
 4.14. cpp-cppcheck                            *ale-linter-options-cpp-cppcheck*
 
@@ -602,7 +592,6 @@ g:ale_cpp_cppcheck_options                         *g:ale_cpp_cppcheck_options*
 
   This variable can be changed to modify flags given to cppcheck.
 
-
 -------------------------------------------------------------------------------
 4.15. htmlhint                                    *ale-linter-options-htmlhint*
 
@@ -612,6 +601,7 @@ g:ale_html_htmlhint_options                       *g:ale_html_htmlhint_options*
   Default: `'--format=unix'`
 
   This variable can be changed to modify flags given to HTMLHint.
+
 
 g:ale_html_htmlhint_executable                   *g:ale_html_htmlhint_executable*
 
@@ -664,14 +654,14 @@ g:ale_python_flake8_args                             *g:ale_python_flake8_args*
   This variable can be changed to add command-line arguments to the flake8
   invocation.
 
-For example, to dynamically switch between programs targeting Python 2 and
-Python 3, you may want to set >
+  For example, to dynamically switch between programs targeting Python 2 and
+  Python 3, you may want to set >
 
   let g:ale_python_flake8_executable = 'python3'   " or 'python' for Python 2
   let g:ale_python_flake8_args = '-m flake8'
-
-after making sure it's installed for the appropriate Python versions (e.g.
-`python3 -m pip install --user flake8`).
+<
+  after making sure it's installed for the appropriate Python versions (e.g.
+  `python3 -m pip install --user flake8`).
 
 -------------------------------------------------------------------------------
 4.18. ruby-rubocop                            *ale-linter-options-ruby-rubocop*
@@ -692,6 +682,7 @@ g:ale_tex_chktex_executable                       *g:ale_tex_chktex_executable*
   Default: `'chktex'`
 
   This variable can be changed to change the path to chktex.
+
 
 g:ale_tex_chktex_options                             *g:ale_tex_chktex_options*
 
@@ -735,6 +726,7 @@ g:ale_css_stylelint_use_global                   *g:ale_css_stylelint_use_global
   global version of stylelint, in preference to locally installed versions of
   stylelint in node_modules.
 
+
 g:ale_sass_stylelint_executable                 *g:ale_sass_stylelint_executable*
 
   Type: |String|
@@ -756,6 +748,7 @@ g:ale_sass_stylelint_use_global                 *g:ale_sass_stylelint_use_global
   stylelint first. If this variable is set to `1`, then ALE will always use the
   global version of stylelint, in preference to locally installed versions of
   stylelint in node_modules.
+
 
 g:ale_scss_stylelint_executable                 *g:ale_scss_stylelint_executable*
 
@@ -792,8 +785,21 @@ g:ale_rust_ignore_error_codes                  *g:ale_rust_ignore_error_codes*
   >
   let g:ale_rust_ignore_error_codes = ['E0432', 'E0433']
 
+
 -------------------------------------------------------------------------------
-4.23. python-pylint                          *ale-linter-options-python-pylint*
+4.24. python-mypy                              *ale-linter-options-python-mypy*
+
+g:ale_python_mypy_options                           *g:ale_python_mypy_options*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to add command-line arguments to the mypy
+  invocation.
+
+
+-------------------------------------------------------------------------------
+4.24. python-pylint                          *ale-linter-options-python-pylint*
 
 g:ale_python_pylint_executable                 *g:ale_python_pylint_executable*
 
@@ -811,14 +817,14 @@ g:ale_python_pylint_options                       *g:ale_python_pylint_options*
   This variable can be changed to add command-line arguments to the pylint
   invocation.
 
-For example, to dynamically switch between programs targeting Python 2 and
-Python 3, you may want to set >
+  For example, to dynamically switch between programs targeting Python 2 and
+  Python 3, you may want to set >
 
   let g:ale_python_pylint_executable = 'python3'   " or 'python' for Python 2
   let g:ale_python_pylint_options = '-rcfile /path/to/pylint.rc'
 
-after making sure it's installed for the appropriate Python versions (e.g.
-`python3 -m pip install --user pylint`).
+  after making sure it's installed for the appropriate Python versions (e.g.
+  `python3 -m pip install --user pylint`).
 
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*
