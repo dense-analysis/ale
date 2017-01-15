@@ -4,8 +4,8 @@
 let g:ale_python_pylint_executable =
 \   get(g:, 'ale_python_pylint_executable', 'pylint')
 
-let g:ale_python_pylint_args =
-\   get(g:, 'ale_python_pylint_args', '')
+let g:ale_python_pylint_options =
+\   get(g:, 'ale_python_pylint_options', '')
 
 function! ale_linters#python#pylint#GetExecutable(buffer) abort
     return g:ale_python_pylint_executable
@@ -14,7 +14,7 @@ endfunction
 function! ale_linters#python#pylint#GetCommand(buffer) abort
     return g:ale#util#stdin_wrapper . ' .py '
     \   . ale_linters#python#pylint#GetExecutable(a:buffer)
-    \   . ' ' . g:ale_python_pylint_args
+    \   . ' ' . g:ale_python_pylint_options
     \   . ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} {msg}" --reports n'
 endfunction
 
