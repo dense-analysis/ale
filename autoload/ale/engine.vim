@@ -72,22 +72,34 @@ function! s:StopPreviousJobs(buffer, linter) abort
     let g:ale_buffer_info[a:buffer].job_list = l:new_job_list
 endfunction
 
-function! s:GatherOutput(job, data) abort
+function! s:GatherOutputVim(channel, data) abort
+    let l:job_id = s:GetJobID(ch_getjob(a:channel))
+
+    if !has_key(s:job_info_map, l:job_id)
+        return
+    endif
+
+    call add(s:job_info_map[l:job_id].output, a:data)
+endfunction
+
+function! s:GatherOutputNeoVim(job, data, event) abort
     let l:job_id = s:GetJobID(a:job)
 
     if !has_key(s:job_info_map, l:job_id)
         return
     endif
 
-    call extend(s:job_info_map[l:job_id].output, a:data)
-endfunction
-
-function! s:GatherOutputVim(channel, data) abort
-    call s:GatherOutput(ch_getjob(a:channel), [a:data])
-endfunction
-
-function! s:GatherOutputNeoVim(job, data, event) abort
-    call s:GatherOutput(a:job, a:data)
+    " Join the lines passed to ale, because Neovim splits them up.
+    " a:data is a list of strings, where every item is a new line, except the
+    " first one, which is the continuation of the last item passed last time.
+    if empty(s:job_info_map[l:job_id].output)
+        let s:job_info_map[l:job_id].output = a:data
+    else
+        let s:job_info_map[l:job_id].output =
+        \   s:job_info_map[l:job_id].output[:-2]
+        \   + [s:job_info_map[l:job_id].output[-1] . get(a:data, 0, '')]
+        \   + a:data[1:]
+    endif
 endfunction
 
 function! s:HandleExit(job) abort
