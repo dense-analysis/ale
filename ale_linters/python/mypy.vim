@@ -1,7 +1,7 @@
 " Author: Keith Smiley <k@keith.so>
 " Description: mypy support for optional python typechecking
 
-let g:ale_python_mypy_args = get(g:, 'ale_python_mypy_options', '')
+let g:ale_python_mypy_options = get(g:, 'ale_python_mypy_options', '')
 
 function! g:ale_linters#python#mypy#GetCommand(buffer) abort
     return g:ale#util#stdin_wrapper
