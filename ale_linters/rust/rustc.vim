@@ -7,9 +7,6 @@ endif
 
 
 function! ale_linters#rust#rustc#HandleRustcErrors(buffer_number, errorlines) abort
-    " FIXME: Fix this linter
-    return []
-
     let l:file_name = fnamemodify(bufname(a:buffer_number), ':t')
     let l:output = []
 
