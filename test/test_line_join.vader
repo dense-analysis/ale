@@ -17,7 +17,7 @@ After:
 
 Execute (Join the lines):
   let joined_result = []
-  for item in g:realistic_output_lines
+  for item in g:test_output
     call ale#engine#JoinNeovimOutput(joined_result, item)
   endfor
   AssertEqual g:expected_result, joined_result
