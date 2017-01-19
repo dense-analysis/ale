@@ -92,13 +92,18 @@ function! s:GatherOutputNeoVim(job, data, event) abort
     " Join the lines passed to ale, because Neovim splits them up.
     " a:data is a list of strings, where every item is a new line, except the
     " first one, which is the continuation of the last item passed last time.
-    if empty(s:job_info_map[l:job_id].output)
-        let s:job_info_map[l:job_id].output = a:data
+    call ale#engine#JoinNeovimOutput(s:job_info_map[l:job_id].output, a:data)
+endfunction
+
+function! ale#engine#JoinNeovimOutput(output, data) abort
+    if empty(a:output)
+        call extend(a:output, a:data)
     else
-        let s:job_info_map[l:job_id].output =
-        \   s:job_info_map[l:job_id].output[:-2]
-        \   + [s:job_info_map[l:job_id].output[-1] . get(a:data, 0, '')]
-        \   + a:data[1:]
+        " Extend the previous line, which can be continued.
+        let a:output[-1] .= get(a:data, 0, '')
+
+        " Add the new lines.
+        call extend(a:output, a:data[1:])
     endif
 endfunction
 
