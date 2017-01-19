@@ -1,0 +1,23 @@
+Before:
+  let g:test_output = [
+  \ ['one', 'two', 'thr'],
+  \ ['ee', ''],
+  \ ['fou'],
+  \ [''],
+  \ ['r', 'five'],
+  \ [],
+  \ ['', 'six']
+  \]
+
+  let g:expected_result = ['one', 'two', 'three', 'four', 'five', 'six']
+
+After:
+  unlet g:test_output
+  unlet g:expected_result
+
+Execute (Join the lines):
+  let joined_result = []
+  for item in g:test_output
+    call ale#engine#JoinNeovimOutput(joined_result, item)
+  endfor
+  AssertEqual g:expected_result, joined_result
