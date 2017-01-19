@@ -1,9 +1,9 @@
 " Author: David Mohundro <david@mohundro.com>
 " Description: swiftlint for swift files
 
-call ale#linter#Define('swiftlint', {
+call ale#linter#Define('swift', {
 \   'name': 'swiftlint',
 \   'executable': 'swiftlint',
-\   'command': g:ale#util#stdin_wrapper . ' .swift swiftlint',
+\   'command': 'swiftlint lint --use-stdin',
 \   'callback': 'ale#handlers#HandleGCCFormat',
 \})
