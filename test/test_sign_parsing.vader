@@ -6,3 +6,6 @@ Execute (Parsing Russian signs should work):
 
 Execute (Parsing Japanese signs should work):
   AssertEqual [1000001], ale#sign#ParseSigns(['    行=1  識別子=1000001  名前=ALEWarningSign'])
+
+Execute (Parsing Spanish signs should work):
+  AssertEqual [1000001], ale#sign#ParseSigns(['    línea=12 id=1000001 nombre=ALEWarningSign'])
