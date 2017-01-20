@@ -2,7 +2,7 @@ Execute(Open a file some directory down):
   silent! cd /testplugin/test
   :e! top/middle/bottom/dummy.txt
 
-Then(We should be able to to find the local version of a file):
+Then(We should be able to find the local version of a file):
   AssertEqual
   \ expand('%:p:h:h:h:h') . '/top/example.ini',
   \  ale#util#ResolveLocalPath(bufnr('%'), 'example.ini', '/global/config.ini')

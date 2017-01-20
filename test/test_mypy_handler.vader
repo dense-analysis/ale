@@ -1,0 +1,22 @@
+Execute(The mypy handler should parse lines correctly):
+  runtime ale_linters/python/mypy.vim
+
+  AssertEqual
+  \ [
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 4,
+  \     'vcol': 0,
+  \     'col': 0,
+  \     'text': "No library stub file for module 'django.db'",
+  \     'type': 'E',
+  \     'nr': -1,
+  \   },
+  \ ],
+  \ ale_linters#python#mypy#Handle(347, [
+  \   "file.py:4: error: No library stub file for module 'django.db'",
+  \   'file.py:4: note: (Stub files are from https://github.com/python/typeshed)',
+  \ ])
+
+After:
+  call ale#linter#Reset()

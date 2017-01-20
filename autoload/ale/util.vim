@@ -44,6 +44,20 @@ function! ale#util#FindNearestFile(buffer, filename) abort
     return ''
 endfunction
 
+" Given a buffer and a directory name, find the nearest directory by searching upwards
+" through the paths relative to the given buffer.
+function! ale#util#FindNearestDirectory(buffer, directory_name) abort
+    let l:buffer_filename = fnamemodify(bufname(a:buffer), ':p')
+
+    let l:relative_path = finddir(a:directory_name, l:buffer_filename . ';')
+
+    if !empty(l:relative_path)
+        return fnamemodify(l:relative_path, ':p')
+    endif
+
+    return ''
+endfunction
+
 " Given a buffer, a string to search for, an a global fallback for when
 " the search fails, look for a file in parent paths, and if that fails,
 " use the global fallback path instead.

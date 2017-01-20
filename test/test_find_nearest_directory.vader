@@ -1,0 +1,15 @@
+Execute(Open a file some directory down):
+  silent! cd /testplugin/test
+  :e! top/middle/bottom/dummy.txt
+
+Then(We should be able to find the right directory):
+  AssertEqual
+  \ expand('%:p:h:h:h:h') . '/top/ale-special-directory-name-dont-use-this-please/',
+  \ ale#util#FindNearestDirectory(bufnr('%'), 'ale-special-directory-name-dont-use-this-please')
+
+Execute(Do nothing):
+
+Then(We shouldn't find anything for files which don't match):
+  AssertEqual
+  \ '',
+  \ ale#util#FindNearestDirectory(bufnr('%'), 'ale-this-should-never-match-anything')
