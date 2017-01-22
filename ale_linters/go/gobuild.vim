@@ -7,6 +7,7 @@ function! s:FindGobuildScript() abort
     let l:this_package = expand('%:p:h')
 
     " Get a listing of all go files in the directory.
+    " TODO: Handle packages that contain c files.
     let l:all_files = globpath(l:this_package, '*.go', 1, 1)
 
     " Filter out the current file since we don't want to include it twice.
