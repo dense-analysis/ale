@@ -61,6 +61,7 @@ name. That seems to be the fairest way to arrange this table.
 | D | [dmd](https://dlang.org/dmd-linux.html)^ |
 | Elixir | [credo](https://github.com/rrrene/credo) |
 | Elm | [elm-make](https://github.com/elm-lang/elm-make) |
+| Erlang | [erlc](http://erlang.org/doc/man/erlc.html) |
 | Fortran | [gcc](https://gcc.gnu.org/) |
 | Go | [gofmt -e](https://golang.org/cmd/gofmt/), [go vet](https://golang.org/cmd/vet/), [golint](https://godoc.org/github.com/golang/lint), [go build](https://golang.org/cmd/go/) |
 | Haskell | [ghc](https://www.haskell.org/ghc/), [hlint](https://hackage.haskell.org/package/hlint) |

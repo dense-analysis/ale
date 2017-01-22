@@ -34,6 +34,7 @@ CONTENTS                                                         *ale-contents*
     4.22. rustc...........................|ale-linter-options-rustc|
     4.23. python-mypy.....................|ale-linter-options-python-mypy|
     4.24. python-pylint...................|ale-linter-options-python-pylint|
+    4.25. erlang..........................|ale-linter-options-erlang|
   5. Linter Integration Notes.............|ale-linter-integration|
     5.1.  merlin..........................|ale-linter-integration-ocaml-merlin|
     5.2. rust.............................|ale-integration-rust|
@@ -78,6 +79,7 @@ The following languages and tools are supported.
 * D: 'dmd'
 * Elixir: 'credo'
 * Elm: 'elm-make'
+* Erlang: 'erlc'
 * Fortran: 'gcc'
 * Go: 'gofmt -e', 'go vet', 'golint', 'go build'
 * Haskell: 'ghc', 'hlint'
@@ -826,6 +828,17 @@ g:ale_python_pylint_options                       *g:ale_python_pylint_options*
 
   after making sure it's installed for the appropriate Python versions (e.g.
   `python3 -m pip install --user pylint`).
+
+------------------------------------------------------------------------------
+4.25. erlang                                       *ale-linter-options-erlang*
+
+g:ale_erlang_erlc_flags                              *g:ale_erlang_erlc_flags*
+
+  Type: |String|
+  Default: '`''`'
+
+  This variable controls additional parameters passed to `erlc`, such as `-I`
+  or `-pa`.
 
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*
