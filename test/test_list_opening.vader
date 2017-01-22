@@ -1,0 +1,87 @@
+" Author: Yann Fery <yann@fery.me>
+
+Before:
+  let g:loclist = [
+  \ {'lnum': 5, 'col': 5},
+  \ {'lnum': 5, 'col': 4},
+  \ {'lnum': 2, 'col': 10},
+  \ {'lnum': 3, 'col': 2},
+  \]
+
+After:
+  " Close quickfix window after every execute block
+  lcl
+  ccl
+  unlet g:loclist
+  call setloclist(0, [])
+  call setqflist([])
+  " Reset options to their default values.
+  let g:ale_set_loclist = 1
+  let g:ale_set_quickfix = 0
+  let g:ale_open_list = 0
+  let g:ale_keep_list_window_open = 0
+
+Execute(IsQuickfixOpen should return the right output):
+  AssertEqual 0, ale#list#IsQuickfixOpen()
+  call setloclist(0, g:loclist)
+  lopen
+  AssertEqual 1, ale#list#IsQuickfixOpen()
+  lcl
+  AssertEqual 0, ale#list#IsQuickfixOpen()
+  call setqflist(g:loclist)
+  copen
+  AssertEqual 1, ale#list#IsQuickfixOpen()
+  ccl
+  AssertEqual 0, ale#list#IsQuickfixOpen()
+
+Execute(The quickfix window should not open by default for the loclist):
+  call ale#list#SetLists(g:loclist)
+  Assert !ale#list#IsQuickfixOpen()
+
+Execute(The quickfix window should open for just the loclist):
+  let g:ale_open_list = 1
+
+  " It should not open for an empty list.
+  call ale#list#SetLists([])
+  Assert !ale#list#IsQuickfixOpen()
+
+  " With a non-empty loclist, the window must open.
+  call ale#list#SetLists(g:loclist)
+  Assert ale#list#IsQuickfixOpen()
+
+Execute(The quickfix window should stay open for just the loclist):
+  let g:ale_open_list = 1
+  let g:ale_keep_list_window_open = 1
+
+  " The window should stay open after even after it is made blank again.
+  call ale#list#SetLists(g:loclist)
+  call ale#list#SetLists([])
+  Assert ale#list#IsQuickfixOpen()
+
+Execute(The quickfix window should not open by default when quickfix is on):
+  let g:ale_set_quickfix = 1
+
+  call ale#list#SetLists(g:loclist)
+  Assert !ale#list#IsQuickfixOpen()
+
+Execute(The quickfix window should open for the quickfix list):
+  let g:ale_set_quickfix = 1
+  let g:ale_open_list = 1
+
+  " It should not open for an empty list.
+  call ale#list#SetLists([])
+  Assert !ale#list#IsQuickfixOpen()
+
+  " With a non-empty quickfix list, the window must open.
+  call ale#list#SetLists(g:loclist)
+  Assert ale#list#IsQuickfixOpen()
+
+Execute(The quickfix window should stay open for the quickfix list):
+  let g:ale_set_quickfix = 1
+  let g:ale_open_list = 1
+  let g:ale_keep_list_window_open = 1
+
+  " The window should stay open after even after it is made blank again.
+  call ale#list#SetLists(g:loclist)
+  call ale#list#SetLists([])
+  Assert ale#list#IsQuickfixOpen()
