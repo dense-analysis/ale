@@ -49,21 +49,31 @@ Execute (loclist without openlist):
   let g:ale_set_loclist = 1
   let g:ale_set_quickfix = 0
   let g:ale_open_list = 0
-  let g:ale_keep_list_window_open = 1
+  " Must stay close without loclist
+  let g:ale_keep_list_window_open = 0
   call ale#list#SetLists(g:empty_loclist)
   AssertEqual 0, ale#list#IsQuickfixOpen()
   call ale#list#SetLists(g:loclist)
   AssertEqual 0, ale#list#IsQuickfixOpen()
+  " Must stay open event without loclist
+  let g:ale_keep_list_window_open = 1
+  call ale#list#SetLists(g:empty_loclist)
+  AssertEqual 1, ale#list#IsQuickfixOpen()
+  call ale#list#SetLists(g:loclist)
+  AssertEqual 1, ale#list#IsQuickfixOpen()
 
 Execute (quickfix and openlist):
   let g:ale_set_loclist = 0
   let g:ale_set_quickfix = 1
   let g:ale_open_list = 1
   let g:ale_keep_list_window_open = 0
+  " With empty loclist, window must stay close
   call ale#list#SetLists(g:empty_loclist)
   AssertEqual 0, ale#list#IsQuickfixOpen()
+  " With a loclist it must open
   call ale#list#SetLists(g:loclist)
   AssertEqual 1, ale#list#IsQuickfixOpen()
+  " And with keep open option, must stay open even with empty loclist
   let g:ale_keep_list_window_open = 1
   call ale#list#SetLists(g:empty_loclist)
   AssertEqual 1, ale#list#IsQuickfixOpen()
@@ -72,8 +82,15 @@ Execute (quickfix without openlist):
   let g:ale_set_loclist = 0
   let g:ale_set_quickfix = 1
   let g:ale_open_list = 0
+  " Must stay close without loclist
   let g:ale_keep_list_window_open = 0
   call ale#list#SetLists(g:empty_loclist)
   AssertEqual 0, ale#list#IsQuickfixOpen()
   call ale#list#SetLists(g:loclist)
   AssertEqual 0, ale#list#IsQuickfixOpen()
+  " Must stay open event without loclist
+  let g:ale_keep_list_window_open = 1
+  call ale#list#SetLists(g:empty_loclist)
+  AssertEqual 1, ale#list#IsQuickfixOpen()
+  call ale#list#SetLists(g:loclist)
+  AssertEqual 1, ale#list#IsQuickfixOpen()
