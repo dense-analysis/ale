@@ -19,12 +19,12 @@ function! ale#list#SetLists(loclist) abort
     endif
 
     " If we don't auto-open lists, bail out here.
-    if !g:ale_open_list
+    if !g:ale_open_list && !g:ale_keep_list_window_open
         return
     endif
 
     " If we have errors in our list, open the list. Only if it isn't already open
-    if len(a:loclist) > 0 && ale#list#IsQuickfixOpen() == 0
+    if len(a:loclist) > 0 || g:ale_keep_list_window_open
         let l:winnr = winnr()
 
         if g:ale_set_quickfix
