@@ -161,8 +161,8 @@ function! s:HandleExit(job) abort
     let g:ale_buffer_info[l:buffer].loclist = g:ale_buffer_info[l:buffer].new_loclist
     let g:ale_buffer_info[l:buffer].new_loclist = []
 
-    if g:ale_set_loclist
-        call setloclist(0, g:ale_buffer_info[l:buffer].loclist)
+    if g:ale_set_quickfix || g:ale_set_loclist
+        call ale#list#SetLists(g:ale_buffer_info[l:buffer].loclist)
     endif
 
     if g:ale_set_signs

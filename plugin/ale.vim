@@ -74,8 +74,16 @@ if g:ale_lint_on_save
     augroup END
 endif
 
-" This flag can be set to 0 to disable setting the loclist.
+" These flags dictates if ale uses the quickfix or the loclist (loclist is the
+" default, quickfix overrides loclist).
 let g:ale_set_loclist = get(g:, 'ale_set_loclist', 1)
+let g:ale_set_quickfix = get(g:, 'ale_set_quickfix', 0)
+
+" This flag dictates if ale open the configured loclist 
+let g:ale_open_list = get(g:, 'ale_open_list', 0)
+
+" This flag dictates if ale keeps open loclist even if there is no error in loclist
+let g:ale_keep_list_window_open = get(g:, 'ale_keep_list_window_open', 0)
 
 " This flag can be set to 0 to disable setting signs.
 " This is enabled by default only if the 'signs' feature exists.
