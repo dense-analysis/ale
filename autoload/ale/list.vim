@@ -2,9 +2,9 @@
 " Description: Manages the loclist and quickfix lists
 
 " Return 1 if there is a buffer with buftype == 'quickfix' in bufffer list
-function! ale#list#IsQuickfixOpen() 
-    for buf in range(1, bufnr('$'))
-        if getbufvar(buf, '&buftype') == 'quickfix' 
+function! ale#list#IsQuickfixOpen() abort
+    for l:buf in range(1, bufnr('$'))
+        if getbufvar(l:buf, '&buftype') ==# 'quickfix' 
             return 1
         endif
     endfor
