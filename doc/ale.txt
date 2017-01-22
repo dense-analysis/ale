@@ -112,81 +112,60 @@ The following languages and tools are supported.
 ===============================================================================
 3. Global Options                                                 *ale-options*
 
-g:ale_linters                                                   *g:ale_linters*
-
-  Type: |Dictionary|
-  Default: `{}`
-
-  The |g:ale_linters| option sets a |Dictionary| mapping a filetype
-  to a |List| of linter programs to be run when checking particular filetypes.
-  Only the filetypes specified in the dictionary will be limited in terms
-  of which linters will be run.
-
-  This |Dictionary| will be merged with a default dictionary containing the
-  following values: >
-
-  {
-  \   'zsh': ['shell'],
-  \   'csh': ['shell'],
-  \}
-<
-  This option can be used to enable only a particular set of linters for a
-  file. For example, you can enable only 'eslint' for JavaScript files: >
-
-  let g:ale_linters = {'javascript': ['eslint']}
-<
-  If you want to disable all linters for a particular filetype, you can pass
-  an empty list of linters as the value: >
-
-  let g:ale_linters = {'javascript': []}
-<
-  All linters available for a given filetype can be enabled by using the
-  string `'all'`: >
-
-  let g:ale_linters = {'c': 'all'}
-<
-
-g:ale_linter_aliases                                     *g:ale_linter_aliases*
-
-  Type: |Dictionary|
-  Default: `{}`
-
-  The |g:ale_linter_aliases| option can be used to set aliases from one
-  filetype to another. A given filetype can be mapped to use the linters
-  run for another given filetype.
-
-  This |Dictionary| will be merged with a default dictionary containing the
-  following values: >
-
-  {
-  \   'zsh': 'sh',
-  \   'csh': 'sh',
-  \}
-<
-  For example, if you wish to map a new filetype `'foobar'` to run the `'php'`
-  linters, you could set the following: >
-
-  let g:ale_linter_aliases = {'foobar': 'php'}
-<
-  When combined with the |g:ale_linters| option, the original filetype
-  (`'foobar'`) will be used for determining which linters to run,
-  not the aliased type (`'php'`). This allows an aliased type to run a
-  different set of linters from the type it is being mapped to.
-
-
-g:ale_lint_on_text_changed                         *g:ale_lint_on_text_changed*
+g:airline#extensions#ale#enabled             *g:airline#extensions#ale#enabled*
 
   Type: |Number|
   Default: `1`
 
-  By default, ALE will check files with the various supported programs when
-  text is changed by using the |TextChanged| event. If this behaviour is not
-  desired, then this option can be disabled by setting it to 0. The
-  |g:ale_lint_delay| variable will be used to set a |timer_start()| on a
-  delay, and each change to a file will continue to call |timer_stop()| and
-  |timer_start()| repeatedly until the timer ticks by, and the linters will be
-  run. The checking of files will run in the background, so it should not
-  inhibit editing files.
+  Enables or disables the |airline|'s native extension for ale, which displays
+  warnings and errors in the status line, prefixed by
+  |airline#extensions#ale#error_symbol| and
+  |airline#extensions#ale#warning_symbol|.
+
+
+g:ale_echo_cursor                                           *g:ale_echo_cursor*
+
+  Type: |Number|
+  Default: `1`
+
+  When this option is set to `1`, a truncated message will be echoed when a
+  cursor is near a warning or error. ALE will attempt to find the warning or
+  error at a column nearest to the cursor when the cursor is resting on a line
+  which contains a warning or error. This option can be set to `0` to disable
+  this behaviour.
+  The format of the message can be customizable in |g:ale_echo_msg_format|.
+
+
+g:ale_echo_msg_error_str                             *g:ale_echo_msg_error_str*
+
+  Type: |String|
+  Default: `Error`
+
+  The string used for error severity in the echoed message.
+  Note |`g:ale_echo_cursor`| should be set to 1
+  Note |`g:ale_echo_msg_format`| should contain the `%severity%` handler
+
+
+g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
+
+  Type: |String|
+  Default: `%s`
+
+  This variable defines the format of the echoed message. The `%s` is the
+  error message itself, and it can contain the following handlers:
+  - `%linter%` for linter's name
+  - `%severity%` for the type of severity
+  Note |`g:ale_echo_cursor`| should be setted to 1
+
+
+g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
+
+  Type: |String|
+  Default: `Warning`
+
+  The string used for warning severity in the echoed message.
+  Note |`g:ale_echo_cursor`| should be set to 1
+  Note |`g:ale_echo_msg_format`| should contain the `%severity%` handler
 
 
 g:ale_lint_delay                                             *g:ale_lint_delay*
@@ -221,6 +200,83 @@ g:ale_lint_on_save                                         *g:ale_lint_on_save*
   make ALE only check files after that have been saved, if that is what is
   desired.
 
+
+g:ale_lint_on_text_changed                         *g:ale_lint_on_text_changed*
+
+  Type: |Number|
+  Default: `1`
+
+  By default, ALE will check files with the various supported programs when
+  text is changed by using the |TextChanged| event. If this behaviour is not
+  desired, then this option can be disabled by setting it to 0. The
+  |g:ale_lint_delay| variable will be used to set a |timer_start()| on a
+  delay, and each change to a file will continue to call |timer_stop()| and
+  |timer_start()| repeatedly until the timer ticks by, and the linters will be
+  run. The checking of files will run in the background, so it should not
+  inhibit editing files.
+
+
+g:ale_linter_aliases                                     *g:ale_linter_aliases*
+
+  Type: |Dictionary|
+  Default: `{}`
+
+  The |g:ale_linter_aliases| option can be used to set aliases from one
+  filetype to another. A given filetype can be mapped to use the linters
+  run for another given filetype.
+
+  This |Dictionary| will be merged with a default dictionary containing the
+  following values: >
+
+  {
+  \   'zsh': 'sh',
+  \   'csh': 'sh',
+  \}
+<
+  For example, if you wish to map a new filetype `'foobar'` to run the `'php'`
+  linters, you could set the following: >
+
+  let g:ale_linter_aliases = {'foobar': 'php'}
+<
+  When combined with the |g:ale_linters| option, the original filetype
+  (`'foobar'`) will be used for determining which linters to run,
+  not the aliased type (`'php'`). This allows an aliased type to run a
+  different set of linters from the type it is being mapped to.
+
+
+g:ale_linters                                                   *g:ale_linters*
+
+  Type: |Dictionary|
+  Default: `{}`
+
+  The |g:ale_linters| option sets a |Dictionary| mapping a filetype
+  to a |List| of linter programs to be run when checking particular filetypes.
+  Only the filetypes specified in the dictionary will be limited in terms
+  of which linters will be run.
+
+  This |Dictionary| will be merged with a default dictionary containing the
+  following values: >
+
+  {
+  \   'zsh': ['shell'],
+  \   'csh': ['shell'],
+  \}
+<
+  This option can be used to enable only a particular set of linters for a
+  file. For example, you can enable only 'eslint' for JavaScript files: >
+
+  let g:ale_linters = {'javascript': ['eslint']}
+<
+  If you want to disable all linters for a particular filetype, you can pass
+  an empty list of linters as the value: >
+
+  let g:ale_linters = {'javascript': []}
+<
+  All linters available for a given filetype can be enabled by using the
+  string `'all'`: >
+
+  let g:ale_linters = {'c': 'all'}
+<
 
 g:ale_set_loclist                                           *g:ale_set_loclist*
 
@@ -265,15 +321,6 @@ g:ale_sign_error                                             *g:ale_sign_error*
   warnings on them will show the error marker, as errors take precedence.
 
 
-g:ale_sign_warning                                         *g:ale_sign_warning*
-
-  Type: |String|
-  Default: `'--'`
-
-  This string can be changed to change the characters used for the sign gutter
-  for lines which at least one warning on them.
-
-
 g:ale_sign_offset                                           *g:ale_sign_offset*
 
   Type: |Number|
@@ -288,49 +335,24 @@ g:ale_sign_offset                                           *g:ale_sign_offset*
   signs are set.
 
 
-g:ale_echo_cursor                                           *g:ale_echo_cursor*
-
-  Type: |Number|
-  Default: `1`
-
-  When this option is set to `1`, a truncated message will be echoed when a
-  cursor is near a warning or error. ALE will attempt to find the warning or
-  error at a column nearest to the cursor when the cursor is resting on a line
-  which contains a warning or error. This option can be set to `0` to disable
-  this behaviour.
-  The format of the message can be customizable in |g:ale_echo_msg_format|.
-
-
-g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
+g:ale_sign_warning                                         *g:ale_sign_warning*
 
   Type: |String|
-  Default: `%s`
+  Default: `'--'`
 
-  This variable defines the format of the echoed message. The `%s` is the
-  error message itself, and it can contain the following handlers:
-  - `%linter%` for linter's name
-  - `%severity%` for the type of severity
-  Note |`g:ale_echo_cursor`| should be setted to 1
+  This string can be changed to change the characters used for the sign gutter
+  for lines which at least one warning on them.
 
 
-g:ale_echo_msg_error_str                             *g:ale_echo_msg_error_str*
+g:ale_statusline_format                               *g:ale_statusline_format*
 
-  Type: |String|
-  Default: `Error`
+  Type: |List|
+  Default: `['%d error(s)', '%d warning(s)', 'OK']`
 
-  The string used for error severity in the echoed message.
-  Note |`g:ale_echo_cursor`| should be set to 1
-  Note |`g:ale_echo_msg_format`| should contain the `%severity%` handler
-
-
-g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
-
-  Type: |String|
-  Default: `Warning`
-
-  The string used for warning severity in the echoed message.
-  Note |`g:ale_echo_cursor`| should be set to 1
-  Note |`g:ale_echo_msg_format`| should contain the `%severity%` handler
+  This variable defines the format of |`ale#statusline#status()`| output.
+  - The 1st element is for errors
+  - The 2nd element is for warnings
+  - The 3rd element is for when no errors are detected
 
 
 g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
@@ -347,26 +369,6 @@ g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
   Not all linters may respect this option. If a linter does not, please file a
   bug report, and it may be possible to add such support.
 
-
-g:ale_statusline_format                               *g:ale_statusline_format*
-
-  Type: |List|
-  Default: `['%d error(s)', '%d warning(s)', 'OK']`
-
-  This variable defines the format of |`ale#statusline#status()`| output.
-  - The 1st element is for errors
-  - The 2nd element is for warnings
-  - The 3rd element is for when no errors are detected
-
-g:airline#extensions#ale#enabled             *g:airline#extensions#ale#enabled*
-
-  Type: |Number|
-  Default: `1`
-
-  Enables or disables the |airline|'s native extension for ale, which displays
-  warnings and errors in the status line, prefixed by
-  |airline#extensions#ale#error_symbol| and
-  |airline#extensions#ale#warning_symbol|.
 
 ===============================================================================
 4. Linter Specific Options                                 *ale-linter-options*
