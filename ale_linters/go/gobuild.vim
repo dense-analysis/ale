@@ -1,4 +1,4 @@
-" Author: dzhou121 <dzhou121@gmail.com>
+" Author: dzhou121 <dzhou121@gmail.com>, Ryan Norris <rynorris@gmail.com>
 " Description: go build for Go files
 
 function! s:FindGobuildScript() abort
