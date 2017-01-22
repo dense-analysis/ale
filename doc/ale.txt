@@ -168,6 +168,19 @@ g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
   Note |`g:ale_echo_msg_format`| should contain the `%severity%` handler
 
 
+g:ale_keep_list_window_open                       *g:ale_keep_list_window_open*
+
+  Type: |Number|
+  Default: `0`
+
+  When set to `1`, this option will keep the loclist or quickfix windows
+  event after all warnings/errors have been removed for files. By default
+  the loclist or quicfix windows will be closed automatically when there
+  are no warnings or errors.
+
+  See: |g:ale_open_list|
+
+
 g:ale_lint_delay                                             *g:ale_lint_delay*
 
   Type: |Number|
@@ -278,14 +291,38 @@ g:ale_linters                                                   *g:ale_linters*
   let g:ale_linters = {'c': 'all'}
 <
 
+g:ale_open_list                                               *g:ale_open_list*
+
+  Type: |Number|
+  Default: `0`
+
+  When set to `1`, this will cause ALE to automatically open a window for
+  the loclist (|lopen|) or for the quickfix list instead if
+  |g:ale_set_quickfix| is `1`. (|copen|)
+
+  The window will be kept open until all warnings or errors are cleared,
+  including those not set by ALE, unless |g:ale_keep_list_window_open| is set
+  to `1`, in which case the window will be kept open until closed manually.
+
+
 g:ale_set_loclist                                           *g:ale_set_loclist*
 
   Type: |Number|
   Default: `1`
 
-  When this option is set to `1`, the |loclist| will be populate with any
+  When this option is set to `1`, the |loclist| will be populated with any
   warnings and errors which are found by ALE. This feature can be used to
   implement jumping between errors through typical use of |lnext| and |lprev|.
+
+
+g:ale_set_quickfix                                         *g:ale_set_quickfix*
+
+  Type: |Number|
+  Default: `0`
+
+  When this option is set to `1`, the |quickfix| list will be populated with any
+  warnings and errors which are found by ALE, instead of the |loclist|. The
+  loclist will never be populated when this option is on.
 
 
 g:ale_set_signs                                               *g:ale_set_signs*
