@@ -14,12 +14,12 @@ function! ale_linters#go#gobuild#GetCommand(buffer) abort
     " We'll then pass this list to go compile and stdin_wrapper will add on
     " the temporary version of the current file.
     let l:this_file = expand('%:p:t')
-    call filter(l:all_files, 'fnamemodify(v:val, ":t") != l:this_file')
+    call filter(l:all_files, 'fnamemodify(v:val, '':t'') != l:this_file')
 
     " We're also going to need the system information in order to find the
     " correct import directory.  We'll pull these from go itself since then
     " we're guaranteed they'll match what it's looking for.
-    " The version string is of the form "go version go1.6.2 darwin/amd64".
+    " The version string is of the form 'go version go1.6.2 darwin/amd64'.
     let l:go_version_string = system('go version')
     let l:version_part = substitute(l:go_version_string, '.* ', '', '')
     let l:goos = substitute(l:version_part, '/.*', '', '')
