@@ -830,9 +830,9 @@ g:ale_python_pylint_options                       *g:ale_python_pylint_options*
   `python3 -m pip install --user pylint`).
 
 ------------------------------------------------------------------------------
-4.25. erlang                                       *ale-linter-options-erlang*
+4.25. erlang                                        *ale-linter-options-erlang*
 
-g:ale_erlang_erlc_flags                              *g:ale_erlang_erlc_flags*
+g:ale_erlang_erlc_options                           *g:ale_erlang_erlc_options*
 
   Type: |String|
   Default: '`''`'
