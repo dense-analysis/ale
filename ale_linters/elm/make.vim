@@ -1,7 +1,7 @@
 " Author: buffalocoder - https://github.com/buffalocoder
 " Description: Elm linting in Ale. Closely follows the Syntastic checker in https://github.com/ElmCast/elm-vim.
 
-function! ale_linters#elm#make#Handle(buffer, lines)
+function! ale_linters#elm#make#Handle(buffer, lines) abort
     let l:output = []
     let l:is_windows = has('win32')
     let l:temp_dir = l:is_windows ? $TMP : $TMPDIR

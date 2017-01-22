@@ -79,7 +79,7 @@ endif
 let g:ale_set_loclist = get(g:, 'ale_set_loclist', 1)
 let g:ale_set_quickfix = get(g:, 'ale_set_quickfix', 0)
 
-" This flag dictates if ale open the configured loclist 
+" This flag dictates if ale open the configured loclist
 let g:ale_open_list = get(g:, 'ale_open_list', 0)
 
 " This flag dictates if ale keeps open loclist even if there is no error in loclist
@@ -154,10 +154,10 @@ augroup END
 
 " Backwards Compatibility
 
-function! ALELint(delay)
+function! ALELint(delay) abort
     call ale#Queue(a:delay)
 endfunction
 
-function! ALEGetStatusLine()
+function! ALEGetStatusLine() abort
     return ale#statusline#Status()
 endfunction

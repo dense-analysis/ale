@@ -19,7 +19,7 @@ function! ale_linters#javascript#jshint#GetExecutable(buffer) abort
     \)
 endfunction
 
-function! ale_linters#javascript#jshint#GetCommand(buffer)
+function! ale_linters#javascript#jshint#GetCommand(buffer) abort
     " Search for a local JShint config locaation, and default to a global one.
     let l:jshint_config = ale#util#ResolveLocalPath(
     \   a:buffer,

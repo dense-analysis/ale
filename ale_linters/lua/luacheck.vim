@@ -4,7 +4,7 @@
 let g:ale_lua_luacheck_executable =
 \   get(g:, 'ale_lua_luacheck_executable', 'luacheck')
 
-function! ale_linters#lua#luacheck#Handle(buffer, lines)
+function! ale_linters#lua#luacheck#Handle(buffer, lines) abort
     " Matches patterns line the following:
     "
     " artal.lua:159:17: (W111) shadowing definition of loop variable 'i' on line 106

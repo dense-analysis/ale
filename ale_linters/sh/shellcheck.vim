@@ -16,7 +16,7 @@ else
     let s:exclude_option = ''
 endif
 
-function! s:GetDialectArgument()
+function! s:GetDialectArgument() abort
     if exists('b:is_bash') && b:is_bash
         return '-s bash'
     elseif exists('b:is_sh') && b:is_sh
@@ -28,7 +28,7 @@ function! s:GetDialectArgument()
     return ''
 endfunction
 
-function! ale_linters#sh#shellcheck#GetCommand(buffer)
+function! ale_linters#sh#shellcheck#GetCommand(buffer) abort
   return 'shellcheck ' . s:exclude_option . ' ' . s:GetDialectArgument() . ' -f gcc -'
 endfunction
 

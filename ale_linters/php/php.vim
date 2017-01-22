@@ -1,7 +1,7 @@
 " Author: Spencer Wood <https://github.com/scwood>
 " Description: This file adds support for checking PHP with php-cli
 
-function! ale_linters#php#php#Handle(buffer, lines)
+function! ale_linters#php#php#Handle(buffer, lines) abort
     " Matches patterns like the following:
     "
     " Parse error: parse error in - on line 7

@@ -5,7 +5,7 @@ if !exists('g:merlin')
   finish
 endif
 
-function! ale_linters#ocaml#merlin#Handle(buffer, lines)
+function! ale_linters#ocaml#merlin#Handle(buffer, lines) abort
   let l:errors = merlin#ErrorLocList()
   return l:errors
 endfunction

@@ -2,7 +2,7 @@
 " Description: "dmd for D files"
 
 " A function for finding the dmd-wrapper script in the Vim runtime paths
-function! s:FindWrapperScript()
+function! s:FindWrapperScript() abort
     for l:parent in split(&runtimepath, ',')
         " Expand the path to deal with ~ issues.
         let l:path = expand(l:parent . '/' . 'dmd-wrapper')
@@ -13,7 +13,7 @@ function! s:FindWrapperScript()
     endfor
 endfunction
 
-function! ale_linters#d#dmd#GetCommand(buffer)
+function! ale_linters#d#dmd#GetCommand(buffer) abort
     let l:wrapper_script = s:FindWrapperScript()
 
     let l:command = l:wrapper_script . ' -o- -vcolumns -c'
@@ -21,7 +21,7 @@ function! ale_linters#d#dmd#GetCommand(buffer)
     return l:command
 endfunction
 
-function! ale_linters#d#dmd#Handle(buffer, lines)
+function! ale_linters#d#dmd#Handle(buffer, lines) abort
     " Matches patterns lines like the following:
     " /tmp/tmp.qclsa7qLP7/file.d(1): Error: function declaration without return type. (Note that constructors are always named 'this')
     " /tmp/tmp.G1L5xIizvB.d(8,8): Error: module weak_reference is in file 'dstruct/weak_reference.d' which cannot be read

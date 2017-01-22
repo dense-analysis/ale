@@ -1,7 +1,7 @@
 " Author: jwilliams108 <https://github.com/jwilliams108>
 " Description: phpcs for PHP files
 
-function! ale_linters#php#phpcs#GetCommand(buffer)
+function! ale_linters#php#phpcs#GetCommand(buffer) abort
     let l:command = 'phpcs -s --report=emacs --stdin-path=%s'
 
     " This option can be set to change the standard used by phpcs
@@ -12,7 +12,7 @@ function! ale_linters#php#phpcs#GetCommand(buffer)
     return l:command
 endfunction
 
-function! ale_linters#php#phpcs#Handle(buffer, lines)
+function! ale_linters#php#phpcs#Handle(buffer, lines) abort
     " Matches against lines like the following:
     "
     " /path/to/some-filename.php:18:3: error - Line indented incorrectly; expected 4 spaces, found 2 (Generic.WhiteSpace.ScopeIndent.IncorrectExact)

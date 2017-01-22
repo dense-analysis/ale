@@ -1,7 +1,7 @@
 " Author: Masahiro H https://github.com/mshr-h
 " Description: iverilog for verilog files
 
-function! ale_linters#verilog#iverilog#Handle(buffer, lines)
+function! ale_linters#verilog#iverilog#Handle(buffer, lines) abort
     " Look for lines like the following.
     "
     " tb_me_top.v:37: warning: Instantiating module me_top with dangling input port 1 (rst_n) floating.

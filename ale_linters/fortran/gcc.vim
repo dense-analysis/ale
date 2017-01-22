@@ -6,7 +6,7 @@ if !exists('g:ale_fortran_gcc_options')
     let g:ale_fortran_gcc_options = '-Wall'
 endif
 
-function! ale_linters#fortran#gcc#Handle(buffer, lines)
+function! ale_linters#fortran#gcc#Handle(buffer, lines) abort
     " We have to match a starting line and a later ending line together,
     " like so.
     "

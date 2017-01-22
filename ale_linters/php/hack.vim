@@ -1,7 +1,7 @@
 " Author: Zefei Xuan <https://github.com/zefei>
 " Description: Hack type checking (http://hacklang.org/)
 
-function! ale_linters#php#hack#Handle(buffer, lines)
+function! ale_linters#php#hack#Handle(buffer, lines) abort
     let l:pattern = '^\(.*\):\(\d\+\):\(\d\+\),\(\d\+\): \(.\+])\)$'
     let l:output = []
 

@@ -2,7 +2,7 @@
 " Description: rustc invoked by cargo for rust files
 
 
-function! ale_linters#rust#cargo#GetCargoExecutable(bufnr)
+function! ale_linters#rust#cargo#GetCargoExecutable(bufnr) abort
     if ale#util#FindNearestFile(a:bufnr, 'Cargo.toml') !=# ''
         return 'cargo'
     else

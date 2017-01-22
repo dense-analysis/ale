@@ -7,7 +7,7 @@ endif
 
 let g:loaded_ale_linters_haskell_ghc = 1
 
-function! ale_linters#haskell#ghc#Handle(buffer, lines)
+function! ale_linters#haskell#ghc#Handle(buffer, lines) abort
     " Look for lines like the following.
     "
     " /dev/stdin:28:26: Not in scope: `>>>>>'

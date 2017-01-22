@@ -1,6 +1,6 @@
 " Author: KabbAmine <amine.kabb@gmail.com>
 
-function! ale_linters#yaml#yamllint#Handle(buffer, lines)
+function! ale_linters#yaml#yamllint#Handle(buffer, lines) abort
     " Matches patterns line the following:
     " something.yaml:1:1: [warning] missing document start "---" (document-start)
     " something.yml:2:1: [error] syntax error: expected the node content, but found '<stream end>'

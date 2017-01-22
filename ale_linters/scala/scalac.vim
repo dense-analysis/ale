@@ -2,7 +2,7 @@
 " Author: Zoltan Kalmar - https://github.com/kalmiz
 " Description: Basic scala support using scalac
 
-function! ale_linters#scala#scalac#Handle(buffer, lines)
+function! ale_linters#scala#scalac#Handle(buffer, lines) abort
     " Matches patterns line the following:
     "
     " /var/folders/5q/20rgxx3x1s34g3m14n5bq0x80000gn/T/vv6pSsy/0:26: error: expected class or object definition

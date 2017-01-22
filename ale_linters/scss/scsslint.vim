@@ -1,7 +1,7 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: This file add scsslint support for SCSS support
 
-function! ale_linters#scss#scsslint#Handle(buffer, lines)
+function! ale_linters#scss#scsslint#Handle(buffer, lines) abort
     " Matches patterns like the following:
     "
     " test.scss:2:1 [W] Indentation: Line should be indented 2 spaces, but was indented 4 spaces

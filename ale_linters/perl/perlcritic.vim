@@ -1,7 +1,7 @@
 " Author: Vincent Lequertier <https://github.com/SkySymbol>
 " Description: This file adds support for checking perl with perl critic
 
-function! ale_linters#perl#perlcritic#Handle(buffer, lines)
+function! ale_linters#perl#perlcritic#Handle(buffer, lines) abort
     let l:pattern = '\(.\+\) at \(.\+\) line \(\d\+\)'
     let l:output = []
 

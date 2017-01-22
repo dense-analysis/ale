@@ -11,7 +11,7 @@ if !exists('g:ale_linters_sh_shell_default_shell')
     endif
 endif
 
-function! ale_linters#sh#shell#GetExecutable(buffer)
+function! ale_linters#sh#shell#GetExecutable(buffer) abort
     let l:banglines = getbufline(a:buffer, 1)
 
     " Take the shell executable from the hashbang, if we can.
@@ -29,11 +29,11 @@ function! ale_linters#sh#shell#GetExecutable(buffer)
     return g:ale_linters_sh_shell_default_shell
 endfunction
 
-function! ale_linters#sh#shell#GetCommand(buffer)
+function! ale_linters#sh#shell#GetCommand(buffer) abort
     return ale_linters#sh#shell#GetExecutable(a:buffer) . ' -n'
 endfunction
 
-function! ale_linters#sh#shell#Handle(buffer, lines)
+function! ale_linters#sh#shell#Handle(buffer, lines) abort
     " Matches patterns line the following:
     "
     " bash: line 13: syntax error near unexpected token `d'

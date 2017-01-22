@@ -1,7 +1,7 @@
 " Author: jparoz <jesse.paroz@gmail.com>
 " Description: hlint for Haskell files
 
-function! ale_linters#haskell#hlint#Handle(buffer, lines)
+function! ale_linters#haskell#hlint#Handle(buffer, lines) abort
     let l:errors = json_decode(join(a:lines, ''))
 
     let l:output = []

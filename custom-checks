@@ -1,0 +1,83 @@
+#!/bin/bash -eu
+
+# This Bash script implements custom sanity checks for scripts beyond what
+# Vint covers, which are easy to check with regex.
+
+# A flag for automatically fixing some errors.
+FIX_ERRORS=0
+RETURN_CODE=0
+
+function print_help() {
+    echo "Usage: ./custom-checks [--fix] [DIRECTORY]" 1>&2
+    echo 1>&2
+    echo "  -h, --help    Print this help text" 1>&2
+    echo "      --fix     Automatically fix some errors" 1>&2
+    exit 1
+}
+
+while [ $# -ne 0 ]; do
+    case $1 in
+    -h) ;& --help)
+        print_help
+    ;;
+    --fix)
+        FIX_ERRORS=1
+        shift
+    ;;
+    --)
+        shift
+        break
+    ;;
+    -?*)
+        echo "Invalid argument: $1" 1>&2
+        exit 1
+    ;;
+    *)
+        break
+    ;;
+    esac
+done
+
+if [ $# -eq 0 ] || [ -z "$1" ]; then
+    print_help
+fi
+
+# Called to output an error.
+# If called at least one, the return code for this script will be 1.
+output_error() {
+    echo "$FILENAME:$LINE_NUMBER $1"
+    RETURN_CODE=1
+}
+
+# This function is called for each line in each file to check syntax.
+check_line() {
+    line="$1"
+
+    if [[ "$line" =~ ^function ]]; then
+        if ! [[ "$line" =~ abort$ ]]; then
+            if ((FIX_ERRORS)); then
+                # Use sed to add the 'abort' flag
+                sed -i "${LINE_NUMBER}s/$/ abort/" "$FILENAME"
+            else
+                output_error 'Function without abort keyword (See :help except-compat)'
+            fi
+        fi
+    fi
+
+    if [[ "$line" =~ ' '+$ ]]; then
+        output_error 'Trailing whitespace'
+    fi
+}
+
+# Loop through all of the vim files and keep track of the file line numbers.
+for FILENAME in $(find "$1" -name '*.vim'); do
+    LINE_NUMBER=0
+
+    while read; do
+        LINE_NUMBER=$(expr $LINE_NUMBER + 1)
+
+        check_line "$REPLY"
+    done < "$FILENAME"
+done
+
+exit $RETURN_CODE

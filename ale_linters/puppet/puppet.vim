@@ -1,6 +1,6 @@
 " Author: Alexander Olofsson <alexander.olofsson@liu.se>
 
-function! ale_linters#puppet#puppet#Handle(buffer, lines)
+function! ale_linters#puppet#puppet#Handle(buffer, lines) abort
     " Matches patterns like the following:
     " Error: Could not parse for environment production: Syntax error at ':' at /root/puppetcode/modules/nginx/manifests/init.pp:43:12
 

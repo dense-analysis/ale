@@ -4,7 +4,7 @@
 let g:ale_matlab_mlint_executable =
 \   get(g:, 'ale_matlab_mlint_executable', 'mlint')
 
-function! ale_linters#matlab#mlint#Handle(buffer, lines)
+function! ale_linters#matlab#mlint#Handle(buffer, lines) abort
     " Matches patterns like the following:
     "
     " L 27 (C 1): FNDEF: Terminate statement with semicolon to suppress output.

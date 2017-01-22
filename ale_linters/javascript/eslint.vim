@@ -28,7 +28,7 @@ function! ale_linters#javascript#eslint#GetCommand(buffer) abort
     \   . ' -f unix --stdin --stdin-filename %s'
 endfunction
 
-function! ale_linters#javascript#eslint#Handle(buffer, lines)
+function! ale_linters#javascript#eslint#Handle(buffer, lines) abort
     " Matches patterns line the following:
     "
     " /path/to/some-filename.js:47:14: Missing trailing comma. [Warning/comma-dangle]

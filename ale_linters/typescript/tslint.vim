@@ -1,7 +1,7 @@
 " Author: Prashanth Chandra https://github.com/prashcr
 " Description: tslint for TypeScript files
 
-function! ale_linters#typescript#tslint#Handle(buffer, lines)
+function! ale_linters#typescript#tslint#Handle(buffer, lines) abort
     " Matches patterns like the following:
     "
     " hello.ts[7, 41]: trailing whitespace

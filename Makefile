@@ -30,6 +30,14 @@ test: test-setup
 	docker run -a stdout $(DOCKER_FLAGS) vint -s /testplugin | sed s:^/testplugin/:: || EXIT=$$?; \
 	set +o pipefail; \
 	echo; \
+	echo '========================================'; \
+	echo 'Running custom checks'; \
+	echo '========================================'; \
+	echo 'Custom warnings/errors follow:'; \
+	echo; \
+	set -o pipefail; \
+	docker run -a stdout $(DOCKER_FLAGS) /testplugin/custom-checks /testplugin | sed s:^/testplugin/:: || EXIT=$$?; \
+	set +o pipefail; \
 	echo; \
 	exit $$EXIT;
 

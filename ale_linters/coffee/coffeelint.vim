@@ -1,7 +1,7 @@
 " Author: Prashanth Chandra https://github.com/prashcr
 " Description: coffeelint linter for coffeescript files
 
-function! ale_linters#coffee#coffeelint#Handle(buffer, lines)
+function! ale_linters#coffee#coffeelint#Handle(buffer, lines) abort
     " Matches patterns like the following:
     "
     " path,lineNumber,lineNumberEnd,level,message

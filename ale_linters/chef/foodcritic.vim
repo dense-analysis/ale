@@ -1,7 +1,7 @@
 " Author: Edward Larkey <edwlarkey@mac.com>
 " Description: This file adds the foodcritic linter for Chef files.
 
-function! ale_linters#chef#foodcritic#Handle(buffer, lines)
+function! ale_linters#chef#foodcritic#Handle(buffer, lines) abort
     " Matches patterns line the following:
     "
     " FC002: Avoid string interpolation where not required: httpd.rb:13

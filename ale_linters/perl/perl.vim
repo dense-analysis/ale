@@ -1,7 +1,7 @@
 " Author: Vincent Lequertier <https://github.com/SkySymbol>
 " Description: This file adds support for checking perl syntax
 
-function! ale_linters#perl#perl#Handle(buffer, lines)
+function! ale_linters#perl#perl#Handle(buffer, lines) abort
     let l:pattern = '\(.\+\) at \(.\+\) line \(\d\+\)'
     let l:output = []
 

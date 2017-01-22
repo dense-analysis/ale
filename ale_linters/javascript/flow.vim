@@ -24,7 +24,7 @@ function! ale_linters#javascript#flow#GetCommand(buffer) abort
   \   . ' check-contents --respect-pragma --json --from ale %s'
 endfunction
 
-function! ale_linters#javascript#flow#Handle(buffer, lines)
+function! ale_linters#javascript#flow#Handle(buffer, lines) abort
   let l:str = join(a:lines, '')
   if l:str ==# ''
     return []

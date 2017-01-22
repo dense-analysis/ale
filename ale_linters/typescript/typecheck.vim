@@ -1,7 +1,7 @@
 " Author: Prashanth Chandra https://github.com/prashcr, Aleh Kashnikau https://github.com/mkusher
 " Description: type checker for TypeScript files
 
-function! ale_linters#typescript#typecheck#Handle(buffer, lines)
+function! ale_linters#typescript#typecheck#Handle(buffer, lines) abort
     " Matches patterns like the following:
     "
     " hello.ts[7, 41]: Property 'a' does not exist on type 'A'

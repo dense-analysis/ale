@@ -1,7 +1,7 @@
 " Author: Masahiro H https://github.com/mshr-h
 " Description: verilator for verilog files
 
-function! ale_linters#verilog#verilator#Handle(buffer, lines)
+function! ale_linters#verilog#verilator#Handle(buffer, lines) abort
     " Look for lines like the following.
     "
     " %Error: addr_gen.v:3: syntax error, unexpected IDENTIFIER

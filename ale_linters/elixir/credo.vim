@@ -1,6 +1,6 @@
 " Author: hauleth - https://github.com/haulethe
 
-function! ale_linters#elixir#credo#Handle(buffer, lines)
+function! ale_linters#elixir#credo#Handle(buffer, lines) abort
   " Matches patterns line the following:
   "
   " stdin:19: F: Pipe chain should start with a raw value.

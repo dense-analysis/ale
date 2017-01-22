@@ -4,11 +4,11 @@
 " Return 1 if there is a buffer with buftype == 'quickfix' in bufffer list
 function! ale#list#IsQuickfixOpen() abort
     for l:buf in range(1, bufnr('$'))
-        if getbufvar(l:buf, '&buftype') ==# 'quickfix' 
+        if getbufvar(l:buf, '&buftype') ==# 'quickfix'
             return 1
         endif
     endfor
-    return 0 
+    return 0
 endfunction
 
 function! ale#list#SetLists(loclist) abort
