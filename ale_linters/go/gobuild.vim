@@ -1,7 +1,7 @@
 " Author: dzhou121 <dzhou121@gmail.com>, Ryan Norris <rynorris@gmail.com>
 " Description: go build for Go files
 
-function! s:FindGobuildScript() abort
+function! ale_linters#go#gobuild#GetCommand(buffer) abort
     " Get absolute path to the directory containing the current file.
     " This directory by definition contains all the files for this go package.
     let l:this_package = expand('%:p:h')
@@ -36,13 +36,10 @@ function! s:FindGobuildScript() abort
     return g:ale#util#stdin_wrapper . ' .go go tool compile -I ' . l:import_path . ' -o /dev/null ' . join(l:all_files)
 endfunction
 
-let g:ale#util#gobuild_script =
-\   get(g:, 'ale_go_gobuild_script', s:FindGobuildScript())
-
 call ale#linter#Define('go', {
 \   'name': 'go build',
 \   'output_stream': 'stdout',
 \   'executable': 'go',
-\   'command': g:ale#util#gobuild_script,
+\   'command_callback': 'ale_linters#go#gobuild#GetCommand',
 \   'callback': 'ale#handlers#HandleUnixFormatAsError',
 \})
