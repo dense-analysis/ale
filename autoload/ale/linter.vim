@@ -103,7 +103,7 @@ function! ale#linter#Define(filetype, linter) abort
     call add(s:linters[a:filetype], l:new_linter)
 endfunction
 
-function! s:LoadLinters(filetype) abort
+function! ale#linter#GetAll(filetype) abort
     if a:filetype ==# ''
         " Empty filetype? Nothing to be done about that.
         return []
@@ -125,22 +125,28 @@ function! s:LoadLinters(filetype) abort
     return s:linters[a:filetype]
 endfunction
 
+function! s:ResolveFiletype(original_filetype) abort
+    " Try and get an aliased file type either from the user's Dictionary, or
+    " our default Dictionary, otherwise use the filetype as-is.
+    let l:filetype = get(
+    \   g:ale_linter_aliases,
+    \   a:original_filetype,
+    \   get(
+    \       s:default_ale_linter_aliases,
+    \       a:original_filetype,
+    \       a:original_filetype
+    \   )
+    \)
+
+    return l:filetype
+endfunction
+
 function! ale#linter#Get(original_filetypes) abort
     let l:combined_linters = []
 
     " Handle dot-seperated filetypes.
     for l:original_filetype in split(a:original_filetypes, '\.')
-        " Try and get an aliased file type either from the user's Dictionary, or
-        " our default Dictionary, otherwise use the filetype as-is.
-        let l:filetype = get(
-        \   g:ale_linter_aliases,
-        \   l:original_filetype,
-        \   get(
-        \       s:default_ale_linter_aliases,
-        \       l:original_filetype,
-        \       l:original_filetype
-        \   )
-        \)
+        let l:filetype = s:ResolveFiletype(l:original_filetype)
 
         " Try and get a list of linters to run, using the original file type,
         " not the aliased filetype. We have some linters to limit by default,
@@ -155,7 +161,7 @@ function! ale#linter#Get(original_filetypes) abort
         \   )
         \)
 
-        let l:all_linters = s:LoadLinters(l:filetype)
+        let l:all_linters = ale#linter#GetAll(l:filetype)
         let l:filetype_linters = []
 
         if type(l:linter_names) == type('') && l:linter_names ==# 'all'
@@ -173,4 +179,26 @@ function! ale#linter#Get(original_filetypes) abort
     endfor
 
     return l:combined_linters
+endfunction
+
+function! ale#linter#Info() abort
+    let l:original_filetypes = &filetype
+
+    " We get the list of enabled linters for free by the above function.
+    let l:enabled_linters = deepcopy(ale#linter#Get(l:original_filetypes))
+
+    " But have to build the list of available linters ourselves.
+    let l:all_linters = []
+    for l:original_filetype in split(l:original_filetypes, '\.')
+        let l:filetype = s:ResolveFiletype(l:original_filetype)
+        let l:filetype_linters = ale#linter#GetAll(l:filetype)
+        call extend(l:all_linters, l:filetype_linters)
+    endfor
+
+    let l:all_names = map(l:all_linters, 'v:val[''name'']')
+    let l:enabled_names = map(l:enabled_linters, 'v:val[''name'']')
+
+    echom ' Current Filetype: ' . l:original_filetypes
+    echom 'Available Linters: ' . string(l:all_names)
+    echom '  Enabled Linters: ' . string(l:enabled_names)
 endfunction

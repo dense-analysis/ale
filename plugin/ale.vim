@@ -138,6 +138,9 @@ command! ALEPreviousWrap :call ale#loclist_jumping#Jump('before', 1)
 command! ALENext :call ale#loclist_jumping#Jump('after', 0)
 command! ALENextWrap :call ale#loclist_jumping#Jump('after', 1)
 
+" Define command to get information about current filetype.
+command! ALEInfo :call ale#linter#Info()
+
 " <Plug> mappings for commands
 nnoremap <silent> <Plug>(ale_previous) :ALEPrevious<Return>
 nnoremap <silent> <Plug>(ale_previous_wrap) :ALEPreviousWrap<Return>
