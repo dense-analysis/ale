@@ -10,6 +10,6 @@ call ale#linter#Define('cpp', {
 \   'name': 'clangtidy',
 \   'output_stream': 'stdout',
 \   'executable': 'clang-tidy',
-\   'command': 'clang-tidy %s -- ' . g:ale_cpp_clangtidy_options,
+\   'command': g:ale#util#stdin_wrapper . ' -- ' . g:ale_cpp_clangtidy_options,
 \   'callback': 'ale#handlers#HandleGCCFormat',
 \})
