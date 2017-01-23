@@ -1,0 +1,102 @@
+Before:
+  let g:testlinter1 = {'name': 'testlinter1', 'executable': 'testlinter1', 'command': 'testlinter1', 'callback': 'testCB1', 'output_stream': 'stdout'}
+  let g:testlinter2 = {'name': 'testlinter2', 'executable': 'testlinter2', 'command': 'testlinter2', 'callback': 'testCB2', 'output_stream': 'stdout'}
+
+  call ale#linter#Reset()
+  let g:ale_linters = {}
+  let g:ale_linter_aliases = {}
+
+Given nolintersft (Empty buffer):
+Do (ALEInfo with no linters):
+  :redir @a\<Enter>
+  :ALEInfo\<Enter>
+  :redir END\<Enter>
+  "aP
+Expect (Test ALEInfo works with no available linters):
+
+   Current Filetype: nolintersft
+  Available Linters: []
+    Enabled Linters: []
+
+Given (Empty buffer):
+Do (ALEInfo with no filetype):
+  :redir @a\<Enter>
+  :ALEInfo\<Enter>
+  :redir END\<Enter>
+  "aP
+Expect (Test ALEInfo works with no filetype):
+
+   Current Filetype: 
+  Available Linters: []
+    Enabled Linters: []
+
+Given testft (Empty buffer):
+Do (Define one linter and ALEInfo):
+  :call ale#linter#Define('testft', g:testlinter1)\<Enter>
+  :redir @a\<Enter>
+  :ALEInfo\<Enter>
+  :redir END\<Enter>
+  "aP
+Expect (Test ALEInfo works with a single linter):
+
+   Current Filetype: testft
+  Available Linters: ['testlinter1']
+    Enabled Linters: ['testlinter1']
+
+Given testft (Empty buffer):
+Do (Define two linters and ALEInfo):
+  :call ale#linter#Define('testft', g:testlinter1)\<Enter>
+  :call ale#linter#Define('testft', g:testlinter2)\<Enter>
+  :redir @a\<Enter>
+  :ALEInfo\<Enter>
+  :redir END\<Enter>
+  "aP
+Expect (Test ALEInfo works with multiple linters):
+
+   Current Filetype: testft
+  Available Linters: ['testlinter1', 'testlinter2']
+    Enabled Linters: ['testlinter1', 'testlinter2']
+
+Given testft (Empty buffer):
+Do (Define two linters, enable only one and ALEInfo):
+  :call ale#linter#Define('testft', g:testlinter1)\<Enter>
+  :call ale#linter#Define('testft', g:testlinter2)\<Enter>
+  :let g:ale_linters = { 'testft': ['testlinter2'] }\<Enter>
+  :redir @a\<Enter>
+  :ALEInfo\<Enter>
+  :redir END\<Enter>
+  "aP
+Expect (Test ALEInfo calculates enabled linters correctly):
+
+   Current Filetype: testft
+  Available Linters: ['testlinter1', 'testlinter2']
+    Enabled Linters: ['testlinter2']
+
+Given testft (Empty buffer):
+Do (Define linters for two filetypes and ALEInfo):
+  :call ale#linter#Define('testft', g:testlinter1)\<Enter>
+  :call ale#linter#Define('testft2', g:testlinter2)\<Enter>
+  :redir @a\<Enter>
+  :ALEInfo\<Enter>
+  :redir END\<Enter>
+  "aP
+Expect (Test ALEInfo only returns linters for current filetype):
+
+   Current Filetype: testft
+  Available Linters: ['testlinter1']
+    Enabled Linters: ['testlinter1']
+
+Given testft.testft2 (Empty buffer with two filetypes):
+Do (Define linters for two filetypes and ALEInfo):
+  :call ale#linter#Define('testft', g:testlinter1)\<Enter>
+  :call ale#linter#Define('testft2', g:testlinter2)\<Enter>
+  :redir @a\<Enter>
+  :ALEInfo\<Enter>
+  :redir END\<Enter>
+  "aP
+Expect (Test ALEInfo works with compound filetypes):
+
+   Current Filetype: testft.testft2
+  Available Linters: ['testlinter1', 'testlinter2']
+    Enabled Linters: ['testlinter1', 'testlinter2']
+
