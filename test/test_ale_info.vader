@@ -9,7 +9,7 @@ Before:
 Given nolintersft (Empty buffer):
 Do (ALEInfo with no linters):
   :redir @a\<Enter>
-  :ALEInfo\<Enter>
+  :silent ALEInfo\<Enter>
   :redir END\<Enter>
   "aP
 Expect (Test ALEInfo works with no available linters):
@@ -21,7 +21,7 @@ Expect (Test ALEInfo works with no available linters):
 Given (Empty buffer):
 Do (ALEInfo with no filetype):
   :redir @a\<Enter>
-  :ALEInfo\<Enter>
+  :silent ALEInfo\<Enter>
   :redir END\<Enter>
   "aP
 Expect (Test ALEInfo works with no filetype):
@@ -34,7 +34,7 @@ Given testft (Empty buffer):
 Do (Define one linter and ALEInfo):
   :call ale#linter#Define('testft', g:testlinter1)\<Enter>
   :redir @a\<Enter>
-  :ALEInfo\<Enter>
+  :silent ALEInfo\<Enter>
   :redir END\<Enter>
   "aP
 Expect (Test ALEInfo works with a single linter):
@@ -48,7 +48,7 @@ Do (Define two linters and ALEInfo):
   :call ale#linter#Define('testft', g:testlinter1)\<Enter>
   :call ale#linter#Define('testft', g:testlinter2)\<Enter>
   :redir @a\<Enter>
-  :ALEInfo\<Enter>
+  :silent ALEInfo\<Enter>
   :redir END\<Enter>
   "aP
 Expect (Test ALEInfo works with multiple linters):
@@ -63,7 +63,7 @@ Do (Define two linters, enable only one and ALEInfo):
   :call ale#linter#Define('testft', g:testlinter2)\<Enter>
   :let g:ale_linters = { 'testft': ['testlinter2'] }\<Enter>
   :redir @a\<Enter>
-  :ALEInfo\<Enter>
+  :silent ALEInfo\<Enter>
   :redir END\<Enter>
   "aP
 Expect (Test ALEInfo calculates enabled linters correctly):
@@ -77,7 +77,7 @@ Do (Define linters for two filetypes and ALEInfo):
   :call ale#linter#Define('testft', g:testlinter1)\<Enter>
   :call ale#linter#Define('testft2', g:testlinter2)\<Enter>
   :redir @a\<Enter>
-  :ALEInfo\<Enter>
+  :silent ALEInfo\<Enter>
   :redir END\<Enter>
   "aP
 Expect (Test ALEInfo only returns linters for current filetype):
@@ -91,7 +91,7 @@ Do (Define linters for two filetypes and ALEInfo):
   :call ale#linter#Define('testft', g:testlinter1)\<Enter>
   :call ale#linter#Define('testft2', g:testlinter2)\<Enter>
   :redir @a\<Enter>
-  :ALEInfo\<Enter>
+  :silent ALEInfo\<Enter>
   :redir END\<Enter>
   "aP
 Expect (Test ALEInfo works with compound filetypes):
@@ -99,4 +99,3 @@ Expect (Test ALEInfo works with compound filetypes):
    Current Filetype: testft.testft2
   Available Linters: ['testlinter1', 'testlinter2']
     Enabled Linters: ['testlinter1', 'testlinter2']
-
