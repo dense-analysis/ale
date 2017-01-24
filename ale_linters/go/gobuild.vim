@@ -40,7 +40,7 @@ function! ale_linters#go#gobuild#GetCommand(buffer) abort
       let l:gopaths = split($GOPATH, ':')
     elseif l:goos == 'windows'
       let l:gopaths = split($GOPATH, ';')
-    elseif l:goos = 'plan9'
+    elseif l:goos == 'plan9'
       " No idea if vim handles list-type environment variables properly.
       let l:gopaths = $GOPATH
     else
