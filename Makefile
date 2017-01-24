@@ -18,7 +18,7 @@ test: test-setup
 		echo "Running tests for $$vim"; \
 		echo '========================================'; \
 		echo; \
-		docker run -it $(DOCKER_FLAGS) $$vim '+Vader! test/*' || EXIT=$$?; \
+		docker run -a stderr $(DOCKER_FLAGS) $$vim '+Vader! test/*' || EXIT=$$?; \
 	done; \
 	echo; \
 	echo '========================================'; \
