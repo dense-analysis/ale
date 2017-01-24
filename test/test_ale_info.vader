@@ -1,0 +1,91 @@
+Before:
+  let g:testlinter1 = {'name': 'testlinter1', 'executable': 'testlinter1', 'command': 'testlinter1', 'callback': 'testCB1', 'output_stream': 'stdout'}
+  let g:testlinter2 = {'name': 'testlinter2', 'executable': 'testlinter2', 'command': 'testlinter2', 'callback': 'testCB2', 'output_stream': 'stdout'}
+
+  call ale#linter#Reset()
+  let g:ale_linters = {}
+  let g:ale_linter_aliases = {}
+
+After:
+  unlet! g:output
+
+Given nolintersft (Empty buffer with no linters):
+Execute (ALEInfo with no linters should return the right output):
+  redir => g:output
+  silent ALEInfo
+  redir END
+  AssertEqual "\n
+              \ Current Filetype: nolintersft\n
+              \Available Linters: []\n
+              \  Enabled Linters: []", g:output
+
+Given (Empty buffer with no filetype):
+Execute (ALEInfo with no filetype should return the right output):
+  redir => g:output
+  silent ALEInfo
+  redir END
+  AssertEqual "\n
+              \ Current Filetype: \n
+              \Available Linters: []\n
+              \  Enabled Linters: []", g:output
+
+Given testft (Empty buffer):
+Execute (ALEInfo with a single linter should return the right output):
+  call ale#linter#Define('testft', g:testlinter1)
+  redir => g:output
+  silent ALEInfo
+  redir END
+  AssertEqual "\n
+              \ Current Filetype: testft\n
+              \Available Linters: ['testlinter1']\n
+              \  Enabled Linters: ['testlinter1']", g:output
+
+Given testft (Empty buffer):
+Execute (ALEInfo with two linters should return the right output):
+  call ale#linter#Define('testft', g:testlinter1)
+  call ale#linter#Define('testft', g:testlinter2)
+  redir => g:output
+  silent ALEInfo
+  redir END
+  AssertEqual "\n
+              \ Current Filetype: testft\n
+              \Available Linters: ['testlinter1', 'testlinter2']\n
+              \  Enabled Linters: ['testlinter1', 'testlinter2']", g:output
+
+Given testft (Empty buffer):
+Execute (ALEInfo should calculate enabled linters correctly):
+  call ale#linter#Define('testft', g:testlinter1)
+  call ale#linter#Define('testft', g:testlinter2)
+  let g:ale_linters = { 'testft': ['testlinter2'] }
+  redir => g:output
+  silent ALEInfo
+  redir END
+  AssertEqual "\n
+              \ Current Filetype: testft\n
+              \Available Linters: ['testlinter1', 'testlinter2']\n
+              \  Enabled Linters: ['testlinter2']", g:output
+
+Given testft (Empty buffer):
+Execute (ALEInfo should only return linters for current filetype):
+  call ale#linter#Define('testft', g:testlinter1)
+  call ale#linter#Define('testft2', g:testlinter2)
+  redir => g:output
+  silent ALEInfo
+  redir END
+  AssertEqual "\n
+              \ Current Filetype: testft\n
+              \Available Linters: ['testlinter1']\n
+              \  Enabled Linters: ['testlinter1']", g:output
+
+Given testft.testft2 (Empty buffer with two filetypes):
+Execute (ALEInfo with compound filetypes should return linters for both of them):
+  call ale#linter#Define('testft', g:testlinter1)
+  call ale#linter#Define('testft2', g:testlinter2)
+  redir => g:output
+  silent ALEInfo
+  redir END
+  AssertEqual "\n
+              \ Current Filetype: testft.testft2\n
+              \Available Linters: ['testlinter1', 'testlinter2']\n
+              \  Enabled Linters: ['testlinter1', 'testlinter2']", g:output
+
