@@ -29,11 +29,27 @@ function! ale_linters#go#gobuild#GetCommand(buffer) abort
     let l:goarch = substitute(l:goarch, '\n\+$', '', '')
 
     " Finally build the import path.
-    " TODO: Handle GOPATHs that contain multiple directories.
-    let l:gopath = $GOPATH
-    let l:import_path = l:gopath . '/pkg/' . l:goos . '_' . l:goarch
+    "
+    " From the output of 'go help gopath':
+    " On Unix, the value is a colon-separated string.
+    " On Windows, the value is a semicolon-separated string.
+    " On Plan 9, the value is a list.
+    let l:unix_oses = ['android', 'darwin', 'dragonfly', 'freebsd', 'linux',
+                      \'nacl', 'netbsd', 'openbsd', 'solaris']
+    if index(l:unix_oses, l:goos) >= 0
+      let l:gopaths = split($GOPATH, ':')
+    elseif l:goos == 'windows'
+      let l:gopaths = split($GOPATH, ';')
+    elseif l:goos = 'plan9'
+      " No idea if vim handles list-type environment variables properly.
+      let l:gopaths = $GOPATH
+    else
+      echoerr 'Unknown value for GOOS: ' . l:goos
+    endif
 
-    return g:ale#util#stdin_wrapper . ' .go go tool compile -I ' . l:import_path . ' -o /dev/null ' . join(l:all_files)
+    let l:import_args = map(l:gopaths, '''-I '' . v:val . ''/pkg/'' . l:goos . ''_'' . l:goarch')
+
+    return g:ale#util#stdin_wrapper . ' .go go tool compile ' . join(l:import_args) . ' -o /dev/null ' . join(l:all_files)
 endfunction
 
 call ale#linter#Define('go', {
