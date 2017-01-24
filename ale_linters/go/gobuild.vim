@@ -49,7 +49,7 @@ function! ale_linters#go#gobuild#GetCommand(buffer) abort
 
     let l:import_args = map(l:gopaths, '''-I '' . v:val . ''/pkg/'' . l:goos . ''_'' . l:goarch')
 
-    return g:ale#util#stdin_wrapper . ' .go go tool compile ' . join(l:import_args) . ' -o /dev/null ' . join(l:all_files)
+    return g:ale#util#stdin_wrapper . ' .go go tool compile ' . join(l:import_args) . ' -o '. g:ale#util#nul_file . join(l:all_files)
 endfunction
 
 call ale#linter#Define('go', {
