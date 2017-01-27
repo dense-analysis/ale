@@ -43,9 +43,8 @@ endif
 call ale#linter#Define('ruby', {
 \   'name': 'rubocop',
 \   'executable': 'rubocop',
-\   'command': 'rubocop --format emacs --stdin '
+\   'command': 'rubocop --format emacs --force-exclusion --stdin '
 \   . g:ale_ruby_rubocop_options
-\   . ' _',
+\   . ' %s',
 \   'callback': 'ale_linters#ruby#rubocop#Handle',
 \})
-
