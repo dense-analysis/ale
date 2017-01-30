@@ -1,4 +1,4 @@
-" Author: hauleth - https://github.com/haulethe
+" Author: hauleth - https://github.com/hauleth
 
 function! ale_linters#elixir#credo#Handle(buffer, lines) abort
   " Matches patterns line the following:

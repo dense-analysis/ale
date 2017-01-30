@@ -77,6 +77,7 @@ The following languages and tools are supported.
 * CSS: 'csslint', 'stylelint'
 * Cython (pyrex filetype): 'cython'
 * D: 'dmd'
+* Dockerfile: 'hadolint'
 * Elixir: 'credo'
 * Elm: 'elm-make'
 * Erlang: 'erlc'
