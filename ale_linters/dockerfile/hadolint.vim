@@ -42,4 +42,4 @@ call ale#linter#Define('dockerfile', {
       \ 'name': 'hadolint',
       \ 'executable': 'hadolint',
       \ 'command': 'hadolint -',
-      \ 'callback': 'ale_linters#docker#hadolint#Handle' })
+      \ 'callback': 'ale_linters#dockerfile#hadolint#Handle' })
