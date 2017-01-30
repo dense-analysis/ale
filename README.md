@@ -238,6 +238,15 @@ let g:ale_sign_error = '>>'
 let g:ale_sign_warning = '--'
 ```
 
+ALE sets some background colors automatically for warnings and errors
+in the sign gutter, with the names `ALEErrorSign` and `ALEWarningSign`.
+These colors can be customised, or even removed completely:
+
+```vim
+highlight clear ALEErrorSign
+highlight clear ALEWarningSign
+```
+
 <a name="faq-statusline"></a>
 
 ### 4.iv. How can I show errors or warnings in my statusline?
