@@ -10,7 +10,7 @@ if !exists('g:ale_c_gcc_options')
 endif
 
 function! ale_linters#c#gcc#GetCommand(buffer) abort
-    return 'gcc -S -x c++ -fsyntax-only '
+    return 'gcc -S -x c -fsyntax-only '
     \      . g:ale_c_gcc_options . ' -'
 
 endfunction
