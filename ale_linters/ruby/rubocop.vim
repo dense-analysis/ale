@@ -4,9 +4,9 @@
 function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
     " Matches patterns line the following:
     "
-    " <path>/_:47:14: 83:29: C: Prefer single-quoted strings when you don't
+    " <path>:83:29: C: Prefer single-quoted strings when you don't
     " need string interpolation or special symbols.
-    let l:pattern = '\v_:(\d+):(\d+): (.): (.+)'
+    let l:pattern = '\v:(\d+):(\d+): (.): (.+)'
     let l:output = []
 
     for l:line in a:lines
