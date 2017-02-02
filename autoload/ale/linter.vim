@@ -7,10 +7,11 @@ let s:linters = {}
 " Default filetype aliaes.
 " The user defined aliases will be merged with this Dictionary.
 let s:default_ale_linter_aliases = {
-\   'zsh': 'sh',
+\   'Dockerfile': 'dockerfile',
 \   'csh': 'sh',
 \   'plaintex': 'tex',
 \   'systemverilog': 'verilog',
+\   'zsh': 'sh',
 \}
 
 " Default linters to run for particular filetypes.
