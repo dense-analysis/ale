@@ -3,16 +3,6 @@
 
 " inspired by work from dzhou121 <dzhou121@gmail.com>
 
-" This comes straight out of syntastic.
-function! s:devnull() abort
-    if has('unix')
-      return '/dev/null'
-    endif
-
-    " assume windows
-    return 'NUL'
-endfunction
-
 " get a list of all source directories from $GOPATH and $GOROOT
 function! s:srcdirs()
   if exists('s:src_dirs')
@@ -127,7 +117,7 @@ function! ale_linters#go#gobuild#GetCommand(buffer) abort
   " e.g. linux_amd64
   let l:import_args = map(copy(s:srcdirs()), '"-I " . v:val . "/pkg/" . s:osarch()')
 
-  return g:ale#util#stdin_wrapper . ' .go go tool compile ' . join(l:import_args) . ' -o ' . s:devnull() . ' ' . join(l:files)
+  return g:ale#util#stdin_wrapper . ' .go go tool compile ' . join(l:import_args) . ' -o /dev/null ' . join(l:files)
 endfunction
 
 call ale#linter#Define('go', {
