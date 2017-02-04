@@ -19,12 +19,12 @@ endfunction
 function! g:ale_linters#python#mypy#Handle(buffer, lines) abort
     " Look for lines like the following:
     "
-    " file.py:4: error: No library stub file for module 'django.db'
+    " file.py:4:0: error: No library stub file for module 'django.db'
     "
     " Lines like these should be ignored below:
     "
-    " file.py:4: note: (Stub files are from https://github.com/python/typeshed)
-    let l:pattern = '^.\+:\(\d\+\):\?\(\d\+\)\?: \([^:]\+\): \(.\+\)$'
+    " file.py:4:0: note: (Stub files are from https://github.com/python/typeshed)
+    let l:pattern = '^.\+:\(\d\+\):\(\d\+\): \([^:]\+\): \(.\+\)$'
     let l:output = []
 
     for l:line in a:lines
