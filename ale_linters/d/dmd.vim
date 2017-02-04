@@ -1,24 +1,54 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: "dmd for D files"
 
-" A function for finding the dmd-wrapper script in the Vim runtime paths
-function! s:FindWrapperScript() abort
-    for l:parent in split(&runtimepath, ',')
-        " Expand the path to deal with ~ issues.
-        let l:path = expand(l:parent . '/' . 'dmd-wrapper')
+function! s:FindDUBConfig(buffer) abort
+    " Find a DUB configuration file in ancestor paths.
+    " The most DUB-specific names will be tried first.
+    for l:possible_filename in ['dub.sdl', 'dub.json', 'package.json']
+        let l:dub_file = ale#util#FindNearestFile(a:buffer, l:possible_filename)
 
-        if filereadable(l:path)
-            return l:path
+        if !empty(l:dub_file)
+            return l:dub_file
         endif
     endfor
+
+    return ''
 endfunction
 
-function! ale_linters#d#dmd#GetCommand(buffer) abort
-    let l:wrapper_script = s:FindWrapperScript()
+function! ale_linters#d#dmd#DUBCommand(buffer) abort
+    " If we can't run dub, then skip this command.
+    if !executable('dub')
+        " Returning an empty string skips to the DMD command.
+        return ''
+    endif
 
-    let l:command = l:wrapper_script . ' -o- -vcolumns -c'
+    let l:dub_file = s:FindDUBConfig(a:buffer)
 
-    return l:command
+    if empty(l:dub_file)
+        return ''
+    endif
+
+    " To support older dub versions, we just change the directory to
+    " the directory where we found the dub config, and then run `dub describe`
+    " from that directory.
+    return 'cd ' . fnameescape(fnamemodify(l:dub_file, ':h'))
+    \   . ' && dub describe --import-paths'
+endfunction
+
+function! ale_linters#d#dmd#DMDCommand(buffer, dub_output) abort
+    let l:import_list = []
+
+    " Build a list of import paths generated from DUB, if available.
+    for l:line in a:dub_output
+        if !empty(l:line)
+            " The arguments must be '-Ifilename', not '-I filename'
+            call add(l:import_list, '-I' . fnameescape(l:line))
+        endif
+    endfor
+
+    return g:ale#util#stdin_wrapper . ' .d dmd '
+    \   . join(l:import_list)
+    \   . ' -o- -vcolumns -c'
 endfunction
 
 function! ale_linters#d#dmd#Handle(buffer, lines) abort
@@ -57,8 +87,10 @@ endfunction
 
 call ale#linter#Define('d', {
 \   'name': 'dmd',
-\   'output_stream': 'stderr',
 \   'executable': 'dmd',
-\   'command_callback': 'ale_linters#d#dmd#GetCommand',
+\   'command_chain': [
+\       {'callback': 'ale_linters#d#dmd#DUBCommand', 'output_stream': 'stdout'},
+\       {'callback': 'ale_linters#d#dmd#DMDCommand', 'output_stream': 'stderr'},
+\   ],
 \   'callback': 'ale_linters#d#dmd#Handle',
 \})
