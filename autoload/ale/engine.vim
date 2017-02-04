@@ -161,24 +161,35 @@ function! s:HandleExit(job) abort
     let g:ale_buffer_info[l:buffer].loclist = g:ale_buffer_info[l:buffer].new_loclist
     let g:ale_buffer_info[l:buffer].new_loclist = []
 
-    if g:ale_set_quickfix || g:ale_set_loclist
-        call ale#list#SetLists(g:ale_buffer_info[l:buffer].loclist)
-    endif
-
-    if g:ale_set_signs
-        call ale#sign#SetSigns(l:buffer, g:ale_buffer_info[l:buffer].loclist)
-    endif
-
-    if exists('*ale#statusline#Update')
-        " Don't load/run if not already loaded.
-        call ale#statusline#Update(l:buffer, g:ale_buffer_info[l:buffer].loclist)
-    endif
+    call ale#engine#SetResults(l:buffer, g:ale_buffer_info[l:buffer].loclist)
 
     " Call user autocommands. This allows users to hook into ALE's lint cycle.
     silent doautocmd User ALELint
 
     " Mark line 200, column 17 with a squiggly line or something
     " matchadd('ALEError', '\%200l\%17v')
+endfunction
+
+function! ale#engine#SetResults(buffer, loclist) abort
+
+    if g:ale_enabled == 1
+        let l:buffer_loclist = a:loclist
+    else
+        let l:buffer_loclist = []
+    endif
+
+    if g:ale_set_quickfix || g:ale_set_loclist
+        call ale#list#SetLists(l:buffer_loclist)
+    endif
+
+    if g:ale_set_signs
+        call ale#sign#SetSigns(a:buffer, l:buffer_loclist)
+    endif
+
+    if exists('*ale#statusline#Update')
+        " Don't load/run if not already loaded.
+        call ale#statusline#Update(a:buffer, l:buffer_loclist)
+    endif
 endfunction
 
 function! s:HandleExitNeoVim(job, data, event) abort
