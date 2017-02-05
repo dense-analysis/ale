@@ -146,12 +146,14 @@ function! s:ALEToggle() abort
     let g:ale_enabled = !get(g:, 'ale_enabled')
 
     if g:ale_enabled
+        " Lint immediately
         call ale#Queue(0)
     else
-        let l:buffers = keys(g:ale_buffer_info)
-
-        for l:buffer in l:buffers
+        for l:buffer in keys(g:ale_buffer_info)
+            " Clear signs, loclist, quicklist
             call ale#engine#SetResults(l:buffer, [])
+            " Stop jobs and delete stored buffer data
+            call ale#cleanup#Buffer(l:buffer)
         endfor
     endif
 
