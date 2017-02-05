@@ -6,7 +6,7 @@ function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
     "
     " <path>/_:47:14: 83:29: C: Prefer single-quoted strings when you don't
     " need string interpolation or special symbols.
-    let l:pattern = '\v_:(\d+):(\d+): (.): (.+)'
+    let l:pattern = '\v:(\d+):(\d+): (.): (.+)'
     let l:output = []
 
     for l:line in a:lines
@@ -34,6 +34,12 @@ function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
     return l:output
 endfunction
 
+function! ale_linters#ruby#rubocop#GetCommand(_buffer) abort
+  return 'rubocop --format emacs --force-exclusion ' .
+        \ g:ale_ruby_rubocop_options .
+        \ ' --stdin ' . expand('%')
+endfunction
+
 " Set this option to change Rubocop options.
 if !exists('g:ale_ruby_rubocop_options')
     " let g:ale_ruby_rubocop_options = '--lint'
@@ -43,8 +49,6 @@ endif
 call ale#linter#Define('ruby', {
 \   'name': 'rubocop',
 \   'executable': 'rubocop',
-\   'command': 'rubocop --format emacs --force-exclusion --stdin '
-\   . g:ale_ruby_rubocop_options
-\   . ' %s',
+\   'command_callback': 'ale_linters#ruby#rubocop#GetCommand',
 \   'callback': 'ale_linters#ruby#rubocop#Handle',
 \})
