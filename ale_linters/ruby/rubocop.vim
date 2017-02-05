@@ -34,10 +34,10 @@ function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
     return l:output
 endfunction
 
-function! ale_linters#ruby#rubocop#GetCommand(_buffer) abort
+function! ale_linters#ruby#rubocop#GetCommand(buffer) abort
   return 'rubocop --format emacs --force-exclusion ' .
         \ g:ale_ruby_rubocop_options .
-        \ ' --stdin ' . expand('%')
+        \ ' --stdin ' . bufname(a:buffer)
 endfunction
 
 " Set this option to change Rubocop options.
