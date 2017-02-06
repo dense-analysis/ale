@@ -150,10 +150,10 @@ function! s:ALEToggle() abort
         call ale#Queue(0)
     else
         for l:buffer in keys(g:ale_buffer_info)
-            " Clear signs, loclist, quicklist
-            call ale#engine#SetResults(l:buffer, [])
             " Stop jobs and delete stored buffer data
             call ale#cleanup#Buffer(l:buffer)
+            " Clear signs, loclist, quicklist
+            call ale#engine#SetResults(l:buffer, [])
         endfor
     endif
 

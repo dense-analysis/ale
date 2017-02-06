@@ -3,6 +3,10 @@
 
 " Update the buffer error/warning count with data from loclist.
 function! ale#statusline#Update(buffer, loclist) abort
+    if !has_key(g:ale_buffer_info, a:buffer)
+        return
+    endif
+
     let l:errors = 0
     let l:warnings = 0
 

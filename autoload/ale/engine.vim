@@ -171,24 +171,17 @@ function! s:HandleExit(job) abort
 endfunction
 
 function! ale#engine#SetResults(buffer, loclist) abort
-
-    if g:ale_enabled == 1
-        let l:buffer_loclist = a:loclist
-    else
-        let l:buffer_loclist = []
-    endif
-
     if g:ale_set_quickfix || g:ale_set_loclist
-        call ale#list#SetLists(l:buffer_loclist)
+        call ale#list#SetLists(a:loclist)
     endif
 
     if g:ale_set_signs
-        call ale#sign#SetSigns(a:buffer, l:buffer_loclist)
+        call ale#sign#SetSigns(a:buffer, a:loclist)
     endif
 
     if exists('*ale#statusline#Update')
         " Don't load/run if not already loaded.
-        call ale#statusline#Update(a:buffer, l:buffer_loclist)
+        call ale#statusline#Update(a:buffer, a:loclist)
     endif
 endfunction
 
