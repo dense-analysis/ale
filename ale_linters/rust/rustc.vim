@@ -17,12 +17,20 @@ function! ale_linters#rust#rustc#HandleRustcErrors(buffer_number, errorlines) ab
         endif
 
         let l:error = json_decode(l:errorline)
+        if !has_key(l:error, 'code') && !has_key(l:error, 'message')
+            continue
+        endif
+
+        if has_key(l:error, 'message')
+            let l:error = l:error.message
+        endif
 
         if !empty(l:error.code) && index(g:ale_rust_ignore_error_codes, l:error.code.code) > -1
             continue
         endif
 
         for l:span in l:error.spans
+            let l:span.file_name = fnamemodify(l:span.file_name, ':t')
             if l:span.is_primary &&
                 \   (l:span.file_name ==# l:file_name || l:span.file_name ==# '<anon>')
                 call add(l:output, {
