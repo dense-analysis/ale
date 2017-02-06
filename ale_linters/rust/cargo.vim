@@ -15,7 +15,7 @@ endfunction
 call ale#linter#Define('rust', {
 \   'name': 'cargo',
 \   'executable_callback': 'ale_linters#rust#cargo#GetCargoExecutable',
-\   'command': 'cargo rustc -- --error-format=json -Z no-trans',
+\   'command': 'cargo build --message-format=json -q',
 \   'callback': 'ale_linters#rust#rustc#HandleRustcErrors',
-\   'output_stream': 'stderr',
+\   'output_stream': 'stdout',
 \})

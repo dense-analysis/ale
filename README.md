@@ -32,6 +32,7 @@ In other words, this plugin allows you to lint while you type.
  6. [How can I execute some code when ALE stops linting?](#faq-autocmd)
  7. [How can I navigate between errors quickly?](#faq-navigation)
  8. [How can I run linters only when I save files?](#faq-lint-on-save)
+ 9. [How can I use the quickfix list instead of the loclist?](#faq-quickfix)
 
 <a name="supported-languages"></a>
 
@@ -347,4 +348,31 @@ let g:ale_lint_on_text_changed = 0
 " You can disable this option too
 " if you don't want linters to run on opening a file
 let g:ale_lint_on_enter = 0
+```
+
+<a name="faq-quickfix"></a>
+
+### 4.ix. How can I use the quickfix list instead of the loclist?
+
+The quickfix list can be enabled by turning the `g:ale_set_quickfix`
+option on. If you wish to also disable the loclist, you can disable
+the `g:ale_set_loclist` option.
+
+```vim
+" Write this in your vimrc file
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
+```
+
+If you wish to show Vim windows for the loclist or quickfix items
+when a file contains warnings or errors, `g:ale_open_list` can be
+set to `1`. `g:ale_keep_list_window_open` can be set to `1`
+if you wish to keep the window open even after errors disappear.
+
+```vim
+let g:ale_open_list = 1
+" Set this if you want to.
+" This can be useful if you are combining ALE with
+" some other plugin which sets quickfix errors, etc.
+let g:ale_keep_list_window_open = 1
 ```

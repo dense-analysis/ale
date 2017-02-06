@@ -1,3 +1,9 @@
+Before:
+  let g:linter = {}
+
+After:
+  unlet g:linter
+
 Execute (PreProcess should throw when the linter object is not a Dictionary):
   AssertThrows call ale#linter#PreProcess('')
   AssertEqual 'The linter object must be a Dictionary', g:vader_exception
@@ -123,3 +129,85 @@ Execute (PreProcess should accept a 'both' output_stream):
   \ 'command': 'echo',
   \ 'output_stream': 'both',
   \})
+
+Execute(PreProcess should complain if the command_chain is not a List):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'callback': 'x',
+  \ 'executable': 'x',
+  \ 'command_chain': 'x',
+  \}
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual '`command_chain` must be a List', g:vader_exception
+
+Execute(PreProcess should complain if the command_chain is empty):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'callback': 'x',
+  \ 'executable': 'x',
+  \ 'command_chain': [],
+  \}
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual '`command_chain` must contain at least one item', g:vader_exception
+
+Execute(PreProcess should complain if the command_chain has no callback):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'callback': 'x',
+  \ 'executable': 'x',
+  \ 'command_chain': [{}],
+  \}
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual 'The `command_chain` item 0 must define a `callback` function', g:vader_exception
+
+Execute(PreProcess should complain if the command_chain callback is not a function):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'callback': 'x',
+  \ 'executable': 'x',
+  \ 'command_chain': [{'callback': 2}],
+  \}
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual 'The `command_chain` item 0 must define a `callback` function', g:vader_exception
+
+Execute(PreProcess should accept a chain with one callback):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'callback': 'x',
+  \ 'executable': 'x',
+  \ 'command_chain': [{'callback': 'foo'}],
+  \}
+  call ale#linter#PreProcess(g:linter)
+
+Execute(PreProcess should complain about invalid output_stream values in the chain):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'callback': 'x',
+  \ 'executable': 'x',
+  \ 'command_chain': [{'callback': 'foo', 'output_stream': ''}],
+  \}
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual "The `command_chain` item 0 `output_stream` flag must be 'stdout', 'stderr', or 'both'", g:vader_exception
+
+Execute(PreProcess should complain about valid output_stream values in the chain):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'callback': 'x',
+  \ 'executable': 'x',
+  \ 'command_chain': [{'callback': 'foo', 'output_stream': 'stdout'}],
+  \}
+  call ale#linter#PreProcess(g:linter)
+  let g:linter.command_chain[0].output_stream = 'stderr'
+  call ale#linter#PreProcess(g:linter)
+  let g:linter.command_chain[0].output_stream = 'both'
+  call ale#linter#PreProcess(g:linter)
+
+Execute(PreProcess should complain about invalid chain items at higher indices):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'callback': 'x',
+  \ 'executable': 'x',
+  \ 'command_chain': [{'callback': 'foo'}, {'callback': 123}],
+  \}
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual 'The `command_chain` item 1 must define a `callback` function', g:vader_exception
