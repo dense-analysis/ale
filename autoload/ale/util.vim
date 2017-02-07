@@ -90,6 +90,17 @@ function! ale#util#LocItemCompare(left, right) abort
         return 1
     endif
 
+    " put warnings after errors (for the same line) since the text that shows
+    " when the cursor is moved will show only the first entry
+
+    if a:left['type'] < a:right['type']
+      return -1
+    endif
+
+    if a:left['type'] > a:right['type']
+      return 1
+    endif
+
     if a:left['col'] < a:right['col']
         return -1
     endif
