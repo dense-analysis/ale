@@ -3,33 +3,32 @@
 
 " inspired by work from dzhou121 <dzhou121@gmail.com>
 
-" get a list of all source directories from $GOPATH and $GOROOT
-function! s:srcdirs()
-  if exists('s:src_dirs')
-    return s:src_dirs
+function! s:goenv()
+  if exists('s:go_env')
+    return s:go_env
   endif
 
-  let s:src_dirs = []
-  for l:val in systemlist('go env GOPATH GOROOT')
-    if has('unix')
-      let l:paths = split(l:val, ':')
-    else
-      let l:paths = split(l:val, ';')
-    endif
+  let l:env = systemlist('go env GOPATH GOROOT')
 
-    call extend(s:src_dirs, l:paths)
-  endfor
+  let s:go_env = {
+  \ 'GOPATH': l:env[0],
+  \ 'GOROOT': l:env[1],
+  \}
 
-  return s:src_dirs
+  return s:go_env
 endfunction
 
-function! s:osarch()
-  if exists('s:os_arch')
-    return s:os_arch
-  endif
+let s:splitchar = ':'
+if !has('unix')
+  let s:splitchar = ';'
+endif
 
-  let s:os_arch = join(systemlist('go env GOOS GOARCH'), '_')
-  return s:os_arch
+" get a list of all source directories from $GOPATH and $GOROOT
+function! s:srcdirs()
+  let l:env = s:goenv()
+  let l:paths = split(l:env.GOPATH, s:splitchar)
+  call add(l:paths, l:env.GOROOT)
+  return l:paths
 endfunction
 
 " figure out from a directory like `/home/user/go/src/some/package` that the
@@ -43,87 +42,81 @@ function! s:pkgimportpath(pkgdir)
   endfor
 endfunction
 
-python import vim
-python import json
-
 " get the package info data structure using `go list`
-" TODO(jrubin) this would be good to chain
-function! s:pkginfo(pkgdir)
-  let l:importpath = s:pkgimportpath(a:pkgdir)
-  let l:json = system('go list -json ' . l:importpath)
-  return pyeval('json.loads(vim.eval("l:json"))')
+function! ale_linters#go#gobuild#GoList(buffer) abort
+  let l:bufname = resolve(bufname(a:buffer))
+  let l:pkgdir = fnamemodify(l:bufname, ':p:h')
+  return 'go list -json ' . s:pkgimportpath(l:pkgdir)
 endfunction
+
+let s:filekeys = [
+\ 'GoFiles',
+\ 'CgoFiles',
+\ 'CFiles',
+\ 'CXXFiles',
+\ 'MFiles',
+\ 'HFiles',
+\ 'FFiles',
+\ 'SFiles',
+\ 'SwigFiles',
+\ 'SwigCXXFiles',
+\ 'SysoFiles',
+\ 'TestGoFiles',
+\ 'XTestGoFiles',
+\]
 
 " get the go and test go files from the package
 " will return empty list if the package has any cgo or other invalid files
-function! s:pkgfiles(pkgdir)
-  " get the package info data structure from `go list`
-  let l:pkginfo = s:pkginfo(a:pkgdir)
-
-  let l:invalid = [
-        \ 'CgoFiles',
-        \ 'CFiles',
-        \ 'CXXFiles',
-        \ 'MFiles',
-        \ 'HFiles',
-        \ 'FFiles',
-        \ 'SFiles',
-        \ 'SwigFiles',
-        \ 'SwigCXXFiles',
-        \ 'SysoFiles',
-        \ 'XTestGoFiles',
-        \]
-
-  for l:key in l:invalid
-    if has_key(l:pkginfo, l:key) && !empty(l:pkginfo[l:key])
-      " `go tool compile` will not work with this package
-      return []
-    endif
-  endfor
-
+function! s:pkgfiles(pkginfo)
   let l:files = []
-  for l:key in [ 'GoFiles', 'TestGoFiles' ]
-    if has_key(l:pkginfo, l:key)
-      call extend(l:files, l:pkginfo[l:key])
+  for l:key in s:filekeys
+    if has_key(a:pkginfo, l:key)
+      call extend(l:files, a:pkginfo[l:key])
     endif
   endfor
 
   " resolve the path of the file relative to the window directory
-  return map(l:files, 'fnamemodify(resolve(l:pkginfo.Dir . "/" . v:val), ":.")')
+  return map(l:files, 'shellescape(fnamemodify(resolve(a:pkginfo.Dir . "/" . v:val), ":p"))')
 endfunction
 
-function! ale_linters#go#gobuild#GetCommand(buffer) abort
-  let l:bufname = resolve(bufname(a:buffer))
-  let l:pkgdir = fnamemodify(l:bufname, ':p:h')
+function! ale_linters#go#gobuild#CopyFiles(buffer, golist_output) abort
+  " concatenate the output
+  let l:pkginfo = json_decode(join(a:golist_output, "\n"))
 
   " get all files for the package
-  let l:files = s:pkgfiles(l:pkgdir)
+  let l:files = s:pkgfiles(l:pkginfo)
 
-  " the package can't be compiled by `go tool compile`
-  if empty(l:files)
-    return ''
-  endif
+  " copy the files to a temp directory with $GOPATH structure
+  let l:tempdir = tempname()
+  let l:temppkgdir = l:tempdir . '/src/' . s:pkgimportpath(l:pkginfo.Dir)
+  call mkdir(l:temppkgdir, "p", 0700)
 
-  " `go install` all dependencies so that `go tool compile` can work
-  " TODO(jrubin) this would be good to chain
-  call system('go test -i ' . s:pkgimportpath(l:pkgdir))
+  return 'cp ' . join(l:files, ' ') . ' ' . shellescape(l:temppkgdir) . ' && echo ' . shellescape(l:tempdir)
+endfunction
+
+function! ale_linters#go#gobuild#GetCommand(buffer, copy_output) abort
+  let l:tempdir = a:copy_output[0]
+  let l:bufname = resolve(bufname(a:buffer))
+  let l:pkgdir = fnamemodify(l:bufname, ':p:h')
+  let l:importpath = s:pkgimportpath(l:pkgdir)
+  let l:temppkgdir = l:tempdir . '/src/' . l:importpath
 
   " the basename of the go file
-  let l:fname = fnamemodify(l:bufname, ':p:t')
+  let l:fname = fnamemodify(l:bufname, ':t')
 
-  " filter out the buffer file itself from the list
-  call filter(l:files, 'fnamemodify(v:val, '':t'') != l:fname')
+  " write the buffer to the tempdir
+  call writefile(getbufline(a:buffer, 1, '$'), l:temppkgdir . '/' . l:fname)
 
-  " e.g. linux_amd64
-  let l:import_args = map(copy(s:srcdirs()), '"-I " . v:val . "/pkg/" . s:osarch()')
-
-  return g:ale#util#stdin_wrapper . ' .go go tool compile ' . join(l:import_args) . ' -o /dev/null ' . join(l:files)
+  return 'GOPATH="' . l:tempdir . ':${GOPATH}" go test -c -o /dev/null ' . l:importpath
 endfunction
 
 call ale#linter#Define('go', {
 \   'name': 'go build',
-\   'output_stream': 'stdout',
 \   'executable': 'go',
-\   'command_callback': 'ale_linters#go#gobuild#GetCommand',
+\   'command_chain': [
+\     {'callback': 'ale_linters#go#gobuild#GoList',     'output_stream': 'stdout'},
+\     {'callback': 'ale_linters#go#gobuild#CopyFiles',  'output_stream': 'stdout'},
+\     {'callback': 'ale_linters#go#gobuild#GetCommand', 'output_stream': 'stderr'},
+\   ],
 \   'callback': 'ale#handlers#HandleUnixFormatAsError',
 \})
