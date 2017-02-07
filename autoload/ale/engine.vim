@@ -198,15 +198,9 @@ function! s:FixLocList(buffer, loclist) abort
     " Some errors have line numbers beyond the end of the file,
     " so we need to adjust them so they set the error at the last line
     " of the file instead.
+    let l:last_line_number = ale#util#GetLineCount(a:buffer)
+
     for l:item in a:loclist
-        let l:bufnr = a:buffer
-
-        if has_key(l:item, 'bufnr') && l:item.bufnr >= 0
-          let l:bufnr = l:item.bufnr
-        endif
-
-        let l:last_line_number = ale#util#GetLineCount(l:bufnr)
-
         if l:item.lnum == 0
             " When errors appear at line 0, put them at line 1 instead.
             let l:item.lnum = 1

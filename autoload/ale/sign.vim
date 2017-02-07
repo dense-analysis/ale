@@ -67,14 +67,10 @@ endfunction
 " Given a loclist, combine the loclist into a list of signs such that only
 " one sign appears per line. Error lines will take precedence.
 " The loclist will have been previously sorted.
-function! ale#sign#CombineSigns(buffer, loclist) abort
+function! ale#sign#CombineSigns(loclist) abort
     let l:signlist = []
 
     for l:obj in a:loclist
-        if has_key(l:obj, 'bufnr') && l:obj.bufnr >= 0 && l:obj.bufnr != a:buffer
-          continue
-        endif
-
         let l:should_append = 1
 
         if l:obj.lnum < 1
@@ -104,7 +100,7 @@ endfunction
 
 " This function will set the signs which show up on the left.
 function! ale#sign#SetSigns(buffer, loclist) abort
-    let l:signlist = ale#sign#CombineSigns(a:buffer, a:loclist)
+    let l:signlist = ale#sign#CombineSigns(a:loclist)
 
     " Find the current markers
     let l:current_id_list = ale#sign#FindCurrentSigns(a:buffer)
