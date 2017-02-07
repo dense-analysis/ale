@@ -107,7 +107,11 @@ function! ale_linters#go#gobuild#GetCommand(buffer, copy_output) abort
   " write the buffer to the tempdir
   call writefile(getbufline(a:buffer, 1, '$'), l:temppkgdir . '/' . l:fname)
 
-  return 'GOPATH="' . escape(l:tempdir, "'") . ':${GOPATH}" go test -c -o /dev/null ' . shellescape(l:importpath)
+  let l:env = s:goenv()
+  let l:gopaths = [ l:tempdir ]
+  call extend(l:gopaths, split(s:goenv().GOPATH, s:splitchar))
+
+  return 'GOPATH=' . shellescape(join(l:gopaths, s:splitchar)) . ' go test -c -o /dev/null ' . shellescape(l:importpath)
 endfunction
 
 call ale#linter#Define('go', {
