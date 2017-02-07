@@ -8,14 +8,7 @@ function! ale_linters#go#gobuild#GoEnv(buffer) abort
     return ''
   endif
 
-  let l:env = systemlist('go env GOPATH GOROOT')
-
-  let s:go_env = {
-  \ 'GOPATH': l:env[0],
-  \ 'GOROOT': l:env[1],
-  \}
-
-  return ''
+  return 'go env GOPATH GOROOT'
 endfunction
 
 let s:SplitChar = has('unix') ? ':' : ':'
@@ -45,6 +38,13 @@ endfunction
 
 " get the package info data structure using `go list`
 function! ale_linters#go#gobuild#GoList(buffer, goenv_output) abort
+  if !empty(a:goenv_output)
+    let s:go_env = {
+    \ 'GOPATH': a:goenv_output[0],
+    \ 'GOROOT': a:goenv_output[1],
+    \}
+  endif
+
   return 'go list -json ' . shellescape(s:PackageImportPath(a:buffer))
 endfunction
 
