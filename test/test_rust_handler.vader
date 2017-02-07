@@ -1,0 +1,28 @@
+Execute(The Rust handler should handle rustc output):
+  AssertEqual
+  \ [
+  \   {'lnum': 15, 'bufnr': 347, 'vcol': 0, 'nr': -1, 'type': 'E', 'col': 418, 'text': 'expected one of `.`, `;`, `?`, `}`, or an operator, found `for`'},
+  \   {'lnum': 13, 'bufnr': 347, 'vcol': 0, 'nr': -1, 'type': 'E', 'col': 407, 'text': 'no method named `wat` found for type `std::string::String` in the current scope'},
+  \ ],
+  \ ale#handlers#rust#HandleRustErrorsForFile(347, 'src/playpen.rs', [
+  \   '',
+  \   'ignore this',
+  \   '{"message":"expected one of `.`, `;`, `?`, `}`, or an operator, found `for`","code":null,"level":"error","spans":[{"file_name":"<anon>","byte_start":418,"byte_end":421,"line_start":15,"line_end":15,"column_start":5,"column_end":8,"is_primary":true,"text":[{"text":"    for chr in source.trim().chars() {","highlight_start":5,"highlight_end":8}],"label":null,"suggested_replacement":null,"expansion":null}],"children":[],"rendered":null}',
+  \   '{"message":"main function not found","code":null,"level":"error","spans":[],"children":[],"rendered":null}',
+  \   '{"message":"no method named `wat` found for type `std::string::String` in the current scope","code":null,"level":"error","spans":[{"file_name":"<anon>","byte_start":407,"byte_end":410,"line_start":13,"line_end":13,"column_start":7,"column_end":10,"is_primary":true,"text":[{"text":"    s.wat()","highlight_start":7,"highlight_end":10}],"label":null,"suggested_replacement":null,"expansion":null}],"children":[],"rendered":null}',
+  \   '{"message":"aborting due to previous error","code":null,"level":"error","spans":[],"children":[],"rendered":null}',
+  \ ])
+
+Execute(The Rust handler should handle cargo output):
+  AssertEqual
+  \ [
+  \   {'lnum': 15, 'bufnr': 347, 'vcol': 0, 'nr': -1, 'type': 'E', 'col': 11505, 'text': 'expected one of `.`, `;`, `?`, `}`, or an operator, found `for`'},
+  \   {'lnum': 13, 'bufnr': 347, 'vcol': 0, 'nr': -1, 'type': 'E', 'col': 11494, 'text': 'no method named `wat` found for type `std::string::String` in the current scope'},
+  \ ],
+  \ ale#handlers#rust#HandleRustErrorsForFile(347, 'src/playpen.rs', [
+  \   '',
+  \   'ignore this',
+  \   '{"message":{"children":[],"code":null,"level":"error","message":"expected one of `.`, `;`, `?`, `}`, or an operator, found `for`","rendered":null,"spans":[{"byte_end":11508,"byte_start":11505,"column_end":8,"column_start":5,"expansion":null,"file_name":"src/playpen.rs","is_primary":true,"label":null,"line_end":15,"line_start":15,"suggested_replacement":null,"text":[{"highlight_end":8,"highlight_start":5,"text":"    for chr in source.trim().chars() {"}]}]},"package_id":"update 0.0.1 (path+file:///home/w0rp/Downloads/rust-by-example)","reason":"compiler-message","target":{"kind":["bin"],"name":"update","src_path":"/home/w0rp/Downloads/rust-by-example/src/main.rs"}}',
+  \   '{"message":{"children":[],"code":null,"level":"error","message":"no method named `wat` found for type `std::string::String` in the current scope","rendered":null,"spans":[{"byte_end":11497,"byte_start":11494,"column_end":10,"column_start":7,"expansion":null,"file_name":"src/playpen.rs","is_primary":true,"label":null,"line_end":13,"line_start":13,"suggested_replacement":null,"text":[{"highlight_end":10,"highlight_start":7,"text":"    s.wat()"}]}]},"package_id":"update 0.0.1 (path+file:///home/w0rp/Downloads/rust-by-example)","reason":"compiler-message","target":{"kind":["bin"],"name":"update","src_path":"/home/w0rp/Downloads/rust-by-example/src/main.rs"}}',
+  \   '{"message":{"children":[],"code":null,"level":"error","message":"aborting due to previous error","rendered":null,"spans":[]},"package_id":"update 0.0.1 (path+file:///home/w0rp/Downloads/rust-by-example)","reason":"compiler-message","target":{"kind":["bin"],"name":"update","src_path":"/home/w0rp/Downloads/rust-by-example/src/main.rs"}}',
+  \ ])
