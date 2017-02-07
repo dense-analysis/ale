@@ -18,7 +18,7 @@ function! ale_linters#rust#rustc#HandleRustcErrors(buffer_number, errorlines) ab
 
         let l:error = json_decode(l:errorline)
 
-        if has_key(l:error, 'message')
+        if has_key(l:error, 'message') && type(l:error.message) == type({})
             let l:error = l:error.message
         endif
 
