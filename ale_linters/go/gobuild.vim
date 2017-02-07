@@ -34,6 +34,8 @@ function! s:PackageImportPath(buffer) abort
       return l:pkgdir[strlen(l:path):]
     endif
   endfor
+
+  return ''
 endfunction
 
 " get the package info data structure using `go list`
