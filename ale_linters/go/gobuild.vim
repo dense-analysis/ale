@@ -46,7 +46,7 @@ endfunction
 function! ale_linters#go#gobuild#GoList(buffer) abort
   let l:bufname = resolve(bufname(a:buffer))
   let l:pkgdir = fnamemodify(l:bufname, ':p:h')
-  return 'go list -json ' . s:pkgimportpath(l:pkgdir)
+  return 'go list -json ' . shellescape(s:pkgimportpath(l:pkgdir))
 endfunction
 
 let s:filekeys = [
@@ -107,7 +107,7 @@ function! ale_linters#go#gobuild#GetCommand(buffer, copy_output) abort
   " write the buffer to the tempdir
   call writefile(getbufline(a:buffer, 1, '$'), l:temppkgdir . '/' . l:fname)
 
-  return 'GOPATH="' . l:tempdir . ':${GOPATH}" go test -c -o /dev/null ' . l:importpath
+  return 'GOPATH="' . escape(l:tempdir, "'") . ':${GOPATH}" go test -c -o /dev/null ' . shellescape(l:importpath)
 endfunction
 
 call ale#linter#Define('go', {
