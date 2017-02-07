@@ -17,12 +17,13 @@ function! ale_linters#rust#rustc#HandleRustcErrors(buffer_number, errorlines) ab
         endif
 
         let l:error = json_decode(l:errorline)
-        if !has_key(l:error, 'code') && !has_key(l:error, 'message')
-            continue
-        endif
 
         if has_key(l:error, 'message')
             let l:error = l:error.message
+        endif
+
+        if !has_key(l:error, 'code')
+            continue
         endif
 
         if !empty(l:error.code) && index(g:ale_rust_ignore_error_codes, l:error.code.code) > -1
