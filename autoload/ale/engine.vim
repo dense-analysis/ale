@@ -201,6 +201,16 @@ function! s:FixLocList(buffer, loclist) abort
     let l:last_line_number = ale#util#GetLineCount(a:buffer)
 
     for l:item in a:loclist
+        if g:ale_experimental_multibuffer
+            let l:bufnr = a:buffer
+
+            if has_key(l:item, 'bufnr') && l:item.bufnr >= 0
+              let l:bufnr = l:item.bufnr
+            endif
+
+            let l:last_line_number = ale#util#GetLineCount(l:bufnr)
+        endif
+
         if l:item.lnum == 0
             " When errors appear at line 0, put them at line 1 instead.
             let l:item.lnum = 1

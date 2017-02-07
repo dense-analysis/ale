@@ -164,8 +164,6 @@ endfunction
 let s:path_pattern = '[a-zA-Z]\?\\\?:\?[[:alnum:]/\.\-_]\+'
 let s:handler_pattern = '^\(' . s:path_pattern . '\):\(\d\+\):\?\(\d\+\)\?: \(.\+\)$'
 
-let s:multibuffer = 0
-
 function! ale_linters#go#gobuild#Handler(buffer, lines) abort
   let l:output = []
 
@@ -182,7 +180,7 @@ function! ale_linters#go#gobuild#Handler(buffer, lines) abort
       continue
     endif
 
-    if !s:multibuffer && l:buffer != a:buffer
+    if !g:ale_experimental_multibuffer && l:buffer != a:buffer
       " strip lines from other buffers
       continue
     endif

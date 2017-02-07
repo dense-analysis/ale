@@ -119,6 +119,10 @@ if g:ale_echo_cursor
     augroup END
 endif
 
+" Experimental support for showing warnings/errors in buffers other than the one
+" being linted
+let g:ale_experimental_multibuffer = get(g:, 'ale_experimental_multibuffer', 0)
+
 " String format for statusline
 " Its a list where:
 " * The 1st element is for errors
