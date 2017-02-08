@@ -25,7 +25,6 @@ function! ale_linters#go#gometalinter#Handler(buffer, lines) abort
   let l:output = []
 
   for l:line in a:lines
-    echomsg l:line
     let l:match = matchlist(l:line, s:handler_pattern)
 
     if len(l:match) == 0
