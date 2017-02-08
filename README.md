@@ -59,7 +59,7 @@ name. That seems to be the fairest way to arrange this table.
 | CoffeeScript | [coffee](http://coffeescript.org/), [coffeelint](https://www.npmjs.com/package/coffeelint) |
 | CSS | [csslint](http://csslint.net/), [stylelint](https://github.com/stylelint/stylelint) |
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
-| D | [dmd](https://dlang.org/dmd-linux.html)^ |
+| D | [dmd](https://dlang.org/dmd-linux.html) |
 | Dockerfile | [hadolint](https://github.com/lukasmartinelli/hadolint) |
 | Elixir | [credo](https://github.com/rrrene/credo) |
 | Elm | [elm-make](https://github.com/elm-lang/elm-make) |
@@ -93,14 +93,13 @@ name. That seems to be the fairest way to arrange this table.
 | Vim | [vint](https://github.com/Kuniwak/vint) |
 | YAML | [yamllint](https://yamllint.readthedocs.io/) |
 
-* *^ Supported only on Unix machines via a wrapper script.*
 * *^^ No text linters are enabled by default.*
 
 If you would like to see support for more languages and tools, please
 [create an issue](https://github.com/w0rp/ale/issues)
 or [create a pull request](https://github.com/w0rp/ale/pulls).
 If your tool can read from stdin or you have code to suggest which is good,
-support can be happily added for more tools.
+support can be happily added for it.
 
 <a name="usage"></a>
 
