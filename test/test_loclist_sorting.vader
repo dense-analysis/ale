@@ -1,9 +1,10 @@
 Before:
   let g:loclist = [
-  \ {'lnum': 5, 'col': 5},
-  \ {'lnum': 5, 'col': 4},
-  \ {'lnum': 2, 'col': 10},
-  \ {'lnum': 3, 'col': 2},
+  \ {'lnum': 5, 'col': 5, 'type': 'W'},
+  \ {'lnum': 5, 'col': 4, 'type': 'W'},
+  \ {'lnum': 2, 'col': 10, 'type': 'W'},
+  \ {'lnum': 3, 'col': 2, 'type': 'W'},
+  \ {'lnum': 3, 'col': 1, 'type': 'E'},
   \]
 
 Execute (Sort loclist with comparison function):
@@ -11,10 +12,11 @@ Execute (Sort loclist with comparison function):
 
 Then (loclist item should be sorted):
   AssertEqual [
-  \ {'lnum': 2, 'col': 10},
-  \ {'lnum': 3, 'col': 2},
-  \ {'lnum': 5, 'col': 4},
-  \ {'lnum': 5, 'col': 5},
+  \ {'lnum': 2, 'col': 10, 'type': 'W'},
+  \ {'lnum': 3, 'col': 1, 'type': 'E'},
+  \ {'lnum': 3, 'col': 2, 'type': 'W'},
+  \ {'lnum': 5, 'col': 4, 'type': 'W'},
+  \ {'lnum': 5, 'col': 5, 'type': 'W'},
   \], g:loclist
 
 After:
