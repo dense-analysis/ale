@@ -93,14 +93,6 @@ function! ale#util#LocItemCompare(left, right) abort
     " put warnings after errors (for the same line) since the text that shows
     " when the cursor is moved will show only the first entry
 
-    if a:left['type'] < a:right['type']
-      return -1
-    endif
-
-    if a:left['type'] > a:right['type']
-      return 1
-    endif
-
     if a:left['col'] < a:right['col']
         return -1
     endif
@@ -109,40 +101,75 @@ function! ale#util#LocItemCompare(left, right) abort
         return 1
     endif
 
+    if a:left['type'] < a:right['type']
+      return -1
+    endif
+
+    if a:left['type'] > a:right['type']
+      return 1
+    endif
+
     return 0
 endfunction
 
 " This function will perform a binary search to find a message from the
 " loclist to echo when the cursor moves.
 function! ale#util#BinarySearch(loclist, line, column) abort
+    if empty(a:loclist)
+      return -1
+    endif
+
     let l:min = 0
     let l:max = len(a:loclist) - 1
     let l:last_column_match = -1
 
     while 1
         if l:max < l:min
-            return l:last_column_match
+            " return l:last_column_match
+            let l:mid = l:last_column_match
+            break
         endif
 
         let l:mid = (l:min + l:max) / 2
-        let l:obj = a:loclist[l:mid]
 
         " Binary search to get on the same line
         if a:loclist[l:mid]['lnum'] < a:line
             let l:min = l:mid + 1
+            continue
         elseif a:loclist[l:mid]['lnum'] > a:line
             let l:max = l:mid - 1
-        else
-            let l:last_column_match = l:mid
+            continue
+        endif
 
-            " Binary search to get the same column, or near it
-            if a:loclist[l:mid]['col'] < a:column
-                let l:min = l:mid + 1
-            elseif a:loclist[l:mid]['col'] > a:column
-                let l:max = l:mid - 1
-            else
-                return l:mid
-            endif
+        let l:last_column_match = l:mid
+
+        " Binary search to get the same column, or near it
+        if a:loclist[l:mid]['col'] < a:column
+            let l:min = l:mid + 1
+        elseif a:loclist[l:mid]['col'] > a:column
+            let l:max = l:mid - 1
+        else
+            break
         endif
     endwhile
+
+    let l:obj = a:loclist[l:mid]
+
+    " Move backward to find the first message in loclist for the matched lnum
+    " and col. The first message has the highest severity.
+    while l:mid > 0
+        let l:prev = a:loclist[l:mid - 1]
+
+        if l:obj['lnum'] != l:prev['lnum']
+            break
+        endif
+
+        if l:obj['col'] != l:prev['col']
+            break
+        endif
+
+        let l:mid -= 1
+    endwhile
+
+    return l:mid
 endfunction
