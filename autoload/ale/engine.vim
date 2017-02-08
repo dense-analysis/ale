@@ -215,6 +215,7 @@ function! s:RunJob(command, generic_job_options) abort
     let l:linter = a:generic_job_options.linter
     let l:output_stream = a:generic_job_options.output_stream
     let l:next_chain_index = a:generic_job_options.next_chain_index
+    let l:read_buffer = a:generic_job_options.read_buffer
     let l:command = a:command
 
     if l:command =~# '%s'
@@ -270,10 +271,12 @@ function! s:RunJob(command, generic_job_options) abort
             " Execute the command with the shell, to fix escaping issues.
             let l:command = split(&shell) + split(&shellcmdflag) + [l:command]
 
-            " On Unix machines, we can send the Vim buffer directly.
-            " This is faster than reading the lines ourselves.
-            let l:job_options.in_io = 'buffer'
-            let l:job_options.in_buf = l:buffer
+            if l:read_buffer
+                " On Unix machines, we can send the Vim buffer directly.
+                " This is faster than reading the lines ourselves.
+                let l:job_options.in_io = 'buffer'
+                let l:job_options.in_buf = l:buffer
+            endif
         endif
 
         " Vim 8 will read the stdin from the file's buffer.
@@ -293,20 +296,22 @@ function! s:RunJob(command, generic_job_options) abort
         \   'next_chain_index': l:next_chain_index,
         \}
 
-        if has('nvim')
-            " In NeoVim, we have to send the buffer lines ourselves.
-            let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
+        if l:read_buffer
+            if has('nvim')
+                " In NeoVim, we have to send the buffer lines ourselves.
+                let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
 
-            call jobsend(l:job, l:input)
-            call jobclose(l:job, 'stdin')
-        elseif has('win32')
-            " On some Vim versions, we have to send the buffer data ourselves.
-            let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
-            let l:channel = job_getchannel(l:job)
+                call jobsend(l:job, l:input)
+                call jobclose(l:job, 'stdin')
+            elseif has('win32')
+                " On some Vim versions, we have to send the buffer data ourselves.
+                let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
+                let l:channel = job_getchannel(l:job)
 
-            if ch_status(l:channel) ==# 'open'
-                call ch_sendraw(l:channel, l:input)
-                call ch_close_in(l:channel)
+                if ch_status(l:channel) ==# 'open'
+                    call ch_sendraw(l:channel, l:input)
+                    call ch_close_in(l:channel)
+                endif
             endif
         endif
     endif
@@ -364,11 +369,14 @@ function! s:InvokeChain(buffer, linter, chain_index, input) abort
         let l:command = a:linter.command
     endif
 
+    let l:is_last_job = l:chain_index >= len(get(a:linter, 'command_chain', [])) - 1
+
     call s:RunJob(l:command, {
     \   'buffer': a:buffer,
     \   'linter': a:linter,
     \   'output_stream': l:output_stream,
     \   'next_chain_index': l:chain_index + 1,
+    \   'read_buffer': l:is_last_job,
     \})
 endfunction
 
