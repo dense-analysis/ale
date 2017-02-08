@@ -44,12 +44,15 @@ function! ale_linters#go#gobuild#ParentImportPaths(buffer) abort
   let l:importpath = ale_linters#go#gobuild#PackageImportPath(a:buffer)
   let l:output = []
 
-  while stridx(l:importpath, '/') >= 0
+  while 1
     call add(l:output, l:importpath)
+
+    if stridx(l:importpath, '/') == -1
+      break
+    endif
+
     let l:importpath = fnamemodify(l:importpath, ':h')
   endwhile
-
-  call add(l:output, l:importpath)
 
   return l:output
 endfunction
@@ -63,7 +66,13 @@ function! ale_linters#go#gobuild#PkgFiles(buffer) abort
 
   while index(s:SrcDirs(), l:pkgdir) == -1
     call extend(l:files, glob(l:pkgdir . '/*', 1, 1))
-    let l:pkgdir = fnamemodify(l:pkgdir, ':h')
+    let l:tmppkgdir = fnamemodify(l:pkgdir, ':h')
+
+    if l:pkgdir ==# l:tmppkgdir
+      break
+    endif
+
+    let l:pkgdir = l:tmppkgdir
   endwhile
 
   call map(l:files, 'fnamemodify(resolve(v:val), '':p'')')
@@ -128,6 +137,13 @@ function! s:SymlinkFilesCmd(srcdir, destdir, files) abort
 endfunction
 
 function! ale_linters#go#gobuild#CopyFiles(buffer, goenv_output) abort
+  if !empty(a:goenv_output)
+    let g:ale_linters#go#gobuild#go_env = {
+    \ 'GOPATH': a:goenv_output[0],
+    \ 'GOROOT': a:goenv_output[1],
+    \}
+  endif
+
   let l:tempdir = tempname()
   let l:temppkgdir = l:tempdir . '/src/' . ale_linters#go#gobuild#PackageImportPath(a:buffer)
   call mkdir(l:temppkgdir, 'p', 0700)
@@ -144,8 +160,6 @@ function! ale_linters#go#gobuild#CopyFiles(buffer, goenv_output) abort
       call remove(l:files.files, l:idx)
     endif
   endfor
-
-  " TODO(jrubin) test when a package depends on a child package
 
   " symlink the files to a temp directory with $GOPATH structure
   return s:SymlinkFilesCmd(l:files.srcdir, l:tempdir, l:files.files) . ' ; echo ' . shellescape(l:tempdir)
