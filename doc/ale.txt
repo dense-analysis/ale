@@ -36,6 +36,7 @@ CONTENTS                                                         *ale-contents*
     4.24. python-pylint...................|ale-linter-options-python-pylint|
     4.25. erlang..........................|ale-linter-options-erlang|
     4.26. phpmd...........................|ale-linter-options-phpmd|
+    4.27. xo..............................|ale-linter-options-xo|
   5. Linter Integration Notes.............|ale-linter-integration|
     5.1.  merlin..........................|ale-linter-integration-ocaml-merlin|
     5.2. rust.............................|ale-integration-rust|
@@ -86,7 +87,7 @@ The following languages and tools are supported.
 * Go: 'gofmt -e', 'go vet', 'golint', 'go build'
 * Haskell: 'ghc', 'hlint'
 * HTML: 'HTMLHint', 'tidy'
-* JavaScript: 'eslint', 'jscs', 'jshint', 'flow'
+* JavaScript: 'eslint', 'jscs', 'jshint', 'flow', 'xo'
 * JSON: 'jsonlint'
 * LaTeX: 'chktex', 'lacheck'
 * Lua: 'luacheck'
@@ -891,6 +892,41 @@ g:ale_php_phpmd_ruleset                           *g:ale_php_phpmd_ruleset*
 
   This variable controls the ruleset used by phpmd.  Default is to use all of
   the available phpmd rulesets
+
+------------------------------------------------------------------------------
+4.27. xo                                             *ale-linter-options-xo*
+
+g:ale_javascript_xo_executable              *g:ale_javascript_xo_executable*
+
+  Type: |String|
+  Default: `'xo'`
+
+  ALE will first discover the xo path in an ancestor node_modules
+  directory. If no such path exists, this variable will be used instead.
+
+  This variable can be set to change the path to xo.
+
+  If you wish to use only a globally installed version of xo, set
+  |g:ale_javascript_xo_use_global| to `1`.
+
+
+g:ale_javascript_xo_options                   *g:ale_javascript_xo_options*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to xo.
+
+
+g:ale_javascript_xo_use_global             *g:ale_javascript_xo_use_global*
+
+  Type: |String|
+  Default: `0`
+
+  This variable controls whether or not ALE will search for a local path for
+  xo first. If this variable is set to `1`, then ALE will always use the
+  global version of xo, in preference to locally installed versions of
+  xo in node_modules.
 
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*
