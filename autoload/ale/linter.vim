@@ -114,6 +114,15 @@ function! ale#linter#PreProcess(linter) abort
         \   . 'must be defined'
     endif
 
+    if (
+    \   has_key(a:linter, 'command')
+    \   + has_key(a:linter, 'command_chain')
+    \   + has_key(a:linter, 'command_callback')
+    \) > 1
+        throw 'Only one of `command`, `command_callback`, or `command_chain` '
+        \   . 'should be set'
+    endif
+
     let l:obj.output_stream = get(a:linter, 'output_stream', 'stdout')
 
     if type(l:obj.output_stream) != type('')
