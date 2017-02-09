@@ -67,7 +67,37 @@ function! ale#linter#PreProcess(linter) abort
         throw 'Either `executable` or `executable_callback` must be defined'
     endif
 
-    if has_key(a:linter, 'command_callback')
+    if has_key(a:linter, 'command_chain')
+        let l:obj.command_chain = a:linter.command_chain
+
+        if type(l:obj.command_chain) != type([])
+            throw '`command_chain` must be a List'
+        endif
+
+        if empty(l:obj.command_chain)
+            throw '`command_chain` must contain at least one item'
+        endif
+
+        let l:link_index = 0
+
+        for l:link in l:obj.command_chain
+            let l:err_prefix = 'The `command_chain` item ' . l:link_index . ' '
+
+            if !s:IsCallback(get(l:link, 'callback'))
+                throw l:err_prefix . 'must define a `callback` function'
+            endif
+
+            if has_key(l:link, 'output_stream')
+                if type(l:link.output_stream) != type('')
+                \|| index(['stdout', 'stderr', 'both'], l:link.output_stream) < 0
+                    throw l:err_prefix . '`output_stream` flag must be '
+                    \   . "'stdout', 'stderr', or 'both'"
+                endif
+            endif
+
+            let l:link_index += 1
+        endfor
+    elseif has_key(a:linter, 'command_callback')
         let l:obj.command_callback = a:linter.command_callback
 
         if !s:IsCallback(l:obj.command_callback)

@@ -1,0 +1,61 @@
+Before:
+  let g:linter_output = []
+  let g:first_echo_called = 0
+  let g:second_echo_called = 0
+  let g:final_callback_called = 0
+
+  function! CollectResults(buffer, output)
+    let g:final_callback_called = 1
+    let g:linter_output = a:output
+    return []
+  endfunction
+  function! RunFirstEcho(buffer)
+    let g:first_echo_called = 1
+
+    return 'echo foo'
+  endfunction
+  function! RunSecondEcho(buffer, output)
+    let g:second_echo_called = 1
+
+    return 'echo bar'
+  endfunction
+
+  call ale#linter#Define('foobar', {
+  \ 'name': 'testlinter',
+  \ 'callback': 'CollectResults',
+  \ 'executable': 'echo',
+  \ 'command_chain': [
+  \   {
+  \     'callback': 'RunFirstEcho',
+  \     'output_stream': 'stdout',
+  \   },
+  \   {
+  \     'callback': 'RunSecondEcho',
+  \     'output_stream': 'stdout',
+  \   },
+  \ ],
+  \})
+
+After:
+  unlet! g:first_echo_called
+  unlet! g:second_echo_called
+  unlet! g:final_callback_called
+  unlet! g:linter_output
+  let g:ale_buffer_info = {}
+  call ale#linter#Reset()
+  delfunction CollectResults
+  delfunction RunFirstEcho
+  delfunction RunSecondEcho
+
+Given foobar (Some imaginary filetype):
+  anything
+
+Execute(Check the results of running the chain):
+  AssertEqual 'foobar', &filetype
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+
+  Assert g:first_echo_called, 'The first chain item was not called'
+  Assert g:second_echo_called, 'The second chain item was not called'
+  Assert g:final_callback_called, 'The final callback was not called'
+  AssertEqual ['bar'], g:linter_output

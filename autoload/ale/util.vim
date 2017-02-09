@@ -8,7 +8,7 @@ function! s:FindWrapperScript() abort
 
         if filereadable(l:path)
             if has('win32')
-                return l:path . '.bat'
+                return l:path . '.exe'
             endif
 
             return l:path

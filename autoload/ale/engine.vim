@@ -53,6 +53,11 @@ function! ale#engine#ClearJob(job) abort
 endfunction
 
 function! s:StopPreviousJobs(buffer, linter) abort
+    if !has_key(g:ale_buffer_info, a:buffer)
+        " Do nothing if we didn't run anything for the buffer.
+        return
+    endif
+
     let l:new_job_list = []
 
     for l:job in g:ale_buffer_info[a:buffer].job_list
@@ -161,24 +166,28 @@ function! s:HandleExit(job) abort
     let g:ale_buffer_info[l:buffer].loclist = g:ale_buffer_info[l:buffer].new_loclist
     let g:ale_buffer_info[l:buffer].new_loclist = []
 
-    if g:ale_set_quickfix || g:ale_set_loclist
-        call ale#list#SetLists(g:ale_buffer_info[l:buffer].loclist)
-    endif
-
-    if g:ale_set_signs
-        call ale#sign#SetSigns(l:buffer, g:ale_buffer_info[l:buffer].loclist)
-    endif
-
-    if exists('*ale#statusline#Update')
-        " Don't load/run if not already loaded.
-        call ale#statusline#Update(l:buffer, g:ale_buffer_info[l:buffer].loclist)
-    endif
+    call ale#engine#SetResults(l:buffer, g:ale_buffer_info[l:buffer].loclist)
 
     " Call user autocommands. This allows users to hook into ALE's lint cycle.
     silent doautocmd User ALELint
 
     " Mark line 200, column 17 with a squiggly line or something
     " matchadd('ALEError', '\%200l\%17v')
+endfunction
+
+function! ale#engine#SetResults(buffer, loclist) abort
+    if g:ale_set_quickfix || g:ale_set_loclist
+        call ale#list#SetLists(a:loclist)
+    endif
+
+    if g:ale_set_signs
+        call ale#sign#SetSigns(a:buffer, a:loclist)
+    endif
+
+    if exists('*ale#statusline#Update')
+        " Don't load/run if not already loaded.
+        call ale#statusline#Update(a:buffer, a:loclist)
+    endif
 endfunction
 
 function! s:HandleExitNeoVim(job, data, event) abort
@@ -210,6 +219,7 @@ function! s:RunJob(command, generic_job_options) abort
     let l:linter = a:generic_job_options.linter
     let l:output_stream = a:generic_job_options.output_stream
     let l:next_chain_index = a:generic_job_options.next_chain_index
+    let l:read_buffer = a:generic_job_options.read_buffer
     let l:command = a:command
 
     if l:command =~# '%s'
@@ -265,10 +275,12 @@ function! s:RunJob(command, generic_job_options) abort
             " Execute the command with the shell, to fix escaping issues.
             let l:command = split(&shell) + split(&shellcmdflag) + [l:command]
 
-            " On Unix machines, we can send the Vim buffer directly.
-            " This is faster than reading the lines ourselves.
-            let l:job_options.in_io = 'buffer'
-            let l:job_options.in_buf = l:buffer
+            if l:read_buffer
+                " On Unix machines, we can send the Vim buffer directly.
+                " This is faster than reading the lines ourselves.
+                let l:job_options.in_io = 'buffer'
+                let l:job_options.in_buf = l:buffer
+            endif
         endif
 
         " Vim 8 will read the stdin from the file's buffer.
@@ -288,20 +300,22 @@ function! s:RunJob(command, generic_job_options) abort
         \   'next_chain_index': l:next_chain_index,
         \}
 
-        if has('nvim')
-            " In NeoVim, we have to send the buffer lines ourselves.
-            let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
+        if l:read_buffer
+            if has('nvim')
+                " In NeoVim, we have to send the buffer lines ourselves.
+                let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
 
-            call jobsend(l:job, l:input)
-            call jobclose(l:job, 'stdin')
-        elseif has('win32')
-            " On some Vim versions, we have to send the buffer data ourselves.
-            let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
-            let l:channel = job_getchannel(l:job)
+                call jobsend(l:job, l:input)
+                call jobclose(l:job, 'stdin')
+            elseif has('win32')
+                " On some Vim versions, we have to send the buffer data ourselves.
+                let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
+                let l:channel = job_getchannel(l:job)
 
-            if ch_status(l:channel) ==# 'open'
-                call ch_sendraw(l:channel, l:input)
-                call ch_close_in(l:channel)
+                if ch_status(l:channel) ==# 'open'
+                    call ch_sendraw(l:channel, l:input)
+                    call ch_close_in(l:channel)
+                endif
             endif
         endif
     endif
@@ -309,25 +323,48 @@ endfunction
 
 function! s:InvokeChain(buffer, linter, chain_index, input) abort
     let l:output_stream = get(a:linter, 'output_stream', 'stdout')
+    let l:chain_index = a:chain_index
+    let l:input = a:input
 
     if has_key(a:linter, 'command_chain')
-        " Run a chain of commands, one asychronous command after the other,
-        " so that many programs can be run in a sequence.
-        let l:chain_item = a:linter.command_chain[a:chain_index]
+        while l:chain_index < len(a:linter.command_chain)
+            " Run a chain of commands, one asychronous command after the other,
+            " so that many programs can be run in a sequence.
+            let l:chain_item = a:linter.command_chain[l:chain_index]
 
-        " The chain item can override the output_stream option.
-        if has_key(l:chain_item)
-            let l:output_stream = l:chain_item.output_stream
-        endif
+            " The chain item can override the output_stream option.
+            if has_key(l:chain_item, 'output_stream')
+                let l:output_stream = l:chain_item.output_stream
+            endif
 
-        let l:callback = ale#util#GetFunction(a:linter.callback)
+            if l:chain_index == 0
+                " The first callback in the chain takes only a buffer number.
+                let l:command = ale#util#GetFunction(l:chain_item.callback)(
+                \   a:buffer
+                \)
+            else
+                " The second callback in the chain takes some input too.
+                let l:command = ale#util#GetFunction(l:chain_item.callback)(
+                \   a:buffer,
+                \   l:input
+                \)
+            endif
 
-        if a:chain_index == 0
-            " The first callback in the chain takes only a buffer number.
-            let l:command = l:callback(a:buffer)
-        else
-            " The second callback in the chain takes some input too.
-            let l:command = l:callback(a:buffer, a:input)
+            if !empty(l:command)
+                " We hit a command to run, so we'll execute that
+                break
+            endif
+
+            " Command chain items can return an empty string to indicate that
+            " a command should be skipped, so we should try the next item
+            " with no input.
+            let l:input = []
+            let l:chain_index += 1
+        endwhile
+
+        if empty(l:command)
+            " Don't run any jobs if the last command is an empty string.
+            return
         endif
     elseif has_key(a:linter, 'command_callback')
         " If there is a callback for generating a command, call that instead.
@@ -336,11 +373,14 @@ function! s:InvokeChain(buffer, linter, chain_index, input) abort
         let l:command = a:linter.command
     endif
 
+    let l:is_last_job = l:chain_index >= len(get(a:linter, 'command_chain', [])) - 1
+
     call s:RunJob(l:command, {
     \   'buffer': a:buffer,
     \   'linter': a:linter,
     \   'output_stream': l:output_stream,
-    \   'next_chain_index': a:chain_index + 1,
+    \   'next_chain_index': l:chain_index + 1,
+    \   'read_buffer': l:is_last_job,
     \})
 endfunction
 
@@ -406,4 +446,27 @@ function! ale#engine#WaitForJobs(deadline) abort
     " prevents the occasional failure where this function exits after jobs
     " end, but before handlers are run.
     sleep 10ms
+
+    " We must check the buffer data again to see if new jobs started
+    " for command_chain linters.
+    let l:has_new_jobs = 0
+
+    for l:info in values(g:ale_buffer_info)
+        if !empty(l:info.job_list)
+            let l:has_new_jobs = 1
+        endif
+    endfor
+
+    if l:has_new_jobs
+        " We have to wait more. Offset the timeout by the time taken so far.
+        let l:now = system('date +%s%3N') + 0
+        let l:new_deadline = a:deadline - (l:now - l:start_time)
+
+        if l:new_deadline <= 0
+            " Enough time passed already, so stop immediately.
+            throw 'Jobs did not complete on time!'
+        endif
+
+        call ale#engine#WaitForJobs(l:new_deadline)
+    endif
 endfunction

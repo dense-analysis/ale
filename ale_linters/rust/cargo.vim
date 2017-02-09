@@ -1,7 +1,6 @@
 " Author: Daniel Schemala <istjanichtzufassen@gmail.com>
 " Description: rustc invoked by cargo for rust files
 
-
 function! ale_linters#rust#cargo#GetCargoExecutable(bufnr) abort
     if ale#util#FindNearestFile(a:bufnr, 'Cargo.toml') !=# ''
         return 'cargo'
@@ -15,7 +14,7 @@ endfunction
 call ale#linter#Define('rust', {
 \   'name': 'cargo',
 \   'executable_callback': 'ale_linters#rust#cargo#GetCargoExecutable',
-\   'command': 'cargo rustc -- --error-format=json -Z no-trans',
-\   'callback': 'ale_linters#rust#rustc#HandleRustcErrors',
-\   'output_stream': 'stderr',
+\   'command': 'cargo build --message-format=json -q',
+\   'callback': 'ale#handlers#rust#HandleRustErrors',
+\   'output_stream': 'stdout',
 \})

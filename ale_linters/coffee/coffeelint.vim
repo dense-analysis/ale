@@ -1,6 +1,19 @@
 " Author: Prashanth Chandra https://github.com/prashcr
 " Description: coffeelint linter for coffeescript files
 
+function! ale_linters#coffee#coffeelint#GetExecutable(buffer) abort
+    return ale#util#ResolveLocalPath(
+    \   a:buffer,
+    \   'node_modules/.bin/coffeelint',
+    \   'coffeelint'
+    \)
+endfunction
+
+function! ale_linters#coffee#coffeelint#GetCommand(buffer) abort
+    return ale_linters#coffee#coffeelint#GetExecutable(a:buffer)
+    \   . ' --stdin --reporter csv'
+endfunction
+
 function! ale_linters#coffee#coffeelint#Handle(buffer, lines) abort
     " Matches patterns like the following:
     "
@@ -40,7 +53,7 @@ endfunction
 
 call ale#linter#Define('coffee', {
 \   'name': 'coffeelint',
-\   'executable': 'coffeelint',
-\   'command': 'coffeelint --stdin --reporter csv',
+\   'executable_callback': 'ale_linters#coffee#coffeelint#GetExecutable',
+\   'command_callback': 'ale_linters#coffee#coffeelint#GetCommand',
 \   'callback': 'ale_linters#coffee#coffeelint#Handle',
 \})
