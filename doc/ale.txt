@@ -1005,14 +1005,39 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          check, and will produce the lines of output given to
                          the `callback`.
 
-                         Either this or the `command_callback` argument must
-                         be provided.
-
   `command_callback`       A |String| or |Funcref| for a callback function
                          accepting a buffer number. A |String| should be
                          returned for a command to run. This can be used in
                          place of `command` when more complicated processing
                          is needed.
+
+  `command_chain`          A |List| of |Dictionary| items defining a series
+                         of commands to be run. At least one |Dictionary|
+                         should be provided. Each Dictionary must contain the
+                         key `callback`, defining a |String| or |Funcref| for
+                         a function returning a |String| for a command to run.
+
+                         The callback functions for each command after the
+                         first command in in the chain should accept two
+                         arguments `(buffer, output)`, a buffer number and a
+                         |List| of lines of output from the previous command
+                         in the chain.
+
+                         The first callback function in a chain accepts only
+                         a `(buffer)` argument, as there are no previous
+                         commands to run which return `output`.
+
+                         Commands in the chain will all use the
+                         `output_stream` value provided in the root
+                         |Dictionary|. Each command in the chain can also
+                         provide an `output_stream` key to override this value.
+                         See the `output_stream` description for more
+                         information.
+
+                         The Vim buffer being checked for linter will only
+                         be sent to the final command in the chain. Previous
+                         commands in the chain will receive no input from
+                         stdin.
 
   `output_stream`          A |String| for the output stream the lines of output
                          should be read from for the command which is run. The
@@ -1022,6 +1047,12 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          their errors and warnings to the stderr stream
                          instead of stdout. The option `'both'` will read
                          from both stder and stdout at the same time.
+
+  Only one of `command`, `command_callback`, or `command_chain` should be
+  specified. `command_callback` is generally recommended when a command string
+  needs to be generated dynamically, or any global options are used.
+  `command_chain` is recommended where any system calls need to be made to
+  retrieve some kind of information before running the final command.
 
   Some programs for checking for errors are not capable of receiving input
   from stdin, as is required by ALE. To remedy this, a wrapper script is
