@@ -882,7 +882,7 @@ g:ale_erlang_erlc_options                           *g:ale_erlang_erlc_options*
   This variable controls additional parameters passed to `erlc`, such as `-I`
   or `-pa`.
 
--------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 4.26. phpmd                                       *ale-linter-options-phpmd*
 
 g:ale_php_phpmd_ruleset                           *g:ale_php_phpmd_ruleset*
@@ -893,7 +893,7 @@ g:ale_php_phpmd_ruleset                           *g:ale_php_phpmd_ruleset*
   This variable controls the ruleset used by phpmd.  Default is to use all of
   the available phpmd rulesets
 
--------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 4.27. xo                                             *ale-linter-options-xo*
 
 g:ale_javascript_xo_executable              *g:ale_javascript_xo_executable*
