@@ -214,13 +214,13 @@ function! s:FixLocList(buffer, loclist) abort
     endfor
 endfunction
 
-function! s:RunJob(command, generic_job_options) abort
-    let l:buffer = a:generic_job_options.buffer
-    let l:linter = a:generic_job_options.linter
-    let l:output_stream = a:generic_job_options.output_stream
-    let l:next_chain_index = a:generic_job_options.next_chain_index
-    let l:read_buffer = a:generic_job_options.read_buffer
-    let l:command = a:command
+function! s:RunJob(options) abort
+    let l:command = a:options.command
+    let l:buffer = a:options.buffer
+    let l:linter = a:options.linter
+    let l:output_stream = a:options.output_stream
+    let l:next_chain_index = a:options.next_chain_index
+    let l:read_buffer = a:options.read_buffer
 
     if l:command =~# '%s'
         " If there is a '%s' in the command string, replace it with the name
@@ -321,8 +321,11 @@ function! s:RunJob(command, generic_job_options) abort
     endif
 endfunction
 
-function! s:InvokeChain(buffer, linter, chain_index, input) abort
+" Determine which commands to run for a link in a command chain, or
+" just a regular command.
+function! ale#engine#ProcessChain(buffer, linter, chain_index, input) abort
     let l:output_stream = get(a:linter, 'output_stream', 'stdout')
+    let l:read_buffer = a:linter.read_buffer
     let l:chain_index = a:chain_index
     let l:input = a:input
 
@@ -331,11 +334,6 @@ function! s:InvokeChain(buffer, linter, chain_index, input) abort
             " Run a chain of commands, one asychronous command after the other,
             " so that many programs can be run in a sequence.
             let l:chain_item = a:linter.command_chain[l:chain_index]
-
-            " The chain item can override the output_stream option.
-            if has_key(l:chain_item, 'output_stream')
-                let l:output_stream = l:chain_item.output_stream
-            endif
 
             if l:chain_index == 0
                 " The first callback in the chain takes only a buffer number.
@@ -352,6 +350,21 @@ function! s:InvokeChain(buffer, linter, chain_index, input) abort
 
             if !empty(l:command)
                 " We hit a command to run, so we'll execute that
+
+                " The chain item can override the output_stream option.
+                if has_key(l:chain_item, 'output_stream')
+                    let l:output_stream = l:chain_item.output_stream
+                endif
+
+                " The chain item can override the read_buffer option.
+                if has_key(l:chain_item, 'read_buffer')
+                    let l:read_buffer = l:chain_item.read_buffer
+                elseif l:chain_index != len(a:linter.command_chain) - 1
+                    " Don't read the buffer for commands besides the last one
+                    " in the chain by default.
+                    let l:read_buffer = 0
+                endif
+
                 break
             endif
 
@@ -361,11 +374,6 @@ function! s:InvokeChain(buffer, linter, chain_index, input) abort
             let l:input = []
             let l:chain_index += 1
         endwhile
-
-        if empty(l:command)
-            " Don't run any jobs if the last command is an empty string.
-            return
-        endif
     elseif has_key(a:linter, 'command_callback')
         " If there is a callback for generating a command, call that instead.
         let l:command = ale#util#GetFunction(a:linter.command_callback)(a:buffer)
@@ -373,15 +381,27 @@ function! s:InvokeChain(buffer, linter, chain_index, input) abort
         let l:command = a:linter.command
     endif
 
-    let l:is_last_job = l:chain_index >= len(get(a:linter, 'command_chain', [])) - 1
+    if empty(l:command)
+        " Don't run any jobs if the command is an empty string.
+        return {}
+    endif
 
-    call s:RunJob(l:command, {
+    return {
+    \   'command': l:command,
     \   'buffer': a:buffer,
     \   'linter': a:linter,
     \   'output_stream': l:output_stream,
     \   'next_chain_index': l:chain_index + 1,
-    \   'read_buffer': l:is_last_job,
-    \})
+    \   'read_buffer': l:read_buffer,
+    \}
+endfunction
+
+function! s:InvokeChain(buffer, linter, chain_index, input) abort
+    let l:options = ale#engine#ProcessChain(a:buffer, a:linter, a:chain_index, a:input)
+
+    if !empty(l:options)
+        call s:RunJob(l:options)
+    endif
 endfunction
 
 function! ale#engine#Invoke(buffer, linter) abort
