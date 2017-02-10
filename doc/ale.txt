@@ -395,6 +395,22 @@ g:ale_statusline_format                               *g:ale_statusline_format*
   - The 3rd element is for when no errors are detected
 
 
+g:ale_use_ch_sendraw                                     *g:ale_use_ch_sendraw*
+
+  Type: |Number|
+  Default: `has('win32')`
+
+  This option only applies to Vim, and is ignored when the plugin is run
+  in NeoVim.
+
+  When this option is set to `1`, ALE will use |ch_sendraw()| for sending text
+  buffers to jobs, instead of setting the `in_io` option to `'buffer'` for
+  |job_start()|. See |in_io-buffer| for more information on this Vim option.
+
+  Using |ch_sendraw()| instead may lead to better performance or stability in
+  some cases. Typically for Linux users, `in_io` seems to be a better option.
+
+
 g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
 
   Type: |Number|

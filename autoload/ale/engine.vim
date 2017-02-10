@@ -266,21 +266,22 @@ function! s:RunJob(options) abort
             let l:job_options.out_cb = function('s:GatherOutputVim')
         endif
 
-        if has('win32')
-            " job_start commands on Windows have to be run with cmd /c,
-            " othwerwise %PATHTEXT% will not be used to programs ending int
-            " .cmd, .bat, .exe, etc.
-            let l:command = 'cmd /c ' . l:command
-        else
-            " Execute the command with the shell, to fix escaping issues.
-            let l:command = split(&shell) + split(&shellcmdflag) + [l:command]
+        " The command will be executed in a subshell. This fixes a number of
+        " issues, including reading the PATH variables correctly, %PATHEXT%
+        " expansion on Windows, etc.
+        "
+        " NeoVim handles this issue automatically if the command is a String.
+        let l:command = has('win32')
+        \   ?  'cmd /c ' . l:command
+        \   : split(&shell) + split(&shellcmdflag) + [l:command]
 
-            if l:read_buffer
-                " On Unix machines, we can send the Vim buffer directly.
-                " This is faster than reading the lines ourselves.
-                let l:job_options.in_io = 'buffer'
-                let l:job_options.in_buf = l:buffer
-            endif
+        if l:read_buffer && !g:ale_use_ch_sendraw
+            " Send the buffer via internal Vim 8 mechanisms, rather than
+            " by reading and sending it ourselves.
+            " On Unix machines, we can send the Vim buffer directly.
+            " This is faster than reading the lines ourselves.
+            let l:job_options.in_io = 'buffer'
+            let l:job_options.in_buf = l:buffer
         endif
 
         " Vim 8 will read the stdin from the file's buffer.
@@ -307,7 +308,7 @@ function! s:RunJob(options) abort
 
                 call jobsend(l:job, l:input)
                 call jobclose(l:job, 'stdin')
-            elseif has('win32')
+            elseif g:ale_use_ch_sendraw
                 " On some Vim versions, we have to send the buffer data ourselves.
                 let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
                 let l:channel = job_getchannel(l:job)
