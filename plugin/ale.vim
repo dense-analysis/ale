@@ -25,6 +25,12 @@ if !s:has_features
     finish
 endif
 
+" Set the TMPDIR environment variable if it is not set automatically.
+" This can automatically fix some environments.
+if has('unix') && empty($TMPDIR)
+    let $TMPDIR = '/tmp'
+endif
+
 " This global variable is used internally by ALE for tracking information for
 " each buffer which linters are being run against.
 let g:ale_buffer_info = {}
