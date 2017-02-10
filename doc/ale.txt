@@ -1075,6 +1075,11 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          place of `command` when more complicated processing
                          is needed.
 
+                         If an empty string is returned from the callback,
+                         no jobs for linting will be run for that linter.
+                         This can be used for skipping a linter call,
+                         say if no configuration file was found.
+
   `command_chain`          A |List| of |Dictionary| items defining a series
                          of commands to be run. At least one |Dictionary|
                          should be provided. Each Dictionary must contain the
@@ -1090,6 +1095,13 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          The first callback function in a chain accepts only
                          a `(buffer)` argument, as there are no previous
                          commands to run which return `output`.
+
+                         If an empty string is returned for a command in a
+                         chain, that command in the chain will be skipped,
+                         and the next function in the chain will be called
+                         immediately instead. If the last command in a chain
+                         returns an empty string, then no linting will be
+                         performed.
 
                          Commands in the chain will all use the
                          `output_stream` value provided in the root
