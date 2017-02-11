@@ -33,6 +33,14 @@ function! ale#engine#InitBufferInfo(buffer) abort
     endif
 endfunction
 
+" A map from timer IDs to Vim 8 jobs, for tracking jobs that need to be killed
+" with SIGKILL if they don't terminate right away.
+let s:job_kill_timers = {}
+
+function! s:KillHandler(timer) abort
+    call job_stop(remove(s:job_kill_timers, a:timer), 'kill')
+endfunction
+
 function! ale#engine#ClearJob(job) abort
     let l:job_id = s:GetJobID(a:job)
     let l:linter = s:job_info_map[l:job_id].linter
@@ -46,10 +54,19 @@ function! ale#engine#ClearJob(job) abort
             call ch_close_in(job_getchannel(a:job))
         endif
 
+        " Ask nicely for the job to stop.
         call job_stop(a:job)
+
+        " If a job doesn't stop immediately, queue a timer which will
+        " send SIGKILL to the job, if it's alive by the time the timer ticks.
+        if job_status(a:job) ==# 'run'
+            let s:job_kill_timers[timer_start(100, function('s:KillHandler'))] = a:job
+        endif
     endif
 
-    call remove(s:job_info_map, l:job_id)
+    if has_key(s:job_info_map, l:job_id)
+        call remove(s:job_info_map, l:job_id)
+    endif
 endfunction
 
 function! s:StopPreviousJobs(buffer, linter) abort
