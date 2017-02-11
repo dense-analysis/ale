@@ -1,11 +1,19 @@
-" Author: farenjihn <farenjihn@gmail.com>
+" Author: farenjihn <farenjihn@gmail.com>, w0rp <devw0rp@gmail.com>
 " Description: Lints java files using javac
 
-let g:loaded_ale_linters_java_javac = 1
-let g:ale_java_javac_classpath = ''
+let g:ale_java_javac_options = get(g:, 'ale_java_javac_options', '')
+let g:ale_java_javac_classpath = get(g:, 'ale_java_javac_classpath', '')
 
-let s:eclipse_classpath = ''
-let s:tmppath = '/tmp/java_ale/'
+function! ale_linters#java#javac#GetCommand(buffer)
+    let l:cp_option = !empty(g:ale_java_javac_classpath)
+    \   ?  '-cp ' . g:ale_java_javac_classpath
+    \   : ''
+
+    return 'javac -Xlint '
+    \ . l:cp_option
+    \ . ' ' . g:ale_java_javac_options
+    \ . ' %t'
+endfunction
 
 function! ale_linters#java#javac#Handle(buffer, lines) abort
     " Look for lines like the following.
@@ -37,62 +45,6 @@ function! ale_linters#java#javac#Handle(buffer, lines) abort
     return l:output
 endfunction
 
-function! ale_linters#java#javac#ParseEclipseClasspath()
-    let l:eclipse_classpath = ''
-
-python << EOF
-
-    import xml.etree.ElementTree as ET, vim
-    tree = ET.parse(".classpath")
-    root = tree.getroot()
-
-    classpath = ''
-
-    for child in root:
-        classpath += child.get("path")
-        classpath += ':'
-
-        vim.command("let l:eclipse_classpath = '%s'" % classpath);
-
-# Cannot indent this EOF token as per :h python
-EOF
-
-    return l:eclipse_classpath
-endfunction
-
-function! ale_linters#java#javac#CheckEclipseClasspath()
-    " Eclipse .classpath parsing through python
-    if file_readable('.classpath')
-        let s:eclipse_classpath = ale_linters#java#javac#ParseEclipseClasspath()
-    endif
-endfunction
-
-function! ale_linters#java#javac#GetCommand(buffer)
-    let l:path = s:tmppath . expand('%:p:h')
-    let l:file = expand('%:t')
-    let l:buf = getline(1, '$')
-
-    " Javac cannot compile files from stdin so we move a copy into /tmp instead
-    call mkdir(l:path, 'p')
-    call writefile(l:buf, l:path . '/' . l:file)
-
-    return 'javac '
-    \ . '-Xlint '
-    \ . '-cp ' . s:eclipse_classpath . g:ale_java_javac_classpath . ':. '
-    \ . g:ale_java_javac_options
-    \ . ' ' . l:path . '/' . l:file
-endfunction
-
-function! ale_linters#java#javac#CleanupTmp()
-    call delete(s:tmppath, 'rf')
-endfunction
-
-augroup java_ale_au
-    autocmd! BufEnter *.java call ale_linters#java#javac#CheckEclipseClasspath()
-    autocmd! BufLeave *.java call ale_linters#java#javac#CleanupTmp()
-augroup END
-
-call ale_linters#java#javac#CheckEclipseClasspath()
 call ale#linter#Define('java', {
 \   'name': 'javac',
 \   'output_stream': 'stderr',

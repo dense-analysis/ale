@@ -38,6 +38,7 @@ CONTENTS                                                         *ale-contents*
     4.26. erlang..........................|ale-linter-options-erlang|
     4.27. phpmd...........................|ale-linter-options-phpmd|
     4.28. xo..............................|ale-linter-options-xo|
+    4.28. javac...........................|ale-linter-options-javac|
   5. Linter Integration Notes.............|ale-linter-integration|
     5.1.  merlin..........................|ale-linter-integration-ocaml-merlin|
     5.2. rust.............................|ale-integration-rust|
@@ -88,6 +89,7 @@ The following languages and tools are supported.
 * Go: 'gofmt -e', 'go vet', 'golint', 'go build'
 * Haskell: 'ghc', 'hlint'
 * HTML: 'HTMLHint', 'tidy'
+* Java: 'javac'
 * JavaScript: 'eslint', 'jscs', 'jshint', 'flow', 'xo'
 * JSON: 'jsonlint'
 * LaTeX: 'chktex', 'lacheck'
@@ -954,6 +956,24 @@ g:ale_javascript_xo_use_global             *g:ale_javascript_xo_use_global*
   xo first. If this variable is set to `1`, then ALE will always use the
   global version of xo, in preference to locally installed versions of
   xo in node_modules.
+
+------------------------------------------------------------------------------
+4.28. javac                                          *ale-linter-options-javac*
+
+g:ale_java_javac_classpath                         *g:ale_java_javac_classpath*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to change the global classpath for Java.
+
+
+g:ale_java_javac_options                             *g:ale_java_javac_options*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to javac.
 
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*
