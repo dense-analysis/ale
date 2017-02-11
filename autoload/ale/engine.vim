@@ -30,10 +30,14 @@ function! ale#engine#InitBufferInfo(buffer) abort
         " job_list will hold the list of jobs
         " loclist holds the loclist items after all jobs have completed.
         " new_loclist holds loclist items while jobs are being run.
+        " temporary_file_list holds temporary files to be cleaned up
+        " temporary_directory_list holds temporary directories to be cleaned up
         let g:ale_buffer_info[a:buffer] = {
         \   'job_list': [],
         \   'loclist': [],
         \   'new_loclist': [],
+        \   'temporary_file_list': [],
+        \   'temporary_directory_list': [],
         \}
     endif
 endfunction
@@ -134,6 +138,40 @@ function! ale#engine#JoinNeovimOutput(output, data) abort
     endif
 endfunction
 
+" Register a temporary file to be managed with the ALE engine for
+" a current job run.
+function! ale#engine#ManageFile(buffer, filename) abort
+    call add(g:ale_buffer_info[a:buffer].temporary_file_list, a:filename)
+endfunction
+
+" Same as the above, but manage an entire directory.
+function! ale#engine#ManageDirectory(buffer, directory) abort
+    call add(g:ale_buffer_info[a:buffer].temporary_directory_list, a:directory)
+endfunction
+
+function! ale#engine#RemoveManagedFiles(buffer) abort
+    if !has_key(g:ale_buffer_info, a:buffer)
+        return
+    endif
+
+    " Delete files with a call akin to a plan `rm` command.
+    for l:filename in g:ale_buffer_info[a:buffer].temporary_file_list
+        call delete(l:filename)
+    endfor
+
+    let g:ale_buffer_info[a:buffer].temporary_file_list = []
+
+    " Delete directories like `rm -rf`.
+    " Directories are handled differently from files, so paths that are
+    " intended to be single files can be set up for automatic deletion without
+    " accidentally deleting entire directories.
+    for l:directory in g:ale_buffer_info[a:buffer].temporary_directory_list
+        call delete(l:directory, 'rf')
+    endfor
+
+    let g:ale_buffer_info[a:buffer].temporary_directory_list = []
+endfunction
+
 function! s:HandleExit(job) abort
     if a:job ==# 'no process'
         " Stop right away when the job is not valid in Vim 8.
@@ -177,6 +215,10 @@ function! s:HandleExit(job) abort
         " Wait for all jobs to complete before doing anything else.
         return
     endif
+
+    " Automatically remove all managed temporary files and directories
+    " now that all jobs have completed.
+    call ale#engine#RemoveManagedFiles(l:buffer)
 
     " Sort the loclist again.
     " We need a sorted list so we can run a binary search against it
@@ -424,6 +466,10 @@ function! s:InvokeChain(buffer, linter, chain_index, input) abort
 
     if !empty(l:options)
         call s:RunJob(l:options)
+    elseif empty(g:ale_buffer_info[a:buffer].job_list)
+        " If we cancelled running a command, and we have no jobs in progress,
+        " then delete the managed temporary files now.
+        call ale#engine#RemoveManagedFiles(a:buffer)
     endif
 endfunction
 

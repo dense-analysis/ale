@@ -1,0 +1,83 @@
+Before:
+  let g:command = 'echo test'
+  let g:filename = tempname()
+  let g:directory = tempname()
+  let g:preserved_directory = tempname()
+
+  function! TestCommandCallback(buffer) abort
+    " We are registering a temporary file, so we should delete it.
+    call writefile(['foo'], g:filename)
+    call ale#engine#ManageFile(a:buffer, g:filename)
+
+    " We are registering this directory appropriately, so we should delete
+    " the whole thing.
+    call mkdir(g:directory)
+    call writefile(['foo'], g:directory . '/bar')
+    call ale#engine#ManageDirectory(a:buffer, g:directory)
+
+    " We are registering this directory as temporary file, so we
+    " shouldn't delete it.
+    call mkdir(g:preserved_directory)
+    call writefile(['foo'], g:preserved_directory . '/bar')
+    call ale#engine#ManageFile(a:buffer, g:preserved_directory)
+
+    return g:command
+  endfunction
+
+  function! TestCallback(buffer, output) abort
+    return []
+  endfunction
+
+  call ale#linter#Define('foobar', {
+  \ 'name': 'testlinter',
+  \ 'executable': 'echo',
+  \ 'callback': 'TestCallback',
+  \ 'command_callback': 'TestCommandCallback',
+  \})
+
+After:
+  call delete(g:preserved_directory, 'rf')
+
+  unlet! g:command
+  unlet! g:filename
+  unlet! g:directory
+  unlet! g:preserved_directory
+  delfunction TestCommandCallback
+  delfunction TestCallback
+  call ale#linter#Reset()
+
+Given foobar (Some imaginary filetype):
+  foo
+  bar
+  baz
+
+Execute(ALE should delete managed files/directories appropriately after linting):
+  AssertEqual 'foobar', &filetype
+
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+
+  Assert !filereadable(g:filename), 'The tempoary file was not deleted'
+  Assert !isdirectory(g:directory), 'The tempoary directory was not deleted'
+  Assert isdirectory(g:preserved_directory), 'The tempoary directory was not kept'
+
+Execute(ALE should delete managed files even if no command is run):
+  AssertEqual 'foobar', &filetype
+
+  let g:command = ''
+
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+
+  Assert !filereadable(g:filename), 'The tempoary file was not deleted'
+  Assert !isdirectory(g:directory), 'The tempoary directory was not deleted'
+  Assert isdirectory(g:preserved_directory), 'The tempoary directory was not kept'
+
+Execute(ALE should delete managed files when the buffer is removed):
+  call ale#engine#InitBufferInfo(bufnr('%'))
+  call TestCommandCallback(bufnr('%'))
+  call ale#cleanup#Buffer(bufnr('%'))
+
+  Assert !filereadable(g:filename), 'The tempoary file was not deleted'
+  Assert !isdirectory(g:directory), 'The tempoary directory was not deleted'
+  Assert isdirectory(g:preserved_directory), 'The tempoary directory was not kept'

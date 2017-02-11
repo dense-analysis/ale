@@ -1037,6 +1037,35 @@ ale#engine#GetLoclist(buffer)                         *ale#engine#GetLoclist()*
   |setqflist()|.
 
 
+ale#engine#ManageFile(buffer, filename)               *ale#engine#ManageFile()*
+
+  Given a buffer number for a buffer currently running some linting tasks
+  and a filename, register a filename with ALE for automatic deletion after
+  linting is complete, or when Vim exits.
+
+  If Vim exits suddenly, ALE will try its best to remove temporary files, but
+  ALE cannot guarantee with absolute certainty that the files will be removed.
+  It is advised to create temporary files in the operating system's managed
+  temporary file directory, such as with |tempname()|.
+
+  Directory names should not be given to this function. ALE will only delete
+  files and symlinks given to this function. This is to prevent entire
+  directories from being accidentally deleted, say in cases of writing
+  `dir . '/' . filename` where `filename` is actually `''`, etc. ALE instead
+  manages directories separetly with the |ale#engine#ManageDirectory| function.
+
+
+ale#engine#ManageDirectory(buffer, directory)    *ale#engine#ManageDirectory()*
+
+  Like |ale#engine#ManageFile()|, but directories and all of their contents
+  will be deleted, akin to `rm -rf directory`, which could lead to loss of
+  data if mistakes are made. This command will also delete any temporary
+  filenames given to it.
+
+  It is advised to use |ale#engine#ManageFile()| instead for deleting single
+  files.
+
+
 ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
   Given a |String| for a filetype and a |Dictionary| Describing a linter
   configuration, add a linter for the given filetype. The dictionaries each
@@ -1150,6 +1179,12 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
   needs to be generated dynamically, or any global options are used.
   `command_chain` is recommended where any system calls need to be made to
   retrieve some kind of information before running the final command.
+
+  If temporary files or directories are created for commands run with
+  `command_callback` or `command_chain`, then these tempoary files or
+  directories can be managed by ALE, for automatic deletion.
+  See |ale#engine#ManageFile()| and |ale#engine#ManageDirectory| for more
+  information.
 
   Some programs for checking for errors are not capable of receiving input
   from stdin, as is required by ALE. To remedy this, a wrapper script is
