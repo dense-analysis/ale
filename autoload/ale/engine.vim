@@ -17,7 +17,12 @@ function! s:GetJobID(job) abort
 
     " In Vim 8, the job is a special variable, and we open a channel for each
     " job. We'll use the ID of the channel instead as the job ID.
-    return ch_info(job_getchannel(a:job)).id
+    try
+        return ch_info(job_getchannel(a:job)).id
+    endtry
+
+    " If we fail to get the channel ID for a job, just return a 0 ID.
+    return 0
 endfunction
 
 function! ale#engine#InitBufferInfo(buffer) abort
