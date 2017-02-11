@@ -13,7 +13,7 @@ function! g:ale_linters#python#mypy#GetCommand(buffer) abort
     return l:automatic_stubs_command
     \   . g:ale#util#stdin_wrapper
     \   . ' .py mypy --show-column-numbers '
-    \   . g:ale_python_mypy_options
+    \   . g:ale_python_mypy_args
 endfunction
 
 let s:path_pattern = '[a-zA-Z]\?\\\?:\?[[:alnum:]/\.\-_]\+'
