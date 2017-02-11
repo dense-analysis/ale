@@ -86,6 +86,7 @@ Execute (Run HandleUnixFormatAsError):
   let g:loclist = ale#handlers#HandleUnixFormatAsError(42, [
   \ 'file.go:27: missing argument for Printf("%s"): format reads arg 2, have only 1 args',
   \ 'file.go:53:10: if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
+  \ 'test.pug:1:1 ".b" is not a valid class name.  Class names must begin with "-", "_" or a letter and can only contain "_", "-", a-z and 0-9.',
   \])
 
 Then (The loclist should be correct):
@@ -107,6 +108,15 @@ Then (The loclist should be correct):
   \   'col': 10,
   \   'type': 'E',
   \   'text': 'if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
+  \ },
+  \ {
+  \   'bufnr': 42,
+  \   'vcol': 0,
+  \   'nr': -1,
+  \   'lnum': 1,
+  \   'col': 1,
+  \   'type': 'E',
+  \   'text': '".b" is not a valid class name.  Class names must begin with "-", "_" or a letter and can only contain "_", "-", a-z and 0-9.',
   \ },
   \], g:loclist
 
