@@ -300,7 +300,7 @@ function! ale#engine#FormatCommand(buffer, command) abort
     " file.
     if l:command =~# '%s'
         let l:filename = fnamemodify(bufname(a:buffer), ':p')
-        let l:command = substitute(l:command, '%s', fnameescape(l:filename), 'g')
+        let l:command = substitute(l:command, '%s', '\=fnameescape(l:filename)', 'g')
     endif
 
     if l:command =~# '%t'
@@ -311,7 +311,7 @@ function! ale#engine#FormatCommand(buffer, command) abort
         \   . (has('win32') ? '\' : '/')
         \   . fnamemodify(bufname(a:buffer), ':t')
 
-        let l:command = substitute(l:command, '%t', fnameescape(l:temporary_file), 'g')
+        let l:command = substitute(l:command, '%t', '\=fnameescape(l:temporary_file)', 'g')
     endif
 
     " Finish formatting so %% becomes %.
