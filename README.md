@@ -33,6 +33,7 @@ In other words, this plugin allows you to lint while you type.
  7. [How can I navigate between errors quickly?](#faq-navigation)
  8. [How can I run linters only when I save files?](#faq-lint-on-save)
  9. [How can I use the quickfix list instead of the loclist?](#faq-quickfix)
+ 10. [How can I check JSX files with both stylelint and eslint?](#faq-jsx-stylelint-eslint)
 
 <a name="supported-languages"></a>
 
@@ -375,3 +376,36 @@ let g:ale_open_list = 1
 " some other plugin which sets quickfix errors, etc.
 let g:ale_keep_list_window_open = 1
 ```
+
+<a name="faq-jsx-stylelint-eslint"></a>
+
+### 4.x. How can I check JSX files with both stylelint and eslint?
+
+If you configure ALE options correctly in your vimrc file, and install
+the right tools, you can check JSX files with stylelint and eslint.
+
+First, install eslint and install stylelint with
+[https://github.com/styled-components/stylelint-processor-styled-components](stylelint-processor-styled-components).
+
+Supposing you have installed both tools correctly, configure your .jsx files so
+`jsx` is included in the filetype. You can use an `autocmd` for this.
+
+```vim
+augroup FiletypeGroup
+    autocmd!
+    au BufNewFile,BufRead *.jsx set filetype=javascript.jsx
+augroup END
+```
+
+Supposing the filetype has been set correctly, you can set the following
+options in your vimrc file:
+
+```vim
+let g:ale_linters = {'jsx': ['stylelint', 'eslint']}
+let g:ale_linter_aliases = {'jsx': 'css'}
+```
+
+ALE will alias the `jsx` filetype so it uses the `css` filetype linters, and
+use the original Array of selected linters for `jsx` from the `g:ale_linters`
+object. All available linters will be used for the filetype `javascript`, and
+no linter will be run twice for the same file.
