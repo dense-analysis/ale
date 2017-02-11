@@ -66,10 +66,6 @@ let g:ale_lint_on_save = get(g:, 'ale_lint_on_save', 0)
 " should be used instead.
 let g:ale_enabled = get(g:, 'ale_enabled', 1)
 
-" This flag can be used to force ALE to send buffer data using ch_sendraw
-" in Vim 8. This works better for some users.
-let g:ale_use_ch_sendraw = get(g:, 'ale_use_ch_sendraw', has('win32'))
-
 " These flags dictates if ale uses the quickfix or the loclist (loclist is the
 " default, quickfix overrides loclist).
 let g:ale_set_loclist = get(g:, 'ale_set_loclist', 1)

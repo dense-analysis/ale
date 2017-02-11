@@ -284,6 +284,14 @@ function! ale#engine#EscapeCommandPart(command_part) abort
     return substitute(a:command_part, '%', '%%', 'g')
 endfunction
 
+function! s:TemporaryFilename(buffer) abort
+    " Create a temporary filename, <temp_dir>/<original_basename>
+    " The file itself will not be created by this function.
+    return tempname()
+    \   . (has('win32') ? '\' : '/')
+    \   . fnamemodify(bufname(a:buffer), ':t')
+endfunction
+
 " Given a command string, replace every...
 " %s -> with the current filename
 " %t -> with the name of an unused file in a temporary directory
@@ -306,11 +314,7 @@ function! ale#engine#FormatCommand(buffer, command) abort
     if l:command =~# '%t'
         " Create a temporary filename, <temp_dir>/<original_basename>
         " The file itself will not be created by this function.
-        let l:temporary_file =
-        \   tempname()
-        \   . (has('win32') ? '\' : '/')
-        \   . fnamemodify(bufname(a:buffer), ':t')
-
+        let l:temporary_file = s:TemporaryFilename(a:buffer)
         let l:command = substitute(l:command, '%t', '\=fnameescape(l:temporary_file)', 'g')
     endif
 
@@ -347,6 +351,14 @@ function! s:RunJob(options) abort
     let l:read_buffer = a:options.read_buffer
 
     let [l:temporary_file, l:command] = ale#engine#FormatCommand(l:buffer, l:command)
+
+    if l:read_buffer && empty(l:temporary_file)
+        " If we are to send the Vim buffer to a command, we'll do it
+        " in the shell. We'll write out the file to a temporary file,
+        " and then read it back in, in the shell.
+        let l:temporary_file = s:TemporaryFilename(l:buffer)
+        let l:command = l:command . ' < ' . fnameescape(l:temporary_file)
+    endif
 
     if s:CreateTemporaryFileForJob(l:buffer, l:temporary_file)
         " If a temporary filename has been formatted in to the command, then
@@ -401,15 +413,6 @@ function! s:RunJob(options) abort
         \   ?  'cmd /c ' . l:command
         \   : split(&shell) + split(&shellcmdflag) + [l:command]
 
-        if l:read_buffer && !g:ale_use_ch_sendraw
-            " Send the buffer via internal Vim 8 mechanisms, rather than
-            " by reading and sending it ourselves.
-            " On Unix machines, we can send the Vim buffer directly.
-            " This is faster than reading the lines ourselves.
-            let l:job_options.in_io = 'buffer'
-            let l:job_options.in_buf = l:buffer
-        endif
-
         " Vim 8 will read the stdin from the file's buffer.
         let l:job = job_start(l:command, l:job_options)
     endif
@@ -426,25 +429,6 @@ function! s:RunJob(options) abort
         \   'output': [],
         \   'next_chain_index': l:next_chain_index,
         \}
-
-        if l:read_buffer
-            if has('nvim')
-                " In NeoVim, we have to send the buffer lines ourselves.
-                let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
-
-                call jobsend(l:job, l:input)
-                call jobclose(l:job, 'stdin')
-            elseif g:ale_use_ch_sendraw
-                " On some Vim versions, we have to send the buffer data ourselves.
-                let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
-                let l:channel = job_getchannel(l:job)
-
-                if ch_status(l:channel) ==# 'open'
-                    call ch_sendraw(l:channel, l:input)
-                    call ch_close_in(l:channel)
-                endif
-            endif
-        endif
     endif
 endfunction
 
