@@ -1,0 +1,2 @@
+Execute($TMPDIR should be set to a default value if unset):
+  AssertEqual '/tmp', $TMPDIR

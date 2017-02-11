@@ -20,3 +20,7 @@ set foldnestmax=10
 set ttimeoutlen=0
 
 let g:mapleader=','
+
+" Clear the TMPDIR value for tests.
+" The plugin should set this to /tmp by default, which we will test.
+let $TMPDIR = ''

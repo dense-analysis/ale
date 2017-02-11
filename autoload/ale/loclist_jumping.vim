@@ -1,11 +1,23 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: This file implements functions for jumping around in a file
-"   based on errors and warnings in the loclist.
+"   based on errors and warnings in the loclist or quickfix list.
+
+function! s:GetCurrentList() abort
+    if g:ale_set_loclist
+        return getloclist(winnr())
+    elseif g:ale_set_quickfix
+        let l:buffer = bufnr('%')
+
+        return filter(getqflist(), 'get(v:val, ''bufnr'', -1) == ' . l:buffer)
+    endif
+
+    return []
+endfunction
 
 function! s:GetSortedLoclist() abort
     let l:loclist = []
 
-    for l:item in getloclist(winnr())
+    for l:item in s:GetCurrentList()
         if l:item.lnum < 1
             " Remove items we can't even jump to.
             continue

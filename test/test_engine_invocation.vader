@@ -1,0 +1,139 @@
+Before:
+  function! CollectResults(buffer, output)
+    return []
+  endfunction
+
+  function! FirstChainFunction(buffer)
+    return 'first'
+  endfunction
+
+  function! SecondChainFunction(buffer, output)
+    " We'll skip this command
+    return ''
+  endfunction
+
+  function! ThirdChainFunction(buffer, output)
+    return 'third'
+  endfunction
+
+  function! FourthChainFunction(buffer, output)
+    return 'fourth'
+  endfunction
+
+  let g:linter = {
+  \ 'name': 'testlinter',
+  \ 'callback': 'CollectResults',
+  \ 'executable': 'echo',
+  \ 'command_chain': [
+  \   {'callback': 'FirstChainFunction'},
+  \   {'callback': 'SecondChainFunction'},
+  \   {'callback': 'ThirdChainFunction'},
+  \   {'callback': 'FourthChainFunction'},
+  \ ],
+  \ 'read_buffer': 1,
+  \}
+
+  function! ProcessIndex(chain_index)
+    return ale#engine#ProcessChain(347, g:linter, a:chain_index, [])
+  endfunction
+
+After:
+  delfunction CollectResults
+  delfunction FirstChainFunction
+  delfunction SecondChainFunction
+  delfunction ThirdChainFunction
+  delfunction ProcessIndex
+  unlet! g:linter
+  unlet! g:result
+
+Execute(Engine invocation should return the command for the first item correctly):
+  let g:result = ProcessIndex(0)
+
+  AssertEqual 'first', g:result.command
+  AssertEqual 1, g:result.next_chain_index
+
+Execute(Engine invocation should return the command for the second item correctly):
+  let g:result = ProcessIndex(1)
+
+  AssertEqual 'third', g:result.command
+  AssertEqual 3, g:result.next_chain_index
+
+Execute(Engine invocation should return the command for the fourth item correctly):
+  let g:result = ProcessIndex(3)
+
+  AssertEqual 'fourth', g:result.command
+  AssertEqual 4, g:result.next_chain_index
+
+Execute(Engine invocation should return the command for a single callback correctly):
+  unlet g:linter.command_chain
+  let g:linter.command_callback = 'FirstChainFunction'
+
+  let g:result = ProcessIndex(0)
+
+  AssertEqual 'first', g:result.command
+
+Execute(Engine invocation should return the command for a command string correctly):
+  unlet g:linter.command_chain
+  let g:linter.command = 'foo bar'
+
+  let g:result = ProcessIndex(0)
+
+  AssertEqual 'foo bar', g:result.command
+
+Execute(Engine invocation should process read_buffer correctly for simple commands):
+  unlet g:linter.command_chain
+  let g:linter.command = 'foo bar'
+  let g:linter.read_buffer = 0
+
+  let g:result = ProcessIndex(0)
+
+  AssertEqual 'foo bar', g:result.command
+  AssertEqual 0, g:result.read_buffer
+
+  let g:linter.command_callback = 'FirstChainFunction'
+  unlet g:linter.command
+
+  let g:result = ProcessIndex(0)
+
+  AssertEqual 'first', g:result.command
+  AssertEqual 0, g:result.read_buffer
+
+Execute(Engine invocation should allow read_buffer to be enabled for a command in the middle of a chain):
+  let g:linter.command_chain[2].read_buffer = 1
+
+  let g:result = ProcessIndex(2)
+
+  AssertEqual g:result.command, 'third'
+  AssertEqual g:result.read_buffer, 1
+
+Execute(Engine invocation should allow read_buffer to be disabled for the end of a chain):
+  let g:linter.command_chain[3].read_buffer = 0
+
+  let g:result = ProcessIndex(3)
+
+  AssertEqual g:result.command, 'fourth'
+  AssertEqual g:result.read_buffer, 0
+
+Execute(Engine invocation should not use read_buffer from earlier items in a chain):
+  let g:linter.command_chain[1].read_buffer = 1
+
+  let g:result = ProcessIndex(1)
+
+  AssertEqual g:result.command, 'third'
+  AssertEqual g:result.read_buffer, 0
+
+Execute(Engine invocation should allow the output_stream setting to be changed in the middle of a chain):
+  let g:linter.command_chain[2].output_stream = 'both'
+
+  let g:result = ProcessIndex(2)
+
+  AssertEqual g:result.command, 'third'
+  AssertEqual g:result.output_stream, 'both'
+
+Execute(Engine invocation should not use output_stream from earlier items in a chain):
+  let g:linter.command_chain[1].output_stream = 'both'
+
+  let g:result = ProcessIndex(1)
+
+  AssertEqual g:result.command, 'third'
+  AssertEqual g:result.output_stream, 'stdout'

@@ -59,7 +59,7 @@ name. That seems to be the fairest way to arrange this table.
 | CoffeeScript | [coffee](http://coffeescript.org/), [coffeelint](https://www.npmjs.com/package/coffeelint) |
 | CSS | [csslint](http://csslint.net/), [stylelint](https://github.com/stylelint/stylelint) |
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
-| D | [dmd](https://dlang.org/dmd-linux.html)^ |
+| D | [dmd](https://dlang.org/dmd-linux.html) |
 | Dockerfile | [hadolint](https://github.com/lukasmartinelli/hadolint) |
 | Elixir | [credo](https://github.com/rrrene/credo) |
 | Elm | [elm-make](https://github.com/elm-lang/elm-make) |
@@ -68,7 +68,7 @@ name. That seems to be the fairest way to arrange this table.
 | Go | [gofmt -e](https://golang.org/cmd/gofmt/), [go vet](https://golang.org/cmd/vet/), [golint](https://godoc.org/github.com/golang/lint), [go build](https://golang.org/cmd/go/) |
 | Haskell | [ghc](https://www.haskell.org/ghc/), [hlint](https://hackage.haskell.org/package/hlint) |
 | HTML | [HTMLHint](http://htmlhint.com/), [tidy](http://www.html-tidy.org/) |
-| JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/), [flow](https://flowtype.org/) |
+| JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/), [flow](https://flowtype.org/), [standard](http://standardjs.com/)
 | JSON | [jsonlint](http://zaa.ch/jsonlint/) |
 | LaTeX | [chktex](http://www.nongnu.org/chktex/), [lacheck](https://www.ctan.org/pkg/lacheck) |
 | Lua | [luacheck](https://github.com/mpeterv/luacheck) |
@@ -76,7 +76,7 @@ name. That seems to be the fairest way to arrange this table.
 | MATLAB | [mlint](https://www.mathworks.com/help/matlab/ref/mlint.html) |
 | OCaml | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-integration-ocaml-merlin` for configuration instructions
 | Perl | [perl -c](https://perl.org/), [perl-critic](https://metacpan.org/pod/Perl::Critic) |
-| PHP | [hack](http://hacklang.org/), [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer) |
+| PHP | [hack](http://hacklang.org/), [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer), [phpmd](https://phpmd.org) |
 | Pug | [pug-lint](https://github.com/pugjs/pug-lint) |
 | Puppet | [puppet](https://puppet.com), [puppet-lint](https://puppet-lint.com) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/), [mypy](http://mypy-lang.org/), [pylint](https://www.pylint.org/) |
@@ -93,14 +93,13 @@ name. That seems to be the fairest way to arrange this table.
 | Vim | [vint](https://github.com/Kuniwak/vint) |
 | YAML | [yamllint](https://yamllint.readthedocs.io/) |
 
-* *^ Supported only on Unix machines via a wrapper script.*
 * *^^ No text linters are enabled by default.*
 
 If you would like to see support for more languages and tools, please
 [create an issue](https://github.com/w0rp/ale/issues)
 or [create a pull request](https://github.com/w0rp/ale/pulls).
 If your tool can read from stdin or you have code to suggest which is good,
-support can be happily added for more tools.
+support can be happily added for it.
 
 <a name="usage"></a>
 

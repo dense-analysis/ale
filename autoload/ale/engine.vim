@@ -17,7 +17,12 @@ function! s:GetJobID(job) abort
 
     " In Vim 8, the job is a special variable, and we open a channel for each
     " job. We'll use the ID of the channel instead as the job ID.
-    return ch_info(job_getchannel(a:job)).id
+    try
+        return ch_info(job_getchannel(a:job)).id
+    endtry
+
+    " If we fail to get the channel ID for a job, just return a 0 ID.
+    return 0
 endfunction
 
 function! ale#engine#InitBufferInfo(buffer) abort
@@ -33,6 +38,14 @@ function! ale#engine#InitBufferInfo(buffer) abort
     endif
 endfunction
 
+" A map from timer IDs to Vim 8 jobs, for tracking jobs that need to be killed
+" with SIGKILL if they don't terminate right away.
+let s:job_kill_timers = {}
+
+function! s:KillHandler(timer) abort
+    call job_stop(remove(s:job_kill_timers, a:timer), 'kill')
+endfunction
+
 function! ale#engine#ClearJob(job) abort
     let l:job_id = s:GetJobID(a:job)
     let l:linter = s:job_info_map[l:job_id].linter
@@ -46,10 +59,19 @@ function! ale#engine#ClearJob(job) abort
             call ch_close_in(job_getchannel(a:job))
         endif
 
+        " Ask nicely for the job to stop.
         call job_stop(a:job)
+
+        " If a job doesn't stop immediately, queue a timer which will
+        " send SIGKILL to the job, if it's alive by the time the timer ticks.
+        if job_status(a:job) ==# 'run'
+            let s:job_kill_timers[timer_start(100, function('s:KillHandler'))] = a:job
+        endif
     endif
 
-    call remove(s:job_info_map, l:job_id)
+    if has_key(s:job_info_map, l:job_id)
+        call remove(s:job_info_map, l:job_id)
+    endif
 endfunction
 
 function! s:StopPreviousJobs(buffer, linter) abort
@@ -166,24 +188,28 @@ function! s:HandleExit(job) abort
     let g:ale_buffer_info[l:buffer].loclist = g:ale_buffer_info[l:buffer].new_loclist
     let g:ale_buffer_info[l:buffer].new_loclist = []
 
-    if g:ale_set_quickfix || g:ale_set_loclist
-        call ale#list#SetLists(g:ale_buffer_info[l:buffer].loclist)
-    endif
-
-    if g:ale_set_signs
-        call ale#sign#SetSigns(l:buffer, g:ale_buffer_info[l:buffer].loclist)
-    endif
-
-    if exists('*ale#statusline#Update')
-        " Don't load/run if not already loaded.
-        call ale#statusline#Update(l:buffer, g:ale_buffer_info[l:buffer].loclist)
-    endif
+    call ale#engine#SetResults(l:buffer, g:ale_buffer_info[l:buffer].loclist)
 
     " Call user autocommands. This allows users to hook into ALE's lint cycle.
     silent doautocmd User ALELint
 
     " Mark line 200, column 17 with a squiggly line or something
     " matchadd('ALEError', '\%200l\%17v')
+endfunction
+
+function! ale#engine#SetResults(buffer, loclist) abort
+    if g:ale_set_quickfix || g:ale_set_loclist
+        call ale#list#SetLists(a:loclist)
+    endif
+
+    if g:ale_set_signs
+        call ale#sign#SetSigns(a:buffer, a:loclist)
+    endif
+
+    if exists('*ale#statusline#Update')
+        " Don't load/run if not already loaded.
+        call ale#statusline#Update(a:buffer, a:loclist)
+    endif
 endfunction
 
 function! s:HandleExitNeoVim(job, data, event) abort
@@ -210,12 +236,13 @@ function! s:FixLocList(buffer, loclist) abort
     endfor
 endfunction
 
-function! s:RunJob(command, generic_job_options) abort
-    let l:buffer = a:generic_job_options.buffer
-    let l:linter = a:generic_job_options.linter
-    let l:output_stream = a:generic_job_options.output_stream
-    let l:next_chain_index = a:generic_job_options.next_chain_index
-    let l:command = a:command
+function! s:RunJob(options) abort
+    let l:command = a:options.command
+    let l:buffer = a:options.buffer
+    let l:linter = a:options.linter
+    let l:output_stream = a:options.output_stream
+    let l:next_chain_index = a:options.next_chain_index
+    let l:read_buffer = a:options.read_buffer
 
     if l:command =~# '%s'
         " If there is a '%s' in the command string, replace it with the name
@@ -261,15 +288,18 @@ function! s:RunJob(command, generic_job_options) abort
             let l:job_options.out_cb = function('s:GatherOutputVim')
         endif
 
-        if has('win32')
-            " job_start commands on Windows have to be run with cmd /c,
-            " othwerwise %PATHTEXT% will not be used to programs ending int
-            " .cmd, .bat, .exe, etc.
-            let l:command = 'cmd /c ' . l:command
-        else
-            " Execute the command with the shell, to fix escaping issues.
-            let l:command = split(&shell) + split(&shellcmdflag) + [l:command]
+        " The command will be executed in a subshell. This fixes a number of
+        " issues, including reading the PATH variables correctly, %PATHEXT%
+        " expansion on Windows, etc.
+        "
+        " NeoVim handles this issue automatically if the command is a String.
+        let l:command = has('win32')
+        \   ?  'cmd /c ' . l:command
+        \   : split(&shell) + split(&shellcmdflag) + [l:command]
 
+        if l:read_buffer && !g:ale_use_ch_sendraw
+            " Send the buffer via internal Vim 8 mechanisms, rather than
+            " by reading and sending it ourselves.
             " On Unix machines, we can send the Vim buffer directly.
             " This is faster than reading the lines ourselves.
             let l:job_options.in_io = 'buffer'
@@ -293,27 +323,32 @@ function! s:RunJob(command, generic_job_options) abort
         \   'next_chain_index': l:next_chain_index,
         \}
 
-        if has('nvim')
-            " In NeoVim, we have to send the buffer lines ourselves.
-            let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
+        if l:read_buffer
+            if has('nvim')
+                " In NeoVim, we have to send the buffer lines ourselves.
+                let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
 
-            call jobsend(l:job, l:input)
-            call jobclose(l:job, 'stdin')
-        elseif has('win32')
-            " On some Vim versions, we have to send the buffer data ourselves.
-            let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
-            let l:channel = job_getchannel(l:job)
+                call jobsend(l:job, l:input)
+                call jobclose(l:job, 'stdin')
+            elseif g:ale_use_ch_sendraw
+                " On some Vim versions, we have to send the buffer data ourselves.
+                let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
+                let l:channel = job_getchannel(l:job)
 
-            if ch_status(l:channel) ==# 'open'
-                call ch_sendraw(l:channel, l:input)
-                call ch_close_in(l:channel)
+                if ch_status(l:channel) ==# 'open'
+                    call ch_sendraw(l:channel, l:input)
+                    call ch_close_in(l:channel)
+                endif
             endif
         endif
     endif
 endfunction
 
-function! s:InvokeChain(buffer, linter, chain_index, input) abort
+" Determine which commands to run for a link in a command chain, or
+" just a regular command.
+function! ale#engine#ProcessChain(buffer, linter, chain_index, input) abort
     let l:output_stream = get(a:linter, 'output_stream', 'stdout')
+    let l:read_buffer = a:linter.read_buffer
     let l:chain_index = a:chain_index
     let l:input = a:input
 
@@ -322,11 +357,6 @@ function! s:InvokeChain(buffer, linter, chain_index, input) abort
             " Run a chain of commands, one asychronous command after the other,
             " so that many programs can be run in a sequence.
             let l:chain_item = a:linter.command_chain[l:chain_index]
-
-            " The chain item can override the output_stream option.
-            if has_key(l:chain_item, 'output_stream')
-                let l:output_stream = l:chain_item.output_stream
-            endif
 
             if l:chain_index == 0
                 " The first callback in the chain takes only a buffer number.
@@ -343,6 +373,21 @@ function! s:InvokeChain(buffer, linter, chain_index, input) abort
 
             if !empty(l:command)
                 " We hit a command to run, so we'll execute that
+
+                " The chain item can override the output_stream option.
+                if has_key(l:chain_item, 'output_stream')
+                    let l:output_stream = l:chain_item.output_stream
+                endif
+
+                " The chain item can override the read_buffer option.
+                if has_key(l:chain_item, 'read_buffer')
+                    let l:read_buffer = l:chain_item.read_buffer
+                elseif l:chain_index != len(a:linter.command_chain) - 1
+                    " Don't read the buffer for commands besides the last one
+                    " in the chain by default.
+                    let l:read_buffer = 0
+                endif
+
                 break
             endif
 
@@ -352,11 +397,6 @@ function! s:InvokeChain(buffer, linter, chain_index, input) abort
             let l:input = []
             let l:chain_index += 1
         endwhile
-
-        if empty(l:command)
-            " Don't run any jobs if the last command is an empty string.
-            return
-        endif
     elseif has_key(a:linter, 'command_callback')
         " If there is a callback for generating a command, call that instead.
         let l:command = ale#util#GetFunction(a:linter.command_callback)(a:buffer)
@@ -364,12 +404,27 @@ function! s:InvokeChain(buffer, linter, chain_index, input) abort
         let l:command = a:linter.command
     endif
 
-    call s:RunJob(l:command, {
+    if empty(l:command)
+        " Don't run any jobs if the command is an empty string.
+        return {}
+    endif
+
+    return {
+    \   'command': l:command,
     \   'buffer': a:buffer,
     \   'linter': a:linter,
     \   'output_stream': l:output_stream,
     \   'next_chain_index': l:chain_index + 1,
-    \})
+    \   'read_buffer': l:read_buffer,
+    \}
+endfunction
+
+function! s:InvokeChain(buffer, linter, chain_index, input) abort
+    let l:options = ale#engine#ProcessChain(a:buffer, a:linter, a:chain_index, a:input)
+
+    if !empty(l:options)
+        call s:RunJob(l:options)
+    endif
 endfunction
 
 function! ale#engine#Invoke(buffer, linter) abort

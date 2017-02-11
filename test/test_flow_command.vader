@@ -1,0 +1,17 @@
+Before:
+  runtime ale_linters/javascript/flow.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(flow should return a command to run if a .flowconfig file exists):
+  silent! cd /testplugin/test
+  :e! flow/a/sub/dummy
+
+  AssertEqual 'flow check-contents --respect-pragma --json --from ale %s', ale_linters#javascript#flow#GetCommand(bufnr('%'))
+
+Execute(flow should not return a command to run if no .flowconfig file exists):
+  silent! cd /testplugin/test
+  :e! flow/b/sub/dummy
+
+  AssertEqual '', ale_linters#javascript#flow#GetCommand(bufnr('%'))

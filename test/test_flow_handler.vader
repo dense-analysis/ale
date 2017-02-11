@@ -1,0 +1,132 @@
+Before:
+  let g:flow_output = {
+  \ "flowVersion": "0.39.0",
+  \ "errors": [
+  \   {
+  \     "kind": "infer",
+  \     "level": "error",
+  \     "message": [
+  \       {
+  \         "context": "  return 1",
+  \         "descr": "number",
+  \         "type": "Blame",
+  \         "loc": {
+  \           "source": "/home/w0rp/Downloads/graphql-js/src/language/parser.js",
+  \           "type": "SourceFile",
+  \           "start": {
+  \             "line": 417,
+  \             "column": 10,
+  \             "offset": 9503
+  \           },
+  \           "end": {
+  \             "line": 417,
+  \             "column": 10,
+  \             "offset": 9504
+  \           }
+  \         },
+  \         "path": "/home/w0rp/Downloads/graphql-js/src/language/parser.js",
+  \         "line": 417,
+  \         "endline": 417,
+  \         "start": 10,
+  \         "end": 10
+  \       },
+  \       {
+  \         "context": v:null,
+  \         "descr": "This type is incompatible with the expected return type of",
+  \         "type": "Comment",
+  \         "path": "",
+  \         "line": 0,
+  \         "endline": 0,
+  \         "start": 1,
+  \         "end": 0
+  \       },
+  \       {
+  \         "context": "function parseArguments(lexer: Lexer<*>): Array<ArgumentNode> {",
+  \         "descr": "array type",
+  \         "type": "Blame",
+  \         "loc": {
+  \           "source": "/home/w0rp/Downloads/graphql-js/src/language/parser.js",
+  \           "type": "SourceFile",
+  \           "start": {
+  \             "line": 416,
+  \             "column": 43,
+  \             "offset": 9472
+  \           },
+  \           "end": {
+  \             "line": 416,
+  \             "column": 61,
+  \             "offset": 9491
+  \           }
+  \         },
+  \         "path": "/home/w0rp/Downloads/graphql-js/src/language/parser.js",
+  \         "line": 416,
+  \         "endline": 416,
+  \         "start": 43,
+  \         "end": 61
+  \       }
+  \     ]
+  \   },
+  \   {
+  \     "kind": "infer",
+  \     "level": "warning",
+  \     "message": [
+  \       {
+  \         "context": "  return peek(lexer, TokenKind.PAREN_L) ?",
+  \         "descr": "unreachable code",
+  \         "type": "Blame",
+  \         "loc": {
+  \           "source": "/home/w0rp/Downloads/graphql-js/src/language/parser.js",
+  \           "type": "SourceFile",
+  \           "start": {
+  \             "line": 419,
+  \             "column": 3,
+  \             "offset": 9508
+  \           },
+  \           "end": {
+  \             "line": 421,
+  \             "column": 7,
+  \             "offset": 9626
+  \           }
+  \         },
+  \         "path": "/home/w0rp/Downloads/graphql-js/src/language/parser.js",
+  \         "line": 419,
+  \         "endline": 421,
+  \         "start": 3,
+  \         "end": 7
+  \       }
+  \     ]
+  \   }
+  \ ],
+  \ "passed": v:false
+  \}
+
+  runtime ale_linters/javascript/flow.vim
+
+After:
+  unlet! g:flow_output
+  unlet! g:expected
+  unlet! g:actual
+  call ale#linter#Reset()
+
+Execute(The flow handler should process errors correctly.):
+  let g:actual = ale_linters#javascript#flow#Handle(347, [json_encode(g:flow_output)])
+  let g:expected = [
+  \ {
+  \   'lnum': 417,
+  \   'bufnr': 347,
+  \   'vcol': 0,
+  \   'type': 'E',
+  \   'col': 10,
+  \   'text': 'number: This type is incompatible with the expected return type of array type',
+  \ },
+  \ {
+  \   'lnum': 419,
+  \   'bufnr': 347,
+  \   'vcol': 0,
+  \   'type': 'W',
+  \   'col': 3,
+  \   'text': 'unreachable code:',
+  \ },
+  \]
+
+  AssertEqual g:expected, g:actual

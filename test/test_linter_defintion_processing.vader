@@ -211,3 +211,75 @@ Execute(PreProcess should complain about invalid chain items at higher indices):
   \}
   AssertThrows call ale#linter#PreProcess(g:linter)
   AssertEqual 'The `command_chain` item 1 must define a `callback` function', g:vader_exception
+
+Execute(PreProcess should complain when conflicting command options are used):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'callback': 'x',
+  \ 'executable': 'x',
+  \ 'command': 'foo',
+  \ 'command_chain': [{'callback': 'foo'}],
+  \}
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual 'Only one of `command`, `command_callback`, or `command_chain` should be set', g:vader_exception
+
+  unlet g:linter.command
+  let g:linter.command_callback = 'foo'
+
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual 'Only one of `command`, `command_callback`, or `command_chain` should be set', g:vader_exception
+
+  let g:linter.command = 'foo'
+  unlet g:linter.command_chain
+
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual 'Only one of `command`, `command_callback`, or `command_chain` should be set', g:vader_exception
+
+Execute(PreProcess should process the read_buffer option correctly):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'callback': 'x',
+  \ 'executable': 'x',
+  \ 'command_chain': [{'callback': 'foo'}, {'callback': 'bar'}],
+  \ 'read_buffer': '0',
+  \}
+
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual '`read_buffer` must be `0` or `1`', g:vader_exception
+
+  let g:linter.read_buffer = 0
+
+  call ale#linter#PreProcess(g:linter)
+
+  let g:linter.read_buffer = 1
+
+  call ale#linter#PreProcess(g:linter)
+
+  unlet g:linter.read_buffer
+  let g:linter.command_chain[0].read_buffer = '0'
+
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual 'The `command_chain` item 0 value for `read_buffer` must be `0` or `1`', g:vader_exception
+
+  let g:linter.command_chain[0].read_buffer = 0
+
+  call ale#linter#PreProcess(g:linter)
+
+  let g:linter.command_chain[1].read_buffer = '0'
+
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual 'The `command_chain` item 1 value for `read_buffer` must be `0` or `1`', g:vader_exception
+
+  let g:linter.command_chain[1].read_buffer = 1
+
+  call ale#linter#PreProcess(g:linter)
+
+Execute(PreProcess should set a default value for read_buffer):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'callback': 'x',
+  \ 'executable': 'x',
+  \ 'command': 'x',
+  \}
+
+  AssertEqual ale#linter#PreProcess(g:linter).read_buffer, 1

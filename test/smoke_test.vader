@@ -1,0 +1,68 @@
+Before:
+  function! TestCallback(buffer, output)
+    return [{
+    \ 'bufnr': a:buffer,
+    \ 'lnum': 2,
+    \ 'vcol': 0,
+    \ 'col': 3,
+    \ 'text': a:output[0],
+    \ 'type': 'E',
+    \ 'nr': -1,
+    \}]
+  endfunction
+
+  call ale#linter#Define('foobar', {
+  \ 'name': 'testlinter',
+  \ 'callback': 'TestCallback',
+  \ 'executable': 'echo',
+  \ 'command': 'echo foo bar',
+  \})
+
+After:
+  let g:ale_use_ch_sendraw = 0
+  let g:ale_buffer_info = {}
+  delfunction TestCallback
+  call ale#linter#Reset()
+
+Given foobar (Some imaginary filetype):
+  foo
+  bar
+  baz
+
+Execute(Linters should run with the default options):
+  AssertEqual 'foobar', &filetype
+
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+
+  AssertEqual [{
+  \   'bufnr': bufnr('%'),
+  \   'lnum': 2,
+  \   'vcol': 0,
+  \   'col': 3,
+  \   'text': 'foo bar',
+  \   'type': 'E',
+  \   'nr': -1,
+  \   'pattern': '',
+  \   'valid': 1,
+  \ }], getloclist(0)
+
+Execute(Linters should run with `let g:ale_use_ch_sendraw = 1`):
+  AssertEqual 'foobar', &filetype
+
+  let g:ale_use_ch_sendraw = 1
+
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+
+  AssertEqual [{
+  \   'bufnr': bufnr('%'),
+  \   'lnum': 2,
+  \   'vcol': 0,
+  \   'col': 3,
+  \   'text': 'foo bar',
+  \   'type': 'E',
+  \   'nr': -1,
+  \   'pattern': '',
+  \   'valid': 1,
+  \ }], getloclist(0)

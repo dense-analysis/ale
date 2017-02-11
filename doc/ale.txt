@@ -35,6 +35,8 @@ CONTENTS                                                         *ale-contents*
     4.23. python-mypy.....................|ale-linter-options-python-mypy|
     4.24. python-pylint...................|ale-linter-options-python-pylint|
     4.25. erlang..........................|ale-linter-options-erlang|
+    4.26. phpmd...........................|ale-linter-options-phpmd|
+    4.27. xo..............................|ale-linter-options-xo|
   5. Linter Integration Notes.............|ale-linter-integration|
     5.1.  merlin..........................|ale-linter-integration-ocaml-merlin|
     5.2. rust.............................|ale-integration-rust|
@@ -85,7 +87,7 @@ The following languages and tools are supported.
 * Go: 'gofmt -e', 'go vet', 'golint', 'go build'
 * Haskell: 'ghc', 'hlint'
 * HTML: 'HTMLHint', 'tidy'
-* JavaScript: 'eslint', 'jscs', 'jshint', 'flow'
+* JavaScript: 'eslint', 'jscs', 'jshint', 'flow', 'xo'
 * JSON: 'jsonlint'
 * LaTeX: 'chktex', 'lacheck'
 * Lua: 'luacheck'
@@ -93,7 +95,7 @@ The following languages and tools are supported.
 * MATLAB: 'mlint'
 * OCaml: 'merlin' (see |ale-linter-integration-ocaml-merlin|)
 * Perl: 'perl' (-c flag), 'perlcritic'
-* PHP: 'hack', 'php' (-l flag), 'phpcs'
+* PHP: 'hack', 'php' (-l flag), 'phpcs', 'phpmd'
 * Pug: 'pug-lint'
 * Puppet: 'puppet', 'puppet-lint'
 * Python: 'flake8', 'mypy', 'pylint'
@@ -391,6 +393,22 @@ g:ale_statusline_format                               *g:ale_statusline_format*
   - The 1st element is for errors
   - The 2nd element is for warnings
   - The 3rd element is for when no errors are detected
+
+
+g:ale_use_ch_sendraw                                     *g:ale_use_ch_sendraw*
+
+  Type: |Number|
+  Default: `has('win32')`
+
+  This option only applies to Vim, and is ignored when the plugin is run
+  in NeoVim.
+
+  When this option is set to `1`, ALE will use |ch_sendraw()| for sending text
+  buffers to jobs, instead of setting the `in_io` option to `'buffer'` for
+  |job_start()|. See |in_io-buffer| for more information on this Vim option.
+
+  Using |ch_sendraw()| instead may lead to better performance or stability in
+  some cases. Typically for Linux users, `in_io` seems to be a better option.
 
 
 g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
@@ -887,6 +905,52 @@ g:ale_erlang_erlc_options                           *g:ale_erlang_erlc_options*
   This variable controls additional parameters passed to `erlc`, such as `-I`
   or `-pa`.
 
+------------------------------------------------------------------------------
+4.26. phpmd                                       *ale-linter-options-phpmd*
+
+g:ale_php_phpmd_ruleset                           *g:ale_php_phpmd_ruleset*
+
+  Type: |String|
+  Default: 'cleancode,codesize,controversial,design,naming,unusedcode'
+
+  This variable controls the ruleset used by phpmd.  Default is to use all of
+  the available phpmd rulesets
+
+------------------------------------------------------------------------------
+4.27. xo                                             *ale-linter-options-xo*
+
+g:ale_javascript_xo_executable              *g:ale_javascript_xo_executable*
+
+  Type: |String|
+  Default: `'xo'`
+
+  ALE will first discover the xo path in an ancestor node_modules
+  directory. If no such path exists, this variable will be used instead.
+
+  This variable can be set to change the path to xo.
+
+  If you wish to use only a globally installed version of xo, set
+  |g:ale_javascript_xo_use_global| to `1`.
+
+
+g:ale_javascript_xo_options                   *g:ale_javascript_xo_options*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to xo.
+
+
+g:ale_javascript_xo_use_global             *g:ale_javascript_xo_use_global*
+
+  Type: |String|
+  Default: `0`
+
+  This variable controls whether or not ALE will search for a local path for
+  xo first. If this variable is set to `1`, then ALE will always use the
+  global version of xo, in preference to locally installed versions of
+  xo in node_modules.
+
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*
 
@@ -1012,14 +1076,55 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          check, and will produce the lines of output given to
                          the `callback`.
 
-                         Either this or the `command_callback` argument must
-                         be provided.
-
   `command_callback`       A |String| or |Funcref| for a callback function
                          accepting a buffer number. A |String| should be
                          returned for a command to run. This can be used in
                          place of `command` when more complicated processing
                          is needed.
+
+                         If an empty string is returned from the callback,
+                         no jobs for linting will be run for that linter.
+                         This can be used for skipping a linter call,
+                         say if no configuration file was found.
+
+  `command_chain`          A |List| of |Dictionary| items defining a series
+                         of commands to be run. At least one |Dictionary|
+                         should be provided. Each Dictionary must contain the
+                         key `callback`, defining a |String| or |Funcref| for
+                         a function returning a |String| for a command to run.
+
+                         The callback functions for each command after the
+                         first command in in the chain should accept two
+                         arguments `(buffer, output)`, a buffer number and a
+                         |List| of lines of output from the previous command
+                         in the chain.
+
+                         The first callback function in a chain accepts only
+                         a `(buffer)` argument, as there are no previous
+                         commands to run which return `output`.
+
+                         If an empty string is returned for a command in a
+                         chain, that command in the chain will be skipped,
+                         and the next function in the chain will be called
+                         immediately instead. If the last command in a chain
+                         returns an empty string, then no linting will be
+                         performed.
+
+                         Commands in the chain will all use the
+                         `output_stream` value provided in the root
+                         |Dictionary|. Each command in the chain can also
+                         provide an `output_stream` key to override this value.
+                         See the `output_stream` description for more
+                         information.
+
+                         Commands in the chain all behave as if `read_buffer`
+                         is set to `0` by default, except for the last command
+                         in the chain, which uses the value set for
+                         `read_buffer` in the root |Dictionary|. Each command
+                         in the chain can also provide a `read_buffer` key
+                         to override these values.
+                         See the `read_buffer` description for more
+                         information.
 
   `output_stream`          A |String| for the output stream the lines of output
                          should be read from for the command which is run. The
@@ -1029,6 +1134,18 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          their errors and warnings to the stderr stream
                          instead of stdout. The option `'both'` will read
                          from both stder and stdout at the same time.
+
+  `read_buffer`            A |Number| (`0` or `1`) indicating whether a command
+                         should read the Vim buffer as input via stdin. This
+                         option is set to `1` by default, and can be disabled
+                         if a command manually reads from a temporary file
+                         instead, etc.
+
+  Only one of `command`, `command_callback`, or `command_chain` should be
+  specified. `command_callback` is generally recommended when a command string
+  needs to be generated dynamically, or any global options are used.
+  `command_chain` is recommended where any system calls need to be made to
+  retrieve some kind of information before running the final command.
 
   Some programs for checking for errors are not capable of receiving input
   from stdin, as is required by ALE. To remedy this, a wrapper script is
