@@ -12,7 +12,7 @@ function! s:HandleUnixFormat(buffer, lines, type) abort
     " file.go:27: missing argument for Printf("%s"): format reads arg 2, have only 1 args
     " file.go:53:10: if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)
     " file.go:5:2: expected declaration, found 'STRING' "log"
-    let l:pattern = '^' . s:path_pattern . ':\(\d\+\):\?\(\d\+\)\?: \(.\+\)$'
+    let l:pattern = '^' . s:path_pattern . ':\(\d\+\):\?\(\d\+\)\?:\? \(.\+\)$'
     let l:output = []
 
     for l:line in a:lines
