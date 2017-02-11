@@ -33,6 +33,6 @@ call ale#linter#Define('puppet', {
 \   'name': 'puppet',
 \   'executable': 'puppet',
 \   'output_stream': 'stderr',
-\   'command': g:ale#util#stdin_wrapper . ' .pp puppet parser validate --color=false',
+\   'command': 'puppet parser validate --color=false %t',
 \   'callback': 'ale_linters#puppet#puppet#Handle',
 \})

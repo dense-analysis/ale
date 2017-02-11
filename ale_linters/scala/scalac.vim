@@ -1,4 +1,3 @@
-" vim: set et:
 " Author: Zoltan Kalmar - https://github.com/kalmiz
 " Description: Basic scala support using scalac
 
@@ -21,8 +20,10 @@ function! ale_linters#scala#scalac#Handle(buffer, lines) abort
         let l:text = l:match[3]
         let l:type = l:match[2] ==# 'error' ? 'E' : 'W'
         let l:col = 0
+
         if l:ln + 1 < len(a:lines)
             let l:col = stridx(a:lines[l:ln + 1], '^')
+
             if l:col == -1
                 let l:col = 0
             endif
@@ -47,6 +48,6 @@ call ale#linter#Define('scala', {
 \   'name': 'scalac',
 \   'executable': 'scalac',
 \   'output_stream': 'stderr',
-\   'command': g:ale#util#stdin_wrapper . ' .scala scalac -Ystop-after:parser',
+\   'command': 'scalac -Ystop-after:parser %t',
 \   'callback': 'ale_linters#scala#scalac#Handle',
 \})

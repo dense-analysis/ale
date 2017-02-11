@@ -37,6 +37,6 @@ endfunction
 call ale#linter#Define('yaml', {
 \   'name': 'yamllint',
 \   'executable': 'yamllint',
-\   'command': g:ale#util#stdin_wrapper . ' .yml yamllint -f parsable',
+\   'command': 'yamllint -f parsable %t',
 \   'callback': 'ale_linters#yaml#yamllint#Handle',
 \})

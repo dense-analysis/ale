@@ -4,6 +4,6 @@
 call ale#linter#Define('tex', {
 \   'name': 'proselint',
 \   'executable': 'proselint',
-\   'command': g:ale#util#stdin_wrapper . ' .tex proselint',
+\   'command': 'proselint %t',
 \   'callback': 'ale#handlers#HandleUnixFormatAsWarning',
 \})

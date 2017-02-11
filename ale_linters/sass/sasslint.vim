@@ -3,6 +3,6 @@
 call ale#linter#Define('sass', {
 \   'name': 'sasslint',
 \   'executable': 'sass-lint',
-\   'command': g:ale#util#stdin_wrapper . ' .sass sass-lint -v -q -f compact',
+\   'command': 'sass-lint -v -q -f compact %t',
 \   'callback': 'ale#handlers#HandleCSSLintFormat',
 \})

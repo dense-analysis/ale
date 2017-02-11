@@ -12,11 +12,11 @@ let s:format = '-f "{file_path}:{line_number}:{column_number}: {severity}: {desc
 call ale#linter#Define('vim', {
 \   'name': 'vint',
 \   'executable': 'vint',
-\   'command': g:ale#util#stdin_wrapper
-\       . ' .vim vint '
+\   'command': 'vint '
 \       . s:warning_flag
 \       . ' --no-color '
 \       . s:enable_neovim
-\       . s:format,
+\       . s:format
+\       . ' %t',
 \   'callback': 'ale#handlers#HandleGCCFormat',
 \})

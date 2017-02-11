@@ -40,6 +40,6 @@ call ale#linter#Define('verilog', {
 \   'name': 'iverilog',
 \   'output_stream': 'stderr',
 \   'executable': 'iverilog',
-\   'command': g:ale#util#stdin_wrapper . ' .v iverilog -t null -Wall',
+\   'command': 'iverilog -t null -Wall %t',
 \   'callback': 'ale_linters#verilog#iverilog#Handle',
 \})

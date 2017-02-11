@@ -4,6 +4,6 @@
 call ale#linter#Define('go', {
 \   'name': 'golint',
 \   'executable': 'golint',
-\   'command': g:ale#util#stdin_wrapper . ' .go golint',
+\   'command': 'golint %t',
 \   'callback': 'ale#handlers#HandleUnixFormatAsWarning',
 \})

@@ -36,6 +36,6 @@ endfunction
 call ale#linter#Define('php', {
 \   'name': 'phpmd',
 \   'executable': 'phpmd',
-\   'command': g:ale#util#stdin_wrapper . ' .php phpmd %s text ' . g:ale_php_phpmd_ruleset . ' --ignore-violations-on-exit',
+\   'command': 'phpmd %s text ' . g:ale_php_phpmd_ruleset . ' --ignore-violations-on-exit %t',
 \   'callback': 'ale_linters#php#phpmd#Handle',
 \})

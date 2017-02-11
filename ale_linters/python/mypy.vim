@@ -10,10 +10,9 @@ function! g:ale_linters#python#mypy#GetCommand(buffer) abort
     \   ?  'MYPYPATH=' . l:automatic_stubs_dir . ' '
     \   : ''
 
-    return l:automatic_stubs_command
-    \   . g:ale#util#stdin_wrapper
-    \   . ' .py mypy --show-column-numbers '
+    return 'mypy --show-column-numbers '
     \   . g:ale_python_mypy_options
+    \   . ' %t'
 endfunction
 
 let s:path_pattern = '[a-zA-Z]\?\\\?:\?[[:alnum:]/\.\-_]\+'

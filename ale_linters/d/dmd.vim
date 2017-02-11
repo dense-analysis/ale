@@ -46,9 +46,7 @@ function! ale_linters#d#dmd#DMDCommand(buffer, dub_output) abort
         endif
     endfor
 
-    return g:ale#util#stdin_wrapper . ' .d dmd '
-    \   . join(l:import_list)
-    \   . ' -o- -vcolumns -c'
+    return 'dmd '. join(l:import_list) . ' -o- -vcolumns -c %t'
 endfunction
 
 function! ale_linters#d#dmd#Handle(buffer, lines) abort

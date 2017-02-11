@@ -52,9 +52,8 @@ function! ale_linters#elm#make#GetCommand(buffer) abort
     " which is why this is hard coded here.
     " Source: https://github.com/elm-lang/elm-make/blob/master/src/Flags.hs
     let l:elm_cmd = 'elm-make --report=json --output='.shellescape('/dev/null')
-    let l:stdin_wrapper = g:ale#util#stdin_wrapper . ' .elm'
 
-    return l:dir_set_cmd . ' ' . l:stdin_wrapper . ' ' . l:elm_cmd
+    return l:dir_set_cmd . ' ' . l:elm_cmd . ' %t'
 endfunction
 
 call ale#linter#Define('elm', {
