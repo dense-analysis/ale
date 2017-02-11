@@ -408,6 +408,13 @@ g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
   bug report, and it may be possible to add such support.
 
 
+g:ale_filetype_blacklist                             *g:ale_filetype_blacklist*
+  Type: |List|
+  Default: `['nerdtree', 'unite']`
+
+  This option prevents ALE linters running for particular filetypes. 
+
+
 ===============================================================================
 4. Linter Specific Options                                 *ale-linter-options*
 
