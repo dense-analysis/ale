@@ -1030,6 +1030,15 @@ ale#Queue(delay)                                                  *ale#Queue()*
   again from the same buffer
 
 
+ale#engine#EscapeCommandPart(command_part)     *ale#engine#EscapeCommandPart()*
+
+  Given a |String|, return a |String| with all `%` characters replaced with
+  `%%` instead. This function can be used to escape strings which are
+  dynamically generated for commands before handing them over to ALE,
+  so that ALE doesn't treat any strings with `%` formatting sequences
+  specially.
+
+
 ale#engine#GetLoclist(buffer)                         *ale#engine#GetLoclist()*
 
   Given a buffer number, this function will rerurn the list of warnings and
@@ -1186,16 +1195,35 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
   See |ale#engine#ManageFile()| and |ale#engine#ManageDirectory| for more
   information.
 
-  Some programs for checking for errors are not capable of receiving input
-  from stdin, as is required by ALE. To remedy this, a wrapper script is
-  provided named in the variable |g:ale#util#stdin_wrapper|. This variable
-  can be called with the regular arguments for any command to forward data
-  from stdin to the program, by way of creating a temporary file. The first
-  argument to the stdin wrapper must be a file extension to save the temporary
-  file with, and the following arguments are the command as normal.
+  All command strings will be formatted for special character sequences.
+  Any substring `%s` will be replaced with the full path to the current file
+  being edited. This format option can be used to pass the exact filename
+  being edited to a program.
+
   For example: >
-  'command': g:ale#util#stdin_wrapper . ' .hs ghc -fno-code -v0',
+  'command': 'eslint -f unix --stdin --stdin-filename %s'
 <
+  Any substring `%t` will be replaced with a path to a temporary file. Merely
+  adding `%t` will cause ALE to create a temporary file containing the
+  contents of the the buffer being checked. All occurrences of `%t` in command
+  strings will reference the one temporary file. The temporary file will be
+  created inside a temporary directory, and the entire temporary directory
+  will be automatically deleted, following the behaviour of
+  |ale#engine#ManageDirectory|. This option can be used for some linters which
+  do not support reading from stdin.
+
+  For example: >
+  'command': 'ghc -fno-code -v0 %t',
+<
+  The character sequence `%%` can be used to emit a literal `%` into a
+  command, so literal character sequences `%s` and `%t` can be escaped by
+  using `%%s` and `%%t` instead, etc.
+
+  If a callback for a command generates part of a command string which might
+  possibly contain `%%`, `%s`, or `%t` where the special formatting behaviour
+  is not desired, the |ale#engine#EscapeCommandPart()| function can be used to
+  replace those characters to avoid formatting issues.
+
 
 ale#linter#Get(filetype)                                     *ale#linter#Get()*
   Return all of linters configured for a given filetype as a |List| of
@@ -1215,11 +1243,6 @@ ale#statusline#Status()                               *ale#statusline#Status()*
   The output's format is defined in |`g:ale_statusline_format`|.
   To enable it, the following should be present in your |statusline| settings: >
   %{ale#statusline#Status()}
-
-
-g:ale#util#stdin_wrapper                             *g:ale#util#stdin_wrapper*
-  This variable names a wrapper script for sending stdin input to programs
-  which cannot accept input via stdin. See |ale#linter#Define()| for more.
 
 
 ALELint                                                               *ALELint*

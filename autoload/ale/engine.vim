@@ -278,6 +278,66 @@ function! s:FixLocList(buffer, loclist) abort
     endfor
 endfunction
 
+" Given part of a command, replace any % with %%, so that no characters in
+" the string will be replaced with filenames, etc.
+function! ale#engine#EscapeCommandPart(command_part) abort
+    return substitute(a:command_part, '%', '%%', 'g')
+endfunction
+
+" Given a command string, replace every...
+" %s -> with the current filename
+" %t -> with the name of an unused file in a temporary directory
+" %% -> with a literal %
+function! ale#engine#FormatCommand(buffer, command) abort
+    let l:temporary_file = ''
+    let l:command = a:command
+
+    " First replace all uses of %%, used for literal percent characters,
+    " with an ugly string.
+    let l:command = substitute(l:command, '%%', '<<PERCENTS>>', 'g')
+
+    " Replace all %s occurences in the string with the name of the current
+    " file.
+    if l:command =~# '%s'
+        let l:filename = fnamemodify(bufname(a:buffer), ':p')
+        let l:command = substitute(l:command, '%s', fnameescape(l:filename), 'g')
+    endif
+
+    if l:command =~# '%t'
+        " Create a temporary filename, <temp_dir>/<original_basename>
+        " The file itself will not be created by this function.
+        let l:temporary_file =
+        \   tempname()
+        \   . (has('win32') ? '\' : '/')
+        \   . fnamemodify(bufname(a:buffer), ':t')
+
+        let l:command = substitute(l:command, '%t', fnameescape(l:temporary_file), 'g')
+    endif
+
+    " Finish formatting so %% becomes %.
+    let l:command = substitute(l:command, '<<PERCENTS>>', '%', 'g')
+
+    return [l:temporary_file, l:command]
+endfunction
+
+function! s:CreateTemporaryFileForJob(buffer, temporary_file) abort
+    if empty(a:temporary_file)
+        " There is no file, so we didn't create anything.
+        return 0
+    endif
+
+    let l:temporary_directory = fnamemodify(a:temporary_file, ':h')
+    " Create the temporary directory for the file, unreadable by 'other'
+    " users.
+    call mkdir(l:temporary_directory, '', 0750)
+    " Automatically delete the directory later.
+    call ale#engine#ManageDirectory(a:buffer, l:temporary_directory)
+    " Write the buffer out to a file.
+    silent! exec 'write' a:temporary_file
+
+    return 1
+endfunction
+
 function! s:RunJob(options) abort
     let l:command = a:options.command
     let l:buffer = a:options.buffer
@@ -286,10 +346,12 @@ function! s:RunJob(options) abort
     let l:next_chain_index = a:options.next_chain_index
     let l:read_buffer = a:options.read_buffer
 
-    if l:command =~# '%s'
-        " If there is a '%s' in the command string, replace it with the name
-        " of the file.
-        let l:command = printf(l:command, shellescape(fnamemodify(bufname(l:buffer), ':p')))
+    let [l:temporary_file, l:command] = ale#engine#FormatCommand(l:buffer, l:command)
+
+    if s:CreateTemporaryFileForJob(l:buffer, l:temporary_file)
+        " If a temporary filename has been formatted in to the command, then
+        " we do not need to send the Vim buffer to the command.
+        let l:read_buffer = 0
     endif
 
     if has('nvim')
