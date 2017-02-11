@@ -27,18 +27,19 @@ CONTENTS                                                         *ale-contents*
     4.15. htmlhint........................|ale-linter-options-htmlhint|
     4.16. c-clang.........................|ale-linter-options-c-clang|
     4.17. cpp-clang.......................|ale-linter-options-cpp-clang|
-    4.18. python-flake8...................|ale-linter-options-python-flake8|
-    4.19. ruby-rubocop....................|ale-linter-options-ruby-rubocop|
-    4.20. chktex..........................|ale-linter-options-chktex|
-    4.21. lacheck.........................|ale-linter-options-lacheck|
-    4.22. stylelint.......................|ale-linter-options-stylelint|
-    4.23. rustc...........................|ale-linter-options-rustc|
-    4.24. python-mypy.....................|ale-linter-options-python-mypy|
-    4.25. python-pylint...................|ale-linter-options-python-pylint|
-    4.26. erlang..........................|ale-linter-options-erlang|
-    4.27. phpmd...........................|ale-linter-options-phpmd|
-    4.28. xo..............................|ale-linter-options-xo|
-    4.28. javac...........................|ale-linter-options-javac|
+    4.18. cpp-clangtidy...................|ale-linter-options-cpp-clangtidy|
+    4.19. python-flake8...................|ale-linter-options-python-flake8|
+    4.20. ruby-rubocop....................|ale-linter-options-ruby-rubocop|
+    4.21. chktex..........................|ale-linter-options-chktex|
+    4.22. lacheck.........................|ale-linter-options-lacheck|
+    4.23. stylelint.......................|ale-linter-options-stylelint|
+    4.24. rustc...........................|ale-linter-options-rustc|
+    4.25. python-mypy.....................|ale-linter-options-python-mypy|
+    4.26. python-pylint...................|ale-linter-options-python-pylint|
+    4.27. erlang..........................|ale-linter-options-erlang|
+    4.28. phpmd...........................|ale-linter-options-phpmd|
+    4.29. xo..............................|ale-linter-options-xo|
+    4.30. javac...........................|ale-linter-options-javac|
   5. Linter Integration Notes.............|ale-linter-integration|
     5.1.  merlin..........................|ale-linter-integration-ocaml-merlin|
     5.2. rust.............................|ale-integration-rust|
@@ -74,7 +75,7 @@ The following languages and tools are supported.
 * Bash: 'shell' (-n flag), 'shellcheck'
 * Bourne Shell: 'shell' (-n flag), 'shellcheck'
 * C: 'cppcheck', 'gcc', 'clang'
-* C++ (filetype cpp): 'cppcheck', 'gcc', 'clang'
+* C++ (filetype cpp): 'clang', 'clangtidy', 'cppcheck', 'gcc'
 * C#: 'mcs'
 * Chef: 'foodcritic'
 * CoffeeScript: 'coffee', 'coffelint'
@@ -651,7 +652,7 @@ g:ale_html_htmlhint_options                       *g:ale_html_htmlhint_options*
   This variable can be changed to modify flags given to HTMLHint.
 
 
-g:ale_html_htmlhint_executable                   *g:ale_html_htmlhint_executable*
+g:ale_html_htmlhint_executable                 *g:ale_html_htmlhint_executable*
 
   Type: |String|
   Default: `'htmlhint'`
@@ -663,7 +664,7 @@ g:ale_html_htmlhint_executable                   *g:ale_html_htmlhint_executable
   |g:ale_html_htmlhint_use_global| to `1`.
 
 
-g:ale_html_htmlhint_use_global                   *g:ale_html_htmlhint_use_global*
+g:ale_html_htmlhint_use_global                 *g:ale_html_htmlhint_use_global*
 
   Type: |String|
   Default: `0`
@@ -691,10 +692,20 @@ g:ale_cpp_clang_options                               *g:ale_cpp_clang_options*
   Type: |String|
   Default: `'-std=c11 -Wall'`
 
-  This variable can be change to modify flags given to clang.
+  This variable can be changed to modify flags given to clang.
 
 -------------------------------------------------------------------------------
-4.18. python-flake8                          *ale-linter-options-python-flake8*
+4.18. cpp-clangtidy                          *ale-linter-options-cpp-clangtidy*
+
+g:ale_cpp_clangtidy_options                       *g:ale_cpp_clangtidy_options*
+
+  Type: |String|
+  Default: `'-std=c++14 -Wall'`
+
+  This variable can be changed to modify flags given to clangtidy.
+
+-------------------------------------------------------------------------------
+4.19. python-flake8                          *ale-linter-options-python-flake8*
 
 g:ale_python_flake8_executable                 *g:ale_python_flake8_executable*
 
@@ -722,7 +733,7 @@ g:ale_python_flake8_args                             *g:ale_python_flake8_args*
   `python3 -m pip install --user flake8`).
 
 -------------------------------------------------------------------------------
-4.19. ruby-rubocop                            *ale-linter-options-ruby-rubocop*
+4.20. ruby-rubocop                            *ale-linter-options-ruby-rubocop*
 
 g:ale_ruby_rubocop_options                         *g:ale_ruby_rubocop_options*
 
@@ -732,7 +743,7 @@ g:ale_ruby_rubocop_options                         *g:ale_ruby_rubocop_options*
   This variable can be change to modify flags given to rubocop.
 
 -------------------------------------------------------------------------------
-4.20. chktex                                        *ale-linter-options-chktex*
+4.21. chktex                                        *ale-linter-options-chktex*
 
 g:ale_tex_chktex_executable                       *g:ale_tex_chktex_executable*
 
@@ -750,9 +761,9 @@ g:ale_tex_chktex_options                             *g:ale_tex_chktex_options*
   This variable can be changed to modify flags given to chktex.
 
 ------------------------------------------------------------------------------
-4.21. lacheck                                     *ale-linter-options-lacheck*
+4.22. lacheck                                      *ale-linter-options-lacheck*
 
-g:ale_lacheck_executable                            *g:ale_lacheck_executable*
+g:ale_lacheck_executable                             *g:ale_lacheck_executable*
 
   Type: |String|
   Default: '`lacheck`'
@@ -760,9 +771,9 @@ g:ale_lacheck_executable                            *g:ale_lacheck_executable*
   This variable can be changed to change the path to lacheck.
 
 -------------------------------------------------------------------------------
-4.22. stylelint                                    *ale-linter-options-stylelint*
+4.23. stylelint                                  *ale-linter-options-stylelint*
 
-g:ale_css_stylelint_executable                   *g:ale_css_stylelint_executable*
+g:ale_css_stylelint_executable                 *g:ale_css_stylelint_executable*
 
   Type: |String|
   Default: `'stylelint'`
@@ -774,7 +785,7 @@ g:ale_css_stylelint_executable                   *g:ale_css_stylelint_executable
   |g:ale_css_stylelint_use_global| to `1`.
 
 
-g:ale_css_stylelint_use_global                   *g:ale_css_stylelint_use_global*
+g:ale_css_stylelint_use_global                 *g:ale_css_stylelint_use_global*
 
   Type: |String|
   Default: `0`
@@ -785,7 +796,7 @@ g:ale_css_stylelint_use_global                   *g:ale_css_stylelint_use_global
   stylelint in node_modules.
 
 
-g:ale_sass_stylelint_executable                 *g:ale_sass_stylelint_executable*
+g:ale_sass_stylelint_executable               *g:ale_sass_stylelint_executable*
 
   Type: |String|
   Default: `'stylelint'`
@@ -797,7 +808,7 @@ g:ale_sass_stylelint_executable                 *g:ale_sass_stylelint_executable
   |g:ale_sass_stylelint_use_global| to `1`.
 
 
-g:ale_sass_stylelint_use_global                 *g:ale_sass_stylelint_use_global*
+g:ale_sass_stylelint_use_global               *g:ale_sass_stylelint_use_global*
 
   Type: |String|
   Default: `0`
@@ -808,7 +819,7 @@ g:ale_sass_stylelint_use_global                 *g:ale_sass_stylelint_use_global
   stylelint in node_modules.
 
 
-g:ale_scss_stylelint_executable                 *g:ale_scss_stylelint_executable*
+g:ale_scss_stylelint_executable               *g:ale_scss_stylelint_executable*
 
   Type: |String|
   Default: `'stylelint'`
@@ -820,7 +831,7 @@ g:ale_scss_stylelint_executable                 *g:ale_scss_stylelint_executable
   |g:ale_scss_stylelint_use_global| to `1`.
 
 
-g:ale_scss_stylelint_use_global                 *g:ale_scss_stylelint_use_global*
+g:ale_scss_stylelint_use_global               *g:ale_scss_stylelint_use_global*
 
   Type: |String|
   Default: `0`
@@ -831,7 +842,7 @@ g:ale_scss_stylelint_use_global                 *g:ale_scss_stylelint_use_global
   stylelint in node_modules.
 
 ------------------------------------------------------------------------------
-4.23. rustc                                         *ale-linter-options-rustc*
+4.24. rustc                                         *ale-linter-options-rustc*
 
 g:ale_rust_ignore_error_codes                  *g:ale_rust_ignore_error_codes*
 
@@ -845,7 +856,7 @@ g:ale_rust_ignore_error_codes                  *g:ale_rust_ignore_error_codes*
 
 
 -------------------------------------------------------------------------------
-4.24. python-mypy                              *ale-linter-options-python-mypy*
+4.25. python-mypy                              *ale-linter-options-python-mypy*
 
 g:ale_python_mypy_options                           *g:ale_python_mypy_options*
 
@@ -857,7 +868,7 @@ g:ale_python_mypy_options                           *g:ale_python_mypy_options*
 
 
 -------------------------------------------------------------------------------
-4.25. python-pylint                          *ale-linter-options-python-pylint*
+4.26. python-pylint                          *ale-linter-options-python-pylint*
 
 g:ale_python_pylint_executable                 *g:ale_python_pylint_executable*
 
@@ -885,7 +896,7 @@ g:ale_python_pylint_options                       *g:ale_python_pylint_options*
   `python3 -m pip install --user pylint`).
 
 ------------------------------------------------------------------------------
-4.26. erlang                                        *ale-linter-options-erlang*
+4.27. erlang                                        *ale-linter-options-erlang*
 
 g:ale_erlang_erlc_options                           *g:ale_erlang_erlc_options*
 
@@ -896,7 +907,7 @@ g:ale_erlang_erlc_options                           *g:ale_erlang_erlc_options*
   or `-pa`.
 
 ------------------------------------------------------------------------------
-4.27. phpmd                                       *ale-linter-options-phpmd*
+4.28. phpmd                                       *ale-linter-options-phpmd*
 
 g:ale_php_phpmd_ruleset                           *g:ale_php_phpmd_ruleset*
 
@@ -907,7 +918,7 @@ g:ale_php_phpmd_ruleset                           *g:ale_php_phpmd_ruleset*
   the available phpmd rulesets
 
 ------------------------------------------------------------------------------
-4.28. xo                                             *ale-linter-options-xo*
+4.29. xo                                             *ale-linter-options-xo*
 
 g:ale_javascript_xo_executable              *g:ale_javascript_xo_executable*
 
@@ -942,7 +953,7 @@ g:ale_javascript_xo_use_global             *g:ale_javascript_xo_use_global*
   xo in node_modules.
 
 ------------------------------------------------------------------------------
-4.28. javac                                          *ale-linter-options-javac*
+4.30. javac                                          *ale-linter-options-javac*
 
 g:ale_java_javac_classpath                         *g:ale_java_javac_classpath*
 
