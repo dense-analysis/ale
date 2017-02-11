@@ -4,7 +4,7 @@
 let g:ale_java_javac_options = get(g:, 'ale_java_javac_options', '')
 let g:ale_java_javac_classpath = get(g:, 'ale_java_javac_classpath', '')
 
-function! ale_linters#java#javac#GetCommand(buffer)
+function! ale_linters#java#javac#GetCommand(buffer) abort
     let l:cp_option = !empty(g:ale_java_javac_classpath)
     \   ?  '-cp ' . g:ale_java_javac_classpath
     \   : ''
