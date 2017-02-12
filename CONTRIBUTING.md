@@ -5,12 +5,20 @@
 3. [Creating Pull Requests](#pull-requests)
  1. [Adding a New Linter](#adding-a-new-linter)
  2. [Adding New Options](#adding-new-options)
+4. [Writing Documentation](#writing-documentation)
+ 1. [Documenting New Linters](#documenting-new-linters)
+ 2. [Editing the Online Documentation](#editing-online-documentation)
+ 3. [Documenting Linter Options](#documenting-new-options)
+5. [In Case of Busses](#in-case-of-busses)
 
 <a name="guidelines"></a>
 
 # 1. Guidelines
 
 Have fun, and work on whatever floats your boat. Take It Easy :tm:.
+
+Don't forget to **write documentation** for whatever it is you are doing.
+See the ["Writing Documentation"](#writing-documentation) section.
 
 When writing code, follow the [Google Vimscript Style
 Guide](https://google.github.io/styleguide/vimscriptguide.xml), and run `vint
@@ -90,3 +98,73 @@ global variable names.
 
 Any options for linters should be set to some default value so it is always
 easy to see what the default is with `:echo g:ale...`.
+
+<a name="writing-documentation"></a>
+
+# 4. Writing Documentation
+
+If you are adding new linters, changing the API, adding new options, etc., you
+_must_ write some documentation describing it in the `doc/ale.txt` file.  New
+linters _must_ be added to the `README.md` file too, so other users can get a
+quick overview of the supported tools.
+
+<a name="documenting-new-linters"></a>
+
+# 4.i Documenting New Linters
+
+If you add a new linter to the project, edit the table in the `README.md` file,
+and edit the list of linters at the top of the `doc/ale.txt` file. The linters
+should be sorted vertically in lexicographic (alphabetical) order by the
+programming language name or filetype, and the tools for each language should
+be sorted in lexicographic order horizontally. Sorting in this manner is a fair
+manner of presenting all of the information in an easy to scan way, without
+giving some unfair preference to any particular tool or language.
+
+<a name="editing-online-documentation"></a>
+
+# 4.ii Editing the Online Documentation
+
+The "online documentation" file used for this project lives in `doc/ale.txt`.
+This is the file used for generating `:help` text inside Vim itself. There are
+some guidlines to follow for this file.
+
+1. Keep all text within a column size of 79 characters, inclusive.
+2. Open a section with 79 `=` or `-` characters, for headings and subheadings.
+3. Sections should have a _single_ blank line before or after.
+4. Between descriptions of variables/functions/commands, use _two_ blank lines.
+5. Up-indent the description of a variable/function/command by two spaces.
+6. Place tags at the ends of lines, with the final characters on column 79.
+   All of the tags should line up perfectly on the same column as you scan
+   down through the document.
+7. Keep the table of contents balanced so the longest tag link ends on column
+   79, and so all links line up perfectly on their first character, on the
+   left.
+
+<a name="documenting-linter-options"></a>
+
+# 4.iii Documenting Linter Options
+
+For documenting new linter options, please add a new sub-section under the
+"Linter Specific Options" section describing all of the global options added
+for each linter, and what the default values of the options are. All global
+options for linters should be set to some default value. This will allow users
+to look up the default value easily by typing `:echo g:ale_...`.
+
+<a name="in-case-of-busses"></a>
+
+# 5. In Case of Busses
+
+Should the principal author of the ALE project and all collaborators with the
+required access needed to properly administrate the project on GitHub or any
+other website either perish or disappear, whether by tragic traffic accident
+or government adduction, etc., action should be taken to ensure that the
+project continues. If no one is left to administer the project where it is
+hosted, please fork the project and nominate someone capable to administer it.
+Preferably, in such an event, a single fork of the project will replace the
+original, and life will go on, except the life of whoever vanished, because
+then they will probably be dead.
+
+Should w0rp suddenly disappear, then he was probably killed in a traffic
+accident, or the government finally decided to kill him and make it look like
+suicide. In the latter event, please subvert said government and restore
+order to the universe, and ensure peace for mankind.
