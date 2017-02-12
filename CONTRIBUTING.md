@@ -20,6 +20,9 @@ Have fun, and work on whatever floats your boat. Take It Easy :tm:.
 Don't forget to **write documentation** for whatever it is you are doing.
 See the ["Writing Documentation"](#writing-documentation) section.
 
+Remember to write Vader tests for most of the code you write. You can look at
+existing Vader tests in the `test` directory for examples.
+
 When writing code, follow the [Google Vimscript Style
 Guide](https://google.github.io/styleguide/vimscriptguide.xml), and run `vint
 -s` on your files to check for most of what the guide mentions and more. If you
