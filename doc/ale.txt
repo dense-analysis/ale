@@ -784,6 +784,12 @@ g:ale_css_stylelint_executable                 *g:ale_css_stylelint_executable*
   If you wish to use only a globally installed version of stylelint, set
   |g:ale_css_stylelint_use_global| to `1`.
 
+g:ale_css_stylelint_options                    *g:ale_css_stylelint_options*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to stylelint.
 
 g:ale_css_stylelint_use_global                 *g:ale_css_stylelint_use_global*
 
