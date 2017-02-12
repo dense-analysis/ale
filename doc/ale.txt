@@ -175,6 +175,16 @@ g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
   Note |`g:ale_echo_msg_format`| should contain the `%severity%` handler
 
 
+g:ale_enabled                                                   *g:ale_enabled*
+
+  Type: |Number|
+  Default: `1`
+
+  When set to `0`, this option will completely disable ALE, such that no
+  error checking will be performed, etc. ALE can be toggled on and off with
+  the |ALEToggle| command, which changes this option.
+
+
 g:ale_keep_list_window_open                       *g:ale_keep_list_window_open*
 
   Type: |Number|
@@ -1040,6 +1050,12 @@ ALENextWrap                                                       *ALENextWrap*
   nmap <silent> <C-k> <Plug>(ale_previous_wrap)
   nmap <silent> <C-j> <Plug>(ale_next_wrap)
 <
+
+ALEToggle                                                           *ALEToggle*
+
+  Enable or disable ALE, including all of its autocmd events, loclist items,
+  quickfix items, signs, current jobs, etc. Calling this option will change
+  the |g:ale_enabled| variable.
 
 ===============================================================================
 7. API                                                                *ale-api*
