@@ -3,6 +3,9 @@
 let g:ale_css_stylelint_executable =
 \   get(g:, 'ale_css_stylelint_executable', 'stylelint')
 
+let g:ale_css_stylelint_options =
+\   get(g:, 'ale_css_stylelint_options', '')
+
 let g:ale_css_stylelint_use_global =
 \   get(g:, 'ale_css_stylelint_use_global', 0)
 
@@ -20,6 +23,7 @@ endfunction
 
 function! ale_linters#css#stylelint#GetCommand(buffer) abort
     return ale_linters#css#stylelint#GetExecutable(a:buffer)
+    \   . ' ' . g:ale_css_stylelint_options
     \   . ' --stdin-filename %s'
 endfunction
 
