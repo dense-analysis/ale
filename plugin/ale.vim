@@ -20,8 +20,13 @@ else
 endif
 
 if !s:has_features
-    echoerr 'ALE requires NeoVim >= 0.1.5 or Vim 8 with +timers +job +channel'
-    echoerr 'Please update your editor appropriately.'
+    " Only output a warning if editing some special files.
+    if index(['', 'gitcommit'], &filetype) == -1
+        echoerr 'ALE requires NeoVim >= 0.1.5 or Vim 8 with +timers +job +channel'
+        echoerr 'Please update your editor appropriately.'
+    endif
+
+    " Stop here, as it won't work.
     finish
 endif
 
