@@ -93,7 +93,7 @@ function! s:FilterLines(buffer, lines) abort
 endfunction
 
 function! ale_linters#go#gobuild#Handler(buffer, lines) abort
-    return ale#handlers#HandleUnixFormatAsError(a:buffer, s:FilterLines(a:lines))
+    return ale#handlers#HandleUnixFormatAsError(a:buffer, s:FilterLines(a:buffer, a:lines))
 endfunction
 
 call ale#linter#Define('go', {
