@@ -1,6 +1,8 @@
 " Author: dzhou121 <dzhou121@gmail.com>, Ryan Norris <rynorris@gmail.com>
 " Description: go build for Go files
 
+let s:temp_file_pattern = 'ale\.[0-9]\+\..*\.go'
+
 function! s:ThisFile(buffer) abort
     return fnamemodify(bufname(a:buffer), ':p:t')
 endfunction
@@ -36,7 +38,7 @@ function! ale_linters#go#gobuild#GetCommand(buffer) abort
     " Also filter out any other ale temporary files in the directory.
     let l:this_file = s:ThisFile(a:buffer)
     call filter(l:all_files, 'fnamemodify(v:val, '':t'') != l:this_file')
-    call filter(l:all_files, 'fnamemodify(v:val, '':t'') !~# ''ale\.[0-9]\+\..*\.go''')
+    call filter(l:all_files, 'fnamemodify(v:val, '':t'') !~# s:temp_file_pattern')
     call add(l:all_files, l:temp_file)
 
     " Prepare command.
