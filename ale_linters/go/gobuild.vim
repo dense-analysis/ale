@@ -1,20 +1,19 @@
 " Author: dzhou121 <dzhou121@gmail.com>, Ryan Norris <rynorris@gmail.com>
 " Description: go build for Go files
 
-function! s:ThisFile(buffer)
+function! s:ThisFile(buffer) abort
     return fnamemodify(bufname(a:buffer), ':p:t')
 endfunction
 
-function! s:ThisPackage(buffer)
+function! s:ThisPackage(buffer) abort
     return fnamemodify(bufname(a:buffer), ':p:h')
 endfunction
 
-function! s:TempFileName(buffer)
+function! s:TempFileName(buffer) abort
     return s:ThisPackage(a:buffer) . '/ale.' . expand('$PPID') . '.' . s:ThisFile(a:buffer)
-    return l:temp_file
 endfunction
 
-function! ale_linters#go#gobuild#GetCommand(buffer)
+function! ale_linters#go#gobuild#GetCommand(buffer) abort
     " Get absolute path to the directory containing the current file.
     " This directory by definition contains all the files for this go package.
     let l:this_package = s:ThisPackage(a:buffer)
@@ -28,7 +27,7 @@ function! ale_linters#go#gobuild#GetCommand(buffer)
     " the temporary version of the current file.
     let l:this_file = s:ThisFile(a:buffer)
     call filter(l:all_files, 'fnamemodify(v:val, '':t'') != l:this_file')
-    call filter(l:all_files, 'fnamemodify(v:val, '':t'') !~ ''ale\.[0-9]\+\..*\.go''')
+    call filter(l:all_files, 'fnamemodify(v:val, '':t'') !~# ''ale\.[0-9]\+\..*\.go''')
 
     " Write current buffer to a temporary file.
     let l:temp_file = s:TempFileName(a:buffer)
