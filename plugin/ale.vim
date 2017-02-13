@@ -185,7 +185,7 @@ command! ALENextWrap :call ale#loclist_jumping#Jump('after', 1)
 command! ALEToggle :call s:ALEToggle()
 
 " Define command to get information about current filetype.
-command! ALEInfo :call ale#linter#Info()
+command! ALEInfo :call ale#debugging#Info()
 
 " <Plug> mappings for commands
 nnoremap <silent> <Plug>(ale_previous) :ALEPrevious<Return>
