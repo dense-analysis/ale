@@ -22,13 +22,6 @@ function! ale_linters#go#gobuild#GetCommand(buffer) abort
     " TODO: Handle packages that contain c files.
     let l:all_files = globpath(l:this_package, '*.go', 1, 1)
 
-    " Filter out the current file since we don't want to include it twice.
-    " We'll then pass this list to go compile and stdin_wrapper will add on
-    " the temporary version of the current file.
-    let l:this_file = s:ThisFile(a:buffer)
-    call filter(l:all_files, 'fnamemodify(v:val, '':t'') != l:this_file')
-    call filter(l:all_files, 'fnamemodify(v:val, '':t'') !~# ''ale\.[0-9]\+\..*\.go''')
-
     " Write current buffer to a temporary file.
     let l:temp_file = s:TempFileName(a:buffer)
     if filereadable(l:temp_file)
@@ -39,7 +32,16 @@ function! ale_linters#go#gobuild#GetCommand(buffer) abort
     call writefile(getbufline(a:buffer, 1, '$'), l:temp_file)
     call ale#engine#ManageFile(a:buffer, l:temp_file)
 
-    return 'go test -c ' . ' -o /dev/null ' . join(l:all_files) . ' ' . l:temp_file
+    " Swap out the current file in the file listing for the temporary version.
+    " Also filter out any other ale temporary files in the directory.
+    let l:this_file = s:ThisFile(a:buffer)
+    call filter(l:all_files, 'fnamemodify(v:val, '':t'') != l:this_file')
+    call filter(l:all_files, 'fnamemodify(v:val, '':t'') !~# ''ale\.[0-9]\+\..*\.go''')
+    call add(l:all_files, l:temp_file)
+
+    " Prepare command.
+    let l:file_args = join(map(l:all_files, 'fnameescape(v:val)'))
+    return 'go test -c ' . ' -o /dev/null ' . l:file_args
 endfunction
 
 call ale#linter#Define('go', {
