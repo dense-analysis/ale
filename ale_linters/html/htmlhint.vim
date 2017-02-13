@@ -23,9 +23,9 @@ function! ale_linters#html#htmlhint#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#html#htmlhint#GetCommand(buffer) abort
-    return g:ale#util#stdin_wrapper . ' .html '
-    \   . ale_linters#html#htmlhint#GetExecutable(a:buffer)
+    return ale_linters#html#htmlhint#GetExecutable(a:buffer)
     \   . ' ' . g:ale_html_htmlhint_options
+    \   . ' %t'
 endfunction
 
 call ale#linter#Define('html', {

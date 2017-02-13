@@ -25,6 +25,12 @@ if !s:has_features
     finish
 endif
 
+" Set the TMPDIR environment variable if it is not set automatically.
+" This can automatically fix some environments.
+if has('unix') && empty($TMPDIR)
+    let $TMPDIR = '/tmp'
+endif
+
 " This global variable is used internally by ALE for tracking information for
 " each buffer which linters are being run against.
 let g:ale_buffer_info = {}
@@ -49,30 +55,16 @@ let g:ale_lint_delay = get(g:, 'ale_lint_delay', 200)
 
 " This flag can be set to 0 to disable linting when text is changed.
 let g:ale_lint_on_text_changed = get(g:, 'ale_lint_on_text_changed', 1)
-if g:ale_lint_on_text_changed
-    augroup ALERunOnTextChangedGroup
-        autocmd!
-        autocmd TextChanged,TextChangedI * call ale#Queue(g:ale_lint_delay)
-    augroup END
-endif
 
 " This flag can be set to 0 to disable linting when the buffer is entered.
 let g:ale_lint_on_enter = get(g:, 'ale_lint_on_enter', 1)
-if g:ale_lint_on_enter
-    augroup ALERunOnEnterGroup
-        autocmd!
-        autocmd BufEnter,BufRead * call ale#Queue(300)
-    augroup END
-endif
 
 " This flag can be set to 1 to enable linting when a buffer is written.
 let g:ale_lint_on_save = get(g:, 'ale_lint_on_save', 0)
-if g:ale_lint_on_save
-    augroup ALERunOnSaveGroup
-        autocmd!
-        autocmd BufWrite * call ale#Queue(0)
-    augroup END
-endif
+
+" This flag may be set to 0 to disable ale. After ale is loaded, :ALEToggle
+" should be used instead.
+let g:ale_enabled = get(g:, 'ale_enabled', 1)
 
 " These flags dictates if ale uses the quickfix or the loclist (loclist is the
 " default, quickfix overrides loclist).
@@ -88,6 +80,9 @@ let g:ale_keep_list_window_open = get(g:, 'ale_keep_list_window_open', 0)
 " This flag can be set to 0 to disable setting signs.
 " This is enabled by default only if the 'signs' feature exists.
 let g:ale_set_signs = get(g:, 'ale_set_signs', has('signs'))
+
+" This flag can be set to 0 to disable setting error highlights.
+let g:ale_set_highlights = get(g:, 'ale_set_highlights', has('syntax'))
 
 " These variables dicatate what sign is used to indicate errors and warnings.
 let g:ale_sign_error = get(g:, 'ale_sign_error', '>>')
@@ -112,12 +107,6 @@ let g:ale_echo_msg_warning_str = get(g:, 'ale_echo_msg_warning_str', 'Warning')
 
 " This flag can be set to 0 to disable echoing when the cursor moves.
 let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
-if g:ale_echo_cursor
-    augroup ALECursorGroup
-        autocmd!
-        autocmd CursorMoved,CursorHold * call ale#cursor#EchoCursorWarningWithDelay()
-    augroup END
-endif
 
 " String format for statusline
 " Its a list where:
@@ -132,11 +121,68 @@ let g:ale_statusline_format = get(g:, 'ale_statusline_format',
 let g:ale_warn_about_trailing_whitespace =
 \   get(g:, 'ale_warn_about_trailing_whitespace', 1)
 
+function! s:ALEInitAuGroups() abort
+    augroup ALERunOnTextChangedGroup
+        autocmd!
+        if g:ale_enabled && g:ale_lint_on_text_changed
+            autocmd TextChanged,TextChangedI * call ale#Queue(g:ale_lint_delay)
+        endif
+    augroup END
+
+    augroup ALERunOnEnterGroup
+        autocmd!
+        if g:ale_enabled && g:ale_lint_on_enter
+            autocmd BufEnter,BufRead * call ale#Queue(300)
+        endif
+    augroup END
+
+    augroup ALERunOnSaveGroup
+        autocmd!
+        if g:ale_enabled && g:ale_lint_on_save
+            autocmd BufWrite * call ale#Queue(0)
+        endif
+    augroup END
+
+    augroup ALECursorGroup
+        autocmd!
+        if g:ale_enabled && g:ale_echo_cursor
+            autocmd CursorMoved,CursorHold * call ale#cursor#EchoCursorWarningWithDelay()
+        endif
+    augroup END
+endfunction
+
+function! s:ALEToggle() abort
+    let g:ale_enabled = !get(g:, 'ale_enabled')
+
+    if g:ale_enabled
+        " Lint immediately
+        call ale#Queue(0)
+    else
+        for l:buffer in keys(g:ale_buffer_info)
+            " Stop jobs and delete stored buffer data
+            call ale#cleanup#Buffer(l:buffer)
+            " Clear signs, loclist, quicklist
+            call ale#engine#SetResults(l:buffer, [])
+        endfor
+
+        " Remove highlights for the current buffer now.
+        if g:ale_set_higlights
+            call ale#highlight#UpdateHighlights()
+        endif
+    endif
+
+    call s:ALEInitAuGroups()
+endfunction
+
+call s:ALEInitAuGroups()
+
 " Define commands for moving through warnings and errors.
 command! ALEPrevious :call ale#loclist_jumping#Jump('before', 0)
 command! ALEPreviousWrap :call ale#loclist_jumping#Jump('before', 1)
 command! ALENext :call ale#loclist_jumping#Jump('after', 0)
 command! ALENextWrap :call ale#loclist_jumping#Jump('after', 1)
+
+command! ALEToggle :call s:ALEToggle()
 
 " Define command to get information about current filetype.
 command! ALEInfo :call ale#linter#Info()
@@ -146,6 +192,7 @@ nnoremap <silent> <Plug>(ale_previous) :ALEPrevious<Return>
 nnoremap <silent> <Plug>(ale_previous_wrap) :ALEPreviousWrap<Return>
 nnoremap <silent> <Plug>(ale_next) :ALENext<Return>
 nnoremap <silent> <Plug>(ale_next_wrap) :ALENextWrap<Return>
+nnoremap <silent> <Plug>(ale_toggle) :ALEToggle<Return>
 
 " Housekeeping
 

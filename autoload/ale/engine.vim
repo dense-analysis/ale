@@ -17,7 +17,13 @@ function! s:GetJobID(job) abort
 
     " In Vim 8, the job is a special variable, and we open a channel for each
     " job. We'll use the ID of the channel instead as the job ID.
-    return ch_info(job_getchannel(a:job)).id
+    try
+        return ch_info(job_getchannel(a:job)).id
+    catch
+    endtry
+
+    " If we fail to get the channel ID for a job, just return a 0 ID.
+    return 0
 endfunction
 
 function! ale#engine#InitBufferInfo(buffer) abort
@@ -25,12 +31,24 @@ function! ale#engine#InitBufferInfo(buffer) abort
         " job_list will hold the list of jobs
         " loclist holds the loclist items after all jobs have completed.
         " new_loclist holds loclist items while jobs are being run.
+        " temporary_file_list holds temporary files to be cleaned up
+        " temporary_directory_list holds temporary directories to be cleaned up
         let g:ale_buffer_info[a:buffer] = {
         \   'job_list': [],
         \   'loclist': [],
         \   'new_loclist': [],
+        \   'temporary_file_list': [],
+        \   'temporary_directory_list': [],
         \}
     endif
+endfunction
+
+" A map from timer IDs to Vim 8 jobs, for tracking jobs that need to be killed
+" with SIGKILL if they don't terminate right away.
+let s:job_kill_timers = {}
+
+function! s:KillHandler(timer) abort
+    call job_stop(remove(s:job_kill_timers, a:timer), 'kill')
 endfunction
 
 function! ale#engine#ClearJob(job) abort
@@ -46,10 +64,19 @@ function! ale#engine#ClearJob(job) abort
             call ch_close_in(job_getchannel(a:job))
         endif
 
+        " Ask nicely for the job to stop.
         call job_stop(a:job)
+
+        " If a job doesn't stop immediately, queue a timer which will
+        " send SIGKILL to the job, if it's alive by the time the timer ticks.
+        if job_status(a:job) ==# 'run'
+            let s:job_kill_timers[timer_start(100, function('s:KillHandler'))] = a:job
+        endif
     endif
 
-    call remove(s:job_info_map, l:job_id)
+    if has_key(s:job_info_map, l:job_id)
+        call remove(s:job_info_map, l:job_id)
+    endif
 endfunction
 
 function! s:StopPreviousJobs(buffer, linter) abort
@@ -112,6 +139,40 @@ function! ale#engine#JoinNeovimOutput(output, data) abort
     endif
 endfunction
 
+" Register a temporary file to be managed with the ALE engine for
+" a current job run.
+function! ale#engine#ManageFile(buffer, filename) abort
+    call add(g:ale_buffer_info[a:buffer].temporary_file_list, a:filename)
+endfunction
+
+" Same as the above, but manage an entire directory.
+function! ale#engine#ManageDirectory(buffer, directory) abort
+    call add(g:ale_buffer_info[a:buffer].temporary_directory_list, a:directory)
+endfunction
+
+function! ale#engine#RemoveManagedFiles(buffer) abort
+    if !has_key(g:ale_buffer_info, a:buffer)
+        return
+    endif
+
+    " Delete files with a call akin to a plan `rm` command.
+    for l:filename in g:ale_buffer_info[a:buffer].temporary_file_list
+        call delete(l:filename)
+    endfor
+
+    let g:ale_buffer_info[a:buffer].temporary_file_list = []
+
+    " Delete directories like `rm -rf`.
+    " Directories are handled differently from files, so paths that are
+    " intended to be single files can be set up for automatic deletion without
+    " accidentally deleting entire directories.
+    for l:directory in g:ale_buffer_info[a:buffer].temporary_directory_list
+        call delete(l:directory, 'rf')
+    endfor
+
+    let g:ale_buffer_info[a:buffer].temporary_directory_list = []
+endfunction
+
 function! s:HandleExit(job) abort
     if a:job ==# 'no process'
         " Stop right away when the job is not valid in Vim 8.
@@ -156,6 +217,10 @@ function! s:HandleExit(job) abort
         return
     endif
 
+    " Automatically remove all managed temporary files and directories
+    " now that all jobs have completed.
+    call ale#engine#RemoveManagedFiles(l:buffer)
+
     " Sort the loclist again.
     " We need a sorted list so we can run a binary search against it
     " for efficient lookup of the messages in the cursor handler.
@@ -166,24 +231,29 @@ function! s:HandleExit(job) abort
     let g:ale_buffer_info[l:buffer].loclist = g:ale_buffer_info[l:buffer].new_loclist
     let g:ale_buffer_info[l:buffer].new_loclist = []
 
+    call ale#engine#SetResults(l:buffer, g:ale_buffer_info[l:buffer].loclist)
+
+    " Call user autocommands. This allows users to hook into ALE's lint cycle.
+    silent doautocmd User ALELint
+endfunction
+
+function! ale#engine#SetResults(buffer, loclist) abort
     if g:ale_set_quickfix || g:ale_set_loclist
-        call ale#list#SetLists(g:ale_buffer_info[l:buffer].loclist)
+        call ale#list#SetLists(a:loclist)
     endif
 
     if g:ale_set_signs
-        call ale#sign#SetSigns(l:buffer, g:ale_buffer_info[l:buffer].loclist)
+        call ale#sign#SetSigns(a:buffer, a:loclist)
     endif
 
     if exists('*ale#statusline#Update')
         " Don't load/run if not already loaded.
-        call ale#statusline#Update(l:buffer, g:ale_buffer_info[l:buffer].loclist)
+        call ale#statusline#Update(a:buffer, a:loclist)
     endif
 
-    " Call user autocommands. This allows users to hook into ALE's lint cycle.
-    silent doautocmd User ALELint
-
-    " Mark line 200, column 17 with a squiggly line or something
-    " matchadd('ALEError', '\%200l\%17v')
+    if g:ale_set_highlights
+        call ale#highlight#SetHighlights(a:buffer, a:loclist)
+    endif
 endfunction
 
 function! s:HandleExitNeoVim(job, data, event) abort
@@ -210,18 +280,98 @@ function! s:FixLocList(buffer, loclist) abort
     endfor
 endfunction
 
-function! s:RunJob(command, generic_job_options) abort
-    let l:buffer = a:generic_job_options.buffer
-    let l:linter = a:generic_job_options.linter
-    let l:output_stream = a:generic_job_options.output_stream
-    let l:next_chain_index = a:generic_job_options.next_chain_index
-    let l:read_buffer = a:generic_job_options.read_buffer
+" Given part of a command, replace any % with %%, so that no characters in
+" the string will be replaced with filenames, etc.
+function! ale#engine#EscapeCommandPart(command_part) abort
+    return substitute(a:command_part, '%', '%%', 'g')
+endfunction
+
+function! s:TemporaryFilename(buffer) abort
+    let l:filename = fnamemodify(bufname(a:buffer), ':t')
+
+    if empty(l:filename)
+        " If the buffer's filename is empty, create a dummy filename.
+        let l:ft = getbufvar(a:buffer, '&filetype')
+        let l:filename = 'file' . ale#filetypes#GuessExtension(l:ft)
+    endif
+
+    " Create a temporary filename, <temp_dir>/<original_basename>
+    " The file itself will not be created by this function.
+    return tempname() . (has('win32') ? '\' : '/') . l:filename
+endfunction
+
+" Given a command string, replace every...
+" %s -> with the current filename
+" %t -> with the name of an unused file in a temporary directory
+" %% -> with a literal %
+function! ale#engine#FormatCommand(buffer, command) abort
+    let l:temporary_file = ''
     let l:command = a:command
 
+    " First replace all uses of %%, used for literal percent characters,
+    " with an ugly string.
+    let l:command = substitute(l:command, '%%', '<<PERCENTS>>', 'g')
+
+    " Replace all %s occurences in the string with the name of the current
+    " file.
     if l:command =~# '%s'
-        " If there is a '%s' in the command string, replace it with the name
-        " of the file.
-        let l:command = printf(l:command, shellescape(fnamemodify(bufname(l:buffer), ':p')))
+        let l:filename = fnamemodify(bufname(a:buffer), ':p')
+        let l:command = substitute(l:command, '%s', '\=fnameescape(l:filename)', 'g')
+    endif
+
+    if l:command =~# '%t'
+        " Create a temporary filename, <temp_dir>/<original_basename>
+        " The file itself will not be created by this function.
+        let l:temporary_file = s:TemporaryFilename(a:buffer)
+        let l:command = substitute(l:command, '%t', '\=fnameescape(l:temporary_file)', 'g')
+    endif
+
+    " Finish formatting so %% becomes %.
+    let l:command = substitute(l:command, '<<PERCENTS>>', '%', 'g')
+
+    return [l:temporary_file, l:command]
+endfunction
+
+function! s:CreateTemporaryFileForJob(buffer, temporary_file) abort
+    if empty(a:temporary_file)
+        " There is no file, so we didn't create anything.
+        return 0
+    endif
+
+    let l:temporary_directory = fnamemodify(a:temporary_file, ':h')
+    " Create the temporary directory for the file, unreadable by 'other'
+    " users.
+    call mkdir(l:temporary_directory, '', 0750)
+    " Automatically delete the directory later.
+    call ale#engine#ManageDirectory(a:buffer, l:temporary_directory)
+    " Write the buffer out to a file.
+    call writefile(getbufline(a:buffer, 1, '$'), a:temporary_file)
+
+    return 1
+endfunction
+
+function! s:RunJob(options) abort
+    let l:command = a:options.command
+    let l:buffer = a:options.buffer
+    let l:linter = a:options.linter
+    let l:output_stream = a:options.output_stream
+    let l:next_chain_index = a:options.next_chain_index
+    let l:read_buffer = a:options.read_buffer
+
+    let [l:temporary_file, l:command] = ale#engine#FormatCommand(l:buffer, l:command)
+
+    if l:read_buffer && empty(l:temporary_file)
+        " If we are to send the Vim buffer to a command, we'll do it
+        " in the shell. We'll write out the file to a temporary file,
+        " and then read it back in, in the shell.
+        let l:temporary_file = s:TemporaryFilename(l:buffer)
+        let l:command = l:command . ' < ' . fnameescape(l:temporary_file)
+    endif
+
+    if s:CreateTemporaryFileForJob(l:buffer, l:temporary_file)
+        " If a temporary filename has been formatted in to the command, then
+        " we do not need to send the Vim buffer to the command.
+        let l:read_buffer = 0
     endif
 
     if has('nvim')
@@ -262,22 +412,14 @@ function! s:RunJob(command, generic_job_options) abort
             let l:job_options.out_cb = function('s:GatherOutputVim')
         endif
 
-        if has('win32')
-            " job_start commands on Windows have to be run with cmd /c,
-            " othwerwise %PATHTEXT% will not be used to programs ending int
-            " .cmd, .bat, .exe, etc.
-            let l:command = 'cmd /c ' . l:command
-        else
-            " Execute the command with the shell, to fix escaping issues.
-            let l:command = split(&shell) + split(&shellcmdflag) + [l:command]
-
-            if l:read_buffer
-                " On Unix machines, we can send the Vim buffer directly.
-                " This is faster than reading the lines ourselves.
-                let l:job_options.in_io = 'buffer'
-                let l:job_options.in_buf = l:buffer
-            endif
-        endif
+        " The command will be executed in a subshell. This fixes a number of
+        " issues, including reading the PATH variables correctly, %PATHEXT%
+        " expansion on Windows, etc.
+        "
+        " NeoVim handles this issue automatically if the command is a String.
+        let l:command = has('win32')
+        \   ?  'cmd /c ' . l:command
+        \   : split(&shell) + split(&shellcmdflag) + [l:command]
 
         " Vim 8 will read the stdin from the file's buffer.
         let l:job = job_start(l:command, l:job_options)
@@ -295,30 +437,14 @@ function! s:RunJob(command, generic_job_options) abort
         \   'output': [],
         \   'next_chain_index': l:next_chain_index,
         \}
-
-        if l:read_buffer
-            if has('nvim')
-                " In NeoVim, we have to send the buffer lines ourselves.
-                let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
-
-                call jobsend(l:job, l:input)
-                call jobclose(l:job, 'stdin')
-            elseif has('win32')
-                " On some Vim versions, we have to send the buffer data ourselves.
-                let l:input = join(getbufline(l:buffer, 1, '$'), "\n") . "\n"
-                let l:channel = job_getchannel(l:job)
-
-                if ch_status(l:channel) ==# 'open'
-                    call ch_sendraw(l:channel, l:input)
-                    call ch_close_in(l:channel)
-                endif
-            endif
-        endif
     endif
 endfunction
 
-function! s:InvokeChain(buffer, linter, chain_index, input) abort
+" Determine which commands to run for a link in a command chain, or
+" just a regular command.
+function! ale#engine#ProcessChain(buffer, linter, chain_index, input) abort
     let l:output_stream = get(a:linter, 'output_stream', 'stdout')
+    let l:read_buffer = a:linter.read_buffer
     let l:chain_index = a:chain_index
     let l:input = a:input
 
@@ -327,11 +453,6 @@ function! s:InvokeChain(buffer, linter, chain_index, input) abort
             " Run a chain of commands, one asychronous command after the other,
             " so that many programs can be run in a sequence.
             let l:chain_item = a:linter.command_chain[l:chain_index]
-
-            " The chain item can override the output_stream option.
-            if has_key(l:chain_item, 'output_stream')
-                let l:output_stream = l:chain_item.output_stream
-            endif
 
             if l:chain_index == 0
                 " The first callback in the chain takes only a buffer number.
@@ -348,6 +469,21 @@ function! s:InvokeChain(buffer, linter, chain_index, input) abort
 
             if !empty(l:command)
                 " We hit a command to run, so we'll execute that
+
+                " The chain item can override the output_stream option.
+                if has_key(l:chain_item, 'output_stream')
+                    let l:output_stream = l:chain_item.output_stream
+                endif
+
+                " The chain item can override the read_buffer option.
+                if has_key(l:chain_item, 'read_buffer')
+                    let l:read_buffer = l:chain_item.read_buffer
+                elseif l:chain_index != len(a:linter.command_chain) - 1
+                    " Don't read the buffer for commands besides the last one
+                    " in the chain by default.
+                    let l:read_buffer = 0
+                endif
+
                 break
             endif
 
@@ -357,11 +493,6 @@ function! s:InvokeChain(buffer, linter, chain_index, input) abort
             let l:input = []
             let l:chain_index += 1
         endwhile
-
-        if empty(l:command)
-            " Don't run any jobs if the last command is an empty string.
-            return
-        endif
     elseif has_key(a:linter, 'command_callback')
         " If there is a callback for generating a command, call that instead.
         let l:command = ale#util#GetFunction(a:linter.command_callback)(a:buffer)
@@ -369,15 +500,31 @@ function! s:InvokeChain(buffer, linter, chain_index, input) abort
         let l:command = a:linter.command
     endif
 
-    let l:is_last_job = l:chain_index >= len(get(a:linter, 'command_chain', [])) - 1
+    if empty(l:command)
+        " Don't run any jobs if the command is an empty string.
+        return {}
+    endif
 
-    call s:RunJob(l:command, {
+    return {
+    \   'command': l:command,
     \   'buffer': a:buffer,
     \   'linter': a:linter,
     \   'output_stream': l:output_stream,
     \   'next_chain_index': l:chain_index + 1,
-    \   'read_buffer': l:is_last_job,
-    \})
+    \   'read_buffer': l:read_buffer,
+    \}
+endfunction
+
+function! s:InvokeChain(buffer, linter, chain_index, input) abort
+    let l:options = ale#engine#ProcessChain(a:buffer, a:linter, a:chain_index, a:input)
+
+    if !empty(l:options)
+        call s:RunJob(l:options)
+    elseif empty(g:ale_buffer_info[a:buffer].job_list)
+        " If we cancelled running a command, and we have no jobs in progress,
+        " then delete the managed temporary files now.
+        call ale#engine#RemoveManagedFiles(a:buffer)
+    endif
 endfunction
 
 function! ale#engine#Invoke(buffer, linter) abort

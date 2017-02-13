@@ -5,8 +5,6 @@ call ale#linter#Define('pyrex', {
 \   'name': 'cython',
 \   'output_stream': 'stderr',
 \   'executable': 'cython',
-\   'command': g:ale#util#stdin_wrapper
-\       . ' .pyx cython --warning-extra -o '
-\       . g:ale#util#nul_file,
+\   'command': 'cython --warning-extra -o ' . g:ale#util#nul_file . ' %t',
 \   'callback': 'ale#handlers#HandleUnixFormatAsError',
 \})

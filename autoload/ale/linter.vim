@@ -33,6 +33,10 @@ function! s:IsCallback(value) abort
     return type(a:value) == type('') || type(a:value) == type(function('type'))
 endfunction
 
+function! s:IsBoolean(value) abort
+    return type(a:value) == type(0) && (a:value == 0 || a:value == 1)
+endfunction
+
 function! ale#linter#PreProcess(linter) abort
     if type(a:linter) != type({})
         throw 'The linter object must be a Dictionary'
@@ -95,6 +99,10 @@ function! ale#linter#PreProcess(linter) abort
                 endif
             endif
 
+            if has_key(l:link, 'read_buffer') && !s:IsBoolean(l:link.read_buffer)
+                throw l:err_prefix . 'value for `read_buffer` must be `0` or `1`'
+            endif
+
             let l:link_index += 1
         endfor
     elseif has_key(a:linter, 'command_callback')
@@ -114,11 +122,27 @@ function! ale#linter#PreProcess(linter) abort
         \   . 'must be defined'
     endif
 
+    if (
+    \   has_key(a:linter, 'command')
+    \   + has_key(a:linter, 'command_chain')
+    \   + has_key(a:linter, 'command_callback')
+    \) > 1
+        throw 'Only one of `command`, `command_callback`, or `command_chain` '
+        \   . 'should be set'
+    endif
+
     let l:obj.output_stream = get(a:linter, 'output_stream', 'stdout')
 
     if type(l:obj.output_stream) != type('')
     \|| index(['stdout', 'stderr', 'both'], l:obj.output_stream) < 0
         throw "`output_stream` must be 'stdout', 'stderr', or 'both'"
+    endif
+
+    " An option indicating that the buffer should be read.
+    let l:obj.read_buffer = get(a:linter, 'read_buffer', 1)
+
+    if !s:IsBoolean(l:obj.read_buffer)
+        throw '`read_buffer` must be `0` or `1`'
     endif
 
     return l:obj

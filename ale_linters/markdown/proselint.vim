@@ -4,6 +4,6 @@
 call ale#linter#Define('markdown', {
 \   'name': 'proselint',
 \   'executable': 'proselint',
-\   'command': g:ale#util#stdin_wrapper . ' .md proselint',
+\   'command': 'proselint %t',
 \   'callback': 'ale#handlers#HandleUnixFormatAsWarning',
 \})

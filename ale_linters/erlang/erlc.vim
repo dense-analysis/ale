@@ -3,7 +3,7 @@
 let g:ale_erlang_erlc_options = get(g:, 'ale_erlang_erlc_options', '')
 
 function! ale_linters#erlang#erlc#GetCommand(buffer) abort
-    return g:ale#util#stdin_wrapper . ' .erl erlc ' . g:ale_erlang_erlc_options
+    return 'erlc ' . g:ale_erlang_erlc_options . ' %t'
 endfunction
 
 function! ale_linters#erlang#erlc#Handle(buffer, lines) abort

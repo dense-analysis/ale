@@ -2,8 +2,8 @@ Before:
     let g:buffer = bufnr('%')
 
     let g:ale_buffer_info = {
-    \  g:buffer : {},
-    \  10347: {},
+    \  g:buffer : {'temporary_file_list': [], 'temporary_directory_list': []},
+    \  10347: {'temporary_file_list': [], 'temporary_directory_list': []},
     \}
 
 After:
@@ -12,4 +12,4 @@ After:
 
 Execute('ALE globals should be cleared when the buffer is closed.'):
     :q!
-    AssertEqual {10347: {}}, g:ale_buffer_info
+    AssertEqual {10347: {'temporary_file_list': [], 'temporary_directory_list': []}}, g:ale_buffer_info

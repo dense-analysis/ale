@@ -4,6 +4,6 @@
 call ale#linter#Define('css', {
 \   'name': 'csslint',
 \   'executable': 'csslint',
-\   'command': g:ale#util#stdin_wrapper . ' .css csslint --format=compact',
+\   'command': 'csslint --format=compact %t',
 \   'callback': 'ale#handlers#HandleCSSLintFormat',
 \})

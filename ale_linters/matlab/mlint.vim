@@ -4,6 +4,16 @@
 let g:ale_matlab_mlint_executable =
 \   get(g:, 'ale_matlab_mlint_executable', 'mlint')
 
+function! ale_linters#matlab#mlint#GetExecutable(buffer) abort
+    return g:ale_matlab_mlint_executable
+endfunction
+
+function! ale_linters#matlab#mlint#GetCommand(buffer) abort
+    let l:executable = ale_linters#matlab#mlint#GetExecutable(a:buffer)
+
+    return l:executable . ' -id %t'
+endfunction
+
 function! ale_linters#matlab#mlint#Handle(buffer, lines) abort
     " Matches patterns like the following:
     "
@@ -47,9 +57,8 @@ endfunction
 
 call ale#linter#Define('matlab', {
 \   'name': 'mlint',
-\   'executable': 'mlint',
-\   'command': g:ale#util#stdin_wrapper .
-\       ' .m ' . g:ale_matlab_mlint_executable . ' -id',
+\   'executable_callback': 'ale_linters#matlab#mlint#GetExecutable',
+\   'command_callback': 'ale_linters#matlab#mlint#GetCommand',
 \   'output_stream': 'stderr',
 \   'callback': 'ale_linters#matlab#mlint#Handle',
 \})

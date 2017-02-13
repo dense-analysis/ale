@@ -1,0 +1,41 @@
+Before:
+  silent! cd /testplugin/test
+  :e! top/middle/bottom/dummy.txt
+
+After:
+  unlet! g:result
+  unlet! g:match
+
+Execute(FormatCommand should do nothing to basic command strings):
+  AssertEqual ['', 'awesome-linter do something'], ale#engine#FormatCommand(bufnr('%'), 'awesome-linter do something')
+
+Execute(FormatCommand should handle %%, and ignore other percents):
+  AssertEqual ['', '% %%d %%f %x %'], ale#engine#FormatCommand(bufnr('%'), '%% %%%d %%%f %x %')
+
+Execute(FormatCommand should convert %s to the current filename):
+  AssertEqual ['', 'foo ' . fnameescape(expand('%:p')) . ' bar ' . fnameescape(expand('%:p'))], ale#engine#FormatCommand(bufnr('%'), 'foo %s bar %s')
+
+Execute(FormatCommand should convert %t to a new temporary filename):
+  let g:result = ale#engine#FormatCommand(bufnr('%'), 'foo %t bar %t')
+  let g:match = matchlist(g:result[1], '\v^foo (/tmp/.*/dummy.txt) bar (/tmp/.*/dummy.txt)$')
+
+  Assert !empty(g:match), 'No match found! Result was: ' . g:result[1]
+  " The first item of the result should be a temporary filename, and it should
+  " be the same as the escaped name in the command string.
+  AssertEqual g:result[0], fnameescape(g:match[1])
+  " The two temporary filenames formatted in should be the same.
+  AssertEqual g:match[1], g:match[2]
+
+Execute(FormatCommand should let you combine %s and %t):
+  let g:result = ale#engine#FormatCommand(bufnr('%'), 'foo %t bar %s')
+  let g:match = matchlist(g:result[1], '\v^foo (/tmp/.*/dummy.txt) bar (.*/dummy.txt)$')
+
+  Assert !empty(g:match), 'No match found! Result was: ' . g:result[1]
+  " The first item of the result should be a temporary filename, and it should
+  " be the same as the escaped name in the command string.
+  AssertEqual g:result[0], fnameescape(g:match[1])
+  " The second item should be equal to the original filename.
+  AssertEqual fnameescape(expand('%:p')), g:match[2]
+
+Execute(EscapeCommandPart should escape all percent signs):
+  AssertEqual '%%s %%t %%%% %%s %%t %%%%', ale#engine#EscapeCommandPart('%s %t %% %s %t %%')

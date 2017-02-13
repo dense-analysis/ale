@@ -3,8 +3,8 @@
 function! ale_linters#elixir#credo#Handle(buffer, lines) abort
   " Matches patterns line the following:
   "
-  " stdin:19: F: Pipe chain should start with a raw value.
-  let l:pattern = '\v^stdin:(\d+):?(\d+)?: (.): (.+)$'
+  " lib/filename.ex:19:7: F: Pipe chain should start with a raw value.
+  let l:pattern = '\v^.+:(\d+):?(\d+)?: (.): (.+)$'
   let l:output = []
 
   for l:line in a:lines
@@ -41,5 +41,5 @@ endfunction
 call ale#linter#Define('elixir', {
       \ 'name': 'credo',
       \ 'executable': 'mix',
-      \ 'command': 'mix credo suggest --format=flycheck --read-from-stdin',
+      \ 'command': 'mix credo suggest --format=flycheck --read-from-stdin %s',
       \ 'callback': 'ale_linters#elixir#credo#Handle' })

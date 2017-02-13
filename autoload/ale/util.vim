@@ -1,23 +1,6 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Contains miscellaneous functions
 
-function! s:FindWrapperScript() abort
-    for l:parent in split(&runtimepath, ',')
-        " Expand the path to deal with ~ issues.
-        let l:path = expand(l:parent . '/' . 'stdin-wrapper')
-
-        if filereadable(l:path)
-            if has('win32')
-                return l:path . '.exe'
-            endif
-
-            return l:path
-        endif
-    endfor
-endfunction
-
-let g:ale#util#stdin_wrapper = s:FindWrapperScript()
-
 " A null file for sending output to nothing.
 let g:ale#util#nul_file = '/dev/null'
 

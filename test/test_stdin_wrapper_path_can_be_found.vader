@@ -1,4 +1,0 @@
-Execute(We should be able to find the stdin-wrapper script):
-  silent! cd /testplugin/test
-
-  AssertEqual expand('%:p:h:h') . '/stdin-wrapper', ale#util#stdin_wrapper

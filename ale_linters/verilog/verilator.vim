@@ -1,6 +1,16 @@
 " Author: Masahiro H https://github.com/mshr-h
 " Description: verilator for verilog files
 
+function! ale_linters#verilog#verilator#GetCommand(buffer) abort
+    let l:filename = tempname() . '_verilator_linted.v'
+
+    " Create a special filename, so we can detect it in the handler.
+    call ale#engine#ManageFile(a:buffer, l:filename)
+    call writefile(getbufline(a:buffer, 1, '$'), l:filename)
+
+    return 'verilator --lint-only -Wall -Wno-DECLFILENAME ' . fnameescape(l:filename)
+endfunction
+
 function! ale_linters#verilog#verilator#Handle(buffer, lines) abort
     " Look for lines like the following.
     "
@@ -25,16 +35,16 @@ function! ale_linters#verilog#verilator#Handle(buffer, lines) abort
         let l:text = l:match[4]
         let l:file = l:match[2]
 
-        if(l:file =~# '_verilator_linted.v')
-          call add(l:output, {
-                \   'bufnr': a:buffer,
-                \   'lnum': l:line,
-                \   'vcol': 0,
-                \   'col': 1,
-                \   'text': l:text,
-                \   'type': l:type,
-                \   'nr': -1,
-                \})
+        if l:file =~# '_verilator_linted.v'
+            call add(l:output, {
+            \   'bufnr': a:buffer,
+            \   'lnum': l:line,
+            \   'vcol': 0,
+            \   'col': 1,
+            \   'text': l:text,
+            \   'type': l:type,
+            \   'nr': -1,
+            \})
         endif
     endfor
 
@@ -45,6 +55,7 @@ call ale#linter#Define('verilog', {
 \   'name': 'verilator',
 \   'output_stream': 'stderr',
 \   'executable': 'verilator',
-\   'command': g:ale#util#stdin_wrapper . ' _verilator_linted.v verilator --lint-only -Wall -Wno-DECLFILENAME',
+\   'command_callback': 'ale_linters#verilog#verilator#GetCommand',
 \   'callback': 'ale_linters#verilog#verilator#Handle',
+\   'read_buffer': 0,
 \})

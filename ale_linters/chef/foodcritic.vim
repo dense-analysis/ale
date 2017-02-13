@@ -35,7 +35,7 @@ endfunction
 call ale#linter#Define('chef', {
 \   'name': 'foodcritic',
 \   'executable': 'foodcritic',
-\   'command': g:ale#util#stdin_wrapper . ' .rb foodcritic',
+\   'command': 'foodcritic %t',
 \   'callback': 'ale_linters#chef#foodcritic#Handle',
 \})
 

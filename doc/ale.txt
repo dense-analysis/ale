@@ -26,15 +26,20 @@ CONTENTS                                                         *ale-contents*
     4.14. cpp-cppcheck....................|ale-linter-options-cpp-cppcheck|
     4.15. htmlhint........................|ale-linter-options-htmlhint|
     4.16. c-clang.........................|ale-linter-options-c-clang|
-    4.17. python-flake8...................|ale-linter-options-python-flake8|
-    4.18. ruby-rubocop....................|ale-linter-options-ruby-rubocop|
-    4.19. chktex..........................|ale-linter-options-chktex|
-    4.20. lacheck.........................|ale-linter-options-lacheck|
-    4.21. stylelint.......................|ale-linter-options-stylelint|
-    4.22. rustc...........................|ale-linter-options-rustc|
-    4.23. python-mypy.....................|ale-linter-options-python-mypy|
-    4.24. python-pylint...................|ale-linter-options-python-pylint|
-    4.25. erlang..........................|ale-linter-options-erlang|
+    4.17. cpp-clang.......................|ale-linter-options-cpp-clang|
+    4.18. cpp-clangtidy...................|ale-linter-options-cpp-clangtidy|
+    4.19. python-flake8...................|ale-linter-options-python-flake8|
+    4.20. ruby-rubocop....................|ale-linter-options-ruby-rubocop|
+    4.21. chktex..........................|ale-linter-options-chktex|
+    4.22. lacheck.........................|ale-linter-options-lacheck|
+    4.23. stylelint.......................|ale-linter-options-stylelint|
+    4.24. rustc...........................|ale-linter-options-rustc|
+    4.25. python-mypy.....................|ale-linter-options-python-mypy|
+    4.26. python-pylint...................|ale-linter-options-python-pylint|
+    4.27. erlang..........................|ale-linter-options-erlang|
+    4.28. phpmd...........................|ale-linter-options-phpmd|
+    4.29. xo..............................|ale-linter-options-xo|
+    4.30. javac...........................|ale-linter-options-javac|
   5. Linter Integration Notes.............|ale-linter-integration|
     5.1.  merlin..........................|ale-linter-integration-ocaml-merlin|
     5.2. rust.............................|ale-integration-rust|
@@ -70,7 +75,7 @@ The following languages and tools are supported.
 * Bash: 'shell' (-n flag), 'shellcheck'
 * Bourne Shell: 'shell' (-n flag), 'shellcheck'
 * C: 'cppcheck', 'gcc', 'clang'
-* C++ (filetype cpp): 'cppcheck', 'gcc'
+* C++ (filetype cpp): 'clang', 'clangtidy', 'cppcheck', 'gcc'
 * C#: 'mcs'
 * Chef: 'foodcritic'
 * CoffeeScript: 'coffee', 'coffelint'
@@ -85,7 +90,8 @@ The following languages and tools are supported.
 * Go: 'gofmt -e', 'go vet', 'golint', 'go build'
 * Haskell: 'ghc', 'hlint'
 * HTML: 'HTMLHint', 'tidy'
-* JavaScript: 'eslint', 'jscs', 'jshint', 'flow'
+* Java: 'javac'
+* JavaScript: 'eslint', 'jscs', 'jshint', 'flow', 'xo'
 * JSON: 'jsonlint'
 * LaTeX: 'chktex', 'lacheck'
 * Lua: 'luacheck'
@@ -93,7 +99,7 @@ The following languages and tools are supported.
 * MATLAB: 'mlint'
 * OCaml: 'merlin' (see |ale-linter-integration-ocaml-merlin|)
 * Perl: 'perl' (-c flag), 'perlcritic'
-* PHP: 'hack', 'php' (-l flag), 'phpcs'
+* PHP: 'hack', 'php' (-l flag), 'phpcs', 'phpmd'
 * Pug: 'pug-lint'
 * Puppet: 'puppet', 'puppet-lint'
 * Python: 'flake8', 'mypy', 'pylint'
@@ -167,6 +173,16 @@ g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
   The string used for warning severity in the echoed message.
   Note |`g:ale_echo_cursor`| should be set to 1
   Note |`g:ale_echo_msg_format`| should contain the `%severity%` handler
+
+
+g:ale_enabled                                                   *g:ale_enabled*
+
+  Type: |Number|
+  Default: `1`
+
+  When set to `0`, this option will completely disable ALE, such that no
+  error checking will be performed, etc. ALE can be toggled on and off with
+  the |ALEToggle| command, which changes this option.
 
 
 g:ale_keep_list_window_open                       *g:ale_keep_list_window_open*
@@ -304,6 +320,17 @@ g:ale_open_list                                               *g:ale_open_list*
   The window will be kept open until all warnings or errors are cleared,
   including those not set by ALE, unless |g:ale_keep_list_window_open| is set
   to `1`, in which case the window will be kept open until closed manually.
+
+
+g:ale_set_highlights                                     *g:ale_set_highlights*
+
+  Type: |Number|
+  Default: `has('syntax')`
+
+  When this option is set to `1`, highlights will be set in for erros and
+  warnings. The `ALEError` and `ALEWarning` highlight groups will be used to
+  provide highlights, and default to linking to `SpellBad` and `SpellCap`
+  respectively by default.
 
 
 g:ale_set_loclist                                           *g:ale_set_loclist*
@@ -646,7 +673,7 @@ g:ale_html_htmlhint_options                       *g:ale_html_htmlhint_options*
   This variable can be changed to modify flags given to HTMLHint.
 
 
-g:ale_html_htmlhint_executable                   *g:ale_html_htmlhint_executable*
+g:ale_html_htmlhint_executable                 *g:ale_html_htmlhint_executable*
 
   Type: |String|
   Default: `'htmlhint'`
@@ -658,7 +685,7 @@ g:ale_html_htmlhint_executable                   *g:ale_html_htmlhint_executable
   |g:ale_html_htmlhint_use_global| to `1`.
 
 
-g:ale_html_htmlhint_use_global                   *g:ale_html_htmlhint_use_global*
+g:ale_html_htmlhint_use_global                 *g:ale_html_htmlhint_use_global*
 
   Type: |String|
   Default: `0`
@@ -679,7 +706,27 @@ g:ale_c_clang_options                                   *g:ale_c_clang_options*
   This variable can be change to modify flags given to clang.
 
 -------------------------------------------------------------------------------
-4.17. python-flake8                          *ale-linter-options-python-flake8*
+4.17. cpp-clang                                  *ale-linter-options-cpp-clang*
+
+g:ale_cpp_clang_options                               *g:ale_cpp_clang_options*
+
+  Type: |String|
+  Default: `'-std=c11 -Wall'`
+
+  This variable can be changed to modify flags given to clang.
+
+-------------------------------------------------------------------------------
+4.18. cpp-clangtidy                          *ale-linter-options-cpp-clangtidy*
+
+g:ale_cpp_clangtidy_options                       *g:ale_cpp_clangtidy_options*
+
+  Type: |String|
+  Default: `'-std=c++14 -Wall'`
+
+  This variable can be changed to modify flags given to clangtidy.
+
+-------------------------------------------------------------------------------
+4.19. python-flake8                          *ale-linter-options-python-flake8*
 
 g:ale_python_flake8_executable                 *g:ale_python_flake8_executable*
 
@@ -707,7 +754,7 @@ g:ale_python_flake8_args                             *g:ale_python_flake8_args*
   `python3 -m pip install --user flake8`).
 
 -------------------------------------------------------------------------------
-4.18. ruby-rubocop                            *ale-linter-options-ruby-rubocop*
+4.20. ruby-rubocop                            *ale-linter-options-ruby-rubocop*
 
 g:ale_ruby_rubocop_options                         *g:ale_ruby_rubocop_options*
 
@@ -717,7 +764,7 @@ g:ale_ruby_rubocop_options                         *g:ale_ruby_rubocop_options*
   This variable can be change to modify flags given to rubocop.
 
 -------------------------------------------------------------------------------
-4.19. chktex                                        *ale-linter-options-chktex*
+4.21. chktex                                        *ale-linter-options-chktex*
 
 g:ale_tex_chktex_executable                       *g:ale_tex_chktex_executable*
 
@@ -735,9 +782,9 @@ g:ale_tex_chktex_options                             *g:ale_tex_chktex_options*
   This variable can be changed to modify flags given to chktex.
 
 ------------------------------------------------------------------------------
-4.20. lacheck                                     *ale-linter-options-lacheck*
+4.22. lacheck                                      *ale-linter-options-lacheck*
 
-g:ale_lacheck_executable                            *g:ale_lacheck_executable*
+g:ale_lacheck_executable                             *g:ale_lacheck_executable*
 
   Type: |String|
   Default: '`lacheck`'
@@ -745,9 +792,9 @@ g:ale_lacheck_executable                            *g:ale_lacheck_executable*
   This variable can be changed to change the path to lacheck.
 
 -------------------------------------------------------------------------------
-4.21. stylelint                                    *ale-linter-options-stylelint*
+4.23. stylelint                                  *ale-linter-options-stylelint*
 
-g:ale_css_stylelint_executable                   *g:ale_css_stylelint_executable*
+g:ale_css_stylelint_executable                 *g:ale_css_stylelint_executable*
 
   Type: |String|
   Default: `'stylelint'`
@@ -758,8 +805,14 @@ g:ale_css_stylelint_executable                   *g:ale_css_stylelint_executable
   If you wish to use only a globally installed version of stylelint, set
   |g:ale_css_stylelint_use_global| to `1`.
 
+g:ale_css_stylelint_options                    *g:ale_css_stylelint_options*
 
-g:ale_css_stylelint_use_global                   *g:ale_css_stylelint_use_global*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to stylelint.
+
+g:ale_css_stylelint_use_global                 *g:ale_css_stylelint_use_global*
 
   Type: |String|
   Default: `0`
@@ -770,7 +823,7 @@ g:ale_css_stylelint_use_global                   *g:ale_css_stylelint_use_global
   stylelint in node_modules.
 
 
-g:ale_sass_stylelint_executable                 *g:ale_sass_stylelint_executable*
+g:ale_sass_stylelint_executable               *g:ale_sass_stylelint_executable*
 
   Type: |String|
   Default: `'stylelint'`
@@ -782,7 +835,7 @@ g:ale_sass_stylelint_executable                 *g:ale_sass_stylelint_executable
   |g:ale_sass_stylelint_use_global| to `1`.
 
 
-g:ale_sass_stylelint_use_global                 *g:ale_sass_stylelint_use_global*
+g:ale_sass_stylelint_use_global               *g:ale_sass_stylelint_use_global*
 
   Type: |String|
   Default: `0`
@@ -793,7 +846,7 @@ g:ale_sass_stylelint_use_global                 *g:ale_sass_stylelint_use_global
   stylelint in node_modules.
 
 
-g:ale_scss_stylelint_executable                 *g:ale_scss_stylelint_executable*
+g:ale_scss_stylelint_executable               *g:ale_scss_stylelint_executable*
 
   Type: |String|
   Default: `'stylelint'`
@@ -805,7 +858,7 @@ g:ale_scss_stylelint_executable                 *g:ale_scss_stylelint_executable
   |g:ale_scss_stylelint_use_global| to `1`.
 
 
-g:ale_scss_stylelint_use_global                 *g:ale_scss_stylelint_use_global*
+g:ale_scss_stylelint_use_global               *g:ale_scss_stylelint_use_global*
 
   Type: |String|
   Default: `0`
@@ -816,7 +869,7 @@ g:ale_scss_stylelint_use_global                 *g:ale_scss_stylelint_use_global
   stylelint in node_modules.
 
 ------------------------------------------------------------------------------
-4.22. rustc                                         *ale-linter-options-rustc*
+4.24. rustc                                         *ale-linter-options-rustc*
 
 g:ale_rust_ignore_error_codes                  *g:ale_rust_ignore_error_codes*
 
@@ -830,7 +883,7 @@ g:ale_rust_ignore_error_codes                  *g:ale_rust_ignore_error_codes*
 
 
 -------------------------------------------------------------------------------
-4.24. python-mypy                              *ale-linter-options-python-mypy*
+4.25. python-mypy                              *ale-linter-options-python-mypy*
 
 g:ale_python_mypy_options                           *g:ale_python_mypy_options*
 
@@ -842,7 +895,7 @@ g:ale_python_mypy_options                           *g:ale_python_mypy_options*
 
 
 -------------------------------------------------------------------------------
-4.24. python-pylint                          *ale-linter-options-python-pylint*
+4.26. python-pylint                          *ale-linter-options-python-pylint*
 
 g:ale_python_pylint_executable                 *g:ale_python_pylint_executable*
 
@@ -870,7 +923,7 @@ g:ale_python_pylint_options                       *g:ale_python_pylint_options*
   `python3 -m pip install --user pylint`).
 
 ------------------------------------------------------------------------------
-4.25. erlang                                        *ale-linter-options-erlang*
+4.27. erlang                                        *ale-linter-options-erlang*
 
 g:ale_erlang_erlc_options                           *g:ale_erlang_erlc_options*
 
@@ -879,6 +932,70 @@ g:ale_erlang_erlc_options                           *g:ale_erlang_erlc_options*
 
   This variable controls additional parameters passed to `erlc`, such as `-I`
   or `-pa`.
+
+------------------------------------------------------------------------------
+4.28. phpmd                                       *ale-linter-options-phpmd*
+
+g:ale_php_phpmd_ruleset                           *g:ale_php_phpmd_ruleset*
+
+  Type: |String|
+  Default: 'cleancode,codesize,controversial,design,naming,unusedcode'
+
+  This variable controls the ruleset used by phpmd.  Default is to use all of
+  the available phpmd rulesets
+
+------------------------------------------------------------------------------
+4.29. xo                                             *ale-linter-options-xo*
+
+g:ale_javascript_xo_executable              *g:ale_javascript_xo_executable*
+
+  Type: |String|
+  Default: `'xo'`
+
+  ALE will first discover the xo path in an ancestor node_modules
+  directory. If no such path exists, this variable will be used instead.
+
+  This variable can be set to change the path to xo.
+
+  If you wish to use only a globally installed version of xo, set
+  |g:ale_javascript_xo_use_global| to `1`.
+
+
+g:ale_javascript_xo_options                   *g:ale_javascript_xo_options*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to xo.
+
+
+g:ale_javascript_xo_use_global             *g:ale_javascript_xo_use_global*
+
+  Type: |String|
+  Default: `0`
+
+  This variable controls whether or not ALE will search for a local path for
+  xo first. If this variable is set to `1`, then ALE will always use the
+  global version of xo, in preference to locally installed versions of
+  xo in node_modules.
+
+------------------------------------------------------------------------------
+4.30. javac                                          *ale-linter-options-javac*
+
+g:ale_java_javac_classpath                         *g:ale_java_javac_classpath*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to change the global classpath for Java.
+
+
+g:ale_java_javac_options                             *g:ale_java_javac_options*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to javac.
 
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*
@@ -945,6 +1062,12 @@ ALENextWrap                                                       *ALENextWrap*
   nmap <silent> <C-j> <Plug>(ale_next_wrap)
 <
 
+ALEToggle                                                           *ALEToggle*
+
+  Enable or disable ALE, including all of its autocmd events, loclist items,
+  quickfix items, signs, current jobs, etc. Calling this option will change
+  the |g:ale_enabled| variable.
+
 ===============================================================================
 7. API                                                                *ale-api*
 
@@ -955,11 +1078,49 @@ ale#Queue(delay)                                                  *ale#Queue()*
   again from the same buffer
 
 
+ale#engine#EscapeCommandPart(command_part)     *ale#engine#EscapeCommandPart()*
+
+  Given a |String|, return a |String| with all `%` characters replaced with
+  `%%` instead. This function can be used to escape strings which are
+  dynamically generated for commands before handing them over to ALE,
+  so that ALE doesn't treat any strings with `%` formatting sequences
+  specially.
+
+
 ale#engine#GetLoclist(buffer)                         *ale#engine#GetLoclist()*
 
   Given a buffer number, this function will rerurn the list of warnings and
   errors reported by ALE for a given buffer in the format accepted by
   |setqflist()|.
+
+
+ale#engine#ManageFile(buffer, filename)               *ale#engine#ManageFile()*
+
+  Given a buffer number for a buffer currently running some linting tasks
+  and a filename, register a filename with ALE for automatic deletion after
+  linting is complete, or when Vim exits.
+
+  If Vim exits suddenly, ALE will try its best to remove temporary files, but
+  ALE cannot guarantee with absolute certainty that the files will be removed.
+  It is advised to create temporary files in the operating system's managed
+  temporary file directory, such as with |tempname()|.
+
+  Directory names should not be given to this function. ALE will only delete
+  files and symlinks given to this function. This is to prevent entire
+  directories from being accidentally deleted, say in cases of writing
+  `dir . '/' . filename` where `filename` is actually `''`, etc. ALE instead
+  manages directories separetly with the |ale#engine#ManageDirectory| function.
+
+
+ale#engine#ManageDirectory(buffer, directory)    *ale#engine#ManageDirectory()*
+
+  Like |ale#engine#ManageFile()|, but directories and all of their contents
+  will be deleted, akin to `rm -rf directory`, which could lead to loss of
+  data if mistakes are made. This command will also delete any temporary
+  filenames given to it.
+
+  It is advised to use |ale#engine#ManageFile()| instead for deleting single
+  files.
 
 
 ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
@@ -1005,14 +1166,55 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          check, and will produce the lines of output given to
                          the `callback`.
 
-                         Either this or the `command_callback` argument must
-                         be provided.
-
   `command_callback`       A |String| or |Funcref| for a callback function
                          accepting a buffer number. A |String| should be
                          returned for a command to run. This can be used in
                          place of `command` when more complicated processing
                          is needed.
+
+                         If an empty string is returned from the callback,
+                         no jobs for linting will be run for that linter.
+                         This can be used for skipping a linter call,
+                         say if no configuration file was found.
+
+  `command_chain`          A |List| of |Dictionary| items defining a series
+                         of commands to be run. At least one |Dictionary|
+                         should be provided. Each Dictionary must contain the
+                         key `callback`, defining a |String| or |Funcref| for
+                         a function returning a |String| for a command to run.
+
+                         The callback functions for each command after the
+                         first command in in the chain should accept two
+                         arguments `(buffer, output)`, a buffer number and a
+                         |List| of lines of output from the previous command
+                         in the chain.
+
+                         The first callback function in a chain accepts only
+                         a `(buffer)` argument, as there are no previous
+                         commands to run which return `output`.
+
+                         If an empty string is returned for a command in a
+                         chain, that command in the chain will be skipped,
+                         and the next function in the chain will be called
+                         immediately instead. If the last command in a chain
+                         returns an empty string, then no linting will be
+                         performed.
+
+                         Commands in the chain will all use the
+                         `output_stream` value provided in the root
+                         |Dictionary|. Each command in the chain can also
+                         provide an `output_stream` key to override this value.
+                         See the `output_stream` description for more
+                         information.
+
+                         Commands in the chain all behave as if `read_buffer`
+                         is set to `0` by default, except for the last command
+                         in the chain, which uses the value set for
+                         `read_buffer` in the root |Dictionary|. Each command
+                         in the chain can also provide a `read_buffer` key
+                         to override these values.
+                         See the `read_buffer` description for more
+                         information.
 
   `output_stream`          A |String| for the output stream the lines of output
                          should be read from for the command which is run. The
@@ -1023,16 +1225,53 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          instead of stdout. The option `'both'` will read
                          from both stder and stdout at the same time.
 
-  Some programs for checking for errors are not capable of receiving input
-  from stdin, as is required by ALE. To remedy this, a wrapper script is
-  provided named in the variable |g:ale#util#stdin_wrapper|. This variable
-  can be called with the regular arguments for any command to forward data
-  from stdin to the program, by way of creating a temporary file. The first
-  argument to the stdin wrapper must be a file extension to save the temporary
-  file with, and the following arguments are the command as normal.
+  `read_buffer`            A |Number| (`0` or `1`) indicating whether a command
+                         should read the Vim buffer as input via stdin. This
+                         option is set to `1` by default, and can be disabled
+                         if a command manually reads from a temporary file
+                         instead, etc.
+
+  Only one of `command`, `command_callback`, or `command_chain` should be
+  specified. `command_callback` is generally recommended when a command string
+  needs to be generated dynamically, or any global options are used.
+  `command_chain` is recommended where any system calls need to be made to
+  retrieve some kind of information before running the final command.
+
+  If temporary files or directories are created for commands run with
+  `command_callback` or `command_chain`, then these tempoary files or
+  directories can be managed by ALE, for automatic deletion.
+  See |ale#engine#ManageFile()| and |ale#engine#ManageDirectory| for more
+  information.
+
+  All command strings will be formatted for special character sequences.
+  Any substring `%s` will be replaced with the full path to the current file
+  being edited. This format option can be used to pass the exact filename
+  being edited to a program.
+
   For example: >
-  'command': g:ale#util#stdin_wrapper . ' .hs ghc -fno-code -v0',
+  'command': 'eslint -f unix --stdin --stdin-filename %s'
 <
+  Any substring `%t` will be replaced with a path to a temporary file. Merely
+  adding `%t` will cause ALE to create a temporary file containing the
+  contents of the the buffer being checked. All occurrences of `%t` in command
+  strings will reference the one temporary file. The temporary file will be
+  created inside a temporary directory, and the entire temporary directory
+  will be automatically deleted, following the behaviour of
+  |ale#engine#ManageDirectory|. This option can be used for some linters which
+  do not support reading from stdin.
+
+  For example: >
+  'command': 'ghc -fno-code -v0 %t',
+<
+  The character sequence `%%` can be used to emit a literal `%` into a
+  command, so literal character sequences `%s` and `%t` can be escaped by
+  using `%%s` and `%%t` instead, etc.
+
+  If a callback for a command generates part of a command string which might
+  possibly contain `%%`, `%s`, or `%t` where the special formatting behaviour
+  is not desired, the |ale#engine#EscapeCommandPart()| function can be used to
+  replace those characters to avoid formatting issues.
+
 
 ale#linter#Get(filetype)                                     *ale#linter#Get()*
   Return all of linters configured for a given filetype as a |List| of
@@ -1052,11 +1291,6 @@ ale#statusline#Status()                               *ale#statusline#Status()*
   The output's format is defined in |`g:ale_statusline_format`|.
   To enable it, the following should be present in your |statusline| settings: >
   %{ale#statusline#Status()}
-
-
-g:ale#util#stdin_wrapper                             *g:ale#util#stdin_wrapper*
-  This variable names a wrapper script for sending stdin input to programs
-  which cannot accept input via stdin. See |ale#linter#Define()| for more.
 
 
 ALELint                                                               *ALELint*

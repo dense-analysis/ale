@@ -33,6 +33,7 @@ In other words, this plugin allows you to lint while you type.
  7. [How can I navigate between errors quickly?](#faq-navigation)
  8. [How can I run linters only when I save files?](#faq-lint-on-save)
  9. [How can I use the quickfix list instead of the loclist?](#faq-quickfix)
+ 10. [How can I check JSX files with both stylelint and eslint?](#faq-jsx-stylelint-eslint)
 
 <a name="supported-languages"></a>
 
@@ -53,7 +54,7 @@ name. That seems to be the fairest way to arrange this table.
 | Bash | [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set), [shellcheck](https://www.shellcheck.net/) |
 | Bourne Shell | [-n flag](http://linux.die.net/man/1/sh), [shellcheck](https://www.shellcheck.net/) |
 | C | [cppcheck](http://cppcheck.sourceforge.net), [gcc](https://gcc.gnu.org/), [clang](http://clang.llvm.org/)|
-| C++ (filetype cpp) | [cppcheck] (http://cppcheck.sourceforge.net), [gcc](https://gcc.gnu.org/)|
+| C++ (filetype cpp) | [clang](http://clang.llvm.org/), [clangtidy](http://clang.llvm.org/extra/clang-tidy/), [cppcheck] (http://cppcheck.sourceforge.net), [gcc](https://gcc.gnu.org/)|
 | C# | [mcs](http://www.mono-project.com/docs/about-mono/languages/csharp/) |
 | Chef | [foodcritic](http://www.foodcritic.io/) |
 | CoffeeScript | [coffee](http://coffeescript.org/), [coffeelint](https://www.npmjs.com/package/coffeelint) |
@@ -68,7 +69,8 @@ name. That seems to be the fairest way to arrange this table.
 | Go | [gofmt -e](https://golang.org/cmd/gofmt/), [go vet](https://golang.org/cmd/vet/), [golint](https://godoc.org/github.com/golang/lint), [go build](https://golang.org/cmd/go/) |
 | Haskell | [ghc](https://www.haskell.org/ghc/), [hlint](https://hackage.haskell.org/package/hlint) |
 | HTML | [HTMLHint](http://htmlhint.com/), [tidy](http://www.html-tidy.org/) |
-| JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/), [flow](https://flowtype.org/) |
+| Java | [javac](http://www.oracle.com/technetwork/java/javase/downloads/index.html) |
+| JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/), [flow](https://flowtype.org/), [standard](http://standardjs.com/)
 | JSON | [jsonlint](http://zaa.ch/jsonlint/) |
 | LaTeX | [chktex](http://www.nongnu.org/chktex/), [lacheck](https://www.ctan.org/pkg/lacheck) |
 | Lua | [luacheck](https://github.com/mpeterv/luacheck) |
@@ -76,7 +78,7 @@ name. That seems to be the fairest way to arrange this table.
 | MATLAB | [mlint](https://www.mathworks.com/help/matlab/ref/mlint.html) |
 | OCaml | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-integration-ocaml-merlin` for configuration instructions
 | Perl | [perl -c](https://perl.org/), [perl-critic](https://metacpan.org/pod/Perl::Critic) |
-| PHP | [hack](http://hacklang.org/), [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer) |
+| PHP | [hack](http://hacklang.org/), [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer), [phpmd](https://phpmd.org) |
 | Pug | [pug-lint](https://github.com/pugjs/pug-lint) |
 | Puppet | [puppet](https://puppet.com), [puppet-lint](https://puppet-lint.com) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/), [mypy](http://mypy-lang.org/), [pylint](https://www.pylint.org/) |
@@ -375,3 +377,36 @@ let g:ale_open_list = 1
 " some other plugin which sets quickfix errors, etc.
 let g:ale_keep_list_window_open = 1
 ```
+
+<a name="faq-jsx-stylelint-eslint"></a>
+
+### 4.x. How can I check JSX files with both stylelint and eslint?
+
+If you configure ALE options correctly in your vimrc file, and install
+the right tools, you can check JSX files with stylelint and eslint.
+
+First, install eslint and install stylelint with
+[https://github.com/styled-components/stylelint-processor-styled-components](stylelint-processor-styled-components).
+
+Supposing you have installed both tools correctly, configure your .jsx files so
+`jsx` is included in the filetype. You can use an `autocmd` for this.
+
+```vim
+augroup FiletypeGroup
+    autocmd!
+    au BufNewFile,BufRead *.jsx set filetype=javascript.jsx
+augroup END
+```
+
+Supposing the filetype has been set correctly, you can set the following
+options in your vimrc file:
+
+```vim
+let g:ale_linters = {'jsx': ['stylelint', 'eslint']}
+let g:ale_linter_aliases = {'jsx': 'css'}
+```
+
+ALE will alias the `jsx` filetype so it uses the `css` filetype linters, and
+use the original Array of selected linters for `jsx` from the `g:ale_linters`
+object. All available linters will be used for the filetype `javascript`, and
+no linter will be run twice for the same file.
