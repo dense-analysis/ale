@@ -23,7 +23,6 @@ function! s:FilesToBuild(buffer, temp_file) abort
     let l:this_package = s:ThisPackage(a:buffer)
 
     " Get a listing of all go files in the directory.
-    " TODO: Handle packages that contain c files.
     let l:all_files = globpath(l:this_package, '*.go', 1, 1)
 
     " Swap out the current file in the file listing for the temporary version.
@@ -35,7 +34,7 @@ function! s:FilesToBuild(buffer, temp_file) abort
     call add(l:all_files, a:temp_file)
 
     return l:all_files
-endfunction!
+endfunction
 
 function! ale_linters#go#gobuild#Install(buffer) abort
     " Install all packages necessary to compile this package.
@@ -66,9 +65,7 @@ let s:path_pattern = '[a-zA-Z]\?\\\?:\?[[:alnum:]/\.\-_]\+'
 let s:handler_pattern = '^\(' . s:path_pattern . '\):\(\d\+\):\?\(\d\+\)\?: \(.\+\)$'
 
 function! s:FilterLines(buffer, lines) abort
-    " Just filter out any lines not for this buffer and then drop back to the
-    " standard Unix format handler.
-    " Note we have to compare against the temporary file we created, not the
+    " We have to compare against the temporary file we created, not the
     " actual filename.
     let l:this_file = s:TempFileName(a:buffer)
 
@@ -95,6 +92,8 @@ function! s:FilterLines(buffer, lines) abort
 endfunction
 
 function! ale_linters#go#gobuild#Handler(buffer, lines) abort
+    " Just filter out any lines not for this buffer and then drop back to the
+    " standard Unix format handler.
     return ale#handlers#HandleUnixFormatAsError(a:buffer, s:FilterLines(a:buffer, a:lines))
 endfunction
 
