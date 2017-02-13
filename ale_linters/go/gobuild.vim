@@ -37,8 +37,9 @@ function! ale_linters#go#gobuild#GetCommand(buffer) abort
     endif
 
     call writefile(getbufline(a:buffer, 1, '$'), l:temp_file)
+    call ale#engine#ManageFile(a:buffer, l:temp_file)
 
-    return 'go test -c ' . ' -o /dev/null ' . join(l:all_files) . ' ' . l:temp_file . '; rm ' . l:temp_file
+    return 'go test -c ' . ' -o /dev/null ' . join(l:all_files) . ' ' . l:temp_file
 endfunction
 
 call ale#linter#Define('go', {
