@@ -234,9 +234,6 @@ function! s:HandleExit(job) abort
 
     " Call user autocommands. This allows users to hook into ALE's lint cycle.
     silent doautocmd User ALELint
-
-    " Mark line 200, column 17 with a squiggly line or something
-    " matchadd('ALEError', '\%200l\%17v')
 endfunction
 
 function! ale#engine#SetResults(buffer, loclist) abort
@@ -251,6 +248,10 @@ function! ale#engine#SetResults(buffer, loclist) abort
     if exists('*ale#statusline#Update')
         " Don't load/run if not already loaded.
         call ale#statusline#Update(a:buffer, a:loclist)
+    endif
+
+    if g:ale_set_highlights
+        call ale#highlight#SetHighlights(a:buffer, a:loclist)
     endif
 endfunction
 

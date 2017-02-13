@@ -1,0 +1,61 @@
+Before:
+  function! GenerateResults(buffer, output)
+    return [
+    \ {
+    \   'lnum': 1,
+    \   'col': 1,
+    \   'bufnr': bufnr('%'),
+    \   'vcol': 0,
+    \   'nr': -1,
+    \   'type': 'E',
+    \   'text': 'foo',
+    \ },
+    \ {
+    \   'lnum': 2,
+    \   'col': 1,
+    \   'bufnr': bufnr('%'),
+    \   'vcol': 0,
+    \   'nr': -1,
+    \   'type': 'W',
+    \   'text': 'bar',
+    \ },
+    \ {
+    \   'lnum': 3,
+    \   'col': 5,
+    \   'bufnr': bufnr('%'),
+    \   'vcol': 0,
+    \   'nr': -1,
+    \   'type': 'E',
+    \   'text': 'wat',
+    \ },
+    \]
+  endfunction
+
+  call ale#linter#Define('testft', {
+  \ 'name': 'x',
+  \ 'executable': 'echo',
+  \ 'command': 'echo',
+  \ 'callback': 'GenerateResults',
+  \})
+
+After:
+  delfunction GenerateResults
+  call ale#linter#Reset()
+  let g:ale_buffer_info = {}
+
+Given testft(A Javscript file with warnings/errors):
+  foo
+  bar
+  baz wat
+
+Execute(Highlights should be set when a linter runs):
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+
+  AssertEqual
+  \ [
+  \   {'group': 'ALEError', 'id': 4, 'priority': 10, 'pos1': [1, 1, 1]},
+  \   {'group': 'ALEWarning', 'id': 5, 'priority': 10, 'pos1': [2, 1, 1]},
+  \   {'group': 'ALEError', 'id': 6, 'priority': 10, 'pos1': [3, 5, 1]}
+  \ ],
+  \ getmatches()

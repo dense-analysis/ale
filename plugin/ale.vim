@@ -81,6 +81,9 @@ let g:ale_keep_list_window_open = get(g:, 'ale_keep_list_window_open', 0)
 " This is enabled by default only if the 'signs' feature exists.
 let g:ale_set_signs = get(g:, 'ale_set_signs', has('signs'))
 
+" This flag can be set to 0 to disable setting error highlights.
+let g:ale_set_highlights = get(g:, 'ale_set_highlights', has('syntax'))
+
 " These variables dicatate what sign is used to indicate errors and warnings.
 let g:ale_sign_error = get(g:, 'ale_sign_error', '>>')
 let g:ale_sign_warning = get(g:, 'ale_sign_warning', '--')
@@ -161,6 +164,11 @@ function! s:ALEToggle() abort
             " Clear signs, loclist, quicklist
             call ale#engine#SetResults(l:buffer, [])
         endfor
+
+        " Remove highlights for the current buffer now.
+        if g:ale_set_higlights
+            call ale#highlight#UpdateHighlights()
+        endif
     endif
 
     call s:ALEInitAuGroups()

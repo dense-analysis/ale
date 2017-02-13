@@ -12,14 +12,6 @@ if !hlexists('ALEWarningSign')
     highlight link ALEWarningSign todo
 endif
 
-if !hlexists('ALEError')
-    highlight link ALEError SpellBad
-endif
-
-if !hlexists('ALEWarning')
-    highlight link ALEWarning SpellCap
-endif
-
 " Signs show up on the left for error markers.
 execute 'sign define ALEErrorSign text=' . g:ale_sign_error
 \   . ' texthl=ALEErrorSign'
