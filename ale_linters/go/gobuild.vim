@@ -1,5 +1,7 @@
-" Author: dzhou121 <dzhou121@gmail.com>, Ryan Norris <rynorris@gmail.com>
+" Author: Joshua Rubin <joshua@rubixconsulting.com>, Ryan Norris <rynorris@gmail.com>
 " Description: go build for Go files
+
+" inspired by work from dzhou121 <dzhou121@gmail.com>
 
 let s:temp_file_pattern = 'ale\.[0-9]\+\..*\.go'
 
