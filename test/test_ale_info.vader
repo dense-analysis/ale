@@ -5,9 +5,39 @@ Before:
   call ale#linter#Reset()
   let g:ale_linters = {}
   let g:ale_linter_aliases = {}
+  let g:ale_buffer_info = {}
+  let g:globals_string = join([
+  \  '',
+  \  ' Global Variables:',
+  \  '',
+  \  'let g:ale_echo_cursor = 1',
+  \  'let g:ale_echo_msg_error_str = ''Error''',
+  \  'let g:ale_echo_msg_format = ''%s''',
+  \  'let g:ale_echo_msg_warning_str = ''Warning''',
+  \  'let g:ale_enabled = 1',
+  \  'let g:ale_keep_list_window_open = 0',
+  \  'let g:ale_lint_delay = 200',
+  \  'let g:ale_lint_on_enter = 1',
+  \  'let g:ale_lint_on_save = 0',
+  \  'let g:ale_lint_on_text_changed = 1',
+  \  'let g:ale_linter_aliases = {}',
+  \  'let g:ale_linters = {}',
+  \  'let g:ale_open_list = 0',
+  \  'let g:ale_set_highlights = 1',
+  \  'let g:ale_set_loclist = 1',
+  \  'let g:ale_set_quickfix = 0',
+  \  'let g:ale_set_signs = 1',
+  \  'let g:ale_sign_column_always = 0',
+  \  'let g:ale_sign_error = ''>>''',
+  \  'let g:ale_sign_offset = 1000000',
+  \  'let g:ale_sign_warning = ''--''',
+  \  'let g:ale_statusline_format = [''%d error(s)'', ''%d warning(s)'', ''OK'']',
+  \  'let g:ale_warn_about_trailing_whitespace = 1',
+  \], "\n")
 
 After:
   unlet! g:output
+  unlet! g:globals_string
 
 Given nolintersft (Empty buffer with no linters):
 Execute (ALEInfo with no linters should return the right output):
@@ -19,7 +49,7 @@ Execute (ALEInfo with no linters should return the right output):
               \Available Linters: []\n
               \  Enabled Linters: []\n
               \ Linter Variables:\n
-              \", g:output
+              \" . g:globals_string, g:output
 
 Given (Empty buffer with no filetype):
 Execute (ALEInfo with no filetype should return the right output):
@@ -31,7 +61,7 @@ Execute (ALEInfo with no filetype should return the right output):
               \Available Linters: []\n
               \  Enabled Linters: []\n
               \ Linter Variables:\n
-              \", g:output
+              \" . g:globals_string, g:output
 
 Given testft (Empty buffer):
 Execute (ALEInfo with a single linter should return the right output):
@@ -44,7 +74,7 @@ Execute (ALEInfo with a single linter should return the right output):
               \Available Linters: ['testlinter1']\n
               \  Enabled Linters: ['testlinter1']\n
               \ Linter Variables:\n
-              \", g:output
+              \" . g:globals_string, g:output
 
 Given testft (Empty buffer):
 Execute (ALEInfo with two linters should return the right output):
@@ -58,7 +88,7 @@ Execute (ALEInfo with two linters should return the right output):
               \Available Linters: ['testlinter1', 'testlinter2']\n
               \  Enabled Linters: ['testlinter1', 'testlinter2']\n
               \ Linter Variables:\n
-              \", g:output
+              \" . g:globals_string, g:output
 
 Given testft (Empty buffer):
 Execute (ALEInfo should calculate enabled linters correctly):
@@ -73,7 +103,8 @@ Execute (ALEInfo should calculate enabled linters correctly):
               \Available Linters: ['testlinter1', 'testlinter2']\n
               \  Enabled Linters: ['testlinter2']\n
               \ Linter Variables:\n
-              \", g:output
+              \",
+              \ "\n" . join(split(g:output, "\n")[:4], "\n")
 
 Given testft (Empty buffer):
 Execute (ALEInfo should only return linters for current filetype):
@@ -87,7 +118,7 @@ Execute (ALEInfo should only return linters for current filetype):
               \Available Linters: ['testlinter1']\n
               \  Enabled Linters: ['testlinter1']\n
               \ Linter Variables:\n
-              \", g:output
+              \" . g:globals_string, g:output
 
 Given testft.testft2 (Empty buffer with two filetypes):
 Execute (ALEInfo with compound filetypes should return linters for both of them):
@@ -101,7 +132,7 @@ Execute (ALEInfo with compound filetypes should return linters for both of them)
               \Available Linters: ['testlinter1', 'testlinter2']\n
               \  Enabled Linters: ['testlinter1', 'testlinter2']\n
               \ Linter Variables:\n
-              \", g:output
+              \" . g:globals_string, g:output
 
 Given testft.testft2 (Empty buffer with two filetypes):
 Execute (ALEInfo should return appropriately named global variables):
@@ -124,4 +155,4 @@ Execute (ALEInfo should return appropriately named global variables):
               \let g:ale_testft2_testlinter2_bar = {'x': 'y'}\n
               \let g:ale_testft2_testlinter2_foo = 123\n
               \let g:ale_testft_testlinter1_bar = ['abc']\n
-              \let g:ale_testft_testlinter1_foo = 'abc'", g:output
+              \let g:ale_testft_testlinter1_foo = 'abc'" . g:globals_string, g:output

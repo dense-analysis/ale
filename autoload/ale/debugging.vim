@@ -1,6 +1,32 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: This file implements debugging information for ALE
 
+let s:global_variable_list = [
+\    'ale_echo_cursor',
+\    'ale_echo_msg_error_str',
+\    'ale_echo_msg_format',
+\    'ale_echo_msg_warning_str',
+\    'ale_enabled',
+\    'ale_keep_list_window_open',
+\    'ale_lint_delay',
+\    'ale_lint_on_enter',
+\    'ale_lint_on_save',
+\    'ale_lint_on_text_changed',
+\    'ale_linter_aliases',
+\    'ale_linters',
+\    'ale_open_list',
+\    'ale_set_highlights',
+\    'ale_set_loclist',
+\    'ale_set_quickfix',
+\    'ale_set_signs',
+\    'ale_sign_column_always',
+\    'ale_sign_error',
+\    'ale_sign_offset',
+\    'ale_sign_warning',
+\    'ale_statusline_format',
+\    'ale_warn_about_trailing_whitespace',
+\]
+
 function! s:GetLinterVariables(filetype, linter_names) abort
     let l:variable_list = []
     let l:filetype_parts = split(a:filetype, '\.')
@@ -25,6 +51,12 @@ endfunction
 function! s:EchoLinterVariables(variable_list) abort
     for l:key in a:variable_list
         echom 'let g:' . l:key . ' = ' . string(g:[l:key])
+    endfor
+endfunction
+
+function! s:EchoGlobalVariables() abort
+    for l:key in s:global_variable_list
+        echom 'let g:' . l:key . ' = ' . string(get(g:, l:key, v:null))
     endfor
 endfunction
 
@@ -56,4 +88,7 @@ function! ale#debugging#Info() abort
     echom ' Linter Variables:'
     echom ''
     call s:EchoLinterVariables(l:variable_list)
+    echom ' Global Variables:'
+    echom ''
+    call s:EchoGlobalVariables()
 endfunction
