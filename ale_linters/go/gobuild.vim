@@ -60,6 +60,42 @@ function! ale_linters#go#gobuild#Build(buffer, output_lines) abort
     return 'go test -c ' . ' -o /dev/null ' . l:file_args
 endfunction
 
+let s:path_pattern = '[a-zA-Z]\?\\\?:\?[[:alnum:]/\.\-_]\+'
+let s:handler_pattern = '^\(' . s:path_pattern . '\):\(\d\+\):\?\(\d\+\)\?: \(.\+\)$'
+
+function! s:FilterLines(buffer, lines) abort
+    " Just filter out any lines not for this buffer and then drop back to the
+    " standard Unix format handler.
+    " Note we have to compare against the temporary file we created, not the
+    " actual filename.
+    let l:this_file = s:TempFileName(a:buffer)
+
+    let l:filtered_lines = []
+
+    for l:line in a:lines
+      " Get the filename from the line.
+      let l:match = matchlist(l:line, s:handler_pattern)
+      if len(l:match) == 0
+        continue
+      endif
+
+      let l:line_file = get(l:match, 1)
+
+      " Since we can only get errors for files in the package directory, just
+      " compare basenames.
+      echom l:this_file . ' ' . l:line_file
+      if fnamemodify(l:this_file, ':p:t') == fnamemodify(l:line_file, ':p:t')
+        call add(l:filtered_lines, l:line)
+      endif
+    endfor
+
+    return l:filtered_lines
+endfunction
+
+function! ale_linters#go#gobuild#Handler(buffer, lines) abort
+    return ale#handlers#HandleUnixFormatAsError(a:buffer, s:FilterLines(a:lines))
+endfunction
+
 call ale#linter#Define('go', {
 \   'name': 'go build',
 \   'executable': 'go',
@@ -69,5 +105,5 @@ call ale#linter#Define('go', {
 \       {'callback': 'ale_linters#go#gobuild#Install'},
 \       {'callback': 'ale_linters#go#gobuild#Build'}
 \   ],
-\   'callback': 'ale#handlers#HandleUnixFormatAsError',
+\   'callback': 'ale_linters#go#gobuild#Handler',
 \})
