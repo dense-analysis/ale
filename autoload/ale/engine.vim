@@ -19,6 +19,7 @@ function! s:GetJobID(job) abort
     " job. We'll use the ID of the channel instead as the job ID.
     try
         return ch_info(job_getchannel(a:job)).id
+    catch
     endtry
 
     " If we fail to get the channel ID for a job, just return a 0 ID.
