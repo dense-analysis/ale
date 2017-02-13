@@ -63,9 +63,8 @@ function! ale#highlight#SetHighlights(buffer, loclist) abort
         " we next open it.
         "
         " We'll filter the loclist down to items we can set now.
-        let temp_loclist = deepcopy(a:loclist)
         let s:buffer_highlights[a:buffer] = filter(
-        \   temp_loclist,
+        \   deepcopy(a:loclist),
         \   'v:val.bufnr == a:buffer && v:val.col > 0'
         \)
 
