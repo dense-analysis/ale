@@ -48,8 +48,9 @@ endfunction
 
 call ale#linter#Define('go', {
 \   'name': 'go build',
-\   'output_stream': 'stderr',
 \   'executable': 'go',
+\   'output_stream': 'stderr',
+\   'read_buffer': 0,
 \   'command_callback': 'ale_linters#go#gobuild#GetCommand',
 \   'callback': 'ale#handlers#HandleUnixFormatAsError',
 \})
