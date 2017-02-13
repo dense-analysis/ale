@@ -82,7 +82,6 @@ function! s:FilterLines(buffer, lines) abort
 
       " Since we can only get errors for files in the package directory, just
       " compare basenames.
-      echom l:this_file . ' ' . l:line_file
       if fnamemodify(l:this_file, ':p:t') == fnamemodify(l:line_file, ':p:t')
         call add(l:filtered_lines, l:line)
       endif
