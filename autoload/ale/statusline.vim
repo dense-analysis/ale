@@ -3,6 +3,10 @@
 
 " Update the buffer error/warning count with data from loclist.
 function! ale#statusline#Update(buffer, loclist) abort
+    if !exists('g:ale_buffer_info')
+        return
+    endif
+
     if !has_key(g:ale_buffer_info, a:buffer)
         return
     endif
@@ -39,6 +43,10 @@ endfunction
 
 " Returns a tuple of errors and warnings for use in third-party integrations.
 function! ale#statusline#Count(buffer) abort
+    if !exists('g:ale_buffer_info')
+        return [0, 0]
+    endif
+
     if !s:SetupCount(a:buffer)
         return [0, 0]
     endif
@@ -48,6 +56,10 @@ endfunction
 
 " Returns a formatted string that can be integrated in the statusline.
 function! ale#statusline#Status() abort
+    if !exists('g:ale_buffer_info')
+        return 'OK'
+    endif
+
     let [l:error_format, l:warning_format, l:no_errors] = g:ale_statusline_format
     let l:buffer = bufnr('%')
 
