@@ -176,7 +176,7 @@ function! s:ALEToggle() abort
         endfor
 
         " Remove highlights for the current buffer now.
-        if g:ale_set_higlights
+        if g:ale_set_highlights
             call ale#highlight#UpdateHighlights()
         endif
     endif
