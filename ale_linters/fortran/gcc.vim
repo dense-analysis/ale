@@ -12,7 +12,7 @@ function! ale_linters#fortran#gcc#Handle(buffer, lines) abort
     "
     " :21.34:
     " Error: Expected comma in I/O list at (1)
-    let l:line_marker_pattern = '^:\(\d\+\)\.\(\d\+\):$'
+    let l:line_marker_pattern = ':\(\d\+\)[.:]\=\(\d\+\)\=:\=$'
     let l:message_pattern = '^\(Error\|Warning\): \(.\+\)$'
     let l:looking_for_message = 0
     let l:last_loclist_obj = {}
