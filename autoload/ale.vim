@@ -4,9 +4,17 @@
 
 let s:lint_timer = -1
 
+" A function for checking various conditions whereby ALE just shouldn't
+" attempt to do anything, say if particular buffer types are open in Vim.
+function! ale#ShouldDoNothing() abort
+    " Do nothing for blacklisted files
+    " OR if ALE is running in the sandbox
+    return index(g:ale_filetype_blacklist, &filetype) >= 0
+    \   || ale#util#InSandbox()
+endfunction
+
 function! ale#Queue(delay) abort
-    " Do nothing for blacklisted files.
-    if index(g:ale_filetype_blacklist, &filetype) >= 0
+    if ale#ShouldDoNothing()
         return
     endif
 
@@ -29,8 +37,7 @@ function! ale#Queue(delay) abort
 endfunction
 
 function! ale#Lint(...) abort
-    " Do nothing for blacklisted files.
-    if index(g:ale_filetype_blacklist, &filetype) >= 0
+    if ale#ShouldDoNothing()
         return
     endif
 

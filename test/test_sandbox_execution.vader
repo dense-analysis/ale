@@ -1,0 +1,51 @@
+Before:
+  function! TestCallback(buffer, output)
+    return [
+    \ {
+    \   'lnum': 1,
+    \   'bufnr': 1,
+    \   'vcol': 0,
+    \   'linter_name': 'testlinter',
+    \   'nr': -1,
+    \   'type': 'E',
+    \   'col': 1,
+    \   'text': 'Test Error',
+    \ },
+    \]
+  endfunction
+
+  call ale#linter#Define('foobar', {
+  \ 'name': 'testlinter',
+  \ 'callback': 'TestCallback',
+  \ 'executable': 'echo',
+  \ 'command': 'echo',
+  \})
+
+  let g:ale_buffer_info = {}
+
+After:
+  delfunction TestCallback
+  call ale#linter#Reset()
+  let g:ale_buffer_info = {}
+
+Given foobar (Some imaginary filetype):
+  foo
+  bar
+  baz
+
+Execute(ALE shouldn't blow up when run from a sandbox):
+  AssertEqual 'foobar', &filetype
+
+  sandbox call ale#Queue(0)
+  sandbox call ale#Queue(1)
+  sandbox call ale#Lint()
+
+Execute(ALE shouldn't blow up if file cleanup happens in a sandbox):
+  let g:ale_buffer_info[3] = {
+  \ 'temporary_file_list': ['/tmp/foo'],
+  \ 'temporary_directory_list': ['/tmp/bar'],
+  \}
+  sandbox call ale#engine#RemoveManagedFiles(3)
+
+  AssertEqual ['/tmp/foo'], g:ale_buffer_info[3].temporary_file_list
+  AssertEqual ['/tmp/bar'], g:ale_buffer_info[3].temporary_directory_list

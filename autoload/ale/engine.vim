@@ -155,6 +155,12 @@ function! ale#engine#RemoveManagedFiles(buffer) abort
         return
     endif
 
+    " We can't delete anything in a sandbox, so wait until we escape from
+    " it to delete temporary files and directories.
+    if ale#util#InSandbox()
+        return
+    endif
+
     " Delete files with a call akin to a plan `rm` command.
     for l:filename in g:ale_buffer_info[a:buffer].temporary_file_list
         call delete(l:filename)
@@ -194,6 +200,12 @@ function! s:HandleExit(job) abort
     " Call the same function for stopping jobs again to clean up the job
     " which just closed.
     call s:StopPreviousJobs(l:buffer, l:linter)
+
+    " Stop here if we land in the handle for a job completing if we're in
+    " a sandbox.
+    if ale#util#InSandbox()
+        return
+    endif
 
     if l:next_chain_index < len(get(l:linter, 'command_chain', []))
         call s:InvokeChain(l:buffer, l:linter, l:next_chain_index, l:output)

@@ -118,3 +118,19 @@ function! ale#util#BinarySearch(loclist, line, column) abort
         endif
     endwhile
 endfunction
+
+" A function for testing if a function is running inside a sandbox.
+" See :help sandbox
+function! ale#util#InSandbox() abort
+    try
+        call setbufvar('%', '', '')
+    catch /^Vim\%((\a\+)\)\=:E48/
+        " E48 is the sandbox error.
+        return 1
+    catch
+        " If we're not in a sandbox, we'll get another error about an
+        " invalid buffer variable name.
+    endtry
+
+    return 0
+endfunction
