@@ -199,6 +199,8 @@ command! ALEToggle :call s:ALEToggle()
 
 " Define command to get information about current filetype.
 command! ALEInfo :call ale#debugging#Info()
+" The same, but copy output to your clipboard.
+command! ALEInfoToClipboard :call ale#debugging#InfoToClipboard()
 
 " <Plug> mappings for commands
 nnoremap <silent> <Plug>(ale_previous) :ALEPrevious<Return>

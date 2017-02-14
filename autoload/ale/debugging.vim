@@ -107,3 +107,11 @@ function! ale#debugging#Info() abort
     echom ''
     call s:EchoCommandHistory()
 endfunction
+
+function! ale#debugging#InfoToClipboard() abort
+    redir @+>
+        silent call ale#debugging#Info()
+    redir END
+
+    echom 'ALEInfo copied to your clipboard'
+endfunction
