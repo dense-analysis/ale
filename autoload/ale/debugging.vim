@@ -60,6 +60,18 @@ function! s:EchoGlobalVariables() abort
     endfor
 endfunction
 
+function! s:EchoCommandHistory() abort
+    let l:buffer = bufnr('%')
+
+    if !has_key(g:ale_buffer_info, l:buffer)
+        return
+    endif
+
+    for l:item in g:ale_buffer_info[l:buffer].history
+        echom '(' . l:item.status . ') ' . string(l:item.command)
+    endfor
+endfunction
+
 function! ale#debugging#Info() abort
     let l:filetype = &filetype
 
@@ -91,4 +103,7 @@ function! ale#debugging#Info() abort
     echom ' Global Variables:'
     echom ''
     call s:EchoGlobalVariables()
+    echom '  Command History:'
+    echom ''
+    call s:EchoCommandHistory()
 endfunction

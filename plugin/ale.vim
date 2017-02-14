@@ -131,6 +131,9 @@ let g:ale_statusline_format = get(g:, 'ale_statusline_format',
 let g:ale_warn_about_trailing_whitespace =
 \   get(g:, 'ale_warn_about_trailing_whitespace', 1)
 
+" A flag for controlling the maximum size of the command history to store.
+let g:ale_max_buffer_history_size = get(g:, 'ale_max_buffer_history_size', 20)
+
 function! s:ALEInitAuGroups() abort
     augroup ALERunOnTextChangedGroup
         autocmd!

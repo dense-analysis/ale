@@ -34,10 +34,17 @@ Before:
   \  'let g:ale_statusline_format = [''%d error(s)'', ''%d warning(s)'', ''OK'']',
   \  'let g:ale_warn_about_trailing_whitespace = 1',
   \], "\n")
+  let g:command_header = "\n  Command History:\n"
 
 After:
   unlet! g:output
   unlet! g:globals_string
+  unlet! g:command_header
+  let g:ale_buffer_info = {}
+  unlet! g:ale_testft_testlinter1_foo
+  unlet! g:ale_testft_testlinter1_bar
+  unlet! g:ale_testft2_testlinter2_foo
+  unlet! g:ale_testft2_testlinter2_bar
 
 Given nolintersft (Empty buffer with no linters):
 Execute (ALEInfo with no linters should return the right output):
@@ -49,7 +56,7 @@ Execute (ALEInfo with no linters should return the right output):
               \Available Linters: []\n
               \  Enabled Linters: []\n
               \ Linter Variables:\n
-              \" . g:globals_string, g:output
+              \" . g:globals_string . g:command_header, g:output
 
 Given (Empty buffer with no filetype):
 Execute (ALEInfo with no filetype should return the right output):
@@ -61,7 +68,7 @@ Execute (ALEInfo with no filetype should return the right output):
               \Available Linters: []\n
               \  Enabled Linters: []\n
               \ Linter Variables:\n
-              \" . g:globals_string, g:output
+              \" . g:globals_string . g:command_header, g:output
 
 Given testft (Empty buffer):
 Execute (ALEInfo with a single linter should return the right output):
@@ -74,7 +81,7 @@ Execute (ALEInfo with a single linter should return the right output):
               \Available Linters: ['testlinter1']\n
               \  Enabled Linters: ['testlinter1']\n
               \ Linter Variables:\n
-              \" . g:globals_string, g:output
+              \" . g:globals_string . g:command_header, g:output
 
 Given testft (Empty buffer):
 Execute (ALEInfo with two linters should return the right output):
@@ -88,7 +95,7 @@ Execute (ALEInfo with two linters should return the right output):
               \Available Linters: ['testlinter1', 'testlinter2']\n
               \  Enabled Linters: ['testlinter1', 'testlinter2']\n
               \ Linter Variables:\n
-              \" . g:globals_string, g:output
+              \" . g:globals_string . g:command_header, g:output
 
 Given testft (Empty buffer):
 Execute (ALEInfo should calculate enabled linters correctly):
@@ -118,7 +125,7 @@ Execute (ALEInfo should only return linters for current filetype):
               \Available Linters: ['testlinter1']\n
               \  Enabled Linters: ['testlinter1']\n
               \ Linter Variables:\n
-              \" . g:globals_string, g:output
+              \" . g:globals_string . g:command_header, g:output
 
 Given testft.testft2 (Empty buffer with two filetypes):
 Execute (ALEInfo with compound filetypes should return linters for both of them):
@@ -132,7 +139,7 @@ Execute (ALEInfo with compound filetypes should return linters for both of them)
               \Available Linters: ['testlinter1', 'testlinter2']\n
               \  Enabled Linters: ['testlinter1', 'testlinter2']\n
               \ Linter Variables:\n
-              \" . g:globals_string, g:output
+              \" . g:globals_string . g:command_header, g:output
 
 Given testft.testft2 (Empty buffer with two filetypes):
 Execute (ALEInfo should return appropriately named global variables):
@@ -155,4 +162,32 @@ Execute (ALEInfo should return appropriately named global variables):
               \let g:ale_testft2_testlinter2_bar = {'x': 'y'}\n
               \let g:ale_testft2_testlinter2_foo = 123\n
               \let g:ale_testft_testlinter1_bar = ['abc']\n
-              \let g:ale_testft_testlinter1_foo = 'abc'" . g:globals_string, g:output
+              \let g:ale_testft_testlinter1_foo = 'abc'"
+              \ . g:globals_string . g:command_header, g:output
+
+Given testft.testft2 (Empty buffer with two filetypes):
+Execute (ALEInfo should return command history):
+  let g:ale_buffer_info[bufnr('%')] = {
+  \ 'history': [
+  \   {'status': 'ran', 'job_id': 347, 'command': 'first command'},
+  \   {'status': 'ran', 'job_id': 347, 'command': ['/bin/bash', '\c', 'last command']},
+  \ ],
+  \}
+
+  call ale#linter#Define('testft', g:testlinter1)
+  call ale#linter#Define('testft2', g:testlinter2)
+  redir => g:output
+  silent ALEInfo
+  redir END
+  AssertEqual
+  \ join([
+  \   '',
+  \   ' Current Filetype: testft.testft2',
+  \   'Available Linters: [''testlinter1'', ''testlinter2'']',
+  \   '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
+  \   ' Linter Variables:',
+  \   g:globals_string . g:command_header,
+  \   '(ran) ''first command''',
+  \   '(ran) [''/bin/bash'', ''\c'', ''last command'']',
+  \ ], "\n"),
+  \ g:output

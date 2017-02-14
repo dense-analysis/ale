@@ -1,0 +1,69 @@
+Before:
+  let g:history = []
+  let g:ale_buffer_info = {}
+  let g:ale_max_buffer_history_size = 20
+
+  function! CollectResults(buffer, output)
+    return []
+  endfunction
+
+  call ale#linter#Define('foobar', {
+  \ 'name': 'testlinter',
+  \ 'callback': 'CollectResults',
+  \ 'executable': 'echo',
+  \ 'command': 'echo command history test',
+  \ 'read_buffer': 0,
+  \})
+
+After:
+  unlet g:history
+  let g:ale_buffer_info = {}
+  let g:ale_max_buffer_history_size = 20
+  call ale#linter#Reset()
+  delfunction CollectResults
+
+Given foobar (Some imaginary filetype):
+  anything
+
+Execute(History should be set when commands are run):
+  AssertEqual 'foobar', &filetype
+
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+
+  let g:history = g:ale_buffer_info[bufnr('%')].history
+
+  AssertEqual 1, len(g:history)
+  AssertEqual ['status', 'job_id', 'command'], keys(g:history[0])
+  AssertEqual ['/bin/bash', '-c', 'echo command history test'], g:history[0].command
+  AssertEqual 'ran', g:history[0].status
+  " The Job ID will change each time, but we can check the type.
+  AssertEqual type(1), type(g:history[0].job_id)
+
+Execute(History items should be popped after going over the max):
+  let g:ale_buffer_info[1] = {
+  \ 'history': map(range(20), '{''status'': ''ran'', ''job_id'': v:val, ''command'': ''foobar''}'),
+  \}
+
+  call ale#engine#AddToHistory(1, 'ran', 347, 'last command')
+
+  AssertEqual
+  \ (
+  \   map(range(1, 19), '{''status'': ''ran'', ''job_id'': v:val, ''command'': ''foobar''}')
+  \   + [{'status': 'ran', 'job_id': 347, 'command': 'last command'}]
+  \ ),
+  \ g:ale_buffer_info[1].history
+
+Execute(Nothing should be added to history if the size is too low):
+  let g:ale_max_buffer_history_size = 0
+  let g:ale_buffer_info[1] = {'history': []}
+
+  call ale#engine#AddToHistory(1, 'ran', 347, 'last command')
+
+  AssertEqual [], g:ale_buffer_info[1].history
+
+  let g:ale_max_buffer_history_size = -2
+
+  call ale#engine#AddToHistory(1, 'ran', 347, 'last command')
+
+  AssertEqual [], g:ale_buffer_info[1].history
