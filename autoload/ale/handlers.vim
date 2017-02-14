@@ -224,18 +224,15 @@ endfunction
 function! ale#handlers#HandleGhcFormat(buffer, lines) abort
     " Look for lines like the following.
     "
-    " /dev/stdin:28:26: Not in scope: `>>>>>'
-     "Appoint/Lib.hs:8:1: warning:
-    let l:pattern = '^[^:]\+:\(\d\+\):\(\d\+\):\s\{-}\(warning\|error\)\(.\+\)$'
+    "Appoint/Lib.hs:8:1: warning:
+    "Appoint/Lib.hs:8:1:
+    let l:pattern = '^[^:]\+:\(\d\+\):\(\d\+\):\(.*\)\?$'
     let l:output = []
 
     let l:corrected_lines = []
     for l:line in a:lines
         if len(matchlist(l:line, l:pattern)) > 0
             call add(l:corrected_lines, l:line)
-            if l:line !~# '\(: error\|warning\):$'
-                call add(l:corrected_lines, '')
-            endif
         elseif l:line ==# ''
             call add(l:corrected_lines, l:line)
         else
@@ -253,13 +250,24 @@ function! ale#handlers#HandleGhcFormat(buffer, lines) abort
             continue
         endif
 
+        let l:errors = matchlist(l:match[3], '\(warning:\|error:\)\(.*\)')
+
+        if len(l:errors) > 0
+          let l:type = l:errors[1]
+          let l:text = l:errors[2]
+        else
+          let l:type = ''
+          let l:text = l:match[3]
+        end
+        let l:type = l:type ==# '' ? 'E' : toupper(l:type[0])
+
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
         \   'vcol': 0,
         \   'col': l:match[2] + 0,
-        \   'text': l:match[4],
-        \   'type': toupper(l:match[3][0]),
+        \   'text': l:text,
+        \   'type': l:type,
         \   'nr': -1,
         \})
     endfor

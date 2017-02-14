@@ -1,4 +1,4 @@
-" Author: w0rp <devw0rp@gmail.com>
+" Author: rob-b
 " Description: hdevtools for Haskell files
 
 call ale#linter#Define('haskell', {
