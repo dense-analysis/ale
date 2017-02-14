@@ -220,3 +220,49 @@ function! ale#handlers#HandleStyleLintFormat(buffer, lines) abort
 
     return l:output
 endfunction
+
+function! ale#handlers#HandleGhcFormat(buffer, lines) abort
+    " Look for lines like the following.
+    "
+    " /dev/stdin:28:26: Not in scope: `>>>>>'
+     "Appoint/Lib.hs:8:1: warning:
+    let l:pattern = '^[^:]\+:\(\d\+\):\(\d\+\):\s\{-}\(warning\|error\)\(.\+\)$'
+    let l:output = []
+
+    let l:corrected_lines = []
+    for l:line in a:lines
+        if len(matchlist(l:line, l:pattern)) > 0
+            call add(l:corrected_lines, l:line)
+            if l:line !~# '\(: error\|warning\):$'
+                call add(l:corrected_lines, '')
+            endif
+        elseif l:line ==# ''
+            call add(l:corrected_lines, l:line)
+        else
+            if len(l:corrected_lines) > 0
+                let l:line = substitute(l:line, '\v^\s+', ' ', '')
+                let l:corrected_lines[-1] .= l:line
+            endif
+        endif
+    endfor
+
+    for l:line in l:corrected_lines
+        let l:match = matchlist(l:line, l:pattern)
+
+        if len(l:match) == 0
+            continue
+        endif
+
+        call add(l:output, {
+        \   'bufnr': a:buffer,
+        \   'lnum': l:match[1] + 0,
+        \   'vcol': 0,
+        \   'col': l:match[2] + 0,
+        \   'text': l:match[4],
+        \   'type': toupper(l:match[3][0]),
+        \   'nr': -1,
+        \})
+    endfor
+
+    return l:output
+endfunction
