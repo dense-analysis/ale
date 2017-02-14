@@ -4,11 +4,13 @@
 
 " Sanity Checks
 
-if exists('g:loaded_ale')
+if exists('g:loaded_ale_dont_use_this_in_other_plugins_please')
     finish
 endif
 
-let g:loaded_ale = 1
+" Set a special flag used only by this plugin for preventing doubly
+" loading the script.
+let g:loaded_ale_dont_use_this_in_other_plugins_please = 1
 
 " A flag for detecting if the required features are set.
 if has('nvim')
@@ -29,6 +31,9 @@ if !s:has_features
     " Stop here, as it won't work.
     finish
 endif
+
+" Set this flag so that other plugins can use it, like airline.
+let g:loaded_ale = 1
 
 " Set the TMPDIR environment variable if it is not set automatically.
 " This can automatically fix some environments.
