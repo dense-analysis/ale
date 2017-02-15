@@ -289,8 +289,10 @@ g:ale_linters                                                   *g:ale_linters*
   following values: >
 
   {
-  \   'zsh': ['shell'],
   \   'csh': ['shell'],
+  \   'rust': ['cargo'],
+  \   'text': [],
+  \   'zsh': ['shell'],
   \}
 <
   This option can be used to enable only a particular set of linters for a
@@ -1046,6 +1048,13 @@ Some linters may have requirements for some other plugins being installed.
      only operate on the files written on disk. That means it is highly
      recommended to turn off |g:ale_lint_on_text_changed| and to turn on
      |g:ale_lint_on_save|.
+
+  Only cargo is enabled by default. To switch to using rustc instead of cargo,
+  configure |g:ale_linters| appropriately: >
+
+  " Set the help text for the option for more information.
+  let g:ale_linters = {'rust': ['rustc']}
+<
 
   Also note that rustc 1.12. or later is needed.
 

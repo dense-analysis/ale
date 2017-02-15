@@ -18,10 +18,13 @@ let s:default_ale_linter_aliases = {
 " The user defined linter selections will be merged with this Dictionary.
 "
 " No linters are used for plaintext files by default.
+"
+" Only cargo is enabled for Rust by default.
 let s:default_ale_linters = {
-\   'zsh': ['shell'],
 \   'csh': ['shell'],
+\   'rust': ['cargo'],
 \   'text': [],
+\   'zsh': ['shell'],
 \}
 
 " Testing/debugging helper to unload all linters.
