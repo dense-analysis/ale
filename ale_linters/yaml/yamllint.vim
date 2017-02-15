@@ -1,5 +1,21 @@
 " Author: KabbAmine <amine.kabb@gmail.com>
 
+let g:ale_yaml_yamllint_executable =
+\   get(g:, 'ale_yaml_yamllint_executable', 'yamllint')
+
+let g:ale_yaml_yamllint_options =
+\   get(g:, 'ale_yaml_yamllint_options', '')
+
+function! ale_linters#yaml#yamllint#GetExecutable(buffer) abort
+    return g:ale_yaml_yamllint_executable
+endfunction
+
+function! ale_linters#yaml#yamllint#GetCommand(buffer) abort
+    return ale_linters#yaml_yamllint#GetExecutable(a:buffer)
+    \   . ' ' . g:ale_yaml_yamllint_options
+    \   . ' -f parsable %t'
+endfunction
+
 function! ale_linters#yaml#yamllint#Handle(buffer, lines) abort
     " Matches patterns line the following:
     " something.yaml:1:1: [warning] missing document start "---" (document-start)
@@ -36,7 +52,7 @@ endfunction
 
 call ale#linter#Define('yaml', {
 \   'name': 'yamllint',
-\   'executable': 'yamllint',
-\   'command': 'yamllint -f parsable %t',
+\   'executable_callback': 'ale_linters#yaml#yamllint#GetExecutable',
+\   'command_callback': 'ale_linters#yaml#yamllint#GetCommand',
 \   'callback': 'ale_linters#yaml#yamllint#Handle',
 \})
