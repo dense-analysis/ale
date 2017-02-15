@@ -11,7 +11,7 @@ function! ale_linters#yaml#yamllint#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#yaml#yamllint#GetCommand(buffer) abort
-    return ale_linters#yaml_yamllint#GetExecutable(a:buffer)
+    return ale_linters#yaml#yamllint#GetExecutable(a:buffer)
     \   . ' ' . g:ale_yaml_yamllint_options
     \   . ' -f parsable %t'
 endfunction
