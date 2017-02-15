@@ -162,6 +162,13 @@ function! s:ALEInitAuGroups() abort
             autocmd CursorMoved,CursorHold * call ale#cursor#EchoCursorWarningWithDelay()
         endif
     augroup END
+
+    if !g:ale_enabled
+        augroup! ALERunOnTextChangedGroup
+        augroup! ALERunOnEnterGroup
+        augroup! ALERunOnSaveGroup
+        augroup! ALECursorGroup
+    endif
 endfunction
 
 function! s:ALEToggle() abort

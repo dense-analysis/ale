@@ -1,0 +1,112 @@
+Before:
+  let g:expected_loclist = [{
+  \ 'bufnr': bufnr('%'),
+  \ 'lnum': 2,
+  \ 'vcol': 0,
+  \ 'col': 3,
+  \ 'text': 'foo bar',
+  \ 'type': 'E',
+  \ 'nr': -1,
+  \ 'pattern': '',
+  \ 'valid': 1,
+  \}]
+  let g:expected_groups = [
+  \ 'ALECleanupGroup',
+  \ 'ALECursorGroup',
+  \ 'ALEHighlightBufferGroup',
+  \ 'ALERunOnEnterGroup',
+  \ 'ALERunOnTextChangedGroup',
+  \]
+
+  function! ToggleTestCallback(buffer, output)
+    return [{
+    \ 'bufnr': a:buffer,
+    \ 'lnum': 2,
+    \ 'vcol': 0,
+    \ 'col': 3,
+    \ 'text': a:output[0],
+    \ 'type': 'E',
+    \ 'nr': -1,
+    \}]
+  endfunction
+
+  function! ParseAuGroups()
+    redir => l:output
+       silent exec 'autocmd'
+    redir end
+
+    let l:results = []
+
+    for l:line in split(l:output, "\n")
+      let l:match = matchlist(l:line, '^ALE[a-zA-Z]\+Group')
+
+      if !empty(l:match)
+        call add(l:results, l:match[0])
+      endif
+    endfor
+
+    call uniq(sort(l:results))
+
+    return l:results
+  endfunction
+
+  call ale#linter#Define('foobar', {
+  \ 'name': 'testlinter',
+  \ 'callback': 'ToggleTestCallback',
+  \ 'executable': 'echo',
+  \ 'command': 'echo foo bar',
+  \})
+
+After:
+  unlet! g:expected_loclist
+  unlet! g:expected_groups
+
+  let g:ale_buffer_info = {}
+  call ale#linter#Reset()
+
+  " Toggle ALE back on if we fail when it's disabled.
+  if !g:ale_enabled
+    ALEToggle
+  endif
+
+  delfunction ToggleTestCallback
+  delfunction ParseAuGroups
+
+Given foobar (Some imaginary filetype):
+  foo
+  bar
+  baz
+
+Execute(ALEToggle should reset everything and then run again):
+  AssertEqual 'foobar', &filetype
+
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+
+  " First check that everything is there...
+  AssertEqual g:expected_loclist, getloclist(0)
+  AssertEqual [1000001], ale#sign#FindCurrentSigns(bufnr('%'))
+  AssertEqual
+  \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
+  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+  AssertEqual g:expected_groups, ParseAuGroups()
+
+  " Now Toggle ALE off.
+  ALEToggle
+
+  " Everything should be cleared.
+  AssertEqual [], getloclist(0)
+  AssertEqual [], ale#sign#FindCurrentSigns(bufnr('%'))
+  AssertEqual [], getmatches()
+  AssertEqual ['ALECleanupGroup', 'ALEHighlightBufferGroup'], ParseAuGroups()
+
+  " Toggle ALE on, everything should be set up and run again.
+  ALEToggle
+  call ale#engine#WaitForJobs(2000)
+
+  AssertEqual g:expected_loclist, getloclist(0)
+  AssertEqual [1000001], ale#sign#FindCurrentSigns(bufnr('%'))
+  AssertEqual
+  \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
+  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+  AssertEqual g:expected_groups, ParseAuGroups()
