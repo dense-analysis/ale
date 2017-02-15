@@ -2,10 +2,19 @@ SHELL := /usr/bin/env bash
 IMAGE ?= w0rp/ale
 CURRENT_IMAGE_ID = 107e4efc4267
 DOCKER_FLAGS = --rm -v $(PWD):/testplugin -v $(PWD)/test:/home "$(IMAGE)"
+tests = test/*
 
 test-setup:
 	docker images -q w0rp/ale | grep ^$(CURRENT_IMAGE_ID) > /dev/null || \
 		docker pull $(IMAGE)
+
+vader: test-setup
+	@:; \
+	vims=$$(docker run --rm $(IMAGE) ls /vim-build/bin | grep -E '^n?vim'); \
+	if [ -z "$$vims" ]; then echo "No Vims found!"; exit 1; fi; \
+	for vim in $$vims; do \
+		docker run -a stderr $(DOCKER_FLAGS) $$vim '+Vader! $(tests)'; \
+	done
 
 test: test-setup
 	@:; \
@@ -18,7 +27,7 @@ test: test-setup
 		echo "Running tests for $$vim"; \
 		echo '========================================'; \
 		echo; \
-		docker run -a stderr $(DOCKER_FLAGS) $$vim '+Vader! test/*' || EXIT=$$?; \
+		docker run -a stderr $(DOCKER_FLAGS) $$vim '+Vader! $(tests)' || EXIT=$$?; \
 	done; \
 	echo; \
 	echo '========================================'; \
