@@ -40,6 +40,7 @@ CONTENTS                                                         *ale-contents*
     4.28. phpmd...........................|ale-linter-options-phpmd|
     4.29. xo..............................|ale-linter-options-xo|
     4.30. javac...........................|ale-linter-options-javac|
+    4.31. yamllint........................|ale-linter-options-yamllint|
   5. Linter Integration Notes.............|ale-linter-integration|
     5.1.  merlin..........................|ale-linter-integration-ocaml-merlin|
     5.2. rust.............................|ale-integration-rust|
@@ -996,6 +997,24 @@ g:ale_java_javac_options                             *g:ale_java_javac_options*
   Default: `''`
 
   This variable can be set to pass additional options to javac.
+
+------------------------------------------------------------------------------
+4.31. yamllint                                    *ale-linter-options-yamllint*
+
+g:ale_yaml_yamllint_executable                 *g:ale_yaml_yamllint_executable*
+
+  Type: |String|
+  Default: `'yamllint'`
+
+  This variable can be set to change the path to yamllint.
+
+
+g:ale_yaml_yamllint_options                       *g:ale_yaml_yamllint_options*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to yamllint.
 
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*
