@@ -36,21 +36,21 @@ Execute(History should be set when commands are run):
   AssertEqual 1, len(g:history)
   AssertEqual ['status', 'job_id', 'command'], keys(g:history[0])
   AssertEqual ['/bin/bash', '-c', 'echo command history test'], g:history[0].command
-  AssertEqual 'ran', g:history[0].status
+  AssertEqual 'started', g:history[0].status
   " The Job ID will change each time, but we can check the type.
   AssertEqual type(1), type(g:history[0].job_id)
 
 Execute(History items should be popped after going over the max):
   let g:ale_buffer_info[1] = {
-  \ 'history': map(range(20), '{''status'': ''ran'', ''job_id'': v:val, ''command'': ''foobar''}'),
+  \ 'history': map(range(20), '{''status'': ''started'', ''job_id'': v:val, ''command'': ''foobar''}'),
   \}
 
-  call ale#engine#AddToHistory(1, 'ran', 347, 'last command')
+  call ale#history#Add(1, 'started', 347, 'last command')
 
   AssertEqual
   \ (
-  \   map(range(1, 19), '{''status'': ''ran'', ''job_id'': v:val, ''command'': ''foobar''}')
-  \   + [{'status': 'ran', 'job_id': 347, 'command': 'last command'}]
+  \   map(range(1, 19), '{''status'': ''started'', ''job_id'': v:val, ''command'': ''foobar''}')
+  \   + [{'status': 'started', 'job_id': 347, 'command': 'last command'}]
   \ ),
   \ g:ale_buffer_info[1].history
 
@@ -58,12 +58,12 @@ Execute(Nothing should be added to history if the size is too low):
   let g:ale_max_buffer_history_size = 0
   let g:ale_buffer_info[1] = {'history': []}
 
-  call ale#engine#AddToHistory(1, 'ran', 347, 'last command')
+  call ale#history#Add(1, 'started', 347, 'last command')
 
   AssertEqual [], g:ale_buffer_info[1].history
 
   let g:ale_max_buffer_history_size = -2
 
-  call ale#engine#AddToHistory(1, 'ran', 347, 'last command')
+  call ale#history#Add(1, 'started', 347, 'last command')
 
   AssertEqual [], g:ale_buffer_info[1].history

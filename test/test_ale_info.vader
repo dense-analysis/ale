@@ -169,8 +169,8 @@ Given testft.testft2 (Empty buffer with two filetypes):
 Execute (ALEInfo should return command history):
   let g:ale_buffer_info[bufnr('%')] = {
   \ 'history': [
-  \   {'status': 'ran', 'job_id': 347, 'command': 'first command'},
-  \   {'status': 'ran', 'job_id': 347, 'command': ['/bin/bash', '\c', 'last command']},
+  \   {'status': 'started', 'job_id': 347, 'command': 'first command'},
+  \   {'status': 'started', 'job_id': 347, 'command': ['/bin/bash', '\c', 'last command']},
   \ ],
   \}
 
@@ -187,7 +187,7 @@ Execute (ALEInfo should return command history):
   \   '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
   \   ' Linter Variables:',
   \   g:globals_string . g:command_header,
-  \   '(ran) ''first command''',
-  \   '(ran) [''/bin/bash'', ''\c'', ''last command'']',
+  \   '(started) ''first command''',
+  \   '(started) [''/bin/bash'', ''\c'', ''last command'']',
   \ ], "\n"),
   \ g:output
