@@ -34,7 +34,7 @@ In other words, this plugin allows you to lint while you type.
  8. [How can I run linters only when I save files?](#faq-lint-on-save)
  9. [How can I use the quickfix list instead of the loclist?](#faq-quickfix)
  10. [How can I check JSX files with both stylelint and eslint?](#faq-jsx-stylelint-eslint)
- 11. [Will this plugin eat all of my laptop battery power](#faq-my-battery-is-sad)
+ 11. [Will this plugin eat all of my laptop battery power?](#faq-my-battery-is-sad)
 
 <a name="supported-languages"></a>
 
