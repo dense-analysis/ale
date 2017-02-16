@@ -13,7 +13,7 @@ call ale#linter#Define('cpp', {
 \   'name': 'clang',
 \   'output_stream': 'stderr',
 \   'executable': 'clang++',
-\   'command': 'clang++ -S -x c -fsyntax-only '
+\   'command': 'clang++ -S -x c++ -fsyntax-only '
 \       . g:ale_cpp_clang_options
 \       . ' -',
 \   'callback': 'ale#handlers#HandleGCCFormat',
