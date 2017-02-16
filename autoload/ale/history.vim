@@ -24,3 +24,18 @@ function! ale#history#Add(buffer, status, job_id, command) abort
 
     let g:ale_buffer_info[a:buffer].history = l:history
 endfunction
+
+" Set an exit code for a command which finished.
+function! ale#history#SetExitCode(buffer, job_id, exit_code) abort
+    " Search backwards to find a matching job ID. IDs might be recycled,
+    " so finding the last one should be good enough.
+    for l:obj in reverse(g:ale_buffer_info[a:buffer].history[:])
+        if l:obj.job_id == a:job_id
+            " If we find a match, then set the code and status, and stop here.
+            let l:obj.exit_code = a:exit_code
+            let l:obj.status = 'finished'
+
+            return
+        endif
+    endfor
+endfunction

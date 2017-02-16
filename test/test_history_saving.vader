@@ -35,9 +35,10 @@ Execute(History should be set when commands are run):
   let g:history = g:ale_buffer_info[bufnr('%')].history
 
   AssertEqual 1, len(g:history)
-  AssertEqual ['status', 'job_id', 'command'], keys(g:history[0])
+  AssertEqual sort(['status', 'exit_code', 'job_id', 'command']), sort(keys(g:history[0]))
   AssertEqual ['/bin/bash', '-c', 'echo command history test'], g:history[0].command
-  AssertEqual 'started', g:history[0].status
+  AssertEqual 'finished', g:history[0].status
+  AssertEqual 0, g:history[0].exit_code
   " The Job ID will change each time, but we can check the type.
   AssertEqual type(1), type(g:history[0].job_id)
 

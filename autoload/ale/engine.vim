@@ -270,12 +270,34 @@ function! ale#engine#SetResults(buffer, loclist) abort
     endif
 endfunction
 
-function! s:HandleExitNeoVim(job, data, event) abort
+function! s:SetExitCode(job, exit_code) abort
+    let l:job_id = s:GetJobID(a:job)
+
+    if !has_key(s:job_info_map, l:job_id)
+        return
+    endif
+
+    let l:buffer = s:job_info_map[l:job_id].buffer
+
+    call ale#history#SetExitCode(l:buffer, l:job_id, a:exit_code)
+endfunction
+
+function! s:HandleExitNeoVim(job, exit_code, event) abort
+    if g:ale_history_enabled
+        call s:SetExitCode(a:job, a:exit_code)
+    endif
+
     call s:HandleExit(a:job)
 endfunction
 
 function! s:HandleExitVim(channel) abort
     call s:HandleExit(ch_getjob(a:channel))
+endfunction
+
+" Vim returns the exit status with one callback,
+" and the channel will close later in another callback.
+function! s:HandleExitStatusVim(job, exit_code) abort
+    call s:SetExitCode(a:job, a:exit_code)
 endfunction
 
 function! s:FixLocList(buffer, loclist) abort
@@ -414,6 +436,12 @@ function! s:RunJob(options) abort
         \   'err_mode': 'nl',
         \   'close_cb': function('s:HandleExitVim'),
         \}
+
+        if g:ale_history_enabled
+            " We only need to capture the exit status if we are going to
+            " save it in the history. Otherwise, we don't care.
+            let l:job_options.exit_cb = function('s:HandleExitStatusVim')
+        endif
 
         if l:output_stream ==# 'stderr'
             " Read from stderr instead of stdout.

@@ -68,7 +68,14 @@ function! s:EchoCommandHistory() abort
     endif
 
     for l:item in g:ale_buffer_info[l:buffer].history
-        echom '(' . l:item.status . ') ' . string(l:item.command)
+        let l:status_message = l:item.status
+
+        " Include the exit code in output if we have it.
+        if l:item.status ==# 'finished'
+            let l:status_message .= ' - exit code ' . l:item.exit_code
+        endif
+
+        echom '(' . l:status_message . ') ' . string(l:item.command)
     endfor
 endfunction
 
