@@ -34,6 +34,7 @@ In other words, this plugin allows you to lint while you type.
  8. [How can I run linters only when I save files?](#faq-lint-on-save)
  9. [How can I use the quickfix list instead of the loclist?](#faq-quickfix)
  10. [How can I check JSX files with both stylelint and eslint?](#faq-jsx-stylelint-eslint)
+ 11. [Will this plugin eat all of my laptop battery power](#faq-my-battery-is-sad)
 
 <a name="supported-languages"></a>
 
@@ -410,3 +411,29 @@ ALE will alias the `jsx` filetype so it uses the `css` filetype linters, and
 use the original Array of selected linters for `jsx` from the `g:ale_linters`
 object. All available linters will be used for the filetype `javascript`, and
 no linter will be run twice for the same file.
+
+<a name="faq-my-battery-is-sad"></a>
+
+### 4.xi. Will this plugin eat all of my laptop battery power?
+
+ALE takes advantage of the power of various tools to check your code. This of
+course means that CPU time will be used to continuously check your code. If you
+are concerned about the CPU time ALE will spend, which will of course imply
+some cost to battery life, you can adjust your settings to make your CPU do
+less work.
+
+First, consider increasing the delay before which ALE will run any linters
+while you type. ALE uses a timeout which is cancelled and reset every time you
+type, and this delay can be increased so linters are run less often. See
+`:help g:ale_lint_delay` for more information.
+
+If you don't wish to run linters while you type, you can disable that
+behaviour. Set `g:ale_lint_on_text_changed` to `0`, and consider setting
+`g:ale_lint_on_save` to `1` to enable linting when you save files. You won't
+get as frequent error checking, but ALE shouldn't block your ability to edit a
+document after you save a file, so the asynchronous nature of the plugin will
+still be an advantage.
+
+If you are still concerned, you can turn the automatic linting off altogether,
+including the option `g:ale_lint_on_enter`, and you can run ALE manually with
+`:call ale#Lint()`.
