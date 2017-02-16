@@ -186,6 +186,19 @@ g:ale_enabled                                                   *g:ale_enabled*
   the |ALEToggle| command, which changes this option.
 
 
+g:ale_history_enabled                                   *g:ale_history_enabled*
+
+  Type: |Number|
+  Default: `1`
+
+  When set to `1`, ALE will remember the last few commands which were run
+  for every buffer which is open. This information can be viewed with the
+  |ALEInfo| command. The size of the buffer can be controlled with the
+  |g:ale_max_buffer_history_size| option.
+
+  This option can be disabled if storing a command history is not desired.
+
+
 g:ale_keep_list_window_open                       *g:ale_keep_list_window_open*
 
   Type: |Number|
@@ -310,6 +323,19 @@ g:ale_linters                                                   *g:ale_linters*
 
   let g:ale_linters = {'c': 'all'}
 <
+
+g:ale_max_buffer_history_size                   *g:ale_max_buffer_history_size*
+
+  Type: |Number|
+  Default: `20`
+
+  This setting controls the maximum number of commands which will be stored in
+  the command history used for |ALEInfo|. Command history will be rotated in
+  a FIFO manner. If set to a number <= 0, then the history will be
+  continuously set to an empty |List|.
+
+  History can be disabled completely with |g:ale_history_enabled|.
+
 
 g:ale_open_list                                               *g:ale_open_list*
 

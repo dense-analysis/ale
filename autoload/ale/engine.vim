@@ -458,7 +458,11 @@ function! s:RunJob(options) abort
         \}
     endif
 
-    call ale#history#Add(l:buffer, l:status, l:job_id, l:command)
+    if g:ale_history_enabled
+        call ale#history#Add(l:buffer, l:status, l:job_id, l:command)
+    else
+        let g:ale_buffer_info[l:buffer].history = []
+    endif
 endfunction
 
 " Determine which commands to run for a link in a command chain, or

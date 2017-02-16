@@ -16,6 +16,7 @@ Before:
   \})
 
 After:
+  let g:ale_history_enabled = 1
   unlet g:history
   let g:ale_buffer_info = {}
   let g:ale_max_buffer_history_size = 20
@@ -39,6 +40,16 @@ Execute(History should be set when commands are run):
   AssertEqual 'started', g:history[0].status
   " The Job ID will change each time, but we can check the type.
   AssertEqual type(1), type(g:history[0].job_id)
+
+Execute(History should be not set when disabled):
+  AssertEqual 'foobar', &filetype
+
+  let g:ale_history_enabled = 0
+
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+
+  AssertEqual 0, len(g:ale_buffer_info[bufnr('%')].history)
 
 Execute(History items should be popped after going over the max):
   let g:ale_buffer_info[1] = {
