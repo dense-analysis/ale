@@ -76,6 +76,24 @@ function! s:EchoCommandHistory() abort
         endif
 
         echom '(' . l:status_message . ') ' . string(l:item.command)
+
+        if g:ale_history_log_output && has_key(l:item, 'output')
+            if empty(l:item.output)
+                echom ''
+                echom '<<<NO OUTPUT RETURNED>>>'
+                echom ''
+            else
+                echom ''
+                echom '<<<OUTPUT STARTS>>>'
+
+                for l:line in l:item.output
+                    echom l:line
+                endfor
+
+                echom '<<<OUTPUT ENDS>>>'
+                echom ''
+            endif
+        endif
     endfor
 endfunction
 

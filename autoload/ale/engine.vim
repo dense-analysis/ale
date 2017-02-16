@@ -214,6 +214,11 @@ function! s:HandleExit(job) abort
         return
     endif
 
+    " Log the output of the command for ALEInfo if we should.
+    if g:ale_history_enabled && g:ale_history_log_output
+        call ale#history#RememberOutput(l:buffer, l:job_id, l:output[:])
+    endif
+
     let l:linter_loclist = ale#util#GetFunction(l:linter.callback)(l:buffer, l:output)
 
     " Make some adjustments to the loclists to fix common problems.

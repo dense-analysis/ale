@@ -17,6 +17,7 @@ Before:
 
 After:
   let g:ale_history_enabled = 1
+  let g:ale_history_log_output = 0
   unlet g:history
   let g:ale_buffer_info = {}
   let g:ale_max_buffer_history_size = 20
@@ -51,6 +52,19 @@ Execute(History should be not set when disabled):
   call ale#engine#WaitForJobs(2000)
 
   AssertEqual 0, len(g:ale_buffer_info[bufnr('%')].history)
+
+Execute(History should include command output if logging is enabled):
+  AssertEqual 'foobar', &filetype
+
+  let g:ale_history_log_output = 1
+
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+
+  let g:history = g:ale_buffer_info[bufnr('%')].history
+
+  AssertEqual 1, len(g:history)
+  AssertEqual ['command history test'], g:history[0].output
 
 Execute(History items should be popped after going over the max):
   let g:ale_buffer_info[1] = {

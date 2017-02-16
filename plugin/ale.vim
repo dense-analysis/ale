@@ -137,6 +137,9 @@ let g:ale_max_buffer_history_size = get(g:, 'ale_max_buffer_history_size', 20)
 " A flag for enabling or disabling the command history.
 let g:ale_history_enabled = get(g:, 'ale_history_enabled', 1)
 
+" A flag for storing the full output of commands in the history.
+let g:ale_history_log_output = get(g:, 'ale_history_log_output', 0)
+
 function! s:ALEInitAuGroups() abort
     augroup ALERunOnTextChangedGroup
         autocmd!
