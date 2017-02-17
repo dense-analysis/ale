@@ -30,13 +30,32 @@ Execute(The php handler should parse lines correctly):
   \     'type': 'E',
   \     'nr': -1,
   \   },
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 5,
+  \     'vcol': 0,
+  \     'col': 0,
+  \     'text': "Invalid numeric literal",
+  \     'type': 'E',
+  \     'nr': -1,
+  \   },
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 21,
+  \     'vcol': 0,
+  \     'col': 0,
+  \     'text': "syntax error, unexpected end of file",
+  \     'type': 'E',
+  \     'nr': -1,
+  \   },
   \ ],
   \ ale_linters#php#php#Handle(347, [
   \   'This line should be ignored completely',
   \   "PHP Parse error:  syntax error, unexpected ';', expecting ']' in - on line 47",
   \   "PHP Parse error:  syntax error, unexpected '/', expecting function (T_FUNCTION) or const (T_CONST) in - on line 56",
-  \   'This line should be ignored completely',
   \   "PHP Parse error:  syntax error, unexpected ')' in - on line 13",
+  \   'PHP Parse error: Invalid numeric literal in - on line 5',
+  \   'PHP Parse error:  syntax error, unexpected end of file in - on line 21',
   \ ])
 
 After:
