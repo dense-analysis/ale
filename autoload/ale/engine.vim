@@ -9,25 +9,19 @@
 " output: The array of lines for the output of the job.
 let s:job_info_map = {}
 
+function! ale#engine#ParseVim8ProcessID(job_string) abort
+    return matchstr(a:job_string, '\d\+') + 0
+endfunction
+
 function! s:GetJobID(job) abort
     if has('nvim')
         "In NeoVim, job values are just IDs.
         return a:job
     endif
 
-    " In Vim 8, the job is a special variable, and we open a channel for each
-    " job. We'll use the ID of the channel instead as the job ID.
-    try
-        let l:channel_info = ch_info(job_getchannel(a:job))
-
-        if !empty(l:channel_info)
-            return l:channel_info.id
-        endif
-    catch
-    endtry
-
-    " If we fail to get the channel ID for a job, just return a 0 ID.
-    return 0
+    " For Vim 8, the job is a different variable type, and we can parse the
+    " process ID from the string.
+    return ale#engine#ParseVim8ProcessID(string(a:job))
 endfunction
 
 function! ale#engine#InitBufferInfo(buffer) abort
