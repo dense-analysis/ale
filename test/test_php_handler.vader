@@ -53,7 +53,7 @@ Execute(The php handler should find columns correctly):
 
   AssertEqual
   \ [
-  \   {'group': 'ALEError', 'id': 4, 'pos1': [2, 12, 1], 'priority': 10},
-  \   {'group': 'ALEError', 'id': 5, 'pos1': [2, 12, 1], 'priority': 10}
+  \   {'group': 'ALEError', 'pos1': [2, 12, 1]},
+  \   {'group': 'ALEError', 'pos1': [2, 12, 1]}
   \ ],
-  \ getmatches()
+  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
