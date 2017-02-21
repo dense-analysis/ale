@@ -6,10 +6,10 @@ function! s:GetCurrentList()  abort
     let l:buffer = bufnr('%')
     let l:list = []
 
-    if g:ale_set_loclist
-        let l:list = getloclist(winnr())
-    elseif g:ale_set_quickfix
+    if g:ale_set_quickfix
         let l:list = getqflist()
+    elseif g:ale_set_loclist
+        let l:list = getloclist(winnr())
     endif
 
     return filter(l:list, 'get(v:val, ''bufnr'', -1) == ' . l:buffer)

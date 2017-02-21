@@ -72,3 +72,15 @@ Execute(An empty List should be returned when both lists are turned off):
   call setloclist(winnr(), [{'lnum': 1, 'col': 1, 'text': 'foo', 'bufnr': bufnr('%')}])
 
   AssertEqual [], GetList()
+
+Execute(quickfix should take precedence over loclist when on):
+  let g:ale_set_quickfix = 1
+
+  call setloclist(winnr(), [
+  \ {'lnum': 1, 'col': 1, 'text': 'ignore this', 'bufnr': g:buffer}
+  \])
+  call setqflist([
+  \ {'lnum': 1, 'col': 1, 'text': 'foo', 'bufnr': g:buffer},
+  \])
+
+  AssertEqual [{'lnum': 1, 'col': 1, 'text': 'foo'}], GetList()
