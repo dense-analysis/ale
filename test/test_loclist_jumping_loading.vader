@@ -1,0 +1,74 @@
+Before:
+  let g:buffer = bufnr('%')
+
+  function! GetList() abort
+    return map(
+    \ ale#loclist_jumping#GetSortedList(),
+    \ '{''lnum'': v:val.lnum, ''col'': v:val.col, ''text'': v:val.text}'
+    \)
+  endfunction
+
+After:
+  unlet! g:buffer
+  unlet! g:new_buffer
+  let g:ale_set_loclist = 1
+  let g:ale_set_quickfix = 0
+  call setloclist(winnr(), [])
+  call setqflist([])
+  delfunction GetList
+
+Execute(The loclist should be filtered and sorted appropriately for jumping):
+  :new
+
+  let g:new_buffer = bufnr('%')
+
+  AssertNotEqual g:new_buffer, g:buffer
+
+  call setloclist(winnr(), [
+  \ {'lnum': 1, 'col': 1, 'text': 'ignore this', 'bufnr': g:buffer},
+  \ {'lnum': 20, 'col': 5, 'text': 'baz', 'bufnr': g:new_buffer},
+  \ {'lnum': 10, 'col': 6, 'text': 'bar', 'bufnr': g:new_buffer},
+  \ {'lnum': 10, 'col': 5, 'text': 'foo', 'bufnr': g:new_buffer},
+  \])
+
+  AssertEqual
+  \ [
+  \   {'lnum': 10, 'col': 5, 'text': 'foo'},
+  \   {'lnum': 10, 'col': 6, 'text': 'bar'},
+  \   {'lnum': 20, 'col': 5, 'text': 'baz'},
+  \ ],
+  \ GetList()
+
+Execute(quickfix should be filtered and sorted appropriately for jumping):
+  let g:ale_set_loclist = 0
+  let g:ale_set_quickfix = 1
+
+  :new
+
+  let g:new_buffer = bufnr('%')
+
+  AssertNotEqual g:new_buffer, g:buffer
+
+  call setqflist([
+  \ {'lnum': 1, 'col': 1, 'text': 'ignore this', 'bufnr': g:buffer},
+  \ {'lnum': 20, 'col': 5, 'text': 'baz', 'bufnr': g:new_buffer},
+  \ {'lnum': 10, 'col': 6, 'text': 'bar', 'bufnr': g:new_buffer},
+  \ {'lnum': 10, 'col': 5, 'text': 'foo', 'bufnr': g:new_buffer},
+  \])
+
+  AssertEqual
+  \ [
+  \   {'lnum': 10, 'col': 5, 'text': 'foo'},
+  \   {'lnum': 10, 'col': 6, 'text': 'bar'},
+  \   {'lnum': 20, 'col': 5, 'text': 'baz'},
+  \ ],
+  \ GetList()
+
+Execute(An empty List should be returned when both lists are turned off):
+  let g:ale_set_loclist = 0
+  let g:ale_set_quickfix = 0
+
+  call setqflist([{'lnum': 1, 'col': 1, 'text': 'foo', 'bufnr': bufnr('%')}])
+  call setloclist(winnr(), [{'lnum': 1, 'col': 1, 'text': 'foo', 'bufnr': bufnr('%')}])
+
+  AssertEqual [], GetList()

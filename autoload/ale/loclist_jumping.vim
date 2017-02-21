@@ -2,19 +2,20 @@
 " Description: This file implements functions for jumping around in a file
 "   based on errors and warnings in the loclist or quickfix list.
 
-function! s:GetCurrentList() abort
-    if g:ale_set_loclist
-        return getloclist(winnr())
-    elseif g:ale_set_quickfix
-        let l:buffer = bufnr('%')
+function! s:GetCurrentList()  abort
+    let l:buffer = bufnr('%')
+    let l:list = []
 
-        return filter(getqflist(), 'get(v:val, ''bufnr'', -1) == ' . l:buffer)
+    if g:ale_set_loclist
+        let l:list = getloclist(winnr())
+    elseif g:ale_set_quickfix
+        let l:list = getqflist()
     endif
 
-    return []
+    return filter(l:list, 'get(v:val, ''bufnr'', -1) == ' . l:buffer)
 endfunction
 
-function! s:GetSortedLoclist() abort
+function! ale#loclist_jumping#GetSortedList() abort
     let l:loclist = []
 
     for l:item in s:GetCurrentList()
@@ -41,7 +42,7 @@ endfunction
 " List will be returned, otherwise a pair of [line_number, column_number] will
 " be returned.
 function! ale#loclist_jumping#FindNearest(direction, wrap) abort
-    let l:loclist = s:GetSortedLoclist()
+    let l:loclist = ale#loclist_jumping#GetSortedList()
 
     if empty(l:loclist)
         " We couldn't find anything, so stop here.
