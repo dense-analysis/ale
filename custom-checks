@@ -67,6 +67,12 @@ check_line() {
     if [[ "$line" =~ ' '+$ ]]; then
         output_error 'Trailing whitespace'
     fi
+
+    endif_regex='^ * end?i? *$'
+
+    if [[ "$line" =~ $endif_regex ]]; then
+        output_error 'Write endif, not en, end, or endi'
+    fi
 }
 
 # Loop through all of the vim files and keep track of the file line numbers.

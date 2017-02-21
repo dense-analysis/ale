@@ -258,7 +258,8 @@ function! ale#handlers#HandleGhcFormat(buffer, lines) abort
         else
           let l:type = ''
           let l:text = l:match[3]
-        end
+        endif
+
         let l:type = l:type ==# '' ? 'E' : toupper(l:type[0])
 
         call add(l:output, {
