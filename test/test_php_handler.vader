@@ -1,0 +1,78 @@
+Execute(The php handler should parse lines correctly):
+  runtime ale_linters/php/php.vim
+
+  AssertEqual
+  \ [
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 47,
+  \     'vcol': 0,
+  \     'col': 0,
+  \     'text': "syntax error, unexpected ';', expecting ']'",
+  \     'type': 'E',
+  \     'nr': -1,
+  \   },
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 56,
+  \     'vcol': 0,
+  \     'col': 0,
+  \     'text': "syntax error, unexpected '/', expecting function (T_FUNCTION) or const (T_CONST)",
+  \     'type': 'E',
+  \     'nr': -1,
+  \   },
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 13,
+  \     'vcol': 0,
+  \     'col': 0,
+  \     'text': "syntax error, unexpected ')'",
+  \     'type': 'E',
+  \     'nr': -1,
+  \   },
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 5,
+  \     'vcol': 0,
+  \     'col': 0,
+  \     'text': "Invalid numeric literal",
+  \     'type': 'E',
+  \     'nr': -1,
+  \   },
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 21,
+  \     'vcol': 0,
+  \     'col': 0,
+  \     'text': "syntax error, unexpected end of file",
+  \     'type': 'E',
+  \     'nr': -1,
+  \   },
+  \ ],
+  \ ale_linters#php#php#Handle(347, [
+  \   'This line should be ignored completely',
+  \   "PHP Parse error:  syntax error, unexpected ';', expecting ']' in - on line 47",
+  \   "PHP Parse error:  syntax error, unexpected '/', expecting function (T_FUNCTION) or const (T_CONST) in - on line 56",
+  \   "PHP Parse error:  syntax error, unexpected ')' in - on line 13",
+  \   'PHP Parse error: Invalid numeric literal in - on line 5',
+  \   'PHP Parse error:  syntax error, unexpected end of file in - on line 21',
+  \ ])
+
+After:
+  call ale#linter#Reset()
+
+
+Given php(A function call with missing argument delimiters):
+  <?php
+  unset($foo $bar)
+
+Execute(The php handler should find columns correctly):
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+
+  AssertEqual
+  \ [
+  \   {'group': 'ALEError', 'pos1': [2, 12, 1]},
+  \   {'group': 'ALEError', 'pos1': [2, 12, 1]}
+  \ ],
+  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')

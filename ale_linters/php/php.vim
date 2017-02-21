@@ -4,8 +4,9 @@
 function! ale_linters#php#php#Handle(buffer, lines) abort
     " Matches patterns like the following:
     "
-    " Parse error: parse error in - on line 7
-    let l:pattern = 'Parse error:\s\+\(.\+\) on line \(\d\+\)'
+    " PHP Parse error:  syntax error, unexpected ';', expecting ']' in - on line 15
+    let l:pattern = 'Parse error:\s\+\(.\{-}unexpected ''\(.\{-}\)''.\{-}\|.*\) in - on line \(\d\+\)'
+
     let l:output = []
 
     for l:line in a:lines
@@ -18,9 +19,9 @@ function! ale_linters#php#php#Handle(buffer, lines) abort
         " vcol is needed to indicate that the column is a character.
         call add(l:output, {
         \   'bufnr': a:buffer,
-        \   'lnum': l:match[2] + 0,
+        \   'lnum': l:match[3] + 0,
         \   'vcol': 0,
-        \   'col': 1,
+        \   'col': empty(l:match[2]) ? 0 : stridx(getline(l:match[3]), l:match[2]) + 1,
         \   'text': l:match[1],
         \   'type': 'E',
         \   'nr': -1,
