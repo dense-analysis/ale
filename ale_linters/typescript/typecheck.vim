@@ -7,7 +7,7 @@ function! ale_linters#typescript#typecheck#Handle(buffer, lines) abort
     " hello.ts[7, 41]: Property 'a' does not exist on type 'A'
     " hello.ts[16, 7]: Type 'A' is not assignable to type 'B'
     "
-    let l:pattern = '.\+.ts\[\(\d\+\), \(\d\+\)\]: \(.\+\)'
+    let l:pattern = '.\+\.ts\[\(\d\+\), \(\d\+\)\]: \(.\+\)'
     let l:output = []
 
     for l:line in a:lines
