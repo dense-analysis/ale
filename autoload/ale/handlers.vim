@@ -220,3 +220,57 @@ function! ale#handlers#HandleStyleLintFormat(buffer, lines) abort
 
     return l:output
 endfunction
+
+function! ale#handlers#HandleGhcFormat(buffer, lines) abort
+    " Look for lines like the following.
+    "
+    "Appoint/Lib.hs:8:1: warning:
+    "Appoint/Lib.hs:8:1:
+    let l:pattern = '^[^:]\+:\(\d\+\):\(\d\+\):\(.*\)\?$'
+    let l:output = []
+
+    let l:corrected_lines = []
+    for l:line in a:lines
+        if len(matchlist(l:line, l:pattern)) > 0
+            call add(l:corrected_lines, l:line)
+        elseif l:line ==# ''
+            call add(l:corrected_lines, l:line)
+        else
+            if len(l:corrected_lines) > 0
+                let l:line = substitute(l:line, '\v^\s+', ' ', '')
+                let l:corrected_lines[-1] .= l:line
+            endif
+        endif
+    endfor
+
+    for l:line in l:corrected_lines
+        let l:match = matchlist(l:line, l:pattern)
+
+        if len(l:match) == 0
+            continue
+        endif
+
+        let l:errors = matchlist(l:match[3], '\(warning:\|error:\)\(.*\)')
+
+        if len(l:errors) > 0
+          let l:type = l:errors[1]
+          let l:text = l:errors[2]
+        else
+          let l:type = ''
+          let l:text = l:match[3]
+        end
+        let l:type = l:type ==# '' ? 'E' : toupper(l:type[0])
+
+        call add(l:output, {
+        \   'bufnr': a:buffer,
+        \   'lnum': l:match[1] + 0,
+        \   'vcol': 0,
+        \   'col': l:match[2] + 0,
+        \   'text': l:text,
+        \   'type': l:type,
+        \   'nr': -1,
+        \})
+    endfor
+
+    return l:output
+endfunction

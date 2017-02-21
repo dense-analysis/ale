@@ -1,0 +1,42 @@
+Execute(The ghc handler should handle hdevtools output):
+
+  AssertEqual
+  \ [
+  \   {'lnum': 147, 'bufnr': 12, 'vcol': 0, 'nr': -1, 'type': 'W', 'col': 62, 'text': '• Couldnt match type ‘a -> T.Text’ with ‘T.Text’ Expected type: [T.Text]'},
+  \ ],
+  \ ale#handlers#HandleGhcFormat(12, [
+  \ '/path/to/foo.hs:147:62: warning:',
+  \ '• Couldnt match type ‘a -> T.Text’ with ‘T.Text’',
+  \ '  Expected type: [T.Text]',
+  \ ])
+
+
+Execute(The ghc handler should handle ghc 8 output):
+
+  AssertEqual
+  \ [
+  \   {'lnum': 6, 'bufnr': 47, 'vcol': 0, 'nr': -1, 'type': 'E', 'col': 1, 'text': ' Failed to load interface for ‘GitHub.Data’ Use -v to see a list of the files searched for.'},
+  \   {'lnum': 7, 'bufnr': 47, 'vcol': 0, 'nr': -1, 'type': 'W', 'col': 1, 'text': ' Failed to load interface for ‘GitHub.Endpoints.PullRequests’ Use -v to see a list of the files searched for.'},
+  \ ],
+  \ ale#handlers#HandleGhcFormat(47, [
+  \ '',
+  \ 'src/Appoint/Lib.hs:6:1: error:',
+  \ '    Failed to load interface for ‘GitHub.Data’',
+  \ '    Use -v to see a list of the files searched for.',
+  \ '',
+  \ 'src/Appoint/Lib.hs:7:1: warning:',
+  \ '    Failed to load interface for ‘GitHub.Endpoints.PullRequests’',
+  \ '    Use -v to see a list of the files searched for.',
+  \ ])
+
+
+Execute(The ghc handler should handle ghc 7 output):
+
+  AssertEqual
+  \ [
+  \   {'lnum': 168, 'bufnr': 47, 'vcol': 0, 'nr': -1, 'type': 'E', 'col': 1, 'text': ' parse error (possibly incorrect indentation or mismatched brackets)'},
+  \ ],
+  \ ale#handlers#HandleGhcFormat(47, [
+  \ 'src/Main.hs:168:1:',
+  \ '    parse error (possibly incorrect indentation or mismatched brackets)',
+  \ ])
