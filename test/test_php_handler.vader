@@ -60,19 +60,3 @@ Execute(The php handler should parse lines correctly):
 
 After:
   call ale#linter#Reset()
-
-
-Given php(A function call with missing argument delimiters):
-  <?php
-  unset($foo $bar)
-
-Execute(The php handler should find columns correctly):
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
-
-  AssertEqual
-  \ [
-  \   {'group': 'ALEError', 'pos1': [2, 12, 1]},
-  \   {'group': 'ALEError', 'pos1': [2, 12, 1]}
-  \ ],
-  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
