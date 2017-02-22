@@ -1,0 +1,33 @@
+Execute(The credo handler should parse lines correctly):
+  runtime ale_linters/elixir/credo.vim
+
+  AssertEqual
+  \ [
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 1,
+  \     'vcol': 0,
+  \     'col': 4,
+  \     'text': 'There is no whitespace around parentheses/brackets most of the time, but here there is.',
+  \     'type': 'E',
+  \     'nr': -1,
+  \   },
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 26,
+  \     'vcol': 0,
+  \     'col': 0,
+  \     'text': 'If/else blocks should not have a negated condition in `if`.',
+  \     'type': 'W',
+  \     'nr': -1,
+  \   },
+  \ ],
+  \ ale_linters#elixir#credo#Handle(347, [
+  \   'This line should be ignored completely',
+  \   'lib/filename.ex:1:4: C: There is no whitespace around parentheses/brackets most of the time, but here there is.',
+  \   'lib/phoenix/channel.ex:26: R: If/else blocks should not have a negated condition in `if`.',
+  \ ])
+
+After:
+  call ale#linter#Reset()
+
