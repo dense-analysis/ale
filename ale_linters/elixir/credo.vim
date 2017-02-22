@@ -4,7 +4,7 @@ function! ale_linters#elixir#credo#Handle(buffer, lines) abort
   " Matches patterns line the following:
   "
   " lib/filename.ex:19:7: F: Pipe chain should start with a raw value.
-  let l:pattern = '\v^.+:(\d+):?(\d+)?: (.): (.+)$'
+  let l:pattern = '\v:(\d+):?(\d+)?: (.): (.+)$'
   let l:output = []
 
   for l:line in a:lines
