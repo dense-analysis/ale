@@ -59,6 +59,7 @@ name. That seems to be the fairest way to arrange this table.
 | C++ (filetype cpp) | [clang](http://clang.llvm.org/), [clangtidy](http://clang.llvm.org/extra/clang-tidy/), [cppcheck] (http://cppcheck.sourceforge.net), [gcc](https://gcc.gnu.org/)|
 | C# | [mcs](http://www.mono-project.com/docs/about-mono/languages/csharp/) |
 | Chef | [foodcritic](http://www.foodcritic.io/) |
+| CMake | [cmakelint](https://github.com/richq/cmake-lint) |
 | CoffeeScript | [coffee](http://coffeescript.org/), [coffeelint](https://www.npmjs.com/package/coffeelint) |
 | CSS | [csslint](http://csslint.net/), [stylelint](https://github.com/stylelint/stylelint) |
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
