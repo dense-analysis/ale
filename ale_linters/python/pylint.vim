@@ -14,7 +14,7 @@ endfunction
 function! ale_linters#python#pylint#GetCommand(buffer) abort
     return ale_linters#python#pylint#GetExecutable(a:buffer)
     \   . ' ' . g:ale_python_pylint_options
-    \   . ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} {msg}" --reports n'
+    \   . ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'
     \   . ' %t'
 endfunction
 
