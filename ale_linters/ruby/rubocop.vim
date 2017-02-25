@@ -26,7 +26,7 @@ function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
         \   'vcol': 0,
         \   'col': l:match[2] + 0,
         \   'text': l:text,
-        \   'type': index(['C', 'E'], l:type) != -1 ? 'E' : 'W',
+        \   'type': index(['F', 'E'], l:type) != -1 ? 'E' : 'W',
         \   'nr': -1,
         \})
     endfor
