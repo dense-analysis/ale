@@ -118,6 +118,10 @@ let g:ale_echo_msg_warning_str = get(g:, 'ale_echo_msg_warning_str', 'Warning')
 " This flag can be set to 0 to disable echoing when the cursor moves.
 let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
 
+" Experimental support for showing warnings/errors in buffers other than the one
+" being linted
+let g:ale_experimental_multibuffer = get(g:, 'ale_experimental_multibuffer', 0)
+
 " String format for statusline
 " Its a list where:
 " * The 1st element is for errors
