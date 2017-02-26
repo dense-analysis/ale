@@ -219,12 +219,9 @@ function! s:HandleExit(job) abort
 
     let l:linter_loclist = ale#util#GetFunction(l:linter.callback)(l:buffer, l:output)
 
-    " Make some adjustments to the loclists to fix common problems.
-    call s:FixLocList(l:buffer, l:linter_loclist)
-
-    for l:item in l:linter_loclist
-        let l:item.linter_name = l:linter.name
-    endfor
+    " Make some adjustments to the loclists to fix common problems, and also
+    " to set default values for loclist items.
+    let l:linter_loclist = ale#engine#FixLocList(l:buffer, l:linter, l:linter_loclist)
 
     " Add the loclist items from the linter.
     call extend(g:ale_buffer_info[l:buffer].new_loclist, l:linter_loclist)
@@ -303,20 +300,50 @@ function! s:HandleExitStatusVim(job, exit_code) abort
     call s:SetExitCode(a:job, a:exit_code)
 endfunction
 
-function! s:FixLocList(buffer, loclist) abort
+function! ale#engine#FixLocList(buffer, linter, loclist) abort
+    let l:new_loclist = []
+
     " Some errors have line numbers beyond the end of the file,
     " so we need to adjust them so they set the error at the last line
     " of the file instead.
     let l:last_line_number = ale#util#GetLineCount(a:buffer)
 
-    for l:item in a:loclist
+    for l:old_item in a:loclist
+        " Copy the loclist item with some default values and corrections.
+        "
+        " line and column numbers will be converted to numbers.
+        " The buffer will default to the buffer being checked.
+        " The vcol setting will default to 0, a byte index.
+        " The error type will default to 'E' for errors.
+        " The error number will default to -1.
+        "
+        " The line number and text are the only required keys.
+        "
+        " The linter_name will be set on the errors so it can be used in
+        " output, filtering, etc..
+        let l:item = {
+        \   'text': l:old_item.text,
+        \   'lnum': str2nr(l:old_item.lnum),
+        \   'col': str2nr(get(l:old_item, 'col', 0)),
+        \   'bufnr': get(l:old_item, 'bufnr', a:buffer),
+        \   'vcol': get(l:old_item, 'vcol', 0),
+        \   'type': get(l:old_item, 'type', 'E'),
+        \   'nr': get(l:old_item, 'nr', -1),
+        \   'linter_name': a:linter.name,
+        \}
+
         if l:item.lnum == 0
             " When errors appear at line 0, put them at line 1 instead.
             let l:item.lnum = 1
         elseif l:item.lnum > l:last_line_number
+            " When errors go beyond the end of the file, put them at the end.
             let l:item.lnum = l:last_line_number
         endif
+
+        call add(l:new_loclist, l:item)
     endfor
+
+    return l:new_loclist
 endfunction
 
 " Given part of a command, replace any % with %%, so that no characters in

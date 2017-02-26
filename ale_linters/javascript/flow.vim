@@ -68,7 +68,6 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:line,
-        \   'vcol': 0,
         \   'col': l:col,
         \   'text': l:text,
         \   'type': l:error.level ==# 'error' ? 'E' : 'W',

@@ -27,11 +27,9 @@ function! ale_linters#elixir#credo#Handle(buffer, lines) abort
     call add(l:output, {
     \   'bufnr': a:buffer,
     \   'lnum': l:match[1] + 0,
-    \   'vcol': 0,
     \   'col': l:match[2] + 0,
     \   'type': l:type,
     \   'text': l:text,
-    \   'nr': -1,
     \})
   endfor
 

@@ -53,11 +53,9 @@ function! ale_linters#html#tidy#Handle(buffer, lines) abort
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:line,
-        \   'vcol': 0,
         \   'col': l:col,
         \   'text': l:text,
         \   'type': l:type,
-        \   'nr': -1,
         \})
     endfor
 

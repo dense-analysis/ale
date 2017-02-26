@@ -20,11 +20,9 @@ function! ale_linters#php#php#Handle(buffer, lines) abort
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[3] + 0,
-        \   'vcol': 0,
         \   'col': empty(l:match[2]) ? 0 : stridx(getline(l:match[3]), l:match[2]) + 1,
         \   'text': l:match[1],
         \   'type': 'E',
-        \   'nr': -1,
         \})
     endfor
 

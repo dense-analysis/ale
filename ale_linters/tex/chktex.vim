@@ -44,11 +44,9 @@ function! ale_linters#tex#chktex#Handle(buffer, lines) abort
     call add(l:output, {
     \   'bufnr': a:buffer,
     \   'lnum': l:match[1] + 0,
-    \   'vcol': 0,
     \   'col': l:match[2] + 0,
     \   'text': l:match[4] . ' (' . (l:match[3]+0) . ')',
     \   'type': 'W',
-    \   'nr': -1
     \})
   endfor
 

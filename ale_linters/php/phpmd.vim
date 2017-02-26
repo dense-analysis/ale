@@ -22,11 +22,9 @@ function! ale_linters#php#phpmd#Handle(buffer, lines) abort
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
-        \   'vcol': 0,
         \   'col': 0,
         \   'text': l:match[2],
         \   'type': 'W',
-        \   'nr': -1,
         \})
     endfor
 

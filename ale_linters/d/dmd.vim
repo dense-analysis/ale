@@ -72,11 +72,9 @@ function! ale_linters#d#dmd#Handle(buffer, lines) abort
         call add(l:output, {
         \   'bufnr': bufnr('%'),
         \   'lnum': l:line,
-        \   'vcol': 0,
         \   'col': l:column,
         \   'text': l:text,
         \   'type': l:type ==# 'Warning' ? 'W' : 'E',
-        \   'nr': -1,
         \})
     endfor
 

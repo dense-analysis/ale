@@ -114,7 +114,6 @@ Execute(The flow handler should process errors correctly.):
   \ {
   \   'lnum': 417,
   \   'bufnr': 347,
-  \   'vcol': 0,
   \   'type': 'E',
   \   'col': 10,
   \   'text': 'number: This type is incompatible with the expected return type of array type',
@@ -122,7 +121,6 @@ Execute(The flow handler should process errors correctly.):
   \ {
   \   'lnum': 419,
   \   'bufnr': 347,
-  \   'vcol': 0,
   \   'type': 'W',
   \   'col': 3,
   \   'text': 'unreachable code:',

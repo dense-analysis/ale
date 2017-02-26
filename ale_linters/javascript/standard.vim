@@ -51,11 +51,9 @@ function! ale_linters#javascript#standard#Handle(buffer, lines) abort
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
-        \   'vcol': 0,
         \   'col': l:match[2] + 0,
         \   'text': l:text,
         \   'type': 'E',
-        \   'nr': -1,
         \})
     endfor
 

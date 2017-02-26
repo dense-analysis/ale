@@ -41,9 +41,7 @@ function! ale_linters#fortran#gcc#Handle(buffer, lines) abort
             let l:last_loclist_obj = {
             \   'bufnr': a:buffer,
             \   'lnum': l:match[1] + 0,
-            \   'vcol': 0,
             \   'col': l:match[2] + 0,
-            \   'nr': -1,
             \}
 
             " Start looking for the message and error type.

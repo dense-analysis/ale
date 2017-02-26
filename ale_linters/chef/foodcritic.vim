@@ -21,11 +21,9 @@ function! ale_linters#chef#foodcritic#Handle(buffer, lines) abort
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[3] + 0,
-        \   'vcol': 0,
         \   'col': 0,
         \   'text': l:text,
         \   'type': 'W',
-        \   'nr': -1,
         \})
     endfor
 

@@ -25,11 +25,9 @@ function! ale_linters#verilog#iverilog#Handle(buffer, lines) abort
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:line,
-        \   'vcol': 0,
         \   'col': 1,
         \   'text': l:text,
         \   'type': l:type,
-        \   'nr': -1,
         \})
     endfor
 

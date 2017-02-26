@@ -190,11 +190,9 @@ function! ale_linters#go#gobuild#Handler(buffer, lines) abort
     call add(l:output, {
     \   'bufnr': l:buffer,
     \   'lnum': l:match[2] + 0,
-    \   'vcol': 0,
     \   'col': l:match[3] + 0,
     \   'text': l:match[4],
     \   'type': 'E',
-    \   'nr': -1,
     \})
   endfor
 

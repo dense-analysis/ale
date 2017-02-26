@@ -27,11 +27,9 @@ function! ale_linters#typescript#tslint#Handle(buffer, lines) abort
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:line,
-        \   'vcol': 0,
         \   'col': l:column,
         \   'text': l:text,
         \   'type': l:type,
-        \   'nr': -1,
         \})
     endfor
 

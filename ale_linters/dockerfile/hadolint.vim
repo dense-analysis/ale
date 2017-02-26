@@ -27,7 +27,6 @@ function! ale_linters#dockerfile#hadolint#Handle(buffer, lines) abort
     call add(l:output, {
     \   'bufnr': a:buffer,
     \   'lnum': l:lnum,
-    \   'vcol': 0,
     \   'col': 0,
     \   'type': l:type,
     \   'text': l:text,

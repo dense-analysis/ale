@@ -1219,6 +1219,26 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
 
                          This argument is required.
 
+                         The keys for each item in the List will be handled in
+                         the following manner:
+
+                         `text` - This error message is required.
+                         `lnum` - The line number is required. Any strings
+                           will be automatically converted to numbers by
+                           using `str2nr()`.
+
+                           Line 0 will be moved to line 1, and lines beyond
+                           the end of the file will be moved to the end.
+                         `col` - The column number is optional and will
+                           default to `0`. Any strings will be automatically
+                           coverted to number using `str2nr()`.
+                         `bufnr` - The buffer number should match the buffer
+                           being checked, and this value will default to
+                           the buffer being checked.
+                         `vcol` - Defaults to `0`.
+                         `type` - Defaults to `'E'`.
+                         `nr` - Defaults to `-1`.
+
   `executable`             A |String| naming the executable itself which
                          will be run.  This value will be used to check if the
                          program requested is installed or not.

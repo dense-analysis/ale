@@ -23,11 +23,9 @@ function! ale_linters#lua#luacheck#Handle(buffer, lines) abort
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
-        \   'vcol': 0,
         \   'col': l:match[2] + 0,
         \   'text': l:match[4],
         \   'type': l:match[3],
-        \   'nr': -1,
         \})
     endfor
 

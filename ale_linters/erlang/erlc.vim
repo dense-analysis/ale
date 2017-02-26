@@ -43,11 +43,9 @@ function! ale_linters#erlang#erlc#Handle(buffer, lines) abort
             call add(l:output, {
             \   'bufnr': a:buffer,
             \   'lnum': 0,
-            \   'vcol': 0,
             \   'col': 0,
             \   'type': 'E',
             \   'text': l:match_parse_transform[0],
-            \   'nr': -1,
             \})
 
             continue
@@ -77,11 +75,9 @@ function! ale_linters#erlang#erlc#Handle(buffer, lines) abort
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:line,
-        \   'vcol': 0,
         \   'col': 0,
         \   'type': l:type,
         \   'text': l:text,
-        \   'nr': -1,
         \})
     endfor
 

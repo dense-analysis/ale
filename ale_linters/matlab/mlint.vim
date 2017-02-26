@@ -44,11 +44,9 @@ function! ale_linters#matlab#mlint#Handle(buffer, lines) abort
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:lnum,
-        \   'vcol': 0,
         \   'col': l:col,
         \   'text': l:text,
         \   'type': 'W',
-        \   'nr': -1,
         \})
     endfor
 

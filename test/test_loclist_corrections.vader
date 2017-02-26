@@ -1,0 +1,130 @@
+Given foo (Some file with lines to count):
+  foo12345678
+  bar12345678
+  baz12345678
+  four12345678
+  five12345678
+  six12345678
+  seven12345678
+  eight12345678
+  nine12345678
+  ten12345678
+
+Execute(FixLocList should set all the default values correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'text': 'a',
+  \     'lnum': 2,
+  \     'col': 0,
+  \     'bufnr': bufnr('%'),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \   },
+  \   {
+  \     'text': 'b',
+  \     'lnum': 2,
+  \     'col': 0,
+  \     'bufnr': bufnr('%'),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \   },
+  \],
+  \ ale#engine#FixLocList(
+  \   bufnr('%'),
+  \   {'name': 'foobar'},
+  \   [{'text': 'a', 'lnum': 2}, {'text': 'b', 'lnum': 2}],
+  \ )
+
+Execute(FixLocList should use the values we supply):
+  AssertEqual
+  \ [
+  \   {
+  \     'text': 'a',
+  \     'lnum': 3,
+  \     'col': 4,
+  \     'bufnr': 10000,
+  \     'vcol': 1,
+  \     'type': 'W',
+  \     'nr': 42,
+  \     'linter_name': 'foobar',
+  \   },
+  \],
+  \ ale#engine#FixLocList(
+  \   bufnr('%'),
+  \   {'name': 'foobar'},
+  \   [{
+  \     'text': 'a',
+  \     'lnum': 3,
+  \     'col': 4,
+  \     'bufnr': 10000,
+  \     'vcol': 1,
+  \     'type': 'W',
+  \     'nr': 42,
+  \   }],
+  \ )
+
+Execute(FixLocList should set items with lines beyond the end to the last line):
+  AssertEqual
+  \ [
+  \   {
+  \     'text': 'a',
+  \     'lnum': 10,
+  \     'col': 0,
+  \     'bufnr': bufnr('%'),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \   },
+  \],
+  \ ale#engine#FixLocList(
+  \   bufnr('%'),
+  \   {'name': 'foobar'},
+  \   [{'text': 'a', 'lnum': 11}],
+  \ )
+
+Execute(FixLocList should move line 0 to line 1):
+  AssertEqual
+  \ [
+  \   {
+  \     'text': 'a',
+  \     'lnum': 1,
+  \     'col': 0,
+  \     'bufnr': bufnr('%'),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \   },
+  \],
+  \ ale#engine#FixLocList(
+  \   bufnr('%'),
+  \   {'name': 'foobar'},
+  \   [{'text': 'a', 'lnum': 0}],
+  \ )
+
+Execute(FixLocList should convert line and column numbers correctly):
+  " The numbers should be 10, not 8 as octals.
+  AssertEqual
+  \ [
+  \   {
+  \     'text': 'a',
+  \     'lnum': 10,
+  \     'col': 10,
+  \     'bufnr': bufnr('%'),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \   },
+  \],
+  \ ale#engine#FixLocList(
+  \   bufnr('%'),
+  \   {'name': 'foobar'},
+  \   [{'text': 'a', 'lnum': '010', 'col': '010'}],
+  \ )

@@ -6,20 +6,16 @@ Execute(The mypy handler should parse lines correctly):
   \   {
   \     'bufnr': 347,
   \     'lnum': 4,
-  \     'vcol': 0,
   \     'col': 0,
   \     'text': "No library stub file for module 'django.db'",
   \     'type': 'E',
-  \     'nr': -1,
   \   },
   \   {
   \     'bufnr': 347,
   \     'lnum': 40,
-  \     'vcol': 0,
   \     'col': 5,
   \     'text': "Some other problem",
   \     'type': 'E',
-  \     'nr': -1,
   \   },
   \ ],
   \ ale_linters#python#mypy#Handle(347, [
