@@ -41,6 +41,8 @@ CONTENTS                                                         *ale-contents*
     4.29. xo..............................|ale-linter-options-xo|
     4.30. javac...........................|ale-linter-options-javac|
     4.31. yamllint........................|ale-linter-options-yamllint|
+    4.32. cmakelint.......................|ale-linter-options-cmakelint|
+    4.33. perl-perl.......................|ale-linter-options-perl-perl|
   5. Linter Integration Notes.............|ale-linter-integration|
     5.1.  merlin..........................|ale-linter-integration-ocaml-merlin|
     5.2. rust.............................|ale-integration-rust|
@@ -1097,6 +1099,24 @@ g:ale_cmake_cmakelint_options                   *g:ale_cmake_cmakelint_options*
 
   This variable can be set to pass additional options to cmakelint.
 
+-------------------------------------------------------------------------------
+4.33. perl-perl                                  *ale-linter-options-perl-perl*
+
+g:ale_perl_perl_executable                         *g:ale_perl_perl_executable*
+
+  Type: |String|
+  Default: `'perl'`
+
+  This variable can be changed to modify the executable used for linting perl.
+
+
+g:ale_perl_perl_options                               *g:ale_perl_perl_options*
+
+  Type: |String|
+  Default: `'-X -c -Mwarnings -Ilib'`
+
+  This variable can be changed to alter the command-line arguments to the perl
+  invocation.
 
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*
