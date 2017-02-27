@@ -79,6 +79,7 @@ The following languages and tools are supported.
 * C++ (filetype cpp): 'clang', 'clangtidy', 'cppcheck', 'gcc'
 * C#: 'mcs'
 * Chef: 'foodcritic'
+* CMake: 'cmakelint'
 * CoffeeScript: 'coffee', 'coffelint'
 * CSS: 'csslint', 'stylelint'
 * Cython (pyrex filetype): 'cython'
@@ -1060,6 +1061,24 @@ g:ale_yaml_yamllint_options                       *g:ale_yaml_yamllint_options*
   Default: `''`
 
   This variable can be set to pass additional options to yamllint.
+
+------------------------------------------------------------------------------
+4.32. cmakelint                                  *ale-linter-options-cmakelint*
+
+g:ale_cmake_cmakelint_exectuable             *g:ale_cmake_cmakelint_executable*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to change the path the cmakelint.
+
+g:ale_cmake_cmakelint_options                   *g:ale_cmake_cmakelint_options*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to cmakelint.
+
 
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*
