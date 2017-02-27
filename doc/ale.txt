@@ -1068,7 +1068,7 @@ g:ale_yaml_yamllint_options                       *g:ale_yaml_yamllint_options*
 g:ale_cmake_cmakelint_exectuable             *g:ale_cmake_cmakelint_executable*
 
   Type: |String|
-  Default: `''`
+  Default: `'cmakelint'`
 
   This variable can be set to change the path the cmakelint.
 
