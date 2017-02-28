@@ -208,9 +208,12 @@ command! ALEPreviousWrap :call ale#loclist_jumping#Jump('before', 1)
 command! ALENext :call ale#loclist_jumping#Jump('after', 0)
 command! ALENextWrap :call ale#loclist_jumping#Jump('after', 1)
 
+" A command for turning ALE on or off.
 command! ALEToggle :call s:ALEToggle()
+" A command for linting manually.
+command! ALELint :call ale#Queue(0)
 
-" Define command to get information about current filetype.
+" Define a command to get information about current filetype.
 command! ALEInfo :call ale#debugging#Info()
 " The same, but copy output to your clipboard.
 command! ALEInfoToClipboard :call ale#debugging#InfoToClipboard()
@@ -221,6 +224,7 @@ nnoremap <silent> <Plug>(ale_previous_wrap) :ALEPreviousWrap<Return>
 nnoremap <silent> <Plug>(ale_next) :ALENext<Return>
 nnoremap <silent> <Plug>(ale_next_wrap) :ALENextWrap<Return>
 nnoremap <silent> <Plug>(ale_toggle) :ALEToggle<Return>
+nnoremap <silent> <Plug>(ale_lint) :ALELint<Return>
 
 " Housekeeping
 

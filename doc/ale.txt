@@ -1123,6 +1123,14 @@ Some linters may have requirements for some other plugins being installed.
 ===============================================================================
 6. Commands/Keybinds                                             *ale-commands*
 
+ALELint                                                               *ALELint*
+
+  Run ALE once for the current buffer. This command can be used to run ALE
+  manually, instead of automatically, if desired.
+
+  A plug mapping `<Plug>(ale_lint)` is defined for this command.
+
+
 ALEPrevious                                                       *ALEPrevious*
 ALEPreviousWrap                                               *ALEPreviousWrap*
 ALENext                                                               *ALENext*
@@ -1403,7 +1411,7 @@ ale#statusline#Status()                               *ale#statusline#Status()*
   %{ale#statusline#Status()}
 
 
-ALELint                                                               *ALELint*
+ALELint                                                       *ALELint-autocmd*
   This |User| autocommand is triggered by ALE every time it completes a lint
   operation. It can be used to update statuslines, send notifications, or
   complete any other operation that needs to be done after a lint run.
