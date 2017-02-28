@@ -1,5 +1,5 @@
 " Author: poohzrn https://github.com/poohzrn
-" Description: proselint for tex files
+" Description: proselint for TeX files
 
 call ale#linter#Define('tex', {
 \   'name': 'proselint',

@@ -1,5 +1,5 @@
 " Author: poohzrn https://github.com/poohzrn
-" Description: proselint for markdown files
+" Description: proselint for Markdown files
 
 call ale#linter#Define('markdown', {
 \   'name': 'proselint',
