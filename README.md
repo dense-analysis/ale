@@ -98,15 +98,15 @@ name. That seems to be the fairest way to arrange this table.
 | Swift | [swiftlint](https://swift.org/) |
 | Tex | [proselint](http://proselint.com/) |
 | Texinfo | [proselint](http://proselint.com/)|
-| Text^^ | [proselint](http://proselint.com/) |
+| Text^ | [proselint](http://proselint.com/) |
 | TypeScript | [tslint](https://github.com/palantir/tslint), typecheck |
 | Verilog | [iverilog](https://github.com/steveicarus/iverilog), [verilator](http://www.veripool.org/projects/verilator/wiki/Intro) |
 | Vim | [vint](https://github.com/Kuniwak/vint) |
-| Vim help | [proselint](http://proselint.com/)|
+| Vim help^ | [proselint](http://proselint.com/)|
 | XHTML | [proselint](http://proselint.com/)|
 | YAML | [yamllint](https://yamllint.readthedocs.io/) |
 
-* *^^ No text linters are enabled by default.*
+* *^ No linters for text or Vim help filetypes are enabled by default.*
 
 <a name="usage"></a>
 
