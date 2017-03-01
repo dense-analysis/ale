@@ -5,7 +5,7 @@ function! ale_linters#php#php#Handle(buffer, lines) abort
     " Matches patterns like the following:
     "
     " PHP Parse error:  syntax error, unexpected ';', expecting ']' in - on line 15
-    let l:pattern = 'Parse error:\s\+\(.\{-}unexpected ''\(.\{-}\)''.\{-}\|.*\) in - on line \(\d\+\)'
+    let l:pattern = '\vParse error:\s+(.+unexpected ''(.+)%(expecting.+)@<!''.*|.+) in - on line (\d+)'
 
     let l:output = []
 
