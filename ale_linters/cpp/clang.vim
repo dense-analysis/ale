@@ -3,10 +3,7 @@
 
 " Set this option to change the Clang options for warnings for CPP.
 if !exists('g:ale_cpp_clang_options')
-    " let g:ale_cpp_clang_options = '-Wall'
-    " let g:ale_cpp_clang_options = '-std=c99 -Wall'
-    " c11 compatible
-    let g:ale_cpp_clang_options = '-std=c11 -Wall'
+    let g:ale_cpp_clang_options = '-std=c++14 -Wall'
 endif
 
 call ale#linter#Define('cpp', {

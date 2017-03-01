@@ -758,7 +758,7 @@ g:ale_c_clang_options                                   *g:ale_c_clang_options*
 g:ale_cpp_clang_options                               *g:ale_cpp_clang_options*
 
   Type: |String|
-  Default: `'-std=c11 -Wall'`
+  Default: `'-std=c++14 -Wall'`
 
   This variable can be changed to modify flags given to clang.
 
