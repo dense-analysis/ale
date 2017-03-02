@@ -91,6 +91,7 @@ The following languages and tools are supported.
 * Erlang: 'erlc'
 * Fortran: 'gcc'
 * Go: 'gofmt -e', 'go vet', 'golint', 'go build'
+* Haml: 'hamllint'
 * Haskell: 'ghc', 'hlint'
 * HTML: 'HTMLHint', 'proselint', 'tidy'
 * Java: 'javac'

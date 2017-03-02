@@ -71,6 +71,7 @@ name. That seems to be the fairest way to arrange this table.
 | Erlang | [erlc](http://erlang.org/doc/man/erlc.html) |
 | Fortran | [gcc](https://gcc.gnu.org/) |
 | Go | [gofmt -e](https://golang.org/cmd/gofmt/), [go vet](https://golang.org/cmd/vet/), [golint](https://godoc.org/github.com/golang/lint), [go build](https://golang.org/cmd/go/) |
+| Haml | [haml-lint](https://github.com/brigade/haml-lint)
 | Haskell | [ghc](https://www.haskell.org/ghc/), [hlint](https://hackage.haskell.org/package/hlint) |
 | HTML | [HTMLHint](http://htmlhint.com/), [proselint](http://proselint.com/), [tidy](http://www.html-tidy.org/) |
 | Java | [javac](http://www.oracle.com/technetwork/java/javase/downloads/index.html) |
