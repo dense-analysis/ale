@@ -35,7 +35,9 @@ function! ale#sign#ParseSigns(line_list) abort
     " строка=1  id=1000001  имя=ALEErrorSign
     " 行=1  識別子=1000001  名前=ALEWarningSign
     " línea=12 id=1000001 nombre=ALEWarningSign
-    let l:pattern = '^.*=\d*\s\+.*=\(\d\+\)\s\+.*=ALE\(Warning\|Error\|Dummy\)Sign'
+    " riga=1 id=1000001, nome=ALEWarningSign
+    let l:pattern = '^.*=\d*\s\+.*=\(\d\+\)\,\?\s\+.*=ALE\(Warning\|Error\|Dummy\)Sign'
+
 
     let l:id_list = []
 
