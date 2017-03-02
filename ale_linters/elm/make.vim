@@ -25,6 +25,7 @@ function! ale_linters#elm#make#Handle(buffer, lines) abort
                     \    'col': l:error.region.start.column,
                     \    'type': (l:error.type ==? 'error') ? 'E' : 'W',
                     \    'text': l:error.overview,
+                    \    'detail': l:error.overview . "\n\n" . l:error.details
                     \})
                 endif
             endfor

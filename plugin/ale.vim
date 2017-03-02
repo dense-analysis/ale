@@ -208,6 +208,9 @@ command! ALEPreviousWrap :call ale#loclist_jumping#Jump('before', 1)
 command! ALENext :call ale#loclist_jumping#Jump('after', 0)
 command! ALENextWrap :call ale#loclist_jumping#Jump('after', 1)
 
+" A command for showing error details.
+command! ALEDetail :call ale#cursor#ShowCursorDetail()
+
 " A command for turning ALE on or off.
 command! ALEToggle :call s:ALEToggle()
 " A command for linting manually.
@@ -225,6 +228,7 @@ nnoremap <silent> <Plug>(ale_next) :ALENext<Return>
 nnoremap <silent> <Plug>(ale_next_wrap) :ALENextWrap<Return>
 nnoremap <silent> <Plug>(ale_toggle) :ALEToggle<Return>
 nnoremap <silent> <Plug>(ale_lint) :ALELint<Return>
+nnoremap <silent> <Plug>(ale_detail) :ALEDetail<Return>
 
 " Housekeeping
 

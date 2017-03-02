@@ -93,3 +93,28 @@ function! ale#cursor#EchoCursorWarningWithDelay() abort
         let s:cursor_timer = timer_start(10, function('ale#cursor#EchoCursorWarning'))
     endif
 endfunction
+
+
+function! ale#cursor#ShowCursorDetail(...) abort
+    " Only show the details in normal mode, otherwise we will get problems.
+    if mode() !=# 'n'
+        return
+    endif
+
+    let l:buffer = bufnr('%')
+
+    if !has_key(g:ale_buffer_info, l:buffer)
+        return
+    endif
+
+    let l:pos = getcurpos()
+    let l:loclist = g:ale_buffer_info[l:buffer].loclist
+    let l:index = ale#util#BinarySearch(l:loclist, l:pos[1], l:pos[2])
+
+    if l:index >= 0
+        let l:loc = l:loclist[l:index]
+        if has_key(l:loc, 'detail')
+            echo l:loc.detail
+        endif
+    endif
+endfunction
