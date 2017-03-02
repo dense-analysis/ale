@@ -36,7 +36,16 @@ Before:
   \ },
   \}
 
+  " Turn off other features, we only care about this one feature in this test.
+  let g:ale_set_loclist = 0
+  let g:ale_set_signs = 0
+  let g:ale_set_highlights = 0
+
 After:
+  let g:ale_set_loclist = 1
+  let g:ale_set_signs = 1
+  let g:ale_set_highlights = 1
+
   unlet! g:output
   unlet! g:lines
   let g:ale_buffer_info = {}
@@ -84,3 +93,33 @@ Then(Check the cursor output):
   let g:lines = split(g:output, "\n")
 
   AssertEqual 'Missing radix parameter (radix)', g:lines[-1]
+
+Execute(Set results for a lint cycle, with the cursor on line 1):
+  :1
+  call ale#engine#SetResults(
+  \ bufnr('%'),
+  \ g:ale_buffer_info[bufnr('%')].loclist,
+  \)
+
+Then(Check the cursor output):
+  redir => g:output
+    :mess
+  redir END
+
+  let g:lines = split(g:output, "\n")
+
+  AssertEqual 'Missing semicolon. (semi)', g:lines[-1]
+
+Execute(Simulate leaving insert mode on line 2):
+  :2
+  normal 16h
+  doautocmd InsertLeave
+
+Then(Check the cursor output):
+  redir => g:output
+    :mess
+  redir END
+
+  let g:lines = split(g:output, "\n")
+
+  AssertEqual 'Infix operators must be spaced. (space-infix-ops)', g:lines[-1]
