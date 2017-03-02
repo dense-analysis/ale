@@ -1,7 +1,7 @@
-" Author: poohzrn https://github.com/poohzrn
-" Description: proselint for Markdown files
+" Author: Daniel M. Capella https://github.com/polyzen
+" Description: proselint for AsciiDoc files
 
-call ale#linter#Define('markdown', {
+call ale#linter#Define('asciidoc', {
 \   'name': 'proselint',
 \   'executable': 'proselint',
 \   'command': 'proselint %t',

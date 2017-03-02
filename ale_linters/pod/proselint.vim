@@ -1,7 +1,7 @@
-" Author: poohzrn https://github.com/poohzrn
-" Description: proselint for Markdown files
+" Author: Daniel M. Capella https://github.com/polyzen
+" Description: proselint for Pod files
 
-call ale#linter#Define('markdown', {
+call ale#linter#Define('pod', {
 \   'name': 'proselint',
 \   'executable': 'proselint',
 \   'command': 'proselint %t',

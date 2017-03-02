@@ -22,6 +22,7 @@ let s:default_ale_linter_aliases = {
 " Only cargo is enabled for Rust by default.
 let s:default_ale_linters = {
 \   'csh': ['shell'],
+\   'help': [],
 \   'rust': ['cargo'],
 \   'text': [],
 \   'zsh': ['shell'],

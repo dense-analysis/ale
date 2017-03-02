@@ -53,6 +53,7 @@ name. That seems to be the fairest way to arrange this table.
 | Language | Tools |
 | -------- | ----- |
 | Ansible | [ansible-lint](https://github.com/willthames/ansible-lint) |
+| AsciiDoc | [proselint](http://proselint.com/)|
 | Bash | [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set), [shellcheck](https://www.shellcheck.net/) |
 | Bourne Shell | [-n flag](http://linux.die.net/man/1/sh), [shellcheck](https://www.shellcheck.net/) |
 | C | [cppcheck](http://cppcheck.sourceforge.net), [gcc](https://gcc.gnu.org/), [clang](http://clang.llvm.org/)|
@@ -71,7 +72,7 @@ name. That seems to be the fairest way to arrange this table.
 | Fortran | [gcc](https://gcc.gnu.org/) |
 | Go | [gofmt -e](https://golang.org/cmd/gofmt/), [go vet](https://golang.org/cmd/vet/), [golint](https://godoc.org/github.com/golang/lint), [go build](https://golang.org/cmd/go/) |
 | Haskell | [ghc](https://www.haskell.org/ghc/), [hlint](https://hackage.haskell.org/package/hlint) |
-| HTML | [HTMLHint](http://htmlhint.com/), [tidy](http://www.html-tidy.org/) |
+| HTML | [HTMLHint](http://htmlhint.com/), [proselint](http://proselint.com/), [tidy](http://www.html-tidy.org/) |
 | Java | [javac](http://www.oracle.com/technetwork/java/javase/downloads/index.html) |
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/), [flow](https://flowtype.org/), [standard](http://standardjs.com/)
 | JSON | [jsonlint](http://zaa.ch/jsonlint/) |
@@ -79,12 +80,15 @@ name. That seems to be the fairest way to arrange this table.
 | Lua | [luacheck](https://github.com/mpeterv/luacheck) |
 | Markdown | [mdl](https://github.com/mivok/markdownlint), [proselint](http://proselint.com/)|
 | MATLAB | [mlint](https://www.mathworks.com/help/matlab/ref/mlint.html) |
+| nroff | [proselint](http://proselint.com/)|
 | OCaml | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-integration-ocaml-merlin` for configuration instructions
 | Perl | [perl -c](https://perl.org/), [perl-critic](https://metacpan.org/pod/Perl::Critic) |
 | PHP | [hack](http://hacklang.org/), [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer), [phpmd](https://phpmd.org) |
+| Pod | [proselint](http://proselint.com/)|
 | Pug | [pug-lint](https://github.com/pugjs/pug-lint) |
 | Puppet | [puppet](https://puppet.com), [puppet-lint](https://puppet-lint.com) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/), [mypy](http://mypy-lang.org/), [pylint](https://www.pylint.org/) |
+| reStructuredText | [proselint](http://proselint.com/)|
 | Ruby | [rubocop](https://github.com/bbatsov/rubocop) |
 | Rust | [rustc](https://www.rust-lang.org/), cargo (see `:help ale-integration-rust` for configuration instructions) |
 | SASS | [sass-lint](https://www.npmjs.com/package/sass-lint), [stylelint](https://github.com/stylelint/stylelint) |
@@ -93,13 +97,16 @@ name. That seems to be the fairest way to arrange this table.
 | SML | [smlnj](http://www.smlnj.org/) |
 | Swift | [swiftlint](https://swift.org/) |
 | Tex | [proselint](http://proselint.com/) |
-| Text^^ | [proselint](http://proselint.com/) |
+| Texinfo | [proselint](http://proselint.com/)|
+| Text^ | [proselint](http://proselint.com/) |
 | TypeScript | [tslint](https://github.com/palantir/tslint), typecheck |
 | Verilog | [iverilog](https://github.com/steveicarus/iverilog), [verilator](http://www.veripool.org/projects/verilator/wiki/Intro) |
 | Vim | [vint](https://github.com/Kuniwak/vint) |
+| Vim help^ | [proselint](http://proselint.com/)|
+| XHTML | [proselint](http://proselint.com/)|
 | YAML | [yamllint](https://yamllint.readthedocs.io/) |
 
-* *^^ No text linters are enabled by default.*
+* *^ No linters for text or Vim help filetypes are enabled by default.*
 
 <a name="usage"></a>
 
