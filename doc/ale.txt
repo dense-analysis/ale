@@ -1142,7 +1142,6 @@ ALEPrevious                                                       *ALEPrevious*
 ALEPreviousWrap                                               *ALEPreviousWrap*
 ALENext                                                               *ALENext*
 ALENextWrap                                                       *ALENextWrap*
-ALENextWrap                                                       *ALENextWrap*
                                                       *ale-navigation-commands*
 
   Move between warnings or errors in a buffer.
