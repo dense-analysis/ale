@@ -10,7 +10,8 @@ Before:
   \       'nr': -1,
   \       'type': 'E',
   \       'col': 10,
-  \       'text': 'Missing semicolon. (semi)'
+  \       'text': 'Missing semicolon. (semi)',
+  \       'detail': 'Every statement should end with a semicolon'
   \     },
   \     {
   \       'lnum': 2,
@@ -123,3 +124,25 @@ Then(Check the cursor output):
   let g:lines = split(g:output, "\n")
 
   AssertEqual 'Infix operators must be spaced. (space-infix-ops)', g:lines[-1]
+
+Execute(Evaluate the cursor detail function at line 1):
+  :1
+  call ale#cursor#ShowCursorDetail()
+
+Then(Check the cursor output):
+  redir => g:output
+    :mess
+  redir END
+
+  AssertEqual "Every statement should end with a semicolon", g:lines[-1]
+
+Execute(Evaluate the cursor detail function at line 2):
+  :2
+  call ale#cursor#ShowCursorDetail()
+
+Then(Check the cursor output):
+  redir => g:output
+    :mess
+  redir END
+
+  AssertEqual "Infix operators must be spaced. (space-infix-ops)", g:lines[-1]

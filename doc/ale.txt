@@ -1173,6 +1173,14 @@ ALEToggle                                                           *ALEToggle*
   quickfix items, signs, current jobs, etc. Calling this option will change
   the |g:ale_enabled| variable.
 
+
+ALEDetail                                                           *ALEDetail*
+
+  Show the full linter message for the current line. This will only have an
+  effect on lines that contain a linter message.
+
+  A plug mapping `<Plug>(ale_detail)` is defined for this command.
+
 ===============================================================================
 7. API                                                                *ale-api*
 

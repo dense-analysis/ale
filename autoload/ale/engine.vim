@@ -338,6 +338,10 @@ function! ale#engine#FixLocList(buffer, linter, loclist) abort
         \   'linter_name': a:linter.name,
         \}
 
+        if has_key(l:old_item, 'detail')
+            let l:item.detail = l:old_item.detail
+        endif
+
         if l:item.lnum == 0
             " When errors appear at line 0, put them at line 1 instead.
             let l:item.lnum = 1
