@@ -14,14 +14,11 @@ function! ale_linters#haml#hamllint#Handle(buffer, lines) abort
             continue
         endif
 
-        let l:text = l:match[3]
-        let l:type = l:match[2]
-
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
-        \   'text': l:text,
-        \   'type': l:type
+        \   'type': l:match[2],
+        \   'text': l:match[3]
         \})
     endfor
 
