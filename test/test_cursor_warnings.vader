@@ -131,7 +131,7 @@ Execute(Evaluate the cursor detail function at line 1):
 
 Then(Check the cursor output):
   redir => g:output
-    :mess
+    silent mess
   redir END
 
   AssertEqual "Every statement should end with a semicolon", g:lines[-1]
@@ -142,7 +142,7 @@ Execute(Evaluate the cursor detail function at line 2):
 
 Then(Check the cursor output):
   redir => g:output
-    :mess
+    silent mess
   redir END
 
   AssertEqual "Infix operators must be spaced. (space-infix-ops)", g:lines[-1]
