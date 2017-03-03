@@ -95,4 +95,19 @@ Then(Check the cursor output):
     :mess
   redir END
 
-  AssertEqual "Every statement should end with a semicolon", g:output[-1]
+  let g:lines = split(g:output, "\n")
+
+  AssertEqual "Every statement should end with a semicolon", g:lines[-1]
+
+Execute(Evaluate the cursor detail function at line 2):
+  :2
+  call ale#cursor#ShowCursorDetail()
+
+Then(Check the cursor output):
+  redir => g:output
+    :mess
+  redir END
+
+  let g:lines = split(g:output, "\n")
+
+  AssertEqual "Infix operators must be spaced. (space-infix-ops)", g:lines[-1]

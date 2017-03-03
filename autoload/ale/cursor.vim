@@ -38,34 +38,32 @@ function! ale#cursor#TruncatedEcho(message) abort
     endtry
 endfunction
 
+function! s:FindItemAtCursor() abort
+    let l:info = get(g:ale_buffer_info, bufnr('%'), {'loclist': []})
+    let l:pos = getcurpos()
+    let l:index = ale#util#BinarySearch(l:info.loclist, l:pos[1], l:pos[2])
+    let l:loc = l:index >= 0 ? l:info.loclist[l:index] : {}
+
+    return [l:info, l:loc]
+endfunction
+
 function! ale#cursor#EchoCursorWarning(...) abort
     " Only echo the warnings in normal mode, otherwise we will get problems.
     if mode() !=# 'n'
         return
     endif
 
-    let l:buffer = bufnr('%')
+    let [l:info, l:loc] = s:FindItemAtCursor()
 
-    if !has_key(g:ale_buffer_info, l:buffer)
-        return
-    endif
-
-    let l:pos = getcurpos()
-    let l:loclist = g:ale_buffer_info[l:buffer].loclist
-    let l:index = ale#util#BinarySearch(l:loclist, l:pos[1], l:pos[2])
-
-    if l:index >= 0
-        let l:loc = l:loclist[l:index]
+    if !empty(l:loc)
         let l:msg = s:GetMessage(l:loc.linter_name, l:loc.type, l:loc.text)
         call ale#cursor#TruncatedEcho(l:msg)
-        let g:ale_buffer_info[l:buffer].echoed = 1
-    else
+        let l:info.echoed = 1
+    elseif get(l:info, 'echoed')
         " We'll only clear the echoed message when moving off errors once,
         " so we don't continually clear the echo line.
-        if get(g:ale_buffer_info[l:buffer], 'echoed')
-            echo
-            let g:ale_buffer_info[l:buffer].echoed = 0
-        endif
+        echo
+        let l:info.echoed = 1
     endif
 endfunction
 
@@ -94,27 +92,19 @@ function! ale#cursor#EchoCursorWarningWithDelay() abort
     endif
 endfunction
 
-
 function! ale#cursor#ShowCursorDetail(...) abort
-    " Only show the details in normal mode, otherwise we will get problems.
+    " Only echo the warnings in normal mode, otherwise we will get problems.
     if mode() !=# 'n'
         return
     endif
 
-    let l:buffer = bufnr('%')
+    let [l:info, l:loc] = s:FindItemAtCursor()
 
-    if !has_key(g:ale_buffer_info, l:buffer)
-        return
-    endif
-
-    let l:pos = getcurpos()
-    let l:loclist = g:ale_buffer_info[l:buffer].loclist
-    let l:index = ale#util#BinarySearch(l:loclist, l:pos[1], l:pos[2])
-
-    if l:index >= 0
-        let l:loc = l:loclist[l:index]
+    if !empty(l:loc)
         if has_key(l:loc, 'detail')
             echo l:loc.detail
+        else
+            echo  l:loc.text
         endif
     endif
 endfunction
