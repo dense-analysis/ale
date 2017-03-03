@@ -60,7 +60,7 @@ Execute(Evaluate the cursor function at line 1):
 
 Then(Check the cursor output):
   redir => g:output
-    :mess
+    silent mess
   redir END
 
   let g:lines = split(g:output, "\n")
@@ -73,7 +73,7 @@ Execute(Evaluate the cursor function at line 2):
 
 Then(Check the cursor output):
   redir => g:output
-    :mess
+    silent mess
   redir END
 
   let g:lines = split(g:output, "\n")
@@ -87,7 +87,7 @@ Execute(Evaluate the cursor function later in line 2):
 
 Then(Check the cursor output):
   redir => g:output
-    :mess
+    silent mess
   redir END
 
   let g:lines = split(g:output, "\n")
@@ -103,7 +103,7 @@ Execute(Set results for a lint cycle, with the cursor on line 1):
 
 Then(Check the cursor output):
   redir => g:output
-    :mess
+    silent mess
   redir END
 
   let g:lines = split(g:output, "\n")
@@ -117,7 +117,7 @@ Execute(Simulate leaving insert mode on line 2):
 
 Then(Check the cursor output):
   redir => g:output
-    :mess
+    silent mess
   redir END
 
   let g:lines = split(g:output, "\n")
