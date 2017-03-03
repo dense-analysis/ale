@@ -4,33 +4,33 @@ Before:
   \   'loclist': [
   \     {
   \       'lnum': 1,
+  \       'col': 10,
   \       'bufnr': bufnr('%'),
   \       'vcol': 0,
   \       'linter_name': 'eslint',
   \       'nr': -1,
   \       'type': 'E',
-  \       'col': 10,
   \       'text': 'Missing semicolon. (semi)',
   \       'detail': 'Every statement should end with a semicolon'
   \     },
   \     {
   \       'lnum': 2,
+  \       'col': 10,
   \       'bufnr': bufnr('%'),
   \       'vcol': 0,
   \       'linter_name': 'eslint',
   \       'nr': -1,
   \       'type': 'W',
-  \       'col': 10,
   \       'text': 'Infix operators must be spaced. (space-infix-ops)'
   \     },
   \     {
   \       'lnum': 2,
+  \       'col': 15,
   \       'bufnr': bufnr('%'),
   \       'vcol': 0,
   \       'linter_name': 'eslint',
   \       'nr': -1,
   \       'type': 'E',
-  \       'col': 15,
   \       'text': 'Missing radix parameter (radix)'
   \     }
   \   ],
@@ -42,107 +42,74 @@ Before:
   let g:ale_set_signs = 0
   let g:ale_set_highlights = 0
 
+  function GetLastMessage()
+    redir => l:output
+      silent mess
+    redir END
+
+    let l:lines = split(l:output, "\n")
+
+    return empty(l:lines) ? '' : l:lines[-1]
+  endfunction
+
 After:
+  call cursor(1, 1)
+
   let g:ale_set_loclist = 1
   let g:ale_set_signs = 1
   let g:ale_set_highlights = 1
 
-  unlet! g:output
-  unlet! g:lines
   let g:ale_buffer_info = {}
+
+  delfunction GetLastMessage
+
+  mess clear
 
 Given javascript(A Javscript file with warnings/errors):
   var x = 3
   var x = 5*2 + parseInt("10");
 
-Execute(Evaluate the cursor function at line 1):
-  :1
+Execute(Messages should be shown for the correct lines):
+  call cursor(1, 1)
   call ale#cursor#EchoCursorWarning()
 
-Then(Check the cursor output):
-  redir => g:output
-    silent mess
-  redir END
+  AssertEqual 'Missing semicolon. (semi)', GetLastMessage()
 
-  let g:lines = split(g:output, "\n")
-
-  AssertEqual 'Missing semicolon. (semi)', g:lines[-1]
-
-Execute(Evaluate the cursor function at line 2):
-  :2
+Execute(Messages should be shown for earlier columns):
+  call cursor(2, 1)
   call ale#cursor#EchoCursorWarning()
 
-Then(Check the cursor output):
-  redir => g:output
-    silent mess
-  redir END
+  AssertEqual 'Infix operators must be spaced. (space-infix-ops)', GetLastMessage()
 
-  let g:lines = split(g:output, "\n")
-
-  AssertEqual 'Infix operators must be spaced. (space-infix-ops)', g:lines[-1]
-
-Execute(Evaluate the cursor function later in line 2):
-  :2
-  normal 16l
+Execute(Messages should be shown for later columns):
+  call cursor(2, 16)
   call ale#cursor#EchoCursorWarning()
 
-Then(Check the cursor output):
-  redir => g:output
-    silent mess
-  redir END
+  AssertEqual 'Missing radix parameter (radix)', GetLastMessage()
 
-  let g:lines = split(g:output, "\n")
-
-  AssertEqual 'Missing radix parameter (radix)', g:lines[-1]
-
-Execute(Set results for a lint cycle, with the cursor on line 1):
-  :1
+Execute(The message at the cursor should be shown when linting ends):
+  call cursor(1, 1)
   call ale#engine#SetResults(
   \ bufnr('%'),
   \ g:ale_buffer_info[bufnr('%')].loclist,
   \)
 
-Then(Check the cursor output):
-  redir => g:output
-    silent mess
-  redir END
+  AssertEqual 'Missing semicolon. (semi)', GetLastMessage()
 
-  let g:lines = split(g:output, "\n")
-
-  AssertEqual 'Missing semicolon. (semi)', g:lines[-1]
-
-Execute(Simulate leaving insert mode on line 2):
-  :2
-  normal 16h
+Execute(The message at the cursor should be shown on InsertLeave):
+  call cursor(2, 9)
   doautocmd InsertLeave
 
-Then(Check the cursor output):
-  redir => g:output
-    silent mess
-  redir END
+  AssertEqual 'Infix operators must be spaced. (space-infix-ops)', GetLastMessage()
 
-  let g:lines = split(g:output, "\n")
+Execute(ALEDetail should print 'detail' attributes):
+  call cursor(1, 1)
+  ALEDetail
 
-  AssertEqual 'Infix operators must be spaced. (space-infix-ops)', g:lines[-1]
+  AssertEqual "Every statement should end with a semicolon", GetLastMessage()
 
-Execute(Evaluate the cursor detail function at line 1):
-  :1
-  call ale#cursor#ShowCursorDetail()
+Execute(ALEDetail should print regular 'text' attributes):
+  call cursor(2, 10)
+  ALEDetail
 
-Then(Check the cursor output):
-  redir => g:output
-    silent mess
-  redir END
-
-  AssertEqual "Every statement should end with a semicolon", g:lines[-1]
-
-Execute(Evaluate the cursor detail function at line 2):
-  :2
-  call ale#cursor#ShowCursorDetail()
-
-Then(Check the cursor output):
-  redir => g:output
-    silent mess
-  redir END
-
-  AssertEqual "Infix operators must be spaced. (space-infix-ops)", g:lines[-1]
+  AssertEqual "Infix operators must be spaced. (space-infix-ops)", GetLastMessage()
