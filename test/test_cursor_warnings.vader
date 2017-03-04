@@ -11,7 +11,7 @@ Before:
   \       'nr': -1,
   \       'type': 'E',
   \       'text': 'Missing semicolon. (semi)',
-  \       'detail': 'Every statement should end with a semicolon'
+  \       'detail': "Every statement should end with a semicolon\nsecond line"
   \     },
   \     {
   \       'lnum': 2,
@@ -61,6 +61,8 @@ After:
 
   let g:ale_buffer_info = {}
 
+  unlet! g:output
+
   delfunction GetLastMessage
 
   mess clear
@@ -104,12 +106,18 @@ Execute(The message at the cursor should be shown on InsertLeave):
 
 Execute(ALEDetail should print 'detail' attributes):
   call cursor(1, 1)
-  ALEDetail
 
-  AssertEqual "Every statement should end with a semicolon", GetLastMessage()
+  redir => g:output
+    ALEDetail
+  redir END
+
+  AssertEqual "\nEvery statement should end with a semicolon\nsecond line", g:output
 
 Execute(ALEDetail should print regular 'text' attributes):
   call cursor(2, 10)
-  ALEDetail
 
-  AssertEqual "Infix operators must be spaced. (space-infix-ops)", GetLastMessage()
+  redir => g:output
+    ALEDetail
+  redir END
+
+  AssertEqual "\nInfix operators must be spaced. (space-infix-ops)", g:output

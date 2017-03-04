@@ -23,16 +23,19 @@ function! s:EchoWithShortMess(setting, message) abort
     let l:shortmess_options = getbufvar('%', '&shortmess')
 
     try
-        " Turn shormess on or off.
+        " Turn shortmess on or off.
         if a:setting ==# 'on'
             setlocal shortmess+=T
+            " echomsg is neede for the message to get truncated and appear in
+            " the message history.
+            exec "norm! :echomsg a:message\n"
         elseif a:setting ==# 'off'
             setlocal shortmess-=T
+            " Regular echo is needed for printing newline characters.
+            echo a:message
         else
             throw 'Invalid setting: ' . string(a:setting)
         endif
-
-        exec "norm! :echomsg a:message\n"
     finally
         call setbufvar('%', '&shortmess', l:shortmess_options)
     endtry
