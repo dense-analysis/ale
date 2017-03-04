@@ -101,6 +101,12 @@ function! ale_linters#go#gobuild#CopyFiles(buffer, golist_output) abort
 endfunction
 
 function! ale_linters#go#gobuild#GetCommand(buffer, copy_output) abort
+  " If for some reason we don't get any output from the last command, stop
+  " here.
+  if empty(a:copy_output)
+    return ''
+  endif
+
   let l:tempdir = a:copy_output[0]
   let l:importpath = s:PackageImportPath(a:buffer)
 
