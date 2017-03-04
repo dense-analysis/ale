@@ -53,7 +53,6 @@ endfunction
 
 function! ale#engine#ClearJob(job) abort
     let l:job_id = s:GetJobID(a:job)
-    let l:linter = s:job_info_map[l:job_id].linter
 
     if has('nvim')
         call jobstop(a:job)
