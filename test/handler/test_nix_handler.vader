@@ -24,3 +24,6 @@ Execute(The nix handler should parse nix-instantiate error messages correctly):
   \   'error: syntax error, unexpected IN, at /path/to/filename.nix:23:14',
   \   'error: syntax error, unexpected ''='', expecting '';'', at /path/to/filename.nix:3:12',
   \ ])
+
+After:
+  call ale#linter#Reset()
