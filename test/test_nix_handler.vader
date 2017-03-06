@@ -1,0 +1,26 @@
+Execute(The nix handler should parse nix-instantiate error messages correctly):
+  runtime ale_linters/nix/nix.vim
+
+  AssertEqual
+  \ [
+  \   {
+  \     'bufnr': 47,
+  \     'lnum': 23,
+  \     'col': 14,
+  \     'text': 'error: syntax error, unexpected IN',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'bufnr': 47,
+  \     'lnum': 3,
+  \     'col': 12,
+  \     'text': 'error: syntax error, unexpected ''='', expecting '';''',
+  \     'type': 'E',
+  \   },
+  \
+  \ ],
+  \ ale_linters#nix#nix#Handle(47, [
+  \   'This line should be ignored',
+  \   'error: syntax error, unexpected IN, at /path/to/filename.nix:23:14',
+  \   'error: syntax error, unexpected ''='', expecting '';'', at /path/to/filename.nix:3:12',
+  \ ])
