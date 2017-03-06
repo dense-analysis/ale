@@ -187,6 +187,15 @@ g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
   Note |`g:ale_echo_msg_format`| should contain the `%severity%` handler
 
 
+g:ale_emit_conflict_warnings                     *g:ale_emit_conflict_warnings*
+
+  Type: |Number|
+  Default: `1`
+
+  When set to `0`, ALE will not emit any warnings on startup about conflicting
+  plugins. ALE will probably not work if other linting plugins are installed.
+
+
 g:ale_enabled                                                   *g:ale_enabled*
 
   Type: |Number|

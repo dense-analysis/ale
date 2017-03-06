@@ -32,6 +32,9 @@ if !s:has_features
     finish
 endif
 
+" Add the after directory to the runtimepath
+let &runtimepath .= ',' . expand('<sfile>:p:h:h') . '/after'
+
 " Set this flag so that other plugins can use it, like airline.
 let g:loaded_ale = 1
 
@@ -40,6 +43,9 @@ let g:loaded_ale = 1
 if has('unix') && empty($TMPDIR)
     let $TMPDIR = '/tmp'
 endif
+
+" This flag can be set to 0 to disable emitting conflict warnings.
+let g:ale_emit_conflict_warnings = get(g:, 'ale_emit_conflict_warnings', 1)
 
 " This global variable is used internally by ALE for tracking information for
 " each buffer which linters are being run against.
