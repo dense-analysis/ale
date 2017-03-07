@@ -42,48 +42,32 @@ if [ $# -eq 0 ] || [ -z "$1" ]; then
     print_help
 fi
 
-# Called to output an error.
-# If called at least one, the return code for this script will be 1.
-output_error() {
-    echo "$FILENAME:$LINE_NUMBER $1"
-    RETURN_CODE=1
+shopt -s globstar
+
+directory="$1"
+
+check_errors() {
+    regex="$1"
+    message="$2"
+
+    for match in $(
+        grep --color=never -Pn "$regex" "$directory"/**/*.vim \
+        | grep --color=never -Po '^[^:]+:[0-9]+' \
+        | sed 's:^\./::'
+    ); do
+        RETURN_CODE=1
+        echo "$match $message"
+    done
 }
 
-# This function is called for each line in each file to check syntax.
-check_line() {
-    line="$1"
+if (( FIX_ERRORS )); then
+    sed -i "s/^\(function.*)\) *$/\1 abort/" "$directory"/**/*.vim
+fi
 
-    if [[ "$line" =~ ^function ]]; then
-        if ! [[ "$line" =~ abort$ ]]; then
-            if ((FIX_ERRORS)); then
-                # Use sed to add the 'abort' flag
-                sed -i "${LINE_NUMBER}s/$/ abort/" "$FILENAME"
-            else
-                output_error 'Function without abort keyword (See :help except-compat)'
-            fi
-        fi
-    fi
-
-    if [[ "$line" =~ ' '+$ ]]; then
-        output_error 'Trailing whitespace'
-    fi
-
-    endif_regex='^ * end?i? *$'
-
-    if [[ "$line" =~ $endif_regex ]]; then
-        output_error 'Write endif, not en, end, or endi'
-    fi
-}
-
-# Loop through all of the vim files and keep track of the file line numbers.
-for FILENAME in $(find "$1" -name '*.vim'); do
-    LINE_NUMBER=0
-
-    while read; do
-        LINE_NUMBER=$(expr $LINE_NUMBER + 1)
-
-        check_line "$REPLY"
-    done < "$FILENAME"
-done
+check_errors \
+    '^function.*\) *$' \
+    'Function without abort keyword (See :help except-compat)'
+check_errors ' +$' 'Trailing whitespace'
+check_errors '^ * end?i? *$' 'Write endif, not en, end, or endi'
 
 exit $RETURN_CODE
