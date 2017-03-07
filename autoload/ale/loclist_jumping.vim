@@ -1,38 +1,6 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: This file implements functions for jumping around in a file
-"   based on errors and warnings in the loclist or quickfix list.
-
-function! s:GetCurrentList()  abort
-    let l:buffer = bufnr('%')
-    let l:list = []
-
-    if g:ale_set_quickfix
-        let l:list = getqflist()
-    elseif g:ale_set_loclist
-        let l:list = getloclist(winnr())
-    endif
-
-    return filter(l:list, 'get(v:val, ''bufnr'', -1) == ' . l:buffer)
-endfunction
-
-function! ale#loclist_jumping#GetSortedList() abort
-    let l:loclist = []
-
-    for l:item in s:GetCurrentList()
-        if l:item.lnum < 1
-            " Remove items we can't even jump to.
-            continue
-        endif
-
-        call add(l:loclist, l:item)
-    endfor
-
-    " We must sort the list again, as the loclist could contain items set
-    " by other plugins.
-    call sort(l:loclist, 'ale#util#LocItemCompare')
-
-    return l:loclist
-endfunction
+"   based on ALE's internal loclist.
 
 " Search for the nearest line either before or after the current position
 " in the loclist. The argument 'wrap' can be passed to enable wrapping
@@ -42,18 +10,15 @@ endfunction
 " List will be returned, otherwise a pair of [line_number, column_number] will
 " be returned.
 function! ale#loclist_jumping#FindNearest(direction, wrap) abort
-    let l:loclist = ale#loclist_jumping#GetSortedList()
-
-    if empty(l:loclist)
-        " We couldn't find anything, so stop here.
-        return []
-    endif
-
-    let l:search_item = {'lnum': getcurpos()[1], 'col': getcurpos()[2]}
+    let l:pos = getcurpos()
+    let l:info = get(g:ale_buffer_info, bufnr('%'), {'loclist': []})
+    " This list will have already been sorted.
+    let l:loclist = l:info.loclist
+    let l:search_item = {'lnum': l:pos[1], 'col': l:pos[2]}
 
     " When searching backwards, so we can find the next smallest match.
     if a:direction ==# 'before'
-        call reverse(l:loclist)
+        let l:loclist = reverse(copy(l:loclist))
     endif
 
     " Look for items before or after the current position.
@@ -82,8 +47,8 @@ function! ale#loclist_jumping#FindNearest(direction, wrap) abort
 
     " If we found nothing, and the wrap option is set to 1, then we should
     " wrap around the list of warnings/errors
-    if a:wrap
-        let l:item = get(l:loclist, 0)
+    if a:wrap && !empty(l:loclist)
+        let l:item = l:loclist[0]
 
         return [l:item.lnum, l:item.col]
     endif

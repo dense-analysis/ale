@@ -1,86 +1,55 @@
 Before:
-  let g:buffer = bufnr('%')
+  let g:ale_buffer_info = {
+  \ bufnr('%'): {
+  \   'loclist': [
+  \     {'lnum': 1, 'col': 2},
+  \     {'lnum': 1, 'col': 3},
+  \     {'lnum': 2, 'col': 1},
+  \     {'lnum': 2, 'col': 2},
+  \     {'lnum': 2, 'col': 3},
+  \     {'lnum': 2, 'col': 6},
+  \     {'lnum': 2, 'col': 700},
+  \   ],
+  \ },
+  \}
 
-  function! GetList() abort
-    return map(
-    \ ale#loclist_jumping#GetSortedList(),
-    \ '{''lnum'': v:val.lnum, ''col'': v:val.col, ''text'': v:val.text}'
-    \)
+  function! TestJump(direction, wrap, pos)
+    call cursor(a:pos)
+    call ale#loclist_jumping#Jump(a:direction, a:wrap)
+
+    return getcurpos()[1:2]
   endfunction
 
 After:
-  unlet! g:buffer
-  unlet! g:new_buffer
-  let g:ale_set_loclist = 1
-  let g:ale_set_quickfix = 0
-  call setloclist(winnr(), [])
-  call setqflist([])
-  delfunction GetList
+  let g:ale_buffer_info = {}
+  delfunction TestJump
 
-Execute(The loclist should be filtered and sorted appropriately for jumping):
-  :new
+Given foobar (Some imaginary filetype):
+  12345678
+  12345678
 
-  let g:new_buffer = bufnr('%')
+Execute(loclist jumping should jump correctly when not wrapping):
+  AssertEqual [2, 1], TestJump('before', 0, [2, 2])
+  AssertEqual [1, 3], TestJump('before', 0, [2, 1])
+  AssertEqual [2, 3], TestJump('after', 0, [2, 2])
+  AssertEqual [2, 1], TestJump('after', 0, [1, 3])
+  AssertEqual [2, 6], TestJump('after', 0, [2, 4])
+  AssertEqual [2, 8], TestJump('after', 0, [2, 6])
 
-  AssertNotEqual g:new_buffer, g:buffer
+Execute(loclist jumping should jump correctly when wrapping):
+  AssertEqual [2, 1], TestJump('before', 1, [2, 2])
+  AssertEqual [1, 3], TestJump('before', 1, [2, 1])
+  AssertEqual [2, 3], TestJump('after', 1, [2, 2])
+  AssertEqual [2, 1], TestJump('after', 1, [1, 3])
+  AssertEqual [2, 6], TestJump('after', 1, [2, 4])
 
-  call setloclist(winnr(), [
-  \ {'lnum': 1, 'col': 1, 'text': 'ignore this', 'bufnr': g:buffer},
-  \ {'lnum': 20, 'col': 5, 'text': 'baz', 'bufnr': g:new_buffer},
-  \ {'lnum': 10, 'col': 6, 'text': 'bar', 'bufnr': g:new_buffer},
-  \ {'lnum': 10, 'col': 5, 'text': 'foo', 'bufnr': g:new_buffer},
-  \])
+  AssertEqual [1, 2], TestJump('after', 1, [2, 8])
+  AssertEqual [2, 8], TestJump('before', 1, [1, 2])
 
-  AssertEqual
-  \ [
-  \   {'lnum': 10, 'col': 5, 'text': 'foo'},
-  \   {'lnum': 10, 'col': 6, 'text': 'bar'},
-  \   {'lnum': 20, 'col': 5, 'text': 'baz'},
-  \ ],
-  \ GetList()
+Execute(loclist jumping not jump when the loclist is empty):
+  let g:ale_buffer_info[bufnr('%')].loclist = []
 
-Execute(quickfix should be filtered and sorted appropriately for jumping):
-  let g:ale_set_loclist = 0
-  let g:ale_set_quickfix = 1
-
-  :new
-
-  let g:new_buffer = bufnr('%')
-
-  AssertNotEqual g:new_buffer, g:buffer
-
-  call setqflist([
-  \ {'lnum': 1, 'col': 1, 'text': 'ignore this', 'bufnr': g:buffer},
-  \ {'lnum': 20, 'col': 5, 'text': 'baz', 'bufnr': g:new_buffer},
-  \ {'lnum': 10, 'col': 6, 'text': 'bar', 'bufnr': g:new_buffer},
-  \ {'lnum': 10, 'col': 5, 'text': 'foo', 'bufnr': g:new_buffer},
-  \])
-
-  AssertEqual
-  \ [
-  \   {'lnum': 10, 'col': 5, 'text': 'foo'},
-  \   {'lnum': 10, 'col': 6, 'text': 'bar'},
-  \   {'lnum': 20, 'col': 5, 'text': 'baz'},
-  \ ],
-  \ GetList()
-
-Execute(An empty List should be returned when both lists are turned off):
-  let g:ale_set_loclist = 0
-  let g:ale_set_quickfix = 0
-
-  call setqflist([{'lnum': 1, 'col': 1, 'text': 'foo', 'bufnr': bufnr('%')}])
-  call setloclist(winnr(), [{'lnum': 1, 'col': 1, 'text': 'foo', 'bufnr': bufnr('%')}])
-
-  AssertEqual [], GetList()
-
-Execute(quickfix should take precedence over loclist when on):
-  let g:ale_set_quickfix = 1
-
-  call setloclist(winnr(), [
-  \ {'lnum': 1, 'col': 1, 'text': 'ignore this', 'bufnr': g:buffer}
-  \])
-  call setqflist([
-  \ {'lnum': 1, 'col': 1, 'text': 'foo', 'bufnr': g:buffer},
-  \])
-
-  AssertEqual [{'lnum': 1, 'col': 1, 'text': 'foo'}], GetList()
+  AssertEqual [1, 6], TestJump('before', 0, [1, 6])
+  AssertEqual [1, 6], TestJump('before', 1, [1, 6])
+  AssertEqual [1, 6], TestJump('after', 0, [1, 6])
+  AssertEqual [1, 6], TestJump('after', 1, [1, 6])

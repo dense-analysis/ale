@@ -1155,7 +1155,9 @@ ALENext                                                               *ALENext*
 ALENextWrap                                                       *ALENextWrap*
                                                       *ale-navigation-commands*
 
-  Move between warnings or errors in a buffer.
+  Move between warnings or errors in a buffer. ALE will only navigate between
+  the errors or warnings it generated, even if both |g:ale_set_quickfix|
+  and |g:ale_set_loclist| are set to `0`.
 
   `ALEPrevious` and `ALENext` will stop at the top and bottom of a file, while
   `ALEPreviousWrap` and `ALENextWrap` will wrap around the file to find
