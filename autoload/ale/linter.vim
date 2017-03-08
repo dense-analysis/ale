@@ -142,11 +142,23 @@ function! ale#linter#PreProcess(linter) abort
         throw "`output_stream` must be 'stdout', 'stderr', or 'both'"
     endif
 
+    " An option indicating that this linter should only be run against the
+    " file on disk.
+    let l:obj.lint_file = get(a:linter, 'lint_file', 0)
+
+    if !s:IsBoolean(l:obj.lint_file)
+        throw '`lint_file` must be `0` or `1`'
+    endif
+
     " An option indicating that the buffer should be read.
-    let l:obj.read_buffer = get(a:linter, 'read_buffer', 1)
+    let l:obj.read_buffer = get(a:linter, 'read_buffer', !l:obj.lint_file)
 
     if !s:IsBoolean(l:obj.read_buffer)
         throw '`read_buffer` must be `0` or `1`'
+    endif
+
+    if l:obj.lint_file && l:obj.read_buffer
+        throw 'Only one of `lint_file` or `read_buffer` can be `1`'
     endif
 
     return l:obj

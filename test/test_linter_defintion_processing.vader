@@ -282,4 +282,44 @@ Execute(PreProcess should set a default value for read_buffer):
   \ 'command': 'x',
   \}
 
-  AssertEqual ale#linter#PreProcess(g:linter).read_buffer, 1
+  AssertEqual 1, ale#linter#PreProcess(g:linter).read_buffer
+
+Execute(PreProcess should process the lint_file option correctly):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'callback': 'x',
+  \ 'executable': 'x',
+  \ 'command': 'x',
+  \ 'lint_file': 'x',
+  \}
+
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual '`lint_file` must be `0` or `1`', g:vader_exception
+
+  let g:linter.lint_file = 0
+
+  AssertEqual 0, ale#linter#PreProcess(g:linter).lint_file
+  " The default for read_buffer should be 1 when lint_file is 0
+  AssertEqual 1, ale#linter#PreProcess(g:linter).read_buffer
+
+  let g:linter.lint_file = 1
+
+  AssertEqual 1, ale#linter#PreProcess(g:linter).lint_file
+  " The default for read_buffer should change to 0 when lint_file is 1.
+  AssertEqual 0, ale#linter#PreProcess(g:linter).read_buffer
+
+  let g:linter.read_buffer = 1
+
+  " We shouldn't be able to set both options to 1 at the same time.
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual 'Only one of `lint_file` or `read_buffer` can be `1`', g:vader_exception
+
+Execute(PreProcess should set a default value for lint_file):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'callback': 'x',
+  \ 'executable': 'x',
+  \ 'command': 'x',
+  \}
+
+  AssertEqual 0, ale#linter#PreProcess(g:linter).lint_file

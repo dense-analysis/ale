@@ -28,6 +28,8 @@ function! ale#engine#InitBufferInfo(buffer) abort
     if !has_key(g:ale_buffer_info, a:buffer)
         " job_list will hold the list of jobs
         " loclist holds the loclist items after all jobs have completed.
+        " lint_file_loclist holds items from the last run including linters
+        "   which use the lint_file option.
         " new_loclist holds loclist items while jobs are being run.
         " temporary_file_list holds temporary files to be cleaned up
         " temporary_directory_list holds temporary directories to be cleaned up
@@ -35,6 +37,7 @@ function! ale#engine#InitBufferInfo(buffer) abort
         let g:ale_buffer_info[a:buffer] = {
         \   'job_list': [],
         \   'loclist': [],
+        \   'lint_file_loclist': [],
         \   'new_loclist': [],
         \   'temporary_file_list': [],
         \   'temporary_directory_list': [],
