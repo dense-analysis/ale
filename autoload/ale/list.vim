@@ -11,11 +11,11 @@ function! ale#list#IsQuickfixOpen() abort
     return 0
 endfunction
 
-function! ale#list#SetLists(loclist) abort
+function! ale#list#SetLists(buffer, loclist) abort
     if g:ale_set_quickfix
         call setqflist(a:loclist)
     elseif g:ale_set_loclist
-        call setloclist(0, a:loclist)
+        call setloclist(bufwinid(str2nr(a:buffer)), a:loclist)
     endif
 
     " If we don't auto-open lists, bail out here.

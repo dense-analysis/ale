@@ -194,7 +194,9 @@ function! s:ALEToggle() abort
         " Lint immediately
         call ale#Queue(0)
     else
-        for l:buffer in keys(g:ale_buffer_info)
+        " Make sure the buffer number is a number, not a string,
+        " otherwise things can go wrong.
+        for l:buffer in map(keys(g:ale_buffer_info), 'str2nr(v:val)')
             " Stop jobs and delete stored buffer data
             call ale#cleanup#Buffer(l:buffer)
             " Clear signs, loclist, quicklist
