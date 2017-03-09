@@ -43,7 +43,7 @@ After:
   delfunction GenerateResults
   unlet! g:output
 
-Given testft(A Javscript file with warnings/errors):
+Given testft(A file with warnings/errors):
   foo
   bar
   baz
