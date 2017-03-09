@@ -134,3 +134,13 @@ function! ale#util#InSandbox() abort
 
     return 0
 endfunction
+
+" Get the number of milliseconds since some vague, but consistent, point in
+" the past.
+"
+" This function can be used for timing execution, etc.
+"
+" The time will be returned as a Number.
+function! ale#util#ClockMilliseconds() abort
+    return float2nr(reltimefloat(reltime()) * 1000)
+endfunction
