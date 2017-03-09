@@ -29,6 +29,21 @@ function! ale_linters#javascript#eslint#GetCommand(buffer) abort
 endfunction
 
 function! ale_linters#javascript#eslint#Handle(buffer, lines) abort
+    let l:config_error_pattern = '\v^ESLint couldn''t find a configuration file'
+    \   . '|^Cannot read config file'
+
+    " Look for a message in the first few lines which indicates that
+    " a configuration file couldn't be found.
+    for l:line in a:lines[:10]
+        if len(matchlist(l:line, l:config_error_pattern)) > 0
+            return [{
+            \   'lnum': 1,
+            \   'text': 'eslint configuration error (type :ALEDetail for more information)',
+            \   'detail': join(a:lines, "\n"),
+            \}]
+        endif
+    endfor
+
     " Matches patterns line the following:
     "
     " /path/to/some-filename.js:47:14: Missing trailing comma. [Warning/comma-dangle]

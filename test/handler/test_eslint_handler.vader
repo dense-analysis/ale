@@ -1,6 +1,7 @@
-Execute(The eslint handler should parse lines correctly):
+Before:
   runtime ale_linters/javascript/eslint.vim
 
+Execute(The eslint handler should parse lines correctly):
   AssertEqual
   \ [
   \   {
@@ -33,5 +34,56 @@ Execute(The eslint handler should parse lines correctly):
   \   '/path/to/some-filename.js:13:3: Parsing error: Unexpected token',
   \ ])
 
+Execute(The eslint handler should print a message about a missing configuration file):
+  let g:config_error_lines = [
+  \   '',
+  \   'Oops! Something went wrong! :(',
+  \   '',
+  \   'ESLint couldn''t find a configuration file. To set up a configuration file for this project, please run:',
+  \   '    eslint --init',
+  \   '',
+  \   'ESLint looked for configuration files in /some/path/or/other and its ancestors.',
+  \   '',
+  \   'If you think you already have a configuration file or if you need more help, please stop by the ESLint chat room: https://gitter.im/eslint/eslint',
+  \   '',
+  \ ]
+
+  AssertEqual
+  \ [{
+  \   'lnum': 1,
+  \   'text': 'eslint configuration error (type :ALEDetail for more information)',
+  \   'detail': join(g:config_error_lines, "\n"),
+  \ }],
+  \ ale_linters#javascript#eslint#Handle(347, g:config_error_lines[:])
+
+Execute(The eslint handler should print a message for config parsing errors):
+  let g:config_error_lines = [
+  \ 'Cannot read config file: /some/path/or/other/.eslintrc.js',
+  \ 'Error: Unexpected token <<',
+  \ '/some/path/or/other/.eslintrc.js:1',
+  \ '(function (exports, require, module, __filename, __dirname) { <<<>>>',
+  \ '                                                              ^^',
+  \ 'SyntaxError: Unexpected token <<',
+  \ '    at Object.exports.runInThisContext (vm.js:76:16)',
+  \ '    at Module._compile (module.js:528:28)',
+  \ '    at Object.Module._extensions..js (module.js:565:10)',
+  \ '    at Module.load (module.js:473:32)',
+  \ '    at tryModuleLoad (module.js:432:12)',
+  \ '    at Function.Module._load (module.js:424:3)',
+  \ '    at Module.require (module.js:483:17)',
+  \ '    at require (internal/module.js:20:19)',
+  \ '    at module.exports (/usr/local/lib/node_modules/eslint/node_modules/require-uncached/index.js:14:12)',
+  \ '    at loadJSConfigFile (/usr/local/lib/node_modules/eslint/lib/config/config-file.js:160:16)',
+  \]
+
+  AssertEqual
+  \ [{
+  \   'lnum': 1,
+  \   'text': 'eslint configuration error (type :ALEDetail for more information)',
+  \   'detail': join(g:config_error_lines, "\n"),
+  \ }],
+  \ ale_linters#javascript#eslint#Handle(347, g:config_error_lines[:])
+
 After:
+  unlet! g:config_error_lines
   call ale#linter#Reset()
