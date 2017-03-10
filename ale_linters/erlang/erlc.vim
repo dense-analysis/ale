@@ -3,7 +3,8 @@
 let g:ale_erlang_erlc_options = get(g:, 'ale_erlang_erlc_options', '')
 
 function! ale_linters#erlang#erlc#GetCommand(buffer) abort
-    return 'erlc ' . g:ale_erlang_erlc_options . ' %t'
+    let l:temp_dir = has('win32') ? $TMP : $TMPDIR
+    return 'erlc -o ' . l:temp_dir . ' ' . g:ale_erlang_erlc_options . ' %t'
 endfunction
 
 function! ale_linters#erlang#erlc#Handle(buffer, lines) abort
