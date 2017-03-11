@@ -16,9 +16,11 @@ if !exists('g:ale_cpp_gcc_options')
 endif
 
 function! ale_linters#cpp#gcc#GetCommand(buffer) abort
+    " -iquote with the directory the file is in makes #include work for
+    "  headers in the same directory.
     return 'gcc -S -x c++ -fsyntax-only '
-    \      . g:ale_cpp_gcc_options . ' -'
-
+    \   . '-iquote ' . fnameescape(fnamemodify(bufname(a:buffer), ':p:h'))
+    \   . ' ' . g:ale_cpp_gcc_options . ' -'
 endfunction
 
 call ale#linter#Define('cpp', {
