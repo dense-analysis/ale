@@ -4,29 +4,44 @@ Before:
     \ {
     \   'lnum': 1,
     \   'col': 1,
-    \   'bufnr': bufnr('%'),
-    \   'vcol': 0,
-    \   'nr': -1,
     \   'type': 'E',
     \   'text': 'foo',
     \ },
     \ {
     \   'lnum': 2,
     \   'col': 1,
-    \   'bufnr': bufnr('%'),
-    \   'vcol': 0,
-    \   'nr': -1,
     \   'type': 'W',
     \   'text': 'bar',
     \ },
     \ {
     \   'lnum': 3,
     \   'col': 1,
-    \   'bufnr': bufnr('%'),
-    \   'vcol': 0,
-    \   'nr': -1,
     \   'type': 'E',
     \   'text': 'baz',
+    \ },
+    \ {
+    \   'lnum': 4,
+    \   'col': 1,
+    \   'type': 'E',
+    \   'text': 'use this one',
+    \ },
+    \ {
+    \   'lnum': 4,
+    \   'col': 2,
+    \   'type': 'W',
+    \   'text': 'ignore this one',
+    \ },
+    \ {
+    \   'lnum': 5,
+    \   'col': 1,
+    \   'type': 'W',
+    \   'text': 'ignore this one',
+    \ },
+    \ {
+    \   'lnum': 5,
+    \   'col': 2,
+    \   'type': 'E',
+    \   'text': 'use this one',
     \ },
     \]
   endfunction
@@ -47,13 +62,15 @@ Given testft(A file with warnings/errors):
   foo
   bar
   baz
+  fourth line
+  fifth line
 
 Execute:
   call ale#Lint()
   call ale#engine#WaitForJobs(2000)
 
   redir => g:output
-    :sign place
+    silent sign place
   redir END
 
   AssertEqual
@@ -61,6 +78,8 @@ Execute:
   \   ['1', '1000001', 'ALEErrorSign'],
   \   ['2', '1000002', 'ALEWarningSign'],
   \   ['3', '1000003', 'ALEErrorSign'],
+  \   ['4', '1000004', 'ALEErrorSign'],
+  \   ['5', '1000005', 'ALEErrorSign'],
   \ ],
   \ map(
   \   split(g:output, '\n')[2:],
