@@ -13,7 +13,6 @@ Before:
   \   'type': 'W',
   \   'col': 10,
   \   'text': 'Infix operators must be spaced. [Warning/space-infix-ops]',
-  \   'sign_id': 1000001,
   \ },
   \ {
   \   'lnum': 2,
@@ -24,7 +23,6 @@ Before:
   \   'type': 'E',
   \   'col': 10,
   \   'text': 'Missing semicolon. [Error/semi]',
-  \   'sign_id': 1000002,
   \ }
   \]
 

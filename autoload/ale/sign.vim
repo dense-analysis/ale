@@ -118,20 +118,12 @@ function! ale#sign#SetSigns(buffer, loclist) abort
 
     " Add the new signs,
     for l:index in range(0, len(l:signlist) - 1)
-        let l:sign_id = l:index + g:ale_sign_offset + 1
         let l:sublist = l:signlist[l:index]
         let l:type = !empty(filter(copy(l:sublist), 'v:val.type ==# ''E'''))
         \   ? 'ALEErrorSign'
         \   : 'ALEWarningSign'
 
-        " Save the sign IDs we are setting back on our loclist objects.
-        " These IDs can be used later for changing line numbers of items
-        " we keep, based on what Vim adjusts automatically.
-        for l:obj in l:sublist
-            let l:obj.sign_id = l:sign_id
-        endfor
-
-        let l:sign_line = 'sign place ' . l:sign_id
+        let l:sign_line = 'sign place ' . (l:index + g:ale_sign_offset + 1)
             \. ' line=' . l:sublist[0].lnum
             \. ' name=' . l:type
             \. ' buffer=' . a:buffer
