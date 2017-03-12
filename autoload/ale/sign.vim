@@ -125,8 +125,7 @@ function! ale#sign#SetSigns(buffer, loclist) abort
         \   : 'ALEWarningSign'
 
         " Save the sign IDs we are setting back on our loclist objects.
-        " These IDs can be used later for changing line numbers of items
-        " we keep, based on what Vim adjusts automatically.
+        " These IDs will be used to preserve items which are set many times.
         for l:obj in l:sublist
             let l:obj.sign_id = l:sign_id
         endfor
