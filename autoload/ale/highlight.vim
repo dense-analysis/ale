@@ -34,16 +34,34 @@ function! s:GetALEMatches() abort
     return l:list
 endfunction
 
+function! s:GetCurrentMatchIDs(loclist) abort
+    let l:current_id_map = {}
+
+    for l:item in a:loclist
+        if has_key(l:item, 'match_id')
+            let l:current_id_map[l:item.match_id] = 1
+        endif
+    endfor
+
+    return l:current_id_map
+endfunction
+
 function! ale#highlight#UpdateHighlights() abort
     let l:buffer = bufnr('%')
     let l:has_new_items = has_key(s:buffer_highlights, l:buffer)
     let l:loclist = l:has_new_items ? remove(s:buffer_highlights, l:buffer) : []
+    let l:current_id_map = s:GetCurrentMatchIDs(l:loclist)
 
     if l:has_new_items || !g:ale_enabled
         for l:match in s:GetALEMatches()
-            call matchdelete(l:match['id'])
+            if !has_key(l:current_id_map, l:match.id)
+                call matchdelete(l:match.id)
+            endif
         endfor
     endif
+
+    " Remove anything with a current match_id
+    call filter(l:loclist, '!has_key(v:val, ''match_id'')')
 
     if l:has_new_items
         for l:item in l:loclist
