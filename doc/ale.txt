@@ -1218,11 +1218,17 @@ ALEDetail                                                           *ALEDetail*
 ===============================================================================
 7. API                                                                *ale-api*
 
-ale#Queue(delay)                                                  *ale#Queue()*
+ale#Queue(delay, [run_file_linters])                              *ale#Queue()*
+
   Run linters for the current buffer, based on the filetype of the buffer,
   with a given `delay`. A `delay` of `0` will run the linters immediately.
   The linters will always be run in the background. Calling this function
   again from the same buffer
+
+  An optional `run_file_linters` argument can be given. If `run_file_linters`
+  is `0`, then no linters where the `lint_file` option is set to `1` will be
+  run. If `run_file_linters` is set to `1`, then all linters for the current
+  file will be run. `run_file_linters` defaults to `0`.
 
 
 ale#engine#EscapeCommandPart(command_part)     *ale#engine#EscapeCommandPart()*

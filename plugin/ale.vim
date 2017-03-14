@@ -157,14 +157,14 @@ function! s:ALEInitAuGroups() abort
     augroup ALERunOnEnterGroup
         autocmd!
         if g:ale_enabled && g:ale_lint_on_enter
-            autocmd BufEnter,BufRead * call ale#Queue(300)
+            autocmd BufEnter,BufRead * call ale#Queue(300, 1)
         endif
     augroup END
 
     augroup ALERunOnSaveGroup
         autocmd!
         if g:ale_enabled && g:ale_lint_on_save
-            autocmd BufWrite * call ale#Queue(0)
+            autocmd BufWrite * call ale#Queue(0, 1)
         endif
     augroup END
 

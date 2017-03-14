@@ -3,6 +3,7 @@
 "   Manages execution of linters when requested by autocommands
 
 let s:lint_timer = -1
+let s:should_lint_file = 0
 
 " A function for checking various conditions whereby ALE just shouldn't
 " attempt to do anything, say if particular buffer types are open in Vim.
@@ -13,10 +14,24 @@ function! ale#ShouldDoNothing() abort
     \   || ale#util#InSandbox()
 endfunction
 
-function! ale#Queue(delay) abort
+" (delay, [run_file_linters])
+function! ale#Queue(delay, ...) abort
+    if len(a:0) > 1
+        throw 'too many arguments!'
+    endif
+
+    let l:a1 = len(a:0) > 1 ? a:1 : 0
+
+    if type(l:a1) != type(1) || (l:a1 != 0 && l:a1 != 1)
+        throw 'The lint_file argument must be a Number which is either 0 or 1!'
+    endif
+
     if ale#ShouldDoNothing()
         return
     endif
+
+    " Remember the event used for linting.
+    let s:should_lint_file = l:a1
 
     if s:lint_timer != -1
         call timer_stop(s:lint_timer)
@@ -51,18 +66,6 @@ function! ale#Lint(...) abort
     let g:ale_buffer_info[l:buffer].new_loclist = []
 
     for l:linter in l:linters
-        " Check if a given linter has a program which can be executed.
-        if has_key(l:linter, 'executable_callback')
-            let l:executable = ale#util#GetFunction(l:linter.executable_callback)(l:buffer)
-        else
-            let l:executable = l:linter.executable
-        endif
-
-        if !executable(l:executable)
-            " The linter's program cannot be executed, so skip it.
-            continue
-        endif
-
         call ale#engine#Invoke(l:buffer, l:linter)
     endfor
 endfunction

@@ -626,7 +626,15 @@ endfunction
 function! ale#engine#Invoke(buffer, linter) abort
     " Stop previous jobs for the same linter.
     call s:StopPreviousJobs(a:buffer, a:linter)
-    call s:InvokeChain(a:buffer, a:linter, 0, [])
+
+    let l:executable = has_key(a:linter, 'executable_callback')
+    \   ? ale#util#GetFunction(a:linter.executable_callback)(a:buffer)
+    \   : a:linter.executable
+
+    " Run this program if it can be executed.
+    if executable(l:executable)
+        call s:InvokeChain(a:buffer, a:linter, 0, [])
+    endif
 endfunction
 
 " Given a buffer number, return the warnings and errors for a given buffer.
