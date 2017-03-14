@@ -254,12 +254,13 @@ function! s:HandleExit(job) abort
 endfunction
 
 function! ale#engine#SetResults(buffer, loclist) abort
-    if g:ale_set_quickfix || g:ale_set_loclist
-        call ale#list#SetLists(a:buffer, a:loclist)
-    endif
-
+    " Set signs first. This could potentially fix some line numbers.
     if g:ale_set_signs
         call ale#sign#SetSigns(a:buffer, a:loclist)
+    endif
+
+    if g:ale_set_quickfix || g:ale_set_loclist
+        call ale#list#SetLists(a:buffer, a:loclist)
     endif
 
     if exists('*ale#statusline#Update')

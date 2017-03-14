@@ -85,7 +85,7 @@ Execute(ALEToggle should reset everything and then run again):
 
   " First check that everything is there...
   AssertEqual g:expected_loclist, getloclist(0)
-  AssertEqual [[2, 1000001]], ale#sign#FindCurrentSigns(bufnr('%'))
+  AssertEqual [[2, 1000001, 'ALEErrorSign']], ale#sign#FindCurrentSigns(bufnr('%'))
   AssertEqual
   \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
   \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
@@ -105,7 +105,7 @@ Execute(ALEToggle should reset everything and then run again):
   call ale#engine#WaitForJobs(2000)
 
   AssertEqual g:expected_loclist, getloclist(0)
-  AssertEqual [[2, 1000001]], ale#sign#FindCurrentSigns(bufnr('%'))
+  AssertEqual [[2, 1000001, 'ALEErrorSign']], ale#sign#FindCurrentSigns(bufnr('%'))
   AssertEqual
   \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
   \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
