@@ -103,6 +103,7 @@ The following languages and tools are supported.
 * Lua: 'luacheck'
 * Markdown: 'mdl', 'proselint'
 * MATLAB: 'mlint'
+* nim: 'nim check'
 * nix: 'nix-instantiate'
 * nroff: 'proselint'
 * OCaml: 'merlin' (see |ale-linter-integration-ocaml-merlin|)
