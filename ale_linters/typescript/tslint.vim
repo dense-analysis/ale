@@ -8,7 +8,6 @@ let g:ale_typescript_tslint_config_path =
 \   get(g:, 'ale_typescript_tslint_config_path', '')
 
 function! ale_linters#typescript#tslint#GetExecutable(buffer) abort
-
   return ale#util#ResolveLocalPath(
   \   a:buffer,
   \   'node_modules/.bin/tslint',
@@ -60,7 +59,7 @@ function! ale_linters#typescript#tslint#BuildLintCommand(buffer) abort
   let l:tslint_options = 
   \   empty(g:ale_typescript_tslint_config_path) ? 
   \         '' 
-  \         : '-c ' . g:ale_typescript_tslint_config_path
+  \         : '-c ' . fnameescape(g:ale_typescript_tslint_config_path)
 
   return ale_linters#typescript#tslint#GetExecutable(a:buffer)
   \   . ' ' . l:tslint_options
