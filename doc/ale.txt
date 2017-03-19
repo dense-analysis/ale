@@ -682,7 +682,7 @@ g:ale_linters_sh_shell_default_shell     *g:ale_linters_sh_shell_default_shell*
 -------------------------------------------------------------------------------
 4.10. shellcheck                                *ale-linter-options-shellcheck*
 
-g:ale_linters_sh_shellckeck_exclusions *g:ale_linters_sh_shellckeck_exclusions*
+g:ale_linters_sh_shellcheck_exclusions *g:ale_linters_sh_shellcheck_exclusions*
 
   Type: |String|
   Default: `''`
