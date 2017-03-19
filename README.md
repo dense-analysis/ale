@@ -81,6 +81,7 @@ name. That seems to be the fairest way to arrange this table.
 | Lua | [luacheck](https://github.com/mpeterv/luacheck) |
 | Markdown | [mdl](https://github.com/mivok/markdownlint), [proselint](http://proselint.com/)|
 | MATLAB | [mlint](https://www.mathworks.com/help/matlab/ref/mlint.html) |
+| Nim | [nim](https://nim-lang.org/docs/nimc.html) |
 | nix | [nix-instantiate](http://nixos.org/nix/manual/#sec-nix-instantiate) |
 | nroff | [proselint](http://proselint.com/)|
 | OCaml | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-integration-ocaml-merlin` for configuration instructions
