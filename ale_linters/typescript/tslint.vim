@@ -1,6 +1,18 @@
 " Author: Prashanth Chandra https://github.com/prashcr
 " Description: tslint for TypeScript files
 
+let g:ale_typescript_tslint_executable =
+\   get(g:, 'ale_typescript_tslint_executable', 'tslint')
+
+function! ale_linters#typescript#tslint#GetExecutable(buffer) abort
+
+  return ale#util#ResolveLocalPath(
+  \   a:buffer,
+  \   'node_modules/.bin/tslint',
+  \   g:ale_typescript_tslint_executable
+  \)
+endfunction
+
 function! ale_linters#typescript#tslint#Handle(buffer, lines) abort
     " Matches patterns like the following:
     "
@@ -40,12 +52,14 @@ function! ale_linters#typescript#tslint#BuildLintCommand(buffer) abort
   let l:tsconfig_path = ale#util#FindNearestFile(a:buffer, 'tslint.json')
   let l:tslint_options = empty(l:tsconfig_path) ? '' : '-c ' . l:tsconfig_path
 
-  return 'tslint ' . l:tslint_options . ' %t'
+  return ale_linters#typescript#tslint#GetExecutable(a:buffer)
+  \   . ' ' . l:tslint_options
+  \   . ' %t'
 endfunction
 
 call ale#linter#Define('typescript', {
 \   'name': 'tslint',
-\   'executable': 'tslint',
+\   'executable_callback': 'ale_linters#typescript#tslint#GetExecutable',
 \   'command_callback': 'ale_linters#typescript#tslint#BuildLintCommand',
 \   'callback': 'ale_linters#typescript#tslint#Handle',
 \})
