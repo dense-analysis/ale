@@ -3,7 +3,7 @@
 
 
 function! ale_linters#nim#nimcheck#Handle(buffer, lines) abort
-    let l:buffer_filename = fnameescape(fnamemodify(bufname(a:buffer), ':p:t'))
+    let l:buffer_filename = fnamemodify(bufname(a:buffer), ':p:t')
     let l:pattern = '^\(.\+\.nim\)(\(\d\+\), \(\d\+\)) \(.\+\)'
     let l:output = [] 
 
@@ -18,7 +18,7 @@ function! ale_linters#nim#nimcheck#Handle(buffer, lines) abort
         " NOTE: Checking filename only is OK because nim enforces unique
         "       module names.
 
-        let l:temp_buffer_filename = fnameescape(fnamemodify(l:match[1], ':p:t'))
+        let l:temp_buffer_filename = fnamemodify(l:match[1], ':p:t')
         if l:buffer_filename !=# '' && l:temp_buffer_filename !=# l:buffer_filename
             continue
         endif
