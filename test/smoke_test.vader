@@ -19,7 +19,6 @@ Before:
   \})
 
 After:
-  let g:ale_use_ch_sendraw = 0
   let g:ale_buffer_info = {}
   delfunction TestCallback
   call ale#linter#Reset()
@@ -31,26 +30,6 @@ Given foobar (Some imaginary filetype):
 
 Execute(Linters should run with the default options):
   AssertEqual 'foobar', &filetype
-
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
-
-  AssertEqual [{
-  \   'bufnr': bufnr('%'),
-  \   'lnum': 2,
-  \   'vcol': 0,
-  \   'col': 3,
-  \   'text': 'foo bar',
-  \   'type': 'E',
-  \   'nr': -1,
-  \   'pattern': '',
-  \   'valid': 1,
-  \ }], getloclist(0)
-
-Execute(Linters should run with `let g:ale_use_ch_sendraw = 1`):
-  AssertEqual 'foobar', &filetype
-
-  let g:ale_use_ch_sendraw = 1
 
   call ale#Lint()
   call ale#engine#WaitForJobs(2000)
