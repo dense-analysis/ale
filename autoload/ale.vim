@@ -14,16 +14,17 @@ function! ale#ShouldDoNothing() abort
     \   || ale#util#InSandbox()
 endfunction
 
-" (delay, [run_file_linters])
+" (delay, [linting_flag])
 function! ale#Queue(delay, ...) abort
     if len(a:0) > 1
         throw 'too many arguments!'
     endif
 
-    let l:a1 = len(a:0) > 1 ? a:1 : 0
+    " Default run_file_linters to 0
+    let l:linting_flag = len(a:0) > 1 ? a:1 : ''
 
-    if type(l:a1) != type(1) || (l:a1 != 0 && l:a1 != 1)
-        throw 'The lint_file argument must be a Number which is either 0 or 1!'
+    if l:linting_flag !=# '' && l:linting_flag !=# 'lint_file'
+        throw "linting_flag must be either '' or 'lint_file'"
     endif
 
     if ale#ShouldDoNothing()
@@ -31,7 +32,7 @@ function! ale#Queue(delay, ...) abort
     endif
 
     " Remember the event used for linting.
-    let s:should_lint_file = l:a1
+    let s:should_lint_file = l:linting_flag ==# 'lint_file'
 
     if s:lint_timer != -1
         call timer_stop(s:lint_timer)

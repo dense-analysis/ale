@@ -157,14 +157,14 @@ function! s:ALEInitAuGroups() abort
     augroup ALERunOnEnterGroup
         autocmd!
         if g:ale_enabled && g:ale_lint_on_enter
-            autocmd BufEnter,BufRead * call ale#Queue(300, 1)
+            autocmd BufEnter,BufRead * call ale#Queue(300, 'lint_file')
         endif
     augroup END
 
     augroup ALERunOnSaveGroup
         autocmd!
         if g:ale_enabled && g:ale_lint_on_save
-            autocmd BufWrite * call ale#Queue(0, 1)
+            autocmd BufWrite * call ale#Queue(0, 'lint_file')
         endif
     augroup END
 
@@ -191,8 +191,8 @@ function! s:ALEToggle() abort
     let g:ale_enabled = !get(g:, 'ale_enabled')
 
     if g:ale_enabled
-        " Lint immediately
-        call ale#Queue(0)
+        " Lint immediately, including running linters against the file.
+        call ale#Queue(0, 'lint_file')
     else
         " Make sure the buffer number is a number, not a string,
         " otherwise things can go wrong.
@@ -226,7 +226,7 @@ command! ALEDetail :call ale#cursor#ShowCursorDetail()
 " A command for turning ALE on or off.
 command! ALEToggle :call s:ALEToggle()
 " A command for linting manually.
-command! ALELint :call ale#Queue(0)
+command! ALELint :call ale#Queue(0, 'lint_file')
 
 " Define a command to get information about current filetype.
 command! ALEInfo :call ale#debugging#Info()
