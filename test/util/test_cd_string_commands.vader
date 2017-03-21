@@ -1,0 +1,9 @@
+Before:
+  silent! cd /testplugin/test/util
+
+Execute(CdString should output the correct command string):
+  AssertEqual 'cd /foo\ bar/baz && ', ale#util#CdString('/foo bar/baz')
+
+Execute(BufferCdString should output the correct command string):
+  Assert match(ale#util#BufferCdString(bufnr('')), '^cd .*test/util && $') >= 0,
+  \ 'String didn''t match regex: ' . ale#util#BufferCdString(bufnr(''))

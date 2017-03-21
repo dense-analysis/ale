@@ -144,3 +144,16 @@ endfunction
 function! ale#util#ClockMilliseconds() abort
     return float2nr(reltimefloat(reltime()) * 1000)
 endfunction
+
+
+" Output 'cd <directory> && '
+" This function can be used changing the directory for a linter command.
+function! ale#util#CdString(directory) abort
+    return 'cd ' . fnameescape(a:directory) . ' && '
+endfunction
+
+" Output 'cd <buffer_filename_directory> && '
+" This function can be used changing the directory for a linter command.
+function! ale#util#BufferCdString(buffer) abort
+    return ale#util#CdString(fnamemodify(bufname(a:buffer), ':p:h'))
+endfunction
