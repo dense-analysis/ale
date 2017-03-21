@@ -1407,6 +1407,24 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          if a command manually reads from a temporary file
                          instead, etc.
 
+  `lint_file`              A |Number| (`0` or `1`) indicating whether a command
+                         should read the file instead of the Vim buffer. This
+                         option can be used for linters which must check the
+                         file on disk, and which cannot check a Vim buffer
+                         instead.
+
+                         Linters set with this option will not be run as a
+                         user types, per |g:ale_lint_on_text_changed|. Linters
+                         will instead be run only when events occur against
+                         the file on disk, including |g:ale_lint_on_enter|
+                         and |g:ale_lint_on_save|. Linters with this option
+                         set to `1` will also be run when linters are run
+                         manually, per |ALELint-autocmd|.
+
+                         When this option is set to `1`, `read_buffer` will
+                         be set automatically to `0`. The two options cannot
+                         be used together.
+
   Only one of `command`, `command_callback`, or `command_chain` should be
   specified. `command_callback` is generally recommended when a command string
   needs to be generated dynamically, or any global options are used.

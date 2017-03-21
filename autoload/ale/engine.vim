@@ -226,7 +226,13 @@ function! s:HandleExit(job) abort
     let l:linter_loclist = ale#engine#FixLocList(l:buffer, l:linter, l:linter_loclist)
 
     " Add the loclist items from the linter.
-    call extend(g:ale_buffer_info[l:buffer].new_loclist, l:linter_loclist)
+    " loclist items for files which are checked go into a different list,
+    " and are kept between runs.
+    if l:linter.lint_file
+        call extend(g:ale_buffer_info[l:buffer].lint_file_loclist, l:linter_loclist)
+    else
+        call extend(g:ale_buffer_info[l:buffer].new_loclist, l:linter_loclist)
+    endif
 
     if !empty(g:ale_buffer_info[l:buffer].job_list)
         " Wait for all jobs to complete before doing anything else.
@@ -237,14 +243,18 @@ function! s:HandleExit(job) abort
     " now that all jobs have completed.
     call ale#engine#RemoveManagedFiles(l:buffer)
 
+    " Combine the lint_file List and the List for everything else.
+    let l:combined_list = g:ale_buffer_info[l:buffer].lint_file_loclist
+    \   + g:ale_buffer_info[l:buffer].new_loclist
+
     " Sort the loclist again.
     " We need a sorted list so we can run a binary search against it
     " for efficient lookup of the messages in the cursor handler.
-    call sort(g:ale_buffer_info[l:buffer].new_loclist, 'ale#util#LocItemCompare')
+    call sort(l:combined_list, 'ale#util#LocItemCompare')
 
     " Now swap the old and new loclists, after we have collected everything
     " and sorted the list again.
-    let g:ale_buffer_info[l:buffer].loclist = g:ale_buffer_info[l:buffer].new_loclist
+    let g:ale_buffer_info[l:buffer].loclist = l:combined_list
     let g:ale_buffer_info[l:buffer].new_loclist = []
 
     call ale#engine#SetResults(l:buffer, g:ale_buffer_info[l:buffer].loclist)
@@ -255,6 +265,7 @@ endfunction
 
 function! ale#engine#SetResults(buffer, loclist) abort
     " Set signs first. This could potentially fix some line numbers.
+    " The List could be sorted again here by SetSigns.
     if g:ale_set_signs
         call ale#sign#SetSigns(a:buffer, a:loclist)
     endif
@@ -698,10 +709,14 @@ function! ale#engine#WaitForJobs(deadline) abort
     " for command_chain linters.
     let l:has_new_jobs = 0
 
+    " Check again to see if any jobs are running.
     for l:info in values(g:ale_buffer_info)
-        if !empty(l:info.job_list)
-            let l:has_new_jobs = 1
-        endif
+        for l:job in l:info.job_list
+            if job_status(l:job) ==# 'run'
+                let l:has_new_jobs = 1
+                break
+            endif
+        endfor
     endfor
 
     if l:has_new_jobs

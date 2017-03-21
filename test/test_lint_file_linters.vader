@@ -1,0 +1,174 @@
+Before:
+  let g:buffer_result = [
+  \ {
+  \   'lnum': 1,
+  \   'col': 1,
+  \   'text': 'buffer error',
+  \   'type': 'E',
+  \ },
+  \ {
+  \   'lnum': 2,
+  \   'col': 1,
+  \   'text': 'buffer warning',
+  \   'type': 'W',
+  \ },
+  \]
+
+  function! LintFileCallback(buffer, output)
+    return [
+    \ {
+    \   'lnum': 1,
+    \   'col': 3,
+    \   'text': 'file warning',
+    \   'type': 'W',
+    \ },
+    \ {
+    \   'lnum': 2,
+    \   'col': 3,
+    \   'text': 'file error',
+    \   'type': 'E',
+    \ },
+    \]
+  endfunction
+
+  function! BufferCallback(buffer, output)
+    return deepcopy(g:buffer_result)
+  endfunction
+
+  function! GetSimplerLoclist()
+    let l:loclist = []
+
+    for l:item in getloclist(0)
+      call add(l:loclist, {
+      \ 'lnum': l:item.lnum,
+      \ 'col': l:item.col,
+      \ 'text': l:item.text,
+      \ 'type': l:item.type,
+      \})
+    endfor
+
+    return l:loclist
+  endfunction
+
+  call ale#linter#Define('foobar', {
+  \ 'name': 'lint_file_linter',
+  \ 'callback': 'LintFileCallback',
+  \ 'executable': 'echo',
+  \ 'command': 'echo',
+  \ 'lint_file': 1,
+  \})
+
+  call ale#linter#Define('foobar', {
+  \ 'name': 'buffer_linter',
+  \ 'callback': 'BufferCallback',
+  \ 'executable': 'echo',
+  \ 'command': 'echo',
+  \ 'read_buffer': 0,
+  \})
+
+After:
+  unlet g:buffer_result
+  let g:ale_buffer_info = {}
+  call ale#linter#Reset()
+  call setloclist(0, [])
+  delfunction LintFileCallback
+  delfunction BufferCallback
+
+Given foobar (Some imaginary filetype):
+  foo
+  bar
+  baz
+
+Execute(Running linters without 'lint_file' should run only buffer linters):
+  call ale#ResetLintFileMarkers()
+  let g:ale_buffer_info = {}
+  call ale#Queue(0)
+  call ale#engine#WaitForJobs(2000)
+
+  AssertEqual [
+  \ {
+  \   'lnum': 1,
+  \   'col': 1,
+  \   'text': 'buffer error',
+  \   'type': 'E',
+  \ },
+  \ {
+  \   'lnum': 2,
+  \   'col': 1,
+  \   'text': 'buffer warning',
+  \   'type': 'W',
+  \ },
+  \], GetSimplerLoclist()
+
+Execute(Running linters with 'lint_file' should run all linters):
+  call ale#ResetLintFileMarkers()
+  let g:ale_buffer_info = {}
+  call ale#Queue(0, 'lint_file')
+  call ale#engine#WaitForJobs(2000)
+
+  AssertEqual [
+  \ {
+  \   'lnum': 1,
+  \   'col': 1,
+  \   'text': 'buffer error',
+  \   'type': 'E',
+  \ },
+  \ {
+  \   'lnum': 1,
+  \   'col': 3,
+  \   'text': 'file warning',
+  \   'type': 'W',
+  \ },
+  \ {
+  \   'lnum': 2,
+  \   'col': 1,
+  \   'text': 'buffer warning',
+  \   'type': 'W',
+  \ },
+  \ {
+  \   'lnum': 2,
+  \   'col': 3,
+  \   'text': 'file error',
+  \   'type': 'E',
+  \ },
+  \], GetSimplerLoclist()
+
+Execute(Linter errors from files should be kept):
+  call ale#ResetLintFileMarkers()
+  let g:ale_buffer_info = {}
+  call ale#Queue(0, 'lint_file')
+  call ale#engine#WaitForJobs(2000)
+
+  " Change the results for the buffer callback.
+  let g:buffer_result = [
+  \ {
+  \   'lnum': 1,
+  \   'col': 1,
+  \   'text': 'new buffer error',
+  \   'type': 'E',
+  \ },
+  \]
+
+  call ale#Queue(0)
+  call ale#engine#WaitForJobs(2000)
+
+  AssertEqual [
+  \ {
+  \   'lnum': 1,
+  \   'col': 1,
+  \   'text': 'new buffer error',
+  \   'type': 'E',
+  \ },
+  \ {
+  \   'lnum': 1,
+  \   'col': 3,
+  \   'text': 'file warning',
+  \   'type': 'W',
+  \ },
+  \ {
+  \   'lnum': 2,
+  \   'col': 3,
+  \   'text': 'file error',
+  \   'type': 'E',
+  \ },
+  \], GetSimplerLoclist()
