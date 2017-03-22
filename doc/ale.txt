@@ -43,6 +43,7 @@ CONTENTS                                                         *ale-contents*
     4.31. yamllint........................|ale-linter-options-yamllint|
     4.32. cmakelint.......................|ale-linter-options-cmakelint|
     4.33. perl-perl.......................|ale-linter-options-perl-perl|
+    4.34. rust-cargo......................|ale-linter-options-rust-cargo|
   5. Linter Integration Notes.............|ale-linter-integration|
     5.1.  merlin..........................|ale-linter-integration-ocaml-merlin|
     5.2. rust.............................|ale-integration-rust|
@@ -1119,6 +1120,17 @@ g:ale_perl_perl_options                               *g:ale_perl_perl_options*
 
   This variable can be changed to alter the command-line arguments to the perl
   invocation.
+
+-------------------------------------------------------------------------------
+4.34. rust-cargo                                *ale-linter-options-rust-cargo*
+
+g:ale_rust_cargo_use_check                         *g:ale_rust_cargo_use_check*
+
+  Type: |Number|
+  Default: `1`
+
+  When set to `1`, this option will cause ALE to use "cargo check" instead of
+  "cargo build". "cargo check" is supported since version 1.16.0 of Rust.
 
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*
