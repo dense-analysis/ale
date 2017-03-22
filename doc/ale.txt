@@ -1280,6 +1280,7 @@ ale#engine#ManageDirectory(buffer, directory)    *ale#engine#ManageDirectory()*
 
 
 ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
+
   Given a |String| for a filetype and a |Dictionary| Describing a linter
   configuration, add a linter for the given filetype. The dictionaries each
   offer the following options:
@@ -1468,6 +1469,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
 
 
 ale#linter#Get(filetype)                                     *ale#linter#Get()*
+
   Return all of linters configured for a given filetype as a |List| of
   |Dictionary| values in the format specified by |ale#linter#Define()|.
 
@@ -1481,6 +1483,7 @@ ale#linter#Get(filetype)                                     *ale#linter#Get()*
 
 
 ale#statusline#Status()                               *ale#statusline#Status()*
+
   Return a formatted string that can be added to the statusline.
   The output's format is defined in |`g:ale_statusline_format`|.
   To enable it, the following should be present in your |statusline| settings: >
@@ -1488,12 +1491,16 @@ ale#statusline#Status()                               *ale#statusline#Status()*
 
 
 ALELint                                                       *ALELint-autocmd*
-  This |User| autocommand is triggered by ALE every time it completes a lint
-  operation. It can be used to update statuslines, send notifications, or
-  complete any other operation that needs to be done after a lint run.
-  It can be used simply:
-  autocmd User ALELint echom "ALE run!"
 
+  This |User| autocommand is triggered by ALE every time it completes a lint
+  cycle. It can be used to update statuslines, send notifications, or
+  complete any other operation that needs to be done after linting has been
+  performed.
+
+  For example, you can echo a message when linting is complete like so:
+  >
+  autocmd User ALELint echom "ALE run!"
+<
 
 ===============================================================================
 8. Special Thanks                                          *ale-special-thanks*
