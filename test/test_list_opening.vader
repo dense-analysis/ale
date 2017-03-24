@@ -49,6 +49,10 @@ Execute(The quickfix window should open for just the loclist):
   call ale#list#SetLists(bufnr('%'), g:loclist)
   Assert ale#list#IsQuickfixOpen()
 
+  " Clear the list and it should close again.
+  call ale#list#SetLists(bufnr('%'), [])
+  Assert !ale#list#IsQuickfixOpen()
+
 Execute(The quickfix window should stay open for just the loclist):
   let g:ale_open_list = 1
   let g:ale_keep_list_window_open = 1
@@ -75,6 +79,10 @@ Execute(The quickfix window should open for the quickfix list):
   " With a non-empty quickfix list, the window must open.
   call ale#list#SetLists(bufnr('%'), g:loclist)
   Assert ale#list#IsQuickfixOpen()
+
+  " Clear the list and it should close again.
+  call ale#list#SetLists(bufnr('%'), [])
+  Assert !ale#list#IsQuickfixOpen()
 
 Execute(The quickfix window should stay open for the quickfix list):
   let g:ale_set_quickfix = 1
