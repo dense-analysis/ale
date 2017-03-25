@@ -52,6 +52,7 @@ name. That seems to be the fairest way to arrange this table.
 
 | Language | Tools |
 | -------- | ----- |
+| ASM | [gcc](https://gcc.gnu.org) |
 | Ansible | [ansible-lint](https://github.com/willthames/ansible-lint) |
 | AsciiDoc | [proselint](http://proselint.com/)|
 | Bash | [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set), [shellcheck](https://www.shellcheck.net/) |
