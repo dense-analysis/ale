@@ -28,10 +28,12 @@ Before:
   \   {
   \     'callback': 'RunFirstEcho',
   \     'output_stream': 'stdout',
+  \     'read_buffer': 0,
   \   },
   \   {
   \     'callback': 'RunSecondEcho',
   \     'output_stream': 'stdout',
+  \     'read_buffer': 0,
   \   },
   \ ],
   \})
