@@ -91,7 +91,7 @@ The following languages and tools are supported.
 * Cython (pyrex filetype): 'cython'
 * D: 'dmd'
 * Dockerfile: 'hadolint'
-* Elixir: 'credo'
+* Elixir: 'credo', 'dogma'
 * Elm: 'elm-make'
 * Erlang: 'erlc'
 * Fortran: 'gcc'

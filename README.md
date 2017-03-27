@@ -67,7 +67,7 @@ name. That seems to be the fairest way to arrange this table.
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
 | D | [dmd](https://dlang.org/dmd-linux.html) |
 | Dockerfile | [hadolint](https://github.com/lukasmartinelli/hadolint) |
-| Elixir | [credo](https://github.com/rrrene/credo) |
+| Elixir | [credo](https://github.com/rrrene/credo), [dogma](https://github.com/lpil/dogma) |
 | Elm | [elm-make](https://github.com/elm-lang/elm-make) |
 | Erlang | [erlc](http://erlang.org/doc/man/erlc.html) |
 | Fortran | [gcc](https://gcc.gnu.org/) |
