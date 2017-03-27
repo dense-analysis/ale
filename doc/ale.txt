@@ -43,6 +43,7 @@ CONTENTS                                                         *ale-contents*
     4.31. yamllint........................|ale-linter-options-yamllint|
     4.32. cmakelint.......................|ale-linter-options-cmakelint|
     4.33. perl-perl.......................|ale-linter-options-perl-perl|
+    4.34. asm-gcc.........................|ale-linter-options-asm-gcc|
   5. Linter Integration Notes.............|ale-linter-integration|
     5.1.  merlin..........................|ale-linter-integration-ocaml-merlin|
     5.2. rust.............................|ale-integration-rust|
@@ -74,6 +75,7 @@ ALE supports the following key features:
 
 The following languages and tools are supported.
 
+* ASM: 'gcc'
 * Ansible: 'ansible-lint'
 * Asciidoc: 'proselint'
 * Bash: 'shell' (-n flag), 'shellcheck'
@@ -1119,6 +1121,16 @@ g:ale_perl_perl_options                               *g:ale_perl_perl_options*
 
   This variable can be changed to alter the command-line arguments to the perl
   invocation.
+
+-------------------------------------------------------------------------------
+4.34. asm-gcc                                      *ale-linter-options-asm-gcc*
+
+g:ale_asm_gcc_options                                   *g:ale_asm_gcc_options*
+
+  Type: |String|
+  Default: `'-Wall'`
+
+  This variable can be set to pass additional options to gcc.
 
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*
