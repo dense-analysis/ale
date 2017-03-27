@@ -279,7 +279,7 @@ g:ale_lint_on_enter                                       *g:ale_lint_on_enter*
 g:ale_lint_on_save                                         *g:ale_lint_on_save*
 
   Type: |Number|
-  Default: `0`
+  Default: `1`
 
   This option will make ALE run the linters whenever a file is saved when it
   it set to `1` in your vimrc file. This option can be used in combination

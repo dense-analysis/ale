@@ -76,7 +76,7 @@ let g:ale_lint_on_text_changed = get(g:, 'ale_lint_on_text_changed', 1)
 let g:ale_lint_on_enter = get(g:, 'ale_lint_on_enter', 1)
 
 " This flag can be set to 1 to enable linting when a buffer is written.
-let g:ale_lint_on_save = get(g:, 'ale_lint_on_save', 0)
+let g:ale_lint_on_save = get(g:, 'ale_lint_on_save', 1)
 
 " This flag may be set to 0 to disable ale. After ale is loaded, :ALEToggle
 " should be used instead.
