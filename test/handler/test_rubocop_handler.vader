@@ -1,0 +1,44 @@
+Execute(The rubocop handler should parse lines correctly):
+  runtime ale_linters/ruby/rubocop.vim
+
+  AssertEqual
+  \ [
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 83,
+  \     'col': 29,
+  \     'text': 'Prefer single-quoted strings...',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 12,
+  \     'col': 2,
+  \     'text': 'Some error',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 10,
+  \     'col': 5,
+  \     'text': 'Regular warning',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 11,
+  \     'col': 1,
+  \     'text': 'Another error',
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale_linters#ruby#rubocop#Handle(347, [
+  \   'This line should be ignored completely',
+  \   'whatever:83:29: C: Prefer single-quoted strings...',
+  \   'whatever:12:2: F: Some error',
+  \   'whatever:10:5: W: Regular warning',
+  \   'whatever:11:1: E: Another error',
+  \ ])
+
+After:
+  call ale#linter#Reset()
