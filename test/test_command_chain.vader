@@ -55,6 +55,8 @@ Given foobar (Some imaginary filetype):
 Execute(Check the results of running the chain):
   AssertEqual 'foobar', &filetype
   call ale#Lint()
+  " Sleep a little. This allows the commands to complete a little better.
+  sleep 50m
   call ale#engine#WaitForJobs(2000)
 
   Assert g:first_echo_called, 'The first chain item was not called'
