@@ -15,6 +15,7 @@ Before:
   \ 'ALECursorGroup',
   \ 'ALEHighlightBufferGroup',
   \ 'ALERunOnEnterGroup',
+  \ 'ALERunOnFiletypeChangeGroup',
   \ 'ALERunOnSaveGroup',
   \ 'ALERunOnTextChangedGroup',
   \]

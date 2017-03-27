@@ -276,6 +276,17 @@ g:ale_lint_on_enter                                       *g:ale_lint_on_enter*
   behaviour.
 
 
+g:ale_lint_on_filetype_changed                 *g:ale_lint_on_filetype_changed*
+
+  Type: |Number|
+  Default: `1`
+
+  This option will cause ALE to run whenever the filetype is changed. A short
+  delay will be used before linting will be done, so the filetype can be
+  changed quickly several times in a row, but resulting in only one lint
+  cycle.
+
+
 g:ale_lint_on_save                                         *g:ale_lint_on_save*
 
   Type: |Number|

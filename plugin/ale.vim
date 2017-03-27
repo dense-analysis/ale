@@ -78,6 +78,9 @@ let g:ale_lint_on_enter = get(g:, 'ale_lint_on_enter', 1)
 " This flag can be set to 1 to enable linting when a buffer is written.
 let g:ale_lint_on_save = get(g:, 'ale_lint_on_save', 1)
 
+" This flag can be set to 1 to enable linting when the filetype is changed.
+let g:ale_lint_on_filetype_changed = get(g:, 'ale_lint_on_filetype_changed', 1)
+
 " This flag may be set to 0 to disable ale. After ale is loaded, :ALEToggle
 " should be used instead.
 let g:ale_enabled = get(g:, 'ale_enabled', 1)
@@ -158,6 +161,13 @@ function! s:ALEInitAuGroups() abort
         autocmd!
         if g:ale_enabled && g:ale_lint_on_enter
             autocmd BufEnter,BufRead * call ale#Queue(300, 'lint_file')
+        endif
+    augroup END
+
+    augroup ALERunOnFiletypeChangeGroup
+        autocmd!
+        if g:ale_enabled && g:ale_lint_on_filetype_changed
+            autocmd FileType * call ale#Queue(300, 'lint_file')
         endif
     augroup END
 
