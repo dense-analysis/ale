@@ -44,6 +44,7 @@ CONTENTS                                                         *ale-contents*
     4.32. cmakelint.......................|ale-linter-options-cmakelint|
     4.33. perl-perl.......................|ale-linter-options-perl-perl|
     4.34. rust-cargo......................|ale-linter-options-rust-cargo|
+    4.35. asm-gcc.........................|ale-linter-options-asm-gcc|
   5. Linter Integration Notes.............|ale-linter-integration|
     5.1.  merlin..........................|ale-linter-integration-ocaml-merlin|
     5.2. rust.............................|ale-integration-rust|
@@ -75,6 +76,7 @@ ALE supports the following key features:
 
 The following languages and tools are supported.
 
+* ASM: 'gcc'
 * Ansible: 'ansible-lint'
 * Asciidoc: 'proselint'
 * Bash: 'shell' (-n flag), 'shellcheck'
@@ -1131,6 +1133,16 @@ g:ale_rust_cargo_use_check                         *g:ale_rust_cargo_use_check*
 
   When set to `1`, this option will cause ALE to use "cargo check" instead of
   "cargo build". "cargo check" is supported since version 1.16.0 of Rust.
+
+-------------------------------------------------------------------------------
+4.35. asm-gcc                                      *ale-linter-options-asm-gcc*
+
+g:ale_asm_gcc_options                                   *g:ale_asm_gcc_options*
+
+  Type: |String|
+  Default: `'-Wall'`
+
+  This variable can be set to pass additional options to gcc.
 
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*
