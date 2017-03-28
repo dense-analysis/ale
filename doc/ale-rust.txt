@@ -16,9 +16,8 @@ Integration Information
      |g:ale_rust_ignore_error_codes| to ignore some of these errors.
   2. cargo -- If your project is managed by Cargo, the whole project is
      checked. That means that all errors are properly shown, but cargo can
-     only operate on the files written on disk. That means it is highly
-     recommended to turn off |g:ale_lint_on_text_changed| and to turn on
-     |g:ale_lint_on_save| in your vimrc file.
+     only operate on the files written on disk, so errors will not be reported
+     while you type.
 
   Only cargo is enabled by default. To switch to using rustc instead of cargo,
   configure |g:ale_linters| appropriately: >

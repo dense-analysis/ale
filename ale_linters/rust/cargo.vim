@@ -27,4 +27,5 @@ call ale#linter#Define('rust', {
 \   'command_callback': 'ale_linters#rust#cargo#GetCommand',
 \   'callback': 'ale#handlers#rust#HandleRustErrors',
 \   'output_stream': 'stdout',
+\   'lint_file': 1,
 \})
