@@ -30,7 +30,7 @@ g:ale_javascript_eslint_options               *g:ale_javascript_eslint_options*
 
 g:ale_javascript_eslint_use_global         *g:ale_javascript_eslint_use_global*
 
-  Type: |String|
+  Type: |Number|
   Default: `0`
 
   This variable controls whether or not ALE will search for a local path for
@@ -56,7 +56,7 @@ g:ale_javascript_flow_executable             *g:ale_javascript_flow_executable*
 
 g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
 
-  Type: |String|
+  Type: |Number|
   Default: `0`
 
   This variable controls whether or not ALE will search for a local path for
@@ -84,7 +84,7 @@ g:ale_javascript_jshint_executable         *g:ale_javascript_jshint_executable*
 
 g:ale_javascript_jshint_use_global         *g:ale_javascript_jshint_use_global*
 
-  Type: |String|
+  Type: |Number|
   Default: `0`
 
   This variable controls whether or not ALE will search for a local path for
@@ -93,7 +93,38 @@ g:ale_javascript_jshint_use_global         *g:ale_javascript_jshint_use_global*
   jshint in node_modules.
 
 
-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+standard                                              *ale-javascript-standard*
+
+g:ale_javascript_standard_executable     *g:ale_javascript_standard_executable*
+
+  Type: |String|
+  Default: `'standard'`
+
+  Same as the eslint option.
+
+  See: |g:ale_javascript_eslint_executable|
+
+
+g:ale_javascript_standard_options           *g:ale_javascript_standard_options*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to standard.
+
+
+g:ale_javascript_standard_use_global     *g:ale_javascript_standard_use_global*
+
+  Type: |Number|
+  Default: `0`
+
+  Same as the eslint option.
+
+  See: |g:ale_javascript_eslint_use_global|
+
+
+-------------------------------------------------------------------------------
 xo                                                          *ale-javascript-xo*
 
 g:ale_javascript_xo_executable                 *g:ale_javascript_xo_executable*
@@ -101,13 +132,9 @@ g:ale_javascript_xo_executable                 *g:ale_javascript_xo_executable*
   Type: |String|
   Default: `'xo'`
 
-  ALE will first discover the xo path in an ancestor node_modules
-  directory. If no such path exists, this variable will be used instead.
+  Same as the eslint option.
 
-  This variable can be set to change the path to xo.
-
-  If you wish to use only a globally installed version of xo, set
-  |g:ale_javascript_xo_use_global| to `1`.
+  See: |g:ale_javascript_eslint_executable|
 
 
 g:ale_javascript_xo_options                       *g:ale_javascript_xo_options*
@@ -120,13 +147,12 @@ g:ale_javascript_xo_options                       *g:ale_javascript_xo_options*
 
 g:ale_javascript_xo_use_global                 *g:ale_javascript_xo_use_global*
 
-  Type: |String|
+  Type: |Number|
   Default: `0`
 
-  This variable controls whether or not ALE will search for a local path for
-  xo first. If this variable is set to `1`, then ALE will always use the
-  global version of xo, in preference to locally installed versions of
-  xo in node_modules.
+  Same as the eslint option.
+
+  See: |g:ale_javascript_eslint_use_global|
 
 
 -------------------------------------------------------------------------------

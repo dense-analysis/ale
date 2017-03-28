@@ -38,6 +38,7 @@ CONTENTS                                                         *ale-contents*
       eslint..............................|ale-javascript-eslint|
       flow................................|ale-javascript-flow|
       jshint..............................|ale-javascript-jshint|
+      standard............................|ale-javascript-standard|
       xo..................................|ale-javascript-xo|
     lua...................................|ale-lua-options|
       luacheck............................|ale-lua-luacheck|
