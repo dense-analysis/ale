@@ -233,8 +233,11 @@ command! -bar ALENextWrap :call ale#loclist_jumping#Jump('after', 1)
 " A command for showing error details.
 command! -bar ALEDetail :call ale#cursor#ShowCursorDetail()
 
-" A command for turning ALE on or off.
+" Define commands for turning ALE on or off.
 command! -bar ALEToggle :call s:ALEToggle()
+command! -bar ALEEnable :if !g:ale_enabled | ALEToggle | endif
+command! -bar ALEDisable :if g:ale_enabled | ALEToggle | endif
+
 " A command for linting manually.
 command! -bar ALELint :call ale#Queue(0, 'lint_file')
 
