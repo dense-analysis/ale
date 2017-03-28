@@ -225,23 +225,23 @@ endfunction
 call s:ALEInitAuGroups()
 
 " Define commands for moving through warnings and errors.
-command! ALEPrevious :call ale#loclist_jumping#Jump('before', 0)
-command! ALEPreviousWrap :call ale#loclist_jumping#Jump('before', 1)
-command! ALENext :call ale#loclist_jumping#Jump('after', 0)
-command! ALENextWrap :call ale#loclist_jumping#Jump('after', 1)
+command! -bar ALEPrevious :call ale#loclist_jumping#Jump('before', 0)
+command! -bar ALEPreviousWrap :call ale#loclist_jumping#Jump('before', 1)
+command! -bar ALENext :call ale#loclist_jumping#Jump('after', 0)
+command! -bar ALENextWrap :call ale#loclist_jumping#Jump('after', 1)
 
 " A command for showing error details.
-command! ALEDetail :call ale#cursor#ShowCursorDetail()
+command! -bar ALEDetail :call ale#cursor#ShowCursorDetail()
 
 " A command for turning ALE on or off.
-command! ALEToggle :call s:ALEToggle()
+command! -bar ALEToggle :call s:ALEToggle()
 " A command for linting manually.
-command! ALELint :call ale#Queue(0, 'lint_file')
+command! -bar ALELint :call ale#Queue(0, 'lint_file')
 
 " Define a command to get information about current filetype.
-command! ALEInfo :call ale#debugging#Info()
+command! -bar ALEInfo :call ale#debugging#Info()
 " The same, but copy output to your clipboard.
-command! ALEInfoToClipboard :call ale#debugging#InfoToClipboard()
+command! -bar ALEInfoToClipboard :call ale#debugging#InfoToClipboard()
 
 " <Plug> mappings for commands
 nnoremap <silent> <Plug>(ale_previous) :ALEPrevious<Return>
