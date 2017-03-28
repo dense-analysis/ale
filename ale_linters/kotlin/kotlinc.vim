@@ -119,4 +119,5 @@ call ale#linter#Define('kotlin', {
 \   'executable': 'kotlinc',
 \   'command_callback': 'ale_linters#kotlin#kotlinc#GetCommand',
 \   'callback': 'ale_linters#kotlin#kotlinc#Handle',
+\   'lint_file': 1,
 \})
