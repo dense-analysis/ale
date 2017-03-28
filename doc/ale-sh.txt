@@ -1,0 +1,31 @@
+===============================================================================
+ALE Shell Integration                                          *ale-sh-options*
+
+
+-------------------------------------------------------------------------------
+shell                                                            *ale-sh-shell*
+
+g:ale_linters_sh_shell_default_shell     *g:ale_linters_sh_shell_default_shell*
+
+  Type: |String|
+  Default: The current shell (`$SHELL`) or `'bash'` if that cannot be read.
+
+  When ALE runs the linter for shells with the `-n` flag, it will attempt to
+  read the shell from the shebang (`#!`) line from the shell script to
+  determine the shell program to run. When this detection fails, this variable
+  will be used instead.
+
+
+-------------------------------------------------------------------------------
+shellcheck                                                  *ale-sh-shellcheck*
+
+g:ale_linters_sh_shellcheck_exclusions *g:ale_linters_sh_shellcheck_exclusions*
+
+  Type: |String|
+  Default: `''`
+
+  Set this variable to exclude test(s) for shellcheck (-e/--exclude option).
+
+
+-------------------------------------------------------------------------------
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

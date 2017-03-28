@@ -1,0 +1,76 @@
+===============================================================================
+ALE Python Integration                                     *ale-python-options*
+
+
+-------------------------------------------------------------------------------
+flake8                                                      *ale-python-flake8*
+
+g:ale_python_flake8_executable                 *g:ale_python_flake8_executable*
+
+  Type: |String|
+  Default: `'flake8'`
+
+  This variable can be changed to modify the executable used for flake8.
+
+
+g:ale_python_flake8_args                             *g:ale_python_flake8_args*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to add command-line arguments to the flake8
+  invocation.
+
+  For example, to dynamically switch between programs targeting Python 2 and
+  Python 3, you may want to set >
+
+  let g:ale_python_flake8_executable = 'python3'   " or 'python' for Python 2
+  let g:ale_python_flake8_args = '-m flake8'
+<
+  after making sure it's installed for the appropriate Python versions (e.g.
+  `python3 -m pip install --user flake8`).
+
+
+-------------------------------------------------------------------------------
+mypy                                                          *ale-python-mypy*
+
+g:ale_python_mypy_options                           *g:ale_python_mypy_options*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to add command-line arguments to the mypy
+  invocation.
+
+
+-------------------------------------------------------------------------------
+pylint                                                      *ale-python-pylint*
+
+g:ale_python_pylint_executable                 *g:ale_python_pylint_executable*
+
+  Type: |String|
+  Default: `'pylint'`
+
+  This variable can be changed to modify the executable used for pylint.
+
+
+g:ale_python_pylint_options                       *g:ale_python_pylint_options*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to add command-line arguments to the pylint
+  invocation.
+
+  For example, to dynamically switch between programs targeting Python 2 and
+  Python 3, you may want to set >
+
+  let g:ale_python_pylint_executable = 'python3'   " or 'python' for Python 2
+  let g:ale_python_pylint_options = '-rcfile /path/to/pylint.rc'
+
+  after making sure it's installed for the appropriate Python versions (e.g.
+  `python3 -m pip install --user pylint`).
+
+
+-------------------------------------------------------------------------------
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

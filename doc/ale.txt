@@ -1,4 +1,4 @@
-*ale.txt*  For Vim version 8.0.  Last change: 2016 October 10
+*ale.txt*  For Vim version 8.0.
 *ale*
 
 ALE - Asynchronous Lint Engine
@@ -9,49 +9,72 @@ CONTENTS                                                         *ale-contents*
   1. Introduction.........................|ale-introduction|
   2. Supported Languages & Tools..........|ale-support|
   3. Global Options.......................|ale-options|
-  4. Linter Specific Options..............|ale-linter-options|
-    4.1.  eslint..........................|ale-linter-options-eslint|
-    4.2.  flow............................|ale-linter-options-flow|
-    4.3.  jshint..........................|ale-linter-options-jshint|
-    4.4.  phpcs...........................|ale-linter-options-phpcs|
-    4.5.  html-tidy.......................|ale-linter-options-html-tidy|
-    4.6.  c-gcc...........................|ale-linter-options-c-gcc|
-    4.7.  cpp-gcc.........................|ale-linter-options-cpp-gcc|
-    4.8.  fortran-gcc.....................|ale-linter-options-fortran-gcc|
-    4.9.  shell...........................|ale-linter-options-shell|
-    4.10. shellcheck......................|ale-linter-options-shellcheck|
-    4.11. vint............................|ale-linter-options-vint|
-    4.12. luacheck........................|ale-linter-options-luacheck|
-    4.13. c-cppcheck......................|ale-linter-options-c-cppcheck|
-    4.14. cpp-cppcheck....................|ale-linter-options-cpp-cppcheck|
-    4.15. htmlhint........................|ale-linter-options-htmlhint|
-    4.16. c-clang.........................|ale-linter-options-c-clang|
-    4.17. cpp-clang.......................|ale-linter-options-cpp-clang|
-    4.18. cpp-clangtidy...................|ale-linter-options-cpp-clangtidy|
-    4.19. python-flake8...................|ale-linter-options-python-flake8|
-    4.20. ruby-rubocop....................|ale-linter-options-ruby-rubocop|
-    4.21. chktex..........................|ale-linter-options-chktex|
-    4.22. lacheck.........................|ale-linter-options-lacheck|
-    4.23. stylelint.......................|ale-linter-options-stylelint|
-    4.24. rustc...........................|ale-linter-options-rustc|
-    4.25. python-mypy.....................|ale-linter-options-python-mypy|
-    4.26. python-pylint...................|ale-linter-options-python-pylint|
-    4.27. erlang..........................|ale-linter-options-erlang|
-    4.28. phpmd...........................|ale-linter-options-phpmd|
-    4.29. xo..............................|ale-linter-options-xo|
-    4.30. javac...........................|ale-linter-options-javac|
-    4.31. yamllint........................|ale-linter-options-yamllint|
-    4.32. cmakelint.......................|ale-linter-options-cmakelint|
-    4.33. perl-perl.......................|ale-linter-options-perl-perl|
-    4.34. rust-cargo......................|ale-linter-options-rust-cargo|
-    4.35. asm-gcc.........................|ale-linter-options-asm-gcc|
-  5. Linter Integration Notes.............|ale-linter-integration|
-    5.1.  merlin..........................|ale-linter-integration-ocaml-merlin|
-    5.2. rust.............................|ale-integration-rust|
-  6. Commands/Keybinds....................|ale-commands|
-  7. API..................................|ale-api|
-  8. Special Thanks.......................|ale-special-thanks|
-  9. Contact..............................|ale-contact|
+  4. Linter Options and Recommendations...|ale-linter-options|
+    asm...................................|ale-asm-options|
+      gcc.................................|ale-asm-gcc|
+    c.....................................|ale-c-options|
+      clang...............................|ale-c-clang|
+      cppcheck............................|ale-c-cppcheck|
+      gcc.................................|ale-c-gcc|
+    cpp...................................|ale-cpp-options|
+      clang...............................|ale-cpp-clang|
+      clangtidy...........................|ale-cpp-clangtidy|
+      cppcheck............................|ale-cpp-cppcheck|
+      gcc.................................|ale-cpp-gcc|
+    css...................................|ale-css-options|
+      stylelint...........................|ale-css-stylelint|
+    cmake.................................|ale-cmake-options|
+      cmakelint...........................|ale-cmake-cmakelint|
+    erlang................................|ale-erlang-options|
+      erlc................................|ale-erlang-erlc|
+    fortran...............................|ale-fortran-options|
+      gcc.................................|ale-fortran-gcc|
+    html..................................|ale-html-options|
+      htmlhint............................|ale-html-htmlhint|
+      tidy................................|ale-html-tidy|
+    java..................................|ale-java-options|
+      javac...............................|ale-java-javac|
+    javascript............................|ale-javascript-options|
+      eslint..............................|ale-javascript-eslint|
+      flow................................|ale-javascript-flow|
+      jshint..............................|ale-javascript-jshint|
+      xo..................................|ale-javascript-xo|
+    lua...................................|ale-lua-options|
+      luacheck............................|ale-lua-luacheck|
+    ocaml.................................|ale-ocaml-options|
+      merlin..............................|ale-ocaml-merlin|
+    perl..................................|ale-perl-options|
+      perl................................|ale-perl-perl|
+    php...................................|ale-php-options|
+      phpcs...............................|ale-php-phpcs|
+      phpmd...............................|ale-php-phpmd|
+    python................................|ale-python-options|
+      flake8..............................|ale-python-flake8|
+      mypy................................|ale-python-mypy|
+      pylint..............................|ale-python-pylint|
+    ruby..................................|ale-ruby-options|
+      rubocop.............................|ale-ruby-rubocop|
+    rust..................................|ale-rust-options|
+      cargo...............................|ale-rust-cargo|
+      rustc...............................|ale-rust-rustc|
+    sass..................................|ale-sass-options|
+      stylelint...........................|ale-sass-stylelint|
+    scss..................................|ale-scss-options|
+      stylelint...........................|ale-scss-stylelint|
+    sh....................................|ale-sh-options|
+      shell...............................|ale-sh-shell|
+      shellcheck..........................|ale-sh-shellcheck|
+    tex...................................|ale-tex-options|
+      chktex..............................|ale-tex-chktex|
+      lacheck.............................|ale-tex-lacheck|
+    vim...................................|ale-vim-options|
+      vint................................|ale-vim-vint|
+    yaml..................................|ale-yaml-options|
+      yamllint............................|ale-yaml-yamllint|
+  5. Commands/Keybinds....................|ale-commands|
+  6. API..................................|ale-api|
+  7. Special Thanks.......................|ale-special-thanks|
+  8. Contact..............................|ale-contact|
 
 ===============================================================================
 1. Introduction                                              *ale-introduction*
@@ -519,684 +542,14 @@ g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
 
 
 ===============================================================================
-4. Linter Specific Options                                 *ale-linter-options*
+4. Linter Options and Recommendations                      *ale-linter-options*
 
-Some linters have specific options which can be configured for each of them,
-for customising their behaviour.
+Linter options are documented in individual help files. See the table of
+contents at |ale-contents|.
 
--------------------------------------------------------------------------------
-4.1. eslint                                         *ale-linter-options-eslint*
-
-g:ale_javascript_eslint_executable         *g:ale_javascript_eslint_executable*
-
-  Type: |String|
-  Default: `'eslint'`
-
-  ALE will first discover the eslint path in an ancestor node_modules
-  directory. If no such path exists, this variable will be used instead.
-
-  This variable can be set to change the path to eslint. If you have eslint_d
-  installed, you can set this option to use eslint_d instead.
-
-  If you wish to use only a globally installed version of eslint, set
-  |g:ale_javascript_eslint_use_global| to `1`.
-
-
-g:ale_javascript_eslint_options               *g:ale_javascript_eslint_options*
-
-  Type: |String|
-  Default: `''`
-
-  This variable can be set to pass additional options to eslint.
-
-
-g:ale_javascript_eslint_use_global         *g:ale_javascript_eslint_use_global*
-
-  Type: |String|
-  Default: `0`
-
-  This variable controls whether or not ALE will search for a local path for
-  eslint first. If this variable is set to `1`, then ALE will always use the
-  global version of eslint, in preference to locally installed versions of
-  eslint in node_modules.
-
--------------------------------------------------------------------------------
-4.2. flow                                             *ale-linter-options-flow*
-
-g:ale_javascript_flow_executable             *g:ale_javascript_flow_executable*
-
-  Type: |String|
-  Default: `'flow'`
-
-  ALE will first discover the flow path in an ancestor node_modules
-  directory. If no such path exists, this variable will be used instead.
-
-  If you wish to use only a globally installed version of flow, set
-  |g:ale_javascript_flow_use_global| to `1`.
-
-
-g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
-
-  Type: |String|
-  Default: `0`
-
-  This variable controls whether or not ALE will search for a local path for
-  flow first. If this variable is set to `1`, then ALE will always use the
-  global version of flow, in preference to locally installed versions of
-  flow in node_modules.
-
--------------------------------------------------------------------------------
-4.3. jshint                                         *ale-linter-options-jshint*
-
-g:ale_javascript_jshint_executable         *g:ale_javascript_jshint_executable*
-
-  Type: |String|
-  Default: `'jshint'`
-
-  ALE will first discover the jshint path in an ancestor node_modules
-  directory. If no such path exists, this variable will be used instead.
-
-  This variable can be changed to change the path to jshint.
-
-  If you wish to use only a globally installed version of jshint, set
-  |g:ale_javascript_jshint_use_global| to `1`.
-
-
-g:ale_javascript_jshint_use_global         *g:ale_javascript_jshint_use_global*
-
-  Type: |String|
-  Default: `0`
-
-  This variable controls whether or not ALE will search for a local path for
-  jshint first. If this variable is set to `1`, then ALE will always use the
-  global version of jshint, in preference to locally installed versions of
-  jshint in node_modules.
-
--------------------------------------------------------------------------------
-4.4. phpcs                                           *ale-linter-options-phpcs*
-
-g:ale_php_phpcs_standard                             *g:ale_php_phpcs_standard*
-
-  Type: |String|
-  Default: `''`
-
-  This variable can be set to specify the coding standard used by phpcs. If no
-  coding standard is specified, phpcs will default to checking against the
-  PEAR coding standard, or the standard you have set as the default.
-
--------------------------------------------------------------------------------
-4.5. html-tidy                                   *ale-linter-options-html-tidy*
-
-g:ale_html_tidy_executable                         *g:ale_html_tidy_executable*
-
-  Type: |String|
-  Default: `'tidy'`
-
-  This variable can be changed to change the path to tidy.
-
-
-g:ale_html_tidy_args                                     *g:ale_html_tidy_args*
-
-  Type: |String|
-  Default: `'-q -e -language en'`
-
-  This variable can be changed to change the arguments provided to the
-  executable.
-
-  ALE will attempt to automatically detect the appropriate file encoding to
-  provide to html-tidy, and fall back to UTF-8 when encoding detection fails.
-
-  The recognized file encodings are as follows: ascii, big5, cp1252 (win1252),
-  cp850 (ibm858), cp932 (shiftjis), iso-2022-jp (iso-2022), latin1, macroman
-  (mac), sjis (shiftjis), utf-16le, utf-16, utf-8
-
--------------------------------------------------------------------------------
-4.6. c-gcc                                           *ale-linter-options-c-gcc*
-
-g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
-
-  Type: |String|
-  Default: `'-std=c11 -Wall'`
-
-  This variable can be change to modify flags given to gcc.
-
--------------------------------------------------------------------------------
-4.7. cpp-gcc                                       *ale-linter-options-cpp-gcc*
-
-g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
-
-  Type: |String|
-  Default: `'-std=c++14 -Wall'`
-
-  This variable can be changed to modify flags given to gcc.
-
--------------------------------------------------------------------------------
-4.8. fortran-gcc                               *ale-linter-options-fortran-gcc*
-
-g:ale_fortran_gcc_options                           *g:ale_fortran_gcc_options*
-
-  Type: |String|
-  Default: `'-Wall'`
-
-  This variable can be changed to modify flags given to gcc.
-
--------------------------------------------------------------------------------
-4.9. shell                                           *ale-linter-options-shell*
-
-g:ale_linters_sh_shell_default_shell     *g:ale_linters_sh_shell_default_shell*
-
-  Type: |String|
-  Default: The current shell (`$SHELL`) or `'bash'` if that cannot be read.
-
-  When ALE runs the linter for shells with the `-n` flag, it will attempt to
-  read the shell from the shebang (`#!`) line from the shell script to
-  determine the shell program to run. When this detection fails, this variable
-  will be used instead.
-
--------------------------------------------------------------------------------
-4.10. shellcheck                                *ale-linter-options-shellcheck*
-
-g:ale_linters_sh_shellcheck_exclusions *g:ale_linters_sh_shellcheck_exclusions*
-
-  Type: |String|
-  Default: `''`
-
-  Set this variable to exclude test(s) for shellcheck (-e/--exclude option).
-
--------------------------------------------------------------------------------
-4.11. vint                                            *ale-linter-options-vint*
-
-g:ale_vim_vint_show_style_issues             *g:ale_vim_vint_show_style_issues*
-
-  Type: |Number|
-  Default: `1`
-
-  This variable will enable/disable style issues for Vint. When this option
-  is disabled, only warnings and errors which are not purely style issues
-  will be reported.
-
--------------------------------------------------------------------------------
-4.12. luacheck                                    *ale-linter-options-luacheck*
-
-g:ale_lua_luacheck_executable                   *g:ale_lua_luacheck_executable*
-
-  Type: |String|
-  Default: `'luacheck'`
-
-  This variable can be changed to change the path to luacheck.
-
--------------------------------------------------------------------------------
-4.13. c-cppcheck                                *ale-linter-options-c-cppcheck*
-
-g:ale_c_cppcheck_options                             *g:ale_c_cppcheck_options*
-
-  Type: |String|
-  Default: `'--enable=style'`
-
-  This variable can be changed to modify flags given to cppcheck.
-
--------------------------------------------------------------------------------
-4.14. cpp-cppcheck                            *ale-linter-options-cpp-cppcheck*
-
-g:ale_cpp_cppcheck_options                         *g:ale_cpp_cppcheck_options*
-
-  Type: |String|
-  Default: `'--enable=style'`
-
-  This variable can be changed to modify flags given to cppcheck.
-
--------------------------------------------------------------------------------
-4.15. htmlhint                                    *ale-linter-options-htmlhint*
-
-g:ale_html_htmlhint_options                       *g:ale_html_htmlhint_options*
-
-  Type: |String|
-  Default: `'--format=unix'`
-
-  This variable can be changed to modify flags given to HTMLHint.
-
-
-g:ale_html_htmlhint_executable                 *g:ale_html_htmlhint_executable*
-
-  Type: |String|
-  Default: `'htmlhint'`
-
-  ALE will first discover the htmlhint path in an ancestor node_modules
-  directory. If no such path exists, this variable will be used instead.
-
-  If you wish to use only a globally installed version of htmlhint, set
-  |g:ale_html_htmlhint_use_global| to `1`.
-
-
-g:ale_html_htmlhint_use_global                 *g:ale_html_htmlhint_use_global*
-
-  Type: |String|
-  Default: `0`
-
-  This variable controls whether or not ALE will search for a local path for
-  htmlhint first. If this variable is set to `1`, then ALE will always use the
-  global version of htmlhint, in preference to locally installed versions of
-  htmlhint in node_modules.
-
--------------------------------------------------------------------------------
-4.16. c-clang                                      *ale-linter-options-c-clang*
-
-g:ale_c_clang_options                                   *g:ale_c_clang_options*
-
-  Type: |String|
-  Default: `'-std=c11 -Wall'`
-
-  This variable can be change to modify flags given to clang.
-
--------------------------------------------------------------------------------
-4.17. cpp-clang                                  *ale-linter-options-cpp-clang*
-
-g:ale_cpp_clang_options                               *g:ale_cpp_clang_options*
-
-  Type: |String|
-  Default: `'-std=c++14 -Wall'`
-
-  This variable can be changed to modify flags given to clang.
-
--------------------------------------------------------------------------------
-4.18. cpp-clangtidy                          *ale-linter-options-cpp-clangtidy*
-
-g:ale_cpp_clangtidy_options                       *g:ale_cpp_clangtidy_options*
-
-  Type: |String|
-  Default: `'-std=c++14 -Wall'`
-
-  This variable can be changed to modify flags given to clangtidy.
-
--------------------------------------------------------------------------------
-4.19. python-flake8                          *ale-linter-options-python-flake8*
-
-g:ale_python_flake8_executable                 *g:ale_python_flake8_executable*
-
-  Type: |String|
-  Default: `'flake8'`
-
-  This variable can be changed to modify the executable used for flake8.
-
-
-g:ale_python_flake8_args                             *g:ale_python_flake8_args*
-
-  Type: |String|
-  Default: `''`
-
-  This variable can be changed to add command-line arguments to the flake8
-  invocation.
-
-  For example, to dynamically switch between programs targeting Python 2 and
-  Python 3, you may want to set >
-
-  let g:ale_python_flake8_executable = 'python3'   " or 'python' for Python 2
-  let g:ale_python_flake8_args = '-m flake8'
-<
-  after making sure it's installed for the appropriate Python versions (e.g.
-  `python3 -m pip install --user flake8`).
-
--------------------------------------------------------------------------------
-4.20. ruby-rubocop                            *ale-linter-options-ruby-rubocop*
-
-g:ale_ruby_rubocop_options                         *g:ale_ruby_rubocop_options*
-
-  Type: |String|
-  Default: `''`
-
-  This variable can be change to modify flags given to rubocop.
-
--------------------------------------------------------------------------------
-4.21. chktex                                        *ale-linter-options-chktex*
-
-g:ale_tex_chktex_executable                       *g:ale_tex_chktex_executable*
-
-  Type: |String|
-  Default: `'chktex'`
-
-  This variable can be changed to change the path to chktex.
-
-
-g:ale_tex_chktex_options                             *g:ale_tex_chktex_options*
-
-  Type: |String|
-  Default: `'-I'`
-
-  This variable can be changed to modify flags given to chktex.
-
-------------------------------------------------------------------------------
-4.22. lacheck                                      *ale-linter-options-lacheck*
-
-g:ale_lacheck_executable                             *g:ale_lacheck_executable*
-
-  Type: |String|
-  Default: '`lacheck`'
-
-  This variable can be changed to change the path to lacheck.
-
--------------------------------------------------------------------------------
-4.23. stylelint                                  *ale-linter-options-stylelint*
-
-g:ale_css_stylelint_executable                 *g:ale_css_stylelint_executable*
-
-  Type: |String|
-  Default: `'stylelint'`
-
-  ALE will first discover the stylelint path in an ancestor node_modules
-  directory. If no such path exists, this variable will be used instead.
-
-  If you wish to use only a globally installed version of stylelint, set
-  |g:ale_css_stylelint_use_global| to `1`.
-
-g:ale_css_stylelint_options                    *g:ale_css_stylelint_options*
-
-  Type: |String|
-  Default: `''`
-
-  This variable can be set to pass additional options to stylelint.
-
-g:ale_css_stylelint_use_global                 *g:ale_css_stylelint_use_global*
-
-  Type: |String|
-  Default: `0`
-
-  This variable controls whether or not ALE will search for a local path for
-  stylelint first. If this variable is set to `1`, then ALE will always use the
-  global version of stylelint, in preference to locally installed versions of
-  stylelint in node_modules.
-
-
-g:ale_sass_stylelint_executable               *g:ale_sass_stylelint_executable*
-
-  Type: |String|
-  Default: `'stylelint'`
-
-  ALE will first discover the stylelint path in an ancestor node_modules
-  directory. If no such path exists, this variable will be used instead.
-
-  If you wish to use only a globally installed version of stylelint, set
-  |g:ale_sass_stylelint_use_global| to `1`.
-
-
-g:ale_sass_stylelint_use_global               *g:ale_sass_stylelint_use_global*
-
-  Type: |String|
-  Default: `0`
-
-  This variable controls whether or not ALE will search for a local path for
-  stylelint first. If this variable is set to `1`, then ALE will always use the
-  global version of stylelint, in preference to locally installed versions of
-  stylelint in node_modules.
-
-
-g:ale_scss_stylelint_executable               *g:ale_scss_stylelint_executable*
-
-  Type: |String|
-  Default: `'stylelint'`
-
-  ALE will first discover the stylelint path in an ancestor node_modules
-  directory. If no such path exists, this variable will be used instead.
-
-  If you wish to use only a globally installed version of stylelint, set
-  |g:ale_scss_stylelint_use_global| to `1`.
-
-
-g:ale_scss_stylelint_use_global               *g:ale_scss_stylelint_use_global*
-
-  Type: |String|
-  Default: `0`
-
-  This variable controls whether or not ALE will search for a local path for
-  stylelint first. If this variable is set to `1`, then ALE will always use the
-  global version of stylelint, in preference to locally installed versions of
-  stylelint in node_modules.
-
-------------------------------------------------------------------------------
-4.24. rustc                                         *ale-linter-options-rustc*
-
-g:ale_rust_ignore_error_codes                  *g:ale_rust_ignore_error_codes*
-
-  Type: |List| of |String|s
-  Default: []
-
-  This variable can contain error codes which will be ignored. For example, to
-  ignore most errors regarding failed imports, put this in your .vimrc
-  >
-  let g:ale_rust_ignore_error_codes = ['E0432', 'E0433']
-
-
--------------------------------------------------------------------------------
-4.25. python-mypy                              *ale-linter-options-python-mypy*
-
-g:ale_python_mypy_options                           *g:ale_python_mypy_options*
-
-  Type: |String|
-  Default: `''`
-
-  This variable can be changed to add command-line arguments to the mypy
-  invocation.
-
-
--------------------------------------------------------------------------------
-4.26. python-pylint                          *ale-linter-options-python-pylint*
-
-g:ale_python_pylint_executable                 *g:ale_python_pylint_executable*
-
-  Type: |String|
-  Default: `'pylint'`
-
-  This variable can be changed to modify the executable used for pylint.
-
-
-g:ale_python_pylint_options                       *g:ale_python_pylint_options*
-
-  Type: |String|
-  Default: `''`
-
-  This variable can be changed to add command-line arguments to the pylint
-  invocation.
-
-  For example, to dynamically switch between programs targeting Python 2 and
-  Python 3, you may want to set >
-
-  let g:ale_python_pylint_executable = 'python3'   " or 'python' for Python 2
-  let g:ale_python_pylint_options = '-rcfile /path/to/pylint.rc'
-
-  after making sure it's installed for the appropriate Python versions (e.g.
-  `python3 -m pip install --user pylint`).
-
-------------------------------------------------------------------------------
-4.27. erlang                                        *ale-linter-options-erlang*
-
-g:ale_erlang_erlc_options                           *g:ale_erlang_erlc_options*
-
-  Type: |String|
-  Default: '`''`'
-
-  This variable controls additional parameters passed to `erlc`, such as `-I`
-  or `-pa`.
-
-------------------------------------------------------------------------------
-4.28. phpmd                                       *ale-linter-options-phpmd*
-
-g:ale_php_phpmd_ruleset                           *g:ale_php_phpmd_ruleset*
-
-  Type: |String|
-  Default: 'cleancode,codesize,controversial,design,naming,unusedcode'
-
-  This variable controls the ruleset used by phpmd. Default is to use all of
-  the available phpmd rulesets
-
-------------------------------------------------------------------------------
-4.29. xo                                             *ale-linter-options-xo*
-
-g:ale_javascript_xo_executable              *g:ale_javascript_xo_executable*
-
-  Type: |String|
-  Default: `'xo'`
-
-  ALE will first discover the xo path in an ancestor node_modules
-  directory. If no such path exists, this variable will be used instead.
-
-  This variable can be set to change the path to xo.
-
-  If you wish to use only a globally installed version of xo, set
-  |g:ale_javascript_xo_use_global| to `1`.
-
-
-g:ale_javascript_xo_options                   *g:ale_javascript_xo_options*
-
-  Type: |String|
-  Default: `''`
-
-  This variable can be set to pass additional options to xo.
-
-
-g:ale_javascript_xo_use_global             *g:ale_javascript_xo_use_global*
-
-  Type: |String|
-  Default: `0`
-
-  This variable controls whether or not ALE will search for a local path for
-  xo first. If this variable is set to `1`, then ALE will always use the
-  global version of xo, in preference to locally installed versions of
-  xo in node_modules.
-
-------------------------------------------------------------------------------
-4.30. javac                                          *ale-linter-options-javac*
-
-g:ale_java_javac_classpath                         *g:ale_java_javac_classpath*
-
-  Type: |String|
-  Default: `''`
-
-  This variable can be set to change the global classpath for Java.
-
-
-g:ale_java_javac_options                             *g:ale_java_javac_options*
-
-  Type: |String|
-  Default: `''`
-
-  This variable can be set to pass additional options to javac.
-
-------------------------------------------------------------------------------
-4.31. yamllint                                    *ale-linter-options-yamllint*
-
-g:ale_yaml_yamllint_executable                 *g:ale_yaml_yamllint_executable*
-
-  Type: |String|
-  Default: `'yamllint'`
-
-  This variable can be set to change the path to yamllint.
-
-
-g:ale_yaml_yamllint_options                       *g:ale_yaml_yamllint_options*
-
-  Type: |String|
-  Default: `''`
-
-  This variable can be set to pass additional options to yamllint.
-
-------------------------------------------------------------------------------
-4.32. cmakelint                                  *ale-linter-options-cmakelint*
-
-g:ale_cmake_cmakelint_exectuable             *g:ale_cmake_cmakelint_executable*
-
-  Type: |String|
-  Default: `'cmakelint'`
-
-  This variable can be set to change the path the cmakelint.
-
-g:ale_cmake_cmakelint_options                   *g:ale_cmake_cmakelint_options*
-
-  Type: |String|
-  Default: `''`
-
-  This variable can be set to pass additional options to cmakelint.
-
--------------------------------------------------------------------------------
-4.33. perl-perl                                  *ale-linter-options-perl-perl*
-
-g:ale_perl_perl_executable                         *g:ale_perl_perl_executable*
-
-  Type: |String|
-  Default: `'perl'`
-
-  This variable can be changed to modify the executable used for linting perl.
-
-
-g:ale_perl_perl_options                               *g:ale_perl_perl_options*
-
-  Type: |String|
-  Default: `'-X -c -Mwarnings -Ilib'`
-
-  This variable can be changed to alter the command-line arguments to the perl
-  invocation.
-
--------------------------------------------------------------------------------
-4.34. rust-cargo                                *ale-linter-options-rust-cargo*
-
-g:ale_rust_cargo_use_check                         *g:ale_rust_cargo_use_check*
-
-  Type: |Number|
-  Default: `1`
-
-  When set to `1`, this option will cause ALE to use "cargo check" instead of
-  "cargo build". "cargo check" is supported since version 1.16.0 of Rust.
-
--------------------------------------------------------------------------------
-4.35. asm-gcc                                      *ale-linter-options-asm-gcc*
-
-g:ale_asm_gcc_options                                   *g:ale_asm_gcc_options*
-
-  Type: |String|
-  Default: `'-Wall'`
-
-  This variable can be set to pass additional options to gcc.
 
 ===============================================================================
-5. Linter Integration Notes                            *ale-linter-integration*
-
-Some linters may have requirements for some other plugins being installed.
-
--------------------------------------------------------------------------------
-5.1. ocaml-merlin                                *ale-integration-ocaml-merlin*
-
-  To use merlin linter for OCaml source code you need to make sure Merlin for
-  Vim is correctly configured. See the corresponding Merlin wiki page for
-  detailed instructions
-  (https://github.com/the-lambda-church/merlin/wiki/vim-from-scratch).
-
--------------------------------------------------------------------------------
-5.2. rust                                                *ale-integration-rust*
-
-  Since Vim does not detect the rust file type out-of-the-box, you need the
-  runtime files for rust from here: https://github.com/rust-lang/rust.vim
-
-  Note that there are two possible linters for rust files:
-
-  1. rustc -- The Rust compiler is used to check the currently edited file.
-     So, if your project consists of multiple files, you will get some errors
-     when you use e.g. a struct which is defined in another file. You can use
-     |g:ale_rust_ignore_error_codes| to ignore some of these errors.
-  2. cargo -- If your project is managed by Cargo, the whole project is
-     checked. That means that all errors are properly shown, but cargo can
-     only operate on the files written on disk. That means it is highly
-     recommended to turn off |g:ale_lint_on_text_changed| and to turn on
-     |g:ale_lint_on_save| in your vimrc file.
-
-  Only cargo is enabled by default. To switch to using rustc instead of cargo,
-  configure |g:ale_linters| appropriately: >
-
-  " See the help text for the option for more information.
-  let g:ale_linters = {'rust': ['rustc']}
-<
-
-  Also note that rustc 1.12. or later is needed.
-
-===============================================================================
-6. Commands/Keybinds                                             *ale-commands*
+5. Commands/Keybinds                                             *ale-commands*
 
 ALELint                                                               *ALELint*
 
@@ -1255,7 +608,7 @@ ALEDetail                                                           *ALEDetail*
   A plug mapping `<Plug>(ale_detail)` is defined for this command.
 
 ===============================================================================
-7. API                                                                *ale-api*
+6. API                                                                *ale-api*
 
 ale#Queue(delay, [linting_flag])                                  *ale#Queue()*
 
@@ -1538,13 +891,13 @@ ALELint                                                       *ALELint-autocmd*
 <
 
 ===============================================================================
-8. Special Thanks                                          *ale-special-thanks*
+7. Special Thanks                                          *ale-special-thanks*
 
 Special thanks to Mark Grealish (https://www.bhalash.com/) for providing ALE's
 snazzy looking ale glass logo. Cheers, Mark!
 
 ===============================================================================
-9. Contact                                                        *ale-contact*
+8. Contact                                                        *ale-contact*
 
 If you like this plugin, and wish to get in touch, check out the GitHub
 page for issues and more at https://github.com/w0rp/ale
