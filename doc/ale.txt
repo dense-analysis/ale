@@ -102,6 +102,7 @@ The following languages and tools are supported.
 * Java: 'javac'
 * JavaScript: 'eslint', 'jscs', 'jshint', 'flow', 'xo'
 * JSON: 'jsonlint'
+* Kotlin: 'kotlin'
 * LaTeX: 'chktex', 'lacheck'
 * Lua: 'luacheck'
 * Markdown: 'mdl', 'proselint'
@@ -1154,6 +1155,106 @@ g:ale_asm_gcc_options                                   *g:ale_asm_gcc_options*
   Default: `'-Wall'`
 
   This variable can be set to pass additional options to gcc.
+
+------------------------------------------------------------------------------
+4.21. kotlinc                                     *ale-linter-options-kotlinc*
+
+g:ale_kotlin_kotlinc_options                    *g:ale_kotlin_kotlinc_options*
+	Type: |String|
+	Default: `''`
+
+	Additional options to pass to the kotlin compiler
+
+g:ale_kotlin_kotlinc_enable_config        *g:ale_kotlin_kotlinc_enable_config*
+	Type: |Number|
+	Default: `0`
+
+	Setting this variable to 1 tells the linter to load a configuration file.
+	This should be set in your vimrc
+
+g:ale_kotlin_kotlinc_config_file            *g:ale_kotlin_kotlinc_config_file*
+  Type: |String|
+	Default: `'.ale_kotlin_kotlinc_config'`
+
+	Filename of the configuration file. This should be set in your vimrc
+
+g:ale_kotlin_kotlinc_classpath                *g:ale_kotlin_kotlinc_classpath*
+	Type: |String|
+	Default: `''`
+
+	A string containing the paths (separated by the appropriate path separator)
+	of the source directories.
+
+g:ale_kotlin_kotlinc_sourcepath              *g:ale_kotlin_kotlinc_sourcepath*
+	Type: |String|
+	Default: `''`
+
+	A string containing the paths (separated by space) of the source
+	directories.
+
+g:ale_kotlin_kotlinc_use_module_file    *g:ale_kotlin_kotlinc_use_module_file*
+	Type: |Number|
+	Default: `0`
+
+	This option indicates whether the linter should use a module file. It is off
+	by default.
+
+g:ale_kotlin_kotlinc_module_filename    *g:ale_kotlin_kotlinc_module_filename*
+	Type: |String|
+	Default: `'module.xml'`
+
+	The filename of the module file that the linter should pass to the kotlin
+	compiler.
+
+------------------------------------------------------------------------------
+4.21. kotlinc                                     *ale-linter-options-kotlinc*
+
+g:ale_kotlin_kotlinc_options                    *g:ale_kotlin_kotlinc_options*
+	Type: |String|
+	Default: `''`
+
+	Additional options to pass to the kotlin compiler
+
+g:ale_kotlin_kotlinc_enable_config        *g:ale_kotlin_kotlinc_enable_config*
+	Type: |Number|
+	Default: `0`
+
+	Setting this variable to 1 tells the linter to load a configuration file.
+	This should be set in your vimrc
+
+g:ale_kotlin_kotlinc_config_file            *g:ale_kotlin_kotlinc_config_file*
+  Type: |String|
+	Default: `'.ale_kotlin_kotlinc_config'`
+
+	Filename of the configuration file. This should be set in your vimrc
+
+g:ale_kotlin_kotlinc_classpath                *g:ale_kotlin_kotlinc_classpath*
+	Type: |String|
+	Default: `''`
+
+	A string containing the paths (separated by the appropriate path separator)
+	of the source directories.
+
+g:ale_kotlin_kotlinc_sourcepath              *g:ale_kotlin_kotlinc_sourcepath*
+	Type: |String|
+	Default: `''`
+
+	A string containing the paths (separated by space) of the source
+	directories.
+
+g:ale_kotlin_kotlinc_use_module_file    *g:ale_kotlin_kotlinc_use_module_file*
+	Type: |Number|
+	Default: `0`
+
+	This option indicates whether the linter should use a module file. It is off
+	by default.
+
+g:ale_kotlin_kotlinc_module_filename    *g:ale_kotlin_kotlinc_module_filename*
+	Type: |String|
+	Default: `'module.xml'`
+
+	The filename of the module file that the linter should pass to the kotlin
+	compiler.
 
 ===============================================================================
 5. Linter Integration Notes                            *ale-linter-integration*
