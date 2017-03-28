@@ -1,0 +1,56 @@
+Before:
+  let g:ale_javascript_eslint_executable = 'eslint_d'
+
+  silent! cd /testplugin/test
+  let g:dir = getcwd()
+
+  runtime ale_linters/javascript/eslint.vim
+
+After:
+  let g:ale_javascript_eslint_executable = 'eslint'
+  let g:ale_javascript_eslint_use_global = 0
+
+  silent execute 'cd ' . g:dir
+  unlet! g:dir
+
+  call ale#linter#Reset()
+
+Execute(create-react-app directories should be detected correctly):
+  new eslint-test-files/react-app/subdir/testfile.js
+
+  AssertEqual
+  \ g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js',
+  \ ale_linters#javascript#eslint#GetExecutable(bufnr(''))
+
+  :q
+
+Execute(use-global should override create-react-app detection):
+  let g:ale_javascript_eslint_use_global = 1
+
+  new eslint-test-files/react-app/subdir/testfile.js
+
+  AssertEqual
+  \ 'eslint_d',
+  \ ale_linters#javascript#eslint#GetExecutable(bufnr(''))
+
+  :q
+
+Execute(other app directories should be detected correctly):
+  new eslint-test-files/other-app/subdir/testfile.js
+
+  AssertEqual
+  \ g:dir . '/eslint-test-files/node_modules/.bin/eslint',
+  \ ale_linters#javascript#eslint#GetExecutable(bufnr(''))
+
+  :q
+
+Execute(use-global should override other app directories):
+  let g:ale_javascript_eslint_use_global = 1
+
+  new eslint-test-files/other-app/subdir/testfile.js
+
+  AssertEqual
+  \ 'eslint_d',
+  \ ale_linters#javascript#eslint#GetExecutable(bufnr(''))
+
+  :q
