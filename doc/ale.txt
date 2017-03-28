@@ -262,7 +262,7 @@ g:ale_lint_delay                                             *g:ale_lint_delay*
 
   This variable controls the milliseconds delay after which the linters will
   be run after text is changed. This option is only meaningful with the
-  |g:ale_lint_on_text_changed| variable set to `1`.
+  |g:ale_lint_on_text_changed| variable set to `always`, `insert`, or `normal`.
 
 
 g:ale_lint_on_enter                                       *g:ale_lint_on_enter*
@@ -301,17 +301,27 @@ g:ale_lint_on_save                                         *g:ale_lint_on_save*
 
 g:ale_lint_on_text_changed                         *g:ale_lint_on_text_changed*
 
-  Type: |Number|
-  Default: `1`
+  Type: |String|
+  Default: `always`
 
   By default, ALE will check files with the various supported programs when
   text is changed by using the |TextChanged| event. If this behaviour is not
-  desired, then this option can be disabled by setting it to 0. The
+  desired, then this option can be disabled by setting it to `never`. The
   |g:ale_lint_delay| variable will be used to set a |timer_start()| on a
   delay, and each change to a file will continue to call |timer_stop()| and
   |timer_start()| repeatedly until the timer ticks by, and the linters will be
   run. The checking of files will run in the background, so it should not
-  inhibit editing files.
+  inhibit editing files. This option can also be set to `insert` or `normal`
+  to lint when text is changed only in insert or normal mode respectively.
+
+
+g:ale_lint_on_insert_leave                         *g:ale_lint_on_insert_leave*
+
+  Type: |Number|
+  Default: `0`
+
+  This option will make ALE run the linters whenever leaving insert mode when
+  it it set to `1` in your vimrc file.
 
 
 g:ale_linter_aliases                                     *g:ale_linter_aliases*

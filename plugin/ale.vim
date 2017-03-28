@@ -69,8 +69,13 @@ let g:ale_linter_aliases = get(g:, 'ale_linter_aliases', {})
 " jobs for linting until enough time has passed after editing is done.
 let g:ale_lint_delay = get(g:, 'ale_lint_delay', 200)
 
-" This flag can be set to 0 to disable linting when text is changed.
-let g:ale_lint_on_text_changed = get(g:, 'ale_lint_on_text_changed', 1)
+" This flag can be set to 'never' to disable linting when text is changed.
+" This flag can also be set to 'insert' or 'normal' to lint when text is
+" changed only in insert or normal mode respectively.
+let g:ale_lint_on_text_changed = get(g:, 'ale_lint_on_text_changed', 'always')
+
+" This flag can be set to 1 to enable linting when leaving insert mode.
+let g:ale_lint_on_insert_leave = get(g:, 'ale_lint_on_insert_leave', 0)
 
 " This flag can be set to 0 to disable linting when the buffer is entered.
 let g:ale_lint_on_enter = get(g:, 'ale_lint_on_enter', 1)
@@ -152,7 +157,11 @@ let g:ale_history_log_output = get(g:, 'ale_history_log_output', 0)
 function! s:ALEInitAuGroups() abort
     augroup ALERunOnTextChangedGroup
         autocmd!
-        if g:ale_enabled && g:ale_lint_on_text_changed
+        if g:ale_enabled && g:ale_lint_on_text_changed ==? 'normal'
+            autocmd TextChanged * call ale#Queue(g:ale_lint_delay)
+        elseif g:ale_enabled && g:ale_lint_on_text_changed ==? 'insert'
+            autocmd TextChangedI * call ale#Queue(g:ale_lint_delay)
+        elseif g:ale_enabled && g:ale_lint_on_text_changed ==? 'always'
             autocmd TextChanged,TextChangedI * call ale#Queue(g:ale_lint_delay)
         endif
     augroup END
@@ -178,6 +187,13 @@ function! s:ALEInitAuGroups() abort
         endif
     augroup END
 
+    augroup ALERunOnInsertLeave
+        autocmd!
+        if g:ale_enabled && g:ale_lint_on_insert_leave
+            autocmd InsertLeave * call ale#Queue(0, 'lint_file')
+        endif
+    augroup END
+
     augroup ALECursorGroup
         autocmd!
         if g:ale_enabled && g:ale_echo_cursor
@@ -193,6 +209,7 @@ function! s:ALEInitAuGroups() abort
         augroup! ALERunOnTextChangedGroup
         augroup! ALERunOnEnterGroup
         augroup! ALERunOnSaveGroup
+        augroup! ALERunOnInsertLeave
         augroup! ALECursorGroup
     endif
 endfunction
