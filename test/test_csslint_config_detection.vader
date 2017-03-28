@@ -1,0 +1,36 @@
+Before:
+  silent! cd /testplugin/test
+  let g:dir = getcwd()
+
+  runtime ale_linters/css/csslint.vim
+
+After:
+  silent execute 'cd ' . g:dir
+  unlet! g:dir
+
+  call ale#linter#Reset()
+
+Execute(--config should be set when the .csslintrc file is found):
+  new csslint-test-files/some-app/subdir/testfile.js
+
+  AssertEqual
+  \ (
+  \   'csslint --format=compact '
+  \   . '--config=' . fnameescape(g:dir . '/csslint-test-files/some-app/.csslintrc')
+  \   . ' %t'
+  \ ),
+  \ ale_linters#css#csslint#GetCommand(bufnr(''))
+
+  :q
+
+Execute(--config should not be used when no .csslintrc file exists):
+  new csslint-test-files/other-app/testfile.css
+
+  AssertEqual
+  \ (
+  \   'csslint --format=compact '
+  \   . ' %t'
+  \ ),
+  \ ale_linters#css#csslint#GetCommand(bufnr(''))
+
+  :q
