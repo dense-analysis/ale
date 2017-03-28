@@ -1241,6 +1241,8 @@ ALENextWrap                                                       *ALENextWrap*
 <
 
 ALEToggle                                                           *ALEToggle*
+ALEEnable                                                           *ALEEnable*
+ALEDisable                                                         *ALEDisable*
 
   Enable or disable ALE, including all of its autocmd events, loclist items,
   quickfix items, signs, current jobs, etc. Calling this option will change
