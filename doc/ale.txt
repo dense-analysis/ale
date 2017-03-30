@@ -470,7 +470,7 @@ g:ale_set_signs                                               *g:ale_set_signs*
   `ALEErrorSign` and `ALEWarningSign` highlight groups will be used to provide
   highlighting for the signs. The text used for signs can be customised with
   the |g:ale_sign_error| and |g:ale_sign_warning| options. The `ALEErrorSign`
-  and `ALEWarningLine`highlight groups will be used to provide highlighting 
+  and `ALEWarningLine` highlight groups will be used to provide highlighting 
   for the lines that the signs reside on.
 
 
