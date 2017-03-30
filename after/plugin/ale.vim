@@ -1,12 +1,21 @@
+" Author: w0rp <devw0rp@gmail.com>
+" Description: Follow-up checks for the plugin: warn about conflicting plugins.
+
+" A flag for ensuring that this is not run more than one time.
 if exists('g:loaded_ale_after')
     finish
 endif
 
+" Set the flag so this file is not run more than one time.
 let g:loaded_ale_after = 1
 
-if !g:ale_emit_conflict_warnings
+" Check if the flag is available and set to 0 to disable checking for and
+" emitting conflicting plugin warnings.
+if exists('g:ale_emit_conflict_warnings') && !g:ale_emit_conflict_warnings
     finish
 endif
+
+" Conflicting Plugins Checks
 
 function! s:GetConflictingPluginWarning(plugin_name) abort
     return 'ALE conflicts with ' . a:plugin_name
