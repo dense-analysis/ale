@@ -49,7 +49,6 @@ function! ale_linters#html#tidy#Handle(buffer, lines) abort
         let l:type = l:match[3] ==# 'Error' ? 'E' : 'W'
         let l:text = l:match[4]
 
-        " vcol is Needed to indicate that the column is a character.
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:line,

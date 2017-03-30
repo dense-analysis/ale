@@ -7,7 +7,6 @@ function! ale_linters#haskell#hlint#Handle(buffer, lines) abort
     let l:output = []
 
     for l:error in l:errors
-        " vcol is Needed to indicate that the column is a character.
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:error.startLine + 0,

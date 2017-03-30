@@ -52,7 +52,6 @@ function! ale_linters#sh#shell#Handle(buffer, lines) abort
         let l:text = l:match[2]
         let l:type = 'E'
 
-        " vcol is Needed to indicate that the column is a character.
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:line,

@@ -22,7 +22,6 @@ function! ale_linters#typescript#typecheck#Handle(buffer, lines) abort
         let l:type = 'E'
         let l:text = l:match[3]
 
-        " vcol is Needed to indicate that the column is a character.
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:line,
