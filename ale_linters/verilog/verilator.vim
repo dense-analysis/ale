@@ -39,7 +39,6 @@ function! ale_linters#verilog#verilator#Handle(buffer, lines) abort
             call add(l:output, {
             \   'bufnr': a:buffer,
             \   'lnum': l:line,
-            \   'col': 1,
             \   'text': l:text,
             \   'type': l:type,
             \})
