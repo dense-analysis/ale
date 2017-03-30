@@ -1,0 +1,66 @@
+Before:
+  Save g:ale_lint_on_text_changed
+  Save g:ale_lint_on_insert_leave
+  autocmd!
+
+After:
+  Restore g:ale_lint_on_text_changed
+  Restore g:ale_lint_on_insert_leave
+  unlet! g:output
+  unlet! g:expected_autocmd
+  autocmd!
+
+Execute (ALE should bind to TextChanged events when g:ale_lint_on_text_changed = 1):
+  let g:expected_autocmd = join([
+  \  '',
+  \  '--- Auto-Commands ---',
+  \  'ALERunOnTextChangedGroup  TextChanged',
+  \  '    *         call ale#Queue(g:ale_lint_delay)',
+  \  'ALERunOnTextChangedGroup  TextChangedI',
+  \  '    *         call ale#Queue(g:ale_lint_delay)',
+  \], "\n")
+
+  let g:ale_lint_on_text_changed = 1
+  call ALEInitAuGroups()
+
+  redir => g:output
+  autocmd ALERunOnTextChangedGroup TextChanged,TextChangedI *
+  redir END
+
+  AssertEqual g:expected_autocmd, g:output
+
+Execute (ALE should bind to TextChanged events when g:ale_lint_on_text_changed = 'always'):
+  let g:expected_autocmd = join([
+  \  '',
+  \  '--- Auto-Commands ---',
+  \  'ALERunOnTextChangedGroup  TextChanged',
+  \  '    *         call ale#Queue(g:ale_lint_delay)',
+  \  'ALERunOnTextChangedGroup  TextChangedI',
+  \  '    *         call ale#Queue(g:ale_lint_delay)',
+  \], "\n")
+
+  let g:ale_lint_on_text_changed = 'always'
+  call ALEInitAuGroups()
+
+  redir => g:output
+  autocmd ALERunOnTextChangedGroup TextChanged,TextChangedI *
+  redir END
+
+  AssertEqual g:expected_autocmd, g:output
+
+Execute (ALE should bind to InsertLeave event when g:ale_lint_on_insert_leave = 1):
+  let g:expected_autocmd = join([
+  \  "",
+  \  "--- Auto-Commands ---",
+  \  "ALERunOnInsertLeave  InsertLeave",
+  \  "    *         call ale#Queue(0, 'lint_file')",
+  \], "\n")
+
+  let g:ale_lint_on_insert_leave = 1
+  call ALEInitAuGroups()
+
+  redir => g:output
+  autocmd ALERunOnInsertLeave InsertLeave *
+  redir END
+
+  AssertEqual g:expected_autocmd, g:output

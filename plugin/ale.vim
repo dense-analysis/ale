@@ -154,15 +154,17 @@ let g:ale_history_enabled = get(g:, 'ale_history_enabled', 1)
 " A flag for storing the full output of commands in the history.
 let g:ale_history_log_output = get(g:, 'ale_history_log_output', 0)
 
-function! s:ALEInitAuGroups() abort
+function! ALEInitAuGroups() abort
     augroup ALERunOnTextChangedGroup
         autocmd!
-        if g:ale_enabled && g:ale_lint_on_text_changed ==? 'normal'
-            autocmd TextChanged * call ale#Queue(g:ale_lint_delay)
-        elseif g:ale_enabled && g:ale_lint_on_text_changed ==? 'insert'
-            autocmd TextChangedI * call ale#Queue(g:ale_lint_delay)
-        elseif g:ale_enabled && g:ale_lint_on_text_changed ==? 'always'
-            autocmd TextChanged,TextChangedI * call ale#Queue(g:ale_lint_delay)
+        if g:ale_enabled
+            if g:ale_lint_on_text_changed ==? 'always' || g:ale_lint_on_text_changed == 1
+                autocmd TextChanged,TextChangedI * call ale#Queue(g:ale_lint_delay)
+            elseif g:ale_lint_on_text_changed ==? 'normal'
+                autocmd TextChanged * call ale#Queue(g:ale_lint_delay)
+            elseif g:ale_lint_on_text_changed ==? 'insert'
+                autocmd TextChangedI * call ale#Queue(g:ale_lint_delay)
+            endif
         endif
     augroup END
 
@@ -236,10 +238,10 @@ function! s:ALEToggle() abort
         endif
     endif
 
-    call s:ALEInitAuGroups()
+    call ALEInitAuGroups()
 endfunction
 
-call s:ALEInitAuGroups()
+call ALEInitAuGroups()
 
 " Define commands for moving through warnings and errors.
 command! ALEPrevious :call ale#loclist_jumping#Jump('before', 0)
