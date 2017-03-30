@@ -4,7 +4,9 @@ endif
 
 let g:loaded_ale_after = 1
 
-if !g:ale_emit_conflict_warnings
+" Check if the flag is available and set to 0 to disable checking for and
+" emitting conflicting plugin warnings.
+if exists('g:ale_emit_conflict_warnings') && !g:ale_emit_conflict_warnings
     finish
 endif
 
