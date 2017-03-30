@@ -119,7 +119,7 @@ The following languages and tools are supported.
 * Elm: 'elm-make'
 * Erlang: 'erlc'
 * Fortran: 'gcc'
-* Go: 'gofmt -e', 'go vet', 'golint', 'go build'
+* Go: 'gofmt -e', 'go vet', 'golint', 'go build', 'gosimple', 'staticcheck'
 * Haml: 'hamllint'
 * Haskell: 'ghc', 'hlint'
 * HTML: 'HTMLHint', 'proselint', 'tidy'
