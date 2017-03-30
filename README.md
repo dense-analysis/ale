@@ -368,7 +368,7 @@ options off.
 
 ```vim
 " Write this in your vimrc file
-let g:ale_lint_on_text_changed = 0
+let g:ale_lint_on_text_changed = 'never'
 " You can disable this option too
 " if you don't want linters to run on opening a file
 let g:ale_lint_on_enter = 0
@@ -453,10 +453,10 @@ type, and this delay can be increased so linters are run less often. See
 `:help g:ale_lint_delay` for more information.
 
 If you don't wish to run linters while you type, you can disable that
-behaviour. Set `g:ale_lint_on_text_changed` to `0`. You won't get as frequent
-error checking, but ALE shouldn't block your ability to edit a document after
-you save a file, so the asynchronous nature of the plugin will still be an
-advantage.
+behaviour. Set `g:ale_lint_on_text_changed` to `never` or `normal`. You won't
+get as frequent error checking, but ALE shouldn't block your ability to edit a
+document after you save a file, so the asynchronous nature of the plugin will
+still be an advantage.
 
 If you are still concerned, you can turn the automatic linting off altogether,
 including the option `g:ale_lint_on_enter`, and you can run ALE manually with
