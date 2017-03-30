@@ -17,7 +17,6 @@ function! ale_linters#chef#foodcritic#Handle(buffer, lines) abort
 
         let l:text = l:match[1]
 
-        " vcol is Needed to indicate that the column is a character.
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[3] + 0,

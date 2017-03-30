@@ -47,7 +47,6 @@ function! ale_linters#javascript#standard#Handle(buffer, lines) abort
         let l:type = 'Error'
         let l:text = l:match[3]
 
-        " vcol is Needed to indicate that the column is a character.
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,

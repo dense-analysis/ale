@@ -6,7 +6,6 @@ Execute(The coffeelint handler should parse lines correctly):
   \   {
   \     'bufnr': 347,
   \     'lnum': 125,
-  \     'col': 1,
   \     'text': "Line exceeds maximum allowed length Length is 122, max is 120.",
   \     'type': 'E',
   \   },

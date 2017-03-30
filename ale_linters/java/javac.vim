@@ -34,7 +34,6 @@ function! ale_linters#java#javac#Handle(buffer, lines) abort
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
-        \   'col': 1,
         \   'text': l:match[2] . ':' . l:match[3],
         \   'type': l:match[2] ==# 'error' ? 'E' : 'W',
         \})
