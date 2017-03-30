@@ -23,7 +23,6 @@ function! ale_linters#dockerfile#hadolint#Handle(buffer, lines) abort
     let l:type = 'W'
     let l:text = l:match[3]
 
-    " vcol is Needed to indicate that the column is a character.
     call add(l:output, {
     \   'bufnr': a:buffer,
     \   'lnum': l:lnum,

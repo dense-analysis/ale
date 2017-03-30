@@ -32,15 +32,12 @@ function! ale_linters#coffee#coffeelint#Handle(buffer, lines) abort
         endif
 
         let l:line = l:match[1] + 0
-        let l:column = 1
         let l:type = l:match[3] ==# 'error' ? 'E' : 'W'
         let l:text = l:match[4]
 
-        " vcol is needed to indicate that the column is a character
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:line,
-        \   'col': l:column,
         \   'text': l:text,
         \   'type': l:type,
         \})

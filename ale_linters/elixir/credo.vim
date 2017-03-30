@@ -23,7 +23,6 @@ function! ale_linters#elixir#credo#Handle(buffer, lines) abort
       let l:type = 'W'
     endif
 
-    " vcol is Needed to indicate that the column is a character.
     call add(l:output, {
     \   'bufnr': a:buffer,
     \   'lnum': l:match[1] + 0,

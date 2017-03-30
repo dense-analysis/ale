@@ -16,7 +16,6 @@ function! ale_linters#php#php#Handle(buffer, lines) abort
             continue
         endif
 
-        " vcol is needed to indicate that the column is a character.
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[3] + 0,

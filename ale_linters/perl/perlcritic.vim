@@ -13,15 +13,12 @@ function! ale_linters#perl#perlcritic#Handle(buffer, lines) abort
         endif
 
         let l:line = l:match[3]
-        let l:column = 1
         let l:text = l:match[1]
         let l:type = 'E'
 
-        " vcol is Needed to indicate that the column is a character.
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:line,
-        \   'col': l:column,
         \   'text': l:text,
         \   'type': l:type,
         \})

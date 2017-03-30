@@ -68,7 +68,6 @@ function! ale_linters#d#dmd#Handle(buffer, lines) abort
         let l:type = l:match[3]
         let l:text = l:match[4]
 
-        " vcol is Needed to indicate that the column is a character.
         call add(l:output, {
         \   'bufnr': bufnr('%'),
         \   'lnum': l:line,

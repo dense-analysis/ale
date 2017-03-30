@@ -73,7 +73,6 @@ function! ale_linters#erlang#erlc#Handle(buffer, lines) abort
             let l:type = 'E'
         endif
 
-        " vcol is Needed to indicate that the column is a character.
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:line,

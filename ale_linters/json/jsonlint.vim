@@ -14,7 +14,6 @@ function! ale_linters#json#jsonlint#Handle(buffer, lines) abort
             continue
         endif
 
-        " vcol is needed to indicate that the column is a character
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
