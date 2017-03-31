@@ -1,0 +1,33 @@
+Before:
+  runtime ale_linters/java/javac.vim
+  call ale#engine#InitBufferInfo(bufnr(''))
+
+After:
+  call ale#linter#Reset()
+  " We need to clean up the buffer to remove the temporary directories created
+  " for the command.
+  call ale#cleanup#Buffer(bufnr(''))
+  let g:ale_java_javac_options = ''
+  let g:ale_java_javac_classpath = ''
+
+Execute(The javac callback should return the correct default value):
+  let b:command = ale_linters#java#javac#GetCommand(bufnr(''))
+
+  Assert match(b:command, '\v^javac +-Xlint +-d +/tmp/[0-9a-zA-Z/]+ +\%t$') >= 0,
+  \ 'Invalid command string: ' . b:command
+
+Execute(The javac callback should use g:ale_java_javac_classpath correctly):
+  let g:ale_java_javac_classpath = 'foo.jar'
+
+  let b:command = ale_linters#java#javac#GetCommand(bufnr(''))
+
+  Assert match(b:command, '\v^javac +-Xlint -cp foo\.jar +-d +/tmp/[0-9a-zA-Z/]+ +\%t$') >= 0,
+  \ 'Invalid command string: ' . b:command
+
+Execute(The javac callback should use g:ale_java_javac_options correctly):
+  let g:ale_java_javac_options = '--anything --else'
+
+  let b:command = ale_linters#java#javac#GetCommand(bufnr(''))
+
+  Assert match(b:command, '\v^javac +-Xlint +-d +/tmp/[0-9a-zA-Z/]+ --anything --else +\%t$') >= 0,
+  \ 'Invalid command string: ' . b:command

@@ -637,6 +637,16 @@ ale#Queue(delay, [linting_flag])                                  *ale#Queue()*
   run. Linters with `lint_file` set to `1` are not run by default.
 
 
+ale#engine#CreateDirectory(buffer)               *ale#engine#CreateDirectory()*
+
+  Create a new temporary directory with a unique name, and manage that
+  directory with |ale#engine#ManageDirectory()|, so it will be removed as
+  soon as possible.
+
+  It is advised to only call this function from a callback function for
+  returning a linter command to run.
+
+
 ale#engine#EscapeCommandPart(command_part)     *ale#engine#EscapeCommandPart()*
 
   Given a |String|, return a |String| with all `%` characters replaced with

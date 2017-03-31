@@ -9,8 +9,12 @@ function! ale_linters#java#javac#GetCommand(buffer) abort
     \   ?  '-cp ' . g:ale_java_javac_classpath
     \   : ''
 
+    " Create .class files in a temporary directory, which we will delete later.
+    let l:class_file_directory = ale#engine#CreateDirectory(a:buffer)
+
     return 'javac -Xlint '
     \ . l:cp_option
+    \ . ' -d ' . fnameescape(l:class_file_directory)
     \ . ' ' . g:ale_java_javac_options
     \ . ' %t'
 endfunction

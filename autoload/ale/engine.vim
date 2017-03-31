@@ -152,6 +152,17 @@ function! ale#engine#ManageDirectory(buffer, directory) abort
     call add(g:ale_buffer_info[a:buffer].temporary_directory_list, a:directory)
 endfunction
 
+" Create a new temporary directory and manage it in one go.
+function! ale#engine#CreateDirectory(buffer) abort
+    let l:temporary_directory = tempname()
+    " Create the temporary directory for the file, unreadable by 'other'
+    " users.
+    call mkdir(l:temporary_directory, '', 0750)
+    call ale#engine#ManageDirectory(a:buffer, l:temporary_directory)
+
+    return l:temporary_directory
+endfunction
+
 function! ale#engine#RemoveManagedFiles(buffer) abort
     if !has_key(g:ale_buffer_info, a:buffer)
         return

@@ -81,3 +81,23 @@ Execute(ALE should delete managed files when the buffer is removed):
   Assert !filereadable(g:filename), 'The tempoary file was not deleted'
   Assert !isdirectory(g:directory), 'The tempoary directory was not deleted'
   Assert isdirectory(g:preserved_directory), 'The tempoary directory was not kept'
+
+Execute(ALE should create and delete directories for ale#engine#CreateDirectory()):
+  call ale#engine#InitBufferInfo(bufnr('%'))
+
+  let b:dir = ale#engine#CreateDirectory(bufnr('%'))
+  let b:dir2 = ale#engine#CreateDirectory(bufnr('%'))
+
+  Assert isdirectory(b:dir), 'The directory was not created'
+
+  " We should get the correct file permissions.
+  " We want to ensure that the directory is not readable by 'other'
+  AssertEqual 'rwxr-x---', getfperm(b:dir)
+
+  " The two directories shouldn't be the same.
+  AssertNotEqual b:dir2, b:dir
+
+  call ale#cleanup#Buffer(bufnr('%'))
+
+  Assert !isdirectory(b:dir), 'The directory was not deleted'
+  Assert !isdirectory(b:dir2), 'The second directory was not deleted'
