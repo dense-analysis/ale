@@ -14,9 +14,9 @@ endif
 
 " Signs show up on the left for error markers.
 execute 'sign define ALEErrorSign text=' . g:ale_sign_error
-\   . ' texthl=ALEErrorSign'
+\   . ' texthl=ALEErrorSign linehl=ALEErrorLine'
 execute 'sign define ALEWarningSign text=' . g:ale_sign_warning
-\   . ' texthl=ALEWarningSign'
+\   . ' texthl=ALEWarningSign linehl=ALEWarningLine'
 sign define ALEDummySign
 
 " Read sign data for a buffer to a list of lines.
