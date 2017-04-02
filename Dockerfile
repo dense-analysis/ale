@@ -8,6 +8,10 @@ ENV PACKAGES="\
     python=2.7.12-r0 \
     py-pip=8.1.2-r0 \
     nodejs \
+    gcc \
+    clang \
+    cppcheck \
+    clang-tidy \
 "
 RUN apk --update add $PACKAGES && \
     rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
