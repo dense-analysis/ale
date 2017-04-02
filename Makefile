@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
 IMAGE ?= w0rp/ale
-CURRENT_IMAGE_ID = 107e4efc4267
+CURRENT_IMAGE_ID = 82334204724d
 DOCKER_FLAGS = --rm -v $(PWD):/testplugin -v $(PWD)/test:/home "$(IMAGE)"
 tests = test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*/*.vader
 
