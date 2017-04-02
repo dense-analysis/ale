@@ -3,6 +3,7 @@ FROM tweekmonster/vim-testbed:latest
 RUN install_vim -tag v8.0.0000 -build \
                 -tag v8.0.0027 -build
 
+# the clang package includes clang-tidy
 ENV PACKAGES="\
     git \
     python=2.7.12-r0 \
@@ -10,8 +11,6 @@ ENV PACKAGES="\
     nodejs \
     gcc \
     clang \
-    cppcheck \
-    clang-tidy \
 "
 RUN apk --update add $PACKAGES && \
     rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
