@@ -5,6 +5,7 @@ RUN install_vim -tag v8.0.0000 -build \
 
 # the clang package includes clang-tidy
 ENV PACKAGES="\
+    bash \
     git \
     python \
     py-pip \
