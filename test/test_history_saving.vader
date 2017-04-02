@@ -1,4 +1,8 @@
 Before:
+  " Temporarily set the shell to /bin/sh, if it isn't already set that way.
+  " This will make it so the test works when running it directly.
+  let g:current_shell = &shell
+  let &shell = '/bin/sh'
   let g:history = []
   let g:ale_buffer_info = {}
   let g:ale_max_buffer_history_size = 20
@@ -16,6 +20,9 @@ Before:
   \})
 
 After:
+  " Reset the shell back to what it was before.
+  let &shell = g:current_shell
+  unlet g:current_shell
   let g:ale_history_enabled = 1
   let g:ale_history_log_output = 0
   unlet g:history
@@ -37,7 +44,7 @@ Execute(History should be set when commands are run):
 
   AssertEqual 1, len(g:history)
   AssertEqual sort(['status', 'exit_code', 'job_id', 'command']), sort(keys(g:history[0]))
-  AssertEqual ['/bin/bash', '-c', 'echo command history test'], g:history[0].command
+  AssertEqual ['/bin/sh', '-c', 'echo command history test'], g:history[0].command
   AssertEqual 'finished', g:history[0].status
   AssertEqual 0, g:history[0].exit_code
   " The Job ID will change each time, but we can check the type.
