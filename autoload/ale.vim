@@ -11,6 +11,7 @@ function! ale#ShouldDoNothing() abort
     " Do nothing for blacklisted files
     " OR if ALE is running in the sandbox
     return index(g:ale_filetype_blacklist, &filetype) >= 0
+    \   || (exists('*getcmdwintype') && !empty(getcmdwintype()))
     \   || ale#util#InSandbox()
 endfunction
 
