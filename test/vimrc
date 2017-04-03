@@ -8,6 +8,7 @@ set runtimepath=/home/vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,/testplu
 filetype plugin indent on
 syntax on
 set shell=/bin/sh
+set shellcmdflag=-c
 set nocompatible
 set tabstop=4
 set softtabstop=4
