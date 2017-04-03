@@ -11,6 +11,7 @@ ENV PACKAGES="\
     py-pip \
     nodejs \
     gcc \
+    g++ \
     clang \
 "
 RUN apk --update add $PACKAGES && \
