@@ -30,7 +30,7 @@ function! ale_linters#sh#shell#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#sh#shell#GetCommand(buffer) abort
-    return ale_linters#sh#shell#GetExecutable(a:buffer) . ' -n'
+    return ale_linters#sh#shell#GetExecutable(a:buffer) . ' -n %t'
 endfunction
 
 function! ale_linters#sh#shell#Handle(buffer, lines) abort
