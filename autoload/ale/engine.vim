@@ -50,8 +50,48 @@ endfunction
 " with SIGKILL if they don't terminate right away.
 let s:job_kill_timers = {}
 
+" Check if a job is still running, in either Vim version.
+function! s:IsJobRunning(job) abort
+    if has('nvim')
+        try
+            " In NeoVim, if the job isn't running, jobpid() will throw.
+            call jobpid(a:job)
+            return 1
+        catch
+        endtry
+
+        return 0
+    endif
+
+    return job_status(a:job) ==# 'run'
+endfunction
+
 function! s:KillHandler(timer) abort
-    call job_stop(remove(s:job_kill_timers, a:timer), 'kill')
+    let l:job = remove(s:job_kill_timers, a:timer)
+
+    " For NeoVim, we have to send SIGKILL ourselves manually, as NeoVim
+    " doesn't do it properly.
+    if has('nvim')
+        let l:pid = 0
+
+        " We can fail to get the PID here if the job manages to stop already.
+        try
+            let l:pid = jobpid(l:job)
+        catch
+        endtry
+
+        if l:pid > 0
+            if has('win32')
+                " Windows
+                call system('taskkill /pid ' . l:pid . ' /f')
+            else
+                " Linux, Mac OSX, etc.
+                call system('kill -9 ' . l:pid)
+            endif
+        endif
+    else
+        call job_stop(l:job, 'kill')
+    endif
 endfunction
 
 function! ale#engine#ClearJob(job) abort
@@ -68,12 +108,12 @@ function! ale#engine#ClearJob(job) abort
 
         " Ask nicely for the job to stop.
         call job_stop(a:job)
+    endif
 
-        " If a job doesn't stop immediately, queue a timer which will
-        " send SIGKILL to the job, if it's alive by the time the timer ticks.
-        if job_status(a:job) ==# 'run'
-            let s:job_kill_timers[timer_start(100, function('s:KillHandler'))] = a:job
-        endif
+    " If a job doesn't stop immediately, queue a timer which will
+    " send SIGKILL to the job, if it's alive by the time the timer ticks.
+    if s:IsJobRunning(a:job)
+        let s:job_kill_timers[timer_start(100, function('s:KillHandler'))] = a:job
     endif
 
     if has_key(s:job_info_map, l:job_id)
