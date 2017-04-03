@@ -38,7 +38,7 @@ function! ale_linters#sh#shell#Handle(buffer, lines) abort
     "
     " bash: line 13: syntax error near unexpected token `d'
     " sh: 11: Syntax error: "(" unexpected
-    let l:pattern = '^[^:]\+: \%(\w\+ \|\)\(\d\+\): \(.\+\)'
+    let l:pattern = '\v(line |: ?)(\d+): (.+)$'
     let l:output = []
 
     for l:line in a:lines
@@ -48,8 +48,8 @@ function! ale_linters#sh#shell#Handle(buffer, lines) abort
             continue
         endif
 
-        let l:line = l:match[1] + 0
-        let l:text = l:match[2]
+        let l:line = l:match[2] + 0
+        let l:text = l:match[3]
         let l:type = 'E'
 
         call add(l:output, {
