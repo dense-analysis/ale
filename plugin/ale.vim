@@ -155,14 +155,17 @@ let g:ale_history_enabled = get(g:, 'ale_history_enabled', 1)
 let g:ale_history_log_output = get(g:, 'ale_history_log_output', 0)
 
 function! ALEInitAuGroups() abort
+    " This value used to be a Boolean as a Number, and is now a String.
+    let l:text_changed = '' . g:ale_lint_on_text_changed
+
     augroup ALERunOnTextChangedGroup
         autocmd!
         if g:ale_enabled
-            if g:ale_lint_on_text_changed ==? 'always' || g:ale_lint_on_text_changed == 1
+            if l:text_changed ==? 'always' || l:text_changed ==# '1'
                 autocmd TextChanged,TextChangedI * call ale#Queue(g:ale_lint_delay)
-            elseif g:ale_lint_on_text_changed ==? 'normal'
+            elseif l:text_changed ==? 'normal'
                 autocmd TextChanged * call ale#Queue(g:ale_lint_delay)
-            elseif g:ale_lint_on_text_changed ==? 'insert'
+            elseif l:text_changed ==? 'insert'
                 autocmd TextChangedI * call ale#Queue(g:ale_lint_delay)
             endif
         endif

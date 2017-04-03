@@ -1,66 +1,56 @@
 Before:
+  function! CheckAutocmd(group)
+    call ALEInitAuGroups()
+    redir => l:output
+      execute 'silent autocmd ' . a:group
+    redir END
+
+    return map(
+    \ filter(split(l:output, "\n"), 'v:val =~# ''^ALE'''),
+    \ 'split(v:val)[1]'
+    \)
+  endfunction
+
   Save g:ale_lint_on_text_changed
   Save g:ale_lint_on_insert_leave
-  autocmd!
 
 After:
-  Restore g:ale_lint_on_text_changed
-  Restore g:ale_lint_on_insert_leave
-  unlet! g:output
-  unlet! g:expected_autocmd
-  autocmd!
+  delfunction CheckAutocmd
+  Restore
 
-Execute (ALE should bind to TextChanged events when g:ale_lint_on_text_changed = 1):
-  let g:expected_autocmd = join([
-  \  '',
-  \  '--- Auto-Commands ---',
-  \  'ALERunOnTextChangedGroup  TextChanged',
-  \  '    *         call ale#Queue(g:ale_lint_delay)',
-  \  'ALERunOnTextChangedGroup  TextChangedI',
-  \  '    *         call ale#Queue(g:ale_lint_delay)',
-  \], "\n")
+  call ALEInitAuGroups()
 
+Execute (g:ale_lint_on_text_changed = 0 should bind no events):
+  let g:ale_lint_on_text_changed = 0
+
+  AssertEqual [], CheckAutocmd('ALERunOnTextChangedGroup')
+
+Execute (g:ale_lint_on_text_changed = 1 bind both events):
   let g:ale_lint_on_text_changed = 1
-  call ALEInitAuGroups()
 
-  redir => g:output
-  autocmd ALERunOnTextChangedGroup TextChanged,TextChangedI *
-  redir END
+  AssertEqual ['TextChanged', 'TextChangedI'], CheckAutocmd('ALERunOnTextChangedGroup')
 
-  AssertEqual g:expected_autocmd, g:output
-
-Execute (ALE should bind to TextChanged events when g:ale_lint_on_text_changed = 'always'):
-  let g:expected_autocmd = join([
-  \  '',
-  \  '--- Auto-Commands ---',
-  \  'ALERunOnTextChangedGroup  TextChanged',
-  \  '    *         call ale#Queue(g:ale_lint_delay)',
-  \  'ALERunOnTextChangedGroup  TextChangedI',
-  \  '    *         call ale#Queue(g:ale_lint_delay)',
-  \], "\n")
-
+Execute (g:ale_lint_on_text_changed = 'always' should bind both events):
   let g:ale_lint_on_text_changed = 'always'
-  call ALEInitAuGroups()
 
-  redir => g:output
-  autocmd ALERunOnTextChangedGroup TextChanged,TextChangedI *
-  redir END
+  AssertEqual ['TextChanged', 'TextChangedI'], CheckAutocmd('ALERunOnTextChangedGroup')
 
-  AssertEqual g:expected_autocmd, g:output
+Execute (g:ale_lint_on_text_changed = 'normal' should bind only TextChanged):
+  let g:ale_lint_on_text_changed = 'normal'
 
-Execute (ALE should bind to InsertLeave event when g:ale_lint_on_insert_leave = 1):
-  let g:expected_autocmd = join([
-  \  "",
-  \  "--- Auto-Commands ---",
-  \  "ALERunOnInsertLeave  InsertLeave",
-  \  "    *         call ale#Queue(0, 'lint_file')",
-  \], "\n")
+  AssertEqual ['TextChanged'], CheckAutocmd('ALERunOnTextChangedGroup')
 
+Execute (g:ale_lint_on_text_changed = 'insert' should bind only TextChangedI):
+  let g:ale_lint_on_text_changed = 'insert'
+
+  AssertEqual ['TextChangedI'], CheckAutocmd('ALERunOnTextChangedGroup')
+
+Execute (g:ale_lint_on_insert_leave = 1 should bind InsertLeave):
   let g:ale_lint_on_insert_leave = 1
-  call ALEInitAuGroups()
 
-  redir => g:output
-  autocmd ALERunOnInsertLeave InsertLeave *
-  redir END
+  AssertEqual ['InsertLeave'], CheckAutocmd('ALERunOnInsertLeave')
 
-  AssertEqual g:expected_autocmd, g:output
+Execute (g:ale_lint_on_insert_leave = 0 should bind no events):
+  let g:ale_lint_on_insert_leave = 0
+
+  AssertEqual [], CheckAutocmd('ALERunOnInsertLeave')
