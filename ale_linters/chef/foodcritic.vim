@@ -1,5 +1,10 @@
 " Author: Edward Larkey <edwlarkey@mac.com>
+" Author: Jose Junior <jose.junior@gmail.com>
 " Description: This file adds the foodcritic linter for Chef files.
+
+" Support options!
+let g:ale_chef_foodcritic_options = get(g:, 'ale_chef_foodcritic_options', '')
+let g:ale_chef_foodcritic_executable = get(g:, 'ale_chef_foodcritic_executable', 'foodcritic')
 
 function! ale_linters#chef#foodcritic#Handle(buffer, lines) abort
     " Matches patterns line the following:
@@ -29,10 +34,18 @@ function! ale_linters#chef#foodcritic#Handle(buffer, lines) abort
     return l:output
 endfunction
 
+function! ale_linters#chef#foodcritic#GetCommand(buffer) abort
+  return printf('%s %s %%t', 
+  \   g:ale_chef_foodcritic_executable,
+  \   escape(g:ale_chef_foodcritic_options, '~')
+	\)
+endfunction
+
+
 call ale#linter#Define('chef', {
 \   'name': 'foodcritic',
 \   'executable': 'foodcritic',
-\   'command': 'foodcritic %t',
+\   'command_callback': 'ale_linters#chef#foodcritic#GetCommand',
 \   'callback': 'ale_linters#chef#foodcritic#Handle',
 \})
 

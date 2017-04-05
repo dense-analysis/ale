@@ -16,6 +16,8 @@ CONTENTS                                                         *ale-contents*
       clang...............................|ale-c-clang|
       cppcheck............................|ale-c-cppcheck|
       gcc.................................|ale-c-gcc|
+    chef..................................|ale-chef-options|
+      foodcritic..........................|ale-chef-foodcritic|
     cpp...................................|ale-cpp-options|
       clang...............................|ale-cpp-clang|
       clangtidy...........................|ale-cpp-clangtidy|
