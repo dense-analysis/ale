@@ -31,6 +31,8 @@ CONTENTS                                                         *ale-contents*
       erlc................................|ale-erlang-erlc|
     fortran...............................|ale-fortran-options|
       gcc.................................|ale-fortran-gcc|
+    handlebars............................|ale-handlebars-options|
+      ember-template-lint.................|ale-handlebars-embertemplatelint|
     html..................................|ale-html-options|
       htmlhint............................|ale-html-htmlhint|
       tidy................................|ale-html-tidy|
@@ -123,6 +125,7 @@ The following languages and tools are supported.
 * Fortran: 'gcc'
 * Go: 'gofmt -e', 'go vet', 'golint', 'go build', 'gosimple', 'staticcheck'
 * Haml: 'hamllint'
+* Handlebars: 'ember-template-lint'
 * Haskell: 'ghc', 'hlint'
 * HTML: 'HTMLHint', 'proselint', 'tidy'
 * Java: 'javac'
