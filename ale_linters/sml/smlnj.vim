@@ -21,9 +21,9 @@ function! ale_linters#sml#smlnj#Handle(buffer, lines) abort
           call add(l:out, {
           \   'bufnr': a:buffer,
           \   'lnum': l:match2[1] + 0,
-          \   'col' : l:match2[2] + 0,
+          \   'col' : l:match2[2] - 1,
           \   'text': l:match2[3],
-          \   'type': l:match2[3] =~ '^Warning' ? 'W' : 'E',
+          \   'type': l:match2[3] =~# '^Warning' ? 'W' : 'E',
           \})
           continue
         endif
