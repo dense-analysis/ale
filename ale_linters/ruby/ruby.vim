@@ -8,7 +8,6 @@ function! ale_linters#ruby#ruby#Handle(buffer, lines) abort
     " test.rb:8: syntax error, unexpected keyword_end, expecting end-of-input
     let l:pattern = '\v^.+:(\d+): (warning: )?(.+)$'
     let l:column = '\v^(\s+)\^$'
-
     let l:output = []
 
     for l:line in a:lines
@@ -20,21 +19,22 @@ function! ale_linters#ruby#ruby#Handle(buffer, lines) abort
             endif
         else
             call add(l:output, {
-                        \  'bufnr': a:buffer,
-                        \  'lnum': l:match[1] + 0,
-                        \  'col': 0,
-                        \  'text': l:match[2] . l:match[3],
-                        \  'type': empty(l:match[2]) ? 'E' : 'W',
-                        \})
+            \   'bufnr': a:buffer,
+            \   'lnum': l:match[1] + 0,
+            \   'col': 0,
+            \   'text': l:match[2] . l:match[3],
+            \   'type': empty(l:match[2]) ? 'E' : 'W',
+            \})
         endif
     endfor
+
     return l:output
 endfunction
 
 call ale#linter#Define('ruby', {
-            \   'name': 'ruby',
-            \   'executable': 'ruby',
-            \   'output_stream': 'stderr',
-            \   'command': 'ruby -w -c -T1 %t',
-            \   'callback': 'ale_linters#ruby#ruby#Handle',
-            \})
+\   'name': 'ruby',
+\   'executable': 'ruby',
+\   'output_stream': 'stderr',
+\   'command': 'ruby -w -c -T1 %t',
+\   'callback': 'ale_linters#ruby#ruby#Handle',
+\})
