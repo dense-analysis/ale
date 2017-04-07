@@ -1,32 +1,31 @@
 Execute(The ruby handler should parse lines correctly and add the column if it can):
   runtime ale_linters/ruby/ruby.vim
-  # Point Error
-  # Warning
-  # Line Error
-
+  " Point Error
+  " Warning
+  " Line Error
   AssertEqual
   \ [
   \   {
-  \     'bufnr': 255,
   \     'lnum': 6,
+  \     'bufnr': 255,
   \     'col': 13,
-  \     'text': "syntax error, unexpected ';'",
   \     'type': 'E',
+  \     'text': 'syntax error, unexpected '';'''
   \   },
   \   {
-  \     'bufnr': 255,
   \     'lnum': 9,
+  \     'bufnr': 255,
   \     'col': 0,
-  \     'text': 'Some error',
   \     'type': 'W',
+  \     'text': 'warning: statement not reached'
   \   },
   \   {
-  \     'bufnr': 255,
   \     'lnum': 12,
+  \     'bufnr': 255,
   \     'col': 0,
-  \     'text': 'syntax error, unexpected end-of-input, expecting keyword_end',
   \     'type': 'E',
-  \   },
+  \     'text': 'syntax error, unexpected end-of-input, expecting keyword_end'
+  \   }
   \ ],
   \ ale_linters#ruby#ruby#Handle(255, [
   \ "test.rb:6: syntax error, unexpected ';'",
