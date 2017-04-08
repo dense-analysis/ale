@@ -52,7 +52,7 @@ endfunction
 
 
 function! ale_linters#nim#nimcheck#GetCommand(buffer)
-    return 'nim check --path:' . fnameescape(fnamemodify(bufname(a:buffer), ':p:h')) . '--threads:on --verbosity:0 --colors:off --listFullPaths %t'
+    return 'nim check --path:' . fnameescape(fnamemodify(bufname(a:buffer), ':p:h')) . ' --threads:on --verbosity:0 --colors:off --listFullPaths %t'
 endfunction
 
 
