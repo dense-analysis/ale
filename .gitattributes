@@ -3,6 +3,7 @@
 /Dockerfile export-ignore
 /ISSUE_TEMPLATE.md export-ignore
 /Makefile export-ignore
+/PULL_REQUEST_TEMPLATE.md export-ignore
 /README.md export-ignore
 /custom-checks export-ignore
 /img export-ignore
