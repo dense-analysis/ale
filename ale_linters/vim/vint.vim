@@ -20,5 +20,5 @@ call ale#linter#Define('vim', {
 \       . s:enable_neovim
 \       . s:format
 \       . ' %t',
-\   'callback': 'ale#handlers#HandleGCCFormat',
+\   'callback': 'ale#handlers#gcc#HandleGCCFormat',
 \})

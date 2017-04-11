@@ -14,5 +14,5 @@ call ale#linter#Define('cpp', {
 \   'output_stream': 'stdout',
 \   'executable': 'clang-tidy',
 \   'command_callback': 'ale_linters#cpp#clangtidy#GetCommand',
-\   'callback': 'ale#handlers#HandleGCCFormat',
+\   'callback': 'ale#handlers#gcc#HandleGCCFormat',
 \})

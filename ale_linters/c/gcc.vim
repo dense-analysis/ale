@@ -22,5 +22,5 @@ call ale#linter#Define('c', {
 \   'output_stream': 'stderr',
 \   'executable': 'gcc',
 \   'command_callback': 'ale_linters#c#gcc#GetCommand',
-\   'callback': 'ale#handlers#HandleGCCFormat',
+\   'callback': 'ale#handlers#gcc#HandleGCCFormat',
 \})

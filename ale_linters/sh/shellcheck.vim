@@ -48,5 +48,5 @@ call ale#linter#Define('sh', {
 \   'name': 'shellcheck',
 \   'executable_callback': 'ale_linters#sh#shellcheck#GetExecutable',
 \   'command_callback': 'ale_linters#sh#shellcheck#GetCommand',
-\   'callback': 'ale#handlers#HandleGCCFormat',
+\   'callback': 'ale#handlers#gcc#HandleGCCFormat',
 \})

@@ -55,7 +55,7 @@ Then (The loclist should be correct):
   \], g:loclist
 
 Execute (Run HandleGCCFormat):
-  let g:loclist = ale#handlers#HandleGCCFormat(42, [
+  let g:loclist = ale#handlers#gcc#HandleGCCFormat(42, [
   \ '<stdin>:8:5: warning: conversion lacks type at end of format [-Wformat=]',
   \ '<stdin>:10:27: error: invalid operands to binary - (have ‘int’ and ‘char *’)',
   \])
@@ -63,18 +63,12 @@ Execute (Run HandleGCCFormat):
 Then (The loclist should be correct):
   AssertEqual [
   \ {
-  \   'bufnr': 42,
-  \   'vcol': 0,
-  \   'nr': -1,
   \   'lnum': 8,
   \   'col': 5,
   \   'type': 'W',
   \   'text': 'conversion lacks type at end of format [-Wformat=]',
   \ },
   \ {
-  \   'bufnr': 42,
-  \   'vcol': 0,
-  \   'nr': -1,
   \   'lnum': 10,
   \   'col': 27,
   \   'type': 'E',

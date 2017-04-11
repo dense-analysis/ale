@@ -34,12 +34,9 @@ Given c (A test C file):
 Execute(Basic errors should be returned for GCC for C files):
   call ale#Lint()
 
-  AssertEqual [{
-  \   'lnum': 3,
-  \   'col': 1,
-  \ }],
-  \ map(getloclist(0), '{''lnum'': v:val.lnum, ''col'': v:val.col}'),
-  \ 'No errors returned! Got: ' . GetCommandOutput()
+  AssertEqual
+  \ [{'lnum': 3, 'col': 1}],
+  \ map(getloclist(0), '{''lnum'': v:val.lnum, ''col'': v:val.col}')
 
   Assert match(getloclist(0)[0].text, '\v^expected .*;.* before .*\}.* token$') >= 0,
   \ 'Invalid error text: ' .  getloclist(0)[0].text
@@ -52,12 +49,42 @@ Given cpp (A test C++ file):
 Execute(Basic errors should be returned for GCC for C++ files):
   call ale#Lint()
 
-  AssertEqual [{
-  \   'lnum': 3,
-  \   'col': 1,
-  \ }],
-  \ map(getloclist(0), '{''lnum'': v:val.lnum, ''col'': v:val.col}'),
-  \ 'No errors returned! Got: ' . GetCommandOutput()
+  AssertEqual
+  \ [{'lnum': 3, 'col': 1}],
+  \ map(getloclist(0), '{''lnum'': v:val.lnum, ''col'': v:val.col}')
 
   Assert match(getloclist(0)[0].text, '\v^expected .*;.* before .*\}.* token$') >= 0,
-  \ 'Invalid error text: ' .  getloclist(0)[0].text
+
+Given c (A test C file with a header containing broken code):
+  // Some comment line
+  #include "broken.h"
+
+  int main() {
+    return 0
+  }
+
+Execute(Basic errors should be returned for GCC for C files with headers):
+  call ale#Lint()
+
+  AssertEqual
+  \ [{'lnum': 2, 'col': 0}],
+  \ map(getloclist(0), '{''lnum'': v:val.lnum, ''col'': v:val.col}')
+
+  AssertEqual 'Problems were found in the header (See :ALEDetail)', getloclist(0)[0].text
+
+Given cpp (A test C++ file with a header containing broken code):
+  // Some comment line
+  #include "broken.h"
+
+  int main() {
+    return 0
+  }
+
+Execute(Basic errors should be returned for GCC for C++ files with headers):
+  call ale#Lint()
+
+  AssertEqual
+  \ [{'lnum': 2, 'col': 0}],
+  \ map(getloclist(0), '{''lnum'': v:val.lnum, ''col'': v:val.col}')
+
+  AssertEqual 'Problems were found in the header (See :ALEDetail)', getloclist(0)[0].text

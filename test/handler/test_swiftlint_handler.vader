@@ -2,26 +2,20 @@ Execute(The swiftint handler should parse error messages correctly):
   AssertEqual
   \ [
   \   {
-  \     'bufnr': 347,
   \     'lnum': 1,
   \     'col': 7,
   \     'text': 'Operator Usage Whitespace Violation: Operators should be surrounded by a single whitespace when they are being used. (operator_usage_whitespace)',
   \     'type': 'W',
-  \     'vcol': 0,
-  \     'nr': -1,
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 1,
   \     'col': 11,
   \     'text': 'Operator Usage Whitespace Violation: Operators should be surrounded by a single whitespace when they are being used. (operator_usage_whitespace)',
   \     'type': 'W',
-  \     'vcol': 0,
-  \     'nr': -1,
   \   },
   \
   \ ],
-  \ ale#handlers#HandleGCCFormat(347, [
+  \ ale#handlers#gcc#HandleGCCFormat(347, [
   \   'This line should be ignored',
   \   '<nopath>:1:7: warning: Operator Usage Whitespace Violation: Operators should be surrounded by a single whitespace when they are being used. (operator_usage_whitespace)',
   \   '<nopath>:1:11: warning: Operator Usage Whitespace Violation: Operators should be surrounded by a single whitespace when they are being used. (operator_usage_whitespace)',

@@ -1,0 +1,36 @@
+Execute(The vint handler should parse error messages correctly):
+  :file! gxc.vim
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'col': 1,
+  \     'text': 'Use scriptencoding when multibyte char exists (see :help :script encoding)',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 3,
+  \     'col': 17,
+  \     'text': 'Use robust operators `==#` or `==?` instead of `==` (see Google VimScript Style Guide (Matching))',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 3,
+  \     'col': 8,
+  \     'text': 'Make the scope explicit like `l:filename` (see Anti-pattern of vimrc (Scope of identifier))',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 7,
+  \     'col': 8,
+  \     'text': 'Undefined variable: filename (see :help E738)',
+  \     'type': 'W',
+  \   },
+  \ ],
+  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \   'gcc.vim:1:1: warning: Use scriptencoding when multibyte char exists (see :help :script encoding)',
+  \   'gcc.vim:3:17: warning: Use robust operators `==#` or `==?` instead of `==` (see Google VimScript Style Guide (Matching))',
+  \   'gcc.vim:3:8: style_problem: Make the scope explicit like `l:filename` (see Anti-pattern of vimrc (Scope of identifier))',
+  \   'gcc.vim:7:8: warning: Undefined variable: filename (see :help E738)',
+  \ ])

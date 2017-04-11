@@ -5,5 +5,5 @@ call ale#linter#Define('swift', {
 \   'name': 'swiftlint',
 \   'executable': 'swiftlint',
 \   'command': 'swiftlint lint --use-stdin',
-\   'callback': 'ale#handlers#HandleGCCFormat',
+\   'callback': 'ale#handlers#gcc#HandleGCCFormat',
 \})

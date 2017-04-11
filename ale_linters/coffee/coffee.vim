@@ -19,5 +19,5 @@ call ale#linter#Define('coffee', {
 \   'executable_callback': 'ale_linters#coffee#coffee#GetExecutable',
 \   'command_callback': 'ale_linters#coffee#coffee#GetCommand',
 \   'output_stream': 'stderr',
-\   'callback': 'ale#handlers#HandleGCCFormat',
+\   'callback': 'ale#handlers#gcc#HandleGCCFormat',
 \})
