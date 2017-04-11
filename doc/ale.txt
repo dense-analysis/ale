@@ -380,6 +380,14 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
   not the aliased type (`'php'`). This allows an aliased type to run a
   different set of linters from the type it is being mapped to.
 
+  Passing a list of filetypes is also supported. Say you want to lint
+  javascript and css embedded in HTML (using linters that support that).
+  You could alias `html` like so:
+
+  `let g:ale_linter_aliases = {'html': ['html', 'javascript', 'css']}`
+
+  Note that `html` itself was included as an alias. That is because aliases
+  will override the original linters for the aliased filetepe.
 
 g:ale_linters                                                   *g:ale_linters*
 

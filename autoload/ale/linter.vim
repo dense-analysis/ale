@@ -174,26 +174,25 @@ function! ale#linter#Define(filetype, linter) abort
     call add(s:linters[a:filetype], l:new_linter)
 endfunction
 
-function! ale#linter#GetAll(filetype) abort
-    if a:filetype ==# ''
-        " Empty filetype? Nothing to be done about that.
-        return []
-    endif
+function! ale#linter#GetAll(filetypes) abort
+    let l:combined_linters = []
 
-    if has_key(s:linters, a:filetype)
-        " We already loaded the linter files for this filetype, so stop here.
-        return s:linters[a:filetype]
-    endif
+    for l:filetype in a:filetypes
+        " Haven't we loaded the linter files for this filetype yet?
+        if !has_key(s:linters, l:filetype)
+            " So load it
+            execute 'silent! runtime! ale_linters/' . l:filetype . '/*.vim'
 
-    " Load all linters for a given filetype.
-    execute 'silent! runtime! ale_linters/' . a:filetype . '/*.vim'
+            " Still don't have the linter files? There must be occured an error
+            if !has_key(s:linters, l:filetype)
+                let s:linters[l:filetype] = []
+            endif
+        endif
 
-    if !has_key(s:linters, a:filetype)
-        " If we couldn't load any linters, let everyone know.
-        let s:linters[a:filetype] = []
-    endif
+        call extend(l:combined_linters, get(s:linters, l:filetype, []))
+    endfor
 
-    return s:linters[a:filetype]
+    return l:combined_linters
 endfunction
 
 function! ale#linter#ResolveFiletype(original_filetype) abort
@@ -208,6 +207,10 @@ function! ale#linter#ResolveFiletype(original_filetype) abort
     \       a:original_filetype
     \   )
     \)
+
+    if type(l:filetype) != type([])
+        return [l:filetype]
+    endif
 
     return l:filetype
 endfunction
