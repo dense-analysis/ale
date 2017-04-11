@@ -19,12 +19,35 @@ g:ale_linters_sh_shell_default_shell     *g:ale_linters_sh_shell_default_shell*
 -------------------------------------------------------------------------------
 shellcheck                                                  *ale-sh-shellcheck*
 
+g:ale_sh_shellcheck_executable                 *g:ale_sh_shellcheck_executable*
+
+  Type: |String|
+  Default: `'shellcheck'`
+
+  This variable sets executable used for shellcheck.
+
+
+g:ale_sh_shellcheck_options                       *g:ale_sh_shellcheck_options*
+
+  Type: |String|
+  Default: `''`
+
+  With this variable we are able to pass extra arguments for shellcheck
+  for shellcheck invocation.
+
+  For example, if we want shellcheck to follow external sources (`see SC1091`)
+  we can set the variable as such:
+
+  let g:ale_sh_shellcheck_options = '-x'
+
+
 g:ale_linters_sh_shellcheck_exclusions *g:ale_linters_sh_shellcheck_exclusions*
 
   Type: |String|
   Default: `''`
 
   Set this variable to exclude test(s) for shellcheck (-e/--exclude option).
+  To exclude more than one option, separate them with commas.
 
 
 -------------------------------------------------------------------------------

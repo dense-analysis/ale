@@ -10,6 +10,16 @@ if !exists('g:ale_linters_sh_shellcheck_exclusions')
     let g:ale_linters_sh_shellcheck_exclusions = ''
 endif
 
+let g:ale_sh_shellcheck_executable =
+\   get(g:, 'ale_sh_shellcheck_executable', 'shellcheck')
+
+let g:ale_sh_shellcheck_options =
+\   get(g:, 'ale_sh_shellcheck_options', '')
+
+function! ale_linters#sh#shellcheck#GetExecutable(buffer) abort
+    return g:ale_sh_shellcheck_executable
+endfunction
+
 if g:ale_linters_sh_shellcheck_exclusions !=# ''
     let s:exclude_option = '-e ' .  g:ale_linters_sh_shellcheck_exclusions
 else
@@ -29,12 +39,14 @@ function! s:GetDialectArgument() abort
 endfunction
 
 function! ale_linters#sh#shellcheck#GetCommand(buffer) abort
-  return 'shellcheck ' . s:exclude_option . ' ' . s:GetDialectArgument() . ' -f gcc -'
+    return ale_linters#sh#shellcheck#GetExecutable(a:buffer)
+    \   . ' ' . g:ale_sh_shellcheck_options
+    \   . ' ' . s:exclude_option . ' ' . s:GetDialectArgument() . ' -f gcc -'
 endfunction
 
 call ale#linter#Define('sh', {
 \   'name': 'shellcheck',
-\   'executable': 'shellcheck',
+\   'executable_callback': 'ale_linters#sh#shellcheck#GetExecutable',
 \   'command_callback': 'ale_linters#sh#shellcheck#GetCommand',
 \   'callback': 'ale#handlers#HandleGCCFormat',
 \})
