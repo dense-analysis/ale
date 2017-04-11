@@ -14,8 +14,12 @@ function! s:AddIncludedErrors(output, include_lnum, include_lines) abort
     endif
 endfunction
 
+function! s:IsHeaderFile(filename) abort
+    return a:filename =~? '\v\.(h|hpp)$'
+endfunction
+
 function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
-    let l:include_pattern = '\v^(In file included | *)from [^:]*:(\d+)'
+    let l:include_pattern = '\v^(In file included | *)from ([^:]*):(\d+)'
     let l:include_lnum = 0
     let l:include_lines = []
     let l:included_filename = ''
@@ -41,9 +45,15 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
                 " need to collect it.
                 call add(l:include_lines, l:line)
             else
-                " Get the line number out of the parsed include line,
-                " and reset the other variables.
-                let l:include_lnum = str2nr(l:include_match[2])
+                " GCC and clang return the lists of files in different orders,
+                " so we'll only grab the line number from lines which aren't
+                " header files.
+                if !s:IsHeaderFile(l:include_match[2])
+                    " Get the line number out of the parsed include line,
+                    " and reset the other variables.
+                    let l:include_lnum = str2nr(l:include_match[3])
+                endif
+
                 let l:include_lines = []
                 let l:included_filename = ''
             endif

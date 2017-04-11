@@ -1,0 +1,23 @@
+Execute(clang errors from included files should be parsed correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 3,
+  \     'type': 'E',
+  \     'text': 'Problems were found in the header (See :ALEDetail)',
+  \     'detail': join([
+  \       './b.h:1:1: error: expected identifier or ''(''',
+  \       '{{{',
+  \       '^',
+  \       '1 error generated.',
+  \     ], "\n"),
+  \   },
+  \ ],
+  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \   'In file included from test.c:3:',
+  \   'In file included from ./a.h:1:',
+  \   './b.h:1:1: error: expected identifier or ''(''',
+  \   '{{{',
+  \   '^',
+  \   '1 error generated.',
+  \ ])
