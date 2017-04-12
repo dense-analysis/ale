@@ -3,12 +3,12 @@
 1. [Guidelines](#guidelines)
 2. [Creating Issues](#issues)
 3. [Creating Pull Requests](#pull-requests)
- 1. [Adding a New Linter](#adding-a-new-linter)
- 2. [Adding New Options](#adding-new-options)
+    1. [Adding a New Linter](#adding-a-new-linter)
+    2. [Adding New Options](#adding-new-options)
 4. [Writing Documentation](#writing-documentation)
- 1. [Documenting New Linters](#documenting-new-linters)
- 2. [Editing the Online Documentation](#editing-online-documentation)
- 3. [Documenting Linter Options](#documenting-new-options)
+    1. [Documenting New Linters](#documenting-new-linters)
+    2. [Editing the Online Documentation](#editing-online-documentation)
+    3. [Documenting Linter Options](#documenting-new-options)
 5. [In Case of Busses](#in-case-of-busses)
 
 <a name="guidelines"></a>
