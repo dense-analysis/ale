@@ -8,7 +8,7 @@
 4. [Writing Documentation](#writing-documentation)
     1. [Documenting New Linters](#documenting-new-linters)
     2. [Editing the Online Documentation](#editing-online-documentation)
-    3. [Documenting Linter Options](#documenting-new-options)
+    3. [Documenting Linter Options](#documenting-linter-options)
 5. [In Case of Busses](#in-case-of-busses)
 
 <a name="guidelines"></a>

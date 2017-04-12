@@ -26,7 +26,7 @@ In other words, this plugin allows you to lint while you type.
 4. [Contributing](#contributing)
 5. [FAQ](#faq)
     1. [How do I disable particular linters?](#faq-disable-linters)
-    2. [How can I keep the sign gutter open?](#faq-disable-linters)
+    2. [How can I keep the sign gutter open?](#faq-keep-signs)
     3. [How can I change the signs ALE uses?](#faq-change-signs)
     4. [How can I show errors or warnings in my statusline?](#faq-statusline)
     5. [How can I change the format for echo messages?](#faq-echo-format)
