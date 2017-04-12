@@ -5,7 +5,7 @@ let g:ale_puppet_puppetlint_executable =
 \   get(g:, 'ale_puppet_puppetlint_executable', 'puppet-lint')
 
 let g:ale_puppet_puppetlint_options =
-\   get(g:, 'ale_puppet_puppetlint_options', '')
+\   get(g:, 'ale_puppet_puppetlint_options', '--no-autoloader_layout-check')
 
 function! ale_linters#puppet#puppetlint#GetExecutable(buffer) abort
     return g:ale_puppet_puppetlint_executable
