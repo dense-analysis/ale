@@ -20,22 +20,22 @@ In other words, this plugin allows you to lint while you type.
 1. [Supported Languages and Tools](#supported-languages)
 2. [Usage](#usage)
 3. [Installation](#installation)
- 1. [Installation with Pathogen](#installation-with-pathogen)
- 2. [Installation with Vundle](#installation-with-vundle)
- 3. [Manual Installation](#manual-installation)
+    1. [Installation with Pathogen](#installation-with-pathogen)
+    2. [Installation with Vundle](#installation-with-vundle)
+    3. [Manual Installation](#manual-installation)
 4. [Contributing](#contributing)
 5. [FAQ](#faq)
- 1. [How do I disable particular linters?](#faq-disable-linters)
- 2. [How can I keep the sign gutter open?](#faq-disable-linters)
- 3. [How can I change the signs ALE uses?](#faq-change-signs)
- 4. [How can I show errors or warnings in my statusline?](#faq-statusline)
- 5. [How can I change the format for echo messages?](#faq-echo-format)
- 6. [How can I execute some code when ALE stops linting?](#faq-autocmd)
- 7. [How can I navigate between errors quickly?](#faq-navigation)
- 8. [How can I run linters only when I save files?](#faq-lint-on-save)
- 9. [How can I use the quickfix list instead of the loclist?](#faq-quickfix)
- 10. [How can I check JSX files with both stylelint and eslint?](#faq-jsx-stylelint-eslint)
- 11. [Will this plugin eat all of my laptop battery power?](#faq-my-battery-is-sad)
+    1. [How do I disable particular linters?](#faq-disable-linters)
+    2. [How can I keep the sign gutter open?](#faq-keep-signs)
+    3. [How can I change the signs ALE uses?](#faq-change-signs)
+    4. [How can I show errors or warnings in my statusline?](#faq-statusline)
+    5. [How can I change the format for echo messages?](#faq-echo-format)
+    6. [How can I execute some code when ALE stops linting?](#faq-autocmd)
+    7. [How can I navigate between errors quickly?](#faq-navigation)
+    8. [How can I run linters only when I save files?](#faq-lint-on-save)
+    9. [How can I use the quickfix list instead of the loclist?](#faq-quickfix)
+    10. [How can I check JSX files with both stylelint and eslint?](#faq-jsx-stylelint-eslint)
+    11. [Will this plugin eat all of my laptop battery power?](#faq-my-battery-is-sad)
 
 <a name="supported-languages"></a>
 
@@ -309,9 +309,9 @@ let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
 There are 3 global options that allow customizing the echoed message.
 
 - `g:ale_echo_msg_format` where:
-  * `%s` is the error message itself
-  * `%linter%` is the linter name
-  * `%severity` is the severity type
+    * `%s` is the error message itself
+    * `%linter%` is the linter name
+    * `%severity` is the severity type
 - `g:ale_echo_msg_error_str` is the string used for error severity.
 - `g:ale_echo_msg_warning_str` is the string used for warning severity.
 
