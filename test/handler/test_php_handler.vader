@@ -3,6 +3,7 @@ Given (Some invalid lines of PHP):
   class Foo { / }
   $foo)
   ['foo' 'bar']
+  function count() {}
 
 Execute(The php handler should parse lines correctly):
   runtime ale_linters/php/php.vim
@@ -39,6 +40,13 @@ Execute(The php handler should parse lines correctly):
   \   },
   \   {
   \     'bufnr': 347,
+  \     'lnum': 5,
+  \     'col': 0,
+  \     'text': "Cannot redeclare count()",
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'bufnr': 347,
   \     'lnum': 21,
   \     'col': 0,
   \     'text': "syntax error, unexpected end of file",
@@ -54,10 +62,12 @@ Execute(The php handler should parse lines correctly):
   \ ],
   \ ale_linters#php#php#Handle(347, [
   \   'This line should be ignored completely',
+  \   "Parse error:  syntax error, This line should be ignored completely in - on line 1",
   \   "PHP Parse error:  syntax error, unexpected ';', expecting ']' in - on line 1",
   \   "PHP Parse error:  syntax error, unexpected '/', expecting function (T_FUNCTION) or const (T_CONST) in - on line 2",
   \   "PHP Parse error:  syntax error, unexpected ')' in - on line 3",
   \   "PHP Parse error:  syntax error, unexpected ''bar'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in - on line 4",
+  \   "PHP Fatal error:  Cannot redeclare count() in - on line 5",
   \   'PHP Parse error:  syntax error, unexpected end of file in - on line 21',
   \   'PHP Parse error: Invalid numeric literal in - on line 47',
   \ ])
