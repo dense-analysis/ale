@@ -153,6 +153,7 @@ The following languages and tools are supported.
 * Scala: 'scalac'
 * Slim: 'slim-lint'
 * SML: 'smlnj'
+* SQL: 'sqlint'
 * Swift: 'swiftlint'
 * Tex: 'proselint'
 * Texinfo: 'proselint'
