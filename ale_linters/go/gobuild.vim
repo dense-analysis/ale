@@ -18,8 +18,8 @@ function! ale_linters#go#gobuild#GetCommand(buffer, goenv_output) abort
     \ 'GOROOT': a:goenv_output[1],
     \}
   endif
-
-  return 'GOPATH=' . s:go_env.GOPATH . ' go test -c -o /dev/null %s'
+  " Run go test in local directory with relative path
+  return 'GOPATH=' . s:go_env.GOPATH . ' cd ' . fnamemodify(bufname(a:buffer), ':.:h') . ' && go test -c -o /dev/null ./'
 endfunction
 
 function! ale_linters#go#gobuild#Handler(buffer, lines) abort
