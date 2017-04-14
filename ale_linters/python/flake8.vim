@@ -7,6 +7,34 @@ let g:ale_python_flake8_executable =
 let g:ale_python_flake8_args =
 \   get(g:, 'ale_python_flake8_args', '')
 
+" E999: Synax Error
+"
+" F601: dictionary key name repeated with different values
+" F602: dictionary key variable name repeated with different values
+" F621: too many expressions in an assignment with star-unpacking
+" F622: two or more starred expressions in an assignment (a, *b, *c = d)
+" F631: assertion test is a tuple, which are always True
+"
+" F701: a break statement outside of a while or for loop
+" F702: a continue statement outside of a while or for loop
+" F703: a continue statement in a finally block in a loop
+" F704: a yield or yield from statement outside of a function
+" F705: a return statement with arguments inside a generator
+" F706: a return statement outside of a function/method
+" F707: an except: block as not the last exception handler
+"
+" F811: redefinition of unused name from line N
+" F821: undefined name name
+" F822: undefined name name in __all__
+" F823: local variable name ... referenced before assignment
+let g:ale_python_flake8_error_codes =
+\   get(g:, 'python_flake8_error_codes', [
+\     'E999',
+\     'F601', 'F602', 'F621', 'F622', 'F631',
+\     'F701', 'F702', 'F703', 'F704', 'F705', 'F706', 'F707',
+\     'F811', 'F821', 'F823', 'F831',
+\   ])
+
 " A map from Python executable paths to semver strings parsed for those
 " executables, so we don't have to look up the version number constantly.
 let s:version_cache = {}
@@ -72,5 +100,5 @@ call ale#linter#Define('python', {
 \       {'callback': 'ale_linters#python#flake8#VersionCheck'},
 \       {'callback': 'ale_linters#python#flake8#GetCommand'},
 \   ],
-\   'callback': 'ale#handlers#HandlePEP8Format',
+\   'callback': 'ale#handlers#HandleFlake8Format',
 \})
