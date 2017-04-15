@@ -51,8 +51,8 @@ check_errors() {
     message="$2"
 
     for match in $(
-        grep --color=never -Pn "$regex" "$directory"/**/*.vim \
-        | grep --color=never -Po '^[^:]+:[0-9]+' \
+        grep -n "$regex" "$directory"/**/*.vim \
+        | grep -o '^[^:]\+:[0-9]\+' \
         | sed 's:^\./::'
     ); do
         RETURN_CODE=1
@@ -65,9 +65,11 @@ if (( FIX_ERRORS )); then
 fi
 
 check_errors \
-    '^function.*\) *$' \
+    '^function.*) *$' \
     'Function without abort keyword (See :help except-compat)'
-check_errors ' +$' 'Trailing whitespace'
-check_errors '^ * end?i? *$' 'Write endif, not en, end, or endi'
+check_errors ' \+$' 'Trailing whitespace'
+check_errors '^ * end\?i\? *$' 'Write endif, not en, end, or endi'
+check_errors '^  [^ ]' 'Use four spaces, not two spaces'
+check_errors $'\t' 'Use four spaces, not tabs'
 
 exit $RETURN_CODE

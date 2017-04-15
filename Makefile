@@ -45,7 +45,7 @@ test: test-setup
 	echo 'Custom warnings/errors follow:'; \
 	echo; \
 	set -o pipefail; \
-	docker run -a stdout $(DOCKER_FLAGS) /testplugin/custom-checks /testplugin | sed s:^/testplugin/:: || EXIT=$$?; \
+	docker run -v $(PWD):/testplugin "$(IMAGE)" /testplugin/custom-checks /testplugin | sed s:^/testplugin/:: || EXIT=$$?; \
 	set +o pipefail; \
 	echo; \
 	exit $$EXIT;
