@@ -124,7 +124,7 @@ The following languages and tools are supported.
 * Elm: 'elm-make'
 * Erlang: 'erlc'
 * Fortran: 'gcc'
-* Go: 'gofmt -e', 'go vet', 'golint', 'go build', 'gosimple', 'staticcheck'
+* Go: 'gofmt -e', 'go vet', 'golint', 'go build', 'gosimple', 'staticcheck', 'goflycheck'
 * Haml: 'hamllint'
 * Handlebars: 'ember-template-lint'
 * Haskell: 'ghc', 'hlint'
