@@ -1,0 +1,31 @@
+Before:
+  runtime ale_linters/fortran/gcc.vim
+
+After:
+  call ale#linter#Reset()
+  let g:ale_fortran_gcc_options = '-Wall'
+  let g:ale_fortran_gcc_use_free_form = 1
+  let g:ale_fortran_gcc_executable = 'gcc'
+
+Execute(The fortran gcc command callback should return the correct default string):
+  AssertEqual 'gcc -S -x f95 -fsyntax-only -ffree-form -Wall -',
+  \ join(split(ale_linters#fortran#gcc#GetCommand(1)))
+
+Execute(The fortran gcc command callback should let you set options):
+  let g:ale_fortran_gcc_options = '-Wotherthings'
+
+  AssertEqual 'gcc -S -x f95 -fsyntax-only -ffree-form -Wotherthings -',
+  \ join(split(ale_linters#fortran#gcc#GetCommand(1)))
+
+Execute(The fortran gcc command callback should let you use -ffixed-form):
+  let g:ale_fortran_gcc_use_free_form = 0
+
+  AssertEqual 'gcc -S -x f95 -fsyntax-only -ffixed-form -Wall -',
+  \ join(split(ale_linters#fortran#gcc#GetCommand(1)))
+
+Execute(The fortran executable should be configurable):
+  let g:ale_fortran_gcc_executable = 'gfortran'
+
+  AssertEqual 'gfortran', ale_linters#fortran#gcc#GetExecutable(1)
+  AssertEqual 'gfortran -S -x f95 -fsyntax-only -ffree-form -Wall -',
+  \ join(split(ale_linters#fortran#gcc#GetCommand(1)))

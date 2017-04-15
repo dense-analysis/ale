@@ -1,6 +1,15 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: gcc for Fortran files
 
+" This option can be set to 0 to use -ffixed-form
+if !exists('g:ale_fortran_gcc_use_free_form')
+    let g:ale_fortran_gcc_use_free_form = 1
+endif
+
+if !exists('g:ale_fortran_gcc_executable')
+    let g:ale_fortran_gcc_executable = 'gcc'
+endif
+
 " Set this option to change the GCC options for warnings for Fortran.
 if !exists('g:ale_fortran_gcc_options')
     let g:ale_fortran_gcc_options = '-Wall'
@@ -52,16 +61,26 @@ function! ale_linters#fortran#gcc#Handle(buffer, lines) abort
     return l:output
 endfunction
 
+function! ale_linters#fortran#gcc#GetExecutable(buffer) abort
+    return g:ale_fortran_gcc_executable
+endfunction
+
 function! ale_linters#fortran#gcc#GetCommand(buffer) abort
-    return 'gcc -S -x f95 -fsyntax-only -ffree-form '
-    \   . g:ale_fortran_gcc_options
-    \   . ' -'
+    let l:layout_option = g:ale_fortran_gcc_use_free_form
+    \   ? '-ffree-form'
+    \   : '-ffixed-form'
+
+    return ale_linters#fortran#gcc#GetExecutable(a:buffer)
+    \   . ' -S -x f95 -fsyntax-only '
+    \   . l:layout_option . ' '
+    \   . g:ale_fortran_gcc_options . ' '
+    \   . '-'
 endfunction
 
 call ale#linter#Define('fortran', {
 \   'name': 'gcc',
 \   'output_stream': 'stderr',
-\   'executable': 'gcc',
+\   'executable_callback': 'ale_linters#fortran#gcc#GetExecutable',
 \   'command_callback': 'ale_linters#fortran#gcc#GetCommand',
 \   'callback': 'ale_linters#fortran#gcc#Handle',
 \})
