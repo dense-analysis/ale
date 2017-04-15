@@ -96,3 +96,14 @@ endfunction
 function! ale#ResetLintFileMarkers() abort
     let s:should_lint_file_for_buffer = {}
 endfunction
+
+" Given a buffer number and a variable name, look for that variable in the
+" buffer scope, then in global scope. If the name does not exist in the global
+" scope, an exception will be thrown.
+"
+" Every variable name will be prefixed with 'ale_'.
+function! ale#Var(buffer, variable_name) abort
+    let l:full_name = 'ale_' . a:variable_name
+
+    return getbufvar(a:buffer, l:full_name, g:[l:full_name])
+endfunction
