@@ -5,7 +5,7 @@
 function! ale_linters#nim#nimcheck#Handle(buffer, lines) abort
     let l:buffer_filename = fnamemodify(bufname(a:buffer), ':p:t')
     let l:pattern = '^\(.\+\.nim\)(\(\d\+\), \(\d\+\)) \(.\+\)'
-    let l:output = [] 
+    let l:output = []
 
     for l:line in a:lines
         let l:match = matchlist(l:line, l:pattern)
@@ -51,7 +51,7 @@ function! ale_linters#nim#nimcheck#Handle(buffer, lines) abort
 endfunction
 
 
-function! ale_linters#nim#nimcheck#GetCommand(buffer)
+function! ale_linters#nim#nimcheck#GetCommand(buffer) abort
     return 'nim check --path:' . fnameescape(fnamemodify(bufname(a:buffer), ':p:h')) . ' --threads:on --verbosity:0 --colors:off --listFullPaths %t'
 endfunction
 

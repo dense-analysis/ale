@@ -13,38 +13,38 @@ function! ale_linters#tex#lacheck#GetCommand(buffer) abort
 endfunction
 
 function! ale_linters#tex#lacheck#Handle(buffer, lines) abort
-  " Mattes lines like:
-  "
-  " "book.tex", line 37: possible unwanted space at "{"
-  " "book.tex", line 38: missing `\ ' after "etc."
+    " Mattes lines like:
+    "
+    " "book.tex", line 37: possible unwanted space at "{"
+    " "book.tex", line 38: missing `\ ' after "etc."
 
-  let l:pattern = '^".\+", line \(\d\+\): \(.\+\)$'
-  let l:output = []
+    let l:pattern = '^".\+", line \(\d\+\): \(.\+\)$'
+    let l:output = []
 
-  for l:line in a:lines
-    let l:match = matchlist(l:line, l:pattern)
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
 
-    if len(l:match) == 0
-      continue
-    endif
+        if len(l:match) == 0
+            continue
+        endif
 
-    " lacheck follows `\input{}` commands. If the cwd is not the same as the
-    " file in the buffer then it will fail to find the inputed items. We do not
-    " want warnings from those items anyway
-    if !empty(matchstr(l:match[2], '^Could not open ".\+"$'))
-      continue
-    endif
+        " lacheck follows `\input{}` commands. If the cwd is not the same as the
+        " file in the buffer then it will fail to find the inputed items. We do not
+        " want warnings from those items anyway
+        if !empty(matchstr(l:match[2], '^Could not open ".\+"$'))
+            continue
+        endif
 
-    call add(l:output, {
-    \   'bufnr': a:buffer,
-    \   'lnum': l:match[1] + 0,
-    \   'col': 0,
-    \   'text': l:match[2],
-    \   'type': 'W',
-    \})
-  endfor
+        call add(l:output, {
+        \   'bufnr': a:buffer,
+        \   'lnum': l:match[1] + 0,
+        \   'col': 0,
+        \   'text': l:match[2],
+        \   'type': 'W',
+        \})
+    endfor
 
-  return l:output
+    return l:output
 endfunction
 
 call ale#linter#Define('tex', {

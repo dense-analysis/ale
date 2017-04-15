@@ -4,22 +4,25 @@
 " inspired by work from dzhou121 <dzhou121@gmail.com>
 
 function! ale_linters#go#gobuild#GoEnv(buffer) abort
-  if exists('s:go_env')
-    return ''
-  endif
+    if exists('s:go_env')
+        return ''
+    endif
 
-  return 'go env GOPATH GOROOT'
+    return 'go env GOPATH GOROOT'
 endfunction
 
 function! ale_linters#go#gobuild#GetCommand(buffer, goenv_output) abort
-  if !exists('s:go_env')
-    let s:go_env = {
-    \ 'GOPATH': a:goenv_output[0],
-    \ 'GOROOT': a:goenv_output[1],
-    \}
-  endif
-  " Run go test in local directory with relative path
-  return 'GOPATH=' . s:go_env.GOPATH . ' cd ' . fnamemodify(bufname(a:buffer), ':.:h') . ' && go test -c -o /dev/null ./'
+    if !exists('s:go_env')
+        let s:go_env = {
+        \   'GOPATH': a:goenv_output[0],
+        \   'GOROOT': a:goenv_output[1],
+        \}
+    endif
+
+    " Run go test in local directory with relative path
+    return 'GOPATH=' . s:go_env.GOPATH
+    \   . ' cd ' . fnamemodify(bufname(a:buffer), ':.:h')
+    \   . ' && go test -c -o /dev/null ./'
 endfunction
 
 function! ale_linters#go#gobuild#Handler(buffer, lines) abort
@@ -42,7 +45,7 @@ function! ale_linters#go#gobuild#HandleGoBuildErrors(buffer, full_filename, line
     for l:line in a:lines
         let l:match = matchlist(l:line, l:pattern)
 
-	" Omit errors from imported go packages
+        " Omit errors from imported go packages
         if len(l:match) == 0 || l:line !~ l:filename
             continue
         endif

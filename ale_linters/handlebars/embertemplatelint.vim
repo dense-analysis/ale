@@ -27,7 +27,7 @@ endfunction
 function! ale_linters#handlebars#embertemplatelint#Handle(buffer, lines) abort
     if len(a:lines) == 0
       return []
-    end
+    endif
 
     let l:output = []
 

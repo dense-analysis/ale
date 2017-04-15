@@ -5,7 +5,7 @@ function! ale_linters#crystal#crystal#Handle(buffer, lines) abort
     let l:output = []
 
     let l:lines = join(a:lines, '')
-    
+
     if !empty(l:lines)
       let l:errors = json_decode(l:lines)
 
@@ -24,11 +24,11 @@ function! ale_linters#crystal#crystal#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#crystal#crystal#GetCommand(buffer) abort
-  let l:crystal_cmd = 'crystal build -f json --no-codegen -o '
-  let l:crystal_cmd .= shellescape(g:ale#util#nul_file)
-  let l:crystal_cmd .= ' %t'
+    let l:crystal_cmd = 'crystal build -f json --no-codegen -o '
+    let l:crystal_cmd .= shellescape(g:ale#util#nul_file)
+    let l:crystal_cmd .= ' %t'
 
-  return l:crystal_cmd
+    return l:crystal_cmd
 endfunction
 
 call ale#linter#Define('crystal', {

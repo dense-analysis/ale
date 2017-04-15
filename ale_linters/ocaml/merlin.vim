@@ -2,12 +2,11 @@
 " Description: Report errors in OCaml code with Merlin
 
 if !exists('g:merlin')
-  finish
+    finish
 endif
 
 function! ale_linters#ocaml#merlin#Handle(buffer, lines) abort
-  let l:errors = merlin#ErrorLocList()
-  return l:errors
+    return merlin#ErrorLocList()
 endfunction
 
 call ale#linter#Define('ocaml', {
@@ -16,4 +15,3 @@ call ale#linter#Define('ocaml', {
 \   'command': 'true',
 \   'callback': 'ale_linters#ocaml#merlin#Handle',
 \})
-

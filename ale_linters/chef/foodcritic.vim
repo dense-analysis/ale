@@ -35,10 +35,10 @@ function! ale_linters#chef#foodcritic#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#chef#foodcritic#GetCommand(buffer) abort
-  return printf('%s %s %%t', 
-  \   g:ale_chef_foodcritic_executable,
-  \   escape(g:ale_chef_foodcritic_options, '~')
-	\)
+    return printf('%s %s %%t',
+    \   g:ale_chef_foodcritic_executable,
+    \   escape(g:ale_chef_foodcritic_options, '~')
+    \)
 endfunction
 
 
@@ -48,4 +48,3 @@ call ale#linter#Define('chef', {
 \   'command_callback': 'ale_linters#chef#foodcritic#GetCommand',
 \   'callback': 'ale_linters#chef#foodcritic#Handle',
 \})
-
