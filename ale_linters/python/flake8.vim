@@ -4,8 +4,10 @@
 let g:ale_python_flake8_executable =
 \   get(g:, 'ale_python_flake8_executable', 'flake8')
 
-let g:ale_python_flake8_args =
-\   get(g:, 'ale_python_flake8_args', '')
+" Support an old setting as a fallback.
+let s:default_options = get(g:, 'ale_python_flake8_args', '')
+let g:ale_python_flake8_options =
+\   get(g:, 'ale_python_flake8_options', s:default_options)
 
 " A map from Python executable paths to semver strings parsed for those
 " executables, so we don't have to look up the version number constantly.

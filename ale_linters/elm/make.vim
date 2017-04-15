@@ -62,4 +62,3 @@ call ale#linter#Define('elm', {
 \    'command_callback': 'ale_linters#elm#make#GetCommand',
 \    'callback': 'ale_linters#elm#make#Handle'
 \})
-

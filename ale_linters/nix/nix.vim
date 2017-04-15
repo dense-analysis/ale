@@ -2,7 +2,6 @@
 " Description: nix-instantiate linter for nix files
 
 function! ale_linters#nix#nix#Handle(buffer, lines) abort
-
     let l:pattern = '^\(.\+\): \(.\+\), at .*:\(\d\+\):\(\d\+\)$'
     let l:output = []
 

@@ -47,7 +47,7 @@ g:ale_html_tidy_executable                         *g:ale_html_tidy_executable*
   This variable can be changed to change the path to tidy.
 
 
-g:ale_html_tidy_args                                     *g:ale_html_tidy_args*
+g:ale_html_tidy_options                               *g:ale_html_tidy_options*
 
   Type: |String|
   Default: `'-q -e -language en'`

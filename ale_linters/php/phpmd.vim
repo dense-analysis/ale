@@ -4,6 +4,12 @@
 " Set to change the ruleset
 let g:ale_php_phpmd_ruleset = get(g:, 'ale_php_phpmd_ruleset', 'cleancode,codesize,controversial,design,naming,unusedcode')
 
+function! ale_linters#php#phpmd#GetCommand(buffer) abort
+    return 'phpmd %s text '
+    \   . g:ale_php_phpmd_ruleset
+    \   . ' --ignore-violations-on-exit %t'
+endfunction
+
 function! ale_linters#php#phpmd#Handle(buffer, lines) abort
     " Matches against lines like the following:
     "
@@ -33,6 +39,6 @@ endfunction
 call ale#linter#Define('php', {
 \   'name': 'phpmd',
 \   'executable': 'phpmd',
-\   'command': 'phpmd %s text ' . g:ale_php_phpmd_ruleset . ' --ignore-violations-on-exit %t',
+\   'command_callback': 'ale_linters#php#phpmd#GetCommand',
 \   'callback': 'ale_linters#php#phpmd#Handle',
 \})

@@ -5,20 +5,25 @@
 let g:ale_vim_vint_show_style_issues =
 \   get(g:, 'ale_vim_vint_show_style_issues', 1)
 
-let s:warning_flag = g:ale_vim_vint_show_style_issues ? '-s' : '-w'
 let s:vint_version = ale#semver#Parse(system('vint --version'))
 let s:has_no_color_support = ale#semver#GreaterOrEqual(s:vint_version, [0, 3, 7])
 let s:enable_neovim = has('nvim') ? ' --enable-neovim ' : ''
 let s:format = '-f "{file_path}:{line_number}:{column_number}: {severity}: {description} (see {reference})"'
 
+function! ale_linters#vim#vint#GetCommand(buffer) abort
+    let l:warning_flag = g:ale_vim_vint_show_style_issues ? '-s' : '-w'
+
+    return 'vint '
+    \   . l:warning_flag . ' '
+    \   . (s:has_no_color_support ? '--no-color ' : '')
+    \   . s:enable_neovim
+    \   . s:format
+    \   . ' %t'
+endfunction
+
 call ale#linter#Define('vim', {
 \   'name': 'vint',
 \   'executable': 'vint',
-\   'command': 'vint '
-\       . s:warning_flag . ' '
-\       . (s:has_no_color_support ? '--no-color ' : '')
-\       . s:enable_neovim
-\       . s:format
-\       . ' %t',
+\   'command_callback': 'ale_linters#vim#vint#GetCommand',
 \   'callback': 'ale#handlers#gcc#HandleGCCFormat',
 \})

@@ -4,6 +4,15 @@
 let g:ale_lua_luacheck_executable =
 \   get(g:, 'ale_lua_luacheck_executable', 'luacheck')
 
+function! ale_linters#lua#luacheck#GetExecutable(buffer) abort
+    return g:ale_lua_luacheck_executable
+endfunction
+
+function! ale_linters#lua#luacheck#GetCommand(buffer) abort
+    return ale_linters#lua#luacheck#GetExecutable(a:buffer)
+    \   . ' --formatter plain --codes --filename %s -'
+endfunction
+
 function! ale_linters#lua#luacheck#Handle(buffer, lines) abort
     " Matches patterns line the following:
     "
@@ -33,7 +42,7 @@ endfunction
 
 call ale#linter#Define('lua', {
 \   'name': 'luacheck',
-\   'executable': g:ale_lua_luacheck_executable,
-\   'command': g:ale_lua_luacheck_executable . ' --formatter plain --codes --filename %s -',
+\   'executable_callback': 'ale_linters#lua#luacheck#GetExecutable',
+\   'command_callback': 'ale_linters#lua#luacheck#GetCommand',
 \   'callback': 'ale_linters#lua#luacheck#Handle',
 \})

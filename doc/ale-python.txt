@@ -13,7 +13,7 @@ g:ale_python_flake8_executable                 *g:ale_python_flake8_executable*
   This variable can be changed to modify the executable used for flake8.
 
 
-g:ale_python_flake8_args                             *g:ale_python_flake8_args*
+g:ale_python_flake8_options                       *g:ale_python_flake8_options*
 
   Type: |String|
   Default: `''`
@@ -25,7 +25,7 @@ g:ale_python_flake8_args                             *g:ale_python_flake8_args*
   Python 3, you may want to set >
 
   let g:ale_python_flake8_executable = 'python3'   " or 'python' for Python 2
-  let g:ale_python_flake8_args = '-m flake8'
+  let g:ale_python_flake8_options = '-m flake8'
 <
   after making sure it's installed for the appropriate Python versions (e.g.
   `python3 -m pip install --user flake8`).

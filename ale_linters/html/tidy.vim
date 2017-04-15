@@ -3,7 +3,9 @@
 
 " CLI options
 let g:ale_html_tidy_executable = get(g:, 'ale_html_tidy_executable', 'tidy')
-let g:ale_html_tidy_args = get(g:, 'ale_html_tidy_args', '-q -e -language en')
+" Look for the old _args variable first.
+let s:default_options = get(g:, 'ale_html_tidy_args', '-q -e -language en')
+let g:ale_html_tidy_options = get(g:, 'ale_html_tidy_options', s:default_options)
 
 function! ale_linters#html#tidy#GetCommand(buffer) abort
     " Specify file encoding in options
@@ -25,9 +27,13 @@ function! ale_linters#html#tidy#GetCommand(buffer) abort
 
     return printf('%s %s %s -',
     \   g:ale_html_tidy_executable,
-    \   g:ale_html_tidy_args,
+    \   g:ale_html_tidy_options,
     \   l:file_encoding
-    \ )
+    \)
+endfunction
+
+function! ale_linters#html#tidy#GetExecutable(buffer) abort
+    return g:ale_html_tidy_executable
 endfunction
 
 function! ale_linters#html#tidy#Handle(buffer, lines) abort
@@ -63,7 +69,7 @@ endfunction
 
 call ale#linter#Define('html', {
 \   'name': 'tidy',
-\   'executable': g:ale_html_tidy_executable,
+\   'executable_callback': 'ale_linters#html#tidy#GetExecutable',
 \   'output_stream': 'stderr',
 \   'command_callback': 'ale_linters#html#tidy#GetCommand',
 \   'callback': 'ale_linters#html#tidy#Handle',

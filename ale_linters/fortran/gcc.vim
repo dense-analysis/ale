@@ -52,12 +52,16 @@ function! ale_linters#fortran#gcc#Handle(buffer, lines) abort
     return l:output
 endfunction
 
+function! ale_linters#fortran#gcc#GetCommand(buffer) abort
+    return 'gcc -S -x f95 -fsyntax-only -ffree-form '
+    \   . g:ale_fortran_gcc_options
+    \   . ' -'
+endfunction
+
 call ale#linter#Define('fortran', {
 \   'name': 'gcc',
 \   'output_stream': 'stderr',
 \   'executable': 'gcc',
-\   'command': 'gcc -S -x f95 -fsyntax-only -ffree-form '
-\       . g:ale_fortran_gcc_options
-\       . ' -',
+\   'command_callback': 'ale_linters#fortran#gcc#GetCommand',
 \   'callback': 'ale_linters#fortran#gcc#Handle',
 \})

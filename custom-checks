@@ -71,5 +71,7 @@ check_errors ' \+$' 'Trailing whitespace'
 check_errors '^ * end\?i\? *$' 'Write endif, not en, end, or endi'
 check_errors '^  [^ ]' 'Use four spaces, not two spaces'
 check_errors $'\t' 'Use four spaces, not tabs'
+# This check should prevent people from using a particular inconsistent name.
+check_errors 'let g:ale_\w\+_\w\+_args =' 'Name your option g:ale_<filetype>_<lintername>_options instead'
 
 exit $RETURN_CODE

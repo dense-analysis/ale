@@ -53,7 +53,7 @@ function! g:ale_linters#python#mypy#Handle(buffer, lines) abort
     return l:output
 endfunction
 
-call g:ale#linter#Define('python', {
+call ale#linter#Define('python', {
 \   'name': 'mypy',
 \   'executable': 'mypy',
 \   'command_callback': 'ale_linters#python#mypy#GetCommand',
