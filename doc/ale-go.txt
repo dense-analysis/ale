@@ -17,14 +17,6 @@ supported by ALE are enabled by default. To enable `gometalinter`, update
 -------------------------------------------------------------------------------
 gometalinter                                             *ale-go-gometalinter*
 
-g:ale_go_gometalinter_enabled                  *g:ale_go_gometalinter_enabled*
-
-  Type: |Integer|
-  Default: 0
-
-  This variable can be change to enable gometalinter for go files.
-
-
 g:ale_go_gometalinter_options                  *g:ale_go_gometalinter_options*
 
   Type: |String|
