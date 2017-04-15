@@ -115,6 +115,7 @@ The following languages and tools are supported.
 * Chef: 'foodcritic'
 * CMake: 'cmakelint'
 * CoffeeScript: 'coffee', 'coffelint'
+* Crystal: 'crystal'
 * CSS: 'csslint', 'stylelint'
 * Cython (pyrex filetype): 'cython'
 * D: 'dmd'
