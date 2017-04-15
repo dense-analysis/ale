@@ -26,7 +26,7 @@ endfunction
 function! ale_linters#crystal#crystal#GetCommand(buffer) abort
     let l:crystal_cmd = 'crystal build -f json --no-codegen -o '
     let l:crystal_cmd .= shellescape(g:ale#util#nul_file)
-    let l:crystal_cmd .= ' %t'
+    let l:crystal_cmd .= ' %s'
 
     return l:crystal_cmd
 endfunction
@@ -35,6 +35,7 @@ call ale#linter#Define('crystal', {
 \   'name': 'crystal',
 \   'executable': 'crystal',
 \   'output_stream': 'both',
+\   'lint_file': 1,
 \   'command_callback': 'ale_linters#crystal#crystal#GetCommand',
 \   'callback': 'ale_linters#crystal#crystal#Handle',
 \})
