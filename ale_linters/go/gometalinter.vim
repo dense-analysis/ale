@@ -1,20 +1,14 @@
 " Author: Ben Reedy <https://github.com/breed808>
 " Description: Adds support for the gometalinter suite for Go files
 
-" Disable gometalinter by default
-if !exists('g:ale_go_gometalinter_enabled')
-    let g:ale_go_gometalinter_enabled = 0
-endif
-
 if !exists('g:ale_go_gometalinter_options')
     let g:ale_go_gometalinter_options = ''
 endif
 
 function! ale_linters#go#gometalinter#GetCommand(buffer) abort
-    if g:ale_go_gometalinter_enabled == 1
-        return 'gometalinter ' . g:ale_go_gometalinter_options . ' ' . fnameescape(fnamemodify(bufname(a:buffer), ':p:h'))
-    endif
-    return ''
+    return 'gometalinter '
+    \   . g:ale_go_gometalinter_options
+    \   . ' ' . fnameescape(fnamemodify(bufname(a:buffer), ':p:h'))
 endfunction
 
 function! ale_linters#go#gometalinter#Handler(buffer, lines) abort
@@ -49,6 +43,7 @@ function! ale_linters#go#gometalinter#Handler(buffer, lines) abort
         \   'nr': -1,
         \})
     endfor
+
     return l:output
 endfunction
 

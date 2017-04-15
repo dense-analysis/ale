@@ -3,6 +3,18 @@ ALE Go Integration                                            *ale-go-options*
 
 
 -------------------------------------------------------------------------------
+Integration Information
+
+The `gometalinter` linter is disabled by default, and all other Go linters
+supported by ALE are enabled by default. To enable `gometalinter`, update
+|g:ale_linters| as appropriate:
+
+>
+  " Enable all of the linters you want for Go.
+  let g:ale_linters = {'go': ['gometalinter', 'gofmt']}
+<
+
+-------------------------------------------------------------------------------
 gometalinter                                             *ale-go-gometalinter*
 
 g:ale_go_gometalinter_enabled                  *g:ale_go_gometalinter_enabled*
