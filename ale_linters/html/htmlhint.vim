@@ -2,9 +2,9 @@
 " Description: HTMLHint for checking html files
 
 " CLI options
-let g:html_htmlhint_options = get(g:, 'ale_html_htmlhint_options', '--format=unix')
-let g:html_htmlhint_executable = get(g:, 'ale_html_htmlhint_executable', 'htmlhint')
-let g:html_htmlhint_use_global = get(g:, 'ale_html_htmlhint_use_global', 0)
+let g:ale_html_htmlhint_options = get(g:, 'ale_html_htmlhint_options', '--format=unix')
+let g:ale_html_htmlhint_executable = get(g:, 'ale_html_htmlhint_executable', 'htmlhint')
+let g:ale_html_htmlhint_use_global = get(g:, 'ale_html_htmlhint_use_global', 0)
 
 function! ale_linters#html#htmlhint#GetExecutable(buffer) abort
     if ale#Var(a:buffer, 'html_htmlhint_use_global')
