@@ -48,8 +48,10 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
         let l:col = 0
 
         for l:message in l:error.message
-            " Comments have no line of column information
-            if has_key(l:message, 'loc') && l:line ==# 0
+            " Comments have no line of column information, so we skip them.
+            " In certain cases, `l:message.loc.source` points to a different path
+            " than the buffer one, thus we skip this loc information too.
+            if has_key(l:message, 'loc') && l:line ==# 0 && l:message.loc.source ==# expand('#' . a:buffer . ':p')
                 let l:line = l:message.loc.start.line + 0
                 let l:col = l:message.loc.start.column + 0
             endif
@@ -66,7 +68,6 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
         endif
 
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:line,
         \   'col': l:col,
         \   'text': l:text,
