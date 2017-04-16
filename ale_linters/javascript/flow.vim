@@ -68,7 +68,6 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
         endif
 
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:line,
         \   'col': l:col,
         \   'text': l:text,

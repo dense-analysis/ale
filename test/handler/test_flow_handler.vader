@@ -113,14 +113,12 @@ Execute(The flow handler should process errors correctly.):
   let g:expected = [
   \ {
   \   'lnum': 417,
-  \   'bufnr': 347,
   \   'type': 'E',
   \   'col': 10,
   \   'text': 'number: This type is incompatible with the expected return type of array type',
   \ },
   \ {
   \   'lnum': 419,
-  \   'bufnr': 347,
   \   'type': 'W',
   \   'col': 3,
   \   'text': 'unreachable code:',
