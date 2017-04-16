@@ -7,7 +7,7 @@ endif
 
 function! ale_linters#go#gometalinter#GetCommand(buffer) abort
     return 'gometalinter '
-    \   . g:ale_go_gometalinter_options
+    \   . ale#Var(a:buffer, 'go_gometalinter_options')
     \   . ' ' . fnameescape(fnamemodify(bufname(a:buffer), ':p:h'))
 endfunction
 

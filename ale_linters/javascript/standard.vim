@@ -11,20 +11,20 @@ let g:ale_javascript_standard_use_global =
 \   get(g:, 'ale_javascript_standard_use_global', 0)
 
 function! ale_linters#javascript#standard#GetExecutable(buffer) abort
-    if g:ale_javascript_standard_use_global
-        return g:ale_javascript_standard_executable
+    if ale#Var(a:buffer, 'javascript_standard_use_global')
+        return ale#Var(a:buffer, 'javascript_standard_executable')
     endif
 
     return ale#util#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/standard',
-    \   g:ale_javascript_standard_executable
+    \   ale#Var(a:buffer, 'javascript_standard_executable')
     \)
 endfunction
 
 function! ale_linters#javascript#standard#GetCommand(buffer) abort
     return ale_linters#javascript#standard#GetExecutable(a:buffer)
-    \   . ' ' . g:ale_javascript_standard_options
+    \   . ' ' . ale#Var(a:buffer, 'javascript_standard_options')
     \   . ' --stdin %s'
 endfunction
 

@@ -5,7 +5,7 @@ let g:ale_lua_luacheck_executable =
 \   get(g:, 'ale_lua_luacheck_executable', 'luacheck')
 
 function! ale_linters#lua#luacheck#GetExecutable(buffer) abort
-    return g:ale_lua_luacheck_executable
+    return ale#Var(a:buffer, 'lua_luacheck_executable')
 endfunction
 
 function! ale_linters#lua#luacheck#GetCommand(buffer) abort

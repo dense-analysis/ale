@@ -17,7 +17,7 @@ let g:ale_sh_shellcheck_options =
 \   get(g:, 'ale_sh_shellcheck_options', '')
 
 function! ale_linters#sh#shellcheck#GetExecutable(buffer) abort
-    return g:ale_sh_shellcheck_executable
+    return ale#Var(a:buffer, 'sh_shellcheck_executable')
 endfunction
 
 if g:ale_linters_sh_shellcheck_exclusions !=# ''
@@ -40,7 +40,7 @@ endfunction
 
 function! ale_linters#sh#shellcheck#GetCommand(buffer) abort
     return ale_linters#sh#shellcheck#GetExecutable(a:buffer)
-    \   . ' ' . g:ale_sh_shellcheck_options
+    \   . ' ' . ale#Var(a:buffer, 'sh_shellcheck_options')
     \   . ' ' . s:exclude_option . ' ' . s:GetDialectArgument() . ' -f gcc -'
 endfunction
 

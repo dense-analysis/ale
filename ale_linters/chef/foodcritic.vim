@@ -36,8 +36,8 @@ endfunction
 
 function! ale_linters#chef#foodcritic#GetCommand(buffer) abort
     return printf('%s %s %%t',
-    \   g:ale_chef_foodcritic_executable,
-    \   escape(g:ale_chef_foodcritic_options, '~')
+    \   ale#Var(a:buffer, 'chef_foodcritic_executable'),
+    \   escape(ale#Var(a:buffer, 'chef_foodcritic_options'), '~')
     \)
 endfunction
 

@@ -14,7 +14,7 @@ function! ale_linters#c#gcc#GetCommand(buffer) abort
     "  headers in the same directory.
     return 'gcc -S -x c -fsyntax-only '
     \   . '-iquote ' . fnameescape(fnamemodify(bufname(a:buffer), ':p:h'))
-    \   . ' ' . g:ale_c_gcc_options . ' -'
+    \   . ' ' . ale#Var(a:buffer, 'c_gcc_options') . ' -'
 endfunction
 
 call ale#linter#Define('c', {

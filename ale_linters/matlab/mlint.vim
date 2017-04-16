@@ -5,7 +5,7 @@ let g:ale_matlab_mlint_executable =
 \   get(g:, 'ale_matlab_mlint_executable', 'mlint')
 
 function! ale_linters#matlab#mlint#GetExecutable(buffer) abort
-    return g:ale_matlab_mlint_executable
+    return ale#Var(a:buffer, 'matlab_mlint_executable')
 endfunction
 
 function! ale_linters#matlab#mlint#GetCommand(buffer) abort

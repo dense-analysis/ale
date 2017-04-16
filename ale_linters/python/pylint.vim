@@ -8,12 +8,12 @@ let g:ale_python_pylint_options =
 \   get(g:, 'ale_python_pylint_options', '')
 
 function! ale_linters#python#pylint#GetExecutable(buffer) abort
-    return g:ale_python_pylint_executable
+    return ale#Var(a:buffer, 'python_pylint_executable')
 endfunction
 
 function! ale_linters#python#pylint#GetCommand(buffer) abort
     return ale_linters#python#pylint#GetExecutable(a:buffer)
-    \   . ' ' . g:ale_python_pylint_options
+    \   . ' ' . ale#Var(a:buffer, 'python_pylint_options')
     \   . ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'
     \   . ' %t'
 endfunction

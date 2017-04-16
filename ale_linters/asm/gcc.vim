@@ -6,7 +6,7 @@ let g:ale_asm_gcc_options = get(g:, 'ale_asm_gcc_options', '-Wall')
 function! ale_linters#asm#gcc#GetCommand(buffer) abort
     return 'gcc -x assembler -fsyntax-only '
     \    . '-iquote ' . fnameescape(fnamemodify(bufname(a:buffer), ':p:h'))
-    \    . ' ' . g:ale_asm_gcc_options . ' -'
+    \    . ' ' . ale#Var(a:buffer, 'asm_gcc_options') . ' -'
 endfunction
 
 function! ale_linters#asm#gcc#Handle(buffer, lines) abort

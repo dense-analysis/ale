@@ -26,14 +26,14 @@ function! ale_linters#html#tidy#GetCommand(buffer) abort
     \ }, &fileencoding, '-utf8')
 
     return printf('%s %s %s -',
-    \   g:ale_html_tidy_executable,
-    \   g:ale_html_tidy_options,
+    \   ale#Var(a:buffer, 'html_tidy_executable'),
+    \   ale#Var(a:buffer, 'html_tidy_options'),
     \   l:file_encoding
     \)
 endfunction
 
 function! ale_linters#html#tidy#GetExecutable(buffer) abort
-    return g:ale_html_tidy_executable
+    return ale#Var(a:buffer, 'html_tidy_executable')
 endfunction
 
 function! ale_linters#html#tidy#Handle(buffer, lines) abort

@@ -7,14 +7,14 @@ let g:ale_scss_stylelint_use_global =
 \   get(g:, 'ale_scss_stylelint_use_global', 0)
 
 function! ale_linters#scss#stylelint#GetExecutable(buffer) abort
-    if g:ale_scss_stylelint_use_global
-        return g:ale_scss_stylelint_executable
+    if ale#Var(a:buffer, 'scss_stylelint_use_global')
+        return ale#Var(a:buffer, 'scss_stylelint_executable')
     endif
 
     return ale#util#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/stylelint',
-    \   g:ale_scss_stylelint_executable
+    \   ale#Var(a:buffer, 'scss_stylelint_executable')
     \)
 endfunction
 

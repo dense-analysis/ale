@@ -7,12 +7,12 @@ let g:ale_yaml_yamllint_options =
 \   get(g:, 'ale_yaml_yamllint_options', '')
 
 function! ale_linters#yaml#yamllint#GetExecutable(buffer) abort
-    return g:ale_yaml_yamllint_executable
+    return ale#Var(a:buffer, 'yaml_yamllint_executable')
 endfunction
 
 function! ale_linters#yaml#yamllint#GetCommand(buffer) abort
     return ale_linters#yaml#yamllint#GetExecutable(a:buffer)
-    \   . ' ' . g:ale_yaml_yamllint_options
+    \   . ' ' . ale#Var(a:buffer, 'yaml_yamllint_options')
     \   . ' -f parsable %t'
 endfunction
 

@@ -26,7 +26,7 @@ function! ale_linters#sh#shell#GetExecutable(buffer) abort
         endfor
     endif
 
-    return g:ale_linters_sh_shell_default_shell
+    return ale#Var(a:buffer, 'linters_sh_shell_default_shell')
 endfunction
 
 function! ale_linters#sh#shell#GetCommand(buffer) abort

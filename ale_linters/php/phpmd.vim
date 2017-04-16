@@ -6,7 +6,7 @@ let g:ale_php_phpmd_ruleset = get(g:, 'ale_php_phpmd_ruleset', 'cleancode,codesi
 
 function! ale_linters#php#phpmd#GetCommand(buffer) abort
     return 'phpmd %s text '
-    \   . g:ale_php_phpmd_ruleset
+    \   . ale#Var(a:buffer, 'php_phpmd_ruleset')
     \   . ' --ignore-violations-on-exit %t'
 endfunction
 

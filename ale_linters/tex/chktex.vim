@@ -13,7 +13,7 @@ function! ale_linters#tex#chktex#GetCommand(buffer) abort
     \   a:buffer,
     \   '.chktexrc')
 
-    let l:command = g:ale_tex_chktex_executable
+    let l:command = ale#Var(a:buffer, 'tex_chktex_executable')
     " Avoid bug when used without -p (last warning has gibberish for a filename)
     let l:command .= ' -v0 -p stdin -q'
 
@@ -21,7 +21,7 @@ function! ale_linters#tex#chktex#GetCommand(buffer) abort
         let l:command .= ' -l ' . fnameescape(l:chktex_config)
     endif
 
-    let l:command .= ' ' . g:ale_tex_chktex_options
+    let l:command .= ' ' . ale#Var(a:buffer, 'tex_chktex_options')
 
     return l:command
 endfunction

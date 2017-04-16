@@ -11,7 +11,7 @@ function! ale_linters#typescript#tslint#GetExecutable(buffer) abort
     return ale#util#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/tslint',
-    \   g:ale_typescript_tslint_executable
+    \   ale#Var(a:buffer, 'typescript_tslint_executable')
     \)
 endfunction
 
@@ -50,18 +50,18 @@ function! ale_linters#typescript#tslint#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#typescript#tslint#BuildLintCommand(buffer) abort
-    let g:ale_typescript_tslint_config_path =
-    \   empty(g:ale_typescript_tslint_config_path)
-    \   ? ale#util#FindNearestFile(a:buffer, 'tslint.json')
-    \   : g:ale_typescript_tslint_config_path
+    let l:tslint_config_path = ale#util#ResolveLocalPath(
+    \   a:buffer,
+    \   'tslint.json',
+    \   ale#Var(a:buffer, 'typescript_tslint_config_path')
+    \)
 
-    let l:tslint_options =
-    \   empty(g:ale_typescript_tslint_config_path)
-    \   ? ''
-    \   : '-c ' . fnameescape(g:ale_typescript_tslint_config_path)
+    let l:tslint_config_option = !empty(l:tslint_config_path)
+    \   ? '-c ' . fnameescape(l:tslint_config_path)
+    \   : ''
 
     return ale_linters#typescript#tslint#GetExecutable(a:buffer)
-    \   . ' ' . l:tslint_options
+    \   . ' ' . l:tslint_config_option
     \   . ' %t'
 endfunction
 

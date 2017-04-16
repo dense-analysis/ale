@@ -33,7 +33,7 @@ endfunction
 
 function! ale_linters#ruby#rubocop#GetCommand(buffer) abort
     return 'rubocop --format emacs --force-exclusion '
-    \   . g:ale_ruby_rubocop_options
+    \   . ale#Var(a:buffer, 'ruby_rubocop_options')
     \   . ' --stdin ' . bufname(a:buffer)
 endfunction
 

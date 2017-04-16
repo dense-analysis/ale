@@ -14,7 +14,7 @@ let g:ale_python_flake8_options =
 let s:version_cache = {}
 
 function! ale_linters#python#flake8#GetExecutable(buffer) abort
-    return g:ale_python_flake8_executable
+    return ale#Var(a:buffer, 'python_flake8_executable')
 endfunction
 
 function! ale_linters#python#flake8#VersionCheck(buffer) abort
@@ -64,7 +64,8 @@ function! ale_linters#python#flake8#GetCommand(buffer, version_output) abort
     \   : ''
 
     return ale_linters#python#flake8#GetExecutable(a:buffer)
-    \   . ' ' . g:ale_python_flake8_args . ' ' . l:display_name_args . ' -'
+    \   . ' ' . ale#Var(a:buffer, 'python_flake8_options')
+    \   . ' ' . l:display_name_args . ' -'
 endfunction
 
 call ale#linter#Define('python', {

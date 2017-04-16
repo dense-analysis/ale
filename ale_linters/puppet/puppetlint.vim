@@ -8,12 +8,12 @@ let g:ale_puppet_puppetlint_options =
 \   get(g:, 'ale_puppet_puppetlint_options', '--no-autoloader_layout-check')
 
 function! ale_linters#puppet#puppetlint#GetExecutable(buffer) abort
-    return g:ale_puppet_puppetlint_executable
+    return ale#Var(a:buffer, 'puppet_puppetlint_executable')
 endfunction
 
 function! ale_linters#puppet#puppetlint#GetCommand(buffer) abort
     return ale_linters#puppet#puppetlint#GetExecutable(a:buffer)
-    \   . ' ' . g:ale_puppet_puppetlint_options
+    \   . ' ' . ale#Var(a:buffer, 'puppet_puppetlint_options')
     \   . ' --log-format "-:%{line}:%{column}: %{kind}: [%{check}] %{message}"'
     \   . ' %t'
 endfunction

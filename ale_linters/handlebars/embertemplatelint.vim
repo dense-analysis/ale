@@ -8,14 +8,14 @@ let g:ale_handlebars_embertemplatelint_use_global =
 \   get(g:, 'ale_handlebars_embertemplatelint_use_global', 0)
 
 function! ale_linters#handlebars#embertemplatelint#GetExecutable(buffer) abort
-    if g:ale_handlebars_embertemplatelint_use_global
-        return g:ale_handlebars_embertemplatelint_executable
+    if ale#Var(a:buffer, 'handlebars_embertemplatelint_use_global')
+        return ale#Var(a:buffer, 'handlebars_embertemplatelint_executable')
     endif
 
     return ale#util#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/ember-template-lint',
-    \   g:ale_handlebars_embertemplatelint_executable
+    \   ale#Var(a:buffer, 'handlebars_embertemplatelint_executable')
     \)
 endfunction
 

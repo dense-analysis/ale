@@ -3,7 +3,7 @@
 
 let g:ale_python_mypy_options = get(g:, 'ale_python_mypy_options', '')
 
-function! g:ale_linters#python#mypy#GetCommand(buffer) abort
+function! ale_linters#python#mypy#GetCommand(buffer) abort
     let l:automatic_stubs_dir = ale#util#FindNearestDirectory(a:buffer, 'stubs')
     " TODO: Add Windows support
     let l:automatic_stubs_command = (has('unix') && !empty(l:automatic_stubs_dir))
@@ -11,13 +11,13 @@ function! g:ale_linters#python#mypy#GetCommand(buffer) abort
     \   : ''
 
     return 'mypy --show-column-numbers '
-    \   . g:ale_python_mypy_options
+    \   . ale#Var(a:buffer, 'python_mypy_options')
     \   . ' %t'
 endfunction
 
 let s:path_pattern = '[a-zA-Z]\?\\\?:\?[[:alnum:]/\.\-_]\+'
 
-function! g:ale_linters#python#mypy#Handle(buffer, lines) abort
+function! ale_linters#python#mypy#Handle(buffer, lines) abort
     " Look for lines like the following:
     "
     " file.py:4: error: No library stub file for module 'django.db'

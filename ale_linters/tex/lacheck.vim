@@ -5,11 +5,11 @@ let g:ale_tex_lacheck_executable =
 \   get(g:, 'ale_tex_lacheck_executable', 'lacheck')
 
 function! ale_linters#tex#lacheck#GetExecutable(buffer) abort
-    return g:ale_tex_lacheck_executable
+    return ale#Var(a:buffer, 'tex_lacheck_executable')
 endfunction
 
 function! ale_linters#tex#lacheck#GetCommand(buffer) abort
-    return g:ale_tex_lacheck_executable . ' %t'
+    return ale#Var(a:buffer, 'tex_lacheck_executable') . ' %t'
 endfunction
 
 function! ale_linters#tex#lacheck#Handle(buffer, lines) abort

@@ -14,7 +14,7 @@ function! ale_linters#rust#cargo#GetCargoExecutable(bufnr) abort
 endfunction
 
 function! ale_linters#rust#cargo#GetCommand(buffer) abort
-    let l:command = g:ale_rust_cargo_use_check
+    let l:command = ale#Var(a:buffer, 'rust_cargo_use_check')
     \   ? 'check'
     \   : 'build'
 

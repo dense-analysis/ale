@@ -11,7 +11,7 @@ let s:enable_neovim = has('nvim') ? ' --enable-neovim ' : ''
 let s:format = '-f "{file_path}:{line_number}:{column_number}: {severity}: {description} (see {reference})"'
 
 function! ale_linters#vim#vint#GetCommand(buffer) abort
-    let l:warning_flag = g:ale_vim_vint_show_style_issues ? '-s' : '-w'
+    let l:warning_flag = ale#Var(a:buffer, 'vim_vint_show_style_issues') ? '-s' : '-w'
 
     return 'vint '
     \   . l:warning_flag . ' '

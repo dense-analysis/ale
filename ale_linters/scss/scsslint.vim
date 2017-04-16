@@ -15,7 +15,7 @@ function! ale_linters#scss#scsslint#Handle(buffer, lines) abort
             continue
         endif
 
-        if !g:ale_warn_about_trailing_whitespace && l:match[4] =~# '^TrailingWhitespace'
+        if g:ale_warn_about_trailing_whitespace && l:match[4] =~# '^TrailingWhitespace'
             " Skip trailing whitespace warnings if that option is on.
             continue
         endif

@@ -11,8 +11,8 @@ let g:ale_javascript_eslint_use_global =
 \   get(g:, 'ale_javascript_eslint_use_global', 0)
 
 function! ale_linters#javascript#eslint#GetExecutable(buffer) abort
-    if g:ale_javascript_eslint_use_global
-        return g:ale_javascript_eslint_executable
+    if ale#Var(a:buffer, 'javascript_eslint_use_global')
+        return ale#Var(a:buffer, 'javascript_eslint_executable')
     endif
 
     " Look for the kinds of paths that create-react-app generates first.
@@ -29,13 +29,13 @@ function! ale_linters#javascript#eslint#GetExecutable(buffer) abort
     return ale#util#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/eslint',
-    \   g:ale_javascript_eslint_executable
+    \   ale#Var(a:buffer, 'javascript_eslint_executable')
     \)
 endfunction
 
 function! ale_linters#javascript#eslint#GetCommand(buffer) abort
     return ale_linters#javascript#eslint#GetExecutable(a:buffer)
-    \   . ' ' . g:ale_javascript_eslint_options
+    \   . ' ' . ale#Var(a:buffer, 'javascript_eslint_options')
     \   . ' -f unix --stdin --stdin-filename %s'
 endfunction
 

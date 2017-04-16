@@ -1,15 +1,15 @@
 " Author: jwilliams108 <https://github.com/jwilliams108>
 " Description: phpcs for PHP files
 
+let g:ale_php_phpcs_standard = get(g:, 'ale_php_phpcs_standard', '')
+
 function! ale_linters#php#phpcs#GetCommand(buffer) abort
-    let l:command = 'phpcs -s --report=emacs --stdin-path=%s'
+    let l:standard = ale#Var(a:buffer, 'php_phpcs_standard')
+    let l:standard_option = !empty(l:standard)
+    \   ? '--standard=' . l:standard
+    \   : ''
 
-    " This option can be set to change the standard used by phpcs
-    if exists('g:ale_php_phpcs_standard')
-        let l:command .= ' --standard=' . g:ale_php_phpcs_standard
-    endif
-
-    return l:command
+    return 'phpcs -s --report=emacs --stdin-path=%s ' . l:standard_option
 endfunction
 
 function! ale_linters#php#phpcs#Handle(buffer, lines) abort

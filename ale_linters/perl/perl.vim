@@ -8,12 +8,12 @@ let g:ale_perl_perl_options =
 \   get(g:, 'ale_perl_perl_options', '-X -c -Mwarnings -Ilib')
 
 function! ale_linters#perl#perl#GetExecutable(buffer) abort
-    return g:ale_perl_perl_executable
+    return ale#Var(a:buffer, 'perl_perl_executable')
 endfunction
 
 function! ale_linters#perl#perl#GetCommand(buffer) abort
     return ale_linters#perl#perl#GetExecutable(a:buffer)
-    \   . ' ' . g:ale_perl_perl_options
+    \   . ' ' . ale#Var(a:buffer, 'perl_perl_options')
     \   . ' %t'
 endfunction
 

@@ -62,18 +62,18 @@ function! ale_linters#fortran#gcc#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#fortran#gcc#GetExecutable(buffer) abort
-    return g:ale_fortran_gcc_executable
+    return ale#Var(a:buffer, 'fortran_gcc_executable')
 endfunction
 
 function! ale_linters#fortran#gcc#GetCommand(buffer) abort
-    let l:layout_option = g:ale_fortran_gcc_use_free_form
+    let l:layout_option = ale#Var(a:buffer, 'fortran_gcc_use_free_form')
     \   ? '-ffree-form'
     \   : '-ffixed-form'
 
     return ale_linters#fortran#gcc#GetExecutable(a:buffer)
     \   . ' -S -x f95 -fsyntax-only '
     \   . l:layout_option . ' '
-    \   . g:ale_fortran_gcc_options . ' '
+    \   . ale#Var(a:buffer, 'fortran_gcc_options') . ' '
     \   . '-'
 endfunction
 

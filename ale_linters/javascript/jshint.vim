@@ -8,14 +8,14 @@ let g:ale_javascript_jshint_use_global =
 \   get(g:, 'ale_javascript_jshint_use_global', 0)
 
 function! ale_linters#javascript#jshint#GetExecutable(buffer) abort
-    if g:ale_javascript_jshint_use_global
-        return g:ale_javascript_jshint_executable
+    if ale#Var(a:buffer, 'javascript_jshint_use_global')
+        return ale#Var(a:buffer, 'javascript_jshint_executable')
     endif
 
     return ale#util#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/jshint',
-    \   g:ale_javascript_jshint_executable
+    \   ale#Var(a:buffer, 'javascript_jshint_executable')
     \)
 endfunction
 

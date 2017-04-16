@@ -5,8 +5,8 @@ let g:ale_java_javac_options = get(g:, 'ale_java_javac_options', '')
 let g:ale_java_javac_classpath = get(g:, 'ale_java_javac_classpath', '')
 
 function! ale_linters#java#javac#GetCommand(buffer) abort
-    let l:cp_option = !empty(g:ale_java_javac_classpath)
-    \   ?  '-cp ' . g:ale_java_javac_classpath
+    let l:cp_option = !empty(ale#Var(a:buffer, 'java_javac_classpath'))
+    \   ?  '-cp ' . ale#Var(a:buffer, 'java_javac_classpath')
     \   : ''
 
     " Create .class files in a temporary directory, which we will delete later.
@@ -15,7 +15,7 @@ function! ale_linters#java#javac#GetCommand(buffer) abort
     return 'javac -Xlint '
     \ . l:cp_option
     \ . ' -d ' . fnameescape(l:class_file_directory)
-    \ . ' ' . g:ale_java_javac_options
+    \ . ' ' . ale#Var(a:buffer, 'java_javac_options')
     \ . ' %t'
 endfunction
 

@@ -8,14 +8,14 @@ let g:ale_javascript_flow_use_global =
 \   get(g:, 'ale_javascript_flow_use_global', 0)
 
 function! ale_linters#javascript#flow#GetExecutable(buffer) abort
-    if g:ale_javascript_flow_use_global
-        return g:ale_javascript_flow_executable
+    if ale#Var(a:buffer, 'javascript_flow_use_global')
+        return ale#Var(a:buffer, 'javascript_flow_executable')
     endif
 
     return ale#util#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/flow',
-    \   g:ale_javascript_flow_executable
+    \   ale#Var(a:buffer, 'javascript_flow_executable')
     \)
 endfunction
 

@@ -6,7 +6,7 @@ let g:ale_c_cppcheck_options = get(g:, 'ale_c_cppcheck_options', '--enable=style
 
 function! ale_linters#c#cppcheck#GetCommand(buffer) abort
     return 'cppcheck -q --language=c '
-    \   . g:ale_c_cppcheck_options
+    \   . ale#Var(a:buffer, 'c_cppcheck_options')
     \   . ' %t'
 endfunction
 

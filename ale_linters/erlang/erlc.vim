@@ -6,7 +6,9 @@ function! ale_linters#erlang#erlc#GetCommand(buffer) abort
     let l:output_file = tempname()
     call ale#engine#ManageFile(a:buffer, l:output_file)
 
-    return 'erlc -o ' . fnameescape(l:output_file) . ' ' . g:ale_erlang_erlc_options . ' %t'
+    return 'erlc -o ' . fnameescape(l:output_file)
+    \   . ' ' . ale#Var(a:buffer, 'erlang_erlc_options')
+    \   . ' %t'
 endfunction
 
 function! ale_linters#erlang#erlc#Handle(buffer, lines) abort
