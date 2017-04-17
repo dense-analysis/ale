@@ -9,7 +9,7 @@ let g:ale_tex_chktex_options =
 
 function! ale_linters#tex#chktex#GetCommand(buffer) abort
     " Check for optional .chktexrc
-    let l:chktex_config = ale#util#FindNearestFile(
+    let l:chktex_config = ale#path#FindNearestFile(
     \   a:buffer,
     \   '.chktexrc')
 

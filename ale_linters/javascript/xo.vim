@@ -15,7 +15,7 @@ function! ale_linters#javascript#xo#GetExecutable(buffer) abort
         return g:ale_javascript_xo_executable
     endif
 
-    return ale#util#ResolveLocalPath(
+    return ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/xo',
     \   g:ale_javascript_xo_executable

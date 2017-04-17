@@ -15,7 +15,7 @@ function! ale_linters#javascript#standard#GetExecutable(buffer) abort
         return ale#Var(a:buffer, 'javascript_standard_executable')
     endif
 
-    return ale#util#ResolveLocalPath(
+    return ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/standard',
     \   ale#Var(a:buffer, 'javascript_standard_executable')

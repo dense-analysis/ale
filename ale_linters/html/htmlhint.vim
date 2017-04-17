@@ -11,7 +11,7 @@ function! ale_linters#html#htmlhint#GetExecutable(buffer) abort
         return ale#Var(a:buffer, 'html_htmlhint_executable')
     endif
 
-    return ale#util#ResolveLocalPath(
+    return ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/htmlhint',
     \   ale#Var(a:buffer, 'html_htmlhint_executable')

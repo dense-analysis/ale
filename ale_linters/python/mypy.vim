@@ -4,7 +4,7 @@
 let g:ale_python_mypy_options = get(g:, 'ale_python_mypy_options', '')
 
 function! ale_linters#python#mypy#GetCommand(buffer) abort
-    let l:automatic_stubs_dir = ale#util#FindNearestDirectory(a:buffer, 'stubs')
+    let l:automatic_stubs_dir = ale#path#FindNearestDirectory(a:buffer, 'stubs')
     " TODO: Add Windows support
     let l:automatic_stubs_command = (has('unix') && !empty(l:automatic_stubs_dir))
     \   ?  'MYPYPATH=' . l:automatic_stubs_dir . ' '

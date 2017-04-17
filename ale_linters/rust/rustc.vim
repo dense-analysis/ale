@@ -5,7 +5,7 @@ function! ale_linters#rust#rustc#RustcCommand(buffer_number) abort
     " Try to guess the library search path. If the project is managed by cargo,
     " it's usually <project root>/target/debug/deps/ or
     " <project root>/target/release/deps/
-    let l:cargo_file = ale#util#FindNearestFile(a:buffer_number, 'Cargo.toml')
+    let l:cargo_file = ale#path#FindNearestFile(a:buffer_number, 'Cargo.toml')
 
     if l:cargo_file !=# ''
         let l:project_root = fnamemodify(l:cargo_file, ':h')

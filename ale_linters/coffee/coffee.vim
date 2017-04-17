@@ -2,7 +2,7 @@
 " Description: Coffee for checking coffee files
 
 function! ale_linters#coffee#coffee#GetExecutable(buffer) abort
-    return ale#util#ResolveLocalPath(
+    return ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/coffee',
     \   'coffee'

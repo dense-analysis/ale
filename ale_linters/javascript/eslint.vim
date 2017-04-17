@@ -16,7 +16,7 @@ function! ale_linters#javascript#eslint#GetExecutable(buffer) abort
     endif
 
     " Look for the kinds of paths that create-react-app generates first.
-    let l:executable = ale#util#ResolveLocalPath(
+    let l:executable = ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/eslint/bin/eslint.js',
     \   ''
@@ -26,7 +26,7 @@ function! ale_linters#javascript#eslint#GetExecutable(buffer) abort
         return l:executable
     endif
 
-    return ale#util#ResolveLocalPath(
+    return ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/eslint',
     \   ale#Var(a:buffer, 'javascript_eslint_executable')

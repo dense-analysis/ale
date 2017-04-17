@@ -12,7 +12,7 @@ function! ale_linters#handlebars#embertemplatelint#GetExecutable(buffer) abort
         return ale#Var(a:buffer, 'handlebars_embertemplatelint_executable')
     endif
 
-    return ale#util#ResolveLocalPath(
+    return ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/ember-template-lint',
     \   ale#Var(a:buffer, 'handlebars_embertemplatelint_executable')

@@ -2,7 +2,7 @@
 " Description: coffeelint linter for coffeescript files
 
 function! ale_linters#coffee#coffeelint#GetExecutable(buffer) abort
-    return ale#util#ResolveLocalPath(
+    return ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/coffeelint',
     \   'coffeelint'

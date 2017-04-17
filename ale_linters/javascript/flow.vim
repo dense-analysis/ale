@@ -12,7 +12,7 @@ function! ale_linters#javascript#flow#GetExecutable(buffer) abort
         return ale#Var(a:buffer, 'javascript_flow_executable')
     endif
 
-    return ale#util#ResolveLocalPath(
+    return ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/flow',
     \   ale#Var(a:buffer, 'javascript_flow_executable')
@@ -20,7 +20,7 @@ function! ale_linters#javascript#flow#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#javascript#flow#GetCommand(buffer) abort
-    let l:flow_config = ale#util#FindNearestFile(a:buffer, '.flowconfig')
+    let l:flow_config = ale#path#FindNearestFile(a:buffer, '.flowconfig')
 
     if empty(l:flow_config)
         " Don't run Flow if we can't find a .flowconfig file.
