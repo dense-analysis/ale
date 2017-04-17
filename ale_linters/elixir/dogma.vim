@@ -7,13 +7,7 @@ function! ale_linters#elixir#dogma#Handle(buffer, lines) abort
     let l:pattern = '\v:(\d+):?(\d+)?: (.): (.+)$'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
-            continue
-        endif
-
+    for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:type = l:match[3]
         let l:text = l:match[4]
 

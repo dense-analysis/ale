@@ -4,14 +4,12 @@ Execute(The mypy handler should parse lines correctly):
   AssertEqual
   \ [
   \   {
-  \     'bufnr': 347,
   \     'lnum': 4,
   \     'col': 0,
   \     'text': "No library stub file for module 'django.db'",
   \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 40,
   \     'col': 5,
   \     'text': "Some other problem",

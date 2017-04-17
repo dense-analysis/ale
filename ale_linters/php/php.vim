@@ -9,19 +9,11 @@ function! ale_linters#php#php#Handle(buffer, lines) abort
 
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
-            continue
-        endif
-
+    for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:match[3] + 0,
         \   'col': empty(l:match[2]) ? 0 : stridx(getline(l:match[3]), l:match[2]) + 1,
         \   'text': l:match[1],
-        \   'type': 'E',
         \})
     endfor
 

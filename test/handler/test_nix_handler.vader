@@ -4,14 +4,12 @@ Execute(The nix handler should parse nix-instantiate error messages correctly):
   AssertEqual
   \ [
   \   {
-  \     'bufnr': 47,
   \     'lnum': 23,
   \     'col': 14,
   \     'text': 'error: syntax error, unexpected IN',
   \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 47,
   \     'lnum': 3,
   \     'col': 12,
   \     'text': 'error: syntax error, unexpected ''='', expecting '';''',

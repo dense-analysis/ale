@@ -23,13 +23,7 @@ function! ale_linters#verilog#verilator#Handle(buffer, lines) abort
     let l:pattern = '^%\(Warning\|Error\)[^:]*:\([^:]\+\):\(\d\+\): \(.\+\)$'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
-            continue
-        endif
-
+    for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:line = l:match[3] + 0
         let l:type = l:match[1] ==# 'Error' ? 'E' : 'W'
         let l:text = l:match[4]
@@ -37,7 +31,6 @@ function! ale_linters#verilog#verilator#Handle(buffer, lines) abort
 
         if l:file =~# '_verilator_linted.v'
             call add(l:output, {
-            \   'bufnr': a:buffer,
             \   'lnum': l:line,
             \   'text': l:text,
             \   'type': l:type,

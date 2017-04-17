@@ -66,18 +66,7 @@ function! ale_linters#javascript#eslint#Handle(buffer, lines) abort
     let l:parsing_pattern = '^.*:\(\d\+\):\(\d\+\): \(.\+\)$'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
-            " Try the parsing pattern for parsing errors.
-            let l:match = matchlist(l:line, l:parsing_pattern)
-        endif
-
-        if len(l:match) == 0
-            continue
-        endif
-
+    for l:match in ale#util#GetMatches(a:lines, [l:pattern, l:parsing_pattern])
         let l:type = 'Error'
         let l:text = l:match[3]
 

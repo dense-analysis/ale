@@ -21,13 +21,7 @@ function! ale_linters#tex#lacheck#Handle(buffer, lines) abort
     let l:pattern = '^".\+", line \(\d\+\): \(.\+\)$'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
-            continue
-        endif
-
+    for l:match in ale#util#GetMatches(a:lines, l:pattern)
         " lacheck follows `\input{}` commands. If the cwd is not the same as the
         " file in the buffer then it will fail to find the inputed items. We do not
         " want warnings from those items anyway
@@ -36,9 +30,7 @@ function! ale_linters#tex#lacheck#Handle(buffer, lines) abort
         endif
 
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
-        \   'col': 0,
         \   'text': l:match[2],
         \   'type': 'W',
         \})

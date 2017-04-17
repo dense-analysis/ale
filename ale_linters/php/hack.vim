@@ -5,23 +5,15 @@ function! ale_linters#php#hack#Handle(buffer, lines) abort
     let l:pattern = '^\(.*\):\(\d\+\):\(\d\+\),\(\d\+\): \(.\+])\)$'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
+    for l:match in ale#util#GetMatches(a:lines, l:pattern)
+        if a:buffer != bufnr(l:match[1])
             continue
         endif
 
-        if a:buffer != bufnr(l:match[1])
-          continue
-        endif
-
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
         \   'text': l:match[5],
-        \   'type': 'E',
         \})
     endfor
 

@@ -26,7 +26,6 @@ function! ale_linters#scala#scalac#Handle(buffer, lines) abort
         endif
 
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
         \   'col': l:col + 1,
         \   'text': l:text,

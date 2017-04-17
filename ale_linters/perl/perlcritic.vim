@@ -5,22 +5,10 @@ function! ale_linters#perl#perlcritic#Handle(buffer, lines) abort
     let l:pattern = '\(.\+\) at \(.\+\) line \(\d\+\)'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
-            continue
-        endif
-
-        let l:line = l:match[3]
-        let l:text = l:match[1]
-        let l:type = 'E'
-
+    for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
-        \   'bufnr': a:buffer,
-        \   'lnum': l:line,
-        \   'text': l:text,
-        \   'type': l:type,
+        \   'text': l:match[1],
+        \   'lnum': l:match[3],
         \})
     endfor
 

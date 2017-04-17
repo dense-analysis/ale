@@ -101,3 +101,27 @@ endfunction
 function! ale#util#ClockMilliseconds() abort
     return float2nr(reltimefloat(reltime()) * 1000)
 endfunction
+
+" Given a single line, or a List of lines, and a single pattern, or a List
+" of patterns, return all of the matches for the lines(s) from the given
+" patterns, using matchlist().
+"
+" Only the first pattern which matches a line will be returned.
+function! ale#util#GetMatches(lines, patterns) abort
+    let l:matches = []
+    let l:lines = type(a:lines) == type([]) ? a:lines : [a:lines]
+    let l:patterns = type(a:patterns) == type([]) ? a:patterns : [a:patterns]
+
+    for l:line in l:lines
+        for l:pattern in l:patterns
+            let l:match = matchlist(l:line, l:pattern)
+
+            if !empty(l:match)
+                call add(l:matches, l:match)
+                break
+            endif
+        endfor
+    endfor
+
+    return l:matches
+endfunction

@@ -23,20 +23,13 @@ function! ale_linters#yaml#yamllint#Handle(buffer, lines) abort
     let l:pattern = '^.*:\(\d\+\):\(\d\+\): \[\(error\|warning\)\] \(.\+\)$'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
-            continue
-        endif
-
+    for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:line = l:match[1] + 0
         let l:col = l:match[2] + 0
         let l:type = l:match[3]
         let l:text = l:match[4]
 
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:line,
         \   'col': l:col,
         \   'text': l:text,

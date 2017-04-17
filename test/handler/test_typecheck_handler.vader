@@ -4,18 +4,14 @@ Execute(The typecheck handler should parse lines correctly):
   AssertEqual
   \ [
   \   {
-  \     'bufnr': 347,
   \     'lnum': 16,
   \     'col': 7,
   \     'text': "Type 'A' is not assignable to type 'B'",
-  \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 7,
   \     'col': 41,
   \     'text': "Property 'a' does not exist on type 'A'",
-  \     'type': 'E',
   \   },
   \ ],
   \ ale_linters#typescript#typecheck#Handle(347, [

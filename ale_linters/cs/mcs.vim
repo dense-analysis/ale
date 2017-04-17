@@ -11,15 +11,8 @@ function! ale_linters#cs#mcs#Handle(buffer, lines) abort
     let l:pattern = '^.\+.cs(\(\d\+\),\(\d\+\)): \(.\+\): \(.\+\)'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
-            continue
-        endif
-
+    for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
         \   'text': l:match[3] . ': ' . l:match[4],

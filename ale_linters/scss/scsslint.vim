@@ -8,20 +8,13 @@ function! ale_linters#scss#scsslint#Handle(buffer, lines) abort
     let l:pattern = '^.*:\(\d\+\):\(\d*\) \[\([^\]]\+\)\] \(.\+\)$'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
-            continue
-        endif
-
+    for l:match in ale#util#GetMatches(a:lines, l:pattern)
         if g:ale_warn_about_trailing_whitespace && l:match[4] =~# '^TrailingWhitespace'
             " Skip trailing whitespace warnings if that option is on.
             continue
         endif
 
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
         \   'text': l:match[4],

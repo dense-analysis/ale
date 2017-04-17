@@ -6,13 +6,7 @@ function! ale_linters#nim#nimcheck#Handle(buffer, lines) abort
     let l:pattern = '^\(.\+\.nim\)(\(\d\+\), \(\d\+\)) \(.\+\)'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
-            continue
-        endif
-
+    for l:match in ale#util#GetMatches(a:lines, l:pattern)
         " Only show errors of the current buffer
         " NOTE: Checking filename only is OK because nim enforces unique
         "       module names.
