@@ -71,6 +71,8 @@ CONTENTS                                                         *ale-contents*
     sh....................................|ale-sh-options|
       shell...............................|ale-sh-shell|
       shellcheck..........................|ale-sh-shellcheck|
+    spec..................................|ale-spec-options|
+      rpmlint.............................|ale-spec-rpmlint|
     tex...................................|ale-tex-options|
       chktex..............................|ale-tex-chktex|
       lacheck.............................|ale-tex-lacheck|
@@ -149,6 +151,7 @@ The following languages and tools are supported.
 * Puppet: 'puppet', 'puppet-lint'
 * Python: 'flake8', 'mypy', 'pylint'
 * reStructuredText: 'proselint'
+* RPM spec: 'spec'
 * Rust: 'rustc' (see |ale-integration-rust|)
 * Ruby: 'rubocop'
 * SASS: 'sasslint', 'stylelint'
