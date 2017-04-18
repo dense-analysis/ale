@@ -74,6 +74,8 @@ CONTENTS                                                         *ale-contents*
     tex...................................|ale-tex-options|
       chktex..............................|ale-tex-chktex|
       lacheck.............................|ale-tex-lacheck|
+    typescript............................|ale-typescript-options|
+      tslint..............................|ale-typescript-tslint|
     vim...................................|ale-vim-options|
       vint................................|ale-vim-vint|
     yaml..................................|ale-yaml-options|

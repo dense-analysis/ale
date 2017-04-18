@@ -7,7 +7,14 @@ let g:ale_typescript_tslint_executable =
 let g:ale_typescript_tslint_config_path =
 \   get(g:, 'ale_typescript_tslint_config_path', '')
 
+let g:ale_typescript_tslint_use_global =
+\   get(g:, 'ale_typescript_tslint_use_global', 0)
+
 function! ale_linters#typescript#tslint#GetExecutable(buffer) abort
+    if ale#Var(a:buffer, 'typescript_tslint_use_global')
+        return ale#Var(a:buffer, 'typescript_tslint_executable')
+    endif
+
     return ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/tslint',
