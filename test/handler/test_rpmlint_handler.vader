@@ -18,7 +18,7 @@ Execute(The rpmlint handler should parse error messages correctly):
   \   {
   \     'bufnr': 42,
   \     'lnum': 1,
-  \     'text': 'warning: bogus date in %changelog: Mon Oct 1 2005 - Foo',
+  \     'text': 'specfile-error warning: bogus date in %changelog: Mon Oct 1 2005 - Foo',
   \     'type': 'E',
   \   },
   \ ],
