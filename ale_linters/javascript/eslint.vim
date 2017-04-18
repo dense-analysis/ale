@@ -16,7 +16,7 @@ function! ale_linters#javascript#eslint#GetExecutable(buffer) abort
     endif
 
     " Look for the kinds of paths that create-react-app generates first.
-    let l:executable = ale#util#ResolveLocalPath(
+    let l:executable = ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/eslint/bin/eslint.js',
     \   ''
@@ -26,7 +26,7 @@ function! ale_linters#javascript#eslint#GetExecutable(buffer) abort
         return l:executable
     endif
 
-    return ale#util#ResolveLocalPath(
+    return ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/eslint',
     \   ale#Var(a:buffer, 'javascript_eslint_executable')
@@ -66,18 +66,7 @@ function! ale_linters#javascript#eslint#Handle(buffer, lines) abort
     let l:parsing_pattern = '^.*:\(\d\+\):\(\d\+\): \(.\+\)$'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
-            " Try the parsing pattern for parsing errors.
-            let l:match = matchlist(l:line, l:parsing_pattern)
-        endif
-
-        if len(l:match) == 0
-            continue
-        endif
-
+    for l:match in ale#util#GetMatches(a:lines, [l:pattern, l:parsing_pattern])
         let l:type = 'Error'
         let l:text = l:match[3]
 

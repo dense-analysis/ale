@@ -4,7 +4,7 @@
 let g:ale_python_mypy_options = get(g:, 'ale_python_mypy_options', '')
 
 function! ale_linters#python#mypy#GetCommand(buffer) abort
-    let l:automatic_stubs_dir = ale#util#FindNearestDirectory(a:buffer, 'stubs')
+    let l:automatic_stubs_dir = ale#path#FindNearestDirectory(a:buffer, 'stubs')
     " TODO: Add Windows support
     let l:automatic_stubs_command = (has('unix') && !empty(l:automatic_stubs_dir))
     \   ?  'MYPYPATH=' . l:automatic_stubs_dir . ' '
@@ -28,13 +28,7 @@ function! ale_linters#python#mypy#Handle(buffer, lines) abort
     let l:pattern = '^' . s:path_pattern . ':\(\d\+\):\?\(\d\+\)\?: \([^:]\+\): \(.\+\)$'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
-            continue
-        endif
-
+    for l:match in ale#util#GetMatches(a:lines, l:pattern)
         if l:match[4] =~# 'Stub files are from'
             " The lines telling us where to get stub files from make it so
             " we can't read the actual errors, so exclude them.
@@ -42,7 +36,6 @@ function! ale_linters#python#mypy#Handle(buffer, lines) abort
         endif
 
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
         \   'text': l:match[4],

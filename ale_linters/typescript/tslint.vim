@@ -15,7 +15,7 @@ function! ale_linters#typescript#tslint#GetExecutable(buffer) abort
         return ale#Var(a:buffer, 'typescript_tslint_executable')
     endif
 
-    return ale#util#ResolveLocalPath(
+    return ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/tslint',
     \   ale#Var(a:buffer, 'typescript_tslint_executable')
@@ -32,24 +32,15 @@ function! ale_linters#typescript#tslint#Handle(buffer, lines) abort
     let l:pattern = '.\+' . l:ext . '\[\(\d\+\), \(\d\+\)\]: \(.\+\)'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
-            continue
-        endif
-
+    for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:line = l:match[1] + 0
         let l:column = l:match[2] + 0
-        let l:type = 'E'
         let l:text = l:match[3]
 
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:line,
         \   'col': l:column,
         \   'text': l:text,
-        \   'type': l:type,
         \})
     endfor
 
@@ -57,7 +48,7 @@ function! ale_linters#typescript#tslint#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#typescript#tslint#BuildLintCommand(buffer) abort
-    let l:tslint_config_path = ale#util#ResolveLocalPath(
+    let l:tslint_config_path = ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'tslint.json',
     \   ale#Var(a:buffer, 'typescript_tslint_config_path')

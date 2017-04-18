@@ -19,7 +19,6 @@ function! ale_linters#ruby#ruby#Handle(buffer, lines) abort
             endif
         else
             call add(l:output, {
-            \   'bufnr': a:buffer,
             \   'lnum': l:match[1] + 0,
             \   'col': 0,
             \   'text': l:match[2] . l:match[3],

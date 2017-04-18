@@ -7,40 +7,28 @@ Execute(The shell handler should parse lines correctly):
   AssertEqual
   \ [
   \   {
-  \     'bufnr': 347,
   \     'lnum': 13,
   \     'text': 'syntax error near unexpected token d',
-  \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 7,
   \     'text': 'line 42: line 36:',
-  \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 11,
   \     'text': 'Syntax error: "(" unexpected',
-  \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 95,
   \     'text': 'parse error near `out=$(( $1 / 1024. )...',
-  \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 22,
   \     'text': ':11: :33: :44:',
-  \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 9,
   \     'text': '`done'' unexpected',
-  \     'type': 'E',
   \   },
   \ ],
   \ ale_linters#sh#shell#Handle(347, [

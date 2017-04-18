@@ -12,7 +12,7 @@ function! ale_linters#javascript#jshint#GetExecutable(buffer) abort
         return ale#Var(a:buffer, 'javascript_jshint_executable')
     endif
 
-    return ale#util#ResolveLocalPath(
+    return ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/jshint',
     \   ale#Var(a:buffer, 'javascript_jshint_executable')
@@ -21,7 +21,7 @@ endfunction
 
 function! ale_linters#javascript#jshint#GetCommand(buffer) abort
     " Search for a local JShint config locaation, and default to a global one.
-    let l:jshint_config = ale#util#ResolveLocalPath(
+    let l:jshint_config = ale#path#ResolveLocalPath(
     \   a:buffer,
     \   '.jshintrc',
     \   get(g:, 'ale_jshint_config_loc', '')

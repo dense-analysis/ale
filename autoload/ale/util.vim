@@ -13,49 +13,6 @@ function! ale#util#GetLineCount(buffer) abort
     return len(getbufline(a:buffer, 1, '$'))
 endfunction
 
-" Given a buffer and a filename, find the nearest file by searching upwards
-" through the paths relative to the given buffer.
-function! ale#util#FindNearestFile(buffer, filename) abort
-    let l:buffer_filename = fnamemodify(bufname(a:buffer), ':p')
-
-    let l:relative_path = findfile(a:filename, l:buffer_filename . ';')
-
-    if !empty(l:relative_path)
-        return fnamemodify(l:relative_path, ':p')
-    endif
-
-    return ''
-endfunction
-
-" Given a buffer and a directory name, find the nearest directory by searching upwards
-" through the paths relative to the given buffer.
-function! ale#util#FindNearestDirectory(buffer, directory_name) abort
-    let l:buffer_filename = fnamemodify(bufname(a:buffer), ':p')
-
-    let l:relative_path = finddir(a:directory_name, l:buffer_filename . ';')
-
-    if !empty(l:relative_path)
-        return fnamemodify(l:relative_path, ':p')
-    endif
-
-    return ''
-endfunction
-
-" Given a buffer, a string to search for, an a global fallback for when
-" the search fails, look for a file in parent paths, and if that fails,
-" use the global fallback path instead.
-function! ale#util#ResolveLocalPath(buffer, search_string, global_fallback) abort
-    " Search for a locally installed file first.
-    let l:path = ale#util#FindNearestFile(a:buffer, a:search_string)
-
-    " If the serach fails, try the global executable instead.
-    if empty(l:path)
-        let l:path = a:global_fallback
-    endif
-
-    return l:path
-endfunction
-
 function! ale#util#GetFunction(string_or_ref) abort
     if type(a:string_or_ref) == type('')
         return function(a:string_or_ref)
@@ -145,15 +102,26 @@ function! ale#util#ClockMilliseconds() abort
     return float2nr(reltimefloat(reltime()) * 1000)
 endfunction
 
+" Given a single line, or a List of lines, and a single pattern, or a List
+" of patterns, return all of the matches for the lines(s) from the given
+" patterns, using matchlist().
+"
+" Only the first pattern which matches a line will be returned.
+function! ale#util#GetMatches(lines, patterns) abort
+    let l:matches = []
+    let l:lines = type(a:lines) == type([]) ? a:lines : [a:lines]
+    let l:patterns = type(a:patterns) == type([]) ? a:patterns : [a:patterns]
 
-" Output 'cd <directory> && '
-" This function can be used changing the directory for a linter command.
-function! ale#util#CdString(directory) abort
-    return 'cd ' . fnameescape(a:directory) . ' && '
-endfunction
+    for l:line in l:lines
+        for l:pattern in l:patterns
+            let l:match = matchlist(l:line, l:pattern)
 
-" Output 'cd <buffer_filename_directory> && '
-" This function can be used changing the directory for a linter command.
-function! ale#util#BufferCdString(buffer) abort
-    return ale#util#CdString(fnamemodify(bufname(a:buffer), ':p:h'))
+            if !empty(l:match)
+                call add(l:matches, l:match)
+                break
+            endif
+        endfor
+    endfor
+
+    return l:matches
 endfunction

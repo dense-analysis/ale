@@ -4,22 +4,14 @@ Execute(The asm GCC handler should parse lines from GCC 6.3.1 correctly):
   AssertEqual
   \ [
   \    {
-  \      'bufnr': 357,
   \      'lnum': 38,
-  \      'vcol': 0,
-  \      'col': 0,
   \      'text': "too many memory references for `mov'",
   \      'type': 'E',
-  \      'nr': -1,
   \    },
   \    {
-  \      'bufnr': 357,
   \      'lnum': 42,
-  \      'vcol': 0,
-  \      'col': 0,
   \      'text': "incorrect register `%ax' used with `l' suffix",
   \      'type': 'E',
-  \      'nr': -1,
   \    },
   \ ],
   \ ale_linters#asm#gcc#Handle(357, [

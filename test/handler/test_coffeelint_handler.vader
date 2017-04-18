@@ -4,7 +4,6 @@ Execute(The coffeelint handler should parse lines correctly):
   AssertEqual
   \ [
   \   {
-  \     'bufnr': 347,
   \     'lnum': 125,
   \     'text': "Line exceeds maximum allowed length Length is 122, max is 120.",
   \     'type': 'E',

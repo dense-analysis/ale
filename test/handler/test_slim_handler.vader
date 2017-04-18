@@ -6,19 +6,16 @@ Execute(The slim handler should parse lines correctly):
   AssertEqual
   \ [
   \   {
-  \     'bufnr': 347,
   \     'lnum': 1,
   \     'text': 'RedundantDiv: `div` is redundant when class attribute shortcut is present',
   \     'type': 'W',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 2,
   \     'text': 'LineLength: Line is too long. [136/80]',
   \     'type': 'W',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 3,
   \     'text': 'Invalid syntax',
   \     'type': 'E',

@@ -38,7 +38,7 @@ endfunction
 " Return the command to execute the linter in the projects directory.
 " If it doesn't, then this will fail when imports are needed.
 function! ale_linters#elm#make#GetCommand(buffer) abort
-    let l:elm_package = ale#util#FindNearestFile(a:buffer, 'elm-package.json')
+    let l:elm_package = ale#path#FindNearestFile(a:buffer, 'elm-package.json')
     if empty(l:elm_package)
         let l:dir_set_cmd = ''
     else

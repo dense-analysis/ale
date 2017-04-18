@@ -15,7 +15,7 @@ function! ale_linters#javascript#standard#GetExecutable(buffer) abort
         return ale#Var(a:buffer, 'javascript_standard_executable')
     endif
 
-    return ale#util#ResolveLocalPath(
+    return ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/standard',
     \   ale#Var(a:buffer, 'javascript_standard_executable')
@@ -37,13 +37,7 @@ function! ale_linters#javascript#standard#Handle(buffer, lines) abort
     let l:pattern = '^.*:\(\d\+\):\(\d\+\): \(.\+\)$'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
-            continue
-        endif
-
+    for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:type = 'Error'
         let l:text = l:match[3]
 

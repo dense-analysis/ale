@@ -11,7 +11,7 @@ function! ale_linters#scss#stylelint#GetExecutable(buffer) abort
         return ale#Var(a:buffer, 'scss_stylelint_executable')
     endif
 
-    return ale#util#ResolveLocalPath(
+    return ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/stylelint',
     \   ale#Var(a:buffer, 'scss_stylelint_executable')

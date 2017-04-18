@@ -7,21 +7,18 @@ Execute(The ruby handler should parse lines correctly and add the column if it c
   \ [
   \   {
   \     'lnum': 6,
-  \     'bufnr': 255,
   \     'col': 13,
   \     'type': 'E',
   \     'text': 'syntax error, unexpected '';'''
   \   },
   \   {
   \     'lnum': 9,
-  \     'bufnr': 255,
   \     'col': 0,
   \     'type': 'W',
   \     'text': 'warning: statement not reached'
   \   },
   \   {
   \     'lnum': 12,
-  \     'bufnr': 255,
   \     'col': 0,
   \     'type': 'E',
   \     'text': 'syntax error, unexpected end-of-input, expecting keyword_end'

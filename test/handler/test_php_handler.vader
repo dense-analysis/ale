@@ -11,53 +11,39 @@ Execute(The php handler should parse lines correctly):
   AssertEqual
   \ [
   \   {
-  \     'bufnr': 347,
   \     'lnum': 1,
   \     'col': 5,
   \     'text': "syntax error, unexpected ';', expecting ']'",
-  \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 2,
   \     'col': 13,
   \     'text': "syntax error, unexpected '/', expecting function (T_FUNCTION) or const (T_CONST)",
-  \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 3,
   \     'col': 5,
   \     'text': "syntax error, unexpected ')'",
-  \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 4,
   \     'col': 8,
   \     'text': "syntax error, unexpected ''bar'' (T_CONSTANT_ENCAPSED_STRING), expecting ']'",
-  \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 5,
   \     'col': 0,
   \     'text': "Cannot redeclare count()",
-  \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 21,
   \     'col': 0,
   \     'text': "syntax error, unexpected end of file",
-  \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 47,
   \     'col': 0,
   \     'text': "Invalid numeric literal",
-  \     'type': 'E',
   \   },
   \ ],
   \ ale_linters#php#php#Handle(347, [
