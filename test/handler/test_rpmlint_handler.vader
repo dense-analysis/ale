@@ -1,7 +1,7 @@
 Execute(The rpmlint handler should parse error messages correctly):
-    runtime ale_linters/spec/rpmlint.vim
+  runtime ale_linters/spec/rpmlint.vim
 
-AssertEqual
+  AssertEqual
   \ [
   \   {
   \     'lnum': 23,
@@ -23,7 +23,4 @@ AssertEqual
   \   'cyrus-imapd.spec:23: W: macro-in-comment %version',
   \   'cyrus-imapd.spec:17: E: hardcoded-library-path in %_prefix/lib/%name',
   \   'apcupsd.spec: E: specfile-error warning: bogus date in %changelog: Mon Oct 1 2005 - Foo',
-\ ])
-
-
-
+  \ ])
