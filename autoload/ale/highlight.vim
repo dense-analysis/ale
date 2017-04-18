@@ -51,8 +51,9 @@ function! ale#highlight#UpdateHighlights() abort
     let l:has_new_items = has_key(s:buffer_highlights, l:buffer)
     let l:loclist = l:has_new_items ? remove(s:buffer_highlights, l:buffer) : []
     let l:current_id_map = s:GetCurrentMatchIDs(l:loclist)
+    let l:is_lintable_buffer = ale#filetypes#IsLintable(&filetype)
 
-    if l:has_new_items || !g:ale_enabled
+    if l:has_new_items || !l:is_lintable_buffer || !g:ale_enabled
         for l:match in s:GetALEMatches()
             if !has_key(l:current_id_map, l:match.id)
                 call matchdelete(l:match.id)

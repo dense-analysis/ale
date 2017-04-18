@@ -58,3 +58,8 @@ function! ale#filetypes#GuessExtension(filetype) abort
     " Return an empty string if we don't find anything.
     return ''
 endfunction
+
+function! ale#filetypes#IsLintable(filetype) abort
+    let l:linters = ale#linter#Get(a:filetype)
+    return len(l:linters) != 0
+endfunction
