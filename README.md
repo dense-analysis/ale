@@ -95,6 +95,7 @@ name. That seems to be the fairest way to arrange this table.
 | Puppet | [puppet](https://puppet.com), [puppet-lint](https://puppet-lint.com) |
 | Python | [flake8](http://flake8.pycqa.org/en/latest/), [mypy](http://mypy-lang.org/), [pylint](https://www.pylint.org/) |
 | reStructuredText | [proselint](http://proselint.com/)|
+| RPM spec | [rpmlint](https://github.com/rpm-software-management/rpmlint) |
 | Ruby | [rubocop](https://github.com/bbatsov/rubocop), [ruby](https://www.ruby-lang.org) |
 | Rust | [rustc](https://www.rust-lang.org/), cargo (see `:help ale-integration-rust` for configuration instructions) |
 | SASS | [sass-lint](https://www.npmjs.com/package/sass-lint), [stylelint](https://github.com/stylelint/stylelint) |
