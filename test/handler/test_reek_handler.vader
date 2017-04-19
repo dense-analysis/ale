@@ -1,0 +1,67 @@
+Execute(The reek handler should parse JSON correctly):
+    runtime ale_linters/ruby/reek.vim
+
+    let g:ale_ruby_reek_show_context = 1
+    let g:ale_ruby_reek_show_wiki_link = 0
+    AssertEqual
+    \ [
+    \     {
+    \         'bufnr': 347,
+    \         'lnum': 12,
+    \         'text': 'Rule1: Context#method violates rule number one',
+    \         'type': 'W',
+    \     },
+    \     {
+    \         'bufnr': 347,
+    \         'lnum': 34,
+    \         'text': 'Rule2: Context#method violates rule number two',
+    \         'type': 'W',
+    \     },
+    \     {
+    \         'bufnr': 347,
+    \         'lnum': 56,
+    \         'text': 'Rule2: Context#method violates rule number two',
+    \         'type': 'W',
+    \     },
+    \ ],
+    \ ale_linters#ruby#reek#Handle(347, [
+    \     '[{"context":"Context#method","lines":[12],"message":"violates rule number one","smell_type":"Rule1","source":"/home/user/file.rb","parameter":"bad parameter","wiki_link":"https://example.com/Rule1.md"},{"context":"Context#method","lines":[34, 56],"message":"violates rule number two","smell_type":"Rule2","source":"/home/user/file.rb","name":"bad code","count":2,"wiki_link":"https://example.com/Rule1.md"}]'
+    \ ])
+
+    let g:ale_ruby_reek_show_context = 0
+    let g:ale_ruby_reek_show_wiki_link = 0
+    AssertEqual
+    \ [
+    \     {
+    \         'bufnr': 347,
+    \         'lnum': 12,
+    \         'text': 'Rule1: violates rule number one',
+    \         'type': 'W',
+    \     },
+    \ ],
+    \ ale_linters#ruby#reek#Handle(347, [
+    \     '[{"context":"Context#method","lines":[12],"message":"violates rule number one","smell_type":"Rule1","source":"/home/user/file.rb","parameter":"bad parameter","wiki_link":"https://example.com/Rule1.md"}]'
+    \ ])
+
+    let g:ale_ruby_reek_show_context = 1
+    let g:ale_ruby_reek_show_wiki_link = 1
+    AssertEqual
+    \ [
+    \     {
+    \         'bufnr': 347,
+    \         'lnum': 12,
+    \         'text': 'Rule1: Context#method violates rule number one [https://example.com/Rule1.md]',
+    \         'type': 'W',
+    \     },
+    \ ],
+    \ ale_linters#ruby#reek#Handle(347, [
+    \     '[{"context":"Context#method","lines":[12],"message":"violates rule number one","smell_type":"Rule1","source":"/home/user/file.rb","parameter":"bad parameter","wiki_link":"https://example.com/Rule1.md"}]'
+    \ ])
+
+    AssertEqual
+    \ [],
+    \ ale_linters#ruby#reek#Handle(347, [
+    \ ])
+
+After:
+    call ale#linter#Reset()

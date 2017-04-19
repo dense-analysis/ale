@@ -60,6 +60,7 @@ CONTENTS                                                         *ale-contents*
       mypy................................|ale-python-mypy|
       pylint..............................|ale-python-pylint|
     ruby..................................|ale-ruby-options|
+      reek................................|ale-ruby-reek|
       rubocop.............................|ale-ruby-rubocop|
     rust..................................|ale-rust-options|
       cargo...............................|ale-rust-cargo|
@@ -155,7 +156,7 @@ The following languages and tools are supported.
 * reStructuredText: 'proselint'
 * RPM spec: 'spec'
 * Rust: 'rustc' (see |ale-integration-rust|)
-* Ruby: 'rubocop'
+* Ruby: 'reek', 'rubocop'
 * SASS: 'sasslint', 'stylelint'
 * SCSS: 'sasslint', 'scsslint', 'stylelint'
 * Scala: 'scalac'
