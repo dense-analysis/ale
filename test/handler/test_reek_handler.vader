@@ -11,19 +11,16 @@ Execute(The reek handler should parse JSON correctly, with only context enabled)
     AssertEqual
     \ [
     \     {
-    \         'bufnr': 347,
     \         'lnum': 12,
     \         'text': 'Rule1: Context#method violates rule number one',
     \         'type': 'W',
     \     },
     \     {
-    \         'bufnr': 347,
     \         'lnum': 34,
     \         'text': 'Rule2: Context#method violates rule number two',
     \         'type': 'W',
     \     },
     \     {
-    \         'bufnr': 347,
     \         'lnum': 56,
     \         'text': 'Rule2: Context#method violates rule number two',
     \         'type': 'W',
@@ -40,7 +37,6 @@ Execute(The reek handler should parse JSON correctly, with no context or wiki li
     AssertEqual
     \ [
     \     {
-    \         'bufnr': 347,
     \         'lnum': 12,
     \         'text': 'Rule1: violates rule number one',
     \         'type': 'W',
@@ -57,7 +53,6 @@ Execute(The reek handler should parse JSON correctly, with both context and wiki
     AssertEqual
     \ [
     \     {
-    \         'bufnr': 347,
     \         'lnum': 12,
     \         'text': 'Rule1: Context#method violates rule number one [https://example.com/Rule1.md]',
     \         'type': 'W',

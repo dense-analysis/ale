@@ -13,7 +13,6 @@ function! ale_linters#ruby#reek#Handle(buffer, lines) abort
     for l:error in l:errors
         for l:location in l:error.lines
             call add(l:output, {
-            \    'bufnr': a:buffer,
             \    'lnum': l:location,
             \    'type': 'W',
             \    'text': s:BuildText(l:error),
