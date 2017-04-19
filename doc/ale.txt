@@ -582,6 +582,10 @@ g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
 Linter options are documented in individual help files. See the table of
 contents at |ale-contents|.
 
+Every linter variable can be set globally, or individually for each buffer.
+For example, `b:ale_python_flake8_executable` will override any values
+set for `g:ale_python_flake8_executable`.
+
 
 ===============================================================================
 5. Commands/Keybinds                                             *ale-commands*
