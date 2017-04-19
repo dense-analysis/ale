@@ -46,18 +46,25 @@ function! s:GetCurrentMatchIDs(loclist) abort
     return l:current_id_map
 endfunction
 
+" Given a loclist for current items to highlight, remove all highlights
+" except these which have matching loclist item entries.
+function! ale#highlight#RemoveHighlights(loclist) abort
+    let l:current_id_map = s:GetCurrentMatchIDs(a:loclist)
+
+    for l:match in s:GetALEMatches()
+        if !has_key(l:current_id_map, l:match.id)
+            call matchdelete(l:match.id)
+        endif
+    endfor
+endfunction
+
 function! ale#highlight#UpdateHighlights() abort
     let l:buffer = bufnr('%')
     let l:has_new_items = has_key(s:buffer_highlights, l:buffer)
     let l:loclist = l:has_new_items ? remove(s:buffer_highlights, l:buffer) : []
-    let l:current_id_map = s:GetCurrentMatchIDs(l:loclist)
 
     if l:has_new_items || !g:ale_enabled
-        for l:match in s:GetALEMatches()
-            if !has_key(l:current_id_map, l:match.id)
-                call matchdelete(l:match.id)
-            endif
-        endfor
+        call ale#highlight#RemoveHighlights(l:loclist)
     endif
 
     " Remove anything with a current match_id
