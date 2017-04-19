@@ -13,6 +13,7 @@ function! ale#cleanup#Buffer(buffer) abort
         " Clear delayed highlights for a buffer being removed.
         if g:ale_set_highlights
             call ale#highlight#UnqueueHighlights(a:buffer)
+            call ale#highlight#RemoveHighlights([])
         endif
 
         call remove(g:ale_buffer_info, a:buffer)
