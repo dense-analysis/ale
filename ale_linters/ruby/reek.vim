@@ -1,6 +1,12 @@
 " Author: Eddie Lebow https://github.com/elebow
 " Description: Reek, a code smell detector for Ruby files
 
+let g:ale_ruby_reek_show_context =
+\   get(g:, 'ale_ruby_reek_show_context', 0)
+
+let g:ale_ruby_reek_show_wiki_link =
+\   get(g:, 'ale_ruby_reek_show_wiki_link', 0)
+
 function! ale_linters#ruby#reek#Handle(buffer, lines) abort
     if len(a:lines) == 0
         return []
@@ -15,7 +21,7 @@ function! ale_linters#ruby#reek#Handle(buffer, lines) abort
             call add(l:output, {
             \    'lnum': l:location,
             \    'type': 'W',
-            \    'text': s:BuildText(l:error),
+            \    'text': s:BuildText(a:buffer, l:error),
             \})
         endfor
     endfor
@@ -23,16 +29,16 @@ function! ale_linters#ruby#reek#Handle(buffer, lines) abort
     return l:output
 endfunction
 
-function! s:BuildText(error) abort
+function! s:BuildText(buffer, error) abort
     let l:text = a:error.smell_type . ':'
 
-    if get(g:, 'ale_ruby_reek_show_context', 0)
+    if ale#Var(a:buffer, 'ruby_reek_show_context')
         let l:text .= ' ' . a:error.context
     endif
 
     let l:text .= ' ' . a:error.message
 
-    if get(g:, 'ale_ruby_reek_show_wiki_link', 0)
+    if ale#Var(a:buffer, 'ruby_reek_show_wiki_link')
         let l:text .= ' [' . a:error.wiki_link . ']'
     endif
 
