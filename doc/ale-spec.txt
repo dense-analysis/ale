@@ -1,11 +1,10 @@
 ===============================================================================
 ALE RPM Spec Integration                                     *ale-spec-options*
 
-
 -------------------------------------------------------------------------------
 rpmlint                                                      *ale-spec-rpmlint*
 
-g:ale_spec_rpmlint_executable                 *g:ale_spec_rpmlint_executable*
+g:ale_spec_rpmlint_executable                   *g:ale_spec_rpmlint_executable*
 
   Type: |String|
   Default: `'rpmlint'`
@@ -13,7 +12,7 @@ g:ale_spec_rpmlint_executable                 *g:ale_spec_rpmlint_executable*
   This variable sets executable used for rpmlint.
 
 
-g:ale_spec_rpmlint_options                       *g:ale_spec_rpmlint_options*
+g:ale_spec_rpmlint_options                         *g:ale_spec_rpmlint_options*
 
   Type: |String|
   Default: `''`
