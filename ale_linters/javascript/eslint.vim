@@ -42,6 +42,7 @@ endfunction
 function! ale_linters#javascript#eslint#Handle(buffer, lines) abort
     let l:config_error_pattern = '\v^ESLint couldn''t find a configuration file'
     \   . '|^Cannot read config file'
+    \   . '|^.*Configuration for rule .* is invalid'
 
     " Look for a message in the first few lines which indicates that
     " a configuration file couldn't be found.

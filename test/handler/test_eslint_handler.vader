@@ -87,3 +87,33 @@ Execute(The eslint handler should print a message for config parsing errors):
 After:
   unlet! g:config_error_lines
   call ale#linter#Reset()
+
+Execute(The eslint handler should print a message for invalid configuration settings):
+  let g:config_error_lines = [
+  \ '/home/w0rp/git/wazoku/wazoku-spotlight/.eslintrc.js:',
+  \ ' Configuration for rule "indent" is invalid:',
+  \ ' Value "off" is the wrong type.',
+  \ '',
+  \ 'Error: /home/w0rp/git/wazoku/wazoku-spotlight/.eslintrc.js:',
+  \ ' Configuration for rule "indent" is invalid:',
+  \ ' Value "off" is the wrong type.',
+  \ '',
+  \ '    at validateRuleOptions (/usr/local/lib/node_modules/eslint/lib/config/config-validator.js:115:15)',
+  \ '    at /usr/local/lib/node_modules/eslint/lib/config/config-validator.js:162:13',
+  \ '    at Array.forEach (native)',
+  \ '    at Object.validate (/usr/local/lib/node_modules/eslint/lib/config/config-validator.js:161:35)',
+  \ '    at Object.load (/usr/local/lib/node_modules/eslint/lib/config/config-file.js:522:19)',
+  \ '    at loadConfig (/usr/local/lib/node_modules/eslint/lib/config.js:63:33)',
+  \ '    at getLocalConfig (/usr/local/lib/node_modules/eslint/lib/config.js:130:29)',
+  \ '    at Config.getConfig (/usr/local/lib/node_modules/eslint/lib/config.js:256:22)',
+  \ '    at processText (/usr/local/lib/node_modules/eslint/lib/cli-engine.js:224:33)',
+  \ '    at CLIEngine.executeOnText (/usr/local/lib/node_modules/eslint/lib/cli-engine.js:756:26)',
+  \]
+
+  AssertEqual
+  \ [{
+  \   'lnum': 1,
+  \   'text': 'eslint configuration error (type :ALEDetail for more information)',
+  \   'detail': join(g:config_error_lines, "\n"),
+  \ }],
+  \ ale_linters#javascript#eslint#Handle(347, g:config_error_lines[:])
