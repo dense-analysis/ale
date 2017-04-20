@@ -3,6 +3,27 @@ ALE Ruby Integration                                         *ale-ruby-options*
 
 
 -------------------------------------------------------------------------------
+reek                                                            *ale-ruby-reek*
+
+g:ale_ruby_reek_show_context                     *g:ale_ruby_reek_show_context*
+
+  Type: |Number|
+  Default: 0
+
+  Controls whether context is included in the linter message. Defaults to off
+  because context is usually obvious while viewing a file.
+
+
+g:ale_ruby_reek_show_wiki_link                 *g:ale_ruby_reek_show_wiki_link*
+
+  Type: |Number|
+  Default: 0
+
+  Controls whether linter messages contain a link to an explanatory wiki page
+  for the type of code smell. Defaults to off to improve readability.
+
+
+-------------------------------------------------------------------------------
 rubocop                                                      *ale-ruby-rubocop*
 
 g:ale_ruby_rubocop_options                         *g:ale_ruby_rubocop_options*
