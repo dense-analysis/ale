@@ -219,6 +219,9 @@ If you are interested in the general direction of the project, check out the
 [wiki home page](https://github.com/w0rp/ale/wiki). The wiki includes a
 Roadmap for the future, and more.
 
+If you'd liked to discuss the project more directly, check out the `#vim-ale` channel
+on Freenode. Web chat is available [here](https://webchat.freenode.net/?channels=vim-ale).
+
 <a name="faq"></a>
 
 ## 5. FAQ
