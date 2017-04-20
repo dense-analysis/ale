@@ -20,11 +20,13 @@ let s:default_ale_linter_aliases = {
 " No linters are used for plaintext files by default.
 "
 " Only cargo is enabled for Rust by default.
+" rpmlint is disabled by default because it can result in code execution.
 let s:default_ale_linters = {
 \   'csh': ['shell'],
 \   'go': ['go build', 'gofmt', 'golint', 'gosimple', 'go vet', 'staticcheck'],
 \   'help': [],
 \   'rust': ['cargo'],
+\   'spec': [],
 \   'text': [],
 \   'zsh': ['shell'],
 \}
