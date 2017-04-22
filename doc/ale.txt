@@ -134,7 +134,7 @@ The following languages and tools are supported.
 * Go: 'gofmt', 'go vet', 'golint', 'go build', 'gosimple', 'staticcheck'
 * Haml: 'hamllint'
 * Handlebars: 'ember-template-lint'
-* Haskell: 'ghc', 'hlint'
+* Haskell: 'ghc', 'hlint', 'hdevtools'
 * HTML: 'HTMLHint', 'proselint', 'tidy'
 * Java: 'javac'
 * JavaScript: 'eslint', 'jscs', 'jshint', 'flow', 'xo'
