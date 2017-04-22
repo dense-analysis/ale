@@ -76,7 +76,7 @@ name. That seems to be the fairest way to arrange this table.
 | Go | [gofmt -e](https://golang.org/cmd/gofmt/), [go vet](https://golang.org/cmd/vet/), [golint](https://godoc.org/github.com/golang/lint), [gometalinter](https://github.com/alecthomas/gometalinter), [go build](https://golang.org/cmd/go/), [gosimple](https://github.com/dominikh/go-tools/tree/master/cmd/gosimple), [staticcheck](https://github.com/dominikh/go-tools/tree/master/cmd/staticcheck) |
 | Haml | [haml-lint](https://github.com/brigade/haml-lint)
 | Handlebars | [ember-template-lint](https://github.com/rwjblue/ember-template-lint) |
-| Haskell | [ghc](https://www.haskell.org/ghc/), [hlint](https://hackage.haskell.org/package/hlint), [hdevtools](https://hackage.haskell.org/package/hdevtools) |
+| Haskell | [ghc](https://www.haskell.org/ghc/), [ghc-mod](https://github.com/DanielG/ghc-mod), [hlint](https://hackage.haskell.org/package/hlint), [hdevtools](https://hackage.haskell.org/package/hdevtools) |
 | HTML | [HTMLHint](http://htmlhint.com/), [proselint](http://proselint.com/), [tidy](http://www.html-tidy.org/) |
 | Java | [javac](http://www.oracle.com/technetwork/java/javase/downloads/index.html) |
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/), [flow](https://flowtype.org/), [standard](http://standardjs.com/), [xo](https://github.com/sindresorhus/xo)
