@@ -1,9 +1,9 @@
-" Author: Patrick Lewis - https://github.com/patricklewis
-" Description: haml-lint for Haml files
+" Author: Matthias Guenther - https://wikimatze.de
+" Description: erb-lint for eruby/erb files
 
 function! ale_linters#eruby#erubylint#Handle(buffer, lines) abort
     " Matches patterns like the following:
-    " <path>:51 [W] RuboCop: Use the new Ruby 1.9 hash syntax.
+    " -:17: syntax error, unexpected end-of-input, expecting keyword_end
      let l:pattern = '^-:\(\d\+\): \([^,]*\),\(.*\)'
     let l:output = []
 
