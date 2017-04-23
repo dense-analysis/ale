@@ -10,7 +10,7 @@ function! ale_linters#eruby#erubylint#Handle(buffer, lines) abort
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
         \   'lnum': l:match[1],
-        \   'type': "",
+        \   'type': '',
         \   'text': l:match[2] . ':' . l:match[3]
         \})
     endfor
