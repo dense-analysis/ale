@@ -794,6 +794,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          This can be used for skipping a linter call,
                          say if no configuration file was found.
 
+                                                            *ale-command-chain*
   `command_chain`          A |List| of |Dictionary| items defining a series
                          of commands to be run. At least one |Dictionary|
                          should be provided. Each Dictionary must contain the
@@ -848,6 +849,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          if a command manually reads from a temporary file
                          instead, etc.
 
+                                                                *ale-lint-file*
   `lint_file`              A |Number| (`0` or `1`) indicating whether a command
                          should read the file instead of the Vim buffer. This
                          option can be used for linters which must check the
@@ -877,6 +879,8 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
   directories can be managed by ALE, for automatic deletion.
   See |ale#engine#ManageFile()| and |ale#engine#ManageDirectory| for more
   information.
+
+                                                   *ale-command-format-strings*
 
   All command strings will be formatted for special character sequences.
   Any substring `%s` will be replaced with the full path to the current file
