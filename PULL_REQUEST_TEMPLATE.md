@@ -1,3 +1,4 @@
+<!--
 When creating new pull requests, please consider the following.
 
 * Read the Contributing guide linked above first.
@@ -13,3 +14,4 @@ When creating new pull requests, please consider the following.
   breaking up your code so that some parts can be tested, and generally open up
   a discussion about it.
 * Have fun!
+-->
