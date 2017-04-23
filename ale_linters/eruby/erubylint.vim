@@ -25,4 +25,3 @@ call ale#linter#Define('eruby', {
 \   'callback': 'ale_linters#eruby#erubylint#Handle'
 \})
 
-
