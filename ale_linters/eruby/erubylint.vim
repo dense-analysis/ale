@@ -21,7 +21,8 @@ endfunction
 call ale#linter#Define('eruby', {
 \   'name': 'erubylint',
 \   'executable': 'erb',
-\   'command': 'erb -P -x %t | ruby -c 2>&1',
+\    'output_stream': 'stderr',
+\   'command': 'erb -P -x %t | ruby -c',
 \   'callback': 'ale_linters#eruby#erubylint#Handle'
 \})
 
