@@ -5,5 +5,5 @@ call ale#linter#Define('javascript', {
 \   'name': 'jscs',
 \   'executable': 'jscs',
 \   'command': 'jscs -r unix -n -',
-\   'callback': 'ale#handlers#HandleUnixFormatAsError',
+\   'callback': 'ale#handlers#unix#HandleAsError',
 \})

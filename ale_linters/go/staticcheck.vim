@@ -5,5 +5,5 @@ call ale#linter#Define('go', {
 \   'name': 'staticcheck',
 \   'executable': 'staticcheck',
 \   'command': 'staticcheck %t',
-\   'callback': 'ale#handlers#HandleUnixFormatAsWarning',
+\   'callback': 'ale#handlers#unix#HandleAsWarning',
 \})

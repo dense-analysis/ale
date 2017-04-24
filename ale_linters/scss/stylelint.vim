@@ -27,5 +27,5 @@ call ale#linter#Define('scss', {
 \   'name': 'stylelint',
 \   'executable_callback': 'ale_linters#scss#stylelint#GetExecutable',
 \   'command_callback': 'ale_linters#scss#stylelint#GetCommand',
-\   'callback': 'ale#handlers#HandleStyleLintFormat',
+\   'callback': 'ale#handlers#css#HandleStyleLintFormat',
 \})

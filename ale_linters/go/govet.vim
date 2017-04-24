@@ -6,5 +6,5 @@ call ale#linter#Define('go', {
 \   'output_stream': 'stderr',
 \   'executable': 'go',
 \   'command': 'go vet %t',
-\   'callback': 'ale#handlers#HandleUnixFormatAsError',
+\   'callback': 'ale#handlers#unix#HandleAsError',
 \})

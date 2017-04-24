@@ -22,5 +22,5 @@ call ale#linter#Define('python', {
 \   'name': 'pylint',
 \   'executable_callback': 'ale_linters#python#pylint#GetExecutable',
 \   'command_callback': 'ale_linters#python#pylint#GetCommand',
-\   'callback': 'ale#handlers#HandlePEP8Format',
+\   'callback': 'ale#handlers#python#HandlePEP8Format',
 \})

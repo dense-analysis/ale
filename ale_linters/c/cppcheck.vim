@@ -15,5 +15,5 @@ call ale#linter#Define('c', {
 \   'output_stream': 'both',
 \   'executable': 'cppcheck',
 \   'command_callback': 'ale_linters#c#cppcheck#GetCommand',
-\   'callback': 'ale#handlers#HandleCppCheckFormat',
+\   'callback': 'ale#handlers#cppcheck#HandleCppCheckFormat',
 \})

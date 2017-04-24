@@ -14,7 +14,7 @@ Execute(HandleCSSLintFormat should handle CSS errors):
   \    'text': "(known-properties) Expected ... but found 'wat'.",
   \   },
   \ ],
-  \ ale#handlers#HandleCSSLintFormat(42, [
+  \ ale#handlers#css#HandleCSSLintFormat(42, [
   \   'something.css: line 2, col 1, Error - Expected RBRACE at line 2, col 1. (errors)',
   \   "something.css: line 2, col 5, Warning - Expected ... but found 'wat'. (known-properties)",
   \ ])
@@ -35,7 +35,7 @@ Execute (HandlePEP8Format should handle the correct lines of output):
   \    'text': "EANSIBLE0002: Trailing whitespace",
   \   },
   \ ],
-  \ ale#handlers#HandlePEP8Format(42, [
+  \ ale#handlers#python#HandlePEP8Format(42, [
   \   "stdin:6:6: E111 indentation is not a multiple of four",
   \   "test.yml:35: [EANSIBLE0002] Trailing whitespace",
   \ ])
@@ -83,7 +83,7 @@ Execute (HandleUnixFormatAsError should handle some example lines of output):
   \     'text': '".b" is not a valid class name.  Class names must begin with "-", "_" or a letter and can only contain "_", "-", a-z and 0-9.',
   \   },
   \ ],
-  \ ale#handlers#HandleUnixFormatAsError(42, [
+  \ ale#handlers#unix#HandleAsError(42, [
   \   'file.go:27: missing argument for Printf("%s"): format reads arg 2, have only 1 args',
   \   'file.go:53:10: if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
   \   'test.pug:1:1 ".b" is not a valid class name.  Class names must begin with "-", "_" or a letter and can only contain "_", "-", a-z and 0-9.',
@@ -105,7 +105,7 @@ Execute (HandleUnixFormatAsError should handle lines with no space after the col
   \     'text': 'bar',
   \   },
   \ ],
-  \ ale#handlers#HandleUnixFormatAsError(42, [
+  \ ale#handlers#unix#HandleAsError(42, [
   \   'some_file.xyz:27:foo',
   \   'some_file.xyz:53:10:bar',
   \ ])
@@ -126,7 +126,7 @@ Execute (HandleUnixFormatAsWarning should handle some example lines of output):
   \     'text': 'if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
   \   },
   \ ],
-  \ ale#handlers#HandleUnixFormatAsWarning(42, [
+  \ ale#handlers#unix#HandleAsWarning(42, [
   \   'file.go:27: missing argument for Printf("%s"): format reads arg 2, have only 1 args',
   \   'file.go:53:10: if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
   \ ])
@@ -147,7 +147,7 @@ Execute (Unix format functions should handle Windows paths):
   \     'text': 'foo',
   \   },
   \ ],
-  \ ale#handlers#HandleUnixFormatAsError(42, [
+  \ ale#handlers#unix#HandleAsError(42, [
   \   'C:\Users\w0rp\AppData\Local\Temp\Xyz123.go:27: foo',
   \   'C:\Users\w0rp\AppData\Local\Temp\Xyz123.go:53:10: foo',
   \ ])
@@ -168,7 +168,7 @@ Execute (HandleCppCheckFormat should handle some example lines of output):
   \     'text': 'Array a[10] accessed at index 10, which is out of bounds. (error)',
   \   },
   \ ],
-  \ ale#handlers#HandleCppCheckFormat(42, [
+  \ ale#handlers#cppcheck#HandleCppCheckFormat(42, [
   \   '[/tmp/test.c:5]: (style) Variable a is assigned a value that is never used.',
   \   '[/tmp/test.c:12]: (error) Array a[10] accessed at index 10, which is out of bounds.'
   \ ])

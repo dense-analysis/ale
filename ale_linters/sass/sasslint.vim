@@ -4,5 +4,5 @@ call ale#linter#Define('sass', {
 \   'name': 'sasslint',
 \   'executable': 'sass-lint',
 \   'command': 'sass-lint -v -q -f compact %t',
-\   'callback': 'ale#handlers#HandleCSSLintFormat',
+\   'callback': 'ale#handlers#css#HandleCSSLintFormat',
 \})

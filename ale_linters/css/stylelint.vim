@@ -31,5 +31,5 @@ call ale#linter#Define('css', {
 \   'name': 'stylelint',
 \   'executable_callback': 'ale_linters#css#stylelint#GetExecutable',
 \   'command_callback': 'ale_linters#css#stylelint#GetCommand',
-\   'callback': 'ale#handlers#HandleStyleLintFormat',
+\   'callback': 'ale#handlers#css#HandleStyleLintFormat',
 \})

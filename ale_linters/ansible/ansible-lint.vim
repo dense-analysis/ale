@@ -5,5 +5,5 @@ call ale#linter#Define('ansible', {
 \   'name': 'ansible',
 \   'executable': 'ansible',
 \   'command': 'ansible-lint -p %t',
-\   'callback': 'ale#handlers#HandlePEP8Format',
+\   'callback': 'ale#handlers#python#HandlePEP8Format',
 \})

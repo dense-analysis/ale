@@ -75,5 +75,5 @@ call ale#linter#Define('python', {
 \       {'callback': 'ale_linters#python#flake8#VersionCheck'},
 \       {'callback': 'ale_linters#python#flake8#GetCommand'},
 \   ],
-\   'callback': 'ale#handlers#HandlePEP8Format',
+\   'callback': 'ale#handlers#python#HandlePEP8Format',
 \})

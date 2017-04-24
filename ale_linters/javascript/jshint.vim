@@ -43,5 +43,5 @@ call ale#linter#Define('javascript', {
 \   'name': 'jshint',
 \   'executable_callback': 'ale_linters#javascript#jshint#GetExecutable',
 \   'command_callback': 'ale_linters#javascript#jshint#GetCommand',
-\   'callback': 'ale#handlers#HandleUnixFormatAsError',
+\   'callback': 'ale#handlers#unix#HandleAsError',
 \})

@@ -6,7 +6,7 @@ call ale#linter#Define('haskell', {
 \   'output_stream': 'stderr',
 \   'executable': 'ghc',
 \   'command': 'ghc -fno-code -v0 %t',
-\   'callback': 'ale#handlers#HandleGhcFormat',
+\   'callback': 'ale#handlers#haskell#HandleGHCFormat',
 \})
 
 call ale#linter#Define('haskell', {
@@ -14,5 +14,5 @@ call ale#linter#Define('haskell', {
 \   'output_stream': 'stderr',
 \   'executable': 'stack',
 \   'command': 'stack ghc -- -fno-code -v0 %t',
-\   'callback': 'ale#handlers#HandleGhcFormat',
+\   'callback': 'ale#handlers#haskell#HandleGHCFormat',
 \})

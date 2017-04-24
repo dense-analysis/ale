@@ -5,5 +5,5 @@ call ale#linter#Define('go', {
 \   'name': 'golint',
 \   'executable': 'golint',
 \   'command': 'golint %t',
-\   'callback': 'ale#handlers#HandleUnixFormatAsWarning',
+\   'callback': 'ale#handlers#unix#HandleAsWarning',
 \})

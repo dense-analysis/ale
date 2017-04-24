@@ -1,0 +1,21 @@
+Execute (stylelint errors should be handled correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 108,
+  \     'col': 10,
+  \     'type': 'E',
+  \     'text': 'Unexpected leading zero [number-leading-zero]',
+  \   },
+  \   {
+  \     'lnum': 116,
+  \     'col': 20,
+  \     'type': 'E',
+  \     'text': 'Expected a trailing semicolon [declaration-block-trailing-semicolon]',
+  \   },
+  \ ],
+  \ ale#handlers#css#HandleStyleLintFormat(42, [
+  \   'src/main.css',
+  \   ' 108:10  ✖  Unexpected leading zero         number-leading-zero',
+  \   ' 116:20  ✖  Expected a trailing semicolon   declaration-block-trailing-semicolon',
+  \ ])

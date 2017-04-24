@@ -5,5 +5,5 @@ call ale#linter#Define('pod', {
 \   'name': 'proselint',
 \   'executable': 'proselint',
 \   'command': 'proselint %t',
-\   'callback': 'ale#handlers#HandleUnixFormatAsWarning',
+\   'callback': 'ale#handlers#unix#HandleAsWarning',
 \})

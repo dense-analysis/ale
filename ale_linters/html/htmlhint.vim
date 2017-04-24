@@ -28,5 +28,5 @@ call ale#linter#Define('html', {
 \   'name': 'htmlhint',
 \   'executable_callback': 'ale_linters#html#htmlhint#GetExecutable',
 \   'command_callback': 'ale_linters#html#htmlhint#GetCommand',
-\   'callback': 'ale#handlers#HandleUnixFormatAsError',
+\   'callback': 'ale#handlers#unix#HandleAsError',
 \})

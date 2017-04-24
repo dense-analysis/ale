@@ -6,5 +6,5 @@ call ale#linter#Define('pug', {
 \   'executable': 'pug-lint',
 \   'output_stream': 'stderr',
 \   'command': 'pug-lint -r inline %t',
-\   'callback': 'ale#handlers#HandleUnixFormatAsError',
+\   'callback': 'ale#handlers#unix#HandleAsError',
 \})
