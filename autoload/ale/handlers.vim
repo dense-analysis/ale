@@ -76,8 +76,6 @@ endfunction
 function! ale#handlers#HandlePEP8Format(buffer, lines) abort
     " Matches patterns line the following:
     "
-    " Matches patterns line the following:
-    "
     " stdin:6:6: E111 indentation is not a multiple of four
     " test.yml:35: [EANSIBLE0002] Trailing whitespace
     let l:pattern = '^' . s:path_pattern . ':\(\d\+\):\?\(\d\+\)\?: \[\?\(\([[:alpha:]]\)[[:alnum:]]\+\)\]\? \(.*\)$'
@@ -109,6 +107,45 @@ function! ale#handlers#HandlePEP8Format(buffer, lines) abort
         \   'col': l:match[2] + 0,
         \   'text': l:code . ': ' . l:match[5],
         \   'type': l:match[4] ==# 'E' ? 'E' : 'W',
+        \   'nr': -1,
+        \})
+    endfor
+
+    return l:output
+endfunction
+
+
+function! ale#handlers#HandleFlake8Format(buffer, lines) abort
+    " Matches patterns line the following:
+    "
+    " stdin:6:6: E111 indentation is not a multiple of four
+    "
+    " Uses g:ale_python_flake8_error_codes to decide the severity of the
+    " message
+    let l:pattern = '^' . s:path_pattern . ':\(\d\+\):\?\(\d\+\)\?: \(\([[:alpha:]]\)[[:alnum:]]\+\) \(.*\)$'
+    let l:output = []
+
+    for l:line in a:lines
+        let l:match = matchlist(l:line, l:pattern)
+
+        if len(l:match) == 0
+            continue
+        endif
+
+        let l:code = l:match[3]
+        if (l:code ==# 'W291' || l:code ==# 'W293')
+                    \ && !g:ale_warn_about_trailing_whitespace
+            " Skip warnings for trailing whitespace if the option is off.
+            continue
+        endif
+
+        call add(l:output, {
+        \   'bufnr': a:buffer,
+        \   'lnum': l:match[1] + 0,
+        \   'vcol': 0,
+        \   'col': l:match[2] + 0,
+        \   'text': l:code . ': ' . l:match[5],
+        \   'type': index(g:ale_python_flake8_error_codes , l:code) == -1 ? 'W' : 'E',
         \   'nr': -1,
         \})
     endfor
