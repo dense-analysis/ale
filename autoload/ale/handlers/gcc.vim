@@ -18,6 +18,14 @@ function! s:IsHeaderFile(filename) abort
     return a:filename =~? '\v\.(h|hpp)$'
 endfunction
 
+function! s:RemoveUnicodeQuotes(text) abort
+    let l:text = a:text
+    let l:text = substitute(l:text, '[`´‘’]', '''', 'g')
+    let l:text = substitute(l:text, '[“”]', '"', 'g')
+
+    return l:text
+endfunction
+
 function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
     let l:include_pattern = '\v^(In file included | *)from ([^:]*):(\d+)'
     let l:include_lnum = 0
@@ -76,7 +84,7 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
             \   'lnum': l:match[2] + 0,
             \   'col': l:match[3] + 0,
             \   'type': l:match[4] =~# 'error' ? 'E' : 'W',
-            \   'text': l:match[5],
+            \   'text': s:RemoveUnicodeQuotes(l:match[5]),
             \})
         endif
     endfor

@@ -53,13 +53,25 @@ Execute (HandleGCCFormat should handle the correct lines of output):
   \     'lnum': 10,
   \     'col': 27,
   \     'type': 'E',
-  \     'text': 'invalid operands to binary - (have ‘int’ and ‘char *’)',
+  \     'text': 'invalid operands to binary - (have ''int'' and ''char *'')',
   \   },
   \ ],
   \ ale#handlers#gcc#HandleGCCFormat(42, [
   \   '<stdin>:8:5: warning: conversion lacks type at end of format [-Wformat=]',
   \   '<stdin>:10:27: error: invalid operands to binary - (have ‘int’ and ‘char *’)',
   \ ])
+
+Execute (HandleGCCFormat should replace Unicode quotes):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 8,
+  \     'col': 5,
+  \     'type': 'W',
+  \     'text': "'''' \"\"",
+  \   },
+  \ ],
+  \ ale#handlers#gcc#HandleGCCFormat(42, ['<stdin>:8:5: warning: `´‘’ “”'])
 
 Execute (HandleUnixFormatAsError should handle some example lines of output):
   AssertEqual
