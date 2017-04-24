@@ -911,6 +911,18 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
   is not desired, the |ale#engine#EscapeCommandPart()| function can be used to
   replace those characters to avoid formatting issues.
 
+                                                 *ale-linter-loading-behaviour*
+
+  Linters for ALE will be loaded by searching |runtimepath| in the following
+  format: >
+
+  ale_linters/<filetype>/<linter_name>.vim
+<
+  Any linters which exist anywhere in |runtimepath| with that directory
+  structure will be automatically loaded for the matching |filetype|. Filetypes
+  containing `.` characters will be split into individual parts, and files
+  will be loaded for each filetype between the `.` characters.
+
 
 ale#linter#Get(filetype)                                     *ale#linter#Get()*
 
