@@ -89,6 +89,27 @@ Execute (HandleUnixFormatAsError should handle some example lines of output):
   \   'test.pug:1:1 ".b" is not a valid class name.  Class names must begin with "-", "_" or a letter and can only contain "_", "-", a-z and 0-9.',
   \ ])
 
+Execute (HandleUnixFormatAsError should handle lines with no space after the colon):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 27,
+  \     'col': 0,
+  \     'type': 'E',
+  \     'text': 'foo',
+  \   },
+  \   {
+  \     'lnum': 53,
+  \     'col': 10,
+  \     'type': 'E',
+  \     'text': 'bar',
+  \   },
+  \ ],
+  \ ale#handlers#HandleUnixFormatAsError(42, [
+  \   'some_file.xyz:27:foo',
+  \   'some_file.xyz:53:10:bar',
+  \ ])
+
 Execute (HandleUnixFormatAsWarning should handle some example lines of output):
   AssertEqual
   \ [
