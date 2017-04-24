@@ -32,15 +32,11 @@ function! ale_linters#go#gometalinter#Handler(buffer, lines) abort
             continue
         endif
 
-        " vcol is Needed to indicate that the column is a character.
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
-        \   'vcol': 0,
         \   'col': l:match[2] + 0,
         \   'text': l:match[4],
         \   'type': tolower(l:match[3]) ==# 'warning' ? 'W' : 'E',
-        \   'nr': -1,
         \})
     endfor
 

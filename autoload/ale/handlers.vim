@@ -22,15 +22,11 @@ function! s:HandleUnixFormat(buffer, lines, type) abort
             continue
         endif
 
-        " vcol is Needed to indicate that the column is a character.
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
-        \   'vcol': 0,
         \   'col': l:match[2] + 0,
         \   'text': l:match[3],
         \   'type': a:type,
-        \   'nr': -1,
         \})
     endfor
 
@@ -60,13 +56,10 @@ function! ale#handlers#HandleCppCheckFormat(buffer, lines) abort
         endif
 
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
-        \   'vcol': 0,
         \   'col': 0,
         \   'text': l:match[3] . ' (' . l:match[2] . ')',
         \   'type': l:match[2] ==# 'error' ? 'E' : 'W',
-        \   'nr': -1,
         \})
     endfor
 
@@ -103,13 +96,10 @@ function! ale#handlers#HandlePEP8Format(buffer, lines) abort
         endif
 
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
-        \   'vcol': 0,
         \   'col': l:match[2] + 0,
         \   'text': l:code . ': ' . l:match[5],
         \   'type': l:match[4] ==# 'E' ? 'E' : 'W',
-        \   'nr': -1,
         \})
     endfor
 
@@ -142,15 +132,11 @@ function! ale#handlers#HandleCSSLintFormat(buffer, lines) abort
         " it is on small echo lines.
         let l:text = '(' . l:errorGroup . ') ' . l:text
 
-        " vcol is Needed to indicate that the column is a character.
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
-        \   'vcol': 0,
         \   'col': l:match[2] + 0,
         \   'text': l:text,
         \   'type': l:type ==# 'Warning' ? 'W' : 'E',
-        \   'nr': -1,
         \})
     endfor
 
@@ -176,15 +162,11 @@ function! ale#handlers#HandleStyleLintFormat(buffer, lines) abort
         let l:type = l:match[3] ==# '✖' ? 'E' : 'W'
         let l:text = l:match[4] . '[' . l:match[5] . ']'
 
-        " vcol is Needed to indicate that the column is a character.
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
-        \   'vcol': 0,
         \   'col': l:match[2] + 0,
         \   'text': l:text,
         \   'type': l:type,
-        \   'nr': -1,
         \})
     endfor
 
@@ -233,13 +215,10 @@ function! ale#handlers#HandleGhcFormat(buffer, lines) abort
         let l:type = l:type ==# '' ? 'E' : toupper(l:type[0])
 
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
-        \   'vcol': 0,
         \   'col': l:match[2] + 0,
         \   'text': l:text,
         \   'type': l:type,
-        \   'nr': -1,
         \})
     endfor
 

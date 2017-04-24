@@ -18,7 +18,6 @@ function! ale_linters#dockerfile#hadolint#Handle(buffer, lines) abort
         let l:text = l:match[3]
 
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:lnum,
         \   'col': 0,
         \   'type': l:type,

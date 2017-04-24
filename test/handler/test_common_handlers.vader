@@ -1,202 +1,153 @@
-Execute (Run HandleCSSLintFormat):
-  let g:loclist = ale#handlers#HandleCSSLintFormat(42, [
-  \ 'something.css: line 2, col 1, Error - Expected RBRACE at line 2, col 1. (errors)',
-  \ "something.css: line 2, col 5, Warning - Expected ... but found 'wat'. (known-properties)",
-  \])
+Execute(HandleCSSLintFormat should handle CSS errors):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 2,
+  \     'col': 1,
+  \     'type': 'E',
+  \     'text': '(errors) Expected RBRACE at line 2, col 1.',
+  \   },
+  \   {
+  \    'lnum': 2,
+  \    'col': 5,
+  \    'type': 'W',
+  \    'text': "(known-properties) Expected ... but found 'wat'.",
+  \   },
+  \ ],
+  \ ale#handlers#HandleCSSLintFormat(42, [
+  \   'something.css: line 2, col 1, Error - Expected RBRACE at line 2, col 1. (errors)',
+  \   "something.css: line 2, col 5, Warning - Expected ... but found 'wat'. (known-properties)",
+  \ ])
 
-Then (The loclist should be correct):
-  AssertEqual [
-  \ {
-  \   'bufnr': 42,
-  \   'vcol': 0,
-  \   'nr': -1,
-  \   'lnum': 2,
-  \   'col': 1,
-  \   'type': 'E',
-  \   'text': '(errors) Expected RBRACE at line 2, col 1.',
-  \ },
-  \ {
-  \   'bufnr': 42,
-  \   'vcol': 0,
-  \   'nr': -1,
-  \   'lnum': 2,
-  \   'col': 5,
-  \   'type': 'W',
-  \   'text': "(known-properties) Expected ... but found 'wat'.",
-  \ },
-  \], g:loclist
+Execute (HandlePEP8Format should handle the correct lines of output):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 6,
+  \     'col': 6,
+  \     'type': 'E',
+  \     'text': 'E111: indentation is not a multiple of four',
+  \   },
+  \   {
+  \    'lnum': 35,
+  \    'col': 0,
+  \    'type': 'E',
+  \    'text': "EANSIBLE0002: Trailing whitespace",
+  \   },
+  \ ],
+  \ ale#handlers#HandlePEP8Format(42, [
+  \   "stdin:6:6: E111 indentation is not a multiple of four",
+  \   "test.yml:35: [EANSIBLE0002] Trailing whitespace",
+  \ ])
 
-Execute (Run HandlePEP8Format):
-  let g:loclist = ale#handlers#HandlePEP8Format(42, [
-  \ "stdin:6:6: E111 indentation is not a multiple of four",
-  \ "test.yml:35: [EANSIBLE0002] Trailing whitespace",
-  \])
+Execute (HandleGCCFormat should handle the correct lines of output):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 8,
+  \     'col': 5,
+  \     'type': 'W',
+  \     'text': 'conversion lacks type at end of format [-Wformat=]',
+  \   },
+  \   {
+  \     'lnum': 10,
+  \     'col': 27,
+  \     'type': 'E',
+  \     'text': 'invalid operands to binary - (have ‘int’ and ‘char *’)',
+  \   },
+  \ ],
+  \ ale#handlers#gcc#HandleGCCFormat(42, [
+  \   '<stdin>:8:5: warning: conversion lacks type at end of format [-Wformat=]',
+  \   '<stdin>:10:27: error: invalid operands to binary - (have ‘int’ and ‘char *’)',
+  \ ])
 
-Then (The loclist should be correct):
-  AssertEqual [
-  \ {
-  \   'bufnr': 42,
-  \   'vcol': 0,
-  \   'nr': -1,
-  \   'lnum': 6,
-  \   'col': 6,
-  \   'type': 'E',
-  \   'text': 'E111: indentation is not a multiple of four',
-  \ },
-  \ {
-  \   'bufnr': 42,
-  \   'vcol': 0,
-  \   'nr': -1,
-  \   'lnum': 35,
-  \   'col': 0,
-  \   'type': 'E',
-  \   'text': "EANSIBLE0002: Trailing whitespace",
-  \ },
-  \], g:loclist
+Execute (HandleUnixFormatAsError should handle some example lines of output):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 27,
+  \     'col': 0,
+  \     'type': 'E',
+  \     'text': 'missing argument for Printf("%s"): format reads arg 2, have only 1 args',
+  \   },
+  \   {
+  \     'lnum': 53,
+  \     'col': 10,
+  \     'type': 'E',
+  \     'text': 'if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
+  \   },
+  \   {
+  \     'lnum': 1,
+  \     'col': 1,
+  \     'type': 'E',
+  \     'text': '".b" is not a valid class name.  Class names must begin with "-", "_" or a letter and can only contain "_", "-", a-z and 0-9.',
+  \   },
+  \ ],
+  \ ale#handlers#HandleUnixFormatAsError(42, [
+  \   'file.go:27: missing argument for Printf("%s"): format reads arg 2, have only 1 args',
+  \   'file.go:53:10: if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
+  \   'test.pug:1:1 ".b" is not a valid class name.  Class names must begin with "-", "_" or a letter and can only contain "_", "-", a-z and 0-9.',
+  \ ])
 
-Execute (Run HandleGCCFormat):
-  let g:loclist = ale#handlers#gcc#HandleGCCFormat(42, [
-  \ '<stdin>:8:5: warning: conversion lacks type at end of format [-Wformat=]',
-  \ '<stdin>:10:27: error: invalid operands to binary - (have ‘int’ and ‘char *’)',
-  \])
+Execute (HandleUnixFormatAsWarning should handle some example lines of output):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 27,
+  \     'col': 0,
+  \     'type': 'W',
+  \     'text': 'missing argument for Printf("%s"): format reads arg 2, have only 1 args',
+  \   },
+  \   {
+  \     'lnum': 53,
+  \     'col': 10,
+  \     'type': 'W',
+  \     'text': 'if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
+  \   },
+  \ ],
+  \ ale#handlers#HandleUnixFormatAsWarning(42, [
+  \   'file.go:27: missing argument for Printf("%s"): format reads arg 2, have only 1 args',
+  \   'file.go:53:10: if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
+  \ ])
 
-Then (The loclist should be correct):
-  AssertEqual [
-  \ {
-  \   'lnum': 8,
-  \   'col': 5,
-  \   'type': 'W',
-  \   'text': 'conversion lacks type at end of format [-Wformat=]',
-  \ },
-  \ {
-  \   'lnum': 10,
-  \   'col': 27,
-  \   'type': 'E',
-  \   'text': 'invalid operands to binary - (have ‘int’ and ‘char *’)',
-  \ },
-  \], g:loclist
+Execute (Unix format functions should handle Windows paths):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 27,
+  \     'col': 0,
+  \     'type': 'E',
+  \     'text': 'foo',
+  \   },
+  \   {
+  \     'lnum': 53,
+  \     'col': 10,
+  \     'type': 'E',
+  \     'text': 'foo',
+  \   },
+  \ ],
+  \ ale#handlers#HandleUnixFormatAsError(42, [
+  \   'C:\Users\w0rp\AppData\Local\Temp\Xyz123.go:27: foo',
+  \   'C:\Users\w0rp\AppData\Local\Temp\Xyz123.go:53:10: foo',
+  \ ])
 
-Execute (Run HandleUnixFormatAsError):
-  let g:loclist = ale#handlers#HandleUnixFormatAsError(42, [
-  \ 'file.go:27: missing argument for Printf("%s"): format reads arg 2, have only 1 args',
-  \ 'file.go:53:10: if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
-  \ 'test.pug:1:1 ".b" is not a valid class name.  Class names must begin with "-", "_" or a letter and can only contain "_", "-", a-z and 0-9.',
-  \])
-
-Then (The loclist should be correct):
-  AssertEqual [
-  \ {
-  \   'bufnr': 42,
-  \   'vcol': 0,
-  \   'nr': -1,
-  \   'lnum': 27,
-  \   'col': 0,
-  \   'type': 'E',
-  \   'text': 'missing argument for Printf("%s"): format reads arg 2, have only 1 args',
-  \ },
-  \ {
-  \   'bufnr': 42,
-  \   'vcol': 0,
-  \   'nr': -1,
-  \   'lnum': 53,
-  \   'col': 10,
-  \   'type': 'E',
-  \   'text': 'if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
-  \ },
-  \ {
-  \   'bufnr': 42,
-  \   'vcol': 0,
-  \   'nr': -1,
-  \   'lnum': 1,
-  \   'col': 1,
-  \   'type': 'E',
-  \   'text': '".b" is not a valid class name.  Class names must begin with "-", "_" or a letter and can only contain "_", "-", a-z and 0-9.',
-  \ },
-  \], g:loclist
-
-Execute (Run HandleUnixFormatAsWarning):
-  let g:loclist = ale#handlers#HandleUnixFormatAsWarning(42, [
-  \ 'file.go:27: missing argument for Printf("%s"): format reads arg 2, have only 1 args',
-  \ 'file.go:53:10: if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
-  \])
-
-Then (The loclist should be correct):
-  AssertEqual [
-  \ {
-  \   'bufnr': 42,
-  \   'vcol': 0,
-  \   'nr': -1,
-  \   'lnum': 27,
-  \   'col': 0,
-  \   'type': 'W',
-  \   'text': 'missing argument for Printf("%s"): format reads arg 2, have only 1 args',
-  \ },
-  \ {
-  \   'bufnr': 42,
-  \   'vcol': 0,
-  \   'nr': -1,
-  \   'lnum': 53,
-  \   'col': 10,
-  \   'type': 'W',
-  \   'text': 'if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
-  \ },
-  \], g:loclist
-
-Execute (Run a Unix format function with a Windows path):
-  let g:loclist = ale#handlers#HandleUnixFormatAsError(42, [
-  \ 'C:\Users\w0rp\AppData\Local\Temp\Xyz123.go:27: foo',
-  \ 'C:\Users\w0rp\AppData\Local\Temp\Xyz123.go:53:10: foo',
-  \])
-
-Then (The loclist should be correct):
-  AssertEqual [
-  \ {
-  \   'bufnr': 42,
-  \   'vcol': 0,
-  \   'nr': -1,
-  \   'lnum': 27,
-  \   'col': 0,
-  \   'type': 'E',
-  \   'text': 'foo',
-  \ },
-  \ {
-  \   'bufnr': 42,
-  \   'vcol': 0,
-  \   'nr': -1,
-  \   'lnum': 53,
-  \   'col': 10,
-  \   'type': 'E',
-  \   'text': 'foo',
-  \ },
-  \], g:loclist
-
-Execute (Run HandleCppCheckFormat):
-  let g:loclist = ale#handlers#HandleCppCheckFormat(42, [
-  \ '[/tmp/test.c:5]: (style) Variable a is assigned a value that is never used.',
-  \ '[/tmp/test.c:12]: (error) Array a[10] accessed at index 10, which is out of bounds.'
-  \])
-
-Then (The loclist should be correct):
-  AssertEqual [
-  \ {
-  \   'bufnr': 42,
-  \   'vcol': 0,
-  \   'nr': -1,
-  \   'lnum': 5,
-  \   'col': 0,
-  \   'type': 'W',
-  \   'text': 'Variable a is assigned a value that is never used. (style)',
-  \ },
-  \ {
-  \   'bufnr': 42,
-  \   'vcol': 0,
-  \   'nr': -1,
-  \   'lnum': 12,
-  \   'col': 0,
-  \   'type': 'E',
-  \   'text': 'Array a[10] accessed at index 10, which is out of bounds. (error)',
-  \ },
-  \], g:loclist
-
-After:
-  unlet g:loclist
+Execute (HandleCppCheckFormat should handle some example lines of output):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 5,
+  \     'col': 0,
+  \     'type': 'W',
+  \     'text': 'Variable a is assigned a value that is never used. (style)',
+  \   },
+  \   {
+  \     'lnum': 12,
+  \     'col': 0,
+  \     'type': 'E',
+  \     'text': 'Array a[10] accessed at index 10, which is out of bounds. (error)',
+  \   },
+  \ ],
+  \ ale#handlers#HandleCppCheckFormat(42, [
+  \   '[/tmp/test.c:5]: (style) Variable a is assigned a value that is never used.',
+  \   '[/tmp/test.c:12]: (error) Array a[10] accessed at index 10, which is out of bounds.'
+  \ ])

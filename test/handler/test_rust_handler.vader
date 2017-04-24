@@ -1,8 +1,18 @@
 Execute(The Rust handler should handle rustc output):
   AssertEqual
   \ [
-  \   {'lnum': 15, 'bufnr': 347, 'vcol': 0, 'nr': -1, 'type': 'E', 'col': 418, 'text': 'expected one of `.`, `;`, `?`, `}`, or an operator, found `for`'},
-  \   {'lnum': 13, 'bufnr': 347, 'vcol': 0, 'nr': -1, 'type': 'E', 'col': 407, 'text': 'no method named `wat` found for type `std::string::String` in the current scope'},
+  \   {
+  \     'lnum': 15,
+  \     'type': 'E',
+  \     'col': 418,
+  \     'text': 'expected one of `.`, `;`, `?`, `}`, or an operator, found `for`',
+  \   },
+  \   {
+  \      'lnum': 13,
+  \      'type': 'E',
+  \      'col': 407,
+  \      'text': 'no method named `wat` found for type `std::string::String` in the current scope',
+  \   },
   \ ],
   \ ale#handlers#rust#HandleRustErrorsForFile(347, 'src/playpen.rs', [
   \   '',
@@ -16,8 +26,18 @@ Execute(The Rust handler should handle rustc output):
 Execute(The Rust handler should handle cargo output):
   AssertEqual
   \ [
-  \   {'lnum': 15, 'bufnr': 347, 'vcol': 0, 'nr': -1, 'type': 'E', 'col': 11505, 'text': 'expected one of `.`, `;`, `?`, `}`, or an operator, found `for`'},
-  \   {'lnum': 13, 'bufnr': 347, 'vcol': 0, 'nr': -1, 'type': 'E', 'col': 11494, 'text': 'no method named `wat` found for type `std::string::String` in the current scope'},
+  \   {
+  \     'lnum': 15,
+  \     'type': 'E',
+  \     'col': 11505,
+  \     'text': 'expected one of `.`, `;`, `?`, `}`, or an operator, found `for`',
+  \   },
+  \   {
+  \     'lnum': 13,
+  \     'type': 'E',
+  \     'col': 11494,
+  \     'text': 'no method named `wat` found for type `std::string::String` in the current scope',
+  \   },
   \ ],
   \ ale#handlers#rust#HandleRustErrorsForFile(347, 'src/playpen.rs', [
   \   '',

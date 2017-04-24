@@ -53,11 +53,8 @@ function! ale#handlers#rust#HandleRustErrorsForFile(buffer, full_filename, lines
             \   && (l:span_filename ==# l:filename || l:span_filename ==# '<anon>')
             \)
                 call add(l:output, {
-                \   'bufnr': a:buffer,
                 \   'lnum': l:span.line_start,
-                \   'vcol': 0,
                 \   'col': l:span.byte_start,
-                \   'nr': -1,
                 \   'text': l:error.message,
                 \   'type': toupper(l:error.level[0]),
                 \})
@@ -68,11 +65,8 @@ function! ale#handlers#rust#HandleRustErrorsForFile(buffer, full_filename, lines
 
                 if !empty(l:root_cause)
                     call add(l:output, {
-                    \   'bufnr': a:buffer,
                     \   'lnum': l:root_cause[0],
-                    \   'vcol': 0,
                     \   'col': l:root_cause[1],
-                    \   'nr': -1,
                     \   'text': l:error.message,
                     \   'type': toupper(l:error.level[0]),
                     \})
