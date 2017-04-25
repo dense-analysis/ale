@@ -6,6 +6,6 @@ call ale#linter#Define('eruby', {
 \   'executable': 'erb',
 \    'output_stream': 'stderr',
 \   'command': 'erb -P -x %t | ruby -c',
-\   'callback': 'ale#handlers#ruby#HandleErbFormationAsError',
+\   'callback': 'ale#handlers#ruby#HandleSyntaxErrors',
 \})
 
