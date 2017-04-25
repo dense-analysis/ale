@@ -24,7 +24,7 @@ Execute(The ruby handler should parse lines correctly and add the column if it c
   \     'text': 'syntax error, unexpected end-of-input, expecting keyword_end'
   \   }
   \ ],
-  \ ale_linters#ruby#ruby#Handle(255, [
+  \ ale#handlers#ruby#HandleSyntaxErrors(255, [
   \ "test.rb:6: syntax error, unexpected ';'",
   \ "        t = ;",
   \ "             ^",
