@@ -199,18 +199,26 @@ function! ale#linter#GetAll(filetypes) abort
     return l:combined_linters
 endfunction
 
-function! ale#linter#ResolveFiletype(original_filetype) abort
-    " Try and get an aliased file type either from the user's Dictionary, or
-    " our default Dictionary, otherwise use the filetype as-is.
-    let l:filetype = get(
+function! s:GetAliasedFiletype(original_filetype) abort
+    " Check for aliased filetypes first in a buffer variable,
+    " then the global variable,
+    " then in the default mapping,
+    " otherwise use the original filetype.
+    for l:dict in [
+    \   get(b:, 'ale_linter_aliases', {}),
     \   g:ale_linter_aliases,
-    \   a:original_filetype,
-    \   get(
-    \       s:default_ale_linter_aliases,
-    \       a:original_filetype,
-    \       a:original_filetype
-    \   )
-    \)
+    \   s:default_ale_linter_aliases,
+    \]
+        if has_key(l:dict, a:original_filetype)
+            return l:dict[a:original_filetype]
+        endif
+    endfor
+
+    return a:original_filetype
+endfunction
+
+function! ale#linter#ResolveFiletype(original_filetype) abort
+    let l:filetype = s:GetAliasedFiletype(a:original_filetype)
 
     if type(l:filetype) != type([])
         return [l:filetype]
@@ -219,26 +227,27 @@ function! ale#linter#ResolveFiletype(original_filetype) abort
     return l:filetype
 endfunction
 
+function! s:GetLinterNames(original_filetype) abort
+    for l:dict in [
+    \   get(b:, 'ale_linters', {}),
+    \   g:ale_linters,
+    \   s:default_ale_linters,
+    \]
+        if has_key(l:dict, a:original_filetype)
+            return l:dict[a:original_filetype]
+        endif
+    endfor
+
+    return 'all'
+endfunction
+
 function! ale#linter#Get(original_filetypes) abort
     let l:combined_linters = []
 
     " Handle dot-seperated filetypes.
     for l:original_filetype in split(a:original_filetypes, '\.')
         let l:filetype = ale#linter#ResolveFiletype(l:original_filetype)
-
-        " Try and get a list of linters to run, using the original file type,
-        " not the aliased filetype. We have some linters to limit by default,
-        " and users may define their own list of linters to run.
-        let l:linter_names = get(
-        \   g:ale_linters,
-        \   l:original_filetype,
-        \   get(
-        \       s:default_ale_linters,
-        \       l:original_filetype,
-        \       'all'
-        \   )
-        \)
-
+        let l:linter_names = s:GetLinterNames(l:original_filetype)
         let l:all_linters = ale#linter#GetAll(l:filetype)
         let l:filetype_linters = []
 

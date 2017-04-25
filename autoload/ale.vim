@@ -3,6 +3,7 @@
 "   Manages execution of linters when requested by autocommands
 
 let s:lint_timer = -1
+let s:queued_buffer_number = -1
 let s:should_lint_file_for_buffer = {}
 
 " A function for checking various conditions whereby ALE just shouldn't
@@ -50,6 +51,7 @@ function! ale#Queue(delay, ...) abort
     endif
 
     if a:delay > 0
+        let s:queued_buffer_number = bufnr('%')
         let s:lint_timer = timer_start(a:delay, function('ale#Lint'))
     else
         call ale#Lint()
@@ -61,8 +63,14 @@ function! ale#Lint(...) abort
         return
     endif
 
-    let l:buffer = bufnr('%')
-    let l:linters = ale#linter#Get(&filetype)
+    " Get the buffer number linting was queued for.
+    " or else take the current one.
+    let l:buffer = len(a:0) > 1 && a:1 == s:lint_timer
+    \   ? s:queued_buffer_number
+    \   : bufnr('%')
+
+    " Use the filetype from the buffer
+    let l:linters = ale#linter#Get(getbufvar(l:buffer, '&filetype'))
     let l:should_lint_file = 0
 
     " Check if we previously requested checking the file.
