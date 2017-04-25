@@ -1,4 +1,4 @@
-" Author: Matthias Guenther https://wikimatze.de
+" Author: Brandon Roehl - https://github.com/BrandonRoehl, Matthias Guenther https://wikimatze.de
 "
 " Description: This file implements handlers specific to Ruby.
 
