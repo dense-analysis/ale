@@ -2,6 +2,8 @@ Before:
   runtime ale_linters/java/javac.vim
   call ale#engine#InitBufferInfo(bufnr(''))
 
+  silent! cd /testplugin/test/command_callback
+
 After:
   call ale#linter#Reset()
   " We need to clean up the buffer to remove the temporary directories created
@@ -11,7 +13,7 @@ After:
   let g:ale_java_javac_classpath = ''
 
 Execute(The javac callback should return the correct default value):
-  let b:command = ale_linters#java#javac#GetCommand(bufnr(''))
+  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
 
   Assert match(b:command, '\v^javac +-Xlint +-d +/tmp/[0-9a-zA-Z/]+ +\%t$') >= 0,
   \ 'Invalid command string: ' . b:command
@@ -19,15 +21,77 @@ Execute(The javac callback should return the correct default value):
 Execute(The javac callback should use g:ale_java_javac_classpath correctly):
   let g:ale_java_javac_classpath = 'foo.jar'
 
-  let b:command = ale_linters#java#javac#GetCommand(bufnr(''))
+  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
 
-  Assert match(b:command, '\v^javac +-Xlint -cp foo\.jar +-d +/tmp/[0-9a-zA-Z/]+ +\%t$') >= 0,
+  Assert match(b:command, '\v^javac +-Xlint +-cp +foo\.jar +-d +/tmp/[0-9a-zA-Z/]+ +\%t$') >= 0,
+  \ 'Invalid command string: ' . b:command
+
+Execute(The javac callback should include discovered classpaths):
+  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [
+  \ '[DEBUG] Ignore this.',
+  \ '[INFO] Something we should ignore.',
+  \ '/foo/bar.jar',
+  \ '/xyz/abc.jar',
+  \])
+
+  Assert match(b:command, '\v^javac +-Xlint +-cp +/foo/bar\.jar:/xyz/abc\.jar +-d +/tmp/[0-9a-zA-Z/]+ +\%t$') >= 0,
+  \ 'Invalid command string: ' . b:command
+
+Execute(The javac callback should combine discovered classpaths and manual ones):
+  let g:ale_java_javac_classpath = 'configured.jar'
+
+  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [
+  \ '[DEBUG] Ignore this.',
+  \ '[INFO] Something we should ignore.',
+  \ '/foo/bar.jar',
+  \ '/xyz/abc.jar',
+  \])
+
+  Assert match(b:command, '\v^javac +-Xlint +-cp +/foo/bar\.jar:/xyz/abc\.jar:configured\.jar +-d +/tmp/[0-9a-zA-Z/]+ +\%t$') >= 0,
+  \ 'Invalid command string: ' . b:command
+
+  let g:ale_java_javac_classpath = 'configured.jar:configured2.jar'
+
+  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [
+  \ '[DEBUG] Ignore this.',
+  \ '[INFO] Something we should ignore.',
+  \ '/foo/bar.jar',
+  \ '/xyz/abc.jar',
+  \])
+
+  Assert match(b:command, '\v^javac +-Xlint +-cp +/foo/bar\.jar:/xyz/abc\.jar:configured\.jar:configured2\.jar +-d +/tmp/[0-9a-zA-Z/]+ +\%t$') >= 0,
+  \ 'Invalid command string: ' . b:command
+
+Execute(The javac callback should detect source directories):
+  call ale#cleanup#Buffer(bufnr(''))
+  :e! java_paths/src/main/java/com/something/dummy
+  call ale#engine#InitBufferInfo(bufnr(''))
+
+  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
+
+  Assert match(b:command, '\v^javac +-Xlint +-sourcepath /.*java_paths/src/main/java/ +-d +/tmp/[0-9a-zA-Z/]+ +\%t$') >= 0,
+  \ 'Invalid command string: ' . b:command
+
+Execute(The javac callback should combine detected source directories and classpaths):
+  call ale#cleanup#Buffer(bufnr(''))
+  :e! java_paths/src/main/java/com/something/dummy
+  call ale#engine#InitBufferInfo(bufnr(''))
+
+  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [
+  \ '[DEBUG] Ignore this.',
+  \ '[INFO] Something we should ignore.',
+  \ '/foo/bar.jar',
+  \ '/xyz/abc.jar',
+  \])
+
+  Assert match(b:command, '\v^javac +-Xlint +-cp +/foo/bar\.jar:/xyz/abc\.jar +-sourcepath /.*java_paths/src/main/java/ +-d +/tmp/[0-9a-zA-Z/]+ +\%t$') >= 0,
   \ 'Invalid command string: ' . b:command
 
 Execute(The javac callback should use g:ale_java_javac_options correctly):
+
   let g:ale_java_javac_options = '--anything --else'
 
-  let b:command = ale_linters#java#javac#GetCommand(bufnr(''))
+  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
 
   Assert match(b:command, '\v^javac +-Xlint +-d +/tmp/[0-9a-zA-Z/]+ --anything --else +\%t$') >= 0,
   \ 'Invalid command string: ' . b:command
