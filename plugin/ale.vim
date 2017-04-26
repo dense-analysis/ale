@@ -181,7 +181,15 @@ function! ALEInitAuGroups() abort
     augroup ALERunOnFiletypeChangeGroup
         autocmd!
         if g:ale_enabled && g:ale_lint_on_filetype_changed
-            autocmd FileType * call ale#Queue(300, 'lint_file')
+            " Set the filetype after a buffer is opened or read.
+            autocmd BufEnter,BufRead * let b:ale_original_filetype = &filetype
+            " Only start linting if the FileType actually changes after
+            " opening a buffer. The FileType will fire when buffers are opened.
+            autocmd FileType *
+            \   if has_key(b:, 'ale_original_filetype')
+            \   && b:ale_original_filetype !=# expand('<amatch>')
+            \|      call ale#Queue(300, 'lint_file')
+            \|  endif
         endif
     augroup END
 
