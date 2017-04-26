@@ -113,5 +113,5 @@ endfunction
 function! ale#Var(buffer, variable_name) abort
     let l:full_name = 'ale_' . a:variable_name
 
-    return getbufvar(a:buffer, l:full_name, g:[l:full_name])
+    return getbufvar(str2nr(a:buffer), l:full_name, g:[l:full_name])
 endfunction
