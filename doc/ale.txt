@@ -153,6 +153,7 @@ The following languages and tools are supported.
 * Pug: 'pug-lint'
 * Puppet: 'puppet', 'puppet-lint'
 * Python: 'flake8', 'mypy', 'pylint'
+* ReasonML: 'merlin'
 * reStructuredText: 'proselint'
 * RPM spec: 'spec'
 * Rust: 'rustc' (see |ale-integration-rust|)
