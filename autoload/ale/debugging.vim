@@ -51,12 +51,20 @@ endfunction
 function! s:EchoLinterVariables(variable_list) abort
     for l:key in a:variable_list
         echom 'let g:' . l:key . ' = ' . string(g:[l:key])
+
+        if has_key(b:, l:key)
+            echom 'let b:' . l:key . ' = ' . string(b:[l:key])
+        endif
     endfor
 endfunction
 
 function! s:EchoGlobalVariables() abort
     for l:key in s:global_variable_list
         echom 'let g:' . l:key . ' = ' . string(get(g:, l:key, v:null))
+
+        if has_key(b:, l:key)
+            echom 'let b:' . l:key . ' = ' . string(b:[l:key])
+        endif
     endfor
 endfunction
 
