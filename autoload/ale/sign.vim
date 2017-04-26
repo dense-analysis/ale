@@ -169,6 +169,12 @@ endfunction
 
 " This function will set the signs which show up on the left.
 function! ale#sign#SetSigns(buffer, loclist) abort
+    if !bufexists(str2nr(a:buffer))
+        " Stop immediately when attempting to set signs for a buffer which
+        " does not exist.
+        return
+    endif
+
     " Find the current markers
     let l:current_sign_list = ale#sign#FindCurrentSigns(a:buffer)
 

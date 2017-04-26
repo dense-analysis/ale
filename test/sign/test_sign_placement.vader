@@ -132,3 +132,6 @@ Execute(Loclist items with sign_id values should be kept):
   \   ['16', '1000004', 'ALEErrorSign'],
   \ ],
   \ ParseSigns()
+
+Execute(No excpetions should be thrown when setting signs for invalid buffers):
+  call ale#sign#SetSigns(123456789, [{'lnum': 15, 'col': 2, 'type': 'W', 'text': 'e'}])
