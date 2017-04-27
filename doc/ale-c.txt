@@ -6,7 +6,7 @@ ALE C Integration                                               *ale-c-options*
 clang                                                             *ale-c-clang*
 
 g:ale_c_clang_options                                   *g:ale_c_clang_options*
-
+                                                        *b:ale_c_clang_options*
   Type: |String|
   Default: `'-std=c11 -Wall'`
 
@@ -17,7 +17,7 @@ g:ale_c_clang_options                                   *g:ale_c_clang_options*
 cppcheck                                                       *ale-c-cppcheck*
 
 g:ale_c_cppcheck_options                             *g:ale_c_cppcheck_options*
-
+                                                     *b:ale_c_cppcheck_options*
   Type: |String|
   Default: `'--enable=style'`
 
@@ -28,7 +28,7 @@ g:ale_c_cppcheck_options                             *g:ale_c_cppcheck_options*
 gcc                                                                 *ale-c-gcc*
 
 g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
-
+                                                          *b:ale_c_gcc_options*
   Type: |String|
   Default: `'-std=c11 -Wall'`
 

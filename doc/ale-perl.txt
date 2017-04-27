@@ -6,7 +6,7 @@ ALE Perl Integration                                         *ale-perl-options*
 perl                                                            *ale-perl-perl*
 
 g:ale_perl_perl_executable                         *g:ale_perl_perl_executable*
-
+                                                   *b:ale_perl_perl_executable*
   Type: |String|
   Default: `'perl'`
 
@@ -14,7 +14,7 @@ g:ale_perl_perl_executable                         *g:ale_perl_perl_executable*
 
 
 g:ale_perl_perl_options                               *g:ale_perl_perl_options*
-
+                                                      *b:ale_perl_perl_options*
   Type: |String|
   Default: `'-X -c -Mwarnings -Ilib'`
 

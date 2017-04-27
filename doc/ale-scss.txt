@@ -6,7 +6,7 @@ ALE SCSS Integration                                         *ale-scss-options*
 stylelint                                                  *ale-scss-stylelint*
 
 g:ale_scss_stylelint_executable               *g:ale_scss_stylelint_executable*
-
+                                              *b:ale_scss_stylelint_executable*
   Type: |String|
   Default: `'stylelint'`
 
@@ -18,7 +18,7 @@ g:ale_scss_stylelint_executable               *g:ale_scss_stylelint_executable*
 
 
 g:ale_scss_stylelint_use_global               *g:ale_scss_stylelint_use_global*
-
+                                              *b:ale_scss_stylelint_use_global*
   Type: |String|
   Default: `0`
 

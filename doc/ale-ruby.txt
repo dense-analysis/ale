@@ -6,7 +6,7 @@ ALE Ruby Integration                                         *ale-ruby-options*
 reek                                                            *ale-ruby-reek*
 
 g:ale_ruby_reek_show_context                     *g:ale_ruby_reek_show_context*
-
+                                                 *b:ale_ruby_reek_show_context*
   Type: |Number|
   Default: 0
 
@@ -15,7 +15,7 @@ g:ale_ruby_reek_show_context                     *g:ale_ruby_reek_show_context*
 
 
 g:ale_ruby_reek_show_wiki_link                 *g:ale_ruby_reek_show_wiki_link*
-
+                                               *b:ale_ruby_reek_show_wiki_link*
   Type: |Number|
   Default: 0
 
@@ -27,7 +27,7 @@ g:ale_ruby_reek_show_wiki_link                 *g:ale_ruby_reek_show_wiki_link*
 rubocop                                                      *ale-ruby-rubocop*
 
 g:ale_ruby_rubocop_options                         *g:ale_ruby_rubocop_options*
-
+                                                   *b:ale_ruby_rubocop_options*
   Type: |String|
   Default: `''`
 

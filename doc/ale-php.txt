@@ -6,7 +6,7 @@ ALE PHP Integration                                           *ale-php-options*
 phpcs                                                           *ale-php-phpcs*
 
 g:ale_php_phpcs_standard                             *g:ale_php_phpcs_standard*
-
+                                                     *b:ale_php_phpcs_standard*
   Type: |String|
   Default: `''`
 
@@ -18,8 +18,8 @@ g:ale_php_phpcs_standard                             *g:ale_php_phpcs_standard*
 ------------------------------------------------------------------------------
 phpmd                                                           *ale-php-phpmd*
 
-g:ale_php_phpmd_ruleset                           *g:ale_php_phpmd_ruleset*
-
+g:ale_php_phpmd_ruleset                               *g:ale_php_phpmd_ruleset*
+                                                      *b:ale_php_phpmd_ruleset*
   Type: |String|
   Default: `'cleancode,codesize,controversial,design,naming,unusedcode'`
 

@@ -6,9 +6,8 @@ ALE Handlebars Integration                             *ale-handlebars-options*
 ember-template-lint                          *ale-handlebars-embertemplatelint*
 
 g:ale_handlebars_embertemplatelint_executable
-                              \ *g:ale_handlebars_embertemplatelint_executable*
-
-  Type: |String|
+                                *g:ale_handlebars_embertemplatelint_executable*
+  Type: |String|                  *b:ale_handlebars_embertemplatelint_executable*
   Default: `'ember-template-lint'`
 
   ALE will look for ember-template-lint executable in ancestor node_modules
@@ -19,9 +18,8 @@ g:ale_handlebars_embertemplatelint_executable
 
 
 g:ale_handlebars_embertemplatelint_use_global
-                              \ *g:ale_handlebars_embertemplatelint_use_global*
-
-  Type: |Number|
+                                *g:ale_handlebars_embertemplatelint_use_global*
+  Type: |Number|                  *b:ale_handlebars_embertemplatelint_use_global*
   Default: `0`
 
   This variable controls whether or not ALE will search for a local

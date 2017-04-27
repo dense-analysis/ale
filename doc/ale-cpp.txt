@@ -6,7 +6,7 @@ ALE C++ Integration                                           *ale-cpp-options*
 clang                                                           *ale-cpp-clang*
 
 g:ale_cpp_clang_options                               *g:ale_cpp_clang_options*
-
+                                                      *b:ale_cpp_clang_options*
   Type: |String|
   Default: `'-std=c++14 -Wall'`
 
@@ -17,7 +17,7 @@ g:ale_cpp_clang_options                               *g:ale_cpp_clang_options*
 clangtidy                                                   *ale-cpp-clangtidy*
 
 g:ale_cpp_clangtidy_options                       *g:ale_cpp_clangtidy_options*
-
+                                                  *b:ale_cpp_clangtidy_options*
   Type: |String|
   Default: `'-std=c++14 -Wall'`
 
@@ -28,7 +28,7 @@ g:ale_cpp_clangtidy_options                       *g:ale_cpp_clangtidy_options*
 cppcheck                                                     *ale-cpp-cppcheck*
 
 g:ale_cpp_cppcheck_options                         *g:ale_cpp_cppcheck_options*
-
+                                                   *b:ale_cpp_cppcheck_options*
   Type: |String|
   Default: `'--enable=style'`
 
@@ -39,7 +39,7 @@ g:ale_cpp_cppcheck_options                         *g:ale_cpp_cppcheck_options*
 gcc                                                               *ale-cpp-gcc*
 
 g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
-
+                                                        *b:ale_cpp_gcc_options*
   Type: |String|
   Default: `'-std=c++14 -Wall'`
 

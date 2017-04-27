@@ -6,7 +6,7 @@ ALE Fortran Integration                                   *ale-fortran-options*
 gcc                                                           *ale-fortran-gcc*
 
 g:ale_fortran_gcc_executable                     *g:ale_fortran_gcc_executable*
-
+                                                 *b:ale_fortran_gcc_executable*
   Type: |String|
   Default: `'gcc'`
 
@@ -15,7 +15,7 @@ g:ale_fortran_gcc_executable                     *g:ale_fortran_gcc_executable*
 
 
 g:ale_fortran_gcc_options                           *g:ale_fortran_gcc_options*
-
+                                                    *b:ale_fortran_gcc_options*
   Type: |String|
   Default: `'-Wall'`
 
@@ -23,7 +23,7 @@ g:ale_fortran_gcc_options                           *g:ale_fortran_gcc_options*
 
 
 g:ale_fortran_gcc_use_free_form               *g:ale_fortran_gcc_use_free_form*
-
+                                              *b:ale_fortran_gcc_use_free_form*
   Type: |Number|
   Default: `1`
 

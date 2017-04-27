@@ -33,7 +33,7 @@ Integration Information
 cargo                                                          *ale-rust-cargo*
 
 g:ale_rust_cargo_use_check                         *g:ale_rust_cargo_use_check*
-
+                                                   *b:ale_rust_cargo_use_check*
   Type: |Number|
   Default: `1`
 
@@ -45,7 +45,7 @@ g:ale_rust_cargo_use_check                         *g:ale_rust_cargo_use_check*
 rustc                                                          *ale-rust-rustc*
 
 g:ale_rust_ignore_error_codes                   *g:ale_rust_ignore_error_codes*
-
+                                                *b:ale_rust_ignore_error_codes*
   Type: |List| of |String|s
   Default: []
 

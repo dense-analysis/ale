@@ -1,12 +1,12 @@
 ===============================================================================
-ALE ASM Integration                                           *ale-asm-options*
+ALE Assembly Integration                                      *ale-asm-options*
 
 
 -------------------------------------------------------------------------------
 gcc                                                               *ale-asm-gcc*
 
 g:ale_asm_gcc_options                                   *g:ale_asm_gcc_options*
-
+                                                        *b:ale_asm_gcc_options*
   Type: |String|
   Default: `'-Wall'`
 

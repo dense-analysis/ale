@@ -1,12 +1,12 @@
 ===============================================================================
-ALE Yaml Integration                                         *ale-yaml-options*
+ALE YAML Integration                                         *ale-yaml-options*
 
 
 -------------------------------------------------------------------------------
 yamllint                                                    *ale-yaml-yamllint*
 
 g:ale_yaml_yamllint_executable                 *g:ale_yaml_yamllint_executable*
-
+                                               *b:ale_yaml_yamllint_executable*
   Type: |String|
   Default: `'yamllint'`
 
@@ -14,7 +14,7 @@ g:ale_yaml_yamllint_executable                 *g:ale_yaml_yamllint_executable*
 
 
 g:ale_yaml_yamllint_options                       *g:ale_yaml_yamllint_options*
-
+                                                  *b:ale_yaml_yamllint_options*
   Type: |String|
   Default: `''`
 
