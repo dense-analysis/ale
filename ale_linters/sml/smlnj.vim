@@ -39,7 +39,7 @@ function! ale_linters#sml#smlnj#Handle(buffer, lines) abort
     return l:out
 endfunction
 
-call g:ale#linter#Define('sml', {
+call ale#linter#Define('sml', {
 \   'name': 'smlnj',
 \   'executable': 'sml',
 \   'command': 'sml',

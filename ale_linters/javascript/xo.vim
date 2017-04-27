@@ -11,20 +11,20 @@ let g:ale_javascript_xo_use_global =
 \   get(g:, 'ale_javascript_xo_use_global', 0)
 
 function! ale_linters#javascript#xo#GetExecutable(buffer) abort
-    if g:ale_javascript_xo_use_global
-        return g:ale_javascript_xo_executable
+    if ale#Var(a:buffer, 'javascript_xo_use_global')
+        return ale#Var(a:buffer, 'javascript_xo_executable')
     endif
 
     return ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'node_modules/.bin/xo',
-    \   g:ale_javascript_xo_executable
+    \   ale#Var(a:buffer, 'javascript_xo_executable')
     \)
 endfunction
 
 function! ale_linters#javascript#xo#GetCommand(buffer) abort
     return ale_linters#javascript#xo#GetExecutable(a:buffer)
-    \   . ' ' . g:ale_javascript_xo_options
+    \   . ' ' . ale#Var(a:buffer, 'javascript_xo_options')
     \   . ' --reporter unix --stdin --stdin-filename %s'
 endfunction
 

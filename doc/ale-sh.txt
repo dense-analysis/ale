@@ -53,7 +53,7 @@ g:ale_linters_sh_shellcheck_exclusions *g:ale_linters_sh_shellcheck_exclusions*
   will be sourced by other scripts, use the buffer-local variant:
 >
     autocmd BufEnter PKGBUILD,.env
-    \   let b:ale_sh_shellcheck_exclusions = 'SC2034,SC2154,SC2164'
+    \   let b:ale_linters_sh_shellcheck_exclusions = 'SC2034,SC2154,SC2164'
 <
 
 -------------------------------------------------------------------------------
