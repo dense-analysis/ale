@@ -44,24 +44,26 @@ fi
 
 shopt -s globstar
 
-directory="$1"
+directories=("$@")
 
 check_errors() {
     regex="$1"
     message="$2"
 
-    for match in $(
-        grep -n "$regex" "$directory"/**/*.vim \
-        | grep -o '^[^:]\+:[0-9]\+' \
-        | sed 's:^\./::'
-    ); do
-        RETURN_CODE=1
-        echo "$match $message"
+    for directory in "${directories[@]}"; do
+        while IFS= read -r match; do
+            RETURN_CODE=1
+            echo "$match $message"
+        done < <(grep -n "$regex" "$directory"/**/*.vim \
+            | grep -o '^[^:]\+:[0-9]\+' \
+            | sed 's:^\./::')
     done
 }
 
 if (( FIX_ERRORS )); then
-    sed -i "s/^\(function.*)\) *$/\1 abort/" "$directory"/**/*.vim
+    for directory in "${directories[@]}"; do
+        sed -i "s/^\(function.*)\) *$/\1 abort/" "$directory"/**/*.vim
+    done
 fi
 
 check_errors \
