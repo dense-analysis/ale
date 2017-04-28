@@ -6,7 +6,7 @@ ALE JavaScript Integration                             *ale-javascript-options*
 eslint                                                  *ale-javascript-eslint*
 
 g:ale_javascript_eslint_executable         *g:ale_javascript_eslint_executable*
-
+                                           *b:ale_javascript_eslint_executable*
   Type: |String|
   Default: `'eslint'`
 
@@ -21,7 +21,7 @@ g:ale_javascript_eslint_executable         *g:ale_javascript_eslint_executable*
 
 
 g:ale_javascript_eslint_options               *g:ale_javascript_eslint_options*
-
+                                              *b:ale_javascript_eslint_options*
   Type: |String|
   Default: `''`
 
@@ -29,7 +29,7 @@ g:ale_javascript_eslint_options               *g:ale_javascript_eslint_options*
 
 
 g:ale_javascript_eslint_use_global         *g:ale_javascript_eslint_use_global*
-
+                                           *b:ale_javascript_eslint_use_global*
   Type: |Number|
   Default: `0`
 
@@ -43,7 +43,7 @@ g:ale_javascript_eslint_use_global         *g:ale_javascript_eslint_use_global*
 flow                                                      *ale-javascript-flow*
 
 g:ale_javascript_flow_executable             *g:ale_javascript_flow_executable*
-
+                                             *b:ale_javascript_flow_executable*
   Type: |String|
   Default: `'flow'`
 
@@ -55,7 +55,7 @@ g:ale_javascript_flow_executable             *g:ale_javascript_flow_executable*
 
 
 g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
-
+                                             *b:ale_javascript_flow_use_global*
   Type: |Number|
   Default: `0`
 
@@ -69,7 +69,7 @@ g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
 jshint                                                  *ale-javascript-jshint*
 
 g:ale_javascript_jshint_executable         *g:ale_javascript_jshint_executable*
-
+                                           *b:ale_javascript_jshint_executable*
   Type: |String|
   Default: `'jshint'`
 
@@ -83,7 +83,7 @@ g:ale_javascript_jshint_executable         *g:ale_javascript_jshint_executable*
 
 
 g:ale_javascript_jshint_use_global         *g:ale_javascript_jshint_use_global*
-
+                                           *b:ale_javascript_jshint_use_global*
   Type: |Number|
   Default: `0`
 
@@ -97,7 +97,7 @@ g:ale_javascript_jshint_use_global         *g:ale_javascript_jshint_use_global*
 standard                                              *ale-javascript-standard*
 
 g:ale_javascript_standard_executable     *g:ale_javascript_standard_executable*
-
+                                         *b:ale_javascript_standard_executable*
   Type: |String|
   Default: `'standard'`
 
@@ -107,7 +107,7 @@ g:ale_javascript_standard_executable     *g:ale_javascript_standard_executable*
 
 
 g:ale_javascript_standard_options           *g:ale_javascript_standard_options*
-
+                                            *b:ale_javascript_standard_options*
   Type: |String|
   Default: `''`
 
@@ -115,7 +115,7 @@ g:ale_javascript_standard_options           *g:ale_javascript_standard_options*
 
 
 g:ale_javascript_standard_use_global     *g:ale_javascript_standard_use_global*
-
+                                         *b:ale_javascript_standard_use_global*
   Type: |Number|
   Default: `0`
 
@@ -128,7 +128,7 @@ g:ale_javascript_standard_use_global     *g:ale_javascript_standard_use_global*
 xo                                                          *ale-javascript-xo*
 
 g:ale_javascript_xo_executable                 *g:ale_javascript_xo_executable*
-
+                                               *b:ale_javascript_xo_executable*
   Type: |String|
   Default: `'xo'`
 
@@ -138,7 +138,7 @@ g:ale_javascript_xo_executable                 *g:ale_javascript_xo_executable*
 
 
 g:ale_javascript_xo_options                       *g:ale_javascript_xo_options*
-
+                                                  *b:ale_javascript_xo_options*
   Type: |String|
   Default: `''`
 
@@ -146,7 +146,7 @@ g:ale_javascript_xo_options                       *g:ale_javascript_xo_options*
 
 
 g:ale_javascript_xo_use_global                 *g:ale_javascript_xo_use_global*
-
+                                               *b:ale_javascript_xo_use_global*
   Type: |Number|
   Default: `0`
 

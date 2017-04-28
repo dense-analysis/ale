@@ -6,7 +6,7 @@ ALE TeX Integration                                           *ale-tex-options*
 chktex                                                         *ale-tex-chktex*
 
 g:ale_tex_chktex_executable                       *g:ale_tex_chktex_executable*
-
+                                                  *b:ale_tex_chktex_executable*
   Type: |String|
   Default: `'chktex'`
 
@@ -14,7 +14,7 @@ g:ale_tex_chktex_executable                       *g:ale_tex_chktex_executable*
 
 
 g:ale_tex_chktex_options                             *g:ale_tex_chktex_options*
-
+                                                     *b:ale_tex_chktex_options*
   Type: |String|
   Default: `'-I'`
 
@@ -25,7 +25,7 @@ g:ale_tex_chktex_options                             *g:ale_tex_chktex_options*
 lacheck                                                       *ale-tex-lacheck*
 
 g:ale_lacheck_executable                             *g:ale_lacheck_executable*
-
+                                                     *b:ale_lacheck_executable*
   Type: |String|
   Default: '`lacheck`'
 

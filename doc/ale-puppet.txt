@@ -6,7 +6,7 @@ ALE Puppet Integration                                     *ale-puppet-options*
 puppetlint                                              *ale-puppet-puppetlint*
 
 g:ale_puppet_puppetlint_executable         *g:ale_puppet_puppetlint_executable*
-
+                                           *b:ale_puppet_puppetlint_executable*
   Type: |String|
   Default: `'puppet-lint'`
 
@@ -14,7 +14,7 @@ g:ale_puppet_puppetlint_executable         *g:ale_puppet_puppetlint_executable*
 
 
 g:ale_puppet_puppetlint_options               *g:ale_puppet_puppetlint_options*
-
+                                              *b:ale_puppet_puppetlint_options*
   Type: |String|
   Default: `'--no-autoloader_layout-check'`
 

@@ -6,7 +6,7 @@ ALE Python Integration                                     *ale-python-options*
 flake8                                                      *ale-python-flake8*
 
 g:ale_python_flake8_executable                 *g:ale_python_flake8_executable*
-
+                                               *b:ale_python_flake8_executable*
   Type: |String|
   Default: `'flake8'`
 
@@ -14,7 +14,7 @@ g:ale_python_flake8_executable                 *g:ale_python_flake8_executable*
 
 
 g:ale_python_flake8_options                       *g:ale_python_flake8_options*
-
+                                                  *b:ale_python_flake8_options*
   Type: |String|
   Default: `''`
 
@@ -35,7 +35,7 @@ g:ale_python_flake8_options                       *g:ale_python_flake8_options*
 mypy                                                          *ale-python-mypy*
 
 g:ale_python_mypy_options                           *g:ale_python_mypy_options*
-
+                                                    *b:ale_python_mypy_options*
   Type: |String|
   Default: `''`
 
@@ -47,7 +47,7 @@ g:ale_python_mypy_options                           *g:ale_python_mypy_options*
 pylint                                                      *ale-python-pylint*
 
 g:ale_python_pylint_executable                 *g:ale_python_pylint_executable*
-
+                                               *b:ale_python_pylint_executable*
   Type: |String|
   Default: `'pylint'`
 
@@ -55,7 +55,7 @@ g:ale_python_pylint_executable                 *g:ale_python_pylint_executable*
 
 
 g:ale_python_pylint_options                       *g:ale_python_pylint_options*
-
+                                                  *b:ale_python_pylint_options*
   Type: |String|
   Default: `''`
 

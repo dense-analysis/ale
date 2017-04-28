@@ -6,7 +6,7 @@ ALE TypeScript Integration                             *ale-typescript-options*
 tslint                                                  *ale-typescript-tslint*
 
 g:ale_typescript_tslint_executable         *g:ale_typescript_tslint_executable*
-
+                                           *b:ale_typescript_tslint_executable*
   Type: |String|
   Default: `'tslint'`
 
@@ -18,7 +18,7 @@ g:ale_typescript_tslint_executable         *g:ale_typescript_tslint_executable*
 
 
 g:ale_typescript_tslint_config_path       *g:ale_typescript_tslint_config_path*
-
+                                          *b:ale_typescript_tslint_config_path*
   Type: |String|
   Default: `''`
 
@@ -27,7 +27,7 @@ g:ale_typescript_tslint_config_path       *g:ale_typescript_tslint_config_path*
 
 
 g:ale_typescript_tslint_use_global         *g:ale_typescript_tslint_use_global*
-
+                                           *b:ale_typescript_tslint_use_global*
   Type: |Number|
   Default: `0`
 
@@ -35,6 +35,7 @@ g:ale_typescript_tslint_use_global         *g:ale_typescript_tslint_use_global*
   tslint first. If this variable is set to `1`, then ALE will always use the
   global version of tslint, in preference to locally installed versions of
   tslint in node_modules.
+
 
 -------------------------------------------------------------------------------
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

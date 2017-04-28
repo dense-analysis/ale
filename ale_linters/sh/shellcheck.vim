@@ -20,12 +20,6 @@ function! ale_linters#sh#shellcheck#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'sh_shellcheck_executable')
 endfunction
 
-if g:ale_linters_sh_shellcheck_exclusions !=# ''
-    let s:exclude_option = '-e ' .  g:ale_linters_sh_shellcheck_exclusions
-else
-    let s:exclude_option = ''
-endif
-
 function! s:GetDialectArgument() abort
     if exists('b:is_bash') && b:is_bash
         return '-s bash'
@@ -39,9 +33,12 @@ function! s:GetDialectArgument() abort
 endfunction
 
 function! ale_linters#sh#shellcheck#GetCommand(buffer) abort
+    let l:exclude_option = ale#Var(a:buffer, 'linters_sh_shellcheck_exclusions')
+
     return ale_linters#sh#shellcheck#GetExecutable(a:buffer)
     \   . ' ' . ale#Var(a:buffer, 'sh_shellcheck_options')
-    \   . ' ' . s:exclude_option . ' ' . s:GetDialectArgument() . ' -f gcc -'
+    \   . ' ' . (!empty(l:exclude_option) ? '-e ' . l:exclude_option : '')
+    \   . ' ' . s:GetDialectArgument() . ' -f gcc -'
 endfunction
 
 call ale#linter#Define('sh', {

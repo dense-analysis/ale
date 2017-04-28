@@ -6,7 +6,7 @@ ALE Java Integration                                         *ale-java-options*
 javac                                                          *ale-java-javac*
 
 g:ale_java_javac_classpath                         *g:ale_java_javac_classpath*
-
+                                                   *b:ale_java_javac_classpath*
   Type: |String|
   Default: `''`
 
@@ -14,7 +14,7 @@ g:ale_java_javac_classpath                         *g:ale_java_javac_classpath*
 
 
 g:ale_java_javac_options                             *g:ale_java_javac_options*
-
+                                                     *b:ale_java_javac_options*
   Type: |String|
   Default: `''`
 

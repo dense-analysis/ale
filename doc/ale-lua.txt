@@ -6,7 +6,7 @@ ALE Lua Integration                                           *ale-lua-options*
 4.12. luacheck                                               *ale-lua-luacheck*
 
 g:ale_lua_luacheck_executable                   *g:ale_lua_luacheck_executable*
-
+                                                *b:ale_lua_luacheck_executable*
   Type: |String|
   Default: `'luacheck'`
 
