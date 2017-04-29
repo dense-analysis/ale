@@ -1,0 +1,31 @@
+Execute(ale#path#GetAbsPath should handle simple relative paths):
+  AssertEqual '/foo/bar', ale#path#GetAbsPath('/foo', 'bar')
+  AssertEqual 'C:\foo/bar', ale#path#GetAbsPath('C:\foo', 'bar')
+  AssertEqual getcwd() . '/foo/bar', ale#path#GetAbsPath('foo', 'bar')
+
+Execute(ale#path#GetAbsPath should handle relative paths with dots):
+  AssertEqual '/foo/baz', ale#path#GetAbsPath('/foo', 'bar/sub/../../baz')
+  AssertEqual '/foo/baz', ale#path#GetAbsPath('/foo/', 'bar/sub/../../baz')
+  AssertEqual '/foo/other', ale#path#GetAbsPath('/foo/bar', '../other')
+  AssertEqual '/foo/other', ale#path#GetAbsPath('/foo/bar/', '../other')
+
+Execute(ale#path#GetAbsPath should handle absolute paths):
+  AssertEqual '/foo/bar', ale#path#GetAbsPath('/something else', '/foo/bar')
+  AssertEqual 'C:\foo/bar', ale#path#GetAbsPath('D:\another thing', 'C:\foo/bar')
+
+Execute(ale#path#IsBufferPath should match simple relative paths):
+  silent file! foo.txt
+
+  Assert ale#path#IsBufferPath(bufnr(''), 'foo.txt'), 'No match for foo.txt'
+  Assert !ale#path#IsBufferPath(bufnr(''), 'bar.txt'), 'Bad match for bar.txt'
+
+Execute(ale#path#IsBufferPath should match absolute paths):
+  silent file! foo.txt
+
+  Assert ale#path#IsBufferPath(bufnr(''), getcwd() . '/foo.txt'), 'No match for foo.txt'
+  Assert !ale#path#IsBufferPath(bufnr(''), getcwd() . '/bar.txt'), 'Bad match for bar.txt'
+
+Execute(ale#path#IsBufferPath should match paths with dots):
+  silent file! foo.txt
+
+  Assert ale#path#IsBufferPath(bufnr(''), './test/../foo.txt'), 'No match for ./test/../foo.txt'

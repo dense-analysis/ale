@@ -58,27 +58,37 @@ endfunction
 
 " Return 1 if a path is an absolute path.
 function! ale#path#IsAbsolute(filename) abort
-    return match(a:filename, '^\v/|^[a-zA-Z]:\\') == 0
+    " Check for /foo and C:\foo, etc.
+    return a:filename[:0] ==# '/' || a:filename[1:2] ==# ':\'
 endfunction
 
 " Given a directory and a filename, resolve the path, which may be relative
 " or absolute, and get an absolute path to the file, following symlinks.
-function! ale#path#Resolve(directory, filename) abort
-    return resolve(
-    \   ale#path#IsAbsolute(a:filename)
-    \       ? a:filename
-    \       : a:directory . '/' . a:filename
-    \)
+function! ale#path#GetAbsPath(directory, filename) abort
+    " If the path is already absolute, then just resolve it.
+    if ale#path#IsAbsolute(a:filename)
+        return resolve(a:filename)
+    endif
+
+    " Get an absolute path to our containing directory.
+    " If our directory is relative, then we'll use the CWD.
+    let l:absolute_directory = ale#path#IsAbsolute(a:directory)
+    \   ? a:directory
+    \   : getcwd() . '/' . a:directory
+
+    " Resolve the relative path to the file with the absolute path to our
+    " directory.
+    return resolve(l:absolute_directory . '/' . a:filename)
 endfunction
 
 " Given a buffer number and a relative or absolute path, return 1 if the
 " two paths represent the same file on disk.
 function! ale#path#IsBufferPath(buffer, filename) abort
     let l:buffer_filename = expand('#' . a:buffer . ':p')
-    let l:resolved_filename = ale#path#Resolve(
+    let l:resolved_filename = ale#path#GetAbsPath(
     \   fnamemodify(l:buffer_filename, ':h'),
     \   a:filename
     \)
 
-    return resolve(l:buffer_filename) == l:resolved_filename
+    return resolve(l:buffer_filename) ==# l:resolved_filename
 endfunction
