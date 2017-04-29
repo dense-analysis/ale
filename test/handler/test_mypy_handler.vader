@@ -1,6 +1,10 @@
-Execute(The mypy handler should parse lines correctly):
+Before:
   runtime ale_linters/python/mypy.vim
 
+After:
+  call ale#linter#Reset()
+
+Execute(The mypy handler should parse lines correctly):
   AssertEqual
   \ [
   \   {
@@ -22,5 +26,16 @@ Execute(The mypy handler should parse lines correctly):
   \   "file.py:40:5: error: Some other problem",
   \ ])
 
-After:
-  call ale#linter#Reset()
+Execute(The mypy handler should handle Windows names with spaces):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 4,
+  \     'col': 0,
+  \     'text': "No library stub file for module 'django.db'",
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale_linters#python#mypy#Handle(347, [
+  \   "C:\something\with spaces.py:4: error: No library stub file for module 'django.db'",
+  \ ])

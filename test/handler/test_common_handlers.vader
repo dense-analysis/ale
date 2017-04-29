@@ -40,6 +40,20 @@ Execute (HandlePEP8Format should handle the correct lines of output):
   \   "test.yml:35: [EANSIBLE0002] Trailing whitespace",
   \ ])
 
+Execute (HandlePEP8Format should handle names with spaces):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 6,
+  \     'col': 6,
+  \     'type': 'E',
+  \     'text': 'E111: indentation is not a multiple of four',
+  \   },
+  \ ],
+  \ ale#handlers#python#HandlePEP8Format(42, [
+  \   'C:\something\with spaces.py:6:6: E111 indentation is not a multiple of four',
+  \ ])
+
 Execute (HandleGCCFormat should handle the correct lines of output):
   AssertEqual
   \ [
@@ -120,6 +134,20 @@ Execute (HandleUnixFormatAsError should handle lines with no space after the col
   \ ale#handlers#unix#HandleAsError(42, [
   \   'some_file.xyz:27:foo',
   \   'some_file.xyz:53:10:bar',
+  \ ])
+
+Execute (HandleUnixFormatAsError should handle names with spaces):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 13,
+  \     'col': 90,
+  \     'type': 'E',
+  \     'text': 'leonard.exclamation.30ppm More than 30 ppm of exclamations. Keep them under control.',
+  \   },
+  \ ],
+  \ ale#handlers#unix#HandleAsError(42, [
+  \   '/Users/rrj/Notes/Astro/Taurus December SM.txt:13:90: leonard.exclamation.30ppm More than 30 ppm of exclamations. Keep them under control.',
   \ ])
 
 Execute (HandleUnixFormatAsWarning should handle some example lines of output):

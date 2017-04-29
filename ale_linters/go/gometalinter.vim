@@ -11,32 +11,26 @@ function! ale_linters#go#gometalinter#GetCommand(buffer) abort
     \   . ' ' . fnameescape(fnamemodify(bufname(a:buffer), ':p:h'))
 endfunction
 
-function! ale_linters#go#gometalinter#Handler(buffer, lines) abort
-    " Matches patterns line the following:
-    "
-    " file.go:27: missing argument for Printf("%s"): format reads arg 2, have only 1 args
-    " file.go:53:10: if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)
-    " file.go:5:2: expected declaration, found 'STRING' "log"
+function! ale_linters#go#gometalinter#GetMatches(lines) abort
+    let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):?(\d+)?:?:?(warning|error):?\s\*?(.+)$'
 
-    " gometalinter returns relative paths so use tail of filename as part of pattern matcher
-    let l:filename = fnamemodify(bufname(a:buffer), ':t')
-    let l:path_pattern = '[a-zA-Z]\?\\\?:\?[[:alnum:]/\.\-_]\+'
-    let l:pattern = '^' . l:path_pattern . ':\(\d\+\):\?\(\d\+\)\?:\?:\?\(warning\|error\):\?\s\*\?\(.\+\)$'
+    return ale#util#GetMatches(a:lines, l:pattern)
+endfunction
+
+function! ale_linters#go#gometalinter#Handler(buffer, lines) abort
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
+    for l:match in ale_linters#go#gometalinter#GetMatches(a:lines)
         " Omit errors from files other than the one currently open
-        if len(l:match) == 0 || l:line !~ l:filename
+        if ale#path#IsBufferPath(a:buffer, l:match[0])
             continue
         endif
 
         call add(l:output, {
-        \   'lnum': l:match[1] + 0,
-        \   'col': l:match[2] + 0,
-        \   'text': l:match[4],
-        \   'type': tolower(l:match[3]) ==# 'warning' ? 'W' : 'E',
+        \   'lnum': l:match[2] + 0,
+        \   'col': l:match[3] + 0,
+        \   'type': tolower(l:match[4]) ==# 'warning' ? 'W' : 'E',
+        \   'text': l:match[5],
         \})
     endfor
 

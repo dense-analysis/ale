@@ -15,8 +15,6 @@ function! ale_linters#python#mypy#GetCommand(buffer) abort
     \   . ' %t'
 endfunction
 
-let s:path_pattern = '[a-zA-Z]\?\\\?:\?[[:alnum:]/\.\-_]\+'
-
 function! ale_linters#python#mypy#Handle(buffer, lines) abort
     " Look for lines like the following:
     "
@@ -25,7 +23,7 @@ function! ale_linters#python#mypy#Handle(buffer, lines) abort
     " Lines like these should be ignored below:
     "
     " file.py:4: note: (Stub files are from https://github.com/python/typeshed)
-    let l:pattern = '^' . s:path_pattern . ':\(\d\+\):\?\(\d\+\)\?: \([^:]\+\): \(.\+\)$'
+    let l:pattern = '\v^[a-zA-Z]?:?[^:]+:(\d+):?(\d+)?: ([^:]+): (.+)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)

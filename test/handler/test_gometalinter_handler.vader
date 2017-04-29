@@ -1,0 +1,53 @@
+Before:
+  runtime ale_linters/go/gometalinter.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute (The gometalinter handler should handle names with spaces):
+  " We can't test Windows paths with the path resovling on Linux, but we can
+  " test the regex.
+  AssertEqual
+  \ [
+  \   [
+  \     'C:\something\file with spaces.go',
+  \     '12',
+  \     '3',
+  \     'warning',
+  \     'expected ''package'', found ''IDENT'' gibberish (staticcheck)',
+  \   ],
+  \   [
+  \     'C:\something\file with spaces.go',
+  \     '37',
+  \     '5',
+  \     'error',
+  \     'expected ''package'', found ''IDENT'' gibberish (golint)',
+  \   ],
+  \ ],
+  \ map(ale_linters#go#gometalinter#GetMatches([
+  \   'C:\something\file with spaces.go:12:3:warning: expected ''package'', found ''IDENT'' gibberish (staticcheck)',
+  \   'C:\something\file with spaces.go:37:5:error: expected ''package'', found ''IDENT'' gibberish (golint)',
+  \ ]), 'v:val[1:5]')
+
+Execute (The gometalinter handler should handle relative paths correctly):
+  :file! /foo/bar/baz.go
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 12,
+  \     'col': 3,
+  \     'text': 'expected ''package'', found ''IDENT'' gibberish (staticcheck)',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 37,
+  \     'col': 5,
+  \     'text': 'expected ''package'', found ''IDENT'' gibberish (golint)',
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale_linters#go#gometalinter#Handler(42, [
+  \   'baz.go:12:3:warning: expected ''package'', found ''IDENT'' gibberish (staticcheck)',
+  \   'baz.go:37:5:error: expected ''package'', found ''IDENT'' gibberish (golint)',
+  \ ])
