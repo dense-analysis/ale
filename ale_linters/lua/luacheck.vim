@@ -4,12 +4,16 @@
 let g:ale_lua_luacheck_executable =
 \   get(g:, 'ale_lua_luacheck_executable', 'luacheck')
 
+let g:ale_lua_luacheck_options =
+\   get(g:, 'ale_lua_luacheck_options', '')
+
 function! ale_linters#lua#luacheck#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'lua_luacheck_executable')
 endfunction
 
 function! ale_linters#lua#luacheck#GetCommand(buffer) abort
     return ale_linters#lua#luacheck#GetExecutable(a:buffer)
+    \   . ' ' . ale#Var(a:buffer, 'lua_luacheck_options')
     \   . ' --formatter plain --codes --filename %s -'
 endfunction
 
