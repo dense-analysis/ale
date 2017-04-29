@@ -8,6 +8,23 @@
 " buffer: The buffer number for the job.
 " output: The array of lines for the output of the job.
 let s:job_info_map = {}
+let s:executable_cache_map = {}
+
+" Check if files are executable, and if they are, remember that they are
+" for subsequent calls. We'll keep checking until programs can be executed.
+function! s:IsExecutable(executable) abort
+    if has_key(s:executable_cache_map, a:executable)
+        return 1
+    endif
+
+    if executable(a:executable)
+        let s:executable_cache_map[a:executable] = 1
+
+        return 1
+    endif
+
+    return  0
+endfunction
 
 function! ale#engine#ParseVim8ProcessID(job_string) abort
     return matchstr(a:job_string, '\d\+') + 0
@@ -722,7 +739,7 @@ function! ale#engine#Invoke(buffer, linter) abort
     \   : a:linter.executable
 
     " Run this program if it can be executed.
-    if executable(l:executable)
+    if s:IsExecutable(l:executable)
         call s:InvokeChain(a:buffer, a:linter, 0, [])
     endif
 endfunction
