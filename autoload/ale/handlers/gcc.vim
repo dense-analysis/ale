@@ -3,6 +3,8 @@ scriptencoding utf-8
 " Description: This file defines a handler function which ought to work for
 " any program which outputs errors in the format that GCC uses.
 
+let s:pragma_error = '#pragma once in main file'
+
 function! s:AddIncludedErrors(output, include_lnum, include_lines) abort
     if a:include_lnum > 0
         call add(a:output, {
@@ -91,6 +93,11 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
             let l:include_lnum = 0
             let l:include_lines = []
             let l:included_filename = ''
+
+            if s:IsHeaderFile(bufname(bufnr('')))
+            \&& l:match[5][:len(s:pragma_error) - 1] ==# s:pragma_error
+                continue
+            endif
 
             call add(l:output, {
             \   'lnum': l:match[2] + 0,

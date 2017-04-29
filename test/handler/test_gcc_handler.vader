@@ -77,3 +77,20 @@ Execute(GCC versions should be parsed correctly):
   \ 'This is free software; see the source for copying conditions.  There is NO',
   \ 'warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.',
   \])
+
+Execute(The GCC handler shouldn't complain about #pragma once for headers):
+  silent file! test.h
+
+  AssertEqual
+  \ [],
+  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \   '<stdin>:1:1: warning: #pragma once in main file [enabled by default]',
+  \ ])
+
+  silent file! test.hpp
+
+  AssertEqual
+  \ [],
+  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \   '<stdin>:1:1: warning: #pragma once in main file [enabled by default]',
+  \ ])
