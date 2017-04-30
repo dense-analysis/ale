@@ -1,4 +1,7 @@
 Before:
+  Save g:ale_run_synchronously
+  let g:ale_run_synchronously = 1
+
   let g:buffer_result = [
   \ {
   \   'lnum': 1,
@@ -67,6 +70,8 @@ Before:
   \})
 
 After:
+  Restore
+
   unlet g:buffer_result
   let g:ale_buffer_info = {}
   call ale#linter#Reset()
@@ -83,7 +88,6 @@ Execute(Running linters without 'lint_file' should run only buffer linters):
   call ale#ResetLintFileMarkers()
   let g:ale_buffer_info = {}
   call ale#Queue(0)
-  call ale#engine#WaitForJobs(2000)
 
   AssertEqual [
   \ {
@@ -104,7 +108,6 @@ Execute(Running linters with 'lint_file' should run all linters):
   call ale#ResetLintFileMarkers()
   let g:ale_buffer_info = {}
   call ale#Queue(0, 'lint_file')
-  call ale#engine#WaitForJobs(2000)
 
   AssertEqual [
   \ {
@@ -137,7 +140,6 @@ Execute(Linter errors from files should be kept):
   call ale#ResetLintFileMarkers()
   let g:ale_buffer_info = {}
   call ale#Queue(0, 'lint_file')
-  call ale#engine#WaitForJobs(2000)
 
   " Change the results for the buffer callback.
   let g:buffer_result = [
@@ -150,7 +152,6 @@ Execute(Linter errors from files should be kept):
   \]
 
   call ale#Queue(0)
-  call ale#engine#WaitForJobs(2000)
 
   AssertEqual [
   \ {
