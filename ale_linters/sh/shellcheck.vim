@@ -5,10 +5,9 @@
 " This global variable can be set with a string of comma-seperated error
 " codes to exclude from shellcheck. For example:
 "
-" let g:ale_linters_sh_shellcheck_exclusions = 'SC2002,SC2004'
-if !exists('g:ale_linters_sh_shellcheck_exclusions')
-    let g:ale_linters_sh_shellcheck_exclusions = ''
-endif
+" let g:ale_sh_shellcheck_exclusions = 'SC2002,SC2004'
+let g:ale_sh_shellcheck_exclusions =
+\   get(g:, 'ale_sh_shellcheck_exclusions', get(g:, 'ale_linters_sh_shellcheck_exclusions', ''))
 
 let g:ale_sh_shellcheck_executable =
 \   get(g:, 'ale_sh_shellcheck_executable', 'shellcheck')
@@ -33,7 +32,7 @@ function! s:GetDialectArgument() abort
 endfunction
 
 function! ale_linters#sh#shellcheck#GetCommand(buffer) abort
-    let l:exclude_option = ale#Var(a:buffer, 'linters_sh_shellcheck_exclusions')
+    let l:exclude_option = ale#Var(a:buffer, 'sh_shellcheck_exclusions')
 
     return ale_linters#sh#shellcheck#GetExecutable(a:buffer)
     \   . ' ' . ale#Var(a:buffer, 'sh_shellcheck_options')

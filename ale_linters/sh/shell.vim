@@ -1,13 +1,18 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Lints sh files using bash -n
 
+" Backwards compatibility
+if exists('g:ale_linters_sh_shell_default_shell')
+    let g:ale_sh_shell_default_shell = g:ale_linters_sh_shell_default_shell
+endif
+
 " This option can be changed to change the default shell when the shell
 " cannot be taken from the hashbang line.
-if !exists('g:ale_linters_sh_shell_default_shell')
-    let g:ale_linters_sh_shell_default_shell = fnamemodify($SHELL, ':t')
+if !exists('g:ale_sh_shell_default_shell')
+    let g:ale_sh_shell_default_shell = fnamemodify($SHELL, ':t')
 
-    if g:ale_linters_sh_shell_default_shell ==# ''
-        let g:ale_linters_sh_shell_default_shell = 'bash'
+    if g:ale_sh_shell_default_shell ==# ''
+        let g:ale_sh_shell_default_shell = 'bash'
     endif
 endif
 
@@ -26,7 +31,7 @@ function! ale_linters#sh#shell#GetExecutable(buffer) abort
         endfor
     endif
 
-    return ale#Var(a:buffer, 'linters_sh_shell_default_shell')
+    return ale#Var(a:buffer, 'sh_shell_default_shell')
 endfunction
 
 function! ale_linters#sh#shell#GetCommand(buffer) abort
