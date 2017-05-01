@@ -83,7 +83,7 @@ name. That seems to be the fairest way to arrange this table.
 | JSON | [jsonlint](http://zaa.ch/jsonlint/) |
 | LaTeX | [chktex](http://www.nongnu.org/chktex/), [lacheck](https://www.ctan.org/pkg/lacheck) |
 | Lua | [luacheck](https://github.com/mpeterv/luacheck) |
-| Markdown | [mdl](https://github.com/mivok/markdownlint), [proselint](http://proselint.com/)|
+| Markdown | [mdl](https://github.com/mivok/markdownlint), [proselint](http://proselint.com/), [vale](https://github.com/ValeLint/vale) |
 | MATLAB | [mlint](https://www.mathworks.com/help/matlab/ref/mlint.html) |
 | Nim | [nim](https://nim-lang.org/docs/nimc.html) |
 | nix | [nix-instantiate](http://nixos.org/nix/manual/#sec-nix-instantiate) |
@@ -109,7 +109,7 @@ name. That seems to be the fairest way to arrange this table.
 | Swift | [swiftlint](https://swift.org/) |
 | Tex | [proselint](http://proselint.com/) |
 | Texinfo | [proselint](http://proselint.com/)|
-| Text^ | [proselint](http://proselint.com/) |
+| Text^ | [proselint](http://proselint.com/), [vale](https://github.com/ValeLint/vale) |
 | TypeScript | [tslint](https://github.com/palantir/tslint), typecheck |
 | Verilog | [iverilog](https://github.com/steveicarus/iverilog), [verilator](http://www.veripool.org/projects/verilator/wiki/Intro) |
 | Vim | [vint](https://github.com/Kuniwak/vint) |
