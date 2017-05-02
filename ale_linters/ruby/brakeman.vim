@@ -38,12 +38,6 @@ function! s:FindRailsRoot(buffer) abort
     " Find the nearest dir contining "app", "db", and "config", and assume it is
     " the root of a Rails app.
 
-    " Return the cached location, if any.
-    let l:path_cached = getbufvar(a:buffer, 'ruby_brakeman_rails_root_cached', '')
-    if l:path_cached !=? '' && l:path_cached !=? '/'
-      return l:path_cached
-    endif
-
     let l:path = fnamemodify(bufname(a:buffer), ':p')
 
     while l:path !=? '/'
@@ -60,8 +54,6 @@ function! s:FindRailsRoot(buffer) abort
     if l:path ==? '/'
         return ''
     else
-        " Cache the location for future reference
-        call setbufvar(a:buffer, 'ruby_brakeman_rails_root_cached', l:path)
         return l:path
     endif
 endfunction
