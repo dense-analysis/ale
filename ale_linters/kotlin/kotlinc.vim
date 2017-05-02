@@ -9,7 +9,7 @@ let g:ale_kotlin_kotlinc_sourcepath = get(g:, 'ale_kotlin_kotlinc_sourcepath', '
 let g:ale_kotlin_kotlinc_use_module_file = get(g:, 'ale_kotlin_kotlinc_use_module_file', 0)
 let g:ale_kotlin_kotlinc_module_filename = get(g:, 'ale_kotlin_kotlinc_module_filename', 'module.xml')
 
-function! ale_linters#kotlin#kotlinc#GetCommand(buffer)
+function! ale_linters#kotlin#kotlinc#GetCommand(buffer) abort
     let l:kotlinc_opts = g:ale_kotlin_kotlinc_options
     let l:command = 'kotlinc '
 
@@ -48,7 +48,7 @@ function! ale_linters#kotlin#kotlinc#GetCommand(buffer)
     return l:command
 endfunction
 
-function! ale_linters#kotlin#kotlinc#Handle(buffer, lines)
+function! ale_linters#kotlin#kotlinc#Handle(buffer, lines) abort
     let l:code_pattern = '^\(.*\):\([0-9]\+\):\([0-9]\+\):\s\+\(error\|warning\):\s\+\(.*\)'
     let l:general_pattern = '^\(warning\|error\|info\):\s*\(.*\)'
     let l:output = []
