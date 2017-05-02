@@ -46,6 +46,8 @@ CONTENTS                                                         *ale-contents*
       jshint..............................|ale-javascript-jshint|
       standard............................|ale-javascript-standard|
       xo..................................|ale-javascript-xo|
+    kotlin................................|ale-kotlin-options|
+      kotlinc.............................|ale-kotlin-kotlinc|
     lua...................................|ale-lua-options|
       luacheck............................|ale-lua-luacheck|
     ocaml.................................|ale-ocaml-options|
@@ -139,6 +141,7 @@ The following languages and tools are supported.
 * Java: 'javac'
 * JavaScript: 'eslint', 'jscs', 'jshint', 'flow', 'xo'
 * JSON: 'jsonlint'
+* Kotlin: 'kotlinc'
 * LaTeX: 'chktex', 'lacheck'
 * Lua: 'luacheck'
 * Markdown: 'mdl', 'proselint', 'vale'
