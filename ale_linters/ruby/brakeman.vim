@@ -7,7 +7,7 @@ function! ale_linters#ruby#brakeman#Handle(buffer, lines) abort
     let l:output = []
 
     for l:warning in l:result.warnings
-        if !s:MatchFileWithoutRailsRoot(l:warning.file, a:buffer)
+        if !ale#path#IsBufferPath(a:buffer, l:warning.file)
           continue
         endif
 
@@ -22,14 +22,6 @@ function! ale_linters#ruby#brakeman#Handle(buffer, lines) abort
     endfor
 
     return l:output
-endfunction
-
-function! s:MatchFileWithoutRailsRoot(fname, buffer) abort
-    let l:rails_root = getbufvar(a:buffer, 'ruby_brakeman_rails_root_cached')
-    let l:buffer_full = fnamemodify(bufname(a:buffer), ':p')
-    let l:buffer_rel = substitute(l:buffer_full, '^' . l:rails_root . '/', '', '')
-
-    return a:fname == l:buffer_rel
 endfunction
 
 function! ale_linters#ruby#brakeman#GetCommand(buffer) abort
