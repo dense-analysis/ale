@@ -16,12 +16,35 @@ g:ale_cpp_clang_options                               *g:ale_cpp_clang_options*
 -------------------------------------------------------------------------------
 clangtidy                                                   *ale-cpp-clangtidy*
 
+`clang-tidy` will be run only when files are saved to disk, so that
+`compile_commands.json` files can be used. It is recommended to use this
+linter in combination with `compile_commands.json` files.
+
+
+g:ale_cpp_clangtidy_checks                         *g:ale_cpp_clangtidy_checks*
+                                                   *b:ale_cpp_clangtidy_checks*
+  Type: |List|
+  Default: `['*']`
+
+  The checks to enable for clang-tidy with the `-checks` argument.
+
+  All options will be joined with commas, and escaped appropriately for
+  the shell. The `-checks` flag can be removed entirely by setting this
+  option to an empty List.
+
+
 g:ale_cpp_clangtidy_options                       *g:ale_cpp_clangtidy_options*
                                                   *b:ale_cpp_clangtidy_options*
   Type: |String|
-  Default: `'-std=c++14 -Wall'`
+  Default: `''`
 
-  This variable can be changed to modify flags given to clangtidy.
+  This variable can be changed to modify flags given to clang-tidy.
+
+  Setting this variable to a non-empty string will cause the `--` argument
+  to be passed to `clang-tidy`, which will mean that detection of
+  `compile_commands.json` files for compile command databases will be
+  disabled. Only set this option if you want to control compiler flags
+  entirely manually.
 
 
 -------------------------------------------------------------------------------
