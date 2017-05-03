@@ -15,10 +15,15 @@ endif
 " wait until the buffer is entered again to show the highlights, unless
 " the buffer is in focus when linting completes.
 let s:buffer_highlights = {}
+let s:buffer_restore_map = {}
 
 function! ale#highlight#UnqueueHighlights(buffer) abort
     if has_key(s:buffer_highlights, a:buffer)
         call remove(s:buffer_highlights, a:buffer)
+    endif
+
+    if has_key(s:buffer_restore_map, a:buffer)
+        call remove(s:buffer_restore_map, a:buffer)
     endif
 endfunction
 
@@ -60,6 +65,11 @@ endfunction
 
 function! ale#highlight#UpdateHighlights() abort
     let l:buffer = bufnr('%')
+
+    if has_key(s:buffer_restore_map, l:buffer)
+        call setmatches(s:buffer_restore_map[l:buffer])
+    endif
+
     let l:has_new_items = has_key(s:buffer_highlights, l:buffer)
     let l:loclist = l:has_new_items ? remove(s:buffer_highlights, l:buffer) : []
 
@@ -85,9 +95,16 @@ function! ale#highlight#UpdateHighlights() abort
     endif
 endfunction
 
+function! ale#highlight#BufferHidden(buffer) abort
+    " Remember all matches, so they can be restored later.
+    let s:buffer_restore_map[a:buffer] = getmatches()
+    call clearmatches()
+endfunction
+
 augroup ALEHighlightBufferGroup
     autocmd!
     autocmd BufEnter * call ale#highlight#UpdateHighlights()
+    autocmd BufHidden * call ale#highlight#BufferHidden(expand('<abuf>'))
 augroup END
 
 function! ale#highlight#SetHighlights(buffer, loclist) abort
