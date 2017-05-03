@@ -7,7 +7,11 @@ function! ale_linters#ruby#brakeman#Handle(buffer, lines) abort
     let l:output = []
 
     for l:warning in l:result.warnings
-        if !ale#path#IsBufferPath(a:buffer, l:warning.file)
+        " Brakeman always outputs paths relative to the Rails app root
+        let l:rails_root = s:FindRailsRoot(a:buffer)
+        let l:warning_file = l:rails_root . '/' . l:warning.file
+
+        if !ale#path#IsBufferPath(a:buffer, l:warning_file)
           continue
         endif
 
