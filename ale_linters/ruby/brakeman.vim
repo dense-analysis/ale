@@ -42,12 +42,16 @@ function! s:FindRailsRoot(buffer) abort
     " Find the nearest dir contining "app", "db", and "config", and assume it is
     " the root of a Rails app.
 
-    let l:path = fnamemodify(bufname(a:buffer), ':p')
+    let l:path = fnamemodify(bufname(a:buffer), ':p:h')
 
     while l:path !=? '/'
-        if strlen(finddir('app', l:path)) > 0 &&
-        \  strlen(finddir('db', l:path)) > 0 &&
-        \  strlen(finddir('config', l:path)) > 0
+        let l:absolute_directories = glob(l:path . '/*/', 0, 1)
+        let l:directories = map(l:absolute_directories,
+        \   {key, value -> substitute(value, '.*\/\(.\{-}/\)', '\1', '') })
+
+        if index(l:directories, 'app/') != -1 &&
+        \  index(l:directories, 'config/') != -1 &&
+        \  index(l:directories, 'db/') != -1
             break
         endif
 
