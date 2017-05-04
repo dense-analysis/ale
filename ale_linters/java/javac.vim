@@ -86,7 +86,7 @@ function! ale_linters#java#javac#Handle(buffer, lines) abort
     " Main.java:16: error: ';' expected
 
     let l:pattern = '\v^.*:(\d+): (.+):(.+)$'
-    let l:symbol_pattern = '\v^ +symbol: *(class) +([^ ]+)'
+    let l:symbol_pattern = '\v^ +symbol: *(class|method) +([^ ]+)'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, [l:pattern, l:symbol_pattern])
