@@ -15,7 +15,7 @@ function! ale#handlers#python#HandlePEP8Format(buffer, lines) abort
         let l:code = l:match[3]
 
         if (l:code ==# 'W291' || l:code ==# 'W293' || l:code ==# 'EANSIBLE002')
-        \ && !g:ale_warn_about_trailing_whitespace
+        \ && !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
             " Skip warnings for trailing whitespace if the option is off.
             continue
         endif

@@ -9,8 +9,9 @@ function! ale_linters#scss#scsslint#Handle(buffer, lines) abort
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        if g:ale_warn_about_trailing_whitespace && l:match[4] =~# '^TrailingWhitespace'
-            " Skip trailing whitespace warnings if that option is on.
+        if !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
+        \&& l:match[4] =~# '^TrailingWhitespace'
+            " Skip trailing whitespace warnings if that option is off.
             continue
         endif
 
