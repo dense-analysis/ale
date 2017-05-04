@@ -85,15 +85,23 @@ function! ale_linters#java#javac#Handle(buffer, lines) abort
     " Main.java:13: warning: [deprecation] donaught() in Testclass has been deprecated
     " Main.java:16: error: ';' expected
 
-    let l:pattern = '^.*\:\(\d\+\):\ \(.*\):\(.*\)$'
+    let l:pattern = '\v^.*:(\d+): (.+):(.+)$'
+    let l:symbol_pattern = '\v^ +symbol: *(class) +([^ ]+)'
     let l:output = []
 
-    for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        call add(l:output, {
-        \   'lnum': l:match[1] + 0,
-        \   'text': l:match[2] . ':' . l:match[3],
-        \   'type': l:match[2] ==# 'error' ? 'E' : 'W',
-        \})
+    for l:match in ale#util#GetMatches(a:lines, [l:pattern, l:symbol_pattern])
+        if empty(l:match[3])
+            " Add symbols to 'cannot find symbol' errors.
+            if l:output[-1].text ==# 'error: cannot find symbol'
+                let l:output[-1].text .= ': ' . l:match[2]
+            endif
+        else
+            call add(l:output, {
+            \   'lnum': l:match[1] + 0,
+            \   'text': l:match[2] . ':' . l:match[3],
+            \   'type': l:match[2] ==# 'error' ? 'E' : 'W',
+            \})
+        endif
     endfor
 
     return l:output

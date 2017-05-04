@@ -1,0 +1,45 @@
+Before:
+  runtime ale_linters/java/javac.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The javac handler should handle cannot find symbol errors):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'text': 'error: some error',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 2,
+  \     'text': 'error: cannot find symbol: BadName',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 34,
+  \     'text': 'error: cannot find symbol: BadName2',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 37,
+  \     'text': 'warning: some warning',
+  \     'type': 'W',
+  \   },
+  \ ],
+  \ ale_linters#java#javac#Handle(347, [
+  \   '/tmp/vLPr4Q5/33/foo.java:1: error: some error',
+  \   '/tmp/vLPr4Q5/33/foo.java:2: error: cannot find symbol',
+  \   '    BadName foo() {',
+  \   '    ^',
+  \   '  symbol:   class BadName',
+  \   '  location: class Bar',
+  \   '/tmp/vLPr4Q5/33/foo.java:34: error: cannot find symbol',
+  \   '    BadName2 foo() {',
+  \   '    ^',
+  \   '  symbol:   class BadName2',
+  \   '  location: class Bar',
+  \   '/tmp/vLPr4Q5/33/foo.java:37: warning: some warning',
+  \   '4 errors',
+  \ ])
