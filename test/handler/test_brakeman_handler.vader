@@ -1,13 +1,20 @@
 Before:
+    " Switch to the test rails directory.
+    let b:path = getcwd()
+    silent! cd /testplugin/test/handler
+    cd ../ruby_fixtures/valid_rails_app/app/models
+
     runtime ale_linters/ruby/brakeman.vim
     call setbufvar(0, 'ruby_brakeman_rails_root_cached', '')
 
-
 After:
+    " Switch back to whatever directory it was that we started on.
+    silent! 'cd ' . fnameescape(b:path)
+    unlet! b:path
+
     call ale#linter#Reset()
 
 Execute(The brakeman handler should parse JSON correctly):
-  cd! /testplugin/test/ruby_fixtures/valid_rails_app/app/models
   silent file! thing.rb
 
   AssertEqual
