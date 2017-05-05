@@ -7,20 +7,23 @@ After:
     call ale#linter#Reset()
 
 Execute(The brakeman handler should parse JSON correctly):
+  cd! /testplugin/test/ruby_fixtures/valid_rails_app/app/models
+  silent file! thing.rb
+
   AssertEqual
   \  [
   \      {
   \          'lnum': 84,
-  \          'text': 'something',
+  \          'text': 'SQL Injection Possible SQL injection (Medium)',
   \          'type': 'W',
   \      },
   \      {
   \          'lnum': 1,
-  \          'text': 'something',
+  \          'text': 'Mass Assignment Potentially dangerous attribute available for mass assignment (Weak)',
   \          'type': 'W',
   \      }
   \  ],
-  \  ale_linters#ruby#brakeman#Handle(347, [
+  \  ale_linters#ruby#brakeman#Handle(bufnr(''), [
   \  '{',
   \    '"warnings": [',
   \      '{',
