@@ -1,0 +1,68 @@
+Before:
+    runtime ale_linters/ruby/brakeman.vim
+    call setbufvar(0, 'ruby_brakeman_rails_root_cached', '')
+
+
+After:
+    call ale#linter#Reset()
+
+Execute(The brakeman handler should parse JSON correctly):
+  cd! /testplugin/test/ruby_fixtures/valid_rails_app/app/models
+  silent file! thing.rb
+
+  AssertEqual
+  \  [
+  \      {
+  \          'lnum': 84,
+  \          'text': 'SQL Injection Possible SQL injection (Medium)',
+  \          'type': 'W',
+  \      },
+  \      {
+  \          'lnum': 1,
+  \          'text': 'Mass Assignment Potentially dangerous attribute available for mass assignment (Weak)',
+  \          'type': 'W',
+  \      }
+  \  ],
+  \  ale_linters#ruby#brakeman#Handle(bufnr(''), [
+  \  '{',
+  \    '"warnings": [',
+  \      '{',
+  \        '"warning_type": "SQL Injection",',
+  \        '"warning_code": 0,',
+  \        '"fingerprint": "1234",',
+  \        '"check_name": "SQL",',
+  \        '"message": "Possible SQL injection",',
+  \        '"file": "app/models/thing.rb",',
+  \        '"line": 84,',
+  \        '"link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",',
+  \        '"code": "Thing.connection.execute(params[:data])",',
+  \        '"render_path": null,',
+  \        '"location": {',
+  \          '"type": "method",',
+  \          '"class": "Thing",',
+  \          '"method": "run_raw_sql_from_internet"',
+  \        '},',
+  \        '"user_input": "whatever",',
+  \        '"confidence": "Medium"',
+  \      '},',
+  \      '{',
+  \        '"warning_type": "Mass Assignment",',
+  \        '"warning_code": 60,',
+  \        '"fingerprint": "1235",',
+  \        '"check_name": "ModelAttrAccessible",',
+  \        '"message": "Potentially dangerous attribute available for mass assignment",',
+  \        '"file": "app/models/thing.rb",',
+  \        '"line": null,',
+  \        '"link": "http://brakemanscanner.org/docs/warning_types/mass_assignment/",',
+  \        '"code": ":name",',
+  \        '"render_path": null,',
+  \        '"location": {',
+  \          '"type": "model",',
+  \          '"model": "Thing"',
+  \        '},',
+  \        '"user_input": null,',
+  \        '"confidence": "Weak"',
+  \      '}',
+  \    ']',
+  \  '}'
+  \  ])

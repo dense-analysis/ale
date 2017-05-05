@@ -3,6 +3,17 @@ ALE Ruby Integration                                         *ale-ruby-options*
 
 
 -------------------------------------------------------------------------------
+brakeman                                                    *ale-ruby-brakeman*
+
+g:ale_ruby_brakeman_options                       *g:ale_ruby_brakeman_options*
+                                                  *b:ale_ruby_brakeman_options*
+  Type: |String|
+  Default: `''`
+
+  The contents of this variable will be passed through to brakeman.
+
+
+-------------------------------------------------------------------------------
 reek                                                            *ale-ruby-reek*
 
 g:ale_ruby_reek_show_context                     *g:ale_ruby_reek_show_context*
