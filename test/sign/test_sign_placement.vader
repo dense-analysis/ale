@@ -59,8 +59,8 @@ Before:
 
   call ale#linter#Define('testft', {
   \ 'name': 'x',
-  \ 'executable': 'echo',
-  \ 'command': 'echo',
+  \ 'executable': 'true',
+  \ 'command': 'true',
   \ 'callback': 'GenerateResults',
   \})
 
