@@ -46,29 +46,21 @@ endfunction
 function! s:FindRailsRoot(buffer) abort
     " Find the nearest dir contining "app", "db", and "config", and assume it is
     " the root of a Rails app.
+    for l:name in ['app', 'config', 'db']
+        let l:dir = fnamemodify(
+        \   ale#path#FindNearestDirectory(a:buffer, l:name),
+        \   ':h:h'
+        \)
 
-    let l:path = fnamemodify(bufname(a:buffer), ':p:h')
-
-    while l:path !=? '/'
-        let l:absolute_directories = glob(l:path . '/*/', 0, 1)
-        let l:directories = map(l:absolute_directories,
-        \   {key, value -> substitute(value, '.*\/\(.\{-}/\)', '\1', '') })
-
-        if index(l:directories, 'app/') != -1 &&
-        \  index(l:directories, 'config/') != -1 &&
-        \  index(l:directories, 'db/') != -1
-            break
+        if l:dir !=# '.'
+        \&& isdirectory(l:dir . '/app')
+        \&& isdirectory(l:dir . '/config')
+        \&& isdirectory(l:dir . '/db')
+            return l:dir
         endif
+    endfor
 
-        let l:path = fnamemodify(l:path, ':h')
-    endwhile
-
-    " This is technically incorrect, since a valid Rails app could exist at the filesystem root.
-    if l:path ==? '/'
-        return ''
-    else
-        return l:path
-    endif
+    return ''
 endfunction
 
 call ale#linter#Define('ruby', {
