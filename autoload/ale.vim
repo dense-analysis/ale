@@ -105,6 +105,14 @@ function! ale#ResetLintFileMarkers() abort
     let s:should_lint_file_for_buffer = {}
 endfunction
 
+let g:ale_has_override = get(g:, 'ale_has_override', {})
+
+" Call has(), but check a global Dictionary so we can force flags on or off
+" for testing purposes.
+function! ale#Has(feature) abort
+    return get(g:ale_has_override, a:feature, has(a:feature))
+endfunction
+
 " Given a buffer number and a variable name, look for that variable in the
 " buffer scope, then in global scope. If the name does not exist in the global
 " scope, an exception will be thrown.

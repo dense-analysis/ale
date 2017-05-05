@@ -92,3 +92,27 @@ function! ale#path#IsBufferPath(buffer, filename) abort
 
     return resolve(l:buffer_filename) ==# l:resolved_filename
 endfunction
+
+" Given a path, return every component of the path, moving upwards.
+function! ale#path#Upwards(path) abort
+    let l:pattern = ale#Has('win32') ? '\v/+|\\+' : '\v/+'
+    let l:sep = ale#Has('win32') ? '\' : '/'
+    let l:parts = split(simplify(a:path), l:pattern)
+    let l:path_list = []
+
+    while !empty(l:parts)
+        call add(l:path_list, join(l:parts, l:sep))
+        let l:parts = l:parts[:-2]
+    endwhile
+
+    if ale#Has('win32') && a:path =~# '^[a-zA-z]:\'
+        " Add \ to C: for C:\, etc.
+        let l:path_list[-1] .= '\'
+    elseif a:path[0] ==# '/'
+        " If the path starts with /, even on Windows, add / and / to all paths.
+        call add(l:path_list, '')
+        call map(l:path_list, '''/'' . v:val')
+    endif
+
+    return l:path_list
+endfunction
