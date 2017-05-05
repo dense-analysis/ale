@@ -13,5 +13,14 @@ Execute(The brakeman command callback should detect absence of a valid Rails app
 Execute(The brakeman command callback should find a valid Rails app root):
     cd /testplugin/test/ruby_fixtures/valid_rails_app/db/
     AssertEqual
-    \   'brakeman -f json -q -p /testplugin/test/ruby_fixtures/valid_rails_app',
+    \   'brakeman -f json -q  -p /testplugin/test/ruby_fixtures/valid_rails_app',
+    \   ale_linters#ruby#brakeman#GetCommand(bufnr(''))
+
+Execute(The brakeman command callback should include configured options):
+    cd /testplugin/test/ruby_fixtures/valid_rails_app/db/
+    let g:ale_ruby_brakeman_options = '--combobulate'
+
+
+    AssertEqual
+    \   'brakeman -f json -q --combobulate -p /testplugin/test/ruby_fixtures/valid_rails_app',
     \   ale_linters#ruby#brakeman#GetCommand(bufnr(''))

@@ -1,6 +1,9 @@
 " Author: Eddie Lebow https://github.com/elebow
 " Description: Brakeman, a static analyzer for Rails security
 
+let g:ale_ruby_brakeman_options =
+\   get(g:, 'ale_ruby_brakeman_options', '')
+
 function! ale_linters#ruby#brakeman#Handle(buffer, lines) abort
     let l:result = json_decode(join(a:lines, ''))
 
@@ -35,7 +38,9 @@ function! ale_linters#ruby#brakeman#GetCommand(buffer) abort
         return ''
     endif
 
-    return 'brakeman -f json -q -p ' . l:rails_root
+    return 'brakeman -f json -q '
+    \    . ale#Var(a:buffer, 'ruby_brakeman_options')
+    \    . ' -p ' . l:rails_root
 endfunction
 
 function! s:FindRailsRoot(buffer) abort
