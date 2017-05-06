@@ -34,6 +34,14 @@ g:ale_python_flake8_options                       *g:ale_python_flake8_options*
 -------------------------------------------------------------------------------
 mypy                                                          *ale-python-mypy*
 
+g:ale_python_mypy_executable                     *g:ale_python_mypy_executable*
+                                                 *b:ale_python_mypy_executable*
+  Type: |String|
+  Default: `'mypy'`
+
+  This variable can be changed to modify the executable used for mypy.
+
+
 g:ale_python_mypy_options                           *g:ale_python_mypy_options*
                                                     *b:ale_python_mypy_options*
   Type: |String|
@@ -41,6 +49,18 @@ g:ale_python_mypy_options                           *g:ale_python_mypy_options*
 
   This variable can be changed to add command-line arguments to the mypy
   invocation.
+
+
+g:ale_python_mypy_use_global                     *g:ale_python_mypy_use_global*
+                                                 *b:ale_python_mypy_use_global*
+  Type: |Number|
+  Default: `0`
+
+  This variable controls whether or not ALE will search for mypy in a
+  virtualenv directory first. If this variable is set to `1`, then ALE will
+  always use |g:ale_python_mypy_executable| for the executable path.
+
+  Both variables can be set with `b:` buffer variables instead.
 
 
 -------------------------------------------------------------------------------
@@ -67,6 +87,8 @@ g:ale_python_pylint_options                       *g:ale_python_pylint_options*
 
   let g:ale_python_pylint_executable = 'python3'   " or 'python' for Python 2
   let g:ale_python_pylint_options = '-rcfile /path/to/pylint.rc'
+  " The virtualenv detection needs to be disabled.
+  let g:ale_python_pylint_use_global = 0
 
   after making sure it's installed for the appropriate Python versions (e.g.
   `python3 -m pip install --user pylint`).
@@ -77,9 +99,9 @@ g:ale_python_pylint_use_global                 *g:ale_python_pylint_use_global*
   Type: |Number|
   Default: `0`
 
-  This variable controls whether or not ALE will search pylint in a virtualenv
-  directory first. If this variable is set to `1`, then ALE will always use
-  |g:ale_python_pylint_executable| for the executable path.
+  This variable controls whether or not ALE will search for pylint in a
+  virtualenv directory first. If this variable is set to `1`, then ALE will
+  always use |g:ale_python_pylint_executable| for the executable path.
 
   Both variables can be set with `b:` buffer variables instead.
 

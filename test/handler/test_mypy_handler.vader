@@ -3,30 +3,45 @@ Before:
 
 After:
   call ale#linter#Reset()
+  silent file something_else.py
 
 Execute(The mypy handler should parse lines correctly):
+  silent file foo/bar/__init__.py
+
   AssertEqual
   \ [
   \   {
-  \     'lnum': 4,
-  \     'col': 0,
-  \     'text': "No library stub file for module 'django.db'",
+  \     'lnum': 15,
+  \     'col': 3,
+  \     'text': 'Argument 1 to "somefunc" has incompatible type "int"; expected "str"',
   \     'type': 'E',
   \   },
   \   {
-  \     'lnum': 40,
-  \     'col': 5,
-  \     'text': "Some other problem",
-  \     'type': 'E',
+  \     'lnum': 72,
+  \     'col': 1,
+  \     'text': 'Some warning',
+  \     'type': 'W',
   \   },
   \ ],
-  \ ale_linters#python#mypy#Handle(347, [
-  \   "file.py:4: error: No library stub file for module 'django.db'",
-  \   'file.py:4: note: (Stub files are from https://github.com/python/typeshed)',
-  \   "file.py:40:5: error: Some other problem",
+  \ ale_linters#python#mypy#Handle(bufnr(''), [
+  \ 'foo/bar/baz.py: note: In class "SomeClass":',
+  \ 'foo/bar/baz.py:768:38: error: Cannot determine type of ''SOME_SYMBOL''',
+  \ 'foo/bar/baz.py: note: In class "AnotherClass":',
+  \ 'foo/bar/baz.py:821:38: error: Cannot determine type of ''SOME_SYMBOL''',
+  \ 'foo/bar/__init__.py:92: note: In module imported here:',
+  \ 'foo/bar/other.py: note: In class "YetAnotherClass":',
+  \ 'foo/bar/other.py:38:44: error: Cannot determine type of ''ANOTHER_SYMBOL''',
+  \ 'foo/bar/__init__.py: note: At top level:',
+  \ 'foo/bar/__init__.py:15:3: error: Argument 1 to "somefunc" has incompatible type "int"; expected "str"',
+  \ 'another_module/bar.py:14: note: In module imported here,',
+  \ 'another_module/__init__.py:16: note: ... from here,',
+  \ 'foo/bar/__init__.py:72:1: warning: Some warning',
   \ ])
 
 Execute(The mypy handler should handle Windows names with spaces):
+  " This test works on Unix, where this is seen as a single filename
+  silent file C:\\something\\with\ spaces.py
+
   AssertEqual
   \ [
   \   {
@@ -36,6 +51,6 @@ Execute(The mypy handler should handle Windows names with spaces):
   \     'type': 'E',
   \   },
   \ ],
-  \ ale_linters#python#mypy#Handle(347, [
-  \   "C:\something\with spaces.py:4: error: No library stub file for module 'django.db'",
+  \ ale_linters#python#mypy#Handle(bufnr(''), [
+  \   'C:\something\with spaces.py:4: error: No library stub file for module ''django.db''',
   \ ])
