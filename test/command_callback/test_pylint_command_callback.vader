@@ -2,7 +2,7 @@ Before:
   runtime ale_linters/python/pylint.vim
   silent! execute 'cd /testplugin/test/command_callback'
   let g:dir = getcwd()
-  let b:command_tail = ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n %t'
+  let b:command_tail = ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n %s'
 
 After:
   silent execute 'cd ' . fnameescape(g:dir)

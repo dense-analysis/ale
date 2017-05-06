@@ -29,7 +29,7 @@ function! ale_linters#python#pylint#GetCommand(buffer) abort
     return ale_linters#python#pylint#GetExecutable(a:buffer)
     \   . ' ' . ale#Var(a:buffer, 'python_pylint_options')
     \   . ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'
-    \   . ' %t'
+    \   . ' %s'
 endfunction
 
 call ale#linter#Define('python', {
@@ -37,4 +37,5 @@ call ale#linter#Define('python', {
 \   'executable_callback': 'ale_linters#python#pylint#GetExecutable',
 \   'command_callback': 'ale_linters#python#pylint#GetCommand',
 \   'callback': 'ale#handlers#python#HandlePEP8Format',
+\   'lint_file': 1,
 \})
