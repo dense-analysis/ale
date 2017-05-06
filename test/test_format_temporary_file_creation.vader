@@ -27,6 +27,8 @@ Given foobar (Some imaginary filetype):
 Execute(ALE should be able to read the %t file):
   AssertEqual 'foobar', &filetype
 
+  " Sleep a little so the test passes more.
+  sleep 100ms
   call ale#Lint()
   call ale#engine#WaitForJobs(2000)
 
