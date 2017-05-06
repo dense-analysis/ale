@@ -97,7 +97,10 @@ endfunction
 
 function! ale#highlight#BufferHidden(buffer) abort
     " Remember all matches, so they can be restored later.
-    let s:buffer_restore_map[a:buffer] = getmatches()
+    let s:buffer_restore_map[a:buffer] = filter(
+    \   getmatches(),
+    \   'get(v:val, ''group'', '''')[:2] ==# ''ALE'''
+    \)
     call clearmatches()
 endfunction
 

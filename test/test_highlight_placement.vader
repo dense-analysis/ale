@@ -28,12 +28,14 @@ Before:
   \ 'command': 'echo',
   \ 'callback': 'GenerateResults',
   \})
+  highlight link SomeOtherGroup SpellBad
 
 After:
   delfunction GenerateResults
   call ale#linter#Reset()
   let g:ale_buffer_info = {}
   call clearmatches()
+  highlight clear SomeOtherGroup
 
 Given testft(A Javscript file with warnings/errors):
   foo
@@ -106,4 +108,24 @@ Execute(Highlights should be cleared when buffers are hidden):
 
   call ale#highlight#UpdateHighlights()
 
+  AssertEqual 1, len(getmatches()), 'The highlights weren''t set again!'
+
+Execute(Only ALE highlights should be restored when buffers are restored):
+  call ale#engine#InitBufferInfo(bufnr('%'))
+  call ale#highlight#SetHighlights(bufnr('%'), [
+  \ {'bufnr': bufnr('%'), 'type': 'E', 'lnum': 3, 'col': 2},
+  \])
+
+  call matchaddpos('SomeOtherGroup', [[1, 1, 1]])
+
+  " We should have one more match here.
+  AssertEqual 2, len(getmatches()), 'The highlights weren''t initially set!'
+
+  call ale#highlight#BufferHidden(bufnr('%'))
+
+  AssertEqual 0, len(getmatches()), 'The highlights weren''t cleared!'
+
+  call ale#highlight#UpdateHighlights()
+
+  " Only our matches should appear again.
   AssertEqual 1, len(getmatches()), 'The highlights weren''t set again!'
