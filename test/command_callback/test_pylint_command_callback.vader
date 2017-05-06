@@ -6,6 +6,9 @@ Before:
 
 After:
   silent execute 'cd ' . fnameescape(g:dir)
+  " Set the file to something else,
+  " or we'll cause issues when running other tests
+  silent file 'dummy.py'
   unlet! g:dir
 
   call ale#linter#Reset()
@@ -19,6 +22,16 @@ Execute(The pylint callbacks should return the correct default values):
   \ ale_linters#python#pylint#GetExecutable(bufnr(''))
   AssertEqual
   \ 'pylint ' . b:command_tail,
+  \ ale_linters#python#pylint#GetCommand(bufnr(''))
+
+Execute(The pylint executable should be configurable, and escaped properly):
+  let g:ale_python_pylint_executable = 'executable with spaces'
+
+  AssertEqual
+  \ 'executable with spaces',
+  \ ale_linters#python#pylint#GetExecutable(bufnr(''))
+  AssertEqual
+  \ 'executable\ with\ spaces ' . b:command_tail,
   \ ale_linters#python#pylint#GetCommand(bufnr(''))
 
 Execute(The pylint command callback should let you set options):
