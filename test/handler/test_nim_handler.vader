@@ -1,38 +1,35 @@
 Execute(Parsing nim errors should work):
   runtime ale_linters/nim/nimcheck.vim
+  silent file foobar.nim
 
   AssertEqual
   \ [
   \   {
-  \     'bufnr': 42,
   \     'lnum': 8,
   \     'col': 8,
   \     'text': 'Warning: use {.base.} for base methods; baseless methods are deprecated [UseBase]',
   \     'type': 'W',
   \   },
   \   {
-  \     'bufnr': 42,
   \     'lnum': 12,
   \     'col': 2,
   \     'text': 'Error: identifier expected, but found ''a.barfoo''',
   \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 42,
   \     'lnum': 2,
   \     'col': 5,
   \     'text': 'Hint: ''NotUsed'' is declared but not used [XDeclaredButNotUsed]',
   \     'type': 'W',
   \   },
   \   {
-  \     'bufnr': 42,
   \     'lnum': 12,
   \     'col': 2,
   \     'text': 'Error: with : character',
   \     'type': 'E',
   \   },
   \ ],
-  \ ale_linters#nim#nimcheck#Handle(42, [
+  \ ale_linters#nim#nimcheck#Handle(bufnr(''), [
   \ 'Line with wrong( format)',
   \ 'foobar.nim(8, 8) Warning: use {.base.} for base methods; baseless methods are deprecated [UseBase]',
   \ 'foobar.nim(12, 2) Error: identifier expected, but found ''a.barfoo''',

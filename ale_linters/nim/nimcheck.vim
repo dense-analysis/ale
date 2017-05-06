@@ -32,7 +32,6 @@ function! ale_linters#nim#nimcheck#Handle(buffer, lines) abort
         endif
 
         call add(l:output, {
-        \   'bufnr': a:buffer,
         \   'lnum': l:line,
         \   'col': l:column,
         \   'text': l:text,
