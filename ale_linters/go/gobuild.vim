@@ -43,7 +43,7 @@ function! ale_linters#go#gobuild#Handler(buffer, lines) abort
 
     for l:match in ale_linters#go#gobuild#GetMatches(a:lines)
         " Omit errors from imported go packages
-        if ale#path#IsBufferPath(a:buffer, l:match[0])
+        if !ale#path#IsBufferPath(a:buffer, l:match[1])
             continue
         endif
 
