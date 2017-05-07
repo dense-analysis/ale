@@ -6,8 +6,6 @@ let g:ale_python_mypy_executable =
 let g:ale_python_mypy_options = get(g:, 'ale_python_mypy_options', '')
 let g:ale_python_mypy_use_global = get(g:, 'ale_python_mypy_use_global', 0)
 
-" (cd /home/w0rp/git/wazoku/wazoku-spotlight &&  /home/w0rp/git/wazoku/wazoku-spotlight/ve-py3/bin/mypy --show-column-numbers /home/w0rp/git/wazoku/wazoku-spotlight/central/models/__init__.py) | grep ^central/models/__init__.p
-
 function! ale_linters#python#mypy#GetExecutable(buffer) abort
     if !ale#Var(a:buffer, 'python_mypy_use_global')
         let l:virtualenv = ale#python#FindVirtualenv(a:buffer)
