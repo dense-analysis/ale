@@ -97,8 +97,7 @@ function! ale#highlight#UpdateHighlights() abort
 endfunction
 
 function! ale#highlight#BufferHidden(buffer) abort
-    let l:info = get(g:ale_buffer_info, a:buffer, {'loclist': []})
-    let l:loclist = deepcopy(l:info.loclist)
+    let l:loclist = get(g:ale_buffer_info, a:buffer, {'loclist': []}).loclist
 
     " Remember loclist items, so they can be restored later.
     if !empty(l:loclist)
