@@ -65,11 +65,6 @@ endfunction
 
 function! ale#highlight#UpdateHighlights() abort
     let l:buffer = bufnr('%')
-
-    if has_key(s:buffer_restore_map, l:buffer)
-        call setmatches(s:buffer_restore_map[l:buffer])
-    endif
-
     let l:has_new_items = has_key(s:buffer_highlights, l:buffer)
     let l:loclist = l:has_new_items ? remove(s:buffer_highlights, l:buffer) : []
 
@@ -80,7 +75,13 @@ function! ale#highlight#UpdateHighlights() abort
     " Remove anything with a current match_id
     call filter(l:loclist, '!has_key(v:val, ''match_id'')')
 
-    if l:has_new_items
+    " Restore items from the map of hidden items,
+    " if we don't have some new items to set already.
+    if empty(l:loclist) && has_key(s:buffer_restore_map, l:buffer)
+        let l:loclist = s:buffer_restore_map[l:buffer]
+    endif
+
+    if g:ale_enabled
         for l:item in l:loclist
             let l:col = l:item.col
             let l:group = l:item.type ==# 'E' ? 'ALEError' : 'ALEWarning'
@@ -96,12 +97,22 @@ function! ale#highlight#UpdateHighlights() abort
 endfunction
 
 function! ale#highlight#BufferHidden(buffer) abort
-    " Remember all matches, so they can be restored later.
-    let s:buffer_restore_map[a:buffer] = filter(
-    \   getmatches(),
-    \   'get(v:val, ''group'', '''')[:2] ==# ''ALE'''
-    \)
-    call clearmatches()
+    let l:info = get(g:ale_buffer_info, a:buffer, {'loclist': []})
+    let l:loclist = deepcopy(l:info.loclist)
+
+    " Remember loclist items, so they can be restored later.
+    if !empty(l:loclist)
+        " Remove match_ids, as they must be re-calculated when buffers are
+        " shown again.
+        for l:item in l:loclist
+            if has_key(l:item, 'match_id')
+                call remove(l:item, 'match_id')
+            endif
+        endfor
+
+        let s:buffer_restore_map[a:buffer] = l:loclist
+        call clearmatches()
+    endif
 endfunction
 
 augroup ALEHighlightBufferGroup

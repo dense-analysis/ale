@@ -96,9 +96,13 @@ Execute(Highlights set by ALE should be removed when buffer cleanup is done):
 
 Execute(Highlights should be cleared when buffers are hidden):
   call ale#engine#InitBufferInfo(bufnr('%'))
-  call ale#highlight#SetHighlights(bufnr('%'), [
+  let g:ale_buffer_info[bufnr('%')].loclist =  [
   \ {'bufnr': bufnr('%'), 'type': 'E', 'lnum': 3, 'col': 2},
-  \])
+  \]
+  call ale#highlight#SetHighlights(
+  \ bufnr('%'),
+  \ g:ale_buffer_info[bufnr('%')].loclist
+  \)
 
   AssertEqual 1, len(getmatches()), 'The highlights weren''t initially set!'
 
@@ -112,9 +116,13 @@ Execute(Highlights should be cleared when buffers are hidden):
 
 Execute(Only ALE highlights should be restored when buffers are restored):
   call ale#engine#InitBufferInfo(bufnr('%'))
-  call ale#highlight#SetHighlights(bufnr('%'), [
+  let g:ale_buffer_info[bufnr('%')].loclist =  [
   \ {'bufnr': bufnr('%'), 'type': 'E', 'lnum': 3, 'col': 2},
-  \])
+  \]
+  call ale#highlight#SetHighlights(
+  \ bufnr('%'),
+  \ g:ale_buffer_info[bufnr('%')].loclist
+  \)
 
   call matchaddpos('SomeOtherGroup', [[1, 1, 1]])
 
