@@ -23,7 +23,7 @@ function! ale_linters#javascript#standard#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#javascript#standard#GetCommand(buffer) abort
-    return ale_linters#javascript#standard#GetExecutable(a:buffer)
+    return fnameescape(ale_linters#javascript#standard#GetExecutable(a:buffer))
     \   . ' ' . ale#Var(a:buffer, 'javascript_standard_options')
     \   . ' --stdin %s'
 endfunction

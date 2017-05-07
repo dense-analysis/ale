@@ -23,7 +23,7 @@ function! ale_linters#javascript#xo#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#javascript#xo#GetCommand(buffer) abort
-    return ale_linters#javascript#xo#GetExecutable(a:buffer)
+    return fnameescape(ale_linters#javascript#xo#GetExecutable(a:buffer))
     \   . ' ' . ale#Var(a:buffer, 'javascript_xo_options')
     \   . ' --reporter unix --stdin --stdin-filename %s'
 endfunction
