@@ -70,3 +70,35 @@ Execute(The flake8 callbacks should detect virtualenv directories):
   \   g:dir . '/python_paths/with_virtualenv/env/bin/flake8'
   \   . ' --stdin-display-name %s -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
+
+" Some users currently run flake8 this way, so we should support it.
+Execute(Using `python -m flake8` should be supported for running flake8):
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+
+  let g:ale_python_flake8_executable = 'python'
+  let g:ale_python_flake8_options = '-m flake8 --some-option'
+
+  AssertEqual
+  \ 'python',
+  \ ale_linters#python#flake8#GetExecutable(bufnr(''))
+  AssertEqual
+  \ 'python -m flake8 --version',
+  \ ale_linters#python#flake8#VersionCheck(bufnr(''))
+  AssertEqual
+  \ 'python -m flake8 --some-option -',
+  \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
+
+  call ale_linters#python#flake8#ClearVersionCache()
+
+  " Leading spaces shouldn't matter
+  let g:ale_python_flake8_options = '  -m flake8 --some-option'
+
+  AssertEqual
+  \ 'python',
+  \ ale_linters#python#flake8#GetExecutable(bufnr(''))
+  AssertEqual
+  \ 'python -m flake8 --version',
+  \ ale_linters#python#flake8#VersionCheck(bufnr(''))
+  AssertEqual
+  \ 'python   -m flake8 --some-option -',
+  \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])

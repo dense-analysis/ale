@@ -14,8 +14,12 @@ let g:ale_python_flake8_use_global = get(g:, 'ale_python_flake8_use_global', 0)
 " executables, so we don't have to look up the version number constantly.
 let s:version_cache = {}
 
+function! s:UsingModule(buffer) abort
+    return ale#Var(a:buffer, 'python_flake8_options') =~# ' *-m flake8'
+endfunction
+
 function! ale_linters#python#flake8#GetExecutable(buffer) abort
-    if !ale#Var(a:buffer, 'python_flake8_use_global')
+    if !s:UsingModule(a:buffer) && !ale#Var(a:buffer, 'python_flake8_use_global')
         let l:virtualenv = ale#python#FindVirtualenv(a:buffer)
 
         if !empty(l:virtualenv)
@@ -44,8 +48,10 @@ function! ale_linters#python#flake8#VersionCheck(buffer) abort
         return ''
     endif
 
-    return fnameescape(ale_linters#python#flake8#GetExecutable(a:buffer))
-    \   . ' --version'
+    let l:executable = fnameescape(ale_linters#python#flake8#GetExecutable(a:buffer))
+    let l:module_string = s:UsingModule(a:buffer) ? ' -m flake8' : ''
+
+    return l:executable . l:module_string . ' --version'
 endfunction
 
 " Get the flake8 version from the output, or the cache.
