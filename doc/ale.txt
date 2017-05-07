@@ -575,6 +575,7 @@ g:ale_statusline_format                               *g:ale_statusline_format*
 
 
 g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
+b:ale_warn_about_trailing_whitespace     *b:ale_warn_about_trailing_whitespace*
 
   Type: |Number|
   Default: `1`
@@ -587,6 +588,8 @@ g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
 
   Not all linters may respect this option. If a linter does not, please file a
   bug report, and it may be possible to add such support.
+
+  This option may be configured on a per buffer basis.
 
 
 ===============================================================================
