@@ -31,6 +31,18 @@ g:ale_python_flake8_options                       *g:ale_python_flake8_options*
   `python3 -m pip install --user flake8`).
 
 
+g:ale_python_flake8_use_global                 *g:ale_python_flake8_use_global*
+                                               *b:ale_python_flake8_use_global*
+  Type: |Number|
+  Default: `0`
+
+  This variable controls whether or not ALE will search for flake8 in a
+  virtualenv directory first. If this variable is set to `1`, then ALE will
+  always use |g:ale_python_flake8_executable| for the executable path.
+
+  Both variables can be set with `b:` buffer variables instead.
+
+
 -------------------------------------------------------------------------------
 mypy                                                          *ale-python-mypy*
 

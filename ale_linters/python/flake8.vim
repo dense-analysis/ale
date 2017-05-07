@@ -8,13 +8,30 @@ let g:ale_python_flake8_executable =
 let s:default_options = get(g:, 'ale_python_flake8_args', '')
 let g:ale_python_flake8_options =
 \   get(g:, 'ale_python_flake8_options', s:default_options)
+let g:ale_python_flake8_use_global = get(g:, 'ale_python_flake8_use_global', 0)
 
 " A map from Python executable paths to semver strings parsed for those
 " executables, so we don't have to look up the version number constantly.
 let s:version_cache = {}
 
 function! ale_linters#python#flake8#GetExecutable(buffer) abort
+    if !ale#Var(a:buffer, 'python_flake8_use_global')
+        let l:virtualenv = ale#python#FindVirtualenv(a:buffer)
+
+        if !empty(l:virtualenv)
+            let l:ve_flake8 = l:virtualenv . '/bin/flake8'
+
+            if executable(l:ve_flake8)
+                return l:ve_flake8
+            endif
+        endif
+    endif
+
     return ale#Var(a:buffer, 'python_flake8_executable')
+endfunction
+
+function! ale_linters#python#flake8#ClearVersionCache() abort
+    let s:version_cache = {}
 endfunction
 
 function! ale_linters#python#flake8#VersionCheck(buffer) abort
@@ -27,7 +44,8 @@ function! ale_linters#python#flake8#VersionCheck(buffer) abort
         return ''
     endif
 
-    return ale_linters#python#flake8#GetExecutable(a:buffer) . ' --version'
+    return fnameescape(ale_linters#python#flake8#GetExecutable(a:buffer))
+    \   . ' --version'
 endfunction
 
 " Get the flake8 version from the output, or the cache.
@@ -60,12 +78,14 @@ function! ale_linters#python#flake8#GetCommand(buffer, version_output) abort
     " Only include the --stdin-display-name argument if we can parse the
     " flake8 version, and it is recent enough to support it.
     let l:display_name_args = s:SupportsDisplayName(l:version)
-    \   ? '--stdin-display-name %s'
+    \   ? ' --stdin-display-name %s'
     \   : ''
 
-    return ale_linters#python#flake8#GetExecutable(a:buffer)
-    \   . ' ' . ale#Var(a:buffer, 'python_flake8_options')
-    \   . ' ' . l:display_name_args . ' -'
+    let l:options = ale#Var(a:buffer, 'python_flake8_options')
+
+    return fnameescape(ale_linters#python#flake8#GetExecutable(a:buffer))
+    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . l:display_name_args . ' -'
 endfunction
 
 call ale#linter#Define('python', {
