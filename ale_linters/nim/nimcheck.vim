@@ -44,7 +44,7 @@ endfunction
 
 
 function! ale_linters#nim#nimcheck#GetCommand(buffer) abort
-    let l:directory = fnameescape(fnamemodify(bufname(a:buffer), ':p:h'))
+    let l:directory = shellescape(fnamemodify(bufname(a:buffer), ':p:h'))
 
     return 'nim check --path:' . l:directory
     \   . ' --threads:on --verbosity:0 --colors:off --listFullPaths %t'

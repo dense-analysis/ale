@@ -34,7 +34,7 @@ function! ale_linters#javascript#eslint#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#javascript#eslint#GetCommand(buffer) abort
-    return fnameescape(ale_linters#javascript#eslint#GetExecutable(a:buffer))
+    return shellescape(ale_linters#javascript#eslint#GetExecutable(a:buffer))
     \   . ' ' . ale#Var(a:buffer, 'javascript_eslint_options')
     \   . ' -f unix --stdin --stdin-filename %s'
 endfunction

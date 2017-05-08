@@ -19,7 +19,7 @@ Execute(cppcheck for C should detect compile_commands.json files):
   cd cppcheck_paths/one
 
   AssertEqual
-  \ 'cd ' . fnameescape(b:dir . '/cppcheck_paths/one') . ' && '
+  \ 'cd ' . shellescape(b:dir . '/cppcheck_paths/one') . ' && '
   \ . 'cppcheck -q --language=c --project=compile_commands.json --enable=style %t',
   \ ale_linters#c#cppcheck#GetCommand(bufnr(''))
 
@@ -35,6 +35,6 @@ Execute(cppcheck for C++ should detect compile_commands.json files):
   cd cppcheck_paths/one
 
   AssertEqual
-  \ 'cd ' . fnameescape(b:dir . '/cppcheck_paths/one') . ' && '
+  \ 'cd ' . shellescape(b:dir . '/cppcheck_paths/one') . ' && '
   \ . 'cppcheck -q --language=c++ --project=compile_commands.json --enable=style %t',
   \ ale_linters#cpp#cppcheck#GetCommand(bufnr(''))

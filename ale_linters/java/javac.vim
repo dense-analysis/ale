@@ -41,14 +41,13 @@ endfunction
 function! s:BuildClassPathOption(buffer, import_paths) abort
     " Filter out lines like [INFO], etc.
     let l:class_paths = filter(a:import_paths[:], 'v:val !~# ''[''')
-    call map(l:class_paths, 'fnameescape(v:val)')
     call extend(
     \   l:class_paths,
     \   split(ale#Var(a:buffer, 'java_javac_classpath'), s:classpath_sep),
     \)
 
     return !empty(l:class_paths)
-    \   ? '-cp ' . join(l:class_paths, s:classpath_sep)
+    \   ? '-cp ' . shellescape(join(l:class_paths, s:classpath_sep))
     \   : ''
 endfunction
 
@@ -65,7 +64,7 @@ function! ale_linters#java#javac#GetCommand(buffer, import_paths) abort
     let l:src_dir = ale#path#FindNearestDirectory(a:buffer, 'src/main/java')
 
     if !empty(l:src_dir)
-        let l:sp_option = '-sourcepath ' . fnameescape(l:src_dir)
+        let l:sp_option = '-sourcepath ' . shellescape(l:src_dir)
     endif
 
     " Create .class files in a temporary directory, which we will delete later.
@@ -74,7 +73,7 @@ function! ale_linters#java#javac#GetCommand(buffer, import_paths) abort
     return 'javac -Xlint'
     \ . ' ' . l:cp_option
     \ . ' ' . l:sp_option
-    \ . ' -d ' . fnameescape(l:class_file_directory)
+    \ . ' -d ' . shellescape(l:class_file_directory)
     \ . ' ' . ale#Var(a:buffer, 'java_javac_options')
     \ . ' %t'
 endfunction

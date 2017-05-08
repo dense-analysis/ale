@@ -8,7 +8,7 @@ function! ale_linters#verilog#verilator#GetCommand(buffer) abort
     call ale#engine#ManageFile(a:buffer, l:filename)
     call writefile(getbufline(a:buffer, 1, '$'), l:filename)
 
-    return 'verilator --lint-only -Wall -Wno-DECLFILENAME ' . fnameescape(l:filename)
+    return 'verilator --lint-only -Wall -Wno-DECLFILENAME ' . shellescape(l:filename)
 endfunction
 
 function! ale_linters#verilog#verilator#Handle(buffer, lines) abort

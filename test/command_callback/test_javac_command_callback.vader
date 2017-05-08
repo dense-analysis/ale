@@ -15,7 +15,7 @@ After:
 Execute(The javac callback should return the correct default value):
   let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
 
-  Assert match(b:command, '\v^javac +-Xlint +-d +/tmp/[0-9a-zA-Z/]+ +\%t$') >= 0,
+  Assert match(b:command, '\v^javac +-Xlint +-d +''/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
   \ 'Invalid command string: ' . b:command
 
 Execute(The javac callback should use g:ale_java_javac_classpath correctly):
@@ -23,7 +23,7 @@ Execute(The javac callback should use g:ale_java_javac_classpath correctly):
 
   let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
 
-  Assert match(b:command, '\v^javac +-Xlint +-cp +foo\.jar +-d +/tmp/[0-9a-zA-Z/]+ +\%t$') >= 0,
+  Assert match(b:command, '\v^javac +-Xlint +-cp ''+foo\.jar'' +-d ''+/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
   \ 'Invalid command string: ' . b:command
 
 Execute(The javac callback should include discovered classpaths):
@@ -34,7 +34,7 @@ Execute(The javac callback should include discovered classpaths):
   \ '/xyz/abc.jar',
   \])
 
-  Assert match(b:command, '\v^javac +-Xlint +-cp +/foo/bar\.jar:/xyz/abc\.jar +-d +/tmp/[0-9a-zA-Z/]+ +\%t$') >= 0,
+  Assert match(b:command, '\v^javac +-Xlint +-cp ''+/foo/bar\.jar:/xyz/abc\.jar'' +-d +''/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
   \ 'Invalid command string: ' . b:command
 
 Execute(The javac callback should combine discovered classpaths and manual ones):
@@ -47,7 +47,7 @@ Execute(The javac callback should combine discovered classpaths and manual ones)
   \ '/xyz/abc.jar',
   \])
 
-  Assert match(b:command, '\v^javac +-Xlint +-cp +/foo/bar\.jar:/xyz/abc\.jar:configured\.jar +-d +/tmp/[0-9a-zA-Z/]+ +\%t$') >= 0,
+  Assert match(b:command, '\v^javac +-Xlint +-cp +''/foo/bar\.jar:/xyz/abc\.jar:configured\.jar'' +-d ''+/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
   \ 'Invalid command string: ' . b:command
 
   let g:ale_java_javac_classpath = 'configured.jar:configured2.jar'
@@ -59,7 +59,7 @@ Execute(The javac callback should combine discovered classpaths and manual ones)
   \ '/xyz/abc.jar',
   \])
 
-  Assert match(b:command, '\v^javac +-Xlint +-cp +/foo/bar\.jar:/xyz/abc\.jar:configured\.jar:configured2\.jar +-d +/tmp/[0-9a-zA-Z/]+ +\%t$') >= 0,
+  Assert match(b:command, '\v^javac +-Xlint +-cp +''/foo/bar\.jar:/xyz/abc\.jar:configured\.jar:configured2\.jar'' +-d +''/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
   \ 'Invalid command string: ' . b:command
 
 Execute(The javac callback should detect source directories):
@@ -69,7 +69,7 @@ Execute(The javac callback should detect source directories):
 
   let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
 
-  Assert match(b:command, '\v^javac +-Xlint +-sourcepath /.*java_paths/src/main/java/ +-d +/tmp/[0-9a-zA-Z/]+ +\%t$') >= 0,
+  Assert match(b:command, '\v^javac +-Xlint +-sourcepath ''/.*java_paths/src/main/java/'' +-d +''/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
   \ 'Invalid command string: ' . b:command
 
 Execute(The javac callback should combine detected source directories and classpaths):
@@ -84,7 +84,7 @@ Execute(The javac callback should combine detected source directories and classp
   \ '/xyz/abc.jar',
   \])
 
-  Assert match(b:command, '\v^javac +-Xlint +-cp +/foo/bar\.jar:/xyz/abc\.jar +-sourcepath /.*java_paths/src/main/java/ +-d +/tmp/[0-9a-zA-Z/]+ +\%t$') >= 0,
+  Assert match(b:command, '\v^javac +-Xlint +-cp +''/foo/bar\.jar:/xyz/abc\.jar'' +-sourcepath ''/.*java_paths/src/main/java/'' +-d +''/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
   \ 'Invalid command string: ' . b:command
 
 Execute(The javac callback should use g:ale_java_javac_options correctly):
@@ -93,5 +93,5 @@ Execute(The javac callback should use g:ale_java_javac_options correctly):
 
   let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
 
-  Assert match(b:command, '\v^javac +-Xlint +-d +/tmp/[0-9a-zA-Z/]+ --anything --else +\%t$') >= 0,
+  Assert match(b:command, '\v^javac +-Xlint +-d +''/tmp/[0-9a-zA-Z/]+'' --anything --else +\%t$') >= 0,
   \ 'Invalid command string: ' . b:command

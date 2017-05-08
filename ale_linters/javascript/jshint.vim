@@ -27,11 +27,11 @@ function! ale_linters#javascript#jshint#GetCommand(buffer) abort
     \   get(g:, 'ale_jshint_config_loc', '')
     \)
 
-    let l:command = fnameescape(ale_linters#javascript#jshint#GetExecutable(a:buffer))
+    let l:command = shellescape(ale_linters#javascript#jshint#GetExecutable(a:buffer))
     let l:command .= ' --reporter unix --extract auto'
 
     if !empty(l:jshint_config)
-        let l:command .= ' --config ' . fnameescape(l:jshint_config)
+        let l:command .= ' --config ' . shellescape(l:jshint_config)
     endif
 
     let l:command .= ' -'
