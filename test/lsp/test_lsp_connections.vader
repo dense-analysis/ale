@@ -1,0 +1,111 @@
+Before:
+  let g:ale_lsp_next_message_id = 1
+
+After:
+  unlet! b:data
+
+Execute(GetNextMessageID() should increment appropriately):
+  " We should get the initial ID, and increment a bit.
+  AssertEqual 1, ale#lsp#GetNextMessageID()
+  AssertEqual 2, ale#lsp#GetNextMessageID()
+  AssertEqual 3, ale#lsp#GetNextMessageID()
+
+  " Set the maximum ID.
+  let g:ale_lsp_next_message_id = 9223372036854775807
+
+  " When we hit the maximum ID, the next ID afterwards should be 1.
+  AssertEqual 9223372036854775807, ale#lsp#GetNextMessageID()
+  AssertEqual 1, ale#lsp#GetNextMessageID()
+
+Execute(ale#lsp#CreateMessageData() should create an appropriate message):
+    " 71 is the size in bytes for UTF-8, not the number of characters.
+    AssertEqual
+    \ [
+    \   1,
+    \   "Content-Length: 71\r\n\r\n"
+    \   . '{"id":1,"jsonrpc":"2.0","method":"someMethod","params":{"foo":"barÜ"}}',
+    \ ],
+    \ ale#lsp#CreateMessageData([0, 'someMethod', {'foo': 'barÜ'}])
+    " Check again to ensure that we use the next ID.
+    AssertEqual
+    \ [
+    \   2,
+    \   "Content-Length: 71\r\n\r\n"
+    \   . '{"id":2,"jsonrpc":"2.0","method":"someMethod","params":{"foo":"barÜ"}}',
+    \ ],
+    \ ale#lsp#CreateMessageData([0, 'someMethod', {'foo': 'barÜ'}])
+
+Execute(ale#lsp#CreateMessageData() should create messages without params):
+    AssertEqual
+    \ [
+    \   1,
+    \   "Content-Length: 51\r\n\r\n"
+    \   . '{"id":1,"jsonrpc":"2.0","method":"someOtherMethod"}',
+    \ ],
+    \ ale#lsp#CreateMessageData([0, 'someOtherMethod'])
+
+Execute(ale#lsp#CreateMessageData() should create notifications):
+    AssertEqual
+    \ [
+    \   0,
+    \   "Content-Length: 55\r\n\r\n"
+    \   . '{"id":null,"jsonrpc":"2.0","method":"someNotification"}',
+    \ ],
+    \ ale#lsp#CreateMessageData([1, 'someNotification'])
+    AssertEqual
+    \ [
+    \   0,
+    \   "Content-Length: 78\r\n\r\n"
+    \   . '{"id":null,"jsonrpc":"2.0","method":"someNotification","params":{"foo":"bar"}}',
+    \ ],
+    \ ale#lsp#CreateMessageData([1, 'someNotification', {'foo': 'bar'}])
+
+Execute(ale#lsp#ReadMessageData() should read single whole messages):
+  AssertEqual
+  \  ['', [{'id': 2, 'jsonrpc': '2.0', 'result': {'foo': 'barÜ'}}]],
+  \ ale#lsp#ReadMessageData(
+  \   "Content-Length: 49\r\n\r\n"
+  \   . '{"id":2,"jsonrpc":"2.0","result":{"foo":"barÜ"}}'
+  \ )
+
+Execute(ale#lsp#ReadMessageData() should ignore other headers):
+  AssertEqual
+  \  ['', [{'id': 2, 'jsonrpc': '2.0', 'result': {'foo': 'barÜ'}}]],
+  \ ale#lsp#ReadMessageData(
+  \   "First-Header: 49\r\n"
+  \   . "Content-Length: 49\r\n"
+  \   . "Other-Header: 49\r\n"
+  \   . "\r\n"
+  \   . '{"id":2,"jsonrpc":"2.0","result":{"foo":"barÜ"}}'
+  \ )
+
+Execute(ale#lsp#ReadMessageData() should handle partial messages):
+  let b:data = "Content-Length: 49\r\n\r\n" . '{"id":2,"jsonrpc":"2.0","result":'
+
+  AssertEqual [b:data, []], ale#lsp#ReadMessageData(b:data)
+
+Execute(ale#lsp#ReadMessageData() should handle multiple messages):
+  AssertEqual
+  \  ['', [
+  \   {'id': 2, 'jsonrpc': '2.0', 'result': {'foo': 'barÜ'}},
+  \   {'id': 2, 'jsonrpc': '2.0', 'result': {'foo123': 'barÜ'}},
+  \ ]],
+  \ ale#lsp#ReadMessageData(
+  \   "Content-Length: 49\r\n\r\n"
+  \   . '{"id":2,"jsonrpc":"2.0","result":{"foo":"barÜ"}}'
+  \   . "Content-Length: 52\r\n\r\n"
+  \   . '{"id":2,"jsonrpc":"2.0","result":{"foo123":"barÜ"}}'
+  \ )
+
+Execute(ale#lsp#ReadMessageData() should handle a message with part of a second message):
+  let b:data = "Content-Length: 52\r\n\r\n" . '{"id":2,"jsonrpc":"2.'
+
+  AssertEqual
+  \  [b:data, [
+  \   {'id': 2, 'jsonrpc': '2.0', 'result': {'foo': 'barÜ'}},
+  \ ]],
+  \ ale#lsp#ReadMessageData(
+  \   "Content-Length: 49\r\n\r\n"
+  \   . '{"id":2,"jsonrpc":"2.0","result":{"foo":"barÜ"}}'
+  \   . b:data
+  \ )

@@ -1,0 +1,121 @@
+Before:
+  function Range(start_line, start_char, end_line, end_char) abort
+    return {
+    \ 'start': {'line': a:start_line, 'character': a:start_char},
+    \ 'end': {'line': a:end_line, 'character': a:end_char},
+    \}
+  endfunction
+
+After:
+  delfunction Range
+
+Execute(ale#lsp#response#ReadDiagnostics() should handle errors):
+  AssertEqual ['filename.ts', [
+  \   {
+  \     'type': 'E',
+  \     'message': 'Something went wrong!',
+  \     'lnum': 3,
+  \     'col': 11,
+  \     'end_lnum': 5,
+  \     'end_col': 16,
+  \     'nr': 'some-error',
+  \   }
+  \ ]],
+  \ ale#lsp#response#ReadDiagnostics({'uri': 'filename.ts', 'diagnostics': [
+  \   {
+  \     'severity': 1,
+  \     'range': Range(2, 10, 4, 15),
+  \     'code': 'some-error',
+  \     'message': 'Something went wrong!',
+  \   },
+  \ ]})
+
+Execute(ale#lsp#response#ReadDiagnostics() should handle warnings):
+  AssertEqual ['filename.ts', [
+  \   {
+  \     'type': 'W',
+  \     'message': 'Something went wrong!',
+  \     'lnum': 2,
+  \     'col': 4,
+  \     'end_lnum': 2,
+  \     'end_col': 4,
+  \     'nr': 'some-warning',
+  \   }
+  \ ]],
+  \ ale#lsp#response#ReadDiagnostics({'uri': 'filename.ts', 'diagnostics': [
+  \   {
+  \     'severity': 2,
+  \     'range': Range(1, 3, 1, 3),
+  \     'code': 'some-warning',
+  \     'message': 'Something went wrong!',
+  \   },
+  \ ]})
+
+Execute(ale#lsp#response#ReadDiagnostics() should treat messages with missing severity as errors):
+  AssertEqual ['filename.ts', [
+  \   {
+  \     'type': 'E',
+  \     'message': 'Something went wrong!',
+  \     'lnum': 3,
+  \     'col': 11,
+  \     'end_lnum': 5,
+  \     'end_col': 16,
+  \     'nr': 'some-error',
+  \   }
+  \ ]],
+  \ ale#lsp#response#ReadDiagnostics({'uri': 'filename.ts', 'diagnostics': [
+  \   {
+  \     'range': Range(2, 10, 4, 15),
+  \     'code': 'some-error',
+  \     'message': 'Something went wrong!',
+  \   },
+  \ ]})
+
+Execute(ale#lsp#response#ReadDiagnostics() should handle messages without codes):
+  AssertEqual ['filename.ts', [
+  \   {
+  \     'type': 'E',
+  \     'message': 'Something went wrong!',
+  \     'lnum': 3,
+  \     'col': 11,
+  \     'end_lnum': 5,
+  \     'end_col': 16,
+  \   }
+  \ ]],
+  \ ale#lsp#response#ReadDiagnostics({'uri': 'filename.ts', 'diagnostics': [
+  \   {
+  \     'range': Range(2, 10, 4, 15),
+  \     'message': 'Something went wrong!',
+  \   },
+  \ ]})
+
+Execute(ale#lsp#response#ReadDiagnostics() should handle multiple messages):
+  AssertEqual ['filename.ts', [
+  \   {
+  \     'type': 'E',
+  \     'message': 'Something went wrong!',
+  \     'lnum': 1,
+  \     'col': 3,
+  \     'end_lnum': 1,
+  \     'end_col': 3,
+  \   },
+  \   {
+  \     'type': 'W',
+  \     'message': 'A warning',
+  \     'lnum': 2,
+  \     'col': 5,
+  \     'end_lnum': 2,
+  \     'end_col': 5,
+  \   },
+  \ ]],
+  \ ale#lsp#response#ReadDiagnostics({'uri': 'filename.ts', 'diagnostics': [
+  \   {
+  \     'range': Range(0, 2, 0, 2),
+  \     'message': 'Something went wrong!',
+  \   },
+  \   {
+  \     'severity': 2,
+  \     'range': Range(1, 4, 1, 4),
+  \     'message': 'A warning',
+  \   },
+  \ ]})

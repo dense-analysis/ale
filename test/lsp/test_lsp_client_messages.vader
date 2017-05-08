@@ -1,0 +1,78 @@
+Execute(ale#lsp#message#Initialize() should return correct messages):
+  AssertEqual
+  \ [
+  \   0,
+  \   'initialize',
+  \   {
+  \    'processId': getpid(),
+  \    'rootUri': '/foo/bar',
+  \    'capabilities': {},
+  \   }
+  \ ],
+  \ ale#lsp#message#Initialize('/foo/bar')
+
+Execute(ale#lsp#message#Initialized() should return correct messages):
+  AssertEqual [1, 'initialized'], ale#lsp#message#Initialized()
+
+Execute(ale#lsp#message#Shutdown() should return correct messages):
+  AssertEqual [0, 'shutdown'], ale#lsp#message#Shutdown()
+
+Execute(ale#lsp#message#Exit() should return correct messages):
+  AssertEqual [1, 'exit'], ale#lsp#message#Exit(),
+
+Execute(ale#lsp#message#DidOpen() should return correct messages):
+  AssertEqual
+  \ [
+  \   1,
+  \   'textDocument/didOpen',
+  \   {
+  \     'textDocument': {
+  \         'uri': '/foo/bar',
+  \         'languageId': 'typescript',
+  \         'version': 123,
+  \         'text': 'foobar',
+  \     },
+  \   }
+  \ ],
+  \ ale#lsp#message#DidOpen('/foo/bar', 'typescript', 123, 'foobar')
+
+Execute(ale#lsp#message#DidChange() should return correct messages):
+  AssertEqual
+  \ [
+  \   1,
+  \   'textDocument/didChange',
+  \   {
+  \     'textDocument': {
+  \         'uri': '/foo/bar',
+  \         'version': 123,
+  \     },
+  \     'contentChanges': [{'text': 'foobar'}],
+  \   }
+  \ ],
+  \ ale#lsp#message#DidChange('/foo/bar', 123, 'foobar')
+
+Execute(ale#lsp#message#DidSave() should return correct messages):
+  AssertEqual
+  \ [
+  \   1,
+  \   'textDocument/didSave',
+  \   {
+  \     'textDocument': {
+  \         'uri': '/foo/bar',
+  \     },
+  \   }
+  \ ],
+  \ ale#lsp#message#DidSave('/foo/bar')
+
+Execute(ale#lsp#message#DidClose() should return correct messages):
+  AssertEqual
+  \ [
+  \   1,
+  \   'textDocument/didClose',
+  \   {
+  \     'textDocument': {
+  \         'uri': '/foo/bar',
+  \     },
+  \   }
+  \ ],
+  \ ale#lsp#message#DidClose('/foo/bar')
