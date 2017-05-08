@@ -16,7 +16,7 @@ Execute(--config should be set when the .csslintrc file is found):
   AssertEqual
   \ (
   \   'csslint --format=compact '
-  \   . '--config=' . fnameescape(g:dir . '/csslint-test-files/some-app/.csslintrc')
+  \   . '--config=' . shellescape(g:dir . '/csslint-test-files/some-app/.csslintrc')
   \   . ' %t'
   \ ),
   \ ale_linters#css#csslint#GetCommand(bufnr(''))

@@ -12,7 +12,7 @@ function! ale_linters#lua#luacheck#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#lua#luacheck#GetCommand(buffer) abort
-    return ale_linters#lua#luacheck#GetExecutable(a:buffer)
+    return shellescape(ale_linters#lua#luacheck#GetExecutable(a:buffer))
     \   . ' ' . ale#Var(a:buffer, 'lua_luacheck_options')
     \   . ' --formatter plain --codes --filename %s -'
 endfunction

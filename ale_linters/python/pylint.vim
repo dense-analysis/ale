@@ -26,7 +26,7 @@ function! ale_linters#python#pylint#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#python#pylint#GetCommand(buffer) abort
-    return fnameescape(ale_linters#python#pylint#GetExecutable(a:buffer))
+    return shellescape(ale_linters#python#pylint#GetExecutable(a:buffer))
     \   . ' ' . ale#Var(a:buffer, 'python_pylint_options')
     \   . ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'
     \   . ' %s'

@@ -13,7 +13,7 @@ function! ale_linters#c#clang#GetCommand(buffer) abort
     " -iquote with the directory the file is in makes #include work for
     "  headers in the same directory.
     return 'clang -S -x c -fsyntax-only '
-    \   . '-iquote ' . fnameescape(fnamemodify(bufname(a:buffer), ':p:h'))
+    \   . '-iquote ' . shellescape(fnamemodify(bufname(a:buffer), ':p:h'))
     \   . ' ' . ale#Var(a:buffer, 'c_clang_options') . ' -'
 endfunction
 

@@ -2,8 +2,7 @@ Before:
   silent! cd /testplugin/test/util
 
 Execute(CdString should output the correct command string):
-  AssertEqual 'cd /foo\ bar/baz && ', ale#path#CdString('/foo bar/baz')
+  AssertEqual 'cd ''/foo bar/baz'' && ', ale#path#CdString('/foo bar/baz')
 
 Execute(BufferCdString should output the correct command string):
-  Assert match(ale#path#BufferCdString(bufnr('')), '^cd .*test/util && $') >= 0,
-  \ 'String didn''t match regex: ' . ale#path#BufferCdString(bufnr(''))
+  AssertEqual 'cd ' . shellescape(getcwd()) . ' && ', ale#path#BufferCdString(bufnr(''))

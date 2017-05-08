@@ -43,7 +43,7 @@ function! ale_linters#elm#make#GetCommand(buffer) abort
         let l:dir_set_cmd = ''
     else
         let l:root_dir = fnamemodify(l:elm_package, ':p:h')
-        let l:dir_set_cmd = 'cd ' . fnameescape(l:root_dir) . ' && '
+        let l:dir_set_cmd = 'cd ' . shellescape(l:root_dir) . ' && '
     endif
 
     " The elm-make compiler, at the time of this writing, uses '/dev/null' as

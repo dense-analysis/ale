@@ -47,7 +47,7 @@ endfunction
 " Output 'cd <directory> && '
 " This function can be used changing the directory for a linter command.
 function! ale#path#CdString(directory) abort
-    return 'cd ' . fnameescape(a:directory) . ' && '
+    return 'cd ' . shellescape(a:directory) . ' && '
 endfunction
 
 " Output 'cd <buffer_filename_directory> && '
