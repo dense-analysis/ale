@@ -5,7 +5,7 @@ function! ale_linters#php#php#Handle(buffer, lines) abort
     " Matches patterns like the following:
     "
     " PHP Parse error:  syntax error, unexpected ';', expecting ']' in - on line 15
-    let l:pattern = '\vPHP %(Fatal|Parse) error:\s+(.+unexpected ''(.+)%(expecting.+)@<!''.*|.+) in - on line (\d+)'
+    let l:pattern = '\v^%(Fatal|Parse) error:\s+(.+unexpected ''(.+)%(expecting.+)@<!''.*|.+) in - on line (\d+)'
 
     let l:output = []
 
@@ -23,7 +23,7 @@ endfunction
 call ale#linter#Define('php', {
 \   'name': 'php',
 \   'executable': 'php',
-\   'output_stream': 'both',
-\   'command': 'php -l -d display_errors=1 --',
+\   'output_stream': 'stdout',
+\   'command': 'php -l -d error_reporting=E_ALL -d display_errors=1 --',
 \   'callback': 'ale_linters#php#php#Handle',
 \})
