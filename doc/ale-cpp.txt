@@ -59,6 +59,17 @@ g:ale_cpp_cppcheck_options                         *g:ale_cpp_cppcheck_options*
 
 
 -------------------------------------------------------------------------------
+cpplint                                                       *ale-cpp-cpplint*
+
+g:ale_cpp_cpplint_options                           *g:ale_cpp_cpplint_options*
+                                                    *b:ale_cpp_cpplint_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to modify flags given to cpplint.
+
+
+-------------------------------------------------------------------------------
 gcc                                                               *ale-cpp-gcc*
 
 g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
