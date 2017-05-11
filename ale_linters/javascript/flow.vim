@@ -7,6 +7,9 @@ let g:ale_javascript_flow_executable =
 let g:ale_javascript_flow_use_global =
 \   get(g:, 'ale_javascript_flow_use_global', 0)
 
+let g:ale_javascript_flow_use_relative_paths =
+\   get(g:, 'ale_javascript_flow_use_relative_paths', 0)
+
 function! ale_linters#javascript#flow#GetExecutable(buffer) abort
     if ale#Var(a:buffer, 'javascript_flow_use_global')
         return ale#Var(a:buffer, 'javascript_flow_executable')
@@ -27,8 +30,14 @@ function! ale_linters#javascript#flow#GetCommand(buffer) abort
         return ''
     endif
 
+    if ale#Var(a:buffer, 'javascript_flow_use_relative_paths')
+        let l:substitution_char = '%r'
+    else
+        let l:substitution_char = '%s'
+    endif
+
     return shellescape(ale_linters#javascript#flow#GetExecutable(a:buffer))
-    \   . ' check-contents --respect-pragma --json --from ale %s'
+    \   . ' check-contents --respect-pragma --json --from ale ' . l:substitution_char
 endfunction
 
 function! ale_linters#javascript#flow#Handle(buffer, lines) abort
@@ -36,6 +45,12 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
 
     if l:str ==# ''
         return []
+    endif
+
+    if ale#Var(a:buffer, 'javascript_flow_use_relative_paths')
+        let l:buffer_path = expand('#' . a:buffer)
+    else
+        let l:buffer_path = expand('#' . a:buffer . ':p')
     endif
 
     let l:flow_output = json_decode(l:str)
@@ -51,7 +66,7 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
             " Comments have no line of column information, so we skip them.
             " In certain cases, `l:message.loc.source` points to a different path
             " than the buffer one, thus we skip this loc information too.
-            if has_key(l:message, 'loc') && l:line ==# 0 && l:message.loc.source ==# expand('#' . a:buffer . ':p')
+            if has_key(l:message, 'loc') && l:line ==# 0 && l:message.loc.source ==# l:buffer_path
                 let l:line = l:message.loc.start.line + 0
                 let l:col = l:message.loc.start.column + 0
             endif

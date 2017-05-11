@@ -476,11 +476,17 @@ function! ale#engine#FormatCommand(buffer, command) abort
     " with an ugly string.
     let l:command = substitute(l:command, '%%', '<<PERCENTS>>', 'g')
 
-    " Replace all %s occurences in the string with the name of the current
-    " file.
+    " Replace all %s occurences in the string with the absolute path of the
+    " current file.
     if l:command =~# '%s'
         let l:filename = fnamemodify(bufname(a:buffer), ':p')
         let l:command = substitute(l:command, '%s', '\=shellescape(l:filename)', 'g')
+    endif
+
+    " Replace all %r occurences with the relative path of the current file
+    if l:command =~# '%r'
+        let l:filename = fnamemodify(bufname(a:buffer), ':.')
+        let l:command = substitute(l:command, '%r', '\=shellescape(l:filename)', 'g')
     endif
 
     if l:command =~# '%t'
