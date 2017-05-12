@@ -396,17 +396,7 @@ function! s:RunJob(options) abort
         let l:read_buffer = 0
     endif
 
-    " The command will be executed in a subshell. This fixes a number of
-    " issues, including reading the PATH variables correctly, %PATHEXT%
-    " expansion on Windows, etc.
-    "
-    " NeoVim handles this issue automatically if the command is a String,
-    " but we'll do this explicitly, so we use thes same exact command for both
-    " versions.
-    let l:command = has('win32')
-    \   ?  'cmd /c ' . l:command
-    \   : split(&shell) + split(&shellcmdflag) + [l:command]
-
+    let l:command = ale#job#PrepareCommand(l:command)
     let l:job_options = {
     \   'mode': 'nl',
     \   'exit_cb': function('s:HandleExit'),

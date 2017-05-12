@@ -57,31 +57,72 @@ function! s:NeoVimCallback(job, data, event) abort
         \   a:data,
         \)
     else
-        call ale#util#GetFunction(l:job_info.exit_cb)(a:job, a:data)
+        try
+            call ale#util#GetFunction(l:job_info.exit_cb)(a:job, a:data)
+        finally
+            " Automatically forget about the job after it's done.
+            if has_key(s:job_map, a:job)
+                call remove(s:job_map, a:job)
+            endif
+        endtry
     endif
 endfunction
 
 function! s:VimOutputCallback(channel, data) abort
     let l:job = ch_getjob(a:channel)
     let l:job_id = ale#job#ParseVim8ProcessID(string(l:job))
-    call ale#util#GetFunction(s:job_map[l:job_id].out_cb)(l:job_id, a:data)
+
+    " Only call the callbacks for jobs which are valid.
+    if l:job_id > 0
+        call ale#util#GetFunction(s:job_map[l:job_id].out_cb)(l:job_id, a:data)
+    endif
 endfunction
 
 function! s:VimErrorCallback(channel, data) abort
     let l:job = ch_getjob(a:channel)
     let l:job_id = ale#job#ParseVim8ProcessID(string(l:job))
-    call ale#util#GetFunction(s:job_map[l:job_id].err_cb)(l:job_id, a:data)
+
+    " Only call the callbacks for jobs which are valid.
+    if l:job_id > 0
+        call ale#util#GetFunction(s:job_map[l:job_id].err_cb)(l:job_id, a:data)
+    endif
 endfunction
 
 function! s:VimCloseCallback(channel) abort
-    " Call job_status, which will trigger the exit callback below.
-    " This behaviour is described in :help job-status
-    call job_status(ch_getjob(a:channel))
+    let l:job = ch_getjob(a:channel)
+    let l:job_id = ale#job#ParseVim8ProcessID(string(l:job))
+    let l:info = s:job_map[l:job_id]
+
+    " job_status() can trigger the exit handler.
+    " The channel can close before the job has exited.
+    if job_status(l:job) ==# 'dead'
+        try
+            call ale#util#GetFunction(l:info.exit_cb)(l:job_id, l:info.exit_code)
+        finally
+            " Automatically forget about the job after it's done.
+            if has_key(s:job_map, l:job_id)
+                call remove(s:job_map, l:job_id)
+            endif
+        endtry
+    endif
 endfunction
 
 function! s:VimExitCallback(job, exit_code) abort
     let l:job_id = ale#job#ParseVim8ProcessID(string(a:job))
-    call ale#util#GetFunction(s:job_map[l:job_id].exit_cb)(l:job_id, a:exit_code)
+    let l:info = s:job_map[l:job_id]
+    let l:info.exit_code = a:exit_code
+
+    " The program can exit before the data has finished being read.
+    if ch_status(job_getchannel(a:job)) ==# 'closed'
+        try
+            call ale#util#GetFunction(l:info.exit_cb)(l:job_id, a:exit_code)
+        finally
+            " Automatically forget about the job after it's done.
+            if has_key(s:job_map, l:job_id)
+                call remove(s:job_map, l:job_id)
+            endif
+        endtry
+    endif
 endfunction
 
 function! ale#job#ParseVim8ProcessID(job_string) abort
@@ -92,6 +133,19 @@ function! ale#job#ValidateArguments(command, options) abort
     if a:options.mode !=# 'nl' && a:options.mode !=# 'raw'
         throw 'Invalid mode: ' . a:options.mode
     endif
+endfunction
+
+function! ale#job#PrepareCommand(command) abort
+    " The command will be executed in a subshell. This fixes a number of
+    " issues, including reading the PATH variables correctly, %PATHEXT%
+    " expansion on Windows, etc.
+    "
+    " NeoVim handles this issue automatically if the command is a String,
+    " but we'll do this explicitly, so we use thes same exact command for both
+    " versions.
+    return has('win32')
+    \   ?  'cmd /c ' . a:command
+    \   : split(&shell) + split(&shellcmdflag) + [a:command]
 endfunction
 
 " Start a job with options which are agnostic to Vim and NeoVim.
