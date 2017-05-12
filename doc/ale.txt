@@ -39,6 +39,7 @@ CONTENTS                                                         *ale-contents*
       htmlhint............................|ale-html-htmlhint|
       tidy................................|ale-html-tidy|
     java..................................|ale-java-options|
+      checkstyle..........................|ale-java-checkstyle|
       javac...............................|ale-java-javac|
     javascript............................|ale-javascript-options|
       eslint..............................|ale-javascript-eslint|
