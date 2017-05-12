@@ -215,6 +215,15 @@ function! ale#job#Start(command, options) abort
     return l:job_id
 endfunction
 
+" Send raw data to the job.
+function! ale#job#SendRaw(job_id, string) abort
+    if has('nvim')
+        call jobsend(a:job_id, a:string)
+    else
+        call ch_sendraw(job_getchannel(s:job_map[a:job_id]), a:string)
+    endif
+endfunction
+
 " Given a job ID, return 1 if the job is currently running.
 " Invalid job IDs will be ignored.
 function! ale#job#IsRunning(job_id) abort

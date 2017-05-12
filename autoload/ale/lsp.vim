@@ -1,8 +1,30 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Language Server Protocol client code
 
-let s:address_info_map = {}
+" A List of connections, used for tracking servers which have been connected
+" to, and programs which are run.
+let s:connections = []
 let g:ale_lsp_next_message_id = 1
+
+function! s:NewConnection() abort
+    " data: The message data received so far.
+    " callback_map: A mapping from connections to response callbacks.
+    " address: An address only set for server connections.
+    " executable: An executable only set for program connections.
+    " job: A job ID only set for running programs.
+    let l:conn = {
+    \   'data': '',
+    \   'callback_map': {},
+    \   'address': '',
+    \   'executable': '',
+    \   'job_id': -1,
+    \}
+
+    call add(s:connections, l:conn)
+
+    return l:conn
+endfunction
+
 
 function! ale#lsp#GetNextMessageID() abort
     " Use the current ID
@@ -87,27 +109,87 @@ function! ale#lsp#ReadMessageData(data) abort
     return [l:remainder, l:response_list]
 endfunction
 
-function! s:HandleMessage(channel, message) abort
-    let l:channel_info = ch_info(a:channel)
-    let l:address = l:channel_info.hostname . ':' . l:channel_info.port
-    let l:info = s:address_info_map[l:address]
-    let l:info.data .= a:message
+function! ale#lsp#HandleMessage(conn, message) abort
+    let a:conn.data .= a:message
 
     " Parse the objects now if we can, and keep the remaining text.
-    let [l:info.data, l:response_list] = ale#lsp#ReadMessageData(l:info.data)
+    let [a:conn.data, l:response_list] = ale#lsp#ReadMessageData(a:conn.data)
 
     " Call our callbacks.
     for l:response in l:response_list
-        let l:callback = l:info.callback_map.pop(l:response.id)
+        let l:callback = a:conn.callback_map.pop(l:response.id)
         call ale#util#GetFunction(l:callback)(l:response)
     endfor
 endfunction
 
-" Send a message to the server.
+function! s:HandleChannelMessage(channel, message) abort
+    let l:info = ch_info(a:channel)
+    let l:address = l:info.hostname . l:info.address
+    let l:conn = filter(s:connections[:], 'v:val.address ==# l:address')[0]
+
+    call ale#lsp#HandleMessage(l:conn, a:message)
+endfunction
+
+function! s:HandleCommandMessage(job_id, message) abort
+    let l:conn = filter(s:connections[:], 'v:val.job_id == a:job_id')[0]
+
+    call ale#lsp#HandleMessage(l:conn, a:message)
+endfunction
+
+" Send a message to a server with a given executable, and a command for
+" running the executable.
+"
+" A callback can be registered to handle the response.
+" Notifications do not need to be handled.
+" (executable, command, message, callback?)
+"
+" Returns 1 when a message is sent, 0 otherwise.
+function! ale#lsp#SendMessageToProgram(executable, command, message, ...) abort
+    if a:0 > 1
+        throw 'Too many arguments!'
+    endif
+
+    if !a:message[0] && a:0 == 0
+        throw 'A callback must be set for messages which are not notifications!'
+    endif
+
+    if !executable(a:executable)
+        return 0
+    endif
+
+    let [l:id, l:data] = ale#lsp#CreateMessageData(a:message)
+
+    let l:matches = filter(s:connections[:], 'v:val.executable ==# a:executable')
+
+    if empty(l:matches)
+        " We haven't looked at this executable before.
+        " Create a new connection.
+        let l:conn = NewConnection()
+    endif
+
+    if !ale#job#IsRunning(l:conn.job_id)
+        let l:options = {'mode': 'raw', 'out_cb': 's:HandleCommandMessage'}
+        let l:job_id = ale#job#Start(ale#job#PrepareCommand(a:command), l:options)
+    endif
+
+    if l:job_id > 0
+        return 0
+    endif
+
+    call ale#job#SendRaw(l:job_id, l:data)
+
+    let l:conn.job_id = l:job_id
+
+    return 1
+endfunction
+
+" Send a message to a server at a given address.
 " A callback can be registered to handle the response.
 " Notifications do not need to be handled.
 " (address, message, callback?)
-function! ale#lsp#SendMessage(address, message, ...) abort
+"
+" Returns 1 when a message is sent, 0 otherwise.
+function! ale#lsp#SendMessageToAddress(address, message, ...) abort
     if a:0 > 1
         throw 'Too many arguments!'
     endif
@@ -118,35 +200,33 @@ function! ale#lsp#SendMessage(address, message, ...) abort
 
     let [l:id, l:data] = ale#lsp#CreateMessageData(a:message)
 
-    let l:info = get(s:address_info_map, a:address, {})
+    let l:matches = filter(s:connections[:], 'v:val.address ==# a:address')
 
-    if empty(l:info)
-        let l:info = {
-        \   'data': '',
-        \   'callback_map': {},
-        \}
-        let s:address_info_map[a:address] = l:info
+    if empty(l:matches)
+        " We haven't looked at this address before.
+        " Create a new connection.
+        let l:conn = NewConnection()
+    endif
+
+    if !has_key(l:conn, 'channel') || ch_status(l:conn.channel) !=# 'open'
+        let l:conn.channnel = ch_open(a:address, {
+        \   'mode': 'raw',
+        \   'waittime': 0,
+        \   'callback': 's:HandleChannelMessage',
+        \})
     endif
 
     " The ID is 0 when the message is a Notification, which is a JSON-RPC
     " request for which the server must not return a response.
     if l:id != 0
         " Add the callback, which the server will respond to later.
-        let l:info.callback_map[l:id] = a:1
+        let l:conn.callback_map[l:id] = a:1
     endif
 
-    if !has_key(l:info, 'channel') || ch_status(l:info.channel) !=# 'open'
-        let l:info.channnel = ch_open(a:address, {
-        \   'mode': 'raw',
-        \   'waittime': 0,
-        \   'callback': 's:HandleMessage',
-        \})
-    endif
-
-    if ch_status(l:info.channnel) ==# 'fail'
-        throw 'Failed to open channel for: ' . a:address
+    if ch_status(l:conn.channnel) ==# 'fail'
+        return 0
     endif
 
     " Send the message to the server
-    call ch_sendraw(l:info.channel, l:data)
+    call ch_sendraw(l:conn.channel, l:data)
 endfunction
