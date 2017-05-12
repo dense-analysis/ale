@@ -55,7 +55,7 @@ function! ale_linters#typescript#tslint#BuildLintCommand(buffer) abort
     \)
 
     let l:tslint_config_option = !empty(l:tslint_config_path)
-    \   ? '-c ' . shellescape(l:tslint_config_path)
+    \   ? '-c ' . ale#Escape(l:tslint_config_path)
     \   : ''
 
     return ale_linters#typescript#tslint#GetExecutable(a:buffer)

@@ -480,14 +480,14 @@ function! ale#engine#FormatCommand(buffer, command) abort
     " file.
     if l:command =~# '%s'
         let l:filename = fnamemodify(bufname(a:buffer), ':p')
-        let l:command = substitute(l:command, '%s', '\=shellescape(l:filename)', 'g')
+        let l:command = substitute(l:command, '%s', '\=ale#Escape(l:filename)', 'g')
     endif
 
     if l:command =~# '%t'
         " Create a temporary filename, <temp_dir>/<original_basename>
         " The file itself will not be created by this function.
         let l:temporary_file = s:TemporaryFilename(a:buffer)
-        let l:command = substitute(l:command, '%t', '\=shellescape(l:temporary_file)', 'g')
+        let l:command = substitute(l:command, '%t', '\=ale#Escape(l:temporary_file)', 'g')
     endif
 
     " Finish formatting so %% becomes %.
@@ -529,7 +529,7 @@ function! s:RunJob(options) abort
         " in the shell. We'll write out the file to a temporary file,
         " and then read it back in, in the shell.
         let l:temporary_file = s:TemporaryFilename(l:buffer)
-        let l:command = l:command . ' < ' . shellescape(l:temporary_file)
+        let l:command = l:command . ' < ' . ale#Escape(l:temporary_file)
     endif
 
     if s:CreateTemporaryFileForJob(l:buffer, l:temporary_file)
@@ -636,7 +636,7 @@ function! s:RunJob(options) abort
         " Run a command synchronously if this test option is set.
         let s:job_info_map[l:job_id].output = systemlist(
         \   type(l:command) == type([])
-        \   ?  join(l:command[0:1]) . ' ' . shellescape(l:command[2])
+        \   ?  join(l:command[0:1]) . ' ' . ale#Escape(l:command[2])
         \   : l:command
         \)
         call s:HandleExit(l:job)

@@ -48,7 +48,7 @@ function! ale_linters#python#flake8#VersionCheck(buffer) abort
         return ''
     endif
 
-    let l:executable = shellescape(ale_linters#python#flake8#GetExecutable(a:buffer))
+    let l:executable = ale#Escape(ale_linters#python#flake8#GetExecutable(a:buffer))
     let l:module_string = s:UsingModule(a:buffer) ? ' -m flake8' : ''
 
     return l:executable . l:module_string . ' --version'
@@ -89,7 +89,7 @@ function! ale_linters#python#flake8#GetCommand(buffer, version_output) abort
 
     let l:options = ale#Var(a:buffer, 'python_flake8_options')
 
-    return shellescape(ale_linters#python#flake8#GetExecutable(a:buffer))
+    return ale#Escape(ale_linters#python#flake8#GetExecutable(a:buffer))
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . l:display_name_args . ' -'
 endfunction

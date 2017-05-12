@@ -25,7 +25,7 @@ endfunction
 
 function! ale_linters#crystal#crystal#GetCommand(buffer) abort
     let l:crystal_cmd = 'crystal build -f json --no-codegen -o '
-    let l:crystal_cmd .= shellescape(g:ale#util#nul_file)
+    let l:crystal_cmd .= ale#Escape(g:ale#util#nul_file)
     let l:crystal_cmd .= ' %s'
 
     return l:crystal_cmd

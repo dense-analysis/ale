@@ -20,7 +20,7 @@ function! ale_linters#cpp#gcc#GetCommand(buffer) abort
     " -iquote with the directory the file is in makes #include work for
     "  headers in the same directory.
     return 'gcc -S -x c++ -fsyntax-only '
-    \   . '-iquote ' . shellescape(fnamemodify(bufname(a:buffer), ':p:h'))
+    \   . '-iquote ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h'))
     \   . ' ' . ale#Var(a:buffer, 'cpp_gcc_options') . ' -'
 endfunction
 

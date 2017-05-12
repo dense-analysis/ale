@@ -8,7 +8,7 @@ endif
 function! ale_linters#go#gometalinter#GetCommand(buffer) abort
     return 'gometalinter '
     \   . ale#Var(a:buffer, 'go_gometalinter_options')
-    \   . ' ' . shellescape(fnamemodify(bufname(a:buffer), ':p:h'))
+    \   . ' ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h'))
 endfunction
 
 function! ale_linters#go#gometalinter#GetMatches(lines) abort

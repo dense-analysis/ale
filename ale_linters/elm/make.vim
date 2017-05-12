@@ -43,14 +43,14 @@ function! ale_linters#elm#make#GetCommand(buffer) abort
         let l:dir_set_cmd = ''
     else
         let l:root_dir = fnamemodify(l:elm_package, ':p:h')
-        let l:dir_set_cmd = 'cd ' . shellescape(l:root_dir) . ' && '
+        let l:dir_set_cmd = 'cd ' . ale#Escape(l:root_dir) . ' && '
     endif
 
     " The elm-make compiler, at the time of this writing, uses '/dev/null' as
     " a sort of flag to tell the compiler not to generate an output file,
     " which is why this is hard coded here.
     " Source: https://github.com/elm-lang/elm-make/blob/master/src/Flags.hs
-    let l:elm_cmd = 'elm-make --report=json --output='.shellescape('/dev/null')
+    let l:elm_cmd = 'elm-make --report=json --output='.ale#Escape('/dev/null')
 
     return l:dir_set_cmd . ' ' . l:elm_cmd . ' %t'
 endfunction

@@ -18,7 +18,7 @@ function! ale_linters#tex#chktex#GetCommand(buffer) abort
     let l:command .= ' -v0 -p stdin -q'
 
     if !empty(l:chktex_config)
-        let l:command .= ' -l ' . shellescape(l:chktex_config)
+        let l:command .= ' -l ' . ale#Escape(l:chktex_config)
     endif
 
     let l:command .= ' ' . ale#Var(a:buffer, 'tex_chktex_options')

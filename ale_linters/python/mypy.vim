@@ -30,7 +30,7 @@ function! ale_linters#python#mypy#GetCommand(buffer) abort
     let l:executable = ale_linters#python#mypy#GetExecutable(a:buffer)
 
     return l:cd_command
-    \   . shellescape(l:executable)
+    \   . ale#Escape(l:executable)
     \   . ' --show-column-numbers '
     \   . ale#Var(a:buffer, 'python_mypy_options')
     \   . ' %s'

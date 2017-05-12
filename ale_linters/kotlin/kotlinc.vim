@@ -16,13 +16,13 @@ function! ale_linters#kotlin#kotlinc#GetCommand(buffer) abort
     " If the config file is enabled and readable, source it
     if ale#Var(a:buffer, 'kotlin_kotlinc_enable_config')
         if filereadable(expand(ale#Var(a:buffer, 'kotlin_kotlinc_config_file'), 1))
-            execute 'source ' . shellescape(expand(ale#Var(a:buffer, 'kotlin_kotlinc_config_file'), 1))
+            execute 'source ' . ale#Escape(expand(ale#Var(a:buffer, 'kotlin_kotlinc_config_file'), 1))
         endif
     endif
 
     " If use module and module file is readable use that and return
     if ale#Var(a:buffer, 'kotlin_kotlinc_use_module_file')
-        let l:module_filename = shellescape(expand(ale#Var(a:buffer, 'kotlin_kotlinc_module_filename'), 1))
+        let l:module_filename = ale#Escape(expand(ale#Var(a:buffer, 'kotlin_kotlinc_module_filename'), 1))
 
         if filereadable(l:module_filename)
             let l:kotlinc_opts .= ' -module ' . l:module_filename
@@ -42,7 +42,7 @@ function! ale_linters#kotlin#kotlinc#GetCommand(buffer) abort
     if ale#Var(a:buffer, 'kotlin_kotlinc_sourcepath') !=# ''
         let l:fname .= expand(ale#Var(a:buffer, 'kotlin_kotlinc_sourcepath'), 1) . ' '
     endif
-    let l:fname .= shellescape(expand('#' . a:buffer . ':p'))
+    let l:fname .= ale#Escape(expand('#' . a:buffer . ':p'))
     let l:command .= l:kotlinc_opts . ' ' . l:fname
 
     return l:command
