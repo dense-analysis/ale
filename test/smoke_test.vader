@@ -11,11 +11,12 @@ Before:
     \}]
   endfunction
 
+  " Running the command in another subshell seems to help here.
   call ale#linter#Define('foobar', {
   \ 'name': 'testlinter',
   \ 'callback': 'TestCallback',
   \ 'executable': 'echo',
-  \ 'command': 'echo foo bar',
+  \ 'command': '/bin/sh -c ''echo foo bar''',
   \})
 
 After:

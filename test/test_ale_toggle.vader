@@ -26,7 +26,7 @@ Before:
     \ 'lnum': 2,
     \ 'vcol': 0,
     \ 'col': 3,
-    \ 'text': a:output[0],
+    \ 'text': 'foo bar',
     \ 'type': 'E',
     \ 'nr': -1,
     \}]
@@ -56,7 +56,8 @@ Before:
   \ 'name': 'testlinter',
   \ 'callback': 'ToggleTestCallback',
   \ 'executable': 'echo',
-  \ 'command': 'echo foo bar',
+  \ 'command': 'echo',
+  \ 'read_buffer': 0,
   \})
 
 After:
