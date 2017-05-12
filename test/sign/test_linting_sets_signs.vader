@@ -44,6 +44,7 @@ After:
 
   sign unplace *
   let g:ale_buffer_info = {}
+  call ale#linter#Reset()
 
 Execute(The signs should be updated after linting is done):
   call ale#Lint()

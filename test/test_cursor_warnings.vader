@@ -65,7 +65,10 @@ After:
 
   delfunction GetLastMessage
 
-  mess clear
+  " Clearing the messages breaks tests on NeoVim for some reason, but all
+  " we need to do for these tests is just make it so the last message isn't
+  " carried over between test cases.
+  echomsg ''
 
 Given javascript(A Javscript file with warnings/errors):
   var x = 3

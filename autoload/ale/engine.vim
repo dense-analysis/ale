@@ -283,6 +283,10 @@ function! s:HandleExit(job) abort
         return
     endif
 
+    if has('nvim') && !empty(l:output) && empty(l:output[-1])
+        call remove(l:output, -1)
+    endif
+
     if l:next_chain_index < len(get(l:linter, 'command_chain', []))
         call s:InvokeChain(l:buffer, l:linter, l:next_chain_index, l:output)
         return
@@ -772,6 +776,17 @@ function! ale#engine#WaitForJobs(deadline) abort
     for l:info in values(g:ale_buffer_info)
         call extend(l:job_list, l:info.job_list)
     endfor
+
+    " NeoVim has a built-in API for this, so use that.
+    if has('nvim')
+        let l:nvim_code_list = jobwait(l:job_list, a:deadline)
+
+        if index(l:nvim_code_list, -1) >= 0
+            throw 'Jobs did not complete on time!'
+        endif
+
+        return
+    endif
 
     let l:should_wait_more = 1
 

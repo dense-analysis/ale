@@ -1,0 +1,171 @@
+#!/bin/bash -eu
+
+# Author: w0rp <devw0rp@gmail.com>
+#
+# This script runs tests for the ALE project. The following options are
+# accepted:
+#
+#            -v  Enable verbose output
+# --neovim-only  Run tests only for NeoVim
+#    --vim-only  Run tests only for Vim
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+CURRENT_IMAGE_ID=d5a1b5915b09
+IMAGE=w0rp/ale
+DOCKER_FLAGS=(--rm -v "$PWD:/testplugin" -v "$PWD/test:/home" -w /testplugin "$IMAGE")
+EXIT=0
+
+tests='test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader'
+verbose=0
+run_neovim_tests=1
+run_vim_tests=1
+run_vint=1
+run_custom_checks=1
+
+while [ $# -ne 0 ]; do
+    case $1 in
+    -v)
+        verbose=1
+        shift
+    ;;
+    --neovim-only)
+        run_vim_tests=0
+        run_vint=0
+        run_custom_checks=0
+        shift
+    ;;
+    --vim-only)
+        run_neovim_tests=0
+        run_vint=0
+        run_custom_checks=0
+    ;;
+    --)
+        shift
+        break
+    ;;
+    -?*)
+        echo "Invalid argument: $1" 1>&2
+        exit 1
+    ;;
+    *)
+        break
+    ;;
+    esac
+done
+
+# Allow tests to be passed as arguments.
+if [ $# -ne 0 ]; then
+    # This doesn't perfectly handle work splitting, but none of our files
+    # have spaces in the names.
+    tests="$*"
+fi
+
+docker images -q w0rp/ale | grep "^$CURRENT_IMAGE_ID" > /dev/null \
+    || docker pull "$IMAGE"
+
+function color-vader-output() {
+    local vader_started=0
+
+    while read -r; do
+        if ((!verbose)); then
+            # When verbose mode is off, suppress output until Vader starts.
+            if ((!vader_started)); then
+                if [[ "$REPLY" = *'Starting Vader:'* ]]; then
+                    vader_started=1
+                else
+                    continue
+                fi
+            fi
+        fi
+
+        if [[ "$REPLY" = *'[EXECUTE] (X)'* ]]; then
+            echo -en "$RED"
+        elif [[ "$REPLY" = *'[EXECUTE]'* ]] || [[ "$REPLY" = *'[  GIVEN]'* ]]; then
+            echo -en "$NC"
+        fi
+
+        if [[ "$REPLY" = *'Success/Total'* ]]; then
+            success="$(echo -n "$REPLY" | grep -o '[0-9]\+/' | head -n1 | cut -d/ -f1)"
+            total="$(echo -n "$REPLY" | grep -o '/[0-9]\+' | head -n1 | cut -d/ -f2)"
+
+            if [ "$success" -lt "$total" ]; then
+                echo -en "$RED"
+            else
+                echo -en "$GREEN"
+            fi
+
+            echo "$REPLY"
+            echo -en "$NC"
+        else
+            echo "$REPLY"
+        fi
+    done
+
+    echo -en "$NC"
+}
+
+if ((run_neovim_tests)); then
+    for vim in $(docker run --rm "$IMAGE" ls /vim-build/bin | grep '^neovim' ); do
+        echo
+        echo '========================================'
+        echo "Running tests for $vim"
+        echo '========================================'
+        echo
+
+        set -o pipefail
+        docker run -it -e VADER_OUTPUT_FILE=/dev/stderr "${DOCKER_FLAGS[@]}" \
+            "/vim-build/bin/$vim" -u test/vimrc \
+            --headless "+Vader! $tests" | color-vader-output || EXIT=$?
+        set +o pipefail
+    done
+
+    echo
+fi
+
+if ((run_vim_tests)); then
+    for vim in $(docker run --rm "$IMAGE" ls /vim-build/bin | grep '^vim' ); do
+        echo
+        echo '========================================'
+        echo "Running tests for $vim"
+        echo '========================================'
+        echo
+
+        set -o pipefail
+        docker run -a stderr "${DOCKER_FLAGS[@]}" \
+            "/vim-build/bin/$vim" -u test/vimrc \
+            "+Vader! $tests" 2>&1 | color-vader-output || EXIT=$?
+        set +o pipefail
+    done
+
+    echo
+fi
+
+if ((run_vint)); then
+    echo '========================================'
+    echo 'Running Vint to lint our code'
+    echo '========================================'
+    echo 'Vint warnings/errors follow:'
+    echo
+
+    set -o pipefail
+    docker run -a stdout "${DOCKER_FLAGS[@]}" vint -s . || EXIT=$?
+    set +o pipefail
+    echo
+fi
+
+if ((run_custom_checks)); then
+    echo '========================================'
+    echo 'Running custom checks'
+    echo '========================================'
+    echo 'Custom warnings/errors follow:'
+    echo
+
+    set -o pipefail
+    docker run -a stdout "${DOCKER_FLAGS[@]}" ./custom-checks . || EXIT=$?
+    set +o pipefail
+    echo
+fi
+
+exit $EXIT

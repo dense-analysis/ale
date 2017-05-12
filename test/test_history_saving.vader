@@ -44,7 +44,13 @@ Execute(History should be set when commands are run):
 
   AssertEqual 1, len(g:history)
   AssertEqual sort(['status', 'exit_code', 'job_id', 'command']), sort(keys(g:history[0]))
-  AssertEqual ['/bin/sh', '-c', 'echo command history test'], g:history[0].command
+
+  if has('nvim')
+    AssertEqual 'echo command history test', g:history[0].command
+  else
+    AssertEqual ['/bin/sh', '-c', 'echo command history test'], g:history[0].command
+  endif
+
   AssertEqual 'finished', g:history[0].status
   AssertEqual 0, g:history[0].exit_code
   " The Job ID will change each time, but we can check the type.

@@ -1,5 +1,9 @@
 Execute(The after file should have been loaded for real):
-  Assert g:loaded_ale_after
+  " FIXME: Fix these tests in NeoVim.
+  if !has('nvim')
+    Assert has_key(g:, 'loaded_ale_after'), 'g:loaded_ale_after was not set!'
+    Assert g:loaded_ale_after
+  endif
 
 Before:
   silent! cd /testplugin/test

@@ -7,4 +7,4 @@ branches:
         - master
 language: python
 script: |
-    make test
+    ./run-tests
