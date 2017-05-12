@@ -1,14 +1,10 @@
-Given javascript (Some JavaScript with problems):
-  var y = 3+3;
-  var y = 3
-
 Before:
   let g:expected_data = [
   \ {
   \   'lnum': 1,
   \   'bufnr': bufnr('%'),
   \   'vcol': 0,
-  \   'linter_name': 'eslint',
+  \   'linter_name': 'testlinter',
   \   'nr': -1,
   \   'type': 'W',
   \   'col': 10,
@@ -19,7 +15,7 @@ Before:
   \   'lnum': 2,
   \   'bufnr': bufnr('%'),
   \   'vcol': 0,
-  \   'linter_name': 'eslint',
+  \   'linter_name': 'testlinter',
   \   'nr': -1,
   \   'type': 'E',
   \   'col': 10,
@@ -28,8 +24,41 @@ Before:
   \ }
   \]
 
+  function! TestCallback(buffer, output)
+    return [
+    \ {
+    \   'lnum': 1,
+    \   'type': 'W',
+    \   'col': 10,
+    \   'text': 'Infix operators must be spaced. [Warning/space-infix-ops]',
+    \ },
+    \ {
+    \   'lnum': 2,
+    \   'type': 'E',
+    \   'col': 10,
+    \   'text': 'Missing semicolon. [Error/semi]',
+    \ }
+    \]
+  endfunction
+
+  call ale#linter#Define('foobar', {
+  \ 'name': 'testlinter',
+  \ 'callback': 'TestCallback',
+  \ 'executable': 'true',
+  \ 'command': 'true',
+  \ 'read_buffer': 0,
+  \})
+
 After:
-  unlet g:expected_data
+  delfunction TestCallback
+
+  unlet! g:expected_data
+  let g:ale_buffer_info = {}
+  call ale#linter#Reset()
+
+Given foobar (Some JavaScript with problems):
+  var y = 3+3;
+  var y = 3
 
 Execute(The loclist should be updated after linting is done):
   call ale#Lint()
