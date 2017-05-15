@@ -1,0 +1,27 @@
+Execute(HandleGhcFormat should handle ghc-mod problems):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 2,
+  \     'col': 1,
+  \     'type': 'E',
+  \     'text': 'Failed to load interface for ‘Missing’Use -v to see a list of the files searched for.',
+  \   },
+  \   {
+  \     'lnum': 2,
+  \     'col': 1,
+  \     'type': 'E',
+  \     'text': ' Suggestion: Use camelCaseFound:  my_variable = ...Why not:  myVariable = ...',
+  \   },
+  \   {
+  \     'lnum': 6,
+  \     'col': 1,
+  \     'type': 'E',
+  \     'text': ' Warning: Eta reduceFound:  myFunc x = succ xWhy not:  myFunc = succ',
+  \   },
+  \ ],
+  \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
+  \   'check1.hs:2:1:Failed to load interface for ‘Missing’Use -v to see a list of the files searched for.',
+  \   'check2.hs:2:1: Suggestion: Use camelCaseFound:  my_variable = ...Why not:  myVariable = ...',
+  \   'check2.hs:6:1: Warning: Eta reduceFound:  myFunc x = succ xWhy not:  myFunc = succ',
+  \ ])
