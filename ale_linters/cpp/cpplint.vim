@@ -1,3 +1,7 @@
+" Author: odanado <odan3240@gmail.com>
+" Description: cpplint linter for c files
+
+
 let g:ale_cpp_cpplint_filter = get(g:, 'ale_cpp_cpplint_filter', [])
 let g:ale_cpp_cpplint_verbose = get(g:, 'ale_cpp_cpplint_verbose', 1)
 let g:ale_cpp_cpplint_linelength = get(g:, 'ale_cpp_cpplint_linelength', 80)
