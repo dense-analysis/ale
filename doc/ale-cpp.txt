@@ -70,4 +70,38 @@ g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
 
 
 -------------------------------------------------------------------------------
+cpplint                                                       *ale-cpp-cpplint*
+g:ale_cpp_cpplint_filter                             *g:ale_cpp_cpplint_filter*
+                                                     *b:ale_cpp_cpplint_filter*
+  Type: |Array|
+  Default: `[]`
+
+  This variable can be set to change the filter option of cpplint. All filters
+  can be seen in _ERROR_CATEGORIES of a source code.
+  https://github.com/google/styleguide/blob/gh-pages/cpplint/cpplint.py
+
+  "-FOO" and "FOO" means "do not print categories that start with FOO".
+  "+FOO" means "do print categories that start with FOO".
+
+
+g:ale_cpp_cpplint_verbose                           *g:ale_cpp_cpplint_verbose*
+                                                    *b:ale_cpp_cpplint_verbose*
+  Type: |Number|
+  Default: `1`
+
+  This variable can be set to change the verbose option of cpplint. The large
+  number, the less a printed message.
+
+  Specify a number 0-5 to restrict errors to certain verbosity levels.
+
+
+g:ale_cpp_cpplint_linelength                     *g:ale_cpp_cpplint_linelength*
+                                                 *b:ale_cpp_cpplint_linelength*
+  Type: |Number| 
+  Default: `80`
+
+  This variable can be set to change the linelength option of cpplint.
+  This is the allowed line length for the project.
+
+-------------------------------------------------------------------------------
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
