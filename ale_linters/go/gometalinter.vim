@@ -22,7 +22,7 @@ function! ale_linters#go#gometalinter#Handler(buffer, lines) abort
 
     for l:match in ale_linters#go#gometalinter#GetMatches(a:lines)
         " Omit errors from files other than the one currently open
-        if ale#path#IsBufferPath(a:buffer, l:match[0])
+        if !ale#path#IsBufferPath(a:buffer, l:match[1])
             continue
         endif
 
