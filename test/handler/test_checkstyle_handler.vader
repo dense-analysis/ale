@@ -1,0 +1,21 @@
+Execute(The checkstyle handler should parse lines correctly):
+  runtime ale_linters/java/checkstyle.vim
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 101,
+  \     'text': "'method def rcurly' has incorrect indentation level 4, expected level should be 2. [Indentation]",
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 63,
+  \     'col': 3,
+  \     'text': "Missing a Javadoc comment. [JavadocMethod]",
+  \     'type': 'W',
+  \   },
+  \ ],
+  \ ale_linters#java#checkstyle#Handle(666, [
+  \   "[WARN] whatever:101: 'method def rcurly' has incorrect indentation level 4, expected level should be 2. [Indentation]",
+  \   "[WARN] whatever:63:3: Missing a Javadoc comment. [JavadocMethod]",
+  \ ])
