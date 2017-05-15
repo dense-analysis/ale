@@ -2,6 +2,7 @@
 " Description: cpplint linter for c files
 
 
+let g:ale_cpp_cpplint_options = get(g:, 'ale_cpp_cpplint_options', '')
 let g:ale_cpp_cpplint_filter = get(g:, 'ale_cpp_cpplint_filter', [])
 let g:ale_cpp_cpplint_verbose = get(g:, 'ale_cpp_cpplint_verbose', 1)
 let g:ale_cpp_cpplint_linelength = get(g:, 'ale_cpp_cpplint_linelength', 80)
@@ -32,10 +33,12 @@ function! s:to_option(key, value)
 endfunction
 
 function! ale_linters#cpp#cpplint#GetCommand(buffer) abort
+    let l:options = ale#Var(a:buffer, 'cpp_cpplint_options')
     let l:filter = s:to_option('filter', join(ale#Var(a:buffer, 'cpp_cpplint_filter'), ','))
     let l:verbose = s:to_option('verbose', ale#Var(a:buffer, 'cpp_cpplint_verbose'))
     let l:linelength = s:to_option('linelength', ale#Var(a:buffer, 'cpp_cpplint_linelength'))
-    return 'cpplint --quiet ' . l:filter . ' ' . l:verbose . ' ' . l:linelength . ' -'
+    return 'cpplint --quiet ' . l:options . ' ' . l:filter 
+                \ . ' ' . l:verbose . ' ' . l:linelength . ' -'
 endfunction
 
 call ale#linter#Define('cpp', {
