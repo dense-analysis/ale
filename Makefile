@@ -1,12 +1,12 @@
 SHELL := /usr/bin/env bash
-IMAGE ?= w0rp/ale
+IMAGE ?= w0rp/ale:30a9967dbdb1
 CURRENT_IMAGE_ID = 30a9967dbdb1
 DOCKER_FLAGS = --rm -v $(PWD):/testplugin -v $(PWD)/test:/home "$(IMAGE)"
 tests = test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*/*.vader
 
 test-setup:
 	docker images -q w0rp/ale | grep ^$(CURRENT_IMAGE_ID) > /dev/null || \
-		docker pull $(IMAGE)
+		docker pull w0rp/ale
 
 vader: test-setup
 	@:; \
