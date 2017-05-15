@@ -1,6 +1,10 @@
-Execute(The checkstyle handler should parse lines correctly):
+Before:
   runtime ale_linters/java/checkstyle.vim
 
+After:
+  call ale#linter#Reset()
+
+Execute(The checkstyle handler should parse lines correctly):
   AssertEqual
   \ [
   \   {
