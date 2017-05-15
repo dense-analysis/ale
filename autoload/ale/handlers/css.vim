@@ -10,17 +10,20 @@ function! ale#handlers#css#HandleCSSLintFormat(buffer, lines) abort
     "
     " These errors can be very massive, so the type will be moved to the front
     " so you can actually read the error type.
-    let l:pattern = '^.*: line \(\d\+\), col \(\d\+\), \(Error\|Warning\) - \(.\+\) (\([^)]\+\))$'
+    let l:pattern = '\v^.*: line (\d+), col (\d+), (Error|Warning) - (.+)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:text = l:match[4]
         let l:type = l:match[3]
-        let l:errorGroup = l:match[5]
+
+        let l:group_match = matchlist(l:text, '\v^(.+) \((.+)\)$')
 
         " Put the error group at the front, so we can see what kind of error
         " it is on small echo lines.
-        let l:text = '(' . l:errorGroup . ') ' . l:text
+        if !empty(l:group_match)
+            let l:text = '(' . l:group_match[2] . ') ' . l:group_match[1]
+        endif
 
         call add(l:output, {
         \   'lnum': l:match[1] + 0,

@@ -11,12 +11,33 @@ Execute(HandleCSSLintFormat should handle CSS errors):
   \    'lnum': 2,
   \    'col': 5,
   \    'type': 'W',
-  \    'text': "(known-properties) Expected ... but found 'wat'.",
+  \    'text': '(known-properties) Expected ... but found ''wat''.',
   \   },
   \ ],
   \ ale#handlers#css#HandleCSSLintFormat(42, [
   \   'something.css: line 2, col 1, Error - Expected RBRACE at line 2, col 1. (errors)',
-  \   "something.css: line 2, col 5, Warning - Expected ... but found 'wat'. (known-properties)",
+  \   'something.css: line 2, col 5, Warning - Expected ... but found ''wat''. (known-properties)',
+  \ ])
+
+Execute(HandleCSSLintFormat should handle CSS errors without groups):
+  AssertEqual
+  \ [
+  \   {
+  \    'lnum': 7,
+  \    'col': 3,
+  \    'type': 'W',
+  \    'text': 'Unknown property ''fill''.',
+  \   },
+  \   {
+  \    'lnum': 8,
+  \    'col': 3,
+  \    'type': 'W',
+  \    'text': 'Unknown property ''fill-opacity''.',
+  \   },
+  \ ],
+  \ ale#handlers#css#HandleCSSLintFormat(42, [
+  \   'something.css: line 7, col 3, Warning - Unknown property ''fill''.',
+  \   'something.css: line 8, col 3, Warning - Unknown property ''fill-opacity''.',
   \ ])
 
 Execute (HandlePEP8Format should handle the correct lines of output):
