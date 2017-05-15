@@ -119,7 +119,7 @@ The following languages and tools are supported.
 * Bash: 'shell' (-n flag), 'shellcheck'
 * Bourne Shell: 'shell' (-n flag), 'shellcheck'
 * C: 'cppcheck', 'gcc', 'clang'
-* C++ (filetype cpp): 'clang', 'clangtidy', 'cppcheck', 'gcc'
+* C++ (filetype cpp): 'clang', 'clangtidy', 'cppcheck', 'cpplint', 'gcc'
 * C#: 'mcs'
 * Chef: 'foodcritic'
 * CMake: 'cmakelint'
