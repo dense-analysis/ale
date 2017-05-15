@@ -14,8 +14,8 @@ function! ale_linters#cpp#cpplint#HandleCpplintFormat(buffer, lines) abort
         let l:match = matchlist(l:line, l:pattern)
         if !empty(l:match)
             call add(l:output, {
-                        \'text': match[3] . ' ' . match[4],
-                        \'lnum': match[2] + 0,
+                        \'text': l:match[3] . ' ' . l:match[4],
+                        \'lnum': l:match[2] + 0,
                         \'col': 0,
                         \'type': 'W',
                         \})
