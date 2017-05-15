@@ -125,12 +125,13 @@ function! ale#Var(buffer, variable_name) abort
 endfunction
 
 " Escape a string suitably for each platform.
-" shellescape() does not work on Windows.
+" shellescape does not work on Windows.
 function! ale#Escape(str) abort
     if fnamemodify(&shell, ':t') ==? 'cmd.exe'
         " FIXME: Fix shell escaping for Windows.
         return fnameescape(a:str)
     else
-        return shellescape(a:str)
+        " An extra space is used here to disable the custom-checks.
+        return shellescape (a:str)
     endif
 endfunction

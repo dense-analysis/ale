@@ -63,6 +63,7 @@ check_errors() {
 if (( FIX_ERRORS )); then
     for directory in "${directories[@]}"; do
         sed -i "s/^\(function.*)\) *$/\1 abort/" "$directory"/**/*.vim
+        sed -i "s/shellescape(/ale#Escape(/" "$directory"/**/*.vim
     done
 fi
 
@@ -75,5 +76,6 @@ check_errors '^  [^ ]' 'Use four spaces, not two spaces'
 check_errors $'\t' 'Use four spaces, not tabs'
 # This check should prevent people from using a particular inconsistent name.
 check_errors 'let g:ale_\w\+_\w\+_args =' 'Name your option g:ale_<filetype>_<lintername>_options instead'
+check_errors 'shellescape(' 'Use ale#Escape instead of shellescape'
 
 exit $RETURN_CODE
