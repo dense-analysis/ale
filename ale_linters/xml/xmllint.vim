@@ -3,12 +3,12 @@
 
 " CLI options
 let g:ale_xml_xmllint_executable = get(g:, 'ale_xml_xmllint_executable', 'xmllint')
-let g:ale_xml_xmllint_args = get(g:, 'ale_xml_xmllint_args', '--noout')
+let g:ale_xml_xmllint_options = get(g:, 'ale_xml_xmllint_options', '--noout')
 
 function! ale_linters#xml#xmllint#GetCommand(buffer) abort
     return printf('%s %s -',
     \   g:ale_xml_xmllint_executable,
-    \   g:ale_xml_xmllint_args
+    \   g:ale_xml_xmllint_options
     \ )
 endfunction
 
