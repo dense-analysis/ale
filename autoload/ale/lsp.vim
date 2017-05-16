@@ -160,20 +160,26 @@ function! ale#lsp#SendMessageToProgram(executable, command, message, ...) abort
     let [l:id, l:data] = ale#lsp#CreateMessageData(a:message)
 
     let l:matches = filter(s:connections[:], 'v:val.executable ==# a:executable')
-
-    if empty(l:matches)
-        " We haven't looked at this executable before.
-        " Create a new connection.
-        let l:conn = NewConnection()
-    endif
+    " Get the current connection or a new one.
+    let l:conn = !empty(l:matches) ? l:matches[0] : s:NewConnection()
 
     if !ale#job#IsRunning(l:conn.job_id)
-        let l:options = {'mode': 'raw', 'out_cb': 's:HandleCommandMessage'}
+        let l:options = {
+        \   'mode': 'raw',
+        \   'out_cb': function('s:HandleCommandMessage'),
+        \}
         let l:job_id = ale#job#Start(ale#job#PrepareCommand(a:command), l:options)
     endif
 
-    if l:job_id > 0
+    if l:job_id <= 0
         return 0
+    endif
+
+    " The ID is 0 when the message is a Notification, which is a JSON-RPC
+    " request for which the server must not return a response.
+    if l:id != 0
+        " Add the callback, which the server will respond to later.
+        let l:conn.callback_map[l:id] = a:1
     endif
 
     call ale#job#SendRaw(l:job_id, l:data)
@@ -201,18 +207,14 @@ function! ale#lsp#SendMessageToAddress(address, message, ...) abort
     let [l:id, l:data] = ale#lsp#CreateMessageData(a:message)
 
     let l:matches = filter(s:connections[:], 'v:val.address ==# a:address')
-
-    if empty(l:matches)
-        " We haven't looked at this address before.
-        " Create a new connection.
-        let l:conn = NewConnection()
-    endif
+    " Get the current connection or a new one.
+    let l:conn = !empty(l:matches) ? l:matches[0] : s:NewConnection()
 
     if !has_key(l:conn, 'channel') || ch_status(l:conn.channel) !=# 'open'
         let l:conn.channnel = ch_open(a:address, {
         \   'mode': 'raw',
         \   'waittime': 0,
-        \   'callback': 's:HandleChannelMessage',
+        \   'callback': function('s:HandleChannelMessage'),
         \})
     endif
 

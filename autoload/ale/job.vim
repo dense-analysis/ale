@@ -220,7 +220,7 @@ function! ale#job#SendRaw(job_id, string) abort
     if has('nvim')
         call jobsend(a:job_id, a:string)
     else
-        call ch_sendraw(job_getchannel(s:job_map[a:job_id]), a:string)
+        call ch_sendraw(job_getchannel(s:job_map[a:job_id].job), a:string)
     endif
 endfunction
 
