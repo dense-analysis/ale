@@ -128,3 +128,39 @@ Execute(FixLocList should convert line and column numbers correctly):
   \   {'name': 'foobar'},
   \   [{'text': 'a', 'lnum': '010', 'col': '010'}],
   \ )
+
+Execute(FixLocList should pass on col_length values):
+  " The numbers should be 10, not 8 as octals.
+  AssertEqual
+  \ [
+  \   {
+  \     'text': 'a',
+  \     'lnum': 10,
+  \     'col': 10,
+  \     'end_col': 12,
+  \     'bufnr': bufnr('%'),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \   },
+  \   {
+  \     'text': 'a',
+  \     'lnum': 10,
+  \     'col': 11,
+  \     'end_col': 12,
+  \     'bufnr': bufnr('%'),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \   },
+  \],
+  \ ale#engine#FixLocList(
+  \   bufnr('%'),
+  \   {'name': 'foobar'},
+  \   [
+  \     {'text': 'a', 'lnum': '010', 'col': '010', 'end_col': '012'},
+  \     {'text': 'a', 'lnum': '010', 'col': '011', 'end_col': 12},
+  \   ],
+  \ )

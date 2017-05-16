@@ -288,6 +288,11 @@ function! ale#engine#FixLocList(buffer, linter, loclist) abort
             let l:item.detail = l:old_item.detail
         endif
 
+        " Pass on a col_length key if set, used for highlights.
+        if has_key(l:old_item, 'end_col')
+            let l:item.end_col = str2nr(l:old_item.end_col)
+        endif
+
         if l:item.lnum == 0
             " When errors appear at line 0, put them at line 1 instead.
             let l:item.lnum = 1
