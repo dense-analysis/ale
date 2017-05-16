@@ -146,7 +146,7 @@ Execute(Higlight end columns should set an appropriate size):
 
   AssertEqual
   \ [
-  \   {'group': 'ALEError', 'id': 15, 'priority': 10, 'pos1': [3, 2, 3]},
-  \   {'group': 'ALEWarning', 'id': 16, 'priority': 10, 'pos1': [4, 1, 4]},
+  \   {'group': 'ALEError', 'id': 15, 'priority': 10, 'pos1': [3, 2, 4]},
+  \   {'group': 'ALEWarning', 'id': 16, 'priority': 10, 'pos1': [4, 1, 5]},
   \ ],
   \ getmatches()

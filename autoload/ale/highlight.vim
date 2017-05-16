@@ -86,7 +86,7 @@ function! ale#highlight#UpdateHighlights() abort
             let l:col = l:item.col
             let l:group = l:item.type ==# 'E' ? 'ALEError' : 'ALEWarning'
             let l:line = l:item.lnum
-            let l:size = has_key(l:item, 'end_col') ? l:item.end_col - l:col : 1
+            let l:size = has_key(l:item, 'end_col') ? l:item.end_col - l:col + 1 : 1
 
             " Rememeber the match ID for the item.
             " This ID will be used to preserve loclist items which are set
