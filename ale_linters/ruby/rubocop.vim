@@ -25,9 +25,17 @@ function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#ruby#rubocop#GetCommand(buffer) abort
-    return 'rubocop --format emacs --force-exclusion '
+    return ale#Var(a:buffer, 'ruby_rubocop_executable')
+    \   . ' --format emacs --force-exclusion '
     \   . ale#Var(a:buffer, 'ruby_rubocop_options')
     \   . ' --stdin ' . bufname(a:buffer)
+endfunction
+
+function! ale_linters#ruby#rubocop#GetExecutable(buffer) abort
+    let l:executable = split(ale#Var(a:buffer, 'ruby_rubocop_executable'))[0]
+    if executable(l:executable)
+        return l:executable
+    endif
 endfunction
 
 " Set this option to change Rubocop options.
@@ -36,9 +44,13 @@ if !exists('g:ale_ruby_rubocop_options')
     let g:ale_ruby_rubocop_options = ''
 endif
 
+if !exists('g:ale_ruby_rubocop_executable')
+    let g:ale_ruby_rubocop_executable = 'rubocop'
+endif
+
 call ale#linter#Define('ruby', {
 \   'name': 'rubocop',
-\   'executable': 'rubocop',
+\   'executable_callback': 'ale_linters#ruby#rubocop#GetExecutable',
 \   'command_callback': 'ale_linters#ruby#rubocop#GetCommand',
 \   'callback': 'ale_linters#ruby#rubocop#Handle',
 \})
