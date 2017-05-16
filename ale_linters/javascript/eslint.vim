@@ -39,6 +39,13 @@ function! ale_linters#javascript#eslint#GetCommand(buffer) abort
     \   . ' -f unix --stdin --stdin-filename %s'
 endfunction
 
+let s:col_end_patterns = [
+\   '\vParsing error: Unexpected token (.+) ',
+\   '\v''(.+)'' is not defined.',
+\   '\v%(Unexpected|Redundant use of) [''`](.+)[''`]',
+\   '\vUnexpected (console) statement',
+\]
+
 function! ale_linters#javascript#eslint#Handle(buffer, lines) abort
     let l:config_error_pattern = '\v^ESLint couldn''t find a configuration file'
     \   . '|^Cannot read config file'
@@ -77,13 +84,18 @@ function! ale_linters#javascript#eslint#Handle(buffer, lines) abort
             let l:text .= ' [' . l:match[4] . ']'
         endif
 
-        call add(l:output, {
-        \   'bufnr': a:buffer,
+        let l:obj = {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
         \   'text': l:text,
         \   'type': l:type ==# 'Warning' ? 'W' : 'E',
-        \})
+        \}
+
+        for l:col_match in ale#util#GetMatches(l:text, s:col_end_patterns)
+            let l:obj.end_col = l:obj.col + len(l:col_match[1]) - 1
+        endfor
+
+        call add(l:output, l:obj)
     endfor
 
     return l:output

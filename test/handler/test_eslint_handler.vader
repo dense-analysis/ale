@@ -5,21 +5,18 @@ Execute(The eslint handler should parse lines correctly):
   AssertEqual
   \ [
   \   {
-  \     'bufnr': 347,
   \     'lnum': 47,
   \     'col': 14,
   \     'text': 'Missing trailing comma. [Warning/comma-dangle]',
   \     'type': 'W',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 56,
   \     'col': 41,
   \     'text': 'Missing semicolon. [Error/semi]',
   \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 13,
   \     'col': 3,
   \     'text': 'Parsing error: Unexpected token',
@@ -117,3 +114,58 @@ Execute(The eslint handler should print a message for invalid configuration sett
   \   'detail': join(g:config_error_lines, "\n"),
   \ }],
   \ ale_linters#javascript#eslint#Handle(347, g:config_error_lines[:])
+
+Execute(The eslint handler should output end_col values where appropriate):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 4,
+  \     'col': 3,
+  \     'end_col': 15,
+  \     'text': 'Parsing error: Unexpected token ''some string'' [Error]',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 70,
+  \     'col': 3,
+  \     'end_col': 5,
+  \     'text': '''foo'' is not defined. [Error/no-undef]',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 71,
+  \     'col': 2,
+  \     'end_col': 6,
+  \     'text': 'Unexpected `await` inside a loop. [Error/no-await-in-loop]',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 72,
+  \     'col': 6,
+  \     'end_col': 10,
+  \     'text': 'Redundant use of `await` on a return value. [Error/no-return-await]',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 73,
+  \     'col': 4,
+  \     'end_col': 10,
+  \     'text': 'Unexpected console statement [Error/no-console]',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 74,
+  \     'col': 4,
+  \     'end_col': 11,
+  \     'text': 'Unexpected ''debugger'' statement. [Error/no-debugger]',
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale_linters#javascript#eslint#Handle(347, [
+  \   'app.js:4:3: Parsing error: Unexpected token ''some string'' [Error]',
+  \   'app.js:70:3: ''foo'' is not defined. [Error/no-undef]',
+  \   'app.js:71:2: Unexpected `await` inside a loop. [Error/no-await-in-loop]',
+  \   'app.js:72:6: Redundant use of `await` on a return value. [Error/no-return-await]',
+  \   'app.js:73:4: Unexpected console statement [Error/no-console]',
+  \   'app.js:74:4: Unexpected ''debugger'' statement. [Error/no-debugger]',
+  \ ])
