@@ -16,7 +16,7 @@ g:ale_xml_xmllint_executable                   *g:ale_xml_xmllint_executable*
 g:ale_xml_xmllint_options                         *g:ale_xml_xmllint_options*
                                                   *b:ale_xml_xmllint_options*
   Type: |String|
-  Default: `'--noout'`
+  Default: `''`
 
   This variable can be set to pass additional options to xmllint.
 
