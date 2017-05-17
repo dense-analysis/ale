@@ -1,0 +1,25 @@
+Before:
+  runtime ale_linters/xml/xmllint.vim
+
+After:
+  call ale#linter#Reset()
+  let g:ale_xml_xmllint_options = ''
+  let g:ale_xml_xmllint_executable = 'xmllint'
+
+Execute(The xml xmllint command callback should return the correct default string):
+  AssertEqual '''xmllint'' --noout -',
+  \ join(split(ale_linters#xml#xmllint#GetCommand(1)))
+
+Execute(The xml xmllint command callback should let you set options):
+  let g:ale_xml_xmllint_options = '--xinclude --postvalid'
+
+  AssertEqual '''xmllint'' --xinclude --postvalid --noout -',
+  \ join(split(ale_linters#xml#xmllint#GetCommand(1)))
+
+Execute(The xmllint executable should be configurable):
+  let g:ale_xml_xmllint_executable = '~/.local/bin/xmllint'
+
+  AssertEqual '~/.local/bin/xmllint', ale_linters#xml#xmllint#GetExecutable(1)
+  AssertEqual '''~/.local/bin/xmllint'' --noout -',
+  \ join(split(ale_linters#xml#xmllint#GetCommand(1)))
+
