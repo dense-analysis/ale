@@ -14,21 +14,25 @@ Execute(The php handler should calculate column numbers):
   \   {
   \     'lnum': 1,
   \     'col': 5,
+  \     'end_col': 5,
   \     'text': "syntax error, unexpected ';', expecting ']'",
   \   },
   \   {
   \     'lnum': 2,
   \     'col': 13,
+  \     'end_col': 13,
   \     'text': "syntax error, unexpected '/', expecting function (T_FUNCTION) or const (T_CONST)",
   \   },
   \   {
   \     'lnum': 3,
   \     'col': 5,
+  \     'end_col': 5,
   \     'text': "syntax error, unexpected ')'",
   \   },
   \   {
   \     'lnum': 4,
   \     'col': 8,
+  \     'end_col': 12,
   \     'text': "syntax error, unexpected ''bar'' (T_CONSTANT_ENCAPSED_STRING), expecting ']'",
   \   },
   \ ],
