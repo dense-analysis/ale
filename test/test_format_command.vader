@@ -7,16 +7,16 @@ After:
   unlet! g:match
 
 Execute(FormatCommand should do nothing to basic command strings):
-  AssertEqual ['', 'awesome-linter do something'], ale#engine#FormatCommand(bufnr('%'), 'awesome-linter do something')
+  AssertEqual ['', 'awesome-linter do something'], ale#command#FormatCommand(bufnr('%'), 'awesome-linter do something', 0)
 
 Execute(FormatCommand should handle %%, and ignore other percents):
-  AssertEqual ['', '% %%d %%f %x %'], ale#engine#FormatCommand(bufnr('%'), '%% %%%d %%%f %x %')
+  AssertEqual ['', '% %%d %%f %x %'], ale#command#FormatCommand(bufnr('%'), '%% %%%d %%%f %x %', 0)
 
 Execute(FormatCommand should convert %s to the current filename):
-  AssertEqual ['', 'foo ' . shellescape(expand('%:p')) . ' bar ' . shellescape(expand('%:p'))], ale#engine#FormatCommand(bufnr('%'), 'foo %s bar %s')
+  AssertEqual ['', 'foo ' . shellescape(expand('%:p')) . ' bar ' . shellescape(expand('%:p'))], ale#command#FormatCommand(bufnr('%'), 'foo %s bar %s', 0)
 
 Execute(FormatCommand should convert %t to a new temporary filename):
-  let g:result = ale#engine#FormatCommand(bufnr('%'), 'foo %t bar %t')
+  let g:result = ale#command#FormatCommand(bufnr('%'), 'foo %t bar %t', 0)
   let g:match = matchlist(g:result[1], '\v^foo (''/tmp/[^'']*/dummy.txt'') bar (''/tmp/[^'']*/dummy.txt'')$')
 
   Assert !empty(g:match), 'No match found! Result was: ' . g:result[1]
@@ -27,7 +27,7 @@ Execute(FormatCommand should convert %t to a new temporary filename):
   AssertEqual g:match[1], g:match[2]
 
 Execute(FormatCommand should let you combine %s and %t):
-  let g:result = ale#engine#FormatCommand(bufnr('%'), 'foo %t bar %s')
+  let g:result = ale#command#FormatCommand(bufnr('%'), 'foo %t bar %s', 0)
   let g:match = matchlist(g:result[1], '\v^foo (''/tmp/.*/dummy.txt'') bar (''.*/dummy.txt'')$')
 
   Assert !empty(g:match), 'No match found! Result was: ' . g:result[1]
@@ -39,3 +39,14 @@ Execute(FormatCommand should let you combine %s and %t):
 
 Execute(EscapeCommandPart should escape all percent signs):
   AssertEqual '%%s %%t %%%% %%s %%t %%%%', ale#engine#EscapeCommandPart('%s %t %% %s %t %%')
+
+Execute(EscapeCommandPart should pipe in temporary files appropriately):
+  let g:result = ale#command#FormatCommand(bufnr('%'), 'foo bar', 1)
+  let g:match = matchlist(g:result[1], '\v^foo bar \< (''/tmp/[^'']*/dummy.txt'')$')
+  Assert !empty(g:match), 'No match found! Result was: ' . g:result[1]
+  AssertEqual shellescape(g:result[0]), g:match[1]
+
+  let g:result = ale#command#FormatCommand(bufnr('%'), 'foo bar %t', 1)
+  let g:match = matchlist(g:result[1], '\v^foo bar (''/tmp/[^'']*/dummy.txt'')$')
+  Assert !empty(g:match), 'No match found! Result was: ' . g:result[1]
+  AssertEqual shellescape(g:result[0]), g:match[1]
