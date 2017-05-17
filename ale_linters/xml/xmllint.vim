@@ -18,13 +18,13 @@ endfunction
 function! ale_linters#xml#xmllint#Handle(buffer, lines) abort
     " Matches patterns lines like the following:
     " file/path:123: error level : error message
-    let l:pattern_message = '\v^([^:]+):(\d+):\s+([^:]+)\s+:\s+(.*)$'
+    let l:pattern_message = '\v^([^:]+):(\d+):\s*(([^:]+)\s*:\s+.*)$'
 
     " parse column token line like that:
     " file/path:123: parser error : Opening and ending tag mismatch: foo line 1 and bar
     " </bar>
     "       ^
-    let l:pattern_column_token = '\v^\s+\^$'
+    let l:pattern_column_token = '\v^\s*\^$'
 
     let l:output = []
 
@@ -34,8 +34,8 @@ function! ale_linters#xml#xmllint#Handle(buffer, lines) abort
         let l:match_message = matchlist(l:line, l:pattern_message)
         if !empty(l:match_message)
           let l:line = l:match_message[2] + 0
-          let l:type = l:match_message[3] =~? 'warning' ? 'W' : 'E'
-          let l:text = l:match_message[3] . ' : ' . l:match_message[4]
+          let l:type = l:match_message[4] =~? 'warning' ? 'W' : 'E'
+          let l:text = l:match_message[3]
 
           call add(l:output, {
           \   'lnum': l:line,
