@@ -25,14 +25,19 @@ function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#ruby#rubocop#GetCommand(buffer) abort
-    return ale#Var(a:buffer, 'ruby_rubocop_executable')
+    let l:unescaped = ale#Var(a:buffer, 'ruby_rubocop_executable')
+    let l:executable = ale#Escape(l:unescaped)
+    if l:unescaped =~? 'bundle$'
+        let l:executable = l:executable . ' exec rubocop'
+    endif
+    return l:executable
     \   . ' --format emacs --force-exclusion '
     \   . ale#Var(a:buffer, 'ruby_rubocop_options')
     \   . ' --stdin ' . bufname(a:buffer)
 endfunction
 
 function! ale_linters#ruby#rubocop#GetExecutable(buffer) abort
-    let l:executable = split(ale#Var(a:buffer, 'ruby_rubocop_executable'))[0]
+    let l:executable = ale#Var(a:buffer, 'ruby_rubocop_executable')
     if executable(l:executable)
         return l:executable
     endif

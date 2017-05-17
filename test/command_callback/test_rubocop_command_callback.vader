@@ -3,27 +3,17 @@ Before:
 
 Execute(Executable should default to rubocop):
   AssertEqual
-  \ 'rubocop --format emacs --force-exclusion  --stdin ''dummy.py''',
+  \ '''rubocop'' --format emacs --force-exclusion  --stdin ''dummy.py''',
   \ ale_linters#ruby#rubocop#GetCommand(bufnr(''))
 
 Execute(Should be able to set a custom executable):
   let g:ale_ruby_rubocop_executable = 'bin/rubocop'
   AssertEqual
-  \ 'bin/rubocop --format emacs --force-exclusion  --stdin ''dummy.py''',
+  \ '''bin/rubocop'' --format emacs --force-exclusion  --stdin ''dummy.py''',
   \ ale_linters#ruby#rubocop#GetCommand(bufnr(''))
 
-Execute(Custom executables should not be escaped):
-  let g:ale_ruby_rubocop_executable = 'bundle exec rubocop'
+Execute(Setting bundle appends 'exec rubocop'):
+  let g:ale_ruby_rubocop_executable = 'path to/bundle'
   AssertEqual
-  \ 'bundle exec rubocop --format emacs --force-exclusion  --stdin ''dummy.py''',
+  \ '''path to/bundle'' exec rubocop --format emacs --force-exclusion  --stdin ''dummy.py''',
   \ ale_linters#ruby#rubocop#GetCommand(bufnr(''))
-
-Execute(Executable callback should return the first token of the executable):
-  let g:ale_ruby_rubocop_executable = 'bundle exec rubocop'
-  AssertEqual
-  \ 'bundle',
-  \ ale_linters#ruby#rubocop#GetExecutable(bufnr(''))
-  let g:ale_ruby_rubocop_executable = 'bin/rubocop'
-  AssertEqual
-  \ 'bin/rubocop',
-  \ ale_linters#ruby#rubocop#GetExecutable(bufnr(''))
