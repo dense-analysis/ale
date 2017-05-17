@@ -1,3 +1,6 @@
+Before:
+  runtime ale_linters/php/php.vim
+
 Given (Some invalid lines of PHP):
   [foo;]
   class Foo { / }
@@ -5,9 +8,7 @@ Given (Some invalid lines of PHP):
   ['foo' 'bar']
   function count() {}
 
-Execute(The php handler should parse lines correctly):
-  runtime ale_linters/php/php.vim
-
+Execute(The php handler should calculate column numbers):
   AssertEqual
   \ [
   \   {
@@ -30,6 +31,25 @@ Execute(The php handler should parse lines correctly):
   \     'col': 8,
   \     'text': "syntax error, unexpected ''bar'' (T_CONSTANT_ENCAPSED_STRING), expecting ']'",
   \   },
+  \ ],
+  \ ale_linters#php#php#Handle(347, [
+  \   "This line should be ignored completely",
+  \   "Parse error:  syntax error, unexpected ';', expecting ']' in - on line 1",
+  \   "Parse error:  syntax error, unexpected '/', expecting function (T_FUNCTION) or const (T_CONST) in - on line 2",
+  \   "Parse error:  syntax error, unexpected ')' in - on line 3",
+  \   "Parse error:  syntax error, unexpected ''bar'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in - on line 4",
+  \ ])
+
+Execute (The php handler should ignore lines starting with 'PHP Parse error'):
+  AssertEqual
+  \ [],
+  \ ale_linters#php#php#Handle(347, [
+  \   "PHP Parse error:  syntax error, This line should be ignored completely in - on line 1",
+  \ ])
+
+Execute (The php handler should parse lines without column indication):
+  AssertEqual
+  \ [
   \   {
   \     'lnum': 5,
   \     'col': 0,
@@ -47,15 +67,10 @@ Execute(The php handler should parse lines correctly):
   \   },
   \ ],
   \ ale_linters#php#php#Handle(347, [
-  \   'This line should be ignored completely',
-  \   "PHP Parse error:  syntax error, This line should be ignored completely in - on line 1",
-  \   "Parse error:  syntax error, unexpected ';', expecting ']' in - on line 1",
-  \   "Parse error:  syntax error, unexpected '/', expecting function (T_FUNCTION) or const (T_CONST) in - on line 2",
-  \   "Parse error:  syntax error, unexpected ')' in - on line 3",
-  \   "Parse error:  syntax error, unexpected ''bar'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in - on line 4",
+  \   "This line should be ignored completely",
   \   "Fatal error:  Cannot redeclare count() in - on line 5",
-  \   'Parse error:  syntax error, unexpected end of file in - on line 21',
-  \   'Parse error: Invalid numeric literal in - on line 47',
+  \   "Parse error:  syntax error, unexpected end of file in - on line 21",
+  \   "Parse error: Invalid numeric literal in - on line 47",
   \ ])
 
 After:
