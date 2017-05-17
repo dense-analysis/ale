@@ -99,12 +99,17 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
                 continue
             endif
 
-            call add(l:output, {
+            let l:obj = {
             \   'lnum': l:match[2] + 0,
             \   'col': l:match[3] + 0,
             \   'type': l:match[4] =~# 'error' ? 'E' : 'W',
             \   'text': s:RemoveUnicodeQuotes(l:match[5]),
-            \})
+            \}
+
+            " clang++ and some other tools can output duplicated errors.
+            if empty(l:output) || l:output[-1] != l:obj
+                call add(l:output, l:obj)
+            endif
         endif
     endfor
 

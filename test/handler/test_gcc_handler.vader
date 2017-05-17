@@ -94,3 +94,29 @@ Execute(The GCC handler shouldn't complain about #pragma once for headers):
   \ ale#handlers#gcc#HandleGCCFormat(347, [
   \   '<stdin>:1:1: warning: #pragma once in main file [enabled by default]',
   \ ])
+
+Execute(The GCC handler should eliminate duplicated clang errors):
+  AssertEqual
+  \ [
+  \   {'lnum': 2, 'col': 10, 'type': 'E', 'text': '''a.h'' file not found'},
+  \   {'lnum': 4, 'col': 10, 'type': 'E', 'text': 'empty filename'},
+  \ ],
+  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \ '<stdin>:2:10: fatal error: ''a.h'' file not found',
+  \ '#include "a.h"',
+  \ '         ^~~~~',
+  \ '',
+  \ '<stdin>:2:10: fatal error: ''a.h'' file not found',
+  \ '#include "a.h"',
+  \ '         ^~~~~',
+  \ '',
+  \ '<stdin>:4:10: error: empty filename',
+  \ '',
+  \ '<stdin>:4:10: error: empty filename',
+  \ '#include ""',
+  \ '         ^',
+  \ '',
+  \ '<stdin>:4:10: error: empty filename',
+  \ '#include ""',
+  \ '         ^',
+  \ ])
