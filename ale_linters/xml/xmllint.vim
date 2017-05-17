@@ -5,11 +5,14 @@
 let g:ale_xml_xmllint_executable = get(g:, 'ale_xml_xmllint_executable', 'xmllint')
 let g:ale_xml_xmllint_options = get(g:, 'ale_xml_xmllint_options', '--noout')
 
+function! ale_linters#xml#xmllint#GetExecutable(buffer) abort
+    return ale#Var(a:buffer, 'xml_xmllint_executable')
+endfunction
+
 function! ale_linters#xml#xmllint#GetCommand(buffer) abort
-    return printf('%s %s -',
-    \   g:ale_xml_xmllint_executable,
-    \   g:ale_xml_xmllint_options
-    \ )
+    return ale#Escape(ale_linters#xml#xmllint#GetExecutable(a:buffer))
+    \   . ' ' . ale#Var(a:buffer, 'xml_xmllint_options')
+    \   . ' -'
 endfunction
 
 function! ale_linters#xml#xmllint#Handle(buffer, lines) abort
@@ -29,16 +32,12 @@ function! ale_linters#xml#xmllint#Handle(buffer, lines) abort
 
         " Parse error/warning lines
         let l:match_message = matchlist(l:line, l:pattern_message)
-        if len(l:match_message)
+        if !empty(l:match_message)
           let l:line = l:match_message[2] + 0
-          let l:type = 'E'
-          if match(l:match_message[3], 'warning') != -1
-            let l:type = 'W'
-          endif
-          let l:text = l:type . ' ' . l:match_message[3] . ' : ' . l:match_message[4]
+          let l:type = l:match_message[3] =~? 'warning' ? 'W' : 'E'
+          let l:text = l:match_message[3] . ' : ' . l:match_message[4]
 
           call add(l:output, {
-          \   'bufnr': a:buffer,
           \   'lnum': l:line,
           \   'text': l:text,
           \   'type': l:type,
@@ -49,8 +48,8 @@ function! ale_linters#xml#xmllint#Handle(buffer, lines) abort
 
         " Parse column position
         let l:match_column_token = matchlist(l:line, l:pattern_column_token)
-        if len(l:output) && len(l:match_column_token)
-          let l:previous = l:output[len(l:output)-1]
+        if !empty(l:output) && !empty(l:match_column_token)
+          let l:previous = l:output[len(l:output) - 1]
           let l:previous['col'] = len(l:match_column_token[0])
 
           continue
@@ -63,8 +62,8 @@ endfunction
 
 call ale#linter#Define('xml', {
 \   'name': 'xmllint',
-\   'executable': g:ale_xml_xmllint_executable,
 \   'output_stream': 'stderr',
+\   'executable_callback': 'ale_linters#xml#xmllint#GetExecutable',
 \   'command_callback': 'ale_linters#xml#xmllint#GetCommand',
 \   'callback': 'ale_linters#xml#xmllint#Handle',
 \ })
