@@ -94,7 +94,7 @@ function! ale#fix#RemoveManagedFiles(buffer) abort
     let s:buffer_data[a:buffer].temporary_directory_list = []
 endfunction
 
-function! s:CreateTemporaryFileForJob(buffer, temporary_file) abort
+function! s:CreateTemporaryFileForJob(buffer, temporary_file, input) abort
     if empty(a:temporary_file)
         " There is no file, so we didn't create anything.
         return 0
@@ -107,7 +107,7 @@ function! s:CreateTemporaryFileForJob(buffer, temporary_file) abort
     " Automatically delete the directory later.
     call ale#fix#ManageDirectory(a:buffer, l:temporary_directory)
     " Write the buffer out to a file.
-    call writefile(getbufline(a:buffer, 1, '$'), a:temporary_file)
+    call writefile(a:input, a:temporary_file)
 
     return 1
 endfunction
@@ -115,11 +115,12 @@ endfunction
 function! s:RunJob(options) abort
     let l:buffer = a:options.buffer
     let l:command = a:options.command
+    let l:input = a:options.input
     let l:output_stream = a:options.output_stream
     let l:read_temporary_file = a:options.read_temporary_file
 
     let [l:temporary_file, l:command] = ale#command#FormatCommand(l:buffer, l:command, 1)
-    call s:CreateTemporaryFileForJob(l:buffer, l:temporary_file)
+    call s:CreateTemporaryFileForJob(l:buffer, l:temporary_file, l:input)
 
     let l:command = ale#job#PrepareCommand(l:command)
     let l:job_options = {
@@ -202,6 +203,7 @@ function! s:RunFixer(options) abort
             let l:job_ran = s:RunJob({
             \   'buffer': l:buffer,
             \   'command': l:result.command,
+            \   'input': l:input,
             \   'output_stream': get(l:result, 'output_stream', 'stdout'),
             \   'read_temporary_file': get(l:result, 'read_temporary_file', 0),
             \   'callback_list': a:options.callback_list,

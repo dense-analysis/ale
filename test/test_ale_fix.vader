@@ -98,6 +98,16 @@ Execute(ALEFix should allow jobs and simple functions to be combined):
 Expect(The lines from the temporary file should be modified):
   $x
 
+Execute(ALEFix should send lines modified by functions to jobs):
+  let g:ale_fixers.testft = ['AddDollars', 'CatLine']
+  ALEFix
+
+Expect(The lines should first be modified by the function, then the job):
+  $a
+  $b
+  $c
+  d
+
 Execute(ALEFix should skip commands when jobs fail to run):
   let g:ale_emulate_job_failure = 1
   let g:ale_fixers.testft = ['CatLine', 'AddDollars']
