@@ -1,0 +1,19 @@
+Before:
+  runtime ale_linters/ruby/rubocop.vim
+
+Execute(Executable should default to rubocop):
+  AssertEqual
+  \ '''rubocop'' --format emacs --force-exclusion  --stdin ''dummy.py''',
+  \ ale_linters#ruby#rubocop#GetCommand(bufnr(''))
+
+Execute(Should be able to set a custom executable):
+  let g:ale_ruby_rubocop_executable = 'bin/rubocop'
+  AssertEqual
+  \ '''bin/rubocop'' --format emacs --force-exclusion  --stdin ''dummy.py''',
+  \ ale_linters#ruby#rubocop#GetCommand(bufnr(''))
+
+Execute(Setting bundle appends 'exec rubocop'):
+  let g:ale_ruby_rubocop_executable = 'path to/bundle'
+  AssertEqual
+  \ '''path to/bundle'' exec rubocop --format emacs --force-exclusion  --stdin ''dummy.py''',
+  \ ale_linters#ruby#rubocop#GetCommand(bufnr(''))

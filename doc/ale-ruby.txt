@@ -37,6 +37,15 @@ g:ale_ruby_reek_show_wiki_link                 *g:ale_ruby_reek_show_wiki_link*
 -------------------------------------------------------------------------------
 rubocop                                                      *ale-ruby-rubocop*
 
+g:ale_ruby_rubocop_executable                   g:ale_ruby_rubocop_executable
+                                                b:ale_ruby_rubocop_executable
+  Type: String
+  Default: 'rubocop'
+
+  Override the invoked rubocop binary. This is useful for running rubocop
+  from binstubs or a bundle.
+
+
 g:ale_ruby_rubocop_options                         *g:ale_ruby_rubocop_options*
                                                    *b:ale_ruby_rubocop_options*
   Type: |String|
