@@ -1,3 +1,6 @@
+" FIXME: Switch to using the global buffer data dictionary instead.
+" Cleanup will work better if there isn't a second Dictionary we have to work
+" with.
 let s:buffer_data = {}
 let s:job_info_map = {}
 
@@ -22,8 +25,6 @@ function! ale#fix#ApplyQueuedFixes() abort
         echoerr 'The file was changed before fixing finished'
         return
     endif
-
-    echom l:data.output[0]
 
     call setline(1, l:data.output)
 
@@ -145,11 +146,42 @@ function! s:RunJob(options) abort
         let l:job_options.out_cb = function('s:GatherOutput')
     endif
 
-    let l:job_id = ale#job#Start(l:command, l:job_options)
+    if get(g:, 'ale_emulate_job_failure') == 1
+        let l:job_id = 0
+    elseif get(g:, 'ale_run_synchronously') == 1
+        " Find a unique Job value to use, which will be the same as the ID for
+        " running commands synchronously. This is only for test code.
+        let l:job_id = len(s:job_info_map) + 1
 
-    " TODO: Check that the job runs, and skip to the next item if it does not.
+        while has_key(s:job_info_map, l:job_id)
+            let l:job_id += 1
+        endwhile
+    else
+        let l:job_id = ale#job#Start(l:command, l:job_options)
+    endif
+
+    if l:job_id == 0
+        return 0
+    endif
 
     let s:job_info_map[l:job_id] = l:job_info
+
+    if get(g:, 'ale_run_synchronously') == 1
+        " Run a command synchronously if this test option is set.
+        let l:output = systemlist(
+        \   type(l:command) == type([])
+        \   ?  join(l:command[0:1]) . ' ' . ale#Escape(l:command[2])
+        \   : l:command
+        \)
+
+        if !l:read_temporary_file
+            let s:job_info_map[l:job_id].output = l:output
+        endif
+
+        call l:job_options.exit_cb(l:job_id, v:shell_error)
+    endif
+
+    return 1
 endfunction
 
 function! s:RunFixer(options) abort
@@ -158,7 +190,7 @@ function! s:RunFixer(options) abort
     let l:index = a:options.callback_index
 
     while len(a:options.callback_list) > l:index
-        let l:result = function(a:options.callback_list[l:index])(l:buffer, l:input)
+        let l:result = function(a:options.callback_list[l:index])(l:buffer, copy(l:input))
 
         if type(l:result) == type(0) && l:result == 0
             " When `0` is returned, skip this item.
@@ -167,9 +199,7 @@ function! s:RunFixer(options) abort
             let l:input = l:result
             let l:index += 1
         else
-            " TODO: Check the return value here, and skip an index if
-            " the job fails.
-            call s:RunJob({
+            let l:job_ran = s:RunJob({
             \   'buffer': l:buffer,
             \   'command': l:result.command,
             \   'output_stream': get(l:result, 'output_stream', 'stdout'),
@@ -178,8 +208,13 @@ function! s:RunFixer(options) abort
             \   'callback_index': l:index,
             \})
 
-            " Stop here, we will handle exit later on.
-            return
+            if !l:job_ran
+                " The job failed to run, so skip to the next item.
+                let l:index += 1
+            else
+                " Stop here, we will handle exit later on.
+                return
+            endif
         endif
     endwhile
 

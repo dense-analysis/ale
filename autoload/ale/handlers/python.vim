@@ -35,3 +35,9 @@ function! ale#handlers#python#HandlePEP8Format(buffer, lines) abort
 
     return l:output
 endfunction
+
+function! ale#handlers#python#AutoPEP8(buffer, lines) abort
+    return {
+    \   'command': 'autopep8 -'
+    \}
+endfunction

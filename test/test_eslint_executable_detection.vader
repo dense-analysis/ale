@@ -20,7 +20,7 @@ Execute(create-react-app directories should be detected correctly):
 
   AssertEqual
   \ g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js',
-  \ ale_linters#javascript#eslint#GetExecutable(bufnr(''))
+  \ ale#handlers#eslint#GetExecutable(bufnr(''))
 
   :q
 
@@ -31,7 +31,7 @@ Execute(use-global should override create-react-app detection):
 
   AssertEqual
   \ 'eslint_d',
-  \ ale_linters#javascript#eslint#GetExecutable(bufnr(''))
+  \ ale#handlers#eslint#GetExecutable(bufnr(''))
 
   :q
 
@@ -40,7 +40,7 @@ Execute(other app directories should be detected correctly):
 
   AssertEqual
   \ g:dir . '/eslint-test-files/node_modules/.bin/eslint',
-  \ ale_linters#javascript#eslint#GetExecutable(bufnr(''))
+  \ ale#handlers#eslint#GetExecutable(bufnr(''))
 
   :q
 
@@ -51,6 +51,6 @@ Execute(use-global should override other app directories):
 
   AssertEqual
   \ 'eslint_d',
-  \ ale_linters#javascript#eslint#GetExecutable(bufnr(''))
+  \ ale#handlers#eslint#GetExecutable(bufnr(''))
 
   :q

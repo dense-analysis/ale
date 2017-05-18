@@ -1,0 +1,109 @@
+Before:
+  Save g:ale_fixers, &shell
+  let g:ale_run_synchronously = 1
+  let g:ale_fixers = {
+  \ 'testft': [],
+  \}
+  let &shell = '/bin/bash'
+
+  function AddCarets(buffer, lines) abort
+    " map() is applied to the original lines here.
+    " This way, we can ensure that defensive copies are made.
+    return map(a:lines, '''^'' . v:val')
+  endfunction
+
+  function AddDollars(buffer, lines) abort
+    return map(a:lines, '''$'' . v:val')
+  endfunction
+
+  function DoNothing(buffer, lines) abort
+    return 0
+  endfunction
+
+  function CatLine(buffer, lines) abort
+    return {'command': 'cat - <(echo d)'}
+  endfunction
+
+  function ReplaceWithTempFile(buffer, lines) abort
+    return {'command': 'echo x > %t', 'read_temporary_file': 1}
+  endfunction
+
+After:
+  Restore
+  unlet! g:ale_run_synchronously
+  unlet! g:ale_emulate_job_failure
+  delfunction AddCarets
+  delfunction AddDollars
+  delfunction DoNothing
+  delfunction CatLine
+  delfunction ReplaceWithTempFile
+
+Given testft (A file with three lines):
+  a
+  b
+  c
+
+Execute(ALEFix should complain when there are no functions to call):
+  AssertThrows ALEFix
+  AssertEqual 'Vim(echoerr):No fixers have been defined for filetype: testft', g:vader_exception
+
+Execute(ALEFix should apply simple functions):
+  let g:ale_fixers.testft = ['AddCarets']
+  ALEFix
+
+Expect(The first function should be used):
+  ^a
+  ^b
+  ^c
+
+Execute(ALEFix should apply simple functions in a chain):
+  let g:ale_fixers.testft = ['AddCarets', 'AddDollars']
+  ALEFix
+
+Expect(Both functions should be used):
+  $^a
+  $^b
+  $^c
+
+Execute(ALEFix should allow 0 to be returned to skip functions):
+  let g:ale_fixers.testft = ['DoNothing', 'AddDollars']
+  ALEFix
+
+Expect(Only the second function should be applied):
+  $a
+  $b
+  $c
+
+Execute(ALEFix should allow commands to be run):
+  let g:ale_fixers.testft = ['CatLine']
+  ALEFix
+
+Expect(An extra line should be added):
+  a
+  b
+  c
+  d
+
+Execute(ALEFix should allow temporary files to be read):
+  let g:ale_fixers.testft = ['ReplaceWithTempFile']
+  ALEFix
+
+Expect(The line we wrote to the temporary file should be used here):
+  x
+
+Execute(ALEFix should allow jobs and simple functions to be combined):
+  let g:ale_fixers.testft = ['ReplaceWithTempFile', 'AddDollars']
+  ALEFix
+
+Expect(The lines from the temporary file should be modified):
+  $x
+
+Execute(ALEFix should skip commands when jobs fail to run):
+  let g:ale_emulate_job_failure = 1
+  let g:ale_fixers.testft = ['CatLine', 'AddDollars']
+  ALEFix
+
+Expect(Only the second function should be applied):
+  $a
+  $b
+  $c

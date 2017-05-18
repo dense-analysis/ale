@@ -60,6 +60,9 @@ let g:ale_filetype_blacklist = ['nerdtree', 'unite', 'tags']
 " This Dictionary configures which linters are enabled for which languages.
 let g:ale_linters = get(g:, 'ale_linters', {})
 
+" This Dictionary configures which functions will be used for fixing problems.
+let g:ale_fixers = get(g:, 'ale_fixers', {})
+
 " This Dictionary allows users to set up filetype aliases for new filetypes.
 let g:ale_linter_aliases = get(g:, 'ale_linter_aliases', {})
 
@@ -276,6 +279,9 @@ command! -bar ALEInfo :call ale#debugging#Info()
 " The same, but copy output to your clipboard.
 command! -bar ALEInfoToClipboard :call ale#debugging#InfoToClipboard()
 
+" Fix problems in files.
+command! -bar ALEFix :call ale#fix#Fix()
+
 " <Plug> mappings for commands
 nnoremap <silent> <Plug>(ale_previous) :ALEPrevious<Return>
 nnoremap <silent> <Plug>(ale_previous_wrap) :ALEPreviousWrap<Return>
@@ -284,6 +290,7 @@ nnoremap <silent> <Plug>(ale_next_wrap) :ALENextWrap<Return>
 nnoremap <silent> <Plug>(ale_toggle) :ALEToggle<Return>
 nnoremap <silent> <Plug>(ale_lint) :ALELint<Return>
 nnoremap <silent> <Plug>(ale_detail) :ALEDetail<Return>
+nnoremap <silent> <Plug>(ale_fix) :ALEFix<Return>
 
 " Housekeeping
 
