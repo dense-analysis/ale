@@ -191,7 +191,7 @@ function! s:RunFixer(options) abort
     let l:index = a:options.callback_index
 
     while len(a:options.callback_list) > l:index
-        let l:result = function(a:options.callback_list[l:index])(l:buffer, copy(l:input))
+        let l:result = call(a:options.callback_list[l:index], [l:buffer, copy(l:input)])
 
         if type(l:result) == type(0) && l:result == 0
             " When `0` is returned, skip this item.
@@ -223,7 +223,7 @@ function! s:RunFixer(options) abort
     call s:ApplyFixes(l:buffer, l:input)
 endfunction
 
-function! ale#fix#Fix() abort
+function! s:GetCallbacks() abort
     let l:callback_list = []
 
     for l:sub_type in split(&filetype, '\.')
@@ -238,6 +238,40 @@ function! ale#fix#Fix() abort
 
     if empty(l:callback_list)
         echoerr 'No fixers have been defined for filetype: ' . &filetype
+        return []
+    endif
+
+    let l:problem_list = []
+    let l:corrected_list = []
+
+    for l:item in l:callback_list
+        if type(l:item) == type('')
+            if exists('*' . l:item)
+                call add(l:corrected_list, function(l:item))
+            else
+                let l:func = ale#fix#registry#GetFunc(l:item)
+
+                if !empty(l:func) && exists('*' . l:func)
+                    call add(l:corrected_list, function(l:func))
+                else
+                    call add(l:problem_list, l:item)
+                endif
+            endif
+        endif
+    endfor
+
+    if !empty(l:problem_list)
+        echoerr 'Invalid fixers used: ' . string(l:problem_list)
+        return []
+    endif
+
+    return l:corrected_list
+endfunction
+
+function! ale#fix#Fix() abort
+    let l:callback_list = s:GetCallbacks()
+
+    if empty(l:callback_list)
         return
     endif
 
