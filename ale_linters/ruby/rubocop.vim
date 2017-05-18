@@ -1,6 +1,32 @@
 " Author: ynonp - https://github.com/ynonp
 " Description: rubocop for Ruby files
 
+" Set this option to change Rubocop options.
+if !exists('g:ale_ruby_rubocop_options')
+    " let g:ale_ruby_rubocop_options = '--lint'
+    let g:ale_ruby_rubocop_options = ''
+endif
+
+if !exists('g:ale_ruby_rubocop_executable')
+    let g:ale_ruby_rubocop_executable = 'rubocop'
+endif
+
+function! ale_linters#ruby#rubocop#GetExecutable(buffer) abort
+    return ale#Var(a:buffer, 'ruby_rubocop_executable')
+endfunction
+
+function! ale_linters#ruby#rubocop#GetCommand(buffer) abort
+    let l:executable = ale#Var(a:buffer, 'ruby_rubocop_executable')
+    let l:exec_args = l:executable =~? 'bundle$'
+    \   ? ' exec rubocop'
+    \   : ''
+
+    return ale#Escape(l:executable) . l:exec_args
+    \   . ' --format emacs --force-exclusion '
+    \   . ale#Var(a:buffer, 'ruby_rubocop_options')
+    \   . ' --stdin ' . bufname(a:buffer)
+endfunction
+
 function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
     " Matches patterns line the following:
     "
@@ -23,35 +49,6 @@ function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
 
     return l:output
 endfunction
-
-function! ale_linters#ruby#rubocop#GetCommand(buffer) abort
-    let l:unescaped = ale#Var(a:buffer, 'ruby_rubocop_executable')
-    let l:executable = ale#Escape(l:unescaped)
-    if l:unescaped =~? 'bundle$'
-        let l:executable = l:executable . ' exec rubocop'
-    endif
-    return l:executable
-    \   . ' --format emacs --force-exclusion '
-    \   . ale#Var(a:buffer, 'ruby_rubocop_options')
-    \   . ' --stdin ' . bufname(a:buffer)
-endfunction
-
-function! ale_linters#ruby#rubocop#GetExecutable(buffer) abort
-    let l:executable = ale#Var(a:buffer, 'ruby_rubocop_executable')
-    if executable(l:executable)
-        return l:executable
-    endif
-endfunction
-
-" Set this option to change Rubocop options.
-if !exists('g:ale_ruby_rubocop_options')
-    " let g:ale_ruby_rubocop_options = '--lint'
-    let g:ale_ruby_rubocop_options = ''
-endif
-
-if !exists('g:ale_ruby_rubocop_executable')
-    let g:ale_ruby_rubocop_executable = 'rubocop'
-endif
 
 call ale#linter#Define('ruby', {
 \   'name': 'rubocop',
