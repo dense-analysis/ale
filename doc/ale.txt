@@ -85,6 +85,8 @@ CONTENTS                                                         *ale-contents*
       tslint..............................|ale-typescript-tslint|
     vim...................................|ale-vim-options|
       vint................................|ale-vim-vint|
+    xml...................................|ale-xml-options|
+      xmllint.............................|ale-xml-xmllint|
     yaml..................................|ale-yaml-options|
       yamllint............................|ale-yaml-yamllint|
   5. Commands/Keybinds....................|ale-commands|
@@ -177,6 +179,7 @@ The following languages and tools are supported.
 * Vim: 'vint'
 * Vim help: 'proselint'
 * XHTML: 'proselint'
+* XML: 'xmllint'
 * YAML: 'yamllint'
 
 ===============================================================================
