@@ -26,6 +26,11 @@ function! ale#history#Add(buffer, status, job_id, command) abort
 endfunction
 
 function! s:FindHistoryItem(buffer, job_id) abort
+    " Stop immediately if there's nothing set up for the buffer.
+    if !has_key(g:ale_buffer_info, a:buffer)
+        return {}
+    endif
+
     " Search backwards to find a matching job ID. IDs might be recycled,
     " so finding the last one should be good enough.
     for l:obj in reverse(g:ale_buffer_info[a:buffer].history[:])
