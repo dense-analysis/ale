@@ -107,3 +107,12 @@ Expect(Only the second function should be applied):
   $a
   $b
   $c
+
+Execute(ALEFix should handle strings for selecting a single function):
+  let g:ale_fixers.testft = 'AddCarets'
+  ALEFix
+
+Expect(The first function should be used):
+  ^a
+  ^b
+  ^c

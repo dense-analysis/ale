@@ -225,7 +225,13 @@ function! ale#fix#Fix() abort
     let l:callback_list = []
 
     for l:sub_type in split(&filetype, '\.')
-        call extend(l:callback_list, get(g:ale_fixers, l:sub_type, []))
+        let l:sub_type_callacks = get(g:ale_fixers, l:sub_type, [])
+
+        if type(l:sub_type_callacks) == type('')
+            call add(l:callback_list, l:sub_type_callacks)
+        else
+            call extend(l:callback_list, l:sub_type_callacks)
+        endif
     endfor
 
     if empty(l:callback_list)
