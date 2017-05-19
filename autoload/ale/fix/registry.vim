@@ -2,10 +2,30 @@
 " Description: A registry of functions for fixing things.
 
 let s:default_registry = {
+\   'autopep8': {
+\       'function': 'ale#handlers#python#AutoPEP8',
+\       'suggested_filetypes': ['python'],
+\       'description': 'Fix PEP8 issues with autopep8.',
+\   },
 \   'eslint': {
 \       'function': 'ale#handlers#eslint#Fix',
 \       'suggested_filetypes': ['javascript'],
-\       'description': '',
+\       'description': 'Apply eslint --fix to a file.',
+\   },
+\   'isort': {
+\       'function': 'ale#handlers#python#ISort',
+\       'suggested_filetypes': ['python'],
+\       'description': 'Sort Python imports with isort.',
+\   },
+\   'remove_trailing_lines': {
+\       'function': 'ale#fix#generic#RemoveTrailingBlankLines',
+\       'suggested_filetypes': [],
+\       'description': 'Remove all blank lines at the end of a file.',
+\   },
+\   'yapf': {
+\       'function': 'ale#handlers#python#YAPF',
+\       'suggested_filetypes': ['python'],
+\       'description': 'Fix Python files with yapf.',
 \   },
 \}
 
