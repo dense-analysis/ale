@@ -6,7 +6,7 @@ if !exists('g:ale_go_gometalinter_options')
 endif
 
 function! ale_linters#go#gometalinter#GetCommand(buffer) abort
-    return 'gometalinter '
+    return 'gometalinter --include=''^' . expand('%:p') . '.*$'' '
     \   . ale#Var(a:buffer, 'go_gometalinter_options')
     \   . ' ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h'))
 endfunction
@@ -21,11 +21,6 @@ function! ale_linters#go#gometalinter#Handler(buffer, lines) abort
     let l:output = []
 
     for l:match in ale_linters#go#gometalinter#GetMatches(a:lines)
-        " Omit errors from files other than the one currently open
-        if !ale#path#IsBufferPath(a:buffer, l:match[1])
-            continue
-        endif
-
         call add(l:output, {
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
