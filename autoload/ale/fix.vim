@@ -26,6 +26,11 @@ function! ale#fix#ApplyQueuedFixes() abort
         return
     endif
 
+    if l:data.lines_before == l:data.output
+        " Don't modify the buffer if nothing has changed.
+        return
+    endif
+
     call setline(1, l:data.output)
 
     let l:start_line = len(l:data.output) + 1
