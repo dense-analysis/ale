@@ -31,7 +31,7 @@ function! ale#fix#ApplyQueuedFixes() abort
     let l:start_line = len(l:data.output) + 1
     let l:end_line = len(l:lines)
 
-    if l:end_line > l:start_line
+    if l:end_line >= l:start_line
         let l:save = winsaveview()
         silent execute l:start_line . ',' . l:end_line . 'd'
         call winrestview(l:save)

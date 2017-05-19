@@ -28,6 +28,9 @@ Before:
     return {'command': 'echo x > %t', 'read_temporary_file': 1}
   endfunction
 
+  function RemoveLastLine(buffer, lines) abort
+    return ['a', 'b']
+  endfunction
 After:
   Restore
   unlet! g:ale_run_synchronously
@@ -37,6 +40,7 @@ After:
   delfunction DoNothing
   delfunction CatLine
   delfunction ReplaceWithTempFile
+  delfunction RemoveLastLine
   call ale#fix#registry#ResetToDefaults()
 
 Given testft (A file with three lines):
@@ -137,3 +141,11 @@ Expect(The registry function should be used):
   ^a
   ^b
   ^c
+
+Execute(ALEFix should be able to remove the last line for files):
+  let g:ale_fixers.testft = ['RemoveLastLine']
+  ALEFix
+
+Expect(There should be only two lines):
+  a
+  b
