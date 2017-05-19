@@ -241,29 +241,19 @@ function! s:GetCallbacks() abort
         return []
     endif
 
-    let l:problem_list = []
     let l:corrected_list = []
 
     for l:item in l:callback_list
         if type(l:item) == type('')
-            if exists('*' . l:item)
-                call add(l:corrected_list, function(l:item))
-            else
-                let l:func = ale#fix#registry#GetFunc(l:item)
+            let l:func = ale#fix#registry#GetFunc(l:item)
 
-                if !empty(l:func) && exists('*' . l:func)
-                    call add(l:corrected_list, function(l:func))
-                else
-                    call add(l:problem_list, l:item)
-                endif
+            if !empty(l:func)
+                let l:item = l:func
             endif
         endif
-    endfor
 
-    if !empty(l:problem_list)
-        echoerr 'Invalid fixers used: ' . string(l:problem_list)
-        return []
-    endif
+        call add(l:corrected_list, function(l:item))
+    endfor
 
     return l:corrected_list
 endfunction

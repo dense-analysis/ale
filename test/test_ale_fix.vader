@@ -128,11 +128,6 @@ Expect(The first function should be used):
   ^b
   ^c
 
-Execute(ALEFix should complain for missing functions):
-  let g:ale_fixers.testft = ['XXX', 'YYY']
-  AssertThrows ALEFix
-  AssertEqual 'Vim(echoerr):Invalid fixers used: [''XXX'', ''YYY'']', g:vader_exception
-
 Execute(ALEFix should use functions from the registry):
   call ale#fix#registry#Add('add_carets', 'AddCarets', [], 'Add some carets')
   let g:ale_fixers.testft = ['add_carets']
