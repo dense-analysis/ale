@@ -41,6 +41,12 @@ function! ale#fix#ApplyQueuedFixes() abort
         silent execute l:start_line . ',' . l:end_line . 'd'
         call winrestview(l:save)
     endif
+
+    " If ALE linting is enabled, check for problems with the file again after
+    " fixing problems.
+    if g:ale_enabled
+        call ale#Queue(g:ale_lint_delay)
+    endif
 endfunction
 
 function! s:ApplyFixes(buffer, output) abort

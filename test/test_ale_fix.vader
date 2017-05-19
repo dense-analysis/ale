@@ -1,5 +1,6 @@
 Before:
-  Save g:ale_fixers, &shell
+  Save g:ale_fixers, &shell, g:ale_enabled
+  let g:ale_enabled = 0
   let g:ale_run_synchronously = 1
   let g:ale_fixers = {
   \ 'testft': [],
@@ -31,6 +32,7 @@ Before:
   function RemoveLastLine(buffer, lines) abort
     return ['a', 'b']
   endfunction
+
 After:
   Restore
   unlet! g:ale_run_synchronously
