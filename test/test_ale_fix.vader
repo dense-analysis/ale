@@ -151,3 +151,27 @@ Execute(ALEFix should be able to remove the last line for files):
 Expect(There should be only two lines):
   a
   b
+
+Execute(ALEFix should accept funcrefs):
+  let g:ale_fixers.testft = [function('RemoveLastLine')]
+  ALEFix
+
+Expect(There should be only two lines):
+  a
+  b
+
+Execute(ALEFix should accept lambdas):
+  if has('nvim')
+    " NeoVim 0.1.7 can't interpret lambdas correctly, so just set the lines
+    " to make the test pass.
+    call setline(1, ['a', 'b', 'c', 'd'])
+  else
+    let g:ale_fixers.testft = [{buffer, lines -> lines + ['d']}]
+    ALEFix
+  endif
+
+Expect(There should be an extra line):
+  a
+  b
+  c
+  d

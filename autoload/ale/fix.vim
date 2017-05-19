@@ -254,16 +254,18 @@ function! s:GetCallbacks() abort
 
     let l:corrected_list = []
 
-    for l:item in l:callback_list
-        if type(l:item) == type('')
-            let l:func = ale#fix#registry#GetFunc(l:item)
+    " Variables with capital characters are needed, or Vim will complain about
+    " funcref variables.
+    for l:Item in l:callback_list
+        if type(l:Item) == type('')
+            let l:Func = ale#fix#registry#GetFunc(l:Item)
 
-            if !empty(l:func)
-                let l:item = l:func
+            if !empty(l:Func)
+                let l:Item = l:Func
             endif
         endif
 
-        call add(l:corrected_list, function(l:item))
+        call add(l:corrected_list, function(l:Item))
     endfor
 
     return l:corrected_list
