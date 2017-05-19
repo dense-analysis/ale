@@ -52,6 +52,10 @@ CONTENTS                                                         *ale-contents*
       kotlinc.............................|ale-kotlin-kotlinc|
     lua...................................|ale-lua-options|
       luacheck............................|ale-lua-luacheck|
+    objc..................................|ale-objc-options|
+      clang...............................|ale-objc-clang|
+    objcpp................................|ale-objcpp-options|
+      clang...............................|ale-objcpp-clang|
     ocaml.................................|ale-ocaml-options|
       merlin..............................|ale-ocaml-merlin|
     perl..................................|ale-perl-options|
@@ -153,6 +157,8 @@ The following languages and tools are supported.
 * nim: 'nim check'
 * nix: 'nix-instantiate'
 * nroff: 'proselint'
+* Objective-C: 'clang'
+* Objective-C++: 'clang'
 * OCaml: 'merlin' (see |ale-linter-integration-ocaml-merlin|)
 * Perl: 'perl' (-c flag), 'perlcritic'
 * PHP: 'hack', 'php' (-l flag), 'phpcs', 'phpmd'
