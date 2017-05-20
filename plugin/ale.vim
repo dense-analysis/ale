@@ -281,6 +281,8 @@ command! -bar ALEInfoToClipboard :call ale#debugging#InfoToClipboard()
 
 " Fix problems in files.
 command! -bar ALEFix :call ale#fix#Fix()
+" Suggest registered functions to use for fixing problems.
+command! -bar ALEFixSuggest :call ale#fix#registry#Suggest(&filetype)
 
 " <Plug> mappings for commands
 nnoremap <silent> <Plug>(ale_previous) :ALEPrevious<Return>

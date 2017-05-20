@@ -37,6 +37,11 @@ endfunction
 " Set up entries now.
 call ale#fix#registry#ResetToDefaults()
 
+" Remove everything from the registry, useful for tests.
+function! ale#fix#registry#Clear() abort
+    let s:entries = {}
+endfunction
+
 " Add a function for fixing problems to the registry.
 function! ale#fix#registry#Add(name, func, filetypes, desc) abort
     if type(a:name) != type('')
@@ -71,4 +76,59 @@ endfunction
 " Get a function from the registry by its short name.
 function! ale#fix#registry#GetFunc(name) abort
     return get(s:entries, a:name, {'function': ''}).function
+endfunction
+
+function! s:ShouldSuggestForType(suggested_filetypes, type_list) abort
+    for l:type in a:type_list
+        if index(a:suggested_filetypes, l:type) >= 0
+            return 1
+        endif
+    endfor
+
+    return 0
+endfunction
+
+" Suggest functions to use from the registry.
+function! ale#fix#registry#Suggest(filetype) abort
+    let l:type_list = split(a:filetype, '\.')
+    let l:first_for_filetype = 1
+    let l:first_generic = 1
+
+    for l:key in sort(keys(s:entries))
+        let l:suggested_filetypes = s:entries[l:key].suggested_filetypes
+
+        if s:ShouldSuggestForType(l:suggested_filetypes, l:type_list)
+            if l:first_for_filetype
+                let l:first_for_filetype = 0
+                echom 'Try the following fixers appropriate for the filetype:'
+                echom ''
+            endif
+
+            echom printf('%s - %s', string(l:key), s:entries[l:key].description)
+        endif
+    endfor
+
+
+    for l:key in sort(keys(s:entries))
+        if empty(s:entries[l:key].suggested_filetypes)
+            if l:first_generic
+                if !l:first_for_filetype
+                    echom ''
+                endif
+
+                let l:first_generic = 0
+                echom 'Try the following generic fixers:'
+                echom ''
+            endif
+
+            echom printf('%s - %s', string(l:key), s:entries[l:key].description)
+        endif
+    endfor
+
+    if l:first_for_filetype && l:first_generic
+        echom 'There is nothing in the registry to suggest.'
+    else
+        echom ''
+        echom 'See :help ale-fix-configuration'
+    endif
 endfunction

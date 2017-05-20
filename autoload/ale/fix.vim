@@ -249,7 +249,7 @@ function! s:GetCallbacks() abort
     endfor
 
     if empty(l:callback_list)
-        echoerr 'No fixers have been defined for filetype: ' . &filetype
+        echoerr 'No fixers have been defined. Try :ALEFixSuggest'
         return []
     endif
 

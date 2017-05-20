@@ -53,7 +53,7 @@ Given testft (A file with three lines):
 
 Execute(ALEFix should complain when there are no functions to call):
   AssertThrows ALEFix
-  AssertEqual 'Vim(echoerr):No fixers have been defined for filetype: testft', g:vader_exception
+  AssertEqual 'Vim(echoerr):No fixers have been defined. Try :ALEFixSuggest', g:vader_exception
 
 Execute(ALEFix should apply simple functions):
   let g:ale_fixers.testft = ['AddCarets']
