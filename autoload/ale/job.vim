@@ -18,43 +18,40 @@ function! s:KillHandler(timer) abort
     call job_stop(l:job, 'kill')
 endfunction
 
-function! ale#job#JoinNeovimOutput(output, data) abort
-    if empty(a:output)
-        call extend(a:output, a:data)
-    else
-        " Extend the previous line, which can be continued.
-        let a:output[-1] .= get(a:data, 0, '')
-
-        " Add the new lines.
-        call extend(a:output, a:data[1:])
-    endif
-endfunction
-
 " Note that jobs and IDs are the same thing on NeoVim.
-function! s:HandleNeoVimLines(job, callback, output, data) abort
-    call ale#job#JoinNeovimOutput(a:output, a:data)
+function! ale#job#JoinNeovimOutput(job, last_line, data, callback) abort
+    let l:lines = a:data[:-2]
 
-    for l:line in a:output
+    if len(a:data) > 1
+        let l:lines[0] = a:last_line . l:lines[0]
+        let l:new_last_line = a:data[-1]
+    else
+        let l:new_last_line = a:last_line . a:data[0]
+    endif
+
+    for l:line in l:lines
         call a:callback(a:job, l:line)
     endfor
+
+    return l:new_last_line
 endfunction
 
 function! s:NeoVimCallback(job, data, event) abort
     let l:job_info = s:job_map[a:job]
 
     if a:event ==# 'stdout'
-        call s:HandleNeoVimLines(
+        let l:job_info.out_cb_line = ale#job#JoinNeovimOutput(
         \   a:job,
-        \   ale#util#GetFunction(l:job_info.out_cb),
-        \   l:job_info.out_cb_output,
+        \   l:job_info.out_cb_line,
         \   a:data,
+        \   ale#util#GetFunction(l:job_info.out_cb),
         \)
     elseif a:event ==# 'stderr'
-        call s:HandleNeoVimLines(
+        let l:job_info.err_cb_line = ale#job#JoinNeovimOutput(
         \   a:job,
-        \   ale#util#GetFunction(l:job_info.err_cb),
-        \   l:job_info.err_cb_output,
+        \   l:job_info.err_cb_line,
         \   a:data,
+        \   ale#util#GetFunction(l:job_info.err_cb),
         \)
     else
         try
@@ -165,12 +162,12 @@ function! ale#job#Start(command, options) abort
     if has('nvim')
         if has_key(a:options, 'out_cb')
             let l:job_options.on_stdout = function('s:NeoVimCallback')
-            let l:job_info.out_cb_output = []
+            let l:job_info.out_cb_line = ''
         endif
 
         if has_key(a:options, 'err_cb')
             let l:job_options.on_stderr = function('s:NeoVimCallback')
-            let l:job_info.err_cb_output = []
+            let l:job_info.err_cb_line = ''
         endif
 
         if has_key(a:options, 'exit_cb')
