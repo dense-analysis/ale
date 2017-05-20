@@ -405,8 +405,7 @@ function! s:RunJob(options) abort
         \   : l:command
         \)
 
-        " TODO, get the exit system of the shell call and pass it on here.
-        call l:job_options.exit_cb(l:job_id, 0)
+        call l:job_options.exit_cb(l:job_id, v:shell_error)
     endif
 endfunction
 

@@ -1,40 +1,14 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: eslint for JavaScript files
 
-let g:ale_javascript_eslint_executable =
-\   get(g:, 'ale_javascript_eslint_executable', 'eslint')
-
 let g:ale_javascript_eslint_options =
 \   get(g:, 'ale_javascript_eslint_options', '')
 
 let g:ale_javascript_eslint_use_global =
 \   get(g:, 'ale_javascript_eslint_use_global', 0)
 
-function! ale_linters#javascript#eslint#GetExecutable(buffer) abort
-    if ale#Var(a:buffer, 'javascript_eslint_use_global')
-        return ale#Var(a:buffer, 'javascript_eslint_executable')
-    endif
-
-    " Look for the kinds of paths that create-react-app generates first.
-    let l:executable = ale#path#ResolveLocalPath(
-    \   a:buffer,
-    \   'node_modules/eslint/bin/eslint.js',
-    \   ''
-    \)
-
-    if !empty(l:executable)
-        return l:executable
-    endif
-
-    return ale#path#ResolveLocalPath(
-    \   a:buffer,
-    \   'node_modules/.bin/eslint',
-    \   ale#Var(a:buffer, 'javascript_eslint_executable')
-    \)
-endfunction
-
 function! ale_linters#javascript#eslint#GetCommand(buffer) abort
-    return ale#Escape(ale_linters#javascript#eslint#GetExecutable(a:buffer))
+    return ale#handlers#eslint#GetExecutable(a:buffer)
     \   . ' ' . ale#Var(a:buffer, 'javascript_eslint_options')
     \   . ' -f unix --stdin --stdin-filename %s'
 endfunction
@@ -103,7 +77,7 @@ endfunction
 
 call ale#linter#Define('javascript', {
 \   'name': 'eslint',
-\   'executable_callback': 'ale_linters#javascript#eslint#GetExecutable',
+\   'executable_callback': 'ale#handlers#eslint#GetExecutable',
 \   'command_callback': 'ale_linters#javascript#eslint#GetCommand',
 \   'callback': 'ale_linters#javascript#eslint#Handle',
 \})

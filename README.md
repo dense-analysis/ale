@@ -15,6 +15,9 @@ back to a filesystem.
 
 In other words, this plugin allows you to lint while you type.
 
+ALE also supports fixing problems with files by running commands in the
+background with a command `ALEFix`.
+
 ## Table of Contents
 
 1. [Supported Languages and Tools](#supported-languages)
@@ -137,6 +140,9 @@ The behaviour of linting can be configured with a variety of options,
 documented in [the Vim help file](doc/ale.txt). For more information on the
 options ALE offers, consult `:help ale-options` for global options and `:help
 ale-linter-options` for options specified to particular linters.
+
+ALE can fix files with the `ALEFix` command. Functions need to be configured
+for different filetypes with the `g:ale_fixers` variable. See `:help ale-fix`.
 
 <a name="installation"></a>
 

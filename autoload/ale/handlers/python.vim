@@ -35,3 +35,31 @@ function! ale#handlers#python#HandlePEP8Format(buffer, lines) abort
 
     return l:output
 endfunction
+
+function! ale#handlers#python#AutoPEP8(buffer, lines) abort
+    return {
+    \   'command': 'autopep8 -'
+    \}
+endfunction
+
+function! ale#handlers#python#ISort(buffer, lines) abort
+    let l:config = ale#path#FindNearestFile(a:buffer, '.isort.cfg')
+    let l:config_options = !empty(l:config)
+    \   ? ' --settings-path ' . ale#Escape(l:config)
+    \   : ''
+
+    return {
+    \   'command': 'isort' . l:config_options . ' -',
+    \}
+endfunction
+
+function! ale#handlers#python#YAPF(buffer, lines) abort
+    let l:config = ale#path#FindNearestFile(a:buffer, '.style.yapf')
+    let l:config_options = !empty(l:config)
+    \   ? ' --style ' . ale#Escape(l:config)
+    \   : ''
+
+    return {
+    \   'command': 'yapf --no-local-style' . l:config_options,
+    \}
+endfunction

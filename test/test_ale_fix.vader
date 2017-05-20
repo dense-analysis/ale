@@ -1,0 +1,187 @@
+Before:
+  Save g:ale_fixers, &shell, g:ale_enabled
+  let g:ale_enabled = 0
+  let g:ale_run_synchronously = 1
+  let g:ale_fixers = {
+  \ 'testft': [],
+  \}
+  let &shell = '/bin/bash'
+
+  function AddCarets(buffer, lines) abort
+    " map() is applied to the original lines here.
+    " This way, we can ensure that defensive copies are made.
+    return map(a:lines, '''^'' . v:val')
+  endfunction
+
+  function AddDollars(buffer, lines) abort
+    return map(a:lines, '''$'' . v:val')
+  endfunction
+
+  function DoNothing(buffer, lines) abort
+    return 0
+  endfunction
+
+  function CatLine(buffer, lines) abort
+    return {'command': 'cat - <(echo d)'}
+  endfunction
+
+  function ReplaceWithTempFile(buffer, lines) abort
+    return {'command': 'echo x > %t', 'read_temporary_file': 1}
+  endfunction
+
+  function RemoveLastLine(buffer, lines) abort
+    return ['a', 'b']
+  endfunction
+
+After:
+  Restore
+  unlet! g:ale_run_synchronously
+  unlet! g:ale_emulate_job_failure
+  unlet! b:ale_fixers
+  delfunction AddCarets
+  delfunction AddDollars
+  delfunction DoNothing
+  delfunction CatLine
+  delfunction ReplaceWithTempFile
+  delfunction RemoveLastLine
+  call ale#fix#registry#ResetToDefaults()
+
+Given testft (A file with three lines):
+  a
+  b
+  c
+
+Execute(ALEFix should complain when there are no functions to call):
+  AssertThrows ALEFix
+  AssertEqual 'Vim(echoerr):No fixers have been defined. Try :ALEFixSuggest', g:vader_exception
+
+Execute(ALEFix should apply simple functions):
+  let g:ale_fixers.testft = ['AddCarets']
+  ALEFix
+
+Expect(The first function should be used):
+  ^a
+  ^b
+  ^c
+
+Execute(ALEFix should apply simple functions in a chain):
+  let g:ale_fixers.testft = ['AddCarets', 'AddDollars']
+  ALEFix
+
+Expect(Both functions should be used):
+  $^a
+  $^b
+  $^c
+
+Execute(ALEFix should allow 0 to be returned to skip functions):
+  let g:ale_fixers.testft = ['DoNothing', 'AddDollars']
+  ALEFix
+
+Expect(Only the second function should be applied):
+  $a
+  $b
+  $c
+
+Execute(ALEFix should allow commands to be run):
+  let g:ale_fixers.testft = ['CatLine']
+  ALEFix
+
+Expect(An extra line should be added):
+  a
+  b
+  c
+  d
+
+Execute(ALEFix should allow temporary files to be read):
+  let g:ale_fixers.testft = ['ReplaceWithTempFile']
+  ALEFix
+
+Expect(The line we wrote to the temporary file should be used here):
+  x
+
+Execute(ALEFix should allow jobs and simple functions to be combined):
+  let g:ale_fixers.testft = ['ReplaceWithTempFile', 'AddDollars']
+  ALEFix
+
+Expect(The lines from the temporary file should be modified):
+  $x
+
+Execute(ALEFix should send lines modified by functions to jobs):
+  let g:ale_fixers.testft = ['AddDollars', 'CatLine']
+  ALEFix
+
+Expect(The lines should first be modified by the function, then the job):
+  $a
+  $b
+  $c
+  d
+
+Execute(ALEFix should skip commands when jobs fail to run):
+  let g:ale_emulate_job_failure = 1
+  let g:ale_fixers.testft = ['CatLine', 'AddDollars']
+  ALEFix
+
+Expect(Only the second function should be applied):
+  $a
+  $b
+  $c
+
+Execute(ALEFix should handle strings for selecting a single function):
+  let g:ale_fixers.testft = 'AddCarets'
+  ALEFix
+
+Expect(The first function should be used):
+  ^a
+  ^b
+  ^c
+
+Execute(ALEFix should use functions from the registry):
+  call ale#fix#registry#Add('add_carets', 'AddCarets', [], 'Add some carets')
+  let g:ale_fixers.testft = ['add_carets']
+  ALEFix
+
+Expect(The registry function should be used):
+  ^a
+  ^b
+  ^c
+
+Execute(ALEFix should be able to remove the last line for files):
+  let g:ale_fixers.testft = ['RemoveLastLine']
+  ALEFix
+
+Expect(There should be only two lines):
+  a
+  b
+
+Execute(ALEFix should accept funcrefs):
+  let g:ale_fixers.testft = [function('RemoveLastLine')]
+  ALEFix
+
+Expect(There should be only two lines):
+  a
+  b
+
+Execute(ALEFix should accept lambdas):
+  if has('nvim')
+    " NeoVim 0.1.7 can't interpret lambdas correctly, so just set the lines
+    " to make the test pass.
+    call setline(1, ['a', 'b', 'c', 'd'])
+  else
+    let g:ale_fixers.testft = [{buffer, lines -> lines + ['d']}]
+    ALEFix
+  endif
+
+Expect(There should be an extra line):
+  a
+  b
+  c
+  d
+
+Execute(ALEFix should user buffer-local fixer settings):
+  let g:ale_fixers.testft = ['AddCarets', 'AddDollars']
+  let b:ale_fixers = {'testft': ['RemoveLastLine']}
+  ALEFix
+
+Expect(There should be only two lines):
+  a
+  b

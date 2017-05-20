@@ -9,7 +9,8 @@ CONTENTS                                                         *ale-contents*
   1. Introduction.........................|ale-introduction|
   2. Supported Languages & Tools..........|ale-support|
   3. Global Options.......................|ale-options|
-  4. Linter Options and Recommendations...|ale-linter-options|
+  4. Fixing Problems......................|ale-fix|
+  5. Linter Options and Recommendations...|ale-linter-options|
     asm...................................|ale-asm-options|
       gcc.................................|ale-asm-gcc|
     c.....................................|ale-c-options|
@@ -93,10 +94,10 @@ CONTENTS                                                         *ale-contents*
       xmllint.............................|ale-xml-xmllint|
     yaml..................................|ale-yaml-options|
       yamllint............................|ale-yaml-yamllint|
-  5. Commands/Keybinds....................|ale-commands|
-  6. API..................................|ale-api|
-  7. Special Thanks.......................|ale-special-thanks|
-  8. Contact..............................|ale-contact|
+  6. Commands/Keybinds....................|ale-commands|
+  7. API..................................|ale-api|
+  8. Special Thanks.......................|ale-special-thanks|
+  9. Contact..............................|ale-contact|
 
 ===============================================================================
 1. Introduction                                              *ale-introduction*
@@ -107,7 +108,7 @@ using the |job-control| features available in Vim 8 and NeoVim. For Vim 8,
 Vim must be compiled with the |job| and |channel| and |timer| features
 as a minimum.
 
-ALE supports the following key features:
+ALE supports the following key features for linting:
 
 1. Running linters when text is changed.
 2. Running linters when files are opened.
@@ -115,6 +116,10 @@ ALE supports the following key features:
 4. Populating the |loclist| with warning and errors.
 5. Setting |signs| with warnings and errors for error markers.
 6. Using |echo| to show error messages when the cursor moves.
+7. Setting syntax highlights for errors.
+
+ALE can fix problems with files with the |ALEFix| command, using the same job
+control functionality used for checking for problems.
 
 ===============================================================================
 2. Supported Languages & Tools                                    *ale-support*
@@ -264,6 +269,18 @@ g:ale_enabled                                                   *g:ale_enabled*
   When set to `0`, this option will completely disable ALE, such that no
   error checking will be performed, etc. ALE can be toggled on and off with
   the |ALEToggle| command, which changes this option.
+
+
+g:ale_fixers                                                     *g:ale_fixers*
+                                                                 *b:ale_fixers*
+
+  Type: |Dictionary|
+  Default: `{}`
+
+  A mapping from filetypes to |List| values for functions for fixing errors.
+  See |ale-fix| for more information.
+
+  This variable can be overriden with variables in each buffer.
 
 
 g:ale_history_enabled                                   *g:ale_history_enabled*
@@ -604,7 +621,57 @@ b:ale_warn_about_trailing_whitespace     *b:ale_warn_about_trailing_whitespace*
 
 
 ===============================================================================
-4. Linter Options and Recommendations                      *ale-linter-options*
+4. Fixing Problems                                                    *ale-fix*
+
+ALE can fix problems with files with the |ALEFix| command. When |ALEFix| is
+run, the variable |g:ale_fixers| will be read for getting a |List| of commands
+for filetypes, split on `.`, and the functions named in |g:ale_fixers| will be
+executed for fixing the errors.
+
+The values for `g:ale_fixers` can be a list of |String|, |Funcref|, or
+|lambda| values. String values must either name a function, or a short name
+for a function set in the ALE fixer registry.
+
+Each function for fixing errors must accept two arguments `(buffer, lines)`,
+representing the buffer being fixed and the lines to fix. The functions must
+return either `0`, for changing nothing, a |List| for new lines to set, or a
+|Dictionary| for describing a command to be run in the background.
+
+When a |Dictionary| is returned for an |ALEFix| callback, the following keys
+are supported for running the commands.
+
+  `command`             A |String| for the command to run. This key is required.
+
+                      When `%t` is included in a command string, a temporary
+                      file will be created, containing the lines from the file
+                      after previous adjustment have been done.
+
+  `read_temporary_file` When set to `1`, ALE will read the contents of the
+                      temporary file created for `%t`. This option can be used
+                      for commands which need to modify some file on disk in
+                      order to fix files.
+
+                                                        *ale-fix-configuration*
+
+Synchronous functions and asynchronous jobs will be run in a sequence for
+fixing files, and can be combined. For example:
+>
+  let g:ale_fixers.javascript = [
+  \ 'DoSomething',
+  \ 'eslint',
+  \ {buffer, lines -> filter(lines, 'v:val !=~ ''^\s*//''')},
+  \]
+
+  ALEFix
+<
+The above example will call a function called `DoSomething` which could act
+upon some lines immediately, then run `eslint` from the ALE registry, and
+then call a lambda function which will remove every single line comment
+from the file.
+
+
+===============================================================================
+5. Linter Options and Recommendations                      *ale-linter-options*
 
 Linter options are documented in individual help files. See the table of
 contents at |ale-contents|.
@@ -615,7 +682,12 @@ set for `g:ale_python_flake8_executable`.
 
 
 ===============================================================================
-5. Commands/Keybinds                                             *ale-commands*
+6. Commands/Keybinds                                             *ale-commands*
+
+ALEFix                                                                 *ALEFix*
+
+  Fix problems with the current buffer. See |ale-fix| for more information.
+
 
 ALELint                                                               *ALELint*
 
@@ -676,7 +748,7 @@ ALEDetail                                                           *ALEDetail*
   A plug mapping `<Plug>(ale_detail)` is defined for this command.
 
 ===============================================================================
-6. API                                                                *ale-api*
+7. API                                                                *ale-api*
 
 ale#Queue(delay, [linting_flag])                                  *ale#Queue()*
 
@@ -743,6 +815,17 @@ ale#engine#ManageDirectory(buffer, directory)    *ale#engine#ManageDirectory()*
 
   It is advised to use |ale#engine#ManageFile()| instead for deleting single
   files.
+
+
+ale#fix#registry#Add(name, func, filetypes, desc)      *ale#fix#registry#Add()*
+
+  Given a |String| `name` for a name to add to the registry, a |String| `func`
+  for a function name, a |List| `filetypes` for a list of filetypes to
+  set for suggestions, and a |String| `desc` for a short description of
+  the fixer, register a fixer in the registry.
+
+  The `name` can then be used for |g:ale_fixers| in place of the function
+  name, and suggested for fixing files.
 
 
 ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
@@ -985,13 +1068,13 @@ ALELint                                                       *ALELint-autocmd*
 <
 
 ===============================================================================
-7. Special Thanks                                          *ale-special-thanks*
+8. Special Thanks                                          *ale-special-thanks*
 
 Special thanks to Mark Grealish (https://www.bhalash.com/) for providing ALE's
 snazzy looking ale glass logo. Cheers, Mark!
 
 ===============================================================================
-8. Contact                                                        *ale-contact*
+9. Contact                                                        *ale-contact*
 
 If you like this plugin, and wish to get in touch, check out the GitHub
 page for issues and more at https://github.com/w0rp/ale

@@ -11,6 +11,7 @@ Before:
   \ 'valid': 1,
   \}]
   let g:expected_groups = [
+  \ 'ALEBufferFixGroup',
   \ 'ALECleanupGroup',
   \ 'ALECursorGroup',
   \ 'ALEHighlightBufferGroup',
@@ -101,7 +102,7 @@ Execute(ALEToggle should reset everything and then run again):
   AssertEqual [], getloclist(0)
   AssertEqual [], ale#sign#FindCurrentSigns(bufnr('%'))
   AssertEqual [], getmatches()
-  AssertEqual ['ALECleanupGroup', 'ALEHighlightBufferGroup'], ParseAuGroups()
+  AssertEqual ['ALEBufferFixGroup', 'ALECleanupGroup', 'ALEHighlightBufferGroup'], ParseAuGroups()
 
   " Toggle ALE on, everything should be set up and run again.
   ALEToggle
