@@ -8,15 +8,33 @@ if !hlexists('ALEErrorSign')
     highlight link ALEErrorSign error
 endif
 
+if !hlexists('ALEStyleErrorSign')
+    highlight link ALEStyleErrorSign ALEErrorSign
+endif
+
 if !hlexists('ALEWarningSign')
     highlight link ALEWarningSign todo
+endif
+
+if !hlexists('ALEStyleWarningSign')
+    highlight link ALEStyleWarningSign ALEWarningSign
+endif
+
+if !hlexists('ALEInfoSign')
+    highlight link ALEInfoSign ALEWarningSign
 endif
 
 " Signs show up on the left for error markers.
 execute 'sign define ALEErrorSign text=' . g:ale_sign_error
 \   . ' texthl=ALEErrorSign linehl=ALEErrorLine'
+execute 'sign define ALEStyleErrorSign text=' . g:ale_sign_style_error
+\   . ' texthl=ALEStyleErrorSign linehl=ALEStyleErrorSign'
 execute 'sign define ALEWarningSign text=' . g:ale_sign_warning
 \   . ' texthl=ALEWarningSign linehl=ALEWarningLine'
+execute 'sign define ALEStyleWarningSign text=' . g:ale_sign_style_warning
+\   . ' texthl=ALEStyleWarningSign linehl=ALEStyleWarningSign'
+execute 'sign define ALEInfoSign text=' . g:ale_sign_info
+\   . ' texthl=ALEInfoSign linehl=ALEInfoLine'
 sign define ALEDummySign
 
 " Read sign data for a buffer to a list of lines.
@@ -36,7 +54,7 @@ function! ale#sign#ParseSigns(line_list) abort
     " 行=1  識別子=1000001  名前=ALEWarningSign
     " línea=12 id=1000001 nombre=ALEWarningSign
     " riga=1 id=1000001, nome=ALEWarningSign
-    let l:pattern = '^.*=\(\d\+\).*=\(\d\+\).*=ALE\(Error\|Warning\|Dummy\)Sign'
+    let l:pattern = '\v^.*\=(\d+).*\=(\d+).*\=(ALE[a-zA-Z]+Sign)'
     let l:result = []
 
     for l:line in a:line_list
@@ -46,7 +64,7 @@ function! ale#sign#ParseSigns(line_list) abort
             call add(l:result, [
             \   str2nr(l:match[1]),
             \   str2nr(l:match[2]),
-            \   'ALE' . l:match[3] . 'Sign',
+            \   l:match[3],
             \])
         endif
     endfor
@@ -108,14 +126,40 @@ function! s:SetDummySignIfNeeded(buffer, current_sign_list, new_signs) abort
     return l:is_dummy_sign_set
 endfunction
 
+function! ale#sign#GetSignType(sublist) abort
+    let l:highest_level = 100
+
+    for l:item in a:sublist
+        let l:level = (l:item.type ==# 'I' ? 2 : l:item.type ==# 'W')
+
+        if get(l:item, 'sub_type', '') ==# 'style'
+            let l:level += 10
+        endif
+
+        if l:level < l:highest_level
+            let l:highest_level = l:level
+        endif
+    endfor
+
+    if l:highest_level == 10
+        return 'ALEStyleErrorSign'
+    elseif l:highest_level == 11
+        return 'ALEStyleWarningSign'
+    elseif l:highest_level == 2
+        return 'ALEInfoSign'
+    elseif l:highest_level == 1
+        return 'ALEWarningSign'
+    endif
+
+    return 'ALEErrorSign'
+endfunction
+
 function! s:PlaceNewSigns(buffer, grouped_items) abort
     " Add the new signs,
     for l:index in range(0, len(a:grouped_items) - 1)
         let l:sign_id = l:index + g:ale_sign_offset + 1
         let l:sublist = a:grouped_items[l:index]
-        let l:type = !empty(filter(copy(l:sublist), 'v:val.type ==# ''E'''))
-        \   ? 'ALEErrorSign'
-        \   : 'ALEWarningSign'
+        let l:type = ale#sign#GetSignType(a:grouped_items[l:index])
 
         " Save the sign IDs we are setting back on our loclist objects.
         " These IDs will be used to preserve items which are set many times.

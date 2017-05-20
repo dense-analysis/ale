@@ -539,12 +539,26 @@ g:ale_set_signs                                               *g:ale_set_signs*
   Default: `has('signs')`
 
   When this option is set to `1`, the |sign| column will be populated with
-  signs marking where errors and warnings appear in the file. The
-  `ALEErrorSign` and `ALEWarningSign` highlight groups will be used to provide
-  highlighting for the signs. The text used for signs can be customised with
-  the |g:ale_sign_error| and |g:ale_sign_warning| options. The `ALEErrorSign`
-  and `ALEWarningLine` highlight groups will be used to provide highlighting
-  for the lines that the signs reside on.
+  signs marking where problems appear in the file.
+
+  ALE will use the following highlight groups for problems:
+
+  `ALEErrorSign`        - Items with `'type': 'E'`
+  `ALEWarningSign`      - Items with `'type': 'W'`
+  `ALEInfoSign`         - Items with `'type': 'I'`
+  `ALEStyleErrorSign`   - Items with `'type': 'E'` and `'sub_type': 'style'`
+  `ALEStyleWarningSign` - Items with `'type': 'W'` and `'sub_type': 'style'`
+
+  The markers for the highlights can be customized with the following options:
+
+  |g:ale_sign_error|
+  |g:ale_sign_warning|
+  |g:ale_sign_info|
+  |g:ale_sign_style_error|
+  |g:ale_sign_style_warning|
+
+  When multiple problems exist on the same line, the signs will take
+  precedence in the order above, from highest to lowest.
 
 
 g:ale_sign_column_always                             *g:ale_sign_column_always*
@@ -563,9 +577,31 @@ g:ale_sign_error                                             *g:ale_sign_error*
   Type: |String|
   Default: `'>>'`
 
-  This string can be changed to change the characters used for the sign gutter
-  for lines which at least one error on them. Lines with both errors and
-  warnings on them will show the error marker, as errors take precedence.
+  The sign for errors in the sign gutter.
+
+
+g:ale_sign_info                                               *g:ale_sign_info*
+
+  Type: |String|
+  Default: `g:ale_sign_warning`
+
+  The sign for "info" markers in the sign gutter.
+
+
+g:ale_sign_style_error                                 *g:ale_sign_style_error*
+
+  Type: |String|
+  Default: `g:ale_sign_error`
+
+  The sign for style errors in the sign gutter.
+
+
+g:ale_sign_style_warning                             *g:ale_sign_style_warning*
+
+  Type: |String|
+  Default: `g:ale_sign_warning`
+
+  The sign for style warnings in the sign gutter.
 
 
 g:ale_sign_offset                                           *g:ale_sign_offset*
@@ -587,8 +623,7 @@ g:ale_sign_warning                                         *g:ale_sign_warning*
   Type: |String|
   Default: `'--'`
 
-  This string can be changed to change the characters used for the sign gutter
-  for lines which at least one warning on them.
+  The sign for warnings in the sign gutter.
 
 
 g:ale_statusline_format                               *g:ale_statusline_format*

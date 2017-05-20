@@ -293,6 +293,10 @@ function! ale#engine#FixLocList(buffer, linter, loclist) abort
             let l:item.end_col = str2nr(l:old_item.end_col)
         endif
 
+        if has_key(l:old_item, 'sub_type')
+            let l:item.sub_type = l:old_item.sub_type
+        endif
+
         if l:item.lnum == 0
             " When errors appear at line 0, put them at line 1 instead.
             let l:item.lnum = 1

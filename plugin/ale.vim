@@ -111,9 +111,12 @@ let g:ale_set_signs = get(g:, 'ale_set_signs', has('signs'))
 " This flag can be set to 0 to disable setting error highlights.
 let g:ale_set_highlights = get(g:, 'ale_set_highlights', has('syntax'))
 
-" These variables dicatate what sign is used to indicate errors and warnings.
-let g:ale_sign_error = get(g:, 'ale_sign_error', '>>')
-let g:ale_sign_warning = get(g:, 'ale_sign_warning', '--')
+" These variables dictate what sign is used to indicate errors and warnings.
+call ale#Set('sign_error', '>>')
+call ale#Set('sign_style_error', g:ale_sign_error)
+call ale#Set('sign_warning', '--')
+call ale#Set('sign_style_warning', g:ale_sign_warning)
+call ale#Set('sign_info', g:ale_sign_warning)
 
 " This variable sets an offset which can be set for sign IDs.
 " This ID can be changed depending on what IDs are set for other plugins.

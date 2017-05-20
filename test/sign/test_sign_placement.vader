@@ -71,6 +71,38 @@ After:
   call ale#linter#Reset()
   sign unplace *
 
+Execute(ale#sign#GetSignType should return the right sign types):
+  AssertEqual 'ALEErrorSign', ale#sign#GetSignType([{'type': 'E'}])
+  AssertEqual 'ALEStyleErrorSign', ale#sign#GetSignType([{'type': 'E', 'sub_type': 'style'}])
+  AssertEqual 'ALEWarningSign', ale#sign#GetSignType([{'type': 'W'}])
+  AssertEqual 'ALEStyleWarningSign', ale#sign#GetSignType([{'type': 'W', 'sub_type': 'style'}])
+  AssertEqual 'ALEInfoSign', ale#sign#GetSignType([{'type': 'I'}])
+  AssertEqual 'ALEErrorSign', ale#sign#GetSignType([
+  \ {'type': 'E'},
+  \ {'type': 'W'},
+  \ {'type': 'I'},
+  \ {'type': 'E', 'sub_type': 'style'},
+  \ {'type': 'W', 'sub_type': 'style'},
+  \])
+  AssertEqual 'ALEWarningSign', ale#sign#GetSignType([
+  \ {'type': 'W'},
+  \ {'type': 'I'},
+  \ {'type': 'E', 'sub_type': 'style'},
+  \ {'type': 'W', 'sub_type': 'style'},
+  \])
+  AssertEqual 'ALEInfoSign', ale#sign#GetSignType([
+  \ {'type': 'I'},
+  \ {'type': 'E', 'sub_type': 'style'},
+  \ {'type': 'W', 'sub_type': 'style'},
+  \])
+  AssertEqual 'ALEStyleErrorSign', ale#sign#GetSignType([
+  \ {'type': 'E', 'sub_type': 'style'},
+  \ {'type': 'W', 'sub_type': 'style'},
+  \])
+  AssertEqual 'ALEStyleWarningSign', ale#sign#GetSignType([
+  \ {'type': 'W', 'sub_type': 'style'},
+  \])
+
 Given testft(A file with warnings/errors):
   foo
   bar
