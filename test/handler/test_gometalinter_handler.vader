@@ -51,24 +51,3 @@ Execute (The gometalinter handler should handle relative paths correctly):
   \   'baz.go:12:3:warning: expected ''package'', found ''IDENT'' gibberish (staticcheck)',
   \   'baz.go:37:5:error: expected ''package'', found ''IDENT'' gibberish (golint)',
   \ ])
-
-
-Execute (The gometalinter handler should filter out errors from other files):
-  silent file! /some/path/sql.go
-
-  AssertEqual
-  \ [],
-  \ ale_linters#go#gometalinter#Handler(bufnr(''), [
-  \   '/some/path/interface_implementation_test.go:417::warning: cyclomatic complexity 24 of function testGetUserHeaders() is high (> 10) (gocyclo)',
-  \   '/some/path/sql_helpers.go:38::warning: cyclomatic complexity 11 of function CreateTestUserMetadataDB() is high (> 10) (gocyclo)',
-  \   '/some/path/sql_alpha.go:560:7:warning: ineffectual assignment to err (ineffassign)',
-  \   '/some/path/sql_alpha.go:589:7:warning: ineffectual assignment to err (ineffassign)',
-  \   '/some/path/sql_test.go:124:9:warning: should not use basic type untyped string as key in context.WithValue (golint)',
-  \   '/some/path/interface_implementation_test.go:640::warning: declaration of "cfg" shadows declaration at sql_test.go:21 (vetshadow)',
-  \   '/some/path/sql_helpers.go:55::warning: declaration of "err" shadows declaration at sql_helpers.go:48 (vetshadow)',
-  \   '/some/path/sql_helpers.go:91::warning: declaration of "err" shadows declaration at sql_helpers.go:48 (vetshadow)',
-  \   '/some/path/sql_helpers.go:108::warning: declaration of "err" shadows declaration at sql_helpers.go:48 (vetshadow)',
-  \   '/some/path/user_metadata_db.go:149::warning: declaration of "err" shadows declaration at user_metadata_db.go:140 (vetshadow)',
-  \   '/some/path/user_metadata_db.go:188::warning: declaration of "err" shadows declaration at user_metadata_db.go:179 (vetshadow)',
-  \   '/some/path/queries_alpha.go:62::warning: Potential hardcoded credentials,HIGH,LOW (gas)',
-  \ ])
