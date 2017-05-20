@@ -265,7 +265,7 @@ function! s:GetCallbacks() abort
             endif
         endif
 
-        call add(l:corrected_list, function(l:Item))
+        call add(l:corrected_list, ale#util#GetFunction(l:Item))
     endfor
 
     return l:corrected_list
