@@ -19,6 +19,7 @@ EXIT=0
 
 tests='test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader'
 verbose=0
+quiet=0
 run_neovim_tests=1
 run_vim_tests=1
 run_vint=1
@@ -28,6 +29,10 @@ while [ $# -ne 0 ]; do
     case $1 in
     -v)
         verbose=1
+        shift
+    ;;
+    -q)
+        quiet=1
         shift
     ;;
     --neovim-only)
@@ -65,21 +70,44 @@ fi
 docker images -q w0rp/ale | grep "^$CURRENT_IMAGE_ID" > /dev/null \
     || docker pull "$IMAGE"
 
-function color-vader-output() {
-    local vader_started=0
+function filter-vader-output() {
+    # When verbose mode is off, suppress output until Vader starts.
+    local start_output="$verbose"
+    local filtered_data=''
 
     while read -r; do
-        if ((!verbose)); then
-            # When verbose mode is off, suppress output until Vader starts.
-            if ((!vader_started)); then
-                if [[ "$REPLY" = *'Starting Vader:'* ]]; then
-                    vader_started=1
-                else
-                    continue
-                fi
+        if ((!start_output)); then
+            if [[ "$REPLY" = *'Starting Vader:'* ]]; then
+                start_output=1
+            else
+                continue
             fi
         fi
 
+        if ((quiet)); then
+            if [[ "$REPLY" = *'Starting Vader:'* ]]; then
+                filtered_data="$REPLY"
+            elif [[ "$REPLY" = *'Success/Total'* ]]; then
+                success="$(echo -n "$REPLY" | grep -o '[0-9]\+/' | head -n1 | cut -d/ -f1)"
+                total="$(echo -n "$REPLY" | grep -o '/[0-9]\+' | head -n1 | cut -d/ -f2)"
+
+                if [ "$success" -lt "$total" ]; then
+                    echo "$filtered_data"
+                    echo "$REPLY"
+                fi
+
+                filtered_data=''
+            else
+                filtered_data="$filtered_data"$'\n'"$REPLY"
+            fi
+        else
+            echo "$REPLY"
+        fi
+    done
+}
+
+function color-vader-output() {
+    while read -r; do
         if [[ "$REPLY" = *'[EXECUTE] (X)'* ]]; then
             echo -en "$RED"
         elif [[ "$REPLY" = *'[EXECUTE]'* ]] || [[ "$REPLY" = *'[  GIVEN]'* ]]; then
@@ -117,7 +145,7 @@ if ((run_neovim_tests)); then
         set -o pipefail
         docker run -it -e VADER_OUTPUT_FILE=/dev/stderr "${DOCKER_FLAGS[@]}" \
             "/vim-build/bin/$vim" -u test/vimrc \
-            --headless "+Vader! $tests" | color-vader-output || EXIT=$?
+            --headless "+Vader! $tests" | filter-vader-output | color-vader-output || EXIT=$?
         set +o pipefail
     done
 
@@ -135,7 +163,7 @@ if ((run_vim_tests)); then
         set -o pipefail
         docker run -a stderr "${DOCKER_FLAGS[@]}" \
             "/vim-build/bin/$vim" -u test/vimrc \
-            "+Vader! $tests" 2>&1 | color-vader-output || EXIT=$?
+            "+Vader! $tests" 2>&1 | filter-vader-output | color-vader-output || EXIT=$?
         set +o pipefail
     done
 
