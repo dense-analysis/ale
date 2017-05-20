@@ -20,37 +20,17 @@ function! s:FindErrorInExpansion(span, file_name) abort
     return []
 endfunction
 
-" The JSON output for Rust can be split over many lines.
-" Those lines should be joined together again.
-function! s:JoinJSONLines(lines) abort
-    let l:corrected_lines = []
-    let l:object_continues = 0
-
-    for l:line in a:lines
-        if l:object_continues
-            let l:corrected_lines[-1] .= l:line
-
-            if l:line =~# '}$'
-                let l:object_continues = 0
-            endif
-        elseif l:line =~# '^{'
-            call add(l:corrected_lines, l:line)
-
-            if l:line !~# '}$'
-                let l:object_continues = 1
-            endif
-        endif
-    endfor
-
-    return l:corrected_lines
-endfunction
-
 " A handler function which accepts a file name, to make unit testing easier.
 function! ale#handlers#rust#HandleRustErrorsForFile(buffer, full_filename, lines) abort
     let l:filename = fnamemodify(a:full_filename, ':t')
     let l:output = []
 
-    for l:errorline in s:JoinJSONLines(a:lines)
+    for l:errorline in a:lines
+        " ignore everything that is not Json
+        if l:errorline !~# '^{'
+            continue
+        endif
+
         let l:error = json_decode(l:errorline)
 
         if has_key(l:error, 'message') && type(l:error.message) == type({})

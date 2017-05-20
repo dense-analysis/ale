@@ -46,21 +46,3 @@ Execute(The Rust handler should handle cargo output):
   \   '{"message":{"children":[],"code":null,"level":"error","message":"no method named `wat` found for type `std::string::String` in the current scope","rendered":null,"spans":[{"byte_end":11497,"byte_start":11494,"column_end":10,"column_start":7,"expansion":null,"file_name":"src/playpen.rs","is_primary":true,"label":null,"line_end":13,"line_start":13,"suggested_replacement":null,"text":[{"highlight_end":10,"highlight_start":7,"text":"    s.wat()"}]}]},"package_id":"update 0.0.1 (path+file:///home/w0rp/Downloads/rust-by-example)","reason":"compiler-message","target":{"kind":["bin"],"name":"update","src_path":"/home/w0rp/Downloads/rust-by-example/src/main.rs"}}',
   \   '{"message":{"children":[],"code":null,"level":"error","message":"aborting due to previous error","rendered":null,"spans":[]},"package_id":"update 0.0.1 (path+file:///home/w0rp/Downloads/rust-by-example)","reason":"compiler-message","target":{"kind":["bin"],"name":"update","src_path":"/home/w0rp/Downloads/rust-by-example/src/main.rs"}}',
   \ ])
-
-Execute(The Rust handler should handle JSON split over many lines):
-  AssertEqual
-  \ [
-  \   {
-  \     'lnum': 15,
-  \     'type': 'E',
-  \     'col': 11505,
-  \     'text': 'expected one of `.`, `;`, `?`, `}`, or an operator, found `for`',
-  \   },
-  \ ],
-  \ ale#handlers#rust#HandleRustErrorsForFile(347, 'src/playpen.rs', [
-  \   '',
-  \   'ignore this',
-  \   '{"message":{"children":[],"code":null,"level":"error","message":"expected one of `.`, `;`, `?`, `}`, or an operator, found `for`","rendered":null,"spans":[{"byte_end":11508,"byte_start":11505,"column_end":8,"column_start":5,"expansion":null',
-  \   ',"file_name":"src/playpen.rs","is_primary":true,"label":null,"line_end":15,"line_start":15,"suggested_replacement":null,',
-  \   '"text":[{"highlight_end":8,"highlight_start":5,"text":"    for chr in source.trim().chars() {"}]}]},"package_id":"update 0.0.1 (path+file:///home/w0rp/Downloads/rust-by-example)","reason":"compiler-message","target":{"kind":["bin"],"name":"update","src_path":"/home/w0rp/Downloads/rust-by-example/src/main.rs"}}',
-  \ ])
