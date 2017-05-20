@@ -27,8 +27,26 @@ function! ale#handlers#eslint#GetExecutable(buffer) abort
     \)
 endfunction
 
+function! s:FindConfig(buffer) abort
+    for l:filename in [
+    \   '.eslintrc.js',
+    \   '.eslintrc.yaml',
+    \   '.eslintrc.yml',
+    \   '.eslintrc.json',
+    \   '.eslintrc',
+    \]
+        let l:config = ale#path#FindNearestFile(a:buffer, l:filename)
+
+        if !empty(l:config)
+            return l:config
+        endif
+    endfor
+
+    return ''
+endfunction
+
 function! ale#handlers#eslint#Fix(buffer, lines) abort
-    let l:config = ale#path#FindNearestFile(a:buffer, '.eslintrc.js')
+    let l:config = s:FindConfig(a:buffer)
 
     if empty(l:config)
         return 0
