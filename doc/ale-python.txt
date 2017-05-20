@@ -3,6 +3,21 @@ ALE Python Integration                                     *ale-python-options*
 
 
 -------------------------------------------------------------------------------
+Global Options
+
+g:ale_virtualenv_dir_names                         *g:ale_virtualenv_dir_names*
+                                                   *b:ale_virtualenv_dir_names*
+
+  Type: |List|
+  Default: `['.env', 'env', 've', 've-py3', 'virtualenv']`
+
+  A list of directory names to be used when searching upwards from Python
+  files to discover virtulenv directories with. For directory named `'foo'`,
+  ALE will search for `'foo/bin/activate'` in all directories on and above
+  the directory containing the Python file to find virtualenv paths.
+
+
+-------------------------------------------------------------------------------
 flake8                                                      *ale-python-flake8*
 
 g:ale_python_flake8_executable                 *g:ale_python_flake8_executable*
