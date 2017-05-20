@@ -235,10 +235,11 @@ function! s:RunFixer(options) abort
 endfunction
 
 function! s:GetCallbacks() abort
+    let l:fixers = ale#Var(bufnr(''), 'fixers')
     let l:callback_list = []
 
     for l:sub_type in split(&filetype, '\.')
-        let l:sub_type_callacks = get(g:ale_fixers, l:sub_type, [])
+        let l:sub_type_callacks = get(l:fixers, l:sub_type, [])
 
         if type(l:sub_type_callacks) == type('')
             call add(l:callback_list, l:sub_type_callacks)

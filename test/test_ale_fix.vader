@@ -37,6 +37,7 @@ After:
   Restore
   unlet! g:ale_run_synchronously
   unlet! g:ale_emulate_job_failure
+  unlet! b:ale_fixers
   delfunction AddCarets
   delfunction AddDollars
   delfunction DoNothing
@@ -175,3 +176,12 @@ Expect(There should be an extra line):
   b
   c
   d
+
+Execute(ALEFix should user buffer-local fixer settings):
+  let g:ale_fixers.testft = ['AddCarets', 'AddDollars']
+  let b:ale_fixers = {'testft': ['RemoveLastLine']}
+  ALEFix
+
+Expect(There should be only two lines):
+  a
+  b
