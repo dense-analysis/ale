@@ -28,9 +28,9 @@ function! ale#statusline#Update(buffer, loclist) abort
     for l:entry in a:loclist
         if l:entry.type ==# 'W'
             if get(l:entry, 'sub_type', '') ==# 'style'
-                let l:count.warning += 1
-            else
                 let l:count.style_warning += 1
+            else
+                let l:count.warning += 1
             endif
         elseif l:entry.type ==# 'I'
             let l:count.info += 1

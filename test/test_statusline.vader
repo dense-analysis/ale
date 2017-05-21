@@ -46,20 +46,34 @@ Execute (Count should be match the loclist):
   let g:ale_buffer_info = {
   \ bufnr('%'): {
   \   'loclist': [
-  \     {
-  \       'lnum': 1,
-  \       'bufnr': 1,
-  \       'vcol': 0,
-  \       'linter_name': 'testlinter',
-  \       'nr': -1,
-  \       'type': 'E',
-  \       'col': 1,
-  \       'text': 'Test Error',
-  \     },
+  \     {'type': 'E'},
+  \     {'type': 'E', 'sub_type': 'style'},
+  \     {'type': 'E', 'sub_type': 'style'},
+  \     {'type': 'W'},
+  \     {'type': 'W'},
+  \     {'type': 'W'},
+  \     {'type': 'W', 'sub_type': 'style'},
+  \     {'type': 'W', 'sub_type': 'style'},
+  \     {'type': 'W', 'sub_type': 'style'},
+  \     {'type': 'W', 'sub_type': 'style'},
+  \     {'type': 'I'},
+  \     {'type': 'I'},
+  \     {'type': 'I'},
+  \     {'type': 'I'},
+  \     {'type': 'I'},
   \   ],
   \ },
   \}
-  AssertEqual Counts({'error': 1}), ale#statusline#Count(bufnr('%'))
+  AssertEqual {
+  \ 'error': 1,
+  \ 'style_error': 2,
+  \ 'warning': 3,
+  \ 'style_warning': 4,
+  \ 'info': 5,
+  \ '0': 3,
+  \ '1': 12,
+  \ 'total': 15,
+  \}, ale#statusline#Count(bufnr('%'))
 
 Execute (Output should be empty for non-existant buffer):
   AssertEqual Counts({}), ale#statusline#Count(9001)
