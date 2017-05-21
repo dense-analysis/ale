@@ -1,21 +1,46 @@
 Before:
-  let g:ale_statusline_format = ['%sE', '%sW', 'OKIE']
+  Save g:ale_statusline_format, g:ale_buffer_info
+  let g:ale_buffer_info = {}
+
+  " A function for conveniently creating expected count objects.
+  function Counts(data) abort
+    let l:res = {
+    \   '0': 0,
+    \   '1': 0,
+    \   'error': 0,
+    \   'warning': 0,
+    \   'info': 0,
+    \   'style_error': 0,
+    \   'style_warning': 0,
+    \   'total': 0,
+    \}
+
+    for l:key in keys(a:data)
+      let l:res[l:key] = a:data[l:key]
+    endfor
+
+    let l:res[0] = l:res.error + l:res.style_error
+    let l:res[1] = l:res.warning + l:res.style_warning + l:res.info
+    let l:res.total = l:res[0] + l:res[1]
+
+    return l:res
+  endfunction
 
 After:
-  let g:ale_buffer_info = {}
+  Restore
+  delfunction Counts
 
 Execute (Count should be 0 when data is empty):
-  let g:ale_buffer_info = {}
-  AssertEqual [0, 0], ale#statusline#Count(bufnr('%'))
+  AssertEqual Counts({}), ale#statusline#Count(bufnr('%'))
 
 Execute (Count should read data from the cache):
-  let g:ale_buffer_info = {'44': {'count': [1, 2]}}
-  AssertEqual [1, 2], ale#statusline#Count(44)
+  let g:ale_buffer_info = {'44': {'count': Counts({'error': 1, 'warning': 2})}}
+  AssertEqual Counts({'error': 1, 'warning': 2}), ale#statusline#Count(44)
 
 Execute (The count should be correct after an update):
   let g:ale_buffer_info = {'44': {}}
   call ale#statusline#Update(44, [])
-  AssertEqual [0, 0], ale#statusline#Count(44)
+  AssertEqual Counts({}), ale#statusline#Count(44)
 
 Execute (Count should be match the loclist):
   let g:ale_buffer_info = {
@@ -34,27 +59,59 @@ Execute (Count should be match the loclist):
   \   ],
   \ },
   \}
-  AssertEqual [1, 0], ale#statusline#Count(bufnr('%'))
+  AssertEqual Counts({'error': 1}), ale#statusline#Count(bufnr('%'))
 
 Execute (Output should be empty for non-existant buffer):
-  AssertEqual [0, 0], ale#statusline#Count(9001)
+  AssertEqual Counts({}), ale#statusline#Count(9001)
 
-Execute (Statusline is formatted to the users preference for just errors):
+Execute (Status() should return just errors for the old format):
+  let g:ale_statusline_format = ['%sE', '%sW', 'OKIE']
   let g:ale_buffer_info = {bufnr('%'): {}}
-  call ale#statusline#Update(bufnr('%'), [{'type': 'E'}, {'type': 'E'}])
+  call ale#statusline#Update(bufnr('%'), [
+  \ {'type': 'E'},
+  \ {'type': 'E', 'sub_type': 'style'},
+  \])
   AssertEqual '2E', ale#statusline#Status()
 
-Execute (Statusline is formatted to the users preference for just warnings):
+Execute (Status() should return just warnings for the old format):
+  let g:ale_statusline_format = ['%sE', '%sW', 'OKIE']
   let g:ale_buffer_info = {bufnr('%'): {}}
-  call ale#statusline#Update(bufnr('%'), [{'type': 'W'}, {'type': 'W'}, {'type': 'W'}])
+  call ale#statusline#Update(bufnr('%'), [
+  \ {'type': 'W'},
+  \ {'type': 'W', 'sub_type': 'style'},
+  \ {'type': 'I'},
+  \])
   AssertEqual '3W', ale#statusline#Status()
 
-Execute (Statusline is formatted to the users preference for errors and warnings):
+Execute (Status() should return errors and warnings for the old format):
+  let g:ale_statusline_format = ['%sE', '%sW', 'OKIE']
   let g:ale_buffer_info = {bufnr('%'): {}}
-  call ale#statusline#Update(bufnr('%'), [{'type': 'E'}, {'type': 'W'}, {'type': 'W'}])
-  AssertEqual '1E 2W', ale#statusline#Status()
+  call ale#statusline#Update(bufnr('%'), [
+  \ {'type': 'E'},
+  \ {'type': 'E', 'sub_type': 'style'},
+  \ {'type': 'W'},
+  \ {'type': 'W', 'sub_type': 'style'},
+  \ {'type': 'I'},
+  \])
+  AssertEqual '2E 3W', ale#statusline#Status()
 
-Execute (Statusline is formatted to the users preference for no errors or warnings):
+Execute (Status() should return the custom 'OK' string with the old format):
+  let g:ale_statusline_format = ['%sE', '%sW', 'OKIE']
   let g:ale_buffer_info = {bufnr('%'): {}}
   call ale#statusline#Update(bufnr('%'), [])
   AssertEqual 'OKIE', ale#statusline#Status()
+
+Execute(ale#statusline#Update shouldn't blow up when globals are undefined):
+  unlet! g:ale_buffer_info
+  unlet! g:ale_statusline_format
+  call ale#statusline#Update(1, [])
+
+Execute(ale#statusline#Count should return 0 counts when globals are undefined):
+  unlet! g:ale_buffer_info
+  unlet! g:ale_statusline_format
+  AssertEqual Counts({}), ale#statusline#Count(1)
+
+Execute(ale#statusline#Status should return 'OK' when globals are undefined):
+  unlet! g:ale_buffer_info
+  unlet! g:ale_statusline_format
+  AssertEqual 'OK', ale#statusline#Status()

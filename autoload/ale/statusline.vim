@@ -1,77 +1,81 @@
 " Author: KabbAmine <amine.kabb@gmail.com>
 " Description: Statusline related function(s)
 
+function! s:CreateCountDict() abort
+    " Keys 0 and 1 are for backwards compatibility.
+    " The count object used to be a List of [error_count, warning_count].
+    return {
+    \   '0': 0,
+    \   '1': 0,
+    \   'error': 0,
+    \   'warning': 0,
+    \   'info': 0,
+    \   'style_error': 0,
+    \   'style_warning': 0,
+    \   'total': 0,
+    \}
+endfunction
+
 " Update the buffer error/warning count with data from loclist.
 function! ale#statusline#Update(buffer, loclist) abort
-    if !exists('g:ale_buffer_info')
+    if !exists('g:ale_buffer_info') || !has_key(g:ale_buffer_info, a:buffer)
         return
     endif
 
-    if !has_key(g:ale_buffer_info, a:buffer)
-        return
-    endif
-
-    let l:errors = 0
-    let l:warnings = 0
+    let l:count = s:CreateCountDict()
+    let l:count.total = len(a:loclist)
 
     for l:entry in a:loclist
-        if l:entry.type ==# 'E'
-            let l:errors += 1
+        if l:entry.type ==# 'W'
+            if get(l:entry, 'sub_type', '') ==# 'style'
+                let l:count.warning += 1
+            else
+                let l:count.style_warning += 1
+            endif
+        elseif l:entry.type ==# 'I'
+            let l:count.info += 1
+        elseif get(l:entry, 'sub_type', '') ==# 'style'
+            let l:count.style_error += 1
         else
-            let l:warnings += 1
+            let l:count.error += 1
         endif
     endfor
 
-    let g:ale_buffer_info[a:buffer].count = [l:errors, l:warnings]
+    " Set keys for backwards compatibility.
+    let l:count[0] = l:count.error + l:count.style_error
+    let l:count[1] = l:count.total - l:count[0]
+
+    let g:ale_buffer_info[a:buffer].count = l:count
 endfunction
 
-" Set the error and warning counts, calling for an update only if needed.
-" If counts cannot be set, return 0.
-function! s:SetupCount(buffer) abort
-    if !has_key(g:ale_buffer_info, a:buffer)
-        " Linters have not been run for the buffer yet, so stop here.
-        return 0
-    endif
+" Get the counts for the buffer, and update the counts if needed.
+function! s:GetCounts(buffer) abort
+if !exists('g:ale_buffer_info') || !has_key(g:ale_buffer_info, a:buffer)
+    return s:CreateCountDict()
+endif
 
-    " Cache is cold, so manually ask for an update.
-    if !has_key(g:ale_buffer_info[a:buffer], 'count')
-        call ale#statusline#Update(a:buffer, g:ale_buffer_info[a:buffer].loclist)
-    endif
-
-    return 1
-endfunction
-
-" Returns a tuple of errors and warnings for use in third-party integrations.
-function! ale#statusline#Count(buffer) abort
-    if !exists('g:ale_buffer_info')
-        return [0, 0]
-    endif
-
-    if !s:SetupCount(a:buffer)
-        return [0, 0]
-    endif
+" Cache is cold, so manually ask for an update.
+if !has_key(g:ale_buffer_info[a:buffer], 'count')
+    call ale#statusline#Update(a:buffer, g:ale_buffer_info[a:buffer].loclist)
+endif
 
     return g:ale_buffer_info[a:buffer].count
 endfunction
 
-" Returns a formatted string that can be integrated in the statusline.
-function! ale#statusline#Status() abort
-    if !exists('g:ale_buffer_info')
-        return 'OK'
-    endif
+" Returns a Dictionary with counts for use in third party integrations.
+function! ale#statusline#Count(buffer) abort
+    " The Dictionary is copied here before exposing it to other plugins.
+    return copy(s:GetCounts(a:buffer))
+endfunction
 
+" This is the historical format setting which could be configured before.
+function! s:StatusForListFormat() abort
     let [l:error_format, l:warning_format, l:no_errors] = g:ale_statusline_format
-    let l:buffer = bufnr('%')
-
-    if !s:SetupCount(l:buffer)
-        return l:no_errors
-    endif
-
-    let [l:error_count, l:warning_count] = g:ale_buffer_info[l:buffer].count
+    let l:counts = s:GetCounts(bufnr(''))
 
     " Build strings based on user formatting preferences.
-    let l:errors = l:error_count ? printf(l:error_format, l:error_count) : ''
-    let l:warnings = l:warning_count ? printf(l:warning_format, l:warning_count) : ''
+    let l:errors = l:counts[0] ? printf(l:error_format, l:counts[0]) : ''
+    let l:warnings = l:counts[1] ? printf(l:warning_format, l:counts[1]) : ''
 
     " Different formats based on the combination of errors and warnings.
     if empty(l:errors) && empty(l:warnings)
@@ -83,4 +87,17 @@ function! ale#statusline#Status() abort
     endif
 
     return l:res
+endfunction
+
+" Returns a formatted string that can be integrated in the statusline.
+function! ale#statusline#Status() abort
+    if !exists('g:ale_statusline_format')
+        return 'OK'
+    endif
+
+    if type(g:ale_statusline_format) == type([])
+        return s:StatusForListFormat()
+    endif
+
+    return ''
 endfunction
