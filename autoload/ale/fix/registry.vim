@@ -17,6 +17,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['javascript'],
 \       'description': 'Apply eslint --fix to a file.',
 \   },
+\   'prettier': {
+\       'function': 'ale#handlers#prettier#Fix',
+\       'suggested_filetypes': ['javascript'],
+\       'description': 'Apply prettier (with ESLint integration) to file',
+\   },
 \   'isort': {
 \       'function': 'ale#handlers#python#ISort',
 \       'suggested_filetypes': ['python'],
