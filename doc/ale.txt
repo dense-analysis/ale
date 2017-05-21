@@ -396,7 +396,7 @@ g:ale_lint_on_insert_leave                         *g:ale_lint_on_insert_leave*
 g:ale_fix_on_enter                                       *g:ale_fix_on_enter*
 
   Type: |Number|
-  Default: `1`
+  Default: `0`
 
   When this option is set to `1`, the |BufEnter| and |BufRead| events will be
   used to apply fixers when buffers are first opened. If this is not desired,
@@ -406,7 +406,7 @@ g:ale_fix_on_enter                                       *g:ale_fix_on_enter*
 g:ale_fix_on_save                                         *g:ale_fix_on_save*
 
   Type: |Number|
-  Default: `1`
+  Default: `0`
 
   This option will make ALE run the fixers whenever a file is saved when it
   it set to `1` in your vimrc file. This option can be used in combination
