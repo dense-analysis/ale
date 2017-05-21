@@ -207,6 +207,21 @@ g:airline#extensions#ale#enabled             *g:airline#extensions#ale#enabled*
   |airline#extensions#ale#warning_symbol|.
 
 
+g:ale_change_sign_column_color                 *g:ale_change_sign_column_color*
+
+  Type: |Number|
+  Default: `0`
+
+  When set to `1`, this option will set different highlights for the sign
+  column itself when ALE reports problems with a file. This option can be
+  combined with |g:ale_sign_column_always|.
+
+  ALE uses the following highlight groups for highlighting the sign column:
+
+  `ALESignColumnWithErrors`    -  Links to `error` by default.
+  `ALESignColumnWithoutErrors` -  Use the value for `SignColumn` by default.
+
+
 g:ale_echo_cursor                                           *g:ale_echo_cursor*
 
   Type: |Number|

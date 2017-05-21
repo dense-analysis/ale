@@ -1,0 +1,22 @@
+Before:
+  function! ParseSignColumnHighlight() abort
+    redir => l:output
+      silent highlight SignColumn
+    redir end
+
+    return join(split(l:output)[2:])
+  endfunction
+
+  let g:sign_highlight = ParseSignColumnHighlight()
+
+After:
+  delfunction ParseSignColumnHighlight
+  execute 'highlight SignColumn ' .  g:sign_highlight
+  unlet! g:sign_highlight
+
+Execute(The SignColumn highlight should be set and reset):
+  call ale#sign#SetSignColumnHighlight(1)
+  AssertEqual 'links to ALESignColumnWithErrors', ParseSignColumnHighlight()
+
+  call ale#sign#SetSignColumnHighlight(0)
+  AssertEqual 'links to ALESignColumnWithoutErrors', ParseSignColumnHighlight()

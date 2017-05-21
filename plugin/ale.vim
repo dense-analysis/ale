@@ -108,6 +108,10 @@ let g:ale_keep_list_window_open = get(g:, 'ale_keep_list_window_open', 0)
 " This is enabled by default only if the 'signs' feature exists.
 let g:ale_set_signs = get(g:, 'ale_set_signs', has('signs'))
 
+" This flag can be set to 1 to enable changing the sign column colors when
+" there are errors.
+call ale#Set('change_sign_column_color', 0)
+
 " This flag can be set to 0 to disable setting error highlights.
 let g:ale_set_highlights = get(g:, 'ale_set_highlights', has('syntax'))
 

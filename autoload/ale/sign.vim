@@ -24,6 +24,24 @@ if !hlexists('ALEInfoSign')
     highlight link ALEInfoSign ALEWarningSign
 endif
 
+if !hlexists('ALESignColumnWithErrors')
+    highlight link ALESignColumnWithErrors error
+endif
+
+if !hlexists('ALESignColumnWithoutErrors')
+    function! s:SetSignColumnWithoutErrorsHighlight() abort
+        redir => l:output
+            silent highlight SignColumn
+        redir end
+
+        execute 'highlight ALESignColumnWithoutErrors '
+        \   . join(split(l:output)[2:])
+    endfunction
+
+    call s:SetSignColumnWithoutErrorsHighlight()
+    delfunction s:SetSignColumnWithoutErrorsHighlight
+endif
+
 " Signs show up on the left for error markers.
 execute 'sign define ALEErrorSign text=' . g:ale_sign_error
 \   . ' texthl=ALEErrorSign linehl=ALEErrorLine'
@@ -154,7 +172,21 @@ function! ale#sign#GetSignType(sublist) abort
     return 'ALEErrorSign'
 endfunction
 
+function! ale#sign#SetSignColumnHighlight(has_problems) abort
+    highlight clear SignColumn
+
+    if a:has_problems
+        highlight link SignColumn ALESignColumnWithErrors
+    else
+        highlight link SignColumn ALESignColumnWithoutErrors
+    endif
+endfunction
+
 function! s:PlaceNewSigns(buffer, grouped_items) abort
+    if g:ale_change_sign_column_color
+        call ale#sign#SetSignColumnHighlight(!empty(a:grouped_items))
+    endif
+
     " Add the new signs,
     for l:index in range(0, len(a:grouped_items) - 1)
         let l:sign_id = l:index + g:ale_sign_offset + 1
