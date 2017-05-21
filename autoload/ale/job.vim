@@ -8,10 +8,15 @@
 "   ale#job#IsRunning(job_id) -> 1 if running, 0 otherwise.
 "   ale#job#Stop(job_id)
 
-let s:job_map = {}
+if !has_key(s:, 'job_map')
+    let s:job_map = {}
+endif
+
 " A map from timer IDs to jobs, for tracking jobs that need to be killed
 " with SIGKILL if they don't terminate right away.
-let s:job_kill_timers = {}
+if !has_key(s:, 'job_kill_timers')
+    let s:job_kill_timers = {}
+endif
 
 function! s:KillHandler(timer) abort
     let l:job = remove(s:job_kill_timers, a:timer)
@@ -88,13 +93,15 @@ endfunction
 function! s:VimCloseCallback(channel) abort
     let l:job = ch_getjob(a:channel)
     let l:job_id = ale#job#ParseVim8ProcessID(string(l:job))
-    let l:info = s:job_map[l:job_id]
+    let l:info = get(s:job_map, l:job_id, {})
 
     " job_status() can trigger the exit handler.
     " The channel can close before the job has exited.
     if job_status(l:job) ==# 'dead'
         try
-            call ale#util#GetFunction(l:info.exit_cb)(l:job_id, l:info.exit_code)
+            if !empty(l:info) && has_key(l:info, 'exit_cb')
+                call ale#util#GetFunction(l:info.exit_cb)(l:job_id, l:info.exit_code)
+            endif
         finally
             " Automatically forget about the job after it's done.
             if has_key(s:job_map, l:job_id)
@@ -106,13 +113,15 @@ endfunction
 
 function! s:VimExitCallback(job, exit_code) abort
     let l:job_id = ale#job#ParseVim8ProcessID(string(a:job))
-    let l:info = s:job_map[l:job_id]
+    let l:info = get(s:job_map, l:job_id, {})
     let l:info.exit_code = a:exit_code
 
     " The program can exit before the data has finished being read.
     if ch_status(job_getchannel(a:job)) ==# 'closed'
         try
-            call ale#util#GetFunction(l:info.exit_cb)(l:job_id, a:exit_code)
+            if !empty(l:info) && has_key(l:info, 'exit_cb')
+                call ale#util#GetFunction(l:info.exit_cb)(l:job_id, a:exit_code)
+            endif
         finally
             " Automatically forget about the job after it's done.
             if has_key(s:job_map, l:job_id)

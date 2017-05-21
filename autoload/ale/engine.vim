@@ -7,7 +7,10 @@
 " linter: The linter dictionary for the job.
 " buffer: The buffer number for the job.
 " output: The array of lines for the output of the job.
-let s:job_info_map = {}
+if !has_key(s:, 'job_info_map')
+    let s:job_info_map = {}
+endif
+
 let s:executable_cache_map = {}
 
 " Check if files are executable, and if they are, remember that they are
