@@ -507,10 +507,15 @@ g:ale_set_highlights                                     *g:ale_set_highlights*
   Type: |Number|
   Default: `has('syntax')`
 
-  When this option is set to `1`, highlights will be set in for erros and
-  warnings. The `ALEError` and `ALEWarning` highlight groups will be used to
-  provide highlights, and default to linking to `SpellBad` and `SpellCap`
-  respectively by default.
+  When this option is set to `1`, highlights will be set for problems.
+
+  ALE will use the following highlight groups for problems:
+
+  `ALEError`        - Items with `'type': 'E'`
+  `ALEWarning`      - Items with `'type': 'W'`
+  `ALEInfo`         - Items with `'type': 'I'`
+  `ALEStyleError`   - Items with `'type': 'E'` and `'sub_type': 'style'`
+  `ALEStyleWarning` - Items with `'type': 'W'` and `'sub_type': 'style'`
 
 
 g:ale_set_loclist                                           *g:ale_set_loclist*

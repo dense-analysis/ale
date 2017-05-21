@@ -6,8 +6,20 @@ if !hlexists('ALEError')
     highlight link ALEError SpellBad
 endif
 
+if !hlexists('ALEStyleError')
+    highlight link ALEStyleError ALEError
+endif
+
 if !hlexists('ALEWarning')
     highlight link ALEWarning SpellCap
+endif
+
+if !hlexists('ALEStyleWarning')
+    highlight link ALEStyleWarning ALEWarning
+endif
+
+if !hlexists('ALEInfo')
+    highlight link ALEInfo ALEWarning
 endif
 
 " This map holds highlights to be set when buffers are opened.
@@ -84,7 +96,21 @@ function! ale#highlight#UpdateHighlights() abort
     if g:ale_enabled
         for l:item in l:loclist
             let l:col = l:item.col
-            let l:group = l:item.type ==# 'E' ? 'ALEError' : 'ALEWarning'
+
+            if l:item.type ==# 'W'
+                if get(l:item, 'sub_type', '') ==# 'style'
+                    let l:group = 'ALEStyleWarning'
+                else
+                    let l:group = 'ALEWarning'
+                endif
+            elseif l:item.type ==# 'I'
+                let l:group = 'ALEInfo'
+            elseif get(l:item, 'sub_type', '') ==# 'style'
+                let l:group = 'ALEStyleError'
+            else
+                let l:group = 'ALEError'
+            endif
+
             let l:line = l:item.lnum
             let l:size = has_key(l:item, 'end_col') ? l:item.end_col - l:col + 1 : 1
 
