@@ -219,7 +219,7 @@ g:ale_change_sign_column_color                 *g:ale_change_sign_column_color*
   ALE uses the following highlight groups for highlighting the sign column:
 
   `ALESignColumnWithErrors`    -  Links to `error` by default.
-  `ALESignColumnWithoutErrors` -  Use the value for `SignColumn` by default.
+  `ALESignColumnWithoutErrors` -  Uses the value for `SignColumn` by default.
 
 
 g:ale_echo_cursor                                           *g:ale_echo_cursor*
