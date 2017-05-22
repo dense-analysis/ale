@@ -2,6 +2,11 @@
 " Description: A registry of functions for fixing things.
 
 let s:default_registry = {
+\   'add_blank_lines_for_python_control_statements': {
+\       'function': 'ale#handlers#python#AddLinesBeforeControlStatements',
+\       'suggested_filetypes': ['python'],
+\       'description': 'Add blank lines before control statements.',
+\   },
 \   'autopep8': {
 \       'function': 'ale#handlers#python#AutoPEP8',
 \       'suggested_filetypes': ['python'],

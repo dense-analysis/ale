@@ -1,0 +1,85 @@
+Before:
+  Save g:ale_fixers
+
+After:
+  Restore
+
+Given python(Some Python without blank lines):
+  def foo():
+      return 1
+
+
+  def bar():
+      return 1
+      return 4
+
+
+  def bar():
+      if x:
+          pass
+          for l in x:
+              pass
+          for l in x:
+              pass
+              break
+              continue
+      elif x:
+          pass
+          while x:
+              pass
+          while x:
+              pass
+      else:
+          pass
+      if x:
+          pass
+      elif x:
+          pass
+      else:
+          pass
+
+Execute(Blank lines should be added appropriately):
+  let g:ale_fixers = {'python': ['ale#handlers#python#AddLinesBeforeControlStatements']}
+  ALEFix
+
+Expect python(Newlines should be added):
+  def foo():
+      return 1
+
+
+  def bar():
+      return 1
+
+      return 4
+
+
+  def bar():
+      if x:
+          pass
+
+          for l in x:
+              pass
+
+          for l in x:
+              pass
+
+              break
+
+              continue
+      elif x:
+          pass
+
+          while x:
+              pass
+
+          while x:
+              pass
+      else:
+          pass
+
+      if x:
+          pass
+      elif x:
+          pass
+      else:
+          pass
