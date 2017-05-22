@@ -4,9 +4,6 @@
 let g:ale_javascript_eslint_options =
 \   get(g:, 'ale_javascript_eslint_options', '')
 
-let g:ale_javascript_eslint_use_global =
-\   get(g:, 'ale_javascript_eslint_use_global', 0)
-
 function! ale_linters#javascript#eslint#GetCommand(buffer) abort
     return ale#handlers#eslint#GetExecutable(a:buffer)
     \   . ' ' . ale#Var(a:buffer, 'javascript_eslint_options')

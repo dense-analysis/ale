@@ -1,8 +1,8 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: eslint functions for handling and fixing errors.
 
-let g:ale_javascript_eslint_executable =
-\   get(g:, 'ale_javascript_eslint_executable', 'eslint')
+call ale#Set('javascript_eslint_executable', 'eslint')
+call ale#Set('javascript_eslint_use_global', 0)
 
 function! ale#handlers#eslint#GetExecutable(buffer) abort
     if ale#Var(a:buffer, 'javascript_eslint_use_global')
