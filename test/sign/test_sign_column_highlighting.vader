@@ -31,12 +31,3 @@ Execute(The SignColumn highlight should be set and reset):
 
   call ale#sign#SetSignColumnHighlight(0)
   AssertEqual 'links to ALESignColumnWithoutErrors', ParseHighlight('SignColumn')
-
-Execute(ALESignColumnWithoutErrors should link to what SignColumn links to):
-  highlight clear SignColumn
-  highlight link SignColumn LineNr
-  highlight clear ALESignColumnWithoutErrors
-
-  runtime 'autoload/ale/sign.vim'
-
-  AssertEqual 'links to LineNr', ParseHighlight('ALESignColumnWithoutErrors')
