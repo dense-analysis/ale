@@ -34,8 +34,15 @@ if !hlexists('ALESignColumnWithoutErrors')
             silent highlight SignColumn
         redir end
 
-        execute 'highlight ALESignColumnWithoutErrors '
-        \   . join(split(l:output)[2:])
+        let l:highlight_syntax = join(split(l:output)[2:])
+
+        let l:match = matchlist(l:highlight_syntax, '\vlinks to (.+)$')
+
+        if !empty(l:match)
+            execute 'highlight link ALESignColumnWithoutErrors ' . l:match[1]
+        else
+            execute 'highlight ALESignColumnWithoutErrors ' . l:highlight_syntax
+        endif
     endfunction
 
     call s:SetSignColumnWithoutErrorsHighlight()

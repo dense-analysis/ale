@@ -1,22 +1,42 @@
 Before:
-  function! ParseSignColumnHighlight() abort
+  function! ParseHighlight(name) abort
     redir => l:output
-      silent highlight SignColumn
+      silent execute 'highlight ' . a:name
     redir end
 
     return join(split(l:output)[2:])
   endfunction
 
-  let g:sign_highlight = ParseSignColumnHighlight()
+  function! SetHighlight(name, syntax) abort
+    let l:match = matchlist(a:syntax, '\vlinks to (.+)$')
+
+    if !empty(l:match)
+      execute 'highlight link ' . a:name . ' ' . l:match[1]
+    else
+      execute 'highlight ' . a:name . ' ' a:syntax
+    endif
+  endfunction
+
+  let g:sign_highlight = ParseHighlight('SignColumn')
 
 After:
-  delfunction ParseSignColumnHighlight
-  execute 'highlight SignColumn ' .  g:sign_highlight
+  delfunction ParseHighlight
+  call SetHighlight('SignColumn', g:sign_highlight)
+  delfunction SetHighlight
   unlet! g:sign_highlight
 
 Execute(The SignColumn highlight should be set and reset):
   call ale#sign#SetSignColumnHighlight(1)
-  AssertEqual 'links to ALESignColumnWithErrors', ParseSignColumnHighlight()
+  AssertEqual 'links to ALESignColumnWithErrors', ParseHighlight('SignColumn')
 
   call ale#sign#SetSignColumnHighlight(0)
-  AssertEqual 'links to ALESignColumnWithoutErrors', ParseSignColumnHighlight()
+  AssertEqual 'links to ALESignColumnWithoutErrors', ParseHighlight('SignColumn')
+
+Execute(ALESignColumnWithoutErrors should link to what SignColumn links to):
+  highlight clear SignColumn
+  highlight link SignColumn LineNr
+  highlight clear ALESignColumnWithoutErrors
+
+  runtime 'autoload/ale/sign.vim'
+
+  AssertEqual 'links to LineNr', ParseHighlight('ALESignColumnWithoutErrors')
