@@ -646,17 +646,6 @@ g:ale_sign_warning                                         *g:ale_sign_warning*
   The sign for warnings in the sign gutter.
 
 
-g:ale_statusline_format                               *g:ale_statusline_format*
-
-  Type: |List|
-  Default: `['%d error(s)', '%d warning(s)', 'OK']`
-
-  This variable defines the format of |`ale#statusline#status()`| output.
-  - The 1st element is for errors
-  - The 2nd element is for warnings
-  - The 3rd element is for when no errors are detected
-
-
 g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
 b:ale_warn_about_trailing_whitespace     *b:ale_warn_about_trailing_whitespace*
 
@@ -1102,12 +1091,17 @@ ale#linter#Get(filetype)                                     *ale#linter#Get()*
   components.
 
 
-ale#statusline#Status()                               *ale#statusline#Status()*
+ale#statusline#Count()                                 *ale#statusline#Count()*
 
-  Return a formatted string that can be added to the statusline.
-  The output's format is defined in |`g:ale_statusline_format`|.
-  To enable it, the following should be present in your |statusline| settings: >
-  %{ale#statusline#Status()}
+  Returns a |Dictionary| containing information about the number of problems
+  detected by ALE. The following keys are supported:
+
+  `error`         -> The number of problems with type `E` and `sub_type != 'style'`
+  `warning`       -> The number of problems with type `W` and `sub_type != 'style'`
+  `info`          -> The number of problems with type `I`
+  `style_error`   -> The number of problems with type `E` and `sub_type == 'style'`
+  `style_warning` -> The number of problems with type `W` and `sub_type == 'style'`
+  `total`         -> The total number of problems.
 
 
 ALELint                                                       *ALELint-autocmd*

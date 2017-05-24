@@ -142,11 +142,8 @@ let g:ale_echo_msg_warning_str = get(g:, 'ale_echo_msg_warning_str', 'Warning')
 " This flag can be set to 0 to disable echoing when the cursor moves.
 let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
 
-" String format for statusline
-" Its a list where:
-" * The 1st element is for errors
-" * The 2nd element is for warnings
-" * The 3rd element is when there are no errors
+" A deprecated setting for ale#statusline#Status()
+" See :help ale#statusline#Count() for getting status reports.
 let g:ale_statusline_format = get(g:, 'ale_statusline_format',
 \   ['%d error(s)', '%d warning(s)', 'OK']
 \)

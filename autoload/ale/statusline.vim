@@ -90,6 +90,9 @@ function! s:StatusForListFormat() abort
 endfunction
 
 " Returns a formatted string that can be integrated in the statusline.
+"
+" This function is deprecated, and should not be used. Use the airline plugin
+" instead, or write your own status function with ale#statusline#Count()
 function! ale#statusline#Status() abort
     if !exists('g:ale_statusline_format')
         return 'OK'
