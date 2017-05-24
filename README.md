@@ -296,28 +296,36 @@ highlight clear ALEWarningSign
 
 ### 5.iv. How can I show errors or warnings in my statusline?
 
-You can use `ALEGetStatusLine()` to integrate ALE into vim statusline.
-To enable it, you should have in your `statusline` settings
+[vim-airline](https://github.com/vim-airline/vim-airline) integrates with
+ALE for displaying error information in the status bar. If you want to see
+the status for ALE in a nice format, it is recommended to use vim-airline
+with ALE.
+
+ALE offers the ability to show some information in statuslines with no extra
+plugins. ALE provides a function for getting a summary with the number of
+problems detected, and you can implement your own function for your statusline.
+
+Say you want to display all errors as one figure, and all non-errors as another
+figure. You can do the following:
 
 ```vim
-%{ALEGetStatusLine()}
+function! LinterStatus() abort
+    let l:counts = ale#statusline#Count()
+
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+
+    return l:counts.total == 0 ? 'OK' : printf(
+    \   '%dW %dE',
+    \   all_non_errors,
+    \   all_errors
+    \)
+endfunction
+
+set statusline=%{LinterStatus()}
 ```
 
-When errors are detected a string showing the number of errors will be shown.
-You can customize the output format using the global list `g:ale_statusline_format` where:
-
-- The 1st element is for errors
-- The 2nd element is for warnings
-- The 3rd element is for when no errors are detected
-
-e.g
-
-```vim
-let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
-```
-
-![Statusline with issues](img/issues.png)
-![Statusline with no issues](img/no_issues.png)
+See `:help ale#statusline#Count()` for more information.
 
 <a name="faq-echo-format"></a>
 
