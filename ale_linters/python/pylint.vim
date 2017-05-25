@@ -32,10 +32,43 @@ function! ale_linters#python#pylint#GetCommand(buffer) abort
     \   . ' %s'
 endfunction
 
+function! ale_linters#python#pylint#Handle(buffer, lines) abort
+    " Matches patterns like the following:
+    "
+    " test.py:4:4: W0101 (unreachable) Unreachable code
+    let l:pattern = '\v^[^:]+:(\d+):(\d+): ([[:alnum:]]+) \((.*)\) (.*)$'
+    let l:output = []
+
+    for l:match in ale#util#GetMatches(a:lines, l:pattern)
+        "let l:failed = append(0, l:match)
+        let l:code = l:match[3]
+
+        if (l:code ==# 'C0303')
+        \ && !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
+            " Skip warnings for trailing whitespace if the option is off.
+            continue
+        endif
+
+        if l:code ==# 'I0011'
+            " Skip 'Locally disabling' message
+             continue
+        endif
+
+        call add(l:output, {
+        \   'lnum': l:match[1] + 0,
+        \   'col': l:match[2] + 1,
+        \   'text': l:code . ': ' . l:match[5],
+        \   'type': l:code[:0] ==# 'E' ? 'E' : 'W',
+        \})
+    endfor
+
+    return l:output
+endfunction
+
 call ale#linter#Define('python', {
 \   'name': 'pylint',
 \   'executable_callback': 'ale_linters#python#pylint#GetExecutable',
 \   'command_callback': 'ale_linters#python#pylint#GetCommand',
-\   'callback': 'ale#handlers#python#HandlePEP8Format',
+\   'callback': 'ale_linters#python#pylint#Handle',
 \   'lint_file': 1,
 \})

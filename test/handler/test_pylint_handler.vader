@@ -1,0 +1,53 @@
+Before:
+  runtime ale_linters/python/pylint.vim
+
+After:
+  call ale#linter#Reset()
+  silent file something_else.py
+
+Execute(pylint handler parsing, translating columns to 1-based index):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 4,
+  \     'col': 1,
+  \     'text': 'C0303: Trailing whitespace',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 1,
+  \     'col': 1,
+  \     'text': 'C0111: Missing module docstring',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 2,
+  \     'col': 1,
+  \     'text': 'C0111: Missing function docstring',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 3,
+  \     'col': 5,
+  \     'text': 'E0103: ''break'' not properly in loop',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 4,
+  \     'col': 5,
+  \     'text': 'W0101: Unreachable code',
+  \     'type': 'W',
+  \   },
+  \ ],
+  \ ale_linters#python#pylint#Handle(bufnr(''), [
+  \ 'No config file found, using default configuration',
+  \ '************* Module test',
+  \ 'test.py:4:0: C0303 (trailing-whitespace) Trailing whitespace',
+  \ 'test.py:1:0: C0111 (missing-docstring) Missing module docstring',
+  \ 'test.py:2:0: C0111 (missing-docstring) Missing function docstring',
+  \ 'test.py:3:4: E0103 (not-in-loop) ''break'' not properly in loop',
+  \ 'test.py:4:4: W0101 (unreachable) Unreachable code',
+  \ '',
+  \ '------------------------------------------------------------------',
+  \ 'Your code has been rated at 0.00/10 (previous run: 2.50/10, -2.50)',
+  \ ])
