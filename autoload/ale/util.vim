@@ -80,13 +80,11 @@ endfunction
 " See :help sandbox
 function! ale#util#InSandbox() abort
     try
-        call setbufvar('%', '', '')
+        function! s:SandboxCheck() abort
+        endfunction
     catch /^Vim\%((\a\+)\)\=:E48/
         " E48 is the sandbox error.
         return 1
-    catch
-        " If we're not in a sandbox, we'll get another error about an
-        " invalid buffer variable name.
     endtry
 
     return 0

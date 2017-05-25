@@ -27,11 +27,17 @@ After:
   delfunction TestCallback
   call ale#linter#Reset()
   let g:ale_buffer_info = {}
+  unlet! b:in_sandbox
 
 Given foobar (Some imaginary filetype):
   foo
   bar
   baz
+
+Execute(ale#util#InSandbox should return 1 when in a sandbox):
+  sandbox let b:in_sandbox = ale#util#InSandbox()
+
+  Assert b:in_sandbox, 'ale#util#InSandbox() returned 0 for a sandbox command'
 
 Execute(ALE shouldn't blow up when run from a sandbox):
   AssertEqual 'foobar', &filetype
