@@ -50,7 +50,7 @@ function! ale#handlers#rust#HandleRustErrorsForFile(buffer, full_filename, lines
 
             if (
             \   l:span.is_primary
-            \   && (l:span_filename ==# l:filename || l:span_filename ==# '<anon>')
+            \   && (a:full_filename =~ (l:span.file_name . '$') || l:span_filename ==# '<anon>')
             \)
                 call add(l:output, {
                 \   'lnum': l:span.line_start,
