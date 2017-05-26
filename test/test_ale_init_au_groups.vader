@@ -2,17 +2,42 @@ Before:
   function! CheckAutocmd(group)
     call ALEInitAuGroups()
     redir => l:output
-      execute 'silent autocmd ' . a:group
+      execute 'silent! autocmd ' . a:group
     redir END
 
-    return map(
-    \ filter(split(l:output, "\n"), 'v:val =~# ''^ALE'''),
-    \ 'split(v:val)[1]'
-    \)
+    let l:matches = []
+    let l:header = ''
+    " Some event names have aliases, and NeoVim and Vim produce
+    " different output. The names are remapped to fix this.
+    let l:event_name_corrections = {
+    \ 'BufWrite': 'BufWritePre',
+    \ 'BufRead': 'BufReadPost',
+    \}
+
+    " autocmd commands are split across two lines in output, so we
+    " must merge the lines back into one simple line.
+    for l:line in split(l:output, "\n")
+      if l:line =~# '^ALE' && split(l:line)[0] ==# a:group
+        let l:header = split(l:line)[1]
+        let l:header = get(l:event_name_corrections, l:header, l:header)
+      elseif !empty(l:header)
+        call add(l:matches, join(split(l:header . l:line)))
+        let l:header = ''
+      endif
+    endfor
+
+    call sort(l:matches)
+
+    return l:matches
   endfunction
 
   Save g:ale_lint_on_text_changed
   Save g:ale_lint_on_insert_leave
+  Save g:ale_pattern_options_enabled
+  Save g:ale_lint_on_enter
+  Save g:ale_lint_on_filetype_changed
+  Save g:ale_lint_on_save
+  Save g:ale_echo_cursor
 
 After:
   delfunction CheckAutocmd
@@ -28,29 +53,111 @@ Execute (g:ale_lint_on_text_changed = 0 should bind no events):
 Execute (g:ale_lint_on_text_changed = 1 bind both events):
   let g:ale_lint_on_text_changed = 1
 
-  AssertEqual ['TextChanged', 'TextChangedI'], CheckAutocmd('ALERunOnTextChangedGroup')
+  AssertEqual [
+  \ 'TextChanged * call ale#Queue(g:ale_lint_delay)',
+  \ 'TextChangedI * call ale#Queue(g:ale_lint_delay)'
+  \], CheckAutocmd('ALERunOnTextChangedGroup')
 
 Execute (g:ale_lint_on_text_changed = 'always' should bind both events):
   let g:ale_lint_on_text_changed = 'always'
 
-  AssertEqual ['TextChanged', 'TextChangedI'], CheckAutocmd('ALERunOnTextChangedGroup')
+  AssertEqual [
+  \ 'TextChanged * call ale#Queue(g:ale_lint_delay)',
+  \ 'TextChangedI * call ale#Queue(g:ale_lint_delay)'
+  \], CheckAutocmd('ALERunOnTextChangedGroup')
 
 Execute (g:ale_lint_on_text_changed = 'normal' should bind only TextChanged):
   let g:ale_lint_on_text_changed = 'normal'
 
-  AssertEqual ['TextChanged'], CheckAutocmd('ALERunOnTextChangedGroup')
+  AssertEqual [
+  \ 'TextChanged * call ale#Queue(g:ale_lint_delay)',
+  \], CheckAutocmd('ALERunOnTextChangedGroup')
 
 Execute (g:ale_lint_on_text_changed = 'insert' should bind only TextChangedI):
   let g:ale_lint_on_text_changed = 'insert'
 
-  AssertEqual ['TextChangedI'], CheckAutocmd('ALERunOnTextChangedGroup')
+  AssertEqual [
+  \ 'TextChangedI * call ale#Queue(g:ale_lint_delay)',
+  \], CheckAutocmd('ALERunOnTextChangedGroup')
 
 Execute (g:ale_lint_on_insert_leave = 1 should bind InsertLeave):
   let g:ale_lint_on_insert_leave = 1
 
-  AssertEqual ['InsertLeave'], CheckAutocmd('ALERunOnInsertLeave')
+  AssertEqual [
+  \ 'InsertLeave * call ale#Queue(0, ''lint_file'')',
+  \], CheckAutocmd('ALERunOnInsertLeave')
 
 Execute (g:ale_lint_on_insert_leave = 0 should bind no events):
   let g:ale_lint_on_insert_leave = 0
 
   AssertEqual [], CheckAutocmd('ALERunOnInsertLeave')
+
+Execute (g:ale_pattern_options_enabled = 0 should bind no events):
+  let g:ale_pattern_options_enabled = 0
+
+  AssertEqual [], CheckAutocmd('ALEPatternOptionsGroup')
+
+Execute (g:ale_pattern_options_enabled = 1 should bind BufReadPost and BufEnter):
+  let g:ale_pattern_options_enabled = 1
+
+  AssertEqual [
+  \ 'BufEnter * call ale#pattern_options#SetOptions()',
+  \ 'BufReadPost * call ale#pattern_options#SetOptions()',
+  \], CheckAutocmd('ALEPatternOptionsGroup')
+
+Execute (g:ale_lint_on_enter = 0 should bind no events):
+  let g:ale_lint_on_enter = 0
+
+  AssertEqual [], CheckAutocmd('ALERunOnEnterGroup')
+
+Execute (g:ale_lint_on_enter = 1 should bind no BufReadPost and BufEnter):
+  let g:ale_lint_on_enter = 1
+
+  AssertEqual [
+  \ 'BufEnter * call ale#Queue(300, ''lint_file'')',
+  \ 'BufReadPost * call ale#Queue(300, ''lint_file'')',
+  \], CheckAutocmd('ALERunOnEnterGroup')
+
+Execute (g:ale_lint_on_filetype_changed = 0 should bind no events):
+  let g:ale_lint_on_filetype_changed = 0
+
+  AssertEqual [], CheckAutocmd('ALERunOnFiletypeChangeGroup')
+
+Execute (g:ale_lint_on_filetype_changed = 1 should bind FileType, and required buffer events):
+  let g:ale_lint_on_filetype_changed = 1
+
+  AssertEqual [
+  \ 'BufEnter * let b:ale_original_filetype = &filetype',
+  \ 'BufReadPost * let b:ale_original_filetype = &filetype',
+  \ 'FileType * '
+  \   . 'if has_key(b:, ''ale_original_filetype'') '
+  \   . '&& b:ale_original_filetype !=# expand(''<amatch>'')'
+  \   . '| call ale#Queue(300, ''lint_file'')'
+  \   . '| endif',
+  \], CheckAutocmd('ALERunOnFiletypeChangeGroup')
+
+Execute (g:ale_lint_on_save = 0 should bind no events):
+  let g:ale_lint_on_save = 0
+
+  AssertEqual [], CheckAutocmd('ALERunOnSaveGroup')
+
+Execute (g:ale_lint_on_save = 1 should bind no events):
+  let g:ale_lint_on_save = 1
+
+  AssertEqual [
+  \ 'BufWritePre * call ale#Queue(0, ''lint_file'')',
+  \], CheckAutocmd('ALERunOnSaveGroup')
+
+Execute (g:ale_echo_cursor = 0 should bind no events):
+  let g:ale_echo_cursor = 0
+
+  AssertEqual [], CheckAutocmd('ALECursorGroup')
+
+Execute (g:ale_echo_cursor = 1 should bind cursor events):
+  let g:ale_echo_cursor = 1
+
+  AssertEqual [
+  \ 'CursorHold * call ale#cursor#EchoCursorWarningWithDelay()',
+  \ 'CursorMoved * call ale#cursor#EchoCursorWarningWithDelay()',
+  \ 'InsertLeave * call ale#cursor#EchoCursorWarning()',
+  \], CheckAutocmd('ALECursorGroup')
