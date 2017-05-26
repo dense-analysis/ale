@@ -161,9 +161,22 @@ let g:ale_history_enabled = get(g:, 'ale_history_enabled', 1)
 " A flag for storing the full output of commands in the history.
 let g:ale_history_log_output = get(g:, 'ale_history_log_output', 0)
 
+" A dictionary mapping regular expression patterns to arbitrary buffer
+" variables to be set. Useful for configuration ALE based on filename
+" patterns.
+call ale#Set('pattern_options', {})
+call ale#Set('pattern_options_enabled', !empty(g:ale_pattern_options))
+
 function! ALEInitAuGroups() abort
     " This value used to be a Boolean as a Number, and is now a String.
     let l:text_changed = '' . g:ale_lint_on_text_changed
+
+    augroup ALEPatternOptionsGroup
+        autocmd!
+        if g:ale_enabled && g:ale_pattern_options_enabled
+            autocmd BufEnter,BufRead * call ale#pattern_options#SetOptions()
+        endif
+    augroup END
 
     augroup ALERunOnTextChangedGroup
         autocmd!
@@ -226,6 +239,7 @@ function! ALEInitAuGroups() abort
     augroup END
 
     if !g:ale_enabled
+        augroup! ALEPatternOptionsGroup
         augroup! ALERunOnTextChangedGroup
         augroup! ALERunOnEnterGroup
         augroup! ALERunOnSaveGroup
@@ -238,6 +252,11 @@ function! s:ALEToggle() abort
     let g:ale_enabled = !get(g:, 'ale_enabled')
 
     if g:ale_enabled
+        " Set pattern options again, if enabled.
+        if g:ale_pattern_options_enabled
+            call ale#pattern_options#SetOptions()
+        endif
+
         " Lint immediately, including running linters against the file.
         call ale#Queue(0, 'lint_file')
     else

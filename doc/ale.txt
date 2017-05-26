@@ -517,6 +517,41 @@ g:ale_open_list                                               *g:ale_open_list*
   to `1`, in which case the window will be kept open until closed manually.
 
 
+g:ale_pattern_options                                   *g:ale_pattern_options*
+
+  Type: |Dictionary|
+  Default: `{}`
+
+  This option maps regular expression patterns to |Dictionary| values for
+  buffer variables. This option can be set to automatically configure
+  different settings for different files. For example: >
+
+  let g:ale_pattern_options = {
+  \   '\.foo\.js$': {
+  \       'ale_linters: {'javascript': ['eslint']},
+  \   },
+  \}
+<
+  The above example will match any filename ending in `.foo.js`, and use
+  only `eslint` for checking those files by setting `b:ale_linters`.
+
+  Filenames are matched with |match()|, and patterns depend on the |magic|
+  setting, unless prefixed with the special escape sequences like `'\v'`, etc.
+
+  The patterns can match any part of a filename. The absolute path of the
+  filename will be used for matching, taken from `expand('%:p')`.
+
+
+g:ale_pattern_options_enabled                   *g:ale_pattern_options_enabled*
+
+  Type: |Number|
+  Default: `!empty(g:ale_pattern_options)`
+
+  This option can be used for turning the behaviour of setting
+  |g:ale_pattern_options| on or off. By default, setting a single key
+  for |g:ale_pattern_options| will turn this option on.
+
+
 g:ale_set_highlights                                     *g:ale_set_highlights*
 
   Type: |Number|
