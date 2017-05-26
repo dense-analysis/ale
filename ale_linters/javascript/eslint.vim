@@ -5,8 +5,20 @@ let g:ale_javascript_eslint_options =
 \   get(g:, 'ale_javascript_eslint_options', '')
 
 function! ale_linters#javascript#eslint#GetCommand(buffer) abort
-    return ale#handlers#eslint#GetExecutable(a:buffer)
-    \   . ' ' . ale#Var(a:buffer, 'javascript_eslint_options')
+    let l:executable = ale#handlers#eslint#GetExecutable(a:buffer)
+
+    if ale#Has('win32') && l:executable =~? 'eslint\.js$'
+        " For Windows, if we detect an eslint.js script, we need to execute
+        " it with node, or the file can be opened with a text editor.
+        let l:head = 'node ' . ale#Escape(l:executable)
+    else
+        let l:head = ale#Escape(l:executable)
+    endif
+
+    let l:options = ale#Var(a:buffer, 'javascript_eslint_options')
+
+    return l:head
+    \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' -f unix --stdin --stdin-filename %s'
 endfunction
 
