@@ -46,11 +46,9 @@ function! ale#handlers#rust#HandleRustErrorsForFile(buffer, full_filename, lines
         endif
 
         for l:span in l:error.spans
-            let l:span_filename = fnamemodify(l:span.file_name, ':t')
-
             if (
             \   l:span.is_primary
-            \   && (l:span_filename ==# l:filename || l:span_filename ==# '<anon>')
+            \   && (a:full_filename =~ (l:span.file_name . '$') || l:span.file_name ==# '<anon>')
             \)
                 call add(l:output, {
                 \   'lnum': l:span.line_start,

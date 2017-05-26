@@ -46,3 +46,13 @@ Execute(The Rust handler should handle cargo output):
   \   '{"message":{"children":[],"code":null,"level":"error","message":"no method named `wat` found for type `std::string::String` in the current scope","rendered":null,"spans":[{"byte_end":11497,"byte_start":11494,"column_end":10,"column_start":7,"expansion":null,"file_name":"src/playpen.rs","is_primary":true,"label":null,"line_end":13,"line_start":13,"suggested_replacement":null,"text":[{"highlight_end":10,"highlight_start":7,"text":"    s.wat()"}]}]},"package_id":"update 0.0.1 (path+file:///home/w0rp/Downloads/rust-by-example)","reason":"compiler-message","target":{"kind":["bin"],"name":"update","src_path":"/home/w0rp/Downloads/rust-by-example/src/main.rs"}}',
   \   '{"message":{"children":[],"code":null,"level":"error","message":"aborting due to previous error","rendered":null,"spans":[]},"package_id":"update 0.0.1 (path+file:///home/w0rp/Downloads/rust-by-example)","reason":"compiler-message","target":{"kind":["bin"],"name":"update","src_path":"/home/w0rp/Downloads/rust-by-example/src/main.rs"}}',
   \ ])
+
+Execute(The Rust handler should find correct files):
+  AssertEqual
+  \ [],
+  \ ale#handlers#rust#HandleRustErrorsForFile(347, 'src/noerrors/mod.rs', [
+  \   '',
+  \   'ignore this',
+  \   '{"message":{"children":[],"code":null,"level":"error","message":"unresolved import `Undefined`","rendered":null,"spans":[{"byte_end":103,"byte_start":94,"column_end":14,"column_start":5,"expansion":null,"file_name":"src/haserrors/mod.rs","is_primary":true,"label":"no `Undefined` in the root","line_end":1,"line_start":1,"suggested_replacement":null,"text":[{"highlight_end":14,"highlight_start":5,"text":"use Undefined;"}]}]},"package_id":"sample 0.1.0 (path+file:///private/tmp/sample)","reason":"compiler-message","target":{"crate_types":["lib"],"kind":["lib"],"name":"sample","src_path":"/private/tmp/sample/src/lib.rs"}}',
+  \   '{"message":{"children":[],"code":null,"level":"error","message":"aborting due to previous error","rendered":null,"spans":[]},"package_id":"sample 0.1.0 (path+file:///private/tmp/sample)","reason":"compiler-message","target":{"crate_types":["lib"],"kind":["lib"],"name":"sample","src_path":"/private/tmp/sample/src/lib.rs"}}',
+  \ ])
