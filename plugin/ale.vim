@@ -167,6 +167,9 @@ let g:ale_history_log_output = get(g:, 'ale_history_log_output', 0)
 call ale#Set('pattern_options', {})
 call ale#Set('pattern_options_enabled', !empty(g:ale_pattern_options))
 
+" A maximum file size for checking for errors.
+call ale#Set('maximum_file_size', 0)
+
 function! ALEInitAuGroups() abort
     " This value used to be a Boolean as a Number, and is now a String.
     let l:text_changed = '' . g:ale_lint_on_text_changed

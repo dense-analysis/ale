@@ -66,11 +66,6 @@ function! s:StopCursorTimer() abort
 endfunction
 
 function! ale#cursor#EchoCursorWarning(...) abort
-    " Stop here if ALE is disabled.
-    if !ale#Var(bufnr(''), 'enabled')
-        return
-    endif
-
     if ale#ShouldDoNothing()
         return
     endif
@@ -98,11 +93,6 @@ let s:cursor_timer = -1
 let s:last_pos = [0, 0, 0]
 
 function! ale#cursor#EchoCursorWarningWithDelay() abort
-    " Stop here if ALE is disabled.
-    if !ale#Var(bufnr(''), 'enabled')
-        return
-    endif
-
     if ale#ShouldDoNothing()
         return
     endif
@@ -122,6 +112,10 @@ function! ale#cursor#EchoCursorWarningWithDelay() abort
 endfunction
 
 function! ale#cursor#ShowCursorDetail() abort
+    if ale#ShouldDoNothing()
+        return
+    endif
+
     " Only echo the warnings in normal mode, otherwise we will get problems.
     if mode() !=# 'n'
         return

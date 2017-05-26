@@ -1,5 +1,27 @@
 Before:
-  Save g:ale_buffer_info, g:ale_enabled, b:ale_enabled
+  Save g:ale_buffer_info
+  Save g:ale_enabled
+  Save b:ale_enabled
+  Save g:ale_maximum_file_size
+  Save b:ale_maximum_file_size
+
+  function! SetUpCursorData()
+    let g:ale_buffer_info = {
+    \ bufnr('%'): {
+    \   'loclist': [
+    \     {
+    \       'lnum': 2,
+    \       'col': 10,
+    \       'linter_name': 'testlinter',
+    \       'type': 'W',
+    \       'text': 'X'
+    \     },
+    \   ],
+    \ },
+    \}
+
+    call cursor(2, 16)
+  endfunction
 
   function! TestCallback(buffer, output)
     return []
@@ -29,6 +51,7 @@ After:
   call ale#linter#Reset()
   delfunction TestCallback
   delfunction GetLastMessage
+  delfunction SetUpCursorData
 
 Given foobar (Some imaginary filetype):
   foo
@@ -43,6 +66,14 @@ Execute(Linting shouldn't happen when ALE is disabled globally):
 
   AssertEqual {}, g:ale_buffer_info
 
+Execute(Linting shouldn't happen when the file is too large with a global options):
+  let g:ale_maximum_file_size = 12
+  let g:ale_buffer_info = {}
+
+  call ale#Queue(0)
+
+  AssertEqual {}, g:ale_buffer_info
+
 Execute(Linting shouldn't happen when ALE is disabled locally):
   let b:ale_enabled = 0
   let g:ale_buffer_info = {}
@@ -51,42 +82,38 @@ Execute(Linting shouldn't happen when ALE is disabled locally):
 
   AssertEqual {}, g:ale_buffer_info
 
+Execute(Linting shouldn't happen when the file is too large with a local options):
+  let b:ale_maximum_file_size = 12
+  let g:ale_buffer_info = {}
+
+  call ale#Queue(0)
+
+  AssertEqual {}, g:ale_buffer_info
+
 Execute(Cursor warnings shouldn't be echoed when ALE is disabled globally):
   let g:ale_enabled = 0
-  let g:ale_buffer_info = {
-  \ bufnr('%'): {
-  \   'loclist': [
-  \     {
-  \       'lnum': 2,
-  \       'col': 10,
-  \       'linter_name': 'testlinter',
-  \       'type': 'W',
-  \       'text': 'X'
-  \     },
-  \   ],
-  \ },
-  \}
 
-  call cursor(2, 16)
+  call SetUpCursorData()
+  call ale#cursor#EchoCursorWarning()
+  AssertEqual '', GetLastMessage()
+
+Execute(Cursor warnings shouldn't be echoed when the file is too large with global options):
+  let g:ale_maximum_file_size = 12
+
+  call SetUpCursorData()
   call ale#cursor#EchoCursorWarning()
   AssertEqual '', GetLastMessage()
 
 Execute(Cursor warnings shouldn't be echoed when ALE is disabled locally):
   let b:ale_enabled = 0
-  let g:ale_buffer_info = {
-  \ bufnr('%'): {
-  \   'loclist': [
-  \     {
-  \       'lnum': 2,
-  \       'col': 10,
-  \       'linter_name': 'testlinter',
-  \       'type': 'W',
-  \       'text': 'X'
-  \     },
-  \   ],
-  \ },
-  \}
 
-  call cursor(2, 16)
+  call SetUpCursorData()
+  call ale#cursor#EchoCursorWarning()
+  AssertEqual '', GetLastMessage()
+
+Execute(Cursor warnings shouldn't be echoed when the file is too large with local options):
+  let b:ale_maximum_file_size = 12
+
+  call SetUpCursorData()
   call ale#cursor#EchoCursorWarning()
   AssertEqual '', GetLastMessage()

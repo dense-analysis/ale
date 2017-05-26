@@ -6,6 +6,13 @@ let s:lint_timer = -1
 let s:queued_buffer_number = -1
 let s:should_lint_file_for_buffer = {}
 
+" Return 1 if a file is too large for ALE to handle.
+function! ale#FileTooLarge() abort
+    let l:max = ale#Var(bufnr(''), 'maximum_file_size')
+
+    return l:max > 0 ? (line2byte(line('$') + 1) > l:max) : 0
+endfunction
+
 " A function for checking various conditions whereby ALE just shouldn't
 " attempt to do anything, say if particular buffer types are open in Vim.
 function! ale#ShouldDoNothing() abort
@@ -14,6 +21,8 @@ function! ale#ShouldDoNothing() abort
     return index(g:ale_filetype_blacklist, &filetype) >= 0
     \   || (exists('*getcmdwintype') && !empty(getcmdwintype()))
     \   || ale#util#InSandbox()
+    \   || !ale#Var(bufnr(''), 'enabled')
+    \   || ale#FileTooLarge()
 endfunction
 
 " (delay, [linting_flag])
@@ -27,11 +36,6 @@ function! ale#Queue(delay, ...) abort
 
     if l:linting_flag !=# '' && l:linting_flag !=# 'lint_file'
         throw "linting_flag must be either '' or 'lint_file'"
-    endif
-
-    " Stop here if ALE is disabled.
-    if !ale#Var(bufnr(''), 'enabled')
-        return
     endif
 
     if ale#ShouldDoNothing()

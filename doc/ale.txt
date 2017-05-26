@@ -514,6 +514,15 @@ g:ale_max_buffer_history_size                   *g:ale_max_buffer_history_size*
   History can be disabled completely with |g:ale_history_enabled|.
 
 
+g:ale_maximum_file_size                               *g:ale_maximum_file_size*
+                                                      *b:ale_maximum_file_size*
+  Type: |Number|
+  Default: `0`
+
+  A maximum file size in bytes for ALE to check. If set to any positive
+  number, ALE will skip checking files larger than the given size.
+
+
 g:ale_open_list                                               *g:ale_open_list*
 
   Type: |Number|
