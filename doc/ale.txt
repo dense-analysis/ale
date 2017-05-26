@@ -277,6 +277,7 @@ g:ale_emit_conflict_warnings                     *g:ale_emit_conflict_warnings*
 
 
 g:ale_enabled                                                   *g:ale_enabled*
+                                                                *b:ale_enabled*
 
   Type: |Number|
   Default: `1`
@@ -284,6 +285,16 @@ g:ale_enabled                                                   *g:ale_enabled*
   When set to `0`, this option will completely disable ALE, such that no
   error checking will be performed, etc. ALE can be toggled on and off with
   the |ALEToggle| command, which changes this option.
+
+  ALE can be disabled in each buffer by setting `let b:ale_enabled = 0`
+  Disabling ALE based on filename patterns can be accomplished by setting
+  a regular expression for |g:ale_pattern_options|. For example: >
+
+  " Disable linting for all minified JS files.
+  let g:ale_pattern_options = {'\.min.js$': {'ale_enabled': 0}}
+<
+
+  See |g:ale_pattern_options| for more information on that option.
 
 
 g:ale_fixers                                                     *g:ale_fixers*

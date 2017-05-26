@@ -29,6 +29,11 @@ function! ale#Queue(delay, ...) abort
         throw "linting_flag must be either '' or 'lint_file'"
     endif
 
+    " Stop here if ALE is disabled.
+    if !ale#Var(bufnr(''), 'enabled')
+        return
+    endif
+
     if ale#ShouldDoNothing()
         return
     endif
