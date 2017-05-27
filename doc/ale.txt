@@ -10,7 +10,7 @@ CONTENTS                                                         *ale-contents*
   2. Supported Languages & Tools..........|ale-support|
   3. Global Options.......................|ale-options|
   4. Fixing Problems......................|ale-fix|
-  5. Linter Options and Recommendations...|ale-linter-options|
+  5. Integration Documentation............|ale-integrations|
     asm...................................|ale-asm-options|
       gcc.................................|ale-asm-gcc|
     c.....................................|ale-c-options|
@@ -47,6 +47,8 @@ CONTENTS                                                         *ale-contents*
       eslint..............................|ale-javascript-eslint|
       flow................................|ale-javascript-flow|
       jshint..............................|ale-javascript-jshint|
+      prettier............................|ale-javascript-prettier|
+      prettier-eslint.....................|ale-javascript-prettier-eslint|
       standard............................|ale-javascript-standard|
       xo..................................|ale-javascript-xo|
     kotlin................................|ale-kotlin-options|
@@ -770,14 +772,14 @@ from the file.
 
 
 ===============================================================================
-5. Linter Options and Recommendations                      *ale-linter-options*
+5. Integration Documentation                                 *ale-integrations*
 
-Linter options are documented in individual help files. See the table of
-contents at |ale-contents|.
+Linter and fixer options are documented in individual help files. See the
+table of contents at |ale-contents|.
 
-Every linter variable can be set globally, or individually for each buffer.
-For example, `b:ale_python_flake8_executable` will override any values
-set for `g:ale_python_flake8_executable`.
+Every option for programs can be set globally, or individually for each
+buffer.  For example, `b:ale_python_flake8_executable` will override any
+values set for `g:ale_python_flake8_executable`.
 
 
 ===============================================================================
