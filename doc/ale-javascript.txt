@@ -40,6 +40,45 @@ g:ale_javascript_eslint_use_global         *g:ale_javascript_eslint_use_global*
 
 
 -------------------------------------------------------------------------------
+prettier                                              *ale-javascript-prettier*
+
+g:ale_javascript_prettier_executable     *g:ale_javascript_prettier_executable*
+                                         *b:ale_javascript_prettier_executable*
+  Type: |String|
+  Default: `'prettier-eslint'`
+
+  ALE will first discover the prettier-eslint path in an ancestor node_modules
+  directory. If no such path exists, this variable will be used instead.
+
+  This variable can be set to change the path to prettier-eslint or if you want
+  to use the original Prettier CLI.
+
+  If you wish to use only a globally installed version of prettier or
+  prettier-eslint, set the set
+  |g:ale_javascript_prettier_use_global| to `1`.
+
+
+g:ale_javascript_prettier_options             *g:ale_javascript_prettier_options*
+                                            *b:ale_javascript_prettier_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to prettier.
+
+
+g:ale_javascript_prettier_use_global       *g:ale_javascript_eslint_use_global*
+                                           *b:ale_javascript_eslint_use_global*
+  Type: |Number|
+  Default: `0`
+
+  This variable controls whether or not ALE will search for a local path for
+  prettier-eslint-cli first. If this variable is set to `1`,
+  then ALE will always use the global version of Prettier or Prettier-ESLint,
+  depending on g:ale_javascript_prettier_executable, in preference to
+  locally installed versions of Prettier / Prettier-ESLint in node_modules.
+
+
+-------------------------------------------------------------------------------
 flow                                                      *ale-javascript-flow*
 
 g:ale_javascript_flow_executable             *g:ale_javascript_flow_executable*
