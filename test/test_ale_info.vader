@@ -1,4 +1,9 @@
 Before:
+  Save g:ale_warn_about_trailing_whitespace
+  Save g:ale_linters
+
+  let g:ale_warn_about_trailing_whitespace = 1
+
   let g:testlinter1 = {'name': 'testlinter1', 'executable': 'testlinter1', 'command': 'testlinter1', 'callback': 'testCB1', 'output_stream': 'stdout'}
   let g:testlinter2 = {'name': 'testlinter2', 'executable': 'testlinter2', 'command': 'testlinter2', 'callback': 'testCB2', 'output_stream': 'stdout'}
 
@@ -6,8 +11,7 @@ Before:
   let g:ale_linters = {}
   let g:ale_linter_aliases = {}
   let g:ale_buffer_info = {}
-  let g:globals_string = join([
-  \  '',
+  let g:globals_lines = [
   \  ' Global Variables:',
   \  '',
   \  'let g:ale_echo_cursor = 1',
@@ -33,10 +37,29 @@ Before:
   \  'let g:ale_sign_warning = ''--''',
   \  'let g:ale_statusline_format = [''%d error(s)'', ''%d warning(s)'', ''OK'']',
   \  'let g:ale_warn_about_trailing_whitespace = 1',
-  \], "\n")
-  let g:command_header = "\n  Command History:\n"
+  \]
+  let g:command_header = [
+  \ '  Command History:',
+  \]
+
+  function CheckInfo(expected_list) abort
+    let l:output = ''
+
+    redir => l:output
+      noautocmd silent ALEInfo
+    redir END
+
+    AssertEqual a:expected_list, split(l:output, "\n")
+  endfunction
 
 After:
+  Restore
+
+  let g:ale_buffer_info = {}
+
+  unlet!  g:testlinter1
+  unlet!  g:testlinter2
+
   unlet! b:ale_linters
   unlet! g:output
   unlet! g:globals_string
@@ -48,121 +71,113 @@ After:
   unlet! g:ale_testft2_testlinter2_foo
   unlet! b:ale_testft2_testlinter2_foo
   unlet! g:ale_testft2_testlinter2_bar
+  delfunction CheckInfo
 
 Given nolintersft (Empty buffer with no linters):
 Execute (ALEInfo with no linters should return the right output):
-  redir => g:output
-  silent ALEInfo
-  redir END
-  AssertEqual "\n
-              \ Current Filetype: nolintersft\n
-              \Available Linters: []\n
-              \  Enabled Linters: []\n
-              \ Linter Variables:\n
-              \" . g:globals_string . g:command_header, g:output
+  call CheckInfo([
+  \ ' Current Filetype: nolintersft',
+  \ 'Available Linters: []',
+  \ '  Enabled Linters: []',
+  \ ' Linter Variables:',
+  \ '',
+  \] + g:globals_lines + g:command_header)
 
 Given (Empty buffer with no filetype):
 Execute (ALEInfo should return buffer-local global ALE settings):
   let b:ale_linters = {'x': ['y']}
-  let g:globals_string = substitute(
-  \ g:globals_string,
-  \ 'let g:ale_linters = {}',
-  \ "let g:ale_linters = {}\nlet b:ale_linters = {'x': ['y']}",
-  \ ''
+
+  call insert(
+  \ g:globals_lines,
+  \ 'let b:ale_linters = {''x'': [''y'']}',
+  \ index(g:globals_lines, 'let g:ale_linters = {}') + 1
   \)
 
-  redir => g:output
-  silent ALEInfo
-  redir END
-  AssertEqual "\n
-              \ Current Filetype: \n
-              \Available Linters: []\n
-              \  Enabled Linters: []\n
-              \ Linter Variables:\n
-              \" . g:globals_string . g:command_header, g:output
+  call CheckInfo([
+  \ ' Current Filetype: ',
+  \ 'Available Linters: []',
+  \ '  Enabled Linters: []',
+  \ ' Linter Variables:',
+  \ '',
+  \] + g:globals_lines + g:command_header)
 
 Given (Empty buffer with no filetype):
 Execute (ALEInfo with no filetype should return the right output):
-  redir => g:output
-  silent ALEInfo
-  redir END
-  AssertEqual "\n
-              \ Current Filetype: \n
-              \Available Linters: []\n
-              \  Enabled Linters: []\n
-              \ Linter Variables:\n
-              \" . g:globals_string . g:command_header, g:output
+  call CheckInfo([
+  \ ' Current Filetype: ',
+  \ 'Available Linters: []',
+  \ '  Enabled Linters: []',
+  \ ' Linter Variables:',
+  \ '',
+  \] + g:globals_lines + g:command_header)
 
 Given testft (Empty buffer):
 Execute (ALEInfo with a single linter should return the right output):
   call ale#linter#Define('testft', g:testlinter1)
-  redir => g:output
-  silent ALEInfo
-  redir END
-  AssertEqual "\n
-              \ Current Filetype: testft\n
-              \Available Linters: ['testlinter1']\n
-              \  Enabled Linters: ['testlinter1']\n
-              \ Linter Variables:\n
-              \" . g:globals_string . g:command_header, g:output
+
+  call CheckInfo([
+  \ ' Current Filetype: testft',
+  \ 'Available Linters: [''testlinter1'']',
+  \ '  Enabled Linters: [''testlinter1'']',
+  \ ' Linter Variables:',
+  \ '',
+  \] + g:globals_lines + g:command_header)
 
 Given testft (Empty buffer):
 Execute (ALEInfo with two linters should return the right output):
   call ale#linter#Define('testft', g:testlinter1)
   call ale#linter#Define('testft', g:testlinter2)
-  redir => g:output
-  silent ALEInfo
-  redir END
-  AssertEqual "\n
-              \ Current Filetype: testft\n
-              \Available Linters: ['testlinter1', 'testlinter2']\n
-              \  Enabled Linters: ['testlinter1', 'testlinter2']\n
-              \ Linter Variables:\n
-              \" . g:globals_string . g:command_header, g:output
+
+  call CheckInfo([
+  \ ' Current Filetype: testft',
+  \ 'Available Linters: [''testlinter1'', ''testlinter2'']',
+  \ '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
+  \ ' Linter Variables:',
+  \ '',
+  \] + g:globals_lines + g:command_header)
 
 Given testft (Empty buffer):
 Execute (ALEInfo should calculate enabled linters correctly):
   call ale#linter#Define('testft', g:testlinter1)
   call ale#linter#Define('testft', g:testlinter2)
-  let g:ale_linters = { 'testft': ['testlinter2'] }
-  redir => g:output
-  silent ALEInfo
-  redir END
-  AssertEqual "\n
-              \ Current Filetype: testft\n
-              \Available Linters: ['testlinter1', 'testlinter2']\n
-              \  Enabled Linters: ['testlinter2']\n
-              \ Linter Variables:\n
-              \",
-              \ "\n" . join(split(g:output, "\n")[:4], "\n")
+  let g:ale_linters = {'testft': ['testlinter2']}
+
+  let g:globals_lines[index(g:globals_lines, 'let g:ale_linters = {}')]
+  \ = 'let g:ale_linters = {''testft'': [''testlinter2'']}'
+
+  call CheckInfo([
+  \ ' Current Filetype: testft',
+  \ 'Available Linters: [''testlinter1'', ''testlinter2'']',
+  \ '  Enabled Linters: [''testlinter2'']',
+  \ ' Linter Variables:',
+  \ '',
+  \] + g:globals_lines + g:command_header)
 
 Given testft (Empty buffer):
 Execute (ALEInfo should only return linters for current filetype):
   call ale#linter#Define('testft', g:testlinter1)
   call ale#linter#Define('testft2', g:testlinter2)
-  redir => g:output
-  silent ALEInfo
-  redir END
-  AssertEqual "\n
-              \ Current Filetype: testft\n
-              \Available Linters: ['testlinter1']\n
-              \  Enabled Linters: ['testlinter1']\n
-              \ Linter Variables:\n
-              \" . g:globals_string . g:command_header, g:output
+
+  call CheckInfo([
+  \ ' Current Filetype: testft',
+  \ 'Available Linters: [''testlinter1'']',
+  \ '  Enabled Linters: [''testlinter1'']',
+  \ ' Linter Variables:',
+  \ '',
+  \] + g:globals_lines + g:command_header)
 
 Given testft.testft2 (Empty buffer with two filetypes):
 Execute (ALEInfo with compound filetypes should return linters for both of them):
   call ale#linter#Define('testft', g:testlinter1)
   call ale#linter#Define('testft2', g:testlinter2)
-  redir => g:output
-  silent ALEInfo
-  redir END
-  AssertEqual "\n
-              \ Current Filetype: testft.testft2\n
-              \Available Linters: ['testlinter1', 'testlinter2']\n
-              \  Enabled Linters: ['testlinter1', 'testlinter2']\n
-              \ Linter Variables:\n
-              \" . g:globals_string . g:command_header, g:output
+
+  call CheckInfo([
+  \ ' Current Filetype: testft.testft2',
+  \ 'Available Linters: [''testlinter1'', ''testlinter2'']',
+  \ '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
+  \ ' Linter Variables:',
+  \ '',
+  \] + g:globals_lines + g:command_header)
 
 Given testft.testft2 (Empty buffer with two filetypes):
 Execute (ALEInfo should return appropriately named global variables):
@@ -173,20 +188,18 @@ Execute (ALEInfo should return appropriately named global variables):
 
   call ale#linter#Define('testft', g:testlinter1)
   call ale#linter#Define('testft2', g:testlinter2)
-  redir => g:output
-  silent ALEInfo
-  redir END
-  AssertEqual "\n
-              \ Current Filetype: testft.testft2\n
-              \Available Linters: ['testlinter1', 'testlinter2']\n
-              \  Enabled Linters: ['testlinter1', 'testlinter2']\n
-              \ Linter Variables:\n
-              \\n
-              \let g:ale_testft2_testlinter2_bar = {'x': 'y'}\n
-              \let g:ale_testft2_testlinter2_foo = 123\n
-              \let g:ale_testft_testlinter1_bar = ['abc']\n
-              \let g:ale_testft_testlinter1_foo = 'abc'"
-              \ . g:globals_string . g:command_header, g:output
+
+  call CheckInfo([
+  \ ' Current Filetype: testft.testft2',
+  \ 'Available Linters: [''testlinter1'', ''testlinter2'']',
+  \ '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
+  \ ' Linter Variables:',
+  \ '',
+  \ 'let g:ale_testft2_testlinter2_bar = {''x'': ''y''}',
+  \ 'let g:ale_testft2_testlinter2_foo = 123',
+  \ 'let g:ale_testft_testlinter1_bar = [''abc'']',
+  \ 'let g:ale_testft_testlinter1_foo = ''abc''',
+  \] + g:globals_lines + g:command_header)
 
 Given testft.testft2 (Empty buffer with two filetypes):
 Execute (ALEInfo should buffer-local linter variables):
@@ -195,18 +208,16 @@ Execute (ALEInfo should buffer-local linter variables):
 
   call ale#linter#Define('testft', g:testlinter1)
   call ale#linter#Define('testft2', g:testlinter2)
-  redir => g:output
-  silent ALEInfo
-  redir END
-  AssertEqual "\n
-              \ Current Filetype: testft.testft2\n
-              \Available Linters: ['testlinter1', 'testlinter2']\n
-              \  Enabled Linters: ['testlinter1', 'testlinter2']\n
-              \ Linter Variables:\n
-              \\n
-              \let g:ale_testft2_testlinter2_foo = 123\n
-              \let b:ale_testft2_testlinter2_foo = 456"
-              \ . g:globals_string . g:command_header, g:output
+
+  call CheckInfo([
+  \ ' Current Filetype: testft.testft2',
+  \ 'Available Linters: [''testlinter1'', ''testlinter2'']',
+  \ '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
+  \ ' Linter Variables:',
+  \ '',
+  \ 'let g:ale_testft2_testlinter2_foo = 123',
+  \ 'let b:ale_testft2_testlinter2_foo = 456',
+  \] + g:globals_lines + g:command_header)
 
 Given testft.testft2 (Empty buffer with two filetypes):
 Execute (ALEInfo should output linter aliases):
@@ -218,21 +229,19 @@ Execute (ALEInfo should output linter aliases):
 
   call ale#linter#Define('testft', g:testlinter1)
   call ale#linter#Define('testft2', g:testlinter2)
-  redir => g:output
-  silent ALEInfo
-  redir END
-  AssertEqual "\n
-              \ Current Filetype: testft.testft2\n
-              \Available Linters: ['testlinter1', 'testlinter2']\n
-              \   Linter Aliases:\n
-              \ 'testlinter1' -> ['testftalias1', 'testftalias2']\n
-              \ 'testlinter2' -> ['testftalias3', 'testftalias4']\n
-              \  Enabled Linters: ['testlinter1', 'testlinter2']\n
-              \ Linter Variables:\n
-              \\n
-              \let g:ale_testft2_testlinter2_foo = 123\n
-              \let b:ale_testft2_testlinter2_foo = 456"
-              \ . g:globals_string . g:command_header, g:output
+
+  call CheckInfo([
+  \ ' Current Filetype: testft.testft2',
+  \ 'Available Linters: [''testlinter1'', ''testlinter2'']',
+  \ '   Linter Aliases:',
+  \ '''testlinter1'' -> [''testftalias1'', ''testftalias2'']',
+  \ '''testlinter2'' -> [''testftalias3'', ''testftalias4'']',
+  \ '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
+  \ ' Linter Variables:',
+  \ '',
+  \ 'let g:ale_testft2_testlinter2_foo = 123',
+  \ 'let b:ale_testft2_testlinter2_foo = 456',
+  \] + g:globals_lines + g:command_header)
 
 Given testft.testft2 (Empty buffer with two filetypes):
 Execute (ALEInfo should return command history):
@@ -245,21 +254,18 @@ Execute (ALEInfo should return command history):
 
   call ale#linter#Define('testft', g:testlinter1)
   call ale#linter#Define('testft2', g:testlinter2)
-  redir => g:output
-  silent ALEInfo
-  redir END
-  AssertEqual
-  \ join([
-  \   '',
+
+  call CheckInfo([
   \   ' Current Filetype: testft.testft2',
   \   'Available Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
-  \   ' Linter Variables:',
-  \   g:globals_string . g:command_header,
-  \   '(started) ''first command''',
-  \   '(started) [''/bin/bash'', ''\c'', ''last command'']',
-  \ ], "\n"),
-  \ g:output
+  \ ' Linter Variables:',
+  \ '',
+  \] + g:globals_lines + g:command_header + [
+  \ '',
+  \ '(started) ''first command''',
+  \ '(started) [''/bin/bash'', ''\c'', ''last command'']',
+  \])
 
 Given testft.testft2 (Empty buffer with two filetypes):
 Execute (ALEInfo command history should print exit codes correctly):
@@ -272,21 +278,18 @@ Execute (ALEInfo command history should print exit codes correctly):
 
   call ale#linter#Define('testft', g:testlinter1)
   call ale#linter#Define('testft2', g:testlinter2)
-  redir => g:output
-  silent ALEInfo
-  redir END
-  AssertEqual
-  \ join([
-  \   '',
+
+  call CheckInfo([
   \   ' Current Filetype: testft.testft2',
   \   'Available Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
-  \   ' Linter Variables:',
-  \   g:globals_string . g:command_header,
-  \   '(finished - exit code 0) ''first command''',
-  \   '(finished - exit code 1) [''/bin/bash'', ''\c'', ''last command'']',
-  \ ], "\n"),
-  \ g:output
+  \ ' Linter Variables:',
+  \ '',
+  \] + g:globals_lines + g:command_header + [
+  \ '',
+  \ '(finished - exit code 0) ''first command''',
+  \ '(finished - exit code 1) [''/bin/bash'', ''\c'', ''last command'']',
+  \])
 
 Given testft.testft2 (Empty buffer with two filetypes):
 Execute (ALEInfo command history should print command output if logging is on):
@@ -320,33 +323,29 @@ Execute (ALEInfo command history should print command output if logging is on):
 
   call ale#linter#Define('testft', g:testlinter1)
   call ale#linter#Define('testft2', g:testlinter2)
-  redir => g:output
-  silent ALEInfo
-  redir END
-  AssertEqual
-  \ join([
-  \   '',
+
+  call CheckInfo([
   \   ' Current Filetype: testft.testft2',
   \   'Available Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
-  \   ' Linter Variables:',
-  \   g:globals_string . g:command_header,
-  \   '(finished - exit code 0) ''first command''',
-  \   '',
-  \   '<<<OUTPUT STARTS>>>',
-  \   'some',
-  \   'first command output',
-  \   '<<<OUTPUT ENDS>>>',
-  \   '',
-  \   '(finished - exit code 1) [''/bin/bash'', ''\c'', ''last command'']',
-  \   '',
-  \   '<<<OUTPUT STARTS>>>',
-  \   'different second command output',
-  \   '<<<OUTPUT ENDS>>>',
-  \   '',
-  \   '(finished - exit code 0) ''command with no output''',
-  \   '',
-  \   '<<<NO OUTPUT RETURNED>>>',
-  \   '',
-  \ ], "\n"),
-  \ g:output
+  \ ' Linter Variables:',
+  \ '',
+  \] + g:globals_lines + g:command_header + [
+  \ '',
+  \ '(finished - exit code 0) ''first command''',
+  \ '',
+  \ '<<<OUTPUT STARTS>>>',
+  \ 'some',
+  \ 'first command output',
+  \ '<<<OUTPUT ENDS>>>',
+  \ '',
+  \ '(finished - exit code 1) [''/bin/bash'', ''\c'', ''last command'']',
+  \ '',
+  \ '<<<OUTPUT STARTS>>>',
+  \ 'different second command output',
+  \ '<<<OUTPUT ENDS>>>',
+  \ '',
+  \ '(finished - exit code 0) ''command with no output''',
+  \ '',
+  \ '<<<NO OUTPUT RETURNED>>>',
+  \])

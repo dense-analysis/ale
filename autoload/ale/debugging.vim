@@ -109,14 +109,14 @@ function! s:EchoLinterAliases(all_linters) abort
     let l:first = 1
 
     for l:linter in a:all_linters
-        if !empty(l:linter.aliaes)
-            if !l:first
+        if !empty(l:linter.aliases)
+            if l:first
                 echom '   Linter Aliases:'
             endif
 
             let l:first = 0
 
-            echom string(l:linter.name) . ' -> ' . string(l:linter.aliaes)
+            echom string(l:linter.name) . ' -> ' . string(l:linter.aliases)
         endif
     endfor
 endfunction
@@ -138,11 +138,6 @@ function! ale#debugging#Info() abort
 
     let l:all_names = map(copy(l:all_linters), 'v:val[''name'']')
     let l:enabled_names = map(copy(l:enabled_linters), 'v:val[''name'']')
-    let l:linter_aliases = []
-
-    for l:linter in l:all_linters
-        call add(l:linter_aliases, [l:linter.name, l:linter.aliaes])
-    endfor
 
     " Load linter variables to display
     " This must be done after linters are loaded.
