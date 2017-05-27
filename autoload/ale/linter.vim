@@ -164,6 +164,13 @@ function! ale#linter#PreProcess(linter) abort
         throw 'Only one of `lint_file` or `read_buffer` can be `1`'
     endif
 
+    let l:obj.aliases = get(a:linter, 'aliases', [])
+
+    if type(l:obj.aliases) != type([])
+    \|| len(filter(copy(l:obj.aliases), 'type(v:val) != type('''')')) > 0
+        throw '`aliases` must be a List of String values'
+    endif
+
     return l:obj
 endfunction
 
@@ -256,9 +263,14 @@ function! ale#linter#Get(original_filetypes) abort
         elseif type(l:linter_names) == type([])
             " Select only the linters we or the user has specified.
             for l:linter in l:all_linters
-                if index(l:linter_names, l:linter.name) >= 0
-                    call add(l:filetype_linters, l:linter)
-                endif
+                let l:name_list = [l:linter.name] + l:linter.aliases
+
+                for l:name in l:name_list
+                    if index(l:linter_names, l:name) >= 0
+                        call add(l:filetype_linters, l:linter)
+                        break
+                    endif
+                endfor
             endfor
         endif
 

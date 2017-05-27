@@ -1078,6 +1078,13 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          be set automatically to `0`. The two options cannot
                          be used together.
 
+  `aliases`                A |List| of aliases for the linter name.
+
+                         This option can be set with alternative names for
+                         for selecting the linter with |g:ale_linters|. This
+                         setting can make it easier to guess the linter name
+                         by offering a few alternatives.
+
   Only one of `command`, `command_callback`, or `command_chain` should be
   specified. `command_callback` is generally recommended when a command string
   needs to be generated dynamically, or any global options are used.

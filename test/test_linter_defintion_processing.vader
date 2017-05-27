@@ -323,3 +323,45 @@ Execute(PreProcess should set a default value for lint_file):
   \}
 
   AssertEqual 0, ale#linter#PreProcess(g:linter).lint_file
+
+Execute(PreProcess should set a default value for aliases):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'callback': 'x',
+  \ 'executable': 'x',
+  \ 'command': 'x',
+  \}
+
+  AssertEqual [], ale#linter#PreProcess(g:linter).aliases
+
+Execute(PreProcess should complain about invalid `aliases` values):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'callback': 'x',
+  \ 'executable': 'x',
+  \ 'command': 'x',
+  \ 'aliases': 'foo',
+  \}
+
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual '`aliases` must be a List of String values', g:vader_exception
+
+  let g:linter.aliases = [1]
+
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual '`aliases` must be a List of String values', g:vader_exception
+
+Execute(PreProcess should accept `aliases` lists):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'callback': 'x',
+  \ 'executable': 'x',
+  \ 'command': 'x',
+  \ 'aliases': [],
+  \}
+
+  AssertEqual [], ale#linter#PreProcess(g:linter).aliases
+
+  let g:linter.aliases = ['foo', 'bar']
+
+  AssertEqual ['foo', 'bar'], ale#linter#PreProcess(g:linter).aliases
