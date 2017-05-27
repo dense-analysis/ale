@@ -22,6 +22,16 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Sort Python imports with isort.',
 \   },
+\   'prettier': {
+\       'function': 'ale#handlers#prettier#Fix',
+\       'suggested_filetypes': ['javascript'],
+\       'description': 'Apply prettier to a file.',
+\   },
+\   'prettier_eslint': {
+\       'function': 'ale#handlers#prettier_eslint#Fix',
+\       'suggested_filetypes': ['javascript'],
+\       'description': 'Apply prettier-eslint to a file.',
+\   },
 \   'remove_trailing_lines': {
 \       'function': 'ale#fix#generic#RemoveTrailingBlankLines',
 \       'suggested_filetypes': [],
