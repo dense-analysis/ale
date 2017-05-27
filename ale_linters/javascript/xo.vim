@@ -1,25 +1,14 @@
 " Author: Daniel Lupu <lupu.daniel.f@gmail.com>
 " Description: xo for JavaScript files
 
-let g:ale_javascript_xo_executable =
-\   get(g:, 'ale_javascript_xo_executable', 'xo')
-
-let g:ale_javascript_xo_options =
-\   get(g:, 'ale_javascript_xo_options', '')
-
-let g:ale_javascript_xo_use_global =
-\   get(g:, 'ale_javascript_xo_use_global', 0)
+call ale#Set('javascript_xo_executable', 'xo')
+call ale#Set('javascript_xo_use_global', 0)
+call ale#Set('javascript_xo_options', '')
 
 function! ale_linters#javascript#xo#GetExecutable(buffer) abort
-    if ale#Var(a:buffer, 'javascript_xo_use_global')
-        return ale#Var(a:buffer, 'javascript_xo_executable')
-    endif
-
-    return ale#path#ResolveLocalPath(
-    \   a:buffer,
+    return ale#node#FindExecutable(a:buffer, 'javascript_xo', [
     \   'node_modules/.bin/xo',
-    \   ale#Var(a:buffer, 'javascript_xo_executable')
-    \)
+    \])
 endfunction
 
 function! ale_linters#javascript#xo#GetCommand(buffer) abort

@@ -1,25 +1,14 @@
 " Author: Ahmed El Gabri <@ahmedelgabri>
 " Description: standardjs for JavaScript files
 
-let g:ale_javascript_standard_executable =
-\   get(g:, 'ale_javascript_standard_executable', 'standard')
-
-let g:ale_javascript_standard_options =
-\   get(g:, 'ale_javascript_standard_options', '')
-
-let g:ale_javascript_standard_use_global =
-\   get(g:, 'ale_javascript_standard_use_global', 0)
+call ale#Set('javascript_standard_executable', 'standard')
+call ale#Set('javascript_standard_use_global', 0)
+call ale#Set('javascript_standard_options', '')
 
 function! ale_linters#javascript#standard#GetExecutable(buffer) abort
-    if ale#Var(a:buffer, 'javascript_standard_use_global')
-        return ale#Var(a:buffer, 'javascript_standard_executable')
-    endif
-
-    return ale#path#ResolveLocalPath(
-    \   a:buffer,
+    return ale#node#FindExecutable(a:buffer, 'javascript_standard', [
     \   'node_modules/.bin/standard',
-    \   ale#Var(a:buffer, 'javascript_standard_executable')
-    \)
+    \])
 endfunction
 
 function! ale_linters#javascript#standard#GetCommand(buffer) abort

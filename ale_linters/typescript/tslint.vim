@@ -1,25 +1,14 @@
 " Author: Prashanth Chandra https://github.com/prashcr
 " Description: tslint for TypeScript files
 
-let g:ale_typescript_tslint_executable =
-\   get(g:, 'ale_typescript_tslint_executable', 'tslint')
-
-let g:ale_typescript_tslint_config_path =
-\   get(g:, 'ale_typescript_tslint_config_path', '')
-
-let g:ale_typescript_tslint_use_global =
-\   get(g:, 'ale_typescript_tslint_use_global', 0)
+call ale#Set('typescript_tslint_executable', 'tslint')
+call ale#Set('typescript_tslint_config_path', '')
+call ale#Set('typescript_tslint_use_global', 0)
 
 function! ale_linters#typescript#tslint#GetExecutable(buffer) abort
-    if ale#Var(a:buffer, 'typescript_tslint_use_global')
-        return ale#Var(a:buffer, 'typescript_tslint_executable')
-    endif
-
-    return ale#path#ResolveLocalPath(
-    \   a:buffer,
+    return ale#node#FindExecutable(a:buffer, 'typescript_tslint', [
     \   'node_modules/.bin/tslint',
-    \   ale#Var(a:buffer, 'typescript_tslint_executable')
-    \)
+    \])
 endfunction
 
 function! ale_linters#typescript#tslint#Handle(buffer, lines) abort

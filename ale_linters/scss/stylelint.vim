@@ -1,21 +1,12 @@
 " Author: diartyz <diartyz@gmail.com>
 
-let g:ale_scss_stylelint_executable =
-\   get(g:, 'ale_scss_stylelint_executable', 'stylelint')
-
-let g:ale_scss_stylelint_use_global =
-\   get(g:, 'ale_scss_stylelint_use_global', 0)
+call ale#Set('scss_stylelint_executable', 'stylelint')
+call ale#Set('scss_stylelint_use_global', 0)
 
 function! ale_linters#scss#stylelint#GetExecutable(buffer) abort
-    if ale#Var(a:buffer, 'scss_stylelint_use_global')
-        return ale#Var(a:buffer, 'scss_stylelint_executable')
-    endif
-
-    return ale#path#ResolveLocalPath(
-    \   a:buffer,
+    return ale#node#FindExecutable(a:buffer, 'scss_stylelint', [
     \   'node_modules/.bin/stylelint',
-    \   ale#Var(a:buffer, 'scss_stylelint_executable')
-    \)
+    \])
 endfunction
 
 function! ale_linters#scss#stylelint#GetCommand(buffer) abort

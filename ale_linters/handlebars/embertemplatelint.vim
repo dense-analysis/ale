@@ -1,22 +1,13 @@
 " Author: Adrian Zalewski <aazalewski@hotmail.com>
 " Description: Ember-template-lint for checking Handlebars files
 
-let g:ale_handlebars_embertemplatelint_executable =
-\   get(g:, 'ale_handlebars_embertemplatelint_executable', 'ember-template-lint')
-
-let g:ale_handlebars_embertemplatelint_use_global =
-\   get(g:, 'ale_handlebars_embertemplatelint_use_global', 0)
+call ale#Set('handlebars_embertemplatelint_executable', 'ember-template-lint')
+call ale#Set('handlebars_embertemplatelint_use_global', 0)
 
 function! ale_linters#handlebars#embertemplatelint#GetExecutable(buffer) abort
-    if ale#Var(a:buffer, 'handlebars_embertemplatelint_use_global')
-        return ale#Var(a:buffer, 'handlebars_embertemplatelint_executable')
-    endif
-
-    return ale#path#ResolveLocalPath(
-    \   a:buffer,
+    return ale#node#FindExecutable(a:buffer, 'handlebars_embertemplatelint', [
     \   'node_modules/.bin/ember-template-lint',
-    \   ale#Var(a:buffer, 'handlebars_embertemplatelint_executable')
-    \)
+    \])
 endfunction
 
 function! ale_linters#handlebars#embertemplatelint#GetCommand(buffer) abort
