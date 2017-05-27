@@ -42,25 +42,33 @@ function! ale#job#JoinNeovimOutput(job, last_line, data, callback) abort
 endfunction
 
 function! s:NeoVimCallback(job, data, event) abort
-    let l:job_info = s:job_map[a:job]
+    let l:info = s:job_map[a:job]
 
     if a:event ==# 'stdout'
-        let l:job_info.out_cb_line = ale#job#JoinNeovimOutput(
+        let l:info.out_cb_line = ale#job#JoinNeovimOutput(
         \   a:job,
-        \   l:job_info.out_cb_line,
+        \   l:info.out_cb_line,
         \   a:data,
-        \   ale#util#GetFunction(l:job_info.out_cb),
+        \   ale#util#GetFunction(l:info.out_cb),
         \)
     elseif a:event ==# 'stderr'
-        let l:job_info.err_cb_line = ale#job#JoinNeovimOutput(
+        let l:info.err_cb_line = ale#job#JoinNeovimOutput(
         \   a:job,
-        \   l:job_info.err_cb_line,
+        \   l:info.err_cb_line,
         \   a:data,
-        \   ale#util#GetFunction(l:job_info.err_cb),
+        \   ale#util#GetFunction(l:info.err_cb),
         \)
     else
+        if has_key(l:info, 'out_cb') && !empty(l:info.out_cb_line)
+            call ale#util#GetFunction(l:info.out_cb)(a:job, l:info.out_cb_line)
+        endif
+
+        if has_key(l:info, 'err_cb') && !empty(l:info.err_cb_line)
+            call ale#util#GetFunction(l:info.err_cb)(a:job, l:info.err_cb_line)
+        endif
+
         try
-            call ale#util#GetFunction(l:job_info.exit_cb)(a:job, a:data)
+            call ale#util#GetFunction(l:info.exit_cb)(a:job, a:data)
         finally
             " Automatically forget about the job after it's done.
             if has_key(s:job_map, a:job)
