@@ -6,27 +6,6 @@ let s:classpath_sep = has('unix') ? ':' : ';'
 let g:ale_java_javac_options = get(g:, 'ale_java_javac_options', '')
 let g:ale_java_javac_classpath = get(g:, 'ale_java_javac_classpath', '')
 
-" Detect if the javac command just shows an annoying popup for Mac OSX.
-if has('macunix')
-    function s:GetIsJavacAnAppStoreStub() abort
-        let l:path = resolve(systemlist('which javac')[0])
-
-        for l:line in readfile(l:path)
-            " This string is present inside the executable for the popup.
-            if l:line =~? 'No Java runtime present'
-                return 1
-            endif
-        endfor
-
-        return 0
-    endfunction
-
-    let s:is_javac_an_app_store_stub = s:GetIsJavacAnAppStoreStub()
-    delfunction s:GetIsJavacAnAppStoreStub
-else
-    let s:is_javac_an_app_store_stub = 0
-endif
-
 function! ale_linters#java#javac#GetImportPaths(buffer) abort
     let l:pom_path = ale#path#FindNearestFile(a:buffer, 'pom.xml')
 
@@ -52,11 +31,6 @@ function! s:BuildClassPathOption(buffer, import_paths) abort
 endfunction
 
 function! ale_linters#java#javac#GetCommand(buffer, import_paths) abort
-    " If running the command will just show a popup, then don't run it.
-    if s:is_javac_an_app_store_stub
-        return ''
-    endif
-
     let l:cp_option = s:BuildClassPathOption(a:buffer, a:import_paths)
     let l:sp_option = ''
 
