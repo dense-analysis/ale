@@ -9,7 +9,38 @@ let g:ale_kotlin_kotlinc_sourcepath = get(g:, 'ale_kotlin_kotlinc_sourcepath', '
 let g:ale_kotlin_kotlinc_use_module_file = get(g:, 'ale_kotlin_kotlinc_use_module_file', 0)
 let g:ale_kotlin_kotlinc_module_filename = get(g:, 'ale_kotlin_kotlinc_module_filename', 'module.xml')
 
-function! ale_linters#kotlin#kotlinc#GetCommand(buffer) abort
+let s:classpath_sep = has('unix') ? ':' : ';'
+
+function! ale_linters#kotlin#kotlinc#GetImportPaths(buffer) abort
+    " exec maven only if classpath is not set
+    if ale#Var(a:buffer, 'kotlin_kotlinc_classpath') !=# ''
+        return ''
+    else
+        let l:pom_path = ale#path#FindNearestFile(a:buffer, 'pom.xml')
+
+        if !empty(l:pom_path) && executable('mvn')
+            return ale#path#CdString(fnamemodify(l:pom_path, ':h'))
+                        \ . 'mvn dependency:build-classpath'
+        endif
+
+        return ''
+    endif
+endfunction
+
+function! s:BuildClassPathOption(buffer, import_paths) abort
+    " Filter out lines like [INFO], etc.
+    let l:class_paths = filter(a:import_paths[:], 'v:val !~# ''[''')
+    call extend(
+    \   l:class_paths,
+    \   split(ale#Var(a:buffer, 'kotlin_kotlinc_classpath'), s:classpath_sep),
+    \)
+
+    return !empty(l:class_paths)
+    \   ? ' -cp ' . ale#Escape(join(l:class_paths, s:classpath_sep))
+    \   : ''
+endfunction
+
+function! ale_linters#kotlin#kotlinc#GetCommand(buffer, import_paths) abort
     let l:kotlinc_opts = ale#Var(a:buffer, 'kotlin_kotlinc_options')
     let l:command = 'kotlinc '
 
@@ -35,12 +66,18 @@ function! ale_linters#kotlin#kotlinc#GetCommand(buffer) abort
     " We only get here if not using module or the module file not readable
     if ale#Var(a:buffer, 'kotlin_kotlinc_classpath') !=# ''
         let l:kotlinc_opts .= ' -cp ' . ale#Var(a:buffer, 'kotlin_kotlinc_classpath')
+    else
+        " get classpath from maven
+        let l:kotlinc_opts .= s:BuildClassPathOption(a:buffer, a:import_paths)
     endif
 
     let l:fname = ''
-
     if ale#Var(a:buffer, 'kotlin_kotlinc_sourcepath') !=# ''
         let l:fname .= expand(ale#Var(a:buffer, 'kotlin_kotlinc_sourcepath'), 1) . ' '
+    else
+        " Find the src directory for files in this project.
+        let l:src_dir = ale#path#FindNearestDirectory(a:buffer, 'src/main/java')
+        let l:fname .= expand(l:src_dir, 1) . ' '
     endif
     let l:fname .= ale#Escape(expand('#' . a:buffer . ':p'))
     let l:command .= l:kotlinc_opts . ' ' . l:fname
@@ -108,9 +145,11 @@ endfunction
 
 call ale#linter#Define('kotlin', {
 \   'name': 'kotlinc',
-\   'output_stream': 'stderr',
 \   'executable': 'kotlinc',
-\   'command_callback': 'ale_linters#kotlin#kotlinc#GetCommand',
+\   'command_chain': [
+\       {'callback': 'ale_linters#kotlin#kotlinc#GetImportPaths', 'output_stream': 'stdout'},
+\       {'callback': 'ale_linters#kotlin#kotlinc#GetCommand', 'output_stream': 'stderr'},
+\   ],
 \   'callback': 'ale_linters#kotlin#kotlinc#Handle',
 \   'lint_file': 1,
 \})
