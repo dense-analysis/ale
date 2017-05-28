@@ -14,11 +14,17 @@ endfunction
 function! ale#list#SetLists(buffer, loclist) abort
     if g:ale_set_quickfix
         call setqflist(a:loclist)
+        if has('patch-7.4.2200')
+            call setqflist([], 'r', {'title': expand('%')})
+        endif
     elseif g:ale_set_loclist
         " If windows support is off, bufwinid() may not exist.
         if exists('*bufwinid')
             " Set the results on the window for the buffer.
             call setloclist(bufwinid(str2nr(a:buffer)), a:loclist)
+            if has('patch-7.4.2200')
+                call setloclist(bufwinid(str2nr(a:buffer)), [], 'r', {'title': expand('%')})
+            endif
         else
             " Set the results in the current window.
             " This may not be the same window we ran the linters for, but
