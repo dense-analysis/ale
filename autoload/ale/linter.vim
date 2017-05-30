@@ -23,7 +23,7 @@ let s:default_ale_linter_aliases = {
 " rpmlint is disabled by default because it can result in code execution.
 let s:default_ale_linters = {
 \   'csh': ['shell'],
-\   'go': ['go build', 'gofmt', 'golint', 'gosimple', 'go vet', 'staticcheck'],
+\   'go': ['gofmt', 'golint', 'go vet'],
 \   'help': [],
 \   'rust': ['cargo'],
 \   'spec': [],
