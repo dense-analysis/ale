@@ -128,9 +128,18 @@ endfunction
 "
 " Every variable name will be prefixed with 'ale_'.
 function! ale#Var(buffer, variable_name) abort
+    let l:nr = str2nr(a:buffer)
     let l:full_name = 'ale_' . a:variable_name
 
-    return getbufvar(str2nr(a:buffer), l:full_name, g:[l:full_name])
+    if bufexists(l:nr)
+        let l:vars = getbufvar(l:nr, '')
+    elseif has_key(g:, 'ale_fix_buffer_data')
+        let l:vars = get(g:ale_fix_buffer_data, l:nr, {'vars': {}}).vars
+    else
+        let l:vars = {}
+    endif
+
+    return get(l:vars, l:full_name, g:[l:full_name])
 endfunction
 
 " Initialize a variable with a default value, if it isn't already set.

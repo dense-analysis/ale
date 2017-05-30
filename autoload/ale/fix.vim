@@ -305,6 +305,7 @@ function! ale#fix#InitBufferData(buffer, fixing_flag) abort
     " The 'done' flag tells the function for applying changes when fixing
     " is complete.
     let g:ale_fix_buffer_data[a:buffer] = {
+    \   'vars': getbufvar(a:buffer, ''),
     \   'lines_before': getbufline(a:buffer, 1, '$'),
     \   'filename': expand('#' . a:buffer . ':p'),
     \   'done': 0,

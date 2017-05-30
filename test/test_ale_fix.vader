@@ -11,6 +11,7 @@ Before:
   let g:ale_enabled = 0
   let g:ale_echo_cursor = 0
   let g:ale_run_synchronously = 1
+  let g:ale_fix_buffer_data = {}
   let g:ale_fixers = {
   \ 'testft': [],
   \}
@@ -74,6 +75,8 @@ After:
   if filereadable('fix_test_file')
     call delete('fix_test_file')
   endif
+
+  let g:ale_fix_buffer_data = {}
 
 Given testft (A file with three lines):
   a
@@ -291,3 +294,24 @@ Expect(The buffer should be the same):
   a
   b
   c
+
+Given testft (A file with three lines):
+  a
+  b
+  c
+
+Execute(ale#fix#InitBufferData() should set up the correct data):
+  noautocmd silent file fix_test_file
+
+  call ale#fix#InitBufferData(bufnr(''), 'save_file')
+
+  AssertEqual {
+  \ bufnr(''): {
+  \   'temporary_directory_list': [],
+  \   'vars': b:,
+  \   'filename': simplify(getcwd() . '/fix_test_file'),
+  \   'done': 0,
+  \   'lines_before': ['a', 'b', 'c'],
+  \   'should_save': 1,
+  \ },
+  \}, g:ale_fix_buffer_data
