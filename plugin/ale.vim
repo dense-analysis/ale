@@ -89,6 +89,8 @@ let g:ale_lint_on_save = get(g:, 'ale_lint_on_save', 1)
 " This flag can be set to 1 to enable linting when the filetype is changed.
 let g:ale_lint_on_filetype_changed = get(g:, 'ale_lint_on_filetype_changed', 1)
 
+call ale#Set('fix_on_save', 0)
+
 " This flag may be set to 0 to disable ale. After ale is loaded, :ALEToggle
 " should be used instead.
 let g:ale_enabled = get(g:, 'ale_enabled', 1)
@@ -218,8 +220,8 @@ function! ALEInitAuGroups() abort
 
     augroup ALERunOnSaveGroup
         autocmd!
-        if g:ale_enabled && g:ale_lint_on_save
-            autocmd BufWrite * call ale#Queue(0, 'lint_file')
+        if (g:ale_enabled && g:ale_lint_on_save) || g:ale_fix_on_save
+            autocmd BufWrite * call ale#events#SaveEvent()
         endif
     augroup END
 
@@ -242,10 +244,13 @@ function! ALEInitAuGroups() abort
     augroup END
 
     if !g:ale_enabled
+        if !g:ale_fix_on_save
+            augroup! ALERunOnSaveGroup
+        endif
+
         augroup! ALEPatternOptionsGroup
         augroup! ALERunOnTextChangedGroup
         augroup! ALERunOnEnterGroup
-        augroup! ALERunOnSaveGroup
         augroup! ALERunOnInsertLeave
         augroup! ALECursorGroup
     endif

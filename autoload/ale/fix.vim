@@ -26,21 +26,34 @@ function! ale#fix#ApplyQueuedFixes() abort
     endif
 
     call remove(g:ale_fix_buffer_data, l:buffer)
-    call setline(1, l:data.output)
 
-    let l:start_line = len(l:data.output) + 1
-    let l:end_line = len(l:data.lines_before)
+    if l:data.changes_made
+        call setline(1, l:data.output)
 
-    if l:end_line >= l:start_line
-        let l:save = winsaveview()
-        silent execute l:start_line . ',' . l:end_line . 'd'
-        call winrestview(l:save)
+        let l:start_line = len(l:data.output) + 1
+        let l:end_line = len(l:data.lines_before)
+
+        if l:end_line >= l:start_line
+            let l:save = winsaveview()
+            silent execute l:start_line . ',' . l:end_line . 'd'
+            call winrestview(l:save)
+        endif
+
+        if l:data.should_save
+            set nomodified
+        endif
+    endif
+
+    if l:data.should_save
+        let l:should_lint = g:ale_fix_on_save
+    else
+        let l:should_lint = l:data.changes_made
     endif
 
     " If ALE linting is enabled, check for problems with the file again after
     " fixing problems.
-    if g:ale_enabled
-        call ale#Queue(g:ale_lint_delay)
+    if g:ale_enabled && l:should_lint
+        call ale#Queue(0, l:data.should_save ? 'lint_file' : '')
     endif
 endfunction
 
@@ -49,14 +62,9 @@ function! ale#fix#ApplyFixes(buffer, output) abort
 
     let l:data = g:ale_fix_buffer_data[a:buffer]
     let l:data.output = a:output
+    let l:data.changes_made = l:data.lines_before != l:data.output
 
-    if l:data.lines_before == l:data.output
-        " Don't modify the buffer if nothing has changed.
-        call remove(g:ale_fix_buffer_data, a:buffer)
-        return
-    endif
-
-    if bufexists(a:buffer)
+    if l:data.changes_made && bufexists(a:buffer)
         let l:lines = getbufline(a:buffer, 1, '$')
 
         if l:data.lines_before != l:lines
@@ -66,7 +74,13 @@ function! ale#fix#ApplyFixes(buffer, output) abort
         endif
 
         let l:data.done = 1
-    else
+    endif
+
+    if l:data.changes_made && l:data.should_save
+        call writefile(a:output, l:data.filename)
+    endif
+
+    if !bufexists(a:buffer)
         " Remove the buffer data when it doesn't exist.
         call remove(g:ale_fix_buffer_data, a:buffer)
     endif
@@ -265,7 +279,6 @@ function! s:GetCallbacks() abort
     endfor
 
     if empty(l:callback_list)
-        echoerr 'No fixers have been defined. Try :ALEFixSuggest'
         return []
     endif
 
@@ -288,33 +301,56 @@ function! s:GetCallbacks() abort
     return l:corrected_list
 endfunction
 
-function! ale#fix#Fix() abort
+function! ale#fix#InitBufferData(buffer, fixing_flag) abort
+    " The 'done' flag tells the function for applying changes when fixing
+    " is complete.
+    let g:ale_fix_buffer_data[a:buffer] = {
+    \   'lines_before': getbufline(a:buffer, 1, '$'),
+    \   'filename': expand('#' . a:buffer . ':p'),
+    \   'done': 0,
+    \   'should_save': a:fixing_flag ==# 'save_file',
+    \   'temporary_directory_list': [],
+    \}
+endfunction
+
+" Accepts an optional argument for what to do when fixing.
+"
+" Returns 0 if no fixes can be applied, and 1 if fixing can be done.
+function! ale#fix#Fix(...) abort
+    if len(a:0) > 1
+        throw 'too many arguments!'
+    endif
+
+    let l:fixing_flag = get(a:000, 0, '')
+
+    if l:fixing_flag !=# '' && l:fixing_flag !=# 'save_file'
+        throw "fixing_flag must be either '' or 'save_file'"
+    endif
+
     let l:callback_list = s:GetCallbacks()
 
     if empty(l:callback_list)
-        return
+        if l:fixing_flag ==# ''
+            echoerr 'No fixers have been defined. Try :ALEFixSuggest'
+        endif
+
+        return 0
     endif
 
     let l:buffer = bufnr('')
-    let l:input = getbufline(l:buffer, 1, '$')
 
     " Clean up any files we might have left behind from a previous run.
     call ale#fix#RemoveManagedFiles(l:buffer)
-
-    " The 'done' flag tells the function for applying changes when fixing
-    " is complete.
-    let g:ale_fix_buffer_data[l:buffer] = {
-    \   'lines_before': l:input,
-    \   'done': 0,
-    \   'temporary_directory_list': [],
-    \}
+    call ale#fix#InitBufferData(l:buffer, l:fixing_flag)
 
     call s:RunFixer({
     \   'buffer': l:buffer,
-    \   'input': l:input,
+    \   'input': g:ale_fix_buffer_data[l:buffer].lines_before,
     \   'callback_index': 0,
     \   'callback_list': l:callback_list,
     \})
+
+    return 1
 endfunction
 
 " Set up an autocmd command to try and apply buffer fixes when available.

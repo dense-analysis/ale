@@ -311,6 +311,18 @@ g:ale_fixers                                                     *g:ale_fixers*
   This variable can be overriden with variables in each buffer.
 
 
+g:ale_fix_on_save                                           *g:ale_fix_on_save*
+
+  Type: |Number|
+  Default: `0`
+
+  When set to 1, ALE will fix files when they are saved.
+
+  If |g:ale_lint_on_save| is set to 1, files will be checked with linters
+  after files are fixed, only when the buffer is open, or re-opened. Changes
+  to the file will saved to the file on disk.
+
+
 g:ale_history_enabled                                   *g:ale_history_enabled*
 
   Type: |Number|
@@ -769,6 +781,11 @@ The above example will call a function called `DoSomething` which could act
 upon some lines immediately, then run `eslint` from the ALE registry, and
 then call a lambda function which will remove every single line comment
 from the file.
+
+Files can be fixed automatically with the following options, which are all off
+by default.
+
+|g:ale_fix_on_save| - Fix files when they are saved.
 
 
 ===============================================================================

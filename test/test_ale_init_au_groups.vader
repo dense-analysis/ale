@@ -31,6 +31,7 @@ Before:
     return l:matches
   endfunction
 
+  Save g:ale_enabled
   Save g:ale_lint_on_text_changed
   Save g:ale_lint_on_insert_leave
   Save g:ale_pattern_options_enabled
@@ -38,6 +39,7 @@ Before:
   Save g:ale_lint_on_filetype_changed
   Save g:ale_lint_on_save
   Save g:ale_echo_cursor
+  Save g:ale_fix_on_save
 
 After:
   delfunction CheckAutocmd
@@ -138,14 +140,33 @@ Execute (g:ale_lint_on_filetype_changed = 1 should bind FileType, and required b
 
 Execute (g:ale_lint_on_save = 0 should bind no events):
   let g:ale_lint_on_save = 0
+  let g:ale_fix_on_save = 0
 
   AssertEqual [], CheckAutocmd('ALERunOnSaveGroup')
 
 Execute (g:ale_lint_on_save = 1 should bind no events):
   let g:ale_lint_on_save = 1
+  let g:ale_fix_on_save = 0
 
   AssertEqual [
-  \ 'BufWritePre * call ale#Queue(0, ''lint_file'')',
+  \ 'BufWritePre * call ale#events#SaveEvent()',
+  \], CheckAutocmd('ALERunOnSaveGroup')
+
+Execute (g:ale_lint_on_save = 0 and g:ale_fix_on_save = 1 should bind events):
+  let g:ale_lint_on_save = 0
+  let g:ale_fix_on_save = 1
+
+  AssertEqual [
+  \ 'BufWritePre * call ale#events#SaveEvent()',
+  \], CheckAutocmd('ALERunOnSaveGroup')
+
+Execute (g:ale_fix_on_save = 1 should bind events even when ALE is disabled):
+  let g:ale_enabled = 0
+  let g:ale_lint_on_save = 0
+  let g:ale_fix_on_save = 1
+
+  AssertEqual [
+  \ 'BufWritePre * call ale#events#SaveEvent()',
   \], CheckAutocmd('ALERunOnSaveGroup')
 
 Execute (g:ale_echo_cursor = 0 should bind no events):
