@@ -1,8 +1,13 @@
-" FIXME: Switch to using the global buffer data dictionary instead.
-" Cleanup will work better if there isn't a second Dictionary we have to work
-" with.
-let s:buffer_data = {}
-let s:job_info_map = {}
+" This global Dictionary tracks the ALE fix data for jobs, etc.
+" This Dictionary should not be accessed outside of the plugin. It is only
+" global so it can be modified in Vader tests.
+if !has_key(g:, 'ale_fix_buffer_data')
+    let g:ale_fix_buffer_data = {}
+endif
+
+if !has_key(s:, 'job_info_map')
+    let s:job_info_map = {}
+endif
 
 function! s:GatherOutput(job_id, line) abort
     if has_key(s:job_info_map, a:job_id)
@@ -10,31 +15,21 @@ function! s:GatherOutput(job_id, line) abort
     endif
 endfunction
 
+" Apply fixes queued up for buffers which may be hidden.
+" Vim doesn't let you modify hidden buffers.
 function! ale#fix#ApplyQueuedFixes() abort
     let l:buffer = bufnr('')
-    let l:data = get(s:buffer_data, l:buffer, {'done': 0})
+    let l:data = get(g:ale_fix_buffer_data, l:buffer, {'done': 0})
 
     if !l:data.done
         return
     endif
 
-    call remove(s:buffer_data, l:buffer)
-    let l:lines = getbufline(l:buffer, 1, '$')
-
-    if l:data.lines_before != l:lines
-        echoerr 'The file was changed before fixing finished'
-        return
-    endif
-
-    if l:data.lines_before == l:data.output
-        " Don't modify the buffer if nothing has changed.
-        return
-    endif
-
+    call remove(g:ale_fix_buffer_data, l:buffer)
     call setline(1, l:data.output)
 
     let l:start_line = len(l:data.output) + 1
-    let l:end_line = len(l:lines)
+    let l:end_line = len(l:data.lines_before)
 
     if l:end_line >= l:start_line
         let l:save = winsaveview()
@@ -49,11 +44,32 @@ function! ale#fix#ApplyQueuedFixes() abort
     endif
 endfunction
 
-function! s:ApplyFixes(buffer, output) abort
+function! ale#fix#ApplyFixes(buffer, output) abort
     call ale#fix#RemoveManagedFiles(a:buffer)
 
-    let s:buffer_data[a:buffer].output = a:output
-    let s:buffer_data[a:buffer].done = 1
+    let l:data = g:ale_fix_buffer_data[a:buffer]
+    let l:data.output = a:output
+
+    if l:data.lines_before == l:data.output
+        " Don't modify the buffer if nothing has changed.
+        call remove(g:ale_fix_buffer_data, a:buffer)
+        return
+    endif
+
+    if bufexists(a:buffer)
+        let l:lines = getbufline(a:buffer, 1, '$')
+
+        if l:data.lines_before != l:lines
+            call remove(g:ale_fix_buffer_data, a:buffer)
+            echoerr 'The file was changed before fixing finished'
+            return
+        endif
+
+        let l:data.done = 1
+    else
+        " Remove the buffer data when it doesn't exist.
+        call remove(g:ale_fix_buffer_data, a:buffer)
+    endif
 
     " We can only change the lines of a buffer which is currently open,
     " so try and apply the fixes to the current buffer.
@@ -80,11 +96,11 @@ function! s:HandleExit(job_id, exit_code) abort
 endfunction
 
 function! ale#fix#ManageDirectory(buffer, directory) abort
-    call add(s:buffer_data[a:buffer].temporary_directory_list, a:directory)
+    call add(g:ale_fix_buffer_data[a:buffer].temporary_directory_list, a:directory)
 endfunction
 
 function! ale#fix#RemoveManagedFiles(buffer) abort
-    if !has_key(s:buffer_data, a:buffer)
+    if !has_key(g:ale_fix_buffer_data, a:buffer)
         return
     endif
 
@@ -98,11 +114,11 @@ function! ale#fix#RemoveManagedFiles(buffer) abort
     " Directories are handled differently from files, so paths that are
     " intended to be single files can be set up for automatic deletion without
     " accidentally deleting entire directories.
-    for l:directory in s:buffer_data[a:buffer].temporary_directory_list
+    for l:directory in g:ale_fix_buffer_data[a:buffer].temporary_directory_list
         call delete(l:directory, 'rf')
     endfor
 
-    let s:buffer_data[a:buffer].temporary_directory_list = []
+    let g:ale_fix_buffer_data[a:buffer].temporary_directory_list = []
 endfunction
 
 function! s:CreateTemporaryFileForJob(buffer, temporary_file, input) abort
@@ -231,7 +247,7 @@ function! s:RunFixer(options) abort
         endif
     endwhile
 
-    call s:ApplyFixes(l:buffer, l:input)
+    call ale#fix#ApplyFixes(l:buffer, l:input)
 endfunction
 
 function! s:GetCallbacks() abort
@@ -287,7 +303,7 @@ function! ale#fix#Fix() abort
 
     " The 'done' flag tells the function for applying changes when fixing
     " is complete.
-    let s:buffer_data[l:buffer] = {
+    let g:ale_fix_buffer_data[l:buffer] = {
     \   'lines_before': l:input,
     \   'done': 0,
     \   'temporary_directory_list': [],
