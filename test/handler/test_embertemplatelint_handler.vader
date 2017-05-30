@@ -46,6 +46,33 @@ Execute(The ember-template-lint handler should parse lines correctly):
   \ ],
   \ ale_linters#handlebars#embertemplatelint#Handle(347, input_lines)
 
+Execute(The ember-template-lint handler should handle template parsing error correctly):
+  let input_lines = split('{
+  \ "/ember-project/app/templates/application.hbs": [
+  \   {
+  \     "fatal": true,
+  \     "moduleId": "app/templates/application",
+  \     "message": "Parse error on line 5 ...",
+  \     "line": 1,
+  \     "column": 1,
+  \     "source": "Error: Parse error on line 5 ...",
+  \     "severity": 2
+  \   }
+  \ ]
+  \ }', '\n')
+
+  AssertEqual
+  \ [
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 1,
+  \     'col': 1,
+  \     'text': 'Parse error on line 5 ...',
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale_linters#handlebars#embertemplatelint#Handle(347, input_lines)
+
 Execute(The ember-template-lint handler should handle no lint errors/warnings):
   AssertEqual
   \ [
