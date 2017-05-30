@@ -55,7 +55,7 @@ function! ale#handlers#rust#HandleRustErrorsForFile(buffer, full_filename, lines
                 \   'end_lnum': l:span.line_end,
                 \   'col': l:span.byte_start,
                 \   'end_col': l:span.byte_end,
-                \   'text': l:error.message,
+                \   'text': printf("%s: %s", l:error.message, l:span.label),
                 \   'type': toupper(l:error.level[0]),
                 \})
             else
