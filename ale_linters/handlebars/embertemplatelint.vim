@@ -26,13 +26,23 @@ function! ale_linters#handlebars#embertemplatelint#Handle(buffer, lines) abort
     let l:file_errors = values(l:input_json)[0]
 
     for l:error in l:file_errors
-        call add(l:output, {
-        \   'bufnr': a:buffer,
-        \   'lnum': l:error.line,
-        \   'col': l:error.column,
-        \   'text': l:error.rule . ': ' . l:error.message,
-        \   'type': l:error.severity == 1 ? 'W' : 'E',
-        \})
+        if has_key(l:error, 'fatal')
+            call add(l:output, {
+            \   'bufnr': a:buffer,
+            \   'lnum': 1,
+            \   'col': 1,
+            \   'text': l:error.message,
+            \   'type': l:error.severity == 1 ? 'W' : 'E',
+            \})
+        else
+            call add(l:output, {
+            \   'bufnr': a:buffer,
+            \   'lnum': l:error.line,
+            \   'col': l:error.column,
+            \   'text': l:error.rule . ': ' . l:error.message,
+            \   'type': l:error.severity == 1 ? 'W' : 'E',
+            \})
+        endif
     endfor
 
     return l:output
