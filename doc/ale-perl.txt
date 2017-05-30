@@ -16,7 +16,7 @@ g:ale_perl_perl_executable                         *g:ale_perl_perl_executable*
 g:ale_perl_perl_options                               *g:ale_perl_perl_options*
                                                       *b:ale_perl_perl_options*
   Type: |String|
-  Default: `'-X -c -Mwarnings -Ilib'`
+  Default: `'-c -Mwarnings -Ilib'`
 
   This variable can be changed to alter the command-line arguments to the perl
   invocation.

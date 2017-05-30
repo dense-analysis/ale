@@ -5,7 +5,7 @@ let g:ale_perl_perl_executable =
 \   get(g:, 'ale_perl_perl_executable', 'perl')
 
 let g:ale_perl_perl_options =
-\   get(g:, 'ale_perl_perl_options', '-X -c -Mwarnings -Ilib')
+\   get(g:, 'ale_perl_perl_options', '-c -Mwarnings -Ilib')
 
 function! ale_linters#perl#perl#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'perl_perl_executable')
