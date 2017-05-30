@@ -89,6 +89,15 @@ let g:ale_lint_on_save = get(g:, 'ale_lint_on_save', 1)
 " This flag can be set to 1 to enable linting when the filetype is changed.
 let g:ale_lint_on_filetype_changed = get(g:, 'ale_lint_on_filetype_changed', 1)
 
+" This flag can be set to 1 to enable fixing when leaving insert mode.
+let g:ale_fix_on_insert_leave = get(g:, 'ale_fix_on_insert_leave', 0)
+
+" This flag can be set to 0 to disable fixing when the buffer is entered.
+let g:ale_fix_on_enter = get(g:, 'ale_fix_on_enter', 0)
+
+" This flag can be set to 1 to enable fixing when a buffer is written.
+let g:ale_fix_on_save = get(g:, 'ale_fix_on_save', 0)
+
 " This flag may be set to 0 to disable ale. After ale is loaded, :ALEToggle
 " should be used instead.
 let g:ale_enabled = get(g:, 'ale_enabled', 1)
@@ -199,6 +208,11 @@ function! ALEInitAuGroups() abort
         if g:ale_enabled && g:ale_lint_on_enter
             autocmd BufEnter,BufRead * call ale#Queue(300, 'lint_file')
         endif
+
+        autocmd!
+        if g:ale_enabled && g:ale_fix_on_enter
+            autocmd BufEnter,BufRead * call ale#fix#Fix()
+        endif
     augroup END
 
     augroup ALERunOnFiletypeChangeGroup
@@ -221,12 +235,22 @@ function! ALEInitAuGroups() abort
         if g:ale_enabled && g:ale_lint_on_save
             autocmd BufWrite * call ale#Queue(0, 'lint_file')
         endif
+
+        autocmd!
+        if g:ale_enabled && g:ale_fix_on_save
+            autocmd BufWrite * call ale#fix#Fix()
+        endif
     augroup END
 
     augroup ALERunOnInsertLeave
         autocmd!
         if g:ale_enabled && g:ale_lint_on_insert_leave
             autocmd InsertLeave * call ale#Queue(0, 'lint_file')
+        endif
+
+        autocmd!
+        if g:ale_enabled && g:ale_fix_on_insert_leave
+            autocmd InsertLeave * call ale#fix#Fix()
         endif
     augroup END
 
