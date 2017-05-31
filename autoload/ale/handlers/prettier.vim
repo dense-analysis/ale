@@ -18,7 +18,7 @@ function! ale#handlers#prettier#Fix(buffer, lines) abort
     return {
     \   'command': ale#Escape(ale#handlers#prettier#GetExecutable(a:buffer))
     \       . ' %t'
-    \       . ' ' . ale#Escape(l:options)
+    \       . ' ' . l:options
     \       . ' --write',
     \   'read_temporary_file': 1,
     \}
