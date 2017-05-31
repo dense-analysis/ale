@@ -55,6 +55,25 @@ Execute(The Rust handler should handle cargo output):
   \   '{"message":{"children":[],"code":null,"level":"error","message":"aborting due to previous error","rendered":null,"spans":[]},"package_id":"update 0.0.1 (path+file:///home/w0rp/Downloads/rust-by-example)","reason":"compiler-message","target":{"kind":["bin"],"name":"update","src_path":"/home/w0rp/Downloads/rust-by-example/src/main.rs"}}',
   \ ])
 
+Execute(The Rust handler should show detailed errors):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 4,
+  \     'end_lnum': 4,
+  \     'type': 'E',
+  \     'col': 21,
+  \     'end_col': 22,
+  \     'text': 'mismatched types: expected bool, found integral variable',
+  \   },
+  \ ],
+  \ ale#handlers#rust#HandleRustErrorsForFile(347, 'src/playpen.rs', [
+  \   '',
+  \   'ignore this',
+  \   '{"message":{"children":[{"children":[],"code":null,"level":"note","message":"expected type `bool`\n   found type `{integer}`","rendered":null,"spans":[]}],"code":{"code":"E0308","explanation":""},"level":"error","message":"mismatched types","rendered":null,"spans":[{"byte_end":54,"byte_start":52,"column_end":23,"column_start":21,"expansion":null,"file_name":"main.rs","is_primary":true,"label":"expected bool, found integral variable","line_end":4,"line_start":4,"suggested_replacement":null,"text":[{"highlight_end":23,"highlight_start":21,"text":"    let foo: bool = 42;"}]}]},"package_id":"ale-rust-details 0.1.1 (path+file:///home/jon/tmp/ale-rust-details)","reason":"compiler-message","target":{"crate_types":["bin"],"kind":["bin"],"name":"ale-rust-details","src_path":"/home/jon/tmp/ale-rust-details/src/main.rs"}}',
+  \   '{"message":{"children":[],"code":null,"level":"error","message":"aborting due to previous error(s)","rendered":null,"spans":[]},"package_id":"ale-rust-details 0.1.1 (path+file:///home/jon/tmp/ale-rust-details)","reason":"compiler-message","target":{"crate_types":["bin"],"kind":["bin"],"name":"ale-rust-details","src_path":"/home/jon/tmp/ale-rust-details/src/main.rs"}}',
+  \ ])
+
 Execute(The Rust handler should find correct files):
   AssertEqual
   \ [],
