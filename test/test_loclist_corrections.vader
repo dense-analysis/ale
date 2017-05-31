@@ -129,7 +129,7 @@ Execute(FixLocList should convert line and column numbers correctly):
   \   [{'text': 'a', 'lnum': '010', 'col': '010'}],
   \ )
 
-Execute(FixLocList should pass on col_length values):
+Execute(FixLocList should pass on end_col values):
   " The numbers should be 10, not 8 as octals.
   AssertEqual
   \ [
@@ -164,6 +164,44 @@ Execute(FixLocList should pass on col_length values):
   \     {'text': 'a', 'lnum': '010', 'col': '011', 'end_col': 12},
   \   ],
   \ )
+
+Execute(FixLocList should pass on end_lnum values):
+  AssertEqual
+  \ [
+  \   {
+  \     'text': 'a',
+  \     'lnum': 10,
+  \     'col': 10,
+  \     'end_lnum': 13,
+  \     'end_col': 12,
+  \     'bufnr': bufnr('%'),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \   },
+  \   {
+  \     'text': 'a',
+  \     'lnum': 10,
+  \     'col': 11,
+  \     'end_lnum': 13,
+  \     'end_col': 12,
+  \     'bufnr': bufnr('%'),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \   },
+  \],
+  \ ale#engine#FixLocList(
+  \   bufnr('%'),
+  \   {'name': 'foobar'},
+  \   [
+  \     {'text': 'a', 'lnum': '010', 'col': '010', 'end_col': '012', 'end_lnum': '013'},
+  \     {'text': 'a', 'lnum': '010', 'col': '011', 'end_col': 12, 'end_lnum': 13},
+  \   ],
+  \ )
+
 
 Execute(FixLocList should allow subtypes to be set):
   AssertEqual

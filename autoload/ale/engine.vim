@@ -291,9 +291,13 @@ function! ale#engine#FixLocList(buffer, linter, loclist) abort
             let l:item.detail = l:old_item.detail
         endif
 
-        " Pass on a col_length key if set, used for highlights.
+        " Pass on a end_col key if set, used for highlights.
         if has_key(l:old_item, 'end_col')
             let l:item.end_col = str2nr(l:old_item.end_col)
+        endif
+
+        if has_key(l:old_item, 'end_lnum')
+            let l:item.end_lnum = str2nr(l:old_item.end_lnum)
         endif
 
         if has_key(l:old_item, 'sub_type')

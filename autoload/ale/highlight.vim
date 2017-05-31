@@ -30,7 +30,7 @@ let s:buffer_highlights = {}
 let s:buffer_restore_map = {}
 " The maximum number of items for the second argument of matchaddpos()
 let s:MAX_POS_VALUES = 8
-let s:MAX_COL_SIZE = 4294967296
+let s:MAX_COL_SIZE = 1073741824 " pow(2, 30)
 
 function! ale#highlight#CreatePositions(line, col, end_line, end_col) abort
     if a:line >= a:end_line
@@ -119,8 +119,6 @@ function! ale#highlight#UpdateHighlights() abort
 
     if g:ale_enabled
         for l:item in l:loclist
-            let l:col = l:item.col
-
             if l:item.type ==# 'W'
                 if get(l:item, 'sub_type', '') ==# 'style'
                     let l:group = 'ALEStyleWarning'
@@ -136,12 +134,19 @@ function! ale#highlight#UpdateHighlights() abort
             endif
 
             let l:line = l:item.lnum
-            let l:size = has_key(l:item, 'end_col') ? l:item.end_col - l:col + 1 : 1
+            let l:col = l:item.col
+            let l:end_line = get(l:item, 'end_lnum', l:line)
+            let l:end_col = get(l:item, 'end_col', l:col)
 
-            " Rememeber the match ID for the item.
-            " This ID will be used to preserve loclist items which are set
-            " many times.
-            let l:item.match_id_list = [matchaddpos(l:group, [[l:line, l:col, l:size]])]
+            " Set all of the positions, which are chunked into Lists which
+            " are as large as will be accepted by matchaddpos.
+            "
+            " We will remember the IDs we set, so we can preserve some
+            " highlights when linting buffers after linting files.
+            let l:item.match_id_list = map(
+            \   ale#highlight#CreatePositions(l:line, l:col, l:end_line, l:end_col),
+            \   'matchaddpos(l:group, v:val)'
+            \)
         endfor
     endif
 endfunction
