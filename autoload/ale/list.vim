@@ -12,18 +12,26 @@ function! ale#list#IsQuickfixOpen() abort
 endfunction
 
 function! ale#list#SetLists(buffer, loclist) abort
+    let l:title = expand('#' . a:buffer . ':p')
+
     if g:ale_set_quickfix
-        call setqflist(a:loclist)
+        if has('nvim')
+            call setqflist(a:loclist, ' ', l:title)
+        else
+            call setqflist(a:loclist)
+            call setqflist([], 'r', {'title': l:title})
+        endif
     elseif g:ale_set_loclist
         " If windows support is off, bufwinid() may not exist.
-        if exists('*bufwinid')
-            " Set the results on the window for the buffer.
-            call setloclist(bufwinid(str2nr(a:buffer)), a:loclist)
+        " We'll set result in the current window, which might not be correct,
+        " but is better than nothing.
+        let l:win_id = exists('*bufwinid') ? bufwinid(str2nr(a:buffer)) : 0
+
+        if has('nvim')
+            call setloclist(l:win_id, a:loclist, ' ', l:title)
         else
-            " Set the results in the current window.
-            " This may not be the same window we ran the linters for, but
-            " it's better than nothing.
-            call setloclist(0, a:loclist)
+            call setloclist(l:win_id, a:loclist)
+            call setloclist(l:win_id, [], 'r', {'title': l:title})
         endif
     endif
 
