@@ -1,4 +1,6 @@
 Before:
+  let g:ale_run_synchronously = 1
+
   let g:command = 'echo test'
   let g:filename = ''
   let g:directory = ''
@@ -43,6 +45,7 @@ After:
     call delete(g:preserved_directory, 'rf')
   endif
 
+  unlet! g:ale_run_synchronously
   unlet! g:command
   unlet! g:filename
   unlet! g:directory
