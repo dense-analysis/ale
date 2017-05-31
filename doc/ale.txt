@@ -586,6 +586,16 @@ g:ale_pattern_options_enabled                   *g:ale_pattern_options_enabled*
   for |g:ale_pattern_options| will turn this option on.
 
 
+g:ale_set_balloons                                         *g:ale_set_balloons*
+
+  Type: |Number|
+  Default: `has('balloon_eval')`
+
+  When this option is set to `1`, balloon messages will be displayed for
+  problems. Problems nearest to the cursor on the line the cursor is over will
+  be displayed.
+
+
 g:ale_set_highlights                                     *g:ale_set_highlights*
 
   Type: |Number|

@@ -144,6 +144,9 @@ let g:ale_echo_msg_warning_str = get(g:, 'ale_echo_msg_warning_str', 'Warning')
 " This flag can be set to 0 to disable echoing when the cursor moves.
 let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
 
+" This flag can be set to 0 to disable balloon support.
+call ale#Set('set_balloons', has('balloon_eval'))
+
 " A deprecated setting for ale#statusline#Status()
 " See :help ale#statusline#Count() for getting status reports.
 let g:ale_statusline_format = get(g:, 'ale_statusline_format',
@@ -267,6 +270,10 @@ function! s:ALEToggle() abort
 
         " Lint immediately, including running linters against the file.
         call ale#Queue(0, 'lint_file')
+
+        if g:ale_set_balloons
+            call ale#balloon#Enable()
+        endif
     else
         " Make sure the buffer number is a number, not a string,
         " otherwise things can go wrong.
@@ -281,12 +288,20 @@ function! s:ALEToggle() abort
         if g:ale_set_highlights
             call ale#highlight#UpdateHighlights()
         endif
+
+        if g:ale_set_balloons
+            call ale#balloon#Disable()
+        endif
     endif
 
     call ALEInitAuGroups()
 endfunction
 
 call ALEInitAuGroups()
+
+if g:ale_set_balloons
+    call ale#balloon#Enable()
+endif
 
 " Define commands for moving through warnings and errors.
 command! -bar ALEPrevious :call ale#loclist_jumping#Jump('before', 0)

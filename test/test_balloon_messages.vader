@@ -1,0 +1,38 @@
+Before:
+  Save g:ale_buffer_info
+
+  let g:ale_buffer_info[347] = {'loclist': [
+  \ {
+  \   'lnum': 1,
+  \   'col': 10,
+  \   'text': 'Missing semicolon. (semi)',
+  \ },
+  \ {
+  \   'lnum': 2,
+  \   'col': 10,
+  \   'text': 'Infix operators must be spaced. (space-infix-ops)'
+  \ },
+  \ {
+  \   'lnum': 2,
+  \   'col': 15,
+  \   'text': 'Missing radix parameter (radix)'
+  \ },
+  \]}
+
+After:
+  Restore
+
+Execute(Balloon messages should be shown for the correct lines):
+  AssertEqual
+  \ 'Missing semicolon. (semi)',
+  \ ale#balloon#MessageForPos(347, 1, 1)
+
+Execute(Balloon messages should be shown for earlier columns):
+  AssertEqual
+  \ 'Infix operators must be spaced. (space-infix-ops)',
+  \ ale#balloon#MessageForPos(347, 2, 1)
+
+Execute(Balloon messages should be shown for later columns):
+  AssertEqual
+  \ 'Missing radix parameter (radix)',
+  \ ale#balloon#MessageForPos(347, 2, 16)
