@@ -55,15 +55,15 @@ Execute(Highlights should be set when a linter runs):
   \ ],
   \ getmatches()
 
-  AssertEqual [4, 5, 6], map(copy(g:ale_buffer_info[bufnr('')].loclist), 'v:val.match_id')
+  AssertEqual [[4], [5], [6]], map(copy(g:ale_buffer_info[bufnr('')].loclist), 'v:val.match_id_list')
 
 Execute(Existing highlights should be kept):
   call matchaddpos('ALEError', [[1, 2, 1]], 10, 347)
   call matchaddpos('ALEWarning', [[2, 2, 1]], 10, 348)
 
   call ale#highlight#SetHighlights(bufnr('%'), [
-  \ {'bufnr': bufnr('%'), 'match_id': 347, 'type': 'E', 'lnum': 1, 'col': 2},
-  \ {'bufnr': bufnr('%'), 'match_id': 348, 'type': 'W', 'lnum': 2, 'col': 2},
+  \ {'bufnr': bufnr('%'), 'match_id_list': [347], 'type': 'E', 'lnum': 1, 'col': 2},
+  \ {'bufnr': bufnr('%'), 'match_id_list': [348], 'type': 'W', 'lnum': 2, 'col': 2},
   \ {'bufnr': bufnr('%'), 'type': 'E', 'lnum': 3, 'col': 2},
   \ {'bufnr': bufnr('%'), 'type': 'W', 'lnum': 4, 'col': 1},
   \])

@@ -55,9 +55,9 @@ function! s:GetCurrentMatchIDs(loclist) abort
     let l:current_id_map = {}
 
     for l:item in a:loclist
-        if has_key(l:item, 'match_id')
-            let l:current_id_map[l:item.match_id] = 1
-        endif
+        for l:id in get(l:item, 'match_id_list', [])
+            let l:current_id_map[l:id] = 1
+        endfor
     endfor
 
     return l:current_id_map
@@ -85,7 +85,7 @@ function! ale#highlight#UpdateHighlights() abort
     endif
 
     " Remove anything with a current match_id
-    call filter(l:loclist, '!has_key(v:val, ''match_id'')')
+    call filter(l:loclist, '!has_key(v:val, ''match_id_list'')')
 
     " Restore items from the map of hidden items,
     " if we don't have some new items to set already.
@@ -117,7 +117,7 @@ function! ale#highlight#UpdateHighlights() abort
             " Rememeber the match ID for the item.
             " This ID will be used to preserve loclist items which are set
             " many times.
-            let l:item.match_id = matchaddpos(l:group, [[l:line, l:col, l:size]])
+            let l:item.match_id_list = [matchaddpos(l:group, [[l:line, l:col, l:size]])]
         endfor
     endif
 endfunction
@@ -130,8 +130,8 @@ function! ale#highlight#BufferHidden(buffer) abort
         " Remove match_ids, as they must be re-calculated when buffers are
         " shown again.
         for l:item in l:loclist
-            if has_key(l:item, 'match_id')
-                call remove(l:item, 'match_id')
+            if has_key(l:item, 'match_id_list')
+                call remove(l:item, 'match_id_list')
             endif
         endfor
 

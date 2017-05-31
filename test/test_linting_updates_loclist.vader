@@ -66,7 +66,7 @@ Execute(The loclist should be updated after linting is done):
 
   AssertEqual ['' . bufnr('%')], keys(g:ale_buffer_info)
 
-  let g:expected_data[0].match_id = getmatches()[0].id
-  let g:expected_data[1].match_id = getmatches()[1].id
+  let g:expected_data[0].match_id_list = [getmatches()[0].id]
+  let g:expected_data[1].match_id_list = [getmatches()[1].id]
 
   AssertEqual g:expected_data, g:ale_buffer_info[bufnr('%')].loclist
