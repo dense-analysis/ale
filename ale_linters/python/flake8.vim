@@ -99,7 +99,7 @@ call ale#linter#Define('python', {
 \   'executable_callback': 'ale_linters#python#flake8#GetExecutable',
 \   'command_chain': [
 \       {'callback': 'ale_linters#python#flake8#VersionCheck'},
-\       {'callback': 'ale_linters#python#flake8#GetCommand'},
+\       {'callback': 'ale_linters#python#flake8#GetCommand', 'output_stream': 'both'},
 \   ],
 \   'callback': 'ale#handlers#python#HandlePEP8Format',
 \})

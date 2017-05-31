@@ -75,6 +75,43 @@ Execute (HandlePEP8Format should handle names with spaces):
   \   'C:\something\with spaces.py:6:6: E111 indentation is not a multiple of four',
   \ ])
 
+Execute (HandlePEP8Format should stack traces):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'text': 'An exception was thrown. See :ALEDetail',
+  \     'detail': join([
+  \       'Traceback (most recent call last):',
+  \       '  File "/usr/local/bin/flake8", line 7, in <module>',
+  \       '    from flake8.main.cli import main',
+  \       '  File "/usr/local/lib/python2.7/dist-packages/flake8/main/cli.py", line 2, in <module>',
+  \       '    from flake8.main import application',
+  \       '  File "/usr/local/lib/python2.7/dist-packages/flake8/main/application.py", line 17, in <module>',
+  \       '    from flake8.plugins import manager as plugin_manager',
+  \       '  File "/usr/local/lib/python2.7/dist-packages/flake8/plugins/manager.py", line 5, in <module>',
+  \       '    import pkg_resources',
+  \       '  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 35, in <module>',
+  \       '    import email.parser',
+  \       'ImportError: No module named parser',
+  \     ], "\n"),
+  \   },
+  \ ],
+  \ ale#handlers#python#HandlePEP8Format(42, [
+  \   'Traceback (most recent call last):',
+  \   '  File "/usr/local/bin/flake8", line 7, in <module>',
+  \   '    from flake8.main.cli import main',
+  \   '  File "/usr/local/lib/python2.7/dist-packages/flake8/main/cli.py", line 2, in <module>',
+  \   '    from flake8.main import application',
+  \   '  File "/usr/local/lib/python2.7/dist-packages/flake8/main/application.py", line 17, in <module>',
+  \   '    from flake8.plugins import manager as plugin_manager',
+  \   '  File "/usr/local/lib/python2.7/dist-packages/flake8/plugins/manager.py", line 5, in <module>',
+  \   '    import pkg_resources',
+  \   '  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 35, in <module>',
+  \   '    import email.parser',
+  \   'ImportError: No module named parser',
+  \ ])
+
 Execute (HandleGCCFormat should handle the correct lines of output):
   AssertEqual
   \ [

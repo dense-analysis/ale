@@ -2,6 +2,16 @@
 " Description: Error handling for flake8, etc.
 
 function! ale#handlers#python#HandlePEP8Format(buffer, lines) abort
+    for l:line in a:lines[:10]
+        if match(l:line, '^Traceback') >= 0
+            return [{
+            \   'lnum': 1,
+            \   'text': 'An exception was thrown. See :ALEDetail',
+            \   'detail': join(a:lines, "\n"),
+            \}]
+        endif
+    endfor
+
     " Matches patterns line the following:
     "
     " Matches patterns line the following:
