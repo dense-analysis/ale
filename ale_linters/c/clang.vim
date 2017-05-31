@@ -10,11 +10,14 @@ if !exists('g:ale_c_clang_options')
 endif
 
 function! ale_linters#c#clang#GetCommand(buffer) abort
+    let l:paths = ale#handlers#c#FindLocalHeaderPaths(a:buffer)
+
     " -iquote with the directory the file is in makes #include work for
     "  headers in the same directory.
     return 'clang -S -x c -fsyntax-only '
-    \   . '-iquote ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h'))
-    \   . ' ' . ale#Var(a:buffer, 'c_clang_options') . ' -'
+    \   . '-iquote ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h')) . ' '
+    \   . ale#handlers#c#IncludeOptions(l:paths)
+    \   . ale#Var(a:buffer, 'c_clang_options') . ' -'
 endfunction
 
 call ale#linter#Define('c', {

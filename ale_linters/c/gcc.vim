@@ -10,11 +10,14 @@ if !exists('g:ale_c_gcc_options')
 endif
 
 function! ale_linters#c#gcc#GetCommand(buffer) abort
+    let l:paths = ale#handlers#c#FindLocalHeaderPaths(a:buffer)
+
     " -iquote with the directory the file is in makes #include work for
     "  headers in the same directory.
     return 'gcc -S -x c -fsyntax-only '
-    \   . '-iquote ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h'))
-    \   . ' ' . ale#Var(a:buffer, 'c_gcc_options') . ' -'
+    \   . '-iquote ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h')) . ' '
+    \   . ale#handlers#c#IncludeOptions(l:paths)
+    \   . ale#Var(a:buffer, 'c_gcc_options') . ' -'
 endfunction
 
 call ale#linter#Define('c', {

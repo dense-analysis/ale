@@ -2,7 +2,7 @@
 " Desciption: Functions for integrating with C and C++ compilers.
 
 function! ale#handlers#c#FindProjectRoot(buffer) abort
-    for l:project_filename in ['Makefile', 'CMakeLists.txt']
+    for l:project_filename in ['configure', 'Makefile', 'CMakeLists.txt']
         let l:full_path = ale#path#FindNearestFile(a:buffer, l:project_filename)
 
         if !empty(l:full_path)
@@ -55,5 +55,9 @@ function! ale#handlers#c#IncludeOptions(include_paths) abort
         call add(l:option_list, '-I' . ale#Escape(l:path))
     endfor
 
-    return join(l:option_list)
+    if empty(l:option_list)
+        return ''
+    endif
+
+    return ' ' . join(l:option_list) . ' '
 endfunction

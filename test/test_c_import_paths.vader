@@ -1,0 +1,228 @@
+Before:
+  Save g:ale_c_gcc_options
+  Save g:ale_c_clang_options
+  Save g:ale_cpp_gcc_options
+  Save g:ale_cpp_clang_options
+
+  silent! cd /testplugin/test
+  let g:dir = getcwd()
+
+  let g:ale_c_gcc_options = ''
+  let g:ale_c_clang_options = ''
+  let g:ale_cpp_gcc_options = ''
+  let g:ale_cpp_clang_options = ''
+
+After:
+  Restore
+
+  silent execute 'cd ' . fnameescape(g:dir)
+  unlet! g:dir
+  call ale#linter#Reset()
+
+Execute(The C GCC handler should include 'include' directories for projects with a Makefile):
+  runtime! ale_linters/c/gcc.vim
+
+  cd test_c_projects/makefile_project/subdir
+  silent noautocmd file file.c
+
+  AssertEqual
+  \   'gcc -S -x c -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/makefile_project/subdir') . ' '
+  \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/makefile_project/include') . ' '
+  \   . ' -'
+  \ , ale_linters#c#gcc#GetCommand(bufnr(''))
+
+Execute(The C GCC handler should include 'include' directories for projects with a configure file):
+  runtime! ale_linters/c/gcc.vim
+
+  cd test_c_projects/configure_project/subdir
+  silent noautocmd file file.c
+
+  AssertEqual
+  \   'gcc -S -x c -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/configure_project/subdir') . ' '
+  \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/configure_project/include') . ' '
+  \   . ' -'
+  \ , ale_linters#c#gcc#GetCommand(bufnr(''))
+
+Execute(The C GCC handler should include root directories for projects with .h files in them):
+  runtime! ale_linters/c/gcc.vim
+
+  cd test_c_projects/h_file_project/subdir
+  silent noautocmd file file.c
+
+  AssertEqual
+  \   'gcc -S -x c -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/h_file_project/subdir') . ' '
+  \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/h_file_project') . ' '
+  \   . ' -'
+  \ , ale_linters#c#gcc#GetCommand(bufnr(''))
+
+Execute(The C GCC handler should include root directories for projects with .hpp files in them):
+  runtime! ale_linters/c/gcc.vim
+
+  cd test_c_projects/hpp_file_project/subdir
+  silent noautocmd file file.c
+
+  AssertEqual
+  \   'gcc -S -x c -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/hpp_file_project/subdir') . ' '
+  \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/hpp_file_project') . ' '
+  \   . ' -'
+  \ , ale_linters#c#gcc#GetCommand(bufnr(''))
+
+Execute(The C Clang handler should include 'include' directories for projects with a Makefile):
+  runtime! ale_linters/c/clang.vim
+
+  cd test_c_projects/makefile_project/subdir
+  silent noautocmd file file.c
+
+  AssertEqual
+  \   'clang -S -x c -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/makefile_project/subdir') . ' '
+  \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/makefile_project/include') . ' '
+  \   . ' -'
+  \ , ale_linters#c#clang#GetCommand(bufnr(''))
+
+Execute(The C Clang handler should include 'include' directories for projects with a configure file):
+  runtime! ale_linters/c/clang.vim
+
+  cd test_c_projects/h_file_project/subdir
+  silent noautocmd file file.c
+
+  AssertEqual
+  \   'clang -S -x c -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/h_file_project/subdir') . ' '
+  \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/h_file_project') . ' '
+  \   . ' -'
+  \ , ale_linters#c#clang#GetCommand(bufnr(''))
+
+Execute(The C Clang handler should include root directories for projects with .h files in them):
+  runtime! ale_linters/c/clang.vim
+
+  cd test_c_projects/h_file_project/subdir
+  silent noautocmd file file.c
+
+  AssertEqual
+  \   'clang -S -x c -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/h_file_project/subdir') . ' '
+  \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/h_file_project') . ' '
+  \   . ' -'
+  \ , ale_linters#c#clang#GetCommand(bufnr(''))
+
+Execute(The C Clang handler should include root directories for projects with .hpp files in them):
+  runtime! ale_linters/c/clang.vim
+
+  cd test_c_projects/hpp_file_project/subdir
+  silent noautocmd file file.c
+
+  AssertEqual
+  \   'clang -S -x c -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/hpp_file_project/subdir') . ' '
+  \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/hpp_file_project') . ' '
+  \   . ' -'
+  \ , ale_linters#c#clang#GetCommand(bufnr(''))
+
+Execute(The C++ GCC handler should include 'include' directories for projects with a Makefile):
+  runtime! ale_linters/cpp/gcc.vim
+
+  cd test_c_projects/makefile_project/subdir
+  silent noautocmd file file.cpp
+
+  AssertEqual
+  \   'gcc -S -x c++ -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/makefile_project/subdir') . ' '
+  \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/makefile_project/include') . ' '
+  \   . ' -'
+  \ , ale_linters#cpp#gcc#GetCommand(bufnr(''))
+
+Execute(The C++ GCC handler should include 'include' directories for projects with a configure file):
+  runtime! ale_linters/cpp/gcc.vim
+
+  cd test_c_projects/configure_project/subdir
+  silent noautocmd file file.cpp
+
+  AssertEqual
+  \   'gcc -S -x c++ -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/configure_project/subdir') . ' '
+  \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/configure_project/include') . ' '
+  \   . ' -'
+  \ , ale_linters#cpp#gcc#GetCommand(bufnr(''))
+
+Execute(The C++ GCC handler should include root directories for projects with .h files in them):
+  runtime! ale_linters/cpp/gcc.vim
+
+  cd test_c_projects/h_file_project/subdir
+  silent noautocmd file file.cpp
+
+  AssertEqual
+  \   'gcc -S -x c++ -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/h_file_project/subdir') . ' '
+  \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/h_file_project') . ' '
+  \   . ' -'
+  \ , ale_linters#cpp#gcc#GetCommand(bufnr(''))
+
+Execute(The C++ GCC handler should include root directories for projects with .hpp files in them):
+  runtime! ale_linters/cpp/gcc.vim
+
+  cd test_c_projects/hpp_file_project/subdir
+  silent noautocmd file file.cpp
+
+  AssertEqual
+  \   'gcc -S -x c++ -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/hpp_file_project/subdir') . ' '
+  \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/hpp_file_project') . ' '
+  \   . ' -'
+  \ , ale_linters#cpp#gcc#GetCommand(bufnr(''))
+
+Execute(The C++ Clang handler should include 'include' directories for projects with a Makefile):
+  runtime! ale_linters/cpp/clang.vim
+
+  cd test_c_projects/makefile_project/subdir
+  silent noautocmd file file.cpp
+
+  AssertEqual
+  \   'clang++ -S -x c++ -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/makefile_project/subdir') . ' '
+  \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/makefile_project/include') . ' '
+  \   . ' -'
+  \ , ale_linters#cpp#clang#GetCommand(bufnr(''))
+
+Execute(The C++ Clang handler should include 'include' directories for projects with a configure file):
+  runtime! ale_linters/cpp/clang.vim
+
+  cd test_c_projects/configure_project/subdir
+  silent noautocmd file file.cpp
+
+  AssertEqual
+  \   'clang++ -S -x c++ -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/configure_project/subdir') . ' '
+  \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/configure_project/include') . ' '
+  \   . ' -'
+  \ , ale_linters#cpp#clang#GetCommand(bufnr(''))
+
+Execute(The C++ Clang handler should include root directories for projects with .h files in them):
+  runtime! ale_linters/cpp/clang.vim
+
+  cd test_c_projects/h_file_project/subdir
+  silent noautocmd file file.cpp
+
+  AssertEqual
+  \   'clang++ -S -x c++ -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/h_file_project/subdir') . ' '
+  \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/h_file_project') . ' '
+  \   . ' -'
+  \ , ale_linters#cpp#clang#GetCommand(bufnr(''))
+
+Execute(The C++ Clang handler should include root directories for projects with .hpp files in them):
+  runtime! ale_linters/cpp/clang.vim
+
+  cd test_c_projects/hpp_file_project/subdir
+  silent noautocmd file file.cpp
+
+  AssertEqual
+  \   'clang++ -S -x c++ -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/hpp_file_project/subdir') . ' '
+  \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/hpp_file_project') . ' '
+  \   . ' -'
+  \ , ale_linters#cpp#clang#GetCommand(bufnr(''))
