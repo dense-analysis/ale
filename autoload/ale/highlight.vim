@@ -28,6 +28,30 @@ endif
 " the buffer is in focus when linting completes.
 let s:buffer_highlights = {}
 let s:buffer_restore_map = {}
+" The maximum number of items for the second argument of matchaddpos()
+let s:MAX_POS_VALUES = 8
+let s:MAX_COL_SIZE = 4294967296
+
+function! ale#highlight#CreatePositions(line, col, end_line, end_col) abort
+    if a:line >= a:end_line
+        " For single lines, just return the one position.
+        return [[[a:line, a:col, a:end_col - a:col + 1]]]
+    endif
+
+    " Get positions from the first line at the first column, up to a large
+    " integer for highlighting up to the end of the line, followed by
+    " the lines in-between, for highlighting entire lines, and
+    " a highlight for the last line, up to the end column.
+    let l:all_positions =
+    \   [[a:line, a:col, s:MAX_COL_SIZE]]
+    \   + range(a:line + 1, a:end_line - 1)
+    \   + [[a:end_line, 1, a:end_col]]
+
+    return map(
+    \   range(0, len(l:all_positions) - 1, s:MAX_POS_VALUES),
+    \   'l:all_positions[v:val : v:val + s:MAX_POS_VALUES - 1]',
+    \)
+endfunction
 
 function! ale#highlight#UnqueueHighlights(buffer) abort
     if has_key(s:buffer_highlights, a:buffer)
