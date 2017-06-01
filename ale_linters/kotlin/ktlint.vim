@@ -36,26 +36,18 @@ function! ale_linters#kotlin#ktlint#Handle(buffer, lines) abort
     let l:message_pattern = '^\(.*\):\([0-9]\+\):\([0-9]\+\):\s\+\(.*\)'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:message_pattern)
-
-        if len(l:match) == 0
-            continue
-        endif
-
-        let l:file = l:match[1]
+    for l:match in ale#util#GetMatches(a:lines, l:message_pattern)
         let l:line = l:match[2] + 0
         let l:column = l:match[3] + 0
         let l:text = l:match[4]
 
-        let l:buf_abspath = fnamemodify(l:file, ':p')
         let l:type = l:text =~? 'not a valid kotlin file' ? 'E' : 'W'
 
         call add(l:output, {
-            \ 'lnum': l:line,
-            \ 'col': l:column,
-            \ 'text': l:text,
-            \ 'type': l:type
+        \   'lnum': l:line,
+        \   'col': l:column,
+        \   'text': l:text,
+        \   'type': l:type
         \})
     endfor
 
@@ -63,9 +55,9 @@ function! ale_linters#kotlin#ktlint#Handle(buffer, lines) abort
 endfunction
 
 call ale#linter#Define('kotlin', {
-    \   'name': 'ktlint',
-    \   'executable': 'ktlint',
-    \   'command_callback': 'ale_linters#kotlin#ktlint#GetCommand',
-    \   'callback': 'ale_linters#kotlin#ktlint#Handle',
-    \   'lint_file': 1
+\   'name': 'ktlint',
+\   'executable': 'ktlint',
+\   'command_callback': 'ale_linters#kotlin#ktlint#GetCommand',
+\   'callback': 'ale_linters#kotlin#ktlint#Handle',
+\   'lint_file': 1
 \})
