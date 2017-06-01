@@ -46,9 +46,9 @@ function! ale#list#SetLists(buffer, loclist) abort
 
         if !ale#list#IsQuickfixOpen()
           if g:ale_set_quickfix
-              copen
+              execute 'copen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
           elseif g:ale_set_loclist
-              lopen
+              execute 'lopen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
           endif
         endif
 

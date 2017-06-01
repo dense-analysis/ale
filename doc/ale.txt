@@ -365,6 +365,19 @@ g:ale_keep_list_window_open                       *g:ale_keep_list_window_open*
   See: |g:ale_open_list|
 
 
+g:ale_list_window_size                                 *g:ale_list_window_size*
+                                                       *b:ale_list_window_size*
+  Type: |Number|
+  Default: `10`
+
+  This number configures the number of lines to set for the height of windows
+  opened automatically for ALE problems. The default of `10` matches the Vim
+  default height.
+
+  See |g:ale_open_list| for information on automatically opening windows
+  for quickfix or the loclist.
+
+
 g:ale_lint_delay                                             *g:ale_lint_delay*
 
   Type: |Number|
@@ -549,6 +562,8 @@ g:ale_open_list                                               *g:ale_open_list*
   The window will be kept open until all warnings or errors are cleared,
   including those not set by ALE, unless |g:ale_keep_list_window_open| is set
   to `1`, in which case the window will be kept open until closed manually.
+
+  The window size can be configured with |g:ale_list_window_size|.
 
 
 g:ale_pattern_options                                   *g:ale_pattern_options*

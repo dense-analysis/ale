@@ -106,6 +106,9 @@ let g:ale_open_list = get(g:, 'ale_open_list', 0)
 " This flag dictates if ale keeps open loclist even if there is no error in loclist
 let g:ale_keep_list_window_open = get(g:, 'ale_keep_list_window_open', 0)
 
+" The window size to set for the quickfix and loclist windows
+call ale#Set('list_window_size', 10)
+
 " This flag can be set to 0 to disable setting signs.
 " This is enabled by default only if the 'signs' feature exists.
 let g:ale_set_signs = get(g:, 'ale_set_signs', has('signs'))

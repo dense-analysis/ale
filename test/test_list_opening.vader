@@ -1,6 +1,17 @@
 " Author: Yann Fery <yann@fery.me>
-
 Before:
+  Save g:ale_set_loclist
+  Save g:ale_set_quickfix
+  Save g:ale_open_list
+  Save g:ale_keep_list_window_open
+  Save g:ale_list_window_size
+
+  let g:ale_set_loclist = 1
+  let g:ale_set_quickfix = 0
+  let g:ale_open_list = 0
+  let g:ale_keep_list_window_open = 0
+  let g:ale_list_window_size = 10
+
   let g:loclist = [
   \ {'lnum': 5, 'col': 5},
   \ {'lnum': 5, 'col': 4},
@@ -8,18 +19,28 @@ Before:
   \ {'lnum': 3, 'col': 2},
   \]
 
+  function GetQuickfixHeight() abort
+    for l:win in range(1, winnr('$'))
+        if getwinvar(l:win, '&buftype') ==# 'quickfix'
+            return winheight(l:win)
+        endif
+    endfor
+
+    return 0
+  endfunction
+
 After:
+  Restore
+
+  unlet! g:loclist
+  unlet! b:ale_list_window_size
+  delfunction GetQuickfixHeight
+
   " Close quickfix window after every execute block
   lcl
   ccl
-  unlet g:loclist
   call setloclist(0, [])
   call setqflist([])
-  " Reset options to their default values.
-  let g:ale_set_loclist = 1
-  let g:ale_set_quickfix = 0
-  let g:ale_open_list = 0
-  let g:ale_keep_list_window_open = 0
 
 Execute(IsQuickfixOpen should return the right output):
   AssertEqual 0, ale#list#IsQuickfixOpen()
@@ -52,6 +73,22 @@ Execute(The quickfix window should open for just the loclist):
   " Clear the list and it should close again.
   call ale#list#SetLists(bufnr('%'), [])
   Assert !ale#list#IsQuickfixOpen()
+
+Execute(The quickfix window height should be correct for the loclist):
+  let g:ale_open_list = 1
+  let g:ale_list_window_size = 7
+
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+
+  AssertEqual 7, GetQuickfixHeight()
+
+Execute(The quickfix window height should be correct for the loclist with buffer variables):
+  let g:ale_open_list = 1
+  let b:ale_list_window_size = 8
+
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+
+  AssertEqual 8, GetQuickfixHeight()
 
 Execute(The quickfix window should stay open for just the loclist):
   let g:ale_open_list = 1
@@ -93,3 +130,21 @@ Execute(The quickfix window should stay open for the quickfix list):
   call ale#list#SetLists(bufnr('%'), g:loclist)
   call ale#list#SetLists(bufnr('%'), [])
   Assert ale#list#IsQuickfixOpen()
+
+Execute(The quickfix window height should be correct for the quickfix list):
+  let g:ale_set_quickfix = 1
+  let g:ale_open_list = 1
+  let g:ale_list_window_size = 7
+
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+
+  AssertEqual 7, GetQuickfixHeight()
+
+Execute(The quickfix window height should be correct for the quickfix list with buffer variables):
+  let g:ale_set_quickfix = 1
+  let g:ale_open_list = 1
+  let b:ale_list_window_size = 8
+
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+
+  AssertEqual 8, GetQuickfixHeight()
