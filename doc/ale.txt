@@ -794,11 +794,13 @@ are supported for running the commands.
 Synchronous functions and asynchronous jobs will be run in a sequence for
 fixing files, and can be combined. For example:
 >
-  let g:ale_fixers.javascript = [
-  \ 'DoSomething',
-  \ 'eslint',
-  \ {buffer, lines -> filter(lines, 'v:val !=~ ''^\s*//''')},
-  \]
+  let g:ale_fixers = {
+  \   'javascript': [
+  \       'DoSomething',
+  \       'eslint',
+  \       {buffer, lines -> filter(lines, 'v:val !=~ ''^\s*//''')},
+  \   ],
+  \}
 
   ALEFix
 <
