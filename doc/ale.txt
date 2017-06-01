@@ -809,6 +809,12 @@ upon some lines immediately, then run `eslint` from the ALE registry, and
 then call a lambda function which will remove every single line comment
 from the file.
 
+For convenience, a plug mapping is defined for |ALEFix|, so you can set up a
+keybind easily for fixing files. >
+
+  " Bind F8 to fixing problems with ALE
+  nmap <F8> <Plug>(ale_fix)
+<
 Files can be fixed automatically with the following options, which are all off
 by default.
 
@@ -832,6 +838,8 @@ values set for `g:ale_python_flake8_executable`.
 ALEFix                                                                 *ALEFix*
 
   Fix problems with the current buffer. See |ale-fix| for more information.
+
+  A plug mapping `<Plug>(ale_fix)` is defined for this command.
 
 
 ALELint                                                               *ALELint*
