@@ -4,18 +4,9 @@
 let g:ale_kotlin_ktlint_exec = get(g:, 'ale_kotlin_ktlint_exec', 'ktlint')
 let g:ale_kotlin_ktlint_rulesets = get(g:, 'ale_kotlin_ktlint_rulesets', [])
 let g:ale_kotlin_ktlint_format = get(g: , 'ale_kotlin_ktlint_format', 0)
-let g:ale_kotlin_ktlint_config_file = get(g:, 'ale_kotlin_ktlint_config_file', '.ale_kotlin_ktlint_config')
-let g:ale_kotlin_ktlint_enable_config = get(g:, 'ale_kotlin_ktlint_enable_config', 0)
 
 
 function! ale_linters#kotlin#ktlint#GetCommand(buffer) abort
-    if ale#Var(a:buffer, 'kotlin_ktlint_enable_config')
-        let l:config_file = ale#path#FindNearestFile(a:buffer, ale#Var(a:buffer, 'kotlin_ktlint_config_file'))
-        if !empty(l:config_file) && filereadable(l:config_file)
-            execute 'source ' . l:config_file
-        endif
-    endif
-
     let l:exec = ale#Var(a:buffer, 'kotlin_ktlint_exec')
     let l:file_path = expand('#' . a:buffer . ':p')
     let l:options = ''

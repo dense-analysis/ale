@@ -66,19 +66,6 @@ g:ale_kotlin_kotlinc_module_filename     *g:ale_kotlin_kotlinc_module_filename*
 -------------------------------------------------------------------------------
 ktlint                                                      *ale-kotlin-ktlint*
 
-g:ale_kotlin_ktlint_enable_config             *ale_kotlin_ktlint_enable_config*
-  Type: |Number|
-  Default: `0`
-
-  Setting this variable to `1` tells the linter to load a configuration file.
-  This should be set in your vimrc
-
-g:ale_kotlin_ktlint_config_file                 *ale_kotlin_ktlint_config_file*
-  Type: |String|
-  Default: `'.ale_kotlin_ktlint_config'`
-
-  Filename of the configuration file. This should be set in your vimrc
-
 g:ale_kotlin_ktlint_exec                             *g:ale_kotlin_ktlint_exec*
   Type: |String|
   Default: `''`
