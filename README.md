@@ -486,4 +486,4 @@ still be an advantage.
 
 If you are still concerned, you can turn the automatic linting off altogether,
 including the option `g:ale_lint_on_enter`, and you can run ALE manually with
-`:call ale#Lint()`.
+`:ALELint`.
