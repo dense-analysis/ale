@@ -64,3 +64,16 @@ function! ale#loclist_jumping#Jump(direction, wrap) abort
         call cursor(l:nearest)
     endif
 endfunction
+
+function! ale#loclist_jumping#JumpToIndex(index) abort
+    let l:info = get(g:ale_buffer_info, bufnr('%'), {'loclist': []})
+    let l:loclist = l:info.loclist
+    if empty(l:loclist)
+        return
+    endif
+
+    let l:item = l:loclist[a:index]
+    if !empty(l:item)
+        call cursor([l:item.lnum, l:item.col])
+    endif
+endfunction
