@@ -857,6 +857,8 @@ ALEPrevious                                                       *ALEPrevious*
 ALEPreviousWrap                                               *ALEPreviousWrap*
 ALENext                                                               *ALENext*
 ALENextWrap                                                       *ALENextWrap*
+ALEFirst                                                             *ALEFirst*
+ALELast                                                               *ALELast*
                                                       *ale-navigation-commands*
 
   Move between warnings or errors in a buffer. ALE will only navigate between
@@ -867,11 +869,16 @@ ALENextWrap                                                       *ALENextWrap*
   `ALEPreviousWrap` and `ALENextWrap` will wrap around the file to find
   the last or first warning or error in the file, respectively.
 
+  `ALEFirst` goes the the first error or warning in the buffer, while `ALELast`
+  goes to the last one.
+
   The following |<Plug>| mappings are defined for the commands: >
   <Plug>(ale_previous) - ALEPrevious
   <Plug>(ale_previous_wrap) - ALEPreviousWrap
   <Plug>(ale_next) - ALENext
   <Plug>(ale_next_wrap) - ALENextWrap
+  <Plug>(ale_first) - ALEFirst
+  <Plug>(ale_last) - ALELast
 <
   For example, these commands could be bound to the keys Ctrl + j
   and Ctrl + k: >
