@@ -1,13 +1,13 @@
 " Author: Francis Agyapong <francisagyapong2@gmail.com>
 " Description: Lint kotlin files using ktlint
 
-let g:ale_kotlin_ktlint_exec = get(g:, 'ale_kotlin_ktlint_exec', 'ktlint')
-let g:ale_kotlin_ktlint_rulesets = get(g:, 'ale_kotlin_ktlint_rulesets', [])
-let g:ale_kotlin_ktlint_format = get(g: , 'ale_kotlin_ktlint_format', 0)
+call ale#Set('kotlin_ktlint_executable', 'ktlint')
+call ale#Set('kotlin_ktlint_rulesets', [])
+call ale#Set('kotlin_ktlint_format', 0)
 
 
 function! ale_linters#kotlin#ktlint#GetCommand(buffer) abort
-    let l:exec = ale#Var(a:buffer, 'kotlin_ktlint_exec')
+    let l:executable = ale#Var(a:buffer, 'kotlin_ktlint_executable')
     let l:file_path = expand('#' . a:buffer . ':p')
     let l:options = ''
 
@@ -20,7 +20,7 @@ function! ale_linters#kotlin#ktlint#GetCommand(buffer) abort
         let l:options = l:options . ' --ruleset ' . l:ruleset
     endfor
 
-    return l:exec . ' ' . l:options . ' ' . l:file_path
+    return l:executable . ' ' . l:options . ' ' . l:file_path
 endfunction
 
 function! ale_linters#kotlin#ktlint#Handle(buffer, lines) abort
