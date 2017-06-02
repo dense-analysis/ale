@@ -164,7 +164,11 @@ function! ale#highlight#BufferHidden(buffer) abort
             endif
         endfor
 
-        let s:buffer_restore_map[a:buffer] = l:loclist
+        let s:buffer_restore_map[a:buffer] = filter(
+        \   copy(l:loclist),
+        \   'v:val.bufnr == a:buffer && v:val.col > 0'
+        \)
+
         call clearmatches()
     endif
 endfunction
