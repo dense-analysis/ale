@@ -438,7 +438,7 @@ If you configure ALE options correctly in your vimrc file, and install
 the right tools, you can check JSX files with stylelint and eslint.
 
 First, install eslint and install stylelint with
-[https://github.com/styled-components/stylelint-processor-styled-components](stylelint-processor-styled-components).
+[stylelint-processor-styled-components](https://github.com/styled-components/stylelint-processor-styled-components).
 
 Supposing you have installed both tools correctly, configure your .jsx files so
 `jsx` is included in the filetype. You can use an `autocmd` for this.
