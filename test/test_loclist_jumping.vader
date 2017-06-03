@@ -13,9 +13,14 @@ Before:
   \ },
   \}
 
-  function! TestJump(direction, wrap, pos)
+  function! TestJump(position, wrap, pos)
     call cursor(a:pos)
-    call ale#loclist_jumping#Jump(a:direction, a:wrap)
+
+    if type(a:position) == type(0)
+      call ale#loclist_jumping#JumpToIndex(a:position)
+    else
+      call ale#loclist_jumping#Jump(a:position, a:wrap)
+    endif
 
     return getcurpos()[1:2]
   endfunction
@@ -53,3 +58,19 @@ Execute(loclist jumping not jump when the loclist is empty):
   AssertEqual [1, 6], TestJump('before', 1, [1, 6])
   AssertEqual [1, 6], TestJump('after', 0, [1, 6])
   AssertEqual [1, 6], TestJump('after', 1, [1, 6])
+
+Execute(We should be able to jump to the last item):
+  AssertEqual [2, 8], TestJump(-1, 0, [1, 6])
+
+Execute(We shouldn't move when jumping to the last item where there are none):
+  let g:ale_buffer_info[bufnr('%')].loclist = []
+
+  AssertEqual [1, 6], TestJump(-1, 0, [1, 6])
+
+Execute(We should be able to jump to the first item):
+  AssertEqual [1, 2], TestJump(0, 0, [1, 6])
+
+Execute(We shouldn't move when jumping to the first item where there are none):
+  let g:ale_buffer_info[bufnr('%')].loclist = []
+
+  AssertEqual [1, 6], TestJump(0, 0, [1, 6])
