@@ -154,7 +154,7 @@ The following languages and tools are supported.
 * Haskell: 'ghc', 'ghc-mod', 'hlint', 'hdevtools'
 * HTML: 'HTMLHint', 'proselint', 'tidy'
 * Java: 'javac'
-* JavaScript: 'eslint', 'jscs', 'jshint', 'flow', 'xo'
+* JavaScript: 'eslint', 'jscs', 'jshint', 'flow', 'prettier', 'prettier-eslint', 'xo'
 * JSON: 'jsonlint'
 * Kotlin: 'kotlinc'
 * LaTeX (tex): 'chktex', 'lacheck', 'proselint'
