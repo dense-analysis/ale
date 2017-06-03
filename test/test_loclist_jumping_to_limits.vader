@@ -1,0 +1,42 @@
+Before(start with cursor midway through buffer):
+  call cursor(2, 3)
+
+After:
+  let g:ale_buffer_info = {}
+
+Given foobar (Some imaginary filetype):
+  line one
+  line two
+  line three
+
+Execute(with an empty loclist):
+  let g:ale_buffer_info = {
+  \ bufnr('%'): {
+  \   'loclist': [],
+  \ },
+  \}
+
+Then(JumpToIndex doesn't move cursor):
+  call ale#loclist_jumping#JumpToIndex(0)
+  AssertEqual [2, 3], getcurpos()[1:2]
+
+  call ale#loclist_jumping#JumpToIndex(-1)
+  AssertEqual [2, 3], getcurpos()[1:2]
+
+Execute(with a populated loclist):
+  let g:ale_buffer_info = {
+  \ bufnr('%'): {
+  \   'loclist': [
+  \     {'lnum': 1, 'col': 6},
+  \     {'lnum': 2, 'col': 1},
+  \     {'lnum': 3, 'col': 1},
+  \   ]
+  \ },
+  \}
+
+Then(JumpToIndex moves cursor to the index specified):
+  call ale#loclist_jumping#JumpToIndex(0)
+  AssertEqual [1, 6], getcurpos()[1:2]
+
+  call ale#loclist_jumping#JumpToIndex(-1)
+  AssertEqual [3, 1], getcurpos()[1:2]
