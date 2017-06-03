@@ -311,6 +311,8 @@ command! -bar ALEPrevious :call ale#loclist_jumping#Jump('before', 0)
 command! -bar ALEPreviousWrap :call ale#loclist_jumping#Jump('before', 1)
 command! -bar ALENext :call ale#loclist_jumping#Jump('after', 0)
 command! -bar ALENextWrap :call ale#loclist_jumping#Jump('after', 1)
+command! -bar ALEFirst :call ale#loclist_jumping#JumpToIndex(0)
+command! -bar ALELast :call ale#loclist_jumping#JumpToIndex(-1)
 
 " A command for showing error details.
 command! -bar ALEDetail :call ale#cursor#ShowCursorDetail()
@@ -338,6 +340,8 @@ nnoremap <silent> <Plug>(ale_previous) :ALEPrevious<Return>
 nnoremap <silent> <Plug>(ale_previous_wrap) :ALEPreviousWrap<Return>
 nnoremap <silent> <Plug>(ale_next) :ALENext<Return>
 nnoremap <silent> <Plug>(ale_next_wrap) :ALENextWrap<Return>
+nnoremap <silent> <Plug>(ale_first) :ALEFirst<Return>
+nnoremap <silent> <Plug>(ale_last) :ALELast<Return>
 nnoremap <silent> <Plug>(ale_toggle) :ALEToggle<Return>
 nnoremap <silent> <Plug>(ale_lint) :ALELint<Return>
 nnoremap <silent> <Plug>(ale_detail) :ALEDetail<Return>
