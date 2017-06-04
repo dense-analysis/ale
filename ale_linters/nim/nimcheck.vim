@@ -54,7 +54,7 @@ function! ale_linters#nim#nimcheck#GetCommand(buffer) abort
         \   . ' --threads:on --verbosity:0 --colors:off --listFullPaths %t'
     else
         return 'nim check'
-        \   . ' --threads:on --verbosity:0 --colors:off --listFullPaths %s'
+        \   . ' --verbosity:0 --colors:off --listFullPaths %s'
     endif
 endfunction
 
