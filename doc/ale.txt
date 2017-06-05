@@ -869,7 +869,7 @@ ALELast                                                               *ALELast*
   `ALEPreviousWrap` and `ALENextWrap` will wrap around the file to find
   the last or first warning or error in the file, respectively.
 
-  `ALEFirst` goes the the first error or warning in the buffer, while `ALELast`
+  `ALEFirst` goes to the first error or warning in the buffer, while `ALELast`
   goes to the last one.
 
   The following |<Plug>| mappings are defined for the commands: >
