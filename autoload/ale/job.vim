@@ -83,7 +83,7 @@ function! s:VimOutputCallback(channel, data) abort
     let l:job_id = ale#job#ParseVim8ProcessID(string(l:job))
 
     " Only call the callbacks for jobs which are valid.
-    if l:job_id > 0
+    if l:job_id > 0 && has_key(s:job_map, l:job_id)
         call ale#util#GetFunction(s:job_map[l:job_id].out_cb)(l:job_id, a:data)
     endif
 endfunction
@@ -93,7 +93,7 @@ function! s:VimErrorCallback(channel, data) abort
     let l:job_id = ale#job#ParseVim8ProcessID(string(l:job))
 
     " Only call the callbacks for jobs which are valid.
-    if l:job_id > 0
+    if l:job_id > 0 && has_key(s:job_map, l:job_id)
         call ale#util#GetFunction(s:job_map[l:job_id].err_cb)(l:job_id, a:data)
     endif
 endfunction
@@ -102,6 +102,10 @@ function! s:VimCloseCallback(channel) abort
     let l:job = ch_getjob(a:channel)
     let l:job_id = ale#job#ParseVim8ProcessID(string(l:job))
     let l:info = get(s:job_map, l:job_id, {})
+
+    if empty(l:info)
+        return
+    endif
 
     " job_status() can trigger the exit handler.
     " The channel can close before the job has exited.
@@ -122,6 +126,11 @@ endfunction
 function! s:VimExitCallback(job, exit_code) abort
     let l:job_id = ale#job#ParseVim8ProcessID(string(a:job))
     let l:info = get(s:job_map, l:job_id, {})
+
+    if empty(l:info)
+        return
+    endif
+
     let l:info.exit_code = a:exit_code
 
     " The program can exit before the data has finished being read.
