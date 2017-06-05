@@ -234,7 +234,7 @@ function! ALEInitAuGroups() abort
     augroup ALERunOnInsertLeave
         autocmd!
         if g:ale_enabled && g:ale_lint_on_insert_leave
-            autocmd InsertLeave * call ale#Queue(0, 'lint_file')
+            autocmd InsertLeave * call ale#Queue(0)
         endif
     augroup END
 

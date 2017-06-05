@@ -86,7 +86,7 @@ Execute (g:ale_lint_on_insert_leave = 1 should bind InsertLeave):
   let g:ale_lint_on_insert_leave = 1
 
   AssertEqual [
-  \ 'InsertLeave * call ale#Queue(0, ''lint_file'')',
+  \ 'InsertLeave * call ale#Queue(0)',
   \], CheckAutocmd('ALERunOnInsertLeave')
 
 Execute (g:ale_lint_on_insert_leave = 0 should bind no events):
