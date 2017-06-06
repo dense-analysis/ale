@@ -123,3 +123,18 @@ function! ale#util#GetMatches(lines, patterns) abort
 
     return l:matches
 endfunction
+
+" Given the name of a function, a Funcref, or a lambda, return the number
+" of named arguments for a function.
+function! ale#util#FunctionArgCount(function) abort
+    let l:Function = ale#util#GetFunction(a:function)
+
+    redir => l:output
+        silent function Function
+    redir END
+
+    let l:match = matchstr(split(l:output, "\n")[0], '\v\([^)]+\)')[1:-2]
+    let l:arg_list = filter(split(l:match, ', '), 'v:val !=# ''...''')
+
+    return len(l:arg_list)
+endfunction
