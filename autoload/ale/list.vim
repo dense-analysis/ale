@@ -44,12 +44,12 @@ function! ale#list#SetLists(buffer, loclist) abort
     if len(a:loclist) > 0 || g:ale_keep_list_window_open
         let l:winnr = winnr()
 
-        if !ale#list#IsQuickfixOpen()
-          if g:ale_set_quickfix
-              execute 'copen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
-          elseif g:ale_set_loclist
-              execute 'lopen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
-          endif
+        if g:ale_set_quickfix
+            if !ale#list#IsQuickfixOpen()
+                execute 'copen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
+            endif
+        elseif g:ale_set_loclist
+            execute 'lopen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
         endif
 
         " If focus changed, restore it (jump to the last window).
