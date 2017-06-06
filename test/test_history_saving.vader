@@ -1,4 +1,7 @@
 Before:
+  Save g:ale_max_buffer_history_size
+  Save g:ale_history_log_output
+
   " Temporarily set the shell to /bin/sh, if it isn't already set that way.
   " This will make it so the test works when running it directly.
   let g:current_shell = &shell
@@ -6,6 +9,7 @@ Before:
   let g:history = []
   let g:ale_buffer_info = {}
   let g:ale_max_buffer_history_size = 20
+  let g:ale_history_log_output = 0
 
   function! CollectResults(buffer, output)
     return []
@@ -15,11 +19,13 @@ Before:
   \ 'name': 'testlinter',
   \ 'callback': 'CollectResults',
   \ 'executable': 'echo',
-  \ 'command': 'echo command history test',
+  \ 'command': '/bin/sh -c ''echo command history test''',
   \ 'read_buffer': 0,
   \})
 
 After:
+  Restore
+
   " Reset the shell back to what it was before.
   let &shell = g:current_shell
   unlet g:current_shell
@@ -44,7 +50,7 @@ Execute(History should be set when commands are run):
 
   AssertEqual 1, len(g:history)
   AssertEqual sort(['status', 'exit_code', 'job_id', 'command']), sort(keys(g:history[0]))
-  AssertEqual ['/bin/sh', '-c', 'echo command history test'], g:history[0].command
+  AssertEqual ['/bin/sh', '-c', '/bin/sh -c ''echo command history test'''], g:history[0].command
   AssertEqual 'finished', g:history[0].status
   AssertEqual 0, g:history[0].exit_code
   " The Job ID will change each time, but we can check the type.
