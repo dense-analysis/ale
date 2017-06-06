@@ -1,11 +1,15 @@
 Before:
   let g:success = 0
+  let g:ale_run_synchronously = 1
+
   augroup VaderTest
     autocmd!
     autocmd User ALELint let g:success = 1
   augroup end
 
 After:
+  let g:ale_run_synchronously = 0
+
   augroup! VaderTest
   let g:ale_buffer_info = {}
 
