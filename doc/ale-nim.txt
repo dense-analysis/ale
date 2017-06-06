@@ -1,0 +1,19 @@
+===============================================================================
+ALE Nim Integration                                           *ale-nim-options*
+
+
+-------------------------------------------------------------------------------
+Global Options
+
+g:ale_nim_make_copy                                       *g:ale_nim_make_copy*
+                                                          *b:ale_nim_make_copy*
+  Type: |Number|
+  Default: `0`
+
+  This variable controls whether or not ALE will make a temporary copy of the
+  buffer (in `'/tmp/foo/bar/your_file.nim'`), in order to run `'nim check'` on
+  buffer change, not just on save.
+  
+  In order to enable this behavior, set this variable to `1`. It's disabled by
+  default because it will only work if the file doesn't depend on some
+  project/file specific `nim.cfg`.

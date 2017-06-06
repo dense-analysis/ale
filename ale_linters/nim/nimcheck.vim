@@ -1,6 +1,9 @@
 " Author: Baabelfish
 " Description: Typechecking for nim files
 
+let g:ale_nim_make_copy =
+\   get(g:, 'ale_nim_make_copy', '0')
+
 function! ale_linters#nim#nimcheck#Handle(buffer, lines) abort
     let l:buffer_filename = fnamemodify(bufname(a:buffer), ':p:t')
     let l:pattern = '^\(.\+\.nim\)(\(\d\+\), \(\d\+\)) \(.\+\)'
@@ -44,10 +47,15 @@ endfunction
 
 
 function! ale_linters#nim#nimcheck#GetCommand(buffer) abort
-    let l:directory = ale#Escape(fnamemodify(bufname(a:buffer), ':p:h'))
+    if ale#Var(a:buffer, 'nim_make_copy')
+        let l:directory = ale#Escape(fnamemodify(bufname(a:buffer), ':p:h'))
 
-    return 'nim check --path:' . l:directory
-    \   . ' --threads:on --verbosity:0 --colors:off --listFullPaths %t'
+        return 'nim check --path:' . l:directory
+        \   . ' --threads:on --verbosity:0 --colors:off --listFullPaths %t'
+    else
+        return 'nim check'
+        \   . ' --verbosity:0 --colors:off --listFullPaths %s'
+    endif
 endfunction
 
 
