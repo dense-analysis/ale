@@ -44,10 +44,7 @@ endfunction
 
 
 function! ale_linters#nim#nimcheck#GetCommand(buffer) abort
-    let l:directory = ale#Escape(fnamemodify(bufname(a:buffer), ':p:h'))
-
-    return 'nim check --path:' . l:directory
-    \   . ' --threads:on --verbosity:0 --colors:off --listFullPaths %t'
+    return 'nim check --verbosity:0 --colors:off --listFullPaths %s'
 endfunction
 
 
@@ -56,5 +53,6 @@ call ale#linter#Define('nim', {
 \    'executable': 'nim',
 \    'output_stream': 'both',
 \    'command_callback': 'ale_linters#nim#nimcheck#GetCommand',
-\    'callback': 'ale_linters#nim#nimcheck#Handle'
+\    'callback': 'ale_linters#nim#nimcheck#Handle',
+\    'lint_file': 1,
 \})
