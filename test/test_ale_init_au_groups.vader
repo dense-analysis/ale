@@ -112,12 +112,12 @@ Execute (g:ale_lint_on_enter = 0 should bind no events):
 
   AssertEqual [], CheckAutocmd('ALERunOnEnterGroup')
 
-Execute (g:ale_lint_on_enter = 1 should bind no BufReadPost and BufEnter):
+Execute (g:ale_lint_on_enter = 1 should bind no BufReadPost and BufWinEnter):
   let g:ale_lint_on_enter = 1
 
   AssertEqual [
-  \ 'BufEnter * call ale#Queue(300, ''lint_file'')',
   \ 'BufReadPost * call ale#Queue(300, ''lint_file'')',
+  \ 'BufWinEnter * call ale#Queue(300, ''lint_file'')',
   \], CheckAutocmd('ALERunOnEnterGroup')
 
 Execute (g:ale_lint_on_filetype_changed = 0 should bind no events):

@@ -205,7 +205,7 @@ function! ALEInitAuGroups() abort
     augroup ALERunOnEnterGroup
         autocmd!
         if g:ale_enabled && g:ale_lint_on_enter
-            autocmd BufEnter,BufRead * call ale#Queue(300, 'lint_file')
+            autocmd BufWinEnter,BufRead * call ale#Queue(300, 'lint_file')
         endif
     augroup END
 

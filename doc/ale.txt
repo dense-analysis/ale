@@ -393,9 +393,9 @@ g:ale_lint_on_enter                                       *g:ale_lint_on_enter*
   Type: |Number|
   Default: `1`
 
-  When this option is set to `1`, the |BufEnter| and |BufRead| events will be
-  used to apply linters when buffers are first opened. If this is not desired,
-  this variable can be set to `0` in your vimrc file to disable this
+  When this option is set to `1`, the |BufWinEnter| and |BufRead| events will
+  be used to apply linters when buffers are first opened. If this is not
+  desired, this variable can be set to `0` in your vimrc file to disable this
   behaviour.
 
 
