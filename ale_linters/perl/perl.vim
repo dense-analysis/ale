@@ -20,17 +20,21 @@ endfunction
 function! ale_linters#perl#perl#Handle(buffer, lines) abort
     let l:pattern = '\(.\+\) at \(.\+\) line \(\d\+\)'
     let l:output = []
+    let l:basename = expand('#' . a:buffer . ':t')
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:line = l:match[3]
         let l:text = l:match[1]
         let l:type = 'E'
 
-        call add(l:output, {
-        \   'lnum': l:line,
-        \   'text': l:text,
-        \   'type': l:type,
-        \})
+        if l:match[2][-len(l:basename):] ==# l:basename
+        \&& l:text !=# 'BEGIN failed--compilation aborted'
+            call add(l:output, {
+            \   'lnum': l:line,
+            \   'text': l:text,
+            \   'type': l:type,
+            \})
+        endif
     endfor
 
     return l:output
