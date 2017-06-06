@@ -35,11 +35,19 @@ Before:
     return {'command': 'cat - <(echo d)'}
   endfunction
 
+  function CatLineOneArg(buffer) abort
+    return {'command': 'cat - <(echo d)'}
+  endfunction
+
   function ReplaceWithTempFile(buffer, lines) abort
     return {'command': 'echo x > %t', 'read_temporary_file': 1}
   endfunction
 
   function RemoveLastLine(buffer, lines) abort
+    return ['a', 'b']
+  endfunction
+
+  function RemoveLastLineOneArg(buffer) abort
     return ['a', 'b']
   endfunction
 
@@ -65,8 +73,10 @@ After:
   delfunction AddDollars
   delfunction DoNothing
   delfunction CatLine
+  delfunction CatLineOneArg
   delfunction ReplaceWithTempFile
   delfunction RemoveLastLine
+  delfunction RemoveLastLineOneArg
   delfunction TestCallback
   delfunction SetUpLinters
   call ale#fix#registry#ResetToDefaults()
@@ -315,3 +325,21 @@ Execute(ale#fix#InitBufferData() should set up the correct data):
   \   'should_save': 1,
   \ },
   \}, g:ale_fix_buffer_data
+
+Execute(ALEFix simple functions should be able to accept one argument, the buffer):
+  let g:ale_fixers.testft = ['RemoveLastLineOneArg']
+  ALEFix
+
+Expect(There should be only two lines):
+  a
+  b
+
+Execute(ALEFix functions returning jobs should be able to accept one argument):
+  let g:ale_fixers.testft = ['CatLine']
+  ALEFix
+
+Expect(An extra line should be added):
+  a
+  b
+  c
+  d

@@ -770,10 +770,16 @@ The values for `g:ale_fixers` can be a list of |String|, |Funcref|, or
 |lambda| values. String values must either name a function, or a short name
 for a function set in the ALE fixer registry.
 
-Each function for fixing errors must accept two arguments `(buffer, lines)`,
-representing the buffer being fixed and the lines to fix. The functions must
-return either `0`, for changing nothing, a |List| for new lines to set, or a
-|Dictionary| for describing a command to be run in the background.
+Each function for fixing errors must accept either one argument `(buffer)` or
+two arguments `(buffer, lines)`, representing the buffer being fixed and the
+lines to fix. The functions must return either `0`, for changing nothing, a
+|List| for new lines to set, or a |Dictionary| for describing a command to be
+run in the background.
+
+Functions receiving a variable number of arguments will not receive the second
+argument `lines`. Functions should name two arguments if the `lines` argument
+is desired. This is required to avoid unnecessary copying of the lines of
+the buffers being checked.
 
 When a |Dictionary| is returned for an |ALEFix| callback, the following keys
 are supported for running the commands.
