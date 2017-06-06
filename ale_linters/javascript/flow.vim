@@ -42,7 +42,9 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
             " Comments have no line of column information, so we skip them.
             " In certain cases, `l:message.loc.source` points to a different path
             " than the buffer one, thus we skip this loc information too.
-            if has_key(l:message, 'loc') && l:line ==# 0 && l:message.loc.source ==# expand('#' . a:buffer . ':p')
+            if has_key(l:message, 'loc')
+            \&& l:line ==# 0
+            \&& ale#path#IsBufferPath(a:buffer, l:message.loc.source)
                 let l:line = l:message.loc.start.line + 0
                 let l:col = l:message.loc.start.column + 0
             endif

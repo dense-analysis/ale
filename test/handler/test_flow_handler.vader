@@ -8,7 +8,7 @@ After:
   call ale#linter#Reset()
 
 Execute(The flow handler should process errors correctly.):
-  e! /home/w0rp/Downloads/graphql-js/src/language/parser.js
+  silent! noautocmd file /home/w0rp/Downloads/graphql-js/src/language/parser.js
 
   let g:flow_output = {
   \ "flowVersion": "0.39.0",
@@ -130,7 +130,7 @@ Execute(The flow handler should process errors correctly.):
   AssertEqual g:expected, g:actual
 
 Execute(The flow handler should fetch the correct location for the currently opened file, even when it's not in the first message.):
-  e! /Users/rav/Projects/vim-ale-flow/index.js
+  silent! noautocmd file /Users/rav/Projects/vim-ale-flow/index.js
 
   let g:flow_output = {
   \ "flowVersion": "0.44.0",
@@ -212,6 +212,110 @@ Execute(The flow handler should fetch the correct location for the currently ope
   \       }
   \     },
   \     "path": "/Users/rav/Projects/vim-ale-flow/index.js",
+  \     "line": 6,
+  \     "endline": 6,
+  \     "start": 3,
+  \     "end": 18
+  \   }]
+  \ }],
+  \ "passed": v:false
+  \}
+
+  let g:actual = ale_linters#javascript#flow#Handle(bufnr(''), [json_encode(g:flow_output)])
+  let g:expected = [
+  \ {
+  \   'lnum': 6,
+  \   'col': 3,
+  \   'type': 'E',
+  \   'text': 'property `bar`: Property not found in props of React element `Foo` See also: React element `Foo`'
+  \ }
+  \]
+
+  AssertEqual g:expected, g:actual
+
+Execute(The flow handler should handle relative paths):
+  silent! noautocmd file /Users/rav/Projects/vim-ale-flow/index.js
+
+  let g:flow_output = {
+  \ "flowVersion": "0.44.0",
+  \ "errors": [{
+  \   "operation": {
+  \     "context": "  <Foo foo=\"bar\"/>, document.getElementById('foo')",
+  \     "descr": "React element `Foo`",
+  \     "type": "Blame",
+  \     "loc": {
+  \       "source": "vim-ale-flow/index.js",
+  \       "type": "SourceFile",
+  \       "start": {
+  \         "line": 6,
+  \         "column": 3,
+  \         "offset": 92
+  \       },
+  \       "end": {
+  \         "line": 6,
+  \         "column": 18,
+  \         "offset": 108
+  \       }
+  \     },
+  \     "path": "vim-ale-flow/index.js",
+  \     "line": 6,
+  \     "endline": 6,
+  \     "start": 3,
+  \     "end": 18
+  \   },
+  \   "kind": "infer",
+  \   "level": "error",
+  \   "message": [{
+  \     "context": "module.exports = function(props: Props) {",
+  \     "descr": "property `bar`",
+  \     "type": "Blame",
+  \     "loc": {
+  \       "source": "vim-ale-flow/foo.js",
+  \       "type": "SourceFile",
+  \       "start": {
+  \         "line": 9,
+  \         "column": 34,
+  \         "offset": 121
+  \       },
+  \       "end": {
+  \         "line": 9,
+  \         "column": 38,
+  \         "offset": 126
+  \       }
+  \     },
+  \     "path": "vim-ale-flow/foo.js",
+  \     "line": 9,
+  \     "endline": 9,
+  \     "start": 34,
+  \     "end": 38
+  \   }, {
+  \     "context": v:null,
+  \     "descr": "Property not found in",
+  \     "type": "Comment",
+  \     "path": "",
+  \     "line": 0,
+  \     "endline": 0,
+  \     "start": 1,
+  \     "end": 0
+  \   }, {
+  \     "context": "  <Foo foo=\"bar\"/>, document.getElementById('foo')",
+  \     "descr": "props of React element `Foo`",
+  \     "type": "Blame",
+  \     "loc": {
+  \       "source": "vim-ale-flow/index.js",
+  \       "type": "SourceFile",
+  \       "start": {
+  \         "line": 6,
+  \         "column": 3,
+  \         "offset": 92
+  \       },
+  \       "end": {
+  \         "line": 6,
+  \         "column": 18,
+  \         "offset": 108
+  \       }
+  \     },
+  \     "path": "vim-ale-flow/index.js",
   \     "line": 6,
   \     "endline": 6,
   \     "start": 3,
