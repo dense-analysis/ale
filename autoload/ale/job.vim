@@ -268,12 +268,16 @@ endfunction
 " Given a Job ID, stop that job.
 " Invalid job IDs will be ignored.
 function! ale#job#Stop(job_id) abort
+    if !has_key(s:job_map, a:job_id)
+        return
+    endif
+
     if has('nvim')
         " FIXME: NeoVim kills jobs on a timer, but will not kill any processes
         " which are child processes on Unix. Some work needs to be done to
         " kill child processes to stop long-running processes like pylint.
         call jobstop(a:job_id)
-    elseif has_key(s:job_map, a:job_id)
+    else
         let l:job = s:job_map[a:job_id].job
 
         " We must close the channel for reading the buffer if it is open

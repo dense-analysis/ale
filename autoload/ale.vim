@@ -104,6 +104,8 @@ function! ale#Lint(...) abort
         call filter(l:linters, '!v:val.lint_file')
     endif
 
+    call ale#engine#StopCurrentJobs(l:buffer, l:should_lint_file)
+
     for l:linter in l:linters
         call ale#engine#Invoke(l:buffer, l:linter)
     endfor

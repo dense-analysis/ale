@@ -51,43 +51,6 @@ function! ale#engine#InitBufferInfo(buffer) abort
     endif
 endfunction
 
-function! ale#engine#ClearJob(job_id) abort
-    if get(g:, 'ale_run_synchronously') == 1
-        call remove(s:job_info_map, a:job_id)
-
-        return
-    endif
-
-    call ale#job#Stop(a:job_id)
-
-    if has_key(s:job_info_map, a:job_id)
-        call remove(s:job_info_map, a:job_id)
-    endif
-endfunction
-
-function! s:StopPreviousJobs(buffer, linter) abort
-    if !has_key(g:ale_buffer_info, a:buffer)
-        " Do nothing if we didn't run anything for the buffer.
-        return
-    endif
-
-    let l:new_job_list = []
-
-    for l:job_id in g:ale_buffer_info[a:buffer].job_list
-        if has_key(s:job_info_map, l:job_id)
-        \&& s:job_info_map[l:job_id].linter.name ==# a:linter.name
-            " Stop jobs which match the buffer and linter.
-            call ale#engine#ClearJob(l:job_id)
-        else
-            " Keep other jobs in the list.
-            call add(l:new_job_list, l:job_id)
-        endif
-    endfor
-
-    " Update the list, removing the previously run job.
-    let g:ale_buffer_info[a:buffer].job_list = l:new_job_list
-endfunction
-
 " Register a temporary file to be managed with the ALE engine for
 " a current job run.
 function! ale#engine#ManageFile(buffer, filename) abort
@@ -160,9 +123,10 @@ function! s:HandleExit(job_id, exit_code) abort
         call ale#history#SetExitCode(l:buffer, a:job_id, a:exit_code)
     endif
 
-    " Call the same function for stopping jobs again to clean up the job
-    " which just closed.
-    call s:StopPreviousJobs(l:buffer, l:linter)
+    " Remove this job from the list.
+    call ale#job#Stop(a:job_id)
+    call remove(s:job_info_map, a:job_id)
+    call filter(g:ale_buffer_info[l:buffer].job_list, 'v:val !=# a:job_id')
 
     " Stop here if we land in the handle for a job completing if we're in
     " a sandbox.
@@ -507,10 +471,28 @@ function! s:InvokeChain(buffer, linter, chain_index, input) abort
     endif
 endfunction
 
-function! ale#engine#Invoke(buffer, linter) abort
-    " Stop previous jobs for the same linter.
-    call s:StopPreviousJobs(a:buffer, a:linter)
+function! ale#engine#StopCurrentJobs(buffer, include_lint_file_jobs) abort
+    let l:info = get(g:ale_buffer_info, a:buffer, {})
+    let l:new_job_list = []
 
+    for l:job_id in get(l:info, 'job_list', [])
+        let l:job_info = get(s:job_info_map, l:job_id, {})
+
+        if !empty(l:job_info)
+            if a:include_lint_file_jobs || !l:job_info.linter.lint_file
+                call ale#job#Stop(l:job_id)
+                call remove(s:job_info_map, l:job_id)
+            else
+                call add(l:new_job_list, l:job_id)
+            endif
+        endif
+    endfor
+
+    " Update the List, so it includes only the jobs we still need.
+    let l:info.job_list = l:new_job_list
+endfunction
+
+function! ale#engine#Invoke(buffer, linter) abort
     let l:executable = has_key(a:linter, 'executable_callback')
     \   ? ale#util#GetFunction(a:linter.executable_callback)(a:buffer)
     \   : a:linter.executable
