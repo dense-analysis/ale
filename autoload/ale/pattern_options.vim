@@ -2,7 +2,7 @@
 " Description: Set options in files based on regex patterns.
 
 function! ale#pattern_options#SetOptions() abort
-    let l:filename = expand('%:p')
+    let l:filename = expand('%:p') " no-custom-checks
     let l:options = {}
 
     for l:pattern in keys(g:ale_pattern_options)

@@ -6,7 +6,9 @@ if !exists('g:ale_go_gometalinter_options')
 endif
 
 function! ale_linters#go#gometalinter#GetCommand(buffer) abort
-    return 'gometalinter --include=''^' . expand('%:p') . '.*$'' '
+    let l:filename = expand('#' . a:buffer . ':p')
+
+    return 'gometalinter --include=''^' . l:filename . '.*$'' '
     \   . ale#Var(a:buffer, 'go_gometalinter_options')
     \   . ' ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h'))
 endfunction

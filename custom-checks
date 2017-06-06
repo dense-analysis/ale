@@ -55,6 +55,7 @@ check_errors() {
             RETURN_CODE=1
             echo "$match $message"
         done < <(grep -n "$regex" "$directory"/**/*.vim \
+            | grep -v 'no-custom-checks' \
             | grep -o '^[^:]\+:[0-9]\+' \
             | sed 's:^\./::')
     done
@@ -77,5 +78,6 @@ check_errors $'\t' 'Use four spaces, not tabs'
 # This check should prevent people from using a particular inconsistent name.
 check_errors 'let g:ale_\w\+_\w\+_args =' 'Name your option g:ale_<filetype>_<lintername>_options instead'
 check_errors 'shellescape(' 'Use ale#Escape instead of shellescape'
+check_errors "expand(['\"]%" "Use expand('#' . a:buffer . '...') instead. You might get a filename for the wrong buffer."
 
 exit $RETURN_CODE
