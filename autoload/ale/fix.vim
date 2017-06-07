@@ -45,7 +45,7 @@ function! ale#fix#ApplyQueuedFixes() abort
     endif
 
     if l:data.should_save
-        let l:should_lint = g:ale_fix_on_save
+        let l:should_lint = !empty(g:ale_fix_on_save)
     else
         let l:should_lint = l:data.changes_made
     endif

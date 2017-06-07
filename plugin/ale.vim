@@ -60,6 +60,11 @@ let g:ale_filetype_blacklist = ['nerdtree', 'unite', 'tags']
 " This Dictionary configures which linters are enabled for which languages.
 let g:ale_linters = get(g:, 'ale_linters', {})
 
+" This List configures which fixers are executed on save.
+" For compatibility reasons (before the variable was a Number) we check for 0
+" and 1 values
+let g:ale_fix_on_save = ale#ParseFixOnSave(get(g:, 'ale_fix_on_save', []))
+
 " This Dictionary configures which functions will be used for fixing problems.
 let g:ale_fixers = get(g:, 'ale_fixers', {})
 
@@ -226,8 +231,11 @@ function! ALEInitAuGroups() abort
 
     augroup ALERunOnSaveGroup
         autocmd!
-        if (g:ale_enabled && g:ale_lint_on_save) || g:ale_fix_on_save
+        if (g:ale_enabled && g:ale_lint_on_save)
             autocmd BufWrite * call ale#events#SaveEvent()
+        elseif !empty(g:ale_fix_on_save)
+            let l:files = join(map(copy(g:ale_fix_on_save), '"*." . v:val'), ',')
+            execute 'autocmd BufWrite '. (l:files ==# '*.*' ? '*' : l:files ) . ' call ale#events#SaveEvent()'
         endif
     augroup END
 
@@ -250,7 +258,7 @@ function! ALEInitAuGroups() abort
     augroup END
 
     if !g:ale_enabled
-        if !g:ale_fix_on_save
+        if empty(g:ale_fix_on_save)
             augroup! ALERunOnSaveGroup
         endif
 
