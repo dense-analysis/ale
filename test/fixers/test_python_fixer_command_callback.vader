@@ -1,0 +1,58 @@
+Before:
+  silent! execute 'cd /testplugin/test/command_callback'
+  let g:dir = getcwd()
+
+After:
+  " Set the file to something else,
+  " or we'll cause issues when running other tests
+  silent file 'dummy.py'
+  unlet! g:dir
+
+Execute(The python GetExecutable callbacks should return the correct path):
+  AssertEqual
+  \ '',
+  \ ale#handlers#python#GetExecutable(bufnr(''), 'isort')
+
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  AssertEqual
+  \ g:dir . '/python_paths/with_virtualenv/env/bin/isort',
+  \ ale#handlers#python#GetExecutable(bufnr(''), 'isort')
+  AssertEqual
+  \ g:dir . '/python_paths/with_virtualenv/env/bin/autopep8',
+  \ ale#handlers#python#GetExecutable(bufnr(''), 'autopep8')
+  AssertEqual
+  \ g:dir . '/python_paths/with_virtualenv/env/bin/yapf',
+  \ ale#handlers#python#GetExecutable(bufnr(''), 'yapf')
+
+
+Execute(The autopep8 callbacks should return the correct default values):
+  AssertEqual
+  \ 0,
+  \ ale#fixers#autopep8#Fix(bufnr(''))
+
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  AssertEqual
+  \ {'command': "'" . g:dir . "/python_paths/with_virtualenv/env/bin/autopep8' -" },
+  \ ale#fixers#autopep8#Fix(bufnr(''))
+
+
+Execute(The isort callbacks should return the correct default values):
+  AssertEqual
+  \ 0,
+  \ ale#fixers#isort#Fix(bufnr(''))
+
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  AssertEqual
+  \ {'command': "'" . g:dir . "/python_paths/with_virtualenv/env/bin/isort' -" },
+  \ ale#fixers#isort#Fix(bufnr(''))
+
+
+Execute(The yapf callbacks should return the correct default values):
+  AssertEqual
+  \ 0,
+  \ ale#fixers#yapf#Fix(bufnr(''))
+
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  AssertEqual
+  \ {'command': "'" . g:dir . "/python_paths/with_virtualenv/env/bin/yapf' --no-local-style" },
+  \ ale#fixers#yapf#Fix(bufnr(''))
