@@ -124,10 +124,8 @@ function! ale#util#GetMatches(lines, patterns) abort
     return l:matches
 endfunction
 
-" Given the name of a function, a Funcref, or a lambda, return the number
-" of named arguments for a function.
-function! ale#util#FunctionArgCount(function) abort
-    let l:Function = ale#util#GetFunction(a:function)
+function! s:LoadArgCount(function) abort
+    let l:Function = a:function
 
     redir => l:output
         silent! function Function
@@ -141,4 +139,25 @@ function! ale#util#FunctionArgCount(function) abort
     let l:arg_list = filter(split(l:match, ', '), 'v:val !=# ''...''')
 
     return len(l:arg_list)
+endfunction
+
+" Given the name of a function, a Funcref, or a lambda, return the number
+" of named arguments for a function.
+function! ale#util#FunctionArgCount(function) abort
+    let l:Function = ale#util#GetFunction(a:function)
+    let l:count = s:LoadArgCount(l:Function)
+
+    " If we failed to get the count, forcibly load the autoload file, if the
+    " function is an autoload function. autoload functions aren't normally
+    " defined until they are called.
+    if l:count == 0
+        let l:function_name = matchlist(string(l:Function), 'function([''"]\(.\+\)[''"])')[1]
+
+        if l:function_name =~# '#'
+            execute 'runtime autoload/' . join(split(l:function_name, '#')[:-2], '/') . '.vim'
+            let l:count = s:LoadArgCount(l:Function)
+        endif
+    endif
+
+    return l:count
 endfunction

@@ -39,3 +39,7 @@ Execute(We should be able to compute the argument count for lambdas):
     AssertEqual 3, ale#util#FunctionArgCount({x,y,z->1})
     AssertEqual 3, ale#util#FunctionArgCount({x,y,z,...->1})
   endif
+
+Execute(We should be able to compute the argument count autoload functions not yet loaded):
+  AssertEqual 1, ale#util#FunctionArgCount(function('ale#fixers#yapf#Fix'))
+  AssertEqual 1, ale#util#FunctionArgCount('ale#fixers#yapf#Fix')

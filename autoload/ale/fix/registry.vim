@@ -3,42 +3,42 @@
 
 let s:default_registry = {
 \   'add_blank_lines_for_python_control_statements': {
-\       'function': 'ale#handlers#python#AddLinesBeforeControlStatements',
+\       'function': 'ale#fixers#generic_python#AddLinesBeforeControlStatements',
 \       'suggested_filetypes': ['python'],
 \       'description': 'Add blank lines before control statements.',
 \   },
 \   'autopep8': {
-\       'function': 'ale#handlers#python#AutoPEP8',
+\       'function': 'ale#fixers#autopep8#Fix',
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix PEP8 issues with autopep8.',
 \   },
 \   'eslint': {
-\       'function': 'ale#handlers#eslint#Fix',
+\       'function': 'ale#fixers#eslint#Fix',
 \       'suggested_filetypes': ['javascript'],
 \       'description': 'Apply eslint --fix to a file.',
 \   },
 \   'isort': {
-\       'function': 'ale#handlers#python#ISort',
+\       'function': 'ale#fixers#isort#Fix',
 \       'suggested_filetypes': ['python'],
 \       'description': 'Sort Python imports with isort.',
 \   },
 \   'prettier': {
-\       'function': 'ale#handlers#prettier#Fix',
+\       'function': 'ale#fixers#prettier#Fix',
 \       'suggested_filetypes': ['javascript'],
 \       'description': 'Apply prettier to a file.',
 \   },
 \   'prettier_eslint': {
-\       'function': 'ale#handlers#prettier_eslint#Fix',
+\       'function': 'ale#fixers#prettier_eslint#Fix',
 \       'suggested_filetypes': ['javascript'],
 \       'description': 'Apply prettier-eslint to a file.',
 \   },
 \   'remove_trailing_lines': {
-\       'function': 'ale#fix#generic#RemoveTrailingBlankLines',
+\       'function': 'ale#fixers#generic#RemoveTrailingBlankLines',
 \       'suggested_filetypes': [],
 \       'description': 'Remove all blank lines at the end of a file.',
 \   },
 \   'yapf': {
-\       'function': 'ale#handlers#python#YAPF',
+\       'function': 'ale#fixers#yapf#Fix',
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix Python files with yapf.',
 \   },

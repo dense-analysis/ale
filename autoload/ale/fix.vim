@@ -232,11 +232,11 @@ function! s:RunFixer(options) abort
     let l:index = a:options.callback_index
 
     while len(a:options.callback_list) > l:index
-        let l:Function = ale#util#GetFunction(a:options.callback_list[l:index])
+        let l:Function = a:options.callback_list[l:index]
 
         let l:result = ale#util#FunctionArgCount(l:Function) == 1
-        \   ? l:Function(l:buffer)
-        \   : l:Function(l:buffer, copy(l:input))
+        \   ? call(l:Function, [l:buffer])
+        \   : call(l:Function, [l:buffer, copy(l:input)])
 
         if type(l:result) == type(0) && l:result == 0
             " When `0` is returned, skip this item.

@@ -39,7 +39,7 @@ Given python(Some Python without blank lines):
           pass
 
 Execute(Blank lines should be added appropriately):
-  let g:ale_fixers = {'python': ['ale#handlers#python#AddLinesBeforeControlStatements']}
+  let g:ale_fixers = {'python': ['add_blank_lines_for_python_control_statements']}
   ALEFix
 
 Expect python(Newlines should be added):
