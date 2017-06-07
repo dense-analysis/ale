@@ -4,8 +4,8 @@
 let g:ale_virtualenv_dir_names = get(g:, 'ale_virtualenv_dir_names', [
 \   '.env',
 \   'env',
-\   've',
 \   've-py3',
+\   've',
 \   'virtualenv',
 \])
 
