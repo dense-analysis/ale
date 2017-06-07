@@ -42,9 +42,35 @@ function! ale#lsp#GetNextMessageID() abort
     return l:id
 endfunction
 
+" TypeScript messages use a different format.
+function! s:CreateTSServerMessageData(message) abort
+    let l:is_notification = a:message[0]
+
+    let l:obj = {
+    \   'seq': v:null,
+    \   'type': 'request',
+    \   'command': a:message[1][3:],
+    \}
+
+    if !l:is_notification
+        let l:obj.seq = ale#lsp#GetNextMessageID()
+    endif
+
+    if len(a:message) > 2
+        let l:obj.arguments = a:message[2]
+    endif
+
+    let l:data = json_encode(l:obj)
+    return [l:is_notification ? 0 : l:obj.seq, l:data]
+endfunction
+
 " Given a List of one or two items, [method_name] or [method_name, params],
 " return a List containing [message_id, message_data]
 function! ale#lsp#CreateMessageData(message) abort
+    if a:message[1] =~# '^ts@'
+        return s:CreateTSServerMessageData(a:message)
+    endif
+
     let l:is_notification = a:message[0]
 
     let l:obj = {
@@ -117,7 +143,11 @@ function! ale#lsp#HandleMessage(conn, message) abort
 
     " Call our callbacks.
     for l:response in l:response_list
-        let l:callback = a:conn.callback_map.pop(l:response.id)
+        let l:id = has_key(l:response, 'seq')
+        \   ? l:response.seq
+        \   : l:response.id
+
+        let l:callback = a:conn.callback_map.pop(l:id)
         call ale#util#GetFunction(l:callback)(l:response)
     endfor
 endfunction

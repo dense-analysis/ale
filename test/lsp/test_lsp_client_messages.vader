@@ -1,3 +1,11 @@
+Before:
+  silent! cd /testplugin/test/lsp
+  let b:dir = getcwd()
+
+After:
+  silent execute 'cd ' . fnameescape(b:dir)
+  unlet! b:dir
+
 Execute(ale#lsp#message#Initialize() should return correct messages):
   AssertEqual
   \ [
@@ -76,3 +84,65 @@ Execute(ale#lsp#message#DidClose() should return correct messages):
   \   }
   \ ],
   \ ale#lsp#message#DidClose('/foo/bar')
+
+Execute(ale#lsp#tsserver_message#Open() should return correct messages):
+  silent! noautocmd file foo.ts
+
+  AssertEqual
+  \ [
+  \   1,
+  \   'ts@open',
+  \   {
+  \     'file': b:dir . '/foo.ts',
+  \   }
+  \ ],
+  \ ale#lsp#tsserver_message#Open(bufnr(''))
+
+Execute(ale#lsp#tsserver_message#Close() should return correct messages):
+  silent! noautocmd file foo.ts
+
+  AssertEqual
+  \ [
+  \   1,
+  \   'ts@close',
+  \   {
+  \     'file': b:dir . '/foo.ts',
+  \   }
+  \ ],
+  \ ale#lsp#tsserver_message#Close(bufnr(''))
+
+Given typescript(A TypeScript file with 3 lines):
+  foo()
+  bar()
+  baz()
+
+Execute(ale#lsp#tsserver_message#Change() should return correct messages):
+  silent! noautocmd file foo.ts
+
+  AssertEqual
+  \ [
+  \   1,
+  \   'ts@change',
+  \   {
+  \     'file': b:dir . '/foo.ts',
+  \     'line': 1,
+  \     'offset': 1,
+  \     'endLine': 3,
+  \     'endOffset': 5,
+  \     'insertString': "foo()\nbar()\nbaz()",
+  \   }
+  \ ],
+  \ ale#lsp#tsserver_message#Change(bufnr(''))
+
+Execute(ale#lsp#tsserver_message#Geterr() should return correct messages):
+  silent! noautocmd file foo.ts
+
+  AssertEqual
+  \ [
+  \   1,
+  \   'ts@geterr',
+  \   {
+  \     'files': [b:dir . '/foo.ts'],
+  \   }
+  \ ],
+  \ ale#lsp#tsserver_message#Geterr(bufnr(''))

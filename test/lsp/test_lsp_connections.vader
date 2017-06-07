@@ -105,6 +105,64 @@ Execute(ale#lsp#CreateMessageData() should create notifications):
       \ ale#lsp#CreateMessageData([1, 'someNotification', {'foo': 'bar'}])
     endif
 
+Execute(ale#lsp#CreateMessageData() should create tsserver notification messages):
+    if has('nvim')
+      AssertEqual
+      \ [
+      \   0,
+      \   '{"seq": null, "type": "request", "command": "someNotification"}',
+      \ ],
+      \ ale#lsp#CreateMessageData([1, 'ts@someNotification'])
+      AssertEqual
+      \ [
+      \   0,
+      \   '{"seq": null, "arguments": {"foo": "bar"}, "type": "request", "command": "someNotification"}',
+      \ ],
+      \ ale#lsp#CreateMessageData([1, 'ts@someNotification', {'foo': 'bar'}])
+    else
+      AssertEqual
+      \ [
+      \   0,
+      \   '{"seq":null,"type":"request","command":"someNotification"}',
+      \ ],
+      \ ale#lsp#CreateMessageData([1, 'ts@someNotification'])
+      AssertEqual
+      \ [
+      \   0,
+      \   '{"seq":null,"arguments":{"foo":"bar"},"type":"request","command":"someNotification"}',
+      \ ],
+      \ ale#lsp#CreateMessageData([1, 'ts@someNotification', {'foo': 'bar'}])
+    endif
+
+Execute(ale#lsp#CreateMessageData() should create tsserver messages excepting responses):
+    if has('nvim')
+      AssertEqual
+      \ [
+      \   1,
+      \   '{"seq": 1, "type": "request", "command": "someMessage"}',
+      \ ],
+      \ ale#lsp#CreateMessageData([0, 'ts@someMessage'])
+      AssertEqual
+      \ [
+      \   2,
+      \   '{"seq": 2, "arguments": {"foo": "bar"}, "type": "request", "command": "someMessage"}',
+      \ ],
+      \ ale#lsp#CreateMessageData([0, 'ts@someMessage', {'foo': 'bar'}])
+    else
+      AssertEqual
+      \ [
+      \   1,
+      \   '{"seq":1,"type":"request","command":"someMessage"}',
+      \ ],
+      \ ale#lsp#CreateMessageData([0, 'ts@someMessage'])
+      AssertEqual
+      \ [
+      \   2,
+      \   '{"seq":2,"arguments":{"foo":"bar"},"type":"request","command":"someMessage"}',
+      \ ],
+      \ ale#lsp#CreateMessageData([0, 'ts@someMessage', {'foo': 'bar'}])
+    endif
+
 Execute(ale#lsp#ReadMessageData() should read single whole messages):
   AssertEqual
   \  ['', [{'id': 2, 'jsonrpc': '2.0', 'result': {'foo': 'barÜ'}}]],
