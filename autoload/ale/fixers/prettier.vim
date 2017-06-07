@@ -4,6 +4,7 @@
 
 call ale#Set('javascript_prettier_executable', 'prettier')
 call ale#Set('javascript_prettier_use_global', 0)
+call ale#Set('javascript_prettier_options', '')
 
 function! ale#handlers#prettier#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'javascript_prettier', [

@@ -4,6 +4,7 @@
 
 call ale#Set('javascript_prettier_eslint_executable', 'prettier-eslint')
 call ale#Set('javascript_prettier_eslint_use_global', 0)
+call ale#Set('javascript_prettier_eslint_options', '')
 
 function! ale#handlers#prettier_eslint#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'javascript_prettier_eslint', [
