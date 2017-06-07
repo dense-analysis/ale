@@ -42,7 +42,7 @@ function! ale#handlers#css#HandleStyleLintFormat(buffer, lines) abort
     " src/main.css
     "  108:10  ✖  Unexpected leading zero         number-leading-zero
     "  116:20  ✖  Expected a trailing semicolon   declaration-block-trailing-semicolon
-    let l:pattern = '\v^.* (\d+):(\d+) \s+(\S+)\s+ (.*[^ ])\s+([^ ]+)$'
+    let l:pattern = '\v^.* (\d+):(\d+) \s+(\S+)\s+ (.*[^ ])\s+([^ ]+)\s*$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
