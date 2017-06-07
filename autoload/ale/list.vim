@@ -35,13 +35,8 @@ function! ale#list#SetLists(buffer, loclist) abort
         endif
     endif
 
-    " If we don't auto-open lists, bail out here.
-    if !g:ale_open_list && !g:ale_keep_list_window_open
-        return
-    endif
-
     " If we have errors in our list, open the list. Only if it isn't already open
-    if len(a:loclist) > 0 || g:ale_keep_list_window_open
+    if (g:ale_open_list && !empty(a:loclist)) || g:ale_keep_list_window_open
         let l:winnr = winnr()
 
         if g:ale_set_quickfix
@@ -56,13 +51,21 @@ function! ale#list#SetLists(buffer, loclist) abort
         if l:winnr !=# winnr()
             wincmd p
         endif
+    endif
+endfunction
 
-        " Only close if the list is totally empty (relying on Vim's state, not our
-        " own). This keeps us from closing the window when other plugins have
-        " populated it.
-    elseif !g:ale_keep_list_window_open && g:ale_set_quickfix && len(getqflist()) == 0
-        cclose
-    elseif !g:ale_keep_list_window_open && len(getloclist(0)) == 0
+function! ale#list#CloseWindowIfNeeded(buffer) abort
+    if g:ale_keep_list_window_open || !g:ale_open_list
+        return
+    endif
+
+    " Only close windows if the quickfix list or loclist is completely empty,
+    " including errors set through other means.
+    if g:ale_set_quickfix
+        if empty(getqflist())
+            cclose
+        endif
+    elseif g:ale_set_loclist && empty(getloclist(0))
         lclose
     endif
 endfunction

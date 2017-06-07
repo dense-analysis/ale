@@ -64,14 +64,17 @@ Execute(The quickfix window should open for just the loclist):
 
   " It should not open for an empty list.
   call ale#list#SetLists(bufnr('%'), [])
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
   Assert !ale#list#IsQuickfixOpen()
 
   " With a non-empty loclist, the window must open.
   call ale#list#SetLists(bufnr('%'), g:loclist)
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
   Assert ale#list#IsQuickfixOpen()
 
   " Clear the list and it should close again.
   call ale#list#SetLists(bufnr('%'), [])
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
   Assert !ale#list#IsQuickfixOpen()
 
 Execute(The quickfix window height should be correct for the loclist):
@@ -79,6 +82,7 @@ Execute(The quickfix window height should be correct for the loclist):
   let g:ale_list_window_size = 7
 
   call ale#list#SetLists(bufnr('%'), g:loclist)
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
 
   AssertEqual 7, GetQuickfixHeight()
 
@@ -87,6 +91,7 @@ Execute(The quickfix window height should be correct for the loclist with buffer
   let b:ale_list_window_size = 8
 
   call ale#list#SetLists(bufnr('%'), g:loclist)
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
 
   AssertEqual 8, GetQuickfixHeight()
 
@@ -96,13 +101,16 @@ Execute(The quickfix window should stay open for just the loclist):
 
   " The window should stay open after even after it is made blank again.
   call ale#list#SetLists(bufnr('%'), g:loclist)
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
   call ale#list#SetLists(bufnr('%'), [])
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
   Assert ale#list#IsQuickfixOpen()
 
 Execute(The quickfix window should not open by default when quickfix is on):
   let g:ale_set_quickfix = 1
 
   call ale#list#SetLists(bufnr('%'), g:loclist)
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
   Assert !ale#list#IsQuickfixOpen()
 
 Execute(The quickfix window should open for the quickfix list):
@@ -111,15 +119,18 @@ Execute(The quickfix window should open for the quickfix list):
 
   " It should not open for an empty list.
   call ale#list#SetLists(bufnr('%'), [])
-  Assert !ale#list#IsQuickfixOpen()
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
+  Assert !ale#list#IsQuickfixOpen(), 'The quickfix window was opened when the list was empty'
 
   " With a non-empty quickfix list, the window must open.
   call ale#list#SetLists(bufnr('%'), g:loclist)
-  Assert ale#list#IsQuickfixOpen()
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
+  Assert ale#list#IsQuickfixOpen(), 'The quickfix window was closed when the list was not empty'
 
   " Clear the list and it should close again.
   call ale#list#SetLists(bufnr('%'), [])
-  Assert !ale#list#IsQuickfixOpen()
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
+  Assert !ale#list#IsQuickfixOpen(), 'The quickfix window was not closed when the list was empty'
 
 Execute(The quickfix window should stay open for the quickfix list):
   let g:ale_set_quickfix = 1
@@ -128,7 +139,9 @@ Execute(The quickfix window should stay open for the quickfix list):
 
   " The window should stay open after even after it is made blank again.
   call ale#list#SetLists(bufnr('%'), g:loclist)
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
   call ale#list#SetLists(bufnr('%'), [])
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
   Assert ale#list#IsQuickfixOpen()
 
 Execute(The quickfix window height should be correct for the quickfix list):
@@ -137,6 +150,7 @@ Execute(The quickfix window height should be correct for the quickfix list):
   let g:ale_list_window_size = 7
 
   call ale#list#SetLists(bufnr('%'), g:loclist)
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
 
   AssertEqual 7, GetQuickfixHeight()
 
@@ -146,5 +160,6 @@ Execute(The quickfix window height should be correct for the quickfix list with 
   let b:ale_list_window_size = 8
 
   call ale#list#SetLists(bufnr('%'), g:loclist)
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
 
   AssertEqual 8, GetQuickfixHeight()

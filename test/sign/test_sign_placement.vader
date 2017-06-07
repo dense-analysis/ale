@@ -126,30 +126,32 @@ Execute(The current signs should be set for running a job):
 
 
 Execute(Loclist items with sign_id values should be kept):
-  exec 'sign place 1000347 line=15 name=ALEErrorSign buffer=' . bufnr('%')
-  exec 'sign place 1000348 line=16 name=ALEWarningSign buffer=' . bufnr('%')
+  exec 'sign place 1000347 line=3 name=ALEErrorSign buffer=' . bufnr('%')
+  exec 'sign place 1000348 line=15 name=ALEErrorSign buffer=' . bufnr('%')
+  exec 'sign place 1000349 line=16 name=ALEWarningSign buffer=' . bufnr('%')
 
   let g:loclist = [
-  \ {'lnum': 1, 'col': 1, 'type': 'E', 'text': 'a', 'sign_id': 1000347},
-  \ {'lnum': 2, 'col': 1, 'type': 'W', 'text': 'b', 'sign_id': 1000348},
-  \ {'lnum': 3, 'col': 1, 'type': 'E', 'text': 'c'},
+  \ {'lnum': 1, 'col': 1, 'type': 'E', 'text': 'a', 'sign_id': 1000348},
+  \ {'lnum': 2, 'col': 1, 'type': 'W', 'text': 'b', 'sign_id': 1000349},
+  \ {'lnum': 3, 'col': 1, 'type': 'E', 'text': 'c', 'sign_id': 1000347},
   \ {'lnum': 4, 'col': 1, 'type': 'W', 'text': 'd'},
   \ {'lnum': 15, 'col': 2, 'type': 'W', 'text': 'e'},
   \ {'lnum': 16, 'col': 2, 'type': 'E', 'text': 'f'},
   \]
 
   call ale#sign#SetSigns(bufnr('%'), g:loclist)
+  call ale#sign#RemoveDummySignIfNeeded(bufnr('%'))
 
-  " Line numbers should be changed, sign_id values should be replaced,
-  " and items should be sorted again.
+  " Sign IDs from before should be kept, and new signs should use
+  " IDs that haven't been used yet.
   AssertEqual
   \ [
-  \   {'lnum': 3, 'col': 1, 'type': 'E', 'text': 'c', 'sign_id': 1000001},
-  \   {'lnum': 4, 'col': 1, 'type': 'W', 'text': 'd', 'sign_id': 1000002},
-  \   {'lnum': 15, 'col': 1, 'type': 'E', 'text': 'a', 'sign_id': 1000003},
-  \   {'lnum': 15, 'col': 2, 'type': 'W', 'text': 'e', 'sign_id': 1000003},
-  \   {'lnum': 16, 'col': 1, 'type': 'W', 'text': 'b', 'sign_id': 1000004},
-  \   {'lnum': 16, 'col': 2, 'type': 'E', 'text': 'f', 'sign_id': 1000004},
+  \   {'lnum': 3, 'col': 1, 'type': 'E', 'text': 'c', 'sign_id': 1000347},
+  \   {'lnum': 4, 'col': 1, 'type': 'W', 'text': 'd', 'sign_id': 1000350},
+  \   {'lnum': 15, 'col': 1, 'type': 'E', 'text': 'a', 'sign_id': 1000351},
+  \   {'lnum': 15, 'col': 2, 'type': 'W', 'text': 'e', 'sign_id': 1000351},
+  \   {'lnum': 16, 'col': 1, 'type': 'W', 'text': 'b', 'sign_id': 1000352},
+  \   {'lnum': 16, 'col': 2, 'type': 'E', 'text': 'f', 'sign_id': 1000352},
   \ ],
   \ g:loclist
 
@@ -158,12 +160,14 @@ Execute(Loclist items with sign_id values should be kept):
   " now have new warnings.
   AssertEqual
   \ [
-  \   ['3', '1000001', 'ALEErrorSign'],
-  \   ['4', '1000002', 'ALEWarningSign'],
-  \   ['15', '1000003', 'ALEErrorSign'],
-  \   ['16', '1000004', 'ALEErrorSign'],
+  \   ['15', '1000348', 'ALEErrorSign'],
+  \   ['15', '1000351', 'ALEErrorSign'],
+  \   ['16', '1000349', 'ALEWarningSign'],
+  \   ['16', '1000352', 'ALEErrorSign'],
+  \   ['3', '1000347', 'ALEErrorSign'],
+  \   ['4', '1000350', 'ALEWarningSign'],
   \ ],
-  \ ParseSigns()
+  \ sort(ParseSigns())
 
 Execute(No excpetions should be thrown when setting signs for invalid buffers):
   call ale#sign#SetSigns(123456789, [{'lnum': 15, 'col': 2, 'type': 'W', 'text': 'e'}])

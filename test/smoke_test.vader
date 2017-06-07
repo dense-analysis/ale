@@ -1,13 +1,16 @@
 Before:
   function! TestCallback(buffer, output)
     return [{
-    \ 'bufnr': a:buffer,
     \ 'lnum': 2,
-    \ 'vcol': 0,
     \ 'col': 3,
     \ 'text': a:output[0],
-    \ 'type': 'E',
-    \ 'nr': -1,
+    \}]
+  endfunction
+  function! TestCallback2(buffer, output)
+    return [{
+    \ 'lnum': 3,
+    \ 'col': 4,
+    \ 'text': a:output[0],
     \}]
   endfunction
 
@@ -22,6 +25,7 @@ Before:
 After:
   let g:ale_buffer_info = {}
   delfunction TestCallback
+  delfunction TestCallback2
   call ale#linter#Reset()
 
 Given foobar (Some imaginary filetype):
@@ -41,6 +45,34 @@ Execute(Linters should run with the default options):
   \   'vcol': 0,
   \   'col': 3,
   \   'text': 'foo bar',
+  \   'type': 'E',
+  \   'nr': -1,
+  \   'pattern': '',
+  \   'valid': 1,
+  \ }], getloclist(0)
+
+Execute(Previous errors should be removed when linters change):
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+
+  call ale#linter#Reset()
+
+  call ale#linter#Define('foobar', {
+  \ 'name': 'testlinter2',
+  \ 'callback': 'TestCallback2',
+  \ 'executable': 'echo',
+  \ 'command': '/bin/sh -c ''echo baz boz''',
+  \})
+
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+
+  AssertEqual [{
+  \   'bufnr': bufnr('%'),
+  \   'lnum': 3,
+  \   'vcol': 0,
+  \   'col': 4,
+  \   'text': 'baz boz',
   \   'type': 'E',
   \   'nr': -1,
   \   'pattern': '',

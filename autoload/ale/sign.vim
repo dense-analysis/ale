@@ -118,7 +118,20 @@ function! s:GroupLoclistItems(loclist) abort
         let l:last_lnum = l:obj.lnum
     endfor
 
-    return l:grouped_items
+    " Now we've gathered the items in groups, filter the groups down to
+    " the groups containing at least one new item.
+    let l:new_grouped_items = []
+
+    for l:group in l:grouped_items
+        for l:obj in l:group
+            if !has_key(l:obj, 'sign_id')
+                call add(l:new_grouped_items, l:group)
+                break
+            endif
+        endfor
+    endfor
+
+    return l:new_grouped_items
 endfunction
 
 function! s:IsDummySignSet(current_id_list) abort
@@ -189,14 +202,18 @@ function! ale#sign#SetSignColumnHighlight(has_problems) abort
     endif
 endfunction
 
-function! s:PlaceNewSigns(buffer, grouped_items) abort
+function! s:PlaceNewSigns(buffer, grouped_items, current_sign_offset) abort
     if g:ale_change_sign_column_color
         call ale#sign#SetSignColumnHighlight(!empty(a:grouped_items))
     endif
 
+    let l:offset = a:current_sign_offset > 0
+    \   ? a:current_sign_offset
+    \   : g:ale_sign_offset
+
     " Add the new signs,
     for l:index in range(0, len(a:grouped_items) - 1)
-        let l:sign_id = l:index + g:ale_sign_offset + 1
+        let l:sign_id = l:offset + l:index + 1
         let l:sublist = a:grouped_items[l:index]
         let l:type = ale#sign#GetSignType(a:grouped_items[l:index])
 
@@ -232,22 +249,17 @@ endfunction
 
 " Given some current signs and a loclist, look for items with sign IDs,
 " and change the line numbers for loclist items to match the signs.
-function! s:UpdateLineNumbers(current_sign_list, loclist) abort
-    let l:items_by_sign_id = s:GetItemsWithSignIDs(a:loclist)
-
+function! s:UpdateLineNumbers(current_sign_list, items_by_sign_id) abort
     " Do nothing if there's nothing to work with.
-    if empty(l:items_by_sign_id)
+    if empty(a:items_by_sign_id)
         return
     endif
 
     for [l:line, l:sign_id, l:name] in a:current_sign_list
-        for l:obj in get(l:items_by_sign_id, l:sign_id, [])
+        for l:obj in get(a:items_by_sign_id, l:sign_id, [])
             let l:obj.lnum = l:line
         endfor
     endfor
-
-    " Sort items again.
-    call sort(a:loclist, 'ale#util#LocItemCompare')
 endfunction
 
 " This function will set the signs which show up on the left.
@@ -260,8 +272,13 @@ function! ale#sign#SetSigns(buffer, loclist) abort
 
     " Find the current markers
     let l:current_sign_list = ale#sign#FindCurrentSigns(a:buffer)
+    " Get a mapping from sign IDs to current loclist items which have them.
+    let l:items_by_sign_id = s:GetItemsWithSignIDs(a:loclist)
 
-    call s:UpdateLineNumbers(l:current_sign_list, a:loclist)
+    " Use sign information to update the line numbers for the loclist items.
+    call s:UpdateLineNumbers(l:current_sign_list, l:items_by_sign_id)
+    " Sort items again, as the line numbers could have changed.
+    call sort(a:loclist, 'ale#util#LocItemCompare')
 
     let l:grouped_items = s:GroupLoclistItems(a:loclist)
 
@@ -277,16 +294,19 @@ function! ale#sign#SetSigns(buffer, loclist) abort
     " while we add the new signs, if we had signs before.
     for [l:line, l:sign_id, l:name] in l:current_sign_list
         if l:sign_id != g:ale_sign_offset
+        \&& !has_key(l:items_by_sign_id, l:sign_id)
             exec 'sign unplace ' . l:sign_id . ' buffer=' . a:buffer
         endif
     endfor
 
-    call s:PlaceNewSigns(a:buffer, l:grouped_items)
+    " Compute a sign ID offset so we don't hit the same sign IDs again.
+    let l:current_sign_offset = max(map(keys(l:items_by_sign_id), 'str2nr(v:val)'))
 
-    " Remove the dummy sign now we've updated the signs, unless we want
-    " to keep it, which will keep the sign column open even when there are
-    " no warnings or errors.
-    if l:is_dummy_sign_set && !g:ale_sign_column_always
+    call s:PlaceNewSigns(a:buffer, l:grouped_items, l:current_sign_offset)
+endfunction
+
+function! ale#sign#RemoveDummySignIfNeeded(buffer) abort
+    if !g:ale_sign_column_always
         execute 'sign unplace ' . g:ale_sign_offset . ' buffer=' . a:buffer
     endif
 endfunction
