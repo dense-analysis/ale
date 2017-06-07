@@ -6,18 +6,18 @@ call ale#Set('javascript_prettier_executable', 'prettier')
 call ale#Set('javascript_prettier_use_global', 0)
 call ale#Set('javascript_prettier_options', '')
 
-function! ale#handlers#prettier#GetExecutable(buffer) abort
+function! ale#fixers#prettier#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'javascript_prettier', [
     \   'node_modules/prettier-cli/index.js',
     \   'node_modules/.bin/prettier',
     \])
 endfunction
 
-function! ale#handlers#prettier#Fix(buffer, lines) abort
+function! ale#fixers#prettier#Fix(buffer) abort
     let l:options = ale#Var(a:buffer, 'javascript_prettier_options')
 
     return {
-    \   'command': ale#Escape(ale#handlers#prettier#GetExecutable(a:buffer))
+    \   'command': ale#Escape(ale#fixers#prettier#GetExecutable(a:buffer))
     \       . ' %t'
     \       . ' ' . l:options
     \       . ' --write',
