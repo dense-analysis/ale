@@ -130,8 +130,12 @@ function! ale#util#FunctionArgCount(function) abort
     let l:Function = ale#util#GetFunction(a:function)
 
     redir => l:output
-        silent function Function
+        silent! function Function
     redir END
+
+    if !exists('l:output')
+        return 0
+    endif
 
     let l:match = matchstr(split(l:output, "\n")[0], '\v\([^)]+\)')[1:-2]
     let l:arg_list = filter(split(l:match, ', '), 'v:val !=# ''...''')
