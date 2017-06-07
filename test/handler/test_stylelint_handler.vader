@@ -1,4 +1,6 @@
 Execute (stylelint errors should be handled correctly):
+  " Stylelint includes trailing spaces for output. This needs to be taken into
+  " account for parsing errors.
   AssertEqual
   \ [
   \   {
@@ -16,6 +18,6 @@ Execute (stylelint errors should be handled correctly):
   \ ],
   \ ale#handlers#css#HandleStyleLintFormat(42, [
   \   'src/main.css',
-  \   ' 108:10  ✖  Unexpected leading zero         number-leading-zero',
+  \   ' 108:10  ✖  Unexpected leading zero         number-leading-zero                 ',
   \   ' 116:20  ✖  Expected a trailing semicolon   declaration-block-trailing-semicolon',
   \ ])
