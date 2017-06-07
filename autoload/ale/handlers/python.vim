@@ -45,3 +45,24 @@ function! ale#handlers#python#HandlePEP8Format(buffer, lines) abort
 
     return l:output
 endfunction
+
+" Given a buffer number and a command name, find the path to the executable.
+" First search on a virtualenv for Python, if nothing is found, try the global
+" command. Returns an empty string if cannot find the executable
+function! ale#handlers#python#GetExecutable(buffer, cmd_name) abort
+    let l:virtualenv = ale#python#FindVirtualenv(a:buffer)
+
+    if !empty(l:virtualenv)
+        let l:ve_executable = l:virtualenv . '/bin/' . a:cmd_name
+
+        if executable(l:ve_executable)
+            return l:ve_executable
+        endif
+    endif
+
+    if executable(a:cmd_name)
+        return a:cmd_name
+    endif
+
+    return ''
+endfunction
