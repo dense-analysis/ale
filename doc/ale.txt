@@ -320,7 +320,7 @@ g:ale_fix_on_save                                           *g:ale_fix_on_save*
 
   If |g:ale_lint_on_save| is set to 1, files will be checked with linters
   after files are fixed, only when the buffer is open, or re-opened. Changes
-  to the file will saved to the file on disk.
+  to the file will be saved to the file on disk.
 
 
 g:ale_history_enabled                                   *g:ale_history_enabled*
