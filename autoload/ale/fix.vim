@@ -344,6 +344,11 @@ function! ale#fix#Fix(...) abort
 
     let l:buffer = bufnr('')
 
+    for l:job_id in keys(s:job_info_map)
+        call remove(s:job_info_map, l:job_id)
+        call ale#job#Stop(l:job_id)
+    endfor
+
     " Clean up any files we might have left behind from a previous run.
     call ale#fix#RemoveManagedFiles(l:buffer)
     call ale#fix#InitBufferData(l:buffer, l:fixing_flag)
