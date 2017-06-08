@@ -1,6 +1,27 @@
 ===============================================================================
 ALE JavaScript Integration                             *ale-javascript-options*
 
+                                        *ale-eslint-nested-configuration-files*
+
+For fixing files with ESLint, nested configuration files with `root: false`
+are not supported. This is because ALE fixes files by writing the contents of
+buffers to temporary files, and then explicitly sets the configuration file.
+Configuration files which are set explicitly must be root configuration files.
+If you are using nested configuration files, you should restructure your
+project so your configuration files use `extends` instead.
+
+See the ESLint documentation here:
+http://eslint.org/docs/user-guide/configuring#extending-configuration-files
+
+You should change the structure of your project from this: >
+  /path/foo/.eslintrc.js # root: true
+  /path/foo/bar/.eslintrc.js # root: false
+<
+To this: >
+  /path/foo/.base-eslintrc.js # Base configuration here
+  /path/foo/.eslintrc.js # extends: ["/path/foo/.base-eslintrc.js"]
+  /path/foo/bar/.eslintrc.js # extends: ["/path/foo/.base-eslintrc.js"]
+<
 
 -------------------------------------------------------------------------------
 eslint                                                  *ale-javascript-eslint*
