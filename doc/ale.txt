@@ -313,14 +313,27 @@ g:ale_fixers                                                     *g:ale_fixers*
 
 g:ale_fix_on_save                                           *g:ale_fix_on_save*
 
-  Type: |Number|
-  Default: `0`
+  Type: |List|
+  Default: `[]`
 
-  When set to 1, ALE will fix files when they are saved.
+  List of file extensions which ALE will fix when they are saved.
 
-  If |g:ale_lint_on_save| is set to 1, files will be checked with linters
-  after files are fixed, only when the buffer is open, or re-opened. Changes
-  to the file will saved to the file on disk.
+  If |g:ale_lint_on_save| is set, files will be checked with linters after
+  files are fixed, only when the buffer is open, or re-opened. Changes to the
+  file will saved to the file on disk.
+
+  Only files with an extension matching one of the list, will be fixed on
+  save.
+
+  For example, if you wish to fix only python and javascript files, you could
+  set the following: >
+
+  let g:ale_fix_on_save_extensions = ['js', 'py']
+<
+  You can set the value to ['*'] to match any extension.
+
+  For backwards compatibility it also supports the values 0 and 1. 0 is like
+  setting the value to [], and 1 has the same effect than setting it to ['*']
 
 
 g:ale_history_enabled                                   *g:ale_history_enabled*

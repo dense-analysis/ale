@@ -178,3 +178,17 @@ function! ale#Escape(str) abort
 
     return shellescape (a:str)
 endfunction
+
+" Parses the ale_fix_on_save value, before it was a number. If 0 returns `[]`,
+" if 1 returns `['*']`
+function! ale#ParseFixOnSave(value) abort
+    if type(a:value) == type(0)
+        if a:value == 0
+            return []
+        elseif a:value == 1
+            return ['*']
+        endif
+    endif
+
+    return a:value
+endfunction
