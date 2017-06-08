@@ -142,7 +142,7 @@ The following languages and tools are supported.
 * Crystal: 'crystal'
 * CSS: 'csslint', 'stylelint'
 * Cython (pyrex filetype): 'cython'
-* D: 'dmd'
+* D: 'dmd', 'dscanner'
 * Dockerfile: 'hadolint'
 * Elixir: 'credo', 'dogma'
 * Elm: 'elm-make'
