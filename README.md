@@ -58,6 +58,7 @@ name. That seems to be the fairest way to arrange this table.
 | ASM | [gcc](https://gcc.gnu.org) |
 | Ansible | [ansible-lint](https://github.com/willthames/ansible-lint) |
 | AsciiDoc | [proselint](http://proselint.com/)|
+| Awk | [gawk](https://www.gnu.org/software/gawk/)|
 | Bash | [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set), [shellcheck](https://www.shellcheck.net/) |
 | Bourne Shell | [-n flag](http://linux.die.net/man/1/sh), [shellcheck](https://www.shellcheck.net/) |
 | C | [cppcheck](http://cppcheck.sourceforge.net), [gcc](https://gcc.gnu.org/), [clang](http://clang.llvm.org/)|
