@@ -13,7 +13,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle errors):
   AssertEqual ['filename.ts', [
   \   {
   \     'type': 'E',
-  \     'message': 'Something went wrong!',
+  \     'text': 'Something went wrong!',
   \     'lnum': 3,
   \     'col': 11,
   \     'end_lnum': 5,
@@ -34,7 +34,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle warnings):
   AssertEqual ['filename.ts', [
   \   {
   \     'type': 'W',
-  \     'message': 'Something went wrong!',
+  \     'text': 'Something went wrong!',
   \     'lnum': 2,
   \     'col': 4,
   \     'end_lnum': 2,
@@ -55,7 +55,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should treat messages with missing se
   AssertEqual ['filename.ts', [
   \   {
   \     'type': 'E',
-  \     'message': 'Something went wrong!',
+  \     'text': 'Something went wrong!',
   \     'lnum': 3,
   \     'col': 11,
   \     'end_lnum': 5,
@@ -75,7 +75,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle messages without codes)
   AssertEqual ['filename.ts', [
   \   {
   \     'type': 'E',
-  \     'message': 'Something went wrong!',
+  \     'text': 'Something went wrong!',
   \     'lnum': 3,
   \     'col': 11,
   \     'end_lnum': 5,
@@ -93,7 +93,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle multiple messages):
   AssertEqual ['filename.ts', [
   \   {
   \     'type': 'E',
-  \     'message': 'Something went wrong!',
+  \     'text': 'Something went wrong!',
   \     'lnum': 1,
   \     'col': 3,
   \     'end_lnum': 1,
@@ -101,7 +101,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle multiple messages):
   \   },
   \   {
   \     'type': 'W',
-  \     'message': 'A warning',
+  \     'text': 'A warning',
   \     'lnum': 2,
   \     'col': 5,
   \     'end_lnum': 2,
@@ -119,3 +119,17 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle multiple messages):
   \     'message': 'A warning',
   \   },
   \ ]})
+
+Execute(ale#lsp#response#ReadTSServerDiagnostics() should handle tsserver responses):
+  AssertEqual [
+  \   {
+  \     'type': 'E',
+  \     'nr': 2365,
+  \     'text': 'Operator ''''+'''' cannot be applied to types ''''3'''' and ''''{}''''.',
+  \     'lnum': 1,
+  \     'col': 11,
+  \     'end_lnum': 1,
+  \     'end_col': 17,
+  \   },
+  \],
+  \ ale#lsp#response#ReadTSServerDiagnostics({"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/bar/foo.ts","diagnostics":[{"start":{"line":1,"offset":11},"end":{"line":1,"offset":17},"text":"Operator ''+'' cannot be applied to types ''3'' and ''{}''.","code":2365}]}})

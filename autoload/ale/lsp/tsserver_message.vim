@@ -19,16 +19,19 @@ endfunction
 function! ale#lsp#tsserver_message#Change(buffer) abort
     let l:lines = getbufline(a:buffer, 1, '$')
 
+    " We will always use a very high endLine number, so we can delete
+    " lines from files. tsserver will gladly accept line numbers beyond the
+    " end.
     return [1, 'ts@change', {
     \   'file': expand('#' . a:buffer . ':p'),
     \   'line': 1,
     \   'offset': 1,
-    \   'endLine': len(l:lines),
-    \   'endOffset': len(l:lines[-1]),
+    \   'endLine': 1073741824 ,
+    \   'endOffset': 1,
     \   'insertString': join(l:lines, "\n"),
     \}]
 endfunction
 
 function! ale#lsp#tsserver_message#Geterr(buffer) abort
-    return [1, 'ts@geterr', {'files': [expand('#' . a:buffer . ':p')]}]
+    return [0, 'ts@geterr', {'files': [expand('#' . a:buffer . ':p')]}]
 endfunction

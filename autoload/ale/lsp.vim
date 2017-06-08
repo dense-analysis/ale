@@ -60,7 +60,7 @@ function! s:CreateTSServerMessageData(message) abort
         let l:obj.arguments = a:message[2]
     endif
 
-    let l:data = json_encode(l:obj)
+    let l:data = json_encode(l:obj) . "\n"
     return [l:is_notification ? 0 : l:obj.seq, l:data]
 endfunction
 
@@ -135,6 +135,16 @@ function! ale#lsp#ReadMessageData(data) abort
     return [l:remainder, l:response_list]
 endfunction
 
+function! s:FindCallbackIDForType(callback_map, type) abort
+    for l:key in reverse(keys(a:callback_map))
+        if a:callback_map[l:key][1][1] ==# a:type
+            return str2nr(l:key)
+        endif
+    endfor
+
+    return 0
+endfunction
+
 function! ale#lsp#HandleMessage(conn, message) abort
     let a:conn.data .= a:message
 
@@ -147,8 +157,15 @@ function! ale#lsp#HandleMessage(conn, message) abort
         \   ? l:response.seq
         \   : l:response.id
 
-        let l:callback = a:conn.callback_map.pop(l:id)
-        call ale#util#GetFunction(l:callback)(l:response)
+        if get(l:response, 'type', '') ==# 'event'
+        \&& get(l:response, 'event', '') ==# 'semanticDiag'
+            let l:id = s:FindCallbackIDForType(a:conn.callback_map, 'ts@geterr')
+        endif
+
+        if has_key(a:conn.callback_map, l:id)
+            let [l:Callback, l:message] = remove(a:conn.callback_map, l:id)
+            call ale#util#GetFunction(l:Callback)(l:id, l:response)
+        endif
     endfor
 endfunction
 
@@ -190,8 +207,10 @@ function! ale#lsp#SendMessageToProgram(executable, command, message, ...) abort
     let [l:id, l:data] = ale#lsp#CreateMessageData(a:message)
 
     let l:matches = filter(s:connections[:], 'v:val.executable ==# a:executable')
+
     " Get the current connection or a new one.
     let l:conn = !empty(l:matches) ? l:matches[0] : s:NewConnection()
+    let l:conn.executable = a:executable
 
     if !ale#job#IsRunning(l:conn.job_id)
         let l:options = {
@@ -199,6 +218,8 @@ function! ale#lsp#SendMessageToProgram(executable, command, message, ...) abort
         \   'out_cb': function('s:HandleCommandMessage'),
         \}
         let l:job_id = ale#job#Start(ale#job#PrepareCommand(a:command), l:options)
+    else
+        let l:job_id = l:conn.job_id
     endif
 
     if l:job_id <= 0
@@ -209,14 +230,14 @@ function! ale#lsp#SendMessageToProgram(executable, command, message, ...) abort
     " request for which the server must not return a response.
     if l:id != 0
         " Add the callback, which the server will respond to later.
-        let l:conn.callback_map[l:id] = a:1
+        let l:conn.callback_map[l:id] = [a:1, a:message]
     endif
 
     call ale#job#SendRaw(l:job_id, l:data)
 
     let l:conn.job_id = l:job_id
 
-    return 1
+    return l:id
 endfunction
 
 " Send a message to a server at a given address.
@@ -252,7 +273,7 @@ function! ale#lsp#SendMessageToAddress(address, message, ...) abort
     " request for which the server must not return a response.
     if l:id != 0
         " Add the callback, which the server will respond to later.
-        let l:conn.callback_map[l:id] = a:1
+        let l:conn.callback_map[l:id] = [a:1, a:message]
     endif
 
     if ch_status(l:conn.channnel) ==# 'fail'
@@ -261,4 +282,6 @@ function! ale#lsp#SendMessageToAddress(address, message, ...) abort
 
     " Send the message to the server
     call ch_sendraw(l:conn.channel, l:data)
+
+    return l:id
 endfunction
