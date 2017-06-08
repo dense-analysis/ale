@@ -5,6 +5,7 @@ function! ale_linters#elm#make#Handle(buffer, lines) abort
     let l:output = []
     let l:is_windows = has('win32')
     let l:temp_dir = l:is_windows ? $TMP : $TMPDIR
+    let l:unparsed_lines = []
     for l:line in a:lines
         if l:line[0] ==# '['
             let l:errors = json_decode(l:line)
@@ -29,8 +30,21 @@ function! ale_linters#elm#make#Handle(buffer, lines) abort
                     \})
                 endif
             endfor
+        elseif l:line !=# 'Successfully generated /dev/null'
+            call add(l:unparsed_lines, l:line)
         endif
     endfor
+
+    if len(l:unparsed_lines) > 0
+        call add(l:output, {
+        \    'bufnr': a:buffer,
+        \    'lnum': 0,
+        \    'col': 0,
+        \    'type': 'E',
+        \    'text': l:unparsed_lines[0],
+        \    'detail': join(l:unparsed_lines, "\n")
+        \})
+    endif
 
     return l:output
 endfunction
