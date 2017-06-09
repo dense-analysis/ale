@@ -1,0 +1,16 @@
+Execute(no g:ale_perl_perlcritic_showrules):
+  silent noautocmd new testfile.pl
+
+  let g:ale_perl_perlcritic_showrules = 0
+
+  AssertEqual
+  \ "perlcritic --verbose '". '%l:%c %m\n' . "' --nocolor",
+  \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))
+
+  let g:ale_perl_perlcritic_showrules = 1
+
+  AssertEqual
+  \ "perlcritic --verbose '". '%l:%c %m [%p]\n' . "' --nocolor",
+  \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))
+
+  :q

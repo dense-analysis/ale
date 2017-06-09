@@ -1,9 +1,13 @@
 " Author: Vincent Lequertier <https://github.com/SkySymbol>
 " Description: This file adds support for checking perl with perl critic
 
+if !exists('g:ale_perl_perlcritic_showrules')
+    let g:ale_perl_perlcritic_showrules = 0
+endif
+
 function! ale_linters#perl#perlcritic#GetCommand(buffer) abort
     let l:critic_verbosity = '%l:%c %m\n'
-    if exists('g:ale_perl_perlcritic_showrules')
+    if g:ale_perl_perlcritic_showrules
         let l:critic_verbosity = '%l:%c %m [%p]\n'
     endif
 
