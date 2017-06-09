@@ -1,6 +1,16 @@
 " Author: Vincent Lequertier <https://github.com/SkySymbol>
 " Description: This file adds support for checking perl with perl critic
 
+function! ale_linters#perl#perlcritic#GetCommand(buffer) abort
+    let l:critic_verbosity = '%l:%c %m\n'
+    if exists('g:ale_perl_perlcritic_showrules')
+        let l:critic_verbosity = '%l:%c %m [%p]\n'
+    endif
+
+    return "perlcritic --verbose '". l:critic_verbosity . "' --nocolor"
+endfunction
+
+
 function! ale_linters#perl#perlcritic#Handle(buffer, lines) abort
     let l:pattern = '\(\d\+\):\(\d\+\) \(.\+\)'
     let l:output = []
@@ -20,6 +30,6 @@ call ale#linter#Define('perl', {
 \   'name': 'perlcritic',
 \   'executable': 'perlcritic',
 \   'output_stream': 'stdout',
-\   'command': "perlcritic --verbose '%l:%c %m\n' --nocolor",
+\   'command_callback': 'ale_linters#perl#perlcritic#GetCommand',
 \   'callback': 'ale_linters#perl#perlcritic#Handle',
 \})
