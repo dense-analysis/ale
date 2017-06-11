@@ -63,6 +63,7 @@ CONTENTS                                                         *ale-contents*
       merlin..............................|ale-ocaml-merlin|
     perl..................................|ale-perl-options|
       perl................................|ale-perl-perl|
+      perlcritic..........................|ale-perl-perlcritic|
     php...................................|ale-php-options|
       phpcs...............................|ale-php-phpcs|
       phpmd...............................|ale-php-phpmd|
