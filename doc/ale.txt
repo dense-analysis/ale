@@ -91,6 +91,7 @@ CONTENTS                                                         *ale-contents*
       lacheck.............................|ale-tex-lacheck|
     typescript............................|ale-typescript-options|
       tslint..............................|ale-typescript-tslint|
+      tsserver............................|ale-typescript-tsserver|
     vim...................................|ale-vim-options|
       vint................................|ale-vim-vint|
     xml...................................|ale-xml-options|
@@ -188,7 +189,7 @@ The following languages and tools are supported.
 * Swift: 'swiftlint'
 * Texinfo: 'proselint'
 * Text: 'proselint', 'vale'
-* TypeScript: 'tslint', 'typecheck'
+* TypeScript: 'tslint', 'tsserver', 'typecheck'
 * Verilog: 'iverilog', 'verilator'
 * Vim: 'vint'
 * Vim help: 'proselint'

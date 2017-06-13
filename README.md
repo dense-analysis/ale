@@ -116,7 +116,7 @@ name. That seems to be the fairest way to arrange this table.
 | Swift | [swiftlint](https://swift.org/) |
 | Texinfo | [proselint](http://proselint.com/)|
 | Text^ | [proselint](http://proselint.com/), [vale](https://github.com/ValeLint/vale) |
-| TypeScript | [tslint](https://github.com/palantir/tslint), typecheck |
+| TypeScript | [tslint](https://github.com/palantir/tslint), tsserver, typecheck |
 | Verilog | [iverilog](https://github.com/steveicarus/iverilog), [verilator](http://www.veripool.org/projects/verilator/wiki/Intro) |
 | Vim | [vint](https://github.com/Kuniwak/vint) |
 | Vim help^ | [proselint](http://proselint.com/)|
