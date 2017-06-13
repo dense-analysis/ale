@@ -36,7 +36,7 @@ Execute(FixLocList should set all the default values correctly):
   \],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
-  \   {'name': 'foobar'},
+  \   'foobar',
   \   [{'text': 'a', 'lnum': 2}, {'text': 'b', 'lnum': 2}],
   \ )
 
@@ -56,7 +56,7 @@ Execute(FixLocList should use the values we supply):
   \],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
-  \   {'name': 'foobar'},
+  \   'foobar',
   \   [{
   \     'text': 'a',
   \     'lnum': 3,
@@ -84,7 +84,7 @@ Execute(FixLocList should set items with lines beyond the end to the last line):
   \],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
-  \   {'name': 'foobar'},
+  \   'foobar',
   \   [{'text': 'a', 'lnum': 11}],
   \ )
 
@@ -104,7 +104,7 @@ Execute(FixLocList should move line 0 to line 1):
   \],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
-  \   {'name': 'foobar'},
+  \   'foobar',
   \   [{'text': 'a', 'lnum': 0}],
   \ )
 
@@ -125,7 +125,7 @@ Execute(FixLocList should convert line and column numbers correctly):
   \],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
-  \   {'name': 'foobar'},
+  \   'foobar',
   \   [{'text': 'a', 'lnum': '010', 'col': '010'}],
   \ )
 
@@ -158,7 +158,7 @@ Execute(FixLocList should pass on end_col values):
   \],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
-  \   {'name': 'foobar'},
+  \   'foobar',
   \   [
   \     {'text': 'a', 'lnum': '010', 'col': '010', 'end_col': '012'},
   \     {'text': 'a', 'lnum': '010', 'col': '011', 'end_col': 12},
@@ -195,7 +195,7 @@ Execute(FixLocList should pass on end_lnum values):
   \],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
-  \   {'name': 'foobar'},
+  \   'foobar',
   \   [
   \     {'text': 'a', 'lnum': '010', 'col': '010', 'end_col': '012', 'end_lnum': '013'},
   \     {'text': 'a', 'lnum': '010', 'col': '011', 'end_col': 12, 'end_lnum': 13},
@@ -220,6 +220,6 @@ Execute(FixLocList should allow subtypes to be set):
   \],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
-  \   {'name': 'foobar'},
+  \   'foobar',
   \   [{'text': 'a', 'lnum': 11, 'sub_type': 'style'}],
   \ )

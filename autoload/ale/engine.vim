@@ -11,15 +11,6 @@ if !has_key(s:, 'job_info_map')
     let s:job_info_map = {}
 endif
 
-" Stores information for each LSP command including:
-"
-" linter: The linter dictionary for the command.
-" buffer: The buffer number for the command.
-" message: The message we sent, [is_notification, command, params?]
-if !has_key(s:, 'lsp_command_info_map')
-    let s:lsp_command_info_map = {}
-endif
-
 let s:executable_cache_map = {}
 
 " Check if files are executable, and if they are, remember that they are
@@ -52,7 +43,6 @@ function! ale#engine#InitBufferInfo(buffer) abort
         \   'temporary_directory_list': [],
         \   'history': [],
         \   'open_lsp_documents': [],
-        \   'lsp_command_list': [],
         \}
     endif
 endfunction
@@ -114,13 +104,13 @@ function! s:GatherOutput(job_id, line) abort
     endif
 endfunction
 
-function! s:HandleLoclist(linter, buffer, loclist) abort
+function! s:HandleLoclist(linter_name, buffer, loclist) abort
     " Make some adjustments to the loclists to fix common problems, and also
     " to set default values for loclist items.
-    let l:linter_loclist = ale#engine#FixLocList(a:buffer, a:linter, a:loclist)
+    let l:linter_loclist = ale#engine#FixLocList(a:buffer, a:linter_name, a:loclist)
 
     " Remove previous items for this linter.
-    call filter(g:ale_buffer_info[a:buffer].loclist, 'v:val.linter_name !=# a:linter.name')
+    call filter(g:ale_buffer_info[a:buffer].loclist, 'v:val.linter_name !=# a:linter_name')
     " Add the new items.
     call extend(g:ale_buffer_info[a:buffer].loclist, l:linter_loclist)
 
@@ -130,7 +120,7 @@ function! s:HandleLoclist(linter, buffer, loclist) abort
     call sort(g:ale_buffer_info[a:buffer].loclist, 'ale#util#LocItemCompare')
 
     let l:linting_is_done = empty(g:ale_buffer_info[a:buffer].job_list)
-    \   && empty(g:ale_buffer_info[a:buffer].lsp_command_list)
+    \   && !get(g:ale_buffer_info[a:buffer], 'waiting_for_tsserver', 0)
 
     if l:linting_is_done
         " Automatically remove all managed temporary files and directories
@@ -201,31 +191,37 @@ function! s:HandleExit(job_id, exit_code) abort
 
     let l:loclist = ale#util#GetFunction(l:linter.callback)(l:buffer, l:output)
 
-    call s:HandleLoclist(l:linter, l:buffer, l:loclist)
+    call s:HandleLoclist(l:linter.name, l:buffer, l:loclist)
 endfunction
 
-function! s:HandleLSPResponse(request_id, response) abort
-    let l:info = get(s:lsp_command_info_map, a:request_id, {})
+function! s:HandleLSPResponse(response) abort
+    let l:is_diag_response = get(a:response, 'type', '') ==# 'event'
+    \   && get(a:response, 'event', '') ==# 'semanticDiag'
+
+    if !l:is_diag_response
+        return
+    endif
+
+    let l:buffer = bufnr(a:response.body.file)
+
+    let l:info = get(g:ale_buffer_info, l:buffer, {})
 
     if empty(l:info)
         return
     endif
 
-    call remove(s:lsp_command_info_map, a:request_id)
-
-    let l:command_list = g:ale_buffer_info[l:info.buffer].lsp_command_list
-    call filter(l:command_list, 'v:val != a:request_id')
+    let l:info.waiting_for_tsserver = 0
 
     let l:loclist = ale#lsp#response#ReadTSServerDiagnostics(a:response)
 
-    call s:HandleLoclist(l:info.linter, l:info.buffer, l:loclist)
+    call s:HandleLoclist('tsserver', l:buffer, l:loclist)
 endfunction
 
 function! ale#engine#SetResults(buffer, loclist) abort
     let l:info = get(g:ale_buffer_info, a:buffer, {})
     let l:job_list = get(l:info, 'job_list', [])
-    let l:lsp_command_list = get(l:info, 'lsp_command_list', [])
-    let l:linting_is_done = empty(l:job_list) && empty(l:lsp_command_list)
+    let l:waiting_for_tsserver = get(l:info, 'waiting_for_tsserver', 0)
+    let l:linting_is_done = empty(l:job_list) && !l:waiting_for_tsserver
 
     " Set signs first. This could potentially fix some line numbers.
     " The List could be sorted again here by SetSigns.
@@ -261,7 +257,7 @@ function! ale#engine#SetResults(buffer, loclist) abort
     endif
 endfunction
 
-function! ale#engine#FixLocList(buffer, linter, loclist) abort
+function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
     let l:new_loclist = []
 
     " Some errors have line numbers beyond the end of the file,
@@ -290,7 +286,7 @@ function! ale#engine#FixLocList(buffer, linter, loclist) abort
         \   'vcol': get(l:old_item, 'vcol', 0),
         \   'type': get(l:old_item, 'type', 'E'),
         \   'nr': get(l:old_item, 'nr', -1),
-        \   'linter_name': a:linter.name,
+        \   'linter_name': a:linter_name,
         \}
 
         if has_key(l:old_item, 'detail')
@@ -542,10 +538,11 @@ function! s:CheckWithTSServer(buffer, linter, executable) abort
     let l:open_documents = l:info.open_lsp_documents
     let l:is_open = index(l:open_documents, a:linter.name) >= 0
 
+    call ale#lsp#StartProgram(a:executable, a:executable, function('s:HandleLSPResponse'))
+
     if !l:is_open
         call add(l:open_documents, a:linter.name)
         call ale#lsp#SendMessageToProgram(
-        \   a:executable,
         \   a:executable,
         \   ale#lsp#tsserver_message#Open(a:buffer),
         \)
@@ -553,25 +550,16 @@ function! s:CheckWithTSServer(buffer, linter, executable) abort
 
     call ale#lsp#SendMessageToProgram(
     \   a:executable,
-    \   a:executable,
     \   ale#lsp#tsserver_message#Change(a:buffer),
     \)
 
-    let l:message = ale#lsp#tsserver_message#Geterr(a:buffer)
     let l:request_id = ale#lsp#SendMessageToProgram(
     \   a:executable,
-    \   a:executable,
-    \   l:message,
-    \   function('s:HandleLSPResponse'),
+    \   ale#lsp#tsserver_message#Geterr(a:buffer),
     \)
 
-    if l:request_id > 0
-        let s:lsp_command_info_map[l:request_id] = {
-        \   'buffer': a:buffer,
-        \   'linter': a:linter,
-        \   'message': l:message,
-        \}
-        call add(l:info.lsp_command_list, l:request_id)
+    if l:request_id != 0
+        let l:info.waiting_for_tsserver = 1
     endif
 endfunction
 

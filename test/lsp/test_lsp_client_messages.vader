@@ -139,7 +139,7 @@ Execute(ale#lsp#tsserver_message#Geterr() should return correct messages):
 
   AssertEqual
   \ [
-  \   0,
+  \   1,
   \   'ts@geterr',
   \   {
   \     'files': [b:dir . '/foo.ts'],

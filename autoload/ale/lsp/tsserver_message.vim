@@ -33,5 +33,5 @@ function! ale#lsp#tsserver_message#Change(buffer) abort
 endfunction
 
 function! ale#lsp#tsserver_message#Geterr(buffer) abort
-    return [0, 'ts@geterr', {'files': [expand('#' . a:buffer . ':p')]}]
+    return [1, 'ts@geterr', {'files': [expand('#' . a:buffer . ':p')]}]
 endfunction
