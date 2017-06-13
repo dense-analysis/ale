@@ -8,6 +8,7 @@ function! s:FindConfig(buffer) abort
     \   '.eslintrc.yml',
     \   '.eslintrc.json',
     \   '.eslintrc',
+    \   'package.json',
     \]
         let l:config = ale#path#FindNearestFile(a:buffer, l:filename)
 
