@@ -8,13 +8,11 @@ let g:ale_lsp_next_message_id = 1
 
 function! s:NewConnection() abort
     " data: The message data received so far.
-    " callback_map: A mapping from connections to response callbacks.
     " address: An address only set for server connections.
     " executable: An executable only set for program connections.
     " job: A job ID only set for running programs.
     let l:conn = {
     \   'data': '',
-    \   'callback_map': {},
     \   'address': '',
     \   'executable': '',
     \   'job_id': -1,
@@ -60,7 +58,7 @@ function! s:CreateTSServerMessageData(message) abort
         let l:obj.arguments = a:message[2]
     endif
 
-    let l:data = json_encode(l:obj)
+    let l:data = json_encode(l:obj) . "\n"
     return [l:is_notification ? 0 : l:obj.seq, l:data]
 endfunction
 
@@ -143,12 +141,9 @@ function! ale#lsp#HandleMessage(conn, message) abort
 
     " Call our callbacks.
     for l:response in l:response_list
-        let l:id = has_key(l:response, 'seq')
-        \   ? l:response.seq
-        \   : l:response.id
-
-        let l:callback = a:conn.callback_map.pop(l:id)
-        call ale#util#GetFunction(l:callback)(l:response)
+        if has_key(a:conn, 'callback')
+            call ale#util#GetFunction(a:conn.callback)(l:response)
+        endif
     endfor
 endfunction
 
@@ -166,32 +161,18 @@ function! s:HandleCommandMessage(job_id, message) abort
     call ale#lsp#HandleMessage(l:conn, a:message)
 endfunction
 
-" Send a message to a server with a given executable, and a command for
-" running the executable.
-"
-" A callback can be registered to handle the response.
-" Notifications do not need to be handled.
-" (executable, command, message, callback?)
-"
-" Returns 1 when a message is sent, 0 otherwise.
-function! ale#lsp#SendMessageToProgram(executable, command, message, ...) abort
-    if a:0 > 1
-        throw 'Too many arguments!'
-    endif
-
-    if !a:message[0] && a:0 == 0
-        throw 'A callback must be set for messages which are not notifications!'
-    endif
-
+" Start a program for LSP servers which run with executables.
+function! ale#lsp#StartProgram(executable, command, callback) abort
     if !executable(a:executable)
         return 0
     endif
 
-    let [l:id, l:data] = ale#lsp#CreateMessageData(a:message)
-
     let l:matches = filter(s:connections[:], 'v:val.executable ==# a:executable')
+
     " Get the current connection or a new one.
     let l:conn = !empty(l:matches) ? l:matches[0] : s:NewConnection()
+    let l:conn.executable = a:executable
+    let l:conn.callback = a:callback
 
     if !ale#job#IsRunning(l:conn.job_id)
         let l:options = {
@@ -199,43 +180,50 @@ function! ale#lsp#SendMessageToProgram(executable, command, message, ...) abort
         \   'out_cb': function('s:HandleCommandMessage'),
         \}
         let l:job_id = ale#job#Start(ale#job#PrepareCommand(a:command), l:options)
+    else
+        let l:job_id = l:conn.job_id
     endif
 
     if l:job_id <= 0
         return 0
     endif
 
-    " The ID is 0 when the message is a Notification, which is a JSON-RPC
-    " request for which the server must not return a response.
-    if l:id != 0
-        " Add the callback, which the server will respond to later.
-        let l:conn.callback_map[l:id] = a:1
-    endif
-
-    call ale#job#SendRaw(l:job_id, l:data)
-
     let l:conn.job_id = l:job_id
 
     return 1
 endfunction
 
-" Send a message to a server at a given address.
-" A callback can be registered to handle the response.
-" Notifications do not need to be handled.
-" (address, message, callback?)
+" Send a message to a server with a given executable, and a command for
+" running the executable.
 "
-" Returns 1 when a message is sent, 0 otherwise.
-function! ale#lsp#SendMessageToAddress(address, message, ...) abort
-    if a:0 > 1
-        throw 'Too many arguments!'
-    endif
-
-    if !a:message[0] && a:0 == 0
-        throw 'A callback must be set for messages which are not notifications!'
-    endif
-
+" Returns -1 when a message is sent, but no response is expected
+"          0 when the message is not sent and
+"          >= 1 with the message ID when a response is expected.
+function! ale#lsp#SendMessageToProgram(executable, message) abort
     let [l:id, l:data] = ale#lsp#CreateMessageData(a:message)
 
+    let l:matches = filter(s:connections[:], 'v:val.executable ==# a:executable')
+
+    " No connection is currently open.
+    if empty(l:matches)
+        return 0
+    endif
+
+    " Get the current connection or a new one.
+    let l:conn = l:matches[0]
+    let l:conn.executable = a:executable
+
+    if get(l:conn, 'job_id', 0) == 0
+        return 0
+    endif
+
+    call ale#job#SendRaw(l:conn.job_id, l:data)
+
+    return l:id == 0 ? -1 : l:id
+endfunction
+
+" Connect to an address and set up a callback for handling responses.
+function! ale#lsp#ConnectToAddress(address, callback) abort
     let l:matches = filter(s:connections[:], 'v:val.address ==# a:address')
     " Get the current connection or a new one.
     let l:conn = !empty(l:matches) ? l:matches[0] : s:NewConnection()
@@ -248,17 +236,47 @@ function! ale#lsp#SendMessageToAddress(address, message, ...) abort
         \})
     endif
 
-    " The ID is 0 when the message is a Notification, which is a JSON-RPC
-    " request for which the server must not return a response.
-    if l:id != 0
-        " Add the callback, which the server will respond to later.
-        let l:conn.callback_map[l:id] = a:1
+    if ch_status(l:conn.channnel) ==# 'fail'
+        return 0
     endif
 
-    if ch_status(l:conn.channnel) ==# 'fail'
+    let l:conn.callback = a:callback
+
+    return 1
+endfunction
+
+" Send a message to a server at a given address.
+" Notifications do not need to be handled.
+"
+" Returns -1 when a message is sent, but no response is expected
+"          0 when the message is not sent and
+"          >= 1 with the message ID when a response is expected.
+function! ale#lsp#SendMessageToAddress(address, message) abort
+    if a:0 > 1
+        throw 'Too many arguments!'
+    endif
+
+    if !a:message[0] && a:0 == 0
+        throw 'A callback must be set for messages which are not notifications!'
+    endif
+
+    let [l:id, l:data] = ale#lsp#CreateMessageData(a:message)
+
+    let l:matches = filter(s:connections[:], 'v:val.address ==# a:address')
+
+    " No connection is currently open.
+    if empty(l:matches)
+        return 0
+    endif
+
+    let l:conn = l:matches[0]
+
+    if ch_status(l:conn.channnel) !=# 'open'
         return 0
     endif
 
     " Send the message to the server
     call ch_sendraw(l:conn.channel, l:data)
+
+    return l:id == 0 ? -1 : l:id
 endfunction

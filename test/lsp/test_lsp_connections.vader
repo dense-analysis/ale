@@ -110,55 +110,63 @@ Execute(ale#lsp#CreateMessageData() should create tsserver notification messages
       AssertEqual
       \ [
       \   0,
-      \   '{"seq": null, "type": "request", "command": "someNotification"}',
+      \   '{"seq": null, "type": "request", "command": "someNotification"}'
+      \   . "\n",
       \ ],
       \ ale#lsp#CreateMessageData([1, 'ts@someNotification'])
       AssertEqual
       \ [
       \   0,
-      \   '{"seq": null, "arguments": {"foo": "bar"}, "type": "request", "command": "someNotification"}',
+      \   '{"seq": null, "arguments": {"foo": "bar"}, "type": "request", "command": "someNotification"}'
+      \   . "\n",
       \ ],
       \ ale#lsp#CreateMessageData([1, 'ts@someNotification', {'foo': 'bar'}])
     else
       AssertEqual
       \ [
       \   0,
-      \   '{"seq":null,"type":"request","command":"someNotification"}',
+      \   '{"seq":null,"type":"request","command":"someNotification"}'
+      \   . "\n",
       \ ],
       \ ale#lsp#CreateMessageData([1, 'ts@someNotification'])
       AssertEqual
       \ [
       \   0,
-      \   '{"seq":null,"arguments":{"foo":"bar"},"type":"request","command":"someNotification"}',
+      \   '{"seq":null,"arguments":{"foo":"bar"},"type":"request","command":"someNotification"}'
+      \   . "\n",
       \ ],
       \ ale#lsp#CreateMessageData([1, 'ts@someNotification', {'foo': 'bar'}])
     endif
 
-Execute(ale#lsp#CreateMessageData() should create tsserver messages excepting responses):
+Execute(ale#lsp#CreateMessageData() should create tsserver messages expecting responses):
     if has('nvim')
       AssertEqual
       \ [
       \   1,
-      \   '{"seq": 1, "type": "request", "command": "someMessage"}',
+      \   '{"seq": 1, "type": "request", "command": "someMessage"}'
+      \   . "\n",
       \ ],
       \ ale#lsp#CreateMessageData([0, 'ts@someMessage'])
       AssertEqual
       \ [
       \   2,
-      \   '{"seq": 2, "arguments": {"foo": "bar"}, "type": "request", "command": "someMessage"}',
+      \   '{"seq": 2, "arguments": {"foo": "bar"}, "type": "request", "command": "someMessage"}'
+      \   . "\n",
       \ ],
       \ ale#lsp#CreateMessageData([0, 'ts@someMessage', {'foo': 'bar'}])
     else
       AssertEqual
       \ [
       \   1,
-      \   '{"seq":1,"type":"request","command":"someMessage"}',
+      \   '{"seq":1,"type":"request","command":"someMessage"}'
+      \   . "\n",
       \ ],
       \ ale#lsp#CreateMessageData([0, 'ts@someMessage'])
       AssertEqual
       \ [
       \   2,
-      \   '{"seq":2,"arguments":{"foo":"bar"},"type":"request","command":"someMessage"}',
+      \   '{"seq":2,"arguments":{"foo":"bar"},"type":"request","command":"someMessage"}'
+      \   . "\n",
       \ ],
       \ ale#lsp#CreateMessageData([0, 'ts@someMessage', {'foo': 'bar'}])
     endif
