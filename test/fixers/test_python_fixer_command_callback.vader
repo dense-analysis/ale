@@ -11,18 +11,18 @@ After:
 Execute(The python GetExecutable callbacks should return the correct path):
   AssertEqual
   \ '',
-  \ ale#handlers#python#GetExecutable(bufnr(''), 'isort')
+  \ ale#python#GetExecutable(bufnr(''), 'isort')
 
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
   \ g:dir . '/python_paths/with_virtualenv/env/bin/isort',
-  \ ale#handlers#python#GetExecutable(bufnr(''), 'isort')
+  \ ale#python#GetExecutable(bufnr(''), 'isort')
   AssertEqual
   \ g:dir . '/python_paths/with_virtualenv/env/bin/autopep8',
-  \ ale#handlers#python#GetExecutable(bufnr(''), 'autopep8')
+  \ ale#python#GetExecutable(bufnr(''), 'autopep8')
   AssertEqual
   \ g:dir . '/python_paths/with_virtualenv/env/bin/yapf',
-  \ ale#handlers#python#GetExecutable(bufnr(''), 'yapf')
+  \ ale#python#GetExecutable(bufnr(''), 'yapf')
 
 
 Execute(The autopep8 callbacks should return the correct default values):

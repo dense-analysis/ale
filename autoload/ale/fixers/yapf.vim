@@ -2,7 +2,7 @@
 " Description: Fixing Python files with yapf.
 
 function! ale#fixers#yapf#Fix(buffer) abort
-    let l:executable = ale#handlers#python#GetExecutable(a:buffer, 'yapf')
+    let l:executable = ale#python#GetExecutable(a:buffer, 'yapf')
     if empty(l:executable)
         return 0
     endif
