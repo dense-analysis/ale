@@ -28,6 +28,6 @@ Execute (The ansible-lint handler should handle names with spaces):
   \     'text': 'E111: indentation is not a multiple of four',
   \   },
   \ ],
-  \ ale_linters#python#flake8#Handle(42, [
+  \ ale_linters#ansible#ansible_lint#Handle(42, [
   \   'C:\something\with spaces.yml:6:6: E111 indentation is not a multiple of four',
   \ ])
