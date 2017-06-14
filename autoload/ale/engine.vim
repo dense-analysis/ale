@@ -538,9 +538,22 @@ function! s:CheckWithTSServer(buffer, linter, executable) abort
     let l:open_documents = l:info.open_lsp_documents
     let l:is_open = index(l:open_documents, a:linter.name) >= 0
 
-    call ale#lsp#StartProgram(a:executable, a:executable, function('s:HandleLSPResponse'))
+    let l:command = ale#job#PrepareCommand(a:executable)
+    let l:job_id = ale#lsp#StartProgram(a:executable, l:command, function('s:HandleLSPResponse'))
+
+    if !l:job_id
+        if g:ale_history_enabled
+            call ale#history#Add(a:buffer, 'failed', l:job_id, l:command)
+        endif
+
+        return
+    endif
 
     if !l:is_open
+        if g:ale_history_enabled
+            call ale#history#Add(a:buffer, 'started', l:job_id, l:command)
+        endif
+
         call add(l:open_documents, a:linter.name)
         call ale#lsp#SendMessageToProgram(
         \   a:executable,

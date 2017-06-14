@@ -162,6 +162,9 @@ function! s:HandleCommandMessage(job_id, message) abort
 endfunction
 
 " Start a program for LSP servers which run with executables.
+"
+" The job ID will be returned for for the program if it ran, otherwise
+" 0 will be returned.
 function! ale#lsp#StartProgram(executable, command, callback) abort
     if !executable(a:executable)
         return 0
@@ -179,7 +182,7 @@ function! ale#lsp#StartProgram(executable, command, callback) abort
         \   'mode': 'raw',
         \   'out_cb': function('s:HandleCommandMessage'),
         \}
-        let l:job_id = ale#job#Start(ale#job#PrepareCommand(a:command), l:options)
+        let l:job_id = ale#job#Start(a:command, l:options)
     else
         let l:job_id = l:conn.job_id
     endif
@@ -190,7 +193,7 @@ function! ale#lsp#StartProgram(executable, command, callback) abort
 
     let l:conn.job_id = l:job_id
 
-    return 1
+    return l:job_id
 endfunction
 
 " Send a message to a server with a given executable, and a command for
