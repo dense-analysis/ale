@@ -1,0 +1,47 @@
+
+Execute(End column indexes should be set for certain errors):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 25,
+  \     'col': 1,
+  \     'type': 'W',
+  \     'end_col': 3,
+  \     'text': 'F821: undefined name ''foo''',
+  \   },
+  \   {
+  \     'lnum': 28,
+  \     'col': 5,
+  \     'type': 'W',
+  \     'end_col': 9,
+  \     'text': 'F405: hello may be undefined, or defined from star imports: x',
+  \   },
+  \   {
+  \     'lnum': 104,
+  \     'col': 5,
+  \     'type': 'W',
+  \     'end_col': 12,
+  \     'text': 'F999: ''continue'' not properly in loop',
+  \   },
+  \   {
+  \     'lnum': 106,
+  \     'col': 5,
+  \     'type': 'W',
+  \     'end_col': 9,
+  \     'text': 'F999: ''break'' outside loop',
+  \   },
+  \   {
+  \     'lnum': 109,
+  \     'col': 5,
+  \     'type': 'W',
+  \     'end_col': 8,
+  \     'text': 'F841: local variable ''test'' is assigned to but never used',
+  \   },
+  \ ],
+  \ ale#handlers#python#HandlePEP8Format(1, [
+  \ 'foo.py:25:1: F821 undefined name ''foo''',
+  \ 'foo.py:28:5: F405 hello may be undefined, or defined from star imports: x',
+  \ 'foo.py:104:5: F999 ''continue'' not properly in loop',
+  \ 'foo.py:106:5: F999 ''break'' outside loop',
+  \ 'foo.py:109:5: F841 local variable ''test'' is assigned to but never used',
+  \ ])

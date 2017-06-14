@@ -1,6 +1,13 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Error handling for flake8, etc.
 
+let s:end_col_pattern_map = {
+\   'F405': '\(.\+\) may be undefined',
+\   'F821': 'undefined name ''\([^'']\+\)''',
+\   'F999': '^''\([^'']\+\)''',
+\   'F841': 'local variable ''\([^'']\+\)''',
+\}
+
 function! ale#handlers#python#HandlePEP8Format(buffer, lines) abort
     for l:line in a:lines[:10]
         if match(l:line, '^Traceback') >= 0
@@ -35,12 +42,24 @@ function! ale#handlers#python#HandlePEP8Format(buffer, lines) abort
              continue
         endif
 
-        call add(l:output, {
+        let l:item = {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
         \   'text': l:code . ': ' . l:match[4],
         \   'type': l:code[:0] ==# 'E' ? 'E' : 'W',
-        \})
+        \}
+
+        let l:end_col_pattern = get(s:end_col_pattern_map, l:code, '')
+
+        if !empty(l:end_col_pattern)
+            let l:end_col_match = matchlist(l:match[4], l:end_col_pattern)
+
+            if !empty(l:end_col_match)
+                let l:item.end_col = l:item.col + len(l:end_col_match[1]) - 1
+            endif
+        endif
+
+        call add(l:output, l:item)
     endfor
 
     return l:output
