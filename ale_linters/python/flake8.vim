@@ -117,7 +117,6 @@ function! ale_linters#python#flake8#Handle(buffer, lines) abort
     " Matches patterns line the following:
     "
     " stdin:6:6: E111 indentation is not a multiple of four
-    " test.yml:35: [EANSIBLE0002] Trailing whitespace
     let l:pattern = '\v^[a-zA-Z]?:?[^:]+:(\d+):?(\d+)?: ([[:alnum:]]+) (.*)$'
     let l:output = []
 
@@ -134,8 +133,17 @@ function! ale_linters#python#flake8#Handle(buffer, lines) abort
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
         \   'text': l:code . ': ' . l:match[4],
-        \   'type': l:code[:0] ==# 'E' ? 'E' : 'W',
+        \   'type': 'W',
         \}
+
+        if l:code[:0] ==# 'F'
+            let l:item.type = 'E'
+        elseif l:code[:0] ==# 'E'
+            let l:item.type = 'E'
+            let l:item.sub_type = 'style'
+        elseif l:code[:0] ==# 'W'
+            let l:item.sub_type = 'style'
+        endif
 
         let l:end_col_pattern = get(s:end_col_pattern_map, l:code, '')
 
