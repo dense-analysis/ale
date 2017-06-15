@@ -1,4 +1,4 @@
-" Author: w0rp <devw0rp@gmail.com>
+" Author: w0rp <devw0rp@gmail.com>, David Alexander <opensource@thelonelyghost.com>
 " Description: Primary code path for the plugin
 "   Manages execution of linters when requested by autocommands
 
@@ -85,7 +85,8 @@ function! ale#Lint(...) abort
     " Check if we previously requested checking the file.
     if has_key(s:should_lint_file_for_buffer, l:buffer)
         unlet s:should_lint_file_for_buffer[l:buffer]
-        let l:should_lint_file = 1
+        " Lint files if they exist.
+        let l:should_lint_file = filereadable(expand('#' . l:buffer . ':p'))
     endif
 
     " Initialise the buffer information if needed.
