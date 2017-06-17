@@ -47,7 +47,7 @@ function! ale_linters#kotlin#kotlinc#GetCommand(buffer, import_paths) abort
     " If the config file is enabled and readable, source it
     if ale#Var(a:buffer, 'kotlin_kotlinc_enable_config')
         if filereadable(expand(ale#Var(a:buffer, 'kotlin_kotlinc_config_file'), 1))
-            execute 'source ' . ale#Escape(expand(ale#Var(a:buffer, 'kotlin_kotlinc_config_file'), 1))
+            execute 'source ' . expand(ale#Var(a:buffer, 'kotlin_kotlinc_config_file'), 1)
         endif
     endif
 
