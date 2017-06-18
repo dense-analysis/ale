@@ -64,15 +64,7 @@ function! ale#highlight#UnqueueHighlights(buffer) abort
 endfunction
 
 function! s:GetALEMatches() abort
-    let l:list = []
-
-    for l:match in getmatches()
-        if l:match['group'] ==# 'ALEError' || l:match['group'] ==# 'ALEWarning'
-            call add(l:list, l:match)
-        endif
-    endfor
-
-    return l:list
+    return filter(getmatches(), 'v:val.group =~# ''^ALE''')
 endfunction
 
 function! s:GetCurrentMatchIDs(loclist) abort
