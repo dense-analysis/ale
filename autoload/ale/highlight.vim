@@ -67,7 +67,7 @@ function! s:GetALEMatches() abort
     let l:list = []
 
     for l:match in getmatches()
-        if l:match['group'] ==# 'ALEError' || l:match['group'] ==# 'ALEWarning'
+        if l:match['group'] ==# 'ALEError' || l:match['group'] ==# 'ALEWarning' || l:match['group'] ==# 'ALEStyleError' || l:match['group'] ==# 'ALEStyleWarning'
             call add(l:list, l:match)
         endif
     endfor
