@@ -10,11 +10,7 @@ g:ale_css_stylelint_executable                 *g:ale_css_stylelint_executable*
   Type: |String|
   Default: `'stylelint'`
 
-  ALE will first discover the stylelint path in an ancestor node_modules
-  directory. If no such path exists, this variable will be used instead.
-
-  If you wish to use only a globally installed version of stylelint, set
-  |g:ale_css_stylelint_use_global| to `1`.
+  See |ale-integrations-local-executables|
 
 
 g:ale_css_stylelint_options                    *g:ale_css_stylelint_options*
@@ -30,10 +26,7 @@ g:ale_css_stylelint_use_global                 *g:ale_css_stylelint_use_global*
   Type: |String|
   Default: `0`
 
-  This variable controls whether or not ALE will search for a local path for
-  stylelint first. If this variable is set to `1`, then ALE will always use the
-  global version of stylelint, in preference to locally installed versions of
-  stylelint in node_modules.
+  See |ale-integrations-local-executables|
 
 
 -------------------------------------------------------------------------------

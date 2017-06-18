@@ -70,9 +70,12 @@ CONTENTS                                                         *ale-contents*
       phpcs...............................|ale-php-phpcs|
       phpmd...............................|ale-php-phpmd|
     python................................|ale-python-options|
+      autopep8............................|ale-python-autopep8|
       flake8..............................|ale-python-flake8|
+      isort...............................|ale-python-isort|
       mypy................................|ale-python-mypy|
       pylint..............................|ale-python-pylint|
+      yapf................................|ale-python-yapf|
     ruby..................................|ale-ruby-options|
       reek................................|ale-ruby-reek|
       rubocop.............................|ale-ruby-rubocop|
@@ -177,7 +180,7 @@ The following languages and tools are supported.
 * Pod: 'proselint'
 * Pug: 'pug-lint'
 * Puppet: 'puppet', 'puppet-lint'
-* Python: 'flake8', 'mypy', 'pylint'
+* Python: 'autopep8', 'flake8', 'isort', 'mypy', 'pylint', 'yapf'
 * ReasonML: 'merlin'
 * reStructuredText: 'proselint'
 * RPM spec: 'spec'
@@ -870,6 +873,28 @@ table of contents at |ale-contents|.
 Every option for programs can be set globally, or individually for each
 buffer.  For example, `b:ale_python_flake8_executable` will override any
 values set for `g:ale_python_flake8_executable`.
+
+                                           *ale-integrations-local-executables*
+
+Some tools will prefer to search for locally-installed executables, unless
+configured otherwise. For example, the `eslint` linter will search for
+various executable paths in `node_modules`. The `flake8` linter will search
+for virtualenv directories.
+
+If you prefer to use global executables for those tools, set the relevant
+`_use_global` and `_executable` options for those linters. >
+
+  " Use the global executable with a special name for eslint.
+  let g:ale_javascript_eslint_executable = 'special-eslint'
+  let g:ale_javascript_eslint_use_global = 1
+
+  " Use the global executable with a special name for flake8.
+  let g:ale_python_flake8_executable = '/foo/bar/flake8'
+  let g:ale_python_flake8_use_global = 1
+<
+
+The option |g:ale_virtualenv_dir_names| controls the local virtualenv paths
+ALE will use to search for Python executables.
 
 
 ===============================================================================

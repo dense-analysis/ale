@@ -5,6 +5,14 @@ ALE HTML Integration                                         *ale-html-options*
 -------------------------------------------------------------------------------
 htmlhint                                                    *ale-html-htmlhint*
 
+g:ale_html_htmlhint_executable                 *g:ale_html_htmlhint_executable*
+                                               *b:ale_html_htmlhint_executable*
+  Type: |String|
+  Default: `'htmlhint'`
+
+  See |ale-integrations-local-executables|
+
+
 g:ale_html_htmlhint_options                       *g:ale_html_htmlhint_options*
                                                   *b:ale_html_htmlhint_options*
   Type: |String|
@@ -13,27 +21,12 @@ g:ale_html_htmlhint_options                       *g:ale_html_htmlhint_options*
   This variable can be changed to modify flags given to HTMLHint.
 
 
-g:ale_html_htmlhint_executable                 *g:ale_html_htmlhint_executable*
-                                               *b:ale_html_htmlhint_executable*
-  Type: |String|
-  Default: `'htmlhint'`
-
-  ALE will first discover the htmlhint path in an ancestor node_modules
-  directory. If no such path exists, this variable will be used instead.
-
-  If you wish to use only a globally installed version of htmlhint, set
-  |g:ale_html_htmlhint_use_global| to `1`.
-
-
 g:ale_html_htmlhint_use_global                 *g:ale_html_htmlhint_use_global*
                                                *b:ale_html_htmlhint_use_global*
   Type: |String|
   Default: `0`
 
-  This variable controls whether or not ALE will search for a local path for
-  htmlhint first. If this variable is set to `1`, then ALE will always use the
-  global version of htmlhint, in preference to locally installed versions of
-  htmlhint in node_modules.
+  See |ale-integrations-local-executables|
 
 
 -------------------------------------------------------------------------------

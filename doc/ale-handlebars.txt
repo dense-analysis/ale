@@ -10,11 +10,7 @@ g:ale_handlebars_embertemplatelint_executable
   Type: |String|                  *b:ale_handlebars_embertemplatelint_executable*
   Default: `'ember-template-lint'`
 
-  ALE will look for ember-template-lint executable in ancestor node_modules
-  directory. When it cannot find it, this variable will be used instead.
-
-  If you wish to use only a globally installed version of ember-template-lint,
-  set |g:ale_handlebars_embertemplatelint_use_global| to `1`.
+  See |ale-integrations-local-executables|
 
 
 g:ale_handlebars_embertemplatelint_use_global
@@ -22,10 +18,7 @@ g:ale_handlebars_embertemplatelint_use_global
   Type: |Number|                  *b:ale_handlebars_embertemplatelint_use_global*
   Default: `0`
 
-  This variable controls whether or not ALE will search for a local
-  ember-template-lint executable first. If this variable is set to `1`, then
-  ALE will always use the global version of ember-template-lint, in preference
-  to version installed in local node_modules directory.
+  See |ale-integrations-local-executables|
 
 
 -------------------------------------------------------------------------------

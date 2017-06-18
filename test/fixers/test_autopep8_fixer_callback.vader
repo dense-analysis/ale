@@ -1,0 +1,39 @@
+Before:
+  Save g:ale_python_autopep8_executable
+  Save g:ale_python_autopep8_options
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_python_autopep8_executable = 'xxxinvalid'
+  let g:ale_python_autopep8_options = ''
+
+  silent! execute 'cd /testplugin/test/command_callback'
+  silent cd ..
+  silent cd command_callback
+  let g:dir = getcwd()
+
+After:
+  Restore
+
+  silent execute 'cd ' . fnameescape(g:dir)
+  " Set the file to something else,
+  " or we'll cause issues when running other tests
+  silent file 'dummy.py'
+  unlet! g:dir
+
+Execute(The autopep8 callback should return the correct default values):
+  AssertEqual
+  \ 0,
+  \ ale#fixers#autopep8#Fix(bufnr(''))
+
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  AssertEqual
+  \ {'command': "'" . g:dir . "/python_paths/with_virtualenv/env/bin/autopep8' -" },
+  \ ale#fixers#autopep8#Fix(bufnr(''))
+
+Execute(The autopep8 callback should include options):
+  let g:ale_python_autopep8_options = '--some-option'
+
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  AssertEqual
+  \ {'command': "'" . g:dir . "/python_paths/with_virtualenv/env/bin/autopep8' --some-option -" },
+  \ ale#fixers#autopep8#Fix(bufnr(''))

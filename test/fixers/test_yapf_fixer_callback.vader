@@ -1,0 +1,29 @@
+Before:
+  Save g:ale_python_yapf_executable
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_python_yapf_executable = 'xxxinvalid'
+
+  silent! execute 'cd /testplugin/test/command_callback'
+  silent cd ..
+  silent cd command_callback
+  let g:dir = getcwd()
+
+After:
+  Restore
+
+  silent execute 'cd ' . fnameescape(g:dir)
+  " Set the file to something else,
+  " or we'll cause issues when running other tests
+  silent file 'dummy.py'
+  unlet! g:dir
+
+Execute(The yapf callback should return the correct default values):
+  AssertEqual
+  \ 0,
+  \ ale#fixers#yapf#Fix(bufnr(''))
+
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  AssertEqual
+  \ {'command': "'" . g:dir . "/python_paths/with_virtualenv/env/bin/yapf' --no-local-style" },
+  \ ale#fixers#yapf#Fix(bufnr(''))

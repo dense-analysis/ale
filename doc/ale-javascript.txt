@@ -31,14 +31,7 @@ g:ale_javascript_eslint_executable         *g:ale_javascript_eslint_executable*
   Type: |String|
   Default: `'eslint'`
 
-  ALE will first discover the eslint path in an ancestor node_modules
-  directory. If no such path exists, this variable will be used instead.
-
-  This variable can be set to change the path to eslint. If you have eslint_d
-  installed, you can set this option to use eslint_d instead.
-
-  If you wish to use only a globally installed version of eslint, set
-  |g:ale_javascript_eslint_use_global| to `1`.
+  See |ale-integrations-local-executables|
 
 
 g:ale_javascript_eslint_options               *g:ale_javascript_eslint_options*
@@ -54,10 +47,7 @@ g:ale_javascript_eslint_use_global         *g:ale_javascript_eslint_use_global*
   Type: |Number|
   Default: `0`
 
-  This variable controls whether or not ALE will search for a local path for
-  eslint first. If this variable is set to `1`, then ALE will always use the
-  global version of eslint, in preference to locally installed versions of
-  eslint in node_modules.
+  See |ale-integrations-local-executables|
 
 
 -------------------------------------------------------------------------------
@@ -68,11 +58,7 @@ g:ale_javascript_prettier_executable     *g:ale_javascript_prettier_executable*
   Type: |String|
   Default: `'prettier'`
 
-  ALE will first discover the prettier path in an ancestor node_modules
-  directory. If no such path exists, this variable will be used instead.
-
-  If you wish to use only a globally installed version of prettier set
-  |g:ale_javascript_prettier_use_global| to `1`.
+  See |ale-integrations-local-executables|
 
 
 g:ale_javascript_prettier_options           *g:ale_javascript_prettier_options*
@@ -88,9 +74,7 @@ g:ale_javascript_prettier_use_global     *g:ale_javascript_prettier_use_global*
   Type: |Number|
   Default: `0`
 
-  This variable controls whether or not ALE will search for a local path for
-  prettier first. If this variable is set to `1`, then ALE will always use the
-  global version of Prettier.
+  See |ale-integrations-local-executables|
 
 
 -------------------------------------------------------------------------------
@@ -102,11 +86,7 @@ g:ale_javascript_prettier_eslint_executable
   Type: |String|
   Default: `'prettier-eslint'`
 
-  ALE will first discover the prettier-eslint path in an ancestor node_modules
-  directory. If no such path exists, this variable will be used instead.
-
-  If you wish to use only a globally installed version of prettier-eslint set
-  |g:ale_javascript_prettier_eslint_use_global| to `1`.
+  See |ale-integrations-local-executables|
 
 
 g:ale_javascript_prettier_eslint_options
@@ -124,9 +104,7 @@ g:ale_javascript_prettier_eslint_use_global
   Type: |Number|
   Default: `0`
 
-  This variable controls whether or not ALE will search for a local path for
-  prettier-eslint first. If this variable is set to `1`, then ALE will always
-  use the global version of Prettier-eslint.
+  See |ale-integrations-local-executables|
 
 
 -------------------------------------------------------------------------------
@@ -137,11 +115,7 @@ g:ale_javascript_flow_executable             *g:ale_javascript_flow_executable*
   Type: |String|
   Default: `'flow'`
 
-  ALE will first discover the flow path in an ancestor node_modules
-  directory. If no such path exists, this variable will be used instead.
-
-  If you wish to use only a globally installed version of flow, set
-  |g:ale_javascript_flow_use_global| to `1`.
+  See |ale-integrations-local-executables|
 
 
 g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
@@ -149,10 +123,7 @@ g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
   Type: |Number|
   Default: `0`
 
-  This variable controls whether or not ALE will search for a local path for
-  flow first. If this variable is set to `1`, then ALE will always use the
-  global version of flow, in preference to locally installed versions of
-  flow in node_modules.
+  See |ale-integrations-local-executables|
 
 
 -------------------------------------------------------------------------------
@@ -163,13 +134,7 @@ g:ale_javascript_jshint_executable         *g:ale_javascript_jshint_executable*
   Type: |String|
   Default: `'jshint'`
 
-  ALE will first discover the jshint path in an ancestor node_modules
-  directory. If no such path exists, this variable will be used instead.
-
-  This variable can be changed to change the path to jshint.
-
-  If you wish to use only a globally installed version of jshint, set
-  |g:ale_javascript_jshint_use_global| to `1`.
+  See |ale-integrations-local-executables|
 
 
 g:ale_javascript_jshint_use_global         *g:ale_javascript_jshint_use_global*
@@ -177,10 +142,7 @@ g:ale_javascript_jshint_use_global         *g:ale_javascript_jshint_use_global*
   Type: |Number|
   Default: `0`
 
-  This variable controls whether or not ALE will search for a local path for
-  jshint first. If this variable is set to `1`, then ALE will always use the
-  global version of jshint, in preference to locally installed versions of
-  jshint in node_modules.
+  See |ale-integrations-local-executables|
 
 
 -------------------------------------------------------------------------------
@@ -191,9 +153,7 @@ g:ale_javascript_standard_executable     *g:ale_javascript_standard_executable*
   Type: |String|
   Default: `'standard'`
 
-  Same as the eslint option.
-
-  See: |g:ale_javascript_eslint_executable|
+  See |ale-integrations-local-executables|
 
 
 g:ale_javascript_standard_options           *g:ale_javascript_standard_options*
@@ -209,9 +169,7 @@ g:ale_javascript_standard_use_global     *g:ale_javascript_standard_use_global*
   Type: |Number|
   Default: `0`
 
-  Same as the eslint option.
-
-  See: |g:ale_javascript_eslint_use_global|
+  See |ale-integrations-local-executables|
 
 
 -------------------------------------------------------------------------------
@@ -222,9 +180,7 @@ g:ale_javascript_xo_executable                 *g:ale_javascript_xo_executable*
   Type: |String|
   Default: `'xo'`
 
-  Same as the eslint option.
-
-  See: |g:ale_javascript_eslint_executable|
+  See |ale-integrations-local-executables|
 
 
 g:ale_javascript_xo_options                       *g:ale_javascript_xo_options*
@@ -240,9 +196,7 @@ g:ale_javascript_xo_use_global                 *g:ale_javascript_xo_use_global*
   Type: |Number|
   Default: `0`
 
-  Same as the eslint option.
-
-  See: |g:ale_javascript_eslint_use_global|
+  See |ale-integrations-local-executables|
 
 
 -------------------------------------------------------------------------------
