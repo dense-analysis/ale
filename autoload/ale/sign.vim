@@ -53,11 +53,11 @@ endif
 execute 'sign define ALEErrorSign text=' . g:ale_sign_error
 \   . ' texthl=ALEErrorSign linehl=ALEErrorLine'
 execute 'sign define ALEStyleErrorSign text=' . g:ale_sign_style_error
-\   . ' texthl=ALEStyleErrorSign linehl=ALEStyleErrorSign'
+\   . ' texthl=ALEStyleErrorSign linehl=ALEErrorLine'
 execute 'sign define ALEWarningSign text=' . g:ale_sign_warning
 \   . ' texthl=ALEWarningSign linehl=ALEWarningLine'
 execute 'sign define ALEStyleWarningSign text=' . g:ale_sign_style_warning
-\   . ' texthl=ALEStyleWarningSign linehl=ALEStyleWarningSign'
+\   . ' texthl=ALEStyleWarningSign linehl=ALEWarningLine'
 execute 'sign define ALEInfoSign text=' . g:ale_sign_info
 \   . ' texthl=ALEInfoSign linehl=ALEInfoLine'
 sign define ALEDummySign
