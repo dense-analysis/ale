@@ -1,0 +1,41 @@
+Before:
+  runtime ale_linters/typescript/tslint.vim
+
+Execute(The tslint handler should parse lines correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 235,
+  \     'col': 21,
+  \     'text': 'unused expression, expected an assignment or function call',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 35,
+  \     'col': 6,
+  \     'text': 'Missing semicolon',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 147,
+  \     'col': 10,
+  \     'text': 'Unnecessary semicolon',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 101,
+  \     'col': 25,
+  \     'text': 'Unnecessary trailing comma',
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale_linters#typescript#tslint#Handle(347, [
+  \   'This line should be ignored completely',
+  \   'WARNING: hello.ts[235, 21]: unused expression, expected an assignment or function call',
+  \   'ERROR: hello.ts[35, 6]: Missing semicolon',
+  \   'WARNING: hello.ts[147, 10]: Unnecessary semicolon',
+  \   'ERROR: hello.ts[101, 25]: Unnecessary trailing comma'
+  \ ])
+
+After:
+  call ale#linter#Reset()
