@@ -14,19 +14,21 @@ endfunction
 function! ale_linters#typescript#tslint#Handle(buffer, lines) abort
     " Matches patterns like the following:
     "
-    " hello.ts[7, 41]: trailing whitespace
-    " hello.ts[5, 1]: Forbidden 'var' keyword, use 'let' or 'const' instead
-    "
+    " WARNING: hello.ts[113, 6]: Unnecessary semicolon
+    " ERROR: hello.ts[133, 10]: Missing semicolon
+
     let l:ext = '.' . fnamemodify(bufname(a:buffer), ':e')
-    let l:pattern = '.\+' . l:ext . '\[\(\d\+\), \(\d\+\)\]: \(.\+\)'
+    let l:pattern = '\<\(WARNING\|ERROR\)\>: .\+' . l:ext . '\[\(\d\+\), \(\d\+\)\]: \(.\+\)'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        let l:line = l:match[1] + 0
-        let l:column = l:match[2] + 0
-        let l:text = l:match[3]
+        let l:type = l:match[1]
+        let l:line = l:match[2] + 0
+        let l:column = l:match[3] + 0
+        let l:text = l:match[4]
 
         call add(l:output, {
+        \   'type': (l:type ==# 'WARNING' ? 'W' : 'E'),
         \   'lnum': l:line,
         \   'col': l:column,
         \   'text': l:text,
