@@ -14,11 +14,13 @@ Execute(The javac handler should handle cannot find symbol errors):
   \   },
   \   {
   \     'lnum': 2,
+  \     'col': 5,
   \     'text': 'error: cannot find symbol: BadName',
   \     'type': 'E',
   \   },
   \   {
   \     'lnum': 34,
+  \     'col': 5,
   \     'text': 'error: cannot find symbol: BadName2',
   \     'type': 'E',
   \   },
@@ -29,6 +31,7 @@ Execute(The javac handler should handle cannot find symbol errors):
   \   },
   \   {
   \     'lnum': 42,
+  \     'col': 11,
   \     'text': 'error: cannot find symbol: bar()',
   \     'type': 'E',
   \   },
