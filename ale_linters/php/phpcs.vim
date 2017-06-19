@@ -1,4 +1,4 @@
-" Author: jwilliams108 <https://github.com/jwilliams108>
+" Author: jwilliams108 <https://github.com/jwilliams108>, Eric Stern <https://github.com/firehed>
 " Description: phpcs for PHP files
 
 let g:ale_php_phpcs_standard = get(g:, 'ale_php_phpcs_standard', '')
