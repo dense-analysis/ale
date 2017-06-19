@@ -59,11 +59,14 @@ function! ale_linters#java#javac#Handle(buffer, lines) abort
     " Main.java:16: error: ';' expected
 
     let l:pattern = '\v^.*:(\d+): (.+):(.+)$'
+    let l:col_pattern = '\v^(\s*\^)$'
     let l:symbol_pattern = '\v^ +symbol: *(class|method) +([^ ]+)'
     let l:output = []
 
-    for l:match in ale#util#GetMatches(a:lines, [l:pattern, l:symbol_pattern])
-        if empty(l:match[3])
+    for l:match in ale#util#GetMatches(a:lines, [l:pattern, l:col_pattern, l:symbol_pattern])
+        if empty(l:match[2]) && empty(l:match[3])
+                let l:output[-1].col = len(l:match[1])
+        elseif empty(l:match[3])
             " Add symbols to 'cannot find symbol' errors.
             if l:output[-1].text ==# 'error: cannot find symbol'
                 let l:output[-1].text .= ': ' . l:match[2]
