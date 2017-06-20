@@ -83,3 +83,29 @@ Expect python(Newlines should be added):
           pass
       else:
           pass
+
+Given python(A file with a main block):
+  import os
+
+
+  def main():
+      print('hello')
+
+
+  if __name__ == '__main__':
+      main()
+
+Execute(Fix the file):
+  let g:ale_fixers = {'python': ['add_blank_lines_for_python_control_statements']}
+  ALEFix
+
+Expect python(extra newlines shouldn't be added to the main block):
+  import os
+
+
+  def main():
+      print('hello')
+
+
+  if __name__ == '__main__':
+      main()
