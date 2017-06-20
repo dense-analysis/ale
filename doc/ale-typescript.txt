@@ -3,6 +3,14 @@ ALE TypeScript Integration                             *ale-typescript-options*
 
 
 -------------------------------------------------------------------------------
+eslint                                                  *ale-typescript-eslint*
+
+Becauase of how TypeScript compiles code to JavaScript and how interrelated
+the two languages are, the `eslint` linter for TypeScript uses the JavaScript
+options for `eslint` too. See: |ale-javascript-eslint|.
+
+
+-------------------------------------------------------------------------------
 tslint                                                  *ale-typescript-tslint*
 
 g:ale_typescript_tslint_executable         *g:ale_typescript_tslint_executable*

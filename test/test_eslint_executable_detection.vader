@@ -74,4 +74,4 @@ Execute(eslint.js executables should be run with node on Windows):
   \   'node '''
   \   . g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'
   \   . ''' -f unix --stdin --stdin-filename %s',
-  \ ale_linters#javascript#eslint#GetCommand(bufnr(''))
+  \ ale#handlers#eslint#GetCommand(bufnr(''))

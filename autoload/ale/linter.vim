@@ -290,7 +290,7 @@ function! s:GetLinterNames(original_filetype) abort
 endfunction
 
 function! ale#linter#Get(original_filetypes) abort
-    let l:combined_linters = []
+    let l:possibly_duplicated_linters = []
 
     " Handle dot-seperated filetypes.
     for l:original_filetype in split(a:original_filetypes, '\.')
@@ -315,8 +315,22 @@ function! ale#linter#Get(original_filetypes) abort
             endfor
         endif
 
-        call extend(l:combined_linters, l:filetype_linters)
+        call extend(l:possibly_duplicated_linters, l:filetype_linters)
     endfor
 
-    return l:combined_linters
+    let l:name_list = []
+    let l:combined_linters = []
+
+    " Make sure we override linters so we don't get two with the same name,
+    " like 'eslint' for both 'javascript' and 'typescript'
+    "
+    " Note that the reverse calls here modify the List variables.
+    for l:linter in reverse(l:possibly_duplicated_linters)
+        if index(l:name_list, l:linter.name) < 0
+            call add(l:name_list, l:linter.name)
+            call add(l:combined_linters, l:linter)
+        endif
+    endfor
+
+    return reverse(l:combined_linters)
 endfunction

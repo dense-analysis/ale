@@ -1,5 +1,5 @@
-Before:
-  runtime ale_linters/javascript/eslint.vim
+After:
+  unlet! g:config_error_lines
 
 Execute(The eslint handler should parse lines correctly):
   AssertEqual
@@ -23,7 +23,7 @@ Execute(The eslint handler should parse lines correctly):
   \     'type': 'E',
   \   },
   \ ],
-  \ ale_linters#javascript#eslint#Handle(347, [
+  \ ale#handlers#eslint#Handle(347, [
   \   'This line should be ignored completely',
   \   '/path/to/some-filename.js:47:14: Missing trailing comma. [Warning/comma-dangle]',
   \   '/path/to/some-filename.js:56:41: Missing semicolon. [Error/semi]',
@@ -51,7 +51,7 @@ Execute(The eslint handler should print a message about a missing configuration 
   \   'text': 'eslint configuration error (type :ALEDetail for more information)',
   \   'detail': join(g:config_error_lines, "\n"),
   \ }],
-  \ ale_linters#javascript#eslint#Handle(347, g:config_error_lines[:])
+  \ ale#handlers#eslint#Handle(347, g:config_error_lines[:])
 
 Execute(The eslint handler should print a message for config parsing errors):
   let g:config_error_lines = [
@@ -79,11 +79,7 @@ Execute(The eslint handler should print a message for config parsing errors):
   \   'text': 'eslint configuration error (type :ALEDetail for more information)',
   \   'detail': join(g:config_error_lines, "\n"),
   \ }],
-  \ ale_linters#javascript#eslint#Handle(347, g:config_error_lines[:])
-
-After:
-  unlet! g:config_error_lines
-  call ale#linter#Reset()
+  \ ale#handlers#eslint#Handle(347, g:config_error_lines[:])
 
 Execute(The eslint handler should print a message for invalid configuration settings):
   let g:config_error_lines = [
@@ -113,7 +109,7 @@ Execute(The eslint handler should print a message for invalid configuration sett
   \   'text': 'eslint configuration error (type :ALEDetail for more information)',
   \   'detail': join(g:config_error_lines, "\n"),
   \ }],
-  \ ale_linters#javascript#eslint#Handle(347, g:config_error_lines[:])
+  \ ale#handlers#eslint#Handle(347, g:config_error_lines[:])
 
 Execute(The eslint handler should output end_col values where appropriate):
   AssertEqual
@@ -161,11 +157,28 @@ Execute(The eslint handler should output end_col values where appropriate):
   \     'type': 'E',
   \   },
   \ ],
-  \ ale_linters#javascript#eslint#Handle(347, [
+  \ ale#handlers#eslint#Handle(347, [
   \   'app.js:4:3: Parsing error: Unexpected token ''some string'' [Error]',
   \   'app.js:70:3: ''foo'' is not defined. [Error/no-undef]',
   \   'app.js:71:2: Unexpected `await` inside a loop. [Error/no-await-in-loop]',
   \   'app.js:72:6: Redundant use of `await` on a return value. [Error/no-return-await]',
   \   'app.js:73:4: Unexpected console statement [Error/no-console]',
   \   'app.js:74:4: Unexpected ''debugger'' statement. [Error/no-debugger]',
+  \ ])
+
+Execute(The eslint hint about using typescript-eslint-parser):
+  silent! noautocmd file foo.ts
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 451,
+  \     'col': 2,
+  \     'end_col': 2,
+  \     'text': 'Parsing error (You may need configure typescript-eslint-parser): Unexpected token ) [Error]',
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale#handlers#eslint#Handle(bufnr(''), [
+  \ 'foo.ts:451:2: Parsing error: Unexpected token ) [Error]',
   \ ])

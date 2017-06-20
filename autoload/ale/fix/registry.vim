@@ -14,7 +14,7 @@ let s:default_registry = {
 \   },
 \   'eslint': {
 \       'function': 'ale#fixers#eslint#Fix',
-\       'suggested_filetypes': ['javascript'],
+\       'suggested_filetypes': ['javascript', 'typescript'],
 \       'description': 'Apply eslint --fix to a file.',
 \   },
 \   'isort': {
