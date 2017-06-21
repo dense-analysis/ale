@@ -3,12 +3,14 @@
 
 let g:ale_php_phpcs_standard = get(g:, 'ale_php_phpcs_standard', '')
 
+call ale#Set('php_phpcs_executable', 'phpcs')
+call ale#Set('php_phpcs_use_global', 0)
+
 function! ale_linters#php#phpcs#GetExecutable(buffer) abort
-    return ale#path#ResolveLocalPath(
-    \   a:buffer,
+    return ale#node#FindExecutable(a:buffer, 'php_phpcs', [
     \   'vendor/bin/phpcs',
     \   'phpcs'
-    \)
+    \])
 endfunction
 
 function! ale_linters#php#phpcs#GetCommand(buffer) abort
