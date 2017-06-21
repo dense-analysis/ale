@@ -17,14 +17,10 @@ function! ale_linters#javascript#xo#GetCommand(buffer) abort
     \   . ' --reporter unix --stdin --stdin-filename %s'
 endfunction
 
-function! ale_linters#javascript#xo#Handle(buffer, lines) abort
-    " xo uses eslint and the output format is the same
-    return ale_linters#javascript#eslint#Handle(a:buffer, a:lines)
-endfunction
-
+" xo uses eslint and the output format is the same
 call ale#linter#Define('javascript', {
 \   'name': 'xo',
 \   'executable_callback': 'ale_linters#javascript#xo#GetExecutable',
 \   'command_callback': 'ale_linters#javascript#xo#GetCommand',
-\   'callback': 'ale_linters#javascript#xo#Handle',
+\   'callback': 'ale#handlers#eslint#Handle',
 \})

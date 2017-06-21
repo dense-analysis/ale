@@ -1,38 +1,29 @@
 Execute(The standard handler should parse lines correctly):
-  runtime ale_linters/javascript/standard.vim
-
   AssertEqual
   \ [
   \   {
-  \     'bufnr': 347,
   \     'lnum': 47,
   \     'col': 14,
   \     'text': 'Expected indentation of 2 spaces but found 4.',
   \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 56,
   \     'col': 41,
   \     'text': 'Strings must use singlequote.',
   \     'type': 'E',
   \   },
   \   {
-  \     'bufnr': 347,
   \     'lnum': 13,
   \     'col': 3,
   \     'text': 'Parsing error: Unexpected token',
   \     'type': 'E',
   \   },
   \ ],
-  \ ale_linters#javascript#standard#Handle(347, [
+  \ ale#handlers#eslint#Handle(347, [
   \   'This line should be ignored completely',
   \   '/path/to/some-filename.js:47:14: Expected indentation of 2 spaces but found 4.',
   \   '/path/to/some-filename.js:56:41: Strings must use singlequote.',
   \   'This line should be ignored completely',
   \   '/path/to/some-filename.js:13:3: Parsing error: Unexpected token',
   \ ])
-
-After:
-  call ale#linter#Reset()
-
