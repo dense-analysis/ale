@@ -14,12 +14,14 @@ function! ale_linters#php#phpcs#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#php#phpcs#GetCommand(buffer) abort
+    let l:executable = ale_linters#php#phpcs#GetExecutable(a:buffer)
+
     let l:standard = ale#Var(a:buffer, 'php_phpcs_standard')
     let l:standard_option = !empty(l:standard)
     \   ? '--standard=' . l:standard
     \   : ''
 
-    return ale_linters#php#phpcs#GetExecutable(a:buffer)
+    return ale#Escape(l:executable)
     \   . ' -s --report=emacs --stdin-path=%s ' . l:standard_option
 endfunction
 
