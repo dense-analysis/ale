@@ -1,26 +1,42 @@
 Before:
-    runtime ale_linters/ruby/brakeman.vim
+  Save g:ale_ruby_brakeman_options
+
+  runtime ale_linters/ruby/brakeman.vim
+
+  let g:ale_ruby_brakeman_options = ''
+
+  silent! cd /testplugin/test/command_callback
+  let g:dir = getcwd()
 
 After:
-    call ale#linter#Reset()
+  Restore
+
+  silent execute 'cd ' . fnameescape(g:dir)
+  unlet! g:dir
+
+  call ale#linter#Reset()
 
 Execute(The brakeman command callback should detect absence of a valid Rails app):
-    cd /testplugin/test/ruby_fixtures/not_a_rails_app/
-    AssertEqual
-    \   '',
-    \   ale_linters#ruby#brakeman#GetCommand(bufnr(''))
+  call ale#test#SetFilename('../ruby_fixtures/not_a_rails_app/test.rb')
+
+  AssertEqual
+  \   '',
+  \   ale_linters#ruby#brakeman#GetCommand(bufnr(''))
 
 Execute(The brakeman command callback should find a valid Rails app root):
-    cd /testplugin/test/ruby_fixtures/valid_rails_app/db/
-    AssertEqual
-    \   'brakeman -f json -q  -p /testplugin/test/ruby_fixtures/valid_rails_app',
-    \   ale_linters#ruby#brakeman#GetCommand(bufnr(''))
+  call ale#test#SetFilename('../ruby_fixtures/valid_rails_app/db/test.rb')
+
+  AssertEqual
+  \ 'brakeman -f json -q  -p '
+  \ . ale#Escape(simplify(g:dir . '/../ruby_fixtures/valid_rails_app')),
+  \ ale_linters#ruby#brakeman#GetCommand(bufnr(''))
 
 Execute(The brakeman command callback should include configured options):
-    cd /testplugin/test/ruby_fixtures/valid_rails_app/db/
-    let g:ale_ruby_brakeman_options = '--combobulate'
+  call ale#test#SetFilename('../ruby_fixtures/valid_rails_app/db/test.rb')
 
+  let g:ale_ruby_brakeman_options = '--combobulate'
 
-    AssertEqual
-    \   'brakeman -f json -q --combobulate -p /testplugin/test/ruby_fixtures/valid_rails_app',
-    \   ale_linters#ruby#brakeman#GetCommand(bufnr(''))
+  AssertEqual
+  \ 'brakeman -f json -q --combobulate -p '
+  \ . ale#Escape(simplify(g:dir . '/../ruby_fixtures/valid_rails_app')),
+  \ ale_linters#ruby#brakeman#GetCommand(bufnr(''))

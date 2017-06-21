@@ -40,7 +40,7 @@ function! ale_linters#ruby#brakeman#GetCommand(buffer) abort
 
     return 'brakeman -f json -q '
     \    . ale#Var(a:buffer, 'ruby_brakeman_options')
-    \    . ' -p ' . l:rails_root
+    \    . ' -p ' . ale#Escape(l:rails_root)
 endfunction
 
 function! s:FindRailsRoot(buffer) abort

@@ -5,10 +5,13 @@ Before:
 After:
   silent execute 'cd ' . fnameescape(b:dir)
   unlet! b:dir
+
   call ale#linter#Reset()
 
 Execute(The default C cppcheck command should be correct):
   runtime ale_linters/c/cppcheck.vim
+
+  call ale#test#SetFilename('cppcheck_paths/two/foo.cpp')
 
   AssertEqual
   \ 'cppcheck -q --language=c --enable=style %t',
@@ -16,15 +19,18 @@ Execute(The default C cppcheck command should be correct):
 
 Execute(cppcheck for C should detect compile_commands.json files):
   runtime ale_linters/c/cppcheck.vim
-  cd cppcheck_paths/one
+
+  call ale#test#SetFilename('cppcheck_paths/one/foo.cpp')
 
   AssertEqual
-  \ 'cd ' . shellescape(b:dir . '/cppcheck_paths/one') . ' && '
+  \ 'cd ' . ale#Escape(b:dir . '/cppcheck_paths/one') . ' && '
   \ . 'cppcheck -q --language=c --project=compile_commands.json --enable=style %t',
   \ ale_linters#c#cppcheck#GetCommand(bufnr(''))
 
 Execute(The default C++ cppcheck command should be correct):
   runtime ale_linters/cpp/cppcheck.vim
+
+  call ale#test#SetFilename('cppcheck_paths/two/foo.cpp')
 
   AssertEqual
   \ 'cppcheck -q --language=c++ --enable=style %t',
@@ -32,9 +38,10 @@ Execute(The default C++ cppcheck command should be correct):
 
 Execute(cppcheck for C++ should detect compile_commands.json files):
   runtime ale_linters/cpp/cppcheck.vim
-  cd cppcheck_paths/one
+
+  call ale#test#SetFilename('cppcheck_paths/one/foo.cpp')
 
   AssertEqual
-  \ 'cd ' . shellescape(b:dir . '/cppcheck_paths/one') . ' && '
+  \ 'cd ' . ale#Escape(b:dir . '/cppcheck_paths/one') . ' && '
   \ . 'cppcheck -q --language=c++ --project=compile_commands.json --enable=style %t',
   \ ale_linters#cpp#cppcheck#GetCommand(bufnr(''))
