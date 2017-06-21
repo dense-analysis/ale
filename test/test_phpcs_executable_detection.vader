@@ -1,0 +1,45 @@
+Before:
+  let g:ale_php_phpcs_executable = 'phpcs_test'
+
+  silent! cd /testplugin/test
+  let g:dir = getcwd()
+
+  runtime ale_linters/php/phpcs.vim
+
+After:
+  let g:ale_php_phpcs_executable = 'phpcs'
+  let g:ale_php_phpcs_use_global = 0
+
+  silent execute 'cd ' . g:dir
+  unlet! g:dir
+
+  call ale#linter#Reset()
+
+Execute(project with phpcs should use local by default):
+  silent noautocmd new phpcs-test-files/project-with-phpcs/vendor/bin/phpcs
+
+  AssertEqual
+  \ g:dir . '/phpcs-test-files/project-with-phpcs/vendor/bin/phpcs',
+  \ ale_linters#php#phpcs#GetExecutable(bufnr(''))
+
+  :q
+
+Execute(use-global should override local detection):
+  let g:ale_php_phpcs_use_global = 1
+
+  silent noautocmd new phpcs-test-files/project-with-phpcs/vendor/bin/phpcs
+
+  AssertEqual
+  \ 'phpcs_test',
+  \ ale_linters#php#phpcs#GetExecutable(bufnr(''))
+
+  :q
+
+Execute(project without phpcs should use global):
+  silent noautocmd new phpcs-test-files/project-without-phpcs/vendor/bin/phpcs
+
+  AssertEqual
+  \ 'phpcs_test',
+  \ ale_linters#php#phpcs#GetExecutable(bufnr(''))
+
+  :q

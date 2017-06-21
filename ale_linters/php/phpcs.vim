@@ -1,15 +1,28 @@
-" Author: jwilliams108 <https://github.com/jwilliams108>
+" Author: jwilliams108 <https://github.com/jwilliams108>, Eric Stern <https://github.com/firehed>
 " Description: phpcs for PHP files
 
 let g:ale_php_phpcs_standard = get(g:, 'ale_php_phpcs_standard', '')
 
+call ale#Set('php_phpcs_executable', 'phpcs')
+call ale#Set('php_phpcs_use_global', 0)
+
+function! ale_linters#php#phpcs#GetExecutable(buffer) abort
+    return ale#node#FindExecutable(a:buffer, 'php_phpcs', [
+    \   'vendor/bin/phpcs',
+    \   'phpcs'
+    \])
+endfunction
+
 function! ale_linters#php#phpcs#GetCommand(buffer) abort
+    let l:executable = ale_linters#php#phpcs#GetExecutable(a:buffer)
+
     let l:standard = ale#Var(a:buffer, 'php_phpcs_standard')
     let l:standard_option = !empty(l:standard)
     \   ? '--standard=' . l:standard
     \   : ''
 
-    return 'phpcs -s --report=emacs --stdin-path=%s ' . l:standard_option
+    return ale#Escape(l:executable)
+    \   . ' -s --report=emacs --stdin-path=%s ' . l:standard_option
 endfunction
 
 function! ale_linters#php#phpcs#Handle(buffer, lines) abort
@@ -36,7 +49,7 @@ endfunction
 
 call ale#linter#Define('php', {
 \   'name': 'phpcs',
-\   'executable': 'phpcs',
+\   'executable_callback': 'ale_linters#php#phpcs#GetExecutable',
 \   'command_callback': 'ale_linters#php#phpcs#GetCommand',
 \   'callback': 'ale_linters#php#phpcs#Handle',
 \})
