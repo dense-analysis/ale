@@ -1,0 +1,42 @@
+" NOTE: We use the 'b:' forms below both to make testing easier (no need to
+" mess with globals) and to ensure that we're properly using ale#Var()
+
+Before:
+  runtime ale_linters/perl/perlcritic.vim
+  silent noautocmd new testfile.pl
+
+
+After:
+  bwipeout
+
+
+Execute(no g:ale_perl_perlcritic_showrules):
+  let b:ale_perl_perlcritic_showrules = 0
+
+  AssertEqual
+  \ "perlcritic --verbose '". '%l:%c %m\n' . "' --nocolor --profile .../.perlcriticrc ",
+  \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))
+
+
+Execute(yes g:ale_perl_perlcritic_showrules):
+  let b:ale_perl_perlcritic_showrules = 1
+
+  AssertEqual
+  \ "perlcritic --verbose '". '%l:%c %m [%p]\n' . "' --nocolor --profile .../.perlcriticrc ",
+  \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))
+
+
+Execute(g:ale_perl_perlcritic_profile):
+  let b:ale_perl_perlcritic_profile   = 'beep'
+
+  AssertEqual
+  \ "perlcritic --verbose '". '%l:%c %m\n' . "' --nocolor --profile beep ",
+  \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))
+
+
+Execute(g:ale_perl_perlcritic_options):
+  let b:ale_perl_perlcritic_options   = 'beep'
+
+  AssertEqual
+  \ "perlcritic --verbose '". '%l:%c %m\n' . "' --nocolor --profile .../.perlcriticrc beep",
+  \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))
