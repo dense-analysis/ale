@@ -65,6 +65,13 @@ endfunction
 " Given a buffer number and a relative or absolute path, return 1 if the
 " two paths represent the same file on disk.
 function! ale#path#IsBufferPath(buffer, complex_filename) abort
+    " If the path is one of many different names for stdin, we have a match.
+    if a:complex_filename ==# '-'
+    \|| a:complex_filename ==# 'stdin'
+    \|| a:complex_filename[:0] ==# '<'
+        return 1
+    endif
+
     let l:test_filename = simplify(a:complex_filename)
 
     if l:test_filename[:1] ==# './'

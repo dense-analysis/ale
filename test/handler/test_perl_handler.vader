@@ -23,3 +23,17 @@ Execute(The Perl linter should ignore errors from other files):
   \   'Compilation failed in require at ' . b:path . '/bar.pl line 2.',
   \   'BEGIN failed--compilation aborted at ' . b:path . '/bar.pl line 2.',
   \ ])
+
+Execute(The Perl linter should complain about failing to locate modules):
+  AssertEqual
+  \ [
+  \    {
+  \     'lnum': '23',
+  \     'type': 'E',
+  \     'text': 'Can''t locate JustOneDb.pm in @INC (you may need to install the JustOneDb module) (@INC contains: /home/local/sean/work/PostgreSQL/6616/../../../../lib /home/local/sean/work/PostgreSQL/6616/lib lib /etc/perl /usr/local/lib/perl/5.18.2 /usr/local/share/perl/5.18.2 /usr/lib/perl5 /usr/share/perl5 /usr/lib/perl/5.18 /usr/share/perl/5.18 /usr/local/lib/site_perl .)',
+  \   },
+  \ ],
+  \ ale_linters#perl#perl#Handle(bufnr(''), [
+  \ 'Can''t locate JustOneDb.pm in @INC (you may need to install the JustOneDb module) (@INC contains: /home/local/sean/work/PostgreSQL/6616/../../../../lib /home/local/sean/work/PostgreSQL/6616/lib lib /etc/perl /usr/local/lib/perl/5.18.2 /usr/local/share/perl/5.18.2 /usr/lib/perl5 /usr/share/perl5 /usr/lib/perl/5.18 /usr/share/perl/5.18 /usr/local/lib/site_perl .) at - line 23.',
+  \ 'BEGIN failed--compilation aborted at - line 23.',
+  \ ])

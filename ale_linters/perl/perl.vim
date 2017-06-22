@@ -27,7 +27,7 @@ function! ale_linters#perl#perl#Handle(buffer, lines) abort
         let l:text = l:match[1]
         let l:type = 'E'
 
-        if l:match[2][-len(l:basename):] ==# l:basename
+        if ale#path#IsBufferPath(a:buffer, l:match[2])
         \&& l:text !=# 'BEGIN failed--compilation aborted'
             call add(l:output, {
             \   'lnum': l:line,

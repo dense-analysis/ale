@@ -24,3 +24,9 @@ Execute(ale#path#IsBufferPath should match paths with redundant slashes):
   silent file! foo.txt
 
   Assert ale#path#IsBufferPath(bufnr(''), getcwd() . '////foo.txt'), 'No match for foo.txt'
+
+Execute(ale#path#IsBufferPath should accept various names for stdin):
+  Assert ale#path#IsBufferPath(bufnr(''), '-')
+  Assert ale#path#IsBufferPath(bufnr(''), 'stdin')
+  Assert ale#path#IsBufferPath(bufnr(''), '<stdin>')
+  Assert ale#path#IsBufferPath(bufnr(''), '<somethingelse>')
