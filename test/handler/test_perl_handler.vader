@@ -1,27 +1,26 @@
 Before:
-  " Switch to the test rails directory.
-  let b:path = getcwd()
   silent! cd /testplugin/test/handler
+  let g:dir = getcwd()
 
   runtime ale_linters/perl/perl.vim
 
 After:
-  silent! 'cd ' . fnameescape(b:path)
-  unlet! b:path
+  silent execute 'cd ' . fnameescape(g:dir)
+  unlet! g:dir
 
   call ale#linter#Reset()
 
 Execute(The Perl linter should ignore errors from other files):
-  silent! noautocmd file bar.pl
+  call ale#test#SetFilename('bar.pl')
 
   AssertEqual
   \ [
   \    {'lnum': '2', 'type': 'E', 'text': 'Compilation failed in require'},
   \ ],
   \ ale_linters#perl#perl#Handle(bufnr(''), [
-  \   'syntax error at ' . b:path . '/foo.pm line 4, near "aklsdfjmy "',
-  \   'Compilation failed in require at ' . b:path . '/bar.pl line 2.',
-  \   'BEGIN failed--compilation aborted at ' . b:path . '/bar.pl line 2.',
+  \   'syntax error at ' . g:dir . '/foo.pm line 4, near "aklsdfjmy "',
+  \   'Compilation failed in require at ' . g:dir . '/bar.pl line 2.',
+  \   'BEGIN failed--compilation aborted at ' . g:dir . '/bar.pl line 2.',
   \ ])
 
 Execute(The Perl linter should complain about failing to locate modules):
