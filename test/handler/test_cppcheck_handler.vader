@@ -1,0 +1,38 @@
+Before:
+  silent! cd /testplugin/test/handler
+  let g:dir = getcwd()
+
+After:
+  silent execute 'cd ' . fnameescape(g:dir)
+  unlet! g:dir
+
+Execute(Basic errors should be handled by cppcheck):
+  call ale#test#SetFilename('test.cpp')
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 5,
+  \     'type': 'E',
+  \     'text': 'Array ''a[10]'' accessed at index 10, which is out of bounds',
+  \   },
+  \   {
+  \     'lnum': 7,
+  \     'type': 'W',
+  \     'text': 'Some other problem',
+  \   },
+  \ ],
+  \ ale#handlers#cppcheck#HandleCppCheckFormat(bufnr(''), [
+  \ '[test.cpp:5]: (error) Array ''a[10]'' accessed at index 10, which is out of bounds',
+  \ '[test.cpp:7]: (warning) Some other problem',
+  \ ])
+
+Execute(Problems from other files should be ignored by cppcheck):
+  call ale#test#SetFilename('test.cpp')
+
+  AssertEqual
+  \ [
+  \ ],
+  \ ale#handlers#cppcheck#HandleCppCheckFormat(bufnr(''), [
+  \ '[bar.cpp:5]: (error) Array ''a[10]'' accessed at index 10, which is out of bounds',
+  \ ])

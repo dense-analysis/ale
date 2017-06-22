@@ -177,24 +177,3 @@ Execute (Unix format functions should handle Windows paths):
   \   'C:\Users\w0rp\AppData\Local\Temp\Xyz123.go:27: foo',
   \   'C:\Users\w0rp\AppData\Local\Temp\Xyz123.go:53:10: foo',
   \ ])
-
-Execute (HandleCppCheckFormat should handle some example lines of output):
-  AssertEqual
-  \ [
-  \   {
-  \     'lnum': 5,
-  \     'col': 0,
-  \     'type': 'W',
-  \     'text': 'Variable a is assigned a value that is never used. (style)',
-  \   },
-  \   {
-  \     'lnum': 12,
-  \     'col': 0,
-  \     'type': 'E',
-  \     'text': 'Array a[10] accessed at index 10, which is out of bounds. (error)',
-  \   },
-  \ ],
-  \ ale#handlers#cppcheck#HandleCppCheckFormat(42, [
-  \   '[/tmp/test.c:5]: (style) Variable a is assigned a value that is never used.',
-  \   '[/tmp/test.c:12]: (error) Array a[10] accessed at index 10, which is out of bounds.'
-  \ ])
