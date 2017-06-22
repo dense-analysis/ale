@@ -1,20 +1,38 @@
-" NOTE: We use the 'b:' forms below both to make testing easier (no need to
-" mess with globals) and to ensure that we're properly using ale#Var()
+" NOTE: We use the 'b:' forms below to ensure that we're properly using
+" ale#Var()
+
+Given perl:
+  #!/usr/bin/env perl
+  use v5.10;
+  say 'Hi there!';
+
 
 Before:
-  runtime ale_linters/perl/perlcritic.vim
-  silent noautocmd new testfile.pl
+  Save g:ale_perl_perlcritic_profile
+  Save g:ale_perl_perlcritic_options
+  Save g:ale_perl_perlcritic_executable
+  Save g:ale_perl_perlcritic_showrules
+  silent! unlet g:ale_perl_perlcritic_options
+  silent! unlet g:ale_perl_perlcritic_executable
+  silent! unlet g:ale_perl_perlcritic_showrules
+  let g:ale_perl_perlcritic_profile  = ''
+
+  source ale_linters/perl/perlcritic.vim
 
 
 After:
-  bwipeout
+  Restore
+  silent! unlet b:ale_perl_perlcritic_profile
+  silent! unlet b:ale_perl_perlcritic_options
+  silent! unlet b:ale_perl_perlcritic_executable
+  silent! unlet b:ale_perl_perlcritic_showrules
 
 
 Execute(no g:ale_perl_perlcritic_showrules):
   let b:ale_perl_perlcritic_showrules = 0
 
   AssertEqual
-  \ "perlcritic --verbose '". '%l:%c %m\n' . "' --nocolor --profile .../.perlcriticrc ",
+  \ "'perlcritic' --verbose '". '%l:%c %m\n' . "' --nocolor",
   \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))
 
 
@@ -22,21 +40,21 @@ Execute(yes g:ale_perl_perlcritic_showrules):
   let b:ale_perl_perlcritic_showrules = 1
 
   AssertEqual
-  \ "perlcritic --verbose '". '%l:%c %m [%p]\n' . "' --nocolor --profile .../.perlcriticrc ",
+  \ "'perlcritic' --verbose '". '%l:%c %m [%p]\n' . "' --nocolor",
   \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))
 
 
-Execute(g:ale_perl_perlcritic_profile):
-  let b:ale_perl_perlcritic_profile   = 'beep'
+Execute(set g:ale_perl_perlcritic_profile):
+  let b:ale_perl_perlcritic_profile   = 'README.md'
 
-  AssertEqual
-  \ "perlcritic --verbose '". '%l:%c %m\n' . "' --nocolor --profile beep ",
+  Assert
   \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))
+  \  =~# "--profile '.*/README.md'"
 
 
 Execute(g:ale_perl_perlcritic_options):
-  let b:ale_perl_perlcritic_options   = 'beep'
+  let b:ale_perl_perlcritic_options   = 'beep boop'
 
   AssertEqual
-  \ "perlcritic --verbose '". '%l:%c %m\n' . "' --nocolor --profile .../.perlcriticrc beep",
+  \ "'perlcritic' --verbose '". '%l:%c %m\n' . "' --nocolor beep boop",
   \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))

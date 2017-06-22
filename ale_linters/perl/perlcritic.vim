@@ -5,7 +5,7 @@ let g:ale_perl_perlcritic_executable =
 \   get(g:, 'ale_perl_perlcritic_executable', 'perlcritic')
 
 let g:ale_perl_perlcritic_profile =
-\   get(g:, 'ale_perl_perlcritic_profile', '.../.perlcriticrc')
+\   get(g:, 'ale_perl_perlcritic_profile', '.perlcriticrc')
 
 let g:ale_perl_perlcritic_options =
 \   get(g:, 'ale_perl_perlcritic_options', '')
@@ -17,16 +17,38 @@ function! ale_linters#perl#perlcritic#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'perl_perlcritic_executable')
 endfunction
 
+function! ale_linters#perl#perlcritic#GetProfile(buffer) abort
+
+    " first see if we've been overridden
+    let l:profile = ale#Var(a:buffer, 'perl_perlcritic_profile')
+    if l:profile ==? ''
+        return ''
+    endif
+
+    " otherwise, iterate upwards to find it
+    return ale#path#FindNearestFile(a:buffer, l:profile)
+endfunction
+
 function! ale_linters#perl#perlcritic#GetCommand(buffer) abort
     let l:critic_verbosity = '%l:%c %m\n'
     if ale#Var(a:buffer, 'perl_perlcritic_showrules')
         let l:critic_verbosity = '%l:%c %m [%p]\n'
     endif
 
-    return ale_linters#perl#perlcritic#GetExecutable(a:buffer)
+    let l:profile = ale_linters#perl#perlcritic#GetProfile(a:buffer)
+    let l:options = ale#Var(a:buffer, 'perl_perlcritic_options')
+
+    let l:command = ale#Escape(ale_linters#perl#perlcritic#GetExecutable(a:buffer))
     \   . " --verbose '". l:critic_verbosity . "' --nocolor"
-    \   . " --profile " . ale#Var(a:buffer, 'perl_perlcritic_profile') . ' '
-    \   . ale#Var(a:buffer, 'perl_perlcritic_options')
+
+    if l:profile !=? ''
+        let l:command .= ' --profile ' . ale#Escape(l:profile)
+    endif
+    if l:options !=? ''
+        let l:command .= ' ' . l:options
+    endif
+
+    return l:command
 endfunction
 
 
