@@ -114,7 +114,14 @@ function! s:GroupLoclistItems(loclist) abort
             call add(l:grouped_items, [])
         endif
 
-        call add(l:grouped_items[-1], l:obj)
+        try
+          if l:obj.lnum > 1
+            call add(l:grouped_items[-1], l:obj)
+          endif
+        catch
+          echom 'skipping invalid sign'
+        finally
+        endtry
         let l:last_lnum = l:obj.lnum
     endfor
 
