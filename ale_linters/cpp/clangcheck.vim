@@ -15,7 +15,7 @@ endfunction
 
 call ale#linter#Define('cpp', {
 \   'name': 'clangcheck',
-\   'output_stream': 'stdout',
+\   'output_stream': 'stderr',
 \   'executable': 'clang-check',
 \   'command_callback': 'ale_linters#cpp#clangcheck#GetCommand',
 \   'callback': 'ale#handlers#gcc#HandleGCCFormat',
