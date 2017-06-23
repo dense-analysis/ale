@@ -52,7 +52,7 @@ function! ale_linters#cpp#clangtidy#GetCommand(buffer) abort
         \   ? ' -- ' . l:user_options
         \   : ''
     else
-        let l:extra_options = ' -p ' . l:user_builddir
+        let l:extra_options = ' -p ' . ale#Escape(l:user_builddir)
     endif
 
     return 'clang-tidy ' . l:check_option . '%s' . l:extra_options
