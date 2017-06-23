@@ -21,8 +21,8 @@ clangcheck                                                *ale-cpp-clangcheck*
 linter in combination with `compile_commands.json` files.
 
 
-g:ale_cpp_clang_check_options                     *g:ale_cpp_clang_check_options*
-                                                  *b:ale_cpp_clang_check_options*
+g:ale_cpp_clangcheck_options                      *g:ale_cpp_clangcheck_options*
+                                                  *b:ale_cpp_clangcheck_options*
   Type: |String|
   Default: `''`
 
