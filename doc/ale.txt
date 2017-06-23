@@ -21,6 +21,7 @@ CONTENTS                                                         *ale-contents*
       foodcritic..........................|ale-chef-foodcritic|
     cpp...................................|ale-cpp-options|
       clang...............................|ale-cpp-clang|
+      clangcheck..........................|ale-cpp-clangcheck|
       clangtidy...........................|ale-cpp-clangtidy|
       cppcheck............................|ale-cpp-cppcheck|
       cpplint.............................|ale-cpp-cpplint|

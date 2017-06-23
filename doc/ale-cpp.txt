@@ -14,6 +14,25 @@ g:ale_cpp_clang_options                               *g:ale_cpp_clang_options*
 
 
 -------------------------------------------------------------------------------
+clangcheck                                                *ale-cpp-clangcheck*
+
+`clang-check` will be run only when files are saved to disk, so that
+`compile_commands.json` files can be used. It is recommended to use this
+linter in combination with `compile_commands.json` files.
+
+
+g:ale_cpp_clang_check_options                     *g:ale_cpp_clang_check_options*
+                                                  *b:ale_cpp_clang_check_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to modify flags given to clang-check.
+
+  Setting this variable is mostly used to point to the build directory where
+  the `compile_commands.json` files are lcoated using `-p path/to/builddir` .
+
+
+-------------------------------------------------------------------------------
 clangtidy                                                   *ale-cpp-clangtidy*
 
 `clang-tidy` will be run only when files are saved to disk, so that
