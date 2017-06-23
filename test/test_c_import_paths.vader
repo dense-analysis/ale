@@ -234,5 +234,5 @@ Execute(The C++ ClangTidy handler should include json folders for projects with 
   silent noautocmd file file.cpp
 
   AssertEqual
-  \   'clang-tidy -checks=''*'' %s -p ''/testplugin/test/test_c_project/build'''
+  \   'clang-tidy -checks=''*'' %s -p ''/testplugin/test/test_c_project/json_project/build'''
   \ , ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
