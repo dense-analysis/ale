@@ -10,7 +10,7 @@ function! ale_linters#cpp#clangcheck#GetCommand(buffer) abort
     \   ? l:user_options
     \   : ''
 
-    return 'clang-check ' . '%s' . l:extra_options
+    return 'clang-check -analyze ' . '%s' . l:extra_options
 endfunction
 
 call ale#linter#Define('cpp', {
