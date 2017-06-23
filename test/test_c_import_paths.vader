@@ -226,3 +226,13 @@ Execute(The C++ Clang handler should include root directories for projects with 
   \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/hpp_file_project') . ' '
   \   . ' -'
   \ , ale_linters#cpp#clang#GetCommand(bufnr(''))
+
+Execute(The C++ ClangTidy handler should include json folders for projects with suitable build directory in them):
+  runtime! ale_linters/cpp/clangtidy.vim
+
+  cd test_c_projects/json_project/subdir
+  silent noautocmd file file.cpp
+
+  AssertEqual
+  \   'clang-tidy -checks=''*'' %s -p ''/test_c_project/build'''
+  \ , ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
