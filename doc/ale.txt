@@ -234,6 +234,10 @@ g:ale_change_sign_column_color                 *g:ale_change_sign_column_color*
   `ALESignColumnWithErrors`    -  Links to `error` by default.
   `ALESignColumnWithoutErrors` -  Uses the value for `SignColumn` by default.
 
+  The sign column color can only be changed globally in Vim. The sign column
+  might produce unexpected results if editing different files in split
+  windows.
+
 
 g:ale_echo_cursor                                           *g:ale_echo_cursor*
 
