@@ -18,9 +18,7 @@ clangtidy                                                   *ale-cpp-clangtidy*
 
 `clang-tidy` will be run only when files are saved to disk, so that
 `compile_commands.json` files can be used. It is recommended to use this
-linter in combination with `compile_commands.json` files. Actually, if
-a `compile_commands.json` is found in a folder upwards, then these settings
-override the |g:ale_cpp_clangtidy_options| setting.
+linter in combination with `compile_commands.json` files.
 
 
 g:ale_cpp_clangtidy_checks                         *g:ale_cpp_clangtidy_checks*
@@ -33,6 +31,19 @@ g:ale_cpp_clangtidy_checks                         *g:ale_cpp_clangtidy_checks*
   All options will be joined with commas, and escaped appropriately for
   the shell. The `-checks` flag can be removed entirely by setting this
   option to an empty List.
+
+g:ale_cpp_clangtidy_builddir                    *g:ale_cpp_clangtidy_builddir*
+                                                *b:ale_cpp_clangtidy_builddir*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to give the build directory to clang-tidy.
+
+  Setting this variable to a non-empty string will cause the `-p` argument
+  to be passed to `clang-tidy` so it finds `compile_commands.json` files for
+  compile command databases.
+  Setting this option overrides `ale_cpp_clangtidy_options`, since the
+  compilation database contains already all the compiler flags.
 
 g:ale_cpp_clangtidy_options                       *g:ale_cpp_clangtidy_options*
                                                   *b:ale_cpp_clangtidy_options*
