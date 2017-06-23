@@ -7,7 +7,7 @@ let g:ale_cpp_clang_check_options = get(g:, 'ale_cpp_clang_check_options', '')
 function! ale_linters#cpp#clangcheck#GetCommand(buffer) abort
     let l:user_options = ale#Var(a:buffer, 'cpp_clang_check_options')
     let l:extra_options = !empty(l:user_options)
-    \   ? ' -- ' . l:user_options
+    \   ? l:user_options
     \   : ''
 
     return 'clang-check ' . '%s' . l:extra_options
