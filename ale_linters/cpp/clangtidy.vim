@@ -30,7 +30,7 @@ function! ale_linters#cpp#clangtidy#GetCommand(buffer) abort
     if empty(l:user_builddir)
         let l:builddir_names = ale#Var(a:buffer, 'cpp_clangtidy_builddirnames')
         for l:name in l:builddir_names
-            let l:candidates = finddir(l:name, expand('%:p:h') . ';', -1)
+            let l:candidates = finddir(l:name, expand('#' . a:buffer.':p:h') . ';', -1)
             for l:candidate in l:candidates
                 if filereadable(l:candidate . '/compile_commands.json')
                     let l:user_builddir = l:candidate
