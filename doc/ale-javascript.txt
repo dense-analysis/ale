@@ -80,6 +80,17 @@ g:ale_javascript_prettier_use_global     *g:ale_javascript_prettier_use_global*
 -------------------------------------------------------------------------------
 prettier-eslint                                *ale-javascript-prettier-eslint*
 
+ALE supports `prettier-eslint` for easy integration with projects, but it is
+not recommended for new projects. ALE instead recommends configuring
+|g:ale_fixers| to run `'prettier'` and `'eslint'` in a sequence like so: >
+
+  let g:ale_fixers = {'javascript': ['prettier', 'eslint']}
+<
+
+This is because `prettier-eslint` cannot be configured to use the ESLint
+configuration file for input given via stdin, which is how ALE integrates with
+the tool.
+
 g:ale_javascript_prettier_eslint_executable
                                   *g:ale_javascript_prettier_eslint_executable*
                                   *b:ale_javascript_prettier_eslint_executable*
