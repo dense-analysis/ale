@@ -8,6 +8,7 @@ let g:ale_c_build_dir_names = get(g:, 'ale_c_build_dir_names', [
 \])
 
 " Given a buffer number, find the build subdirectory with compile commands
+" The subdirectory is returned without the trailing /
 function! ale#c#FindCompileCommands(buffer) abort
     for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
         for l:dirname in ale#Var(a:buffer, 'c_build_dir_names')
