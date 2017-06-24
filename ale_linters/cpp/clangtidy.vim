@@ -23,14 +23,13 @@ function! ale_linters#cpp#clangtidy#GetCommand(buffer) abort
     let l:user_options = ale#Var(a:buffer, 'cpp_clangtidy_options')
     let l:user_build_dir = ale#Var(a:buffer, 'c_build_dir')
 
-    " Build directory has the priority if
-    " both builddir and builddirnames options are defined
+    " c_build_dir has the priority if defined
     if empty(l:user_build_dir)
         let l:user_build_dir = ale#c#FindCompileCommands(a:buffer)
     endif
 
-    " We check again if user_builddir stayed empty after the builddirnames
-    " check
+    " We check again if user_builddir stayed empty after the
+    " c_build_dir_names check
     " If we found the compilation database we override the value of
     " l:extra_options
     if empty(l:user_build_dir)
