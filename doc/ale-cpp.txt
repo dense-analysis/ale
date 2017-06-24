@@ -50,6 +50,9 @@ clangcheck                                                *ale-cpp-clangcheck*
 `clang-check` will be run only when files are saved to disk, so that
 `compile_commands.json` files can be used. It is recommended to use this
 linter in combination with `compile_commands.json` files.
+Therefore, `clang-check` linter reads the options |g:ale_c_build_dir| and
+|g:ale_c_build_dir_names|. Also, setting |g:ale_c_build_dir| actually
+overrides |g:ale_c_build_dir_names|.
 
 
 g:ale_cpp_clangcheck_options                      *g:ale_cpp_clangcheck_options*
@@ -59,8 +62,9 @@ g:ale_cpp_clangcheck_options                      *g:ale_cpp_clangcheck_options*
 
   This variable can be changed to modify flags given to clang-check.
 
-  Setting this variable is mostly used to point to the build directory where
-  the `compile_commands.json` files are lcoated using `-p path/to/builddir` .
+  This variable should not be set to point to build subdirectory with
+  `-p path/to/build` option, as it is handled by the |g:ale_c_build_dir|
+  option.
 
 
 -------------------------------------------------------------------------------
