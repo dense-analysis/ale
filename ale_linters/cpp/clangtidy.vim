@@ -12,10 +12,10 @@ let g:ale_cpp_clangtidy_options = get(g:, 'ale_cpp_clangtidy_options', '')
 " Set this option to manually point to the build directory for clang-tidy.
 " This will disable all the other clangtidy_options, since compilation
 " flags are contained in the json
-let g:ale_cpp_clangtidy_builddir = get(g:, 'ale_cpp_clangtidy_builddir', '')
+let g:ale_c_build_dir = get(g:, 'ale_c_build_dir', '')
 
-let g:ale_cpp_clangtidy_builddirnames =
-            \ get(g:, 'ale_cpp_clangtidy_builddirnames', ['build', 'bin'])
+let g:ale_c_build_dir_names =
+            \ get(g:, 'ale_c_build_dir_names', ['build', 'bin'])
 
 function! ale_linters#cpp#clangtidy#GetCommand(buffer) abort
     let l:check_list = ale#Var(a:buffer, 'cpp_clangtidy_checks')
@@ -23,12 +23,12 @@ function! ale_linters#cpp#clangtidy#GetCommand(buffer) abort
     \   ? '-checks=' . ale#Escape(join(l:check_list, ',')) . ' '
     \   : ''
     let l:user_options = ale#Var(a:buffer, 'cpp_clangtidy_options')
-    let l:user_builddir = ale#Var(a:buffer, 'cpp_clangtidy_builddir')
+    let l:user_builddir = ale#Var(a:buffer, 'c_build_dir')
 
     " Build directory has the priority if
     " both builddir and builddirnames options are defined
     if empty(l:user_builddir)
-        let l:builddir_names = ale#Var(a:buffer, 'cpp_clangtidy_builddirnames')
+        let l:builddir_names = ale#Var(a:buffer, 'c_build_dir_names')
         for l:name in l:builddir_names
             let l:candidates = finddir(l:name, expand('#' . a:buffer.':p:h') . ';', -1)
             for l:candidate in l:candidates
