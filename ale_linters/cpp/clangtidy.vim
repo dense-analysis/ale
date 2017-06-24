@@ -14,8 +14,6 @@ let g:ale_cpp_clangtidy_options = get(g:, 'ale_cpp_clangtidy_options', '')
 " flags are contained in the json
 let g:ale_c_build_dir = get(g:, 'ale_c_build_dir', '')
 
-let g:ale_c_build_dir_names =
-            \ get(g:, 'ale_c_build_dir_names', ['build', 'bin'])
 
 function! ale_linters#cpp#clangtidy#GetCommand(buffer) abort
     let l:check_list = ale#Var(a:buffer, 'cpp_clangtidy_checks')
@@ -23,36 +21,24 @@ function! ale_linters#cpp#clangtidy#GetCommand(buffer) abort
     \   ? '-checks=' . ale#Escape(join(l:check_list, ',')) . ' '
     \   : ''
     let l:user_options = ale#Var(a:buffer, 'cpp_clangtidy_options')
-    let l:user_builddir = ale#Var(a:buffer, 'c_build_dir')
+    let l:user_build_dir = ale#Var(a:buffer, 'c_build_dir')
 
     " Build directory has the priority if
     " both builddir and builddirnames options are defined
-    if empty(l:user_builddir)
-        let l:builddir_names = ale#Var(a:buffer, 'c_build_dir_names')
-        for l:name in l:builddir_names
-            let l:candidates = finddir(l:name, expand('#' . a:buffer.':p:h') . ';', -1)
-            for l:candidate in l:candidates
-                if filereadable(l:candidate . '/compile_commands.json')
-                    let l:user_builddir = l:candidate
-                    break
-                endif
-            endfor
-            if !empty(l:user_builddir)
-                break
-            endif
-        endfor
+    if empty(l:user_build_dir)
+        let l:user_build_dir = ale#c#FindCompileCommands(a:buffer)
     endif
 
     " We check again if user_builddir stayed empty after the builddirnames
     " check
     " If we found the compilation database we override the value of
     " l:extra_options
-    if empty(l:user_builddir)
+    if empty(l:user_build_dir)
         let l:extra_options = !empty(l:user_options)
         \   ? ' -- ' . l:user_options
         \   : ''
     else
-        let l:extra_options = ' -p ' . ale#Escape(l:user_builddir)
+        let l:extra_options = ' -p ' . ale#Escape(l:user_build_dir)
     endif
 
     return 'clang-tidy ' . l:check_option . '%s' . l:extra_options
