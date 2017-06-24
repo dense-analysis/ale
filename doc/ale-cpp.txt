@@ -45,6 +45,29 @@ g:ale_cpp_clang_options                               *g:ale_cpp_clang_options*
 
 
 -------------------------------------------------------------------------------
+clangcheck                                                *ale-cpp-clangcheck*
+
+`clang-check` will be run only when files are saved to disk, so that
+`compile_commands.json` files can be used. It is recommended to use this
+linter in combination with `compile_commands.json` files.
+Therefore, `clang-check` linter reads the options |g:ale_c_build_dir| and
+|g:ale_c_build_dir_names|. Also, setting |g:ale_c_build_dir| actually
+overrides |g:ale_c_build_dir_names|.
+
+
+g:ale_cpp_clangcheck_options                      *g:ale_cpp_clangcheck_options*
+                                                  *b:ale_cpp_clangcheck_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to modify flags given to clang-check.
+
+  This variable should not be set to point to build subdirectory with
+  `-p path/to/build` option, as it is handled by the |g:ale_c_build_dir|
+  option.
+
+
+-------------------------------------------------------------------------------
 clangtidy                                                   *ale-cpp-clangtidy*
 
 `clang-tidy` will be run only when files are saved to disk, so that
@@ -73,11 +96,15 @@ g:ale_cpp_clangtidy_options                       *g:ale_cpp_clangtidy_options*
 
   This variable can be changed to modify flags given to clang-tidy.
 
-  Setting this variable to a non-empty string will cause the `--` argument
-  to be passed to `clang-tidy`, which will mean that detection of
-  `compile_commands.json` files for compile command databases will be
-  disabled. Only set this option if you want to control compiler flags
-  entirely manually.
+  - Setting this variable to a non-empty string,
+  - and working in a buffer where no compilation database is found using
+    |g:ale_c_build_dir_names| or |g:ale_c_build_dir|,
+  will cause the `--` argument to be passed to `clang-tidy`, which will mean
+  that detection of `compile_commands.json` files for compile command
+  databases will be disabled.
+  Only set this option if you want to control compiler flags
+  entirely manually, and no `compile_commands.json` file is in one
+  of the |g:ale_c_build_dir_names| directories of the project tree.
 
 
 -------------------------------------------------------------------------------
