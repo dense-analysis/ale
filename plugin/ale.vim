@@ -209,6 +209,10 @@ function! ALEInitAuGroups() abort
         autocmd!
         if g:ale_enabled && g:ale_lint_on_enter
             autocmd BufWinEnter,BufRead * call ale#Queue(300, 'lint_file')
+            " Track when the file is changed outside of Vim.
+            autocmd FileChangedShellPost * call ale#events#FileChangedEvent(str2nr(expand('<abuf>')))
+            " If the file has been changed, then check it again on enter.
+            autocmd BufEnter * call ale#events#EnterEvent()
         endif
     augroup END
 

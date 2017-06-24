@@ -12,3 +12,22 @@ function! ale#events#SaveEvent() abort
         call ale#Queue(0, 'lint_file')
     endif
 endfunction
+
+function! s:LintOnEnter() abort
+    if g:ale_enabled && g:ale_lint_on_enter && has_key(b:, 'ale_file_changed')
+        call remove(b:, 'ale_file_changed')
+        call ale#Queue(0, 'lint_file')
+    endif
+endfunction
+
+function! ale#events#EnterEvent() abort
+    call s:LintOnEnter()
+endfunction
+
+function! ale#events#FileChangedEvent(buffer) abort
+    call setbufvar(a:buffer, 'ale_file_changed', 1)
+
+    if bufnr('') == a:buffer
+        call s:LintOnEnter()
+    endif
+endfunction

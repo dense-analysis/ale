@@ -407,6 +407,10 @@ g:ale_lint_on_enter                                       *g:ale_lint_on_enter*
   desired, this variable can be set to `0` in your vimrc file to disable this
   behaviour.
 
+  The |FileChangedShellPost| and |BufEnter| events will be used to check if
+  files have been changed outside of Vim. If a file is changed outside of
+  Vim, it will be checked when it is next opened.
+
 
 g:ale_lint_on_filetype_changed                 *g:ale_lint_on_filetype_changed*
 
