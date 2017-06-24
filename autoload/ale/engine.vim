@@ -328,8 +328,8 @@ function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
             let l:item.sub_type = l:old_item.sub_type
         endif
 
-        if l:item.lnum == 0
-            " When errors appear at line 0, put them at line 1 instead.
+        if l:item.lnum < 1
+            " When errors appear before line 1, put them at line 1.
             let l:item.lnum = 1
         elseif l:item.lnum > l:last_line_number
             " When errors go beyond the end of the file, put them at the end.

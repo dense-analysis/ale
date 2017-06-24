@@ -136,7 +136,7 @@ function! ale_linters#kotlin#kotlinc#Handle(buffer, lines) abort
         let l:type_marker_str = l:type ==# 'warning' || l:type ==# 'info' ? 'W' : 'E'
 
         call add(l:output, {
-        \   'lnum': -1,
+        \   'lnum': 1,
         \   'text': l:text,
         \   'type': l:type_marker_str,
         \})
