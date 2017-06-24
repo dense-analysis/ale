@@ -2,11 +2,10 @@
 " Description: Functions for integrating with C-family linters.
 
 
-let g:ale_c_build_dir_names =
-            \ get(g:, 'ale_c_build_dir_names', [
-            \ 'build',
-            \ 'bin',
-            \ ])
+let g:ale_c_build_dir_names = get(g:, 'ale_c_build_dir_names', [
+\   'build',
+\   'bin',
+\])
 
 " Given a buffer number, find the build subdirectory with compile commands
 function! ale#c#FindCompileCommands(buffer) abort
