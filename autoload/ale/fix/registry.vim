@@ -42,6 +42,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix Python files with yapf.',
 \   },
+\   'rubocop': {
+\       'function': 'ale#fixers#rubocop#Fix',
+\       'suggested_filetypes': ['ruby'],
+\       'description': 'Fix ruby files with rubocop --auto-correct.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
