@@ -14,7 +14,7 @@ function! ale#c#FindCompileCommands(buffer) abort
         for l:dirname in ale#Var(a:buffer, 'c_build_dir_names')
             let l:c_build_dir = l:path . '/' . l:dirname
 
-            if filereadable(l:c_build_dir . 'compile_commands.json')
+            if filereadable(l:c_build_dir . '/compile_commands.json')
                 return l:c_build_dir
             endif
         endfor
