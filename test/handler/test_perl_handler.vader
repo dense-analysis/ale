@@ -36,3 +36,17 @@ Execute(The Perl linter should complain about failing to locate modules):
   \ 'Can''t locate JustOneDb.pm in @INC (you may need to install the JustOneDb module) (@INC contains: /home/local/sean/work/PostgreSQL/6616/../../../../lib /home/local/sean/work/PostgreSQL/6616/lib lib /etc/perl /usr/local/lib/perl/5.18.2 /usr/local/share/perl/5.18.2 /usr/lib/perl5 /usr/share/perl5 /usr/lib/perl/5.18 /usr/share/perl/5.18 /usr/local/lib/site_perl .) at - line 23.',
   \ 'BEGIN failed--compilation aborted at - line 23.',
   \ ])
+
+
+Execute(The Perl linter should complain about failing to locate modules):
+  AssertEqual
+  \ [
+  \ {'lnum': '8', 'type': 'E', 'text': 'BEGIN failed--compilation aborted'},
+  \ {'lnum': '10', 'type': 'E', 'text': 'BEGIN failed--compilation aborted'}
+  \ ],
+  \ ale_linters#perl#perl#Handle(bufnr(''), [
+  \ 'Unable to build `ro` accessor for slot `path` in `App::CPANFileUpdate` because the slot cannot be found. at /extlib/Method/Traits.pm line 189.',
+  \ 'BEGIN failed--compilation aborted at - line 8.',
+  \ 'Unable to build `ro` accessor for slot `path` in `App::CPANFileUpdate` because the slot cannot be found. at /extlib/Method/Traits.pm line 189.',
+  \ 'BEGIN failed--compilation aborted at - line 10.',
+  \ ])
