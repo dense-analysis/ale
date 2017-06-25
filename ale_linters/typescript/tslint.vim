@@ -17,12 +17,12 @@ function! ale_linters#typescript#tslint#Handle(buffer, lines) abort
     for l:error in json_decode(join(a:lines, ''))
         if ale#path#IsBufferPath(a:buffer, l:error.name)
             call add(l:output, {
-            \   'type': (l:error.ruleSeverity ==# 'WARNING' ? 'W' : 'E'),
+            \   'type': (get(l:error, 'ruleSeverity', '') ==# 'WARNING' ? 'W' : 'E'),
             \   'text': l:error.failure,
             \   'lnum': l:error.startPosition.line + 1,
-            \   'col': l:error.startPosition.position + 1,
+            \   'col': l:error.startPosition.character + 1,
             \   'end_lnum': l:error.endPosition.line + 1,
-            \   'end_col': l:error.endPosition.position + 1,
+            \   'end_col': l:error.endPosition.character + 1,
             \})
         endif
     endfor

@@ -25,11 +25,19 @@ Execute(The tslint handler should parse lines correctly):
   \   },
   \   {
   \     'lnum': 2,
-  \     'col': 15,
+  \     'col': 8,
   \     'end_lnum': 3,
-  \     'end_col': 23,
+  \     'end_col': 12,
   \     'text': 'Something else',
   \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 31,
+  \     'col': 9,
+  \     'end_lnum': 31,
+  \     'end_col': 20,
+  \     'text': 'Calls to console.log are not allowed.',
+  \     'type': 'E',
   \   },
   \ ],
   \ ale_linters#typescript#tslint#Handle(bufnr(''), [json_encode([
@@ -37,7 +45,7 @@ Execute(The tslint handler should parse lines correctly):
   \     'endPosition': {
   \       'character': 14,
   \       'line': 0,
-  \       'position': 14
+  \       'position': 1000
   \     },
   \     'failure': 'Missing semicolon',
   \     'fix': {
@@ -51,14 +59,14 @@ Execute(The tslint handler should parse lines correctly):
   \     'startPosition': {
   \       'character': 14,
   \       'line': 0,
-  \       'position': 14
+  \       'position': 1000
   \     }
   \   },
   \   {
   \     'endPosition': {
   \       'character': 11,
   \       'line': 2,
-  \       'position': 22
+  \       'position': 1000
   \     },
   \     'failure': 'Something else',
   \     'fix': {
@@ -72,7 +80,7 @@ Execute(The tslint handler should parse lines correctly):
   \     'startPosition': {
   \       'character': 7,
   \       'line': 1,
-  \       'position': 14
+  \       'position': 1000
   \     }
   \   },
   \   {
@@ -94,6 +102,21 @@ Execute(The tslint handler should parse lines correctly):
   \       'character': 7,
   \       'line': 1,
   \       'position': 14
+  \     }
+  \   },
+  \   {
+  \     "endPosition": {
+  \       "character": 19,
+  \       "line": 30,
+  \       "position": 14590
+  \     },
+  \     "failure": "Calls to console.log are not allowed.",
+  \     'name': 'app/test.ts',
+  \     "ruleName": "no-console",
+  \     "startPosition": {
+  \       "character": 8,
+  \       "line": 30,
+  \       "position": 14579
   \     }
   \   },
   \])])
