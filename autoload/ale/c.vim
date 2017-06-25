@@ -2,11 +2,18 @@
 " Description: Functions for integrating with C-family linters.
 
 function! ale#c#FindProjectRoot(buffer) abort
-    for l:project_filename in ['configure', 'Makefile', 'CMakeLists.txt']
+    for l:project_filename in ['.git/HEAD', 'configure', 'Makefile', 'CMakeLists.txt']
         let l:full_path = ale#path#FindNearestFile(a:buffer, l:project_filename)
 
         if !empty(l:full_path)
-            return fnamemodify(l:full_path, ':h')
+            let l:path = fnamemodify(l:full_path, ':h')
+
+            " Correct .git path detection.
+            if fnamemodify(l:path, ':t') ==# '.git'
+                let l:path = fnamemodify(l:path, ':h')
+            endif
+
+            return l:path
         endif
     endfor
 
