@@ -298,14 +298,19 @@ highlight clear ALEWarningSign
 
 ### 5.iv. How can I show errors or warnings in my statusline?
 
-[vim-airline](https://github.com/vim-airline/vim-airline) integrates with
-ALE for displaying error information in the status bar. If you want to see
-the status for ALE in a nice format, it is recommended to use vim-airline
-with ALE.
+[vim-airline](https://github.com/vim-airline/vim-airline) integrates with ALE
+for displaying error information in the status bar. If you want to see the
+status for ALE in a nice format, it is recommended to use vim-airline with ALE.
+The airline extension can be enabled by adding the following to your vimrc:
 
-ALE offers the ability to show some information in statuslines with no extra
-plugins. ALE provides a function for getting a summary with the number of
-problems detected, and you can implement your own function for your statusline.
+```vim
+" Set this. Airline will handle the rest.
+let g:airline#extensions#ale#enabled = 1
+```
+
+If you don't want to use vim-airline, you can implement your own statusline
+function without adding any other plugins. ALE provides a function for counting
+the number of problems for this purpose, named `ale#statusline#Count`.
 
 Say you want to display all errors as one figure, and all non-errors as another
 figure. You can do the following:
