@@ -21,7 +21,6 @@ function! ale_linters#elm#make#Handle(buffer, lines) abort
 
                 if l:file_is_buffer
                     call add(l:output, {
-                    \    'bufnr': a:buffer,
                     \    'lnum': l:error.region.start.line,
                     \    'col': l:error.region.start.column,
                     \    'type': (l:error.type ==? 'error') ? 'E' : 'W',
@@ -37,9 +36,7 @@ function! ale_linters#elm#make#Handle(buffer, lines) abort
 
     if len(l:unparsed_lines) > 0
         call add(l:output, {
-        \    'bufnr': a:buffer,
-        \    'lnum': 0,
-        \    'col': 0,
+        \    'lnum': 1,
         \    'type': 'E',
         \    'text': l:unparsed_lines[0],
         \    'detail': join(l:unparsed_lines, "\n")
