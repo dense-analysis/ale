@@ -28,10 +28,6 @@ function! ale#fix#ApplyQueuedFixes() abort
     call remove(g:ale_fix_buffer_data, l:buffer)
 
     if l:data.changes_made
-        if l:data.should_save
-             noautocmd :w!
-        endif
-
         call setline(1, l:data.output)
 
         let l:start_line = len(l:data.output) + 1
@@ -44,7 +40,7 @@ function! ale#fix#ApplyQueuedFixes() abort
         endif
 
         if l:data.should_save
-            set nomodified
+             noautocmd :w!
         endif
     endif
 
