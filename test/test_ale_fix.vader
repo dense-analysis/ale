@@ -239,6 +239,7 @@ Execute(ALEFix should save files on the save event):
   let g:ale_enabled = 1
 
   noautocmd silent file fix_test_file
+  noautocmd :w
 
   let g:ale_fixers.testft = ['AddDollars']
 

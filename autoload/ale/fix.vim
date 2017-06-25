@@ -40,7 +40,11 @@ function! ale#fix#ApplyQueuedFixes() abort
         endif
 
         if l:data.should_save
-             noautocmd :w!
+            if empty(&buftype)
+                noautocmd :w!
+            else
+                set nomodified
+            endif
         endif
     endif
 
