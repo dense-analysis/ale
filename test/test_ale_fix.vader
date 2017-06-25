@@ -239,7 +239,7 @@ Execute(ALEFix should save files on the save event):
   let g:ale_enabled = 1
 
   noautocmd silent file fix_test_file
-  noautocmd :w
+  call writefile(getline(1, '$'), 'fix_test_file')
 
   let g:ale_fixers.testft = ['AddDollars']
 
@@ -247,7 +247,6 @@ Execute(ALEFix should save files on the save event):
   call ale#events#SaveEvent()
 
   " We should save the file.
-  Assert filereadable('fix_test_file'), 'The file cannot be read'
   AssertEqual ['$a', '$b', '$c'], readfile('fix_test_file')
   Assert !&modified, 'The was marked as ''modified'''
 
