@@ -1,8 +1,13 @@
 Execute(ale#path#IsBufferPath should match simple relative paths):
-  silent file! foo.txt
+  call ale#test#SetFilename('app/foo.txt')
 
-  Assert ale#path#IsBufferPath(bufnr(''), 'foo.txt'), 'No match for foo.txt'
-  Assert !ale#path#IsBufferPath(bufnr(''), 'bar.txt'), 'Bad match for bar.txt'
+  Assert ale#path#IsBufferPath(bufnr(''), 'app/foo.txt'), 'No match for foo.txt'
+  Assert !ale#path#IsBufferPath(bufnr(''), 'app/bar.txt'), 'Bad match for bar.txt'
+
+Execute(ale#path#IsBufferPath should match relative paths with dots):
+  call ale#test#SetFilename('app/foo.txt')
+
+  Assert ale#path#IsBufferPath(bufnr(''), '../../app/foo.txt'), 'No match for ../../app/foo.txt'
 
 Execute(ale#path#IsBufferPath should match absolute paths):
   silent file! foo.txt
@@ -30,3 +35,9 @@ Execute(ale#path#IsBufferPath should accept various names for stdin):
   Assert ale#path#IsBufferPath(bufnr(''), 'stdin')
   Assert ale#path#IsBufferPath(bufnr(''), '<stdin>')
   Assert ale#path#IsBufferPath(bufnr(''), '<somethingelse>')
+
+Execute(ale#path#IsBufferPath should match files in /tmp):
+  call ale#test#SetFilename('app/test.ts')
+
+  Assert ale#path#IsBufferPath(bufnr(''), '../../../../../../../../tmp/vG0hKyD/1/test.ts')
+  Assert ale#path#IsBufferPath(bufnr(''), '/tmp/vG0hKyD/1/test.ts')

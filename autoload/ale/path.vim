@@ -78,6 +78,16 @@ function! ale#path#IsBufferPath(buffer, complex_filename) abort
         let l:test_filename = l:test_filename[2:]
     endif
 
+    if l:test_filename[:1] ==# '..'
+        " Remove ../../ etc. from the front of the path.
+        let l:test_filename = substitute(l:test_filename, '\v^(\.\.[/\\])+', '/', '')
+    endif
+
+    " Use the basename for files in /tmp, as they are likely our files.
+    if l:test_filename[:len($TMPDIR) - 1] ==# $TMPDIR
+        let l:test_filename = fnamemodify(l:test_filename, ':t')
+    endif
+
     let l:buffer_filename = expand('#' . a:buffer . ':p')
 
     return l:buffer_filename ==# l:test_filename

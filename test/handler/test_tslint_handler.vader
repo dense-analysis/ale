@@ -1,41 +1,99 @@
 Before:
   runtime ale_linters/typescript/tslint.vim
 
+  silent! cd /testplugin/test/handler
+  let g:dir = getcwd()
+
+After:
+  silent execute 'cd ' . fnameescape(g:dir)
+  unlet! g:dir
+
+  call ale#linter#Reset()
+
 Execute(The tslint handler should parse lines correctly):
+  call ale#test#SetFilename('app/test.ts')
+
   AssertEqual
   \ [
   \   {
-  \     'lnum': 235,
-  \     'col': 21,
-  \     'text': 'unused expression, expected an assignment or function call',
-  \     'type': 'W',
-  \   },
-  \   {
-  \     'lnum': 35,
-  \     'col': 6,
+  \     'lnum': 1,
+  \     'col': 15,
+  \     'end_lnum': 1,
+  \     'end_col': 15,
   \     'text': 'Missing semicolon',
   \     'type': 'E',
   \   },
   \   {
-  \     'lnum': 147,
-  \     'col': 10,
-  \     'text': 'Unnecessary semicolon',
+  \     'lnum': 2,
+  \     'col': 15,
+  \     'end_lnum': 3,
+  \     'end_col': 23,
+  \     'text': 'Something else',
   \     'type': 'W',
   \   },
-  \   {
-  \     'lnum': 101,
-  \     'col': 25,
-  \     'text': 'Unnecessary trailing comma',
-  \     'type': 'E',
-  \   },
   \ ],
-  \ ale_linters#typescript#tslint#Handle(347, [
-  \   'This line should be ignored completely',
-  \   'WARNING: hello.ts[235, 21]: unused expression, expected an assignment or function call',
-  \   'ERROR: hello.ts[35, 6]: Missing semicolon',
-  \   'WARNING: hello.ts[147, 10]: Unnecessary semicolon',
-  \   'ERROR: hello.ts[101, 25]: Unnecessary trailing comma'
-  \ ])
-
-After:
-  call ale#linter#Reset()
+  \ ale_linters#typescript#tslint#Handle(bufnr(''), [json_encode([
+  \   {
+  \     'endPosition': {
+  \       'character': 14,
+  \       'line': 0,
+  \       'position': 14
+  \     },
+  \     'failure': 'Missing semicolon',
+  \     'fix': {
+  \       'innerLength': 0,
+  \       'innerStart': 14,
+  \       'innerText': ';'
+  \     },
+  \     'name': 'app/test.ts',
+  \     'ruleName': 'semicolon',
+  \     'ruleSeverity': 'ERROR',
+  \     'startPosition': {
+  \       'character': 14,
+  \       'line': 0,
+  \       'position': 14
+  \     }
+  \   },
+  \   {
+  \     'endPosition': {
+  \       'character': 11,
+  \       'line': 2,
+  \       'position': 22
+  \     },
+  \     'failure': 'Something else',
+  \     'fix': {
+  \       'innerLength': 0,
+  \       'innerStart': 14,
+  \       'innerText': ';'
+  \     },
+  \     'name': 'app/test.ts',
+  \     'ruleName': 'something',
+  \     'ruleSeverity': 'WARNING',
+  \     'startPosition': {
+  \       'character': 7,
+  \       'line': 1,
+  \       'position': 14
+  \     }
+  \   },
+  \   {
+  \     'endPosition': {
+  \       'character': 11,
+  \       'line': 2,
+  \       'position': 22
+  \     },
+  \     'failure': 'Something else',
+  \     'fix': {
+  \       'innerLength': 0,
+  \       'innerStart': 14,
+  \       'innerText': ';'
+  \     },
+  \     'name': 'app/something-else.ts',
+  \     'ruleName': 'something',
+  \     'ruleSeverity': 'WARNING',
+  \     'startPosition': {
+  \       'character': 7,
+  \       'line': 1,
+  \       'position': 14
+  \     }
+  \   },
+  \])])

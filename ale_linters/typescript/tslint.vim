@@ -12,27 +12,19 @@ function! ale_linters#typescript#tslint#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#typescript#tslint#Handle(buffer, lines) abort
-    " Matches patterns like the following:
-    "
-    " WARNING: hello.ts[113, 6]: Unnecessary semicolon
-    " ERROR: hello.ts[133, 10]: Missing semicolon
-
-    let l:ext = '.' . fnamemodify(bufname(a:buffer), ':e')
-    let l:pattern = '\<\(WARNING\|ERROR\)\>: .\+' . l:ext . '\[\(\d\+\), \(\d\+\)\]: \(.\+\)'
     let l:output = []
 
-    for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        let l:type = l:match[1]
-        let l:line = l:match[2] + 0
-        let l:column = l:match[3] + 0
-        let l:text = l:match[4]
-
-        call add(l:output, {
-        \   'type': (l:type ==# 'WARNING' ? 'W' : 'E'),
-        \   'lnum': l:line,
-        \   'col': l:column,
-        \   'text': l:text,
-        \})
+    for l:error in json_decode(join(a:lines, ''))
+        if ale#path#IsBufferPath(a:buffer, l:error.name)
+            call add(l:output, {
+            \   'type': (l:error.ruleSeverity ==# 'WARNING' ? 'W' : 'E'),
+            \   'text': l:error.failure,
+            \   'lnum': l:error.startPosition.line + 1,
+            \   'col': l:error.startPosition.position + 1,
+            \   'end_lnum': l:error.endPosition.line + 1,
+            \   'end_col': l:error.endPosition.position + 1,
+            \})
+        endif
     endfor
 
     return l:output
@@ -46,11 +38,12 @@ function! ale_linters#typescript#tslint#BuildLintCommand(buffer) abort
     \)
 
     let l:tslint_config_option = !empty(l:tslint_config_path)
-    \   ? '-c ' . ale#Escape(l:tslint_config_path)
+    \   ? ' -c ' . ale#Escape(l:tslint_config_path)
     \   : ''
 
     return ale_linters#typescript#tslint#GetExecutable(a:buffer)
-    \   . ' ' . l:tslint_config_option
+    \   . ' --format json'
+    \   . l:tslint_config_option
     \   . ' %t'
 endfunction
 
