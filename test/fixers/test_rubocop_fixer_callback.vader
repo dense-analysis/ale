@@ -23,7 +23,6 @@ Execute(The rubocop callback should return the correct default values):
 
   AssertEqual
   \ {'read_temporary_file': 1,
-  \  'command': '''''\''''' . g:ale_ruby_rubocop_executable . '''\'''' '
-  \      . '--format emacs --force-exclusion  --stdin ' . g:dir
-  \      . '/ruby_paths/dummy.rb'' --auto-correct %t' },
+  \  'command': "'" . g:ale_ruby_rubocop_executable . "' "
+  \      . '--auto-correct %t' },
   \ ale#fixers#rubocop#Fix(bufnr(''))
