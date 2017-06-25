@@ -41,3 +41,4 @@ Execute(ale#path#IsBufferPath should match files in /tmp):
 
   Assert ale#path#IsBufferPath(bufnr(''), '../../../../../../../../tmp/vG0hKyD/1/test.ts')
   Assert ale#path#IsBufferPath(bufnr(''), '/tmp/vG0hKyD/1/test.ts')
+  Assert ale#path#IsBufferPath(bufnr(''), '/run/user/1000/vG0hKyD/1/test.ts')

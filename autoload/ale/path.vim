@@ -62,6 +62,23 @@ function! ale#path#IsAbsolute(filename) abort
     return a:filename[:0] ==# '/' || a:filename[1:2] ==# ':\'
 endfunction
 
+" Given a filename, return 1 if the file represents some temporary file
+" created by Vim.
+function! ale#path#IsTempName(filename) abort
+    let l:prefix_list = [
+    \   $TMPDIR,
+    \   '/run/user',
+    \]
+
+    for l:prefix in l:prefix_list
+        if a:filename[:len(l:prefix) - 1] ==# l:prefix
+            return 1
+        endif
+    endfor
+
+    return 0
+endfunction
+
 " Given a buffer number and a relative or absolute path, return 1 if the
 " two paths represent the same file on disk.
 function! ale#path#IsBufferPath(buffer, complex_filename) abort
@@ -83,8 +100,8 @@ function! ale#path#IsBufferPath(buffer, complex_filename) abort
         let l:test_filename = substitute(l:test_filename, '\v^(\.\.[/\\])+', '/', '')
     endif
 
-    " Use the basename for files in /tmp, as they are likely our files.
-    if l:test_filename[:len($TMPDIR) - 1] ==# $TMPDIR
+    " Use the basename for temporary files, as they are likely our files.
+    if ale#path#IsTempName(l:test_filename)
         let l:test_filename = fnamemodify(l:test_filename, ':t')
     endif
 

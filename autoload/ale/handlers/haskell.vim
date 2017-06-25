@@ -6,10 +6,11 @@ function! ale#handlers#haskell#HandleGHCFormat(buffer, lines) abort
     "
     "Appoint/Lib.hs:8:1: warning:
     "Appoint/Lib.hs:8:1:
-    let l:pattern = '^[^:]\+:\(\d\+\):\(\d\+\):\(.*\)\?$'
+    let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):(\d+):(.*)?$'
     let l:output = []
 
     let l:corrected_lines = []
+
     for l:line in a:lines
         if len(matchlist(l:line, l:pattern)) > 0
             call add(l:corrected_lines, l:line)
@@ -30,21 +31,25 @@ function! ale#handlers#haskell#HandleGHCFormat(buffer, lines) abort
             continue
         endif
 
-        let l:errors = matchlist(l:match[3], '\(warning:\|error:\)\(.*\)')
+        if !ale#path#IsBufferPath(a:buffer, l:match[1])
+            continue
+        endif
+
+        let l:errors = matchlist(l:match[4], '\(warning:\|error:\)\(.*\)')
 
         if len(l:errors) > 0
           let l:type = l:errors[1]
           let l:text = l:errors[2]
         else
           let l:type = ''
-          let l:text = l:match[3]
+          let l:text = l:match[4]
         endif
 
         let l:type = l:type ==# '' ? 'E' : toupper(l:type[0])
 
         call add(l:output, {
-        \   'lnum': l:match[1] + 0,
-        \   'col': l:match[2] + 0,
+        \   'lnum': l:match[2] + 0,
+        \   'col': l:match[3] + 0,
         \   'text': l:text,
         \   'type': l:type,
         \})

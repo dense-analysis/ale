@@ -1,4 +1,6 @@
 Execute(The ghc handler should handle hdevtools output):
+  call ale#test#SetFilename('foo.hs')
+
   AssertEqual
   \ [
   \   {
@@ -8,13 +10,15 @@ Execute(The ghc handler should handle hdevtools output):
   \     'text': '• Couldnt match type ‘a -> T.Text’ with ‘T.Text’ Expected type: [T.Text]',
   \   },
   \ ],
-  \ ale#handlers#haskell#HandleGHCFormat(12, [
-  \ '/path/to/foo.hs:147:62: warning:',
+  \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
+  \ 'foo.hs:147:62: warning:',
   \ '• Couldnt match type ‘a -> T.Text’ with ‘T.Text’',
   \ '  Expected type: [T.Text]',
   \ ])
 
 Execute(The ghc handler should handle ghc 8 output):
+  call ale#test#SetFilename('src/Appoint/Lib.hs')
+
   AssertEqual
   \ [
   \   {
@@ -30,7 +34,7 @@ Execute(The ghc handler should handle ghc 8 output):
   \     'text': ' Failed to load interface for ‘GitHub.Endpoints.PullRequests’ Use -v to see a list of the files searched for.',
   \   },
   \ ],
-  \ ale#handlers#haskell#HandleGHCFormat(47, [
+  \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
   \ '',
   \ 'src/Appoint/Lib.hs:6:1: error:',
   \ '    Failed to load interface for ‘GitHub.Data’',
@@ -42,6 +46,8 @@ Execute(The ghc handler should handle ghc 8 output):
   \ ])
 
 Execute(The ghc handler should handle ghc 7 output):
+  call ale#test#SetFilename('src/Main.hs')
+
   AssertEqual
   \ [
   \   {
@@ -51,7 +57,7 @@ Execute(The ghc handler should handle ghc 7 output):
   \     'text': ' parse error (possibly incorrect indentation or mismatched brackets)',
   \   },
   \ ],
-  \ ale#handlers#haskell#HandleGHCFormat(47, [
+  \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
   \ 'src/Main.hs:168:1:',
   \ '    parse error (possibly incorrect indentation or mismatched brackets)',
   \ ])
