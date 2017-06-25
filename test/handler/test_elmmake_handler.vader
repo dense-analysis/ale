@@ -1,0 +1,66 @@
+Before:
+  runtime ale_linters/elm/make.vim
+
+Execute(The elm-make handler should parse lines correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 33,
+  \     'col': 1,
+  \     'type': 'W',
+  \     'text': 'warning overview',
+  \     'detail': "warning overview\n\nwarning details",
+  \   },
+  \   {
+  \     'lnum': 404,
+  \     'col': 1,
+  \     'type': 'E',
+  \     'text': 'error overview 1',
+  \     'detail': "error overview 1\n\nerror details 1",
+  \   },
+  \   {
+  \     'lnum': 406,
+  \     'col': 5,
+  \     'type': 'E',
+  \     'text': 'error overview 2',
+  \     'detail': "error overview 2\n\nerror details 2",
+  \   },
+  \   {
+  \     'lnum': 406,
+  \     'col': 5,
+  \     'type': 'E',
+  \     'text': 'error overview 3',
+  \     'detail': "error overview 3\n\nerror details 3",
+  \   },
+  \ ],
+  \ ale_linters#elm#make#Handle(347, [
+  \   '[{"tag":"unused import","overview":"warning overview","details":"warning details","region":{"start":{"line":33,"column":1},"end":{"line":33,"column":19}},"type":"warning","file":"' . $TMPDIR . 'Module.elm"}]',
+  \   '[{"tag":"TYPE MISMATCH","overview":"error overview 1","subregion":{"start":{"line":406,"column":5},"end":{"line":408,"column":18}},"details":"error details 1","region":{"start":{"line":404,"column":1},"end":{"line":408,"column":18}},"type":"error","file":"' . $TMPDIR . 'Module.elm"},{"tag":"TYPE MISMATCH","overview":"error overview 2","subregion":{"start":{"line":407,"column":12},"end":{"line":407,"column":17}},"details":"error details 2","region":{"start":{"line":406,"column":5},"end":{"line":407,"column":17}},"type":"error","file":"' . $TMPDIR . 'Module.elm"},{"tag":"TYPE MISMATCH","overview":"error overview 3","subregion":{"start":{"line":406,"column":88},"end":{"line":406,"column":93}},"details":"error details 3","region":{"start":{"line":406,"column":5},"end":{"line":406,"column":93}},"type":"error","file":"' . $TMPDIR . 'Module.elm"}]'
+  \ ])
+
+Execute(The elm-make handler should put an error on the first line if a line cannot be parsed):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 33,
+  \     'col': 1,
+  \     'type': 'W',
+  \     'text': 'warning overview',
+  \     'detail': "warning overview\n\nwarning details",
+  \   },
+  \   {
+  \     'lnum': 1,
+  \     'type': 'E',
+  \     'text': 'Not JSON',
+  \     'detail': "Not JSON\nAlso not JSON",
+  \   },
+  \ ],
+  \ ale_linters#elm#make#Handle(347, [
+  \   '[{"tag":"unused import","overview":"warning overview","details":"warning details","region":{"start":{"line":33,"column":1},"end":{"line":33,"column":19}},"type":"warning","file":"' . $TMPDIR . 'Module.elm"}]',
+  \   "Not JSON",
+  \   "Also not JSON",
+  \ ])
+
+After:
+  unlet! g:config_error_lines
+  call ale#linter#Reset()
