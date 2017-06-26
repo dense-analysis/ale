@@ -9,6 +9,7 @@ CONTENTS                                                         *ale-contents*
   1. Introduction.........................|ale-introduction|
   2. Supported Languages & Tools..........|ale-support|
   3. Global Options.......................|ale-options|
+    3.1 Highlights........................|ale-highlights|
   4. Fixing Problems......................|ale-fix|
   5. Integration Documentation............|ale-integrations|
     asm...................................|ale-asm-options|
@@ -634,11 +635,11 @@ g:ale_set_highlights                                     *g:ale_set_highlights*
 
   ALE will use the following highlight groups for problems:
 
-  `ALEError`        - Items with `'type': 'E'`
-  `ALEWarning`      - Items with `'type': 'W'`
-  `ALEInfo`         - Items with `'type': 'I'`
-  `ALEStyleError`   - Items with `'type': 'E'` and `'sub_type': 'style'`
-  `ALEStyleWarning` - Items with `'type': 'W'` and `'sub_type': 'style'`
+  |ALEError|        - Items with `'type': 'E'`
+  |ALEWarning|      - Items with `'type': 'W'`
+  |ALEInfo.|        - Items with `'type': 'I'`
+  |ALEStyleError|   - Items with `'type': 'E'` and `'sub_type': 'style'`
+  |ALEStyleWarning| - Items with `'type': 'W'` and `'sub_type': 'style'`
 
 
 g:ale_set_loclist                                           *g:ale_set_loclist*
@@ -671,11 +672,18 @@ g:ale_set_signs                                               *g:ale_set_signs*
 
   ALE will use the following highlight groups for problems:
 
-  `ALEErrorSign`        - Items with `'type': 'E'`
-  `ALEWarningSign`      - Items with `'type': 'W'`
-  `ALEInfoSign`         - Items with `'type': 'I'`
-  `ALEStyleErrorSign`   - Items with `'type': 'E'` and `'sub_type': 'style'`
-  `ALEStyleWarningSign` - Items with `'type': 'W'` and `'sub_type': 'style'`
+  |ALEErrorSign|        - Items with `'type': 'E'`
+  |ALEWarningSign|      - Items with `'type': 'W'`
+  |ALEInfoSign|         - Items with `'type': 'I'`
+  |ALEStyleErrorSign|   - Items with `'type': 'E'` and `'sub_type': 'style'`
+  |ALEStyleWarningSign| - Items with `'type': 'W'` and `'sub_type': 'style'`
+
+  In addition to the style of the signs, the style of lines where signs appear
+  can be configured with the following highlights:
+
+  |ALEErrorLine|   - All items with `'type': 'E'`
+  |ALEWarningLine| - All items with `'type': 'W'`
+  |ALEInfoLine|    - All items with `'type': 'I'`
 
   The markers for the highlights can be customized with the following options:
 
@@ -799,6 +807,100 @@ b:ale_warn_about_trailing_whitespace     *b:ale_warn_about_trailing_whitespace*
   bug report, and it may be possible to add such support.
 
   This option may be configured on a per buffer basis.
+
+
+-------------------------------------------------------------------------------
+3.1. Highlights                                                *ale-highlights*
+
+ALEError                                                             *ALEError*
+
+  Default: `highlight link ALEError SpellBad`
+
+  The highlight used for highlighted errors. See |g:ale_set_highlights|.
+
+
+ALEErrorLine                                                     *ALEErrorLine*
+
+  Default: Undefined
+
+  The highlight for lines where error signs appear. See |g:ale_set_signs|.
+
+
+ALEErrorSign                                                     *ALEErrorSign*
+
+  Default: `highlight link ALEErrorSign error`
+
+  The highlight used for error signs. See |g:ale_set_signs|.
+
+
+ALEInfo                                                              *ALEInfo.*
+                                                            *ALEInfo-highlight*
+  Default: `highlight link ALEInfo ALEWarning`
+
+  The highlight used for highlighted info messages. See |g:ale_set_highlights|.
+
+
+ALEInfoSign                                                       *ALEInfoSign*
+
+  Default: `highlight link ALEInfoSign ALEWarningSign`
+
+  The highlight used for info message signs. See |g:ale_set_signs|.
+
+
+ALEInfoLine                                                       *ALEInfoLine*
+
+  Default: Undefined
+
+  The highlight for lines where info signs appear. See |g:ale_set_signs|.
+
+
+ALEStyleError                                                   *ALEStyleError*
+
+  Default: `highlight link ALEStyleError ALEError`
+
+  The highlight used for highlighted style errors. See |g:ale_set_highlights|.
+
+
+ALEStyleErrorSign                                           *ALEStyleErrorSign*
+
+  Default: `highlight link ALEStyleErrorSign ALEErrorSign`
+
+  The highlight used for style error signs. See |g:ale_set_signs|.
+
+
+ALEStyleWarning                                               *ALEStyleWarning*
+
+  Default: `highlight link ALEStyleWarning ALEError`
+
+  The highlight used for highlighted style warnings. See |g:ale_set_highlights|.
+
+
+ALEStyleWarningSign                                       *ALEStyleWarningSign*
+
+  Default: `highlight link ALEStyleWarningSign ALEWarningSign`
+
+  The highlight used for style warning signs. See |g:ale_set_signs|.
+
+
+ALEWarning                                                         *ALEWarning*
+
+  Default: `highlight link ALEWarning SpellCap`
+
+  The highlight used for highlighted warnings. See |g:ale_set_highlights|.
+
+
+ALEWarningLine                                                 *ALEWarningLine*
+
+  Default: Undefined
+
+  The highlight for lines where warning signs appear. See |g:ale_set_signs|.
+
+
+ALEWarningSign                                                 *ALEWarningSign*
+
+  Default: `highlight link ALEWarningSign todo`
+
+  The highlight used for warning signs. See |g:ale_set_signs|.
 
 
 ===============================================================================
