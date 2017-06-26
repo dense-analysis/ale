@@ -1080,6 +1080,24 @@ ALEDetail                                                           *ALEDetail*
 
   A plug mapping `<Plug>(ale_detail)` is defined for this command.
 
+
+ALEInfo                                                               *ALEInfo*
+ALEInfoToClipboard                                         *ALEInfoToClipboard*
+
+  Print runtime information about ALE, including the values of global and
+  buffer-local settings for ALE, the linters that are enabled, the commands
+  that have been run, and the output of commands.
+
+  ALE will log the commands that are run by default. If you wish to disable
+  this, set |g:ale_history_enabled| to `0`. Because it could be expensive, ALE
+  does not remember the output of recent commands by default. Set
+  |g:ale_history_log_output| to `1` to enable logging of output for commands.
+  ALE will only log the output captured for parsing problems, etc.
+
+  The command `:ALEInfoToClipboard` can be used to output ALEInfo directly to
+  your clipboard. This might not work on every machine.
+
+
 ===============================================================================
 7. API                                                                *ale-api*
 
