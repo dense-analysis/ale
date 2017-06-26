@@ -38,6 +38,12 @@ Execute(pylint handler parsing, translating columns to 1-based index):
   \     'text': 'W0101: Unreachable code (unreachable)',
   \     'type': 'W',
   \   },
+  \   {
+  \     'lnum': 7,
+  \     'col': 33,
+  \     'text': 'W0702: No exception type(s) specified (bare-except)',
+  \     'type': 'W',
+  \   },
   \ ],
   \ ale_linters#python#pylint#Handle(bufnr(''), [
   \ 'No config file found, using default configuration',
@@ -47,6 +53,7 @@ Execute(pylint handler parsing, translating columns to 1-based index):
   \ 'test.py:2:0: C0111 (missing-docstring) Missing function docstring',
   \ 'test.py:3:4: E0103 (not-in-loop) ''break'' not properly in loop',
   \ 'test.py:4:4: W0101 (unreachable) Unreachable code',
+  \ 'test.py:7:32: W0702 (bare-except) No exception type(s) specified',
   \ '',
   \ '------------------------------------------------------------------',
   \ 'Your code has been rated at 0.00/10 (previous run: 2.50/10, -2.50)',

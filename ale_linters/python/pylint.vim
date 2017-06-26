@@ -36,7 +36,7 @@ function! ale_linters#python#pylint#Handle(buffer, lines) abort
     " Matches patterns like the following:
     "
     " test.py:4:4: W0101 (unreachable) Unreachable code
-    let l:pattern = '\v^[^:]+:(\d+):(\d+): ([[:alnum:]]+) \((.*)\) (.*)$'
+    let l:pattern = '\v^[^:]+:(\d+):(\d+): ([[:alnum:]]+) \(([^(]*)\) (.*)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
