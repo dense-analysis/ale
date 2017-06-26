@@ -7,6 +7,8 @@ Execute(The elm-make handler should parse lines correctly):
   \   {
   \     'lnum': 33,
   \     'col': 1,
+  \     'end_lnum': 33,
+  \     'end_col': 19,
   \     'type': 'W',
   \     'text': 'warning overview',
   \     'detail': "warning overview\n\nwarning details",
@@ -14,6 +16,8 @@ Execute(The elm-make handler should parse lines correctly):
   \   {
   \     'lnum': 404,
   \     'col': 1,
+  \     'end_lnum': 408,
+  \     'end_col': 18,
   \     'type': 'E',
   \     'text': 'error overview 1',
   \     'detail': "error overview 1\n\nerror details 1",
@@ -21,6 +25,8 @@ Execute(The elm-make handler should parse lines correctly):
   \   {
   \     'lnum': 406,
   \     'col': 5,
+  \     'end_lnum': 407,
+  \     'end_col': 17,
   \     'type': 'E',
   \     'text': 'error overview 2',
   \     'detail': "error overview 2\n\nerror details 2",
@@ -28,6 +34,8 @@ Execute(The elm-make handler should parse lines correctly):
   \   {
   \     'lnum': 406,
   \     'col': 5,
+  \     'end_lnum': 406,
+  \     'end_col': 93,
   \     'type': 'E',
   \     'text': 'error overview 3',
   \     'detail': "error overview 3\n\nerror details 3",
@@ -44,6 +52,8 @@ Execute(The elm-make handler should put an error on the first line if a line can
   \   {
   \     'lnum': 33,
   \     'col': 1,
+  \     'end_lnum': 33,
+  \     'end_col': 19,
   \     'type': 'W',
   \     'text': 'warning overview',
   \     'detail': "warning overview\n\nwarning details",

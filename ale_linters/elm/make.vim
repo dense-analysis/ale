@@ -23,6 +23,8 @@ function! ale_linters#elm#make#Handle(buffer, lines) abort
                     call add(l:output, {
                     \    'lnum': l:error.region.start.line,
                     \    'col': l:error.region.start.column,
+                    \    'end_lnum': l:error.region.end.line,
+                    \    'end_col': l:error.region.end.column,
                     \    'type': (l:error.type ==? 'error') ? 'E' : 'W',
                     \    'text': l:error.overview,
                     \    'detail': l:error.overview . "\n\n" . l:error.details
