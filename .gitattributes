@@ -8,4 +8,5 @@
 /README.md export-ignore
 /custom-checks export-ignore
 /img export-ignore
+/run-tests export-ignore
 /test export-ignore
