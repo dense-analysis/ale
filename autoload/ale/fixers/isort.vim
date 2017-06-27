@@ -11,7 +11,7 @@ function! ale#fixers#isort#Fix(buffer) abort
     \   ['/bin/isort'],
     \)
 
-    if empty(l:executable)
+    if !executable(l:executable)
         return 0
     endif
 

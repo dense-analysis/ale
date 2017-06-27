@@ -12,7 +12,7 @@ function! ale#fixers#autopep8#Fix(buffer) abort
     \   ['/bin/autopep8'],
     \)
 
-    if empty(l:executable)
+    if !executable(l:executable)
         return 0
     endif
 

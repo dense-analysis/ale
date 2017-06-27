@@ -20,7 +20,8 @@ Execute(The mypy callbacks should return the correct default values):
   \ 'mypy',
   \ ale_linters#python#mypy#GetExecutable(bufnr(''))
   AssertEqual
-  \ 'cd ''' . g:dir . ''' && ''mypy'' --show-column-numbers  %s',
+  \ 'cd ''' . g:dir . ''' && ''mypy'' --show-column-numbers  '
+  \   . '--shadow-file %s %t %s',
   \ ale_linters#python#mypy#GetCommand(bufnr(''))
 
 Execute(The mypy executable should be configurable, and escaped properly):
@@ -30,14 +31,16 @@ Execute(The mypy executable should be configurable, and escaped properly):
   \ 'executable with spaces',
   \ ale_linters#python#mypy#GetExecutable(bufnr(''))
   AssertEqual
-  \ 'cd ''' . g:dir . ''' && ''executable with spaces'' --show-column-numbers  %s',
+  \ 'cd ''' . g:dir . ''' && ''executable with spaces'' --show-column-numbers  '
+  \   . '--shadow-file %s %t %s',
   \ ale_linters#python#mypy#GetCommand(bufnr(''))
 
 Execute(The mypy command callback should let you set options):
   let g:ale_python_mypy_options = '--some-option'
 
   AssertEqual
-  \ 'cd ''' . g:dir . ''' && ''mypy'' --show-column-numbers --some-option %s',
+  \ 'cd ''' . g:dir . ''' && ''mypy'' --show-column-numbers --some-option '
+  \   . '--shadow-file %s %t %s',
   \ ale_linters#python#mypy#GetCommand(bufnr(''))
 
 Execute(The mypy command should switch directories to the detected project root):
@@ -47,7 +50,8 @@ Execute(The mypy command should switch directories to the detected project root)
   \ 'mypy',
   \ ale_linters#python#mypy#GetExecutable(bufnr(''))
   AssertEqual
-  \ 'cd ''' . g:dir . '/python_paths/no_virtualenv/subdir'' && ''mypy'' --show-column-numbers  %s',
+  \ 'cd ''' . g:dir . '/python_paths/no_virtualenv/subdir'' && ''mypy'' --show-column-numbers  '
+  \   . '--shadow-file %s %t %s',
   \ ale_linters#python#mypy#GetCommand(bufnr(''))
 
 Execute(The mypy callbacks should detect virtualenv directories and switch to the project root):
@@ -58,7 +62,8 @@ Execute(The mypy callbacks should detect virtualenv directories and switch to th
   \ ale_linters#python#mypy#GetExecutable(bufnr(''))
   AssertEqual
   \   'cd ''' . g:dir . '/python_paths/with_virtualenv/subdir'' && '''
-  \   . g:dir . '/python_paths/with_virtualenv/env/bin/mypy'' --show-column-numbers  %s',
+  \   . g:dir . '/python_paths/with_virtualenv/env/bin/mypy'' --show-column-numbers  '
+  \   . '--shadow-file %s %t %s',
   \ ale_linters#python#mypy#GetCommand(bufnr(''))
 
 Execute(You should able able to use the global mypy instead):
@@ -69,5 +74,6 @@ Execute(You should able able to use the global mypy instead):
   \ 'mypy',
   \ ale_linters#python#mypy#GetExecutable(bufnr(''))
   AssertEqual
-  \ 'cd ''' . g:dir . '/python_paths/with_virtualenv/subdir'' && ''mypy'' --show-column-numbers  %s',
+  \ 'cd ''' . g:dir . '/python_paths/with_virtualenv/subdir'' && ''mypy'' --show-column-numbers  '
+  \   . '--shadow-file %s %t %s',
   \ ale_linters#python#mypy#GetCommand(bufnr(''))

@@ -107,6 +107,11 @@ g:ale_python_isort_use_global                   *g:ale_python_isort_use_global*
 -------------------------------------------------------------------------------
 mypy                                                          *ale-python-mypy*
 
+The minimum supported version of mypy that ALE supports is v0.4.4. This is
+the first version containing the `--shadow-file` option ALE needs to be able
+to check for errors while you type.
+
+
 g:ale_python_mypy_executable                     *g:ale_python_mypy_executable*
                                                  *b:ale_python_mypy_executable*
   Type: |String|

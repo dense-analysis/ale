@@ -11,7 +11,7 @@ function! ale#fixers#yapf#Fix(buffer) abort
     \   ['/bin/yapf'],
     \)
 
-    if empty(l:executable)
+    if !executable(l:executable)
         return 0
     endif
 

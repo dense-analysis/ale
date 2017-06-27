@@ -58,11 +58,5 @@ function! ale#python#FindExecutable(buffer, base_var_name, path_list) abort
         endfor
     endif
 
-    let l:global_executable = ale#Var(a:buffer, a:base_var_name . '_executable')
-
-    if executable(l:global_executable)
-        return l:global_executable
-    endif
-
-    return ''
+    return ale#Var(a:buffer, a:base_var_name . '_executable')
 endfunction

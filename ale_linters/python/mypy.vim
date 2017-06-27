@@ -7,19 +7,7 @@ let g:ale_python_mypy_options = get(g:, 'ale_python_mypy_options', '')
 let g:ale_python_mypy_use_global = get(g:, 'ale_python_mypy_use_global', 0)
 
 function! ale_linters#python#mypy#GetExecutable(buffer) abort
-    if !ale#Var(a:buffer, 'python_mypy_use_global')
-        let l:virtualenv = ale#python#FindVirtualenv(a:buffer)
-
-        if !empty(l:virtualenv)
-            let l:ve_mypy = l:virtualenv . '/bin/mypy'
-
-            if executable(l:ve_mypy)
-                return l:ve_mypy
-            endif
-        endif
-    endif
-
-    return ale#Var(a:buffer, 'python_mypy_executable')
+    return ale#python#FindExecutable(a:buffer, 'python_mypy', ['/bin/mypy'])
 endfunction
 
 function! ale_linters#python#mypy#GetCommand(buffer) abort
@@ -33,7 +21,7 @@ function! ale_linters#python#mypy#GetCommand(buffer) abort
     \   . ale#Escape(l:executable)
     \   . ' --show-column-numbers '
     \   . ale#Var(a:buffer, 'python_mypy_options')
-    \   . ' %s'
+    \   . ' --shadow-file %s %t %s'
 endfunction
 
 function! ale_linters#python#mypy#Handle(buffer, lines) abort
@@ -69,5 +57,4 @@ call ale#linter#Define('python', {
 \   'executable_callback': 'ale_linters#python#mypy#GetExecutable',
 \   'command_callback': 'ale_linters#python#mypy#GetCommand',
 \   'callback': 'ale_linters#python#mypy#Handle',
-\   'lint_file': 1,
 \})
