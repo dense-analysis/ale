@@ -4,7 +4,7 @@ Before:
 After:
     call ale#linter#Reset()
 
-Execute(The flake8 handler should handle basic warnings):
+Execute(The flake8 handler should handle basic warnings and syntax errors):
   AssertEqual
   \ [
   \   {
@@ -21,10 +21,17 @@ Execute(The flake8 handler should handle basic warnings):
   \     'text': 'W123: some warning',
   \     'sub_type': 'style',
   \   },
+  \   {
+  \     'lnum': 8,
+  \     'col': 3,
+  \     'type': 'E',
+  \     'text': 'E999: SyntaxError: invalid syntax',
+  \   },
   \ ],
   \ ale_linters#python#flake8#Handle(1, [
   \   'stdin:6:6: E111 indentation is not a multiple of four',
   \   'stdin:7:6: W123 some warning',
+  \   'stdin:8:3: E999 SyntaxError: invalid syntax',
   \ ])
 
 Execute(The flake8 handler should set end column indexes should be set for certain errors):

@@ -136,7 +136,7 @@ function! ale_linters#python#flake8#Handle(buffer, lines) abort
         \   'type': 'W',
         \}
 
-        if l:code[:0] ==# 'F'
+        if l:code[:0] ==# 'F' || l:code ==# 'E999'
             let l:item.type = 'E'
         elseif l:code[:0] ==# 'E'
             let l:item.type = 'E'
