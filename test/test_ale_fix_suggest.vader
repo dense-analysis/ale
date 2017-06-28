@@ -1,15 +1,27 @@
 Before:
   call ale#fix#registry#Clear()
 
-  function GetSuggestions()
-    redir => l:output
-      silent ALEFixSuggest
-    redir END
+  let g:buffer = bufnr('')
 
-    return split(l:output, "\n")
+  function GetSuggestions()
+    silent ALEFixSuggest
+
+    if bufnr('') != g:buffer
+      let l:lines = getline(1, '$')
+    else
+      let l:lines = []
+    endif
+
+    return l:lines
   endfunction
 
 After:
+  if bufnr('') != g:buffer
+    :q!
+  endif
+
+  unlet! g:buffer
+
   call ale#fix#registry#ResetToDefaults()
   delfunction GetSuggestions
 
@@ -17,8 +29,17 @@ Execute(ALEFixSuggest should return something sensible with no suggestions):
   AssertEqual
   \ [
   \   'There is nothing in the registry to suggest.',
+  \   '',
+  \   'Press q to close this window',
   \ ],
   \ GetSuggestions()
+
+Execute(ALEFixSuggest should set the appropriate settings):
+  silent ALEFixSuggest
+
+  AssertEqual 'ale-fix-suggest', &filetype
+  Assert !&modified, 'The buffer was marked as modified'
+  Assert !&modifiable, 'The buffer was modifiable'
 
 Execute(ALEFixSuggest output should be correct for only generic handlers):
   call ale#fix#registry#Add('zed', 'XYZ', [], 'Zedify things.')
@@ -32,6 +53,8 @@ Execute(ALEFixSuggest output should be correct for only generic handlers):
   \   '''zed'' - Zedify things.',
   \   '',
   \   'See :help ale-fix-configuration',
+  \   '',
+  \   'Press q to close this window',
   \ ],
   \ GetSuggestions()
 
@@ -49,6 +72,8 @@ Execute(ALEFixSuggest output should be correct for only filetype handlers):
   \   '''zed'' - Zedify things.',
   \   '',
   \   'See :help ale-fix-configuration',
+  \   '',
+  \   'Press q to close this window',
   \ ],
   \ GetSuggestions()
 
@@ -71,5 +96,7 @@ Execute(ALEFixSuggest should suggest filetype and generic handlers):
   \   '''generic'' - Generic things.',
   \   '',
   \   'See :help ale-fix-configuration',
+  \   '',
+  \   'Press q to close this window',
   \ ],
   \ GetSuggestions()

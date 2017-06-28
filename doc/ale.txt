@@ -131,7 +131,9 @@ ALE supports the following key features for linting:
 7. Setting syntax highlights for errors.
 
 ALE can fix problems with files with the |ALEFix| command, using the same job
-control functionality used for checking for problems.
+control functionality used for checking for problems. Try using the
+|ALEFixSuggest| command for browsing tools that can be used to fix problems
+for the current buffer.
 
 ===============================================================================
 2. Supported Languages & Tools                                    *ale-support*
@@ -915,6 +917,9 @@ run, the variable |g:ale_fixers| will be read for getting a |List| of commands
 for filetypes, split on `.`, and the functions named in |g:ale_fixers| will be
 executed for fixing the errors.
 
+The |ALEFixSuggest| command can be used to suggest tools that be used to
+fix problems for the current buffer.
+
 The values for `g:ale_fixers` can be a list of |String|, |Funcref|, or
 |lambda| values. String values must either name a function, or a short name
 for a function set in the ALE fixer registry.
@@ -1017,6 +1022,13 @@ ALEFix                                                                 *ALEFix*
   Fix problems with the current buffer. See |ale-fix| for more information.
 
   A plug mapping `<Plug>(ale_fix)` is defined for this command.
+
+
+ALEFixSuggest                                                   *ALEFixSuggest*
+
+  Suggest tools that can be used to fix problems in the current buffer.
+
+  See |ale-fix| for more information.
 
 
 ALELint                                                               *ALELint*
