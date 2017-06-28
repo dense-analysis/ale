@@ -17,6 +17,8 @@ Before:
   silent! unlet g:ale_perl_perlcritic_showrules
   let g:ale_perl_perlcritic_profile  = ''
 
+  " enable loading inside test container
+  silent! cd /testplugin
   source ale_linters/perl/perlcritic.vim
 
 
