@@ -3,7 +3,7 @@ ALE Verilog/SystemVerilog Integration                     *ale-verilog-options*
 
 
 -------------------------------------------------------------------------------
-ALE can use tow diffent linters for Verilog HDL:
+ALE can use two different linters for Verilog HDL:
 
   iverilog:
     Using `iverilog -t null -Wall`
@@ -11,7 +11,7 @@ ALE can use tow diffent linters for Verilog HDL:
   verilator
     Using `verilator --lint-only -Wall`
 
-By default both 'verilog' and 'systemverilog' filetypes are checked.
+By default, both 'verilog' and 'systemverilog' filetypes are checked.
 
 You can limit 'systemverilog' files to be checked using only 'verilator' by
 defining 'g:ale_linters' variable:
