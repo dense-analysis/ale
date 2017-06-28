@@ -12,6 +12,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix PEP8 issues with autopep8.',
 \   },
+\   'prettier_standard': {
+\       'function': 'ale#fixers#prettier_standard#Fix',
+\       'suggested_filetypes': ['javascript'],
+\       'description': 'Apply prettier-standard to a file.',
+\   },
 \   'eslint': {
 \       'function': 'ale#fixers#eslint#Fix',
 \       'suggested_filetypes': ['javascript', 'typescript'],

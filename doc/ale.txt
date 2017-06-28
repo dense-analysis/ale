@@ -53,6 +53,7 @@ CONTENTS                                                         *ale-contents*
       jshint..............................|ale-javascript-jshint|
       prettier............................|ale-javascript-prettier|
       prettier-eslint.....................|ale-javascript-prettier-eslint|
+      prettier-standard...................|ale-javascript-prettier-standard|
       standard............................|ale-javascript-standard|
       xo..................................|ale-javascript-xo|
     kotlin................................|ale-kotlin-options|

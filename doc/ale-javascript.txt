@@ -119,6 +119,37 @@ g:ale_javascript_prettier_eslint_use_global
 
 
 -------------------------------------------------------------------------------
+prettier-standard                              *ale-javascript-prettier-eslint*
+
+
+g:ale_javascript_prettier_standard_executable
+                                  *g:ale_javascript_prettier_eslint_executable*
+                                  *b:ale_javascript_prettier_eslint_executable*
+  Type: |String|
+  Default: `'prettier-standard'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_javascript_prettier_standard_options
+                                     *g:ale_javascript_prettier_standard_options*
+                                     *b:ale_javascript_prettier_standard_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to prettier-standard.
+
+
+g:ale_javascript_prettier_standard_use_global
+                                  *g:ale_javascript_prettier_standard_use_global*
+                                  *b:ale_javascript_prettier_standard_use_global*
+  Type: |Number|
+  Default: `0`
+
+  See |ale-integrations-local-executables|
+
+
+-------------------------------------------------------------------------------
 flow                                                      *ale-javascript-flow*
 
 g:ale_javascript_flow_executable             *g:ale_javascript_flow_executable*
