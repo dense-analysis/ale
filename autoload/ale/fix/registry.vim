@@ -32,6 +32,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['javascript'],
 \       'description': 'Apply prettier-eslint to a file.',
 \   },
+\   'puppetlint': {
+\       'function': 'ale#fixers#puppetlint#Fix',
+\       'suggested_filetypes': ['puppet'],
+\       'description': 'Run puppet-lint -f on a file.',
+\   },
 \   'remove_trailing_lines': {
 \       'function': 'ale#fixers#generic#RemoveTrailingBlankLines',
 \       'suggested_filetypes': [],
