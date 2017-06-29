@@ -12,6 +12,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix PEP8 issues with autopep8.',
 \   },
+\   'prettier_standard': {
+\       'function': 'ale#fixers#prettier_standard#Fix',
+\       'suggested_filetypes': ['javascript'],
+\       'description': 'Apply prettier-standard to a file.',
+\   },
 \   'eslint': {
 \       'function': 'ale#fixers#eslint#Fix',
 \       'suggested_filetypes': ['javascript', 'typescript'],
@@ -31,6 +36,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#prettier_eslint#Fix',
 \       'suggested_filetypes': ['javascript'],
 \       'description': 'Apply prettier-eslint to a file.',
+\   },
+\   'puppetlint': {
+\       'function': 'ale#fixers#puppetlint#Fix',
+\       'suggested_filetypes': ['puppet'],
+\       'description': 'Run puppet-lint -f on a file.',
 \   },
 \   'remove_trailing_lines': {
 \       'function': 'ale#fixers#generic#RemoveTrailingBlankLines',
@@ -111,44 +121,56 @@ endfunction
 " Suggest functions to use from the registry.
 function! ale#fix#registry#Suggest(filetype) abort
     let l:type_list = split(a:filetype, '\.')
-    let l:first_for_filetype = 1
-    let l:first_generic = 1
+    let l:filetype_fixer_list = []
 
     for l:key in sort(keys(s:entries))
         let l:suggested_filetypes = s:entries[l:key].suggested_filetypes
 
         if s:ShouldSuggestForType(l:suggested_filetypes, l:type_list)
-            if l:first_for_filetype
-                let l:first_for_filetype = 0
-                echom 'Try the following fixers appropriate for the filetype:'
-                echom ''
-            endif
-
-            echom printf('%s - %s', string(l:key), s:entries[l:key].description)
+            call add(
+            \   l:filetype_fixer_list,
+            \   printf('%s - %s', string(l:key), s:entries[l:key].description),
+            \)
         endif
     endfor
 
+    let l:generic_fixer_list = []
 
     for l:key in sort(keys(s:entries))
         if empty(s:entries[l:key].suggested_filetypes)
-            if l:first_generic
-                if !l:first_for_filetype
-                    echom ''
-                endif
-
-                let l:first_generic = 0
-                echom 'Try the following generic fixers:'
-                echom ''
-            endif
-
-            echom printf('%s - %s', string(l:key), s:entries[l:key].description)
+            call add(
+            \   l:generic_fixer_list,
+            \   printf('%s - %s', string(l:key), s:entries[l:key].description),
+            \)
         endif
     endfor
 
-    if l:first_for_filetype && l:first_generic
-        echom 'There is nothing in the registry to suggest.'
+    let l:filetype_fixer_header = !empty(l:filetype_fixer_list)
+    \   ? ['Try the following fixers appropriate for the filetype:', '']
+    \   : []
+    let l:generic_fixer_header = !empty(l:generic_fixer_list)
+    \   ? ['Try the following generic fixers:', '']
+    \   : []
+
+    let l:has_both_lists = !empty(l:filetype_fixer_list) && !empty(l:generic_fixer_list)
+
+    let l:lines =
+    \   l:filetype_fixer_header
+    \   + l:filetype_fixer_list
+    \   + (l:has_both_lists ? [''] : [])
+    \   + l:generic_fixer_header
+    \   + l:generic_fixer_list
+
+    if empty(l:lines)
+        let l:lines = ['There is nothing in the registry to suggest.']
     else
-        echom ''
-        echom 'See :help ale-fix-configuration'
+        let l:lines += ['', 'See :help ale-fix-configuration']
     endif
+
+    let l:lines += ['', 'Press q to close this window']
+
+    new +set\ filetype=ale-fix-suggest
+    call setline(1, l:lines)
+    setlocal nomodified
+    setlocal nomodifiable
 endfunction
