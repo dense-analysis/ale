@@ -1,6 +1,11 @@
 " Author: Masahiro H https://github.com/mshr-h
 " Description: verilator for verilog files
 
+" Set this option to change Verilator lint options
+if !exists('g:ale_verilog_verilator_options')
+    let g:ale_verilog_verilator_options = ''
+endif
+
 function! ale_linters#verilog#verilator#GetCommand(buffer) abort
     let l:filename = tempname() . '_verilator_linted.v'
 
@@ -8,7 +13,9 @@ function! ale_linters#verilog#verilator#GetCommand(buffer) abort
     call ale#engine#ManageFile(a:buffer, l:filename)
     call writefile(getbufline(a:buffer, 1, '$'), l:filename)
 
-    return 'verilator --lint-only -Wall -Wno-DECLFILENAME ' . ale#Escape(l:filename)
+    return 'verilator --lint-only -Wall -Wno-DECLFILENAME '
+    \   . ale#Var(a:buffer, 'verilog_verilator_options') .' '
+    \   . ale#Escape(l:filename)
 endfunction
 
 function! ale_linters#verilog#verilator#Handle(buffer, lines) abort

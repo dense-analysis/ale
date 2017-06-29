@@ -101,6 +101,9 @@ CONTENTS                                                         *ale-contents*
       eslint..............................|ale-typescript-eslint|
       tslint..............................|ale-typescript-tslint|
       tsserver............................|ale-typescript-tsserver|
+    verilog/systemverilog.................|ale-verilog-options|
+      iverilog............................|ale-verilog-iverilog|
+      verilator...........................|ale-verilog-verilator|
     vim...................................|ale-vim-options|
       vint................................|ale-vim-vint|
     xml...................................|ale-xml-options|
