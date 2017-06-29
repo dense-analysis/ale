@@ -1,9 +1,11 @@
 " Author: geam <mdelage@student.42.fr>
 " Description: gcc linter for cpp files
 
+let s:executable = get(g:, 'ale_cpp_gcc_executable', 'gcc')
+
 " Set this option to change the GCC options for warnings for C.
 if !exists('g:ale_cpp_gcc_options')
-    let s:version = ale#handlers#gcc#ParseGCCVersion(systemlist('gcc --version'))
+    let s:version = ale#handlers#gcc#ParseGCCVersion(systemlist(s:executable . ' --version'))
 
     if !empty(s:version) && ale#semver#GreaterOrEqual(s:version, [4, 9, 0])
         " Use c++14 support in 4.9 and above.
@@ -21,7 +23,7 @@ function! ale_linters#cpp#gcc#GetCommand(buffer) abort
 
     " -iquote with the directory the file is in makes #include work for
     "  headers in the same directory.
-    return 'gcc -S -x c++ -fsyntax-only '
+    return s:executable . ' -S -x c++ -fsyntax-only '
     \   . '-iquote ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h')) . ' '
     \   . ale#c#IncludeOptions(l:paths)
     \   . ale#Var(a:buffer, 'cpp_gcc_options') . ' -'
@@ -30,7 +32,7 @@ endfunction
 call ale#linter#Define('cpp', {
 \   'name': 'g++',
 \   'output_stream': 'stderr',
-\   'executable': 'g++',
+\   'executable': s:executable,
 \   'command_callback': 'ale_linters#cpp#gcc#GetCommand',
 \   'callback': 'ale#handlers#gcc#HandleGCCFormat',
 \})
