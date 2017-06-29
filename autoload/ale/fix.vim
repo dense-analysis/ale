@@ -102,9 +102,15 @@ function! s:HandleExit(job_id, exit_code) abort
         let l:job_info.output = readfile(l:job_info.file_to_read)
     endif
 
+    " Use the output of the job for changing the file if it isn't empty,
+    " otherwise skip this job and use the input from before.
+    let l:input = !empty(l:job_info.output)
+    \   ? l:job_info.output
+    \   : l:job_info.input
+
     call s:RunFixer({
     \   'buffer': l:job_info.buffer,
-    \   'input': l:job_info.output,
+    \   'input': l:input,
     \   'callback_list': l:job_info.callback_list,
     \   'callback_index': l:job_info.callback_index + 1,
     \})
@@ -172,6 +178,7 @@ function! s:RunJob(options) abort
 
     let l:job_info = {
     \   'buffer': l:buffer,
+    \   'input': l:input,
     \   'output': [],
     \   'callback_list': a:options.callback_list,
     \   'callback_index': a:options.callback_index,
