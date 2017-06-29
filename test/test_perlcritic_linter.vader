@@ -1,0 +1,62 @@
+" NOTE: We use the 'b:' forms below to ensure that we're properly using
+" ale#Var()
+
+Given perl:
+  #!/usr/bin/env perl
+  use v5.10;
+  say 'Hi there!';
+
+
+Before:
+  Save g:ale_perl_perlcritic_profile
+  Save g:ale_perl_perlcritic_options
+  Save g:ale_perl_perlcritic_executable
+  Save g:ale_perl_perlcritic_showrules
+  silent! unlet g:ale_perl_perlcritic_options
+  silent! unlet g:ale_perl_perlcritic_executable
+  silent! unlet g:ale_perl_perlcritic_showrules
+  let g:ale_perl_perlcritic_profile  = ''
+
+  " enable loading inside test container
+  silent! cd /testplugin
+  source ale_linters/perl/perlcritic.vim
+
+
+After:
+  Restore
+  silent! unlet b:ale_perl_perlcritic_profile
+  silent! unlet b:ale_perl_perlcritic_options
+  silent! unlet b:ale_perl_perlcritic_executable
+  silent! unlet b:ale_perl_perlcritic_showrules
+
+
+Execute(no g:ale_perl_perlcritic_showrules):
+  let b:ale_perl_perlcritic_showrules = 0
+
+  AssertEqual
+  \ "'perlcritic' --verbose '". '%l:%c %m\n' . "' --nocolor",
+  \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))
+
+
+Execute(yes g:ale_perl_perlcritic_showrules):
+  let b:ale_perl_perlcritic_showrules = 1
+
+  AssertEqual
+  \ "'perlcritic' --verbose '". '%l:%c %m [%p]\n' . "' --nocolor",
+  \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))
+
+
+Execute(set g:ale_perl_perlcritic_profile):
+  let b:ale_perl_perlcritic_profile   = 'README.md'
+
+  Assert
+  \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))
+  \  =~# "--profile '.*/README.md'"
+
+
+Execute(g:ale_perl_perlcritic_options):
+  let b:ale_perl_perlcritic_options   = 'beep boop'
+
+  AssertEqual
+  \ "'perlcritic' --verbose '". '%l:%c %m\n' . "' --nocolor beep boop",
+  \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))

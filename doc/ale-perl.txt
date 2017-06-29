@@ -25,6 +25,37 @@ g:ale_perl_perl_options                               *g:ale_perl_perl_options*
 -------------------------------------------------------------------------------
 perlcritic                                                *ale-perl-perlcritic*
 
+g:ale_perl_perlcritic_executable              *g:ale_perl_perlcritic_executable*
+                                              *b:ale_perl_perlcritic_executable*
+  Type: |String|
+  Default: `'perlcritic'`
+
+  This variable can be changed to modify the perlcritic executable used for
+  linting perl.
+
+
+g:ale_perl_perlcritic_profile                    *g:ale_perl_perlcritic_profile*
+                                                 *b:ale_perl_perlcritic_profile*
+  Type: |String|
+  Default: `'.perlcriticrc'`
+
+  This variable can be changed to modify the perlcritic profile used for
+  linting perl.  The current directory is checked for the file, then the
+  parent directory, etc, until it finds one.  If no matching file is found, no
+  profile is passed to perlcritic.
+
+  Set to an empty string to disable using a profile.
+
+
+g:ale_perl_perlcritic_options                    *g:ale_perl_perlcritic_options*
+                                                 *b:ale_perl_perlcritic_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to supply additional command-line arguments to
+  the perlcritic invocation.
+
+
 g:ale_perl_perlcritic_showrules               *g:ale_perl_perlcritic_showrules*
 
   Type: |Number|
