@@ -72,6 +72,8 @@ CONTENTS                                                         *ale-contents*
     php...................................|ale-php-options|
       phpcs...............................|ale-php-phpcs|
       phpmd...............................|ale-php-phpmd|
+    pug...................................|ale-pug-options|
+      puglint.............................|ale-pug-puglint|
     python................................|ale-python-options|
       autopep8............................|ale-python-autopep8|
       flake8..............................|ale-python-flake8|
