@@ -1,4 +1,4 @@
-" Author: geam <mdelage@student.42.fr>
+" Author: geam <mdelage@student.42.fr>, Toreno96 <toreno96@gmail.com>
 " Description: gcc linter for cpp files
 
 let s:executable = get(g:, 'ale_cpp_gcc_executable', 'gcc')

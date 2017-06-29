@@ -132,6 +132,14 @@ g:ale_cpp_cpplint_options                           *g:ale_cpp_cpplint_options*
 -------------------------------------------------------------------------------
 gcc                                                               *ale-cpp-gcc*
 
+g:ale_cpp_gcc_executable                             *g:ale_cpp_gcc_executable*
+                                                     *b:ale_cpp_gcc_executable*
+  Type: |String|
+  Default: `'gcc'`
+
+  This variable can be changed to modify the executable used for gcc.
+
+
 g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
                                                         *b:ale_cpp_gcc_options*
   Type: |String|
