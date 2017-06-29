@@ -119,12 +119,12 @@ g:ale_javascript_prettier_eslint_use_global
 
 
 -------------------------------------------------------------------------------
-prettier-standard                              *ale-javascript-prettier-eslint*
+prettier-standard                            *ale-javascript-prettier-standard*
 
 
 g:ale_javascript_prettier_standard_executable
-                                  *g:ale_javascript_prettier_eslint_executable*
-                                  *b:ale_javascript_prettier_eslint_executable*
+                                *g:ale_javascript_prettier_standard_executable*
+                                *b:ale_javascript_prettier_standard_executable*
   Type: |String|
   Default: `'prettier-standard'`
 
