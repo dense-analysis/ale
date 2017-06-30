@@ -104,25 +104,23 @@ function! ale#c#FindCompileArgs(buffer) abort
         for elem in readfile(l:compile_commands_path)
             let l:split = split(elem, ':')
             if (len(l:split) > 1)
-                let l:key = split(l:split[0], '"')
-                let l:value = split(l:split[1], '"')
-                if l:key[1] == 'command'
-                    let l:command = l:value[1]
-                elseif l:key[1] == 'file'
-                    let l:file = l:value[1]
+                let l:key = split(l:split[0], '"')[1]
+                let l:value = split(l:split[1], '"')[1]
+                if l:key == 'command'
+                    let l:command = l:value
+                elseif l:key == 'file'
+                    let l:file = l:value
                 endif
 
                 if (!empty(l:file))
                     if l:file == l:bufname
-                        " skip  first (compiler) and last (filename)
-                        " arguments
-                        let l:args = split(l:command, ' ')[2:-2]
-
-                        " skip other stuff we don't want
+                        " skip unwanted stuff
+                        "   first arg (compiler)
+                        "   last arg (filename)
                         "    -o objectfile
                         "    -c
                         let l_skip = 0
-                        for arg in l:args
+                        for arg in split(l:command, ' ')[2:-2]
                             if (l_skip == 1)
                                 let l_skip = 0
                             elseif (arg == '-o')
