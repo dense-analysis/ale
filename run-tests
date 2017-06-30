@@ -194,6 +194,14 @@ if ((run_custom_checks)); then
     docker run -a stdout "${DOCKER_FLAGS[@]}" ./custom-checks . || EXIT=$?
     set +o pipefail
     echo
+
+    echo '========================================'
+    echo 'Checking for duplicate tags'
+    echo '========================================'
+    echo 'Duplicate tags follow:'
+    echo
+
+    grep --exclude=tags -roh '\*.*\*$' doc | sort | uniq -d || EXIT=$?
 fi
 
 exit $EXIT
