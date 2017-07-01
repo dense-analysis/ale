@@ -42,7 +42,6 @@ function! ale#engine#InitBufferInfo(buffer) abort
         \   'temporary_file_list': [],
         \   'temporary_directory_list': [],
         \   'history': [],
-        \   'open_lsp_documents': [],
         \}
     endif
 endfunction
@@ -563,8 +562,6 @@ endfunction
 
 function! s:CheckWithTSServer(buffer, linter, executable) abort
     let l:info = g:ale_buffer_info[a:buffer]
-    let l:open_documents = l:info.open_lsp_documents
-    let l:is_open = index(l:open_documents, a:linter.name) >= 0
 
     let l:command = ale#job#PrepareCommand(a:executable)
     let l:job_id = ale#lsp#StartProgram(a:executable, l:command, function('s:HandleLSPResponse'))
@@ -577,16 +574,10 @@ function! s:CheckWithTSServer(buffer, linter, executable) abort
         return
     endif
 
-    if !l:is_open
+    if ale#lsp#OpenTSServerDocumentIfNeeded(a:executable, a:buffer)
         if g:ale_history_enabled
             call ale#history#Add(a:buffer, 'started', l:job_id, l:command)
         endif
-
-        call add(l:open_documents, a:linter.name)
-        call ale#lsp#SendMessageToProgram(
-        \   a:executable,
-        \   ale#lsp#tsserver_message#Open(a:buffer),
-        \)
     endif
 
     call ale#lsp#SendMessageToProgram(

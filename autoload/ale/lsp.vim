@@ -16,6 +16,7 @@ function! s:NewConnection() abort
     \   'address': '',
     \   'executable': '',
     \   'job_id': -1,
+    \   'open_documents': [],
     \}
 
     call add(s:connections, l:conn)
@@ -282,4 +283,22 @@ function! ale#lsp#SendMessageToAddress(address, message) abort
     call ch_sendraw(l:conn.channel, l:data)
 
     return l:id == 0 ? -1 : l:id
+endfunction
+
+function! ale#lsp#OpenTSServerDocumentIfNeeded(executable, buffer) abort
+    let l:opened = 0
+    let l:matches = filter(s:connections[:], 'v:val.executable ==# a:executable')
+
+    " Send the command for opening the document only if needed.
+    if !empty(l:matches) && index(l:matches[0].open_documents, a:buffer) < 0
+        call ale#lsp#SendMessageToProgram(
+        \   a:executable,
+        \   ale#lsp#tsserver_message#Open(a:buffer),
+        \)
+        call add(l:matches[0].open_documents, a:buffer)
+
+        let l:opened = 1
+    endif
+
+    return l:opened
 endfunction
