@@ -1,0 +1,32 @@
+After:
+  call ale#linter#Reset()
+
+Execute(The luacheck handler should parse lines correctly):
+  runtime ale_linters/lua/luacheck.vim
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'col': 8,
+  \     'text': 'W612: line contains trailing whitespace',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 3,
+  \     'col': 5,
+  \     'text': 'W213: unused loop variable ''k''',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 3,
+  \     'col': 19,
+  \     'text': 'W113: accessing undefined variable ''x''',
+  \     'type': 'W',
+  \   },
+  \ ],
+  \ ale_linters#lua#luacheck#Handle(347, [
+  \   '    /file/path/here.lua:1:8: (W612) line contains trailing whitespace',
+  \   '    /file/path/here.lua:3:5: (W213) unused loop variable ''k''',
+  \   '    /file/path/here.lua:3:19: (W113) accessing undefined variable ''x''',
+  \ ])
