@@ -181,6 +181,11 @@ call ale#Set('maximum_file_size', 0)
 " Remapping of linter problems.
 call ale#Set('type_map', {})
 
+" Enable automatic completion with LSP servers and tsserver
+call ale#Set('completion_enabled', 0)
+call ale#Set('completion_delay', 300)
+call ale#Set('completion_max_suggestions', 20)
+
 function! ALEInitAuGroups() abort
     " This value used to be a Boolean as a Number, and is now a String.
     let l:text_changed = '' . g:ale_lint_on_text_changed
@@ -311,6 +316,10 @@ call ALEInitAuGroups()
 
 if g:ale_set_balloons
     call ale#balloon#Enable()
+endif
+
+if g:ale_completion_enabled
+    call ale#completion#Enable()
 endif
 
 " Define commands for moving through warnings and errors.

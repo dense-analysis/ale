@@ -36,12 +36,12 @@ function! ale#lsp#tsserver_message#Geterr(buffer) abort
     return [1, 'ts@geterr', {'files': [expand('#' . a:buffer . ':p')]}]
 endfunction
 
-function! ale#lsp#tsserver_message#Completions(buffer, line, column) abort
-    " An optional 'prefix' key can be added here for a completion prefix.
+function! ale#lsp#tsserver_message#Completions(buffer, line, column, prefix) abort
     return [0, 'ts@completions', {
     \   'line': a:line,
     \   'offset': a:column,
     \   'file': expand('#' . a:buffer . ':p'),
+    \   'prefix': a:prefix,
     \}]
 endfunction
 

@@ -1,189 +1,280 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Completion support for LSP linters
 
-let s:timer = -1
-let s:delay = 300
-let s:max_suggestions = 20
-let s:buffer_completion_map = {}
+let s:timer_id = -1
 
-function! s:RememberCompletionInfo(buffer, conn_id, request_id, line, column) abort
-    let s:buffer_completion_map[a:buffer] = {
-    \   'conn_id': a:conn_id,
-    \   'request_id': a:request_id,
-    \   'line': a:line,
-    \   'column': a:column,
-    \}
-endfunction
+function! s:GetRegex(map, filetype) abort
+    for l:part in reverse(split(a:filetype, '\.'))
+        let l:regex = get(a:map, l:part, [])
 
-" Find completion information for a response, and delete the information
-" if the request failed.
-function! s:FindCompletionInfo(response) abort
-    let l:matched_buffer = -1
-    let l:matched_data = {}
-
-    for l:key in keys(s:buffer_completion_map)
-        let l:obj = s:buffer_completion_map[l:key]
-
-        if l:obj.request_id ==# a:response.request_seq
-            if get(a:response, 'success')
-                let l:matched_buffer = str2nr(l:key)
-                let l:matched_data = l:obj
-            else
-                " Clean up the data we remembered if the request failed.
-                call remove(s:buffer_completion_map, l:matched_buffer)
-            endif
+        if !empty(l:regex)
+            return l:regex
         endif
     endfor
 
-    return [l:matched_buffer, l:matched_data]
+    return ''
 endfunction
 
-function! s:HandleCompletions(response) abort
-    let [l:buffer, l:info] = s:FindCompletionInfo(a:response)
+" Regular expressions for checking the characters in the line before where
+" the insert cursor is. If one of these matches, we'll check for completions.
+let s:should_complete_map = {
+\   'javascript': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$|\.$',
+\   'typescript': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$|\.$',
+\}
 
-    if l:buffer >= 0
-        let l:names = []
+" Check if we should look for completions for a language.
+function! ale#completion#GetPrefix(filetype, line, column) abort
+    let l:regex = s:GetRegex(s:should_complete_map, a:filetype)
+    " The column we're using completions for is where we are inserting text,
+    " like so:
+    "   abc
+    "      ^
+    " So we need check the text in the column before that position.
+    return matchstr(getline(a:line)[: a:column - 2], l:regex)
+endfunction
 
-        for l:suggestion in a:response.body[: s:max_suggestions]
-            call add(l:names, l:suggestion.name)
+" Regular expressions for finding the start column to replace with completion.
+let s:omni_start_map = {
+\   'javascript': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$',
+\   'typescript': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$',
+\}
+
+function! ale#completion#OmniFunc(findstart, base) abort
+    if a:findstart
+        let l:line = b:ale_completion_info.line
+        let l:column = b:ale_completion_info.column
+        let l:regex = s:GetRegex(s:omni_start_map, &filetype)
+        let l:up_to_column = getline(l:line)[: l:column - 1]
+        let l:match = matchstr(l:up_to_column, l:regex)
+
+        return l:column - len(l:match) - 1
+    else
+        " Reset the settings now
+        let &omnifunc = b:ale_old_omnifunc
+        let &completeopt = b:ale_old_completeopt
+        let l:response = b:ale_completion_response
+        let l:parser = b:ale_completion_parser
+
+        unlet b:ale_completion_response
+        unlet b:ale_completion_parser
+        unlet b:ale_old_omnifunc
+        unlet b:ale_old_completeopt
+
+        return function(l:parser)(l:response)
+    endif
+endfunction
+
+function! ale#completion#Show(response, completion_parser) abort
+    " Remember the old omnifunc value.
+    if !exists('b:ale_old_omnifunc')
+        let b:ale_old_omnifunc = &omnifunc
+        let b:ale_old_completeopt = &completeopt
+    endif
+
+    " Set the list in the buffer, temporarily replace omnifunc with our
+    " function, and then start omni-completion.
+    let b:ale_completion_response = a:response
+    let b:ale_completion_parser = a:completion_parser
+    let &omnifunc = 'ale#completion#OmniFunc'
+    let &completeopt = 'menu,noinsert,noselect'
+    call feedkeys("\<C-x>\<C-o>", 'n')
+endfunction
+
+function! s:CompletionStillValid(request_id) abort
+    let [l:line, l:column] = getcurpos()[1:2]
+
+    return has_key(b:, 'ale_completion_info')
+    \&& b:ale_completion_info.request_id == a:request_id
+    \&& b:ale_completion_info.line == l:line
+    \&& b:ale_completion_info.column == l:column
+endfunction
+
+function! ale#completion#ParseTSServerCompletions(response) abort
+    let l:names = []
+
+    for l:suggestion in a:response.body[: g:ale_completion_max_suggestions]
+        call add(l:names, l:suggestion.name)
+    endfor
+
+    return l:names
+endfunction
+
+function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
+    let l:results = []
+
+    for l:suggestion in a:response.body
+        let l:displayParts = []
+
+        for l:part in l:suggestion.displayParts
+            call add(l:displayParts, l:part.text)
         endfor
 
-        let l:request_id = ale#lsp#Send(
-        \   l:info.conn_id,
-        \   ale#lsp#tsserver_message#CompletionEntryDetails(
-        \       l:buffer,
-        \       l:info.line,
-        \       l:info.column,
-        \       l:names,
-        \   ),
-        \)
+        " Each one of these parts has 'kind' properties
+        let l:documentationParts = []
 
-        if l:request_id
-            let l:info.request_id = l:request_id
+        for l:part in get(l:suggestion, 'documentation', [])
+            call add(l:documentationParts, l:part.text)
+        endfor
+
+        if l:suggestion.kind ==# 'clasName'
+            let l:kind = 'f'
+        elseif l:suggestion.kind ==# 'parameterName'
+            let l:kind = 'f'
         else
-            " Remove the info now if we failed to start the request.
-            call remove(s:buffer_completion_map, l:buffer)
+            let l:kind = 'v'
         endif
-    endif
+
+        " See :help complete-items
+        call add(l:results, {
+        \   'word': l:suggestion.name,
+        \   'kind': l:kind,
+        \   'menu': join(l:displayParts, ''),
+        \   'info': join(l:documentationParts, ''),
+        \})
+    endfor
+
+    return l:results
 endfunction
 
-function! s:HandleCompletionDetails(response) abort
-    let [l:buffer, l:info] = s:FindCompletionInfo(a:response)
-
-    if l:buffer >= 0
-        call remove(s:buffer_completion_map, l:buffer)
-
-        let l:name_list = []
-
-        for l:suggestion in a:response.body[: s:max_suggestions]
-            " Each suggestion has 'kind' and 'kindModifier' properties
-            " which could be useful.
-            " Each one of these parts has 'kind' properties
-            let l:displayParts = []
-
-            for l:part in l:suggestion.displayParts
-                call add(l:displayParts, l:part.text)
-            endfor
-
-            " Each one of these parts has 'kind' properties
-            let l:documentationParts = []
-
-            for l:part in l:suggestion.documentation
-                call add(l:documentationParts, l:part.text)
-            endfor
-
-            let l:text = l:suggestion.name
-            \   . ' - '
-            \   . join(l:displayParts, '')
-            \   . (!empty(l:documentationParts) ? ' ' : '')
-            \   . join(l:documentationParts, '')
-
-            call add(l:name_list, l:text)
-        endfor
-
-        echom string(l:name_list)
+function! s:HandleTSServerLSPResponse(response) abort
+    if !s:CompletionStillValid(get(a:response, 'request_seq'))
+        return
     endif
-endfunction
 
-function! s:HandleLSPResponse(response) abort
+    if !has_key(a:response, 'body')
+        return
+    endif
+
     let l:command = get(a:response, 'command', '')
 
     if l:command ==# 'completions'
-        call s:HandleCompletions(a:response)
+        let l:names = ale#completion#ParseTSServerCompletions(a:response)
+
+        if !empty(l:names)
+            let b:ale_completion_info.request_id = ale#lsp#Send(
+            \   b:ale_completion_info.conn_id,
+            \   ale#lsp#tsserver_message#CompletionEntryDetails(
+            \       bufnr(''),
+            \       b:ale_completion_info.line,
+            \       b:ale_completion_info.column,
+            \       l:names,
+            \   ),
+            \)
+        endif
     elseif l:command ==# 'completionEntryDetails'
-        call s:HandleCompletionDetails(a:response)
+        call ale#completion#Show(
+        \   a:response,
+        \   'ale#completion#ParseTSServerCompletionEntryDetails',
+        \)
     endif
 endfunction
 
-function! s:GetCompletionsForTSServer(buffer, linter, line, column) abort
+function! s:GetCompletionsForTSServer(linter) abort
+    let l:buffer = bufnr('')
     let l:executable = has_key(a:linter, 'executable_callback')
-    \   ? ale#util#GetFunction(a:linter.executable_callback)(a:buffer)
+    \   ? ale#util#GetFunction(a:linter.executable_callback)(l:buffer)
     \   : a:linter.executable
     let l:command = ale#job#PrepareCommand(l:executable)
 
     let l:id = ale#lsp#StartProgram(
     \   l:executable,
     \   l:command,
-    \   function('s:HandleLSPResponse')
+    \   function('s:HandleTSServerLSPResponse'),
     \)
 
     if !l:id
         if g:ale_history_enabled
-            call ale#history#Add(a:buffer, 'failed', l:id, l:command)
+            call ale#history#Add(l:buffer, 'failed', l:id, l:command)
         endif
     endif
 
-    if ale#lsp#OpenTSServerDocumentIfNeeded(l:id, a:buffer)
+    if ale#lsp#OpenTSServerDocumentIfNeeded(l:id, l:buffer)
         if g:ale_history_enabled
-            call ale#history#Add(a:buffer, 'started', l:id, l:command)
+            call ale#history#Add(l:buffer, 'started', l:id, l:command)
         endif
     endif
 
-    call ale#lsp#Send(l:id, ale#lsp#tsserver_message#Change(a:buffer))
+    call ale#lsp#Send(l:id, ale#lsp#tsserver_message#Change(l:buffer))
 
     let l:request_id = ale#lsp#Send(
     \   l:id,
-    \   ale#lsp#tsserver_message#Completions(a:buffer, a:line, a:column),
+    \   ale#lsp#tsserver_message#Completions(
+    \       l:buffer,
+    \       b:ale_completion_info.line,
+    \       b:ale_completion_info.column,
+    \       b:ale_completion_info.prefix,
+    \   ),
     \)
 
     if l:request_id
-        call s:RememberCompletionInfo(
-        \   a:buffer,
-        \   l:id,
-        \   l:request_id,
-        \   a:line,
-        \   a:column,
-        \)
+        let b:ale_completion_info.conn_id = l:id
+        let b:ale_completion_info.request_id = l:request_id
     endif
 endfunction
 
 function! ale#completion#GetCompletions() abort
-    let l:buffer = bufnr('')
     let [l:line, l:column] = getcurpos()[1:2]
 
-    for l:linter in ale#linter#Get(getbufvar(l:buffer, '&filetype'))
+    if s:timer_pos != [l:line, l:column]
+        return
+    endif
+
+    let l:prefix = ale#completion#GetPrefix(&filetype, l:line, l:column)
+
+    if empty(l:prefix)
+        return
+    endif
+
+    let b:ale_completion_info = {
+    \   'line': l:line,
+    \   'column': l:column,
+    \   'prefix': l:prefix,
+    \   'conn_id': 0,
+    \   'request_id': 0,
+    \}
+
+    for l:linter in ale#linter#Get(&filetype)
         if l:linter.lsp ==# 'tsserver'
-            call s:GetCompletionsForTSServer(l:buffer, l:linter, l:line, l:column)
+            call s:GetCompletionsForTSServer(l:linter)
         endif
     endfor
 endfunction
 
 function! s:TimerHandler(...) abort
+    let s:timer_id = -1
+
     call ale#completion#GetCompletions()
 endfunction
 
 function! ale#completion#Queue() abort
-    if s:timer != -1
-        call timer_stop(s:timer)
-        let s:timer = -1
+    let s:timer_pos = getcurpos()[1:2]
+
+    if s:timer_id != -1
+        call timer_stop(s:timer_id)
     endif
 
-    let s:timer = timer_start(s:delay, function('s:TimerHandler'))
+    let s:timer_id = timer_start(g:ale_completion_delay, function('s:TimerHandler'))
 endfunction
 
-function! ale#completion#Start() abort
+function! s:Setup(enabled) abort
     augroup ALECompletionGroup
         autocmd!
-        autocmd TextChangedI * call ale#completion#Queue()
+
+        if a:enabled
+            autocmd TextChangedI * call ale#completion#Queue()
+            autocmd CompleteDone * silent! pclose
+        endif
     augroup END
+
+    if !a:enabled
+        augroup! ALECompletionGroup
+    endif
+endfunction
+
+function! ale#completion#Enable() abort
+    call s:Setup(1)
+endfunction
+
+function! ale#completion#Disable() abort
+    call s:Setup(0)
 endfunction
