@@ -5,6 +5,10 @@ let g:ale_ruby_brakeman_options =
 \   get(g:, 'ale_ruby_brakeman_options', '')
 
 function! ale_linters#ruby#brakeman#Handle(buffer, lines) abort
+    if len(a:lines) == 0
+        return []
+    endif
+
     let l:result = json_decode(join(a:lines, ''))
 
     let l:output = []
