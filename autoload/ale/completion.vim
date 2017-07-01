@@ -6,9 +6,9 @@ let s:delay = 300
 let s:max_suggestions = 20
 let s:buffer_completion_map = {}
 
-function! s:RememberCompletionInfo(buffer, executable, request_id, line, column) abort
+function! s:RememberCompletionInfo(buffer, conn_id, request_id, line, column) abort
     let s:buffer_completion_map[a:buffer] = {
-    \   'executable': a:executable,
+    \   'conn_id': a:conn_id,
     \   'request_id': a:request_id,
     \   'line': a:line,
     \   'column': a:column,
@@ -48,8 +48,8 @@ function! s:HandleCompletions(response) abort
             call add(l:names, l:suggestion.name)
         endfor
 
-        let l:request_id = ale#lsp#SendMessageToProgram(
-        \   l:info.executable,
+        let l:request_id = ale#lsp#Send(
+        \   l:info.conn_id,
         \   ale#lsp#tsserver_message#CompletionEntryDetails(
         \       l:buffer,
         \       l:info.line,
@@ -119,40 +119,37 @@ function! s:GetCompletionsForTSServer(buffer, linter, line, column) abort
     let l:executable = has_key(a:linter, 'executable_callback')
     \   ? ale#util#GetFunction(a:linter.executable_callback)(a:buffer)
     \   : a:linter.executable
-    let l:command = l:executable
+    let l:command = ale#job#PrepareCommand(l:executable)
 
-    let l:job_id = ale#lsp#StartProgram(
+    let l:id = ale#lsp#StartProgram(
     \   l:executable,
-    \   l:executable,
+    \   l:command,
     \   function('s:HandleLSPResponse')
     \)
 
-    if !l:job_id
+    if !l:id
         if g:ale_history_enabled
-            call ale#history#Add(a:buffer, 'failed', l:job_id, l:command)
+            call ale#history#Add(a:buffer, 'failed', l:id, l:command)
         endif
     endif
 
-    if ale#lsp#OpenTSServerDocumentIfNeeded(l:executable, a:buffer)
+    if ale#lsp#OpenTSServerDocumentIfNeeded(l:id, a:buffer)
         if g:ale_history_enabled
-            call ale#history#Add(a:buffer, 'started', l:job_id, l:command)
+            call ale#history#Add(a:buffer, 'started', l:id, l:command)
         endif
     endif
 
-    call ale#lsp#SendMessageToProgram(
-    \   l:executable,
-    \   ale#lsp#tsserver_message#Change(a:buffer),
-    \)
+    call ale#lsp#Send(l:id, ale#lsp#tsserver_message#Change(a:buffer))
 
-    let l:request_id = ale#lsp#SendMessageToProgram(
-    \   l:executable,
+    let l:request_id = ale#lsp#Send(
+    \   l:id,
     \   ale#lsp#tsserver_message#Completions(a:buffer, a:line, a:column),
     \)
 
     if l:request_id
         call s:RememberCompletionInfo(
         \   a:buffer,
-        \   l:executable,
+        \   l:id,
         \   l:request_id,
         \   a:line,
         \   a:column,

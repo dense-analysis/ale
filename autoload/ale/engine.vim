@@ -564,29 +564,30 @@ function! s:CheckWithTSServer(buffer, linter, executable) abort
     let l:info = g:ale_buffer_info[a:buffer]
 
     let l:command = ale#job#PrepareCommand(a:executable)
-    let l:job_id = ale#lsp#StartProgram(a:executable, l:command, function('s:HandleLSPResponse'))
+    let l:id = ale#lsp#StartProgram(
+    \   a:executable,
+    \   l:command,
+    \   function('s:HandleLSPResponse'),
+    \)
 
-    if !l:job_id
+    if !l:id
         if g:ale_history_enabled
-            call ale#history#Add(a:buffer, 'failed', l:job_id, l:command)
+            call ale#history#Add(a:buffer, 'failed', l:id, l:command)
         endif
 
         return
     endif
 
-    if ale#lsp#OpenTSServerDocumentIfNeeded(a:executable, a:buffer)
+    if ale#lsp#OpenTSServerDocumentIfNeeded(l:id, a:buffer)
         if g:ale_history_enabled
-            call ale#history#Add(a:buffer, 'started', l:job_id, l:command)
+            call ale#history#Add(a:buffer, 'started', l:id, l:command)
         endif
     endif
 
-    call ale#lsp#SendMessageToProgram(
-    \   a:executable,
-    \   ale#lsp#tsserver_message#Change(a:buffer),
-    \)
+    call ale#lsp#Send(l:id, ale#lsp#tsserver_message#Change(a:buffer))
 
-    let l:request_id = ale#lsp#SendMessageToProgram(
-    \   a:executable,
+    let l:request_id = ale#lsp#Send(
+    \   l:id,
     \   ale#lsp#tsserver_message#Geterr(a:buffer),
     \)
 
