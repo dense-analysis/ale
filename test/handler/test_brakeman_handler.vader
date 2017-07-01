@@ -73,3 +73,9 @@ Execute(The brakeman handler should parse JSON correctly):
   \    ']',
   \  '}'
   \  ])
+
+Execute(The brakeman handler should parse JSON correctly when there is no output from brakeman):
+  AssertEqual
+  \ [],
+  \ ale_linters#ruby#brakeman#Handle(347, [
+  \ ])
