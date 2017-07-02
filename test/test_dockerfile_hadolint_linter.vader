@@ -1,0 +1,69 @@
+" NOTE: We use the 'b:' forms below to ensure that we're properly using
+" ale#Var()
+
+Given dockerfile:
+  #
+
+Before:
+  Save g:ale_dockerfile_hadolint_use_docker
+  Save g:ale_dockerfile_hadolint_docker_image
+  silent! unlet g:ale_dockerfile_hadolint_use_docker
+  silent! unlet g:ale_dockerfile_hadolint_docker_image
+
+  " enable loading inside test container
+  silent! cd /testplugin
+  source ale_linters/dockerfile/hadolint.vim
+
+
+After:
+  Restore
+  silent! unlet b:ale_dockerfile_hadolint_use_docker
+  silent! unlet b:ale_dockerfile_hadolint_docker_image
+
+
+Execute(linter honors ..._use_docker correctly):
+
+  " default: never
+  AssertEqual
+  \ 'hadolint',
+  \ ale_linters#dockerfile#hadolint#GetExecutable(bufnr(''))
+
+  " explicit never
+  let b:ale_dockerfile_hadolint_use_docker = 'never'
+  AssertEqual
+  \ 'hadolint',
+  \ ale_linters#dockerfile#hadolint#GetExecutable(bufnr(''))
+
+  let b:ale_dockerfile_hadolint_use_docker = 'always'
+  AssertEqual
+  \ 'docker',
+  \ ale_linters#dockerfile#hadolint#GetExecutable(bufnr(''))
+
+  " hadolint if present, otherwise docker
+  let command = 'docker'
+  if executable('hadolint')
+    let command = 'hadolint'
+  endif
+
+  let b:ale_dockerfile_hadolint_use_docker = 'yes'
+  AssertEqual
+  \ command,
+  \ ale_linters#dockerfile#hadolint#GetExecutable(bufnr(''))
+
+
+Execute(command is correct when using docker):
+  let b:ale_dockerfile_hadolint_use_docker = 'always'
+
+  AssertEqual
+  \ "docker run --rm -i lukasmartinelli/hadolint",
+  \ ale_linters#dockerfile#hadolint#GetCommand(bufnr(''))
+
+
+Execute(command is correct when not docker):
+  let b:ale_dockerfile_hadolint_use_docker = 'never'
+
+  AssertEqual
+  \ "hadolint -",
+  \ ale_linters#dockerfile#hadolint#GetCommand(bufnr(''))
+
+" fin...
