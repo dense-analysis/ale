@@ -52,20 +52,23 @@ function! ale#linter#PreProcess(linter) abort
     let l:obj = {
     \   'name': get(a:linter, 'name'),
     \   'lsp': get(a:linter, 'lsp', ''),
-    \   'callback': get(a:linter, 'callback'),
     \}
 
     if type(l:obj.name) != type('')
         throw '`name` must be defined to name the linter'
     endif
 
-    if !s:IsCallback(l:obj.callback)
-        throw '`callback` must be defined with a callback to accept output'
-    endif
-
     let l:needs_address = l:obj.lsp ==# 'socket'
     let l:needs_executable = l:obj.lsp !=# 'socket'
     let l:needs_command = l:obj.lsp !=# 'socket'
+
+    if empty(l:obj.lsp)
+        let l:obj.callback = get(a:linter, 'callback')
+
+        if !s:IsCallback(l:obj.callback)
+            throw '`callback` must be defined with a callback to accept output'
+        endif
+    endif
 
     if index(['', 'socket', 'stdio', 'tsserver'], l:obj.lsp) < 0
         throw '`lsp` must be either `''lsp''` or `''tsserver''` if defined'

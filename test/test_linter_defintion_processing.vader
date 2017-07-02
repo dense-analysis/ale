@@ -372,7 +372,6 @@ Execute(PreProcess should accept tsserver LSP configuration):
   \ 'executable': 'x',
   \ 'command': 'x',
   \ 'lsp': 'tsserver',
-  \ 'callback': 'x',
   \}
 
   AssertEqual 'tsserver', ale#linter#PreProcess(g:linter).lsp
@@ -393,7 +392,6 @@ Execute(PreProcess should accept stdio LSP configuration):
   \ 'executable': 'x',
   \ 'command': 'x',
   \ 'lsp': 'stdio',
-  \ 'callback': 'x',
   \}
 
   AssertEqual 'stdio', ale#linter#PreProcess(g:linter).lsp
@@ -412,7 +410,6 @@ Execute(PreProcess should accept LSP server configurations):
   let g:linter = {
   \ 'name': 'x',
   \ 'lsp': 'socket',
-  \ 'callback': 'x',
   \ 'address_callback': 'X',
   \}
 
@@ -422,7 +419,6 @@ Execute(PreProcess should require an address_callback for LSP socket configurati
   let g:linter = {
   \ 'name': 'x',
   \ 'lsp': 'socket',
-  \ 'callback': 'x',
   \}
 
   AssertThrows call ale#linter#PreProcess(g:linter)
