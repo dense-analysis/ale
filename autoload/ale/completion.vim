@@ -171,11 +171,10 @@ endfunction
 
 function! s:GetCompletionsForTSServer(linter) abort
     let l:buffer = bufnr('')
-    let l:executable = has_key(a:linter, 'executable_callback')
-    \   ? ale#util#GetFunction(a:linter.executable_callback)(l:buffer)
-    \   : a:linter.executable
-    let l:command = ale#job#PrepareCommand(l:executable)
-
+    let l:executable = ale#linter#GetExecutable(l:buffer, a:linter)
+    let l:command = ale#job#PrepareCommand(
+    \ ale#linter#GetCommand(l:buffer, a:linter),
+    \)
     let l:id = ale#lsp#StartProgram(
     \   l:executable,
     \   l:command,

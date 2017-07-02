@@ -19,5 +19,6 @@ call ale#linter#Define('typescript', {
 \   'name': 'tsserver',
 \   'lsp': 'tsserver',
 \   'executable_callback': 'ale_linters#typescript#tsserver#GetExecutable',
+\   'command_callback': 'ale_linters#typescript#tsserver#GetExecutable',
 \   'callback': 'ale_linters#typescript#tsserver#Handle',
 \})

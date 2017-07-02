@@ -502,11 +502,8 @@ function! ale#engine#ProcessChain(buffer, linter, chain_index, input) abort
             let l:input = []
             let l:chain_index += 1
         endwhile
-    elseif has_key(a:linter, 'command_callback')
-        " If there is a callback for generating a command, call that instead.
-        let l:command = ale#util#GetFunction(a:linter.command_callback)(a:buffer)
     else
-        let l:command = a:linter.command
+        let l:command = ale#linter#GetCommand(a:buffer, a:linter)
     endif
 
     if empty(l:command)
@@ -563,7 +560,9 @@ endfunction
 function! s:CheckWithTSServer(buffer, linter, executable) abort
     let l:info = g:ale_buffer_info[a:buffer]
 
-    let l:command = ale#job#PrepareCommand(a:executable)
+    let l:command = ale#job#PrepareCommand(
+    \ ale#linter#GetCommand(a:buffer, a:linter),
+    \)
     let l:id = ale#lsp#StartProgram(
     \   a:executable,
     \   l:command,
@@ -598,9 +597,7 @@ endfunction
 
 function! ale#engine#Invoke(buffer, linter) abort
     if empty(a:linter.lsp) || a:linter.lsp ==# 'tsserver'
-        let l:executable = has_key(a:linter, 'executable_callback')
-        \   ? ale#util#GetFunction(a:linter.executable_callback)(a:buffer)
-        \   : a:linter.executable
+        let l:executable = ale#linter#GetExecutable(a:buffer, a:linter)
 
         " Run this program if it can be executed.
         if s:IsExecutable(l:executable)
