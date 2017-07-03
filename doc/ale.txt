@@ -194,6 +194,7 @@ The following languages and tools are supported.
 * Pug: 'pug-lint'
 * Puppet: 'puppet', 'puppet-lint'
 * Python: 'autopep8', 'flake8', 'isort', 'mypy', 'pylint', 'yapf'
+* R: 'lintr'
 * ReasonML: 'merlin'
 * reStructuredText: 'proselint'
 * RPM spec: 'spec'
