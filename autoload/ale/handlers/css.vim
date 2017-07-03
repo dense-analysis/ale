@@ -37,6 +37,18 @@ function! ale#handlers#css#HandleCSSLintFormat(buffer, lines) abort
 endfunction
 
 function! ale#handlers#css#HandleStyleLintFormat(buffer, lines) abort
+    let l:exception_pattern = '\v^Error:'
+
+    for l:line in a:lines[:10]
+        if len(matchlist(l:line, l:exception_pattern)) > 0
+            return [{
+            \   'lnum': 1,
+            \   'text': 'stylelint exception thrown (type :ALEDetail for more information)',
+            \   'detail': join(a:lines, "\n"),
+            \}]
+        endif
+    endfor
+
     " Matches patterns line the following:
     "
     " src/main.css
