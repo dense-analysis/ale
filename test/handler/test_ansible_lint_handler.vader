@@ -1,5 +1,6 @@
 Before:
     runtime ale_linters/ansible/ansible_lint.vim
+    call ale#test#SetFilename('main.yml')
 
 After:
     call ale#linter#Reset()
@@ -11,11 +12,11 @@ Execute(The ansible-lint handler should handle basic errors):
   \    'lnum': 35,
   \    'col': 0,
   \    'type': 'E',
-  \    'text': "EANSIBLE0002: Trailing whitespace",
+  \    'text': 'EANSIBLE0002: Trailing whitespace',
   \   },
   \ ],
-  \ ale_linters#ansible#ansible_lint#Handle(42, [
-  \   "test.yml:35: [EANSIBLE0002] Trailing whitespace",
+  \ ale_linters#ansible#ansible_lint#Handle(bufnr(''), [
+  \   '/tmp/vxepmGL/1/main.yml:35: [EANSIBLE0002] Trailing whitespace',
   \ ])
 
 Execute (The ansible-lint handler should handle names with spaces):
@@ -28,6 +29,14 @@ Execute (The ansible-lint handler should handle names with spaces):
   \     'text': 'E111: indentation is not a multiple of four',
   \   },
   \ ],
-  \ ale_linters#ansible#ansible_lint#Handle(42, [
-  \   'C:\something\with spaces.yml:6:6: E111 indentation is not a multiple of four',
+  \ ale_linters#ansible#ansible_lint#Handle(bufnr(''), [
+  \   '/tmp/vxepm GL/1/main.yml:6:6: E111 indentation is not a multiple of four',
+  \ ])
+
+Execute (The ansible-lint handler should ignore errors from other files):
+  AssertEqual
+  \ [
+  \ ],
+  \ ale_linters#ansible#ansible_lint#Handle(bufnr(''), [
+  \   '/foo/bar/roles/main.yml:6:6: E111 indentation is not a multiple of four',
   \ ])
