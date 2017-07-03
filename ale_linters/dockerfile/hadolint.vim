@@ -1,5 +1,9 @@
 " Author: hauleth - https://github.com/hauleth
 
+" always, yes, never
+call ale#Set('dockerfile_hadolint_use_docker', 'never')
+call ale#Set('dockerfile_hadolint_docker_image', 'lukasmartinelli/hadolint')
+
 function! ale_linters#dockerfile#hadolint#Handle(buffer, lines) abort
     " Matches patterns line the following:
     "
@@ -29,9 +33,45 @@ function! ale_linters#dockerfile#hadolint#Handle(buffer, lines) abort
     return l:output
 endfunction
 
+" This is a little different than the typical 'executable' callback.  We want
+" to afford the user the chance to say always use docker, never use docker,
+" and use docker if the hadolint executable is not present on the system.
+"
+" In the case of neither docker nor hadolint executables being present, it
+" really doesn't matter which we return -- either will have the effect of
+" 'nope, can't use this linter!'.
+
+function! ale_linters#dockerfile#hadolint#GetExecutable(buffer) abort
+    let l:use_docker = ale#Var(a:buffer, 'dockerfile_hadolint_use_docker')
+
+    " check for mandatory directives
+    if l:use_docker ==# 'never'
+        return 'hadolint'
+    elseif l:use_docker ==# 'always'
+        return 'docker'
+    endif
+
+    " if we reach here, we want to use 'hadolint' if present...
+    if executable('hadolint')
+        return 'hadolint'
+    endif
+
+    "... and 'docker' as a fallback.
+    return 'docker'
+endfunction
+
+function! ale_linters#dockerfile#hadolint#GetCommand(buffer) abort
+    let l:command = ale_linters#dockerfile#hadolint#GetExecutable(a:buffer)
+    if l:command ==# 'docker'
+        return 'docker run --rm -i ' . ale#Var(a:buffer, 'dockerfile_hadolint_docker_image')
+    endif
+    return 'hadolint -'
+endfunction
+
+
 call ale#linter#Define('dockerfile', {
 \   'name': 'hadolint',
-\   'executable': 'hadolint',
-\   'command': 'hadolint -',
+\   'executable_callback': 'ale_linters#dockerfile#hadolint#GetExecutable',
+\   'command_callback': 'ale_linters#dockerfile#hadolint#GetCommand',
 \   'callback': 'ale_linters#dockerfile#hadolint#Handle',
 \})
