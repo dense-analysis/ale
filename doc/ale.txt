@@ -96,6 +96,8 @@ CONTENTS                                                         *ale-contents*
       shellcheck..........................|ale-sh-shellcheck|
     spec..................................|ale-spec-options|
       rpmlint.............................|ale-spec-rpmlint|
+    stylus................................|ale-stylus-options|
+      stylelint...........................|ale-stylus-stylelint|
     tex...................................|ale-tex-options|
       chktex..............................|ale-tex-chktex|
       lacheck.............................|ale-tex-lacheck|
@@ -202,6 +204,7 @@ The following languages and tools are supported.
 * Scala: 'scalac'
 * Slim: 'slim-lint'
 * SML: 'smlnj'
+* Stylus: 'stylelint'
 * SQL: 'sqlint'
 * Swift: 'swiftlint'
 * Texinfo: 'proselint'

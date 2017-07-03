@@ -113,6 +113,7 @@ name. That seems to be the fairest way to arrange this table.
 | Scala | [scalac](http://scala-lang.org) |
 | Slim | [slim-lint](https://github.com/sds/slim-lint)
 | SML | [smlnj](http://www.smlnj.org/) |
+| Stylus | [stylelint](https://github.com/stylelint/stylelint) |
 | SQL | [sqlint](https://github.com/purcell/sqlint) |
 | Swift | [swiftlint](https://swift.org/) |
 | Texinfo | [proselint](http://proselint.com/)|
