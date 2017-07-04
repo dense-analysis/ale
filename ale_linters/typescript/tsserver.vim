@@ -11,13 +11,9 @@ function! ale_linters#typescript#tsserver#GetExecutable(buffer) abort
     \])
 endfunction
 
-function! ale_linters#typescript#tsserver#Handle(buffer, lines) abort
-    return a:lines
-endfunction
-
 call ale#linter#Define('typescript', {
 \   'name': 'tsserver',
 \   'lsp': 'tsserver',
 \   'executable_callback': 'ale_linters#typescript#tsserver#GetExecutable',
-\   'callback': 'ale_linters#typescript#tsserver#Handle',
+\   'command_callback': 'ale_linters#typescript#tsserver#GetExecutable',
 \})

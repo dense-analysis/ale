@@ -7,15 +7,14 @@ let s:connections = []
 let g:ale_lsp_next_message_id = 1
 
 function! s:NewConnection() abort
+    " id: The job ID as a Number, or the server address as a string.
     " data: The message data received so far.
-    " address: An address only set for server connections.
     " executable: An executable only set for program connections.
-    " job: A job ID only set for running programs.
+    " open_documents: A list of buffers we told the server we opened.
     let l:conn = {
+    \   'id': '',
     \   'data': '',
-    \   'address': '',
-    \   'executable': '',
-    \   'job_id': -1,
+    \   'open_documents': [],
     \}
 
     call add(s:connections, l:conn)
@@ -23,6 +22,15 @@ function! s:NewConnection() abort
     return l:conn
 endfunction
 
+function! s:FindConnection(key, value) abort
+    for l:conn in s:connections
+        if has_key(l:conn, a:key) && get(l:conn, a:key) == a:value
+            return l:conn
+        endif
+    endfor
+
+    return {}
+endfunction
 
 function! ale#lsp#GetNextMessageID() abort
     " Use the current ID
@@ -150,13 +158,13 @@ endfunction
 function! s:HandleChannelMessage(channel, message) abort
     let l:info = ch_info(a:channel)
     let l:address = l:info.hostname . l:info.address
-    let l:conn = filter(s:connections[:], 'v:val.address ==# l:address')[0]
+    let l:conn = s:FindConnection('id', l:address)
 
     call ale#lsp#HandleMessage(l:conn, a:message)
 endfunction
 
 function! s:HandleCommandMessage(job_id, message) abort
-    let l:conn = filter(s:connections[:], 'v:val.job_id == a:job_id')[0]
+    let l:conn = s:FindConnection('id', a:job_id)
 
     call ale#lsp#HandleMessage(l:conn, a:message)
 endfunction
@@ -170,66 +178,37 @@ function! ale#lsp#StartProgram(executable, command, callback) abort
         return 0
     endif
 
-    let l:matches = filter(s:connections[:], 'v:val.executable ==# a:executable')
+    let l:conn = s:FindConnection('executable', a:executable)
 
     " Get the current connection or a new one.
-    let l:conn = !empty(l:matches) ? l:matches[0] : s:NewConnection()
+    let l:conn = !empty(l:conn) ? l:conn : s:NewConnection()
     let l:conn.executable = a:executable
-    let l:conn.callback = a:callback
 
-    if !ale#job#IsRunning(l:conn.job_id)
+    if !has_key(l:conn, 'id') || !ale#job#IsRunning(l:conn.id)
         let l:options = {
         \   'mode': 'raw',
         \   'out_cb': function('s:HandleCommandMessage'),
         \}
         let l:job_id = ale#job#Start(a:command, l:options)
     else
-        let l:job_id = l:conn.job_id
+        let l:job_id = l:conn.id
     endif
 
     if l:job_id <= 0
         return 0
     endif
 
-    let l:conn.job_id = l:job_id
+    let l:conn.id = l:job_id
+    let l:conn.callback = a:callback
 
     return l:job_id
 endfunction
 
-" Send a message to a server with a given executable, and a command for
-" running the executable.
-"
-" Returns -1 when a message is sent, but no response is expected
-"          0 when the message is not sent and
-"          >= 1 with the message ID when a response is expected.
-function! ale#lsp#SendMessageToProgram(executable, message) abort
-    let [l:id, l:data] = ale#lsp#CreateMessageData(a:message)
-
-    let l:matches = filter(s:connections[:], 'v:val.executable ==# a:executable')
-
-    " No connection is currently open.
-    if empty(l:matches)
-        return 0
-    endif
-
-    " Get the current connection or a new one.
-    let l:conn = l:matches[0]
-    let l:conn.executable = a:executable
-
-    if get(l:conn, 'job_id', 0) == 0
-        return 0
-    endif
-
-    call ale#job#SendRaw(l:conn.job_id, l:data)
-
-    return l:id == 0 ? -1 : l:id
-endfunction
-
 " Connect to an address and set up a callback for handling responses.
 function! ale#lsp#ConnectToAddress(address, callback) abort
-    let l:matches = filter(s:connections[:], 'v:val.address ==# a:address')
+    let l:conn = s:FindConnection('id', a:address)
     " Get the current connection or a new one.
-    let l:conn = !empty(l:matches) ? l:matches[0] : s:NewConnection()
+    let l:conn = !empty(l:conn) ? l:conn : s:NewConnection()
 
     if !has_key(l:conn, 'channel') || ch_status(l:conn.channel) !=# 'open'
         let l:conn.channnel = ch_open(a:address, {
@@ -243,43 +222,43 @@ function! ale#lsp#ConnectToAddress(address, callback) abort
         return 0
     endif
 
+    let l:conn.id = a:address
     let l:conn.callback = a:callback
 
     return 1
 endfunction
 
-" Send a message to a server at a given address.
+" Send a message to an LSP server.
 " Notifications do not need to be handled.
 "
 " Returns -1 when a message is sent, but no response is expected
 "          0 when the message is not sent and
 "          >= 1 with the message ID when a response is expected.
-function! ale#lsp#SendMessageToAddress(address, message) abort
-    if a:0 > 1
-        throw 'Too many arguments!'
-    endif
-
-    if !a:message[0] && a:0 == 0
-        throw 'A callback must be set for messages which are not notifications!'
-    endif
-
+function! ale#lsp#Send(conn_id, message) abort
+    let l:conn = s:FindConnection('id', a:conn_id)
     let [l:id, l:data] = ale#lsp#CreateMessageData(a:message)
 
-    let l:matches = filter(s:connections[:], 'v:val.address ==# a:address')
-
-    " No connection is currently open.
-    if empty(l:matches)
+    if has_key(l:conn, 'executable')
+        call ale#job#SendRaw(l:conn.id, l:data)
+    elseif has_key(l:conn, 'channel') && ch_status(l:conn.channnel) ==# 'open'
+        " Send the message to the server
+        call ch_sendraw(l:conn.channel, l:data)
+    else
         return 0
     endif
-
-    let l:conn = l:matches[0]
-
-    if ch_status(l:conn.channnel) !=# 'open'
-        return 0
-    endif
-
-    " Send the message to the server
-    call ch_sendraw(l:conn.channel, l:data)
 
     return l:id == 0 ? -1 : l:id
+endfunction
+
+function! ale#lsp#OpenTSServerDocumentIfNeeded(conn_id, buffer) abort
+    let l:conn = s:FindConnection('id', a:conn_id)
+    let l:opened = 0
+
+    if !empty(l:conn) && index(l:conn.open_documents, a:buffer) < 0
+        call ale#lsp#Send(a:conn_id, ale#lsp#tsserver_message#Open(a:buffer))
+        call add(l:conn.open_documents, a:buffer)
+        let l:opened = 1
+    endif
+
+    return l:opened
 endfunction

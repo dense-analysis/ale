@@ -96,6 +96,8 @@ CONTENTS                                                         *ale-contents*
       shellcheck..........................|ale-sh-shellcheck|
     spec..................................|ale-spec-options|
       rpmlint.............................|ale-spec-rpmlint|
+    stylus................................|ale-stylus-options|
+      stylelint...........................|ale-stylus-stylelint|
     tex...................................|ale-tex-options|
       chktex..............................|ale-tex-chktex|
       lacheck.............................|ale-tex-lacheck|
@@ -192,6 +194,7 @@ The following languages and tools are supported.
 * Pug: 'pug-lint'
 * Puppet: 'puppet', 'puppet-lint'
 * Python: 'autopep8', 'flake8', 'isort', 'mypy', 'pylint', 'yapf'
+* R: 'lintr'
 * ReasonML: 'merlin'
 * reStructuredText: 'proselint'
 * RPM spec: 'spec'
@@ -202,6 +205,7 @@ The following languages and tools are supported.
 * Scala: 'scalac'
 * Slim: 'slim-lint'
 * SML: 'smlnj'
+* Stylus: 'stylelint'
 * SQL: 'sqlint'
 * Swift: 'swiftlint'
 * Texinfo: 'proselint'
@@ -362,7 +366,7 @@ g:ale_history_enabled                                   *g:ale_history_enabled*
 g:ale_history_log_output                             *g:ale_history_log_output*
 
   Type: |Number|
-  Default: `0`
+  Default: `1`
 
   When set to `1`, ALE will store the output of commands which have completed
   successfully in the command history, and the output will be displayed when
@@ -371,8 +375,9 @@ g:ale_history_log_output                             *g:ale_history_log_output*
   |g:ale_history_enabled| must be set to `1` for this output to be stored or
   printed.
 
-  ALE will likely consume a lot of memory if this option is on, so it should
-  only be used for debugging problems with linters.
+  Some memory will be consumed by this option. It is very useful for figuring
+  out what went wrong with linters, and for bug reports. Turn this option off
+  if you want to save on some memory usage.
 
 
 g:ale_keep_list_window_open                       *g:ale_keep_list_window_open*

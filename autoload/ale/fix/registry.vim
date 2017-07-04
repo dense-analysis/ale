@@ -7,6 +7,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Add blank lines before control statements.',
 \   },
+\   'align_help_tags': {
+\       'function': 'ale#fixers#help#AlignTags',
+\       'suggested_filetypes': ['help'],
+\       'description': 'Align help tags to the right margin',
+\   },
 \   'autopep8': {
 \       'function': 'ale#fixers#autopep8#Fix',
 \       'suggested_filetypes': ['python'],

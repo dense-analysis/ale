@@ -146,3 +146,35 @@ Execute(ale#lsp#tsserver_message#Geterr() should return correct messages):
   \   }
   \ ],
   \ ale#lsp#tsserver_message#Geterr(bufnr(''))
+
+Execute(ale#lsp#tsserver_message#Completions() should return correct messages):
+  silent! noautocmd file foo.ts
+
+  AssertEqual
+  \ [
+  \   0,
+  \   'ts@completions',
+  \   {
+  \     'file': b:dir . '/foo.ts',
+  \     'line': 347,
+  \     'offset': 12,
+  \     'prefix': 'abc',
+  \   }
+  \ ],
+  \ ale#lsp#tsserver_message#Completions(bufnr(''), 347, 12, 'abc')
+
+Execute(ale#lsp#tsserver_message#CompletionEntryDetails() should return correct messages):
+  silent! noautocmd file foo.ts
+
+  AssertEqual
+  \ [
+  \   0,
+  \   'ts@completionEntryDetails',
+  \   {
+  \     'file': b:dir . '/foo.ts',
+  \     'line': 347,
+  \     'offset': 12,
+  \     'entryNames': ['foo', 'bar'],
+  \   }
+  \ ],
+  \ ale#lsp#tsserver_message#CompletionEntryDetails(bufnr(''), 347, 12, ['foo', 'bar'])

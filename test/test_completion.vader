@@ -1,0 +1,90 @@
+Execute(TypeScript completions responses should be parsed correctly):
+  AssertEqual [],
+  \ ale#completion#ParseTSServerCompletions({
+  \ 'body': [],
+  \})
+  AssertEqual ['foo', 'bar', 'baz'],
+  \ ale#completion#ParseTSServerCompletions({
+  \ 'body': [
+  \   {'name': 'foo'},
+  \   {'name': 'bar'},
+  \   {'name': 'baz'},
+  \ ],
+  \})
+
+Execute(TypeScript completion details responses should be parsed correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'word': 'abc',
+  \     'menu': '(property) Foo.abc: number',
+  \     'info': '',
+  \     'kind': 'f'
+  \   },
+  \   {
+  \     'word': 'def',
+  \     'menu': '(property) Foo.def: number',
+  \     'info': 'foo bar baz',
+  \     'kind': 'f'
+  \   },
+  \ ],
+  \ ale#completion#ParseTSServerCompletionEntryDetails({
+  \ 'body': [
+  \   {
+  \     'name': 'abc',
+  \     'kind': 'parameterName',
+  \     'displayParts': [
+  \       {'text': '('},
+  \       {'text': 'property'},
+  \       {'text': ')'},
+  \       {'text': ' '},
+  \       {'text': 'Foo'},
+  \       {'text': '.'},
+  \       {'text': 'abc'},
+  \       {'text': ':'},
+  \       {'text': ' '},
+  \       {'text': 'number'},
+  \     ],
+  \   },
+  \   {
+  \     'name': 'def',
+  \     'kind': 'parameterName',
+  \     'displayParts': [
+  \       {'text': '('},
+  \       {'text': 'property'},
+  \       {'text': ')'},
+  \       {'text': ' '},
+  \       {'text': 'Foo'},
+  \       {'text': '.'},
+  \       {'text': 'def'},
+  \       {'text': ':'},
+  \       {'text': ' '},
+  \       {'text': 'number'},
+  \     ],
+  \     'documentation': [
+  \       {'text': 'foo'},
+  \       {'text': ' '},
+  \       {'text': 'bar'},
+  \       {'text': ' '},
+  \       {'text': 'baz'},
+  \     ],
+  \   },
+  \ ],
+  \})
+
+Given typescript():
+  let abc = y.
+  let foo = ab
+  let foo = (ab)
+
+Execute(Completion should be done after dots in TypeScript):
+  AssertEqual '.', ale#completion#GetPrefix(&filetype, 1, 13)
+
+Execute(Completion should be done after words in TypeScript):
+  AssertEqual 'ab', ale#completion#GetPrefix(&filetype, 2, 13)
+
+Execute(Completion should be done after words in parens in TypeScript):
+  AssertEqual 'ab', ale#completion#GetPrefix(&filetype, 3, 14)
+
+Execute(Completion should not be done after parens in TypeScript):
+  AssertEqual '', ale#completion#GetPrefix(&filetype, 3, 15)

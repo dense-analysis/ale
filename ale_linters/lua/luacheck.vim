@@ -22,14 +22,14 @@ function! ale_linters#lua#luacheck#Handle(buffer, lines) abort
     "
     " artal.lua:159:17: (W111) shadowing definition of loop variable 'i' on line 106
     " artal.lua:182:7: (W213) unused loop variable 'i'
-    let l:pattern = '^.*:\(\d\+\):\(\d\+\): (\([WE]\)\d\+) \(.\+\)$'
+    let l:pattern = '^.*:\(\d\+\):\(\d\+\): (\([WE]\)\(\d\+\)) \(.\+\)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
-        \   'text': l:match[4],
+        \   'text': l:match[3] . l:match[4] . ': ' . l:match[5],
         \   'type': l:match[3],
         \})
     endfor

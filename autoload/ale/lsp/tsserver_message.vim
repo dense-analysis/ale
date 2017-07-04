@@ -26,7 +26,7 @@ function! ale#lsp#tsserver_message#Change(buffer) abort
     \   'file': expand('#' . a:buffer . ':p'),
     \   'line': 1,
     \   'offset': 1,
-    \   'endLine': 1073741824 ,
+    \   'endLine': 1073741824,
     \   'endOffset': 1,
     \   'insertString': join(l:lines, "\n"),
     \}]
@@ -34,4 +34,22 @@ endfunction
 
 function! ale#lsp#tsserver_message#Geterr(buffer) abort
     return [1, 'ts@geterr', {'files': [expand('#' . a:buffer . ':p')]}]
+endfunction
+
+function! ale#lsp#tsserver_message#Completions(buffer, line, column, prefix) abort
+    return [0, 'ts@completions', {
+    \   'line': a:line,
+    \   'offset': a:column,
+    \   'file': expand('#' . a:buffer . ':p'),
+    \   'prefix': a:prefix,
+    \}]
+endfunction
+
+function! ale#lsp#tsserver_message#CompletionEntryDetails(buffer, line, column, entry_names) abort
+    return [0, 'ts@completionEntryDetails', {
+    \   'line': a:line,
+    \   'offset': a:column,
+    \   'file': expand('#' . a:buffer . ':p'),
+    \   'entryNames': a:entry_names,
+    \}]
 endfunction

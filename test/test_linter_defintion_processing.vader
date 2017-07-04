@@ -370,8 +370,8 @@ Execute(PreProcess should accept tsserver LSP configuration):
   let g:linter = {
   \ 'name': 'x',
   \ 'executable': 'x',
+  \ 'command': 'x',
   \ 'lsp': 'tsserver',
-  \ 'callback': 'x',
   \}
 
   AssertEqual 'tsserver', ale#linter#PreProcess(g:linter).lsp
@@ -379,47 +379,46 @@ Execute(PreProcess should accept tsserver LSP configuration):
   call remove(g:linter, 'executable')
   let g:linter.executable_callback = 'X'
 
-  call ale#linter#PreProcess(g:linter).lsp
-
-Execute(PreProcess should complain about commands being set for LSP configurations):
-  let g:linter = {
-  \ 'name': 'x',
-  \ 'executable': 'x',
-  \ 'lsp': 'tsserver',
-  \ 'command': 'x',
-  \ 'callback': 'x',
-  \}
-
-  AssertThrows call ale#linter#PreProcess(g:linter)
-  AssertEqual '`command` and `command_callback` and `command_chain` cannot be used when `lsp` is set', g:vader_exception
+  call ale#linter#PreProcess(g:linter)
 
   call remove(g:linter, 'command')
   let g:linter.command_callback = 'X'
 
-  AssertThrows call ale#linter#PreProcess(g:linter)
-  AssertEqual '`command` and `command_callback` and `command_chain` cannot be used when `lsp` is set', g:vader_exception
+  call ale#linter#PreProcess(g:linter)
 
-  call remove(g:linter, 'command_callback')
-  let g:linter.command_chain = []
+Execute(PreProcess should accept stdio LSP configuration):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'executable': 'x',
+  \ 'command': 'x',
+  \ 'lsp': 'stdio',
+  \}
 
-  AssertThrows call ale#linter#PreProcess(g:linter)
-  AssertEqual '`command` and `command_callback` and `command_chain` cannot be used when `lsp` is set', g:vader_exception
+  AssertEqual 'stdio', ale#linter#PreProcess(g:linter).lsp
+
+  call remove(g:linter, 'executable')
+  let g:linter.executable_callback = 'X'
+
+  call ale#linter#PreProcess(g:linter)
+
+  call remove(g:linter, 'command')
+  let g:linter.command_callback = 'X'
+
+  call ale#linter#PreProcess(g:linter)
 
 Execute(PreProcess should accept LSP server configurations):
   let g:linter = {
   \ 'name': 'x',
-  \ 'lsp': 'lsp',
-  \ 'callback': 'x',
+  \ 'lsp': 'socket',
   \ 'address_callback': 'X',
   \}
 
-  AssertEqual 'lsp', ale#linter#PreProcess(g:linter).lsp
+  AssertEqual 'socket', ale#linter#PreProcess(g:linter).lsp
 
-Execute(PreProcess should require an address_callback for LSP server configurations):
+Execute(PreProcess should require an address_callback for LSP socket configurations):
   let g:linter = {
   \ 'name': 'x',
-  \ 'lsp': 'lsp',
-  \ 'callback': 'x',
+  \ 'lsp': 'socket',
   \}
 
   AssertThrows call ale#linter#PreProcess(g:linter)
@@ -435,4 +434,4 @@ Execute(PreProcess should complain about address_callback for non-LSP linters):
   \}
 
   AssertThrows call ale#linter#PreProcess(g:linter)
-  AssertEqual '`address_callback` cannot be used when lsp != ''lsp''', g:vader_exception
+  AssertEqual '`address_callback` cannot be used when lsp != ''socket''', g:vader_exception

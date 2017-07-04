@@ -52,36 +52,32 @@ function! ale#linter#PreProcess(linter) abort
     let l:obj = {
     \   'name': get(a:linter, 'name'),
     \   'lsp': get(a:linter, 'lsp', ''),
-    \   'callback': get(a:linter, 'callback'),
     \}
 
     if type(l:obj.name) != type('')
         throw '`name` must be defined to name the linter'
     endif
 
-    if !s:IsCallback(l:obj.callback)
-        throw '`callback` must be defined with a callback to accept output'
+    let l:needs_address = l:obj.lsp ==# 'socket'
+    let l:needs_executable = l:obj.lsp !=# 'socket'
+    let l:needs_command = l:obj.lsp !=# 'socket'
+
+    if empty(l:obj.lsp)
+        let l:obj.callback = get(a:linter, 'callback')
+
+        if !s:IsCallback(l:obj.callback)
+            throw '`callback` must be defined with a callback to accept output'
+        endif
     endif
 
-    let l:needs_executable = 0
-    let l:needs_address = 0
-    let l:needs_command = 0
-
-    if l:obj.lsp ==# 'tsserver'
-        let l:needs_executable = 1
-    elseif l:obj.lsp ==# 'lsp'
-        let l:needs_address = 1
-    elseif !empty(l:obj.lsp)
+    if index(['', 'socket', 'stdio', 'tsserver'], l:obj.lsp) < 0
         throw '`lsp` must be either `''lsp''` or `''tsserver''` if defined'
-    else
-        let l:needs_executable = 1
-        let l:needs_command = 1
     endif
 
     if !l:needs_executable
         if has_key(a:linter, 'executable')
         \|| has_key(a:linter, 'executable_callback')
-            throw '`executable` and `executable_callback` cannot be used when lsp == ''lsp'''
+            throw '`executable` and `executable_callback` cannot be used when lsp == ''socket'''
         endif
     elseif has_key(a:linter, 'executable_callback')
         let l:obj.executable_callback = a:linter.executable_callback
@@ -103,7 +99,7 @@ function! ale#linter#PreProcess(linter) abort
         if has_key(a:linter, 'command')
         \|| has_key(a:linter, 'command_callback')
         \|| has_key(a:linter, 'command_chain')
-            throw '`command` and `command_callback` and `command_chain` cannot be used when `lsp` is set'
+            throw '`command` and `command_callback` and `command_chain` cannot be used when lsp == ''socket'''
         endif
     elseif has_key(a:linter, 'command_chain')
         let l:obj.command_chain = a:linter.command_chain
@@ -167,7 +163,7 @@ function! ale#linter#PreProcess(linter) abort
 
     if !l:needs_address
         if has_key(a:linter, 'address_callback')
-            throw '`address_callback` cannot be used when lsp != ''lsp'''
+            throw '`address_callback` cannot be used when lsp != ''socket'''
         endif
     elseif has_key(a:linter, 'address_callback')
         let l:obj.address_callback = a:linter.address_callback
@@ -333,4 +329,19 @@ function! ale#linter#Get(original_filetypes) abort
     endfor
 
     return reverse(l:combined_linters)
+endfunction
+
+" Given a buffer and linter, get the executable String for the linter.
+function! ale#linter#GetExecutable(buffer, linter) abort
+    return has_key(a:linter, 'executable_callback')
+    \   ? ale#util#GetFunction(a:linter.executable_callback)(a:buffer)
+    \   : a:linter.executable
+endfunction
+
+" Given a buffer and linter, get the command String for the linter.
+" The command_chain key is not supported.
+function! ale#linter#GetCommand(buffer, linter) abort
+    return has_key(a:linter, 'command_callback')
+    \   ? ale#util#GetFunction(a:linter.command_callback)(a:buffer)
+    \   : a:linter.command
 endfunction

@@ -44,7 +44,12 @@ g:ale_perl_perlcritic_profile                    *g:ale_perl_perlcritic_profile*
   parent directory, etc, until it finds one.  If no matching file is found, no
   profile is passed to perlcritic.
 
-  Set to an empty string to disable using a profile.
+  Set to an empty string to disable passing a specific profile to perlcritic
+  with the `'--profile'` option.
+
+  To prevent perlcritic from using any profile, set this variable to an empty
+  string and pass `'--no-profile'`to perlcritic via the
+  |g:ale_perl_perlcritic_options| variable.
 
 
 g:ale_perl_perlcritic_options                    *g:ale_perl_perlcritic_options*
