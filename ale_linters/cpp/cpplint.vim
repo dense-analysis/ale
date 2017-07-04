@@ -6,7 +6,7 @@ if !exists('g:ale_cpp_cpplint_options')
 endif
 
 function! ale_linters#cpp#cpplint#GetCommand(buffer) abort
-  return 'cpplint ' . ale#Var(a:buffer, 'cpp_cpplint_options') . ' %s'
+    return 'cpplint ' . ale#Var(a:buffer, 'cpp_cpplint_options') . ' %s'
 endfunction
 
 call ale#linter#Define('cpp', {
