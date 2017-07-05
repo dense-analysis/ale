@@ -15,5 +15,5 @@ function! ale#test#SetFilename(path) abort
         let l:dir = getcwd()
     endif
 
-    silent noautocmd execute 'file ' . fnameescape(simplify(l:dir . '/' . a:path))
+    silent noautocmd execute 'file ' . fnameescape(ale#path#Simplify(l:dir . '/' . a:path))
 endfunction

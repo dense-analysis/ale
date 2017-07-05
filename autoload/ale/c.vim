@@ -47,7 +47,7 @@ function! ale#c#FindLocalHeaderPaths(buffer) abort
 
     " If we find an 'include' directory in the project root, then use that.
     if isdirectory(l:project_root . '/include')
-        return [simplify(l:project_root . '/include')]
+        return [ale#path#Simplify(l:project_root . '/include')]
     endif
 
     return []

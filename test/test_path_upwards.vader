@@ -44,3 +44,7 @@ Execute(ale#path#Upwards should return the correct path components for Windows):
   \ ale#path#Upwards('foo//..///foo2////bar')
   " Expect an empty List for empty strings.
   AssertEqual [], ale#path#Upwards('')
+  " Paths starting with // return /
+  AssertEqual
+  \ ['/foo2\bar', '/foo2', '/'],
+  \ ale#path#Upwards('//foo//..///foo2////bar')
