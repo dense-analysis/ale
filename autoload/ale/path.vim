@@ -2,8 +2,8 @@
 " Description: Functions for working with paths in the filesystem.
 
 function! ale#path#Simplify(path) abort
-    " //foo is turned into / to stop Windows doing stupid things with search
-    " paths.
+    " //foo is turned into /foo to stop Windows doing stupid things with
+    " search paths.
     return substitute(simplify(a:path), '^//\+', '/', 'g') " no-custom-checks
 endfunction
 
