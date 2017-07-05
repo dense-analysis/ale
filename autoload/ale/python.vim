@@ -1,6 +1,8 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Functions for integrating with Python linters.
 
+" bin is used for Unix virtualenv directories, and Scripts is for Windows.
+let s:bin_dir = has('unix') ? 'bin' : 'Scripts'
 let g:ale_virtualenv_dir_names = get(g:, 'ale_virtualenv_dir_names', [
 \   '.env',
 \   'env',
@@ -29,7 +31,7 @@ function! ale#python#FindVirtualenv(buffer) abort
         for l:dirname in ale#Var(a:buffer, 'virtualenv_dir_names')
             let l:venv_dir = simplify(l:path . '/' . l:dirname)
 
-            if filereadable(l:venv_dir . '/bin/activate')
+            if filereadable(simplify(l:venv_dir . '/' . s:bin_dir . '/activate'))
                 return l:venv_dir
             endif
         endfor
@@ -50,7 +52,7 @@ function! ale#python#FindExecutable(buffer, base_var_name, path_list) abort
 
     if !empty(l:virtualenv)
         for l:path in a:path_list
-            let l:ve_executable = l:virtualenv . l:path
+            let l:ve_executable = simplify(l:virtualenv . '/' . s:bin_dir . '/' . l:path)
 
             if executable(l:ve_executable)
                 return l:ve_executable

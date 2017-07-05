@@ -7,7 +7,7 @@ let g:ale_python_mypy_options = get(g:, 'ale_python_mypy_options', '')
 let g:ale_python_mypy_use_global = get(g:, 'ale_python_mypy_use_global', 0)
 
 function! ale_linters#python#mypy#GetExecutable(buffer) abort
-    return ale#python#FindExecutable(a:buffer, 'python_mypy', ['/bin/mypy'])
+    return ale#python#FindExecutable(a:buffer, 'python_mypy', ['mypy'])
 endfunction
 
 function! ale_linters#python#mypy#GetCommand(buffer) abort
