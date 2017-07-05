@@ -74,10 +74,10 @@ If you want to credit multiple authors, you can comma separate them.
 ### 3.i. Adding a New Linter
 
 If you add a new linter, look for existing handlers first in the
-[handlers.vim](autoload/ale/handlers.vim) file. One of the handlers there may
+[handlers](autoload/ale/handlers) directory. One of the handlers there may
 already be able to handle your lines of output. If you find that your new
 linter replicates an existing error handler, consider pulling it up into the
-[handlers.vim](autoload/ale/handlers.vim) file, and use the generic handler in
+[handlers](autoload/ale/handlers) directory, and use the generic handler in
 both places.
 
 When you add a linter, make sure the language for the linter and the linter
