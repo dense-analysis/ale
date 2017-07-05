@@ -7,6 +7,8 @@ let s:global_variable_list = [
 \    'ale_echo_msg_format',
 \    'ale_echo_msg_warning_str',
 \    'ale_enabled',
+\    'ale_fix_on_save',
+\    'ale_fixers',
 \    'ale_keep_list_window_open',
 \    'ale_lint_delay',
 \    'ale_lint_on_enter',
