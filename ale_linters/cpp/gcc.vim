@@ -21,10 +21,11 @@ function! ale_linters#cpp#gcc#GetCommand(buffer) abort
     let l:args = ale#c#FindCompileArgs(a:buffer)
 
     " if we've found compile args then just use those
-    if (!empty(l:args))
-        return 'gcc -S -x c++ -fsyntax-only '
-                    \	. l:args
-                    \   . ' -'
+    if len(l:args) > 0
+        return 'cd ' . l:args["directory"] . ' && '
+        \   . 'gcc -S -x c++ -fsyntax-only '
+        \	. l:args["args"]
+        \   . ' -'
     endif
 
     let l:paths = ale#c#FindLocalHeaderPaths(a:buffer)
@@ -32,9 +33,9 @@ function! ale_linters#cpp#gcc#GetCommand(buffer) abort
     " -iquote with the directory the file is in makes #include work for
     "  headers in the same directory.
     return 'gcc -S -x c++ -fsyntax-only '
-                \   . '-iquote ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h')) . ' '
-                \   . ale#c#IncludeOptions(l:paths)
-                \   . ale#Var(a:buffer, 'cpp_gcc_options') . ' -'
+    \   . '-iquote ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h')) . ' '
+    \   . ale#c#IncludeOptions(l:paths)
+    \   . ale#Var(a:buffer, 'cpp_gcc_options') . ' -'
 endfunction
 
 call ale#linter#Define('cpp', {

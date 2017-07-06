@@ -93,55 +93,41 @@ endfunction
 " Given a buffer number, find a compilation database (compile_commands.json)
 " and parse this into an argument string
 function! ale#c#FindCompileArgs(buffer) abort
-    let l:use_args = []
+    let l:compile_args = {}
 
     let l:compile_commands_path = ale#path#FindNearestFile(a:buffer, 'compile_commands.json')
-    if (!empty(l:compile_commands_path))
+    if !empty(l:compile_commands_path)
         let l:bufname = fnamemodify(bufname(a:buffer), ':p')
-        let l:command = ''
-        let l:file = ''
 
-        for elem in readfile(l:compile_commands_path)
-            let l:split = split(elem, ':')
-            if (len(l:split) > 1)
-                let l:key = split(l:split[0], '"')[1]
-                let l:value = split(l:split[1], '"')[1]
-                if l:key == 'command'
-                    let l:command = l:value
-                elseif l:key == 'file'
-                    let l:file = l:value
-                endif
-
-                if (!empty(l:file))
-                    if l:file == l:bufname
-                        " skip unwanted stuff
-                        "   first arg (compiler)
-                        "   last arg (filename)
-                        "    -o objectfile
-                        "    -c
+        for elem in json_decode(readfile(l:compile_commands_path))
+            if elem["file"] == l:bufname
+                let l:compile_args["directory"] = elem["directory"]
+                " skip unwanted stuff
+                "   first arg (compiler)
+                "   last arg (filename)
+                "    -o objectfile
+                "    -c
+                let l_skip = 0
+                let l:args = []
+                for arg in split(elem["command"], ' ')[2:-2]
+                    if (l_skip == 1)
                         let l_skip = 0
-                        for arg in split(l:command, ' ')[2:-2]
-                            if (l_skip == 1)
-                                let l_skip = 0
-                            elseif (arg == '-o')
-                                " skip next 1 arg as well
-                                let l_skip = 1
-                            elseif (arg == '-c')
-                                " simply omit
-                            else
-                                let l:use_args += [arg]
-                            endif
-                        endfor
-                        break
+                    elseif (arg == '-o')
+                        " skip next 1 arg as well
+                        let l_skip = 1
+                    elseif (arg == '-c')
+                        " simply omit
+                    else
+                        let l:args += [arg]
                     endif
-                endif
+                endfor
+
+                let l:compile_args["args"] = join(l:args, ' ')
+
+                break
             endif
         endfor
     endif
 
-    if (!empty(l:use_args))
-        return join(l:use_args, ' ')
-    endif
-
-    return ''
+    return l:compile_args
 endfunction
