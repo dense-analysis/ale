@@ -1,16 +1,22 @@
 " Author: Ben Reedy <https://github.com/breed808>
 " Description: Adds support for the gometalinter suite for Go files
 
-if !exists('g:ale_go_gometalinter_options')
-    let g:ale_go_gometalinter_options = ''
-endif
+call ale#Set('go_gometalinter_options', '')
+call ale#Set('go_gometalinter_executable', 'gometalinter')
+
+function! ale_linters#go#gometalinter#GetExecutable(buffer) abort
+    return ale#Var(a:buffer, 'go_gometalinter_executable')
+endfunction
 
 function! ale_linters#go#gometalinter#GetCommand(buffer) abort
+    let l:executable = ale_linters#go#gometalinter#GetExecutable(a:buffer)
     let l:filename = expand('#' . a:buffer . ':p')
+    let l:options = ale#Var(a:buffer, 'go_gometalinter_options')
 
-    return 'gometalinter --include=''^' . l:filename . '.*$'' '
-    \   . ale#Var(a:buffer, 'go_gometalinter_options')
-    \   . ' ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h'))
+    return ale#Escape(l:executable)
+    \   . ' --include=''^' . l:filename . '.*$'''
+    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ' ' . ale#Escape(fnamemodify(l:filename, ':h'))
 endfunction
 
 function! ale_linters#go#gometalinter#GetMatches(lines) abort
@@ -36,7 +42,7 @@ endfunction
 
 call ale#linter#Define('go', {
 \   'name': 'gometalinter',
-\   'executable': 'gometalinter',
+\   'executable_callback': 'ale_linters#go#gometalinter#GetExecutable',
 \   'command_callback': 'ale_linters#go#gometalinter#GetCommand',
 \   'callback': 'ale_linters#go#gometalinter#Handler',
 \   'lint_file': 1,
