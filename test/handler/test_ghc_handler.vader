@@ -25,13 +25,13 @@ Execute(The ghc handler should handle ghc 8 output):
   \     'lnum': 6,
   \     'type': 'E',
   \     'col': 1,
-  \     'text': ' Failed to load interface for ‘GitHub.Data’ Use -v to see a list of the files searched for.',
+  \     'text': 'Failed to load interface for ‘GitHub.Data’ Use -v to see a list of the files searched for.',
   \   },
   \   {
   \     'lnum': 7,
   \     'type': 'W',
   \     'col': 1,
-  \     'text': ' Failed to load interface for ‘GitHub.Endpoints.PullRequests’ Use -v to see a list of the files searched for.',
+  \     'text': 'Failed to load interface for ‘GitHub.Endpoints.PullRequests’ Use -v to see a list of the files searched for.',
   \   },
   \ ],
   \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
@@ -54,10 +54,25 @@ Execute(The ghc handler should handle ghc 7 output):
   \     'lnum': 168,
   \     'type': 'E',
   \     'col': 1,
-  \     'text': ' parse error (possibly incorrect indentation or mismatched brackets)',
+  \     'text': 'parse error (possibly incorrect indentation or mismatched brackets)',
+  \   },
+  \   {
+  \     'lnum': 84,
+  \     'col': 1,
+  \     'type': 'W',
+  \     'text': 'Top-level binding with no type signature:^@  myLayout :: Choose Tall (Choose (Mirror Tall) Full) a',
+  \   },
+  \   {
+  \     'lnum': 94,
+  \     'col': 5,
+  \     'type': 'E',
+  \     'text': 'Some other error',
   \   },
   \ ],
   \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
   \ 'src/Main.hs:168:1:',
   \ '    parse error (possibly incorrect indentation or mismatched brackets)',
+  \ 'src/Main.hs:84:1:Warning: Top-level binding with no type signature:^@  myLayout :: Choose Tall (Choose (Mirror Tall) Full) a',
+  \ 'src/Main.hs:94:5:Error:',
+  \ '  Some other error',
   \ ])
