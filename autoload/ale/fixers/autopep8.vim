@@ -9,7 +9,7 @@ function! ale#fixers#autopep8#Fix(buffer) abort
     let l:executable = ale#python#FindExecutable(
     \   a:buffer,
     \   'python_autopep8',
-    \   ['/bin/autopep8'],
+    \   ['autopep8'],
     \)
 
     if !executable(l:executable)

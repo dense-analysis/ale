@@ -19,16 +19,8 @@ function! s:UsingModule(buffer) abort
 endfunction
 
 function! ale_linters#python#flake8#GetExecutable(buffer) abort
-    if !s:UsingModule(a:buffer) && !ale#Var(a:buffer, 'python_flake8_use_global')
-        let l:virtualenv = ale#python#FindVirtualenv(a:buffer)
-
-        if !empty(l:virtualenv)
-            let l:ve_flake8 = l:virtualenv . '/bin/flake8'
-
-            if executable(l:ve_flake8)
-                return l:ve_flake8
-            endif
-        endif
+    if !s:UsingModule(a:buffer)
+        return ale#python#FindExecutable(a:buffer, 'python_flake8', ['flake8'])
     endif
 
     return ale#Var(a:buffer, 'python_flake8_executable')

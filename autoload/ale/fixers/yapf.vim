@@ -8,7 +8,7 @@ function! ale#fixers#yapf#Fix(buffer) abort
     let l:executable = ale#python#FindExecutable(
     \   a:buffer,
     \   'python_yapf',
-    \   ['/bin/yapf'],
+    \   ['yapf'],
     \)
 
     if !executable(l:executable)

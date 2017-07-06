@@ -8,7 +8,7 @@ function! ale#fixers#isort#Fix(buffer) abort
     let l:executable = ale#python#FindExecutable(
     \   a:buffer,
     \   'python_isort',
-    \   ['/bin/isort'],
+    \   ['isort'],
     \)
 
     if !executable(l:executable)
