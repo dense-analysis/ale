@@ -3,8 +3,10 @@ function! ale#fixers#rubocop#GetCommand(buffer) abort
     let l:exec_args = l:executable =~? 'bundle$'
     \   ? ' exec rubocop'
     \   : ''
+    let l:config = ale#path#FindNearestFile(a:buffer, '.rubocop.yml')
 
     return ale#Escape(l:executable) . l:exec_args
+    \   . (!empty(l:config) ? ' --config ' . ale#Escape(l:config) : '')
     \   . ' --auto-correct %t'
 
 endfunction
