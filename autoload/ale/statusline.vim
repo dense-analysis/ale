@@ -50,14 +50,14 @@ endfunction
 
 " Get the counts for the buffer, and update the counts if needed.
 function! s:GetCounts(buffer) abort
-if !exists('g:ale_buffer_info') || !has_key(g:ale_buffer_info, a:buffer)
-    return s:CreateCountDict()
-endif
+    if !exists('g:ale_buffer_info') || !has_key(g:ale_buffer_info, a:buffer)
+        return s:CreateCountDict()
+    endif
 
-" Cache is cold, so manually ask for an update.
-if !has_key(g:ale_buffer_info[a:buffer], 'count')
-    call ale#statusline#Update(a:buffer, g:ale_buffer_info[a:buffer].loclist)
-endif
+    " Cache is cold, so manually ask for an update.
+    if !has_key(g:ale_buffer_info[a:buffer], 'count')
+        call ale#statusline#Update(a:buffer, g:ale_buffer_info[a:buffer].loclist)
+    endif
 
     return g:ale_buffer_info[a:buffer].count
 endfunction
