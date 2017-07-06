@@ -19,10 +19,24 @@ After:
   unlet! g:dir
 
 Execute(The rubocop callback should return the correct default values):
-  silent execute 'file ' . fnameescape(g:dir . '/ruby_paths/dummy.rb')
+  call ale#test#SetFilename('ruby_paths/dummy.rb')
 
   AssertEqual
-  \ {'read_temporary_file': 1,
-  \  'command': "'" . g:ale_ruby_rubocop_executable . "' "
-  \      . '--auto-correct %t' },
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
+  \     . ' --auto-correct %t',
+  \ },
+  \ ale#fixers#rubocop#Fix(bufnr(''))
+
+Execute(The rubocop callback should include configuration files):
+  call ale#test#SetFilename('ruby_paths/with_config/dummy.rb')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
+  \     . ' --config ' . ale#Escape(g:dir . '/ruby_paths/with_config/.rubocop.yml')
+  \     . ' --auto-correct %t',
+  \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))
