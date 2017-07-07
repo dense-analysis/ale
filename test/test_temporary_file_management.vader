@@ -84,7 +84,7 @@ Execute(ALE should delete managed files even if no command is run):
 Execute(ALE should delete managed files when the buffer is removed):
   call ale#engine#InitBufferInfo(bufnr('%'))
   call TestCommandCallback(bufnr('%'))
-  call ale#cleanup#Buffer(bufnr('%'))
+  call ale#engine#Cleanup(bufnr('%'))
 
   Assert !filereadable(g:filename), 'The temporary file was not deleted'
   Assert !isdirectory(g:directory), 'The temporary directory was not deleted'
@@ -105,7 +105,7 @@ Execute(ALE should create and delete directories for ale#engine#CreateDirectory(
   " The two directories shouldn't be the same.
   AssertNotEqual b:dir2, b:dir
 
-  call ale#cleanup#Buffer(bufnr('%'))
+  call ale#engine#Cleanup(bufnr('%'))
 
   Assert !isdirectory(b:dir), 'The directory was not deleted'
   Assert !isdirectory(b:dir2), 'The second directory was not deleted'

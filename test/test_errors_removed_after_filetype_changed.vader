@@ -1,0 +1,58 @@
+Before:
+  Save g:ale_run_synchronously
+
+  let b:old_filetype = &filetype
+  let g:ale_run_synchronously = 1
+
+  noautocmd let &filetype = 'foobar'
+
+  function! TestCallback(buffer, output)
+    return [{'text': 'x', 'lnum': 1}]
+  endfunction
+
+  call ale#linter#Define('foobar', {
+  \ 'name': 'buffer_linter',
+  \ 'callback': 'TestCallback',
+  \ 'executable': 'true',
+  \ 'command': 'true',
+  \ 'read_buffer': 0,
+  \})
+
+  call ale#linter#Define('foobar2', {
+  \ 'name': 'buffer_linter',
+  \ 'callback': 'TestCallback',
+  \ 'executable': 'true',
+  \ 'command': 'true',
+  \ 'read_buffer': 0,
+  \})
+
+After:
+  Restore
+
+  noautocmd let &filetype = b:old_filetype
+  unlet b:old_filetype
+  delfunction TestCallback
+
+  if has_key(g:ale_buffer_info, bufnr(''))
+    call remove(g:ale_buffer_info, bufnr(''))
+  endif
+
+  call ale#Queue(0)
+
+Execute(Error should be removed when the filetype changes to something else we cannot check):
+  call ale#Queue(0)
+
+  AssertEqual 1, len(getloclist(0))
+
+  noautocmd let &filetype = 'foobar2'
+
+  call ale#Queue(0)
+
+  " We should get some items from the second filetype.
+  AssertEqual 1, len(getloclist(0))
+
+  noautocmd let &filetype = 'xxx'
+
+  call ale#Queue(0)
+
+  AssertEqual 0, len(getloclist(0))

@@ -293,10 +293,9 @@ function! s:ALEToggle() abort
         " Make sure the buffer number is a number, not a string,
         " otherwise things can go wrong.
         for l:buffer in map(keys(g:ale_buffer_info), 'str2nr(v:val)')
-            " Stop jobs and delete stored buffer data
-            call ale#cleanup#Buffer(l:buffer)
-            " Clear signs, loclist, quicklist
-            call ale#engine#SetResults(l:buffer, [])
+            " Stop all jobs and clear the results for everything, and delete
+            " all of the data we stored for the buffer.
+            call ale#engine#Cleanup(l:buffer)
         endfor
 
         " Remove highlights for the current buffer now.
@@ -368,7 +367,7 @@ nnoremap <silent> <Plug>(ale_fix) :ALEFix<Return>
 augroup ALECleanupGroup
     autocmd!
     " Clean up buffers automatically when they are unloaded.
-    autocmd BufUnload * call ale#cleanup#Buffer(expand('<abuf>'))
+    autocmd BufUnload * call ale#engine#Cleanup(str2nr(expand('<abuf>')))
 augroup END
 
 " Backwards Compatibility

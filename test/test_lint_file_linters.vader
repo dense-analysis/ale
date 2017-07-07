@@ -69,6 +69,10 @@ Before:
   \ 'read_buffer': 0,
   \})
 
+  let g:filename = tempname()
+  call writefile([], g:filename)
+  call ale#test#SetFilename(g:filename)
+
 After:
   Restore
 
@@ -78,6 +82,12 @@ After:
   call setloclist(0, [])
   delfunction LintFileCallback
   delfunction BufferCallback
+
+  if filereadable(g:filename)
+    call delete(g:filename)
+  endif
+
+  unlet g:filename
 
 Given foobar (Some imaginary filetype):
   foo
@@ -107,6 +117,9 @@ Execute(Running linters without 'lint_file' should run only buffer linters):
 Execute(Running linters with 'lint_file' should run all linters):
   call ale#ResetLintFileMarkers()
   let g:ale_buffer_info = {}
+
+  Assert filereadable(expand('%:p')), 'The file was not readable'
+
   call ale#Queue(0, 'lint_file')
 
   AssertEqual [
@@ -139,6 +152,9 @@ Execute(Running linters with 'lint_file' should run all linters):
 Execute(Linter errors from files should be kept):
   call ale#ResetLintFileMarkers()
   let g:ale_buffer_info = {}
+
+  Assert filereadable(expand('%:p')), 'The file was not readable'
+
   call ale#Queue(0, 'lint_file')
 
   " Change the results for the buffer callback.

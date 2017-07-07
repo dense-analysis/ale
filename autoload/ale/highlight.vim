@@ -67,27 +67,11 @@ function! s:GetALEMatches() abort
     return filter(getmatches(), 'v:val.group =~# ''^ALE''')
 endfunction
 
-function! s:GetCurrentMatchIDs(loclist) abort
-    let l:current_id_map = {}
-
-    for l:item in a:loclist
-        for l:id in get(l:item, 'match_id_list', [])
-            let l:current_id_map[l:id] = 1
-        endfor
-    endfor
-
-    return l:current_id_map
-endfunction
-
 " Given a loclist for current items to highlight, remove all highlights
 " except these which have matching loclist item entries.
 function! ale#highlight#RemoveHighlights(loclist) abort
-    let l:current_id_map = s:GetCurrentMatchIDs(a:loclist)
-
     for l:match in s:GetALEMatches()
-        if !has_key(l:current_id_map, l:match.id)
-            call matchdelete(l:match.id)
-        endif
+        call matchdelete(l:match.id)
     endfor
 endfunction
 
@@ -99,9 +83,6 @@ function! ale#highlight#UpdateHighlights() abort
     if l:has_new_items || !g:ale_enabled
         call ale#highlight#RemoveHighlights(l:loclist)
     endif
-
-    " Remove anything with a current match_id
-    call filter(l:loclist, '!has_key(v:val, ''match_id_list'')')
 
     " Restore items from the map of hidden items,
     " if we don't have some new items to set already.
@@ -132,10 +113,7 @@ function! ale#highlight#UpdateHighlights() abort
 
             " Set all of the positions, which are chunked into Lists which
             " are as large as will be accepted by matchaddpos.
-            "
-            " We will remember the IDs we set, so we can preserve some
-            " highlights when linting buffers after linting files.
-            let l:item.match_id_list = map(
+            call map(
             \   ale#highlight#CreatePositions(l:line, l:col, l:end_line, l:end_col),
             \   'matchaddpos(l:group, v:val)'
             \)
@@ -148,14 +126,6 @@ function! ale#highlight#BufferHidden(buffer) abort
 
     " Remember loclist items, so they can be restored later.
     if !empty(l:loclist)
-        " Remove match_ids, as they must be re-calculated when buffers are
-        " shown again.
-        for l:item in l:loclist
-            if has_key(l:item, 'match_id_list')
-                call remove(l:item, 'match_id_list')
-            endif
-        endfor
-
         let s:buffer_restore_map[a:buffer] = filter(
         \   copy(l:loclist),
         \   'v:val.bufnr == a:buffer && v:val.col > 0'

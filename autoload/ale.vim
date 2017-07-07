@@ -53,9 +53,17 @@ function! ale#Queue(delay, ...) abort
         let s:lint_timer = -1
     endif
 
-    let l:linters = ale#linter#Get(&filetype)
-    if len(l:linters) == 0
-        " There are no linters to lint with, so stop here.
+    let l:buffer = bufnr('')
+    let l:linters = ale#linter#Get(getbufvar(l:buffer, '&filetype'))
+
+    " Don't set up buffer data and so on if there are no linters to run.
+    if empty(l:linters)
+        " If we have some previous buffer data, then stop any jobs currently
+        " running and clear everything.
+        if has_key(g:ale_buffer_info, l:buffer)
+            call ale#engine#RunLinters(l:buffer, [], 1)
+        endif
+
         return
     endif
 
@@ -68,15 +76,15 @@ function! ale#Queue(delay, ...) abort
 endfunction
 
 function! ale#Lint(...) abort
-    if ale#ShouldDoNothing()
-        return
-    endif
-
     " Get the buffer number linting was queued for.
     " or else take the current one.
     let l:buffer = len(a:0) > 1 && a:1 == s:lint_timer
     \   ? s:queued_buffer_number
     \   : bufnr('%')
+
+    if ale#ShouldDoNothing()
+        return
+    endif
 
     " Use the filetype from the buffer
     let l:linters = ale#linter#Get(getbufvar(l:buffer, '&filetype'))
@@ -89,27 +97,7 @@ function! ale#Lint(...) abort
         let l:should_lint_file = filereadable(expand('#' . l:buffer . ':p'))
     endif
 
-    " Initialise the buffer information if needed.
-    call ale#engine#InitBufferInfo(l:buffer)
-
-    " Clear the new loclist again, so we will work with all new items.
-    let g:ale_buffer_info[l:buffer].new_loclist = []
-
-    if l:should_lint_file
-        " Clear loclist items for files if we are checking files again.
-        let g:ale_buffer_info[l:buffer].lint_file_loclist = []
-    else
-        " Otherwise, don't run any `lint_file` linters
-        " We will continue running any linters which are currently checking
-        " the file, and the items will be mixed together with any new items.
-        call filter(l:linters, '!v:val.lint_file')
-    endif
-
-    call ale#engine#StopCurrentJobs(l:buffer, l:should_lint_file)
-
-    for l:linter in l:linters
-        call ale#engine#Invoke(l:buffer, l:linter)
-    endfor
+    call ale#engine#RunLinters(l:buffer, l:linters, l:should_lint_file)
 endfunction
 
 " Reset flags indicating that files should be checked for all buffers.
