@@ -1,8 +1,8 @@
 Before:
   Save g:ale_linters, g:ale_linter_aliases
 
-  let g:testlinter1 = {'name': 'testlinter1', 'executable': 'testlinter1', 'command': 'testlinter1', 'callback': 'testCB1', 'output_stream': 'stdout', 'read_buffer': 1, 'lint_file': 0, 'aliases': [], 'lsp': ''}
-  let g:testlinter2 = {'name': 'testlinter2', 'executable': 'testlinter2', 'command': 'testlinter2', 'callback': 'testCB2', 'output_stream': 'stdout', 'read_buffer': 0, 'lint_file': 1, 'aliases': [], 'lsp': ''}
+  let g:testlinter1 = {'name': 'testlinter1', 'executable': 'testlinter1', 'command': 'testlinter1', 'callback': 'testCB1', 'output_stream': 'stdout', 'read_buffer': 1, 'lint_file': 0, 'aliases': [], 'lsp': '', 'add_newline': 0}
+  let g:testlinter2 = {'name': 'testlinter2', 'executable': 'testlinter2', 'command': 'testlinter2', 'callback': 'testCB2', 'output_stream': 'stdout', 'read_buffer': 0, 'lint_file': 1, 'aliases': [], 'lsp': '', 'add_newline': 0}
   call ale#linter#Reset()
 
 After:
@@ -105,7 +105,7 @@ Execute (The local alias option shouldn't completely replace the global one):
   AssertEqual [g:testlinter1, g:testlinter2], ale#linter#Get('testft1')
 
 Execute (Linters should be loaded from disk appropriately):
-  AssertEqual [{'name': 'testlinter', 'output_stream': 'stdout', 'executable': 'testlinter', 'command': 'testlinter', 'callback': 'testCB', 'read_buffer': 1, 'lint_file': 0, 'aliases': [], 'lsp': ''}], ale#linter#Get('testft')
+  AssertEqual [{'name': 'testlinter', 'output_stream': 'stdout', 'executable': 'testlinter', 'command': 'testlinter', 'callback': 'testCB', 'read_buffer': 1, 'lint_file': 0, 'aliases': [], 'lsp': '', 'add_newline': 0}], ale#linter#Get('testft')
 
 
 Execute (Linters for later filetypes should replace the former ones):
@@ -123,5 +123,5 @@ Execute (Linters for later filetypes should replace the former ones):
   \})
 
   AssertEqual [
-  \ {'output_stream': 'stdout', 'lint_file': 0, 'read_buffer': 1, 'name': 'eslint', 'executable': 'x', 'lsp': '', 'aliases': [], 'command': 'x', 'callback': 'x'}
+  \ {'output_stream': 'stdout', 'lint_file': 0, 'read_buffer': 1, 'name': 'eslint', 'executable': 'x', 'lsp': '', 'aliases': [], 'command': 'x', 'callback': 'x', 'add_newline': 0}
   \], ale#linter#Get('javascript.typescript')

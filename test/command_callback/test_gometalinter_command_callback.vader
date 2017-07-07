@@ -1,0 +1,53 @@
+Before:
+  Save b:ale_go_gometalinter_executable
+  Save b:ale_go_gometalinter_options
+
+  let b:ale_go_gometalinter_executable = 'gometalinter'
+  let b:ale_go_gometalinter_options = ''
+
+  runtime ale_linters/go/gometalinter.vim
+
+  silent! cd /testplugin/test/command_callback
+  let g:dir = getcwd()
+
+  call ale#test#SetFilename('test.go')
+
+After:
+  Restore
+
+  silent execute 'cd ' . fnameescape(g:dir)
+  unlet! g:dir
+
+  call ale#linter#Reset()
+
+Execute(The gometalinter callback should return the right defaults):
+  AssertEqual
+  \ 'gometalinter',
+  \ ale_linters#go#gometalinter#GetExecutable(bufnr(''))
+  AssertEqual
+  \ ale#Escape('gometalinter')
+  \   . ' --include=''^' . expand('%:p') . '.*$'''
+  \   . ' ' . ale#Escape(getcwd()),
+  \ ale_linters#go#gometalinter#GetCommand(bufnr(''))
+
+Execute(The gometalinter callback should use a configured executable):
+  let b:ale_go_gometalinter_executable = 'something else'
+
+  AssertEqual
+  \ 'something else',
+  \ ale_linters#go#gometalinter#GetExecutable(bufnr(''))
+  AssertEqual
+  \ ale#Escape('something else')
+  \   . ' --include=''^' . expand('%:p') . '.*$'''
+  \   . ' ' . ale#Escape(getcwd()),
+  \ ale_linters#go#gometalinter#GetCommand(bufnr(''))
+
+Execute(The gometalinter callback should use configured options):
+  let b:ale_go_gometalinter_options = '--foobar'
+
+  AssertEqual
+  \ ale#Escape('gometalinter')
+  \   . ' --include=''^' . expand('%:p') . '.*$'''
+  \   . ' --foobar'
+  \   . ' ' . ale#Escape(getcwd()),
+  \ ale_linters#go#gometalinter#GetCommand(bufnr(''))

@@ -10,7 +10,12 @@ function! ale_linters#javascript#flow#GetExecutable(buffer) abort
     \])
 endfunction
 
-function! ale_linters#javascript#flow#GetCommand(buffer) abort
+function! ale_linters#javascript#flow#VersionCheck(buffer) abort
+    return ale#Escape(ale_linters#javascript#flow#GetExecutable(a:buffer))
+    \   . ' --version'
+endfunction
+
+function! ale_linters#javascript#flow#GetCommand(buffer, version_lines) abort
     let l:flow_config = ale#path#FindNearestFile(a:buffer, '.flowconfig')
 
     if empty(l:flow_config)
@@ -18,8 +23,21 @@ function! ale_linters#javascript#flow#GetCommand(buffer) abort
         return ''
     endif
 
+    let l:use_respect_pragma = 1
+
+    " If we can parse the version number, then only use --respect-pragma
+    " if the version is >= 0.36.0, which added the argument.
+    for l:match in ale#util#GetMatches(a:version_lines, '\v\d+\.\d+\.\d+$')
+        let l:use_respect_pragma = ale#semver#GreaterOrEqual(
+        \   ale#semver#Parse(l:match[0]),
+        \   [0, 36, 0]
+        \)
+    endfor
+
     return ale#Escape(ale_linters#javascript#flow#GetExecutable(a:buffer))
-    \   . ' check-contents --respect-pragma --json --from ale %s'
+    \   . ' check-contents'
+    \   . (l:use_respect_pragma ? ' --respect-pragma': '')
+    \   . ' --json --from ale %s'
 endfunction
 
 function! ale_linters#javascript#flow#Handle(buffer, lines) abort
@@ -74,6 +92,10 @@ endfunction
 call ale#linter#Define('javascript', {
 \   'name': 'flow',
 \   'executable_callback': 'ale_linters#javascript#flow#GetExecutable',
-\   'command_callback': 'ale_linters#javascript#flow#GetCommand',
+\   'command_chain': [
+\       {'callback': 'ale_linters#javascript#flow#VersionCheck'},
+\       {'callback': 'ale_linters#javascript#flow#GetCommand'},
+\   ],
 \   'callback': 'ale_linters#javascript#flow#Handle',
+\   'add_newline': 1,
 \})

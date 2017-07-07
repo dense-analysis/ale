@@ -35,17 +35,21 @@ function! ale#handlers#haskell#HandleGHCFormat(buffer, lines) abort
             continue
         endif
 
-        let l:errors = matchlist(l:match[4], '\(warning:\|error:\)\(.*\)')
+        let l:errors = matchlist(l:match[4], '\v([wW]arning|[eE]rror): ?(.*)')
 
         if len(l:errors) > 0
-          let l:type = l:errors[1]
+          let l:ghc_type = l:errors[1]
           let l:text = l:errors[2]
         else
-          let l:type = ''
-          let l:text = l:match[4]
+          let l:ghc_type = ''
+          let l:text = l:match[4][:0] ==# ' ' ? l:match[4][1:] : l:match[4]
         endif
 
-        let l:type = l:type ==# '' ? 'E' : toupper(l:type[0])
+        if l:ghc_type ==? 'Warning'
+            let l:type = 'W'
+        else
+            let l:type = 'E'
+        endif
 
         call add(l:output, {
         \   'lnum': l:match[2] + 0,
