@@ -55,6 +55,22 @@ Execute(The Rust handler should handle cargo output):
   \   '{"message":{"children":[],"code":null,"level":"error","message":"aborting due to previous error","rendered":null,"spans":[]},"package_id":"update 0.0.1 (path+file:///home/w0rp/Downloads/rust-by-example)","reason":"compiler-message","target":{"kind":["bin"],"name":"update","src_path":"/home/w0rp/Downloads/rust-by-example/src/main.rs"}}',
   \ ])
 
+Execute(The Rust handler should handle cargo output on Windows):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 467,
+  \     'end_lnum': 467,
+  \     'type': 'E',
+  \     'col': 43198,
+  \     'end_col': 43199,
+  \     'text': 'expected one of `!` or `::`, found `#`: unexpected token',
+  \   },
+  \ ],
+  \ ale#handlers#rust#HandleRustErrorsForFile(347, 'src\nvim.rs', [
+  \   '{"message":{"children":[],"code":null,"level":"error","message":"expected one of `!` or `::`, found `#`","rendered":null,"spans":[{"byte_end":43199,"byte_start":43198,"column_end":2,"column_start":1,"expansion":null,"file_name":"src\\nvim.rs","is_primary":true,"label":"unexpected token","line_end":467,"line_start":467,"suggested_replacement":null,"text":[{"highlight_end":2,"highlight_start":1,"text":"#[cfg(test)]\r"}]}]},"package_id":"nvim-gtk 0.1.2 (path+file:///E:/daa/local/neovim-gtk)","reason":"compiler-message","target":{"crate_types":["bin"],"kind":["bin"],"name":"nvim-gtk","src_path":"E:\\daa\\local\\neovim-gtk\\src\\main.rs"}}',
+  \ ])
+
 Execute(The Rust handler should show detailed errors):
   AssertEqual
   \ [
