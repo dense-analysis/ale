@@ -42,7 +42,7 @@ function! ale#handlers#haskell#HandleGHCFormat(buffer, lines) abort
           let l:text = l:errors[2]
         else
           let l:ghc_type = ''
-          let l:text = l:match[4][:0] ==# ' ' ? l:match[4][1:] : l:match
+          let l:text = l:match[4][:0] ==# ' ' ? l:match[4][1:] : l:match[4]
         endif
 
         if l:ghc_type ==? 'Warning'

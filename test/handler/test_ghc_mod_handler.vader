@@ -13,13 +13,13 @@ Execute(HandleGhcFormat should handle ghc-mod problems):
   \     'lnum': 2,
   \     'col': 1,
   \     'type': 'E',
-  \     'text': ' Suggestion: Use camelCaseFound:  my_variable = ...Why not:  myVariable = ...',
+  \     'text': 'Suggestion: Use camelCaseFound:  my_variable = ...Why not:  myVariable = ...',
   \   },
   \   {
   \     'lnum': 6,
   \     'col': 1,
-  \     'type': 'E',
-  \     'text': ' Warning: Eta reduceFound:  myFunc x = succ xWhy not:  myFunc = succ',
+  \     'type': 'W',
+  \     'text': 'Eta reduceFound:  myFunc x = succ xWhy not:  myFunc = succ',
   \   },
   \ ],
   \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
