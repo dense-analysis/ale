@@ -46,9 +46,11 @@ function! ale#handlers#rust#HandleRustErrorsForFile(buffer, full_filename, lines
         endif
 
         for l:span in l:error.spans
+            " substitue used for window file paths
+            let l:file_name = substitute(l:span.file_name, '\\', '\\\\', 'g')
             if (
             \   l:span.is_primary
-            \   && (a:full_filename =~ (l:span.file_name . '$') || l:span.file_name ==# '<anon>')
+            \   && (a:full_filename =~ (l:file_name . '$') || l:span.file_name ==# '<anon>')
             \)
                 call add(l:output, {
                 \   'lnum': l:span.line_start,
