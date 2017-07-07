@@ -97,32 +97,30 @@ function! ale#c#FindCompileArgs(buffer) abort
 
     let l:compile_commands_path = ale#path#FindNearestFile(a:buffer, 'compile_commands.json')
     if !empty(l:compile_commands_path)
-        let l:bufname = fnamemodify(bufname(a:buffer), ':p')
-
-        for elem in json_decode(readfile(l:compile_commands_path))
-            if elem["file"] == l:bufname
-                let l:compile_args["directory"] = elem["directory"]
+        for l:elem in json_decode(readfile(l:compile_commands_path))
+            if ale#path#IsBufferPath(a:buffer, l:elem.file)
+                let l:compile_args.directory = l:elem.directory
                 " skip unwanted stuff
                 "   first arg (compiler)
                 "   last arg (filename)
                 "    -o objectfile
                 "    -c
-                let l_skip = 0
+                let l:skip = 0
                 let l:args = []
-                for arg in split(elem["command"], ' ')[2:-2]
-                    if (l_skip == 1)
-                        let l_skip = 0
-                    elseif (arg == '-o')
+                for l:arg in split(l:elem.command, ' ')[2:-2]
+                    if l:skip == 1
+                        let l:skip = 0
+                    elseif l:arg ==# '-o'
                         " skip next 1 arg as well
-                        let l_skip = 1
-                    elseif (arg == '-c')
+                        let l:skip = 1
+                    elseif l:arg ==# '-c'
                         " simply omit
                     else
-                        let l:args += [arg]
+                        let l:args += [l:arg]
                     endif
                 endfor
 
-                let l:compile_args["args"] = join(l:args, ' ')
+                let l:compile_args.args = join(l:args, ' ')
 
                 break
             endif
