@@ -369,6 +369,7 @@ augroup ALECleanupGroup
     autocmd!
     " Clean up buffers automatically when they are unloaded.
     autocmd BufUnload * call ale#cleanup#Buffer(expand('<abuf>'))
+    autocmd QuitPre * call ale#list#CloseWindowIfNotEmpty()
 augroup END
 
 " Backwards Compatibility
