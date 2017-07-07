@@ -22,7 +22,6 @@ endfunction
 
 " A handler function which accepts a file name, to make unit testing easier.
 function! ale#handlers#rust#HandleRustErrorsForFile(buffer, full_filename, lines) abort
-    let l:filename = fnamemodify(a:full_filename, ':t')
     let l:output = []
 
     for l:errorline in a:lines
@@ -48,7 +47,7 @@ function! ale#handlers#rust#HandleRustErrorsForFile(buffer, full_filename, lines
         for l:span in l:error.spans
             if (
             \   l:span.is_primary
-            \   && (ale#path#IsBufferPath(a:buffer, l:file_name) || l:span.file_name ==# '<anon>')
+            \   && (ale#path#IsBufferPath(a:buffer, l:span.file_name) || l:span.file_name ==# '<anon>')
             \)
                 call add(l:output, {
                 \   'lnum': l:span.line_start,
