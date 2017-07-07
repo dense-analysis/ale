@@ -17,7 +17,7 @@ function! ale_linters#c#gcc#GetCommand(buffer) abort
     if has_key(l:args, 'args') && has_key(l:args, 'directory')
         return 'cd ' . l:args.directory . ' && '
         \   . 'gcc -S -x c -fsyntax-only '
-        \	. l:args.args
+        \   . l:args.args
         \   . ' -'
     endif
 
