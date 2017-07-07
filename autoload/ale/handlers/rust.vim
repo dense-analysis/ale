@@ -8,13 +8,13 @@ if !exists('g:ale_rust_ignore_error_codes')
 endif
 
 " returns: a list [lnum, col] with the location of the error or []
-function! s:FindErrorInExpansion(span, file_name) abort
-    if a:span.file_name ==# a:file_name
+function! s:FindErrorInExpansion(span, buffer) abort
+    if ale#path#IsBufferPath(a:buffer, a:span.file_name)
         return [a:span.line_start, a:span.line_end, a:span.byte_start, a:span.byte_end]
     endif
 
     if !empty(a:span.expansion)
-        return s:FindErrorInExpansion(a:span.expansion.span, a:file_name)
+        return s:FindErrorInExpansion(a:span.expansion.span, a:buffer)
     endif
 
     return []
@@ -22,7 +22,6 @@ endfunction
 
 " A handler function which accepts a file name, to make unit testing easier.
 function! ale#handlers#rust#HandleRustErrorsForFile(buffer, full_filename, lines) abort
-    let l:filename = fnamemodify(a:full_filename, ':t')
     let l:output = []
 
     for l:errorline in a:lines
@@ -48,7 +47,7 @@ function! ale#handlers#rust#HandleRustErrorsForFile(buffer, full_filename, lines
         for l:span in l:error.spans
             if (
             \   l:span.is_primary
-            \   && (a:full_filename =~ (l:span.file_name . '$') || l:span.file_name ==# '<anon>')
+            \   && (ale#path#IsBufferPath(a:buffer, l:span.file_name) || l:span.file_name ==# '<anon>')
             \)
                 call add(l:output, {
                 \   'lnum': l:span.line_start,
@@ -61,7 +60,7 @@ function! ale#handlers#rust#HandleRustErrorsForFile(buffer, full_filename, lines
             else
                 " when the error is caused in the expansion of a macro, we have
                 " to bury deeper
-                let l:root_cause = s:FindErrorInExpansion(l:span, l:filename)
+                let l:root_cause = s:FindErrorInExpansion(l:span, a:buffer)
 
                 if !empty(l:root_cause)
                     call add(l:output, {
