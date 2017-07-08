@@ -169,6 +169,25 @@ g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
 
 
 ===============================================================================
+jscs                                                      *ale-javascript-jscs*
+
+g:ale_javascript_jscs_executable             *g:ale_javascript_jscs_executable*
+                                             *b:ale_javascript_jscs_executable*
+  Type: |String|
+  Default: `'jscs'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_javascript_jscs_use_global             *g:ale_javascript_jscs_use_global*
+                                             *b:ale_javascript_jscs_use_global*
+  Type: |Number|
+  Default: `0`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
 jshint                                                  *ale-javascript-jshint*
 
 g:ale_javascript_jshint_executable         *g:ale_javascript_jshint_executable*
