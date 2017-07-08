@@ -1,5 +1,7 @@
 Before:
-  Save g:ale_pattern_options, g:ale_pattern_options_enabled
+  Save g:ale_pattern_options
+  Save g:ale_pattern_options_enabled
+  Save &filetype
 
 After:
   Restore
@@ -11,6 +13,7 @@ Execute(Buffer variables should be set when filename patterns match):
   let g:ale_pattern_options = {'baz.*\.js': {
   \ 'ale_enabled': 1,
   \ 'some_option': 347,
+  \ '&filetype': 'pattern_option_set_filetype',
   \}}
 
   silent! file foobar.js
@@ -26,3 +29,4 @@ Execute(Buffer variables should be set when filename patterns match):
 
   AssertEqual 1, b:ale_enabled
   AssertEqual 347, b:some_option
+  AssertEqual 'pattern_option_set_filetype', &filetype
