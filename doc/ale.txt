@@ -609,7 +609,7 @@ g:ale_pattern_options                                   *g:ale_pattern_options*
 
   let g:ale_pattern_options = {
   \   '\.foo\.js$': {
-  \       'ale_linters: {'javascript': ['eslint']},
+  \       'ale_linters': {'javascript': ['eslint']},
   \   },
   \}
 <
@@ -1113,7 +1113,7 @@ ALEDisable                                                         *ALEDisable*
   quickfix items, signs, current jobs, etc. Executing any of those commands
   will change the |g:ale_enabled| variable.
 
-  For convenience, a plug mapping `<Plug>(ale_toggle)` is defined for the 
+  For convenience, a plug mapping `<Plug>(ale_toggle)` is defined for the
   |ALEToggle| command.
 
 
