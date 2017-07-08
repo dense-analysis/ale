@@ -1110,8 +1110,11 @@ ALEEnable                                                           *ALEEnable*
 ALEDisable                                                         *ALEDisable*
 
   Enable or disable ALE, including all of its autocmd events, loclist items,
-  quickfix items, signs, current jobs, etc. Calling this option will change
-  the |g:ale_enabled| variable.
+  quickfix items, signs, current jobs, etc. Executing any of those commands
+  will change the |g:ale_enabled| variable.
+
+  For convenience, a plug mapping `<Plug>(ale_toggle)` is defined for the 
+  |ALEToggle| command.
 
 
 ALEDetail                                                           *ALEDetail*
