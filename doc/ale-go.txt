@@ -2,7 +2,7 @@
 ALE Go Integration                                             *ale-go-options*
 
 
--------------------------------------------------------------------------------
+===============================================================================
 Integration Information
 
 The `gometalinter` linter is disabled by default. ALE enables `gofmt`,
@@ -20,7 +20,7 @@ the benefit of running a number of linters, more than ALE would by default,
 while ensuring it doesn't run any linters known to be slow or resource
 intensive.
 
--------------------------------------------------------------------------------
+===============================================================================
 gometalinter                                              *ale-go-gometalinter*
 
 g:ale_go_gometalinter_executable             *g:ale_go_gometalinter_executable*
@@ -45,5 +45,5 @@ g:ale_go_gometalinter_options                   *g:ale_go_gometalinter_options*
   number of linters known to be slow or consume a lot of resources.
 
 
--------------------------------------------------------------------------------
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

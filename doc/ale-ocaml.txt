@@ -2,7 +2,7 @@
 ALE OCaml Integration                                       *ale-ocaml-options*
 
 
--------------------------------------------------------------------------------
+===============================================================================
 merlin                                                       *ale-ocaml-merlin*
 
   To use merlin linter for OCaml source code you need to make sure Merlin for
@@ -11,5 +11,5 @@ merlin                                                       *ale-ocaml-merlin*
   (https://github.com/the-lambda-church/merlin/wiki/vim-from-scratch).
 
 
--------------------------------------------------------------------------------
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

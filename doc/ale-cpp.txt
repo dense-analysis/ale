@@ -2,7 +2,7 @@
 ALE C++ Integration                                           *ale-cpp-options*
 
 
--------------------------------------------------------------------------------
+===============================================================================
 Global Options
 
 g:ale_c_build_dir_names                               *g:ale_c_build_dir_names*
@@ -33,7 +33,7 @@ g:ale_c_build_dir                                           *g:ale_c_build_dir*
   This feature is also most useful for the clang tools linters, wrapped
   aroung LibTooling (namely clang-tidy here)
 
--------------------------------------------------------------------------------
+===============================================================================
 clang                                                           *ale-cpp-clang*
 
 g:ale_cpp_clang_options                               *g:ale_cpp_clang_options*
@@ -44,7 +44,7 @@ g:ale_cpp_clang_options                               *g:ale_cpp_clang_options*
   This variable can be changed to modify flags given to clang.
 
 
--------------------------------------------------------------------------------
+===============================================================================
 clangcheck                                                *ale-cpp-clangcheck*
 
 `clang-check` will be run only when files are saved to disk, so that
@@ -67,7 +67,7 @@ g:ale_cpp_clangcheck_options                      *g:ale_cpp_clangcheck_options*
   option.
 
 
--------------------------------------------------------------------------------
+===============================================================================
 clangtidy                                                   *ale-cpp-clangtidy*
 
 `clang-tidy` will be run only when files are saved to disk, so that
@@ -107,7 +107,7 @@ g:ale_cpp_clangtidy_options                       *g:ale_cpp_clangtidy_options*
   of the |g:ale_c_build_dir_names| directories of the project tree.
 
 
--------------------------------------------------------------------------------
+===============================================================================
 cppcheck                                                     *ale-cpp-cppcheck*
 
 g:ale_cpp_cppcheck_options                         *g:ale_cpp_cppcheck_options*
@@ -118,7 +118,7 @@ g:ale_cpp_cppcheck_options                         *g:ale_cpp_cppcheck_options*
   This variable can be changed to modify flags given to cppcheck.
 
 
--------------------------------------------------------------------------------
+===============================================================================
 cpplint                                                       *ale-cpp-cpplint*
 
 g:ale_cpp_cpplint_options                           *g:ale_cpp_cpplint_options*
@@ -129,7 +129,7 @@ g:ale_cpp_cpplint_options                           *g:ale_cpp_cpplint_options*
   This variable can be changed to modify flags given to cpplint.
 
 
--------------------------------------------------------------------------------
+===============================================================================
 gcc                                                               *ale-cpp-gcc*
 
 g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
@@ -140,5 +140,5 @@ g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
   This variable can be changed to modify flags given to gcc.
 
 
--------------------------------------------------------------------------------
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
