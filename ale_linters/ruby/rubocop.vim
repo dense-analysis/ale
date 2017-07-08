@@ -1,5 +1,5 @@
-" Author: ynonp - https://github.com/ynonp
-" Description: rubocop for Ruby files
+" Author: ynonp - https://github.com/ynonp, Eddie Lebow https://github.com/elebow
+" Description: RuboCop, a code style analyzer for Ruby files
 
 function! ale_linters#ruby#rubocop#GetCommand(buffer) abort
     let l:executable = ale#handlers#rubocop#GetExecutable(a:buffer)
@@ -8,32 +8,47 @@ function! ale_linters#ruby#rubocop#GetCommand(buffer) abort
     \   : ''
 
     return ale#Escape(l:executable) . l:exec_args
-    \   . ' --format emacs --force-exclusion '
+    \   . ' --format json --force-exclusion '
     \   . ale#Var(a:buffer, 'ruby_rubocop_options')
     \   . ' --stdin ' . bufname(a:buffer)
 endfunction
 
 function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
-    " Matches patterns line the following:
-    "
-    " <path>:83:29: C: Prefer single-quoted strings when you don't
-    " need string interpolation or special symbols.
-    let l:pattern = '\v:(\d+):(\d+): (.): (.+)'
+    if len(a:lines) == 0
+      return []
+    endif
+
+    let l:errors = json_decode(a:lines[0])
+
     let l:output = []
 
-    for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        let l:text = l:match[4]
-        let l:type = l:match[3]
-
+    for l:error in l:errors['files'][0]['offenses']
         call add(l:output, {
-        \   'lnum': l:match[1] + 0,
-        \   'col': l:match[2] + 0,
-        \   'text': l:text,
-        \   'type': index(['F', 'E'], l:type) != -1 ? 'E' : 'W',
+        \   'lnum': l:error['location']['line'] + 0,
+        \   'col': l:error['location']['column'] + 0,
+        \   'text': l:error['message'],
+        \   'type': s:GetType(l:error['severity']),
         \})
     endfor
 
     return l:output
+endfunction
+
+function! s:GetType(severity) abort
+    if a:severity ==? 'refactor'
+      return 'W'
+    elseif a:severity ==? 'convention'
+      return 'W'
+    elseif a:severity ==? 'warning'
+      return 'W'
+    elseif a:severity ==? 'error'
+      return 'E'
+    elseif a:severity ==? 'fatal'
+      return 'E'
+    else
+      echo 'Rubocop offense type unrecognized by ALE: ' + severity
+      return ''
+    endif
 endfunction
 
 call ale#linter#Define('ruby', {
