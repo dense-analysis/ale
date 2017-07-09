@@ -172,7 +172,7 @@ The following languages and tools are supported.
 * FusionScript: 'fusion-lint'
 * Haml: 'hamllint'
 * Handlebars: 'ember-template-lint'
-* Haskell: 'ghc', 'ghc-mod', 'hlint', 'hdevtools'
+* Haskell: 'ghc', 'stack-ghc', 'stack-build', 'ghc-mod', 'stack-ghc-mod', 'hlint', 'hdevtools'
 * HTML: 'HTMLHint', 'proselint', 'tidy'
 * Java: 'javac'
 * JavaScript: 'eslint', 'jscs', 'jshint', 'flow', 'prettier', 'prettier-eslint', 'xo'
