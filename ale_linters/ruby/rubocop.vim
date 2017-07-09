@@ -40,7 +40,7 @@ function! ale_linters#ruby#rubocop#GetType(severity) abort
     if a:severity ==? 'convention'
     \|| a:severity ==? 'warning'
     \|| a:severity ==? 'refactor'
-      return 'W'
+        return 'W'
     endif
 
     return 'E'
