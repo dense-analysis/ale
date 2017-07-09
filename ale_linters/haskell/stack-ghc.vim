@@ -1,10 +1,10 @@
 " Author: w0rp <devw0rp@gmail.com>
-" Description: ghc for Haskell files
+" Description: ghc for Haskell files, using Stack
 
 call ale#linter#Define('haskell', {
-\   'name': 'ghc',
+\   'name': 'stack-ghc',
 \   'output_stream': 'stderr',
-\   'executable': 'ghc',
-\   'command': 'ghc -fno-code -v0 %t',
+\   'executable': 'stack',
+\   'command': 'stack ghc -- -fno-code -v0 %t',
 \   'callback': 'ale#handlers#haskell#HandleGHCFormat',
 \})
