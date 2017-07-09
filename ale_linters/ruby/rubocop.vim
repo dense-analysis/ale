@@ -27,14 +27,14 @@ function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
         \   'lnum': l:error['location']['line'] + 0,
         \   'col': l:error['location']['column'] + 0,
         \   'text': l:error['message'],
-        \   'type': s:GetType(l:error['severity']),
+        \   'type': ale_linters#ruby#rubocop#GetType(l:error['severity']),
         \})
     endfor
 
     return l:output
 endfunction
 
-function! s:GetType(severity) abort
+function! ale_linters#ruby#rubocop#GetType(severity) abort
     if a:severity ==? 'refactor'
       return 'W'
     elseif a:severity ==? 'convention'
