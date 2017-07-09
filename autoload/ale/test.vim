@@ -3,6 +3,34 @@
 "
 " This file should not typically be loaded during the normal execution of ALE.
 
+" Change the directory for checking things in particular test directories
+"
+" This function will set the g:dir variable, which represents the working
+" directory after changing the path. This variable allows a test to change
+" directories, and then switch back to a directory at the start of the test
+" run.
+"
+" This function should be run in a Vader Before: block.
+function! ale#test#SetDirectory(docker_path) abort
+    if a:docker_path[:len('/testplugin/') - 1] !=# '/testplugin/'
+        throw 'docker_path must start with /testplugin/!'
+    endif
+
+    " Try to switch directory, which will fail when running tests directly,
+    " and not through the Docker image.
+    silent! execute 'cd ' . fnameescape(a:docker_path)
+    let g:dir = getcwd()
+endfunction
+
+" When g:dir is defined, switch back to the directory we saved, and then
+" delete that variable.
+"
+" This function should be run in a Vader After: block.
+function! ale#test#RestoreDirectory() abort
+    silent execute 'cd ' . fnameescape(g:dir)
+    unlet! g:dir
+endfunction
+
 " Change the filename for the current buffer using a relative path to
 " the script without running autocmd commands.
 "

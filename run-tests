@@ -45,6 +45,15 @@ while [ $# -ne 0 ]; do
         run_neovim_tests=0
         run_vint=0
         run_custom_checks=0
+        shift
+    ;;
+    --no-vint)
+        run_vint=0
+        shift
+    ;;
+    --no-custom-checks)
+        run_custom_checks=0
+        shift
     ;;
     --)
         shift
@@ -161,7 +170,7 @@ if ((run_vim_tests)); then
         echo
 
         set -o pipefail
-        docker run -a stderr "${DOCKER_FLAGS[@]}" \
+        docker run -a stderr -e VADER_OUTPUT_FILE=/dev/stderr "${DOCKER_FLAGS[@]}" \
             "/vim-build/bin/$vim" -u test/vimrc \
             "+Vader! $tests" 2>&1 | filter-vader-output | color-vader-output || EXIT=$?
         set +o pipefail

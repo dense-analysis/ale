@@ -1,11 +1,13 @@
-Execute(Open a file some directory down):
-  silent! cd /testplugin/test
-  :e! top/middle/bottom/dummy.txt
+Before:
+  call ale#test#SetDirectory('/testplugin/test')
 
-Then(We should be able to find a configuration file further up):
+After:
+  call ale#test#RestoreDirectory()
+
+Execute(We should be able to find a configuration file further up):
+  call ale#test#SetFilename('top/middle/bottom/dummy.txt')
+
   AssertEqual expand('%:p:h:h:h:h') . '/top/example.ini', ale#path#FindNearestFile(bufnr('%'), 'example.ini')
 
-Execute(Do nothing):
-
-Then(We shouldn't find anything for files which don't match):
+Execute(We shouldn't find anything for files which don't match):
   AssertEqual '', ale#path#FindNearestFile(bufnr('%'), 'cantfindthis')

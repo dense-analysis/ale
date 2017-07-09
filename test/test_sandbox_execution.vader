@@ -47,6 +47,12 @@ Execute(ALE shouldn't blow up when run from a sandbox):
   sandbox call ale#Lint()
 
 Execute(ALE shouldn't blow up if file cleanup happens in a sandbox):
+  " Make a call to an engine function first, so the function will be defined
+  " before we make the sandbox call.
+  "
+  " You are not allowed to define any functions in the sandbox.
+  call ale#engine#InitBufferInfo(3)
+
   let g:ale_buffer_info[3] = {
   \ 'temporary_file_list': ['/tmp/foo'],
   \ 'temporary_directory_list': ['/tmp/bar'],
