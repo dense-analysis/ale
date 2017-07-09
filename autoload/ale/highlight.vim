@@ -69,7 +69,7 @@ endfunction
 
 " Given a loclist for current items to highlight, remove all highlights
 " except these which have matching loclist item entries.
-function! ale#highlight#RemoveHighlights(loclist) abort
+function! ale#highlight#RemoveHighlights() abort
     for l:match in s:GetALEMatches()
         call matchdelete(l:match.id)
     endfor
@@ -81,7 +81,7 @@ function! ale#highlight#UpdateHighlights() abort
     let l:loclist = l:has_new_items ? remove(s:buffer_highlights, l:buffer) : []
 
     if l:has_new_items || !g:ale_enabled
-        call ale#highlight#RemoveHighlights(l:loclist)
+        call ale#highlight#RemoveHighlights()
     endif
 
     " Restore items from the map of hidden items,
@@ -131,7 +131,7 @@ function! ale#highlight#BufferHidden(buffer) abort
         \   'v:val.bufnr == a:buffer && v:val.col > 0'
         \)
 
-        call clearmatches()
+        call ale#highlight#RemoveHighlights()
     endif
 endfunction
 

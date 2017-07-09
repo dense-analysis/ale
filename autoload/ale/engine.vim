@@ -669,7 +669,7 @@ function! ale#engine#Cleanup(buffer) abort
 
     if g:ale_set_highlights
         call ale#highlight#UnqueueHighlights(a:buffer)
-        call ale#highlight#RemoveHighlights([])
+        call ale#highlight#RemoveHighlights()
     endif
 
     call remove(g:ale_buffer_info, a:buffer)
