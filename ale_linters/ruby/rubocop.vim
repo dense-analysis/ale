@@ -37,20 +37,13 @@ function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#ruby#rubocop#GetType(severity) abort
-    if a:severity ==? 'refactor'
+    if a:severity ==? 'convention'
+    \|| a:severity ==? 'warning'
+    \|| a:severity ==? 'refactor'
       return 'W'
-    elseif a:severity ==? 'convention'
-      return 'W'
-    elseif a:severity ==? 'warning'
-      return 'W'
-    elseif a:severity ==? 'error'
-      return 'E'
-    elseif a:severity ==? 'fatal'
-      return 'E'
-    else
-      echo 'Rubocop offense type unrecognized by ALE: ' + a:severity
-      return ''
     endif
+
+    return 'E'
 endfunction
 
 call ale#linter#Define('ruby', {
