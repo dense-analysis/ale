@@ -25,8 +25,11 @@ endfunction
 " When g:dir is defined, switch back to the directory we saved, and then
 " delete that variable.
 "
+" The filename will be reset to dummy.txt
+"
 " This function should be run in a Vader After: block.
 function! ale#test#RestoreDirectory() abort
+    call ale#test#SetFilename('dummy.txt')
     silent execute 'cd ' . fnameescape(g:dir)
     unlet! g:dir
 endfunction

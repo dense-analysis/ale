@@ -7,17 +7,14 @@ Before:
   let g:ale_pug_puglint_executable = 'pug-lint'
   let g:ale_pug_puglint_use_global = 0
 
-  silent! cd /testplugin/test/command_callback
-  let g:dir = getcwd()
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
 
   runtime ale_linters/pug/puglint.vim
 
 After:
   Restore
 
-  silent execute 'cd ' . fnameescape(g:dir)
-  unlet! g:dir
-
+  call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
 Execute(puglint should detect local executables and package.json):

@@ -4,8 +4,7 @@ Before:
   Save g:ale_cpp_gcc_options
   Save g:ale_cpp_clang_options
 
-  silent! cd /testplugin/test
-  let g:dir = getcwd()
+  call ale#test#SetDirectory('/testplugin/test')
 
   let g:ale_c_gcc_options = ''
   let g:ale_c_clang_options = ''
@@ -15,8 +14,7 @@ Before:
 After:
   Restore
 
-  silent execute 'cd ' . fnameescape(g:dir)
-  unlet! g:dir
+  call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
 " Run this only once for this series of tests. The cleanup Execute step

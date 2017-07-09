@@ -1,17 +1,14 @@
 Before:
-  silent! cd /testplugin/test
-  let g:dir = getcwd()
+  call ale#test#SetDirectory('/testplugin/test')
 
   runtime ale_linters/css/csslint.vim
 
 After:
-  silent execute 'cd ' . g:dir
-  unlet! g:dir
-
+  call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
 Execute(--config should be set when the .csslintrc file is found):
-  new csslint-test-files/some-app/subdir/testfile.js
+  call ale#test#SetFilename('csslint-test-files/some-app/subdir/testfile.js')
 
   AssertEqual
   \ (
@@ -21,10 +18,8 @@ Execute(--config should be set when the .csslintrc file is found):
   \ ),
   \ ale_linters#css#csslint#GetCommand(bufnr(''))
 
-  :q
-
 Execute(--config should not be used when no .csslintrc file exists):
-  new csslint-test-files/other-app/testfile.css
+  call ale#test#SetFilename('csslint-test-files/other-app/testfile.css')
 
   AssertEqual
   \ (
@@ -32,5 +27,3 @@ Execute(--config should not be used when no .csslintrc file exists):
   \   . ' %t'
   \ ),
   \ ale_linters#css#csslint#GetCommand(bufnr(''))
-
-  :q

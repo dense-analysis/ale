@@ -1,10 +1,8 @@
 Before:
-  silent! cd /testplugin/test/handler
-  let g:dir = getcwd()
+  call ale#test#SetDirectory('/testplugin/test/handler')
 
 After:
-  silent execute 'cd ' . fnameescape(g:dir)
-  unlet! g:dir
+  call ale#test#RestoreDirectory()
 
 Execute(Basic errors should be handled by cppcheck):
   call ale#test#SetFilename('test.cpp')

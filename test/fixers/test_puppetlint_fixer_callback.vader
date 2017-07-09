@@ -6,7 +6,7 @@ Before:
   let g:ale_puppet_puppetlint_executable = 'xxxinvalid'
   let g:ale_puppet_puppetlint_options = '--invalid'
 
-  silent! execute 'cd /testplugin/test/command_callback'
+  call ale#test#SetDirectory('/testplugin/test/fixers')
   silent cd ..
   silent cd command_callback
   let g:dir = getcwd()
@@ -14,11 +14,7 @@ Before:
 After:
   Restore
 
-  silent execute 'cd ' . fnameescape(g:dir)
-  " Set the file to something else,
-  " or we'll cause issues when running other tests
-  silent file 'dummy.pp'
-  unlet! g:dir
+  call ale#test#RestoreDirectory()
 
 Execute(The puppetlint callback should return the correct default values):
   silent execute 'file ' . fnameescape(g:dir . '/puppet_paths/dummy.pp')

@@ -7,17 +7,13 @@ Before:
 
   runtime ale_linters/go/gometalinter.vim
 
-  silent! cd /testplugin/test/command_callback
-  let g:dir = getcwd()
-
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
   call ale#test#SetFilename('test.go')
 
 After:
   Restore
 
-  silent execute 'cd ' . fnameescape(g:dir)
-  unlet! g:dir
-
+  call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
 Execute(The gometalinter callback should return the right defaults):
