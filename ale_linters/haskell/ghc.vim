@@ -16,3 +16,12 @@ call ale#linter#Define('haskell', {
 \   'command': 'stack ghc -- -fno-code -v0 %t',
 \   'callback': 'ale#handlers#haskell#HandleGHCFormat',
 \})
+
+call ale#linter#Define('haskell', {
+\   'name': 'stack-build',
+\   'output_stream': 'stderr',
+\   'executable': 'stack',
+\   'command': 'stack build',
+\   'lint_file': 1,
+\   'callback': 'ale#handlers#haskell#HandleGHCFormat',
+\})
