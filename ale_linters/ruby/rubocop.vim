@@ -46,7 +46,7 @@ function! ale_linters#ruby#rubocop#GetType(severity) abort
     elseif a:severity ==? 'fatal'
       return 'E'
     else
-      echo 'Rubocop offense type unrecognized by ALE: ' + severity
+      echo 'Rubocop offense type unrecognized by ALE: ' + a:severity
       return ''
     endif
 endfunction
