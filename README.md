@@ -81,7 +81,7 @@ name. That seems to be the fairest way to arrange this table.
 | Go | [gofmt -e](https://golang.org/cmd/gofmt/), [go vet](https://golang.org/cmd/vet/), [golint](https://godoc.org/github.com/golang/lint), [gometalinter](https://github.com/alecthomas/gometalinter), [go build](https://golang.org/cmd/go/), [gosimple](https://github.com/dominikh/go-tools/tree/master/cmd/gosimple), [staticcheck](https://github.com/dominikh/go-tools/tree/master/cmd/staticcheck) |
 | Haml | [haml-lint](https://github.com/brigade/haml-lint)
 | Handlebars | [ember-template-lint](https://github.com/rwjblue/ember-template-lint) |
-| Haskell | [ghc](https://www.haskell.org/ghc/), [ghc-mod](https://github.com/DanielG/ghc-mod), [hlint](https://hackage.haskell.org/package/hlint), [hdevtools](https://hackage.haskell.org/package/hdevtools) |
+| Haskell | [ghc](https://www.haskell.org/ghc/), [stack-ghc](https://haskellstack.org/), [stack-build](https://haskellstack.org/), [ghc-mod](https://github.com/DanielG/ghc-mod), [stack-ghc-mod](https://github.com/DanielG/ghc-mod), [hlint](https://hackage.haskell.org/package/hlint), [hdevtools](https://hackage.haskell.org/package/hdevtools) |
 | HTML | [HTMLHint](http://htmlhint.com/), [proselint](http://proselint.com/), [tidy](http://www.html-tidy.org/) |
 | Java | [checkstyle](http://checkstyle.sourceforge.net), [javac](http://www.oracle.com/technetwork/java/javase/downloads/index.html) |
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/), [flow](https://flowtype.org/), [standard](http://standardjs.com/), [prettier](https://github.com/prettier/prettier) (and `prettier-eslint`, `prettier-standard`), [xo](https://github.com/sindresorhus/xo)
