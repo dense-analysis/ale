@@ -1,0 +1,42 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test')
+  runtime ale_linters/kotlin/kotlinc.vim
+  let g:ale_gradle_path = $PATH
+
+After:
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+  let $PATH = g:ale_gradle_path
+
+Execute(Should return 'gradlew' command if project includes gradle wapper):
+  call ale#test#SetFilename('gradle-test-files/wrapped-project/src/main/kotlin/dummy.kt')
+
+  let g:project_root = '/testplugin/test/gradle-test-files/wrapped-project'
+  let g:gradle_executable = '/testplugin/test/gradle-test-files/wrapped-project/gradlew'
+  let g:gradle_init_path = '/testplugin/autoload/ale/gradle/init.gradle'
+  let g:gradle_options = '-I ' . g:gradle_init_path . ' -q printClasspath'
+
+
+  AssertEqual
+  \ "cd '" . g:project_root . "' && " . g:gradle_executable . " " . g:gradle_options,
+  \ ale#gradle#BuildClasspathCommand(bufnr(''))
+
+Execute(Should return 'gradle' command if project does not include gradle wapper):
+  call ale#test#SetFilename('gradle-test-files/unwrapped-project/src/main/kotlin/dummy.kt')
+  let $PATH .= ':' . g:dir . '/gradle-test-files'
+
+  let g:project_root = '/testplugin/test/gradle-test-files/unwrapped-project'
+  let g:gradle_executable = 'gradle'
+  let g:gradle_init_path = '/testplugin/autoload/ale/gradle/init.gradle'
+  let g:gradle_options = '-I ' . g:gradle_init_path . ' -q printClasspath'
+
+  AssertEqual
+  \ "cd '" . g:project_root . "' && " . g:gradle_executable . " " . g:gradle_options,
+  \ ale#gradle#BuildClasspathCommand(bufnr(''))
+
+Execute(Should return empty string if gradle cannot be executed):
+  call ale#test#SetFilename('gradle-test-files/non-gradle-project/src/main/kotlin/dummy.kt')
+
+  AssertEqual
+  \ '',
+  \ ale#gradle#BuildClasspathCommand(bufnr(''))
