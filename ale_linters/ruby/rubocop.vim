@@ -23,9 +23,11 @@ function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
     let l:output = []
 
     for l:error in l:errors['files'][0]['offenses']
+        let l:start_col = l:error['location']['column'] + 0
         call add(l:output, {
         \   'lnum': l:error['location']['line'] + 0,
-        \   'col': l:error['location']['column'] + 0,
+        \   'col': l:start_col,
+        \   'end_col': l:start_col + l:error['location']['length'] - 1,
         \   'text': l:error['message'],
         \   'type': ale_linters#ruby#rubocop#GetType(l:error['severity']),
         \})

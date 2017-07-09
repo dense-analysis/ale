@@ -6,24 +6,28 @@ Execute(The rubocop handler should parse lines correctly):
   \   {
   \     'lnum': 83,
   \     'col': 29,
+  \     'end_col': 35,
   \     'text': 'Prefer single-quoted strings...',
   \     'type': 'W',
   \   },
   \   {
   \     'lnum': 12,
   \     'col': 2,
+  \     'end_col': 2,
   \     'text': 'Some error',
   \     'type': 'E',
   \   },
   \   {
   \     'lnum': 10,
   \     'col': 5,
+  \     'end_col': 12,
   \     'text': 'Regular warning',
   \     'type': 'W',
   \   },
   \   {
   \     'lnum': 11,
   \     'col': 1,
+  \     'end_col': 1,
   \     'text': 'Another error',
   \     'type': 'E',
   \   },
