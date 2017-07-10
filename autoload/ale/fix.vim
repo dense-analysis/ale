@@ -77,14 +77,14 @@ function! ale#fix#ApplyFixes(buffer, output) abort
             echoerr 'The file was changed before fixing finished'
             return
         endif
-
-        let l:data.done = 1
     endif
 
     if !bufexists(a:buffer)
         " Remove the buffer data when it doesn't exist.
         call remove(g:ale_fix_buffer_data, a:buffer)
     endif
+
+    let l:data.done = 1
 
     " We can only change the lines of a buffer which is currently open,
     " so try and apply the fixes to the current buffer.
