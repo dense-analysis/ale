@@ -174,9 +174,15 @@ function! ale#job#PrepareCommand(command) abort
     " NeoVim handles this issue automatically if the command is a String,
     " but we'll do this explicitly, so we use thes same exact command for both
     " versions.
-    return has('win32')
-    \   ?  'cmd /c ' . a:command
-    \   : split(&shell) + split(&shellcmdflag) + [a:command]
+    if ale#Has('win32')
+        return 'cmd /c ' . a:command
+    endif
+
+    if &shell =~? 'fish$'
+        return ['/bin/sh', '-c', a:command]
+    endif
+
+    return split(&shell) + split(&shellcmdflag) + [a:command]
 endfunction
 
 " Start a job with options which are agnostic to Vim and NeoVim.
