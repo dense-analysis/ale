@@ -31,9 +31,11 @@ endfunction
 " containing no __init__.py files is found.
 function! ale#python#FindProjectRoot(buffer) abort
     let l:ini_root = ale#python#FindProjectRootIni(a:buffer)
+
     if !empty(l:ini_root)
       return l:ini_root
     endif
+
     for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
         if !filereadable(l:path . '/__init__.py')
             return l:path
