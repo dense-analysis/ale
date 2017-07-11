@@ -1,0 +1,50 @@
+Before:
+    " Switch to the test rails directory.
+    let b:path = getcwd()
+    silent! cd /testplugin/test/handler
+    cd ../ruby_fixtures/valid_rails_app/app/models
+
+    runtime ale_linters/ruby/rails_best_practices.vim
+
+After:
+    " Switch back to whatever directory it was that we started on.
+    silent! 'cd ' . fnameescape(b:path)
+    unlet! b:path
+
+    call ale#linter#Reset()
+
+Execute(The rails_best_practices handler should parse JSON correctly):
+  silent file! thing.rb
+
+  AssertEqual
+  \  [
+  \      {
+  \          'lnum': 5,
+  \          'text': 'use local variable',
+  \          'type': 'W',
+  \      },
+  \      {
+  \          'lnum': 10,
+  \          'text': 'other advice',
+  \          'type': 'W',
+  \      }
+  \  ],
+  \  ale_linters#ruby#rails_best_practices#Handle(bufnr(''), [
+  \  '[',
+  \    '{',
+  \      '"message": "use local variable",',
+  \      '"line_number": "5",',
+  \      '"filename": "/testplugin/test/ruby_fixtures/valid_rails_app/app/models/thing.rb"',
+  \    '},{',
+  \      '"message": "other advice",',
+  \      '"line_number": "10",',
+  \      '"filename": "/testplugin/test/ruby_fixtures/valid_rails_app/app/models/thing.rb"',
+  \    '}',
+  \  ']'
+  \  ])
+
+Execute(The rails_best_practices handler should parse JSON correctly when there is no output from the tool):
+  AssertEqual
+  \ [],
+  \ ale_linters#ruby#rails_best_practices#Handle(347, [
+  \ ])
