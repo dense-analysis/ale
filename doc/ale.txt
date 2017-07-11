@@ -41,6 +41,8 @@ CONTENTS                                                         *ale-contents*
       gometalinter........................|ale-go-gometalinter|
     handlebars............................|ale-handlebars-options|
       ember-template-lint.................|ale-handlebars-embertemplatelint|
+    haskell...............................|ale-haskell-options|
+      stack-build.........................|ale-haskell-stack-build|
     html..................................|ale-html-options|
       htmlhint............................|ale-html-htmlhint|
       tidy................................|ale-html-tidy|
