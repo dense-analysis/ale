@@ -239,7 +239,7 @@ function! ALEInitAuGroups() abort
     augroup ALERunOnSaveGroup
         autocmd!
         if (g:ale_enabled && g:ale_lint_on_save) || g:ale_fix_on_save
-            autocmd BufWrite * call ale#events#SaveEvent()
+            autocmd BufWritePost * call ale#events#SaveEvent()
         endif
     augroup END
 
