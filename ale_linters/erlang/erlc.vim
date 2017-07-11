@@ -1,14 +1,12 @@
 " Author: Magnus Ottenklinger - https://github.com/evnu
 
-let g:ale_erlang_erlc_options = get(g:, 'ale_erlang_erlc_options', '')
+let g:ale_erlang_erlc = expand('<sfile>:p:h') . '/erlc.erl'
 
 function! ale_linters#erlang#erlc#GetCommand(buffer) abort
     let l:output_file = tempname()
     call ale#engine#ManageFile(a:buffer, l:output_file)
 
-    return 'erlc -o ' . ale#Escape(l:output_file)
-    \   . ' ' . ale#Var(a:buffer, 'erlang_erlc_options')
-    \   . ' %t'
+    return ale#Escape(g:ale_erlang_erlc) . ' %s %t'
 endfunction
 
 function! ale_linters#erlang#erlc#Handle(buffer, lines) abort
