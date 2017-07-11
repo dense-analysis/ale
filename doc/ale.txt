@@ -800,12 +800,12 @@ g:ale_type_map                                                 *g:ale_type_map*
   For example, if you want to turn flake8 errors into warnings, you can do
   the following: >
 
-  let g:ale_type_map = {'flake8', {'ES': 'WS', 'E': 'W'}}
+  let g:ale_type_map = {'flake8': {'ES': 'WS', 'E': 'W'}}
 <
   If you wanted to turn style errors and warnings into regular errors and
   warnings, you can use the following: >
 
-  let g:ale_type_map = {'flake8', {'ES': 'E', 'WS': 'W'}}
+  let g:ale_type_map = {'flake8': {'ES': 'E', 'WS': 'W'}}
 <
   Type maps can be set per-buffer with `b:ale_type_map`.
 
