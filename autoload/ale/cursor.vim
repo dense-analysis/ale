@@ -24,7 +24,7 @@ function! s:EchoWithShortMess(setting, message) abort
         " Turn shortmess on or off.
         if a:setting ==# 'on'
             setlocal shortmess+=T
-            " echomsg is neede for the message to get truncated and appear in
+            " echomsg is needed for the message to get truncated and appear in
             " the message history.
             exec "norm! :echomsg a:message\n"
         elseif a:setting ==# 'off'
