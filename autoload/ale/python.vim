@@ -11,11 +11,31 @@ let g:ale_virtualenv_dir_names = get(g:, 'ale_virtualenv_dir_names', [
 \   'virtualenv',
 \])
 
+
+function! ale#python#FindProjectRootIni(buffer) abort
+    for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
+        if filereadable(l:path . '/MANIFEST.in')
+        \|| filereadable(l:path . '/setup.cfg')
+        \|| filereadable(l:path . '/pytest.ini')
+        \|| filereadable(l:path . '/tox.ini')
+            return l:path
+        endif
+    endfor
+
+    return ''
+endfunction
+
 " Given a buffer number, find the project root directory for Python.
 " The root directory is defined as the first directory found while searching
 " upwards through paths, including the current directory, until a path
 " containing no __init__.py files is found.
 function! ale#python#FindProjectRoot(buffer) abort
+    let l:ini_root = ale#python#FindProjectRootIni(a:buffer)
+
+    if !empty(l:ini_root)
+      return l:ini_root
+    endif
+
     for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
         if !filereadable(l:path . '/__init__.py')
             return l:path
