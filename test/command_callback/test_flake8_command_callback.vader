@@ -65,6 +65,20 @@ Execute(The flake8 callbacks should detect virtualenv directories):
   \   . ' --stdin-display-name %s -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
 
+Execute(The FindProjectRoot should detect the project root directory for namespace module):
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/namespace_module/namespace/foo/bar.py')
+
+  AssertEqual
+  \ fnameescape(g:dir . '/python_paths/namespace_module'),
+  \ ale#python#FindProjectRoot(bufnr(''))
+
+Execute(The FindProjectRoot should detect the project root directory for old-style module):
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/no_virtualenv/subdir/foo/bar.py')
+
+  AssertEqual
+  \ fnameescape(g:dir . '/python_paths/no_virtualenv/subdir/foo'),
+  \ ale#python#FindProjectRoot(bufnr(''))
+
 " Some users currently run flake8 this way, so we should support it.
 Execute(Using `python -m flake8` should be supported for running flake8):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
