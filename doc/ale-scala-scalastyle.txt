@@ -1,0 +1,16 @@
+===============================================================================
+ALE Scala Integration                                       *ale-scala-options*
+
+
+===============================================================================
+scalastyle                                               *ale-scala-scalastyle*
+
+g:ale_scalastyle_config_file                     *g:ale_scalastyle_config_file*
+
+  Type: |String|
+  Default: `'scalastyle-config.xml'`
+
+  A string containing the path of the scalastyle config file to use.
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
