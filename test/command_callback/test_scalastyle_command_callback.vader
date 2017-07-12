@@ -1,0 +1,18 @@
+Before:
+  runtime ale_linters/scala/scalastyle.vim
+
+After:
+  call ale#linter#Reset()
+  let g:ale_scalastyle_config_file = 'scalastyle-config.xml'
+
+Execute(Should return the correct default command):
+  AssertEqual
+  \   'scalastyle -c "scalastyle-config.xml" %t',
+  \   ale_linters#scala#scalastyle#GetCommand(bufnr(''))
+
+Execute(Should allow using a custom config file):
+  let g:ale_scalastyle_config_file = 'foobar'
+
+  AssertEqual
+  \   'scalastyle -c "foobar" %t',
+  \   ale_linters#scala#scalastyle#GetCommand(bufnr(''))
