@@ -40,10 +40,14 @@ function! ale_linters#ruby#rails_best_practices#GetCommand(buffer) abort
         return ''
     endif
 
+    let l:output_file = ale#Has('win32') ? '%t ' : '/dev/stdout '
+    let l:cat_file = ale#Has('win32') ? '; type %t' : ''
+
     return ale#Escape(l:executable) . l:exec_args
-    \    . ' --silent -f json --output-file /dev/stdout '
+    \    . ' --silent -f json --output-file ' . l:output_file
     \    . ale#Var(a:buffer, 'ruby_rails_best_practices_options')
     \    . ale#Escape(l:rails_root)
+    \    . l:cat_file
 endfunction
 
 call ale#linter#Define('ruby', {
