@@ -28,7 +28,11 @@ endfunction
 " Given a buffer number, find the project root directory for Python.
 " The root directory is defined as the first directory found while searching
 " upwards through paths, including the current directory, until a path
-" containing no __init__.py files is found.
+" containing an init file (one from MANIFEST.in, setup.cfg, pytest.ini,
+" tox.ini) is found. If it is not possible to find the project root directorty
+" via init file, then it will be defined as the first directory found
+" searching upwards through paths, including the current directory, until no
+" __init__.py files is found.
 function! ale#python#FindProjectRoot(buffer) abort
     let l:ini_root = ale#python#FindProjectRootIni(a:buffer)
 
