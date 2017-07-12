@@ -28,6 +28,10 @@ function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
         \}]
     endtry
 
+    if l:errors['summary']['offense_count'] == 0 || empty(l:errors['files'])
+      return []
+    endif
+
     let l:output = []
 
     for l:error in l:errors['files'][0]['offenses']
