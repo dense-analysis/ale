@@ -1,8 +1,8 @@
 " Author: Kevin Kays - https://github.com/okkays
 " Description: Support for the scalastyle checker.
 
-let g:ale_scalastyle_config_file =
-\   get(g:, 'ale_scalastyle_config_file', 'scalastyle-config.xml')
+let g:ale_scala_scalastyle_options =
+\   get(g:, 'ale_scala_scalastyle_options', '-c scalastyle-config.xml')
 
 function! ale_linters#scala#scalastyle#Handle(buffer, lines) abort
     " Matches patterns line the following:
@@ -34,7 +34,7 @@ function! ale_linters#scala#scalastyle#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#scala#scalastyle#GetCommand(buffer) abort
-    return 'scalastyle -c "' . g:ale_scalastyle_config_file . '" %t'
+    return 'scalastyle ' . g:ale_scala_scalastyle_options . ' %t'
 endfunction
 
 call ale#linter#Define('scala', {
