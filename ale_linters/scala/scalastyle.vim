@@ -9,33 +9,25 @@ function! ale_linters#scala#scalastyle#Handle(buffer, lines) abort
     "
     " warning file=/home/blurble/Doop.scala message=Missing or badly formed ScalaDoc: Extra @param foobles line=190
 
-    let l:pattern = '^\(.\+\) .\+ message=\(.\+\) line=\(\d\+\)'
-    "let l:pattern = '^.\+:\(\d\+\): \(\w\+\): \(.\+\)'
+    let l:patterns = [
+        \ '^\(.\+\) .\+ message=\(.\+\) line=\(\d\+\)$',
+        \ '^\(.\+\) .\+ message=\(.\+\) line=\(\d\+\) column=\(\d\+\)$',
+        \]
     let l:output = []
-    let l:ln = 0
 
-    for l:line in a:lines
-        let l:ln = l:ln + 1
-        let l:match = matchlist(l:line, l:pattern)
-
-        if len(l:match) == 0
-            continue
-        endif
-
-        let l:text = l:match[2]
-        let l:type = l:match[1] ==# 'error' ? 'E' : 'W'
-        let l:col = 0
-
-        if l:ln + 1 < len(a:lines)
-            let l:col = stridx(a:lines[l:ln + 1], '^')
-        endif
-
-        call add(l:output, {
+    for l:match in ale#util#GetMatches(a:lines, l:patterns)
+        let l:args = {
         \   'lnum': l:match[3] + 0,
-        \   'col': l:col + 1,
-        \   'text': l:text,
-        \   'type': l:type,
-        \})
+        \   'type': l:match[1] =~? 'error' ? 'E' : 'W',
+        \   'text': l:match[2]
+        \ }
+
+        let l:col = l:match[4] + 0
+        if l:col > 0
+            let l:args['col'] = l:col
+        endif
+
+        call add(l:output, l:args)
     endfor
 
     return l:output
