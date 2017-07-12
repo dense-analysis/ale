@@ -14,7 +14,7 @@ function! ale_linters#go#gometalinter#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'go_gometalinter_options')
 
     return ale#Escape(l:executable)
-    \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(l:filename))
+    \   . ' --include=' . ale#Escape('^' . ale#util#EscapePCRE(l:filename))
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' ' . ale#Escape(fnamemodify(l:filename, ':h'))
 endfunction
