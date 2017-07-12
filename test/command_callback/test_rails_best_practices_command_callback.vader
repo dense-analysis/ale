@@ -1,0 +1,42 @@
+Before:
+  Save g:ale_ruby_rails_best_practices_executable
+
+  let g:ale_ruby_rails_best_practices_executable = 'rails_best_practices'
+
+  runtime ale_linters/ruby/rails_best_practices.vim
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#test#SetFilename('../ruby_fixtures/valid_rails_app/db/test.rb')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(Executable should default to rails_best_practices):
+  AssertEqual
+  \ '''rails_best_practices'' --silent -f json --output-file /dev/stdout '
+  \   . ale#Escape(simplify(g:dir . '/../ruby_fixtures/valid_rails_app')),
+  \ ale_linters#ruby#rails_best_practices#GetCommand(bufnr(''))
+
+Execute(Should be able to set a custom executable):
+  let g:ale_ruby_rails_best_practices_executable = 'bin/rails_best_practices'
+
+  AssertEqual
+  \ '''bin/rails_best_practices'' --silent -f json --output-file /dev/stdout '
+  \   . ale#Escape(simplify(g:dir . '/../ruby_fixtures/valid_rails_app')),
+  \ ale_linters#ruby#rails_best_practices#GetCommand(bufnr(''))
+
+Execute(Setting bundle appends 'exec rails_best_practices'):
+  let g:ale_ruby_rails_best_practices_executable = 'path to/bundle'
+
+  AssertEqual
+  \ '''path to/bundle'' exec rails_best_practices --silent -f json --output-file /dev/stdout '
+  \   . ale#Escape(simplify(g:dir . '/../ruby_fixtures/valid_rails_app')),
+  \ ale_linters#ruby#rails_best_practices#GetCommand(bufnr(''))
+
+Execute(Command callback should be empty when not in a valid Rails app):
+  call ale#test#SetFilename('../ruby_fixtures/not_a_rails_app/test.rb')
+
+  AssertEqual
+  \   '',
+  \   ale_linters#ruby#rails_best_practices#GetCommand(bufnr(''))

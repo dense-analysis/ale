@@ -15,7 +15,7 @@ function! ale_linters#ruby#brakeman#Handle(buffer, lines) abort
 
     for l:warning in l:result.warnings
         " Brakeman always outputs paths relative to the Rails app root
-        let l:rails_root = s:FindRailsRoot(a:buffer)
+        let l:rails_root = ale#ruby#FindRailsRoot(a:buffer)
         let l:warning_file = l:rails_root . '/' . l:warning.file
 
         if !ale#path#IsBufferPath(a:buffer, l:warning_file)
@@ -36,7 +36,7 @@ function! ale_linters#ruby#brakeman#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#ruby#brakeman#GetCommand(buffer) abort
-    let l:rails_root = s:FindRailsRoot(a:buffer)
+    let l:rails_root = ale#ruby#FindRailsRoot(a:buffer)
 
     if l:rails_root ==? ''
         return ''
@@ -45,26 +45,6 @@ function! ale_linters#ruby#brakeman#GetCommand(buffer) abort
     return 'brakeman -f json -q '
     \    . ale#Var(a:buffer, 'ruby_brakeman_options')
     \    . ' -p ' . ale#Escape(l:rails_root)
-endfunction
-
-function! s:FindRailsRoot(buffer) abort
-    " Find the nearest dir contining "app", "db", and "config", and assume it is
-    " the root of a Rails app.
-    for l:name in ['app', 'config', 'db']
-        let l:dir = fnamemodify(
-        \   ale#path#FindNearestDirectory(a:buffer, l:name),
-        \   ':h:h'
-        \)
-
-        if l:dir !=# '.'
-        \&& isdirectory(l:dir . '/app')
-        \&& isdirectory(l:dir . '/config')
-        \&& isdirectory(l:dir . '/db')
-            return l:dir
-        endif
-    endfor
-
-    return ''
 endfunction
 
 call ale#linter#Define('ruby', {

@@ -84,6 +84,8 @@ CONTENTS                                                         *ale-contents*
       pylint..............................|ale-python-pylint|
       yapf................................|ale-python-yapf|
     ruby..................................|ale-ruby-options|
+      brakeman............................|ale-ruby-brakeman|
+      rails_best_practices................|ale-ruby-rails_best_practices|
       reek................................|ale-ruby-reek|
       rubocop.............................|ale-ruby-rubocop|
     rust..................................|ale-rust-options|

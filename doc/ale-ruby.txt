@@ -14,6 +14,27 @@ g:ale_ruby_brakeman_options                       *g:ale_ruby_brakeman_options*
 
 
 ===============================================================================
+rails_best_practices                            *ale-ruby-rails_best_practices*
+
+g:ale_ruby_rails_best_practices_executable
+                                   *g:ale_ruby_rails_best_practices_executable*
+                                   *b:ale_ruby_rails_best_practices_executable*
+  Type: String
+  Default: 'rails_best_practices'
+
+  Override the invoked rails_best_practices binary. Set this to `'bundle'` to
+  invoke `'bundle` `exec` `rails_best_practices'`.
+
+g:ale_ruby_rails_best_practices_options
+                                      *g:ale_ruby_rails_best_practices_options*
+                                      *b:ale_ruby_rails_best_practices_options*
+  Type: |String|
+  Default: `''`
+
+  The contents of this variable will be passed through to rails_best_practices.
+
+
+===============================================================================
 reek                                                            *ale-ruby-reek*
 
 g:ale_ruby_reek_show_context                     *g:ale_ruby_reek_show_context*
