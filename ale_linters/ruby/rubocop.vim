@@ -14,22 +14,16 @@ function! ale_linters#ruby#rubocop#GetCommand(buffer) abort
 endfunction
 
 function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
-    if empty(a:lines)
-        return []
-    endif
-
     try
         let l:errors = json_decode(a:lines[0])
     catch
-        return [{
-        \   'lnum': 1,
-        \   'text': 'rubocop configuration error (type :ALEDetail for more information)',
-        \   'detail': join(a:lines, "\n"),
-        \}]
+        return []
     endtry
 
-    if l:errors['summary']['offense_count'] == 0 || empty(l:errors['files'])
-      return []
+    if !has_key(l:errors, 'summary')
+    \|| l:errors['summary']['offense_count'] == 0
+    \|| empty(l:errors['files'])
+        return []
     endif
 
     let l:output = []
@@ -63,5 +57,4 @@ call ale#linter#Define('ruby', {
 \   'executable_callback': 'ale#handlers#rubocop#GetExecutable',
 \   'command_callback': 'ale_linters#ruby#rubocop#GetCommand',
 \   'callback': 'ale_linters#ruby#rubocop#Handle',
-\   'output_stream': 'both',
 \})

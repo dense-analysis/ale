@@ -55,19 +55,18 @@ Execute(The rubocop handler should handle when no files are checked):
   \     '{"metadata":{"rubocop_version":"0.47.1","ruby_engine":"ruby","ruby_version":"2.1.5","ruby_patchlevel":"273","ruby_platform":"x86_64-linux-gnu"},"files":[],"summary":{"offense_count":0,"target_file_count":0,"inspected_file_count":0}}'
   \ ])
 
-Execute(Parse errors should be handled for rubocop):
+Execute(The rubocop handler should handle output without any errors):
   let g:lines = [
-  \ '/my/project/.rubocop.yml: Layout/MultilineOperationIndentation has the wrong namespace - should be Style',
-  \ '/my/project/.rubocop.yml: Layout/AlignHash has the wrong namespace - should be Style',
   \ '{"metadata":{"rubocop_version":"0.48.1","ruby_engine":"ruby","ruby_version":"2.4.1","ruby_patchlevel":"111","ruby_platform":"x86_64-darwin16"},"files":[]}',
   \]
 
   AssertEqual
-  \ [
-  \   {
-  \     'lnum': 1,
-  \     'text': 'rubocop configuration error (type :ALEDetail for more information)',
-  \     'detail': join(g:lines, "\n"),
-  \   },
-  \ ],
+  \ [],
   \ ale_linters#ruby#rubocop#Handle(347, g:lines)
+  \
+  AssertEqual
+  \ [],
+  \ ale_linters#ruby#rubocop#Handle(347, ['{}'])
+  AssertEqual
+  \ [],
+  \ ale_linters#ruby#rubocop#Handle(347, [])
