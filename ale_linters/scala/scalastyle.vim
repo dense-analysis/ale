@@ -2,7 +2,10 @@
 " Description: Support for the scalastyle checker.
 
 let g:ale_scala_scalastyle_options =
-\   get(g:, 'ale_scala_scalastyle_options', '-c scalastyle-config.xml')
+\   get(g:, 'ale_scala_scalastyle_options', '')
+
+let g:ale_scalastyle_config_loc =
+\   get(g:, 'ale_scalastyle_config_loc', '')
 
 function! ale_linters#scala#scalastyle#Handle(buffer, lines) abort
     " Matches patterns like the following:
@@ -34,7 +37,40 @@ function! ale_linters#scala#scalastyle#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#scala#scalastyle#GetCommand(buffer) abort
-    return 'scalastyle ' . g:ale_scala_scalastyle_options . ' %t'
+    " Search for scalastyle config in parent directories.
+    let l:scalastyle_config = ''
+    let l:potential_configs = [
+    \   'scalastyle_config.xml',
+    \   'scalastyle-config.xml'
+    \]
+    while !empty(l:potential_configs) && empty(l:scalastyle_config)
+        let l:scalastyle_config = ale#path#ResolveLocalPath(
+        \   a:buffer,
+        \   remove(l:potential_configs, 0),
+        \   ''
+        \)
+    endwhile
+    " If all else fails, try the global config.
+    if empty(l:scalastyle_config)
+        let l:scalastyle_config = get(g:, 'ale_scalastyle_config_loc', '')
+    endif
+
+    echom l:scalastyle_config
+
+    " Build the command using the config file and additional options.
+    let l:command = 'scalastyle'
+
+    if !empty(l:scalastyle_config)
+        let l:command .= ' --config ' . ale#Escape(l:scalastyle_config)
+    endif
+
+    if !empty(g:ale_scala_scalastyle_options)
+        let l:command .= ' ' . g:ale_scala_scalastyle_options
+    endif
+
+    let l:command .= ' %t'
+
+    return l:command
 endfunction
 
 call ale#linter#Define('scala', {
