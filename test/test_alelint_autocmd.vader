@@ -2,23 +2,17 @@ Before:
   let g:success = 0
   let g:ale_run_synchronously = 1
 
+After:
+  let g:ale_run_synchronously = 0
+  let g:ale_buffer_info = {}
+  augroup! VaderTest
+
+Execute (Run a lint cycle, and check that a variable is set in the autocmd):
   augroup VaderTest
     autocmd!
     autocmd User ALELint let g:success = 1
   augroup end
 
-After:
-  let g:ale_run_synchronously = 0
-
-  augroup! VaderTest
-  let g:ale_buffer_info = {}
-
-Given vim (Some vimscript):
-  set nocompatible
-
-Execute (Lint it):
   call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
 
-Then (Autocommands should have run):
   AssertEqual g:success, 1
