@@ -54,8 +54,6 @@ function! ale_linters#scala#scalastyle#GetCommand(buffer) abort
         let l:scalastyle_config = get(g:, 'ale_scalastyle_config_loc', '')
     endif
 
-    echom l:scalastyle_config
-
     " Build the command using the config file and additional options.
     let l:command = 'scalastyle'
 
