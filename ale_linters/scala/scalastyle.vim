@@ -5,14 +5,14 @@ let g:ale_scala_scalastyle_options =
 \   get(g:, 'ale_scala_scalastyle_options', '-c scalastyle-config.xml')
 
 function! ale_linters#scala#scalastyle#Handle(buffer, lines) abort
-    " Matches patterns line the following:
+    " Matches patterns like the following:
     "
     " warning file=/home/blurble/Doop.scala message=Missing or badly formed ScalaDoc: Extra @param foobles line=190
 
     let l:patterns = [
-        \ '^\(.\+\) .\+ message=\(.\+\) line=\(\d\+\)$',
-        \ '^\(.\+\) .\+ message=\(.\+\) line=\(\d\+\) column=\(\d\+\)$',
-        \]
+    \   '^\(.\+\) .\+ message=\(.\+\) line=\(\d\+\)$',
+    \   '^\(.\+\) .\+ message=\(.\+\) line=\(\d\+\) column=\(\d\+\)$',
+    \]
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:patterns)
@@ -20,7 +20,7 @@ function! ale_linters#scala#scalastyle#Handle(buffer, lines) abort
         \   'lnum': l:match[3] + 0,
         \   'type': l:match[1] =~? 'error' ? 'E' : 'W',
         \   'text': l:match[2]
-        \ }
+        \}
 
         let l:col = l:match[4] + 0
         if l:col > 0
