@@ -42,13 +42,17 @@ function! ale_linters#scala#scalastyle#GetCommand(buffer) abort
     \   'scalastyle_config.xml',
     \   'scalastyle-config.xml'
     \]
-    while !empty(l:potential_configs) && empty(l:scalastyle_config)
+    for l:config in l:potential_configs
         let l:scalastyle_config = ale#path#ResolveLocalPath(
         \   a:buffer,
-        \   remove(l:potential_configs, 0),
+        \   l:config,
         \   ''
         \)
-    endwhile
+        if !empty(l:scalastyle_config)
+            break
+        endif
+    endfor
+
     " If all else fails, try the global config.
     if empty(l:scalastyle_config)
         let l:scalastyle_config = get(g:, 'ale_scalastyle_config_loc', '')
