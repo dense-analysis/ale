@@ -14,11 +14,15 @@ function! ale_linters#ruby#rubocop#GetCommand(buffer) abort
 endfunction
 
 function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
-    if len(a:lines) == 0
-      return []
+    if empty(a:lines)
+        return []
     endif
 
     let l:errors = json_decode(a:lines[0])
+
+    if empty(l:errors['files'])
+        return []
+    endif
 
     let l:output = []
 
