@@ -59,5 +59,4 @@ call ale#linter#Define('ruby', {
 \   'executable_callback': 'ale#handlers#rubocop#GetExecutable',
 \   'command_callback': 'ale_linters#ruby#rubocop#GetCommand',
 \   'callback': 'ale_linters#ruby#rubocop#Handle',
-\   'output_stream': 'both',
 \})
