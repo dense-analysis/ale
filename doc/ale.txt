@@ -1478,8 +1478,10 @@ ALELint                                                       *ALELint-autocmd*
 
   For example, you can echo a message when linting is complete like so:
   >
-  autocmd User ALELint echom "ALE run!"
+  autocmd User ALELint unsilent echom 'ALE run!'
 <
+  The autocmd commands are run with |:silent|, so |:unsilent| is required for
+  echoing messges.
 
 ===============================================================================
 8. Special Thanks                                          *ale-special-thanks*
