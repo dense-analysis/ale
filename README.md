@@ -111,7 +111,7 @@ name. That seems to be the fairest way to arrange this table.
 | Rust | [rustc](https://www.rust-lang.org/), cargo (see `:help ale-integration-rust` for configuration instructions) |
 | SASS | [sass-lint](https://www.npmjs.com/package/sass-lint), [stylelint](https://github.com/stylelint/stylelint) |
 | SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint), [stylelint](https://github.com/stylelint/stylelint) |
-| Scala | [scalac](http://scala-lang.org) |
+| Scala | [scalac](http://scala-lang.org), [scalastyle](http://www.scalastyle.org) |
 | Slim | [slim-lint](https://github.com/sds/slim-lint)
 | SML | [smlnj](http://www.smlnj.org/) |
 | Stylus | [stylelint](https://github.com/stylelint/stylelint) |
