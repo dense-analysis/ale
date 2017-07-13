@@ -667,11 +667,6 @@ endfunction
 function! ale#engine#Cleanup(buffer) abort
     call ale#engine#RunLinters(a:buffer, [], 1)
 
-    if g:ale_set_highlights
-        call ale#highlight#UnqueueHighlights(a:buffer)
-        call ale#highlight#RemoveHighlights()
-    endif
-
     call remove(g:ale_buffer_info, a:buffer)
 endfunction
 

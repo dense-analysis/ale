@@ -204,3 +204,29 @@ Execute(Highlighting should support errors spanning many lines):
   \   },
   \ ],
   \ GetMatchesWithoutIDs()
+  \
+Execute(Highlights should always be cleared when the buffer highlight list is empty):
+  " Add our highlights and something else.
+  call matchaddpos('ALEError', [[1, 1, 1]])
+  call matchaddpos('SomeOtherGroup', [[1, 1, 1]])
+
+  AssertEqual
+  \ [
+  \   {'group': 'ALEError', 'priority': 10, 'pos1': [1, 1, 1]},
+  \   {'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]},
+  \ ],
+  \ GetMatchesWithoutIDs()
+
+  " Set the List we use for holding highlights for buffers.
+  let b:ale_highlight_items = []
+
+  " Call the function for updating the highlights called when buffers
+  " are entered, or when problems are presented.
+  call ale#highlight#UpdateHighlights()
+
+  " Check that we remove our highlights.
+  AssertEqual
+  \ [
+  \   {'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]},
+  \ ],
+  \ GetMatchesWithoutIDs()
