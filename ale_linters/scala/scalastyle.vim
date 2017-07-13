@@ -25,9 +25,8 @@ function! ale_linters#scala#scalastyle#Handle(buffer, lines) abort
         \   'text': l:match[2]
         \}
 
-        let l:col = l:match[4] + 0
-        if l:col > 0
-            let l:args['col'] = l:col + 1
+        if !empty(l:match[4])
+            let l:args['col'] = l:match[4] + 1
         endif
 
         call add(l:output, l:args)
