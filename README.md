@@ -125,7 +125,7 @@ name. That seems to be the fairest way to arrange this table.
 | Vim help^ | [proselint](http://proselint.com/)|
 | XHTML | [proselint](http://proselint.com/)|
 | XML | [xmllint](http://xmlsoft.org/xmllint.html/)|
-| YAML | [yamllint](https://yamllint.readthedocs.io/) |
+| YAML | [swaglint](https://github.com/byCedric/swaglint), [yamllint](https://yamllint.readthedocs.io/) |
 
 * *^ No linters for text or Vim help filetypes are enabled by default.*
 
