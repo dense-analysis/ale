@@ -6,8 +6,8 @@ call ale#Set('yaml_swaglint_use_global', 0)
 
 function! ale_linters#yaml#swaglint#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'yaml_swaglint', [
-        \   'node_modules/.bin/swaglint',
-        \])
+    \   'node_modules/.bin/swaglint',
+    \])
 endfunction
 
 function! ale_linters#yaml#swaglint#GetCommand(buffer) abort
