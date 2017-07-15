@@ -1257,7 +1257,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
 
                          The keys for each item in the List will be handled in
                          the following manner:
-
+                                                           *ale-loclist-format*
                          `text` - This error message is required.
                          `lnum` - The line number is required. Any strings
                            will be automatically converted to numbers by
@@ -1268,6 +1268,12 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          `col` - The column number is optional and will
                            default to `0`. Any strings will be automatically
                            coverted to number using `str2nr()`.
+                         `end_col` - An optional end column number.
+                           This key can be set to specify the column problems
+                           end on, for improved highlighting.
+                         `end_lnum` - An optional end line number.
+                           This key can set along with `end_col` for
+                           highlighting multi-line problems.
                          `bufnr` - The buffer number should match the buffer
                            being checked, and this value will default to
                            the buffer being checked.
