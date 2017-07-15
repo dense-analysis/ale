@@ -665,6 +665,10 @@ endfunction
 " clear the state of everything, and remove the Dictionary for managing
 " the buffer.
 function! ale#engine#Cleanup(buffer) abort
+    if !has_key(g:ale_buffer_info, a:buffer)
+        return
+    endif
+
     call ale#engine#RunLinters(a:buffer, [], 1)
 
     call remove(g:ale_buffer_info, a:buffer)

@@ -1,0 +1,45 @@
+Before:
+  Save g:ale_run_synchronously
+
+  let g:ale_run_synchronously = 1
+
+  function! TestCallback(buffer, output)
+    return [
+    \ {
+    \   'lnum': 1,
+    \   'text': 'Something is wrong',
+    \ },
+    \]
+  endfunction
+
+  call ale#linter#Define('foobar', {
+  \ 'name': 'testlinter',
+  \ 'callback': 'TestCallback',
+  \ 'executable': 'true',
+  \ 'command': 'true',
+  \ 'read_buffer': 0,
+  \})
+
+After:
+  Restore
+
+  delfunction TestCallback
+  let g:ale_buffer_info = {}
+  call ale#linter#Reset()
+
+Given foobar (Some file):
+  abc
+
+Execute(The loclist shouldn't be cleared when opening the loclist):
+  call ale#Lint()
+
+  AssertEqual 1, len(getloclist(0))
+
+  " The cleanup function is called when the loclist window is closed.
+  " If some cleanup is done for this buffer, for which nothing is wrong,
+  " then the loclist for the window, which is the same window as the window
+  " we are checking, will be cleared.
+  :lopen
+  :q
+
+  AssertEqual 1, len(getloclist(0))
