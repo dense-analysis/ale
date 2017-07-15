@@ -16,7 +16,7 @@ endfunction
 function! ale_linters#php#phpstan#Handle(buffer, lines) abort
     " Matches against lines like the following:
     "
-    " filename.php:15:message 
+    " filename.php:15:message
     let l:pattern = '^.*\.php:\(\d\+\):\(.\+\)$'
     let l:output = []
 
