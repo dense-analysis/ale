@@ -9,14 +9,15 @@ function! ale_linters#php#phpstan#GetCommand(buffer) abort
     return ale#Var(a:buffer, 'php_phpstan_executable')
     \   . ' analyze -l'
     \   . ale#Var(a:buffer, 'php_phpstan_level')
+    \   . ' --errorFormat raw'
     \   . ' %s'
 endfunction
 
 function! ale_linters#php#phpstan#Handle(buffer, lines) abort
     " Matches against lines like the following:
     "
-    "  18    message
-    let l:pattern = '^\s*\(\d\+\)\s*\(.\+\)$'
+    " filename.php:15:message 
+    let l:pattern = '^.*\.php:\(\d\+\):\(.\+\)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)

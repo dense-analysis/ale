@@ -19,12 +19,63 @@ Execute(project with level set to 3):
   let g:ale_php_phpstan_level = 3
 
   AssertEqual
-  \ 'phpstan_test analyze -l3 %s',
+  \ 'phpstan_test analyze -l3 --errorFormat raw %s',
   \ ale_linters#php#phpstan#GetCommand(bufnr(''))
 
 Execute(project with default level):
   call ale#test#SetFilename('phpstan-test-files/project-without-phpstan/foo/test.php')
 
   AssertEqual
-  \ 'phpstan_test analyze -l4 %s',
+  \ 'phpstan_test analyze -l4 --errorFormat raw %s',
   \ ale_linters#php#phpstan#GetCommand(bufnr(''))
+
+Execute(parse output without errors):
+  call ale#test#SetFilename('phpstan-test-files/project-without-phpstan/foo/test.php')
+
+  AssertEqual
+  \ [],
+  \ ale_linters#php#phpstan#Handle(bufnr(''), [" 1/1 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%"])
+
+Execute(parse output with one error):
+  call ale#test#SetFilename('phpstan-test-files/project-without-phpstan/foo/test.php')
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 9,
+  \     'text': 'Access to an undefined property Test::$var.',
+  \     'type': 'W'
+  \   }
+  \ ],
+  \ ale_linters#php#phpstan#Handle(bufnr(''), [
+  \   ' 1/1 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%',
+  \   'phpstan-test-files/project-without-phpstan/foo/test.php:9:Access to an undefined property Test::$var.',
+  \])
+
+Execute(parse output with three error):
+  call ale#test#SetFilename('phpstan-test-files/project-without-phpstan/foo/test.php')
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 9,
+  \     'text': 'Call to method format() on an unknown class DateTimeImutable.',
+  \     'type': 'W'
+  \   },
+  \   {
+  \     'lnum': 16,
+  \     'text': 'Sample message.',
+  \     'type': 'W'
+  \   },
+  \   {
+  \     'lnum': 192,
+  \     'text': 'Invalid command testCommand.',
+  \     'type': 'W'
+  \   }
+  \ ],
+  \ ale_linters#php#phpstan#Handle(bufnr(''), [
+  \   ' 1/1 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%',
+  \   'phpstan-test-files/project-without-phpstan/foo/test.php:9:Call to method format() on an unknown class DateTimeImutable.',
+  \   'phpstan-test-files/project-without-phpstan/foo/test.php:16:Sample message.',
+  \   'phpstan-test-files/project-without-phpstan/foo/test.php:192:Invalid command testCommand.',
+  \])
