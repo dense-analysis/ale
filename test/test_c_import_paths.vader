@@ -266,7 +266,8 @@ Execute(The C++ ClangTidy handler should include json folders for projects with 
   call ale#test#SetFilename('test_c_projects/json_project/subdir/file.cpp')
 
   AssertEqual
-  \   'clang-tidy -checks=''*'' %s '
+  \ ale#Escape('clang-tidy')
+  \   . ' -checks=''*'' %s '
   \   . '-p ' . ale#Escape(g:dir . '/test_c_projects/json_project/build')
   \ , ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
 

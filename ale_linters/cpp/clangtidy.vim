@@ -2,51 +2,43 @@
 " gagbo <gagbobada@gmail.com>
 " Description: clang-tidy linter for cpp files
 
+call ale#Set('cpp_clangtidy_executable', 'clang-tidy')
 " Set this option to check the checks clang-tidy will apply.
-let g:ale_cpp_clangtidy_checks = get(g:, 'ale_cpp_clangtidy_checks', ['*'])
-
+call ale#Set('cpp_clangtidy_checks', ['*'])
 " Set this option to manually set some options for clang-tidy.
 " This will disable compile_commands.json detection.
-let g:ale_cpp_clangtidy_options = get(g:, 'ale_cpp_clangtidy_options', '')
+call ale#Set('cpp_clangtidy_options', '')
+call ale#Set('c_build_dir', '')
 
-" Set this option to manually point to the build directory for clang-tidy.
-" This will disable all the other clangtidy_options, since compilation
-" flags are contained in the json
-let g:ale_c_build_dir = get(g:, 'ale_c_build_dir', '')
-
+function! ale_linters#cpp#clangtidy#GetExecutable(buffer) abort
+    return ale#Var(a:buffer, 'cpp_clangtidy_executable')
+endfunction
 
 function! ale_linters#cpp#clangtidy#GetCommand(buffer) abort
-    let l:check_list = ale#Var(a:buffer, 'cpp_clangtidy_checks')
-    let l:check_option = !empty(l:check_list)
-    \   ? '-checks=' . ale#Escape(join(l:check_list, ',')) . ' '
-    \   : ''
-    let l:user_options = ale#Var(a:buffer, 'cpp_clangtidy_options')
-    let l:user_build_dir = ale#Var(a:buffer, 'c_build_dir')
+    let l:checks = join(ale#Var(a:buffer, 'cpp_clangtidy_checks'), ',')
+    let l:build_dir = ale#Var(a:buffer, 'c_build_dir')
 
     " c_build_dir has the priority if defined
-    if empty(l:user_build_dir)
-        let l:user_build_dir = ale#c#FindCompileCommands(a:buffer)
+    if empty(l:build_dir)
+        let l:build_dir = ale#c#FindCompileCommands(a:buffer)
     endif
 
-    " We check again if user_builddir stayed empty after the
-    " c_build_dir_names check
-    " If we found the compilation database we override the value of
-    " l:extra_options
-    if empty(l:user_build_dir)
-        let l:extra_options = !empty(l:user_options)
-        \   ? ' -- ' . l:user_options
-        \   : ''
-    else
-        let l:extra_options = ' -p ' . ale#Escape(l:user_build_dir)
-    endif
+    " Get the extra options if we couldn't find a build directory.
+    let l:options = empty(l:build_dir)
+    \   ? ale#Var(a:buffer, 'cpp_clangtidy_options')
+    \   : ''
 
-    return 'clang-tidy ' . l:check_option . '%s' . l:extra_options
+    return ale#Escape(ale_linters#cpp#clangtidy#GetExecutable(a:buffer))
+    \   . (!empty(l:checks) ? ' -checks=' . ale#Escape(l:checks) : '')
+    \   . ' %s'
+    \   . (!empty(l:build_dir) ? ' -p ' . ale#Escape(l:build_dir) : '')
+    \   . (!empty(l:options) ? ' -- ' . l:options : '')
 endfunction
 
 call ale#linter#Define('cpp', {
 \   'name': 'clangtidy',
 \   'output_stream': 'stdout',
-\   'executable': 'clang-tidy',
+\   'executable_callback': 'ale_linters#cpp#clangtidy#GetExecutable',
 \   'command_callback': 'ale_linters#cpp#clangtidy#GetCommand',
 \   'callback': 'ale#handlers#gcc#HandleGCCFormat',
 \   'lint_file': 1,

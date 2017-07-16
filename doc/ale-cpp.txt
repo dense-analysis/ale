@@ -105,6 +105,15 @@ g:ale_cpp_clangtidy_checks                         *g:ale_cpp_clangtidy_checks*
   the shell. The `-checks` flag can be removed entirely by setting this
   option to an empty List.
 
+
+g:ale_cpp_clangtidy_executable                 *g:ale_cpp_clangtidy_executable*
+                                               *b:ale_cpp_clangtidy_executable*
+  Type: |String|
+  Default: `'clang-tidy'`
+
+  This variable can be changed to use a different executable for clangtidy.
+
+
 g:ale_cpp_clangtidy_options                       *g:ale_cpp_clangtidy_options*
                                                   *b:ale_cpp_clangtidy_options*
   Type: |String|
