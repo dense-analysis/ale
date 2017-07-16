@@ -23,7 +23,7 @@ endfunction
 call ale#linter#Define('cpp', {
 \   'name': 'clang',
 \   'output_stream': 'stderr',
-\   'executable_callback': 'ale_linters#cpp#clang#GetCommand',
+\   'executable_callback': 'ale_linters#cpp#clang#GetExecutable',
 \   'command_callback': 'ale_linters#cpp#clang#GetCommand',
 \   'callback': 'ale#handlers#gcc#HandleGCCFormat',
 \})
