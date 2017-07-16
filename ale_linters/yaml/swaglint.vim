@@ -16,7 +16,7 @@ function! ale_linters#yaml#swaglint#GetCommand(buffer) abort
 endfunction
 
 function! ale_linters#yaml#swaglint#Handle(buffer, lines) abort
-    let l:pattern = ': \([^\s]\+\) @ \(\d\+\):\(\d\)\+ - \(.\+\)$'
+    let l:pattern = ': \([^\s]\+\) @ \(\d\+\):\(\d\+\) - \(.\+\)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
