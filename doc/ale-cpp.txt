@@ -63,6 +63,14 @@ Therefore, `clang-check` linter reads the options |g:ale_c_build_dir| and
 overrides |g:ale_c_build_dir_names|.
 
 
+g:ale_cpp_clangcheck_executable               *g:ale_cpp_clangcheck_executable*
+                                              *b:ale_cpp_clangcheck_executable*
+  Type: |String|
+  Default: `'clang-check'`
+
+  This variable can be changed to use a different executable for clangcheck.
+
+
 g:ale_cpp_clangcheck_options                     *g:ale_cpp_clangcheck_options*
                                                  *b:ale_cpp_clangcheck_options*
   Type: |String|
