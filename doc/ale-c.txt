@@ -43,6 +43,14 @@ g:ale_c_cppcheck_options                             *g:ale_c_cppcheck_options*
 ===============================================================================
 gcc                                                                 *ale-c-gcc*
 
+g:ale_c_gcc_executable                                 *g:ale_c_gcc_executable*
+                                                       *b:ale_c_gcc_executable*
+  Type: |String|
+  Default: `'gcc'`
+
+  This variable can be changed to use a different executable for gcc.
+
+
 g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
                                                           *b:ale_c_gcc_options*
   Type: |String|

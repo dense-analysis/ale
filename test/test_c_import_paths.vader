@@ -37,7 +37,8 @@ Execute(The C GCC handler should include 'include' directories for projects with
   call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
 
   AssertEqual
-  \   'gcc -S -x c -fsyntax-only '
+  \ ale#Escape('gcc')
+  \   . ' -S -x c -fsyntax-only '
   \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/makefile_project/subdir') . ' '
   \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/makefile_project/include') . ' '
   \   . ' -'
@@ -49,7 +50,8 @@ Execute(The C GCC handler should include 'include' directories for projects with
   call ale#test#SetFilename('test_c_projects/configure_project/subdir/file.c')
 
   AssertEqual
-  \   'gcc -S -x c -fsyntax-only '
+  \ ale#Escape('gcc')
+  \   . ' -S -x c -fsyntax-only '
   \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/configure_project/subdir') . ' '
   \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/configure_project/include') . ' '
   \   . ' -'
@@ -61,7 +63,8 @@ Execute(The C GCC handler should include root directories for projects with .h f
   call ale#test#SetFilename('test_c_projects/h_file_project/subdir/file.c')
 
   AssertEqual
-  \   'gcc -S -x c -fsyntax-only '
+  \ ale#Escape('gcc')
+  \   . ' -S -x c -fsyntax-only '
   \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/h_file_project/subdir') . ' '
   \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/h_file_project') . ' '
   \   . ' -'
@@ -73,7 +76,8 @@ Execute(The C GCC handler should include root directories for projects with .hpp
   call ale#test#SetFilename('test_c_projects/hpp_file_project/subdir/file.c')
 
   AssertEqual
-  \   'gcc -S -x c -fsyntax-only '
+  \ ale#Escape('gcc')
+  \   . ' -S -x c -fsyntax-only '
   \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/hpp_file_project/subdir') . ' '
   \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/hpp_file_project') . ' '
   \   . ' -'
@@ -137,7 +141,8 @@ Execute(The C++ GCC handler should include 'include' directories for projects wi
   call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.cpp')
 
   AssertEqual
-  \   'gcc -S -x c++ -fsyntax-only '
+  \   ale#Escape('gcc')
+  \   . ' -S -x c++ -fsyntax-only '
   \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/makefile_project/subdir') . ' '
   \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/makefile_project/include') . ' '
   \   . ' -'
@@ -149,7 +154,8 @@ Execute(The C++ GCC handler should include 'include' directories for projects wi
   call ale#test#SetFilename('test_c_projects/configure_project/subdir/file.cpp')
 
   AssertEqual
-  \   'gcc -S -x c++ -fsyntax-only '
+  \   ale#Escape('gcc')
+  \   . ' -S -x c++ -fsyntax-only '
   \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/configure_project/subdir') . ' '
   \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/configure_project/include') . ' '
   \   . ' -'
@@ -161,7 +167,8 @@ Execute(The C++ GCC handler should include root directories for projects with .h
   call ale#test#SetFilename('test_c_projects/h_file_project/subdir/file.cpp')
 
   AssertEqual
-  \   'gcc -S -x c++ -fsyntax-only '
+  \   ale#Escape('gcc')
+  \   . ' -S -x c++ -fsyntax-only '
   \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/h_file_project/subdir') . ' '
   \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/h_file_project') . ' '
   \   . ' -'
@@ -173,7 +180,8 @@ Execute(The C++ GCC handler should include root directories for projects with .h
   call ale#test#SetFilename('test_c_projects/hpp_file_project/subdir/file.cpp')
 
   AssertEqual
-  \   'gcc -S -x c++ -fsyntax-only '
+  \   ale#Escape('gcc')
+  \   . ' -S -x c++ -fsyntax-only '
   \   . '-iquote ' . ale#Escape(g:dir .  '/test_c_projects/hpp_file_project/subdir') . ' '
   \   . ' -I' . ale#Escape(g:dir .  '/test_c_projects/hpp_file_project') . ' '
   \   . ' -'
