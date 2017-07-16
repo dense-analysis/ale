@@ -1,0 +1,39 @@
+Before:
+  Save g:ale_cpp_clang_executable
+  Save g:ale_cpp_clang_options
+
+  unlet! g:ale_cpp_clang_executable
+  unlet! b:ale_cpp_clang_executable
+  unlet! g:ale_cpp_clang_options
+  unlet! b:ale_cpp_clang_options
+
+  runtime ale_linters/cpp/clang.vim
+
+  let b:command_tail = ' -S -x c++ -fsyntax-only -iquote'
+  \   . ' ' . ale#Escape(getcwd())
+  \   . ' -std=c++14 -Wall -'
+
+After:
+  Restore
+  unlet! b:command_tail
+  unlet! b:ale_cpp_clang_executable
+  unlet! b:ale_cpp_clang_options
+  call ale#linter#Reset()
+
+Execute(The executable should be configurable):
+  AssertEqual 'clang++', ale_linters#cpp#clang#GetExecutable(bufnr(''))
+
+  let b:ale_cpp_clang_executable = 'foobar'
+
+  AssertEqual 'foobar', ale_linters#cpp#clang#GetExecutable(bufnr(''))
+
+Execute(The executable should be used in the command):
+  AssertEqual
+  \ ale#Escape('clang++') . b:command_tail,
+  \ ale_linters#cpp#clang#GetCommand(bufnr(''))
+
+  let b:ale_cpp_clang_executable = 'foobar'
+
+  AssertEqual
+  \ ale#Escape('foobar') . b:command_tail,
+  \ ale_linters#cpp#clang#GetCommand(bufnr(''))

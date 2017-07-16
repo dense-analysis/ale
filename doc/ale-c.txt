@@ -5,12 +5,20 @@ ALE C Integration                                               *ale-c-options*
 ===============================================================================
 clang                                                             *ale-c-clang*
 
+g:ale_c_clang_executable                             *g:ale_c_clang_executable*
+                                                     *b:ale_c_clang_executable*
+  Type: |String|
+  Default: `'clang'`
+
+  This variable can be changed to use a different executable for clang.
+
+
 g:ale_c_clang_options                                   *g:ale_c_clang_options*
                                                         *b:ale_c_clang_options*
   Type: |String|
   Default: `'-std=c11 -Wall'`
 
-  This variable can be change to modify flags given to clang.
+  This variable can be changed to modify flags given to clang.
 
 
 ===============================================================================

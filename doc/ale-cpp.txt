@@ -36,6 +36,14 @@ g:ale_c_build_dir                                           *g:ale_c_build_dir*
 ===============================================================================
 clang                                                           *ale-cpp-clang*
 
+g:ale_cpp_clang_executable                         *g:ale_cpp_clang_executable*
+                                                   *b:ale_cpp_clang_executable*
+  Type: |String|
+  Default: `'clang++'`
+
+  This variable can be changed to use a different executable for clang.
+
+
 g:ale_cpp_clang_options                               *g:ale_cpp_clang_options*
                                                       *b:ale_cpp_clang_options*
   Type: |String|
@@ -45,7 +53,7 @@ g:ale_cpp_clang_options                               *g:ale_cpp_clang_options*
 
 
 ===============================================================================
-clangcheck                                                *ale-cpp-clangcheck*
+clangcheck                                                 *ale-cpp-clangcheck*
 
 `clang-check` will be run only when files are saved to disk, so that
 `compile_commands.json` files can be used. It is recommended to use this
@@ -55,8 +63,8 @@ Therefore, `clang-check` linter reads the options |g:ale_c_build_dir| and
 overrides |g:ale_c_build_dir_names|.
 
 
-g:ale_cpp_clangcheck_options                      *g:ale_cpp_clangcheck_options*
-                                                  *b:ale_cpp_clangcheck_options*
+g:ale_cpp_clangcheck_options                     *g:ale_cpp_clangcheck_options*
+                                                 *b:ale_cpp_clangcheck_options*
   Type: |String|
   Default: `''`
 
