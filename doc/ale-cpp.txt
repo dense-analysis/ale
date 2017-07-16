@@ -154,6 +154,14 @@ g:ale_cpp_cppcheck_options                         *g:ale_cpp_cppcheck_options*
 ===============================================================================
 cpplint                                                       *ale-cpp-cpplint*
 
+g:ale_cpp_cpplint_executable                     *g:ale_cpp_cpplint_executable*
+                                                 *b:ale_cpp_cpplint_executable*
+  Type: |String|
+  Default: `'cpplint'`
+
+  This variable can be changed to use a different executable for cpplint.
+
+
 g:ale_cpp_cpplint_options                           *g:ale_cpp_cpplint_options*
                                                     *b:ale_cpp_cpplint_options*
   Type: |String|

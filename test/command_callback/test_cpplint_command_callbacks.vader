@@ -1,0 +1,42 @@
+Before:
+  Save g:ale_cpp_cpplint_executable
+  Save g:ale_cpp_cpplint_options
+
+  unlet! g:ale_cpp_cpplint_executable
+  unlet! b:ale_cpp_cpplint_executable
+  unlet! g:ale_cpp_cpplint_options
+  unlet! b:ale_cpp_cpplint_options
+
+  runtime ale_linters/cpp/cpplint.vim
+
+After:
+  Restore
+  unlet! b:command_tail
+  unlet! b:ale_cpp_cpplint_executable
+  unlet! b:ale_cpp_cpplint_options
+  call ale#linter#Reset()
+
+Execute(The executable should be configurable):
+  AssertEqual 'cpplint', ale_linters#cpp#cpplint#GetExecutable(bufnr(''))
+
+  let b:ale_cpp_cpplint_executable = 'foobar'
+
+  AssertEqual 'foobar', ale_linters#cpp#cpplint#GetExecutable(bufnr(''))
+
+Execute(The executable should be used in the command):
+  AssertEqual
+  \ ale#Escape('cpplint') . ' %s',
+  \ ale_linters#cpp#cpplint#GetCommand(bufnr(''))
+
+  let b:ale_cpp_cpplint_executable = 'foobar'
+
+  AssertEqual
+  \ ale#Escape('foobar') . ' %s',
+  \ ale_linters#cpp#cpplint#GetCommand(bufnr(''))
+  \
+Execute(The options should be configurable):
+  let b:ale_cpp_cpplint_options = '--something'
+
+  AssertEqual
+  \ ale#Escape('cpplint') . ' --something %s',
+  \ ale_linters#cpp#cpplint#GetCommand(bufnr(''))
