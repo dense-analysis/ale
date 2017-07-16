@@ -24,6 +24,14 @@ g:ale_c_clang_options                                   *g:ale_c_clang_options*
 ===============================================================================
 cppcheck                                                       *ale-c-cppcheck*
 
+g:ale_c_cppcheck_executable                       *g:ale_c_cppcheck_executable*
+                                                  *b:ale_c_cppcheck_executable*
+  Type: |String|
+  Default: `'cppcheck'`
+
+  This variable can be changed to use a different executable for cppcheck.
+
+
 g:ale_c_cppcheck_options                             *g:ale_c_cppcheck_options*
                                                      *b:ale_c_cppcheck_options*
   Type: |String|

@@ -1,8 +1,12 @@
 " Author: Bart Libert <bart.libert@gmail.com>
 " Description: cppcheck linter for cpp files
 
-" Set this option to change the cppcheck options
-let g:ale_cpp_cppcheck_options = get(g:, 'ale_cpp_cppcheck_options', '--enable=style')
+call ale#Set('cpp_cppcheck_executable', 'cppcheck')
+call ale#Set('cpp_cppcheck_options', '--enable=style')
+
+function! ale_linters#cpp#cppcheck#GetExecutable(buffer) abort
+    return ale#Var(a:buffer, 'cpp_cppcheck_executable')
+endfunction
 
 function! ale_linters#cpp#cppcheck#GetCommand(buffer) abort
     " Search upwards from the file for compile_commands.json.
@@ -19,7 +23,8 @@ function! ale_linters#cpp#cppcheck#GetCommand(buffer) abort
     \   : ''
 
     return l:cd_command
-    \   . 'cppcheck -q --language=c++ '
+    \   . ale#Escape(ale_linters#cpp#cppcheck#GetExecutable(a:buffer))
+    \   . ' -q --language=c++ '
     \   . l:compile_commands_option
     \   . ale#Var(a:buffer, 'cpp_cppcheck_options')
     \   . ' %t'
@@ -28,7 +33,7 @@ endfunction
 call ale#linter#Define('cpp', {
 \   'name': 'cppcheck',
 \   'output_stream': 'both',
-\   'executable': 'cppcheck',
+\   'executable_callback': 'ale_linters#cpp#cppcheck#GetExecutable',
 \   'command_callback': 'ale_linters#cpp#cppcheck#GetCommand',
 \   'callback': 'ale#handlers#cppcheck#HandleCppCheckFormat',
 \})

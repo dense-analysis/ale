@@ -1,0 +1,49 @@
+Before:
+  Save g:ale_cpp_cppcheck_executable
+  Save g:ale_cpp_cppcheck_options
+
+  unlet! g:ale_cpp_cppcheck_executable
+  unlet! b:ale_cpp_cppcheck_executable
+  unlet! g:ale_cpp_cppcheck_options
+  unlet! b:ale_cpp_cppcheck_options
+
+  runtime ale_linters/cpp/cppcheck.vim
+
+  let b:command_tail = ' -q --language=c++ --enable=style %t'
+
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+After:
+  Restore
+  unlet! b:command_tail
+  unlet! b:ale_cpp_cppcheck_executable
+  unlet! b:ale_cpp_cppcheck_options
+  call ale#linter#Reset()
+  call ale#test#RestoreDirectory()
+
+Execute(The executable should be configurable):
+  AssertEqual 'cppcheck', ale_linters#cpp#cppcheck#GetExecutable(bufnr(''))
+
+  let b:ale_cpp_cppcheck_executable = 'foobar'
+
+  AssertEqual 'foobar', ale_linters#cpp#cppcheck#GetExecutable(bufnr(''))
+
+Execute(The executable should be used in the command):
+  AssertEqual
+  \ ale#Escape('cppcheck') . b:command_tail,
+  \ ale_linters#cpp#cppcheck#GetCommand(bufnr(''))
+
+  let b:ale_cpp_cppcheck_executable = 'foobar'
+
+  AssertEqual
+  \ ale#Escape('foobar') . b:command_tail,
+  \ ale_linters#cpp#cppcheck#GetCommand(bufnr(''))
+
+Execute(cppcheck for C++ should detect compile_commands.json files):
+  call ale#test#SetFilename('cppcheck_paths/one/foo.cpp')
+
+  AssertEqual
+  \ 'cd ' . ale#Escape(g:dir . '/cppcheck_paths/one') . ' && '
+  \   . ale#Escape('cppcheck')
+  \   . ' -q --language=c++ --project=compile_commands.json --enable=style %t',
+  \ ale_linters#cpp#cppcheck#GetCommand(bufnr(''))
