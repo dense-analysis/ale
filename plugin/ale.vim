@@ -55,7 +55,13 @@ let g:ale_buffer_info = {}
 
 " This option prevents ALE autocmd commands from being run for particular
 " filetypes which can cause issues.
-let g:ale_filetype_blacklist = ['nerdtree', 'unite', 'tags']
+let g:ale_filetype_blacklist = [
+\   'dirvish',
+\   'nerdtree',
+\   'qf',
+\   'tags',
+\   'unite',
+\]
 
 " This Dictionary configures which linters are enabled for which languages.
 let g:ale_linters = get(g:, 'ale_linters', {})

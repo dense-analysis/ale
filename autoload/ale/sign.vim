@@ -65,7 +65,7 @@ sign define ALEDummySign
 " Read sign data for a buffer to a list of lines.
 function! ale#sign#ReadSigns(buffer) abort
     redir => l:output
-       silent exec 'sign place buffer=' . a:buffer
+       silent execute 'sign place buffer=' . a:buffer
     redir end
 
     return split(l:output, "\n")
@@ -154,7 +154,7 @@ function! s:SetDummySignIfNeeded(buffer, current_sign_list, new_signs) abort
     " If we haven't already set a dummy sign, and we have some previous signs
     " or always want a dummy sign, then set one, to keep the sign column open.
     if !l:is_dummy_sign_set && (a:new_signs || g:ale_sign_column_always)
-        execute 'sign place ' .  g:ale_sign_offset
+        silent! execute 'sign place ' .  g:ale_sign_offset
         \   . ' line=1 name=ALEDummySign buffer='
         \   . a:buffer
 
@@ -223,7 +223,7 @@ function! s:PlaceNewSigns(buffer, grouped_items, current_sign_offset) abort
             let l:obj.sign_id = l:sign_id
         endfor
 
-        execute 'sign place ' . l:sign_id
+        silent! execute 'sign place ' . l:sign_id
         \   . ' line=' . l:sublist[0].lnum
         \   . ' name=' . l:type
         \   . ' buffer=' . a:buffer
@@ -295,7 +295,7 @@ function! ale#sign#SetSigns(buffer, loclist) abort
     for [l:line, l:sign_id, l:name] in l:current_sign_list
         if l:sign_id != g:ale_sign_offset
         \&& !has_key(l:items_by_sign_id, l:sign_id)
-            exec 'sign unplace ' . l:sign_id . ' buffer=' . a:buffer
+            execute 'sign unplace ' . l:sign_id . ' buffer=' . a:buffer
         endif
     endfor
 
