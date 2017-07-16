@@ -33,6 +33,7 @@ CONTENTS                                                         *ale-contents*
       cmakelint...........................|ale-cmake-cmakelint|
     erlang................................|ale-erlang-options|
       erlc................................|ale-erlang-erlc|
+      syntaxerl...........................|ale-erlang-syntaxerl|
     fortran...............................|ale-fortran-options|
       gcc.................................|ale-fortran-gcc|
     fusionscript..........................|ale-fuse-options|
