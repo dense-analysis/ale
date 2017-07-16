@@ -17,13 +17,14 @@ function! ale_linters#php#phpstan#Handle(buffer, lines) abort
     " Matches against lines like the following:
     "
     " filename.php:15:message
-    let l:pattern = '^.*\.php:\(\d\+\):\(.\+\)$'
+    " C:\folder\filename.php:15:message
+    let l:pattern = '^\([a-zA-Z]:\)\?[^:]\+:\(\d\+\):\(.*\)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
-        \   'lnum': l:match[1] + 0,
-        \   'text': l:match[2],
+        \   'lnum': l:match[2] + 0,
+        \   'text': l:match[3],
         \   'type': 'W',
         \})
     endfor
