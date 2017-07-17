@@ -5,14 +5,8 @@ ALE Erlang Integration                                     *ale-erlang-options*
 ===============================================================================
 erlc                                                          *ale-erlang-erlc*
 
-g:ale_erlang_erlc_options                           *g:ale_erlang_erlc_options*
-                                                    *b:ale_erlang_erlc_options*
-  Type: |String|
-  Default: `''`
-
-  This variable controls additional parameters passed to `erlc`, such as `-I`
-  or `-pa`.
-
+  To use erlc linter for Erlang source code you need to make sure erlang is
+  installed and escript is in the $PATH.
 
 -------------------------------------------------------------------------------
 syntaxerl                                                *ale-erlang-syntaxerl*
