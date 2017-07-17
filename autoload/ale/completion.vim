@@ -39,6 +39,34 @@ let s:omni_start_map = {
 \   'typescript': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$',
 \}
 
+function! ale#completion#FilterSuggestionsByPrefix(suggestions, prefix) abort
+    " For completing...
+    "   foo.
+    "       ^
+    " We need to include all of the given suggestions.
+    if a:prefix ==# '.'
+        return a:suggestions
+    endif
+
+    let l:filtered_suggestions = []
+
+    " Filter suggestions down to those starting with the prefix we used for
+    " finding suggestions in the first place.
+    "
+    " Some completion tools will
+    " include suggestions which don't even start with the characters we have
+    " already typed.
+    for l:suggestion in a:suggestions
+        " Add suggestions if the suggestion starts with a case-insensitive
+        " match for the prefix.
+        if l:suggestion.word[: len(a:prefix) - 1] ==? a:prefix
+            call add(l:filtered_suggestions, l:suggestion)
+        endif
+    endfor
+
+    return l:filtered_suggestions
+endfunction
+
 function! ale#completion#OmniFunc(findstart, base) abort
     if a:findstart
         let l:line = b:ale_completion_info.line
@@ -58,7 +86,12 @@ function! ale#completion#OmniFunc(findstart, base) abort
             unlet b:ale_completion_response
             unlet b:ale_completion_parser
 
-            let b:ale_completion_result = function(l:parser)(l:response)
+            let l:prefix = b:ale_completion_info.prefix
+
+            let b:ale_completion_result = ale#completion#FilterSuggestionsByPrefix(
+            \   function(l:parser)(l:response),
+            \   l:prefix
+            \)
         endif
 
         return get(b:, 'ale_completion_result', [])
