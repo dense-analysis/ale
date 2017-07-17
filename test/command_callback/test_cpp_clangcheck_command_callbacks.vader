@@ -26,20 +26,28 @@ Execute(The executable should be configurable):
 
 Execute(The executable should be used in the command):
   AssertEqual
-  \ ale#Escape('clang-check') . ' -analyze %s',
+  \ ale#Escape('clang-check')
+  \   . ' -analyze %s'
+  \   . ' -extra-arg -Xanalyzer -extra-arg -analyzer-output=text',
   \ ale_linters#cpp#clangcheck#GetCommand(bufnr(''))
 
   let b:ale_cpp_clangcheck_executable = 'foobar'
 
+  " The extra arguments in the command are used to prevent .plist files from
+  " being generated.
   AssertEqual
-  \ ale#Escape('foobar') . ' -analyze %s',
+  \ ale#Escape('foobar')
+  \   . ' -analyze %s'
+  \   . ' -extra-arg -Xanalyzer -extra-arg -analyzer-output=text',
   \ ale_linters#cpp#clangcheck#GetCommand(bufnr(''))
 
 Execute(The options should be configurable):
   let b:ale_cpp_clangcheck_options = '--something'
 
   AssertEqual
-  \ ale#Escape('clang-check') . ' -analyze %s --something',
+  \ ale#Escape('clang-check')
+  \   . ' -analyze %s --something'
+  \   . ' -extra-arg -Xanalyzer -extra-arg -analyzer-output=text',
   \ ale_linters#cpp#clangcheck#GetCommand(bufnr(''))
 
 Execute(The build directory should be used when set):

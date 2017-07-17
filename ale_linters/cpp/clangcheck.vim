@@ -19,10 +19,14 @@ function! ale_linters#cpp#clangcheck#GetCommand(buffer) abort
         let l:build_dir = ale#c#FindCompileCommands(a:buffer)
     endif
 
+    " The extra arguments in the command are used to prevent .plist files from
+    " being generated. These are only added if no build directory can be
+    " detected.
     return ale#Escape(ale_linters#cpp#clangcheck#GetExecutable(a:buffer))
     \   . ' -analyze %s'
     \   . (!empty(l:user_options) ? ' ' . l:user_options : '')
     \   . (!empty(l:build_dir) ? ' -p ' . ale#Escape(l:build_dir) : '')
+    \   . (empty(l:build_dir) ? ' -extra-arg -Xanalyzer -extra-arg -analyzer-output=text' : '')
 endfunction
 
 call ale#linter#Define('cpp', {
