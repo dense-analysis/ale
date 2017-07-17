@@ -91,7 +91,7 @@ function! ale#completion#OmniFunc(findstart, base) abort
             let b:ale_completion_result = ale#completion#FilterSuggestionsByPrefix(
             \   function(l:parser)(l:response),
             \   l:prefix
-            \)
+            \)[: g:ale_completion_max_suggestions]
         endif
 
         return get(b:, 'ale_completion_result', [])
@@ -132,7 +132,7 @@ endfunction
 function! ale#completion#ParseTSServerCompletions(response) abort
     let l:names = []
 
-    for l:suggestion in a:response.body[: g:ale_completion_max_suggestions]
+    for l:suggestion in a:response.body
         call add(l:names, l:suggestion.name)
     endfor
 
