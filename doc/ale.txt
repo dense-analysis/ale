@@ -121,6 +121,7 @@ CONTENTS                                                         *ale-contents*
     xml...................................|ale-xml-options|
       xmllint.............................|ale-xml-xmllint|
     yaml..................................|ale-yaml-options|
+      swaglint............................|ale-yaml-swaglint|
       yamllint............................|ale-yaml-yamllint|
   6. Commands/Keybinds....................|ale-commands|
   7. API..................................|ale-api|
@@ -224,7 +225,7 @@ The following languages and tools are supported.
 * Vim help: 'proselint'
 * XHTML: 'proselint'
 * XML: 'xmllint'
-* YAML: 'yamllint'
+* YAML: 'swaglint', 'yamllint'
 
 ===============================================================================
 3. Global Options                                                 *ale-options*

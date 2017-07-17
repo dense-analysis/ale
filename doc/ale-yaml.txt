@@ -3,6 +3,40 @@ ALE YAML Integration                                         *ale-yaml-options*
 
 
 ===============================================================================
+swaglint                                                    *ale-yaml-swaglint*
+
+Website: https://github.com/byCedric/swaglint
+
+
+Installation
+-------------------------------------------------------------------------------
+
+Install swaglint either globally or locally: >
+
+  npm install swaglint -g  # global
+  npm install swaglint     # local
+<
+
+Options
+-------------------------------------------------------------------------------
+
+g:ale_yaml_swaglint_executable                 *g:ale_yaml_swaglint_executable*
+                                               *b:ale_yaml_swaglint_executable*
+  Type: |String|
+  Default: `'swaglint'`
+
+  This variable can be set to change the path to swaglint.
+
+
+g:ale_yaml_swaglint_use_global                 *g:ale_yaml_swaglint_use_global*
+                                               *b:ale_yaml_swaglint_use_global*
+  Type: |String|
+  Default: `0`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
 yamllint                                                    *ale-yaml-yamllint*
 
 Website: https://github.com/adrienverge/yamllint
