@@ -31,6 +31,8 @@ CONTENTS                                                         *ale-contents*
       stylelint...........................|ale-css-stylelint|
     cmake.................................|ale-cmake-options|
       cmakelint...........................|ale-cmake-cmakelint|
+    dart..................................|ale-dart-options|
+      dartanalyzer........................|ale-dart-dartanalyzer|
     erlang................................|ale-erlang-options|
       erlc................................|ale-erlang-erlc|
       syntaxerl...........................|ale-erlang-syntaxerl|
@@ -172,6 +174,7 @@ The following languages and tools are supported.
 * CSS: 'csslint', 'stylelint'
 * Cython (pyrex filetype): 'cython'
 * D: 'dmd'
+* Dart: 'dartanalyzer'
 * Dockerfile: 'hadolint'
 * Elixir: 'credo', 'dogma'
 * Elm: 'elm-make'

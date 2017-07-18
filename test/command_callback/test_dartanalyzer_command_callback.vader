@@ -1,0 +1,40 @@
+Before:
+  Save g:ale_dart_dartanalyzer_executable
+  unlet! g:ale_dart_dartanalyzer_executable
+
+  runtime ale_linters/dart/dartanalyzer.vim
+
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(The default command and executable should be correct):
+  AssertEqual
+  \ 'dartanalyzer',
+  \ ale_linters#dart#dartanalyzer#GetExecutable(bufnr(''))
+  AssertEqual
+  \ ale#Escape('dartanalyzer') . ' %t',
+  \ ale_linters#dart#dartanalyzer#GetCommand(bufnr(''))
+
+Execute(The executable should be configurable):
+  let g:ale_dart_dartanalyzer_executable = '/usr/lib/dart/bin/dartanalyzer'
+
+  AssertEqual
+  \ '/usr/lib/dart/bin/dartanalyzer',
+  \ ale_linters#dart#dartanalyzer#GetExecutable(bufnr(''))
+  AssertEqual
+  \ ale#Escape('/usr/lib/dart/bin/dartanalyzer') . ' %t',
+  \ ale_linters#dart#dartanalyzer#GetCommand(bufnr(''))
+
+Execute(The .packages file should be set if detected):
+  call ale#test#SetFilename('dart_paths/foo')
+
+  AssertEqual
+  \ ale#Escape('dartanalyzer')
+  \   . ' --packages ' . ale#Escape(g:dir . '/dart_paths/.packages')
+  \   . ' %t',
+  \ ale_linters#dart#dartanalyzer#GetCommand(bufnr(''))

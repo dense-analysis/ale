@@ -71,6 +71,7 @@ name. That seems to be the fairest way to arrange this table.
 | CSS | [csslint](http://csslint.net/), [stylelint](https://github.com/stylelint/stylelint) |
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
 | D | [dmd](https://dlang.org/dmd-linux.html) |
+| Dart | [dartanalyzer](https://github.com/dart-lang/sdk/tree/master/pkg/analyzer_cli) |
 | Dockerfile | [hadolint](https://github.com/lukasmartinelli/hadolint) |
 | Elixir | [credo](https://github.com/rrrene/credo), [dogma](https://github.com/lpil/dogma) |
 | Elm | [elm-make](https://github.com/elm-lang/elm-make) |
