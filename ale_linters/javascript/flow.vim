@@ -97,5 +97,5 @@ call ale#linter#Define('javascript', {
 \       {'callback': 'ale_linters#javascript#flow#GetCommand'},
 \   ],
 \   'callback': 'ale_linters#javascript#flow#Handle',
-\   'add_newline': 1,
+\   'add_newline': !has('win32'),
 \})
