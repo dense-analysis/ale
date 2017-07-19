@@ -117,3 +117,8 @@ Execute(The tslint handler should parse lines correctly):
   \     }
   \   },
   \])])
+
+Execute(The tslint handler should handle empty output):
+  AssertEqual
+  \ [],
+  \ ale_linters#typescript#tslint#Handle(bufnr(''), [])

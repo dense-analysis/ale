@@ -14,6 +14,10 @@ endfunction
 function! ale_linters#typescript#tslint#Handle(buffer, lines) abort
     let l:output = []
 
+    if empty(a:lines)
+        return []
+    endif
+
     for l:error in json_decode(join(a:lines, ''))
         if ale#path#IsBufferPath(a:buffer, l:error.name)
             call add(l:output, {
