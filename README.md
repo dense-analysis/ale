@@ -23,9 +23,9 @@ background with a command `ALEFix`.
 1. [Supported Languages and Tools](#supported-languages)
 2. [Usage](#usage)
 3. [Installation](#installation)
-    1. [Installation with Pathogen](#installation-with-pathogen)
-    2. [Installation with Vundle](#installation-with-vundle)
-    3. [Manual Installation](#manual-installation)
+    1. [Installation with Vim package management](#standard-installation)
+    2. [Installation with Pathogen](#installation-with-pathogen)
+    3. [Installation with Vundle](#installation-with-vundle)
 4. [Contributing](#contributing)
 5. [FAQ](#faq)
     1. [How do I disable particular linters?](#faq-disable-linters)
@@ -155,13 +155,52 @@ for different filetypes with the `g:ale_fixers` variable. See `:help ale-fix`.
 
 To install this plugin, you should use one of the following methods.
 For Windows users, replace usage of the Unix `~/.vim` directory with
-`%USERPROFILE%\_vim`, or another directory if you have configured
+`%USERPROFILE%\vimfiles`, or another directory if you have configured
 Vim differently. On Windows, your `~/.vimrc` file will be similarly
 stored in `%USERPROFILE%\_vimrc`.
 
+<a name="standard-installation"></a>
+
+### 3.i. Installation with Vim package management
+
+In Vim 8 and NeoVim, you can install plugins easily without needing to use
+any other tools. Simply clone the plugin into your `pack` directory.
+
+### Vim 8 on Unix
+
+```bash
+mkdir -p ~/.vim/pack/git-plugins/start
+git clone https://github.com/w0rp/ale.git ~/.vim/pack/git-plugins/start/ale
+```
+
+### NeoVim on Unix
+
+```bash
+mkdir -p ~/.local/share/nvim/site/pack/git-plugins/start
+git clone https://github.com/w0rp/ale.git ~/.local/share/nvim/site/pack/git-plugins/start/ale
+```
+
+### Vim 8 on Windows
+
+```bash
+# Run these commands in the "Git for Windows" Bash terminal
+mkdir -p ~/vimfiles/pack/git-plugins/start
+git clone https://github.com/w0rp/ale.git ~/vimfiles/pack/git-plugins/start/ale
+```
+
+### Generating documentation
+
+You can add the following line to your vimrc files to generate documentation
+tags automatically, if you don't have something similar already, so you can use
+the `:help` command to consult ALE's online documentation:
+
+```vim
+silent! helptags ALL
+```
+
 <a name="installation-with-pathogen"></a>
 
-### 3.i. Installation with Pathogen
+### 3.ii. Installation with Pathogen
 
 To install this module with [Pathogen](https://github.com/tpope/vim-pathogen),
 you should clone this repository to your bundle directory, and ensure
@@ -175,7 +214,7 @@ git clone https://github.com/w0rp/ale.git
 
 <a name="installation-with-vundle"></a>
 
-### 3.ii. Installation with Vundle
+### 3.iii. Installation with Vundle
 
 You can install this plugin using [Vundle](https://github.com/VundleVim/Vundle.vim)
 by using the path on GitHub for this repository.
@@ -185,41 +224,6 @@ Plugin 'w0rp/ale'
 ```
 
 See the Vundle documentation for more information.
-
-<a name="manual-installation"></a>
-
-### 3.iii. Manual Installation
-
-For installation without a package manager, you can clone this git repository
-into a bundle directory as with pathogen, and add the repository to your
-runtime path yourself. First clone the repository.
-
-```bash
-cd ~/.vim/bundle
-git clone https://github.com/w0rp/ale.git
-```
-
-Then, modify your `~/.vimrc` file to add this plugin to your runtime path.
-
-```vim
-set nocompatible
-filetype off
-
-let &runtimepath.=',~/.vim/bundle/ale'
-
-filetype plugin on
-```
-
-You can add the following line to generate documentation tags automatically,
-if you don't have something similar already, so you can use the `:help` command
-to consult ALE's online documentation:
-
-```vim
-silent! helptags ALL
-```
-
-Because the author of this plugin is a weird nerd, this is his preferred
-installation method.
 
 <a name="contributing"></a>
 
