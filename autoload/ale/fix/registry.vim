@@ -62,6 +62,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['ruby'],
 \       'description': 'Fix ruby files with rubocop --auto-correct.',
 \   },
+\   'standard': {
+\       'function': 'ale#fixers#standard#Fix',
+\       'suggested_filetypes': ['javascript'],
+\       'description': 'Fix JavaScript files using standard --fix',
+\   },
 \}
 
 " Reset the function registry to the default entries.
