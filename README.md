@@ -195,24 +195,13 @@ into a bundle directory as with pathogen, and add the repository to your
 runtime path yourself. First clone the repository.
 
 ```bash
-cd ~/.vim/bundle
+cd ~/.vim/pack/<name>/start
 git clone https://github.com/w0rp/ale.git
 ```
 
-Then, modify your `~/.vimrc` file to add this plugin to your runtime path.
-
-```vim
-set nocompatible
-filetype off
-
-let &runtimepath.=',~/.vim/bundle/ale'
-
-filetype plugin on
-```
-
-You can add the following line to generate documentation tags automatically,
-if you don't have something similar already, so you can use the `:help` command
-to consult ALE's online documentation:
+You can add the following line to `~/.vim/vimrc` to generate documentation tags
+automatically, if you don't have something similar already, so you can use the
+`:help` command to consult ALE's online documentation:
 
 ```vim
 silent! helptags ALL
