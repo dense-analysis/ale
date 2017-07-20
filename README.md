@@ -195,6 +195,13 @@ tags automatically, if you don't have something similar already, so you can use
 the `:help` command to consult ALE's online documentation:
 
 ```vim
+" Put these lines at the very end of your vimrc file.
+
+" Load all plugins now.
+" Plugins need to be added to runtimepath before helptags can be generated.
+packloadall
+" Load all of the helptags now, after plugins have been loaded.
+" All messages and errors will be ignored.
 silent! helptags ALL
 ```
 
