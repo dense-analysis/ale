@@ -12,6 +12,8 @@ Before:
 
   runtime ale_linters/cpp/clangtidy.vim
 
+  call ale#test#SetFilename('test.cpp')
+
 After:
   unlet! b:ale_c_build_dir
   unlet! b:ale_cpp_clangtidy_checks
@@ -66,6 +68,24 @@ Execute(The build directory setting should override the options):
   AssertEqual
   \ ale#Escape('clang-tidy')
   \   . ' -checks=''*'' %s -p ' . ale#Escape('/foo/bar'),
+  \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
+
+Execute(The build directory should be ignored for header files):
+  call ale#test#SetFilename('test.h')
+
+  let b:ale_c_build_dir = '/foo/bar'
+  let b:ale_cpp_clangtidy_options = '-Wall'
+
+  AssertEqual
+  \ ale#Escape('clang-tidy')
+  \   . ' -checks=''*'' %s -- -Wall',
+  \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
+  \
+  call ale#test#SetFilename('test.hpp')
+
+  AssertEqual
+  \ ale#Escape('clang-tidy')
+  \   . ' -checks=''*'' %s -- -Wall',
   \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
 
 Execute(The executable should be configurable):
