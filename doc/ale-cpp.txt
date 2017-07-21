@@ -132,6 +132,39 @@ g:ale_cpp_clangtidy_options                       *g:ale_cpp_clangtidy_options*
   of the |g:ale_c_build_dir_names| directories of the project tree.
 
 
+g:ale_cpp_clangtidy_header_suffixes        *g:ale_cpp_clangtidy_header_suffixes*
+                                           *b:ale_cpp_clangtidy_header_suffixes*
+  Type: |List|
+  Default: `['h', 'hpp', 'hxx', 'tcc']`
+
+  What suffixes are considered headers.
+
+  Headers could have an extra logic if |g:ale_cpp_clangtidy_header_sourcefile|
+  is set.
+  If |g:ale_cpp_clangtidy_header_sourcefile| is empty, `compile_commands.json`
+  is ignored, even if it exists in |g:ale_c_build_dir_names|.
+
+g:ale_cpp_clangtidy_header_sourcefile      *g:ale_cpp_clangtidy_header_sourcefile*
+                                           *b:ale_cpp_clangtidy_header_sourcefile*
+  Type: |String|
+  Default: `''`
+
+  Headers in cpp are not in the `compile_commands.json`, so it is hard to
+  process them with current tools.
+
+  This option allow the user to choose a source file (a `.cpp`) that uses
+  the current header to get linting.
+
+  The source file can be set locally per buffer with:
+  `let b:ale_cpp_clangtidy_header_sourcefile = '/path/source.cpp'`
+  Or set |g:ale_pattern_options| in a project vimL file.
+  let g:ale_pattern_options = {
+    \   'my_favourite_header\.h$': {
+    \       'ale_linters': {'cpp': ['clangtidy']},
+    \       'ale_cpp_clangtidy_header_sourcefile': '/path/test_header.cpp',
+    \   },
+  \}
+
 ===============================================================================
 cppcheck                                                     *ale-cpp-cppcheck*
 

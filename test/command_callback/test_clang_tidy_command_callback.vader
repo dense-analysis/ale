@@ -9,6 +9,10 @@ Before:
   unlet! b:ale_cpp_clangtidy_checks
   unlet! g:ale_cpp_clangtidy_options
   unlet! b:ale_cpp_clangtidy_options
+  unlet! g:ale_cpp_clangtidy_header_suffixes
+  unlet! b:ale_cpp_clangtidy_header_suffixes
+  unlet! g:ale_cpp_clangtidy_header_sourcefile
+  unlet! b:ale_cpp_clangtidy_header_sourcefile
 
   runtime ale_linters/cpp/clangtidy.vim
 
@@ -19,6 +23,8 @@ After:
   unlet! b:ale_cpp_clangtidy_checks
   unlet! b:ale_cpp_clangtidy_options
   unlet! b:ale_cpp_clangtidy_executable
+  unlet! b:ale_cpp_clangtidy_header_suffixes
+  unlet! b:ale_cpp_clangtidy_header_sourcefile
 
   Restore
   call ale#linter#Reset()
@@ -70,22 +76,42 @@ Execute(The build directory setting should override the options):
   \   . ' -checks=''*'' %s -p ' . ale#Escape('/foo/bar'),
   \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
 
-Execute(The build directory should be ignored for header files):
+Execute(The build directory should be ignored for header files with empty header_sourcefile):
   call ale#test#SetFilename('test.h')
 
   let b:ale_c_build_dir = '/foo/bar'
   let b:ale_cpp_clangtidy_options = '-Wall'
+  let b:ale_cpp_clangtidy_header_sourcefile = ''
+  let b:ale_cpp_clangtidy_header_suffixes = ['h', 'hpp', 'hxx']
 
   AssertEqual
   \ ale#Escape('clang-tidy')
   \   . ' -checks=''*'' %s -- -Wall',
   \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
   \
-  call ale#test#SetFilename('test.hpp')
 
+  call ale#test#SetFilename('test.hpp')
   AssertEqual
   \ ale#Escape('clang-tidy')
   \   . ' -checks=''*'' %s -- -Wall',
+  \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
+
+  call ale#test#SetFilename('test.hxx')
+  AssertEqual
+  \ ale#Escape('clang-tidy')
+  \   . ' -checks=''*'' %s -- -Wall',
+  \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
+
+Execute(The header_sourcefile should be used when non-empty, not ignoring build_dir):
+  call ale#test#SetFilename('test.h')
+
+  let b:ale_c_build_dir = '/foo/bar'
+  let b:ale_cpp_clangtidy_options = '-Wall'
+  let b:ale_cpp_clangtidy_header_sourcefile = 'test.cpp'
+
+  AssertEqual
+  \ ale#Escape('clang-tidy')
+  \   . ' -checks=''*'' tests.cpp -p ' . ale#Escape('/foo/bar')',
   \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
 
 Execute(The executable should be configurable):
