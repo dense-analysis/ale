@@ -45,7 +45,7 @@ function! ale_linters#typescript#tslint#BuildLintCommand(buffer) abort
     let l:tslint_config_option = !empty(l:tslint_config_path)
     \   ? ' -c ' . ale#Escape(l:tslint_config_path)
     \   : ''
-    
+
     let l:tslint_rules_dir = ale#Var(a:buffer, 'typescript_tslint_rules_dir')
 
     let l:tslint_rules_option = !empty(l:tslint_rules_dir)
