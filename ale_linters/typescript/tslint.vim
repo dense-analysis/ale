@@ -55,6 +55,7 @@ function! ale_linters#typescript#tslint#BuildLintCommand(buffer) abort
     return ale_linters#typescript#tslint#GetExecutable(a:buffer)
     \   . ' --format json'
     \   . l:tslint_config_option
+    \   . l:tslint_rules_option
     \   . ' %t'
 endfunction
 
