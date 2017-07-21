@@ -1,4 +1,4 @@
-" Author: Prashanth Chandra https://github.com/prashcr
+" Author: Prashanth Chandra <https://github.com/prashcr>, Jonathan Clem <https://jclem.net>
 " Description: tslint for TypeScript files
 
 call ale#Set('typescript_tslint_executable', 'tslint')
