@@ -102,21 +102,15 @@ function! ale#completion#Show(response, completion_parser) abort
     " Remember the old omnifunc value, if there is one.
     " If we don't store an old one, we'll just never reset the option.
     " This will stop some random exceptions from appearing.
-    if !exists('b:ale_old_omnifunc') && !empty(&omnifunc)
-        let b:ale_old_omnifunc = &omnifunc
-    endif
-
-    " Remember the old completion options, if they are set.
-    if !exists('b:ale_old_completeopt') && !empty(&completeopt)
-        let b:ale_old_completeopt = &completeopt
+    if !exists('b:ale_old_omnifunc') && !empty(&l:omnifunc)
+        let b:ale_old_omnifunc = &l:omnifunc
     endif
 
     " Set the list in the buffer, temporarily replace omnifunc with our
     " function, and then start omni-completion.
     let b:ale_completion_response = a:response
     let b:ale_completion_parser = a:completion_parser
-    let &omnifunc = 'ale#completion#OmniFunc'
-    let &completeopt = 'menu,noinsert,noselect'
+    let &l:omnifunc = 'ale#completion#OmniFunc'
     call feedkeys("\<C-x>\<C-o>", 'n')
 endfunction
 
@@ -306,13 +300,8 @@ function! ale#completion#Done() abort
 
     " Reset settings when completion is done.
     if exists('b:ale_old_omnifunc')
-        let &omnifunc = b:ale_old_omnifunc
+        let &l:omnifunc = b:ale_old_omnifunc
         unlet b:ale_old_omnifunc
-    endif
-
-    if exists('b:ale_old_completeopt')
-        let &completeopt = b:ale_old_completeopt
-        unlet b:ale_old_completeopt
     endif
 endfunction
 
