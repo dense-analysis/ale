@@ -94,3 +94,42 @@ Execute(The GCC handler shouldn't complain about #pragma once for headers):
   \ ale#handlers#gcc#HandleGCCFormat(347, [
   \   '<stdin>:1:1: warning: #pragma once in main file [enabled by default]',
   \ ])
+
+Execute(The GCC handler should handle syntax errors):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 6,
+  \     'col': 12,
+  \     'type': 'E',
+  \     'text': 'invalid suffix "p" on integer constant'
+  \   },
+  \   {
+  \     'lnum': 17,
+  \     'col': 5,
+  \     'type': 'E',
+  \     'text': 'invalid suffix "n" on integer constant'
+  \   },
+  \   {
+  \     'lnum': 4,
+  \     'type': 'E',
+  \     'text': 'variable or field ''foo'' declared void'
+  \   },
+  \   {
+  \     'lnum': 4,
+  \     'type': 'E',
+  \     'text': '''cat'' was not declared in this scope'
+  \   },
+  \   {
+  \     'lnum': 12,
+  \     'type': 'E',
+  \     'text': 'expected '';'' before ''o'''
+  \   },
+  \ ],
+  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \ '<stdin>:6:12: error: invalid suffix "p" on integer constant',
+  \ '<stdin>:17:5: error: invalid suffix "n" on integer constant',
+  \ '<stdin>:4: error: variable or field ''foo'' declared void',
+  \ '<stdin>:4: error: ''cat'' was not declared in this scope',
+  \ '<stdin>:12: error: expected `;'' before ''o''',
+  \ ])
