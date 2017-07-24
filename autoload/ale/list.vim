@@ -39,11 +39,12 @@ function! ale#list#SetLists(buffer, loclist) abort
     if (g:ale_open_list && !empty(a:loclist)) || g:ale_keep_list_window_open
         let l:winnr = winnr()
 
-        let l:reselect = 0
+        let l:reset_visual_selection = 0
+        let l:reset_character_selection = 0
         if mode() ==? 'v' || mode() ==# "\<c-v>"
-            let l:reselect = 1
+            let l:reset_visual_selection = 1
         elseif mode() ==? 's' || mode() ==# "\<c-s>"
-            let l:reselect = 2
+            let l:reset_character_selection = 1
         endif
 
         if g:ale_set_quickfix
@@ -59,9 +60,9 @@ function! ale#list#SetLists(buffer, loclist) abort
             wincmd p
         endif
 
-        if l:reselect > 0
+        if l:reset_visual_selection || l:reset_character_selection
             normal! gv
-            if l:reselect > 1
+            if l:reset_character_selection
                 normal! "\<c-g>"
             endif
         endif
