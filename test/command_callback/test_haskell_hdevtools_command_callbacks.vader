@@ -1,0 +1,37 @@
+Before:
+  Save g:ale_haskell_hdevtools_executable
+  Save g:ale_haskell_hdevtools_options
+
+  unlet! g:ale_haskell_hdevtools_executable
+  unlet! b:ale_haskell_hdevtools_executable
+  unlet! g:ale_haskell_hdevtools_options
+  unlet! b:ale_haskell_hdevtools_options
+
+  runtime ale_linters/haskell/hdevtools.vim
+
+  let b:command_tail = ' check -g -Wall -p %s %t'
+
+After:
+  Restore
+  unlet! b:command_tail
+  unlet! b:ale_haskell_hdevtools_executable
+  unlet! b:ale_haskell_hdevtools_options
+  call ale#linter#Reset()
+
+Execute(The executable should be configurable):
+  AssertEqual 'hdevtools', ale_linters#haskell#hdevtools#GetExecutable(bufnr(''))
+
+  let b:ale_haskell_hdevtools_executable = 'foobar'
+
+  AssertEqual 'foobar', ale_linters#haskell#hdevtools#GetExecutable(bufnr(''))
+
+Execute(The executable should be used in the command):
+  AssertEqual
+  \ ale#Escape('hdevtools') . b:command_tail,
+  \ ale_linters#haskell#hdevtools#GetCommand(bufnr(''))
+
+  let b:ale_haskell_hdevtools_executable = 'foobar'
+
+  AssertEqual
+  \ ale#Escape('foobar') . b:command_tail,
+  \ ale_linters#haskell#hdevtools#GetCommand(bufnr(''))
