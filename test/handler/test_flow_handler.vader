@@ -7,6 +7,22 @@ After:
   unlet! g:actual
   call ale#linter#Reset()
 
+Execute(The flow handler should throw away non-JSON lines):
+  AssertEqual
+  \ [],
+  \ ale_linters#javascript#flow#Handle(bufnr(''), [
+  \   'Already up-to-date.',
+  \   '{"flowVersion":"0.50.0","errors":[],"passed":true}',
+  \ ])
+  AssertEqual
+  \ [],
+  \ ale_linters#javascript#flow#Handle(bufnr(''), [
+  \   'foo',
+  \   'bar',
+  \   'baz',
+  \   '{"flowVersion":"0.50.0","errors":[],"passed":true}',
+  \ ])
+
 Execute(The flow handler should process errors correctly.):
   silent! noautocmd file /home/w0rp/Downloads/graphql-js/src/language/parser.js
 

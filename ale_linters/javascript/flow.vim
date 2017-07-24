@@ -40,10 +40,26 @@ function! ale_linters#javascript#flow#GetCommand(buffer, version_lines) abort
     \   . ' --json --from ale %s'
 endfunction
 
-function! ale_linters#javascript#flow#Handle(buffer, lines) abort
-    let l:str = join(a:lines, '')
+" Filter lines of flow output until we find the first line where the JSON
+" output starts.
+function! s:GetJSONLines(lines) abort
+    let l:start_index = 0
 
-    if l:str ==# ''
+    for l:line in a:lines
+        if l:line[:0] ==# '{'
+            break
+        endif
+
+        let l:start_index += 1
+    endfor
+
+    return a:lines[l:start_index :]
+endfunction
+
+function! ale_linters#javascript#flow#Handle(buffer, lines) abort
+    let l:str = join(s:GetJSONLines(a:lines), '')
+
+    if empty(l:str)
         return []
     endif
 

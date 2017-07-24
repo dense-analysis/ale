@@ -1,3 +1,13 @@
+Before:
+  Save g:ale_completion_enabled
+
+After:
+  Restore
+
+  if !g:ale_completion_enabled
+    call ale#completion#Disable()
+  endif
+
 Execute(TypeScript completions responses should be parsed correctly):
   AssertEqual [],
   \ ale#completion#ParseTSServerCompletions({

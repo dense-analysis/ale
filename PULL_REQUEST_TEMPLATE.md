@@ -1,6 +1,8 @@
 <!--
-When creating new pull requests, please consider the following.
+READ THIS: Before creating a pull request, please consider the following first.
 
+* The most important thing you can do is write tests. Code without tests
+  probably doesn't work, and will almost certainly stop working later on.
 * Read the Contributing guide linked above first.
 * If you are adding a new linter, remember to update the README.md file and
   doc/ale.txt first.
