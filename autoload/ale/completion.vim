@@ -321,9 +321,11 @@ function! s:Setup(enabled) abort
 endfunction
 
 function! ale#completion#Enable() abort
+    let g:ale_completion_enabled = 1
     call s:Setup(1)
 endfunction
 
 function! ale#completion#Disable() abort
+    let g:ale_completion_enabled = 0
     call s:Setup(0)
 endfunction
