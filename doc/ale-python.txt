@@ -2,22 +2,7 @@
 ALE Python Integration                                     *ale-python-options*
 
 
--------------------------------------------------------------------------------
-Global Options
-
-g:ale_virtualenv_dir_names                         *g:ale_virtualenv_dir_names*
-                                                   *b:ale_virtualenv_dir_names*
-
-  Type: |List|
-  Default: `['.env', 'env', 've-py3', 've', 'virtualenv']`
-
-  A list of directory names to be used when searching upwards from Python
-  files to discover virtulenv directories with. For directory named `'foo'`,
-  ALE will search for `'foo/bin/activate'` in all directories on and above
-  the directory containing the Python file to find virtualenv paths.
-
-
--------------------------------------------------------------------------------
+===============================================================================
 autopep8                                                  *ale-python-autopep8*
 
 g:ale_python_autopep8_executable             *g:ale_python_autopep8_executable*
@@ -44,7 +29,7 @@ g:ale_python_autopep8_use_global             *g:ale_python_autopep8_use_global*
   See |ale-integrations-local-executables|
 
 
--------------------------------------------------------------------------------
+===============================================================================
 flake8                                                      *ale-python-flake8*
 
 g:ale_python_flake8_executable                 *g:ale_python_flake8_executable*
@@ -85,7 +70,7 @@ g:ale_python_flake8_use_global                 *g:ale_python_flake8_use_global*
   Both variables can be set with `b:` buffer variables instead.
 
 
--------------------------------------------------------------------------------
+===============================================================================
 isort                                                        *ale-python-isort*
 
 g:ale_python_isort_executable                   *g:ale_python_isort_executable*
@@ -104,7 +89,7 @@ g:ale_python_isort_use_global                   *g:ale_python_isort_use_global*
   See |ale-integrations-local-executables|
 
 
--------------------------------------------------------------------------------
+===============================================================================
 mypy                                                          *ale-python-mypy*
 
 The minimum supported version of mypy that ALE supports is v0.4.4. This is
@@ -137,7 +122,7 @@ g:ale_python_mypy_use_global                     *g:ale_python_mypy_use_global*
   See |ale-integrations-local-executables|
 
 
--------------------------------------------------------------------------------
+===============================================================================
 pylint                                                      *ale-python-pylint*
 
 g:ale_python_pylint_executable                 *g:ale_python_pylint_executable*
@@ -176,7 +161,7 @@ g:ale_python_pylint_use_global                 *g:ale_python_pylint_use_global*
   See |ale-integrations-local-executables|
 
 
--------------------------------------------------------------------------------
+===============================================================================
 yapf                                                          *ale-python-yapf*
 
 g:ale_python_yapf_executable                     *g:ale_python_yapf_executable*
@@ -195,5 +180,5 @@ g:ale_python_yapf_use_global                     *g:ale_python_yapf_use_global*
   See |ale-integrations-local-executables|
 
 
--------------------------------------------------------------------------------
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

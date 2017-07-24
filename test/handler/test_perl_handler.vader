@@ -1,13 +1,10 @@
 Before:
-  silent! cd /testplugin/test/handler
-  let g:dir = getcwd()
+  call ale#test#SetDirectory('/testplugin/test/handler')
 
   runtime ale_linters/perl/perl.vim
 
 After:
-  silent execute 'cd ' . fnameescape(g:dir)
-  unlet! g:dir
-
+  call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
 Execute(The Perl linter should ignore errors from other files):

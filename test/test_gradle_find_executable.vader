@@ -1,0 +1,31 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test')
+  runtime ale_linters/kotlin/kotlinc.vim
+  let g:ale_gradle_path = $PATH
+
+After:
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+  let $PATH = g:ale_gradle_path
+  
+Execute(Should return 'gradlew' if found in parent directory):
+  call ale#test#SetFilename('gradle-test-files/wrapped-project/src/main/kotlin/dummy.kt')
+
+  AssertEqual
+  \ g:dir . '/gradle-test-files/wrapped-project/gradlew',
+  \ ale#gradle#FindExecutable(bufnr(''))
+
+Execute(Should return 'gradle' if 'gradlew' not found in parent directory):
+  call ale#test#SetFilename('gradle-test-files/unwrapped-project/src/main/kotlin/dummy.kt')
+  let $PATH .= ':' . g:dir . '/gradle-test-files'
+  
+  AssertEqual
+  \ 'gradle', 
+  \ ale#gradle#FindExecutable(bufnr(''))
+
+Execute(Should return empty string if 'gradlew' not in parent directory and gradle not in path):
+  call ale#test#SetFilename('gradle-test-files/unwrapped-project/src/main/kotlin/dummy.kt')
+  
+  AssertEqual
+  \ '', 
+  \ ale#gradle#FindExecutable(bufnr(''))

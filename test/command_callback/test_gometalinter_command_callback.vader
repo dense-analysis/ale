@@ -7,17 +7,13 @@ Before:
 
   runtime ale_linters/go/gometalinter.vim
 
-  silent! cd /testplugin/test/command_callback
-  let g:dir = getcwd()
-
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
   call ale#test#SetFilename('test.go')
 
 After:
   Restore
 
-  silent execute 'cd ' . fnameescape(g:dir)
-  unlet! g:dir
-
+  call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
 Execute(The gometalinter callback should return the right defaults):
@@ -26,7 +22,7 @@ Execute(The gometalinter callback should return the right defaults):
   \ ale_linters#go#gometalinter#GetExecutable(bufnr(''))
   AssertEqual
   \ ale#Escape('gometalinter')
-  \   . ' --include=''^' . expand('%:p') . '.*$'''
+  \   . ' --include=' . ale#Escape('^' . ale#util#EscapePCRE(expand('%')))
   \   . ' ' . ale#Escape(getcwd()),
   \ ale_linters#go#gometalinter#GetCommand(bufnr(''))
 
@@ -38,7 +34,7 @@ Execute(The gometalinter callback should use a configured executable):
   \ ale_linters#go#gometalinter#GetExecutable(bufnr(''))
   AssertEqual
   \ ale#Escape('something else')
-  \   . ' --include=''^' . expand('%:p') . '.*$'''
+  \   . ' --include=' . ale#Escape('^' . ale#util#EscapePCRE(expand('%')))
   \   . ' ' . ale#Escape(getcwd()),
   \ ale_linters#go#gometalinter#GetCommand(bufnr(''))
 
@@ -47,7 +43,7 @@ Execute(The gometalinter callback should use configured options):
 
   AssertEqual
   \ ale#Escape('gometalinter')
-  \   . ' --include=''^' . expand('%:p') . '.*$'''
+  \   . ' --include=' . ale#Escape('^' . ale#util#EscapePCRE(expand('%')))
   \   . ' --foobar'
   \   . ' ' . ale#Escape(getcwd()),
   \ ale_linters#go#gometalinter#GetCommand(bufnr(''))

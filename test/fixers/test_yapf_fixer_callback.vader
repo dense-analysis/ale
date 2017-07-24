@@ -4,7 +4,7 @@ Before:
   " Use an invalid global executable, so we don't match it.
   let g:ale_python_yapf_executable = 'xxxinvalid'
 
-  silent! execute 'cd /testplugin/test/command_callback'
+  call ale#test#SetDirectory('/testplugin/test/fixers')
   silent cd ..
   silent cd command_callback
   let g:dir = getcwd()
@@ -12,18 +12,27 @@ Before:
 After:
   Restore
 
-  silent execute 'cd ' . fnameescape(g:dir)
-  " Set the file to something else,
-  " or we'll cause issues when running other tests
-  silent file 'dummy.py'
-  unlet! g:dir
+  call ale#test#RestoreDirectory()
 
 Execute(The yapf callback should return the correct default values):
   AssertEqual
   \ 0,
   \ ale#fixers#yapf#Fix(bufnr(''))
 
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
+
   AssertEqual
-  \ {'command': "'" . g:dir . "/python_paths/with_virtualenv/env/bin/yapf' --no-local-style" },
+  \ {'command': ale#Escape(g:dir . '/python_paths/with_virtualenv/env/bin/yapf')},
+  \ ale#fixers#yapf#Fix(bufnr(''))
+  \
+Execute(The yapf should include the .style.yapf file if present):
+  call ale#test#SetFilename('python_paths/with_virtualenv/dir_with_yapf_config/foo/bar.py')
+
+  AssertEqual
+  \ {
+  \   'command':
+  \     ale#Escape(g:dir . '/python_paths/with_virtualenv/env/bin/yapf')
+  \     . ' --no-local-style'
+  \     . ' --style ' . ale#Escape(g:dir . '/python_paths/with_virtualenv/dir_with_yapf_config/.style.yapf'),
+  \ },
   \ ale#fixers#yapf#Fix(bufnr(''))

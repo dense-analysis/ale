@@ -1,0 +1,39 @@
+Before:
+  Save g:ale_cpp_gcc_executable
+  Save g:ale_cpp_gcc_options
+
+  unlet! g:ale_cpp_gcc_executable
+  unlet! b:ale_cpp_gcc_executable
+  unlet! g:ale_cpp_gcc_options
+  unlet! b:ale_cpp_gcc_options
+
+  runtime ale_linters/cpp/gcc.vim
+
+  let b:command_tail = ' -S -x c++ -fsyntax-only -iquote'
+  \   . ' ' . ale#Escape(getcwd())
+  \   . ' -std=c++14 -Wall -'
+
+After:
+  Restore
+  unlet! b:command_tail
+  unlet! b:ale_cpp_gcc_executable
+  unlet! b:ale_cpp_gcc_options
+  call ale#linter#Reset()
+
+Execute(The executable should be configurable):
+  AssertEqual 'gcc', ale_linters#cpp#gcc#GetExecutable(bufnr(''))
+
+  let b:ale_cpp_gcc_executable = 'foobar'
+
+  AssertEqual 'foobar', ale_linters#cpp#gcc#GetExecutable(bufnr(''))
+
+Execute(The executable should be used in the command):
+  AssertEqual
+  \ ale#Escape('gcc') . b:command_tail,
+  \ ale_linters#cpp#gcc#GetCommand(bufnr(''))
+
+  let b:ale_cpp_gcc_executable = 'foobar'
+
+  AssertEqual
+  \ ale#Escape('foobar') . b:command_tail,
+  \ ale_linters#cpp#gcc#GetCommand(bufnr(''))

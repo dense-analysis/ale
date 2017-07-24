@@ -10,11 +10,11 @@ endfunction
 
 function! ale_linters#go#gometalinter#GetCommand(buffer) abort
     let l:executable = ale_linters#go#gometalinter#GetExecutable(a:buffer)
-    let l:filename = expand('#' . a:buffer . ':p')
+    let l:filename = expand('#' . a:buffer)
     let l:options = ale#Var(a:buffer, 'go_gometalinter_options')
 
     return ale#Escape(l:executable)
-    \   . ' --include=''^' . l:filename . '.*$'''
+    \   . ' --include=' . ale#Escape('^' . ale#util#EscapePCRE(l:filename))
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' ' . ale#Escape(fnamemodify(l:filename, ':h'))
 endfunction

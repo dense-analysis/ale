@@ -2,7 +2,7 @@
 ALE Erlang Integration                                     *ale-erlang-options*
 
 
--------------------------------------------------------------------------------
+===============================================================================
 erlc                                                          *ale-erlang-erlc*
 
 g:ale_erlang_erlc_options                           *g:ale_erlang_erlc_options*
@@ -15,4 +15,15 @@ g:ale_erlang_erlc_options                           *g:ale_erlang_erlc_options*
 
 
 -------------------------------------------------------------------------------
+syntaxerl                                                *ale-erlang-syntaxerl*
+
+g:ale_erlang_syntaxerl_executable           *g:ale_erlang_syntaxerl_executable*
+                                            *b:ale_erlang_syntaxerl_executable*
+  Type: |String|
+  Default: `'syntaxerl'`
+
+  This variable can be changed to specify the syntaxerl executable.
+
+
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

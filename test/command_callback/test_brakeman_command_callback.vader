@@ -5,15 +5,12 @@ Before:
 
   let g:ale_ruby_brakeman_options = ''
 
-  silent! cd /testplugin/test/command_callback
-  let g:dir = getcwd()
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
 
 After:
   Restore
 
-  silent execute 'cd ' . fnameescape(g:dir)
-  unlet! g:dir
-
+  call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
 Execute(The brakeman command callback should detect absence of a valid Rails app):

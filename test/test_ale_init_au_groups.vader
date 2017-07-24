@@ -151,7 +151,7 @@ Execute (g:ale_lint_on_save = 1 should bind no events):
   let g:ale_fix_on_save = 0
 
   AssertEqual [
-  \ 'BufWritePre * call ale#events#SaveEvent()',
+  \ 'BufWritePost * call ale#events#SaveEvent()',
   \], CheckAutocmd('ALERunOnSaveGroup')
 
 Execute (g:ale_lint_on_save = 0 and g:ale_fix_on_save = 1 should bind events):
@@ -159,7 +159,7 @@ Execute (g:ale_lint_on_save = 0 and g:ale_fix_on_save = 1 should bind events):
   let g:ale_fix_on_save = 1
 
   AssertEqual [
-  \ 'BufWritePre * call ale#events#SaveEvent()',
+  \ 'BufWritePost * call ale#events#SaveEvent()',
   \], CheckAutocmd('ALERunOnSaveGroup')
 
 Execute (g:ale_fix_on_save = 1 should bind events even when ALE is disabled):
@@ -168,7 +168,7 @@ Execute (g:ale_fix_on_save = 1 should bind events even when ALE is disabled):
   let g:ale_fix_on_save = 1
 
   AssertEqual [
-  \ 'BufWritePre * call ale#events#SaveEvent()',
+  \ 'BufWritePost * call ale#events#SaveEvent()',
   \], CheckAutocmd('ALERunOnSaveGroup')
 
 Execute (g:ale_echo_cursor = 0 should bind no events):

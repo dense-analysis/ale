@@ -73,6 +73,7 @@ endfunction
 function! ale#path#IsTempName(filename) abort
     let l:prefix_list = [
     \   $TMPDIR,
+    \   resolve($TMPDIR),
     \   '/run/user',
     \]
 

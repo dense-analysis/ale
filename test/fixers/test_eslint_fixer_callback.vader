@@ -1,0 +1,34 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  let g:ale_has_override = {}
+  call ale#test#RestoreDirectory()
+
+Execute(The path to eslint.js should be run on Unix):
+  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.js')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command':
+  \     ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \     . ' --config ' . ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
+  \     . ' --fix %t',
+  \ },
+  \ ale#fixers#eslint#Fix(bufnr(''))
+
+Execute(The eslint fixer with eslint.js should be run with node on Windows):
+  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.js')
+  let g:ale_has_override['win32'] = 1
+
+  " We have to execute the file with node.
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': 'node '
+  \     . ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \     . ' --config ' . ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
+  \     . ' --fix %t',
+  \ },
+  \ ale#fixers#eslint#Fix(bufnr(''))

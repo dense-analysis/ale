@@ -86,6 +86,8 @@ After:
     call delete('fix_test_file')
   endif
 
+  call setloclist(0, [])
+
   let g:ale_fix_buffer_data = {}
 
 Given testft (A file with three lines):
@@ -281,6 +283,38 @@ Execute(ALEFix should still lint with no linters to be applied):
   noautocmd silent file fix_test_file
 
   let g:ale_fixers.testft = []
+
+  call SetUpLinters()
+  call ale#events#SaveEvent()
+
+  Assert !filereadable('fix_test_file'), 'The file should not have been saved'
+
+  " We have run the linter.
+  AssertEqual [{
+  \   'bufnr': bufnr('%'),
+  \   'lnum': 1,
+  \   'vcol': 0,
+  \   'col': 1,
+  \   'text': 'xxx',
+  \   'type': 'E',
+  \   'nr': -1,
+  \   'pattern': '',
+  \   'valid': 1,
+  \}], getloclist(0)
+
+Expect(The buffer should be the same):
+  a
+  b
+  c
+
+Execute(ALEFix should still lint when nothing was fixed on save):
+  let g:ale_fix_on_save = 1
+  let g:ale_lint_on_save = 1
+  let g:ale_enabled = 1
+
+  noautocmd silent file fix_test_file
+
+  let g:ale_fixers.testft = ['DoNothing']
 
   call SetUpLinters()
   call ale#events#SaveEvent()

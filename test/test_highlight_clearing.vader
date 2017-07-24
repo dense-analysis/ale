@@ -1,4 +1,0 @@
-Execute(ALE should be able to queue highlights and clear them for some other buffer):
-  " We'll just make sure that this doesn't blow up.
-  call ale#highlight#SetHighlights(bufnr('%') + 1, [])
-  call ale#highlight#UnqueueHighlights(bufnr('%') + 1)

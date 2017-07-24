@@ -23,7 +23,7 @@ To this: >
   /path/foo/bar/.eslintrc.js # extends: ["/path/foo/.base-eslintrc.js"]
 <
 
--------------------------------------------------------------------------------
+===============================================================================
 eslint                                                  *ale-javascript-eslint*
 
 g:ale_javascript_eslint_executable         *g:ale_javascript_eslint_executable*
@@ -50,7 +50,7 @@ g:ale_javascript_eslint_use_global         *g:ale_javascript_eslint_use_global*
   See |ale-integrations-local-executables|
 
 
--------------------------------------------------------------------------------
+===============================================================================
 prettier                                              *ale-javascript-prettier*
 
 g:ale_javascript_prettier_executable     *g:ale_javascript_prettier_executable*
@@ -77,7 +77,7 @@ g:ale_javascript_prettier_use_global     *g:ale_javascript_prettier_use_global*
   See |ale-integrations-local-executables|
 
 
--------------------------------------------------------------------------------
+===============================================================================
 prettier-eslint                                *ale-javascript-prettier-eslint*
 
 ALE supports `prettier-eslint` for easy integration with projects, but it is
@@ -118,7 +118,7 @@ g:ale_javascript_prettier_eslint_use_global
   See |ale-integrations-local-executables|
 
 
--------------------------------------------------------------------------------
+===============================================================================
 prettier-standard                            *ale-javascript-prettier-standard*
 
 
@@ -149,7 +149,7 @@ g:ale_javascript_prettier_standard_use_global
   See |ale-integrations-local-executables|
 
 
--------------------------------------------------------------------------------
+===============================================================================
 flow                                                      *ale-javascript-flow*
 
 g:ale_javascript_flow_executable             *g:ale_javascript_flow_executable*
@@ -168,7 +168,26 @@ g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
   See |ale-integrations-local-executables|
 
 
--------------------------------------------------------------------------------
+===============================================================================
+jscs                                                      *ale-javascript-jscs*
+
+g:ale_javascript_jscs_executable             *g:ale_javascript_jscs_executable*
+                                             *b:ale_javascript_jscs_executable*
+  Type: |String|
+  Default: `'jscs'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_javascript_jscs_use_global             *g:ale_javascript_jscs_use_global*
+                                             *b:ale_javascript_jscs_use_global*
+  Type: |Number|
+  Default: `0`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
 jshint                                                  *ale-javascript-jshint*
 
 g:ale_javascript_jshint_executable         *g:ale_javascript_jshint_executable*
@@ -187,7 +206,7 @@ g:ale_javascript_jshint_use_global         *g:ale_javascript_jshint_use_global*
   See |ale-integrations-local-executables|
 
 
--------------------------------------------------------------------------------
+===============================================================================
 standard                                              *ale-javascript-standard*
 
 g:ale_javascript_standard_executable     *g:ale_javascript_standard_executable*
@@ -214,7 +233,7 @@ g:ale_javascript_standard_use_global     *g:ale_javascript_standard_use_global*
   See |ale-integrations-local-executables|
 
 
--------------------------------------------------------------------------------
+===============================================================================
 xo                                                          *ale-javascript-xo*
 
 g:ale_javascript_xo_executable                 *g:ale_javascript_xo_executable*
@@ -241,5 +260,5 @@ g:ale_javascript_xo_use_global                 *g:ale_javascript_xo_use_global*
   See |ale-integrations-local-executables|
 
 
--------------------------------------------------------------------------------
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

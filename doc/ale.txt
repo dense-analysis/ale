@@ -31,8 +31,11 @@ CONTENTS                                                         *ale-contents*
       stylelint...........................|ale-css-stylelint|
     cmake.................................|ale-cmake-options|
       cmakelint...........................|ale-cmake-cmakelint|
+    dart..................................|ale-dart-options|
+      dartanalyzer........................|ale-dart-dartanalyzer|
     erlang................................|ale-erlang-options|
       erlc................................|ale-erlang-erlc|
+      syntaxerl...........................|ale-erlang-syntaxerl|
     fortran...............................|ale-fortran-options|
       gcc.................................|ale-fortran-gcc|
     fusionscript..........................|ale-fuse-options|
@@ -41,6 +44,8 @@ CONTENTS                                                         *ale-contents*
       gometalinter........................|ale-go-gometalinter|
     handlebars............................|ale-handlebars-options|
       ember-template-lint.................|ale-handlebars-embertemplatelint|
+    haskell...............................|ale-haskell-options|
+      stack-build.........................|ale-haskell-stack-build|
     html..................................|ale-html-options|
       htmlhint............................|ale-html-htmlhint|
       tidy................................|ale-html-tidy|
@@ -72,6 +77,7 @@ CONTENTS                                                         *ale-contents*
     php...................................|ale-php-options|
       phpcs...............................|ale-php-phpcs|
       phpmd...............................|ale-php-phpmd|
+      phpstan.............................|ale-php-phpstan|
     pug...................................|ale-pug-options|
       puglint.............................|ale-pug-puglint|
     python................................|ale-python-options|
@@ -82,6 +88,8 @@ CONTENTS                                                         *ale-contents*
       pylint..............................|ale-python-pylint|
       yapf................................|ale-python-yapf|
     ruby..................................|ale-ruby-options|
+      brakeman............................|ale-ruby-brakeman|
+      rails_best_practices................|ale-ruby-rails_best_practices|
       reek................................|ale-ruby-reek|
       rubocop.............................|ale-ruby-rubocop|
     rust..................................|ale-rust-options|
@@ -89,6 +97,8 @@ CONTENTS                                                         *ale-contents*
       rustc...............................|ale-rust-rustc|
     sass..................................|ale-sass-options|
       stylelint...........................|ale-sass-stylelint|
+    scala.................................|ale-scala-options|
+      scalastyle..........................|ale-scala-scalastyle|
     scss..................................|ale-scss-options|
       stylelint...........................|ale-scss-stylelint|
     sh....................................|ale-sh-options|
@@ -113,6 +123,7 @@ CONTENTS                                                         *ale-contents*
     xml...................................|ale-xml-options|
       xmllint.............................|ale-xml-xmllint|
     yaml..................................|ale-yaml-options|
+      swaglint............................|ale-yaml-swaglint|
       yamllint............................|ale-yaml-yamllint|
   6. Commands/Keybinds....................|ale-commands|
   7. API..................................|ale-api|
@@ -163,6 +174,7 @@ The following languages and tools are supported.
 * CSS: 'csslint', 'stylelint'
 * Cython (pyrex filetype): 'cython'
 * D: 'dmd'
+* Dart: 'dartanalyzer'
 * Dockerfile: 'hadolint'
 * Elixir: 'credo', 'dogma'
 * Elm: 'elm-make'
@@ -172,7 +184,7 @@ The following languages and tools are supported.
 * FusionScript: 'fusion-lint'
 * Haml: 'hamllint'
 * Handlebars: 'ember-template-lint'
-* Haskell: 'ghc', 'ghc-mod', 'hlint', 'hdevtools'
+* Haskell: 'ghc', 'stack-ghc', 'stack-build', 'ghc-mod', 'stack-ghc-mod', 'hlint', 'hdevtools'
 * HTML: 'HTMLHint', 'proselint', 'tidy'
 * Java: 'javac'
 * JavaScript: 'eslint', 'jscs', 'jshint', 'flow', 'prettier', 'prettier-eslint', 'xo'
@@ -189,7 +201,7 @@ The following languages and tools are supported.
 * Objective-C++: 'clang'
 * OCaml: 'merlin' (see |ale-linter-integration-ocaml-merlin|)
 * Perl: 'perl' (-c flag), 'perlcritic'
-* PHP: 'hack', 'php' (-l flag), 'phpcs', 'phpmd'
+* PHP: 'hack', 'php' (-l flag), 'phpcs', 'phpmd', 'phpstan'
 * Pod: 'proselint'
 * Pug: 'pug-lint'
 * Puppet: 'puppet', 'puppet-lint'
@@ -202,7 +214,7 @@ The following languages and tools are supported.
 * Ruby: 'reek', 'rubocop'
 * SASS: 'sasslint', 'stylelint'
 * SCSS: 'sasslint', 'scsslint', 'stylelint'
-* Scala: 'scalac'
+* Scala: 'scalac', 'scalastyle'
 * Slim: 'slim-lint'
 * SML: 'smlnj'
 * Stylus: 'stylelint'
@@ -216,7 +228,7 @@ The following languages and tools are supported.
 * Vim help: 'proselint'
 * XHTML: 'proselint'
 * XML: 'xmllint'
-* YAML: 'yamllint'
+* YAML: 'swaglint', 'yamllint'
 
 ===============================================================================
 3. Global Options                                                 *ale-options*
@@ -609,7 +621,7 @@ g:ale_pattern_options                                   *g:ale_pattern_options*
 
   let g:ale_pattern_options = {
   \   '\.foo\.js$': {
-  \       'ale_linters: {'javascript': ['eslint']},
+  \       'ale_linters': {'javascript': ['eslint']},
   \   },
   \}
 <
@@ -798,14 +810,28 @@ g:ale_type_map                                                 *g:ale_type_map*
   For example, if you want to turn flake8 errors into warnings, you can do
   the following: >
 
-  let g:ale_type_map = {'flake8', {'ES': 'WS', 'E': 'W'}}
+  let g:ale_type_map = {'flake8': {'ES': 'WS', 'E': 'W'}}
 <
   If you wanted to turn style errors and warnings into regular errors and
   warnings, you can use the following: >
 
-  let g:ale_type_map = {'flake8', {'ES': 'E', 'WS': 'W'}}
+  let g:ale_type_map = {'flake8': {'ES': 'E', 'WS': 'W'}}
 <
   Type maps can be set per-buffer with `b:ale_type_map`.
+
+
+g:ale_virtualenv_dir_names                         *g:ale_virtualenv_dir_names*
+b:ale_virtualenv_dir_names                         *b:ale_virtualenv_dir_names*
+
+  Type: |List|
+  Default: `['.env', 'env', 've-py3', 've', 'virtualenv']`
+
+  A list of directory names to be used when searching upwards from Python
+  files to discover virtulenv directories with.
+
+  For directory named `'foo'`, ALE will search for `'foo/bin/activate'`
+  (`foo\Scripts\activate\` on Windows) in all directories on and above the
+  directory containing the Python file to find virtualenv paths.
 
 
 g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
@@ -1096,8 +1122,11 @@ ALEEnable                                                           *ALEEnable*
 ALEDisable                                                         *ALEDisable*
 
   Enable or disable ALE, including all of its autocmd events, loclist items,
-  quickfix items, signs, current jobs, etc. Calling this option will change
-  the |g:ale_enabled| variable.
+  quickfix items, signs, current jobs, etc. Executing any of those commands
+  will change the |g:ale_enabled| variable.
+
+  For convenience, a plug mapping `<Plug>(ale_toggle)` is defined for the
+  |ALEToggle| command.
 
 
 ALEDetail                                                           *ALEDetail*
@@ -1234,7 +1263,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
 
                          The keys for each item in the List will be handled in
                          the following manner:
-
+                                                           *ale-loclist-format*
                          `text` - This error message is required.
                          `lnum` - The line number is required. Any strings
                            will be automatically converted to numbers by
@@ -1245,6 +1274,12 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          `col` - The column number is optional and will
                            default to `0`. Any strings will be automatically
                            coverted to number using `str2nr()`.
+                         `end_col` - An optional end column number.
+                           This key can be set to specify the column problems
+                           end on, for improved highlighting.
+                         `end_lnum` - An optional end line number.
+                           This key can set along with `end_col` for
+                           highlighting multi-line problems.
                          `bufnr` - The buffer number should match the buffer
                            being checked, and this value will default to
                            the buffer being checked.
@@ -1455,8 +1490,10 @@ ALELint                                                       *ALELint-autocmd*
 
   For example, you can echo a message when linting is complete like so:
   >
-  autocmd User ALELint echom "ALE run!"
+  autocmd User ALELint unsilent echom 'ALE run!'
 <
+  The autocmd commands are run with |:silent|, so |:unsilent| is required for
+  echoing messges.
 
 ===============================================================================
 8. Special Thanks                                          *ale-special-thanks*

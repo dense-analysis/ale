@@ -2,7 +2,7 @@
 ALE Java Integration                                         *ale-java-options*
 
 
--------------------------------------------------------------------------------
+===============================================================================
 checkstyle                                                ale-java-checkstyle
 
 g:ale_java_checkstyle_options                   g:ale_java_checkstyle_options
@@ -14,7 +14,7 @@ g:ale_java_checkstyle_options                   g:ale_java_checkstyle_options
   This variable can be changed to modify flags given to checkstyle.
 
 
--------------------------------------------------------------------------------
+===============================================================================
 javac                                                          *ale-java-javac*
 
 g:ale_java_javac_classpath                         *g:ale_java_javac_classpath*
@@ -33,5 +33,5 @@ g:ale_java_javac_options                             *g:ale_java_javac_options*
   This variable can be set to pass additional options to javac.
 
 
--------------------------------------------------------------------------------
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

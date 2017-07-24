@@ -5,7 +5,6 @@ Before:
     cd ../ruby_fixtures/valid_rails_app/app/models
 
     runtime ale_linters/ruby/brakeman.vim
-    call setbufvar(0, 'ruby_brakeman_rails_root_cached', '')
 
 After:
     " Switch back to whatever directory it was that we started on.

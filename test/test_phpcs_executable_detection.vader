@@ -5,17 +5,14 @@ Before:
   let g:ale_php_phpcs_executable = 'phpcs_test'
   let g:ale_php_phpcs_use_global = 0
 
-  silent! cd /testplugin/test
-  let g:dir = getcwd()
+  call ale#test#SetDirectory('/testplugin/test')
 
   runtime ale_linters/php/phpcs.vim
 
 After:
   Restore
 
-  silent execute 'cd ' . fnameescape(g:dir)
-  unlet! g:dir
-
+  call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
 Execute(project with phpcs should use local by default):

@@ -1,15 +1,9 @@
 Before:
   runtime ale_linters/python/flake8.vim
-  silent! execute 'cd /testplugin/test/command_callback'
-  let g:dir = getcwd()
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
 
 After:
-  silent execute 'cd ' . fnameescape(g:dir)
-  " Set the file to something else,
-  " or we'll cause issues when running other tests
-  silent file 'dummy.py'
-  unlet! g:dir
-
+  call ale#test#RestoreDirectory()
   call ale#linter#Reset()
   let g:ale_python_flake8_executable = 'flake8'
   let g:ale_python_flake8_options = ''
@@ -70,6 +64,41 @@ Execute(The flake8 callbacks should detect virtualenv directories):
   \   '''' . g:dir . '/python_paths/with_virtualenv/env/bin/flake8'''
   \   . ' --stdin-display-name %s -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
+
+Execute(The FindProjectRoot should detect the project root directory for namespace package via Manifest.in):
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/namespace_package_manifest/namespace/foo/bar.py')
+
+  AssertEqual
+  \ fnameescape(g:dir . '/python_paths/namespace_package_manifest'),
+  \ ale#python#FindProjectRoot(bufnr(''))
+
+Execute(The FindProjectRoot should detect the project root directory for namespace package via setup.cf):
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/namespace_package_setup/namespace/foo/bar.py')
+
+  AssertEqual
+  \ fnameescape(g:dir . '/python_paths/namespace_package_setup'),
+  \ ale#python#FindProjectRoot(bufnr(''))
+
+Execute(The FindProjectRoot should detect the project root directory for namespace package via pytest.ini):
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/namespace_package_pytest/namespace/foo/bar.py')
+
+  AssertEqual
+  \ fnameescape(g:dir . '/python_paths/namespace_package_pytest'),
+  \ ale#python#FindProjectRoot(bufnr(''))
+
+Execute(The FindProjectRoot should detect the project root directory for namespace package via tox.ini):
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/namespace_package_tox/namespace/foo/bar.py')
+
+  AssertEqual
+  \ fnameescape(g:dir . '/python_paths/namespace_package_tox'),
+  \ ale#python#FindProjectRoot(bufnr(''))
+
+Execute(The FindProjectRoot should detect the project root directory for non-namespace package):
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/no_virtualenv/subdir/foo/bar.py')
+
+  AssertEqual
+  \ fnameescape(g:dir . '/python_paths/no_virtualenv/subdir'),
+  \ ale#python#FindProjectRoot(bufnr(''))
 
 " Some users currently run flake8 this way, so we should support it.
 Execute(Using `python -m flake8` should be supported for running flake8):

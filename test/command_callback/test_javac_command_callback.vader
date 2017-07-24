@@ -8,7 +8,7 @@ After:
   call ale#linter#Reset()
   " We need to clean up the buffer to remove the temporary directories created
   " for the command.
-  call ale#cleanup#Buffer(bufnr(''))
+  call ale#engine#Cleanup(bufnr(''))
   let g:ale_java_javac_options = ''
   let g:ale_java_javac_classpath = ''
 
@@ -63,7 +63,7 @@ Execute(The javac callback should combine discovered classpaths and manual ones)
   \ 'Invalid command string: ' . b:command
 
 Execute(The javac callback should detect source directories):
-  call ale#cleanup#Buffer(bufnr(''))
+  call ale#engine#Cleanup(bufnr(''))
   :e! java_paths/src/main/java/com/something/dummy
   call ale#engine#InitBufferInfo(bufnr(''))
 
@@ -73,7 +73,7 @@ Execute(The javac callback should detect source directories):
   \ 'Invalid command string: ' . b:command
 
 Execute(The javac callback should combine detected source directories and classpaths):
-  call ale#cleanup#Buffer(bufnr(''))
+  call ale#engine#Cleanup(bufnr(''))
   :e! java_paths/src/main/java/com/something/dummy
   call ale#engine#InitBufferInfo(bufnr(''))
 

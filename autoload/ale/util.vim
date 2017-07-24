@@ -161,3 +161,9 @@ function! ale#util#FunctionArgCount(function) abort
 
     return l:count
 endfunction
+
+" Escape a string so the characters in it will be safe for use inside of PCRE
+" or RE2 regular expressions without characters having special meanings.
+function! ale#util#EscapePCRE(unsafe_string) abort
+    return substitute(a:unsafe_string, '\([\-\[\]{}()*+?.^$|]\)', '\\\1', 'g')
+endfunction

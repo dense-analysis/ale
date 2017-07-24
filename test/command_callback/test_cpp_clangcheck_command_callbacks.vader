@@ -1,0 +1,62 @@
+Before:
+  Save g:ale_cpp_clangcheck_executable
+  Save g:ale_cpp_clangcheck_options
+
+  unlet! g:ale_cpp_clangcheck_executable
+  unlet! b:ale_cpp_clangcheck_executable
+  unlet! g:ale_cpp_clangcheck_options
+  unlet! b:ale_cpp_clangcheck_options
+
+  runtime ale_linters/cpp/clangcheck.vim
+
+After:
+  Restore
+  unlet! b:command_tail
+  unlet! b:ale_cpp_clangcheck_executable
+  unlet! b:ale_cpp_clangcheck_options
+  unlet! b:ale_c_build_dir
+  call ale#linter#Reset()
+
+Execute(The executable should be configurable):
+  AssertEqual 'clang-check', ale_linters#cpp#clangcheck#GetExecutable(bufnr(''))
+
+  let b:ale_cpp_clangcheck_executable = 'foobar'
+
+  AssertEqual 'foobar', ale_linters#cpp#clangcheck#GetExecutable(bufnr(''))
+
+Execute(The executable should be used in the command):
+  AssertEqual
+  \ ale#Escape('clang-check')
+  \   . ' -analyze %s'
+  \   . ' -extra-arg -Xanalyzer -extra-arg -analyzer-output=text',
+  \ ale_linters#cpp#clangcheck#GetCommand(bufnr(''))
+
+  let b:ale_cpp_clangcheck_executable = 'foobar'
+
+  " The extra arguments in the command are used to prevent .plist files from
+  " being generated.
+  AssertEqual
+  \ ale#Escape('foobar')
+  \   . ' -analyze %s'
+  \   . ' -extra-arg -Xanalyzer -extra-arg -analyzer-output=text',
+  \ ale_linters#cpp#clangcheck#GetCommand(bufnr(''))
+
+Execute(The options should be configurable):
+  let b:ale_cpp_clangcheck_options = '--something'
+
+  AssertEqual
+  \ ale#Escape('clang-check')
+  \   . ' -analyze %s --something'
+  \   . ' -extra-arg -Xanalyzer -extra-arg -analyzer-output=text',
+  \ ale_linters#cpp#clangcheck#GetCommand(bufnr(''))
+
+Execute(The build directory should be used when set):
+  let b:ale_cpp_clangcheck_options = '--something'
+  let b:ale_c_build_dir = '/foo/bar'
+
+  AssertEqual
+  \ ale#Escape('clang-check')
+  \   . ' -analyze %s '
+  \   . '--something -p '
+  \   . ale#Escape('/foo/bar'),
+  \ ale_linters#cpp#clangcheck#GetCommand(bufnr(''))

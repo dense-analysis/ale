@@ -59,13 +59,17 @@ function! ale#list#CloseWindowIfNeeded(buffer) abort
         return
     endif
 
-    " Only close windows if the quickfix list or loclist is completely empty,
-    " including errors set through other means.
-    if g:ale_set_quickfix
-        if empty(getqflist())
-            cclose
+    try
+        " Only close windows if the quickfix list or loclist is completely empty,
+        " including errors set through other means.
+        if g:ale_set_quickfix
+            if empty(getqflist())
+                cclose
+            endif
+        elseif g:ale_set_loclist && empty(getloclist(0))
+            lclose
         endif
-    elseif g:ale_set_loclist && empty(getloclist(0))
-        lclose
-    endif
+    " Ignore 'Cannot close last window' errors.
+    catch /E444/
+    endtry
 endfunction

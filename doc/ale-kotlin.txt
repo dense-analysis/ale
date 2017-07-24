@@ -2,7 +2,7 @@
 ALE Kotlin Integration                                     *ale-kotlin-options*
                                                        *ale-integration-kotlin*
 
--------------------------------------------------------------------------------
+===============================================================================
 Integration Information
 
   Make sure your setup has support for the kotlin file type. A filetype plugin
@@ -12,7 +12,7 @@ Integration Information
   Note: Make sure you have a working kotlin compiler
 
 
--------------------------------------------------------------------------------
+===============================================================================
 kotlinc                                                    *ale-kotlin-kotlinc*
 
 g:ale_kotlin_kotlinc_options                     *g:ale_kotlin_kotlinc_options*
@@ -63,7 +63,7 @@ g:ale_kotlin_kotlinc_module_filename     *g:ale_kotlin_kotlinc_module_filename*
   compiler.
 
 
--------------------------------------------------------------------------------
+===============================================================================
 ktlint                                                      *ale-kotlin-ktlint*
 
 g:ale_kotlin_ktlint_executable                 *g:ale_kotlin_ktlint_executable*

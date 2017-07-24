@@ -2,7 +2,7 @@
 ALE CMake Integration                                       *ale-cmake-options*
 
 
--------------------------------------------------------------------------------
+===============================================================================
 cmakelint                                                 *ale-cmake-cmakelint*
 
 g:ale_cmake_cmakelint_exectuable             *g:ale_cmake_cmakelint_executable*
@@ -21,5 +21,5 @@ g:ale_cmake_cmakelint_options                   *g:ale_cmake_cmakelint_options*
   This variable can be set to pass additional options to cmakelint.
 
 
--------------------------------------------------------------------------------
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

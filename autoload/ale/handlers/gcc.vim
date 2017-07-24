@@ -23,6 +23,7 @@ endfunction
 function! s:RemoveUnicodeQuotes(text) abort
     let l:text = a:text
     let l:text = substitute(l:text, '[`´‘’]', '''', 'g')
+    let l:text = substitute(l:text, '\v\\u2018([^\\]+)\\u2019', '''\1''', 'g')
     let l:text = substitute(l:text, '[“”]', '"', 'g')
 
     return l:text
@@ -50,7 +51,7 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
     " <stdin>:8:5: warning: conversion lacks type at end of format [-Wformat=]
     " <stdin>:10:27: error: invalid operands to binary - (have ‘int’ and ‘char *’)
     " -:189:7: note: $/${} is unnecessary on arithmetic variables. [SC2004]
-    let l:pattern = '^\(.\+\):\(\d\+\):\(\d\+\): \([^:]\+\): \(.\+\)$'
+    let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):(\d+)?:? ([^:]+): (.+)$'
     let l:output = []
 
     for l:line in a:lines
@@ -99,12 +100,17 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
                 continue
             endif
 
-            call add(l:output, {
-            \   'lnum': l:match[2] + 0,
-            \   'col': l:match[3] + 0,
+            let l:item = {
+            \   'lnum': str2nr(l:match[2]),
             \   'type': l:match[4] =~# 'error' ? 'E' : 'W',
             \   'text': s:RemoveUnicodeQuotes(l:match[5]),
-            \})
+            \}
+
+            if !empty(l:match[3])
+                let l:item.col = str2nr(l:match[3])
+            endif
+
+            call add(l:output, l:item)
         endif
     endfor
 

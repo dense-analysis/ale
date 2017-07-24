@@ -11,7 +11,6 @@ Before:
   \ 'valid': 1,
   \}]
   let g:expected_groups = [
-  \ 'ALEBufferFixGroup',
   \ 'ALECleanupGroup',
   \ 'ALECursorGroup',
   \ 'ALEHighlightBufferGroup',
@@ -43,7 +42,10 @@ Before:
     for l:line in split(l:output, "\n")
       let l:match = matchlist(l:line, '^ALE[a-zA-Z]\+Group')
 
+      " We don't care about checking for the completion or fixing groups here.
       if !empty(l:match)
+      \&& l:match[0] !=# 'ALECompletionGroup'
+      \&& l:match[0] !=# 'ALEBufferFixGroup'
         call add(l:results, l:match[0])
       endif
     endfor
@@ -94,15 +96,17 @@ Execute(ALEToggle should reset everything and then run again):
   \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
   \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
   AssertEqual g:expected_groups, ParseAuGroups()
+  AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
 
   " Now Toggle ALE off.
   ALEToggle
 
   " Everything should be cleared.
-  AssertEqual [], getloclist(0)
-  AssertEqual [], ale#sign#FindCurrentSigns(bufnr('%'))
-  AssertEqual [], getmatches()
-  AssertEqual ['ALEBufferFixGroup', 'ALECleanupGroup', 'ALEHighlightBufferGroup'], ParseAuGroups()
+  Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
+  AssertEqual [], getloclist(0), 'The loclist was not cleared'
+  AssertEqual [], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
+  AssertEqual [], getmatches(), 'The highlights were not cleared'
+  AssertEqual ['ALECleanupGroup', 'ALEHighlightBufferGroup'], ParseAuGroups()
 
   " Toggle ALE on, everything should be set up and run again.
   ALEToggle
@@ -114,3 +118,4 @@ Execute(ALEToggle should reset everything and then run again):
   \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
   \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
   AssertEqual g:expected_groups, ParseAuGroups()
+  AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist

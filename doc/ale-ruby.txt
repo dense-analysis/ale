@@ -2,7 +2,7 @@
 ALE Ruby Integration                                         *ale-ruby-options*
 
 
--------------------------------------------------------------------------------
+===============================================================================
 brakeman                                                    *ale-ruby-brakeman*
 
 g:ale_ruby_brakeman_options                       *g:ale_ruby_brakeman_options*
@@ -13,7 +13,28 @@ g:ale_ruby_brakeman_options                       *g:ale_ruby_brakeman_options*
   The contents of this variable will be passed through to brakeman.
 
 
--------------------------------------------------------------------------------
+===============================================================================
+rails_best_practices                            *ale-ruby-rails_best_practices*
+
+g:ale_ruby_rails_best_practices_executable
+                                   *g:ale_ruby_rails_best_practices_executable*
+                                   *b:ale_ruby_rails_best_practices_executable*
+  Type: String
+  Default: 'rails_best_practices'
+
+  Override the invoked rails_best_practices binary. Set this to `'bundle'` to
+  invoke `'bundle` `exec` `rails_best_practices'`.
+
+g:ale_ruby_rails_best_practices_options
+                                      *g:ale_ruby_rails_best_practices_options*
+                                      *b:ale_ruby_rails_best_practices_options*
+  Type: |String|
+  Default: `''`
+
+  The contents of this variable will be passed through to rails_best_practices.
+
+
+===============================================================================
 reek                                                            *ale-ruby-reek*
 
 g:ale_ruby_reek_show_context                     *g:ale_ruby_reek_show_context*
@@ -34,7 +55,7 @@ g:ale_ruby_reek_show_wiki_link                 *g:ale_ruby_reek_show_wiki_link*
   for the type of code smell. Defaults to off to improve readability.
 
 
--------------------------------------------------------------------------------
+===============================================================================
 rubocop                                                      *ale-ruby-rubocop*
 
 g:ale_ruby_rubocop_executable                   g:ale_ruby_rubocop_executable
@@ -54,5 +75,5 @@ g:ale_ruby_rubocop_options                         *g:ale_ruby_rubocop_options*
   This variable can be change to modify flags given to rubocop.
 
 
--------------------------------------------------------------------------------
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

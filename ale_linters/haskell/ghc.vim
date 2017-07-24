@@ -8,11 +8,3 @@ call ale#linter#Define('haskell', {
 \   'command': 'ghc -fno-code -v0 %t',
 \   'callback': 'ale#handlers#haskell#HandleGHCFormat',
 \})
-
-call ale#linter#Define('haskell', {
-\   'name': 'stack-ghc',
-\   'output_stream': 'stderr',
-\   'executable': 'stack',
-\   'command': 'stack ghc -- -fno-code -v0 %t',
-\   'callback': 'ale#handlers#haskell#HandleGHCFormat',
-\})
