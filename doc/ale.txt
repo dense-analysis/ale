@@ -10,6 +10,7 @@ CONTENTS                                                         *ale-contents*
   2. Supported Languages & Tools..........|ale-support|
   3. Global Options.......................|ale-options|
     3.1 Highlights........................|ale-highlights|
+    3.2 "Standard" linter variables.......|ale-standard-linter-variables|
   4. Fixing Problems......................|ale-fix|
   5. Integration Documentation............|ale-integrations|
     asm...................................|ale-asm-options|
@@ -944,6 +945,36 @@ ALEWarningSign                                                 *ALEWarningSign*
   Default: `highlight link ALEWarningSign todo`
 
   The highlight used for warning signs. See |g:ale_set_signs|.
+
+
+-------------------------------------------------------------------------------
+3.2. "Standard" linter variables                *ale-standard-linter-variables*
+
+Some ALE linters use a standard set of variables to control their behaviour,
+most notably the executable used and any additional options to be passed.
+While not universally supported by all linters these are being documented here
+to spare having multiple copies of this documentation copied (and recopied)
+between the linters.
+
+Linters that honor these variables will have them documented in their
+linter-specific help. See, e.g., |g:ale_help_proselint_executable|.
+
+
+g:ale_{ft}_{name}_executable                     *g:ale_{ft}_{name}_executable*
+                                                 *b:ale_{ft}_{name}_executable*
+  Type: |String|
+  Default: `depends on the linter`
+
+  This variable can be changed to modify the executable used for linting.
+
+
+g:ale_{ft}_{name}_options                           *g:ale_{ft}_{name}_options*
+                                                    *b:ale_{ft}_{name}_options*
+  Type: |String|
+  Default: `depends on the linter`
+
+  This variable can be changed to alter the command-line arguments used to
+  invoke the linter.
 
 
 ===============================================================================
