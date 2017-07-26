@@ -1,0 +1,18 @@
+Before:
+    runtime ale_linters/scala/scalac.vim
+
+After:
+    call ale#linter#Reset()
+
+Given scala(An empty Scala file):
+
+Execute(The default executable and command should be correct):
+  AssertEqual 'scalac', ale_linters#scala#scalac#GetExecutable(bufnr(''))
+  AssertEqual
+  \ ale#Escape('scalac') . ' -Ystop-after:parser %t',
+  \ ale_linters#scala#scalac#GetCommand(bufnr(''))
+
+Given scala.sbt(An empty SBT file):
+Execute(scalac should not be run for sbt files):
+  AssertEqual '', ale_linters#scala#scalac#GetExecutable(bufnr(''))
+  AssertEqual '', ale_linters#scala#scalac#GetCommand(bufnr(''))
