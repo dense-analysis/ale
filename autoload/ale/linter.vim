@@ -62,6 +62,7 @@ function! ale#linter#PreProcess(linter) abort
     let l:needs_address = l:obj.lsp ==# 'socket'
     let l:needs_executable = l:obj.lsp !=# 'socket'
     let l:needs_command = l:obj.lsp !=# 'socket'
+    let l:needs_lsp_details = !empty(l:obj.lsp)
 
     if empty(l:obj.lsp)
         let l:obj.callback = get(a:linter, 'callback')
@@ -174,6 +175,20 @@ function! ale#linter#PreProcess(linter) abort
         endif
     else
         throw '`address_callback` must be defined for getting the LSP address'
+    endif
+
+    if l:needs_lsp_details
+        let l:obj.language_callback = get(a:linter, 'language_callback')
+
+        if !s:IsCallback(l:obj.language_callback)
+            throw '`language_callback` must be a callback for LSP linters'
+        endif
+
+        let l:obj.project_root_callback = get(a:linter, 'project_root_callback')
+
+        if !s:IsCallback(l:obj.project_root_callback)
+            throw '`project_root_callback` must be a callback for LSP linters'
+        endif
     endif
 
     let l:obj.output_stream = get(a:linter, 'output_stream', 'stdout')
@@ -345,4 +360,73 @@ function! ale#linter#GetCommand(buffer, linter) abort
     return has_key(a:linter, 'command_callback')
     \   ? ale#util#GetFunction(a:linter.command_callback)(a:buffer)
     \   : a:linter.command
+endfunction
+
+" Given a buffer and linter, get the address for connecting to the server.
+function! ale#linter#GetAddress(buffer, linter) abort
+    return has_key(a:linter, 'address_callback')
+    \   ? ale#util#GetFunction(a:linter.address_callback)(a:buffer)
+    \   : a:linter.address
+endfunction
+
+" Given a buffer, an LSP linter, and a callback to register for handling
+" messages, start up an LSP linter and get ready to receive errors or
+" completions.
+function! ale#linter#StartLSP(buffer, linter, callback) abort
+    let l:command = ''
+    let l:address = ''
+    let l:root = ale#util#GetFunction(a:linter.project_root_callback)(a:buffer)
+
+    if a:linter.lsp ==# 'socket'
+        let l:address = ale#linter#GetAddress(a:buffer, a:linter)
+        let l:conn_id = ale#lsp#ConnectToAddress(
+        \   l:address,
+        \   l:root,
+        \   a:callback,
+        \)
+    else
+        let l:executable = ale#linter#GetExecutable(a:buffer, a:linter)
+
+        if !executable(l:executable)
+            return {}
+        endif
+
+        let l:command = ale#job#PrepareCommand(
+        \   ale#linter#GetCommand(a:buffer, a:linter),
+        \)
+        let l:conn_id = ale#lsp#StartProgram(
+        \   l:executable,
+        \   l:command,
+        \   l:root,
+        \   a:callback,
+        \)
+    endif
+
+    let l:language_id = ale#util#GetFunction(a:linter.language_callback)(a:buffer)
+
+    if !l:conn_id
+        if g:ale_history_enabled && !empty(l:command)
+            call ale#history#Add(a:buffer, 'failed', l:conn_id, l:command)
+        endif
+
+        return {}
+    endif
+
+    if ale#lsp#OpenDocumentIfNeeded(l:conn_id, a:buffer, l:root, l:language_id)
+        if g:ale_history_enabled && !empty(l:command)
+            call ale#history#Add(a:buffer, 'started', l:conn_id, l:command)
+        endif
+    endif
+
+    " The change message needs to be sent for tsserver before doing anything.
+    if a:linter.lsp ==# 'tsserver'
+        call ale#lsp#Send(l:conn_id, ale#lsp#tsserver_message#Change(a:buffer))
+    endif
+
+    return {
+    \   'connection_id': l:conn_id,
+    \   'command': l:command,
+    \   'project_root': l:root,
+    \   'language_id': l:language_id,
+    \}
 endfunction

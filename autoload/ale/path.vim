@@ -141,3 +141,26 @@ function! ale#path#Upwards(path) abort
 
     return l:path_list
 endfunction
+
+" Convert a filesystem path to a file:// URI
+" relatives paths will not be prefixed with the protocol.
+" For Windows paths, the `:` in C:\ etc. will not be percent-encoded.
+function! ale#path#ToURI(path) abort
+    let l:has_drive_letter = a:path[1:2] ==# ':\'
+
+    return substitute(
+    \   ((l:has_drive_letter || a:path[:0] ==# '/') ? 'file://' : '')
+    \       . (l:has_drive_letter ? '/' . a:path[:2] : '')
+    \       . ale#uri#Encode(l:has_drive_letter ? a:path[3:] : a:path),
+    \   '\\',
+    \   '/',
+    \   'g',
+    \)
+endfunction
+
+function! ale#path#FromURI(uri) abort
+    let l:i = len('file://')
+    let l:encoded_path = a:uri[: l:i - 1] ==# 'file://' ? a:uri[l:i :] : a:uri
+
+    return ale#uri#Decode(l:encoded_path)
+endfunction
