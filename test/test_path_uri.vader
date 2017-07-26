@@ -1,0 +1,16 @@
+Execute(ale#path#ToURI should work for Windows paths):
+  AssertEqual 'file:///C:/foo/bar/baz.tst', ale#path#ToURI('C:\foo\bar\baz.tst')
+  AssertEqual 'foo/bar/baz.tst', ale#path#ToURI('foo\bar\baz.tst')
+
+Execute(ale#path#ToURI should work for Unix paths):
+  AssertEqual 'file:///foo/bar/baz.tst', ale#path#ToURI('/foo/bar/baz.tst')
+  AssertEqual 'foo/bar/baz.tst', ale#path#ToURI('foo/bar/baz.tst')
+
+Execute(ale#path#ToURI should keep safe characters):
+  AssertEqual '//a-zA-Z0-9$-_.!*''(),', ale#path#ToURI('\/a-zA-Z0-9$-_.!*''(),')
+
+Execute(ale#path#ToURI should percent encode unsafe characters):
+  AssertEqual '%20%2b%3a%3f%26%3d', ale#path#ToURI(' +:?&=')
+
+Execute(ale#path#FromURI should decode percent encodings):
+  AssertEqual ' +:?&=', ale#path#FromURI('%20%2b%3a%3f%26%3d')

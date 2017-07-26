@@ -372,6 +372,8 @@ Execute(PreProcess should accept tsserver LSP configuration):
   \ 'executable': 'x',
   \ 'command': 'x',
   \ 'lsp': 'tsserver',
+  \ 'language_callback': 'x',
+  \ 'project_root_callback': 'x',
   \}
 
   AssertEqual 'tsserver', ale#linter#PreProcess(g:linter).lsp
@@ -392,6 +394,8 @@ Execute(PreProcess should accept stdio LSP configuration):
   \ 'executable': 'x',
   \ 'command': 'x',
   \ 'lsp': 'stdio',
+  \ 'language_callback': 'x',
+  \ 'project_root_callback': 'x',
   \}
 
   AssertEqual 'stdio', ale#linter#PreProcess(g:linter).lsp
@@ -411,6 +415,8 @@ Execute(PreProcess should accept LSP server configurations):
   \ 'name': 'x',
   \ 'lsp': 'socket',
   \ 'address_callback': 'X',
+  \ 'language_callback': 'x',
+  \ 'project_root_callback': 'x',
   \}
 
   AssertEqual 'socket', ale#linter#PreProcess(g:linter).lsp
