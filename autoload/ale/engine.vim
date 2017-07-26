@@ -52,8 +52,7 @@ endfunction
 function! ale#engine#IsCheckingBuffer(buffer) abort
     let l:info = get(g:ale_buffer_info, a:buffer, {})
 
-    return get(l:info, 'waiting_for_tsserver') == 1
-    \|| !empty(get(l:info, 'job_list'))
+    return !empty(get(l:info, 'active_linter_list', []))
 endfunction
 
 " Register a temporary file to be managed with the ALE engine for
