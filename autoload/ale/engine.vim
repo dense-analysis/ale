@@ -617,7 +617,7 @@ endfunction
 "
 " Returns 1 if the linter was successfully run.
 function! s:RunLinter(buffer, linter) abort
-    if !empty(a:linter.lsp) || a:linter.lsp ==# 'tsserver'
+    if !empty(a:linter.lsp)
         return s:CheckWithLSP(a:buffer, a:linter)
     else
         let l:executable = ale#linter#GetExecutable(a:buffer, a:linter)
