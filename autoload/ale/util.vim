@@ -167,3 +167,23 @@ endfunction
 function! ale#util#EscapePCRE(unsafe_string) abort
     return substitute(a:unsafe_string, '\([\-\[\]{}()*+?.^$|]\)', '\\\1', 'g')
 endfunction
+
+" Given a String or a List of String values, try and decode the string(s)
+" as a JSON value which can be decoded with json_decode. If the JSON string
+" is invalid, the default argument value will be returned instead.
+"
+" This function is useful in code where the data can't be trusted to be valid
+" JSON, and where throwing exceptions is mostly just irritating.
+function! ale#util#FuzzyJSONDecode(data, default) abort
+    if empty(a:data)
+        return a:default
+    endif
+
+    let l:str = type(a:data) == type('') ? a:data : join(a:data, '')
+
+    try
+        return json_decode(l:str)
+    catch /E474/
+        return a:default
+    endtry
+endfunction
