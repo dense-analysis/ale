@@ -16,16 +16,10 @@ function! ale_linters#handlebars#embertemplatelint#GetCommand(buffer) abort
 endfunction
 
 function! ale_linters#handlebars#embertemplatelint#Handle(buffer, lines) abort
-    if len(a:lines) == 0
-      return []
-    endif
-
     let l:output = []
+    let l:json = ale#util#FuzzyJSONDecode(a:lines, {})
 
-    let l:input_json = json_decode(join(a:lines, ''))
-    let l:file_errors = values(l:input_json)[0]
-
-    for l:error in l:file_errors
+    for l:error in get(values(l:json), 0, [])
         if has_key(l:error, 'fatal')
             call add(l:output, {
             \   'bufnr': a:buffer,

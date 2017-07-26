@@ -2,15 +2,9 @@
 " Description: hlint for Haskell files
 
 function! ale_linters#haskell#hlint#Handle(buffer, lines) abort
-    if empty(a:lines)
-        return []
-    endif
-
-    let l:errors = json_decode(join(a:lines, ''))
-
     let l:output = []
 
-    for l:error in l:errors
+    for l:error in ale#util#FuzzyJSONDecode(a:lines, [])
         if l:error.severity ==# 'Error'
             let l:type = 'E'
         elseif l:error.severity ==# 'Suggestion'

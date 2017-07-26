@@ -1,20 +1,15 @@
 Before:
-    " Switch to the test rails directory.
-    let b:path = getcwd()
-    silent! cd /testplugin/test/handler
-    cd ../ruby_fixtures/valid_rails_app/app/models
+  call ale#test#SetDirectory('/testplugin/test/handler')
+  cd ..
 
-    runtime ale_linters/ruby/rails_best_practices.vim
+  runtime ale_linters/ruby/rails_best_practices.vim
 
 After:
-    " Switch back to whatever directory it was that we started on.
-    silent! 'cd ' . fnameescape(b:path)
-    unlet! b:path
-
-    call ale#linter#Reset()
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
 
 Execute(The rails_best_practices handler should parse JSON correctly):
-  silent file! thing.rb
+  call ale#test#SetFilename('ruby_fixtures/valid_rails_app/app/models/thing.rb')
 
   AssertEqual
   \  [
@@ -34,11 +29,11 @@ Execute(The rails_best_practices handler should parse JSON correctly):
   \    '{',
   \      '"message": "use local variable",',
   \      '"line_number": "5",',
-  \      '"filename": "/testplugin/test/ruby_fixtures/valid_rails_app/app/models/thing.rb"',
+  \      '"filename": "' . g:dir . '/ruby_fixtures/valid_rails_app/app/models/thing.rb"',
   \    '},{',
   \      '"message": "other advice",',
   \      '"line_number": "10",',
-  \      '"filename": "/testplugin/test/ruby_fixtures/valid_rails_app/app/models/thing.rb"',
+  \      '"filename": "' . g:dir . '/ruby_fixtures/valid_rails_app/app/models/thing.rb"',
   \    '}',
   \  ']'
   \  ])
@@ -47,4 +42,11 @@ Execute(The rails_best_practices handler should parse JSON correctly when there 
   AssertEqual
   \ [],
   \ ale_linters#ruby#rails_best_practices#Handle(347, [
+  \ ])
+
+Execute(The rails_best_practices handler should handle garbage output):
+  AssertEqual
+  \ [],
+  \ ale_linters#ruby#rails_best_practices#Handle(347, [
+  \   'No such command in 2.4.1 of ruby',
   \ ])
