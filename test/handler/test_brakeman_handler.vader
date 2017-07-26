@@ -1,20 +1,15 @@
 Before:
-    " Switch to the test rails directory.
-    let b:path = getcwd()
-    silent! cd /testplugin/test/handler
-    cd ../ruby_fixtures/valid_rails_app/app/models
+  call ale#test#SetDirectory('/testplugin/test/handler')
+  cd ..
 
-    runtime ale_linters/ruby/brakeman.vim
+  runtime ale_linters/ruby/brakeman.vim
 
 After:
-    " Switch back to whatever directory it was that we started on.
-    silent! 'cd ' . fnameescape(b:path)
-    unlet! b:path
-
-    call ale#linter#Reset()
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
 
 Execute(The brakeman handler should parse JSON correctly):
-  silent file! thing.rb
+  call ale#test#SetFilename('ruby_fixtures/valid_rails_app/app/models/thing.rb')
 
   AssertEqual
   \  [
@@ -77,4 +72,11 @@ Execute(The brakeman handler should parse JSON correctly when there is no output
   AssertEqual
   \ [],
   \ ale_linters#ruby#brakeman#Handle(347, [
+  \ ])
+  \
+Execute(The brakeman handler should handle garbage output):
+  AssertEqual
+  \ [],
+  \ ale_linters#ruby#brakeman#Handle(347, [
+  \   'No such command in 2.4.1 of ruby',
   \ ])

@@ -9,7 +9,12 @@ function! ale_linters#ruby#brakeman#Handle(buffer, lines) abort
         return []
     endif
 
-    let l:result = json_decode(join(a:lines, ''))
+    try
+        let l:result = json_decode(join(a:lines, ''))
+    catch /E474/
+        " Ignore invalid JSON
+        return []
+    endtry
 
     let l:output = []
 
