@@ -4,6 +4,6 @@
 call ale#linter#Define('nroff', {
 \   'name': 'write-good',
 \   'executable': 'write-good',
-\   'command': 'write-good --text="%t"',
-\   'callback': 'ale#handlers#unix#HandleAsWarning',
+\   'command': 'write-good %t',
+\   'callback': 'ale#handlers#writegood#HandleAsWarning',
 \})
