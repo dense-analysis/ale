@@ -200,21 +200,42 @@ function! s:HandleLSPDiagnostics(response) abort
     call s:HandleLoclist('langserver', l:buffer, l:loclist)
 endfunction
 
-function! s:HandleTSServerDiagnostics(response) abort
+function! s:HandleTSServerDiagnostics(response, error_type) abort
     let l:buffer = bufnr(a:response.body.file)
-    let l:loclist = ale#lsp#response#ReadTSServerDiagnostics(a:response)
+    let l:info = get(g:ale_buffer_info, l:buffer, {})
+
+    if empty(l:info)
+        return
+    endif
+
+    let l:thislist = ale#lsp#response#ReadTSServerDiagnostics(a:response)
+
+    " tsserver sends syntax and semantic errors in separate messages, so we
+    " have to collect the messages separately for each buffer and join them
+    " back together again.
+    if a:error_type ==# 'syntax'
+        let l:info.syntax_loclist = l:thislist
+    else
+        let l:info.semantic_loclist = l:thislist
+    endif
+
+    let l:loclist = get(l:info, 'semantic_loclist', [])
+    \   + get(l:info, 'syntax_loclist', [])
 
     call s:HandleLoclist('tsserver', l:buffer, l:loclist)
 endfunction
 
-function! s:HandleLSPResponse(response) abort
+function! ale#engine#HandleLSPResponse(response) abort
     let l:method = get(a:response, 'method', '')
 
     if l:method ==# 'textDocument/publishDiagnostics'
         call s:HandleLSPDiagnostics(a:response)
     elseif get(a:response, 'type', '') ==# 'event'
     \&& get(a:response, 'event', '') ==# 'semanticDiag'
-        call s:HandleTSServerDiagnostics(a:response)
+        call s:HandleTSServerDiagnostics(a:response, 'semantic')
+    elseif get(a:response, 'type', '') ==# 'event'
+    \&& get(a:response, 'event', '') ==# 'syntaxDiag'
+        call s:HandleTSServerDiagnostics(a:response, 'syntax')
     endif
 endfunction
 
@@ -575,7 +596,7 @@ function! s:CheckWithLSP(buffer, linter) abort
     let l:lsp_details = ale#linter#StartLSP(
     \   a:buffer,
     \   a:linter,
-    \   function('s:HandleLSPResponse'),
+    \   function('ale#engine#HandleLSPResponse'),
     \)
 
     if empty(l:lsp_details)
