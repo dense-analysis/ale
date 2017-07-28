@@ -31,6 +31,10 @@ function! ale#handlers#writegood#GetCommand(buffer) abort
 endfunction
 
 function! s:HandleWriteGoodFormat(buffer, lines, type) abort
+    " Look for lines like the following.
+    "
+    " "it is" is wordy or unneeded on line 20 at column 53
+    " "easily" can weaken meaning on line 154 at column 29
     let l:pattern = '\v^(".*"\s.*)\son\sline\s(\d+)\sat\scolumn\s(\d+)$'
     let l:output = []
 
