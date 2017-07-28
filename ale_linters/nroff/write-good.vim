@@ -3,7 +3,7 @@
 
 call ale#linter#Define('nroff', {
 \   'name': 'write-good',
-\   'executable': 'write-good',
-\   'command': 'write-good %t',
-\   'callback': 'ale#handlers#writegood#HandleAsWarning',
+\   'executable_callback': 'ale#handlers#writegood#GetExecutable',
+\   'command_callback': 'ale#handlers#writegood#GetCommand',
+\   'callback': 'ale#handlers#writegood#Handle',
 \})
