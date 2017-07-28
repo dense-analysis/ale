@@ -8,10 +8,13 @@ function! s:HandleWriteGoodFormat(buffer, lines, type) abort
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
+        " Add the linter error. Note that we need to add 1 to the col because
+        " write-good reports the column corresponding to the space before the
+        " offending word or phrase.
         call add(l:output, {
         \   'text': l:match[1],
         \   'lnum': l:match[2] + 0,
-        \   'col': l:match[3] + 0,
+        \   'col': l:match[3] + 1,
         \   'type': a:type,
         \})
     endfor
