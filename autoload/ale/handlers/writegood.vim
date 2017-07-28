@@ -4,7 +4,7 @@
 let g:ale_writegood_options = get(g:, 'ale_writegood_options', '')
 
 function! s:HandleWriteGoodFormat(buffer, lines, type) abort
-    let l:pattern = '\v[\^\s]+\n^(".*"\s.*)on\sline\s(\d+)\sat\scolumn\s(\d+)$\n-+$'
+    let l:pattern = '\v^(".*"\s.*)\son\sline\s(\d+)\sat\scolumn\s(\d+)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
