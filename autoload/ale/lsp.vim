@@ -164,6 +164,8 @@ function! s:HandleInitializeResponse(conn, response) abort
         return
     endif
 
+    let l:project.initialized = 1
+
     " After the server starts, send messages we had queued previously.
     for l:message_data in l:project.message_queue
         call s:SendMessageData(a:conn, l:message_data)
@@ -211,7 +213,7 @@ function! s:RegisterProject(conn, project_root) abort
         " Tools without project roots are ready right away, like tsserver.
         let a:conn.projects[a:project_root] = {
         \   'initialized': empty(a:project_root),
-        \   'init_messsage_id': 0,
+        \   'init_request_id': 0,
         \   'message_queue': [],
         \}
     endif
@@ -319,7 +321,7 @@ function! ale#lsp#Send(conn_id, message, ...) abort
         " Only send the init message once.
         if !l:project.init_request_id
             let [l:init_id, l:init_data] = ale#lsp#CreateMessageData(
-            \   ale#lsp#message#Initialize(l:conn.project_root),
+            \   ale#lsp#message#Initialize(l:project_root),
             \)
 
             let l:project.init_request_id = l:init_id
