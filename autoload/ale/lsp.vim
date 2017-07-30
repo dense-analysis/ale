@@ -156,23 +156,49 @@ function! s:FindProjectWithInitRequestID(conn, init_request_id) abort
     return {}
 endfunction
 
-function! s:HandleInitializeResponse(conn, response) abort
-    let l:request_id = a:response.request_id
-    let l:project = s:FindProjectWithInitRequestID(a:conn, l:request_id)
-
-    if empty(l:project)
-        return
-    endif
-
-    let l:project.initialized = 1
+function! s:MarkProjectAsInitialized(conn, project) abort
+    let a:project.initialized = 1
 
     " After the server starts, send messages we had queued previously.
-    for l:message_data in l:project.message_queue
+    for l:message_data in a:project.message_queue
         call s:SendMessageData(a:conn, l:message_data)
     endfor
 
     " Remove the messages now.
     let a:conn.message_queue = []
+endfunction
+
+function! s:HandleInitializeResponse(conn, response) abort
+    let l:request_id = a:response.request_id
+    let l:project = s:FindProjectWithInitRequestID(a:conn, l:request_id)
+
+    if !empty(l:project)
+        call s:MarkProjectAsInitialized(a:conn, l:project)
+    endif
+endfunction
+
+function! ale#lsp#HandleOtherInitializeResponses(conn, response) abort
+    let l:uninitialized_projects = []
+
+    for [l:key, l:value] in items(a:conn.projects)
+        if l:value.initialized == 0
+            call add(l:uninitialized_projects, [l:key, l:value])
+        endif
+    endfor
+
+    if empty(l:uninitialized_projects)
+        return
+    endif
+
+    if get(a:response, 'method', '') ==# 'textDocument/publishDiagnostics'
+        let l:filename = ale#path#FromURI(a:response.params.uri)
+
+        for [l:dir, l:project] in l:uninitialized_projects
+            if l:filename[:len(l:dir) - 1] ==# l:dir
+                call s:MarkProjectAsInitialized(a:conn, l:project)
+            endif
+        endfor
+    endif
 endfunction
 
 function! ale#lsp#HandleMessage(conn, message) abort
@@ -186,6 +212,8 @@ function! ale#lsp#HandleMessage(conn, message) abort
         if get(l:response, 'method', '') ==# 'initialize'
             call s:HandleInitializeResponse(a:conn, l:response)
         else
+            call ale#lsp#HandleOtherInitializeResponses(a:conn, l:response)
+
             " Call all of the registered handlers with the response.
             for l:Callback in a:conn.callback_list
                 call ale#util#GetFunction(l:Callback)(l:response)
