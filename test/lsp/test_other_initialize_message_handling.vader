@@ -1,0 +1,66 @@
+Before:
+  let b:project = {
+  \ 'initialized': 0,
+  \ 'init_request_id': 3,
+  \ 'message_queue': [],
+  \}
+
+  let b:conn = {
+  \ 'projects': {
+  \   '/foo/bar': b:project,
+  \ },
+  \}
+
+After:
+  unlet! b:project
+  unlet! b:conn
+
+Execute(publishDiagnostics messages with files inside project directories should initialize projects):
+  " This is for some other file, ignore this one.
+  call ale#lsp#HandleOtherInitializeResponses(b:conn, {
+  \ 'method': 'textDocument/publishDiagnostics',
+  \ 'params': {'uri': 'file:///xyz/bar/baz.txt'},
+  \})
+
+  AssertEqual
+  \ {
+  \   'initialized': 0,
+  \   'init_request_id': 3,
+  \   'message_queue': [],
+  \ },
+  \ b:project
+
+  call ale#lsp#HandleOtherInitializeResponses(b:conn, {
+  \ 'method': 'textDocument/publishDiagnostics',
+  \ 'params': {'uri': 'file:///foo/bar/baz.txt'},
+  \})
+
+  AssertEqual
+  \ {
+  \   'initialized': 1,
+  \   'init_request_id': 3,
+  \   'message_queue': [],
+  \ },
+  \ b:project
+
+Execute(Messages with no method and capabilities should initialize projects):
+  call ale#lsp#HandleOtherInitializeResponses(b:conn, {
+  \ 'result': {'capabilities': {}},
+  \})
+
+  AssertEqual
+  \ {
+  \   'initialized': 1,
+  \   'init_request_id': 3,
+  \   'message_queue': [],
+  \ },
+  \ b:project
+
+Execute(Other messages should not initialize projects):
+  call ale#lsp#HandleOtherInitializeResponses(b:conn, {'method': 'lolwat'})
+
+  AssertEqual 0, b:project.initialized
+
+  call ale#lsp#HandleOtherInitializeResponses(b:conn, {'result': {'x': {}}})
+
+  AssertEqual 0, b:project.initialized
