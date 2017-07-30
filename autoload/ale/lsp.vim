@@ -190,7 +190,13 @@ function! ale#lsp#HandleOtherInitializeResponses(conn, response) abort
         return
     endif
 
-    if get(a:response, 'method', '') ==# 'textDocument/publishDiagnostics'
+    if get(a:response, 'method', '') ==# ''
+        if has_key(get(a:response, 'result', {}), 'capabilities')
+            for [l:dir, l:project] in l:uninitialized_projects
+                call s:MarkProjectAsInitialized(a:conn, l:project)
+            endfor
+        endif
+    elseif get(a:response, 'method', '') ==# 'textDocument/publishDiagnostics'
         let l:filename = ale#path#FromURI(a:response.params.uri)
 
         for [l:dir, l:project] in l:uninitialized_projects
@@ -237,7 +243,7 @@ function! s:HandleCommandMessage(job_id, message) abort
 endfunction
 
 function! s:RegisterProject(conn, project_root) abort
-    if !has_key(a:conn, a:project_root)
+    if !has_key(a:conn.projects, a:project_root)
         " Tools without project roots are ready right away, like tsserver.
         let a:conn.projects[a:project_root] = {
         \   'initialized': empty(a:project_root),

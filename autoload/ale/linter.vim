@@ -377,6 +377,12 @@ function! ale#linter#StartLSP(buffer, linter, callback) abort
     let l:address = ''
     let l:root = ale#util#GetFunction(a:linter.project_root_callback)(a:buffer)
 
+    if empty(l:root) && a:linter.lsp !=# 'tsserver'
+        " If there's no project root, then we can't check files with LSP,
+        " unless we are using tsserver, which doesn't use project roots.
+        return {}
+    endif
+
     if a:linter.lsp ==# 'socket'
         let l:address = ale#linter#GetAddress(a:buffer, a:linter)
         let l:conn_id = ale#lsp#ConnectToAddress(
