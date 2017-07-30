@@ -225,10 +225,21 @@ function! s:HandleTSServerDiagnostics(response, error_type) abort
     call s:HandleLoclist('tsserver', l:buffer, l:loclist)
 endfunction
 
+function! s:HandleLSPErrorMessage(error_message) abort
+    echoerr 'Error from LSP:'
+
+    for l:line in split(a:error_message, "\n")
+        echoerr l:line
+    endfor
+endfunction
+
 function! ale#engine#HandleLSPResponse(response) abort
     let l:method = get(a:response, 'method', '')
 
-    if l:method ==# 'textDocument/publishDiagnostics'
+    if get(a:response, 'jsonrpc', '') ==# '2.0' && has_key(a:response, 'error')
+        " Uncomment this line to print LSP error messages.
+        " call s:HandleLSPErrorMessage(a:response.error.message)
+    elseif l:method ==# 'textDocument/publishDiagnostics'
         call s:HandleLSPDiagnostics(a:response)
     elseif get(a:response, 'type', '') ==# 'event'
     \&& get(a:response, 'event', '') ==# 'semanticDiag'
