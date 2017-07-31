@@ -667,25 +667,26 @@ function! ale#engine#RunLinters(buffer, linters, should_lint_file) abort
     call s:StopCurrentJobs(a:buffer, a:should_lint_file)
     call s:RemoveProblemsForDisabledLinters(a:buffer, a:linters)
 
-    let l:any_linter_ran = 0
+    " We can only clear the results if we aren't checking the buffer.
+    let l:can_clear_results = !ale#engine#IsCheckingBuffer(a:buffer)
 
     for l:linter in a:linters
-        " Skip linters for checking files if we shouldn't check the file.
-        if l:linter.lint_file && !a:should_lint_file
-            continue
-        endif
-
-        if s:RunLinter(a:buffer, l:linter)
-            let l:any_linter_ran = 1
+        " Only run lint_file linters if we should.
+        if !l:linter.lint_file || a:should_lint_file
+            if s:RunLinter(a:buffer, l:linter)
+                " If a single linter ran, we shouldn't clear everything.
+                let l:can_clear_results = 0
+            endif
+        else
+            " If we skipped running a lint_file linter still in the list,
+            " we shouldn't clear everything.
+            let l:can_clear_results = 0
         endif
     endfor
 
-    " If we didn't manage to start checking the buffer with anything,
-    " and there's nothing running currently for the buffer, then clear the
-    " results.
-    "
-    " We need to use both checks, as we run some tests synchronously.
-    if !l:any_linter_ran && !ale#engine#IsCheckingBuffer(a:buffer)
+    " Clear the results if we can. This needs to be done when linters are
+    " disabled, or ALE itself is disabled.
+    if l:can_clear_results
         call ale#engine#SetResults(a:buffer, [])
     endif
 endfunction
