@@ -219,11 +219,11 @@ function! ALEInitAuGroups() abort
     augroup ALERunOnEnterGroup
         autocmd!
         if g:ale_enabled && g:ale_lint_on_enter
-            autocmd BufWinEnter,BufRead * call ale#Queue(300, 'lint_file')
+            autocmd BufWinEnter,BufRead * call ale#Queue(0, 'lint_file', str2nr(expand('<abuf>')))
             " Track when the file is changed outside of Vim.
             autocmd FileChangedShellPost * call ale#events#FileChangedEvent(str2nr(expand('<abuf>')))
             " If the file has been changed, then check it again on enter.
-            autocmd BufEnter * call ale#events#EnterEvent()
+            autocmd BufEnter * call ale#events#EnterEvent(str2nr(expand('<abuf>')))
         endif
     augroup END
 
@@ -245,7 +245,7 @@ function! ALEInitAuGroups() abort
     augroup ALERunOnSaveGroup
         autocmd!
         if (g:ale_enabled && g:ale_lint_on_save) || g:ale_fix_on_save
-            autocmd BufWritePost * call ale#events#SaveEvent()
+            autocmd BufWritePost * call ale#events#SaveEvent(str2nr(expand('<abuf>')))
         endif
     augroup END
 

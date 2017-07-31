@@ -139,7 +139,7 @@ function! s:HandleLoclist(linter_name, buffer, loclist) abort
     " for efficient lookup of the messages in the cursor handler.
     call sort(g:ale_buffer_info[a:buffer].loclist, 'ale#util#LocItemCompare')
 
-    if ale#ShouldDoNothing()
+    if ale#ShouldDoNothing(a:buffer)
         return
     endif
 

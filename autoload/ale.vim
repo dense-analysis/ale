@@ -15,19 +15,19 @@ endfunction
 
 " A function for checking various conditions whereby ALE just shouldn't
 " attempt to do anything, say if particular buffer types are open in Vim.
-function! ale#ShouldDoNothing() abort
+function! ale#ShouldDoNothing(buffer) abort
     " Do nothing for blacklisted files
     " OR if ALE is running in the sandbox
     return index(g:ale_filetype_blacklist, &filetype) >= 0
     \   || (exists('*getcmdwintype') && !empty(getcmdwintype()))
     \   || ale#util#InSandbox()
-    \   || !ale#Var(bufnr(''), 'enabled')
+    \   || !ale#Var(a:buffer, 'enabled')
     \   || ale#FileTooLarge()
 endfunction
 
-" (delay, [linting_flag])
+" (delay, [linting_flag, buffer_number])
 function! ale#Queue(delay, ...) abort
-    if len(a:0) > 1
+    if a:0 > 2
         throw 'too many arguments!'
     endif
 
@@ -38,7 +38,13 @@ function! ale#Queue(delay, ...) abort
         throw "linting_flag must be either '' or 'lint_file'"
     endif
 
-    if ale#ShouldDoNothing()
+    let l:buffer = get(a:000, 1, bufnr(''))
+
+    if type(l:buffer) != type(0)
+        throw 'buffer_number must be a Number'
+    endif
+
+    if ale#ShouldDoNothing(l:buffer)
         return
     endif
 
@@ -53,7 +59,6 @@ function! ale#Queue(delay, ...) abort
         let s:lint_timer = -1
     endif
 
-    let l:buffer = bufnr('')
     let l:linters = ale#linter#Get(getbufvar(l:buffer, '&filetype'))
 
     " Don't set up buffer data and so on if there are no linters to run.
@@ -68,21 +73,26 @@ function! ale#Queue(delay, ...) abort
     endif
 
     if a:delay > 0
-        let s:queued_buffer_number = bufnr('%')
+        let s:queued_buffer_number = l:buffer
         let s:lint_timer = timer_start(a:delay, function('ale#Lint'))
     else
-        call ale#Lint()
+        call ale#Lint(-1, l:buffer)
     endif
 endfunction
 
 function! ale#Lint(...) abort
-    " Get the buffer number linting was queued for.
-    " or else take the current one.
-    let l:buffer = len(a:0) > 1 && a:1 == s:lint_timer
-    \   ? s:queued_buffer_number
-    \   : bufnr('%')
+    if a:0 > 1
+        " Use the buffer number given as the optional second argument.
+        let l:buffer = a:2
+    elseif a:0 > 0 && a:1 == s:lint_timer
+        " Use the buffer number for the buffer linting was queued for.
+        let l:buffer = s:queued_buffer_number
+    else
+        " Use the current buffer number.
+        let l:buffer = bufnr('')
+    endif
 
-    if ale#ShouldDoNothing()
+    if ale#ShouldDoNothing(l:buffer)
         return
     endif
 

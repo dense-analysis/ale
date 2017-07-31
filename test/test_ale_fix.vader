@@ -246,7 +246,7 @@ Execute(ALEFix should save files on the save event):
   let g:ale_fixers.testft = ['AddDollars']
 
   call SetUpLinters()
-  call ale#events#SaveEvent()
+  call ale#events#SaveEvent(bufnr(''))
 
   " We should save the file.
   AssertEqual ['$a', '$b', '$c'], readfile('fix_test_file')
@@ -285,7 +285,7 @@ Execute(ALEFix should still lint with no linters to be applied):
   let g:ale_fixers.testft = []
 
   call SetUpLinters()
-  call ale#events#SaveEvent()
+  call ale#events#SaveEvent(bufnr(''))
 
   Assert !filereadable('fix_test_file'), 'The file should not have been saved'
 
@@ -317,7 +317,7 @@ Execute(ALEFix should still lint when nothing was fixed on save):
   let g:ale_fixers.testft = ['DoNothing']
 
   call SetUpLinters()
-  call ale#events#SaveEvent()
+  call ale#events#SaveEvent(bufnr(''))
 
   Assert !filereadable('fix_test_file'), 'The file should not have been saved'
 
