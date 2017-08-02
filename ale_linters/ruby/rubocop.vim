@@ -34,7 +34,7 @@ function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
         \   'lnum': l:error['location']['line'] + 0,
         \   'col': l:start_col,
         \   'end_col': l:start_col + l:error['location']['length'] - 1,
-        \   'text': l:error['message'],
+        \   'text': printf('%s [%s]', l:error['message'], l:error['cop_name']),
         \   'type': ale_linters#ruby#rubocop#GetType(l:error['severity']),
         \})
     endfor
