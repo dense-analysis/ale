@@ -12,7 +12,7 @@ function! ale_linters#php#langserver#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#php#langserver#GetCommand(buffer) abort
-    return 'php ' . ale_linters#php#langserver#GetExecutable(a:buffer)
+    return 'php ' . ale#Escape(ale_linters#php#langserver#GetExecutable(a:buffer))
 endfunction
 
 function! ale_linters#php#langserver#GetLanguage(buffer) abort
