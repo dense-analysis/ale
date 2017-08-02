@@ -1,0 +1,32 @@
+Before:
+  Save g:ale_rust_rls_executable
+
+  unlet! g:ale_rust_rls_executable
+
+  runtime ale_linters/rust/rls.vim
+
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(The default executable path should be correct):
+  AssertEqual 'rls', ale_linters#rust#rls#GetExecutable(bufnr(''))
+  AssertEqual
+  \ ale#Escape('rls') . ' +nightly',
+  \ ale_linters#rust#rls#GetCommand(bufnr(''))
+
+Execute(The language string should be correct):
+  AssertEqual 'rust', ale_linters#rust#rls#GetLanguage(bufnr(''))
+
+Execute(The project root should be detected correctly):
+  AssertEqual '', ale_linters#rust#rls#GetProjectRoot(bufnr(''))
+
+  call ale#test#SetFilename('rust-rls-project/test.rs')
+
+  AssertEqual
+  \ g:dir . '/rust-rls-project',
+  \ ale_linters#rust#rls#GetProjectRoot(bufnr(''))

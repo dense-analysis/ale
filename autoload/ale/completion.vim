@@ -170,7 +170,7 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
     return l:results
 endfunction
 
-function! s:HandleTSServerLSPResponse(response) abort
+function! s:HandleTSServerLSPResponse(conn_id, response) abort
     if !s:CompletionStillValid(get(a:response, 'request_seq'))
         return
     endif

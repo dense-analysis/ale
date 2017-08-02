@@ -11,6 +11,11 @@ if !has_key(s:, 'job_info_map')
     let s:job_info_map = {}
 endif
 
+" Associates LSP connection IDs with linter names.
+if !has_key(s:, 'lsp_linter_map')
+    let s:lsp_linter_map = {}
+endif
+
 let s:executable_cache_map = {}
 
 " Check if files are executable, and if they are, remember that they are
@@ -192,12 +197,18 @@ function! s:HandleExit(job_id, exit_code) abort
     call s:HandleLoclist(l:linter.name, l:buffer, l:loclist)
 endfunction
 
-function! s:HandleLSPDiagnostics(response) abort
+function! s:HandleLSPDiagnostics(conn_id, response) abort
+    let l:linter_name = s:lsp_linter_map[a:conn_id]
     let l:filename = ale#path#FromURI(a:response.params.uri)
     let l:buffer = bufnr(l:filename)
+
+    if l:buffer <= 0
+        return
+    endif
+
     let l:loclist = ale#lsp#response#ReadDiagnostics(a:response)
 
-    call s:HandleLoclist('langserver', l:buffer, l:loclist)
+    call s:HandleLoclist(l:linter_name, l:buffer, l:loclist)
 endfunction
 
 function! s:HandleTSServerDiagnostics(response, error_type) abort
@@ -233,14 +244,14 @@ function! s:HandleLSPErrorMessage(error_message) abort
     endfor
 endfunction
 
-function! ale#engine#HandleLSPResponse(response) abort
+function! ale#engine#HandleLSPResponse(conn_id, response) abort
     let l:method = get(a:response, 'method', '')
 
     if get(a:response, 'jsonrpc', '') ==# '2.0' && has_key(a:response, 'error')
         " Uncomment this line to print LSP error messages.
         " call s:HandleLSPErrorMessage(a:response.error.message)
     elseif l:method ==# 'textDocument/publishDiagnostics'
-        call s:HandleLSPDiagnostics(a:response)
+        call s:HandleLSPDiagnostics(a:conn_id, a:response)
     elseif get(a:response, 'type', '') ==# 'event'
     \&& get(a:response, 'event', '') ==# 'semanticDiag'
         call s:HandleTSServerDiagnostics(a:response, 'semantic')
@@ -616,6 +627,9 @@ function! s:CheckWithLSP(buffer, linter) abort
 
     let l:id = l:lsp_details.connection_id
     let l:root = l:lsp_details.project_root
+
+    " Remember the linter this connection is for.
+    let s:lsp_linter_map[l:id] = a:linter.name
 
     let l:change_message = a:linter.lsp ==# 'tsserver'
     \   ? ale#lsp#tsserver_message#Geterr(a:buffer)

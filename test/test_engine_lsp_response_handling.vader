@@ -15,7 +15,7 @@ Execute(tsserver syntax error responses should be handled correctly):
 
   " When we get syntax errors and no semantic errors, we should keep the
   " syntax errors.
-  call ale#engine#HandleLSPResponse({
+  call ale#engine#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'syntaxDiag',
@@ -37,7 +37,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   \   ],
   \ },
   \})
-  call ale#engine#HandleLSPResponse({
+  call ale#engine#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'semanticDiag',
@@ -65,7 +65,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   \ getloclist(0)
 
   " After we get empty syntax errors, we should clear them.
-  call ale#engine#HandleLSPResponse({
+  call ale#engine#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'syntaxDiag',
@@ -88,7 +88,7 @@ Execute(tsserver semantic error responses should be handled correctly):
 
   " When we get syntax errors and no semantic errors, we should keep the
   " syntax errors.
-  call ale#engine#HandleLSPResponse({
+  call ale#engine#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'syntaxDiag',
@@ -98,7 +98,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   \   ],
   \ },
   \})
-  call ale#engine#HandleLSPResponse({
+  call ale#engine#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'semanticDiag',
@@ -138,7 +138,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   \ getloclist(0)
 
   " After we get empty syntax errors, we should clear them.
-  call ale#engine#HandleLSPResponse({
+  call ale#engine#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'semanticDiag',

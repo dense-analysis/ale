@@ -222,7 +222,7 @@ function! ale#lsp#HandleMessage(conn, message) abort
 
             " Call all of the registered handlers with the response.
             for l:Callback in a:conn.callback_list
-                call ale#util#GetFunction(l:Callback)(l:response)
+                call ale#util#GetFunction(l:Callback)(a:conn.id, l:response)
             endfor
         endif
     endfor
