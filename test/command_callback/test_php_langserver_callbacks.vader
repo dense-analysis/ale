@@ -1,11 +1,11 @@
 Before:
-  Save ale_php_langserver_executable
-  Save ale_php_langserver_config_path
-  Save ale_php_langserver_use_global
+  Save g:ale_php_langserver_executable
+  Save g:ale_php_langserver_config_path
+  Save g:ale_php_langserver_use_global
 
-  unlet! ale_php_langserver_executable
-  unlet! ale_php_langserver_config_path
-  unlet! ale_php_langserver_use_global
+  unlet! g:ale_php_langserver_executable
+  unlet! g:ale_php_langserver_config_path
+  unlet! g:ale_php_langserver_use_global
 
   runtime ale_linters/php/langserver.vim
 
