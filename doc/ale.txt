@@ -108,6 +108,8 @@ CONTENTS                                                         *ale-contents*
       rpmlint.............................|ale-spec-rpmlint|
     stylus................................|ale-stylus-options|
       stylelint...........................|ale-stylus-stylelint|
+    tcl...................................|ale-tcl-options|
+      nagelfar............................|ale-tcl-nagelfar|
     tex...................................|ale-tex-options|
       chktex..............................|ale-tex-chktex|
       lacheck.............................|ale-tex-lacheck|
