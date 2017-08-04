@@ -162,6 +162,7 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
         call add(l:results, {
         \   'word': l:suggestion.name,
         \   'kind': l:kind,
+        \   'icase': 1,
         \   'menu': join(l:displayParts, ''),
         \   'info': join(l:documentationParts, ''),
         \})
