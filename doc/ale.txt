@@ -16,6 +16,7 @@ CONTENTS                                                         *ale-contents*
       gcc.................................|ale-asm-gcc|
     c.....................................|ale-c-options|
       clang...............................|ale-c-clang|
+      clangtidy...........................|ale-c-clangtidy|
       cppcheck............................|ale-c-cppcheck|
       gcc.................................|ale-c-gcc|
     chef..................................|ale-chef-options|
