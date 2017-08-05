@@ -154,7 +154,7 @@ function! s:CreateTemporaryFileForJob(buffer, temporary_file, input) abort
     " Automatically delete the directory later.
     call ale#fix#ManageDirectory(a:buffer, l:temporary_directory)
     " Write the buffer out to a file.
-    call writefile(a:input, a:temporary_file)
+    call ale#util#Writefile(a:buffer, a:input, a:temporary_file)
 
     return 1
 endfunction

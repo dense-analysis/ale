@@ -417,7 +417,8 @@ function! s:CreateTemporaryFileForJob(buffer, temporary_file) abort
     " Automatically delete the directory later.
     call ale#engine#ManageDirectory(a:buffer, l:temporary_directory)
     " Write the buffer out to a file.
-    call writefile(getbufline(a:buffer, 1, '$'), a:temporary_file)
+    let l:lines = getbufline(a:buffer, 1, '$')
+    call ale#util#Writefile(a:buffer, l:lines, a:temporary_file)
 
     return 1
 endfunction

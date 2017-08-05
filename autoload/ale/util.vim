@@ -187,3 +187,15 @@ function! ale#util#FuzzyJSONDecode(data, default) abort
         return a:default
     endtry
 endfunction
+
+" Write a file, including carriage return characters for DOS files.
+"
+" The buffer number is required for determining the fileformat setting for
+" the buffer.
+function! ale#util#Writefile(buffer, lines, filename) abort
+    let l:corrected_lines = getbufvar(a:buffer, '&fileformat') ==# 'dos'
+    \   ? map(copy(a:lines), 'v:val . "\r"')
+    \   : a:lines
+
+    call writefile(l:corrected_lines, a:filename) " no-custom-checks
+endfunction
