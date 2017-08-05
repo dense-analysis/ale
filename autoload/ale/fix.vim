@@ -43,7 +43,6 @@ function! ale#fix#ApplyQueuedFixes() abort
             if empty(&buftype)
                 noautocmd :w!
             else
-                call writefile(l:data.output, 'fix_test_file')
                 set nomodified
             endif
         endif
