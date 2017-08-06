@@ -7,51 +7,8 @@ call ale#Set('c_clangtidy_executable', 'clang-tidy')
 " The number of checks that can be applied to C files is limited in contrast to
 " C++
 "
-" Here is an incomplete list of C-compatible checks for clang-tidy version 6:
-" bugprone-suspicious-memset-usage
-" cert-env33-c
-" cert-err34-c
-" cert-flp30-c
-" google-runtime-int
-" llvm-header-guard
-" llvm-include-order
-" misc-argument-comment
-" misc-assert-side-effect
-" misc-bool-pointer-implicit-conversion
-" misc-definitions-in-headers
-" misc-incorrect-roundings
-" misc-macro-parentheses
-" misc-macro-repeated-side-effects
-" misc-misplaced-const
-" misc-misplaced-widening-cast
-" misc-multiple-statement-macro
-" misc-non-copyable-objects
-" misc-redundant-expression
-" misc-sizeof-expression
-" misc-static-assert
-" misc-string-literal-with-embedded-nul
-" misc-suspicious-enum-usage
-" misc-suspicious-missing-comma
-" misc-suspicious-semicolon
-" misc-suspicious-string-compare
-" misc-swapped-arguments
-" modernize-redundant-void-arg
-" modernize-use-bool-literals
-" performance-type-promotion-in-math-fn
-" readability-braces-around-statements
-" readability-else-after-return
-" readability-function-size
-" readability-identifier-naming
-" readability-implicit-bool-cast
-" readability-inconsistent-declaration-parameter-name
-" readability-misleading-indentation
-" readability-misplaced-array-index
-" readability-named-parameter
-" readability-non-const-parameter
-" readability-redundant-control-flow
-" readability-redundant-declaration
-" readability-redundant-function-ptr-dereference
-" readability-simplify-boolean-expr
+" Consult the check list in clang-tidy's documentation:
+" http://clang.llvm.org/extra/clang-tidy/checks/list.html
 
 call ale#Set('c_clangtidy_checks', ['*'])
 " Set this option to manually set some options for clang-tidy.
