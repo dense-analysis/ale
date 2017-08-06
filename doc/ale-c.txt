@@ -53,7 +53,7 @@ g:ale_c_clang_options                                   *g:ale_c_clang_options*
 
 
 ===============================================================================
-clangtidy                                                   *ale-c-clangtidy*
+clangtidy                                                     *ale-c-clangtidy*
 
 `clang-tidy` will be run only when files are saved to disk, so that
 `compile_commands.json` files can be used. It is recommended to use this
@@ -79,16 +79,16 @@ g:ale_c_clangtidy_checks                             *g:ale_c_clangtidy_checks*
   http://clang.llvm.org/extra/clang-tidy/checks/list.html
 
 
-g:ale_c_clangtidy_executable                 *g:ale_c_clangtidy_executable*
-                                               *b:ale_c_clangtidy_executable*
+g:ale_c_clangtidy_executable                     *g:ale_c_clangtidy_executable*
+                                                 *b:ale_c_clangtidy_executable*
   Type: |String|
   Default: `'clang-tidy'`
 
   This variable can be changed to use a different executable for clangtidy.
 
 
-g:ale_c_clangtidy_options                       *g:ale_c_clangtidy_options*
-                                                  *b:ale_c_clangtidy_options*
+g:ale_c_clangtidy_options                           *g:ale_c_clangtidy_options*
+                                                    *b:ale_c_clangtidy_options*
   Type: |String|
   Default: `''`
 
