@@ -72,7 +72,7 @@ function! ale#completion#OmniFunc(findstart, base) abort
         let l:line = b:ale_completion_info.line
         let l:column = b:ale_completion_info.column
         let l:regex = s:GetRegex(s:omni_start_map, &filetype)
-        let l:up_to_column = getline(l:line)[: l:column - 1]
+        let l:up_to_column = getline(l:line)[: l:column - 2]
         let l:match = matchstr(l:up_to_column, l:regex)
 
         return l:column - len(l:match) - 1
@@ -162,6 +162,7 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
         call add(l:results, {
         \   'word': l:suggestion.name,
         \   'kind': l:kind,
+        \   'icase': 1,
         \   'menu': join(l:displayParts, ''),
         \   'info': join(l:documentationParts, ''),
         \})
@@ -170,7 +171,7 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
     return l:results
 endfunction
 
-function! s:HandleTSServerLSPResponse(response) abort
+function! s:HandleTSServerLSPResponse(conn_id, response) abort
     if !s:CompletionStillValid(get(a:response, 'request_seq'))
         return
     endif
@@ -203,41 +204,29 @@ function! s:HandleTSServerLSPResponse(response) abort
     endif
 endfunction
 
-function! s:GetCompletionsForTSServer(linter) abort
+function! s:GetLSPCompletions(linter) abort
     let l:buffer = bufnr('')
-    let l:executable = ale#linter#GetExecutable(l:buffer, a:linter)
-    let l:command = ale#job#PrepareCommand(
-    \ ale#linter#GetCommand(l:buffer, a:linter),
-    \)
-    let l:id = ale#lsp#StartProgram(
-    \   l:executable,
-    \   l:command,
+    let l:lsp_details = ale#linter#StartLSP(
+    \   l:buffer,
+    \   a:linter,
     \   function('s:HandleTSServerLSPResponse'),
     \)
 
-    if !l:id
-        if g:ale_history_enabled
-            call ale#history#Add(l:buffer, 'failed', l:id, l:command)
-        endif
+    if empty(l:lsp_details)
+        return 0
     endif
 
-    if ale#lsp#OpenTSServerDocumentIfNeeded(l:id, l:buffer)
-        if g:ale_history_enabled
-            call ale#history#Add(l:buffer, 'started', l:id, l:command)
-        endif
-    endif
+    let l:id = l:lsp_details.connection_id
+    let l:command = l:lsp_details.command
+    let l:root = l:lsp_details.project_root
 
-    call ale#lsp#Send(l:id, ale#lsp#tsserver_message#Change(l:buffer))
-
-    let l:request_id = ale#lsp#Send(
-    \   l:id,
-    \   ale#lsp#tsserver_message#Completions(
-    \       l:buffer,
-    \       b:ale_completion_info.line,
-    \       b:ale_completion_info.column,
-    \       b:ale_completion_info.prefix,
-    \   ),
+    let l:message = ale#lsp#tsserver_message#Completions(
+    \   l:buffer,
+    \   b:ale_completion_info.line,
+    \   b:ale_completion_info.column,
+    \   b:ale_completion_info.prefix,
     \)
+    let l:request_id = ale#lsp#Send(l:id, l:message, l:root)
 
     if l:request_id
         let b:ale_completion_info.conn_id = l:id
@@ -268,7 +257,7 @@ function! ale#completion#GetCompletions() abort
 
     for l:linter in ale#linter#Get(&filetype)
         if l:linter.lsp ==# 'tsserver'
-            call s:GetCompletionsForTSServer(l:linter)
+            call s:GetLSPCompletions(l:linter)
         endif
     endfor
 endfunction

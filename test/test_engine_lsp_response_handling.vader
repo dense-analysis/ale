@@ -1,0 +1,155 @@
+Before:
+  Save g:ale_buffer_info
+  call ale#test#SetDirectory('/testplugin/test')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(tsserver syntax error responses should be handled correctly):
+  runtime ale_linters/typescript/tsserver.vim
+  call ale#test#SetFilename('filename.ts')
+  call ale#engine#InitBufferInfo(bufnr(''))
+
+  " When we get syntax errors and no semantic errors, we should keep the
+  " syntax errors.
+  call ale#engine#HandleLSPResponse(1, {
+  \ 'seq': 0,
+  \ 'type': 'event',
+  \ 'event': 'syntaxDiag',
+  \ 'body': {
+  \   'file': g:dir . '/filename.ts',
+  \   'diagnostics':[
+  \     {
+  \       'start': {
+  \         'line':2,
+  \         'offset':14,
+  \       },
+  \       'end': {
+  \         'line':2,
+  \         'offset':15,
+  \       },
+  \       'text': ''','' expected.',
+  \       "code":1005
+  \     },
+  \   ],
+  \ },
+  \})
+  call ale#engine#HandleLSPResponse(1, {
+  \ 'seq': 0,
+  \ 'type': 'event',
+  \ 'event': 'semanticDiag',
+  \ 'body': {
+  \   'file': g:dir . '/filename.ts',
+  \   'diagnostics':[
+  \   ],
+  \ },
+  \})
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'bufnr': bufnr(''),
+  \     'col': 14,
+  \     'vcol': 0,
+  \     'nr': 1005,
+  \     'type': 'E',
+  \     'text': ''','' expected.',
+  \     'valid': 1,
+  \     'pattern': '',
+  \   },
+  \ ],
+  \ getloclist(0)
+
+  " After we get empty syntax errors, we should clear them.
+  call ale#engine#HandleLSPResponse(1, {
+  \ 'seq': 0,
+  \ 'type': 'event',
+  \ 'event': 'syntaxDiag',
+  \ 'body': {
+  \   'file': g:dir . '/filename.ts',
+  \   'diagnostics':[
+  \   ],
+  \ },
+  \})
+
+  AssertEqual
+  \ [
+  \ ],
+  \ getloclist(0)
+
+Execute(tsserver semantic error responses should be handled correctly):
+  runtime ale_linters/typescript/tsserver.vim
+  call ale#test#SetFilename('filename.ts')
+  call ale#engine#InitBufferInfo(bufnr(''))
+
+  " When we get syntax errors and no semantic errors, we should keep the
+  " syntax errors.
+  call ale#engine#HandleLSPResponse(1, {
+  \ 'seq': 0,
+  \ 'type': 'event',
+  \ 'event': 'syntaxDiag',
+  \ 'body': {
+  \   'file': g:dir . '/filename.ts',
+  \   'diagnostics':[
+  \   ],
+  \ },
+  \})
+  call ale#engine#HandleLSPResponse(1, {
+  \ 'seq': 0,
+  \ 'type': 'event',
+  \ 'event': 'semanticDiag',
+  \ 'body': {
+  \   'file': g:dir . '/filename.ts',
+  \   'diagnostics':[
+  \     {
+  \       'start': {
+  \         'line':2,
+  \         'offset':14,
+  \       },
+  \       'end': {
+  \         'line':2,
+  \         'offset':15,
+  \       },
+  \       'text': 'Some semantic error',
+  \       "code":1005
+  \     },
+  \   ],
+  \ },
+  \})
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'bufnr': bufnr(''),
+  \     'col': 14,
+  \     'vcol': 0,
+  \     'nr': 1005,
+  \     'type': 'E',
+  \     'text': 'Some semantic error',
+  \     'valid': 1,
+  \     'pattern': '',
+  \   },
+  \ ],
+  \ getloclist(0)
+
+  " After we get empty syntax errors, we should clear them.
+  call ale#engine#HandleLSPResponse(1, {
+  \ 'seq': 0,
+  \ 'type': 'event',
+  \ 'event': 'semanticDiag',
+  \ 'body': {
+  \   'file': g:dir . '/filename.ts',
+  \   'diagnostics':[
+  \   ],
+  \ },
+  \})
+
+  AssertEqual
+  \ [
+  \ ],
+  \ getloclist(0)

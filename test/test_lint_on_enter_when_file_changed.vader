@@ -64,7 +64,7 @@ Execute(The buffer should be checked after entering it after the file has change
   let b:ale_file_changed = 1
 
   set filetype=foobar
-  call ale#events#EnterEvent()
+  call ale#events#EnterEvent(bufnr(''))
 
   AssertEqual [{
   \   'bufnr': bufnr(''),

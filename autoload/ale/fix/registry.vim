@@ -67,6 +67,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['javascript'],
 \       'description': 'Fix JavaScript files using standard --fix',
 \   },
+\   'stylelint': {
+\       'function': 'ale#fixers#stylelint#Fix',
+\       'suggested_filetypes': ['css', 'sass', 'scss', 'stylus'],
+\       'description': 'Fix stylesheet files using stylelint --fix.',
+\   },
 \}
 
 " Reset the function registry to the default entries.

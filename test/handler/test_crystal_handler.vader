@@ -4,9 +4,7 @@ Execute(The crystal handler should parse lines correctly and add the column if i
   \ [
   \   {
   \     'lnum': 2,
-  \     'bufnr': 255,
   \     'col': 1,
-  \     'type': 'E',
   \     'text': 'unexpected token: EOF'
   \   }
   \ ],

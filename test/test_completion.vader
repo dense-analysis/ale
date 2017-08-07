@@ -29,13 +29,15 @@ Execute(TypeScript completion details responses should be parsed correctly):
   \     'word': 'abc',
   \     'menu': '(property) Foo.abc: number',
   \     'info': '',
-  \     'kind': 'f'
+  \     'kind': 'f',
+  \     'icase': 1,
   \   },
   \   {
   \     'word': 'def',
   \     'menu': '(property) Foo.def: number',
   \     'info': 'foo bar baz',
-  \     'kind': 'f'
+  \     'kind': 'f',
+  \     'icase': 1,
   \   },
   \ ],
   \ ale#completion#ParseTSServerCompletionEntryDetails({

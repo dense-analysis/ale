@@ -1,10 +1,13 @@
 Before:
   silent! cd /testplugin/test/lsp
-  let b:dir = getcwd()
+  let g:dir = getcwd()
+  let g:ale_lsp_next_version_id = 1
+
+  call ale#test#SetFilename('foo/bar.ts')
 
 After:
-  silent execute 'cd ' . fnameescape(b:dir)
-  unlet! b:dir
+  silent execute 'cd ' . fnameescape(g:dir)
+  unlet! g:dir
 
 Execute(ale#lsp#message#Initialize() should return correct messages):
   AssertEqual
@@ -13,7 +16,7 @@ Execute(ale#lsp#message#Initialize() should return correct messages):
   \   'initialize',
   \   {
   \    'processId': getpid(),
-  \    'rootUri': '/foo/bar',
+  \    'rootPath': '/foo/bar',
   \    'capabilities': {},
   \   }
   \ ],
@@ -28,36 +31,51 @@ Execute(ale#lsp#message#Shutdown() should return correct messages):
 Execute(ale#lsp#message#Exit() should return correct messages):
   AssertEqual [1, 'exit'], ale#lsp#message#Exit(),
 
+Given typescript(A TypeScript file with 3 lines):
+  foo()
+  bar()
+  baz()
+
 Execute(ale#lsp#message#DidOpen() should return correct messages):
+  let g:ale_lsp_next_version_id = 12
   AssertEqual
   \ [
   \   1,
   \   'textDocument/didOpen',
   \   {
   \     'textDocument': {
-  \         'uri': '/foo/bar',
+  \         'uri': 'file://' . g:dir . '/foo/bar.ts',
   \         'languageId': 'typescript',
-  \         'version': 123,
-  \         'text': 'foobar',
+  \         'version': 12,
+  \         'text': "foo()\nbar()\nbaz()",
   \     },
   \   }
   \ ],
-  \ ale#lsp#message#DidOpen('/foo/bar', 'typescript', 123, 'foobar')
+  \ ale#lsp#message#DidOpen(bufnr(''), 'typescript')
 
 Execute(ale#lsp#message#DidChange() should return correct messages):
+  let g:ale_lsp_next_version_id = 34
+
   AssertEqual
   \ [
   \   1,
   \   'textDocument/didChange',
   \   {
   \     'textDocument': {
-  \         'uri': '/foo/bar',
-  \         'version': 123,
+  \         'uri': 'file://' . g:dir . '/foo/bar.ts',
+  \         'version': 34,
   \     },
-  \     'contentChanges': [{'text': 'foobar'}],
+  \     'contentChanges': [{'text': "foo()\nbar()\nbaz()"}],
   \   }
   \ ],
-  \ ale#lsp#message#DidChange('/foo/bar', 123, 'foobar')
+  \ ale#lsp#message#DidChange(bufnr(''))
+  " The version numbers should increment.
+  AssertEqual
+  \ 35,
+  \ ale#lsp#message#DidChange(bufnr(''))[2].textDocument.version
+  AssertEqual
+  \ 36,
+  \ ale#lsp#message#DidChange(bufnr(''))[2].textDocument.version
 
 Execute(ale#lsp#message#DidSave() should return correct messages):
   AssertEqual
@@ -66,11 +84,11 @@ Execute(ale#lsp#message#DidSave() should return correct messages):
   \   'textDocument/didSave',
   \   {
   \     'textDocument': {
-  \         'uri': '/foo/bar',
+  \         'uri': 'file://' . g:dir . '/foo/bar.ts',
   \     },
   \   }
   \ ],
-  \ ale#lsp#message#DidSave('/foo/bar')
+  \ ale#lsp#message#DidSave(bufnr(''))
 
 Execute(ale#lsp#message#DidClose() should return correct messages):
   AssertEqual
@@ -79,52 +97,41 @@ Execute(ale#lsp#message#DidClose() should return correct messages):
   \   'textDocument/didClose',
   \   {
   \     'textDocument': {
-  \         'uri': '/foo/bar',
+  \         'uri': 'file://' . g:dir . '/foo/bar.ts',
   \     },
   \   }
   \ ],
-  \ ale#lsp#message#DidClose('/foo/bar')
+  \ ale#lsp#message#DidClose(bufnr(''))
 
 Execute(ale#lsp#tsserver_message#Open() should return correct messages):
-  silent! noautocmd file foo.ts
-
   AssertEqual
   \ [
   \   1,
   \   'ts@open',
   \   {
-  \     'file': b:dir . '/foo.ts',
+  \     'file': g:dir . '/foo/bar.ts',
   \   }
   \ ],
   \ ale#lsp#tsserver_message#Open(bufnr(''))
 
 Execute(ale#lsp#tsserver_message#Close() should return correct messages):
-  silent! noautocmd file foo.ts
-
   AssertEqual
   \ [
   \   1,
   \   'ts@close',
   \   {
-  \     'file': b:dir . '/foo.ts',
+  \     'file': g:dir . '/foo/bar.ts',
   \   }
   \ ],
   \ ale#lsp#tsserver_message#Close(bufnr(''))
 
-Given typescript(A TypeScript file with 3 lines):
-  foo()
-  bar()
-  baz()
-
 Execute(ale#lsp#tsserver_message#Change() should return correct messages):
-  silent! noautocmd file foo.ts
-
   AssertEqual
   \ [
   \   1,
   \   'ts@change',
   \   {
-  \     'file': b:dir . '/foo.ts',
+  \     'file': g:dir . '/foo/bar.ts',
   \     'line': 1,
   \     'offset': 1,
   \     'endLine': 1073741824,
@@ -135,27 +142,23 @@ Execute(ale#lsp#tsserver_message#Change() should return correct messages):
   \ ale#lsp#tsserver_message#Change(bufnr(''))
 
 Execute(ale#lsp#tsserver_message#Geterr() should return correct messages):
-  silent! noautocmd file foo.ts
-
   AssertEqual
   \ [
   \   1,
   \   'ts@geterr',
   \   {
-  \     'files': [b:dir . '/foo.ts'],
+  \     'files': [g:dir . '/foo/bar.ts'],
   \   }
   \ ],
   \ ale#lsp#tsserver_message#Geterr(bufnr(''))
 
 Execute(ale#lsp#tsserver_message#Completions() should return correct messages):
-  silent! noautocmd file foo.ts
-
   AssertEqual
   \ [
   \   0,
   \   'ts@completions',
   \   {
-  \     'file': b:dir . '/foo.ts',
+  \     'file': g:dir . '/foo/bar.ts',
   \     'line': 347,
   \     'offset': 12,
   \     'prefix': 'abc',
@@ -164,14 +167,12 @@ Execute(ale#lsp#tsserver_message#Completions() should return correct messages):
   \ ale#lsp#tsserver_message#Completions(bufnr(''), 347, 12, 'abc')
 
 Execute(ale#lsp#tsserver_message#CompletionEntryDetails() should return correct messages):
-  silent! noautocmd file foo.ts
-
   AssertEqual
   \ [
   \   0,
   \   'ts@completionEntryDetails',
   \   {
-  \     'file': b:dir . '/foo.ts',
+  \     'file': g:dir . '/foo/bar.ts',
   \     'line': 347,
   \     'offset': 12,
   \     'entryNames': ['foo', 'bar'],

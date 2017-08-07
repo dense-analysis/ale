@@ -11,7 +11,8 @@ function! ale_linters#verilog#verilator#GetCommand(buffer) abort
 
     " Create a special filename, so we can detect it in the handler.
     call ale#engine#ManageFile(a:buffer, l:filename)
-    call writefile(getbufline(a:buffer, 1, '$'), l:filename)
+    let l:lines = getbufline(a:buffer, 1, '$')
+    call ale#util#Writefile(a:buffer, l:lines, l:filename)
 
     return 'verilator --lint-only -Wall -Wno-DECLFILENAME '
     \   . ale#Var(a:buffer, 'verilog_verilator_options') .' '

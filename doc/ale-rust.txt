@@ -8,7 +8,7 @@ Integration Information
   Since Vim does not detect the rust file type out-of-the-box, you need the
   runtime files for rust from here: https://github.com/rust-lang/rust.vim
 
-  Note that there are two possible linters for rust files:
+  Note that there are three possible linters for Rust files:
 
   1. rustc -- The Rust compiler is used to check the currently edited file.
      So, if your project consists of multiple files, you will get some errors
@@ -18,6 +18,10 @@ Integration Information
      checked. That means that all errors are properly shown, but cargo can
      only operate on the files written on disk, so errors will not be reported
      while you type.
+  3. rls -- If you have `rls` installed, you might prefer using this linter
+     over cargo. rls implements the Language Server Protocol for incremental
+     compliation of Rust code, and can check Rust files while you type. `rls`
+     requires Rust files to contained in Cargo projects.
 
   Only cargo is enabled by default. To switch to using rustc instead of cargo,
   configure |g:ale_linters| appropriately: >
@@ -35,10 +39,21 @@ cargo                                                          *ale-rust-cargo*
 g:ale_rust_cargo_use_check                         *g:ale_rust_cargo_use_check*
                                                    *b:ale_rust_cargo_use_check*
   Type: |Number|
-  Default: `1`
+  Default: `0`
 
   When set to `1`, this option will cause ALE to use "cargo check" instead of
   "cargo build". "cargo check" is supported since version 1.16.0 of Rust.
+
+
+===============================================================================
+rls                                                              *ale-rust-rls*
+
+g:ale_rust_rls_executable                           *g:ale_rust_rls_executable*
+                                                    *b:ale_rust_rls_executable*
+  Type: |String|
+  Default: `'rls'`
+
+  This variable can be modified to change the executable path for `rls`.
 
 
 ===============================================================================
@@ -47,7 +62,7 @@ rustc                                                          *ale-rust-rustc*
 g:ale_rust_ignore_error_codes                   *g:ale_rust_ignore_error_codes*
                                                 *b:ale_rust_ignore_error_codes*
   Type: |List| of |String|s
-  Default: []
+  Default: `[]`
 
   This variable can contain error codes which will be ignored. For example, to
   ignore most errors regarding failed imports, put this in your .vimrc

@@ -1,6 +1,11 @@
 Before:
   Save g:ale_run_synchronously
+  Save g:ale_buffer_info
+  Save g:ale_linters
+
+  let g:ale_buffer_info = {}
   let g:ale_run_synchronously = 1
+  call ale#ResetLintFileMarkers()
 
   let g:buffer_result = [
   \ {
@@ -95,8 +100,6 @@ Given foobar (Some imaginary filetype):
   baz
 
 Execute(Running linters without 'lint_file' should run only buffer linters):
-  call ale#ResetLintFileMarkers()
-  let g:ale_buffer_info = {}
   call ale#Queue(0)
 
   AssertEqual [
@@ -115,9 +118,6 @@ Execute(Running linters without 'lint_file' should run only buffer linters):
   \], GetSimplerLoclist()
 
 Execute(Running linters with 'lint_file' should run all linters):
-  call ale#ResetLintFileMarkers()
-  let g:ale_buffer_info = {}
-
   Assert filereadable(expand('%:p')), 'The file was not readable'
 
   call ale#Queue(0, 'lint_file')
@@ -150,9 +150,6 @@ Execute(Running linters with 'lint_file' should run all linters):
   \], GetSimplerLoclist()
 
 Execute(Linter errors from files should be kept):
-  call ale#ResetLintFileMarkers()
-  let g:ale_buffer_info = {}
-
   Assert filereadable(expand('%:p')), 'The file was not readable'
 
   call ale#Queue(0, 'lint_file')
@@ -176,6 +173,71 @@ Execute(Linter errors from files should be kept):
   \   'text': 'new buffer error',
   \   'type': 'E',
   \ },
+  \ {
+  \   'lnum': 1,
+  \   'col': 3,
+  \   'text': 'file warning',
+  \   'type': 'W',
+  \ },
+  \ {
+  \   'lnum': 2,
+  \   'col': 3,
+  \   'text': 'file error',
+  \   'type': 'E',
+  \ },
+  \], GetSimplerLoclist()
+
+Execute(Linter errors from files should be kept when no other linters are run):
+  let g:ale_linters = {'foobar': ['lint_file_linter']}
+  Assert filereadable(expand('%:p')), 'The file was not readable'
+
+  call ale#Queue(0, 'lint_file')
+
+  AssertEqual [
+  \ {
+  \   'lnum': 1,
+  \   'col': 3,
+  \   'text': 'file warning',
+  \   'type': 'W',
+  \ },
+  \ {
+  \   'lnum': 2,
+  \   'col': 3,
+  \   'text': 'file error',
+  \   'type': 'E',
+  \ },
+  \], GetSimplerLoclist()
+
+  call ale#Queue(0)
+
+  AssertEqual [
+  \ {
+  \   'lnum': 1,
+  \   'col': 3,
+  \   'text': 'file warning',
+  \   'type': 'W',
+  \ },
+  \ {
+  \   'lnum': 2,
+  \   'col': 3,
+  \   'text': 'file error',
+  \   'type': 'E',
+  \ },
+  \], GetSimplerLoclist()
+
+Execute(The Save event should respect the buffer number):
+  let g:ale_linters = {'foobar': ['lint_file_linter']}
+  Assert filereadable(expand('%:p')), 'The file was not readable'
+
+  call ale#events#SaveEvent(bufnr('') + 1)
+
+  " We shouldn't get any prblems yet.
+  AssertEqual [], GetSimplerLoclist()
+
+  call ale#events#SaveEvent(bufnr(''))
+
+  " We should get them now we used the right buffer number.
+  AssertEqual [
   \ {
   \   'lnum': 1,
   \   'col': 3,

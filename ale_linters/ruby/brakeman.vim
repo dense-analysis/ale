@@ -5,15 +5,10 @@ let g:ale_ruby_brakeman_options =
 \   get(g:, 'ale_ruby_brakeman_options', '')
 
 function! ale_linters#ruby#brakeman#Handle(buffer, lines) abort
-    if len(a:lines) == 0
-        return []
-    endif
-
-    let l:result = json_decode(join(a:lines, ''))
-
     let l:output = []
+    let l:json = ale#util#FuzzyJSONDecode(a:lines, {})
 
-    for l:warning in l:result.warnings
+    for l:warning in get(l:json, 'warnings', [])
         " Brakeman always outputs paths relative to the Rails app root
         let l:rails_root = ale#ruby#FindRailsRoot(a:buffer)
         let l:warning_file = l:rails_root . '/' . l:warning.file

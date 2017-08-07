@@ -1,0 +1,52 @@
+Before:
+  Save g:ale_php_langserver_executable
+  Save g:ale_php_langserver_config_path
+  Save g:ale_php_langserver_use_global
+
+  unlet! g:ale_php_langserver_executable
+  unlet! g:ale_php_langserver_config_path
+  unlet! g:ale_php_langserver_use_global
+
+  runtime ale_linters/php/langserver.vim
+
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+After:
+  Restore
+
+  if isdirectory(g:dir . '/.git')
+    call delete(g:dir . '/.git', 'd')
+  endif
+
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(The default executable path should be correct):
+  AssertEqual
+  \ 'php-language-server.php',
+  \ ale_linters#php#langserver#GetExecutable(bufnr(''))
+  AssertEqual
+  \ 'php ' . ale#Escape('php-language-server.php'),
+  \ ale_linters#php#langserver#GetCommand(bufnr(''))
+
+Execute(Vendor executables should be detected):
+  call ale#test#SetFilename('php-langserver-project/test.php')
+
+  AssertEqual
+  \ g:dir . '/php-langserver-project/vendor/bin/php-language-server.php',
+  \ ale_linters#php#langserver#GetExecutable(bufnr(''))
+  AssertEqual
+  \ 'php ' . ale#Escape(
+  \   g:dir
+  \   . '/php-langserver-project/vendor/bin/php-language-server.php'
+  \ ),
+  \ ale_linters#php#langserver#GetCommand(bufnr(''))
+
+Execute(The language string should be correct):
+  AssertEqual 'php', ale_linters#php#langserver#GetLanguage(bufnr(''))
+
+Execute(The project path should be correct for .git directories):
+  call ale#test#SetFilename('php-langserver-project/test.php')
+  call mkdir(g:dir . '/.git')
+
+  AssertEqual g:dir, ale_linters#php#langserver#GetProjectRoot(bufnr(''))

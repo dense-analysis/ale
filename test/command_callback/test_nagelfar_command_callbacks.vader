@@ -1,0 +1,42 @@
+Before:
+  Save g:ale_tcl_nagelfar_executable
+  Save g:ale_tcl_nagelfar_options
+
+  unlet! g:ale_tcl_nagelfar_executable
+  unlet! b:ale_tcl_nagelfar_executable
+  unlet! g:ale_tcl_nagelfar_options
+  unlet! b:ale_tcl_nagelfar_options
+
+  runtime ale_linters/tcl/nagelfar.vim
+
+After:
+  Restore
+  unlet! b:command_tail
+  unlet! b:ale_tcl_nagelfar_executable
+  unlet! b:ale_tcl_nagelfar_options
+  call ale#linter#Reset()
+
+Execute(The executable should be configurable):
+  AssertEqual 'nagelfar.tcl', ale_linters#tcl#nagelfar#GetExecutable(bufnr(''))
+
+  let b:ale_tcl_nagelfar_executable = 'foobar'
+
+  AssertEqual 'foobar', ale_linters#tcl#nagelfar#GetExecutable(bufnr(''))
+
+Execute(The executable should be used in the command):
+  AssertEqual
+  \ ale#Escape('nagelfar.tcl') . ' %s',
+  \ ale_linters#tcl#nagelfar#GetCommand(bufnr(''))
+
+  let b:ale_tcl_nagelfar_executable = 'foobar'
+
+  AssertEqual
+  \ ale#Escape('foobar') . ' %s',
+  \ ale_linters#tcl#nagelfar#GetCommand(bufnr(''))
+
+Execute(The options should be configurable):
+  let b:ale_tcl_nagelfar_options = '--something'
+
+  AssertEqual
+  \ ale#Escape('nagelfar.tcl') . ' --something %s',
+  \ ale_linters#tcl#nagelfar#GetCommand(bufnr(''))

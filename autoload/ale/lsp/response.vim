@@ -8,11 +8,10 @@ let s:SEVERITY_INFORMATION = 3
 let s:SEVERITY_HINT = 4
 
 " Parse the message for textDocument/publishDiagnostics
-function! ale#lsp#response#ReadDiagnostics(params) abort
-    let l:filename = a:params.uri
+function! ale#lsp#response#ReadDiagnostics(response) abort
     let l:loclist = []
 
-    for l:diagnostic in a:params.diagnostics
+    for l:diagnostic in a:response.params.diagnostics
         let l:severity = get(l:diagnostic, 'severity', 0)
         let l:loclist_item = {
         \   'text': l:diagnostic.message,
@@ -40,7 +39,7 @@ function! ale#lsp#response#ReadDiagnostics(params) abort
         call add(l:loclist, l:loclist_item)
     endfor
 
-    return [l:filename, l:loclist]
+    return l:loclist
 endfunction
 
 function! ale#lsp#response#ReadTSServerDiagnostics(response) abort

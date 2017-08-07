@@ -75,6 +75,8 @@ CONTENTS                                                         *ale-contents*
       perl................................|ale-perl-perl|
       perlcritic..........................|ale-perl-perlcritic|
     php...................................|ale-php-options|
+      hack................................|ale-php-hack|
+      langserver..........................|ale-php-langserver|
       phpcs...............................|ale-php-phpcs|
       phpmd...............................|ale-php-phpmd|
       phpstan.............................|ale-php-phpstan|
@@ -94,6 +96,7 @@ CONTENTS                                                         *ale-contents*
       rubocop.............................|ale-ruby-rubocop|
     rust..................................|ale-rust-options|
       cargo...............................|ale-rust-cargo|
+      rls.................................|ale-rust-rls|
       rustc...............................|ale-rust-rustc|
     sass..................................|ale-sass-options|
       stylelint...........................|ale-sass-stylelint|
@@ -108,6 +111,8 @@ CONTENTS                                                         *ale-contents*
       rpmlint.............................|ale-spec-rpmlint|
     stylus................................|ale-stylus-options|
       stylelint...........................|ale-stylus-stylelint|
+    tcl...................................|ale-tcl-options|
+      nagelfar............................|ale-tcl-nagelfar|
     tex...................................|ale-tex-options|
       chktex..............................|ale-tex-chktex|
       lacheck.............................|ale-tex-lacheck|
@@ -201,7 +206,7 @@ The following languages and tools are supported.
 * Objective-C++: 'clang'
 * OCaml: 'merlin' (see |ale-linter-integration-ocaml-merlin|)
 * Perl: 'perl' (-c flag), 'perlcritic'
-* PHP: 'hack', 'php' (-l flag), 'phpcs', 'phpmd', 'phpstan'
+* PHP: 'hack', 'langserver', 'php' (-l flag), 'phpcs', 'phpmd', 'phpstan'
 * Pod: 'proselint'
 * Pug: 'pug-lint'
 * Puppet: 'puppet', 'puppet-lint'
@@ -210,7 +215,7 @@ The following languages and tools are supported.
 * ReasonML: 'merlin'
 * reStructuredText: 'proselint'
 * RPM spec: 'spec'
-* Rust: 'rustc' (see |ale-integration-rust|)
+* Rust: 'cargo', 'rls', 'rustc' (see |ale-integration-rust|)
 * Ruby: 'reek', 'rubocop'
 * SASS: 'sasslint', 'stylelint'
 * SCSS: 'sasslint', 'scsslint', 'stylelint'
@@ -1259,7 +1264,10 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          search by in future before being passed on to the
                          |loclist|, etc.
 
-                         This argument is required.
+                         This argument is required, unless the linter is an
+                         LSP linter. In which case, this argument must not be
+                         defined, as LSP linters handle diangostics
+                         automatically. See |ale-lsp-linters|.
 
                          The keys for each item in the List will be handled in
                          the following manner:
@@ -1390,10 +1398,47 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          be set automatically to `0`. The two options cannot
                          be used together.
 
+                                                              *ale-lsp-linters*
+  `lsp`                    A |String| for defining LSP (Language Server Protocol)
+                         linters.
+
+                         This argument may be omitted or `''` when a linter
+                         does not represent an LSP linter.
+
+                         When this argument is set to `'stdio'`, then the
+                         linter will be defined as an LSP linter which keeps a
+                         process for a language server runnning, and
+                         communicates with it directly via a |channel|.
+
+                         When this argument is not empty, then the
+                         `project_callback` and `language_callback` arguments
+                         must also be defined.
+
+                         LSP linters handle diagonstics automatically, so
+                         the `callback` argument must not be defined.
+
+  `project_callback`       A |String| or |Funcref| for a callback function
+                         accepting a buffer number. A |String| should be
+                         returned representing the path to the project for the
+                         file being checked with the language server. If an
+                         empty string is returned, the file will not be
+                         checked at all.
+
+                         This argument must only be set if the `lsp` argument
+                         is also set to a non-empty string.
+
+  `language_callback`      A |String| or |Funcref| for a callback function
+                         accepting a buffer number. A |String| should be
+                         returned representing the name of the language being
+                         checked.
+
+                         This argument must only be set if the `lsp` argument
+                         is also set to a non-empty string.
+
   `aliases`                A |List| of aliases for the linter name.
 
-                         This option can be set with alternative names for
-                         for selecting the linter with |g:ale_linters|. This
+                         This argument can be set with alternative names for
+                         selecting the linter with |g:ale_linters|. This
                          setting can make it easier to guess the linter name
                          by offering a few alternatives.
 

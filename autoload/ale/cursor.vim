@@ -66,7 +66,7 @@ function! s:StopCursorTimer() abort
 endfunction
 
 function! ale#cursor#EchoCursorWarning(...) abort
-    if ale#ShouldDoNothing()
+    if ale#ShouldDoNothing(bufnr(''))
         return
     endif
 
@@ -93,7 +93,7 @@ let s:cursor_timer = -1
 let s:last_pos = [0, 0, 0]
 
 function! ale#cursor#EchoCursorWarningWithDelay() abort
-    if ale#ShouldDoNothing()
+    if ale#ShouldDoNothing(bufnr(''))
         return
     endif
 
@@ -112,7 +112,7 @@ function! ale#cursor#EchoCursorWarningWithDelay() abort
 endfunction
 
 function! ale#cursor#ShowCursorDetail() abort
-    if ale#ShouldDoNothing()
+    if ale#ShouldDoNothing(bufnr(''))
         return
     endif
 

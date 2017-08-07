@@ -23,6 +23,10 @@ intensive.
 ===============================================================================
 gometalinter                                              *ale-go-gometalinter*
 
+`gometalinter` is a `lint_file` linter, which only lints files that are
+written to disk. This differs from the default behavior of linting the buffer.
+See: |ale-lint-file|
+
 g:ale_go_gometalinter_executable             *g:ale_go_gometalinter_executable*
                                              *b:ale_go_gometalinter_executable*
   Type: |String|
