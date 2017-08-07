@@ -39,6 +39,14 @@ function! ale#list#SetLists(buffer, loclist) abort
     if (g:ale_open_list && !empty(a:loclist)) || g:ale_keep_list_window_open
         let l:winnr = winnr()
 
+        let l:reset_visual_selection = 0
+        let l:reset_character_selection = 0
+        if mode() ==? 'v' || mode() ==# "\<c-v>"
+            let l:reset_visual_selection = 1
+        elseif mode() ==? 's' || mode() ==# "\<c-s>"
+            let l:reset_character_selection = 1
+        endif
+
         if g:ale_set_quickfix
             if !ale#list#IsQuickfixOpen()
                 execute 'copen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
@@ -50,6 +58,13 @@ function! ale#list#SetLists(buffer, loclist) abort
         " If focus changed, restore it (jump to the last window).
         if l:winnr !=# winnr()
             wincmd p
+        endif
+
+        if l:reset_visual_selection || l:reset_character_selection
+            normal! gv
+            if l:reset_character_selection
+                normal! "\<c-g>"
+            endif
         endif
     endif
 endfunction
