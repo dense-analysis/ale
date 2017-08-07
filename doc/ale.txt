@@ -398,7 +398,7 @@ g:ale_history_log_output                             *g:ale_history_log_output*
 
 
 g:ale_keep_list_window_open                       *g:ale_keep_list_window_open*
-
+                                                  *b:ale_keep_list_window_open*
   Type: |Number|
   Default: `0`
 
@@ -600,13 +600,17 @@ g:ale_maximum_file_size                               *g:ale_maximum_file_size*
 
 
 g:ale_open_list                                               *g:ale_open_list*
-
-  Type: |Number|
+                                                              *b:ale_open_list*
+  Type: |Number| or |String|
   Default: `0`
 
-  When set to `1`, this will cause ALE to automatically open a window for
-  the loclist (|lopen|) or for the quickfix list instead if
-  |g:ale_set_quickfix| is `1`. (|copen|)
+  When set to `1`, this will cause ALE to automatically open a window for the
+  loclist (|lopen|) or for the quickfix list instead if |g:ale_set_quickfix|
+  is `1`. (|copen|)
+
+  When set to `'on_save'`, ALE will only open the loclist after buffers have
+  been saved. The list will be opened some time after buffers are saved and
+  any linter for a buffer returns results.
 
   The window will be kept open until all warnings or errors are cleared,
   including those not set by ALE, unless |g:ale_keep_list_window_open| is set

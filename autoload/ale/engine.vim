@@ -83,7 +83,7 @@ function! ale#engine#CreateDirectory(buffer) abort
 endfunction
 
 function! ale#engine#RemoveManagedFiles(buffer) abort
-    let l:info = get(g:ale_buffer_info, a:buffer)
+    let l:info = get(g:ale_buffer_info, a:buffer, {})
 
     " We can't delete anything in a sandbox, so wait until we escape from
     " it to delete temporary files and directories.
@@ -298,6 +298,9 @@ function! ale#engine#SetResults(buffer, loclist) abort
     endif
 
     if l:linting_is_done
+        " Reset the save event marker, used for opening windows, etc.
+        call setbufvar(a:buffer, 'ale_save_event_fired', 0)
+
         " Automatically remove all managed temporary files and directories
         " now that all jobs have completed.
         call ale#engine#RemoveManagedFiles(a:buffer)

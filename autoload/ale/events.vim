@@ -1,6 +1,7 @@
 " Author: w0rp <devw0rp@gmail.com>
 
 function! ale#events#SaveEvent(buffer) abort
+    call setbufvar(a:buffer, 'ale_save_event_fired', 1)
     let l:should_lint = ale#Var(a:buffer, 'enabled') && g:ale_lint_on_save
 
     if g:ale_fix_on_save

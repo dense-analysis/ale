@@ -34,6 +34,10 @@ After:
 
   unlet! g:loclist
   unlet! b:ale_list_window_size
+  unlet! b:ale_open_list
+  unlet! b:ale_keep_list_window_open
+  unlet! b:ale_save_event_fired
+
   delfunction GetQuickfixHeight
 
   " Close quickfix window after every execute block
@@ -163,3 +167,33 @@ Execute(The quickfix window height should be correct for the quickfix list with 
   call ale#list#CloseWindowIfNeeded(bufnr(''))
 
   AssertEqual 8, GetQuickfixHeight()
+
+Execute(The buffer ale_open_list option should be respected):
+  let b:ale_open_list = 1
+
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+  Assert ale#list#IsQuickfixOpen()
+
+Execute(The buffer ale_keep_list_window_open option should be respected):
+  let b:ale_open_list = 1
+  let b:ale_keep_list_window_open = 1
+
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
+  call ale#list#SetLists(bufnr('%'), [])
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
+
+  Assert ale#list#IsQuickfixOpen()
+
+Execute(The ale_open_list='on_save' option should work):
+  let b:ale_open_list = 'on_save'
+
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+  " The list shouldn't open yet, the event wasn't fired.
+  Assert !ale#list#IsQuickfixOpen()
+
+  let b:ale_save_event_fired = 1
+
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+  " Now the list should have opened.
+  Assert ale#list#IsQuickfixOpen()

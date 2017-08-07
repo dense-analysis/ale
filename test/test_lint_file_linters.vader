@@ -81,6 +81,8 @@ Before:
 After:
   Restore
 
+  unlet! b:ale_save_event_fired
+  unlet! b:ale_enabled
   unlet g:buffer_result
   let g:ale_buffer_info = {}
   call ale#linter#Reset()
@@ -251,3 +253,17 @@ Execute(The Save event should respect the buffer number):
   \   'type': 'E',
   \ },
   \], GetSimplerLoclist()
+
+Execute(The Save event should set b:ale_save_event_fired to 1):
+  let b:ale_enabled = 0
+  call ale#events#SaveEvent(bufnr(''))
+
+  " This flag needs to be set so windows can be opened, etc.
+  AssertEqual 1, b:ale_save_event_fired
+
+Execute(b:ale_save_event_fired should be set to 0 when results are set):
+  let b:ale_save_event_fired = 1
+
+  call ale#engine#SetResults(bufnr(''), [])
+
+  AssertEqual 0, b:ale_save_event_fired
