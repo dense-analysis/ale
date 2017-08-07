@@ -35,7 +35,7 @@ cargo                                                          *ale-rust-cargo*
 g:ale_rust_cargo_use_check                         *g:ale_rust_cargo_use_check*
                                                    *b:ale_rust_cargo_use_check*
   Type: |Number|
-  Default: `1`
+  Default: `0`
 
   When set to `1`, this option will cause ALE to use "cargo check" instead of
   "cargo build". "cargo check" is supported since version 1.16.0 of Rust.
