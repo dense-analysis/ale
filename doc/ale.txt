@@ -75,6 +75,8 @@ CONTENTS                                                         *ale-contents*
       perl................................|ale-perl-perl|
       perlcritic..........................|ale-perl-perlcritic|
     php...................................|ale-php-options|
+      hack................................|ale-php-hack|
+      langserver..........................|ale-php-langserver|
       phpcs...............................|ale-php-phpcs|
       phpmd...............................|ale-php-phpmd|
       phpstan.............................|ale-php-phpstan|
@@ -204,7 +206,7 @@ The following languages and tools are supported.
 * Objective-C++: 'clang'
 * OCaml: 'merlin' (see |ale-linter-integration-ocaml-merlin|)
 * Perl: 'perl' (-c flag), 'perlcritic'
-* PHP: 'hack', 'php' (-l flag), 'phpcs', 'phpmd', 'phpstan'
+* PHP: 'hack', 'langserver', 'php' (-l flag), 'phpcs', 'phpmd', 'phpstan'
 * Pod: 'proselint'
 * Pug: 'pug-lint'
 * Puppet: 'puppet', 'puppet-lint'
