@@ -94,6 +94,7 @@ CONTENTS                                                         *ale-contents*
       rubocop.............................|ale-ruby-rubocop|
     rust..................................|ale-rust-options|
       cargo...............................|ale-rust-cargo|
+      rls.................................|ale-rust-rls|
       rustc...............................|ale-rust-rustc|
     sass..................................|ale-sass-options|
       stylelint...........................|ale-sass-stylelint|
@@ -212,7 +213,7 @@ The following languages and tools are supported.
 * ReasonML: 'merlin'
 * reStructuredText: 'proselint'
 * RPM spec: 'spec'
-* Rust: 'rustc' (see |ale-integration-rust|)
+* Rust: 'cargo', 'rls', 'rustc' (see |ale-integration-rust|)
 * Ruby: 'reek', 'rubocop'
 * SASS: 'sasslint', 'stylelint'
 * SCSS: 'sasslint', 'scsslint', 'stylelint'
