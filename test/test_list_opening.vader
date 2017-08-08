@@ -197,3 +197,11 @@ Execute(The ale_open_list='on_save' option should work):
   call ale#list#SetLists(bufnr('%'), g:loclist)
   " Now the list should have opened.
   Assert ale#list#IsQuickfixOpen()
+
+Execute(The window shouldn't open on save when ale_open_list=0):
+  let b:ale_open_list = 0
+  let b:ale_save_event_fired = 1
+
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+  " Now the list should have opened.
+  Assert !ale#list#IsQuickfixOpen()
