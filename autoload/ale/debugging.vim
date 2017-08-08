@@ -81,7 +81,7 @@ function! s:EchoCommandHistory() abort
         let l:status_message = l:item.status
 
         " Include the exit code in output if we have it.
-        if l:item.status ==# 'finished'
+        if l:item.status is# 'finished'
             let l:status_message .= ' - exit code ' . l:item.exit_code
         endif
 

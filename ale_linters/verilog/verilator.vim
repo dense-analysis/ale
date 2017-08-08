@@ -33,7 +33,7 @@ function! ale_linters#verilog#verilator#Handle(buffer, lines) abort
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:line = l:match[3] + 0
-        let l:type = l:match[1] ==# 'Error' ? 'E' : 'W'
+        let l:type = l:match[1] is# 'Error' ? 'E' : 'W'
         let l:text = l:match[4]
         let l:file = l:match[2]
 

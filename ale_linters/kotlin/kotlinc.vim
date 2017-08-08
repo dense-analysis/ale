@@ -124,7 +124,7 @@ function! ale_linters#kotlin#kotlinc#Handle(buffer, lines) abort
         if l:buf_abspath !=# l:curbuf_abspath
             continue
         endif
-        let l:type_marker_str = l:type ==# 'warning' ? 'W' : 'E'
+        let l:type_marker_str = l:type is# 'warning' ? 'W' : 'E'
 
         call add(l:output, {
         \   'lnum': l:line,
@@ -145,7 +145,7 @@ function! ale_linters#kotlin#kotlinc#Handle(buffer, lines) abort
         let l:type = l:match[1]
         let l:text = l:match[2]
 
-        let l:type_marker_str = l:type ==# 'warning' || l:type ==# 'info' ? 'W' : 'E'
+        let l:type_marker_str = l:type is# 'warning' || l:type is# 'info' ? 'W' : 'E'
 
         call add(l:output, {
         \   'lnum': 1,

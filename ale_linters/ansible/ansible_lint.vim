@@ -21,8 +21,8 @@ function! ale_linters#ansible#ansible_lint#Handle(buffer, lines) abort
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:code = l:match[4]
 
-        if (l:code ==# 'EANSIBLE002')
-        \ && !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
+        if l:code is# 'EANSIBLE002'
+        \&& !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
             " Skip warnings for trailing whitespace if the option is off.
             continue
         endif
@@ -32,7 +32,7 @@ function! ale_linters#ansible#ansible_lint#Handle(buffer, lines) abort
             \   'lnum': l:match[2] + 0,
             \   'col': l:match[3] + 0,
             \   'text': l:code . ': ' . l:match[5],
-            \   'type': l:code[:0] ==# 'E' ? 'E' : 'W',
+            \   'type': l:code[:0] is# 'E' ? 'E' : 'W',
             \})
         endif
     endfor

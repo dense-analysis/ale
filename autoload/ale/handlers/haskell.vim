@@ -14,7 +14,7 @@ function! ale#handlers#haskell#HandleGHCFormat(buffer, lines) abort
     for l:line in a:lines
         if len(matchlist(l:line, l:pattern)) > 0
             call add(l:corrected_lines, l:line)
-        elseif l:line ==# ''
+        elseif l:line is# ''
             call add(l:corrected_lines, l:line)
         else
             if len(l:corrected_lines) > 0
@@ -42,10 +42,10 @@ function! ale#handlers#haskell#HandleGHCFormat(buffer, lines) abort
           let l:text = l:errors[2]
         else
           let l:ghc_type = ''
-          let l:text = l:match[4][:0] ==# ' ' ? l:match[4][1:] : l:match[4]
+          let l:text = l:match[4][:0] is# ' ' ? l:match[4][1:] : l:match[4]
         endif
 
-        if l:ghc_type ==? 'Warning'
+        if l:ghc_type is? 'Warning'
             let l:type = 'W'
         else
             let l:type = 'E'

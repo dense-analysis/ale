@@ -50,7 +50,7 @@ function! ale#Queue(delay, ...) abort
 
     " Remember that we want to check files for this buffer.
     " We will remember this until we finally run the linters, via any event.
-    if l:linting_flag ==# 'lint_file'
+    if l:linting_flag is# 'lint_file'
         let s:should_lint_file_for_buffer[bufnr('%')] = 1
     endif
 
@@ -157,7 +157,7 @@ endfunction
 " Escape a string suitably for each platform.
 " shellescape does not work on Windows.
 function! ale#Escape(str) abort
-    if fnamemodify(&shell, ':t') ==? 'cmd.exe'
+    if fnamemodify(&shell, ':t') is? 'cmd.exe'
         " If the string contains spaces, it will be surrounded by quotes.
         " Otherwise, special characters will be escaped with carets (^).
         return substitute(

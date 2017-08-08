@@ -27,7 +27,7 @@ function! ale_linters#erlang#erlc#Handle(buffer, lines) abort
     let l:pattern_no_module_definition = '\v(no module definition)$'
     let l:pattern_unused = '\v(.* is unused)$'
 
-    let l:is_hrl = fnamemodify(bufname(a:buffer), ':e') ==# 'hrl'
+    let l:is_hrl = fnamemodify(bufname(a:buffer), ':e') is# 'hrl'
 
     for l:line in a:lines
         let l:match = matchlist(l:line, l:pattern)

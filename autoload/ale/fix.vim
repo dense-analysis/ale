@@ -186,9 +186,9 @@ function! s:RunJob(options) abort
     if l:read_temporary_file
         " TODO: Check that a temporary file is set here.
         let l:job_info.file_to_read = l:temporary_file
-    elseif l:output_stream ==# 'stderr'
+    elseif l:output_stream is# 'stderr'
         let l:job_options.err_cb = function('s:GatherOutput')
-    elseif l:output_stream ==# 'both'
+    elseif l:output_stream is# 'both'
         let l:job_options.out_cb = function('s:GatherOutput')
         let l:job_options.err_cb = function('s:GatherOutput')
     else
@@ -320,7 +320,7 @@ function! ale#fix#InitBufferData(buffer, fixing_flag) abort
     \   'lines_before': getbufline(a:buffer, 1, '$'),
     \   'filename': expand('#' . a:buffer . ':p'),
     \   'done': 0,
-    \   'should_save': a:fixing_flag ==# 'save_file',
+    \   'should_save': a:fixing_flag is# 'save_file',
     \   'temporary_directory_list': [],
     \}
 endfunction
@@ -342,7 +342,7 @@ function! ale#fix#Fix(...) abort
     let l:callback_list = s:GetCallbacks()
 
     if empty(l:callback_list)
-        if l:fixing_flag ==# ''
+        if l:fixing_flag is# ''
             echoerr 'No fixers have been defined. Try :ALEFixSuggest'
         endif
 

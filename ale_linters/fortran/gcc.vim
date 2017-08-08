@@ -44,7 +44,7 @@ function! ale_linters#fortran#gcc#Handle(buffer, lines) abort
 
             " Now we have the text, we can set it and add the error.
             let l:last_loclist_obj.text = l:match[2]
-            let l:last_loclist_obj.type = l:match[1] ==# 'Warning' ? 'W' : 'E'
+            let l:last_loclist_obj.type = l:match[1] is# 'Warning' ? 'W' : 'E'
             call add(l:output, l:last_loclist_obj)
         else
             let l:last_loclist_obj = {

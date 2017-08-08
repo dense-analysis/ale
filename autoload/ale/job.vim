@@ -34,7 +34,7 @@ function! ale#job#JoinNeovimOutput(job, last_line, data, mode, callback) abort
         let l:new_last_line = a:last_line . a:data[0]
     endif
 
-    if a:mode ==# 'raw'
+    if a:mode is# 'raw'
         if !empty(l:lines)
             call a:callback(a:job, join(l:lines, "\n") . "\n")
         endif
@@ -50,7 +50,7 @@ endfunction
 function! s:NeoVimCallback(job, data, event) abort
     let l:info = s:job_map[a:job]
 
-    if a:event ==# 'stdout'
+    if a:event is# 'stdout'
         let l:info.out_cb_line = ale#job#JoinNeovimOutput(
         \   a:job,
         \   l:info.out_cb_line,
@@ -58,7 +58,7 @@ function! s:NeoVimCallback(job, data, event) abort
         \   l:info.mode,
         \   ale#util#GetFunction(l:info.out_cb),
         \)
-    elseif a:event ==# 'stderr'
+    elseif a:event is# 'stderr'
         let l:info.err_cb_line = ale#job#JoinNeovimOutput(
         \   a:job,
         \   l:info.err_cb_line,
@@ -117,7 +117,7 @@ function! s:VimCloseCallback(channel) abort
 
     " job_status() can trigger the exit handler.
     " The channel can close before the job has exited.
-    if job_status(l:job) ==# 'dead'
+    if job_status(l:job) is# 'dead'
         try
             if !empty(l:info) && has_key(l:info, 'exit_cb')
                 call ale#util#GetFunction(l:info.exit_cb)(l:job_id, l:info.exit_code)
@@ -142,7 +142,7 @@ function! s:VimExitCallback(job, exit_code) abort
     let l:info.exit_code = a:exit_code
 
     " The program can exit before the data has finished being read.
-    if ch_status(job_getchannel(a:job)) ==# 'closed'
+    if ch_status(job_getchannel(a:job)) is# 'closed'
         try
             if !empty(l:info) && has_key(l:info, 'exit_cb')
                 call ale#util#GetFunction(l:info.exit_cb)(l:job_id, a:exit_code)
@@ -273,7 +273,7 @@ function! ale#job#IsRunning(job_id) abort
         endtry
     elseif has_key(s:job_map, a:job_id)
         let l:job = s:job_map[a:job_id].job
-        return job_status(l:job) ==# 'run'
+        return job_status(l:job) is# 'run'
     endif
 
     return 0
@@ -296,7 +296,7 @@ function! ale#job#Stop(job_id) abort
 
         " We must close the channel for reading the buffer if it is open
         " when stopping a job. Otherwise, we will get errors in the status line.
-        if ch_status(job_getchannel(l:job)) ==# 'open'
+        if ch_status(job_getchannel(l:job)) is# 'open'
             call ch_close_in(job_getchannel(l:job))
         endif
 

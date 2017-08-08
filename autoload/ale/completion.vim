@@ -44,7 +44,7 @@ function! ale#completion#FilterSuggestionsByPrefix(suggestions, prefix) abort
     "   foo.
     "       ^
     " We need to include all of the given suggestions.
-    if a:prefix ==# '.'
+    if a:prefix is# '.'
         return a:suggestions
     endif
 
@@ -59,7 +59,7 @@ function! ale#completion#FilterSuggestionsByPrefix(suggestions, prefix) abort
     for l:suggestion in a:suggestions
         " Add suggestions if the suggestion starts with a case-insensitive
         " match for the prefix.
-        if l:suggestion.word[: len(a:prefix) - 1] ==? a:prefix
+        if l:suggestion.word[: len(a:prefix) - 1] is? a:prefix
             call add(l:filtered_suggestions, l:suggestion)
         endif
     endfor
@@ -150,9 +150,9 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
             call add(l:documentationParts, l:part.text)
         endfor
 
-        if l:suggestion.kind ==# 'clasName'
+        if l:suggestion.kind is# 'clasName'
             let l:kind = 'f'
-        elseif l:suggestion.kind ==# 'parameterName'
+        elseif l:suggestion.kind is# 'parameterName'
             let l:kind = 'f'
         else
             let l:kind = 'v'
@@ -182,7 +182,7 @@ function! s:HandleTSServerLSPResponse(conn_id, response) abort
 
     let l:command = get(a:response, 'command', '')
 
-    if l:command ==# 'completions'
+    if l:command is# 'completions'
         let l:names = ale#completion#ParseTSServerCompletions(a:response)
 
         if !empty(l:names)
@@ -196,7 +196,7 @@ function! s:HandleTSServerLSPResponse(conn_id, response) abort
             \   ),
             \)
         endif
-    elseif l:command ==# 'completionEntryDetails'
+    elseif l:command is# 'completionEntryDetails'
         call ale#completion#Show(
         \   a:response,
         \   'ale#completion#ParseTSServerCompletionEntryDetails',
@@ -256,7 +256,7 @@ function! ale#completion#GetCompletions() abort
     \}
 
     for l:linter in ale#linter#Get(&filetype)
-        if l:linter.lsp ==# 'tsserver'
+        if l:linter.lsp is# 'tsserver'
             call s:GetLSPCompletions(l:linter)
         endif
     endfor

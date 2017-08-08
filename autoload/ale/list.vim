@@ -4,7 +4,7 @@
 " Return 1 if there is a buffer with buftype == 'quickfix' in bufffer list
 function! ale#list#IsQuickfixOpen() abort
     for l:buf in range(1, bufnr('$'))
-        if getbufvar(l:buf, '&buftype') ==# 'quickfix'
+        if getbufvar(l:buf, '&buftype') is# 'quickfix'
             return 1
         endif
     endfor
@@ -18,7 +18,7 @@ function! s:ShouldOpen(buffer) abort
     let l:saved = getbufvar(a:buffer, 'ale_save_event_fired', 0)
 
     return (type(l:val) == type(1) && l:val == 1)
-    \   || (type(l:val) == type('') && l:val ==# 'on_save' && l:saved)
+    \   || (type(l:val) == type('') && l:val is# 'on_save' && l:saved)
 endfunction
 
 function! ale#list#SetLists(buffer, loclist) abort
@@ -51,8 +51,8 @@ function! ale#list#SetLists(buffer, loclist) abort
     if s:ShouldOpen(a:buffer) && (l:keep_open || !empty(a:loclist))
         let l:winnr = winnr()
         let l:mode = mode()
-        let l:reset_visual_selection = l:mode ==? 'v' || l:mode ==# "\<c-v>"
-        let l:reset_character_selection = l:mode ==? 's' || l:mode ==# "\<c-s>"
+        let l:reset_visual_selection = l:mode is? 'v' || l:mode is# "\<c-v>"
+        let l:reset_character_selection = l:mode is? 's' || l:mode is# "\<c-s>"
 
         if g:ale_set_quickfix
             if !ale#list#IsQuickfixOpen()

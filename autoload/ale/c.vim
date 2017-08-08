@@ -9,7 +9,7 @@ function! ale#c#FindProjectRoot(buffer) abort
             let l:path = fnamemodify(l:full_path, ':h')
 
             " Correct .git path detection.
-            if fnamemodify(l:path, ':t') ==# '.git'
+            if fnamemodify(l:path, ':t') is# '.git'
                 let l:path = fnamemodify(l:path, ':h')
             endif
 

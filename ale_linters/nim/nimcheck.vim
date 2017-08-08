@@ -26,7 +26,7 @@ function! ale_linters#nim#nimcheck#Handle(buffer, lines) abort
 
         if len(l:textmatch) > 0
             let l:errortype = l:textmatch[1]
-            if l:errortype ==# 'Error'
+            if l:errortype is# 'Error'
                 let l:type = 'E'
             endif
         endif

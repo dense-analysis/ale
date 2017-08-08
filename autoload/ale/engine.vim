@@ -224,7 +224,7 @@ function! s:HandleTSServerDiagnostics(response, error_type) abort
     " tsserver sends syntax and semantic errors in separate messages, so we
     " have to collect the messages separately for each buffer and join them
     " back together again.
-    if a:error_type ==# 'syntax'
+    if a:error_type is# 'syntax'
         let l:info.syntax_loclist = l:thislist
     else
         let l:info.semantic_loclist = l:thislist
@@ -247,16 +247,16 @@ endfunction
 function! ale#engine#HandleLSPResponse(conn_id, response) abort
     let l:method = get(a:response, 'method', '')
 
-    if get(a:response, 'jsonrpc', '') ==# '2.0' && has_key(a:response, 'error')
+    if get(a:response, 'jsonrpc', '') is# '2.0' && has_key(a:response, 'error')
         " Uncomment this line to print LSP error messages.
         " call s:HandleLSPErrorMessage(a:response.error.message)
-    elseif l:method ==# 'textDocument/publishDiagnostics'
+    elseif l:method is# 'textDocument/publishDiagnostics'
         call s:HandleLSPDiagnostics(a:conn_id, a:response)
-    elseif get(a:response, 'type', '') ==# 'event'
-    \&& get(a:response, 'event', '') ==# 'semanticDiag'
+    elseif get(a:response, 'type', '') is# 'event'
+    \&& get(a:response, 'event', '') is# 'semanticDiag'
         call s:HandleTSServerDiagnostics(a:response, 'semantic')
-    elseif get(a:response, 'type', '') ==# 'event'
-    \&& get(a:response, 'event', '') ==# 'syntaxDiag'
+    elseif get(a:response, 'type', '') is# 'event'
+    \&& get(a:response, 'event', '') is# 'syntaxDiag'
         call s:HandleTSServerDiagnostics(a:response, 'syntax')
     endif
 endfunction
@@ -313,17 +313,17 @@ endfunction
 function! s:RemapItemTypes(type_map, loclist) abort
     for l:item in a:loclist
         let l:key = l:item.type
-        \   . (get(l:item, 'sub_type', '') ==# 'style' ? 'S' : '')
+        \   . (get(l:item, 'sub_type', '') is# 'style' ? 'S' : '')
         let l:new_key = get(a:type_map, l:key, '')
 
-        if l:new_key ==# 'E'
-        \|| l:new_key ==# 'ES'
-        \|| l:new_key ==# 'W'
-        \|| l:new_key ==# 'WS'
-        \|| l:new_key ==# 'I'
+        if l:new_key is# 'E'
+        \|| l:new_key is# 'ES'
+        \|| l:new_key is# 'W'
+        \|| l:new_key is# 'WS'
+        \|| l:new_key is# 'I'
             let l:item.type = l:new_key[0]
 
-            if l:new_key ==# 'ES' || l:new_key ==# 'WS'
+            if l:new_key is# 'ES' || l:new_key is# 'WS'
                 let l:item.sub_type = 'style'
             elseif has_key(l:item, 'sub_type')
                 call remove(l:item, 'sub_type')
@@ -465,9 +465,9 @@ function! s:RunJob(options) abort
     \   'exit_cb': function('s:HandleExit'),
     \}
 
-    if l:output_stream ==# 'stderr'
+    if l:output_stream is# 'stderr'
         let l:job_options.err_cb = function('s:GatherOutput')
-    elseif l:output_stream ==# 'both'
+    elseif l:output_stream is# 'both'
         let l:job_options.out_cb = function('s:GatherOutput')
         let l:job_options.err_cb = function('s:GatherOutput')
     else
@@ -635,7 +635,7 @@ function! s:CheckWithLSP(buffer, linter) abort
     " Remember the linter this connection is for.
     let s:lsp_linter_map[l:id] = a:linter.name
 
-    let l:change_message = a:linter.lsp ==# 'tsserver'
+    let l:change_message = a:linter.lsp is# 'tsserver'
     \   ? ale#lsp#tsserver_message#Geterr(a:buffer)
     \   : ale#lsp#message#DidChange(a:buffer)
     let l:request_id = ale#lsp#Send(l:id, l:change_message, l:root)

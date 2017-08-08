@@ -21,7 +21,7 @@ function! ale_linters#yaml#swaglint#Handle(buffer, lines) abort
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:obj = {
-        \   'type': l:match[1] ==# 'error' ? 'E' : 'W',
+        \   'type': l:match[1] is# 'error' ? 'E' : 'W',
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
         \   'text': l:match[4],

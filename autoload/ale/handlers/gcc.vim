@@ -81,7 +81,7 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
                 let l:included_filename = ''
             endif
         elseif l:include_lnum > 0
-        \&& (empty(l:included_filename) || l:included_filename ==# l:match[1])
+        \&& (empty(l:included_filename) || l:included_filename is# l:match[1])
             " If we hit the first error after an include header, or the
             " errors below have the same name as the first filename we see,
             " then include these lines, and remember what that filename was.
@@ -96,7 +96,7 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
             let l:included_filename = ''
 
             if s:IsHeaderFile(bufname(bufnr('')))
-            \&& l:match[5][:len(s:pragma_error) - 1] ==# s:pragma_error
+            \&& l:match[5][:len(s:pragma_error) - 1] is# s:pragma_error
                 continue
             endif
 

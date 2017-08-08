@@ -45,9 +45,9 @@ function! ale_linters#dockerfile#hadolint#GetExecutable(buffer) abort
     let l:use_docker = ale#Var(a:buffer, 'dockerfile_hadolint_use_docker')
 
     " check for mandatory directives
-    if l:use_docker ==# 'never'
+    if l:use_docker is# 'never'
         return 'hadolint'
-    elseif l:use_docker ==# 'always'
+    elseif l:use_docker is# 'always'
         return 'docker'
     endif
 
@@ -62,7 +62,7 @@ endfunction
 
 function! ale_linters#dockerfile#hadolint#GetCommand(buffer) abort
     let l:command = ale_linters#dockerfile#hadolint#GetExecutable(a:buffer)
-    if l:command ==# 'docker'
+    if l:command is# 'docker'
         return 'docker run --rm -i ' . ale#Var(a:buffer, 'dockerfile_hadolint_docker_image')
     endif
     return 'hadolint -'

@@ -7,16 +7,16 @@ function! ale_linters#elm#make#Handle(buffer, lines) abort
     let l:temp_dir = l:is_windows ? $TMP : $TMPDIR
     let l:unparsed_lines = []
     for l:line in a:lines
-        if l:line[0] ==# '['
+        if l:line[0] is# '['
             let l:errors = json_decode(l:line)
 
             for l:error in l:errors
                 " Check if file is from the temp directory.
                 " Filters out any errors not related to the buffer.
                 if l:is_windows
-                    let l:file_is_buffer = l:error.file[0:len(l:temp_dir) - 1] ==? l:temp_dir
+                    let l:file_is_buffer = l:error.file[0:len(l:temp_dir) - 1] is? l:temp_dir
                 else
-                    let l:file_is_buffer = l:error.file[0:len(l:temp_dir) - 1] ==# l:temp_dir
+                    let l:file_is_buffer = l:error.file[0:len(l:temp_dir) - 1] is# l:temp_dir
                 endif
 
                 if l:file_is_buffer
@@ -25,7 +25,7 @@ function! ale_linters#elm#make#Handle(buffer, lines) abort
                     \    'col': l:error.region.start.column,
                     \    'end_lnum': l:error.region.end.line,
                     \    'end_col': l:error.region.end.column,
-                    \    'type': (l:error.type ==? 'error') ? 'E' : 'W',
+                    \    'type': (l:error.type is? 'error') ? 'E' : 'W',
                     \    'text': l:error.overview,
                     \    'detail': l:error.overview . "\n\n" . l:error.details
                     \})

@@ -19,7 +19,7 @@ function! ale_linters#scss#scsslint#Handle(buffer, lines) abort
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
         \   'text': l:match[4],
-        \   'type': l:match[3] ==# 'E' ? 'E' : 'W',
+        \   'type': l:match[3] is# 'E' ? 'E' : 'W',
         \})
     endfor
 

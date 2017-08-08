@@ -17,7 +17,7 @@ function! ale#loclist_jumping#FindNearest(direction, wrap) abort
     let l:search_item = {'lnum': l:pos[1], 'col': l:pos[2]}
 
     " When searching backwards, so we can find the next smallest match.
-    if a:direction ==# 'before'
+    if a:direction is# 'before'
         let l:loclist = reverse(copy(l:loclist))
     endif
 
@@ -36,11 +36,11 @@ function! ale#loclist_jumping#FindNearest(direction, wrap) abort
         \   l:search_item
         \)
 
-        if a:direction ==# 'before' && l:cmp_value < 0
+        if a:direction is# 'before' && l:cmp_value < 0
             return [l:item.lnum, l:item.col]
         endif
 
-        if a:direction ==# 'after' && l:cmp_value > 0
+        if a:direction is# 'after' && l:cmp_value > 0
             return [l:item.lnum, l:item.col]
         endif
     endfor

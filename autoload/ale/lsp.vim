@@ -190,17 +190,17 @@ function! ale#lsp#HandleOtherInitializeResponses(conn, response) abort
         return
     endif
 
-    if get(a:response, 'method', '') ==# ''
+    if get(a:response, 'method', '') is# ''
         if has_key(get(a:response, 'result', {}), 'capabilities')
             for [l:dir, l:project] in l:uninitialized_projects
                 call s:MarkProjectAsInitialized(a:conn, l:project)
             endfor
         endif
-    elseif get(a:response, 'method', '') ==# 'textDocument/publishDiagnostics'
+    elseif get(a:response, 'method', '') is# 'textDocument/publishDiagnostics'
         let l:filename = ale#path#FromURI(a:response.params.uri)
 
         for [l:dir, l:project] in l:uninitialized_projects
-            if l:filename[:len(l:dir) - 1] ==# l:dir
+            if l:filename[:len(l:dir) - 1] is# l:dir
                 call s:MarkProjectAsInitialized(a:conn, l:project)
             endif
         endfor
@@ -215,7 +215,7 @@ function! ale#lsp#HandleMessage(conn, message) abort
 
     " Call our callbacks.
     for l:response in l:response_list
-        if get(l:response, 'method', '') ==# 'initialize'
+        if get(l:response, 'method', '') is# 'initialize'
             call s:HandleInitializeResponse(a:conn, l:response)
         else
             call ale#lsp#HandleOtherInitializeResponses(a:conn, l:response)
@@ -304,7 +304,7 @@ function! ale#lsp#ConnectToAddress(address, project_root, callback) abort
         \})
     endif
 
-    if ch_status(l:conn.channnel) ==# 'fail'
+    if ch_status(l:conn.channnel) is# 'fail'
         return 0
     endif
 
@@ -319,7 +319,7 @@ endfunction
 function! s:SendMessageData(conn, data) abort
     if has_key(a:conn, 'executable')
         call ale#job#SendRaw(a:conn.id, a:data)
-    elseif has_key(a:conn, 'channel') && ch_status(a:conn.channnel) ==# 'open'
+    elseif has_key(a:conn, 'channel') && ch_status(a:conn.channnel) is# 'open'
         " Send the message to the server
         call ch_sendraw(a:conn.channel, a:data)
     else

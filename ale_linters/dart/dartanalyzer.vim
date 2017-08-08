@@ -22,7 +22,7 @@ function! ale_linters#dart#dartanalyzer#Handle(buffer, lines) abort
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
-        \   'type': l:match[1] ==# 'error' ? 'E' : 'W',
+        \   'type': l:match[1] is# 'error' ? 'E' : 'W',
         \   'text': l:match[6] . ': ' . l:match[2],
         \   'lnum': str2nr(l:match[4]),
         \   'col': str2nr(l:match[5]),

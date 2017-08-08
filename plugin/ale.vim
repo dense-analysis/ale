@@ -206,11 +206,11 @@ function! ALEInitAuGroups() abort
     augroup ALERunOnTextChangedGroup
         autocmd!
         if g:ale_enabled
-            if l:text_changed ==? 'always' || l:text_changed ==# '1'
+            if l:text_changed is? 'always' || l:text_changed is# '1'
                 autocmd TextChanged,TextChangedI * call ale#Queue(g:ale_lint_delay)
-            elseif l:text_changed ==? 'normal'
+            elseif l:text_changed is? 'normal'
                 autocmd TextChanged * call ale#Queue(g:ale_lint_delay)
-            elseif l:text_changed ==? 'insert'
+            elseif l:text_changed is? 'insert'
                 autocmd TextChangedI * call ale#Queue(g:ale_lint_delay)
             endif
         endif

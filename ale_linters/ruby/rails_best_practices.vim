@@ -30,7 +30,7 @@ function! ale_linters#ruby#rails_best_practices#GetCommand(buffer) abort
 
     let l:rails_root = ale#ruby#FindRailsRoot(a:buffer)
 
-    if l:rails_root ==? ''
+    if l:rails_root is? ''
         return ''
     endif
 

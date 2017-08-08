@@ -11,7 +11,7 @@ function! ale#handlers#cppcheck#HandleCppCheckFormat(buffer, lines) abort
         if ale#path#IsBufferPath(a:buffer, l:match[1])
             call add(l:output, {
             \   'lnum': str2nr(l:match[2]),
-            \   'type': l:match[3] ==# 'error' ? 'E' : 'W',
+            \   'type': l:match[3] is# 'error' ? 'E' : 'W',
             \   'text': l:match[4],
             \})
         endif

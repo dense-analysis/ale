@@ -21,7 +21,7 @@ function! ale_linters#perl#perlcritic#GetProfile(buffer) abort
 
     " first see if we've been overridden
     let l:profile = ale#Var(a:buffer, 'perl_perlcritic_profile')
-    if l:profile ==? ''
+    if l:profile is? ''
         return ''
     endif
 

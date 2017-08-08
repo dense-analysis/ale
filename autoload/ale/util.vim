@@ -193,7 +193,7 @@ endfunction
 " The buffer number is required for determining the fileformat setting for
 " the buffer.
 function! ale#util#Writefile(buffer, lines, filename) abort
-    let l:corrected_lines = getbufvar(a:buffer, '&fileformat') ==# 'dos'
+    let l:corrected_lines = getbufvar(a:buffer, '&fileformat') is# 'dos'
     \   ? map(copy(a:lines), 'v:val . "\r"')
     \   : a:lines
 

@@ -168,9 +168,9 @@ function! ale#sign#GetSignType(sublist) abort
     let l:highest_level = 100
 
     for l:item in a:sublist
-        let l:level = (l:item.type ==# 'I' ? 2 : l:item.type ==# 'W')
+        let l:level = (l:item.type is# 'I' ? 2 : l:item.type is# 'W')
 
-        if get(l:item, 'sub_type', '') ==# 'style'
+        if get(l:item, 'sub_type', '') is# 'style'
             let l:level += 10
         endif
 

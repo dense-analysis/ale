@@ -47,7 +47,7 @@ function! ale#handlers#rust#HandleRustErrorsForFile(buffer, full_filename, lines
         for l:span in l:error.spans
             if (
             \   l:span.is_primary
-            \   && (ale#path#IsBufferPath(a:buffer, l:span.file_name) || l:span.file_name ==# '<anon>')
+            \   && (ale#path#IsBufferPath(a:buffer, l:span.file_name) || l:span.file_name is# '<anon>')
             \)
                 call add(l:output, {
                 \   'lnum': l:span.line_start,
