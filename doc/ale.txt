@@ -1180,6 +1180,12 @@ ale#Queue(delay, [linting_flag, buffer_number])                   *ale#Queue()*
   An optional `buffer_number` argument can be given for specifying the buffer
   to check. The active buffer (`bufnr('')`) will be checked by default.
 
+                                                                *ale-cool-down*
+  If an exception is thrown when queuing/running ALE linters, ALE will enter
+  a cool down period where it will stop checking anything for a short period
+  of time. This is to prevent ALE from seriously annoying users if a linter
+  is broken, or when developing ALE itself.
+
 
 ale#engine#CreateDirectory(buffer)               *ale#engine#CreateDirectory()*
 
