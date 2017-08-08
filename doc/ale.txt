@@ -1166,7 +1166,7 @@ ALEInfoToClipboard                                         *ALEInfoToClipboard*
 ===============================================================================
 7. API                                                                *ale-api*
 
-ale#Queue(delay, [linting_flag])                                  *ale#Queue()*
+ale#Queue(delay, [linting_flag, buffer_number])                   *ale#Queue()*
 
   Run linters for the current buffer, based on the filetype of the buffer,
   with a given `delay`. A `delay` of `0` will run the linters immediately.
@@ -1176,6 +1176,9 @@ ale#Queue(delay, [linting_flag])                                  *ale#Queue()*
   An optional `linting_flag` argument can be given. If `linting_flag`
   is `'lint_file'`, then linters where the `lint_file` option is set to `1` will be
   run. Linters with `lint_file` set to `1` are not run by default.
+
+  An optional `buffer_number` argument can be given for specifying the buffer
+  to check. The active buffer (`bufnr('')`) will be checked by default.
 
 
 ale#engine#CreateDirectory(buffer)               *ale#engine#CreateDirectory()*
