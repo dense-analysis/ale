@@ -17,8 +17,7 @@ function! s:ShouldOpen(buffer) abort
     let l:val = ale#Var(a:buffer, 'open_list')
     let l:saved = getbufvar(a:buffer, 'ale_save_event_fired', 0)
 
-    return (type(l:val) == type(1) && l:val == 1)
-    \   || (type(l:val) == type('') && l:val is# 'on_save' && l:saved)
+    return l:val is 1 || (l:val is# 'on_save' && l:saved)
 endfunction
 
 function! ale#list#SetLists(buffer, loclist) abort
