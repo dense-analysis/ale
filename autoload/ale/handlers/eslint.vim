@@ -82,7 +82,7 @@ function! ale#handlers#eslint#Handle(buffer, lines) abort
         let l:type = 'Error'
         let l:text = l:match[3]
 
-        if l:text == 'File ignored because of a matching ignore pattern. Use "--no-ignore" to override.'
+        if l:text is# 'File ignored because of a matching ignore pattern. Use "--no-ignore" to override.'
             continue
         endif
 
