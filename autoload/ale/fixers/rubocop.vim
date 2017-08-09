@@ -7,7 +7,8 @@ function! ale#fixers#rubocop#GetCommand(buffer) abort
 
     return ale#Escape(l:executable) . l:exec_args
     \   . (!empty(l:config) ? ' --config ' . ale#Escape(l:config) : '')
-    \   . ' --auto-correct %t'
+    \   . ' --auto-correct %t '
+    \   . ale#Var(a:buffer, 'ruby_rubocop_options')
 
 endfunction
 
