@@ -50,6 +50,16 @@ g:ale_javascript_eslint_use_global         *g:ale_javascript_eslint_use_global*
   See |ale-integrations-local-executables|
 
 
+g:ale_javascript_eslint_suppress_eslintignore
+                                *g:ale_javascript_eslint_suppress_eslintignore*
+                                *b:ale_javascript_eslint_suppress_eslintignore*
+  Type: |Number|
+  Default: `0`
+
+  This variable can be set to disable the warning that linting is disabled on
+  the current file due to being covered by `.eslintignore`.
+
+
 ===============================================================================
 prettier                                              *ale-javascript-prettier*
 
