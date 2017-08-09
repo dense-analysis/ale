@@ -117,7 +117,7 @@ name. That seems to be the fairest way to arrange this table.
 | SML | [smlnj](http://www.smlnj.org/) |
 | Stylus | [stylelint](https://github.com/stylelint/stylelint) |
 | SQL | [sqlint](https://github.com/purcell/sqlint) |
-| Swift | [swiftlint](https://swift.org/) |
+| Swift | [swiftlint](https://github.com/realm/SwiftLint) |
 | Tcl | [nagelfar](http://nagelfar.sourceforge.net)|
 | Texinfo | [proselint](http://proselint.com/)|
 | Text^ | [proselint](http://proselint.com/), [vale](https://github.com/ValeLint/vale) |
