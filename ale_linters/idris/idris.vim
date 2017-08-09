@@ -5,8 +5,9 @@ function! ale_linters#idris#idris#Handle(buffer, lines) abort
     " This was copied almost verbatim from ale#handlers#haskell#HandleGHCFormat
 
     " Look for lines like the following:
-    " blah.idr:2:6:When checking right hand side of main with expected type"
-    let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):(\d+):(.*)?$'
+    " foo.idr:2:6:When checking right hand side of main with expected type
+    " bar.idr:11:11-13:
+    let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):(\d+)(-\d+)?:(.*)?$'
     let l:output = []
 
     let l:corrected_lines = []
@@ -35,14 +36,14 @@ function! ale_linters#idris#idris#Handle(buffer, lines) abort
             continue
         endif
 
-        let l:errors = matchlist(l:match[4], '\v([wW]arning|[eE]rror): ?(.*)')
+        let l:errors = matchlist(l:match[5], '\v([wW]arning|[eE]rror) - ?(.*)')
 
         if len(l:errors) > 0
           let l:ghc_type = l:errors[1]
           let l:text = l:errors[2]
         else
           let l:ghc_type = ''
-          let l:text = l:match[4][:0] is# ' ' ? l:match[4][1:] : l:match[4]
+          let l:text = l:match[5][:0] is# ' ' ? l:match[5][1:] : l:match[5]
         endif
 
         if l:ghc_type is? 'Warning'
