@@ -1,0 +1,32 @@
+Before:
+  runtime ale_linters/idris/idris.vim
+
+Execute(The idris handler should parse idris output correctly):
+  call ale#test#SetFilename('/tmp/foo.idr')
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 4,
+  \     'col': 5,
+  \     'type': 'E',
+  \     'text': 'When checking right hand side of main with expected type IO () When checking an application of function Prelude.Monad.>>=: Type mismatch between IO () (Type of putStrLn _) and _ -> _ (Is putStrLn _ applied to too many arguments?) Specifically: Type mismatch between IO and \uv => _ -> uv'
+  \   }
+  \ ],
+  \ ale_linters#idris#idris#Handle(bufnr(''), [
+  \ '/tmp/foo.idr:4:5:',
+  \ 'When checking right hand side of main with expected type',
+  \ '        IO ()',
+  \ '',
+  \ 'When checking an application of function Prelude.Monad.>>=:',
+  \ '        Type mismatch between',
+  \ '                IO () (Type of putStrLn _)',
+  \ '        and',
+  \ '                _ -> _ (Is putStrLn _ applied to too many arguments?)',
+  \ '',
+  \ '        Specifically:',
+  \ '                Type mismatch between',
+  \ '                        IO',
+  \ '                and',
+  \ '                        \uv => _ -> uv',
+  \ ])
