@@ -2,6 +2,8 @@
 " Description: Functions for integrating with C-family linters.
 
 function! ale#c#FindProjectRoot(buffer) abort
+    let l:nearest_path = ''
+
     for l:project_filename in ['.git/HEAD', 'configure', 'Makefile', 'CMakeLists.txt']
         let l:full_path = ale#path#FindNearestFile(a:buffer, l:project_filename)
 
@@ -13,11 +15,13 @@ function! ale#c#FindProjectRoot(buffer) abort
                 let l:path = fnamemodify(l:path, ':h')
             endif
 
-            return l:path
+	    if empty(l:nearest_path) || (len(l:path) > len(l:nearest_path))
+                let l:nearest_path = l:path
+	    endif
         endif
     endfor
 
-    return ''
+    return l:nearest_path
 endfunction
 
 " Given a buffer number, search for a project root, and output a List
