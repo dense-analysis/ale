@@ -82,6 +82,10 @@ function! ale#handlers#eslint#Handle(buffer, lines) abort
         let l:type = 'Error'
         let l:text = l:match[3]
 
+        if l:text == 'File ignored because of a matching ignore pattern. Use "--no-ignore" to override.'
+            continue
+        endif
+
         " Take the error type from the output if available.
         if !empty(l:match[4])
             let l:type = split(l:match[4], '/')[0]
