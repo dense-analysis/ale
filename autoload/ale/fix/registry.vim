@@ -72,6 +72,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['css', 'sass', 'scss', 'stylus'],
 \       'description': 'Fix stylesheet files using stylelint --fix.',
 \   },
+\   'swiftformat': {
+\       'function': 'ale#fixers#swiftformat#Fix',
+\       'suggested_filetypes': ['swift'],
+\       'description': 'Apply SwiftFormat to a file.',
+\   },
 \}
 
 " Reset the function registry to the default entries.

@@ -224,7 +224,7 @@ The following languages and tools are supported.
 * SML: 'smlnj'
 * Stylus: 'stylelint'
 * SQL: 'sqlint'
-* Swift: 'swiftlint'
+* Swift: 'swiftlint', 'swiftformat'
 * Texinfo: 'proselint'
 * Text: 'proselint', 'vale'
 * TypeScript: 'eslint', 'tslint', 'tsserver', 'typecheck'
