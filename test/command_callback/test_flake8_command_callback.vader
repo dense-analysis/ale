@@ -19,12 +19,12 @@ Execute(The flake8 callbacks should return the correct default values):
   \ '''flake8'' --version',
   \ ale_linters#python#flake8#VersionCheck(bufnr(''))
   AssertEqual
-  \ '''flake8''  --format=default --stdin-display-name %s -',
+  \ '''flake8'' --format=default --stdin-display-name %s -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
   " Try with older versions.
   call ale_linters#python#flake8#ClearVersionCache()
   AssertEqual
-  \ '''flake8''  --format=default -',
+  \ '''flake8'' --format=default -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
 
 Execute(The flake8 command callback should let you set options):
@@ -48,7 +48,7 @@ Execute(You should be able to set a custom executable and it should be escaped):
   \ '''executable with spaces'' --version',
   \ ale_linters#python#flake8#VersionCheck(bufnr(''))
   AssertEqual
-  \ '''executable with spaces''  --format=default --stdin-display-name %s -',
+  \ '''executable with spaces'' --format=default --stdin-display-name %s -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
 
 Execute(The flake8 callbacks should detect virtualenv directories):
@@ -62,7 +62,7 @@ Execute(The flake8 callbacks should detect virtualenv directories):
   \ ale_linters#python#flake8#VersionCheck(bufnr(''))
   AssertEqual
   \   '''' . g:dir . '/python_paths/with_virtualenv/env/bin/flake8'''
-  \   . '  --format=default --stdin-display-name %s -',
+  \   . ' --format=default --stdin-display-name %s -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
 
 Execute(The FindProjectRoot should detect the project root directory for namespace package via Manifest.in):
