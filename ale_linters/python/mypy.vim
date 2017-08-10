@@ -37,7 +37,7 @@ function! ale_linters#python#mypy#Handle(buffer, lines) abort
     let l:buffer_filename = expand('#' . a:buffer . ':p')
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        if l:buffer_filename[-len(l:match[1]):] !=# l:match[1]
+        if l:buffer_filename[-len(l:match[1]):] isnot# l:match[1]
             continue
         endif
 

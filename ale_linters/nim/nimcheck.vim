@@ -12,7 +12,7 @@ function! ale_linters#nim#nimcheck#Handle(buffer, lines) abort
         "       module names.
 
         let l:temp_buffer_filename = fnamemodify(l:match[1], ':p:t')
-        if l:buffer_filename !=# '' && l:temp_buffer_filename !=# l:buffer_filename
+        if l:buffer_filename isnot# '' && l:temp_buffer_filename isnot# l:buffer_filename
             continue
         endif
 

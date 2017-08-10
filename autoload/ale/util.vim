@@ -136,7 +136,7 @@ function! s:LoadArgCount(function) abort
     endif
 
     let l:match = matchstr(split(l:output, "\n")[0], '\v\([^)]+\)')[1:-2]
-    let l:arg_list = filter(split(l:match, ', '), 'v:val !=# ''...''')
+    let l:arg_list = filter(split(l:match, ', '), 'v:val isnot# ''...''')
 
     return len(l:arg_list)
 endfunction

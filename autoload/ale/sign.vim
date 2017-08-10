@@ -40,7 +40,7 @@ if !hlexists('ALESignColumnWithoutErrors')
 
         if !empty(l:match)
             execute 'highlight link ALESignColumnWithoutErrors ' . l:match[1]
-        elseif l:highlight_syntax !=# 'cleared'
+        elseif l:highlight_syntax isnot# 'cleared'
             execute 'highlight ALESignColumnWithoutErrors ' . l:highlight_syntax
         endif
     endfunction

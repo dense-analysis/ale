@@ -60,8 +60,8 @@ function! ale#linter#PreProcess(linter) abort
     endif
 
     let l:needs_address = l:obj.lsp is# 'socket'
-    let l:needs_executable = l:obj.lsp !=# 'socket'
-    let l:needs_command = l:obj.lsp !=# 'socket'
+    let l:needs_executable = l:obj.lsp isnot# 'socket'
+    let l:needs_command = l:obj.lsp isnot# 'socket'
     let l:needs_lsp_details = !empty(l:obj.lsp)
 
     if empty(l:obj.lsp)
@@ -377,7 +377,7 @@ function! ale#linter#StartLSP(buffer, linter, callback) abort
     let l:address = ''
     let l:root = ale#util#GetFunction(a:linter.project_root_callback)(a:buffer)
 
-    if empty(l:root) && a:linter.lsp !=# 'tsserver'
+    if empty(l:root) && a:linter.lsp isnot# 'tsserver'
         " If there's no project root, then we can't check files with LSP,
         " unless we are using tsserver, which doesn't use project roots.
         return {}

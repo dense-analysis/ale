@@ -236,7 +236,7 @@ function! ALEInitAuGroups() abort
             " opening a buffer. The FileType will fire when buffers are opened.
             autocmd FileType *
             \   if has_key(b:, 'ale_original_filetype')
-            \   && b:ale_original_filetype !=# expand('<amatch>')
+            \   && b:ale_original_filetype isnot# expand('<amatch>')
             \|      call ale#Queue(300, 'lint_file')
             \|  endif
         endif

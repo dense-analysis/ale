@@ -135,7 +135,7 @@ Execute (g:ale_lint_on_filetype_changed = 1 should bind FileType, and required b
   \ 'BufReadPost * let b:ale_original_filetype = &filetype',
   \ 'FileType * '
   \   . 'if has_key(b:, ''ale_original_filetype'') '
-  \   . '&& b:ale_original_filetype !=# expand(''<amatch>'')'
+  \   . '&& b:ale_original_filetype isnot# expand(''<amatch>'')'
   \   . '| call ale#Queue(300, ''lint_file'')'
   \   . '| endif',
   \], CheckAutocmd('ALERunOnFiletypeChangeGroup')

@@ -128,14 +128,14 @@ function! s:HandleLoclist(linter_name, buffer, loclist) abort
 
     " Remove this linter from the list of active linters.
     " This may have already been done when the job exits.
-    call filter(l:buffer_info.active_linter_list, 'v:val !=# a:linter_name')
+    call filter(l:buffer_info.active_linter_list, 'v:val isnot# a:linter_name')
 
     " Make some adjustments to the loclists to fix common problems, and also
     " to set default values for loclist items.
     let l:linter_loclist = ale#engine#FixLocList(a:buffer, a:linter_name, a:loclist)
 
     " Remove previous items for this linter.
-    call filter(g:ale_buffer_info[a:buffer].loclist, 'v:val.linter_name !=# a:linter_name')
+    call filter(g:ale_buffer_info[a:buffer].loclist, 'v:val.linter_name isnot# a:linter_name')
     " Add the new items.
     call extend(g:ale_buffer_info[a:buffer].loclist, l:linter_loclist)
 
@@ -169,8 +169,8 @@ function! s:HandleExit(job_id, exit_code) abort
     " Remove this job from the list.
     call ale#job#Stop(a:job_id)
     call remove(s:job_info_map, a:job_id)
-    call filter(g:ale_buffer_info[l:buffer].job_list, 'v:val !=# a:job_id')
-    call filter(g:ale_buffer_info[l:buffer].active_linter_list, 'v:val !=# l:linter.name')
+    call filter(g:ale_buffer_info[l:buffer].job_list, 'v:val isnot# a:job_id')
+    call filter(g:ale_buffer_info[l:buffer].active_linter_list, 'v:val isnot# l:linter.name')
 
     " Stop here if we land in the handle for a job completing if we're in
     " a sandbox.

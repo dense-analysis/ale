@@ -58,7 +58,7 @@ function! ale#Queue(delay, ...) abort
 endfunction
 
 function! s:ALEQueueImpl(delay, linting_flag, buffer) abort
-    if a:linting_flag !=# '' && a:linting_flag !=# 'lint_file'
+    if a:linting_flag isnot# '' && a:linting_flag isnot# 'lint_file'
         throw "linting_flag must be either '' or 'lint_file'"
     endif
 

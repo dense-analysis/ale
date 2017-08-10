@@ -335,7 +335,7 @@ function! ale#fix#Fix(...) abort
 
     let l:fixing_flag = get(a:000, 0, '')
 
-    if l:fixing_flag !=# '' && l:fixing_flag !=# 'save_file'
+    if l:fixing_flag isnot# '' && l:fixing_flag isnot# 'save_file'
         throw "fixing_flag must be either '' or 'save_file'"
     endif
 

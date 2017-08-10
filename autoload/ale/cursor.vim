@@ -72,7 +72,7 @@ function! ale#cursor#EchoCursorWarning(...) abort
     endif
 
     " Only echo the warnings in normal mode, otherwise we will get problems.
-    if mode() !=# 'n'
+    if mode() isnot# 'n'
         return
     endif
 
@@ -118,7 +118,7 @@ function! ale#cursor#ShowCursorDetail() abort
     endif
 
     " Only echo the warnings in normal mode, otherwise we will get problems.
-    if mode() !=# 'n'
+    if mode() isnot# 'n'
         return
     endif
 

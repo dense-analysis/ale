@@ -296,7 +296,7 @@ function! ale#lsp#ConnectToAddress(address, project_root, callback) abort
     " Get the current connection or a new one.
     let l:conn = !empty(l:conn) ? l:conn : s:NewConnection()
 
-    if !has_key(l:conn, 'channel') || ch_status(l:conn.channel) !=# 'open'
+    if !has_key(l:conn, 'channel') || ch_status(l:conn.channel) isnot# 'open'
         let l:conn.channnel = ch_open(a:address, {
         \   'mode': 'raw',
         \   'waittime': 0,

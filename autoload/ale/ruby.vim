@@ -10,7 +10,7 @@ function! ale#ruby#FindRailsRoot(buffer) abort
         \   ':h:h'
         \)
 
-        if l:dir !=# '.'
+        if l:dir isnot# '.'
         \&& isdirectory(l:dir . '/app')
         \&& isdirectory(l:dir . '/config')
         \&& isdirectory(l:dir . '/db')
