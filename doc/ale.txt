@@ -204,7 +204,7 @@ The following languages and tools are supported.
 * nroff: 'proselint'
 * Objective-C: 'clang'
 * Objective-C++: 'clang'
-* OCaml: 'merlin' (see |ale-linter-integration-ocaml-merlin|)
+* OCaml: 'merlin' (see |ale-ocaml-merlin|)
 * Perl: 'perl' (-c flag), 'perlcritic'
 * PHP: 'hack', 'langserver', 'php' (-l flag), 'phpcs', 'phpmd', 'phpstan'
 * Pod: 'proselint'

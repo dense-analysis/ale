@@ -63,7 +63,7 @@ g:ale_php_phpcs_use_global                         *g:ale_php_phpcs_use_global*
   See |ale-integrations-local-executables|
 
 
-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 phpmd                                                           *ale-php-phpmd*
 
 g:ale_php_phpmd_ruleset                               *g:ale_php_phpmd_ruleset*
@@ -75,8 +75,8 @@ g:ale_php_phpmd_ruleset                               *g:ale_php_phpmd_ruleset*
   the available phpmd rulesets
 
 
-------------------------------------------------------------------------------
-phpstan                                                          *ale-php-stan*
+-------------------------------------------------------------------------------
+phpstan                                                       *ale-php-phpstan*
 
 g:ale_php_phpstan_executable                     *g:ale_php_phpstan_executable*
                                                  *b:ale_php_phpstan_executable*
