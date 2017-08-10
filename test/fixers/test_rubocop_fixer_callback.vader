@@ -1,8 +1,10 @@
 Before:
   Save g:ale_ruby_rubocop_executable
+  Save g:ale_ruby_rubocop_options
 
   " Use an invalid global executable, so we don't match it.
   let g:ale_ruby_rubocop_executable = 'xxxinvalid'
+  let g:ale_ruby_rubocop_options = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
   silent cd ..
@@ -21,7 +23,7 @@ Execute(The rubocop callback should return the correct default values):
   \ {
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
-  \     . ' --auto-correct %t ',
+  \     . ' --auto-correct %t',
   \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))
 
@@ -33,7 +35,7 @@ Execute(The rubocop callback should include configuration files):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
   \     . ' --config ' . ale#Escape(g:dir . '/ruby_paths/with_config/.rubocop.yml')
-  \     . ' --auto-correct %t ',
+  \     . ' --auto-correct %t',
   \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))
 
@@ -46,6 +48,7 @@ Execute(The rubocop callback should include custom rubocop options):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
   \     . ' --config ' . ale#Escape(g:dir . '/ruby_paths/with_config/.rubocop.yml')
-  \     . ' --auto-correct %t --except Lint/Debugger',
+  \     . ' --except Lint/Debugger'
+  \     . ' --auto-correct %t',
   \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))
