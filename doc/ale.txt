@@ -49,6 +49,8 @@ CONTENTS                                                         *ale-contents*
     html..................................|ale-html-options|
       htmlhint............................|ale-html-htmlhint|
       tidy................................|ale-html-tidy|
+    idris.................................|ale-idris-options|
+      idris...............................|ale-idris-idris|
     java..................................|ale-java-options|
       checkstyle..........................|ale-java-checkstyle|
       javac...............................|ale-java-javac|
@@ -191,6 +193,7 @@ The following languages and tools are supported.
 * Handlebars: 'ember-template-lint'
 * Haskell: 'ghc', 'stack-ghc', 'stack-build', 'ghc-mod', 'stack-ghc-mod', 'hlint', 'hdevtools'
 * HTML: 'HTMLHint', 'proselint', 'tidy'
+* Idris: 'idris'
 * Java: 'javac'
 * JavaScript: 'eslint', 'jscs', 'jshint', 'flow', 'prettier', 'prettier-eslint', 'xo'
 * JSON: 'jsonlint'
