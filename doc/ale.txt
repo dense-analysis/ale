@@ -287,8 +287,8 @@ g:ale_echo_msg_error_str                             *g:ale_echo_msg_error_str*
   Default: `Error`
 
   The string used for error severity in the echoed message.
-  Note |`g:ale_echo_cursor`| should be set to 1
-  Note |`g:ale_echo_msg_format`| should contain the `%severity%` handler
+  Note |g:ale_echo_cursor| should be set to 1
+  Note |g:ale_echo_msg_format| should contain the `%severity%` handler
 
 
 g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
@@ -300,7 +300,7 @@ g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
   error message itself, and it can contain the following handlers:
   - `%linter%` for linter's name
   - `%severity%` for the type of severity
-  Note |`g:ale_echo_cursor`| should be setted to 1
+  Note |g:ale_echo_cursor| should be setted to 1
 
 
 g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
@@ -309,8 +309,8 @@ g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
   Default: `Warning`
 
   The string used for warning severity in the echoed message.
-  Note |`g:ale_echo_cursor`| should be set to 1
-  Note |`g:ale_echo_msg_format`| should contain the `%severity%` handler
+  Note |g:ale_echo_cursor| should be set to 1
+  Note |g:ale_echo_msg_format| should contain the `%severity%` handler
 
 
 g:ale_emit_conflict_warnings                     *g:ale_emit_conflict_warnings*
