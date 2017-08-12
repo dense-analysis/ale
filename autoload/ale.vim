@@ -5,15 +5,31 @@
 let s:lint_timer = -1
 let s:queued_buffer_number = -1
 let s:should_lint_file_for_buffer = {}
-let s:queue_error_delay_ms = 1000 * 60 * 2
+let s:error_delay_ms = 1000 * 60 * 2
 
-if !exists('s:dont_queue_until')
-    let s:dont_queue_until = -1
-endif
+let s:timestamp_map = {}
 
-if !exists('s:dont_lint_until')
-    let s:dont_lint_until = -1
-endif
+" Given a key for a script variable for tracking the time to wait until
+" a given function should be called, a funcref for a function to call, and
+" a List of arguments, call the function and return whatever value it returns.
+"
+" If the function throws an exception, then the function will not be called
+" for a while, and 0 will be returned instead.
+function! ale#CallWithCooldown(timestamp_key, func, arglist) abort
+    let l:now = ale#util#ClockMilliseconds()
+
+    if l:now < get(s:timestamp_map, a:timestamp_key, -1)
+        return 0
+    endif
+
+    let s:timestamp_map[a:timestamp_key] = l:now + s:error_delay_ms
+
+    let l:return_value = call(a:func, a:arglist)
+
+    let s:timestamp_map[a:timestamp_key] = -1
+
+    return l:return_value
+endfunction
 
 " Return 1 if a file is too large for ALE to handle.
 function! ale#FileTooLarge() abort
@@ -40,21 +56,15 @@ function! ale#Queue(delay, ...) abort
         throw 'too many arguments!'
     endif
 
-    let l:now = ale#util#ClockMilliseconds()
-
-    if l:now < s:dont_queue_until
-        return
-    endif
-
-    let s:dont_queue_until = l:now + s:queue_error_delay_ms
-
     " Default linting_flag to ''
     let l:linting_flag = get(a:000, 0, '')
     let l:buffer = get(a:000, 1, bufnr(''))
 
-    call s:ALEQueueImpl(a:delay, l:linting_flag, l:buffer)
-
-    let s:dont_queue_until = -1
+    return ale#CallWithCooldown(
+    \   'dont_queue_until',
+    \   function('s:ALEQueueImpl'),
+    \   [a:delay, l:linting_flag, l:buffer],
+    \)
 endfunction
 
 function! s:ALEQueueImpl(delay, linting_flag, buffer) abort
@@ -114,17 +124,11 @@ function! ale#Lint(...) abort
         let l:buffer = bufnr('')
     endif
 
-    let l:now = ale#util#ClockMilliseconds()
-
-    if l:now < s:dont_lint_until
-        return
-    endif
-
-    let s:dont_lint_until = l:now + s:queue_error_delay_ms
-
-    call s:ALELintImpl(l:buffer)
-
-    let s:dont_lint_until = -1
+    return ale#CallWithCooldown(
+    \   'dont_lint_until',
+    \   function('s:ALELintImpl'),
+    \   [l:buffer],
+    \)
 endfunction
 
 function! s:ALELintImpl(buffer) abort
@@ -152,8 +156,7 @@ function! ale#ResetLintFileMarkers() abort
 endfunction
 
 function! ale#ResetErrorDelays() abort
-    let s:dont_queue_until = -1
-    let s:dont_lint_until = -1
+    let s:timestamp_map = {}
 endfunction
 
 let g:ale_has_override = get(g:, 'ale_has_override', {})

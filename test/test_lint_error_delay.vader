@@ -16,3 +16,11 @@ Execute(ALE should stop queuing for a while after exceptions are thrown):
 Execute(ALE should stop linting for a while after exceptions are thrown):
   AssertThrows call ale#Lint()
   call ale#Lint()
+
+Execute(ALE should stop queuing echo messages for a while after exceptions are thrown):
+  AssertThrows call ale#cursor#EchoCursorWarningWithDelay()
+  call ale#cursor#EchoCursorWarningWithDelay()
+
+Execute(ALE should stop echoing messages for a while after exceptions are thrown):
+  AssertThrows call ale#cursor#EchoCursorWarning()
+  call ale#cursor#EchoCursorWarning()
