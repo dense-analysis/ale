@@ -2,13 +2,13 @@ Before:
   let g:ale_buffer_info = {
   \ bufnr('%'): {
   \   'loclist': [
-  \     {'lnum': 1, 'col': 2},
-  \     {'lnum': 1, 'col': 3},
-  \     {'lnum': 2, 'col': 1},
-  \     {'lnum': 2, 'col': 2},
-  \     {'lnum': 2, 'col': 3},
-  \     {'lnum': 2, 'col': 6},
-  \     {'lnum': 2, 'col': 700},
+  \     {'bufnr': bufnr(''), 'lnum': 1, 'col': 2},
+  \     {'bufnr': bufnr(''), 'lnum': 1, 'col': 3},
+  \     {'bufnr': bufnr(''), 'lnum': 2, 'col': 1},
+  \     {'bufnr': bufnr(''), 'lnum': 2, 'col': 2},
+  \     {'bufnr': bufnr(''), 'lnum': 2, 'col': 3},
+  \     {'bufnr': bufnr(''), 'lnum': 2, 'col': 6},
+  \     {'bufnr': bufnr(''), 'lnum': 2, 'col': 700},
   \   ],
   \ },
   \}

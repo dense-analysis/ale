@@ -14,7 +14,7 @@ function! ale#loclist_jumping#FindNearest(direction, wrap) abort
     let l:info = get(g:ale_buffer_info, bufnr('%'), {'loclist': []})
     " This list will have already been sorted.
     let l:loclist = l:info.loclist
-    let l:search_item = {'lnum': l:pos[1], 'col': l:pos[2]}
+    let l:search_item = {'bufnr': bufnr(''), 'lnum': l:pos[1], 'col': l:pos[2]}
 
     " When searching backwards, so we can find the next smallest match.
     if a:direction is# 'before'
@@ -30,6 +30,7 @@ function! ale#loclist_jumping#FindNearest(direction, wrap) abort
         " cursor to a line without changing the column, in some cases.
         let l:cmp_value = ale#util#LocItemCompare(
         \   {
+        \       'bufnr': bufnr(''),
         \       'lnum': l:item.lnum,
         \       'col': min([max([l:item.col, 1]), len(getline(l:item.lnum))]),
         \   },
