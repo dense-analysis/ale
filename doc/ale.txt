@@ -40,6 +40,8 @@ CONTENTS                                                         *ale-contents*
       gcc.................................|ale-fortran-gcc|
     fusionscript..........................|ale-fuse-options|
       fusion-lint.........................|ale-fuse-fusionlint|
+    glsl..................................ale-glsl-options
+      glslang.............................ale-glsl-glslang
     go....................................|ale-go-options|
       gometalinter........................|ale-go-gometalinter|
     handlebars............................|ale-handlebars-options|
@@ -187,8 +189,9 @@ The following languages and tools are supported.
 * Elm: 'elm-make'
 * Erlang: 'erlc'
 * Fortran: 'gcc'
-* Go: 'gofmt', 'go vet', 'golint', 'go build', 'gosimple', 'staticcheck'
 * FusionScript: 'fusion-lint'
+* GLSL: 'glslang'
+* Go: 'gofmt', 'go vet', 'golint', 'go build', 'gosimple', 'staticcheck'
 * Haml: 'hamllint'
 * Handlebars: 'ember-template-lint'
 * Haskell: 'ghc', 'stack-ghc', 'stack-build', 'ghc-mod', 'stack-ghc-mod', 'hlint', 'hdevtools'
