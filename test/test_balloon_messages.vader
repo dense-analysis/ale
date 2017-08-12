@@ -3,16 +3,19 @@ Before:
 
   let g:ale_buffer_info[347] = {'loclist': [
   \ {
+  \   'bufnr': 347,
   \   'lnum': 1,
   \   'col': 10,
   \   'text': 'Missing semicolon. (semi)',
   \ },
   \ {
+  \   'bufnr': 347,
   \   'lnum': 2,
   \   'col': 10,
   \   'text': 'Infix operators must be spaced. (space-infix-ops)'
   \ },
   \ {
+  \   'bufnr': 347,
   \   'lnum': 2,
   \   'col': 15,
   \   'text': 'Missing radix parameter (radix)'
