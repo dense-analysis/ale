@@ -22,19 +22,27 @@ function! ale#util#GetFunction(string_or_ref) abort
 endfunction
 
 function! ale#util#LocItemCompare(left, right) abort
-    if a:left['lnum'] < a:right['lnum']
+    if a:left.bufnr < a:right.bufnr
         return -1
     endif
 
-    if a:left['lnum'] > a:right['lnum']
+    if a:left.bufnr > a:right.bufnr
         return 1
     endif
 
-    if a:left['col'] < a:right['col']
+    if a:left.lnum < a:right.lnum
         return -1
     endif
 
-    if a:left['col'] > a:right['col']
+    if a:left.lnum > a:right.lnum
+        return 1
+    endif
+
+    if a:left.col < a:right.col
+        return -1
+    endif
+
+    if a:left.col > a:right.col
         return 1
     endif
 
