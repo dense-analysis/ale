@@ -13,16 +13,13 @@ function! ale#loclist_jumping#FindNearest(direction, wrap) abort
     let l:buffer = bufnr('')
     let l:pos = getcurpos()
     let l:info = get(g:ale_buffer_info, bufnr('%'), {'loclist': []})
-    " This list will have already been sorted.
-    let l:loclist = l:info.loclist
+    " Copy the list and filter to only the items in this buffer.
+    let l:loclist = filter(copy(l:info.loclist), 'v:val.bufnr == l:buffer')
     let l:search_item = {'bufnr': l:buffer, 'lnum': l:pos[1], 'col': l:pos[2]}
-
-    " Copy the List and filter it to only items in this buffer.
-    let l:loclist = filter(copy(l:loclist), 'v:val.bufnr == l:buffer')
 
     " When searching backwards, so we can find the next smallest match.
     if a:direction is# 'before'
-        let l:loclist = reverse(l:loclist)
+        call reverse(l:loclist)
     endif
 
     " Look for items before or after the current position.
@@ -76,8 +73,7 @@ endfunction
 function! ale#loclist_jumping#JumpToIndex(index) abort
     let l:buffer = bufnr('')
     let l:info = get(g:ale_buffer_info, l:buffer, {'loclist': []})
-    let l:loclist = l:info.loclist
-    let l:loclist = filter(copy(l:loclist), 'v:val.bufnr == l:buffer')
+    let l:loclist = filter(copy(l:info.loclist), 'v:val.bufnr == l:buffer')
 
     if empty(l:loclist)
         return
