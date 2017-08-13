@@ -296,12 +296,17 @@ function! s:ALEToggle() abort
             call ale#balloon#Enable()
         endif
     else
-        " Make sure the buffer number is a number, not a string,
-        " otherwise things can go wrong.
-        for l:buffer in map(keys(g:ale_buffer_info), 'str2nr(v:val)')
-            " Stop all jobs and clear the results for everything, and delete
-            " all of the data we stored for the buffer.
-            call ale#engine#Cleanup(l:buffer)
+        for l:key in keys(g:ale_buffer_info)
+            " The key could be a filename or a buffer number, so try and
+            " convert it to a number. We need a number for the other
+            " functions.
+            let l:buffer = str2nr(l:key)
+
+            if l:buffer > 0
+                " Stop all jobs and clear the results for everything, and delete
+                " all of the data we stored for the buffer.
+                call ale#engine#Cleanup(l:buffer)
+            endif
         endfor
 
         " Remove highlights for the current buffer now.

@@ -1,4 +1,7 @@
 Before:
+  Save g:ale_buffer_info
+
+  let g:ale_buffer_info = {}
   let g:expected_loclist = [{
   \ 'bufnr': bufnr('%'),
   \ 'lnum': 2,
@@ -42,10 +45,11 @@ Before:
     for l:line in split(l:output, "\n")
       let l:match = matchlist(l:line, '^ALE[a-zA-Z]\+Group')
 
-      " We don't care about checking for the completion or fixing groups here.
+      " We don't care about some groups here.
       if !empty(l:match)
       \&& l:match[0] !=# 'ALECompletionGroup'
       \&& l:match[0] !=# 'ALEBufferFixGroup'
+      \&& l:match[0] !=# 'ALEPatternOptionsGroup'
         call add(l:results, l:match[0])
       endif
     endfor
@@ -64,10 +68,11 @@ Before:
   \})
 
 After:
+  Restore
+
   unlet! g:expected_loclist
   unlet! g:expected_groups
 
-  let g:ale_buffer_info = {}
   call ale#linter#Reset()
 
   " Toggle ALE back on if we fail when it's disabled.
@@ -119,3 +124,47 @@ Execute(ALEToggle should reset everything and then run again):
   \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
   AssertEqual g:expected_groups, ParseAuGroups()
   AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
+
+Execute(ALEToggle should skip filename keys and preserve them):
+  AssertEqual 'foobar', &filetype
+
+  let g:ale_buffer_info['/foo/bar/baz.txt'] = {
+  \ 'job_list': [],
+  \ 'active_linter_list': [],
+  \ 'loclist': [],
+  \ 'temporary_file_list': [],
+  \ 'temporary_directory_list': [],
+  \ 'history': [],
+  \}
+
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+
+  " Now Toggle ALE off.
+  ALEToggle
+
+  AssertEqual
+  \ {
+  \   'job_list': [],
+  \   'active_linter_list': [],
+  \   'loclist': [],
+  \   'temporary_file_list': [],
+  \   'temporary_directory_list': [],
+  \   'history': [],
+  \ },
+  \ get(g:ale_buffer_info, '/foo/bar/baz.txt', {})
+
+  " Toggle ALE on again.
+  ALEToggle
+  call ale#engine#WaitForJobs(2000)
+
+  AssertEqual
+  \ {
+  \   'job_list': [],
+  \   'active_linter_list': [],
+  \   'loclist': [],
+  \   'temporary_file_list': [],
+  \   'temporary_directory_list': [],
+  \   'history': [],
+  \ },
+  \ get(g:ale_buffer_info, '/foo/bar/baz.txt', {})
