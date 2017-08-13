@@ -32,6 +32,7 @@ After:
 Given foobar (Some imaginary filetype):
   12345678
   12345678
+  
 
 Execute(loclist jumping should jump correctly when not wrapping):
   AssertEqual [2, 1], TestJump('before', 0, [2, 2])
@@ -74,3 +75,12 @@ Execute(We shouldn't move when jumping to the first item where there are none):
   let g:ale_buffer_info[bufnr('%')].loclist = []
 
   AssertEqual [1, 6], TestJump(0, 0, [1, 6])
+
+Execute(We should be able to jump when the error line is blank):
+  call add(g:ale_buffer_info[bufnr('%')].loclist, {'bufnr': bufnr(''), 'lnum': 3, 'col': 1})
+
+  AssertEqual 0, len(getline(3))
+  AssertEqual [2, 8], TestJump('before', 0, [3, 1])
+  AssertEqual [2, 8], TestJump('before', 1, [3, 1])
+  AssertEqual [3, 1], TestJump('after', 0, [3, 1])
+  AssertEqual [1, 2], TestJump('after', 1, [3, 1])

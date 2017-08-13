@@ -32,7 +32,7 @@ function! ale#loclist_jumping#FindNearest(direction, wrap) abort
         \   {
         \       'bufnr': bufnr(''),
         \       'lnum': l:item.lnum,
-        \       'col': min([max([l:item.col, 1]), len(getline(l:item.lnum))]),
+        \       'col': min([max([l:item.col, 1]), max([len(getline(l:item.lnum)), 1])]),
         \   },
         \   l:search_item
         \)
