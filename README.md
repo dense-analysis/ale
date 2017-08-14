@@ -190,7 +190,7 @@ mkdir -p ~/vimfiles/pack/git-plugins/start
 git clone https://github.com/w0rp/ale.git ~/vimfiles/pack/git-plugins/start/ale
 ```
 
-#### Generating documentation
+#### Generating Vim help files
 
 You can add the following line to your vimrc files to generate documentation
 tags automatically, if you don't have something similar already, so you can use
