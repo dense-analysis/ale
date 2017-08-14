@@ -107,10 +107,12 @@ Execute (g:ale_pattern_options_enabled = 1 should bind BufReadPost and BufEnter)
   \ 'BufReadPost * call ale#pattern_options#SetOptions()',
   \], CheckAutocmd('ALEPatternOptionsGroup')
 
-Execute (g:ale_lint_on_enter = 0 should bind no events):
+Execute (g:ale_lint_on_enter = 0 should bind only the BufEnter event):
   let g:ale_lint_on_enter = 0
 
-  AssertEqual [], CheckAutocmd('ALERunOnEnterGroup')
+  AssertEqual
+  \ ['BufEnter * call ale#events#EnterEvent(str2nr(expand(''<abuf>'')))'],
+  \ CheckAutocmd('ALERunOnEnterGroup')
 
 Execute (g:ale_lint_on_enter = 1 should bind the required events):
   let g:ale_lint_on_enter = 1
@@ -127,18 +129,17 @@ Execute (g:ale_lint_on_filetype_changed = 0 should bind no events):
 
   AssertEqual [], CheckAutocmd('ALERunOnFiletypeChangeGroup')
 
-Execute (g:ale_lint_on_filetype_changed = 1 should bind FileType, and required buffer events):
+Execute (g:ale_lint_on_filetype_changed = 1 should bind the FileType event):
   let g:ale_lint_on_filetype_changed = 1
 
-  AssertEqual [
-  \ 'BufEnter * let b:ale_original_filetype = &filetype',
-  \ 'BufReadPost * let b:ale_original_filetype = &filetype',
-  \ 'FileType * '
-  \   . 'if has_key(b:, ''ale_original_filetype'') '
-  \   . '&& b:ale_original_filetype isnot# expand(''<amatch>'')'
-  \   . '| call ale#Queue(300, ''lint_file'')'
-  \   . '| endif',
-  \], CheckAutocmd('ALERunOnFiletypeChangeGroup')
+  AssertEqual
+  \ [
+  \   'FileType * call ale#events#FileTypeEvent( '
+  \     . 'str2nr(expand(''<abuf>'')), '
+  \     . 'expand(''<amatch>'')'
+  \     . ')',
+  \ ],
+  \ CheckAutocmd('ALERunOnFiletypeChangeGroup')
 
 Execute (g:ale_lint_on_save = 0 should bind no events):
   let g:ale_lint_on_save = 0
