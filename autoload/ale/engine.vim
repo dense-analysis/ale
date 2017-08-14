@@ -460,6 +460,7 @@ function! s:RunJob(options) abort
     let l:output_stream = a:options.output_stream
     let l:next_chain_index = a:options.next_chain_index
     let l:read_buffer = a:options.read_buffer
+    let l:info = g:ale_buffer_info[l:buffer]
 
     if empty(l:command)
         return 0
@@ -515,8 +516,11 @@ function! s:RunJob(options) abort
     " Only proceed if the job is being run.
     if l:job_id
         " Add the job to the list of jobs, so we can track them.
-        call add(g:ale_buffer_info[l:buffer].job_list, l:job_id)
-        call add(g:ale_buffer_info[l:buffer].active_linter_list, l:linter.name)
+        call add(l:info.job_list, l:job_id)
+
+        if index(l:info.active_linter_list, l:linter.name) < 0
+            call add(l:info.active_linter_list, l:linter.name)
+        endif
 
         let l:status = 'started'
         " Store the ID for the job in the map to read back again.
@@ -531,7 +535,7 @@ function! s:RunJob(options) abort
     if g:ale_history_enabled
         call ale#history#Add(l:buffer, l:status, l:job_id, l:command)
     else
-        let g:ale_buffer_info[l:buffer].history = []
+        let l:info.history = []
     endif
 
     if get(g:, 'ale_run_synchronously') == 1
@@ -624,6 +628,7 @@ endfunction
 function! s:StopCurrentJobs(buffer, include_lint_file_jobs) abort
     let l:info = get(g:ale_buffer_info, a:buffer, {})
     let l:new_job_list = []
+    let l:new_active_linter_list = []
 
     for l:job_id in get(l:info, 'job_list', [])
         let l:job_info = get(s:job_info_map, l:job_id, {})
@@ -634,15 +639,23 @@ function! s:StopCurrentJobs(buffer, include_lint_file_jobs) abort
                 call remove(s:job_info_map, l:job_id)
             else
                 call add(l:new_job_list, l:job_id)
+                " Linters with jobs still running are still active.
+                call add(l:new_active_linter_list, l:job_info.linter.name)
             endif
         endif
     endfor
 
+    " Remove duplicates from the active linter list.
+    call uniq(sort(l:new_active_linter_list))
+
     " Update the List, so it includes only the jobs we still need.
     let l:info.job_list = l:new_job_list
+    " Update the active linter list, clearing out anything not running.
+    let l:info.active_linter_list = l:new_active_linter_list
 endfunction
 
 function! s:CheckWithLSP(buffer, linter) abort
+    let l:info = g:ale_buffer_info[a:buffer]
     let l:lsp_details = ale#linter#StartLSP(
     \   a:buffer,
     \   a:linter,
@@ -665,7 +678,9 @@ function! s:CheckWithLSP(buffer, linter) abort
     let l:request_id = ale#lsp#Send(l:id, l:change_message, l:root)
 
     if l:request_id != 0
-        call add(g:ale_buffer_info[a:buffer].active_linter_list, a:linter.name)
+        if index(l:info.active_linter_list, a:linter.name) < 0
+            call add(l:info.active_linter_list, a:linter.name)
+        endif
     endif
 
     return l:request_id != 0

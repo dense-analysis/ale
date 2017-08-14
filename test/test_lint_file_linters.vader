@@ -79,6 +79,10 @@ Before:
   call ale#test#SetFilename(g:filename)
 
 After:
+  if !g:ale_run_synchronously
+    call ale#engine#WaitForJobs(2000)
+  endif
+
   Restore
 
   unlet! b:ale_save_event_fired
@@ -267,3 +271,19 @@ Execute(b:ale_save_event_fired should be set to 0 when results are set):
   call ale#engine#SetResults(bufnr(''), [])
 
   AssertEqual 0, b:ale_save_event_fired
+
+Execute(lint_file linters should stay running after checking without them):
+  let g:ale_run_synchronously = 0
+
+  " Run all linters, then just the buffer linters.
+  call ale#Queue(0, 'lint_file')
+  call ale#Queue(0)
+
+  " The lint_file linter should still be running.
+  AssertEqual
+  \ ['lint_file_linter', 'buffer_linter'],
+  \ g:ale_buffer_info[bufnr('')].active_linter_list
+  " We should have 1 job for each linter.
+  AssertEqual 2, len(g:ale_buffer_info[bufnr('')].job_list)
+
+  call ale#engine#WaitForJobs(2000)
