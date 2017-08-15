@@ -3,7 +3,7 @@
 
 function! ale_linters#r#lintr#GetCommand(buffer) abort
     return ale#path#BufferCdString(a:buffer)
-    \   . 'Rscript -e ' . ale#Escape('lintr::lint(commandArgs(TRUE))') . ' %t'
+    \   . 'Rscript -e ' . ale#Escape('lintr::lint(commandArgs(TRUE), linters = lintr::with_defaults(object_usage_linter = NULL))') . ' %t'
 endfunction
 
 call ale#linter#Define('r', {
