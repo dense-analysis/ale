@@ -1,10 +1,31 @@
 Before:
   Save g:ale_completion_enabled
+  Save g:ale_completion_delay
+  Save &l:omnifunc
+
+  let g:test_vars = {
+  \ 'feedkeys_calls': [],
+  \}
+
+  call ale#completion#Nop()
+
+  function! ale#completion#FeedKeys(string, mode) abort
+    call add(g:test_vars.feedkeys_calls, [a:string, a:mode])
+  endfunction
 
 After:
   Restore
 
-  if !g:ale_completion_enabled
+  unlet! g:test_vars
+  unlet! b:ale_completion_info
+  unlet! b:ale_completion_response
+  unlet! b:ale_completion_parser
+
+  runtime autoload/ale/completion.vim
+
+  if g:ale_completion_enabled
+    call ale#completion#Enable()
+  else
     call ale#completion#Disable()
   endif
 
@@ -100,3 +121,88 @@ Execute(Completion should be done after words in parens in TypeScript):
 
 Execute(Completion should not be done after parens in TypeScript):
   AssertEqual '', ale#completion#GetPrefix(&filetype, 3, 15)
+
+Execute(ale#completion#Show() should remember the omnifunc setting and replace it):
+  let &l:omnifunc = 'FooBar'
+
+  call ale#completion#Show('Response', 'Parser')
+
+  AssertEqual 'FooBar', b:ale_old_omnifunc
+  AssertEqual 'ale#completion#OmniFunc', &l:omnifunc
+
+Execute(ale#completion#Show() should make the correct feedkeys() call):
+  call ale#completion#Show('Response', 'Parser')
+
+  AssertEqual [["\<C-x>\<C-o>", 'n']], g:test_vars.feedkeys_calls
+
+Execute(ale#completion#Show() should set up the response and parser):
+  call ale#completion#Show('Response', 'Parser')
+
+  AssertEqual 'Response', b:ale_completion_response
+  AssertEqual 'Parser', b:ale_completion_parser
+
+Execute(ale#completion#Done() should restore old omnifunc values):
+  let b:ale_old_omnifunc = 'FooBar'
+
+  call ale#completion#Done()
+
+  " We reset the old omnifunc setting and remove the buffer variable.
+  AssertEqual 'FooBar', &l:omnifunc
+  Assert !has_key(b:, 'ale_old_omnifunc')
+
+Execute(The completion request_id should be reset when queuing again):
+  let b:ale_completion_info = {'request_id': 123}
+
+  let g:ale_completion_delay = 0
+  call ale#completion#Queue()
+  sleep 1m
+
+  AssertEqual 0, b:ale_completion_info.request_id
+
+Execute(b:ale_completion_info should be set up correctly when requesting completions):
+  call setpos('.', [bufnr(''), 3, 14, 0])
+  call ale#completion#GetCompletions()
+
+  AssertEqual
+  \ {
+  \   'request_id': 0,
+  \   'conn_id': 0,
+  \   'column': 14,
+  \   'line': 3,
+  \   'prefix': 'ab',
+  \ },
+  \ b:ale_completion_info
+
+Execute(ale#completion#GetCompletions should be called when the cursor position stays the same):
+  let g:test_vars.get_completions_called = 0
+
+  " We just want to check if the function is called.
+  function! ale#completion#GetCompletions()
+    let g:test_vars.get_completions_called = 1
+  endfunction
+
+  let g:ale_completion_delay = 0
+  call ale#completion#Queue()
+  sleep 1m
+
+  Assert g:test_vars.get_completions_called
+
+Execute(ale#completion#GetCompletions should not be called when the cursor position changes):
+  call setpos('.', [bufnr(''), 1, 2, 0])
+
+  let g:test_vars.get_completions_called = 0
+
+  " We just want to check if the function is called.
+  function! ale#completion#GetCompletions()
+    let g:test_vars.get_completions_called = 1
+  endfunction
+
+  let g:ale_completion_delay = 0
+  call ale#completion#Queue()
+
+  " Change the cursor position before the callback is triggered.
+  call setpos('.', [bufnr(''), 2, 2, 0])
+
+  sleep 1m
+
+  Assert !g:test_vars.get_completions_called

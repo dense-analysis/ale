@@ -40,10 +40,17 @@ Before:
   Save g:ale_lint_on_save
   Save g:ale_echo_cursor
   Save g:ale_fix_on_save
+  Save g:ale_completion_enabled
 
 After:
   delfunction CheckAutocmd
   Restore
+
+  if g:ale_completion_enabled
+    call ale#completion#Enable()
+  else
+    call ale#completion#Disable()
+  endif
 
   call ALEInitAuGroups()
 
@@ -185,3 +192,21 @@ Execute (g:ale_echo_cursor = 1 should bind cursor events):
   \ 'CursorMoved * call ale#cursor#EchoCursorWarningWithDelay()',
   \ 'InsertLeave * call ale#cursor#EchoCursorWarning()',
   \], CheckAutocmd('ALECursorGroup')
+
+Execute(Enabling completion should set up autocmd events correctly):
+  let g:ale_completion_enabled = 0
+  call ale#completion#Enable()
+
+  AssertEqual [
+  \ 'CompleteDone * call ale#completion#Done()',
+  \ 'TextChangedI * call ale#completion#Queue()',
+  \], CheckAutocmd('ALECompletionGroup')
+  AssertEqual 1, g:ale_completion_enabled
+
+Execute(Disabling completion should remove autocmd events correctly):
+  let g:ale_completion_enabled = 1
+  call ale#completion#Enable()
+  call ale#completion#Disable()
+
+  AssertEqual [], CheckAutocmd('ALECompletionGroup')
+  AssertEqual 0, g:ale_completion_enabled

@@ -1,6 +1,10 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Completion support for LSP linters
 
+" A do-nothing function so we can load this autoload file in tests.
+function! ale#completion#Nop() abort
+endfunction
+
 let s:timer_id = -1
 
 function! s:GetRegex(map, filetype) abort
@@ -98,6 +102,11 @@ function! ale#completion#OmniFunc(findstart, base) abort
     endif
 endfunction
 
+" A wrapper function for feedkeys so we can test calls for it.
+function! ale#completion#FeedKeys(string, mode) abort
+    call feedkeys(a:string, a:mode)
+endfunction
+
 function! ale#completion#Show(response, completion_parser) abort
     " Remember the old omnifunc value, if there is one.
     " If we don't store an old one, we'll just never reset the option.
@@ -111,7 +120,7 @@ function! ale#completion#Show(response, completion_parser) abort
     let b:ale_completion_response = a:response
     let b:ale_completion_parser = a:completion_parser
     let &l:omnifunc = 'ale#completion#OmniFunc'
-    call feedkeys("\<C-x>\<C-o>", 'n')
+    call ale#completion#FeedKeys("\<C-x>\<C-o>", 'n')
 endfunction
 
 function! s:CompletionStillValid(request_id) abort
@@ -237,10 +246,6 @@ endfunction
 function! ale#completion#GetCompletions() abort
     let [l:line, l:column] = getcurpos()[1:2]
 
-    if s:timer_pos != [l:line, l:column]
-        return
-    endif
-
     let l:prefix = ale#completion#GetPrefix(&filetype, l:line, l:column)
 
     if empty(l:prefix)
@@ -265,7 +270,13 @@ endfunction
 function! s:TimerHandler(...) abort
     let s:timer_id = -1
 
-    call ale#completion#GetCompletions()
+    let [l:line, l:column] = getcurpos()[1:2]
+
+    " When running the timer callback, we have to be sure that the cursor
+    " hasn't moved from where it was when we requested completions by typing.
+    if s:timer_pos == [l:line, l:column]
+        call ale#completion#GetCompletions()
+    endif
 endfunction
 
 function! ale#completion#Queue() abort
