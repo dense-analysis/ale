@@ -10,15 +10,16 @@
 " List will be returned, otherwise a pair of [line_number, column_number] will
 " be returned.
 function! ale#loclist_jumping#FindNearest(direction, wrap) abort
+    let l:buffer = bufnr('')
     let l:pos = getcurpos()
     let l:info = get(g:ale_buffer_info, bufnr('%'), {'loclist': []})
-    " This list will have already been sorted.
-    let l:loclist = l:info.loclist
-    let l:search_item = {'lnum': l:pos[1], 'col': l:pos[2]}
+    " Copy the list and filter to only the items in this buffer.
+    let l:loclist = filter(copy(l:info.loclist), 'v:val.bufnr == l:buffer')
+    let l:search_item = {'bufnr': l:buffer, 'lnum': l:pos[1], 'col': l:pos[2]}
 
     " When searching backwards, so we can find the next smallest match.
     if a:direction is# 'before'
-        let l:loclist = reverse(copy(l:loclist))
+        call reverse(l:loclist)
     endif
 
     " Look for items before or after the current position.
@@ -30,8 +31,12 @@ function! ale#loclist_jumping#FindNearest(direction, wrap) abort
         " cursor to a line without changing the column, in some cases.
         let l:cmp_value = ale#util#LocItemCompare(
         \   {
+        \       'bufnr': l:buffer,
         \       'lnum': l:item.lnum,
-        \       'col': min([max([l:item.col, 1]), len(getline(l:item.lnum))]),
+        \       'col': min([
+        \           max([l:item.col, 1]),
+        \           max([len(getline(l:item.lnum)), 1]),
+        \       ]),
         \   },
         \   l:search_item
         \)
@@ -66,13 +71,16 @@ function! ale#loclist_jumping#Jump(direction, wrap) abort
 endfunction
 
 function! ale#loclist_jumping#JumpToIndex(index) abort
-    let l:info = get(g:ale_buffer_info, bufnr('%'), {'loclist': []})
-    let l:loclist = l:info.loclist
+    let l:buffer = bufnr('')
+    let l:info = get(g:ale_buffer_info, l:buffer, {'loclist': []})
+    let l:loclist = filter(copy(l:info.loclist), 'v:val.bufnr == l:buffer')
+
     if empty(l:loclist)
         return
     endif
 
     let l:item = l:loclist[a:index]
+
     if !empty(l:item)
         call cursor([l:item.lnum, l:item.col])
     endif

@@ -189,7 +189,7 @@ call ale#Set('type_map', {})
 
 " Enable automatic completion with LSP servers and tsserver
 call ale#Set('completion_enabled', 0)
-call ale#Set('completion_delay', 300)
+call ale#Set('completion_delay', 100)
 call ale#Set('completion_max_suggestions', 20)
 
 function! ALEInitAuGroups() abort
@@ -218,27 +218,26 @@ function! ALEInitAuGroups() abort
 
     augroup ALERunOnEnterGroup
         autocmd!
+        if g:ale_enabled
+            " Handle everything that needs to happen when buffers are entered.
+            autocmd BufEnter * call ale#events#EnterEvent(str2nr(expand('<abuf>')))
+        endif
         if g:ale_enabled && g:ale_lint_on_enter
             autocmd BufWinEnter,BufRead * call ale#Queue(0, 'lint_file', str2nr(expand('<abuf>')))
             " Track when the file is changed outside of Vim.
             autocmd FileChangedShellPost * call ale#events#FileChangedEvent(str2nr(expand('<abuf>')))
-            " If the file has been changed, then check it again on enter.
-            autocmd BufEnter * call ale#events#EnterEvent(str2nr(expand('<abuf>')))
         endif
     augroup END
 
     augroup ALERunOnFiletypeChangeGroup
         autocmd!
         if g:ale_enabled && g:ale_lint_on_filetype_changed
-            " Set the filetype after a buffer is opened or read.
-            autocmd BufEnter,BufRead * let b:ale_original_filetype = &filetype
             " Only start linting if the FileType actually changes after
             " opening a buffer. The FileType will fire when buffers are opened.
-            autocmd FileType *
-            \   if has_key(b:, 'ale_original_filetype')
-            \   && b:ale_original_filetype !=# expand('<amatch>')
-            \|      call ale#Queue(300, 'lint_file')
-            \|  endif
+            autocmd FileType * call ale#events#FileTypeEvent(
+            \   str2nr(expand('<abuf>')),
+            \   expand('<amatch>')
+            \)
         endif
     augroup END
 
@@ -296,12 +295,17 @@ function! s:ALEToggle() abort
             call ale#balloon#Enable()
         endif
     else
-        " Make sure the buffer number is a number, not a string,
-        " otherwise things can go wrong.
-        for l:buffer in map(keys(g:ale_buffer_info), 'str2nr(v:val)')
-            " Stop all jobs and clear the results for everything, and delete
-            " all of the data we stored for the buffer.
-            call ale#engine#Cleanup(l:buffer)
+        for l:key in keys(g:ale_buffer_info)
+            " The key could be a filename or a buffer number, so try and
+            " convert it to a number. We need a number for the other
+            " functions.
+            let l:buffer = str2nr(l:key)
+
+            if l:buffer > 0
+                " Stop all jobs and clear the results for everything, and delete
+                " all of the data we stored for the buffer.
+                call ale#engine#Cleanup(l:buffer)
+            endif
         endfor
 
         " Remove highlights for the current buffer now.

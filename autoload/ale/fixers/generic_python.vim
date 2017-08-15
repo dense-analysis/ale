@@ -23,3 +23,38 @@ function! ale#fixers#generic_python#AddLinesBeforeControlStatements(buffer, line
 
     return l:new_lines
 endfunction
+
+" This function breaks up long lines so that autopep8 or other tools can
+" fix the badly-indented code which is produced as a result.
+function! ale#fixers#generic_python#BreakUpLongLines(buffer, lines) abort
+    " Default to a maximum line length of 79
+    let l:max_line_length = 79
+    let l:conf = ale#path#FindNearestFile(a:buffer, 'setup.cfg')
+
+    " Read the maximum line length from setup.cfg
+    if !empty(l:conf)
+        for l:match in ale#util#GetMatches(
+        \   readfile(l:conf),
+        \   '\v^ *max-line-length *\= *(\d+)',
+        \)
+            let l:max_line_length = str2nr(l:match[1])
+        endfor
+    endif
+
+    let l:new_list = []
+
+    for l:line in a:lines
+        if len(l:line) > l:max_line_length && l:line !~# '# *noqa'
+            let l:line = substitute(l:line, '\v([(,])([^)])', '\1\n\2', 'g')
+            let l:line = substitute(l:line, '\v([^(])([)])', '\1,\n\2', 'g')
+
+            for l:split_line in split(l:line, "\n")
+                call add(l:new_list, l:split_line)
+            endfor
+        else
+            call add(l:new_list, l:line)
+        endif
+    endfor
+
+    return l:new_list
+endfunction

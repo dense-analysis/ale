@@ -49,6 +49,8 @@ CONTENTS                                                         *ale-contents*
     html..................................|ale-html-options|
       htmlhint............................|ale-html-htmlhint|
       tidy................................|ale-html-tidy|
+    idris.................................|ale-idris-options|
+      idris...............................|ale-idris-idris|
     java..................................|ale-java-options|
       checkstyle..........................|ale-java-checkstyle|
       javac...............................|ale-java-javac|
@@ -191,6 +193,7 @@ The following languages and tools are supported.
 * Handlebars: 'ember-template-lint'
 * Haskell: 'ghc', 'stack-ghc', 'stack-build', 'ghc-mod', 'stack-ghc-mod', 'hlint', 'hdevtools'
 * HTML: 'HTMLHint', 'proselint', 'tidy'
+* Idris: 'idris'
 * Java: 'javac'
 * JavaScript: 'eslint', 'jscs', 'jshint', 'flow', 'prettier', 'prettier-eslint', 'xo'
 * JSON: 'jsonlint'
@@ -204,7 +207,7 @@ The following languages and tools are supported.
 * nroff: 'proselint'
 * Objective-C: 'clang'
 * Objective-C++: 'clang'
-* OCaml: 'merlin' (see |ale-linter-integration-ocaml-merlin|)
+* OCaml: 'merlin' (see |ale-ocaml-merlin|)
 * Perl: 'perl' (-c flag), 'perlcritic'
 * PHP: 'hack', 'langserver', 'php' (-l flag), 'phpcs', 'phpmd', 'phpstan'
 * Pod: 'proselint'
@@ -224,7 +227,7 @@ The following languages and tools are supported.
 * SML: 'smlnj'
 * Stylus: 'stylelint'
 * SQL: 'sqlint'
-* Swift: 'swiftlint'
+* Swift: 'swiftlint', 'swiftformat'
 * Texinfo: 'proselint'
 * Text: 'proselint', 'vale'
 * TypeScript: 'eslint', 'tslint', 'tsserver', 'typecheck'
@@ -287,8 +290,8 @@ g:ale_echo_msg_error_str                             *g:ale_echo_msg_error_str*
   Default: `Error`
 
   The string used for error severity in the echoed message.
-  Note |`g:ale_echo_cursor`| should be set to 1
-  Note |`g:ale_echo_msg_format`| should contain the `%severity%` handler
+  Note |g:ale_echo_cursor| should be set to 1
+  Note |g:ale_echo_msg_format| should contain the `%severity%` handler
 
 
 g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
@@ -300,7 +303,7 @@ g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
   error message itself, and it can contain the following handlers:
   - `%linter%` for linter's name
   - `%severity%` for the type of severity
-  Note |`g:ale_echo_cursor`| should be setted to 1
+  Note |g:ale_echo_cursor| should be setted to 1
 
 
 g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
@@ -309,8 +312,8 @@ g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
   Default: `Warning`
 
   The string used for warning severity in the echoed message.
-  Note |`g:ale_echo_cursor`| should be set to 1
-  Note |`g:ale_echo_msg_format`| should contain the `%severity%` handler
+  Note |g:ale_echo_cursor| should be set to 1
+  Note |g:ale_echo_msg_format| should contain the `%severity%` handler
 
 
 g:ale_emit_conflict_warnings                     *g:ale_emit_conflict_warnings*
@@ -1166,7 +1169,7 @@ ALEInfoToClipboard                                         *ALEInfoToClipboard*
 ===============================================================================
 7. API                                                                *ale-api*
 
-ale#Queue(delay, [linting_flag])                                  *ale#Queue()*
+ale#Queue(delay, [linting_flag, buffer_number])                   *ale#Queue()*
 
   Run linters for the current buffer, based on the filetype of the buffer,
   with a given `delay`. A `delay` of `0` will run the linters immediately.
@@ -1176,6 +1179,15 @@ ale#Queue(delay, [linting_flag])                                  *ale#Queue()*
   An optional `linting_flag` argument can be given. If `linting_flag`
   is `'lint_file'`, then linters where the `lint_file` option is set to `1` will be
   run. Linters with `lint_file` set to `1` are not run by default.
+
+  An optional `buffer_number` argument can be given for specifying the buffer
+  to check. The active buffer (`bufnr('')`) will be checked by default.
+
+                                                                *ale-cool-down*
+  If an exception is thrown when queuing/running ALE linters, ALE will enter
+  a cool down period where it will stop checking anything for a short period
+  of time. This is to prevent ALE from seriously annoying users if a linter
+  is broken, or when developing ALE itself.
 
 
 ale#engine#CreateDirectory(buffer)               *ale#engine#CreateDirectory()*

@@ -22,10 +22,11 @@ function! ale#statusline#Update(buffer, loclist) abort
         return
     endif
 
+    let l:loclist = filter(copy(a:loclist), 'v:val.bufnr == a:buffer')
     let l:count = s:CreateCountDict()
-    let l:count.total = len(a:loclist)
+    let l:count.total = len(l:loclist)
 
-    for l:entry in a:loclist
+    for l:entry in l:loclist
         if l:entry.type is# 'W'
             if get(l:entry, 'sub_type', '') is# 'style'
                 let l:count.style_warning += 1

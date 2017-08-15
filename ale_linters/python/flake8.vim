@@ -83,6 +83,7 @@ function! ale_linters#python#flake8#GetCommand(buffer, version_output) abort
 
     return ale#Escape(ale_linters#python#flake8#GetExecutable(a:buffer))
     \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ' --format=default'
     \   . l:display_name_args . ' -'
 endfunction
 

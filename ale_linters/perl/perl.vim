@@ -34,7 +34,7 @@ function! ale_linters#perl#perl#Handle(buffer, lines) abort
 
         if ale#path#IsBufferPath(a:buffer, l:match[2])
         \ && (
-        \   l:text !=# 'BEGIN failed--compilation aborted'
+        \   l:text isnot# 'BEGIN failed--compilation aborted'
         \   || empty(l:output)
         \   || match(l:output[-1].text, s:begin_failed_skip_pattern) < 0
         \ )

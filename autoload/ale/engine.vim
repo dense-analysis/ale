@@ -128,14 +128,14 @@ function! s:HandleLoclist(linter_name, buffer, loclist) abort
 
     " Remove this linter from the list of active linters.
     " This may have already been done when the job exits.
-    call filter(l:buffer_info.active_linter_list, 'v:val !=# a:linter_name')
+    call filter(l:buffer_info.active_linter_list, 'v:val isnot# a:linter_name')
 
     " Make some adjustments to the loclists to fix common problems, and also
     " to set default values for loclist items.
     let l:linter_loclist = ale#engine#FixLocList(a:buffer, a:linter_name, a:loclist)
 
     " Remove previous items for this linter.
-    call filter(g:ale_buffer_info[a:buffer].loclist, 'v:val.linter_name !=# a:linter_name')
+    call filter(g:ale_buffer_info[a:buffer].loclist, 'v:val.linter_name isnot# a:linter_name')
     " Add the new items.
     call extend(g:ale_buffer_info[a:buffer].loclist, l:linter_loclist)
 
@@ -169,8 +169,8 @@ function! s:HandleExit(job_id, exit_code) abort
     " Remove this job from the list.
     call ale#job#Stop(a:job_id)
     call remove(s:job_info_map, a:job_id)
-    call filter(g:ale_buffer_info[l:buffer].job_list, 'v:val !=# a:job_id')
-    call filter(g:ale_buffer_info[l:buffer].active_linter_list, 'v:val !=# l:linter.name')
+    call filter(g:ale_buffer_info[l:buffer].job_list, 'v:val isnot# a:job_id')
+    call filter(g:ale_buffer_info[l:buffer].active_linter_list, 'v:val isnot# l:linter.name')
 
     " Stop here if we land in the handle for a job completing if we're in
     " a sandbox.
@@ -333,6 +333,7 @@ function! s:RemapItemTypes(type_map, loclist) abort
 endfunction
 
 function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
+    let l:bufnr_map = {}
     let l:new_loclist = []
 
     " Some errors have line numbers beyond the end of the file,
@@ -357,12 +358,35 @@ function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
         \   'text': l:old_item.text,
         \   'lnum': str2nr(l:old_item.lnum),
         \   'col': str2nr(get(l:old_item, 'col', 0)),
-        \   'bufnr': get(l:old_item, 'bufnr', a:buffer),
         \   'vcol': get(l:old_item, 'vcol', 0),
         \   'type': get(l:old_item, 'type', 'E'),
         \   'nr': get(l:old_item, 'nr', -1),
         \   'linter_name': a:linter_name,
         \}
+
+        if has_key(l:old_item, 'filename')
+            " Use the filename given.
+            let l:filename = l:old_item.filename
+            let l:item.filename = l:filename
+
+            if has_key(l:old_item, 'bufnr')
+                " If a buffer number is also given, include that too.
+                " If Vim detects that he buffer number is valid, it will
+                " be used instead of the filename.
+                let l:item.bufnr = l:old_item.bufnr
+            elseif has_key(l:bufnr_map, l:filename)
+                " Get the buffer number from the map, which can be faster.
+                let l:item.bufnr = l:bufnr_map[l:filename]
+            else
+                " Look up the buffer number.
+                let l:item.bufnr = bufnr(l:filename)
+                let l:bufnr_map[l:filename] = l:item.bufnr
+            endif
+        elseif has_key(l:old_item, 'bufnr')
+            let l:item.bufnr = l:old_item.bufnr
+        else
+            let l:item.bufnr = a:buffer
+        endif
 
         if has_key(l:old_item, 'detail')
             let l:item.detail = l:old_item.detail
@@ -436,6 +460,7 @@ function! s:RunJob(options) abort
     let l:output_stream = a:options.output_stream
     let l:next_chain_index = a:options.next_chain_index
     let l:read_buffer = a:options.read_buffer
+    let l:info = g:ale_buffer_info[l:buffer]
 
     if empty(l:command)
         return 0
@@ -491,8 +516,11 @@ function! s:RunJob(options) abort
     " Only proceed if the job is being run.
     if l:job_id
         " Add the job to the list of jobs, so we can track them.
-        call add(g:ale_buffer_info[l:buffer].job_list, l:job_id)
-        call add(g:ale_buffer_info[l:buffer].active_linter_list, l:linter.name)
+        call add(l:info.job_list, l:job_id)
+
+        if index(l:info.active_linter_list, l:linter.name) < 0
+            call add(l:info.active_linter_list, l:linter.name)
+        endif
 
         let l:status = 'started'
         " Store the ID for the job in the map to read back again.
@@ -507,7 +535,7 @@ function! s:RunJob(options) abort
     if g:ale_history_enabled
         call ale#history#Add(l:buffer, l:status, l:job_id, l:command)
     else
-        let g:ale_buffer_info[l:buffer].history = []
+        let l:info.history = []
     endif
 
     if get(g:, 'ale_run_synchronously') == 1
@@ -600,6 +628,7 @@ endfunction
 function! s:StopCurrentJobs(buffer, include_lint_file_jobs) abort
     let l:info = get(g:ale_buffer_info, a:buffer, {})
     let l:new_job_list = []
+    let l:new_active_linter_list = []
 
     for l:job_id in get(l:info, 'job_list', [])
         let l:job_info = get(s:job_info_map, l:job_id, {})
@@ -610,15 +639,23 @@ function! s:StopCurrentJobs(buffer, include_lint_file_jobs) abort
                 call remove(s:job_info_map, l:job_id)
             else
                 call add(l:new_job_list, l:job_id)
+                " Linters with jobs still running are still active.
+                call add(l:new_active_linter_list, l:job_info.linter.name)
             endif
         endif
     endfor
 
+    " Remove duplicates from the active linter list.
+    call uniq(sort(l:new_active_linter_list))
+
     " Update the List, so it includes only the jobs we still need.
     let l:info.job_list = l:new_job_list
+    " Update the active linter list, clearing out anything not running.
+    let l:info.active_linter_list = l:new_active_linter_list
 endfunction
 
 function! s:CheckWithLSP(buffer, linter) abort
+    let l:info = g:ale_buffer_info[a:buffer]
     let l:lsp_details = ale#linter#StartLSP(
     \   a:buffer,
     \   a:linter,
@@ -641,7 +678,9 @@ function! s:CheckWithLSP(buffer, linter) abort
     let l:request_id = ale#lsp#Send(l:id, l:change_message, l:root)
 
     if l:request_id != 0
-        call add(g:ale_buffer_info[a:buffer].active_linter_list, a:linter.name)
+        if index(l:info.active_linter_list, a:linter.name) < 0
+            call add(l:info.active_linter_list, a:linter.name)
+        endif
     endif
 
     return l:request_id != 0

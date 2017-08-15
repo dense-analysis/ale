@@ -1,8 +1,14 @@
 Before:
+  Save g:ale_buffer_info
+
+  let g:ale_buffer_info = {}
+
   let g:original_buffer = bufnr('%')
-  new
+  noautocmd new
 
 After:
+  Restore
+
   unlet! g:original_buffer
 
 Execute(Errors should be set in the loclist for the original buffer, not the new one):

@@ -24,7 +24,18 @@ function! s:LintOnEnter(buffer) abort
 endfunction
 
 function! ale#events#EnterEvent(buffer) abort
+    let l:filetype = getbufvar(a:buffer, '&filetype')
+    call setbufvar(a:buffer, 'ale_original_filetype', l:filetype)
+
     call s:LintOnEnter(a:buffer)
+endfunction
+
+function! ale#events#FileTypeEvent(buffer, new_filetype) abort
+    let l:filetype = getbufvar(a:buffer, 'ale_original_filetype', '')
+
+    if a:new_filetype isnot# l:filetype
+        call ale#Queue(300, 'lint_file', a:buffer)
+    endif
 endfunction
 
 function! ale#events#FileChangedEvent(buffer) abort

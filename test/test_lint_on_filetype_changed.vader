@@ -1,0 +1,47 @@
+Before:
+  Save &filetype
+
+  let g:queue_calls = []
+
+  function! ale#Queue(...)
+    call add(g:queue_calls, a:000)
+  endfunction
+
+After:
+  Restore
+
+  unlet! g:queue_calls
+
+  " Reload the ALE code to load the real function again.
+  runtime autoload/ale.vim
+
+  unlet! b:ale_original_filetype
+
+Execute(The original filetype should be set on BufEnter):
+  let &filetype = 'foobar'
+
+  call ale#events#EnterEvent(bufnr(''))
+
+  AssertEqual 'foobar', b:ale_original_filetype
+
+  let &filetype = 'bazboz'
+
+  call ale#events#EnterEvent(bufnr(''))
+
+  AssertEqual 'bazboz', b:ale_original_filetype
+
+Execute(Linting should not be queued when the filetype is the same):
+  let b:ale_original_filetype = 'foobar'
+  let g:queue_calls = []
+
+  call ale#events#FileTypeEvent(bufnr(''), 'foobar')
+
+  AssertEqual [], g:queue_calls
+
+Execute(Linting should be queued when the filetype changes):
+  let b:ale_original_filetype = 'foobar'
+  let g:queue_calls = []
+
+  call ale#events#FileTypeEvent(bufnr(''), 'bazboz')
+
+  AssertEqual [[300, 'lint_file', bufnr('')]], g:queue_calls

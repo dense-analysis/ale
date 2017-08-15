@@ -124,19 +124,18 @@ Execute(The current signs should be set for running a job):
   \ ],
   \ ParseSigns()
 
-
 Execute(Loclist items with sign_id values should be kept):
   exec 'sign place 1000347 line=3 name=ALEErrorSign buffer=' . bufnr('%')
   exec 'sign place 1000348 line=15 name=ALEErrorSign buffer=' . bufnr('%')
   exec 'sign place 1000349 line=16 name=ALEWarningSign buffer=' . bufnr('%')
 
   let g:loclist = [
-  \ {'lnum': 1, 'col': 1, 'type': 'E', 'text': 'a', 'sign_id': 1000348},
-  \ {'lnum': 2, 'col': 1, 'type': 'W', 'text': 'b', 'sign_id': 1000349},
-  \ {'lnum': 3, 'col': 1, 'type': 'E', 'text': 'c', 'sign_id': 1000347},
-  \ {'lnum': 4, 'col': 1, 'type': 'W', 'text': 'd'},
-  \ {'lnum': 15, 'col': 2, 'type': 'W', 'text': 'e'},
-  \ {'lnum': 16, 'col': 2, 'type': 'E', 'text': 'f'},
+  \ {'bufnr': bufnr(''), 'lnum': 1, 'col': 1, 'type': 'E', 'text': 'a', 'sign_id': 1000348},
+  \ {'bufnr': bufnr(''), 'lnum': 2, 'col': 1, 'type': 'W', 'text': 'b', 'sign_id': 1000349},
+  \ {'bufnr': bufnr(''), 'lnum': 3, 'col': 1, 'type': 'E', 'text': 'c', 'sign_id': 1000347},
+  \ {'bufnr': bufnr(''), 'lnum': 4, 'col': 1, 'type': 'W', 'text': 'd'},
+  \ {'bufnr': bufnr(''), 'lnum': 15, 'col': 2, 'type': 'W', 'text': 'e'},
+  \ {'bufnr': bufnr(''), 'lnum': 16, 'col': 2, 'type': 'E', 'text': 'f'},
   \]
 
   call ale#sign#SetSigns(bufnr('%'), g:loclist)
@@ -146,12 +145,12 @@ Execute(Loclist items with sign_id values should be kept):
   " IDs that haven't been used yet.
   AssertEqual
   \ [
-  \   {'lnum': 3, 'col': 1, 'type': 'E', 'text': 'c', 'sign_id': 1000347},
-  \   {'lnum': 4, 'col': 1, 'type': 'W', 'text': 'd', 'sign_id': 1000350},
-  \   {'lnum': 15, 'col': 1, 'type': 'E', 'text': 'a', 'sign_id': 1000351},
-  \   {'lnum': 15, 'col': 2, 'type': 'W', 'text': 'e', 'sign_id': 1000351},
-  \   {'lnum': 16, 'col': 1, 'type': 'W', 'text': 'b', 'sign_id': 1000352},
-  \   {'lnum': 16, 'col': 2, 'type': 'E', 'text': 'f', 'sign_id': 1000352},
+  \   {'bufnr': bufnr(''), 'lnum': 3, 'col': 1, 'type': 'E', 'text': 'c', 'sign_id': 1000347},
+  \   {'bufnr': bufnr(''), 'lnum': 4, 'col': 1, 'type': 'W', 'text': 'd', 'sign_id': 1000350},
+  \   {'bufnr': bufnr(''), 'lnum': 15, 'col': 1, 'type': 'E', 'text': 'a', 'sign_id': 1000351},
+  \   {'bufnr': bufnr(''), 'lnum': 15, 'col': 2, 'type': 'W', 'text': 'e', 'sign_id': 1000351},
+  \   {'bufnr': bufnr(''), 'lnum': 16, 'col': 1, 'type': 'W', 'text': 'b', 'sign_id': 1000352},
+  \   {'bufnr': bufnr(''), 'lnum': 16, 'col': 2, 'type': 'E', 'text': 'f', 'sign_id': 1000352},
   \ ],
   \ g:loclist
 
@@ -166,6 +165,33 @@ Execute(Loclist items with sign_id values should be kept):
   \   ['16', '1000352', 'ALEErrorSign'],
   \   ['3', '1000347', 'ALEErrorSign'],
   \   ['4', '1000350', 'ALEWarningSign'],
+  \ ],
+  \ sort(ParseSigns())
+
+Execute(Items for other buffers should be ignored):
+  let g:loclist = [
+  \ {'bufnr': bufnr('') - 1, 'lnum': 1, 'col': 1, 'type': 'E', 'text': 'a'},
+  \ {'bufnr': bufnr('') - 1, 'lnum': 2, 'col': 1, 'type': 'E', 'text': 'a', 'sign_id': 1000347},
+  \ {'bufnr': bufnr(''), 'lnum': 1, 'col': 1, 'type': 'E', 'text': 'a'},
+  \ {'bufnr': bufnr(''), 'lnum': 2, 'col': 1, 'type': 'W', 'text': 'b'},
+  \ {'bufnr': bufnr(''), 'lnum': 3, 'col': 1, 'type': 'E', 'text': 'c'},
+  \ {'bufnr': bufnr(''), 'lnum': 4, 'col': 1, 'type': 'W', 'text': 'd'},
+  \ {'bufnr': bufnr(''), 'lnum': 15, 'col': 2, 'type': 'W', 'text': 'e'},
+  \ {'bufnr': bufnr(''), 'lnum': 16, 'col': 2, 'type': 'E', 'text': 'f'},
+  \ {'bufnr': bufnr('') + 1, 'lnum': 1, 'col': 1, 'type': 'E', 'text': 'a'},
+  \]
+
+  call ale#sign#SetSigns(bufnr(''), g:loclist)
+  call ale#sign#RemoveDummySignIfNeeded(bufnr(''))
+
+  AssertEqual
+  \ [
+  \   ['1', '1000001', 'ALEErrorSign'],
+  \   ['15', '1000005', 'ALEWarningSign'],
+  \   ['16', '1000006', 'ALEErrorSign'],
+  \   ['2', '1000002', 'ALEWarningSign'],
+  \   ['3', '1000003', 'ALEErrorSign'],
+  \   ['4', '1000004', 'ALEWarningSign'],
   \ ],
   \ sort(ParseSigns())
 

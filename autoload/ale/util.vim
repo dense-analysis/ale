@@ -22,56 +22,79 @@ function! ale#util#GetFunction(string_or_ref) abort
 endfunction
 
 function! ale#util#LocItemCompare(left, right) abort
-    if a:left['lnum'] < a:right['lnum']
+    if a:left.bufnr < a:right.bufnr
         return -1
     endif
 
-    if a:left['lnum'] > a:right['lnum']
+    if a:left.bufnr > a:right.bufnr
         return 1
     endif
 
-    if a:left['col'] < a:right['col']
+    if a:left.lnum < a:right.lnum
         return -1
     endif
 
-    if a:left['col'] > a:right['col']
+    if a:left.lnum > a:right.lnum
+        return 1
+    endif
+
+    if a:left.col < a:right.col
+        return -1
+    endif
+
+    if a:left.col > a:right.col
         return 1
     endif
 
     return 0
 endfunction
 
-" This function will perform a binary search to find a message from the
-" loclist to echo when the cursor moves.
-function! ale#util#BinarySearch(loclist, line, column) abort
+" This function will perform a binary search and a small sequential search
+" on the list to find the last problem in the buffer and line which is
+" on or before the column. The index of the problem will be returned.
+"
+" -1 will be returned if nothing can be found.
+function! ale#util#BinarySearch(loclist, buffer, line, column) abort
     let l:min = 0
     let l:max = len(a:loclist) - 1
-    let l:last_column_match = -1
 
     while 1
         if l:max < l:min
-            return l:last_column_match
+            return -1
         endif
 
         let l:mid = (l:min + l:max) / 2
-        let l:obj = a:loclist[l:mid]
+        let l:item = a:loclist[l:mid]
 
-        " Binary search to get on the same line
-        if a:loclist[l:mid]['lnum'] < a:line
+        " Binary search for equal buffers, equal lines, then near columns.
+        if l:item.bufnr < a:buffer
             let l:min = l:mid + 1
-        elseif a:loclist[l:mid]['lnum'] > a:line
+        elseif l:item.bufnr > a:buffer
+            let l:max = l:mid - 1
+        elseif l:item.lnum < a:line
+            let l:min = l:mid + 1
+        elseif l:item.lnum > a:line
             let l:max = l:mid - 1
         else
-            let l:last_column_match = l:mid
+            " This part is a small sequential search.
+            let l:index = l:mid
 
-            " Binary search to get the same column, or near it
-            if a:loclist[l:mid]['col'] < a:column
-                let l:min = l:mid + 1
-            elseif a:loclist[l:mid]['col'] > a:column
-                let l:max = l:mid - 1
-            else
-                return l:mid
-            endif
+            " Search backwards to find the first problem on the line.
+            while l:index > 0
+            \&& a:loclist[l:index - 1].bufnr == a:buffer
+            \&& a:loclist[l:index - 1].lnum == a:line
+                let l:index -= 1
+            endwhile
+
+            " Find the last problem on or before this column.
+            while l:index < l:max
+            \&& a:loclist[l:index + 1].bufnr == a:buffer
+            \&& a:loclist[l:index + 1].lnum == a:line
+            \&& a:loclist[l:index + 1].col <= a:column
+                let l:index += 1
+            endwhile
+
+            return l:index
         endif
     endwhile
 endfunction
@@ -136,7 +159,7 @@ function! s:LoadArgCount(function) abort
     endif
 
     let l:match = matchstr(split(l:output, "\n")[0], '\v\([^)]+\)')[1:-2]
-    let l:arg_list = filter(split(l:match, ', '), 'v:val !=# ''...''')
+    let l:arg_list = filter(split(l:match, ', '), 'v:val isnot# ''...''')
 
     return len(l:arg_list)
 endfunction

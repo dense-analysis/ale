@@ -14,7 +14,7 @@ function! ale_linters#dockerfile#hadolint#Handle(buffer, lines) abort
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:lnum = 0
 
-        if l:match[1] !=# ''
+        if l:match[1] isnot# ''
             let l:lnum = l:match[1] + 0
         endif
 

@@ -11,25 +11,25 @@ There are no options for this linter.
 ===============================================================================
 langserver                                                 *ale-php-langserver*
 
-g:php_langserver_executable                       *g:php_langserver_executable*
-                                                  *b:php_langserver_executable*
+g:ale_php_langserver_executable               *g:ale_php_langserver_executable*
+                                              *b:ale_php_langserver_executable*
   Type: |String|
   Default: `'php-language-server.php'`
 
   The variable can be set to configure the executable that will be used for
   running the PHP language server. `vendor` directory executables will be
-  preferred instead of this setting if |g:php_langserver_use_global| is `0`.
+  preferred instead of this setting if |g:ale_php_langserver_use_global| is `0`.
 
   See: |ale-integrations-local-executables|
 
 
-g:php_langserver_use_global                       *g:php_langserver_use_global*
-                                                  *b:php_langserver_use_global*
+g:ale_php_langserver_use_global               *g:ale_php_langserver_use_global*
+                                              *b:ale_php_langserver_use_global*
   Type: |Number|
   Default: `0`
 
   This variable can be set to `1` to force the language server to be run with
-  the executable set for |g:php_langserver_executable|.
+  the executable set for |g:ale_php_langserver_executable|.
 
   See: |ale-integrations-local-executables|
 
@@ -63,7 +63,7 @@ g:ale_php_phpcs_use_global                         *g:ale_php_phpcs_use_global*
   See |ale-integrations-local-executables|
 
 
-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 phpmd                                                           *ale-php-phpmd*
 
 g:ale_php_phpmd_ruleset                               *g:ale_php_phpmd_ruleset*
@@ -75,8 +75,8 @@ g:ale_php_phpmd_ruleset                               *g:ale_php_phpmd_ruleset*
   the available phpmd rulesets
 
 
-------------------------------------------------------------------------------
-phpstan                                                          *ale-php-stan*
+-------------------------------------------------------------------------------
+phpstan                                                       *ale-php-phpstan*
 
 g:ale_php_phpstan_executable                     *g:ale_php_phpstan_executable*
                                                  *b:ale_php_phpstan_executable*

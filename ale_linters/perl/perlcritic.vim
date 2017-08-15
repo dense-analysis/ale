@@ -41,10 +41,10 @@ function! ale_linters#perl#perlcritic#GetCommand(buffer) abort
     let l:command = ale#Escape(ale_linters#perl#perlcritic#GetExecutable(a:buffer))
     \   . " --verbose '". l:critic_verbosity . "' --nocolor"
 
-    if l:profile !=? ''
+    if l:profile isnot? ''
         let l:command .= ' --profile ' . ale#Escape(l:profile)
     endif
-    if l:options !=? ''
+    if l:options isnot? ''
         let l:command .= ' ' . l:options
     endif
 

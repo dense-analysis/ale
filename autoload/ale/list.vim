@@ -62,7 +62,7 @@ function! ale#list#SetLists(buffer, loclist) abort
         endif
 
         " If focus changed, restore it (jump to the last window).
-        if l:winnr !=# winnr()
+        if l:winnr isnot# winnr()
             wincmd p
         endif
 

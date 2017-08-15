@@ -7,7 +7,7 @@ function! ale_linters#rust#rustc#RustcCommand(buffer_number) abort
     " <project root>/target/release/deps/
     let l:cargo_file = ale#path#FindNearestFile(a:buffer_number, 'Cargo.toml')
 
-    if l:cargo_file !=# ''
+    if l:cargo_file isnot# ''
         let l:project_root = fnamemodify(l:cargo_file, ':h')
         let l:dependencies = '-L ' . l:project_root . '/target/debug/deps -L ' .
         \   l:project_root . '/target/release/deps'

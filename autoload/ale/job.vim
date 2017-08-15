@@ -161,7 +161,7 @@ function! ale#job#ParseVim8ProcessID(job_string) abort
 endfunction
 
 function! ale#job#ValidateArguments(command, options) abort
-    if a:options.mode !=# 'nl' && a:options.mode !=# 'raw'
+    if a:options.mode isnot# 'nl' && a:options.mode isnot# 'raw'
         throw 'Invalid mode: ' . a:options.mode
     endif
 endfunction

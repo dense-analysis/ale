@@ -31,7 +31,7 @@ function! ale_linters#elm#make#Handle(buffer, lines) abort
                     \})
                 endif
             endfor
-        elseif l:line !=# 'Successfully generated /dev/null'
+        elseif l:line isnot# 'Successfully generated /dev/null'
             call add(l:unparsed_lines, l:line)
         endif
     endfor

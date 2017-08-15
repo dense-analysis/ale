@@ -55,6 +55,12 @@ while [ $# -ne 0 ]; do
         run_custom_checks=0
         shift
     ;;
+    --custom-checks-only)
+        run_vim_tests=0
+        run_neovim_tests=0
+        run_vint=0
+        shift
+    ;;
     --)
         shift
         break
@@ -211,6 +217,21 @@ if ((run_custom_checks)); then
     echo
 
     grep --exclude=tags -roh '\*.*\*$' doc | sort | uniq -d || EXIT=$?
+
+    echo '========================================'
+    echo 'Checking for invalid tag references'
+    echo '========================================'
+    echo 'Invalid tag references tags follow:'
+    echo
+
+    tag_regex='[gb]\?:\?\(ale\|ALE\)[a-zA-Z_\-]\+'
+
+    # Grep for tags and references, and complain if we find a reference without
+    # a tag for the reference. Only our tags will be included.
+    diff -u \
+        <(grep --exclude=tags -roh "\*$tag_regex\*" doc | sort -u | sed 's/*//g') \
+        <(grep --exclude=tags -roh "|$tag_regex|" doc | sort -u | sed 's/|//g') \
+        | grep '^+[^+]' && EXIT=1
 fi
 
 exit $EXIT

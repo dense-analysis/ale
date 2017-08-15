@@ -67,6 +67,8 @@ if (( FIX_ERRORS )); then
         sed -i "s/shellescape(/ale#Escape(/" "$directory"/**/*.vim
         sed -i 's/==#/is#/g' "$directory"/**/*.vim
         sed -i 's/==?/is?/g' "$directory"/**/*.vim
+        sed -i 's/!=#/isnot#/g' "$directory"/**/*.vim
+        sed -i 's/!=?/isnot?/g' "$directory"/**/*.vim
     done
 fi
 
@@ -84,5 +86,7 @@ check_errors 'simplify(' 'Use ale#path#Simplify instead of simplify'
 check_errors "expand(['\"]%" "Use expand('#' . a:buffer . '...') instead. You might get a filename for the wrong buffer."
 check_errors '==#' "Use 'is#' instead of '==#'. 0 ==# 'foobar' is true"
 check_errors '==?' "Use 'is?' instead of '==?'. 0 ==? 'foobar' is true"
+check_errors '!=#' "Use 'isnot#' instead of '!=#'. 0 !=# 'foobar' is false"
+check_errors '!=?' "Use 'isnot?' instead of '!=?'. 0 !=? 'foobar' is false"
 
 exit $RETURN_CODE
