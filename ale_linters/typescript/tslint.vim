@@ -18,7 +18,9 @@ function! ale_linters#typescript#tslint#Handle(buffer, lines) abort
         if ale#path#IsBufferPath(a:buffer, l:error.name)
             call add(l:output, {
             \   'type': (get(l:error, 'ruleSeverity', '') is# 'WARNING' ? 'W' : 'E'),
-            \   'text': l:error.failure,
+            \   'text': has_key(l:error, 'ruleName')
+            \       ? l:error.ruleName . ': ' . l:error.failure
+            \       : l:error.failure,
             \   'lnum': l:error.startPosition.line + 1,
             \   'col': l:error.startPosition.character + 1,
             \   'end_lnum': l:error.endPosition.line + 1,

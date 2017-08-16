@@ -17,7 +17,7 @@ Execute(The tslint handler should parse lines correctly):
   \     'col': 15,
   \     'end_lnum': 1,
   \     'end_col': 15,
-  \     'text': 'Missing semicolon',
+  \     'text': 'semicolon: Missing semicolon',
   \     'type': 'E',
   \   },
   \   {
@@ -33,7 +33,7 @@ Execute(The tslint handler should parse lines correctly):
   \     'col': 9,
   \     'end_lnum': 31,
   \     'end_col': 20,
-  \     'text': 'Calls to console.log are not allowed.',
+  \     'text': 'no-console: Calls to console.log are not allowed.',
   \     'type': 'E',
   \   },
   \ ],
@@ -72,7 +72,6 @@ Execute(The tslint handler should parse lines correctly):
   \       'innerText': ';'
   \     },
   \     'name': 'app/test.ts',
-  \     'ruleName': 'something',
   \     'ruleSeverity': 'WARNING',
   \     'startPosition': {
   \       'character': 7,
