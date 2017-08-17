@@ -22,6 +22,9 @@ background with a command `ALEFix`.
 
 1. [Supported Languages and Tools](#supported-languages)
 2. [Usage](#usage)
+    1. [Linting](#usage-linting)
+    2. [Fixing](#usage-fixing)
+    3. [Completion](#usage-completion)
 3. [Installation](#installation)
     1. [Installation with Vim package management](#standard-installation)
     2. [Installation with Pathogen](#installation-with-pathogen)
@@ -136,6 +139,10 @@ name. That seems to be the fairest way to arrange this table.
 
 ## 2. Usage
 
+<a name="usage-linting"></a>
+
+### 2.i Linting
+
 Once this plugin is installed, while editing your files in supported
 languages and tools which have been correctly installed,
 this plugin will send the contents of your text buffers to a variety of
@@ -148,8 +155,46 @@ documented in [the Vim help file](doc/ale.txt). For more information on the
 options ALE offers, consult `:help ale-options` for global options and `:help
 ale-linter-options` for options specified to particular linters.
 
+<a name="usage-fixing"></a>
+
+### 2.ii Fixing
+
 ALE can fix files with the `ALEFix` command. Functions need to be configured
-for different filetypes with the `g:ale_fixers` variable. See `:help ale-fix`.
+for different filetypes with the `g:ale_fixers` variable. For example, the
+following code can be used to fix JavaScript code with ESLint:
+
+```vim
+" Put this in vimrc or a plugin file of your own.
+" After this is configured, :ALEFix will try and fix your JS code with ESLint.
+let g:ale_fixers = {
+\   'javascript': ['eslint'],
+\}
+
+" Set this setting in vimrc if you want to fix files automatically on save.
+" This is off by default.
+let g:ale_fix_on_save = 1
+```
+
+The `:ALEFixSuggest` command will suggest some supported tools for fixing code,
+but fixers can be also implemented with functions, including lambda functions
+too. See `:help ale-fix` for detailed information.
+
+<a name="usage-completion"></a>
+
+### 2.iii Completion
+
+ALE offers some support for completion via hijacking of omnicompletion while you
+type. All of ALE's completion information must come from Language Server
+Protocol linters, or similar protocols. At the moment, completion is only
+supported for TypeScript code with `tsserver`, when `tsserver` is enabled. You
+can enable completion like so:
+
+```vim
+" Enable completion where available.
+let g:ale_completion_enabled = 1
+```
+
+See `:help ale-completion` for more information.
 
 <a name="installation"></a>
 
