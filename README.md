@@ -15,8 +15,9 @@ back to a filesystem.
 
 In other words, this plugin allows you to lint while you type.
 
-ALE also supports fixing problems with files by running commands in the
-background with a command `ALEFix`.
+In addition to linting support, ALE offers some support for fixing code with
+formatting tools, and completion via Language Server Protocol servers, or
+servers with similar enough protocols, like `tsserver`.
 
 ## Table of Contents
 
