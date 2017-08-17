@@ -195,7 +195,7 @@ The following languages and tools are supported.
 * HTML: 'HTMLHint', 'proselint', 'tidy'
 * Idris: 'idris'
 * Java: 'javac'
-* JavaScript: 'eslint', 'jscs', 'jshint', 'flow', 'prettier', 'prettier-eslint', 'xo'
+* JavaScript: 'eslint', 'jscs', 'jshint', 'flow', 'prettier', 'prettier-eslint' > 4.2.0, 'xo'
 * JSON: 'jsonlint'
 * Kotlin: 'kotlinc'
 * LaTeX (tex): 'chktex', 'lacheck', 'proselint'
