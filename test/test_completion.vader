@@ -2,6 +2,7 @@ Before:
   Save g:ale_completion_enabled
   Save g:ale_completion_delay
   Save &l:omnifunc
+  Save &l:completeopt
 
   let g:test_vars = {
   \ 'feedkeys_calls': [],
@@ -17,6 +18,8 @@ After:
   Restore
 
   unlet! g:test_vars
+  unlet! b:ale_old_omnifunc
+  unlet! b:ale_old_completopt
   unlet! b:ale_completion_info
   unlet! b:ale_completion_response
   unlet! b:ale_completion_parser
@@ -130,6 +133,14 @@ Execute(ale#completion#Show() should remember the omnifunc setting and replace i
   AssertEqual 'FooBar', b:ale_old_omnifunc
   AssertEqual 'ale#completion#OmniFunc', &l:omnifunc
 
+Execute(ale#completion#Show() should remember the completeopt setting and replace it):
+  let &l:completeopt = 'menu'
+
+  call ale#completion#Show('Response', 'Parser')
+
+  AssertEqual 'menu', b:ale_old_completopt
+  AssertEqual 'menu,menuone,preview,noselect,noinsert', &l:completeopt
+
 Execute(ale#completion#Show() should make the correct feedkeys() call):
   call ale#completion#Show('Response', 'Parser')
 
@@ -149,6 +160,24 @@ Execute(ale#completion#Done() should restore old omnifunc values):
   " We reset the old omnifunc setting and remove the buffer variable.
   AssertEqual 'FooBar', &l:omnifunc
   Assert !has_key(b:, 'ale_old_omnifunc')
+
+Execute(ale#completion#Done() should restore the old completeopt setting):
+  let b:ale_old_completopt = 'menu'
+  let &l:completeopt = 'menu,menuone,preview,noselect,noinsert'
+
+  call ale#completion#Done()
+
+  AssertEqual 'menu', &l:completeopt
+  Assert !has_key(b:, 'ale_old_completopt')
+
+Execute(ale#completion#Done() should leave settings alone when none were remembered):
+  let &l:omnifunc = 'BazBoz'
+  let &l:completeopt = 'menu'
+
+  call ale#completion#Done()
+
+  AssertEqual 'BazBoz', &l:omnifunc
+  AssertEqual 'menu', &l:completeopt
 
 Execute(The completion request_id should be reset when queuing again):
   let b:ale_completion_info = {'request_id': 123}

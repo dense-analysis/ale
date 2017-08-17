@@ -115,11 +115,16 @@ function! ale#completion#Show(response, completion_parser) abort
         let b:ale_old_omnifunc = &l:omnifunc
     endif
 
+    if !exists('b:ale_old_completopt')
+        let b:ale_old_completopt = &l:completeopt
+    endif
+
     " Set the list in the buffer, temporarily replace omnifunc with our
     " function, and then start omni-completion.
     let b:ale_completion_response = a:response
     let b:ale_completion_parser = a:completion_parser
     let &l:omnifunc = 'ale#completion#OmniFunc'
+    let &l:completeopt = 'menu,menuone,preview,noselect,noinsert'
     call ale#completion#FeedKeys("\<C-x>\<C-o>", 'n')
 endfunction
 
@@ -302,6 +307,11 @@ function! ale#completion#Done() abort
     if exists('b:ale_old_omnifunc')
         let &l:omnifunc = b:ale_old_omnifunc
         unlet b:ale_old_omnifunc
+    endif
+
+    if exists('b:ale_old_completopt')
+        let &l:completeopt = b:ale_old_completopt
+        unlet b:ale_old_completopt
     endif
 endfunction
 
