@@ -11,6 +11,6 @@ call ale#linter#Define('haskell', {
 call ale#linter#Define('haskell', {
 \   'name': 'stack-ghc-mod',
 \   'executable': 'stack',
-\   'command': 'stack exec ghc-mod --map-file %s=%t check %s',
+\   'command': 'stack exec ghc-mod -- --map-file %s=%t check %s',
 \   'callback': 'ale#handlers#haskell#HandleGHCFormat',
 \})
