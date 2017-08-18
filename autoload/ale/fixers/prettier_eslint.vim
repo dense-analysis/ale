@@ -24,6 +24,7 @@ endfunction
 call ale#Set('javascript_prettier_eslint_executable', 'prettier-eslint')
 call ale#Set('javascript_prettier_eslint_use_global', 0)
 call ale#Set('javascript_prettier_eslint_options', '')
+call ale#Set('javascript_prettier_eslint_legacy', 0)
 
 function! ale#fixers#prettier_eslint#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'javascript_prettier_eslint', [
@@ -37,10 +38,15 @@ function! ale#fixers#prettier_eslint#Fix(buffer, lines) abort
     let l:executable = ale#fixers#prettier_eslint#GetExecutable(a:buffer)
     let l:config = s:FindConfig(a:buffer)
 
+    let l:eslint_config_option = ' --eslint-config-path ' . ale#Escape(l:config)
+    if ale#Var(a:buffer, 'javascript_prettier_eslint_legacy')
+      let l:eslint_config_option = ''
+    endif
+
     return {
     \   'command': ale#Escape(l:executable)
     \       . ' %t'
-    \       . ' --eslint-config-path ' . ale#Escape(l:config)
+    \       . l:eslint_config_option
     \       . ' ' . l:options
     \       . ' --write',
     \   'read_temporary_file': 1,
