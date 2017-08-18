@@ -71,6 +71,14 @@ function! ale#completion#FilterSuggestionsByPrefix(suggestions, prefix) abort
     return l:filtered_suggestions
 endfunction
 
+function! s:ReplaceCompleteopt() abort
+    if !exists('b:ale_old_completopt')
+        let b:ale_old_completopt = &l:completeopt
+    endif
+
+    let &l:completeopt = 'menu,menuone,preview,noselect,noinsert'
+endfunction
+
 function! ale#completion#OmniFunc(findstart, base) abort
     if a:findstart
         let l:line = b:ale_completion_info.line
@@ -98,6 +106,8 @@ function! ale#completion#OmniFunc(findstart, base) abort
             \)[: g:ale_completion_max_suggestions]
         endif
 
+        call s:ReplaceCompleteopt()
+
         return get(b:, 'ale_completion_result', [])
     endif
 endfunction
@@ -115,16 +125,12 @@ function! ale#completion#Show(response, completion_parser) abort
         let b:ale_old_omnifunc = &l:omnifunc
     endif
 
-    if !exists('b:ale_old_completopt')
-        let b:ale_old_completopt = &l:completeopt
-    endif
-
     " Set the list in the buffer, temporarily replace omnifunc with our
     " function, and then start omni-completion.
     let b:ale_completion_response = a:response
     let b:ale_completion_parser = a:completion_parser
     let &l:omnifunc = 'ale#completion#OmniFunc'
-    let &l:completeopt = 'menu,menuone,preview,noselect,noinsert'
+    call s:ReplaceCompleteopt()
     call ale#completion#FeedKeys("\<C-x>\<C-o>", 'n')
 endfunction
 

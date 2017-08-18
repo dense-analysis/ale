@@ -141,6 +141,14 @@ Execute(ale#completion#Show() should remember the completeopt setting and replac
   AssertEqual 'menu', b:ale_old_completopt
   AssertEqual 'menu,menuone,preview,noselect,noinsert', &l:completeopt
 
+Execute(ale#completion#OmniFunc() should also remember the completeopt setting and replace it):
+  let &l:completeopt = 'menu'
+
+  call ale#completion#OmniFunc(0, '')
+
+  AssertEqual 'menu', b:ale_old_completopt
+  AssertEqual 'menu,menuone,preview,noselect,noinsert', &l:completeopt
+
 Execute(ale#completion#Show() should make the correct feedkeys() call):
   call ale#completion#Show('Response', 'Parser')
 
