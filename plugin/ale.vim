@@ -190,7 +190,7 @@ call ale#Set('type_map', {})
 " Enable automatic completion with LSP servers and tsserver
 call ale#Set('completion_enabled', 0)
 call ale#Set('completion_delay', 100)
-call ale#Set('completion_max_suggestions', 20)
+call ale#Set('completion_max_suggestions', 50)
 
 function! ALEInitAuGroups() abort
     " This value used to be a Boolean as a Number, and is now a String.

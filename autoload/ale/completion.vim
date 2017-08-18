@@ -43,7 +43,7 @@ let s:omni_start_map = {
 \   'typescript': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$',
 \}
 
-function! ale#completion#FilterSuggestionsByPrefix(suggestions, prefix) abort
+function! ale#completion#Filter(suggestions, prefix) abort
     " For completing...
     "   foo.
     "       ^
@@ -57,14 +57,17 @@ function! ale#completion#FilterSuggestionsByPrefix(suggestions, prefix) abort
     " Filter suggestions down to those starting with the prefix we used for
     " finding suggestions in the first place.
     "
-    " Some completion tools will
-    " include suggestions which don't even start with the characters we have
-    " already typed.
-    for l:suggestion in a:suggestions
+    " Some completion tools will include suggestions which don't even start
+    " with the characters we have already typed.
+    for l:item in a:suggestions
+        " A List of String values or a List of completion item Dictionaries
+        " is accepted here.
+        let l:word = type(l:item) == type('') ? l:item : l:item.word
+
         " Add suggestions if the suggestion starts with a case-insensitive
         " match for the prefix.
-        if l:suggestion.word[: len(a:prefix) - 1] is? a:prefix
-            call add(l:filtered_suggestions, l:suggestion)
+        if l:word[: len(a:prefix) - 1] is? a:prefix
+            call add(l:filtered_suggestions, l:item)
         endif
     endfor
 
@@ -98,12 +101,7 @@ function! ale#completion#OmniFunc(findstart, base) abort
             unlet b:ale_completion_response
             unlet b:ale_completion_parser
 
-            let l:prefix = b:ale_completion_info.prefix
-
-            let b:ale_completion_result = ale#completion#FilterSuggestionsByPrefix(
-            \   function(l:parser)(l:response),
-            \   l:prefix
-            \)[: g:ale_completion_max_suggestions]
+            let b:ale_completion_result = function(l:parser)(l:response)
         endif
 
         call s:ReplaceCompleteopt()
@@ -191,7 +189,7 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
     return l:results
 endfunction
 
-function! s:HandleTSServerLSPResponse(conn_id, response) abort
+function! ale#completion#HandleTSServerLSPResponse(conn_id, response) abort
     if !s:CompletionStillValid(get(a:response, 'request_seq'))
         return
     endif
@@ -203,7 +201,10 @@ function! s:HandleTSServerLSPResponse(conn_id, response) abort
     let l:command = get(a:response, 'command', '')
 
     if l:command is# 'completions'
-        let l:names = ale#completion#ParseTSServerCompletions(a:response)
+        let l:names = ale#completion#Filter(
+        \   ale#completion#ParseTSServerCompletions(a:response),
+        \   b:ale_completion_info.prefix,
+        \)[: g:ale_completion_max_suggestions - 1]
 
         if !empty(l:names)
             let b:ale_completion_info.request_id = ale#lsp#Send(
@@ -229,7 +230,7 @@ function! s:GetLSPCompletions(linter) abort
     let l:lsp_details = ale#linter#StartLSP(
     \   l:buffer,
     \   a:linter,
-    \   function('s:HandleTSServerLSPResponse'),
+    \   function('ale#completion#HandleTSServerLSPResponse'),
     \)
 
     if empty(l:lsp_details)

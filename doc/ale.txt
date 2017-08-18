@@ -296,7 +296,7 @@ g:ale_completion_enabled                             *g:ale_completion_enabled*
 g:ale_completion_max_suggestions             *g:ale_completion_max_suggestions*
 
   Type: |Number|
-  Default: `20`
+  Default: `50`
 
   The maximum number of items ALE will suggest in completion menus for
   automatic completion.

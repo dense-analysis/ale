@@ -1,6 +1,7 @@
 Before:
   Save g:ale_completion_enabled
   Save g:ale_completion_delay
+  Save g:ale_completion_max_suggestions
   Save &l:omnifunc
   Save &l:completeopt
 
@@ -25,6 +26,7 @@ After:
   unlet! b:ale_completion_parser
 
   runtime autoload/ale/completion.vim
+  runtime autoload/ale/lsp.vim
 
   if g:ale_completion_enabled
     call ale#completion#Enable()
@@ -107,6 +109,89 @@ Execute(TypeScript completion details responses should be parsed correctly):
   \   },
   \ ],
   \})
+
+Execute(Prefix filtering should work for Lists of strings):
+  AssertEqual
+  \ ['FooBar', 'foo'],
+  \ ale#completion#Filter(['FooBar', 'FongBar', 'baz', 'foo'], 'foo')
+  AssertEqual
+  \ ['FooBar', 'FongBar', 'baz', 'foo'],
+  \ ale#completion#Filter(['FooBar', 'FongBar', 'baz', 'foo'], '.')
+
+Execute(Prefix filtering should work for completion items):
+  AssertEqual
+  \ [{'word': 'FooBar'}, {'word': 'foo'}],
+  \ ale#completion#Filter(
+  \   [
+  \     {'word': 'FooBar'},
+  \     {'word': 'FongBar'},
+  \     {'word': 'baz'},
+  \     {'word': 'foo'},
+  \   ],
+  \   'foo'
+  \ )
+  AssertEqual
+  \ [
+  \   {'word': 'FooBar'},
+  \   {'word': 'FongBar'},
+  \   {'word': 'baz'},
+  \   {'word': 'foo'},
+  \ ],
+  \ ale#completion#Filter(
+  \   [
+  \     {'word': 'FooBar'},
+  \     {'word': 'FongBar'},
+  \     {'word': 'baz'},
+  \     {'word': 'foo'},
+  \   ],
+  \   '.'
+  \ )
+
+Execute(The right message sent to the tsserver LSP when the first completion message is received):
+  " The cursor position needs to match what was saved before.
+  call setpos('.', [bufnr(''), 1, 1, 0])
+  let b:ale_completion_info = {
+  \ 'conn_id': 123,
+  \ 'prefix': 'f',
+  \ 'request_id': 4,
+  \ 'line': 1,
+  \ 'column': 1,
+  \}
+  " We should only show up to this many suggestions.
+  let g:ale_completion_max_suggestions = 3
+
+  " Replace the Send function for LSP, so we can monitor calls to it.
+  function! ale#lsp#Send(conn_id, message) abort
+    let g:test_vars.message = a:message
+  endfunction
+
+  " Handle the response for completions.
+  call ale#completion#HandleTSServerLSPResponse(123, {
+  \ 'request_seq': 4,
+  \ 'command': 'completions',
+  \ 'body': [
+  \   {'name': 'Baz'},
+  \   {'name': 'dingDong'},
+  \   {'name': 'Foo'},
+  \   {'name': 'FooBar'},
+  \   {'name': 'frazzle'},
+  \   {'name': 'FFS'},
+  \ ],
+  \})
+
+  " The entry details messages should have been sent.
+  AssertEqual
+  \ [
+  \   0,
+  \   'ts@completionEntryDetails',
+  \   {
+  \     'file': expand('%:p'),
+  \     'entryNames': ['Foo', 'FooBar', 'frazzle'],
+  \     'offset': 1,
+  \     'line': 1,
+  \   },
+  \ ],
+  \ g:test_vars.message
 
 Given typescript():
   let abc = y.
