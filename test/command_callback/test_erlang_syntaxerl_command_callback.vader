@@ -25,22 +25,22 @@ Execute (The executable should be correct):
 
 Execute (The executable should be presented in the feature check command):
   let g:ale_erlang_syntaxerl_executable = '/some/other/syntaxerl'
-  AssertEqual '/some/other/syntaxerl -h', ale_linters#erlang#syntaxerl#FeatureCheck(bufnr(''))
+  AssertEqual "'/some/other/syntaxerl' -h", ale_linters#erlang#syntaxerl#FeatureCheck(bufnr(''))
 
   let b:ale_erlang_syntaxerl_executable = '/yet/another/syntaxerl'
-  AssertEqual '/yet/another/syntaxerl -h', ale_linters#erlang#syntaxerl#FeatureCheck(bufnr(''))
+  AssertEqual "'/yet/another/syntaxerl' -h", ale_linters#erlang#syntaxerl#FeatureCheck(bufnr(''))
 
 
 Execute (The executable should be presented in the command):
   let g:ale_erlang_syntaxerl_executable = '/some/other/syntaxerl'
-  AssertEqual '/some/other/syntaxerl %t', ale_linters#erlang#syntaxerl#GetCommand(bufnr(''), [])
+  AssertEqual "'/some/other/syntaxerl' %t", ale_linters#erlang#syntaxerl#GetCommand(bufnr(''), [])
 
   let b:ale_erlang_syntaxerl_executable = '/yet/another/syntaxerl'
-  AssertEqual '/yet/another/syntaxerl %t', ale_linters#erlang#syntaxerl#GetCommand(bufnr(''), [])
+  AssertEqual "'/yet/another/syntaxerl' %t", ale_linters#erlang#syntaxerl#GetCommand(bufnr(''), [])
 
 
 Execute (The -b option should be used when available):
-  AssertEqual 'syntaxerl %t', ale_linters#erlang#syntaxerl#GetCommand(bufnr(''), [
+  AssertEqual "'syntaxerl' %t", ale_linters#erlang#syntaxerl#GetCommand(bufnr(''), [
   \   'Syntax checker for Erlang (0.14.0)',
   \   'Usage: syntaxerl [-d | --debug] <FILENAME>',
   \   '       syntaxerl <-h | --help>',
@@ -48,7 +48,7 @@ Execute (The -b option should be used when available):
   \   '  -h, --help     Show this message',
   \ ])
 
-  AssertEqual 'syntaxerl -b %s %t', ale_linters#erlang#syntaxerl#GetCommand(bufnr(''), [
+  AssertEqual "'syntaxerl' -b %s %t", ale_linters#erlang#syntaxerl#GetCommand(bufnr(''), [
   \   'Syntax checker for Erlang (0.14.0)',
   \   'Usage: syntaxerl [-b | --base <FILENAME>] [-d | --debug] <FILENAME>',
   \   '       syntaxerl <-h | --help>',

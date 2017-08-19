@@ -10,15 +10,14 @@ endfunction
 
 
 function! ale_linters#erlang#syntaxerl#FeatureCheck(buffer) abort
-    return ale_linters#erlang#syntaxerl#GetExecutable(a:buffer) . ' -h'
+    return s:GetEscapedExecutable(a:buffer) . ' -h'
 endfunction
 
 
 function! ale_linters#erlang#syntaxerl#GetCommand(buffer, output) abort
     let l:use_b_option = match(a:output, '\C\V-b, --base\>') > -1
 
-    return ale_linters#erlang#syntaxerl#GetExecutable(a:buffer)
-    \   . (l:use_b_option ? ' -b %s %t' : ' %t')
+    return s:GetEscapedExecutable(a:buffer) . (l:use_b_option ? ' -b %s %t' : ' %t')
 endfunction
 
 
@@ -35,6 +34,11 @@ function! ale_linters#erlang#syntaxerl#Handle(buffer, lines) abort
     endfor
 
     return l:loclist
+endfunction
+
+
+function! s:GetEscapedExecutable(buffer) abort
+    return ale#Escape(ale_linters#erlang#syntaxerl#GetExecutable(a:buffer))
 endfunction
 
 
