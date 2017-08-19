@@ -50,7 +50,11 @@ function! ale#engine#InitBufferInfo(buffer) abort
         \   'temporary_directory_list': [],
         \   'history': [],
         \}
+
+        return 1
     endif
+
+    return 0
 endfunction
 
 " Return 1 if ALE is busy checking a given buffer
@@ -408,8 +412,9 @@ function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
         if l:item.lnum < 1
             " When errors appear before line 1, put them at line 1.
             let l:item.lnum = 1
-        elseif l:item.lnum > l:last_line_number
+        elseif l:item.bufnr == a:buffer && l:item.lnum > l:last_line_number
             " When errors go beyond the end of the file, put them at the end.
+            " This is only done for the current buffer.
             let l:item.lnum = l:last_line_number
         endif
 
@@ -701,6 +706,35 @@ function! s:RemoveProblemsForDisabledLinters(buffer, linters) abort
     \)
 endfunction
 
+function! s:AddProblemsFromOtherBuffers(buffer, linters) abort
+    let l:filename = expand('#' . a:buffer . ':p')
+    let l:loclist = []
+    let l:name_map = {}
+
+    " Build a map of the active linters.
+    for l:linter in a:linters
+        let l:name_map[l:linter.name] = 1
+    endfor
+
+    " Find the items from other buffers, for the linters that are enabled.
+    for l:info in values(g:ale_buffer_info)
+        for l:item in l:info.loclist
+            if has_key(l:item, 'filename')
+            \&& l:item.filename is# l:filename
+            \&& has_key(l:name_map, l:item.linter_name)
+                call add(l:loclist, l:item)
+            endif
+        endfor
+    endfor
+
+    if !empty(l:loclist)
+        call sort(l:loclist, function('ale#util#LocItemCompareWithText'))
+        call uniq(l:loclist, function('ale#util#LocItemCompareWithText'))
+
+        call ale#engine#SetResults(a:buffer, l:loclist)
+    endif
+endfunction
+
 " Run a linter for a buffer.
 "
 " Returns 1 if the linter was successfully run.
@@ -720,7 +754,7 @@ endfunction
 
 function! ale#engine#RunLinters(buffer, linters, should_lint_file) abort
     " Initialise the buffer information if needed.
-    call ale#engine#InitBufferInfo(a:buffer)
+    let l:new_buffer = ale#engine#InitBufferInfo(a:buffer)
     call s:StopCurrentJobs(a:buffer, a:should_lint_file)
     call s:RemoveProblemsForDisabledLinters(a:buffer, a:linters)
 
@@ -745,6 +779,8 @@ function! ale#engine#RunLinters(buffer, linters, should_lint_file) abort
     " disabled, or ALE itself is disabled.
     if l:can_clear_results
         call ale#engine#SetResults(a:buffer, [])
+    elseif l:new_buffer
+        call s:AddProblemsFromOtherBuffers(a:buffer, a:linters)
     endif
 endfunction
 

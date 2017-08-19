@@ -20,25 +20,6 @@ function! s:ShouldOpen(buffer) abort
     return l:val is 1 || (l:val is# 'on_save' && l:saved)
 endfunction
 
-" A comparison function for de-duplicating loclist items for quickfix.
-function! ale#list#TextLocItemCompare(left, right) abort
-    let l:cmp_val = ale#util#LocItemCompare(a:left, a:right)
-
-    if l:cmp_val
-        return l:cmp_val
-    endif
-
-    if a:left.text < a:right.text
-        return -1
-    endif
-
-    if a:left.text > a:right.text
-        return 1
-    endif
-
-    return 0
-endfunction
-
 function! ale#list#GetCombinedList() abort
     let l:list = []
 
@@ -46,8 +27,8 @@ function! ale#list#GetCombinedList() abort
         call extend(l:list, l:info.loclist)
     endfor
 
-    call sort(l:list, function('ale#list#TextLocItemCompare'))
-    call uniq(l:list, function('ale#list#TextLocItemCompare'))
+    call sort(l:list, function('ale#util#LocItemCompareWithText'))
+    call uniq(l:list, function('ale#util#LocItemCompareWithText'))
 
     return l:list
 endfunction
