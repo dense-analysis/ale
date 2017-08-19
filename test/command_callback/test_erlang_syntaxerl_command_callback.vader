@@ -1,12 +1,11 @@
 Before:
   Save g:ale_erlang_syntaxerl_executable
-  Save g:ale_erlang_syntaxerl_use_basename
 
   unlet! g:ale_erlang_syntaxerl_executable
   unlet! b:ale_erlang_syntaxerl_executable
-  unlet! b:ale_erlang_syntaxerl_use_basename
 
   runtime ale_linters/erlang/syntaxerl.vim
+
 
 After:
   Restore
@@ -14,7 +13,7 @@ After:
   call ale#linter#Reset()
 
 
-Execute (The SyntaxErl executable should be correct):
+Execute (The executable should be correct):
   AssertEqual 'syntaxerl', ale_linters#erlang#syntaxerl#GetExecutable(bufnr(''))
 
   let g:ale_erlang_syntaxerl_executable = '/some/other/syntaxerl'
@@ -23,17 +22,37 @@ Execute (The SyntaxErl executable should be correct):
   let b:ale_erlang_syntaxerl_executable = '/yet/another/syntaxerl'
   AssertEqual '/yet/another/syntaxerl', ale_linters#erlang#syntaxerl#GetExecutable(bufnr(''))
 
-Execute (The default SyntaxErl command should be correct):
-  AssertEqual 'syntaxerl %t', ale_linters#erlang#syntaxerl#GetCommand(bufnr(''))
 
-Execute (The executable name should be used in the command):
+Execute (The executable should be presented in the feature check command):
   let g:ale_erlang_syntaxerl_executable = '/some/other/syntaxerl'
-  AssertEqual '/some/other/syntaxerl %t', ale_linters#erlang#syntaxerl#GetCommand(bufnr(''))
+  AssertEqual "'/some/other/syntaxerl' -h", ale_linters#erlang#syntaxerl#FeatureCheck(bufnr(''))
 
   let b:ale_erlang_syntaxerl_executable = '/yet/another/syntaxerl'
-  AssertEqual '/yet/another/syntaxerl %t', ale_linters#erlang#syntaxerl#GetCommand(bufnr(''))
+  AssertEqual "'/yet/another/syntaxerl' -h", ale_linters#erlang#syntaxerl#FeatureCheck(bufnr(''))
 
-Execute (The basename option should be set when the option is on):
-  let b:ale_erlang_syntaxerl_use_basename = 1
 
-  AssertEqual 'syntaxerl -b %s %t', ale_linters#erlang#syntaxerl#GetCommand(bufnr(''))
+Execute (The executable should be presented in the command):
+  let g:ale_erlang_syntaxerl_executable = '/some/other/syntaxerl'
+  AssertEqual "'/some/other/syntaxerl' %t", ale_linters#erlang#syntaxerl#GetCommand(bufnr(''), [])
+
+  let b:ale_erlang_syntaxerl_executable = '/yet/another/syntaxerl'
+  AssertEqual "'/yet/another/syntaxerl' %t", ale_linters#erlang#syntaxerl#GetCommand(bufnr(''), [])
+
+
+Execute (The -b option should be used when available):
+  AssertEqual "'syntaxerl' %t", ale_linters#erlang#syntaxerl#GetCommand(bufnr(''), [
+  \   'Syntax checker for Erlang (0.14.0)',
+  \   'Usage: syntaxerl [-d | --debug] <FILENAME>',
+  \   '       syntaxerl <-h | --help>',
+  \   '  -d, --debug    Enable debug output',
+  \   '  -h, --help     Show this message',
+  \ ])
+
+  AssertEqual "'syntaxerl' -b %s %t", ale_linters#erlang#syntaxerl#GetCommand(bufnr(''), [
+  \   'Syntax checker for Erlang (0.14.0)',
+  \   'Usage: syntaxerl [-b | --base <FILENAME>] [-d | --debug] <FILENAME>',
+  \   '       syntaxerl <-h | --help>',
+  \   '  -b, --base     Set original filename',
+  \   '  -d, --debug    Enable debug output',
+  \   '  -h, --help     Show this message',
+  \ ])
