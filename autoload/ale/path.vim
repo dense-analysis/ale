@@ -86,6 +86,19 @@ function! ale#path#IsTempName(filename) abort
     return 0
 endfunction
 
+" Given a base directory, which must not have a trailing slash, and a
+" filename, which may have an absolute path a path relative to the base
+" directory, return the absolute path to the file.
+function! ale#path#GetAbsPath(base_directory, filename) abort
+    if ale#path#IsAbsolute(a:filename)
+        return a:filename
+    endif
+
+    let l:sep = has('win32') ? '\' : '/'
+
+    return ale#path#Simplify(a:base_directory . l:sep . a:filename)
+endfunction
+
 " Given a buffer number and a relative or absolute path, return 1 if the
 " two paths represent the same file on disk.
 function! ale#path#IsBufferPath(buffer, complex_filename) abort

@@ -362,6 +362,7 @@ function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
         " The linter_name will be set on the errors so it can be used in
         " output, filtering, etc..
         let l:item = {
+        \   'bufnr': a:buffer,
         \   'text': l:old_item.text,
         \   'lnum': str2nr(l:old_item.lnum),
         \   'col': str2nr(get(l:old_item, 'col', 0)),
@@ -372,7 +373,11 @@ function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
         \}
 
         if has_key(l:old_item, 'filename')
+        \&& l:old_item.filename[:len(s:temp_dir) - 1] isnot# s:temp_dir
             " Use the filename given.
+            " Temporary files are assumed to be for this buffer,
+            " and the filename is not included then, because it looks bad
+            " in the loclist window.
             let l:filename = l:old_item.filename
             let l:item.filename = l:filename
 
@@ -384,10 +389,6 @@ function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
             elseif has_key(l:bufnr_map, l:filename)
                 " Get the buffer number from the map, which can be faster.
                 let l:item.bufnr = l:bufnr_map[l:filename]
-            elseif l:filename[:len(s:temp_dir) - 1] is# s:temp_dir
-                " Assume that any temporary files are for this buffer.
-                let l:item.bufnr = a:buffer
-                let l:bufnr_map[l:filename] = a:buffer
             else
                 " Look up the buffer number.
                 let l:item.bufnr = bufnr(l:filename)
@@ -395,8 +396,6 @@ function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
             endif
         elseif has_key(l:old_item, 'bufnr')
             let l:item.bufnr = l:old_item.bufnr
-        else
-            let l:item.bufnr = a:buffer
         endif
 
         if has_key(l:old_item, 'detail')

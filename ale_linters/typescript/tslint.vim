@@ -12,27 +12,27 @@ function! ale_linters#typescript#tslint#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#typescript#tslint#Handle(buffer, lines) abort
+    let l:dir = expand('#' . a:buffer . ':p:h')
     let l:output = []
 
     for l:error in ale#util#FuzzyJSONDecode(a:lines, [])
-        if ale#path#IsBufferPath(a:buffer, l:error.name)
-            call add(l:output, {
-            \   'type': (get(l:error, 'ruleSeverity', '') is# 'WARNING' ? 'W' : 'E'),
-            \   'text': has_key(l:error, 'ruleName')
-            \       ? l:error.ruleName . ': ' . l:error.failure
-            \       : l:error.failure,
-            \   'lnum': l:error.startPosition.line + 1,
-            \   'col': l:error.startPosition.character + 1,
-            \   'end_lnum': l:error.endPosition.line + 1,
-            \   'end_col': l:error.endPosition.character + 1,
-            \})
-        endif
+        call add(l:output, {
+        \   'filename': ale#path#GetAbsPath(l:dir, l:error.name),
+        \   'type': (get(l:error, 'ruleSeverity', '') is# 'WARNING' ? 'W' : 'E'),
+        \   'text': has_key(l:error, 'ruleName')
+        \       ? l:error.ruleName . ': ' . l:error.failure
+        \       : l:error.failure,
+        \   'lnum': l:error.startPosition.line + 1,
+        \   'col': l:error.startPosition.character + 1,
+        \   'end_lnum': l:error.endPosition.line + 1,
+        \   'end_col': l:error.endPosition.character + 1,
+        \})
     endfor
 
     return l:output
 endfunction
 
-function! ale_linters#typescript#tslint#BuildLintCommand(buffer) abort
+function! ale_linters#typescript#tslint#GetCommand(buffer) abort
     let l:tslint_config_path = ale#path#ResolveLocalPath(
     \   a:buffer,
     \   'tslint.json',
@@ -43,7 +43,8 @@ function! ale_linters#typescript#tslint#BuildLintCommand(buffer) abort
     \   ? ' -c ' . ale#Escape(l:tslint_config_path)
     \   : ''
 
-    return ale_linters#typescript#tslint#GetExecutable(a:buffer)
+    return ale#path#BufferCdString(a:buffer)
+    \   . ale_linters#typescript#tslint#GetExecutable(a:buffer)
     \   . ' --format json'
     \   . l:tslint_config_option
     \   . ' %t'
@@ -52,6 +53,6 @@ endfunction
 call ale#linter#Define('typescript', {
 \   'name': 'tslint',
 \   'executable_callback': 'ale_linters#typescript#tslint#GetExecutable',
-\   'command_callback': 'ale_linters#typescript#tslint#BuildLintCommand',
+\   'command_callback': 'ale_linters#typescript#tslint#GetCommand',
 \   'callback': 'ale_linters#typescript#tslint#Handle',
 \})

@@ -1,0 +1,24 @@
+Before:
+  Save g:typescript_tslint_executable
+  Save g:typescript_tslint_config_path
+  Save g:typescript_tslint_use_global
+
+  unlet! g:typescript_tslint_executable
+  unlet! g:typescript_tslint_config_path
+  unlet! g:typescript_tslint_use_global
+
+  runtime ale_linters/typescript/tslint.vim
+
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(The default tslint command should be correct):
+  AssertEqual
+  \ 'cd ''' . expand('%:p:h') . ''' && '
+  \   . 'tslint --format json %t',
+  \ ale_linters#typescript#tslint#GetCommand(bufnr(''))

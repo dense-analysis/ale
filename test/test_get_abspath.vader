@@ -1,0 +1,15 @@
+Execute(Relative paths should be resolved correctly):
+  AssertEqual
+  \ '/foo/bar/baz/whatever.txt',
+  \ ale#path#GetAbsPath('/foo/bar/xyz', '../baz/whatever.txt')
+  AssertEqual
+  \ '/foo/bar/xyz/whatever.txt',
+  \ ale#path#GetAbsPath('/foo/bar/xyz', './whatever.txt')
+  AssertEqual
+  \ '/foo/bar/xyz/whatever.txt',
+  \ ale#path#GetAbsPath('/foo/bar/xyz', 'whatever.txt')
+
+Execute(Absolute paths should be resolved correctly):
+  AssertEqual
+  \ '/ding/dong',
+  \ ale#path#GetAbsPath('/foo/bar/xyz', '/ding/dong')
