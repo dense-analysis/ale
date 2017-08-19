@@ -10,7 +10,7 @@ endfunction
 
 
 function! ale_linters#erlang#syntaxerl#GetCommand(buffer) abort
-    return ale_linters#erlang#syntaxerl#GetExecutable(a:buffer) . ' %t'
+    return ale_linters#erlang#syntaxerl#GetExecutable(a:buffer) . ' -b %s %t'
 endfunction
 
 
