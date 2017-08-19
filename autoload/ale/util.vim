@@ -30,6 +30,16 @@ function! ale#util#LocItemCompare(left, right) abort
         return 1
     endif
 
+    if a:left.bufnr == -1
+        if a:left.filename < a:right.filename
+            return -1
+        endif
+
+        if a:left.filename > a:right.filename
+            return 1
+        endif
+    endif
+
     if a:left.lnum < a:right.lnum
         return -1
     endif
