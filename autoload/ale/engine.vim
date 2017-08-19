@@ -336,6 +336,9 @@ function! s:RemapItemTypes(type_map, loclist) abort
     endfor
 endfunction
 
+" Save the temporary directory so we can figure out if files are in it.
+let s:temp_dir = fnamemodify(tempname(), ':h')
+
 function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
     let l:bufnr_map = {}
     let l:new_loclist = []
@@ -381,6 +384,10 @@ function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
             elseif has_key(l:bufnr_map, l:filename)
                 " Get the buffer number from the map, which can be faster.
                 let l:item.bufnr = l:bufnr_map[l:filename]
+            elseif l:filename[:len(s:temp_dir) - 1] is# s:temp_dir
+                " Assume that any temporary files are for this buffer.
+                let l:item.bufnr = a:buffer
+                let l:bufnr_map[l:filename] = a:buffer
             else
                 " Look up the buffer number.
                 let l:item.bufnr = bufnr(l:filename)
