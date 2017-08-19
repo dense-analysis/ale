@@ -1365,9 +1365,27 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          `end_lnum` - An optional end line number.
                            This key can set along with `end_col` for
                            highlighting multi-line problems.
-                         `bufnr` - The buffer number should match the buffer
-                           being checked, and this value will default to
-                           the buffer being checked.
+                         `bufnr` - This key represents the buffer number the
+                           problems are for. This value will default to
+                           the buffer number being checked.
+
+                           The `filename` key can be set instead of this key,
+                           and then the eventual `bufnr` value in the final
+                           list will either represent the number for an open
+                           buffer or `-1` for a file not open in any buffer.
+                         `filename` - An optional filename for the file the
+                           problems are for. This should be an absolute path to
+                           a file.
+
+                           Problems for files which have not yet been opened
+                           will be set in those files after they are opened
+                           and have been checked at least once.
+
+                           Temporary files in directories used for Vim
+                           temporary files with `tempname()` will be asssumed
+                           to be the buffer being checked, unless the `bufnr`
+                           key is also set with a valid number for some other
+                           buffer.
                          `vcol` - Defaults to `0`.
                          `type` - Defaults to `'E'`.
                          `nr` - Defaults to `-1`.
