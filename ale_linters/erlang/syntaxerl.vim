@@ -2,6 +2,7 @@
 " Description: SyntaxErl linter for Erlang files
 
 call ale#Set('erlang_syntaxerl_executable', 'syntaxerl')
+call ale#Set('erlang_syntaxerl_use_basename', 0)
 
 
 function! ale_linters#erlang#syntaxerl#GetExecutable(buffer) abort
@@ -10,7 +11,13 @@ endfunction
 
 
 function! ale_linters#erlang#syntaxerl#GetCommand(buffer) abort
-    return ale_linters#erlang#syntaxerl#GetExecutable(a:buffer) . ' -b %s %t'
+    let l:base_options = ale#Var(a:buffer, 'erlang_syntaxerl_use_basename')
+    \   ? ' -b %s'
+    \   : ''
+
+    return ale_linters#erlang#syntaxerl#GetExecutable(a:buffer)
+    \   . l:base_options
+    \   . ' %t'
 endfunction
 
 
