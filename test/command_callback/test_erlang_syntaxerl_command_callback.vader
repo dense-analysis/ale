@@ -17,10 +17,10 @@ Execute (Get SyntaxErl executable):
   AssertEqual '/yet/another/syntaxerl', ale_linters#erlang#syntaxerl#GetExecutable(bufnr(''))
 
 Execute (Get SyntaxErl command line):
-  AssertEqual 'syntaxerl %t', ale_linters#erlang#syntaxerl#GetCommand(bufnr(''))
+  AssertEqual 'syntaxerl -b %s %t', ale_linters#erlang#syntaxerl#GetCommand(bufnr(''))
 
   let g:ale_erlang_syntaxerl_executable = '/some/other/syntaxerl'
-  AssertEqual '/some/other/syntaxerl %t', ale_linters#erlang#syntaxerl#GetCommand(bufnr(''))
+  AssertEqual '/some/other/syntaxerl -b %s %t', ale_linters#erlang#syntaxerl#GetCommand(bufnr(''))
 
   let b:ale_erlang_syntaxerl_executable = '/yet/another/syntaxerl'
-  AssertEqual '/yet/another/syntaxerl %t', ale_linters#erlang#syntaxerl#GetCommand(bufnr(''))
+  AssertEqual '/yet/another/syntaxerl -b %s %t', ale_linters#erlang#syntaxerl#GetCommand(bufnr(''))
