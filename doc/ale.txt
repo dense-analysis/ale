@@ -737,9 +737,12 @@ g:ale_set_quickfix                                         *g:ale_set_quickfix*
   Type: |Number|
   Default: `0`
 
-  When this option is set to `1`, the |quickfix| list will be populated with any
-  warnings and errors which are found by ALE, instead of the |loclist|. The
-  loclist will never be populated when this option is on.
+  When this option is set to `1`, the |quickfix| list will be populated with
+  any problems which are found by ALE, instead of the |loclist|. The loclist
+  will never be populated when this option is on.
+
+  Problems from every buffer ALE has checked will be included in the quickfix
+  list, which can be checked with |:copen|. Problems will be de-duplicated.
 
 
 g:ale_set_signs                                               *g:ale_set_signs*
