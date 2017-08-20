@@ -489,6 +489,11 @@ g:ale_lint_on_enter                                       *g:ale_lint_on_enter*
   files have been changed outside of Vim. If a file is changed outside of
   Vim, it will be checked when it is next opened.
 
+  A |BufWinLeave| event will be used to look for the |E924|, |E925|, or |E926|
+  errors after moving from a loclist or quickfix window to a new buffer. If
+  prompts for these errors are opened after moving to new buffers, then ALE
+  will automatically send the `<CR>` key needed to close the prompt.
+
 
 g:ale_lint_on_filetype_changed                 *g:ale_lint_on_filetype_changed*
 
