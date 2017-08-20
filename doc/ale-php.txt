@@ -94,5 +94,35 @@ g:ale_php_phpstan_level                               *g:ale_php_phpstan_level*
   This variable controls the rule levels. 0 is the loosest and 4 is the
   strictest.
 
+
+-------------------------------------------------------------------------------
+phpcbf                                                         *ale-php-phpcbf*
+
+g:ale_php_phpcbf_executable                       *g:ale_php_phpcbf_executable*
+                                                  *b:ale_php_phpcbf_executable*
+  Type: |String|
+  Default: `'phpcbf'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_php_phpcbf_standard                           *g:ale_php_phpcbf_standard*
+                                                    *b:ale_php_phpcbf_standard*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to specify the coding standard used by phpcbf. If no
+  coding standard is specified, phpcbf will default to fixing against the
+  PEAR coding standard, or the standard you have set as the default.
+
+
+g:ale_php_phpcbf_use_global                       *g:ale_php_phpcbf_use_global*
+                                                  *b:ale_php_phpcbf_use_global*
+  Type: |Number|
+  Default: `0`
+
+  See |ale-integrations-local-executables|
+
+
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
