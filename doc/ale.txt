@@ -83,6 +83,7 @@ CONTENTS                                                         *ale-contents*
       phpcs...............................|ale-php-phpcs|
       phpmd...............................|ale-php-phpmd|
       phpstan.............................|ale-php-phpstan|
+      phpcbf..............................|ale-php-phpcbf|
     pug...................................|ale-pug-options|
       puglint.............................|ale-pug-puglint|
     python................................|ale-python-options|
@@ -210,7 +211,7 @@ The following languages and tools are supported.
 * Objective-C++: 'clang'
 * OCaml: 'merlin' (see |ale-ocaml-merlin|)
 * Perl: 'perl' (-c flag), 'perlcritic'
-* PHP: 'hack', 'langserver', 'php' (-l flag), 'phpcs', 'phpmd', 'phpstan'
+* PHP: 'hack', 'langserver', 'php' (-l flag), 'phpcs', 'phpmd', 'phpstan', 'phpcbf'
 * Pod: 'proselint'
 * Pug: 'pug-lint'
 * Puppet: 'puppet', 'puppet-lint'
