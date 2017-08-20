@@ -26,6 +26,7 @@ Before:
 After:
   unlet! b:fake_mode
   unlet! b:feedkeys_calls
+  unlet! g:ale_list_window_selection
 
   delfunction CheckError
 
@@ -52,3 +53,44 @@ Execute(The BufWinLeave event function should ignore other errors):
 
 Execute(The BufWinLeave event function not send keys for other modes):
   call CheckError('n', 'E924', [])
+
+Execute(The last window selection should always be cleared by the timer):
+  let g:ale_list_window_selection = [347, 2]
+
+  " The message and mode shouldn't matter, we should still clear the variable.
+  echom 'xyz'
+  let b:fake_mode = 'n'
+  call ale#events#BufWinLeave()
+  sleep 1ms
+
+  Assert !has_key(g:, 'ale_list_window_selection')
+
+Given qf(A quickfix list with some errors):
+  test.txt|23 col 9 warning| Some warning
+  test.txt|72 col 25 error| Some column error
+  test.txt|93 error| Some line error
+
+Execute(Line and column numbers should be parsed by the quickfix event function):
+  call setpos('.', [bufnr(''), 2, 1, 0])
+  call ale#events#ParseLoclistWindowItemPosition()
+  AssertEqual [72, 25], g:ale_list_window_selection
+
+Execute(Just Line numbers should be parsed by the quickfix event function):
+  call setpos('.', [bufnr(''), 3, 1, 0])
+  call ale#events#ParseLoclistWindowItemPosition()
+  AssertEqual [93, 1], g:ale_list_window_selection
+
+Given python(Some example Python file):
+  class FooBar:
+    def whatever(self):
+      self.do_something()
+
+Execute(We should jump to the window selection after cancelling the errors):
+  call setpos('.', [bufnr(''), 1, 1, 0])
+  let g:ale_list_window_selection = [3, 9]
+
+  echom 'E925'
+  call ale#events#BufWinLeave()
+  sleep 1ms
+
+  AssertEqual [3, 9], getcurpos()[1:2]
