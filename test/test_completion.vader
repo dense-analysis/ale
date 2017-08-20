@@ -9,9 +9,7 @@ Before:
   \ 'feedkeys_calls': [],
   \}
 
-  call ale#completion#Nop()
-
-  function! ale#completion#FeedKeys(string, mode) abort
+  function! ale#util#FeedKeys(string, mode) abort
     call add(g:test_vars.feedkeys_calls, [a:string, a:mode])
   endfunction
 

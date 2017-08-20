@@ -128,6 +128,7 @@ Execute (g:ale_lint_on_enter = 1 should bind the required events):
   \ 'BufEnter * call ale#events#EnterEvent(str2nr(expand(''<abuf>'')))',
   \ 'BufReadPost * call ale#Queue(0, ''lint_file'', str2nr(expand(''<abuf>'')))',
   \ 'BufWinEnter * call ale#Queue(0, ''lint_file'', str2nr(expand(''<abuf>'')))',
+  \ 'BufWinLeave * call ale#events#BufWinLeave()',
   \ 'FileChangedShellPost * call ale#events#FileChangedEvent(str2nr(expand(''<abuf>'')))',
   \], CheckAutocmd('ALERunOnEnterGroup')
 

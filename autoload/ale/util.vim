@@ -1,11 +1,23 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Contains miscellaneous functions
 
-" A null file for sending output to nothing.
-let g:ale#util#nul_file = '/dev/null'
+" A wrapper function for mode() so we can test calls for it.
+function! ale#util#Mode(...) abort
+    return call('mode', a:000)
+endfunction
 
-if has('win32')
-    let g:ale#util#nul_file = 'nul'
+" A wrapper function for feedkeys so we can test calls for it.
+function! ale#util#FeedKeys(...) abort
+    return call('feedkeys', a:000)
+endfunction
+
+if !exists('g:ale#util#nul_file')
+    " A null file for sending output to nothing.
+    let g:ale#util#nul_file = '/dev/null'
+
+    if has('win32')
+        let g:ale#util#nul_file = 'nul'
+    endif
 endif
 
 " Return the number of lines for a given buffer.

@@ -1,0 +1,54 @@
+Before:
+  let b:fake_mode = 'r'
+  let b:feedkeys_calls = []
+
+  " Mock mode() and feedkeys() for the check
+  function! ale#util#Mode(...) abort
+    return b:fake_mode
+  endfunction
+
+  function! ale#util#FeedKeys(...) abort
+    call add(b:feedkeys_calls, a:000)
+  endfunction
+
+  function! CheckError(mode, message, expected_list) abort
+    let b:fake_mode = a:mode
+
+    echom a:message
+
+    call ale#events#BufWinLeave()
+    AssertEqual [], b:feedkeys_calls
+
+    sleep 1ms
+    AssertEqual a:expected_list, b:feedkeys_calls
+  endfunction
+
+After:
+  unlet! b:fake_mode
+  unlet! b:feedkeys_calls
+
+  delfunction CheckError
+
+  runtime autoload/ale/util.vim
+
+Execute(The BufWinLeave event function should hide E924 errors):
+  " For some reason, this test fails the first time when running in NeoVim
+  " in Docker, so just execute this twice.
+  echom 'E924'
+  call ale#events#BufWinLeave()
+  sleep 1ms
+  let b:feedkeys_calls = []
+
+  call CheckError('r', 'E924', [["\<CR>", 'n']])
+
+Execute(The BufWinLeave event function should hide E925 errors):
+  call CheckError('r', 'E925', [["\<CR>", 'n']])
+
+Execute(The BufWinLeave event function should hide E926 errors):
+  call CheckError('r', 'E926', [["\<CR>", 'n']])
+
+Execute(The BufWinLeave event function should ignore other errors):
+  call CheckError('r', 'E999', [])
+
+Execute(The BufWinLeave event function not send keys for other modes):
+  call CheckError('n', 'E924', [])

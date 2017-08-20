@@ -45,3 +45,25 @@ function! ale#events#FileChangedEvent(buffer) abort
         call s:LintOnEnter(a:buffer)
     endif
 endfunction
+
+" When changing quickfix or a loclist window while the window is open
+" from autocmd events and while navigating from one buffer to another, Vim
+" will complain saying that the window has closed or that the lists have
+" changed.
+"
+" This timer callback just accepts those errors when they appear.
+function! s:HitReturn(...) abort
+    if ale#util#Mode() is# 'r'
+        redir => l:output
+            silent mess
+        redir end
+
+        if get(split(l:output, "\n"), -1, '') =~# '^E92[456]'
+            call ale#util#FeedKeys("\<CR>", 'n')
+        endif
+    endif
+endfunction
+
+function! ale#events#BufWinLeave() abort
+    call timer_start(0, function('s:HitReturn'))
+endfunction
