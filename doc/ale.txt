@@ -43,6 +43,8 @@ CONTENTS                                                         *ale-contents*
       fusion-lint.........................|ale-fuse-fusionlint|
     go....................................|ale-go-options|
       gometalinter........................|ale-go-gometalinter|
+    graphql...............................|ale-graphql-options|
+      gqlint..............................|ale-graphql-gqlint|
     handlebars............................|ale-handlebars-options|
       ember-template-lint.................|ale-handlebars-embertemplatelint|
     haskell...............................|ale-haskell-options|
