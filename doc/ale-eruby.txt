@@ -1,0 +1,17 @@
+===============================================================================
+ALE Eruby Integration                                       *ale-eruby-options*
+
+There are two linters for `eruby` files:
+
+- `erubylint`
+- `erubis`
+
+If you don't know which one your project uses, it's probably `erb`.
+To selectively enable one or the other, see |g:ale_linters|.
+
+(Note that ALE already disables linters if the executable for that linter is
+not found; thus, there's probably no need to disable one of these if you're
+using the other one.)
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
