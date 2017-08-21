@@ -14,7 +14,7 @@ function! ale_linters#verilog#iverilog#Handle(buffer, lines) abort
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:line = l:match[1] + 0
         let l:type = l:match[2] =~# 'error' ? 'E' : 'W'
-        let l:text = l:match[2] ==# 'syntax error' ? 'syntax error' : l:match[4]
+        let l:text = l:match[2] is# 'syntax error' ? 'syntax error' : l:match[4]
 
         call add(l:output, {
         \   'lnum': l:line,

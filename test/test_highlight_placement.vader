@@ -162,6 +162,7 @@ Execute(Higlight end columns should set an appropriate size):
 
 Execute(Higlight end columns should set an appropriate size):
   call ale#highlight#SetHighlights(bufnr('%'), [
+  \ {'bufnr': bufnr('%') - 1, 'type': 'E', 'lnum': 1, 'col': 1},
   \ {'bufnr': bufnr('%'), 'type': 'E', 'lnum': 1, 'col': 1},
   \ {'bufnr': bufnr('%'), 'type': 'E', 'lnum': 2, 'col': 1},
   \ {'bufnr': bufnr('%'), 'type': 'E', 'sub_type': 'style', 'lnum': 3, 'col': 1},
@@ -169,6 +170,7 @@ Execute(Higlight end columns should set an appropriate size):
   \ {'bufnr': bufnr('%'), 'type': 'W', 'lnum': 5, 'col': 1},
   \ {'bufnr': bufnr('%'), 'type': 'W', 'sub_type': 'style', 'lnum': 6, 'col': 1},
   \ {'bufnr': bufnr('%'), 'type': 'I', 'lnum': 7, 'col': 1},
+  \ {'bufnr': bufnr('%') + 1, 'type': 'E', 'lnum': 1, 'col': 1},
   \])
 
   AssertEqual

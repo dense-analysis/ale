@@ -33,7 +33,7 @@ function! ale_linters#yaml#yamllint#Handle(buffer, lines) abort
         \   'lnum': l:line,
         \   'col': l:col,
         \   'text': l:text,
-        \   'type': l:type ==# 'error' ? 'E' : 'W',
+        \   'type': l:type is# 'error' ? 'E' : 'W',
         \})
     endfor
 

@@ -29,7 +29,7 @@ function! ale#handlers#css#HandleCSSLintFormat(buffer, lines) abort
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
         \   'text': l:text,
-        \   'type': l:type ==# 'Warning' ? 'W' : 'E',
+        \   'type': l:type is# 'Warning' ? 'W' : 'E',
         \})
     endfor
 
@@ -61,7 +61,7 @@ function! ale#handlers#css#HandleStyleLintFormat(buffer, lines) abort
         call add(l:output, {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
-        \   'type': l:match[3] ==# '✖' ? 'E' : 'W',
+        \   'type': l:match[3] is# '✖' ? 'E' : 'W',
         \   'text': l:match[4] . ' [' . l:match[5] . ']',
         \})
     endfor

@@ -13,7 +13,7 @@ function! ale#pattern_options#SetOptions() abort
     endfor
 
     for l:key in keys(l:options)
-        if l:key[:0] ==# '&'
+        if l:key[:0] is# '&'
             call setbufvar(bufnr(''), l:key, l:options[l:key])
         else
             let b:[l:key] = l:options[l:key]

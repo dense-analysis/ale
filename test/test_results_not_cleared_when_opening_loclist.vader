@@ -26,6 +26,9 @@ After:
   delfunction TestCallback
   let g:ale_buffer_info = {}
   call ale#linter#Reset()
+  call setloclist(0, [])
+  call clearmatches()
+  sign unplace *
 
 Given foobar (Some file):
   abc

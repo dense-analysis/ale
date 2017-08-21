@@ -12,7 +12,7 @@
 "
 " This function should be run in a Vader Before: block.
 function! ale#test#SetDirectory(docker_path) abort
-    if a:docker_path[:len('/testplugin/') - 1] !=# '/testplugin/'
+    if a:docker_path[:len('/testplugin/') - 1] isnot# '/testplugin/'
         throw 'docker_path must start with /testplugin/!'
     endif
 

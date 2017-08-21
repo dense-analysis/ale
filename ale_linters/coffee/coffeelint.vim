@@ -27,7 +27,7 @@ function! ale_linters#coffee#coffeelint#Handle(buffer, lines) abort
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
         \   'lnum': str2nr(l:match[1]),
-        \   'type': l:match[3] ==# 'error' ? 'E' : 'W',
+        \   'type': l:match[3] is# 'error' ? 'E' : 'W',
         \   'text': l:match[4],
         \})
     endfor

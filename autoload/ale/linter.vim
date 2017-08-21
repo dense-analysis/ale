@@ -59,9 +59,9 @@ function! ale#linter#PreProcess(linter) abort
         throw '`name` must be defined to name the linter'
     endif
 
-    let l:needs_address = l:obj.lsp ==# 'socket'
-    let l:needs_executable = l:obj.lsp !=# 'socket'
-    let l:needs_command = l:obj.lsp !=# 'socket'
+    let l:needs_address = l:obj.lsp is# 'socket'
+    let l:needs_executable = l:obj.lsp isnot# 'socket'
+    let l:needs_command = l:obj.lsp isnot# 'socket'
     let l:needs_lsp_details = !empty(l:obj.lsp)
 
     if empty(l:obj.lsp)
@@ -311,7 +311,7 @@ function! ale#linter#Get(original_filetypes) abort
         let l:all_linters = ale#linter#GetAll(l:filetype)
         let l:filetype_linters = []
 
-        if type(l:linter_names) == type('') && l:linter_names ==# 'all'
+        if type(l:linter_names) == type('') && l:linter_names is# 'all'
             let l:filetype_linters = l:all_linters
         elseif type(l:linter_names) == type([])
             " Select only the linters we or the user has specified.
@@ -377,13 +377,13 @@ function! ale#linter#StartLSP(buffer, linter, callback) abort
     let l:address = ''
     let l:root = ale#util#GetFunction(a:linter.project_root_callback)(a:buffer)
 
-    if empty(l:root) && a:linter.lsp !=# 'tsserver'
+    if empty(l:root) && a:linter.lsp isnot# 'tsserver'
         " If there's no project root, then we can't check files with LSP,
         " unless we are using tsserver, which doesn't use project roots.
         return {}
     endif
 
-    if a:linter.lsp ==# 'socket'
+    if a:linter.lsp is# 'socket'
         let l:address = ale#linter#GetAddress(a:buffer, a:linter)
         let l:conn_id = ale#lsp#ConnectToAddress(
         \   l:address,
@@ -425,7 +425,7 @@ function! ale#linter#StartLSP(buffer, linter, callback) abort
     endif
 
     " The change message needs to be sent for tsserver before doing anything.
-    if a:linter.lsp ==# 'tsserver'
+    if a:linter.lsp is# 'tsserver'
         call ale#lsp#Send(l:conn_id, ale#lsp#tsserver_message#Change(a:buffer))
     endif
 

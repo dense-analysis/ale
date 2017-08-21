@@ -3,10 +3,10 @@ ALE Java Integration                                         *ale-java-options*
 
 
 ===============================================================================
-checkstyle                                                ale-java-checkstyle
+checkstyle                                                *ale-java-checkstyle*
 
-g:ale_java_checkstyle_options                   g:ale_java_checkstyle_options
-                                                b:ale_java_checkstyle_options
+g:ale_java_checkstyle_options                   *g:ale_java_checkstyle_options*
+                                                *b:ale_java_checkstyle_options*
 
   Type: String
   Default: '-c /google_checks.xml'

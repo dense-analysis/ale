@@ -1,14 +1,16 @@
 Before:
   let g:ale_buffer_info = {
-  \ bufnr('%'): {
+  \ bufnr(''): {
   \   'loclist': [
-  \     {'lnum': 1, 'col': 2},
-  \     {'lnum': 1, 'col': 3},
-  \     {'lnum': 2, 'col': 1},
-  \     {'lnum': 2, 'col': 2},
-  \     {'lnum': 2, 'col': 3},
-  \     {'lnum': 2, 'col': 6},
-  \     {'lnum': 2, 'col': 700},
+  \     {'bufnr': bufnr('') - 1, 'lnum': 3, 'col': 2},
+  \     {'bufnr': bufnr(''), 'lnum': 1, 'col': 2},
+  \     {'bufnr': bufnr(''), 'lnum': 1, 'col': 3},
+  \     {'bufnr': bufnr(''), 'lnum': 2, 'col': 1},
+  \     {'bufnr': bufnr(''), 'lnum': 2, 'col': 2},
+  \     {'bufnr': bufnr(''), 'lnum': 2, 'col': 3},
+  \     {'bufnr': bufnr(''), 'lnum': 2, 'col': 6},
+  \     {'bufnr': bufnr(''), 'lnum': 2, 'col': 700},
+  \     {'bufnr': bufnr('') + 1, 'lnum': 3, 'col': 2},
   \   ],
   \ },
   \}
@@ -74,3 +76,15 @@ Execute(We shouldn't move when jumping to the first item where there are none):
   let g:ale_buffer_info[bufnr('%')].loclist = []
 
   AssertEqual [1, 6], TestJump(0, 0, [1, 6])
+
+Execute(We should be able to jump when the error line is blank):
+  " Add a blank line at the end.
+  call setline(1, getline('.', '$') + [''])
+  " Add a problem on the blank line.
+  call add(g:ale_buffer_info[bufnr('%')].loclist, {'bufnr': bufnr(''), 'lnum': 3, 'col': 1})
+
+  AssertEqual 0, len(getline(3))
+  AssertEqual [2, 8], TestJump('before', 0, [3, 1])
+  AssertEqual [2, 8], TestJump('before', 1, [3, 1])
+  AssertEqual [3, 1], TestJump('after', 0, [3, 1])
+  AssertEqual [1, 2], TestJump('after', 1, [3, 1])

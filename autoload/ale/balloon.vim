@@ -3,7 +3,7 @@
 
 function! ale#balloon#MessageForPos(bufnr, lnum, col) abort
     let l:loclist = get(g:ale_buffer_info, a:bufnr, {'loclist': []}).loclist
-    let l:index = ale#util#BinarySearch(l:loclist, a:lnum, a:col)
+    let l:index = ale#util#BinarySearch(l:loclist, a:bufnr, a:lnum, a:col)
 
     return l:index >= 0 ? l:loclist[l:index].text : ''
 endfunction

@@ -92,7 +92,7 @@ function! ale#handlers#eslint#Handle(buffer, lines) abort
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
         \   'text': l:text,
-        \   'type': l:type ==# 'Warning' ? 'W' : 'E',
+        \   'type': l:type is# 'Warning' ? 'W' : 'E',
         \}
 
         for l:col_match in ale#util#GetMatches(l:text, s:col_end_patterns)

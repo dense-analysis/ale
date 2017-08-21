@@ -32,7 +32,7 @@ function! ale_linters#go#gometalinter#Handler(buffer, lines) abort
         call add(l:output, {
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
-        \   'type': tolower(l:match[4]) ==# 'warning' ? 'W' : 'E',
+        \   'type': tolower(l:match[4]) is# 'warning' ? 'W' : 'E',
         \   'text': l:match[5],
         \})
     endfor

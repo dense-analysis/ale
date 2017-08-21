@@ -65,15 +65,15 @@ function! ale#highlight#UpdateHighlights() abort
     call ale#highlight#RemoveHighlights()
 
     for l:item in l:item_list
-        if l:item.type ==# 'W'
-            if get(l:item, 'sub_type', '') ==# 'style'
+        if l:item.type is# 'W'
+            if get(l:item, 'sub_type', '') is# 'style'
                 let l:group = 'ALEStyleWarning'
             else
                 let l:group = 'ALEWarning'
             endif
-        elseif l:item.type ==# 'I'
+        elseif l:item.type is# 'I'
             let l:group = 'ALEInfo'
-        elseif get(l:item, 'sub_type', '') ==# 'style'
+        elseif get(l:item, 'sub_type', '') is# 'style'
             let l:group = 'ALEStyleError'
         else
             let l:group = 'ALEError'

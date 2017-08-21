@@ -83,6 +83,7 @@ function! ale_linters#python#flake8#GetCommand(buffer, version_output) abort
 
     return ale#Escape(ale_linters#python#flake8#GetExecutable(a:buffer))
     \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ' --format=default'
     \   . l:display_name_args . ' -'
 endfunction
 
@@ -115,7 +116,7 @@ function! ale_linters#python#flake8#Handle(buffer, lines) abort
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:code = l:match[3]
 
-        if (l:code ==# 'W291' || l:code ==# 'W293')
+        if (l:code is# 'W291' || l:code is# 'W293')
         \ && !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
             " Skip warnings for trailing whitespace if the option is off.
             continue
@@ -128,12 +129,12 @@ function! ale_linters#python#flake8#Handle(buffer, lines) abort
         \   'type': 'W',
         \}
 
-        if l:code[:0] ==# 'F' || l:code ==# 'E999'
+        if l:code[:0] is# 'F' || l:code is# 'E999'
             let l:item.type = 'E'
-        elseif l:code[:0] ==# 'E'
+        elseif l:code[:0] is# 'E'
             let l:item.type = 'E'
             let l:item.sub_type = 'style'
-        elseif l:code[:0] ==# 'W'
+        elseif l:code[:0] is# 'W'
             let l:item.sub_type = 'style'
         endif
 

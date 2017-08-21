@@ -1,3 +1,7 @@
+After:
+  unlet! b:temp_name
+  unlet! b:other_bufnr
+
 Given foo (Some file with lines to count):
   foo12345678
   bar12345678
@@ -202,7 +206,6 @@ Execute(FixLocList should pass on end_lnum values):
   \   ],
   \ )
 
-
 Execute(FixLocList should allow subtypes to be set):
   AssertEqual
   \ [
@@ -222,4 +225,105 @@ Execute(FixLocList should allow subtypes to be set):
   \   bufnr('%'),
   \   'foobar',
   \   [{'text': 'a', 'lnum': 11, 'sub_type': 'style'}],
+  \ )
+
+Execute(FixLocList should accept filenames):
+  let b:other_bufnr = bufnr('/foo/bar/baz', 1)
+
+  " Make sure we actually get another buffer number, or the test is invalid.
+  AssertNotEqual -1, b:other_bufnr
+
+  call ale#test#SetFilename('test.txt')
+
+  AssertEqual
+  \ [
+  \   {
+  \     'text': 'a',
+  \     'lnum': 2,
+  \     'col': 0,
+  \     'bufnr': bufnr('%'),
+  \     'filename': expand('%:p'),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \   },
+  \   {
+  \     'text': 'a',
+  \     'lnum': 3,
+  \     'col': 0,
+  \     'bufnr': bufnr('%'),
+  \     'filename': expand('%:p'),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \   },
+  \   {
+  \     'text': 'a',
+  \     'lnum': 4,
+  \     'col': 0,
+  \     'bufnr': b:other_bufnr,
+  \     'filename': '/foo/bar/baz',
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \   },
+  \   {
+  \     'text': 'a',
+  \     'lnum': 5,
+  \     'col': 0,
+  \     'bufnr': b:other_bufnr,
+  \     'filename': '/foo/bar/baz',
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \   },
+  \],
+  \ ale#engine#FixLocList(
+  \   bufnr('%'),
+  \   'foobar',
+  \   [
+  \     {'text': 'a', 'lnum': 2, 'filename': expand('%:p')},
+  \     {'text': 'a', 'lnum': 3, 'filename': expand('%:p')},
+  \     {'text': 'a', 'lnum': 4, 'filename': '/foo/bar/baz'},
+  \     {'text': 'a', 'lnum': 5, 'filename': '/foo/bar/baz'},
+  \   ],
+  \ )
+
+Execute(FixLocList should interpret temporary filenames as being the current buffer):
+  let b:temp_name = tempname()
+
+  AssertEqual
+  \ [
+  \   {
+  \     'text': 'a',
+  \     'lnum': 2,
+  \     'col': 0,
+  \     'bufnr': bufnr(''),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \   },
+  \   {
+  \     'text': 'a',
+  \     'lnum': 3,
+  \     'col': 0,
+  \     'bufnr': bufnr(''),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \   },
+  \],
+  \ ale#engine#FixLocList(
+  \   bufnr(''),
+  \   'foobar',
+  \   [
+  \     {'text': 'a', 'lnum': 2, 'filename': b:temp_name},
+  \     {'text': 'a', 'lnum': 3, 'filename': b:temp_name},
+  \   ],
   \ )

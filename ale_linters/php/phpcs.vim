@@ -40,7 +40,7 @@ function! ale_linters#php#phpcs#Handle(buffer, lines) abort
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
         \   'text': l:text,
-        \   'type': l:type ==# 'error' ? 'E' : 'W',
+        \   'type': l:type is# 'error' ? 'E' : 'W',
         \})
     endfor
 

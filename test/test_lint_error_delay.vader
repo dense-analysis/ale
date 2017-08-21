@@ -1,0 +1,26 @@
+Before:
+  Save g:ale_filetype_blacklist
+
+  " Delete some variable which should be defined.
+  unlet! g:ale_filetype_blacklist
+
+After:
+  Restore
+
+  call ale#ResetErrorDelays()
+
+Execute(ALE should stop queuing for a while after exceptions are thrown):
+  AssertThrows call ale#Queue(100)
+  call ale#Queue(100)
+
+Execute(ALE should stop linting for a while after exceptions are thrown):
+  AssertThrows call ale#Lint()
+  call ale#Lint()
+
+Execute(ALE should stop queuing echo messages for a while after exceptions are thrown):
+  AssertThrows call ale#cursor#EchoCursorWarningWithDelay()
+  call ale#cursor#EchoCursorWarningWithDelay()
+
+Execute(ALE should stop echoing messages for a while after exceptions are thrown):
+  AssertThrows call ale#cursor#EchoCursorWarning()
+  call ale#cursor#EchoCursorWarning()

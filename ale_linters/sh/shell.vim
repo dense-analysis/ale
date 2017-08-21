@@ -11,7 +11,7 @@ endif
 if !exists('g:ale_sh_shell_default_shell')
     let g:ale_sh_shell_default_shell = fnamemodify($SHELL, ':t')
 
-    if g:ale_sh_shell_default_shell ==# '' || g:ale_sh_shell_default_shell ==# 'fish'
+    if g:ale_sh_shell_default_shell is# '' || g:ale_sh_shell_default_shell is# 'fish'
         let g:ale_sh_shell_default_shell = 'bash'
     endif
 endif

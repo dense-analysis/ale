@@ -38,7 +38,7 @@ function! ale_linters#scala#scalac#Handle(buffer, lines) abort
         endif
 
         let l:text = l:match[3]
-        let l:type = l:match[2] ==# 'error' ? 'E' : 'W'
+        let l:type = l:match[2] is# 'error' ? 'E' : 'W'
         let l:col = 0
 
         if l:ln + 1 < len(a:lines)

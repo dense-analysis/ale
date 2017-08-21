@@ -31,13 +31,13 @@ function! ale_linters#python#pylint#Handle(buffer, lines) abort
         "let l:failed = append(0, l:match)
         let l:code = l:match[3]
 
-        if (l:code ==# 'C0303')
+        if (l:code is# 'C0303')
         \ && !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
             " Skip warnings for trailing whitespace if the option is off.
             continue
         endif
 
-        if l:code ==# 'I0011'
+        if l:code is# 'I0011'
             " Skip 'Locally disabling' message
              continue
         endif
@@ -46,7 +46,7 @@ function! ale_linters#python#pylint#Handle(buffer, lines) abort
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 1,
         \   'text': l:code . ': ' . l:match[5] . ' (' . l:match[4] . ')',
-        \   'type': l:code[:0] ==# 'E' ? 'E' : 'W',
+        \   'type': l:code[:0] is# 'E' ? 'E' : 'W',
         \})
     endfor
 

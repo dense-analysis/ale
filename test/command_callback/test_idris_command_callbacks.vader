@@ -1,0 +1,42 @@
+Before:
+  Save g:ale_idris_idris_executable
+  Save g:ale_idris_idris_options
+
+  unlet! g:ale_idris_idris_executable
+  unlet! b:ale_idris_idris_executable
+  unlet! g:ale_idris_idris_options
+  unlet! b:ale_idris_idris_options
+
+  runtime ale_linters/idris/idris.vim
+
+After:
+  Restore
+  unlet! b:command_tail
+  unlet! b:ale_idris_idris_executable
+  unlet! b:ale_idris_idris_options
+  call ale#linter#Reset()
+
+Execute(The executable should be configurable):
+  AssertEqual 'idris', ale_linters#idris#idris#GetExecutable(bufnr(''))
+
+  let b:ale_idris_idris_executable = 'foobar'
+
+  AssertEqual 'foobar', ale_linters#idris#idris#GetExecutable(bufnr(''))
+
+Execute(The executable should be used in the command):
+  AssertEqual
+  \ ale#Escape('idris') . ' --total --warnpartial --warnreach --warnipkg --check %s',
+  \ ale_linters#idris#idris#GetCommand(bufnr(''))
+
+  let b:ale_idris_idris_executable = 'foobar'
+
+  AssertEqual
+  \ ale#Escape('foobar') . ' --total --warnpartial --warnreach --warnipkg --check %s',
+  \ ale_linters#idris#idris#GetCommand(bufnr(''))
+
+Execute(The options should be configurable):
+  let b:ale_idris_idris_options = '--something'
+
+  AssertEqual
+  \ ale#Escape('idris') . ' --something --check %s',
+  \ ale_linters#idris#idris#GetCommand(bufnr(''))

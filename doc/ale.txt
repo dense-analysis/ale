@@ -11,7 +11,8 @@ CONTENTS                                                         *ale-contents*
   3. Global Options.......................|ale-options|
     3.1 Highlights........................|ale-highlights|
   4. Fixing Problems......................|ale-fix|
-  5. Integration Documentation............|ale-integrations|
+  5. Completion...........................|ale-completion|
+  6. Integration Documentation............|ale-integrations|
     asm...................................|ale-asm-options|
       gcc.................................|ale-asm-gcc|
     c.....................................|ale-c-options|
@@ -42,6 +43,8 @@ CONTENTS                                                         *ale-contents*
       fusion-lint.........................|ale-fuse-fusionlint|
     go....................................|ale-go-options|
       gometalinter........................|ale-go-gometalinter|
+    graphql...............................|ale-graphql-options|
+      gqlint..............................|ale-graphql-gqlint|
     handlebars............................|ale-handlebars-options|
       ember-template-lint.................|ale-handlebars-embertemplatelint|
     haskell...............................|ale-haskell-options|
@@ -49,6 +52,8 @@ CONTENTS                                                         *ale-contents*
     html..................................|ale-html-options|
       htmlhint............................|ale-html-htmlhint|
       tidy................................|ale-html-tidy|
+    idris.................................|ale-idris-options|
+      idris...............................|ale-idris-idris|
     java..................................|ale-java-options|
       checkstyle..........................|ale-java-checkstyle|
       javac...............................|ale-java-javac|
@@ -80,6 +85,7 @@ CONTENTS                                                         *ale-contents*
       phpcs...............................|ale-php-phpcs|
       phpmd...............................|ale-php-phpmd|
       phpstan.............................|ale-php-phpstan|
+      phpcbf..............................|ale-php-phpcbf|
     pug...................................|ale-pug-options|
       puglint.............................|ale-pug-puglint|
     python................................|ale-python-options|
@@ -130,10 +136,10 @@ CONTENTS                                                         *ale-contents*
     yaml..................................|ale-yaml-options|
       swaglint............................|ale-yaml-swaglint|
       yamllint............................|ale-yaml-yamllint|
-  6. Commands/Keybinds....................|ale-commands|
-  7. API..................................|ale-api|
-  8. Special Thanks.......................|ale-special-thanks|
-  9. Contact..............................|ale-contact|
+  7. Commands/Keybinds....................|ale-commands|
+  8. API..................................|ale-api|
+  9. Special Thanks.......................|ale-special-thanks|
+  10. Contact.............................|ale-contact|
 
 ===============================================================================
 1. Introduction                                              *ale-introduction*
@@ -191,6 +197,7 @@ The following languages and tools are supported.
 * Handlebars: 'ember-template-lint'
 * Haskell: 'ghc', 'stack-ghc', 'stack-build', 'ghc-mod', 'stack-ghc-mod', 'hlint', 'hdevtools'
 * HTML: 'HTMLHint', 'proselint', 'tidy'
+* Idris: 'idris'
 * Java: 'javac'
 * JavaScript: 'eslint', 'jscs', 'jshint', 'flow', 'prettier', 'prettier-eslint', 'xo'
 * JSON: 'jsonlint'
@@ -204,9 +211,9 @@ The following languages and tools are supported.
 * nroff: 'proselint'
 * Objective-C: 'clang'
 * Objective-C++: 'clang'
-* OCaml: 'merlin' (see |ale-linter-integration-ocaml-merlin|)
+* OCaml: 'merlin' (see |ale-ocaml-merlin|)
 * Perl: 'perl' (-c flag), 'perlcritic'
-* PHP: 'hack', 'langserver', 'php' (-l flag), 'phpcs', 'phpmd', 'phpstan'
+* PHP: 'hack', 'langserver', 'php' (-l flag), 'phpcs', 'phpmd', 'phpstan', 'phpcbf'
 * Pod: 'proselint'
 * Pug: 'pug-lint'
 * Puppet: 'puppet', 'puppet-lint'
@@ -224,7 +231,7 @@ The following languages and tools are supported.
 * SML: 'smlnj'
 * Stylus: 'stylelint'
 * SQL: 'sqlint'
-* Swift: 'swiftlint'
+* Swift: 'swiftlint', 'swiftformat'
 * Texinfo: 'proselint'
 * Text: 'proselint', 'vale'
 * TypeScript: 'eslint', 'tslint', 'tsserver', 'typecheck'
@@ -268,6 +275,44 @@ g:ale_change_sign_column_color                 *g:ale_change_sign_column_color*
   windows.
 
 
+g:ale_completion_delay                                 *g:ale_completion_delay*
+
+  Type: |Number|
+  Default: `100`
+
+  The number of milliseconds before ALE will send a request to a language
+  server for completions after you have finished typing.
+
+  See |ale-completion|
+
+
+g:ale_completion_enabled                             *g:ale_completion_enabled*
+
+  Type: |Number|
+  Default: `0`
+
+  When this option is set to `1`, completion support will be enabled.
+
+  See |ale-completion|
+
+
+g:ale_completion_max_suggestions             *g:ale_completion_max_suggestions*
+
+  Type: |Number|
+  Default: `50`
+
+  The maximum number of items ALE will suggest in completion menus for
+  automatic completion.
+
+  Setting this number higher will require more processing time, and may
+  suggest too much noise. Setting this number lower will require less
+  processing time, but some suggestions will not be included, so you might not
+  be able to see the suggestions you want.
+
+  Adjust this option as needed, depending on the complexity of your codebase
+  and your available processing power.
+
+
 g:ale_echo_cursor                                           *g:ale_echo_cursor*
 
   Type: |Number|
@@ -287,8 +332,8 @@ g:ale_echo_msg_error_str                             *g:ale_echo_msg_error_str*
   Default: `Error`
 
   The string used for error severity in the echoed message.
-  Note |`g:ale_echo_cursor`| should be set to 1
-  Note |`g:ale_echo_msg_format`| should contain the `%severity%` handler
+  Note |g:ale_echo_cursor| should be set to 1
+  Note |g:ale_echo_msg_format| should contain the `%severity%` handler
 
 
 g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
@@ -300,7 +345,7 @@ g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
   error message itself, and it can contain the following handlers:
   - `%linter%` for linter's name
   - `%severity%` for the type of severity
-  Note |`g:ale_echo_cursor`| should be setted to 1
+  Note |g:ale_echo_cursor| should be setted to 1
 
 
 g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
@@ -309,8 +354,8 @@ g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
   Default: `Warning`
 
   The string used for warning severity in the echoed message.
-  Note |`g:ale_echo_cursor`| should be set to 1
-  Note |`g:ale_echo_msg_format`| should contain the `%severity%` handler
+  Note |g:ale_echo_cursor| should be set to 1
+  Note |g:ale_echo_msg_format| should contain the `%severity%` handler
 
 
 g:ale_emit_conflict_warnings                     *g:ale_emit_conflict_warnings*
@@ -398,7 +443,7 @@ g:ale_history_log_output                             *g:ale_history_log_output*
 
 
 g:ale_keep_list_window_open                       *g:ale_keep_list_window_open*
-
+                                                  *b:ale_keep_list_window_open*
   Type: |Number|
   Default: `0`
 
@@ -407,7 +452,7 @@ g:ale_keep_list_window_open                       *g:ale_keep_list_window_open*
   the loclist or quicfix windows will be closed automatically when there
   are no warnings or errors.
 
-  See: |g:ale_open_list|
+  See |g:ale_open_list|
 
 
 g:ale_list_window_size                                 *g:ale_list_window_size*
@@ -446,6 +491,11 @@ g:ale_lint_on_enter                                       *g:ale_lint_on_enter*
   The |FileChangedShellPost| and |BufEnter| events will be used to check if
   files have been changed outside of Vim. If a file is changed outside of
   Vim, it will be checked when it is next opened.
+
+  A |BufWinLeave| event will be used to look for the |E924|, |E925|, or |E926|
+  errors after moving from a loclist or quickfix window to a new buffer. If
+  prompts for these errors are opened after moving to new buffers, then ALE
+  will automatically send the `<CR>` key needed to close the prompt.
 
 
 g:ale_lint_on_filetype_changed                 *g:ale_lint_on_filetype_changed*
@@ -600,13 +650,17 @@ g:ale_maximum_file_size                               *g:ale_maximum_file_size*
 
 
 g:ale_open_list                                               *g:ale_open_list*
-
-  Type: |Number|
+                                                              *b:ale_open_list*
+  Type: |Number| or |String|
   Default: `0`
 
-  When set to `1`, this will cause ALE to automatically open a window for
-  the loclist (|lopen|) or for the quickfix list instead if
-  |g:ale_set_quickfix| is `1`. (|copen|)
+  When set to `1`, this will cause ALE to automatically open a window for the
+  loclist (|lopen|) or for the quickfix list instead if |g:ale_set_quickfix|
+  is `1`. (|copen|)
+
+  When set to `'on_save'`, ALE will only open the loclist after buffers have
+  been saved. The list will be opened some time after buffers are saved and
+  any linter for a buffer returns results.
 
   The window will be kept open until all warnings or errors are cleared,
   including those not set by ALE, unless |g:ale_keep_list_window_open| is set
@@ -691,9 +745,12 @@ g:ale_set_quickfix                                         *g:ale_set_quickfix*
   Type: |Number|
   Default: `0`
 
-  When this option is set to `1`, the |quickfix| list will be populated with any
-  warnings and errors which are found by ALE, instead of the |loclist|. The
-  loclist will never be populated when this option is on.
+  When this option is set to `1`, the |quickfix| list will be populated with
+  any problems which are found by ALE, instead of the |loclist|. The loclist
+  will never be populated when this option is on.
+
+  Problems from every buffer ALE has checked will be included in the quickfix
+  list, which can be checked with |:copen|. Problems will be de-duplicated.
 
 
 g:ale_set_signs                                               *g:ale_set_signs*
@@ -1024,7 +1081,26 @@ by default.
 
 
 ===============================================================================
-5. Integration Documentation                                 *ale-integrations*
+5. Completion                                                  *ale-completion*
+
+ALE offers some limited support for automatic completion of code while you
+type. Completion is only supported via Language Server Protocol servers which
+ALE can connect to for linting, which can offer good built-in support for
+suggesting completion information. ALE will only suggest symbols for
+completion for LSP linters that are enabled.
+
+NOTE: At the moment, only `tsserver` for TypeScript code is supported for
+completion.
+
+Suggestions will be made while you type after completion is enabled.
+Completion can be enabled by setting |g:ale_completion_enabled| to `1`. The
+delay for completion can be configured with |g:ale_completion_delay|. ALE will
+only suggest so many possible matches for completion. The maximum number of
+items can be controlled with |g:ale_completion_max_suggestions|.
+
+
+===============================================================================
+6. Integration Documentation                                 *ale-integrations*
 
 Linter and fixer options are documented in individual help files. See the
 table of contents at |ale-contents|.
@@ -1057,7 +1133,7 @@ ALE will use to search for Python executables.
 
 
 ===============================================================================
-6. Commands/Keybinds                                             *ale-commands*
+7. Commands/Keybinds                                             *ale-commands*
 
 ALEFix                                                                 *ALEFix*
 
@@ -1160,9 +1236,9 @@ ALEInfoToClipboard                                         *ALEInfoToClipboard*
 
 
 ===============================================================================
-7. API                                                                *ale-api*
+8. API                                                                *ale-api*
 
-ale#Queue(delay, [linting_flag])                                  *ale#Queue()*
+ale#Queue(delay, [linting_flag, buffer_number])                   *ale#Queue()*
 
   Run linters for the current buffer, based on the filetype of the buffer,
   with a given `delay`. A `delay` of `0` will run the linters immediately.
@@ -1172,6 +1248,15 @@ ale#Queue(delay, [linting_flag])                                  *ale#Queue()*
   An optional `linting_flag` argument can be given. If `linting_flag`
   is `'lint_file'`, then linters where the `lint_file` option is set to `1` will be
   run. Linters with `lint_file` set to `1` are not run by default.
+
+  An optional `buffer_number` argument can be given for specifying the buffer
+  to check. The active buffer (`bufnr('')`) will be checked by default.
+
+                                                                *ale-cool-down*
+  If an exception is thrown when queuing/running ALE linters, ALE will enter
+  a cool down period where it will stop checking anything for a short period
+  of time. This is to prevent ALE from seriously annoying users if a linter
+  is broken, or when developing ALE itself.
 
 
 ale#engine#CreateDirectory(buffer)               *ale#engine#CreateDirectory()*
@@ -1288,9 +1373,27 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          `end_lnum` - An optional end line number.
                            This key can set along with `end_col` for
                            highlighting multi-line problems.
-                         `bufnr` - The buffer number should match the buffer
-                           being checked, and this value will default to
-                           the buffer being checked.
+                         `bufnr` - This key represents the buffer number the
+                           problems are for. This value will default to
+                           the buffer number being checked.
+
+                           The `filename` key can be set instead of this key,
+                           and then the eventual `bufnr` value in the final
+                           list will either represent the number for an open
+                           buffer or `-1` for a file not open in any buffer.
+                         `filename` - An optional filename for the file the
+                           problems are for. This should be an absolute path to
+                           a file.
+
+                           Problems for files which have not yet been opened
+                           will be set in those files after they are opened
+                           and have been checked at least once.
+
+                           Temporary files in directories used for Vim
+                           temporary files with `tempname()` will be asssumed
+                           to be the buffer being checked, unless the `bufnr`
+                           key is also set with a valid number for some other
+                           buffer.
                          `vcol` - Defaults to `0`.
                          `type` - Defaults to `'E'`.
                          `nr` - Defaults to `-1`.
@@ -1541,13 +1644,13 @@ ALELint                                                       *ALELint-autocmd*
   echoing messges.
 
 ===============================================================================
-8. Special Thanks                                          *ale-special-thanks*
+9. Special Thanks                                          *ale-special-thanks*
 
 Special thanks to Mark Grealish (https://www.bhalash.com/) for providing ALE's
 snazzy looking ale glass logo. Cheers, Mark!
 
 ===============================================================================
-9. Contact                                                        *ale-contact*
+10. Contact                                                       *ale-contact*
 
 If you like this plugin, and wish to get in touch, check out the GitHub
 page for issues and more at https://github.com/w0rp/ale

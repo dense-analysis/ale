@@ -29,7 +29,7 @@ function! ale_linters#sml#smlnj#Handle(buffer, lines) abort
           \   'bufnr': a:buffer,
           \   'lnum': l:match[1] + 0,
           \   'text': l:match[2] . ': ' . l:match[3],
-          \   'type': l:match[2] ==# 'error' ? 'E' : 'W',
+          \   'type': l:match[2] is# 'error' ? 'E' : 'W',
           \})
           continue
         endif

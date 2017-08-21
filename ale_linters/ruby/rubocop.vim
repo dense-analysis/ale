@@ -43,9 +43,9 @@ function! ale_linters#ruby#rubocop#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#ruby#rubocop#GetType(severity) abort
-    if a:severity ==? 'convention'
-    \|| a:severity ==? 'warning'
-    \|| a:severity ==? 'refactor'
+    if a:severity is? 'convention'
+    \|| a:severity is? 'warning'
+    \|| a:severity is? 'refactor'
         return 'W'
     endif
 

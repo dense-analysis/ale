@@ -72,6 +72,16 @@ let s:default_registry = {
 \       'suggested_filetypes': ['css', 'sass', 'scss', 'stylus'],
 \       'description': 'Fix stylesheet files using stylelint --fix.',
 \   },
+\   'swiftformat': {
+\       'function': 'ale#fixers#swiftformat#Fix',
+\       'suggested_filetypes': ['swift'],
+\       'description': 'Apply SwiftFormat to a file.',
+\   },
+\   'phpcbf': {
+\       'function': 'ale#fixers#phpcbf#Fix',
+\       'suggested_filetypes': ['php'],
+\       'description': 'Fix PHP files with phpcbf.',
+\   },
 \}
 
 " Reset the function registry to the default entries.

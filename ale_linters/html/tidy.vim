@@ -46,7 +46,7 @@ function! ale_linters#html#tidy#Handle(buffer, lines) abort
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:line = l:match[1] + 0
         let l:col = l:match[2] + 0
-        let l:type = l:match[3] ==# 'Error' ? 'E' : 'W'
+        let l:type = l:match[3] is# 'Error' ? 'E' : 'W'
         let l:text = l:match[4]
 
         call add(l:output, {

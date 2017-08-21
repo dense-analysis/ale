@@ -1,4 +1,8 @@
 Before:
+  Save g:ale_buffer_info
+
+  let g:ale_buffer_info = {}
+
   let g:expected_loclist = [{
   \ 'bufnr': bufnr('%'),
   \ 'lnum': 2,
@@ -38,6 +42,8 @@ Before:
   \})
 
 After:
+  Restore
+
   unlet! g:expected_loclist
   unlet! g:expected_groups
 

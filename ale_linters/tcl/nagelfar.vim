@@ -28,7 +28,7 @@ function! ale_linters#tcl#nagelfar#Handle(buffer, lines) abort
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
         \   'lnum': l:match[1] + 0,
-        \   'type': l:match[2] ==# 'N' ? 'W' : l:match[2],
+        \   'type': l:match[2] is# 'N' ? 'W' : l:match[2],
         \   'text': l:match[3],
         \})
     endfor
