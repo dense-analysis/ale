@@ -37,6 +37,7 @@ CONTENTS                                                         *ale-contents*
     erlang................................|ale-erlang-options|
       erlc................................|ale-erlang-erlc|
       syntaxerl...........................|ale-erlang-syntaxerl|
+    eruby.................................|ale-eruby-options|
     fortran...............................|ale-fortran-options|
       gcc.................................|ale-fortran-gcc|
     fusionscript..........................|ale-fuse-options|
