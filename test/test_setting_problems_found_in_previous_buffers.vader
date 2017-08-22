@@ -1,6 +1,9 @@
 Before:
   Save g:ale_buffer_info
   Save &filetype
+  Save g:ale_set_lists_synchronously
+
+  let g:ale_set_lists_synchronously = 1
 
   " Set up items in other buffers which should set in this one.
   let g:ale_buffer_info = {}
@@ -13,7 +16,7 @@ Before:
   \ ])
   call ale#engine#InitBufferInfo(bufnr('') + 2)
   let g:ale_buffer_info[bufnr('') + 2].loclist =
-  \ ale#engine#FixLocList(bufnr('') + 2, 'linter_two', [
+  \ ale#engine#FixLocList(bufnr('') + 2, 'linter_one', [
   \   {'lnum': 1, 'filename': expand('%:p'), 'text': 'foo'},
   \   {'lnum': 3, 'filename': expand('%:p'), 'text': 'baz'},
   \   {'lnum': 5, 'text': 'ignore this one'},
@@ -23,14 +26,8 @@ Before:
   \ 'name': 'linter_one',
   \ 'callback': 'WhoCares',
   \ 'executable': 'echo',
-  \ 'command': 'echo',
+  \ 'command': 'sleep 1000',
   \ 'lint_file': 1,
-  \})
-  call ale#linter#Define('foobar', {
-  \ 'name': 'linter_two',
-  \ 'callback': 'WhoCares',
-  \ 'executable': 'echo',
-  \ 'command': 'echo',
   \})
 
 After:
@@ -50,6 +47,47 @@ Given foobar(A file with some lines):
 
 Execute(Problems found from previously opened buffers should be set when linting for the first time):
   call ale#engine#RunLinters(bufnr(''), ale#linter#Get(&filetype), 0)
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'bufnr': bufnr(''),
+  \     'col': 0,
+  \     'filename': expand('%:p'),
+  \     'linter_name': 'linter_one',
+  \     'nr': -1,
+  \     'type': 'E',
+  \     'vcol': 0,
+  \     'text': 'foo',
+  \     'sign_id': 1000001,
+  \   },
+  \   {
+  \     'lnum': 2,
+  \     'bufnr': bufnr(''),
+  \     'col': 0,
+  \     'filename': expand('%:p'),
+  \     'linter_name': 'linter_one',
+  \     'nr': -1,
+  \     'type': 'E',
+  \     'vcol': 0,
+  \     'text': 'bar',
+  \     'sign_id': 1000002,
+  \   },
+  \   {
+  \     'lnum': 3,
+  \     'bufnr': bufnr(''),
+  \     'col': 0,
+  \     'filename': expand('%:p'),
+  \     'linter_name': 'linter_one',
+  \     'nr': -1,
+  \     'type': 'E',
+  \     'vcol': 0,
+  \     'text': 'baz',
+  \     'sign_id': 1000003,
+  \   },
+  \ ],
+  \ g:ale_buffer_info[bufnr('')].loclist
 
   AssertEqual
   \ [

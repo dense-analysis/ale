@@ -728,7 +728,10 @@ function! s:AddProblemsFromOtherBuffers(buffer, linters) abort
             if has_key(l:item, 'filename')
             \&& l:item.filename is# l:filename
             \&& has_key(l:name_map, l:item.linter_name)
-                call add(l:loclist, l:item)
+                " Copy the items and set the buffer numbers to this one.
+                let l:new_item = copy(l:item)
+                let l:new_item.bufnr = a:buffer
+                call add(l:loclist, l:new_item)
             endif
         endfor
     endfor
@@ -737,6 +740,8 @@ function! s:AddProblemsFromOtherBuffers(buffer, linters) abort
         call sort(l:loclist, function('ale#util#LocItemCompareWithText'))
         call uniq(l:loclist, function('ale#util#LocItemCompareWithText'))
 
+        " Set the loclist variable, used by some parts of ALE.
+        let g:ale_buffer_info[a:buffer].loclist = l:loclist
         call ale#engine#SetResults(a:buffer, l:loclist)
     endif
 endfunction
