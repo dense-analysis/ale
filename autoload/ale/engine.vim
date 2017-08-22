@@ -708,7 +708,7 @@ function! s:RemoveProblemsForDisabledLinters(buffer, linters) abort
 
     call filter(
     \   get(g:ale_buffer_info[a:buffer], 'loclist', []),
-    \   'get(l:name_map, v:val.linter_name)',
+    \   'get(l:name_map, get(v:val, ''linter_name''))',
     \)
 endfunction
 

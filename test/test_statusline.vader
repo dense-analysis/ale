@@ -1,9 +1,11 @@
 Before:
-  Save g:ale_statusline_format, g:ale_buffer_info
+  Save g:ale_statusline_format
+  Save g:ale_buffer_info
+
   let g:ale_buffer_info = {}
 
   " A function for conveniently creating expected count objects.
-  function Counts(data) abort
+  function! Counts(data) abort
     let l:res = {
     \   '0': 0,
     \   '1': 0,
@@ -28,6 +30,7 @@ Before:
 
 After:
   Restore
+
   delfunction Counts
 
 Execute (Count should be 0 when data is empty):
@@ -126,16 +129,13 @@ Execute (Status() should return the custom 'OK' string with the old format):
   AssertEqual 'OKIE', ale#statusline#Status()
 
 Execute(ale#statusline#Update shouldn't blow up when globals are undefined):
-  unlet! g:ale_buffer_info
   unlet! g:ale_statusline_format
   call ale#statusline#Update(1, [])
 
 Execute(ale#statusline#Count should return 0 counts when globals are undefined):
-  unlet! g:ale_buffer_info
   unlet! g:ale_statusline_format
   AssertEqual Counts({}), ale#statusline#Count(1)
 
 Execute(ale#statusline#Status should return 'OK' when globals are undefined):
-  unlet! g:ale_buffer_info
   unlet! g:ale_statusline_format
   AssertEqual 'OK', ale#statusline#Status()
