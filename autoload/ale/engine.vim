@@ -16,22 +16,34 @@ if !has_key(s:, 'lsp_linter_map')
     let s:lsp_linter_map = {}
 endif
 
-let s:executable_cache_map = {}
+if !has_key(s:, 'executable_cache_map')
+    let s:executable_cache_map = {}
+endif
+
+function! ale#engine#ResetExecutableCache() abort
+    let s:executable_cache_map = {}
+endfunction
 
 " Check if files are executable, and if they are, remember that they are
 " for subsequent calls. We'll keep checking until programs can be executed.
-function! s:IsExecutable(executable) abort
+function! ale#engine#IsExecutable(buffer, executable) abort
     if has_key(s:executable_cache_map, a:executable)
         return 1
     endif
 
+    let l:result = 0
+
     if executable(a:executable)
         let s:executable_cache_map[a:executable] = 1
 
-        return 1
+        let l:result = 1
     endif
 
-    return  0
+    if g:ale_history_enabled
+        call ale#history#Add(a:buffer, l:result, 'executable', a:executable)
+    endif
+
+    return l:result
 endfunction
 
 function! ale#engine#InitBufferInfo(buffer) abort
@@ -755,7 +767,7 @@ function! s:RunLinter(buffer, linter) abort
     else
         let l:executable = ale#linter#GetExecutable(a:buffer, a:linter)
 
-        if s:IsExecutable(l:executable)
+        if ale#engine#IsExecutable(a:buffer, l:executable)
             return s:InvokeChain(a:buffer, a:linter, 0, [])
         endif
     endif
