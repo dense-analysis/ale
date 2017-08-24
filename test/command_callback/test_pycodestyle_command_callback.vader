@@ -1,8 +1,8 @@
 Before:
   runtime ale_linters/python/pycodestyle.vim
   Save g:ale_python_pycodestyle_executable,
-  \  g:ale_python_pycodestyle_options,
-  \  g:ale_python_pycodestyle_use_global
+  \ g:ale_python_pycodestyle_options,
+  \ g:ale_python_pycodestyle_use_global
 
 After:
   call ale#linter#Reset()
