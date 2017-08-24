@@ -9,10 +9,13 @@ function! ale_linters#cuda#nvcc#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#cuda#nvcc#GetCommand(buffer) abort
+    let l:output_file = tempname() . ".ii"
+    call ale#engine#ManageFile(a:buffer, l:output_file)
     return ale#Escape(ale_linters#cuda#nvcc#GetExecutable(a:buffer))
     \   . ' -cuda '
     \   . ale#c#IncludeOptions(ale#c#FindLocalHeaderPaths(a:buffer))
     \   . ale#Var(a:buffer, 'cuda_nvcc_options') . ' %s'
+    \   . ' -o ' . l:output_file
 endfunction
 
 function! ale_linters#cuda#nvcc#HandleNVCCFormat(buffer, lines) abort
