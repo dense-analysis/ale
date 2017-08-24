@@ -28,6 +28,8 @@ CONTENTS                                                         *ale-contents*
       cppcheck............................|ale-cpp-cppcheck|
       cpplint.............................|ale-cpp-cpplint|
       gcc.................................|ale-cpp-gcc|
+    cuda..................................|ale-cuda-options|
+      nvcc................................|ale-cuda-nvcc|
     css...................................|ale-css-options|
       stylelint...........................|ale-css-stylelint|
     cmake.................................|ale-cmake-options|
