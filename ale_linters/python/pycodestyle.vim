@@ -26,12 +26,12 @@ function! ale_linters#python#pycodestyle#Handle(buffer, lines) abort
     " file.py:21:26: W291 trailing whitespace
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
-    \   'filename': l:match[1],
-    \   'lnum': l:match[2] + 0,
-    \   'col': l:match[3] + 0,
-    \   'type': l:match[6],
-    \   'text': l:match[4],
-    \})
+        \   'filename': l:match[1],
+        \   'lnum': l:match[2] + 0,
+        \   'col': l:match[3] + 0,
+        \   'type': l:match[6],
+        \   'text': l:match[4],
+        \})
     endfor
 
     return l:output
