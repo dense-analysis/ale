@@ -1,12 +1,9 @@
 " Author: Michael Thiesen <micthiesen@gmail.com>
 " Description: pycodestyle linting for python files
 
-let g:ale_python_pycodestyle_executable =
-\   get(g:, 'ale_python_pycodestyle_executable', 'pycodestyle')
-let g:ale_python_pycodestyle_options =
-\   get(g:, 'ale_python_pycodestyle_options', '')
-let g:ale_python_pycodestyle_use_global =
-\   get(g:, 'ale_python_pycodestyle_use_global', 0)
+call ale#Set('python_pycodestyle_executable', 'pycodestyle')
+call ale#Set('python_pycodestyle_options', '')
+call ale#Set('python_pycodestyle_use_global', 0)
 
 function! ale_linters#python#pycodestyle#GetExecutable(buffer) abort
     return ale#python#FindExecutable(a:buffer, 'python_pycodestyle', ['pycodestyle'])
