@@ -19,6 +19,7 @@ CONTENTS                                                         *ale-contents*
       clang...............................|ale-c-clang|
       cppcheck............................|ale-c-cppcheck|
       gcc.................................|ale-c-gcc|
+      clang-format........................|ale-c-clangformat|
     chef..................................|ale-chef-options|
       foodcritic..........................|ale-chef-foodcritic|
     cpp...................................|ale-cpp-options|
@@ -28,6 +29,7 @@ CONTENTS                                                         *ale-contents*
       cppcheck............................|ale-cpp-cppcheck|
       cpplint.............................|ale-cpp-cpplint|
       gcc.................................|ale-cpp-gcc|
+      clang-format........................|ale-cpp-clangformat|
     css...................................|ale-css-options|
       stylelint...........................|ale-css-stylelint|
     cmake.................................|ale-cmake-options|
@@ -176,8 +178,8 @@ The following languages and tools are supported.
 * Asciidoc: 'proselint'
 * Bash: 'shell' (-n flag), 'shellcheck'
 * Bourne Shell: 'shell' (-n flag), 'shellcheck'
-* C: 'cppcheck', 'gcc', 'clang'
-* C++ (filetype cpp): 'clang', 'clangtidy', 'cppcheck', 'cpplint', 'gcc'
+* C: 'cppcheck', 'gcc', 'clang', 'clang-format'
+* C++ (filetype cpp): 'clang', 'clangtidy', 'cppcheck', 'cpplint', 'gcc', 'clang-format'
 * C#: 'mcs'
 * Chef: 'foodcritic'
 * CMake: 'cmakelint'
