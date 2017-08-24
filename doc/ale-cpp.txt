@@ -192,20 +192,8 @@ g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
 ===============================================================================
 clang-format                                              *ale-cpp-clangformat*
 
-g:ale_c_clangformat_executable                 *g:ale_c_clangformat_executable*
-                                               *b:ale_c_clangformat_executable*
-  Type: |String|
-  Default: `'clang-format'`
-
-  This variable can be changed to use a different executable for clang-format.
-
-
-g:ale_c_clangformat_options                       *g:ale_c_clangformat_options*
-                                                  *b:ale_c_clangformat_options*
-  Type: |String|
-  Default: `''`
-
-  This variable can be change to modify flags given to clang-format.
+See |ale-c-clangformat| for information about the available options.
+Note that the C options are also used for C++.
 
 
 ===============================================================================
