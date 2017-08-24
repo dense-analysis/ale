@@ -16,7 +16,7 @@ function! ale_linters#python#pycodestyle#GetCommand(buffer) abort
     return ale#Escape(ale_linters#python#pycodestyle#GetExecutable(a:buffer))
     \   . ' '
     \   . ale#Var(a:buffer, 'python_pycodestyle_options')
-    \   . ' %s'
+    \   . ' -'
 endfunction
 
 function! ale_linters#python#pycodestyle#Handle(buffer, lines) abort
@@ -27,7 +27,6 @@ function! ale_linters#python#pycodestyle#Handle(buffer, lines) abort
     " file.py:21:26: W291 trailing whitespace
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
-        \   'filename': l:match[1],
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
         \   'type': l:match[6],
