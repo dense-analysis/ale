@@ -5,7 +5,7 @@ After:
   call ale#linter#Reset()
   silent file something_else.py
 
-Execute(pycodestyle handler parsing):
+Execute(The pycodestyle handler should parse output):
   AssertEqual
   \ [
   \   {
