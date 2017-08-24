@@ -14,6 +14,7 @@ endfunction
 
 function! ale_linters#python#pycodestyle#GetCommand(buffer) abort
     return ale#Escape(ale_linters#python#pycodestyle#GetExecutable(a:buffer))
+    \   . ' '
     \   . ale#Var(a:buffer, 'python_pycodestyle_options')
     \   . ' %s'
 endfunction
