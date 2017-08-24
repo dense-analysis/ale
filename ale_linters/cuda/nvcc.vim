@@ -26,7 +26,6 @@ function! ale_linters#cuda#nvcc#HandleNVCCFormat(buffer, lines) abort
         let l:match = matchlist(l:line, l:pattern)
 
         if !empty(l:match)
-            echom fnamemodify(l:match[1], ":p:.") . ' vs ' . bufname(bufnr(''))
             " Ignore errors that is not for this file
             if !(fnamemodify(l:match[1], ":p:.") ==# bufname(bufnr('')))
                 continue
