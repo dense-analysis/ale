@@ -30,7 +30,7 @@ function! ale_linters#cuda#nvcc#HandleNVCCFormat(buffer, lines) abort
 
         if !empty(l:match)
             " Ignore errors that is not for this file
-            if !(fnamemodify(l:match[1], ":p:.") ==# bufname(bufnr('')))
+            if !(fnamemodify(l:match[1], ':p:.') is# bufname(bufnr('')))
                 continue
             endif
 
