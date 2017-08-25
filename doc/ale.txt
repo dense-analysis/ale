@@ -96,6 +96,7 @@ CONTENTS                                                         *ale-contents*
       flake8..............................|ale-python-flake8|
       isort...............................|ale-python-isort|
       mypy................................|ale-python-mypy|
+      pycodestyle.........................|ale-python-pycodestyle|
       pylint..............................|ale-python-pylint|
       yapf................................|ale-python-yapf|
     ruby..................................|ale-ruby-options|

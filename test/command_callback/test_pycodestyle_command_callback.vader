@@ -1,0 +1,23 @@
+Before:
+  runtime ale_linters/python/pycodestyle.vim
+  Save g:ale_python_pycodestyle_executable,
+  \ g:ale_python_pycodestyle_options,
+  \ g:ale_python_pycodestyle_use_global
+
+After:
+  call ale#linter#Reset()
+  Restore
+
+Execute(The pycodestyle command callback should return default string):
+  AssertEqual '''pycodestyle''  -',
+  \ ale_linters#python#pycodestyle#GetCommand(bufnr(''))
+
+Execute(The pycodestyle command callback should allow options):
+  let g:ale_python_pycodestyle_options = '--exclude=test*.py'
+  AssertEqual '''pycodestyle'' --exclude=test*.py -',
+  \ ale_linters#python#pycodestyle#GetCommand(bufnr(''))
+
+Execute(The pycodestyle executable should be configurable):
+  let g:ale_python_pycodestyle_executable = '~/.local/bin/pycodestyle'
+  AssertEqual '''~/.local/bin/pycodestyle''  -',
+  \ ale_linters#python#pycodestyle#GetCommand(bufnr(''))
