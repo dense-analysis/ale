@@ -53,14 +53,12 @@ function! ale#engine#InitBufferInfo(buffer) abort
         " loclist holds the loclist items after all jobs have completed.
         " temporary_file_list holds temporary files to be cleaned up
         " temporary_directory_list holds temporary directories to be cleaned up
-        " history holds a list of previously run commands for this buffer
         let g:ale_buffer_info[a:buffer] = {
         \   'job_list': [],
         \   'active_linter_list': [],
         \   'loclist': [],
         \   'temporary_file_list': [],
         \   'temporary_directory_list': [],
-        \   'history': [],
         \}
 
         return 1
@@ -557,8 +555,6 @@ function! s:RunJob(options) abort
 
     if g:ale_history_enabled
         call ale#history#Add(l:buffer, l:status, l:job_id, l:command)
-    else
-        let l:info.history = []
     endif
 
     if get(g:, 'ale_run_synchronously') == 1
