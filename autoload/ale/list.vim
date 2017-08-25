@@ -1,6 +1,10 @@
 " Author: Bjorn Neergaard <bjorn@neersighted.com>, modified by Yann fery <yann@fery.me>
 " Description: Manages the loclist and quickfix lists
 
+if !exists('s:timer_args')
+    let s:timer_args = {}
+endif
+
 " Return 1 if there is a buffer with buftype == 'quickfix' in bufffer list
 function! ale#list#IsQuickfixOpen() abort
     for l:buf in range(1, bufnr('$'))
@@ -52,7 +56,7 @@ function! s:FixList(list) abort
     return l:new_list
 endfunction
 
-function! ale#list#SetLists(buffer, loclist) abort
+function! s:SetListsImpl(timer_id, buffer, loclist) abort
     let l:title = expand('#' . a:buffer . ':p')
 
     if g:ale_set_quickfix
@@ -115,7 +119,19 @@ function! ale#list#SetLists(buffer, loclist) abort
     endif
 endfunction
 
-function! ale#list#CloseWindowIfNeeded(buffer) abort
+function! ale#list#SetLists(buffer, loclist) abort
+    if get(g:, 'ale_set_lists_synchronously') == 1
+        call s:SetListsImpl(-1, a:buffer, a:loclist)
+    else
+        call ale#util#StartPartialTimer(
+        \   0,
+        \   function('s:SetListsImpl'),
+        \   [a:buffer, a:loclist],
+        \)
+    endif
+endfunction
+
+function! s:CloseWindowIfNeededImpl(timer_id, buffer) abort
     if ale#Var(a:buffer, 'keep_list_window_open') || !s:ShouldOpen(a:buffer)
         return
     endif
@@ -133,4 +149,16 @@ function! ale#list#CloseWindowIfNeeded(buffer) abort
     " Ignore 'Cannot close last window' errors.
     catch /E444/
     endtry
+endfunction
+
+function! ale#list#CloseWindowIfNeeded(buffer) abort
+    if get(g:, 'ale_set_lists_synchronously') == 1
+        call s:CloseWindowIfNeededImpl(-1, a:buffer)
+    else
+        call ale#util#StartPartialTimer(
+        \   0,
+        \   function('s:CloseWindowIfNeededImpl'),
+        \   [a:buffer],
+        \)
+    endif
 endfunction

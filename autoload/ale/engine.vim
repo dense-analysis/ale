@@ -16,22 +16,34 @@ if !has_key(s:, 'lsp_linter_map')
     let s:lsp_linter_map = {}
 endif
 
-let s:executable_cache_map = {}
+if !has_key(s:, 'executable_cache_map')
+    let s:executable_cache_map = {}
+endif
+
+function! ale#engine#ResetExecutableCache() abort
+    let s:executable_cache_map = {}
+endfunction
 
 " Check if files are executable, and if they are, remember that they are
 " for subsequent calls. We'll keep checking until programs can be executed.
-function! s:IsExecutable(executable) abort
+function! ale#engine#IsExecutable(buffer, executable) abort
     if has_key(s:executable_cache_map, a:executable)
         return 1
     endif
 
+    let l:result = 0
+
     if executable(a:executable)
         let s:executable_cache_map[a:executable] = 1
 
-        return 1
+        let l:result = 1
     endif
 
-    return  0
+    if g:ale_history_enabled
+        call ale#history#Add(a:buffer, l:result, 'executable', a:executable)
+    endif
+
+    return l:result
 endfunction
 
 function! ale#engine#InitBufferInfo(buffer) abort
@@ -708,7 +720,7 @@ function! s:RemoveProblemsForDisabledLinters(buffer, linters) abort
 
     call filter(
     \   get(g:ale_buffer_info[a:buffer], 'loclist', []),
-    \   'get(l:name_map, v:val.linter_name)',
+    \   'get(l:name_map, get(v:val, ''linter_name''))',
     \)
 endfunction
 
@@ -728,7 +740,10 @@ function! s:AddProblemsFromOtherBuffers(buffer, linters) abort
             if has_key(l:item, 'filename')
             \&& l:item.filename is# l:filename
             \&& has_key(l:name_map, l:item.linter_name)
-                call add(l:loclist, l:item)
+                " Copy the items and set the buffer numbers to this one.
+                let l:new_item = copy(l:item)
+                let l:new_item.bufnr = a:buffer
+                call add(l:loclist, l:new_item)
             endif
         endfor
     endfor
@@ -737,6 +752,8 @@ function! s:AddProblemsFromOtherBuffers(buffer, linters) abort
         call sort(l:loclist, function('ale#util#LocItemCompareWithText'))
         call uniq(l:loclist, function('ale#util#LocItemCompareWithText'))
 
+        " Set the loclist variable, used by some parts of ALE.
+        let g:ale_buffer_info[a:buffer].loclist = l:loclist
         call ale#engine#SetResults(a:buffer, l:loclist)
     endif
 endfunction
@@ -750,7 +767,7 @@ function! s:RunLinter(buffer, linter) abort
     else
         let l:executable = ale#linter#GetExecutable(a:buffer, a:linter)
 
-        if s:IsExecutable(l:executable)
+        if ale#engine#IsExecutable(a:buffer, l:executable)
             return s:InvokeChain(a:buffer, a:linter, 0, [])
         endif
     endif

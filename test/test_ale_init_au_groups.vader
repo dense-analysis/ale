@@ -60,11 +60,6 @@ After:
 
   call ALEInitAuGroups()
 
-  " Clean up the quickfix group.
-  augroup ALEQuickfixCursorMovedEvent
-    autocmd! * <buffer>
-  augroup END
-
 Execute (g:ale_lint_on_text_changed = 0 should bind no events):
   let g:ale_lint_on_text_changed = 0
 
@@ -139,7 +134,6 @@ Execute (g:ale_lint_on_enter = 1 should bind the required events):
   \ 'BufEnter * call ale#events#EnterEvent(str2nr(expand(''<abuf>'')))',
   \ 'BufReadPost * call ale#Queue(0, ''lint_file'', str2nr(expand(''<abuf>'')))',
   \ 'BufWinEnter * call ale#Queue(0, ''lint_file'', str2nr(expand(''<abuf>'')))',
-  \ 'BufWinLeave * call ale#events#BufWinLeave()',
   \ 'FileChangedShellPost * call ale#events#FileChangedEvent(str2nr(expand(''<abuf>'')))',
   \], CheckAutocmd('ALERunOnEnterGroup')
 
@@ -222,12 +216,3 @@ Execute(Disabling completion should remove autocmd events correctly):
 
   AssertEqual [], CheckAutocmd('ALECompletionGroup')
   AssertEqual 0, g:ale_completion_enabled
-
-Execute(The cursor events should be set up for the quickfix list):
-  runtime! ftplugin/qf.vim
-
-  AssertEqual
-  \ [
-  \   'CursorMoved <buffer> call ale#events#ParseLoclistWindowItemPosition()',
-  \ ],
-  \ CheckAutocmd('ALEQuickfixCursorMovedEvent')

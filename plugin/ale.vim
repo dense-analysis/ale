@@ -226,7 +226,6 @@ function! ALEInitAuGroups() abort
             autocmd BufWinEnter,BufRead * call ale#Queue(0, 'lint_file', str2nr(expand('<abuf>')))
             " Track when the file is changed outside of Vim.
             autocmd FileChangedShellPost * call ale#events#FileChangedEvent(str2nr(expand('<abuf>')))
-            autocmd BufWinLeave * call ale#events#BufWinLeave()
         endif
     augroup END
 

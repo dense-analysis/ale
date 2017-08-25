@@ -5,8 +5,14 @@
 let g:ale_php_phpstan_executable = get(g:, 'ale_php_phpstan_executable', 'phpstan')
 let g:ale_php_phpstan_level = get(g:, 'ale_php_phpstan_level', '4')
 
-function! ale_linters#php#phpstan#GetCommand(buffer) abort
+function! ale_linters#php#phpstan#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'php_phpstan_executable')
+endfunction
+
+function! ale_linters#php#phpstan#GetCommand(buffer) abort
+    let l:executable = ale_linters#php#phpstan#GetExecutable(a:buffer)
+
+    return ale#Escape(l:executable)
     \   . ' analyze -l'
     \   . ale#Var(a:buffer, 'php_phpstan_level')
     \   . ' --errorFormat raw'
@@ -34,7 +40,7 @@ endfunction
 
 call ale#linter#Define('php', {
 \   'name': 'phpstan',
-\   'executable': 'phpstan',
+\   'executable_callback': 'ale_linters#php#phpstan#GetExecutable',
 \   'command_callback': 'ale_linters#php#phpstan#GetCommand',
 \   'callback': 'ale_linters#php#phpstan#Handle',
 \})

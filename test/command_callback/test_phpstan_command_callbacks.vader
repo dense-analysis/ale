@@ -1,0 +1,29 @@
+Before:
+  Save g:ale_php_phpstan_executable
+  Save g:ale_php_phpstan_level
+
+  unlet! g:ale_php_phpstan_executable
+  unlet! g:ale_php_phpstan_level
+
+  runtime ale_linters/php/phpstan.vim
+
+After:
+  Restore
+
+  call ale#linter#Reset()
+
+Execute(Custom executables should be used for the executable and command):
+  let g:ale_php_phpstan_executable = 'phpstan_test'
+
+  AssertEqual 'phpstan_test', ale_linters#php#phpstan#GetExecutable(bufnr(''))
+  AssertEqual
+  \ ale#Escape('phpstan_test') . ' analyze -l4 --errorFormat raw %s',
+  \ ale_linters#php#phpstan#GetCommand(bufnr(''))
+
+Execute(project with level set to 3):
+  call ale#test#SetFilename('phpstan-test-files/foo/test.php')
+  let g:ale_php_phpstan_level = 3
+
+  AssertEqual
+  \ ale#Escape('phpstan') . ' analyze -l3 --errorFormat raw %s',
+  \ ale_linters#php#phpstan#GetCommand(bufnr(''))

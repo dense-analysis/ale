@@ -267,3 +267,33 @@ function! ale#util#Writefile(buffer, lines, filename) abort
 
     call writefile(l:corrected_lines, a:filename) " no-custom-checks
 endfunction
+
+if !exists('s:patial_timers')
+    let s:partial_timers = {}
+endif
+
+function! s:ApplyPartialTimer(timer_id) abort
+    let [l:Callback, l:args] = remove(s:partial_timers, a:timer_id)
+    call call(l:Callback, [a:timer_id] + l:args)
+endfunction
+
+" Given a delay, a callback, a List of arguments, start a timer with
+" timer_start() and call the callback provided with [timer_id] + args.
+"
+" The timer must not be stopped with timer_stop().
+" Use ale#util#StopPartialTimer() instead, which can stop any timer, and will
+" clear any arguments saved for executing callbacks later.
+function! ale#util#StartPartialTimer(delay, callback, args) abort
+    let l:timer_id = timer_start(a:delay, function('s:ApplyPartialTimer'))
+    let s:partial_timers[l:timer_id] = [a:callback, a:args]
+
+    return l:timer_id
+endfunction
+
+function! ale#util#StopPartialTimer(timer_id) abort
+    call timer_stop(a:timer_id)
+
+    if has_key(s:partial_timers, a:timer_id)
+        call remove(s:partial_timers, a:timer_id)
+    endif
+endfunction

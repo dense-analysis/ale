@@ -1,9 +1,4 @@
 Before:
-  Save g:ale_php_phpstan_executable
-  Save g:ale_php_phpstan_level
-
-  let g:ale_php_phpstan_executable = 'phpstan_test'
-
   call ale#test#SetDirectory('/testplugin/test')
 
   runtime ale_linters/php/phpstan.vim
@@ -14,45 +9,14 @@ After:
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
-Execute(project with level set to 3):
-  call ale#test#SetFilename('phpstan-test-files/foo/test.php')
-  let g:ale_php_phpstan_level = 3
-
-  AssertEqual
-  \ 'phpstan_test analyze -l3 --errorFormat raw %s',
-  \ ale_linters#php#phpstan#GetCommand(bufnr(''))
-
-Execute(project with default level):
-  call ale#test#SetFilename('phpstan-test-files/foo/test.php')
-
-  AssertEqual
-  \ 'phpstan_test analyze -l4 --errorFormat raw %s',
-  \ ale_linters#php#phpstan#GetCommand(bufnr(''))
-
-Execute(parse output without errors):
+Execute(Output without errors should be parsed correctly):
   call ale#test#SetFilename('phpstan-test-files/foo/test.php')
 
   AssertEqual
   \ [],
   \ ale_linters#php#phpstan#Handle(bufnr(''), [" 1/1 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%"])
 
-Execute(parse output with one error):
-  call ale#test#SetFilename('phpstan-test-files/foo/test.php')
-
-  AssertEqual
-  \ [
-  \   {
-  \     'lnum': 9,
-  \     'text': 'Access to an undefined property Test::$var.',
-  \     'type': 'W'
-  \   }
-  \ ],
-  \ ale_linters#php#phpstan#Handle(bufnr(''), [
-  \   ' 1/1 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%',
-  \   'phpstan-test-files/foo/test.php:9:Access to an undefined property Test::$var.',
-  \])
-
-Execute(parse output with three errors):
+Execute(Output with some errors should be parsed correctly):
   call ale#test#SetFilename('phpstan-test-files/foo/test.php')
 
   AssertEqual
@@ -80,7 +44,7 @@ Execute(parse output with three errors):
   \   'phpstan-test-files/foo/test.php:192:Invalid command testCommand.',
   \])
 
-Execute(parse output for windows filesystem):
+Execute(Output should be parsed correctly with Windows paths):
   call ale#test#SetFilename('phpstan-test-files/foo/test.php')
 
   AssertEqual
@@ -96,7 +60,7 @@ Execute(parse output for windows filesystem):
   \   'D:\phpstan-test-files\foo\test.php:9:Access to an undefined property Test::$var.',
   \])
 
-Execute(parse output for not php file):
+Execute(Output for .inc files should be parsed correctly):
   call ale#test#SetFilename('phpstan-test-files/test.inc')
 
   AssertEqual
