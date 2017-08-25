@@ -9,8 +9,9 @@ function! ale_linters#cuda#nvcc#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#cuda#nvcc#GetCommand(buffer) abort
-    let l:output_file = tempname() . ".ii"
+    let l:output_file = tempname() . '.ii'
     call ale#engine#ManageFile(a:buffer, l:output_file)
+
     return ale#Escape(ale_linters#cuda#nvcc#GetExecutable(a:buffer))
     \   . ' -cuda '
     \   . ale#c#IncludeOptions(ale#c#FindLocalHeaderPaths(a:buffer))
@@ -25,27 +26,23 @@ function! ale_linters#cuda#nvcc#HandleNVCCFormat(buffer, lines) abort
     let l:pattern = '\v^([^:\(\)]+):?\(?(\d+)\)?:(\d+)?:?\s*\w*\s*(error|warning): (.+)$'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if !empty(l:match)
-            " Ignore errors that is not for this file
-            if !(fnamemodify(l:match[1], ':p:.') is# bufname(bufnr('')))
-                continue
-            endif
-
-            let l:item = {
-            \   'lnum': str2nr(l:match[2]),
-            \   'type': l:match[4] =~# 'error' ? 'E' : 'W',
-            \   'text': l:match[5],
-            \}
-
-            if !empty(l:match[3])
-                let l:item.col = str2nr(l:match[3])
-            endif
-
-            call add(l:output, l:item)
+    for l:match in ale#util#GetMatches(a:lines, l:pattern)
+        " Ignore errors that is not for this file
+        if !(fnamemodify(l:match[1], ':p:.') is# bufname(bufnr('')))
+            continue
         endif
+
+        let l:item = {
+        \   'lnum': str2nr(l:match[2]),
+        \   'type': l:match[4] =~# 'error' ? 'E' : 'W',
+        \   'text': l:match[5],
+        \}
+
+        if !empty(l:match[3])
+            let l:item.col = str2nr(l:match[3])
+        endif
+
+        call add(l:output, l:item)
     endfor
 
     return l:output
