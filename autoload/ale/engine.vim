@@ -282,10 +282,6 @@ function! ale#engine#SetResults(buffer, loclist) abort
     " The List could be sorted again here by SetSigns.
     if g:ale_set_signs
         call ale#sign#SetSigns(a:buffer, a:loclist)
-
-        if l:linting_is_done
-            call ale#sign#RemoveDummySignIfNeeded(a:buffer)
-        endif
     endif
 
     if g:ale_set_quickfix || g:ale_set_loclist
