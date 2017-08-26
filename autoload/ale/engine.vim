@@ -16,22 +16,34 @@ if !has_key(s:, 'lsp_linter_map')
     let s:lsp_linter_map = {}
 endif
 
-let s:executable_cache_map = {}
+if !has_key(s:, 'executable_cache_map')
+    let s:executable_cache_map = {}
+endif
+
+function! ale#engine#ResetExecutableCache() abort
+    let s:executable_cache_map = {}
+endfunction
 
 " Check if files are executable, and if they are, remember that they are
 " for subsequent calls. We'll keep checking until programs can be executed.
-function! s:IsExecutable(executable) abort
+function! ale#engine#IsExecutable(buffer, executable) abort
     if has_key(s:executable_cache_map, a:executable)
         return 1
     endif
 
+    let l:result = 0
+
     if executable(a:executable)
         let s:executable_cache_map[a:executable] = 1
 
-        return 1
+        let l:result = 1
     endif
 
-    return  0
+    if g:ale_history_enabled
+        call ale#history#Add(a:buffer, l:result, 'executable', a:executable)
+    endif
+
+    return l:result
 endfunction
 
 function! ale#engine#InitBufferInfo(buffer) abort
@@ -41,16 +53,18 @@ function! ale#engine#InitBufferInfo(buffer) abort
         " loclist holds the loclist items after all jobs have completed.
         " temporary_file_list holds temporary files to be cleaned up
         " temporary_directory_list holds temporary directories to be cleaned up
-        " history holds a list of previously run commands for this buffer
         let g:ale_buffer_info[a:buffer] = {
         \   'job_list': [],
         \   'active_linter_list': [],
         \   'loclist': [],
         \   'temporary_file_list': [],
         \   'temporary_directory_list': [],
-        \   'history': [],
         \}
+
+        return 1
     endif
+
+    return 0
 endfunction
 
 " Return 1 if ALE is busy checking a given buffer
@@ -268,10 +282,6 @@ function! ale#engine#SetResults(buffer, loclist) abort
     " The List could be sorted again here by SetSigns.
     if g:ale_set_signs
         call ale#sign#SetSigns(a:buffer, a:loclist)
-
-        if l:linting_is_done
-            call ale#sign#RemoveDummySignIfNeeded(a:buffer)
-        endif
     endif
 
     if g:ale_set_quickfix || g:ale_set_loclist
@@ -332,6 +342,9 @@ function! s:RemapItemTypes(type_map, loclist) abort
     endfor
 endfunction
 
+" Save the temporary directory so we can figure out if files are in it.
+let s:temp_dir = fnamemodify(tempname(), ':h')
+
 function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
     let l:bufnr_map = {}
     let l:new_loclist = []
@@ -355,6 +368,7 @@ function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
         " The linter_name will be set on the errors so it can be used in
         " output, filtering, etc..
         let l:item = {
+        \   'bufnr': a:buffer,
         \   'text': l:old_item.text,
         \   'lnum': str2nr(l:old_item.lnum),
         \   'col': str2nr(get(l:old_item, 'col', 0)),
@@ -365,7 +379,11 @@ function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
         \}
 
         if has_key(l:old_item, 'filename')
+        \&& l:old_item.filename[:len(s:temp_dir) - 1] isnot# s:temp_dir
             " Use the filename given.
+            " Temporary files are assumed to be for this buffer,
+            " and the filename is not included then, because it looks bad
+            " in the loclist window.
             let l:filename = l:old_item.filename
             let l:item.filename = l:filename
 
@@ -384,8 +402,6 @@ function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
             endif
         elseif has_key(l:old_item, 'bufnr')
             let l:item.bufnr = l:old_item.bufnr
-        else
-            let l:item.bufnr = a:buffer
         endif
 
         if has_key(l:old_item, 'detail')
@@ -408,8 +424,9 @@ function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
         if l:item.lnum < 1
             " When errors appear before line 1, put them at line 1.
             let l:item.lnum = 1
-        elseif l:item.lnum > l:last_line_number
+        elseif l:item.bufnr == a:buffer && l:item.lnum > l:last_line_number
             " When errors go beyond the end of the file, put them at the end.
+            " This is only done for the current buffer.
             let l:item.lnum = l:last_line_number
         endif
 
@@ -460,6 +477,7 @@ function! s:RunJob(options) abort
     let l:output_stream = a:options.output_stream
     let l:next_chain_index = a:options.next_chain_index
     let l:read_buffer = a:options.read_buffer
+    let l:info = g:ale_buffer_info[l:buffer]
 
     if empty(l:command)
         return 0
@@ -515,8 +533,11 @@ function! s:RunJob(options) abort
     " Only proceed if the job is being run.
     if l:job_id
         " Add the job to the list of jobs, so we can track them.
-        call add(g:ale_buffer_info[l:buffer].job_list, l:job_id)
-        call add(g:ale_buffer_info[l:buffer].active_linter_list, l:linter.name)
+        call add(l:info.job_list, l:job_id)
+
+        if index(l:info.active_linter_list, l:linter.name) < 0
+            call add(l:info.active_linter_list, l:linter.name)
+        endif
 
         let l:status = 'started'
         " Store the ID for the job in the map to read back again.
@@ -530,8 +551,6 @@ function! s:RunJob(options) abort
 
     if g:ale_history_enabled
         call ale#history#Add(l:buffer, l:status, l:job_id, l:command)
-    else
-        let g:ale_buffer_info[l:buffer].history = []
     endif
 
     if get(g:, 'ale_run_synchronously') == 1
@@ -624,6 +643,7 @@ endfunction
 function! s:StopCurrentJobs(buffer, include_lint_file_jobs) abort
     let l:info = get(g:ale_buffer_info, a:buffer, {})
     let l:new_job_list = []
+    let l:new_active_linter_list = []
 
     for l:job_id in get(l:info, 'job_list', [])
         let l:job_info = get(s:job_info_map, l:job_id, {})
@@ -634,15 +654,23 @@ function! s:StopCurrentJobs(buffer, include_lint_file_jobs) abort
                 call remove(s:job_info_map, l:job_id)
             else
                 call add(l:new_job_list, l:job_id)
+                " Linters with jobs still running are still active.
+                call add(l:new_active_linter_list, l:job_info.linter.name)
             endif
         endif
     endfor
 
+    " Remove duplicates from the active linter list.
+    call uniq(sort(l:new_active_linter_list))
+
     " Update the List, so it includes only the jobs we still need.
     let l:info.job_list = l:new_job_list
+    " Update the active linter list, clearing out anything not running.
+    let l:info.active_linter_list = l:new_active_linter_list
 endfunction
 
 function! s:CheckWithLSP(buffer, linter) abort
+    let l:info = g:ale_buffer_info[a:buffer]
     let l:lsp_details = ale#linter#StartLSP(
     \   a:buffer,
     \   a:linter,
@@ -665,7 +693,9 @@ function! s:CheckWithLSP(buffer, linter) abort
     let l:request_id = ale#lsp#Send(l:id, l:change_message, l:root)
 
     if l:request_id != 0
-        call add(g:ale_buffer_info[a:buffer].active_linter_list, a:linter.name)
+        if index(l:info.active_linter_list, a:linter.name) < 0
+            call add(l:info.active_linter_list, a:linter.name)
+        endif
     endif
 
     return l:request_id != 0
@@ -682,8 +712,42 @@ function! s:RemoveProblemsForDisabledLinters(buffer, linters) abort
 
     call filter(
     \   get(g:ale_buffer_info[a:buffer], 'loclist', []),
-    \   'get(l:name_map, v:val.linter_name)',
+    \   'get(l:name_map, get(v:val, ''linter_name''))',
     \)
+endfunction
+
+function! s:AddProblemsFromOtherBuffers(buffer, linters) abort
+    let l:filename = expand('#' . a:buffer . ':p')
+    let l:loclist = []
+    let l:name_map = {}
+
+    " Build a map of the active linters.
+    for l:linter in a:linters
+        let l:name_map[l:linter.name] = 1
+    endfor
+
+    " Find the items from other buffers, for the linters that are enabled.
+    for l:info in values(g:ale_buffer_info)
+        for l:item in l:info.loclist
+            if has_key(l:item, 'filename')
+            \&& l:item.filename is# l:filename
+            \&& has_key(l:name_map, l:item.linter_name)
+                " Copy the items and set the buffer numbers to this one.
+                let l:new_item = copy(l:item)
+                let l:new_item.bufnr = a:buffer
+                call add(l:loclist, l:new_item)
+            endif
+        endfor
+    endfor
+
+    if !empty(l:loclist)
+        call sort(l:loclist, function('ale#util#LocItemCompareWithText'))
+        call uniq(l:loclist, function('ale#util#LocItemCompareWithText'))
+
+        " Set the loclist variable, used by some parts of ALE.
+        let g:ale_buffer_info[a:buffer].loclist = l:loclist
+        call ale#engine#SetResults(a:buffer, l:loclist)
+    endif
 endfunction
 
 " Run a linter for a buffer.
@@ -695,7 +759,7 @@ function! s:RunLinter(buffer, linter) abort
     else
         let l:executable = ale#linter#GetExecutable(a:buffer, a:linter)
 
-        if s:IsExecutable(l:executable)
+        if ale#engine#IsExecutable(a:buffer, l:executable)
             return s:InvokeChain(a:buffer, a:linter, 0, [])
         endif
     endif
@@ -705,7 +769,7 @@ endfunction
 
 function! ale#engine#RunLinters(buffer, linters, should_lint_file) abort
     " Initialise the buffer information if needed.
-    call ale#engine#InitBufferInfo(a:buffer)
+    let l:new_buffer = ale#engine#InitBufferInfo(a:buffer)
     call s:StopCurrentJobs(a:buffer, a:should_lint_file)
     call s:RemoveProblemsForDisabledLinters(a:buffer, a:linters)
 
@@ -730,6 +794,8 @@ function! ale#engine#RunLinters(buffer, linters, should_lint_file) abort
     " disabled, or ALE itself is disabled.
     if l:can_clear_results
         call ale#engine#SetResults(a:buffer, [])
+    elseif l:new_buffer
+        call s:AddProblemsFromOtherBuffers(a:buffer, a:linters)
     endif
 endfunction
 

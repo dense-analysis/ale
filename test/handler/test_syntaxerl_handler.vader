@@ -4,7 +4,7 @@ Before:
 After:
   call ale#linter#Reset()
 
-Execute:
+Execute (Handle SyntaxErl output):
   AssertEqual
   \ [
   \   {
@@ -18,7 +18,7 @@ Execute:
   \     'type': 'W',
   \   },
   \ ],
-  \ ale_linters#erlang#syntaxerl#Handle(42, [
+  \ ale_linters#erlang#syntaxerl#Handle(bufnr(''), [
   \   "/tmp/v2wDixk/1/module.erl:42: syntax error before: ','",
   \   '/tmp/v2wDixk/2/module.erl:42: warning: function foo/0 is unused',
   \ ])

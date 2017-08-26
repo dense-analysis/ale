@@ -15,28 +15,40 @@ Execute(The tslint handler should parse lines correctly):
   \   {
   \     'lnum': 1,
   \     'col': 15,
+  \     'filename': expand('%:p:h') . '/test.ts',
   \     'end_lnum': 1,
-  \     'end_col': 15,
-  \     'text': 'Missing semicolon',
   \     'type': 'E',
+  \     'end_col': 15,
+  \     'text': 'semicolon: Missing semicolon'
   \   },
   \   {
   \     'lnum': 2,
   \     'col': 8,
+  \     'filename': expand('%:p:h') . '/test.ts',
   \     'end_lnum': 3,
-  \     'end_col': 12,
-  \     'text': 'Something else',
   \     'type': 'W',
+  \     'end_col': 12,
+  \     'text': 'Something else'
+  \   },
+  \   {
+  \     'lnum': 2,
+  \     'col': 8,
+  \     'filename': expand('%:p:h') . '/something-else.ts',
+  \     'end_lnum': 3,
+  \     'type': 'W',
+  \     'end_col': 12,
+  \     'text': 'something: Something else'
   \   },
   \   {
   \     'lnum': 31,
   \     'col': 9,
+  \     'filename': expand('%:p:h') . '/test.ts',
   \     'end_lnum': 31,
-  \     'end_col': 20,
-  \     'text': 'Calls to console.log are not allowed.',
   \     'type': 'E',
+  \     'end_col': 20,
+  \     'text': 'no-console: Calls to console.log are not allowed.'
   \   },
-  \ ],
+  \ ] ,
   \ ale_linters#typescript#tslint#Handle(bufnr(''), [json_encode([
   \   {
   \     'endPosition': {
@@ -50,7 +62,7 @@ Execute(The tslint handler should parse lines correctly):
   \       'innerStart': 14,
   \       'innerText': ';'
   \     },
-  \     'name': 'app/test.ts',
+  \     'name': 'test.ts',
   \     'ruleName': 'semicolon',
   \     'ruleSeverity': 'ERROR',
   \     'startPosition': {
@@ -71,8 +83,7 @@ Execute(The tslint handler should parse lines correctly):
   \       'innerStart': 14,
   \       'innerText': ';'
   \     },
-  \     'name': 'app/test.ts',
-  \     'ruleName': 'something',
+  \     'name': 'test.ts',
   \     'ruleSeverity': 'WARNING',
   \     'startPosition': {
   \       'character': 7,
@@ -92,7 +103,7 @@ Execute(The tslint handler should parse lines correctly):
   \       'innerStart': 14,
   \       'innerText': ';'
   \     },
-  \     'name': 'app/something-else.ts',
+  \     'name': 'something-else.ts',
   \     'ruleName': 'something',
   \     'ruleSeverity': 'WARNING',
   \     'startPosition': {
@@ -108,7 +119,7 @@ Execute(The tslint handler should parse lines correctly):
   \       "position": 14590
   \     },
   \     "failure": "Calls to console.log are not allowed.",
-  \     'name': 'app/test.ts',
+  \     'name': 'test.ts',
   \     "ruleName": "no-console",
   \     "startPosition": {
   \       "character": 8,

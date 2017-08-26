@@ -5,6 +5,7 @@ Before:
   Save g:ale_open_list
   Save g:ale_keep_list_window_open
   Save g:ale_list_window_size
+  Save g:ale_buffer_info
 
   let g:ale_set_loclist = 1
   let g:ale_set_quickfix = 0
@@ -13,11 +14,12 @@ Before:
   let g:ale_list_window_size = 10
 
   let g:loclist = [
-  \ {'lnum': 5, 'col': 5},
-  \ {'lnum': 5, 'col': 4},
-  \ {'lnum': 2, 'col': 10},
-  \ {'lnum': 3, 'col': 2},
+  \ {'bufnr': bufnr(''), 'lnum': 5, 'col': 5, 'text': 'x'},
+  \ {'bufnr': bufnr(''), 'lnum': 5, 'col': 4, 'text': 'x'},
+  \ {'bufnr': bufnr(''), 'lnum': 2, 'col': 10, 'text': 'x'},
+  \ {'bufnr': bufnr(''), 'lnum': 3, 'col': 2, 'text': 'x'},
   \]
+  let g:ale_buffer_info = {bufnr(''): {'loclist': g:loclist}}
 
   function GetQuickfixHeight() abort
     for l:win in range(1, winnr('$'))
@@ -121,6 +123,10 @@ Execute(The quickfix window should open for the quickfix list):
   let g:ale_set_quickfix = 1
   let g:ale_open_list = 1
 
+  let g:ale_buffer_info[bufnr('') + 1] = {
+  \ 'loclist': [{'bufnr': -1, 'filename': '/foo/bar', 'lnum': 5, 'col': 5, 'text': 'x'}],
+  \}
+
   " It should not open for an empty list.
   call ale#list#SetLists(bufnr('%'), [])
   call ale#list#CloseWindowIfNeeded(bufnr(''))
@@ -131,10 +137,17 @@ Execute(The quickfix window should open for the quickfix list):
   call ale#list#CloseWindowIfNeeded(bufnr(''))
   Assert ale#list#IsQuickfixOpen(), 'The quickfix window was closed when the list was not empty'
 
-  " Clear the list and it should close again.
+  " Clear this List. The window should stay open, as there are other items.
+  let g:ale_buffer_info[bufnr('')].loclist = []
   call ale#list#SetLists(bufnr('%'), [])
   call ale#list#CloseWindowIfNeeded(bufnr(''))
-  Assert !ale#list#IsQuickfixOpen(), 'The quickfix window was not closed when the list was empty'
+  Assert ale#list#IsQuickfixOpen(), 'The quickfix window closed even though there are items in another buffer'
+
+  " Clear the other List now. Now the window should close.
+  call remove(g:ale_buffer_info, bufnr('') + 1)
+  call ale#list#SetLists(bufnr('%'), [])
+  call ale#list#CloseWindowIfNeeded(bufnr(''))
+  Assert !ale#list#IsQuickfixOpen(), 'The quickfix window was not closed'
 
 Execute(The quickfix window should stay open for the quickfix list):
   let g:ale_set_quickfix = 1

@@ -1,12 +1,25 @@
 Before:
+  Save g:ale_buffer_info
+
+  let g:ale_buffer_info = {
+  \ bufnr(''): {
+  \   'loclist': [{'bufnr': bufnr(''), 'lnum': 4, 'col': 1, 'text': 'foo'}]
+  \ },
+  \}
+
   let g:original_buffer = bufnr('%')
-  new
+  noautocmd new
 
 After:
+  Restore
+
   unlet! g:original_buffer
 
 Execute(Errors should be set in the loclist for the original buffer, not the new one):
-  call ale#list#SetLists(g:original_buffer, [{'lnum': 4, 'text': 'foo'}])
+  call ale#list#SetLists(
+  \ g:original_buffer,
+  \ g:ale_buffer_info[(g:original_buffer)].loclist,
+  \ )
 
   AssertEqual [], getloclist(0)
   AssertEqual 1, len(getloclist(bufwinid(g:original_buffer)))

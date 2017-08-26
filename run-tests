@@ -82,6 +82,9 @@ if [ $# -ne 0 ]; then
     tests="$*"
 fi
 
+# Delete .swp files in the test directory, which cause Vim 8 to hang.
+find test -name '*.swp' -delete
+
 docker images -q w0rp/ale | grep "^$CURRENT_IMAGE_ID" > /dev/null \
     || docker pull "$IMAGE"
 

@@ -1,11 +1,23 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Contains miscellaneous functions
 
-" A null file for sending output to nothing.
-let g:ale#util#nul_file = '/dev/null'
+" A wrapper function for mode() so we can test calls for it.
+function! ale#util#Mode(...) abort
+    return call('mode', a:000)
+endfunction
 
-if has('win32')
-    let g:ale#util#nul_file = 'nul'
+" A wrapper function for feedkeys so we can test calls for it.
+function! ale#util#FeedKeys(...) abort
+    return call('feedkeys', a:000)
+endfunction
+
+if !exists('g:ale#util#nul_file')
+    " A null file for sending output to nothing.
+    let g:ale#util#nul_file = '/dev/null'
+
+    if has('win32')
+        let g:ale#util#nul_file = 'nul'
+    endif
 endif
 
 " Return the number of lines for a given buffer.
@@ -21,6 +33,8 @@ function! ale#util#GetFunction(string_or_ref) abort
     return a:string_or_ref
 endfunction
 
+" Compare two loclist items for ALE, sorted by their buffers, filenames, and
+" line numbers and column numbers.
 function! ale#util#LocItemCompare(left, right) abort
     if a:left.bufnr < a:right.bufnr
         return -1
@@ -28,6 +42,16 @@ function! ale#util#LocItemCompare(left, right) abort
 
     if a:left.bufnr > a:right.bufnr
         return 1
+    endif
+
+    if a:left.bufnr == -1
+        if a:left.filename < a:right.filename
+            return -1
+        endif
+
+        if a:left.filename > a:right.filename
+            return 1
+        endif
     endif
 
     if a:left.lnum < a:right.lnum
@@ -43,6 +67,27 @@ function! ale#util#LocItemCompare(left, right) abort
     endif
 
     if a:left.col > a:right.col
+        return 1
+    endif
+
+    return 0
+endfunction
+
+" Compare two loclist items, including the text for the items.
+"
+" This function can be used for de-duplicating lists.
+function! ale#util#LocItemCompareWithText(left, right) abort
+    let l:cmp_value = ale#util#LocItemCompare(a:left, a:right)
+
+    if l:cmp_value
+        return l:cmp_value
+    endif
+
+    if a:left.text < a:right.text
+        return -1
+    endif
+
+    if a:left.text > a:right.text
         return 1
     endif
 
@@ -221,4 +266,34 @@ function! ale#util#Writefile(buffer, lines, filename) abort
     \   : a:lines
 
     call writefile(l:corrected_lines, a:filename) " no-custom-checks
+endfunction
+
+if !exists('s:patial_timers')
+    let s:partial_timers = {}
+endif
+
+function! s:ApplyPartialTimer(timer_id) abort
+    let [l:Callback, l:args] = remove(s:partial_timers, a:timer_id)
+    call call(l:Callback, [a:timer_id] + l:args)
+endfunction
+
+" Given a delay, a callback, a List of arguments, start a timer with
+" timer_start() and call the callback provided with [timer_id] + args.
+"
+" The timer must not be stopped with timer_stop().
+" Use ale#util#StopPartialTimer() instead, which can stop any timer, and will
+" clear any arguments saved for executing callbacks later.
+function! ale#util#StartPartialTimer(delay, callback, args) abort
+    let l:timer_id = timer_start(a:delay, function('s:ApplyPartialTimer'))
+    let s:partial_timers[l:timer_id] = [a:callback, a:args]
+
+    return l:timer_id
+endfunction
+
+function! ale#util#StopPartialTimer(timer_id) abort
+    call timer_stop(a:timer_id)
+
+    if has_key(s:partial_timers, a:timer_id)
+        call remove(s:partial_timers, a:timer_id)
+    endif
 endfunction

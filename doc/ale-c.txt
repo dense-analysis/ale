@@ -60,4 +60,23 @@ g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
 
 
 ===============================================================================
+clang-format                                                *ale-c-clangformat*
+
+g:ale_c_clangformat_executable                 *g:ale_c_clangformat_executable*
+                                               *b:ale_c_clangformat_executable*
+  Type: |String|
+  Default: `'clang-format'`
+
+  This variable can be changed to use a different executable for clang-format.
+
+
+g:ale_c_clangformat_options                       *g:ale_c_clangformat_options*
+                                                  *b:ale_c_clangformat_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be change to modify flags given to clang-format.
+
+
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

@@ -1,4 +1,11 @@
+Before:
+  Save g:ale_javascript_eslint_suppress_eslintignore
+
+  let g:ale_javascript_eslint_suppress_eslintignore = 0
+
 After:
+  Restore
+
   unlet! g:config_error_lines
 
 Execute(The eslint handler should parse lines correctly):
@@ -205,4 +212,25 @@ Execute(The eslint hint about using typescript-eslint-parser):
   \ ],
   \ ale#handlers#eslint#Handle(bufnr(''), [
   \ 'foo.ts:451:2: Parsing error: Unexpected token ) [Error]',
+  \ ])
+
+Execute(eslint should warn about ignored files by default):
+  AssertEqual
+  \ [{
+  \    'lnum': 0,
+  \    'col': 0,
+  \    'type': 'W',
+  \    'text': 'File ignored because of a matching ignore pattern. Use "--no-ignore" to override. [Warning]'
+  \ }],
+  \ ale#handlers#eslint#Handle(347, [
+  \  '/path/to/some/ignored.js:0:0: File ignored because of a matching ignore pattern. Use "--no-ignore" to override. [Warning]',
+  \ ])
+
+Execute(eslint should not warn about ignored files when explicitly disabled):
+  let g:ale_javascript_eslint_suppress_eslintignore = 1
+
+  AssertEqual
+  \ [],
+  \ ale#handlers#eslint#Handle(347, [
+  \  '/path/to/some/ignored.js:0:0: File ignored because of a matching ignore pattern. Use "--no-ignore" to override. [Warning]',
   \ ])

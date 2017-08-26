@@ -70,39 +70,53 @@ function! s:EchoGlobalVariables() abort
     endfor
 endfunction
 
+" Echo a command that was run.
+function! s:EchoCommand(item) abort
+    let l:status_message = a:item.status
+
+    " Include the exit code in output if we have it.
+    if a:item.status is# 'finished'
+        let l:status_message .= ' - exit code ' . a:item.exit_code
+    endif
+
+    echom '(' . l:status_message . ') ' . string(a:item.command)
+
+    if g:ale_history_log_output && has_key(a:item, 'output')
+        if empty(a:item.output)
+            echom ''
+            echom '<<<NO OUTPUT RETURNED>>>'
+            echom ''
+        else
+            echom ''
+            echom '<<<OUTPUT STARTS>>>'
+
+            for l:line in a:item.output
+                echom l:line
+            endfor
+
+            echom '<<<OUTPUT ENDS>>>'
+            echom ''
+        endif
+    endif
+endfunction
+
+" Echo the results of an executable check.
+function! s:EchoExecutable(item) abort
+    echom printf(
+    \   '(executable check - %s) %s',
+    \   a:item.status ? 'success' : 'failure',
+    \   a:item.command,
+    \)
+endfunction
+
 function! s:EchoCommandHistory() abort
     let l:buffer = bufnr('%')
 
-    if !has_key(g:ale_buffer_info, l:buffer)
-        return
-    endif
-
-    for l:item in g:ale_buffer_info[l:buffer].history
-        let l:status_message = l:item.status
-
-        " Include the exit code in output if we have it.
-        if l:item.status is# 'finished'
-            let l:status_message .= ' - exit code ' . l:item.exit_code
-        endif
-
-        echom '(' . l:status_message . ') ' . string(l:item.command)
-
-        if g:ale_history_log_output && has_key(l:item, 'output')
-            if empty(l:item.output)
-                echom ''
-                echom '<<<NO OUTPUT RETURNED>>>'
-                echom ''
-            else
-                echom ''
-                echom '<<<OUTPUT STARTS>>>'
-
-                for l:line in l:item.output
-                    echom l:line
-                endfor
-
-                echom '<<<OUTPUT ENDS>>>'
-                echom ''
-            endif
+    for l:item in ale#history#Get(l:buffer)
+        if l:item.job_id is# 'executable'
+            call s:EchoExecutable(l:item)
+        else
+            call s:EchoCommand(l:item)
         endif
     endfor
 endfunction

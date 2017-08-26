@@ -1,6 +1,10 @@
 " Author: Bjorn Neergaard <bjorn@neersighted.com>, modified by Yann fery <yann@fery.me>
 " Description: Manages the loclist and quickfix lists
 
+if !exists('s:timer_args')
+    let s:timer_args = {}
+endif
+
 " Return 1 if there is a buffer with buftype == 'quickfix' in bufffer list
 function! ale#list#IsQuickfixOpen() abort
     for l:buf in range(1, bufnr('$'))
@@ -20,14 +24,48 @@ function! s:ShouldOpen(buffer) abort
     return l:val is 1 || (l:val is# 'on_save' && l:saved)
 endfunction
 
-function! ale#list#SetLists(buffer, loclist) abort
+function! ale#list#GetCombinedList() abort
+    let l:list = []
+
+    for l:info in values(g:ale_buffer_info)
+        call extend(l:list, l:info.loclist)
+    endfor
+
+    call sort(l:list, function('ale#util#LocItemCompareWithText'))
+    call uniq(l:list, function('ale#util#LocItemCompareWithText'))
+
+    return l:list
+endfunction
+
+function! s:FixList(list) abort
+    let l:new_list = []
+
+    for l:item in a:list
+        if l:item.bufnr == -1
+            " If the buffer number is invalid, remove it.
+            let l:fixed_item = copy(l:item)
+            call remove(l:fixed_item, 'bufnr')
+        else
+            " Don't copy the Dictionary if we do not need to.
+            let l:fixed_item = l:item
+        endif
+
+        call add(l:new_list, l:fixed_item)
+    endfor
+
+    return l:new_list
+endfunction
+
+function! s:SetListsImpl(timer_id, buffer, loclist) abort
     let l:title = expand('#' . a:buffer . ':p')
 
     if g:ale_set_quickfix
+        let l:quickfix_list = ale#list#GetCombinedList()
+
         if has('nvim')
-            call setqflist(a:loclist, ' ', l:title)
+            call setqflist(s:FixList(l:quickfix_list), ' ', l:title)
         else
-            call setqflist(a:loclist)
+            call setqflist(s:FixList(l:quickfix_list))
             call setqflist([], 'r', {'title': l:title})
         endif
     elseif g:ale_set_loclist
@@ -37,9 +75,9 @@ function! ale#list#SetLists(buffer, loclist) abort
         let l:win_id = exists('*bufwinid') ? bufwinid(str2nr(a:buffer)) : 0
 
         if has('nvim')
-            call setloclist(l:win_id, a:loclist, ' ', l:title)
+            call setloclist(l:win_id, s:FixList(a:loclist), ' ', l:title)
         else
-            call setloclist(l:win_id, a:loclist)
+            call setloclist(l:win_id, s:FixList(a:loclist))
             call setloclist(l:win_id, [], 'r', {'title': l:title})
         endif
     endif
@@ -47,6 +85,9 @@ function! ale#list#SetLists(buffer, loclist) abort
     let l:keep_open = ale#Var(a:buffer, 'keep_list_window_open')
 
     " Open a window to show the problems if we need to.
+    "
+    " We'll check if the current buffer's List is not empty here, so the
+    " window will only be opened if the current buffer has problems.
     if s:ShouldOpen(a:buffer) && (l:keep_open || !empty(a:loclist))
         let l:winnr = winnr()
         let l:mode = mode()
@@ -78,7 +119,19 @@ function! ale#list#SetLists(buffer, loclist) abort
     endif
 endfunction
 
-function! ale#list#CloseWindowIfNeeded(buffer) abort
+function! ale#list#SetLists(buffer, loclist) abort
+    if get(g:, 'ale_set_lists_synchronously') == 1
+        call s:SetListsImpl(-1, a:buffer, a:loclist)
+    else
+        call ale#util#StartPartialTimer(
+        \   0,
+        \   function('s:SetListsImpl'),
+        \   [a:buffer, a:loclist],
+        \)
+    endif
+endfunction
+
+function! s:CloseWindowIfNeededImpl(timer_id, buffer) abort
     if ale#Var(a:buffer, 'keep_list_window_open') || !s:ShouldOpen(a:buffer)
         return
     endif
@@ -96,4 +149,16 @@ function! ale#list#CloseWindowIfNeeded(buffer) abort
     " Ignore 'Cannot close last window' errors.
     catch /E444/
     endtry
+endfunction
+
+function! ale#list#CloseWindowIfNeeded(buffer) abort
+    if get(g:, 'ale_set_lists_synchronously') == 1
+        call s:CloseWindowIfNeededImpl(-1, a:buffer)
+    else
+        call ale#util#StartPartialTimer(
+        \   0,
+        \   function('s:CloseWindowIfNeededImpl'),
+        \   [a:buffer],
+        \)
+    endif
 endfunction

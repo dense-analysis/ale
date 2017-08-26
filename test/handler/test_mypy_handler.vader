@@ -11,16 +11,39 @@ Execute(The mypy handler should parse lines correctly):
   AssertEqual
   \ [
   \   {
+  \     'lnum': 768,
+  \     'col': 38,
+  \     'filename': 'foo/bar/foo/bar/baz.py',
+  \     'type': 'E',
+  \     'text': 'Cannot determine type of ''SOME_SYMBOL''',
+  \   },
+  \   {
+  \     'lnum': 821,
+  \     'col': 38,
+  \     'filename': 'foo/bar/foo/bar/baz.py',
+  \     'type': 'E',
+  \     'text': 'Cannot determine type of ''SOME_SYMBOL''',
+  \   },
+  \   {
+  \     'lnum': 38,
+  \     'col': 44,
+  \     'filename': 'foo/bar/foo/bar/other.py',
+  \     'type': 'E',
+  \     'text': 'Cannot determine type of ''ANOTHER_SYMBOL''',
+  \   },
+  \   {
   \     'lnum': 15,
   \     'col': 3,
-  \     'text': 'Argument 1 to "somefunc" has incompatible type "int"; expected "str"',
+  \     'filename': 'foo/bar/foo/bar/__init__.py',
   \     'type': 'E',
+  \     'text': 'Argument 1 to "somefunc" has incompatible type "int"; expected "str"'
   \   },
   \   {
   \     'lnum': 72,
   \     'col': 1,
-  \     'text': 'Some warning',
+  \     'filename': 'foo/bar/foo/bar/__init__.py',
   \     'type': 'W',
+  \     'text': 'Some warning',
   \   },
   \ ],
   \ ale_linters#python#mypy#Handle(bufnr(''), [
@@ -47,8 +70,9 @@ Execute(The mypy handler should handle Windows names with spaces):
   \   {
   \     'lnum': 4,
   \     'col': 0,
-  \     'text': "No library stub file for module 'django.db'",
+  \     'filename': 'C:\something\with spaces.py',
   \     'type': 'E',
+  \     'text': 'No library stub file for module ''django.db''',
   \   },
   \ ],
   \ ale_linters#python#mypy#Handle(bufnr(''), [

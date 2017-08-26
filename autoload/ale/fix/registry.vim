@@ -77,6 +77,16 @@ let s:default_registry = {
 \       'suggested_filetypes': ['swift'],
 \       'description': 'Apply SwiftFormat to a file.',
 \   },
+\   'phpcbf': {
+\       'function': 'ale#fixers#phpcbf#Fix',
+\       'suggested_filetypes': ['php'],
+\       'description': 'Fix PHP files with phpcbf.',
+\   },
+\   'clang-format': {
+\       'function': 'ale#fixers#clangformat#Fix',
+\       'suggested_filetypes': ['c', 'cpp'],
+\       'description': 'Fix C/C++ files with clang-format.',
+\   },
 \}
 
 " Reset the function registry to the default entries.

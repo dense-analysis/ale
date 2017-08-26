@@ -1,14 +1,19 @@
 Before:
   Save g:ale_warn_about_trailing_whitespace
   Save g:ale_linters
+  Save g:ale_fixers
+
+  unlet! b:ale_history
 
   let g:ale_warn_about_trailing_whitespace = 1
 
   let g:testlinter1 = {'name': 'testlinter1', 'executable': 'testlinter1', 'command': 'testlinter1', 'callback': 'testCB1', 'output_stream': 'stdout'}
   let g:testlinter2 = {'name': 'testlinter2', 'executable': 'testlinter2', 'command': 'testlinter2', 'callback': 'testCB2', 'output_stream': 'stdout'}
 
+  call ale#engine#ResetExecutableCache()
   call ale#linter#Reset()
   let g:ale_linters = {}
+  let g:ale_fixers = {}
   let g:ale_linter_aliases = {}
   let g:ale_buffer_info = {}
   let g:globals_lines = [
@@ -59,9 +64,10 @@ After:
 
   let g:ale_buffer_info = {}
 
-  unlet!  g:testlinter1
-  unlet!  g:testlinter2
+  unlet! g:testlinter1
+  unlet! g:testlinter2
 
+  unlet! b:ale_history
   unlet! b:ale_linters
   unlet! g:output
   unlet! g:globals_string
@@ -247,12 +253,10 @@ Execute (ALEInfo should output linter aliases):
 
 Given testft.testft2 (Empty buffer with two filetypes):
 Execute (ALEInfo should return command history):
-  let g:ale_buffer_info[bufnr('%')] = {
-  \ 'history': [
-  \   {'status': 'started', 'job_id': 347, 'command': 'first command'},
-  \   {'status': 'started', 'job_id': 347, 'command': ['/bin/bash', '\c', 'last command']},
-  \ ],
-  \}
+  let b:ale_history = [
+  \ {'status': 'started', 'job_id': 347, 'command': 'first command'},
+  \ {'status': 'started', 'job_id': 347, 'command': ['/bin/bash', '\c', 'last command']},
+  \]
 
   call ale#linter#Define('testft', g:testlinter1)
   call ale#linter#Define('testft2', g:testlinter2)
@@ -271,12 +275,10 @@ Execute (ALEInfo should return command history):
 
 Given testft.testft2 (Empty buffer with two filetypes):
 Execute (ALEInfo command history should print exit codes correctly):
-  let g:ale_buffer_info[bufnr('%')] = {
-  \ 'history': [
-  \   {'status': 'finished', 'exit_code': 0, 'job_id': 347, 'command': 'first command'},
-  \   {'status': 'finished', 'exit_code': 1, 'job_id': 347, 'command': ['/bin/bash', '\c', 'last command']},
-  \ ],
-  \}
+  let b:ale_history = [
+  \ {'status': 'finished', 'exit_code': 0, 'job_id': 347, 'command': 'first command'},
+  \ {'status': 'finished', 'exit_code': 1, 'job_id': 347, 'command': ['/bin/bash', '\c', 'last command']},
+  \]
 
   call ale#linter#Define('testft', g:testlinter1)
   call ale#linter#Define('testft2', g:testlinter2)
@@ -297,31 +299,29 @@ Given testft.testft2 (Empty buffer with two filetypes):
 Execute (ALEInfo command history should print command output if logging is on):
   let g:ale_history_log_output = 1
 
-  let g:ale_buffer_info[bufnr('%')] = {
-  \ 'history': [
-  \   {
-  \     'status': 'finished',
-  \     'exit_code': 0,
-  \     'job_id': 347,
-  \     'command': 'first command',
-  \     'output': ['some', 'first command output'],
-  \   },
-  \   {
-  \     'status': 'finished',
-  \     'exit_code': 1,
-  \     'job_id': 347,
-  \     'command': ['/bin/bash', '\c', 'last command'],
-  \     'output': ['different second command output'],
-  \   },
-  \   {
-  \     'status': 'finished',
-  \     'exit_code': 0,
-  \     'job_id': 347,
-  \     'command': 'command with no output',
-  \     'output': [],
-  \   },
-  \ ],
-  \}
+  let b:ale_history = [
+  \ {
+  \   'status': 'finished',
+  \   'exit_code': 0,
+  \   'job_id': 347,
+  \   'command': 'first command',
+  \   'output': ['some', 'first command output'],
+  \ },
+  \ {
+  \   'status': 'finished',
+  \   'exit_code': 1,
+  \   'job_id': 347,
+  \   'command': ['/bin/bash', '\c', 'last command'],
+  \   'output': ['different second command output'],
+  \ },
+  \ {
+  \   'status': 'finished',
+  \   'exit_code': 0,
+  \   'job_id': 347,
+  \   'command': 'command with no output',
+  \   'output': [],
+  \ },
+  \]
 
   call ale#linter#Define('testft', g:testlinter1)
   call ale#linter#Define('testft2', g:testlinter2)
@@ -350,4 +350,21 @@ Execute (ALEInfo command history should print command output if logging is on):
   \ '(finished - exit code 0) ''command with no output''',
   \ '',
   \ '<<<NO OUTPUT RETURNED>>>',
+  \])
+
+Execute (ALEInfo should include executable checks in the history):
+  call ale#linter#Define('testft', g:testlinter1)
+  call ale#engine#IsExecutable(bufnr(''), 'echo')
+  call ale#engine#IsExecutable(bufnr(''), 'TheresNoWayThisIsExecutable')
+
+  call CheckInfo([
+  \   ' Current Filetype: testft.testft2',
+  \   'Available Linters: [''testlinter1'']',
+  \   '  Enabled Linters: [''testlinter1'']',
+  \ ' Linter Variables:',
+  \ '',
+  \] + g:globals_lines + g:command_header + [
+  \ '',
+  \ '(executable check - success) echo',
+  \ '(executable check - failure) TheresNoWayThisIsExecutable',
   \])

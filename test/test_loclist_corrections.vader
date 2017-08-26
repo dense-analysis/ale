@@ -1,4 +1,5 @@
 After:
+  unlet! b:temp_name
   unlet! b:other_bufnr
 
 Given foo (Some file with lines to count):
@@ -289,5 +290,40 @@ Execute(FixLocList should accept filenames):
   \     {'text': 'a', 'lnum': 3, 'filename': expand('%:p')},
   \     {'text': 'a', 'lnum': 4, 'filename': '/foo/bar/baz'},
   \     {'text': 'a', 'lnum': 5, 'filename': '/foo/bar/baz'},
+  \   ],
+  \ )
+
+Execute(FixLocList should interpret temporary filenames as being the current buffer):
+  let b:temp_name = tempname()
+
+  AssertEqual
+  \ [
+  \   {
+  \     'text': 'a',
+  \     'lnum': 2,
+  \     'col': 0,
+  \     'bufnr': bufnr(''),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \   },
+  \   {
+  \     'text': 'a',
+  \     'lnum': 3,
+  \     'col': 0,
+  \     'bufnr': bufnr(''),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \   },
+  \],
+  \ ale#engine#FixLocList(
+  \   bufnr(''),
+  \   'foobar',
+  \   [
+  \     {'text': 'a', 'lnum': 2, 'filename': b:temp_name},
+  \     {'text': 'a', 'lnum': 3, 'filename': b:temp_name},
   \   ],
   \ )
