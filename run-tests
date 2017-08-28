@@ -235,6 +235,14 @@ if ((run_custom_checks)); then
         <(grep --exclude=tags -roh "\*$tag_regex\*" doc | sort -u | sed 's/*//g') \
         <(grep --exclude=tags -roh "|$tag_regex|" doc | sort -u | sed 's/|//g') \
         | grep '^+[^+]' && EXIT=1
+
+    echo '========================================'
+    echo 'diff README.md and doc/ale.txt tables'
+    echo '========================================'
+    echo 'Differences follow:'
+    echo
+
+    ./check-supported-tools-tables || EXIT=$?
 fi
 
 exit $EXIT
