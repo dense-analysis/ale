@@ -1,0 +1,47 @@
+Before:
+  Save g:ale_sh_shellcheck_exclusions
+  Save g:ale_sh_shellcheck_executable
+  Save g:ale_sh_shellcheck_options
+
+  unlet! g:ale_sh_shellcheck_exclusions
+  unlet! g:ale_sh_shellcheck_executable
+  unlet! g:ale_sh_shellcheck_options
+
+  runtime ale_linters/sh/shellcheck.vim
+
+After:
+  Restore
+
+  unlet! b:ale_sh_shellcheck_exclusions
+  unlet! b:ale_sh_shellcheck_executable
+  unlet! b:ale_sh_shellcheck_options
+  unlet! b:is_bash
+
+  call ale#linter#Reset()
+
+Execute(The default shellcheck command should be correct):
+  AssertEqual
+  \ 'shellcheck -f gcc -',
+  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''))
+
+Execute(The shellcheck command should accept options):
+  let b:ale_sh_shellcheck_options = '--foobar'
+
+  AssertEqual
+  \ 'shellcheck --foobar -f gcc -',
+  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''))
+
+Execute(The shellcheck command should accept options and exclusions):
+  let b:ale_sh_shellcheck_options = '--foobar'
+  let b:ale_sh_shellcheck_exclusions = 'foo,bar'
+
+  AssertEqual
+  \ 'shellcheck --foobar -e foo,bar -f gcc -',
+  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''))
+
+Execute(The shellcheck command should include the dialect):
+  let b:is_bash = 1
+
+  AssertEqual
+  \ 'shellcheck -s bash -f gcc -',
+  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''))
