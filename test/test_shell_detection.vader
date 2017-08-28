@@ -1,0 +1,83 @@
+Before:
+  runtime ale_linters/sh/shell.vim
+  runtime ale_linters/sh/shellcheck.vim
+
+After:
+  call ale#linter#Reset()
+
+  unlet! b:is_bash
+  unlet! b:is_sh
+  unlet! b:is_kornshell
+
+Given(A file with a Bash hashbang):
+  #!/bin/bash
+
+Execute(/bin/bash should be detected appropriately):
+  AssertEqual 'bash', ale#handlers#sh#GetShellType(bufnr(''))
+  AssertEqual 'bash', ale_linters#sh#shell#GetExecutable(bufnr(''))
+  AssertEqual 'bash', ale_linters#sh#shellcheck#GetDialectArgument(bufnr(''))
+
+Given(A file with /bin/sh):
+  #!/usr/bin/env sh -eu --foobar
+
+Execute(/bin/sh should be detected appropriately):
+  AssertEqual 'sh', ale#handlers#sh#GetShellType(bufnr(''))
+  AssertEqual 'sh', ale_linters#sh#shell#GetExecutable(bufnr(''))
+  AssertEqual 'sh', ale_linters#sh#shellcheck#GetDialectArgument(bufnr(''))
+
+Given(A file with bash as an argument to env):
+  #!/usr/bin/env bash
+
+Execute(/usr/bin/env bash should be detected appropriately):
+  AssertEqual 'bash', ale#handlers#sh#GetShellType(bufnr(''))
+  AssertEqual 'bash', ale_linters#sh#shell#GetExecutable(bufnr(''))
+  AssertEqual 'bash', ale_linters#sh#shellcheck#GetDialectArgument(bufnr(''))
+
+Given(A file with a tcsh hash bang and arguments):
+  #!/usr/bin/env tcsh -eu --foobar
+
+Execute(tcsh should be detected appropriately):
+  AssertEqual 'tcsh', ale#handlers#sh#GetShellType(bufnr(''))
+  AssertEqual 'tcsh', ale_linters#sh#shell#GetExecutable(bufnr(''))
+  AssertEqual 'tcsh', ale_linters#sh#shellcheck#GetDialectArgument(bufnr(''))
+
+Given(A file with a zsh hash bang and arguments):
+  #!/usr/bin/env zsh -eu --foobar
+
+Execute(zsh should be detected appropriately):
+  AssertEqual 'zsh', ale#handlers#sh#GetShellType(bufnr(''))
+  AssertEqual 'zsh', ale_linters#sh#shell#GetExecutable(bufnr(''))
+  AssertEqual 'zsh', ale_linters#sh#shellcheck#GetDialectArgument(bufnr(''))
+
+Given(A file with a csh hash bang and arguments):
+  #!/usr/bin/env csh -eu --foobar
+
+Execute(zsh should be detected appropriately):
+  AssertEqual 'csh', ale#handlers#sh#GetShellType(bufnr(''))
+  AssertEqual 'csh', ale_linters#sh#shell#GetExecutable(bufnr(''))
+  AssertEqual 'csh', ale_linters#sh#shellcheck#GetDialectArgument(bufnr(''))
+
+Given(A file with a sh hash bang and arguments):
+  #!/usr/bin/env sh -eu --foobar
+
+Execute(sh should be detected appropriately):
+  AssertEqual 'sh', ale#handlers#sh#GetShellType(bufnr(''))
+  AssertEqual 'sh', ale_linters#sh#shell#GetExecutable(bufnr(''))
+  AssertEqual 'sh', ale_linters#sh#shellcheck#GetDialectArgument(bufnr(''))
+
+Given(A file without a hashbang):
+
+Execute(The bash dialect should be used for shellcheck if b:is_bash is 1):
+  let b:is_bash = 1
+
+  AssertEqual 'bash', ale_linters#sh#shellcheck#GetDialectArgument(bufnr(''))
+
+Execute(The sh dialect should be used for shellcheck if b:is_sh is 1):
+  let b:is_sh = 1
+
+  AssertEqual 'sh', ale_linters#sh#shellcheck#GetDialectArgument(bufnr(''))
+
+Execute(The ksh dialect should be used for shellcheck if b:is_kornshell is 1):
+  let b:is_kornshell = 1
+
+  AssertEqual 'ksh', ale_linters#sh#shellcheck#GetDialectArgument(bufnr(''))
