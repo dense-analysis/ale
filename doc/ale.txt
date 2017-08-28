@@ -178,7 +178,7 @@ The following languages and tools are supported.
 Notes:
 
 `^` No linters for text or Vim help filetypes are enabled by default.
-`!` These linters check only files on disk. See |ale-lint-file-linters|
+`!!` These linters check only files on disk. See |ale-lint-file-linters|
 
 * ASM: `gcc`
 * Ansible: `ansible-lint`
@@ -186,29 +186,29 @@ Notes:
 * Awk: `gawk`
 * Bash: `shell` (-n flag), `shellcheck`
 * Bourne Shell: `shell` (-n flag), `shellcheck`
-* C: `cppcheck`, `cpplint`!, `gcc`, `clang`, `clang-format`
-* C++ (filetype cpp): `clang`, `clangcheck`!, `clangtidy`!, `cppcheck`, `cpplint`!, `gcc`, `clang-format`
+* C: `cppcheck`, `cpplint`!!, `gcc`, `clang`, `clang-format`
+* C++ (filetype cpp): `clang`, `clangcheck`!!, `clangtidy`!!, `cppcheck`, `cpplint`!!, `gcc`, `clang-format`
 * C#: `mcs`
 * Chef: `foodcritic`
 * CMake: `cmakelint`
 * CoffeeScript: `coffee`, `coffeelint`
-* Crystal: `crystal`!
+* Crystal: `crystal`!!
 * CSS: `csslint`, `stylelint`
 * Cython (pyrex filetype): `cython`
 * D: `dmd`
 * Dart: `dartanalyzer`
 * Dockerfile: `hadolint`
-* Elixir: `credo`, `dogma`!
+* Elixir: `credo`, `dogma`!!
 * Elm: `elm-make`
 * Erb: `erb`, `erubis`
 * Erlang: `erlc`, `SyntaxErl`
 * Fortran: `gcc`
 * FusionScript: `fusion-lint`
-* Go: `gofmt`, `go vet`, `golint`, `gometalinter`!, `go build`!, `gosimple`, `staticcheck`
+* Go: `gofmt`, `go vet`, `golint`, `gometalinter`!!, `go build`!!, `gosimple`, `staticcheck`
 * GraphQL: `gqlint`
 * Haml: `haml-lint`
 * Handlebars: `ember-template-lint`
-* Haskell: `ghc`, `stack-ghc`, `stack-build`!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`
+* Haskell: `ghc`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`
 * HTML: `HTMLHint`, `proselint`, `tidy`
 * Idris: `idris`
 * Java: `checkstyle`, `javac`
@@ -219,7 +219,7 @@ Notes:
 * Lua: `luacheck`
 * Markdown: `mdl`, `proselint`, `vale`
 * MATLAB: `mlint`
-* Nim: `nim check`!
+* Nim: `nim check`!!
 * nix: `nix-instantiate`
 * nroff: `proselint`
 * Objective-C: `clang`
@@ -230,13 +230,13 @@ Notes:
 * Pod: `proselint`
 * Pug: `pug-lint`
 * Puppet: `puppet`, `puppet-lint`
-* Python: `autopep8`, `flake8`, `isort`, `mypy`, `pycodestyle`, `pylint`!, `yapf`
+* Python: `autopep8`, `flake8`, `isort`, `mypy`, `pycodestyle`, `pylint`!!, `yapf`
 * R: `lintr`
 * ReasonML: `merlin`
 * reStructuredText: `proselint`
 * RPM spec: `rpmlint`
-* Ruby: `brakeman`, `rails_best_practices`!, `reek`, `rubocop`, `ruby`
-* Rust: `cargo`!, `rls`, `rustc` (see |ale-integration-rust|)
+* Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`
+* Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|)
 * SASS: `sass-lint`, `stylelint`
 * SCSS: `sass-lint`, `scss-lint`, `stylelint`
 * Scala: `scalac`, `scalastyle`
@@ -245,7 +245,7 @@ Notes:
 * Stylus: `stylelint`
 * SQL: `sqlint`
 * Swift: `swiftlint`, `swiftformat`
-* Tcl: `nagelfar`!
+* Tcl: `nagelfar`!!
 * Texinfo: `proselint`
 * Text^: `proselint`, `vale`
 * TypeScript: `eslint`, `tslint`, `tsserver`, `typecheck`
