@@ -4,6 +4,7 @@
 
 call ale#Set('javascript_prettier_executable', 'prettier')
 call ale#Set('javascript_prettier_use_global', 0)
+call ale#Set('javascript_prettier_use_local_config', 0)
 call ale#Set('javascript_prettier_options', '')
 
 function! s:FindConfig(buffer) abort
@@ -35,12 +36,13 @@ endfunction
 function! ale#fixers#prettier#Fix(buffer) abort
     let l:options = ale#Var(a:buffer, 'javascript_prettier_options')
     let l:config = s:FindConfig(a:buffer)
+    let l:use_config = ale#Var(a:buffer, 'javascript_prettier_use_local_config')
 
     return {
     \   'command': ale#Escape(ale#fixers#prettier#GetExecutable(a:buffer))
     \       . ' %t'
     \       . (!empty(l:options) ? ' ' . l:options : '')
-    \       . (!empty(l:config) ? ' --config ' . ale#Escape(l:config) : '')
+    \       . (l:use_config ? ' --config ' . ale#Escape(l:config) : '')
     \       . ' --write',
     \   'read_temporary_file': 1,
     \}

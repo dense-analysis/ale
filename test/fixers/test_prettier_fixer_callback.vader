@@ -28,7 +28,8 @@ Execute(The prettier callback should return the correct default values):
   \ },
   \ ale#fixers#prettier#Fix(bufnr(''))
 
-Execute(The prettier callback should include configuration files):
+Execute(The prettier callback should include configuration files when the option is set):
+  let g:ale_javascript_prettier_use_local_config = 1
   call ale#test#SetFilename('../prettier-test-files/with_config/testfile.js')
 
   AssertEqual
