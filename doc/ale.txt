@@ -114,6 +114,8 @@ CONTENTS                                                         *ale-contents*
     sh....................................|ale-sh-options|
       shell...............................|ale-sh-shell|
       shellcheck..........................|ale-sh-shellcheck|
+    sml...................................|ale-sml-options|
+      smlnj...............................|ale-sml-smlnj|
     spec..................................|ale-spec-options|
       rpmlint.............................|ale-spec-rpmlint|
     stylus................................|ale-stylus-options|
