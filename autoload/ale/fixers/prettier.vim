@@ -6,6 +6,24 @@ call ale#Set('javascript_prettier_executable', 'prettier')
 call ale#Set('javascript_prettier_use_global', 0)
 call ale#Set('javascript_prettier_options', '')
 
+function! s:FindConfig(buffer) abort
+    for l:filename in [
+    \   '.prettierrc',
+    \   'prettier.config.js',
+    \   'package.json',
+    \ ]
+
+        let l:config = ale#path#FindNearestFile(a:buffer, l:filename)
+
+        if !empty(l:config)
+            return l:config
+        endif
+    endfor
+
+    return ''
+endfunction
+
+
 function! ale#fixers#prettier#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'javascript_prettier', [
     \   'node_modules/.bin/prettier_d',
@@ -16,11 +34,13 @@ endfunction
 
 function! ale#fixers#prettier#Fix(buffer) abort
     let l:options = ale#Var(a:buffer, 'javascript_prettier_options')
+    let l:config = s:FindConfig(a:buffer)
 
     return {
     \   'command': ale#Escape(ale#fixers#prettier#GetExecutable(a:buffer))
     \       . ' %t'
-    \       . ' ' . l:options
+    \       . (!empty(l:options) ? ' ' . l:options : '')
+    \       . (!empty(l:config) ? ' --config ' . ale#Escape(l:config) : '')
     \       . ' --write',
     \   'read_temporary_file': 1,
     \}
