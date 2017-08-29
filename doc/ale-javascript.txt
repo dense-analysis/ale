@@ -86,6 +86,12 @@ g:ale_javascript_prettier_use_global     *g:ale_javascript_prettier_use_global*
 
   See |ale-integrations-local-executables|
 
+g:ale_javascript_prettier_use_local_config     *g:ale_javascript_prettier_use_local_config*
+                                               *b:ale_javascript_prettier_use_local_config*
+  Type: |Number|
+  Default: `0`
+
+  This variable can be set to use the local prettier configuration file.
 
 ===============================================================================
 prettier-eslint                                *ale-javascript-prettier-eslint*
