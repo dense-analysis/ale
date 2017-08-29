@@ -91,6 +91,7 @@ g:ale_javascript_prettier_use_local_config     *g:ale_javascript_prettier_use_lo
   Type: |Number|
   Default: `0`
 
+  This variable can be set to use the local prettier configuration file.
 
 ===============================================================================
 prettier-eslint                                *ale-javascript-prettier-eslint*
