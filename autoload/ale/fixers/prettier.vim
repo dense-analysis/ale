@@ -1,5 +1,5 @@
 " Author: tunnckoCore (Charlike Mike Reagent) <mameto2011@gmail.com>,
-"         w0rp <devw0rp@gmail.com>
+"         w0rp <devw0rp@gmail.com>, morhetz (Pavel Pertsev) <morhetz@gmail.com>
 " Description: Integration of Prettier with ALE.
 
 call ale#Set('javascript_prettier_executable', 'prettier')
@@ -8,6 +8,7 @@ call ale#Set('javascript_prettier_options', '')
 
 function! ale#fixers#prettier#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'javascript_prettier', [
+    \   'node_modules/.bin/prettier_d',
     \   'node_modules/prettier-cli/index.js',
     \   'node_modules/.bin/prettier',
     \])
