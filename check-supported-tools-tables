@@ -13,7 +13,9 @@ ale_help_section_size="$( \
     | grep -m1 -n '================' \
     | sed 's/\([0-9]*\).*/\1/' \
 )"
-ale_help_end_line="$(("$ale_help_start_line" + "$ale_help_section_size"))"
+# -- shellcheck complains about expr, but it works better.
+# shellcheck disable=SC2003
+ale_help_end_line="$(expr "$ale_help_start_line" + "$ale_help_section_size")"
 
 # Find the start and end lines for the same section in the README.
 readme_start_line="$( \
@@ -25,7 +27,8 @@ readme_section_size="$( \
     | grep -m1 -n '^##.*Usage' \
     | sed 's/\([0-9]*\).*/\1/' \
 )"
-readme_end_line="$(("$readme_start_line" + "$readme_section_size"))"
+# shellcheck disable=SC2003
+readme_end_line="$(expr "$readme_start_line" + "$readme_section_size")"
 
 doc_file="$(mktemp)"
 readme_file="$(mktemp)"
