@@ -37,6 +37,7 @@ function! ale#fixers#prettier#Fix(buffer) abort
     let l:options = ale#Var(a:buffer, 'javascript_prettier_options')
     let l:config = s:FindConfig(a:buffer)
     let l:use_config = ale#Var(a:buffer, 'javascript_prettier_use_local_config')
+                \ && !empty(l:config)
 
     return {
     \   'command': ale#Escape(ale#fixers#prettier#GetExecutable(a:buffer))
