@@ -127,6 +127,8 @@ CONTENTS                                                         *ale-contents*
     tex...................................|ale-tex-options|
       chktex..............................|ale-tex-chktex|
       lacheck.............................|ale-tex-lacheck|
+    thrift................................|ale-thrift-options|
+      thrift..............................|ale-thrift-thrift|
     typescript............................|ale-typescript-options|
       eslint..............................|ale-typescript-eslint|
       tslint..............................|ale-typescript-tslint|
@@ -248,6 +250,7 @@ Notes:
 * Tcl: `nagelfar`!!
 * Texinfo: `proselint`
 * Text^: `proselint`, `vale`
+* Thrift: `thrift`
 * TypeScript: `eslint`, `tslint`, `tsserver`, `typecheck`
 * Verilog: `iverilog`, `verilator`
 * Vim: `vint`
