@@ -18,6 +18,7 @@ CONTENTS                                                         *ale-contents*
       gcc.................................|ale-asm-gcc|
     c.....................................|ale-c-options|
       clang...............................|ale-c-clang|
+      clangtidy...........................|ale-c-clangtidy|
       cppcheck............................|ale-c-cppcheck|
       gcc.................................|ale-c-gcc|
       clang-format........................|ale-c-clangformat|
@@ -188,7 +189,7 @@ Notes:
 * Awk: `gawk`
 * Bash: `shell` (-n flag), `shellcheck`
 * Bourne Shell: `shell` (-n flag), `shellcheck`
-* C: `cppcheck`, `cpplint`!!, `gcc`, `clang`, `clang-format`
+* C: `cppcheck`, `cpplint`!!, `gcc`, `clang`, `clangtidy`!!, `clang-format`
 * C++ (filetype cpp): `clang`, `clangcheck`!!, `clangtidy`!!, `cppcheck`, `cpplint`!!, `gcc`, `clang-format`
 * C#: `mcs`
 * Chef: `foodcritic`
