@@ -13,6 +13,8 @@ let g:ale_perl_perlcritic_options =
 let g:ale_perl_perlcritic_showrules =
 \   get(g:, 'ale_perl_perlcritic_showrules', 0)
 
+call ale#Set('perl_perlcritic_as_warnings', 0)
+
 function! ale_linters#perl#perlcritic#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'perl_perlcritic_executable')
 endfunction
@@ -55,12 +57,14 @@ endfunction
 function! ale_linters#perl#perlcritic#Handle(buffer, lines) abort
     let l:pattern = '\(\d\+\):\(\d\+\) \(.\+\)'
     let l:output = []
+    let l:type = ale#Var(a:buffer, 'perl_perlcritic_as_warnings') ? 'W' : 'E'
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
         \   'lnum': l:match[1],
         \   'col': l:match[2],
         \   'text': l:match[3],
+        \   'type': l:type,
         \})
     endfor
 

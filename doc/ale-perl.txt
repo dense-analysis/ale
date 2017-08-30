@@ -25,8 +25,8 @@ g:ale_perl_perl_options                               *g:ale_perl_perl_options*
 ===============================================================================
 perlcritic                                                *ale-perl-perlcritic*
 
-g:ale_perl_perlcritic_executable              *g:ale_perl_perlcritic_executable*
-                                              *b:ale_perl_perlcritic_executable*
+g:ale_perl_perlcritic_executable             *g:ale_perl_perlcritic_executable*
+                                             *b:ale_perl_perlcritic_executable*
   Type: |String|
   Default: `'perlcritic'`
 
@@ -34,8 +34,8 @@ g:ale_perl_perlcritic_executable              *g:ale_perl_perlcritic_executable*
   linting perl.
 
 
-g:ale_perl_perlcritic_profile                    *g:ale_perl_perlcritic_profile*
-                                                 *b:ale_perl_perlcritic_profile*
+g:ale_perl_perlcritic_profile                   *g:ale_perl_perlcritic_profile*
+                                                *b:ale_perl_perlcritic_profile*
   Type: |String|
   Default: `'.perlcriticrc'`
 
@@ -52,8 +52,8 @@ g:ale_perl_perlcritic_profile                    *g:ale_perl_perlcritic_profile*
   |g:ale_perl_perlcritic_options| variable.
 
 
-g:ale_perl_perlcritic_options                    *g:ale_perl_perlcritic_options*
-                                                 *b:ale_perl_perlcritic_options*
+g:ale_perl_perlcritic_options                   *g:ale_perl_perlcritic_options*
+                                                *b:ale_perl_perlcritic_options*
   Type: |String|
   Default: `''`
 
@@ -68,6 +68,14 @@ g:ale_perl_perlcritic_showrules               *g:ale_perl_perlcritic_showrules*
 
   Controls whether perlcritic rule names are shown after the error message.
   Defaults to off to reduce length of message.
+
+
+g:ale_perl_perlcritic_as_warnings           *g:ale_perl_perlcritic_as_warnings*
+
+  Type: |Number|
+  Default: 0
+
+  Controls how linting notes are shown: 0 for errors, 1 for warnings.
 
 
 ===============================================================================
