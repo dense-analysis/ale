@@ -86,8 +86,9 @@ g:ale_javascript_prettier_use_global     *g:ale_javascript_prettier_use_global*
 
   See |ale-integrations-local-executables|
 
-g:ale_javascript_prettier_use_local_config     *g:ale_javascript_prettier_use_local_config*
-                                               *b:ale_javascript_prettier_use_local_config*
+g:ale_javascript_prettier_use_local_config
+                                   *g:ale_javascript_prettier_use_local_config*
+                                   *b:ale_javascript_prettier_use_local_config*
   Type: |Number|
   Default: `0`
 
@@ -128,8 +129,8 @@ g:ale_javascript_prettier_eslint_use_global
   See |ale-integrations-local-executables|
 
 g:ale_javascript_prettier_eslint_legacy
-                                  *g:ale_javascript_prettier_eslint_legacy*
-                                  *b:ale_javascript_prettier_eslint_legacy*
+                                      *g:ale_javascript_prettier_eslint_legacy*
+                                      *b:ale_javascript_prettier_eslint_legacy*
   Type: |Number|
   Default: `0`
 
@@ -150,8 +151,8 @@ g:ale_javascript_prettier_standard_executable
 
 
 g:ale_javascript_prettier_standard_options
-                                     *g:ale_javascript_prettier_standard_options*
-                                     *b:ale_javascript_prettier_standard_options*
+                                   *g:ale_javascript_prettier_standard_options*
+                                   *b:ale_javascript_prettier_standard_options*
   Type: |String|
   Default: `''`
 
@@ -159,8 +160,8 @@ g:ale_javascript_prettier_standard_options
 
 
 g:ale_javascript_prettier_standard_use_global
-                                  *g:ale_javascript_prettier_standard_use_global*
-                                  *b:ale_javascript_prettier_standard_use_global*
+                                *g:ale_javascript_prettier_standard_use_global*
+                                *b:ale_javascript_prettier_standard_use_global*
   Type: |Number|
   Default: `0`
 
