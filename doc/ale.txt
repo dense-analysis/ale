@@ -215,7 +215,7 @@ Notes:
 * HTML: `HTMLHint`, `proselint`, `tidy`
 * Idris: `idris`
 * Java: `checkstyle`, `javac`
-* JavaScript: `eslint`, `jscs`, `jshint`, `flow`, `prettier`, `prettier-eslint`, `prettier-standard`, `standard`, `xo`
+* JavaScript: `eslint`, `jscs`, `jshint`, `flow`, `prettier`, `prettier-eslint` >= 4.2.0, `prettier-standard`, `standard`, `xo`
 * JSON: `jsonlint`
 * Kotlin: `kotlinc`, `ktlint`
 * LaTeX (tex): `chktex`, `lacheck`, `proselint`
