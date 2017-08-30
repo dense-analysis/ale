@@ -243,6 +243,18 @@ if ((run_custom_checks)); then
     echo
 
     ./check-supported-tools-tables || EXIT=$?
+
+    echo '========================================'
+    echo 'Look for badly aligned doc tags'
+    echo '========================================'
+    echo 'Badly aligned tags follow:'
+    echo
+
+    # Documentation tags need to be aligned to the right margin, so look for
+    # tags which aren't at the right margin.
+    grep ' \*[^*]\+\*$' doc/ -r \
+        | awk '{ sep = index($0, ":"); if (length(substr($0, sep + 1 )) < 79) { print } }' \
+        | grep . && EXIT=1
 fi
 
 exit $EXIT

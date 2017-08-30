@@ -1,20 +1,20 @@
 ===============================================================================
-ALE Awk Integration                                          *ale-awk-options*
+ALE Awk Integration                                           *ale-awk-options*
 
 
 ===============================================================================
-gawk                                                  *ale-awk-gawk*
+gawk                                                             *ale-awk-gawk*
 
-g:ale_awk_gawk_executable                      *g:ale_awk_gawk_executable*
-                                               *b:ale_awk_gawk_executable*
+g:ale_awk_gawk_executable                           *g:ale_awk_gawk_executable*
+                                                    *b:ale_awk_gawk_executable*
   Type: |String|
   Default: `'gawk'`
 
   This variable sets executable used for gawk.
 
 
-g:ale_awk_gawk_options                            *g:ale_awk_gawk_options*
-                                                  *b:ale_awk_gawk_options*
+g:ale_awk_gawk_options                                 *g:ale_awk_gawk_options*
+                                                       *b:ale_awk_gawk_options*
   Type: |String|
   Default: `''`
 
