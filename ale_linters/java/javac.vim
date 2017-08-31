@@ -14,6 +14,11 @@ function! ale_linters#java#javac#GetImportPaths(buffer) abort
         \ . 'mvn dependency:build-classpath'
     endif
 
+    let l:classpath_command = ale#gradle#BuildClasspathCommand(a:buffer)
+    if !empty(l:classpath_command)
+        return l:classpath_command
+    endif
+
     return ''
 endfunction
 

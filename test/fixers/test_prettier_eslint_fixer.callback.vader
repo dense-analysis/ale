@@ -1,0 +1,76 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+  Save g:ale_javascript_prettier_eslint_executable
+  Save g:ale_javascript_prettier_eslint_use_global
+  Save g:ale_javascript_prettier_eslint_options
+  Save g:ale_javascript_prettier_eslint_legacy
+
+  unlet! g:ale_javascript_prettier_eslint_executable
+  unlet! g:ale_javascript_prettier_eslint_use_global
+  unlet! g:ale_javascript_prettier_eslint_options
+  unlet! g:ale_javascript_prettier_eslint_legacy
+
+  call ale#fixers#prettier_eslint#SetOptionDefaults()
+
+After:
+  Restore
+
+  unlet! b:ale_javascript_prettier_eslint_executable
+  unlet! b:ale_javascript_prettier_eslint_use_global
+  unlet! b:ale_javascript_prettier_eslint_options
+  unlet! b:ale_javascript_prettier_eslint_legacy
+
+  call ale#test#RestoreDirectory()
+
+Execute(The default command should be correct):
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command':
+  \     ale#Escape('prettier-eslint')
+  \     . ' %t'
+  \     . ' --write'
+  \ },
+  \ ale#fixers#prettier_eslint#Fix(bufnr(''))
+
+Execute(Additional options should be used when set):
+  let b:ale_javascript_prettier_eslint_options = '--foobar'
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command':
+  \     ale#Escape('prettier-eslint')
+  \     . ' %t'
+  \     . ' --foobar --write'
+  \ },
+  \ ale#fixers#prettier_eslint#Fix(bufnr(''))
+
+Execute(Configuration files should be detected):
+  call ale#test#SetFilename('eslint-test-files/react-app/foo/bar.js')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command':
+  \     ale#Escape('prettier-eslint')
+  \     . ' %t'
+  \     . ' --eslint-config-path ' . ale#Escape(g:dir . '/eslint-test-files/react-app/.eslintrc.js')
+  \     . ' --write'
+  \ },
+  \ ale#fixers#prettier_eslint#Fix(bufnr(''))
+
+Execute(Configuration files should be disabled if the legacy option is on):
+  call ale#test#SetFilename('eslint-test-files/react-app/foo/bar.js')
+  let b:ale_javascript_prettier_eslint_legacy = 1
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command':
+  \     ale#Escape('prettier-eslint')
+  \     . ' %t'
+  \     . ' --write'
+  \ },
+  \ ale#fixers#prettier_eslint#Fix(bufnr(''))

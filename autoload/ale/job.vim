@@ -244,7 +244,7 @@ function! ale#job#Start(command, options) abort
         let l:job_id = ale#job#ParseVim8ProcessID(string(l:job_info.job))
     endif
 
-    if l:job_id
+    if l:job_id > 0
         " Store the job in the map for later only if we can get the ID.
         let s:job_map[l:job_id] = l:job_info
     endif

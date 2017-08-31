@@ -5,33 +5,9 @@ ALE C++ Integration                                           *ale-cpp-options*
 ===============================================================================
 Global Options
 
-g:ale_c_build_dir_names                               *g:ale_c_build_dir_names*
-                                                      *b:ale_c_build_dir_names*
+The |g:ale_c_build_dir_names| and |g:ale_c_build_dir| also apply to some C++
+linters too.
 
-  Type: |List|
-  Default: `['build', 'bin']`
-
-  A list of directory names to be used when searching upwards from cpp
-  files to discover compilation databases with. For directory named `'foo'`,
-  ALE will search for `'foo/compile_commands.json'` in all directories on and above
-  the directory containing the cpp file to find path to compilation database.
-  This feature is useful for the clang tools wrapped around LibTooling (namely
-  here, clang-tidy)
-
-
-g:ale_c_build_dir                                           *g:ale_c_build_dir*
-                                                            *b:ale_c_build_dir*
-
-  Type: |String|
-  Default: `''`
-
-  A path to the directory containing the `compile_commands.json` file to use
-  with c-family linters. Usually setting this option to a non-empty string
-  will override the |g:ale_c_build_dir_names| option to impose a compilation
-  database (it can be useful if multiple builds are in multiple build
-  subdirectories in the project tree).
-  This feature is also most useful for the clang tools linters, wrapped
-  aroung LibTooling (namely clang-tidy here)
 
 ===============================================================================
 clang                                                           *ale-cpp-clang*

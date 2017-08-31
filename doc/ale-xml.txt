@@ -1,20 +1,20 @@
 ===============================================================================
-ALE XML Integration                                         *ale-xml-options*
+ALE XML Integration                                           *ale-xml-options*
 
 
 ===============================================================================
-xmllint                                                    *ale-xml-xmllint*
+xmllint                                                       *ale-xml-xmllint*
 
-g:ale_xml_xmllint_executable                   *g:ale_xml_xmllint_executable*
-                                               *b:ale_xml_xmllint_executable*
+g:ale_xml_xmllint_executable                     *g:ale_xml_xmllint_executable*
+                                                 *b:ale_xml_xmllint_executable*
   Type: |String|
   Default: `'xmllint'`
 
   This variable can be set to change the path to xmllint.
 
 
-g:ale_xml_xmllint_options                         *g:ale_xml_xmllint_options*
-                                                  *b:ale_xml_xmllint_options*
+g:ale_xml_xmllint_options                           *g:ale_xml_xmllint_options*
+                                                    *b:ale_xml_xmllint_options*
   Type: |String|
   Default: `''`
 

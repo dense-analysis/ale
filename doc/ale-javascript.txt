@@ -86,20 +86,21 @@ g:ale_javascript_prettier_use_global     *g:ale_javascript_prettier_use_global*
 
   See |ale-integrations-local-executables|
 
+g:ale_javascript_prettier_use_local_config
+                                   *g:ale_javascript_prettier_use_local_config*
+                                   *b:ale_javascript_prettier_use_local_config*
+  Type: |Number|
+  Default: `0`
+
+  This variable can be set to use the local prettier configuration file.
 
 ===============================================================================
 prettier-eslint                                *ale-javascript-prettier-eslint*
 
-ALE supports `prettier-eslint` for easy integration with projects, but it is
-not recommended for new projects. ALE instead recommends configuring
-|g:ale_fixers| to run `'prettier'` and `'eslint'` in a sequence like so: >
-
-  let g:ale_fixers = {'javascript': ['prettier', 'eslint']}
-<
-
-This is because `prettier-eslint` cannot be configured to use the ESLint
-configuration file for input given via stdin, which is how ALE integrates with
-the tool.
+ALE supports `prettier-eslint` >= 4.2.0. Using lower version is not recommended
+because it cannot be configured to use the ESLint configuration file for input
+given via stdin. However ALE could be set up on your own risk with older
+versions with |g:ale_javascript_prettier_eslint_legacy|
 
 g:ale_javascript_prettier_eslint_executable
                                   *g:ale_javascript_prettier_eslint_executable*
@@ -127,6 +128,14 @@ g:ale_javascript_prettier_eslint_use_global
 
   See |ale-integrations-local-executables|
 
+g:ale_javascript_prettier_eslint_legacy
+                                      *g:ale_javascript_prettier_eslint_legacy*
+                                      *b:ale_javascript_prettier_eslint_legacy*
+  Type: |Number|
+  Default: `0`
+
+  Fallback option for `prettier-eslint` < 4.2.0
+
 
 ===============================================================================
 prettier-standard                            *ale-javascript-prettier-standard*
@@ -142,8 +151,8 @@ g:ale_javascript_prettier_standard_executable
 
 
 g:ale_javascript_prettier_standard_options
-                                     *g:ale_javascript_prettier_standard_options*
-                                     *b:ale_javascript_prettier_standard_options*
+                                   *g:ale_javascript_prettier_standard_options*
+                                   *b:ale_javascript_prettier_standard_options*
   Type: |String|
   Default: `''`
 
@@ -151,8 +160,8 @@ g:ale_javascript_prettier_standard_options
 
 
 g:ale_javascript_prettier_standard_use_global
-                                  *g:ale_javascript_prettier_standard_use_global*
-                                  *b:ale_javascript_prettier_standard_use_global*
+                                *g:ale_javascript_prettier_standard_use_global*
+                                *b:ale_javascript_prettier_standard_use_global*
   Type: |Number|
   Default: `0`
 

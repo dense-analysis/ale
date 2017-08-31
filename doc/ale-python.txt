@@ -123,6 +123,35 @@ g:ale_python_mypy_use_global                     *g:ale_python_mypy_use_global*
 
 
 ===============================================================================
+pycodestyle                                            *ale-python-pycodestyle*
+
+
+g:ale_python_pycodestyle_executable       *g:ale_python_pycodestyle_executable*
+                                          *b:ale_python_pycodestyle_executable*
+  Type: |String|
+  Default: `'pycodestyle'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_python_pycodestyle_options             *g:ale_python_pycodestyle_options*
+                                             *b:ale_python_pycodestyle_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to add command-line arguments to the
+  pycodestyle invocation.
+
+
+g:ale_python_pycodestyle_use_global       *g:ale_python_pycodestyle_use_global*
+                                          *b:ale_python_pycodestyle_use_global*
+  Type: |Number|
+  Default: `0`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
 pylint                                                      *ale-python-pylint*
 
 g:ale_python_pylint_executable                 *g:ale_python_pylint_executable*
