@@ -1,0 +1,68 @@
+#!/bin/bash -eu
+
+# This script compares the table of supported tools in both the README file
+# and the doc/ale.txt file, so we can complain if they don't match up.
+
+# Find the start and end lines for the help section.
+ale_help_start_line="$( \
+    grep -m1 -n '^[0-9][0-9]*\. *Supported Languages' doc/ale.txt \
+    | sed 's/\([0-9]*\).*/\1/' \
+)"
+ale_help_section_size="$( \
+    tail -n +"$ale_help_start_line" doc/ale.txt \
+    | grep -m1 -n '================' \
+    | sed 's/\([0-9]*\).*/\1/' \
+)"
+# -- shellcheck complains about expr, but it works better.
+# shellcheck disable=SC2003
+ale_help_end_line="$(expr "$ale_help_start_line" + "$ale_help_section_size")"
+
+# Find the start and end lines for the same section in the README.
+readme_start_line="$( \
+    grep -m1 -n '^.*[0-9][0-9]*\. *Supported Languages' README.md \
+    | sed 's/\([0-9]*\).*/\1/' \
+)"
+readme_section_size="$( \
+    tail -n +"$readme_start_line" README.md \
+    | grep -m1 -n '^##.*Usage' \
+    | sed 's/\([0-9]*\).*/\1/' \
+)"
+# shellcheck disable=SC2003
+readme_end_line="$(expr "$readme_start_line" + "$readme_section_size")"
+
+doc_file="$(mktemp)"
+readme_file="$(mktemp)"
+
+sed -n "$ale_help_start_line,$ale_help_end_line"p doc/ale.txt \
+    | grep '\* .*: ' \
+    | sed 's/^*//' \
+    | sed 's/[`!^]\|([^)]*)//g' \
+    | sed 's/ *\([,:]\)/\1/g' \
+    | sed 's/  */ /g' \
+    | sed 's/^ *\| *$//g' \
+    | sed 's/^/ /' \
+    > "$doc_file"
+
+sed -n "$readme_start_line,$readme_end_line"p README.md \
+    | grep '| .* |' \
+    | sed '/^| Language\|^| ---/d' \
+    | sed 's/^|//' \
+    | sed 's/ \?|/:/' \
+    | sed 's/[`!^|]\|([^)]*)//g' \
+    | sed 's/\[\|\]//g' \
+    | sed 's/see.*\(,\|$\)/\1/g' \
+    | sed 's/ *\([,:]\)/\1/g' \
+    | sed 's/  */ /g' \
+    | sed 's/^ *\| *$//g' \
+    | sed 's/^/ /' \
+    | sed 's/ *-n flag//g' \
+    > "$readme_file"
+
+exit_code=0
+
+diff -U0 "$readme_file" "$doc_file" || exit_code=$?
+
+rm "$doc_file"
+rm "$readme_file"
+
+exit "$exit_code"

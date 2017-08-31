@@ -58,7 +58,7 @@ Execute(eslint.js executables should be run with node on Windows):
 
   " We have to execute the file with node.
   AssertEqual
-  \   'node '''
-  \   . g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'
-  \   . ''' -f unix --stdin --stdin-filename %s',
+  \   ale#Escape('node.exe') . ' '
+  \   . ale#Escape(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js')
+  \   . ' -f unix --stdin --stdin-filename %s',
   \ ale#handlers#eslint#GetCommand(bufnr(''))

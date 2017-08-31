@@ -30,6 +30,14 @@ g:ale_typescript_tslint_config_path       *g:ale_typescript_tslint_config_path*
   such path exists, this variable will be used instead.
 
 
+g:ale_typescript_tslint_rules_dir           *g:ale_typescript_tslint_rules_dir*
+                                            *b:ale_typescript_tslint_rules_dir*
+  Type: |String|
+  Default: `''`
+
+  If this variable is set, ALE will use it as the rules directory for tslint.
+
+
 g:ale_typescript_tslint_use_global         *g:ale_typescript_tslint_use_global*
                                            *b:ale_typescript_tslint_use_global*
   Type: |Number|

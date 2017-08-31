@@ -1,6 +1,6 @@
 Execute (Parsing English signs should work):
   AssertEqual
-  \ [[9, 1000001, 'ALEWarningSign']],
+  \ [0, [[9, 1000001, 'ALEWarningSign']]],
   \ ale#sign#ParseSigns([
   \   'Signs for app.js:',
   \   '    line=9  id=1000001  name=ALEWarningSign',
@@ -8,20 +8,28 @@ Execute (Parsing English signs should work):
 
 Execute (Parsing Russian signs should work):
   AssertEqual
-  \ [[1, 1000001, 'ALEErrorSign']],
+  \ [0, [[1, 1000001, 'ALEErrorSign']]],
   \ ale#sign#ParseSigns(['    строка=1  id=1000001  имя=ALEErrorSign'])
 
 Execute (Parsing Japanese signs should work):
   AssertEqual
-  \ [[1, 1000001, 'ALEWarningSign']],
+  \ [0, [[1, 1000001, 'ALEWarningSign']]],
   \ ale#sign#ParseSigns(['    行=1  識別子=1000001  名前=ALEWarningSign'])
 
 Execute (Parsing Spanish signs should work):
   AssertEqual
-  \ [[12, 1000001, 'ALEWarningSign']],
+  \ [0, [[12, 1000001, 'ALEWarningSign']]],
   \ ale#sign#ParseSigns(['    línea=12 id=1000001 nombre=ALEWarningSign'])
 
 Execute (Parsing Italian signs should work):
   AssertEqual
-  \ [[1, 1000001, 'ALEWarningSign']],
+  \ [0, [[1, 1000001, 'ALEWarningSign']]],
   \ ale#sign#ParseSigns(['    riga=1 id=1000001, nome=ALEWarningSign'])
+  \
+Execute (The sign parser should indicate if the dummy sign is set):
+  AssertEqual
+  \ [1, [[1, 1000001, 'ALEErrorSign']]],
+  \ ale#sign#ParseSigns([
+  \   '    строка=1  id=1000001  имя=ALEErrorSign',
+  \   '    line=1  id=1000000  name=ALEDummySign',
+  \ ])

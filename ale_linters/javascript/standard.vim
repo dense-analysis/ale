@@ -7,13 +7,17 @@ call ale#Set('javascript_standard_options', '')
 
 function! ale_linters#javascript#standard#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'javascript_standard', [
+    \   'node_modules/standard/bin/cmd.js',
     \   'node_modules/.bin/standard',
     \])
 endfunction
 
 function! ale_linters#javascript#standard#GetCommand(buffer) abort
-    return ale#Escape(ale_linters#javascript#standard#GetExecutable(a:buffer))
-    \   . ' ' . ale#Var(a:buffer, 'javascript_standard_options')
+    let l:executable = ale_linters#javascript#standard#GetExecutable(a:buffer)
+    let l:options = ale#Var(a:buffer, 'javascript_standard_options')
+
+    return ale#node#Executable(a:buffer, l:executable)
+    \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' --stdin %s'
 endfunction
 

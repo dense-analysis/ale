@@ -112,11 +112,7 @@ endfunction
 function! s:EchoCommandHistory() abort
     let l:buffer = bufnr('%')
 
-    if !has_key(g:ale_buffer_info, l:buffer)
-        return
-    endif
-
-    for l:item in g:ale_buffer_info[l:buffer].history
+    for l:item in ale#history#Get(l:buffer)
         if l:item.job_id is# 'executable'
             call s:EchoExecutable(l:item)
         else
