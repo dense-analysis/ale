@@ -12,9 +12,11 @@ Before:
   Save g:ale_perl_perlcritic_options
   Save g:ale_perl_perlcritic_executable
   Save g:ale_perl_perlcritic_showrules
+  Save g:ale_perl_perlcritic_display_mode
   silent! unlet g:ale_perl_perlcritic_options
   silent! unlet g:ale_perl_perlcritic_executable
   silent! unlet g:ale_perl_perlcritic_showrules
+  silent! unlet g:ale_perl_perlcritic_display_mode
   let g:ale_perl_perlcritic_profile  = ''
 
   " enable loading inside test container
@@ -28,6 +30,7 @@ After:
   silent! unlet b:ale_perl_perlcritic_options
   silent! unlet b:ale_perl_perlcritic_executable
   silent! unlet b:ale_perl_perlcritic_showrules
+  silent! unlet b:ale_perl_perlcritic_display_mode
 
 
 Execute(no g:ale_perl_perlcritic_showrules):
