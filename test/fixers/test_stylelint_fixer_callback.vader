@@ -25,7 +25,7 @@ Execute(The stylelint fixer with stylelint.js should be run with node on Windows
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
-  \   'command': 'node '
+  \   'command': ale#Escape('node.exe') . ' '
   \     . ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/node_modules/stylelint/bin/stylelint.js'))
   \     . ' --fix %t',
   \ },

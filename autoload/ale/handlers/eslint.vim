@@ -17,17 +17,9 @@ endfunction
 function! ale#handlers#eslint#GetCommand(buffer) abort
     let l:executable = ale#handlers#eslint#GetExecutable(a:buffer)
 
-    if ale#Has('win32') && l:executable =~? 'eslint\.js$'
-        " For Windows, if we detect an eslint.js script, we need to execute
-        " it with node, or the file can be opened with a text editor.
-        let l:head = 'node ' . ale#Escape(l:executable)
-    else
-        let l:head = ale#Escape(l:executable)
-    endif
-
     let l:options = ale#Var(a:buffer, 'javascript_eslint_options')
 
-    return l:head
+    return ale#node#Executable(a:buffer, l:executable)
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' -f unix --stdin --stdin-filename %s'
 endfunction

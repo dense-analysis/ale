@@ -918,6 +918,22 @@ b:ale_warn_about_trailing_whitespace     *b:ale_warn_about_trailing_whitespace*
   This option may be configured on a per buffer basis.
 
 
+g:ale_windows_node_executable_path         *g:ale_windows_node_executable_path*
+                                           *b:ale_windows_node_executable_path*
+
+  Type: |String|
+  Default: `'node.exe'`
+
+  This variable is used as the path to the executable to use for executing
+  scripts with Node.js on Windows.
+
+  For Windows, any file with a `.js` file extension needs to be executed with
+  the node executable explicitly. Otherwise, Windows could try and open the
+  scripts with other applications, like a text editor. Therefore, these
+  scripts are executed with whatever executable is configured with this
+  setting.
+
+
 -------------------------------------------------------------------------------
 3.1. Highlights                                                *ale-highlights*
 
