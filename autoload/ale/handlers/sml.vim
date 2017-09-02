@@ -26,12 +26,12 @@ function! s:GetExecutable(buffer, source) abort
     if a:source ==# 'smlnj-file'
       return 'sml'
     elseif a:source ==# 'smlnj-cm'
-      return 'false'
+      return ''
     end
   else
     " Found a CM file; only allow cm-file mode to be enabled
     if a:source ==# 'smlnj-file'
-      return 'false'
+      return ''
     elseif a:source ==# 'smlnj-cm'
       return 'sml'
     end

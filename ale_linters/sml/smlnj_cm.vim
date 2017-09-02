@@ -18,6 +18,6 @@ call ale#linter#Define('sml', {
 \   'name': 'smlnj-cm',
 \   'executable_callback': 'ale#handlers#sml#GetExecutableSmlnjCm',
 \   'lint_file': 1,
-\   'command': 'ale_linters#sml#smlnj_cm#GetCommand',
+\   'command_callback': 'ale_linters#sml#smlnj_cm#GetCommand',
 \   'callback': 'ale#handlers#sml#Handle',
 \})
