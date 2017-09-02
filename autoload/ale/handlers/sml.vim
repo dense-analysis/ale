@@ -2,47 +2,47 @@
 " Description: Shared functions for SML linters
 
 function! ale#handlers#sml#GetCmFile(buffer) abort
-  let l:pattern = ale#Var(a:buffer, 'sml_smlnj_cm_file')
-  let l:as_list = 1
+    let l:pattern = ale#Var(a:buffer, 'sml_smlnj_cm_file')
+    let l:as_list = 1
 
-  let l:cmfile = ''
-  for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
-    let l:results = glob(l:path . '/' . l:pattern, 0, l:as_list)
-    if len(l:results) > 0
-      " If there is more than one CM file, we take the first one
-      " See :help ale-sml-smlnj for how to configure this.
-      let l:cmfile = l:results[0]
-    endif
-  endfor
+    let l:cmfile = ''
+    for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
+        let l:results = glob(l:path . '/' . l:pattern, 0, l:as_list)
+        if len(l:results) > 0
+            " If there is more than one CM file, we take the first one
+            " See :help ale-sml-smlnj for how to configure this.
+            let l:cmfile = l:results[0]
+        endif
+    endfor
 
-  return l:cmfile
+    return l:cmfile
 endfunction
 
 " Only one of smlnj or smlnj-cm can be enabled at a time.
 " executable_callback is called before *every* lint attempt
 function! s:GetExecutable(buffer, source) abort
-  if ale#handlers#sml#GetCmFile(a:buffer) ==# ''
-    " No CM file found; only allow single-file mode to be enabled
-    if a:source ==# 'smlnj-file'
-      return 'sml'
-    elseif a:source ==# 'smlnj-cm'
-      return ''
-    end
-  else
-    " Found a CM file; only allow cm-file mode to be enabled
-    if a:source ==# 'smlnj-file'
-      return ''
-    elseif a:source ==# 'smlnj-cm'
-      return 'sml'
-    end
-  endif
+    if ale#handlers#sml#GetCmFile(a:buffer) is# ''
+        " No CM file found; only allow single-file mode to be enabled
+        if a:source is# 'smlnj-file'
+            return 'sml'
+        elseif a:source is# 'smlnj-cm'
+            return ''
+        endif
+    else
+        " Found a CM file; only allow cm-file mode to be enabled
+        if a:source is# 'smlnj-file'
+            return ''
+        elseif a:source is# 'smlnj-cm'
+            return 'sml'
+        endif
+    endif
 endfunction
 
 function! ale#handlers#sml#GetExecutableSmlnjCm(buffer) abort
-  return s:GetExecutable(a:buffer, 'smlnj-cm')
+    return s:GetExecutable(a:buffer, 'smlnj-cm')
 endfunction
 function! ale#handlers#sml#GetExecutableSmlnjFile(buffer) abort
-  return s:GetExecutable(a:buffer, 'smlnj-file')
+    return s:GetExecutable(a:buffer, 'smlnj-file')
 endfunction
 
 function! ale#handlers#sml#Handle(buffer, lines) abort
@@ -84,3 +84,4 @@ function! ale#handlers#sml#Handle(buffer, lines) abort
     return l:out
 endfunction
 
+" vim:ts=4:sts=4:sw=4

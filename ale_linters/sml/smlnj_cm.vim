@@ -8,8 +8,8 @@
 call ale#Set('sml_smlnj_cm_file', '*.cm')
 
 function! ale_linters#sml#smlnj_cm#GetCommand(buffer) abort
-  let l:cmfile = ale#handlers#sml#GetCmFile(a:buffer)
-  return 'sml -m ' . l:cmfile . ' < /dev/null'
+    let l:cmfile = ale#handlers#sml#GetCmFile(a:buffer)
+    return 'sml -m ' . l:cmfile . ' < /dev/null'
 endfunction
 
 " Using CM requires that we set "lint_file: 1", since it reads the files
@@ -21,3 +21,5 @@ call ale#linter#Define('sml', {
 \   'command_callback': 'ale_linters#sml#smlnj_cm#GetCommand',
 \   'callback': 'ale#handlers#sml#Handle',
 \})
+
+" vim:ts=4:sts=4:sw=4

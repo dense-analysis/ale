@@ -2,7 +2,7 @@
 ALE SML Integration                                           *ale-sml-options*
 
 ===============================================================================
-smlnj                                                        *ale-sml-smlnj*
+smlnj                                                           *ale-sml-smlnj*
                                                              *ale-sml-smlnj-cm*
 
 There are two SML/NJ powered checkers:
