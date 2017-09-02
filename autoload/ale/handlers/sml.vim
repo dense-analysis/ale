@@ -7,7 +7,7 @@ function! ale#handlers#sml#GetCmFile(buffer) abort
 
   let l:cmfile = ''
   for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
-    let l:results = glob(l:pattern, 0, l:as_list)
+    let l:results = glob(l:path . '/' . l:pattern, 0, l:as_list)
     if len(l:results) > 0
       " If there is more than one CM file, we take the first one
       " See :help ale-sml-smlnj for how to configure this.
