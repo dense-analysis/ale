@@ -683,6 +683,10 @@ g:ale_lint_on_filetype_changed                 *g:ale_lint_on_filetype_changed*
   changed quickly several times in a row, but resulting in only one lint
   cycle.
 
+  If |g:ale_lint_on_enter| is set to `0`, then ALE will not lint a file when
+  the filetype is initially set. Otherwise ALE would still lint files when
+  buffers are opened, and the option for doing so is turned off.
+
 
 g:ale_lint_on_save                                         *g:ale_lint_on_save*
 
