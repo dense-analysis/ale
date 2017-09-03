@@ -56,6 +56,10 @@ function! s:FixList(list) abort
     return l:new_list
 endfunction
 
+function! s:BufWinId(buffer) abort
+    return exists('*bufwinid') ? bufwinid(str2nr(a:buffer)) : 0
+endfunction
+
 function! s:SetListsImpl(timer_id, buffer, loclist) abort
     let l:title = expand('#' . a:buffer . ':p')
 
@@ -72,7 +76,7 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
         " If windows support is off, bufwinid() may not exist.
         " We'll set result in the current window, which might not be correct,
         " but is better than nothing.
-        let l:win_id = exists('*bufwinid') ? bufwinid(str2nr(a:buffer)) : 0
+        let l:win_id = s:BufWinId(a:buffer)
 
         if has('nvim')
             call setloclist(l:win_id, s:FixList(a:loclist), ' ', l:title)
@@ -82,13 +86,11 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
         endif
     endif
 
-    let l:keep_open = ale#Var(a:buffer, 'keep_list_window_open')
-
     " Open a window to show the problems if we need to.
     "
     " We'll check if the current buffer's List is not empty here, so the
     " window will only be opened if the current buffer has problems.
-    if s:ShouldOpen(a:buffer) && (l:keep_open || !empty(a:loclist))
+    if s:ShouldOpen(a:buffer) && !empty(a:loclist)
         let l:winnr = winnr()
         let l:mode = mode()
         let l:reset_visual_selection = l:mode is? 'v' || l:mode is# "\<c-v>"
@@ -117,6 +119,13 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
             endif
         endif
     endif
+
+    " If ALE isn't currently checking for more problems, close the window if
+    " needed now. This check happens inside of this timer function, so
+    " the window can be closed reliably.
+    if !ale#engine#IsCheckingBuffer(bufnr(''))
+        call s:CloseWindowIfNeeded(a:buffer)
+    endif
 endfunction
 
 function! ale#list#SetLists(buffer, loclist) abort
@@ -131,7 +140,7 @@ function! ale#list#SetLists(buffer, loclist) abort
     endif
 endfunction
 
-function! s:CloseWindowIfNeededImpl(timer_id, buffer) abort
+function! s:CloseWindowIfNeeded(buffer) abort
     if ale#Var(a:buffer, 'keep_list_window_open') || !s:ShouldOpen(a:buffer)
         return
     endif
@@ -143,22 +152,14 @@ function! s:CloseWindowIfNeededImpl(timer_id, buffer) abort
             if empty(getqflist())
                 cclose
             endif
-        elseif g:ale_set_loclist && empty(getloclist(0))
-            lclose
+        else
+            let l:win_id = s:BufWinId(a:buffer)
+
+            if g:ale_set_loclist && empty(getloclist(l:win_id))
+                lclose
+            endif
         endif
     " Ignore 'Cannot close last window' errors.
     catch /E444/
     endtry
-endfunction
-
-function! ale#list#CloseWindowIfNeeded(buffer) abort
-    if get(g:, 'ale_set_lists_synchronously') == 1
-        call s:CloseWindowIfNeededImpl(-1, a:buffer)
-    else
-        call ale#util#StartPartialTimer(
-        \   0,
-        \   function('s:CloseWindowIfNeededImpl'),
-        \   [a:buffer],
-        \)
-    endif
 endfunction
