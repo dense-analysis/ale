@@ -1039,10 +1039,10 @@ g:ale_type_map                                                 *g:ale_type_map*
   Type: |Dictionary|
   Default: `{}`
 
-  This option can be set re-map problem types for linters. Each key in
-  the |Dictionary| should be the name of a linter, and each value must be
-  a |Dictionary| mapping error types from one type to another. The
-  following types are supported:
+  This option can be set re-map problem types for linters. Each key in the
+  |Dictionary| should be the name of a linter, and each value must be a
+  |Dictionary| mapping problem types from one type to another. The following
+  types are supported:
 
   `'E'`  - `{'type': 'E'}`
   `'ES'` - `{'type': 'E', 'sub_type': 'style'}`
@@ -1050,13 +1050,13 @@ g:ale_type_map                                                 *g:ale_type_map*
   `'WS'` - `{'type': 'W', 'sub_type': 'style'}`
   `'I'`  - `{'type': 'I'}`
 
-  For example, if you want to turn flake8 errors into warnings, you can do
+  For example, if you want to turn flake8 errors into warnings, you can write
   the following: >
 
   let g:ale_type_map = {'flake8': {'ES': 'WS', 'E': 'W'}}
 <
   If you wanted to turn style errors and warnings into regular errors and
-  warnings, you can use the following: >
+  warnings, you can write the following: >
 
   let g:ale_type_map = {'flake8': {'ES': 'E', 'WS': 'W'}}
 <
