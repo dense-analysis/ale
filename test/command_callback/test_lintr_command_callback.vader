@@ -1,0 +1,34 @@
+Before:
+  Save g:ale_r_lintr_options
+
+  unlet! g:ale_r_lintr_options
+  unlet! b:ale_r_lintr_options
+
+  runtime ale_linters/r/lintr.vim
+
+After:
+  Restore
+
+  unlet! b:ale_r_lintr_options
+
+  call ale#linter#Reset()
+
+Execute(The default lintr command should be correct):
+  AssertEqual
+  \   'cd ' . ale#Escape(getcwd()) . ' && '
+  \   . 'Rscript -e '
+  \   . ale#Escape('lintr::lint(commandArgs(TRUE)[1], eval(parse(text = commandArgs(TRUE)[2])))')
+  \   . ' %t '
+  \   . ale#Escape('lintr::with_defaults()'),
+  \ ale_linters#r#lintr#GetCommand(bufnr(''))
+
+Execute(The lintr options should be configurable):
+  let b:ale_r_lintr_options = 'lintr::with_defaults(object_usage_linter = NULL)'
+
+  AssertEqual
+  \   'cd ' . ale#Escape(getcwd()) . ' && '
+  \   . 'Rscript -e '
+  \   . ale#Escape('lintr::lint(commandArgs(TRUE)[1], eval(parse(text = commandArgs(TRUE)[2])))')
+  \   . ' %t '
+  \   . ale#Escape('lintr::with_defaults(object_usage_linter = NULL)'),
+  \ ale_linters#r#lintr#GetCommand(bufnr(''))
