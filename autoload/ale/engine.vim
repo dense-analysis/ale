@@ -286,10 +286,6 @@ function! ale#engine#SetResults(buffer, loclist) abort
 
     if g:ale_set_quickfix || g:ale_set_loclist
         call ale#list#SetLists(a:buffer, a:loclist)
-
-        if l:linting_is_done
-            call ale#list#CloseWindowIfNeeded(a:buffer)
-        endif
     endif
 
     if exists('*ale#statusline#Update')
