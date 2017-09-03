@@ -242,15 +242,25 @@ function! s:HandleCommandMessage(job_id, message) abort
     call ale#lsp#HandleMessage(l:conn, a:message)
 endfunction
 
-function! s:RegisterProject(conn, project_root) abort
-    if !has_key(a:conn.projects, a:project_root)
+function! ale#lsp#RegisterProject(conn, project_root) abort
+    " Empty strings can't be used for Dictionary keys in NeoVim, due to E713.
+    " This appears to be a nonsensical bug in NeoVim.
+    let l:key = empty(a:project_root) ? '<<EMPTY>>' : a:project_root
+
+    if !has_key(a:conn.projects, l:key)
         " Tools without project roots are ready right away, like tsserver.
-        let a:conn.projects[a:project_root] = {
+        let a:conn.projects[l:key] = {
         \   'initialized': empty(a:project_root),
         \   'init_request_id': 0,
         \   'message_queue': [],
         \}
     endif
+endfunction
+
+function! ale#lsp#GetProject(conn, project_root) abort
+    let l:key = empty(a:project_root) ? '<<EMPTY>>' : a:project_root
+
+    return get(a:conn.projects, l:key, {})
 endfunction
 
 " Start a program for LSP servers which run with executables.
@@ -285,7 +295,7 @@ function! ale#lsp#StartProgram(executable, command, project_root, callback) abor
     let l:conn.id = l:job_id
     " Add the callback to the List if it's not there already.
     call uniq(sort(add(l:conn.callback_list, a:callback)))
-    call s:RegisterProject(l:conn, a:project_root)
+    call ale#lsp#RegisterProject(l:conn, a:project_root)
 
     return l:job_id
 endfunction
@@ -311,7 +321,7 @@ function! ale#lsp#ConnectToAddress(address, project_root, callback) abort
     let l:conn.id = a:address
     " Add the callback to the List if it's not there already.
     call uniq(sort(add(l:conn.callback_list, a:callback)))
-    call s:RegisterProject(l:conn, a:project_root)
+    call ale#lsp#RegisterProject(l:conn, a:project_root)
 
     return 1
 endfunction
@@ -344,7 +354,7 @@ function! ale#lsp#Send(conn_id, message, ...) abort
         return 0
     endif
 
-    let l:project = get(l:conn.projects, l:project_root, {})
+    let l:project = ale#lsp#GetProject(l:conn, l:project_root)
 
     if empty(l:project)
         return 0

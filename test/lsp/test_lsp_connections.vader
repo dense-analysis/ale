@@ -3,6 +3,7 @@ Before:
 
 After:
   unlet! b:data
+  unlet! b:conn
 
 Execute(GetNextMessageID() should increment appropriately):
   " We should get the initial ID, and increment a bit.
@@ -220,3 +221,51 @@ Execute(ale#lsp#ReadMessageData() should handle a message with part of a second 
   \   . '{"id":2,"jsonrpc":"2.0","result":{"foo":"barÜ"}}'
   \   . b:data
   \ )
+
+Execute(Projects with regular project roots should be registered correctly):
+  let b:conn = {'projects': {}}
+
+  call ale#lsp#RegisterProject(b:conn, '/foo/bar')
+
+  AssertEqual
+  \ {
+  \   'projects': {
+  \     '/foo/bar': {'initialized': 0, 'message_queue': [], 'init_request_id': 0},
+  \   },
+  \ },
+  \ b:conn
+
+Execute(Projects with regular project roots should be fetched correctly):
+  let b:conn = {
+  \ 'projects': {
+  \   '/foo/bar': {'initialized': 0, 'message_queue': [], 'init_request_id': 0},
+  \ },
+  \}
+
+  AssertEqual
+  \ {'initialized': 0, 'message_queue': [], 'init_request_id': 0},
+  \ ale#lsp#GetProject(b:conn, '/foo/bar')
+
+Execute(Projects with empty project roots should be registered correctly):
+  let b:conn = {'projects': {}}
+
+  call ale#lsp#RegisterProject(b:conn, '')
+
+  AssertEqual
+  \ {
+  \   'projects': {
+  \     '<<EMPTY>>': {'initialized': 1, 'message_queue': [], 'init_request_id': 0},
+  \   },
+  \ },
+  \ b:conn
+
+Execute(Projects with empty project roots should be fetched correctly):
+  let b:conn = {
+  \ 'projects': {
+  \   '<<EMPTY>>': {'initialized': 1, 'message_queue': [], 'init_request_id': 0},
+  \ },
+  \}
+
+  AssertEqual
+  \ {'initialized': 1, 'message_queue': [], 'init_request_id': 0},
+  \ ale#lsp#GetProject(b:conn, '')
