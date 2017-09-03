@@ -1,0 +1,12 @@
+Before:
+  Save &l:statusline
+
+After:
+  Restore
+
+Execute(ALE shouldn't do much of anything for ctrlp-funky buffers):
+  Assert !ale#ShouldDoNothing(bufnr('')), 'The preliminary check failed'
+
+  let &l:statusline = '%#CtrlPMode2# prt %*%#CtrlPMode1# line %* <mru>={%#CtrlPMode1# funky %*}=<fil> <-> %=%<%#CtrlPMode2# %{getcwd()} %*'
+
+  Assert ale#ShouldDoNothing(bufnr(''))
