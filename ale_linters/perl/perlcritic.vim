@@ -13,6 +13,9 @@ let g:ale_perl_perlcritic_options =
 let g:ale_perl_perlcritic_showrules =
 \   get(g:, 'ale_perl_perlcritic_showrules', 0)
 
+let g:ale_perl_perlcritic_display_mode =
+\   get(g:, 'ale_perl_perlcritic_display_mode', 'E')
+
 function! ale_linters#perl#perlcritic#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'perl_perlcritic_executable')
 endfunction
@@ -61,6 +64,7 @@ function! ale_linters#perl#perlcritic#Handle(buffer, lines) abort
         \   'lnum': l:match[1],
         \   'col': l:match[2],
         \   'text': l:match[3],
+        \   'type': ale#Var(a:buffer, 'perl_perlcritic_display_mode'),
         \})
     endfor
 
