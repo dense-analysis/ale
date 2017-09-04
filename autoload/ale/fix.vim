@@ -96,6 +96,11 @@ function! s:HandleExit(job_id, exit_code) abort
     endif
 
     let l:job_info = remove(s:job_info_map, a:job_id)
+    let l:buffer = l:job_info.buffer
+
+    if g:ale_history_enabled
+        call ale#history#SetExitCode(l:buffer, a:job_id, a:exit_code)
+    endif
 
     if has_key(l:job_info, 'file_to_read')
         let l:job_info.output = readfile(l:job_info.file_to_read)
@@ -108,7 +113,7 @@ function! s:HandleExit(job_id, exit_code) abort
     \   : l:job_info.input
 
     call s:RunFixer({
-    \   'buffer': l:job_info.buffer,
+    \   'buffer': l:buffer,
     \   'input': l:input,
     \   'callback_list': l:job_info.callback_list,
     \   'callback_index': l:job_info.callback_index + 1,
@@ -207,6 +212,12 @@ function! s:RunJob(options) abort
         endwhile
     else
         let l:job_id = ale#job#Start(l:command, l:job_options)
+    endif
+
+    let l:status = l:job_id ? 'started' : 'failed'
+
+    if g:ale_history_enabled
+        call ale#history#Add(l:buffer, l:status, l:job_id, l:command)
     endif
 
     if l:job_id == 0

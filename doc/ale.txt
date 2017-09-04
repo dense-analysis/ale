@@ -101,6 +101,8 @@ CONTENTS                                                         *ale-contents*
       pycodestyle.........................|ale-python-pycodestyle|
       pylint..............................|ale-python-pylint|
       yapf................................|ale-python-yapf|
+    r.....................................|ale-r-options|
+      lintr...............................|ale-r-lintr|
     ruby..................................|ale-ruby-options|
       brakeman............................|ale-ruby-brakeman|
       rails_best_practices................|ale-ruby-rails_best_practices|
@@ -119,6 +121,8 @@ CONTENTS                                                         *ale-contents*
     sh....................................|ale-sh-options|
       shell...............................|ale-sh-shell|
       shellcheck..........................|ale-sh-shellcheck|
+    sml...................................|ale-sml-options|
+      smlnj...............................|ale-sml-smlnj|
     spec..................................|ale-spec-options|
       rpmlint.............................|ale-spec-rpmlint|
     stylus................................|ale-stylus-options|
@@ -683,6 +687,10 @@ g:ale_lint_on_filetype_changed                 *g:ale_lint_on_filetype_changed*
   changed quickly several times in a row, but resulting in only one lint
   cycle.
 
+  If |g:ale_lint_on_enter| is set to `0`, then ALE will not lint a file when
+  the filetype is initially set. Otherwise ALE would still lint files when
+  buffers are opened, and the option for doing so is turned off.
+
 
 g:ale_lint_on_save                                         *g:ale_lint_on_save*
 
@@ -1033,10 +1041,10 @@ g:ale_type_map                                                 *g:ale_type_map*
   Type: |Dictionary|
   Default: `{}`
 
-  This option can be set re-map problem types for linters. Each key in
-  the |Dictionary| should be the name of a linter, and each value must be
-  a |Dictionary| mapping error types from one type to another. The
-  following types are supported:
+  This option can be set re-map problem types for linters. Each key in the
+  |Dictionary| should be the name of a linter, and each value must be a
+  |Dictionary| mapping problem types from one type to another. The following
+  types are supported:
 
   `'E'`  - `{'type': 'E'}`
   `'ES'` - `{'type': 'E', 'sub_type': 'style'}`
@@ -1044,13 +1052,13 @@ g:ale_type_map                                                 *g:ale_type_map*
   `'WS'` - `{'type': 'W', 'sub_type': 'style'}`
   `'I'`  - `{'type': 'I'}`
 
-  For example, if you want to turn flake8 errors into warnings, you can do
+  For example, if you want to turn flake8 errors into warnings, you can write
   the following: >
 
   let g:ale_type_map = {'flake8': {'ES': 'WS', 'E': 'W'}}
 <
   If you wanted to turn style errors and warnings into regular errors and
-  warnings, you can use the following: >
+  warnings, you can write the following: >
 
   let g:ale_type_map = {'flake8': {'ES': 'E', 'WS': 'W'}}
 <
@@ -1087,6 +1095,22 @@ b:ale_warn_about_trailing_whitespace     *b:ale_warn_about_trailing_whitespace*
   bug report, and it may be possible to add such support.
 
   This option may be configured on a per buffer basis.
+
+
+g:ale_windows_node_executable_path         *g:ale_windows_node_executable_path*
+                                           *b:ale_windows_node_executable_path*
+
+  Type: |String|
+  Default: `'node.exe'`
+
+  This variable is used as the path to the executable to use for executing
+  scripts with Node.js on Windows.
+
+  For Windows, any file with a `.js` file extension needs to be executed with
+  the node executable explicitly. Otherwise, Windows could try and open the
+  scripts with other applications, like a text editor. Therefore, these
+  scripts are executed with whatever executable is configured with this
+  setting.
 
 
 -------------------------------------------------------------------------------

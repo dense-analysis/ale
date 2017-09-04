@@ -1,11 +1,24 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Error handling for the format GHC outputs.
 
+" Remember the directory used for temporary files for Vim.
+let s:temp_dir = fnamemodify(tempname(), ':h')
+" Build part of a regular expression for matching ALE temporary filenames.
+let s:temp_regex_prefix =
+\   '\M'
+\   . substitute(s:temp_dir, '\\', '\\\\', 'g')
+\   . '\.\{-}'
+
 function! ale#handlers#haskell#HandleGHCFormat(buffer, lines) abort
     " Look for lines like the following.
     "
     "Appoint/Lib.hs:8:1: warning:
     "Appoint/Lib.hs:8:1:
+    let l:basename = expand('#' . a:buffer . ':t')
+    " Build a complete regular expression for replacing temporary filenames
+    " in Haskell error messages with the basename for this file.
+    let l:temp_filename_regex = s:temp_regex_prefix . l:basename
+
     let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):(\d+):(.*)?$'
     let l:output = []
 
@@ -50,6 +63,9 @@ function! ale#handlers#haskell#HandleGHCFormat(buffer, lines) abort
         else
             let l:type = 'E'
         endif
+
+        " Replace temporary filenames in problem messages with the basename
+        let l:text = substitute(l:text, l:temp_filename_regex, l:basename, 'g')
 
         call add(l:output, {
         \   'lnum': l:match[2] + 0,

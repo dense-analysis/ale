@@ -67,7 +67,7 @@ Execute(.js files should be executed with node on Windows):
   \ ale_linters#javascript#standard#GetExecutable(bufnr(''))
 
   AssertEqual
-  \ 'node ' . ale#Escape(b:executable) . ' --stdin %s',
+  \ ale#Escape('node.exe') . ' ' . ale#Escape(b:executable) . ' --stdin %s',
   \ ale_linters#javascript#standard#GetCommand(bufnr(''))
 
 Execute(The global executable should be used otherwise):

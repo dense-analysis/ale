@@ -14,17 +14,9 @@ endfunction
 
 function! ale_linters#javascript#standard#GetCommand(buffer) abort
     let l:executable = ale_linters#javascript#standard#GetExecutable(a:buffer)
-
-    if ale#Has('win32') && l:executable =~? '\.js$'
-        " .js files have to be executed with Node on Windows.
-        let l:head = 'node ' . ale#Escape(l:executable)
-    else
-        let l:head = ale#Escape(l:executable)
-    endif
-
     let l:options = ale#Var(a:buffer, 'javascript_standard_options')
 
-    return l:head
+    return ale#node#Executable(a:buffer, l:executable)
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' --stdin %s'
 endfunction
