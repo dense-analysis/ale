@@ -12,5 +12,7 @@ init:
   - 'nmake -f Make_mvc.mak CPU=AMD64 OLE=no GUI=no IME=yes MBYTE=yes
     ICONV=yes DEBUG=no FEATURES=NORMAL'
 
+clone_depth: 10
+
 test_script:
   - echo hello world
