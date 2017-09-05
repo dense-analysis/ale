@@ -1,5 +1,8 @@
 ---
 init:
+  # Set up the build environment
+  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd"
+    /x64 /release'
   # Build Vim
   - cd C:\
   - git clone https://github.com/vim/vim
