@@ -111,7 +111,7 @@ formatting.
 | nroff | [proselint](http://proselint.com/)|
 | Objective-C | [clang](http://clang.llvm.org/) |
 | Objective-C++ | [clang](http://clang.llvm.org/) |
-| OCaml | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-integration-ocaml-merlin` for configuration instructions
+| OCaml | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-ocaml-merlin` for configuration instructions
 | Perl | [perl -c](https://perl.org/), [perl-critic](https://metacpan.org/pod/Perl::Critic) |
 | PHP | [hack](http://hacklang.org/), [langserver](https://github.com/felixfbecker/php-language-server), [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer), [phpmd](https://phpmd.org), [phpstan](https://github.com/phpstan/phpstan), [phpcbf](https://github.com/squizlabs/PHP_CodeSniffer) |
 | Pod | [proselint](http://proselint.com/)|
