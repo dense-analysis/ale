@@ -3,7 +3,7 @@ ALE OCaml Integration                                       *ale-ocaml-options*
 
 
 ===============================================================================
-merlin                                                       *ale-ocaml-merlin*
+merlin                                                      *ale-integration-ocaml-merlin*
 
   To use merlin linter for OCaml source code you need to make sure Merlin for
   Vim is correctly configured. See the corresponding Merlin wiki page for
