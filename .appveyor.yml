@@ -9,7 +9,7 @@ init:
   - cd vim
   - git checkout v8.0.0027
   - cd src
-  - 'nmake -f Make_mvc2.mak CPU=AMD64 OLE=no GUI=no IME=yes MBYTE=yes
+  - 'nmake -f Make_mvc.mak CPU=AMD64 OLE=no GUI=no IME=yes MBYTE=yes
     ICONV=yes DEBUG=no FEATURES=NORMAL'
 
 test_script:
