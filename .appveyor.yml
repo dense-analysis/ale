@@ -14,6 +14,11 @@ install:
     -OutFile C:\vim.zip'
   - ps: Add-Type -A System.IO.Compression.FileSystem
   - ps: "[IO.Compression.ZipFile]::ExtractToDirectory('C:\\vim.zip', 'C:\\vim')"
+  # Download and unpack Vim runtime files
+  - cd C:\
+  - ps: 'Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586rt.zip
+    -OutFile C:\rt.zip'
+  - ps: "[IO.Compression.ZipFile]::ExtractToDirectory('C:\\rt.zip', 'C:\\vim')"
   # Set up Vader for tests
   - git clone https://github.com/junegunn/vader.vim C:\vader
   - cd C:\vader
