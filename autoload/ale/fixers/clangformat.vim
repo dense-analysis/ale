@@ -1,3 +1,4 @@
+scriptencoding utf-8
 " Author: Peter Renström <renstrom.peter@gmail.com>
 " Description: Fixing C/C++ files with clang-format.
 

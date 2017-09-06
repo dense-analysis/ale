@@ -3,6 +3,9 @@ Before:
 
   let g:ale_set_signs = 1
 
+  call ale#linter#Reset()
+  sign unplace *
+
   function! GenerateResults(buffer, output)
     return [
     \ {

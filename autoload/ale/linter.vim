@@ -25,6 +25,7 @@ let s:default_ale_linters = {
 \   'csh': ['shell'],
 \   'go': ['gofmt', 'golint', 'go vet'],
 \   'help': [],
+\   'python': ['flake8', 'mypy', 'pylint'],
 \   'rust': ['cargo'],
 \   'spec': [],
 \   'text': [],

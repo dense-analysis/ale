@@ -1,9 +1,11 @@
-" Author: Prashanth Chandra https://github.com/prashcr
+" Author: Prashanth Chandra <https://github.com/prashcr>, Jonathan Clem <https://jclem.net>
 " Description: tslint for TypeScript files
 
 call ale#Set('typescript_tslint_executable', 'tslint')
 call ale#Set('typescript_tslint_config_path', '')
+call ale#Set('typescript_tslint_rules_dir', '')
 call ale#Set('typescript_tslint_use_global', 0)
+call ale#Set('typescript_tslint_ignore_empty_files', 0)
 
 function! ale_linters#typescript#tslint#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'typescript_tslint', [
@@ -12,6 +14,12 @@ function! ale_linters#typescript#tslint#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#typescript#tslint#Handle(buffer, lines) abort
+    " Do not output any errors for empty files if the option is on.
+    if ale#Var(a:buffer, 'typescript_tslint_ignore_empty_files')
+    \&& getbufline(a:buffer, 1, '$') == ['']
+        return []
+    endif
+
     let l:dir = expand('#' . a:buffer . ':p:h')
     let l:output = []
 
@@ -38,15 +46,20 @@ function! ale_linters#typescript#tslint#GetCommand(buffer) abort
     \   'tslint.json',
     \   ale#Var(a:buffer, 'typescript_tslint_config_path')
     \)
-
     let l:tslint_config_option = !empty(l:tslint_config_path)
     \   ? ' -c ' . ale#Escape(l:tslint_config_path)
     \   : ''
+
+    let l:tslint_rules_dir = ale#Var(a:buffer, 'typescript_tslint_rules_dir')
+    let l:tslint_rules_option = !empty(l:tslint_rules_dir)
+    \  ? ' -r ' . ale#Escape(l:tslint_rules_dir)
+    \  : ''
 
     return ale#path#BufferCdString(a:buffer)
     \   . ale_linters#typescript#tslint#GetExecutable(a:buffer)
     \   . ' --format json'
     \   . l:tslint_config_option
+    \   . l:tslint_rules_option
     \   . ' %t'
 endfunction
 

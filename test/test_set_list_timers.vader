@@ -27,12 +27,3 @@ Execute(The SetLists function should work when run in a timer):
   \ 'type': 'E',
   \ 'pattern': '',
   \}], getloclist(0)
-
-Execute(The CloseWindowIfNeeded function should work when run in a timer):
-  let g:ale_open_list = 1
-  lopen
-
-  call ale#list#CloseWindowIfNeeded(bufnr(''))
-  sleep 1ms
-
-  Assert !ale#list#IsQuickfixOpen(), 'The window was not closed!'

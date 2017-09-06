@@ -1,0 +1,20 @@
+---
+install:
+  # Stop git from changing newlines
+  - git config --global core.autocrlf input
+  # Set up the build environment
+  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd"
+    /x64 /release'
+  # Build Vim
+  - cd C:\
+  - git clone https://github.com/vim/vim
+  - cd vim
+  - git checkout v8.0.0027
+  - cd src
+  - 'nmake -f Make_mvc.mak CPU=AMD64 OLE=no GUI=no IME=yes MBYTE=yes
+    ICONV=yes DEBUG=no FEATURES=NORMAL'
+
+clone_depth: 10
+
+test_script:
+  - echo hello world

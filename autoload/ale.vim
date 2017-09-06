@@ -48,6 +48,7 @@ function! ale#ShouldDoNothing(buffer) abort
     \   || ale#util#InSandbox()
     \   || !ale#Var(a:buffer, 'enabled')
     \   || ale#FileTooLarge()
+    \   || getbufvar(a:buffer, '&l:statusline') =~# 'CtrlPMode.*funky'
 endfunction
 
 " (delay, [linting_flag, buffer_number])

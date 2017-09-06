@@ -15,16 +15,8 @@ endfunction
 function! ale#fixers#stylelint#Fix(buffer) abort
     let l:executable = ale#fixers#stylelint#GetExecutable(a:buffer)
 
-    if ale#Has('win32') && l:executable =~? 'stylelint\.js$'
-        " For Windows, if we detect an stylelint.js script, we need to execute
-        " it with node, or the file can be opened with a text editor.
-        let l:head = 'node ' . ale#Escape(l:executable)
-    else
-        let l:head = ale#Escape(l:executable)
-    endif
-
     return {
-    \   'command': l:head
+    \   'command': ale#node#Executable(a:buffer, l:executable)
     \       . ' --fix %t',
     \   'read_temporary_file': 1,
     \}

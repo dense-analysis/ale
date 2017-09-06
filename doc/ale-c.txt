@@ -3,6 +3,37 @@ ALE C Integration                                               *ale-c-options*
 
 
 ===============================================================================
+Global Options
+
+g:ale_c_build_dir_names                               *g:ale_c_build_dir_names*
+                                                      *b:ale_c_build_dir_names*
+
+  Type: |List|
+  Default: `['build', 'bin']`
+
+  A list of directory names to be used when searching upwards from cpp
+  files to discover compilation databases with. For directory named `'foo'`,
+  ALE will search for `'foo/compile_commands.json'` in all directories on and above
+  the directory containing the cpp file to find path to compilation database.
+  This feature is useful for the clang tools wrapped around LibTooling (namely
+  here, clang-tidy)
+
+
+g:ale_c_build_dir                                           *g:ale_c_build_dir*
+                                                            *b:ale_c_build_dir*
+
+  Type: |String|
+  Default: `''`
+
+  A path to the directory containing the `compile_commands.json` file to use
+  with c-family linters. Usually setting this option to a non-empty string
+  will override the |g:ale_c_build_dir_names| option to impose a compilation
+  database (it can be useful if multiple builds are in multiple build
+  subdirectories in the project tree).
+  This feature is also most useful for the clang tools linters, wrapped
+  aroung LibTooling (namely clang-tidy here)
+
+===============================================================================
 clang                                                             *ale-c-clang*
 
 g:ale_c_clang_executable                             *g:ale_c_clang_executable*
@@ -19,6 +50,59 @@ g:ale_c_clang_options                                   *g:ale_c_clang_options*
   Default: `'-std=c11 -Wall'`
 
   This variable can be changed to modify flags given to clang.
+
+
+===============================================================================
+clangtidy                                                     *ale-c-clangtidy*
+
+`clang-tidy` will be run only when files are saved to disk, so that
+`compile_commands.json` files can be used. It is recommended to use this
+linter in combination with `compile_commands.json` files.
+Therefore, `clang-tidy` linter reads the options |g:ale_c_build_dir| and
+|g:ale_c_build_dir_names|. Also, setting |g:ale_c_build_dir| actually
+overrides |g:ale_c_build_dir_names|.
+
+
+g:ale_c_clangtidy_checks                             *g:ale_c_clangtidy_checks*
+                                                     *b:ale_c_clangtidy_checks*
+  Type: |List|
+  Default: `['*']`
+
+  The checks to enable for clang-tidy with the `-checks` argument.
+
+  All options will be joined with commas, and escaped appropriately for
+  the shell. The `-checks` flag can be removed entirely by setting this
+  option to an empty List.
+
+  Not all of clangtidy checks are applicable for C. You should consult the
+  clang documentation for an up-to-date list of compatible checks:
+  http://clang.llvm.org/extra/clang-tidy/checks/list.html
+
+
+g:ale_c_clangtidy_executable                     *g:ale_c_clangtidy_executable*
+                                                 *b:ale_c_clangtidy_executable*
+  Type: |String|
+  Default: `'clang-tidy'`
+
+  This variable can be changed to use a different executable for clangtidy.
+
+
+g:ale_c_clangtidy_options                           *g:ale_c_clangtidy_options*
+                                                    *b:ale_c_clangtidy_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to modify flags given to clang-tidy.
+
+  - Setting this variable to a non-empty string,
+  - and working in a buffer where no compilation database is found using
+    |g:ale_c_build_dir_names| or |g:ale_c_build_dir|,
+  will cause the `--` argument to be passed to `clang-tidy`, which will mean
+  that detection of `compile_commands.json` files for compile command
+  databases will be disabled.
+  Only set this option if you want to control compiler flags
+  entirely manually, and no `compile_commands.json` file is in one
+  of the |g:ale_c_build_dir_names| directories of the project tree.
 
 
 ===============================================================================

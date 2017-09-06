@@ -1,7 +1,10 @@
 Before:
   Save g:ale_max_buffer_history_size
   Save g:ale_history_log_output
+  Save g:ale_run_synchronously
 
+  unlet! b:ale_fixers
+  unlet! b:ale_enabled
   unlet! b:ale_history
 
   " Temporarily set the shell to /bin/sh, if it isn't already set that way.
@@ -12,6 +15,10 @@ Before:
   let g:ale_buffer_info = {}
   let g:ale_max_buffer_history_size = 20
   let g:ale_history_log_output = 0
+
+  function! TestFixer(buffer)
+    return {'command': 'echo foo'}
+  endfunction
 
   function! CollectResults(buffer, output)
     return []
@@ -28,6 +35,8 @@ Before:
 After:
   Restore
 
+  unlet! b:ale_fixers
+  unlet! b:ale_enabled
   " Clear the history we changed.
   unlet! b:ale_history
 
@@ -40,6 +49,7 @@ After:
   let g:ale_buffer_info = {}
   let g:ale_max_buffer_history_size = 20
   call ale#linter#Reset()
+  delfunction TestFixer
   delfunction CollectResults
 
 Given foobar (Some imaginary filetype):
@@ -108,3 +118,18 @@ Execute(Nothing should be added to history if the size is too low):
   call ale#history#Add(1, 'started', 347, 'last command')
 
   AssertEqual [], ale#history#Get(bufnr(''))
+
+Given foobar(Some file with an imaginary filetype):
+  a
+  b
+  c
+
+Execute(The history should be updated when fixers are run):
+  let b:ale_fixers = {'foobar': ['TestFixer']}
+  let b:ale_enabled = 0
+  let g:ale_run_synchronously = 1
+
+  ALEFix
+
+  AssertEqual ['finished'], map(copy(b:ale_history), 'v:val.status')
+  AssertEqual '/bin/sh -c echo foo ', split(join(b:ale_history[0].command), '<')[0]
