@@ -16,6 +16,6 @@ install:
   - ps: "[IO.Compression.ZipFile]::ExtractToDirectory('C:\\vim.zip', 'C:\\vim')"
 
 test_script:
-  - dir C:\vim
-  - C:\vim\vim.exe --version
+  - dir C:\vim\vim
+  - C:\vim\vim\vim80\vim.exe --version
   - echo hello world
