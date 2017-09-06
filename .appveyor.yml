@@ -14,8 +14,11 @@ install:
     -OutFile C:\vim.zip'
   - ps: Add-Type -A System.IO.Compression.FileSystem
   - ps: "[IO.Compression.ZipFile]::ExtractToDirectory('C:\\vim.zip', 'C:\\vim')"
+  # Set up Vader for tests
+  - git clone https://github.com/junegunn/vader.vim C:\vader
+  - cd C:\vader
+  - git checkout -qf c6243dd81c98350df4dec608fa972df98fa2a3af
+  - cd C:\
 
 test_script:
-  - dir C:\vim\vim
   - C:\vim\vim\vim80\vim.exe --version
-  - echo hello world
