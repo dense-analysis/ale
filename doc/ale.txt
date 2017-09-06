@@ -136,6 +136,7 @@ CONTENTS                                                         *ale-contents*
       thrift..............................|ale-thrift-thrift|
     typescript............................|ale-typescript-options|
       eslint..............................|ale-typescript-eslint|
+      prettier............................|ale-typescript-prettier|
       tslint..............................|ale-typescript-tslint|
       tsserver............................|ale-typescript-tsserver|
     verilog/systemverilog.................|ale-verilog-options|
@@ -256,7 +257,7 @@ Notes:
 * Texinfo: `proselint`
 * Text^: `proselint`, `vale`
 * Thrift: `thrift`
-* TypeScript: `eslint`, `tslint`, `tsserver`, `typecheck`
+* TypeScript: `eslint`, `tslint`, `tsserver`, `typecheck`, `prettier`
 * Verilog: `iverilog`, `verilator`
 * Vim: `vint`
 * Vim help^: `proselint`

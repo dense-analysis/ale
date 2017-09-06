@@ -39,6 +39,17 @@ function! ale#fixers#prettier#Fix(buffer) abort
     let l:use_config = ale#Var(a:buffer, 'javascript_prettier_use_local_config')
                 \ && !empty(l:config)
 
+    " Append the --parser flag depending on the current filetype (unless it's
+    " already set in g:javascript_prettier_options).
+    if match(l:options, '--parser') == -1
+        if &filetype is# 'typescript'
+            let l:parser = 'typescript'
+        else
+            let l:parser = 'babylon'
+        endif
+        let l:options = (!empty(l:options) ? l:options . ' ' : '') . '--parser ' . l:parser
+    endif
+
     return {
     \   'command': ale#Escape(ale#fixers#prettier#GetExecutable(a:buffer))
     \       . ' %t'

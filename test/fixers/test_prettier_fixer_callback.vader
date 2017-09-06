@@ -24,6 +24,7 @@ Execute(The prettier callback should return the correct default values):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
+  \     . ' --parser babylon'
   \     . ' --write',
   \ },
   \ ale#fixers#prettier#Fix(bufnr(''))
@@ -37,6 +38,7 @@ Execute(The prettier callback should include configuration files when the option
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
+  \     . ' --parser babylon'
   \     . ' --config ' . ale#Escape(simplify(g:dir .  '/../prettier-test-files/with_config/.prettierrc'))
   \     . ' --write',
   \ },
@@ -51,8 +53,22 @@ Execute(The prettier callback should include custom prettier options):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
-  \     . ' --no-semi'
+  \     . ' --no-semi --parser babylon'
   \     . ' --config ' . ale#Escape(simplify(g:dir .  '/../prettier-test-files/with_config/.prettierrc'))
+  \     . ' --write',
+  \ },
+  \ ale#fixers#prettier#Fix(bufnr(''))
+
+Execute(Append '--parser typescript' for filetype=typescript):
+  set filetype=typescript
+  call ale#test#SetFilename('../prettier-test-files/testfile.ts')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape(g:ale_javascript_prettier_executable)
+  \     . ' %t'
+  \     . ' --parser typescript'
   \     . ' --write',
   \ },
   \ ale#fixers#prettier#Fix(bufnr(''))
