@@ -34,5 +34,4 @@ install:
 
 test_script:
   - cd C:\projects\ale
-  - C:\vim\vim\vim80\vim.exe --version
   - 'C:\vim\vim\vim80\vim.exe -u test\vimrc "+Vader! test/test_path_uri.vader"'
