@@ -72,6 +72,9 @@ CONTENTS                                                         *ale-contents*
       prettier-standard...................|ale-javascript-prettier-standard|
       standard............................|ale-javascript-standard|
       xo..................................|ale-javascript-xo|
+    json..................................|ale-json-options|
+      jsonlint............................|ale-json-jsonlint|
+      prettier............................|ale-json-prettier|
     kotlin................................|ale-kotlin-options|
       kotlinc.............................|ale-kotlin-kotlinc|
     lua...................................|ale-lua-options|
@@ -223,7 +226,7 @@ Notes:
 * Idris: `idris`
 * Java: `checkstyle`, `javac`
 * JavaScript: `eslint`, `jscs`, `jshint`, `flow`, `prettier`, `prettier-eslint` >= 4.2.0, `prettier-standard`, `standard`, `xo`
-* JSON: `jsonlint`
+* JSON: `jsonlint`, `prettier`
 * Kotlin: `kotlinc`, `ktlint`
 * LaTeX (tex): `chktex`, `lacheck`, `proselint`
 * Lua: `luacheck`

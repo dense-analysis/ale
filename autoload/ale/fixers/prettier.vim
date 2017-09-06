@@ -46,6 +46,8 @@ function! ale#fixers#prettier#Fix(buffer) abort
             let l:parser = 'typescript'
         elseif &filetype =~# 'css\|scss'
             let l:parser = 'postcss'
+        elseif &filetype is# 'json'
+            let l:parser = 'json'
         else
             let l:parser = 'babylon'
         endif
