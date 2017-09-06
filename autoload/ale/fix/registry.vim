@@ -34,7 +34,7 @@ let s:default_registry = {
 \   },
 \   'prettier': {
 \       'function': 'ale#fixers#prettier#Fix',
-\       'suggested_filetypes': ['javascript'],
+\       'suggested_filetypes': ['javascript', 'typescript', 'json', 'css', 'scss'],
 \       'description': 'Apply prettier to a file.',
 \   },
 \   'prettier_eslint': {

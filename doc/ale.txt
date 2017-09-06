@@ -33,6 +33,7 @@ CONTENTS                                                         *ale-contents*
       gcc.................................|ale-cpp-gcc|
       clang-format........................|ale-cpp-clangformat|
     css...................................|ale-css-options|
+      prettier............................|ale-css-prettier|
       stylelint...........................|ale-css-stylelint|
     cmake.................................|ale-cmake-options|
       cmakelint...........................|ale-cmake-cmakelint|
@@ -71,6 +72,9 @@ CONTENTS                                                         *ale-contents*
       prettier-standard...................|ale-javascript-prettier-standard|
       standard............................|ale-javascript-standard|
       xo..................................|ale-javascript-xo|
+    json..................................|ale-json-options|
+      jsonlint............................|ale-json-jsonlint|
+      prettier............................|ale-json-prettier|
     kotlin................................|ale-kotlin-options|
       kotlinc.............................|ale-kotlin-kotlinc|
     lua...................................|ale-lua-options|
@@ -117,6 +121,7 @@ CONTENTS                                                         *ale-contents*
     scala.................................|ale-scala-options|
       scalastyle..........................|ale-scala-scalastyle|
     scss..................................|ale-scss-options|
+      prettier............................|ale-scss-prettier|
       stylelint...........................|ale-scss-stylelint|
     sh....................................|ale-sh-options|
       shell...............................|ale-sh-shell|
@@ -136,6 +141,7 @@ CONTENTS                                                         *ale-contents*
       thrift..............................|ale-thrift-thrift|
     typescript............................|ale-typescript-options|
       eslint..............................|ale-typescript-eslint|
+      prettier............................|ale-typescript-prettier|
       tslint..............................|ale-typescript-tslint|
       tsserver............................|ale-typescript-tsserver|
     verilog/systemverilog.................|ale-verilog-options|
@@ -200,7 +206,7 @@ Notes:
 * CMake: `cmakelint`
 * CoffeeScript: `coffee`, `coffeelint`
 * Crystal: `crystal`!!
-* CSS: `csslint`, `stylelint`
+* CSS: `csslint`, `stylelint`, `prettier`
 * Cython (pyrex filetype): `cython`
 * D: `dmd`
 * Dart: `dartanalyzer`
@@ -220,7 +226,7 @@ Notes:
 * Idris: `idris`
 * Java: `checkstyle`, `javac`
 * JavaScript: `eslint`, `jscs`, `jshint`, `flow`, `prettier`, `prettier-eslint` >= 4.2.0, `prettier-standard`, `standard`, `xo`
-* JSON: `jsonlint`
+* JSON: `jsonlint`, `prettier`
 * Kotlin: `kotlinc`, `ktlint`
 * LaTeX (tex): `chktex`, `lacheck`, `proselint`
 * Lua: `luacheck`
@@ -245,7 +251,7 @@ Notes:
 * Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`
 * Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|)
 * SASS: `sass-lint`, `stylelint`
-* SCSS: `sass-lint`, `scss-lint`, `stylelint`
+* SCSS: `sass-lint`, `scss-lint`, `stylelint`, `prettier`
 * Scala: `scalac`, `scalastyle`
 * Slim: `slim-lint`
 * SML: `smlnj`
@@ -256,7 +262,7 @@ Notes:
 * Texinfo: `proselint`
 * Text^: `proselint`, `vale`
 * Thrift: `thrift`
-* TypeScript: `eslint`, `tslint`, `tsserver`, `typecheck`
+* TypeScript: `eslint`, `tslint`, `tsserver`, `typecheck`, `prettier`
 * Verilog: `iverilog`, `verilator`
 * Vim: `vint`
 * Vim help^: `proselint`

@@ -80,7 +80,7 @@ formatting.
 | CMake | [cmakelint](https://github.com/richq/cmake-lint) |
 | CoffeeScript | [coffee](http://coffeescript.org/), [coffeelint](https://www.npmjs.com/package/coffeelint) |
 | Crystal | [crystal](https://crystal-lang.org/) !! |
-| CSS | [csslint](http://csslint.net/), [stylelint](https://github.com/stylelint/stylelint) |
+| CSS | [csslint](http://csslint.net/), [stylelint](https://github.com/stylelint/stylelint), [prettier](https://github.com/prettier/prettier) |
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
 | D | [dmd](https://dlang.org/dmd-linux.html) |
 | Dart | [dartanalyzer](https://github.com/dart-lang/sdk/tree/master/pkg/analyzer_cli) |
@@ -100,7 +100,7 @@ formatting.
 | Idris | [idris](http://www.idris-lang.org/) |
 | Java | [checkstyle](http://checkstyle.sourceforge.net), [javac](http://www.oracle.com/technetwork/java/javase/downloads/index.html) |
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/), [flow](https://flowtype.org/), [prettier](https://github.com/prettier/prettier), prettier-eslint >= 4.2.0, prettier-standard, [standard](http://standardjs.com/), [xo](https://github.com/sindresorhus/xo)
-| JSON | [jsonlint](http://zaa.ch/jsonlint/) |
+| JSON | [jsonlint](http://zaa.ch/jsonlint/), [prettier](https://github.com/prettier/prettier) |
 | Kotlin | [kotlinc](https://kotlinlang.org) !!, [ktlint](https://ktlint.github.io) !! see `:help ale-integration-kotlin` for configuration instructions
 | LaTeX | [chktex](http://www.nongnu.org/chktex/), [lacheck](https://www.ctan.org/pkg/lacheck), [proselint](http://proselint.com/) |
 | Lua | [luacheck](https://github.com/mpeterv/luacheck) |
@@ -125,7 +125,7 @@ formatting.
 | Ruby | [brakeman](http://brakemanscanner.org/) !!, [rails_best_practices](https://github.com/flyerhzm/rails_best_practices) !!, [reek](https://github.com/troessner/reek), [rubocop](https://github.com/bbatsov/rubocop), [ruby](https://www.ruby-lang.org) |
 | Rust |  cargo !! (see `:help ale-integration-rust` for configuration instructions), [rls](https://github.com/rust-lang-nursery/rls), [rustc](https://www.rust-lang.org/) |
 | SASS | [sass-lint](https://www.npmjs.com/package/sass-lint), [stylelint](https://github.com/stylelint/stylelint) |
-| SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint), [stylelint](https://github.com/stylelint/stylelint) |
+| SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint), [stylelint](https://github.com/stylelint/stylelint), [prettier](https://github.com/prettier/prettier) |
 | Scala | [scalac](http://scala-lang.org), [scalastyle](http://www.scalastyle.org) |
 | Slim | [slim-lint](https://github.com/sds/slim-lint)
 | SML | [smlnj](http://www.smlnj.org/) |
@@ -136,7 +136,7 @@ formatting.
 | Texinfo | [proselint](http://proselint.com/)|
 | Text^ | [proselint](http://proselint.com/), [vale](https://github.com/ValeLint/vale) |
 | Thrift | [thrift](http://thrift.apache.org/) |
-| TypeScript | [eslint](http://eslint.org/), [tslint](https://github.com/palantir/tslint), tsserver, typecheck |
+| TypeScript | [eslint](http://eslint.org/), [tslint](https://github.com/palantir/tslint), tsserver, typecheck, [prettier](https://github.com/prettier/prettier) |
 | Verilog | [iverilog](https://github.com/steveicarus/iverilog), [verilator](http://www.veripool.org/projects/verilator/wiki/Intro) |
 | Vim | [vint](https://github.com/Kuniwak/vint) |
 | Vim help^ | [proselint](http://proselint.com/)|
