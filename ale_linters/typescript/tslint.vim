@@ -5,6 +5,7 @@ call ale#Set('typescript_tslint_executable', 'tslint')
 call ale#Set('typescript_tslint_config_path', '')
 call ale#Set('typescript_tslint_rules_dir', '')
 call ale#Set('typescript_tslint_use_global', 0)
+call ale#Set('typescript_tslint_ignore_empty_files', 0)
 
 function! ale_linters#typescript#tslint#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'typescript_tslint', [
@@ -13,6 +14,12 @@ function! ale_linters#typescript#tslint#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#typescript#tslint#Handle(buffer, lines) abort
+    " Do not output any errors for empty files if the option is on.
+    if ale#Var(a:buffer, 'typescript_tslint_ignore_empty_files')
+    \&& getbufline(a:buffer, 1, '$') == ['']
+        return []
+    endif
+
     let l:dir = expand('#' . a:buffer . ':p:h')
     let l:output = []
 
