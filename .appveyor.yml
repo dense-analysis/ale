@@ -3,6 +3,11 @@
 build: false
 clone_depth: 10
 
+# Cache the vim and vader directories between builds.
+cache:
+  - C:\vim -> .appveyor.yml
+  - C:\vader -> .appveyor.yml
+
 init:
   # Stop git from changing newlines
   - git config --global core.autocrlf input
