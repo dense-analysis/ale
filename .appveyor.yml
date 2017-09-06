@@ -22,9 +22,9 @@ install:
   # Clone Vader and check out the commit we want
   - ps: >-
       if (!(Test-Path -Path C:\vader)){
-        git clone https://github.com/junegunn/vader.vim C:\vader
+        git clone https://github.com/junegunn/vader.vim C:\vader 2> $null
         cd C:\vader
-        git checkout -qf c6243dd81c98350df4dec608fa972df98fa2a3af
+        git checkout -qf c6243dd81c98350df4dec608fa972df98fa2a3af 2> $null
       }
 
 test_script:
