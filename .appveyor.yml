@@ -9,17 +9,16 @@ init:
 
 install:
   # Download and unpack Vim
-  - cd C:\
-  - ps: 'Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586w32.zip
-    -OutFile C:\vim.zip'
-  - ps: Add-Type -A System.IO.Compression.FileSystem
-  - ps: "[IO.Compression.ZipFile]::ExtractToDirectory('C:\\vim.zip', 'C:\\vim')"
-  # Download and unpack Vim runtime files
-  - cd C:\
-  - ps: 'Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586rt.zip
-    -OutFile C:\rt.zip'
-  - ps: "[IO.Compression.ZipFile]::ExtractToDirectory('C:\\rt.zip', 'C:\\vim')"
-  # Set up Vader for tests
+  - ps: >-
+      if (!Test-Path -Path C:\vim)) {
+        Add-Type -A System.IO.Compression.FileSystem
+        Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586w32.zip `
+          -OutFile C:\vim.zip
+        [IO.Compression.ZipFile]::ExtractToDirectory('C:\vim.zip', 'C:\vim')
+        Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586rt.zip `
+          -OutFile C:\rt.zip
+        [IO.Compression.ZipFile]::ExtractToDirectory('C:\rt.zip', 'C:\vim')
+      }
   - git clone https://github.com/junegunn/vader.vim C:\vader
   - cd C:\vader
   - git checkout -qf c6243dd81c98350df4dec608fa972df98fa2a3af
