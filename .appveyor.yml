@@ -11,7 +11,7 @@ install:
   - ps: 'Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586w32.zip
     -OutFile C:\vim.zip'
   - ps: Add-Type -A System.IO.Compression.FileSystem
-  - ps: "[IO.Compression.ZipFile]::ExtractToDirectory('vim.zip', 'vim')"
+  - ps: "[IO.Compression.ZipFile]::ExtractToDirectory('C:\\vim.zip', 'C:\\vim')"
 
 test_script:
   - C:\vim\vim80\vim.exe --version
