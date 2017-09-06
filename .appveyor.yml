@@ -19,10 +19,13 @@ install:
           -OutFile C:\rt.zip
         [IO.Compression.ZipFile]::ExtractToDirectory('C:\rt.zip', 'C:\vim')
       }
-  - git clone https://github.com/junegunn/vader.vim C:\vader
-  - cd C:\vader
-  - git checkout -qf c6243dd81c98350df4dec608fa972df98fa2a3af
-  - cd C:\
+  # Clone Vader and check out the commit we want
+  - ps: >-
+      if (!(Test-Path -Path C:\vader)){
+        git clone https://github.com/junegunn/vader.vim C:\vader
+        cd C:\vader
+        git checkout -qf c6243dd81c98350df4dec608fa972df98fa2a3af
+      }
 
 test_script:
   - cd C:\projects\ale
