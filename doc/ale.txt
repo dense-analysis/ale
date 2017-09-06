@@ -33,6 +33,7 @@ CONTENTS                                                         *ale-contents*
       gcc.................................|ale-cpp-gcc|
       clang-format........................|ale-cpp-clangformat|
     css...................................|ale-css-options|
+      prettier............................|ale-css-prettier|
       stylelint...........................|ale-css-stylelint|
     cmake.................................|ale-cmake-options|
       cmakelint...........................|ale-cmake-cmakelint|
@@ -117,6 +118,7 @@ CONTENTS                                                         *ale-contents*
     scala.................................|ale-scala-options|
       scalastyle..........................|ale-scala-scalastyle|
     scss..................................|ale-scss-options|
+      prettier............................|ale-scss-prettier|
       stylelint...........................|ale-scss-stylelint|
     sh....................................|ale-sh-options|
       shell...............................|ale-sh-shell|
@@ -201,7 +203,7 @@ Notes:
 * CMake: `cmakelint`
 * CoffeeScript: `coffee`, `coffeelint`
 * Crystal: `crystal`!!
-* CSS: `csslint`, `stylelint`
+* CSS: `csslint`, `stylelint`, `prettier`
 * Cython (pyrex filetype): `cython`
 * D: `dmd`
 * Dart: `dartanalyzer`
@@ -246,7 +248,7 @@ Notes:
 * Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`
 * Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|)
 * SASS: `sass-lint`, `stylelint`
-* SCSS: `sass-lint`, `scss-lint`, `stylelint`
+* SCSS: `sass-lint`, `scss-lint`, `stylelint`, `prettier`
 * Scala: `scalac`, `scalastyle`
 * Slim: `slim-lint`
 * SML: `smlnj`

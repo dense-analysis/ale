@@ -72,3 +72,31 @@ Execute(Append '--parser typescript' for filetype=typescript):
   \     . ' --write',
   \ },
   \ ale#fixers#prettier#Fix(bufnr(''))
+
+Execute(Append '--parser postcss' for filetype=scss):
+  set filetype=scss
+  call ale#test#SetFilename('../prettier-test-files/testfile.scss')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape(g:ale_javascript_prettier_executable)
+  \     . ' %t'
+  \     . ' --parser postcss'
+  \     . ' --write',
+  \ },
+  \ ale#fixers#prettier#Fix(bufnr(''))
+
+Execute(Append '--parser postcss' for filetype=css):
+  set filetype=css
+  call ale#test#SetFilename('../prettier-test-files/testfile.css')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape(g:ale_javascript_prettier_executable)
+  \     . ' %t'
+  \     . ' --parser postcss'
+  \     . ' --write',
+  \ },
+  \ ale#fixers#prettier#Fix(bufnr(''))
