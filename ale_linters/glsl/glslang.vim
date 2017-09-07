@@ -1,5 +1,5 @@
 " Author: Sven-Hendrik Haase <svenstaro@gmail.com>
-" Description: glslang for glsl files
+" Description: glslang-based linter for glsl files
 "
 " TODO: Once https://github.com/KhronosGroup/glslang/pull/1047 is accepted,
 " we can use stdin.

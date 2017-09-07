@@ -46,8 +46,8 @@ CONTENTS                                                         *ale-contents*
       gcc.................................|ale-fortran-gcc|
     fusionscript..........................|ale-fuse-options|
       fusion-lint.........................|ale-fuse-fusionlint|
-    glsl..................................ale-glsl-options
-      glslang.............................ale-glsl-glslang
+    glsl..................................|ale-glsl-options|
+      glslang.............................|ale-glsl-glslang|
     go....................................|ale-go-options|
       gometalinter........................|ale-go-gometalinter|
     graphql...............................|ale-graphql-options|
