@@ -1,5 +1,10 @@
 Before:
   Save g:ale_buffer_info
+  Save g:ale_set_signs
+  Save g:ale_set_lists_synchronously
+
+  let g:ale_set_signs = 1
+  let g:ale_set_lists_synchronously = 1
 
   let g:ale_buffer_info = {}
   let g:expected_loclist = [{
@@ -67,6 +72,8 @@ Before:
   \ 'read_buffer': 0,
   \})
 
+  sign unplace *
+
 After:
   Restore
 
@@ -96,7 +103,7 @@ Execute(ALEToggle should reset everything and then run again):
 
   " First check that everything is there...
   AssertEqual g:expected_loclist, getloclist(0)
-  AssertEqual [[2, 1000001, 'ALEErrorSign']], ale#sign#FindCurrentSigns(bufnr('%'))
+  AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
   AssertEqual
   \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
   \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
@@ -109,7 +116,7 @@ Execute(ALEToggle should reset everything and then run again):
   " Everything should be cleared.
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
   AssertEqual [], getloclist(0), 'The loclist was not cleared'
-  AssertEqual [], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
+  AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
   AssertEqual [], getmatches(), 'The highlights were not cleared'
   AssertEqual ['ALECleanupGroup', 'ALEHighlightBufferGroup'], ParseAuGroups()
 
@@ -118,7 +125,7 @@ Execute(ALEToggle should reset everything and then run again):
   call ale#engine#WaitForJobs(2000)
 
   AssertEqual g:expected_loclist, getloclist(0)
-  AssertEqual [[2, 1000001, 'ALEErrorSign']], ale#sign#FindCurrentSigns(bufnr('%'))
+  AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
   AssertEqual
   \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
   \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')

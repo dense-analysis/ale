@@ -82,6 +82,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['php'],
 \       'description': 'Fix PHP files with phpcbf.',
 \   },
+\   'clang-format': {
+\       'function': 'ale#fixers#clangformat#Fix',
+\       'suggested_filetypes': ['c', 'cpp'],
+\       'description': 'Fix C/C++ files with clang-format.',
+\   },
 \}
 
 " Reset the function registry to the default entries.

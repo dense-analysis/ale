@@ -13,8 +13,8 @@ g:ale_css_stylelint_executable                 *g:ale_css_stylelint_executable*
   See |ale-integrations-local-executables|
 
 
-g:ale_css_stylelint_options                    *g:ale_css_stylelint_options*
-                                               *b:ale_css_stylelint_options*
+g:ale_css_stylelint_options                       *g:ale_css_stylelint_options*
+                                                  *b:ale_css_stylelint_options*
   Type: |String|
   Default: `''`
 

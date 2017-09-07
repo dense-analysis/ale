@@ -1,4 +1,8 @@
 Before:
+  Save g:ale_set_signs
+
+  let g:ale_set_signs = 1
+
   function! GenerateResults(buffer, output)
     return [
     \ {
@@ -65,41 +69,43 @@ Before:
   \})
 
 After:
+  Restore
+
   unlet! g:loclist
   delfunction GenerateResults
   delfunction ParseSigns
   call ale#linter#Reset()
   sign unplace *
 
-Execute(ale#sign#GetSignType should return the right sign types):
-  AssertEqual 'ALEErrorSign', ale#sign#GetSignType([{'type': 'E'}])
-  AssertEqual 'ALEStyleErrorSign', ale#sign#GetSignType([{'type': 'E', 'sub_type': 'style'}])
-  AssertEqual 'ALEWarningSign', ale#sign#GetSignType([{'type': 'W'}])
-  AssertEqual 'ALEStyleWarningSign', ale#sign#GetSignType([{'type': 'W', 'sub_type': 'style'}])
-  AssertEqual 'ALEInfoSign', ale#sign#GetSignType([{'type': 'I'}])
-  AssertEqual 'ALEErrorSign', ale#sign#GetSignType([
+Execute(ale#sign#GetSignName should return the right sign names):
+  AssertEqual 'ALEErrorSign', ale#sign#GetSignName([{'type': 'E'}])
+  AssertEqual 'ALEStyleErrorSign', ale#sign#GetSignName([{'type': 'E', 'sub_type': 'style'}])
+  AssertEqual 'ALEWarningSign', ale#sign#GetSignName([{'type': 'W'}])
+  AssertEqual 'ALEStyleWarningSign', ale#sign#GetSignName([{'type': 'W', 'sub_type': 'style'}])
+  AssertEqual 'ALEInfoSign', ale#sign#GetSignName([{'type': 'I'}])
+  AssertEqual 'ALEErrorSign', ale#sign#GetSignName([
   \ {'type': 'E'},
   \ {'type': 'W'},
   \ {'type': 'I'},
   \ {'type': 'E', 'sub_type': 'style'},
   \ {'type': 'W', 'sub_type': 'style'},
   \])
-  AssertEqual 'ALEWarningSign', ale#sign#GetSignType([
+  AssertEqual 'ALEWarningSign', ale#sign#GetSignName([
   \ {'type': 'W'},
   \ {'type': 'I'},
   \ {'type': 'E', 'sub_type': 'style'},
   \ {'type': 'W', 'sub_type': 'style'},
   \])
-  AssertEqual 'ALEInfoSign', ale#sign#GetSignType([
+  AssertEqual 'ALEInfoSign', ale#sign#GetSignName([
   \ {'type': 'I'},
   \ {'type': 'E', 'sub_type': 'style'},
   \ {'type': 'W', 'sub_type': 'style'},
   \])
-  AssertEqual 'ALEStyleErrorSign', ale#sign#GetSignType([
+  AssertEqual 'ALEStyleErrorSign', ale#sign#GetSignName([
   \ {'type': 'E', 'sub_type': 'style'},
   \ {'type': 'W', 'sub_type': 'style'},
   \])
-  AssertEqual 'ALEStyleWarningSign', ale#sign#GetSignType([
+  AssertEqual 'ALEStyleWarningSign', ale#sign#GetSignName([
   \ {'type': 'W', 'sub_type': 'style'},
   \])
 
@@ -125,9 +131,9 @@ Execute(The current signs should be set for running a job):
   \ ParseSigns()
 
 Execute(Loclist items with sign_id values should be kept):
-  exec 'sign place 1000347 line=3 name=ALEErrorSign buffer=' . bufnr('%')
-  exec 'sign place 1000348 line=15 name=ALEErrorSign buffer=' . bufnr('%')
-  exec 'sign place 1000349 line=16 name=ALEWarningSign buffer=' . bufnr('%')
+  exec 'sign place 1000347 line=3 name=ALEErrorSign buffer=' . bufnr('')
+  exec 'sign place 1000348 line=15 name=ALEErrorSign buffer=' . bufnr('')
+  exec 'sign place 1000349 line=16 name=ALEWarningSign buffer=' . bufnr('')
 
   let g:loclist = [
   \ {'bufnr': bufnr(''), 'lnum': 1, 'col': 1, 'type': 'E', 'text': 'a', 'sign_id': 1000348},
@@ -138,8 +144,7 @@ Execute(Loclist items with sign_id values should be kept):
   \ {'bufnr': bufnr(''), 'lnum': 16, 'col': 2, 'type': 'E', 'text': 'f'},
   \]
 
-  call ale#sign#SetSigns(bufnr('%'), g:loclist)
-  call ale#sign#RemoveDummySignIfNeeded(bufnr('%'))
+  call ale#sign#SetSigns(bufnr(''), g:loclist)
 
   " Sign IDs from before should be kept, and new signs should use
   " IDs that haven't been used yet.
@@ -147,10 +152,10 @@ Execute(Loclist items with sign_id values should be kept):
   \ [
   \   {'bufnr': bufnr(''), 'lnum': 3, 'col': 1, 'type': 'E', 'text': 'c', 'sign_id': 1000347},
   \   {'bufnr': bufnr(''), 'lnum': 4, 'col': 1, 'type': 'W', 'text': 'd', 'sign_id': 1000350},
-  \   {'bufnr': bufnr(''), 'lnum': 15, 'col': 1, 'type': 'E', 'text': 'a', 'sign_id': 1000351},
-  \   {'bufnr': bufnr(''), 'lnum': 15, 'col': 2, 'type': 'W', 'text': 'e', 'sign_id': 1000351},
-  \   {'bufnr': bufnr(''), 'lnum': 16, 'col': 1, 'type': 'W', 'text': 'b', 'sign_id': 1000352},
-  \   {'bufnr': bufnr(''), 'lnum': 16, 'col': 2, 'type': 'E', 'text': 'f', 'sign_id': 1000352},
+  \   {'bufnr': bufnr(''), 'lnum': 15, 'col': 1, 'type': 'E', 'text': 'a', 'sign_id': 1000348},
+  \   {'bufnr': bufnr(''), 'lnum': 15, 'col': 2, 'type': 'W', 'text': 'e', 'sign_id': 1000348},
+  \   {'bufnr': bufnr(''), 'lnum': 16, 'col': 1, 'type': 'W', 'text': 'b', 'sign_id': 1000351},
+  \   {'bufnr': bufnr(''), 'lnum': 16, 'col': 2, 'type': 'E', 'text': 'f', 'sign_id': 1000351},
   \ ],
   \ g:loclist
 
@@ -160,9 +165,7 @@ Execute(Loclist items with sign_id values should be kept):
   AssertEqual
   \ [
   \   ['15', '1000348', 'ALEErrorSign'],
-  \   ['15', '1000351', 'ALEErrorSign'],
-  \   ['16', '1000349', 'ALEWarningSign'],
-  \   ['16', '1000352', 'ALEErrorSign'],
+  \   ['16', '1000351', 'ALEErrorSign'],
   \   ['3', '1000347', 'ALEErrorSign'],
   \   ['4', '1000350', 'ALEWarningSign'],
   \ ],
@@ -182,7 +185,6 @@ Execute(Items for other buffers should be ignored):
   \]
 
   call ale#sign#SetSigns(bufnr(''), g:loclist)
-  call ale#sign#RemoveDummySignIfNeeded(bufnr(''))
 
   AssertEqual
   \ [
@@ -195,5 +197,72 @@ Execute(Items for other buffers should be ignored):
   \ ],
   \ sort(ParseSigns())
 
-Execute(No excpetions should be thrown when setting signs for invalid buffers):
+Execute(Signs should be downgraded correctly):
+  call ale#sign#SetSigns(bufnr(''), [
+  \ {'bufnr': bufnr(''), 'lnum': 1, 'col': 1, 'type': 'E', 'text': 'x'},
+  \ {'bufnr': bufnr(''), 'lnum': 2, 'col': 1, 'type': 'W', 'text': 'x'},
+  \])
+
+  AssertEqual
+  \ [
+  \   ['1', '1000001', 'ALEErrorSign'],
+  \   ['2', '1000002', 'ALEWarningSign'],
+  \ ],
+  \ sort(ParseSigns())
+
+  call ale#sign#SetSigns(bufnr(''), [
+  \ {'bufnr': bufnr(''), 'lnum': 1, 'col': 1, 'type': 'W', 'text': 'x'},
+  \ {'bufnr': bufnr(''), 'lnum': 2, 'col': 1, 'type': 'I', 'text': 'x'},
+  \])
+
+  AssertEqual
+  \ [
+  \   ['1', '1000003', 'ALEWarningSign'],
+  \   ['2', '1000004', 'ALEInfoSign'],
+  \ ],
+  \ sort(ParseSigns())
+
+Execute(Signs should be upgraded correctly):
+  call ale#sign#SetSigns(bufnr(''), [
+  \ {'bufnr': bufnr(''), 'lnum': 1, 'col': 1, 'type': 'W', 'text': 'x'},
+  \ {'bufnr': bufnr(''), 'lnum': 2, 'col': 1, 'type': 'I', 'text': 'x'},
+  \])
+
+  AssertEqual
+  \ [
+  \   ['1', '1000001', 'ALEWarningSign'],
+  \   ['2', '1000002', 'ALEInfoSign'],
+  \ ],
+  \ sort(ParseSigns())
+
+  call ale#sign#SetSigns(bufnr(''), [
+  \ {'bufnr': bufnr(''), 'lnum': 1, 'col': 1, 'type': 'E', 'text': 'x'},
+  \ {'bufnr': bufnr(''), 'lnum': 2, 'col': 1, 'type': 'W', 'text': 'x'},
+  \])
+
+  AssertEqual
+  \ [
+  \   ['1', '1000003', 'ALEErrorSign'],
+  \   ['2', '1000004', 'ALEWarningSign'],
+  \ ],
+  \ sort(ParseSigns())
+
+Execute(It should be possible to clear signs with empty lists):
+  let g:loclist = [
+  \ {'bufnr': bufnr(''), 'lnum': 16, 'col': 2, 'type': 'E', 'text': 'f'},
+  \]
+
+  call ale#sign#SetSigns(bufnr(''), g:loclist)
+
+  AssertEqual
+  \ [
+  \   ['16', '1000001', 'ALEErrorSign'],
+  \ ],
+  \ sort(ParseSigns())
+
+  call ale#sign#SetSigns(bufnr(''), [])
+
+  AssertEqual [], ParseSigns()
+
+Execute(No exceptions should be thrown when setting signs for invalid buffers):
   call ale#sign#SetSigns(123456789, [{'lnum': 15, 'col': 2, 'type': 'W', 'text': 'e'}])

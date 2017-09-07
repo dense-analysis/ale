@@ -1,0 +1,48 @@
+Before:
+  runtime ale_linters/python/pycodestyle.vim
+
+After:
+  call ale#linter#Reset()
+  silent file something_else.py
+
+Execute(The pycodestyle handler should parse output):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 69,
+  \     'col': 11,
+  \     'text': 'E401 multiple imports on one line',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 77,
+  \     'col': 1,
+  \     'text': 'E302 expected 2 blank lines, found 1',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 88,
+  \     'col': 5,
+  \     'text': 'E301 expected 1 blank line, found 0',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 222,
+  \     'col': 34,
+  \     'text': 'W602 deprecated form of raising exception',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 544,
+  \     'col': 21,
+  \     'text': 'W601 .has_key() is deprecated, use ''in''',
+  \     'type': 'W',
+  \   },
+  \ ],
+  \ ale_linters#python#pycodestyle#Handle(bufnr(''), [
+  \   'stdin:69:11: E401 multiple imports on one line',
+  \   'stdin:77:1: E302 expected 2 blank lines, found 1',
+  \   'stdin:88:5: E301 expected 1 blank line, found 0',
+  \   'stdin:222:34: W602 deprecated form of raising exception',
+  \   'example.py:544:21: W601 .has_key() is deprecated, use ''in''',
+  \ ])

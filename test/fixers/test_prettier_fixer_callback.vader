@@ -1,0 +1,58 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+  Save g:ale_javascript_prettier_executable
+  Save g:ale_javascript_prettier_options
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_javascript_prettier_executable = 'xxxinvalid'
+  let g:ale_javascript_prettier_options = ''
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+  silent cd ..
+  silent cd command_callback
+  let g:dir = getcwd()
+
+After:
+  let g:ale_has_override = {}
+  call ale#test#RestoreDirectory()
+
+Execute(The prettier callback should return the correct default values):
+  call ale#test#SetFilename('../prettier-test-files/testfile.js')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape(g:ale_javascript_prettier_executable)
+  \     . ' %t'
+  \     . ' --write',
+  \ },
+  \ ale#fixers#prettier#Fix(bufnr(''))
+
+Execute(The prettier callback should include configuration files when the option is set):
+  let g:ale_javascript_prettier_use_local_config = 1
+  call ale#test#SetFilename('../prettier-test-files/with_config/testfile.js')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape(g:ale_javascript_prettier_executable)
+  \     . ' %t'
+  \     . ' --config ' . ale#Escape(simplify(g:dir .  '/../prettier-test-files/with_config/.prettierrc'))
+  \     . ' --write',
+  \ },
+  \ ale#fixers#prettier#Fix(bufnr(''))
+
+Execute(The prettier callback should include custom prettier options):
+  let g:ale_javascript_prettier_options = '--no-semi'
+  call ale#test#SetFilename('../prettier-test-files/with_config/testfile.js')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape(g:ale_javascript_prettier_executable)
+  \     . ' %t'
+  \     . ' --no-semi'
+  \     . ' --config ' . ale#Escape(simplify(g:dir .  '/../prettier-test-files/with_config/.prettierrc'))
+  \     . ' --write',
+  \ },
+  \ ale#fixers#prettier#Fix(bufnr(''))

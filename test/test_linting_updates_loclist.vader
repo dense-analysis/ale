@@ -1,4 +1,7 @@
 Before:
+  Save g:ale_set_signs
+  let g:ale_set_signs = 1
+
   let g:expected_data = [
   \ {
   \   'lnum': 1,
@@ -49,7 +52,11 @@ Before:
   \ 'read_buffer': 0,
   \})
 
+  sign unplace *
+
 After:
+  Restore
+
   delfunction TestCallback
 
   unlet! g:expected_data
