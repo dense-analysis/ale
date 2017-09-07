@@ -193,6 +193,7 @@ Notes:
 * Bourne Shell: `shell` (-n flag), `shellcheck`
 * C: `cppcheck`, `cpplint`!!, `gcc`, `clang`, `clangtidy`!!, `clang-format`
 * C++ (filetype cpp): `clang`, `clangcheck`!!, `clangtidy`!!, `cppcheck`, `cpplint`!!, `gcc`, `clang-format`
+* CUDA: `nvcc`!!
 * C#: `mcs`
 * Chef: `foodcritic`
 * CMake: `cmakelint`
