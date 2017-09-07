@@ -28,15 +28,12 @@ function! ale_linters#cuda#nvcc#HandleNVCCFormat(buffer, lines) abort
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        " Ignore errors that is not for this file
-        if !(fnamemodify(l:match[1], ':p:.') is# bufname(bufnr('')))
-            continue
-        endif
 
         let l:item = {
         \   'lnum': str2nr(l:match[2]),
         \   'type': l:match[4] =~# 'error' ? 'E' : 'W',
         \   'text': l:match[5],
+        \   'filename': fnamemodify(l:match[1], ':p'),
         \}
 
         if !empty(l:match[3])
