@@ -28,10 +28,10 @@ function! ale_linters#glsl#glslang#Handle(buffer, lines) abort
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
-        \   'lnum': l:match[3],
-        \   'col': l:match[2],
+        \   'lnum': str2nr(l:match[3]),
+        \   'col': str2nr(l:match[2]),
         \   'text': l:match[4],
-        \   'type': l:match[1] is# 'W' ? 'ERROR' : 'E',
+        \   'type': l:match[1] is# 'ERROR' ? 'E' : 'W',
         \})
     endfor
 
