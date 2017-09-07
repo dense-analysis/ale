@@ -32,6 +32,8 @@ CONTENTS                                                         *ale-contents*
       cpplint.............................|ale-cpp-cpplint|
       gcc.................................|ale-cpp-gcc|
       clang-format........................|ale-cpp-clangformat|
+    cuda..................................|ale-cuda-options|
+      nvcc................................|ale-cuda-nvcc|
     css...................................|ale-css-options|
       prettier............................|ale-css-prettier|
       stylelint...........................|ale-css-stylelint|
@@ -201,6 +203,7 @@ Notes:
 * Bourne Shell: `shell` (-n flag), `shellcheck`
 * C: `cppcheck`, `cpplint`!!, `gcc`, `clang`, `clangtidy`!!, `clang-format`
 * C++ (filetype cpp): `clang`, `clangcheck`!!, `clangtidy`!!, `cppcheck`, `cpplint`!!, `gcc`, `clang-format`
+* CUDA: `nvcc`!!
 * C#: `mcs`
 * Chef: `foodcritic`
 * CMake: `cmakelint`
