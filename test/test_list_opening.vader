@@ -189,11 +189,18 @@ Execute(The ale_open_list='on_save' option should work):
   " The list shouldn't open yet, the event wasn't fired.
   Assert !ale#list#IsQuickfixOpen()
 
+  " Turn this option off, to ensure that we update lists immediately when we
+  " save buffers.
+  let g:ale_set_lists_synchronously = 0
   let b:ale_save_event_fired = 1
 
   call ale#list#SetLists(bufnr('%'), g:loclist)
   " Now the list should have opened.
   Assert ale#list#IsQuickfixOpen()
+
+  call ale#list#SetLists(bufnr('%'), [])
+  " The window should close again when the loclist is empty.
+  Assert !ale#list#IsQuickfixOpen()
 
 Execute(The window shouldn't open on save when ale_open_list=0):
   let b:ale_open_list = 0
