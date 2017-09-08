@@ -1,16 +1,23 @@
 Before:
+  Save g:ale_set_lists_synchronously
+  Save g:ale_buffer_info
+
+  let g:ale_buffer_info = {}
+  let g:ale_set_lists_synchronously = 1
+
   function! TestCallback(buffer, output)
+    " Windows adds extra spaces to the text from echo.
     return [{
     \ 'lnum': 2,
     \ 'col': 3,
-    \ 'text': a:output[0],
+    \ 'text': substitute(a:output[0], ' *$', '', ''),
     \}]
   endfunction
   function! TestCallback2(buffer, output)
     return [{
     \ 'lnum': 3,
     \ 'col': 4,
-    \ 'text': a:output[0],
+    \ 'text': substitute(a:output[0],  ' *$', '', ''),
     \}]
   endfunction
 
@@ -18,12 +25,13 @@ Before:
   call ale#linter#Define('foobar', {
   \ 'name': 'testlinter',
   \ 'callback': 'TestCallback',
-  \ 'executable': 'echo',
-  \ 'command': '/bin/sh -c ''echo foo bar''',
+  \ 'executable': has('win32') ? 'cmd' : 'echo',
+  \ 'command': has('win32') ? 'echo foo bar' : '/bin/sh -c ''echo foo bar''',
   \})
 
 After:
-  let g:ale_buffer_info = {}
+  Restore
+
   delfunction TestCallback
   delfunction TestCallback2
   call ale#linter#Reset()
@@ -60,8 +68,8 @@ Execute(Previous errors should be removed when linters change):
   call ale#linter#Define('foobar', {
   \ 'name': 'testlinter2',
   \ 'callback': 'TestCallback2',
-  \ 'executable': 'echo',
-  \ 'command': '/bin/sh -c ''echo baz boz''',
+  \ 'executable': has('win32') ? 'cmd' : 'echo',
+  \ 'command': has('win32') ? 'echo baz boz' : '/bin/sh -c ''echo baz boz''',
   \})
 
   call ale#Lint()
