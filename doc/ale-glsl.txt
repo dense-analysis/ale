@@ -14,7 +14,7 @@ Integration Information
 
 
 ===============================================================================
-glslangValidator                                    *ale-glsl-glslangValidator*
+glslang                                                      *ale-glsl-glslang*
 
 g:ale_glsl_glslang_executable                   *g:ale_glsl_glslang_executable*
                                                 *b:ale_glsl_glslang_executable*
