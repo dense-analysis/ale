@@ -33,12 +33,14 @@ function! ale_linters#perl#perl#Handle(buffer, lines) abort
         let type = 'W'
     endif
 
+    let seen = {}
+
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:line = l:match[3]
         let l:text = l:match[1]
         let l:type = type
 
-        if ale#path#IsBufferPath(a:buffer, l:match[2])
+        if ( ale#path#IsBufferPath(a:buffer, l:match[2]) && !has_key(seen,l:line) )
         \ && (
         \   l:text isnot# 'BEGIN failed--compilation aborted'
         \   || empty(l:output)
@@ -49,6 +51,8 @@ function! ale_linters#perl#perl#Handle(buffer, lines) abort
             \   'text': l:text,
             \   'type': l:type,
             \})
+
+            let seen[l:line] = 1
         endif
     endfor
 
