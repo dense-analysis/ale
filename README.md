@@ -92,9 +92,10 @@ formatting.
 | Erlang | [erlc](http://erlang.org/doc/man/erlc.html), [SyntaxErl](https://github.com/ten0s/syntaxerl) |
 | Fortran | [gcc](https://gcc.gnu.org/) |
 | FusionScript | [fusion-lint](https://github.com/RyanSquared/fusionscript) |
+| GLSL | [glslang](https://github.com/KhronosGroup/glslang) |
 | Go | [gofmt](https://golang.org/cmd/gofmt/), [go vet](https://golang.org/cmd/vet/), [golint](https://godoc.org/github.com/golang/lint), [gometalinter](https://github.com/alecthomas/gometalinter) !!, [go build](https://golang.org/cmd/go/) !!, [gosimple](https://github.com/dominikh/go-tools/tree/master/cmd/gosimple), [staticcheck](https://github.com/dominikh/go-tools/tree/master/cmd/staticcheck) |
 | GraphQL | [gqlint](https://github.com/happylinks/gqlint) |
-| Haml | [haml-lint](https://github.com/brigade/haml-lint)
+| Haml | [haml-lint](https://github.com/brigade/haml-lint) |
 | Handlebars | [ember-template-lint](https://github.com/rwjblue/ember-template-lint) |
 | Haskell | [ghc](https://www.haskell.org/ghc/), [stack-ghc](https://haskellstack.org/), [stack-build](https://haskellstack.org/) !!, [ghc-mod](https://github.com/DanielG/ghc-mod), [stack-ghc-mod](https://github.com/DanielG/ghc-mod), [hlint](https://hackage.haskell.org/package/hlint), [hdevtools](https://hackage.haskell.org/package/hdevtools) |
 | HTML | [HTMLHint](http://htmlhint.com/), [proselint](http://proselint.com/), [tidy](http://www.html-tidy.org/) |

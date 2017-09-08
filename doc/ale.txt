@@ -49,6 +49,8 @@ CONTENTS                                                         *ale-contents*
       gcc.................................|ale-fortran-gcc|
     fusionscript..........................|ale-fuse-options|
       fusion-lint.........................|ale-fuse-fusionlint|
+    glsl..................................|ale-glsl-options|
+      glslang.............................|ale-glsl-glslang|
     go....................................|ale-go-options|
       gometalinter........................|ale-go-gometalinter|
     graphql...............................|ale-graphql-options|
@@ -220,6 +222,7 @@ Notes:
 * Erlang: `erlc`, `SyntaxErl`
 * Fortran: `gcc`
 * FusionScript: `fusion-lint`
+* GLSL: glslang
 * Go: `gofmt`, `go vet`, `golint`, `gometalinter`!!, `go build`!!, `gosimple`, `staticcheck`
 * GraphQL: `gqlint`
 * Haml: `haml-lint`

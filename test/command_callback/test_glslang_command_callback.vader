@@ -1,0 +1,42 @@
+Before:
+  Save g:ale_glsl_glslang_executable
+  Save g:ale_glsl_glslang_options
+
+  unlet! g:ale_glsl_glslang_executable
+  unlet! g:ale_glsl_glslang_options
+
+  runtime ale_linters/glsl/glslang.vim
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+After:
+  Restore
+  unlet! g:ale_cuda_nvcc_executable
+  unlet! g:ale_cuda_nvcc_options
+  call ale#linter#Reset()
+
+Execute(Executable should default to glslangValidator):
+  AssertEqual
+  \ 'glslangValidator',
+  \ ale_linters#glsl#glslang#GetExecutable(bufnr(''))
+
+Execute(Executable should be configurable):
+  let g:ale_glsl_glslang_executable = 'foobar'
+  AssertEqual
+  \ 'foobar',
+  \ ale_linters#glsl#glslang#GetExecutable(bufnr(''))
+
+Execute(Command should use executable):
+  AssertEqual
+  \ 'glslangValidator  -C %t',
+  \ ale_linters#glsl#glslang#GetCommand(bufnr(''))
+
+  let g:ale_glsl_glslang_executable = 'foobar'
+  AssertEqual
+  \ 'foobar  -C %t',
+  \ ale_linters#glsl#glslang#GetCommand(bufnr(''))
+
+Execute(Options should work):
+  let g:ale_glsl_glslang_options = '--test'
+  AssertEqual
+  \ 'glslangValidator --test -C %t',
+  \ ale_linters#glsl#glslang#GetCommand(bufnr(''))
