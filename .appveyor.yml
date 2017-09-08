@@ -2,6 +2,8 @@
 # Disabling building for AppVeyor. We are just testing things.
 build: false
 clone_depth: 10
+# Use the directory C:\testplugin so test directories will mostly work.
+clone_folder: C:\testplugin
 
 # Cache the vim and vader directories between builds.
 cache:
@@ -33,5 +35,5 @@ install:
       }
 
 test_script:
-  - cd C:\projects\ale
+  - cd C:\testplugin
   - 'C:\vim\vim\vim80\vim.exe -u test\vimrc "+Vader! test/test_path_uri.vader"'
