@@ -27,10 +27,16 @@ function! ale_linters#perl#perl#Handle(buffer, lines) abort
     let l:output = []
     let l:basename = expand('#' . a:buffer . ':t')
 
+    let type = 'E'
+    let syntax_ok = matchstr(a:lines[-1], 'syntax OK')
+    if syntax_ok != ''
+        let type = 'W'
+    endif
+
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:line = l:match[3]
         let l:text = l:match[1]
-        let l:type = 'E'
+        let l:type = type
 
         if ale#path#IsBufferPath(a:buffer, l:match[2])
         \ && (
