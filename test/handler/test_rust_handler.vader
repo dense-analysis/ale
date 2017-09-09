@@ -20,13 +20,58 @@ Execute(The Rust handler should handle rustc output):
   \      'text': 'no method named `wat` found for type `std::string::String` in the current scope',
   \   },
   \ ],
-  \ ale#handlers#rust#HandleRustErrorsForFile(bufnr(''), 'src/playpen.rs', [
+  \ ale#handlers#rust#HandleRustErrors(bufnr(''), [
   \   '',
   \   'ignore this',
-  \   '{"message":"expected one of `.`, `;`, `?`, `}`, or an operator, found `for`","code":null,"level":"error","spans":[{"file_name":"<anon>","byte_start":418,"byte_end":421,"line_start":15,"line_end":15,"column_start":5,"column_end":8,"is_primary":true,"text":[{"text":"    for chr in source.trim().chars() {","highlight_start":5,"highlight_end":8}],"label":null,"suggested_replacement":null,"expansion":null}],"children":[],"rendered":null}',
-  \   '{"message":"main function not found","code":null,"level":"error","spans":[],"children":[],"rendered":null}',
-  \   '{"message":"no method named `wat` found for type `std::string::String` in the current scope","code":null,"level":"error","spans":[{"file_name":"<anon>","byte_start":407,"byte_end":410,"line_start":13,"line_end":13,"column_start":7,"column_end":10,"is_primary":true,"text":[{"text":"    s.wat()","highlight_start":7,"highlight_end":10}],"label":null,"suggested_replacement":null,"expansion":null}],"children":[],"rendered":null}',
-  \   '{"message":"aborting due to previous error","code":null,"level":"error","spans":[],"children":[],"rendered":null}',
+  \   json_encode({
+  \     'message': 'expected one of `.`, `;`, `?`, `}`, or an operator, found `for`',
+  \     'code': v:null,
+  \     'level': 'error',
+  \     'spans': [
+  \       {
+  \         'file_name': '<anon>',
+  \         'byte_start': 418,
+  \         'byte_end': 421,
+  \         'line_start': 15,
+  \         'line_end': 15,
+  \         'column_start': 5,
+  \         'column_end': 8,
+  \         'is_primary': v:true,
+  \         'label': v:null,
+  \       },
+  \     ],
+  \   }),
+  \   json_encode({
+  \     'message': 'main function not found',
+  \     'code': v:null,
+  \     'level': 'error',
+  \     'spans': [],
+  \   }),
+  \   json_encode({
+  \     'code': v:null,
+  \     'level': 'error',
+  \     'message': 'no method named `wat` found for type `std::string::String` in the current scope',
+  \     'spans': [
+  \       {
+  \         'byte_end': 410,
+  \         'byte_start': 407,
+  \         'column_end': 10,
+  \         'column_start': 7,
+  \         'file_name': '<anon>',
+  \         'is_primary': v:true,
+  \         'label': v:null,
+  \         'line_end': 13,
+  \         'line_start': 13,
+  \       }
+  \     ]
+  \   }),
+  \   json_encode({
+  \     'code': v:null,
+  \     'level': 'error',
+  \     'message': 'aborting due to previous error',
+  \     'spans': [
+  \     ]
+  \   }),
   \ ])
 
 Execute(The Rust handler should handle cargo output):
@@ -51,31 +96,107 @@ Execute(The Rust handler should handle cargo output):
   \     'text': 'no method named `wat` found for type `std::string::String` in the current scope',
   \   },
   \ ],
-  \ ale#handlers#rust#HandleRustErrorsForFile(bufnr(''), 'src/playpen.rs', [
+  \ ale#handlers#rust#HandleRustErrors(bufnr(''), [
   \   '',
   \   'ignore this',
-  \   '{"message":{"children":[],"code":null,"level":"error","message":"expected one of `.`, `;`, `?`, `}`, or an operator, found `for`","rendered":null,"spans":[{"byte_end":11508,"byte_start":11505,"column_end":8,"column_start":5,"expansion":null,"file_name":"src/playpen.rs","is_primary":true,"label":null,"line_end":15,"line_start":15,"suggested_replacement":null,"text":[{"highlight_end":8,"highlight_start":5,"text":"    for chr in source.trim().chars() {"}]}]},"package_id":"update 0.0.1 (path+file:///home/w0rp/Downloads/rust-by-example)","reason":"compiler-message","target":{"kind":["bin"],"name":"update","src_path":"/home/w0rp/Downloads/rust-by-example/src/main.rs"}}',
-  \   '{"message":{"children":[],"code":null,"level":"error","message":"no method named `wat` found for type `std::string::String` in the current scope","rendered":null,"spans":[{"byte_end":11497,"byte_start":11494,"column_end":10,"column_start":7,"expansion":null,"file_name":"src/playpen.rs","is_primary":true,"label":null,"line_end":13,"line_start":13,"suggested_replacement":null,"text":[{"highlight_end":10,"highlight_start":7,"text":"    s.wat()"}]}]},"package_id":"update 0.0.1 (path+file:///home/w0rp/Downloads/rust-by-example)","reason":"compiler-message","target":{"kind":["bin"],"name":"update","src_path":"/home/w0rp/Downloads/rust-by-example/src/main.rs"}}',
-  \   '{"message":{"children":[],"code":null,"level":"error","message":"aborting due to previous error","rendered":null,"spans":[]},"package_id":"update 0.0.1 (path+file:///home/w0rp/Downloads/rust-by-example)","reason":"compiler-message","target":{"kind":["bin"],"name":"update","src_path":"/home/w0rp/Downloads/rust-by-example/src/main.rs"}}',
+  \   json_encode({
+  \     'message': {
+  \       'code': v:null,
+  \       'level': 'error',
+  \       'message': 'expected one of `.`, `;`, `?`, `}`, or an operator, found `for`',
+  \       'spans': [
+  \         {
+  \           'byte_end': 11508,
+  \           'byte_start': 11505,
+  \           'column_end': 8,
+  \           'column_start': 5,
+  \           'file_name': ale#path#Winify('src/playpen.rs'),
+  \           'is_primary': v:true,
+  \           'label': v:null,
+  \           'line_end': 15,
+  \           'line_start': 15,
+  \         }
+  \       ]
+  \     },
+  \   }),
+  \   json_encode({
+  \     'message': {
+  \       'code': v:null,
+  \       'level': 'error',
+  \       'message': 'no method named `wat` found for type `std::string::String` in the current scope',
+  \       'spans': [
+  \         {
+  \           'byte_end': 11497,
+  \           'byte_start': 11494,
+  \           'column_end': 10,
+  \           'column_start': 7,
+  \           'file_name': ale#path#Winify('src/playpen.rs'),
+  \           'is_primary': v:true,
+  \           'label': v:null,
+  \           'line_end': 13,
+  \           'line_start': 13,
+  \         }
+  \       ]
+  \     },
+  \   }),
+  \   json_encode({
+  \     'message': {
+  \       'code': v:null,
+  \       'level': 'error',
+  \       'message': 'aborting due to previous error',
+  \       'spans': [
+  \       ]
+  \     },
+  \   }),
   \ ])
 
-" Execute(The Rust handler should handle cargo output on Windows):
-"   call ale#test#SetFilename('src\nvim.rs')
-" 
-"   AssertEqual
-"   \ [
-"   \   {
-"   \     'lnum': 467,
-"   \     'end_lnum': 467,
-"   \     'type': 'E',
-"   \     'col': 43198,
-"   \     'end_col': 43199,
-"   \     'text': 'expected one of `!` or `::`, found `#`: unexpected token',
-"   \   },
-"   \ ],
-"   \ ale#handlers#rust#HandleRustErrorsForFile(bufnr(''), 'src\nvim.rs', [
-"   \   '{"message":{"children":[],"code":null,"level":"error","message":"expected one of `!` or `::`, found `#`","rendered":null,"spans":[{"byte_end":43199,"byte_start":43198,"column_end":2,"column_start":1,"expansion":null,"file_name":"src\\nvim.rs","is_primary":true,"label":"unexpected token","line_end":467,"line_start":467,"suggested_replacement":null,"text":[{"highlight_end":2,"highlight_start":1,"text":"#[cfg(test)]\r"}]}]},"package_id":"nvim-gtk 0.1.2 (path+file:///E:/daa/local/neovim-gtk)","reason":"compiler-message","target":{"crate_types":["bin"],"kind":["bin"],"name":"nvim-gtk","src_path":"E:\\daa\\local\\neovim-gtk\\src\\main.rs"}}',
-"   \ ])
+Execute(The Rust handler should should errors from expansion spans):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 4,
+  \     'end_lnum': 4,
+  \     'type': 'E',
+  \     'col': 52,
+  \     'end_col': 54,
+  \     'text': 'mismatched types: expected bool, found integral variable',
+  \   },
+  \ ],
+  \ ale#handlers#rust#HandleRustErrors(bufnr(''), [
+  \   json_encode({
+  \     'message': {
+  \       'code': v:null,
+  \       'level': 'error',
+  \       'message': 'mismatched types',
+  \       'spans': [
+  \         {
+  \           'byte_end': 1,
+  \           'byte_start': 1,
+  \           'column_end': 1,
+  \           'column_start': 1,
+  \           'file_name': ale#path#Winify('src/other.rs'),
+  \           'is_primary': v:true,
+  \           'label': 'some other error',
+  \           'line_end': 4,
+  \           'line_start': 4,
+  \           'expansion': {
+  \             'span': {
+  \               'byte_end': 54,
+  \               'byte_start': 52,
+  \               'column_end': 23,
+  \               'column_start': 21,
+  \               'file_name': ale#path#Winify('src/playpen.rs'),
+  \               'is_primary': v:true,
+  \               'label': 'expected bool, found integral variable',
+  \               'line_end': 4,
+  \               'line_start': 4,
+  \             }
+  \           }
+  \         }
+  \       ]
+  \     },
+  \   }),
+  \ ])
 
 Execute(The Rust handler should show detailed errors):
   call ale#test#SetFilename('src/playpen.rs')
@@ -91,11 +212,39 @@ Execute(The Rust handler should show detailed errors):
   \     'text': 'mismatched types: expected bool, found integral variable',
   \   },
   \ ],
-  \ ale#handlers#rust#HandleRustErrorsForFile(bufnr(''), 'src/playpen.rs', [
+  \ ale#handlers#rust#HandleRustErrors(bufnr(''), [
   \   '',
   \   'ignore this',
-  \   '{"message":{"children":[],"code":null,"level":"error","message":"mismatched types","rendered":null,"spans":[{"byte_end":54,"byte_start":52,"column_end":23,"column_start":21,"expansion":null,"file_name":"src/playpen.rs","is_primary":true,"label":"expected bool, found integral variable","line_end":4,"line_start":4,"suggested_replacement":null,"text":[{"highlight_end":23,"highlight_start":21,"text":"    let foo: bool = 42;"}]}]},"package_id":"ale-rust-details 0.1.1 (path+file:///home/jon/tmp/ale-rust-details)","reason":"compiler-message","target":{"crate_types":["bin"],"kind":["bin"],"name":"ale-rust-details","src_path":"/home/jon/tmp/ale-rust-details/src/main.rs"}}',
-  \   '{"message":{"children":[],"code":null,"level":"error","message":"aborting due to previous error(s)","rendered":null,"spans":[]},"package_id":"ale-rust-details 0.1.1 (path+file:///home/jon/tmp/ale-rust-details)","reason":"compiler-message","target":{"crate_types":["bin"],"kind":["bin"],"name":"ale-rust-details","src_path":"/home/jon/tmp/ale-rust-details/src/main.rs"}}',
+  \   json_encode({
+  \     'message': {
+  \       'code': v:null,
+  \       'level': 'error',
+  \       'message': 'mismatched types',
+  \       'spans': [
+  \         {
+  \           'byte_end': 54,
+  \           'byte_start': 52,
+  \           'column_end': 23,
+  \           'column_start': 21,
+  \           'expansion': v:null,
+  \           'file_name': ale#path#Winify('src/playpen.rs'),
+  \           'is_primary': v:true,
+  \           'label': 'expected bool, found integral variable',
+  \           'line_end': 4,
+  \           'line_start': 4,
+  \         }
+  \       ]
+  \     },
+  \   }),
+  \   json_encode({
+  \     'message': {
+  \       'code': v:null,
+  \       'level': 'error',
+  \       'message': 'aborting due to previous error(s)',
+  \       'spans': [
+  \       ]
+  \     },
+  \   }),
   \ ])
 
 Execute(The Rust handler should find correct files):
@@ -103,9 +252,36 @@ Execute(The Rust handler should find correct files):
 
   AssertEqual
   \ [],
-  \ ale#handlers#rust#HandleRustErrorsForFile(bufnr(''), 'src/noerrors/mod.rs', [
+  \ ale#handlers#rust#HandleRustErrors(bufnr(''), [
   \   '',
   \   'ignore this',
-  \   '{"message":{"children":[],"code":null,"level":"error","message":"unresolved import `Undefined`","rendered":null,"spans":[{"byte_end":103,"byte_start":94,"column_end":14,"column_start":5,"expansion":null,"file_name":"src/haserrors/mod.rs","is_primary":true,"label":"no `Undefined` in the root","line_end":1,"line_start":1,"suggested_replacement":null,"text":[{"highlight_end":14,"highlight_start":5,"text":"use Undefined;"}]}]},"package_id":"sample 0.1.0 (path+file:///private/tmp/sample)","reason":"compiler-message","target":{"crate_types":["lib"],"kind":["lib"],"name":"sample","src_path":"/private/tmp/sample/src/lib.rs"}}',
-  \   '{"message":{"children":[],"code":null,"level":"error","message":"aborting due to previous error","rendered":null,"spans":[]},"package_id":"sample 0.1.0 (path+file:///private/tmp/sample)","reason":"compiler-message","target":{"crate_types":["lib"],"kind":["lib"],"name":"sample","src_path":"/private/tmp/sample/src/lib.rs"}}',
+  \   json_encode({
+  \     'message': {
+  \       'code': v:null,
+  \       'level': 'error',
+  \       'message': 'unresolved import `Undefined`',
+  \       'spans': [
+  \         {
+  \           'byte_end': 103,
+  \           'byte_start': 94,
+  \           'column_end': 14,
+  \           'column_start': 5,
+  \           'file_name': 'src/haserrors/mod.rs',
+  \           'is_primary': v:true,
+  \           'label': 'no `Undefined` in the root',
+  \           'line_end': 1,
+  \           'line_start': 1,
+  \         }
+  \       ]
+  \     },
+  \   }),
+  \   json_encode({
+  \     'message': {
+  \       'code': v:null,
+  \       'level': 'error',
+  \       'message': 'aborting due to previous error',
+  \       'spans': [
+  \       ]
+  \     },
+  \   }),
   \ ])
