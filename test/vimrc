@@ -32,7 +32,7 @@ set foldlevelstart=10
 set foldnestmax=10
 set ttimeoutlen=0
 " The encoding must be explicitly set for tests for Windows.
-set encoding=utf-8
+execute 'set encoding=utf-8'
 
 let g:mapleader=','
 
