@@ -66,7 +66,7 @@ Before:
 
   call ale#linter#Define('testft', {
   \ 'name': 'x',
-  \ 'executable': 'true',
+  \ 'executable': has('win32') ? 'cmd' : 'true',
   \ 'command': 'true',
   \ 'callback': 'GenerateResults',
   \})

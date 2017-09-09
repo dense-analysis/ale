@@ -7,9 +7,12 @@ After:
   unlet! g:dir
 
 Execute(CdString should output the correct command string):
-  AssertEqual 'cd ''/foo bar/baz'' && ', ale#path#CdString('/foo bar/baz')
+  " We will check that escaping is done correctly for each platform.
+  AssertEqual
+  \ has('unix') ? 'cd ''/foo bar/baz'' && ' : 'cd "/foo bar/baz" && ',
+  \ ale#path#CdString('/foo bar/baz')
 
 Execute(BufferCdString should output the correct command string):
   call ale#test#SetFilename('foo.txt')
 
-  AssertEqual 'cd ' . shellescape(g:dir) . ' && ', ale#path#BufferCdString(bufnr(''))
+  AssertEqual 'cd ' . ale#Escape(g:dir) . ' && ', ale#path#BufferCdString(bufnr(''))
