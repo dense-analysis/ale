@@ -7,6 +7,18 @@ function! ale#path#Simplify(path) abort
     return substitute(simplify(a:path), '^//\+', '/', 'g') " no-custom-checks
 endfunction
 
+" This function is mainly used for testing.
+" Simplify() a path, and change forward slashes to back slashes on Windows.
+function! ale#path#Winify(path) abort
+    let l:simplified_path = ale#path#Simplify(a:path)
+
+    if has('win32')
+        return substitute(l:simplified_path, '/', '\\', 'g')
+    endif
+
+    return l:simplified_path
+endfunction
+
 " Given a buffer and a filename, find the nearest file by searching upwards
 " through the paths relative to the given buffer.
 function! ale#path#FindNearestFile(buffer, filename) abort
