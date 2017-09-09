@@ -24,7 +24,7 @@ Execute(The tslint handler should parse lines correctly):
   \   {
   \     'lnum': 1,
   \     'col': 15,
-  \     'filename': expand('%:p:h') . '/test.ts',
+  \     'filename': ale#path#Winify(expand('%:p:h') . '/test.ts'),
   \     'end_lnum': 1,
   \     'type': 'E',
   \     'end_col': 15,
@@ -33,7 +33,7 @@ Execute(The tslint handler should parse lines correctly):
   \   {
   \     'lnum': 2,
   \     'col': 8,
-  \     'filename': expand('%:p:h') . '/test.ts',
+  \     'filename': ale#path#Winify(expand('%:p:h') . '/test.ts'),
   \     'end_lnum': 3,
   \     'type': 'W',
   \     'end_col': 12,
@@ -42,7 +42,7 @@ Execute(The tslint handler should parse lines correctly):
   \   {
   \     'lnum': 2,
   \     'col': 8,
-  \     'filename': expand('%:p:h') . '/something-else.ts',
+  \     'filename': ale#path#Winify(expand('%:p:h') . '/something-else.ts'),
   \     'end_lnum': 3,
   \     'type': 'W',
   \     'end_col': 12,
@@ -51,7 +51,7 @@ Execute(The tslint handler should parse lines correctly):
   \   {
   \     'lnum': 31,
   \     'col': 9,
-  \     'filename': expand('%:p:h') . '/test.ts',
+  \     'filename': ale#path#Winify(expand('%:p:h') . '/test.ts'),
   \     'end_lnum': 31,
   \     'type': 'E',
   \     'end_col': 20,
@@ -151,7 +151,7 @@ Execute(The tslint handler report errors for empty files by default):
   \   {
   \     'lnum': 2,
   \     'col': 1,
-  \     'filename': expand('%:p:h') . '/test.ts',
+  \     'filename': ale#path#Winify(expand('%:p:h') . '/test.ts'),
   \     'end_lnum': 2,
   \     'type': 'E',
   \     'end_col': 1,
@@ -224,7 +224,7 @@ Execute(The tslint handler should report errors when the ignore option is on, bu
   \   {
   \     'lnum': 2,
   \     'col': 1,
-  \     'filename': expand('%:p:h') . '/test.ts',
+  \     'filename': ale#path#Winify(expand('%:p:h') . '/test.ts'),
   \     'end_lnum': 2,
   \     'type': 'E',
   \     'end_col': 1,
