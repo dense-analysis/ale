@@ -1,14 +1,23 @@
 Before:
+  Save g:ale_python_flake8_executable
+  Save g:ale_python_flake8_options
+  Save g:ale_python_flake8_use_global
+
+  unlet! g:ale_python_flake8_executable
+  unlet! g:ale_python_flake8_args
+  unlet! g:ale_python_flake8_options
+  unlet! g:ale_python_flake8_use_global
+
   runtime ale_linters/python/flake8.vim
   call ale#test#SetDirectory('/testplugin/test/command_callback')
 
 After:
+  Restore
+
+  unlet! g:ale_python_flake8_args
+
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
-  let g:ale_python_flake8_executable = 'flake8'
-  let g:ale_python_flake8_options = ''
-  let g:ale_python_flake8_use_global = 0
-
   call ale_linters#python#flake8#ClearVersionCache()
 
 Execute(The flake8 callbacks should return the correct default values):
@@ -130,4 +139,26 @@ Execute(Using `python -m flake8` should be supported for running flake8):
   \ ale_linters#python#flake8#VersionCheck(bufnr(''))
   AssertEqual
   \ '''python''   -m flake8 --some-option --format=default -',
+  \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
+
+Execute(Using `python2 -m flake8` should be use with the old args option):
+  let g:ale_python_flake8_executable = 'python2'
+  let g:ale_python_flake8_args = '-m flake8'
+  let g:ale_python_flake8_use_global = 0
+
+  unlet! g:ale_python_flake8_options
+
+  call ale#linter#Reset()
+  runtime ale_linters/python/flake8.vim
+
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+
+  AssertEqual
+  \ 'python2',
+  \ ale_linters#python#flake8#GetExecutable(bufnr(''))
+  AssertEqual
+  \ '''python2'' -m flake8 --version',
+  \ ale_linters#python#flake8#VersionCheck(bufnr(''))
+  AssertEqual
+  \ '''python2'' -m flake8 --format=default -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
