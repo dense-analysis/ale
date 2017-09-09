@@ -217,7 +217,7 @@ Notes:
 * Dart: `dartanalyzer`
 * Dockerfile: `hadolint`
 * Elixir: `credo`, `dogma`!!
-* Elm: `elm-make`
+* Elm: `elm-make, elm-format`
 * Erb: `erb`, `erubis`
 * Erlang: `erlc`, `SyntaxErl`
 * Fortran: `gcc`
