@@ -2,7 +2,7 @@
 " Description: Elm linting in Ale. Closely follows the Syntastic checker in https://github.com/ElmCast/elm-vim.
 
 call ale#Set('elm_make_executable', 'elm-make')
-call ale#Set('elm_make_use_global', 1)
+call ale#Set('elm_make_use_global', 0)
 
 function! ale_linters#elm#make#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'elm_make', [
@@ -75,7 +75,7 @@ function! ale_linters#elm#make#GetCommand(buffer) abort
     " Source: https://github.com/elm-lang/elm-make/blob/master/src/Flags.hs
     let l:elm_cmd = ale#Escape(l:elm_exe)
     \   . ' --report=json'
-    \   . ' --output=' . ale#Escape('/dev/null')
+    \   . ' --output=' . ale#Escape(g:ale#util#nul_file)
 
     return l:dir_set_cmd . ' ' . l:elm_cmd . ' %t'
 endfunction
