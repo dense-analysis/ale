@@ -98,10 +98,10 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
 
         if g:ale_set_quickfix
             if !ale#list#IsQuickfixOpen()
-                execute 'copen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
+                silent! execute 'copen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
             endif
         elseif g:ale_set_loclist
-            execute 'lopen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
+            silent! execute 'lopen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
         endif
 
         " If focus changed, restore it (jump to the last window).
