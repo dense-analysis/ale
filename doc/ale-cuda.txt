@@ -3,7 +3,7 @@ ALE CUDA Integration                                         *ale-cuda-options*
 
 
 ===============================================================================
-NVCC                                                            *ale-cuda-nvcc*
+nvcc                                                            *ale-cuda-nvcc*
 
 g:ale_cuda_nvcc_executable                         *g:ale_cuda_nvcc_executable*
                                                    *b:ale_cuda_nvcc_executable*

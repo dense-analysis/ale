@@ -3,7 +3,7 @@ ALE Elm Integration                                           *ale-elm-options*
 
 
 ===============================================================================
-elm-format                                                     *ale-elm-format*
+elm-format                                                 *ale-elm-elm-format*
 
 g:ale_elm_format_executable                       *g:ale_elm_format_executable*
                                                   *b:ale_elm_format_executable*
@@ -29,18 +29,18 @@ g:ale_elm_format_options                             *g:ale_elm_format_options*
   This variable can be set to pass additional options to elm-format.
 
 ===============================================================================
-elm-make                                                         *ale-elm-make*
+elm-make                                                     *ale-elm-elm-make*
 
 g:ale_elm_make_executable                           *g:ale_elm_make_executable*
                                                     *b:ale_elm_make_executable*
   Type: |String|
   Default: `'elm-make'`
-  
+
   See |ale-integrations-local-executables|
-  
-  
+
+
 g:ale_elm_make_use_global                           *g:ale_elm_make_use_global*
-                                                    *b:ale_elm_make_use_global*                                         
+                                                    *b:ale_elm_make_use_global*
   Type: |Number|
   Default: `0`
 

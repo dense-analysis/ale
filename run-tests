@@ -255,6 +255,13 @@ if ((run_custom_checks)); then
     grep ' \*[^*]\+\*$' doc/ -r \
         | awk '{ sep = index($0, ":"); if (length(substr($0, sep + 1 )) < 79) { print } }' \
         | grep . && EXIT=1
+
+    echo '========================================'
+    echo 'Look for table of contents issues'
+    echo '========================================'
+    echo
+
+    test/script/check-toc || EXIT=$?
 fi
 
 exit $EXIT

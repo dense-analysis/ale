@@ -16,31 +16,38 @@ CONTENTS                                                         *ale-contents*
   7. Integration Documentation............|ale-integrations|
     asm...................................|ale-asm-options|
       gcc.................................|ale-asm-gcc|
+    awk...................................|ale-awk-options|
+      gawk................................|ale-awk-gawk|
     c.....................................|ale-c-options|
       clang...............................|ale-c-clang|
+      clang-format........................|ale-c-clangformat|
       clangtidy...........................|ale-c-clangtidy|
       cppcheck............................|ale-c-cppcheck|
       gcc.................................|ale-c-gcc|
-      clang-format........................|ale-c-clangformat|
     chef..................................|ale-chef-options|
       foodcritic..........................|ale-chef-foodcritic|
+    cmake.................................|ale-cmake-options|
+      cmakelint...........................|ale-cmake-cmakelint|
     cpp...................................|ale-cpp-options|
       clang...............................|ale-cpp-clang|
       clangcheck..........................|ale-cpp-clangcheck|
+      clang-format........................|ale-cpp-clangformat|
       clangtidy...........................|ale-cpp-clangtidy|
       cppcheck............................|ale-cpp-cppcheck|
       cpplint.............................|ale-cpp-cpplint|
       gcc.................................|ale-cpp-gcc|
-      clang-format........................|ale-cpp-clangformat|
-    cuda..................................|ale-cuda-options|
-      nvcc................................|ale-cuda-nvcc|
     css...................................|ale-css-options|
       prettier............................|ale-css-prettier|
       stylelint...........................|ale-css-stylelint|
-    cmake.................................|ale-cmake-options|
-      cmakelint...........................|ale-cmake-cmakelint|
+    cuda..................................|ale-cuda-options|
+      nvcc................................|ale-cuda-nvcc|
     dart..................................|ale-dart-options|
       dartanalyzer........................|ale-dart-dartanalyzer|
+    dockerfile............................|ale-dockerfile-options|
+      hadolint............................|ale-dockerfile-hadolint|
+    elm...................................|ale-elm-options|
+      elm-format..........................|ale-elm-elm-format|
+      elm-make............................|ale-elm-elm-make|
     erlang................................|ale-erlang-options|
       erlc................................|ale-erlang-erlc|
       syntaxerl...........................|ale-erlang-syntaxerl|
@@ -58,6 +65,7 @@ CONTENTS                                                         *ale-contents*
     handlebars............................|ale-handlebars-options|
       ember-template-lint.................|ale-handlebars-embertemplatelint|
     haskell...............................|ale-haskell-options|
+      hdevtools...........................|ale-haskell-hdevtools|
       stack-build.........................|ale-haskell-stack-build|
     html..................................|ale-html-options|
       htmlhint............................|ale-html-htmlhint|
@@ -70,6 +78,7 @@ CONTENTS                                                         *ale-contents*
     javascript............................|ale-javascript-options|
       eslint..............................|ale-javascript-eslint|
       flow................................|ale-javascript-flow|
+      jscs................................|ale-javascript-jscs|
       jshint..............................|ale-javascript-jshint|
       prettier............................|ale-javascript-prettier|
       prettier-eslint.....................|ale-javascript-prettier-eslint|
@@ -81,6 +90,7 @@ CONTENTS                                                         *ale-contents*
       prettier............................|ale-json-prettier|
     kotlin................................|ale-kotlin-options|
       kotlinc.............................|ale-kotlin-kotlinc|
+      ktlint..............................|ale-kotlin-ktlint|
     lua...................................|ale-lua-options|
       luacheck............................|ale-lua-luacheck|
     objc..................................|ale-objc-options|
@@ -95,12 +105,14 @@ CONTENTS                                                         *ale-contents*
     php...................................|ale-php-options|
       hack................................|ale-php-hack|
       langserver..........................|ale-php-langserver|
+      phpcbf..............................|ale-php-phpcbf|
       phpcs...............................|ale-php-phpcs|
       phpmd...............................|ale-php-phpmd|
       phpstan.............................|ale-php-phpstan|
-      phpcbf..............................|ale-php-phpcbf|
     pug...................................|ale-pug-options|
       puglint.............................|ale-pug-puglint|
+    puppet................................|ale-puppet-options|
+      puppetlint..........................|ale-puppet-puppetlint|
     python................................|ale-python-options|
       autopep8............................|ale-python-autopep8|
       flake8..............................|ale-python-flake8|
@@ -111,6 +123,8 @@ CONTENTS                                                         *ale-contents*
       yapf................................|ale-python-yapf|
     r.....................................|ale-r-options|
       lintr...............................|ale-r-lintr|
+    reasonml..............................|ale-reasonml-options|
+      merlin..............................|ale-reasonml-merlin|
     ruby..................................|ale-ruby-options|
       brakeman............................|ale-ruby-brakeman|
       rails_best_practices................|ale-ruby-rails_best_practices|

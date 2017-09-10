@@ -60,6 +60,13 @@ g:ale_cpp_clangcheck_options                     *g:ale_cpp_clangcheck_options*
 
 
 ===============================================================================
+clang-format                                              *ale-cpp-clangformat*
+
+See |ale-c-clangformat| for information about the available options.
+Note that the C options are also used for C++.
+
+
+===============================================================================
 clangtidy                                                   *ale-cpp-clangtidy*
 
 `clang-tidy` will be run only when files are saved to disk, so that
@@ -163,13 +170,6 @@ g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
   Default: `'-std=c++14 -Wall'`
 
   This variable can be changed to modify flags given to gcc.
-
-
-===============================================================================
-clang-format                                              *ale-cpp-clangformat*
-
-See |ale-c-clangformat| for information about the available options.
-Note that the C options are also used for C++.
 
 
 ===============================================================================

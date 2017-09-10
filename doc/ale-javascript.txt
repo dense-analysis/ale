@@ -61,6 +61,63 @@ g:ale_javascript_eslint_suppress_eslintignore
 
 
 ===============================================================================
+flow                                                      *ale-javascript-flow*
+
+g:ale_javascript_flow_executable             *g:ale_javascript_flow_executable*
+                                             *b:ale_javascript_flow_executable*
+  Type: |String|
+  Default: `'flow'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
+                                             *b:ale_javascript_flow_use_global*
+  Type: |Number|
+  Default: `0`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
+jscs                                                      *ale-javascript-jscs*
+
+g:ale_javascript_jscs_executable             *g:ale_javascript_jscs_executable*
+                                             *b:ale_javascript_jscs_executable*
+  Type: |String|
+  Default: `'jscs'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_javascript_jscs_use_global             *g:ale_javascript_jscs_use_global*
+                                             *b:ale_javascript_jscs_use_global*
+  Type: |Number|
+  Default: `0`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
+jshint                                                  *ale-javascript-jshint*
+
+g:ale_javascript_jshint_executable         *g:ale_javascript_jshint_executable*
+                                           *b:ale_javascript_jshint_executable*
+  Type: |String|
+  Default: `'jshint'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_javascript_jshint_use_global         *g:ale_javascript_jshint_use_global*
+                                           *b:ale_javascript_jshint_use_global*
+  Type: |Number|
+  Default: `0`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
 prettier                                              *ale-javascript-prettier*
 
 g:ale_javascript_prettier_executable     *g:ale_javascript_prettier_executable*
@@ -93,6 +150,7 @@ g:ale_javascript_prettier_use_local_config
   Default: `0`
 
   This variable can be set to use the local prettier configuration file.
+
 
 ===============================================================================
 prettier-eslint                                *ale-javascript-prettier-eslint*
@@ -168,61 +226,6 @@ g:ale_javascript_prettier_standard_use_global
   See |ale-integrations-local-executables|
 
 
-===============================================================================
-flow                                                      *ale-javascript-flow*
-
-g:ale_javascript_flow_executable             *g:ale_javascript_flow_executable*
-                                             *b:ale_javascript_flow_executable*
-  Type: |String|
-  Default: `'flow'`
-
-  See |ale-integrations-local-executables|
-
-
-g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
-                                             *b:ale_javascript_flow_use_global*
-  Type: |Number|
-  Default: `0`
-
-  See |ale-integrations-local-executables|
-
-
-===============================================================================
-jscs                                                      *ale-javascript-jscs*
-
-g:ale_javascript_jscs_executable             *g:ale_javascript_jscs_executable*
-                                             *b:ale_javascript_jscs_executable*
-  Type: |String|
-  Default: `'jscs'`
-
-  See |ale-integrations-local-executables|
-
-
-g:ale_javascript_jscs_use_global             *g:ale_javascript_jscs_use_global*
-                                             *b:ale_javascript_jscs_use_global*
-  Type: |Number|
-  Default: `0`
-
-  See |ale-integrations-local-executables|
-
-
-===============================================================================
-jshint                                                  *ale-javascript-jshint*
-
-g:ale_javascript_jshint_executable         *g:ale_javascript_jshint_executable*
-                                           *b:ale_javascript_jshint_executable*
-  Type: |String|
-  Default: `'jshint'`
-
-  See |ale-integrations-local-executables|
-
-
-g:ale_javascript_jshint_use_global         *g:ale_javascript_jshint_use_global*
-                                           *b:ale_javascript_jshint_use_global*
-  Type: |Number|
-  Default: `0`
-
-  See |ale-integrations-local-executables|
 
 
 ===============================================================================

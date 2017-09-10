@@ -53,6 +53,25 @@ g:ale_c_clang_options                                   *g:ale_c_clang_options*
 
 
 ===============================================================================
+clang-format                                                *ale-c-clangformat*
+
+g:ale_c_clangformat_executable                 *g:ale_c_clangformat_executable*
+                                               *b:ale_c_clangformat_executable*
+  Type: |String|
+  Default: `'clang-format'`
+
+  This variable can be changed to use a different executable for clang-format.
+
+
+g:ale_c_clangformat_options                       *g:ale_c_clangformat_options*
+                                                  *b:ale_c_clangformat_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be change to modify flags given to clang-format.
+
+
+===============================================================================
 clangtidy                                                     *ale-c-clangtidy*
 
 `clang-tidy` will be run only when files are saved to disk, so that
@@ -141,25 +160,6 @@ g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
   Default: `'-std=c11 -Wall'`
 
   This variable can be change to modify flags given to gcc.
-
-
-===============================================================================
-clang-format                                                *ale-c-clangformat*
-
-g:ale_c_clangformat_executable                 *g:ale_c_clangformat_executable*
-                                               *b:ale_c_clangformat_executable*
-  Type: |String|
-  Default: `'clang-format'`
-
-  This variable can be changed to use a different executable for clang-format.
-
-
-g:ale_c_clangformat_options                       *g:ale_c_clangformat_options*
-                                                  *b:ale_c_clangformat_options*
-  Type: |String|
-  Default: `''`
-
-  This variable can be change to modify flags given to clang-format.
 
 
 ===============================================================================

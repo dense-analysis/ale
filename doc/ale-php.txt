@@ -35,6 +35,35 @@ g:ale_php_langserver_use_global               *g:ale_php_langserver_use_global*
 
 
 ===============================================================================
+phpcbf                                                         *ale-php-phpcbf*
+
+g:ale_php_phpcbf_executable                       *g:ale_php_phpcbf_executable*
+                                                  *b:ale_php_phpcbf_executable*
+  Type: |String|
+  Default: `'phpcbf'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_php_phpcbf_standard                           *g:ale_php_phpcbf_standard*
+                                                    *b:ale_php_phpcbf_standard*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to specify the coding standard used by phpcbf. If no
+  coding standard is specified, phpcbf will default to fixing against the
+  PEAR coding standard, or the standard you have set as the default.
+
+
+g:ale_php_phpcbf_use_global                       *g:ale_php_phpcbf_use_global*
+                                                  *b:ale_php_phpcbf_use_global*
+  Type: |Number|
+  Default: `0`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
 phpcs                                                           *ale-php-phpcs*
 
 g:ale_php_phpcs_executable                         *g:ale_php_phpcs_executable*
@@ -63,7 +92,7 @@ g:ale_php_phpcs_use_global                         *g:ale_php_phpcs_use_global*
   See |ale-integrations-local-executables|
 
 
--------------------------------------------------------------------------------
+===============================================================================
 phpmd                                                           *ale-php-phpmd*
 
 g:ale_php_phpmd_ruleset                               *g:ale_php_phpmd_ruleset*
@@ -75,7 +104,7 @@ g:ale_php_phpmd_ruleset                               *g:ale_php_phpmd_ruleset*
   the available phpmd rulesets
 
 
--------------------------------------------------------------------------------
+===============================================================================
 phpstan                                                       *ale-php-phpstan*
 
 g:ale_php_phpstan_executable                     *g:ale_php_phpstan_executable*
@@ -93,35 +122,6 @@ g:ale_php_phpstan_level                               *g:ale_php_phpstan_level*
 
   This variable controls the rule levels. 0 is the loosest and 4 is the
   strictest.
-
-
--------------------------------------------------------------------------------
-phpcbf                                                         *ale-php-phpcbf*
-
-g:ale_php_phpcbf_executable                       *g:ale_php_phpcbf_executable*
-                                                  *b:ale_php_phpcbf_executable*
-  Type: |String|
-  Default: `'phpcbf'`
-
-  See |ale-integrations-local-executables|
-
-
-g:ale_php_phpcbf_standard                           *g:ale_php_phpcbf_standard*
-                                                    *b:ale_php_phpcbf_standard*
-  Type: |String|
-  Default: `''`
-
-  This variable can be set to specify the coding standard used by phpcbf. If no
-  coding standard is specified, phpcbf will default to fixing against the
-  PEAR coding standard, or the standard you have set as the default.
-
-
-g:ale_php_phpcbf_use_global                       *g:ale_php_phpcbf_use_global*
-                                                  *b:ale_php_phpcbf_use_global*
-  Type: |Number|
-  Default: `0`
-
-  See |ale-integrations-local-executables|
 
 
 ===============================================================================

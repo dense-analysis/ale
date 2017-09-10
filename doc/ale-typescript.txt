@@ -11,6 +11,12 @@ options for `eslint` too. See: |ale-javascript-eslint|.
 
 
 ===============================================================================
+prettier                                              *ale-typescript-prettier*
+
+See |ale-javascript-prettier| for information about the available options.
+
+
+===============================================================================
 tslint                                                  *ale-typescript-tslint*
 
 g:ale_typescript_tslint_executable         *g:ale_typescript_tslint_executable*
@@ -91,12 +97,6 @@ g:ale_typescript_tsserver_use_global     *g:ale_typescript_tsserver_use_global*
   tsserver first. If this variable is set to `1`, then ALE will always use the
   global version of tsserver, in preference to locally installed versions of
   tsserver in node_modules.
-
-
-===============================================================================
-prettier                                              *ale-typescript-prettier*
-
-See |ale-javascript-prettier| for information about the available options.
 
 
 ===============================================================================
