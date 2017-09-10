@@ -1,10 +1,12 @@
 Before:
   Save g:ale_run_synchronously
+  Save g:ale_set_lists_synchronously
   Save g:ale_buffer_info
   Save g:ale_linters
 
   let g:ale_buffer_info = {}
   let g:ale_run_synchronously = 1
+  let g:ale_set_lists_synchronously = 1
   call ale#ResetLintFileMarkers()
 
   let g:buffer_result = [
@@ -61,7 +63,7 @@ Before:
   call ale#linter#Define('foobar', {
   \ 'name': 'lint_file_linter',
   \ 'callback': 'LintFileCallback',
-  \ 'executable': 'echo',
+  \ 'executable': has('win32') ? 'cmd' : 'echo',
   \ 'command': 'echo',
   \ 'lint_file': 1,
   \})
@@ -69,7 +71,7 @@ Before:
   call ale#linter#Define('foobar', {
   \ 'name': 'buffer_linter',
   \ 'callback': 'BufferCallback',
-  \ 'executable': 'echo',
+  \ 'executable': has('win32') ? 'cmd' : 'echo',
   \ 'command': 'echo',
   \ 'read_buffer': 0,
   \})

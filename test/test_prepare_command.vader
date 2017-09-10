@@ -9,6 +9,7 @@ After:
 Execute(sh should be used when the shell is fish):
   " Set something else, so we will replace that too.
   let &shellcmdflag = '-f'
+  let g:ale_has_override = {'win32': 0}
 
   let &shell = 'fish'
 
@@ -25,13 +26,13 @@ Execute(sh should be used when the shell is fish):
 Execute(Other shells should be used when set):
   let &shell = '/bin/bash'
   let &shellcmdflag = '-c'
+  let g:ale_has_override = {'win32': 0}
 
   AssertEqual ['/bin/bash', '-c', 'foobar'], ale#job#PrepareCommand('foobar')
 
 Execute(cmd /c as a string should be used on Windows):
   let &shell = 'who cares'
   let &shellcmdflag = 'whatever'
-
   let g:ale_has_override = {'win32': 1}
 
   AssertEqual 'cmd /c foobar', ale#job#PrepareCommand('foobar')

@@ -2,6 +2,8 @@ After:
   let g:ale_has_override = {}
 
 Execute(ale#path#Upwards should return the correct path components for Unix):
+  let g:ale_has_override = {'win32': 0}
+
   " Absolute paths should include / on the end.
   AssertEqual
   \ ['/foo/bar/baz', '/foo/bar', '/foo', '/'],

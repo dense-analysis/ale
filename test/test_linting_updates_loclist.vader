@@ -47,7 +47,7 @@ Before:
   call ale#linter#Define('foobar', {
   \ 'name': 'testlinter',
   \ 'callback': 'TestCallback',
-  \ 'executable': 'true',
+  \ 'executable': has('win32') ? 'cmd': 'true',
   \ 'command': 'true',
   \ 'read_buffer': 0,
   \})

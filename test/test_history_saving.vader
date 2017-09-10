@@ -10,7 +10,11 @@ Before:
   " Temporarily set the shell to /bin/sh, if it isn't already set that way.
   " This will make it so the test works when running it directly.
   let g:current_shell = &shell
-  let &shell = '/bin/sh'
+
+  if !has('win32')
+    let &shell = '/bin/sh'
+  endif
+
   let g:history = []
   let g:ale_buffer_info = {}
   let g:ale_max_buffer_history_size = 20
@@ -27,8 +31,10 @@ Before:
   call ale#linter#Define('foobar', {
   \ 'name': 'testlinter',
   \ 'callback': 'CollectResults',
-  \ 'executable': 'echo',
-  \ 'command': '/bin/sh -c ''echo command history test''',
+  \ 'executable': has('win32') ? 'cmd' : 'echo',
+  \ 'command': has('win32')
+  \   ? 'echo command history test'
+  \   : '/bin/sh -c ''echo command history test''',
   \ 'read_buffer': 0,
   \})
 
@@ -65,7 +71,13 @@ Execute(History should be set when commands are run):
 
   AssertEqual 1, len(g:history)
   AssertEqual sort(['status', 'exit_code', 'job_id', 'command']), sort(keys(g:history[0]))
-  AssertEqual ['/bin/sh', '-c', '/bin/sh -c ''echo command history test'''], g:history[0].command
+
+  if has('win32')
+    AssertEqual 'cmd /c echo command history test', g:history[0].command
+  else
+    AssertEqual ['/bin/sh', '-c', '/bin/sh -c ''echo command history test'''], g:history[0].command
+  endif
+
   AssertEqual 'finished', g:history[0].status
   AssertEqual 0, g:history[0].exit_code
   " The Job ID will change each time, but we can check the type.
@@ -125,6 +137,8 @@ Given foobar(Some file with an imaginary filetype):
   c
 
 Execute(The history should be updated when fixers are run):
+  call ale#test#SetFilename('dummy.txt')
+
   let b:ale_fixers = {'foobar': ['TestFixer']}
   let b:ale_enabled = 0
   let g:ale_run_synchronously = 1
@@ -132,4 +146,9 @@ Execute(The history should be updated when fixers are run):
   ALEFix
 
   AssertEqual ['finished'], map(copy(b:ale_history), 'v:val.status')
-  AssertEqual '/bin/sh -c echo foo ', split(join(b:ale_history[0].command), '<')[0]
+
+  if has('win32')
+    AssertEqual 'cmd /c echo foo ', split(b:ale_history[0].command, '<')[0]
+  else
+    AssertEqual '/bin/sh -c echo foo ', split(join(b:ale_history[0].command), '<')[0]
+  endif
