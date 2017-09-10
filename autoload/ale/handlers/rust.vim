@@ -7,25 +7,25 @@ if !exists('g:ale_rust_ignore_error_codes')
     let g:ale_rust_ignore_error_codes = []
 endif
 
-" returns: a list [lnum, col] with the location of the error or []
-function! s:FindErrorInExpansion(span, buffer) abort
-    if ale#path#IsBufferPath(a:buffer, a:span.file_name)
-        return [a:span.line_start, a:span.line_end, a:span.byte_start, a:span.byte_end]
+function! s:FindSpan(buffer, span) abort
+    if ale#path#IsBufferPath(a:buffer, a:span.file_name) || a:span.file_name is# '<anon>'
+        return a:span
     endif
 
-    if !empty(a:span.expansion)
-        return s:FindErrorInExpansion(a:span.expansion.span, a:buffer)
+    " Search inside the expansion of an error, as the problem for this buffer
+    " could lie inside a nested object.
+    if !empty(get(a:span, 'expansion', v:null))
+        return s:FindSpan(a:buffer, a:span.expansion.span)
     endif
 
-    return []
+    return {}
 endfunction
 
-" A handler function which accepts a file name, to make unit testing easier.
-function! ale#handlers#rust#HandleRustErrorsForFile(buffer, full_filename, lines) abort
+function! ale#handlers#rust#HandleRustErrors(buffer, lines) abort
     let l:output = []
 
     for l:errorline in a:lines
-        " ignore everything that is not Json
+        " ignore everything that is not JSON
         if l:errorline !~# '^{'
             continue
         endif
@@ -44,11 +44,10 @@ function! ale#handlers#rust#HandleRustErrorsForFile(buffer, full_filename, lines
             continue
         endif
 
-        for l:span in l:error.spans
-            if (
-            \   l:span.is_primary
-            \   && (ale#path#IsBufferPath(a:buffer, l:span.file_name) || l:span.file_name is# '<anon>')
-            \)
+        for l:root_span in l:error.spans
+            let l:span = s:FindSpan(a:buffer, l:root_span)
+
+            if !empty(l:span)
                 call add(l:output, {
                 \   'lnum': l:span.line_start,
                 \   'end_lnum': l:span.line_end,
@@ -57,29 +56,9 @@ function! ale#handlers#rust#HandleRustErrorsForFile(buffer, full_filename, lines
                 \   'text': empty(l:span.label) ? l:error.message : printf('%s: %s', l:error.message, l:span.label),
                 \   'type': toupper(l:error.level[0]),
                 \})
-            else
-                " when the error is caused in the expansion of a macro, we have
-                " to bury deeper
-                let l:root_cause = s:FindErrorInExpansion(l:span, a:buffer)
-
-                if !empty(l:root_cause)
-                    call add(l:output, {
-                    \   'lnum': l:root_cause[0],
-                    \   'end_lnum': l:root_cause[1],
-                    \   'col': l:root_cause[2],
-                    \   'end_col': l:root_cause[3],
-                    \   'text': l:error.message,
-                    \   'type': toupper(l:error.level[0]),
-                    \})
-                endif
             endif
         endfor
     endfor
 
     return l:output
-endfunction
-
-" A handler for output for Rust linters.
-function! ale#handlers#rust#HandleRustErrors(buffer, lines) abort
-    return ale#handlers#rust#HandleRustErrorsForFile(a:buffer, bufname(a:buffer), a:lines)
 endfunction
