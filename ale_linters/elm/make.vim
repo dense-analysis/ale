@@ -1,5 +1,14 @@
-" Author: buffalocoder - https://github.com/buffalocoder
+" Author: buffalocoder - https://github.com/buffalocoder, soywod - https://github.com/soywod
 " Description: Elm linting in Ale. Closely follows the Syntastic checker in https://github.com/ElmCast/elm-vim.
+
+call ale#Set('elm_make_executable', 'elm-make')
+call ale#Set('elm_make_use_global', 0)
+
+function! ale_linters#elm#make#GetExecutable(buffer) abort
+    return ale#node#FindExecutable(a:buffer, 'elm_make', [
+    \   'node_modules/.bin/elm-make',
+    \])
+endfunction
 
 function! ale_linters#elm#make#Handle(buffer, lines) abort
     let l:output = []
@@ -52,6 +61,7 @@ endfunction
 " If it doesn't, then this will fail when imports are needed.
 function! ale_linters#elm#make#GetCommand(buffer) abort
     let l:elm_package = ale#path#FindNearestFile(a:buffer, 'elm-package.json')
+    let l:elm_exe = ale_linters#elm#make#GetExecutable(a:buffer)
     if empty(l:elm_package)
         let l:dir_set_cmd = ''
     else
@@ -63,14 +73,16 @@ function! ale_linters#elm#make#GetCommand(buffer) abort
     " a sort of flag to tell the compiler not to generate an output file,
     " which is why this is hard coded here.
     " Source: https://github.com/elm-lang/elm-make/blob/master/src/Flags.hs
-    let l:elm_cmd = 'elm-make --report=json --output='.ale#Escape('/dev/null')
+    let l:elm_cmd = ale#Escape(l:elm_exe)
+    \   . ' --report=json'
+    \   . ' --output=' . ale#Escape(g:ale#util#nul_file)
 
     return l:dir_set_cmd . ' ' . l:elm_cmd . ' %t'
 endfunction
 
 call ale#linter#Define('elm', {
 \    'name': 'make',
-\    'executable': 'elm-make',
+\    'executable_callback': 'ale_linters#elm#make#GetExecutable',
 \    'output_stream': 'both',
 \    'command_callback': 'ale_linters#elm#make#GetCommand',
 \    'callback': 'ale_linters#elm#make#Handle'
