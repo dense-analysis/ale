@@ -6,7 +6,7 @@
 
 call ale#Set('haskell_stack_build_options', '--fast')
 
-function ale_linters#haskell#stack_build#GetCommand(buffer) abort
+function! ale_linters#haskell#stack_build#GetCommand(buffer) abort
     let l:flags = ale#Var(a:buffer, 'haskell_stack_build_options')
 
     return 'stack build ' . l:flags

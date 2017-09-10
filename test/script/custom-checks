@@ -75,6 +75,7 @@ fi
 check_errors \
     '^function.*) *$' \
     'Function without abort keyword (See :help except-compat)'
+check_errors '^function[^!]' 'function without !'
 check_errors ' \+$' 'Trailing whitespace'
 check_errors '^ * end\?i\? *$' 'Write endif, not en, end, or endi'
 check_errors '^  [^ ]' 'Use four spaces, not two spaces'
