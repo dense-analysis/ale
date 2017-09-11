@@ -2,19 +2,21 @@
 " Description: Fixing files with eslint.
 
 function! s:FindConfig(buffer) abort
-    for l:filename in [
-    \   '.eslintrc.js',
-    \   '.eslintrc.yaml',
-    \   '.eslintrc.yml',
-    \   '.eslintrc.json',
-    \   '.eslintrc',
-    \   'package.json',
-    \]
-        let l:config = ale#path#FindNearestFile(a:buffer, l:filename)
+    for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
+        for l:basename in [
+        \   '.eslintrc.js',
+        \   '.eslintrc.yaml',
+        \   '.eslintrc.yml',
+        \   '.eslintrc.json',
+        \   '.eslintrc',
+        \   'package.json',
+        \]
+            let l:config = ale#path#Simplify(l:path . '/' . l:basename)
 
-        if !empty(l:config)
-            return l:config
-        endif
+            if filereadable(l:config)
+                return l:config
+            endif
+        endfor
     endfor
 
     return ''
