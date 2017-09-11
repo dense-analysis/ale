@@ -36,11 +36,11 @@ Execute(The ghc handler should handle ghc 8 output):
   \ ],
   \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
   \ '',
-  \ 'src/Appoint/Lib.hs:6:1: error:',
+  \ ale#path#Winify('src/Appoint/Lib.hs') . ':6:1: error:',
   \ '    Failed to load interface for ‘GitHub.Data’',
   \ '    Use -v to see a list of the files searched for.',
   \ '',
-  \ 'src/Appoint/Lib.hs:7:1: warning:',
+  \ ale#path#Winify('src/Appoint/Lib.hs') . ':7:1: warning:',
   \ '    Failed to load interface for ‘GitHub.Endpoints.PullRequests’',
   \ '    Use -v to see a list of the files searched for.',
   \ ])
@@ -70,9 +70,9 @@ Execute(The ghc handler should handle ghc 7 output):
   \   },
   \ ],
   \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
-  \ 'src/Main.hs:168:1:',
+  \ ale#path#Winify('src/Main.hs') . ':168:1:',
   \ '    parse error (possibly incorrect indentation or mismatched brackets)',
-  \ 'src/Main.hs:84:1:Warning: Top-level binding with no type signature:^@  myLayout :: Choose Tall (Choose (Mirror Tall) Full) a',
-  \ 'src/Main.hs:94:5:Error:',
+  \ ale#path#Winify('src/Main.hs') . ':84:1:Warning: Top-level binding with no type signature:^@  myLayout :: Choose Tall (Choose (Mirror Tall) Full) a',
+  \ ale#path#Winify('src/Main.hs') . ':94:5:Error:',
   \ '  Some other error',
   \ ])

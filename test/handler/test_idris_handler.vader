@@ -1,5 +1,15 @@
 Before:
+  Save $TMPDIR
+
+  " Set TMPDIR so the temporary file checks work.
+  let $TMPDIR = '/tmp'
+
   runtime ale_linters/idris/idris.vim
+
+After:
+  Restore
+
+  call ale#linter#Reset()
 
 Execute(The idris handler should parse messages that reference a single column):
   call ale#test#SetFilename('/tmp/foo.idr')

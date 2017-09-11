@@ -1,64 +1,66 @@
 Before:
   runtime ale_linters/python/mypy.vim
 
+  call ale#test#SetDirectory('/testplugin/test/handler')
+
 After:
+  call ale#test#RestoreDirectory()
   call ale#linter#Reset()
-  silent file something_else.py
 
 Execute(The mypy handler should parse lines correctly):
-  silent file foo/bar/__init__.py
+  call ale#test#SetFilename('__init__.py')
 
   AssertEqual
   \ [
   \   {
   \     'lnum': 768,
   \     'col': 38,
-  \     'filename': 'foo/bar/foo/bar/baz.py',
+  \     'filename': ale#path#Winify(g:dir . '/baz.py'),
   \     'type': 'E',
   \     'text': 'Cannot determine type of ''SOME_SYMBOL''',
   \   },
   \   {
   \     'lnum': 821,
   \     'col': 38,
-  \     'filename': 'foo/bar/foo/bar/baz.py',
+  \     'filename': ale#path#Winify(g:dir . '/baz.py'),
   \     'type': 'E',
   \     'text': 'Cannot determine type of ''SOME_SYMBOL''',
   \   },
   \   {
   \     'lnum': 38,
   \     'col': 44,
-  \     'filename': 'foo/bar/foo/bar/other.py',
+  \     'filename': ale#path#Winify(g:dir . '/other.py'),
   \     'type': 'E',
   \     'text': 'Cannot determine type of ''ANOTHER_SYMBOL''',
   \   },
   \   {
   \     'lnum': 15,
   \     'col': 3,
-  \     'filename': 'foo/bar/foo/bar/__init__.py',
+  \     'filename': ale#path#Winify(g:dir . '/__init__.py'),
   \     'type': 'E',
   \     'text': 'Argument 1 to "somefunc" has incompatible type "int"; expected "str"'
   \   },
   \   {
   \     'lnum': 72,
   \     'col': 1,
-  \     'filename': 'foo/bar/foo/bar/__init__.py',
+  \     'filename': ale#path#Winify(g:dir . '/__init__.py'),
   \     'type': 'W',
   \     'text': 'Some warning',
   \   },
   \ ],
   \ ale_linters#python#mypy#Handle(bufnr(''), [
-  \ 'foo/bar/baz.py: note: In class "SomeClass":',
-  \ 'foo/bar/baz.py:768:38: error: Cannot determine type of ''SOME_SYMBOL''',
-  \ 'foo/bar/baz.py: note: In class "AnotherClass":',
-  \ 'foo/bar/baz.py:821:38: error: Cannot determine type of ''SOME_SYMBOL''',
-  \ 'foo/bar/__init__.py:92: note: In module imported here:',
-  \ 'foo/bar/other.py: note: In class "YetAnotherClass":',
-  \ 'foo/bar/other.py:38:44: error: Cannot determine type of ''ANOTHER_SYMBOL''',
-  \ 'foo/bar/__init__.py: note: At top level:',
-  \ 'foo/bar/__init__.py:15:3: error: Argument 1 to "somefunc" has incompatible type "int"; expected "str"',
+  \ 'baz.py: note: In class "SomeClass":',
+  \ 'baz.py:768:38: error: Cannot determine type of ''SOME_SYMBOL''',
+  \ 'baz.py: note: In class "AnotherClass":',
+  \ 'baz.py:821:38: error: Cannot determine type of ''SOME_SYMBOL''',
+  \ '__init__.py:92: note: In module imported here:',
+  \ 'other.py: note: In class "YetAnotherClass":',
+  \ 'other.py:38:44: error: Cannot determine type of ''ANOTHER_SYMBOL''',
+  \ '__init__.py: note: At top level:',
+  \ '__init__.py:15:3: error: Argument 1 to "somefunc" has incompatible type "int"; expected "str"',
   \ 'another_module/bar.py:14: note: In module imported here,',
   \ 'another_module/__init__.py:16: note: ... from here,',
-  \ 'foo/bar/__init__.py:72:1: warning: Some warning',
+  \ '__init__.py:72:1: warning: Some warning',
   \ ])
 
 Execute(The mypy handler should handle Windows names with spaces):

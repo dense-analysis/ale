@@ -29,11 +29,11 @@ Execute(The rails_best_practices handler should parse JSON correctly):
   \    '{',
   \      '"message": "use local variable",',
   \      '"line_number": "5",',
-  \      '"filename": "' . g:dir . '/ruby_fixtures/valid_rails_app/app/models/thing.rb"',
+  \      printf('"filename": "%s"', substitute(expand('%:p'), '\\', '\\\\', 'g')),
   \    '},{',
   \      '"message": "other advice",',
   \      '"line_number": "10",',
-  \      '"filename": "' . g:dir . '/ruby_fixtures/valid_rails_app/app/models/thing.rb"',
+  \      printf('"filename": "%s"', substitute(expand('%:p'), '\\', '\\\\', 'g')),
   \    '}',
   \  ']'
   \  ])
