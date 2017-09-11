@@ -44,10 +44,6 @@ function! ale#handlers#haskell#HandleGHCFormat(buffer, lines) abort
             continue
         endif
 
-        if !ale#path#IsBufferPath(a:buffer, l:match[1])
-            continue
-        endif
-
         let l:errors = matchlist(l:match[4], '\v([wW]arning|[eE]rror): ?(.*)')
 
         if len(l:errors) > 0
@@ -68,6 +64,7 @@ function! ale#handlers#haskell#HandleGHCFormat(buffer, lines) abort
         let l:text = substitute(l:text, l:temp_filename_regex, l:basename, 'g')
 
         call add(l:output, {
+        \   'filename': ale#path#Simplify(getcwd() . '/' . l:match[1]),
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
         \   'text': l:text,

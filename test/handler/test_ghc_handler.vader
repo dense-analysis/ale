@@ -4,6 +4,7 @@ Execute(The ghc handler should handle hdevtools output):
   AssertEqual
   \ [
   \   {
+  \     'filename': simplify(getcwd() . '/foo.hs'),
   \     'lnum': 147,
   \     'type': 'W',
   \     'col': 62,
@@ -22,12 +23,14 @@ Execute(The ghc handler should handle ghc 8 output):
   AssertEqual
   \ [
   \   {
+  \     'filename': simplify(getcwd() . '/src/Appoint/Lib.hs'),
   \     'lnum': 6,
   \     'type': 'E',
   \     'col': 1,
   \     'text': 'Failed to load interface for ‘GitHub.Data’ Use -v to see a list of the files searched for.',
   \   },
   \   {
+  \     'filename': simplify(getcwd() . '/src/Appoint/Lib.hs'),
   \     'lnum': 7,
   \     'type': 'W',
   \     'col': 1,
@@ -51,18 +54,21 @@ Execute(The ghc handler should handle ghc 7 output):
   AssertEqual
   \ [
   \   {
+  \     'filename': simplify(getcwd() . '/src/Main.hs'),
   \     'lnum': 168,
   \     'type': 'E',
   \     'col': 1,
   \     'text': 'parse error (possibly incorrect indentation or mismatched brackets)',
   \   },
   \   {
+  \     'filename': simplify(getcwd() . '/src/Main.hs'),
   \     'lnum': 84,
   \     'col': 1,
   \     'type': 'W',
   \     'text': 'Top-level binding with no type signature:^@  myLayout :: Choose Tall (Choose (Mirror Tall) Full) a',
   \   },
   \   {
+  \     'filename': simplify(getcwd() . '/src/Main.hs'),
   \     'lnum': 94,
   \     'col': 5,
   \     'type': 'E',

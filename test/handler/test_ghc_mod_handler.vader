@@ -4,18 +4,28 @@ Execute(HandleGhcFormat should handle ghc-mod problems):
   AssertEqual
   \ [
   \   {
+  \     'filename': simplify(getcwd() . '/check2.hs'),
   \     'lnum': 2,
   \     'col': 1,
   \     'type': 'E',
   \     'text': 'Failed to load interface for ‘Missing’Use -v to see a list of the files searched for.',
   \   },
   \   {
+  \     'filename': simplify(getcwd() . '/check2.hs'),
   \     'lnum': 2,
   \     'col': 1,
   \     'type': 'E',
   \     'text': 'Suggestion: Use camelCaseFound:  my_variable = ...Why not:  myVariable = ...',
   \   },
   \   {
+  \     'filename': simplify(getcwd() . '/check2.hs'),
+  \     'lnum': 6,
+  \     'col': 1,
+  \     'type': 'W',
+  \     'text': 'Eta reduceFound:  myFunc x = succ xWhy not:  myFunc = succ',
+  \   },
+  \   {
+  \     'filename': simplify(getcwd() . '/xxx.hs'),
   \     'lnum': 6,
   \     'col': 1,
   \     'type': 'W',
