@@ -9,7 +9,6 @@ function! s:FindConfig(buffer) abort
         \   '.eslintrc.yml',
         \   '.eslintrc.json',
         \   '.eslintrc',
-        \   'package.json',
         \]
             let l:config = ale#path#Simplify(l:path . '/' . l:basename)
 
@@ -19,7 +18,7 @@ function! s:FindConfig(buffer) abort
         endfor
     endfor
 
-    return ''
+    return ale#path#FindNearestFile(a:buffer, 'package.json')
 endfunction
 
 function! ale#fixers#eslint#Fix(buffer) abort
