@@ -6,6 +6,26 @@ call ale#Set('javascript_eslint_executable', 'eslint')
 call ale#Set('javascript_eslint_use_global', 0)
 call ale#Set('javascript_eslint_suppress_eslintignore', 0)
 
+function! ale#handlers#eslint#FindConfig(buffer) abort
+    for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
+        for l:basename in [
+        \   '.eslintrc.js',
+        \   '.eslintrc.yaml',
+        \   '.eslintrc.yml',
+        \   '.eslintrc.json',
+        \   '.eslintrc',
+        \]
+            let l:config = ale#path#Simplify(l:path . '/' . l:basename)
+
+            if filereadable(l:config)
+                return l:config
+            endif
+        endfor
+    endfor
+
+    return ale#path#FindNearestFile(a:buffer, 'package.json')
+endfunction
+
 function! ale#handlers#eslint#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'javascript_eslint', [
     \   'node_modules/.bin/eslint_d',

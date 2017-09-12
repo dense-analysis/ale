@@ -11,25 +11,6 @@ endfunction
 
 call ale#fixers#prettier_eslint#SetOptionDefaults()
 
-function! s:FindConfig(buffer) abort
-    for l:filename in [
-    \   '.eslintrc.js',
-    \   '.eslintrc.yaml',
-    \   '.eslintrc.yml',
-    \   '.eslintrc.json',
-    \   '.eslintrc',
-    \   'package.json',
-    \]
-        let l:config = ale#path#FindNearestFile(a:buffer, l:filename)
-
-        if !empty(l:config)
-            return l:config
-        endif
-    endfor
-
-    return ''
-endfunction
-
 function! ale#fixers#prettier_eslint#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'javascript_prettier_eslint', [
     \   'node_modules/prettier-eslint-cli/dist/index.js',
@@ -42,7 +23,7 @@ function! ale#fixers#prettier_eslint#Fix(buffer) abort
     let l:executable = ale#fixers#prettier_eslint#GetExecutable(a:buffer)
 
     let l:config = !ale#Var(a:buffer, 'javascript_prettier_eslint_legacy')
-    \   ? s:FindConfig(a:buffer)
+    \   ? ale#handlers#eslint#FindConfig(a:buffer)
     \   : ''
     let l:eslint_config_option = !empty(l:config)
     \   ? ' --eslint-config-path ' . ale#Escape(l:config)
