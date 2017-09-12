@@ -6,4 +6,5 @@ call ale#linter#Define('go', {
 \   'executable': 'staticcheck',
 \   'command': 'staticcheck %t',
 \   'callback': 'ale#handlers#unix#HandleAsWarning',
+\   'output_stream': 'both'
 \})
