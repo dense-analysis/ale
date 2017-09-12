@@ -1,7 +1,7 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Error handling for the format GHC outputs.
 
-function! ale#handlers#haskell#HandleGHCFormat(buffer, lines) abort
+function! ale#handlers#haskell#HandleGHCFormat(buffer, lines, wd) abort
     " Look for lines like the following.
     "
     "Appoint/Lib.hs:8:1: warning:
@@ -48,7 +48,7 @@ function! ale#handlers#haskell#HandleGHCFormat(buffer, lines) abort
         endif
 
         call add(l:output, {
-        \   'filename': ale#path#Simplify(getcwd() . '/' . l:match[1]),
+        \   'filename': ale#path#GetAbsPath(a:wd, l:match[1]),
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
         \   'text': l:text,

@@ -177,6 +177,7 @@ function! s:HandleExit(job_id, exit_code) abort
     let l:output = l:job_info.output
     let l:buffer = l:job_info.buffer
     let l:next_chain_index = l:job_info.next_chain_index
+    let l:wd = l:job_info.wd
 
     if g:ale_history_enabled
         call ale#history#SetExitCode(l:buffer, a:job_id, a:exit_code)
@@ -208,7 +209,7 @@ function! s:HandleExit(job_id, exit_code) abort
         call ale#history#RememberOutput(l:buffer, a:job_id, l:output[:])
     endif
 
-    let l:loclist = ale#util#GetFunction(l:linter.callback)(l:buffer, l:output)
+    let l:loclist = ale#util#GetFunction(l:linter.callback)(l:buffer, l:output, l:wd)
 
     call s:HandleLoclist(l:linter.name, l:buffer, l:loclist)
 endfunction
@@ -552,6 +553,7 @@ function! s:RunJob(options) abort
         \   'buffer': l:buffer,
         \   'output': [],
         \   'next_chain_index': l:next_chain_index,
+        \   'wd': getcwd(),
         \}
     endif
 
