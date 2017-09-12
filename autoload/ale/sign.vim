@@ -184,16 +184,6 @@ function! s:GroupLoclistItems(buffer, loclist) abort
     return l:grouped_items
 endfunction
 
-function! ale#sign#SetSignColumnHighlight(has_problems) abort
-    highlight clear SignColumn
-
-    if a:has_problems
-        highlight link SignColumn ALESignColumnWithErrors
-    else
-        highlight link SignColumn ALESignColumnWithoutErrors
-    endif
-endfunction
-
 function! s:UpdateLineNumbers(buffer, current_sign_list, loclist) abort
     let l:line_map = {}
     let l:line_numbers_changed = 0
@@ -347,7 +337,19 @@ function! ale#sign#SetSigns(buffer, loclist) abort
     \   l:sign_map,
     \)
 
+    " Change the sign column color if the option is on.
+    if g:ale_change_sign_column_color && !empty(a:loclist)
+        highlight clear SignColumn
+        highlight link SignColumn ALESignColumnWithErrors
+    endif
+
     for l:command in l:command_list
         silent! execute l:command
     endfor
+
+    " Reset the sign column color when there are no more errors.
+    if g:ale_change_sign_column_color && empty(a:loclist)
+        highlight clear SignColumn
+        highlight link SignColumn ALESignColumnWithoutErrors
+    endif
 endfunction
