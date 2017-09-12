@@ -6,4 +6,5 @@ call ale#linter#Define('go', {
 \   'executable': 'gosimple',
 \   'command': 'gosimple %t',
 \   'callback': 'ale#handlers#unix#HandleAsWarning',
+\   'output_stream': 'both'
 \})
