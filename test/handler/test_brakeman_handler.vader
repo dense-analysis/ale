@@ -1,6 +1,5 @@
 Before:
   call ale#test#SetDirectory('/testplugin/test/handler')
-  cd ..
 
   runtime ale_linters/ruby/brakeman.vim
 
@@ -9,16 +8,18 @@ After:
   call ale#linter#Reset()
 
 Execute(The brakeman handler should parse JSON correctly):
-  call ale#test#SetFilename('ruby_fixtures/valid_rails_app/app/models/thing.rb')
+  call ale#test#SetFilename('../ruby_fixtures/valid_rails_app/app/models/thing.rb')
 
   AssertEqual
   \  [
   \      {
+  \          'filename': expand('%:p'),
   \          'lnum': 84,
   \          'text': 'SQL Injection Possible SQL injection (Medium)',
   \          'type': 'W',
   \      },
   \      {
+  \          'filename': expand('%:p'),
   \          'lnum': 1,
   \          'text': 'Mass Assignment Potentially dangerous attribute available for mass assignment (Weak)',
   \          'type': 'W',
@@ -33,7 +34,7 @@ Execute(The brakeman handler should parse JSON correctly):
   \        '"fingerprint": "1234",',
   \        '"check_name": "SQL",',
   \        '"message": "Possible SQL injection",',
-  \        '"file": "app/models/thing.rb",',
+  \        '"file": "' . substitute(ale#path#Winify('app/models/thing.rb'), '\\', '\\\\', 'g') . '",',
   \        '"line": 84,',
   \        '"link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",',
   \        '"code": "Thing.connection.execute(params[:data])",',
@@ -52,7 +53,7 @@ Execute(The brakeman handler should parse JSON correctly):
   \        '"fingerprint": "1235",',
   \        '"check_name": "ModelAttrAccessible",',
   \        '"message": "Potentially dangerous attribute available for mass assignment",',
-  \        '"file": "app/models/thing.rb",',
+  \        '"file": "' .  substitute(ale#path#Winify('app/models/thing.rb'), '\\', '\\\\', 'g') . '",',
   \        '"line": null,',
   \        '"link": "http://brakemanscanner.org/docs/warning_types/mass_assignment/",',
   \        '"code": ":name",',
