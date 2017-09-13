@@ -1,3 +1,9 @@
+Before:
+  runtime ale_linters/cuda/nvcc.vim
+
+After:
+  call ale#linter#Reset()
+
 Execute(The cuda nvcc handler should parse errors from multiple files for NVCC 8.0):
   AssertEqual
   \ [
@@ -5,19 +11,25 @@ Execute(The cuda nvcc handler should parse errors from multiple files for NVCC 8
   \     'lnum': 1,
   \     'type': 'E',
   \     'text': 'this declaration has no storage class or type specifier',
-  \     'filename': '/tmp/cudatest/test.cu',
+  \     'filename': has('win32')
+  \       ? 'C:\tmp\cudatest\test.cu'
+  \       : '/tmp/cudatest/test.cu',
   \   },
   \   {
   \     'lnum': 2,
   \     'type': 'E',
   \     'text': 'attribute "global" does not apply here',
-  \     'filename': '/tmp/cudatest/common.h',
+  \     'filename': has('win32')
+  \       ? 'C:\tmp\cudatest\common.h'
+  \       : '/tmp/cudatest/common.h',
   \   },
   \   {
   \     'lnum': 2,
   \     'type': 'E',
   \     'text': 'expected a ";"',
-  \     'filename': '/tmp/cudatest/common.h',
+  \     'filename': has('win32')
+  \       ? 'C:\tmp\cudatest\common.h'
+  \       : '/tmp/cudatest/common.h',
   \   },
   \ ],
   \ ale_linters#cuda#nvcc#HandleNVCCFormat(0, [
