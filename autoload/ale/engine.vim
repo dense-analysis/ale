@@ -375,7 +375,7 @@ function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
         \}
 
         if has_key(l:old_item, 'filename')
-        \&& l:old_item.filename[:len(s:temp_dir) - 1] isnot# s:temp_dir
+        \&& !ale#path#IsTempName(l:old_item.filename)
             " Use the filename given.
             " Temporary files are assumed to be for this buffer,
             " and the filename is not included then, because it looks bad

@@ -52,9 +52,4 @@ Execute(ale#path#IsBufferPath should accept various names for stdin):
 Execute(ale#path#IsBufferPath should match files in /tmp):
   call ale#test#SetFilename('app/test.ts')
 
-  " Skip these checks on Windows.
-  if !has('win32')
-    Assert ale#path#IsBufferPath(bufnr(''), '../../../../../../../../tmp/vG0hKyD/1/test.ts')
-    Assert ale#path#IsBufferPath(bufnr(''), '/tmp/vG0hKyD/1/test.ts')
-    Assert ale#path#IsBufferPath(bufnr(''), '/run/user/1000/vG0hKyD/1/test.ts')
-  endif
+  Assert ale#path#IsBufferPath(bufnr(''), tempname() . '/test.ts')

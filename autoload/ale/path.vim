@@ -80,22 +80,12 @@ function! ale#path#IsAbsolute(filename) abort
     return a:filename[:0] is# '/' || a:filename[1:2] is# ':\'
 endfunction
 
+let s:temp_dir = fnamemodify(tempname(), ':h')
+
 " Given a filename, return 1 if the file represents some temporary file
 " created by Vim.
 function! ale#path#IsTempName(filename) abort
-    let l:prefix_list = [
-    \   $TMPDIR,
-    \   resolve($TMPDIR),
-    \   '/run/user',
-    \]
-
-    for l:prefix in l:prefix_list
-        if a:filename[:len(l:prefix) - 1] is# l:prefix
-            return 1
-        endif
-    endfor
-
-    return 0
+    return a:filename[:len(s:temp_dir) - 1] is# s:temp_dir
 endfunction
 
 " Given a base directory, which must not have a trailing slash, and a
