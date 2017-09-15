@@ -100,7 +100,41 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
         \   'text': l:text,
         \   'type': l:error.level is# 'error' ? 'E' : 'W',
         \})
-    endfor
+
+        if has_key(l:error, 'extra')
+            " New flow error format contains extra property
+            for l:extra_error in l:error.extra
+  
+                for l:extra_message in l:extra_error.message
+                    let l:text = l:extra_message.descr
+                endfor
+  
+                for l:child in l:extra_error.children
+                    for l:child_message in l:child.message
+  
+                        if has_key(l:child_message, 'loc')
+                            \&& l:line is# 0
+                            \&& ale#path#IsBufferPath(a:buffer, l:message.loc.source)
+                            let l:line = l:child_message.loc.start.line + 0
+                            let l:col = l:child_message.loc.start.column + 0
+                        endif
+  
+                        let l:text = l:text . ' ' . l:child_message.descr
+  
+                    endfor
+                endfor
+  
+            endfor
+  
+            call add(l:output, {
+            \   'lnum': l:line,
+            \   'col': l:col,
+            \   'text': l:text, 
+            \   'type': l:error.level is# 'error' ? 'E' : 'W',
+            \})
+  
+          endif
+      endfor
 
     return l:output
 endfunction

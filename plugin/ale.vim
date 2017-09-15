@@ -112,6 +112,9 @@ let g:ale_open_list = get(g:, 'ale_open_list', 0)
 " This flag dictates if ale keeps open loclist even if there is no error in loclist
 let g:ale_keep_list_window_open = get(g:, 'ale_keep_list_window_open', 0)
 
+" Flow also reports error details now through an 'extra' property
+let g:ale_show_flow_details = get(g:, 'ale_show_flow_details', 0)
+
 " The window size to set for the quickfix and loclist windows
 call ale#Set('list_window_size', 10)
 
