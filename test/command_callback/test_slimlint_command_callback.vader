@@ -22,7 +22,7 @@ Execute(The command should have the .rubocop.yml prepended as an env var if one 
   call ale#test#SetFilename('../slimlint-test-files/subdir/file.slim')
 
   AssertEqual
-  \ 'SLIM_LINT_RUBUCOP_CONF=''/testplugin/test/slimlint-test-files/.rubocop.yml'' ' . g:default_command,
+  \ 'SLIM_LINT_RUBOCOP_CONF=''/testplugin/test/slimlint-test-files/.rubocop.yml'' ' . g:default_command,
   \ ale_linters#slim#slimlint#GetCommand(bufnr(''))
 
 Execute(The command should have the .rubocop.yml prepended as an env var if one exists on win32):
@@ -31,5 +31,5 @@ Execute(The command should have the .rubocop.yml prepended as an env var if one 
   let g:ale_has_override['win32'] = 1
 
   AssertEqual
-  \ 'set SLIM_LINT_RUBUCOP_CONF=''/testplugin/test/slimlint-test-files/.rubocop.yml'' && ' . g:default_command,
+  \ 'set SLIM_LINT_RUBOCOP_CONF=''/testplugin/test/slimlint-test-files/.rubocop.yml'' && ' . g:default_command,
   \ ale_linters#slim#slimlint#GetCommand(bufnr(''))
