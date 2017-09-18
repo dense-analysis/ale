@@ -6,15 +6,15 @@ function! ale_linters#slim#slimlint#GetCommand(buffer) abort
 
     let l:rubocop_config = ale#path#FindNearestFile(a:buffer, '.rubocop.yml')
 
-    " Set SLIM_LINT_RUBUCOP_CONF variable as it is needed for slim-lint to
+    " Set SLIM_LINT_RUBOCOP_CONF variable as it is needed for slim-lint to
     " pick up the rubocop config.
     "
     " See https://github.com/sds/slim-lint/blob/master/lib/slim_lint/linter/README.md#rubocop
     if !empty(l:rubocop_config)
       if ale#Has('win32')
-        let l:command = 'set SLIM_LINT_RUBUCOP_CONF=' . ale#Escape(l:rubocop_config) . ' && ' . l:command
+        let l:command = 'set SLIM_LINT_RUBOCOP_CONF=' . ale#Escape(l:rubocop_config) . ' && ' . l:command
       else
-        let l:command = 'SLIM_LINT_RUBUCOP_CONF=' . ale#Escape(l:rubocop_config) . ' ' . l:command
+        let l:command = 'SLIM_LINT_RUBOCOP_CONF=' . ale#Escape(l:rubocop_config) . ' ' . l:command
       endif
     endif
 
