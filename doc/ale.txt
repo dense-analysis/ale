@@ -1647,17 +1647,34 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          This argument may be omitted or `''` when a linter
                          does not represent an LSP linter.
 
+                         When this argument is set to `'socket'`, then the
+                         linter will be defined as an LSP linter which
+                         communicates with a running language server at
+                         an address provided by `address_callback`.
+                         With `socket`, none of `executable`,
+                         `executable_callback`, `command`, `command_callback`,
+                         `command_chain` may be provided.
+
                          When this argument is set to `'stdio'`, then the
                          linter will be defined as an LSP linter which keeps a
                          process for a language server runnning, and
                          communicates with it directly via a |channel|.
+                         In this case, `project_callback` and
+                         `language_callback` arguments must also be defined.
 
-                         When this argument is not empty, then the
-                         `project_callback` and `language_callback` arguments
-                         must also be defined.
+                         When this argument is set to `'tsserver'`, then the
+                         linter will be defined as an LSP linter which
+                         communicates with tsserver directly.
+                         In this case, `project_callback` and
+                         `language_callback` arguments must also be defined.
 
                          LSP linters handle diagonstics automatically, so
                          the `callback` argument must not be defined.
+
+  `address_callback`       A |String| of |Funcref| for a callback function
+                         accepting a buffer number. A |String| should be
+                         returned representing the address to the language
+                         server.
 
   `project_callback`       A |String| or |Funcref| for a callback function
                          accepting a buffer number. A |String| should be
