@@ -1,0 +1,35 @@
+Before:
+  runtime ale_linters/slim/slimlint.vim
+
+  let g:default_command = 'slim-lint %t'
+
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+After:
+  Restore
+
+  unlet! g:default_command
+
+  let g:ale_has_override = {}
+
+  call ale#linter#Reset()
+  call ale#test#RestoreDirectory()
+
+Execute(The default command should be correct):
+  AssertEqual g:default_command, ale_linters#slim#slimlint#GetCommand(bufnr(''))
+
+Execute(The command should have the .rubocop.yml prepended as an env var if one exists):
+  call ale#test#SetFilename('../slimlint-test-files/subdir/file.slim')
+
+  AssertEqual
+  \ 'SLIM_LINT_RUBOCOP_CONF=''/testplugin/test/slimlint-test-files/.rubocop.yml'' ' . g:default_command,
+  \ ale_linters#slim#slimlint#GetCommand(bufnr(''))
+
+Execute(The command should have the .rubocop.yml prepended as an env var if one exists on win32):
+  call ale#test#SetFilename('../slimlint-test-files/subdir/file.slim')
+
+  let g:ale_has_override['win32'] = 1
+
+  AssertEqual
+  \ 'set SLIM_LINT_RUBOCOP_CONF=''/testplugin/test/slimlint-test-files/.rubocop.yml'' && ' . g:default_command,
+  \ ale_linters#slim#slimlint#GetCommand(bufnr(''))
