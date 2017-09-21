@@ -1,6 +1,9 @@
 " Author: Zach Perrault -- @zperrault
 " Description: FlowType checking for JavaScript files
 
+" Flow extra errors
+" Author: Florian Beeres <yuuki@protonmail.com>
+
 call ale#Set('javascript_flow_executable', 'flow')
 call ale#Set('javascript_flow_use_global', 0)
 
