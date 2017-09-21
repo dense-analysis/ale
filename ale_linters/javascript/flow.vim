@@ -102,11 +102,20 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
         \})
 
         if has_key(l:error, 'extra')
+            \&& g:ale_show_flow_details
+
+            let l:text = ''
+
             " New flow error format contains extra property
             for l:extra_error in l:error.extra
   
                 for l:extra_message in l:extra_error.message
-                    let l:text = l:extra_message.descr
+                    if l:text is# ''
+                        " extra messages appear to already have a :
+                        let l:text = l:extra_message.descr
+                    else
+                        let l:text = l:text . ' ' . l:extra_message.descr
+                    endif
                 endfor
   
                 for l:child in l:extra_error.children
