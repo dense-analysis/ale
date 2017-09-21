@@ -102,7 +102,7 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
         \})
 
         if has_key(l:error, 'extra')
-            \&& g:ale_show_flow_details
+            \&& g:ale_javascript_flow_extra
 
             let l:text = ''
 
