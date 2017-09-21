@@ -109,7 +109,6 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
 
             let l:text = ''
 
-            " New flow error format contains extra property
             for l:extra_error in l:error.extra
   
                 for l:extra_message in l:extra_error.message
