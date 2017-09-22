@@ -44,9 +44,9 @@ function! ale_linters#sh#shellcheck#GetCommand(buffer) abort
     let l:dialect = ale_linters#sh#shellcheck#GetDialectArgument(a:buffer)
 
     return ale_linters#sh#shellcheck#GetExecutable(a:buffer)
+    \   . (!empty(l:dialect) ? ' -s ' . l:dialect : '')
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . (!empty(l:exclude_option) ? ' -e ' . l:exclude_option : '')
-    \   . (!empty(l:dialect) ? ' -s ' . l:dialect : '')
     \   . ' -f gcc -'
 endfunction
 
