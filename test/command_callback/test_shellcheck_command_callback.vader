@@ -45,3 +45,12 @@ Execute(The shellcheck command should include the dialect):
   AssertEqual
   \ 'shellcheck -s bash -f gcc -',
   \ ale_linters#sh#shellcheck#GetCommand(bufnr(''))
+
+Execute(The shellcheck command should include the dialect before options and exclusions):
+  let b:is_bash = 1
+  let b:ale_sh_shellcheck_options = '--foobar'
+  let b:ale_sh_shellcheck_exclusions = 'foo,bar'
+
+  AssertEqual
+  \ 'shellcheck -s bash --foobar -e foo,bar -f gcc -',
+  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''))
