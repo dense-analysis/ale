@@ -13,6 +13,7 @@ CONTENTS                                                         *ale-contents*
   5. Completion...........................|ale-completion|
   6. Global Options.......................|ale-options|
     6.1 Highlights........................|ale-highlights|
+    6.2 Options for write-good Linter.....|ale-write-good-options|
   7. Integration Documentation............|ale-integrations|
     asm...................................|ale-asm-options|
       gcc.................................|ale-asm-gcc|
@@ -215,7 +216,7 @@ Notes:
 
 * ASM: `gcc`
 * Ansible: `ansible-lint`
-* AsciiDoc: `proselint`
+* AsciiDoc: `proselint`, `write-good`
 * Awk: `gawk`
 * Bash: `shell` (-n flag), `shellcheck`
 * Bourne Shell: `shell` (-n flag), `shellcheck`
@@ -244,31 +245,31 @@ Notes:
 * Haml: `haml-lint`
 * Handlebars: `ember-template-lint`
 * Haskell: `ghc`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`
-* HTML: `HTMLHint`, `proselint`, `tidy`
+* HTML: `HTMLHint`, `proselint`, `tidy`, `write-good`
 * Idris: `idris`
 * Java: `checkstyle`, `javac`
 * JavaScript: `eslint`, `jscs`, `jshint`, `flow`, `prettier`, `prettier-eslint` >= 4.2.0, `prettier-standard`, `standard`, `xo`
 * JSON: `jsonlint`, `prettier`
 * Kotlin: `kotlinc`, `ktlint`
-* LaTeX (tex): `chktex`, `lacheck`, `proselint`
+* LaTeX (tex): `chktex`, `lacheck`, `proselint`, `write-good`
 * Lua: `luacheck`
-* Markdown: `mdl`, `proselint`, `vale`
+* Markdown: `mdl`, `proselint`, `vale`, `write-good`
 * MATLAB: `mlint`
 * Nim: `nim check`!!
 * nix: `nix-instantiate`
-* nroff: `proselint`
+* nroff: `proselint`, `write-good`
 * Objective-C: `clang`
 * Objective-C++: `clang`
 * OCaml: `merlin` (see |ale-ocaml-merlin|)
 * Perl: `perl -c`, `perl-critic`
 * PHP: `hack`, `langserver`, `php -l`, `phpcs`, `phpmd`, `phpstan`, `phpcbf`
-* Pod: `proselint`
+* Pod: `proselint`, `write-good`
 * Pug: `pug-lint`
 * Puppet: `puppet`, `puppet-lint`
 * Python: `autopep8`, `flake8`, `isort`, `mypy`, `pycodestyle`, `pylint`!!, `yapf`
 * R: `lintr`
 * ReasonML: `merlin`
-* reStructuredText: `proselint`
+* reStructuredText: `proselint`, `write-good`
 * RPM spec: `rpmlint`
 * Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`
 * Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|)
@@ -282,14 +283,14 @@ Notes:
 * SQL: `sqlint`
 * Swift: `swiftlint`, `swiftformat`
 * Tcl: `nagelfar`!!
-* Texinfo: `proselint`
-* Text^: `proselint`, `vale`
+* Texinfo: `proselint`, `write-good`
+* Text^: `proselint`, `vale`, `write-good`
 * Thrift: `thrift`
 * TypeScript: `eslint`, `tslint`, `tsserver`, `typecheck`, `prettier`
 * Verilog: `iverilog`, `verilator`
 * Vim: `vint`
-* Vim help^: `proselint`
-* XHTML: `proselint`
+* Vim help^: `proselint`, `write-good`
+* XHTML: `proselint`, `write-good`
 * XML: `xmllint`
 * YAML: `swaglint`, `yamllint`
 
@@ -358,6 +359,78 @@ based on regular expressions for filenames. For configuring entire projects,
 the buffer-local options can be used with external plugins for reading Vim
 project configuration files.
 
+=======
+* ASM: 'gcc'
+* Ansible: 'ansible-lint'
+* Asciidoc: 'proselint', 'write-good'
+* Bash: 'shell' (-n flag), 'shellcheck'
+* Bourne Shell: 'shell' (-n flag), 'shellcheck'
+* C: 'cppcheck', 'gcc', 'clang'
+* C++ (filetype cpp): 'clang', 'clangtidy', 'cppcheck', 'cpplint', 'gcc'
+* C#: 'mcs'
+* Chef: 'foodcritic'
+* CMake: 'cmakelint'
+* CoffeeScript: 'coffee', 'coffelint'
+* Crystal: 'crystal'
+* CSS: 'csslint', 'stylelint'
+* Cython (pyrex filetype): 'cython'
+* D: 'dmd'
+* Dart: 'dartanalyzer'
+* Dockerfile: 'hadolint'
+* Elixir: 'credo', 'dogma'
+* Elm: 'elm-make'
+* Erlang: 'erlc'
+* Fortran: 'gcc'
+* Go: 'gofmt', 'go vet', 'golint', 'go build', 'gosimple', 'staticcheck'
+* FusionScript: 'fusion-lint'
+* Haml: 'hamllint'
+* Handlebars: 'ember-template-lint'
+* Haskell: 'ghc', 'stack-ghc', 'stack-build', 'ghc-mod', 'stack-ghc-mod', 'hlint', 'hdevtools'
+* HTML: 'HTMLHint', 'proselint', 'tidy', 'write-good'
+* Java: 'javac'
+* JavaScript: 'eslint', 'jscs', 'jshint', 'flow', 'prettier', 'prettier-eslint', 'xo'
+* JSON: 'jsonlint'
+* Kotlin: 'kotlinc'
+* LaTeX (tex): 'chktex', 'lacheck', 'proselint', 'write-good'
+* Lua: 'luacheck'
+* Markdown: 'mdl', 'proselint', 'vale', 'write-good'
+* MATLAB: 'mlint'
+* nim: 'nim check'
+* nix: 'nix-instantiate'
+* nroff: 'proselint', 'write-good'
+* Objective-C: 'clang'
+* Objective-C++: 'clang'
+* OCaml: 'merlin' (see |ale-linter-integration-ocaml-merlin|)
+* Perl: 'perl' (-c flag), 'perlcritic'
+* PHP: 'hack', 'php' (-l flag), 'phpcs', 'phpmd', 'phpstan'
+* Pod: 'proselint', 'write-good'
+* Pug: 'pug-lint'
+* Puppet: 'puppet', 'puppet-lint'
+* Python: 'autopep8', 'flake8', 'isort', 'mypy', 'pylint', 'yapf'
+* R: 'lintr'
+* ReasonML: 'merlin'
+* reStructuredText: 'proselint', 'write-good'
+* RPM spec: 'spec'
+* Rust: 'rustc' (see |ale-integration-rust|)
+* Ruby: 'reek', 'rubocop'
+* SASS: 'sasslint', 'stylelint'
+* SCSS: 'sasslint', 'scsslint', 'stylelint'
+* Scala: 'scalac', 'scalastyle'
+* Slim: 'slim-lint'
+* SML: 'smlnj'
+* Stylus: 'stylelint'
+* SQL: 'sqlint'
+* Swift: 'swiftlint'
+* Texinfo: 'proselint', 'write-good'
+* Text: 'proselint', 'vale', 'write-good'
+* TypeScript: 'eslint', 'tslint', 'tsserver', 'typecheck'
+* Verilog: 'iverilog', 'verilator'
+* Vim: 'vint'
+* Vim help: 'proselint', 'write-good'
+* XHTML: 'proselint', 'write-good'
+* XML: 'xmllint'
+* YAML: 'swaglint', 'yamllint'
+>>>>>>> #643 documentation
 
 ===============================================================================
 4. Fixing Problems                                                    *ale-fix*
@@ -1234,6 +1307,36 @@ ALEWarningSign                                                 *ALEWarningSign*
   Default: `highlight link ALEWarningSign todo`
 
   The highlight used for warning signs. See |g:ale_set_signs|.
+
+
+-------------------------------------------------------------------------------
+6.2. Options for write-good Linter                     *ale-write-good-options*
+
+The options for the write-good linter are global because it does not make
+sense to have them specified on a per-language basis.
+
+g:ale_writegood_executable                         *g:ale_writegood_executable*
+                                                   *b:ale_writegood_executable*
+  Type: |String|
+  Default: `'writegood'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_writegood_options                               *g:ale_writegood_options*
+                                                      *b:ale_writegood_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to writegood.
+
+
+g:ale_writegood_use_global                         *g:ale_writegood_use_global*
+                                                   *b:ale_writegood_use_global*
+  Type: |Number|
+  Default: `0`
+
+  See |ale-integrations-local-executables|
 
 
 ===============================================================================
