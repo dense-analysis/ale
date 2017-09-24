@@ -11,7 +11,7 @@ function! ale#fixers#eslint#Fix(buffer) abort
 
     return {
     \   'command': ale#node#Executable(a:buffer, l:executable)
-    \       . ' --config ' . ale#Escape(l:config)
+    \       . ' -c ' . ale#Escape(l:config)
     \       . ' --fix %t',
     \   'read_temporary_file': 1,
     \}

@@ -13,7 +13,7 @@ Execute(The path to eslint.js should be run on Unix):
   \   'read_temporary_file': 1,
   \   'command':
   \     ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
-  \     . ' --config ' . ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
+  \     . ' -c ' . ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --fix %t',
   \ },
   \ ale#fixers#eslint#Fix(bufnr(''))
@@ -26,7 +26,7 @@ Execute(The lower priority configuration file in a nested directory should be pr
   \   'read_temporary_file': 1,
   \   'command':
   \     ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
-  \     . ' --config ' . ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/subdir-with-config/.eslintrc'))
+  \     . ' -c ' . ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/subdir-with-config/.eslintrc'))
   \     . ' --fix %t',
   \ },
   \ ale#fixers#eslint#Fix(bufnr(''))
@@ -39,7 +39,7 @@ Execute(package.json should be used as a last resort):
   \   'read_temporary_file': 1,
   \   'command':
   \     ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
-  \     . ' --config ' . ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
+  \     . ' -c ' . ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --fix %t',
   \ },
   \ ale#fixers#eslint#Fix(bufnr(''))
@@ -51,7 +51,7 @@ Execute(package.json should be used as a last resort):
   \   'read_temporary_file': 1,
   \   'command':
   \     ale#Escape(simplify(g:dir . '/../eslint-test-files/node_modules/.bin/eslint'))
-  \     . ' --config ' . ale#Escape(simplify(g:dir . '/../eslint-test-files/package.json'))
+  \     . ' -c ' . ale#Escape(simplify(g:dir . '/../eslint-test-files/package.json'))
   \     . ' --fix %t',
   \ },
   \ ale#fixers#eslint#Fix(bufnr(''))
