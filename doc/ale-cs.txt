@@ -1,0 +1,75 @@
+===============================================================================
+ALE C# Integration                                             *ale-cs-options*
+
+
+===============================================================================
+mcs                 																		           *ale-cs-mcs*
+
+  The mcs linter calls the mono mcs compiler setting the --parse and -unsafe
+  flags.
+
+g:ale_cs_mcs_options                                     *g:ale_cs_mcs_options*
+                                                         *b:ale_cs_mcs_options*
+
+  Type: String
+  Default: `''`
+
+  This variable can be changed to modify flags given to mcs. The options
+  --parse and -unsafe are implicitly set.
+
+
+===============================================================================
+mcsc                                                              *ale-cs-mcsc*
+
+	The mcsc linter uses the mono mcs compiler to generate a temporary module
+  target file (-t:module) including all '*.cs' files contained in the
+	directory by specified by |g:ale_cs_mcsc_source| or |b:ale_cs_mcsc_source|
+  variable and all sub directories. Currently none can be excluded from
+  linting. It uses the assembly directories as specified by 
+	|g:ale_cs_mcsc_assembly_path| or |b:ale_cs_mcsc_assembly_path| and selects
+  the assembly files specified by |g:ale_cs_mcsc_assemblies| or 
+  |b:ale_cs_mcsc_assemblies|. The mcs -unsafe option is set implicitly and has
+  not to be added using |g:ale_cs_mcsc_options| or |b:ale_cs_mcsc_options|
+  variable.
+
+g:ale_cs_mcsc_options                                 *g:ale_cs_mcsc_options*
+                                                      *b:ale_cs_mcsc_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to set further options for example adding packages 
+  (eg.: -pkg:dotnet) with are not added per default.
+
+g:ale_cs_mcsc_source                                   *g:ale_cs_mcsc_source*
+                                                       *b:ale_cs_mcsc_source*
+  Type: |String|
+  Default: `''`
+
+  This variable defines the base path of the directory tree the '*.cs' files
+  should be included into the compilation of the temporary module. If empty
+  the current directory is used.
+
+g:ale_cs_mcsc_assembly_path                     *g:ale_cs_mcsc_assembly_path*
+                                                *b:ale_cs_mcsc_assembly_path*
+  Type: |List|
+  Default: `[]`
+
+  This variable defines a list of absolute or relative path strings pointing
+  to the location of the assembly files (*.dll) to be considered by mcsc
+  linter. If the list is not empty the list will be added to the mcsc command
+  line using the -lib: flag of mcs.
+
+g:ale_cs_mcsc_assemblies                            *g:ale_cs_mcsc_assemblies*
+                                                   *b:ale_cs_mcsc_assemblies*
+  Type: |List|
+  Default: `[]`
+
+  This variable defines a list of assembly files (*.dll) to be considered by
+  the mono mcs compiler when generating the temporary module. If the list is
+  not empty the list of assemblies will be added to the mcsc command
+  line using the -r: flag of mcs. To change the search path mcs uses to 
+  locate the specified assembly files use |g:ale_cs_mcsc_assembly_path| or
+  |b:ale_cs_mcsc_assembly_path| variables
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
