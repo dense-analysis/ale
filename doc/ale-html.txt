@@ -57,7 +57,7 @@ g:ale_html_tidy_options                               *g:ale_html_tidy_options*
 
 
 ===============================================================================
-write-good                                            *ale-asciidoc-write-good*
+write-good                                                *ale-html-write-good*
 
 See |ale-write-good-options|
 

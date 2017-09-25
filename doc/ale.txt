@@ -1310,7 +1310,7 @@ ALEWarningSign                                                 *ALEWarningSign*
 
 
 -------------------------------------------------------------------------------
-6.2. Options for write-good Linter                     *ale-write-good-options*
+6.2. Options for write-good                            *ale-write-good-options*
 
 The options for the write-good linter are global because it does not make
 sense to have them specified on a per-language basis.

@@ -30,7 +30,7 @@ function! ale#handlers#writegood#GetCommand(buffer) abort
     \   . ' %t'
 endfunction
 
-function! s:HandleWriteGoodFormat(buffer, lines, type) abort
+function! ale#handlers#writegood#Handle(buffer, lines) abort
     " Look for lines like the following.
     "
     " "it is" is wordy or unneeded on line 20 at column 53
@@ -46,13 +46,9 @@ function! s:HandleWriteGoodFormat(buffer, lines, type) abort
         \   'text': l:match[1],
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 1,
-        \   'type': a:type,
+        \   'type': 'W',
         \})
     endfor
 
     return l:output
-endfunction
-
-function! ale#handlers#writegood#Handle(buffer, lines) abort
-    return s:HandleWriteGoodFormat(a:buffer, a:lines, 'W')
 endfunction
