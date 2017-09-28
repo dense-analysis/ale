@@ -36,6 +36,9 @@ CONTENTS                                                         *ale-contents*
       cppcheck............................|ale-cpp-cppcheck|
       cpplint.............................|ale-cpp-cpplint|
       gcc.................................|ale-cpp-gcc|
+    c#....................................|ale-cs-options|
+      mcs.................................|ale-cs-mcs|
+      mcsc................................|ale-cs-mcsc|
     css...................................|ale-css-options|
       prettier............................|ale-css-prettier|
       stylelint...........................|ale-css-stylelint|
@@ -222,7 +225,7 @@ Notes:
 * C: `cppcheck`, `cpplint`!!, `gcc`, `clang`, `clangtidy`!!, `clang-format`
 * C++ (filetype cpp): `clang`, `clangcheck`!!, `clangtidy`!!, `cppcheck`, `cpplint`!!, `gcc`, `clang-format`
 * CUDA: `nvcc`!!
-* C#: `mcs`
+* C#: `mcs`, `mcsc`!!
 * Chef: `foodcritic`
 * CMake: `cmakelint`
 * CoffeeScript: `coffee`, `coffeelint`
