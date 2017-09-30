@@ -124,5 +124,13 @@ g:ale_php_phpstan_level                               *g:ale_php_phpstan_level*
   strictest.
 
 
+g:ale_php_phpstan_configuration               *g:ale_php_phpstan_configuration*
+                                              *b:ale_php_phpstan_configuration*
+  Type: |String|
+  Default: `''`
+
+  This variable sets path to phpstan configuration file.
+
+
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
