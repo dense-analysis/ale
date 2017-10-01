@@ -56,7 +56,7 @@ Execute(Configuration files should be detected):
   \   'command':
   \     ale#Escape('prettier-eslint')
   \     . ' %t'
-  \     . ' --eslint-config-path ' . ale#Escape(g:dir . '/eslint-test-files/react-app/.eslintrc.js')
+  \     . ' --eslint-config-path ' . ale#Escape(ale#path#Winify(g:dir . '/eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --write'
   \ },
   \ ale#fixers#prettier_eslint#Fix(bufnr(''))

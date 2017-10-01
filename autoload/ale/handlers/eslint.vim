@@ -1,6 +1,8 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Functions for working with eslint, for checking or fixing files.
 
+let s:sep = has('win32') ? '\' : '/'
+
 call ale#Set('javascript_eslint_options', '')
 call ale#Set('javascript_eslint_executable', 'eslint')
 call ale#Set('javascript_eslint_use_global', 0)
@@ -15,7 +17,7 @@ function! ale#handlers#eslint#FindConfig(buffer) abort
         \   '.eslintrc.json',
         \   '.eslintrc',
         \]
-            let l:config = ale#path#Simplify(l:path . '/' . l:basename)
+            let l:config = ale#path#Simplify(join([l:path, l:basename], s:sep))
 
             if filereadable(l:config)
                 return l:config

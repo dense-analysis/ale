@@ -11,8 +11,12 @@ Before:
   silent cd command_callback
   let g:dir = getcwd()
 
+  let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
+
 After:
   Restore
+
+  unlet! b:bin_dir
 
   call ale#test#RestoreDirectory()
 
@@ -23,7 +27,7 @@ Execute(The autopep8 callback should return the correct default values):
 
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
-  \ {'command': "'" . g:dir . "/python_paths/with_virtualenv/env/bin/autopep8' -" },
+  \ {'command': ale#Escape(ale#path#Winify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/autopep8')) . ' -'},
   \ ale#fixers#autopep8#Fix(bufnr(''))
 
 Execute(The autopep8 callback should include options):
@@ -31,5 +35,5 @@ Execute(The autopep8 callback should include options):
 
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
-  \ {'command': "'" . g:dir . "/python_paths/with_virtualenv/env/bin/autopep8' --some-option -" },
+  \ {'command': ale#Escape(ale#path#Winify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/autopep8')) . ' --some-option -' },
   \ ale#fixers#autopep8#Fix(bufnr(''))

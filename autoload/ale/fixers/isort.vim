@@ -11,7 +11,7 @@ function! ale#fixers#isort#Fix(buffer) abort
     \   ['isort'],
     \)
 
-    if !executable(l:executable)
+    if !ale#python#IsExecutable(l:executable)
         return 0
     endif
 
