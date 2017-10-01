@@ -92,6 +92,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['c', 'cpp'],
 \       'description': 'Fix C/C++ files with clang-format.',
 \   },
+\   'gofmt': {
+\       'function': 'ale#fixers#gofmt#Fix',
+\       'suggested_filetypes': ['go'],
+\       'description': 'Fix Go files with go fmt.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
