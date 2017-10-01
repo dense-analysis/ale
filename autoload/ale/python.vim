@@ -1,6 +1,7 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Functions for integrating with Python linters.
 
+let s:sep = has('win32') ? '\' : '/'
 " bin is used for Unix virtualenv directories, and Scripts is for Windows.
 let s:bin_dir = has('unix') ? 'bin' : 'Scripts'
 let g:ale_virtualenv_dir_names = get(g:, 'ale_virtualenv_dir_names', [
@@ -10,7 +11,6 @@ let g:ale_virtualenv_dir_names = get(g:, 'ale_virtualenv_dir_names', [
 \   've',
 \   'virtualenv',
 \])
-
 
 function! ale#python#FindProjectRootIni(buffer) abort
     for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
@@ -58,15 +58,26 @@ function! ale#python#FindVirtualenv(buffer) abort
         endif
 
         for l:dirname in ale#Var(a:buffer, 'virtualenv_dir_names')
-            let l:venv_dir = ale#path#Simplify(l:path . '/' . l:dirname)
+            let l:venv_dir = ale#path#Simplify(
+            \   join([l:path, l:dirname], s:sep)
+            \)
+            let l:script_filename = ale#path#Simplify(
+            \   join([l:venv_dir, s:bin_dir, 'activate'], s:sep)
+            \)
 
-            if filereadable(ale#path#Simplify(l:venv_dir . '/' . s:bin_dir . '/activate'))
+            if filereadable(l:script_filename)
                 return l:venv_dir
             endif
         endfor
     endfor
 
     return ''
+endfunction
+
+" Run an executable check for Python scripts.
+" On Windows, 1 will be returned if the file is merely readable.
+function! ale#python#IsExecutable(path) abort
+    return has('win32') ? filereadable(a:path) : executable(a:path)
 endfunction
 
 " Given a buffer number and a command name, find the path to the executable.
@@ -81,9 +92,11 @@ function! ale#python#FindExecutable(buffer, base_var_name, path_list) abort
 
     if !empty(l:virtualenv)
         for l:path in a:path_list
-            let l:ve_executable = ale#path#Simplify(l:virtualenv . '/' . s:bin_dir . '/' . l:path)
+            let l:ve_executable = ale#path#Simplify(
+            \   join([l:virtualenv, s:bin_dir, l:path], s:sep)
+            \)
 
-            if executable(l:ve_executable)
+            if ale#python#IsExecutable(l:ve_executable)
                 return l:ve_executable
             endif
         endfor
