@@ -19,21 +19,21 @@ Execute(The mcs handler should handle cannot find symbol errors):
   \     'col' : 29,
   \     'text': 'error CS1001: ; expected',
   \     'type': 'E',
-  \     'filename': '/home/foo/project/bar/Test.cs'
+  \     'filename': ale#path#Winify('/home/foo/project/bar/Test.cs', 'add_drive'),
   \   },
   \   {
   \     'lnum': 101,
   \     'col': 0,
   \     'text': 'error CS1028: Unexpected processor directive (no #if for this #endif)',
   \     'type': 'E',
-  \     'filename': '/home/foo/project/bar/Test.cs'
+  \     'filename': ale#path#Winify('/home/foo/project/bar/Test.cs', 'add_drive'),
   \   },
   \   {
   \     'lnum': 10,
   \     'col': 12,
   \     'text': 'warning CS0123: some warning',
   \     'type': 'W',
-  \     'filename': '/home/foo/project/bar/Test.cs'
+  \     'filename': ale#path#Winify('/home/foo/project/bar/Test.cs', 'add_drive'),
   \   },
   \ ],
   \ ale_linters#cs#mcsc#Handle(347, [
