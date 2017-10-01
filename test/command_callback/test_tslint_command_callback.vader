@@ -12,6 +12,7 @@ Before:
   runtime ale_linters/typescript/tslint.vim
 
   call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#test#SetFilename('test.ts')
 
 After:
   Restore
@@ -23,7 +24,7 @@ After:
 
 Execute(The default tslint command should be correct):
   AssertEqual
-  \ 'cd ''' . expand('%:p:h') . ''' && '
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
   \   . 'tslint --format json %t',
   \ ale_linters#typescript#tslint#GetCommand(bufnr(''))
 
@@ -31,7 +32,7 @@ Execute(The rules directory option should be included if set):
   let b:ale_typescript_tslint_rules_dir = '/foo/bar'
 
   AssertEqual
-  \ 'cd ''' . expand('%:p:h') . ''' && '
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
   \   . 'tslint --format json'
   \   . ' -r ' . ale#Escape('/foo/bar')
   \   . ' %t',
