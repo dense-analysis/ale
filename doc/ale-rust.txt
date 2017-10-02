@@ -20,7 +20,7 @@ Integration Information
      while you type.
   3. rls -- If you have `rls` installed, you might prefer using this linter
      over cargo. rls implements the Language Server Protocol for incremental
-     compliation of Rust code, and can check Rust files while you type. `rls`
+     compilation of Rust code, and can check Rust files while you type. `rls`
      requires Rust files to contained in Cargo projects.
 
   Only cargo is enabled by default. To switch to using rustc instead of cargo,

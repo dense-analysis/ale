@@ -2,7 +2,7 @@
 " Description: This file adds support for using the shellcheck linter with
 "   shell scripts.
 
-" This global variable can be set with a string of comma-seperated error
+" This global variable can be set with a string of comma-separated error
 " codes to exclude from shellcheck. For example:
 "
 " let g:ale_sh_shellcheck_exclusions = 'SC2002,SC2004'

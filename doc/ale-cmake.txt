@@ -5,7 +5,7 @@ ALE CMake Integration                                       *ale-cmake-options*
 ===============================================================================
 cmakelint                                                 *ale-cmake-cmakelint*
 
-g:ale_cmake_cmakelint_exectuable             *g:ale_cmake_cmakelint_executable*
+g:ale_cmake_cmakelint_executable             *g:ale_cmake_cmakelint_executable*
                                              *b:ale_cmake_cmakelint_executable*
   Type: |String|
   Default: `'cmakelint'`
