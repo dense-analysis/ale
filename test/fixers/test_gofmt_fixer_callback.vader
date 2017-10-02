@@ -19,7 +19,7 @@ Execute(The gofmt callback should return the correct default values):
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
-  \   'command': ale#Escape(g:ale_go_gofmt_executable)
+  \   'command': ale#Escape('xxxinvalid')
   \     . ' -l -w'
   \     . ' %t',
   \ },
@@ -32,7 +32,7 @@ Execute(The gofmt callback should include custom gofmt options):
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
-  \   'command': ale#Escape(g:ale_go_gofmt_executable)
+  \   'command': ale#Escape('xxxinvalid')
   \     . ' -l -w'
   \     . ' ' . g:ale_go_gofmt_options
   \     . ' %t',
