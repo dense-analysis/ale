@@ -21,6 +21,16 @@ while ensuring it doesn't run any linters known to be slow or resource
 intensive.
 
 ===============================================================================
+gofmt                                                            *ale-go-gofmt*
+
+g:ale_go_gofmt_options                                 *g:ale_go_gofmt_options*
+                                                       *b:ale_go_gofmt_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to the gofmt fixer.
+
+===============================================================================
 gometalinter                                              *ale-go-gometalinter*
 
 `gometalinter` is a `lint_file` linter, which only lints files that are
@@ -48,16 +58,6 @@ g:ale_go_gometalinter_options                   *g:ale_go_gometalinter_options*
   use `gometalinter` as one of the linters in |g:ale_linters|. This disables a
   number of linters known to be slow or consume a lot of resources.
 
-
-===============================================================================
-gofmt                                                            *ale-go-gofmt*
-
-g:ale_go_gofmt_options                                 *g:ale_go_gofmt_options*
-                                                       *b:ale_go_gofmt_options*
-  Type: |String|
-  Default: `''`
-
-  This variable can be set to pass additional options to the gofmt fixer.
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
