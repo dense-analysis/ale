@@ -14,7 +14,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The gofmt callback should return the correct default values):
-  call ale#test#SetFilename('../prettier-test-files/testfile.js')
+  call ale#test#SetFilename('../go_files/testfile.go')
 
   AssertEqual
   \ {
@@ -27,7 +27,7 @@ Execute(The gofmt callback should return the correct default values):
 
 Execute(The gofmt callback should include custom gofmt options):
   let g:ale_go_gofmt_options = "-r '(a) -> a'"
-  call ale#test#SetFilename('../prettier-test-files/testfile.js')
+  call ale#test#SetFilename('../go_files/testfile.go')
 
   AssertEqual
   \ {
