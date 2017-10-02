@@ -20,7 +20,7 @@ Execute(The gofmt callback should return the correct default values):
   \ {
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_go_gofmt_executable)
-  \     . '-l -w'
+  \     . ' -l -w'
   \     . ' %t',
   \ },
   \ ale#fixers#gofmt#Fix(bufnr(''))
@@ -33,7 +33,7 @@ Execute(The gofmt callback should include custom gofmt options):
   \ {
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_go_gofmt_executable)
-  \     . '-l -w'
+  \     . ' -l -w'
   \     . ' ' . g:ale_go_gofmt_options
   \     . ' %t',
   \ },

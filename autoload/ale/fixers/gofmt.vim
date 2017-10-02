@@ -10,7 +10,7 @@ function! ale#fixers#gofmt#Fix(buffer) abort
 
     return {
     \   'command': ale#Escape(l:executable)
-    \       . '-l -w'
+    \       . ' -l -w'
     \       . (empty(l:options) ? '' : ' ' . l:options)
     \       . ' %t',
     \   'read_temporary_file': 1,
