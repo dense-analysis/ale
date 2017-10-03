@@ -214,24 +214,32 @@ function! s:BuildSignMap(current_sign_list, grouped_items) abort
     let l:sign_offset = g:ale_sign_offset
 
     for [l:line, l:sign_id, l:name] in a:current_sign_list
-        let l:sign_map[l:line] = {
-        \   'current_id': l:sign_id,
-        \   'current_name': l:name,
+        let l:sign_info = get(l:sign_map, l:line, {
+        \   'current_id_list': [],
+        \   'current_name_list': [],
         \   'new_id': 0,
         \   'new_name': '',
         \   'items': [],
-        \}
+        \})
 
+        " Increment the sign offset for new signs, by the maximum sign ID.
         if l:sign_id > l:sign_offset
             let l:sign_offset = l:sign_id
         endif
+
+        " Remember the sign names and IDs in separate Lists, so they are easy
+        " to work with.
+        call add(l:sign_info.current_id_list, l:sign_id)
+        call add(l:sign_info.current_name_list, l:name)
+
+        let l:sign_map[l:line] = l:sign_info
     endfor
 
     for l:group in a:grouped_items
         let l:line = l:group[0].lnum
         let l:sign_info = get(l:sign_map, l:line, {
-        \   'current_id': 0,
-        \   'current_name': '',
+        \   'current_id_list': [],
+        \   'current_name_list': [],
         \   'new_id': 0,
         \   'new_name': '',
         \   'items': [],
@@ -240,11 +248,18 @@ function! s:BuildSignMap(current_sign_list, grouped_items) abort
         let l:sign_info.new_name = ale#sign#GetSignName(l:group)
         let l:sign_info.items = l:group
 
-        if l:sign_info.current_name isnot# l:sign_info.new_name
+        let l:index = index(
+        \   l:sign_info.current_name_list,
+        \   l:sign_info.new_name
+        \)
+
+        if l:index >= 0
+            " We have a sign with this name already, so use the same ID.
+            let l:sign_info.new_id = l:sign_info.current_id_list[l:index]
+        else
+            " This sign name replaces the previous name, so use a new ID.
             let l:sign_info.new_id = l:sign_offset + 1
             let l:sign_offset += 1
-        else
-            let l:sign_info.new_id = l:sign_info.current_id
         endif
 
         let l:sign_map[l:line] = l:sign_info
@@ -278,7 +293,7 @@ function! ale#sign#GetSignCommands(buffer, was_sign_set, sign_map) abort
                 let l:item.sign_id = l:info.new_id
             endfor
 
-            if l:info.new_id isnot l:info.current_id
+            if index(l:info.current_id_list, l:info.new_id) < 0
                 call add(l:command_list, 'sign place '
                 \   . (l:info.new_id)
                 \   . ' line=' . l:line_str
@@ -291,12 +306,14 @@ function! ale#sign#GetSignCommands(buffer, was_sign_set, sign_map) abort
 
     " Remove signs without new IDs.
     for l:info in values(a:sign_map)
-        if l:info.current_id && l:info.current_id isnot l:info.new_id
-            call add(l:command_list, 'sign unplace '
-            \   . (l:info.current_id)
-            \   . ' buffer=' . a:buffer
-            \)
-        endif
+        for l:current_id in l:info.current_id_list
+            if l:current_id isnot l:info.new_id
+                call add(l:command_list, 'sign unplace '
+                \   . l:current_id
+                \   . ' buffer=' . a:buffer
+                \)
+            endif
+        endfor
     endfor
 
     " Remove the dummy sign to close the sign column if we need to.
