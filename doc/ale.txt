@@ -62,6 +62,7 @@ CONTENTS                                                         *ale-contents*
     glsl..................................|ale-glsl-options|
       glslang.............................|ale-glsl-glslang|
     go....................................|ale-go-options|
+      gofmt...............................|ale-go-gofmt|
       gometalinter........................|ale-go-gometalinter|
     graphql...............................|ale-graphql-options|
       gqlint..............................|ale-graphql-gqlint|
