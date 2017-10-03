@@ -28,7 +28,7 @@ function! ale#command#FormatCommand(buffer, command, pipe_file_if_needed) abort
     " with an ugly string.
     let l:command = substitute(l:command, '%%', '<<PERCENTS>>', 'g')
 
-    " Replace all %s occurences in the string with the name of the current
+    " Replace all %s occurrences in the string with the name of the current
     " file.
     if l:command =~# '%s'
         let l:filename = fnamemodify(bufname(a:buffer), ':p')
