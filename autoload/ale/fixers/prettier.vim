@@ -10,6 +10,10 @@ call ale#Set('javascript_prettier_options', '')
 function! s:FindConfig(buffer) abort
     for l:filename in [
     \   '.prettierrc',
+    \   '.prettierrc.json',
+    \   '.prettierrc.yaml',
+    \   '.prettierrc.yml',
+    \   '.prettierrc.js',
     \   'prettier.config.js',
     \   'package.json',
     \ ]
