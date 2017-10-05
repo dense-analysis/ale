@@ -9,8 +9,7 @@ After:
   Restore
 
   unlet! g:default_command
-
-  let g:ale_has_override = {}
+  unlet! b:conf
 
   call ale#linter#Reset()
   call ale#test#RestoreDirectory()
@@ -21,15 +20,20 @@ Execute(The default command should be correct):
 Execute(The command should have the .rubocop.yml prepended as an env var if one exists):
   call ale#test#SetFilename('../slimlint-test-files/subdir/file.slim')
 
-  AssertEqual
-  \ 'SLIM_LINT_RUBOCOP_CONF=''/testplugin/test/slimlint-test-files/.rubocop.yml'' ' . g:default_command,
-  \ ale_linters#slim#slimlint#GetCommand(bufnr(''))
+  let b:conf = ale#path#Winify(g:dir . '/../slimlint-test-files/.rubocop.yml')
 
-Execute(The command should have the .rubocop.yml prepended as an env var if one exists on win32):
-  call ale#test#SetFilename('../slimlint-test-files/subdir/file.slim')
-
-  let g:ale_has_override['win32'] = 1
-
-  AssertEqual
-  \ 'set SLIM_LINT_RUBOCOP_CONF=''/testplugin/test/slimlint-test-files/.rubocop.yml'' && ' . g:default_command,
-  \ ale_linters#slim#slimlint#GetCommand(bufnr(''))
+  if has('win32')
+    " Windows uses 'set var=... && command'
+    AssertEqual
+    \ 'set SLIM_LINT_RUBOCOP_CONF='
+    \   . ale#Escape(b:conf)
+    \   .  ' && ' . g:default_command,
+    \ ale_linters#slim#slimlint#GetCommand(bufnr(''))
+  else
+    " Unix uses 'var=... command'
+    AssertEqual
+    \ 'SLIM_LINT_RUBOCOP_CONF='
+    \   . ale#Escape(b:conf)
+    \   .  ' ' . g:default_command,
+    \ ale_linters#slim#slimlint#GetCommand(bufnr(''))
+  endif

@@ -1,10 +1,16 @@
 Before:
+  Save g:ale_scala_scalastyle_options
+  Save g:ale_scalastyle_config_loc
+
+  unlet! g:ale_scala_scalastyle_options
+  unlet! g:ale_scalastyle_config_loc
+
   runtime ale_linters/scala/scalastyle.vim
 
 After:
+  Restore
+
   call ale#linter#Reset()
-  let g:ale_scala_scalastyle_options = ''
-  let g:ale_scalastyle_conf_loc = ''
 
 Execute(Should return the correct default command):
   AssertEqual
@@ -15,13 +21,16 @@ Execute(Should allow using a custom config file):
   let g:ale_scalastyle_config_loc = '/dooper/config.xml'
 
   AssertEqual
-  \   'scalastyle --config ''/dooper/config.xml'' %t',
+  \   'scalastyle'
+  \     . ' --config ' . ale#Escape('/dooper/config.xml')
+  \     . ' %t',
   \   ale_linters#scala#scalastyle#GetCommand(bufnr(''))
 
 Execute(Should allow using custom options):
   let g:ale_scala_scalastyle_options = '--warnings false --quiet true'
 
   AssertEqual
-  \   'scalastyle --config ''/dooper/config.xml'' --warnings false --quiet true %t',
+  \   'scalastyle'
+  \     . ' --warnings false --quiet true'
+  \     . ' %t',
   \   ale_linters#scala#scalastyle#GetCommand(bufnr(''))
-

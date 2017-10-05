@@ -30,7 +30,12 @@ Execute(The yaml swaglint command callback should allow a global installation to
 
 Execute(The yaml swaglint command callback should allow a local installation to be used):
   call ale#test#SetFilename('swaglint_paths/docs/swagger.yaml')
-  AssertEqual g:dir . '/swaglint_paths/node_modules/.bin/swaglint',
+
+  AssertEqual
+  \ ale#path#Winify(g:dir . '/swaglint_paths/node_modules/.bin/swaglint'),
   \ ale_linters#yaml#swaglint#GetExecutable(bufnr(''))
-  AssertEqual g:dir . '/swaglint_paths/node_modules/.bin/swaglint -r compact --stdin',
+
+  AssertEqual
+  \ ale#path#Winify(g:dir . '/swaglint_paths/node_modules/.bin/swaglint')
+  \   . ' -r compact --stdin',
   \ ale_linters#yaml#swaglint#GetCommand(bufnr(''))
