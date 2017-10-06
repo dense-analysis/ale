@@ -257,6 +257,7 @@ Notes:
 * JSON: `jsonlint`, `prettier`
 * Kotlin: `kotlinc`, `ktlint`
 * LaTeX (tex): `chktex`, `lacheck`, `proselint`
+* LLVM: `llc`
 * Lua: `luacheck`
 * Markdown: `mdl`, `proselint`, `vale`
 * MATLAB: `mlint`
