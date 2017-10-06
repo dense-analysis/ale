@@ -7,7 +7,6 @@ function! ale_linters#llvm#llc#GetCommand(buffer) abort
     return ale#Var(a:buffer, 'llvm_llc_command')
     \   . ' -filetype=null -o='
     \   . ale#Escape(g:ale#util#nul_file)
-    \   . ' %s'
 endfunction
 
 function! ale_linters#llvm#llc#HandleErrors(buffer, lines) abort
