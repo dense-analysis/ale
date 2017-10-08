@@ -125,6 +125,7 @@ call ale#Set('change_sign_column_color', 0)
 
 " This flag can be set to 0 to disable setting error highlights.
 let g:ale_set_highlights = get(g:, 'ale_set_highlights', has('syntax'))
+let g:ale_highlight_expand = get(g:, 'ale_highlight_expand', 0)
 
 " These variables dictate what sign is used to indicate errors and warnings.
 call ale#Set('sign_error', '>>')
