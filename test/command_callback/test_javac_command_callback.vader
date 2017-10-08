@@ -1,97 +1,151 @@
 Before:
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+  Save g:ale_java_javac_options
+  Save g:ale_java_javac_classpath
+
+  unlet! g:ale_java_javac_options
+  unlet! g:ale_java_javac_classpath
+
+  let g:cp_sep = has('unix') ? ':' : ';'
+
+  function! GetCommand(previous_output) abort
+    let l:command = ale_linters#java#javac#GetCommand(
+    \ bufnr(''),
+    \ a:previous_output
+    \)
+
+    let l:split_command = split(l:command)
+    let l:index = index(l:split_command, '-d')
+
+    let l:split_command[l:index + 1] = 'TEMP'
+
+    return join(l:split_command)
+  endfunction
+
   runtime ale_linters/java/javac.vim
   call ale#engine#InitBufferInfo(bufnr(''))
 
-  silent! cd /testplugin/test/command_callback
+  call ale#test#SetFilename('dummy.java')
 
 After:
+  call ale#test#RestoreDirectory()
+
+  Restore
+
+  unlet! g:cp_sep
+
+  delfunction GetCommand
+
   call ale#linter#Reset()
   " We need to clean up the buffer to remove the temporary directories created
   " for the command.
   call ale#engine#Cleanup(bufnr(''))
-  let g:ale_java_javac_options = ''
-  let g:ale_java_javac_classpath = ''
 
 Execute(The javac callback should return the correct default value):
-  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
-
-  Assert match(b:command, '\v^javac +-Xlint +-d +''/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
-  \ 'Invalid command string: ' . b:command
+  AssertEqual 'javac -Xlint -d TEMP %t', GetCommand([])
 
 Execute(The javac callback should use g:ale_java_javac_classpath correctly):
   let g:ale_java_javac_classpath = 'foo.jar'
 
-  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
-
-  Assert match(b:command, '\v^javac +-Xlint +-cp ''+foo\.jar'' +-d ''+/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
-  \ 'Invalid command string: ' . b:command
+  AssertEqual
+  \ 'javac -Xlint'
+  \   . ' -cp ' . ale#Escape('foo.jar')
+  \   . ' -d TEMP %t',
+  \ GetCommand([])
 
 Execute(The javac callback should include discovered classpaths):
-  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [
-  \ '[DEBUG] Ignore this.',
-  \ '[INFO] Something we should ignore.',
-  \ '/foo/bar.jar',
-  \ '/xyz/abc.jar',
-  \])
-
-  Assert match(b:command, '\v^javac +-Xlint +-cp ''+/foo/bar\.jar:/xyz/abc\.jar'' +-d +''/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
-  \ 'Invalid command string: ' . b:command
+  AssertEqual
+  \ 'javac -Xlint -cp '
+  \   . ale#Escape(join(['/foo/bar.jar', '/xyz/abc.jar'], g:cp_sep))
+  \   . ' -d TEMP %t',
+  \ GetCommand([
+  \   '[DEBUG] Ignore this.',
+  \   '[INFO] Something we should ignore.',
+  \   '/foo/bar.jar',
+  \   '/xyz/abc.jar',
+  \ ])
 
 Execute(The javac callback should combine discovered classpaths and manual ones):
   let g:ale_java_javac_classpath = 'configured.jar'
 
-  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [
-  \ '[DEBUG] Ignore this.',
-  \ '[INFO] Something we should ignore.',
-  \ '/foo/bar.jar',
-  \ '/xyz/abc.jar',
-  \])
+  AssertEqual
+  \ 'javac -Xlint -cp '
+  \   . ale#Escape(join(
+  \     [
+  \       '/foo/bar.jar',
+  \       '/xyz/abc.jar',
+  \       'configured.jar',
+  \     ],
+  \     g:cp_sep
+  \   ))
+  \   . ' -d TEMP %t',
+  \ GetCommand([
+  \   '[DEBUG] Ignore this.',
+  \   '[INFO] Something we should ignore.',
+  \   '/foo/bar.jar',
+  \   '/xyz/abc.jar',
+  \ ])
 
-  Assert match(b:command, '\v^javac +-Xlint +-cp +''/foo/bar\.jar:/xyz/abc\.jar:configured\.jar'' +-d ''+/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
-  \ 'Invalid command string: ' . b:command
+  let g:ale_java_javac_classpath = 'configured.jar' . g:cp_sep . 'configured2.jar'
 
-  let g:ale_java_javac_classpath = 'configured.jar:configured2.jar'
-
-  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [
-  \ '[DEBUG] Ignore this.',
-  \ '[INFO] Something we should ignore.',
-  \ '/foo/bar.jar',
-  \ '/xyz/abc.jar',
-  \])
-
-  Assert match(b:command, '\v^javac +-Xlint +-cp +''/foo/bar\.jar:/xyz/abc\.jar:configured\.jar:configured2\.jar'' +-d +''/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
-  \ 'Invalid command string: ' . b:command
+  AssertEqual
+  \ 'javac -Xlint -cp '
+  \   . ale#Escape(join(
+  \     [
+  \       '/foo/bar.jar',
+  \       '/xyz/abc.jar',
+  \       'configured.jar',
+  \       'configured2.jar',
+  \     ],
+  \     g:cp_sep
+  \   ))
+  \   . ' -d TEMP %t',
+  \ GetCommand([
+  \   '[DEBUG] Ignore this.',
+  \   '[INFO] Something we should ignore.',
+  \   '/foo/bar.jar',
+  \   '/xyz/abc.jar',
+  \ ])
 
 Execute(The javac callback should detect source directories):
   call ale#engine#Cleanup(bufnr(''))
   :e! java_paths/src/main/java/com/something/dummy
   call ale#engine#InitBufferInfo(bufnr(''))
 
-  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
-
-  Assert match(b:command, '\v^javac +-Xlint +-sourcepath ''/.*java_paths/src/main/java/'' +-d +''/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
-  \ 'Invalid command string: ' . b:command
+  AssertEqual
+  \ 'javac -Xlint'
+  \   . ' -sourcepath ' . ale#Escape(
+  \     ale#path#Winify(g:dir . '/java_paths/src/main/java/')
+  \   )
+  \   . ' -d TEMP %t',
+  \ GetCommand([])
 
 Execute(The javac callback should combine detected source directories and classpaths):
   call ale#engine#Cleanup(bufnr(''))
-  :e! java_paths/src/main/java/com/something/dummy
+  call ale#test#SetFilename('java_paths/src/main/java/com/something/dummy.java')
   call ale#engine#InitBufferInfo(bufnr(''))
 
-  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [
-  \ '[DEBUG] Ignore this.',
-  \ '[INFO] Something we should ignore.',
-  \ '/foo/bar.jar',
-  \ '/xyz/abc.jar',
-  \])
-
-  Assert match(b:command, '\v^javac +-Xlint +-cp +''/foo/bar\.jar:/xyz/abc\.jar'' +-sourcepath ''/.*java_paths/src/main/java/'' +-d +''/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
-  \ 'Invalid command string: ' . b:command
+  AssertEqual
+  \ 'javac -Xlint'
+  \   . ' -cp ' . ale#Escape(join(['/foo/bar.jar', '/xyz/abc.jar'], g:cp_sep))
+  \   . ' -sourcepath ' . ale#Escape(
+  \     ale#path#Winify(g:dir . '/java_paths/src/main/java/')
+  \   )
+  \   . ' -d TEMP %t',
+  \ GetCommand([
+  \   '[DEBUG] Ignore this.',
+  \   '[INFO] Something we should ignore.',
+  \   '/foo/bar.jar',
+  \   '/xyz/abc.jar',
+  \ ])
 
 Execute(The javac callback should use g:ale_java_javac_options correctly):
-
   let g:ale_java_javac_options = '--anything --else'
 
   let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
 
-  Assert match(b:command, '\v^javac +-Xlint +-d +''/tmp/[0-9a-zA-Z/]+'' --anything --else +\%t$') >= 0,
-  \ 'Invalid command string: ' . b:command
+  AssertEqual
+  \ 'javac -Xlint'
+  \   . ' -d TEMP --anything --else %t',
+  \ GetCommand([])

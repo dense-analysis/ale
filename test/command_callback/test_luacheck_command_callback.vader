@@ -7,18 +7,18 @@ After:
   let g:ale_lua_luacheck_executable = 'luacheck'
 
 Execute(The lua luacheck command callback should return the correct default string):
-  AssertEqual '''luacheck'' --formatter plain --codes --filename %s -',
+  AssertEqual ale#Escape('luacheck') . ' --formatter plain --codes --filename %s -',
   \ join(split(ale_linters#lua#luacheck#GetCommand(1)))
 
 Execute(The lua luacheck command callback should let you set options):
   let g:ale_lua_luacheck_options = '--config filename'
 
-  AssertEqual '''luacheck'' --config filename --formatter plain --codes --filename %s -',
+  AssertEqual ale#Escape('luacheck') . ' --config filename --formatter plain --codes --filename %s -',
   \ join(split(ale_linters#lua#luacheck#GetCommand(1)))
 
 Execute(The luacheck executable should be configurable):
   let g:ale_lua_luacheck_executable = 'luacheck.sh'
 
   AssertEqual 'luacheck.sh', ale_linters#lua#luacheck#GetExecutable(1)
-  AssertEqual '''luacheck.sh'' --formatter plain --codes --filename %s -',
+  AssertEqual ale#Escape('luacheck.sh') . ' --formatter plain --codes --filename %s -',
   \ join(split(ale_linters#lua#luacheck#GetCommand(1)))
