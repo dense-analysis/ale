@@ -74,6 +74,7 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
         let l:text = ''
         let l:line = 0
         let l:col = 0
+        let l:detail = ''
 
         for l:message in l:error.message
             " Comments have no line of column information, so we skip them.
@@ -97,54 +98,39 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
             let l:text = l:text . ' See also: ' . l:error.operation.descr
         endif
 
-        call add(l:output, {
-        \   'lnum': l:line,
-        \   'col': l:col,
-        \   'text': l:text,
-        \   'type': l:error.level is# 'error' ? 'E' : 'W',
-        \})
-
         if has_key(l:error, 'extra')
             \&& g:ale_javascript_flow_extra
-
-            let l:text = ''
 
             for l:extra_error in l:error.extra
   
                 for l:extra_message in l:extra_error.message
-                    if l:text is# ''
+                    if l:detail is# ''
                         " extra messages appear to already have a :
-                        let l:text = l:extra_message.descr
+                        let l:detail = l:extra_message.descr
                     else
-                        let l:text = l:text . ' ' . l:extra_message.descr
+                        let l:detail = l:detail . ' ' . l:extra_message.descr
                     endif
                 endfor
   
                 for l:child in l:extra_error.children
                     for l:child_message in l:child.message
   
-                        if has_key(l:child_message, 'loc')
-                            \&& l:line is# 0
-                            \&& ale#path#IsBufferPath(a:buffer, l:message.loc.source)
-                            let l:line = l:child_message.loc.start.line + 0
-                            let l:col = l:child_message.loc.start.column + 0
-                        endif
-  
-                        let l:text = l:text . ' ' . l:child_message.descr
+                        let l:detail = l:detail . ' ' . l:child_message.descr
   
                     endfor
                 endfor
   
             endfor
+        endif
+
+        call add(l:output, {
+        \   'lnum': l:line,
+        \   'col': l:col,
+        \   'text': l:text, 
+        \   'type': l:error.level is# 'error' ? 'E' : 'W',
+        \   'detail': l:detail,
+        \})
   
-            call add(l:output, {
-            \   'lnum': l:line,
-            \   'col': l:col,
-            \   'text': l:text, 
-            \   'type': l:error.level is# 'error' ? 'E' : 'W',
-            \})
-  
-          endif
       endfor
 
     return l:output
