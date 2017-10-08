@@ -10,27 +10,9 @@ function! ale_linters#php#phpmd#GetCommand(buffer) abort
     \   . ' --ignore-violations-on-exit %t'
 endfunction
 
-function! ale_linters#php#phpmd#Handle(buffer, lines) abort
-    " Matches against lines like the following:
-    "
-    " /path/to/some-filename.php:18 message
-    let l:pattern = '^.*:\(\d\+\)\t\(.\+\)$'
-    let l:output = []
-
-    for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        call add(l:output, {
-        \   'lnum': l:match[1] + 0,
-        \   'text': l:match[2],
-        \   'type': 'W',
-        \})
-    endfor
-
-    return l:output
-endfunction
-
 call ale#linter#Define('php', {
 \   'name': 'phpmd',
 \   'executable': 'phpmd',
 \   'command_callback': 'ale_linters#php#phpmd#GetCommand',
-\   'callback': 'ale_linters#php#phpmd#Handle',
+\   'callback': 'ale#handlers#php#StaticAnalyzerHandle',
 \})
