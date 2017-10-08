@@ -31,10 +31,10 @@ function! ale#highlight#CreatePositions(line, col, end_line, end_col) abort
         " If only a single character would be highlighted, and there's an
         " expand expression, apply it to increase the amount of text that
         " would be highlighted.
-        if g:ale_highlight_expand != '0' && a:col == a:end_col
+        if g:ale_highlight_expand !=# '0' && a:col == a:end_col
             let l:line = getline(a:line)
-            let l:endWord = match(l:line, g:ale_highlight_expand, a:col)
-            return [[[a:line, a:col, max([l:endWord, a:end_col]) - a:col + 1]]]
+            let l:expand_end = match(l:line, g:ale_highlight_expand, a:col)
+            return [[[a:line, a:col, max([l:expand_end, a:end_col]) - a:col + 1]]]
         endif
 
         " For single lines, just return the one position.
