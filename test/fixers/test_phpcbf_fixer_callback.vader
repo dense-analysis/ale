@@ -21,7 +21,7 @@ Execute(project with phpcbf should use local by default):
   call ale#test#SetFilename('php_paths/project-with-phpcbf/foo/test.php')
 
   AssertEqual
-  \ g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf',
+  \ ale#path#Winify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf'),
   \ ale#fixers#phpcbf#GetExecutable(bufnr(''))
 
 Execute(use-global should override local detection):
@@ -43,7 +43,7 @@ Execute(The phpcbf callback should return the correct default values):
   call ale#test#SetFilename('php_paths/project-with-phpcbf/foo/test.php')
 
   AssertEqual
-  \ {'command': ale#Escape(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf') . ' --stdin-path=%s ' },
+  \ {'command': ale#Escape(ale#path#Winify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf')) . ' --stdin-path=%s ' },
   \ ale#fixers#phpcbf#Fix(bufnr(''))
 
 Execute(The phpcbf callback should include the phpcbf_standard option):
@@ -51,6 +51,62 @@ Execute(The phpcbf callback should include the phpcbf_standard option):
   call ale#test#SetFilename('php_paths/project-with-phpcbf/foo/test.php')
 
   AssertEqual
-  \ {'command': ale#Escape(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf') . ' --stdin-path=%s ' . '--standard=phpcbf_ruleset.xml'},
+  \ {'command': ale#Escape(ale#path#Winify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf')) . ' --stdin-path=%s ' . '--standard=phpcbf_ruleset.xml'},
+  \ ale#fixers#phpcbf#Fix(bufnr(''))
+
+Before:
+  Save g:ale_php_phpcbf_executable
+  Save g:ale_php_phpcbf_standard
+  Save g:ale_php_phpcbf_use_global
+
+  let g:ale_php_phpcbf_executable = 'phpcbf_test'
+  let g:ale_php_phpcbf_standard = ''
+  let g:ale_php_phpcbf_use_global = 0
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+  silent cd ..
+  silent cd command_callback
+  let g:dir = getcwd()
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(project with phpcbf should use local by default):
+  call ale#test#SetFilename('php_paths/project-with-phpcbf/foo/test.php')
+
+  AssertEqual
+  \ ale#path#Winify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf'),
+  \ ale#fixers#phpcbf#GetExecutable(bufnr(''))
+
+Execute(use-global should override local detection):
+  let g:ale_php_phpcbf_use_global = 1
+  call ale#test#SetFilename('php_paths/project-with-phpcbf/foo/test.php')
+
+  AssertEqual
+  \ 'phpcbf_test',
+  \ ale#fixers#phpcbf#GetExecutable(bufnr(''))
+
+Execute(project without phpcbf should use global):
+  call ale#test#SetFilename('php_paths/project-without-phpcbf/foo/test.php')
+
+  AssertEqual
+  \ 'phpcbf_test',
+  \ ale#fixers#phpcbf#GetExecutable(bufnr(''))
+
+Execute(The phpcbf callback should return the correct default values):
+  call ale#test#SetFilename('php_paths/project-with-phpcbf/foo/test.php')
+
+  AssertEqual
+  \ {'command': ale#Escape(ale#path#Winify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf')) . ' --stdin-path=%s ' },
+  \ ale#fixers#phpcbf#Fix(bufnr(''))
+
+Execute(The phpcbf callback should include the phpcbf_standard option):
+  let g:ale_php_phpcbf_standard = 'phpcbf_ruleset.xml'
+  call ale#test#SetFilename('php_paths/project-with-phpcbf/foo/test.php')
+
+  AssertEqual
+  \ {'command': ale#Escape(ale#path#Winify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf')) . ' --stdin-path=%s ' . '--standard=phpcbf_ruleset.xml'},
   \ ale#fixers#phpcbf#Fix(bufnr(''))
 

@@ -39,7 +39,7 @@ Execute(The prettier callback should include configuration files when the option
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
   \     . ' --parser babylon'
-  \     . ' --config ' . ale#Escape(simplify(g:dir .  '/../prettier-test-files/with_config/.prettierrc'))
+  \     . ' --config ' . ale#Escape(ale#path#Winify(g:dir .  '/../prettier-test-files/with_config/.prettierrc'))
   \     . ' --write',
   \ },
   \ ale#fixers#prettier#Fix(bufnr(''))
@@ -54,7 +54,7 @@ Execute(The prettier callback should include custom prettier options):
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
   \     . ' --no-semi --parser babylon'
-  \     . ' --config ' . ale#Escape(simplify(g:dir .  '/../prettier-test-files/with_config/.prettierrc'))
+  \     . ' --config ' . ale#Escape(ale#path#Winify(g:dir .  '/../prettier-test-files/with_config/.prettierrc'))
   \     . ' --write',
   \ },
   \ ale#fixers#prettier#Fix(bufnr(''))

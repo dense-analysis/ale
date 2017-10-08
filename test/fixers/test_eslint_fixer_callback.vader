@@ -2,18 +2,17 @@ Before:
   call ale#test#SetDirectory('/testplugin/test/fixers')
 
 After:
-  let g:ale_has_override = {}
   call ale#test#RestoreDirectory()
 
-Execute(The path to eslint.js should be run on Unix):
+Execute(The executable path should be correct):
   call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.js')
 
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
-  \   'command':
-  \     ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
-  \     . ' --config ' . ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
+  \   'command': (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \     . ' -c ' . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --fix %t',
   \ },
   \ ale#fixers#eslint#Fix(bufnr(''))
@@ -24,9 +23,9 @@ Execute(The lower priority configuration file in a nested directory should be pr
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
-  \   'command':
-  \     ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
-  \     . ' --config ' . ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/subdir-with-config/.eslintrc'))
+  \   'command': (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \     . ' -c ' . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/subdir-with-config/.eslintrc'))
   \     . ' --fix %t',
   \ },
   \ ale#fixers#eslint#Fix(bufnr(''))
@@ -37,9 +36,9 @@ Execute(package.json should be used as a last resort):
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
-  \   'command':
-  \     ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
-  \     . ' --config ' . ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
+  \   'command': (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \     . ' -c ' . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --fix %t',
   \ },
   \ ale#fixers#eslint#Fix(bufnr(''))
@@ -50,8 +49,8 @@ Execute(package.json should be used as a last resort):
   \ {
   \   'read_temporary_file': 1,
   \   'command':
-  \     ale#Escape(simplify(g:dir . '/../eslint-test-files/node_modules/.bin/eslint'))
-  \     . ' --config ' . ale#Escape(simplify(g:dir . '/../eslint-test-files/package.json'))
+  \     ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/node_modules/.bin/eslint'))
+  \     . ' -c ' . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/package.json'))
   \     . ' --fix %t',
   \ },
   \ ale#fixers#eslint#Fix(bufnr(''))

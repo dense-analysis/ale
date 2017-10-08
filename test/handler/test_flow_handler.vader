@@ -260,7 +260,7 @@ Execute(The flow handler should handle relative paths):
   \     "descr": "React element `Foo`",
   \     "type": "Blame",
   \     "loc": {
-  \       "source": "vim-ale-flow/index.js",
+  \       "source": expand('%:p'),
   \       "type": "SourceFile",
   \       "start": {
   \         "line": 6,
@@ -273,7 +273,7 @@ Execute(The flow handler should handle relative paths):
   \         "offset": 108
   \       }
   \     },
-  \     "path": "vim-ale-flow/index.js",
+  \     "path": expand('%:p'),
   \     "line": 6,
   \     "endline": 6,
   \     "start": 3,
@@ -318,7 +318,7 @@ Execute(The flow handler should handle relative paths):
   \     "descr": "props of React element `Foo`",
   \     "type": "Blame",
   \     "loc": {
-  \       "source": "vim-ale-flow/index.js",
+  \       "source": expand('%:p'),
   \       "type": "SourceFile",
   \       "start": {
   \         "line": 6,
@@ -331,7 +331,7 @@ Execute(The flow handler should handle relative paths):
   \         "offset": 108
   \       }
   \     },
-  \     "path": "vim-ale-flow/index.js",
+  \     "path": expand('%:p'),
   \     "line": 6,
   \     "endline": 6,
   \     "start": 3,

@@ -36,6 +36,9 @@ CONTENTS                                                         *ale-contents*
       cppcheck............................|ale-cpp-cppcheck|
       cpplint.............................|ale-cpp-cpplint|
       gcc.................................|ale-cpp-gcc|
+    c#....................................|ale-cs-options|
+      mcs.................................|ale-cs-mcs|
+      mcsc................................|ale-cs-mcsc|
     css...................................|ale-css-options|
       prettier............................|ale-css-prettier|
       stylelint...........................|ale-css-stylelint|
@@ -59,6 +62,7 @@ CONTENTS                                                         *ale-contents*
     glsl..................................|ale-glsl-options|
       glslang.............................|ale-glsl-glslang|
     go....................................|ale-go-options|
+      gofmt...............................|ale-go-gofmt|
       gometalinter........................|ale-go-gometalinter|
     graphql...............................|ale-graphql-options|
       gqlint..............................|ale-graphql-gqlint|
@@ -222,7 +226,7 @@ Notes:
 * C: `cppcheck`, `cpplint`!!, `gcc`, `clang`, `clangtidy`!!, `clang-format`
 * C++ (filetype cpp): `clang`, `clangcheck`!!, `clangtidy`!!, `cppcheck`, `cpplint`!!, `gcc`, `clang-format`
 * CUDA: `nvcc`!!
-* C#: `mcs`
+* C#: `mcs`, `mcsc`!!
 * Chef: `foodcritic`
 * CMake: `cmakelint`
 * CoffeeScript: `coffee`, `coffeelint`
@@ -605,7 +609,7 @@ g:ale_fixers                                                     *g:ale_fixers*
   A mapping from filetypes to |List| values for functions for fixing errors.
   See |ale-fix| for more information.
 
-  This variable can be overriden with variables in each buffer.
+  This variable can be overridden with variables in each buffer.
 
 
 g:ale_fix_on_save                                           *g:ale_fix_on_save*
@@ -1505,7 +1509,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                            the end of the file will be moved to the end.
                          `col` - The column number is optional and will
                            default to `0`. Any strings will be automatically
-                           coverted to number using `str2nr()`.
+                           converted to number using `str2nr()`.
                          `end_col` - An optional end column number.
                            This key can be set to specify the column problems
                            end on, for improved highlighting.
@@ -1656,7 +1660,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          `project_callback` and `language_callback` arguments
                          must also be defined.
 
-                         LSP linters handle diagonstics automatically, so
+                         LSP linters handle diagnostics automatically, so
                          the `callback` argument must not be defined.
 
   `project_callback`       A |String| or |Funcref| for a callback function
@@ -1745,12 +1749,12 @@ ale#linter#Get(filetype)                                     *ale#linter#Get()*
   Return all of linters configured for a given filetype as a |List| of
   |Dictionary| values in the format specified by |ale#linter#Define()|.
 
-  Filetypes may be dot-seperated to invoke linters for multiple filetypes:
+  Filetypes may be dot-separated to invoke linters for multiple filetypes:
   for instance, the filetype `javascript.jsx` will return linters for both the
   `javascript` and `jsx` filetype.
 
   Aliases may be defined in as described in |g:ale_linter_aliases|. Aliases
-  are applied after dot-seperated filetypes are broken up into their
+  are applied after dot-separated filetypes are broken up into their
   components.
 
 

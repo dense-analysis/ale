@@ -7,36 +7,51 @@ Before:
   call ale#test#SetDirectory('/testplugin/test/command_callback')
   call ale#test#SetFilename('../ruby_fixtures/valid_rails_app/db/test.rb')
 
+  let b:args = '--silent -f json'
+  \ . ' --output-file ' . (has('win32') ? '%t' : '/dev/stdout')
+  let b:app_path = ale#path#Winify(g:dir . '/../ruby_fixtures/valid_rails_app')
+  let b:suffix = has('win32') ? '; type %t' : ''
+
 After:
   Restore
+
+  unlet! b:args
+  unlet! b:app_path
+  unlet! b:suffix
 
   call ale#test#RestoreDirectory()
 
 Execute(Executable should default to rails_best_practices):
   AssertEqual
-  \ '''rails_best_practices'' --silent -f json --output-file /dev/stdout '
-  \   . ale#Escape(simplify(g:dir . '/../ruby_fixtures/valid_rails_app')),
+  \ ale#Escape('rails_best_practices')
+  \   . ' ' . b:args
+  \   . ' ' . ale#Escape(b:app_path)
+  \   . b:suffix,
   \ ale_linters#ruby#rails_best_practices#GetCommand(bufnr(''))
 
 Execute(Should be able to set a custom executable):
   let g:ale_ruby_rails_best_practices_executable = 'bin/rails_best_practices'
 
   AssertEqual
-  \ '''bin/rails_best_practices'' --silent -f json --output-file /dev/stdout '
-  \   . ale#Escape(simplify(g:dir . '/../ruby_fixtures/valid_rails_app')),
+  \ ale#Escape('bin/rails_best_practices')
+  \   . ' ' . b:args
+  \   . ' ' . ale#Escape(b:app_path)
+  \   . b:suffix,
   \ ale_linters#ruby#rails_best_practices#GetCommand(bufnr(''))
 
 Execute(Setting bundle appends 'exec rails_best_practices'):
   let g:ale_ruby_rails_best_practices_executable = 'path to/bundle'
 
   AssertEqual
-  \ '''path to/bundle'' exec rails_best_practices --silent -f json --output-file /dev/stdout '
-  \   . ale#Escape(simplify(g:dir . '/../ruby_fixtures/valid_rails_app')),
+  \ ale#Escape('path to/bundle') . ' exec rails_best_practices'
+  \   . ' ' . b:args
+  \   . ' ' . ale#Escape(b:app_path)
+  \   . b:suffix,
   \ ale_linters#ruby#rails_best_practices#GetCommand(bufnr(''))
 
 Execute(Command callback should be empty when not in a valid Rails app):
   call ale#test#SetFilename('../ruby_fixtures/not_a_rails_app/test.rb')
 
   AssertEqual
-  \   '',
-  \   ale_linters#ruby#rails_best_practices#GetCommand(bufnr(''))
+  \ '',
+  \ ale_linters#ruby#rails_best_practices#GetCommand(bufnr(''))

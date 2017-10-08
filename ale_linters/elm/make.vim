@@ -71,11 +71,11 @@ function! ale_linters#elm#make#GetCommand(buffer) abort
 
     " The elm-make compiler, at the time of this writing, uses '/dev/null' as
     " a sort of flag to tell the compiler not to generate an output file,
-    " which is why this is hard coded here.
+    " which is why this is hard coded here. It does not use NUL on Windows.
     " Source: https://github.com/elm-lang/elm-make/blob/master/src/Flags.hs
     let l:elm_cmd = ale#Escape(l:elm_exe)
     \   . ' --report=json'
-    \   . ' --output=' . ale#Escape(g:ale#util#nul_file)
+    \   . ' --output=/dev/null'
 
     return l:dir_set_cmd . ' ' . l:elm_cmd . ' %t'
 endfunction

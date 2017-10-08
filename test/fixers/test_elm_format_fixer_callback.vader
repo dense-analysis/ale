@@ -15,7 +15,7 @@ Execute(The elm-format command should have default params):
   \ {
   \   'read_temporary_file': 1,
   \   'command':
-  \     ale#Escape(simplify(g:dir . '/../elm-test-files/node_modules/.bin/elm-format'))
+  \     ale#Escape(ale#path#Winify(g:dir . '/../elm-test-files/node_modules/.bin/elm-format'))
   \     . ' %t --yes',
   \ },
   \ ale#fixers#format#Fix(bufnr(''))
@@ -55,7 +55,7 @@ Execute(The elm-format command should manage empty options):
   \ {
   \   'read_temporary_file': 1,
   \   'command':
-  \     ale#Escape(simplify(g:dir . '/../elm-test-files/node_modules/.bin/elm-format'))
+  \     ale#Escape(ale#path#Winify(g:dir . '/../elm-test-files/node_modules/.bin/elm-format'))
   \     . ' %t',
   \ },
   \ ale#fixers#format#Fix(bufnr(''))
@@ -68,8 +68,7 @@ Execute(The elm-format command should manage custom options):
   \ {
   \   'read_temporary_file': 1,
   \   'command':
-  \     ale#Escape(simplify(g:dir . '/../elm-test-files/node_modules/.bin/elm-format'))
+  \     ale#Escape(ale#path#Winify(g:dir . '/../elm-test-files/node_modules/.bin/elm-format'))
   \     . ' %t --param1 --param2',
   \ },
   \ ale#fixers#format#Fix(bufnr(''))
-

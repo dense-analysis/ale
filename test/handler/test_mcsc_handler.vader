@@ -1,0 +1,44 @@
+Before:
+  Save g:ale_cs_mcsc_source
+
+  unlet! g:ale_cs_mcsc_source
+
+  runtime ale_linters/cs/mcsc.vim
+
+After:
+  unlet! g:ale_cs_mcsc_source
+  call ale#linter#Reset()
+
+Execute(The mcs handler should handle cannot find symbol errors):
+  let g:ale_cs_mcsc_source='/home/foo/project/bar'
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 12,
+  \     'col' : 29,
+  \     'text': 'error CS1001: ; expected',
+  \     'type': 'E',
+  \     'filename': ale#path#Winify('/home/foo/project/bar/Test.cs', 'add_drive'),
+  \   },
+  \   {
+  \     'lnum': 101,
+  \     'col': 0,
+  \     'text': 'error CS1028: Unexpected processor directive (no #if for this #endif)',
+  \     'type': 'E',
+  \     'filename': ale#path#Winify('/home/foo/project/bar/Test.cs', 'add_drive'),
+  \   },
+  \   {
+  \     'lnum': 10,
+  \     'col': 12,
+  \     'text': 'warning CS0123: some warning',
+  \     'type': 'W',
+  \     'filename': ale#path#Winify('/home/foo/project/bar/Test.cs', 'add_drive'),
+  \   },
+  \ ],
+  \ ale_linters#cs#mcsc#Handle(347, [
+  \   'Test.cs(12,29): error CS1001: ; expected',
+  \   'Test.cs(101,0): error CS1028: Unexpected processor directive (no #if for this #endif)',
+  \   'Test.cs(10,12): warning CS0123: some warning',
+  \   'Compilation failed: 2 error(s), 1 warnings',
+  \ ])

@@ -10,24 +10,30 @@ Before:
 After:
   Restore
 
+  call ale#linter#Reset()
   call ale#test#RestoreDirectory()
 
 Execute(Executable should default to rubocop):
   AssertEqual
-  \ '''rubocop'' --format json --force-exclusion  --stdin '
-  \   . ale#Escape(g:dir . '/dummy.rb'),
+  \ ale#Escape('rubocop')
+  \   . ' --format json --force-exclusion  --stdin '
+  \   . ale#Escape(ale#path#Winify(g:dir . '/dummy.rb')),
   \ ale_linters#ruby#rubocop#GetCommand(bufnr(''))
 
 Execute(Should be able to set a custom executable):
   let g:ale_ruby_rubocop_executable = 'bin/rubocop'
+
   AssertEqual
-  \ '''bin/rubocop'' --format json --force-exclusion  --stdin '
-  \   . ale#Escape(g:dir . '/dummy.rb'),
+  \ ale#Escape('bin/rubocop')
+  \   . ' --format json --force-exclusion  --stdin '
+  \   . ale#Escape(ale#path#Winify(g:dir . '/dummy.rb')),
   \ ale_linters#ruby#rubocop#GetCommand(bufnr(''))
 
 Execute(Setting bundle appends 'exec rubocop'):
   let g:ale_ruby_rubocop_executable = 'path to/bundle'
+
   AssertEqual
-  \ '''path to/bundle'' exec rubocop --format json --force-exclusion  --stdin '
-  \   . ale#Escape(g:dir . '/dummy.rb'),
+  \ ale#Escape('path to/bundle') . ' exec rubocop'
+  \   . ' --format json --force-exclusion  --stdin '
+  \   . ale#Escape(ale#path#Winify(g:dir . '/dummy.rb')),
   \ ale_linters#ruby#rubocop#GetCommand(bufnr(''))

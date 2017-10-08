@@ -1,6 +1,10 @@
 " Author: Sumner Evans <sumner.evans98@gmail.com>
 " Description: Fixing files with Standard.
 
+call ale#Set('javascript_standard_executable', 'standard')
+call ale#Set('javascript_standard_use_global', 0)
+call ale#Set('javascript_standard_options', '')
+
 function! ale#fixers#standard#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'javascript_standard', [
     \   'node_modules/standard/bin/cmd.js',

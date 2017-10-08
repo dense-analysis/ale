@@ -1,5 +1,5 @@
 " Author: w0rp <devw0rp@gmail.com>
-" Deciption: APIs for working with Asynchronous jobs, with an API normalised
+" Description: APIs for working with Asynchronous jobs, with an API normalised
 " between Vim 8 and NeoVim.
 "
 " Important functions are described below. They are:

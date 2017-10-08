@@ -2,31 +2,16 @@ Before:
   call ale#test#SetDirectory('/testplugin/test/fixers')
 
 After:
-  let g:ale_has_override = {}
   call ale#test#RestoreDirectory()
 
-Execute(The path to standard.js should be run on Unix):
+Execute(The executable path should be correct):
   call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.js')
 
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
-  \   'command':
-  \     ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/node_modules/standard/bin/cmd.js'))
-  \     . ' --fix %t',
-  \ },
-  \ ale#fixers#standard#Fix(bufnr(''))
-
-Execute(The standard fixer with standard.js should be run with node on Windows):
-  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.js')
-  let g:ale_has_override['win32'] = 1
-
-  " We have to execute the file with node.
-  AssertEqual
-  \ {
-  \   'read_temporary_file': 1,
-  \   'command': ale#Escape('node.exe') . ' '
-  \     . ale#Escape(simplify(g:dir . '/../eslint-test-files/react-app/node_modules/standard/bin/cmd.js'))
+  \   'command': (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/node_modules/standard/bin/cmd.js'))
   \     . ' --fix %t',
   \ },
   \ ale#fixers#standard#Fix(bufnr(''))

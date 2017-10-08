@@ -269,3 +269,14 @@ Execute(It should be possible to clear signs with empty lists):
 
 Execute(No exceptions should be thrown when setting signs for invalid buffers):
   call ale#sign#SetSigns(123456789, [{'lnum': 15, 'col': 2, 'type': 'W', 'text': 'e'}])
+
+Execute(Signs should be removed when lines have multiple sign IDs on them):
+  " We can fail to remove signs if there are multiple signs on one line,
+  " say after deleting lines in Vim, etc.
+  exec 'sign place 1000347 line=3 name=ALEErrorSign buffer=' . bufnr('')
+  exec 'sign place 1000348 line=3 name=ALEWarningSign buffer=' . bufnr('')
+  exec 'sign place 1000349 line=10 name=ALEErrorSign buffer=' . bufnr('')
+  exec 'sign place 1000350 line=10 name=ALEWarningSign buffer=' . bufnr('')
+
+  call ale#sign#SetSigns(bufnr(''), [])
+  AssertEqual [], ParseSigns()

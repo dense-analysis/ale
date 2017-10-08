@@ -573,7 +573,7 @@ function! ale#engine#ProcessChain(buffer, linter, chain_index, input) abort
 
     if has_key(a:linter, 'command_chain')
         while l:chain_index < len(a:linter.command_chain)
-            " Run a chain of commands, one asychronous command after the other,
+            " Run a chain of commands, one asynchronous command after the other,
             " so that many programs can be run in a sequence.
             let l:chain_item = a:linter.command_chain[l:chain_index]
 
