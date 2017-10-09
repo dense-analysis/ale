@@ -1,12 +1,12 @@
 ===============================================================================
-ALE LLVM Integration                                           *ale-llvm-options*
+ALE LLVM Integration                                         *ale-llvm-options*
 
 
 ===============================================================================
-llc                                                                *ale-llvm-llc*
+llc                                                              *ale-llvm-llc*
 
-g:ale_llvm_llc_command                                   *g:ale_llvm_llc_command*
-                                                         *b:ale_llvm_llc_command*
+g:ale_llvm_llc_command                                 *g:ale_llvm_llc_command*
+                                                       *b:ale_llvm_llc_command*
 
   Type: |String|
   Default: "llc"
