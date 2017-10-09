@@ -1,24 +1,24 @@
 Before:
-  Save g:ale_llvm_llc_command
+  Save g:ale_llvm_llc_executable
 
-  unlet! g:ale_llvm_llc_command
-  unlet! b:ale_llvm_llc_command
+  unlet! g:ale_llvm_llc_executable
+  unlet! b:ale_llvm_llc_executable
 
   runtime ale_linters/llvm/llc.vim
 
 After:
-  unlet! g:ale_llvm_llc_command
-  unlet! b:ale_llvm_llc_command
+  unlet! g:ale_llvm_llc_executable
+  unlet! b:ale_llvm_llc_executable
   Restore
 
 Execute(llc command is customizable):
   let cmd = ale_linters#llvm#llc#GetCommand(bufnr(''))[:3]
   AssertEqual 'llc ', cmd
 
-  let g:ale_llvm_llc_command = 'llc-5.0'
+  let g:ale_llvm_llc_executable = 'llc-5.0'
   let cmd = ale_linters#llvm#llc#GetCommand(bufnr(''))[:7]
   AssertEqual 'llc-5.0 ', cmd
 
-  let b:ale_llvm_llc_command = 'llc-4.0'
+  let b:ale_llvm_llc_executable = 'llc-4.0'
   let cmd = ale_linters#llvm#llc#GetCommand(bufnr(''))[:7]
   AssertEqual 'llc-4.0 ', cmd
