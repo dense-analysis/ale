@@ -23,7 +23,11 @@ Execute(llc command is customizable):
   let cmd = ale_linters#llvm#llc#GetCommand(bufnr(''))
   AssertEqual stridx(cmd, ale#Escape('llc-4.0')), 0
 
-Execute(space can be contained in llc executable path):
+Execute(GetCommand() escapes the returned path):
   let b:ale_llvm_llc_executable = '/path/space contained/llc'
   let cmd = ale_linters#llvm#llc#GetCommand(bufnr(''))
   AssertEqual stridx(cmd, ale#Escape('/path/space contained/llc')), 0
+
+Execute(GetExecutable() does not escape the returned path):
+  let b:ale_llvm_llc_executable = '/path/space contained/llc'
+  AssertEqual ale_linters#llvm#llc#GetExecutable(bufnr('')), '/path/space contained/llc'

@@ -4,11 +4,11 @@
 call ale#Set('llvm_llc_executable', 'llc')
 
 function! ale_linters#llvm#llc#GetExecutable(buffer) abort
-    return ale#Escape(ale#Var(a:buffer, 'llvm_llc_executable'))
+    return ale#Var(a:buffer, 'llvm_llc_executable')
 endfunction
 
 function! ale_linters#llvm#llc#GetCommand(buffer) abort
-    return ale_linters#llvm#llc#GetExecutable(a:buffer)
+    return ale#Escape(ale_linters#llvm#llc#GetExecutable(a:buffer))
     \   . ' -filetype=null -o='
     \   . ale#Escape(g:ale#util#nul_file)
 endfunction
