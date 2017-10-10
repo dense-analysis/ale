@@ -103,8 +103,9 @@ formatting.
 | Java | [checkstyle](http://checkstyle.sourceforge.net), [javac](http://www.oracle.com/technetwork/java/javase/downloads/index.html) |
 | JavaScript | [eslint](http://eslint.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/), [flow](https://flowtype.org/), [prettier](https://github.com/prettier/prettier), prettier-eslint >= 4.2.0, prettier-standard, [standard](http://standardjs.com/), [xo](https://github.com/sindresorhus/xo)
 | JSON | [jsonlint](http://zaa.ch/jsonlint/), [prettier](https://github.com/prettier/prettier) |
-| Kotlin | [kotlinc](https://kotlinlang.org) !!, [ktlint](https://ktlint.github.io) !! see `:help ale-integration-kotlin` for configuration instructions
+| Kotlin | [kotlinc](https://kotlinlang.org) !!, [ktlint](https://ktlint.github.io) !! see `:help ale-integration-kotlin` for configuration instructions |
 | LaTeX | [chktex](http://www.nongnu.org/chktex/), [lacheck](https://www.ctan.org/pkg/lacheck), [proselint](http://proselint.com/) |
+| LLVM | [llc](https://llvm.org/docs/CommandGuide/llc.html) |
 | Lua | [luacheck](https://github.com/mpeterv/luacheck) |
 | Markdown | [mdl](https://github.com/mivok/markdownlint), [proselint](http://proselint.com/), [vale](https://github.com/ValeLint/vale) |
 | MATLAB | [mlint](https://www.mathworks.com/help/matlab/ref/mlint.html) |
@@ -113,7 +114,7 @@ formatting.
 | nroff | [proselint](http://proselint.com/)|
 | Objective-C | [clang](http://clang.llvm.org/) |
 | Objective-C++ | [clang](http://clang.llvm.org/) |
-| OCaml | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-ocaml-merlin` for configuration instructions
+| OCaml | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-ocaml-merlin` for configuration instructions |
 | Perl | [perl -c](https://perl.org/), [perl-critic](https://metacpan.org/pod/Perl::Critic) |
 | PHP | [hack](http://hacklang.org/), [langserver](https://github.com/felixfbecker/php-language-server), [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer), [phpmd](https://phpmd.org), [phpstan](https://github.com/phpstan/phpstan), [phpcbf](https://github.com/squizlabs/PHP_CodeSniffer) |
 | Pod | [proselint](http://proselint.com/)|
@@ -121,7 +122,7 @@ formatting.
 | Puppet | [puppet](https://puppet.com), [puppet-lint](https://puppet-lint.com) |
 | Python | [autopep8](https://github.com/hhatto/autopep8), [flake8](http://flake8.pycqa.org/en/latest/), [isort](https://github.com/timothycrosley/isort), [mypy](http://mypy-lang.org/), [pycodestyle](https://github.com/PyCQA/pycodestyle), [pylint](https://www.pylint.org/) !!, [yapf](https://github.com/google/yapf) |
 | R | [lintr](https://github.com/jimhester/lintr) |
-| ReasonML | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-integration-reason-merlin` for configuration instructions
+| ReasonML | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-integration-reason-merlin` for configuration instructions |
 | reStructuredText | [proselint](http://proselint.com/) |
 | RPM spec | [rpmlint](https://github.com/rpm-software-management/rpmlint) (disabled by default; see `:help ale-integration-spec`) |
 | Ruby | [brakeman](http://brakemanscanner.org/) !!, [rails_best_practices](https://github.com/flyerhzm/rails_best_practices) !!, [reek](https://github.com/troessner/reek), [rubocop](https://github.com/bbatsov/rubocop), [ruby](https://www.ruby-lang.org) |
@@ -129,7 +130,7 @@ formatting.
 | SASS | [sass-lint](https://www.npmjs.com/package/sass-lint), [stylelint](https://github.com/stylelint/stylelint) |
 | SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint), [stylelint](https://github.com/stylelint/stylelint), [prettier](https://github.com/prettier/prettier) |
 | Scala | [scalac](http://scala-lang.org), [scalastyle](http://www.scalastyle.org) |
-| Slim | [slim-lint](https://github.com/sds/slim-lint)
+| Slim | [slim-lint](https://github.com/sds/slim-lint) |
 | SML | [smlnj](http://www.smlnj.org/) |
 | Solidity | [solium](https://github.com/duaraghav8/Solium) |
 | Stylus | [stylelint](https://github.com/stylelint/stylelint) |

@@ -95,6 +95,8 @@ CONTENTS                                                         *ale-contents*
     kotlin................................|ale-kotlin-options|
       kotlinc.............................|ale-kotlin-kotlinc|
       ktlint..............................|ale-kotlin-ktlint|
+    llvm..................................|ale-llvm-options|
+      llc.................................|ale-llvm-llc|
     lua...................................|ale-lua-options|
       luacheck............................|ale-lua-luacheck|
     objc..................................|ale-objc-options|
@@ -255,6 +257,7 @@ Notes:
 * JSON: `jsonlint`, `prettier`
 * Kotlin: `kotlinc`, `ktlint`
 * LaTeX (tex): `chktex`, `lacheck`, `proselint`
+* LLVM: `llc`
 * Lua: `luacheck`
 * Markdown: `mdl`, `proselint`, `vale`
 * MATLAB: `mlint`
