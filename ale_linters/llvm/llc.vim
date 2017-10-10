@@ -4,7 +4,7 @@
 call ale#Set('llvm_llc_executable', 'llc')
 
 function! ale_linters#llvm#llc#GetExecutable(buffer) abort
-    return ale#Var(a:buffer, 'llvm_llc_executable')
+    return ale#Escape(ale#Var(a:buffer, 'llvm_llc_executable'))
 endfunction
 
 function! ale_linters#llvm#llc#GetCommand(buffer) abort
