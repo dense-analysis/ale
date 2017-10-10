@@ -71,7 +71,7 @@ function! ale#python#FindVirtualenv(buffer) abort
         endfor
     endfor
 
-    return ''
+    return $VIRTUAL_ENV
 endfunction
 
 " Run an executable check for Python scripts.
