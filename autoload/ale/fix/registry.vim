@@ -57,6 +57,11 @@ let s:default_registry = {
 \       'suggested_filetypes': [],
 \       'description': 'Remove all blank lines at the end of a file.',
 \   },
+\   'trim_white_spaces': {
+\       'function': 'ale#fixers#generic#TrimWhiteSpaces',
+\       'suggested_filetypes': [],
+\       'description': 'Remove all whitespaces at the end of line.',
+\   },
 \   'yapf': {
 \       'function': 'ale#fixers#yapf#Fix',
 \       'suggested_filetypes': ['python'],
