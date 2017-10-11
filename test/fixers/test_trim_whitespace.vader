@@ -4,7 +4,7 @@ Before:
 After:
   call ale#test#RestoreDirectory()
 
-Execute(Should delete all white spaces at the end of diferent lines):
+Execute(Should delete all whitespace at the end of different lines):
   AssertEqual
   \ [
   \   'def foo():',
@@ -16,7 +16,7 @@ Execute(Should delete all white spaces at the end of diferent lines):
   \   ' bar,',
   \   '))',
   \ ],
-  \ ale#fixers#generic#TrimWhiteSpaces(bufnr(''), [
+  \ ale#fixers#generic#TrimWhitespace(bufnr(''), [
   \   'def foo():',     
   \   '    some_variable = this_is_a_longer_function(', 
   \   'first_argument,',  

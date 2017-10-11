@@ -12,12 +12,14 @@ function! ale#fixers#generic#RemoveTrailingBlankLines(buffer, lines) abort
 endfunction
 
 " Remove all whitespaces at the end of lines
-function! ale#fixers#generic#TrimWhiteSpaces(buffer, lines) abort
-    let l:index = 1
+function! ale#fixers#generic#TrimWhitespace(buffer, lines) abort
+    let l:index = 0
     let l:lines_new = range(len(a:lines))
+
     for l:line in a:lines
-        let l:lines_new[l:index - 1] = substitute(l:line, '\s\+$', '', 'g')
+        let l:lines_new[l:index] = substitute(l:line, '\s\+$', '', 'g')
         let l:index = l:index + 1
     endfor
+
     return l:lines_new
 endfunction
