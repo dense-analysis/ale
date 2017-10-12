@@ -145,7 +145,7 @@ formatting.
 | Vim | [vint](https://github.com/Kuniwak/vint) |
 | Vim help^ | [proselint](http://proselint.com/)|
 | XHTML | [proselint](http://proselint.com/)|
-| XML | [xmllint](http://xmlsoft.org/xmllint.html/)|
+| XML | [xmllint](http://xmlsoft.org/xmllint.html)|
 | YAML | [swaglint](https://github.com/byCedric/swaglint), [yamllint](https://yamllint.readthedocs.io/) |
 
 <a name="usage"></a>
