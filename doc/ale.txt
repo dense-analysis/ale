@@ -541,6 +541,18 @@ g:ale_echo_cursor                                           *g:ale_echo_cursor*
   The format of the message can be customizable in |g:ale_echo_msg_format|.
 
 
+g:ale_echo_delay                                             *g:ale_echo_delay*
+                                                             *b:ale_echo_delay*
+  Type: |Number|
+  Default: `10`
+
+  Given any integer, this option controls the number of milliseconds before
+  ALE will echo a message for a problem near the cursor.
+
+  The value can be increased to decrease the amount of processing ALE will do
+  for files displaying a large number of problems.
+
+
 g:ale_echo_msg_error_str                             *g:ale_echo_msg_error_str*
 
   Type: |String|

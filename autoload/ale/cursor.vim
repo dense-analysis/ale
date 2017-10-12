@@ -113,8 +113,13 @@ function! ale#cursor#EchoCursorWarningWithDelay() abort
     " we should echo something. Otherwise we can end up doing processing
     " the echo message far too frequently.
     if l:pos != s:last_pos
+        let l:delay = ale#Var(bufnr(''), 'echo_delay')
+
         let s:last_pos = l:pos
-        let s:cursor_timer = timer_start(10, function('ale#cursor#EchoCursorWarning'))
+        let s:cursor_timer = timer_start(
+        \   l:delay,
+        \   function('ale#cursor#EchoCursorWarning')
+        \)
     endif
 endfunction
 
