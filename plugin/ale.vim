@@ -118,6 +118,9 @@ call ale#Set('list_window_size', 10)
 " This flag can be set to 0 to disable setting signs.
 " This is enabled by default only if the 'signs' feature exists.
 let g:ale_set_signs = get(g:, 'ale_set_signs', has('signs'))
+" This flag can be set to some integer to control the maximum number of signs
+" that ALE will set.
+let g:ale_max_signs = get(g:, 'ale_max_signs', -1)
 
 " This flag can be set to 1 to enable changing the sign column colors when
 " there are errors.

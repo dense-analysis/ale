@@ -859,6 +859,23 @@ g:ale_max_buffer_history_size                   *g:ale_max_buffer_history_size*
   History can be disabled completely with |g:ale_history_enabled|.
 
 
+g:ale_max_signs                                               *g:ale_max_signs*
+                                                              *b:ale_max_signs*
+  Type: |Number|
+  Default: `-1`
+
+  When set to any positive integer, ALE will not render any more than the
+  given number of signs for any one buffer.
+
+  When set to `0`, no signs will be set, but sign processing will still be
+  done, so existing signs can be removed.
+
+  When set to any other value, no limit will be imposed on the number of signs
+  set.
+
+  For disabling sign processing, see |g:ale_set_signs|.
+
+
 g:ale_maximum_file_size                               *g:ale_maximum_file_size*
                                                       *b:ale_maximum_file_size*
   Type: |Number|
@@ -1005,6 +1022,8 @@ g:ale_set_signs                                               *g:ale_set_signs*
 
   When multiple problems exist on the same line, the signs will take
   precedence in the order above, from highest to lowest.
+
+  To limit the number of signs ALE will set, see |g:ale_max_signs|.
 
 
 g:ale_sign_column_always                             *g:ale_sign_column_always*
