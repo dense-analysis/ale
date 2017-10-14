@@ -324,7 +324,7 @@ circumstances, which can be configured with the associated options.
 * When you open a new or modified buffer.  - |g:ale_lint_on_enter|
 * When you save a buffer.                  - |g:ale_lint_on_save|
 * When the filetype changes for a buffer.  - |g:ale_lint_on_filetype_changed|
-* If ALE is used to check ccode manually.  - |:ALELint|
+* If ALE is used to check code manually.   - |:ALELint|
 
 In addition to the above options, ALE can also check buffers for errors when
 you leave insert mode with |g:ale_lint_on_insert_leave|, which is off by
@@ -342,7 +342,7 @@ circumstances.
 * When you open a new or modified buffer.  - |g:ale_lint_on_enter|
 * When you save a buffer.                  - |g:ale_lint_on_save|
 * When the filetype changes for a buffer.  - |g:ale_lint_on_filetype_changed|
-* If ALE is used to check ccode manually.  - |:ALELint|
+* If ALE is used to check code manually.   - |:ALELint|
 
 ALE will report problems with your code in the following ways, listed with
 their relevant options.
