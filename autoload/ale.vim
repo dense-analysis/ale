@@ -46,6 +46,11 @@ function! ale#ShouldDoNothing(buffer) abort
     " The checks are split into separate if statements to make it possible to
     " profile each check individually with Vim's profiling tools.
 
+    " Don't perform any checks when newer NeoVim versions are exiting.
+    if get(v:, 'exiting', v:null) isnot v:null
+        return 1
+    endif
+
     " Do nothing for blacklisted files
     if index(g:ale_filetype_blacklist, &filetype) >= 0
         return 1

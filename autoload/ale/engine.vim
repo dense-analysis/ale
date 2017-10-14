@@ -801,6 +801,11 @@ endfunction
 " clear the state of everything, and remove the Dictionary for managing
 " the buffer.
 function! ale#engine#Cleanup(buffer) abort
+    " Don't bother with cleanup code when newer NeoVim versions are exiting.
+    if get(v:, 'exiting', v:null) isnot v:null
+        return
+    endif
+
     if !has_key(g:ale_buffer_info, a:buffer)
         return
     endif
