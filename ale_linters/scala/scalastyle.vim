@@ -8,10 +8,21 @@ let g:ale_scalastyle_config_loc =
 \   get(g:, 'ale_scalastyle_config_loc', '')
 
 function! ale_linters#scala#scalastyle#Handle(buffer, lines) abort
+    " Look for help output from scalastyle first, which indicates that no
+    " configuration file was found.
+    for l:line in a:lines[:10]
+        if l:line =~# '-c, --config'
+            return [{
+            \   'lnum': 1,
+            \   'text': '(See :help ale-scala-scalastyle)'
+            \       . ' No scalastyle configuration file was found.',
+            \}]
+        endif
+    endfor
+
     " Matches patterns like the following:
     "
     " warning file=/home/blurble/Doop.scala message=Missing or badly formed ScalaDoc: Extra @param foobles line=190
-
     let l:patterns = [
     \   '^\(.\+\) .\+ message=\(.\+\) line=\(\d\+\)$',
     \   '^\(.\+\) .\+ message=\(.\+\) line=\(\d\+\) column=\(\d\+\)$',

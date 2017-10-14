@@ -5,6 +5,17 @@ ALE Scala Integration                                       *ale-scala-options*
 ===============================================================================
 scalastyle                                               *ale-scala-scalastyle*
 
+`scalastyle` requires a configuration file for a project to run. When no
+configuration file can be found, ALE will report a problem saying that a
+configuration file is required at line 1.
+
+To disable `scalastyle` globally, use |g:ale_linters| like so: >
+  let g:ale_linters = {'scala': ['scalac']} " Enable only scalac instead
+<
+
+See |g:ale_linters| for more information on disabling linters.
+
+
 g:ale_scalastyle_config_loc                       *g:ale_scalastyle_config_loc*
 
   Type: |String|
