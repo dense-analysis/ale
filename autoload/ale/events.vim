@@ -1,8 +1,15 @@
 " Author: w0rp <devw0rp@gmail.com>
 
+function! ale#events#QuitEvent(buffer) abort
+    " Remember when ALE is quitting for BufWrite, etc.
+    call setbufvar(a:buffer, 'ale_quitting', 1)
+endfunction
+
 function! ale#events#SaveEvent(buffer) abort
     call setbufvar(a:buffer, 'ale_save_event_fired', 1)
-    let l:should_lint = ale#Var(a:buffer, 'enabled') && g:ale_lint_on_save
+    let l:should_lint = ale#Var(a:buffer, 'enabled')
+    \   && g:ale_lint_on_save
+    \   && !getbufvar(a:buffer, 'ale_quitting')
 
     if g:ale_fix_on_save
         let l:will_fix = ale#fix#Fix('save_file')
@@ -24,6 +31,8 @@ function! s:LintOnEnter(buffer) abort
 endfunction
 
 function! ale#events#EnterEvent(buffer) abort
+    " When entering a buffer, we are no longer quitting it.
+    call setbufvar(a:buffer, 'ale_quitting', 0)
     let l:filetype = getbufvar(a:buffer, '&filetype')
     call setbufvar(a:buffer, 'ale_original_filetype', l:filetype)
 
