@@ -38,6 +38,8 @@ function! ale#FileTooLarge() abort
     return l:max > 0 ? (line2byte(line('$') + 1) > l:max) : 0
 endfunction
 
+let s:getcmdwintype_exists = exists('*getcmdwintype')
+
 " A function for checking various conditions whereby ALE just shouldn't
 " attempt to do anything, say if particular buffer types are open in Vim.
 function! ale#ShouldDoNothing(buffer) abort
@@ -50,7 +52,7 @@ function! ale#ShouldDoNothing(buffer) abort
     endif
 
     " Do nothing if running from command mode
-    if exists('*getcmdwintype') && !empty(getcmdwintype())
+    if s:getcmdwintype_exists && !empty(getcmdwintype())
         return 1
     endif
 
