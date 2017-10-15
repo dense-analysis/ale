@@ -52,7 +52,7 @@ function! ale#ShouldDoNothing(buffer) abort
     endif
 
     " Do nothing for blacklisted files
-    if index(g:ale_filetype_blacklist, &filetype) >= 0
+    if index(g:ale_filetype_blacklist, getbufvar(a:buffer, '&filetype')) >= 0
         return 1
     endif
 
@@ -118,7 +118,7 @@ function! s:ALEQueueImpl(delay, linting_flag, buffer) abort
     " Remember that we want to check files for this buffer.
     " We will remember this until we finally run the linters, via any event.
     if a:linting_flag is# 'lint_file'
-        let s:should_lint_file_for_buffer[bufnr('%')] = 1
+        let s:should_lint_file_for_buffer[a:buffer] = 1
     endif
 
     if s:lint_timer != -1
