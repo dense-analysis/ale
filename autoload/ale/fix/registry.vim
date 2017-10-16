@@ -102,6 +102,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['go'],
 \       'description': 'Fix Go files with go fmt.',
 \   },
+\   'tslint': {
+\       'function': 'ale#fixers#tslint#Fix',
+\       'suggested_filetypes': ['typescript'],
+\       'description': 'Fix typescript files with tslint --fix.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
