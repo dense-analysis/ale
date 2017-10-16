@@ -2,21 +2,26 @@
 
 function! ale#events#QuitEvent(buffer) abort
     " Remember when ALE is quitting for BufWrite, etc.
-    call setbufvar(a:buffer, 'ale_quitting', 1)
+    call setbufvar(a:buffer, 'ale_quitting', ale#util#ClockMilliseconds())
+endfunction
+
+function! ale#events#QuitRecently(buffer) abort
+    let l:time = getbufvar(a:buffer, 'ale_quitting', 0)
+
+    return l:time && ale#util#ClockMilliseconds() - l:time < 1000
 endfunction
 
 function! ale#events#SaveEvent(buffer) abort
     call setbufvar(a:buffer, 'ale_save_event_fired', 1)
     let l:should_lint = ale#Var(a:buffer, 'enabled')
     \   && g:ale_lint_on_save
-    \   && !getbufvar(a:buffer, 'ale_quitting')
 
     if g:ale_fix_on_save
         let l:will_fix = ale#fix#Fix('save_file')
         let l:should_lint = l:should_lint && !l:will_fix
     endif
 
-    if l:should_lint
+    if l:should_lint && !ale#events#QuitRecently(a:buffer)
         call ale#Queue(0, 'lint_file', a:buffer)
     endif
 endfunction

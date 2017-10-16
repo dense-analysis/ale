@@ -58,7 +58,7 @@ function! ale#fix#ApplyQueuedFixes() abort
     " fixing problems.
     if g:ale_enabled
     \&& l:should_lint
-    \&& !getbufvar(l:buffer, 'ale_quitting')
+    \&& !ale#events#QuitRecently(l:buffer)
         call ale#Queue(0, l:data.should_save ? 'lint_file' : '')
     endif
 endfunction
