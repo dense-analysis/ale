@@ -1,13 +1,11 @@
 Before:
-  silent! cd /testplugin/test/lsp
-  let g:dir = getcwd()
   let g:ale_lsp_next_version_id = 1
 
+  call ale#test#SetDirectory('/testplugin/test/lsp')
   call ale#test#SetFilename('foo/bar.ts')
 
 After:
-  silent execute 'cd ' . fnameescape(g:dir)
-  unlet! g:dir
+  call ale#test#RestoreDirectory()
 
 Execute(ale#lsp#message#Initialize() should return correct messages):
   AssertEqual
@@ -44,7 +42,7 @@ Execute(ale#lsp#message#DidOpen() should return correct messages):
   \   'textDocument/didOpen',
   \   {
   \     'textDocument': {
-  \         'uri': 'file://' . g:dir . '/foo/bar.ts',
+  \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
   \         'languageId': 'typescript',
   \         'version': 12,
   \         'text': "foo()\nbar()\nbaz()",
@@ -62,7 +60,7 @@ Execute(ale#lsp#message#DidChange() should return correct messages):
   \   'textDocument/didChange',
   \   {
   \     'textDocument': {
-  \         'uri': 'file://' . g:dir . '/foo/bar.ts',
+  \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
   \         'version': 34,
   \     },
   \     'contentChanges': [{'text': "foo()\nbar()\nbaz()"}],
@@ -84,7 +82,7 @@ Execute(ale#lsp#message#DidSave() should return correct messages):
   \   'textDocument/didSave',
   \   {
   \     'textDocument': {
-  \         'uri': 'file://' . g:dir . '/foo/bar.ts',
+  \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
   \     },
   \   }
   \ ],
@@ -97,7 +95,7 @@ Execute(ale#lsp#message#DidClose() should return correct messages):
   \   'textDocument/didClose',
   \   {
   \     'textDocument': {
-  \         'uri': 'file://' . g:dir . '/foo/bar.ts',
+  \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
   \     },
   \   }
   \ ],
@@ -109,7 +107,7 @@ Execute(ale#lsp#tsserver_message#Open() should return correct messages):
   \   1,
   \   'ts@open',
   \   {
-  \     'file': g:dir . '/foo/bar.ts',
+  \     'file': ale#path#Winify(g:dir . '/foo/bar.ts'),
   \   }
   \ ],
   \ ale#lsp#tsserver_message#Open(bufnr(''))
@@ -120,7 +118,7 @@ Execute(ale#lsp#tsserver_message#Close() should return correct messages):
   \   1,
   \   'ts@close',
   \   {
-  \     'file': g:dir . '/foo/bar.ts',
+  \     'file': ale#path#Winify(g:dir . '/foo/bar.ts'),
   \   }
   \ ],
   \ ale#lsp#tsserver_message#Close(bufnr(''))
@@ -131,7 +129,7 @@ Execute(ale#lsp#tsserver_message#Change() should return correct messages):
   \   1,
   \   'ts@change',
   \   {
-  \     'file': g:dir . '/foo/bar.ts',
+  \     'file': ale#path#Winify(g:dir . '/foo/bar.ts'),
   \     'line': 1,
   \     'offset': 1,
   \     'endLine': 1073741824,
@@ -147,7 +145,7 @@ Execute(ale#lsp#tsserver_message#Geterr() should return correct messages):
   \   1,
   \   'ts@geterr',
   \   {
-  \     'files': [g:dir . '/foo/bar.ts'],
+  \     'files': [ale#path#Winify(g:dir . '/foo/bar.ts')],
   \   }
   \ ],
   \ ale#lsp#tsserver_message#Geterr(bufnr(''))
@@ -158,7 +156,7 @@ Execute(ale#lsp#tsserver_message#Completions() should return correct messages):
   \   0,
   \   'ts@completions',
   \   {
-  \     'file': g:dir . '/foo/bar.ts',
+  \     'file': ale#path#Winify(g:dir . '/foo/bar.ts'),
   \     'line': 347,
   \     'offset': 12,
   \     'prefix': 'abc',
@@ -172,7 +170,7 @@ Execute(ale#lsp#tsserver_message#CompletionEntryDetails() should return correct 
   \   0,
   \   'ts@completionEntryDetails',
   \   {
-  \     'file': g:dir . '/foo/bar.ts',
+  \     'file': ale#path#Winify(g:dir . '/foo/bar.ts'),
   \     'line': 347,
   \     'offset': 12,
   \     'entryNames': ['foo', 'bar'],

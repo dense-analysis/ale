@@ -1,5 +1,6 @@
 /init.vim
 /doc/tags
 .*
+!.editorconfig
 *.obj
 tags

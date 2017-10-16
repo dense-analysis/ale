@@ -1,34 +1,47 @@
+Before:
+  function! CheckPath(path) abort
+    return ale#path#IsBufferPath(bufnr(''), ale#path#Winify(a:path))
+  endfunction
+
+After:
+  delfunction CheckPath
+
 Execute(ale#path#IsBufferPath should match simple relative paths):
   call ale#test#SetFilename('app/foo.txt')
 
-  Assert ale#path#IsBufferPath(bufnr(''), 'app/foo.txt'), 'No match for foo.txt'
-  Assert !ale#path#IsBufferPath(bufnr(''), 'app/bar.txt'), 'Bad match for bar.txt'
+  Assert CheckPath('app/foo.txt'), 'No match for foo.txt'
+  Assert !CheckPath('app/bar.txt'), 'Bad match for bar.txt'
 
 Execute(ale#path#IsBufferPath should match relative paths with dots):
   call ale#test#SetFilename('app/foo.txt')
 
-  Assert ale#path#IsBufferPath(bufnr(''), '../../app/foo.txt'), 'No match for ../../app/foo.txt'
+  " Skip these checks on Windows.
+  if !has('win32')
+    Assert CheckPath('../../app/foo.txt'), 'No match for ../../app/foo.txt'
+  endif
 
 Execute(ale#path#IsBufferPath should match absolute paths):
   silent file! foo.txt
 
-  Assert ale#path#IsBufferPath(bufnr(''), getcwd() . '/foo.txt'), 'No match for foo.txt'
-  Assert !ale#path#IsBufferPath(bufnr(''), getcwd() . '/bar.txt'), 'Bad match for bar.txt'
+  Assert CheckPath(getcwd() . '/foo.txt'), 'No match for foo.txt'
+  Assert !CheckPath(getcwd() . '/bar.txt'), 'Bad match for bar.txt'
 
 Execute(ale#path#IsBufferPath should match paths beginning with ./):
   silent file! foo.txt
 
-  Assert ale#path#IsBufferPath(bufnr(''), './foo.txt'), 'No match for ./foo.txt'
+  if !has('win32')
+    Assert ale#path#IsBufferPath(bufnr(''), './foo.txt'), 'No match for ./foo.txt'
+  endif
 
 Execute(ale#path#IsBufferPath should match if our path ends with the test path):
   silent file! foo/bar/baz.txt
 
-  Assert ale#path#IsBufferPath(bufnr(''), 'bar/baz.txt'), 'No match for bar/baz.txt'
+  Assert CheckPath('bar/baz.txt'), 'No match for bar/baz.txt'
 
 Execute(ale#path#IsBufferPath should match paths with redundant slashes):
   silent file! foo.txt
 
-  Assert ale#path#IsBufferPath(bufnr(''), getcwd() . '////foo.txt'), 'No match for foo.txt'
+  Assert CheckPath(getcwd() . '////foo.txt'), 'No match for foo.txt'
 
 Execute(ale#path#IsBufferPath should accept various names for stdin):
   Assert ale#path#IsBufferPath(bufnr(''), '-')
@@ -39,6 +52,4 @@ Execute(ale#path#IsBufferPath should accept various names for stdin):
 Execute(ale#path#IsBufferPath should match files in /tmp):
   call ale#test#SetFilename('app/test.ts')
 
-  Assert ale#path#IsBufferPath(bufnr(''), '../../../../../../../../tmp/vG0hKyD/1/test.ts')
-  Assert ale#path#IsBufferPath(bufnr(''), '/tmp/vG0hKyD/1/test.ts')
-  Assert ale#path#IsBufferPath(bufnr(''), '/run/user/1000/vG0hKyD/1/test.ts')
+  Assert ale#path#IsBufferPath(bufnr(''), tempname() . '/test.ts')

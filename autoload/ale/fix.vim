@@ -56,7 +56,9 @@ function! ale#fix#ApplyQueuedFixes() abort
 
     " If ALE linting is enabled, check for problems with the file again after
     " fixing problems.
-    if g:ale_enabled && l:should_lint
+    if g:ale_enabled
+    \&& l:should_lint
+    \&& !getbufvar(l:buffer, 'ale_quitting')
         call ale#Queue(0, l:data.should_save ? 'lint_file' : '')
     endif
 endfunction

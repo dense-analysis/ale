@@ -1,16 +1,6 @@
 ===============================================================================
 ALE Haskell Integration                                   *ale-haskell-options*
 
-===============================================================================
-stack-build                                           *ale-haskell-stack-build*
-
-g:ale_haskell_stack_build_options           *g:ale_haskell_stack_build_options*
-                                            *b:ale_haskell_stack_build_options*
-  Type: |String|
-  Default: `'--fast'`
-
-  We default to using `'--fast'`. Since Stack generates binaries, your
-  programs will be slower unless you separately rebuild them outside of ALE.
 
 ===============================================================================
 hdevtools                                               *ale-haskell-hdevtools*
@@ -29,6 +19,18 @@ g:ale_haskell_hdevtools_options               *g:ale_haskell_hdevtools_options*
   Default: `'-g -Wall'`
 
   This variable can be changed to modify flags given to hdevtools.
+
+===============================================================================
+stack-build                                           *ale-haskell-stack-build*
+
+g:ale_haskell_stack_build_options           *g:ale_haskell_stack_build_options*
+                                            *b:ale_haskell_stack_build_options*
+  Type: |String|
+  Default: `'--fast'`
+
+  We default to using `'--fast'`. Since Stack generates binaries, your
+  programs will be slower unless you separately rebuild them outside of ALE.
+
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

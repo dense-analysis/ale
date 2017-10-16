@@ -1,5 +1,5 @@
 ===============================================================================
-ALE RPM Spec Integration                                     *ale-spec-options*
+ALE Spec Integration                                         *ale-spec-options*
                                                          *ale-integration-spec*
 
 ===============================================================================

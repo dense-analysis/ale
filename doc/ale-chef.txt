@@ -3,7 +3,7 @@ ALE Chef Integration                                         *ale-chef-options*
 
 
 ===============================================================================
-foodcritc                                                 *ale-chef-foodcritic*
+foodcritic                                                *ale-chef-foodcritic*
 
 g:ale_chef_foodcritic_options                   *g:ale_chef_foodcritic_options*
                                                 *b:ale_chef_foodcritic_options*

@@ -1,4 +1,6 @@
 Before:
+  Save g:ale_change_sign_column_color
+
   function! ParseHighlight(name) abort
     redir => l:output
       silent execute 'highlight ' . a:name
@@ -20,14 +22,34 @@ Before:
   let g:sign_highlight = ParseHighlight('SignColumn')
 
 After:
+  Restore
+
   delfunction ParseHighlight
   call SetHighlight('SignColumn', g:sign_highlight)
   delfunction SetHighlight
   unlet! g:sign_highlight
 
+  sign unplace *
+
+Execute(The SignColumn highlight shouldn't be changed if the option is off):
+  let g:ale_change_sign_column_color = 0
+  let b:sign_highlight = ParseHighlight('SignColumn')
+
+  call ale#sign#SetSigns(bufnr(''), [
+  \ {'bufnr': bufnr(''), 'lnum': 1, 'col': 1, 'type': 'W', 'text': 'x'},
+  \])
+  AssertEqual b:sign_highlight, ParseHighlight('SignColumn')
+
+  call ale#sign#SetSigns(bufnr(''), [])
+  AssertEqual b:sign_highlight, ParseHighlight('SignColumn')
+
 Execute(The SignColumn highlight should be set and reset):
-  call ale#sign#SetSignColumnHighlight(1)
+  let g:ale_change_sign_column_color = 1
+
+  call ale#sign#SetSigns(bufnr(''), [
+  \ {'bufnr': bufnr(''), 'lnum': 1, 'col': 1, 'type': 'W', 'text': 'x'},
+  \])
   AssertEqual 'links to ALESignColumnWithErrors', ParseHighlight('SignColumn')
 
-  call ale#sign#SetSignColumnHighlight(0)
+  call ale#sign#SetSigns(bufnr(''), [])
   AssertEqual 'links to ALESignColumnWithoutErrors', ParseHighlight('SignColumn')

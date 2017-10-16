@@ -16,28 +16,41 @@ CONTENTS                                                         *ale-contents*
   7. Integration Documentation............|ale-integrations|
     asm...................................|ale-asm-options|
       gcc.................................|ale-asm-gcc|
+    awk...................................|ale-awk-options|
+      gawk................................|ale-awk-gawk|
     c.....................................|ale-c-options|
       clang...............................|ale-c-clang|
+      clang-format........................|ale-c-clangformat|
       clangtidy...........................|ale-c-clangtidy|
       cppcheck............................|ale-c-cppcheck|
       gcc.................................|ale-c-gcc|
-      clang-format........................|ale-c-clangformat|
     chef..................................|ale-chef-options|
       foodcritic..........................|ale-chef-foodcritic|
+    cmake.................................|ale-cmake-options|
+      cmakelint...........................|ale-cmake-cmakelint|
     cpp...................................|ale-cpp-options|
       clang...............................|ale-cpp-clang|
       clangcheck..........................|ale-cpp-clangcheck|
+      clang-format........................|ale-cpp-clangformat|
       clangtidy...........................|ale-cpp-clangtidy|
       cppcheck............................|ale-cpp-cppcheck|
       cpplint.............................|ale-cpp-cpplint|
       gcc.................................|ale-cpp-gcc|
-      clang-format........................|ale-cpp-clangformat|
+    c#....................................|ale-cs-options|
+      mcs.................................|ale-cs-mcs|
+      mcsc................................|ale-cs-mcsc|
     css...................................|ale-css-options|
+      prettier............................|ale-css-prettier|
       stylelint...........................|ale-css-stylelint|
-    cmake.................................|ale-cmake-options|
-      cmakelint...........................|ale-cmake-cmakelint|
+    cuda..................................|ale-cuda-options|
+      nvcc................................|ale-cuda-nvcc|
     dart..................................|ale-dart-options|
       dartanalyzer........................|ale-dart-dartanalyzer|
+    dockerfile............................|ale-dockerfile-options|
+      hadolint............................|ale-dockerfile-hadolint|
+    elm...................................|ale-elm-options|
+      elm-format..........................|ale-elm-elm-format|
+      elm-make............................|ale-elm-elm-make|
     erlang................................|ale-erlang-options|
       erlc................................|ale-erlang-erlc|
       syntaxerl...........................|ale-erlang-syntaxerl|
@@ -46,13 +59,17 @@ CONTENTS                                                         *ale-contents*
       gcc.................................|ale-fortran-gcc|
     fusionscript..........................|ale-fuse-options|
       fusion-lint.........................|ale-fuse-fusionlint|
+    glsl..................................|ale-glsl-options|
+      glslang.............................|ale-glsl-glslang|
     go....................................|ale-go-options|
+      gofmt...............................|ale-go-gofmt|
       gometalinter........................|ale-go-gometalinter|
     graphql...............................|ale-graphql-options|
       gqlint..............................|ale-graphql-gqlint|
     handlebars............................|ale-handlebars-options|
       ember-template-lint.................|ale-handlebars-embertemplatelint|
     haskell...............................|ale-haskell-options|
+      hdevtools...........................|ale-haskell-hdevtools|
       stack-build.........................|ale-haskell-stack-build|
     html..................................|ale-html-options|
       htmlhint............................|ale-html-htmlhint|
@@ -65,14 +82,21 @@ CONTENTS                                                         *ale-contents*
     javascript............................|ale-javascript-options|
       eslint..............................|ale-javascript-eslint|
       flow................................|ale-javascript-flow|
+      jscs................................|ale-javascript-jscs|
       jshint..............................|ale-javascript-jshint|
       prettier............................|ale-javascript-prettier|
       prettier-eslint.....................|ale-javascript-prettier-eslint|
       prettier-standard...................|ale-javascript-prettier-standard|
       standard............................|ale-javascript-standard|
       xo..................................|ale-javascript-xo|
+    json..................................|ale-json-options|
+      jsonlint............................|ale-json-jsonlint|
+      prettier............................|ale-json-prettier|
     kotlin................................|ale-kotlin-options|
       kotlinc.............................|ale-kotlin-kotlinc|
+      ktlint..............................|ale-kotlin-ktlint|
+    llvm..................................|ale-llvm-options|
+      llc.................................|ale-llvm-llc|
     lua...................................|ale-lua-options|
       luacheck............................|ale-lua-luacheck|
     objc..................................|ale-objc-options|
@@ -87,12 +111,14 @@ CONTENTS                                                         *ale-contents*
     php...................................|ale-php-options|
       hack................................|ale-php-hack|
       langserver..........................|ale-php-langserver|
+      phpcbf..............................|ale-php-phpcbf|
       phpcs...............................|ale-php-phpcs|
       phpmd...............................|ale-php-phpmd|
       phpstan.............................|ale-php-phpstan|
-      phpcbf..............................|ale-php-phpcbf|
     pug...................................|ale-pug-options|
       puglint.............................|ale-pug-puglint|
+    puppet................................|ale-puppet-options|
+      puppetlint..........................|ale-puppet-puppetlint|
     python................................|ale-python-options|
       autopep8............................|ale-python-autopep8|
       flake8..............................|ale-python-flake8|
@@ -103,6 +129,8 @@ CONTENTS                                                         *ale-contents*
       yapf................................|ale-python-yapf|
     r.....................................|ale-r-options|
       lintr...............................|ale-r-lintr|
+    reasonml..............................|ale-reasonml-options|
+      merlin..............................|ale-reasonml-merlin|
     ruby..................................|ale-ruby-options|
       brakeman............................|ale-ruby-brakeman|
       rails_best_practices................|ale-ruby-rails_best_practices|
@@ -117,12 +145,15 @@ CONTENTS                                                         *ale-contents*
     scala.................................|ale-scala-options|
       scalastyle..........................|ale-scala-scalastyle|
     scss..................................|ale-scss-options|
+      prettier............................|ale-scss-prettier|
       stylelint...........................|ale-scss-stylelint|
     sh....................................|ale-sh-options|
       shell...............................|ale-sh-shell|
       shellcheck..........................|ale-sh-shellcheck|
     sml...................................|ale-sml-options|
       smlnj...............................|ale-sml-smlnj|
+    solidity..............................|ale-solidity-options|
+      solium..............................|ale-solidity-solium|
     spec..................................|ale-spec-options|
       rpmlint.............................|ale-spec-rpmlint|
     stylus................................|ale-stylus-options|
@@ -136,6 +167,7 @@ CONTENTS                                                         *ale-contents*
       thrift..............................|ale-thrift-thrift|
     typescript............................|ale-typescript-options|
       eslint..............................|ale-typescript-eslint|
+      prettier............................|ale-typescript-prettier|
       tslint..............................|ale-typescript-tslint|
       tsserver............................|ale-typescript-tsserver|
     verilog/systemverilog.................|ale-verilog-options|
@@ -195,22 +227,24 @@ Notes:
 * Bourne Shell: `shell` (-n flag), `shellcheck`
 * C: `cppcheck`, `cpplint`!!, `gcc`, `clang`, `clangtidy`!!, `clang-format`
 * C++ (filetype cpp): `clang`, `clangcheck`!!, `clangtidy`!!, `cppcheck`, `cpplint`!!, `gcc`, `clang-format`
-* C#: `mcs`
+* CUDA: `nvcc`!!
+* C#: `mcs`, `mcsc`!!
 * Chef: `foodcritic`
 * CMake: `cmakelint`
 * CoffeeScript: `coffee`, `coffeelint`
 * Crystal: `crystal`!!
-* CSS: `csslint`, `stylelint`
+* CSS: `csslint`, `stylelint`, `prettier`
 * Cython (pyrex filetype): `cython`
 * D: `dmd`
 * Dart: `dartanalyzer`
 * Dockerfile: `hadolint`
 * Elixir: `credo`, `dogma`!!
-* Elm: `elm-make`
+* Elm: `elm-format, elm-make`
 * Erb: `erb`, `erubis`
 * Erlang: `erlc`, `SyntaxErl`
 * Fortran: `gcc`
 * FusionScript: `fusion-lint`
+* GLSL: glslang
 * Go: `gofmt`, `go vet`, `golint`, `gometalinter`!!, `go build`!!, `gosimple`, `staticcheck`
 * GraphQL: `gqlint`
 * Haml: `haml-lint`
@@ -220,9 +254,10 @@ Notes:
 * Idris: `idris`
 * Java: `checkstyle`, `javac`
 * JavaScript: `eslint`, `jscs`, `jshint`, `flow`, `prettier`, `prettier-eslint` >= 4.2.0, `prettier-standard`, `standard`, `xo`
-* JSON: `jsonlint`
+* JSON: `jsonlint`, `prettier`
 * Kotlin: `kotlinc`, `ktlint`
 * LaTeX (tex): `chktex`, `lacheck`, `proselint`
+* LLVM: `llc`
 * Lua: `luacheck`
 * Markdown: `mdl`, `proselint`, `vale`
 * MATLAB: `mlint`
@@ -245,10 +280,11 @@ Notes:
 * Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`
 * Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|)
 * SASS: `sass-lint`, `stylelint`
-* SCSS: `sass-lint`, `scss-lint`, `stylelint`
+* SCSS: `sass-lint`, `scss-lint`, `stylelint`, `prettier`
 * Scala: `scalac`, `scalastyle`
 * Slim: `slim-lint`
 * SML: `smlnj`
+* Solidity: `solium`
 * Stylus: `stylelint`
 * SQL: `sqlint`
 * Swift: `swiftlint`, `swiftformat`
@@ -256,7 +292,7 @@ Notes:
 * Texinfo: `proselint`
 * Text^: `proselint`, `vale`
 * Thrift: `thrift`
-* TypeScript: `eslint`, `tslint`, `tsserver`, `typecheck`
+* TypeScript: `eslint`, `tslint`, `tsserver`, `typecheck`, `prettier`
 * Verilog: `iverilog`, `verilator`
 * Vim: `vint`
 * Vim help^: `proselint`
@@ -288,7 +324,7 @@ circumstances, which can be configured with the associated options.
 * When you open a new or modified buffer.  - |g:ale_lint_on_enter|
 * When you save a buffer.                  - |g:ale_lint_on_save|
 * When the filetype changes for a buffer.  - |g:ale_lint_on_filetype_changed|
-* If ALE is used to check ccode manually.  - |:ALELint|
+* If ALE is used to check code manually.   - |:ALELint|
 
 In addition to the above options, ALE can also check buffers for errors when
 you leave insert mode with |g:ale_lint_on_insert_leave|, which is off by
@@ -306,7 +342,7 @@ circumstances.
 * When you open a new or modified buffer.  - |g:ale_lint_on_enter|
 * When you save a buffer.                  - |g:ale_lint_on_save|
 * When the filetype changes for a buffer.  - |g:ale_lint_on_filetype_changed|
-* If ALE is used to check ccode manually.  - |:ALELint|
+* If ALE is used to check code manually.   - |:ALELint|
 
 ALE will report problems with your code in the following ways, listed with
 their relevant options.
@@ -505,6 +541,18 @@ g:ale_echo_cursor                                           *g:ale_echo_cursor*
   The format of the message can be customizable in |g:ale_echo_msg_format|.
 
 
+g:ale_echo_delay                                             *g:ale_echo_delay*
+                                                             *b:ale_echo_delay*
+  Type: |Number|
+  Default: `10`
+
+  Given any integer, this option controls the number of milliseconds before
+  ALE will echo a message for a problem near the cursor.
+
+  The value can be increased to decrease the amount of processing ALE will do
+  for files displaying a large number of problems.
+
+
 g:ale_echo_msg_error_str                             *g:ale_echo_msg_error_str*
 
   Type: |String|
@@ -576,7 +624,7 @@ g:ale_fixers                                                     *g:ale_fixers*
   A mapping from filetypes to |List| values for functions for fixing errors.
   See |ale-fix| for more information.
 
-  This variable can be overriden with variables in each buffer.
+  This variable can be overridden with variables in each buffer.
 
 
 g:ale_fix_on_save                                           *g:ale_fix_on_save*
@@ -823,6 +871,23 @@ g:ale_max_buffer_history_size                   *g:ale_max_buffer_history_size*
   History can be disabled completely with |g:ale_history_enabled|.
 
 
+g:ale_max_signs                                               *g:ale_max_signs*
+                                                              *b:ale_max_signs*
+  Type: |Number|
+  Default: `-1`
+
+  When set to any positive integer, ALE will not render any more than the
+  given number of signs for any one buffer.
+
+  When set to `0`, no signs will be set, but sign processing will still be
+  done, so existing signs can be removed.
+
+  When set to any other value, no limit will be imposed on the number of signs
+  set.
+
+  For disabling sign processing, see |g:ale_set_signs|.
+
+
 g:ale_maximum_file_size                               *g:ale_maximum_file_size*
                                                       *b:ale_maximum_file_size*
   Type: |Number|
@@ -969,6 +1034,8 @@ g:ale_set_signs                                               *g:ale_set_signs*
 
   When multiple problems exist on the same line, the signs will take
   precedence in the order above, from highest to lowest.
+
+  To limit the number of signs ALE will set, see |g:ale_max_signs|.
 
 
 g:ale_sign_column_always                             *g:ale_sign_column_always*
@@ -1476,7 +1543,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                            the end of the file will be moved to the end.
                          `col` - The column number is optional and will
                            default to `0`. Any strings will be automatically
-                           coverted to number using `str2nr()`.
+                           converted to number using `str2nr()`.
                          `end_col` - An optional end column number.
                            This key can be set to specify the column problems
                            end on, for improved highlighting.
@@ -1627,7 +1694,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          `project_callback` and `language_callback` arguments
                          must also be defined.
 
-                         LSP linters handle diagonstics automatically, so
+                         LSP linters handle diagnostics automatically, so
                          the `callback` argument must not be defined.
 
   `project_callback`       A |String| or |Funcref| for a callback function
@@ -1716,12 +1783,12 @@ ale#linter#Get(filetype)                                     *ale#linter#Get()*
   Return all of linters configured for a given filetype as a |List| of
   |Dictionary| values in the format specified by |ale#linter#Define()|.
 
-  Filetypes may be dot-seperated to invoke linters for multiple filetypes:
+  Filetypes may be dot-separated to invoke linters for multiple filetypes:
   for instance, the filetype `javascript.jsx` will return linters for both the
   `javascript` and `jsx` filetype.
 
   Aliases may be defined in as described in |g:ale_linter_aliases|. Aliases
-  are applied after dot-seperated filetypes are broken up into their
+  are applied after dot-separated filetypes are broken up into their
   components.
 
 

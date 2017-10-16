@@ -184,16 +184,6 @@ function! s:GroupLoclistItems(buffer, loclist) abort
     return l:grouped_items
 endfunction
 
-function! ale#sign#SetSignColumnHighlight(has_problems) abort
-    highlight clear SignColumn
-
-    if a:has_problems
-        highlight link SignColumn ALESignColumnWithErrors
-    else
-        highlight link SignColumn ALESignColumnWithoutErrors
-    endif
-endfunction
-
 function! s:UpdateLineNumbers(buffer, current_sign_list, loclist) abort
     let l:line_map = {}
     let l:line_numbers_changed = 0
@@ -219,29 +209,47 @@ function! s:UpdateLineNumbers(buffer, current_sign_list, loclist) abort
     endif
 endfunction
 
-function! s:BuildSignMap(current_sign_list, grouped_items) abort
+function! s:BuildSignMap(buffer, current_sign_list, grouped_items) abort
+    let l:max_signs = ale#Var(a:buffer, 'max_signs')
+
+    if l:max_signs is 0
+        let l:selected_grouped_items = []
+    elseif type(l:max_signs) is type(0) && l:max_signs > 0
+        let l:selected_grouped_items = a:grouped_items[:l:max_signs - 1]
+    else
+        let l:selected_grouped_items = a:grouped_items
+    endif
+
     let l:sign_map = {}
     let l:sign_offset = g:ale_sign_offset
 
     for [l:line, l:sign_id, l:name] in a:current_sign_list
-        let l:sign_map[l:line] = {
-        \   'current_id': l:sign_id,
-        \   'current_name': l:name,
+        let l:sign_info = get(l:sign_map, l:line, {
+        \   'current_id_list': [],
+        \   'current_name_list': [],
         \   'new_id': 0,
         \   'new_name': '',
         \   'items': [],
-        \}
+        \})
 
+        " Increment the sign offset for new signs, by the maximum sign ID.
         if l:sign_id > l:sign_offset
             let l:sign_offset = l:sign_id
         endif
+
+        " Remember the sign names and IDs in separate Lists, so they are easy
+        " to work with.
+        call add(l:sign_info.current_id_list, l:sign_id)
+        call add(l:sign_info.current_name_list, l:name)
+
+        let l:sign_map[l:line] = l:sign_info
     endfor
 
-    for l:group in a:grouped_items
+    for l:group in l:selected_grouped_items
         let l:line = l:group[0].lnum
         let l:sign_info = get(l:sign_map, l:line, {
-        \   'current_id': 0,
-        \   'current_name': '',
+        \   'current_id_list': [],
+        \   'current_name_list': [],
         \   'new_id': 0,
         \   'new_name': '',
         \   'items': [],
@@ -250,11 +258,18 @@ function! s:BuildSignMap(current_sign_list, grouped_items) abort
         let l:sign_info.new_name = ale#sign#GetSignName(l:group)
         let l:sign_info.items = l:group
 
-        if l:sign_info.current_name isnot# l:sign_info.new_name
+        let l:index = index(
+        \   l:sign_info.current_name_list,
+        \   l:sign_info.new_name
+        \)
+
+        if l:index >= 0
+            " We have a sign with this name already, so use the same ID.
+            let l:sign_info.new_id = l:sign_info.current_id_list[l:index]
+        else
+            " This sign name replaces the previous name, so use a new ID.
             let l:sign_info.new_id = l:sign_offset + 1
             let l:sign_offset += 1
-        else
-            let l:sign_info.new_id = l:sign_info.current_id
         endif
 
         let l:sign_map[l:line] = l:sign_info
@@ -288,7 +303,7 @@ function! ale#sign#GetSignCommands(buffer, was_sign_set, sign_map) abort
                 let l:item.sign_id = l:info.new_id
             endfor
 
-            if l:info.new_id isnot l:info.current_id
+            if index(l:info.current_id_list, l:info.new_id) < 0
                 call add(l:command_list, 'sign place '
                 \   . (l:info.new_id)
                 \   . ' line=' . l:line_str
@@ -301,12 +316,14 @@ function! ale#sign#GetSignCommands(buffer, was_sign_set, sign_map) abort
 
     " Remove signs without new IDs.
     for l:info in values(a:sign_map)
-        if l:info.current_id && l:info.current_id isnot l:info.new_id
-            call add(l:command_list, 'sign unplace '
-            \   . (l:info.current_id)
-            \   . ' buffer=' . a:buffer
-            \)
-        endif
+        for l:current_id in l:info.current_id_list
+            if l:current_id isnot l:info.new_id
+                call add(l:command_list, 'sign unplace '
+                \   . l:current_id
+                \   . ' buffer=' . a:buffer
+                \)
+            endif
+        endfor
     endfor
 
     " Remove the dummy sign to close the sign column if we need to.
@@ -339,7 +356,11 @@ function! ale#sign#SetSigns(buffer, loclist) abort
     let l:grouped_items = s:GroupLoclistItems(a:buffer, a:loclist)
 
     " Build a map of current and new signs, with the lines as the keys.
-    let l:sign_map = s:BuildSignMap(l:current_sign_list, l:grouped_items)
+    let l:sign_map = s:BuildSignMap(
+    \   a:buffer,
+    \   l:current_sign_list,
+    \   l:grouped_items,
+    \)
 
     let l:command_list = ale#sign#GetSignCommands(
     \   a:buffer,
@@ -347,7 +368,19 @@ function! ale#sign#SetSigns(buffer, loclist) abort
     \   l:sign_map,
     \)
 
+    " Change the sign column color if the option is on.
+    if g:ale_change_sign_column_color && !empty(a:loclist)
+        highlight clear SignColumn
+        highlight link SignColumn ALESignColumnWithErrors
+    endif
+
     for l:command in l:command_list
         silent! execute l:command
     endfor
+
+    " Reset the sign column color when there are no more errors.
+    if g:ale_change_sign_column_color && empty(a:loclist)
+        highlight clear SignColumn
+        highlight link SignColumn ALESignColumnWithoutErrors
+    endif
 endfunction

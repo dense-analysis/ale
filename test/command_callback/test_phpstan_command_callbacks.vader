@@ -1,9 +1,11 @@
 Before:
   Save g:ale_php_phpstan_executable
   Save g:ale_php_phpstan_level
+  Save g:ale_php_phpstan_configuration
 
   unlet! g:ale_php_phpstan_executable
   unlet! g:ale_php_phpstan_level
+  unlet! g:ale_php_phpstan_configuration
 
   runtime ale_linters/php/phpstan.vim
 
@@ -26,4 +28,11 @@ Execute(project with level set to 3):
 
   AssertEqual
   \ ale#Escape('phpstan') . ' analyze -l3 --errorFormat raw %s',
+  \ ale_linters#php#phpstan#GetCommand(bufnr(''))
+
+Execute(Custom phpstan configuration file):
+  let g:ale_php_phpstan_configuration = 'phpstan_config'
+
+  AssertEqual
+  \ ale#Escape('phpstan') . ' analyze -l4 --errorFormat raw -c phpstan_config %s',
   \ ale_linters#php#phpstan#GetCommand(bufnr(''))

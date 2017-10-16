@@ -11,6 +11,12 @@ options for `eslint` too. See: |ale-javascript-eslint|.
 
 
 ===============================================================================
+prettier                                              *ale-typescript-prettier*
+
+See |ale-javascript-prettier| for information about the available options.
+
+
+===============================================================================
 tslint                                                  *ale-typescript-tslint*
 
 g:ale_typescript_tslint_executable         *g:ale_typescript_tslint_executable*
@@ -28,6 +34,18 @@ g:ale_typescript_tslint_config_path       *g:ale_typescript_tslint_config_path*
 
   ALE will first discover the tslint.json path in an ancestor directory. If no
   such path exists, this variable will be used instead.
+
+
+g:ale_typescript_tslint_ignore_empty_files
+                                   *g:ale_typescript_tslint_ignore_empty_files*
+                                   *b:ale_typescript_tslint_ignore_empty_files*
+  Type: |Number|
+  Default: `0`
+
+  When set to `1`, ALE will not report any problems for empty files with
+  TSLint. ALE will still execute TSLint for the files, but ignore any problems
+  reported. This stops ALE from complaining about newly created files,
+  and files where lines have been added and then removed.
 
 
 g:ale_typescript_tslint_rules_dir           *g:ale_typescript_tslint_rules_dir*

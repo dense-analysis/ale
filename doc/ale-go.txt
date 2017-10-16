@@ -21,6 +21,16 @@ while ensuring it doesn't run any linters known to be slow or resource
 intensive.
 
 ===============================================================================
+gofmt                                                            *ale-go-gofmt*
+
+g:ale_go_gofmt_options                                 *g:ale_go_gofmt_options*
+                                                       *b:ale_go_gofmt_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to the gofmt fixer.
+
+===============================================================================
 gometalinter                                              *ale-go-gometalinter*
 
 `gometalinter` is a `lint_file` linter, which only lints files that are

@@ -19,7 +19,7 @@ function! ale#test#SetDirectory(docker_path) abort
     " Try to switch directory, which will fail when running tests directly,
     " and not through the Docker image.
     silent! execute 'cd ' . fnameescape(a:docker_path)
-    let g:dir = getcwd()
+    let g:dir = getcwd() " no-custom-checks
 endfunction
 
 " When g:dir is defined, switch back to the directory we saved, and then
@@ -43,12 +43,12 @@ function! ale#test#SetFilename(path) abort
     let l:dir = get(g:, 'dir', '')
 
     if empty(l:dir)
-        let l:dir = getcwd()
+        let l:dir = getcwd() " no-custom-checks
     endif
 
     let l:full_path = ale#path#IsAbsolute(a:path)
     \   ? a:path
     \   : l:dir . '/' . a:path
 
-    silent noautocmd execute 'file ' . fnameescape(ale#path#Simplify(l:full_path))
+    silent! noautocmd execute 'file ' . fnameescape(ale#path#Winify(l:full_path))
 endfunction

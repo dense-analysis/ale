@@ -9,8 +9,12 @@ Before:
   silent cd command_callback
   let g:dir = getcwd()
 
+  let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
+
 After:
   Restore
+
+  unlet! b:bin_dir
 
   call ale#test#RestoreDirectory()
 
@@ -21,5 +25,5 @@ Execute(The isort callback should return the correct default values):
 
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
-  \ {'command': "'" . g:dir . "/python_paths/with_virtualenv/env/bin/isort' -" },
+  \ {'command': ale#Escape(ale#path#Winify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/isort')) . ' -' },
   \ ale#fixers#isort#Fix(bufnr(''))

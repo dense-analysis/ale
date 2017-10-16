@@ -1,5 +1,13 @@
 Before:
+  let b:tmp = has('win32') ? substitute($TMP, '\\', '\\\\', 'g') : $TMPDIR
+
   runtime ale_linters/elm/make.vim
+
+After:
+  unlet! b:tmp
+  unlet! g:config_error_lines
+
+  call ale#linter#Reset()
 
 Execute(The elm-make handler should parse lines correctly):
   AssertEqual
@@ -42,8 +50,8 @@ Execute(The elm-make handler should parse lines correctly):
   \   },
   \ ],
   \ ale_linters#elm#make#Handle(347, [
-  \   '[{"tag":"unused import","overview":"warning overview","details":"warning details","region":{"start":{"line":33,"column":1},"end":{"line":33,"column":19}},"type":"warning","file":"' . $TMPDIR . 'Module.elm"}]',
-  \   '[{"tag":"TYPE MISMATCH","overview":"error overview 1","subregion":{"start":{"line":406,"column":5},"end":{"line":408,"column":18}},"details":"error details 1","region":{"start":{"line":404,"column":1},"end":{"line":408,"column":18}},"type":"error","file":"' . $TMPDIR . 'Module.elm"},{"tag":"TYPE MISMATCH","overview":"error overview 2","subregion":{"start":{"line":407,"column":12},"end":{"line":407,"column":17}},"details":"error details 2","region":{"start":{"line":406,"column":5},"end":{"line":407,"column":17}},"type":"error","file":"' . $TMPDIR . 'Module.elm"},{"tag":"TYPE MISMATCH","overview":"error overview 3","subregion":{"start":{"line":406,"column":88},"end":{"line":406,"column":93}},"details":"error details 3","region":{"start":{"line":406,"column":5},"end":{"line":406,"column":93}},"type":"error","file":"' . $TMPDIR . 'Module.elm"}]'
+  \   '[{"tag":"unused import","overview":"warning overview","details":"warning details","region":{"start":{"line":33,"column":1},"end":{"line":33,"column":19}},"type":"warning","file":"' . b:tmp . 'Module.elm"}]',
+  \   '[{"tag":"TYPE MISMATCH","overview":"error overview 1","subregion":{"start":{"line":406,"column":5},"end":{"line":408,"column":18}},"details":"error details 1","region":{"start":{"line":404,"column":1},"end":{"line":408,"column":18}},"type":"error","file":"' . b:tmp . 'Module.elm"},{"tag":"TYPE MISMATCH","overview":"error overview 2","subregion":{"start":{"line":407,"column":12},"end":{"line":407,"column":17}},"details":"error details 2","region":{"start":{"line":406,"column":5},"end":{"line":407,"column":17}},"type":"error","file":"' . b:tmp . 'Module.elm"},{"tag":"TYPE MISMATCH","overview":"error overview 3","subregion":{"start":{"line":406,"column":88},"end":{"line":406,"column":93}},"details":"error details 3","region":{"start":{"line":406,"column":5},"end":{"line":406,"column":93}},"type":"error","file":"' . b:tmp . 'Module.elm"}]'
   \ ])
 
 Execute(The elm-make handler should put an error on the first line if a line cannot be parsed):
@@ -66,11 +74,7 @@ Execute(The elm-make handler should put an error on the first line if a line can
   \   },
   \ ],
   \ ale_linters#elm#make#Handle(347, [
-  \   '[{"tag":"unused import","overview":"warning overview","details":"warning details","region":{"start":{"line":33,"column":1},"end":{"line":33,"column":19}},"type":"warning","file":"' . $TMPDIR . 'Module.elm"}]',
+  \   '[{"tag":"unused import","overview":"warning overview","details":"warning details","region":{"start":{"line":33,"column":1},"end":{"line":33,"column":19}},"type":"warning","file":"' . b:tmp . 'Module.elm"}]',
   \   "Not JSON",
   \   "Also not JSON",
   \ ])
-
-After:
-  unlet! g:config_error_lines
-  call ale#linter#Reset()

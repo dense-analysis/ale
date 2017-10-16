@@ -38,17 +38,51 @@ function! ale#FileTooLarge() abort
     return l:max > 0 ? (line2byte(line('$') + 1) > l:max) : 0
 endfunction
 
+let s:getcmdwintype_exists = exists('*getcmdwintype')
+
 " A function for checking various conditions whereby ALE just shouldn't
 " attempt to do anything, say if particular buffer types are open in Vim.
 function! ale#ShouldDoNothing(buffer) abort
+    " The checks are split into separate if statements to make it possible to
+    " profile each check individually with Vim's profiling tools.
+
+    " Don't perform any checks when newer NeoVim versions are exiting.
+    if get(v:, 'exiting', v:null) isnot v:null
+        return 1
+    endif
+
     " Do nothing for blacklisted files
-    " OR if ALE is running in the sandbox
-    return index(g:ale_filetype_blacklist, &filetype) >= 0
-    \   || (exists('*getcmdwintype') && !empty(getcmdwintype()))
-    \   || ale#util#InSandbox()
-    \   || !ale#Var(a:buffer, 'enabled')
-    \   || ale#FileTooLarge()
-    \   || getbufvar(a:buffer, '&l:statusline') =~# 'CtrlPMode.*funky'
+    if index(g:ale_filetype_blacklist, getbufvar(a:buffer, '&filetype')) >= 0
+        return 1
+    endif
+
+    " Do nothing if running from command mode
+    if s:getcmdwintype_exists && !empty(getcmdwintype())
+        return 1
+    endif
+
+    " Do nothing if running in the sandbox
+    if ale#util#InSandbox()
+        return 1
+    endif
+
+    " Do nothing if ALE is disabled.
+    if !ale#Var(a:buffer, 'enabled')
+        return 1
+    endif
+
+    " Do nothing if the file is too large.
+    if ale#FileTooLarge()
+        return 1
+    endif
+
+    " Do nothing from CtrlP buffers with CtrlP-funky.
+    if exists(':CtrlPFunky') is 2
+    \&& getbufvar(a:buffer, '&l:statusline') =~# 'CtrlPMode.*funky'
+        return 1
+    endif
+
+    return 0
 endfunction
 
 " (delay, [linting_flag, buffer_number])
@@ -84,7 +118,7 @@ function! s:ALEQueueImpl(delay, linting_flag, buffer) abort
     " Remember that we want to check files for this buffer.
     " We will remember this until we finally run the linters, via any event.
     if a:linting_flag is# 'lint_file'
-        let s:should_lint_file_for_buffer[bufnr('%')] = 1
+        let s:should_lint_file_for_buffer[a:buffer] = 1
     endif
 
     if s:lint_timer != -1

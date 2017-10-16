@@ -88,7 +88,7 @@ Execute (Count should be match the loclist):
   \ 'total': 15,
   \}, ale#statusline#Count(bufnr(''))
 
-Execute (Output should be empty for non-existant buffer):
+Execute (Output should be empty for non-existent buffer):
   AssertEqual Counts({}), ale#statusline#Count(9001)
 
 Execute (Status() should return just errors for the old format):

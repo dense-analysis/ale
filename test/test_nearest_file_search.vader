@@ -7,7 +7,9 @@ After:
 Execute(We should be able to find a configuration file further up):
   call ale#test#SetFilename('top/middle/bottom/dummy.txt')
 
-  AssertEqual expand('%:p:h:h:h:h') . '/top/example.ini', ale#path#FindNearestFile(bufnr('%'), 'example.ini')
+  AssertEqual
+  \ ale#path#Winify(expand('%:p:h:h:h:h') . '/top/example.ini'),
+  \ ale#path#FindNearestFile(bufnr('%'), 'example.ini')
 
 Execute(We shouldn't find anything for files which don't match):
   AssertEqual '', ale#path#FindNearestFile(bufnr('%'), 'cantfindthis')

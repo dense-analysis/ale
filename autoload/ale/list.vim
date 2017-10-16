@@ -98,10 +98,10 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
 
         if g:ale_set_quickfix
             if !ale#list#IsQuickfixOpen()
-                execute 'copen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
+                silent! execute 'copen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
             endif
         elseif g:ale_set_loclist
-            execute 'lopen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
+            silent! execute 'lopen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
         endif
 
         " If focus changed, restore it (jump to the last window).
@@ -123,13 +123,19 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
     " If ALE isn't currently checking for more problems, close the window if
     " needed now. This check happens inside of this timer function, so
     " the window can be closed reliably.
-    if !ale#engine#IsCheckingBuffer(bufnr(''))
+    if !ale#engine#IsCheckingBuffer(a:buffer)
         call s:CloseWindowIfNeeded(a:buffer)
     endif
 endfunction
 
 function! ale#list#SetLists(buffer, loclist) abort
     if get(g:, 'ale_set_lists_synchronously') == 1
+    \|| getbufvar(a:buffer, 'ale_save_event_fired', 0)
+        " Update lists immediately if running a test synchronously, or if the
+        " buffer was saved.
+        "
+        " The lists need to be updated immediately when saving a buffer so
+        " that we can reliably close window automatically, if so configured.
         call s:SetListsImpl(-1, a:buffer, a:loclist)
     else
         call ale#util#StartPartialTimer(

@@ -35,7 +35,7 @@ Before:
 
   call ale#linter#Define('foobar', {
   \ 'name': 'testlinter',
-  \ 'executable': 'echo',
+  \ 'executable': has('win32') ? 'cmd' : 'echo',
   \ 'callback': 'TestCallback',
   \ 'command_callback': 'TestCommandCallback',
   \})
@@ -100,7 +100,9 @@ Execute(ALE should create and delete directories for ale#engine#CreateDirectory(
 
   " We should get the correct file permissions.
   " We want to ensure that the directory is not readable by 'other'
-  AssertEqual 'rwxr-x---', getfperm(b:dir)
+  if has('unix')
+    AssertEqual 'rwxr-x---', getfperm(b:dir)
+  endif
 
   " The two directories shouldn't be the same.
   AssertNotEqual b:dir2, b:dir

@@ -28,5 +28,5 @@ Execute(The project root should be detected correctly):
   call ale#test#SetFilename('rust-rls-project/test.rs')
 
   AssertEqual
-  \ g:dir . '/rust-rls-project',
+  \ ale#path#Winify(g:dir . '/rust-rls-project'),
   \ ale_linters#rust#rls#GetProjectRoot(bufnr(''))

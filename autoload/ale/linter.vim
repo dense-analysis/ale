@@ -305,7 +305,7 @@ endfunction
 function! ale#linter#Get(original_filetypes) abort
     let l:possibly_duplicated_linters = []
 
-    " Handle dot-seperated filetypes.
+    " Handle dot-separated filetypes.
     for l:original_filetype in split(a:original_filetypes, '\.')
         let l:filetype = ale#linter#ResolveFiletype(l:original_filetype)
         let l:linter_names = s:GetLinterNames(l:original_filetype)

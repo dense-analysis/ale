@@ -7,6 +7,26 @@ function! ale#path#Simplify(path) abort
     return substitute(simplify(a:path), '^//\+', '/', 'g') " no-custom-checks
 endfunction
 
+" This function is mainly used for testing.
+" Simplify() a path, and change forward slashes to back slashes on Windows.
+"
+" If an additional 'add_drive' argument is given, the current drive letter
+" will be prefixed to any absolute paths on Windows.
+function! ale#path#Winify(path, ...) abort
+    let l:new_path = ale#path#Simplify(a:path)
+
+    if has('win32')
+        let l:new_path = substitute(l:new_path, '/', '\\', 'g')
+
+        " Add a drive letter to \foo\bar paths, if needed.
+        if a:0 && a:1 is# 'add_drive' && l:new_path[:0] is# '\'
+            let l:new_path = fnamemodify('.', ':p')[:1] . l:new_path
+        endif
+    endif
+
+    return l:new_path
+endfunction
+
 " Given a buffer and a filename, find the nearest file by searching upwards
 " through the paths relative to the given buffer.
 function! ale#path#FindNearestFile(buffer, filename) abort
@@ -68,22 +88,12 @@ function! ale#path#IsAbsolute(filename) abort
     return a:filename[:0] is# '/' || a:filename[1:2] is# ':\'
 endfunction
 
+let s:temp_dir = fnamemodify(tempname(), ':h')
+
 " Given a filename, return 1 if the file represents some temporary file
 " created by Vim.
 function! ale#path#IsTempName(filename) abort
-    let l:prefix_list = [
-    \   $TMPDIR,
-    \   resolve($TMPDIR),
-    \   '/run/user',
-    \]
-
-    for l:prefix in l:prefix_list
-        if a:filename[:len(l:prefix) - 1] is# l:prefix
-            return 1
-        endif
-    endfor
-
-    return 0
+    return a:filename[:len(s:temp_dir) - 1] is# s:temp_dir
 endfunction
 
 " Given a base directory, which must not have a trailing slash, and a

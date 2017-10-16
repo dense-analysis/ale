@@ -38,7 +38,7 @@ Execute(The flow handler should process errors correctly.):
   \         "descr": "number",
   \         "type": "Blame",
   \         "loc": {
-  \           "source": "/home/w0rp/Downloads/graphql-js/src/language/parser.js",
+  \           "source": expand('%:p'),
   \           "type": "SourceFile",
   \           "start": {
   \             "line": 417,
@@ -51,7 +51,7 @@ Execute(The flow handler should process errors correctly.):
   \             "offset": 9504
   \           }
   \         },
-  \         "path": "/home/w0rp/Downloads/graphql-js/src/language/parser.js",
+  \         "path": expand('%:p'),
   \         "line": 417,
   \         "endline": 417,
   \         "start": 10,
@@ -72,7 +72,7 @@ Execute(The flow handler should process errors correctly.):
   \         "descr": "array type",
   \         "type": "Blame",
   \         "loc": {
-  \           "source": "/home/w0rp/Downloads/graphql-js/src/language/parser.js",
+  \           "source": expand('%:p'),
   \           "type": "SourceFile",
   \           "start": {
   \             "line": 416,
@@ -85,7 +85,7 @@ Execute(The flow handler should process errors correctly.):
   \             "offset": 9491
   \           }
   \         },
-  \         "path": "/home/w0rp/Downloads/graphql-js/src/language/parser.js",
+  \         "path": expand('%:p'),
   \         "line": 416,
   \         "endline": 416,
   \         "start": 43,
@@ -102,7 +102,7 @@ Execute(The flow handler should process errors correctly.):
   \         "descr": "unreachable code",
   \         "type": "Blame",
   \         "loc": {
-  \           "source": "/home/w0rp/Downloads/graphql-js/src/language/parser.js",
+  \           "source": expand('%:p'),
   \           "type": "SourceFile",
   \           "start": {
   \             "line": 419,
@@ -115,7 +115,7 @@ Execute(The flow handler should process errors correctly.):
   \             "offset": 9626
   \           }
   \         },
-  \         "path": "/home/w0rp/Downloads/graphql-js/src/language/parser.js",
+  \         "path": expand('%:p'),
   \         "line": 419,
   \         "endline": 421,
   \         "start": 3,
@@ -156,7 +156,7 @@ Execute(The flow handler should fetch the correct location for the currently ope
   \     "descr": "React element `Foo`",
   \     "type": "Blame",
   \     "loc": {
-  \       "source": "/Users/rav/Projects/vim-ale-flow/index.js",
+  \       "source": expand('%:p'),
   \       "type": "SourceFile",
   \       "start": {
   \         "line": 6,
@@ -169,7 +169,7 @@ Execute(The flow handler should fetch the correct location for the currently ope
   \         "offset": 108
   \       }
   \     },
-  \     "path": "/Users/rav/Projects/vim-ale-flow/index.js",
+  \     "path": expand('%:p'),
   \     "line": 6,
   \     "endline": 6,
   \     "start": 3,
@@ -214,7 +214,7 @@ Execute(The flow handler should fetch the correct location for the currently ope
   \     "descr": "props of React element `Foo`",
   \     "type": "Blame",
   \     "loc": {
-  \       "source": "/Users/rav/Projects/vim-ale-flow/index.js",
+  \       "source": expand('%:p'),
   \       "type": "SourceFile",
   \       "start": {
   \         "line": 6,
@@ -227,7 +227,7 @@ Execute(The flow handler should fetch the correct location for the currently ope
   \         "offset": 108
   \       }
   \     },
-  \     "path": "/Users/rav/Projects/vim-ale-flow/index.js",
+  \     "path": expand('%:p'),
   \     "line": 6,
   \     "endline": 6,
   \     "start": 3,
@@ -260,7 +260,7 @@ Execute(The flow handler should handle relative paths):
   \     "descr": "React element `Foo`",
   \     "type": "Blame",
   \     "loc": {
-  \       "source": "vim-ale-flow/index.js",
+  \       "source": expand('%:p'),
   \       "type": "SourceFile",
   \       "start": {
   \         "line": 6,
@@ -273,7 +273,7 @@ Execute(The flow handler should handle relative paths):
   \         "offset": 108
   \       }
   \     },
-  \     "path": "vim-ale-flow/index.js",
+  \     "path": expand('%:p'),
   \     "line": 6,
   \     "endline": 6,
   \     "start": 3,
@@ -318,7 +318,7 @@ Execute(The flow handler should handle relative paths):
   \     "descr": "props of React element `Foo`",
   \     "type": "Blame",
   \     "loc": {
-  \       "source": "vim-ale-flow/index.js",
+  \       "source": expand('%:p'),
   \       "type": "SourceFile",
   \       "start": {
   \         "line": 6,
@@ -331,7 +331,7 @@ Execute(The flow handler should handle relative paths):
   \         "offset": 108
   \       }
   \     },
-  \     "path": "vim-ale-flow/index.js",
+  \     "path": expand('%:p'),
   \     "line": 6,
   \     "endline": 6,
   \     "start": 3,

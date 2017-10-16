@@ -1,0 +1,34 @@
+Before:
+  Save g:ale_cuda_nvcc_executable
+  Save g:ale_cuda_nvcc_options
+
+  unlet! g:ale_cuda_nvcc_executable
+  unlet! b:ale_cuda_nvcc_executable
+  unlet! g:ale_cuda_nvcc_options
+  unlet! b:ale_cuda_nvcc_options
+
+  runtime ale_linters/cuda/nvcc.vim
+
+After:
+  Restore
+  unlet! b:ale_cuda_nvcc_executable
+  unlet! b:ale_cuda_nvcc_options
+  call ale#linter#Reset()
+
+Execute(The executable should be configurable):
+  AssertEqual 'nvcc', ale_linters#cuda#nvcc#GetExecutable(bufnr(''))
+
+  let b:ale_cuda_nvcc_executable = 'foobar'
+
+  AssertEqual 'foobar', ale_linters#cuda#nvcc#GetExecutable(bufnr(''))
+
+Execute(The executable should be used in the command):
+  AssertEqual
+  \ ale#Escape('nvcc') . ' -cuda -std=c++11 %s -o /dev/null',
+  \ ale_linters#cuda#nvcc#GetCommand(bufnr(''))
+
+  let b:ale_cuda_nvcc_executable = 'foobar'
+
+  AssertEqual
+  \ ale#Escape('foobar') . ' -cuda -std=c++11 %s -o /dev/null',
+  \ ale_linters#cuda#nvcc#GetCommand(bufnr(''))

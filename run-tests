@@ -209,7 +209,7 @@ if ((run_custom_checks)); then
     echo
 
     set -o pipefail
-    docker run -a stdout "${DOCKER_FLAGS[@]}" ./custom-checks . || EXIT=$?
+    docker run -a stdout "${DOCKER_FLAGS[@]}" test/script/custom-checks . || EXIT=$?
     set +o pipefail
     echo
 
@@ -242,7 +242,7 @@ if ((run_custom_checks)); then
     echo 'Differences follow:'
     echo
 
-    ./check-supported-tools-tables || EXIT=$?
+    test/script/check-supported-tools-tables || EXIT=$?
 
     echo '========================================'
     echo 'Look for badly aligned doc tags'
@@ -255,6 +255,13 @@ if ((run_custom_checks)); then
     grep ' \*[^*]\+\*$' doc/ -r \
         | awk '{ sep = index($0, ":"); if (length(substr($0, sep + 1 )) < 79) { print } }' \
         | grep . && EXIT=1
+
+    echo '========================================'
+    echo 'Look for table of contents issues'
+    echo '========================================'
+    echo
+
+    test/script/check-toc || EXIT=$?
 fi
 
 exit $EXIT

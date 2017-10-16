@@ -4,6 +4,7 @@
 " Set to change the ruleset
 let g:ale_php_phpstan_executable = get(g:, 'ale_php_phpstan_executable', 'phpstan')
 let g:ale_php_phpstan_level = get(g:, 'ale_php_phpstan_level', '4')
+let g:ale_php_phpstan_configuration = get(g:, 'ale_php_phpstan_configuration', '')
 
 function! ale_linters#php#phpstan#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'php_phpstan_executable')
@@ -12,10 +13,16 @@ endfunction
 function! ale_linters#php#phpstan#GetCommand(buffer) abort
     let l:executable = ale_linters#php#phpstan#GetExecutable(a:buffer)
 
+    let l:configuration = ale#Var(a:buffer, 'php_phpstan_configuration')
+    let l:configuration_option = !empty(l:configuration)
+    \   ? ' -c ' . l:configuration
+    \   : ''
+
     return ale#Escape(l:executable)
     \   . ' analyze -l'
     \   . ale#Var(a:buffer, 'php_phpstan_level')
     \   . ' --errorFormat raw'
+    \   . l:configuration_option
     \   . ' %s'
 endfunction
 

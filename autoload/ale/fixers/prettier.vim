@@ -10,6 +10,10 @@ call ale#Set('javascript_prettier_options', '')
 function! s:FindConfig(buffer) abort
     for l:filename in [
     \   '.prettierrc',
+    \   '.prettierrc.json',
+    \   '.prettierrc.yaml',
+    \   '.prettierrc.yml',
+    \   '.prettierrc.js',
     \   'prettier.config.js',
     \   'package.json',
     \ ]
@@ -38,6 +42,22 @@ function! ale#fixers#prettier#Fix(buffer) abort
     let l:config = s:FindConfig(a:buffer)
     let l:use_config = ale#Var(a:buffer, 'javascript_prettier_use_local_config')
                 \ && !empty(l:config)
+    let l:filetype = getbufvar(a:buffer, '&filetype')
+
+    " Append the --parser flag depending on the current filetype (unless it's
+    " already set in g:javascript_prettier_options).
+    if match(l:options, '--parser') == -1
+        if l:filetype is# 'typescript'
+            let l:parser = 'typescript'
+        elseif l:filetype =~# 'css\|scss'
+            let l:parser = 'postcss'
+        elseif l:filetype is# 'json'
+            let l:parser = 'json'
+        else
+            let l:parser = 'babylon'
+        endif
+        let l:options = (!empty(l:options) ? l:options . ' ' : '') . '--parser ' . l:parser
+    endif
 
     return {
     \   'command': ale#Escape(ale#fixers#prettier#GetExecutable(a:buffer))

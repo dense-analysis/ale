@@ -1,0 +1,39 @@
+---
+# Disabling building for AppVeyor. We are just testing things.
+build: false
+clone_depth: 10
+# Use the directory C:\testplugin so test directories will mostly work.
+clone_folder: C:\testplugin
+
+# Cache the vim and vader directories between builds.
+cache:
+  - C:\vim -> .appveyor.yml
+  - C:\vader -> .appveyor.yml
+
+init:
+  # Stop git from changing newlines
+  - git config --global core.autocrlf input
+
+install:
+  # Download and unpack Vim
+  - ps: >-
+      if (!(Test-Path -Path C:\vim)){
+        Add-Type -A System.IO.Compression.FileSystem
+        Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586w32.zip `
+          -OutFile C:\vim.zip
+        [IO.Compression.ZipFile]::ExtractToDirectory('C:\vim.zip', 'C:\vim')
+        Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586rt.zip `
+          -OutFile C:\rt.zip
+        [IO.Compression.ZipFile]::ExtractToDirectory('C:\rt.zip', 'C:\vim')
+      }
+  # Clone Vader and check out the commit we want
+  - ps: >-
+      if (!(Test-Path -Path C:\vader)){
+        git clone https://github.com/junegunn/vader.vim C:\vader 2> $null
+        cd C:\vader
+        git checkout -qf c6243dd81c98350df4dec608fa972df98fa2a3af 2> $null
+      }
+
+test_script:
+  - cd C:\testplugin
+  - 'C:\vim\vim\vim80\vim.exe -u test\vimrc "+Vader! test/test_path_uri.vader"'

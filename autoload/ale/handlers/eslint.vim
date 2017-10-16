@@ -1,10 +1,32 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Functions for working with eslint, for checking or fixing files.
 
+let s:sep = has('win32') ? '\' : '/'
+
 call ale#Set('javascript_eslint_options', '')
 call ale#Set('javascript_eslint_executable', 'eslint')
 call ale#Set('javascript_eslint_use_global', 0)
 call ale#Set('javascript_eslint_suppress_eslintignore', 0)
+
+function! ale#handlers#eslint#FindConfig(buffer) abort
+    for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
+        for l:basename in [
+        \   '.eslintrc.js',
+        \   '.eslintrc.yaml',
+        \   '.eslintrc.yml',
+        \   '.eslintrc.json',
+        \   '.eslintrc',
+        \]
+            let l:config = ale#path#Simplify(join([l:path, l:basename], s:sep))
+
+            if filereadable(l:config)
+                return l:config
+            endif
+        endfor
+    endfor
+
+    return ale#path#FindNearestFile(a:buffer, 'package.json')
+endfunction
 
 function! ale#handlers#eslint#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'javascript_eslint', [

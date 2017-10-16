@@ -1,6 +1,11 @@
 " Author: Jake Zimmerman <jake@zimmerman.io>
 " Description: Shared functions for SML linters
 
+" The glob to use for finding the .cm file.
+"
+" See :help ale-sml-smlnj for more information.
+call ale#Set('sml_smlnj_cm_file', '*.cm')
+
 function! ale#handlers#sml#GetCmFile(buffer) abort
     let l:pattern = ale#Var(a:buffer, 'sml_smlnj_cm_file')
     let l:as_list = 1

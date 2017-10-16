@@ -75,6 +75,7 @@ fi
 check_errors \
     '^function.*) *$' \
     'Function without abort keyword (See :help except-compat)'
+check_errors '^function[^!]' 'function without !'
 check_errors ' \+$' 'Trailing whitespace'
 check_errors '^ * end\?i\? *$' 'Write endif, not en, end, or endi'
 check_errors '^  [^ ]' 'Use four spaces, not two spaces'
@@ -84,6 +85,7 @@ check_errors 'let g:ale_\w\+_\w\+_args =' 'Name your option g:ale_<filetype>_<li
 check_errors 'shellescape(' 'Use ale#Escape instead of shellescape'
 check_errors 'simplify(' 'Use ale#path#Simplify instead of simplify'
 check_errors "expand(['\"]%" "Use expand('#' . a:buffer . '...') instead. You might get a filename for the wrong buffer."
+check_errors 'getcwd()' "Do not use getcwd(), as it could run from the wrong buffer. Use expand('#' . a:buffer . ':p:h') instead."
 check_errors '==#' "Use 'is#' instead of '==#'. 0 ==# 'foobar' is true"
 check_errors '==?' "Use 'is?' instead of '==?'. 0 ==? 'foobar' is true"
 check_errors '!=#' "Use 'isnot#' instead of '!=#'. 0 !=# 'foobar' is false"

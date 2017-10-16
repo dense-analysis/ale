@@ -3,7 +3,7 @@ ALE FusionScript Integration                                 *ale-fuse-options*
 
 
 ===============================================================================
-4.12. fusionlint                                          *ale-fuse-fusionlint*
+fusion-lint                                               *ale-fuse-fusionlint*
 
 g:ale_fusion_fusionlint_executable           *g:ale_fuse_fusionlint_executable*
                                              *b:ale_fuse_fusionlint_executable*

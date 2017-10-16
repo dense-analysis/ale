@@ -1,0 +1,39 @@
+Before:
+  runtime ale_linters/slim/slimlint.vim
+
+  let g:default_command = 'slim-lint %t'
+
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+After:
+  Restore
+
+  unlet! g:default_command
+  unlet! b:conf
+
+  call ale#linter#Reset()
+  call ale#test#RestoreDirectory()
+
+Execute(The default command should be correct):
+  AssertEqual g:default_command, ale_linters#slim#slimlint#GetCommand(bufnr(''))
+
+Execute(The command should have the .rubocop.yml prepended as an env var if one exists):
+  call ale#test#SetFilename('../slimlint-test-files/subdir/file.slim')
+
+  let b:conf = ale#path#Winify(g:dir . '/../slimlint-test-files/.rubocop.yml')
+
+  if has('win32')
+    " Windows uses 'set var=... && command'
+    AssertEqual
+    \ 'set SLIM_LINT_RUBOCOP_CONF='
+    \   . ale#Escape(b:conf)
+    \   .  ' && ' . g:default_command,
+    \ ale_linters#slim#slimlint#GetCommand(bufnr(''))
+  else
+    " Unix uses 'var=... command'
+    AssertEqual
+    \ 'SLIM_LINT_RUBOCOP_CONF='
+    \   . ale#Escape(b:conf)
+    \   .  ' ' . g:default_command,
+    \ ale_linters#slim#slimlint#GetCommand(bufnr(''))
+  endif

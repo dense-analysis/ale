@@ -19,8 +19,6 @@ After:
 
   unlet! b:executable
 
-  let g:ale_has_override = {}
-
   call ale#test#SetFilename('test.txt')
 
   call ale#test#RestoreDirectory()
@@ -29,45 +27,36 @@ After:
 Execute(bin/cmd.js paths should be preferred):
   call ale#test#SetFilename('standard-test-files/with-cmd/testfile.js')
 
-  let b:executable = g:dir
-  \ . '/standard-test-files/with-cmd/node_modules/standard/bin/cmd.js'
+  let b:executable = ale#path#Winify(
+  \   g:dir
+  \   . '/standard-test-files/with-cmd/node_modules/standard/bin/cmd.js'
+  \)
 
   AssertEqual
   \ b:executable,
   \ ale_linters#javascript#standard#GetExecutable(bufnr(''))
 
   AssertEqual
-  \ ale#Escape(b:executable) . ' --stdin %s',
+  \ (has('win32') ? 'node.exe ' : '')
+  \   . ale#Escape(b:executable)
+  \   . ' --stdin %s',
   \ ale_linters#javascript#standard#GetCommand(bufnr(''))
 
 Execute(.bin directories should be used too):
   call ale#test#SetFilename('standard-test-files/with-bin/testfile.js')
 
-  let b:executable = g:dir
-  \ . '/standard-test-files/with-bin/node_modules/.bin/standard'
+  let b:executable = ale#path#Winify(
+  \   g:dir
+  \   . '/standard-test-files/with-bin/node_modules/.bin/standard'
+  \)
 
   AssertEqual
   \ b:executable,
   \ ale_linters#javascript#standard#GetExecutable(bufnr(''))
 
   AssertEqual
-  \ ale#Escape(b:executable) . ' --stdin %s',
-  \ ale_linters#javascript#standard#GetCommand(bufnr(''))
-
-Execute(.js files should be executed with node on Windows):
-  let g:ale_has_override['win32'] = 1
-
-  call ale#test#SetFilename('standard-test-files/with-cmd/testfile.js')
-
-  let b:executable = g:dir
-  \ . '/standard-test-files/with-cmd/node_modules/standard/bin/cmd.js'
-
-  AssertEqual
-  \ b:executable,
-  \ ale_linters#javascript#standard#GetExecutable(bufnr(''))
-
-  AssertEqual
-  \ ale#Escape('node.exe') . ' ' . ale#Escape(b:executable) . ' --stdin %s',
+  \ ale#Escape(b:executable)
+  \   . ' --stdin %s',
   \ ale_linters#javascript#standard#GetCommand(bufnr(''))
 
 Execute(The global executable should be used otherwise):

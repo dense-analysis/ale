@@ -1,30 +1,28 @@
 Before:
-  runtime ale_linters/sml/sml.vim
-  runtime ale_linters/sml/smlnj.vim
   call ale#test#SetDirectory('/testplugin/test')
 
 After:
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
-# ----- GetCmFile -----
-
 Execute(smlnj finds CM file if it exists):
   call ale#test#SetFilename('smlnj/cm/foo.sml')
 
-  AssertEqual '/testplugin/test/smlnj/cm/sources.cm', ale#handlers#sml#GetCmFile(bufnr('%'))
+  AssertEqual
+  \ ale#path#Winify(g:dir . '/smlnj/cm/sources.cm'),
+  \ ale#handlers#sml#GetCmFile(bufnr('%'))
 
 Execute(smlnj finds CM file by searching upwards):
   call ale#test#SetFilename('smlnj/cm/path/to/bar.sml')
 
-  AssertEqual '/testplugin/test/smlnj/cm/sources.cm', ale#handlers#sml#GetCmFile(bufnr('%'))
+  AssertEqual
+  \ ale#path#Winify(g:dir . '/smlnj/cm/sources.cm'),
+  \ ale#handlers#sml#GetCmFile(bufnr('%'))
 
 Execute(smlnj returns '' when no CM file found):
   call ale#test#SetFilename('smlnj/file/qux.sml')
 
   AssertEqual '', ale#handlers#sml#GetCmFile(bufnr('%'))
-
-# ----- GetExecutableSmlnjCm & GetExecutableSmlnjFile -----
 
 Execute(CM-project mode enabled when CM file found):
   call ale#test#SetFilename('smlnj/cm/foo.sml')

@@ -27,6 +27,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['javascript', 'typescript'],
 \       'description': 'Apply eslint --fix to a file.',
 \   },
+\   'format': {
+\       'function': 'ale#fixers#format#Fix',
+\       'suggested_filetypes': ['elm'],
+\       'description': 'Apply elm-format to a file.',
+\   },
 \   'isort': {
 \       'function': 'ale#fixers#isort#Fix',
 \       'suggested_filetypes': ['python'],
@@ -34,7 +39,7 @@ let s:default_registry = {
 \   },
 \   'prettier': {
 \       'function': 'ale#fixers#prettier#Fix',
-\       'suggested_filetypes': ['javascript'],
+\       'suggested_filetypes': ['javascript', 'typescript', 'json', 'css', 'scss'],
 \       'description': 'Apply prettier to a file.',
 \   },
 \   'prettier_eslint': {
@@ -51,6 +56,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#generic#RemoveTrailingBlankLines',
 \       'suggested_filetypes': [],
 \       'description': 'Remove all blank lines at the end of a file.',
+\   },
+\   'trim_whitespace': {
+\       'function': 'ale#fixers#generic#TrimWhitespace',
+\       'suggested_filetypes': [],
+\       'description': 'Remove all trailing whitespace characters at the end of every line.',
 \   },
 \   'yapf': {
 \       'function': 'ale#fixers#yapf#Fix',
@@ -86,6 +96,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#clangformat#Fix',
 \       'suggested_filetypes': ['c', 'cpp'],
 \       'description': 'Fix C/C++ files with clang-format.',
+\   },
+\   'gofmt': {
+\       'function': 'ale#fixers#gofmt#Fix',
+\       'suggested_filetypes': ['go'],
+\       'description': 'Fix Go files with go fmt.',
 \   },
 \}
 

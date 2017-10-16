@@ -2,7 +2,7 @@
 " Description: This file adds support for using the shellcheck linter with
 "   shell scripts.
 
-" This global variable can be set with a string of comma-seperated error
+" This global variable can be set with a string of comma-separated error
 " codes to exclude from shellcheck. For example:
 "
 " let g:ale_sh_shellcheck_exclusions = 'SC2002,SC2004'
@@ -44,9 +44,9 @@ function! ale_linters#sh#shellcheck#GetCommand(buffer) abort
     let l:dialect = ale_linters#sh#shellcheck#GetDialectArgument(a:buffer)
 
     return ale_linters#sh#shellcheck#GetExecutable(a:buffer)
+    \   . (!empty(l:dialect) ? ' -s ' . l:dialect : '')
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . (!empty(l:exclude_option) ? ' -e ' . l:exclude_option : '')
-    \   . (!empty(l:dialect) ? ' -s ' . l:dialect : '')
     \   . ' -f gcc -'
 endfunction
 

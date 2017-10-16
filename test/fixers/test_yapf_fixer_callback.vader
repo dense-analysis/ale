@@ -9,8 +9,12 @@ Before:
   silent cd command_callback
   let g:dir = getcwd()
 
+  let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
+
 After:
   Restore
+
+  unlet! b:bin_dir
 
   call ale#test#RestoreDirectory()
 
@@ -22,7 +26,7 @@ Execute(The yapf callback should return the correct default values):
   call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
 
   AssertEqual
-  \ {'command': ale#Escape(g:dir . '/python_paths/with_virtualenv/env/bin/yapf')},
+  \ {'command': ale#Escape(ale#path#Winify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/yapf'))},
   \ ale#fixers#yapf#Fix(bufnr(''))
   \
 Execute(The yapf should include the .style.yapf file if present):
@@ -31,8 +35,8 @@ Execute(The yapf should include the .style.yapf file if present):
   AssertEqual
   \ {
   \   'command':
-  \     ale#Escape(g:dir . '/python_paths/with_virtualenv/env/bin/yapf')
+  \     ale#Escape(ale#path#Winify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/yapf'))
   \     . ' --no-local-style'
-  \     . ' --style ' . ale#Escape(g:dir . '/python_paths/with_virtualenv/dir_with_yapf_config/.style.yapf'),
+  \     . ' --style ' . ale#Escape(ale#path#Winify(g:dir . '/python_paths/with_virtualenv/dir_with_yapf_config/.style.yapf')),
   \ },
   \ ale#fixers#yapf#Fix(bufnr(''))

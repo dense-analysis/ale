@@ -97,7 +97,7 @@ Execute (The local alias option shouldn't completely replace the global one):
   call ale#linter#Define('testft1', g:testlinter1)
   call ale#linter#Define('testft2', g:testlinter2)
   let g:ale_linter_aliases = {'testft1': ['testft1', 'testft2']}
-  " This is a key set for a differnt filetype.
+  " This is a key set for a different filetype.
   " We should look for a key in this Dictionary first, and then check the
   " global Dictionary.
   let b:ale_linter_aliases = {'testft3': ['testft1']}

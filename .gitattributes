@@ -6,8 +6,7 @@
 /Makefile export-ignore
 /PULL_REQUEST_TEMPLATE.md export-ignore
 /README.md export-ignore
-/check-supported-tools-tables export-ignore
-/custom-checks export-ignore
 /img export-ignore
 /run-tests export-ignore
+/run-tests.bat export-ignore
 /test export-ignore

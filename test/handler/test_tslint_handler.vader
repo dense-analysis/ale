@@ -1,9 +1,18 @@
 Before:
+  Save g:ale_typescript_tslint_ignore_empty_files
+
+  unlet! g:ale_typescript_tslint_ignore_empty_files
+  unlet! b:ale_typescript_tslint_ignore_empty_files
+
   runtime ale_linters/typescript/tslint.vim
 
   call ale#test#SetDirectory('/testplugin/test/handler')
 
 After:
+  Restore
+
+  unlet! b:ale_typescript_tslint_ignore_empty_files
+
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
@@ -15,7 +24,7 @@ Execute(The tslint handler should parse lines correctly):
   \   {
   \     'lnum': 1,
   \     'col': 15,
-  \     'filename': expand('%:p:h') . '/test.ts',
+  \     'filename': ale#path#Winify(expand('%:p:h') . '/test.ts'),
   \     'end_lnum': 1,
   \     'type': 'E',
   \     'end_col': 15,
@@ -24,7 +33,7 @@ Execute(The tslint handler should parse lines correctly):
   \   {
   \     'lnum': 2,
   \     'col': 8,
-  \     'filename': expand('%:p:h') . '/test.ts',
+  \     'filename': ale#path#Winify(expand('%:p:h') . '/test.ts'),
   \     'end_lnum': 3,
   \     'type': 'W',
   \     'end_col': 12,
@@ -33,7 +42,7 @@ Execute(The tslint handler should parse lines correctly):
   \   {
   \     'lnum': 2,
   \     'col': 8,
-  \     'filename': expand('%:p:h') . '/something-else.ts',
+  \     'filename': ale#path#Winify(expand('%:p:h') . '/something-else.ts'),
   \     'end_lnum': 3,
   \     'type': 'W',
   \     'end_col': 12,
@@ -42,7 +51,7 @@ Execute(The tslint handler should parse lines correctly):
   \   {
   \     'lnum': 31,
   \     'col': 9,
-  \     'filename': expand('%:p:h') . '/test.ts',
+  \     'filename': ale#path#Winify(expand('%:p:h') . '/test.ts'),
   \     'end_lnum': 31,
   \     'type': 'E',
   \     'end_col': 20,
@@ -133,3 +142,113 @@ Execute(The tslint handler should handle empty output):
   AssertEqual
   \ [],
   \ ale_linters#typescript#tslint#Handle(bufnr(''), [])
+
+Execute(The tslint handler report errors for empty files by default):
+  call ale#test#SetFilename('app/test.ts')
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 2,
+  \     'col': 1,
+  \     'filename': ale#path#Winify(expand('%:p:h') . '/test.ts'),
+  \     'end_lnum': 2,
+  \     'type': 'E',
+  \     'end_col': 1,
+  \     'text': 'no-consecutive-blank-lines: Consecutive blank lines are forbidden',
+  \   },
+  \ ],
+  \ ale_linters#typescript#tslint#Handle(bufnr(''), [json_encode([{
+  \   'endPosition': {
+  \     'character': 0,
+  \     'line': 1,
+  \     'position': 1
+  \   },
+  \   'failure': 'Consecutive blank lines are forbidden',
+  \   'fix': [{
+  \     'innerStart': 0,
+  \     'innerLength': 1,
+  \     'innerText': ''
+  \   }],
+  \   'name': 'test.ts',
+  \   'ruleName': 'no-consecutive-blank-lines',
+  \   'ruleSeverity': 'ERROR',
+  \   'startPosition': {
+  \     'character': 0,
+  \     'line': 1,
+  \     'position': 1
+  \   }
+  \ }])])
+
+Execute(The tslint handler should not report errors for empty files when the ignore option is on):
+  let b:ale_typescript_tslint_ignore_empty_files = 1
+  call ale#test#SetFilename('app/test.ts')
+
+  AssertEqual
+  \ [
+  \ ],
+  \ ale_linters#typescript#tslint#Handle(bufnr(''), [json_encode([{
+  \   'endPosition': {
+  \     'character': 0,
+  \     'line': 1,
+  \     'position': 1
+  \   },
+  \   'failure': 'Consecutive blank lines are forbidden',
+  \   'fix': [{
+  \     'innerStart': 0,
+  \     'innerLength': 1,
+  \     'innerText': ''
+  \   }],
+  \   'name': 'test.ts',
+  \   'ruleName': 'no-consecutive-blank-lines',
+  \   'ruleSeverity': 'ERROR',
+  \   'startPosition': {
+  \     'character': 0,
+  \     'line': 1,
+  \     'position': 1
+  \   }
+  \ }])])
+
+Given typescript(A file with extra blank lines):
+  const x = 3
+
+
+  const y = 4
+
+Execute(The tslint handler should report errors when the ignore option is on, but the file is not empty):
+  let b:ale_typescript_tslint_ignore_empty_files = 1
+  call ale#test#SetFilename('app/test.ts')
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 2,
+  \     'col': 1,
+  \     'filename': ale#path#Winify(expand('%:p:h') . '/test.ts'),
+  \     'end_lnum': 2,
+  \     'type': 'E',
+  \     'end_col': 1,
+  \     'text': 'no-consecutive-blank-lines: Consecutive blank lines are forbidden',
+  \   },
+  \ ],
+  \ ale_linters#typescript#tslint#Handle(bufnr(''), [json_encode([{
+  \   'endPosition': {
+  \     'character': 0,
+  \     'line': 1,
+  \     'position': 1
+  \   },
+  \   'failure': 'Consecutive blank lines are forbidden',
+  \   'fix': [{
+  \     'innerStart': 0,
+  \     'innerLength': 1,
+  \     'innerText': ''
+  \   }],
+  \   'name': 'test.ts',
+  \   'ruleName': 'no-consecutive-blank-lines',
+  \   'ruleSeverity': 'ERROR',
+  \   'startPosition': {
+  \     'character': 0,
+  \     'line': 1,
+  \     'position': 1
+  \   }
+  \ }])])
