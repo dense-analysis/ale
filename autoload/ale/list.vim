@@ -90,33 +90,40 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
     "
     " We'll check if the current buffer's List is not empty here, so the
     " window will only be opened if the current buffer has problems.
-    if s:ShouldOpen(a:buffer) && !empty(a:loclist)
-        let l:winnr = winnr()
-        let l:mode = mode()
-        let l:reset_visual_selection = l:mode is? 'v' || l:mode is# "\<c-v>"
-        let l:reset_character_selection = l:mode is? 's' || l:mode is# "\<c-s>"
+    let l:winnr = winnr()
+    let l:mode = mode()
+    let l:reset_visual_selection = l:mode is? 'v' || l:mode is# "\<c-v>"
+    let l:reset_character_selection = l:mode is? 's' || l:mode is# "\<c-s>"
 
-        if g:ale_set_quickfix
-            if !ale#list#IsQuickfixOpen()
-                silent! execute 'copen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
-            endif
-        elseif g:ale_set_loclist
-            silent! execute 'lopen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
+    if g:ale_set_quickfix
+        if !ale#list#IsQuickfixOpen()
+            silent! execute 'copen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
         endif
-
-        " If focus changed, restore it (jump to the last window).
-        if l:winnr isnot# winnr()
-            wincmd p
-        endif
-
-        if l:reset_visual_selection || l:reset_character_selection
-            " If we were in a selection mode before, select the last selection.
-            normal! gv
-
-            if l:reset_character_selection
-                " Switch back to Select mode, if we were in that.
-                normal! "\<c-g>"
+    elseif g:ale_set_loclist
+        if !empty(a:loclist)
+            " Set list_window_size to be up to list_window_size parameter
+            let l:lheight = len(a:loclist)
+            if l:lheight > ale#Var(a:buffer, 'list_window_size')
+                let l:lheight = ale#Var(a:buffer, 'list_window_size')
             endif
+            silent! execute 'lopen ' . str2nr(l:lheight)
+        else
+            silent! execute 'lopen 1'
+        endif
+    endif
+
+    " If focus changed, restore it (jump to the last window).
+    if l:winnr isnot# winnr()
+        wincmd p
+    endif
+
+    if l:reset_visual_selection || l:reset_character_selection
+        " If we were in a selection mode before, select the last selection.
+        normal! gv
+
+        if l:reset_character_selection
+            " Switch back to Select mode, if we were in that.
+            normal! "\<c-g>"
         endif
     endif
 
@@ -162,7 +169,10 @@ function! s:CloseWindowIfNeeded(buffer) abort
             let l:win_id = s:BufWinId(a:buffer)
 
             if g:ale_set_loclist && empty(getloclist(l:win_id))
-                lclose
+                " Disable lclose because when 'close', have a 1 row location
+                " list
+
+                "lclose
             endif
         endif
     " Ignore 'Cannot close last window' errors.
