@@ -101,7 +101,12 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
         endif
     elseif g:ale_set_loclist
         if !empty(a:loclist)
-            silent! execute 'lopen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
+            " Set list_window_size to be up to list_window_size parameter
+            let l:lheight = len(a:loclist)
+            if l:lheight > ale#Var(a:buffer, 'list_window_size')
+                let l:lheight = ale#Var(a:buffer, 'list_window_size')
+            endif
+            silent! execute 'lopen ' . str2nr(l:lheight)
         else
             silent! execute 'lopen 1'
         endif
