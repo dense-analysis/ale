@@ -26,7 +26,7 @@ After:
 Execute(The clangtidy command default should be correct):
   AssertEqual
   \ ale#Escape('clang-tidy')
-  \   . ' -checks=''*'' %s',
+  \   . ' -checks=' . ale#Escape('*') . ' %s',
   \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
 
 Execute(You should be able to remove the -checks option for clang-tidy):
@@ -42,7 +42,7 @@ Execute(You should be able to set other checks for clang-tidy):
 
   AssertEqual
   \ ale#Escape('clang-tidy')
-  \   . ' -checks=''-*,clang-analyzer-*'' %s',
+  \   . ' -checks=' . ale#Escape('-*,clang-analyzer-*') . ' %s',
   \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
 
 Execute(You should be able to manually set compiler flags for clang-tidy):
@@ -50,7 +50,7 @@ Execute(You should be able to manually set compiler flags for clang-tidy):
 
   AssertEqual
   \ ale#Escape('clang-tidy')
-  \   . ' -checks=''*'' %s -- -Wall',
+  \   . ' -checks=' . ale#Escape('*') . ' %s -- -Wall',
   \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
   \
 Execute(The build directory should be configurable):
@@ -58,7 +58,7 @@ Execute(The build directory should be configurable):
 
   AssertEqual
   \ ale#Escape('clang-tidy')
-  \   . ' -checks=''*'' %s -p ' . ale#Escape('/foo/bar'),
+  \   . ' -checks=' . ale#Escape('*') . ' %s -p ' . ale#Escape('/foo/bar'),
   \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
 
 Execute(The build directory setting should override the options):
@@ -67,7 +67,7 @@ Execute(The build directory setting should override the options):
 
   AssertEqual
   \ ale#Escape('clang-tidy')
-  \   . ' -checks=''*'' %s -p ' . ale#Escape('/foo/bar'),
+  \   . ' -checks=' . ale#Escape('*') . ' %s -p ' . ale#Escape('/foo/bar'),
   \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
 
 Execute(The build directory should be ignored for header files):
@@ -78,14 +78,14 @@ Execute(The build directory should be ignored for header files):
 
   AssertEqual
   \ ale#Escape('clang-tidy')
-  \   . ' -checks=''*'' %s -- -Wall',
+  \   . ' -checks=' . ale#Escape('*') . ' %s -- -Wall',
   \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
   \
   call ale#test#SetFilename('test.hpp')
 
   AssertEqual
   \ ale#Escape('clang-tidy')
-  \   . ' -checks=''*'' %s -- -Wall',
+  \   . ' -checks=' . ale#Escape('*') . ' %s -- -Wall',
   \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
 
 Execute(The executable should be configurable):
@@ -93,5 +93,5 @@ Execute(The executable should be configurable):
 
   AssertEqual
   \ ale#Escape('foobar')
-  \   . ' -checks=''*'' %s',
+  \   . ' -checks=' . ale#Escape('*') . ' %s',
   \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
