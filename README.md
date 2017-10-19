@@ -36,13 +36,14 @@ servers with similar enough protocols, like `tsserver`.
     2. [How can I keep the sign gutter open?](#faq-keep-signs)
     3. [How can I change the signs ALE uses?](#faq-change-signs)
     4. [How can I show errors or warnings in my statusline?](#faq-statusline)
-    5. [How can I change the format for echo messages?](#faq-echo-format)
-    6. [How can I execute some code when ALE stops linting?](#faq-autocmd)
-    7. [How can I navigate between errors quickly?](#faq-navigation)
-    8. [How can I run linters only when I save files?](#faq-lint-on-save)
-    9. [How can I use the quickfix list instead of the loclist?](#faq-quickfix)
-    10. [How can I check JSX files with both stylelint and eslint?](#faq-jsx-stylelint-eslint)
-    11. [Will this plugin eat all of my laptop battery power?](#faq-my-battery-is-sad)
+    5. [How can I show errors or warnings in my lightline?](#faq-lightline)
+    6. [How can I change the format for echo messages?](#faq-echo-format)
+    7. [How can I execute some code when ALE stops linting?](#faq-autocmd)
+    8. [How can I navigate between errors quickly?](#faq-navigation)
+    9. [How can I run linters only when I save files?](#faq-lint-on-save)
+    10. [How can I use the quickfix list instead of the loclist?](#faq-quickfix)
+    11. [How can I check JSX files with both stylelint and eslint?](#faq-jsx-stylelint-eslint)
+    12. [Will this plugin eat all of my laptop battery power?](#faq-my-battery-is-sad)
 
 <a name="supported-languages"></a>
 
@@ -408,9 +409,70 @@ set statusline=%{LinterStatus()}
 
 See `:help ale#statusline#Count()` for more information.
 
+<a name="faq-lightline"></a>
+
+### 5.v. How can I show errors or warnings in my lightline?
+
+[lightline](https://github.com/itchyny/lightline.vim) does not have built-in 
+support for ALE, nevertheless it's easy to do it yourself:
+
+```vim
+" This is regular lightline configuration, we just added 
+" 'linter_warnings', 'linter_errors' and 'linter_ok' to
+" the active right panel. Feel free to move it anywhere.
+" `component_expand' and `component_type' are required.
+"
+" For more info on how this works, see lightline documentation.
+let g:lightline = {
+      \ 'active': {
+      \   'right': [ [ 'lineinfo' ],
+      \              [ 'percent' ],
+      \              [ 'linter_warnings', 'linter_errors', 'linter_ok' ],
+      \              [ 'fileformat', 'fileencoding', 'filetype' ] ]
+      \ },
+      \ 'component_expand': {
+      \   'linter_warnings': 'LightlineLinterWarnings',
+      \   'linter_errors': 'LightlineLinterErrors',
+      \   'linter_ok': 'LightlineLinterOK'
+      \ },
+      \ 'component_type': {
+      \   'linter_warnings': 'warning',
+      \   'linter_errors': 'error',
+      \   'linter_ok': 'ok'
+      \ },
+      \ }
+
+autocmd User ALELint call lightline#update()
+
+" ale + lightline
+function! LightlineLinterWarnings() abort
+  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:all_errors = l:counts.error + l:counts.style_error
+  let l:all_non_errors = l:counts.total - l:all_errors
+  return l:counts.total == 0 ? '' : printf('%d --', all_non_errors)
+endfunction
+
+function! LightlineLinterErrors() abort
+  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:all_errors = l:counts.error + l:counts.style_error
+  let l:all_non_errors = l:counts.total - l:all_errors
+  return l:counts.total == 0 ? '' : printf('%d >>', all_errors)
+endfunction
+
+function! LightlineLinterOK() abort
+  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:all_errors = l:counts.error + l:counts.style_error
+  let l:all_non_errors = l:counts.total - l:all_errors
+  return l:counts.total == 0 ? '✓' : ''
+endfunction
+```
+
+See `:help ale#statusline#Count()` and [lightline documentation](https://github.com/itchyny/lightline.vim#advanced-configuration) 
+for more information.
+
 <a name="faq-echo-format"></a>
 
-### 5.v. How can I change the format for echo messages?
+### 5.vi. How can I change the format for echo messages?
 
 There are 3 global options that allow customizing the echoed message.
 
@@ -435,7 +497,7 @@ Will give you:
 
 <a name="faq-autocmd"></a>
 
-### 5.vi. How can I execute some code when ALE stops linting?
+### 5.vii. How can I execute some code when ALE stops linting?
 
 ALE runs its own [autocmd](http://vimdoc.sourceforge.net/htmldoc/autocmd.html)
 event whenever has a linter has been successfully executed and processed. This
@@ -450,7 +512,7 @@ augroup END
 
 <a name="faq-navigation"></a>
 
-### 5.vii. How can I navigate between errors quickly?
+### 5.viii. How can I navigate between errors quickly?
 
 ALE offers some commands with `<Plug>` keybinds for moving between warnings and
 errors quickly. You can map the keys Ctrl+j and Ctrl+k to moving between errors
@@ -466,7 +528,7 @@ For more information, consult the online documentation with
 
 <a name="faq-lint-on-save"></a>
 
-### 5.viii. How can I run linters only when I save files?
+### 5.ix. How can I run linters only when I save files?
 
 ALE offers an option `g:ale_lint_on_save` for enabling running the linters
 when files are saved. This option is enabled by default. If you only
@@ -486,7 +548,7 @@ files, you can set `g:ale_lint_on_save` to `0`.
 
 <a name="faq-quickfix"></a>
 
-### 5.ix. How can I use the quickfix list instead of the loclist?
+### 5.x. How can I use the quickfix list instead of the loclist?
 
 The quickfix list can be enabled by turning the `g:ale_set_quickfix`
 option on. If you wish to also disable the loclist, you can disable
@@ -513,7 +575,7 @@ let g:ale_keep_list_window_open = 1
 
 <a name="faq-jsx-stylelint-eslint"></a>
 
-### 5.x. How can I check JSX files with both stylelint and eslint?
+### 5.xi. How can I check JSX files with both stylelint and eslint?
 
 If you configure ALE options correctly in your vimrc file, and install
 the right tools, you can check JSX files with stylelint and eslint.
@@ -546,7 +608,7 @@ no linter will be run twice for the same file.
 
 <a name="faq-my-battery-is-sad"></a>
 
-### 5.xi. Will this plugin eat all of my laptop battery power?
+### 5.xii. Will this plugin eat all of my laptop battery power?
 
 ALE takes advantage of the power of various tools to check your code. This of
 course means that CPU time will be used to continuously check your code. If you
