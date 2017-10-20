@@ -67,7 +67,7 @@ CONTENTS                                                         *ale-contents*
     graphql...............................|ale-graphql-options|
       gqlint..............................|ale-graphql-gqlint|
     haml..................................|ale-haml-options|
-      hamllint............................|ale-haml-htmllint|
+      hamllint............................|ale-haml-hamllint|
     handlebars............................|ale-handlebars-options|
       ember-template-lint.................|ale-handlebars-embertemplatelint|
     haskell...............................|ale-haskell-options|
