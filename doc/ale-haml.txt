@@ -3,7 +3,7 @@ ALE HAML Integration                                         *ale-haml-options*
 
 
 ===============================================================================
-hamllint                                                    ale-haml-hamllint
+hamllint                                                    *ale-haml-hamllint*
 
 Website: https://github.com/brigade/haml-lint
 
@@ -19,7 +19,7 @@ Install haml-lint globally:
 Options
 -------------------------------------------------------------------------------
 
-g:ale_haml_hamllint_options                       g:ale_haml_hamllint_options
+g:ale_haml_hamllint_options                       *g:ale_haml_hamllint_options*
 
   Type: |String|
   Default: `''`

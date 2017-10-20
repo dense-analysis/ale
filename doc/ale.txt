@@ -66,6 +66,8 @@ CONTENTS                                                         *ale-contents*
       gometalinter........................|ale-go-gometalinter|
     graphql...............................|ale-graphql-options|
       gqlint..............................|ale-graphql-gqlint|
+    haml..................................|ale-haml-options|
+      hamllint............................|ale-haml-htmllint|
     handlebars............................|ale-handlebars-options|
       ember-template-lint.................|ale-handlebars-embertemplatelint|
     haskell...............................|ale-haskell-options|
