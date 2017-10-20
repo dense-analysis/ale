@@ -1,0 +1,32 @@
+===============================================================================
+ALE HAML Integration                                         *ale-haml-options*
+
+
+===============================================================================
+hamllint                                                    ale-haml-hamllint
+
+Website: https://github.com/brigade/haml-lint
+
+
+Installation
+-------------------------------------------------------------------------------
+
+Install haml-lint globally:
+
+  gem install haml_lint
+
+
+Options
+-------------------------------------------------------------------------------
+
+g:ale_haml_hamllint_options                       g:ale_haml_hamllint_options
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be set and will be passed to haml-lint as options
+  eg. let g:ale_haml_hamllint_options = '-c ~/use-my.haml-lint.yml'
+
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
