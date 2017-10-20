@@ -1,0 +1,16 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  call ale#test#RestoreDirectory()
+
+Execute(The executable path should be correct):
+  call ale#test#SetFilename('../elixir-test-files/testfile.ex')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': 'mix format'
+  \     . ' %t',
+  \ },
+  \ ale#fixers#elixir#Fix(bufnr(''))

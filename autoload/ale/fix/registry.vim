@@ -27,6 +27,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['javascript', 'typescript'],
 \       'description': 'Apply eslint --fix to a file.',
 \   },
+\   'mix_format': {
+\       'function': 'ale#fixers#mix_format#Fix',
+\       'suggested_filetypes': ['elixir'],
+\       'description': 'Apply mix format to a file.',
+\   },
 \   'format': {
 \       'function': 'ale#fixers#format#Fix',
 \       'suggested_filetypes': ['elm'],
