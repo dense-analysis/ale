@@ -95,6 +95,8 @@ CONTENTS                                                         *ale-contents*
     kotlin................................|ale-kotlin-options|
       kotlinc.............................|ale-kotlin-kotlinc|
       ktlint..............................|ale-kotlin-ktlint|
+    less..................................|ale-less-options|
+      prettier............................|ale-less-prettier|
     llvm..................................|ale-llvm-options|
       llc.................................|ale-llvm-llc|
     lua...................................|ale-lua-options|
