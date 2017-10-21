@@ -71,7 +71,7 @@ CONTENTS                                                         *ale-contents*
     haskell...............................|ale-haskell-options|
       hdevtools...........................|ale-haskell-hdevtools|
       stack-build.........................|ale-haskell-stack-build|
-      hfmt................................|ale-go-hfmt|
+      hfmt................................|ale-haskell-hfmt|
     html..................................|ale-html-options|
       htmlhint............................|ale-html-htmlhint|
       tidy................................|ale-html-tidy|
