@@ -1,3 +1,9 @@
 #include <iostream>
 
-cout << "error";
+class Test {
+ private:
+    inline void dummy() {
+        cout << "error";
+        return;
+    }
+};
