@@ -129,7 +129,7 @@ giving some unfair preference to any particular tool or language.
 
 The "online documentation" file used for this project lives in `doc/ale.txt`.
 This is the file used for generating `:help` text inside Vim itself. There are
-some guidlines to follow for this file.
+some guidelines to follow for this file.
 
 1. Keep all text within a column size of 79 characters, inclusive.
 2. Open a section with 79 `=` or `-` characters, for headings and subheadings.
