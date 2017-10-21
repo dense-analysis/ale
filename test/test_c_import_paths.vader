@@ -279,3 +279,14 @@ Execute(Move .git/HEAD back):
 
   unlet! g:temp_head_filename
   unlet! g:head_filename
+
+Execute(The C++ ClangCheck handler should populate loclist with included files):
+  runtime! ale_linters/cpp/clangcheck.vim
+
+  call ale#test#SetFilename('test_c_projects/included_error/test.cpp')
+
+" We check that the buffer number for the location list items is 0, which
+" means file not loaded in a buffer (here, test.h)
+  AssertEqual
+  \ 0
+  \ , getloclist(winnr())[0]['bufnr']
