@@ -142,6 +142,7 @@ CONTENTS                                                         *ale-contents*
       cargo...............................|ale-rust-cargo|
       rls.................................|ale-rust-rls|
       rustc...............................|ale-rust-rustc|
+      rustfmt.............................|ale-rust-rustfmt|
     sass..................................|ale-sass-options|
       stylelint...........................|ale-sass-stylelint|
     scala.................................|ale-scala-options|
@@ -280,7 +281,7 @@ Notes:
 * reStructuredText: `proselint`
 * RPM spec: `rpmlint`
 * Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`
-* Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|)
+* Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|), `rustfmt`
 * SASS: `sass-lint`, `stylelint`
 * SCSS: `sass-lint`, `scss-lint`, `stylelint`, `prettier`
 * Scala: `scalac`, `scalastyle`

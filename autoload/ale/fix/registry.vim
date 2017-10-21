@@ -107,6 +107,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['typescript'],
 \       'description': 'Fix typescript files with tslint --fix.',
 \   },
+\   'rustfmt': {
+\       'function': 'ale#fixers#rustfmt#Fix',
+\       'suggested_filetypes': ['rust'],
+\       'description': 'Fix Rust files with Rustfmt.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
