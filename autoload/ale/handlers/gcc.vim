@@ -101,6 +101,7 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
             endif
 
             let l:item = {
+            \   'filename': l:match[1],
             \   'lnum': str2nr(l:match[2]),
             \   'type': l:match[4] =~# 'error' ? 'E' : 'W',
             \   'text': s:RemoveUnicodeQuotes(l:match[5]),
