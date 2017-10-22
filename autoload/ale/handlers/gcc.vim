@@ -88,6 +88,11 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
             " let l:included_filename = l:match[1]
             " call add(l:include_lines, l:line)
         else
+            " TODO(gagbo) : check if l:match[4] is note
+            " If it is, add the item as a detail to the previous item
+            " If it isn't, store the info of l:item in case we need to append
+            " detail later
+
             " If we hit a regular error again, then add the previously
             " collected lines as one error, and reset the include variables.
             call s:AddIncludedErrors(l:output, l:include_lnum, l:include_lines)
