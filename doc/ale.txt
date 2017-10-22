@@ -69,8 +69,8 @@ CONTENTS                                                         *ale-contents*
     handlebars............................|ale-handlebars-options|
       ember-template-lint.................|ale-handlebars-embertemplatelint|
     haskell...............................|ale-haskell-options|
-      hfmt................................|ale-haskell-hfmt|
       hdevtools...........................|ale-haskell-hdevtools|
+      hfmt................................|ale-haskell-hfmt|
       stack-build.........................|ale-haskell-stack-build|
     html..................................|ale-html-options|
       htmlhint............................|ale-html-htmlhint|
