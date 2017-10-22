@@ -9,8 +9,7 @@ endfunction
 
 function! ale#fixers#mix_format#Fix(buffer) abort
     return {
-    \   'command': ale#handlers#elixir#GetExecutable(a:buffer)
-    \       . ale#fixers#mix_format#GetExecutable(a:buffer)
+    \   'command': ale#Escape(ale#fixers#mix_format#GetExecutable(a:buffer))
     \       . ' format %t',
     \   'read_temporary_file': 1,
     \}
