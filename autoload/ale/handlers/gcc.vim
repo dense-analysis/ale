@@ -57,7 +57,16 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
     for l:line in a:lines
         let l:match = matchlist(l:line, l:pattern)
 
-        if !empty(l:match)
+        if empty(l:match)
+            let l:include_match = matchlist(l:line, l:include_pattern)
+            " If the line has an 'included from' pattern, store the line to
+            " create a gutter sign at the appropriate location in linted file
+            if !empty(l:include_match)
+                " TODO : check that the l:include_match[2] corresponds to the
+                " linted file
+                let l:include_lnum = l:include_match[3]
+            endif
+        else
             " Filter out the pragma errors
             if s:IsHeaderFile(bufname(bufnr('')))
             \&& l:match[5][:len(s:pragma_error) - 1] is# s:pragma_error
@@ -68,12 +77,18 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
             " the previous error parsed in output
             if l:match[4] is# 'note'
                 if has_key(l:output[-1], 'detail')
-                    let l:output[-1]['detail'] .= s:RemoveUnicodeQuotes(l:match[0])
+                    let l:output[-1]['detail'] .= s:RemoveUnicodeQuotes(l:match[0]) . ' --'
                 else
-                    let l:output[-1]['detail'] = s:RemoveUnicodeQuotes(l:match[0])
+                    let l:output[-1]['detail'] = s:RemoveUnicodeQuotes(l:match[0]) . ' --'
                 endif
                 continue
             endif
+
+            " TODO : Compare l:match[1] and the linted filename, to know if we
+            " can just add l:item to l:output or if we also need to add a
+            " gutter sign at l:include_lnum.
+            " Hint : We probably only need to check l:include_lnum value since
+            " it should be non-null only if the gutter is needed.
 
             let l:item = {
             \   'filename': l:match[1],
@@ -87,6 +102,8 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
             endif
 
             call add(l:output, l:item)
+            " Reset include_lnum after an error has been added
+            let l:include_lnum = 0
         endif
     endfor
 
