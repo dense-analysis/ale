@@ -10,7 +10,9 @@ let g:ale_haml_hamllint_options =
 \   get(g:, 'ale_haml_hamllint_options', '')
 
 function! ale_linters#haml#hamllint#GetCommand(buffer) abort
-    return 'haml-lint ' . g:ale_haml_hamllint_options . ' %t'
+    return 'haml-lint'
+    \ . (!empty(g:ale_haml_hamllint_options) ? ' ' . g:ale_haml_hamllint_options : '')
+    \ . ' %t'
 endfunction
 
 function! ale_linters#haml#hamllint#Handle(buffer, lines) abort

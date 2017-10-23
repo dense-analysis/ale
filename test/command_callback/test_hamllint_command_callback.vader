@@ -1,0 +1,25 @@
+Before:
+  Save g:ale_haml_hamllint_options
+
+  unlet! g:ale_haml_hamllint_options
+
+  runtime ale_linters/haml/hamllint.vim
+
+After:
+  Restore
+
+  unlet! g:ale_haml_hamllint_options
+
+  call ale#linter#Reset()
+
+Execute(The default hamllint command should be correct):
+  AssertEqual
+  \ 'haml-lint %t',
+  \ ale_linters#haml#hamllint#GetCommand(bufnr(''))
+
+Execute(The hamllint command should accept options):
+  let g:ale_haml_hamllint_options = '-c ~/my-config.yaml'
+
+  AssertEqual
+  \ 'haml-lint -c ~/my-config.yaml %t',
+  \ ale_linters#haml#hamllint#GetCommand(bufnr(''))
