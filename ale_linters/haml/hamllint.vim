@@ -1,5 +1,19 @@
-" Author: Patrick Lewis - https://github.com/patricklewis
+" Author: Patrick Lewis - https://github.com/patricklewis, thenoseman - https://github.com/thenoseman
 " Description: haml-lint for Haml files
+"
+" Options:
+" g:ale_haml_hamllint_options can be set and will be passed as options to
+" haml-lint
+" eg. let g:ale_haml_hamllint_options = '-c ~/use-my.haml-lint.yml'
+
+let g:ale_haml_hamllint_options =
+\   get(g:, 'ale_haml_hamllint_options', '')
+
+function! ale_linters#haml#hamllint#GetCommand(buffer) abort
+    return 'haml-lint'
+    \ . (!empty(g:ale_haml_hamllint_options) ? ' ' . g:ale_haml_hamllint_options : '')
+    \ . ' %t'
+endfunction
 
 function! ale_linters#haml#hamllint#Handle(buffer, lines) abort
     " Matches patterns like the following:
@@ -21,6 +35,6 @@ endfunction
 call ale#linter#Define('haml', {
 \   'name': 'hamllint',
 \   'executable': 'haml-lint',
-\   'command': 'haml-lint %t',
+\   'command_callback': 'ale_linters#haml#hamllint#GetCommand',
 \   'callback': 'ale_linters#haml#hamllint#Handle'
 \})
