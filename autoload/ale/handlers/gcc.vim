@@ -115,7 +115,7 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
             let l:item = {
             \   'filename': l:match[1],
             \   'lnum': str2nr(l:match[2]),
-            \   'type': l:match[4] =~# 'error' ? 'E' : 'W',
+            \   'type': l:match[4] is# 'error' ? 'E' : 'W',
             \   'text': s:RemoveUnicodeQuotes(l:match[5]),
             \}
 
