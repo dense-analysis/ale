@@ -105,10 +105,17 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
                 continue
             endif
 
+            " If the 'error type' is a note, make it detail related to
+            " the previous error parsed in output
+            if l:match[4] is# 'note'
+                let l:output[-1]['detail'] = s:RemoveUnicodeQuotes(l:match[0])
+                continue
+            endif
+
             let l:item = {
             \   'filename': l:match[1],
             \   'lnum': str2nr(l:match[2]),
-            \   'type': l:match[4] =~# 'error' ? 'E' : (l:match[4] =~# 'note' ? 'I' : 'W'),
+            \   'type': l:match[4] =~# 'error' ? 'E' : 'W',
             \   'text': s:RemoveUnicodeQuotes(l:match[5]),
             \}
 
