@@ -4,12 +4,14 @@ Execute(The swiftint handler should parse error messages correctly):
   \   {
   \     'lnum': 1,
   \     'col': 7,
+  \     'filename': '<nopath>',
   \     'text': 'Operator Usage Whitespace Violation: Operators should be surrounded by a single whitespace when they are being used. (operator_usage_whitespace)',
   \     'type': 'W',
   \   },
   \   {
   \     'lnum': 1,
   \     'col': 11,
+  \     'filename': '<nopath>',
   \     'text': 'Operator Usage Whitespace Violation: Operators should be surrounded by a single whitespace when they are being used. (operator_usage_whitespace)',
   \     'type': 'W',
   \   },
