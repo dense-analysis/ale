@@ -1,4 +1,5 @@
-# Asynchronous Lint Engine [![Build Status](https://travis-ci.org/w0rp/ale.svg?branch=master)](https://travis-ci.org/w0rp/ale)
+# Asynchronous Lint Engine [![Travis CI Build Status](https://travis-ci.org/w0rp/ale.svg?branch=master)](https://travis-ci.org/w0rp/ale) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/w0rp/ale?svg=true)](https://ci.appveyor.com/project/w0rp/ale)
+
 
 ![ALE Logo by Mark Grealish - https://www.bhalash.com/](img/logo.jpg?raw=true)
 
@@ -413,11 +414,11 @@ See `:help ale#statusline#Count()` for more information.
 
 ### 5.v. How can I show errors or warnings in my lightline?
 
-[lightline](https://github.com/itchyny/lightline.vim) does not have built-in 
+[lightline](https://github.com/itchyny/lightline.vim) does not have built-in
 support for ALE, nevertheless it's easy to do it yourself:
 
 ```vim
-" This is regular lightline configuration, we just added 
+" This is regular lightline configuration, we just added
 " 'linter_warnings', 'linter_errors' and 'linter_ok' to
 " the active right panel. Feel free to move it anywhere.
 " `component_expand' and `component_type' are required.
@@ -467,7 +468,7 @@ function! LightlineLinterOK() abort
 endfunction
 ```
 
-See `:help ale#statusline#Count()` and [lightline documentation](https://github.com/itchyny/lightline.vim#advanced-configuration) 
+See `:help ale#statusline#Count()` and [lightline documentation](https://github.com/itchyny/lightline.vim#advanced-configuration)
 for more information.
 
 <a name="faq-echo-format"></a>
