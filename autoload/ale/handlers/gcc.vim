@@ -101,6 +101,10 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
                 let l:item.col = str2nr(l:match[3])
             endif
 
+            if get(l:item, 'filename', 'dummy_no_key_to_unlet') ==# ''
+                unlet l:item['filename']
+            endif
+
             call add(l:output, l:item)
             " Reset include_lnum after an error has been added
             let l:include_lnum = 0
