@@ -87,8 +87,11 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
             " Hint : We probably only need to check l:include_lnum value since
             " it should be non-null only if the gutter is needed.
 
+            " The ternary operator in filename filters out the 'dummy'
+            " filenames like <nopath> or <stdin> and leave the location
+            " handling to engine#FixLocList
             let l:item = {
-            \   'filename': l:match[1],
+            \   'filename': (l:match[1][:0] is# '<') ? '' : l:match[1],
             \   'lnum': str2nr(l:match[2]),
             \   'type': l:match[4] is# 'error' ? 'E' : 'W',
             \   'text': s:RemoveUnicodeQuotes(l:match[5]),

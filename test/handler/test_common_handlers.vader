@@ -46,14 +46,12 @@ Execute (HandleGCCFormat should handle the correct lines of output):
   \   {
   \     'lnum': 8,
   \     'col': 5,
-  \     'filename': '<stdin>',
   \     'type': 'W',
   \     'text': 'conversion lacks type at end of format [-Wformat=]',
   \   },
   \   {
   \     'lnum': 10,
   \     'col': 27,
-  \     'filename': '<stdin>',
   \     'type': 'E',
   \     'text': 'invalid operands to binary - (have ''int'' and ''char *'')',
   \   },
@@ -69,7 +67,6 @@ Execute (HandleGCCFormat should replace Unicode quotes):
   \   {
   \     'lnum': 8,
   \     'col': 5,
-  \     'filename': '<stdin>',
   \     'type': 'W',
   \     'text': "'''' \"\"",
   \   },

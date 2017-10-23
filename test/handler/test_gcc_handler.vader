@@ -96,32 +96,27 @@ Execute(The GCC handler should handle syntax errors):
   \   {
   \     'lnum': 6,
   \     'col': 12,
-  \     'filename': '<stdin>',
   \     'type': 'E',
   \     'text': 'invalid suffix "p" on integer constant'
   \   },
   \   {
   \     'lnum': 17,
   \     'col': 5,
-  \     'filename': '<stdin>',
   \     'type': 'E',
   \     'text': 'invalid suffix "n" on integer constant'
   \   },
   \   {
   \     'lnum': 4,
-  \     'filename': '<stdin>',
   \     'type': 'E',
   \     'text': 'variable or field ''foo'' declared void'
   \   },
   \   {
   \     'lnum': 4,
-  \     'filename': '<stdin>',
   \     'type': 'E',
   \     'text': '''cat'' was not declared in this scope'
   \   },
   \   {
   \     'lnum': 12,
-  \     'filename': '<stdin>',
   \     'type': 'E',
   \     'text': 'expected '';'' before ''o'''
   \   },
