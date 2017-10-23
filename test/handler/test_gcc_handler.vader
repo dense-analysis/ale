@@ -41,14 +41,14 @@ Execute(GCC errors from included files should be parsed correctly):
   \     'col': 1,
   \     'filename': 'b.h',
   \     'type': 'E',
-  \     'text': 'unknown type name ‘bad_type’',
+  \     'text': 'unknown type name ''bad_type''',
   \   },
   \   {
   \     'lnum': 2,
   \     'col': 1,
   \     'filename': 'b.h',
   \     'type': 'E',
-  \     'text': 'unknown type name ‘other_bad_type’',
+  \     'text': 'unknown type name ''other_bad_type''',
   \   },
   \ ],
   \ ale#handlers#gcc#HandleGCCFormat(347, [
