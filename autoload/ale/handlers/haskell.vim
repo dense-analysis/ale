@@ -72,6 +72,7 @@ function! ale#handlers#haskell#HandleGHCFormat(buffer, lines) abort
         \   'col': l:match[3] + 0,
         \   'text': l:text,
         \   'type': l:type,
+        \   'detail': join(a:lines, "\n"),
         \})
     endfor
 
