@@ -28,7 +28,7 @@ Before:
     \ 'lnum': 2,
     \ 'vcol': 0,
     \ 'col': 3,
-    \ 'text': a:output[0],
+    \ 'text': join(split(a:output[0])),
     \ 'type': 'E',
     \ 'nr': -1,
     \}]
@@ -37,7 +37,7 @@ Before:
   call ale#linter#Define('foobar', {
   \ 'name': 'testlinter',
   \ 'callback': 'ToggleTestCallback',
-  \ 'executable': 'echo',
+  \ 'executable': has('win32') ? 'cmd' : 'echo',
   \ 'command': 'echo foo bar',
   \})
 
@@ -62,6 +62,12 @@ Execute(ALELint should run the linters):
 
   ALELint
   call ale#engine#WaitForJobs(2000)
+
+  if !has('nvim')
+    " Sleep so the delayed list function can run.
+    " This breaks the tests in NeoVim for some reason.
+    sleep 1ms
+  endif
 
   " Check the loclist
   AssertEqual g:expected_loclist, getloclist(0)

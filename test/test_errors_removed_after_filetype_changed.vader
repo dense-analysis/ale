@@ -13,7 +13,7 @@ Before:
   call ale#linter#Define('foobar', {
   \ 'name': 'buffer_linter',
   \ 'callback': 'TestCallback',
-  \ 'executable': 'true',
+  \ 'executable': has('win32') ? 'cmd': 'true',
   \ 'command': 'true',
   \ 'read_buffer': 0,
   \})
@@ -21,7 +21,7 @@ Before:
   call ale#linter#Define('foobar2', {
   \ 'name': 'buffer_linter',
   \ 'callback': 'TestCallback',
-  \ 'executable': 'true',
+  \ 'executable': has('win32') ? 'cmd': 'true',
   \ 'command': 'true',
   \ 'read_buffer': 0,
   \})
@@ -41,12 +41,14 @@ After:
 
 Execute(Error should be removed when the filetype changes to something else we cannot check):
   call ale#Queue(0)
+  sleep 1ms
 
   AssertEqual 1, len(getloclist(0))
 
   noautocmd let &filetype = 'foobar2'
 
   call ale#Queue(0)
+  sleep 1ms
 
   " We should get some items from the second filetype.
   AssertEqual 1, len(getloclist(0))
@@ -54,5 +56,6 @@ Execute(Error should be removed when the filetype changes to something else we c
   noautocmd let &filetype = 'xxx'
 
   call ale#Queue(0)
+  sleep 1ms
 
   AssertEqual 0, len(getloclist(0))
