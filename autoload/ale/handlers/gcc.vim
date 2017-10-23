@@ -57,44 +57,8 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
     for l:line in a:lines
         let l:match = matchlist(l:line, l:pattern)
 
-        if empty(l:match)
-            " " Check for matches in includes.
-            " " We will keep matching lines until we hit the last file, which
-            " " is our file.
-            " let l:include_match = matchlist(l:line, l:include_pattern)
-
-            " if empty(l:include_match)
-            "     " If this isn't another include header line, then we
-            "     " need to collect it.
-            "     call add(l:include_lines, l:line)
-            " else
-            "     " GCC and clang return the lists of files in different orders,
-            "     " so we'll only grab the line number from lines which aren't
-            "     " header files.
-            "     if !s:IsHeaderFile(l:include_match[2])
-            "         " Get the line number out of the parsed include line,
-            "         " and reset the other variables.
-            "         let l:include_lnum = str2nr(l:include_match[3])
-            "     endif
-
-            "     let l:include_lines = []
-            "     let l:included_filename = ''
-            " endif
-        " elseif l:include_lnum > 0
-        " \&& (empty(l:included_filename) || l:included_filename is# l:match[1])
-            " " If we hit the first error after an include header, or the
-            " " errors below have the same name as the first filename we see,
-            " " then include these lines, and remember what that filename was.
-            " let l:included_filename = l:match[1]
-            " call add(l:include_lines, l:line)
-        else
-            " If we hit a regular error again, then add the previously
-            " collected lines as one error, and reset the include variables.
-            " call s:AddIncludedErrors(l:output, l:include_lnum, l:include_lines)
-            " let l:include_lnum = 0
-            " let l:include_lines = []
-            " let l:included_filename = ''
-
+        if !empty(l:match)
+            " Filter out the pragma errors
             if s:IsHeaderFile(bufname(bufnr('')))
             \&& l:match[5][:len(s:pragma_error) - 1] is# s:pragma_error
                 continue
@@ -121,9 +85,6 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
             call add(l:output, l:item)
         endif
     endfor
-
-    " Add remaining include errors after we go beyond the last line.
-    " call s:AddIncludedErrors(l:output, l:include_lnum, l:include_lines)
 
     return l:output
 endfunction
