@@ -77,9 +77,9 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
             " the previous error parsed in output
             if l:match[4] is# 'note'
                 if has_key(l:output[-1], 'detail')
-                    let l:output[-1]['detail'] .= s:RemoveUnicodeQuotes(l:match[0]) . ' --'
+                    let l:output[-1]['detail'] .= "\n" . s:RemoveUnicodeQuotes(l:match[0])
                 else
-                    let l:output[-1]['detail'] = s:RemoveUnicodeQuotes(l:match[0]) . ' --'
+                    let l:output[-1]['detail'] = s:RemoveUnicodeQuotes(l:match[0])
                 endif
                 continue
             endif
