@@ -4,7 +4,7 @@ Execute(GCC errors from included files should be parsed correctly):
   \   {
   \     'lnum': 1,
   \     'col': 1,
-  \     'filename': 'broken.h'
+  \     'filename': 'broken.h',
   \     'type': 'E',
   \     'text': 'expected identifier or ''('' before ''{'' token',
   \   },
@@ -21,7 +21,7 @@ Execute(GCC errors from included files should be parsed correctly):
   \   {
   \     'lnum': 1,
   \     'col': 1,
-  \     'filename': 'b.h'
+  \     'filename': 'b.h',
   \     'type': 'E',
   \     'text': 'expected identifier or ''('' before ''{'' token',
   \   },
