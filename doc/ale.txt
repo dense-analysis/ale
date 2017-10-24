@@ -261,6 +261,7 @@ Notes:
 * LaTeX (tex): `chktex`, `lacheck`, `proselint`
 * LLVM: `llc`
 * Lua: `luacheck`
+* Make: `checkmake`
 * Markdown: `mdl`, `proselint`, `vale`, `remark-lint`
 * MATLAB: `mlint`
 * Nim: `nim check`!!
