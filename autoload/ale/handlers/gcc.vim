@@ -111,7 +111,7 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
 
             " Finish filtering out filename : if the key exists but is empty,
             " unlet it.
-            if get(l:item, 'filename', 'dummy_no_key_to_unlet') ==# ''
+            if get(l:item, 'filename', 'dummy_no_key_to_unlet') is# ''
                 unlet l:item['filename']
             endif
 
