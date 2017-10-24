@@ -2,9 +2,12 @@ Before:
   Save &filetype
   Save g:ale_buffer_info
   Save g:ale_lint_on_enter
+  Save g:ale_set_lists_synchronously
+
   let g:buf = bufnr('')
   let g:ale_lint_on_enter = 1
   let g:ale_run_synchronously = 1
+  let g:ale_set_lists_synchronously = 1
 
   function! TestCallback(buffer, output)
     return [{
@@ -17,8 +20,8 @@ Before:
   call ale#linter#Define('foobar', {
   \ 'name': 'testlinter',
   \ 'callback': 'TestCallback',
-  \ 'executable': 'true',
-  \ 'command': 'true',
+  \ 'executable': has('win32') ? 'cmd' : 'true',
+  \ 'command': has('win32') ? 'echo' : 'true',
   \})
 
 After:

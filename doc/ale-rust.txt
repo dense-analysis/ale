@@ -22,6 +22,8 @@ Integration Information
      over cargo. rls implements the Language Server Protocol for incremental
      compilation of Rust code, and can check Rust files while you type. `rls`
      requires Rust files to contained in Cargo projects.
+  4. rustfmt -- If you have `rustfmt` installed, you can use it as a fixer to
+     consistently reformat your Rust code.
 
   Only cargo is enabled by default. To switch to using rustc instead of cargo,
   configure |g:ale_linters| appropriately: >
@@ -68,6 +70,17 @@ g:ale_rust_ignore_error_codes                   *g:ale_rust_ignore_error_codes*
   ignore most errors regarding failed imports, put this in your .vimrc
   >
   let g:ale_rust_ignore_error_codes = ['E0432', 'E0433']
+
+
+===============================================================================
+rustfmt                                                      *ale-rust-rustfmt*
+
+g:ale_rust_rustfmt_options                         *g:ale_rust_rustfmt_options*
+                                                   *b:ale_rust_rustfmt_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to the rustfmt fixer.
 
 
 ===============================================================================

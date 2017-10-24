@@ -1,4 +1,5 @@
-# Asynchronous Lint Engine [![Build Status](https://travis-ci.org/w0rp/ale.svg?branch=master)](https://travis-ci.org/w0rp/ale)
+# Asynchronous Lint Engine [![Travis CI Build Status](https://travis-ci.org/w0rp/ale.svg?branch=master)](https://travis-ci.org/w0rp/ale) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/w0rp/ale?svg=true)](https://ci.appveyor.com/project/w0rp/ale)
+
 
 ![ALE Logo by Mark Grealish - https://www.bhalash.com/](img/logo.jpg?raw=true)
 
@@ -117,7 +118,7 @@ formatting.
 | Objective-C++ | [clang](http://clang.llvm.org/) |
 | OCaml | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-ocaml-merlin` for configuration instructions |
 | Perl | [perl -c](https://perl.org/), [perl-critic](https://metacpan.org/pod/Perl::Critic) |
-| PHP | [hack](http://hacklang.org/), [langserver](https://github.com/felixfbecker/php-language-server), [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer), [phpmd](https://phpmd.org), [phpstan](https://github.com/phpstan/phpstan), [phpcbf](https://github.com/squizlabs/PHP_CodeSniffer) |
+| PHP | [hack](http://hacklang.org/), [langserver](https://github.com/felixfbecker/php-language-server), [phan](https://github.com/phan/phan) see `:help ale-php-phan` to instructions, [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer), [phpmd](https://phpmd.org), [phpstan](https://github.com/phpstan/phpstan), [phpcbf](https://github.com/squizlabs/PHP_CodeSniffer) |
 | Pod | [proselint](http://proselint.com/)|
 | Pug | [pug-lint](https://github.com/pugjs/pug-lint) |
 | Puppet | [puppet](https://puppet.com), [puppet-lint](https://puppet-lint.com) |
@@ -127,7 +128,7 @@ formatting.
 | reStructuredText | [proselint](http://proselint.com/) |
 | RPM spec | [rpmlint](https://github.com/rpm-software-management/rpmlint) (disabled by default; see `:help ale-integration-spec`) |
 | Ruby | [brakeman](http://brakemanscanner.org/) !!, [rails_best_practices](https://github.com/flyerhzm/rails_best_practices) !!, [reek](https://github.com/troessner/reek), [rubocop](https://github.com/bbatsov/rubocop), [ruby](https://www.ruby-lang.org) |
-| Rust |  cargo !! (see `:help ale-integration-rust` for configuration instructions), [rls](https://github.com/rust-lang-nursery/rls), [rustc](https://www.rust-lang.org/) |
+| Rust |  cargo !! (see `:help ale-integration-rust` for configuration instructions), [rls](https://github.com/rust-lang-nursery/rls), [rustc](https://www.rust-lang.org/), [rustfmt](https://github.com/rust-lang-nursery/rustfmt) |
 | SASS | [sass-lint](https://www.npmjs.com/package/sass-lint), [stylelint](https://github.com/stylelint/stylelint) |
 | SCSS | [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint), [stylelint](https://github.com/stylelint/stylelint), [prettier](https://github.com/prettier/prettier) |
 | Scala | [scalac](http://scala-lang.org), [scalastyle](http://www.scalastyle.org) |
@@ -413,11 +414,11 @@ See `:help ale#statusline#Count()` for more information.
 
 ### 5.v. How can I show errors or warnings in my lightline?
 
-[lightline](https://github.com/itchyny/lightline.vim) does not have built-in 
+[lightline](https://github.com/itchyny/lightline.vim) does not have built-in
 support for ALE, nevertheless it's easy to do it yourself:
 
 ```vim
-" This is regular lightline configuration, we just added 
+" This is regular lightline configuration, we just added
 " 'linter_warnings', 'linter_errors' and 'linter_ok' to
 " the active right panel. Feel free to move it anywhere.
 " `component_expand' and `component_type' are required.
@@ -467,7 +468,7 @@ function! LightlineLinterOK() abort
 endfunction
 ```
 
-See `:help ale#statusline#Count()` and [lightline documentation](https://github.com/itchyny/lightline.vim#advanced-configuration) 
+See `:help ale#statusline#Count()` and [lightline documentation](https://github.com/itchyny/lightline.vim#advanced-configuration)
 for more information.
 
 <a name="faq-echo-format"></a>

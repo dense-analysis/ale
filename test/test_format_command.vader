@@ -2,9 +2,17 @@ Before:
   silent! cd /testplugin/test
   silent file top/middle/bottom/dummy.txt
 
+  function! CheckTempFile(filename) abort
+    " Check every part of the temporary filename, except the random part.
+    AssertEqual fnamemodify(tempname(), ':h'), fnamemodify(a:filename, ':h:h')
+    AssertEqual 'dummy.txt', fnamemodify(a:filename, ':t')
+  endfunction
+
 After:
   unlet! g:result
   unlet! g:match
+
+  delfunction CheckTempFile
 
 Execute(FormatCommand should do nothing to basic command strings):
   AssertEqual ['', 'awesome-linter do something'], ale#command#FormatCommand(bufnr('%'), 'awesome-linter do something', 0)
@@ -13,40 +21,57 @@ Execute(FormatCommand should handle %%, and ignore other percents):
   AssertEqual ['', '% %%d %%f %x %'], ale#command#FormatCommand(bufnr('%'), '%% %%%d %%%f %x %', 0)
 
 Execute(FormatCommand should convert %s to the current filename):
-  AssertEqual ['', 'foo ' . shellescape(expand('%:p')) . ' bar ' . shellescape(expand('%:p'))], ale#command#FormatCommand(bufnr('%'), 'foo %s bar %s', 0)
+  AssertEqual
+  \ [
+  \   '',
+  \   'foo ' . ale#Escape(expand('%:p')) . ' bar ' . ale#Escape(expand('%:p'))
+  \ ],
+  \ ale#command#FormatCommand(bufnr('%'), 'foo %s bar %s', 0)
 
 Execute(FormatCommand should convert %t to a new temporary filename):
   let g:result = ale#command#FormatCommand(bufnr('%'), 'foo %t bar %t', 0)
-  let g:match = matchlist(g:result[1], '\v^foo (''/tmp/[^'']*/dummy.txt'') bar (''/tmp/[^'']*/dummy.txt'')$')
+
+  call CheckTempFile(g:result[0])
+
+  let g:match = matchlist(g:result[1], '\v^foo (.*) bar (.*)$')
 
   Assert !empty(g:match), 'No match found! Result was: ' . g:result[1]
   " The first item of the result should be a temporary filename, and it should
   " be the same as the escaped name in the command string.
-  AssertEqual shellescape(g:result[0]), g:match[1]
+  AssertEqual ale#Escape(g:result[0]), g:match[1]
   " The two temporary filenames formatted in should be the same.
   AssertEqual g:match[1], g:match[2]
 
 Execute(FormatCommand should let you combine %s and %t):
   let g:result = ale#command#FormatCommand(bufnr('%'), 'foo %t bar %s', 0)
-  let g:match = matchlist(g:result[1], '\v^foo (''/tmp/.*/dummy.txt'') bar (''.*/dummy.txt'')$')
+
+  call CheckTempFile(g:result[0])
+
+  let g:match = matchlist(g:result[1], '\v^foo (.*) bar (.*)$')
 
   Assert !empty(g:match), 'No match found! Result was: ' . g:result[1]
   " The first item of the result should be a temporary filename, and it should
   " be the same as the escaped name in the command string.
-  AssertEqual shellescape(g:result[0]), g:match[1]
+  AssertEqual ale#Escape(g:result[0]), g:match[1]
   " The second item should be equal to the original filename.
-  AssertEqual shellescape(expand('%:p')), g:match[2]
+  AssertEqual ale#Escape(expand('%:p')), g:match[2]
 
 Execute(EscapeCommandPart should escape all percent signs):
   AssertEqual '%%s %%t %%%% %%s %%t %%%%', ale#engine#EscapeCommandPart('%s %t %% %s %t %%')
 
 Execute(EscapeCommandPart should pipe in temporary files appropriately):
   let g:result = ale#command#FormatCommand(bufnr('%'), 'foo bar', 1)
-  let g:match = matchlist(g:result[1], '\v^foo bar \< (''/tmp/[^'']*/dummy.txt'')$')
+
+  call CheckTempFile(g:result[0])
+
+  let g:match = matchlist(g:result[1], '\v^foo bar \< (.*)$')
   Assert !empty(g:match), 'No match found! Result was: ' . g:result[1]
-  AssertEqual shellescape(g:result[0]), g:match[1]
+  AssertEqual ale#Escape(g:result[0]), g:match[1]
 
   let g:result = ale#command#FormatCommand(bufnr('%'), 'foo bar %t', 1)
-  let g:match = matchlist(g:result[1], '\v^foo bar (''/tmp/[^'']*/dummy.txt'')$')
+
+  call CheckTempFile(g:result[0])
+
+  let g:match = matchlist(g:result[1], '\v^foo bar (.*)$')
   Assert !empty(g:match), 'No match found! Result was: ' . g:result[1]
-  AssertEqual shellescape(g:result[0]), g:match[1]
+  AssertEqual ale#Escape(g:result[0]), g:match[1]

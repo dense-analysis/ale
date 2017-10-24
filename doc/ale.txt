@@ -48,6 +48,8 @@ CONTENTS                                                         *ale-contents*
       dartanalyzer........................|ale-dart-dartanalyzer|
     dockerfile............................|ale-dockerfile-options|
       hadolint............................|ale-dockerfile-hadolint|
+    elixir................................|ale-elixir-options|
+      mix.................................|ale-elixir-mix|
     elm...................................|ale-elm-options|
       elm-format..........................|ale-elm-elm-format|
       elm-make............................|ale-elm-elm-make|
@@ -114,6 +116,7 @@ CONTENTS                                                         *ale-contents*
     php...................................|ale-php-options|
       hack................................|ale-php-hack|
       langserver..........................|ale-php-langserver|
+      phan................................|ale-php-phan|
       phpcbf..............................|ale-php-phpcbf|
       phpcs...............................|ale-php-phpcs|
       phpmd...............................|ale-php-phpmd|
@@ -143,6 +146,7 @@ CONTENTS                                                         *ale-contents*
       cargo...............................|ale-rust-cargo|
       rls.................................|ale-rust-rls|
       rustc...............................|ale-rust-rustc|
+      rustfmt.............................|ale-rust-rustfmt|
     sass..................................|ale-sass-options|
       stylelint...........................|ale-sass-stylelint|
     scala.................................|ale-scala-options|
@@ -271,7 +275,7 @@ Notes:
 * Objective-C++: `clang`
 * OCaml: `merlin` (see |ale-ocaml-merlin|)
 * Perl: `perl -c`, `perl-critic`
-* PHP: `hack`, `langserver`, `php -l`, `phpcs`, `phpmd`, `phpstan`, `phpcbf`
+* PHP: `hack`, `langserver`, `phan`, `php -l`, `phpcs`, `phpmd`, `phpstan`, `phpcbf`
 * Pod: `proselint`
 * Pug: `pug-lint`
 * Puppet: `puppet`, `puppet-lint`
@@ -281,7 +285,7 @@ Notes:
 * reStructuredText: `proselint`
 * RPM spec: `rpmlint`
 * Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`
-* Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|)
+* Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|), `rustfmt`
 * SASS: `sass-lint`, `stylelint`
 * SCSS: `sass-lint`, `scss-lint`, `stylelint`, `prettier`
 * Scala: `scalac`, `scalastyle`

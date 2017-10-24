@@ -67,7 +67,10 @@ Execute(History should be set when commands are run):
   call ale#Lint()
   call ale#engine#WaitForJobs(2000)
 
-  let g:history = ale#history#Get(bufnr(''))
+  let g:history = filter(
+  \ copy(ale#history#Get(bufnr(''))),
+  \ 'v:val.job_id isnot# ''executable''',
+  \)
 
   AssertEqual 1, len(g:history)
   AssertEqual sort(['status', 'exit_code', 'job_id', 'command']), sort(keys(g:history[0]))

@@ -841,7 +841,7 @@ function! ale#engine#WaitForJobs(deadline) abort
 
     " Gather all of the jobs from every buffer.
     for l:info in values(g:ale_buffer_info)
-        call extend(l:job_list, l:info.job_list)
+        call extend(l:job_list, get(l:info, 'job_list', []))
     endfor
 
     " NeoVim has a built-in API for this, so use that.
@@ -889,7 +889,7 @@ function! ale#engine#WaitForJobs(deadline) abort
 
     " Check again to see if any jobs are running.
     for l:info in values(g:ale_buffer_info)
-        for l:job_id in l:info.job_list
+        for l:job_id in get(l:info, 'job_list', [])
             if ale#job#IsRunning(l:job_id)
                 let l:has_new_jobs = 1
                 break
