@@ -110,6 +110,7 @@ formatting.
 | LLVM | [llc](https://llvm.org/docs/CommandGuide/llc.html) |
 | Lua | [luacheck](https://github.com/mpeterv/luacheck) |
 | Mail | [proselint](http://proselint.com/) |
+| Make | [checkmake](https://github.com/mrtazz/checkmake) |
 | Markdown | [mdl](https://github.com/mivok/markdownlint), [proselint](http://proselint.com/), [vale](https://github.com/ValeLint/vale), [remark-lint](https://github.com/wooorm/remark-lint) !! |
 | MATLAB | [mlint](https://www.mathworks.com/help/matlab/ref/mlint.html) |
 | Nim | [nim check](https://nim-lang.org/docs/nimc.html) !! |

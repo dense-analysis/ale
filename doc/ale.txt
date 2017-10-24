@@ -267,6 +267,7 @@ Notes:
 * LLVM: `llc`
 * Lua: `luacheck`
 * Mail: `proselint`
+* Make: `checkmake`
 * Markdown: `mdl`, `proselint`, `vale`, `remark-lint`
 * MATLAB: `mlint`
 * Nim: `nim check`!!
