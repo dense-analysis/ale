@@ -288,7 +288,7 @@ Notes:
 * LaTeX (tex): `chktex`, `lacheck`, `proselint`, `write-good`
 * LLVM: `llc`
 * Lua: `luacheck`
-* Mail: `proselint`
+* Mail: `proselint`, `vale`
 * Make: `checkmake`
 * Markdown: `mdl`, `proselint`, `vale`, `remark-lint`, `write-good`
 * MATLAB: `mlint`
