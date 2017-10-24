@@ -31,19 +31,30 @@ function! ale#handlers#writegood#Handle(buffer, lines) abort
     "
     " "it is" is wordy or unneeded on line 20 at column 53
     " "easily" can weaken meaning on line 154 at column 29
+    let l:marks_pattern = '\v^ *(\^+) *$'
     let l:pattern = '\v^(".*"\s.*)\son\sline\s(\d+)\sat\scolumn\s(\d+)$'
     let l:output = []
+    let l:last_len = 0
 
-    for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        " Add the linter error. Note that we need to add 1 to the col because
-        " write-good reports the column corresponding to the space before the
-        " offending word or phrase.
-        call add(l:output, {
-        \   'text': l:match[1],
-        \   'lnum': l:match[2] + 0,
-        \   'col': l:match[3] + 1,
-        \   'type': 'W',
-        \})
+    for l:match in ale#util#GetMatches(a:lines, [l:marks_pattern, l:pattern])
+        if empty(l:match[2])
+            let l:last_len = len(l:match[1])
+        else
+            let l:col = l:match[3] + 1
+
+            " Add the linter error. Note that we need to add 1 to the col because
+            " write-good reports the column corresponding to the space before the
+            " offending word or phrase.
+            call add(l:output, {
+            \   'text': l:match[1],
+            \   'lnum': l:match[2] + 0,
+            \   'col': l:col,
+            \   'end_col': l:last_len ? (l:col + l:last_len - 1) : l:col,
+            \   'type': 'W',
+            \})
+
+            let l:last_len = 0
+        endif
     endfor
 
     return l:output
