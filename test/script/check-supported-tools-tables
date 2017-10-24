@@ -30,30 +30,30 @@ readme_section_size="$( \
 # shellcheck disable=SC2003
 readme_end_line="$(expr "$readme_start_line" + "$readme_section_size")"
 
-doc_file="$(mktemp)"
-readme_file="$(mktemp)"
+doc_file="$(mktemp -t doc.XXXXXXXX)"
+readme_file="$(mktemp -t readme.XXXXXXXX)"
 
 sed -n "$ale_help_start_line,$ale_help_end_line"p doc/ale.txt \
     | grep '\* .*: ' \
     | sed 's/^*//' \
-    | sed 's/[`!^]\|([^)]*)//g' \
+    | sed 's/[`!^]//g;s/([^)]*)//g' \
     | sed 's/ *\([,:]\)/\1/g' \
     | sed 's/  */ /g' \
-    | sed 's/^ *\| *$//g' \
+    | sed 's/^ *//;s/ *$//' \
     | sed 's/^/ /' \
     > "$doc_file"
 
 sed -n "$readme_start_line,$readme_end_line"p README.md \
     | grep '| .* |' \
-    | sed '/^| Language\|^| ---/d' \
+    | sed '/^| Language/d;/^| ---/d' \
     | sed 's/^|//' \
-    | sed 's/ \?|/:/' \
-    | sed 's/[`!^|]\|([^)]*)//g' \
-    | sed 's/\[\|\]//g' \
-    | sed 's/see[^,]*\(,\|$\)/\1/g' \
+    | sed 's/ \{0,1\}|/:/' \
+    | sed 's/[`!^|]//g;s/([^)]*)//g' \
+    | sed 's/\[//g;s/\]//g' \
+    | sed 's/see[^,]*//g' \
     | sed 's/ *\([,:]\)/\1/g' \
     | sed 's/  */ /g' \
-    | sed 's/^ *\| *$//g' \
+    | sed 's/^ *//;s/ *$//' \
     | sed 's/^/ /' \
     | sed 's/ *-n flag//g' \
     > "$readme_file"
