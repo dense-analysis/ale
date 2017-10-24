@@ -117,6 +117,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['rust'],
 \       'description': 'Fix Rust files with Rustfmt.',
 \   },
+\   'hfmt': {
+\       'function': 'ale#fixers#hfmt#Fix',
+\       'suggested_filetypes': ['haskell'],
+\       'description': 'Fix Haskell files with hfmt.',
+\   },
 \}
 
 " Reset the function registry to the default entries.

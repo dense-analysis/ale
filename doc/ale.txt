@@ -72,6 +72,7 @@ CONTENTS                                                         *ale-contents*
       ember-template-lint.................|ale-handlebars-embertemplatelint|
     haskell...............................|ale-haskell-options|
       hdevtools...........................|ale-haskell-hdevtools|
+      hfmt................................|ale-haskell-hfmt|
       stack-build.........................|ale-haskell-stack-build|
     html..................................|ale-html-options|
       htmlhint............................|ale-html-htmlhint|
@@ -255,7 +256,7 @@ Notes:
 * GraphQL: `gqlint`
 * Haml: `haml-lint`
 * Handlebars: `ember-template-lint`
-* Haskell: `ghc`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`
+* Haskell: `ghc`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`, `hfmt`
 * HTML: `HTMLHint`, `proselint`, `tidy`
 * Idris: `idris`
 * Java: `checkstyle`, `javac`
