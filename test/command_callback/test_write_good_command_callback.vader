@@ -48,7 +48,7 @@ Execute(Should use the node_modules/write-good executable, if available):
   \ ale#path#Winify(g:dir . '/write-good-node-modules-2/node_modules/write-good/bin/write-good.js'),
   \ ale#handlers#writegood#GetExecutable(bufnr(''))
   AssertEqual
-  \   (has('win32') ? 'node' : '')
+  \   (has('win32') ? 'node.exe ' : '')
   \   . ale#Escape(ale#path#Winify(g:dir . '/write-good-node-modules-2/node_modules/write-good/bin/write-good.js'))
   \   . ' %t',
   \ ale#handlers#writegood#GetCommand(bufnr(''))
