@@ -13,7 +13,10 @@ CONTENTS                                                         *ale-contents*
   5. Completion...........................|ale-completion|
   6. Global Options.......................|ale-options|
     6.1 Highlights........................|ale-highlights|
+    6.2 Options for write-good Linter.....|ale-write-good-options|
   7. Integration Documentation............|ale-integrations|
+    asciidoc..............................|ale-asciidoc-options|
+      write-good..........................|ale-asciidoc-write-good|
     asm...................................|ale-asm-options|
       gcc.................................|ale-asm-gcc|
     awk...................................|ale-awk-options|
@@ -77,6 +80,7 @@ CONTENTS                                                         *ale-contents*
     html..................................|ale-html-options|
       htmlhint............................|ale-html-htmlhint|
       tidy................................|ale-html-tidy|
+      write-good..........................|ale-html-write-good|
     idris.................................|ale-idris-options|
       idris...............................|ale-idris-idris|
     java..................................|ale-java-options|
@@ -98,12 +102,18 @@ CONTENTS                                                         *ale-contents*
     kotlin................................|ale-kotlin-options|
       kotlinc.............................|ale-kotlin-kotlinc|
       ktlint..............................|ale-kotlin-ktlint|
+    latex.................................|ale-latex-options|
+      write-good..........................|ale-latex-write-good|
     less..................................|ale-less-options|
       prettier............................|ale-less-prettier|
     llvm..................................|ale-llvm-options|
       llc.................................|ale-llvm-llc|
     lua...................................|ale-lua-options|
       luacheck............................|ale-lua-luacheck|
+    markdown..............................|ale-markdown-options|
+      write-good..........................|ale-markdown-write-good|
+    nroff.................................|ale-nroff-options|
+      write-good..........................|ale-nroff-write-good|
     objc..................................|ale-objc-options|
       clang...............................|ale-objc-clang|
     objcpp................................|ale-objcpp-options|
@@ -121,6 +131,8 @@ CONTENTS                                                         *ale-contents*
       phpcs...............................|ale-php-phpcs|
       phpmd...............................|ale-php-phpmd|
       phpstan.............................|ale-php-phpstan|
+    pod...................................|ale-pod-options|
+      write-good..........................|ale-pod-write-good|
     pug...................................|ale-pug-options|
       puglint.............................|ale-pug-puglint|
     puppet................................|ale-puppet-options|
@@ -137,6 +149,8 @@ CONTENTS                                                         *ale-contents*
       lintr...............................|ale-r-lintr|
     reasonml..............................|ale-reasonml-options|
       merlin..............................|ale-reasonml-merlin|
+    restructuredtext......................|ale-restructuredtext-options|
+      write-good..........................|ale-restructuredtext-write-good|
     ruby..................................|ale-ruby-options|
       brakeman............................|ale-ruby-brakeman|
       rails_best_practices................|ale-ruby-rails_best_practices|
@@ -170,6 +184,10 @@ CONTENTS                                                         *ale-contents*
     tex...................................|ale-tex-options|
       chktex..............................|ale-tex-chktex|
       lacheck.............................|ale-tex-lacheck|
+    texinfo...............................|ale-texinfo-options|
+      write-good..........................|ale-texinfo-write-good|
+    text..................................|ale-text-options|
+      write-good..........................|ale-text-write-good|
     thrift................................|ale-thrift-options|
       thrift..............................|ale-thrift-thrift|
     typescript............................|ale-typescript-options|
@@ -182,6 +200,10 @@ CONTENTS                                                         *ale-contents*
       verilator...........................|ale-verilog-verilator|
     vim...................................|ale-vim-options|
       vint................................|ale-vim-vint|
+    vim help..............................|ale-vim-help-options|
+      write-good..........................|ale-vim-help-write-good|
+    xhtml.................................|ale-xhtml-options|
+      write-good..........................|ale-xhtml-write-good|
     xml...................................|ale-xml-options|
       xmllint.............................|ale-xml-xmllint|
     yaml..................................|ale-yaml-options|
@@ -228,7 +250,7 @@ Notes:
 
 * ASM: `gcc`
 * Ansible: `ansible-lint`
-* AsciiDoc: `proselint`
+* AsciiDoc: `proselint`, `write-good`
 * Awk: `gawk`
 * Bash: `shell` (-n flag), `shellcheck`
 * Bourne Shell: `shell` (-n flag), `shellcheck`
@@ -257,34 +279,34 @@ Notes:
 * Haml: `haml-lint`
 * Handlebars: `ember-template-lint`
 * Haskell: `ghc`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`, `hfmt`
-* HTML: `HTMLHint`, `proselint`, `tidy`
+* HTML: `HTMLHint`, `proselint`, `tidy`, `write-good`
 * Idris: `idris`
 * Java: `checkstyle`, `javac`
 * JavaScript: `eslint`, `jscs`, `jshint`, `flow`, `prettier`, `prettier-eslint` >= 4.2.0, `prettier-standard`, `standard`, `xo`
 * JSON: `jsonlint`, `prettier`
 * Kotlin: `kotlinc`, `ktlint`
-* LaTeX (tex): `chktex`, `lacheck`, `proselint`
+* LaTeX (tex): `chktex`, `lacheck`, `proselint`, `write-good`
 * LLVM: `llc`
 * Lua: `luacheck`
 * Mail: `proselint`
 * Make: `checkmake`
-* Markdown: `mdl`, `proselint`, `vale`, `remark-lint`
+* Markdown: `mdl`, `proselint`, `vale`, `remark-lint`, `write-good`
 * MATLAB: `mlint`
 * Nim: `nim check`!!
 * nix: `nix-instantiate`
-* nroff: `proselint`
+* nroff: `proselint`, `write-good`
 * Objective-C: `clang`
 * Objective-C++: `clang`
 * OCaml: `merlin` (see |ale-ocaml-merlin|)
 * Perl: `perl -c`, `perl-critic`
 * PHP: `hack`, `langserver`, `phan`, `php -l`, `phpcs`, `phpmd`, `phpstan`, `phpcbf`
-* Pod: `proselint`
+* Pod: `proselint`, `write-good`
 * Pug: `pug-lint`
 * Puppet: `puppet`, `puppet-lint`
 * Python: `autopep8`, `flake8`, `isort`, `mypy`, `pycodestyle`, `pylint`!!, `yapf`
 * R: `lintr`
 * ReasonML: `merlin`
-* reStructuredText: `proselint`
+* reStructuredText: `proselint`, `write-good`
 * RPM spec: `rpmlint`
 * Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`
 * Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|), `rustfmt`
@@ -298,14 +320,14 @@ Notes:
 * SQL: `sqlint`
 * Swift: `swiftlint`, `swiftformat`
 * Tcl: `nagelfar`!!
-* Texinfo: `proselint`
-* Text^: `proselint`, `vale`
+* Texinfo: `proselint`, `write-good`
+* Text^: `proselint`, `vale`, `write-good`
 * Thrift: `thrift`
 * TypeScript: `eslint`, `tslint`, `tsserver`, `typecheck`, `prettier`
 * Verilog: `iverilog`, `verilator`
 * Vim: `vint`
-* Vim help^: `proselint`
-* XHTML: `proselint`
+* Vim help^: `proselint`, `write-good`
+* XHTML: `proselint`, `write-good`
 * XML: `xmllint`
 * YAML: `swaglint`, `yamllint`
 
@@ -1281,6 +1303,36 @@ ALEWarningSign                                                 *ALEWarningSign*
   Default: `highlight link ALEWarningSign todo`
 
   The highlight used for warning signs. See |g:ale_set_signs|.
+
+
+-------------------------------------------------------------------------------
+6.2. Options for write-good                            *ale-write-good-options*
+
+The options for the write-good linter are global because it does not make
+sense to have them specified on a per-language basis.
+
+g:ale_writegood_executable                         *g:ale_writegood_executable*
+                                                   *b:ale_writegood_executable*
+  Type: |String|
+  Default: `'writegood'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_writegood_options                               *g:ale_writegood_options*
+                                                      *b:ale_writegood_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to writegood.
+
+
+g:ale_writegood_use_global                         *g:ale_writegood_use_global*
+                                                   *b:ale_writegood_use_global*
+  Type: |Number|
+  Default: `0`
+
+  See |ale-integrations-local-executables|
 
 
 ===============================================================================
