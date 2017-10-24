@@ -35,6 +35,21 @@ g:ale_php_langserver_use_global               *g:ale_php_langserver_use_global*
 
 
 ===============================================================================
+phan                                                             *ale-php-phan*
+
+WARNING: please do not use this linter if you have an configuration file
+for your project because the phan will look into your entirely project and
+ale will display in the current buffer warnings that may belong to other file.
+
+g:ale_php_phan_minimum_severity               *g:ale_php_phan_minimum_severity*
+                                              *b:ale_php_phan_minimum_severity*
+  Type: |Number|
+  Default: `0`
+
+  This variable defines the minimum severity level
+
+
+===============================================================================
 phpcbf                                                         *ale-php-phpcbf*
 
 g:ale_php_phpcbf_executable                       *g:ale_php_phpcbf_executable*
