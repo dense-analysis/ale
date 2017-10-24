@@ -43,6 +43,10 @@ endfunction
 
 function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
     let l:include_pattern = '\v^(In file included | *)from ([^:]*):(\d+)'
+    " Include pattern looks for lines like :
+    "
+    " In file included from test.h:1:0,
+    "                  from test.cpp:1:
     let l:include_lnum = 0
     let l:include_lines = []
     let l:included_filename = ''
@@ -64,6 +68,10 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
             if !empty(l:include_match)
                 " TODO : check that the l:include_match[2] corresponds to the
                 " linted file
+                " We probably don't need to check for l:include_match[2]
+                " because the last line following include_pattern in a group
+                " of contiguous lines is probably concerning the linted file
+                " anyway
                 let l:include_lnum = l:include_match[3]
             endif
         else
@@ -101,6 +109,8 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
                 let l:item.col = str2nr(l:match[3])
             endif
 
+            " Finish filtering out filename : if the key exists but is empty,
+            " unlet it.
             if get(l:item, 'filename', 'dummy_no_key_to_unlet') ==# ''
                 unlet l:item['filename']
             endif
