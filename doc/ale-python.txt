@@ -174,7 +174,7 @@ g:ale_python_pylint_options                       *g:ale_python_pylint_options*
   Python 3, you may want to set >
 
   let g:ale_python_pylint_executable = 'python3'   " or 'python' for Python 2
-  let g:ale_python_pylint_options = '-rcfile /path/to/pylint.rc'
+  let g:ale_python_pylint_options = '--rcfile /path/to/pylint.rc'
   " The virtualenv detection needs to be disabled.
   let g:ale_python_pylint_use_global = 0
 
