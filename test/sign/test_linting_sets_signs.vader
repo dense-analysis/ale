@@ -20,7 +20,8 @@ Before:
     let l:actual_sign_list = []
 
     for l:line in split(l:output, "\n")
-      let l:match = matchlist(l:line, 'line=\(\d\+\).*name=\(ALE[a-zA-Z]\+\)')
+      let l:match = matchlist(l:line, '\m\s*line=\(\d\+\).*name=\(ALE[a-zA-Z]\+\)')
+
 
       if len(l:match) > 0
         call add(l:actual_sign_list, [l:match[1], l:match[2]])
