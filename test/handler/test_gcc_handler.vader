@@ -1,3 +1,12 @@
+Execute(The GCC handler should ignore other lines of output):
+  AssertEqual
+  \ [],
+  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \   'foo',
+  \   'bar',
+  \   'baz',
+  \ ])
+
 Execute(GCC errors from included files should be parsed correctly):
   AssertEqual
   \ [
@@ -135,4 +144,18 @@ Execute(The GCC handler should handle notes with no previous message):
   \ ale#handlers#gcc#HandleGCCFormat(347, [
   \   '<stdin>:1:1: note: x',
   \   '<stdin>:1:1: note: x',
+  \ ])
+
+Execute(The GCC handler should interpret - as being the current file):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 6,
+  \     'col': 12,
+  \     'type': 'E',
+  \     'text': 'Some error',
+  \   },
+  \ ],
+  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \ '-:6:12: error: Some error',
   \ ])

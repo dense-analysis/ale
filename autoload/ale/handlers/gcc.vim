@@ -5,17 +5,6 @@ scriptencoding utf-8
 
 let s:pragma_error = '#pragma once in main file'
 
-function! s:AddIncludedErrors(output, include_lnum, include_lines) abort
-    if a:include_lnum > 0
-        call add(a:output, {
-        \   'lnum': a:include_lnum,
-        \   'type': 'E',
-        \   'text': 'Problems were found in the header (See :ALEDetail)',
-        \   'detail': join(a:include_lines, "\n"),
-        \})
-    endif
-endfunction
-
 function! s:IsHeaderFile(filename) abort
     return a:filename =~? '\v\.(h|hpp)$'
 endfunction
@@ -42,14 +31,6 @@ function! ale#handlers#gcc#ParseGCCVersion(lines) abort
 endfunction
 
 function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
-    let l:include_pattern = '\v^(In file included | *)from ([^:]*):(\d+)'
-    " Include pattern looks for lines like :
-    "
-    " In file included from test.h:1:0,
-    "                  from test.cpp:1:
-    let l:include_lnum = 0
-    let l:include_lines = []
-    let l:included_filename = ''
     " Look for lines like the following.
     "
     " <stdin>:8:5: warning: conversion lacks type at end of format [-Wformat=]
@@ -58,67 +39,42 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
     let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):(\d+)?:? ([^:]+): (.+)$'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
-
-        if empty(l:match)
-            let l:include_match = matchlist(l:line, l:include_pattern)
-            " If the line has an 'included from' pattern, store the line to
-            " create a gutter sign at the appropriate location in linted file
-            if !empty(l:include_match)
-                " We don't check if l:include_match[2] is linted filename
-                " because the last line matching include_pattern in a group
-                " of contiguous lines is probably concerning the linted file
-                " anyway
-                let l:include_lnum = l:include_match[3]
-            endif
-        else
-            " Filter out the pragma errors
-            if s:IsHeaderFile(bufname(bufnr('')))
-            \&& l:match[5][:len(s:pragma_error) - 1] is# s:pragma_error
-                continue
-            endif
-
-            " If the 'error type' is a note, make it detail related to
-            " the previous error parsed in output
-            if l:match[4] is# 'note'
-                if !empty(l:output)
-                    let l:output[-1]['detail'] =
-                    \   get(l:output[-1], 'detail', '')
-                    \   . s:RemoveUnicodeQuotes(l:match[0]) . "\n"
-                endif
-
-                continue
-            endif
-
-            " If l:include_lnum is non-null, then the error relates to
-            " an included file and l:include_lnum is the line number
-            " where a gutter sign would be needed in linted file
-
-            " The ternary operator in filename filters out the 'dummy'
-            " filenames like <nopath> or <stdin> and leave the location
-            " handling to engine#FixLocList
-            let l:item = {
-            \   'filename': (l:match[1][:0] is# '<') ? '' : l:match[1],
-            \   'lnum': str2nr(l:match[2]),
-            \   'type': l:match[4] is# 'error' ? 'E' : 'W',
-            \   'text': s:RemoveUnicodeQuotes(l:match[5]),
-            \}
-
-            if !empty(l:match[3])
-                let l:item.col = str2nr(l:match[3])
-            endif
-
-            " Finish filtering out filename : if the key exists but is empty,
-            " unlet it.
-            if get(l:item, 'filename', 'dummy_no_key_to_unlet') is# ''
-                unlet l:item['filename']
-            endif
-
-            call add(l:output, l:item)
-            " Reset include_lnum after an error has been added
-            let l:include_lnum = 0
+    for l:match in ale#util#GetMatches(a:lines, l:pattern)
+        " Filter out the pragma errors
+        if s:IsHeaderFile(bufname(bufnr('')))
+        \&& l:match[5][:len(s:pragma_error) - 1] is# s:pragma_error
+            continue
         endif
+
+        " If the 'error type' is a note, make it detail related to
+        " the previous error parsed in output
+        if l:match[4] is# 'note'
+            if !empty(l:output)
+                let l:output[-1]['detail'] =
+                \   get(l:output[-1], 'detail', '')
+                \   . s:RemoveUnicodeQuotes(l:match[0]) . "\n"
+            endif
+
+            continue
+        endif
+
+        let l:item = {
+        \   'lnum': str2nr(l:match[2]),
+        \   'type': l:match[4] is# 'error' ? 'E' : 'W',
+        \   'text': s:RemoveUnicodeQuotes(l:match[5]),
+        \}
+
+        if !empty(l:match[3])
+            let l:item.col = str2nr(l:match[3])
+        endif
+
+        " If the filename is something like <stdin>, <nofile> or -, then
+        " this is an error for the file we checked.
+        if l:match[1] isnot# '-' && l:match[1][0] isnot# '<'
+            let l:item['filename'] = l:match[1]
+        endif
+
+        call add(l:output, l:item)
     endfor
 
     return l:output
