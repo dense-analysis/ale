@@ -13,17 +13,17 @@ function! ale_linters#haml#hamllint#GetCommand(buffer) abort
     " See https://github.com/brigade/haml-lint/blob/master/lib/haml_lint/linter/rubocop.rb#L89
     "     HamlLint::Linter::RuboCop#rubocop_flags
     if !empty(l:rubocop_config_file_path)
-      if ale#Has('win32')
-        let l:prefix = 'set HAML_LINT_RUBOCOP_CONF=' . ale#Escape(l:rubocop_config_file_path) . ' &&'
-      else
-        let l:prefix = 'HAML_LINT_RUBOCOP_CONF=' . ale#Escape(l:rubocop_config_file_path)
-      endif
+        if ale#Has('win32')
+            let l:prefix = 'set HAML_LINT_RUBOCOP_CONF=' . ale#Escape(l:rubocop_config_file_path) . ' &&'
+        else
+            let l:prefix = 'HAML_LINT_RUBOCOP_CONF=' . ale#Escape(l:rubocop_config_file_path)
+        endif
     endif
 
     return (!empty(l:prefix) ? l:prefix . ' ' : '')
-    \ . 'haml-lint'
-    \ . (!empty(l:hamllint_config_file_path) ? ' --config ' . ale#Escape(l:hamllint_config_file_path) : '')
-    \ . ' %t'
+    \   . 'haml-lint'
+    \   . (!empty(l:hamllint_config_file_path) ? ' --config ' . ale#Escape(l:hamllint_config_file_path) : '')
+    \   . ' %t'
 endfunction
 
 function! ale_linters#haml#hamllint#Handle(buffer, lines) abort
