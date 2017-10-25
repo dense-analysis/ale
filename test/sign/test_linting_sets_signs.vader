@@ -34,7 +34,7 @@ Before:
   \ 'name': 'testlinter',
   \ 'callback': 'TestCallback',
   \ 'executable': has('win32') ? 'cmd' : 'echo',
-  \ 'command': 'echo foo bar',
+  \ 'command': has('win32') ? 'echo foo bar' : '/bin/sh -c ''echo foo bar''',
   \})
 
 
