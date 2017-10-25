@@ -66,10 +66,8 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
             " If the line has an 'included from' pattern, store the line to
             " create a gutter sign at the appropriate location in linted file
             if !empty(l:include_match)
-                " TODO : check that the l:include_match[2] corresponds to the
-                " linted file
-                " We probably don't need to check for l:include_match[2]
-                " because the last line following include_pattern in a group
+                " We don't check if l:include_match[2] is linted filename
+                " because the last line matching include_pattern in a group
                 " of contiguous lines is probably concerning the linted file
                 " anyway
                 let l:include_lnum = l:include_match[3]
@@ -89,11 +87,9 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
                 continue
             endif
 
-            " TODO : Compare l:match[1] and the linted filename, to know if we
-            " can just add l:item to l:output or if we also need to add a
-            " gutter sign at l:include_lnum.
-            " Hint : We probably only need to check l:include_lnum value since
-            " it should be non-null only if the gutter is needed.
+            " If l:include_lnum is non-null, then the error relates to
+            " an included file and l:include_lnum is the line number
+            " where a gutter sign would be needed in linted file
 
             " The ternary operator in filename filters out the 'dummy'
             " filenames like <nopath> or <stdin> and leave the location

@@ -279,10 +279,3 @@ Execute(Move .git/HEAD back):
 
   unlet! g:temp_head_filename
   unlet! g:head_filename
-
-" TODO : Test using test_c_projects/included_error/test.h to see if headers are properly analysed
-" the error should be about cout being undefined l. 6 ; and #include <iostream> should not be a problem
-
-" TODO : Test the appearance of gutter sign on the test_c_projects/included_error/test.cpp as errors
-" are found in the included header
-" If we keep the gutter sign, we probably want the ale_error_msg to be the one of the included error.
