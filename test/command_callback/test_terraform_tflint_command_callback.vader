@@ -1,0 +1,24 @@
+Before:
+
+  Save g:ale_terraform_tflint_executable
+  Save g:ale_terraform_tflint_options
+
+  runtime ale_linters/terraform/tflint.vim
+
+
+After:
+  Restore
+  call ale#linter#Reset()
+
+
+Execute(The default command should be good):
+  AssertEqual
+  \ 'tflint -f json %t',
+  \ ale_linters#terraform#tflint#GetCommand(bufnr(''))
+
+Execute(Overriding things should work):
+  let g:ale_terraform_tflint_executable = 'fnord'
+  let g:ale_terraform_tflint_options = '--whatever'
+  AssertEqual
+  \ 'fnord --whatever %t',
+  \ ale_linters#terraform#tflint#GetCommand(bufnr(''))
