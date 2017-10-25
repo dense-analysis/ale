@@ -322,6 +322,7 @@ Notes:
 * SQL: `sqlint`
 * Swift: `swiftlint`, `swiftformat`
 * Tcl: `nagelfar`!!
+* Terraform: `tflint`
 * Texinfo: `proselint`, `write-good`
 * Text^: `proselint`, `vale`, `write-good`
 * Thrift: `thrift`
