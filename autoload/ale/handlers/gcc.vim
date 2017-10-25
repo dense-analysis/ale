@@ -82,8 +82,12 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
             " If the 'error type' is a note, make it detail related to
             " the previous error parsed in output
             if l:match[4] is# 'note'
-                let l:output[-1]['detail'] = get(l:output[-1], 'detail', '')
-                            \    . s:RemoveUnicodeQuotes(l:match[0]) . "\n"
+                if !empty(l:output)
+                    let l:output[-1]['detail'] =
+                    \   get(l:output[-1], 'detail', '')
+                    \   . s:RemoveUnicodeQuotes(l:match[0]) . "\n"
+                endif
+
                 continue
             endif
 

@@ -128,3 +128,11 @@ Execute(The GCC handler should handle syntax errors):
   \ '<stdin>:4: error: ''cat'' was not declared in this scope',
   \ '<stdin>:12: error: expected `;'' before ''o''',
   \ ])
+
+Execute(The GCC handler should handle notes with no previous message):
+  AssertEqual
+  \ [],
+  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \   '<stdin>:1:1: note: x',
+  \   '<stdin>:1:1: note: x',
+  \ ])
