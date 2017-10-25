@@ -66,13 +66,14 @@ function! ale#handlers#haskell#HandleGHCFormat(buffer, lines) abort
 
         " Replace temporary filenames in problem messages with the basename
         let l:text = substitute(l:text, l:temp_filename_regex, l:basename, 'g')
+        let l:detail = map(copy(a:lines), {key, val -> substitute(val, l:temp_filename_regex, l:basename, 'g')})
 
         call add(l:output, {
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
         \   'text': l:text,
         \   'type': l:type,
-        \   'detail': join(a:lines, "\n"),
+        \   'detail': join(l:detail, "\n"),
         \})
     endfor
 
