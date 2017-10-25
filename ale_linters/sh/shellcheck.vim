@@ -43,11 +43,12 @@ function! ale_linters#sh#shellcheck#GetCommand(buffer) abort
     let l:exclude_option = ale#Var(a:buffer, 'sh_shellcheck_exclusions')
     let l:dialect = ale_linters#sh#shellcheck#GetDialectArgument(a:buffer)
 
-    return ale_linters#sh#shellcheck#GetExecutable(a:buffer)
+    return ale#path#BufferCdString(a:buffer)
+    \   . ale#Escape(ale_linters#sh#shellcheck#GetExecutable(a:buffer))
     \   . (!empty(l:dialect) ? ' -s ' . l:dialect : '')
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . (!empty(l:exclude_option) ? ' -e ' . l:exclude_option : '')
-    \   . ' -f gcc -'
+    \   . ' -x -f gcc -'
 endfunction
 
 call ale#linter#Define('sh', {
