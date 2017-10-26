@@ -4,8 +4,8 @@
 " See: https://www.terraform.io/
 "      https://github.com/wata727/tflint
 
-let g:ale_terraform_tflint_options = get(g:, 'ale_terraform_tflint_options' ,'-f json')
-let g:ale_terraform_tflint_executable = get(g:, 'ale_terraform_tflint_executable', 'tflint')
+call ale#Set('terraform_tflint_options', '')
+call ale#Set('terraform_tflint_executable', 'tflint')
 
 function! ale_linters#terraform#tflint#Handle(buffer, lines) abort
     let l:output = []
@@ -30,10 +30,21 @@ function! ale_linters#terraform#tflint#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#terraform#tflint#GetCommand(buffer) abort
-    return printf('%s %s %%t',
-    \   ale#Var(a:buffer, 'terraform_tflint_executable'),
-    \   escape(ale#Var(a:buffer, 'terraform_tflint_options'), '~')
-    \)
+    let l:cmd = ale#Escape(ale#Var(a:buffer, 'terraform_tflint_executable'))
+
+    let l:config_file = ale#path#FindNearestFile(a:buffer, '.tflint.hcl')
+    if !empty(l:config_file)
+        let l:cmd .= ' --config ' . ale#Escape(l:config_file)
+    endif
+
+    let l:opts = ale#Var(a:buffer, 'terraform_tflint_options')
+    if !empty(l:opts)
+        let l:cmd .= ' ' . l:opts
+    endif
+
+    let l:cmd .= ' -f json'
+
+    return l:cmd
 endfunction
 
 call ale#linter#Define('terraform', {
@@ -42,3 +53,5 @@ call ale#linter#Define('terraform', {
 \   'command_callback': 'ale_linters#terraform#tflint#GetCommand',
 \   'callback': 'ale_linters#terraform#tflint#Handle',
 \})
+
+" vim:sw=4
