@@ -1,0 +1,28 @@
+Before:
+  runtime! ale_linters/terraform/tflint.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The tflint handler should parse items correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 12,
+  \     'text': 'be warned, traveller',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 9,
+  \     'text': 'error message',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 5,
+  \     'text': 'just so ya know',
+  \     'type': 'I',
+  \   },
+  \ ],
+  \ ale_linters#terraform#tflint#Handle(123, [
+  \ '[ { "detector": "aws_db_instance_readable_password", "type": "WARNING", "message": "be warned, traveller", "line": 12, "file": "github.com/wata727/example-module/aws_db_instance.tf", "link": "https://github.com/wata727/tflint/blob/master/docs/aws_db_instance_readable_password.md" }, { "detector": "aws_elasticache_cluster_invalid_type", "type": "ERROR", "message": "error message", "line": 9, "file": "github.com/wata727/example-module/aws_elasticache_cluster.tf", "link": "https://github.com/wata727/tflint/blob/master/docs/aws_elasticache_cluster_invalid_type.md" }, { "detector": "aws_instance_not_specified_iam_profile", "type": "NOTICE", "message": "just so ya know", "line": 5, "file": "github.com/wata727/example-module/aws_instance.tf", "link": "https://github.com/wata727/tflint/blob/master/docs/aws_instance_not_specified_iam_profile.md" } ]'
+  \ ])
