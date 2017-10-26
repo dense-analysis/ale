@@ -13,6 +13,6 @@ Execute(adjacent config file should be found):
   \   ale#Escape('tflint')
   \   . ' --config '
   \   . ale#Escape(ale#path#Winify(g:dir . '/tflint-test-files/foo/.tflint.hcl'))
-  \   . ' -f json'
+  \   . ' -f json %t'
   \ ),
   \ ale_linters#terraform#tflint#GetCommand(bufnr(''))
