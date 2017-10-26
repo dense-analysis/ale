@@ -29,6 +29,10 @@ function! ale_linters#terraform#tflint#Handle(buffer, lines) abort
     return l:output
 endfunction
 
+function! ale_linters#terraform#tflint#GetExecutable(buffer) abort
+    return ale#Var(a:buffer, 'terraform_tflint_executable')
+endfunction
+
 function! ale_linters#terraform#tflint#GetCommand(buffer) abort
     let l:cmd = ale#Escape(ale#Var(a:buffer, 'terraform_tflint_executable'))
 
@@ -49,7 +53,7 @@ endfunction
 
 call ale#linter#Define('terraform', {
 \   'name': 'tflint',
-\   'executable': 'tflint',
+\   'executable_callback': 'ale_linters#terraform#tflint#GetExecutable',
 \   'command_callback': 'ale_linters#terraform#tflint#GetCommand',
 \   'callback': 'ale_linters#terraform#tflint#Handle',
 \})
