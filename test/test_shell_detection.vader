@@ -81,3 +81,23 @@ Execute(The ksh dialect should be used for shellcheck if b:is_kornshell is 1):
   let b:is_kornshell = 1
 
   AssertEqual 'ksh', ale_linters#sh#shellcheck#GetDialectArgument(bufnr(''))
+
+Given(A file with /bin/ash):
+  #!/bin/ash
+
+Execute(The ash dialect should be used for the shell and the base function):
+  AssertEqual 'ash', ale#handlers#sh#GetShellType(bufnr(''))
+  AssertEqual 'ash', ale_linters#sh#shell#GetExecutable(bufnr(''))
+
+Execute(dash should be used for shellcheck, which has no ash dialect):
+  AssertEqual 'dash', ale_linters#sh#shellcheck#GetDialectArgument(bufnr(''))
+
+Given(A file with /bin/dash):
+  #!/bin/dash
+
+Execute(The dash dialect should be used for the shell and the base function):
+  AssertEqual 'dash', ale#handlers#sh#GetShellType(bufnr(''))
+  AssertEqual 'dash', ale_linters#sh#shell#GetExecutable(bufnr(''))
+
+Execute(dash should be used for shellcheck):
+  AssertEqual 'dash', ale_linters#sh#shellcheck#GetDialectArgument(bufnr(''))
