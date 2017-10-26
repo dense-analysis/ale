@@ -125,6 +125,7 @@ CONTENTS                                                         *ale-contents*
       perlcritic..........................|ale-perl-perlcritic|
     php...................................|ale-php-options|
       hack................................|ale-php-hack|
+      hackfmt.............................|ale-php-hackfmt|
       langserver..........................|ale-php-langserver|
       phan................................|ale-php-phan|
       phpcbf..............................|ale-php-phpcbf|
@@ -301,7 +302,7 @@ Notes:
 * Objective-C++: `clang`
 * OCaml: `merlin` (see |ale-ocaml-merlin|)
 * Perl: `perl -c`, `perl-critic`
-* PHP: `hack`, `langserver`, `phan`, `php -l`, `phpcs`, `phpmd`, `phpstan`, `phpcbf`
+* PHP: `hack`, `hackfmt`, `langserver`, `phan`, `php -l`, `phpcs`, `phpmd`, `phpstan`, `phpcbf`
 * Pod: `proselint`, `write-good`
 * Pug: `pug-lint`
 * Puppet: `puppet`, `puppet-lint`
