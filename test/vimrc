@@ -6,9 +6,9 @@ let g:ale_set_lists_synchronously = 1
 " Load builtin plugins
 " We need this because run_vim.sh sets -i NONE
 if has('win32')
-    set runtimepath=$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,C:\vader,C:\testplugin
+    set runtimepath=C:\testplugin,C:\vader,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,C:\testplugin\after
 else
-    set runtimepath=/home/vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,/testplugin,/vader
+    set runtimepath=/testplugin,/vader,/home/vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,/testplugin/after
 endif
 
 " The following is just an example

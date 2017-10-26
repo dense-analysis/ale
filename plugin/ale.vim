@@ -32,9 +32,6 @@ if !s:has_features
     finish
 endif
 
-" Add the after directory to the runtimepath
-let &runtimepath .= ',' . expand('<sfile>:p:h:h') . '/after'
-
 " Set this flag so that other plugins can use it, like airline.
 let g:loaded_ale = 1
 
