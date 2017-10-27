@@ -33,7 +33,17 @@ if !s:has_features
 endif
 
 " Add the after directory to the runtimepath
-let &runtimepath .= ',' . expand('<sfile>:p:h:h') . '/after'
+let s:should_add_after_dir = 1
+for s:path in split(&runtimepath, ',')
+    if s:path =~# '\/ale\/after$'
+        let s:should_add_after_dir = 0
+    endif
+endfor
+if s:should_add_after_dir
+    let &runtimepath .= ',' . expand('<sfile>:p:h:h') . '/after'
+endif
+unlet! s:path
+unlet! s:should_add_after_dir
 
 " Set this flag so that other plugins can use it, like airline.
 let g:loaded_ale = 1
