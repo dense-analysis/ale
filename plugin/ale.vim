@@ -33,17 +33,20 @@ if !s:has_features
 endif
 
 " Add the after directory to the runtimepath
+let s:sep = has('win32') ? '\' : '/'
 let s:should_add_after_dir = 1
 for s:path in split(&runtimepath, ',')
-    if s:path =~# '\/ale\/after$'
+    if s:path =~# s:sep . 'after$' &&
+    \  filereadable(s:path . s:sep . 'plugin' . s:sep . 'ale.vim')
         let s:should_add_after_dir = 0
         break
     endif
 endfor
+unlet! s:sep
+unlet! s:path
 if s:should_add_after_dir
     let &runtimepath .= ',' . expand('<sfile>:p:h:h') . '/after'
 endif
-unlet! s:path
 unlet! s:should_add_after_dir
 
 " Set this flag so that other plugins can use it, like airline.
