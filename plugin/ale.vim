@@ -36,7 +36,9 @@ endif
 let g:ale_emit_conflict_warnings = get(g:, 'ale_emit_conflict_warnings', 1)
 
 if g:ale_emit_conflict_warnings
+\&& match(&runtimepath, '[/\\]ale[/\\]after') < 0
     " Add the after directory to the runtimepath
+    " This is only done if the after directory isn't already in runtimepath
     let &runtimepath .= ',' . expand('<sfile>:p:h:h') . '/after'
 endif
 
