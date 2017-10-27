@@ -283,6 +283,13 @@ function! s:TimerHandler(...) abort
 endfunction
 
 function! ale#completion#Queue() abort
+    let l:time = get(b:, 'ale_complete_done_time', 0)
+
+    if l:time && ale#util#ClockMilliseconds() - l:time < 100
+        " Do not ask for completions shortly after we just closed the menu.
+        return
+    endif
+
     let s:timer_pos = getcurpos()[1:2]
 
     " If we changed the text again while we're still waiting for a response,
@@ -311,6 +318,9 @@ function! ale#completion#Done() abort
         let &l:completeopt = b:ale_old_completopt
         unlet b:ale_old_completopt
     endif
+
+    " Set a timestamp, so we can avoid requesting completions again.
+    let b:ale_complete_done_time = ale#util#ClockMilliseconds()
 endfunction
 
 function! s:Setup(enabled) abort

@@ -9,13 +9,17 @@ After:
 Execute(flow should return a command to run if a .flowconfig file exists):
   call ale#test#SetFilename('flow/a/sub/dummy')
 
-  AssertEqual '''flow'' check-contents --respect-pragma --json --from ale %s', ale_linters#javascript#flow#GetCommand(bufnr('%'), [])
+  AssertEqual
+  \ ale#Escape('flow')
+  \   . ' check-contents --respect-pragma --json --from ale %s',
+  \ ale_linters#javascript#flow#GetCommand(bufnr('%'), [])
 
 Execute(flow should should not use --respect-pragma for old versions):
   call ale#test#SetFilename('flow/a/sub/dummy')
 
   AssertEqual
-  \ '''flow'' check-contents --json --from ale %s',
+  \ ale#Escape('flow')
+  \   . ' check-contents --json --from ale %s',
   \ ale_linters#javascript#flow#GetCommand(bufnr('%'), [
   \   'Warning: `flow --version` is deprecated in favor of `flow version`',
   \   'Flow, a static type checker for JavaScript, version 0.27.0',

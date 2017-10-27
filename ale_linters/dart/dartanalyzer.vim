@@ -13,7 +13,7 @@ function! ale_linters#dart#dartanalyzer#GetCommand(buffer) abort
 
     return ale#Escape(l:executable)
     \   . (!empty(l:path) ? ' --packages ' . ale#Escape(l:path) : '')
-    \   . ' %t'
+    \   . ' %s'
 endfunction
 
 function! ale_linters#dart#dartanalyzer#Handle(buffer, lines) abort
@@ -37,4 +37,5 @@ call ale#linter#Define('dart', {
 \   'executable_callback': 'ale_linters#dart#dartanalyzer#GetExecutable',
 \   'command_callback': 'ale_linters#dart#dartanalyzer#GetCommand',
 \   'callback': 'ale_linters#dart#dartanalyzer#Handle',
+\   'lint_file': 1,
 \})

@@ -27,6 +27,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['javascript', 'typescript'],
 \       'description': 'Apply eslint --fix to a file.',
 \   },
+\   'mix_format': {
+\       'function': 'ale#fixers#mix_format#Fix',
+\       'suggested_filetypes': ['elixir'],
+\       'description': 'Apply mix format to a file.',
+\   },
 \   'format': {
 \       'function': 'ale#fixers#format#Fix',
 \       'suggested_filetypes': ['elm'],
@@ -106,6 +111,16 @@ let s:default_registry = {
 \       'function': 'ale#fixers#tslint#Fix',
 \       'suggested_filetypes': ['typescript'],
 \       'description': 'Fix typescript files with tslint --fix.',
+\   },
+\   'rustfmt': {
+\       'function': 'ale#fixers#rustfmt#Fix',
+\       'suggested_filetypes': ['rust'],
+\       'description': 'Fix Rust files with Rustfmt.',
+\   },
+\   'hfmt': {
+\       'function': 'ale#fixers#hfmt#Fix',
+\       'suggested_filetypes': ['haskell'],
+\       'description': 'Fix Haskell files with hfmt.',
 \   },
 \}
 

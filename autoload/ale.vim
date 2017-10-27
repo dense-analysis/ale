@@ -61,6 +61,12 @@ function! ale#ShouldDoNothing(buffer) abort
         return 1
     endif
 
+    let l:filename = fnamemodify(bufname(a:buffer), ':t')
+
+    if l:filename is# '.'
+        return 1
+    endif
+
     " Do nothing if running in the sandbox
     if ale#util#InSandbox()
         return 1

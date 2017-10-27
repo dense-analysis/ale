@@ -1,5 +1,30 @@
-" Author: Patrick Lewis - https://github.com/patricklewis
+" Author: Patrick Lewis - https://github.com/patricklewis, thenoseman - https://github.com/thenoseman
 " Description: haml-lint for Haml files
+
+function! ale_linters#haml#hamllint#GetCommand(buffer) abort
+    let l:prefix = ''
+
+    let l:rubocop_config_file_path = ale#path#FindNearestFile(a:buffer, '.rubocop.yml')
+    let l:hamllint_config_file_path = ale#path#FindNearestFile(a:buffer, '.haml-lint.yml')
+
+    " Set HAML_LINT_RUBOCOP_CONF variable as it is needed for haml-lint to
+    " pick up the rubocop config.
+    "
+    " See https://github.com/brigade/haml-lint/blob/master/lib/haml_lint/linter/rubocop.rb#L89
+    "     HamlLint::Linter::RuboCop#rubocop_flags
+    if !empty(l:rubocop_config_file_path)
+        if ale#Has('win32')
+            let l:prefix = 'set HAML_LINT_RUBOCOP_CONF=' . ale#Escape(l:rubocop_config_file_path) . ' &&'
+        else
+            let l:prefix = 'HAML_LINT_RUBOCOP_CONF=' . ale#Escape(l:rubocop_config_file_path)
+        endif
+    endif
+
+    return (!empty(l:prefix) ? l:prefix . ' ' : '')
+    \   . 'haml-lint'
+    \   . (!empty(l:hamllint_config_file_path) ? ' --config ' . ale#Escape(l:hamllint_config_file_path) : '')
+    \   . ' %t'
+endfunction
 
 function! ale_linters#haml#hamllint#Handle(buffer, lines) abort
     " Matches patterns like the following:
@@ -21,6 +46,6 @@ endfunction
 call ale#linter#Define('haml', {
 \   'name': 'hamllint',
 \   'executable': 'haml-lint',
-\   'command': 'haml-lint %t',
+\   'command_callback': 'ale_linters#haml#hamllint#GetCommand',
 \   'callback': 'ale_linters#haml#hamllint#Handle'
 \})

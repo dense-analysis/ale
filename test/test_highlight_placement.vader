@@ -37,7 +37,7 @@ Before:
   call ale#linter#Define('testft', {
   \ 'name': 'x',
   \ 'executable': has('win32') ? 'cmd': 'echo',
-  \ 'command': 'echo',
+  \ 'command': has('win32') ? 'echo' : '/bin/sh -c ''echo''',
   \ 'callback': 'GenerateResults',
   \})
   highlight link SomeOtherGroup SpellBad

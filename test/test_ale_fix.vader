@@ -11,11 +11,18 @@ Before:
   let g:ale_enabled = 0
   let g:ale_echo_cursor = 0
   let g:ale_run_synchronously = 1
+  let g:ale_set_lists_synchronously = 1
   let g:ale_fix_buffer_data = {}
   let g:ale_fixers = {
   \ 'testft': [],
   \}
-  let &shell = '/bin/bash'
+
+  if !has('win32')
+    let &shell = '/bin/bash'
+  endif
+
+  call ale#test#SetDirectory('/testplugin/test')
+  call ale#test#SetFilename('test.txt')
 
   function AddCarets(buffer, lines) abort
     " map() is applied to the original lines here.
@@ -67,6 +74,7 @@ Before:
 After:
   Restore
   unlet! g:ale_run_synchronously
+  unlet! g:ale_set_lists_synchronously
   unlet! g:ale_emulate_job_failure
   unlet! b:ale_fixers
   delfunction AddCarets
@@ -79,6 +87,9 @@ After:
   delfunction RemoveLastLineOneArg
   delfunction TestCallback
   delfunction SetUpLinters
+
+  call ale#test#RestoreDirectory()
+
   call ale#fix#registry#ResetToDefaults()
   call ale#linter#Reset()
 
@@ -129,8 +140,13 @@ Expect(Only the second function should be applied):
   $c
 
 Execute(ALEFix should allow commands to be run):
-  let g:ale_fixers.testft = ['CatLine']
-  ALEFix
+  if has('win32')
+    " Just skip this test on Windows, we can't run it.
+    call setline(1, ['a', 'b', 'c', 'd'])
+  else
+    let g:ale_fixers.testft = ['CatLine']
+    ALEFix
+  endif
 
 Expect(An extra line should be added):
   a
@@ -139,22 +155,39 @@ Expect(An extra line should be added):
   d
 
 Execute(ALEFix should allow temporary files to be read):
-  let g:ale_fixers.testft = ['ReplaceWithTempFile']
-  ALEFix
+  if has('win32')
+    " Just skip this test on Windows, we can't run it.
+    call setline(1, ['x'])
+    2,3d
+  else
+    let g:ale_fixers.testft = ['ReplaceWithTempFile']
+    ALEFix
+  endif
 
 Expect(The line we wrote to the temporary file should be used here):
   x
 
 Execute(ALEFix should allow jobs and simple functions to be combined):
-  let g:ale_fixers.testft = ['ReplaceWithTempFile', 'AddDollars']
-  ALEFix
+  if has('win32')
+    " Just skip this test on Windows, we can't run it.
+    call setline(1, ['$x'])
+    2,3d
+  else
+    let g:ale_fixers.testft = ['ReplaceWithTempFile', 'AddDollars']
+    ALEFix
+  endif
 
 Expect(The lines from the temporary file should be modified):
   $x
 
 Execute(ALEFix should send lines modified by functions to jobs):
-  let g:ale_fixers.testft = ['AddDollars', 'CatLine']
-  ALEFix
+  if has('win32')
+    " Just skip this test on Windows, we can't run it.
+    call setline(1, ['$a', '$b', '$c', 'd'])
+  else
+    let g:ale_fixers.testft = ['AddDollars', 'CatLine']
+    ALEFix
+  endif
 
 Expect(The lines should first be modified by the function, then the job):
   $a
@@ -257,18 +290,20 @@ Execute(ALEFix should save files on the save event):
   AssertEqual ['$a', '$b', '$c'], readfile('fix_test_file')
   Assert !&modified, 'The was marked as ''modified'''
 
-  " We have run the linter.
-  AssertEqual [{
-  \   'bufnr': bufnr('%'),
-  \   'lnum': 1,
-  \   'vcol': 0,
-  \   'col': 1,
-  \   'text': 'xxx',
-  \   'type': 'E',
-  \   'nr': -1,
-  \   'pattern': '',
-  \   'valid': 1,
-  \}], getloclist(0)
+  if !has('win32')
+    " We should have run the linter.
+    AssertEqual [{
+    \   'bufnr': bufnr('%'),
+    \   'lnum': 1,
+    \   'vcol': 0,
+    \   'col': 1,
+    \   'text': 'xxx',
+    \   'type': 'E',
+    \   'nr': -1,
+    \   'pattern': '',
+    \   'valid': 1,
+    \}], getloclist(0)
+  endif
 
 Expect(The buffer should be modified):
   $a
@@ -294,18 +329,20 @@ Execute(ALEFix should still lint with no linters to be applied):
 
   Assert !filereadable('fix_test_file'), 'The file should not have been saved'
 
-  " We have run the linter.
-  AssertEqual [{
-  \   'bufnr': bufnr('%'),
-  \   'lnum': 1,
-  \   'vcol': 0,
-  \   'col': 1,
-  \   'text': 'xxx',
-  \   'type': 'E',
-  \   'nr': -1,
-  \   'pattern': '',
-  \   'valid': 1,
-  \}], getloclist(0)
+  if !has('win32')
+    " We have run the linter.
+    AssertEqual [{
+    \   'bufnr': bufnr('%'),
+    \   'lnum': 1,
+    \   'vcol': 0,
+    \   'col': 1,
+    \   'text': 'xxx',
+    \   'type': 'E',
+    \   'nr': -1,
+    \   'pattern': '',
+    \   'valid': 1,
+    \}], getloclist(0)
+  endif
 
 Expect(The buffer should be the same):
   a
@@ -326,18 +363,20 @@ Execute(ALEFix should still lint when nothing was fixed on save):
 
   Assert !filereadable('fix_test_file'), 'The file should not have been saved'
 
-  " We have run the linter.
-  AssertEqual [{
-  \   'bufnr': bufnr('%'),
-  \   'lnum': 1,
-  \   'vcol': 0,
-  \   'col': 1,
-  \   'text': 'xxx',
-  \   'type': 'E',
-  \   'nr': -1,
-  \   'pattern': '',
-  \   'valid': 1,
-  \}], getloclist(0)
+  if !has('win32')
+    " We should have run the linter.
+    AssertEqual [{
+    \   'bufnr': bufnr('%'),
+    \   'lnum': 1,
+    \   'vcol': 0,
+    \   'col': 1,
+    \   'text': 'xxx',
+    \   'type': 'E',
+    \   'nr': -1,
+    \   'pattern': '',
+    \   'valid': 1,
+    \}], getloclist(0)
+  endif
 
 Expect(The buffer should be the same):
   a
@@ -358,7 +397,7 @@ Execute(ale#fix#InitBufferData() should set up the correct data):
   \ bufnr(''): {
   \   'temporary_directory_list': [],
   \   'vars': b:,
-  \   'filename': simplify(getcwd() . '/fix_test_file'),
+  \   'filename': ale#path#Winify(getcwd() . '/fix_test_file'),
   \   'done': 0,
   \   'lines_before': ['a', 'b', 'c'],
   \   'should_save': 1,
@@ -374,8 +413,13 @@ Expect(There should be only two lines):
   b
 
 Execute(ALEFix functions returning jobs should be able to accept one argument):
-  let g:ale_fixers.testft = ['CatLine']
-  ALEFix
+  if has('win32')
+    " Just skip this test on Windows, we can't run it.
+    call setline(1, ['a', 'b', 'c', 'd'])
+  else
+    let g:ale_fixers.testft = ['CatLine']
+    ALEFix
+  endif
 
 Expect(An extra line should be added):
   a

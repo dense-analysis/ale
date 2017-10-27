@@ -1,6 +1,8 @@
 Before:
   Save &l:statusline
 
+  call ale#test#SetDirectory('/testplugin/test')
+
   let b:funky_command_created = 0
 
   " We will test for the existence of this command, so create one if needed.
@@ -10,6 +12,8 @@ Before:
   endif
 
 After:
+  call ale#test#RestoreDirectory()
+
   if b:funky_command_created
     delcommand CtrlPFunky
     let b:funky_command_created = 0
@@ -23,5 +27,15 @@ Execute(ALE shouldn't do much of anything for ctrlp-funky buffers):
   Assert !ale#ShouldDoNothing(bufnr('')), 'The preliminary check failed'
 
   let &l:statusline = '%#CtrlPMode2# prt %*%#CtrlPMode1# line %* <mru>={%#CtrlPMode1# funky %*}=<fil> <-> %=%<%#CtrlPMode2# %{getcwd()} %*'
+
+  Assert ale#ShouldDoNothing(bufnr(''))
+
+Execute(ALE shouldn't try to check buffers with '.' as the filename):
+  AssertEqual
+  \ 0,
+  \ ale#ShouldDoNothing(bufnr('')),
+  \ 'ShouldDoNothing() was 1 for some other reason'
+
+  silent! noautocmd file .
 
   Assert ale#ShouldDoNothing(bufnr(''))
