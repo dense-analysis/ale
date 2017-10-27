@@ -117,6 +117,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['rust'],
 \       'description': 'Fix Rust files with Rustfmt.',
 \   },
+\   'hackfmt': {
+\       'function': 'ale#fixers#hackfmt#Fix',
+\       'suggested_filetypes': ['php'],
+\       'description': 'Fix Hack files with hackfmt.',
+\   },
 \   'hfmt': {
 \       'function': 'ale#fixers#hfmt#Fix',
 \       'suggested_filetypes': ['haskell'],
