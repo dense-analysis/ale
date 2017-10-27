@@ -37,6 +37,7 @@ let s:should_add_after_dir = 1
 for s:path in split(&runtimepath, ',')
     if s:path =~# '\/ale\/after$'
         let s:should_add_after_dir = 0
+        break
     endif
 endfor
 if s:should_add_after_dir
