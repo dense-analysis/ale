@@ -2,6 +2,7 @@ Before:
   Save g:ale_buffer_info
   Save g:ale_set_signs
   Save g:ale_set_lists_synchronously
+  Save g:ale_run_synchronously
 
   let g:ale_set_signs = 1
   let g:ale_set_lists_synchronously = 1
@@ -175,3 +176,31 @@ Execute(ALEToggle should skip filename keys and preserve them):
   \   'history': [],
   \ },
   \ get(g:ale_buffer_info, '/foo/bar/baz.txt', {})
+
+Execute(ALEDisable should reset everything and stay disabled):
+  " We can just lint sychronously for these tests.
+  let g:ale_run_synchronously = 1
+
+  call ale#Lint()
+
+  AssertEqual g:expected_loclist, getloclist(0)
+
+  ALEDisable
+
+  AssertEqual [], getloclist(0)
+  AssertEqual 0, g:ale_enabled
+
+  ALEDisable
+
+  AssertEqual [], getloclist(0)
+  AssertEqual 0, g:ale_enabled
+
+Execute(ALEEnable should enable ALE and lint again):
+  " We can just lint sychronously for these tests.
+  let g:ale_enabled = 0
+  let g:ale_run_synchronously = 1
+
+  ALEEnable
+
+  AssertEqual g:expected_loclist, getloclist(0)
+  AssertEqual 1, g:ale_enabled
