@@ -85,21 +85,36 @@ function! ale#toggle#InitAuGroups() abort
     endif
 endfunction
 
+function! s:EnablePreamble() abort
+    " Set pattern options again, if enabled.
+    if g:ale_pattern_options_enabled
+        call ale#pattern_options#SetOptions()
+    endif
+
+    " Lint immediately, including running linters against the file.
+    call ale#Queue(0, 'lint_file')
+
+    if g:ale_set_balloons
+        call ale#balloon#Enable()
+    endif
+endfunction
+
+function! s:DisablePostamble() abort
+    " Remove highlights for the current buffer now.
+    if g:ale_set_highlights
+        call ale#highlight#UpdateHighlights()
+    endif
+
+    if g:ale_set_balloons
+        call ale#balloon#Disable()
+    endif
+endfunction
+
 function! ale#toggle#Toggle() abort
     let g:ale_enabled = !get(g:, 'ale_enabled')
 
     if g:ale_enabled
-        " Set pattern options again, if enabled.
-        if g:ale_pattern_options_enabled
-            call ale#pattern_options#SetOptions()
-        endif
-
-        " Lint immediately, including running linters against the file.
-        call ale#Queue(0, 'lint_file')
-
-        if g:ale_set_balloons
-            call ale#balloon#Enable()
-        endif
+        call s:EnablePreamble()
     else
         for l:key in keys(g:ale_buffer_info)
             " The key could be a filename or a buffer number, so try and
@@ -114,14 +129,7 @@ function! ale#toggle#Toggle() abort
             endif
         endfor
 
-        " Remove highlights for the current buffer now.
-        if g:ale_set_highlights
-            call ale#highlight#UpdateHighlights()
-        endif
-
-        if g:ale_set_balloons
-            call ale#balloon#Disable()
-        endif
+        call s:DisablePostamble()
     endif
 
     call ale#toggle#InitAuGroups()
@@ -129,6 +137,11 @@ endfunction
 
 function! ale#toggle#Enable() abort
     if !g:ale_enabled
+        " Set pattern options again, if enabled.
+        if g:ale_pattern_options_enabled
+            call ale#pattern_options#SetOptions()
+        endif
+
         call ale#toggle#Toggle()
     endif
 endfunction
@@ -136,5 +149,42 @@ endfunction
 function! ale#toggle#Disable() abort
     if g:ale_enabled
         call ale#toggle#Toggle()
+    endif
+endfunction
+
+function! ale#toggle#ToggleBuffer(buffer) abort
+    " Get the new value for the toggle.
+    let l:enabled = !getbufvar(a:buffer, 'ale_enabled', 1)
+
+    " Disabling ALE globally removes autocmd events, so we cannot enable
+    " linting locally when linting is disabled globally
+    if l:enabled && !g:ale_enabled
+        echom 'ALE cannot be enabled locally when disabled globally'
+        return
+    endif
+
+    call setbufvar(a:buffer, 'ale_enabled', l:enabled)
+
+    if l:enabled
+        call s:EnablePreamble()
+    else
+        " Stop all jobs and clear the results for everything, and delete
+        " all of the data we stored for the buffer.
+        call ale#engine#Cleanup(a:buffer)
+
+        call s:DisablePostamble()
+    endif
+endfunction
+
+function! ale#toggle#EnableBuffer(buffer) abort
+    " ALE is enabled by default for all buffers.
+    if !getbufvar(a:buffer, 'ale_enabled', 1)
+        call ale#toggle#ToggleBuffer(a:buffer)
+    endif
+endfunction
+
+function! ale#toggle#DisableBuffer(buffer) abort
+    if getbufvar(a:buffer, 'ale_enabled', 1)
+        call ale#toggle#ToggleBuffer(a:buffer)
     endif
 endfunction
