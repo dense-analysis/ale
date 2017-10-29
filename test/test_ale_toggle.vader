@@ -215,6 +215,30 @@ Execute(ALEEnable should enable ALE and lint again):
   AssertEqual g:expected_loclist, getloclist(0)
   AssertEqual 1, g:ale_enabled
 
+Execute(ALEReset should reset everything for a buffer):
+  AssertEqual 'foobar', &filetype
+
+  call ale#Lint()
+
+  " First check that everything is there...
+  AssertEqual g:expected_loclist, getloclist(0)
+  AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
+  AssertEqual
+  \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
+  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+  AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
+
+  " Now Toggle ALE off.
+  ALEReset
+
+  " Everything should be cleared.
+  Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
+  AssertEqual [], getloclist(0), 'The loclist was not cleared'
+  AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
+  AssertEqual [], getmatches(), 'The highlights were not cleared'
+
+  AssertEqual 1, g:ale_enabled
+
 Execute(ALEToggleBuffer should reset everything and then run again):
   " Run this test asynchrously.
   let g:ale_run_synchronously = 0
@@ -285,3 +309,28 @@ Execute(ALEEnableBuffer should complain when ALE is disabled globally):
   AssertEqual
   \ 'ALE cannot be enabled locally when disabled globally',
   \ join(split(g:output))
+
+Execute(ALEResetBuffer should reset everything for a buffer):
+  AssertEqual 'foobar', &filetype
+
+  call ale#Lint()
+
+  " First check that everything is there...
+  AssertEqual g:expected_loclist, getloclist(0)
+  AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
+  AssertEqual
+  \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
+  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+  AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
+
+  " Now Toggle ALE off.
+  ALEResetBuffer
+
+  " Everything should be cleared.
+  Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
+  AssertEqual [], getloclist(0), 'The loclist was not cleared'
+  AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
+  AssertEqual [], getmatches(), 'The highlights were not cleared'
+
+  AssertEqual 1, g:ale_enabled
+  AssertEqual 1, get(b:, 'ale_enabled', 1)

@@ -1468,8 +1468,7 @@ ALEDisableBuffer                                             *ALEDisableBuffer*
   globally, as disabling ALE globally removes the autocmd events needed to
   perform linting with.
 
-  The following plug mappings are defined, for conveniently defining
-  keybinds:
+  The following plug mappings are defined, for conveniently defining keybinds:
 
   |ALEToggle|        - `<Plug>(ale_toggle)`
   |ALEEnable|        - `<Plug>(ale_enable)`
@@ -1478,6 +1477,8 @@ ALEDisableBuffer                                             *ALEDisableBuffer*
   |ALEEnableBuffer|  - `<Plug>(ale_enable_buffer)`
   |ALEDisableBuffer| - `<Plug>(ale_disable_buffer)`
 
+  For removing problems reported by ALE, but leaving ALE enabled, see
+  |ALEReset| and |ALEResetBuffer|.
 
 ALEDetail                                                           *ALEDetail*
 
@@ -1503,6 +1504,24 @@ ALEInfoToClipboard                                         *ALEInfoToClipboard*
 
   The command `:ALEInfoToClipboard` can be used to output ALEInfo directly to
   your clipboard. This might not work on every machine.
+
+
+ALEReset                                                             *ALEReset*
+ALEResetBuffer                                                 *ALEResetBuffer*
+
+  `ALEReset` will remove all problems reported by ALE for all buffers.
+  `ALEResetBuffer` will remove all problems reported for a single buffer.
+
+  Either command will leave ALE linting enabled, so ALE will report problems
+  when linting is performed again. See |ale-lint| for more information.
+
+  The following plug mappings are defined, for conveniently defining keybinds:
+
+  |ALEReset|       - `<Plug>(ale_reset)`
+  |ALEResetBuffer| - `<Plug>(ale_reset_buffer)`
+
+  ALE can be disabled globally or for a buffer with |ALEDisable| or
+  |ALEDisableBuffer|.
 
 
 ===============================================================================

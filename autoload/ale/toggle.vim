@@ -110,25 +110,28 @@ function! s:DisablePostamble() abort
     endif
 endfunction
 
+function! s:CleanupEveryBuffer() abort
+    for l:key in keys(g:ale_buffer_info)
+        " The key could be a filename or a buffer number, so try and
+        " convert it to a number. We need a number for the other
+        " functions.
+        let l:buffer = str2nr(l:key)
+
+        if l:buffer > 0
+            " Stop all jobs and clear the results for everything, and delete
+            " all of the data we stored for the buffer.
+            call ale#engine#Cleanup(l:buffer)
+        endif
+    endfor
+endfunction
+
 function! ale#toggle#Toggle() abort
     let g:ale_enabled = !get(g:, 'ale_enabled')
 
     if g:ale_enabled
         call s:EnablePreamble()
     else
-        for l:key in keys(g:ale_buffer_info)
-            " The key could be a filename or a buffer number, so try and
-            " convert it to a number. We need a number for the other
-            " functions.
-            let l:buffer = str2nr(l:key)
-
-            if l:buffer > 0
-                " Stop all jobs and clear the results for everything, and delete
-                " all of the data we stored for the buffer.
-                call ale#engine#Cleanup(l:buffer)
-            endif
-        endfor
-
+        call s:CleanupEveryBuffer()
         call s:DisablePostamble()
     endif
 
@@ -152,6 +155,11 @@ function! ale#toggle#Disable() abort
     endif
 endfunction
 
+function! ale#toggle#Reset() abort
+    call s:CleanupEveryBuffer()
+    call ale#highlight#UpdateHighlights()
+endfunction
+
 function! ale#toggle#ToggleBuffer(buffer) abort
     " Get the new value for the toggle.
     let l:enabled = !getbufvar(a:buffer, 'ale_enabled', 1)
@@ -171,7 +179,6 @@ function! ale#toggle#ToggleBuffer(buffer) abort
         " Stop all jobs and clear the results for everything, and delete
         " all of the data we stored for the buffer.
         call ale#engine#Cleanup(a:buffer)
-
         call s:DisablePostamble()
     endif
 endfunction
@@ -187,4 +194,9 @@ function! ale#toggle#DisableBuffer(buffer) abort
     if getbufvar(a:buffer, 'ale_enabled', 1)
         call ale#toggle#ToggleBuffer(a:buffer)
     endif
+endfunction
+
+function! ale#toggle#ResetBuffer(buffer) abort
+    call ale#engine#Cleanup(a:buffer)
+    call ale#highlight#UpdateHighlights()
 endfunction
