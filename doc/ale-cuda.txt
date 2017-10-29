@@ -3,6 +3,24 @@ ALE CUDA Integration                                         *ale-cuda-options*
 
 
 ===============================================================================
+clang                                                          *ale-cuda-clang*
+
+g:ale_cuda_clang_executable                        *g:ale_cuda_clang_executable*
+                                                   *b:ale_cuda_clang_executable*
+  Type: |String|
+  Default: `'clang++'`
+
+  This variable can be changed to use a different executable for clang.
+
+
+g:ale_cuda_clang_options                              *g:ale_cuda_clang_options*
+                                                      *b:ale_cuda_clang_options*
+  Type: |String|
+  Default: `'-std=c++14 -Wall'`
+
+  This variable can be changed to modify flags given to clang.
+
+===============================================================================
 nvcc                                                            *ale-cuda-nvcc*
 
 g:ale_cuda_nvcc_executable                         *g:ale_cuda_nvcc_executable*

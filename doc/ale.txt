@@ -46,6 +46,7 @@ CONTENTS                                                         *ale-contents*
       prettier............................|ale-css-prettier|
       stylelint...........................|ale-css-stylelint|
     cuda..................................|ale-cuda-options|
+      clang...............................|ale-cuda-clang|
       nvcc................................|ale-cuda-nvcc|
     dart..................................|ale-dart-options|
       dartanalyzer........................|ale-dart-dartanalyzer|
