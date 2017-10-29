@@ -1447,13 +1447,36 @@ ALELast                                                               *ALELast*
 ALEToggle                                                           *ALEToggle*
 ALEEnable                                                           *ALEEnable*
 ALEDisable                                                         *ALEDisable*
+ALEToggleBuffer                                               *ALEToggleBuffer*
+ALEEnableBuffer                                               *ALEEnableBuffer*
+ALEDisableBuffer                                             *ALEDisableBuffer*
 
-  Enable or disable ALE, including all of its autocmd events, loclist items,
-  quickfix items, signs, current jobs, etc. Executing any of those commands
-  will change the |g:ale_enabled| variable.
+  `ALEToggle`, `ALEEnable`, and `ALEDisable` enable or disable ALE linting,
+  including all of its autocmd events, loclist items, quickfix items, signs,
+  current jobs, etc., globally. Executing any of these commands will change
+  the |g:ale_enabled| variable.
 
-  For convenience, a plug mapping `<Plug>(ale_toggle)` is defined for the
-  |ALEToggle| command.
+  ALE can be disabled or enabled for only a single buffer with
+  `ALEToggleBuffer`, `ALEEnableBuffer`, and `ALEDisableBuffer`. Disabling ALE
+  for a buffer will not remove autocmd events, but will prevent ALE from
+  checking for problems and reporting problems for whatever buffer the
+  `ALEDisableBuffer` or `ALEToggleBuffer` command is executed from. These
+  commands can be used for temporarily disabling ALE for a buffer. These
+  commands will modify the |b:ale_enabled| variable.
+
+  ALE linting cannot be enabled for a single buffer when it is disabled
+  globally, as disabling ALE globally removes the autocmd events needed to
+  perform linting with.
+
+  The following plug mappings are defined, for conveniently defining
+  keybinds:
+
+  |ALEToggle|        - `<Plug>(ale_toggle)`
+  |ALEEnable|        - `<Plug>(ale_enable)`
+  |ALEDisable|       - `<Plug>(ale_disable)`
+  |ALEToggleBuffer|  - `<Plug>(ale_toggle_buffer)`
+  |ALEEnableBuffer|  - `<Plug>(ale_enable_buffer)`
+  |ALEDisableBuffer| - `<Plug>(ale_disable_buffer)`
 
 
 ALEDetail                                                           *ALEDetail*

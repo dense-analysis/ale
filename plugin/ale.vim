@@ -250,6 +250,11 @@ nnoremap <silent> <Plug>(ale_next_wrap) :ALENextWrap<Return>
 nnoremap <silent> <Plug>(ale_first) :ALEFirst<Return>
 nnoremap <silent> <Plug>(ale_last) :ALELast<Return>
 nnoremap <silent> <Plug>(ale_toggle) :ALEToggle<Return>
+nnoremap <silent> <Plug>(ale_enable) :ALEEnable<Return>
+nnoremap <silent> <Plug>(ale_disable) :ALEDisable<Return>
+nnoremap <silent> <Plug>(ale_toggle_buffer) :ALEToggleBuffer<Return>
+nnoremap <silent> <Plug>(ale_enable_buffer) :ALEEnableBuffer<Return>
+nnoremap <silent> <Plug>(ale_disable_buffer) :ALEDisableBuffer<Return>
 nnoremap <silent> <Plug>(ale_lint) :ALELint<Return>
 nnoremap <silent> <Plug>(ale_detail) :ALEDetail<Return>
 nnoremap <silent> <Plug>(ale_fix) :ALEFix<Return>
