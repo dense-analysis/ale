@@ -131,7 +131,13 @@ Execute(ALEToggle should reset everything and then run again):
   AssertEqual [], getloclist(0), 'The loclist was not cleared'
   AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
   AssertEqual [], getmatches(), 'The highlights were not cleared'
-  AssertEqual ['ALECleanupGroup', 'ALEHighlightBufferGroup'], ParseAuGroups()
+  AssertEqual
+  \ [
+  \   'ALECleanupGroup',
+  \   'ALEHighlightBufferGroup',
+  \   'ALERunOnSaveGroup',
+  \ ],
+  \ ParseAuGroups()
 
   " Toggle ALE on, everything should be set up and run again.
   ALEToggle

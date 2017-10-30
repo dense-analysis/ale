@@ -12,11 +12,13 @@ function! ale#events#QuitRecently(buffer) abort
 endfunction
 
 function! ale#events#SaveEvent(buffer) abort
-    call setbufvar(a:buffer, 'ale_save_event_fired', 1)
-    let l:should_lint = ale#Var(a:buffer, 'enabled')
-    \   && g:ale_lint_on_save
+    let l:should_lint = ale#Var(a:buffer, 'enabled') && g:ale_lint_on_save
 
-    if g:ale_fix_on_save
+    if l:should_lint
+        call setbufvar(a:buffer, 'ale_save_event_fired', 1)
+    endif
+
+    if ale#Var(a:buffer, 'fix_on_save')
         let l:will_fix = ale#fix#Fix('save_file')
         let l:should_lint = l:should_lint && !l:will_fix
     endif

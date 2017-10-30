@@ -155,32 +155,10 @@ Execute (g:ale_lint_on_filetype_changed = 1 should bind the FileType event):
   \ ],
   \ CheckAutocmd('ALERunOnFiletypeChangeGroup')
 
-Execute (g:ale_lint_on_save = 0 should bind no events):
-  let g:ale_lint_on_save = 0
-  let g:ale_fix_on_save = 0
-
-  AssertEqual [], CheckAutocmd('ALERunOnSaveGroup')
-
-Execute (g:ale_lint_on_save = 1 should bind no events):
-  let g:ale_lint_on_save = 1
-  let g:ale_fix_on_save = 0
-
-  AssertEqual [
-  \ 'BufWritePost * call ale#events#SaveEvent(str2nr(expand(''<abuf>'')))',
-  \], CheckAutocmd('ALERunOnSaveGroup')
-
-Execute (g:ale_lint_on_save = 0 and g:ale_fix_on_save = 1 should bind events):
-  let g:ale_lint_on_save = 0
-  let g:ale_fix_on_save = 1
-
-  AssertEqual [
-  \ 'BufWritePost * call ale#events#SaveEvent(str2nr(expand(''<abuf>'')))',
-  \], CheckAutocmd('ALERunOnSaveGroup')
-
-Execute (g:ale_fix_on_save = 1 should bind events even when ALE is disabled):
+Execute (The SaveEvent should always be bound):
   let g:ale_enabled = 0
   let g:ale_lint_on_save = 0
-  let g:ale_fix_on_save = 1
+  let g:ale_fix_on_save = 0
 
   AssertEqual [
   \ 'BufWritePost * call ale#events#SaveEvent(str2nr(expand(''<abuf>'')))',

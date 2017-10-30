@@ -77,6 +77,7 @@ After:
   unlet! g:ale_set_lists_synchronously
   unlet! g:ale_emulate_job_failure
   unlet! b:ale_fixers
+  unlet! b:ale_fix_on_save
   delfunction AddCarets
   delfunction AddDollars
   delfunction DoNothing
@@ -411,6 +412,29 @@ Execute(ALEFix simple functions should be able to accept one argument, the buffe
 Expect(There should be only two lines):
   a
   b
+
+Execute(b:ale_fix_on_save = 1 should override g:ale_fix_on_save = 0):
+  let g:ale_fix_on_save = 0
+  let b:ale_fix_on_save = 1
+
+  let g:ale_fixers.testft = ['RemoveLastLineOneArg']
+  call ale#events#SaveEvent(bufnr(''))
+
+Expect(There should be only two lines):
+  a
+  b
+
+Execute(b:ale_fix_on_save = 0 should override g:ale_fix_on_save = 1):
+  let g:ale_fix_on_save = 1
+  let b:ale_fix_on_save = 0
+
+  let g:ale_fixers.testft = ['RemoveLastLineOneArg']
+  call ale#events#SaveEvent(bufnr(''))
+
+Expect(The lines should be the same):
+  a
+  b
+  c
 
 Execute(ALEFix functions returning jobs should be able to accept one argument):
   if has('win32')

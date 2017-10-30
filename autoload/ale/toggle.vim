@@ -49,9 +49,7 @@ function! ale#toggle#InitAuGroups() abort
 
     augroup ALERunOnSaveGroup
         autocmd!
-        if (g:ale_enabled && g:ale_lint_on_save) || g:ale_fix_on_save
-            autocmd BufWritePost * call ale#events#SaveEvent(str2nr(expand('<abuf>')))
-        endif
+        autocmd BufWritePost * call ale#events#SaveEvent(str2nr(expand('<abuf>')))
     augroup END
 
     augroup ALERunOnInsertLeave
@@ -73,10 +71,6 @@ function! ale#toggle#InitAuGroups() abort
     augroup END
 
     if !g:ale_enabled
-        if !g:ale_fix_on_save
-            augroup! ALERunOnSaveGroup
-        endif
-
         augroup! ALEPatternOptionsGroup
         augroup! ALERunOnTextChangedGroup
         augroup! ALERunOnEnterGroup
