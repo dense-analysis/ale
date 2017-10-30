@@ -87,7 +87,7 @@ formatting.
 | CSS | [csslint](http://csslint.net/), [stylelint](https://github.com/stylelint/stylelint), [prettier](https://github.com/prettier/prettier) |
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
 | D | [dmd](https://dlang.org/dmd-linux.html) |
-| Dart | [dartanalyzer](https://github.com/dart-lang/sdk/tree/master/pkg/analyzer_cli) !! |
+| Dart | [dartanalyzer](https://github.com/dart-lang/sdk/tree/master/pkg/analyzer_cli) !!, [language_server](https://github.com/natebosch/dart_language_server) |
 | Dockerfile | [hadolint](https://github.com/lukasmartinelli/hadolint) |
 | Elixir | [credo](https://github.com/rrrene/credo), [dogma](https://github.com/lpil/dogma) !! |
 | Elm | [elm-format](https://github.com/avh4/elm-format), [elm-make](https://github.com/elm-lang/elm-make) |

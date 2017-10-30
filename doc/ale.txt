@@ -270,7 +270,7 @@ Notes:
 * CSS: `csslint`, `stylelint`, `prettier`
 * Cython (pyrex filetype): `cython`
 * D: `dmd`
-* Dart: `dartanalyzer`!!
+* Dart: `dartanalyzer`!!, `language_server`
 * Dockerfile: `hadolint`
 * Elixir: `credo`, `dogma`!!
 * Elm: `elm-format, elm-make`
