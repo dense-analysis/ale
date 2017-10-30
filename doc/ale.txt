@@ -150,6 +150,7 @@ CONTENTS                                                         *ale-contents*
       lintr...............................|ale-r-lintr|
     reasonml..............................|ale-reasonml-options|
       merlin..............................|ale-reasonml-merlin|
+      refmt...............................|ale-reasonml-refmt|
     restructuredtext......................|ale-restructuredtext-options|
       write-good..........................|ale-restructuredtext-write-good|
     ruby..................................|ale-ruby-options|
@@ -308,7 +309,7 @@ Notes:
 * Puppet: `puppet`, `puppet-lint`
 * Python: `autopep8`, `flake8`, `isort`, `mypy`, `pycodestyle`, `pylint`!!, `yapf`
 * R: `lintr`
-* ReasonML: `merlin`
+* ReasonML: `merlin`, `refmt`
 * reStructuredText: `proselint`, `write-good`
 * RPM spec: `rpmlint`
 * Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`
