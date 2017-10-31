@@ -17,7 +17,7 @@ function! ale_linters#erlang#erlc#Handle(buffer, lines) abort
     " error.erl:4: variable 'B' is unbound
     " error.erl:3: Warning: function main/0 is unused
     " error.erl:4: Warning: variable 'A' is unused
-    let l:pattern = '\v^([^:]+):(\d+): (Warning: )?(.+)$'
+    let l:pattern = '\v\C:(\d+): (Warning: )?(.+)$'
 
     " parse_transforms are a special case. The error message does not indicate a location:
     " error.erl: undefined parse transform 'some_parse_transform'
@@ -56,9 +56,9 @@ function! ale_linters#erlang#erlc#Handle(buffer, lines) abort
             continue
         endif
 
-        let l:line = l:match[2]
-        let l:warning_or_text = l:match[3]
-        let l:text = l:match[4]
+        let l:line = l:match[1]
+        let l:warning_or_text = l:match[2]
+        let l:text = l:match[3]
 
         " If this file is a header .hrl, ignore the following expected messages:
         " - 'no module definition'
