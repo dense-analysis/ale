@@ -278,7 +278,7 @@ Notes:
 * Fortran: `gcc`
 * FusionScript: `fusion-lint`
 * GLSL: glslang
-* Go: `gofmt`, `go vet`, `golint`, `gometalinter`!!, `go build`!!, `gosimple`, `staticcheck`
+* Go: `gofmt`, `go vet`, `golint`, `gometalinter`!!, `go build`!!, `gosimple`!!, `staticcheck`!!
 * GraphQL: `gqlint`
 * Haml: `haml-lint`
 * Handlebars: `ember-template-lint`
