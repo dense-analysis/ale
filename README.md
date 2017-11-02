@@ -36,15 +36,16 @@ servers with similar enough protocols, like `tsserver`.
     1. [How do I disable particular linters?](#faq-disable-linters)
     2. [How can I keep the sign gutter open?](#faq-keep-signs)
     3. [How can I change the signs ALE uses?](#faq-change-signs)
-    4. [How can I show errors or warnings in my statusline?](#faq-statusline)
-    5. [How can I show errors or warnings in my lightline?](#faq-lightline)
-    6. [How can I change the format for echo messages?](#faq-echo-format)
-    7. [How can I execute some code when ALE stops linting?](#faq-autocmd)
-    8. [How can I navigate between errors quickly?](#faq-navigation)
-    9. [How can I run linters only when I save files?](#faq-lint-on-save)
-    10. [How can I use the quickfix list instead of the loclist?](#faq-quickfix)
-    11. [How can I check JSX files with both stylelint and eslint?](#faq-jsx-stylelint-eslint)
-    12. [Will this plugin eat all of my laptop battery power?](#faq-my-battery-is-sad)
+    4. [How can I change or disable the highlights ALE uses?](#faq-change-highlights)
+    5. [How can I show errors or warnings in my statusline?](#faq-statusline)
+    6. [How can I show errors or warnings in my lightline?](#faq-lightline)
+    7. [How can I change the format for echo messages?](#faq-echo-format)
+    8. [How can I execute some code when ALE stops linting?](#faq-autocmd)
+    9. [How can I navigate between errors quickly?](#faq-navigation)
+    10. [How can I run linters only when I save files?](#faq-lint-on-save)
+    11. [How can I use the quickfix list instead of the loclist?](#faq-quickfix)
+    12. [How can I check JSX files with both stylelint and eslint?](#faq-jsx-stylelint-eslint)
+    13. [Will this plugin eat all of my laptop battery power?](#faq-my-battery-is-sad)
 
 <a name="supported-languages"></a>
 
@@ -373,9 +374,30 @@ highlight clear ALEErrorSign
 highlight clear ALEWarningSign
 ```
 
+<a name="faq-change-highlights"></a>
+
+### 5.iv. How can I change or disable the highlights ALE uses?
+
+ALE's highlights problems with highlight groups which link to `SpellBad`,
+`SpellCap`, `error`, and `todo` groups by default. The characters that are
+highlighted depend on the linters being used, and the information provided to
+ALE.
+
+Highlighting can be disabled completely by setting `g:ale_set_highlights` to
+`0`.
+
+```vim
+" Set this in your vimrc file to disabling highlighting
+let g:ale_set_highlights = 0
+```
+
+You can control all of the highlights ALE uses, say if you are using a different
+color scheme which produces ugly highlights. See `:help ale-highlights` for more
+information.
+
 <a name="faq-statusline"></a>
 
-### 5.iv. How can I show errors or warnings in my statusline?
+### 5.v. How can I show errors or warnings in my statusline?
 
 [vim-airline](https://github.com/vim-airline/vim-airline) integrates with ALE
 for displaying error information in the status bar. If you want to see the
@@ -415,7 +437,7 @@ See `:help ale#statusline#Count()` for more information.
 
 <a name="faq-lightline"></a>
 
-### 5.v. How can I show errors or warnings in my lightline?
+### 5.vi. How can I show errors or warnings in my lightline?
 
 [lightline](https://github.com/itchyny/lightline.vim) does not have built-in
 support for ALE, nevertheless there is a plugin that adds this functionality: [maximbaz/lightline-ale](https://github.com/maximbaz/lightline-ale).
@@ -424,7 +446,7 @@ For more information, check out the sources of that plugin, `:help ale#statuslin
 
 <a name="faq-echo-format"></a>
 
-### 5.vi. How can I change the format for echo messages?
+### 5.vii. How can I change the format for echo messages?
 
 There are 3 global options that allow customizing the echoed message.
 
@@ -449,7 +471,7 @@ Will give you:
 
 <a name="faq-autocmd"></a>
 
-### 5.vii. How can I execute some code when ALE stops linting?
+### 5.viii. How can I execute some code when ALE stops linting?
 
 ALE runs its own [autocmd](http://vimdoc.sourceforge.net/htmldoc/autocmd.html)
 event whenever has a linter has been successfully executed and processed. This
@@ -464,7 +486,7 @@ augroup END
 
 <a name="faq-navigation"></a>
 
-### 5.viii. How can I navigate between errors quickly?
+### 5.ix. How can I navigate between errors quickly?
 
 ALE offers some commands with `<Plug>` keybinds for moving between warnings and
 errors quickly. You can map the keys Ctrl+j and Ctrl+k to moving between errors
@@ -480,7 +502,7 @@ For more information, consult the online documentation with
 
 <a name="faq-lint-on-save"></a>
 
-### 5.ix. How can I run linters only when I save files?
+### 5.x. How can I run linters only when I save files?
 
 ALE offers an option `g:ale_lint_on_save` for enabling running the linters
 when files are saved. This option is enabled by default. If you only
@@ -500,7 +522,7 @@ files, you can set `g:ale_lint_on_save` to `0`.
 
 <a name="faq-quickfix"></a>
 
-### 5.x. How can I use the quickfix list instead of the loclist?
+### 5.xi. How can I use the quickfix list instead of the loclist?
 
 The quickfix list can be enabled by turning the `g:ale_set_quickfix`
 option on. If you wish to also disable the loclist, you can disable
@@ -527,7 +549,7 @@ let g:ale_keep_list_window_open = 1
 
 <a name="faq-jsx-stylelint-eslint"></a>
 
-### 5.xi. How can I check JSX files with both stylelint and eslint?
+### 5.xii. How can I check JSX files with both stylelint and eslint?
 
 If you configure ALE options correctly in your vimrc file, and install
 the right tools, you can check JSX files with stylelint and eslint.
@@ -560,7 +582,7 @@ no linter will be run twice for the same file.
 
 <a name="faq-my-battery-is-sad"></a>
 
-### 5.xii. Will this plugin eat all of my laptop battery power?
+### 5.xiii. Will this plugin eat all of my laptop battery power?
 
 ALE takes advantage of the power of various tools to check your code. This of
 course means that CPU time will be used to continuously check your code. If you
