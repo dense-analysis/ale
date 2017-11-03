@@ -9,6 +9,17 @@ There are no options for this linter.
 
 
 ===============================================================================
+hackfmt                                                       *ale-php-hackfmt*
+
+g:ale_php_hackfmt_options                           *g:ale_php_hackfmt_options*
+                                                    *b:ale_php_hackfmt_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to the hackfmt fixer.
+
+
+===============================================================================
 langserver                                                 *ale-php-langserver*
 
 g:ale_php_langserver_executable               *g:ale_php_langserver_executable*
@@ -32,6 +43,21 @@ g:ale_php_langserver_use_global               *g:ale_php_langserver_use_global*
   the executable set for |g:ale_php_langserver_executable|.
 
   See: |ale-integrations-local-executables|
+
+
+===============================================================================
+phan                                                             *ale-php-phan*
+
+WARNING: please do not use this linter if you have an configuration file
+for your project because the phan will look into your entirely project and
+ale will display in the current buffer warnings that may belong to other file.
+
+g:ale_php_phan_minimum_severity               *g:ale_php_phan_minimum_severity*
+                                              *b:ale_php_phan_minimum_severity*
+  Type: |Number|
+  Default: `0`
+
+  This variable defines the minimum severity level
 
 
 ===============================================================================

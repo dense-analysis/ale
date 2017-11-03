@@ -32,8 +32,15 @@ if !s:has_features
     finish
 endif
 
-" Add the after directory to the runtimepath
-let &runtimepath .= ',' . expand('<sfile>:p:h:h') . '/after'
+" This flag can be set to 0 to disable emitting conflict warnings.
+let g:ale_emit_conflict_warnings = get(g:, 'ale_emit_conflict_warnings', 1)
+
+if g:ale_emit_conflict_warnings
+\&& match(&runtimepath, '[/\\]ale[/\\]after') < 0
+    " Add the after directory to the runtimepath
+    " This is only done if the after directory isn't already in runtimepath
+    let &runtimepath .= ',' . expand('<sfile>:p:h:h') . '/after'
+endif
 
 " Set this flag so that other plugins can use it, like airline.
 let g:loaded_ale = 1
@@ -43,9 +50,6 @@ let g:loaded_ale = 1
 if has('unix') && empty($TMPDIR)
     let $TMPDIR = '/tmp'
 endif
-
-" This flag can be set to 0 to disable emitting conflict warnings.
-let g:ale_emit_conflict_warnings = get(g:, 'ale_emit_conflict_warnings', 1)
 
 " This global variable is used internally by ALE for tracking information for
 " each buffer which linters are being run against.
@@ -197,137 +201,6 @@ call ale#Set('completion_enabled', 0)
 call ale#Set('completion_delay', 100)
 call ale#Set('completion_max_suggestions', 50)
 
-function! ALEInitAuGroups() abort
-    " This value used to be a Boolean as a Number, and is now a String.
-    let l:text_changed = '' . g:ale_lint_on_text_changed
-
-    augroup ALEPatternOptionsGroup
-        autocmd!
-        if g:ale_enabled && g:ale_pattern_options_enabled
-            autocmd BufEnter,BufRead * call ale#pattern_options#SetOptions()
-        endif
-    augroup END
-
-    augroup ALERunOnTextChangedGroup
-        autocmd!
-        if g:ale_enabled
-            if l:text_changed is? 'always' || l:text_changed is# '1'
-                autocmd TextChanged,TextChangedI * call ale#Queue(g:ale_lint_delay)
-            elseif l:text_changed is? 'normal'
-                autocmd TextChanged * call ale#Queue(g:ale_lint_delay)
-            elseif l:text_changed is? 'insert'
-                autocmd TextChangedI * call ale#Queue(g:ale_lint_delay)
-            endif
-        endif
-    augroup END
-
-    augroup ALERunOnEnterGroup
-        autocmd!
-        if g:ale_enabled
-            " Handle everything that needs to happen when buffers are entered.
-            autocmd BufEnter * call ale#events#EnterEvent(str2nr(expand('<abuf>')))
-        endif
-        if g:ale_enabled && g:ale_lint_on_enter
-            autocmd BufWinEnter,BufRead * call ale#Queue(0, 'lint_file', str2nr(expand('<abuf>')))
-            " Track when the file is changed outside of Vim.
-            autocmd FileChangedShellPost * call ale#events#FileChangedEvent(str2nr(expand('<abuf>')))
-        endif
-    augroup END
-
-    augroup ALERunOnFiletypeChangeGroup
-        autocmd!
-        if g:ale_enabled && g:ale_lint_on_filetype_changed
-            " Only start linting if the FileType actually changes after
-            " opening a buffer. The FileType will fire when buffers are opened.
-            autocmd FileType * call ale#events#FileTypeEvent(
-            \   str2nr(expand('<abuf>')),
-            \   expand('<amatch>')
-            \)
-        endif
-    augroup END
-
-    augroup ALERunOnSaveGroup
-        autocmd!
-        if (g:ale_enabled && g:ale_lint_on_save) || g:ale_fix_on_save
-            autocmd BufWritePost * call ale#events#SaveEvent(str2nr(expand('<abuf>')))
-        endif
-    augroup END
-
-    augroup ALERunOnInsertLeave
-        autocmd!
-        if g:ale_enabled && g:ale_lint_on_insert_leave
-            autocmd InsertLeave * call ale#Queue(0)
-        endif
-    augroup END
-
-    augroup ALECursorGroup
-        autocmd!
-        if g:ale_enabled && g:ale_echo_cursor
-            autocmd CursorMoved,CursorHold * call ale#cursor#EchoCursorWarningWithDelay()
-            " Look for a warning to echo as soon as we leave Insert mode.
-            " The script's position variable used when moving the cursor will
-            " not be changed here.
-            autocmd InsertLeave * call ale#cursor#EchoCursorWarning()
-        endif
-    augroup END
-
-    if !g:ale_enabled
-        if !g:ale_fix_on_save
-            augroup! ALERunOnSaveGroup
-        endif
-
-        augroup! ALEPatternOptionsGroup
-        augroup! ALERunOnTextChangedGroup
-        augroup! ALERunOnEnterGroup
-        augroup! ALERunOnInsertLeave
-        augroup! ALECursorGroup
-    endif
-endfunction
-
-function! s:ALEToggle() abort
-    let g:ale_enabled = !get(g:, 'ale_enabled')
-
-    if g:ale_enabled
-        " Set pattern options again, if enabled.
-        if g:ale_pattern_options_enabled
-            call ale#pattern_options#SetOptions()
-        endif
-
-        " Lint immediately, including running linters against the file.
-        call ale#Queue(0, 'lint_file')
-
-        if g:ale_set_balloons
-            call ale#balloon#Enable()
-        endif
-    else
-        for l:key in keys(g:ale_buffer_info)
-            " The key could be a filename or a buffer number, so try and
-            " convert it to a number. We need a number for the other
-            " functions.
-            let l:buffer = str2nr(l:key)
-
-            if l:buffer > 0
-                " Stop all jobs and clear the results for everything, and delete
-                " all of the data we stored for the buffer.
-                call ale#engine#Cleanup(l:buffer)
-            endif
-        endfor
-
-        " Remove highlights for the current buffer now.
-        if g:ale_set_highlights
-            call ale#highlight#UpdateHighlights()
-        endif
-
-        if g:ale_set_balloons
-            call ale#balloon#Disable()
-        endif
-    endif
-
-    call ALEInitAuGroups()
-endfunction
-
-call ALEInitAuGroups()
-
 if g:ale_set_balloons
     call ale#balloon#Enable()
 endif
@@ -348,9 +221,15 @@ command! -bar ALELast :call ale#loclist_jumping#JumpToIndex(-1)
 command! -bar ALEDetail :call ale#cursor#ShowCursorDetail()
 
 " Define commands for turning ALE on or off.
-command! -bar ALEToggle :call s:ALEToggle()
-command! -bar ALEEnable :if !g:ale_enabled | ALEToggle | endif
-command! -bar ALEDisable :if g:ale_enabled | ALEToggle | endif
+command! -bar ALEToggle :call ale#toggle#Toggle()
+command! -bar ALEEnable :call ale#toggle#Enable()
+command! -bar ALEDisable :call ale#toggle#Disable()
+command! -bar ALEReset :call ale#toggle#Reset()
+" Commands for turning ALE on or off for a buffer.
+command! -bar ALEToggleBuffer :call ale#toggle#ToggleBuffer(bufnr(''))
+command! -bar ALEEnableBuffer :call ale#toggle#EnableBuffer(bufnr(''))
+command! -bar ALEDisableBuffer :call ale#toggle#DisableBuffer(bufnr(''))
+command! -bar ALEResetBuffer :call ale#toggle#ResetBuffer(bufnr(''))
 
 " A command for linting manually.
 command! -bar ALELint :call ale#Queue(0, 'lint_file')
@@ -373,9 +252,19 @@ nnoremap <silent> <Plug>(ale_next_wrap) :ALENextWrap<Return>
 nnoremap <silent> <Plug>(ale_first) :ALEFirst<Return>
 nnoremap <silent> <Plug>(ale_last) :ALELast<Return>
 nnoremap <silent> <Plug>(ale_toggle) :ALEToggle<Return>
+nnoremap <silent> <Plug>(ale_enable) :ALEEnable<Return>
+nnoremap <silent> <Plug>(ale_disable) :ALEDisable<Return>
+nnoremap <silent> <Plug>(ale_reset) :ALEReset<Return>
+nnoremap <silent> <Plug>(ale_toggle_buffer) :ALEToggleBuffer<Return>
+nnoremap <silent> <Plug>(ale_enable_buffer) :ALEEnableBuffer<Return>
+nnoremap <silent> <Plug>(ale_disable_buffer) :ALEDisableBuffer<Return>
+nnoremap <silent> <Plug>(ale_reset_buffer) :ALEResetBuffer<Return>
 nnoremap <silent> <Plug>(ale_lint) :ALELint<Return>
 nnoremap <silent> <Plug>(ale_detail) :ALEDetail<Return>
 nnoremap <silent> <Plug>(ale_fix) :ALEFix<Return>
+
+" Set up autocmd groups now.
+call ale#toggle#InitAuGroups()
 
 " Housekeeping
 

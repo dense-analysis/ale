@@ -24,11 +24,13 @@ Execute(The executable should be configurable):
 
 Execute(The executable should be used in the command):
   AssertEqual
-  \ ale#Escape('nvcc') . ' -cuda -std=c++11 %s -o /dev/null',
+  \ ale#Escape('nvcc') . ' -cuda -std=c++11 %s'
+  \   . ' -o ' . g:ale#util#nul_file,
   \ ale_linters#cuda#nvcc#GetCommand(bufnr(''))
 
   let b:ale_cuda_nvcc_executable = 'foobar'
 
   AssertEqual
-  \ ale#Escape('foobar') . ' -cuda -std=c++11 %s -o /dev/null',
+  \ ale#Escape('foobar') . ' -cuda -std=c++11 %s'
+  \   . ' -o ' . g:ale#util#nul_file,
   \ ale_linters#cuda#nvcc#GetCommand(bufnr(''))

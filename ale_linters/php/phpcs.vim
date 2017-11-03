@@ -29,11 +29,12 @@ function! ale_linters#php#phpcs#Handle(buffer, lines) abort
     " Matches against lines like the following:
     "
     " /path/to/some-filename.php:18:3: error - Line indented incorrectly; expected 4 spaces, found 2 (Generic.WhiteSpace.ScopeIndent.IncorrectExact)
-    let l:pattern = '^.*:\(\d\+\):\(\d\+\): \(.\+\) - \(.\+\) \(\(.\+\)\)$'
+    let l:pattern = '^.*:\(\d\+\):\(\d\+\): \(.\+\) - \(.\+\) (\(.\+\))$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        let l:text = l:match[4]
+        let l:code = l:match[5]
+        let l:text = l:match[4] . ' (' . l:code . ')'
         let l:type = l:match[3]
 
         call add(l:output, {

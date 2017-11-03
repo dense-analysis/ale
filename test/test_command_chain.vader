@@ -1,7 +1,11 @@
 Before:
   Save &shell, g:ale_run_synchronously
   let g:ale_run_synchronously = 1
-  set shell=/bin/sh
+
+  if !has('win32')
+    set shell=/bin/sh
+  endif
+
   let g:linter_output = []
   let g:first_echo_called = 0
   let g:second_echo_called = 0
@@ -9,7 +13,7 @@ Before:
 
   function! CollectResults(buffer, output)
     let g:final_callback_called = 1
-    let g:linter_output = a:output
+    let g:linter_output = map(copy(a:output), 'join(split(v:val))')
     return []
   endfunction
   function! RunFirstEcho(buffer)
@@ -26,7 +30,7 @@ Before:
   call ale#linter#Define('foobar', {
   \ 'name': 'testlinter',
   \ 'callback': 'CollectResults',
-  \ 'executable': 'echo',
+  \ 'executable': has('win32') ? 'cmd' : 'echo',
   \ 'command_chain': [
   \   {
   \     'callback': 'RunFirstEcho',

@@ -22,7 +22,7 @@ Before:
   call ale#linter#Define('testft', {
   \ 'name': 'testlinter',
   \ 'callback': 'TestCallback',
-  \ 'executable': 'true',
+  \ 'executable': has('win32') ? 'cmd' : 'true',
   \ 'command': 'true',
   \})
 
@@ -55,6 +55,19 @@ Execute(No linting should be done on :wq or :x):
 
   AssertEqual [], getloclist(0)
 
+Execute(No linting should be for :w after :q fails):
+  let g:ale_lint_on_save = 1
+  let g:ale_fix_on_save = 0
+
+  call ale#events#QuitEvent(bufnr(''))
+
+  " Simulate 2 seconds passing.
+  let b:ale_quitting -= 1000
+
+  call ale#events#SaveEvent(bufnr(''))
+
+  AssertEqual 1, len(getloclist(0))
+
 Execute(No linting should be done on :wq or :x after fixing files):
   let g:ale_lint_on_save = 0
   let g:ale_fix_on_save = 1
@@ -69,3 +82,16 @@ Execute(No linting should be done on :wq or :x after fixing files):
   call ale#events#SaveEvent(bufnr(''))
 
   AssertEqual [], getloclist(0)
+
+Execute(Linting should be done after :q fails and fixing files):
+  let g:ale_lint_on_save = 0
+  let g:ale_fix_on_save = 1
+
+  call ale#events#QuitEvent(bufnr(''))
+
+  " Simulate 2 seconds passing.
+  let b:ale_quitting -= 1000
+
+  call ale#events#SaveEvent(bufnr(''))
+
+  AssertEqual 1, len(getloclist(0))

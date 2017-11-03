@@ -17,7 +17,7 @@ Execute(The default command and executable should be correct):
   \ 'dartanalyzer',
   \ ale_linters#dart#dartanalyzer#GetExecutable(bufnr(''))
   AssertEqual
-  \ ale#Escape('dartanalyzer') . ' %t',
+  \ ale#Escape('dartanalyzer') . ' %s',
   \ ale_linters#dart#dartanalyzer#GetCommand(bufnr(''))
 
 Execute(The executable should be configurable):
@@ -27,7 +27,7 @@ Execute(The executable should be configurable):
   \ '/usr/lib/dart/bin/dartanalyzer',
   \ ale_linters#dart#dartanalyzer#GetExecutable(bufnr(''))
   AssertEqual
-  \ ale#Escape('/usr/lib/dart/bin/dartanalyzer') . ' %t',
+  \ ale#Escape('/usr/lib/dart/bin/dartanalyzer') . ' %s',
   \ ale_linters#dart#dartanalyzer#GetCommand(bufnr(''))
 
 Execute(The .packages file should be set if detected):
@@ -35,6 +35,6 @@ Execute(The .packages file should be set if detected):
 
   AssertEqual
   \ ale#Escape('dartanalyzer')
-  \   . ' --packages ' . ale#Escape(g:dir . '/dart_paths/.packages')
-  \   . ' %t',
+  \   . ' --packages ' . ale#Escape(ale#path#Winify(g:dir . '/dart_paths/.packages'))
+  \   . ' %s',
   \ ale_linters#dart#dartanalyzer#GetCommand(bufnr(''))

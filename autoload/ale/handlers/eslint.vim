@@ -7,6 +7,7 @@ call ale#Set('javascript_eslint_options', '')
 call ale#Set('javascript_eslint_executable', 'eslint')
 call ale#Set('javascript_eslint_use_global', 0)
 call ale#Set('javascript_eslint_suppress_eslintignore', 0)
+call ale#Set('javascript_eslint_suppress_missing_config', 0)
 
 function! ale#handlers#eslint#FindConfig(buffer) abort
     for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
@@ -64,7 +65,7 @@ function! s:AddHintsForTypeScriptParsingErrors(output) abort
     endfor
 endfunction
 
-function! ale#handlers#eslint#Handle(buffer, lines) abort
+function! s:CheckForBadConfig(buffer, lines) abort
     let l:config_error_pattern = '\v^ESLint couldn''t find a configuration file'
     \   . '|^Cannot read config file'
     \   . '|^.*Configuration for rule .* is invalid'
@@ -73,14 +74,30 @@ function! ale#handlers#eslint#Handle(buffer, lines) abort
     " Look for a message in the first few lines which indicates that
     " a configuration file couldn't be found.
     for l:line in a:lines[:10]
-        if len(matchlist(l:line, l:config_error_pattern)) > 0
-            return [{
-            \   'lnum': 1,
-            \   'text': 'eslint configuration error (type :ALEDetail for more information)',
-            \   'detail': join(a:lines, "\n"),
-            \}]
+        let l:match = matchlist(l:line, l:config_error_pattern)
+
+        if len(l:match) > 0
+            " Don't show the missing config error if we've disabled it.
+            if ale#Var(a:buffer, 'javascript_eslint_suppress_missing_config')
+            \&& l:match[0] is# 'ESLint couldn''t find a configuration file'
+                return 0
+            endif
+
+            return 1
         endif
     endfor
+
+    return 0
+endfunction
+
+function! ale#handlers#eslint#Handle(buffer, lines) abort
+    if s:CheckForBadConfig(a:buffer, a:lines)
+        return [{
+        \   'lnum': 1,
+        \   'text': 'eslint configuration error (type :ALEDetail for more information)',
+        \   'detail': join(a:lines, "\n"),
+        \}]
+    endif
 
     " Matches patterns line the following:
     "

@@ -27,6 +27,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['javascript', 'typescript'],
 \       'description': 'Apply eslint --fix to a file.',
 \   },
+\   'mix_format': {
+\       'function': 'ale#fixers#mix_format#Fix',
+\       'suggested_filetypes': ['elixir'],
+\       'description': 'Apply mix format to a file.',
+\   },
 \   'format': {
 \       'function': 'ale#fixers#format#Fix',
 \       'suggested_filetypes': ['elm'],
@@ -39,7 +44,7 @@ let s:default_registry = {
 \   },
 \   'prettier': {
 \       'function': 'ale#fixers#prettier#Fix',
-\       'suggested_filetypes': ['javascript', 'typescript', 'json', 'css', 'scss'],
+\       'suggested_filetypes': ['javascript', 'typescript', 'json', 'css', 'scss', 'less'],
 \       'description': 'Apply prettier to a file.',
 \   },
 \   'prettier_eslint': {
@@ -101,6 +106,31 @@ let s:default_registry = {
 \       'function': 'ale#fixers#gofmt#Fix',
 \       'suggested_filetypes': ['go'],
 \       'description': 'Fix Go files with go fmt.',
+\   },
+\   'tslint': {
+\       'function': 'ale#fixers#tslint#Fix',
+\       'suggested_filetypes': ['typescript'],
+\       'description': 'Fix typescript files with tslint --fix.',
+\   },
+\   'rustfmt': {
+\       'function': 'ale#fixers#rustfmt#Fix',
+\       'suggested_filetypes': ['rust'],
+\       'description': 'Fix Rust files with Rustfmt.',
+\   },
+\   'hackfmt': {
+\       'function': 'ale#fixers#hackfmt#Fix',
+\       'suggested_filetypes': ['php'],
+\       'description': 'Fix Hack files with hackfmt.',
+\   },
+\   'hfmt': {
+\       'function': 'ale#fixers#hfmt#Fix',
+\       'suggested_filetypes': ['haskell'],
+\       'description': 'Fix Haskell files with hfmt.',
+\   },
+\   'refmt': {
+\       'function': 'ale#fixers#refmt#Fix',
+\       'suggested_filetypes': ['reason'],
+\       'description': 'Fix ReasonML files with refmt.',
 \   },
 \}
 

@@ -1,4 +1,6 @@
 Before:
+  Save g:ale_enabled
+
   function! GenerateResults(buffer, output)
     return [
     \ {
@@ -36,14 +38,17 @@ Before:
 
   call ale#linter#Define('testft', {
   \ 'name': 'x',
-  \ 'executable': 'echo',
-  \ 'command': 'echo',
+  \ 'executable': has('win32') ? 'cmd': 'echo',
+  \ 'command': has('win32') ? 'echo' : '/bin/sh -c ''echo''',
   \ 'callback': 'GenerateResults',
   \})
   highlight link SomeOtherGroup SpellBad
 
 After:
+  Restore
+
   unlet! g:items
+  unlet! b:ale_enabled
 
   delfunction GenerateResults
   call ale#linter#Reset()
@@ -206,7 +211,7 @@ Execute(Highlighting should support errors spanning many lines):
   \   },
   \ ],
   \ GetMatchesWithoutIDs()
-  \
+
 Execute(Highlights should always be cleared when the buffer highlight list is empty):
   " Add our highlights and something else.
   call matchaddpos('ALEError', [[1, 1, 1]])
@@ -232,3 +237,24 @@ Execute(Highlights should always be cleared when the buffer highlight list is em
   \   {'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]},
   \ ],
   \ GetMatchesWithoutIDs()
+
+Execute(Highlights should be cleared when ALE is disabled):
+  let g:ale_enabled = 1
+  call ale#highlight#SetHighlights(bufnr(''), [
+  \ {'bufnr': bufnr(''), 'type': 'E', 'lnum': 1, 'col': 1, 'end_lnum': 10, 'end_col': 3},
+  \])
+
+  let g:ale_enabled = 0
+  call ale#highlight#UpdateHighlights()
+
+  AssertEqual [], GetMatchesWithoutIDs()
+
+  let g:ale_enabled = 1
+  call ale#highlight#SetHighlights(bufnr(''), [
+  \ {'bufnr': bufnr(''), 'type': 'E', 'lnum': 1, 'col': 1, 'end_lnum': 10, 'end_col': 3},
+  \])
+
+  let b:ale_enabled = 0
+  call ale#highlight#UpdateHighlights()
+
+  AssertEqual [], GetMatchesWithoutIDs()

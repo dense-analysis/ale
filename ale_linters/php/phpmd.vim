@@ -14,7 +14,7 @@ function! ale_linters#php#phpmd#Handle(buffer, lines) abort
     " Matches against lines like the following:
     "
     " /path/to/some-filename.php:18 message
-    let l:pattern = '^.*:\(\d\+\)\t\(.\+\)$'
+    let l:pattern = '^.*:\(\d\+\)\s\+\(.\+\)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)

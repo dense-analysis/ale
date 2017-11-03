@@ -114,3 +114,17 @@ Execute(Append '--parser postcss' for filetype=css):
   \     . ' --write',
   \ },
   \ ale#fixers#prettier#Fix(bufnr(''))
+
+Execute(Append '--parser postcss' for filetype=less):
+  set filetype=less
+  call ale#test#SetFilename('../prettier-test-files/testfile.less')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape(g:ale_javascript_prettier_executable)
+  \     . ' %t'
+  \     . ' --parser postcss'
+  \     . ' --write',
+  \ },
+  \ ale#fixers#prettier#Fix(bufnr(''))

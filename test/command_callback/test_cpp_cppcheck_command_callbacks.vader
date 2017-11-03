@@ -43,7 +43,7 @@ Execute(cppcheck for C++ should detect compile_commands.json files):
   call ale#test#SetFilename('cppcheck_paths/one/foo.cpp')
 
   AssertEqual
-  \ 'cd ' . ale#Escape(g:dir . '/cppcheck_paths/one') . ' && '
+  \ 'cd ' . ale#Escape(ale#path#Winify(g:dir . '/cppcheck_paths/one')) . ' && '
   \   . ale#Escape('cppcheck')
   \   . ' -q --language=c++ --project=compile_commands.json --enable=style %t',
   \ ale_linters#cpp#cppcheck#GetCommand(bufnr(''))

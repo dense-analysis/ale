@@ -4,7 +4,8 @@
 call ale#linter#Define('go', {
 \   'name': 'staticcheck',
 \   'executable': 'staticcheck',
-\   'command': 'staticcheck %t',
+\   'command': 'staticcheck %s',
 \   'callback': 'ale#handlers#unix#HandleAsWarning',
-\   'output_stream': 'both'
+\   'output_stream': 'both',
+\   'lint_file': 1,
 \})
