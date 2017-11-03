@@ -13,7 +13,7 @@ Before:
   call ale#test#SetFilename('test.sh')
 
   let b:prefix = 'cd ' . ale#Escape(ale#path#Winify(g:dir)) . ' && '
-  let b:suffix = ' -x -f gcc -'
+  let b:suffix = ' -f gcc -'
 
 After:
   Restore
@@ -31,14 +31,14 @@ After:
 Execute(The default shellcheck command should be correct):
   AssertEqual
   \ b:prefix . ale#Escape('shellcheck') . b:suffix,
-  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''))
+  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''), [])
 
 Execute(The shellcheck command should accept options):
   let b:ale_sh_shellcheck_options = '--foobar'
 
   AssertEqual
   \ b:prefix . ale#Escape('shellcheck') . ' --foobar' . b:suffix,
-  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''))
+  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''), [])
 
 Execute(The shellcheck command should accept options and exclusions):
   let b:ale_sh_shellcheck_options = '--foobar'
@@ -46,14 +46,14 @@ Execute(The shellcheck command should accept options and exclusions):
 
   AssertEqual
   \ b:prefix . ale#Escape('shellcheck') . ' --foobar -e foo,bar' . b:suffix,
-  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''))
+  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''), [])
 
 Execute(The shellcheck command should include the dialect):
   let b:is_bash = 1
 
   AssertEqual
   \ b:prefix . ale#Escape('shellcheck') . ' -s bash' . b:suffix,
-  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''))
+  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''), [])
 
 Execute(The shellcheck command should include the dialect before options and exclusions):
   let b:is_bash = 1
@@ -65,4 +65,65 @@ Execute(The shellcheck command should include the dialect before options and exc
   \   . ale#Escape('shellcheck')
   \   . ' -s bash --foobar -e foo,bar'
   \   . b:suffix,
-  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''))
+  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''), [])
+
+Execute(The VersionCheck function should return the --version command):
+  AssertEqual
+  \ ale#Escape('shellcheck') . ' --version',
+  \ ale_linters#sh#shellcheck#VersionCheck(bufnr(''))
+
+  let g:ale_sh_shellcheck_executable = 'foobar'
+
+  AssertEqual
+  \ ale#Escape('foobar') . ' --version',
+  \ ale_linters#sh#shellcheck#VersionCheck(bufnr(''))
+
+Execute(The -x option should be added when the version is new enough):
+  AssertEqual
+  \ b:prefix . ale#Escape('shellcheck') . ' -x' . b:suffix,
+  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''), [
+  \   'ShellCheck - shell script analysis tool',
+  \   'version: 0.4.4',
+  \   'license: GNU General Public License, version 3',
+  \   'website: http://www.shellcheck.net',
+  \ ])
+
+  " We should cache the version check
+  AssertEqual
+  \ b:prefix . ale#Escape('shellcheck') . ' -x' . b:suffix,
+  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''), [])
+
+  AssertEqual '', ale_linters#sh#shellcheck#VersionCheck(bufnr(''))
+
+Execute(The version check shouldn't be run again for new versions):
+  call ale_linters#sh#shellcheck#GetCommand(bufnr(''), [
+  \ 'ShellCheck - shell script analysis tool',
+  \ 'version: 0.4.4',
+  \ 'license: GNU General Public License, version 3',
+  \ 'website: http://www.shellcheck.net',
+  \])
+
+Execute(The -x option should not be added when the version is too old):
+  AssertEqual
+  \ b:prefix . ale#Escape('shellcheck') . b:suffix,
+  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''), [
+  \   'ShellCheck - shell script analysis tool',
+  \   'version: 0.3.9',
+  \   'license: GNU General Public License, version 3',
+  \   'website: http://www.shellcheck.net',
+  \ ])
+
+  " We should cache the version check
+  AssertEqual
+  \ b:prefix . ale#Escape('shellcheck') . b:suffix,
+  \ ale_linters#sh#shellcheck#GetCommand(bufnr(''), [])
+
+Execute(The version check shouldn't be run again for old versions):
+  call ale_linters#sh#shellcheck#GetCommand(bufnr(''), [
+  \ 'ShellCheck - shell script analysis tool',
+  \ 'version: 0.3.9',
+  \ 'license: GNU General Public License, version 3',
+  \ 'website: http://www.shellcheck.net',
+  \])
+
+  AssertEqual '', ale_linters#sh#shellcheck#VersionCheck(bufnr(''))
