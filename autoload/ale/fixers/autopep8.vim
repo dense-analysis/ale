@@ -12,7 +12,7 @@ function! ale#fixers#autopep8#Fix(buffer) abort
     \   ['autopep8'],
     \)
 
-    if !ale#python#IsExecutable(l:executable)
+    if !executable(l:executable)
         return 0
     endif
 
