@@ -290,7 +290,7 @@ function! ale#job#Stop(job_id) abort
         " FIXME: NeoVim kills jobs on a timer, but will not kill any processes
         " which are child processes on Unix. Some work needs to be done to
         " kill child processes to stop long-running processes like pylint.
-        call jobstop(a:job_id)
+        silent! call jobstop(a:job_id)
     else
         let l:job = s:job_map[a:job_id].job
 
