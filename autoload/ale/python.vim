@@ -77,7 +77,7 @@ endfunction
 " Run an executable check for Python scripts.
 " On Windows, 1 will be returned if the file is merely readable.
 function! ale#python#IsExecutable(path) abort
-    return has('win32') ? filereadable(a:path) : executable(a:path)
+    return executable(a:path)
 endfunction
 
 " Given a buffer number and a command name, find the path to the executable.
