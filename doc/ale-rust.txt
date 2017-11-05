@@ -41,10 +41,22 @@ cargo                                                          *ale-rust-cargo*
 g:ale_rust_cargo_use_check                         *g:ale_rust_cargo_use_check*
                                                    *b:ale_rust_cargo_use_check*
   Type: |Number|
-  Default: `0`
+  Default: `1`
 
-  When set to `1`, this option will cause ALE to use "cargo check" instead of
-  "cargo build". "cargo check" is supported since version 1.16.0 of Rust.
+  When set to `1`, this option will cause ALE to use `cargo check` instead of
+  `cargo build` . `cargo check` is supported since version 1.16.0 of Rust.
+
+  ALE will never use `cargo check` when the version of `cargo` is less than
+  0.17.0.
+
+
+g:ale_rust_cargo_check_all_targets         *g:ale_rust_cargo_check_all_targets*
+                                           *b:ale_rust_cargo_check_all_targets*
+  Type: |Number|
+  Default: `1`
+
+  When set to `1`, ALE will set the `--all-targets` option when `cargo check`
+  is used. See |g:ale_rust_cargo_use_check|,
 
 
 ===============================================================================
