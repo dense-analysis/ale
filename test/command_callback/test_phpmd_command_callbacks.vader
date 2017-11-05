@@ -1,0 +1,20 @@
+Before:
+  Save g:ale_php_phpmd_executable
+
+  unlet! g:ale_php_phpmd_executable
+
+  runtime ale_linters/php/phpmd.vim
+
+After:
+  Restore
+
+  call ale#linter#Reset()
+
+Execute(Custom executables should be used for the executable and command):
+  let g:ale_php_phpmd_executable = 'phpmd_test'
+
+  AssertEqual 'phpmd_test', ale_linters#php#phpmd#GetExecutable(bufnr(''))
+  AssertEqual
+  \ ale#Escape('phpmd_test')
+  \ . ' %s text cleancode,codesize,controversial,design,naming,unusedcode --ignore-violations-on-exit %t',
+  \ ale_linters#php#phpmd#GetCommand(bufnr(''))
