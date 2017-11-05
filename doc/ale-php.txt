@@ -121,6 +121,14 @@ g:ale_php_phpcs_use_global                         *g:ale_php_phpcs_use_global*
 ===============================================================================
 phpmd                                                           *ale-php-phpmd*
 
+g:ale_php_phpmd_executable                         *g:ale_php_phpmd_executable*
+                                                   *b:ale_php_phpmd_executable*
+  Type: |String|
+  Default: `'phpmd'`
+
+  This variable sets executable used for phpmd.
+
+
 g:ale_php_phpmd_ruleset                               *g:ale_php_phpmd_ruleset*
                                                       *b:ale_php_phpmd_ruleset*
   Type: |String|
