@@ -312,7 +312,7 @@ function! ale#engine#SetResults(buffer, loclist) abort
         call ale#engine#RemoveManagedFiles(a:buffer)
 
         " Call user autocommands. This allows users to hook into ALE's lint cycle.
-        silent doautocmd User ALELint
+        silent doautocmd <nomodeline> User ALELint
     endif
 endfunction
 
