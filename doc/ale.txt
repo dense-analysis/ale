@@ -173,6 +173,7 @@ CONTENTS                                                         *ale-contents*
     sh....................................|ale-sh-options|
       shell...............................|ale-sh-shell|
       shellcheck..........................|ale-sh-shellcheck|
+      shfmt...............................|ale-sh-shfmt|
     sml...................................|ale-sml-options|
       smlnj...............................|ale-sml-smlnj|
     solidity..............................|ale-solidity-options|
@@ -256,8 +257,8 @@ Notes:
 * Ansible: `ansible-lint`
 * AsciiDoc: `proselint`, `write-good`
 * Awk: `gawk`
-* Bash: `shell` (-n flag), `shellcheck`
-* Bourne Shell: `shell` (-n flag), `shellcheck`
+* Bash: `shell` (-n flag), `shellcheck`, `shfmt`
+* Bourne Shell: `shell` (-n flag), `shellcheck`, `shfmt`
 * C: `cppcheck`, `cpplint`!!, `gcc`, `clang`, `clangtidy`!!, `clang-format`
 * C++ (filetype cpp): `clang`, `clangcheck`!!, `clangtidy`!!, `cppcheck`, `cpplint`!!, `gcc`, `clang-format`
 * CUDA: `nvcc`!!
