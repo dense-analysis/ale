@@ -132,6 +132,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['reason'],
 \       'description': 'Fix ReasonML files with refmt.',
 \   },
+\   'shfmt': {
+\       'function': 'ale#fixers#shfmt#Fix',
+\       'suggested_filetypes': ['sh'],
+\       'description': 'Fix sh files with shfmt.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
