@@ -45,7 +45,7 @@ Execute(ale#lsp#message#DidOpen() should return correct messages):
   \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
   \         'languageId': 'typescript',
   \         'version': 12,
-  \         'text': "foo()\nbar()\nbaz()",
+  \         'text': "foo()\nbar()\nbaz()\n",
   \     },
   \   }
   \ ],
@@ -63,7 +63,7 @@ Execute(ale#lsp#message#DidChange() should return correct messages):
   \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
   \         'version': 34,
   \     },
-  \     'contentChanges': [{'text': "foo()\nbar()\nbaz()"}],
+  \     'contentChanges': [{'text': "foo()\nbar()\nbaz()\n"}],
   \   }
   \ ],
   \ ale#lsp#message#DidChange(bufnr(''))
@@ -134,7 +134,7 @@ Execute(ale#lsp#tsserver_message#Change() should return correct messages):
   \     'offset': 1,
   \     'endLine': 1073741824,
   \     'endOffset': 1,
-  \     'insertString': "foo()\nbar()\nbaz()",
+  \     'insertString': "foo()\nbar()\nbaz()\n",
   \   }
   \ ],
   \ ale#lsp#tsserver_message#Change(bufnr(''))
