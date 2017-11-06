@@ -392,8 +392,13 @@ let g:ale_set_highlights = 0
 ```
 
 You can control all of the highlights ALE uses, say if you are using a different
-color scheme which produces ugly highlights. See `:help ale-highlights` for more
-information.
+color scheme which produces ugly highlights. For example:
+
+```vim
+highlight ALEWarning ctermbg=DarkMagenta
+```
+
+See `:help ale-highlights` for more information.
 
 <a name="faq-statusline"></a>
 
