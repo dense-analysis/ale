@@ -62,8 +62,8 @@ Execute (ALE should pass on full lines for NeoVim for raw data):
 Execute (ALE should pass on a single long line):
   let g:last_line = ale#job#JoinNeovimOutput(1, '', ['x'], 'raw', function('RawCallback'))
 
-  AssertEqual '', g:data
-  AssertEqual 'x', g:last_line
+  AssertEqual 'x', g:data
+  AssertEqual '', g:last_line
 
 Execute (ALE should handle just a single line of output):
   let g:last_line = ale#job#JoinNeovimOutput(1, '', ['x', ''], 'raw', function('RawCallback'))
@@ -71,20 +71,8 @@ Execute (ALE should handle just a single line of output):
   AssertEqual "x\n", g:data
   AssertEqual '', g:last_line
 
-Execute (ALE should join two incomplete pieces of large lines together):
-  let g:last_line = ale#job#JoinNeovimOutput(1, 'x', ['y'], 'raw', function('RawCallback'))
+Execute (ALE should pass on two lines and one incomplete one):
+  let g:last_line = ale#job#JoinNeovimOutput(1, '', ['y', 'z', 'a'], 'raw', function('RawCallback'))
 
-  AssertEqual '', g:data
-  AssertEqual 'xy', g:last_line
-
-Execute (ALE join incomplete lines, and set new ones):
-  let g:last_line = ale#job#JoinNeovimOutput(1, 'x', ['y', 'z', 'a'], 'raw', function('RawCallback'))
-
-  AssertEqual "xy\nz\n", g:data
-  AssertEqual 'a', g:last_line
-
-Execute (ALE join incomplete lines, and set new ones, with two elements):
-  let g:last_line = ale#job#JoinNeovimOutput(1, 'x', ['y', 'z'], 'raw', function('RawCallback'))
-
-  AssertEqual "xy\n", g:data
-  AssertEqual 'z', g:last_line
+  AssertEqual "y\nz\na", g:data
+  AssertEqual '', g:last_line
