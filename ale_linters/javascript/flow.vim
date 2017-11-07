@@ -112,13 +112,15 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
                     endif
                 endfor
   
-                for l:child in l:extra_error.children
-                    for l:child_message in l:child.message
-  
-                        let l:detail = l:detail . ' ' . l:child_message.descr
-  
-                    endfor
-                endfor
+                if has_key(l:extra_error, 'children')
+                  for l:child in l:extra_error.children
+                      for l:child_message in l:child.message
+    
+                          let l:detail = l:detail . ' ' . l:child_message.descr
+    
+                      endfor
+                  endfor
+                endif
   
             endfor
         endif
