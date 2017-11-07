@@ -91,18 +91,6 @@ g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
 
   See |ale-integrations-local-executables|
 
-
-g:ale_javascript_flow_extra                   *g:ale_javascript_flow_extra*
-                                              *b:ale_javascript_flow_extra*
-  Type: |Number|
-  Default: `0`
-
-  This variable dictates whether flow extra errors should be shown in the
-  loclist. For example, when passing a prop of type function to a component
-  that expects a prop of type string, flow reports not just a general prop 
-  type mismatch, but also which prop caused that mismatch and why.
-
-  
 ===============================================================================
 jscs                                                      *ale-javascript-jscs*
 

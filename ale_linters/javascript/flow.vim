@@ -99,10 +99,9 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
         endif
 
         if has_key(l:error, 'extra')
-            \&& g:ale_javascript_flow_extra
 
             for l:extra_error in l:error.extra
-  
+
                 for l:extra_message in l:extra_error.message
                     if l:detail is# ''
                         " extra messages appear to already have a :
@@ -111,17 +110,17 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
                         let l:detail = l:detail . ' ' . l:extra_message.descr
                     endif
                 endfor
-  
+
                 if has_key(l:extra_error, 'children')
                   for l:child in l:extra_error.children
                       for l:child_message in l:child.message
-    
+
                           let l:detail = l:detail . ' ' . l:child_message.descr
-    
+
                       endfor
                   endfor
                 endif
-  
+
             endfor
         endif
 
@@ -132,7 +131,7 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
         \   'type': l:error.level is# 'error' ? 'E' : 'W',
         \   'detail': l:detail,
         \})
-  
+
       endfor
 
     return l:output
