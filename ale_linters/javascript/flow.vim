@@ -76,42 +76,47 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
         let l:col = 0
         let l:detail = ''
 
-        for l:message in l:error.message
-            " Comments have no line of column information, so we skip them.
-            " In certain cases, `l:message.loc.source` points to a different path
-            " than the buffer one, thus we skip this loc information too.
-            if has_key(l:message, 'loc')
-            \&& l:line is# 0
-            \&& ale#path#IsBufferPath(a:buffer, l:message.loc.source)
-                let l:line = l:message.loc.start.line + 0
-                let l:col = l:message.loc.start.column + 0
-            endif
+        if has_key(l:error, 'message')
+            for l:message in l:error.message
+                " Comments have no line of column information, so we skip them.
+                " In certain cases, `l:message.loc.source` points to a different path
+                " than the buffer one, thus we skip this loc information too.
+                if has_key(l:message, 'loc')
+                \&& l:line is# 0
+                \&& ale#path#IsBufferPath(a:buffer, l:message.loc.source)
+                    let l:line = l:message.loc.start.line + 0
+                    let l:col = l:message.loc.start.column + 0
+                endif
 
-            if l:text is# ''
-                let l:text = l:message.descr . ':'
-            else
-                let l:text = l:text . ' ' . l:message.descr
-            endif
-        endfor
+                if l:text is# ''
+                    let l:text = l:message.descr . ':'
+                else
+                    let l:text = l:text . ' ' . l:message.descr
+                endif
+            endfor
+        endif
 
         if has_key(l:error, 'operation')
             let l:text = l:text . ' See also: ' . l:error.operation.descr
         endif
 
         if has_key(l:error, 'extra')
-
             for l:extra_error in l:error.extra
 
-                for l:extra_message in l:extra_error.message
-                    if l:detail is# ''
-                        " extra messages appear to already have a :
-                        let l:detail = l:extra_message.descr
-                    else
-                        let l:detail = l:detail . ' ' . l:extra_message.descr
-                    endif
-                endfor
+              if has_key(l:extra_error, 'message')
+                  for l:extra_message in l:extra_error.message
 
-                if has_key(l:extra_error, 'children')
+                      if l:detail is# ''
+                          " extra messages appear to already have a :
+                          let l:detail = l:extra_message.descr
+                      else
+                          let l:detail = l:detail . ' ' . l:extra_message.descr
+                      endif
+
+                  endfor
+              endif
+
+              if has_key(l:extra_error, 'children')
                   for l:child in l:extra_error.children
                       for l:child_message in l:child.message
 
@@ -119,7 +124,7 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
 
                       endfor
                   endfor
-                endif
+              endif
 
             endfor
         endif
@@ -127,8 +132,8 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
         call add(l:output, {
         \   'lnum': l:line,
         \   'col': l:col,
-        \   'text': l:text, 
-        \   'type': l:error.level is# 'error' ? 'E' : 'W',
+        \   'text': l:text,
+        \   'type': has_key(l:error, 'level') && l:error.level is# 'error' ? 'E' : 'W',
         \   'detail': l:detail,
         \})
 
