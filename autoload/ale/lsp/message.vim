@@ -53,7 +53,7 @@ function! ale#lsp#message#DidOpen(buffer, language_id) abort
     \       'uri': ale#path#ToURI(expand('#' . a:buffer . ':p')),
     \       'languageId': a:language_id,
     \       'version': ale#lsp#message#GetNextVersionID(),
-    \       'text': join(l:lines, "\n"),
+    \       'text': join(l:lines, "\n") . "\n",
     \   },
     \}]
 endfunction
@@ -67,7 +67,7 @@ function! ale#lsp#message#DidChange(buffer) abort
     \       'uri': ale#path#ToURI(expand('#' . a:buffer . ':p')),
     \       'version': ale#lsp#message#GetNextVersionID(),
     \   },
-    \   'contentChanges': [{'text': join(l:lines, "\n")}]
+    \   'contentChanges': [{'text': join(l:lines, "\n") . "\n"}]
     \}]
 endfunction
 

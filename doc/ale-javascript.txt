@@ -56,8 +56,21 @@ g:ale_javascript_eslint_suppress_eslintignore
   Type: |Number|
   Default: `0`
 
-  This variable can be set to disable the warning that linting is disabled on
-  the current file due to being covered by `.eslintignore`.
+  This variable can be set to `1` to disable warnings for files being ignored
+  by eslint.
+
+
+g:ale_javascript_eslint_suppress_missing_config
+                              *g:ale_javascript_eslint_suppress_missing_config*
+                              *b:ale_javascript_eslint_suppress_missing_config*
+  Type: |Number|
+  Default: `0`
+
+  This variable can be set to `1` to disable errors for missing eslint
+  configuration files.
+
+  When turning this option on, eslint will not report any problems when no
+  configuration files are found.
 
 
 ===============================================================================

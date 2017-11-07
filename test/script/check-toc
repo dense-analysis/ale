@@ -23,18 +23,19 @@ tagged_toc_file="$(mktemp -t ale.txt.XXXXXXXX)"
 sorted_toc_file="$(mktemp -t sorted-ale.txt.XXXXXXXX)"
 
 sed -n "$toc_start_line,$toc_end_line"p doc/ale.txt \
-    | sed 's/^    \( *[^.]\+\)\.\+|\(.\+\)|/\1, \2/' \
+    | sed 's/^    \( *[^.][^.]*\)\.\.*|\(..*\)|/\1, \2/' \
     > "$toc_file"
 
 # Get all of the doc files in a natural sorted order.
-doc_files="$(/bin/ls -1v doc | grep ^ale- | sed 's/^/doc\//' | paste -sd ' ')"
+doc_files="$(/bin/ls -1v doc | grep ^ale- | sed 's/^/doc\//' | paste -sd ' ' -)"
 
 # shellcheck disable=SC2086
-grep -h 'ale-.*-options\|^[a-z].*\*ale-.*\*$' $doc_files \
+grep -h '\*ale-.*-options\|^[a-z].*\*ale-.*\*$' $doc_files \
     | sed 's/^/  /' \
     | sed 's/ALE Shell Integration/ALE sh Integration/' \
-    | sed 's/  ALE \(.*\) Integration/\L\1/' \
-    | sed 's/ *\*\(.\+\)\*$/, \1/' \
+    | sed 's/  ALE \(.*\) Integration/\1/' \
+    | sed 's/ *\*\(..*\)\*$/, \1/' \
+    | tr '[:upper:]' '[:lower:]' \
     | sed 's/objective-c/objc/' \
     | sed 's/c++/cpp/' \
     > "$heading_file"
@@ -62,7 +63,7 @@ while read -r; do
 done < "$toc_file"
 
 # Sort the sections and sub-sections and remove the tags.
-sort -h "$tagged_toc_file" | sed 's/[0-9]\+ //' > "$sorted_toc_file"
+sort -sn "$tagged_toc_file" | sed 's/[0-9][0-9]* //' > "$sorted_toc_file"
 
 echo 'Check for bad ToC sorting:'
 echo

@@ -209,7 +209,17 @@ function! s:UpdateLineNumbers(buffer, current_sign_list, loclist) abort
     endif
 endfunction
 
-function! s:BuildSignMap(current_sign_list, grouped_items) abort
+function! s:BuildSignMap(buffer, current_sign_list, grouped_items) abort
+    let l:max_signs = ale#Var(a:buffer, 'max_signs')
+
+    if l:max_signs is 0
+        let l:selected_grouped_items = []
+    elseif type(l:max_signs) is type(0) && l:max_signs > 0
+        let l:selected_grouped_items = a:grouped_items[:l:max_signs - 1]
+    else
+        let l:selected_grouped_items = a:grouped_items
+    endif
+
     let l:sign_map = {}
     let l:sign_offset = g:ale_sign_offset
 
@@ -235,7 +245,7 @@ function! s:BuildSignMap(current_sign_list, grouped_items) abort
         let l:sign_map[l:line] = l:sign_info
     endfor
 
-    for l:group in a:grouped_items
+    for l:group in l:selected_grouped_items
         let l:line = l:group[0].lnum
         let l:sign_info = get(l:sign_map, l:line, {
         \   'current_id_list': [],
@@ -346,7 +356,11 @@ function! ale#sign#SetSigns(buffer, loclist) abort
     let l:grouped_items = s:GroupLoclistItems(a:buffer, a:loclist)
 
     " Build a map of current and new signs, with the lines as the keys.
-    let l:sign_map = s:BuildSignMap(l:current_sign_list, l:grouped_items)
+    let l:sign_map = s:BuildSignMap(
+    \   a:buffer,
+    \   l:current_sign_list,
+    \   l:grouped_items,
+    \)
 
     let l:command_list = ale#sign#GetSignCommands(
     \   a:buffer,

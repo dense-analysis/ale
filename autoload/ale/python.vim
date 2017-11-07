@@ -71,13 +71,7 @@ function! ale#python#FindVirtualenv(buffer) abort
         endfor
     endfor
 
-    return ''
-endfunction
-
-" Run an executable check for Python scripts.
-" On Windows, 1 will be returned if the file is merely readable.
-function! ale#python#IsExecutable(path) abort
-    return has('win32') ? filereadable(a:path) : executable(a:path)
+    return $VIRTUAL_ENV
 endfunction
 
 " Given a buffer number and a command name, find the path to the executable.
@@ -96,7 +90,7 @@ function! ale#python#FindExecutable(buffer, base_var_name, path_list) abort
             \   join([l:virtualenv, s:bin_dir, l:path], s:sep)
             \)
 
-            if ale#python#IsExecutable(l:ve_executable)
+            if executable(l:ve_executable)
                 return l:ve_executable
             endif
         endfor

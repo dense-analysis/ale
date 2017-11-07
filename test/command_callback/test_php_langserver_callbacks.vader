@@ -33,13 +33,13 @@ Execute(Vendor executables should be detected):
   call ale#test#SetFilename('php-langserver-project/test.php')
 
   AssertEqual
-  \ g:dir . '/php-langserver-project/vendor/bin/php-language-server.php',
+  \ ale#path#Winify(g:dir . '/php-langserver-project/vendor/bin/php-language-server.php'),
   \ ale_linters#php#langserver#GetExecutable(bufnr(''))
   AssertEqual
-  \ 'php ' . ale#Escape(
+  \ 'php ' . ale#Escape(ale#path#Winify(
   \   g:dir
   \   . '/php-langserver-project/vendor/bin/php-language-server.php'
-  \ ),
+  \ )),
   \ ale_linters#php#langserver#GetCommand(bufnr(''))
 
 Execute(The language string should be correct):

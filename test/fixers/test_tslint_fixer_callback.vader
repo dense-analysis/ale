@@ -1,0 +1,41 @@
+Before:
+  Save g:ale_typescript_tslint_executable
+  Save g:ale_typescript_tslint_config_path
+
+  let g:ale_typescript_tslint_executable = 'xxxinvalid'
+  let g:ale_typescript_tslint_config_path = 'tslint.json'
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+  silent cd ..
+  silent cd command_callback
+  let g:dir = getcwd()
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The tslint callback should return the correct default values):
+  call ale#test#SetFilename('../prettier-test-files/testfile.ts')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape(g:ale_typescript_tslint_executable)
+  \     . ' -c ' . ale#Escape('tslint.json')
+  \     . ' --fix %t',
+  \ },
+  \ ale#fixers#tslint#Fix(bufnr(''))
+
+Execute(The tslint callback should include custom tslint config option):
+  let g:ale_typescript_tslint_config_path = '.tslintrc'
+  call ale#test#SetFilename('../prettier-test-files/testfile.ts')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape(g:ale_typescript_tslint_executable)
+  \     . ' -c ' . ale#Escape(g:ale_typescript_tslint_config_path)
+  \     . ' --fix %t',
+  \ },
+  \ ale#fixers#tslint#Fix(bufnr(''))

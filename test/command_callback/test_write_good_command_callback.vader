@@ -1,0 +1,65 @@
+Before:
+  Save g:ale_writegood_options
+  Save g:ale_writegood_executable
+  Save g:ale_writegood_use_global
+
+  unlet! g:ale_writegood_options
+  unlet! g:ale_writegood_executable
+  unlet! g:ale_writegood_use_global
+
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#test#SetFilename('testfile.txt')
+
+  call ale#handlers#writegood#ResetOptions()
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The global executable should be used when the local one cannot be found):
+  AssertEqual 'write-good', ale#handlers#writegood#GetExecutable(bufnr(''))
+  AssertEqual
+  \ ale#Escape('write-good') . ' %t',
+  \ ale#handlers#writegood#GetCommand(bufnr(''))
+
+Execute(The options should be used in the command):
+  let g:ale_writegood_options = '--foo --bar'
+
+  AssertEqual
+  \ ale#Escape('write-good') . ' --foo --bar %t',
+  \ ale#handlers#writegood#GetCommand(bufnr(''))
+
+Execute(Should use the node_modules/.bin executable, if available):
+  call ale#test#SetFilename('write-good-node-modules/test.txt')
+
+  AssertEqual
+  \ ale#path#Winify(g:dir . '/write-good-node-modules/node_modules/.bin/write-good'),
+  \ ale#handlers#writegood#GetExecutable(bufnr(''))
+  AssertEqual
+  \ ale#Escape(ale#path#Winify(g:dir . '/write-good-node-modules/node_modules/.bin/write-good'))
+  \   . ' %t',
+  \ ale#handlers#writegood#GetCommand(bufnr(''))
+
+Execute(Should use the node_modules/write-good executable, if available):
+  call ale#test#SetFilename('write-good-node-modules-2/test.txt')
+
+  AssertEqual
+  \ ale#path#Winify(g:dir . '/write-good-node-modules-2/node_modules/write-good/bin/write-good.js'),
+  \ ale#handlers#writegood#GetExecutable(bufnr(''))
+  AssertEqual
+  \   (has('win32') ? 'node.exe ' : '')
+  \   . ale#Escape(ale#path#Winify(g:dir . '/write-good-node-modules-2/node_modules/write-good/bin/write-good.js'))
+  \   . ' %t',
+  \ ale#handlers#writegood#GetCommand(bufnr(''))
+
+Execute(Should let users configure a global executable and override local paths):
+  call ale#test#SetFilename('write-good-node-modules-2/test.txt')
+
+  let g:ale_writegood_executable = 'foo-bar'
+  let g:ale_writegood_use_global = 1
+
+  AssertEqual 'foo-bar', ale#handlers#writegood#GetExecutable(bufnr(''))
+  AssertEqual
+  \ ale#Escape('foo-bar') . ' %t',
+  \ ale#handlers#writegood#GetCommand(bufnr(''))

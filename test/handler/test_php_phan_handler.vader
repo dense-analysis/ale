@@ -1,0 +1,24 @@
+Before:
+  runtime ale_linters/php/phan.vim
+
+Execute(The php static analyzer handler should parse errors from phan):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 25,
+  \     'type': 'W',
+  \     'text': 'Return type of getValidator is undeclared type \Respect\Validation\Validator',
+  \   },
+  \   {
+  \     'lnum': 66,
+  \     'type': 'W',
+  \     'text': 'Call to method string from undeclared class \Respect\Validation\Validator',
+  \   },
+  \ ],
+  \ ale_linters#php#phan#Handle(347, [
+  \ "example.php:25 PhanUndeclaredTypeReturnType Return type of getValidator is undeclared type \\Respect\\Validation\\Validator",
+  \ "example.php:66 PhanUndeclaredClassMethod Call to method string from undeclared class \\Respect\\Validation\\Validator",
+  \ ])
+
+After:
+  call ale#linter#Reset()

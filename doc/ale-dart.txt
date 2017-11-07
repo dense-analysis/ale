@@ -20,6 +20,8 @@ If you have installed Dart on Linux, you can also try the following: >
 ... or similarly for wherever your Dart SDK lives. This should work without
 having to modify `$PATH`.
 
+ALE can only check for problems with `dartanalyzer` with the file on disk.
+See |ale-lint-file-linters|
 
 Options
 -------------------------------------------------------------------------------

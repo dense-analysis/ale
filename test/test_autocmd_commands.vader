@@ -1,6 +1,7 @@
 Before:
   function! CheckAutocmd(group)
-    call ALEInitAuGroups()
+    call ale#toggle#InitAuGroups()
+
     redir => l:output
       execute 'silent! autocmd ' . a:group
     redir END
@@ -58,7 +59,7 @@ After:
     call ale#completion#Disable()
   endif
 
-  call ALEInitAuGroups()
+  call ale#toggle#InitAuGroups()
 
 Execute (g:ale_lint_on_text_changed = 0 should bind no events):
   let g:ale_lint_on_text_changed = 0
@@ -154,32 +155,10 @@ Execute (g:ale_lint_on_filetype_changed = 1 should bind the FileType event):
   \ ],
   \ CheckAutocmd('ALERunOnFiletypeChangeGroup')
 
-Execute (g:ale_lint_on_save = 0 should bind no events):
-  let g:ale_lint_on_save = 0
-  let g:ale_fix_on_save = 0
-
-  AssertEqual [], CheckAutocmd('ALERunOnSaveGroup')
-
-Execute (g:ale_lint_on_save = 1 should bind no events):
-  let g:ale_lint_on_save = 1
-  let g:ale_fix_on_save = 0
-
-  AssertEqual [
-  \ 'BufWritePost * call ale#events#SaveEvent(str2nr(expand(''<abuf>'')))',
-  \], CheckAutocmd('ALERunOnSaveGroup')
-
-Execute (g:ale_lint_on_save = 0 and g:ale_fix_on_save = 1 should bind events):
-  let g:ale_lint_on_save = 0
-  let g:ale_fix_on_save = 1
-
-  AssertEqual [
-  \ 'BufWritePost * call ale#events#SaveEvent(str2nr(expand(''<abuf>'')))',
-  \], CheckAutocmd('ALERunOnSaveGroup')
-
-Execute (g:ale_fix_on_save = 1 should bind events even when ALE is disabled):
+Execute (The SaveEvent should always be bound):
   let g:ale_enabled = 0
   let g:ale_lint_on_save = 0
-  let g:ale_fix_on_save = 1
+  let g:ale_fix_on_save = 0
 
   AssertEqual [
   \ 'BufWritePost * call ale#events#SaveEvent(str2nr(expand(''<abuf>'')))',
@@ -198,6 +177,12 @@ Execute (g:ale_echo_cursor = 1 should bind cursor events):
   \ 'CursorMoved * call ale#cursor#EchoCursorWarningWithDelay()',
   \ 'InsertLeave * call ale#cursor#EchoCursorWarning()',
   \], CheckAutocmd('ALECursorGroup')
+
+Execute (ALECleanupGroup should include the right commands):
+  AssertEqual [
+  \ 'BufUnload * call ale#engine#Cleanup(str2nr(expand(''<abuf>'')))',
+  \ 'QuitPre * call ale#events#QuitEvent(str2nr(expand(''<abuf>'')))',
+  \], CheckAutocmd('ALECleanupGroup')
 
 Execute(Enabling completion should set up autocmd events correctly):
   let g:ale_completion_enabled = 0

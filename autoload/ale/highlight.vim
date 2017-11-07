@@ -58,7 +58,7 @@ function! ale#highlight#RemoveHighlights() abort
 endfunction
 
 function! ale#highlight#UpdateHighlights() abort
-    let l:item_list = g:ale_enabled
+    let l:item_list = get(b:, 'ale_enabled', 1) && g:ale_enabled
     \   ? get(b:, 'ale_highlight_items', [])
     \   : []
 
@@ -106,7 +106,7 @@ augroup ALEHighlightBufferGroup
 augroup END
 
 function! ale#highlight#SetHighlights(buffer, loclist) abort
-    let l:new_list = g:ale_enabled
+    let l:new_list = getbufvar(a:buffer, 'ale_enabled', 1) && g:ale_enabled
     \   ? filter(copy(a:loclist), 'v:val.bufnr == a:buffer && v:val.col > 0')
     \   : []
 

@@ -7,19 +7,19 @@ After:
 
 Execute(Should return the correct default values):
   AssertEqual
-  \  'jscs',
-  \   ale_linters#javascript#jscs#GetExecutable(bufnr(''))
+  \ 'jscs',
+  \ ale_linters#javascript#jscs#GetExecutable(bufnr(''))
   AssertEqual
-  \   '''jscs'' --reporter inline --no-colors -',
-  \   ale_linters#javascript#jscs#GetCommand(bufnr(''))
+  \ ale#Escape('jscs') . ' --reporter inline --no-colors -',
+  \ ale_linters#javascript#jscs#GetCommand(bufnr(''))
 
 
 Execute(Should allow using a custom executable):
   let g:ale_javascript_jscs_executable = 'foobar'
 
   AssertEqual
-  \   'foobar',
-  \   ale_linters#javascript#jscs#GetExecutable(bufnr(''))
+  \ 'foobar',
+  \ ale_linters#javascript#jscs#GetExecutable(bufnr(''))
   AssertEqual
-  \   '''foobar'' --reporter inline --no-colors -',
-  \   ale_linters#javascript#jscs#GetCommand(bufnr(''))
+  \ ale#Escape('foobar') . ' --reporter inline --no-colors -',
+  \ ale_linters#javascript#jscs#GetCommand(bufnr(''))

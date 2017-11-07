@@ -1,24 +1,34 @@
 Before:
+  Save g:ale_fuse_fusionlint_options
+  Save g:ale_fuse_fusionlint_executable
+
+  unlet! g:ale_fuse_fusionlint_options
+  unlet! g:ale_fuse_fusionlint_executable
+
   runtime ale_linters/fuse/fusionlint.vim
 
 After:
+  Restore
+
   call ale#linter#Reset()
-  let g:ale_fuse_fusionlint_options = ''
-  let g:ale_fuse_fusionlint_executable = 'fusion-lint'
 
 Execute(The fuse fusionlint command callback should return the correct default string):
-  AssertEqual '''fusion-lint'' --filename %s -i',
+  AssertEqual ale#Escape('fusion-lint') . ' --filename %s -i',
   \ join(split(ale_linters#fuse#fusionlint#GetCommand(1)))
 
 Execute(The fuse fusionlint command callback should let you set options):
   let g:ale_fuse_fusionlint_options = '--example-option argument'
 
-  AssertEqual '''fusion-lint'' --example-option argument --filename %s -i',
+  AssertEqual
+  \ ale#Escape('fusion-lint')
+  \   . ' --example-option argument --filename %s -i',
   \ join(split(ale_linters#fuse#fusionlint#GetCommand(1)))
 
 Execute(The fusionlint executable should be configurable):
   let g:ale_fuse_fusionlint_executable = 'util/linter.fuse'
 
   AssertEqual 'util/linter.fuse', ale_linters#fuse#fusionlint#GetExecutable(1)
-  AssertEqual '''util/linter.fuse'' --filename %s -i',
+  AssertEqual
+  \ ale#Escape('util/linter.fuse')
+  \   . ' --filename %s -i',
   \ join(split(ale_linters#fuse#fusionlint#GetCommand(1)))

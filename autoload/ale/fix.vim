@@ -56,7 +56,9 @@ function! ale#fix#ApplyQueuedFixes() abort
 
     " If ALE linting is enabled, check for problems with the file again after
     " fixing problems.
-    if g:ale_enabled && l:should_lint
+    if g:ale_enabled
+    \&& l:should_lint
+    \&& !ale#events#QuitRecently(l:buffer)
         call ale#Queue(0, l:data.should_save ? 'lint_file' : '')
     endif
 endfunction
@@ -350,11 +352,21 @@ function! ale#fix#Fix(...) abort
         throw "fixing_flag must be either '' or 'save_file'"
     endif
 
-    let l:callback_list = s:GetCallbacks()
+    try
+        let l:callback_list = s:GetCallbacks()
+    catch /E700/
+        let l:function_name = join(split(split(v:exception, ':')[3]))
+        echom printf(
+        \   'There is no fixer named `%s`. Check :ALEFixSuggest',
+        \   l:function_name,
+        \)
+
+        return 0
+    endtry
 
     if empty(l:callback_list)
         if l:fixing_flag is# ''
-            echoerr 'No fixers have been defined. Try :ALEFixSuggest'
+            echom 'No fixers have been defined. Try :ALEFixSuggest'
         endif
 
         return 0

@@ -8,6 +8,8 @@ Before:
   unlet! g:ale_python_flake8_options
   unlet! g:ale_python_flake8_use_global
 
+  let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
+
   runtime ale_linters/python/flake8.vim
   call ale#test#SetDirectory('/testplugin/test/command_callback')
 
@@ -15,6 +17,9 @@ After:
   Restore
 
   unlet! g:ale_python_flake8_args
+
+  unlet! b:bin_dir
+  unlet! b:executable
 
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
@@ -25,26 +30,29 @@ Execute(The flake8 callbacks should return the correct default values):
   \ 'flake8',
   \ ale_linters#python#flake8#GetExecutable(bufnr(''))
   AssertEqual
-  \ '''flake8'' --version',
+  \ ale#Escape('flake8') . ' --version',
   \ ale_linters#python#flake8#VersionCheck(bufnr(''))
   AssertEqual
-  \ '''flake8'' --format=default --stdin-display-name %s -',
+  \ ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
   " Try with older versions.
   call ale_linters#python#flake8#ClearVersionCache()
   AssertEqual
-  \ '''flake8'' --format=default -',
+  \ ale#Escape('flake8') . ' --format=default -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
 
 Execute(The flake8 command callback should let you set options):
   let g:ale_python_flake8_options = '--some-option'
 
   AssertEqual
-  \ '''flake8'' --some-option --format=default --stdin-display-name %s -',
+  \ ale#Escape('flake8')
+  \   . ' --some-option --format=default'
+  \   . ' --stdin-display-name %s -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.4'])
   call ale_linters#python#flake8#ClearVersionCache()
   AssertEqual
-  \ '''flake8'' --some-option --format=default -',
+  \ ale#Escape('flake8')
+  \   . ' --some-option --format=default -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
 
 Execute(You should be able to set a custom executable and it should be escaped):
@@ -54,23 +62,29 @@ Execute(You should be able to set a custom executable and it should be escaped):
   \ 'executable with spaces',
   \ ale_linters#python#flake8#GetExecutable(bufnr(''))
   AssertEqual
-  \ '''executable with spaces'' --version',
+  \ ale#Escape('executable with spaces') . ' --version',
   \ ale_linters#python#flake8#VersionCheck(bufnr(''))
   AssertEqual
-  \ '''executable with spaces'' --format=default --stdin-display-name %s -',
+  \ ale#Escape('executable with spaces')
+  \   . ' --format=default'
+  \   . ' --stdin-display-name %s -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
 
 Execute(The flake8 callbacks should detect virtualenv directories):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
 
+  let b:executable = ale#path#Winify(
+  \ g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/flake8'
+  \)
+
   AssertEqual
-  \ g:dir . '/python_paths/with_virtualenv/env/bin/flake8',
+  \ b:executable,
   \ ale_linters#python#flake8#GetExecutable(bufnr(''))
   AssertEqual
-  \ '''' . g:dir . '/python_paths/with_virtualenv/env/bin/flake8'' --version',
+  \ ale#Escape(b:executable) . ' --version',
   \ ale_linters#python#flake8#VersionCheck(bufnr(''))
   AssertEqual
-  \   '''' . g:dir . '/python_paths/with_virtualenv/env/bin/flake8'''
+  \ ale#Escape(b:executable)
   \   . ' --format=default --stdin-display-name %s -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
 
@@ -78,35 +92,35 @@ Execute(The FindProjectRoot should detect the project root directory for namespa
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/namespace_package_manifest/namespace/foo/bar.py')
 
   AssertEqual
-  \ fnameescape(g:dir . '/python_paths/namespace_package_manifest'),
+  \ ale#path#Winify(g:dir . '/python_paths/namespace_package_manifest'),
   \ ale#python#FindProjectRoot(bufnr(''))
 
 Execute(The FindProjectRoot should detect the project root directory for namespace package via setup.cf):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/namespace_package_setup/namespace/foo/bar.py')
 
   AssertEqual
-  \ fnameescape(g:dir . '/python_paths/namespace_package_setup'),
+  \ ale#path#Winify(g:dir . '/python_paths/namespace_package_setup'),
   \ ale#python#FindProjectRoot(bufnr(''))
 
 Execute(The FindProjectRoot should detect the project root directory for namespace package via pytest.ini):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/namespace_package_pytest/namespace/foo/bar.py')
 
   AssertEqual
-  \ fnameescape(g:dir . '/python_paths/namespace_package_pytest'),
+  \ ale#path#Winify(g:dir . '/python_paths/namespace_package_pytest'),
   \ ale#python#FindProjectRoot(bufnr(''))
 
 Execute(The FindProjectRoot should detect the project root directory for namespace package via tox.ini):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/namespace_package_tox/namespace/foo/bar.py')
 
   AssertEqual
-  \ fnameescape(g:dir . '/python_paths/namespace_package_tox'),
+  \ ale#path#Winify(g:dir . '/python_paths/namespace_package_tox'),
   \ ale#python#FindProjectRoot(bufnr(''))
 
 Execute(The FindProjectRoot should detect the project root directory for non-namespace package):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/no_virtualenv/subdir/foo/bar.py')
 
   AssertEqual
-  \ fnameescape(g:dir . '/python_paths/no_virtualenv/subdir'),
+  \ ale#path#Winify(g:dir . '/python_paths/no_virtualenv/subdir'),
   \ ale#python#FindProjectRoot(bufnr(''))
 
 " Some users currently run flake8 this way, so we should support it.
@@ -120,10 +134,10 @@ Execute(Using `python -m flake8` should be supported for running flake8):
   \ 'python',
   \ ale_linters#python#flake8#GetExecutable(bufnr(''))
   AssertEqual
-  \ '''python'' -m flake8 --version',
+  \ ale#Escape('python') . ' -m flake8 --version',
   \ ale_linters#python#flake8#VersionCheck(bufnr(''))
   AssertEqual
-  \ '''python'' -m flake8 --some-option --format=default -',
+  \ ale#Escape('python') . ' -m flake8 --some-option --format=default -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
 
   call ale_linters#python#flake8#ClearVersionCache()
@@ -135,10 +149,10 @@ Execute(Using `python -m flake8` should be supported for running flake8):
   \ 'python',
   \ ale_linters#python#flake8#GetExecutable(bufnr(''))
   AssertEqual
-  \ '''python'' -m flake8 --version',
+  \ ale#Escape('python') . ' -m flake8 --version',
   \ ale_linters#python#flake8#VersionCheck(bufnr(''))
   AssertEqual
-  \ '''python''   -m flake8 --some-option --format=default -',
+  \ ale#Escape('python') . '   -m flake8 --some-option --format=default -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
 
 Execute(Using `python2 -m flake8` should be use with the old args option):
@@ -157,8 +171,8 @@ Execute(Using `python2 -m flake8` should be use with the old args option):
   \ 'python2',
   \ ale_linters#python#flake8#GetExecutable(bufnr(''))
   AssertEqual
-  \ '''python2'' -m flake8 --version',
+  \ ale#Escape('python2') . ' -m flake8 --version',
   \ ale_linters#python#flake8#VersionCheck(bufnr(''))
   AssertEqual
-  \ '''python2'' -m flake8 --format=default -',
+  \ ale#Escape('python2') . ' -m flake8 --format=default -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])

@@ -13,6 +13,21 @@ Before:
     call add(g:test_vars.feedkeys_calls, [a:string, a:mode])
   endfunction
 
+  function! CheckCompletionCalled(expect_success) abort
+    let g:test_vars.get_completions_called = 0
+
+    " We just want to check if the function is called.
+    function! ale#completion#GetCompletions()
+      let g:test_vars.get_completions_called = 1
+    endfunction
+
+    let g:ale_completion_delay = 0
+    call ale#completion#Queue()
+    sleep 1m
+
+    AssertEqual a:expect_success, g:test_vars.get_completions_called
+  endfunction
+
 After:
   Restore
 
@@ -22,6 +37,9 @@ After:
   unlet! b:ale_completion_info
   unlet! b:ale_completion_response
   unlet! b:ale_completion_parser
+  unlet! b:ale_complete_done_time
+
+  delfunction CheckCompletionCalled
 
   runtime autoload/ale/completion.vim
   runtime autoload/ale/lsp.vim
@@ -294,18 +312,7 @@ Execute(b:ale_completion_info should be set up correctly when requesting complet
   \ b:ale_completion_info
 
 Execute(ale#completion#GetCompletions should be called when the cursor position stays the same):
-  let g:test_vars.get_completions_called = 0
-
-  " We just want to check if the function is called.
-  function! ale#completion#GetCompletions()
-    let g:test_vars.get_completions_called = 1
-  endfunction
-
-  let g:ale_completion_delay = 0
-  call ale#completion#Queue()
-  sleep 1m
-
-  Assert g:test_vars.get_completions_called
+  call CheckCompletionCalled(1)
 
 Execute(ale#completion#GetCompletions should not be called when the cursor position changes):
   call setpos('.', [bufnr(''), 1, 2, 0])
@@ -326,3 +333,8 @@ Execute(ale#completion#GetCompletions should not be called when the cursor posit
   sleep 1m
 
   Assert !g:test_vars.get_completions_called
+
+Execute(Completion should not be done shortly after the CompleteDone function):
+  call CheckCompletionCalled(1)
+  call ale#completion#Done()
+  call CheckCompletionCalled(0)

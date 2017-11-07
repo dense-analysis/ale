@@ -3,118 +3,77 @@ Before:
   Save g:ale_cs_mcsc_source
   Save g:ale_cs_mcsc_assembly_path
   Save g:ale_cs_mcsc_assemblies
+  Save g:ale_buffer_info
+
+  let g:ale_buffer_info = {bufnr(''): {'temporary_file_list': []}}
 
   unlet! g:ale_cs_mcsc_options
   unlet! g:ale_cs_mcsc_source
   unlet! g:ale_cs_mcsc_assembly_path
   unlet! g:ale_cs_mcsc_assemblies
 
-  let g:temppath = fnamemodify(tempname(), ':p:h')
-  let g:temppathpattern = substitute(escape(g:temppath, '\\/.*$^~[]'), '[\\/]*$', '[\\\\/]\\+\\S\\+','')
-  let g:sometempfile = fnamemodify(g:temppath .'/some_temp_file.tmp', ':p')
+  function! GetCommand()
+    let l:command = ale_linters#cs#mcsc#GetCommand(bufnr(''))
+    let l:command = join(split(l:command))
+
+    return substitute(l:command, ':[^ ]\+ -t:module', ':TEMP -t:module', '')
+  endfunction
 
   runtime ale_linters/cs/mcsc.vim
 
 After:
   Restore
+
   unlet! b:ale_cs_mcsc_options
   unlet! g:ale_cs_mcsc_source
   unlet! g:ale_cs_mcsc_assembly_path
   unlet! g:ale_cs_mcsc_assemblies
-  unlet! g:temppath
-  unlet! g:temppathpattern
-  unlet! g:sometempfile
+
+  delfunction GetCommand
+
   call ale#linter#Reset()
 
 Execute(Check for proper default command):
-
-  let b:command = ale_linters#cs#mcsc#GetCommand(bufnr(''))
-  let b:command = substitute(b:command, '-out:' . g:temppathpattern, '-out:' . g:sometempfile, '')
-  let b:command = substitute(b:command, '\s\+', ' ', 'g')
-
   AssertEqual
-  \   b:command,
-  \   'cd ".";mcs -unsafe -out:' . g:sometempfile . ' -t:module -recurse:"*.cs"'
+  \ 'cd ".";mcs -unsafe -out:TEMP -t:module -recurse:"*.cs"',
+  \ GetCommand()
 
 Execute(The options should be be used in the command):
-
   let g:ale_cs_mcsc_options = '-pkg:dotnet'
 
-  let b:command = ale_linters#cs#mcsc#GetCommand(bufnr(''))
-  let b:command = substitute(b:command, '-out:' . g:temppathpattern, '-out:' . g:sometempfile, '')
-  let b:command = substitute(b:command, '\s\+', ' ', 'g')
-
   AssertEqual
-  \   b:command,
-  \   'cd ".";mcs -unsafe ' . g:ale_cs_mcsc_options . ' -out:' . g:sometempfile . ' -t:module -recurse:"*.cs"'
+  \   'cd ".";mcs -unsafe ' . g:ale_cs_mcsc_options . ' -out:TEMP -t:module -recurse:"*.cs"',
+  \ GetCommand()
 
 Execute(The souce path should be be used in the command):
-  call ale#engine#Cleanup(bufnr(''))
-  call ale#engine#InitBufferInfo(bufnr(''))
-
   let g:ale_cs_mcsc_source='../foo/bar'
 
-  let b:command = ale_linters#cs#mcsc#GetCommand(bufnr(''))
-  let b:command = substitute(b:command, '-out:' . g:temppathpattern, '-out:' . g:sometempfile, '')
-  let b:command = substitute(b:command, '\s\+', ' ', 'g')
-
   AssertEqual
-  \   b:command,
-  \   'cd "' . g:ale_cs_mcsc_source . '";mcs -unsafe -out:' . g:sometempfile . ' -t:module -recurse:"*.cs"'
+  \ 'cd "' . g:ale_cs_mcsc_source . '";mcs -unsafe -out:TEMP -t:module -recurse:"*.cs"',
+  \ GetCommand()
 
 Execute(The list of search pathes for assemblies should be be used in the command if not empty):
-  call ale#engine#Cleanup(bufnr(''))
-  call ale#engine#InitBufferInfo(bufnr(''))
-
-  let g:ale_cs_mcsc_assembly_path = [
-  \ '/usr/lib/mono',
-  \ '../foo/bar'
-  \]
-
-  let b:command = ale_linters#cs#mcsc#GetCommand(bufnr(''))
-  let b:command = substitute(b:command, '-out:' . g:temppathpattern, '-out:' . g:sometempfile, '')
-  let b:command = substitute(b:command, '\s\+', ' ', 'g')
+  let g:ale_cs_mcsc_assembly_path = ['/usr/lib/mono', '../foo/bar']
 
   AssertEqual
-  \   b:command,
-  \   'cd ".";mcs -unsafe -lib:"' . join(g:ale_cs_mcsc_assembly_path,'","') . '" -out:' . g:sometempfile . ' -t:module -recurse:"*.cs"'
+  \ 'cd ".";mcs -unsafe -lib:"' . join(g:ale_cs_mcsc_assembly_path,'","') . '" -out:TEMP -t:module -recurse:"*.cs"',
+  \ GetCommand()
 
-  let g:ale_cs_mcsc_assembly_path = [
-  \]
-
-  let b:command = ale_linters#cs#mcsc#GetCommand(bufnr(''))
-  let b:command = substitute(b:command, '-out:' . g:temppathpattern, '-out:' . g:sometempfile, '')
-  let b:command = substitute(b:command, '\s\+', ' ', 'g')
+  let g:ale_cs_mcsc_assembly_path = []
 
   AssertEqual
-  \   b:command,
-  \   'cd ".";mcs -unsafe -out:' . g:sometempfile . ' -t:module -recurse:"*.cs"'
+  \ 'cd ".";mcs -unsafe -out:TEMP -t:module -recurse:"*.cs"',
+  \ GetCommand()
 
 Execute(The list of assemblies should be be used in the command if not empty):
-  call ale#engine#Cleanup(bufnr(''))
-  call ale#engine#InitBufferInfo(bufnr(''))
-
-  let g:ale_cs_mcsc_assemblies = [
-  \ 'foo.dll',
-  \ 'bar.dll'
-  \]
-
-  let b:command = ale_linters#cs#mcsc#GetCommand(bufnr(''))
-  let b:command = substitute(b:command, '-out:' . g:temppathpattern, '-out:' . g:sometempfile, '')
-  let b:command = substitute(b:command,'\s\+',' ','g')
+  let g:ale_cs_mcsc_assemblies = ['foo.dll', 'bar.dll']
 
   AssertEqual
-  \   b:command,
-  \   'cd ".";mcs -unsafe -r:"' . join(g:ale_cs_mcsc_assemblies,'","') . '" -out:' . g:sometempfile . ' -t:module -recurse:"*.cs"'
+  \ 'cd ".";mcs -unsafe -r:"' . join(g:ale_cs_mcsc_assemblies,'","') . '" -out:TEMP -t:module -recurse:"*.cs"',
+  \ GetCommand()
 
-  let g:ale_cs_mcsc_assemblies = [
-  \]
-
-  let b:command = ale_linters#cs#mcsc#GetCommand(bufnr(''))
-  let b:command = substitute(b:command, '-out:' . g:temppathpattern, '-out:' . g:sometempfile, '')
-  let b:command = substitute(b:command,'\s\+',' ','g')
+  let g:ale_cs_mcsc_assemblies = []
 
   AssertEqual
-  \   b:command,
-  \   'cd ".";mcs -unsafe -out:' . g:sometempfile . ' -t:module -recurse:"*.cs"'
-
+  \ 'cd ".";mcs -unsafe -out:TEMP -t:module -recurse:"*.cs"',
+  \ GetCommand()

@@ -1,0 +1,72 @@
+Before:
+  runtime ale_linters/haml/hamllint.vim
+
+  let g:default_command = 'haml-lint %t'
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+After:
+  Restore
+
+  unlet! g:default_command
+  unlet! b:conf
+
+  call ale#linter#Reset()
+  call ale#test#RestoreDirectory()
+
+Execute(The default command should be correct):
+  AssertEqual g:default_command, ale_linters#haml#hamllint#GetCommand(bufnr(''))
+
+Execute(The command should have the .rubocop.yml prepended as an env var if one exists):
+  call ale#test#SetFilename('../hamllint-test-files/rubocop-yml/subdir/file.haml')
+  let b:conf = ale#path#Winify(g:dir . '/../hamllint-test-files/rubocop-yml/.rubocop.yml')
+
+  if has('win32')
+    " Windows uses 'set var=... && command'
+    AssertEqual
+    \ 'set HAML_LINT_RUBOCOP_CONF='
+    \   . ale#Escape(b:conf)
+    \   .  ' && ' . g:default_command,
+    \ ale_linters#haml#hamllint#GetCommand(bufnr(''))
+  else
+    " Unix uses 'var=... command'
+    AssertEqual
+    \ 'HAML_LINT_RUBOCOP_CONF='
+    \   . ale#Escape(b:conf)
+    \   .  ' ' . g:default_command,
+    \ ale_linters#haml#hamllint#GetCommand(bufnr(''))
+  endif
+
+Execute(The command should have the nearest .haml-lint.yml set as --config if it exists):
+  call ale#test#SetFilename('../hamllint-test-files/haml-lint-yml/subdir/file.haml')
+  let b:conf = ale#path#Winify(g:dir . '/../hamllint-test-files/haml-lint-yml/.haml-lint.yml')
+
+  AssertEqual
+  \ 'haml-lint --config '
+  \   . ale#Escape(b:conf)
+  \   . ' %t',
+  \ ale_linters#haml#hamllint#GetCommand(bufnr(''))
+
+Execute(The command should include a .rubocop.yml and a .haml-lint if both are found):
+  call ale#test#SetFilename('../hamllint-test-files/haml-lint-and-rubocop/subdir/file.haml')
+  let b:conf_hamllint = ale#path#Winify(g:dir . '/../hamllint-test-files/haml-lint-and-rubocop/.haml-lint.yml')
+  let b:conf_rubocop = ale#path#Winify(g:dir . '/../hamllint-test-files/haml-lint-and-rubocop/.rubocop.yml')
+
+  if has('win32')
+    " Windows uses 'set var=... && command'
+    AssertEqual
+    \ 'set HAML_LINT_RUBOCOP_CONF='
+    \   . ale#Escape(b:conf_rubocop)
+    \   .  ' && haml-lint --config '
+    \   . ale#Escape(b:conf_hamllint)
+    \   .  ' %t',
+    \ ale_linters#haml#hamllint#GetCommand(bufnr(''))
+  else
+    " Unix uses 'var=... command'
+    AssertEqual
+    \ 'HAML_LINT_RUBOCOP_CONF='
+    \   . ale#Escape(b:conf_rubocop)
+    \   .  ' haml-lint --config '
+    \   . ale#Escape(b:conf_hamllint)
+    \   .  ' %t',
+    \ ale_linters#haml#hamllint#GetCommand(bufnr(''))
+  endif
