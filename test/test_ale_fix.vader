@@ -71,6 +71,16 @@ Before:
     \})
   endfunction
 
+  function GetLastMessage()
+    redir => l:output
+      silent mess
+    redir END
+
+    let l:lines = split(l:output, "\n")
+
+    return empty(l:lines) ? '' : l:lines[-1]
+  endfunction
+
 After:
   Restore
   unlet! g:ale_run_synchronously
@@ -88,6 +98,7 @@ After:
   delfunction RemoveLastLineOneArg
   delfunction TestCallback
   delfunction SetUpLinters
+  delfunction GetLastMessage
 
   call ale#test#RestoreDirectory()
 
@@ -104,14 +115,17 @@ After:
 
   let g:ale_fix_buffer_data = {}
 
+  " Clear the messages between tests.
+  echomsg ''
+
 Given testft (A file with three lines):
   a
   b
   c
 
 Execute(ALEFix should complain when there are no functions to call):
-  AssertThrows ALEFix
-  AssertEqual 'Vim(echoerr):No fixers have been defined. Try :ALEFixSuggest', g:vader_exception
+  ALEFix
+  AssertEqual 'No fixers have been defined. Try :ALEFixSuggest', GetLastMessage()
 
 Execute(ALEFix should apply simple functions):
   let g:ale_fixers.testft = ['AddCarets']
@@ -450,3 +464,9 @@ Expect(An extra line should be added):
   b
   c
   d
+
+Execute(ALE should print a message telling you something isn't a valid fixer when you type some nonsense):
+  let g:ale_fixers.testft = ['CatLine', 'invalidname']
+  ALEFix
+
+  AssertEqual 'There is no fixer named `invalidname`. Check :ALEFixSuggest', GetLastMessage()
