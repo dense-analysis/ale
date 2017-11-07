@@ -28,7 +28,7 @@ function! ale#lsp#tsserver_message#Change(buffer) abort
     \   'offset': 1,
     \   'endLine': 1073741824,
     \   'endOffset': 1,
-    \   'insertString': join(l:lines, "\n"),
+    \   'insertString': join(l:lines, "\n") . "\n",
     \}]
 endfunction
 

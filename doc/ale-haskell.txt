@@ -21,6 +21,16 @@ g:ale_haskell_hdevtools_options               *g:ale_haskell_hdevtools_options*
   This variable can be changed to modify flags given to hdevtools.
 
 ===============================================================================
+hfmt                                                         *ale-haskell-hfmt*
+
+g:ale_haskell_hfmt_executable                   *g:ale_haskell_hfmt_executable*
+                                                *b:ale_haskell_hfmt_executable*
+  Type: |String|
+  Default: `'hfmt'`
+
+  This variable can be changed to use a different executable for hfmt.
+
+===============================================================================
 stack-build                                           *ale-haskell-stack-build*
 
 g:ale_haskell_stack_build_options           *g:ale_haskell_stack_build_options*

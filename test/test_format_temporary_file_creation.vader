@@ -10,8 +10,8 @@ Before:
   call ale#linter#Define('foobar', {
   \ 'name': 'testlinter',
   \ 'callback': 'TestCallback',
-  \ 'executable': 'cat',
-  \ 'command': 'cat %t',
+  \ 'executable': has('win32') ? 'cmd' : 'cat',
+  \ 'command': has('win32') ? 'type %t' : 'cat %t',
   \})
 
 After:

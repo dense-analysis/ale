@@ -1,0 +1,24 @@
+Before:
+  Save g:ale_sh_shfmt_executable
+  Save g:ale_sh_shfmt_options
+
+After:
+  Restore
+
+Execute(The shfmt callback should return the correct default values):
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('shfmt'),
+  \ },
+  \ ale#fixers#shfmt#Fix(bufnr(''))
+
+Execute(The shfmt executable and options should be configurable):
+  let g:ale_sh_shfmt_executable = 'foobar'
+  let g:ale_sh_shfmt_options = '--some-option'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('foobar')
+  \     . ' --some-option',
+  \ },
+  \ ale#fixers#shfmt#Fix(bufnr(''))

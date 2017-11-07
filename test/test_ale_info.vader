@@ -354,7 +354,7 @@ Execute (ALEInfo command history should print command output if logging is on):
 
 Execute (ALEInfo should include executable checks in the history):
   call ale#linter#Define('testft', g:testlinter1)
-  call ale#engine#IsExecutable(bufnr(''), 'echo')
+  call ale#engine#IsExecutable(bufnr(''), has('win32') ? 'cmd' : 'echo')
   call ale#engine#IsExecutable(bufnr(''), 'TheresNoWayThisIsExecutable')
 
   call CheckInfo([
@@ -365,6 +365,6 @@ Execute (ALEInfo should include executable checks in the history):
   \ '',
   \] + g:globals_lines + g:command_header + [
   \ '',
-  \ '(executable check - success) echo',
+  \ '(executable check - success) ' . (has('win32') ? 'cmd' : 'echo'),
   \ '(executable check - failure) TheresNoWayThisIsExecutable',
   \])

@@ -2,15 +2,11 @@ Execute(clang errors from included files should be parsed correctly):
   AssertEqual
   \ [
   \   {
-  \     'lnum': 3,
+  \     'lnum': 1,
+  \     'col': 1,
+  \     'filename': './b.h',
   \     'type': 'E',
-  \     'text': 'Problems were found in the header (See :ALEDetail)',
-  \     'detail': join([
-  \       './b.h:1:1: error: expected identifier or ''(''',
-  \       '{{{',
-  \       '^',
-  \       '1 error generated.',
-  \     ], "\n"),
+  \     'text': 'expected identifier or ''(''',
   \   },
   \ ],
   \ ale#handlers#gcc#HandleGCCFormat(347, [

@@ -12,7 +12,7 @@ Execute(should get valid executable with default params):
   call ale#test#SetFilename('elm-test-files/app/testfile.elm')
 
   AssertEqual
-  \ g:dir . '/elm-test-files/app/node_modules/.bin/elm-make',
+  \ ale#path#Winify(g:dir . '/elm-test-files/app/node_modules/.bin/elm-make'),
   \ ale_linters#elm#make#GetExecutable(bufnr(''))
 
 Execute(should get valid executable with 'use_global' params):

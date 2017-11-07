@@ -28,12 +28,15 @@ Before:
 
   call ale#test#SetFilename('dummy.java')
 
+  let g:prefix = 'cd ' . ale#Escape(expand('%:p:h')) . ' && javac -Xlint'
+
 After:
   call ale#test#RestoreDirectory()
 
   Restore
 
   unlet! g:cp_sep
+  unlet! g:prefix
 
   delfunction GetCommand
 
@@ -43,20 +46,21 @@ After:
   call ale#engine#Cleanup(bufnr(''))
 
 Execute(The javac callback should return the correct default value):
-  AssertEqual 'javac -Xlint -d TEMP %t', GetCommand([])
+  AssertEqual g:prefix . ' -d TEMP %t', GetCommand([])
 
 Execute(The javac callback should use g:ale_java_javac_classpath correctly):
   let g:ale_java_javac_classpath = 'foo.jar'
 
   AssertEqual
-  \ 'javac -Xlint'
+  \ g:prefix
   \   . ' -cp ' . ale#Escape('foo.jar')
   \   . ' -d TEMP %t',
   \ GetCommand([])
 
 Execute(The javac callback should include discovered classpaths):
   AssertEqual
-  \ 'javac -Xlint -cp '
+  \ g:prefix
+  \   . ' -cp '
   \   . ale#Escape(join(['/foo/bar.jar', '/xyz/abc.jar'], g:cp_sep))
   \   . ' -d TEMP %t',
   \ GetCommand([
@@ -70,7 +74,8 @@ Execute(The javac callback should combine discovered classpaths and manual ones)
   let g:ale_java_javac_classpath = 'configured.jar'
 
   AssertEqual
-  \ 'javac -Xlint -cp '
+  \ g:prefix
+  \   . ' -cp '
   \   . ale#Escape(join(
   \     [
   \       '/foo/bar.jar',
@@ -90,7 +95,8 @@ Execute(The javac callback should combine discovered classpaths and manual ones)
   let g:ale_java_javac_classpath = 'configured.jar' . g:cp_sep . 'configured2.jar'
 
   AssertEqual
-  \ 'javac -Xlint -cp '
+  \ g:prefix
+  \   . ' -cp '
   \   . ale#Escape(join(
   \     [
   \       '/foo/bar.jar',
@@ -114,7 +120,7 @@ Execute(The javac callback should detect source directories):
   call ale#engine#InitBufferInfo(bufnr(''))
 
   AssertEqual
-  \ 'javac -Xlint'
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && javac -Xlint'
   \   . ' -sourcepath ' . ale#Escape(
   \     ale#path#Winify(g:dir . '/java_paths/src/main/java/')
   \   )
@@ -127,7 +133,7 @@ Execute(The javac callback should combine detected source directories and classp
   call ale#engine#InitBufferInfo(bufnr(''))
 
   AssertEqual
-  \ 'javac -Xlint'
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && javac -Xlint'
   \   . ' -cp ' . ale#Escape(join(['/foo/bar.jar', '/xyz/abc.jar'], g:cp_sep))
   \   . ' -sourcepath ' . ale#Escape(
   \     ale#path#Winify(g:dir . '/java_paths/src/main/java/')
@@ -146,6 +152,6 @@ Execute(The javac callback should use g:ale_java_javac_options correctly):
   let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
 
   AssertEqual
-  \ 'javac -Xlint'
+  \ g:prefix
   \   . ' -d TEMP --anything --else %t',
   \ GetCommand([])

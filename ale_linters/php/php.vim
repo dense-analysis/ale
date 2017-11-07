@@ -30,6 +30,6 @@ call ale#linter#Define('php', {
 \   'name': 'php',
 \   'executable': 'php',
 \   'output_stream': 'stdout',
-\   'command': 'php -l -d error_reporting=E_ALL -d display_errors=1 --',
+\   'command': 'php -l -d error_reporting=E_ALL -d display_errors=1 -d log_errors=0 --',
 \   'callback': 'ale_linters#php#php#Handle',
 \})

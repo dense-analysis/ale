@@ -13,7 +13,10 @@ CONTENTS                                                         *ale-contents*
   5. Completion...........................|ale-completion|
   6. Global Options.......................|ale-options|
     6.1 Highlights........................|ale-highlights|
+    6.2 Options for write-good Linter.....|ale-write-good-options|
   7. Integration Documentation............|ale-integrations|
+    asciidoc..............................|ale-asciidoc-options|
+      write-good..........................|ale-asciidoc-write-good|
     asm...................................|ale-asm-options|
       gcc.................................|ale-asm-gcc|
     awk...................................|ale-awk-options|
@@ -48,6 +51,8 @@ CONTENTS                                                         *ale-contents*
       dartanalyzer........................|ale-dart-dartanalyzer|
     dockerfile............................|ale-dockerfile-options|
       hadolint............................|ale-dockerfile-hadolint|
+    elixir................................|ale-elixir-options|
+      mix.................................|ale-elixir-mix|
     elm...................................|ale-elm-options|
       elm-format..........................|ale-elm-elm-format|
       elm-make............................|ale-elm-elm-make|
@@ -70,10 +75,12 @@ CONTENTS                                                         *ale-contents*
       ember-template-lint.................|ale-handlebars-embertemplatelint|
     haskell...............................|ale-haskell-options|
       hdevtools...........................|ale-haskell-hdevtools|
+      hfmt................................|ale-haskell-hfmt|
       stack-build.........................|ale-haskell-stack-build|
     html..................................|ale-html-options|
       htmlhint............................|ale-html-htmlhint|
       tidy................................|ale-html-tidy|
+      write-good..........................|ale-html-write-good|
     idris.................................|ale-idris-options|
       idris...............................|ale-idris-idris|
     java..................................|ale-java-options|
@@ -95,12 +102,18 @@ CONTENTS                                                         *ale-contents*
     kotlin................................|ale-kotlin-options|
       kotlinc.............................|ale-kotlin-kotlinc|
       ktlint..............................|ale-kotlin-ktlint|
+    latex.................................|ale-latex-options|
+      write-good..........................|ale-latex-write-good|
     less..................................|ale-less-options|
       prettier............................|ale-less-prettier|
     llvm..................................|ale-llvm-options|
       llc.................................|ale-llvm-llc|
     lua...................................|ale-lua-options|
       luacheck............................|ale-lua-luacheck|
+    markdown..............................|ale-markdown-options|
+      write-good..........................|ale-markdown-write-good|
+    nroff.................................|ale-nroff-options|
+      write-good..........................|ale-nroff-write-good|
     objc..................................|ale-objc-options|
       clang...............................|ale-objc-clang|
     objcpp................................|ale-objcpp-options|
@@ -112,11 +125,15 @@ CONTENTS                                                         *ale-contents*
       perlcritic..........................|ale-perl-perlcritic|
     php...................................|ale-php-options|
       hack................................|ale-php-hack|
+      hackfmt.............................|ale-php-hackfmt|
       langserver..........................|ale-php-langserver|
+      phan................................|ale-php-phan|
       phpcbf..............................|ale-php-phpcbf|
       phpcs...............................|ale-php-phpcs|
       phpmd...............................|ale-php-phpmd|
       phpstan.............................|ale-php-phpstan|
+    pod...................................|ale-pod-options|
+      write-good..........................|ale-pod-write-good|
     pug...................................|ale-pug-options|
       puglint.............................|ale-pug-puglint|
     puppet................................|ale-puppet-options|
@@ -133,6 +150,9 @@ CONTENTS                                                         *ale-contents*
       lintr...............................|ale-r-lintr|
     reasonml..............................|ale-reasonml-options|
       merlin..............................|ale-reasonml-merlin|
+      refmt...............................|ale-reasonml-refmt|
+    restructuredtext......................|ale-restructuredtext-options|
+      write-good..........................|ale-restructuredtext-write-good|
     ruby..................................|ale-ruby-options|
       brakeman............................|ale-ruby-brakeman|
       rails_best_practices................|ale-ruby-rails_best_practices|
@@ -142,6 +162,7 @@ CONTENTS                                                         *ale-contents*
       cargo...............................|ale-rust-cargo|
       rls.................................|ale-rust-rls|
       rustc...............................|ale-rust-rustc|
+      rustfmt.............................|ale-rust-rustfmt|
     sass..................................|ale-sass-options|
       stylelint...........................|ale-sass-stylelint|
     scala.................................|ale-scala-options|
@@ -152,6 +173,7 @@ CONTENTS                                                         *ale-contents*
     sh....................................|ale-sh-options|
       shell...............................|ale-sh-shell|
       shellcheck..........................|ale-sh-shellcheck|
+      shfmt...............................|ale-sh-shfmt|
     sml...................................|ale-sml-options|
       smlnj...............................|ale-sml-smlnj|
     solidity..............................|ale-solidity-options|
@@ -162,9 +184,15 @@ CONTENTS                                                         *ale-contents*
       stylelint...........................|ale-stylus-stylelint|
     tcl...................................|ale-tcl-options|
       nagelfar............................|ale-tcl-nagelfar|
+    terraform.............................|ale-terraform-options|
+      tflint..............................|ale-terraform-tflint|
     tex...................................|ale-tex-options|
       chktex..............................|ale-tex-chktex|
       lacheck.............................|ale-tex-lacheck|
+    texinfo...............................|ale-texinfo-options|
+      write-good..........................|ale-texinfo-write-good|
+    text..................................|ale-text-options|
+      write-good..........................|ale-text-write-good|
     thrift................................|ale-thrift-options|
       thrift..............................|ale-thrift-thrift|
     typescript............................|ale-typescript-options|
@@ -177,6 +205,10 @@ CONTENTS                                                         *ale-contents*
       verilator...........................|ale-verilog-verilator|
     vim...................................|ale-vim-options|
       vint................................|ale-vim-vint|
+    vim help..............................|ale-vim-help-options|
+      write-good..........................|ale-vim-help-write-good|
+    xhtml.................................|ale-xhtml-options|
+      write-good..........................|ale-xhtml-write-good|
     xml...................................|ale-xml-options|
       xmllint.............................|ale-xml-xmllint|
     yaml..................................|ale-yaml-options|
@@ -223,10 +255,10 @@ Notes:
 
 * ASM: `gcc`
 * Ansible: `ansible-lint`
-* AsciiDoc: `proselint`
+* AsciiDoc: `proselint`, `write-good`
 * Awk: `gawk`
-* Bash: `shell` (-n flag), `shellcheck`
-* Bourne Shell: `shell` (-n flag), `shellcheck`
+* Bash: `shell` (-n flag), `shellcheck`, `shfmt`
+* Bourne Shell: `shell` (-n flag), `shellcheck`, `shfmt`
 * C: `cppcheck`, `cpplint`!!, `gcc`, `clang`, `clangtidy`!!, `clang-format`
 * C++ (filetype cpp): `clang`, `clangcheck`!!, `clangtidy`!!, `cppcheck`, `cpplint`!!, `gcc`, `clang-format`
 * CUDA: `nvcc`!!
@@ -238,7 +270,7 @@ Notes:
 * CSS: `csslint`, `stylelint`, `prettier`
 * Cython (pyrex filetype): `cython`
 * D: `dmd`
-* Dart: `dartanalyzer`
+* Dart: `dartanalyzer`!!, `language_server`
 * Dockerfile: `hadolint`
 * Elixir: `credo`, `dogma`!!
 * Elm: `elm-format, elm-make`
@@ -247,40 +279,42 @@ Notes:
 * Fortran: `gcc`
 * FusionScript: `fusion-lint`
 * GLSL: glslang
-* Go: `gofmt`, `go vet`, `golint`, `gometalinter`!!, `go build`!!, `gosimple`, `staticcheck`
+* Go: `gofmt`, `go vet`, `golint`, `gometalinter`!!, `go build`!!, `gosimple`!!, `staticcheck`!!
 * GraphQL: `gqlint`
 * Haml: `haml-lint`
 * Handlebars: `ember-template-lint`
-* Haskell: `ghc`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`
-* HTML: `HTMLHint`, `proselint`, `tidy`
+* Haskell: `ghc`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`, `hfmt`
+* HTML: `HTMLHint`, `proselint`, `tidy`, `write-good`
 * Idris: `idris`
 * Java: `checkstyle`, `javac`
 * JavaScript: `eslint`, `jscs`, `jshint`, `flow`, `prettier`, `prettier-eslint` >= 4.2.0, `prettier-standard`, `standard`, `xo`
 * JSON: `jsonlint`, `prettier`
 * Kotlin: `kotlinc`, `ktlint`
-* LaTeX (tex): `chktex`, `lacheck`, `proselint`
+* LaTeX (tex): `chktex`, `lacheck`, `proselint`, `write-good`
 * LLVM: `llc`
 * Lua: `luacheck`
-* Markdown: `mdl`, `proselint`, `vale`, `remark-lint`
+* Mail: `proselint`, `vale`
+* Make: `checkmake`
+* Markdown: `mdl`, `proselint`, `vale`, `remark-lint`, `write-good`
 * MATLAB: `mlint`
 * Nim: `nim check`!!
 * nix: `nix-instantiate`
-* nroff: `proselint`
+* nroff: `proselint`, `write-good`
 * Objective-C: `clang`
 * Objective-C++: `clang`
 * OCaml: `merlin` (see |ale-ocaml-merlin|)
 * Perl: `perl -c`, `perl-critic`
-* PHP: `hack`, `langserver`, `php -l`, `phpcs`, `phpmd`, `phpstan`, `phpcbf`
-* Pod: `proselint`
+* PHP: `hack`, `hackfmt`, `langserver`, `phan`, `php -l`, `phpcs`, `phpmd`, `phpstan`, `phpcbf`
+* Pod: `proselint`, `write-good`
 * Pug: `pug-lint`
 * Puppet: `puppet`, `puppet-lint`
 * Python: `autopep8`, `flake8`, `isort`, `mypy`, `pycodestyle`, `pylint`!!, `yapf`
 * R: `lintr`
-* ReasonML: `merlin`
-* reStructuredText: `proselint`, `rstcheck`
+* ReasonML: `merlin`, `refmt`
+* reStructuredText: `proselint`, `rstcheck`, `write-good`
 * RPM spec: `rpmlint`
 * Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`
-* Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|)
+* Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|), `rustfmt`
 * SASS: `sass-lint`, `stylelint`
 * SCSS: `sass-lint`, `scss-lint`, `stylelint`, `prettier`
 * Scala: `scalac`, `scalastyle`
@@ -291,14 +325,15 @@ Notes:
 * SQL: `sqlint`
 * Swift: `swiftlint`, `swiftformat`
 * Tcl: `nagelfar`!!
-* Texinfo: `proselint`
-* Text^: `proselint`, `vale`
+* Terraform: `tflint`
+* Texinfo: `proselint`, `write-good`
+* Text^: `proselint`, `vale`, `write-good`
 * Thrift: `thrift`
 * TypeScript: `eslint`, `tslint`, `tsserver`, `typecheck`, `prettier`
 * Verilog: `iverilog`, `verilator`
 * Vim: `vint`
-* Vim help^: `proselint`
-* XHTML: `proselint`
+* Vim help^: `proselint`, `write-good`
+* XHTML: `proselint`, `write-good`
 * XML: `xmllint`
 * YAML: `swaglint`, `yamllint`
 
@@ -595,6 +630,11 @@ g:ale_emit_conflict_warnings                     *g:ale_emit_conflict_warnings*
   When set to `0`, ALE will not emit any warnings on startup about conflicting
   plugins. ALE will probably not work if other linting plugins are installed.
 
+  When this option is set to `1`, ALE will add its `after` directory to
+  |runtimepath| automatically, so the checks can be applied. Setting this
+  option to `0` before ALE is loaded will prevent ALE from modifying
+  |runtimepath|.
+
 
 g:ale_enabled                                                   *g:ale_enabled*
                                                                 *b:ale_enabled*
@@ -630,6 +670,7 @@ g:ale_fixers                                                     *g:ale_fixers*
 
 
 g:ale_fix_on_save                                           *g:ale_fix_on_save*
+b:ale_fix_on_save                                           *b:ale_fix_on_save*
 
   Type: |Number|
   Default: `0`
@@ -639,6 +680,9 @@ g:ale_fix_on_save                                           *g:ale_fix_on_save*
   If |g:ale_lint_on_save| is set to 1, files will be checked with linters
   after files are fixed, only when the buffer is open, or re-opened. Changes
   to the file will be saved to the file on disk.
+
+  Fixing files can be disabled or enabled for individual buffers by setting
+  `b:ale_fix_on_save` to `0` or `1`.
 
 
 g:ale_history_enabled                                   *g:ale_history_enabled*
@@ -1276,6 +1320,36 @@ ALEWarningSign                                                 *ALEWarningSign*
   The highlight used for warning signs. See |g:ale_set_signs|.
 
 
+-------------------------------------------------------------------------------
+6.2. Options for write-good                            *ale-write-good-options*
+
+The options for the write-good linter are global because it does not make
+sense to have them specified on a per-language basis.
+
+g:ale_writegood_executable                         *g:ale_writegood_executable*
+                                                   *b:ale_writegood_executable*
+  Type: |String|
+  Default: `'writegood'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_writegood_options                               *g:ale_writegood_options*
+                                                      *b:ale_writegood_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to writegood.
+
+
+g:ale_writegood_use_global                         *g:ale_writegood_use_global*
+                                                   *b:ale_writegood_use_global*
+  Type: |Number|
+  Default: `0`
+
+  See |ale-integrations-local-executables|
+
+
 ===============================================================================
 7. Integration Documentation                                 *ale-integrations*
 
@@ -1379,14 +1453,38 @@ ALELast                                                               *ALELast*
 ALEToggle                                                           *ALEToggle*
 ALEEnable                                                           *ALEEnable*
 ALEDisable                                                         *ALEDisable*
+ALEToggleBuffer                                               *ALEToggleBuffer*
+ALEEnableBuffer                                               *ALEEnableBuffer*
+ALEDisableBuffer                                             *ALEDisableBuffer*
 
-  Enable or disable ALE, including all of its autocmd events, loclist items,
-  quickfix items, signs, current jobs, etc. Executing any of those commands
-  will change the |g:ale_enabled| variable.
+  `ALEToggle`, `ALEEnable`, and `ALEDisable` enable or disable ALE linting,
+  including all of its autocmd events, loclist items, quickfix items, signs,
+  current jobs, etc., globally. Executing any of these commands will change
+  the |g:ale_enabled| variable.
 
-  For convenience, a plug mapping `<Plug>(ale_toggle)` is defined for the
-  |ALEToggle| command.
+  ALE can be disabled or enabled for only a single buffer with
+  `ALEToggleBuffer`, `ALEEnableBuffer`, and `ALEDisableBuffer`. Disabling ALE
+  for a buffer will not remove autocmd events, but will prevent ALE from
+  checking for problems and reporting problems for whatever buffer the
+  `ALEDisableBuffer` or `ALEToggleBuffer` command is executed from. These
+  commands can be used for temporarily disabling ALE for a buffer. These
+  commands will modify the |b:ale_enabled| variable.
 
+  ALE linting cannot be enabled for a single buffer when it is disabled
+  globally, as disabling ALE globally removes the autocmd events needed to
+  perform linting with.
+
+  The following plug mappings are defined, for conveniently defining keybinds:
+
+  |ALEToggle|        - `<Plug>(ale_toggle)`
+  |ALEEnable|        - `<Plug>(ale_enable)`
+  |ALEDisable|       - `<Plug>(ale_disable)`
+  |ALEToggleBuffer|  - `<Plug>(ale_toggle_buffer)`
+  |ALEEnableBuffer|  - `<Plug>(ale_enable_buffer)`
+  |ALEDisableBuffer| - `<Plug>(ale_disable_buffer)`
+
+  For removing problems reported by ALE, but leaving ALE enabled, see
+  |ALEReset| and |ALEResetBuffer|.
 
 ALEDetail                                                           *ALEDetail*
 
@@ -1412,6 +1510,24 @@ ALEInfoToClipboard                                         *ALEInfoToClipboard*
 
   The command `:ALEInfoToClipboard` can be used to output ALEInfo directly to
   your clipboard. This might not work on every machine.
+
+
+ALEReset                                                             *ALEReset*
+ALEResetBuffer                                                 *ALEResetBuffer*
+
+  `ALEReset` will remove all problems reported by ALE for all buffers.
+  `ALEResetBuffer` will remove all problems reported for a single buffer.
+
+  Either command will leave ALE linting enabled, so ALE will report problems
+  when linting is performed again. See |ale-lint| for more information.
+
+  The following plug mappings are defined, for conveniently defining keybinds:
+
+  |ALEReset|       - `<Plug>(ale_reset)`
+  |ALEResetBuffer| - `<Plug>(ale_reset_buffer)`
+
+  ALE can be disabled globally or for a buffer with |ALEDisable| or
+  |ALEDisableBuffer|.
 
 
 ===============================================================================

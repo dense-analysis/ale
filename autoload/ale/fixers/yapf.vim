@@ -11,7 +11,7 @@ function! ale#fixers#yapf#Fix(buffer) abort
     \   ['yapf'],
     \)
 
-    if !ale#python#IsExecutable(l:executable)
+    if !executable(l:executable)
         return 0
     endif
 

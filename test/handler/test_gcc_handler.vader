@@ -1,15 +1,21 @@
+Execute(The GCC handler should ignore other lines of output):
+  AssertEqual
+  \ [],
+  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \   'foo',
+  \   'bar',
+  \   'baz',
+  \ ])
+
 Execute(GCC errors from included files should be parsed correctly):
   AssertEqual
   \ [
   \   {
-  \     'lnum': 3,
+  \     'lnum': 1,
+  \     'col': 1,
+  \     'filename': 'broken.h',
   \     'type': 'E',
-  \     'text': 'Problems were found in the header (See :ALEDetail)',
-  \     'detail': join([
-  \       'broken.h:1:1: error: expected identifier or ''('' before ''{'' token',
-  \       ' {{{',
-  \       ' ^',
-  \     ], "\n"),
+  \     'text': 'expected identifier or ''('' before ''{'' token',
   \   },
   \ ],
   \ ale#handlers#gcc#HandleGCCFormat(347, [
@@ -22,14 +28,11 @@ Execute(GCC errors from included files should be parsed correctly):
   AssertEqual
   \ [
   \   {
-  \     'lnum': 3,
+  \     'lnum': 1,
+  \     'col': 1,
+  \     'filename': 'b.h',
   \     'type': 'E',
-  \     'text': 'Problems were found in the header (See :ALEDetail)',
-  \     'detail': join([
-  \       'b.h:1:1: error: expected identifier or ''('' before ''{'' token',
-  \       ' {{{',
-  \       ' ^',
-  \     ], "\n"),
+  \     'text': 'expected identifier or ''('' before ''{'' token',
   \   },
   \ ],
   \ ale#handlers#gcc#HandleGCCFormat(347, [
@@ -43,17 +46,18 @@ Execute(GCC errors from included files should be parsed correctly):
   AssertEqual
   \ [
   \   {
-  \     'lnum': 3,
+  \     'lnum': 1,
+  \     'col': 1,
+  \     'filename': 'b.h',
   \     'type': 'E',
-  \     'text': 'Problems were found in the header (See :ALEDetail)',
-  \     'detail': join([
-  \       'b.h:1:1: error: unknown type name ‘bad_type’',
-  \       ' bad_type x;',
-  \       ' ^',
-  \       'b.h:2:1: error: unknown type name ‘other_bad_type’',
-  \       ' other_bad_type y;',
-  \       ' ^',
-  \     ], "\n"),
+  \     'text': 'unknown type name ''bad_type''',
+  \   },
+  \   {
+  \     'lnum': 2,
+  \     'col': 1,
+  \     'filename': 'b.h',
+  \     'type': 'E',
+  \     'text': 'unknown type name ''other_bad_type''',
   \   },
   \ ],
   \ ale#handlers#gcc#HandleGCCFormat(347, [
@@ -132,4 +136,26 @@ Execute(The GCC handler should handle syntax errors):
   \ '<stdin>:4: error: variable or field ''foo'' declared void',
   \ '<stdin>:4: error: ''cat'' was not declared in this scope',
   \ '<stdin>:12: error: expected `;'' before ''o''',
+  \ ])
+
+Execute(The GCC handler should handle notes with no previous message):
+  AssertEqual
+  \ [],
+  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \   '<stdin>:1:1: note: x',
+  \   '<stdin>:1:1: note: x',
+  \ ])
+
+Execute(The GCC handler should interpret - as being the current file):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 6,
+  \     'col': 12,
+  \     'type': 'E',
+  \     'text': 'Some error',
+  \   },
+  \ ],
+  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \ '-:6:12: error: Some error',
   \ ])

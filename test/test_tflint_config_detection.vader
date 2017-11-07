@@ -1,0 +1,18 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test')
+  runtime ale_linters/terraform/tflint.vim
+
+After:
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(adjacent config file should be found):
+  call ale#test#SetFilename('tflint-test-files/foo/bar.tf')
+  AssertEqual
+  \ (
+  \   ale#Escape('tflint')
+  \   . ' --config '
+  \   . ale#Escape(ale#path#Winify(g:dir . '/tflint-test-files/foo/.tflint.hcl'))
+  \   . ' -f json %t'
+  \ ),
+  \ ale_linters#terraform#tflint#GetCommand(bufnr(''))

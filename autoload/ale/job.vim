@@ -25,6 +25,11 @@ endfunction
 
 " Note that jobs and IDs are the same thing on NeoVim.
 function! ale#job#JoinNeovimOutput(job, last_line, data, mode, callback) abort
+    if a:mode is# 'raw'
+        call a:callback(a:job, join(a:data, "\n"))
+        return ''
+    endif
+
     let l:lines = a:data[:-2]
 
     if len(a:data) > 1
@@ -34,15 +39,9 @@ function! ale#job#JoinNeovimOutput(job, last_line, data, mode, callback) abort
         let l:new_last_line = a:last_line . a:data[0]
     endif
 
-    if a:mode is# 'raw'
-        if !empty(l:lines)
-            call a:callback(a:job, join(l:lines, "\n") . "\n")
-        endif
-    else
-        for l:line in l:lines
-            call a:callback(a:job, l:line)
-        endfor
-    endif
+    for l:line in l:lines
+        call a:callback(a:job, l:line)
+    endfor
 
     return l:new_last_line
 endfunction
@@ -290,7 +289,7 @@ function! ale#job#Stop(job_id) abort
         " FIXME: NeoVim kills jobs on a timer, but will not kill any processes
         " which are child processes on Unix. Some work needs to be done to
         " kill child processes to stop long-running processes like pylint.
-        call jobstop(a:job_id)
+        silent! call jobstop(a:job_id)
     else
         let l:job = s:job_map[a:job_id].job
 
