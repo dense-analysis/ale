@@ -443,6 +443,26 @@ are supported for running the commands.
                       for commands which need to modify some file on disk in
                       order to fix files.
 
+  `chain_with`          An optional key for defining a callback to call next.
+
+                      The callback must accept two or three arguments,
+                      `(buffer, output)` or `(buffer, output, input)` .
+                      Functions receiving a variable number of arguments will
+                      only receive the first two values. The `output` argument
+                      will contain the lines of output from the command run.
+                      The `input` argument is the List of lines for the
+                      buffer, after applying any previous fixers.
+
+                      The callback must return the same values returned for
+                      any fixer function. This allows fixer functions to be
+                      chained recursively.
+
+                      When the command string returned for a fixer is an empty
+                      string, the next command in the chain will still be run.
+                      This allows commands to be skipped, like version checks
+                      that are cached. An empty List will be passed to the
+                      next callback in the chain for the `output`.
+
                                                         *ale-fix-configuration*
 
 Synchronous functions and asynchronous jobs will be run in a sequence for

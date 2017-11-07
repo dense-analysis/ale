@@ -62,6 +62,49 @@ Before:
     return [{'lnum': 1, 'col': 1, 'text': 'xxx'}]
   endfunction
 
+  function! FirstChainCallback(buffer)
+    return {'command': 'echo echoline', 'chain_with': 'SecondChainCallback'}
+  endfunction
+
+  function! FirstChainCallbackSkipped(buffer)
+    return {'command': '', 'chain_with': 'SecondChainCallback'}
+  endfunction
+
+  function! FirstChainCallbackSecondSkipped(buffer)
+    return {'command': 'echo skipit', 'chain_with': 'SecondChainCallback'}
+  endfunction
+
+  function! SecondChainCallback(buffer, output)
+    let l:previous_line = empty(a:output)
+    \ ? 'emptydefault'
+    \ : join(split(a:output[0]))
+
+    if l:previous_line is# 'skipit'
+      return {'command': '', 'chain_with': 'ThirdChainCallback'}
+    endif
+
+    return {
+    \ 'command': 'echo ' . l:previous_line,
+    \ 'chain_with': 'ThirdChainCallback',
+    \}
+  endfunction
+
+  function! ThirdChainCallback(buffer, output, input)
+    let l:previous_line = empty(a:output)
+    \ ? 'thirddefault'
+    \ : join(split(a:output[0]))
+
+    return a:input + [l:previous_line]
+  endfunction
+
+  function! ChainWhereLastIsSkipped(buffer)
+    return {'command': 'echo echoline', 'chain_with': 'ChainEndSkipped'}
+  endfunction
+
+  function! ChainEndSkipped(buffer, output)
+    return {'command': ''}
+  endfunction
+
   function! SetUpLinters()
     call ale#linter#Define('testft', {
     \ 'name': 'testlinter',
@@ -97,6 +140,13 @@ After:
   delfunction RemoveLastLine
   delfunction RemoveLastLineOneArg
   delfunction TestCallback
+  delfunction FirstChainCallback
+  delfunction FirstChainCallbackSkipped
+  delfunction FirstChainCallbackSecondSkipped
+  delfunction SecondChainCallback
+  delfunction ThirdChainCallback
+  delfunction ChainWhereLastIsSkipped
+  delfunction ChainEndSkipped
   delfunction SetUpLinters
   delfunction GetLastMessage
 
@@ -470,3 +520,42 @@ Execute(ALE should print a message telling you something isn't a valid fixer whe
   ALEFix
 
   AssertEqual 'There is no fixer named `invalidname`. Check :ALEFixSuggest', GetLastMessage()
+
+Execute(Test fixing with chained callbacks):
+  let g:ale_fixers.testft = ['FirstChainCallback']
+  ALEFix
+
+Expect(The echoed line should be added):
+  a
+  b
+  c
+  echoline
+
+Execute(Test fixing with chained callback where the first command is skipped):
+  let g:ale_fixers.testft = ['FirstChainCallbackSkipped']
+  ALEFix
+
+Expect(The default line should be added):
+  a
+  b
+  c
+  emptydefault
+
+Execute(Test fixing with chained callback where the second command is skipped):
+  let g:ale_fixers.testft = ['FirstChainCallbackSecondSkipped']
+  ALEFix
+
+Expect(The default line should be added):
+  a
+  b
+  c
+  thirddefault
+
+Execute(Test fixing with chained callback where the final callback is skipped):
+  let g:ale_fixers.testft = ['ChainWhereLastIsSkipped']
+  ALEFix
+
+Expect(The lines should be the same):
+  a
+  b
+  c
