@@ -277,7 +277,7 @@ Notes:
 * Python: `autopep8`, `flake8`, `isort`, `mypy`, `pycodestyle`, `pylint`!!, `yapf`
 * R: `lintr`
 * ReasonML: `merlin`
-* reStructuredText: `proselint`
+* reStructuredText: `proselint`, `rstcheck`
 * RPM spec: `rpmlint`
 * Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`
 * Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|)
