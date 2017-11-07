@@ -91,6 +91,7 @@ g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
 
   See |ale-integrations-local-executables|
 
+
 ===============================================================================
 jscs                                                      *ale-javascript-jscs*
 
