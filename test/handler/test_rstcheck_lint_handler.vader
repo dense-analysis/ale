@@ -1,0 +1,31 @@
+Before:
+  runtime ale_linters/rstcheck/rstcheck.vim
+
+Execute(Warning and error messages should be handled correctly):
+  AssertEqual
+  \ [
+  \   {
+  \      'lnum': 7,
+  \      'col': 0,
+  \      'type': 'W',
+  \      'text': '(python) unexpected EOF while parsing',
+  \   },
+  \   {
+  \      'lnum': 9,
+  \      'col': 0,
+  \      'type': 'W',
+  \      'text': '(cpp) error: ''x'' was not declared in this scope',
+  \   },
+  \   {
+  \      'lnum': 1,
+  \      'col': 0,
+  \      'type': 'E',
+  \      'text': 'Title overline & underline mismatch.',
+  \   },
+  \ ],
+  \ ale_linters#rst#rstcheck#Handle(1, [
+  \   'foo.rst',
+  \   'bad_python.rst:7: (ERROR/3) (python) unexpected EOF while parsing',
+  \   'bad_cpp.rst:9: (ERROR/3) (cpp) error: ''x'' was not declared in this scope',
+  \   'bad_rst.rst:1: (SEVERE/4) Title overline & underline mismatch.',
+  \])
