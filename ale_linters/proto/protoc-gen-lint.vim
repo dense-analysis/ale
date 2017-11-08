@@ -1,4 +1,4 @@
-" Author: Jeff Willette <jrwillette88@gmail.com
+" Author: Jeff Willette <jrwillette88@gmail.com>
 " Description: run the protoc-gen-lint plugin for the protoc binary
 
 call ale#linter#Define('proto', {
