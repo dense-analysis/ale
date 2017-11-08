@@ -21,4 +21,5 @@ call ale#linter#Define('dafny', {
 \    'executable': 'dafny',
 \    'command': 'dafny %s /compile:0',
 \    'callback': 'ale_linters#dafny#dafny#Handle',
+\    'lint_file': 1,
 \ })
