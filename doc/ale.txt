@@ -145,6 +145,7 @@ CONTENTS                                                         *ale-contents*
       mypy................................|ale-python-mypy|
       pycodestyle.........................|ale-python-pycodestyle|
       pylint..............................|ale-python-pylint|
+      pyls................................|ale-python-pyls|
       yapf................................|ale-python-yapf|
     r.....................................|ale-r-options|
       lintr...............................|ale-r-lintr|
