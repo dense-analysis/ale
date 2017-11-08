@@ -1,0 +1,26 @@
+Execute(The Dafny handler should parse output correctly):
+  runtime ale_linters/dafny/dafny.vim
+  AssertEqual
+  \ [
+  \   {
+  \     'bufnr': 0,
+  \     'col': 45,
+  \     'lnum': 123,
+  \     'text': 'A precondition for this call might not hold.',
+  \     'type': 'E'
+  \   },
+  \   {
+  \     'bufnr': 0,
+  \     'col': 90,
+  \     'lnum': 678,
+  \     'text': 'This is the precondition that might not hold.',
+  \     'type': 'W'
+  \   }
+  \ ],
+  \ ale_linters#dafny#dafny#Handle(0, [
+  \ 'File.dfy(123,45): Error BP5002: A precondition for this call might not hold.',
+  \ 'File.dfy(678,90): Related location: This is the precondition that might not hold.'
+  \ ])
+
+After:
+  call ale#linter#Reset()
