@@ -24,7 +24,6 @@ Execute(The prettier callback should return the correct default values):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
-  \     . ' --parser babylon'
   \     . ' --write',
   \ },
   \ ale#fixers#prettier#Fix(bufnr(''))
@@ -38,7 +37,6 @@ Execute(The prettier callback should include configuration files when the option
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
-  \     . ' --parser babylon'
   \     . ' --config ' . ale#Escape(ale#path#Winify(g:dir .  '/../prettier-test-files/with_config/.prettierrc'))
   \     . ' --write',
   \ },
@@ -53,7 +51,7 @@ Execute(The prettier callback should include custom prettier options):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
-  \     . ' --no-semi --parser babylon'
+  \     . ' --no-semi'
   \     . ' --config ' . ale#Escape(ale#path#Winify(g:dir .  '/../prettier-test-files/with_config/.prettierrc'))
   \     . ' --write',
   \ },
@@ -68,7 +66,6 @@ Execute(Append '--parser typescript' for filetype=typescript):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
-  \     . ' --parser typescript'
   \     . ' --write',
   \ },
   \ ale#fixers#prettier#Fix(bufnr(''))
@@ -82,7 +79,6 @@ Execute(Append '--parser json' for filetype=json):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
-  \     . ' --parser json'
   \     . ' --write',
   \ },
   \ ale#fixers#prettier#Fix(bufnr(''))
@@ -96,7 +92,6 @@ Execute(Append '--parser postcss' for filetype=scss):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
-  \     . ' --parser postcss'
   \     . ' --write',
   \ },
   \ ale#fixers#prettier#Fix(bufnr(''))
@@ -110,7 +105,6 @@ Execute(Append '--parser postcss' for filetype=css):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
-  \     . ' --parser postcss'
   \     . ' --write',
   \ },
   \ ale#fixers#prettier#Fix(bufnr(''))
@@ -124,7 +118,6 @@ Execute(Append '--parser postcss' for filetype=less):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
-  \     . ' --parser postcss'
   \     . ' --write',
   \ },
   \ ale#fixers#prettier#Fix(bufnr(''))
