@@ -23,7 +23,7 @@ After:
 
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
-  call ale_linters#python#flake8#ClearVersionCache()
+  call ale#semver#ResetVersionCache()
 
 Execute(The flake8 callbacks should return the correct default values):
   AssertEqual
@@ -35,8 +35,9 @@ Execute(The flake8 callbacks should return the correct default values):
   AssertEqual
   \ ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
+
   " Try with older versions.
-  call ale_linters#python#flake8#ClearVersionCache()
+  call ale#semver#ResetVersionCache()
   AssertEqual
   \ ale#Escape('flake8') . ' --format=default -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
@@ -49,7 +50,9 @@ Execute(The flake8 command callback should let you set options):
   \   . ' --some-option --format=default'
   \   . ' --stdin-display-name %s -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.4'])
-  call ale_linters#python#flake8#ClearVersionCache()
+
+  call ale#semver#ResetVersionCache()
+
   AssertEqual
   \ ale#Escape('flake8')
   \   . ' --some-option --format=default -',
@@ -140,7 +143,7 @@ Execute(Using `python -m flake8` should be supported for running flake8):
   \ ale#Escape('python') . ' -m flake8 --some-option --format=default -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
 
-  call ale_linters#python#flake8#ClearVersionCache()
+  call ale#semver#ResetVersionCache()
 
   " Leading spaces shouldn't matter
   let g:ale_python_flake8_options = '  -m flake8 --some-option'

@@ -17,6 +17,7 @@ After:
 
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
+  call ale#semver#ResetVersionCache()
 
 Execute(An empty string should be returned for the cargo executable when there's no Cargo.toml file):
   AssertEqual
