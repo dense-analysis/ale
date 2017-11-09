@@ -1,4 +1,4 @@
-" Author: zanona <https://github.com/zanona>, w0rp <devw0rp@gmail.com>
+" Author: zanona <https://github.com/zanona>
 " Description: This file adds support for checking Less code with lessc.
 
 call ale#Set('less_lessc_options', '')
