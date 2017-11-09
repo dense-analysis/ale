@@ -252,3 +252,26 @@ Execute(The tslint handler should report errors when the ignore option is on, bu
   \     'position': 1
   \   }
   \ }])])
+
+Execute(The tslint handler should not report no-implicit-dependencies errors):
+  call ale#test#SetFilename('app/test.ts')
+
+  AssertEqual
+  \ [
+  \ ],
+  \ ale_linters#typescript#tslint#Handle(bufnr(''), [json_encode([{
+  \   'endPosition': {
+  \     'character': 0,
+  \     'line': 1,
+  \     'position': 1
+  \   },
+  \   'failure': 'this is ignored',
+  \   'name': 'test.ts',
+  \   'ruleName': 'no-implicit-dependencies',
+  \   'ruleSeverity': 'ERROR',
+  \   'startPosition': {
+  \     'character': 0,
+  \     'line': 1,
+  \     'position': 1
+  \   }
+  \ }])])

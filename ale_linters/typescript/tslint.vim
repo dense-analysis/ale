@@ -24,6 +24,10 @@ function! ale_linters#typescript#tslint#Handle(buffer, lines) abort
     let l:output = []
 
     for l:error in ale#util#FuzzyJSONDecode(a:lines, [])
+        if get(l:error, 'ruleName', '') is# 'no-implicit-dependencies'
+            continue
+        endif
+
         call add(l:output, {
         \   'filename': ale#path#GetAbsPath(l:dir, l:error.name),
         \   'type': (get(l:error, 'ruleSeverity', '') is# 'WARNING' ? 'W' : 'E'),
