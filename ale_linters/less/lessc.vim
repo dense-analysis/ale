@@ -4,10 +4,10 @@
 call ale#Set('less_lessc_options', '')
 
 function! ale_linters#less#lessc#GetCommand(buffer) abort
-    return 'lessc'
-    \   . ' --no-color --lint'
+    return 'cat %t | lessc'
+    \   . ' --no-color --lint --include-path=' . expand('%:p:h')
     \   . ' ' . ale#Var(a:buffer, 'less_lessc_options')
-    \   . ' %t'
+    \   . ' -'
 endfunction
 
 function! ale_linters#less#lessc#Handle(buffer, lines) abort
