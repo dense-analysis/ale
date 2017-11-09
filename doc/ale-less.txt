@@ -3,6 +3,17 @@ ALE Less Integration                                         *ale-less-options*
 
 
 ===============================================================================
+lessc                                                          *ale-less-lessc*
+
+g:ale_less_lessc_options                             *g:ale_less_lessc_options*
+                                                     *b:ale_less_lessc_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to lessc.
+
+
+===============================================================================
 prettier                                                    *ale-less-prettier*
 
 See |ale-javascript-prettier| for information about the available options.
