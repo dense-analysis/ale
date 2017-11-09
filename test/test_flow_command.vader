@@ -5,6 +5,7 @@ Before:
 After:
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
+  call ale#semver#ResetVersionCache()
 
 Execute(flow should return a command to run if a .flowconfig file exists):
   call ale#test#SetFilename('flow/a/sub/dummy')

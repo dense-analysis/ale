@@ -4,8 +4,6 @@
 call ale#Set('rust_cargo_use_check', 1)
 call ale#Set('rust_cargo_check_all_targets', 1)
 
-let s:version_cache = {}
-
 function! ale_linters#rust#cargo#GetCargoExecutable(bufnr) abort
     if ale#path#FindNearestFile(a:bufnr, 'Cargo.toml') isnot# ''
         return 'cargo'
@@ -17,59 +15,23 @@ function! ale_linters#rust#cargo#GetCargoExecutable(bufnr) abort
 endfunction
 
 function! ale_linters#rust#cargo#VersionCheck(buffer) abort
-    if has_key(s:version_cache, 'cargo')
-        return ''
-    endif
-
-    return 'cargo --version'
-endfunction
-
-function! s:GetVersion(executable, output) abort
-    let l:version = get(s:version_cache, a:executable, [])
-
-    for l:match in ale#util#GetMatches(a:output, '\v\d+\.\d+\.\d+')
-        let l:version = ale#semver#Parse(l:match[0])
-        let s:version_cache[a:executable] = l:version
-    endfor
-
-    return l:version
-endfunction
-
-function! s:CanUseCargoCheck(buffer, version) abort
-    " Allow `cargo check` to be disabled.
-    if !ale#Var(a:buffer, 'rust_cargo_use_check')
-        return 0
-    endif
-
-    return !empty(a:version)
-    \   && ale#semver#GreaterOrEqual(a:version, [0, 17, 0])
-endfunction
-
-function! s:CanUseAllTargets(buffer, version) abort
-    if !ale#Var(a:buffer, 'rust_cargo_use_check')
-        return 0
-    endif
-
-    if !ale#Var(a:buffer, 'rust_cargo_check_all_targets')
-        return 0
-    endif
-
-    return !empty(a:version)
-    \   && ale#semver#GreaterOrEqual(a:version, [0, 22, 0])
+    return !ale#semver#HasVersion('cargo')
+    \   ? 'cargo --version'
+    \   : ''
 endfunction
 
 function! ale_linters#rust#cargo#GetCommand(buffer, version_output) abort
-    let l:version = s:GetVersion('cargo', a:version_output)
-    let l:command = s:CanUseCargoCheck(a:buffer, l:version)
-    \   ? 'check'
-    \   : 'build'
-    let l:all_targets = s:CanUseAllTargets(a:buffer, l:version)
-    \   ? ' --all-targets'
-    \   : ''
+    let l:version = ale#semver#GetVersion('cargo', a:version_output)
+
+    let l:use_check = ale#Var(a:buffer, 'rust_cargo_use_check')
+    \   && ale#semver#GTE(l:version, [0, 17, 0])
+    let l:use_all_targets = l:use_check
+    \   && ale#Var(a:buffer, 'rust_cargo_check_all_targets')
+    \   && ale#semver#GTE(l:version, [0, 22, 0])
 
     return 'cargo '
-    \   . l:command
-    \   . l:all_targets
+    \   . (l:use_check ? 'check' : 'build')
+    \   . (l:use_all_targets ? ' --all-targets' : '')
     \   . ' --frozen --message-format=json -q'
 endfunction
 

@@ -23,18 +23,15 @@ function! ale_linters#javascript#flow#GetCommand(buffer, version_lines) abort
         return ''
     endif
 
-    let l:use_respect_pragma = 1
+    let l:executable = ale_linters#javascript#flow#GetExecutable(a:buffer)
+    let l:version = ale#semver#GetVersion(l:executable, a:version_lines)
 
     " If we can parse the version number, then only use --respect-pragma
     " if the version is >= 0.36.0, which added the argument.
-    for l:match in ale#util#GetMatches(a:version_lines, '\v\d+\.\d+\.\d+$')
-        let l:use_respect_pragma = ale#semver#GreaterOrEqual(
-        \   ale#semver#Parse(l:match[0]),
-        \   [0, 36, 0]
-        \)
-    endfor
+    let l:use_respect_pragma = empty(l:version)
+    \   || ale#semver#GTE(l:version, [0, 36])
 
-    return ale#Escape(ale_linters#javascript#flow#GetExecutable(a:buffer))
+    return ale#Escape(l:executable)
     \   . ' check-contents'
     \   . (l:use_respect_pragma ? ' --respect-pragma': '')
     \   . ' --json --from ale %s'
