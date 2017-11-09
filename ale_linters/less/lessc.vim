@@ -5,9 +5,9 @@ call ale#Set('less_lessc_options', '')
 
 function! ale_linters#less#lessc#GetCommand(buffer) abort
     return 'lessc'
-          \ . ' --no-color --lint '
-          \ . ale#Var(a:buffer, 'less_lessc_options')
-          \ . ' %t'
+    \   . ' --no-color --lint'
+    \   . ' ' . ale#Var(a:buffer, 'less_lessc_options')
+    \   . ' %t'
 endfunction
 
 function! ale_linters#less#lessc#Handle(buffer, lines) abort
