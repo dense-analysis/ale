@@ -4,7 +4,8 @@
 call ale#linter#Define('proto', {
 \   'name': 'protoc-gen-lint',
 \   'output_stream': 'stderr',
+\   'lint_file': 1,
 \   'executable': 'protoc',
-\   'command': 'protoc --lint_out=. *.proto',
+\   'command': 'protoc -I $(dirname %s) --lint_out=. %s',
 \   'callback': 'ale#handlers#unix#HandleAsError',
 \})

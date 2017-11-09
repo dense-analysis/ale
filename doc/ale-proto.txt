@@ -15,9 +15,17 @@ To enable `.proto` file linting, update |g:ale_linters| as appropriate:
   let g:ale_linters = {'proto': ['protoc-gen-lint']}
 <
 ===============================================================================
+protoc                                                        *ale-proto-protoc*
+
+  The protobuf compiler. The compiler needs to have the abslute path of the 
+  directory which contains the `.proto` file. Currently the linter will only 
+  check the directory which contains the file that is currently being edited.
+
+===============================================================================
 protoc-gen-lint                                      *ale-proto-protoc-gen-lint*
 
-  The linter is a plugin for the `protoc` binary.
+  The linter is a plugin for the `protoc` binary. As long as the binary resides
+  in the system path, `protoc` will find it.
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
