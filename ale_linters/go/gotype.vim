@@ -12,7 +12,7 @@ call ale#linter#Define('go', {
 "\   'command':
 function! ale_linters#go#gotype#GetCommand(buffer) abort
     let l:module_files = globpath(expand('#' . a:buffer . ':p:h'), '*.go', 0, 1)
-    let l:other_module_files = filter(l:module_files, 'v:val !=# ' . ale#Escape(expand('#' . a:buffer . ':p')))
+    let l:other_module_files = filter(l:module_files, 'v:val isnot# ' . ale#Escape(expand('#' . a:buffer . ':p')))
     return 'gotype %t ' . join(map(l:other_module_files, 'ale#Escape(v:val)'))
 
 endfunction
