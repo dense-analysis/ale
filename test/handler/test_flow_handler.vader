@@ -134,14 +134,12 @@ Execute(The flow handler should process errors correctly.):
   \   'type': 'E',
   \   'col': 10,
   \   'text': 'number: This type is incompatible with the expected return type of array type',
-  \   'detail': '',
   \ },
   \ {
   \   'lnum': 419,
   \   'type': 'W',
   \   'col': 3,
   \   'text': 'unreachable code:',
-  \   'detail': '',
   \ },
   \]
 
@@ -246,7 +244,6 @@ Execute(The flow handler should fetch the correct location for the currently ope
   \   'col': 3,
   \   'type': 'E',
   \   'text': 'property `bar`: Property not found in props of React element `Foo` See also: React element `Foo`',
-  \   'detail': '',
   \ }
   \]
 
@@ -351,7 +348,6 @@ Execute(The flow handler should handle relative paths):
   \   'col': 3,
   \   'type': 'E',
   \   'text': 'property `bar`: Property not found in props of React element `Foo` See also: React element `Foo`',
-  \   'detail': '',
   \ }
   \]
 
