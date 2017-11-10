@@ -135,6 +135,8 @@ CONTENTS                                                         *ale-contents*
       phpstan.............................|ale-php-phpstan|
     pod...................................|ale-pod-options|
       write-good..........................|ale-pod-write-good|
+    proto.................................|ale-proto-options|
+      protoc-gen-lint.....................|ale-proto-protoc-gen-lint|
     pug...................................|ale-pug-options|
       puglint.............................|ale-pug-puglint|
     puppet................................|ale-puppet-options|
