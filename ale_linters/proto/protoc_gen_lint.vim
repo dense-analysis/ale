@@ -6,7 +6,7 @@ function! ale_linters#proto#protoc_gen_lint#GetCommand(buffer) abort
 
     return 'protoc'
     \   . ' -I ' . ale#Escape(l:dirname)
-    \   . ' --lint_out=. %s' 
+    \   . ' --lint_out=. ' . '%s'
 endfunction
 
 call ale#linter#Define('proto', {

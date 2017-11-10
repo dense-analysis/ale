@@ -11,6 +11,6 @@ After:
 Execute(The default command should be correct):
 
   AssertEqual
-  \ 'protoc' . ' -I ' . ale#Escape(getcwd()) . ' --lint_out=. ' . ale#Escape(expand('%')),
+  \ 'protoc' . ' -I ' . ale#Escape(getcwd()) . ' --lint_out=. ' . '%s',
   \ ale_linters#proto#protoc_gen_lint#GetCommand(bufnr(''))
 
