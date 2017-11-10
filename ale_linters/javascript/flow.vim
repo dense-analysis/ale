@@ -60,16 +60,16 @@ function! s:GetJSONLines(lines) abort
 endfunction
 
 function! s:ExtraErrorMsg(current, new) abort
-    let newMsg = ''
+    let l:newMsg = ''
 
     if a:current is# ''
         " extra messages appear to already have a :
-        let newMsg = a:new
+        let l:newMsg = a:new
     else
-        let newMsg = a:current . ' ' . a:new
+        let l:newMsg = a:current . ' ' . a:new
     endif
 
-    return newMsg
+    return l:newMsg
 endfunction
 
 
