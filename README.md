@@ -87,6 +87,7 @@ formatting.
 | CSS | [csslint](http://csslint.net/), [stylelint](https://github.com/stylelint/stylelint), [prettier](https://github.com/prettier/prettier) |
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
 | D | [dmd](https://dlang.org/dmd-linux.html) |
+| Dafny | [dafny](https://rise4fun.com/Dafny) !! |
 | Dart | [dartanalyzer](https://github.com/dart-lang/sdk/tree/master/pkg/analyzer_cli) !!, [language_server](https://github.com/natebosch/dart_language_server) |
 | Dockerfile | [hadolint](https://github.com/lukasmartinelli/hadolint) |
 | Elixir | [credo](https://github.com/rrrene/credo), [dogma](https://github.com/lpil/dogma) !! |
@@ -123,9 +124,10 @@ formatting.
 | Perl | [perl -c](https://perl.org/), [perl-critic](https://metacpan.org/pod/Perl::Critic) |
 | PHP | [hack](http://hacklang.org/), [hackfmt](https://github.com/facebook/flow/tree/master/hack/hackfmt), [langserver](https://github.com/felixfbecker/php-language-server), [phan](https://github.com/phan/phan) see `:help ale-php-phan` to instructions, [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer), [phpmd](https://phpmd.org), [phpstan](https://github.com/phpstan/phpstan), [phpcbf](https://github.com/squizlabs/PHP_CodeSniffer) |
 | Pod | [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good) |
+| proto | [protoc-gen-lint](https://github.com/ckaznocha/protoc-gen-lint) |
 | Pug | [pug-lint](https://github.com/pugjs/pug-lint) |
 | Puppet | [puppet](https://puppet.com), [puppet-lint](https://puppet-lint.com) |
-| Python | [autopep8](https://github.com/hhatto/autopep8), [flake8](http://flake8.pycqa.org/en/latest/), [isort](https://github.com/timothycrosley/isort), [mypy](http://mypy-lang.org/), [pycodestyle](https://github.com/PyCQA/pycodestyle), [pylint](https://www.pylint.org/) !!, [yapf](https://github.com/google/yapf) |
+| Python | [autopep8](https://github.com/hhatto/autopep8), [flake8](http://flake8.pycqa.org/en/latest/), [isort](https://github.com/timothycrosley/isort), [mypy](http://mypy-lang.org/), [pycodestyle](https://github.com/PyCQA/pycodestyle), [pyls](https://github.com/palantir/python-language-server), [pylint](https://www.pylint.org/) !!, [yapf](https://github.com/google/yapf) |
 | R | [lintr](https://github.com/jimhester/lintr) |
 | ReasonML | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-integration-reason-merlin` for configuration instructions, [refmt](https://github.com/reasonml/reason-cli) |
 | reStructuredText | [proselint](http://proselint.com/), [rstcheck](https://github.com/myint/rstcheck), [write-good](https://github.com/btford/write-good) |

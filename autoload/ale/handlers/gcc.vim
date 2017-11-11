@@ -18,18 +18,6 @@ function! s:RemoveUnicodeQuotes(text) abort
     return l:text
 endfunction
 
-function! ale#handlers#gcc#ParseGCCVersion(lines) abort
-    for l:line in a:lines
-        let l:match = matchstr(l:line, '\d\.\d\.\d')
-
-        if !empty(l:match)
-            return ale#semver#Parse(l:match)
-        endif
-    endfor
-
-    return []
-endfunction
-
 function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
     " Look for lines like the following.
     "

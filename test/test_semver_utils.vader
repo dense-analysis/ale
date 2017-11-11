@@ -1,16 +1,50 @@
-Execute(ParseSemver should return the correct results):
-  " We should be able to parse the semver string from flake8
-  AssertEqual [3, 0, 4], ale#semver#Parse('3.0.4 (mccabe: 0.5.2, pyflakes: 1.2.3, pycodestyle: 2.0.0) CPython 2.7.12 on Linux')
+After:
+  call ale#semver#ResetVersionCache()
 
-Execute(GreaterOrEqual should compare triples correctly):
-  Assert ale#semver#GreaterOrEqual([3, 0, 4], [3, 0, 0])
-  Assert ale#semver#GreaterOrEqual([3, 0, 0], [3, 0, 0])
-  Assert ale#semver#GreaterOrEqual([3, 0, 0], [2, 0, 0])
-  Assert ale#semver#GreaterOrEqual([3, 1, 0], [3, 1, 0])
-  Assert ale#semver#GreaterOrEqual([3, 2, 0], [3, 1, 0])
-  Assert ale#semver#GreaterOrEqual([3, 2, 2], [3, 1, 6])
-  Assert ale#semver#GreaterOrEqual([3, 2, 5], [3, 2, 5])
-  Assert ale#semver#GreaterOrEqual([3, 2, 6], [3, 2, 5])
-  Assert !ale#semver#GreaterOrEqual([2, 9, 1], [3, 0, 0])
-  Assert !ale#semver#GreaterOrEqual([3, 2, 3], [3, 3, 3])
-  Assert !ale#semver#GreaterOrEqual([3, 3, 2], [3, 3, 3])
+Execute(GetVersion should return the version from the lines of output):
+  " We should be able to parse the semver string from flake8
+  AssertEqual [3, 0, 4], ale#semver#GetVersion('dummy', [
+  \ '3.0.4 (mccabe: 0.5.2, pyflakes: 1.2.3, pycodestyle: 2.0.0) CPython 2.7.12 on Linux',
+  \ '1.2.3',
+  \])
+
+Execute(GetVersion should return an empty list when no vesrion can be found):
+  AssertEqual [], ale#semver#GetVersion('dummy', ['x'])
+  AssertEqual [], ale#semver#GetVersion('dummy', [])
+
+Execute(GetVersion should cache the version):
+  AssertEqual [], ale#semver#GetVersion('dummy', [])
+  AssertEqual [3, 4, 7], ale#semver#GetVersion('dummy', ['Version 3.4.7'])
+  AssertEqual [3, 4, 7], ale#semver#GetVersion('dummy', [])
+
+Execute(HasVersion should return 1 when the version has been cached):
+  call ale#semver#GetVersion('dummy', [])
+  AssertEqual 0, ale#semver#HasVersion('dummy')
+  call ale#semver#GetVersion('dummy', ['3.4.7'])
+  AssertEqual 1, ale#semver#HasVersion('dummy')
+
+Execute(GTE should compare triples correctly):
+  Assert ale#semver#GTE([3, 0, 4], [3, 0, 0])
+  Assert ale#semver#GTE([3, 0, 0], [3, 0, 0])
+  Assert ale#semver#GTE([3, 0, 0], [2, 0, 0])
+  Assert ale#semver#GTE([3, 1, 0], [3, 1, 0])
+  Assert ale#semver#GTE([3, 2, 0], [3, 1, 0])
+  Assert ale#semver#GTE([3, 2, 2], [3, 1, 6])
+  Assert ale#semver#GTE([3, 2, 5], [3, 2, 5])
+  Assert ale#semver#GTE([3, 2, 6], [3, 2, 5])
+  Assert !ale#semver#GTE([2, 9, 1], [3, 0, 0])
+  Assert !ale#semver#GTE([3, 2, 3], [3, 3, 3])
+  Assert !ale#semver#GTE([3, 3, 2], [3, 3, 3])
+
+Execute(GTE should compare pairs correctly):
+  Assert ale#semver#GTE([3, 0], [3, 0, 0])
+  Assert ale#semver#GTE([3, 0], [3, 0])
+  Assert ale#semver#GTE([3, 1], [3, 0])
+  Assert ale#semver#GTE([3, 1], [3, 0, 0])
+  Assert ale#semver#GTE([3, 0, 1], [3, 0])
+  Assert !ale#semver#GTE([3, 0], [3, 0, 1])
+  Assert !ale#semver#GTE([3, 0], [3, 1])
+  Assert !ale#semver#GTE([2, 9, 11], [3, 0])
+
+Execute(GTE should permit the LHS to be an empty List):
+  Assert !ale#semver#GTE([], [0, 0, 0])

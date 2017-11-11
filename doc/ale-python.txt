@@ -189,6 +189,15 @@ g:ale_python_pylint_use_global                 *g:ale_python_pylint_use_global*
 
   See |ale-integrations-local-executables|
 
+===============================================================================
+pyls                                                          *ale-python-pyls*
+
+g:ale_python_pyls_executable                     *g:ale_python_pyls_executable*
+                                                 *b:ale_python_pyls_executable*
+  Type: |String|
+  Default: `pyls`
+
+  See |ale-integrations-local-executables|
 
 ===============================================================================
 yapf                                                          *ale-python-yapf*

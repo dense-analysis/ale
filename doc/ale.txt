@@ -134,6 +134,8 @@ CONTENTS                                                         *ale-contents*
       phpstan.............................|ale-php-phpstan|
     pod...................................|ale-pod-options|
       write-good..........................|ale-pod-write-good|
+    proto.................................|ale-proto-options|
+      protoc-gen-lint.....................|ale-proto-protoc-gen-lint|
     pug...................................|ale-pug-options|
       puglint.............................|ale-pug-puglint|
     puppet................................|ale-puppet-options|
@@ -145,6 +147,7 @@ CONTENTS                                                         *ale-contents*
       mypy................................|ale-python-mypy|
       pycodestyle.........................|ale-python-pycodestyle|
       pylint..............................|ale-python-pylint|
+      pyls................................|ale-python-pyls|
       yapf................................|ale-python-yapf|
     r.....................................|ale-r-options|
       lintr...............................|ale-r-lintr|
@@ -270,6 +273,7 @@ Notes:
 * CSS: `csslint`, `stylelint`, `prettier`
 * Cython (pyrex filetype): `cython`
 * D: `dmd`
+* Dafny: `dafny`!!
 * Dart: `dartanalyzer`!!, `language_server`
 * Dockerfile: `hadolint`
 * Elixir: `credo`, `dogma`!!
@@ -306,9 +310,10 @@ Notes:
 * Perl: `perl -c`, `perl-critic`
 * PHP: `hack`, `hackfmt`, `langserver`, `phan`, `php -l`, `phpcs`, `phpmd`, `phpstan`, `phpcbf`
 * Pod: `proselint`, `write-good`
+* proto: `protoc-gen-lint`
 * Pug: `pug-lint`
 * Puppet: `puppet`, `puppet-lint`
-* Python: `autopep8`, `flake8`, `isort`, `mypy`, `pycodestyle`, `pylint`!!, `yapf`
+* Python: `autopep8`, `flake8`, `isort`, `mypy`, `pycodestyle`, `pyls`, `pylint`!!, `yapf`
 * R: `lintr`
 * ReasonML: `merlin`, `refmt`
 * reStructuredText: `proselint`, `rstcheck`, `write-good`
