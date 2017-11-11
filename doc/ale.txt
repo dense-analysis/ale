@@ -882,7 +882,7 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
   `let g:ale_linter_aliases = {'html': ['html', 'javascript', 'css']}`
 
   Note that `html` itself was included as an alias. That is because aliases
-  will override the original linters for the aliased filetepe.
+  will override the original linters for the aliased filetype.
 
   Linter aliases can be configured in each buffer with buffer-local variables.
   ALE will first look for aliases for filetypes in the `b:ale_linter_aliases`
