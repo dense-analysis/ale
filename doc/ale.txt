@@ -946,6 +946,20 @@ g:ale_linters                                                   *g:ale_linters*
   will first look for linters for filetypes in the `b:ale_linters` variable,
   then `g:ale_linters`, and then a default Dictionary.
 
+  `b:ale_linters` can be set to a List, or the string `'all'`. When linters
+  for two different filetypes share the same name, the first linter loaded
+  will be used. Any ambiguity can be resolved by using a Dictionary specifying
+  which linter to run for which filetype instead. >
+
+  " Use ESLint for the buffer if the filetype includes 'javascript'.
+  let b:ale_linters = {'javascript': ['eslint'], 'html': ['tidy']}
+  " Use a List for the same setting. This will work in most cases.
+  let b:ale_linters = ['eslint', 'tidy']
+  " Disable all linters for the buffer.
+  let b:ale_linters = []
+  " Explicitly enable all available linters for the filetype.
+  let b:ale_linters = 'all'
+<
 
 g:ale_max_buffer_history_size                   *g:ale_max_buffer_history_size*
 
@@ -1018,7 +1032,7 @@ g:ale_pattern_options                                   *g:ale_pattern_options*
   " Use just ESLint for linting and fixing files which end in '.foo.js'
   let g:ale_pattern_options = {
   \   '\.foo\.js$': {
-  \       'ale_linters': {'javascript': ['eslint']},
+  \       'ale_linters': ['eslint'],
   \       'ale_fixers: ['eslint'],
   \   },
   \}
