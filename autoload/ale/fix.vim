@@ -332,18 +332,25 @@ function! s:RunFixer(options) abort
 endfunction
 
 function! s:GetCallbacks() abort
-    let l:fixers = ale#Var(bufnr(''), 'fixers')
-    let l:callback_list = []
+    if type(get(b:, 'ale_fixers')) is type([])
+        " Lists can be used for buffer-local variables only
+        let l:callback_list = b:ale_fixers
+    else
+        " buffer and global options can use dictionaries mapping filetypes to
+        " callbacks to run.
+        let l:fixers = ale#Var(bufnr(''), 'fixers')
+        let l:callback_list = []
 
-    for l:sub_type in split(&filetype, '\.')
-        let l:sub_type_callacks = get(l:fixers, l:sub_type, [])
+        for l:sub_type in split(&filetype, '\.')
+            let l:sub_type_callacks = get(l:fixers, l:sub_type, [])
 
-        if type(l:sub_type_callacks) == type('')
-            call add(l:callback_list, l:sub_type_callacks)
-        else
-            call extend(l:callback_list, l:sub_type_callacks)
-        endif
-    endfor
+            if type(l:sub_type_callacks) == type('')
+                call add(l:callback_list, l:sub_type_callacks)
+            else
+                call extend(l:callback_list, l:sub_type_callacks)
+            endif
+        endfor
+    endif
 
     if empty(l:callback_list)
         return []

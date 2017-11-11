@@ -330,6 +330,15 @@ Expect(There should be only two lines):
   a
   b
 
+Execute(ALEFix should allow Lists to be used for buffer-local fixer settings):
+  let g:ale_fixers.testft = ['AddCarets', 'AddDollars']
+  let b:ale_fixers = ['RemoveLastLine']
+  ALEFix
+
+Expect(There should be only two lines):
+  a
+  b
+
 Given testft (A file with three lines):
   a
   b
