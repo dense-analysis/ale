@@ -83,9 +83,8 @@ function! ale#lsp#CreateMessageData(message) abort
     let l:is_notification = a:message[0]
 
     let l:obj = {
-    \   'id': v:null,
-    \   'jsonrpc': '2.0',
     \   'method': a:message[1],
+    \   'jsonrpc': '2.0',
     \}
 
     if !l:is_notification
