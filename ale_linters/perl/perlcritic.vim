@@ -61,6 +61,7 @@ function! ale_linters#perl#perlcritic#Handle(buffer, lines) abort
         \   'lnum': l:match[1],
         \   'col': l:match[2],
         \   'text': l:match[3],
+        \   'type': 'W'
         \})
     endfor
 
