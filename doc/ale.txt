@@ -492,6 +492,18 @@ upon some lines immediately, then run `eslint` from the ALE registry, and
 then call a lambda function which will remove every single line comment
 from the file.
 
+For buffer-local settings, such as in |g:ale_pattern_options| or in ftplugin
+files, a |List| may be used for configuring the fixers instead.
+>
+  " Same as the above, only a List can be used instead of a Dictionary.
+  let b:ale_fixers = [
+  \   'DoSomething',
+  \   'eslint',
+  \   {buffer, lines -> filter(lines, 'v:val !=~ ''^\s*//''')},
+  \]
+
+  ALEFix
+<
 For convenience, a plug mapping is defined for |ALEFix|, so you can set up a
 keybind easily for fixing files. >
 
@@ -696,6 +708,8 @@ g:ale_fixers                                                     *g:ale_fixers*
   See |ale-fix| for more information.
 
   This variable can be overridden with variables in each buffer.
+  `b:ale_fixers` can be set to a |List| of callbacks instead, which can be
+  more convenient.
 
 
 g:ale_fix_on_save                                           *g:ale_fix_on_save*
@@ -1001,14 +1015,15 @@ g:ale_pattern_options                                   *g:ale_pattern_options*
   buffer variables. This option can be set to automatically configure
   different settings for different files. For example: >
 
+  " Use just ESLint for linting and fixing files which end in '.foo.js'
   let g:ale_pattern_options = {
   \   '\.foo\.js$': {
   \       'ale_linters': {'javascript': ['eslint']},
+  \       'ale_fixers: ['eslint'],
   \   },
   \}
 <
-  The above example will match any filename ending in `.foo.js`, and use
-  only `eslint` for checking those files by setting `b:ale_linters`.
+  See |b:ale_linters| and |b:ale_fixers| for information for those options.
 
   Filenames are matched with |match()|, and patterns depend on the |magic|
   setting, unless prefixed with the special escape sequences like `'\v'`,
