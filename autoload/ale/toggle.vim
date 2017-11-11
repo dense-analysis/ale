@@ -4,9 +4,7 @@ function! ale#toggle#InitAuGroups() abort
 
     augroup ALEPatternOptionsGroup
         autocmd!
-        if g:ale_enabled && g:ale_pattern_options_enabled
-            autocmd BufEnter,BufRead * call ale#pattern_options#SetOptions()
-        endif
+        autocmd BufEnter,BufRead * call ale#pattern_options#SetOptions(str2nr(expand('<abuf>')))
     augroup END
 
     augroup ALERunOnTextChangedGroup
@@ -71,7 +69,6 @@ function! ale#toggle#InitAuGroups() abort
     augroup END
 
     if !g:ale_enabled
-        augroup! ALEPatternOptionsGroup
         augroup! ALERunOnTextChangedGroup
         augroup! ALERunOnEnterGroup
         augroup! ALERunOnInsertLeave
