@@ -26,7 +26,7 @@ Execute(ale#lsp#CreateMessageData() should create an appropriate message):
       \ [
       \   1,
       \   "Content-Length: 79\r\n\r\n"
-      \   . '{"id": 1, "jsonrpc": "2.0", "method": "someMethod", "params": {"foo": "barÜ"}}',
+      \   . '{"method": "someMethod", "jsonrpc": "2.0", "id": 1, "params": {"foo": "barÜ"}}',
       \ ],
       \ ale#lsp#CreateMessageData([0, 'someMethod', {'foo': 'barÜ'}])
       " Check again to ensure that we use the next ID.
@@ -34,7 +34,7 @@ Execute(ale#lsp#CreateMessageData() should create an appropriate message):
       \ [
       \   2,
       \   "Content-Length: 79\r\n\r\n"
-      \   . '{"id": 2, "jsonrpc": "2.0", "method": "someMethod", "params": {"foo": "barÜ"}}',
+      \   . '{"method": "someMethod", "jsonrpc": "2.0", "id": 2, "params": {"foo": "barÜ"}}',
       \ ],
       \ ale#lsp#CreateMessageData([0, 'someMethod', {'foo': 'barÜ'}])
     else
@@ -42,14 +42,14 @@ Execute(ale#lsp#CreateMessageData() should create an appropriate message):
       \ [
       \   1,
       \   "Content-Length: 71\r\n\r\n"
-      \   . '{"id":1,"jsonrpc":"2.0","method":"someMethod","params":{"foo":"barÜ"}}',
+      \   . '{"method":"someMethod","jsonrpc":"2.0","id":1,"params":{"foo":"barÜ"}}',
       \ ],
       \ ale#lsp#CreateMessageData([0, 'someMethod', {'foo': 'barÜ'}])
       AssertEqual
       \ [
       \   2,
       \   "Content-Length: 71\r\n\r\n"
-      \   . '{"id":2,"jsonrpc":"2.0","method":"someMethod","params":{"foo":"barÜ"}}',
+      \   . '{"method":"someMethod","jsonrpc":"2.0","id":2,"params":{"foo":"barÜ"}}',
       \ ],
       \ ale#lsp#CreateMessageData([0, 'someMethod', {'foo': 'barÜ'}])
     endif
@@ -60,7 +60,7 @@ Execute(ale#lsp#CreateMessageData() should create messages without params):
       \ [
       \   1,
       \   "Content-Length: 56\r\n\r\n"
-      \   . '{"id": 1, "jsonrpc": "2.0", "method": "someOtherMethod"}',
+      \   . '{"method": "someOtherMethod", "jsonrpc": "2.0", "id": 1}',
       \ ],
       \ ale#lsp#CreateMessageData([0, 'someOtherMethod'])
     else
@@ -68,7 +68,7 @@ Execute(ale#lsp#CreateMessageData() should create messages without params):
       \ [
       \   1,
       \   "Content-Length: 51\r\n\r\n"
-      \   . '{"id":1,"jsonrpc":"2.0","method":"someOtherMethod"}',
+      \   . '{"method":"someOtherMethod","jsonrpc":"2.0","id":1}',
       \ ],
       \ ale#lsp#CreateMessageData([0, 'someOtherMethod'])
     endif
@@ -78,30 +78,30 @@ Execute(ale#lsp#CreateMessageData() should create notifications):
       AssertEqual
       \ [
       \   0,
-      \   "Content-Length: 60\r\n\r\n"
-      \   . '{"id": null, "jsonrpc": "2.0", "method": "someNotification"}',
+      \   "Content-Length: 48\r\n\r\n"
+      \   . '{"method": "someNotification", "jsonrpc": "2.0"}',
       \ ],
       \ ale#lsp#CreateMessageData([1, 'someNotification'])
       AssertEqual
       \ [
       \   0,
-      \   "Content-Length: 86\r\n\r\n"
-      \   . '{"id": null, "jsonrpc": "2.0", "method": "someNotification", "params": {"foo": "bar"}}',
+      \   "Content-Length: 74\r\n\r\n"
+      \   . '{"method": "someNotification", "jsonrpc": "2.0", "params": {"foo": "bar"}}',
       \ ],
       \ ale#lsp#CreateMessageData([1, 'someNotification', {'foo': 'bar'}])
     else
       AssertEqual
       \ [
       \   0,
-      \   "Content-Length: 55\r\n\r\n"
-      \   . '{"id":null,"jsonrpc":"2.0","method":"someNotification"}',
+      \   "Content-Length: 45\r\n\r\n"
+      \   . '{"method":"someNotification","jsonrpc":"2.0"}',
       \ ],
       \ ale#lsp#CreateMessageData([1, 'someNotification'])
       AssertEqual
       \ [
       \   0,
-      \   "Content-Length: 78\r\n\r\n"
-      \   . '{"id":null,"jsonrpc":"2.0","method":"someNotification","params":{"foo":"bar"}}',
+      \   "Content-Length: 68\r\n\r\n"
+      \   . '{"method":"someNotification","jsonrpc":"2.0","params":{"foo":"bar"}}',
       \ ],
       \ ale#lsp#CreateMessageData([1, 'someNotification', {'foo': 'bar'}])
     endif
