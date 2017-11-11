@@ -74,3 +74,19 @@ Execute(Patterns should not be applied when the setting is disabled):
   call ale#pattern_options#SetOptions(bufnr(''))
 
   AssertEqual 0, b:some_option
+
+" This test is important for making sure we update the sorted items.
+Execute(Patterns should be applied after the Dictionary changes):
+  call ale#test#SetFilename('foobar.js')
+
+  let g:ale_pattern_options = {}
+
+  call ale#pattern_options#SetOptions(bufnr(''))
+
+  AssertEqual 0, b:some_option
+
+  let g:ale_pattern_options['foo'] = {'some_option': 666}
+
+  call ale#pattern_options#SetOptions(bufnr(''))
+
+  AssertEqual 666, b:some_option
