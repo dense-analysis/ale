@@ -289,11 +289,19 @@ function! ale#linter#ResolveFiletype(original_filetype) abort
 endfunction
 
 function! s:GetLinterNames(original_filetype) abort
-    for l:dict in [
-    \   get(b:, 'ale_linters', {}),
-    \   g:ale_linters,
-    \   s:default_ale_linters,
-    \]
+    let l:buffer_ale_linters = get(b:, 'ale_linters', {})
+
+    " b:ale_linters can be set to 'all'
+    if l:buffer_ale_linters is# 'all'
+        return 'all'
+    endif
+
+    " b:ale_linters can be set to a List.
+    if type(l:buffer_ale_linters) is type([])
+        return l:buffer_ale_linters
+    endif
+
+    for l:dict in [l:buffer_ale_linters, g:ale_linters, s:default_ale_linters]
         if has_key(l:dict, a:original_filetype)
             return l:dict[a:original_filetype]
         endif

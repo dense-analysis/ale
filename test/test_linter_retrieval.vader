@@ -42,6 +42,30 @@ Execute (You should be able to select linters with a buffer option):
 
   AssertEqual [g:testlinter1], ale#linter#Get('testft')
 
+Execute (b:ale_linters should work when set to a List):
+  call ale#linter#Define('testft', g:testlinter1)
+  call ale#linter#Define('testft', g:testlinter2)
+  let g:ale_linters = {'testft': ['testlinter1', 'testlinter2']}
+  let b:ale_linters = ['testlinter1']
+
+  AssertEqual [g:testlinter1], ale#linter#Get('testft')
+
+Execute (b:ale_linters should disable all linters when set to an empty List):
+  call ale#linter#Define('testft', g:testlinter1)
+  call ale#linter#Define('testft', g:testlinter2)
+  let g:ale_linters = {'testft': ['testlinter1', 'testlinter2']}
+  let b:ale_linters = []
+
+  AssertEqual [], ale#linter#Get('testft')
+
+Execute (b:ale_linters should enable all available linters when set to 'all'):
+  call ale#linter#Define('testft', g:testlinter1)
+  call ale#linter#Define('testft', g:testlinter2)
+  let g:ale_linters = {'testft': ['testlinter1']}
+  let b:ale_linters = 'all'
+
+  AssertEqual [g:testlinter1, g:testlinter2], ale#linter#Get('testft')
+
 Execute (Buffer settings shouldn't completely replace global settings):
   call ale#linter#Define('testft', g:testlinter1)
   call ale#linter#Define('testft', g:testlinter2)
