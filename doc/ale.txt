@@ -635,33 +635,37 @@ g:ale_echo_delay                                             *g:ale_echo_delay*
 g:ale_echo_msg_error_str                             *g:ale_echo_msg_error_str*
 
   Type: |String|
-  Default: `Error`
+  Default: `'Error'`
 
-  The string used for error severity in the echoed message.
-  Note |g:ale_echo_cursor| should be set to 1
-  Note |g:ale_echo_msg_format| should contain the `%severity%` handler
+  The string used for `%severity%` for errors. See |g:ale_echo_msg_format|
 
 
 g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
 
   Type: |String|
-  Default: `%s`
+  Default: `'%s'`
 
-  This variable defines the format of the echoed message. The `%s` is the
-  error message itself, and it can contain the following handlers:
-  - `%linter%` for linter's name
-  - `%severity%` for the type of severity
-  Note |g:ale_echo_cursor| should be setted to 1
+  This variable defines a message format for echoed messages. The following
+  sequences of characters will be replaced.
+
+    `%s`         - will be replaced with the text for the problem
+    `%linter%`   - will be replaced with the name of the linter
+    `%severity%` - will be replaced withe severity of the problem
+
+  The strings for `%severity%` can be configured with the following options.
+
+    |g:ale_echo_msg_error_str|   - Defaults to `'Error'`
+    |g:ale_echo_msg_warning_str| - Defaults to `'Warning'`
+
+  |g:ale_echo_cursor| needs to be set to 1 for messages to be displayed.
 
 
 g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
 
   Type: |String|
-  Default: `Warning`
+  Default: `'Warning'`
 
-  The string used for warning severity in the echoed message.
-  Note |g:ale_echo_cursor| should be set to 1
-  Note |g:ale_echo_msg_format| should contain the `%severity%` handler
+  The string used for `%severity%` for warnings. See |g:ale_echo_msg_format|
 
 
 g:ale_emit_conflict_warnings                     *g:ale_emit_conflict_warnings*
