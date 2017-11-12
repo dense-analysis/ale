@@ -24,17 +24,24 @@ function! ale_linters#less#lessc#GetCommand(buffer) abort
 endfunction
 
 function! ale_linters#less#lessc#Handle(buffer, lines) abort
+    let l:dir = expand('#' . a:buffer . ':p:h')
     " Matches patterns like the following:
     let l:pattern = '^\(\w\+\): \(.\{-}\) in \(.\{-}\) on line \(\d\+\), column \(\d\+\):$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        call add(l:output, {
+        let l:item = {
         \   'lnum': l:match[4] + 0,
         \   'col': l:match[5] + 0,
         \   'text': l:match[2],
         \   'type': 'E',
-        \})
+        \}
+
+        if l:match[3] isnot# '-'
+            let l:item.filename = ale#path#GetAbsPath(l:dir, l:match[3])
+        endif
+
+        call add(l:output, l:item)
     endfor
 
     return l:output
