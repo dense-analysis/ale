@@ -1,0 +1,82 @@
+Before:
+  Save g:ale_less_lessc_executable
+  Save g:ale_less_lessc_use_global
+  Save g:ale_less_lessc_options
+
+  unlet! b:executable
+
+  unlet! g:ale_less_lessc_executable
+  unlet! g:ale_less_lessc_use_global
+  unlet! g:ale_less_lessc_options
+
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#test#SetFilename('testfile.less')
+
+  runtime ale_linters/less/lessc.vim
+
+After:
+  Restore
+
+  unlet! b:executable
+  unlet! b:ale_less_lessc_executable
+  unlet! b:ale_less_lessc_use_global
+  unlet! b:ale_less_lessc_options
+
+  call ale#test#SetFilename('test.txt')
+
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(node_modules directories should be discovered):
+  call ale#test#SetFilename('lessc_paths/nested/testfile.less')
+
+  let b:executable = ale#path#Winify(
+  \   g:dir
+  \   . '/lessc_paths/node_modules/.bin/lessc'
+  \)
+
+  AssertEqual
+  \ b:executable,
+  \ ale_linters#less#lessc#GetExecutable(bufnr(''))
+
+  AssertEqual
+  \ ale#Escape(b:executable)
+  \   . ' --no-color --lint'
+  \   . ' --include-path='
+  \     . ale#Escape(ale#path#Winify(g:dir . '/lessc_paths/nested'))
+  \   . ' -',
+  \ ale_linters#less#lessc#GetCommand(bufnr(''))
+
+Execute(The global override should work):
+  let b:ale_less_lessc_executable = 'foobar'
+  let b:ale_less_lessc_use_global = 1
+
+  call ale#test#SetFilename('lessc_paths/nested/testfile.less')
+
+  AssertEqual
+  \ 'foobar',
+  \ ale_linters#less#lessc#GetExecutable(bufnr(''))
+
+  AssertEqual
+  \ ale#Escape('foobar')
+  \   . ' --no-color --lint'
+  \   . ' --include-path='
+  \     . ale#Escape(ale#path#Winify(g:dir . '/lessc_paths/nested'))
+  \   . ' -',
+  \ ale_linters#less#lessc#GetCommand(bufnr(''))
+
+Execute(Extra options should be configurable):
+  let b:ale_less_lessc_options = '--whatever'
+
+  AssertEqual
+  \ 'lessc',
+  \ ale_linters#less#lessc#GetExecutable(bufnr(''))
+
+  AssertEqual
+  \ ale#Escape('lessc')
+  \   . ' --no-color --lint'
+  \   . ' --include-path='
+  \     . ale#Escape(ale#path#Winify(g:dir))
+  \   . ' --whatever'
+  \   . ' -',
+  \ ale_linters#less#lessc#GetCommand(bufnr(''))
