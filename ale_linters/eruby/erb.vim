@@ -1,8 +1,8 @@
 " Author: Matthias Guenther - https://wikimatze.de
-" Description: erb-lint for eruby/erb files
+" Description: ERB from the Ruby standard library, for eruby/erb files
 
 call ale#linter#Define('eruby', {
-\   'name': 'erubylint',
+\   'name': 'erb',
 \   'executable': 'erb',
 \    'output_stream': 'stderr',
 \   'command': 'erb -P -x %t | ruby -c',
