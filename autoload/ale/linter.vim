@@ -261,12 +261,19 @@ function! ale#linter#GetAll(filetypes) abort
 endfunction
 
 function! s:GetAliasedFiletype(original_filetype) abort
+    let l:buffer_aliases = get(b:, 'ale_linter_aliases', {})
+
+    " b:ale_linter_aliases can be set to a List.
+    if type(l:buffer_aliases) is type([])
+        return l:buffer_aliases
+    endif
+
     " Check for aliased filetypes first in a buffer variable,
     " then the global variable,
     " then in the default mapping,
     " otherwise use the original filetype.
     for l:dict in [
-    \   get(b:, 'ale_linter_aliases', {}),
+    \   l:buffer_aliases,
     \   g:ale_linter_aliases,
     \   s:default_ale_linter_aliases,
     \]
