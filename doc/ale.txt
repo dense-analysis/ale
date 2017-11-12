@@ -107,6 +107,7 @@ CONTENTS                                                         *ale-contents*
     less..................................|ale-less-options|
       lessc...............................|ale-less-lessc|
       prettier............................|ale-less-prettier|
+      stylelint...........................|ale-less-stylelint|
     llvm..................................|ale-llvm-options|
       llc.................................|ale-llvm-llc|
     lua...................................|ale-lua-options|
@@ -298,7 +299,7 @@ Notes:
 * JSON: `jsonlint`, `prettier`
 * Kotlin: `kotlinc`, `ktlint`
 * LaTeX (tex): `chktex`, `lacheck`, `proselint`, `write-good`
-* Less: `lessc`
+* Less: `lessc`, `prettier`, `stylelint`
 * LLVM: `llc`
 * Lua: `luacheck`
 * Mail: `proselint`, `vale`

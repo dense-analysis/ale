@@ -109,7 +109,7 @@ formatting.
 | JSON | [jsonlint](http://zaa.ch/jsonlint/), [prettier](https://github.com/prettier/prettier) |
 | Kotlin | [kotlinc](https://kotlinlang.org) !!, [ktlint](https://ktlint.github.io) !! see `:help ale-integration-kotlin` for configuration instructions |
 | LaTeX | [chktex](http://www.nongnu.org/chktex/), [lacheck](https://www.ctan.org/pkg/lacheck), [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good) |
-| Less | [lessc](https://www.npmjs.com/package/less) |
+| Less | [lessc](https://www.npmjs.com/package/less), [prettier](https://github.com/prettier/prettier), [stylelint](https://github.com/stylelint/stylelint) |
 | LLVM | [llc](https://llvm.org/docs/CommandGuide/llc.html) |
 | Lua | [luacheck](https://github.com/mpeterv/luacheck) |
 | Mail | [proselint](http://proselint.com/), [vale](https://github.com/ValeLint/vale) |
