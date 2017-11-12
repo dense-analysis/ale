@@ -155,6 +155,7 @@ let g:ale_echo_msg_format = get(g:, 'ale_echo_msg_format', '%s')
 
 " Strings used for severity in the echoed message
 let g:ale_echo_msg_error_str = get(g:, 'ale_echo_msg_error_str', 'Error')
+let g:ale_echo_msg_info_str = get(g:, 'ale_echo_msg_info_str', 'Info')
 let g:ale_echo_msg_warning_str = get(g:, 'ale_echo_msg_warning_str', 'Warning')
 
 " This flag can be set to 0 to disable echoing when the cursor moves.

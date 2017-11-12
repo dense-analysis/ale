@@ -7,12 +7,16 @@ let s:last_pos = [0, 0, 0]
 " Return a formatted message according to g:ale_echo_msg_format variable
 function! s:GetMessage(linter, type, text) abort
     let l:msg = g:ale_echo_msg_format
-    let l:type = a:type is# 'E'
-    \   ? g:ale_echo_msg_error_str
-    \   : g:ale_echo_msg_warning_str
+    let l:severity = g:ale_echo_msg_warning_str
+
+    if a:type is# 'E'
+        let l:severity = g:ale_echo_msg_error_str
+    elseif a:type is# 'I'
+        let l:severity = g:ale_echo_msg_info_str
+    endif
 
     " Replace handlers if they exist
-    for [l:k, l:v] in items({'linter': a:linter, 'severity': l:type})
+    for [l:k, l:v] in items({'linter': a:linter, 'severity': l:severity})
         let l:msg = substitute(l:msg, '\V%' . l:k . '%', l:v, '')
     endfor
 

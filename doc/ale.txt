@@ -660,6 +660,14 @@ g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
   |g:ale_echo_cursor| needs to be set to 1 for messages to be displayed.
 
 
+g:ale_echo_msg_info_str                               *g:ale_echo_msg_info_str*
+
+  Type: |String|
+  Default: `'Info'`
+
+  The string used for `%severity%` for info. See |g:ale_echo_msg_format|
+
+
 g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
 
   Type: |String|

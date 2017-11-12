@@ -1,4 +1,6 @@
 Before:
+  Save g:ale_echo_msg_format
+
   let g:ale_buffer_info = {
   \ bufnr('%'): {
   \   'loclist': [
@@ -12,6 +14,16 @@ Before:
   \       'type': 'E',
   \       'text': 'Missing semicolon. (semi)',
   \       'detail': "Every statement should end with a semicolon\nsecond line"
+  \     },
+  \     {
+  \       'lnum': 1,
+  \       'col': 14,
+  \       'bufnr': bufnr('%'),
+  \       'vcol': 0,
+  \       'linter_name': 'eslint',
+  \       'nr': -1,
+  \       'type': 'I',
+  \       'text': 'Some information',
   \     },
   \     {
   \       'lnum': 2,
@@ -63,6 +75,8 @@ Before:
   endfunction
 
 After:
+  Restore
+
   call cursor(1, 1)
 
   let g:ale_set_loclist = 1
@@ -81,7 +95,7 @@ After:
   echomsg ''
 
 Given javascript(A Javscript file with warnings/errors):
-  var x = 3
+  var x = 3 + 12345678
   var x = 5*2 + parseInt("10");
   // comment
 
@@ -141,3 +155,33 @@ Execute(ALEDetail should not capitlise cursor messages):
   call ale#cursor#EchoCursorWarning()
 
   AssertEqual 'lowercase error', GetLastMessage()
+
+Execute(The linter name should be formatted into the message correctly):
+  let g:ale_echo_msg_format = '%linter%: %s'
+
+  call cursor(2, 9)
+  call ale#cursor#EchoCursorWarning()
+
+  AssertEqual
+  \ 'eslint: Infix operators must be spaced. (space-infix-ops)',
+  \ GetLastMessage()
+
+Execute(The severity should be formatted into the message correctly):
+  let g:ale_echo_msg_format = '%severity%: %s'
+
+  call cursor(2, 9)
+  call ale#cursor#EchoCursorWarning()
+
+  AssertEqual
+  \ 'Warning: Infix operators must be spaced. (space-infix-ops)',
+  \ GetLastMessage()
+
+  call cursor(1, 10)
+  call ale#cursor#EchoCursorWarning()
+
+  AssertEqual 'Error: Missing semicolon. (semi)', GetLastMessage()
+
+  call cursor(1, 14)
+  call ale#cursor#EchoCursorWarning()
+
+  AssertEqual 'Info: Some information', GetLastMessage()
