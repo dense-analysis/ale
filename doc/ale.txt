@@ -286,7 +286,7 @@ Notes:
 * Dockerfile: `hadolint`
 * Elixir: `credo`, `dogma`!!
 * Elm: `elm-format, elm-make`
-* Erb: `erb`, `erubis`
+* Erb: `erb`, `erubi`, `erubis`
 * Erlang: `erlc`, `SyntaxErl`
 * Fortran: `gcc`
 * FusionScript: `fusion-lint`
