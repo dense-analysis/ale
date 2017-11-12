@@ -274,7 +274,7 @@ Notes:
 * CMake: `cmakelint`
 * CoffeeScript: `coffee`, `coffeelint`
 * Crystal: `crystal`!!
-* CSS: `csslint`, `stylelint`, `prettier`
+* CSS: `csslint`, `prettier`, `stylelint`
 * Cython (pyrex filetype): `cython`
 * D: `dmd`
 * Dafny: `dafny`!!
@@ -295,7 +295,7 @@ Notes:
 * HTML: `HTMLHint`, `proselint`, `tidy`, `write-good`
 * Idris: `idris`
 * Java: `checkstyle`, `javac`
-* JavaScript: `eslint`, `jscs`, `jshint`, `flow`, `prettier`, `prettier-eslint` >= 4.2.0, `prettier-standard`, `standard`, `xo`
+* JavaScript: `eslint`, `flow`, `jscs`, `jshint`, `prettier`, `prettier-eslint` >= 4.2.0, `prettier-standard`, `standard`, `xo`
 * JSON: `jsonlint`, `prettier`
 * Kotlin: `kotlinc`, `ktlint`
 * LaTeX (tex): `chktex`, `lacheck`, `proselint`, `write-good`
@@ -326,7 +326,7 @@ Notes:
 * Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`
 * Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|), `rustfmt`
 * SASS: `sass-lint`, `stylelint`
-* SCSS: `sass-lint`, `scss-lint`, `stylelint`, `prettier`
+* SCSS: `prettier`, `sass-lint`, `scss-lint`, `stylelint`
 * Scala: `scalac`, `scalastyle`
 * Slim: `slim-lint`
 * SML: `smlnj`
@@ -339,7 +339,7 @@ Notes:
 * Texinfo: `proselint`, `write-good`
 * Text^: `proselint`, `vale`, `write-good`
 * Thrift: `thrift`
-* TypeScript: `eslint`, `tslint`, `tsserver`, `typecheck`, `prettier`
+* TypeScript: `eslint`, `prettier`, `tslint`, `tsserver`, `typecheck`
 * Verilog: `iverilog`, `verilator`
 * Vim: `vint`
 * Vim help^: `proselint`, `write-good`
