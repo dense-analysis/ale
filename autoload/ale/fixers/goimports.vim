@@ -8,6 +8,10 @@ function! ale#fixers#goimports#Fix(buffer) abort
     let l:executable = ale#Var(a:buffer, 'go_goimports_executable')
     let l:options = ale#Var(a:buffer, 'go_goimports_options')
 
+    if !executable(l:executable)
+        return 0
+    endif
+
     return {
     \   'command': ale#Escape(l:executable)
     \       . ' -l -w'
