@@ -76,3 +76,25 @@ Execute(The ghc handler should handle ghc 7 output):
   \ ale#path#Winify('src/Main.hs') . ':94:5:Error:',
   \ '  Some other error',
   \ ])
+
+Execute(The ghc handler should handle stack 1.5.1 output):
+  call ale#test#SetFilename('src/Main.hs')
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 160,
+  \     'col': 14,
+  \     'type': 'E',
+  \     'text': '• Expecting one fewer arguments to ‘Exp’ Expected kind ‘k0 -> *’, but ‘Exp’ has kind ‘*’ • In the type ‘Exp a’ | 160 | pattern F :: Exp a |              ^^^^^',
+  \   },
+  \ ],
+  \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
+  \   '    ' . ale#path#Winify('src/Main.hs') . ':160:14: error:',
+  \   '        • Expecting one fewer arguments to ‘Exp’',
+  \   '          Expected kind ‘k0 -> *’, but ‘Exp’ has kind ‘*’',
+  \   '        • In the type ‘Exp a’',
+  \   '        |',
+  \   '    160 | pattern F :: Exp a',
+  \   '        |              ^^^^^',
+  \ ])

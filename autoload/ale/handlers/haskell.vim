@@ -19,7 +19,7 @@ function! ale#handlers#haskell#HandleGHCFormat(buffer, lines) abort
     " in Haskell error messages with the basename for this file.
     let l:temp_filename_regex = s:temp_regex_prefix . l:basename
 
-    let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):(\d+):(.*)?$'
+    let l:pattern = '\v^\s*([a-zA-Z]?:?[^:]+):(\d+):(\d+):(.*)?$'
     let l:output = []
 
     let l:corrected_lines = []
