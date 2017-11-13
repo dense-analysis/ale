@@ -12,8 +12,9 @@ Before:
   \       'linter_name': 'eslint',
   \       'nr': -1,
   \       'type': 'E',
-  \       'text': 'Missing semicolon. (semi)',
-  \       'detail': "Every statement should end with a semicolon\nsecond line"
+  \       'code': 'semi',
+  \       'text': 'Missing semicolon.',
+  \       'detail': "Every statement should end with a semicolon\nsecond line",
   \     },
   \     {
   \       'lnum': 1,
@@ -33,7 +34,8 @@ Before:
   \       'linter_name': 'eslint',
   \       'nr': -1,
   \       'type': 'W',
-  \       'text': 'Infix operators must be spaced. (space-infix-ops)'
+  \       'code': 'space-infix-ops',
+  \       'text': 'Infix operators must be spaced.',
   \     },
   \     {
   \       'lnum': 2,
@@ -43,7 +45,8 @@ Before:
   \       'linter_name': 'eslint',
   \       'nr': -1,
   \       'type': 'E',
-  \       'text': 'Missing radix parameter (radix)'
+  \       'code': 'radix',
+  \       'text': 'Missing radix parameter',
   \     },
   \     {
   \       'lnum': 3,
@@ -53,7 +56,7 @@ Before:
   \       'linter_name': 'eslint',
   \       'nr': -1,
   \       'type': 'E',
-  \       'text': 'lowercase error'
+  \       'text': 'lowercase error',
   \     },
   \   ],
   \ },
@@ -103,19 +106,19 @@ Execute(Messages should be shown for the correct lines):
   call cursor(1, 1)
   call ale#cursor#EchoCursorWarning()
 
-  AssertEqual 'Missing semicolon. (semi)', GetLastMessage()
+  AssertEqual 'semi: Missing semicolon.', GetLastMessage()
 
 Execute(Messages should be shown for earlier columns):
   call cursor(2, 1)
   call ale#cursor#EchoCursorWarning()
 
-  AssertEqual 'Infix operators must be spaced. (space-infix-ops)', GetLastMessage()
+  AssertEqual 'space-infix-ops: Infix operators must be spaced.', GetLastMessage()
 
 Execute(Messages should be shown for later columns):
   call cursor(2, 16)
   call ale#cursor#EchoCursorWarning()
 
-  AssertEqual 'Missing radix parameter (radix)', GetLastMessage()
+  AssertEqual 'radix: Missing radix parameter', GetLastMessage()
 
 Execute(The message at the cursor should be shown when linting ends):
   call cursor(1, 1)
@@ -124,13 +127,13 @@ Execute(The message at the cursor should be shown when linting ends):
   \ g:ale_buffer_info[bufnr('%')].loclist,
   \)
 
-  AssertEqual 'Missing semicolon. (semi)', GetLastMessage()
+  AssertEqual 'semi: Missing semicolon.', GetLastMessage()
 
 Execute(The message at the cursor should be shown on InsertLeave):
   call cursor(2, 9)
   doautocmd InsertLeave
 
-  AssertEqual 'Infix operators must be spaced. (space-infix-ops)', GetLastMessage()
+  AssertEqual 'space-infix-ops: Infix operators must be spaced.', GetLastMessage()
 
 Execute(ALEDetail should print 'detail' attributes):
   call cursor(1, 1)
@@ -148,7 +151,7 @@ Execute(ALEDetail should print regular 'text' attributes):
     ALEDetail
   redir END
 
-  AssertEqual "\nInfix operators must be spaced. (space-infix-ops)", g:output
+  AssertEqual "\nInfix operators must be spaced.", g:output
 
 Execute(ALEDetail should not capitlise cursor messages):
   call cursor(3, 1)
@@ -163,7 +166,7 @@ Execute(The linter name should be formatted into the message correctly):
   call ale#cursor#EchoCursorWarning()
 
   AssertEqual
-  \ 'eslint: Infix operators must be spaced. (space-infix-ops)',
+  \ 'eslint: Infix operators must be spaced.',
   \ GetLastMessage()
 
 Execute(The severity should be formatted into the message correctly):
@@ -173,15 +176,33 @@ Execute(The severity should be formatted into the message correctly):
   call ale#cursor#EchoCursorWarning()
 
   AssertEqual
-  \ 'Warning: Infix operators must be spaced. (space-infix-ops)',
+  \ 'Warning: Infix operators must be spaced.',
   \ GetLastMessage()
 
   call cursor(1, 10)
   call ale#cursor#EchoCursorWarning()
 
-  AssertEqual 'Error: Missing semicolon. (semi)', GetLastMessage()
+  AssertEqual 'Error: Missing semicolon.', GetLastMessage()
 
   call cursor(1, 14)
   call ale#cursor#EchoCursorWarning()
 
   AssertEqual 'Info: Some information', GetLastMessage()
+
+Execute(The %code% and %ifcode% should show the code and some text):
+  let g:ale_echo_msg_format = '%(code) %%s'
+
+  call cursor(2, 9)
+  call ale#cursor#EchoCursorWarning()
+
+  AssertEqual
+  \ '(space-infix-ops) Infix operators must be spaced.',
+  \ GetLastMessage()
+
+Execute(The %code% and %ifcode% should be removed when there's no code):
+  let g:ale_echo_msg_format = '%(code) %%s'
+
+  call cursor(1, 14)
+  call ale#cursor#EchoCursorWarning()
+
+  AssertEqual 'Some information', GetLastMessage()

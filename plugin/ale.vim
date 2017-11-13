@@ -148,10 +148,8 @@ let g:ale_sign_offset = get(g:, 'ale_sign_offset', 1000000)
 " This flag can be set to 1 to keep sign gutter always open
 let g:ale_sign_column_always = get(g:, 'ale_sign_column_always', 0)
 
-" String format for the echoed message
-" A %s is mandatory
-" It can contain 2 handlers: %linter%, %severity%
-let g:ale_echo_msg_format = get(g:, 'ale_echo_msg_format', '%s')
+" A string format for the echoed message
+let g:ale_echo_msg_format = get(g:, 'ale_echo_msg_format', '%code: %%s')
 
 " Strings used for severity in the echoed message
 let g:ale_echo_msg_error_str = get(g:, 'ale_echo_msg_error_str', 'Error')

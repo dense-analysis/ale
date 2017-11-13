@@ -643,19 +643,26 @@ g:ale_echo_msg_error_str                             *g:ale_echo_msg_error_str*
 g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
 
   Type: |String|
-  Default: `'%s'`
+  Default: `'%code: %%s'`
 
   This variable defines a message format for echoed messages. The following
   sequences of characters will be replaced.
 
-    `%s`         - will be replaced with the text for the problem
-    `%linter%`   - will be replaced with the name of the linter
-    `%severity%` - will be replaced withe severity of the problem
+    `%s`           - replaced with the text for the problem
+    `%...code...% `- replaced with the error code
+    `%linter%`     - replaced with the name of the linter
+    `%severity%`   - replaced withe severity of the problem
 
   The strings for `%severity%` can be configured with the following options.
 
     |g:ale_echo_msg_error_str|   - Defaults to `'Error'`
     |g:ale_echo_msg_warning_str| - Defaults to `'Warning'`
+
+  `%code%` is replaced with the error code, and replaced with an empty string
+  when there is no error code. Any extra characters between the percent signs
+  will be printed when an error code is present. For example, a message like
+  `(error code): message` will be printed for `'%(code): %%s'` and simply the
+  message will be printed when there is no code.
 
   |g:ale_echo_cursor| needs to be set to 1 for messages to be displayed.
 

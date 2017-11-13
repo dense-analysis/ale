@@ -21,7 +21,7 @@ Before:
   \  '',
   \  'let g:ale_echo_cursor = 1',
   \  'let g:ale_echo_msg_error_str = ''Error''',
-  \  'let g:ale_echo_msg_format = ''%s''',
+  \  'let g:ale_echo_msg_format = ''%code: %%s''',
   \  'let g:ale_echo_msg_warning_str = ''Warning''',
   \  'let g:ale_enabled = 1',
   \  'let g:ale_fix_on_save = 0',
