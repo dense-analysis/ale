@@ -882,9 +882,16 @@ g:ale_lint_on_insert_leave                         *g:ale_lint_on_insert_leave*
   Type: |Number|
   Default: `0`
 
-  This option will make ALE run the linters whenever leaving insert mode when
-  it is set to `1` in your vimrc file.
+  When set to `1` in your vimrc file, this option will cause ALE to run
+  linters when you leave insert mode.
 
+  ALE will not lint files when you escape insert mode with |CTRL-C| by
+  default. You can make ALE lint files with this option when you use |CTRL-C|
+  with the following keybind. >
+
+    " Make using Ctrl+C do the same as Escape, to trigger autocmd commands
+    inoremap <C-c> <Esc>
+<
 
 g:ale_linter_aliases                                     *g:ale_linter_aliases*
                                                          *b:ale_linter_aliases*
