@@ -48,7 +48,7 @@ function! ale#handlers#eslint#GetCommand(buffer) abort
 endfunction
 
 let s:col_end_patterns = [
-\   '\vParsing error: Unexpected token (.+) ',
+\   '\vParsing error: Unexpected token (.+) ?',
 \   '\v''(.+)'' is not defined.',
 \   '\v%(Unexpected|Redundant use of) [''`](.+)[''`]',
 \   '\vUnexpected (console) statement',
@@ -111,7 +111,6 @@ function! ale#handlers#eslint#Handle(buffer, lines) abort
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, [l:pattern, l:parsing_pattern])
-        let l:type = 'Error'
         let l:text = l:match[3]
 
         if ale#Var(a:buffer, 'javascript_eslint_suppress_eslintignore')
@@ -120,18 +119,23 @@ function! ale#handlers#eslint#Handle(buffer, lines) abort
             endif
         endif
 
-        " Take the error type from the output if available.
-        if !empty(l:match[4])
-            let l:type = split(l:match[4], '/')[0]
-            let l:text .= ' [' . l:match[4] . ']'
-        endif
-
         let l:obj = {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
         \   'text': l:text,
-        \   'type': l:type is# 'Warning' ? 'W' : 'E',
+        \   'type': 'E',
         \}
+
+        " Take the error type from the output if available.
+        let l:split_code = split(l:match[4], '/')
+
+        if get(l:split_code, 0, '') is# 'Warning'
+            let l:obj.type = 'W'
+        endif
+
+        if !empty(get(l:split_code, 1))
+            let l:obj.code = l:split_code[1]
+        endif
 
         for l:col_match in ale#util#GetMatches(l:text, s:col_end_patterns)
             let l:obj.end_col = l:obj.col + len(l:col_match[1]) - 1
