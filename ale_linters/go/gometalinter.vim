@@ -1,4 +1,4 @@
-" Author: Ben Reedy <https://github.com/breed808>
+" Author: Ben Reedy <https://github.com/breed808>, Jeff Willette <jrwillette88@gmail.com>
 " Description: Adds support for the gometalinter suite for Go files
 
 call ale#Set('go_gometalinter_options', '')
@@ -14,7 +14,6 @@ function! ale_linters#go#gometalinter#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'go_gometalinter_options')
 
     return ale#Escape(l:executable)
-    \   . ' --include=' . ale#Escape('^' . ale#util#EscapePCRE(l:filename))
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' ' . ale#Escape(fnamemodify(l:filename, ':h'))
 endfunction
@@ -25,11 +24,15 @@ function! ale_linters#go#gometalinter#GetMatches(lines) abort
     return ale#util#GetMatches(a:lines, l:pattern)
 endfunction
 
+" TODO: fix for gometalinter and then go build and any other go fixers that need it
+
 function! ale_linters#go#gometalinter#Handler(buffer, lines) abort
+    let l:dir = expand('#' . a:buffer . ':p:h')
     let l:output = []
 
     for l:match in ale_linters#go#gometalinter#GetMatches(a:lines)
         call add(l:output, {
+        \   'filename': ale#path#GetAbsPath(l:dir, l:match[1]),
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
         \   'type': tolower(l:match[4]) is# 'warning' ? 'W' : 'E',
