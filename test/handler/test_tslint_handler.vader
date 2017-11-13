@@ -28,7 +28,8 @@ Execute(The tslint handler should parse lines correctly):
   \     'end_lnum': 1,
   \     'type': 'E',
   \     'end_col': 15,
-  \     'text': 'semicolon: Missing semicolon'
+  \     'text': 'Missing semicolon',
+  \     'code': 'semicolon',
   \   },
   \   {
   \     'lnum': 2,
@@ -37,7 +38,7 @@ Execute(The tslint handler should parse lines correctly):
   \     'end_lnum': 3,
   \     'type': 'W',
   \     'end_col': 12,
-  \     'text': 'Something else'
+  \     'text': 'Something else',
   \   },
   \   {
   \     'lnum': 2,
@@ -46,7 +47,8 @@ Execute(The tslint handler should parse lines correctly):
   \     'end_lnum': 3,
   \     'type': 'W',
   \     'end_col': 12,
-  \     'text': 'something: Something else'
+  \     'text': 'Something else',
+  \     'code': 'something',
   \   },
   \   {
   \     'lnum': 31,
@@ -55,7 +57,8 @@ Execute(The tslint handler should parse lines correctly):
   \     'end_lnum': 31,
   \     'type': 'E',
   \     'end_col': 20,
-  \     'text': 'no-console: Calls to console.log are not allowed.'
+  \     'text': 'Calls to console.log are not allowed.',
+  \     'code': 'no-console',
   \   },
   \ ] ,
   \ ale_linters#typescript#tslint#Handle(bufnr(''), [json_encode([
@@ -155,7 +158,8 @@ Execute(The tslint handler report errors for empty files by default):
   \     'end_lnum': 2,
   \     'type': 'E',
   \     'end_col': 1,
-  \     'text': 'no-consecutive-blank-lines: Consecutive blank lines are forbidden',
+  \     'text': 'Consecutive blank lines are forbidden',
+  \     'code': 'no-consecutive-blank-lines',
   \   },
   \ ],
   \ ale_linters#typescript#tslint#Handle(bufnr(''), [json_encode([{
@@ -228,7 +232,8 @@ Execute(The tslint handler should report errors when the ignore option is on, bu
   \     'end_lnum': 2,
   \     'type': 'E',
   \     'end_col': 1,
-  \     'text': 'no-consecutive-blank-lines: Consecutive blank lines are forbidden',
+  \     'text': 'Consecutive blank lines are forbidden',
+  \     'code': 'no-consecutive-blank-lines',
   \   },
   \ ],
   \ ale_linters#typescript#tslint#Handle(bufnr(''), [json_encode([{
