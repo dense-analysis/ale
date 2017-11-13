@@ -327,3 +327,24 @@ Execute(FixLocList should interpret temporary filenames as being the current buf
   \     {'text': 'a', 'lnum': 3, 'filename': b:temp_name},
   \   ],
   \ )
+
+Execute(The error code should be passed on):
+  AssertEqual
+  \ [
+  \   {
+  \     'text': 'a',
+  \     'lnum': 10,
+  \     'col': 0,
+  \     'bufnr': bufnr('%'),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \     'code': 'some-code'
+  \   },
+  \],
+  \ ale#engine#FixLocList(
+  \   bufnr('%'),
+  \   'foobar',
+  \   [{'text': 'a', 'lnum': 11, 'code': 'some-code'}],
+  \ )

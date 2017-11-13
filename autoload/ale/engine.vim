@@ -374,6 +374,10 @@ function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
         \   'linter_name': a:linter_name,
         \}
 
+        if has_key(l:old_item, 'code')
+            let l:item.code = l:old_item.code
+        endif
+
         if has_key(l:old_item, 'filename')
         \&& !ale#path#IsTempName(l:old_item.filename)
             " Use the filename given.
