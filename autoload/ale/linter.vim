@@ -21,6 +21,8 @@ let s:default_ale_linter_aliases = {
 "
 " Only cargo is enabled for Rust by default.
 " rpmlint is disabled by default because it can result in code execution.
+"
+" NOTE: Update the g:ale_linters documentation when modifying this.
 let s:default_ale_linters = {
 \   'csh': ['shell'],
 \   'go': ['gofmt', 'golint', 'go vet'],
@@ -308,11 +310,26 @@ function! s:GetLinterNames(original_filetype) abort
         return l:buffer_ale_linters
     endif
 
-    for l:dict in [l:buffer_ale_linters, g:ale_linters, s:default_ale_linters]
-        if has_key(l:dict, a:original_filetype)
-            return l:dict[a:original_filetype]
-        endif
-    endfor
+    " Try to get a buffer-local setting for the filetype
+    if has_key(l:buffer_ale_linters, a:original_filetype)
+        return l:buffer_ale_linters[a:original_filetype]
+    endif
+
+    " Try to get a global setting for the filetype
+    if has_key(g:ale_linters, a:original_filetype)
+        return g:ale_linters[a:original_filetype]
+    endif
+
+    " If the user has configured ALE to only enable linters explicitly, then
+    " don't enable any linters by default.
+    if g:ale_linters_explicit
+        return []
+    endif
+
+    " Try to get a default setting for the filetype
+    if has_key(s:default_ale_linters, a:original_filetype)
+        return s:default_ale_linters[a:original_filetype]
+    endif
 
     return 'all'
 endfunction

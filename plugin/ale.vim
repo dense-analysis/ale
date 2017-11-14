@@ -68,7 +68,9 @@ let g:ale_filetype_blacklist = [
 \]
 
 " This Dictionary configures which linters are enabled for which languages.
-let g:ale_linters = get(g:, 'ale_linters', {})
+call ale#Set('linters', {})
+" This option can be changed to only enable explicitly selected linters.
+call ale#Set('linters_explicit', 0)
 
 " This Dictionary configures which functions will be used for fixing problems.
 let g:ale_fixers = get(g:, 'ale_fixers', {})

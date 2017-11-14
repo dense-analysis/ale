@@ -1,5 +1,6 @@
 Before:
-  Save g:ale_linters, g:ale_linter_aliases
+  Save g:ale_linters
+  Save g:ale_linter_aliases
 
   let g:testlinter1 = {'name': 'testlinter1', 'executable': 'testlinter1', 'command': 'testlinter1', 'callback': 'testCB1', 'output_stream': 'stdout', 'read_buffer': 1, 'lint_file': 0, 'aliases': [], 'lsp': '', 'add_newline': 0}
   let g:testlinter2 = {'name': 'testlinter2', 'executable': 'testlinter2', 'command': 'testlinter2', 'callback': 'testCB2', 'output_stream': 'stdout', 'read_buffer': 0, 'lint_file': 1, 'aliases': [], 'lsp': '', 'add_newline': 0}

@@ -1,0 +1,68 @@
+Before:
+  Save g:ale_linters
+  Save g:ale_linters_explicit
+
+  let g:ale_linters_explicit = 0
+  let g:ale_linters = {}
+
+  function! GetLinterNames(filetype) abort
+    return map(ale#linter#Get(a:filetype), 'v:val.name')
+  endfunction
+
+After:
+  Restore
+
+  call ale#linter#Reset()
+
+Execute(The defaults for the csh filetype should be correct):
+  AssertEqual ['shell'], GetLinterNames('csh')
+
+  let g:ale_linters_explicit = 1
+
+  AssertEqual [], GetLinterNames('csh')
+
+Execute(The defaults for the go filetype should be correct):
+  AssertEqual ['gofmt', 'golint', 'go vet'], GetLinterNames('go')
+
+  let g:ale_linters_explicit = 1
+
+  AssertEqual [], GetLinterNames('go')
+
+Execute(The defaults for the help filetype should be correct):
+  AssertEqual [], GetLinterNames('help')
+
+Execute(The defaults for the python filetype should be correct):
+  AssertEqual ['flake8', 'mypy', 'pylint'], GetLinterNames('python')
+
+  let g:ale_linters_explicit = 1
+
+  AssertEqual [], GetLinterNames('python')
+
+Execute(The defaults for the rust filetype should be correct):
+  AssertEqual ['cargo'], GetLinterNames('rust')
+
+  let g:ale_linters_explicit = 1
+
+  AssertEqual [], GetLinterNames('rust')
+
+Execute(The defaults for the spec filetype should be correct):
+  AssertEqual [], GetLinterNames('spec')
+
+Execute(The defaults for the text filetype should be correct):
+  AssertEqual [], GetLinterNames('text')
+
+Execute(The defaults for the zsh filetype should be correct):
+  AssertEqual ['shell'], GetLinterNames('zsh')
+
+  let g:ale_linters_explicit = 1
+
+  AssertEqual [], GetLinterNames('zsh')
+
+Execute(The defaults for the verilog filetype should be correct):
+  " This filetype isn't configured with default, so we can test loading all
+  " available linters with this.
+  AssertEqual ['iverilog', 'verilator'], GetLinterNames('verilog')
+
+  let g:ale_linters_explicit = 1
+
+  AssertEqual [], GetLinterNames('verilog')
