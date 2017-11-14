@@ -44,13 +44,6 @@ function! ale_linters#go#gobuild#Handler(buffer, lines) abort
     let l:output = []
 
     for l:match in ale_linters#go#gobuild#GetMatches(a:lines)
-        "
-        " Get the list of parent paths from the current filename
-        let l:paths = ale#path#Upwards(expand('#' . a:buffer . ':p'))
-        " Only see errors from this package (directory), ignore errors from imported packages
-        if !l:dir is# l:paths[1]
-            continue
-        endif
 
         echom l:match[1]
         call add(l:output, {
