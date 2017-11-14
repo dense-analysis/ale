@@ -13,28 +13,10 @@ After:
 
   call ale#test#RestoreDirectory()
 
-Execute(The goimports callback should return the correct default values):
+Execute(The goimports callback should return 0 with bad executable):
   call ale#test#SetFilename('../go_files/testfile.go')
 
   AssertEqual
-  \ {
-  \   'read_temporary_file': 1,
-  \   'command': ale#Escape('xxxinvalid')
-  \     . ' -l -w'
-  \     . ' %t',
-  \ },
+  \ 0,
   \ ale#fixers#goimports#Fix(bufnr(''))
 
-Execute(The goimports callback should include custom goimports options):
-  let g:ale_go_goimports_options = "-r '(a) -> a'"
-  call ale#test#SetFilename('../go_files/testfile.go')
-
-  AssertEqual
-  \ {
-  \   'read_temporary_file': 1,
-  \   'command': ale#Escape('xxxinvalid')
-  \     . ' -l -w'
-  \     . ' ' . g:ale_go_goimports_options
-  \     . ' %t',
-  \ },
-  \ ale#fixers#goimports#Fix(bufnr(''))
