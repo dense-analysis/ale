@@ -94,7 +94,8 @@ function! ale_linters#python#flake8#Handle(buffer, lines) abort
         let l:item = {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
-        \   'text': l:code . ': ' . l:match[4],
+        \   'text': l:match[4],
+        \   'code': l:code,
         \   'type': 'W',
         \}
 
