@@ -149,7 +149,9 @@ let g:ale_sign_offset = get(g:, 'ale_sign_offset', 1000000)
 let g:ale_sign_column_always = get(g:, 'ale_sign_column_always', 0)
 
 " A string format for the echoed message
-let g:ale_echo_msg_format = get(g:, 'ale_echo_msg_format', '%code: %%s')
+call ale#Set('echo_msg_format', '%code: %%s')
+" The same for the loclist.
+call ale#Set('loclist_msg_format', g:ale_echo_msg_format)
 
 " Strings used for severity in the echoed message
 let g:ale_echo_msg_error_str = get(g:, 'ale_echo_msg_error_str', 'Error')

@@ -4,30 +4,6 @@
 let s:cursor_timer = -1
 let s:last_pos = [0, 0, 0]
 
-" Return a formatted message according to g:ale_echo_msg_format variable
-function! s:GetMessage(item) abort
-    let l:msg = g:ale_echo_msg_format
-    let l:severity = g:ale_echo_msg_warning_str
-    let l:code = get(a:item, 'code', '')
-    let l:code_repl = !empty(l:code) ? '\=submatch(1) . l:code . submatch(2)' : ''
-
-    if a:item.type is# 'E'
-        let l:severity = g:ale_echo_msg_error_str
-    elseif a:item.type is# 'I'
-        let l:severity = g:ale_echo_msg_info_str
-    endif
-
-    " Replace special markers with certain information.
-    " \=l:variable is used to avoid escaping issues.
-    let l:msg = substitute(l:msg, '\V%severity%', '\=l:severity', 'g')
-    let l:msg = substitute(l:msg, '\V%linter%', '\=a:item.linter_name', 'g')
-    let l:msg = substitute(l:msg, '\v\%([^\%]*)code([^\%]*)\%', l:code_repl, 'g')
-    " Replace %s with the text.
-    let l:msg = substitute(l:msg, '\V%s', '\=a:item.text', 'g')
-
-    return l:msg
-endfunction
-
 function! s:EchoWithShortMess(setting, message) abort
     " We need to remember the setting for shormess and reset it again.
     let l:shortmess_options = getbufvar('%', '&shortmess')
@@ -96,7 +72,7 @@ function! s:EchoImpl() abort
     let [l:info, l:loc] = s:FindItemAtCursor()
 
     if !empty(l:loc)
-        let l:msg = s:GetMessage(l:loc)
+        let l:msg = ale#GetLocItemMessage(l:loc, g:ale_echo_msg_format)
         call ale#cursor#TruncatedEcho(l:msg)
         let l:info.echoed = 1
     elseif get(l:info, 'echoed')

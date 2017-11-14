@@ -257,3 +257,31 @@ function! ale#Escape(str) abort
 
     return shellescape (a:str)
 endfunction
+
+" Get the loclist item message according to a given format string.
+"
+" See `:help g:ale_loclist_msg_format` and `:help g:ale_echo_msg_format`
+function! ale#GetLocItemMessage(item, format_string) abort
+    let l:msg = a:format_string
+    let l:severity = g:ale_echo_msg_warning_str
+    let l:code = get(a:item, 'code', '')
+    let l:type = get(a:item, 'type', 'E')
+    let l:linter_name = get(a:item, 'linter_name', '')
+    let l:code_repl = !empty(l:code) ? '\=submatch(1) . l:code . submatch(2)' : ''
+
+    if l:type is# 'E'
+        let l:severity = g:ale_echo_msg_error_str
+    elseif l:type is# 'I'
+        let l:severity = g:ale_echo_msg_info_str
+    endif
+
+    " Replace special markers with certain information.
+    " \=l:variable is used to avoid escaping issues.
+    let l:msg = substitute(l:msg, '\V%severity%', '\=l:severity', 'g')
+    let l:msg = substitute(l:msg, '\V%linter%', '\=l:linter_name', 'g')
+    let l:msg = substitute(l:msg, '\v\%([^\%]*)code([^\%]*)\%', l:code_repl, 'g')
+    " Replace %s with the text.
+    let l:msg = substitute(l:msg, '\V%s', '\=a:item.text', 'g')
+
+    return l:msg
+endfunction

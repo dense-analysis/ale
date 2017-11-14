@@ -656,6 +656,7 @@ g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
   The strings for `%severity%` can be configured with the following options.
 
     |g:ale_echo_msg_error_str|   - Defaults to `'Error'`
+    |g:ale_echo_msg_info_str|    - Defaults to `'Info'`
     |g:ale_echo_msg_warning_str| - Defaults to `'Warning'`
 
   `%code%` is replaced with the error code, and replaced with an empty string
@@ -993,6 +994,17 @@ g:ale_linters                                                   *g:ale_linters*
   " Explicitly enable all available linters for the filetype.
   let b:ale_linters = 'all'
 <
+
+g:ale_loclist_msg_format                             *g:ale_loclist_msg_format*
+
+  Type: |String|
+  Default: `g:ale_echo_msg_format`
+
+  This option is the same as |g:ale_echo_msg_format|, but for formatting the
+  message used for the loclist and the quickfix list.
+
+  The strings for configuring `%severity%` are also used for this option.
+
 
 g:ale_max_buffer_history_size                   *g:ale_max_buffer_history_size*
 

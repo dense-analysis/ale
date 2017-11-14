@@ -41,13 +41,16 @@ function! s:FixList(list) abort
     let l:new_list = []
 
     for l:item in a:list
+        let l:fixed_item = copy(l:item)
+
+        let l:fixed_item.text = ale#GetLocItemMessage(
+        \   l:item,
+        \   g:ale_loclist_msg_format,
+        \)
+
         if l:item.bufnr == -1
             " If the buffer number is invalid, remove it.
-            let l:fixed_item = copy(l:item)
             call remove(l:fixed_item, 'bufnr')
-        else
-            " Don't copy the Dictionary if we do not need to.
-            let l:fixed_item = l:item
         endif
 
         call add(l:new_list, l:fixed_item)
