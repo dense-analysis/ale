@@ -125,9 +125,7 @@ function! ale#cursor#ShowCursorDetail() abort
     if !empty(l:loc)
         let l:message = get(l:loc, 'detail', l:loc.text)
 
-        call s:EchoWithShortMess('off', l:message)
-
-        " Set the echo marker, so we can clear it by moving the cursor.
-        let l:info.echoed = 1
+        call ale#preview#Show(split(l:message, "\n"))
+        echo
     endif
 endfunction
