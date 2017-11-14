@@ -1609,10 +1609,12 @@ ALEDisableBuffer                                             *ALEDisableBuffer*
   For removing problems reported by ALE, but leaving ALE enabled, see
   |ALEReset| and |ALEResetBuffer|.
 
+                                                                   *:ALEDetail*
 ALEDetail                                                           *ALEDetail*
 
-  Show the full linter message for the current line. This will only have an
-  effect on lines that contain a linter message.
+  Show the full linter message for the current line in the preview window.
+  This will only have an effect on lines that contain a linter message. The
+  preview window can be easily closed with the `q` key.
 
   A plug mapping `<Plug>(ale_detail)` is defined for this command.
 
