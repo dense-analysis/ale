@@ -1,0 +1,22 @@
+Before:
+  Save g:ale_go_goimports_executable
+  Save g:ale_go_goimports_options
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_go_goimports_executable = 'xxxinvalid'
+  let g:ale_go_goimports_options = ''
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The goimports callback should return 0 with bad executable):
+  call ale#test#SetFilename('../go_files/testfile.go')
+
+  AssertEqual
+  \ 0,
+  \ ale#fixers#goimports#Fix(bufnr(''))
+
