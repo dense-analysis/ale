@@ -71,7 +71,7 @@ function! ale_linters#sh#shellcheck#GetCommand(buffer, version_output) abort
 endfunction
 
 function! ale_linters#sh#shellcheck#Handle(buffer, lines) abort
-    let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):(\d+)?:? ([^:]+): (.+)$'
+    let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):(\d+)?:? ([^:]+): (.+) \[([^\]]+)\]$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
@@ -87,6 +87,7 @@ function! ale_linters#sh#shellcheck#Handle(buffer, lines) abort
         \   'lnum': str2nr(l:match[2]),
         \   'type': l:type,
         \   'text': l:match[5],
+        \   'code': l:match[6],
         \}
 
         if !empty(l:match[3])

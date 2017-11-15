@@ -11,13 +11,15 @@ Execute(The shellcheck handler should handle basic errors or warnings):
   \     'lnum': 2,
   \     'col': 1,
   \     'type': 'W',
-  \     'text': 'In POSIX sh, ''let'' is not supported. [SC2039]',
+  \     'text': 'In POSIX sh, ''let'' is not supported.',
+  \     'code': 'SC2039',
   \   },
   \   {
   \     'lnum': 2,
   \     'col': 3,
   \     'type': 'E',
-  \     'text': 'Don''t put spaces around the = in assignments. [SC1068]',
+  \     'text': 'Don''t put spaces around the = in assignments.',
+  \     'code': 'SC1068',
   \   },
   \ ],
   \ ale_linters#sh#shellcheck#Handle(bufnr(''), [
@@ -32,7 +34,8 @@ Execute(The shellcheck handler should handle notes):
   \     'lnum': 3,
   \     'col': 3,
   \     'type': 'I',
-  \     'text': 'Double quote to prevent globbing and word splitting. [SC2086]',
+  \     'text': 'Double quote to prevent globbing and word splitting.',
+  \     'code': 'SC2086',
   \   },
   \ ],
   \ ale_linters#sh#shellcheck#Handle(bufnr(''), [
