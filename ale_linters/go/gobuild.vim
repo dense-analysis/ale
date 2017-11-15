@@ -44,8 +44,6 @@ function! ale_linters#go#gobuild#Handler(buffer, lines) abort
     let l:output = []
 
     for l:match in ale_linters#go#gobuild#GetMatches(a:lines)
-
-        echom l:match[1]
         call add(l:output, {
         \   'filename': ale#path#GetAbsPath(l:dir, l:match[1]),
         \   'lnum': l:match[2] + 0,
