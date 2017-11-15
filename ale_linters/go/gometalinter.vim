@@ -24,8 +24,6 @@ function! ale_linters#go#gometalinter#GetMatches(lines) abort
     return ale#util#GetMatches(a:lines, l:pattern)
 endfunction
 
-" TODO: fix for gometalinter and then go build and any other go fixers that need it
-
 function! ale_linters#go#gometalinter#Handler(buffer, lines) abort
     let l:dir = expand('#' . a:buffer . ':p:h')
     let l:output = []
