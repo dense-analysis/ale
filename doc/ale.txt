@@ -1700,9 +1700,11 @@ ale#engine#EscapeCommandPart(command_part)     *ale#engine#EscapeCommandPart()*
 
 ale#engine#GetLoclist(buffer)                         *ale#engine#GetLoclist()*
 
-  Given a buffer number, this function will rerurn the list of warnings and
-  errors reported by ALE for a given buffer in the format accepted by
-  |setqflist()|.
+  Given a buffer number, this function will return the list of problems
+  reported by ALE for a given buffer in the format accepted by |setqflist()|.
+
+  A reference to the buffer's list of problems will be returned. The list must
+  be copied before applying |map()| or |filter()|.
 
 
 ale#engine#ManageFile(buffer, filename)               *ale#engine#ManageFile()*
