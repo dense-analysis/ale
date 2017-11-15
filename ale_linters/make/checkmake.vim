@@ -5,12 +5,12 @@ function! ale_linters#make#checkmake#Handle(buffer, lines) abort
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        let l:text = l:match[2] . ': ' . l:match[3]
         call add(l:output, {
         \    'bufnr': a:buffer,
         \    'lnum': l:match[1] + 0,
         \    'type': 'E',
-        \    'text': l:text,
+        \    'code': l:match[2],
+        \    'text': l:match[3],
         \})
     endfor
     return l:output
