@@ -1,15 +1,13 @@
 Before:
-
   Save g:ale_terraform_tflint_executable
   Save g:ale_terraform_tflint_options
 
   runtime ale_linters/terraform/tflint.vim
 
-
 After:
   Restore
-  call ale#linter#Reset()
 
+  call ale#linter#Reset()
 
 Execute(The default executable should be configurable):
   AssertEqual 'tflint', ale_linters#terraform#tflint#GetExecutable(bufnr(''))

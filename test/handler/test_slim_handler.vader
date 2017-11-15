@@ -1,7 +1,11 @@
 " Author: Markus Doits <markus.doits@googlemail.com>
+Before:
+  runtime ale_linters/slim/slimlint.vim
+
+After:
+  call ale#linter#Reset()
 
 Execute(The slim handler should parse lines correctly):
-  runtime ale_linters/slim/slimlint.vim
 
   AssertEqual
   \ [
@@ -26,6 +30,3 @@ Execute(The slim handler should parse lines correctly):
   \   'inv.slim:2 [W] LineLength: Line is too long. [136/80]',
   \   'inv.slim:3 [E] Invalid syntax',
   \ ])
-
-After:
-  call ale#linter#Reset()

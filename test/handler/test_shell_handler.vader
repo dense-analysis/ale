@@ -1,9 +1,10 @@
+Before:
+  runtime ale_linters/sh/shell.vim
+
 After:
   call ale#linter#Reset()
 
 Execute(The shell handler should parse lines correctly):
-  runtime ale_linters/sh/shell.vim
-
   AssertEqual
   \ [
   \   {

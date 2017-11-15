@@ -1,6 +1,9 @@
 Before:
   runtime ale_linters/markdown/remark_lint.vim
 
+After:
+  call ale#linter#Reset()
+
 Execute(Warning and error messages should be handled correctly):
   AssertEqual
   \ [

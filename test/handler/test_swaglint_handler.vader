@@ -1,6 +1,9 @@
 Before:
   runtime ale_linters/yaml/swaglint.vim
 
+After:
+  call ale#linter#Reset()
+
 Execute(The swaglint handler should parse lines correctly):
   AssertEqual
   \ [

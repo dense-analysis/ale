@@ -1,5 +1,10 @@
-Execute(Parsing nim errors should work):
+Before:
   runtime ale_linters/nim/nimcheck.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(Parsing nim errors should work):
   silent file foobar.nim
 
   AssertEqual

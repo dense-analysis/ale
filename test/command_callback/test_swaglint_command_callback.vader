@@ -1,11 +1,13 @@
 Before:
   runtime ale_linters/yaml/swaglint.vim
+
   call ale#test#SetDirectory('/testplugin/test/command_callback')
 
 After:
-  call ale#linter#Reset()
   let g:ale_yaml_swaglint_executable = 'swaglint'
   let g:ale_yaml_swaglint_use_global = 0
+
+  call ale#linter#Reset()
 
 Execute(The yaml swaglint command callback should return the correct default string):
   AssertEqual 'swaglint',

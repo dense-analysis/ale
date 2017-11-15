@@ -1,13 +1,13 @@
 Before:
   Save g:ale_warn_about_trailing_whitespace
 
+  runtime ale_linters/lua/luacheck.vim
+
 After:
   Restore
   call ale#linter#Reset()
 
 Execute(The luacheck handler should parse lines correctly):
-  runtime ale_linters/lua/luacheck.vim
-
   AssertEqual
   \ [
   \   {
@@ -36,8 +36,6 @@ Execute(The luacheck handler should parse lines correctly):
   \ ])
 
 Execute(The luacheck handler should respect the warn_about_trailing_whitespace option):
-  runtime ale_linters/lua/luacheck.vim
-
   let g:ale_warn_about_trailing_whitespace = 0
 
   AssertEqual
