@@ -31,7 +31,8 @@ function! ale_linters#ansible#ansible_lint#Handle(buffer, lines) abort
             call add(l:output, {
             \   'lnum': l:match[2] + 0,
             \   'col': l:match[3] + 0,
-            \   'text': l:code . ': ' . l:match[5],
+            \   'text': l:match[5],
+            \   'code': l:code,
             \   'type': l:code[:0] is# 'E' ? 'E' : 'W',
             \})
         endif
