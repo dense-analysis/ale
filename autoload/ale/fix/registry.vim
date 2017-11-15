@@ -110,7 +110,7 @@ let s:default_registry = {
 \   'goimports': {
 \       'function': 'ale#fixers#goimports#Fix',
 \       'suggested_filetypes': ['go'],
-\       'description': 'Fix Go files imports with go fmt.',
+\       'description': 'Fix Go files imports with goimports.',
 \   },
 \   'tslint': {
 \       'function': 'ale#fixers#tslint#Fix',
