@@ -13,7 +13,8 @@ Execute(Parsing checkmake errors should work):
   \      'bufnr': 42,
   \      'lnum': 1,
   \      'type': 'E',
-  \      'text': 'woops: an error has occurred',
+  \      'code': 'woops',
+  \      'text': 'an error has occurred',
   \   }
   \ ],
   \ ale_linters#make#checkmake#Handle(42, [
