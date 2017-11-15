@@ -251,10 +251,10 @@ function! s:HandleTSServerDiagnostics(response, error_type) abort
 endfunction
 
 function! s:HandleLSPErrorMessage(error_message) abort
-    echoerr 'Error from LSP:'
+    execute 'echoerr ''Error from LSP:'''
 
     for l:line in split(a:error_message, "\n")
-        echoerr l:line
+        execute 'echoerr l:line'
     endfor
 endfunction
 

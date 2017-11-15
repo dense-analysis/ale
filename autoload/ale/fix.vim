@@ -75,7 +75,7 @@ function! ale#fix#ApplyFixes(buffer, output) abort
 
         if l:data.lines_before != l:lines
             call remove(g:ale_fix_buffer_data, a:buffer)
-            echoerr 'The file was changed before fixing finished'
+            execute 'echoerr ''The file was changed before fixing finished'''
             return
         endif
     endif
@@ -406,17 +406,18 @@ function! ale#fix#Fix(...) abort
         let l:callback_list = s:GetCallbacks()
     catch /E700/
         let l:function_name = join(split(split(v:exception, ':')[3]))
-        echom printf(
+        let l:echo_message = printf(
         \   'There is no fixer named `%s`. Check :ALEFixSuggest',
         \   l:function_name,
         \)
+        execute 'echom l:echo_message'
 
         return 0
     endtry
 
     if empty(l:callback_list)
         if l:fixing_flag is# ''
-            echom 'No fixers have been defined. Try :ALEFixSuggest'
+            execute 'echom ''No fixers have been defined. Try :ALEFixSuggest'''
         endif
 
         return 0

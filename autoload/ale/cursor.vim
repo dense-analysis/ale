@@ -18,7 +18,7 @@ function! s:EchoWithShortMess(setting, message) abort
         elseif a:setting is# 'off'
             setlocal shortmess-=T
             " Regular echo is needed for printing newline characters.
-            echo a:message
+            execute 'echo a:message'
         else
             throw 'Invalid setting: ' . string(a:setting)
         endif
@@ -78,7 +78,7 @@ function! s:EchoImpl() abort
     elseif get(l:info, 'echoed')
         " We'll only clear the echoed message when moving off errors once,
         " so we don't continually clear the echo line.
-        echo
+        execute 'echo'
         let l:info.echoed = 0
     endif
 endfunction
@@ -126,6 +126,6 @@ function! ale#cursor#ShowCursorDetail() abort
         let l:message = get(l:loc, 'detail', l:loc.text)
 
         call ale#preview#Show(split(l:message, "\n"))
-        echo
+        execute 'echo'
     endif
 endfunction

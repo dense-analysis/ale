@@ -158,7 +158,7 @@ function! ale#toggle#ToggleBuffer(buffer) abort
     " Disabling ALE globally removes autocmd events, so we cannot enable
     " linting locally when linting is disabled globally
     if l:enabled && !g:ale_enabled
-        echom 'ALE cannot be enabled locally when disabled globally'
+        execute 'echom ''ALE cannot be enabled locally when disabled globally'''
         return
     endif
 
