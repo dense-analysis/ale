@@ -133,8 +133,9 @@ function! ale#handlers#eslint#Handle(buffer, lines) abort
             let l:obj.type = 'W'
         endif
 
+        " The code can be something like 'Error/foo/bar', or just 'Error'
         if !empty(get(l:split_code, 1))
-            let l:obj.code = l:split_code[1]
+            let l:obj.code = join(l:split_code[1:], '/')
         endif
 
         for l:col_match in ale#util#GetMatches(l:text, s:col_end_patterns)

@@ -3,13 +3,12 @@ Before:
   Save g:ale_javascript_eslint_suppress_missing_config
 
   let g:ale_javascript_eslint_suppress_eslintignore = 0
-  let b:ale_javascript_eslint_suppress_missing_config = 0
-
-  unlet! b:ale_javascript_eslint_suppress_missing_config
+  let g:ale_javascript_eslint_suppress_missing_config = 0
 
 After:
   Restore
 
+  unlet! b:ale_javascript_eslint_suppress_eslintignore
   unlet! b:ale_javascript_eslint_suppress_missing_config
   unlet! g:config_error_lines
 
@@ -350,4 +349,19 @@ Execute(eslint should not warn about ignored files when explicitly disabled):
   \ [],
   \ ale#handlers#eslint#Handle(bufnr(''), [
   \  '/path/to/some/ignored.js:0:0: File ignored because of a matching ignore pattern. Use "--no-ignore" to override. [Warning]',
+  \ ])
+
+Execute(eslint should handle react errors correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 59,
+  \     'col': 9,
+  \     'type': 'E',
+  \     'text': 'Property should be placed on the same line as the component declaration',
+  \     'code': 'react/jsx-first-prop-new-line',
+  \   },
+  \ ],
+  \ ale#handlers#eslint#Handle(bufnr(''), [
+  \  '/path/editor-help.jsx:59:9: Property should be placed on the same line as the component declaration [Error/react/jsx-first-prop-new-line]',
   \ ])
