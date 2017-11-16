@@ -9,7 +9,7 @@ Before:
 
   runtime ale_linters/asm/gcc.vim
 
-  let b:command_tail = ' -x c -fsyntax-only -iquote'
+  let b:command_tail = ' -x assembler -fsyntax-only -iquote'
   \   . ' ' . ale#Escape(getcwd())
   \   . ' -Wall -'
 
