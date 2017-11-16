@@ -1,0 +1,67 @@
+Before:
+  runtime! ale_linters/markdown/redpen.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(redpen handler should handle errors output):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'col': 9,
+  \     'end_lnum': 1,
+  \     'end_col': 15,
+  \     'text': 'Found possibly misspelled word "plugin". (Spelling)',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 1,
+  \     'col': 1,
+  \     'text': 'Found possibly misspelled word "NeoVim". (Spelling)',
+  \     'type': 'W',
+  \   },
+  \ ],
+  \ ale_linters#markdown#redpen#HandleErrors(bufnr(''), [
+  \   '[',
+  \   '  {',
+  \   '    "document": "test.md",',
+  \   '    "errors": [',
+  \   '      {',
+  \   '        "sentence": "ALE is a plugin for providing linting in NeoVim and Vim 8 while you edit your text files.",',
+  \   '        "endPosition": {',
+  \   '          "offset": 15,',
+  \   '          "lineNum": 1',
+  \   '        },',
+  \   '        "validator": "Spelling",',
+  \   '        "lineNum": 1,',
+  \   '        "sentenceStartColumnNum": 0,',
+  \   '        "message": "Found possibly misspelled word \"plugin\".",',
+  \   '        "startPosition": {',
+  \   '          "offset": 9,',
+  \   '          "lineNum": 1',
+  \   '        }',
+  \   '      },',
+  \   '      {',
+  \   '        "sentence": "ALE is a plugin for providing linting in NeoVim and Vim 8 while you edit your text files.",',
+  \   '        "validator": "Spelling",',
+  \   '        "lineNum": 1,',
+  \   '        "sentenceStartColumnNum": 0,',
+  \   '        "message": "Found possibly misspelled word \"NeoVim\"."',
+  \   '      }',
+  \   '    ]',
+  \   '  }',
+  \   ']',
+  \ ])
+
+Execute(redpen handler should no error output):
+  AssertEqual
+  \ [],
+  \ ale_linters#markdown#redpen#HandleErrors(bufnr(''), [
+  \   '[',
+  \   '  {',
+  \   '    "document": "test.md",',
+  \   '    "errors": []',
+  \   '  }',
+  \   ']',
+  \ ])
