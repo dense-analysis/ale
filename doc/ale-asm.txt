@@ -5,6 +5,14 @@ ALE ASM Integration                                           *ale-asm-options*
 ===============================================================================
 gcc                                                               *ale-asm-gcc*
 
+g:ale_asm_gcc_executable                             *g:ale_asm_gcc_executable*
+                                                     *b:ale_asm_gcc_executable*
+  Type: |String|
+  Default: `'gcc'`
+
+This variable can be changed to use a different executable for gcc.
+
+
 g:ale_asm_gcc_options                                   *g:ale_asm_gcc_options*
                                                         *b:ale_asm_gcc_options*
   Type: |String|
