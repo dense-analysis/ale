@@ -5,23 +5,26 @@ function! ale_linters#markdown#redpen#HandleErrors(buffer, lines) abort
     " Only one file was passed to redpen. So response array has only one
     " element.
     let l:res = json_decode(join(a:lines))[0]
-    let l:errors = []
+    let l:output = []
     for l:err in l:res.errors
-        if has_key(l:err, 'startPosition')
-            let l:lnum = l:err.startPosition.lineNum
-            let l:col = l:err.startPosition.offset
-        else
-            let l:lnum = l:err.lineNum
-            let l:col = l:err.sentenceStartColumnNum + 1
-        endif
-        call add(l:errors, {
-        \   'lnum': l:lnum,
-        \   'col': l:col,
+        let l:item = {
         \   'text': l:err.message . ' (' . l:err.validator . ')',
         \   'type': 'W',
-        \})
+        \}
+        if has_key(l:err, 'startPosition')
+            let l:item.lnum = l:err.startPosition.lineNum
+            let l:item.col = l:err.startPosition.offset
+            if has_key(l:err, 'endPosition')
+                let l:item.end_lnum = l:err.endPosition.lineNum
+                let l:item.end_col = l:err.endPosition.offset
+            endif
+        else
+            let l:item.lnum = l:err.lineNum
+            let l:item.col = l:err.sentenceStartColumnNum + 1
+        endif
+        call add(l:output, l:item)
     endfor
-    return l:errors
+    return l:output
 endfunction
 
 call ale#linter#Define('markdown', {
