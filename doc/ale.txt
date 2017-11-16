@@ -29,6 +29,8 @@ CONTENTS                                                         *ale-contents*
       gcc.................................|ale-c-gcc|
     chef..................................|ale-chef-options|
       foodcritic..........................|ale-chef-foodcritic|
+    clojure...............................|ale-clojure-options|
+      joker...............................|ale-clojure-joker|
     cmake.................................|ale-cmake-options|
       cmakelint...........................|ale-cmake-cmakelint|
     cpp...................................|ale-cpp-options|
@@ -271,6 +273,7 @@ Notes:
 * CUDA: `nvcc`!!
 * C#: `mcs`, `mcsc`!!
 * Chef: `foodcritic`
+* Clojure: `joker`
 * CMake: `cmakelint`
 * CoffeeScript: `coffee`, `coffeelint`
 * Crystal: `crystal`!!
