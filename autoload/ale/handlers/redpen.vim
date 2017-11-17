@@ -13,7 +13,7 @@ function! ale#handlers#redpen#HandleRedpenOutput(buffer, lines) abort
         \}
         if has_key(l:err, 'startPosition')
             let l:item.lnum = l:err.startPosition.lineNum
-            let l:item.col = l:err.startPosition.offset
+            let l:item.col = l:err.startPosition.offset + 1
             if has_key(l:err, 'endPosition')
                 let l:item.end_lnum = l:err.endPosition.lineNum
                 let l:item.end_col = l:err.endPosition.offset
