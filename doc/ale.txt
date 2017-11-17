@@ -341,7 +341,7 @@ Notes:
 * Tcl: `nagelfar`!!
 * Terraform: `tflint`
 * Texinfo: `proselint`, `write-good`
-* Text^: `proselint`, `vale`, `write-good`
+* Text^: `proselint`, `vale`, `write-good`, `redpen`
 * Thrift: `thrift`
 * TypeScript: `eslint`, `prettier`, `tslint`, `tsserver`, `typecheck`
 * Verilog: `iverilog`, `verilator`
