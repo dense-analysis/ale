@@ -14,7 +14,7 @@ function! ale_linters#apiblueprint#drafter#HandleErrors(buffer, lines) abort
         \   'col': l:match[4] + 0,
         \   'end_lnum': l:match[6] + 0,
         \   'end_col': l:match[8] + 0,
-        \   'type': l:type ==# 'warning' ? 'W' : 'E',
+        \   'type': l:type is# 'warning' ? 'W' : 'E',
         \})
     endfor
 
