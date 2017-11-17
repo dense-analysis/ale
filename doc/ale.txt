@@ -1149,6 +1149,17 @@ g:ale_set_highlights                                     *g:ale_set_highlights*
   |ALEStyleError|   - Items with `'type': 'E'` and `'sub_type': 'style'`
   |ALEStyleWarning| - Items with `'type': 'W'` and `'sub_type': 'style'`
 
+  When |g:ale_set_signs| is set to `0`, the following highlights for entire
+  lines will be set.
+
+  |ALEErrorLine|   - All items with `'type': 'E'`
+  |ALEWarningLine| - All items with `'type': 'W'`
+  |ALEInfoLine|    - All items with `'type': 'I'`
+
+  Vim can only highlight the characters up to the last column in a buffer for
+  match highlights, whereas the line highlights when signs are enabled will
+  run to the edge of the screen.
+
 
 g:ale_set_loclist                                           *g:ale_set_loclist*
 
@@ -1366,7 +1377,10 @@ ALEErrorLine                                                     *ALEErrorLine*
 
   Default: Undefined
 
-  The highlight for lines where error signs appear. See |g:ale_set_signs|.
+  The highlight for an entire line where errors appear. Only the first
+  line for a problem will be highlighted.
+
+  See |g:ale_set_signs| and |g:ale_set_highlights|.
 
 
 ALEErrorSign                                                     *ALEErrorSign*
@@ -1394,7 +1408,10 @@ ALEInfoLine                                                       *ALEInfoLine*
 
   Default: Undefined
 
-  The highlight for lines where info signs appear. See |g:ale_set_signs|.
+  The highlight for entire lines where info messages appear. Only the first
+  line for a problem will be highlighted.
+
+  See |g:ale_set_signs| and |g:ale_set_highlights|.
 
 
 ALEStyleError                                                   *ALEStyleError*
@@ -1436,7 +1453,10 @@ ALEWarningLine                                                 *ALEWarningLine*
 
   Default: Undefined
 
-  The highlight for lines where warning signs appear. See |g:ale_set_signs|.
+  The highlight for entire lines where warnings appear. Only the first line
+  for a problem will be highlighted.
+
+  See |g:ale_set_signs| and |g:ale_set_highlights|.
 
 
 ALEWarningSign                                                 *ALEWarningSign*
