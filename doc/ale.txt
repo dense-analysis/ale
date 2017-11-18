@@ -573,6 +573,29 @@ g:ale_change_sign_column_color                 *g:ale_change_sign_column_color*
   windows.
 
 
+g:ale_cmd_wrapper                                           g:ale_cmd_wrapper
+
+  Type: String
+  Default: ''
+
+  All commands executed will be run prefixed with this wrapper. This allows
+  restricting resource usage of background linters. You can set it for example
+  to 'nice -n15' to have lower priority than other processes, including the
+  editor itself.
+
+  If creating your own wrapper, be sure to handle a command passed as multiple
+  arguments and handle arguments with spaces and special characters in them.
+  Prefer this:
+
+    #/bin/sh
+    exec nice -n15 ionice -c idle "$@"
+
+  Over this:
+
+    #/bin/sh
+    exec nice -n15 ionice -c idle $1
+
+
 g:ale_completion_delay                                 *g:ale_completion_delay*
 
   Type: |Number|

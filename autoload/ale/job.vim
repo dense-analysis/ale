@@ -174,14 +174,20 @@ function! ale#job#PrepareCommand(command) abort
     " but we'll do this explicitly, so we use thes same exact command for both
     " versions.
     if ale#Has('win32')
-        return 'cmd /c ' . a:command
+        if g:ale_cmd_wrapper isnot# ''
+            return g:ale_cmd_wrapper . ' cmd /c ' . a:command
+        else
+            return 'cmd /c ' . a:command
+        endif
     endif
+
+    let l:precmd = split(g:ale_cmd_wrapper)
 
     if &shell =~? 'fish$'
-        return ['/bin/sh', '-c', a:command]
+        return l:precmd + ['/bin/sh', '-c', a:command]
     endif
 
-    return split(&shell) + split(&shellcmdflag) + [a:command]
+    return l:precmd + split(&shell) + split(&shellcmdflag) + [a:command]
 endfunction
 
 " Start a job with options which are agnostic to Vim and NeoVim.

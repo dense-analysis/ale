@@ -187,6 +187,9 @@ let g:ale_history_enabled = get(g:, 'ale_history_enabled', 1)
 " A flag for storing the full output of commands in the history.
 let g:ale_history_log_output = get(g:, 'ale_history_log_output', 1)
 
+" A wrapper to call commands inside, like 'nice -n 8'
+let g:ale_cmd_wrapper = get(g:, 'ale_cmd_wrapper', '')
+
 " A dictionary mapping regular expression patterns to arbitrary buffer
 " variables to be set. Useful for configuration ALE based on filename
 " patterns.

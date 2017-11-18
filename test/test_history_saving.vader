@@ -2,6 +2,7 @@ Before:
   Save g:ale_max_buffer_history_size
   Save g:ale_history_log_output
   Save g:ale_run_synchronously
+  Save g:ale_cmd_wrapper
 
   unlet! b:ale_fixers
   unlet! b:ale_enabled
@@ -19,6 +20,7 @@ Before:
   let g:ale_buffer_info = {}
   let g:ale_max_buffer_history_size = 20
   let g:ale_history_log_output = 0
+  let g:ale_cmd_wrapper = ''
 
   function! TestFixer(buffer)
     return {'command': 'echo foo'}
@@ -85,6 +87,37 @@ Execute(History should be set when commands are run):
   AssertEqual 0, g:history[0].exit_code
   " The Job ID will change each time, but we can check the type.
   AssertEqual type(1), type(g:history[0].job_id)
+
+Execute(History should be set when commands are run with a wrapper):
+  if has('win32')
+    let g:ale_cmd_wrapper = 'start /low /wait /b'
+  else
+    let g:ale_cmd_wrapper = 'nice -n5'
+  endif
+  AssertEqual 'foobar', &filetype
+
+  call ale#Lint()
+  call ale#engine#WaitForJobs(2000)
+
+  let g:history = filter(
+  \ copy(ale#history#Get(bufnr(''))),
+  \ 'v:val.job_id isnot# ''executable''',
+  \)
+
+  AssertEqual 1, len(g:history)
+  AssertEqual sort(['status', 'exit_code', 'job_id', 'command']), sort(keys(g:history[0]))
+
+  if has('win32')
+    AssertEqual 'start /low /wait /b cmd /c echo command history test', g:history[0].command
+  else
+    AssertEqual ['nice', '-n5', '/bin/sh', '-c', '/bin/sh -c ''echo command history test'''], g:history[0].command
+  endif
+
+  AssertEqual 'finished', g:history[0].status
+  AssertEqual 0, g:history[0].exit_code
+  " The Job ID will change each time, but we can check the type.
+  AssertEqual type(1), type(g:history[0].job_id)
+
 
 Execute(History should be not set when disabled):
   AssertEqual 'foobar', &filetype
