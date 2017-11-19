@@ -15,4 +15,4 @@ Execute(Set Verilog iverilog linter additional options to `-y.`):
   call ale#Lint()
 
   let g:cmd = ale_linters#verilog#iverilog#GetCommand(bufnr(''))
-  AssertEqual g:cmd, 'iverilog -t null -Wall -y. %t',
+  AssertEqual g:cmd, 'iverilog -t null -Wall -y. %t'
