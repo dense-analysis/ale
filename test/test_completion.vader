@@ -41,6 +41,10 @@ After:
 
   delfunction CheckCompletionCalled
 
+  " Stop any timers we left behind.
+  " This stops the tests from failing randomly.
+  call ale#completion#StopTimer()
+
   runtime autoload/ale/completion.vim
   runtime autoload/ale/lsp.vim
 
