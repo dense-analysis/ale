@@ -28,6 +28,7 @@ After:
   Restore
 
   unlet! g:loclist
+  unlet! b:ale_loclist_msg_format
 
   delfunction AddItem
 
@@ -162,3 +163,26 @@ Execute(Formatting with the linter name should work for the quickfix list):
   \   },
   \ ],
   \ getqflist()
+
+Execute(The buffer loclist format option should take precedence):
+  let g:ale_loclist_msg_format = '(%linter%) %s'
+  let b:ale_loclist_msg_format = 'FOO %s'
+
+  call AddItem({'text': 'whatever'})
+  call ale#list#SetLists(bufnr(''), g:loclist)
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'bufnr': bufnr(''),
+  \     'col': 1,
+  \     'valid': 1,
+  \     'vcol': 0,
+  \     'nr': 0,
+  \     'type': 'E',
+  \     'pattern': '',
+  \     'text': 'FOO whatever',
+  \   },
+  \ ],
+  \ getloclist(0)
