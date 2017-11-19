@@ -1,0 +1,18 @@
+Before:
+  Save g:ale_verilog_iverilog_options
+  let g:ale_verilog_iverilog_options = ''
+
+After:
+  Restore
+  call ale#linter#Reset()
+
+Execute(Set Verilog iverilog linter additional options to `-y.`):
+  runtime! ale_linters/verilog/iverilog.vim
+
+  " Additional args for the linter
+  let g:ale_verilog_iverilog_options = '-y.'
+
+  call ale#Lint()
+
+  let g:cmd = ale_linters#verilog#iverilog#GetCommand(bufnr(''))
+  AssertEqual g:cmd, 'iverilog -t null -Wall -y. %t'
