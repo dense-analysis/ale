@@ -282,6 +282,15 @@ function! s:TimerHandler(...) abort
     endif
 endfunction
 
+" Stop any completion timer that is queued. This is useful for tests.
+function! ale#completion#StopTimer() abort
+    if s:timer_id != -1
+        call timer_stop(s:timer_id)
+    endif
+
+    let s:timer_id = -1
+endfunction
+
 function! ale#completion#Queue() abort
     let l:time = get(b:, 'ale_complete_done_time', 0)
 
@@ -298,9 +307,7 @@ function! ale#completion#Queue() abort
         let b:ale_completion_info.request_id = 0
     endif
 
-    if s:timer_id != -1
-        call timer_stop(s:timer_id)
-    endif
+    call ale#completion#StopTimer()
 
     let s:timer_id = timer_start(g:ale_completion_delay, function('s:TimerHandler'))
 endfunction
