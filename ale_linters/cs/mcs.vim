@@ -8,15 +8,16 @@ function! ale_linters#cs#mcs#Handle(buffer, lines) abort
     " Look for lines like the following.
     "
     " Tests.cs(12,29): error CSXXXX: ; expected
-    let l:pattern = '^.\+.cs(\(\d\+\),\(\d\+\)): \(.\+\): \(.\+\)'
+    let l:pattern = '^\v(.+\.cs)\((\d+),(\d+)\)\: ([^ ]+) ([^ ]+): (.+)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
-        \   'lnum': l:match[1] + 0,
-        \   'col': l:match[2] + 0,
-        \   'text': l:match[3] . ': ' . l:match[4],
-        \   'type': l:match[3] =~# '^error' ? 'E' : 'W',
+        \   'lnum': l:match[2] + 0,
+        \   'col': l:match[3] + 0,
+        \   'type': l:match[4] is# 'error' ? 'E' : 'W',
+        \   'code': l:match[5],
+        \   'text': l:match[6],
         \})
     endfor
 

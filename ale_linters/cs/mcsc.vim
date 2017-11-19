@@ -60,7 +60,7 @@ function! ale_linters#cs#mcsc#Handle(buffer, lines) abort
     " NOTE: pattern also captures file name as linter compiles all
     " files within the source tree rooted at the specified source
     " path and not just the file loaded in the buffer
-    let l:pattern = '^\(.\+\.cs\)(\(\d\+\),\(\d\+\)): \(.\+\): \(.\+\)'
+    let l:pattern = '^\v(.+\.cs)\((\d+),(\d+)\)\: ([^ ]+) ([^ ]+): (.+)$'
     let l:output = []
     let l:source = ale#Var(a:buffer, 'cs_mcsc_source')
 
@@ -69,8 +69,9 @@ function! ale_linters#cs#mcsc#Handle(buffer, lines) abort
         \   'filename': fnamemodify(l:source . '/' . l:match[1], ':p'),
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
-        \   'text': l:match[4] . ': ' . l:match[5],
-        \   'type': l:match[4] =~# '^error' ? 'E' : 'W',
+        \   'type': l:match[4] is# 'error' ? 'E' : 'W',
+        \   'code': l:match[5],
+        \   'text': l:match[6],
         \})
     endfor
 
