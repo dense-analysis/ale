@@ -11,12 +11,14 @@ Execute(The slim handler should parse lines correctly):
   \ [
   \   {
   \     'lnum': 1,
-  \     'text': 'RedundantDiv: `div` is redundant when class attribute shortcut is present',
+  \     'text': '`div` is redundant when class attribute shortcut is present',
+  \     'code': 'RedundantDiv',
   \     'type': 'W',
   \   },
   \   {
   \     'lnum': 2,
-  \     'text': 'LineLength: Line is too long. [136/80]',
+  \     'text': 'Line is too long. [136/80]',
+  \     'code': 'LineLength',
   \     'type': 'W',
   \   },
   \   {
