@@ -669,8 +669,8 @@ absolute path to a file, you can use `g:ale_pattern_options`.
 ```vim
 " Do not lint or fix minified files.
 let g:ale_pattern_options = {
-\ '\.min\.js$': {'ale_linters': [], 'ale_fixers: []},
-\ '\.min\.css$': {'ale_linters': [], 'ale_fixers: []},
+\ '\.min\.js$': {'ale_linters': [], 'ale_fixers': []},
+\ '\.min\.css$': {'ale_linters': [], 'ale_fixers': []},
 \}
 " If you configure g:ale_pattern_options outside of vimrc, you need this.
 let g:ale_pattern_options_enabled = 1
