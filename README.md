@@ -47,6 +47,7 @@ servers with similar enough protocols, like `tsserver`.
     12. [How can I check JSX files with both stylelint and eslint?](#faq-jsx-stylelint-eslint)
     13. [Will this plugin eat all of my laptop battery power?](#faq-my-battery-is-sad)
     14. [How can I configure my C or C++ project?](#faq-c-configuration)
+    15. [How can I configure ALE differently for different buffers?](#faq-buffer-configuration)
 
 <a name="supported-languages"></a>
 
@@ -640,3 +641,39 @@ want to use only `gcc` for one project, and only `clang` for another.
 You may also configure buffer-local settings for linters with project-specific
 vimrc files. [local_vimrc](https://github.com/LucHermitte/local_vimrc) can be
 used for executing local vimrc files which can be shared in your project.
+
+<a name="faq-buffer-configuration"></a>
+
+### 5.xv. How can I configure ALE differently for different buffers?
+
+ALE offers various ways to configure which linters or fixers are run, and
+other settings. For the majority of ALE's settings, they can either be
+configured globally with a `g:` variable prefix, or for a specific buffer
+with a `b:` variable prefix. For example, you can configure a Python ftplugin
+file like so.
+
+```vim
+" In ~/.vim/ftplugin/python.vim
+
+" Check Python files with flake8 and pylint.
+let b:ale_linters = ['flake8', 'pylint']
+" Fix Python files with autopep8 and yapf.
+let b:ale_fixers = ['autopep8', 'yapf']
+" Disable warnings about trailing whitespace for Python files.
+let b:ale_warn_about_trailing_whitespace = 0
+```
+
+For configuring files based on regular expression patterns matched against the
+absolute path to a file, you can use `g:ale_pattern_options`.
+
+```vim
+" Do not lint or fix minified files.
+let g:ale_pattern_options = {
+\ '\.min\.js$': {'ale_linters': [], 'ale_fixers: []},
+\ '\.min\.css$': {'ale_linters': [], 'ale_fixers: []},
+\}
+" If you configure g:ale_pattern_options outside of vimrc, you need this.
+let g:ale_pattern_options_enabled = 1
+```
+
+Buffer-local variables for settings always override the global settings.

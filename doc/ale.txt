@@ -414,7 +414,8 @@ including disabling ALE for certain buffers with |b:ale_enabled|. The
 |g:ale_pattern_options| setting can be used to configure files differently
 based on regular expressions for filenames. For configuring entire projects,
 the buffer-local options can be used with external plugins for reading Vim
-project configuration files.
+project configuration files. Buffer-local settings can also be used in
+ftplugin files for different filetypes.
 
 
 ===============================================================================
