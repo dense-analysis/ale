@@ -14,11 +14,5 @@ Execute(Set Verilog iverilog linter additional options to `-y.`):
 
   call ale#Lint()
 
-  let g:run_cmd = ale_linters#verilog#iverilog#GetCommand(bufnr(''))
-  let g:matched = match(g:run_cmd, '\s' . g:ale_verilog_iverilog_options . '\s')
-
-  " match returns -1 if not found
-  AssertNotEqual
-  \   g:matched ,
-  \   -1 ,
-  \   'Additionnal arguments not found in the run command'
+  let g:cmd = ale_linters#verilog#iverilog#GetCommand(bufnr(''))
+  AssertEqual g:cmd, 'iverilog -t null -Wall -y. %t',
