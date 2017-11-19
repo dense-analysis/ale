@@ -61,7 +61,8 @@ function! ale#handlers#css#HandleStyleLintFormat(buffer, lines) abort
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
         \   'type': l:match[3] is# '✖' ? 'E' : 'W',
-        \   'text': l:match[4] . ' [' . l:match[5] . ']',
+        \   'text': l:match[4],
+        \   'code': l:match[5],
         \})
     endfor
 
