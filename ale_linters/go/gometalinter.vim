@@ -3,6 +3,7 @@
 
 call ale#Set('go_gometalinter_options', '')
 call ale#Set('go_gometalinter_executable', 'gometalinter')
+call ale#Set('go_gometalinter_lint_dir', 1)
 
 function! ale_linters#go#gometalinter#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'go_gometalinter_executable')
@@ -12,6 +13,13 @@ function! ale_linters#go#gometalinter#GetCommand(buffer) abort
     let l:executable = ale_linters#go#gometalinter#GetExecutable(a:buffer)
     let l:filename = expand('#' . a:buffer)
     let l:options = ale#Var(a:buffer, 'go_gometalinter_options')
+    let l:lint_dir = ale#Var(a:buffer, 'go_gometalinter_lint_dir')
+
+    if l:lint_dir
+        return ale#Escape(l:executable)
+        \   . (!empty(l:options) ? ' ' . l:options : '')
+        \   . ' ' . ale#Escape(fnamemodify(l:filename, ':h'))
+    endif
 
     return ale#Escape(l:executable)
     \   . ' --include=' . ale#Escape('^' . ale#util#EscapePCRE(l:filename))
