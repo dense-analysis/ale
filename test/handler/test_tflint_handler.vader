@@ -10,16 +10,19 @@ Execute(The tflint handler should parse items correctly):
   \   {
   \     'lnum': 12,
   \     'text': 'be warned, traveller',
+  \     'code': 'aws_db_instance_readable_password',
   \     'type': 'W',
   \   },
   \   {
   \     'lnum': 9,
   \     'text': 'error message',
+  \     'code': 'aws_elasticache_cluster_invalid_type',
   \     'type': 'E',
   \   },
   \   {
   \     'lnum': 5,
   \     'text': 'just so ya know',
+  \     'code': 'aws_instance_not_specified_iam_profile',
   \     'type': 'I',
   \   },
   \ ],

@@ -37,16 +37,14 @@ function! ale#list#GetCombinedList() abort
     return l:list
 endfunction
 
-function! s:FixList(list) abort
+function! s:FixList(buffer, list) abort
+    let l:format = ale#Var(a:buffer, 'loclist_msg_format')
     let l:new_list = []
 
     for l:item in a:list
         let l:fixed_item = copy(l:item)
 
-        let l:fixed_item.text = ale#GetLocItemMessage(
-        \   l:item,
-        \   g:ale_loclist_msg_format,
-        \)
+        let l:fixed_item.text = ale#GetLocItemMessage(l:item, l:format)
 
         if l:item.bufnr == -1
             " If the buffer number is invalid, remove it.
@@ -70,22 +68,22 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
         let l:quickfix_list = ale#list#GetCombinedList()
 
         if has('nvim')
-            call setqflist(s:FixList(l:quickfix_list), ' ', l:title)
+            call setqflist(s:FixList(a:buffer, l:quickfix_list), ' ', l:title)
         else
-            call setqflist(s:FixList(l:quickfix_list))
+            call setqflist(s:FixList(a:buffer, l:quickfix_list))
             call setqflist([], 'r', {'title': l:title})
         endif
     elseif g:ale_set_loclist
         " If windows support is off, bufwinid() may not exist.
         " We'll set result in the current window, which might not be correct,
-        " but is better than nothing.
-        let l:win_id = s:BufWinId(a:buffer)
+        " but it's better than nothing.
+        let l:id = s:BufWinId(a:buffer)
 
         if has('nvim')
-            call setloclist(l:win_id, s:FixList(a:loclist), ' ', l:title)
+            call setloclist(l:id, s:FixList(a:buffer, a:loclist), ' ', l:title)
         else
-            call setloclist(l:win_id, s:FixList(a:loclist))
-            call setloclist(l:win_id, [], 'r', {'title': l:title})
+            call setloclist(l:id, s:FixList(a:buffer, a:loclist))
+            call setloclist(l:id, [], 'r', {'title': l:title})
         endif
     endif
 

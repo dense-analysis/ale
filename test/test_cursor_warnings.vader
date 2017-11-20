@@ -89,6 +89,7 @@ After:
   let g:ale_buffer_info = {}
 
   unlet! g:output
+  unlet! b:ale_loclist_msg_format
 
   delfunction GetLastMessage
 
@@ -212,3 +213,12 @@ Execute(The %code% and %ifcode% should be removed when there's no code):
   call ale#cursor#EchoCursorWarning()
 
   AssertEqual 'Some information', GetLastMessage()
+
+Execute(The buffer message format option should take precedence):
+  let g:ale_echo_msg_format = '%(code) %%s'
+  let b:ale_echo_msg_format = 'FOO %s'
+
+  call cursor(1, 14)
+  call ale#cursor#EchoCursorWarning()
+
+  AssertEqual 'FOO Some information', GetLastMessage()

@@ -27,6 +27,14 @@ function! ale_linters#yaml#swaglint#Handle(buffer, lines) abort
         \   'text': l:match[4],
         \}
 
+        " Parse the code if it's there.
+        let l:code_match = matchlist(l:obj.text, '\v^(.+) \(([^ (]+)\)$')
+
+        if !empty(l:code_match)
+            let l:obj.text = l:code_match[1]
+            let l:obj.code = l:code_match[2]
+        endif
+
         call add(l:output, l:obj)
     endfor
 

@@ -69,10 +69,12 @@ function! s:EchoImpl() abort
         return
     endif
 
+    let l:buffer = bufnr('')
     let [l:info, l:loc] = s:FindItemAtCursor()
 
     if !empty(l:loc)
-        let l:msg = ale#GetLocItemMessage(l:loc, g:ale_echo_msg_format)
+        let l:format = ale#Var(l:buffer, 'echo_msg_format')
+        let l:msg = ale#GetLocItemMessage(l:loc, l:format)
         call ale#cursor#TruncatedEcho(l:msg)
         let l:info.echoed = 1
     elseif get(l:info, 'echoed')

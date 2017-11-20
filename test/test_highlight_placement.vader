@@ -1,5 +1,6 @@
 Before:
   Save g:ale_enabled
+  Save g:ale_set_signs
 
   function! GenerateResults(buffer, output)
     return [
@@ -258,3 +259,23 @@ Execute(Highlights should be cleared when ALE is disabled):
   call ale#highlight#UpdateHighlights()
 
   AssertEqual [], GetMatchesWithoutIDs()
+
+Execute(Line highlights should be set when signs are disabled):
+  let g:ale_set_signs = 0
+
+  call ale#highlight#SetHighlights(bufnr(''), [
+  \ {'bufnr': bufnr(''), 'type': 'E', 'lnum': 1, 'col': 1},
+  \ {'bufnr': bufnr(''), 'type': 'W', 'lnum': 2, 'col': 1},
+  \ {'bufnr': bufnr(''), 'type': 'I', 'lnum': 3, 'col': 1},
+  \])
+
+  AssertEqual
+  \ [
+  \   {'group': 'ALEError', 'priority': 10, 'pos1': [1, 1, 1]},
+  \   {'group': 'ALEWarning', 'priority': 10, 'pos1': [2, 1, 1]},
+  \   {'group': 'ALEInfo', 'priority': 10, 'pos1': [3, 1, 1]},
+  \   {'group': 'ALEErrorLine', 'priority': 10, 'pos1': [1]},
+  \   {'group': 'ALEWarningLine', 'priority': 10, 'pos1': [2]},
+  \   {'group': 'ALEInfoLine', 'priority': 10, 'pos1': [3]},
+  \ ],
+  \ GetMatchesWithoutIDs()

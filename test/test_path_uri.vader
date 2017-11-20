@@ -2,6 +2,9 @@ Execute(ale#path#ToURI should work for Windows paths):
   AssertEqual 'file:///C:/foo/bar/baz.tst', ale#path#ToURI('C:\foo\bar\baz.tst')
   AssertEqual 'foo/bar/baz.tst', ale#path#ToURI('foo\bar\baz.tst')
 
+Execute(ale#path#FromURI should work for Windows paths):
+  AssertEqual 'C:\foo\bar\baz.tst', ale#path#FromURI('file:///C:/foo/bar/baz.tst')
+
 Execute(ale#path#ToURI should work for Unix paths):
   AssertEqual 'file:///foo/bar/baz.tst', ale#path#ToURI('/foo/bar/baz.tst')
   AssertEqual 'foo/bar/baz.tst', ale#path#ToURI('foo/bar/baz.tst')

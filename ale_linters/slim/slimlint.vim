@@ -28,11 +28,20 @@ function! ale_linters#slim#slimlint#Handle(buffer, lines) abort
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        call add(l:output, {
+        let l:item = {
         \   'lnum': l:match[1] + 0,
         \   'type': l:match[2],
         \   'text': l:match[3]
-        \})
+        \}
+
+        let l:code_match = matchlist(l:item.text, '\v^([^:]+): (.+)$')
+
+        if !empty(l:code_match)
+            let l:item.code = l:code_match[1]
+            let l:item.text = l:code_match[2]
+        endif
+
+        call add(l:output, l:item)
     endfor
 
     return l:output

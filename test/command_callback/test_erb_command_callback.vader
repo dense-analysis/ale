@@ -17,5 +17,5 @@ Execute(Executable should filter invalid eRuby when inside a Rails project):
   call ale#test#SetFilename('../ruby_fixtures/valid_rails_app/app/views/my_great_view.html.erb')
 
   AssertEqual
-  \ 'ruby -r erb -e ' . ale#Escape('puts ERB.new($stdin.read.gsub(%{<%=},%{<%}), nil, %{-}).src') . ' | ruby -c',
+  \ 'ruby -r erb -e ' . ale#Escape('puts ERB.new($stdin.read.gsub(%{<%=},%{<%}), nil, %{-}).src') . '< %t | ruby -c',
   \ ale_linters#eruby#erb#GetCommand(bufnr(''))

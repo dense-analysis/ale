@@ -23,6 +23,7 @@ function! ale_linters#terraform#tflint#Handle(buffer, lines) abort
         \   'lnum': l:error.line,
         \   'text': l:error.message,
         \   'type': l:type,
+        \   'code': l:error.detector,
         \})
     endfor
 

@@ -9,7 +9,7 @@ Execute(redpen handler should handle errors output):
   \ [
   \   {
   \     'lnum': 1,
-  \     'col': 9,
+  \     'col': 10,
   \     'end_lnum': 1,
   \     'end_col': 15,
   \     'text': 'Found possibly misspelled word "plugin". (Spelling)',
@@ -22,7 +22,7 @@ Execute(redpen handler should handle errors output):
   \     'type': 'W',
   \   },
   \ ],
-  \ ale_linters#markdown#redpen#HandleErrors(bufnr(''), [
+  \ ale#handlers#redpen#HandleRedpenOutput(bufnr(''), [
   \   '[',
   \   '  {',
   \   '    "document": "test.md",',
@@ -57,7 +57,7 @@ Execute(redpen handler should handle errors output):
 Execute(redpen handler should no error output):
   AssertEqual
   \ [],
-  \ ale_linters#markdown#redpen#HandleErrors(bufnr(''), [
+  \ ale#handlers#redpen#HandleRedpenOutput(bufnr(''), [
   \   '[',
   \   '  {',
   \   '    "document": "test.md",',

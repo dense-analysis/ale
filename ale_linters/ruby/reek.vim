@@ -13,6 +13,7 @@ function! ale_linters#ruby#reek#Handle(buffer, lines) abort
             \    'lnum': l:location,
             \    'type': 'W',
             \    'text': s:BuildText(a:buffer, l:error),
+            \    'code': l:error.smell_type,
             \})
         endfor
     endfor
@@ -21,19 +22,19 @@ function! ale_linters#ruby#reek#Handle(buffer, lines) abort
 endfunction
 
 function! s:BuildText(buffer, error) abort
-    let l:text = a:error.smell_type . ':'
+    let l:parts = []
 
     if ale#Var(a:buffer, 'ruby_reek_show_context')
-        let l:text .= ' ' . a:error.context
+        call add(l:parts, a:error.context)
     endif
 
-    let l:text .= ' ' . a:error.message
+    call add(l:parts, a:error.message)
 
     if ale#Var(a:buffer, 'ruby_reek_show_wiki_link')
-        let l:text .= ' [' . a:error.wiki_link . ']'
+        call add(l:parts, '[' . a:error.wiki_link . ']')
     endif
 
-    return l:text
+    return join(l:parts, ' ')
 endfunction
 
 call ale#linter#Define('ruby', {
