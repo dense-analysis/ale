@@ -1,5 +1,4 @@
-" Author: Joshua Rubin <joshua@rubixconsulting.com>, Ben Reedy <https://github.com/breed808>,
-" Jeff Willette <jrwillette88@gmail.com>
+" Author: Joshua Rubin <joshua@rubixconsulting.com>, Ben Reedy <https://github.com/breed808>
 " Description: go build for Go files
 
 " inspired by work from dzhou121 <dzhou121@gmail.com>
@@ -40,12 +39,15 @@ function! ale_linters#go#gobuild#GetMatches(lines) abort
 endfunction
 
 function! ale_linters#go#gobuild#Handler(buffer, lines) abort
-    let l:dir = expand('#' . a:buffer . ':p:h')
     let l:output = []
 
     for l:match in ale_linters#go#gobuild#GetMatches(a:lines)
+        " Omit errors from imported go packages
+        if !ale#path#IsBufferPath(a:buffer, l:match[1])
+            continue
+        endif
+
         call add(l:output, {
-        \   'filename': ale#path#GetAbsPath(l:dir, l:match[1]),
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
         \   'text': l:match[4],

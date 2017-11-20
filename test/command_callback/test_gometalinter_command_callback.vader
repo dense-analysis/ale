@@ -22,6 +22,7 @@ Execute(The gometalinter callback should return the right defaults):
   \ ale_linters#go#gometalinter#GetExecutable(bufnr(''))
   AssertEqual
   \ ale#Escape('gometalinter')
+  \   . ' --include=' . ale#Escape('^' . ale#util#EscapePCRE(expand('%')))
   \   . ' ' . ale#Escape(getcwd()),
   \ ale_linters#go#gometalinter#GetCommand(bufnr(''))
 
@@ -33,6 +34,7 @@ Execute(The gometalinter callback should use a configured executable):
   \ ale_linters#go#gometalinter#GetExecutable(bufnr(''))
   AssertEqual
   \ ale#Escape('something else')
+  \   . ' --include=' . ale#Escape('^' . ale#util#EscapePCRE(expand('%')))
   \   . ' ' . ale#Escape(getcwd()),
   \ ale_linters#go#gometalinter#GetCommand(bufnr(''))
 
@@ -41,6 +43,7 @@ Execute(The gometalinter callback should use configured options):
 
   AssertEqual
   \ ale#Escape('gometalinter')
+  \   . ' --include=' . ale#Escape('^' . ale#util#EscapePCRE(expand('%')))
   \   . ' --foobar'
   \   . ' ' . ale#Escape(getcwd()),
   \ ale_linters#go#gometalinter#GetCommand(bufnr(''))
