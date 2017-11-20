@@ -1,9 +1,11 @@
 Before:
   Save b:ale_go_gometalinter_executable
   Save b:ale_go_gometalinter_options
+  Save b:ale_go_gometalinter_lint_dir
 
   let b:ale_go_gometalinter_executable = 'gometalinter'
   let b:ale_go_gometalinter_options = ''
+  let b:ale_go_gometalinter_lint_dir = 1
 
   runtime ale_linters/go/gometalinter.vim
 
@@ -42,5 +44,14 @@ Execute(The gometalinter callback should use configured options):
   AssertEqual
   \ ale#Escape('gometalinter')
   \   . ' --foobar'
+  \   . ' ' . ale#Escape(getcwd()),
+  \ ale_linters#go#gometalinter#GetCommand(bufnr(''))
+
+Execute(The gometalinter callback should pass `--include` when `lint_dir` is set to 0):
+  let b:ale_go_gometalinter_lint_dir = 0
+
+  AssertEqual
+  \ ale#Escape('gometalinter')
+  \   . ' --include=' . ale#Escape('^' . ale#util#EscapePCRE(expand('%')))
   \   . ' ' . ale#Escape(getcwd()),
   \ ale_linters#go#gometalinter#GetCommand(bufnr(''))
