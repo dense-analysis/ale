@@ -185,5 +185,12 @@ function! ale#path#FromURI(uri) abort
     let l:i = len('file://')
     let l:encoded_path = a:uri[: l:i - 1] is# 'file://' ? a:uri[l:i :] : a:uri
 
-    return ale#uri#Decode(l:encoded_path)
+    let l:path = ale#uri#Decode(l:encoded_path)
+
+    " If the path is like /C:/foo/bar, it should be C:\foo\bar instead.
+    if l:path =~# '^/[a-zA-Z]:'
+        let l:path = substitute(l:path[1:], '/', '\\', 'g')
+    endif
+
+    return l:path
 endfunction
