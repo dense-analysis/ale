@@ -41,9 +41,33 @@ function! ale_linters#java#javac#GetCommand(buffer, import_paths) abort
 
     " Find the src directory, for files in this project.
     let l:src_dir = ale#path#FindNearestDirectory(a:buffer, 'src/main/java')
+    let l:sp_dirs = []
 
     if !empty(l:src_dir)
-        let l:sp_option = '-sourcepath ' . ale#Escape(l:src_dir)
+        call add(l:sp_dirs, l:src_dir)
+
+        " Automatically include the jaxb directory too, if it's there.
+        let l:jaxb_dir = fnamemodify(l:src_dir, ':h:h')
+        \   . (has('win32') ? '\jaxb\' : '/jaxb/')
+
+        if isdirectory(l:jaxb_dir)
+            call add(l:sp_dirs, l:jaxb_dir)
+        endif
+
+        " Automatically include the test directory, but only for test code.
+        if expand('#' . a:buffer . ':p') =~? '\vsrc[/\\]test[/\\]java'
+            let l:test_dir = fnamemodify(l:src_dir, ':h:h:h')
+            \   . (has('win32') ? '\test\java\' : '/test/java/')
+
+            if isdirectory(l:test_dir)
+                call add(l:sp_dirs, l:test_dir)
+            endif
+        endif
+    endif
+
+    if !empty(l:sp_dirs)
+        let l:sp_option = '-sourcepath '
+        \   . ale#Escape(join(l:sp_dirs, s:classpath_sep))
     endif
 
     " Create .class files in a temporary directory, which we will delete later.
