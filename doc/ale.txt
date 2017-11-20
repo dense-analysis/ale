@@ -1093,6 +1093,21 @@ g:ale_open_list                                               *g:ale_open_list*
   The window size can be configured with |g:ale_list_window_size|.
 
 
+g:ale_override_tmpdir                                   *g:ale_override_tmpdir*
+
+  Type: |String|
+  Default: `{}`
+
+  This option allows one to override the $TMPDIR environment variable. This
+  can be useful when running linters in Docker containers using Docker
+  Machine, where by default '/tmp' (*nix) or '/var/folders' (MacOS) aren't
+  mountable. 
+
+  Example:
+  " Have Vim-specific TMPDIR:
+  let g:ale_override_tmpdir = $HOME.'/.vimtmp'
+
+
 g:ale_pattern_options                                   *g:ale_pattern_options*
 
   Type: |Dictionary|

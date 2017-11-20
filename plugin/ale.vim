@@ -45,6 +45,12 @@ endif
 " Set this flag so that other plugins can use it, like airline.
 let g:loaded_ale = 1
 
+" Allow overriding of the TMPDIR variable. This is especially useful
+" for running linters in containers using Docker Machine
+if exists('g:ale_override_tmpdir')
+    let $TMPDIR = get(g:, 'ale_override_tmpdir', {})
+endif
+
 " Set the TMPDIR environment variable if it is not set automatically.
 " This can automatically fix some environments.
 if has('unix') && empty($TMPDIR)

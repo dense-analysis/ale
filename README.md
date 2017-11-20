@@ -678,3 +678,27 @@ let g:ale_pattern_options_enabled = 1
 ```
 
 Buffer-local variables for settings always override the global settings.
+
+### 5.xvi. How can I override my TMPDIR setting?
+
+By default, ALE will use whatever your `$TMPDIR` environment variable is set
+to. If it is unset, ALE will default to `/tmp`. However, when you want to
+specifically override your `$TMPDIR` setting for ALE, you can do so in the
+following way:
+
+```vim
+" Override TMPDIR for ALE
+let g:ale_override_tmpdir = '/path/to/tmp'
+```
+
+One of the reasons to do this, is when you run linters in containers, using
+Docker Machine. By default only your home directory is shared with the Docker
+VM, which means `/tmp` or `/var/folders` (MacOS) are never available to a 
+linter inside a container. But if we were to set `$TMPDIR` to something
+inside our home directory, suddenly everything works fine:
+
+```vim
+" Set TMPDIR to subdir of homedir, just for ALE
+let g:ale_override_tmpdir = $HOME.'/.vimtmp'
+```
+
