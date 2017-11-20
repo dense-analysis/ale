@@ -264,6 +264,7 @@ Notes:
 
 * ASM: `gcc`
 * Ansible: `ansible-lint`
+* API Blueprint: `drafter`
 * AsciiDoc: `proselint`, `write-good`, `redpen`
 * Awk: `gawk`
 * Bash: `shell` (-n flag), `shellcheck`, `shfmt`
