@@ -12,14 +12,14 @@ function! s:GetRegex(map, filetype) abort
         endif
     endfor
 
-    return ''
+    " Use the default regex for other files.
+    return s:should_complete_map['<default>']
 endfunction
 
 " Regular expressions for checking the characters in the line before where
 " the insert cursor is. If one of these matches, we'll check for completions.
 let s:should_complete_map = {
-\   'javascript': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$|\.$',
-\   'typescript': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$|\.$',
+\   '<default>': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$|\.$',
 \}
 
 " Check if we should look for completions for a language.
