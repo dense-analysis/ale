@@ -10,7 +10,7 @@ function! ale_linters#eruby#erubis#GetCommand(buffer) abort
 
     " Rails-flavored eRuby does not comply with the standard as understood by
     " Erubis, so we'll have to do some substitution. This does not reduce the
-    " effectiveness of the linter—the translated code is still evaluated.
+    " effectiveness of the linter - the translated code is still evaluated.
     return 'ruby -r erubis -e ' . ale#Escape('puts Erubis::Eruby.new($stdin.read.gsub(%{<%=},%{<%})).src') . '< %t | ruby -c'
 endfunction
 
