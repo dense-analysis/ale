@@ -12,14 +12,16 @@ Execute(redpen handler should handle errors output):
   \     'col': 10,
   \     'end_lnum': 1,
   \     'end_col': 15,
-  \     'text': 'Found possibly misspelled word "plugin". (Spelling)',
+  \     'text': 'Found possibly misspelled word "plugin".',
   \     'type': 'W',
+  \     'code': 'Spelling',
   \   },
   \   {
   \     'lnum': 1,
   \     'col': 1,
-  \     'text': 'Found possibly misspelled word "NeoVim". (Spelling)',
+  \     'text': 'Found possibly misspelled word "NeoVim".',
   \     'type': 'W',
+  \     'code': 'Spelling',
   \   },
   \ ],
   \ ale#handlers#redpen#HandleRedpenOutput(bufnr(''), [

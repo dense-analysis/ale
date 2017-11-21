@@ -8,8 +8,9 @@ function! ale#handlers#redpen#HandleRedpenOutput(buffer, lines) abort
     let l:output = []
     for l:err in l:res.errors
         let l:item = {
-        \   'text': l:err.message . ' (' . l:err.validator . ')',
+        \   'text': l:err.message,
         \   'type': 'W',
+        \   'code': l:err.validator,
         \}
         if has_key(l:err, 'startPosition')
             let l:item.lnum = l:err.startPosition.lineNum
@@ -19,6 +20,8 @@ function! ale#handlers#redpen#HandleRedpenOutput(buffer, lines) abort
                 let l:item.end_col = l:err.endPosition.offset
             endif
         else
+            " Fallback to a whole sentence region when a region is not
+            " specified by the error.
             let l:item.lnum = l:err.lineNum
             let l:item.col = l:err.sentenceStartColumnNum + 1
         endif
