@@ -84,6 +84,17 @@ g:ale_javascript_flow_executable             *g:ale_javascript_flow_executable*
   See |ale-integrations-local-executables|
 
 
+g:ale_javascript_flow_use_home_config   *g:ale_javascript_flow_use_home_config*
+                                        *b:ale_javascript_flow_use_home_config*
+  Type: |Number|
+  Default: `0`
+
+  When set to `1`, ALE will allow Flow to be executed with configuration files
+  from your home directory. ALE will not run Flow with home directory
+  configuration files by default, as doing so can lead to Vim consuming all of
+  your RAM and CPU power.
+
+
 g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
                                              *b:ale_javascript_flow_use_global*
   Type: |Number|

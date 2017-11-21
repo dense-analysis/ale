@@ -1,24 +1,12 @@
 " Author: Zach Perrault -- @zperrault
+" Author: Florian Beeres <yuuki@protonmail.com>
 " Description: FlowType checking for JavaScript files
 
-" Flow extra errors
-" Author: Florian Beeres <yuuki@protonmail.com>
-
 call ale#Set('javascript_flow_executable', 'flow')
+call ale#Set('javascript_flow_use_home_config', 0)
 call ale#Set('javascript_flow_use_global', 0)
 
 function! ale_linters#javascript#flow#GetExecutable(buffer) abort
-    return ale#node#FindExecutable(a:buffer, 'javascript_flow', [
-    \   'node_modules/.bin/flow',
-    \])
-endfunction
-
-function! ale_linters#javascript#flow#VersionCheck(buffer) abort
-    return ale#Escape(ale_linters#javascript#flow#GetExecutable(a:buffer))
-    \   . ' --version'
-endfunction
-
-function! ale_linters#javascript#flow#GetCommand(buffer, version_lines) abort
     let l:flow_config = ale#path#FindNearestFile(a:buffer, '.flowconfig')
 
     if empty(l:flow_config)
@@ -26,7 +14,35 @@ function! ale_linters#javascript#flow#GetCommand(buffer, version_lines) abort
         return ''
     endif
 
+    " Don't run Flow with a configuration file from the home directory by
+    " default, which can eat all of your RAM.
+    if fnamemodify(l:flow_config, ':h') is? $HOME
+    \&& !ale#Var(a:buffer, 'javascript_flow_use_home_config')
+        return ''
+    endif
+
+    return ale#node#FindExecutable(a:buffer, 'javascript_flow', [
+    \   'node_modules/.bin/flow',
+    \])
+endfunction
+
+function! ale_linters#javascript#flow#VersionCheck(buffer) abort
     let l:executable = ale_linters#javascript#flow#GetExecutable(a:buffer)
+
+    if empty(l:executable)
+        return ''
+    endif
+
+    return ale#Escape(l:executable) . ' --version'
+endfunction
+
+function! ale_linters#javascript#flow#GetCommand(buffer, version_lines) abort
+    let l:executable = ale_linters#javascript#flow#GetExecutable(a:buffer)
+
+    if empty(l:executable)
+        return ''
+    endif
+
     let l:version = ale#semver#GetVersion(l:executable, a:version_lines)
 
     " If we can parse the version number, then only use --respect-pragma

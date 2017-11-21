@@ -27,6 +27,11 @@ endfunction
 " Check if files are executable, and if they are, remember that they are
 " for subsequent calls. We'll keep checking until programs can be executed.
 function! ale#engine#IsExecutable(buffer, executable) abort
+    if empty(a:executable)
+        " Don't log the executable check if the executable string is empty.
+        return 0
+    endif
+
     if has_key(s:executable_cache_map, a:executable)
         return 1
     endif
