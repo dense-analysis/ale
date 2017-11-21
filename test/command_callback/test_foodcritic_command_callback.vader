@@ -1,0 +1,44 @@
+Before:
+  Save g:ale_chef_foodcritic_executable
+  Save g:ale_chef_foodcritic_options
+
+  unlet! g:ale_chef_foodcritic_executable
+  unlet! g:ale_chef_foodcritic_options
+
+  call ale#test#SetDirectory('/testplugin/test')
+
+  runtime ale_linters/chef/foodcritic.vim
+
+After:
+  Restore
+
+  unlet! b:ale_chef_foodcritic_executable
+  unlet! b:ale_chef_foodcritic_options
+
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(The default command should be correct):
+  AssertEqual
+  \ 'foodcritic',
+  \ ale_linters#chef#foodcritic#GetExecutable(bufnr(''))
+  AssertEqual
+  \ ale#Escape('foodcritic') . ' %s',
+  \ ale_linters#chef#foodcritic#GetCommand(bufnr(''))
+
+Execute(Extra options should be included with escapeed tildes (~)):
+  let b:ale_chef_foodcritic_options = '-t ~F011'
+
+  AssertEqual
+  \ ale#Escape('foodcritic') . ' -t \~F011 %s',
+  \ ale_linters#chef#foodcritic#GetCommand(bufnr(''))
+
+Execute(The executable should be configurable):
+  let b:ale_chef_foodcritic_executable = 'foobar'
+
+  AssertEqual
+  \ 'foobar',
+  \ ale_linters#chef#foodcritic#GetExecutable(bufnr(''))
+  AssertEqual
+  \ ale#Escape('foobar') . ' %s',
+  \ ale_linters#chef#foodcritic#GetCommand(bufnr(''))
