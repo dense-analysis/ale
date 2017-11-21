@@ -177,3 +177,16 @@ Execute(ale#lsp#tsserver_message#CompletionEntryDetails() should return correct 
   \   }
   \ ],
   \ ale#lsp#tsserver_message#CompletionEntryDetails(bufnr(''), 347, 12, ['foo', 'bar'])
+
+Execute(ale#lsp#tsserver_message#Definition() should return correct messages):
+  AssertEqual
+  \ [
+  \   0,
+  \   'ts@definition',
+  \   {
+  \     'file': ale#path#Winify(g:dir . '/foo/bar.ts'),
+  \     'line': 347,
+  \     'offset': 12,
+  \   }
+  \ ],
+  \ ale#lsp#tsserver_message#Definition(bufnr(''), 347, 12)
