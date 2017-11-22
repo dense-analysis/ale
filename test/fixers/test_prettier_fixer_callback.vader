@@ -87,7 +87,7 @@ Execute(The version number should be cached):
   " Call the second callback with the version output.
   call ale#fixers#prettier#ApplyFixForVersion(bufnr(''), ['1.6.0'])
 
-  " Call it again without the vesrion output. We should use the newer command.
+  " Call it again without the version output. We should use the newer command.
   AssertEqual
   \ {
   \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
