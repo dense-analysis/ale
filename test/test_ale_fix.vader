@@ -107,7 +107,7 @@ Before:
 
   " echo will output a single blank line, and we should ingore it.
   function! IgnoredEmptyOutput(buffer, output)
-    return {'command': 'echo'}
+    return {'command': has('win32') ? 'echo(' : 'echo'}
   endfunction
 
   function! SetUpLinters()
