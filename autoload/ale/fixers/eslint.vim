@@ -32,14 +32,6 @@ function! ale#fixers#eslint#ApplyFixForVersion(buffer, version_output) abort
         \}
     endif
 
-    " 4.9.0 is the first version with --fix-dry-run
-    if ale#semver#GTE(l:version, [4, 9, 0])
-        return {
-        \   'command': ale#node#Executable(a:buffer, l:executable)
-        \       . ' --stdin-filename %s --stdin --fix-dry-run',
-        \}
-    endif
-
     return {
     \   'command': ale#node#Executable(a:buffer, l:executable)
     \       . ' -c ' . ale#Escape(l:config)
