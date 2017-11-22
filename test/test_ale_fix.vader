@@ -110,6 +110,10 @@ Before:
     return {'command': has('win32') ? 'echo(' : 'echo'}
   endfunction
 
+  function! EchoLineNoPipe(buffer, output)
+    return {'command': 'echo new line', 'read_buffer': 0}
+  endfunction
+
   function! SetUpLinters()
     call ale#linter#Define('testft', {
     \ 'name': 'testlinter',
@@ -155,6 +159,7 @@ After:
   delfunction SetUpLinters
   delfunction GetLastMessage
   delfunction IgnoredEmptyOutput
+  delfunction EchoLineNoPipe
 
   call ale#test#RestoreDirectory()
 
@@ -540,6 +545,14 @@ Execute(Test fixing with chained callbacks):
   let g:ale_fixers.testft = ['FirstChainCallback']
   ALEFix
 
+  " The buffer shouldn't be piped in for earlier commands in the chain.
+  AssertEqual
+  \ [
+  \   string(ale#job#PrepareCommand('echo echoline')),
+  \   string(ale#job#PrepareCommand('echo echoline')),
+  \ ],
+  \ map(ale#history#Get(bufnr(''))[-2:-1], 'string(v:val.command)')
+
 Expect(The echoed line should be added):
   a
   b
@@ -583,3 +596,14 @@ Expect(The lines should be the same):
   a
   b
   c
+
+Execute(A temporary file shouldn't be piped into the command when disabled):
+  let g:ale_fixers.testft = ['EchoLineNoPipe']
+  ALEFix
+
+  AssertEqual
+  \ string(ale#job#PrepareCommand('echo new line')),
+  \ string(ale#history#Get(bufnr(''))[-1].command)
+
+Expect(The new line should be used):
+  new line

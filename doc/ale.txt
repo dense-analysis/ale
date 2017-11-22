@@ -479,6 +479,18 @@ are supported for running the commands.
                       that are cached. An empty List will be passed to the
                       next callback in the chain for the `output`.
 
+  `read_buffer`         An optional key for disabling reading the buffer.
+
+                      When set to `0`, ALE will not pipe the buffer's data
+                      into the command via stdin. This option is ignored and
+                      the buffer is not read when `read_temporary_file` is
+                      `1`.
+
+                      This option defaults to `0` when `chain_with` is defined
+                      as anything other than `v:null`, and defaults to `1`
+                      otherwise. This is so earlier commands in a chain
+                      do not receive the buffer's data by default.
+
                                                         *ale-fix-configuration*
 
 Synchronous functions and asynchronous jobs will be run in a sequence for

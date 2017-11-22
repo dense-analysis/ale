@@ -185,6 +185,7 @@ function! s:RunJob(options) abort
     let l:output_stream = a:options.output_stream
     let l:read_temporary_file = a:options.read_temporary_file
     let l:chain_with = a:options.chain_with
+    let l:read_buffer = a:options.read_buffer
 
     if empty(l:command)
         " If there's nothing further to chain the command with, stop here.
@@ -205,7 +206,11 @@ function! s:RunJob(options) abort
         return 1
     endif
 
-    let [l:temporary_file, l:command] = ale#command#FormatCommand(l:buffer, l:command, 1)
+    let [l:temporary_file, l:command] = ale#command#FormatCommand(
+    \   l:buffer,
+    \   l:command,
+    \   l:read_buffer,
+    \)
     call s:CreateTemporaryFileForJob(l:buffer, l:temporary_file, l:input)
 
     let l:command = ale#job#PrepareCommand(l:command)
@@ -309,13 +314,19 @@ function! s:RunFixer(options) abort
             let l:input = l:result
             let l:index += 1
         else
+            " Capitals are required for funcrefs.
+            let l:Chain_with = get(l:result, 'chain_with', v:null)
+            " Default to piping the buffer for the last fixer in the chain.
+            let l:read_buffer = get(l:result, 'read_buffer', l:Chain_with is v:null)
+
             let l:job_ran = s:RunJob({
             \   'buffer': l:buffer,
             \   'command': l:result.command,
             \   'input': l:input,
             \   'output_stream': get(l:result, 'output_stream', 'stdout'),
             \   'read_temporary_file': get(l:result, 'read_temporary_file', 0),
-            \   'chain_with': get(l:result, 'chain_with', v:null),
+            \   'read_buffer': l:read_buffer,
+            \   'chain_with': l:Chain_with,
             \   'callback_list': a:options.callback_list,
             \   'callback_index': l:index,
             \})
