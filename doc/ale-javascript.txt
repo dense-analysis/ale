@@ -171,11 +171,6 @@ g:ale_javascript_prettier_use_global     *g:ale_javascript_prettier_use_global*
 ===============================================================================
 prettier-eslint                                *ale-javascript-prettier-eslint*
 
-ALE supports `prettier-eslint` >= 4.2.0. Using lower version is not recommended
-because it cannot be configured to use the ESLint configuration file for input
-given via stdin. However ALE could be set up on your own risk with older
-versions with |g:ale_javascript_prettier_eslint_legacy|
-
 g:ale_javascript_prettier_eslint_executable
                                   *g:ale_javascript_prettier_eslint_executable*
                                   *b:ale_javascript_prettier_eslint_executable*
@@ -201,14 +196,6 @@ g:ale_javascript_prettier_eslint_use_global
   Default: `0`
 
   See |ale-integrations-local-executables|
-
-g:ale_javascript_prettier_eslint_legacy
-                                      *g:ale_javascript_prettier_eslint_legacy*
-                                      *b:ale_javascript_prettier_eslint_legacy*
-  Type: |Number|
-  Default: `0`
-
-  Fallback option for `prettier-eslint` < 4.2.0
 
 
 ===============================================================================
