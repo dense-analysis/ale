@@ -133,7 +133,7 @@ function! ale#toggle#Enable() abort
     if !g:ale_enabled
         " Set pattern options again, if enabled.
         if g:ale_pattern_options_enabled
-            call ale#pattern_options#SetOptions()
+            call ale#pattern_options#SetOptions(bufnr(''))
         endif
 
         call ale#toggle#Toggle()
