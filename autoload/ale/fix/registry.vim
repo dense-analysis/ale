@@ -21,6 +21,7 @@ let s:default_registry = {
 \       'function': 'ale#fixers#prettier_standard#Fix',
 \       'suggested_filetypes': ['javascript'],
 \       'description': 'Apply prettier-standard to a file.',
+\       'aliases': ['prettier-standard'],
 \   },
 \   'eslint': {
 \       'function': 'ale#fixers#eslint#Fix',
@@ -51,6 +52,7 @@ let s:default_registry = {
 \       'function': 'ale#fixers#prettier_eslint#Fix',
 \       'suggested_filetypes': ['javascript'],
 \       'description': 'Apply prettier-eslint to a file.',
+\       'aliases': ['prettier-eslint'],
 \   },
 \   'puppetlint': {
 \       'function': 'ale#fixers#puppetlint#Fix',
@@ -147,6 +149,14 @@ let s:default_registry = {
 " Reset the function registry to the default entries.
 function! ale#fix#registry#ResetToDefaults() abort
     let s:entries = deepcopy(s:default_registry)
+    let s:aliases = {}
+
+    " Set up aliases for fixers too.
+    for [l:key, l:entry] in items(s:entries)
+        for l:alias in get(l:entry, 'aliases', [])
+            let s:aliases[l:alias] = l:key
+        endfor
+    endfor
 endfunction
 
 " Set up entries now.
@@ -155,10 +165,12 @@ call ale#fix#registry#ResetToDefaults()
 " Remove everything from the registry, useful for tests.
 function! ale#fix#registry#Clear() abort
     let s:entries = {}
+    let s:aliases = {}
 endfunction
 
 " Add a function for fixing problems to the registry.
-function! ale#fix#registry#Add(name, func, filetypes, desc) abort
+" (name, func, filetypes, desc, aliases)
+function! ale#fix#registry#Add(name, func, filetypes, desc, ...) abort
     if type(a:name) != type('')
         throw '''name'' must be a String'
     endif
@@ -181,16 +193,37 @@ function! ale#fix#registry#Add(name, func, filetypes, desc) abort
         throw '''desc'' must be a String'
     endif
 
+    let l:aliases = get(a:000, 0, [])
+
+    if type(l:aliases) != type([])
+    \|| !empty(filter(copy(l:aliases), 'type(v:val) != type('''')'))
+        throw '''aliases'' must be a List of String values'
+    endif
+
     let s:entries[a:name] = {
     \   'function': a:func,
     \   'suggested_filetypes': a:filetypes,
     \   'description': a:desc,
     \}
+
+    " Set up aliases for the fixer.
+    if !empty(l:aliases)
+        let s:entries[a:name].aliases = l:aliases
+
+        for l:alias in l:aliases
+            let s:aliases[l:alias] = a:name
+        endfor
+    endif
 endfunction
 
 " Get a function from the registry by its short name.
 function! ale#fix#registry#GetFunc(name) abort
-    return get(s:entries, a:name, {'function': ''}).function
+    " Use the exact name, or an alias.
+    let l:resolved_name = !has_key(s:entries, a:name)
+    \   ? get(s:aliases, a:name, a:name)
+    \   : a:name
+
+    return get(s:entries, l:resolved_name, {'function': ''}).function
 endfunction
 
 function! s:ShouldSuggestForType(suggested_filetypes, type_list) abort
@@ -201,6 +234,25 @@ function! s:ShouldSuggestForType(suggested_filetypes, type_list) abort
     endfor
 
     return 0
+endfunction
+
+function! s:FormatEntry(key, entry) abort
+    let l:aliases_str = ''
+
+    " Show aliases in :ALEFixSuggest if they are there.
+    if !empty(get(a:entry, 'aliases', []))
+        let l:aliases_str = ', ' . join(
+        \   map(copy(a:entry.aliases), 'string(v:val)'),
+        \   ','
+        \)
+    endif
+
+    return printf(
+    \   '%s%s - %s',
+    \   string(a:key),
+    \   l:aliases_str,
+    \   a:entry.description,
+    \)
 endfunction
 
 " Suggest functions to use from the registry.
@@ -214,7 +266,7 @@ function! ale#fix#registry#Suggest(filetype) abort
         if s:ShouldSuggestForType(l:suggested_filetypes, l:type_list)
             call add(
             \   l:filetype_fixer_list,
-            \   printf('%s - %s', string(l:key), s:entries[l:key].description),
+            \   s:FormatEntry(l:key, s:entries[l:key]),
             \)
         endif
     endfor
@@ -225,7 +277,7 @@ function! ale#fix#registry#Suggest(filetype) abort
         if empty(s:entries[l:key].suggested_filetypes)
             call add(
             \   l:generic_fixer_list,
-            \   printf('%s - %s', string(l:key), s:entries[l:key].description),
+            \   s:FormatEntry(l:key, s:entries[l:key]),
             \)
         endif
     endfor

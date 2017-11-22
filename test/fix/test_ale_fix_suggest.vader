@@ -80,7 +80,7 @@ Execute(ALEFixSuggest output should be correct for only filetype handlers):
 Execute(ALEFixSuggest should suggest filetype and generic handlers):
   let &filetype = 'testft2.testft'
 
-  call ale#fix#registry#Add('zed', 'XYZ', ['testft2'], 'Zedify things.')
+  call ale#fix#registry#Add('zed', 'XYZ', ['testft2'], 'Zedify things.', ['foobar'])
   call ale#fix#registry#Add('alpha', 'XYZ', ['testft'], 'Alpha things.')
   call ale#fix#registry#Add('generic', 'XYZ', [], 'Generic things.')
 
@@ -89,7 +89,7 @@ Execute(ALEFixSuggest should suggest filetype and generic handlers):
   \   'Try the following fixers appropriate for the filetype:',
   \   '',
   \   '''alpha'' - Alpha things.',
-  \   '''zed'' - Zedify things.',
+  \   '''zed'', ''foobar'' - Zedify things.',
   \   '',
   \   'Try the following generic fixers:',
   \   '',

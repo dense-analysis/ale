@@ -1780,7 +1780,8 @@ ale#engine#ManageDirectory(buffer, directory)    *ale#engine#ManageDirectory()*
   files.
 
 
-ale#fix#registry#Add(name, func, filetypes, desc)      *ale#fix#registry#Add()*
+ale#fix#registry#Add(name, func, filetypes, desc, [aliases])
+                                                       *ale#fix#registry#Add()*
 
   Given a |String| `name` for a name to add to the registry, a |String| `func`
   for a function name, a |List| `filetypes` for a list of filetypes to
@@ -1789,6 +1790,11 @@ ale#fix#registry#Add(name, func, filetypes, desc)      *ale#fix#registry#Add()*
 
   The `name` can then be used for |g:ale_fixers| in place of the function
   name, and suggested for fixing files.
+
+  An optional |List| of |String|s for aliases can be passed as the `aliases`
+  argument. These aliases can also be used for looking up a fixer function.
+  ALE will search for fixers in the registry first by `name`, then by their
+  `aliases`.
 
 
 ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
