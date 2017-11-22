@@ -1,5 +1,6 @@
 " Author: tunnckoCore (Charlike Mike Reagent) <mameto2011@gmail.com>,
-"         w0rp <devw0rp@gmail.com>, morhetz (Pavel Pertsev) <morhetz@gmail.com>
+"         w0rp <devw0rp@gmail.com>, morhetz (Pavel Pertsev) <morhetz@gmail.com>,
+"         Ahmed El Gabri <@ahmedelgabri>
 " Description: Integration of Prettier with ALE.
 
 call ale#Set('javascript_prettier_executable', 'prettier')
@@ -42,22 +43,7 @@ function! ale#fixers#prettier#Fix(buffer) abort
     let l:config = s:FindConfig(a:buffer)
     let l:use_config = ale#Var(a:buffer, 'javascript_prettier_use_local_config')
                 \ && !empty(l:config)
-    let l:filetype = getbufvar(a:buffer, '&filetype')
-
-    " Append the --parser flag depending on the current filetype (unless it's
-    " already set in g:javascript_prettier_options).
-    if match(l:options, '--parser') == -1
-        if l:filetype is# 'typescript'
-            let l:parser = 'typescript'
-        elseif l:filetype =~# 'css\|scss\|less'
-            let l:parser = 'postcss'
-        elseif l:filetype is# 'json'
-            let l:parser = 'json'
-        else
-            let l:parser = 'babylon'
-        endif
-        let l:options = (!empty(l:options) ? l:options . ' ' : '') . '--parser ' . l:parser
-    endif
+    let l:options = (!empty(l:options) ? l:options : '')
 
     return {
     \   'command': ale#Escape(ale#fixers#prettier#GetExecutable(a:buffer))
