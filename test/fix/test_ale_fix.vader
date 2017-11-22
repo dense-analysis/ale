@@ -67,7 +67,14 @@ Before:
   endfunction
 
   function! FirstChainCallbackSkipped(buffer)
-    return {'command': '', 'chain_with': 'SecondChainCallback'}
+    let l:ChainWith = 'SecondChainCallback'
+
+    " Test with lambdas where support is available.
+    if has('lambda')
+      let l:ChainWith = {buffer, output -> SecondChainCallback(buffer, output)}
+    endif
+
+    return {'command': '', 'chain_with': l:ChainWith}
   endfunction
 
   function! FirstChainCallbackSecondSkipped(buffer)

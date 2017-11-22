@@ -108,7 +108,7 @@ function! s:HandleExit(job_id, exit_code) abort
         let l:job_info.output = readfile(l:job_info.file_to_read)
     endif
 
-    let l:chain_callback = get(l:job_info, 'chain_with', v:null)
+    let l:ChainCallback = get(l:job_info, 'chain_with', v:null)
     let l:ProcessWith = get(l:job_info, 'process_with', v:null)
 
     " Post-process the output with a function if we have one.
@@ -123,13 +123,13 @@ function! s:HandleExit(job_id, exit_code) abort
     " otherwise skip this job and use the input from before.
     "
     " We'll use the input from before for chained commands.
-    if l:chain_callback is v:null && !empty(split(join(l:job_info.output)))
+    if l:ChainCallback is v:null && !empty(split(join(l:job_info.output)))
         let l:input = l:job_info.output
     else
         let l:input = l:job_info.input
     endif
 
-    let l:next_index = l:chain_callback is v:null
+    let l:next_index = l:ChainCallback is v:null
     \   ? l:job_info.callback_index + 1
     \   : l:job_info.callback_index
 
@@ -139,7 +139,7 @@ function! s:HandleExit(job_id, exit_code) abort
     \   'output': l:job_info.output,
     \   'callback_list': l:job_info.callback_list,
     \   'callback_index': l:next_index,
-    \   'chain_callback': l:chain_callback,
+    \   'chain_callback': l:ChainCallback,
     \})
 endfunction
 
@@ -193,12 +193,12 @@ function! s:RunJob(options) abort
     let l:input = a:options.input
     let l:output_stream = a:options.output_stream
     let l:read_temporary_file = a:options.read_temporary_file
-    let l:chain_with = a:options.chain_with
+    let l:ChainWith = a:options.chain_with
     let l:read_buffer = a:options.read_buffer
 
     if empty(l:command)
         " If there's nothing further to chain the command with, stop here.
-        if l:chain_with is v:null
+        if l:ChainWith is v:null
             return 0
         endif
 
@@ -208,7 +208,7 @@ function! s:RunJob(options) abort
         \   'input': l:input,
         \   'callback_index': a:options.callback_index,
         \   'callback_list': a:options.callback_list,
-        \   'chain_callback': l:chain_with,
+        \   'chain_callback': l:ChainWith,
         \   'output': [],
         \})
 
@@ -232,7 +232,7 @@ function! s:RunJob(options) abort
     \   'buffer': l:buffer,
     \   'input': l:input,
     \   'output': [],
-    \   'chain_with': l:chain_with,
+    \   'chain_with': l:ChainWith,
     \   'callback_index': a:options.callback_index,
     \   'callback_list': a:options.callback_list,
     \   'process_with': a:options.process_with,
@@ -298,14 +298,14 @@ function! s:RunFixer(options) abort
     let l:buffer = a:options.buffer
     let l:input = a:options.input
     let l:index = a:options.callback_index
-    let l:chain_callback = get(a:options, 'chain_callback', v:null)
+    let l:ChainCallback = get(a:options, 'chain_callback', v:null)
 
     while len(a:options.callback_list) > l:index
-        let l:Function = l:chain_callback isnot v:null
-        \   ? ale#util#GetFunction(l:chain_callback)
+        let l:Function = l:ChainCallback isnot v:null
+        \   ? ale#util#GetFunction(l:ChainCallback)
         \   : a:options.callback_list[l:index]
 
-        if l:chain_callback isnot v:null
+        if l:ChainCallback isnot v:null
             " Chained commands accept (buffer, output, [input])
             let l:result = ale#util#FunctionArgCount(l:Function) == 2
             \   ? call(l:Function, [l:buffer, a:options.output])
@@ -324,10 +324,9 @@ function! s:RunFixer(options) abort
             let l:input = l:result
             let l:index += 1
         else
-            " Capitals are required for funcrefs.
-            let l:Chain_with = get(l:result, 'chain_with', v:null)
+            let l:ChainWith = get(l:result, 'chain_with', v:null)
             " Default to piping the buffer for the last fixer in the chain.
-            let l:read_buffer = get(l:result, 'read_buffer', l:Chain_with is v:null)
+            let l:read_buffer = get(l:result, 'read_buffer', l:ChainWith is v:null)
 
             let l:job_ran = s:RunJob({
             \   'buffer': l:buffer,
@@ -336,7 +335,7 @@ function! s:RunFixer(options) abort
             \   'output_stream': get(l:result, 'output_stream', 'stdout'),
             \   'read_temporary_file': get(l:result, 'read_temporary_file', 0),
             \   'read_buffer': l:read_buffer,
-            \   'chain_with': l:Chain_with,
+            \   'chain_with': l:ChainWith,
             \   'callback_list': a:options.callback_list,
             \   'callback_index': l:index,
             \   'process_with': get(l:result, 'process_with', v:null),
