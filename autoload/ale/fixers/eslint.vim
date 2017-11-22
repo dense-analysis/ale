@@ -14,6 +14,14 @@ function! ale#fixers#eslint#Fix(buffer) abort
     \}
 endfunction
 
+function! ale#fixers#eslint#ProcessFixDryRunOutput(buffer, output) abort
+    for l:item in ale#util#FuzzyJSONDecode(a:output, [])
+        return split(get(l:item, 'output', ''), "\n")
+    endfor
+
+    return []
+endfunction
+
 function! ale#fixers#eslint#ApplyFixForVersion(buffer, version_output) abort
     let l:executable = ale#handlers#eslint#GetExecutable(a:buffer)
     let l:version = ale#semver#GetVersion(l:executable, a:version_output)
@@ -29,6 +37,15 @@ function! ale#fixers#eslint#ApplyFixForVersion(buffer, version_output) abort
         return {
         \   'command': ale#node#Executable(a:buffer, l:executable)
         \       . ' --stdin-filename %s --stdin --fix-to-stdout',
+        \}
+    endif
+
+    " 4.9.0 is the first version with --fix-dry-run
+    if ale#semver#GTE(l:version, [4, 9, 0])
+        return {
+        \   'command': ale#node#Executable(a:buffer, l:executable)
+        \       . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
+        \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
         \}
     endif
 

@@ -69,6 +69,18 @@ Execute(The version check should be correct):
   \ },
   \ ale#fixers#eslint#Fix(bufnr(''))
 
+Execute(--fix-dry-run should be used for 4.9.0 and up):
+  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.js')
+
+  AssertEqual
+  \ {
+  \   'command': (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
+  \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
+  \ },
+  \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), ['4.9.0'])
+
 Execute(--fix-to-stdout should be used for eslint_d):
   call ale#test#SetFilename('../eslint-test-files/app-with-eslint-d/testfile.js')
 
@@ -114,3 +126,27 @@ Execute(The version number should be cached):
   \   'command': '',
   \ },
   \ ale#fixers#eslint#Fix(bufnr(''))
+
+  " Call it again without the version output. We should use the newer command.
+  AssertEqual
+  \ {
+  \   'command': (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
+  \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
+  \ },
+  \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), [])
+
+Execute(The --fix-dry-run post-processor should handle JSON output correctly):
+  AssertEqual
+  \ [],
+  \ ale#fixers#eslint#ProcessFixDryRunOutput(bufnr(''), [])
+  AssertEqual
+  \ [],
+  \ ale#fixers#eslint#ProcessFixDryRunOutput(bufnr(''), [''])
+  AssertEqual
+  \ [],
+  \ ale#fixers#eslint#ProcessFixDryRunOutput(bufnr(''), ['[{}]'])
+  AssertEqual
+  \ ['foo', 'bar'],
+  \ ale#fixers#eslint#ProcessFixDryRunOutput(bufnr(''), ['[{"output": "foo\nbar"}]'])

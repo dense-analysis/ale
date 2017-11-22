@@ -250,7 +250,14 @@ function! ale#util#FuzzyJSONDecode(data, default) abort
     let l:str = type(a:data) == type('') ? a:data : join(a:data, '')
 
     try
-        return json_decode(l:str)
+        let l:result = json_decode(l:str)
+
+        " Vim 8 only uses the value v:none for decoding blank strings.
+        if !has('nvim') && l:result is v:none
+            return a:default
+        endif
+
+        return l:result
     catch /E474/
         return a:default
     endtry
