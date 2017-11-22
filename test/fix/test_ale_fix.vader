@@ -156,7 +156,7 @@ Before:
   endfunction
 
   function! JSONPostProcessor(buffer, output) abort
-    return json_decode(a:output[0]).output
+    return json_decode(join(split(a:output[0]))).output
   endfunction
 
 After:
