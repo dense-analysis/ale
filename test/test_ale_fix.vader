@@ -105,6 +105,11 @@ Before:
     return {'command': ''}
   endfunction
 
+  " echo will output a single blank line, and we should ingore it.
+  function! IgnoredEmptyOutput(buffer, output)
+    return {'command': 'echo'}
+  endfunction
+
   function! SetUpLinters()
     call ale#linter#Define('testft', {
     \ 'name': 'testlinter',
@@ -149,6 +154,7 @@ After:
   delfunction ChainEndSkipped
   delfunction SetUpLinters
   delfunction GetLastMessage
+  delfunction IgnoredEmptyOutput
 
   call ale#test#RestoreDirectory()
 
@@ -562,6 +568,15 @@ Expect(The default line should be added):
 
 Execute(Test fixing with chained callback where the final callback is skipped):
   let g:ale_fixers.testft = ['ChainWhereLastIsSkipped']
+  ALEFix
+
+Expect(The lines should be the same):
+  a
+  b
+  c
+
+Execute(Empty output should be ignored):
+  let g:ale_fixers.testft = ['IgnoredEmptyOutput']
   ALEFix
 
 Expect(The lines should be the same):

@@ -114,9 +114,11 @@ function! s:HandleExit(job_id, exit_code) abort
     " otherwise skip this job and use the input from before.
     "
     " We'll use the input from before for chained commands.
-    let l:input = l:chain_callback is v:null && !empty(l:job_info.output)
-    \   ? l:job_info.output
-    \   : l:job_info.input
+    if l:chain_callback is v:null && !empty(split(join(l:job_info.output)))
+        let l:input = l:job_info.output
+    else
+        let l:input = l:job_info.input
+    endif
 
     let l:next_index = l:chain_callback is v:null
     \   ? l:job_info.callback_index + 1
