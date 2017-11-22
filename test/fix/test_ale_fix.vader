@@ -148,15 +148,20 @@ Before:
       let l:ProcessWith = {buffer, output -> JSONPostProcessor(buffer, output)}
     endif
 
+    " Escaping needs to be handled specially for CMD on Windows.
+    let l:json_string = has('win32')
+    \ ? '{"output":["x","y","z"]}'
+    \ : ale#Escape('{"output": ["x", "y", "z"]}')
+
     return {
-    \ 'command': 'echo ' . ale#Escape('{"output": ["x", "y", "z"]}'),
+    \ 'command': 'echo ' . l:json_string,
     \ 'read_buffer': 0,
     \ 'process_with': l:ProcessWith,
     \}
   endfunction
 
   function! JSONPostProcessor(buffer, output) abort
-    return json_decode(join(split(a:output[0]))).output
+    return json_decode(a:output[0]).output
   endfunction
 
 After:
