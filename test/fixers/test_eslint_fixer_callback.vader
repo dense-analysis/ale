@@ -75,8 +75,8 @@ Execute(--fix-to-stdout should be used for eslint_d):
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
-  \   'command': (has('win32') ? 'node.exe ' : '')
-  \     . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
+  \   'command':
+  \     ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
   \     . ' -c ' . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/package.json'))
   \     . ' --fix %t',
   \ },
@@ -86,8 +86,8 @@ Execute(--fix-to-stdout should be used for eslint_d):
   " We look at the ESLint version instead of the eslint_d version.
   AssertEqual
   \ {
-  \   'command': (has('win32') ? 'node.exe ' : '')
-  \     . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
+  \   'command':
+  \     ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
   \     . ' --stdin-filename %s --stdin --fix-to-stdout',
   \ },
   \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), ['v3.19.0 (eslint_d v4.2.0)'])
@@ -95,8 +95,8 @@ Execute(--fix-to-stdout should be used for eslint_d):
   " The option should be used for new versions too.
   AssertEqual
   \ {
-  \   'command': (has('win32') ? 'node.exe ' : '')
-  \     . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
+  \   'command':
+  \     ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
   \     . ' --stdin-filename %s --stdin --fix-to-stdout',
   \ },
   \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), ['4.9.0'])
