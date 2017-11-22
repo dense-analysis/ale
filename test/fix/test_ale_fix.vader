@@ -6,7 +6,7 @@ Before:
   Save g:ale_lint_on_save
   Save g:ale_echo_cursor
 
-  silent! cd /testplugin/test
+  silent! cd /testplugin/test/fix
 
   let g:ale_enabled = 0
   let g:ale_echo_cursor = 0
