@@ -459,6 +459,15 @@ are supported for running the commands.
                       for commands which need to modify some file on disk in
                       order to fix files.
 
+  `process_with`        An optional callback for post-processing.
+
+                      The callback must accept two arguments,
+                      `(buffer, output)`, which can be used for converting
+                      the output from a command into lines to replace the
+                      buffer's contents with.
+
+                      A |List| of |String|s must be returned.
+
   `chain_with`          An optional key for defining a callback to call next.
 
                       The callback must accept two or three arguments,

@@ -109,6 +109,15 @@ function! s:HandleExit(job_id, exit_code) abort
     endif
 
     let l:chain_callback = get(l:job_info, 'chain_with', v:null)
+    let l:ProcessWith = get(l:job_info, 'process_with', v:null)
+
+    " Post-process the output with a function if we have one.
+    if l:ProcessWith isnot v:null
+        let l:job_info.output = call(
+        \   ale#util#GetFunction(l:ProcessWith),
+        \   [l:buffer, l:job_info.output]
+        \)
+    endif
 
     " Use the output of the job for changing the file if it isn't empty,
     " otherwise skip this job and use the input from before.
@@ -226,6 +235,7 @@ function! s:RunJob(options) abort
     \   'chain_with': l:chain_with,
     \   'callback_index': a:options.callback_index,
     \   'callback_list': a:options.callback_list,
+    \   'process_with': a:options.process_with,
     \}
 
     if l:read_temporary_file
@@ -329,6 +339,7 @@ function! s:RunFixer(options) abort
             \   'chain_with': l:Chain_with,
             \   'callback_list': a:options.callback_list,
             \   'callback_index': l:index,
+            \   'process_with': get(l:result, 'process_with', v:null),
             \})
 
             if !l:job_ran

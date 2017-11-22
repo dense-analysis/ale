@@ -133,6 +133,25 @@ Before:
     return empty(l:lines) ? '' : l:lines[-1]
   endfunction
 
+  function! FixWithJSONPostProcessing(buffer) abort
+    let l:ProcessWith = 'JSONPostProcessor'
+
+    " Test with lambdas where support is available.
+    if has('lambda')
+      let l:ProcessWith = {buffer, output -> JSONPostProcessor(buffer, output)}
+    endif
+
+    return {
+    \ 'command': 'echo ' . ale#Escape('{"output": ["x", "y", "z"]}'),
+    \ 'read_buffer': 0,
+    \ 'process_with': l:ProcessWith,
+    \}
+  endfunction
+
+  function! JSONPostProcessor(buffer, output) abort
+    return json_decode(a:output[0]).output
+  endfunction
+
 After:
   Restore
   unlet! g:ale_run_synchronously
@@ -160,6 +179,8 @@ After:
   delfunction GetLastMessage
   delfunction IgnoredEmptyOutput
   delfunction EchoLineNoPipe
+  delfunction FixWithJSONPostProcessing
+  delfunction JSONPostProcessor
 
   call ale#test#RestoreDirectory()
 
@@ -612,3 +633,12 @@ Execute(A temporary file shouldn't be piped into the command when disabled):
 
 Expect(The new line should be used):
   new line
+
+Execute(Post-processing should work):
+  let g:ale_fixers.testft = ['FixWithJSONPostProcessing']
+  ALEFix
+
+Expect(The lines in the JSON should be used):
+  x
+  y
+  z
