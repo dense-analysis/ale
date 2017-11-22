@@ -605,5 +605,10 @@ Execute(A temporary file shouldn't be piped into the command when disabled):
   \ string(ale#job#PrepareCommand('echo new line')),
   \ string(ale#history#Get(bufnr(''))[-1].command)
 
+  " Remove trailing whitespace for Windows.
+  if has('win32')
+    %s/[[:space:]]*$//g
+  endif
+
 Expect(The new line should be used):
   new line
