@@ -8,6 +8,13 @@ Execute(The ghc handler should handle hdevtools output):
   \     'type': 'W',
   \     'col': 62,
   \     'text': '• Couldnt match type ‘a -> T.Text’ with ‘T.Text’ Expected type: [T.Text]',
+  \     'detail': join([
+  \      'foo.hs:147:62: warning:',
+  \      '• Couldnt match type ‘a -> T.Text’ with ‘T.Text’',
+  \      '  Expected type: [T.Text]',
+  \      '',
+  \      '',
+  \      ], "\n"),
   \   },
   \ ],
   \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
@@ -26,12 +33,24 @@ Execute(The ghc handler should handle ghc 8 output):
   \     'type': 'E',
   \     'col': 1,
   \     'text': 'Failed to load interface for ‘GitHub.Data’ Use -v to see a list of the files searched for.',
+  \     'detail': join([
+  \      "src/Appoint/Lib.hs:6:1: error:",
+  \      "    Failed to load interface for ‘GitHub.Data’",
+  \      "    Use -v to see a list of the files searched for.",
+  \      "",
+  \      ""], "\n"),
   \   },
   \   {
   \     'lnum': 7,
   \     'type': 'W',
   \     'col': 1,
   \     'text': 'Failed to load interface for ‘GitHub.Endpoints.PullRequests’ Use -v to see a list of the files searched for.',
+  \     'detail': join([
+  \      "src/Appoint/Lib.hs:7:1: warning:",
+  \      "    Failed to load interface for ‘GitHub.Endpoints.PullRequests’",
+  \      "    Use -v to see a list of the files searched for.",
+  \      "",
+  \      ""], "\n"),
   \   },
   \ ],
   \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
@@ -55,18 +74,21 @@ Execute(The ghc handler should handle ghc 7 output):
   \     'type': 'E',
   \     'col': 1,
   \     'text': 'parse error (possibly incorrect indentation or mismatched brackets)',
+  \     'detail': "src/Main.hs:168:1:\n    parse error (possibly incorrect indentation or mismatched brackets)\n\n",
   \   },
   \   {
   \     'lnum': 84,
   \     'col': 1,
   \     'type': 'W',
   \     'text': 'Top-level binding with no type signature:^@  myLayout :: Choose Tall (Choose (Mirror Tall) Full) a',
+  \     'detail': "src/Main.hs:84:1:Warning: Top-level binding with no type signature:^@  myLayout :: Choose Tall (Choose (Mirror Tall) Full) a\n\n",
   \   },
   \   {
   \     'lnum': 94,
   \     'col': 5,
   \     'type': 'E',
   \     'text': 'Some other error',
+  \     'detail': "src/Main.hs:94:5:Error:\n  Some other error\n\n",
   \   },
   \ ],
   \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
