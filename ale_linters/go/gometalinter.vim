@@ -34,9 +34,12 @@ function! ale_linters#go#gometalinter#GetMatches(lines) abort
 endfunction
 
 function! ale_linters#go#gometalinter#Handler(buffer, lines) abort
-    let l:dir = expand('#' . a:buffer . ':p:h')
+    let l:dir = getcwd()
     let l:output = []
 
+    " gometalinter always gives the output in filenames with a path that is relative to
+    " the current directory, so passing `l:dir` and the match name to `GetAbsPath` should
+    " compute the correct absolute filepath
     for l:match in ale_linters#go#gometalinter#GetMatches(a:lines)
         call add(l:output, {
         \   'filename': ale#path#GetAbsPath(l:dir, l:match[1]),
