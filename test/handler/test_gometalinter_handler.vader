@@ -50,6 +50,6 @@ Execute (The gometalinter handler should handle relative paths correctly):
   \   },
   \ ],
   \ ale_linters#go#gometalinter#Handler(bufnr(''), [
-  \   'test.go:12:3:warning: expected ''package'', found ''IDENT'' gibberish (staticcheck)',
-  \   'test.go:37:5:error: expected ''package'', found ''IDENT'' gibberish (golint)',
+  \   'app/test.go:12:3:warning: expected ''package'', found ''IDENT'' gibberish (staticcheck)',
+  \   'app/test.go:37:5:error: expected ''package'', found ''IDENT'' gibberish (golint)',
   \ ])
