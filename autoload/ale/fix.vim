@@ -35,7 +35,7 @@ function! ale#fix#ApplyQueuedFixes() abort
 
         if l:end_line >= l:start_line
             let l:save = winsaveview()
-            silent execute l:start_line . ',' . l:end_line . 'd'
+            silent execute l:start_line . ',' . l:end_line . 'd_'
             call winrestview(l:save)
         endif
 
