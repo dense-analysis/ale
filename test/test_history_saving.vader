@@ -43,6 +43,7 @@ Before:
 After:
   Restore
 
+  let g:ale_cmd_wrapper = ''
   unlet! b:ale_fixers
   unlet! b:ale_enabled
   " Clear the history we changed.
