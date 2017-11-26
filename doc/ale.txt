@@ -583,9 +583,9 @@ g:ale_cmd_wrapper                                           *g:ale_cmd_wrapper*
   to 'nice -n15' to have lower priority than other processes, including the
   editor itself.
 
-  If creating your own wrapper, be sure to handle a command passed as multiple
-  arguments and handle arguments with spaces and special characters in them.
-  Prefer this: >
+  The wrapper must be able to accept the command as multiple arguments,
+  possibly with special characters and spaces in them. If creating your own,
+  prefer this: >
 
     #/bin/sh
     exec nice -n15 ionice -c idle "$@"
@@ -596,6 +596,9 @@ g:ale_cmd_wrapper                                           *g:ale_cmd_wrapper*
     #/bin/sh
     exec nice -n15 ionice -c idle $1
 <
+
+  Known issue: currently, the path to the wrapper can't contain spaces
+  (`nice -n5` is fine, `/home/user name with spaces/command` is not).
 
 g:ale_completion_delay                                 *g:ale_completion_delay*
 
