@@ -2,6 +2,7 @@
 " Description: A language server for Rust
 
 call ale#Set('rust_rls_executable', 'rls')
+call ale#Set('rust_rls_toolchain', 'nightly')
 
 function! ale_linters#rust#rls#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'rust_rls_executable')
@@ -9,8 +10,10 @@ endfunction
 
 function! ale_linters#rust#rls#GetCommand(buffer) abort
     let l:executable = ale_linters#rust#rls#GetExecutable(a:buffer)
+    let l:toolchain = ale#Var(a:buffer, 'rust_rls_toolchain')
 
-    return ale#Escape(l:executable) . ' +nightly'
+    return ale#Escape(l:executable)
+    \   . ' +' . ale#Escape(l:toolchain)
 endfunction
 
 function! ale_linters#rust#rls#GetLanguage(buffer) abort

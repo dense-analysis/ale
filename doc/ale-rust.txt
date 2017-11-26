@@ -70,6 +70,17 @@ g:ale_rust_rls_executable                           *g:ale_rust_rls_executable*
   This variable can be modified to change the executable path for `rls`.
 
 
+g:ale_rust_rls_toolchain                             *g:ale_rust_rls_toolchain*
+                                                     *b:ale_rust_rls_toolchain*
+  Type: |String|
+  Default: `'nightly'`
+
+  This option can be set to change the toolchain used for `rls`. Possible
+  values include `'nightly'`, `'beta'`, and `'stable'`.
+
+  The `rls` server will only be started once per executable.
+
+
 ===============================================================================
 rustc                                                          *ale-rust-rustc*
 
