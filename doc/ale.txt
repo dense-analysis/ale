@@ -10,7 +10,9 @@ CONTENTS                                                         *ale-contents*
   2. Supported Languages & Tools..........|ale-support|
   3. Linting..............................|ale-lint|
   4. Fixing Problems......................|ale-fix|
-  5. Completion...........................|ale-completion|
+  5. Language Server Protocol Support.....|ale-lsp|
+    5.1 Completion........................|ale-completion|
+    5.2 Go To Definition..................|ale-go-to-definition|
   6. Global Options.......................|ale-options|
     6.1 Highlights........................|ale-highlights|
     6.2 Options for write-good Linter.....|ale-write-good-options|
@@ -545,22 +547,46 @@ by default.
 
 
 ===============================================================================
-5. Completion                                                  *ale-completion*
+5. Language Server Protocol Support                                   *ale-lsp*
 
-ALE offers some limited support for automatic completion of code while you
-type. Completion is only supported via Language Server Protocol servers which
-ALE can connect to for linting, which can offer good built-in support for
-suggesting completion information. ALE will only suggest symbols for
-completion for LSP linters that are enabled.
+ALE offers some support for integrating with Language Server Protocol (LSP)
+servers. LSP linters can be used in combination with any other linter, and
+will automatically connect to LSP servers when needed. ALE also supports
+`tsserver` for TypeScript, which uses a different but very similar protocol.
+
+ALE supports the following LSP/tsserver features.
+
+1. Diagnostics/linting - Enabled via selecting linters as usual.
+2. Completion (Only for tsserver)
+3. Go to definition
+
+
+-------------------------------------------------------------------------------
+5.1 Completion                                                 *ale-completion*
 
 NOTE: At the moment, only `tsserver` for TypeScript code is supported for
 completion.
+
+ALE offers limited support for automatic completion of code while you type.
+Completion is only supported while a least one LSP linter is enabled. ALE
+will only suggest symbols provided by the LSP servers.
 
 Suggestions will be made while you type after completion is enabled.
 Completion can be enabled by setting |g:ale_completion_enabled| to `1`. The
 delay for completion can be configured with |g:ale_completion_delay|. ALE will
 only suggest so many possible matches for completion. The maximum number of
 items can be controlled with |g:ale_completion_max_suggestions|.
+
+
+-------------------------------------------------------------------------------
+5.2 Go To Definition                                     *ale-go-to-definition*
+
+ALE supports jumping to the files and locations where symbols are defined
+through any enabled LSP linters. The locations ALE will jump to depend on the
+information returned by LSP servers. The following commands are supported:
+
+|ALEGoToDefinition|      - Open the definition of the symbol under the cursor.
+|ALEGoToDefinitionInTab| - The same, but for opening the file in a new tab.
 
 
 ===============================================================================
@@ -1575,6 +1601,22 @@ ALEFixSuggest                                                   *ALEFixSuggest*
 
   See |ale-fix| for more information.
 
+
+ALEGoToDefinition                                           *ALEGoToDefinition*
+
+  Jump to the definition of a symbol under the cursor using the enabled LSP
+  linters for the buffer. ALE will jump to a definition if an LSP server
+  provides a location to jump to. Otherwise, ALE will do nothing.
+
+  A plug mapping `<Plug>(ale_go_to_definition)` is defined for this command.
+
+
+ALEGoToDefinitionInTab                                 *ALEGoToDefinitionInTab*
+
+  The same as |ALEGoToDefinition|, but opens results in a new tab.
+
+  A plug mapping `<Plug>(ale_go_to_definition_in_tab)` is defined for this
+  command.
 
                                                                      *:ALELint*
 ALELint                                                               *ALELint*
