@@ -107,3 +107,12 @@ function! ale#lsp#message#Completion(buffer, line, column, trigger_character) ab
 
     return l:message
 endfunction
+
+function! ale#lsp#message#Definition(buffer, line, column) abort
+    return [0, 'textDocument/definition', {
+    \   'textDocument': {
+    \       'uri': ale#path#ToURI(expand('#' . a:buffer . ':p')),
+    \   },
+    \   'position': {'line': a:line - 1, 'character': a:column},
+    \}]
+endfunction

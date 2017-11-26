@@ -129,6 +129,20 @@ Execute(ale#lsp#message#Completion() should return correct messages with a trigg
   \   }
   \ ],
   \ ale#lsp#message#Completion(bufnr(''), 12, 34, '.')
+  \
+Execute(ale#lsp#message#Definition() should return correct messages):
+  AssertEqual
+  \ [
+  \   0,
+  \   'textDocument/definition',
+  \   {
+  \     'textDocument': {
+  \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
+  \     },
+  \     'position': {'line': 11, 'character': 34},
+  \   }
+  \ ],
+  \ ale#lsp#message#Definition(bufnr(''), 12, 34)
 
 Execute(ale#lsp#tsserver_message#Open() should return correct messages):
   AssertEqual
