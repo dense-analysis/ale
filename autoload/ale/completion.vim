@@ -328,11 +328,7 @@ function! s:GetLSPCompletions(linter) abort
     else
         " Send a message saying the buffer has changed first, otherwise
         " completions won't know what text is nearby.
-        call ale#lsp#Send(
-        \   l:id,
-        \   ale#lsp#message#DidChange(l:buffer),
-        \   l:root
-        \)
+        call ale#lsp#Send(l:id, ale#lsp#message#DidChange(l:buffer), l:root)
 
         " For LSP completions, we need to clamp the column to the length of
         " the line. python-language-server and perhaps others do not implement
