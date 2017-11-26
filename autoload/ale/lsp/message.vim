@@ -86,3 +86,24 @@ function! ale#lsp#message#DidClose(buffer) abort
     \   },
     \}]
 endfunction
+
+let s:COMPLETION_TRIGGER_INVOKED = 1
+let s:COMPLETION_TRIGGER_CHARACTER = 2
+
+function! ale#lsp#message#Completion(buffer, line, column, trigger_character) abort
+    let l:message = [0, 'textDocument/completion', {
+    \   'textDocument': {
+    \       'uri': ale#path#ToURI(expand('#' . a:buffer . ':p')),
+    \   },
+    \   'position': {'line': a:line - 1, 'character': a:column - 1},
+    \}]
+
+    if !empty(a:trigger_character)
+        let l:message[2].context = {
+        \   'triggerKind': s:COMPLETION_TRIGGER_CHARACTER,
+        \   'triggerCharacter': a:trigger_character,
+        \}
+    endif
+
+    return l:message
+endfunction

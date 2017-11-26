@@ -101,6 +101,35 @@ Execute(ale#lsp#message#DidClose() should return correct messages):
   \ ],
   \ ale#lsp#message#DidClose(bufnr(''))
 
+Execute(ale#lsp#message#Completion() should return correct messages):
+  AssertEqual
+  \ [
+  \   0,
+  \   'textDocument/completion',
+  \   {
+  \     'textDocument': {
+  \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
+  \     },
+  \     'position': {'line': 11, 'character': 33},
+  \   }
+  \ ],
+  \ ale#lsp#message#Completion(bufnr(''), 12, 34, '')
+
+Execute(ale#lsp#message#Completion() should return correct messages with a trigger charaacter):
+  AssertEqual
+  \ [
+  \   0,
+  \   'textDocument/completion',
+  \   {
+  \     'textDocument': {
+  \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
+  \     },
+  \     'position': {'line': 11, 'character': 33},
+  \     'context': {'triggerKind': 2, 'triggerCharacter': '.'},
+  \   }
+  \ ],
+  \ ale#lsp#message#Completion(bufnr(''), 12, 34, '.')
+
 Execute(ale#lsp#tsserver_message#Open() should return correct messages):
   AssertEqual
   \ [

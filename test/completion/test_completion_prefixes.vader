@@ -1,0 +1,19 @@
+Given typescript():
+  let abc = y.
+  let foo = ab
+  let foo = (ab)
+
+Execute(Completion should be done after dots in TypeScript):
+  AssertEqual '.', ale#completion#GetPrefix(&filetype, 1, 13)
+
+Execute(Completion should be done after words in TypeScript):
+  AssertEqual 'ab', ale#completion#GetPrefix(&filetype, 2, 13)
+
+Execute(Completion should be done after words in parens in TypeScript):
+  AssertEqual 'ab', ale#completion#GetPrefix(&filetype, 3, 14)
+
+Execute(Completion should not be done after parens in TypeScript):
+  AssertEqual '', ale#completion#GetPrefix(&filetype, 3, 15)
+
+Execute(Completion prefixes should work for other filetypes):
+  AssertEqual 'ab', ale#completion#GetPrefix('xxxyyyzzz', 3, 14)
