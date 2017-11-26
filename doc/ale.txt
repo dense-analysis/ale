@@ -573,7 +573,7 @@ g:ale_change_sign_column_color                 *g:ale_change_sign_column_color*
   windows.
 
 
-g:ale_cmd_wrapper                                           g:ale_cmd_wrapper
+g:ale_cmd_wrapper                                           *g:ale_cmd_wrapper*
 
   Type: String
   Default: ''
@@ -585,16 +585,17 @@ g:ale_cmd_wrapper                                           g:ale_cmd_wrapper
 
   If creating your own wrapper, be sure to handle a command passed as multiple
   arguments and handle arguments with spaces and special characters in them.
-  Prefer this:
+  Prefer this: >
 
     #/bin/sh
     exec nice -n15 ionice -c idle "$@"
+<
 
-  Over this:
+  Over this: >
 
     #/bin/sh
     exec nice -n15 ionice -c idle $1
-
+<
 
 g:ale_completion_delay                                 *g:ale_completion_delay*
 
