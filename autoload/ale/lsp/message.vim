@@ -95,7 +95,7 @@ function! ale#lsp#message#Completion(buffer, line, column, trigger_character) ab
     \   'textDocument': {
     \       'uri': ale#path#ToURI(expand('#' . a:buffer . ':p')),
     \   },
-    \   'position': {'line': a:line - 1, 'character': a:column - 1},
+    \   'position': {'line': a:line - 1, 'character': a:column},
     \}]
 
     if !empty(a:trigger_character)

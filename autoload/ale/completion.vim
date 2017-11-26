@@ -326,6 +326,14 @@ function! s:GetLSPCompletions(linter) abort
         \   b:ale_completion_info.prefix,
         \)
     else
+        " Send a message saying the buffer has changed first, otherwise
+        " completions won't know what text is nearby.
+        call ale#lsp#Send(
+        \   l:id,
+        \   ale#lsp#message#DidChange(l:buffer),
+        \   l:root
+        \)
+
         " For LSP completions, we need to clamp the column to the length of
         " the line. python-language-server and perhaps others do not implement
         " this correctly.
@@ -334,9 +342,9 @@ function! s:GetLSPCompletions(linter) abort
         \   b:ale_completion_info.line,
         \   min([
         \       b:ale_completion_info.line_length,
-        \       b:ale_completion_info.column
+        \       b:ale_completion_info.column,
         \   ]),
-        \   '',
+        \   ale#completion#GetTriggerCharacter(&filetype, b:ale_completion_info.prefix),
         \)
     endif
 

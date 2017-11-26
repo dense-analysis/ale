@@ -110,7 +110,7 @@ Execute(ale#lsp#message#Completion() should return correct messages):
   \     'textDocument': {
   \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
   \     },
-  \     'position': {'line': 11, 'character': 33},
+  \     'position': {'line': 11, 'character': 34},
   \   }
   \ ],
   \ ale#lsp#message#Completion(bufnr(''), 12, 34, '')
@@ -124,7 +124,7 @@ Execute(ale#lsp#message#Completion() should return correct messages with a trigg
   \     'textDocument': {
   \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
   \     },
-  \     'position': {'line': 11, 'character': 33},
+  \     'position': {'line': 11, 'character': 34},
   \     'context': {'triggerKind': 2, 'triggerCharacter': '.'},
   \   }
   \ ],
