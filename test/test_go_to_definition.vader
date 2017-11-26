@@ -79,7 +79,7 @@ Execute(Other files should be jumped to for definition responses):
 
   AssertEqual
   \ [
-  \   'edit ' . fnameescape(g:dir . '/completion_dummy_file'),
+  \   'edit ' . fnameescape(ale#path#Winify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
   AssertEqual [3, 7], getpos('.')[1:2]
@@ -104,7 +104,7 @@ Execute(Other files should be jumped to for definition responses in tabs too):
 
   AssertEqual
   \ [
-  \   'tabedit ' . fnameescape(g:dir . '/completion_dummy_file'),
+  \   'tabedit ' . fnameescape(ale#path#Winify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
   AssertEqual [3, 7], getpos('.')[1:2]
@@ -160,7 +160,7 @@ Execute(Other files should be jumped to for LSP definition responses):
 
   AssertEqual
   \ [
-  \   'edit ' . fnameescape(g:dir . '/completion_dummy_file'),
+  \   'edit ' . fnameescape(ale#path#Winify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
   AssertEqual [3, 7], getpos('.')[1:2]
