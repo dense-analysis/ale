@@ -10,7 +10,7 @@ let s:temp_regex_prefix =
 \   . '\.\{-}'
 
 
-function! ale#handlers#haskell#ReplaceTempFilename(line, basename)
+function! ale#handlers#haskell#ReplaceTempFilename(line, basename) abort
     let l:temp_filename_regex = s:temp_regex_prefix . a:basename
     return substitute(a:line, l:temp_filename_regex, a:basename, 'g')
 endfunction
