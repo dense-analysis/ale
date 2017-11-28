@@ -79,6 +79,7 @@ CONTENTS                                                         *ale-contents*
     handlebars............................|ale-handlebars-options|
       ember-template-lint.................|ale-handlebars-embertemplatelint|
     haskell...............................|ale-haskell-options|
+      brittany............................|ale-haskell-brittany|
       hdevtools...........................|ale-haskell-hdevtools|
       hfmt................................|ale-haskell-hfmt|
       stack-build.........................|ale-haskell-stack-build|

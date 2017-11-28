@@ -134,6 +134,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'Fix Haskell files with hfmt.',
 \   },
+\   'brittany': {
+\       'function': 'ale#fixers#brittany#Fix',
+\       'suggested_filetypes': ['haskell'],
+\       'description': 'Fix Haskell files with brittany.',
+\   },
 \   'refmt': {
 \       'function': 'ale#fixers#refmt#Fix',
 \       'suggested_filetypes': ['reason'],
