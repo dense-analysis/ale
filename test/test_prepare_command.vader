@@ -1,6 +1,8 @@
 Before:
   Save &shell
   Save &shellcmdflag
+  Save g:ale_cmd_wrapper
+  let g:ale_cmd_wrapper = ''
 
 After:
   Restore
@@ -23,6 +25,10 @@ Execute(sh should be used when the shell is fish):
 
   AssertEqual ['/bin/sh', '-c', 'foobar'], ale#job#PrepareCommand('foobar')
 
+  let g:ale_cmd_wrapper = 'nice -n5'
+
+  AssertEqual ['nice', '-n5', '/bin/sh', '-c', 'foobar'], ale#job#PrepareCommand('foobar')
+
 Execute(Other shells should be used when set):
   let &shell = '/bin/bash'
   let &shellcmdflag = '-c'
@@ -30,9 +36,17 @@ Execute(Other shells should be used when set):
 
   AssertEqual ['/bin/bash', '-c', 'foobar'], ale#job#PrepareCommand('foobar')
 
+  let g:ale_cmd_wrapper = 'nice -n5'
+
+  AssertEqual ['nice', '-n5', '/bin/bash', '-c', 'foobar'], ale#job#PrepareCommand('foobar')
+
 Execute(cmd /c as a string should be used on Windows):
   let &shell = 'who cares'
   let &shellcmdflag = 'whatever'
   let g:ale_has_override = {'win32': 1}
 
   AssertEqual 'cmd /c foobar', ale#job#PrepareCommand('foobar')
+
+  let g:ale_cmd_wrapper = 'nice -n5'
+
+  AssertEqual 'nice -n5 cmd /c foobar', ale#job#PrepareCommand('foobar')
