@@ -170,6 +170,7 @@ CONTENTS                                                         *ale-contents*
       rails_best_practices................|ale-ruby-rails_best_practices|
       reek................................|ale-ruby-reek|
       rubocop.............................|ale-ruby-rubocop|
+      ruby................................|ale-ruby-ruby|
     rust..................................|ale-rust-options|
       cargo...............................|ale-rust-cargo|
       rls.................................|ale-rust-rls|
