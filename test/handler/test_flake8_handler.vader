@@ -1,8 +1,16 @@
 Before:
-    runtime ale_linters/python/flake8.vim
+  Save g:ale_warn_about_trailing_blank_lines
+
+  let g:ale_warn_about_trailing_blank_lines = 1
+
+  runtime ale_linters/python/flake8.vim
 
 After:
-    call ale#linter#Reset()
+  Restore
+
+  unlet! b:ale_warn_about_trailing_blank_lines
+
+  call ale#linter#Reset()
 
 Execute(The flake8 handler should handle basic warnings and syntax errors):
   AssertEqual
@@ -126,7 +134,7 @@ Execute(The flake8 handler should handle stack traces):
   \   'ImportError: No module named parser',
   \ ])
 
-Execute (The flake8 handler should handle names with spaces):
+Execute(The flake8 handler should handle names with spaces):
   AssertEqual
   \ [
   \   {
@@ -140,4 +148,30 @@ Execute (The flake8 handler should handle names with spaces):
   \ ],
   \ ale_linters#python#flake8#Handle(42, [
   \   'C:\something\with spaces.py:6:6: E111 indentation is not a multiple of four',
+  \ ])
+
+Execute(Warnings about trailing blank lines should be reported by default):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 6,
+  \     'col': 1,
+  \     'code': 'W391',
+  \     'type': 'W',
+  \     'sub_type': 'style',
+  \     'text': 'blank line at end of file',
+  \   },
+  \ ],
+  \ ale_linters#python#flake8#Handle(bufnr(''), [
+  \   'foo.py:6:1: W391 blank line at end of file',
+  \ ])
+
+Execute(Disabling trailing blank line warnings should work):
+  let b:ale_warn_about_trailing_blank_lines = 0
+
+  AssertEqual
+  \ [
+  \ ],
+  \ ale_linters#python#flake8#Handle(bufnr(''), [
+  \   'foo.py:6:1: W391 blank line at end of file',
   \ ])

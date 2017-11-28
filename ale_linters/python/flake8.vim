@@ -91,6 +91,12 @@ function! ale_linters#python#flake8#Handle(buffer, lines) abort
             continue
         endif
 
+        if l:code is# 'W391'
+        \&& !ale#Var(a:buffer, 'warn_about_trailing_blank_lines')
+            " Skip warnings for trailing blank lines if the option is off
+            continue
+        endif
+
         let l:item = {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,

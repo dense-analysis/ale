@@ -1,7 +1,15 @@
 Before:
+  Save g:ale_warn_about_trailing_blank_lines
+
+  let g:ale_warn_about_trailing_blank_lines = 1
+
   runtime ale_linters/python/pycodestyle.vim
 
 After:
+  Restore
+
+  unlet! b:ale_warn_about_trailing_blank_lines
+
   call ale#linter#Reset()
   silent file something_else.py
 
@@ -63,4 +71,30 @@ Execute(The pycodestyle handler should parse output):
   \   'stdin:88:5: E301 expected 1 blank line, found 0',
   \   'stdin:222:34: W602 deprecated form of raising exception',
   \   'example.py:544:21: W601 .has_key() is deprecated, use ''in''',
+  \ ])
+
+Execute(Warnings about trailing blank lines should be reported by default):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 6,
+  \     'col': 1,
+  \     'code': 'W391',
+  \     'type': 'W',
+  \     'sub_type': 'style',
+  \     'text': 'blank line at end of file',
+  \   },
+  \ ],
+  \ ale_linters#python#pycodestyle#Handle(bufnr(''), [
+  \   'foo.py:6:1: W391 blank line at end of file',
+  \ ])
+
+Execute(Disabling trailing blank line warnings should work):
+  let b:ale_warn_about_trailing_blank_lines = 0
+
+  AssertEqual
+  \ [
+  \ ],
+  \ ale_linters#python#pycodestyle#Handle(bufnr(''), [
+  \   'foo.py:6:1: W391 blank line at end of file',
   \ ])

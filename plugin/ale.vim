@@ -175,8 +175,9 @@ let g:ale_statusline_format = get(g:, 'ale_statusline_format',
 \)
 
 " This flag can be set to 0 to disable warnings for trailing whitespace
-let g:ale_warn_about_trailing_whitespace =
-\   get(g:, 'ale_warn_about_trailing_whitespace', 1)
+call ale#Set('warn_about_trailing_whitespace', 1)
+" This flag can be set to 0 to disable warnings for trailing blank lines
+call ale#Set('warn_about_trailing_blank_lines', 1)
 
 " A flag for controlling the maximum size of the command history to store.
 let g:ale_max_buffer_history_size = get(g:, 'ale_max_buffer_history_size', 20)

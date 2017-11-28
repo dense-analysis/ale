@@ -1387,6 +1387,18 @@ b:ale_virtualenv_dir_names                         *b:ale_virtualenv_dir_names*
   directory containing the Python file to find virtualenv paths.
 
 
+g:ale_warn_about_trailing_blank_lines   *g:ale_warn_about_trailing_blank_lines*
+b:ale_warn_about_trailing_blank_lines   *b:ale_warn_about_trailing_blank_lines*
+
+  Type: |Number|
+  Default: `1`
+
+  When this option is set to `1`, warnings about trailing blank lines will be
+  shown.
+
+  This option behaves similarly to |g:ale_warn_about_trailing_whitespace|.
+
+
 g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
 b:ale_warn_about_trailing_whitespace     *b:ale_warn_about_trailing_whitespace*
 
@@ -1394,10 +1406,9 @@ b:ale_warn_about_trailing_whitespace     *b:ale_warn_about_trailing_whitespace*
   Default: `1`
 
   When this option is set to `1`, warnings relating to trailing whitespace on
-  lines will be shown in signs, the loclist, and echo messages, etc. If these
-  errors are found to be too irritating while edits are being made, and you
-  have configured Vim to automatically remove trailing whitespace, then you
-  can disable these warnings for some linters by setting this option to `0`.
+  lines will be shown. If warnings are too irritating while editing buffers,
+  and you have configured Vim to automatically remove trailing whitespace,
+  you can disable these warnings by setting this option to `0`.
 
   Not all linters may respect this option. If a linter does not, please file a
   bug report, and it may be possible to add such support.
