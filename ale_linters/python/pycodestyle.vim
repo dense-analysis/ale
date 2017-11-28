@@ -23,6 +23,12 @@ function! ale_linters#python#pycodestyle#Handle(buffer, lines) abort
     " lines are formatted as follows:
     " file.py:21:26: W291 trailing whitespace
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
+        if(l:match[4] is# 'W291' || l:match[4] is# 'W293')
+        \&& !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
+            " Skip warnings for trailing whitespace if the option is off.
+            continue
+        endif
+
         if l:match[4] is# 'W391'
         \&& !ale#Var(a:buffer, 'warn_about_trailing_blank_lines')
             " Skip warnings for trailing blank lines if the option is off
