@@ -1,19 +1,16 @@
 " Author: Sven-Hendrik Haase <svenstaro@gmail.com>
-" Description: glslls-based linter for glsl files
+" Description: A language server for glsl
 
-let g:ale_glsl_glslls_executable =
-\ get(g:, 'ale_glsl_glslls_executable', '/home/svenstaro/prj/glsl-language-server/build/glslls')
-
-let g:ale_glsl_glslls_options = get(g:, 'ale_glsl_glslls_options', '-l /tmp/glslls.log')
+call ale#Set('glsl_glslls_executable', 'glslls')
 
 function! ale_linters#glsl#glslls#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'glsl_glslls_executable')
 endfunction
 
 function! ale_linters#glsl#glslls#GetCommand(buffer) abort
-    return ale_linters#glsl#glslls#GetExecutable(a:buffer)
-    \   . ' ' . ale#Var(a:buffer, 'glsl_glslls_options')
-    \   . ' ' . '--stdin'
+    let l:executable = ale_linters#glsl#glslls#GetExecutable(a:buffer)
+
+    return ale#Escape(l:executable) . ' -l ' . tempname() . ' --stdin --verbose'
 endfunction
 
 function! ale_linters#glsl#glslls#GetLanguage(buffer) abort
