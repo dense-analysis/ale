@@ -22,6 +22,17 @@ function! ale#fixers#eslint#ProcessFixDryRunOutput(buffer, output) abort
     return []
 endfunction
 
+function! ale#fixers#eslint#ProcessEslintDOutput(buffer, output) abort
+    " If the output is an error message, don't use it.
+    for l:line in a:output[:10]
+        if l:line =~# '^Error:'
+            return []
+        endif
+    endfor
+
+    return a:output
+endfunction
+
 function! ale#fixers#eslint#ApplyFixForVersion(buffer, version_output) abort
     let l:executable = ale#handlers#eslint#GetExecutable(a:buffer)
     let l:version = ale#semver#GetVersion(l:executable, a:version_output)
@@ -37,6 +48,7 @@ function! ale#fixers#eslint#ApplyFixForVersion(buffer, version_output) abort
         return {
         \   'command': ale#node#Executable(a:buffer, l:executable)
         \       . ' --stdin-filename %s --stdin --fix-to-stdout',
+        \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
         \}
     endif
 

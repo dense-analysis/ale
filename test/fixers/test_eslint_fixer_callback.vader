@@ -101,6 +101,7 @@ Execute(--fix-to-stdout should be used for eslint_d):
   \   'command':
   \     ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
   \     . ' --stdin-filename %s --stdin --fix-to-stdout',
+  \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
   \ },
   \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), ['v3.19.0 (eslint_d v4.2.0)'])
 
@@ -110,6 +111,7 @@ Execute(--fix-to-stdout should be used for eslint_d):
   \   'command':
   \     ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
   \     . ' --stdin-filename %s --stdin --fix-to-stdout',
+  \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
   \ },
   \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), ['4.9.0'])
 
@@ -150,3 +152,21 @@ Execute(The --fix-dry-run post-processor should handle JSON output correctly):
   AssertEqual
   \ ['foo', 'bar'],
   \ ale#fixers#eslint#ProcessFixDryRunOutput(bufnr(''), ['[{"output": "foo\nbar"}]'])
+
+Execute(The eslint_d post-processor should permit regular JavaScript content):
+  AssertEqual
+  \ [
+  \   'const x = ''Error: foo''',
+  \   'const y = 3',
+  \ ],
+  \ ale#fixers#eslint#ProcessEslintDOutput(bufnr(''), [
+  \   'const x = ''Error: foo''',
+  \   'const y = 3',
+  \ ])
+
+Execute(The eslint_d post-processor should handle error messages correctly):
+  AssertEqual
+  \ [],
+  \ ale#fixers#eslint#ProcessEslintDOutput(bufnr(''), [
+  \   'Error: No ESLint configuration found.',
+  \ ])
