@@ -31,6 +31,7 @@ endfunction
 " through the paths relative to the given buffer.
 function! ale#path#FindNearestFile(buffer, filename) abort
     let l:buffer_filename = fnamemodify(bufname(a:buffer), ':p')
+    let l:buffer_filename = fnameescape(l:buffer_filename)
 
     let l:relative_path = findfile(a:filename, l:buffer_filename . ';')
 
