@@ -188,6 +188,10 @@ let g:ale_history_enabled = get(g:, 'ale_history_enabled', 1)
 " A flag for storing the full output of commands in the history.
 let g:ale_history_log_output = get(g:, 'ale_history_log_output', 1)
 
+" A flag for caching failed executable checks.
+" This is off by default, because it will cause problems.
+call ale#Set('cache_executable_check_failures', 0)
+
 " A dictionary mapping regular expression patterns to arbitrary buffer
 " variables to be set. Useful for configuration ALE based on filename
 " patterns.

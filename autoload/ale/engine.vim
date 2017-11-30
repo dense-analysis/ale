@@ -32,16 +32,20 @@ function! ale#engine#IsExecutable(buffer, executable) abort
         return 0
     endif
 
-    if has_key(s:executable_cache_map, a:executable)
-        return 1
+    " Check for a cached executable() check.
+    let l:result = get(s:executable_cache_map, a:executable, v:null)
+
+    if l:result isnot v:null
+        return l:result
     endif
 
-    let l:result = 0
+    " Check if the file is executable, and convert -1 to 1.
+    let l:result = executable(a:executable) isnot 0
 
-    if executable(a:executable)
-        let s:executable_cache_map[a:executable] = 1
-
-        let l:result = 1
+    " Cache the executable check if we found it, or if the option to cache
+    " failing checks is on.
+    if l:result || g:ale_cache_executable_check_failures
+        let s:executable_cache_map[a:executable] = l:result
     endif
 
     if g:ale_history_enabled
