@@ -26,9 +26,15 @@ function! ale_linters#python#prospector#Handle(buffer, lines) abort
     let l:prospector_error = json_decode(join(a:lines, ''))
 
     for l:error in l:prospector_error.messages
-        if (l:error.code is# 'trailing-whitespace')
+        if (l:error.code is# 'W291' || l:error.code is# 'W293' || l:error.code is# 'trailing-whitespace')
         \ && !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
             " Skip warnings for trailing whitespace if the option is off.
+            continue
+        endif
+
+        if l:error.code is# 'W391'
+        \&& !ale#Var(a:buffer, 'warn_about_trailing_blank_lines')
+            " Skip warnings for trailing blank lines if the option is off
             continue
         endif
 
@@ -38,9 +44,7 @@ function! ale_linters#python#prospector#Handle(buffer, lines) abort
             let l:sub_type = ''
         endif
 
-        if l:error.source =~# '\v\[pylint\]$'
-            let l:type = l:error.code
-        elseif l:error.source =~# '\v\[%(frosted|pep8)\]$'
+        if l:error.source =~# '\v\[%(frosted|pep8)\]$'
             let l:type = l:error.code =~? '\m^W' ? 'W' : 'E'
         elseif l:error.source =~# '\v\[%(dodgy|pyroma|vulture)\]$'
             let l:type = 'W'
