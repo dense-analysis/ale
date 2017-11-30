@@ -125,16 +125,16 @@ g:ale_python_mypy_use_global                     *g:ale_python_mypy_use_global*
 ===============================================================================
 prospector                                              *ale-python-prospector*
 
-g:ale_python_prospector_executable       *g:ale_python_prospector_executable*
-                                         *b:ale_python_prospector_executable*
+g:ale_python_prospector_executable               *g:ale_python_prospector_executable*
+                                                 *b:ale_python_prospector_executable*
   Type: |String|
   Default: `'prospector'`
 
   See |ale-integrations-local-executables|
 
 
-g:ale_python_prospector_options          *g:ale_python_prospector_options*
-                                         *b:ale_python_prospector_options*
+g:ale_python_prospector_options                  *g:ale_python_prospector_options*
+                                                 *b:ale_python_prospector_options*
   Type: |String|
   Default: `''`
 
@@ -154,8 +154,8 @@ g:ale_python_prospector_options          *g:ale_python_prospector_options*
   `python3 -m pip install --user prospector`).
 
 
-g:ale_python_prospector_use_global       *g:ale_python_prospector_use_global*
-                                         *b:ale_python_prospector_use_global*
+g:ale_python_prospector_use_global               *g:ale_python_prospector_use_global*
+                                                 *b:ale_python_prospector_use_global*
   Type: |Number|
   Default: `0`
 
