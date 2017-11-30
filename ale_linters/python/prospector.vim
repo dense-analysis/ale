@@ -26,6 +26,12 @@ function! ale_linters#python#prospector#Handle(buffer, lines) abort
     let l:prospector_error = json_decode(join(a:lines, ''))
 
     for l:error in l:prospector_error.messages
+        if (l:error.code is# 'trailing-whitespace')
+        \ && !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
+            " Skip warnings for trailing whitespace if the option is off.
+            continue
+        endif
+
         if l:error.source =~# '\v\[%(dodgy|mccabe|pep8|pep257|pyroma)\]$'
             let l:sub_type = 'style'
         else
@@ -33,7 +39,7 @@ function! ale_linters#python#prospector#Handle(buffer, lines) abort
         endif
 
         if l:error.source =~# '\v\[pylint\]$'
-            let l:type = l:error.code =~? '\m^[CRW]' ? 'W' : 'E'
+            let l:type = l:error.code
         elseif l:error.source =~# '\v\[%(frosted|pep8)\]$'
             let l:type = l:error.code =~? '\m^W' ? 'W' : 'E'
         elseif l:error.source =~# '\v\[%(dodgy|pyroma|vulture)\]$'
@@ -44,8 +50,9 @@ function! ale_linters#python#prospector#Handle(buffer, lines) abort
 
         let l:item = {
         \   'lnum': l:error.location.line,
-        \   'col': l:error.location.character,
+        \   'col': l:error.location.character + 1,
         \   'text': empty(l:error.code) ? l:error.message : printf('(%s) %s: %s', l:error.source, l:error.code, l:error.message),
+        \   'code': l:error.code,
         \   'type': l:type,
         \   'sub_type': l:sub_type,
         \}
