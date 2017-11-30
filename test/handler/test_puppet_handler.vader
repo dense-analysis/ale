@@ -1,0 +1,19 @@
+Before:
+  runtime ale_linters/puppet/puppet.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The puppet handler should parse lines and column correctly):
+  " Line Error
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 43 ,
+  \     'col': 12,
+  \     'text': "Syntax error at ':'"
+  \   }
+  \ ],
+  \ ale_linters#puppet#puppet#Handle(255, [
+  \   "Error: Could not parse for environment production: Syntax error at ':' at /root/puppetcode/modules/nginx/manifests/init.pp:43:12"
+  \ ])
