@@ -44,7 +44,9 @@ function! ale_linters#python#prospector#Handle(buffer, lines) abort
             let l:sub_type = ''
         endif
 
-        if l:error.source =~# '\v\[%(frosted|pep8)\]$'
+        if l:error.source =~# '\v\[pylint\]$'
+            let l:type = l:error.code =~? '\m^[CRW]' ? 'W' : 'E'
+        elseif l:error.source =~# '\v\[%(frosted|pep8)\]$'
             let l:type = l:error.code =~? '\m^W' ? 'W' : 'E'
         elseif l:error.source =~# '\v\[%(dodgy|pyroma|vulture)\]$'
             let l:type = 'W'
@@ -55,8 +57,8 @@ function! ale_linters#python#prospector#Handle(buffer, lines) abort
         let l:item = {
         \   'lnum': l:error.location.line,
         \   'col': l:error.location.character + 1,
-        \   'text': empty(l:error.code) ? l:error.message : printf('(%s) %s: %s', l:error.source, l:error.code, l:error.message),
-        \   'code': l:error.code,
+        \   'text': l:error.message,
+        \   'code': printf('(%s) %s', l:error.source, l:error.code),
         \   'type': l:type,
         \   'sub_type': l:sub_type,
         \}
