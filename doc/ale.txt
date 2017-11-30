@@ -605,6 +605,19 @@ g:airline#extensions#ale#enabled             *g:airline#extensions#ale#enabled*
   |airline#extensions#ale#warning_symbol|.
 
 
+g:ale_cache_executable_check_failures   *g:ale_cache_executable_check_failures*
+
+  Type: |Number|
+  Default: `0`
+
+  When set to `1`, ALE will cache failing executable checks for linters. By
+  default, only executable checks which succeed will be cached.
+
+  When this option is set to `1`, Vim will have to be restarted after new
+  executables are installed for ALE to be able to run linters for those
+  executables.
+
+
 g:ale_change_sign_column_color                 *g:ale_change_sign_column_color*
 
   Type: |Number|
