@@ -11,7 +11,6 @@
 
 current_image_id=d5a1b5915b09
 image=w0rp/ale
-docker_flags=(--rm -v "$PWD:/testplugin" -v "$PWD/test:/home" -w /testplugin "$image")
 exit_code=0
 
 tests='test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader'
@@ -47,6 +46,12 @@ while [ $# -ne 0 ]; do
     ;;
     --no-vint)
         run_vint=0
+        shift
+    ;;
+    --vint-only)
+        run_vim_tests=0
+        run_neovim_tests=0
+        run_custom_checks=0
         shift
     ;;
     --no-custom-checks)
@@ -88,86 +93,18 @@ docker images -q w0rp/ale | grep "^$current_image_id" > /dev/null \
 
 for vim in $(docker run --rm "$image" ls /vim-build/bin | grep '^neovim\|^vim' ); do
     if [[ $vim =~ ^neovim ]] && ((run_neovim_tests)); then
-        test/script/run-vader-tests $quiet_flag $verbose_flag "$vim" "$tests"
+        test/script/run-vader-tests $quiet_flag $verbose_flag "$vim" "$tests" || exit_code=$?
     elif ((run_vim_tests)); then
-        test/script/run-vader-tests $quiet_flag $verbose_flag "$vim" "$tests"
+        test/script/run-vader-tests $quiet_flag $verbose_flag "$vim" "$tests" || exit_code=$?
     fi
 done
 
 if ((run_vint)); then
-    echo '========================================'
-    echo 'Running Vint to lint our code'
-    echo '========================================'
-    echo 'Vint warnings/errors follow:'
-    echo
-
-    set -o pipefail
-    docker run -a stdout "${docker_flags[@]}" vint -s . || exit_code=$?
-    set +o pipefail
-    echo
+    test/script/run-vint || exit_code=$?
 fi
 
 if ((run_custom_checks)); then
-    echo '========================================'
-    echo 'Running custom checks'
-    echo '========================================'
-    echo 'Custom warnings/errors follow:'
-    echo
-
-    set -o pipefail
-    docker run -a stdout "${docker_flags[@]}" test/script/custom-checks . || exit_code=$?
-    set +o pipefail
-    echo
-
-    echo '========================================'
-    echo 'Checking for duplicate tags'
-    echo '========================================'
-    echo 'Duplicate tags follow:'
-    echo
-
-    grep --exclude=tags -roh '\*.*\*$' doc | sort | uniq -d || exit_code=$?
-
-    echo '========================================'
-    echo 'Checking for invalid tag references'
-    echo '========================================'
-    echo 'Invalid tag references tags follow:'
-    echo
-
-    tag_regex='[gb]\?:\?\(ale\|ALE\)[a-zA-Z_\-]\+'
-
-    # Grep for tags and references, and complain if we find a reference without
-    # a tag for the reference. Only our tags will be included.
-    diff -u \
-        <(grep --exclude=tags -roh "\*$tag_regex\*" doc | sort -u | sed 's/*//g') \
-        <(grep --exclude=tags -roh "|$tag_regex|" doc | sort -u | sed 's/|//g') \
-        | grep '^+[^+]' && exit_code=1
-
-    echo '========================================'
-    echo 'diff README.md and doc/ale.txt tables'
-    echo '========================================'
-    echo 'Differences follow:'
-    echo
-
-    test/script/check-supported-tools-tables || exit_code=$?
-
-    echo '========================================'
-    echo 'Look for badly aligned doc tags'
-    echo '========================================'
-    echo 'Badly aligned tags follow:'
-    echo
-
-    # Documentation tags need to be aligned to the right margin, so look for
-    # tags which aren't at the right margin.
-    grep ' \*[^*]\+\*$' doc/ -r \
-        | awk '{ sep = index($0, ":"); if (length(substr($0, sep + 1 )) < 79) { print } }' \
-        | grep . && exit_code=1
-
-    echo '========================================'
-    echo 'Look for table of contents issues'
-    echo '========================================'
-    echo
-
-    test/script/check-toc || exit_code=$?
+    test/script/custom-checks || exit_code=$?
 fi
 
 exit $exit_code

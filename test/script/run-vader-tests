@@ -7,6 +7,7 @@ green='\033[0;32m'
 nc='\033[0m'
 verbose=0
 quiet=0
+exit_code=0
 
 while [ $# -ne 0 ]; do
     case $1 in
@@ -109,12 +110,14 @@ if [[ $vim =~ ^neovim ]]; then
     set -o pipefail
     docker run -it -e VADER_OUTPUT_FILE=/dev/stderr "${docker_flags[@]}" \
         "/vim-build/bin/$vim" -u test/vimrc \
-        --headless "+Vader! $tests" | filter-vader-output | color-vader-output
+        --headless "+Vader! $tests" | filter-vader-output | color-vader-output || exit_code=$?
     set +o pipefail
 else
     set -o pipefail
     docker run -a stderr -e VADER_OUTPUT_FILE=/dev/stderr "${docker_flags[@]}" \
         "/vim-build/bin/$vim" -u test/vimrc \
-        "+Vader! $tests" 2>&1 | filter-vader-output | color-vader-output
+        "+Vader! $tests" 2>&1 | filter-vader-output | color-vader-output || exit_code=$?
     set +o pipefail
 fi
+
+exit "$exit_code"
