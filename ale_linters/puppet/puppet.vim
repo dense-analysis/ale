@@ -5,7 +5,7 @@ function! ale_linters#puppet#puppet#Handle(buffer, lines) abort
     " Error: Could not parse for environment production: Syntax error at ':' at /root/puppetcode/modules/nginx/manifests/init.pp:43:12
     " Error: Could not parse for environment production: Syntax error at '='; expected '}' at /root/puppetcode/modules/pancakes/manifests/init.pp:5"
 
-    let l:pattern = '^Error: .*: \(.\+\) at \/.\+\.pp:\(\d\+\):\=\(\d*\)'
+    let l:pattern = '^Error: .*: \(.\+\) at .\+\.pp:\(\d\+\):\=\(\d*\)'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
