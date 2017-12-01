@@ -79,7 +79,7 @@ endfunction
 function! s:EnablePreamble() abort
     " Set pattern options again, if enabled.
     if g:ale_pattern_options_enabled
-        call ale#pattern_options#SetOptions()
+        call ale#pattern_options#SetOptions(bufnr(''))
     endif
 
     " Lint immediately, including running linters against the file.
