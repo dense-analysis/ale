@@ -9,17 +9,15 @@
 # --neovim-only  Run tests only for NeoVim
 #    --vim-only  Run tests only for Vim
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-NC='\033[0m'
-CURRENT_IMAGE_ID=d5a1b5915b09
-IMAGE=w0rp/ale
-DOCKER_FLAGS=(--rm -v "$PWD:/testplugin" -v "$PWD/test:/home" -w /testplugin "$IMAGE")
-EXIT=0
+current_image_id=d5a1b5915b09
+image=w0rp/ale
+docker_flags=(--rm -v "$PWD:/testplugin" -v "$PWD/test:/home" -w /testplugin "$image")
+exit_code=0
 
 tests='test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader'
-verbose=0
-quiet=0
+# These flags are forwarded to the script for running Vader tests.
+verbose_flag=''
+quiet_flag=''
 run_neovim_tests=1
 run_vim_tests=1
 run_vint=1
@@ -28,11 +26,11 @@ run_custom_checks=1
 while [ $# -ne 0 ]; do
     case $1 in
     -v)
-        verbose=1
+        verbose_flag='-v'
         shift
     ;;
     -q)
-        quiet=1
+        quiet_flag='-q'
         shift
     ;;
     --neovim-only)
@@ -85,108 +83,16 @@ fi
 # Delete .swp files in the test directory, which cause Vim 8 to hang.
 find test -name '*.swp' -delete
 
-docker images -q w0rp/ale | grep "^$CURRENT_IMAGE_ID" > /dev/null \
-    || docker pull "$IMAGE"
+docker images -q w0rp/ale | grep "^$current_image_id" > /dev/null \
+    || docker pull "$image"
 
-function filter-vader-output() {
-    # When verbose mode is off, suppress output until Vader starts.
-    local start_output="$verbose"
-    local filtered_data=''
-
-    while read -r; do
-        if ((!start_output)); then
-            if [[ "$REPLY" = *'Starting Vader:'* ]]; then
-                start_output=1
-            else
-                continue
-            fi
-        fi
-
-        if ((quiet)); then
-            if [[ "$REPLY" = *'Starting Vader:'* ]]; then
-                filtered_data="$REPLY"
-            elif [[ "$REPLY" = *'Success/Total'* ]]; then
-                success="$(echo -n "$REPLY" | grep -o '[0-9]\+/' | head -n1 | cut -d/ -f1)"
-                total="$(echo -n "$REPLY" | grep -o '/[0-9]\+' | head -n1 | cut -d/ -f2)"
-
-                if [ "$success" -lt "$total" ]; then
-                    echo "$filtered_data"
-                    echo "$REPLY"
-                fi
-
-                filtered_data=''
-            else
-                filtered_data="$filtered_data"$'\n'"$REPLY"
-            fi
-        else
-            echo "$REPLY"
-        fi
-    done
-}
-
-function color-vader-output() {
-    while read -r; do
-        if [[ "$REPLY" = *'[EXECUTE] (X)'* ]]; then
-            echo -en "$RED"
-        elif [[ "$REPLY" = *'[EXECUTE]'* ]] || [[ "$REPLY" = *'[  GIVEN]'* ]]; then
-            echo -en "$NC"
-        fi
-
-        if [[ "$REPLY" = *'Success/Total'* ]]; then
-            success="$(echo -n "$REPLY" | grep -o '[0-9]\+/' | head -n1 | cut -d/ -f1)"
-            total="$(echo -n "$REPLY" | grep -o '/[0-9]\+' | head -n1 | cut -d/ -f2)"
-
-            if [ "$success" -lt "$total" ]; then
-                echo -en "$RED"
-            else
-                echo -en "$GREEN"
-            fi
-
-            echo "$REPLY"
-            echo -en "$NC"
-        else
-            echo "$REPLY"
-        fi
-    done
-
-    echo -en "$NC"
-}
-
-if ((run_neovim_tests)); then
-    for vim in $(docker run --rm "$IMAGE" ls /vim-build/bin | grep '^neovim' ); do
-        echo
-        echo '========================================'
-        echo "Running tests for $vim"
-        echo '========================================'
-        echo
-
-        set -o pipefail
-        docker run -it -e VADER_OUTPUT_FILE=/dev/stderr "${DOCKER_FLAGS[@]}" \
-            "/vim-build/bin/$vim" -u test/vimrc \
-            --headless "+Vader! $tests" | filter-vader-output | color-vader-output || EXIT=$?
-        set +o pipefail
-    done
-
-    echo
-fi
-
-if ((run_vim_tests)); then
-    for vim in $(docker run --rm "$IMAGE" ls /vim-build/bin | grep '^vim' ); do
-        echo
-        echo '========================================'
-        echo "Running tests for $vim"
-        echo '========================================'
-        echo
-
-        set -o pipefail
-        docker run -a stderr -e VADER_OUTPUT_FILE=/dev/stderr "${DOCKER_FLAGS[@]}" \
-            "/vim-build/bin/$vim" -u test/vimrc \
-            "+Vader! $tests" 2>&1 | filter-vader-output | color-vader-output || EXIT=$?
-        set +o pipefail
-    done
-
-    echo
-fi
+for vim in $(docker run --rm "$image" ls /vim-build/bin | grep '^neovim\|^vim' ); do
+    if [[ $vim =~ ^neovim ]] && ((run_neovim_tests)); then
+        test/script/run-vader-tests $quiet_flag $verbose_flag "$vim" "$tests"
+    elif ((run_vim_tests)); then
+        test/script/run-vader-tests $quiet_flag $verbose_flag "$vim" "$tests"
+    fi
+done
 
 if ((run_vint)); then
     echo '========================================'
@@ -196,7 +102,7 @@ if ((run_vint)); then
     echo
 
     set -o pipefail
-    docker run -a stdout "${DOCKER_FLAGS[@]}" vint -s . || EXIT=$?
+    docker run -a stdout "${docker_flags[@]}" vint -s . || exit_code=$?
     set +o pipefail
     echo
 fi
@@ -209,7 +115,7 @@ if ((run_custom_checks)); then
     echo
 
     set -o pipefail
-    docker run -a stdout "${DOCKER_FLAGS[@]}" test/script/custom-checks . || EXIT=$?
+    docker run -a stdout "${docker_flags[@]}" test/script/custom-checks . || exit_code=$?
     set +o pipefail
     echo
 
@@ -219,7 +125,7 @@ if ((run_custom_checks)); then
     echo 'Duplicate tags follow:'
     echo
 
-    grep --exclude=tags -roh '\*.*\*$' doc | sort | uniq -d || EXIT=$?
+    grep --exclude=tags -roh '\*.*\*$' doc | sort | uniq -d || exit_code=$?
 
     echo '========================================'
     echo 'Checking for invalid tag references'
@@ -234,7 +140,7 @@ if ((run_custom_checks)); then
     diff -u \
         <(grep --exclude=tags -roh "\*$tag_regex\*" doc | sort -u | sed 's/*//g') \
         <(grep --exclude=tags -roh "|$tag_regex|" doc | sort -u | sed 's/|//g') \
-        | grep '^+[^+]' && EXIT=1
+        | grep '^+[^+]' && exit_code=1
 
     echo '========================================'
     echo 'diff README.md and doc/ale.txt tables'
@@ -242,7 +148,7 @@ if ((run_custom_checks)); then
     echo 'Differences follow:'
     echo
 
-    test/script/check-supported-tools-tables || EXIT=$?
+    test/script/check-supported-tools-tables || exit_code=$?
 
     echo '========================================'
     echo 'Look for badly aligned doc tags'
@@ -254,14 +160,14 @@ if ((run_custom_checks)); then
     # tags which aren't at the right margin.
     grep ' \*[^*]\+\*$' doc/ -r \
         | awk '{ sep = index($0, ":"); if (length(substr($0, sep + 1 )) < 79) { print } }' \
-        | grep . && EXIT=1
+        | grep . && exit_code=1
 
     echo '========================================'
     echo 'Look for table of contents issues'
     echo '========================================'
     echo
 
-    test/script/check-toc || EXIT=$?
+    test/script/check-toc || exit_code=$?
 fi
 
-exit $EXIT
+exit $exit_code
