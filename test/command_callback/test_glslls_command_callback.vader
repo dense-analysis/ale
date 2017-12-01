@@ -25,13 +25,13 @@ Execute(Executable should be configurable):
 
 Execute(Command should use executable):
   let command1 = ale_linters#glsl#glslls#GetCommand(bufnr(''))
-  AssertEqual command1, "'glslls' --stdin"
+  AssertEqual command1, ale#Escape('glslls') . ' --stdin'
 
   let g:ale_glsl_glslls_executable = 'foobar'
   let command2 = ale_linters#glsl#glslls#GetCommand(bufnr(''))
-  AssertEqual command2, "'foobar' --stdin"
+  AssertEqual command2, ale#Escape('foobar') . ' --stdin'
 
 Execute(Setting logfile should work):
   let g:ale_glsl_glslls_logfile = '/tmp/test.log'
   let command = ale_linters#glsl#glslls#GetCommand(bufnr(''))
-  AssertEqual command, "'glslls' --verbose -l /tmp/test.log --stdin"
+  AssertEqual command, ale#Escape('glslls') . ' --verbose -l /tmp/test.log --stdin'
