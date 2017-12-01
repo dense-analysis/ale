@@ -1,7 +1,9 @@
 Before:
   Save g:ale_glsl_glslls_executable
+  Save g:ale_glsl_glslls_logfile
 
   unlet! g:ale_glsl_glslls_executable
+  unlet! g:ale_glsl_glslls_logfile
 
   runtime ale_linters/glsl/glslls.vim
   call ale#test#SetDirectory('/testplugin/test/command_callback')
@@ -23,10 +25,13 @@ Execute(Executable should be configurable):
 
 Execute(Command should use executable):
   let command1 = ale_linters#glsl#glslls#GetCommand(bufnr(''))
-  let match1 = matchstr(command1, "'glslls' -l .* --stdin --verbose")
-  Assert !empty(match1)
+  AssertEqual command1, "'glslls' --stdin"
 
   let g:ale_glsl_glslls_executable = 'foobar'
   let command2 = ale_linters#glsl#glslls#GetCommand(bufnr(''))
-  let match2 = matchstr(command2, "'foobar' -l .* --stdin --verbose")
-  Assert !empty(match2)
+  AssertEqual command2, "'foobar' --stdin"
+
+Execute(Setting logfile should work):
+  let g:ale_glsl_glslls_logfile = '/tmp/test.log'
+  let command = ale_linters#glsl#glslls#GetCommand(bufnr(''))
+  AssertEqual command, "'glslls' --verbose -l /tmp/test.log --stdin"
