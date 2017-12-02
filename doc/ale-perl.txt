@@ -16,10 +16,14 @@ g:ale_perl_perl_executable                         *g:ale_perl_perl_executable*
 g:ale_perl_perl_options                               *g:ale_perl_perl_options*
                                                       *b:ale_perl_perl_options*
   Type: |String|
-  Default: `'-c -Mwarnings -Ilib'`
+  Default: `'-w -Mwarnings -Ilib'`
 
   This variable can be changed to alter the command-line arguments to the perl
   invocation.
+
+  Perl code is checked with `-w` by default, because `-c` can execute
+  malicious code. You can use the `-c` option at your own risk. See
+  |g:ale_pattern_options| for changing the option only for specific files.
 
 
 ===============================================================================
