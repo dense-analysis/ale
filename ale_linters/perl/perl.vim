@@ -1,15 +1,18 @@
 " Author: Vincent Lequertier <https://github.com/SkySymbol>
 " Description: This file adds support for checking perl syntax
 
-call ale#Set('perl_perl_executable', 'perl')
-call ale#Set('perl_perl_options', '-w -Mwarnings -Ilib')
+let g:ale_perl_perl_executable =
+\   get(g:, 'ale_perl_perl_executable', 'perl')
+
+let g:ale_perl_perl_options =
+\   get(g:, 'ale_perl_perl_options', '-c -Mwarnings -Ilib')
 
 function! ale_linters#perl#perl#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'perl_perl_executable')
 endfunction
 
 function! ale_linters#perl#perl#GetCommand(buffer) abort
-    return ale#Escape(ale_linters#perl#perl#GetExecutable(a:buffer))
+    return ale_linters#perl#perl#GetExecutable(a:buffer)
     \   . ' ' . ale#Var(a:buffer, 'perl_perl_options')
     \   . ' %t'
 endfunction
