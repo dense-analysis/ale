@@ -1,6 +1,11 @@
 ===============================================================================
 ALE Perl Integration                                         *ale-perl-options*
 
+ALE offers a few ways to check Perl code. Checking code with `perl` is
+disabled by default, as `perl` code cannot be checked without executing it.
+
+See |g:ale_linters|.
+
 
 ===============================================================================
 perl                                                            *ale-perl-perl*
