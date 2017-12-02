@@ -1,0 +1,37 @@
+Before:
+  Save g:ale_perl_perl_executable
+  Save g:ale_perl_perl_options
+
+  unlet! g:ale_perl_perl_executable
+  unlet! g:ale_perl_perl_options
+
+  runtime ale_linters/perl/perl.vim
+
+After:
+  Restore
+
+  unlet! b:ale_perl_perl_executable
+  unlet! b:ale_perl_perl_options
+
+  call ale#linter#Reset()
+
+Execute(The default Perl command callback should be correct):
+  AssertEqual
+  \ 'perl',
+  \ ale_linters#perl#perl#GetExecutable(bufnr(''))
+
+  AssertEqual
+  \ ale#Escape('perl') . ' -c -Mwarnings -Ilib %t',
+  \ ale_linters#perl#perl#GetCommand(bufnr(''))
+
+Execute(Overriding the executable and command should work):
+  let b:ale_perl_perl_executable = 'foobar'
+  let b:ale_perl_perl_options = '-w'
+
+  AssertEqual
+  \ 'foobar',
+  \ ale_linters#perl#perl#GetExecutable(bufnr(''))
+
+  AssertEqual
+  \ ale#Escape('foobar') . ' -w %t',
+  \ ale_linters#perl#perl#GetCommand(bufnr(''))
