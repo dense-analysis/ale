@@ -29,7 +29,7 @@ Execute (The gometalinter handler should handle names with spaces):
   \   'C:\something\file with spaces.go:37:5:error: expected ''package'', found ''IDENT'' gibberish (golint)',
   \ ]), 'v:val[1:5]')
 
-Execute (The gometalinter handler should handle relative paths correctly):
+Execute (The gometalinter handler should handle paths correctly):
   call ale#test#SetFilename('app/test.go')
 
   AssertEqual
@@ -50,6 +50,6 @@ Execute (The gometalinter handler should handle relative paths correctly):
   \   },
   \ ],
   \ ale_linters#go#gometalinter#Handler(bufnr(''), [
-  \   'app/test.go:12:3:warning: expected ''package'', found ''IDENT'' gibberish (staticcheck)',
-  \   'app/test.go:37:5:error: expected ''package'', found ''IDENT'' gibberish (golint)',
+  \   '/testplugin/test/handler/app/test.go:12:3:warning: expected ''package'', found ''IDENT'' gibberish (staticcheck)',
+  \   '/testplugin/test/handler/app/test.go:37:5:error: expected ''package'', found ''IDENT'' gibberish (golint)',
   \ ])
