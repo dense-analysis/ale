@@ -32,6 +32,8 @@ Execute (The gometalinter handler should handle names with spaces):
 Execute (The gometalinter handler should handle paths correctly):
   call ale#test#SetFilename('app/test.go')
 
+  let file = ale#path#GetAbsPath(expand('%:p:h'), 'test.go')
+
   AssertEqual
   \ [
   \   {
@@ -50,6 +52,6 @@ Execute (The gometalinter handler should handle paths correctly):
   \   },
   \ ],
   \ ale_linters#go#gometalinter#Handler(bufnr(''), [
-  \   '/testplugin/test/handler/app/test.go:12:3:warning: expected ''package'', found ''IDENT'' gibberish (staticcheck)',
-  \   '/testplugin/test/handler/app/test.go:37:5:error: expected ''package'', found ''IDENT'' gibberish (golint)',
+  \   file . ':12:3:warning: expected ''package'', found ''IDENT'' gibberish (staticcheck)',
+  \   file . ':37:5:error: expected ''package'', found ''IDENT'' gibberish (golint)',
   \ ])
