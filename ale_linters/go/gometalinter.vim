@@ -11,7 +11,7 @@ endfunction
 
 function! ale_linters#go#gometalinter#GetCommand(buffer) abort
     let l:executable = ale_linters#go#gometalinter#GetExecutable(a:buffer)
-    let l:filename = expand('#' . a:buffer)
+    let l:filename = expand('#' . a:buffer . ':t')
     let l:options = ale#Var(a:buffer, 'go_gometalinter_options')
     let l:lint_package = ale#Var(a:buffer, 'go_gometalinter_lint_package')
 

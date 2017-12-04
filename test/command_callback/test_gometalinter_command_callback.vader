@@ -25,7 +25,7 @@ Execute(The gometalinter callback should return the right defaults):
   AssertEqual
   \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
   \   . ale#Escape('gometalinter')
-  \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(expand('%')))
+  \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(expand('%' . ':t')))
   \   . ' .',
   \ ale_linters#go#gometalinter#GetCommand(bufnr(''))
 
@@ -38,7 +38,7 @@ Execute(The gometalinter callback should use a configured executable):
   AssertEqual
   \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
   \   . ale#Escape('something else')
-  \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(expand('%')))
+  \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(expand('%' . ':t')))
   \   . ' .', 
   \ ale_linters#go#gometalinter#GetCommand(bufnr(''))
 
@@ -48,7 +48,7 @@ Execute(The gometalinter callback should use configured options):
   AssertEqual
   \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
   \   . ale#Escape('gometalinter')
-  \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(expand('%')))
+  \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(expand('%' . ':t')))
   \   . ' --foobar' . ' .',
   \ ale_linters#go#gometalinter#GetCommand(bufnr(''))
 
