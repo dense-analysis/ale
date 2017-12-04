@@ -1,9 +1,11 @@
 Before:
   Save b:ale_go_gometalinter_executable
   Save b:ale_go_gometalinter_options
+  Save b:ale_go_gometalinter_lint_package
 
   let b:ale_go_gometalinter_executable = 'gometalinter'
   let b:ale_go_gometalinter_options = ''
+  let b:ale_go_gometalinter_lint_package = 0
 
   runtime ale_linters/go/gometalinter.vim
 
@@ -21,9 +23,10 @@ Execute(The gometalinter callback should return the right defaults):
   \ 'gometalinter',
   \ ale_linters#go#gometalinter#GetExecutable(bufnr(''))
   AssertEqual
-  \ ale#Escape('gometalinter')
-  \   . ' --include=' . ale#Escape('^' . ale#util#EscapePCRE(expand('%')))
-  \   . ' ' . ale#Escape(getcwd()),
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   . ale#Escape('gometalinter')
+  \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(expand('%' . ':t')))
+  \   . ' .',
   \ ale_linters#go#gometalinter#GetCommand(bufnr(''))
 
 Execute(The gometalinter callback should use a configured executable):
@@ -33,17 +36,26 @@ Execute(The gometalinter callback should use a configured executable):
   \ 'something else',
   \ ale_linters#go#gometalinter#GetExecutable(bufnr(''))
   AssertEqual
-  \ ale#Escape('something else')
-  \   . ' --include=' . ale#Escape('^' . ale#util#EscapePCRE(expand('%')))
-  \   . ' ' . ale#Escape(getcwd()),
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   . ale#Escape('something else')
+  \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(expand('%' . ':t')))
+  \   . ' .', 
   \ ale_linters#go#gometalinter#GetCommand(bufnr(''))
 
 Execute(The gometalinter callback should use configured options):
   let b:ale_go_gometalinter_options = '--foobar'
 
   AssertEqual
-  \ ale#Escape('gometalinter')
-  \   . ' --include=' . ale#Escape('^' . ale#util#EscapePCRE(expand('%')))
-  \   . ' --foobar'
-  \   . ' ' . ale#Escape(getcwd()),
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   . ale#Escape('gometalinter')
+  \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(expand('%' . ':t')))
+  \   . ' --foobar' . ' .',
+  \ ale_linters#go#gometalinter#GetCommand(bufnr(''))
+
+Execute(The gometalinter `lint_package` option should use the correct command):
+  let b:ale_go_gometalinter_lint_package = 1
+
+  AssertEqual
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   . ale#Escape('gometalinter') . ' .',
   \ ale_linters#go#gometalinter#GetCommand(bufnr(''))
