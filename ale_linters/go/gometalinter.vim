@@ -15,20 +15,20 @@ function! ale_linters#go#gometalinter#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'go_gometalinter_options')
     let l:lint_package = ale#Var(a:buffer, 'go_gometalinter_lint_package')
 
-    " standard format string given by gometalinter, but with absolute path to file
-    let l:fmt = '{{.Path.Abs}}:{{.Line}}:{{if .Col}}{{.Col}}{{end}}:{{.Severity}}: {{.Message}} ({{.Linter}}'
+    " BufferCdString is used so that we can be sure the paths output from gometalinter can
+    " be calculated to absolute paths in the Handler
     if l:lint_package
-        return ale#Escape(l:executable)
-        \   . ' --format=' . ale#Escape(l:fmt)
+        return ale#path#BufferCdString(a:buffer)
+        \   . ale#Escape(l:executable)
         \   . (!empty(l:options) ? ' ' . l:options : '')
-        \   . ' ' . ale#Escape(fnamemodify(l:filename, ':h'))
+        \   . ' .' 
     endif
 
-    return ale#Escape(l:executable)
-    \   . ' --format=' . ale#Escape(l:fmt)
+    return ale#path#BufferCdString(a:buffer)
+    \   . ale#Escape(l:executable)
     \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(l:filename))
     \   . (!empty(l:options) ? ' ' . l:options : '')
-    \   . ' ' . ale#Escape(fnamemodify(l:filename, ':h'))
+    \   . ' .' 
 endfunction
 
 function! ale_linters#go#gometalinter#GetMatches(lines) abort
@@ -38,12 +38,13 @@ function! ale_linters#go#gometalinter#GetMatches(lines) abort
 endfunction
 
 function! ale_linters#go#gometalinter#Handler(buffer, lines) abort
+    let l:dir = expand('#' . a:buffer . ':p:h')
     let l:output = []
 
     for l:match in ale_linters#go#gometalinter#GetMatches(a:lines)
         " l:match[1] will already be an absolute path, output from gometalinter
         call add(l:output, {
-        \   'filename': l:match[1],
+        \   'filename': ale#path#GetAbsPath(l:dir, l:match[1]),
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
         \   'type': tolower(l:match[4]) is# 'warning' ? 'W' : 'E',
