@@ -95,6 +95,7 @@ CONTENTS                                                         *ale-contents*
     javascript............................|ale-javascript-options|
       eslint..............................|ale-javascript-eslint|
       flow................................|ale-javascript-flow|
+      importjs............................|ale-javascript-importjs|
       jscs................................|ale-javascript-jscs|
       jshint..............................|ale-javascript-jshint|
       prettier............................|ale-javascript-prettier|

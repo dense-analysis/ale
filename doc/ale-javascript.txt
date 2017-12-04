@@ -104,6 +104,15 @@ g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
 
 
 ===============================================================================
+importjs                                              *ale-javascript-importjs*
+
+g:ale_javascript_importjs_executable     *g:ale_javascript_importjs_executable*
+                                         *b:ale_javascript_importjs_executable*
+  Type: |String|
+  Default: `'importjs'`
+
+
+===============================================================================
 jscs                                                      *ale-javascript-jscs*
 
 g:ale_javascript_jscs_executable             *g:ale_javascript_jscs_executable*

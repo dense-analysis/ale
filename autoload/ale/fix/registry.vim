@@ -54,6 +54,11 @@ let s:default_registry = {
 \       'description': 'Apply prettier-eslint to a file.',
 \       'aliases': ['prettier-eslint'],
 \   },
+\   'importjs': {
+\       'function': 'ale#fixers#importjs#Fix',
+\       'suggested_filetypes': ['javascript'],
+\       'description': 'automatic imports for javascript',
+\   },
 \   'puppetlint': {
 \       'function': 'ale#fixers#puppetlint#Fix',
 \       'suggested_filetypes': ['puppet'],
