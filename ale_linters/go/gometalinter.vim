@@ -20,15 +20,13 @@ function! ale_linters#go#gometalinter#GetCommand(buffer) abort
     if l:lint_package
         return ale#path#BufferCdString(a:buffer)
         \   . ale#Escape(l:executable)
-        \   . (!empty(l:options) ? ' ' . l:options : '')
-        \   . ' .' 
+        \   . (!empty(l:options) ? ' ' . l:options : '') . ' .'
     endif
 
     return ale#path#BufferCdString(a:buffer)
     \   . ale#Escape(l:executable)
     \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(l:filename))
-    \   . (!empty(l:options) ? ' ' . l:options : '')
-    \   . ' .' 
+    \   . (!empty(l:options) ? ' ' . l:options : '') . ' .'
 endfunction
 
 function! ale_linters#go#gometalinter#GetMatches(lines) abort
