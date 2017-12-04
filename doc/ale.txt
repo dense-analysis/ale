@@ -186,6 +186,7 @@ CONTENTS                                                         *ale-contents*
     sml...................................|ale-sml-options|
       smlnj...............................|ale-sml-smlnj|
     solidity..............................|ale-solidity-options|
+      solhint.............................|ale-solidity-solhint|
       solium..............................|ale-solidity-solium|
     spec..................................|ale-spec-options|
       rpmlint.............................|ale-spec-rpmlint|
@@ -334,7 +335,7 @@ Notes:
 * Scala: `scalac`, `scalastyle`
 * Slim: `slim-lint`
 * SML: `smlnj`
-* Solidity: `solium`
+* Solidity: `solhint, solium`
 * Stylus: `stylelint`
 * SQL: `sqlint`
 * Swift: `swiftlint`, `swiftformat`
