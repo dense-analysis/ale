@@ -53,7 +53,7 @@ g:ale_rust_cargo_use_check                         *g:ale_rust_cargo_use_check*
 g:ale_rust_cargo_check_all_targets         *g:ale_rust_cargo_check_all_targets*
                                            *b:ale_rust_cargo_check_all_targets*
   Type: |Number|
-  Default: `1`
+  Default: `0`
 
   When set to `1`, ALE will set the `--all-targets` option when `cargo check`
   is used. See |g:ale_rust_cargo_use_check|,

@@ -85,32 +85,32 @@ Execute(`cargo build` should be used when g:ale_rust_cargo_use_check is set to 0
 
   AssertEqual '', ale_linters#rust#cargo#VersionCheck(bufnr(''))
 
-Execute(`cargo check --all-targets` should be used when the version is new enough):
+Execute(`cargo check` should be used when the version is new enough):
   AssertEqual
-  \ 'cargo check --all-targets' . g:suffix,
+  \ 'cargo check' . g:suffix,
   \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
   \   'cargo 0.22.0 (3423351a5 2017-10-06)',
   \ ])
 
   " We should cache the version check
   AssertEqual
-  \ 'cargo check --all-targets' . g:suffix,
+  \ 'cargo check' . g:suffix,
   \ ale_linters#rust#cargo#GetCommand(bufnr(''), [])
 
   AssertEqual '', ale_linters#rust#cargo#VersionCheck(bufnr(''))
 
-Execute(--all-targets should not be used when g:ale_rust_cargo_check_all_targets is set to 0):
-  let g:ale_rust_cargo_check_all_targets = 0
+Execute(--all-targets should be used when g:ale_rust_cargo_check_all_targets is set to 1):
+  let g:ale_rust_cargo_check_all_targets = 1
 
   AssertEqual
-  \ 'cargo check' . g:suffix,
+  \ 'cargo check --all-targets' . g:suffix,
   \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
   \   'cargo 0.22.0 (3423351a5 2017-10-06)',
   \ ])
 
   " We should cache the version check
   AssertEqual
-  \ 'cargo check' . g:suffix,
+  \ 'cargo check --all-targets' . g:suffix,
   \ ale_linters#rust#cargo#GetCommand(bufnr(''), [])
 
   AssertEqual '', ale_linters#rust#cargo#VersionCheck(bufnr(''))
