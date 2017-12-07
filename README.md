@@ -40,7 +40,7 @@ formatting tools, and some Language Server Protocol and `tsserver` features.
     5. [How can I show errors or warnings in my statusline?](#faq-statusline)
     6. [How can I show errors or warnings in my lightline?](#faq-lightline)
     7. [How can I change the format for echo messages?](#faq-echo-format)
-    8. [How can I execute some code when ALE stops linting?](#faq-autocmd)
+    8. [How can I execute some code when ALE starts or stops linting?](#faq-autocmd)
     9. [How can I navigate between errors quickly?](#faq-navigation)
     10. [How can I run linters only when I save files?](#faq-lint-on-save)
     11. [How can I use the quickfix list instead of the loclist?](#faq-quickfix)
@@ -493,15 +493,17 @@ Will give you:
 
 <a name="faq-autocmd"></a>
 
-### 5.viii. How can I execute some code when ALE stops linting?
+### 5.viii. How can I execute some code when ALE starts or stops linting?
 
 ALE runs its own [autocmd](http://vimdoc.sourceforge.net/htmldoc/autocmd.html)
-event whenever has a linter has been successfully executed and processed. This
-autocmd event can be used to call arbitrary functions after ALE stops linting.
+events whenever has a linter is started and has been successfully executed and
+processed. This autocmd event can be used to call arbitrary functions before and
+after ALE stops linting.
 
 ```vim
 augroup YourGroup
     autocmd!
+    autocmd User ALEStartLint call YourFunction()
     autocmd User ALELint call YourFunction()
 augroup END
 ```

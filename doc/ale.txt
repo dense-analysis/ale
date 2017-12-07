@@ -2196,6 +2196,12 @@ ALELint                                                       *ALELint-autocmd*
   The autocmd commands are run with |:silent|, so |:unsilent| is required for
   echoing messges.
 
+
+ALEStartLint                                             *ALEStartLint-autocmd*
+
+  This |User| autocommand is triggered by ALE right after it started a new
+  linting job.
+
 ===============================================================================
 10. Special Thanks                                         *ale-special-thanks*
 

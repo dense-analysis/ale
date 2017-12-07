@@ -1,18 +1,41 @@
 Before:
+  let g:start = 0
   let g:success = 0
   let g:ale_run_synchronously = 1
+
+  function! TestCallback(buffer, output)
+    return [{
+    \ 'lnum': 1,
+    \ 'col': 3,
+    \ 'text': 'baz boz',
+    \}]
+  endfunction
+
+  call ale#linter#Define('foobar', {
+  \ 'name': 'testlinter',
+  \ 'callback': 'TestCallback',
+  \ 'executable': has('win32') ? 'cmd' : 'true',
+  \ 'command': has('win32') ? 'echo' : 'true',
+  \})
+  "let g:ale_linters = {'foobar': ['lint_file_linter']}
 
 After:
   let g:ale_run_synchronously = 0
   let g:ale_buffer_info = {}
+  let g:ale_linters = {}
+  call ale#linter#Reset()
+  delfunction TestCallback
   augroup! VaderTest
 
 Execute (Run a lint cycle, and check that a variable is set in the autocmd):
+  set filetype=foobar
   augroup VaderTest
     autocmd!
-    autocmd User ALELint let g:success = 1
+    autocmd User ALEStartLint let g:start = 1
+    autocmd User ALELint      let g:success = 1
   augroup end
 
   call ale#Lint()
 
+  AssertEqual g:start, 1
   AssertEqual g:success, 1
