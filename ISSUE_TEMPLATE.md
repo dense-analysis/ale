@@ -7,6 +7,7 @@
 ## Information
 
 VIM version: PASTE JUST THE FIRST LINE OF `:version` HERE.
+Operating System: WHAT OS WERE YOU USING?
 
 ### :ALEInfo
 
