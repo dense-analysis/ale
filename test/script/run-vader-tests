@@ -106,18 +106,10 @@ echo "Running tests for $vim"
 echo '========================================'
 echo
 
-if [[ $vim =~ ^neovim ]]; then
-    set -o pipefail
-    docker run -it -e VADER_OUTPUT_FILE=/dev/stderr "${docker_flags[@]}" \
-        "/vim-build/bin/$vim" -u test/vimrc \
-        --headless "+Vader! $tests" | filter-vader-output | color-vader-output || exit_code=$?
-    set +o pipefail
-else
-    set -o pipefail
-    docker run -a stderr -e VADER_OUTPUT_FILE=/dev/stderr "${docker_flags[@]}" \
-        "/vim-build/bin/$vim" -u test/vimrc \
-        "+Vader! $tests" 2>&1 | filter-vader-output | color-vader-output || exit_code=$?
-    set +o pipefail
-fi
+set -o pipefail
+docker run -a stderr -e VADER_OUTPUT_FILE=/dev/stderr "${docker_flags[@]}" \
+    "/vim-build/bin/$vim" -u test/vimrc \
+    "+Vader! $tests" 2>&1 | filter-vader-output | color-vader-output || exit_code=$?
+set +o pipefail
 
 exit "$exit_code"

@@ -11,7 +11,6 @@
 
 current_image_id=d5a1b5915b09
 image=w0rp/ale
-exit_code=0
 
 tests='test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader'
 # These flags are forwarded to the script for running Vader tests.
@@ -91,20 +90,50 @@ find test -name '*.swp' -delete
 docker images -q w0rp/ale | grep "^$current_image_id" > /dev/null \
     || docker pull "$image"
 
+output_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
+
+trap '{ rm -rf "$output_dir"; }' EXIT
+
+file_number=0
+pid_list=''
+
 for vim in $(docker run --rm "$image" ls /vim-build/bin | grep '^neovim\|^vim' ); do
-    if [[ $vim =~ ^neovim ]] && ((run_neovim_tests)); then
-        test/script/run-vader-tests $quiet_flag $verbose_flag "$vim" "$tests" || exit_code=$?
-    elif ((run_vim_tests)); then
-        test/script/run-vader-tests $quiet_flag $verbose_flag "$vim" "$tests" || exit_code=$?
+    if ((run_vim_tests)) || [[ $vim =~ ^neovim ]] && ((run_neovim_tests)); then
+        echo "Starting Vim: $vim..."
+        file_number=$((file_number+1))
+        test/script/run-vader-tests $quiet_flag $verbose_flag "$vim" "$tests" \
+            > "$output_dir/$file_number" 2>&1 &
+        pid_list="$pid_list $!"
     fi
 done
 
 if ((run_vint)); then
-    test/script/run-vint || exit_code=$?
+    echo "Starting Vint..."
+    file_number=$((file_number+1))
+    test/script/run-vint > "$output_dir/$file_number" 2>&1 &
+    pid_list="$pid_list $!"
 fi
 
 if ((run_custom_checks)); then
-    test/script/custom-checks || exit_code=$?
+    echo "Starting Custom checks..."
+    file_number=$((file_number+1))
+    test/script/custom-checks &> "$output_dir/$file_number" 2>&1 &
+    pid_list="$pid_list $!"
 fi
 
-exit $exit_code
+echo
+
+failed=0
+index=0
+
+for pid in $pid_list; do
+    index=$((index+1))
+
+    if ! wait "$pid"; then
+        failed=1
+    fi
+
+    cat "$output_dir/$index"
+done
+
+exit $failed
