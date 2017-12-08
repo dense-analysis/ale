@@ -4,6 +4,8 @@
 
 " inspired by work from dzhou121 <dzhou121@gmail.com>
 
+call ale#Set('go_gobuild_options', '')
+
 function! ale_linters#go#gobuild#GoEnv(buffer) abort
     if exists('s:go_env')
         return ''
@@ -13,6 +15,8 @@ function! ale_linters#go#gobuild#GoEnv(buffer) abort
 endfunction
 
 function! ale_linters#go#gobuild#GetCommand(buffer, goenv_output) abort
+    let l:options = ale#Var(a:buffer, 'go_gobuild_options')
+
     if !exists('s:go_env')
         let s:go_env = {
         \   'GOPATH': a:goenv_output[0],
@@ -23,7 +27,7 @@ function! ale_linters#go#gobuild#GetCommand(buffer, goenv_output) abort
     " Run go test in local directory with relative path
     return 'GOPATH=' . s:go_env.GOPATH
     \   . ' cd ' . fnamemodify(bufname(a:buffer), ':.:h')
-    \   . ' && go test -c -o /dev/null ./'
+    \   . ' && go test ' . l:options . ' -c -o /dev/null ./'
 endfunction
 
 function! ale_linters#go#gobuild#GetMatches(lines) abort
