@@ -93,6 +93,7 @@ CONTENTS                                                         *ale-contents*
     java..................................|ale-java-options|
       checkstyle..........................|ale-java-checkstyle|
       javac...............................|ale-java-javac|
+      google-java-format..................|ale-java-google-java-format|
     javascript............................|ale-javascript-options|
       eslint..............................|ale-javascript-eslint|
       flow................................|ale-javascript-flow|

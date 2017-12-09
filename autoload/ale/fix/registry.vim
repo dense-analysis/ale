@@ -154,6 +154,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['sh'],
 \       'description': 'Fix sh files with shfmt.',
 \   },
+\   'google_java_format': {
+\       'function': 'ale#fixers#google_java_format#Fix',
+\       'suggested_filetypes': ['java'],
+\       'description': 'Fix Java files with google-java-format.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
