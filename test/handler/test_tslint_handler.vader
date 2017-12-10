@@ -282,27 +282,29 @@ Execute(The tslint handler should not report no-implicit-dependencies errors):
   \ }])])
 
 Execute(The tslint handler should set filename keys for temporary files):
-  " The temporay filename below is hacked into being a relative path so we can
-  " test that we resolve the temporary filename first.
-  AssertEqual
-  \ [
-  \   {'lnum': 47, 'col': 1, 'code': 'curly', 'end_lnum': 47, 'type': 'E', 'end_col': 26, 'text': 'if statements must be braced'},
-  \ ],
-  \ ale_linters#typescript#tslint#Handle(bufnr(''), [json_encode([
-  \   {
-  \     'endPosition': {
-  \       'character':25,
-  \       'line':46,
-  \       'position':1383,
-  \     },
-  \     'failure': 'if statements must be braced',
-  \     'name': substitute(substitute(substitute(expand('%:p'), '[^/\\]', '', 'g'), '.', '../', 'g') . tempname(), '\([A-Z]:\\\)[A-Z]:', '\1', ''),
-  \     'ruleName': 'curly',
-  \     'ruleSeverity':'ERROR',
-  \     'startPosition': {
-  \       'character':0,
-  \       'line':46,
-  \       'position':1358,
-  \     }
-  \   },
-  \ ])])
+  if !has('win32')
+    " The temporay filename below is hacked into being a relative path so we can
+    " test that we resolve the temporary filename first.
+    AssertEqual
+    \ [
+    \   {'lnum': 47, 'col': 1, 'code': 'curly', 'end_lnum': 47, 'type': 'E', 'end_col': 26, 'text': 'if statements must be braced'},
+    \ ],
+    \ ale_linters#typescript#tslint#Handle(bufnr(''), [json_encode([
+    \   {
+    \     'endPosition': {
+    \       'character':25,
+    \       'line':46,
+    \       'position':1383,
+    \     },
+    \     'failure': 'if statements must be braced',
+    \     'name': substitute(substitute(substitute(expand('%:p'), '[^/\\]', '', 'g'), '.', '../', 'g') . tempname(), '\([A-Z]:\\\)[A-Z]:', '\1', ''),
+    \     'ruleName': 'curly',
+    \     'ruleSeverity':'ERROR',
+    \     'startPosition': {
+    \       'character':0,
+    \       'line':46,
+    \       'position':1358,
+    \     }
+    \   },
+    \ ])])
+  endif
