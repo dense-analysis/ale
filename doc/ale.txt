@@ -2048,7 +2048,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          the file on disk, including |g:ale_lint_on_enter|
                          and |g:ale_lint_on_save|. Linters with this option
                          set to `1` will also be run when linters are run
-                         manually, per |ALELint-autocmd|.
+                         manually, per |ALELintPost-autocmd|.
 
                          When this option is set to `1`, `read_buffer` will
                          be set automatically to `0`. The two options cannot
@@ -2182,26 +2182,32 @@ ale#statusline#Count(buffer)                           *ale#statusline#Count()*
   `total`         -> The total number of problems.
 
 
-ALELint                                                       *ALELint-autocmd*
+ALELintPre ALELintPost                 *ALELintPre-autocmd* *ALELintPost-autocmd*
 
-  This |User| autocommand is triggered by ALE every time it completes a lint
-  cycle. It can be used to update statuslines, send notifications, or
-  complete any other operation that needs to be done after linting has been
-  performed.
-
-  For example, you can echo a message when linting is complete like so:
-  >
-  autocmd User ALELint unsilent echom 'ALE run!'
-<
+  These |User| autocommands are triggered before and after every lint cycle.
+  It can be used to update statuslines, send notifications, etc.
   The autocmd commands are run with |:silent|, so |:unsilent| is required for
   echoing messges.
 
-
-ALEStartLint                                             *ALEStartLint-autocmd*
-
-  This |User| autocommand is triggered by ALE right after it started a new
-  linting job.
-
+  For example to change the color of the statusline while the linter is
+  running:
+>
+    augroup ALEProgress
+        autocmd!
+        autocmd User ALELintPre  hi Statusline ctermfg=darkgrey
+        autocmd User ALELintPOST hi Statusline ctermfg=NONE
+    augroup end
+<
+  Or to display the progress in the statusline:
+>
+    let s:ale_running = 0
+    let l:stl .= '%{s:ale_running ? "[linting]" : ""}'
+    augroup ALEProgress
+        autocmd!
+        autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
+        autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
+    augroup end
+<
 ===============================================================================
 10. Special Thanks                                         *ale-special-thanks*
 

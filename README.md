@@ -497,14 +497,14 @@ Will give you:
 
 ALE runs its own [autocmd](http://vimdoc.sourceforge.net/htmldoc/autocmd.html)
 events whenever has a linter is started and has been successfully executed and
-processed. This autocmd event can be used to call arbitrary functions before and
-after ALE stops linting.
+processed. These events can be used to call arbitrary functions before and after
+ALE stops linting.
 
 ```vim
 augroup YourGroup
     autocmd!
-    autocmd User ALEStartLint call YourFunction()
-    autocmd User ALELint call YourFunction()
+    autocmd User ALELintPre  call YourFunction()
+    autocmd User ALELintPost call YourFunction()
 augroup END
 ```
 
