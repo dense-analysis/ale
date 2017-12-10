@@ -296,7 +296,7 @@ Execute(The tslint handler should set filename keys for temporary files):
   \       'position':1383,
   \     },
   \     'failure': 'if statements must be braced',
-  \     'name': substitute(substitute(expand('%:p'), '[^/\\]', '', 'g'), '.', '../', 'g') . tempname(),
+  \     'name': substitute(substitute(substitute(expand('%:p'), '[^/\\]', '', 'g'), '.', '../', 'g') . tempname(), '\([A-Z]:\\\)[A-Z]:', '\1', ''),
   \     'ruleName': 'curly',
   \     'ruleSeverity':'ERROR',
   \     'startPosition': {
