@@ -21,7 +21,7 @@ function! ale_linters#ansible#ansible_lint#Handle(buffer, lines) abort
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:code = l:match[4]
 
-        if l:code is# 'EANSIBLE002'
+        if l:code is# 'EANSIBLE0002'
         \&& !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
             " Skip warnings for trailing whitespace if the option is off.
             continue
