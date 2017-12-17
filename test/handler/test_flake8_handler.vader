@@ -48,7 +48,7 @@ Execute(The flake8 handler should handle basic warnings and syntax errors):
   \   'stdin:8:3: E999 SyntaxError: invalid syntax',
   \ ])
 
-Execute(The flake8 handler should set end column indexes should be set for certain errors):
+Execute(The flake8 handler should set end column indexes for certain errors):
   AssertEqual
   \ [
   \   {
