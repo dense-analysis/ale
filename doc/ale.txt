@@ -275,7 +275,7 @@ Notes:
 * ASM: `gcc`
 * Ansible: `ansible-lint`
 * API Blueprint: `drafter`
-* AsciiDoc: `proselint`, `write-good`, `redpen`
+* AsciiDoc: `alex`, `proselint`, `write-good`, `redpen`
 * Awk: `gawk`
 * Bash: `shell` (-n flag), `shellcheck`, `shfmt`
 * Bourne Shell: `shell` (-n flag), `shellcheck`, `shfmt`
@@ -306,36 +306,36 @@ Notes:
 * Haml: `haml-lint`
 * Handlebars: `ember-template-lint`
 * Haskell: `brittany`, `ghc`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`, `hfmt`
-* HTML: `HTMLHint`, `proselint`, `tidy`, `write-good`
+* HTML: `alex`, `HTMLHint`, `proselint`, `tidy`, `write-good`
 * Idris: `idris`
 * Java: `checkstyle`, `javac`, `google-java-format`
 * JavaScript: `eslint`, `flow`, `jscs`, `jshint`, `prettier`, `prettier-eslint` >= 4.2.0, `prettier-standard`, `standard`, `xo`
 * JSON: `jsonlint`, `prettier`
 * Kotlin: `kotlinc`, `ktlint`
-* LaTeX (tex): `chktex`, `lacheck`, `proselint`, `write-good`, `redpen`
+* LaTeX (tex): `alex`, `chktex`, `lacheck`, `proselint`, `write-good`, `redpen`
 * Less: `lessc`, `prettier`, `stylelint`
 * LLVM: `llc`
 * Lua: `luacheck`
-* Mail: `proselint`, `vale`
+* Mail: `alex`, `proselint`, `vale`
 * Make: `checkmake`
-* Markdown: `mdl`, `proselint`, `vale`, `remark-lint`, `write-good`, `redpen`
+* Markdown: `alex`, `mdl`, `proselint`, `vale`, `remark-lint`, `write-good`, `redpen`
 * MATLAB: `mlint`
 * Nim: `nim check`!!
 * nix: `nix-instantiate`
-* nroff: `proselint`, `write-good`
+* nroff: `alex`, `proselint`, `write-good`
 * Objective-C: `clang`
 * Objective-C++: `clang`
 * OCaml: `merlin` (see |ale-ocaml-merlin|), `ols`
 * Perl: `perl -c`, `perl-critic`
 * PHP: `hack`, `hackfmt`, `langserver`, `phan`, `php -l`, `phpcs`, `phpmd`, `phpstan`, `phpcbf`
-* Pod: `proselint`, `write-good`
+* Pod: `alex`, `proselint`, `write-good`
 * proto: `protoc-gen-lint`
 * Pug: `pug-lint`
 * Puppet: `puppet`, `puppet-lint`
 * Python: `autopep8`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pyls`, `pylint`!!, `yapf`
 * R: `lintr`
 * ReasonML: `merlin`, `ols`, `refmt`
-* reStructuredText: `proselint`, `rstcheck`, `write-good`, `redpen`
+* reStructuredText: `alex`, `proselint`, `rstcheck`, `write-good`, `redpen`
 * Re:VIEW: `redpen`
 * RPM spec: `rpmlint`
 * Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`
@@ -351,14 +351,14 @@ Notes:
 * Swift: `swiftlint`, `swiftformat`
 * Tcl: `nagelfar`!!
 * Terraform: `tflint`
-* Texinfo: `proselint`, `write-good`
-* Text^: `proselint`, `vale`, `write-good`, `redpen`
+* Texinfo: `alex`, `proselint`, `write-good`
+* Text^: `alex`, `proselint`, `vale`, `write-good`, `redpen`
 * Thrift: `thrift`
 * TypeScript: `eslint`, `prettier`, `tslint`, `tsserver`, `typecheck`
 * Verilog: `iverilog`, `verilator`
 * Vim: `vint`
-* Vim help^: `proselint`, `write-good`
-* XHTML: `proselint`, `write-good`
+* Vim help^: `alex`, `proselint`, `write-good`
+* XHTML: `alex`, `proselint`, `write-good`
 * XML: `xmllint`
 * YAML: `swaglint`, `yamllint`
 
