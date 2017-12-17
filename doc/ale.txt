@@ -93,6 +93,7 @@ CONTENTS                                                         *ale-contents*
     java..................................|ale-java-options|
       checkstyle..........................|ale-java-checkstyle|
       javac...............................|ale-java-javac|
+      google-java-format..................|ale-java-google-java-format|
     javascript............................|ale-javascript-options|
       eslint..............................|ale-javascript-eslint|
       flow................................|ale-javascript-flow|
@@ -307,7 +308,7 @@ Notes:
 * Haskell: `brittany`, `ghc`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`, `hfmt`
 * HTML: `HTMLHint`, `proselint`, `tidy`, `write-good`
 * Idris: `idris`
-* Java: `checkstyle`, `javac`
+* Java: `checkstyle`, `javac`, `google-java-format`
 * JavaScript: `eslint`, `flow`, `jscs`, `jshint`, `prettier`, `prettier-eslint` >= 4.2.0, `prettier-standard`, `standard`, `xo`
 * JSON: `jsonlint`, `prettier`
 * Kotlin: `kotlinc`, `ktlint`
