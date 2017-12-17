@@ -54,6 +54,18 @@ Execute (The php handler should ignore lines starting with 'PHP Parse error'):
   \   "PHP Parse error:  syntax error, This line should be ignored completely in - on line 1",
   \ ])
 
+Execute (The php handler should handle lines containing 'Standard input code'):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 47,
+  \     'col': 0,
+  \     'text': "Invalid numeric literal",
+  \   },
+  \ ],
+  \ ale_linters#php#php#Handle(347, [
+  \   "Parse error: Invalid numeric literal in Standard input code on line 47",
+  \ ])
 Execute (The php handler should parse lines without column indication):
   AssertEqual
   \ [
