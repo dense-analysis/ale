@@ -31,7 +31,7 @@ endfunction
 " The root directory is defined as the first directory found while searching
 " upwards through paths, including the current directory, until a path
 " containing an init file (one from MANIFEST.in, setup.cfg, pytest.ini,
-" tox.ini) is found. If it is not possible to find the project root directorty
+" tox.ini) is found. If it is not possible to find the project root directory
 " via init file, then it will be defined as the first directory found
 " searching upwards through paths, including the current directory, until no
 " __init__.py files is found.
