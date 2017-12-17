@@ -2185,10 +2185,11 @@ ale#statusline#Count(buffer)                           *ale#statusline#Count()*
   `total`         -> The total number of problems.
 
 
-ALELintPre ALELintPost                 *ALELintPre-autocmd* *ALELintPost-autocmd*
+ALELintPre                                                 *ALELintPre-autocmd*
+ALELintPost                                               *ALELintPost-autocmd*
 
   These |User| autocommands are triggered before and after every lint cycle.
-  It can be used to update statuslines, send notifications, etc.
+  They can be used to update statuslines, send notifications, etc.
   The autocmd commands are run with |:silent|, so |:unsilent| is required for
   echoing messges.
 
@@ -2211,6 +2212,7 @@ ALELintPre ALELintPost                 *ALELintPre-autocmd* *ALELintPost-autocmd
         autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
     augroup end
 <
+
 ===============================================================================
 10. Special Thanks                                         *ale-special-thanks*
 
