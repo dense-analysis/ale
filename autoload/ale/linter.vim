@@ -14,6 +14,12 @@ let s:default_ale_linter_aliases = {
 \   'zsh': 'sh',
 \}
 
+call ale#Set('lsp_load_settings', 1)
+" FIXME: There has to be a better way to do this
+let s:path_sep = has('win32') ? '\' : '/'
+" Note: .vim/settings.json is the default location for LanguageClient-neovim
+call ale#Set('lsp_settings_path', '.vim' . s:path_sep . 'settings.json')
+
 " Default linters to run for particular filetypes.
 " The user defined linter selections will be merged with this Dictionary.
 "
@@ -461,6 +467,17 @@ function! ale#linter#StartLSP(buffer, linter, callback) abort
     " The change message needs to be sent for tsserver before doing anything.
     if a:linter.lsp is# 'tsserver'
         call ale#lsp#Send(l:conn_id, ale#lsp#tsserver_message#Change(a:buffer))
+    endif
+
+    " FIXME: ale#Var calls take a buffer number
+    if ale#Var(-1, 'lsp_load_settings')
+        let l:settings_path = findfile(ale#Var(-1, 'lsp_settings_path'), l:root)
+        if empty(l:settings_path) || !filereadable(l:settings_path)
+            return
+        endif
+        let l:config = ale#util#FuzzyJSONDecode(readfile(l:settings_path), {})
+        " Queue up a workspace/didConfigurationChange message
+        call ale#lsp#Send(l:conn_id, ale#lsp#message#DidChangeConfiguration(l:config), l:root)
     endif
 
     return {

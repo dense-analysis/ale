@@ -6,12 +6,6 @@
 let s:connections = []
 let g:ale_lsp_next_message_id = 1
 
-call ale#Set('lsp_load_settings', 1)
-" FIXME: There has to be a better way to do this
-let s:path_sep = has('win32') ? '\' : '/'
-" Note: .vim/settings.json is the default location for LanguageClient-neovim
-call ale#Set('lsp_settings_path', '.vim' . s:path_sep . 'settings.json')
-
 function! s:NewConnection() abort
     " id: The job ID as a Number, or the server address as a string.
     " data: The message data received so far.
@@ -259,15 +253,6 @@ function! ale#lsp#RegisterProject(conn, project_root) abort
         \   'init_request_id': 0,
         \   'message_queue': [],
         \}
-    " FIXME: What do we pass to ale#Var if we only want a global var
-    elseif ale#Var(-1, 'lsp_load_settings')
-        let l:settings_path = findfile(ale#Var(-1, 'lsp_settings_path'), a:project_root)
-        if empty(l:settings_path) || !filereadable(l:settings_path)
-            return
-        endif
-        let l:config = ale#util#FuzzyJSONDecode(readfile(l:settings_path), {})
-        " Queue up a workspace/didConfigurationChange message
-        call ale#lsp#Send(a:conn.id, ale#lsp#message#DidChangeConfiguration(l:config), a:project_root)
     endif
 endfunction
 
