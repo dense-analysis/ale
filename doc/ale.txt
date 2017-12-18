@@ -309,7 +309,7 @@ Notes:
 * HTML: `alex`, `HTMLHint`, `proselint`, `tidy`, `write-good`
 * Idris: `idris`
 * Java: `checkstyle`, `javac`, `google-java-format`
-* JavaScript: `eslint`, `flow`, `jscs`, `jshint`, `prettier`, `prettier-eslint` >= 4.2.0, `prettier-standard`, `standard`, `xo`
+* JavaScript: `eslint`, `flow`, `jscs`, `jshint`, `prettier`, `prettier-eslint`, `prettier-standard`, `standard`, `xo`
 * JSON: `jsonlint`, `prettier`
 * Kotlin: `kotlinc`, `ktlint`
 * LaTeX (tex): `alex`, `chktex`, `lacheck`, `proselint`, `redpen`, `vale`, `write-good`
