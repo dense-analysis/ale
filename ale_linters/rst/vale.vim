@@ -4,6 +4,6 @@
 call ale#linter#Define('rst', {
 \   'name': 'vale',
 \   'executable': 'vale',
-\   'command': 'vale --output=line %t',
+\   'command': 'vale --output=JSON %t',
 \   'callback': 'ale#handlers#vale#Handle',
 \})
