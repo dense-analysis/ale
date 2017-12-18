@@ -26,11 +26,6 @@ g:ale_gitcommit_gitlint_options               *g:ale_gitcommit_gitlint_options*
 
   let g:ale_gitcommit_gitlint_options = '-C /home/user/.config/gitlint.ini'
 <
-  Or if you are using gitlint as a module you may want to set >
-
-  let g:ale_gitcommit_gitlint_executable = 'python'
-  let g:ale_gitcommit_gitlint_options = '-m gitlint'
-<
 g:ale_gitcommit_gitlint_use_global         *g:ale_gitcommit_gitlint_use_global*
                                            *b:ale_gitcommit_gitlint_use_global*
   Type: |Number|
