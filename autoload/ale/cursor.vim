@@ -4,37 +4,23 @@
 let s:cursor_timer = -1
 let s:last_pos = [0, 0, 0]
 
-function! s:EchoWithShortMess(setting, message) abort
-    " We need to remember the setting for shormess and reset it again.
-    let l:shortmess_options = getbufvar('%', '&shortmess')
-
-    try
-        " Turn shortmess on or off.
-        if a:setting is# 'on'
-            setlocal shortmess+=T
-            " echomsg is needed for the message to get truncated and appear in
-            " the message history.
-            exec "norm! :echomsg a:message\n"
-        elseif a:setting is# 'off'
-            setlocal shortmess-=T
-            " Regular echo is needed for printing newline characters.
-            execute 'echo a:message'
-        else
-            throw 'Invalid setting: ' . string(a:setting)
-        endif
-    finally
-        call setbufvar('%', '&shortmess', l:shortmess_options)
-    endtry
-endfunction
-
-function! ale#cursor#TruncatedEcho(message) abort
-    let l:message = a:message
+function! ale#cursor#TruncatedEcho(original_message) abort
+    let l:message = a:original_message
     " Change tabs to spaces.
     let l:message = substitute(l:message, "\t", ' ', 'g')
     " Remove any newlines in the message.
     let l:message = substitute(l:message, "\n", '', 'g')
 
-    call s:EchoWithShortMess('on', l:message)
+    " We need to remember the setting for shortmess and reset it again.
+    let l:shortmess_options = &l:shortmess
+
+    try
+        " The message is truncated and saved to the history.
+        setlocal shortmess+=T
+        exec "norm! :echomsg l:message\n"
+    finally
+        let &l:shortmess = l:shortmess_options
+    endtry
 endfunction
 
 function! s:FindItemAtCursor() abort
