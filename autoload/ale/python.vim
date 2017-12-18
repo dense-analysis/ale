@@ -10,6 +10,7 @@ let g:ale_virtualenv_dir_names = get(g:, 'ale_virtualenv_dir_names', [
 \   've-py3',
 \   've',
 \   'virtualenv',
+\   'venv',
 \])
 
 function! ale#python#FindProjectRootIni(buffer) abort
