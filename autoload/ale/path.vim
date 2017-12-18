@@ -1,14 +1,23 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Functions for working with paths in the filesystem.
 
+" simplify a path, and fix annoying issues with paths on Windows.
+"
+" Forward slashes are changed to back slashes so path equality works better.
+"
+" Paths starting with more than one forward slash are changed to only one
+" forward slash, to prevent the paths being treated as special MSYS paths.
 function! ale#path#Simplify(path) abort
-    " //foo is turned into /foo to stop Windows doing stupid things with
-    " search paths.
-    return substitute(simplify(a:path), '^//\+', '/', 'g') " no-custom-checks
+    if has('unix')
+        return substitute(simplify(a:path), '^//\+', '/', 'g') " no-custom-checks
+    endif
+
+    let l:win_path = substitute(a:path, '/', '\\', 'g')
+
+    return substitute(simplify(l:win_path), '^\\\+', '\', 'g') " no-custom-checks
 endfunction
 
 " This function is mainly used for testing.
-" Simplify() a path, and change forward slashes to back slashes on Windows.
 "
 " If an additional 'add_drive' argument is given, the current drive letter
 " will be prefixed to any absolute paths on Windows.
@@ -16,8 +25,6 @@ function! ale#path#Winify(path, ...) abort
     let l:new_path = ale#path#Simplify(a:path)
 
     if has('win32')
-        let l:new_path = substitute(l:new_path, '/', '\\', 'g')
-
         " Add a drive letter to \foo\bar paths, if needed.
         if a:0 && a:1 is# 'add_drive' && l:new_path[:0] is# '\'
             let l:new_path = fnamemodify('.', ':p')[:1] . l:new_path
@@ -86,6 +93,10 @@ endfunction
 
 " Return 1 if a path is an absolute path.
 function! ale#path#IsAbsolute(filename) abort
+    if has('win32') && a:filename[:0] is# '\'
+        return 1
+    endif
+
     " Check for /foo and C:\foo, etc.
     return a:filename[:0] is# '/' || a:filename[1:2] is# ':\'
 endfunction
@@ -103,7 +114,7 @@ endfunction
 " directory, return the absolute path to the file.
 function! ale#path#GetAbsPath(base_directory, filename) abort
     if ale#path#IsAbsolute(a:filename)
-        return a:filename
+        return ale#path#Simplify(a:filename)
     endif
 
     let l:sep = has('win32') ? '\' : '/'
@@ -145,8 +156,8 @@ endfunction
 
 " Given a path, return every component of the path, moving upwards.
 function! ale#path#Upwards(path) abort
-    let l:pattern = ale#Has('win32') ? '\v/+|\\+' : '\v/+'
-    let l:sep = ale#Has('win32') ? '\' : '/'
+    let l:pattern = has('win32') ? '\v/+|\\+' : '\v/+'
+    let l:sep = has('win32') ? '\' : '/'
     let l:parts = split(ale#path#Simplify(a:path), l:pattern)
     let l:path_list = []
 
@@ -155,7 +166,7 @@ function! ale#path#Upwards(path) abort
         let l:parts = l:parts[:-2]
     endwhile
 
-    if ale#Has('win32') && a:path =~# '^[a-zA-z]:\'
+    if has('win32') && a:path =~# '^[a-zA-z]:\'
         " Add \ to C: for C:\, etc.
         let l:path_list[-1] .= '\'
     elseif a:path[0] is# '/'

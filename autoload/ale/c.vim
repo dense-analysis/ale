@@ -1,6 +1,8 @@
 " Author: gagbo <gagbobada@gmail.com>, w0rp <devw0rp@gmail.com>
 " Description: Functions for integrating with C-family linters.
 
+let s:sep = has('win32') ? '\' : '/'
+
 function! ale#c#FindProjectRoot(buffer) abort
     for l:project_filename in ['.git/HEAD', 'configure', 'Makefile', 'CMakeLists.txt']
         let l:full_path = ale#path#FindNearestFile(a:buffer, l:project_filename)
@@ -47,7 +49,7 @@ function! ale#c#FindLocalHeaderPaths(buffer) abort
 
     " If we find an 'include' directory in the project root, then use that.
     if isdirectory(l:project_root . '/include')
-        return [ale#path#Simplify(l:project_root . '/include')]
+        return [ale#path#Simplify(l:project_root . s:sep . 'include')]
     endif
 
     return []
@@ -79,7 +81,7 @@ let g:ale_c_build_dir_names = get(g:, 'ale_c_build_dir_names', [
 function! ale#c#FindCompileCommands(buffer) abort
     for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
         for l:dirname in ale#Var(a:buffer, 'c_build_dir_names')
-            let l:c_build_dir = l:path . '/' . l:dirname
+            let l:c_build_dir = l:path . s:sep . l:dirname
 
             if filereadable(l:c_build_dir . '/compile_commands.json')
                 return l:c_build_dir

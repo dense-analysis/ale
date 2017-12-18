@@ -40,7 +40,7 @@ Execute(The C GCC handler should include 'include' directories for projects with
   \ ale#Escape('gcc')
   \   . ' -S -x c -fsyntax-only '
   \   . '-iquote ' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/makefile_project/subdir')) . ' '
-  \   . ' -I' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/makefile_project') . '/include') . ' '
+  \   . ' -I' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/makefile_project/include')) . ' '
   \   . ' -'
   \ , ale_linters#c#gcc#GetCommand(bufnr(''))
 
@@ -53,7 +53,7 @@ Execute(The C GCC handler should include 'include' directories for projects with
   \ ale#Escape('gcc')
   \   . ' -S -x c -fsyntax-only '
   \   . '-iquote ' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/configure_project/subdir')) . ' '
-  \   . ' -I' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/configure_project') . '/include') . ' '
+  \   . ' -I' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/configure_project/include')) . ' '
   \   . ' -'
   \ , ale_linters#c#gcc#GetCommand(bufnr(''))
 
@@ -92,7 +92,7 @@ Execute(The C Clang handler should include 'include' directories for projects wi
   \   ale#Escape('clang')
   \   . ' -S -x c -fsyntax-only '
   \   . '-iquote ' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/makefile_project/subdir')) . ' '
-  \   . ' -I' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/makefile_project') . '/include') . ' '
+  \   . ' -I' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/makefile_project/include')) . ' '
   \   . ' -'
   \ , ale_linters#c#clang#GetCommand(bufnr(''))
 
@@ -144,7 +144,7 @@ Execute(The C++ GCC handler should include 'include' directories for projects wi
   \   ale#Escape('gcc')
   \   . ' -S -x c++ -fsyntax-only '
   \   . '-iquote ' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/makefile_project/subdir')) . ' '
-  \   . ' -I' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/makefile_project') . '/include') . ' '
+  \   . ' -I' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/makefile_project/include')) . ' '
   \   . ' -'
   \ , ale_linters#cpp#gcc#GetCommand(bufnr(''))
 
@@ -157,7 +157,7 @@ Execute(The C++ GCC handler should include 'include' directories for projects wi
   \   ale#Escape('gcc')
   \   . ' -S -x c++ -fsyntax-only '
   \   . '-iquote ' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/configure_project/subdir')) . ' '
-  \   . ' -I' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/configure_project') . '/include') . ' '
+  \   . ' -I' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/configure_project/include')) . ' '
   \   . ' -'
   \ , ale_linters#cpp#gcc#GetCommand(bufnr(''))
 
@@ -196,7 +196,7 @@ Execute(The C++ Clang handler should include 'include' directories for projects 
   \   ale#Escape('clang++')
   \   . ' -S -x c++ -fsyntax-only '
   \   . '-iquote ' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/makefile_project/subdir')) . ' '
-  \   . ' -I' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/makefile_project') . '/include') . ' '
+  \   . ' -I' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/makefile_project/include')) . ' '
   \   . ' -'
   \ , ale_linters#cpp#clang#GetCommand(bufnr(''))
 
@@ -209,7 +209,7 @@ Execute(The C++ Clang handler should include 'include' directories for projects 
   \   ale#Escape('clang++')
   \   . ' -S -x c++ -fsyntax-only '
   \   . '-iquote ' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/configure_project/subdir')) . ' '
-  \   . ' -I' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/configure_project') . '/include') . ' '
+  \   . ' -I' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/configure_project/include')) . ' '
   \   . ' -'
   \ , ale_linters#cpp#clang#GetCommand(bufnr(''))
 
@@ -256,7 +256,7 @@ Execute(The C++ Clang handler shoud use the include directory based on the .git 
   \   ale#Escape('clang++')
   \   . ' -S -x c++ -fsyntax-only '
   \   . '-iquote ' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/git_and_nested_makefiles/src')) . ' '
-  \   . ' -I' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/git_and_nested_makefiles') . '/include') . ' '
+  \   . ' -I' . ale#Escape(ale#path#Winify(g:dir .  '/test_c_projects/git_and_nested_makefiles/include')) . ' '
   \   . ' -'
   \ , ale_linters#cpp#clang#GetCommand(bufnr(''))
 
@@ -268,7 +268,7 @@ Execute(The C++ ClangTidy handler should include json folders for projects with 
   AssertEqual
   \ ale#Escape('clang-tidy')
   \   . ' -checks=' . ale#Escape('*') . ' %s '
-  \   . '-p ' . ale#Escape(ale#path#Winify(g:dir . '/test_c_projects/json_project') . '/build')
+  \   . '-p ' . ale#Escape(ale#path#Winify(g:dir . '/test_c_projects/json_project/build'))
   \ , ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
 
 Execute(Move .git/HEAD back):
