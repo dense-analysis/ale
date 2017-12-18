@@ -35,39 +35,3 @@ Execute(The gitlint handler should handle basic warnings and syntax errors):
   \   '8: T1 Title exceeds max length (92>72): "some very long commit subject line where the author can''t wait to explain what he just fixed"'
   \ ])
 
-Execute(The gitlint handler should handle stack traces):
-  AssertEqual
-  \ [
-  \   {
-  \     'lnum': 1,
-  \     'text': 'An exception was thrown. See :ALEDetail',
-  \     'detail': join([
-  \       'Traceback (most recent call last):',
-  \       '  File "/usr/local/bin/gitlint", line 7, in <module>',
-  \       '    from gitlint.main.cli import main',
-  \       '  File "/usr/local/lib/python2.7/dist-packages/gitlint/main/cli.py", line 2, in <module>',
-  \       '    from gitlint.main import application',
-  \       '  File "/usr/local/lib/python2.7/dist-packages/gitlint/main/application.py", line 17, in <module>',
-  \       '    from gitlint.plugins import manager as plugin_manager',
-  \       '  File "/usr/local/lib/python2.7/dist-packages/gitlint/plugins/manager.py", line 5, in <module>',
-  \       '    import pkg_resources',
-  \       '  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 35, in <module>',
-  \       '    import email.parser',
-  \       'ImportError: Failed to read commit message',
-  \     ], "\n"),
-  \   },
-  \ ],
-  \ ale_linters#gitcommit#gitlint#Handle(42, [
-  \   'Traceback (most recent call last):',
-  \   '  File "/usr/local/bin/gitlint", line 7, in <module>',
-  \   '    from gitlint.main.cli import main',
-  \   '  File "/usr/local/lib/python2.7/dist-packages/gitlint/main/cli.py", line 2, in <module>',
-  \   '    from gitlint.main import application',
-  \   '  File "/usr/local/lib/python2.7/dist-packages/gitlint/main/application.py", line 17, in <module>',
-  \   '    from gitlint.plugins import manager as plugin_manager',
-  \   '  File "/usr/local/lib/python2.7/dist-packages/gitlint/plugins/manager.py", line 5, in <module>',
-  \   '    import pkg_resources',
-  \   '  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 35, in <module>',
-  \   '    import email.parser',
-  \   'ImportError: Failed to read commit message',
-  \ ])
