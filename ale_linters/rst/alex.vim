@@ -4,7 +4,8 @@
 call ale#linter#Define('rst', {
 \   'name': 'alex',
 \   'executable': 'alex',
-\   'command': 'alex %t -t',
+\   'command': 'alex %s -t',
 \   'output_stream': 'stderr',
 \   'callback': 'ale#handlers#alex#Handle',
+\   'lint_file': 1,
 \})
