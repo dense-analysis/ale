@@ -275,12 +275,12 @@ Notes:
 * ASM: `gcc`
 * Ansible: `ansible-lint`
 * API Blueprint: `drafter`
-* AsciiDoc: `alex`, `proselint`, `write-good`, `redpen`
+* AsciiDoc: `alex`, `proselint`, `redpen`, `write-good`
 * Awk: `gawk`
 * Bash: `shell` (-n flag), `shellcheck`, `shfmt`
 * Bourne Shell: `shell` (-n flag), `shellcheck`, `shfmt`
 * C: `cppcheck`, `cpplint`!!, `gcc`, `clang`, `clangtidy`!!, `clang-format`
-* C++ (filetype cpp): `clang`, `clangcheck`!!, `clangtidy`!!, `cppcheck`, `cpplint`!!, `gcc`, `clang-format`
+* C++ (filetype cpp): `clang`, `clangcheck`!!, `clangtidy`!!, `clang-format`, `cppcheck`, `cpplint`!!, `gcc`
 * CUDA: `nvcc`!!
 * C#: `mcs`, `mcsc`!!
 * Chef: `foodcritic`
@@ -312,13 +312,13 @@ Notes:
 * JavaScript: `eslint`, `flow`, `jscs`, `jshint`, `prettier`, `prettier-eslint` >= 4.2.0, `prettier-standard`, `standard`, `xo`
 * JSON: `jsonlint`, `prettier`
 * Kotlin: `kotlinc`, `ktlint`
-* LaTeX (tex): `alex`, `chktex`, `lacheck`, `proselint`, `write-good`, `redpen`
+* LaTeX (tex): `alex`, `chktex`, `lacheck`, `proselint`, `redpen`, `vale`, `write-good`
 * Less: `lessc`, `prettier`, `stylelint`
 * LLVM: `llc`
 * Lua: `luacheck`
 * Mail: `alex`, `proselint`, `vale`
 * Make: `checkmake`
-* Markdown: `alex`, `mdl`, `proselint`, `vale`, `remark-lint`, `write-good`, `redpen`
+* Markdown: `alex`, `mdl`, `proselint`, `redpen`, `remark-lint`, `vale`, `write-good`
 * MATLAB: `mlint`
 * Nim: `nim check`!!
 * nix: `nix-instantiate`
@@ -335,7 +335,7 @@ Notes:
 * Python: `autopep8`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pyls`, `pylint`!!, `yapf`
 * R: `lintr`
 * ReasonML: `merlin`, `ols`, `refmt`
-* reStructuredText: `alex`, `proselint`, `rstcheck`, `write-good`, `redpen`
+* reStructuredText: `alex`, `proselint`, `redpen`, `rstcheck`, `vale`, `write-good`
 * Re:VIEW: `redpen`
 * RPM spec: `rpmlint`
 * Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`
