@@ -4,6 +4,8 @@
 function! ale#handlers#vale#GetType(severity) abort
     if a:severity is? 'warning'
         return 'W'
+    elseif a:severity is? 'suggestion'
+        return 'I'
     endif
 
     return 'E'
