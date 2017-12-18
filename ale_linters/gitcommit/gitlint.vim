@@ -8,12 +8,13 @@ let g:ale_gitcommit_gitlint_use_global = get(g:, 'ale_gitcommit_gitlint_use_glob
 
 
 function! ale_linters#gitcommit#gitlint#GetExecutable(buffer) abort
-    return ale#Var(a:buffer, 'gitcommit_gitlint_executable')
+    return ale#python#FindExecutable(a:buffer, 'gitcommit_gitlint', ['gitlint'])
 endfunction
 
 function! ale_linters#gitcommit#gitlint#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'gitcommit_gitlint_options')
-    return ale#Escape(ale_linters#gitcommit#gitlint#GetExecutable(a:buffer))
+    let l:executable = ale_linters#gitcommit#gitlint#GetExecutable(a:buffer)
+    return ale#Escape(l:executable)
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' lint'
 endfunction
