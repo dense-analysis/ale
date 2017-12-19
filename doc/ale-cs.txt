@@ -63,7 +63,8 @@ g:ale_cs_mcsc_source                                     *g:ale_cs_mcsc_source*
   Default: `''`
 
   This variable defines the root path of the directory tree searched for the
-  '*.cs' files to be linted. If empty the current working directory is used.
+  '*.cs' files to be linted. If this option is empty, the source file's
+  directory will be used.
 
   NOTE: Currently it is not possible to specify sub directories and
   directory sub trees which shall not be searched for *.cs files.
