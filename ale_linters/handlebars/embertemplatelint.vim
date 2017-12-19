@@ -22,15 +22,13 @@ function! ale_linters#handlebars#embertemplatelint#Handle(buffer, lines) abort
     for l:error in get(values(l:json), 0, [])
         if has_key(l:error, 'fatal')
             call add(l:output, {
-            \   'bufnr': a:buffer,
-            \   'lnum': 1,
-            \   'col': 1,
+            \   'lnum': get(l:error, 'line', 1),
+            \   'col': get(l:error, 'column', 1),
             \   'text': l:error.message,
             \   'type': l:error.severity == 1 ? 'W' : 'E',
             \})
         else
             call add(l:output, {
-            \   'bufnr': a:buffer,
             \   'lnum': l:error.line,
             \   'col': l:error.column,
             \   'text': l:error.rule . ': ' . l:error.message,
