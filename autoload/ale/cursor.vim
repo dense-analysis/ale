@@ -55,6 +55,10 @@ function! ale#cursor#EchoCursorWarning(...) abort
 endfunction
 
 function! s:EchoImpl() abort
+    if !g:ale_echo_cursor
+        return
+    endif
+
     " Only echo the warnings in normal mode, otherwise we will get problems.
     if mode() isnot# 'n'
         return
@@ -81,6 +85,10 @@ function! s:EchoImpl() abort
 endfunction
 
 function! ale#cursor#EchoCursorWarningWithDelay() abort
+    if !g:ale_echo_cursor
+        return
+    endif
+
     " Only echo the warnings in normal mode, otherwise we will get problems.
     if mode() isnot# 'n'
         return
