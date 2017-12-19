@@ -43,7 +43,7 @@ Execute(The command should be correct with g:ale_perl_perlcritic_showrules on):
 Execute(The command search for the profile file when set):
   let b:ale_perl_perlcritic_profile = 'README.md'
 
-  let b:readme_path = ale#path#Winify(expand('%:p:h:h:h') . '/README.md')
+  let b:readme_path = ale#path#Simplify(expand('%:p:h:h:h') . '/README.md')
 
   AssertEqual
   \ ale#Escape('perlcritic') . ' --verbose ''%l:%c %m\n'' --nocolor'

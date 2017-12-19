@@ -61,7 +61,7 @@ Execute(The pylint callbacks shouldn't detect virtualenv directories where they 
 Execute(The pylint callbacks should detect virtualenv directories):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
 
-  let b:executable = ale#path#Winify(
+  let b:executable = ale#path#Simplify(
   \ g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/pylint'
   \)
 

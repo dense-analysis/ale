@@ -17,7 +17,7 @@ Execute(create-react-app directories should be detected correctly):
   call ale#test#SetFilename('eslint-test-files/react-app/subdir/testfile.js')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'),
+  \ ale#path#Simplify(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'),
   \ ale#handlers#eslint#GetExecutable(bufnr(''))
 
 Execute(use-global should override create-react-app detection):
@@ -33,7 +33,7 @@ Execute(other app directories should be detected correctly):
   call ale#test#SetFilename('eslint-test-files/other-app/subdir/testfile.js')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/eslint-test-files/node_modules/.bin/eslint'),
+  \ ale#path#Simplify(g:dir . '/eslint-test-files/node_modules/.bin/eslint'),
   \ ale#handlers#eslint#GetExecutable(bufnr(''))
 
 Execute(use-global should override other app directories):
@@ -49,7 +49,7 @@ Execute(eslint_d should be detected correctly):
   call ale#test#SetFilename('eslint-test-files/app-with-eslint-d/testfile.js')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'),
+  \ ale#path#Simplify(g:dir . '/eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'),
   \ ale#handlers#eslint#GetExecutable(bufnr(''))
 
 Execute(eslint.js executables should be run with node on Windows):
@@ -59,6 +59,6 @@ Execute(eslint.js executables should be run with node on Windows):
   " We have to execute the file with node.
   AssertEqual
   \   ale#Escape('node.exe') . ' '
-  \   . ale#Escape(ale#path#Winify(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \   . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \   . ' -f unix --stdin --stdin-filename %s',
   \ ale#handlers#eslint#GetCommand(bufnr(''))

@@ -21,12 +21,12 @@ Execute(puglint should detect local executables and package.json):
   call ale#test#SetFilename('puglint_project/test.pug')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/puglint_project/node_modules/.bin/pug-lint'),
+  \ ale#path#Simplify(g:dir . '/puglint_project/node_modules/.bin/pug-lint'),
   \ ale_linters#pug#puglint#GetExecutable(bufnr(''))
 
   AssertEqual
-  \ ale#Escape(ale#path#Winify(g:dir . '/puglint_project/node_modules/.bin/pug-lint'))
-  \   . ' -c ' . ale#Escape(ale#path#Winify(g:dir . '/puglint_project/package.json'))
+  \ ale#Escape(ale#path#Simplify(g:dir . '/puglint_project/node_modules/.bin/pug-lint'))
+  \   . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/puglint_project/package.json'))
   \   . ' -r inline %t',
   \ ale_linters#pug#puglint#GetCommand(bufnr(''))
 
@@ -39,7 +39,7 @@ Execute(puglint should use global executables if configured):
 
   AssertEqual
   \ ale#Escape('pug-lint')
-  \   . ' -c ' . ale#Escape(ale#path#Winify(g:dir . '/puglint_project/package.json'))
+  \   . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/puglint_project/package.json'))
   \   . ' -r inline %t',
   \ ale_linters#pug#puglint#GetCommand(bufnr(''))
 
@@ -47,8 +47,8 @@ Execute(puglint should detect .pug-lintrc):
   call ale#test#SetFilename('puglint_project/puglint_rc_dir/subdir/test.pug')
 
   AssertEqual
-  \ ale#Escape(ale#path#Winify(g:dir . '/puglint_project/node_modules/.bin/pug-lint'))
-  \   . ' -c ' . ale#Escape(ale#path#Winify(g:dir . '/puglint_project/puglint_rc_dir/.pug-lintrc'))
+  \ ale#Escape(ale#path#Simplify(g:dir . '/puglint_project/node_modules/.bin/pug-lint'))
+  \   . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/puglint_project/puglint_rc_dir/.pug-lintrc'))
   \   . ' -r inline %t',
   \ ale_linters#pug#puglint#GetCommand(bufnr(''))
 
@@ -56,8 +56,8 @@ Execute(puglint should detect .pug-lintrc.js):
   call ale#test#SetFilename('puglint_project/puglint_rc_js_dir/subdir/test.pug')
 
   AssertEqual
-  \ ale#Escape(ale#path#Winify(g:dir . '/puglint_project/node_modules/.bin/pug-lint'))
-  \   . ' -c ' . ale#Escape(ale#path#Winify(g:dir . '/puglint_project/puglint_rc_js_dir/.pug-lintrc.js'))
+  \ ale#Escape(ale#path#Simplify(g:dir . '/puglint_project/node_modules/.bin/pug-lint'))
+  \   . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/puglint_project/puglint_rc_js_dir/.pug-lintrc.js'))
   \   . ' -r inline %t',
   \ ale_linters#pug#puglint#GetCommand(bufnr(''))
 
@@ -65,7 +65,7 @@ Execute(puglint should detect .pug-lintrc.json):
   call ale#test#SetFilename('puglint_project/puglint_rc_json_dir/subdir/test.pug')
 
   AssertEqual
-  \ ale#Escape(ale#path#Winify(g:dir . '/puglint_project/node_modules/.bin/pug-lint'))
-  \   . ' -c ' . ale#Escape(ale#path#Winify(g:dir . '/puglint_project/puglint_rc_json_dir/.pug-lintrc.json'))
+  \ ale#Escape(ale#path#Simplify(g:dir . '/puglint_project/node_modules/.bin/pug-lint'))
+  \   . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/puglint_project/puglint_rc_json_dir/.pug-lintrc.json'))
   \   . ' -r inline %t',
   \ ale_linters#pug#puglint#GetCommand(bufnr(''))

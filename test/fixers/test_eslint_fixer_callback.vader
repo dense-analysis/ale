@@ -13,8 +13,8 @@ Execute(The executable path should be correct):
   \ {
   \   'read_temporary_file': 1,
   \   'command': (has('win32') ? 'node.exe ' : '')
-  \     . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
-  \     . ' -c ' . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --fix %t',
   \ },
   \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), ['v4.4.1 (eslint_d v5.1.0)'])
@@ -26,8 +26,8 @@ Execute(The lower priority configuration file in a nested directory should be pr
   \ {
   \   'read_temporary_file': 1,
   \   'command': (has('win32') ? 'node.exe ' : '')
-  \     . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
-  \     . ' -c ' . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/subdir-with-config/.eslintrc'))
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/subdir-with-config/.eslintrc'))
   \     . ' --fix %t',
   \ },
   \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), [])
@@ -39,8 +39,8 @@ Execute(package.json should be used as a last resort):
   \ {
   \   'read_temporary_file': 1,
   \   'command': (has('win32') ? 'node.exe ' : '')
-  \     . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
-  \     . ' -c ' . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --fix %t',
   \ },
   \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), [])
@@ -51,8 +51,8 @@ Execute(package.json should be used as a last resort):
   \ {
   \   'read_temporary_file': 1,
   \   'command':
-  \     ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/node_modules/.bin/eslint'))
-  \     . ' -c ' . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/package.json'))
+  \     ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/node_modules/.bin/eslint'))
+  \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/package.json'))
   \     . ' --fix %t',
   \ },
   \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), [])
@@ -64,7 +64,7 @@ Execute(The version check should be correct):
   \ {
   \   'chain_with': 'ale#fixers#eslint#ApplyFixForVersion',
   \   'command': (has('win32') ? 'node.exe ' : '')
-  \     . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' --version'
   \ },
   \ ale#fixers#eslint#Fix(bufnr(''))
@@ -75,7 +75,7 @@ Execute(--fix-dry-run should be used for 4.9.0 and up):
   AssertEqual
   \ {
   \   'command': (has('win32') ? 'node.exe ' : '')
-  \     . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
   \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
   \ },
@@ -88,8 +88,8 @@ Execute(--fix-to-stdout should be used for eslint_d):
   \ {
   \   'read_temporary_file': 1,
   \   'command':
-  \     ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
-  \     . ' -c ' . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/package.json'))
+  \     ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
+  \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/package.json'))
   \     . ' --fix %t',
   \ },
   \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), [''])
@@ -99,7 +99,7 @@ Execute(--fix-to-stdout should be used for eslint_d):
   AssertEqual
   \ {
   \   'command':
-  \     ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
+  \     ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
   \     . ' --stdin-filename %s --stdin --fix-to-stdout',
   \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
   \ },
@@ -109,7 +109,7 @@ Execute(--fix-to-stdout should be used for eslint_d):
   AssertEqual
   \ {
   \   'command':
-  \     ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
+  \     ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
   \     . ' --stdin-filename %s --stdin --fix-to-stdout',
   \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
   \ },
@@ -133,7 +133,7 @@ Execute(The version number should be cached):
   AssertEqual
   \ {
   \   'command': (has('win32') ? 'node.exe ' : '')
-  \     . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
   \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
   \ },

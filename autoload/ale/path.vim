@@ -17,23 +17,6 @@ function! ale#path#Simplify(path) abort
     return substitute(simplify(l:win_path), '^\\\+', '\', 'g') " no-custom-checks
 endfunction
 
-" This function is mainly used for testing.
-"
-" If an additional 'add_drive' argument is given, the current drive letter
-" will be prefixed to any absolute paths on Windows.
-function! ale#path#Winify(path, ...) abort
-    let l:new_path = ale#path#Simplify(a:path)
-
-    if has('win32')
-        " Add a drive letter to \foo\bar paths, if needed.
-        if a:0 && a:1 is# 'add_drive' && l:new_path[:0] is# '\'
-            let l:new_path = fnamemodify('.', ':p')[:1] . l:new_path
-        endif
-    endif
-
-    return l:new_path
-endfunction
-
 " Given a buffer and a filename, find the nearest file by searching upwards
 " through the paths relative to the given buffer.
 function! ale#path#FindNearestFile(buffer, filename) abort

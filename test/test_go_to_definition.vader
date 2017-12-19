@@ -70,7 +70,7 @@ Execute(Other files should be jumped to for definition responses):
   \   'success': v:true,
   \   'body': [
   \     {
-  \       'file': ale#path#Winify(g:dir . '/completion_dummy_file'),
+  \       'file': ale#path#Simplify(g:dir . '/completion_dummy_file'),
   \       'start': {'line': 3, 'offset': 7},
   \     },
   \   ],
@@ -79,7 +79,7 @@ Execute(Other files should be jumped to for definition responses):
 
   AssertEqual
   \ [
-  \   'edit ' . fnameescape(ale#path#Winify(g:dir . '/completion_dummy_file')),
+  \   'edit ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
   AssertEqual [3, 7], getpos('.')[1:2]
@@ -95,7 +95,7 @@ Execute(Other files should be jumped to for definition responses in tabs too):
   \   'success': v:true,
   \   'body': [
   \     {
-  \       'file': ale#path#Winify(g:dir . '/completion_dummy_file'),
+  \       'file': ale#path#Simplify(g:dir . '/completion_dummy_file'),
   \       'start': {'line': 3, 'offset': 7},
   \     },
   \   ],
@@ -104,7 +104,7 @@ Execute(Other files should be jumped to for definition responses in tabs too):
 
   AssertEqual
   \ [
-  \   'tabedit ' . fnameescape(ale#path#Winify(g:dir . '/completion_dummy_file')),
+  \   'tabedit ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
   AssertEqual [3, 7], getpos('.')[1:2]
@@ -150,7 +150,7 @@ Execute(Other files should be jumped to for LSP definition responses):
   \ {
   \   'id': 3,
   \   'result': {
-  \     'uri': ale#path#ToURI(ale#path#Winify(g:dir . '/completion_dummy_file')),
+  \     'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \     'range': {
   \       'start': {'line': 2, 'character': 7},
   \     },
@@ -160,7 +160,7 @@ Execute(Other files should be jumped to for LSP definition responses):
 
   AssertEqual
   \ [
-  \   'edit ' . fnameescape(ale#path#Winify(g:dir . '/completion_dummy_file')),
+  \   'edit ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
   AssertEqual [3, 7], getpos('.')[1:2]
@@ -173,7 +173,7 @@ Execute(Other files should be jumped to in tabs for LSP definition responses):
   \ {
   \   'id': 3,
   \   'result': {
-  \     'uri': ale#path#ToURI(ale#path#Winify(g:dir . '/completion_dummy_file')),
+  \     'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \     'range': {
   \       'start': {'line': 2, 'character': 7},
   \     },
@@ -183,7 +183,7 @@ Execute(Other files should be jumped to in tabs for LSP definition responses):
 
   AssertEqual
   \ [
-  \   'tabedit ' . fnameescape(ale#path#Winify(g:dir . '/completion_dummy_file')),
+  \   'tabedit ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
   AssertEqual [3, 7], getpos('.')[1:2]
@@ -197,13 +197,13 @@ Execute(Definition responses with lists should be handled):
   \   'id': 3,
   \   'result': [
   \     {
-  \       'uri': ale#path#ToURI(ale#path#Winify(g:dir . '/completion_dummy_file')),
+  \       'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \       'range': {
   \         'start': {'line': 2, 'character': 7},
   \       },
   \     },
   \     {
-  \       'uri': ale#path#ToURI(ale#path#Winify(g:dir . '/other_file')),
+  \       'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/other_file')),
   \       'range': {
   \         'start': {'line': 20, 'character': 3},
   \       },
@@ -214,7 +214,7 @@ Execute(Definition responses with lists should be handled):
 
   AssertEqual
   \ [
-  \   'edit ' . fnameescape(ale#path#Winify(g:dir . '/completion_dummy_file')),
+  \   'edit ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
   AssertEqual [3, 7], getpos('.')[1:2]

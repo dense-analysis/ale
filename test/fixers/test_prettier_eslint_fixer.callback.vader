@@ -54,7 +54,7 @@ Execute(--eslint-config-path should be set for 4.2.0 and up):
   \   'command':
   \     ale#Escape('prettier-eslint')
   \     . ' %t'
-  \     . ' --eslint-config-path ' . ale#Escape(ale#path#Winify(g:dir . '/eslint-test-files/react-app/.eslintrc.js'))
+  \     . ' --eslint-config-path ' . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --write'
   \ },
   \ ale#fixers#prettier_eslint#ApplyFixForVersion(bufnr(''), ['4.2.0'])
@@ -87,7 +87,7 @@ Execute(The new --stdin-filepath option should be used when the version is new e
   \ {
   \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
   \     . ale#Escape('prettier-eslint')
-  \     . ' --eslint-config-path ' . ale#Escape(ale#path#Winify(g:dir . '/eslint-test-files/react-app/.eslintrc.js'))
+  \     . ' --eslint-config-path ' . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --stdin-filepath %s --stdin',
   \ },
   \ ale#fixers#prettier_eslint#ApplyFixForVersion(bufnr(''), ['4.4.0'])

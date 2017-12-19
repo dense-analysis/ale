@@ -8,21 +8,21 @@ Execute(Warning and error messages should be handled correctly):
   AssertEqual
   \ [
   \   {
-  \      'filename': ale#path#Winify(expand('%:p:h') . '/bad_python.rst'),
+  \      'filename': ale#path#Simplify(expand('%:p:h') . '/bad_python.rst'),
   \      'lnum': 7,
   \      'col': 0,
   \      'type': 'W',
   \      'text': '(python) unexpected EOF while parsing',
   \   },
   \   {
-  \      'filename': ale#path#Winify(expand('%:p:h') . '/bad_cpp.rst'),
+  \      'filename': ale#path#Simplify(expand('%:p:h') . '/bad_cpp.rst'),
   \      'lnum': 9,
   \      'col': 0,
   \      'type': 'W',
   \      'text': '(cpp) error: ''x'' was not declared in this scope',
   \   },
   \   {
-  \      'filename': ale#path#Winify(expand('%:p:h') . '/bad_rst.rst'),
+  \      'filename': ale#path#Simplify(expand('%:p:h') . '/bad_rst.rst'),
   \      'lnum': 1,
   \      'col': 0,
   \      'type': 'E',

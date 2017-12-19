@@ -27,7 +27,7 @@ After:
 Execute(bin/cmd.js paths should be preferred):
   call ale#test#SetFilename('standard-test-files/with-cmd/testfile.js')
 
-  let b:executable = ale#path#Winify(
+  let b:executable = ale#path#Simplify(
   \   g:dir
   \   . '/standard-test-files/with-cmd/node_modules/standard/bin/cmd.js'
   \)
@@ -45,7 +45,7 @@ Execute(bin/cmd.js paths should be preferred):
 Execute(.bin directories should be used too):
   call ale#test#SetFilename('standard-test-files/with-bin/testfile.js')
 
-  let b:executable = ale#path#Winify(
+  let b:executable = ale#path#Simplify(
   \   g:dir
   \   . '/standard-test-files/with-bin/node_modules/.bin/standard'
   \)

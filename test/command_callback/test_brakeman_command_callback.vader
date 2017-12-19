@@ -25,7 +25,7 @@ Execute(The brakeman command callback should find a valid Rails app root):
 
   AssertEqual
   \ 'brakeman -f json -q  -p '
-  \ . ale#Escape(ale#path#Winify(g:dir . '/../ruby_fixtures/valid_rails_app')),
+  \ . ale#Escape(ale#path#Simplify(g:dir . '/../ruby_fixtures/valid_rails_app')),
   \ ale_linters#ruby#brakeman#GetCommand(bufnr(''))
 
 Execute(The brakeman command callback should include configured options):
@@ -35,5 +35,5 @@ Execute(The brakeman command callback should include configured options):
 
   AssertEqual
   \ 'brakeman -f json -q --combobulate -p '
-  \ . ale#Escape(ale#path#Winify(g:dir . '/../ruby_fixtures/valid_rails_app')),
+  \ . ale#Escape(ale#path#Simplify(g:dir . '/../ruby_fixtures/valid_rails_app')),
   \ ale_linters#ruby#brakeman#GetCommand(bufnr(''))

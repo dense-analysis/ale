@@ -18,7 +18,7 @@ Execute(The default command should be correct):
 
 Execute(The command should have the .rubocop.yml prepended as an env var if one exists):
   call ale#test#SetFilename('../hamllint-test-files/rubocop-yml/subdir/file.haml')
-  let b:conf = ale#path#Winify(g:dir . '/../hamllint-test-files/rubocop-yml/.rubocop.yml')
+  let b:conf = ale#path#Simplify(g:dir . '/../hamllint-test-files/rubocop-yml/.rubocop.yml')
 
   if has('win32')
     " Windows uses 'set var=... && command'
@@ -38,7 +38,7 @@ Execute(The command should have the .rubocop.yml prepended as an env var if one 
 
 Execute(The command should have the nearest .haml-lint.yml set as --config if it exists):
   call ale#test#SetFilename('../hamllint-test-files/haml-lint-yml/subdir/file.haml')
-  let b:conf = ale#path#Winify(g:dir . '/../hamllint-test-files/haml-lint-yml/.haml-lint.yml')
+  let b:conf = ale#path#Simplify(g:dir . '/../hamllint-test-files/haml-lint-yml/.haml-lint.yml')
 
   AssertEqual
   \ 'haml-lint --config '
@@ -48,8 +48,8 @@ Execute(The command should have the nearest .haml-lint.yml set as --config if it
 
 Execute(The command should include a .rubocop.yml and a .haml-lint if both are found):
   call ale#test#SetFilename('../hamllint-test-files/haml-lint-and-rubocop/subdir/file.haml')
-  let b:conf_hamllint = ale#path#Winify(g:dir . '/../hamllint-test-files/haml-lint-and-rubocop/.haml-lint.yml')
-  let b:conf_rubocop = ale#path#Winify(g:dir . '/../hamllint-test-files/haml-lint-and-rubocop/.rubocop.yml')
+  let b:conf_hamllint = ale#path#Simplify(g:dir . '/../hamllint-test-files/haml-lint-and-rubocop/.haml-lint.yml')
+  let b:conf_rubocop = ale#path#Simplify(g:dir . '/../hamllint-test-files/haml-lint-and-rubocop/.rubocop.yml')
 
   if has('win32')
     " Windows uses 'set var=... && command'

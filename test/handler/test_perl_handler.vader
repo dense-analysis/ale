@@ -15,9 +15,9 @@ Execute(The Perl linter should ignore errors from other files):
   \    {'lnum': '2', 'type': 'E', 'text': 'Compilation failed in require'},
   \ ],
   \ ale_linters#perl#perl#Handle(bufnr(''), [
-  \   'syntax error at ' . ale#path#Winify(g:dir . '/foo.pm') . ' line 4, near "aklsdfjmy "',
-  \   'Compilation failed in require at ' . ale#path#Winify(g:dir . '/bar.pl') . ' line 2.',
-  \   'BEGIN failed--compilation aborted at ' . ale#path#Winify(g:dir . '/bar.pl') . ' line 2.',
+  \   'syntax error at ' . ale#path#Simplify(g:dir . '/foo.pm') . ' line 4, near "aklsdfjmy "',
+  \   'Compilation failed in require at ' . ale#path#Simplify(g:dir . '/bar.pl') . ' line 2.',
+  \   'BEGIN failed--compilation aborted at ' . ale#path#Simplify(g:dir . '/bar.pl') . ' line 2.',
   \ ])
 
 Execute(The Perl linter should complain about failing to locate modules):

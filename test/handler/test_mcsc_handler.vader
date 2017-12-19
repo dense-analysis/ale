@@ -18,7 +18,7 @@ Execute(The mcs handler should work with the default of the buffer's directory):
   \     'text': '; expected',
   \     'code': 'CS1001',
   \     'type': 'E',
-  \     'filename': ale#path#Winify(expand('%:p:h') . '/Test.cs', 'add_drive'),
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/Test.cs'),
   \   },
   \ ],
   \ ale_linters#cs#mcsc#Handle(347, [
@@ -37,7 +37,7 @@ Execute(The mcs handler should handle cannot find symbol errors):
   \     'text': '; expected',
   \     'code': 'CS1001',
   \     'type': 'E',
-  \     'filename': ale#path#Winify('/home/foo/project/bar/Test.cs', 'add_drive'),
+  \     'filename': ale#path#Simplify('/home/foo/project/bar/Test.cs'),
   \   },
   \   {
   \     'lnum': 101,
@@ -45,7 +45,7 @@ Execute(The mcs handler should handle cannot find symbol errors):
   \     'text': 'Unexpected processor directive (no #if for this #endif)',
   \     'code': 'CS1028',
   \     'type': 'E',
-  \     'filename': ale#path#Winify('/home/foo/project/bar/Test.cs', 'add_drive'),
+  \     'filename': ale#path#Simplify('/home/foo/project/bar/Test.cs'),
   \   },
   \   {
   \     'lnum': 10,
@@ -53,7 +53,7 @@ Execute(The mcs handler should handle cannot find symbol errors):
   \     'text': 'some warning',
   \     'code': 'CS0123',
   \     'type': 'W',
-  \     'filename': ale#path#Winify('/home/foo/project/bar/Test.cs', 'add_drive'),
+  \     'filename': ale#path#Simplify('/home/foo/project/bar/Test.cs'),
   \   },
   \ ],
   \ ale_linters#cs#mcsc#Handle(347, [

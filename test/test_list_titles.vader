@@ -42,7 +42,7 @@ Execute(The loclist titles should be set appropriately):
 
   if !has('nvim')
     AssertEqual
-    \ {'title': ale#path#Winify(getcwd() . '/foo')},
+    \ {'title': ale#path#Simplify(getcwd() . '/foo')},
     \ getloclist(0, {'title': ''})
   endif
 
@@ -72,6 +72,6 @@ Execute(The quickfix titles should be set appropriately):
 
   if !has('nvim')
     AssertEqual
-    \ {'title': ale#path#Winify(getcwd() . '/foo')},
+    \ {'title': ale#path#Simplify(getcwd() . '/foo')},
     \ getqflist({'title': ''})
   endif

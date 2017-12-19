@@ -30,7 +30,7 @@ After:
 Execute(node_modules directories should be discovered):
   call ale#test#SetFilename('stylelint_paths/nested/testfile.less')
 
-  let b:executable = ale#path#Winify(
+  let b:executable = ale#path#Simplify(
   \   g:dir
   \   . '/stylelint_paths/node_modules/.bin/stylelint'
   \)

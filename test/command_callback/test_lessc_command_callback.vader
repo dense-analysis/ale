@@ -30,7 +30,7 @@ After:
 Execute(node_modules directories should be discovered):
   call ale#test#SetFilename('lessc_paths/nested/testfile.less')
 
-  let b:executable = ale#path#Winify(
+  let b:executable = ale#path#Simplify(
   \   g:dir
   \   . '/lessc_paths/node_modules/.bin/lessc'
   \)
@@ -43,7 +43,7 @@ Execute(node_modules directories should be discovered):
   \ ale#Escape(b:executable)
   \   . ' --no-color --lint'
   \   . ' --include-path='
-  \     . ale#Escape(ale#path#Winify(g:dir . '/lessc_paths/nested'))
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/lessc_paths/nested'))
   \   . ' -',
   \ ale_linters#less#lessc#GetCommand(bufnr(''))
 
@@ -61,7 +61,7 @@ Execute(The global override should work):
   \ ale#Escape('foobar')
   \   . ' --no-color --lint'
   \   . ' --include-path='
-  \     . ale#Escape(ale#path#Winify(g:dir . '/lessc_paths/nested'))
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/lessc_paths/nested'))
   \   . ' -',
   \ ale_linters#less#lessc#GetCommand(bufnr(''))
 
@@ -76,7 +76,7 @@ Execute(Extra options should be configurable):
   \ ale#Escape('lessc')
   \   . ' --no-color --lint'
   \   . ' --include-path='
-  \     . ale#Escape(ale#path#Winify(g:dir))
+  \     . ale#Escape(ale#path#Simplify(g:dir))
   \   . ' --whatever'
   \   . ' -',
   \ ale_linters#less#lessc#GetCommand(bufnr(''))

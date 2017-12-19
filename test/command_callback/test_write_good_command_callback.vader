@@ -34,10 +34,10 @@ Execute(Should use the node_modules/.bin executable, if available):
   call ale#test#SetFilename('write-good-node-modules/test.txt')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/write-good-node-modules/node_modules/.bin/write-good'),
+  \ ale#path#Simplify(g:dir . '/write-good-node-modules/node_modules/.bin/write-good'),
   \ ale#handlers#writegood#GetExecutable(bufnr(''))
   AssertEqual
-  \ ale#Escape(ale#path#Winify(g:dir . '/write-good-node-modules/node_modules/.bin/write-good'))
+  \ ale#Escape(ale#path#Simplify(g:dir . '/write-good-node-modules/node_modules/.bin/write-good'))
   \   . ' %t',
   \ ale#handlers#writegood#GetCommand(bufnr(''))
 
@@ -45,11 +45,11 @@ Execute(Should use the node_modules/write-good executable, if available):
   call ale#test#SetFilename('write-good-node-modules-2/test.txt')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/write-good-node-modules-2/node_modules/write-good/bin/write-good.js'),
+  \ ale#path#Simplify(g:dir . '/write-good-node-modules-2/node_modules/write-good/bin/write-good.js'),
   \ ale#handlers#writegood#GetExecutable(bufnr(''))
   AssertEqual
   \   (has('win32') ? 'node.exe ' : '')
-  \   . ale#Escape(ale#path#Winify(g:dir . '/write-good-node-modules-2/node_modules/write-good/bin/write-good.js'))
+  \   . ale#Escape(ale#path#Simplify(g:dir . '/write-good-node-modules-2/node_modules/write-good/bin/write-good.js'))
   \   . ' %t',
   \ ale#handlers#writegood#GetCommand(bufnr(''))
 

@@ -69,13 +69,13 @@ Execute(The javac handler should resolve files from different directories):
   AssertEqual
   \ [
   \   {
-  \     'filename': ale#path#Winify(g:dir . '/Foo.java'),
+  \     'filename': ale#path#Simplify(g:dir . '/Foo.java'),
   \     'lnum': 1,
   \     'text': 'error: some error',
   \     'type': 'E',
   \   },
   \   {
-  \     'filename': ale#path#Winify(g:dir . '/Bar.java'),
+  \     'filename': ale#path#Simplify(g:dir . '/Bar.java'),
   \     'lnum': 1,
   \     'text': 'error: some error',
   \     'type': 'E',

@@ -32,14 +32,14 @@ Execute(The project root should be detected correctly):
   call ale#test#SetFilename('ols_paths/file.re')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/ols_paths'),
+  \ ale#path#Simplify(g:dir . '/ols_paths'),
   \ ale#handlers#ols#GetProjectRoot(bufnr(''))
 
 Execute(The local executable should be used when available):
   call ale#test#SetFilename('ols_paths/file.re')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/ols_paths/node_modules/.bin/ocaml-language-server'),
+  \ ale#path#Simplify(g:dir . '/ols_paths/node_modules/.bin/ocaml-language-server'),
   \ ale#handlers#ols#GetExecutable(bufnr(''))
 
 Execute(The gloabl executable should always be used when use_global is set):

@@ -32,14 +32,14 @@ Execute(The lessc handler should handle errors for other files in the same direc
   \     'col': 1,
   \     'type': 'E',
   \     'text': 'Unrecognised input. Possibly missing something',
-  \     'filename': ale#path#Winify(g:dir . '/imported.less')
+  \     'filename': ale#path#Simplify(g:dir . '/imported.less')
   \   },
   \   {
   \     'lnum': 2,
   \     'col': 1,
   \     'type': 'E',
   \     'text': 'Unrecognised input. Possibly missing something',
-  \     'filename': ale#path#Winify(g:dir . '/imported.less')
+  \     'filename': ale#path#Simplify(g:dir . '/imported.less')
   \   },
   \ ],
   \ ale_linters#less#lessc#Handle(bufnr(''), [
@@ -59,7 +59,7 @@ Execute(The lessc handler should handle errors for files in directories above co
   \     'col': 1,
   \     'type': 'E',
   \     'text': 'Unrecognised input. Possibly missing something',
-  \     'filename': ale#path#Winify(g:dir . '/../imported2.less')
+  \     'filename': ale#path#Simplify(g:dir . '/../imported2.less')
   \   },
   \ ],
   \ ale_linters#less#lessc#Handle(bufnr(''), [

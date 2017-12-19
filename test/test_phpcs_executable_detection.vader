@@ -19,7 +19,7 @@ Execute(project with phpcs should use local by default):
   call ale#test#SetFilename('phpcs-test-files/project-with-phpcs/foo/test.php')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/phpcs-test-files/project-with-phpcs/vendor/bin/phpcs'),
+  \ ale#path#Simplify(g:dir . '/phpcs-test-files/project-with-phpcs/vendor/bin/phpcs'),
   \ ale_linters#php#phpcs#GetExecutable(bufnr(''))
 
 Execute(use-global should override local detection):

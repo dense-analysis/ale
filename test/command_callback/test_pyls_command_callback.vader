@@ -33,7 +33,7 @@ Execute(The pyls executable should be configurable):
 Execute(The pyls executable should be run from the virtualenv path):
   call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
 
-  let b:executable = ale#path#Winify(
+  let b:executable = ale#path#Simplify(
   \ g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/pyls'
   \)
 

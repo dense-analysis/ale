@@ -41,14 +41,14 @@ Execute (The gometalinter handler should handle paths correctly):
   \     'col': 3,
   \     'text': 'expected ''package'', found ''IDENT'' gibberish (staticcheck)',
   \     'type': 'W',
-  \     'filename': ale#path#Winify(expand('%:p:h') . '/test.go'),
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/test.go'),
   \   },
   \   {
   \     'lnum': 37,
   \     'col': 5,
   \     'text': 'expected ''package'', found ''IDENT'' gibberish (golint)',
   \     'type': 'E',
-  \     'filename': ale#path#Winify(expand('%:p:h') . '/test.go'),
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/test.go'),
   \   },
   \ ],
   \ ale_linters#go#gometalinter#Handler(bufnr(''), [
