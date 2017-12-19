@@ -15,9 +15,18 @@ function! ale#cursor#TruncatedEcho(original_message) abort
     let l:shortmess_options = &l:shortmess
 
     try
+        let l:cursor_position = getcurpos()
+
         " The message is truncated and saved to the history.
         setlocal shortmess+=T
         exec "norm! :echomsg l:message\n"
+
+        " Reset the cursor position if we moved off the end of the line.
+        " Using :norm and :echomsg can move the cursor off the end of the
+        " line.
+        if l:cursor_position != getcurpos()
+            call setpos('.', l:cursor_position)
+        endif
     finally
         let &l:shortmess = l:shortmess_options
     endtry
