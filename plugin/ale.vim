@@ -285,7 +285,7 @@ call ale#toggle#InitAuGroups()
 augroup ALECleanupGroup
     autocmd!
     " Clean up buffers automatically when they are unloaded.
-    autocmd BufUnload * call ale#engine#Cleanup(str2nr(expand('<abuf>')))
+    autocmd BufDelete * call ale#engine#Cleanup(str2nr(expand('<abuf>')))
     autocmd QuitPre * call ale#events#QuitEvent(str2nr(expand('<abuf>')))
 augroup END
 

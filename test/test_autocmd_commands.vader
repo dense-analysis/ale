@@ -191,7 +191,7 @@ Execute (g:ale_echo_cursor = 1 should bind cursor events):
 
 Execute (ALECleanupGroup should include the right commands):
   AssertEqual [
-  \ 'BufUnload * call ale#engine#Cleanup(str2nr(expand(''<abuf>'')))',
+  \ 'BufDelete * call ale#engine#Cleanup(str2nr(expand(''<abuf>'')))',
   \ 'QuitPre * call ale#events#QuitEvent(str2nr(expand(''<abuf>'')))',
   \], CheckAutocmd('ALECleanupGroup')
 
