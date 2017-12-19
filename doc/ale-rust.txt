@@ -84,6 +84,19 @@ g:ale_rust_rls_toolchain                             *g:ale_rust_rls_toolchain*
 ===============================================================================
 rustc                                                          *ale-rust-rustc*
 
+
+g:ale_rust_rustc_options                             *g:ale_rust_rustc_options*
+                                                     *b:ale_rust_rustc_options*
+  Type: |String|
+  Default: `'-Z no-trans'`
+
+  The variable can be used to change the options passed to `rustc`.
+
+  `-Z no-trans` should only work with nightly builds of Rust. Be careful when
+  setting the options, as running `rustc` could execute code or generate
+  binary files.
+
+
 g:ale_rust_ignore_error_codes                   *g:ale_rust_ignore_error_codes*
                                                 *b:ale_rust_ignore_error_codes*
   Type: |List| of |String|s
