@@ -26,6 +26,7 @@ g:ale_gitcommit_gitlint_options               *g:ale_gitcommit_gitlint_options*
 
   let g:ale_gitcommit_gitlint_options = '-C /home/user/.config/gitlint.ini'
 <
+
 g:ale_gitcommit_gitlint_use_global         *g:ale_gitcommit_gitlint_use_global*
                                            *b:ale_gitcommit_gitlint_use_global*
   Type: |Number|

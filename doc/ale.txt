@@ -68,7 +68,7 @@ CONTENTS                                                         *ale-contents*
       gcc.................................|ale-fortran-gcc|
     fusionscript..........................|ale-fuse-options|
       fusion-lint.........................|ale-fuse-fusionlint|
-    git commit.............................|ale-gitcommit-options|
+    git commit............................|ale-gitcommit-options|
       gitlint.............................|ale-gitcommit-gitlint|
     glsl..................................|ale-glsl-options|
       glslang.............................|ale-glsl-glslang|
