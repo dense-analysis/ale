@@ -5,7 +5,7 @@ function! ale_linters#eruby#erb#GetCommand(buffer) abort
     let l:rails_root = ale#ruby#FindRailsRoot(a:buffer)
 
     if empty(l:rails_root)
-        return 'erb -P -x %t | ruby -c'
+        return 'erb -P -T - -x %t | ruby -c'
     endif
 
     " Rails-flavored eRuby does not comply with the standard as understood by
