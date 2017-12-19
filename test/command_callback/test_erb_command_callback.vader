@@ -10,7 +10,7 @@ Execute(Executable should not contain any filter code by default):
   call ale#test#SetFilename('../ruby_fixtures/not_a_rails_app/file.rb')
 
   AssertEqual
-  \ 'erb -P -x %t | ruby -c',
+  \ 'erb -P -T - -x %t | ruby -c',
   \ ale_linters#eruby#erb#GetCommand(bufnr(''))
 
 Execute(Executable should filter invalid eRuby when inside a Rails project):
