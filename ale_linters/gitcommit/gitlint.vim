@@ -30,7 +30,8 @@ function! ale_linters#gitcommit#gitlint#Handle(buffer, lines) abort
 
         let l:item = {
         \   'lnum': l:match[1] + 0,
-        \   'text': l:code . ': ' . l:match[3],
+        \   'text': l:match[3],
+        \   'code': l:code,
         \   'type': 'E',
         \}
 
