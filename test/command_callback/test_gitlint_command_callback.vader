@@ -60,7 +60,7 @@ Execute(The gitlint callbacks shouldn't detect virtualenv directories where they
 Execute(The gitlint callbacks should detect virtualenv directories):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/COMMIT_EDITMSG')
 
-  let b:executable = ale#path#Winify(
+  let b:executable = ale#path#Simplify(
   \ g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/gitlint'
   \)
 
