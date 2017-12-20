@@ -100,6 +100,7 @@ formatting.
 | Erlang | [erlc](http://erlang.org/doc/man/erlc.html), [SyntaxErl](https://github.com/ten0s/syntaxerl) |
 | Fortran | [gcc](https://gcc.gnu.org/) |
 | FusionScript | [fusion-lint](https://github.com/RyanSquared/fusionscript) |
+| Git Commit Messages | [gitlint](https://github.com/jorisroovers/gitlint) |
 | GLSL | [glslang](https://github.com/KhronosGroup/glslang), [glslls](https://github.com/svenstaro/glsl-language-server) |
 | Go | [gofmt](https://golang.org/cmd/gofmt/), [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports), [go vet](https://golang.org/cmd/vet/), [golint](https://godoc.org/github.com/golang/lint), [gometalinter](https://github.com/alecthomas/gometalinter) !!, [go build](https://golang.org/cmd/go/) !!, [gosimple](https://github.com/dominikh/go-tools/tree/master/cmd/gosimple) !!, [staticcheck](https://github.com/dominikh/go-tools/tree/master/cmd/staticcheck) !! |
 | GraphQL | [eslint](http://eslint.org/), [gqlint](https://github.com/happylinks/gqlint) |
