@@ -581,8 +581,8 @@ Execute(Test fixing with chained callbacks):
   " The buffer shouldn't be piped in for earlier commands in the chain.
   AssertEqual
   \ [
-  \   string(ale#job#PrepareCommand('echo echoline')),
-  \   string(ale#job#PrepareCommand('echo echoline')),
+  \   string(ale#job#PrepareCommand(bufnr(''), 'echo echoline')),
+  \   string(ale#job#PrepareCommand(bufnr(''), 'echo echoline')),
   \ ],
   \ map(ale#history#Get(bufnr(''))[-2:-1], 'string(v:val.command)')
 
@@ -635,7 +635,7 @@ Execute(A temporary file shouldn't be piped into the command when disabled):
   ALEFix
 
   AssertEqual
-  \ string(ale#job#PrepareCommand('echo new line')),
+  \ string(ale#job#PrepareCommand(bufnr(''), 'echo new line')),
   \ string(ale#history#Get(bufnr(''))[-1].command)
 
   " Remove trailing whitespace for Windows.

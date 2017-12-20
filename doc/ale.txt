@@ -646,6 +646,39 @@ g:ale_change_sign_column_color                 *g:ale_change_sign_column_color*
   windows.
 
 
+g:ale_command_wrapper                                   *g:ale_command_wrapper*
+                                                        *b:ale_command_wrapper*
+  Type: |String|
+  Default: `''`
+
+  An option for wrapping all commands that ALE runs, for linters, fixers,
+  and LSP commands. This option can be set globally, or for specific buffers.
+
+  This option can be used to apply nice to all commands. For example: >
+
+    " Prefix all commands with nice.
+    let g:ale_command_wrapper = 'nice -n5'
+<
+  Use the |ALEInfo| command to view the commands that are run. All of the
+  arguments for commands will be put on the end of the wrapped command by
+  default. A `%*` marker can be used to spread the arguments in the wrapped
+  command. >
+
+    " Has the same effect as the above.
+    let g:ale_command_wrapper = 'nice -n5 %*'
+<
+
+  For passing all of the arguments for a command as one argument to a wrapper,
+  `%@` can be used instead. >
+
+    " Will result in say: /bin/bash -c 'other-wrapper -c "some command" -x'
+    let g:ale_command_wrapper = 'other-wrapper -c %@ -x'
+<
+  For commands including `&&` or `;`, only the last command in the list will
+  be passed to the wrapper. `&&` is most commonly used in ALE to change the
+  working directory before running a command.
+
+
 g:ale_completion_delay                                 *g:ale_completion_delay*
 
   Type: |Number|

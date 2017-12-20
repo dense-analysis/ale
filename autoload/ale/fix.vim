@@ -222,7 +222,7 @@ function! s:RunJob(options) abort
     \)
     call s:CreateTemporaryFileForJob(l:buffer, l:temporary_file, l:input)
 
-    let l:command = ale#job#PrepareCommand(l:command)
+    let l:command = ale#job#PrepareCommand(l:buffer, l:command)
     let l:job_options = {
     \   'mode': 'nl',
     \   'exit_cb': function('s:HandleExit'),
