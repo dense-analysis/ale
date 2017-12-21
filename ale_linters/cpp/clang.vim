@@ -26,7 +26,11 @@ function! ale_linters#cpp#clang#GetCommand(buffer) abort
         let l:b = fnamemodify(bufname(a:buffer), ':p')
         for l:d in l:l
             if l:d["file"] == l:b
-                return l:d["command"] . ' -fsyntax-only'
+                " Key 'command' contains -o with path relative to key 'directory'
+                " Make it absolute path. This way this linter generates valid
+                " .o which makes subsequent build of whole project faster...
+                let l:s = substitute(l:d["command"], "-o ", "-o ".l:d["directory"]."/","")
+                return l:s
             endif
         endfor
         echom "ALE: Please refresh your compile_commands.json!"
