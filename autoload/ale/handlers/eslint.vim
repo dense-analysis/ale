@@ -153,7 +153,7 @@ function! ale#handlers#eslint#Handle(buffer, lines) abort
     " Fixer: Roney
     " Description: Fallback to catch all unknown eslint interal errors.
     " (it seems Eslint emits nothing when everything works fine.)
-    if !empty(l:output)
+    if !empty(a:lines) && empty(l:output) " error is returned from eslint and not recognized as lint error.
         return [{
         \   'lnum': 1,
         \   'text': 'Unknown eslint internal error (type :ALEDetail for more information)',
