@@ -149,5 +149,18 @@ function! ale#handlers#eslint#Handle(buffer, lines) abort
         call s:AddHintsForTypeScriptParsingErrors(l:output)
     endif
 
+    " Issue: #1246: eslint's internal errors are not shown.
+    " Fixer: Roney
+    " Description: Fallback to catch all unknown eslint interal errors.
+    " (it seems Eslint emits nothing when everything works fine.)
+    if !empty(l:output)
+        return [{
+        \   'lnum': 1,
+        \   'text': 'Unknown eslint internal error (type :ALEDetail for more information)',
+        \   'detail': join(a:lines, "\n"),
+        \}]
+    endif
+    " End: fix #1246
+   
     return l:output
 endfunction
