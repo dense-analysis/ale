@@ -17,6 +17,14 @@ Before:
   \ 'testft': [],
   \}
 
+  let g:pre_success = 0
+  let g:post_success = 0
+  augroup VaderTest
+    autocmd!
+    autocmd User ALEFixPre let g:pre_success = 1
+    autocmd User ALEFixPost let g:post_success = 1
+  augroup end
+
   if !has('win32')
     let &shell = '/bin/bash'
   endif
@@ -171,6 +179,7 @@ After:
   unlet! g:ale_emulate_job_failure
   unlet! b:ale_fixers
   unlet! b:ale_fix_on_save
+  augroup! VaderTest
   delfunction AddCarets
   delfunction AddDollars
   delfunction DoNothing
@@ -664,3 +673,9 @@ Expect(The lines in the JSON should be used):
   x
   y
   z
+
+Execute(ALEFix should apply autocmds):
+  let g:ale_fixers.testft = ['AddCarets']
+  ALEFix
+  AssertEqual g:pre_success, 1
+  AssertEqual g:post_success, 1

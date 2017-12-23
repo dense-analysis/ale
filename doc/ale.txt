@@ -2304,9 +2304,11 @@ b:ale_linted                                                     *b:ale_linted*
 
 ALELintPre                                                 *ALELintPre-autocmd*
 ALELintPost                                               *ALELintPost-autocmd*
+ALEFixPre                                                   *ALEFixPre-autocmd*
+ALEFixPost                                                 *ALEFixPost-autocmd*
 
-  These |User| autocommands are triggered before and after every lint cycle.
-  They can be used to update statuslines, send notifications, etc.
+  These |User| autocommands are triggered before and after every lint or fix
+  cycle. They can be used to update statuslines, send notifications, etc.
   The autocmd commands are run with |:silent|, so |:unsilent| is required for
   echoing messges.
 
