@@ -92,7 +92,7 @@ g:ale_cs_mcsc_assemblies                             *g:ale_cs_mcsc_assemblies*
   For example: >
 
     " Compile C# programs with the Unity engine DLL file on Mac.
-    let g:ale_cs_mcss_assemblies = [
+    let g:ale_cs_mcsc_assemblies = [
     \ '/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll',
     \]
 <
