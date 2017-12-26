@@ -17,6 +17,12 @@ After:
   delfunction LineCallback
   delfunction RawCallback
 
+Execute (ALE should handle empty Lists for the lines):
+  let g:last_line = ale#job#JoinNeovimOutput(1, '', [], 'nl', function('LineCallback'))
+
+  AssertEqual [], g:lines
+  AssertEqual '', g:last_line
+
 Execute (ALE should pass on full lines for NeoVim):
   let g:last_line = ale#job#JoinNeovimOutput(1, '', ['x', 'y', ''], 'nl', function('LineCallback'))
 

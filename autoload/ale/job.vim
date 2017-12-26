@@ -36,7 +36,7 @@ function! ale#job#JoinNeovimOutput(job, last_line, data, mode, callback) abort
         let l:lines[0] = a:last_line . l:lines[0]
         let l:new_last_line = a:data[-1]
     else
-        let l:new_last_line = a:last_line . a:data[0]
+        let l:new_last_line = a:last_line . get(a:data, 0, '')
     endif
 
     for l:line in l:lines
