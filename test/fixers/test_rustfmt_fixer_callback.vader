@@ -18,9 +18,7 @@ Execute(The rustfmt callback should return the correct default values):
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
-  \   'command': ale#Escape('xxxinvalid')
-  \     . ' %t',
+  \   'command': ale#Escape('xxxinvalid'),
   \ },
   \ ale#fixers#rustfmt#Fix(bufnr(''))
 
@@ -30,9 +28,7 @@ Execute(The rustfmt callback should include custom rustfmt options):
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
   \   'command': ale#Escape('xxxinvalid')
-  \     . ' ' . g:ale_rust_rustfmt_options
-  \     . ' %t',
+  \     . ' ' . g:ale_rust_rustfmt_options,
   \ },
   \ ale#fixers#rustfmt#Fix(bufnr(''))
