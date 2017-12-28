@@ -18,12 +18,12 @@ Execute(Should return 'gradlew' if found in parent directory):
   call ale#test#SetFilename('gradle-test-files/wrapped-project/src/main/kotlin/dummy.kt')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/gradle-test-files/wrapped-project/gradlew'),
+  \ ale#path#Simplify(g:dir . '/gradle-test-files/wrapped-project/gradlew'),
   \ ale#gradle#FindExecutable(bufnr(''))
 
 Execute(Should return 'gradle' if 'gradlew' not found in parent directory):
   call ale#test#SetFilename('gradle-test-files/unwrapped-project/src/main/kotlin/dummy.kt')
-  let $PATH .= (has('win32') ? ';': ':') . ale#path#Winify(g:dir . '/gradle-test-files')
+  let $PATH .= (has('win32') ? ';': ':') . ale#path#Simplify(g:dir . '/gradle-test-files')
 
   AssertEqual
   \ 'gradle',

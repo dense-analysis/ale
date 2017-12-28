@@ -1,0 +1,21 @@
+Before:
+  runtime ale_linters/eruby/erb.vim
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+After:
+  call ale#linter#Reset()
+  call ale#test#RestoreDirectory()
+
+Execute(Executable should not contain any filter code by default):
+  call ale#test#SetFilename('../ruby_fixtures/not_a_rails_app/file.rb')
+
+  AssertEqual
+  \ 'erb -P -T - -x %t | ruby -c',
+  \ ale_linters#eruby#erb#GetCommand(bufnr(''))
+
+Execute(Executable should filter invalid eRuby when inside a Rails project):
+  call ale#test#SetFilename('../ruby_fixtures/valid_rails_app/app/views/my_great_view.html.erb')
+
+  AssertEqual
+  \ 'ruby -r erb -e ' . ale#Escape('puts ERB.new($stdin.read.gsub(%{<%=},%{<%}), nil, %{-}).src') . '< %t | ruby -c',
+  \ ale_linters#eruby#erb#GetCommand(bufnr(''))

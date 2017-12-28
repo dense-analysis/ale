@@ -1,5 +1,6 @@
 Before:
-  let g:success = 0
+  let g:pre_success = 0
+  let g:post_success = 0
   let g:ale_run_synchronously = 1
 
 After:
@@ -10,9 +11,11 @@ After:
 Execute (Run a lint cycle, and check that a variable is set in the autocmd):
   augroup VaderTest
     autocmd!
-    autocmd User ALELint let g:success = 1
+    autocmd User ALELintPre let g:pre_success = 1
+    autocmd User ALELintPost let g:post_success = 1
   augroup end
 
   call ale#Lint()
 
-  AssertEqual g:success, 1
+  AssertEqual g:pre_success, 1
+  AssertEqual g:post_success, 1

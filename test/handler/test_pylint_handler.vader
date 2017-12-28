@@ -1,47 +1,60 @@
 Before:
+  Save g:ale_warn_about_trailing_whitespace
+
+  let g:ale_warn_about_trailing_whitespace = 1
+
   runtime ale_linters/python/pylint.vim
 
 After:
+  Restore
+
   call ale#linter#Reset()
+
   silent file something_else.py
 
-Execute(pylint handler parsing, translating columns to 1-based index):
+Execute(Basic pylint errors should be handle):
   AssertEqual
   \ [
   \   {
   \     'lnum': 4,
   \     'col': 1,
-  \     'text': 'C0303: Trailing whitespace (trailing-whitespace)',
+  \     'text': 'Trailing whitespace',
+  \     'code': 'trailing-whitespace',
   \     'type': 'W',
   \   },
   \   {
   \     'lnum': 1,
   \     'col': 1,
-  \     'text': 'C0111: Missing module docstring (missing-docstring)',
+  \     'text': 'Missing module docstring',
+  \     'code': 'missing-docstring',
   \     'type': 'W',
   \   },
   \   {
   \     'lnum': 2,
   \     'col': 1,
-  \     'text': 'C0111: Missing function docstring (missing-docstring)',
+  \     'text': 'Missing function docstring',
+  \     'code': 'missing-docstring',
   \     'type': 'W',
   \   },
   \   {
   \     'lnum': 3,
   \     'col': 5,
-  \     'text': 'E0103: ''break'' not properly in loop (not-in-loop)',
+  \     'text': '''break'' not properly in loop',
+  \     'code': 'not-in-loop',
   \     'type': 'E',
   \   },
   \   {
   \     'lnum': 4,
   \     'col': 5,
-  \     'text': 'W0101: Unreachable code (unreachable)',
+  \     'text': 'Unreachable code',
+  \     'code': 'unreachable',
   \     'type': 'W',
   \   },
   \   {
   \     'lnum': 7,
   \     'col': 33,
-  \     'text': 'W0702: No exception type(s) specified (bare-except)',
+  \     'text': 'No exception type(s) specified',
+  \     'code': 'bare-except',
   \     'type': 'W',
   \   },
   \ ],
@@ -54,6 +67,29 @@ Execute(pylint handler parsing, translating columns to 1-based index):
   \ 'test.py:3:4: E0103 (not-in-loop) ''break'' not properly in loop',
   \ 'test.py:4:4: W0101 (unreachable) Unreachable code',
   \ 'test.py:7:32: W0702 (bare-except) No exception type(s) specified',
+  \ '',
+  \ '------------------------------------------------------------------',
+  \ 'Your code has been rated at 0.00/10 (previous run: 2.50/10, -2.50)',
+  \ ])
+
+Execute(Ignoring trailing whitespace messages should work):
+  let g:ale_warn_about_trailing_whitespace = 0
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'col': 1,
+  \     'text': 'Missing module docstring',
+  \     'code': 'missing-docstring',
+  \     'type': 'W',
+  \   },
+  \ ],
+  \ ale_linters#python#pylint#Handle(bufnr(''), [
+  \ 'No config file found, using default configuration',
+  \ '************* Module test',
+  \ 'test.py:4:0: C0303 (trailing-whitespace) Trailing whitespace',
+  \ 'test.py:1:0: C0111 (missing-docstring) Missing module docstring',
   \ '',
   \ '------------------------------------------------------------------',
   \ 'Your code has been rated at 0.00/10 (previous run: 2.50/10, -2.50)',

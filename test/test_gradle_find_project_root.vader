@@ -10,21 +10,21 @@ Execute(Should return directory for 'gradlew' if found in parent directory):
   call ale#test#SetFilename('gradle-test-files/wrapped-project/src/main/kotlin/dummy.kt')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/gradle-test-files/wrapped-project'),
+  \ ale#path#Simplify(g:dir . '/gradle-test-files/wrapped-project'),
   \ ale#gradle#FindProjectRoot(bufnr(''))
 
 Execute(Should return directory for 'settings.gradle' if found in parent directory):
   call ale#test#SetFilename('gradle-test-files/settings-gradle-project/src/main/kotlin/dummy.kt')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/gradle-test-files/settings-gradle-project'),
+  \ ale#path#Simplify(g:dir . '/gradle-test-files/settings-gradle-project'),
   \ ale#gradle#FindProjectRoot(bufnr(''))
 
 Execute(Should return directory for 'build.gradle' if found in parent directory):
   call ale#test#SetFilename('gradle-test-files/build-gradle-project/src/main/kotlin/dummy.kt')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/gradle-test-files/build-gradle-project'),
+  \ ale#path#Simplify(g:dir . '/gradle-test-files/build-gradle-project'),
   \ ale#gradle#FindProjectRoot(bufnr(''))
 
 Execute(Should return empty string if gradle files are not found in parent directory):

@@ -9,7 +9,7 @@ Before:
 
   let b:args = '--silent -f json'
   \ . ' --output-file ' . (has('win32') ? '%t' : '/dev/stdout')
-  let b:app_path = ale#path#Winify(g:dir . '/../ruby_fixtures/valid_rails_app')
+  let b:app_path = ale#path#Simplify(g:dir . '/../ruby_fixtures/valid_rails_app')
   let b:suffix = has('win32') ? '; type %t' : ''
 
 After:

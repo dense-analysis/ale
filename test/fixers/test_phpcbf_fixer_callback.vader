@@ -21,7 +21,7 @@ Execute(project with phpcbf should use local by default):
   call ale#test#SetFilename('php_paths/project-with-phpcbf/foo/test.php')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf'),
+  \ ale#path#Simplify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf'),
   \ ale#fixers#phpcbf#GetExecutable(bufnr(''))
 
 Execute(use-global should override local detection):
@@ -43,7 +43,7 @@ Execute(The phpcbf callback should return the correct default values):
   call ale#test#SetFilename('php_paths/project-with-phpcbf/foo/test.php')
 
   AssertEqual
-  \ {'command': ale#Escape(ale#path#Winify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf')) . ' --stdin-path=%s ' },
+  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf')) . ' --stdin-path=%s  -' },
   \ ale#fixers#phpcbf#Fix(bufnr(''))
 
 Execute(The phpcbf callback should include the phpcbf_standard option):
@@ -51,7 +51,7 @@ Execute(The phpcbf callback should include the phpcbf_standard option):
   call ale#test#SetFilename('php_paths/project-with-phpcbf/foo/test.php')
 
   AssertEqual
-  \ {'command': ale#Escape(ale#path#Winify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf')) . ' --stdin-path=%s ' . '--standard=phpcbf_ruleset.xml'},
+  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf')) . ' --stdin-path=%s ' . '--standard=phpcbf_ruleset.xml' . ' -'},
   \ ale#fixers#phpcbf#Fix(bufnr(''))
 
 Before:
@@ -77,7 +77,7 @@ Execute(project with phpcbf should use local by default):
   call ale#test#SetFilename('php_paths/project-with-phpcbf/foo/test.php')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf'),
+  \ ale#path#Simplify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf'),
   \ ale#fixers#phpcbf#GetExecutable(bufnr(''))
 
 Execute(use-global should override local detection):
@@ -99,7 +99,7 @@ Execute(The phpcbf callback should return the correct default values):
   call ale#test#SetFilename('php_paths/project-with-phpcbf/foo/test.php')
 
   AssertEqual
-  \ {'command': ale#Escape(ale#path#Winify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf')) . ' --stdin-path=%s ' },
+  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf')) . ' --stdin-path=%s  -' },
   \ ale#fixers#phpcbf#Fix(bufnr(''))
 
 Execute(The phpcbf callback should include the phpcbf_standard option):
@@ -107,6 +107,6 @@ Execute(The phpcbf callback should include the phpcbf_standard option):
   call ale#test#SetFilename('php_paths/project-with-phpcbf/foo/test.php')
 
   AssertEqual
-  \ {'command': ale#Escape(ale#path#Winify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf')) . ' --stdin-path=%s ' . '--standard=phpcbf_ruleset.xml'},
+  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/php_paths/project-with-phpcbf/vendor/bin/phpcbf')) . ' --stdin-path=%s ' . '--standard=phpcbf_ruleset.xml' . ' -'},
   \ ale#fixers#phpcbf#Fix(bufnr(''))
 

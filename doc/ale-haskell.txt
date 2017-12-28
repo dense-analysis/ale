@@ -3,6 +3,16 @@ ALE Haskell Integration                                   *ale-haskell-options*
 
 
 ===============================================================================
+brittany                                                 *ale-haskell-brittany*
+
+g:ale_haskell_brittany_executable           *g:ale_haskell_brittany_executable*
+                                            *b:ale_haskell_brittany_executable*
+  Type: |String|
+  Default: `'brittany'`
+
+  This variable can be changed to use a different executable for brittany.
+
+===============================================================================
 hdevtools                                               *ale-haskell-hdevtools*
 
 g:ale_haskell_hdevtools_executable         *g:ale_haskell_hdevtools_executable*

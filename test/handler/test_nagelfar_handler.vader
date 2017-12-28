@@ -1,6 +1,9 @@
 Before:
   runtime ale_linters/tcl/nagelfar.vim
 
+After:
+  call ale#linter#Reset()
+
 Execute(The nagelfar handler should parse lines correctly):
   AssertEqual
   \ [

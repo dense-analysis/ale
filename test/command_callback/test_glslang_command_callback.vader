@@ -10,8 +10,6 @@ Before:
 
 After:
   Restore
-  unlet! g:ale_cuda_nvcc_executable
-  unlet! g:ale_cuda_nvcc_options
   call ale#linter#Reset()
 
 Execute(Executable should default to glslangValidator):

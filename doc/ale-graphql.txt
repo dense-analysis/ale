@@ -3,6 +3,14 @@ ALE GraphQL Integration                                   *ale-graphql-options*
 
 
 ===============================================================================
+eslint                                                     *ale-graphql-eslint*
+
+The `eslint` linter for GraphQL uses the JavaScript options for `eslint`; see:
+|ale-javascript-eslint|.
+
+You will need the GraphQL ESLint plugin installed for this to work.
+
+===============================================================================
 gqlint                                                     *ale-graphql-gqlint*
 
 ===============================================================================

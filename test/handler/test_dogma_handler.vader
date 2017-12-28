@@ -1,5 +1,10 @@
-Execute(The dogma handler should parse lines correctly):
+Before:
   runtime ale_linters/elixir/dogma.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The dogma handler should parse lines correctly):
 
   AssertEqual
   \ [
@@ -23,6 +28,3 @@ Execute(The dogma handler should parse lines correctly):
   \   'lib/filename.ex:18:5: C: Some error',
   \   'lib/filename.ex:19:7: R: Some warning',
   \ ])
-
-After:
-  call ale#linter#Reset()

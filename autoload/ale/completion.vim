@@ -2,8 +2,45 @@
 " Description: Completion support for LSP linters
 
 let s:timer_id = -1
+let s:last_done_pos = []
 
-function! s:GetRegex(map, filetype) abort
+" CompletionItemKind values from the LSP protocol.
+let s:LSP_COMPLETION_TEXT_KIND = 1
+let s:LSP_COMPLETION_METHOD_KIND = 2
+let s:LSP_COMPLETION_FUNCTION_KIND = 3
+let s:LSP_COMPLETION_CONSTRUCTOR_KIND = 4
+let s:LSP_COMPLETION_FIELD_KIND = 5
+let s:LSP_COMPLETION_VARIABLE_KIND = 6
+let s:LSP_COMPLETION_CLASS_KIND = 7
+let s:LSP_COMPLETION_INTERFACE_KIND = 8
+let s:LSP_COMPLETION_MODULE_KIND = 9
+let s:LSP_COMPLETION_PROPERTY_KIND = 10
+let s:LSP_COMPLETION_UNIT_KIND = 11
+let s:LSP_COMPLETION_VALUE_KIND = 12
+let s:LSP_COMPLETION_ENUM_KIND = 13
+let s:LSP_COMPLETION_KEYWORD_KIND = 14
+let s:LSP_COMPLETION_SNIPPET_KIND = 15
+let s:LSP_COMPLETION_COLOR_KIND = 16
+let s:LSP_COMPLETION_FILE_KIND = 17
+let s:LSP_COMPLETION_REFERENCE_KIND = 18
+
+" Regular expressions for checking the characters in the line before where
+" the insert cursor is. If one of these matches, we'll check for completions.
+let s:should_complete_map = {
+\   '<default>': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$|\.$',
+\}
+
+" Regular expressions for finding the start column to replace with completion.
+let s:omni_start_map = {
+\   '<default>': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$',
+\}
+
+" A map of exact characters for triggering LSP completions.
+let s:trigger_character_map = {
+\   '<default>': ['.'],
+\}
+
+function! s:GetFiletypeValue(map, filetype) abort
     for l:part in reverse(split(a:filetype, '\.'))
         let l:regex = get(a:map, l:part, [])
 
@@ -12,19 +49,13 @@ function! s:GetRegex(map, filetype) abort
         endif
     endfor
 
-    return ''
+    " Use the default regex for other files.
+    return a:map['<default>']
 endfunction
-
-" Regular expressions for checking the characters in the line before where
-" the insert cursor is. If one of these matches, we'll check for completions.
-let s:should_complete_map = {
-\   'javascript': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$|\.$',
-\   'typescript': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$|\.$',
-\}
 
 " Check if we should look for completions for a language.
 function! ale#completion#GetPrefix(filetype, line, column) abort
-    let l:regex = s:GetRegex(s:should_complete_map, a:filetype)
+    let l:regex = s:GetFiletypeValue(s:should_complete_map, a:filetype)
     " The column we're using completions for is where we are inserting text,
     " like so:
     "   abc
@@ -33,11 +64,15 @@ function! ale#completion#GetPrefix(filetype, line, column) abort
     return matchstr(getline(a:line)[: a:column - 2], l:regex)
 endfunction
 
-" Regular expressions for finding the start column to replace with completion.
-let s:omni_start_map = {
-\   'javascript': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$',
-\   'typescript': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$',
-\}
+function! ale#completion#GetTriggerCharacter(filetype, prefix) abort
+    let l:char_list = s:GetFiletypeValue(s:trigger_character_map, a:filetype)
+
+    if index(l:char_list, a:prefix) >= 0
+        return a:prefix
+    endif
+
+    return ''
+endfunction
 
 function! ale#completion#Filter(suggestions, prefix) abort
     " For completing...
@@ -82,7 +117,7 @@ function! ale#completion#OmniFunc(findstart, base) abort
     if a:findstart
         let l:line = b:ale_completion_info.line
         let l:column = b:ale_completion_info.column
-        let l:regex = s:GetRegex(s:omni_start_map, &filetype)
+        let l:regex = s:GetFiletypeValue(s:omni_start_map, &filetype)
         let l:up_to_column = getline(l:line)[: l:column - 2]
         let l:match = matchstr(l:up_to_column, l:regex)
 
@@ -180,7 +215,47 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
     return l:results
 endfunction
 
-function! ale#completion#HandleTSServerLSPResponse(conn_id, response) abort
+function! ale#completion#ParseLSPCompletions(response) abort
+    let l:item_list = []
+
+    if type(get(a:response, 'result')) is type([])
+        let l:item_list = a:response.result
+    elseif type(get(a:response, 'result')) is type({})
+    \&& type(get(a:response.result, 'items')) is type([])
+        let l:item_list = a:response.result.items
+    endif
+
+    let l:results = []
+
+    for l:item in l:item_list
+        " See :help complete-items for Vim completion kinds
+        if l:item.kind is s:LSP_COMPLETION_METHOD_KIND
+            let l:kind = 'm'
+        elseif l:item.kind is s:LSP_COMPLETION_CONSTRUCTOR_KIND
+            let l:kind = 'm'
+        elseif l:item.kind is s:LSP_COMPLETION_FUNCTION_KIND
+            let l:kind = 'f'
+        elseif l:item.kind is s:LSP_COMPLETION_CLASS_KIND
+            let l:kind = 'f'
+        elseif l:item.kind is s:LSP_COMPLETION_INTERFACE_KIND
+            let l:kind = 'f'
+        else
+            let l:kind = 'v'
+        endif
+
+        call add(l:results, {
+        \   'word': l:item.label,
+        \   'kind': l:kind,
+        \   'icase': 1,
+        \   'menu': l:item.detail,
+        \   'info': l:item.documentation,
+        \})
+    endfor
+
+    return l:results
+endfunction
+
+function! ale#completion#HandleTSServerResponse(conn_id, response) abort
     if !s:CompletionStillValid(get(a:response, 'request_seq'))
         return
     endif
@@ -216,28 +291,59 @@ function! ale#completion#HandleTSServerLSPResponse(conn_id, response) abort
     endif
 endfunction
 
+
+function! ale#completion#HandleLSPResponse(conn_id, response) abort
+    if !s:CompletionStillValid(get(a:response, 'id'))
+        return
+    endif
+
+    call ale#completion#Show(
+    \   a:response,
+    \   'ale#completion#ParseLSPCompletions',
+    \)
+endfunction
+
 function! s:GetLSPCompletions(linter) abort
     let l:buffer = bufnr('')
-    let l:lsp_details = ale#linter#StartLSP(
-    \   l:buffer,
-    \   a:linter,
-    \   function('ale#completion#HandleTSServerLSPResponse'),
-    \)
+    let l:Callback = a:linter.lsp is# 'tsserver'
+    \   ? function('ale#completion#HandleTSServerResponse')
+    \   : function('ale#completion#HandleLSPResponse')
+
+    let l:lsp_details = ale#linter#StartLSP(l:buffer, a:linter, l:Callback)
 
     if empty(l:lsp_details)
         return 0
     endif
 
     let l:id = l:lsp_details.connection_id
-    let l:command = l:lsp_details.command
     let l:root = l:lsp_details.project_root
 
-    let l:message = ale#lsp#tsserver_message#Completions(
-    \   l:buffer,
-    \   b:ale_completion_info.line,
-    \   b:ale_completion_info.column,
-    \   b:ale_completion_info.prefix,
-    \)
+    if a:linter.lsp is# 'tsserver'
+        let l:message = ale#lsp#tsserver_message#Completions(
+        \   l:buffer,
+        \   b:ale_completion_info.line,
+        \   b:ale_completion_info.column,
+        \   b:ale_completion_info.prefix,
+        \)
+    else
+        " Send a message saying the buffer has changed first, otherwise
+        " completions won't know what text is nearby.
+        call ale#lsp#Send(l:id, ale#lsp#message#DidChange(l:buffer), l:root)
+
+        " For LSP completions, we need to clamp the column to the length of
+        " the line. python-language-server and perhaps others do not implement
+        " this correctly.
+        let l:message = ale#lsp#message#Completion(
+        \   l:buffer,
+        \   b:ale_completion_info.line,
+        \   min([
+        \       b:ale_completion_info.line_length,
+        \       b:ale_completion_info.column,
+        \   ]),
+        \   ale#completion#GetTriggerCharacter(&filetype, b:ale_completion_info.prefix),
+        \)
+    endif
+
     let l:request_id = ale#lsp#Send(l:id, l:message, l:root)
 
     if l:request_id
@@ -247,6 +353,10 @@ function! s:GetLSPCompletions(linter) abort
 endfunction
 
 function! ale#completion#GetCompletions() abort
+    if !g:ale_completion_enabled
+        return
+    endif
+
     let [l:line, l:column] = getcurpos()[1:2]
 
     let l:prefix = ale#completion#GetPrefix(&filetype, l:line, l:column)
@@ -255,8 +365,11 @@ function! ale#completion#GetCompletions() abort
         return
     endif
 
+    let l:line_length = len(getline('.'))
+
     let b:ale_completion_info = {
     \   'line': l:line,
+    \   'line_length': l:line_length,
     \   'column': l:column,
     \   'prefix': l:prefix,
     \   'conn_id': 0,
@@ -264,8 +377,11 @@ function! ale#completion#GetCompletions() abort
     \}
 
     for l:linter in ale#linter#Get(&filetype)
-        if l:linter.lsp is# 'tsserver'
-            call s:GetLSPCompletions(l:linter)
+        if !empty(l:linter.lsp)
+            if l:linter.lsp is# 'tsserver'
+            \|| get(g:, 'ale_completion_experimental_lsp_support', 0)
+                call s:GetLSPCompletions(l:linter)
+            endif
         endif
     endfor
 endfunction
@@ -282,15 +398,27 @@ function! s:TimerHandler(...) abort
     endif
 endfunction
 
-function! ale#completion#Queue() abort
-    let l:time = get(b:, 'ale_complete_done_time', 0)
+" Stop any completion timer that is queued. This is useful for tests.
+function! ale#completion#StopTimer() abort
+    if s:timer_id != -1
+        call timer_stop(s:timer_id)
+    endif
 
-    if l:time && ale#util#ClockMilliseconds() - l:time < 100
-        " Do not ask for completions shortly after we just closed the menu.
+    let s:timer_id = -1
+endfunction
+
+function! ale#completion#Queue() abort
+    if !g:ale_completion_enabled
         return
     endif
 
     let s:timer_pos = getcurpos()[1:2]
+
+    if s:timer_pos == s:last_done_pos
+        " Do not ask for completions if the cursor rests on the position we
+        " last completed on.
+        return
+    endif
 
     " If we changed the text again while we're still waiting for a response,
     " then invalidate the requests before the timer ticks again.
@@ -298,9 +426,7 @@ function! ale#completion#Queue() abort
         let b:ale_completion_info.request_id = 0
     endif
 
-    if s:timer_id != -1
-        call timer_stop(s:timer_id)
-    endif
+    call ale#completion#StopTimer()
 
     let s:timer_id = timer_start(g:ale_completion_delay, function('s:TimerHandler'))
 endfunction
@@ -310,7 +436,10 @@ function! ale#completion#Done() abort
 
     " Reset settings when completion is done.
     if exists('b:ale_old_omnifunc')
-        let &l:omnifunc = b:ale_old_omnifunc
+        if b:ale_old_omnifunc isnot# 'pythoncomplete#Complete'
+            let &l:omnifunc = b:ale_old_omnifunc
+        endif
+
         unlet b:ale_old_omnifunc
     endif
 
@@ -319,8 +448,7 @@ function! ale#completion#Done() abort
         unlet b:ale_old_completopt
     endif
 
-    " Set a timestamp, so we can avoid requesting completions again.
-    let b:ale_complete_done_time = ale#util#ClockMilliseconds()
+    let s:last_done_pos = getcurpos()[1:2]
 endfunction
 
 function! s:Setup(enabled) abort

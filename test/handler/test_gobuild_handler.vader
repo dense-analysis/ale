@@ -28,7 +28,7 @@ Execute (The gobuild handler should handle names with spaces):
   \ ]), 'v:val[1:4]')
 
 Execute (The gobuild handler should handle relative paths correctly):
-  silent file! /foo/bar/baz.go
+  call ale#test#SetFilename('app/test.go')
 
   AssertEqual
   \ [
@@ -37,8 +37,9 @@ Execute (The gobuild handler should handle relative paths correctly):
   \     'col': 0,
   \     'text': 'missing argument for Printf("%s"): format reads arg 2, have only 1 args',
   \     'type': 'E',
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/test.go'),
   \   },
   \ ],
   \ ale_linters#go#gobuild#Handler(bufnr(''), [
-  \   'baz.go:27: missing argument for Printf("%s"): format reads arg 2, have only 1 args',
+  \   'test.go:27: missing argument for Printf("%s"): format reads arg 2, have only 1 args',
   \ ])

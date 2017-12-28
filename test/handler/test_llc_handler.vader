@@ -1,6 +1,9 @@
 Before:
   runtime! ale_linters/llvm/llc.vim
 
+After:
+  call ale#linter#Reset()
+
 Execute(llc handler should parse errors output for STDIN):
   AssertEqual
   \ [
@@ -53,4 +56,3 @@ Execute(llc handler should parse errors output for some file):
   \   'call void @foo(i64 %0)',
   \   '          ^',
   \ ])
-

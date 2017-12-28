@@ -3,7 +3,7 @@ ALE Eruby Integration                                       *ale-eruby-options*
 
 There are two linters for `eruby` files:
 
-- `erubylint`
+- `erb`
 - `erubis`
 
 If you don't know which one your project uses, it's probably `erb`.

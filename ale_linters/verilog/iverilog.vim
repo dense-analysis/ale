@@ -1,6 +1,14 @@
 " Author: Masahiro H https://github.com/mshr-h
 " Description: iverilog for verilog files
 
+call ale#Set('verilog_iverilog_options', '')
+
+function! ale_linters#verilog#iverilog#GetCommand(buffer) abort
+    return 'iverilog -t null -Wall '
+    \   . ale#Var(a:buffer, 'verilog_iverilog_options')
+    \   . ' %t'
+endfunction
+
 function! ale_linters#verilog#iverilog#Handle(buffer, lines) abort
     " Look for lines like the following.
     "
@@ -30,6 +38,6 @@ call ale#linter#Define('verilog', {
 \   'name': 'iverilog',
 \   'output_stream': 'stderr',
 \   'executable': 'iverilog',
-\   'command': 'iverilog -t null -Wall %t',
+\   'command_callback': 'ale_linters#verilog#iverilog#GetCommand',
 \   'callback': 'ale_linters#verilog#iverilog#Handle',
 \})

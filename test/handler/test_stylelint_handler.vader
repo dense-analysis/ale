@@ -10,13 +10,15 @@ Execute (stylelint errors should be handled correctly):
   \     'lnum': 108,
   \     'col': 10,
   \     'type': 'E',
-  \     'text': 'Unexpected leading zero [number-leading-zero]',
+  \     'text': 'Unexpected leading zero',
+  \     'code': 'number-leading-zero',
   \   },
   \   {
   \     'lnum': 116,
   \     'col': 20,
   \     'type': 'E',
-  \     'text': 'Expected a trailing semicolon [declaration-block-trailing-semicolon]',
+  \     'text': 'Expected a trailing semicolon',
+  \     'code': 'declaration-block-trailing-semicolon',
   \   },
   \ ],
   \ ale#handlers#css#HandleStyleLintFormat(42, [

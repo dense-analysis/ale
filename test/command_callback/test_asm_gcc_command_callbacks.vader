@@ -1,0 +1,39 @@
+Before:
+  Save g:ale_asm_gcc_executable
+  Save g:ale_asm_gcc_options
+
+  unlet! g:ale_asm_gcc_executable
+  unlet! b:ale_asm_gcc_executable
+  unlet! g:ale_asm_gcc_options
+  unlet! b:ale_asm_gcc_options
+
+  runtime ale_linters/asm/gcc.vim
+
+  let b:command_tail = ' -x assembler -fsyntax-only -iquote'
+  \   . ' ' . ale#Escape(getcwd())
+  \   . ' -Wall -'
+
+After:
+  Restore
+  unlet! b:command_tail
+  unlet! b:ale_asm_gcc_executable
+  unlet! b:ale_asm_gcc_options
+  call ale#linter#Reset()
+
+Execute(The executable should be configurable):
+  AssertEqual 'gcc', ale_linters#asm#gcc#GetExecutable(bufnr(''))
+
+  let b:ale_asm_gcc_executable = 'foobar'
+
+  AssertEqual 'foobar', ale_linters#asm#gcc#GetExecutable(bufnr(''))
+
+Execute(The executable should be used in the command):
+  AssertEqual
+  \ ale#Escape('gcc') . b:command_tail,
+  \ ale_linters#asm#gcc#GetCommand(bufnr(''))
+
+  let b:ale_asm_gcc_executable = 'foobar'
+
+  AssertEqual
+  \ ale#Escape('foobar') . b:command_tail,
+  \ ale_linters#asm#gcc#GetCommand(bufnr(''))

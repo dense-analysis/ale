@@ -10,7 +10,7 @@ Before:
   let g:command_tail = ' -I ' . ale#Escape(ale#gradle#GetInitPath())
   \   . ' -q printClasspath'
 
-  let g:gradle_init_path = ale#path#Winify(g:dir . '../../autoload/ale/gradle/init.gradle')
+  let g:gradle_init_path = ale#path#Simplify(g:dir . '../../autoload/ale/gradle/init.gradle')
 
 After:
   Restore
@@ -25,18 +25,18 @@ Execute(Should return 'gradlew' command if project includes gradle wapper):
   call ale#test#SetFilename('gradle-test-files/wrapped-project/src/main/kotlin/dummy.kt')
 
   AssertEqual
-  \ 'cd ' . ale#Escape(ale#path#Winify(g:dir . '/gradle-test-files/wrapped-project'))
-  \   . ' && ' . ale#Escape(ale#path#Winify(g:dir . '/gradle-test-files/wrapped-project/gradlew'))
+  \ 'cd ' . ale#Escape(ale#path#Simplify(g:dir . '/gradle-test-files/wrapped-project'))
+  \   . ' && ' . ale#Escape(ale#path#Simplify(g:dir . '/gradle-test-files/wrapped-project/gradlew'))
   \   . g:command_tail,
   \ ale#gradle#BuildClasspathCommand(bufnr(''))
 
 Execute(Should return 'gradle' command if project does not include gradle wapper):
   call ale#test#SetFilename('gradle-test-files/unwrapped-project/src/main/kotlin/dummy.kt')
   let $PATH .= (has('win32') ? ';' : ':')
-  \ . ale#path#Winify(g:dir . '/gradle-test-files')
+  \ . ale#path#Simplify(g:dir . '/gradle-test-files')
 
   AssertEqual
-  \ 'cd ' . ale#Escape(ale#path#Winify(g:dir . '/gradle-test-files/unwrapped-project'))
+  \ 'cd ' . ale#Escape(ale#path#Simplify(g:dir . '/gradle-test-files/unwrapped-project'))
   \   . ' && ' . ale#Escape('gradle')
   \   . g:command_tail,
   \ ale#gradle#BuildClasspathCommand(bufnr(''))

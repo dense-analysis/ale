@@ -1,8 +1,8 @@
 Before:
-    runtime ale_linters/scala/scalac.vim
+  runtime ale_linters/scala/scalac.vim
 
 After:
-    call ale#linter#Reset()
+  call ale#linter#Reset()
 
 Given scala(An empty Scala file):
 

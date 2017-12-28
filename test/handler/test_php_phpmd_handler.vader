@@ -1,6 +1,9 @@
 Before:
   runtime ale_linters/php/phpmd.vim
 
+After:
+  call ale#linter#Reset()
+
 Execute(The php static analyzer handler should parse errors from phpmd):
   AssertEqual
   \ [
@@ -19,6 +22,3 @@ Execute(The php static analyzer handler should parse errors from phpmd):
   \ "example.php:22     Avoid unused local variables such as '$response'.",
   \ "example.php:14    The method test uses an else expression. Else is never necessary and you can simplify the code to work without else.",
   \ ])
-
-After:
-  call ale#linter#Reset()

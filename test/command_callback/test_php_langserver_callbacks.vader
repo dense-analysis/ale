@@ -33,10 +33,10 @@ Execute(Vendor executables should be detected):
   call ale#test#SetFilename('php-langserver-project/test.php')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/php-langserver-project/vendor/bin/php-language-server.php'),
+  \ ale#path#Simplify(g:dir . '/php-langserver-project/vendor/bin/php-language-server.php'),
   \ ale_linters#php#langserver#GetExecutable(bufnr(''))
   AssertEqual
-  \ 'php ' . ale#Escape(ale#path#Winify(
+  \ 'php ' . ale#Escape(ale#path#Simplify(
   \   g:dir
   \   . '/php-langserver-project/vendor/bin/php-language-server.php'
   \ )),

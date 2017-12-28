@@ -11,7 +11,7 @@ Execute(The executable path should be correct):
   \ {
   \   'read_temporary_file': 1,
   \   'command': (has('win32') ? 'node.exe ' : '')
-  \     . ale#Escape(ale#path#Winify(g:dir . '/../eslint-test-files/react-app/node_modules/standard/bin/cmd.js'))
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/standard/bin/cmd.js'))
   \     . ' --fix %t',
   \ },
   \ ale#fixers#standard#Fix(bufnr(''))

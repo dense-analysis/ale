@@ -14,7 +14,9 @@ Before:
 
 After:
   let g:ale_has_override = {}
+
   call ale#test#RestoreDirectory()
+  call ale#semver#ResetVersionCache()
 
 Execute(The prettier callback should return the correct default values):
   call ale#test#SetFilename('../prettier-test-files/testfile.js')
@@ -24,12 +26,11 @@ Execute(The prettier callback should return the correct default values):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
-  \     . ' --parser babylon'
   \     . ' --write',
   \ },
-  \ ale#fixers#prettier#Fix(bufnr(''))
+  \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), [])
 
-Execute(The prettier callback should include configuration files when the option is set):
+Execute(The --config option should not be set automatically):
   let g:ale_javascript_prettier_use_local_config = 1
   call ale#test#SetFilename('../prettier-test-files/with_config/testfile.js')
 
@@ -38,11 +39,9 @@ Execute(The prettier callback should include configuration files when the option
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
-  \     . ' --parser babylon'
-  \     . ' --config ' . ale#Escape(ale#path#Winify(g:dir .  '/../prettier-test-files/with_config/.prettierrc'))
   \     . ' --write',
   \ },
-  \ ale#fixers#prettier#Fix(bufnr(''))
+  \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), [])
 
 Execute(The prettier callback should include custom prettier options):
   let g:ale_javascript_prettier_options = '--no-semi'
@@ -53,78 +52,46 @@ Execute(The prettier callback should include custom prettier options):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
-  \     . ' --no-semi --parser babylon'
-  \     . ' --config ' . ale#Escape(ale#path#Winify(g:dir .  '/../prettier-test-files/with_config/.prettierrc'))
+  \     . ' --no-semi'
   \     . ' --write',
   \ },
-  \ ale#fixers#prettier#Fix(bufnr(''))
+  \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), [])
 
-Execute(Append '--parser typescript' for filetype=typescript):
-  set filetype=typescript
-  call ale#test#SetFilename('../prettier-test-files/testfile.ts')
+Execute(The version check should be correct):
+  call ale#test#SetFilename('../prettier-test-files/testfile.js')
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
+  \   'chain_with': 'ale#fixers#prettier#ApplyFixForVersion',
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
-  \     . ' %t'
-  \     . ' --parser typescript'
-  \     . ' --write',
+  \     . ' --version',
   \ },
   \ ale#fixers#prettier#Fix(bufnr(''))
 
-Execute(Append '--parser json' for filetype=json):
-  set filetype=json
-  call ale#test#SetFilename('../prettier-test-files/testfile.json')
+Execute(--stdin-filepath should be used when prettier is new enough):
+  let g:ale_javascript_prettier_options = '--no-semi'
+  call ale#test#SetFilename('../prettier-test-files/with_config/testfile.js')
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
-  \   'command': ale#Escape(g:ale_javascript_prettier_executable)
-  \     . ' %t'
-  \     . ' --parser json'
-  \     . ' --write',
+  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \     . ale#Escape(g:ale_javascript_prettier_executable)
+  \     . ' --no-semi'
+  \     . ' --stdin-filepath %s --stdin',
   \ },
-  \ ale#fixers#prettier#Fix(bufnr(''))
+  \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), ['1.6.0'])
 
-Execute(Append '--parser postcss' for filetype=scss):
-  set filetype=scss
-  call ale#test#SetFilename('../prettier-test-files/testfile.scss')
+Execute(The version number should be cached):
+  call ale#test#SetFilename('../prettier-test-files/with_config/testfile.js')
 
+  " Call the second callback with the version output.
+  call ale#fixers#prettier#ApplyFixForVersion(bufnr(''), ['1.6.0'])
+
+  " Call it again without the version output. We should use the newer command.
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
-  \   'command': ale#Escape(g:ale_javascript_prettier_executable)
-  \     . ' %t'
-  \     . ' --parser postcss'
-  \     . ' --write',
+  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \     . ale#Escape(g:ale_javascript_prettier_executable)
+  \     . ' --stdin-filepath %s --stdin',
   \ },
-  \ ale#fixers#prettier#Fix(bufnr(''))
-
-Execute(Append '--parser postcss' for filetype=css):
-  set filetype=css
-  call ale#test#SetFilename('../prettier-test-files/testfile.css')
-
-  AssertEqual
-  \ {
-  \   'read_temporary_file': 1,
-  \   'command': ale#Escape(g:ale_javascript_prettier_executable)
-  \     . ' %t'
-  \     . ' --parser postcss'
-  \     . ' --write',
-  \ },
-  \ ale#fixers#prettier#Fix(bufnr(''))
-
-Execute(Append '--parser postcss' for filetype=less):
-  set filetype=less
-  call ale#test#SetFilename('../prettier-test-files/testfile.less')
-
-  AssertEqual
-  \ {
-  \   'read_temporary_file': 1,
-  \   'command': ale#Escape(g:ale_javascript_prettier_executable)
-  \     . ' %t'
-  \     . ' --parser postcss'
-  \     . ' --write',
-  \ },
-  \ ale#fixers#prettier#Fix(bufnr(''))
+  \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), [])

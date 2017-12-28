@@ -35,6 +35,6 @@ Execute(The .packages file should be set if detected):
 
   AssertEqual
   \ ale#Escape('dartanalyzer')
-  \   . ' --packages ' . ale#Escape(ale#path#Winify(g:dir . '/dart_paths/.packages'))
+  \   . ' --packages ' . ale#Escape(ale#path#Simplify(g:dir . '/dart_paths/.packages'))
   \   . ' %s',
   \ ale_linters#dart#dartanalyzer#GetCommand(bufnr(''))

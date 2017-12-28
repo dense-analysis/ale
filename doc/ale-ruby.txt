@@ -58,10 +58,10 @@ g:ale_ruby_reek_show_wiki_link                 *g:ale_ruby_reek_show_wiki_link*
 ===============================================================================
 rubocop                                                      *ale-ruby-rubocop*
 
-g:ale_ruby_rubocop_executable                   g:ale_ruby_rubocop_executable
-                                                b:ale_ruby_rubocop_executable
+g:ale_ruby_rubocop_executable                   *g:ale_ruby_rubocop_executable*
+                                                *b:ale_ruby_rubocop_executable*
   Type: String
-  Default: 'rubocop'
+  Default: `'rubocop'`
 
   Override the invoked rubocop binary. This is useful for running rubocop
   from binstubs or a bundle.
@@ -73,6 +73,17 @@ g:ale_ruby_rubocop_options                         *g:ale_ruby_rubocop_options*
   Default: `''`
 
   This variable can be change to modify flags given to rubocop.
+
+
+===============================================================================
+ruby                                                            *ale-ruby-ruby*
+
+g:ale_ruby_ruby_executable                         *g:ale_ruby_ruby_executable*
+                                                   *b:ale_ruby_ruby_executable*
+  Type: String
+  Default: `'ruby'`
+
+  This variable can be changed to use a different executable for ruby.
 
 
 ===============================================================================

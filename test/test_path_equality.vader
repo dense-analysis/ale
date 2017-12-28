@@ -1,6 +1,6 @@
 Before:
   function! CheckPath(path) abort
-    return ale#path#IsBufferPath(bufnr(''), ale#path#Winify(a:path))
+    return ale#path#IsBufferPath(bufnr(''), ale#path#Simplify(a:path))
   endfunction
 
 After:

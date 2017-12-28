@@ -14,23 +14,22 @@ function! ale#handlers#css#HandleCSSLintFormat(buffer, lines) abort
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        let l:text = l:match[4]
-        let l:type = l:match[3]
-
-        let l:group_match = matchlist(l:text, '\v^(.+) \((.+)\)$')
-
-        " Put the error group at the front, so we can see what kind of error
-        " it is on small echo lines.
-        if !empty(l:group_match)
-            let l:text = '(' . l:group_match[2] . ') ' . l:group_match[1]
-        endif
-
-        call add(l:output, {
+        let l:item = {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
-        \   'text': l:text,
-        \   'type': l:type is# 'Warning' ? 'W' : 'E',
-        \})
+        \   'type': l:match[3] is# 'Warning' ? 'W' : 'E',
+        \   'text': l:match[4],
+        \}
+
+        let l:code_match = matchlist(l:match[4], '\v(.+) \(([^(]+)\)$')
+
+        " Split up the error code and the text if we find one.
+        if !empty(l:code_match)
+            let l:item.text = l:code_match[1]
+            let l:item.code = l:code_match[2]
+        endif
+
+        call add(l:output, l:item)
     endfor
 
     return l:output
@@ -62,7 +61,8 @@ function! ale#handlers#css#HandleStyleLintFormat(buffer, lines) abort
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
         \   'type': l:match[3] is# '✖' ? 'E' : 'W',
-        \   'text': l:match[4] . ' [' . l:match[5] . ']',
+        \   'text': l:match[4],
+        \   'code': l:match[5],
         \})
     endfor
 

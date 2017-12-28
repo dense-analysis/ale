@@ -1,12 +1,14 @@
 Before:
+  Save g:ale_python_pycodestyle_executable
+  Save g:ale_python_pycodestyle_options
+  Save g:ale_python_pycodestyle_use_global
+
   runtime ale_linters/python/pycodestyle.vim
-  Save g:ale_python_pycodestyle_executable,
-  \ g:ale_python_pycodestyle_options,
-  \ g:ale_python_pycodestyle_use_global
 
 After:
-  call ale#linter#Reset()
   Restore
+
+  call ale#linter#Reset()
 
 Execute(The pycodestyle command callback should return default string):
   AssertEqual ale#Escape('pycodestyle') . '  -',

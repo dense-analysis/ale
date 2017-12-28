@@ -2,9 +2,10 @@ Before:
   runtime ale_linters/xml/xmllint.vim
 
 After:
-  call ale#linter#Reset()
   let g:ale_xml_xmllint_options = ''
   let g:ale_xml_xmllint_executable = 'xmllint'
+
+  call ale#linter#Reset()
 
 Execute(The xml xmllint command callback should return the correct default string):
   AssertEqual ale#Escape('xmllint') . ' --noout -',
@@ -22,4 +23,3 @@ Execute(The xmllint executable should be configurable):
   AssertEqual '~/.local/bin/xmllint', ale_linters#xml#xmllint#GetExecutable(1)
   AssertEqual ale#Escape('~/.local/bin/xmllint') . ' --noout -',
   \ join(split(ale_linters#xml#xmllint#GetCommand(1)))
-

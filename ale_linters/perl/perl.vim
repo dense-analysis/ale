@@ -12,7 +12,7 @@ function! ale_linters#perl#perl#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#perl#perl#GetCommand(buffer) abort
-    return ale_linters#perl#perl#GetExecutable(a:buffer)
+    return ale#Escape(ale_linters#perl#perl#GetExecutable(a:buffer))
     \   . ' ' . ale#Var(a:buffer, 'perl_perl_options')
     \   . ' %t'
 endfunction

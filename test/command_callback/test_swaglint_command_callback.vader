@@ -1,11 +1,13 @@
 Before:
   runtime ale_linters/yaml/swaglint.vim
+
   call ale#test#SetDirectory('/testplugin/test/command_callback')
 
 After:
-  call ale#linter#Reset()
   let g:ale_yaml_swaglint_executable = 'swaglint'
   let g:ale_yaml_swaglint_use_global = 0
+
+  call ale#linter#Reset()
 
 Execute(The yaml swaglint command callback should return the correct default string):
   AssertEqual 'swaglint',
@@ -32,10 +34,10 @@ Execute(The yaml swaglint command callback should allow a local installation to 
   call ale#test#SetFilename('swaglint_paths/docs/swagger.yaml')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/swaglint_paths/node_modules/.bin/swaglint'),
+  \ ale#path#Simplify(g:dir . '/swaglint_paths/node_modules/.bin/swaglint'),
   \ ale_linters#yaml#swaglint#GetExecutable(bufnr(''))
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/swaglint_paths/node_modules/.bin/swaglint')
+  \ ale#path#Simplify(g:dir . '/swaglint_paths/node_modules/.bin/swaglint')
   \   . ' -r compact --stdin',
   \ ale_linters#yaml#swaglint#GetCommand(bufnr(''))

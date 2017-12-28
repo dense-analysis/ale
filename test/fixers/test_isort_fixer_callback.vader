@@ -25,5 +25,5 @@ Execute(The isort callback should return the correct default values):
 
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
-  \ {'command': ale#Escape(ale#path#Winify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/isort')) . ' -' },
+  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/isort')) . ' -' },
   \ ale#fixers#isort#Fix(bufnr(''))

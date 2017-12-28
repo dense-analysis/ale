@@ -1,18 +1,24 @@
 " Author: Markus Doits <markus.doits@googlemail.com>
+Before:
+  runtime ale_linters/slim/slimlint.vim
+
+After:
+  call ale#linter#Reset()
 
 Execute(The slim handler should parse lines correctly):
-  runtime ale_linters/slim/slimlint.vim
 
   AssertEqual
   \ [
   \   {
   \     'lnum': 1,
-  \     'text': 'RedundantDiv: `div` is redundant when class attribute shortcut is present',
+  \     'text': '`div` is redundant when class attribute shortcut is present',
+  \     'code': 'RedundantDiv',
   \     'type': 'W',
   \   },
   \   {
   \     'lnum': 2,
-  \     'text': 'LineLength: Line is too long. [136/80]',
+  \     'text': 'Line is too long. [136/80]',
+  \     'code': 'LineLength',
   \     'type': 'W',
   \   },
   \   {
@@ -26,6 +32,3 @@ Execute(The slim handler should parse lines correctly):
   \   'inv.slim:2 [W] LineLength: Line is too long. [136/80]',
   \   'inv.slim:3 [E] Invalid syntax',
   \ ])
-
-After:
-  call ale#linter#Reset()

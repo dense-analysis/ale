@@ -9,14 +9,14 @@ Execute(smlnj finds CM file if it exists):
   call ale#test#SetFilename('smlnj/cm/foo.sml')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/smlnj/cm/sources.cm'),
+  \ ale#path#Simplify(g:dir . '/smlnj/cm/sources.cm'),
   \ ale#handlers#sml#GetCmFile(bufnr('%'))
 
 Execute(smlnj finds CM file by searching upwards):
   call ale#test#SetFilename('smlnj/cm/path/to/bar.sml')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/smlnj/cm/sources.cm'),
+  \ ale#path#Simplify(g:dir . '/smlnj/cm/sources.cm'),
   \ ale#handlers#sml#GetCmFile(bufnr('%'))
 
 Execute(smlnj returns '' when no CM file found):

@@ -50,5 +50,5 @@ function! ale#test#SetFilename(path) abort
     \   ? a:path
     \   : l:dir . '/' . a:path
 
-    silent! noautocmd execute 'file ' . fnameescape(ale#path#Winify(l:full_path))
+    silent! noautocmd execute 'file ' . fnameescape(ale#path#Simplify(l:full_path))
 endfunction

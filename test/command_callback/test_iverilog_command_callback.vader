@@ -1,0 +1,24 @@
+Before:
+  Save g:ale_verilog_iverilog_options
+
+  unlet! g:ale_verilog_iverilog_options
+
+  runtime ale_linters/verilog/iverilog.vim
+
+After:
+  Restore
+
+  call ale#linter#Reset()
+
+Execute(The default iverilog command should be correct):
+  AssertEqual
+  \ 'iverilog -t null -Wall  %t',
+  \ ale_linters#verilog#iverilog#GetCommand(bufnr(''))
+
+Execute(iverilog options should be configurable):
+  " Additional args for the linter
+  let g:ale_verilog_iverilog_options = '-y.'
+
+  AssertEqual
+  \ 'iverilog -t null -Wall -y. %t',
+  \ ale_linters#verilog#iverilog#GetCommand(bufnr(''))

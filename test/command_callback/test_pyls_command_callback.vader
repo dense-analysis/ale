@@ -1,0 +1,49 @@
+Before:
+  Save g:ale_python_pyls_executable
+  Save g:ale_python_pyls_use_global
+
+  unlet! g:ale_python_pyls_executable
+  unlet! g:ale_python_pyls_use_global
+
+  let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
+
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+  runtime ale_linters/python/pyls.vim
+
+After:
+  Restore
+
+  unlet! b:bin_dir
+  unlet! b:executable
+
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(The pyls command callback should return default string):
+  AssertEqual ale#Escape('pyls'),
+  \ ale_linters#python#pyls#GetCommand(bufnr(''))
+
+Execute(The pyls executable should be configurable):
+  let g:ale_python_pyls_executable = '~/.local/bin/pyls'
+
+  AssertEqual ale#Escape('~/.local/bin/pyls'),
+  \ ale_linters#python#pyls#GetCommand(bufnr(''))
+
+Execute(The pyls executable should be run from the virtualenv path):
+  call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
+
+  let b:executable = ale#path#Simplify(
+  \ g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/pyls'
+  \)
+
+  AssertEqual ale#Escape(b:executable),
+  \ ale_linters#python#pyls#GetCommand(bufnr(''))
+
+Execute(You should be able to override the pyls virtualenv lookup):
+  call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
+
+  let g:ale_python_pyls_use_global = 1
+
+  AssertEqual ale#Escape('pyls'),
+  \ ale_linters#python#pyls#GetCommand(bufnr(''))

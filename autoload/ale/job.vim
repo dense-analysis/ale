@@ -36,7 +36,7 @@ function! ale#job#JoinNeovimOutput(job, last_line, data, mode, callback) abort
         let l:lines[0] = a:last_line . l:lines[0]
         let l:new_last_line = a:data[-1]
     else
-        let l:new_last_line = a:last_line . a:data[0]
+        let l:new_last_line = a:last_line . get(a:data, 0, '')
     endif
 
     for l:line in l:lines
@@ -165,23 +165,54 @@ function! ale#job#ValidateArguments(command, options) abort
     endif
 endfunction
 
-function! ale#job#PrepareCommand(command) abort
+function! s:PrepareWrappedCommand(original_wrapper, command) abort
+    let l:match = matchlist(a:command, '\v^(.*(\&\&|;)) *(.*)$')
+    let l:prefix = ''
+    let l:command = a:command
+
+    if !empty(l:match)
+        let l:prefix = l:match[1] . ' '
+        let l:command = l:match[3]
+    endif
+
+    let l:format = a:original_wrapper
+
+    if l:format =~# '%@'
+        let l:wrapped = substitute(l:format, '%@', ale#Escape(l:command), '')
+    else
+        if l:format !~# '%\*'
+            let l:format .= ' %*'
+        endif
+
+        let l:wrapped = substitute(l:format, '%\*', l:command, '')
+    endif
+
+    return l:prefix . l:wrapped
+endfunction
+
+function! ale#job#PrepareCommand(buffer, command) abort
+    let l:wrapper = ale#Var(a:buffer, 'command_wrapper')
+
+    let l:command = !empty(l:wrapper)
+    \ ? s:PrepareWrappedCommand(l:wrapper, a:command)
+    \ : a:command
+
     " The command will be executed in a subshell. This fixes a number of
     " issues, including reading the PATH variables correctly, %PATHEXT%
     " expansion on Windows, etc.
     "
     " NeoVim handles this issue automatically if the command is a String,
-    " but we'll do this explicitly, so we use thes same exact command for both
+    " but we'll do this explicitly, so we use the same exact command for both
     " versions.
-    if ale#Has('win32')
-        return 'cmd /c ' . a:command
+    if has('win32')
+        return 'cmd /c ' . l:command
     endif
 
     if &shell =~? 'fish$'
-        return ['/bin/sh', '-c', a:command]
+        return ['/bin/sh', '-c', l:command]
     endif
 
-    return split(&shell) + split(&shellcmdflag) + [a:command]
+    return split(&shell) + split(&shellcmdflag) + [l:command]
 endfunction
 
 " Start a job with options which are agnostic to Vim and NeoVim.

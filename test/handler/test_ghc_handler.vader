@@ -8,6 +8,10 @@ Execute(The ghc handler should handle hdevtools output):
   \     'type': 'W',
   \     'col': 62,
   \     'text': '• Couldnt match type ‘a -> T.Text’ with ‘T.Text’ Expected type: [T.Text]',
+  \     'detail': join([
+  \       '• Couldnt match type ‘a -> T.Text’ with ‘T.Text’',
+  \       '  Expected type: [T.Text]',
+  \     ], "\n"),
   \   },
   \ ],
   \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
@@ -26,21 +30,29 @@ Execute(The ghc handler should handle ghc 8 output):
   \     'type': 'E',
   \     'col': 1,
   \     'text': 'Failed to load interface for ‘GitHub.Data’ Use -v to see a list of the files searched for.',
+  \     'detail': join([
+  \       '    Failed to load interface for ‘GitHub.Data’',
+  \       '    Use -v to see a list of the files searched for.',
+  \     ], "\n"),
   \   },
   \   {
   \     'lnum': 7,
   \     'type': 'W',
   \     'col': 1,
   \     'text': 'Failed to load interface for ‘GitHub.Endpoints.PullRequests’ Use -v to see a list of the files searched for.',
+  \     'detail': join([
+  \       '    Failed to load interface for ‘GitHub.Endpoints.PullRequests’',
+  \       '    Use -v to see a list of the files searched for.',
+  \     ], "\n"),
   \   },
   \ ],
   \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
   \ '',
-  \ ale#path#Winify('src/Appoint/Lib.hs') . ':6:1: error:',
+  \ ale#path#Simplify('src/Appoint/Lib.hs') . ':6:1: error:',
   \ '    Failed to load interface for ‘GitHub.Data’',
   \ '    Use -v to see a list of the files searched for.',
   \ '',
-  \ ale#path#Winify('src/Appoint/Lib.hs') . ':7:1: warning:',
+  \ ale#path#Simplify('src/Appoint/Lib.hs') . ':7:1: warning:',
   \ '    Failed to load interface for ‘GitHub.Endpoints.PullRequests’',
   \ '    Use -v to see a list of the files searched for.',
   \ ])
@@ -55,24 +67,66 @@ Execute(The ghc handler should handle ghc 7 output):
   \     'type': 'E',
   \     'col': 1,
   \     'text': 'parse error (possibly incorrect indentation or mismatched brackets)',
+  \     'detail': join([
+  \       '    parse error (possibly incorrect indentation or mismatched brackets)',
+  \     ], "\n"),
   \   },
   \   {
   \     'lnum': 84,
   \     'col': 1,
   \     'type': 'W',
-  \     'text': 'Top-level binding with no type signature:^@  myLayout :: Choose Tall (Choose (Mirror Tall) Full) a',
+  \     'text': 'Top-level binding with no type signature: myLayout :: Choose Tall (Choose (Mirror Tall) Full) a',
+  \     'detail': join([
+  \       '    Top-level binding with no type signature:',
+  \       '    myLayout :: Choose Tall (Choose (Mirror Tall) Full) a',
+  \     ], "\n"),
   \   },
   \   {
   \     'lnum': 94,
   \     'col': 5,
   \     'type': 'E',
   \     'text': 'Some other error',
+  \     'detail': join([
+  \       '  Some other error',
+  \     ], "\n"),
   \   },
   \ ],
   \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
-  \ ale#path#Winify('src/Main.hs') . ':168:1:',
+  \ ale#path#Simplify('src/Main.hs') . ':168:1:',
   \ '    parse error (possibly incorrect indentation or mismatched brackets)',
-  \ ale#path#Winify('src/Main.hs') . ':84:1:Warning: Top-level binding with no type signature:^@  myLayout :: Choose Tall (Choose (Mirror Tall) Full) a',
-  \ ale#path#Winify('src/Main.hs') . ':94:5:Error:',
+  \ ale#path#Simplify('src/Main.hs') . ':84:1:Warning:',
+  \ '    Top-level binding with no type signature:',
+  \ '    myLayout :: Choose Tall (Choose (Mirror Tall) Full) a',
+  \ ale#path#Simplify('src/Main.hs') . ':94:5:Error:',
   \ '  Some other error',
+  \ ])
+
+Execute(The ghc handler should handle stack 1.5.1 output):
+  call ale#test#SetFilename('src/Main.hs')
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 160,
+  \     'col': 14,
+  \     'type': 'E',
+  \     'text': '• Expecting one fewer arguments to ‘Exp’ Expected kind ‘k0 -> *’, but ‘Exp’ has kind ‘*’ • In the type ‘Exp a’ | 160 | pattern F :: Exp a |              ^^^^^',
+  \     'detail': join([
+  \       '        • Expecting one fewer arguments to ‘Exp’',
+  \       '          Expected kind ‘k0 -> *’, but ‘Exp’ has kind ‘*’',
+  \       '        • In the type ‘Exp a’',
+  \       '        |',
+  \       '    160 | pattern F :: Exp a',
+  \       '        |              ^^^^^',
+  \     ], "\n"),
+  \   },
+  \ ],
+  \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
+  \   '    ' . ale#path#Simplify('src/Main.hs') . ':160:14: error:',
+  \   '        • Expecting one fewer arguments to ‘Exp’',
+  \   '          Expected kind ‘k0 -> *’, but ‘Exp’ has kind ‘*’',
+  \   '        • In the type ‘Exp a’',
+  \   '        |',
+  \   '    160 | pattern F :: Exp a',
+  \   '        |              ^^^^^',
   \ ])

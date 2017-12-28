@@ -3,13 +3,12 @@ Before:
   Save g:ale_javascript_eslint_suppress_missing_config
 
   let g:ale_javascript_eslint_suppress_eslintignore = 0
-  let b:ale_javascript_eslint_suppress_missing_config = 0
-
-  unlet! b:ale_javascript_eslint_suppress_missing_config
+  let g:ale_javascript_eslint_suppress_missing_config = 0
 
 After:
   Restore
 
+  unlet! b:ale_javascript_eslint_suppress_eslintignore
   unlet! b:ale_javascript_eslint_suppress_missing_config
   unlet! g:config_error_lines
 
@@ -19,13 +18,15 @@ Execute(The eslint handler should parse lines correctly):
   \   {
   \     'lnum': 47,
   \     'col': 14,
-  \     'text': 'Missing trailing comma. [Warning/comma-dangle]',
+  \     'text': 'Missing trailing comma.',
+  \     'code': 'comma-dangle',
   \     'type': 'W',
   \   },
   \   {
   \     'lnum': 56,
   \     'col': 41,
-  \     'text': 'Missing semicolon. [Error/semi]',
+  \     'text': 'Missing semicolon.',
+  \     'code': 'semi',
   \     'type': 'E',
   \   },
   \   {
@@ -259,42 +260,47 @@ Execute(The eslint handler should output end_col values where appropriate):
   \     'lnum': 4,
   \     'col': 3,
   \     'end_col': 15,
-  \     'text': 'Parsing error: Unexpected token ''some string'' [Error]',
+  \     'text': 'Parsing error: Unexpected token ''some string''',
   \     'type': 'E',
   \   },
   \   {
   \     'lnum': 70,
   \     'col': 3,
   \     'end_col': 5,
-  \     'text': '''foo'' is not defined. [Error/no-undef]',
+  \     'text': '''foo'' is not defined.',
+  \     'code': 'no-undef',
   \     'type': 'E',
   \   },
   \   {
   \     'lnum': 71,
   \     'col': 2,
   \     'end_col': 6,
-  \     'text': 'Unexpected `await` inside a loop. [Error/no-await-in-loop]',
+  \     'text': 'Unexpected `await` inside a loop.',
+  \     'code': 'no-await-in-loop',
   \     'type': 'E',
   \   },
   \   {
   \     'lnum': 72,
   \     'col': 6,
   \     'end_col': 10,
-  \     'text': 'Redundant use of `await` on a return value. [Error/no-return-await]',
+  \     'text': 'Redundant use of `await` on a return value.',
+  \     'code': 'no-return-await',
   \     'type': 'E',
   \   },
   \   {
   \     'lnum': 73,
   \     'col': 4,
   \     'end_col': 10,
-  \     'text': 'Unexpected console statement [Error/no-console]',
+  \     'text': 'Unexpected console statement',
+  \     'code': 'no-console',
   \     'type': 'E',
   \   },
   \   {
   \     'lnum': 74,
   \     'col': 4,
   \     'end_col': 11,
-  \     'text': 'Unexpected ''debugger'' statement. [Error/no-debugger]',
+  \     'text': 'Unexpected ''debugger'' statement.',
+  \     'code': 'no-debugger',
   \     'type': 'E',
   \   },
   \ ],
@@ -316,7 +322,7 @@ Execute(The eslint hint about using typescript-eslint-parser):
   \     'lnum': 451,
   \     'col': 2,
   \     'end_col': 2,
-  \     'text': 'Parsing error (You may need configure typescript-eslint-parser): Unexpected token ) [Error]',
+  \     'text': 'Parsing error (You may need configure typescript-eslint-parser): Unexpected token )',
   \     'type': 'E',
   \   },
   \ ],
@@ -330,7 +336,7 @@ Execute(eslint should warn about ignored files by default):
   \    'lnum': 0,
   \    'col': 0,
   \    'type': 'W',
-  \    'text': 'File ignored because of a matching ignore pattern. Use "--no-ignore" to override. [Warning]'
+  \    'text': 'File ignored because of a matching ignore pattern. Use "--no-ignore" to override.'
   \ }],
   \ ale#handlers#eslint#Handle(bufnr(''), [
   \  '/path/to/some/ignored.js:0:0: File ignored because of a matching ignore pattern. Use "--no-ignore" to override. [Warning]',
@@ -343,4 +349,19 @@ Execute(eslint should not warn about ignored files when explicitly disabled):
   \ [],
   \ ale#handlers#eslint#Handle(bufnr(''), [
   \  '/path/to/some/ignored.js:0:0: File ignored because of a matching ignore pattern. Use "--no-ignore" to override. [Warning]',
+  \ ])
+
+Execute(eslint should handle react errors correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 59,
+  \     'col': 9,
+  \     'type': 'E',
+  \     'text': 'Property should be placed on the same line as the component declaration',
+  \     'code': 'react/jsx-first-prop-new-line',
+  \   },
+  \ ],
+  \ ale#handlers#eslint#Handle(bufnr(''), [
+  \  '/path/editor-help.jsx:59:9: Property should be placed on the same line as the component declaration [Error/react/jsx-first-prop-new-line]',
   \ ])

@@ -1,5 +1,10 @@
-Execute(The crystal handler should parse lines correctly and add the column if it can):
+Before:
   runtime ale_linters/crystal/crystal.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The crystal handler should parse lines correctly and add the column if it can):
   AssertEqual
   \ [
   \   {
@@ -11,6 +16,3 @@ Execute(The crystal handler should parse lines correctly and add the column if i
   \ ale_linters#crystal#crystal#Handle(255, [
   \ '[{"file":"/tmp/test.cr","line":2,"column":1,"size":null,"message":"unexpected token: EOF"}]'
   \ ])
-
-After:
-  call ale#linter#Reset()

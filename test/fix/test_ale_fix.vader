@@ -6,7 +6,7 @@ Before:
   Save g:ale_lint_on_save
   Save g:ale_echo_cursor
 
-  silent! cd /testplugin/test
+  silent! cd /testplugin/test/fix
 
   let g:ale_enabled = 0
   let g:ale_echo_cursor = 0
@@ -67,7 +67,14 @@ Before:
   endfunction
 
   function! FirstChainCallbackSkipped(buffer)
-    return {'command': '', 'chain_with': 'SecondChainCallback'}
+    let l:ChainWith = 'SecondChainCallback'
+
+    " Test with lambdas where support is available.
+    if has('lambda')
+      let l:ChainWith = {buffer, output -> SecondChainCallback(buffer, output)}
+    endif
+
+    return {'command': '', 'chain_with': l:ChainWith}
   endfunction
 
   function! FirstChainCallbackSecondSkipped(buffer)
@@ -105,6 +112,15 @@ Before:
     return {'command': ''}
   endfunction
 
+  " echo will output a single blank line, and we should ingore it.
+  function! IgnoredEmptyOutput(buffer, output)
+    return {'command': has('win32') ? 'echo(' : 'echo'}
+  endfunction
+
+  function! EchoLineNoPipe(buffer, output)
+    return {'command': 'echo new line', 'read_buffer': 0}
+  endfunction
+
   function! SetUpLinters()
     call ale#linter#Define('testft', {
     \ 'name': 'testlinter',
@@ -122,6 +138,30 @@ Before:
     let l:lines = split(l:output, "\n")
 
     return empty(l:lines) ? '' : l:lines[-1]
+  endfunction
+
+  function! FixWithJSONPostProcessing(buffer) abort
+    let l:ProcessWith = 'JSONPostProcessor'
+
+    " Test with lambdas where support is available.
+    if has('lambda')
+      let l:ProcessWith = {buffer, output -> JSONPostProcessor(buffer, output)}
+    endif
+
+    " Escaping needs to be handled specially for CMD on Windows.
+    let l:json_string = has('win32')
+    \ ? '{"output":["x","y","z"]}'
+    \ : ale#Escape('{"output": ["x", "y", "z"]}')
+
+    return {
+    \ 'command': 'echo ' . l:json_string,
+    \ 'read_buffer': 0,
+    \ 'process_with': l:ProcessWith,
+    \}
+  endfunction
+
+  function! JSONPostProcessor(buffer, output) abort
+    return json_decode(a:output[0]).output
   endfunction
 
 After:
@@ -149,6 +189,10 @@ After:
   delfunction ChainEndSkipped
   delfunction SetUpLinters
   delfunction GetLastMessage
+  delfunction IgnoredEmptyOutput
+  delfunction EchoLineNoPipe
+  delfunction FixWithJSONPostProcessing
+  delfunction JSONPostProcessor
 
   call ale#test#RestoreDirectory()
 
@@ -330,6 +374,15 @@ Expect(There should be only two lines):
   a
   b
 
+Execute(ALEFix should allow Lists to be used for buffer-local fixer settings):
+  let g:ale_fixers.testft = ['AddCarets', 'AddDollars']
+  let b:ale_fixers = ['RemoveLastLine']
+  ALEFix
+
+Expect(There should be only two lines):
+  a
+  b
+
 Given testft (A file with three lines):
   a
   b
@@ -462,7 +515,7 @@ Execute(ale#fix#InitBufferData() should set up the correct data):
   \ bufnr(''): {
   \   'temporary_directory_list': [],
   \   'vars': b:,
-  \   'filename': ale#path#Winify(getcwd() . '/fix_test_file'),
+  \   'filename': ale#path#Simplify(getcwd() . '/fix_test_file'),
   \   'done': 0,
   \   'lines_before': ['a', 'b', 'c'],
   \   'should_save': 1,
@@ -525,6 +578,14 @@ Execute(Test fixing with chained callbacks):
   let g:ale_fixers.testft = ['FirstChainCallback']
   ALEFix
 
+  " The buffer shouldn't be piped in for earlier commands in the chain.
+  AssertEqual
+  \ [
+  \   string(ale#job#PrepareCommand(bufnr(''), 'echo echoline')),
+  \   string(ale#job#PrepareCommand(bufnr(''), 'echo echoline')),
+  \ ],
+  \ map(ale#history#Get(bufnr(''))[-2:-1], 'string(v:val.command)')
+
 Expect(The echoed line should be added):
   a
   b
@@ -559,3 +620,37 @@ Expect(The lines should be the same):
   a
   b
   c
+
+Execute(Empty output should be ignored):
+  let g:ale_fixers.testft = ['IgnoredEmptyOutput']
+  ALEFix
+
+Expect(The lines should be the same):
+  a
+  b
+  c
+
+Execute(A temporary file shouldn't be piped into the command when disabled):
+  let g:ale_fixers.testft = ['EchoLineNoPipe']
+  ALEFix
+
+  AssertEqual
+  \ string(ale#job#PrepareCommand(bufnr(''), 'echo new line')),
+  \ string(ale#history#Get(bufnr(''))[-1].command)
+
+  " Remove trailing whitespace for Windows.
+  if has('win32')
+    %s/[[:space:]]*$//g
+  endif
+
+Expect(The new line should be used):
+  new line
+
+Execute(Post-processing should work):
+  let g:ale_fixers.testft = ['FixWithJSONPostProcessing']
+  ALEFix
+
+Expect(The lines in the JSON should be used):
+  x
+  y
+  z

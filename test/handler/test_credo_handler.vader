@@ -1,6 +1,10 @@
-Execute(The credo handler should parse lines correctly):
+Before:
   runtime ale_linters/elixir/credo.vim
 
+After:
+  call ale#linter#Reset()
+
+Execute(The credo handler should parse lines correctly):
   AssertEqual
   \ [
   \   {
@@ -23,7 +27,3 @@ Execute(The credo handler should parse lines correctly):
   \   'lib/filename.ex:1:4: C: There is no whitespace around parentheses/brackets most of the time, but here there is.',
   \   'lib/phoenix/channel.ex:26: R: If/else blocks should not have a negated condition in `if`.',
   \ ])
-
-After:
-  call ale#linter#Reset()
-

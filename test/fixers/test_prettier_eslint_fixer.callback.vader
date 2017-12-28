@@ -4,12 +4,10 @@ Before:
   Save g:ale_javascript_prettier_eslint_executable
   Save g:ale_javascript_prettier_eslint_use_global
   Save g:ale_javascript_prettier_eslint_options
-  Save g:ale_javascript_prettier_eslint_legacy
 
   unlet! g:ale_javascript_prettier_eslint_executable
   unlet! g:ale_javascript_prettier_eslint_use_global
   unlet! g:ale_javascript_prettier_eslint_options
-  unlet! g:ale_javascript_prettier_eslint_legacy
 
   call ale#fixers#prettier_eslint#SetOptionDefaults()
 
@@ -19,9 +17,9 @@ After:
   unlet! b:ale_javascript_prettier_eslint_executable
   unlet! b:ale_javascript_prettier_eslint_use_global
   unlet! b:ale_javascript_prettier_eslint_options
-  unlet! b:ale_javascript_prettier_eslint_legacy
 
   call ale#test#RestoreDirectory()
+  call ale#semver#ResetVersionCache()
 
 Execute(The default command should be correct):
   AssertEqual
@@ -32,7 +30,7 @@ Execute(The default command should be correct):
   \     . ' %t'
   \     . ' --write'
   \ },
-  \ ale#fixers#prettier_eslint#Fix(bufnr(''))
+  \ ale#fixers#prettier_eslint#ApplyFixForVersion(bufnr(''), [])
 
 Execute(Additional options should be used when set):
   let b:ale_javascript_prettier_eslint_options = '--foobar'
@@ -45,9 +43,9 @@ Execute(Additional options should be used when set):
   \     . ' %t'
   \     . ' --foobar --write'
   \ },
-  \ ale#fixers#prettier_eslint#Fix(bufnr(''))
+  \ ale#fixers#prettier_eslint#ApplyFixForVersion(bufnr(''), [])
 
-Execute(Configuration files should be detected):
+Execute(--eslint-config-path should be set for 4.2.0 and up):
   call ale#test#SetFilename('eslint-test-files/react-app/foo/bar.js')
 
   AssertEqual
@@ -56,14 +54,13 @@ Execute(Configuration files should be detected):
   \   'command':
   \     ale#Escape('prettier-eslint')
   \     . ' %t'
-  \     . ' --eslint-config-path ' . ale#Escape(ale#path#Winify(g:dir . '/eslint-test-files/react-app/.eslintrc.js'))
+  \     . ' --eslint-config-path ' . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --write'
   \ },
-  \ ale#fixers#prettier_eslint#Fix(bufnr(''))
+  \ ale#fixers#prettier_eslint#ApplyFixForVersion(bufnr(''), ['4.2.0'])
 
-Execute(Configuration files should be disabled if the legacy option is on):
+Execute(--eslint-config-path shouldn't be used for older versions):
   call ale#test#SetFilename('eslint-test-files/react-app/foo/bar.js')
-  let b:ale_javascript_prettier_eslint_legacy = 1
 
   AssertEqual
   \ {
@@ -73,4 +70,44 @@ Execute(Configuration files should be disabled if the legacy option is on):
   \     . ' %t'
   \     . ' --write'
   \ },
+  \ ale#fixers#prettier_eslint#ApplyFixForVersion(bufnr(''), [])
+
+Execute(The version check should be correct):
+  AssertEqual
+  \ {
+  \   'chain_with': 'ale#fixers#prettier_eslint#ApplyFixForVersion',
+  \   'command': ale#Escape('prettier-eslint') . ' --version',
+  \ },
   \ ale#fixers#prettier_eslint#Fix(bufnr(''))
+
+Execute(The new --stdin-filepath option should be used when the version is new enough):
+  call ale#test#SetFilename('eslint-test-files/react-app/foo/bar.js')
+
+  AssertEqual
+  \ {
+  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \     . ale#Escape('prettier-eslint')
+  \     . ' --eslint-config-path ' . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/.eslintrc.js'))
+  \     . ' --stdin-filepath %s --stdin',
+  \ },
+  \ ale#fixers#prettier_eslint#ApplyFixForVersion(bufnr(''), ['4.4.0'])
+
+Execute(The version number should be cached):
+  call ale#fixers#prettier_eslint#ApplyFixForVersion(bufnr(''), ['4.4.0'])
+
+  " The version command should be skipped.
+  AssertEqual
+  \ {
+  \   'chain_with': 'ale#fixers#prettier_eslint#ApplyFixForVersion',
+  \   'command': '',
+  \ },
+  \ ale#fixers#prettier_eslint#Fix(bufnr(''))
+
+  " The newer command should be used.
+  AssertEqual
+  \ {
+  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \     . ale#Escape('prettier-eslint')
+  \     . ' --stdin-filepath %s --stdin',
+  \ },
+  \ ale#fixers#prettier_eslint#ApplyFixForVersion(bufnr(''), [])

@@ -28,6 +28,7 @@ Before:
 
 After:
   Restore
+
   delfunction GetCommand
   unlet! b:ale_thrift_thrift_executable
   unlet! b:ale_thrift_thrift_generators

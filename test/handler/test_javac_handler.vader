@@ -12,33 +12,33 @@ Execute(The javac handler should handle cannot find symbol errors):
   AssertEqual
   \ [
   \   {
-  \     'filename': '/tmp/vLPr4Q5/33/foo.java',
+  \     'filename': ale#path#Simplify('/tmp/vLPr4Q5/33/foo.java'),
   \     'lnum': 1,
   \     'text': 'error: some error',
   \     'type': 'E',
   \   },
   \   {
-  \     'filename': '/tmp/vLPr4Q5/33/foo.java',
+  \     'filename': ale#path#Simplify('/tmp/vLPr4Q5/33/foo.java'),
   \     'lnum': 2,
   \     'col': 5,
   \     'text': 'error: cannot find symbol: BadName',
   \     'type': 'E',
   \   },
   \   {
-  \     'filename': '/tmp/vLPr4Q5/33/foo.java',
+  \     'filename': ale#path#Simplify('/tmp/vLPr4Q5/33/foo.java'),
   \     'lnum': 34,
   \     'col': 5,
   \     'text': 'error: cannot find symbol: BadName2',
   \     'type': 'E',
   \   },
   \   {
-  \     'filename': '/tmp/vLPr4Q5/33/foo.java',
+  \     'filename': ale#path#Simplify('/tmp/vLPr4Q5/33/foo.java'),
   \     'lnum': 37,
   \     'text': 'warning: some warning',
   \     'type': 'W',
   \   },
   \   {
-  \     'filename': '/tmp/vLPr4Q5/33/foo.java',
+  \     'filename': ale#path#Simplify('/tmp/vLPr4Q5/33/foo.java'),
   \     'lnum': 42,
   \     'col': 11,
   \     'text': 'error: cannot find symbol: bar()',
@@ -69,13 +69,13 @@ Execute(The javac handler should resolve files from different directories):
   AssertEqual
   \ [
   \   {
-  \     'filename': ale#path#Winify(g:dir . '/Foo.java'),
+  \     'filename': ale#path#Simplify(g:dir . '/Foo.java'),
   \     'lnum': 1,
   \     'text': 'error: some error',
   \     'type': 'E',
   \   },
   \   {
-  \     'filename': ale#path#Winify(g:dir . '/Bar.java'),
+  \     'filename': ale#path#Simplify(g:dir . '/Bar.java'),
   \     'lnum': 1,
   \     'text': 'error: some error',
   \     'type': 'E',

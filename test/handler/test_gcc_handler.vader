@@ -71,17 +71,6 @@ Execute(GCC errors from included files should be parsed correctly):
   \   ' ^',
   \ ])
 
-Execute(GCC versions should be parsed correctly):
-  AssertEqual [4, 9, 1], ale#handlers#gcc#ParseGCCVersion([
-  \ 'g++ (GCC) 4.9.1 20140922 (Red Hat 4.9.1-10)',
-  \])
-  AssertEqual [4, 8, 4], ale#handlers#gcc#ParseGCCVersion([
-  \ 'gcc (Ubuntu 4.8.4-2ubuntu1~14.04.3) 4.8.4',
-  \ 'Copyright (C) 2013 Free Software Foundation, Inc.',
-  \ 'This is free software; see the source for copying conditions.  There is NO',
-  \ 'warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.',
-  \])
-
 Execute(The GCC handler shouldn't complain about #pragma once for headers):
   silent file! test.h
 

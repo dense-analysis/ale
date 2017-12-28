@@ -61,7 +61,7 @@ Execute(The mypy command should switch directories to the detected project root)
   \ 'mypy',
   \ ale_linters#python#mypy#GetExecutable(bufnr(''))
   AssertEqual
-  \ 'cd ' . ale#Escape(ale#path#Winify(g:dir . '/python_paths/no_virtualenv/subdir'))
+  \ 'cd ' . ale#Escape(ale#path#Simplify(g:dir . '/python_paths/no_virtualenv/subdir'))
   \   . ' && ' . ale#Escape('mypy')
   \   . ' --show-column-numbers  '
   \   . '--shadow-file %s %t %s',
@@ -70,13 +70,13 @@ Execute(The mypy command should switch directories to the detected project root)
 Execute(The mypy callbacks should detect virtualenv directories and switch to the project root):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
 
-  let b:executable = ale#path#Winify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/mypy')
+  let b:executable = ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/mypy')
 
   AssertEqual
   \ b:executable,
   \ ale_linters#python#mypy#GetExecutable(bufnr(''))
   AssertEqual
-  \   'cd ' . ale#Escape(ale#path#Winify(g:dir . '/python_paths/with_virtualenv/subdir'))
+  \   'cd ' . ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/subdir'))
   \   . ' && ' . ale#Escape(b:executable)
   \   . ' --show-column-numbers  '
   \   . '--shadow-file %s %t %s',
@@ -90,7 +90,7 @@ Execute(You should able able to use the global mypy instead):
   \ 'mypy',
   \ ale_linters#python#mypy#GetExecutable(bufnr(''))
   AssertEqual
-  \   'cd ' . ale#Escape(ale#path#Winify(g:dir . '/python_paths/with_virtualenv/subdir'))
+  \   'cd ' . ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/subdir'))
   \   . ' && ' . ale#Escape('mypy')
   \   . ' --show-column-numbers  '
   \   . '--shadow-file %s %t %s',

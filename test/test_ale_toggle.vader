@@ -3,10 +3,14 @@ Before:
   Save g:ale_set_signs
   Save g:ale_set_lists_synchronously
   Save g:ale_run_synchronously
+  Save g:ale_pattern_options
+  Save g:ale_pattern_options_enabled
 
   let g:ale_set_signs = 1
   let g:ale_set_lists_synchronously = 1
   let g:ale_run_synchronously = 1
+  let g:ale_pattern_options = {}
+  let g:ale_pattern_options_enabled = 1
 
   unlet! b:ale_enabled
 

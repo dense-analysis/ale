@@ -1,7 +1,9 @@
 Before:
   Save g:ale_rust_rls_executable
+  Save g:ale_rust_rls_toolchain
 
   unlet! g:ale_rust_rls_executable
+  unlet! g:ale_rust_rls_toolchain
 
   runtime ale_linters/rust/rls.vim
 
@@ -16,7 +18,14 @@ After:
 Execute(The default executable path should be correct):
   AssertEqual 'rls', ale_linters#rust#rls#GetExecutable(bufnr(''))
   AssertEqual
-  \ ale#Escape('rls') . ' +nightly',
+  \ ale#Escape('rls') . ' +' . ale#Escape('nightly'),
+  \ ale_linters#rust#rls#GetCommand(bufnr(''))
+
+Execute(The toolchain should be configurable):
+  let g:ale_rust_rls_toolchain = 'stable'
+
+  AssertEqual
+  \ ale#Escape('rls') . ' +' . ale#Escape('stable'),
   \ ale_linters#rust#rls#GetCommand(bufnr(''))
 
 Execute(The language string should be correct):
@@ -28,5 +37,5 @@ Execute(The project root should be detected correctly):
   call ale#test#SetFilename('rust-rls-project/test.rs')
 
   AssertEqual
-  \ ale#path#Winify(g:dir . '/rust-rls-project'),
+  \ ale#path#Simplify(g:dir . '/rust-rls-project'),
   \ ale_linters#rust#rls#GetProjectRoot(bufnr(''))

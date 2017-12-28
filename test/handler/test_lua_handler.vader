@@ -1,31 +1,36 @@
 Before:
   Save g:ale_warn_about_trailing_whitespace
 
+  let g:ale_warn_about_trailing_whitespace = 1
+
+  runtime ale_linters/lua/luacheck.vim
+
 After:
   Restore
   call ale#linter#Reset()
 
 Execute(The luacheck handler should parse lines correctly):
-  runtime ale_linters/lua/luacheck.vim
-
   AssertEqual
   \ [
   \   {
   \     'lnum': 1,
   \     'col': 8,
-  \     'text': 'W612: line contains trailing whitespace',
+  \     'text': 'line contains trailing whitespace',
+  \     'code': 'W612',
   \     'type': 'W',
   \   },
   \   {
   \     'lnum': 3,
   \     'col': 5,
-  \     'text': 'W213: unused loop variable ''k''',
+  \     'text': 'unused loop variable ''k''',
+  \     'code': 'W213',
   \     'type': 'W',
   \   },
   \   {
   \     'lnum': 3,
   \     'col': 19,
-  \     'text': 'W113: accessing undefined variable ''x''',
+  \     'text': 'accessing undefined variable ''x''',
+  \     'code': 'W113',
   \     'type': 'W',
   \   },
   \ ],
@@ -36,8 +41,6 @@ Execute(The luacheck handler should parse lines correctly):
   \ ])
 
 Execute(The luacheck handler should respect the warn_about_trailing_whitespace option):
-  runtime ale_linters/lua/luacheck.vim
-
   let g:ale_warn_about_trailing_whitespace = 0
 
   AssertEqual
@@ -45,7 +48,8 @@ Execute(The luacheck handler should respect the warn_about_trailing_whitespace o
   \   {
   \     'lnum': 5,
   \     'col': 43,
-  \     'text': 'W212: unused argument ''g''',
+  \     'text': 'unused argument ''g''',
+  \     'code': 'W212',
   \     'type': 'W',
   \   }
   \ ],

@@ -91,6 +91,30 @@ function! ale#highlight#UpdateHighlights() abort
         \   'matchaddpos(l:group, v:val)'
         \)
     endfor
+
+    " If highlights are enabled and signs are not enabled, we should still
+    " offer line highlights by adding a separate set of highlights.
+    if !g:ale_set_signs
+        let l:available_groups = {
+        \   'ALEWarningLine': hlexists('ALEWarningLine'),
+        \   'ALEInfoLine': hlexists('ALEInfoLine'),
+        \   'ALEErrorLine': hlexists('ALEErrorLine'),
+        \}
+
+        for l:item in l:item_list
+            if l:item.type is# 'W'
+                let l:group = 'ALEWarningLine'
+            elseif l:item.type is# 'I'
+                let l:group = 'ALEInfoLine'
+            else
+                let l:group = 'ALEErrorLine'
+            endif
+
+            if l:available_groups[l:group]
+                call matchaddpos(l:group, [l:item.lnum])
+            endif
+        endfor
+    endif
 endfunction
 
 function! ale#highlight#BufferHidden(buffer) abort

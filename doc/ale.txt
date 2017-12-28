@@ -10,7 +10,9 @@ CONTENTS                                                         *ale-contents*
   2. Supported Languages & Tools..........|ale-support|
   3. Linting..............................|ale-lint|
   4. Fixing Problems......................|ale-fix|
-  5. Completion...........................|ale-completion|
+  5. Language Server Protocol Support.....|ale-lsp|
+    5.1 Completion........................|ale-completion|
+    5.2 Go To Definition..................|ale-go-to-definition|
   6. Global Options.......................|ale-options|
     6.1 Highlights........................|ale-highlights|
     6.2 Options for write-good Linter.....|ale-write-good-options|
@@ -29,6 +31,8 @@ CONTENTS                                                         *ale-contents*
       gcc.................................|ale-c-gcc|
     chef..................................|ale-chef-options|
       foodcritic..........................|ale-chef-foodcritic|
+    clojure...............................|ale-clojure-options|
+      joker...............................|ale-clojure-joker|
     cmake.................................|ale-cmake-options|
       cmakelint...........................|ale-cmake-cmakelint|
     cpp...................................|ale-cpp-options|
@@ -64,16 +68,21 @@ CONTENTS                                                         *ale-contents*
       gcc.................................|ale-fortran-gcc|
     fusionscript..........................|ale-fuse-options|
       fusion-lint.........................|ale-fuse-fusionlint|
+    git commit............................|ale-gitcommit-options|
+      gitlint.............................|ale-gitcommit-gitlint|
     glsl..................................|ale-glsl-options|
       glslang.............................|ale-glsl-glslang|
+      glslls..............................|ale-glsl-glslls|
     go....................................|ale-go-options|
       gofmt...............................|ale-go-gofmt|
       gometalinter........................|ale-go-gometalinter|
     graphql...............................|ale-graphql-options|
+      eslint..............................|ale-graphql-eslint|
       gqlint..............................|ale-graphql-gqlint|
     handlebars............................|ale-handlebars-options|
       ember-template-lint.................|ale-handlebars-embertemplatelint|
     haskell...............................|ale-haskell-options|
+      brittany............................|ale-haskell-brittany|
       hdevtools...........................|ale-haskell-hdevtools|
       hfmt................................|ale-haskell-hfmt|
       stack-build.........................|ale-haskell-stack-build|
@@ -86,9 +95,11 @@ CONTENTS                                                         *ale-contents*
     java..................................|ale-java-options|
       checkstyle..........................|ale-java-checkstyle|
       javac...............................|ale-java-javac|
+      google-java-format..................|ale-java-google-java-format|
     javascript............................|ale-javascript-options|
       eslint..............................|ale-javascript-eslint|
       flow................................|ale-javascript-flow|
+      importjs............................|ale-javascript-importjs|
       jscs................................|ale-javascript-jscs|
       jshint..............................|ale-javascript-jshint|
       prettier............................|ale-javascript-prettier|
@@ -105,7 +116,9 @@ CONTENTS                                                         *ale-contents*
     latex.................................|ale-latex-options|
       write-good..........................|ale-latex-write-good|
     less..................................|ale-less-options|
+      lessc...............................|ale-less-lessc|
       prettier............................|ale-less-prettier|
+      stylelint...........................|ale-less-stylelint|
     llvm..................................|ale-llvm-options|
       llc.................................|ale-llvm-llc|
     lua...................................|ale-lua-options|
@@ -120,6 +133,7 @@ CONTENTS                                                         *ale-contents*
       clang...............................|ale-objcpp-clang|
     ocaml.................................|ale-ocaml-options|
       merlin..............................|ale-ocaml-merlin|
+      ols.................................|ale-ocaml-ols|
     perl..................................|ale-perl-options|
       perl................................|ale-perl-perl|
       perlcritic..........................|ale-perl-perlcritic|
@@ -134,6 +148,8 @@ CONTENTS                                                         *ale-contents*
       phpstan.............................|ale-php-phpstan|
     pod...................................|ale-pod-options|
       write-good..........................|ale-pod-write-good|
+    proto.................................|ale-proto-options|
+      protoc-gen-lint.....................|ale-proto-protoc-gen-lint|
     pug...................................|ale-pug-options|
       puglint.............................|ale-pug-puglint|
     puppet................................|ale-puppet-options|
@@ -143,13 +159,16 @@ CONTENTS                                                         *ale-contents*
       flake8..............................|ale-python-flake8|
       isort...............................|ale-python-isort|
       mypy................................|ale-python-mypy|
+      prospector..........................|ale-python-prospector|
       pycodestyle.........................|ale-python-pycodestyle|
       pylint..............................|ale-python-pylint|
+      pyls................................|ale-python-pyls|
       yapf................................|ale-python-yapf|
     r.....................................|ale-r-options|
       lintr...............................|ale-r-lintr|
     reasonml..............................|ale-reasonml-options|
       merlin..............................|ale-reasonml-merlin|
+      ols.................................|ale-reasonml-ols|
       refmt...............................|ale-reasonml-refmt|
     restructuredtext......................|ale-restructuredtext-options|
       write-good..........................|ale-restructuredtext-write-good|
@@ -158,6 +177,7 @@ CONTENTS                                                         *ale-contents*
       rails_best_practices................|ale-ruby-rails_best_practices|
       reek................................|ale-ruby-reek|
       rubocop.............................|ale-ruby-rubocop|
+      ruby................................|ale-ruby-ruby|
     rust..................................|ale-rust-options|
       cargo...............................|ale-rust-cargo|
       rls.................................|ale-rust-rls|
@@ -177,6 +197,7 @@ CONTENTS                                                         *ale-contents*
     sml...................................|ale-sml-options|
       smlnj...............................|ale-sml-smlnj|
     solidity..............................|ale-solidity-options|
+      solhint.............................|ale-solidity-solhint|
       solium..............................|ale-solidity-solium|
     spec..................................|ale-spec-options|
       rpmlint.............................|ale-spec-rpmlint|
@@ -255,21 +276,24 @@ Notes:
 
 * ASM: `gcc`
 * Ansible: `ansible-lint`
-* AsciiDoc: `proselint`, `write-good`
+* API Blueprint: `drafter`
+* AsciiDoc: `alex`!!, `proselint`, `redpen`, `write-good`
 * Awk: `gawk`
 * Bash: `shell` (-n flag), `shellcheck`, `shfmt`
 * Bourne Shell: `shell` (-n flag), `shellcheck`, `shfmt`
 * C: `cppcheck`, `cpplint`!!, `gcc`, `clang`, `clangtidy`!!, `clang-format`
-* C++ (filetype cpp): `clang`, `clangcheck`!!, `clangtidy`!!, `cppcheck`, `cpplint`!!, `gcc`, `clang-format`
+* C++ (filetype cpp): `clang`, `clangcheck`!!, `clangtidy`!!, `clang-format`, `cppcheck`, `cpplint`!!, `gcc`
 * CUDA: `nvcc`!!
 * C#: `mcs`, `mcsc`!!
 * Chef: `foodcritic`
+* Clojure: `joker`
 * CMake: `cmakelint`
 * CoffeeScript: `coffee`, `coffeelint`
 * Crystal: `crystal`!!
-* CSS: `csslint`, `stylelint`, `prettier`
+* CSS: `csslint`, `prettier`, `stylelint`
 * Cython (pyrex filetype): `cython`
 * D: `dmd`
+* Dafny: `dafny`!!
 * Dart: `dartanalyzer`!!, `language_server`
 * Dockerfile: `hadolint`
 * Elixir: `credo`, `dogma`!!
@@ -278,62 +302,66 @@ Notes:
 * Erlang: `erlc`, `SyntaxErl`
 * Fortran: `gcc`
 * FusionScript: `fusion-lint`
-* GLSL: glslang
-* Go: `gofmt`, `go vet`, `golint`, `gotype`, `gometalinter`!!, `go build`!!, `gosimple`!!, `staticcheck`!!
-* GraphQL: `gqlint`
+* Git Commit Messages: `gitlint`
+* GLSL: glslang, `glslls`
+* Go: `gofmt`, `goimports`, `go vet`, `golint`, `gotype`, `gometalinter`!!, `go build`!!, `gosimple`!!, `staticcheck`!!
+* GraphQL: `eslint`, `gqlint`
 * Haml: `haml-lint`
 * Handlebars: `ember-template-lint`
-* Haskell: `ghc`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`, `hfmt`
-* HTML: `HTMLHint`, `proselint`, `tidy`, `write-good`
+* Haskell: `brittany`, `ghc`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`, `hfmt`
+* HTML: `alex`!!, `HTMLHint`, `proselint`, `tidy`, `write-good`
 * Idris: `idris`
-* Java: `checkstyle`, `javac`
-* JavaScript: `eslint`, `jscs`, `jshint`, `flow`, `prettier`, `prettier-eslint` >= 4.2.0, `prettier-standard`, `standard`, `xo`
+* Java: `checkstyle`, `javac`, `google-java-format`
+* JavaScript: `eslint`, `flow`, `jscs`, `jshint`, `prettier`, `prettier-eslint`, `prettier-standard`, `standard`, `xo`
 * JSON: `jsonlint`, `prettier`
 * Kotlin: `kotlinc`, `ktlint`
-* LaTeX (tex): `chktex`, `lacheck`, `proselint`, `write-good`
+* LaTeX (tex): `alex`!!, `chktex`, `lacheck`, `proselint`, `redpen`, `vale`, `write-good`
+* Less: `lessc`, `prettier`, `stylelint`
 * LLVM: `llc`
 * Lua: `luacheck`
-* Mail: `proselint`, `vale`
+* Mail: `alex`!!, `proselint`, `vale`
 * Make: `checkmake`
-* Markdown: `mdl`, `proselint`, `vale`, `remark-lint`, `write-good`
+* Markdown: `alex`!!, `mdl`, `proselint`, `redpen`, `remark-lint`, `vale`, `write-good`
 * MATLAB: `mlint`
 * Nim: `nim check`!!
 * nix: `nix-instantiate`
-* nroff: `proselint`, `write-good`
+* nroff: `alex`!!, `proselint`, `write-good`
 * Objective-C: `clang`
 * Objective-C++: `clang`
-* OCaml: `merlin` (see |ale-ocaml-merlin|)
+* OCaml: `merlin` (see |ale-ocaml-merlin|), `ols`
 * Perl: `perl -c`, `perl-critic`
 * PHP: `hack`, `hackfmt`, `langserver`, `phan`, `php -l`, `phpcs`, `phpmd`, `phpstan`, `phpcbf`
-* Pod: `proselint`, `write-good`
+* Pod: `alex`!!, `proselint`, `write-good`
+* proto: `protoc-gen-lint`
 * Pug: `pug-lint`
 * Puppet: `puppet`, `puppet-lint`
-* Python: `autopep8`, `flake8`, `isort`, `mypy`, `pycodestyle`, `pylint`!!, `yapf`
+* Python: `autopep8`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pyls`, `pylint`!!, `yapf`
 * R: `lintr`
-* ReasonML: `merlin`, `refmt`
-* reStructuredText: `proselint`, `write-good`
+* ReasonML: `merlin`, `ols`, `refmt`
+* reStructuredText: `alex`!!, `proselint`, `redpen`, `rstcheck`, `vale`, `write-good`
+* Re:VIEW: `redpen`
 * RPM spec: `rpmlint`
 * Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`
 * Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|), `rustfmt`
 * SASS: `sass-lint`, `stylelint`
-* SCSS: `sass-lint`, `scss-lint`, `stylelint`, `prettier`
+* SCSS: `prettier`, `sass-lint`, `scss-lint`, `stylelint`
 * Scala: `scalac`, `scalastyle`
 * Slim: `slim-lint`
 * SML: `smlnj`
-* Solidity: `solium`
+* Solidity: `solhint, solium`
 * Stylus: `stylelint`
 * SQL: `sqlint`
 * Swift: `swiftlint`, `swiftformat`
 * Tcl: `nagelfar`!!
 * Terraform: `tflint`
-* Texinfo: `proselint`, `write-good`
-* Text^: `proselint`, `vale`, `write-good`
+* Texinfo: `alex`!!, `proselint`, `write-good`
+* Text^: `alex`!!, `proselint`, `vale`, `write-good`, `redpen`
 * Thrift: `thrift`
-* TypeScript: `eslint`, `tslint`, `tsserver`, `typecheck`, `prettier`
+* TypeScript: `eslint`, `prettier`, `tslint`, `tsserver`, `typecheck`
 * Verilog: `iverilog`, `verilator`
 * Vim: `vint`
-* Vim help^: `proselint`, `write-good`
-* XHTML: `proselint`, `write-good`
+* Vim help^: `alex`!!, `proselint`, `write-good`
+* XHTML: `alex`!!, `proselint`, `write-good`
 * XML: `xmllint`
 * YAML: `swaglint`, `yamllint`
 
@@ -400,7 +428,8 @@ including disabling ALE for certain buffers with |b:ale_enabled|. The
 |g:ale_pattern_options| setting can be used to configure files differently
 based on regular expressions for filenames. For configuring entire projects,
 the buffer-local options can be used with external plugins for reading Vim
-project configuration files.
+project configuration files. Buffer-local settings can also be used in
+ftplugin files for different filetypes.
 
 
 ===============================================================================
@@ -443,6 +472,15 @@ are supported for running the commands.
                       for commands which need to modify some file on disk in
                       order to fix files.
 
+  `process_with`        An optional callback for post-processing.
+
+                      The callback must accept two arguments,
+                      `(buffer, output)`, which can be used for converting
+                      the output from a command into lines to replace the
+                      buffer's contents with.
+
+                      A |List| of |String|s must be returned.
+
   `chain_with`          An optional key for defining a callback to call next.
 
                       The callback must accept two or three arguments,
@@ -462,6 +500,18 @@ are supported for running the commands.
                       This allows commands to be skipped, like version checks
                       that are cached. An empty List will be passed to the
                       next callback in the chain for the `output`.
+
+  `read_buffer`         An optional key for disabling reading the buffer.
+
+                      When set to `0`, ALE will not pipe the buffer's data
+                      into the command via stdin. This option is ignored and
+                      the buffer is not read when `read_temporary_file` is
+                      `1`.
+
+                      This option defaults to `0` when `chain_with` is defined
+                      as anything other than `v:null`, and defaults to `1`
+                      otherwise. This is so earlier commands in a chain
+                      do not receive the buffer's data by default.
 
                                                         *ale-fix-configuration*
 
@@ -483,6 +533,18 @@ upon some lines immediately, then run `eslint` from the ALE registry, and
 then call a lambda function which will remove every single line comment
 from the file.
 
+For buffer-local settings, such as in |g:ale_pattern_options| or in ftplugin
+files, a |List| may be used for configuring the fixers instead.
+>
+  " Same as the above, only a List can be used instead of a Dictionary.
+  let b:ale_fixers = [
+  \   'DoSomething',
+  \   'eslint',
+  \   {buffer, lines -> filter(lines, 'v:val !=~ ''^\s*//''')},
+  \]
+
+  ALEFix
+<
 For convenience, a plug mapping is defined for |ALEFix|, so you can set up a
 keybind easily for fixing files. >
 
@@ -496,22 +558,46 @@ by default.
 
 
 ===============================================================================
-5. Completion                                                  *ale-completion*
+5. Language Server Protocol Support                                   *ale-lsp*
 
-ALE offers some limited support for automatic completion of code while you
-type. Completion is only supported via Language Server Protocol servers which
-ALE can connect to for linting, which can offer good built-in support for
-suggesting completion information. ALE will only suggest symbols for
-completion for LSP linters that are enabled.
+ALE offers some support for integrating with Language Server Protocol (LSP)
+servers. LSP linters can be used in combination with any other linter, and
+will automatically connect to LSP servers when needed. ALE also supports
+`tsserver` for TypeScript, which uses a different but very similar protocol.
+
+ALE supports the following LSP/tsserver features.
+
+1. Diagnostics/linting - Enabled via selecting linters as usual.
+2. Completion (Only for tsserver)
+3. Go to definition
+
+
+-------------------------------------------------------------------------------
+5.1 Completion                                                 *ale-completion*
 
 NOTE: At the moment, only `tsserver` for TypeScript code is supported for
 completion.
+
+ALE offers limited support for automatic completion of code while you type.
+Completion is only supported while a least one LSP linter is enabled. ALE
+will only suggest symbols provided by the LSP servers.
 
 Suggestions will be made while you type after completion is enabled.
 Completion can be enabled by setting |g:ale_completion_enabled| to `1`. The
 delay for completion can be configured with |g:ale_completion_delay|. ALE will
 only suggest so many possible matches for completion. The maximum number of
 items can be controlled with |g:ale_completion_max_suggestions|.
+
+
+-------------------------------------------------------------------------------
+5.2 Go To Definition                                     *ale-go-to-definition*
+
+ALE supports jumping to the files and locations where symbols are defined
+through any enabled LSP linters. The locations ALE will jump to depend on the
+information returned by LSP servers. The following commands are supported:
+
+|ALEGoToDefinition|      - Open the definition of the symbol under the cursor.
+|ALEGoToDefinitionInTab| - The same, but for opening the file in a new tab.
 
 
 ===============================================================================
@@ -526,6 +612,19 @@ g:airline#extensions#ale#enabled             *g:airline#extensions#ale#enabled*
   warnings and errors in the status line, prefixed by
   |airline#extensions#ale#error_symbol| and
   |airline#extensions#ale#warning_symbol|.
+
+
+g:ale_cache_executable_check_failures   *g:ale_cache_executable_check_failures*
+
+  Type: |Number|
+  Default: `0`
+
+  When set to `1`, ALE will cache failing executable checks for linters. By
+  default, only executable checks which succeed will be cached.
+
+  When this option is set to `1`, Vim will have to be restarted after new
+  executables are installed for ALE to be able to run linters for those
+  executables.
 
 
 g:ale_change_sign_column_color                 *g:ale_change_sign_column_color*
@@ -545,6 +644,39 @@ g:ale_change_sign_column_color                 *g:ale_change_sign_column_color*
   The sign column color can only be changed globally in Vim. The sign column
   might produce unexpected results if editing different files in split
   windows.
+
+
+g:ale_command_wrapper                                   *g:ale_command_wrapper*
+                                                        *b:ale_command_wrapper*
+  Type: |String|
+  Default: `''`
+
+  An option for wrapping all commands that ALE runs, for linters, fixers,
+  and LSP commands. This option can be set globally, or for specific buffers.
+
+  This option can be used to apply nice to all commands. For example: >
+
+    " Prefix all commands with nice.
+    let g:ale_command_wrapper = 'nice -n5'
+<
+  Use the |ALEInfo| command to view the commands that are run. All of the
+  arguments for commands will be put on the end of the wrapped command by
+  default. A `%*` marker can be used to spread the arguments in the wrapped
+  command. >
+
+    " Has the same effect as the above.
+    let g:ale_command_wrapper = 'nice -n5 %*'
+<
+
+  For passing all of the arguments for a command as one argument to a wrapper,
+  `%@` can be used instead. >
+
+    " Will result in say: /bin/bash -c 'other-wrapper -c "some command" -x'
+    let g:ale_command_wrapper = 'other-wrapper -c %@ -x'
+<
+  For commands including `&&` or `;`, only the last command in the list will
+  be passed to the wrapper. `&&` is most commonly used in ALE to change the
+  working directory before running a command.
 
 
 g:ale_completion_delay                                 *g:ale_completion_delay*
@@ -613,33 +745,58 @@ g:ale_echo_delay                                             *g:ale_echo_delay*
 g:ale_echo_msg_error_str                             *g:ale_echo_msg_error_str*
 
   Type: |String|
-  Default: `Error`
+  Default: `'Error'`
 
-  The string used for error severity in the echoed message.
-  Note |g:ale_echo_cursor| should be set to 1
-  Note |g:ale_echo_msg_format| should contain the `%severity%` handler
+  The string used for `%severity%` for errors. See |g:ale_echo_msg_format|
 
 
 g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
+b:ale_echo_msg_format                                   *b:ale_echo_msg_format*
 
   Type: |String|
-  Default: `%s`
+  Default: `'%code: %%s'`
 
-  This variable defines the format of the echoed message. The `%s` is the
-  error message itself, and it can contain the following handlers:
-  - `%linter%` for linter's name
-  - `%severity%` for the type of severity
-  Note |g:ale_echo_cursor| should be setted to 1
+  This variable defines a message format for echoed messages. The following
+  sequences of characters will be replaced.
+
+    `%s`           - replaced with the text for the problem
+    `%...code...% `- replaced with the error code
+    `%linter%`     - replaced with the name of the linter
+    `%severity%`   - replaced withe severity of the problem
+
+  The strings for `%severity%` can be configured with the following options.
+
+    |g:ale_echo_msg_error_str|   - Defaults to `'Error'`
+    |g:ale_echo_msg_info_str|    - Defaults to `'Info'`
+    |g:ale_echo_msg_warning_str| - Defaults to `'Warning'`
+
+  `%code%` is replaced with the error code, and replaced with an empty string
+  when there is no error code. Any extra characters between the percent signs
+  will be printed when an error code is present. For example, a message like
+  `(error code): message` will be printed for `'%(code): %%s'` and simply the
+  message will be printed when there is no code.
+
+  |g:ale_echo_cursor| needs to be set to 1 for messages to be displayed.
+
+  The echo message format can also be configured separately for each buffer,
+  so different formats can be used for differnt languages. (Say in ftplugin
+  files.)
+
+
+g:ale_echo_msg_info_str                               *g:ale_echo_msg_info_str*
+
+  Type: |String|
+  Default: `'Info'`
+
+  The string used for `%severity%` for info. See |g:ale_echo_msg_format|
 
 
 g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
 
   Type: |String|
-  Default: `Warning`
+  Default: `'Warning'`
 
-  The string used for warning severity in the echoed message.
-  Note |g:ale_echo_cursor| should be set to 1
-  Note |g:ale_echo_msg_format| should contain the `%severity%` handler
+  The string used for `%severity%` for warnings. See |g:ale_echo_msg_format|
 
 
 g:ale_emit_conflict_warnings                     *g:ale_emit_conflict_warnings*
@@ -687,6 +844,8 @@ g:ale_fixers                                                     *g:ale_fixers*
   See |ale-fix| for more information.
 
   This variable can be overridden with variables in each buffer.
+  `b:ale_fixers` can be set to a |List| of callbacks instead, which can be
+  more convenient.
 
 
 g:ale_fix_on_save                                           *g:ale_fix_on_save*
@@ -839,9 +998,16 @@ g:ale_lint_on_insert_leave                         *g:ale_lint_on_insert_leave*
   Type: |Number|
   Default: `0`
 
-  This option will make ALE run the linters whenever leaving insert mode when
-  it is set to `1` in your vimrc file.
+  When set to `1` in your vimrc file, this option will cause ALE to run
+  linters when you leave insert mode.
 
+  ALE will not lint files when you escape insert mode with |CTRL-C| by
+  default. You can make ALE lint files with this option when you use |CTRL-C|
+  with the following keybind. >
+
+    " Make using Ctrl+C do the same as Escape, to trigger autocmd commands
+    inoremap <C-c> <Esc>
+<
 
 g:ale_linter_aliases                                     *g:ale_linter_aliases*
                                                          *b:ale_linter_aliases*
@@ -877,35 +1043,44 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
   `let g:ale_linter_aliases = {'html': ['html', 'javascript', 'css']}`
 
   Note that `html` itself was included as an alias. That is because aliases
-  will override the original linters for the aliased filetepe.
+  will override the original linters for the aliased filetype.
 
   Linter aliases can be configured in each buffer with buffer-local variables.
   ALE will first look for aliases for filetypes in the `b:ale_linter_aliases`
   variable, then `g:ale_linter_aliases`, and then a default Dictionary.
 
+  `b:ale_linter_aliases` can be set to a |List|, to tell ALE to load the
+  linters for specific filetypes for a given buffer. >
+
+  let b:ale_linter_aliases = ['html', 'javascript', 'css']
+<
+  No linters will be loaded when the buffer's filetype is empty.
 
 g:ale_linters                                                   *g:ale_linters*
                                                                 *b:ale_linters*
   Type: |Dictionary|
   Default: `{}`
 
-  The |g:ale_linters| option sets a |Dictionary| mapping a filetype
-  to a |List| of linter programs to be run when checking particular filetypes.
-  Only the filetypes specified in the dictionary will be limited in terms
-  of which linters will be run.
+  The |g:ale_linters| option sets a |Dictionary| mapping a filetype to a
+  |List| of linter programs to be run when checking particular filetypes.
 
   This |Dictionary| will be merged with a default dictionary containing the
   following values: >
 
   {
   \   'csh': ['shell'],
+  \   'go': ['gofmt', 'golint', 'go vet'],
+  \   'help': [],
+  \   'perl': ['perlcritic'],
+  \   'python': ['flake8', 'mypy', 'pylint'],
   \   'rust': ['cargo'],
+  \   'spec': [],
   \   'text': [],
   \   'zsh': ['shell'],
   \}
 <
   This option can be used to enable only a particular set of linters for a
-  file. For example, you can enable only 'eslint' for JavaScript files: >
+  file. For example, you can enable only `eslint` for JavaScript files: >
 
   let g:ale_linters = {'javascript': ['eslint']}
 <
@@ -914,14 +1089,54 @@ g:ale_linters                                                   *g:ale_linters*
 
   let g:ale_linters = {'javascript': []}
 <
-  All linters available for a given filetype can be enabled by using the
-  string `'all'`: >
+  All linters will be run for unspecified filetypes. All available linters can
+  be enabled explicitly for a given filetype by passing the string `'all'`,
+  instead of a List. >
 
   let g:ale_linters = {'c': 'all'}
 <
   Linters can be configured in each buffer with buffer-local variables. ALE
   will first look for linters for filetypes in the `b:ale_linters` variable,
-  then `g:ale_linters`, and then a default Dictionary.
+  then `g:ale_linters`, and then the default Dictionary mentioned above.
+
+  `b:ale_linters` can be set to a List, or the string `'all'`. When linters
+  for two different filetypes share the same name, the first linter loaded
+  will be used. Any ambiguity can be resolved by using a Dictionary specifying
+  which linter to run for which filetype instead. >
+
+  " Use ESLint for the buffer if the filetype includes 'javascript'.
+  let b:ale_linters = {'javascript': ['eslint'], 'html': ['tidy']}
+  " Use a List for the same setting. This will work in most cases.
+  let b:ale_linters = ['eslint', 'tidy']
+  " Disable all linters for the buffer.
+  let b:ale_linters = []
+  " Explicitly enable all available linters for the filetype.
+  let b:ale_linters = 'all'
+<
+  ALE can be configured to disable all linters unless otherwise specified with
+  `g:ale_enabled` or `b:ale_enabled` with the option |g:ale_linters_explicit|.
+
+
+g:ale_linters_explicit                                 *g:ale_linters_explicit*
+
+  Type: |Number|
+  Default: `0`
+
+  When set to `1`, only the linters from |g:ale_linters| and |b:ale_linters|
+  will be enabled. The default behavior for ALE is to enable as many linters
+  as possible, unless otherwise specified.
+
+
+g:ale_loclist_msg_format                             *g:ale_loclist_msg_format*
+b:ale_loclist_msg_format                             *b:ale_loclist_msg_format*
+
+  Type: |String|
+  Default: `g:ale_echo_msg_format`
+
+  This option is the same as |g:ale_echo_msg_format|, but for formatting the
+  message used for the loclist and the quickfix list.
+
+  The strings for configuring `%severity%` are also used for this option.
 
 
 g:ale_max_buffer_history_size                   *g:ale_max_buffer_history_size*
@@ -992,20 +1207,24 @@ g:ale_pattern_options                                   *g:ale_pattern_options*
   buffer variables. This option can be set to automatically configure
   different settings for different files. For example: >
 
+  " Use just ESLint for linting and fixing files which end in '.foo.js'
   let g:ale_pattern_options = {
   \   '\.foo\.js$': {
-  \       'ale_linters': {'javascript': ['eslint']},
+  \       'ale_linters': ['eslint'],
+  \       'ale_fixers: ['eslint'],
   \   },
   \}
 <
-  The above example will match any filename ending in `.foo.js`, and use
-  only `eslint` for checking those files by setting `b:ale_linters`.
+  See |b:ale_linters| and |b:ale_fixers| for information for those options.
 
   Filenames are matched with |match()|, and patterns depend on the |magic|
-  setting, unless prefixed with the special escape sequences like `'\v'`, etc.
-
-  The patterns can match any part of a filename. The absolute path of the
+  setting, unless prefixed with the special escape sequences like `'\v'`,
+  etc.The patterns can match any part of a filename. The absolute path of the
   filename will be used for matching, taken from `expand('%:p')`.
+
+  The options for every match for the filename will be applied, with the
+  pattern keys sorted in alphabetical order. Options for `'zebra'` will
+  override the options for `'alpha'` for a filename `alpha-zebra`.
 
 
 g:ale_pattern_options_enabled                   *g:ale_pattern_options_enabled*
@@ -1014,8 +1233,9 @@ g:ale_pattern_options_enabled                   *g:ale_pattern_options_enabled*
   Default: `!empty(g:ale_pattern_options)`
 
   This option can be used for turning the behaviour of setting
-  |g:ale_pattern_options| on or off. By default, setting a single key
-  for |g:ale_pattern_options| will turn this option on.
+  |g:ale_pattern_options| on or off. By default, setting a single key for
+  |g:ale_pattern_options| will turn this option on, as long as the setting is
+  configured before ALE is loaded.
 
 
 g:ale_set_balloons                                         *g:ale_set_balloons*
@@ -1042,6 +1262,17 @@ g:ale_set_highlights                                     *g:ale_set_highlights*
   |ALEInfo.|        - Items with `'type': 'I'`
   |ALEStyleError|   - Items with `'type': 'E'` and `'sub_type': 'style'`
   |ALEStyleWarning| - Items with `'type': 'W'` and `'sub_type': 'style'`
+
+  When |g:ale_set_signs| is set to `0`, the following highlights for entire
+  lines will be set.
+
+  |ALEErrorLine|   - All items with `'type': 'E'`
+  |ALEWarningLine| - All items with `'type': 'W'`
+  |ALEInfoLine|    - All items with `'type': 'I'`
+
+  Vim can only highlight the characters up to the last column in a buffer for
+  match highlights, whereas the line highlights when signs are enabled will
+  run to the edge of the screen.
 
 
 g:ale_set_loclist                                           *g:ale_set_loclist*
@@ -1202,7 +1433,7 @@ g:ale_virtualenv_dir_names                         *g:ale_virtualenv_dir_names*
 b:ale_virtualenv_dir_names                         *b:ale_virtualenv_dir_names*
 
   Type: |List|
-  Default: `['.env', 'env', 've-py3', 've', 'virtualenv']`
+  Default: `['.env', 'env', 've-py3', 've', 'virtualenv', 'venv']`
 
   A list of directory names to be used when searching upwards from Python
   files to discover virtulenv directories with.
@@ -1212,6 +1443,18 @@ b:ale_virtualenv_dir_names                         *b:ale_virtualenv_dir_names*
   directory containing the Python file to find virtualenv paths.
 
 
+g:ale_warn_about_trailing_blank_lines   *g:ale_warn_about_trailing_blank_lines*
+b:ale_warn_about_trailing_blank_lines   *b:ale_warn_about_trailing_blank_lines*
+
+  Type: |Number|
+  Default: `1`
+
+  When this option is set to `1`, warnings about trailing blank lines will be
+  shown.
+
+  This option behaves similarly to |g:ale_warn_about_trailing_whitespace|.
+
+
 g:ale_warn_about_trailing_whitespace     *g:ale_warn_about_trailing_whitespace*
 b:ale_warn_about_trailing_whitespace     *b:ale_warn_about_trailing_whitespace*
 
@@ -1219,10 +1462,9 @@ b:ale_warn_about_trailing_whitespace     *b:ale_warn_about_trailing_whitespace*
   Default: `1`
 
   When this option is set to `1`, warnings relating to trailing whitespace on
-  lines will be shown in signs, the loclist, and echo messages, etc. If these
-  errors are found to be too irritating while edits are being made, and you
-  have configured Vim to automatically remove trailing whitespace, then you
-  can disable these warnings for some linters by setting this option to `0`.
+  lines will be shown. If warnings are too irritating while editing buffers,
+  and you have configured Vim to automatically remove trailing whitespace,
+  you can disable these warnings by setting this option to `0`.
 
   Not all linters may respect this option. If a linter does not, please file a
   bug report, and it may be possible to add such support.
@@ -1260,7 +1502,10 @@ ALEErrorLine                                                     *ALEErrorLine*
 
   Default: Undefined
 
-  The highlight for lines where error signs appear. See |g:ale_set_signs|.
+  The highlight for an entire line where errors appear. Only the first
+  line for a problem will be highlighted.
+
+  See |g:ale_set_signs| and |g:ale_set_highlights|.
 
 
 ALEErrorSign                                                     *ALEErrorSign*
@@ -1288,7 +1533,10 @@ ALEInfoLine                                                       *ALEInfoLine*
 
   Default: Undefined
 
-  The highlight for lines where info signs appear. See |g:ale_set_signs|.
+  The highlight for entire lines where info messages appear. Only the first
+  line for a problem will be highlighted.
+
+  See |g:ale_set_signs| and |g:ale_set_highlights|.
 
 
 ALEStyleError                                                   *ALEStyleError*
@@ -1330,7 +1578,10 @@ ALEWarningLine                                                 *ALEWarningLine*
 
   Default: Undefined
 
-  The highlight for lines where warning signs appear. See |g:ale_set_signs|.
+  The highlight for entire lines where warnings appear. Only the first line
+  for a problem will be highlighted.
+
+  See |g:ale_set_signs| and |g:ale_set_highlights|.
 
 
 ALEWarningSign                                                 *ALEWarningSign*
@@ -1420,6 +1671,22 @@ ALEFixSuggest                                                   *ALEFixSuggest*
   See |ale-fix| for more information.
 
 
+ALEGoToDefinition                                           *ALEGoToDefinition*
+
+  Jump to the definition of a symbol under the cursor using the enabled LSP
+  linters for the buffer. ALE will jump to a definition if an LSP server
+  provides a location to jump to. Otherwise, ALE will do nothing.
+
+  A plug mapping `<Plug>(ale_go_to_definition)` is defined for this command.
+
+
+ALEGoToDefinitionInTab                                 *ALEGoToDefinitionInTab*
+
+  The same as |ALEGoToDefinition|, but opens results in a new tab.
+
+  A plug mapping `<Plug>(ale_go_to_definition_in_tab)` is defined for this
+  command.
+
                                                                      *:ALELint*
 ALELint                                                               *ALELint*
 
@@ -1506,10 +1773,12 @@ ALEDisableBuffer                                             *ALEDisableBuffer*
   For removing problems reported by ALE, but leaving ALE enabled, see
   |ALEReset| and |ALEResetBuffer|.
 
+                                                                   *:ALEDetail*
 ALEDetail                                                           *ALEDetail*
 
-  Show the full linter message for the current line. This will only have an
-  effect on lines that contain a linter message.
+  Show the full linter message for the current line in the preview window.
+  This will only have an effect on lines that contain a linter message. The
+  preview window can be easily closed with the `q` key.
 
   A plug mapping `<Plug>(ale_detail)` is defined for this command.
 
@@ -1595,9 +1864,11 @@ ale#engine#EscapeCommandPart(command_part)     *ale#engine#EscapeCommandPart()*
 
 ale#engine#GetLoclist(buffer)                         *ale#engine#GetLoclist()*
 
-  Given a buffer number, this function will rerurn the list of warnings and
-  errors reported by ALE for a given buffer in the format accepted by
-  |setqflist()|.
+  Given a buffer number, this function will return the list of problems
+  reported by ALE for a given buffer in the format accepted by |setqflist()|.
+
+  A reference to the buffer's list of problems will be returned. The list must
+  be copied before applying |map()| or |filter()|.
 
 
 ale#engine#ManageFile(buffer, filename)               *ale#engine#ManageFile()*
@@ -1629,7 +1900,8 @@ ale#engine#ManageDirectory(buffer, directory)    *ale#engine#ManageDirectory()*
   files.
 
 
-ale#fix#registry#Add(name, func, filetypes, desc)      *ale#fix#registry#Add()*
+ale#fix#registry#Add(name, func, filetypes, desc, [aliases])
+                                                       *ale#fix#registry#Add()*
 
   Given a |String| `name` for a name to add to the registry, a |String| `func`
   for a function name, a |List| `filetypes` for a list of filetypes to
@@ -1638,6 +1910,11 @@ ale#fix#registry#Add(name, func, filetypes, desc)      *ale#fix#registry#Add()*
 
   The `name` can then be used for |g:ale_fixers| in place of the function
   name, and suggested for fixing files.
+
+  An optional |List| of |String|s for aliases can be passed as the `aliases`
+  argument. These aliases can also be used for looking up a fixer function.
+  ALE will search for fixers in the registry first by `name`, then by their
+  `aliases`.
 
 
 ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
@@ -1810,7 +2087,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          the file on disk, including |g:ale_lint_on_enter|
                          and |g:ale_lint_on_save|. Linters with this option
                          set to `1` will also be run when linters are run
-                         manually, per |ALELint-autocmd|.
+                         manually, per |ALELintPost-autocmd|.
 
                          When this option is set to `1`, `read_buffer` will
                          be set automatically to `0`. The two options cannot
@@ -1944,19 +2221,33 @@ ale#statusline#Count(buffer)                           *ale#statusline#Count()*
   `total`         -> The total number of problems.
 
 
-ALELint                                                       *ALELint-autocmd*
+ALELintPre                                                 *ALELintPre-autocmd*
+ALELintPost                                               *ALELintPost-autocmd*
 
-  This |User| autocommand is triggered by ALE every time it completes a lint
-  cycle. It can be used to update statuslines, send notifications, or
-  complete any other operation that needs to be done after linting has been
-  performed.
-
-  For example, you can echo a message when linting is complete like so:
-  >
-  autocmd User ALELint unsilent echom 'ALE run!'
-<
+  These |User| autocommands are triggered before and after every lint cycle.
+  They can be used to update statuslines, send notifications, etc.
   The autocmd commands are run with |:silent|, so |:unsilent| is required for
   echoing messges.
+
+  For example to change the color of the statusline while the linter is
+  running:
+>
+    augroup ALEProgress
+        autocmd!
+        autocmd User ALELintPre  hi Statusline ctermfg=darkgrey
+        autocmd User ALELintPOST hi Statusline ctermfg=NONE
+    augroup end
+<
+  Or to display the progress in the statusline:
+>
+    let s:ale_running = 0
+    let l:stl .= '%{s:ale_running ? "[linting]" : ""}'
+    augroup ALEProgress
+        autocmd!
+        autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
+        autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
+    augroup end
+<
 
 ===============================================================================
 10. Special Thanks                                         *ale-special-thanks*

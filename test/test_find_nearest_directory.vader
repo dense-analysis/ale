@@ -8,7 +8,7 @@ Execute(We should be able to find a directory some directory down):
   call ale#test#SetFilename('top/middle/bottom/dummy.txt')
 
   AssertEqual
-  \ ale#path#Winify(expand('%:p:h:h:h:h') . '/top/ale-special-directory-name-dont-use-this-please/'),
+  \ ale#path#Simplify(expand('%:p:h:h:h:h') . '/top/ale-special-directory-name-dont-use-this-please/'),
   \ ale#path#FindNearestDirectory(bufnr('%'), 'ale-special-directory-name-dont-use-this-please')
 
 Execute(We shouldn't find anything for files which don't match):

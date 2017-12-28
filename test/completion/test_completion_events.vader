@@ -1,0 +1,172 @@
+Before:
+  Save g:ale_completion_enabled
+  Save g:ale_completion_delay
+  Save g:ale_completion_max_suggestions
+  Save g:ale_completion_experimental_lsp_support
+  Save &l:omnifunc
+  Save &l:completeopt
+
+  unlet! g:ale_completion_experimental_lsp_support
+
+  let g:ale_completion_enabled = 1
+  let g:get_completions_called = 0
+  let g:feedkeys_calls = []
+
+  runtime autoload/ale/util.vim
+
+  function! ale#util#FeedKeys(string, mode) abort
+    call add(g:feedkeys_calls, [a:string, a:mode])
+  endfunction
+
+  function! CheckCompletionCalled(expect_success) abort
+    let g:get_completions_called = 0
+
+    " We just want to check if the function is called.
+    function! ale#completion#GetCompletions()
+      let g:get_completions_called = 1
+    endfunction
+
+    let g:ale_completion_delay = 0
+    call ale#completion#Queue()
+    sleep 1m
+
+    AssertEqual a:expect_success, g:get_completions_called
+  endfunction
+
+After:
+  Restore
+
+  unlet! g:get_completions_called
+  unlet! b:ale_old_omnifunc
+  unlet! b:ale_old_completopt
+  unlet! b:ale_completion_info
+  unlet! b:ale_completion_response
+  unlet! b:ale_completion_parser
+  unlet! b:ale_complete_done_time
+  unlet! g:ale_completion_experimental_lsp_support
+
+  delfunction CheckCompletionCalled
+
+  " Stop any timers we left behind.
+  " This stops the tests from failing randomly.
+  call ale#completion#StopTimer()
+
+  runtime autoload/ale/completion.vim
+  runtime autoload/ale/util.vim
+
+Execute(ale#completion#GetCompletions should be called when the cursor position stays the same):
+  call CheckCompletionCalled(1)
+
+Given typescript():
+  let abc = y.
+  let foo = ab
+  let foo = (ab)
+
+Execute(ale#completion#GetCompletions should not be called when the cursor position changes):
+  call setpos('.', [bufnr(''), 1, 2, 0])
+
+  " We just want to check if the function is called.
+  function! ale#completion#GetCompletions()
+    let g:get_completions_called = 1
+  endfunction
+
+  let g:ale_completion_delay = 0
+  call ale#completion#Queue()
+
+  " Change the cursor position before the callback is triggered.
+  call setpos('.', [bufnr(''), 2, 2, 0])
+
+  sleep 1m
+
+  Assert !g:get_completions_called
+
+Execute(Completion should not be done shortly after the CompleteDone function):
+  call CheckCompletionCalled(1)
+  call ale#completion#Done()
+  call CheckCompletionCalled(0)
+
+Execute(ale#completion#Show() should remember the omnifunc setting and replace it):
+  let &l:omnifunc = 'FooBar'
+
+  call ale#completion#Show('Response', 'Parser')
+
+  AssertEqual 'FooBar', b:ale_old_omnifunc
+  AssertEqual 'ale#completion#OmniFunc', &l:omnifunc
+
+Execute(ale#completion#Show() should remember the completeopt setting and replace it):
+  let &l:completeopt = 'menu'
+
+  call ale#completion#Show('Response', 'Parser')
+
+  AssertEqual 'menu', b:ale_old_completopt
+  AssertEqual 'menu,menuone,preview,noselect,noinsert', &l:completeopt
+
+Execute(ale#completion#OmniFunc() should also remember the completeopt setting and replace it):
+  let &l:completeopt = 'menu'
+
+  call ale#completion#OmniFunc(0, '')
+
+  AssertEqual 'menu', b:ale_old_completopt
+  AssertEqual 'menu,menuone,preview,noselect,noinsert', &l:completeopt
+
+Execute(ale#completion#Show() should make the correct feedkeys() call):
+  call ale#completion#Show('Response', 'Parser')
+
+  AssertEqual [["\<C-x>\<C-o>", 'n']], g:feedkeys_calls
+
+Execute(ale#completion#Show() should set up the response and parser):
+  call ale#completion#Show('Response', 'Parser')
+
+  AssertEqual 'Response', b:ale_completion_response
+  AssertEqual 'Parser', b:ale_completion_parser
+
+Execute(ale#completion#Done() should restore old omnifunc values):
+  let b:ale_old_omnifunc = 'FooBar'
+
+  call ale#completion#Done()
+
+  " We reset the old omnifunc setting and remove the buffer variable.
+  AssertEqual 'FooBar', &l:omnifunc
+  Assert !has_key(b:, 'ale_old_omnifunc')
+
+Execute(ale#completion#Done() should restore the old completeopt setting):
+  let b:ale_old_completopt = 'menu'
+  let &l:completeopt = 'menu,menuone,preview,noselect,noinsert'
+
+  call ale#completion#Done()
+
+  AssertEqual 'menu', &l:completeopt
+  Assert !has_key(b:, 'ale_old_completopt')
+
+Execute(ale#completion#Done() should leave settings alone when none were remembered):
+  let &l:omnifunc = 'BazBoz'
+  let &l:completeopt = 'menu'
+
+  call ale#completion#Done()
+
+  AssertEqual 'BazBoz', &l:omnifunc
+  AssertEqual 'menu', &l:completeopt
+
+Execute(The completion request_id should be reset when queuing again):
+  let b:ale_completion_info = {'request_id': 123}
+
+  let g:ale_completion_delay = 0
+  call ale#completion#Queue()
+  sleep 1m
+
+  AssertEqual 0, b:ale_completion_info.request_id
+
+Execute(b:ale_completion_info should be set up correctly when requesting completions):
+  call setpos('.', [bufnr(''), 3, 14, 0])
+  call ale#completion#GetCompletions()
+
+  AssertEqual
+  \ {
+  \   'request_id': 0,
+  \   'conn_id': 0,
+  \   'column': 14,
+  \   'line_length': 14,
+  \   'line': 3,
+  \   'prefix': 'ab',
+  \ },
+  \ b:ale_completion_info

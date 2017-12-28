@@ -243,7 +243,7 @@ Execute(The flow handler should fetch the correct location for the currently ope
   \   'lnum': 6,
   \   'col': 3,
   \   'type': 'E',
-  \   'text': 'property `bar`: Property not found in props of React element `Foo` See also: React element `Foo`'
+  \   'text': 'property `bar`: Property not found in props of React element `Foo` See also: React element `Foo`',
   \ }
   \]
 
@@ -347,7 +347,159 @@ Execute(The flow handler should handle relative paths):
   \   'lnum': 6,
   \   'col': 3,
   \   'type': 'E',
-  \   'text': 'property `bar`: Property not found in props of React element `Foo` See also: React element `Foo`'
+  \   'text': 'property `bar`: Property not found in props of React element `Foo` See also: React element `Foo`',
+  \ }
+  \]
+
+  AssertEqual g:expected, g:actual
+
+Execute(The flow handler should handle extra errors):
+  silent! noautocmd file /Users/rav/Projects/vim-ale-flow/index.js
+
+  let g:flow_output = {
+  \  "flowVersion": "0.54.0",
+  \  "errors": [{
+  \    "extra": [{
+  \      "message": [{
+  \        "context": v:null,
+  \        "descr": "Property \`setVector\` is incompatible:",
+  \        "type": "Blame ",
+  \        "path": "",
+  \        "line": 0,
+  \        "endline": 0,
+  \        "start": 1,
+  \        "end": 0
+  \      }],
+  \      "children": [{
+  \        "message": [{
+  \          "context": "setVector = \{2\}",
+  \          "descr": "number ",
+  \          "type": "Blame ",
+  \          "loc": {
+  \            "source": expand('%:p'),
+  \            "type": "SourceFile ",
+  \            "start": {
+  \              "line": 90,
+  \              "column": 30,
+  \              "offset": 2296
+  \            },
+  \            "end": {
+  \              "line": 90,
+  \              "column": 30,
+  \              "offset": 2297
+  \            }
+  \          },
+  \          "path": expand('%:p'),
+  \          "line": 90,
+  \          "endline": 90,
+  \          "start": 30,
+  \          "end": 30
+  \        }, {
+  \          "context": v:null,
+  \          "descr": "This type is incompatible with ",
+  \          "type": "Comment ",
+  \          "path": "",
+  \          "line": 0,
+  \          "endline": 0,
+  \          "start": 1,
+  \          "end": 0
+  \        }, {
+  \          "context": "setVector: VectorType => void,",
+  \          "descr": "function type ",
+  \          "type": "Blame ",
+  \          "loc": {
+  \            "source": expand('%:p'),
+  \            "type": "SourceFile",
+  \            "start": {
+  \              "line": 9,
+  \              "column": 14,
+  \              "offset": 252
+  \            },
+  \            "end": {
+  \              "line": 9,
+  \              "column": 31,
+  \              "offset": 270
+  \            }
+  \          },
+  \          "path": expand('%:p'),
+  \          "line": 9,
+  \          "endline": 9,
+  \          "start": 14,
+  \          "end": 31
+  \        }]
+  \      }]
+  \    }],
+  \    "kind": "infer",
+  \    "level": "error",
+  \    "suppressions": [],
+  \    "message": [{
+  \      "context": " < New ",
+  \      "descr": "props of React element `New`",
+  \      "type": "Blame",
+  \      "loc": {
+  \        "source": "vim-ale-flow/foo.js",
+  \        "type": "SourceFile",
+  \        "start": {
+  \          "line": 89,
+  \          "column": 17,
+  \          "offset": 2262
+  \        },
+  \        "end": {
+  \          "line": 94,
+  \          "column": 18,
+  \          "offset": 2488
+  \        }
+  \      },
+  \      "path": "",
+  \      "line": 89,
+  \      "endline": 94,
+  \      "start": 17,
+  \      "end": 18
+  \    }, {
+  \      "context": v:null,
+  \      "descr": "This type is incompatible with",
+  \      "type": "Comment",
+  \      "path": "",
+  \      "line": 0,
+  \      "endline": 0,
+  \      "start": 1,
+  \      "end": 0
+  \    }, {
+  \      "context": "class New extends React.Component < NewProps,NewState > {",
+  \      "descr": "object type",
+  \      "type": "Blame",
+  \      "loc": {
+  \        "source": expand('%:p'),
+  \        "type": "SourceFile",
+  \        "start": {
+  \          "line": 20,
+  \          "column": 35,
+  \          "offset": 489
+  \        },
+  \        "end": {
+  \          "line": 20,
+  \          "column": 42,
+  \          "offset": 497
+  \        }
+  \      },
+  \      "path": expand('%:p'),
+  \      "line": 20,
+  \      "endline": 20,
+  \      "start": 35,
+  \      "end": 42
+  \    }]
+  \  }],
+  \  "passed": v:false
+  \}
+
+  let g:actual = ale_linters#javascript#flow#Handle(bufnr(''), [json_encode(g:flow_output)])
+  let g:expected = [
+  \ {
+  \   'lnum': 20,
+  \   'col': 35,
+  \   'type': 'E',
+  \   'text': 'props of React element `New`: This type is incompatible with object type',
+  \   'detail': 'Property `setVector` is incompatible: number  This type is incompatible with  function type ',
   \ }
   \]
 

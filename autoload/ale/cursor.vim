@@ -4,52 +4,32 @@
 let s:cursor_timer = -1
 let s:last_pos = [0, 0, 0]
 
-" Return a formatted message according to g:ale_echo_msg_format variable
-function! s:GetMessage(linter, type, text) abort
-    let l:msg = g:ale_echo_msg_format
-    let l:type = a:type is# 'E'
-    \   ? g:ale_echo_msg_error_str
-    \   : g:ale_echo_msg_warning_str
-
-    " Replace handlers if they exist
-    for [l:k, l:v] in items({'linter': a:linter, 'severity': l:type})
-        let l:msg = substitute(l:msg, '\V%' . l:k . '%', l:v, '')
-    endfor
-
-    return printf(l:msg, a:text)
-endfunction
-
-function! s:EchoWithShortMess(setting, message) abort
-    " We need to remember the setting for shormess and reset it again.
-    let l:shortmess_options = getbufvar('%', '&shortmess')
-
-    try
-        " Turn shortmess on or off.
-        if a:setting is# 'on'
-            setlocal shortmess+=T
-            " echomsg is needed for the message to get truncated and appear in
-            " the message history.
-            exec "norm! :echomsg a:message\n"
-        elseif a:setting is# 'off'
-            setlocal shortmess-=T
-            " Regular echo is needed for printing newline characters.
-            echo a:message
-        else
-            throw 'Invalid setting: ' . string(a:setting)
-        endif
-    finally
-        call setbufvar('%', '&shortmess', l:shortmess_options)
-    endtry
-endfunction
-
-function! ale#cursor#TruncatedEcho(message) abort
-    let l:message = a:message
+function! ale#cursor#TruncatedEcho(original_message) abort
+    let l:message = a:original_message
     " Change tabs to spaces.
     let l:message = substitute(l:message, "\t", ' ', 'g')
     " Remove any newlines in the message.
     let l:message = substitute(l:message, "\n", '', 'g')
 
-    call s:EchoWithShortMess('on', l:message)
+    " We need to remember the setting for shortmess and reset it again.
+    let l:shortmess_options = &l:shortmess
+
+    try
+        let l:cursor_position = getcurpos()
+
+        " The message is truncated and saved to the history.
+        setlocal shortmess+=T
+        exec "norm! :echomsg l:message\n"
+
+        " Reset the cursor position if we moved off the end of the line.
+        " Using :norm and :echomsg can move the cursor off the end of the
+        " line.
+        if l:cursor_position != getcurpos()
+            call setpos('.', l:cursor_position)
+        endif
+    finally
+        let &l:shortmess = l:shortmess_options
+    endtry
 endfunction
 
 function! s:FindItemAtCursor() abort
@@ -75,6 +55,10 @@ function! ale#cursor#EchoCursorWarning(...) abort
 endfunction
 
 function! s:EchoImpl() abort
+    if !g:ale_echo_cursor
+        return
+    endif
+
     " Only echo the warnings in normal mode, otherwise we will get problems.
     if mode() isnot# 'n'
         return
@@ -84,21 +68,27 @@ function! s:EchoImpl() abort
         return
     endif
 
+    let l:buffer = bufnr('')
     let [l:info, l:loc] = s:FindItemAtCursor()
 
     if !empty(l:loc)
-        let l:msg = s:GetMessage(l:loc.linter_name, l:loc.type, l:loc.text)
+        let l:format = ale#Var(l:buffer, 'echo_msg_format')
+        let l:msg = ale#GetLocItemMessage(l:loc, l:format)
         call ale#cursor#TruncatedEcho(l:msg)
         let l:info.echoed = 1
     elseif get(l:info, 'echoed')
         " We'll only clear the echoed message when moving off errors once,
         " so we don't continually clear the echo line.
-        echo
+        execute 'echo'
         let l:info.echoed = 0
     endif
 endfunction
 
 function! ale#cursor#EchoCursorWarningWithDelay() abort
+    if !g:ale_echo_cursor
+        return
+    endif
+
     " Only echo the warnings in normal mode, otherwise we will get problems.
     if mode() isnot# 'n'
         return
@@ -140,9 +130,7 @@ function! ale#cursor#ShowCursorDetail() abort
     if !empty(l:loc)
         let l:message = get(l:loc, 'detail', l:loc.text)
 
-        call s:EchoWithShortMess('off', l:message)
-
-        " Set the echo marker, so we can clear it by moving the cursor.
-        let l:info.echoed = 1
+        call ale#preview#Show(split(l:message, "\n"))
+        execute 'echo'
     endif
 endfunction

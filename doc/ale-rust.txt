@@ -53,7 +53,7 @@ g:ale_rust_cargo_use_check                         *g:ale_rust_cargo_use_check*
 g:ale_rust_cargo_check_all_targets         *g:ale_rust_cargo_check_all_targets*
                                            *b:ale_rust_cargo_check_all_targets*
   Type: |Number|
-  Default: `1`
+  Default: `0`
 
   When set to `1`, ALE will set the `--all-targets` option when `cargo check`
   is used. See |g:ale_rust_cargo_use_check|,
@@ -70,8 +70,32 @@ g:ale_rust_rls_executable                           *g:ale_rust_rls_executable*
   This variable can be modified to change the executable path for `rls`.
 
 
+g:ale_rust_rls_toolchain                             *g:ale_rust_rls_toolchain*
+                                                     *b:ale_rust_rls_toolchain*
+  Type: |String|
+  Default: `'nightly'`
+
+  This option can be set to change the toolchain used for `rls`. Possible
+  values include `'nightly'`, `'beta'`, and `'stable'`.
+
+  The `rls` server will only be started once per executable.
+
+
 ===============================================================================
 rustc                                                          *ale-rust-rustc*
+
+
+g:ale_rust_rustc_options                             *g:ale_rust_rustc_options*
+                                                     *b:ale_rust_rustc_options*
+  Type: |String|
+  Default: `'-Z no-trans'`
+
+  The variable can be used to change the options passed to `rustc`.
+
+  `-Z no-trans` should only work with nightly builds of Rust. Be careful when
+  setting the options, as running `rustc` could execute code or generate
+  binary files.
+
 
 g:ale_rust_ignore_error_codes                   *g:ale_rust_ignore_error_codes*
                                                 *b:ale_rust_ignore_error_codes*

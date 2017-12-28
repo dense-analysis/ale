@@ -1,94 +1,68 @@
 #!/bin/bash -eu
 
-# This Bash script implements custom sanity checks for scripts beyond what
-# Vint covers, which are easy to check with regex.
+exit_code=0
+image=w0rp/ale
+docker_flags=(--rm -v "$PWD:/testplugin" -v "$PWD/test:/home" -w /testplugin "$image")
 
-# A flag for automatically fixing some errors.
-FIX_ERRORS=0
-RETURN_CODE=0
+echo '========================================'
+echo 'Running custom linting rules'
+echo '========================================'
+echo 'Custom warnings/errors follow:'
+echo
 
-function print_help() {
-    echo "Usage: ./custom-checks [--fix] [DIRECTORY]" 1>&2
-    echo 1>&2
-    echo "  -h, --help    Print this help text" 1>&2
-    echo "      --fix     Automatically fix some errors" 1>&2
-    exit 1
-}
+set -o pipefail
+docker run -a stdout "${docker_flags[@]}" test/script/custom-linting-rules . || exit_code=$?
+set +o pipefail
+echo
 
-while [ $# -ne 0 ]; do
-    case $1 in
-    -h) ;& --help)
-        print_help
-    ;;
-    --fix)
-        FIX_ERRORS=1
-        shift
-    ;;
-    --)
-        shift
-        break
-    ;;
-    -?*)
-        echo "Invalid argument: $1" 1>&2
-        exit 1
-    ;;
-    *)
-        break
-    ;;
-    esac
-done
+echo '========================================'
+echo 'Checking for duplicate tags'
+echo '========================================'
+echo 'Duplicate tags follow:'
+echo
 
-if [ $# -eq 0 ] || [ -z "$1" ]; then
-    print_help
-fi
+grep --exclude=tags -roh '\*.*\*$' doc | sort | uniq -d || exit_code=$?
 
-shopt -s globstar
+echo '========================================'
+echo 'Checking for invalid tag references'
+echo '========================================'
+echo 'Invalid tag references tags follow:'
+echo
 
-directories=("$@")
+tag_regex='[gb]\?:\?\(ale\|ALE\)[a-zA-Z_\-]\+'
 
-check_errors() {
-    regex="$1"
-    message="$2"
+# Grep for tags and references, and complain if we find a reference without
+# a tag for the reference. Only our tags will be included.
+diff -u \
+    <(grep --exclude=tags -roh "\*$tag_regex\*" doc | sort -u | sed 's/*//g') \
+    <(grep --exclude=tags -roh "|$tag_regex|" doc | sort -u | sed 's/|//g') \
+    | grep '^+[^+]' && exit_code=1
 
-    for directory in "${directories[@]}"; do
-        while IFS= read -r match; do
-            RETURN_CODE=1
-            echo "$match $message"
-        done < <(grep -n "$regex" "$directory"/**/*.vim \
-            | grep -v 'no-custom-checks' \
-            | grep -o '^[^:]\+:[0-9]\+' \
-            | sed 's:^\./::')
-    done
-}
+echo '========================================'
+echo 'diff README.md and doc/ale.txt tables'
+echo '========================================'
+echo 'Differences follow:'
+echo
 
-if (( FIX_ERRORS )); then
-    for directory in "${directories[@]}"; do
-        sed -i "s/^\(function.*)\) *$/\1 abort/" "$directory"/**/*.vim
-        sed -i "s/shellescape(/ale#Escape(/" "$directory"/**/*.vim
-        sed -i 's/==#/is#/g' "$directory"/**/*.vim
-        sed -i 's/==?/is?/g' "$directory"/**/*.vim
-        sed -i 's/!=#/isnot#/g' "$directory"/**/*.vim
-        sed -i 's/!=?/isnot?/g' "$directory"/**/*.vim
-    done
-fi
+test/script/check-supported-tools-tables || exit_code=$?
 
-check_errors \
-    '^function.*) *$' \
-    'Function without abort keyword (See :help except-compat)'
-check_errors '^function[^!]' 'function without !'
-check_errors ' \+$' 'Trailing whitespace'
-check_errors '^ * end\?i\? *$' 'Write endif, not en, end, or endi'
-check_errors '^  [^ ]' 'Use four spaces, not two spaces'
-check_errors $'\t' 'Use four spaces, not tabs'
-# This check should prevent people from using a particular inconsistent name.
-check_errors 'let g:ale_\w\+_\w\+_args =' 'Name your option g:ale_<filetype>_<lintername>_options instead'
-check_errors 'shellescape(' 'Use ale#Escape instead of shellescape'
-check_errors 'simplify(' 'Use ale#path#Simplify instead of simplify'
-check_errors "expand(['\"]%" "Use expand('#' . a:buffer . '...') instead. You might get a filename for the wrong buffer."
-check_errors 'getcwd()' "Do not use getcwd(), as it could run from the wrong buffer. Use expand('#' . a:buffer . ':p:h') instead."
-check_errors '==#' "Use 'is#' instead of '==#'. 0 ==# 'foobar' is true"
-check_errors '==?' "Use 'is?' instead of '==?'. 0 ==? 'foobar' is true"
-check_errors '!=#' "Use 'isnot#' instead of '!=#'. 0 !=# 'foobar' is false"
-check_errors '!=?' "Use 'isnot?' instead of '!=?'. 0 !=? 'foobar' is false"
+echo '========================================'
+echo 'Look for badly aligned doc tags'
+echo '========================================'
+echo 'Badly aligned tags follow:'
+echo
 
-exit $RETURN_CODE
+# Documentation tags need to be aligned to the right margin, so look for
+# tags which aren't at the right margin.
+grep ' \*[^*]\+\*$' doc/ -r \
+    | awk '{ sep = index($0, ":"); if (length(substr($0, sep + 1 )) < 79) { print } }' \
+    | grep . && exit_code=1
+
+echo '========================================'
+echo 'Look for table of contents issues'
+echo '========================================'
+echo
+
+test/script/check-toc || exit_code=$?
+
+exit $exit_code

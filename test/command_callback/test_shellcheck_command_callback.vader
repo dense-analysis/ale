@@ -12,7 +12,7 @@ Before:
   call ale#test#SetDirectory('/testplugin/test/command_callback')
   call ale#test#SetFilename('test.sh')
 
-  let b:prefix = 'cd ' . ale#Escape(ale#path#Winify(g:dir)) . ' && '
+  let b:prefix = 'cd ' . ale#Escape(ale#path#Simplify(g:dir)) . ' && '
   let b:suffix = ' -f gcc -'
 
 After:

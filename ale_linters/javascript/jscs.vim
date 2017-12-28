@@ -35,18 +35,22 @@ function! ale_linters#javascript#jscs#Handle(buffer, lines) abort
     "
     " foobar.js: line 2, col 1, Expected indentation of 1 characters
     "
-    let l:pattern = '^.*:\s\+line \(\d\+\),\s\+col\s\+\(\d\+\),\s\+\(.*\)$'
+    let l:pattern = '\v^.*:\s+line (\d+),\s+col\s+(\d+),\s+(.*)$'
     let l:output = []
-    let l:m = ale#util#GetMatches(a:lines, [l:pattern])
 
-    for l:match in l:m
-        let l:text = l:match[3]
-
+    for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:obj = {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
         \   'text': l:match[3]
         \}
+
+        let l:code_match = matchlist(l:match[3], '\v([^ :]+): (.+)$')
+
+        if !empty(l:code_match)
+            let l:obj.code = l:code_match[1]
+            let l:obj.text = l:code_match[2]
+        endif
 
         call add(l:output, l:obj)
     endfor

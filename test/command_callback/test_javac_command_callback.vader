@@ -116,13 +116,13 @@ Execute(The javac callback should combine discovered classpaths and manual ones)
 
 Execute(The javac callback should detect source directories):
   call ale#engine#Cleanup(bufnr(''))
-  :e! java_paths/src/main/java/com/something/dummy
+  noautocmd e! java_paths/src/main/java/com/something/dummy
   call ale#engine#InitBufferInfo(bufnr(''))
 
   AssertEqual
   \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && javac -Xlint'
   \   . ' -sourcepath ' . ale#Escape(
-  \     ale#path#Winify(g:dir . '/java_paths/src/main/java/')
+  \     ale#path#Simplify(g:dir . '/java_paths/src/main/java/')
   \   )
   \   . ' -d TEMP %t',
   \ GetCommand([])
@@ -136,7 +136,7 @@ Execute(The javac callback should combine detected source directories and classp
   \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && javac -Xlint'
   \   . ' -cp ' . ale#Escape(join(['/foo/bar.jar', '/xyz/abc.jar'], g:cp_sep))
   \   . ' -sourcepath ' . ale#Escape(
-  \     ale#path#Winify(g:dir . '/java_paths/src/main/java/')
+  \     ale#path#Simplify(g:dir . '/java_paths/src/main/java/')
   \   )
   \   . ' -d TEMP %t',
   \ GetCommand([
@@ -154,4 +154,34 @@ Execute(The javac callback should use g:ale_java_javac_options correctly):
   AssertEqual
   \ g:prefix
   \   . ' -d TEMP --anything --else %t',
+  \ GetCommand([])
+
+Execute(The javac callback should include src/test/java for test paths):
+  call ale#engine#Cleanup(bufnr(''))
+  " The test path is only included for test files.
+  " Regular Java files shouldn't import from tests.
+  noautocmd e! java_paths/src/test/java/com/something/dummy
+  call ale#engine#InitBufferInfo(bufnr(''))
+
+  AssertEqual
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && javac -Xlint'
+  \   . ' -sourcepath ' . ale#Escape(join([
+  \     ale#path#Simplify(g:dir . '/java_paths/src/main/java/'),
+  \     ale#path#Simplify(g:dir . '/java_paths/src/test/java/'),
+  \   ], g:cp_sep))
+  \   . ' -d TEMP %t',
+  \ GetCommand([])
+
+Execute(The javac callback should include src/main/jaxb when available):
+  call ale#engine#Cleanup(bufnr(''))
+  noautocmd e! java_paths_with_jaxb/src/main/java/com/something/dummy
+  call ale#engine#InitBufferInfo(bufnr(''))
+
+  AssertEqual
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && javac -Xlint'
+  \   . ' -sourcepath ' . ale#Escape(join([
+  \     ale#path#Simplify(g:dir . '/java_paths_with_jaxb/src/main/java/'),
+  \     ale#path#Simplify(g:dir . '/java_paths_with_jaxb/src/main/jaxb/'),
+  \   ], g:cp_sep))
+  \   . ' -d TEMP %t',
   \ GetCommand([])
