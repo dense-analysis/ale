@@ -25,8 +25,16 @@ function! ale_linters#html#tidy#GetCommand(buffer) abort
     \   'utf-8':        '-utf8',
     \ }, &fileencoding, '-utf8')
 
+    " On macOS, old tidy (released on 31 Oct 2006) is installed. It does not
+    " consider HTML5 so we should avoid it.
+    let l:executable = ale#Var(a:buffer, 'html_tidy_executable')
+    if has('mac') && l:executable is# 'tidy' && exists('*exepath')
+    \  && exepath(l:executable) is# '/usr/bin/tidy'
+        return ''
+    endif
+
     return printf('%s %s %s -',
-    \   ale#Var(a:buffer, 'html_tidy_executable'),
+    \   l:executable,
     \   ale#Var(a:buffer, 'html_tidy_options'),
     \   l:file_encoding
     \)
