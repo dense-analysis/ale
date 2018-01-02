@@ -66,6 +66,7 @@ CONTENTS                                                         *ale-contents*
     eruby.................................|ale-eruby-options|
     fortran...............................|ale-fortran-options|
       gcc.................................|ale-fortran-gcc|
+    fountain..............................|ale-fountain-options|
     fusionscript..........................|ale-fuse-options|
       fusion-lint.........................|ale-fuse-fusionlint|
     git commit............................|ale-gitcommit-options|
@@ -301,6 +302,7 @@ Notes:
 * Erb: `erb`, `erubis`
 * Erlang: `erlc`, `SyntaxErl`
 * Fortran: `gcc`
+* Fountain: `proselint`
 * FusionScript: `fusion-lint`
 * Git Commit Messages: `gitlint`
 * GLSL: glslang, `glslls`
