@@ -13,6 +13,16 @@ g:ale_haskell_brittany_executable           *g:ale_haskell_brittany_executable*
   This variable can be changed to use a different executable for brittany.
 
 ===============================================================================
+ghc                                                           *ale-haskell-ghc*
+
+g:ale_haskell_ghc_options                           *g:ale_haskell_ghc_options*
+                                                    *b:ale_haskell_ghc_options*
+  Type: |String|
+  Default: `'-fno-code -v0'`
+
+  This variable can be changed to modify flags given to ghc.
+
+===============================================================================
 hdevtools                                               *ale-haskell-hdevtools*
 
 g:ale_haskell_hdevtools_executable         *g:ale_haskell_hdevtools_executable*
