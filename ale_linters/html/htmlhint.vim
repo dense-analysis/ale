@@ -1,7 +1,7 @@
 " Author: KabbAmine <amine.kabb@gmail.com>, deathmaz <00maz1987@gmail.com>, diartyz <diartyz@gmail.com>
 " Description: HTMLHint for checking html files
 
-call ale#Set('html_htmlhint_options', '--format=unix')
+call ale#Set('html_htmlhint_options', '--format=unix --config .htmlhintrc')
 call ale#Set('html_htmlhint_executable', 'htmlhint')
 call ale#Set('html_htmlhint_use_global', 0)
 
