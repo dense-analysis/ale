@@ -17,7 +17,7 @@ function! ale_linters#go#gotype#GetCommand(buffer) abort
     endif
 
     let l:module_files = globpath(expand('#' . a:buffer . ':p:h'), '*.go', 0, 1)
-    let l:other_module_files = filter(l:module_files, 'v:val isnot# ' . ale#Escape(l:cur_file) . ' && v:val !~# "_test\.go$"')
+    let l:other_module_files = filter(l:module_files, 'v:val isnot# "' . ale#Escape(l:cur_file) . '" && v:val !~# "_test\.go$"')
     return 'gotype %t ' . join(map(l:other_module_files, 'ale#Escape(v:val)'))
 
 endfunction
