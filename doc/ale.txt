@@ -64,8 +64,10 @@ CONTENTS                                                         *ale-contents*
       erlc................................|ale-erlang-erlc|
       syntaxerl...........................|ale-erlang-syntaxerl|
     eruby.................................|ale-eruby-options|
+    fish..................................|ale-fish-options|
     fortran...............................|ale-fortran-options|
       gcc.................................|ale-fortran-gcc|
+    fountain..............................|ale-fountain-options|
     fusionscript..........................|ale-fuse-options|
       fusion-lint.........................|ale-fuse-fusionlint|
     git commit............................|ale-gitcommit-options|
@@ -83,6 +85,7 @@ CONTENTS                                                         *ale-contents*
       ember-template-lint.................|ale-handlebars-embertemplatelint|
     haskell...............................|ale-haskell-options|
       brittany............................|ale-haskell-brittany|
+      ghc.................................|ale-haskell-ghc|
       hdevtools...........................|ale-haskell-hdevtools|
       hfmt................................|ale-haskell-hfmt|
       stack-build.........................|ale-haskell-stack-build|
@@ -300,7 +303,9 @@ Notes:
 * Elm: `elm-format, elm-make`
 * Erb: `erb`, `erubis`
 * Erlang: `erlc`, `SyntaxErl`
+* Fish: `fish` (-n flag)
 * Fortran: `gcc`
+* Fountain: `proselint`
 * FusionScript: `fusion-lint`
 * Git Commit Messages: `gitlint`
 * GLSL: glslang, `glslls`
