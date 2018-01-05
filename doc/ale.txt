@@ -81,6 +81,7 @@ CONTENTS                                                         *ale-contents*
     graphql...............................|ale-graphql-options|
       eslint..............................|ale-graphql-eslint|
       gqlint..............................|ale-graphql-gqlint|
+      prettier............................|ale-graphql-prettier|
     handlebars............................|ale-handlebars-options|
       ember-template-lint.................|ale-handlebars-embertemplatelint|
     haskell...............................|ale-haskell-options|
@@ -128,6 +129,7 @@ CONTENTS                                                         *ale-contents*
       luacheck............................|ale-lua-luacheck|
     markdown..............................|ale-markdown-options|
       write-good..........................|ale-markdown-write-good|
+      prettier............................|ale-markdown-prettier|
     nroff.................................|ale-nroff-options|
       write-good..........................|ale-nroff-write-good|
     objc..................................|ale-objc-options|
@@ -310,7 +312,7 @@ Notes:
 * Git Commit Messages: `gitlint`
 * GLSL: glslang, `glslls`
 * Go: `gofmt`, `goimports`, `go vet`, `golint`, `gotype`, `gometalinter`!!, `go build`!!, `gosimple`!!, `staticcheck`!!
-* GraphQL: `eslint`, `gqlint`
+* GraphQL: `eslint`, `gqlint`, `prettier`
 * Haml: `haml-lint`
 * Handlebars: `ember-template-lint`
 * Haskell: `brittany`, `ghc`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`, `hfmt`
@@ -326,7 +328,7 @@ Notes:
 * Lua: `luacheck`
 * Mail: `alex`!!, `proselint`, `vale`
 * Make: `checkmake`
-* Markdown: `alex`!!, `mdl`, `proselint`, `redpen`, `remark-lint`, `vale`, `write-good`
+* Markdown: `alex`!!, `mdl`, `proselint`, `prettier`, `redpen`, `remark-lint`, `vale`, `write-good`
 * MATLAB: `mlint`
 * Nim: `nim check`!!
 * nix: `nix-instantiate`

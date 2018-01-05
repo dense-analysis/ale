@@ -105,7 +105,7 @@ formatting.
 | Git Commit Messages | [gitlint](https://github.com/jorisroovers/gitlint) |
 | GLSL | [glslang](https://github.com/KhronosGroup/glslang), [glslls](https://github.com/svenstaro/glsl-language-server) |
 | Go | [gofmt](https://golang.org/cmd/gofmt/), [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports), [go vet](https://golang.org/cmd/vet/), [golint](https://godoc.org/github.com/golang/lint), [gotype](https://godoc.org/golang.org/x/tools/cmd/gotype), [gometalinter](https://github.com/alecthomas/gometalinter) !!, [go build](https://golang.org/cmd/go/) !!, [gosimple](https://github.com/dominikh/go-tools/tree/master/cmd/gosimple) !!, [staticcheck](https://github.com/dominikh/go-tools/tree/master/cmd/staticcheck) !! |
-| GraphQL | [eslint](http://eslint.org/), [gqlint](https://github.com/happylinks/gqlint) |
+| GraphQL | [eslint](http://eslint.org/), [gqlint](https://github.com/happylinks/gqlint), [prettier](https://github.com/prettier/prettier) |
 | Haml | [haml-lint](https://github.com/brigade/haml-lint) |
 | Handlebars | [ember-template-lint](https://github.com/rwjblue/ember-template-lint) |
 | Haskell | [brittany](https://github.com/lspitzner/brittany), [ghc](https://www.haskell.org/ghc/), [stack-ghc](https://haskellstack.org/), [stack-build](https://haskellstack.org/) !!, [ghc-mod](https://github.com/DanielG/ghc-mod), [stack-ghc-mod](https://github.com/DanielG/ghc-mod), [hlint](https://hackage.haskell.org/package/hlint), [hdevtools](https://hackage.haskell.org/package/hdevtools), [hfmt](https://github.com/danstiner/hfmt) |
@@ -121,7 +121,7 @@ formatting.
 | Lua | [luacheck](https://github.com/mpeterv/luacheck) |
 | Mail | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [vale](https://github.com/ValeLint/vale) |
 | Make | [checkmake](https://github.com/mrtazz/checkmake) |
-| Markdown | [alex](https://github.com/wooorm/alex) !!, [mdl](https://github.com/mivok/markdownlint), [proselint](http://proselint.com/), [redpen](http://redpen.cc/), [remark-lint](https://github.com/wooorm/remark-lint) !!, [vale](https://github.com/ValeLint/vale), [write-good](https://github.com/btford/write-good) |
+| Markdown | [alex](https://github.com/wooorm/alex) !!, [mdl](https://github.com/mivok/markdownlint), [proselint](http://proselint.com/), [prettier](https://github.com/prettier/prettier), [redpen](http://redpen.cc/), [remark-lint](https://github.com/wooorm/remark-lint) !!, [vale](https://github.com/ValeLint/vale), [write-good](https://github.com/btford/write-good) |
 | MATLAB | [mlint](https://www.mathworks.com/help/matlab/ref/mlint.html) |
 | Nim | [nim check](https://nim-lang.org/docs/nimc.html) !! |
 | nix | [nix-instantiate](http://nixos.org/nix/manual/#sec-nix-instantiate) |
