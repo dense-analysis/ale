@@ -32,6 +32,21 @@ g:ale_html_htmlhint_use_global                 *g:ale_html_htmlhint_use_global*
 ===============================================================================
 tidy                                                            *ale-html-tidy*
 
+`tidy` is a console application which corrects and cleans up HTML and XML
+documents by fixing markup errors and upgrading legacy code to modern
+standards.
+
+Note:
+`/usr/bin/tidy` on macOS (installed by default) is too old. It was released
+on 31 Oct 2006. It does not consider modern HTML specs (HTML5) and shows
+outdated warnings. So |ale| ignores `/usr/bin/tidy` on macOS.
+
+To use `tidy` on macOS, please install the latest version with Homebrew:
+>
+  $ brew install tidy-html5
+<
+`/usr/local/bin/tidy` is installed.
+
 g:ale_html_tidy_executable                         *g:ale_html_tidy_executable*
                                                    *b:ale_html_tidy_executable*
   Type: |String|
