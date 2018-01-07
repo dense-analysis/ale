@@ -309,7 +309,7 @@ Notes:
 * FusionScript: `fusion-lint`
 * Git Commit Messages: `gitlint`
 * GLSL: glslang, `glslls`
-* Go: `gofmt`, `goimports`, `go vet`, `golint`, `gometalinter`!!, `go build`!!, `gosimple`!!, `staticcheck`!!
+* Go: `gofmt`, `goimports`, `go vet`, `golint`, `gotype`, `gometalinter`!!, `go build`!!, `gosimple`!!, `staticcheck`!!
 * GraphQL: `eslint`, `gqlint`
 * Haml: `haml-lint`
 * Handlebars: `ember-template-lint`

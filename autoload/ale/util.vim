@@ -236,6 +236,13 @@ function! ale#util#EscapePCRE(unsafe_string) abort
     return substitute(a:unsafe_string, '\([\-\[\]{}()*+?.^$|]\)', '\\\1', 'g')
 endfunction
 
+" Escape a string so that it can be used as a literal string inside an evaled
+" vim command.
+function! ale#util#EscapeVim(unsafe_string) abort
+    return "'" . substitute(a:unsafe_string, "'", "''", 'g') . "'"
+endfunction
+
+
 " Given a String or a List of String values, try and decode the string(s)
 " as a JSON value which can be decoded with json_decode. If the JSON string
 " is invalid, the default argument value will be returned instead.

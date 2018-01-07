@@ -1,0 +1,19 @@
+Before:
+  runtime ale_linters/go/gotype.vim
+  call ale#test#SetFilename('../go_files/testfile2.go')
+
+After:
+  call ale#linter#Reset()
+
+
+Execute(The gotype callback should include other files from the directory but exclude the file itself):
+  let dir = expand('#' . bufnr('') . ':p:h')
+  AssertEqual
+  \ "gotype %t ". ale#Escape(ale#path#Simplify(dir . "/testfile.go")),
+  \ ale_linters#go#gotype#GetCommand(bufnr(''))
+
+Execute(The gotype callback should ignore test files):
+  call ale#test#SetFilename('bla_test.go')
+  AssertEqual
+  \ 0,
+  \ ale_linters#go#gotype#GetCommand(bufnr(''))
