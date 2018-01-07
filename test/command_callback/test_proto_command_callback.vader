@@ -1,11 +1,9 @@
 Before:
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
   call ale#test#SetFilename('test.proto')
 
 After:
   Restore
 
-  call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
 Execute(The default command should be correct):
