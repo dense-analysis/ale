@@ -2,10 +2,10 @@
 ALE Lua Integration                                           *ale-lua-options*
 
 ===============================================================================
-luac                                                          *ale-lua-luac*
+luac                                                             *ale-lua-luac*
 
-g:ale_lua_luac_executable                       *g:ale_lua_luac_executable*
-                                                *b:ale_lua_luac_executable*
+g:ale_lua_luac_executable                           *g:ale_lua_luac_executable*
+                                                    *b:ale_lua_luac_executable*
   Type: |String|
   Default: `'luac'`
 
