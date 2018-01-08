@@ -17,7 +17,7 @@ Execute(The credo handler should parse lines correctly):
   \   {
   \     'bufnr': 347,
   \     'lnum': 26,
-  \     'col': 0,
+  \     'col': 1,
   \     'text': 'If/else blocks should not have a negated condition in `if`.',
   \     'type': 'W',
   \   },
