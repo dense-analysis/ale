@@ -17,10 +17,15 @@ function! ale_linters#elixir#credo#Handle(buffer, lines) abort
             let l:type = 'W'
         endif
 
+        " column can be missing:
+        "
+        " lib/filename.ex:19: F: Pipe chain should start with a raw value.
+        let l:col = l:match[2] || 1
+
         call add(l:output, {
         \   'bufnr': a:buffer,
         \   'lnum': l:match[1] + 0,
-        \   'col': l:match[2] + 0,
+        \   'col': l:col + 0,
         \   'type': l:type,
         \   'text': l:text,
         \})
