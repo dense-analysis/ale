@@ -47,8 +47,8 @@ Execute(The options should be configurable):
   AssertEqual
   \ ale#Escape('clang-check')
   \   . ' -analyze %s'
-  \   . ' -extra-arg -Xclang -extra-arg -analyzer-output=text',
-  \   . ' --something'
+  \   . ' -extra-arg -Xclang -extra-arg -analyzer-output=text'
+  \   . ' --something',
   \ ale_linters#cpp#clangcheck#GetCommand(bufnr(''))
 
 Execute(The build directory should be used when set):
