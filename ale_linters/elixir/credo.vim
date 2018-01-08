@@ -20,7 +20,7 @@ function! ale_linters#elixir#credo#Handle(buffer, lines) abort
         " column can be missing:
         "
         " lib/filename.ex:19: F: Pipe chain should start with a raw value.
-        let l:col = l:match[2] || 1
+        let l:col = empty(l:match[2]) ? 1 : l:match[2]
 
         call add(l:output, {
         \   'bufnr': a:buffer,
