@@ -1,9 +1,13 @@
 Before:
   Save g:ale_rust_cargo_use_check
   Save g:ale_rust_cargo_check_all_targets
+  Save g:ale_rust_cargo_default_feature_behavior
+  Save g:ale_rust_cargo_include_features
 
   unlet! g:ale_rust_cargo_use_check
   unlet! g:ale_cargo_check_all_targets
+  unlet! g:ale_rust_cargo_default_feature_behavior
+  unlet! g:ale_rust_cargo_include_features
 
   runtime ale_linters/rust/cargo.vim
   call ale#test#SetDirectory('/testplugin/test/command_callback')
@@ -114,3 +118,47 @@ Execute(--all-targets should be used when g:ale_rust_cargo_check_all_targets is 
   \ ale_linters#rust#cargo#GetCommand(bufnr(''), [])
 
   AssertEqual '', ale_linters#rust#cargo#VersionCheck(bufnr(''))
+
+Execute(--no-default-features should be used when g:ale_rust_cargo_default_feature_behavior is none):
+  let g:ale_rust_cargo_default_feature_behavior = 'none'
+
+  AssertEqual
+  \ 'cargo check' . g:suffix . ' --no-default-features',
+  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
+  \   'cargo 0.22.0 (3423351a5 2017-10-06)',
+  \ ])
+
+Execute(g:ale_rust_cargo_include_features added when g:ale_rust_cargo_default_feature_behavior is none):
+  let g:ale_rust_cargo_default_feature_behavior = 'none'
+  let g:ale_rust_cargo_include_features = 'foo bar'
+
+  AssertEqual
+  \ 'cargo check' . g:suffix . ' --no-default-features --features ' .
+  \ (fnamemodify(&shell, ':t') is? 'cmd.exe' ? '"foo bar"' : "'foo bar'"),
+  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
+  \   'cargo 0.22.0 (3423351a5 2017-10-06)',
+  \ ])
+
+Execute(g:ale_rust_cargo_include_features added and escaped):
+  let g:ale_rust_cargo_default_feature_behavior = 'default'
+  let g:ale_rust_cargo_include_features = "foo bar baz"
+
+  AssertEqual
+  \ 'cargo check' . g:suffix . ' --features ' .
+  \ (fnamemodify(&shell, ':t') is? 'cmd.exe' ? '"foo bar baz"' : "'foo bar baz'"),
+  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
+  \   'cargo 0.22.0 (3423351a5 2017-10-06)',
+  \ ])
+
+Execute(--all-features should be used when g:ale_rust_cargo_default_feature_behavior is all):
+  let g:ale_rust_cargo_default_feature_behavior = 'all'
+
+  " When all features are enabled we should ignore extra features to add
+  " since it won't do anything
+  let g:ale_rust_cargo_include_features = 'foo bar'
+
+  AssertEqual
+  \ 'cargo check' . g:suffix . ' --all-features',
+  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
+  \   'cargo 0.22.0 (3423351a5 2017-10-06)',
+  \ ])
