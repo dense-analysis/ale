@@ -104,6 +104,16 @@ g:ale_python_mypy_executable                     *g:ale_python_mypy_executable*
 
   See |ale-integrations-local-executables|
 
+g:ale_python_mypy_ignore_invalid_syntax
+                                      *g:ale_python_mypy_ignore_invalid_syntax*
+                                      *b:ale_python_mypy_ignore_invalid_syntax*
+  Type: |Number|
+  Default: `0`
+
+  When set to `1`, syntax error messages for mypy will be ignored. This option
+  can be used when running other Python linters which check for syntax errors,
+  as mypy can take a while to finish executing.
+
 
 g:ale_python_mypy_options                           *g:ale_python_mypy_options*
                                                     *b:ale_python_mypy_options*
@@ -125,16 +135,16 @@ g:ale_python_mypy_use_global                     *g:ale_python_mypy_use_global*
 ===============================================================================
 prospector                                              *ale-python-prospector*
 
-g:ale_python_prospector_executable               *g:ale_python_prospector_executable*
-                                                 *b:ale_python_prospector_executable*
+g:ale_python_prospector_executable         *g:ale_python_prospector_executable*
+                                           *b:ale_python_prospector_executable*
   Type: |String|
   Default: `'prospector'`
 
   See |ale-integrations-local-executables|
 
 
-g:ale_python_prospector_options                  *g:ale_python_prospector_options*
-                                                 *b:ale_python_prospector_options*
+g:ale_python_prospector_options               *g:ale_python_prospector_options*
+                                              *b:ale_python_prospector_options*
   Type: |String|
   Default: `''`
 
@@ -154,8 +164,8 @@ g:ale_python_prospector_options                  *g:ale_python_prospector_option
   `python3 -m pip install --user prospector`).
 
 
-g:ale_python_prospector_use_global               *g:ale_python_prospector_use_global*
-                                                 *b:ale_python_prospector_use_global*
+g:ale_python_prospector_use_global         *g:ale_python_prospector_use_global*
+                                           *b:ale_python_prospector_use_global*
   Type: |Number|
   Default: `0`
 
