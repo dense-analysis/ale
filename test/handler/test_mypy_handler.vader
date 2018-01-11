@@ -1,9 +1,15 @@
 Before:
+  Save g:ale_python_mypy_ignore_invalid_syntax
+
+  unlet! g:ale_python_mypy_ignore_invalid_syntax
+
   runtime ale_linters/python/mypy.vim
 
   call ale#test#SetDirectory('/testplugin/test/handler')
 
 After:
+  Restore
+
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
@@ -79,4 +85,28 @@ Execute(The mypy handler should handle Windows names with spaces):
   \ ],
   \ ale_linters#python#mypy#Handle(bufnr(''), [
   \   'C:\something\with spaces.py:4: error: No library stub file for module ''django.db''',
+  \ ])
+
+Execute(The mypy syntax errors shouldn't be ignored by default):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 4,
+  \     'col': 0,
+  \     'filename': ale#path#Simplify(g:dir . '/foo.py'),
+  \     'type': 'E',
+  \     'text': 'invalid syntax',
+  \   },
+  \ ],
+  \ ale_linters#python#mypy#Handle(bufnr(''), [
+  \   'foo.py:4: error: invalid syntax',
+  \ ])
+
+Execute(The mypy syntax errors should be ignored when the option is on):
+  let g:ale_python_mypy_ignore_invalid_syntax = 1
+
+  AssertEqual
+  \ [],
+  \ ale_linters#python#mypy#Handle(bufnr(''), [
+  \   'foo.py:4: error: invalid syntax',
   \ ])
