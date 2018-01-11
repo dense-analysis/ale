@@ -1,0 +1,27 @@
+Before:
+  Save g:ale_json_fixjson_executable
+  Save g:ale_json_fixjson_options
+
+  let g:ale_json_fixjson_executable = '/path/to/fixjson'
+  let g:ale_json_fixjson_options = ''
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  Restore
+
+Execute(The fixjson callback should return the correct default command):
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('/path/to/fixjson')
+  \ },
+  \ ale#fixers#fixjson#Fix(bufnr(''))
+
+Execute(The fixjson callback should include additional options):
+  let g:ale_json_fixjson_options = '-i 2'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('/path/to/fixjson') . ' -i 2'
+  \ },
+  \ ale#fixers#fixjson#Fix(bufnr(''))
