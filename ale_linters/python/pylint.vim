@@ -46,7 +46,7 @@ function! ale_linters#python#pylint#Handle(buffer, lines) abort
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 1,
         \   'text': l:match[5],
-        \   'code': l:match[4],
+        \   'code': l:code,
         \   'type': l:code[:0] is# 'E' ? 'E' : 'W',
         \})
     endfor
