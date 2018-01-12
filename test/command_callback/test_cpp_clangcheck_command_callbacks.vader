@@ -28,7 +28,7 @@ Execute(The executable should be used in the command):
   AssertEqual
   \ ale#Escape('clang-check')
   \   . ' -analyze %s'
-  \   . ' -extra-arg -Xanalyzer -extra-arg -analyzer-output=text',
+  \   . ' -extra-arg -Xclang -extra-arg -analyzer-output=text',
   \ ale_linters#cpp#clangcheck#GetCommand(bufnr(''))
 
   let b:ale_cpp_clangcheck_executable = 'foobar'
@@ -38,7 +38,7 @@ Execute(The executable should be used in the command):
   AssertEqual
   \ ale#Escape('foobar')
   \   . ' -analyze %s'
-  \   . ' -extra-arg -Xanalyzer -extra-arg -analyzer-output=text',
+  \   . ' -extra-arg -Xclang -extra-arg -analyzer-output=text',
   \ ale_linters#cpp#clangcheck#GetCommand(bufnr(''))
 
 Execute(The options should be configurable):
@@ -46,8 +46,9 @@ Execute(The options should be configurable):
 
   AssertEqual
   \ ale#Escape('clang-check')
-  \   . ' -analyze %s --something'
-  \   . ' -extra-arg -Xanalyzer -extra-arg -analyzer-output=text',
+  \   . ' -analyze %s'
+  \   . ' -extra-arg -Xclang -extra-arg -analyzer-output=text'
+  \   . ' --something',
   \ ale_linters#cpp#clangcheck#GetCommand(bufnr(''))
 
 Execute(The build directory should be used when set):
