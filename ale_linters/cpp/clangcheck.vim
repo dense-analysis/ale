@@ -24,9 +24,9 @@ function! ale_linters#cpp#clangcheck#GetCommand(buffer) abort
     " detected.
     return ale#Escape(ale_linters#cpp#clangcheck#GetExecutable(a:buffer))
     \   . ' -analyze %s'
+    \   . (empty(l:build_dir) ? ' -extra-arg -Xclang -extra-arg -analyzer-output=text' : '')
     \   . (!empty(l:user_options) ? ' ' . l:user_options : '')
     \   . (!empty(l:build_dir) ? ' -p ' . ale#Escape(l:build_dir) : '')
-    \   . (empty(l:build_dir) ? ' -extra-arg -Xanalyzer -extra-arg -analyzer-output=text' : '')
 endfunction
 
 call ale#linter#Define('cpp', {
