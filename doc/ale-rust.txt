@@ -59,6 +59,36 @@ g:ale_rust_cargo_check_all_targets         *g:ale_rust_cargo_check_all_targets*
   is used. See |g:ale_rust_cargo_use_check|,
 
 
+g:ale_rust_cargo_default_feature_behavior
+                                    *g:ale_rust_cargo_default_feature_behavior*
+                                    *b:ale_rust_cargo_default_feature_behavior*
+  Type: |String|
+  Default: `default`
+
+  When set to `none`, ALE will set the `--no-default-features` option when
+  invoking `cargo`. Only the features specified in
+  |g:ale_rust_cargo_include_features| will be included when performing the
+  lint check.
+
+  When set to `default`, ALE will instruct `cargo` to build all default
+  features specified in the project's `Cargo.toml` file, in addition to
+  including any additional features defined in
+  |g:ale_rust_cargo_include_features|.
+
+  When set to `all`, ALE will set the `--all-features` option when
+  invoking `cargo`, which will include all features defined in the project's
+  `Cargo.toml` file when performing the lint check.
+
+
+g:ale_rust_cargo_include_features           *g:ale_rust_cargo_include_features*
+                                            *b:ale_rust_cargo_include_features*
+  Type: |String|
+  Default: `''`
+
+  When defined, ALE will set the `--features` option when invoking `cargo` to
+  perform the lint check. See |g:ale_rust_cargo_default_feature_behavior|.
+
+
 ===============================================================================
 rls                                                              *ale-rust-rls*
 
