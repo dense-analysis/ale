@@ -1,4 +1,4 @@
-# Asynchronous Lint Engine [![Travis CI Build Status](https://travis-ci.org/w0rp/ale.svg?branch=master)](https://travis-ci.org/w0rp/ale) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/w0rp/ale?svg=true)](https://ci.appveyor.com/project/w0rp/ale)
+# Asynchronous Lint Engine [![Travis CI Build Status](https://travis-ci.org/w0rp/ale.svg?branch=master)](https://travis-ci.org/w0rp/ale) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/r0ef1xu8xjmik58d/branch/master?svg=true)](https://ci.appveyor.com/project/w0rp/ale)
 
 
 ![ALE Logo by Mark Grealish - https://www.bhalash.com/](img/logo.jpg?raw=true)
