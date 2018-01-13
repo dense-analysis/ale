@@ -159,6 +159,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['java'],
 \       'description': 'Fix Java files with google-java-format.',
 \   },
+\   'jq': {
+\       'function': 'ale#fixers#jq#Fix',
+\       'suggested_filetypes': ['json'],
+\       'description': 'Fix JSON files with jq.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
