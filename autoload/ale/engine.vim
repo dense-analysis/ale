@@ -703,6 +703,13 @@ function! s:CheckWithLSP(buffer, linter) abort
     \   : ale#lsp#message#DidChange(a:buffer)
     let l:request_id = ale#lsp#Send(l:id, l:change_message, l:root)
 
+    " If this was a file save event, also notify the server of that.
+    let l:is_save = getbufvar(a:buffer, 'ale_save_event_fired', 0)
+    if l:is_save != 0
+      let l:save_message = ale#lsp#message#DidSave(a:buffer)
+      let l:request_id = ale#lsp#Send(l:id, l:save_message, l:root)
+    endif
+
     if l:request_id != 0
         if index(l:info.active_linter_list, a:linter.name) < 0
             call add(l:info.active_linter_list, a:linter.name)
