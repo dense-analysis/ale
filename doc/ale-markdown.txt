@@ -3,6 +3,12 @@ ALE Markdown Integration                                 *ale-markdown-options*
 
 
 ===============================================================================
+prettier                                                *ale-markdown-prettier*
+
+See |ale-javascript-prettier| for information about the available options.
+
+
+===============================================================================
 write-good                                            *ale-markdown-write-good*
 
 See |ale-write-good-options|

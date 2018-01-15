@@ -127,6 +127,7 @@ CONTENTS                                                         *ale-contents*
     lua...................................|ale-lua-options|
       luacheck............................|ale-lua-luacheck|
     markdown..............................|ale-markdown-options|
+      prettier............................|ale-markdown-prettier|
       write-good..........................|ale-markdown-write-good|
     nroff.................................|ale-nroff-options|
       write-good..........................|ale-nroff-write-good|
@@ -326,7 +327,7 @@ Notes:
 * Lua: `luacheck`
 * Mail: `alex`!!, `proselint`, `vale`
 * Make: `checkmake`
-* Markdown: `alex`!!, `mdl`, `proselint`, `redpen`, `remark-lint`, `vale`, `write-good`
+* Markdown: `alex`!!, `mdl`, `prettier`, `proselint`, `redpen`, `remark-lint`, `vale`, `write-good`
 * MATLAB: `mlint`
 * Nim: `nim check`!!
 * nix: `nix-instantiate`
