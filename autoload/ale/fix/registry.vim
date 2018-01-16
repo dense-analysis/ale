@@ -149,6 +149,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['reason'],
 \       'description': 'Fix ReasonML files with refmt.',
 \   },
+\   'ktlint': {
+\       'function': 'ale#fixers#ktlint#Fix',
+\       'suggested_filetypes': ['kotlin'],
+\       'description': 'Fix kotlin files with ktlint.',
+\   },
 \   'shfmt': {
 \       'function': 'ale#fixers#shfmt#Fix',
 \       'suggested_filetypes': ['sh'],
