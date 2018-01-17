@@ -5,7 +5,7 @@ Before:
 
   function! TestCommand(expected_part, input) abort
     let l:expected = has('win32')
-    \ ? 'cmd /c ' . a:expected_part
+    \ ? 'cmd /s/c "' . a:expected_part . '"'
     \ : split(&shell) + split(&shellcmdflag) + [a:expected_part]
 
     AssertEqual l:expected, ale#job#PrepareCommand(bufnr(''), a:input)
