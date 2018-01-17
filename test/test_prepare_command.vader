@@ -30,10 +30,10 @@ Execute(Other shells should be used when set):
     AssertEqual ['/bin/bash', '-c', 'foobar'], ale#job#PrepareCommand(bufnr(''), 'foobar')
   endif
 
-Execute(cmd /c as a string should be used on Windows):
+Execute(cmd /s/c as a string should be used on Windows):
   if has('win32')
     let &shell = 'who cares'
     let &shellcmdflag = 'whatever'
 
-    AssertEqual 'cmd /c foobar', ale#job#PrepareCommand(bufnr(''), 'foobar')
+    AssertEqual 'cmd /s/c "foobar"', ale#job#PrepareCommand(bufnr(''), 'foobar')
   endif
