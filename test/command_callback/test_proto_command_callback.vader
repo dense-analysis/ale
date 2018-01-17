@@ -1,14 +1,21 @@
 Before:
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
   call ale#test#SetFilename('test.proto')
 
 After:
   Restore
 
-  call ale#test#RestoreDirectory()
+  unlet! b:ale_proto_protoc_gen_lint_options
+
   call ale#linter#Reset()
 
 Execute(The default command should be correct):
   AssertEqual
   \ 'protoc' . ' -I ' . ale#Escape(getcwd()) . ' --lint_out=. ' . '%s',
+  \ ale_linters#proto#protoc_gen_lint#GetCommand(bufnr(''))
+
+Execute(The callback should include any additional options):
+  let b:ale_proto_protoc_gen_lint_options = '--some-option'
+
+  AssertEqual
+  \ 'protoc' . ' -I ' . ale#Escape(getcwd()) . ' --some-option --lint_out=. ' . '%s',
   \ ale_linters#proto#protoc_gen_lint#GetCommand(bufnr(''))
