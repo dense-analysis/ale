@@ -174,7 +174,7 @@ function! ale#job#PrepareCommand(command) abort
     " but we'll do this explicitly, so we use thes same exact command for both
     " versions.
     if ale#Has('win32')
-        return 'cmd /c ' . a:command
+        return 'cmd /s/c "' . a:command . '"'
     endif
 
     if &shell =~? 'fish$'

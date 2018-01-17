@@ -35,4 +35,4 @@ Execute(cmd /c as a string should be used on Windows):
   let &shellcmdflag = 'whatever'
   let g:ale_has_override = {'win32': 1}
 
-  AssertEqual 'cmd /c foobar', ale#job#PrepareCommand('foobar')
+  AssertEqual 'cmd /s/c "foobar"', ale#job#PrepareCommand('foobar')
