@@ -76,7 +76,7 @@ Execute(History should be set when commands are run):
   AssertEqual sort(['status', 'exit_code', 'job_id', 'command']), sort(keys(g:history[0]))
 
   if has('win32')
-    AssertEqual 'cmd /c echo command history test', g:history[0].command
+    AssertEqual 'cmd /s/c "echo command history test"', g:history[0].command
   else
     AssertEqual ['/bin/sh', '-c', '/bin/sh -c ''echo command history test'''], g:history[0].command
   endif
@@ -151,7 +151,7 @@ Execute(The history should be updated when fixers are run):
   AssertEqual ['finished'], map(copy(b:ale_history), 'v:val.status')
 
   if has('win32')
-    AssertEqual 'cmd /c echo foo ', split(b:ale_history[0].command, '<')[0]
+    AssertEqual 'cmd /s/c "echo foo ', split(b:ale_history[0].command, '<')[0]
   else
     AssertEqual '/bin/sh -c echo foo ', split(join(b:ale_history[0].command), '<')[0]
   endif

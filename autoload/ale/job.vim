@@ -205,7 +205,7 @@ function! ale#job#PrepareCommand(buffer, command) abort
     " but we'll do this explicitly, so we use the same exact command for both
     " versions.
     if has('win32')
-        return 'cmd /c ' . l:command
+        return 'cmd /s/c "' . l:command . '"'
     endif
 
     if &shell =~? 'fish$'
