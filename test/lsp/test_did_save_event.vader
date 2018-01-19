@@ -16,13 +16,21 @@ Before:
   let g:message_list = []
   let g:Callback = ''
 
+  function! LanguageCallback() abort
+    return 'foobar'
+  endfunction
+
+  function! ProjectRootCallback() abort
+    return expand('.')
+  endfunction
+
   call ale#linter#Define('foobar', {
   \ 'name': 'dummy_linter',
   \ 'lsp': 'stdio',
   \ 'command': 'cat - > /dev/null',
   \ 'executable': has('win32') ? 'cmd' : 'echo',
-  \ 'language_callback': {buffer -> 'foobar'},
-  \ 'project_root_callback': {buffer -> expand('.')},
+  \ 'language_callback': 'LanguageCallback',
+  \ 'project_root_callback': 'ProjectRootCallback',
   \ })
   let g:ale_linters = {'foobar': ['dummy_linter']}
 
@@ -47,6 +55,9 @@ After:
   unlet! b:ale_linters
   unlet! g:Callback
   unlet! g:message_list
+
+  delfunction LanguageCallback
+  delfunction ProjectRootCallback
 
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
