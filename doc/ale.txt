@@ -125,6 +125,7 @@ CONTENTS                                                         *ale-contents*
     llvm..................................|ale-llvm-options|
       llc.................................|ale-llvm-llc|
     lua...................................|ale-lua-options|
+      luac................................|ale-lua-luac|
       luacheck............................|ale-lua-luacheck|
     markdown..............................|ale-markdown-options|
       write-good..........................|ale-markdown-write-good|
@@ -323,7 +324,7 @@ Notes:
 * LaTeX (tex): `alex`!!, `chktex`, `lacheck`, `proselint`, `redpen`, `vale`, `write-good`
 * Less: `lessc`, `prettier`, `stylelint`
 * LLVM: `llc`
-* Lua: `luacheck`
+* Lua: `luac`, `luacheck`
 * Mail: `alex`!!, `proselint`, `vale`
 * Make: `checkmake`
 * Markdown: `alex`!!, `mdl`, `proselint`, `redpen`, `remark-lint`, `vale`, `write-good`
