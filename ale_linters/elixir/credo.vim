@@ -32,6 +32,6 @@ endfunction
 call ale#linter#Define('elixir', {
 \   'name': 'credo',
 \   'executable': 'mix',
-\   'command': 'mix credo suggest --format=flycheck --read-from-stdin %s',
+\   'command': 'mix help credo && mix credo suggest --format=flycheck --read-from-stdin %s',
 \   'callback': 'ale_linters#elixir#credo#Handle',
 \})
