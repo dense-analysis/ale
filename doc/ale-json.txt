@@ -3,6 +3,45 @@ ALE JSON Integration                                         *ale-json-options*
 
 
 ===============================================================================
+fixjson                                                      *ale-json-fixjson*
+
+fixjson is a JSON file fixer/formatter for humans using (relaxed) JSON5.
+It provides:
+
+- Pretty-prints JSON input
+- Fixes various failures while humans writing JSON
+  - Fixes trailing commas objects or arrays
+  - Fixes missing commas for elements of objects or arrays
+  - Adds quotes to keys in objects
+  - Newlines in strings
+  - Hex numbers
+  - Fixes single quotes to double quotes
+
+You can install it using npm:
+>
+  $ npm install -g fixjson
+<
+ALE provides fixjson integration as a fixer. See |ale-fix|.
+
+g:ale_json_fixjson_executable                   *g:ale_json_fixjson_executable*
+                                                *b:ale_json_fixjson_executable*
+
+  Type: |String|
+  Default: `'fixjson'`
+
+  The executable that will be run for fixjson.
+
+g:ale_json_fixjson_options                         *g:ale_json_fixjson_options*
+                                                   *b:ale_json_fixjson_options*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can add extra options to the command executed for running
+  fixjson.
+
+
+===============================================================================
 jsonlint                                                    *ale-json-jsonlint*
 
 There are no options available.
