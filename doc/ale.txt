@@ -297,7 +297,7 @@ Notes:
 * Dafny: `dafny`!!
 * Dart: `dartanalyzer`!!, `language_server`
 * Dockerfile: `hadolint`
-* Elixir: `credo`, `dogma`!!
+* Elixir: `credo`, `dialyxir`, `dogma`!!
 * Elm: `elm-format, elm-make`
 * Erb: `erb`, `erubis`
 * Erlang: `erlc`, `SyntaxErl`
