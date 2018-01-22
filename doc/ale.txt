@@ -57,6 +57,7 @@ CONTENTS                                                         *ale-contents*
       hadolint............................|ale-dockerfile-hadolint|
     elixir................................|ale-elixir-options|
       mix.................................|ale-elixir-mix|
+      dialyxir............................|ale-elixir-dialyxir|
     elm...................................|ale-elm-options|
       elm-format..........................|ale-elm-elm-format|
       elm-make............................|ale-elm-elm-make|
@@ -301,7 +302,7 @@ Notes:
 * Dafny: `dafny`!!
 * Dart: `dartanalyzer`!!, `language_server`
 * Dockerfile: `hadolint`
-* Elixir: `credo`, `dogma`!!
+* Elixir: `credo`, `dialyxir`, `dogma`!!
 * Elm: `elm-format, elm-make`
 * Erb: `erb`, `erubis`
 * Erlang: `erlc`, `SyntaxErl`
