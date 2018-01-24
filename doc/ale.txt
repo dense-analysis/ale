@@ -306,7 +306,7 @@ Notes:
 * Dockerfile: `hadolint`
 * Elixir: `credo`, `dialyxir`, `dogma`!!
 * Elm: `elm-format, elm-make`
-* Erb: `erb`, `erubis`
+* Erb: `erb`, `erubi`, `erubis`
 * Erlang: `erlc`, `SyntaxErl`
 * Fish: `fish` (-n flag)
 * Fortran: `gcc`
