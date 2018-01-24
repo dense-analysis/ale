@@ -112,6 +112,7 @@ CONTENTS                                                         *ale-contents*
       standard............................|ale-javascript-standard|
       xo..................................|ale-javascript-xo|
     json..................................|ale-json-options|
+      fixjson.............................|ale-json-fixjson|
       jsonlint............................|ale-json-jsonlint|
       jq..................................|ale-json-jq|
       prettier............................|ale-json-prettier|
@@ -322,7 +323,7 @@ Notes:
 * Idris: `idris`
 * Java: `checkstyle`, `javac`, `google-java-format`
 * JavaScript: `eslint`, `flow`, `jscs`, `jshint`, `prettier`, `prettier-eslint`, `prettier-standard`, `standard`, `xo`
-* JSON: `jsonlint`, `jq`, `prettier`
+* JSON: `fixjson`, `jsonlint`, `jq`, `prettier`
 * Kotlin: `kotlinc`, `ktlint`
 * LaTeX (tex): `alex`!!, `chktex`, `lacheck`, `proselint`, `redpen`, `vale`, `write-good`
 * Less: `lessc`, `prettier`, `stylelint`

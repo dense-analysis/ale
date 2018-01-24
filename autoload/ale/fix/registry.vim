@@ -159,6 +159,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['java'],
 \       'description': 'Fix Java files with google-java-format.',
 \   },
+\   'fixjson': {
+\       'function': 'ale#fixers#fixjson#Fix',
+\       'suggested_filetypes': ['json'],
+\       'description': 'Fix JSON files with fixjson.',
+\   },
 \   'jq': {
 \       'function': 'ale#fixers#jq#Fix',
 \       'suggested_filetypes': ['json'],
