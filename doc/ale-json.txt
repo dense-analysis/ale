@@ -9,6 +9,25 @@ There are no options available.
 
 
 ===============================================================================
+jq                                                                *ale-json-jq*
+
+g:ale_jq_executable                                       *g:ale_jq_executable*
+                                                          *b:ale_jq_executable*
+  Type: |String|
+  Default: `'jq'`
+
+g:ale_jq_use_global                                       *g:ale_jq_use_global*
+                                                          *b:ale_jq_use_global*
+  Type: |Number|
+  Default: `1`
+
+g:ale_jq_options                                             *g:ale_jq_options*
+                                                             *b:ale_jq_options*
+  Type: |String|
+  Default: `''`
+
+
+===============================================================================
 prettier                                                    *ale-json-prettier*
 
 See |ale-javascript-prettier| for information about the available options.
