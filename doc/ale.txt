@@ -1307,6 +1307,11 @@ g:ale_set_quickfix                                         *g:ale_set_quickfix*
   Problems from every buffer ALE has checked will be included in the quickfix
   list, which can be checked with |:copen|. Problems will be de-duplicated.
 
+  This feature should not be used in combination with tools for searching for
+  matches and commands like |:cfdo|, as ALE will replace the quickfix list
+  pretty frequently. If you wish to use such tools, you should populate the
+  loclist instead.
+
 
 g:ale_set_signs                                               *g:ale_set_signs*
 
