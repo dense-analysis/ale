@@ -16,7 +16,7 @@ g:ale_html_htmlhint_executable                 *g:ale_html_htmlhint_executable*
 g:ale_html_htmlhint_options                       *g:ale_html_htmlhint_options*
                                                   *b:ale_html_htmlhint_options*
   Type: |String|
-  Default: `'--format=unix'`
+  Default: `''`
 
   This variable can be changed to modify flags given to HTMLHint.
 
