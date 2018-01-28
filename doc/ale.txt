@@ -155,6 +155,8 @@ CONTENTS                                                         *ale-contents*
       phpcs...............................|ale-php-phpcs|
       phpmd...............................|ale-php-phpmd|
       phpstan.............................|ale-php-phpstan|
+    po....................................|ale-po-options|
+      write-good..........................|ale-po-write-good|
     pod...................................|ale-pod-options|
       write-good..........................|ale-pod-write-good|
     proto.................................|ale-proto-options|
@@ -342,6 +344,7 @@ Notes:
 * OCaml: `merlin` (see |ale-ocaml-merlin|), `ols`
 * Perl: `perl -c`, `perl-critic`
 * PHP: `hack`, `hackfmt`, `langserver`, `phan`, `php -l`, `phpcs`, `phpmd`, `phpstan`, `phpcbf`
+* PO: `alex`!!, `msgfmt`, `proselint`, `write-good`
 * Pod: `alex`!!, `proselint`, `write-good`
 * proto: `protoc-gen-lint`
 * Pug: `pug-lint`
