@@ -14,7 +14,7 @@ endfunction
 function! ale_linters#html#htmlhint#GetCommand(buffer) abort
     return ale_linters#html#htmlhint#GetExecutable(a:buffer)
     \   . ' ' . ale#Var(a:buffer, 'html_htmlhint_options')
-    \   . ' %t'
+    \   . ' %s'
 endfunction
 
 call ale#linter#Define('html', {

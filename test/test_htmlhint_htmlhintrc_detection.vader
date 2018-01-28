@@ -1,0 +1,24 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test')
+
+  runtime ale_linters/html/htmlhint.vim
+
+After:
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(support .htmlhintrc should be use current filename):
+  call ale#test#SetFilename('/project/test.html')
+
+  let b:buffer = bufnr('')
+
+  let b:temporary_file = ''
+  let b:command = ale_linters#html#htmlhint#GetCommand(b:buffer)
+  let [b:temporary_file, b:command] = ale#command#FormatCommand(b:buffer, b:command, 0)
+
+  let b:filename = fnamemodify(bufname(b:buffer), ':p')
+
+  AssertNotEqual
+  \ stridx(b:command, shellescape(b:filename)),
+  \ -1,
+  \ 'ale_linters#html#htmlhint#GetCommand without current filename'
