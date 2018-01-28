@@ -63,15 +63,7 @@ g:ale_json_jq_executable                             *g:ale_json_jq_executable*
   Type: |String|
   Default: `'jq'`
 
-  See |ale-integrations-local-executables|
-
-
-g:ale_json_jq_use_global                             *g:ale_json_jq_use_global*
-                                                     *b:ale_json_jq_use_global*
-  Type: |Number|
-  Default: `0`
-
-  See |ale-integrations-local-executables|
+  This option can be changed to change the path for `jq`.
 
 
 g:ale_json_jq_options                                   *g:ale_json_jq_options*

@@ -1,0 +1,14 @@
+Before:
+  Save g:ale_json_jq_executable
+  Save g:ale_json_jq_options
+
+After:
+  Restore
+
+Execute(The jq fixer should use the options you set):
+  let g:ale_json_jq_executable = 'foo'
+  let g:ale_json_jq_options = '--bar'
+
+  AssertEqual
+  \ {'command': ale#Escape('foo') . ' . --bar'},
+  \ ale#fixers#jq#Fix(bufnr(''))
