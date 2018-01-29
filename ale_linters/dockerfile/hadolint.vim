@@ -2,7 +2,7 @@
 
 " always, yes, never
 call ale#Set('dockerfile_hadolint_use_docker', 'never')
-call ale#Set('dockerfile_hadolint_docker_image', 'lukasmartinelli/hadolint')
+call ale#Set('dockerfile_hadolint_docker_image', 'hadolint/hadolint')
 
 function! ale_linters#dockerfile#hadolint#Handle(buffer, lines) abort
     " Matches patterns line the following:
