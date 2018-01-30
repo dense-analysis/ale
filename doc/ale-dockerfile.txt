@@ -5,7 +5,7 @@ ALE Dockerfile Integration                             *ale-dockerfile-options*
 ===============================================================================
 hadolint                                              *ale-dockerfile-hadolint*
 
-  hadolint can be found at: https://github.com/lukasmartinelli/hadolint
+  hadolint can be found at: https://github.com/hadolint/hadolint
 
 
 g:ale_dockerfile_hadolint_use_docker     *g:ale_dockerfile_hadolint_use_docker*
@@ -25,12 +25,12 @@ g:ale_dockerfile_hadolint_use_docker     *g:ale_dockerfile_hadolint_use_docker*
 g:ale_dockerfile_hadolint_image               *g:ale_dockerfile_hadolint_image*
                                               *b:ale_dockerfile_hadolint_image*
   Type: |String|
-  Default: `'lukasmartinelli/hadolint'`
+  Default: `'hadolint/hadolint'`
 
   This variable controls the docker image used to run hadolint.  The default
   is hadolint's author's build, and can be found at:
 
-    https://hub.docker.com/r/lukasmartinelli/hadolint/
+    https://hub.docker.com/r/hadolint/hadolint/
 
 
 ===============================================================================

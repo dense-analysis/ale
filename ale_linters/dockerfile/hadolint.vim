@@ -2,31 +2,51 @@
 
 " always, yes, never
 call ale#Set('dockerfile_hadolint_use_docker', 'never')
-call ale#Set('dockerfile_hadolint_docker_image', 'lukasmartinelli/hadolint')
+call ale#Set('dockerfile_hadolint_docker_image', 'hadolint/hadolint')
 
 function! ale_linters#dockerfile#hadolint#Handle(buffer, lines) abort
     " Matches patterns line the following:
     "
-    " stdin:19: F: Pipe chain should start with a raw value.
-    let l:pattern = '\v^/dev/stdin:?(\d+)? (\S+) (.+)$'
+    " /dev/stdin:19 DL3001 Pipe chain should start with a raw value.
+    " /dev/stdin:19:3 unexpected thing
+    let l:pattern = '\v^/dev/stdin:(\d+):?(\d+)? ((DL|SC)(\d+) )?(.+)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:lnum = 0
+        let l:colnum = 0
 
         if l:match[1] isnot# ''
             let l:lnum = l:match[1] + 0
         endif
 
+        if l:match[2] isnot# ''
+            let l:colnum = l:match[2] + 0
+        endif
+
         let l:type = 'W'
-        let l:text = l:match[3]
+        let l:text = l:match[6]
+        let l:detail = l:match[6]
+        let l:domain = 'https://github.com/hadolint/hadolint/wiki/'
+
+        if l:match[4] is# 'SC'
+            let l:domain = 'https://github.com/koalaman/shellcheck/wiki/'
+        endif
+
+        if l:match[5] isnot# ''
+            let l:code = l:match[4] . l:match[5]
+            let l:link = ' ( ' . l:domain . l:code . ' )'
+            let l:detail = l:code . l:link . "\n\n" . l:detail
+        else
+            let l:type = 'E'
+        endif
 
         call add(l:output, {
         \   'lnum': l:lnum,
-        \   'col': 0,
+        \   'col': l:colnum,
         \   'type': l:type,
         \   'text': l:text,
-        \   'nr': l:match[2],
+        \   'detail': l:detail
         \})
     endfor
 
