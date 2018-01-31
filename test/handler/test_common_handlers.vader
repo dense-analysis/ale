@@ -79,18 +79,21 @@ Execute (HandleUnixFormatAsError should handle some example lines of output):
   AssertEqual
   \ [
   \   {
+  \     'filename': 'file.go',
   \     'lnum': 27,
   \     'col': 0,
   \     'type': 'E',
   \     'text': 'missing argument for Printf("%s"): format reads arg 2, have only 1 args',
   \   },
   \   {
+  \     'filename': 'file.go',
   \     'lnum': 53,
   \     'col': 10,
   \     'type': 'E',
   \     'text': 'if block ends with a return statement, so drop this else and outdent its block (move short variable declaration to its own line if necessary)',
   \   },
   \   {
+  \     'filename': 'test.pug',
   \     'lnum': 1,
   \     'col': 1,
   \     'type': 'E',
@@ -107,12 +110,14 @@ Execute (HandleUnixFormatAsError should handle lines with no space after the col
   AssertEqual
   \ [
   \   {
+  \     'filename': 'some_file.xyz',
   \     'lnum': 27,
   \     'col': 0,
   \     'type': 'E',
   \     'text': 'foo',
   \   },
   \   {
+  \     'filename': 'some_file.xyz',
   \     'lnum': 53,
   \     'col': 10,
   \     'type': 'E',
@@ -128,6 +133,7 @@ Execute (HandleUnixFormatAsError should handle names with spaces):
   AssertEqual
   \ [
   \   {
+  \     'filename': '/Users/rrj/Notes/Astro/Taurus December SM.txt',
   \     'lnum': 13,
   \     'col': 90,
   \     'type': 'E',
@@ -142,12 +148,14 @@ Execute (HandleUnixFormatAsWarning should handle some example lines of output):
   AssertEqual
   \ [
   \   {
+  \     'filename': 'file.go',
   \     'lnum': 27,
   \     'col': 0,
   \     'type': 'W',
   \     'text': 'missing argument for Printf("%s"): format reads arg 2, have only 1 args',
   \   },
   \   {
+  \     'filename': 'file.go',
   \     'lnum': 53,
   \     'col': 10,
   \     'type': 'W',
@@ -163,12 +171,14 @@ Execute (Unix format functions should handle Windows paths):
   AssertEqual
   \ [
   \   {
+  \     'filename': 'C:\Users\w0rp\AppData\Local\Temp\Xyz123.go',
   \     'lnum': 27,
   \     'col': 0,
   \     'type': 'E',
   \     'text': 'foo',
   \   },
   \   {
+  \     'filename': 'C:\Users\w0rp\AppData\Local\Temp\Xyz123.go',
   \     'lnum': 53,
   \     'col': 10,
   \     'type': 'E',

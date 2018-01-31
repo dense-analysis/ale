@@ -2,14 +2,15 @@
 " Description: Error handling for errors in a Unix format.
 
 function! s:HandleUnixFormat(buffer, lines, type) abort
-    let l:pattern = '\v^[a-zA-Z]?:?[^:]+:(\d+):?(\d+)?:? ?(.+)$'
+    let l:pattern = '\v^(([a-zA-Z]:)?[^:]+):(\d+):?(\d+)?:? ?(.+)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
-        \   'lnum': l:match[1] + 0,
-        \   'col': l:match[2] + 0,
-        \   'text': l:match[3],
+        \   'filename': l:match[1],
+        \   'lnum': l:match[3] + 0,
+        \   'col': l:match[4] + 0,
+        \   'text': l:match[5],
         \   'type': a:type,
         \})
     endfor
