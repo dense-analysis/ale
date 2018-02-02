@@ -162,6 +162,7 @@ formatting.
 | Verilog | [iverilog](https://github.com/steveicarus/iverilog), [verilator](http://www.veripool.org/projects/verilator/wiki/Intro) |
 | Vim | [vint](https://github.com/Kuniwak/vint) |
 | Vim help^ | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good) |
+| Vue | [prettier](https://github.com/prettier/prettier) |
 | XHTML | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good) |
 | XML | [xmllint](http://xmlsoft.org/xmllint.html) |
 | YAML | [swaglint](https://github.com/byCedric/swaglint), [yamllint](https://yamllint.readthedocs.io/) |
