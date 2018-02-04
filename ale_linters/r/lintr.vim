@@ -1,13 +1,23 @@
-" Author: Michel Lang <michellang@gmail.com>, w0rp <devw0rp@gmail.com>
+" Author: Michel Lang <michellang@gmail.com>, w0rp <devw0rp@gmail.com>,
+"         Fenner Macrae <fmacrae.dev@gmail.com>
 " Description: This file adds support for checking R code with lintr.
 
 let g:ale_r_lintr_options = get(g:, 'ale_r_lintr_options', 'with_defaults()')
 " A reasonable alternative default:
 "   get(g:, 'ale_r_lintr_options', 'with_defaults(object_usage_linter = NULL)')
 
+
+let g:ale_r_lintr_lint_package = get(g:, 'ale_r_lintr_lint_package', 0)
+
 function! ale_linters#r#lintr#GetCommand(buffer) abort
+    if ale#Var(a:buffer, 'r_lintr_lint_package')
+        let l:lint_cmd = 'lint_package'
+    else
+        let l:lint_cmd = 'lint'
+    endif
+
     let l:cmd_string = 'suppressPackageStartupMessages(library(lintr));'
-    \   . 'lint(cache = FALSE, commandArgs(TRUE),'
+    \   . l:lint_cmd . '(cache = FALSE, commandArgs(TRUE),'
     \   . ale#Var(a:buffer, 'r_lintr_options') . ')'
 
     return ale#path#BufferCdString(a:buffer)
