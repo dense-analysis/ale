@@ -15,12 +15,8 @@ function! ale#fixers#isort#Fix(buffer) abort
         return 0
     endif
 
-    let l:config = ale#path#FindNearestFile(a:buffer, '.isort.cfg')
-    let l:config_options = !empty(l:config)
-    \   ? ' --settings-path ' . ale#Escape(l:config)
-    \   : ''
-
     return {
-    \   'command': ale#Escape(l:executable) . l:config_options . ' -',
+    \   'command': ale#path#BufferCdString(a:buffer)
+    \   .   ale#Escape(l:executable) . ' -',
     \}
 endfunction
