@@ -1,8 +1,13 @@
 " Author: Joshua Rubin <joshua@rubixconsulting.com>, Ben Reedy <https://github.com/breed808>,
 " Jeff Willette <jrwillette88@gmail.com>
 " Description: go build for Go files
-
 " inspired by work from dzhou121 <dzhou121@gmail.com>
+
+call ale#Set('go_gobuild_options', '')
+
+function! ale_linters#go#gobuild#ResetEnv() abort
+    unlet! s:go_env
+endfunction
 
 function! ale_linters#go#gobuild#GoEnv(buffer) abort
     if exists('s:go_env')
@@ -13,6 +18,8 @@ function! ale_linters#go#gobuild#GoEnv(buffer) abort
 endfunction
 
 function! ale_linters#go#gobuild#GetCommand(buffer, goenv_output) abort
+    let l:options = ale#Var(a:buffer, 'go_gobuild_options')
+
     if !exists('s:go_env')
         let s:go_env = {
         \   'GOPATH': a:goenv_output[0],
@@ -20,10 +27,16 @@ function! ale_linters#go#gobuild#GetCommand(buffer, goenv_output) abort
         \}
     endif
 
+    let l:gopath_env_command = has('win32')
+    \   ? 'set GOPATH=' . ale#Escape(s:go_env.GOPATH) . ' && '
+    \   : 'GOPATH=' . ale#Escape(s:go_env.GOPATH) . ' '
+
     " Run go test in local directory with relative path
-    return 'GOPATH=' . s:go_env.GOPATH
-    \   . ' cd ' . fnamemodify(bufname(a:buffer), ':.:h')
-    \   . ' && go test -c -o /dev/null ./'
+    return l:gopath_env_command
+    \   . ale#path#BufferCdString(a:buffer)
+    \   . 'go test'
+    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ' -c -o /dev/null ./'
 endfunction
 
 function! ale_linters#go#gobuild#GetMatches(lines) abort
