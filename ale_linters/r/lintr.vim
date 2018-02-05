@@ -11,7 +11,7 @@ let g:ale_r_lintr_lint_package = get(g:, 'ale_r_lintr_lint_package', 0)
 
 function! ale_linters#r#lintr#GetCommand(buffer) abort
     if ale#Var(a:buffer, 'r_lintr_lint_package')
-        let l:lint_cmd = 'lint_package(cache = FALSE, linters = ' 
+        let l:lint_cmd = 'lint_package(cache = FALSE, linters = '
         \   . ale#Var(a:buffer, 'r_lintr_options') . ')'
     else
         let l:lint_cmd = 'lint(cache = FALSE, commandArgs(TRUE), '
@@ -19,7 +19,7 @@ function! ale_linters#r#lintr#GetCommand(buffer) abort
     endif
 
     let l:cmd_string = 'suppressPackageStartupMessages(library(lintr));'
-    \   . l:lint_cmd 
+    \   . l:lint_cmd
 
     return ale#path#BufferCdString(a:buffer)
     \   . 'Rscript -e '
