@@ -18,7 +18,7 @@ Execute(The default lintr command should be correct):
   \   'cd ' . ale#Escape(getcwd()) . ' && '
   \   . 'Rscript -e '
   \   . ale#Escape('suppressPackageStartupMessages(library(lintr));'
-      \   .            'lint(cache = FALSE, commandArgs(TRUE),'
+      \   .            'lint(cache = FALSE, commandArgs(TRUE), '
       \   .            'with_defaults())')
   \   . ' %t',
   \ ale_linters#r#lintr#GetCommand(bufnr(''))
@@ -30,7 +30,7 @@ Execute(The lintr options should be configurable):
   \   'cd ' . ale#Escape(getcwd()) . ' && '
   \   . 'Rscript -e '
   \   . ale#Escape('suppressPackageStartupMessages(library(lintr));'
-      \   .            'lint(cache = FALSE, commandArgs(TRUE),'
+      \   .            'lint(cache = FALSE, commandArgs(TRUE), '
       \   .            'with_defaults(object_usage_linter = NULL))')
   \   . ' %t',
   \ ale_linters#r#lintr#GetCommand(bufnr(''))
@@ -42,7 +42,7 @@ Execute(If the lint_package flag is set, lintr::lint_package should be called):
   \   'cd ' . ale#Escape(getcwd()) . ' && '
   \   . 'Rscript -e '
   \   . ale#Escape('suppressPackageStartupMessages(library(lintr));'
-      \    .           'lint_package(cache = FALSE, commandArgs(TRUE),'
-      \    .           'with_defaults())')
+      \    .           'lint_package(cache = FALSE, '
+      \    .           'linters = with_defaults())')
   \   . ' %t',
   \ ale_linters#r#lintr#GetCommand(bufnr(''))
