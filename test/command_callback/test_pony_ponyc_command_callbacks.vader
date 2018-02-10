@@ -1,0 +1,23 @@
+Before:
+  Save g:ale_pony_ponyc_options
+
+  unlet! g:ale_pony_ponyc_options
+  unlet! b:ale_pony_ponyc_options
+
+  runtime ale_linters/pony/ponyc.vim
+
+After:
+  Restore
+  unlet! b:ale_pony_ponyc_options
+  call ale#linter#Reset()
+
+Execute(The options should be used in the command):
+  AssertEqual
+  \ 'ponyc --pass paint',
+  \ ale_linters#pony#ponyc#GetCommand(bufnr(''))
+
+  let b:ale_pony_ponyc_options = 'foobar'
+
+  AssertEqual
+  \ 'ponyc foobar',
+  \ ale_linters#pony#ponyc#GetCommand(bufnr(''))
