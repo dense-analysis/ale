@@ -1,7 +1,4 @@
 function! ale#toggle#InitAuGroups() abort
-    " This value used to be a Boolean as a Number, and is now a String.
-    let l:text_changed = '' . g:ale_lint_on_text_changed
-
     augroup ALEPatternOptionsGroup
         autocmd!
         autocmd BufEnter,BufRead * call ale#pattern_options#SetOptions(str2nr(expand('<abuf>')))
@@ -10,13 +7,7 @@ function! ale#toggle#InitAuGroups() abort
     augroup ALERunOnTextChangedGroup
         autocmd!
         if g:ale_enabled
-            if l:text_changed is? 'always' || l:text_changed is# '1'
-                autocmd TextChanged,TextChangedI * call ale#Queue(g:ale_lint_delay)
-            elseif l:text_changed is? 'normal'
-                autocmd TextChanged * call ale#Queue(g:ale_lint_delay)
-            elseif l:text_changed is? 'insert'
-                autocmd TextChangedI * call ale#Queue(g:ale_lint_delay)
-            endif
+            autocmd TextChanged,TextChangedI * call ale#events#TextChangedEvent(str2nr(expand('<abuf>')))
         endif
     augroup END
 
@@ -35,7 +26,7 @@ function! ale#toggle#InitAuGroups() abort
 
     augroup ALERunOnFiletypeChangeGroup
         autocmd!
-        if g:ale_enabled && g:ale_lint_on_filetype_changed
+        if g:ale_enabled
             " Only start linting if the FileType actually changes after
             " opening a buffer. The FileType will fire when buffers are opened.
             autocmd FileType * call ale#events#FileTypeEvent(
@@ -52,8 +43,8 @@ function! ale#toggle#InitAuGroups() abort
 
     augroup ALERunOnInsertLeave
         autocmd!
-        if g:ale_enabled && g:ale_lint_on_insert_leave
-            autocmd InsertLeave * call ale#Queue(0)
+        if g:ale_enabled
+            autocmd InsertLeave * call ale#events#InsertLeaveEvent(str2nr(expand('<abuf>')))
         endif
     augroup END
 

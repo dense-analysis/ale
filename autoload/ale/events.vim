@@ -11,8 +11,27 @@ function! ale#events#QuitRecently(buffer) abort
     return l:time && ale#util#ClockMilliseconds() - l:time < 1000
 endfunction
 
+function! ale#events#TextChangedEvent(buffer) abort
+    " This value used to be a Boolean as a Number, and is now a String.
+    let l:text_changed = '' . ale#Var(a:buffer, 'lint_on_text_changed')
+
+    if l:text_changed is? 'always' || l:text_changed is# '1'
+        call ale#Queue(g:ale_lint_delay)
+    elseif l:text_changed is? 'normal'
+        call ale#Queue(g:ale_lint_delay)
+    elseif l:text_changed is? 'insert'
+        call ale#Queue(g:ale_lint_delay)
+    endif
+endfunction
+
+function! ale#events#InsertLeaveEvent(buffer) abort
+    if ale#Var(a:buffer, 'lint_on_insert_leave')
+        call ale#Queue(0)
+    end
+endfunction
+
 function! ale#events#SaveEvent(buffer) abort
-    let l:should_lint = ale#Var(a:buffer, 'enabled') && g:ale_lint_on_save
+    let l:should_lint = ale#Var(a:buffer, 'enabled') && ale#Var(a:buffer, 'lint_on_save')
 
     if l:should_lint
         call setbufvar(a:buffer, 'ale_save_event_fired', 1)
@@ -30,7 +49,7 @@ endfunction
 
 function! s:LintOnEnter(buffer) abort
     if ale#Var(a:buffer, 'enabled')
-    \&& g:ale_lint_on_enter
+    \&& ale#Var(a:buffer, 'lint_on_enter')
     \&& has_key(b:, 'ale_file_changed')
         call remove(b:, 'ale_file_changed')
         call ale#Queue(0, 'lint_file', a:buffer)
@@ -47,6 +66,10 @@ function! ale#events#EnterEvent(buffer) abort
 endfunction
 
 function! ale#events#FileTypeEvent(buffer, new_filetype) abort
+    if !ale#Var(a:buffer, 'lint_on_filetype_changed')
+        return
+    end
+
     let l:filetype = getbufvar(a:buffer, 'ale_original_filetype', '')
 
     " If we're setting the filetype for the first time after it was blank,
