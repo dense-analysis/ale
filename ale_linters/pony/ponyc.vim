@@ -8,7 +8,7 @@ function! ale_linters#pony#ponyc#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#pony#ponyc#GetCommand(buffer) abort
-    return ale_linters#pony#ponyc#GetExecutable(a:buffer)
+    return ale#Escape(ale_linters#pony#ponyc#GetExecutable(a:buffer))
     \   . ' ' . ale#Var(a:buffer, 'pony_ponyc_options')
 endfunction
 

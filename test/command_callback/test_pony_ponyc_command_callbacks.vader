@@ -13,11 +13,11 @@ After:
 
 Execute(The options should be used in the command):
   AssertEqual
-  \ 'ponyc --pass paint',
+  \ ale#Escape('ponyc') . ' --pass paint',
   \ ale_linters#pony#ponyc#GetCommand(bufnr(''))
 
   let b:ale_pony_ponyc_options = 'foobar'
 
   AssertEqual
-  \ 'ponyc foobar',
+  \ ale#Escape('ponyc') . ' foobar',
   \ ale_linters#pony#ponyc#GetCommand(bufnr(''))
