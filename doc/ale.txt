@@ -160,6 +160,8 @@ CONTENTS                                                         *ale-contents*
       write-good..........................|ale-po-write-good|
     pod...................................|ale-pod-options|
       write-good..........................|ale-pod-write-good|
+    pony..................................|ale-pony-options|
+      ponyc...............................|ale-pony-ponyc|
     proto.................................|ale-proto-options|
       protoc-gen-lint.....................|ale-proto-protoc-gen-lint|
     pug...................................|ale-pug-options|
@@ -349,6 +351,7 @@ Notes:
 * PHP: `hack`, `hackfmt`, `langserver`, `phan`, `php -l`, `phpcs`, `phpmd`, `phpstan`, `phpcbf`
 * PO: `alex`!!, `msgfmt`, `proselint`, `write-good`
 * Pod: `alex`!!, `proselint`, `write-good`
+* Pony: `ponyc`
 * proto: `protoc-gen-lint`
 * Pug: `pug-lint`
 * Puppet: `puppet`, `puppet-lint`
