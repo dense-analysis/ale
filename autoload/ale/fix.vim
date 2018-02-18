@@ -392,7 +392,13 @@ function! s:GetCallbacks() abort
             endif
         endif
 
-        call add(l:corrected_list, ale#util#GetFunction(l:Item))
+        try
+            call add(l:corrected_list, ale#util#GetFunction(l:Item))
+        catch /E475/
+            " Rethrow exceptions for failing to get a function so we can print
+            " a friendly message about it.
+            throw 'BADNAME ' . v:exception
+        endtry
     endfor
 
     return l:corrected_list
@@ -427,7 +433,7 @@ function! ale#fix#Fix(...) abort
 
     try
         let l:callback_list = s:GetCallbacks()
-    catch /E700/
+    catch /E700\|BADNAME/
         let l:function_name = join(split(split(v:exception, ':')[3]))
         let l:echo_message = printf(
         \   'There is no fixer named `%s`. Check :ALEFixSuggest',

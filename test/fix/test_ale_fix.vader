@@ -574,6 +574,16 @@ Execute(ALE should print a message telling you something isn't a valid fixer whe
 
   AssertEqual 'There is no fixer named `invalidname`. Check :ALEFixSuggest', GetLastMessage()
 
+Execute(ALE should complain about invalid fixers with minuses in the name):
+  let g:ale_fixers.testft = ['foo-bar']
+  ALEFix
+
+  AssertEqual 'There is no fixer named `foo-bar`. Check :ALEFixSuggest', GetLastMessage()
+
+Execute(ALE should tolerate valid fixers with minuses in the name):
+  let g:ale_fixers.testft = ['prettier-standard']
+  ALEFix
+
 Execute(Test fixing with chained callbacks):
   let g:ale_fixers.testft = ['FirstChainCallback']
   ALEFix
