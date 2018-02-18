@@ -44,8 +44,8 @@ function! ale_linters#python#pycodestyle#Handle(buffer, lines) abort
         \   'code': l:match[4],
         \}
 
-        " E999 is not a style error, it's a syntax error.
-        if l:match[4] is# 'E999'
+        " E999 and E112 are syntax errors.
+        if l:match[4] is# 'E999' || l:match[4] is# 'E112'
             unlet l:item.sub_type
         endif
 
