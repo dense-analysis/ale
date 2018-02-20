@@ -158,7 +158,7 @@ flawfinder                                                 *ale-cpp-flawfinder*
 
 g:ale_cpp_flawfinder_minlevel                   *g:ale_cpp_flawfinder_minlevel*
                                                 *b:ale_cpp_flawfinder_minlevel*
-  Type: |Integer|
+  Type: |Number|
   Default: `1`
 
   This variable can be changed to ignore risks under the given risk threshold.

@@ -148,7 +148,7 @@ flawfinder                                                   *ale-c-flawfinder*
 
 g:ale_c_flawfinder_minlevel                       *g:ale_c_flawfinder_minlevel*
                                                   *b:ale_c_flawfinder_minlevel*
-  Type: |Integer|
+  Type: |Number|
   Default: `1`
 
   This variable can be changed to ignore risks under the given risk threshold.
