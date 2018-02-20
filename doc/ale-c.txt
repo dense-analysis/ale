@@ -144,6 +144,17 @@ g:ale_c_cppcheck_options                             *g:ale_c_cppcheck_options*
 
 
 ===============================================================================
+flawfinder                                                   *ale-c-flawfinder*
+
+g:ale_c_flawfinder_minlevel                       *g:ale_c_flawfinder_minlevel*
+                                                  *b:ale_c_flawfinder_minlevel*
+  Type: |Integer|
+  Default: `1`
+
+  This variable can be changed to ignore risks under the given risk threshold.
+
+
+===============================================================================
 gcc                                                                 *ale-c-gcc*
 
 g:ale_c_gcc_executable                                 *g:ale_c_gcc_executable*
