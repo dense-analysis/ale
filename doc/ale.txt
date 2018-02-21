@@ -28,6 +28,7 @@ CONTENTS                                                         *ale-contents*
       clang-format........................|ale-c-clangformat|
       clangtidy...........................|ale-c-clangtidy|
       cppcheck............................|ale-c-cppcheck|
+      flawfinder..........................|ale-c-flawfinder|
       gcc.................................|ale-c-gcc|
     chef..................................|ale-chef-options|
       foodcritic..........................|ale-chef-foodcritic|
@@ -42,6 +43,7 @@ CONTENTS                                                         *ale-contents*
       clangtidy...........................|ale-cpp-clangtidy|
       cppcheck............................|ale-cpp-cppcheck|
       cpplint.............................|ale-cpp-cpplint|
+      flawfinder..........................|ale-cpp-flawfinder|
       gcc.................................|ale-cpp-gcc|
     c#....................................|ale-cs-options|
       mcs.................................|ale-cs-mcs|
