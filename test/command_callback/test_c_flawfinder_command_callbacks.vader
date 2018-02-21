@@ -32,4 +32,20 @@ Execute(The minlevel of flawfinder should be configurable):
   AssertEqual
   \ ale#Escape('flawfinder')
   \   . ' -CDQS --minlevel=8 %t',
-  \ ale_linters#c#flawfinder#GetCommand(bufnr(''))  
+  \ ale_linters#c#flawfinder#GetCommand(bufnr(''))
+
+Execute(Additional flawfinder options should be configurable):
+  let b:ale_c_flawfinder_options = ' --foobar'
+
+  AssertEqual
+  \ ale#Escape('flawfinder')
+  \   . ' -CDQS --foobar --minlevel=1 %t',
+  \ ale_linters#c#flawfinder#GetCommand(bufnr(''))
+
+Execute(The flawfinder exectable should be configurable):
+  let b:ale_c_flawfinder_executable = 'foo/bar'
+
+  AssertEqual
+  \ ale#Escape('foo/bar')
+  \   . ' -CDQS --minlevel=1 %t',
+  \ ale_linters#c#flawfinder#GetCommand(bufnr(''))
