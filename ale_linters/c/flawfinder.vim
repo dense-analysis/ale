@@ -27,7 +27,7 @@ function! ale_linters#c#flawfinder#GetCommand(buffer) abort
    \  . l:minlevel
    \  . ' %t'
 endfunction
-      
+
 call ale#linter#Define('c', {
 \  'name': 'flawfinder',
 \  'output_stream': 'stdout',
