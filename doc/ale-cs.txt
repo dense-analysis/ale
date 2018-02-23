@@ -94,6 +94,7 @@ g:ale_cs_mcsc_assemblies                             *g:ale_cs_mcsc_assemblies*
     " Compile C# programs with the Unity engine DLL file on Mac.
     let g:ale_cs_mcsc_assemblies = [
     \ '/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll',
+    \ 'path-to-unityproject/obj/Debug',
     \]
 <
 
