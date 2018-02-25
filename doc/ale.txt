@@ -80,6 +80,7 @@ CONTENTS                                                         *ale-contents*
       gobuild.............................|ale-go-gobuild|
       gofmt...............................|ale-go-gofmt|
       gometalinter........................|ale-go-gometalinter|
+      staticcheck.........................|ale-go-staticcheck|
     graphql...............................|ale-graphql-options|
       eslint..............................|ale-graphql-eslint|
       gqlint..............................|ale-graphql-gqlint|

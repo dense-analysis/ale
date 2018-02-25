@@ -20,6 +20,7 @@ the benefit of running a number of linters, more than ALE would by default,
 while ensuring it doesn't run any linters known to be slow or resource
 intensive.
 
+
 ===============================================================================
 gobuild                                                        *ale-go-gobuild*
 
@@ -41,6 +42,7 @@ g:ale_go_gofmt_options                                 *g:ale_go_gofmt_options*
   Default: `''`
 
   This variable can be set to pass additional options to the gofmt fixer.
+
 
 ===============================================================================
 gometalinter                                              *ale-go-gometalinter*
@@ -69,6 +71,36 @@ g:ale_go_gometalinter_options                   *g:ale_go_gometalinter_options*
   resources it's recommended to set this option to a value of `--fast` if you
   use `gometalinter` as one of the linters in |g:ale_linters|. This disables a
   number of linters known to be slow or consume a lot of resources.
+
+
+g:ale_go_gometalinter_package                   *g:ale_go_gometalinter_package*
+                                                *b:ale_go_gometalinter_package*
+  Type: |Number|
+  Default: `0`
+
+  When set to `1`, the whole Go package will be checked instead of only the
+  current file.
+
+
+===============================================================================
+staticcheck                                                *ale-go-staticcheck*
+
+g:ale_go_staticcheck_options                     *g:ale_go_staticcheck_options*
+                                                 *b:ale_go_staticcheck_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to the staticcheck
+  linter.
+
+
+g:ale_go_staticcheck_package                     *g:ale_go_staticcheck_package*
+                                                 *b:ale_go_staticcheck_package*
+  Type: |Number|
+  Default: `0`
+
+  When set to `1`, the whole Go package will be checked instead of only the
+  current file.
 
 
 ===============================================================================
