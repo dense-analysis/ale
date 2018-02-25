@@ -3,6 +3,7 @@
 function! ale#events#QuitEvent(buffer) abort
     " Remember when ALE is quitting for BufWrite, etc.
     call setbufvar(a:buffer, 'ale_quitting', ale#util#ClockMilliseconds())
+    if empty(&buftype) | lclose | endif
 endfunction
 
 function! ale#events#QuitRecently(buffer) abort
