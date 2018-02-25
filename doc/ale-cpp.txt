@@ -157,7 +157,7 @@ g:ale_cpp_cpplint_options                           *g:ale_cpp_cpplint_options*
 flawfinder                                                 *ale-cpp-flawfinder*
 
 g:ale_cpp_flawfinder_executable               *g:ale_cpp_flawfinder_executable*
-                                              *g:ale_cpp_flawfinder_executable*
+                                              *b:ale_cpp_flawfinder_executable*
   Type: |String|
   Default: `'flawfinder'`
 
