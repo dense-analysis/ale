@@ -1,0 +1,16 @@
+Before:
+  runtime ale_linters/go/govet.vim
+
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+After:
+  Restore
+
+  call ale#linter#Reset()
+  call ale#test#RestoreDirectory()
+
+Execute(The default command should be correct):
+  AssertEqual
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \ . ' go vet .',
+  \ ale_linters#go#govet#GetCommand(bufnr(''))
