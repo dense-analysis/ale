@@ -921,10 +921,10 @@ g:ale_keep_list_window_open                       *g:ale_keep_list_window_open*
   Type: |Number|
   Default: `0`
 
-  When set to `1`, this option will keep the loclist or quickfix windows
-  event after all warnings/errors have been removed for files. By default
-  the loclist or quicfix windows will be closed automatically when there
-  are no warnings or errors.
+  When set to `1`, this option will keep the loclist or quickfix windows event
+  after all warnings/errors have been removed for files. By default the
+  loclist or quickfix windows will be closed automatically when there are no
+  warnings or errors.
 
   See |g:ale_open_list|
 
@@ -1215,10 +1215,19 @@ g:ale_open_list                                               *g:ale_open_list*
 
   The window will be kept open until all warnings or errors are cleared,
   including those not set by ALE, unless |g:ale_keep_list_window_open| is set
-  to `1`, in which case the window will be kept open until closed manually.
+  to `1`, in which case the window will be kept open when no problems are
+  found.
 
   The window size can be configured with |g:ale_list_window_size|.
 
+  If you want to close the loclist window automatically when the buffer is
+  closed, you can set up the following |autocmd| command: >
+
+  augroup CloseLoclistWindowGroup
+    autocmd!
+    autocmd QuitPre * if empty(&buftype) | lclose | endif
+  augroup END
+<
 
 g:ale_pattern_options                                   *g:ale_pattern_options*
 
