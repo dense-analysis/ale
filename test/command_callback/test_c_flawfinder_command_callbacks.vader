@@ -1,0 +1,51 @@
+Before:
+  Save g:ale_c_flawfinder_executable
+  Save g:ale_c_flawfinder_options
+  Save g:ale_c_flawfinder_minlevel
+
+  unlet! g:ale_c_flawfinder_executable
+  unlet! b:ale_c_flawfinder_executable
+  unlet! g:ale_c_flawfinder_options
+  unlet! b:ale_c_flawfinder_options
+  unlet! g:ale_c_flawfinder_minlevel
+  unlet! b:ale_c_flawfinder_minlevel
+
+  runtime ale_linters/c/flawfinder.vim
+
+After:
+  unlet! b:ale_c_flawfinder_executable
+  unlet! b:ale_c_flawfinder_options
+  unlet! b:ale_c_flawfinder_minlevel
+
+  Restore
+  call ale#linter#Reset()
+
+Execute(The flawfinder command should be correct):
+  AssertEqual
+  \ ale#Escape('flawfinder')
+  \   . ' -CDQS --minlevel=1 %t',
+  \ ale_linters#c#flawfinder#GetCommand(bufnr(''))
+
+Execute(The minlevel of flawfinder should be configurable):
+  let b:ale_c_flawfinder_minlevel = 8
+
+  AssertEqual
+  \ ale#Escape('flawfinder')
+  \   . ' -CDQS --minlevel=8 %t',
+  \ ale_linters#c#flawfinder#GetCommand(bufnr(''))
+
+Execute(Additional flawfinder options should be configurable):
+  let b:ale_c_flawfinder_options = ' --foobar'
+
+  AssertEqual
+  \ ale#Escape('flawfinder')
+  \   . ' -CDQS --foobar --minlevel=1 %t',
+  \ ale_linters#c#flawfinder#GetCommand(bufnr(''))
+
+Execute(The flawfinder exectable should be configurable):
+  let b:ale_c_flawfinder_executable = 'foo/bar'
+
+  AssertEqual
+  \ ale#Escape('foo/bar')
+  \   . ' -CDQS --minlevel=1 %t',
+  \ ale_linters#c#flawfinder#GetCommand(bufnr(''))

@@ -144,6 +144,33 @@ g:ale_c_cppcheck_options                             *g:ale_c_cppcheck_options*
 
 
 ===============================================================================
+flawfinder                                                   *ale-c-flawfinder*
+
+g:ale_c_flawfinder_executable                   *g:ale_c_flawfinder_executable*
+                                                *g:ale_c_flawfinder_executable*
+  Type: |String|
+  Default: `'flawfinder'`
+
+  This variable can be changed to use a different executable for flawfinder.
+
+
+g:ale_c_flawfinder_minlevel                       *g:ale_c_flawfinder_minlevel*
+                                                  *b:ale_c_flawfinder_minlevel*
+  Type: |Number|
+  Default: `1`
+
+  This variable can be changed to ignore risks under the given risk threshold.
+
+
+g:ale_c_flawfinder_options                                 *g:ale-c-flawfinder*
+                                                           *b:ale-c-flawfinder*
+  Type: |String|
+  Default: `''`
+
+  This variable can be used to pass extra options into the flawfinder command.
+
+
+===============================================================================
 gcc                                                                 *ale-c-gcc*
 
 g:ale_c_gcc_executable                                 *g:ale_c_gcc_executable*
