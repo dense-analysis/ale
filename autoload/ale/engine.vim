@@ -76,6 +76,8 @@ function! ale#engine#InitBufferInfo(buffer) abort
     return 0
 endfunction
 
+" This function is documented and part of the public API.
+"
 " Return 1 if ALE is busy checking a given buffer
 function! ale#engine#IsCheckingBuffer(buffer) abort
     let l:info = get(g:ale_buffer_info, a:buffer, {})

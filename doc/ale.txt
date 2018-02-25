@@ -1907,6 +1907,13 @@ ale#engine#GetLoclist(buffer)                         *ale#engine#GetLoclist()*
   be copied before applying |map()| or |filter()|.
 
 
+ale#engine#IsCheckingBuffer(buffer)             *ale#engine#IsCheckingBuffer()*
+
+  Given a buffer number, returns `1` when ALE is busy checking that buffer.
+
+  This function can be used for status lines, tab names, etc.
+
+
 ale#engine#ManageFile(buffer, filename)               *ale#engine#ManageFile()*
 
   Given a buffer number for a buffer currently running some linting tasks
