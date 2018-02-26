@@ -1234,7 +1234,7 @@ g:ale_open_list                                               *g:ale_open_list*
 <
 
 g:ale_list_vertical                                       *g:ale_list_vertical*
-                                                          *g:ale_list_vertical*
+                                                          *b:ale_list_vertical*
   Type: |Number|
   Default: `0`
 

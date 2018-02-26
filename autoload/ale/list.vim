@@ -99,7 +99,7 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
 
         " open windows vertically instead of default horizontally
         let l:open_type = ''
-        if get(g:, 'ale_list_vertical') == 1
+        if ale#Var(a:buffer, 'list_vertical') == 1
             let l:open_type = 'vert '
         endif
         if g:ale_set_quickfix

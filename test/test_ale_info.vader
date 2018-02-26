@@ -66,6 +66,7 @@ Before:
   \  'let g:ale_linters = {}',
   \  'let g:ale_linters_explicit = 0',
   \  'let g:ale_list_window_size = 10',
+  \  'let g:ale_list_vertical = 0',
   \  'let g:ale_loclist_msg_format = ''%code: %%s''',
   \  'let g:ale_max_buffer_history_size = 20',
   \  'let g:ale_max_signs = -1',

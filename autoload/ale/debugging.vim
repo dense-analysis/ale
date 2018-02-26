@@ -29,6 +29,7 @@ let s:global_variable_list = [
 \    'ale_linters',
 \    'ale_linters_explicit',
 \    'ale_list_window_size',
+\    'ale_list_vertical',
 \    'ale_loclist_msg_format',
 \    'ale_max_buffer_history_size',
 \    'ale_max_signs',
