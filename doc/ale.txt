@@ -136,6 +136,7 @@ CONTENTS                                                         *ale-contents*
       luac................................|ale-lua-luac|
       luacheck............................|ale-lua-luacheck|
     markdown..............................|ale-markdown-options|
+      mdl.................................|ale-markdown-mdl|
       prettier............................|ale-markdown-prettier|
       write-good..........................|ale-markdown-write-good|
     nroff.................................|ale-nroff-options|
