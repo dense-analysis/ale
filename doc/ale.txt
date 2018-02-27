@@ -167,6 +167,7 @@ CONTENTS                                                         *ale-contents*
       ponyc...............................|ale-pony-ponyc|
     proto.................................|ale-proto-options|
       protoc-gen-lint.....................|ale-proto-protoc-gen-lint|
+      prototool...........................|ale-proto-prototool|
     pug...................................|ale-pug-options|
       puglint.............................|ale-pug-puglint|
     puppet................................|ale-puppet-options|
@@ -355,7 +356,7 @@ Notes:
 * PO: `alex`!!, `msgfmt`, `proselint`, `write-good`
 * Pod: `alex`!!, `proselint`, `write-good`
 * Pony: `ponyc`
-* proto: `protoc-gen-lint`
+* proto: `protoc-gen-lint`, `prototool`!!
 * Pug: `pug-lint`
 * Puppet: `puppet`, `puppet-lint`
 * Python: `autopep8`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pyls`, `pylint`!!, `yapf`
