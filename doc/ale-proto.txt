@@ -46,7 +46,7 @@ prototool                                                  *ale-proto-prototool*
 
   See https://github.com/uber/prototool for more details.
 
-g:ale_proto_prototool_command                  *g:ale_proto_prototool_command*
+g:ale_proto_prototool_command                   *g:ale_proto_prototool_command*
 
   Type: |String|
   Default: `'all'`
