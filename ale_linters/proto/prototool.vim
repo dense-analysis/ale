@@ -5,13 +5,13 @@ call ale#Set('proto_prototool_command', 'all')
 
 function! ale_linters#proto#prototool#GetCommand(buffer) abort
     let l:command = ale#Var(a:buffer, 'proto_prototool_command')
-    if l:command ==? 'all'
+    if l:command is? 'all'
       " Compile the file, then do generation, then lint
       return 'prototool all --disable-format --dir-mode %s'
-    elseif l:command ==? 'compile'
+    elseif l:command is? 'compile'
       " Compile the file only, doing no generation
       return 'prototool compile --dir-mode %s'
-    elseif l:command ==? 'lint'
+    elseif l:command is? 'lint'
       " Compile the file and then lint, doing no generation
       return 'prototool lint --dir-mode %s'
     else
