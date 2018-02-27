@@ -40,7 +40,8 @@ function! ale_linters#perl#perl#Handle(buffer, lines) abort
         let l:file = l:match[2]
         let l:text = l:match[1]
 
-        if ( ale#path#IsBufferPath(a:buffer, l:file) && !has_key(l:seen,l:line) )
+        if ale#path#IsBufferPath(a:buffer, l:file)
+        \ && !has_key(l:seen,l:line)
         \ && (
         \   l:text isnot# 'BEGIN failed--compilation aborted'
         \   || empty(l:output)
