@@ -37,9 +37,10 @@ function! ale_linters#perl#perl#Handle(buffer, lines) abort
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:line = l:match[3]
+        let l:file = l:match[2]
         let l:text = l:match[1]
 
-        if ( ale#path#IsBufferPath(a:buffer, l:match[2]) && !has_key(l:seen,l:line) )
+        if ( ale#path#IsBufferPath(a:buffer, l:file) && !has_key(l:seen,l:line) )
         \ && (
         \   l:text isnot# 'BEGIN failed--compilation aborted'
         \   || empty(l:output)
