@@ -10,19 +10,19 @@ After:
 
 Execute(The default command should be correct):
   AssertEqual
-  \ 'prototool all --disable-format --dirmode ' . '%s',
+  \ 'prototool all --disable-format --dir-mode %s',
   \ ale_linters#proto#prototool#GetCommand(bufnr(''))
 
 Execute(The compile command should be correct):
   let b:ale_proto_prototool_command = 'compile'
 
   AssertEqual
-  \ 'prototool compile --dirmode ' . '%s',
+  \ 'prototool compile --dir-mode %s',
   \ ale_linters#proto#prototool#GetCommand(bufnr(''))
 
 Execute(The lint command should be correct):
   let b:ale_proto_prototool_command = 'lint'
 
   AssertEqual
-  \ 'prototool lint --dirmode ' . '%s',
+  \ 'prototool lint --dir-mode %s',
   \ ale_linters#proto#prototool#GetCommand(bufnr(''))
