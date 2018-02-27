@@ -5,13 +5,13 @@ call ale#Set('proto_prototool_command', 'all')
 
 function! ale_linters#proto#prototool#GetCommand(buffer) abort
     let l:command = ale#Var(a:buffer, 'proto_prototool_command')
-    if l:command == 'all'
+    if l:command ==? 'all'
       " Compile the file, then do generation, then lint
       return 'prototool all --disable-format --dir-mode %s'
-    elseif l:command == 'compile'
+    elseif l:command ==? 'compile'
       " Compile the file only, doing no generation
       return 'prototool compile --dir-mode %s'
-    elseif l:command == 'lint'
+    elseif l:command ==? 'lint'
       " Compile the file and then lint, doing no generation
       return 'prototool lint --dir-mode %s'
     else
@@ -22,39 +22,39 @@ function! ale_linters#proto#prototool#GetCommand(buffer) abort
 endfunction
 
 call ale#linter#Define('proto', {
-			\   'name': 'prototool',
-			\   'lint_file': 1,
-			\   'output_stream': 'stdout',
-			\   'executable': 'prototool',
-      \   'command_callback': 'ale_linters#proto#prototool#GetCommand',
-			\   'callback': 'ale#handlers#unix#HandleAsError',
-			\})
+    \   'name': 'prototool',
+    \   'lint_file': 1,
+    \   'output_stream': 'stdout',
+    \   'executable': 'prototool',
+    \   'command_callback': 'ale_linters#proto#prototool#GetCommand',
+    \   'callback': 'ale#handlers#unix#HandleAsError',
+    \})
 
 " TODO: not sure how to integrate the below properly, see PR description
 
-function! PrototoolEnable()
-  silent! let g:prototool_format_enable = 1
+function! PrototoolEnable() abort
+    silent! let g:prototool_format_enable = 1
 endfunction
 
-function! PrototoolDisable()
-  silent! unlet g:prototool_format_enable
+function! PrototoolDisable() abort
+    silent! unlet g:prototool_format_enable
 endfunction
 
-function! PrototoolFormatToggle()
-  if exists("g:prototool_format_enable")
-    call PrototoolDisable()
-    echo "prototool format DISABLED"
-  else
-    call PrototoolEnable()
-    echo "prototool format ENABLED"
-  endif
+function! PrototoolFormatToggle() abort
+    if exists('g:prototool_format_enable')
+        call PrototoolDisable()
+        execute 'echo "prototool format DISABLED"'
+    else
+        call PrototoolEnable()
+        execute 'echo "prototool format ENABLED"'
+    endif
 endfunction
 
-function! PrototoolFormat()
-  if exists("g:prototool_format_enable")
-    silent! execute "!prototool format -w %"
-    silent! edit
-  endif
+function! PrototoolFormat() abort
+    if exists('g:prototool_format_enable')
+        silent! execute '!prototool format -w %'
+        silent! edit
+    endif
 endfunction
 
 autocmd BufEnter,BufWritePost *.proto :call PrototoolFormat()

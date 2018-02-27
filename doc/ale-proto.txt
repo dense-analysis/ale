@@ -34,7 +34,7 @@ g:ale_proto_protoc_gen_lint_options       *g:ale_proto_protoc_gen_lint_options*
   before any user-supplied options.
 
 ===============================================================================
-prototool                                      *ale-proto-prototool*
+prototool                                                  *ale-proto-prototool*
 
   Prototool provides a full toolbelt for working with `.proto` files. The
   compile, generate, and lint commands are integrated into ale.
@@ -46,7 +46,7 @@ prototool                                      *ale-proto-prototool*
 
   See https://github.com/uber/prototool for more details.
 
-g:ale_proto_prototool_command       *g:ale_proto_prototool_command*
+g:ale_proto_prototool_command                  *g:ale_proto_prototool_command*
 
   Type: |String|
   Default: `'all'`
