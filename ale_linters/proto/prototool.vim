@@ -32,20 +32,20 @@ call ale#linter#Define('proto', {
 
 " TODO: not sure how to integrate the below properly, see PR description
 
-function! PrototoolEnable() abort
+function! PrototoolFormatEnable() abort
     silent! let g:prototool_format_enable = 1
 endfunction
 
-function! PrototoolDisable() abort
+function! PrototoolFormatDisable() abort
     silent! unlet g:prototool_format_enable
 endfunction
 
 function! PrototoolFormatToggle() abort
     if exists('g:prototool_format_enable')
-        call PrototoolDisable()
+        call PrototoolFormatDisable()
         execute 'echo "prototool format DISABLED"'
     else
-        call PrototoolEnable()
+        call PrototoolFormatEnable()
         execute 'echo "prototool format ENABLED"'
     endif
 endfunction
