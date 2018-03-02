@@ -47,3 +47,42 @@ Execute(The Perl linter should complain about failing to locate modules):
   \ 'Unable to build `ro` accessor for slot `path` in `App::CPANFileUpdate` because the slot cannot be found. at /extlib/Method/Traits.pm line 189.',
   \ 'BEGIN failed--compilation aborted at - line 10.',
   \ ])
+
+Execute(The Perl linter should not report warnings as errors):
+  AssertEqual
+  \ [
+  \ {'lnum': '5', 'type': 'W', 'text': '"my" variable $foo masks earlier declaration in same scope'},
+  \ ],
+  \ ale_linters#perl#perl#Handle(bufnr(''), [
+  \ '"my" variable $foo masks earlier declaration in same scope at - line 5.',
+  \ 't.pl syntax OK',
+  \ ])
+
+Execute(The Perl linter does not default to reporting generic error):
+  AssertEqual
+  \ [
+  \ {'lnum': '8', 'type': 'E', 'text': 'Missing right curly or square bracket'},
+  \ ],
+  \ ale_linters#perl#perl#Handle(bufnr(''), [
+  \ 'Missing right curly or square bracket at - line 8, at end of line',
+  \ 'syntax error at - line 8, at EOF',
+  \ 'Execution of t.pl aborted due to compilation errors.',
+  \ ])
+
+" The first "error" is actually a warning, but the current implementation
+" doesn't have a good way of teasing out the warnings from amongst the
+" errors.  If we're able to do this in future, then we'll want to switch
+" the first "E" to a "W".
+
+Execute(The Perl linter reports errors even when mixed with warnings):
+  AssertEqual
+  \ [
+  \ {'lnum': '5', 'type': 'E', 'text': '"my" variable $foo masks earlier declaration in same scope'},
+  \ {'lnum': '8', 'type': 'E', 'text': 'Missing right curly or square bracket'},
+  \ ],
+  \ ale_linters#perl#perl#Handle(bufnr(''), [
+  \ '"my" variable $foo masks earlier declaration in same scope at - line 5.',
+  \ 'Missing right curly or square bracket at - line 8, at end of line',
+  \ 'syntax error at - line 8, at EOF',
+  \ 'Execution of t.pl aborted due to compilation errors.',
+  \ ])
