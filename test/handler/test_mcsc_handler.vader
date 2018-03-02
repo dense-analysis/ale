@@ -3,10 +3,14 @@ Before:
 
   unlet! g:ale_cs_mcsc_source
 
+  call ale#test#SetDirectory('/testplugin/test/handler')
+
   runtime ale_linters/cs/mcsc.vim
 
 After:
   unlet! g:ale_cs_mcsc_source
+
+  call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
 Execute(The mcs handler should work with the default of the buffer's directory):
@@ -18,7 +22,7 @@ Execute(The mcs handler should work with the default of the buffer's directory):
   \     'text': '; expected',
   \     'code': 'CS1001',
   \     'type': 'E',
-  \     'filename': ale#path#Simplify(expand('%:p:h') . '/Test.cs'),
+  \     'filename': ale#path#Simplify(g:dir . '/Test.cs'),
   \   },
   \ ],
   \ ale_linters#cs#mcsc#Handle(347, [
