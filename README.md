@@ -577,6 +577,9 @@ let g:ale_open_list = 1
 let g:ale_keep_list_window_open = 1
 ```
 
+You can also set `let g:ale_list_vertical = 1` to open the windows vertically
+instead of the default horizontally.
+
 <a name="faq-jsx-stylelint-eslint"></a>
 
 ### 5.xii. How can I check JSX files with both stylelint and eslint?

@@ -5,6 +5,7 @@ Before:
   Save g:ale_open_list
   Save g:ale_keep_list_window_open
   Save g:ale_list_window_size
+  Save g:ale_list_vertical
   Save g:ale_buffer_info
   Save g:ale_set_lists_synchronously
 
@@ -13,6 +14,7 @@ Before:
   let g:ale_open_list = 0
   let g:ale_keep_list_window_open = 0
   let g:ale_list_window_size = 10
+  let g:ale_list_vertical = 0
   let g:ale_set_lists_synchronously = 1
 
   let g:loclist = [
@@ -33,16 +35,29 @@ Before:
     return 0
   endfunction
 
+  " If the window is vertical, window size should match column size/width
+  function GetQuickfixIsVertical(cols) abort
+    for l:win in range(1, winnr('$'))
+        if getwinvar(l:win, '&buftype') is# 'quickfix'
+            return winwidth(l:win) == a:cols
+        endif
+    endfor
+
+    return 0
+  endfunction
+
 After:
   Restore
 
   unlet! g:loclist
+  unlet! b:ale_list_vertical
   unlet! b:ale_list_window_size
   unlet! b:ale_open_list
   unlet! b:ale_keep_list_window_open
   unlet! b:ale_save_event_fired
 
   delfunction GetQuickfixHeight
+  delfunction GetQuickfixIsVertical
 
   " Close quickfix window after every execute block
   lcl
@@ -97,6 +112,24 @@ Execute(The quickfix window height should be correct for the loclist with buffer
   call ale#list#SetLists(bufnr('%'), g:loclist)
 
   AssertEqual 8, GetQuickfixHeight()
+
+Execute(The quickfix window should be vertical for the loclist with appropriate variables):
+  let g:ale_open_list = 1
+  let b:ale_list_window_size = 8
+  let b:ale_list_vertical = 1
+
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+
+  AssertEqual 1, GetQuickfixIsVertical(b:ale_list_window_size)
+
+Execute(The quickfix window should be horizontal for the loclist with appropriate variables):
+  let g:ale_open_list = 1
+  let b:ale_list_window_size = 8
+  let b:ale_list_vertical = 0
+
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+
+  AssertEqual 0, GetQuickfixIsVertical(b:ale_list_window_size)
 
 Execute(The quickfix window should stay open for just the loclist):
   let g:ale_open_list = 1
@@ -166,6 +199,24 @@ Execute(The quickfix window height should be correct for the quickfix list with 
   call ale#list#SetLists(bufnr('%'), g:loclist)
 
   AssertEqual 8, GetQuickfixHeight()
+
+Execute(The quickfix window should be vertical for the quickfix with appropriate variables):
+  let g:ale_open_list = 1
+  let b:ale_list_window_size = 8
+  let b:ale_list_vertical = 1
+
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+
+  AssertEqual 1, GetQuickfixIsVertical(b:ale_list_window_size)
+
+Execute(The quickfix window should be horizontal for the quickfix with appropriate variables):
+  let g:ale_open_list = 1
+  let b:ale_list_window_size = 8
+  let b:ale_list_vertical = 0
+
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+
+  AssertEqual 0, GetQuickfixIsVertical(b:ale_list_window_size)
 
 Execute(The buffer ale_open_list option should be respected):
   let b:ale_open_list = 1
