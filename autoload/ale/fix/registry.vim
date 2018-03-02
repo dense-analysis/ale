@@ -104,6 +104,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['php'],
 \       'description': 'Fix PHP files with phpcbf.',
 \   },
+\   'php_cs_fixer': {
+\       'function': 'ale#fixers#php_cs_fixer#Fix',
+\       'suggested_filetypes': ['php'],
+\       'description': 'Fix PHP files with php-cs-fixer.',
+\   },
 \   'clang-format': {
 \       'function': 'ale#fixers#clangformat#Fix',
 \       'suggested_filetypes': ['c', 'cpp'],
