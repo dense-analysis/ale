@@ -59,6 +59,14 @@ function! ale#lsp#response#ReadTSServerDiagnostics(response) abort
             let l:loclist_item.nr = l:diagnostic.code
         endif
 
+        if get(l:diagnostic, 'category') is# 'warning'
+            let l:loclist_item.type = 'W'
+        endif
+
+        if get(l:diagnostic, 'category') is# 'suggestion'
+            let l:loclist_item.type = 'I'
+        endif
+
         call add(l:loclist, l:loclist_item)
     endfor
 
