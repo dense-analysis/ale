@@ -2280,6 +2280,19 @@ ale#statusline#Count(buffer)                           *ale#statusline#Count()*
   `total`         -> The total number of problems.
 
 
+b:ale_linted                                                     *b:ale_linted*
+
+  `b:ale_linted` is set to the number of times a buffer has been checked by
+  ALE after all linters for one lint cycle have finished checking a buffer.
+  This variable may not be defined until ALE first checks a buffer, so it
+  should be accessed with |get()| or |getbufvar()|. For example: >
+
+    " Print a message indicating how many times ALE has checked this buffer.
+    echo 'ALE has checked this buffer ' . get(b:, 'ale_linted') . ' time(s).'
+    " Print 'checked' using getbufvar() if a buffer has been checked.
+    echo getbufvar(bufnr(''), 'ale_linted', 0) > 0 ? 'checked' : 'not checked'
+<
+
 ALELintPre                                                 *ALELintPre-autocmd*
 ALELintPost                                               *ALELintPost-autocmd*
 
