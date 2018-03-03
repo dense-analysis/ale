@@ -32,6 +32,11 @@ if !s:has_features
     finish
 endif
 
+if has('nvim') && !has('nvim-0.2.0') && !get(g:, 'ale_use_deprecated_neovim')
+    echom 'ALE support for NeoVim versions below 0.2.0 is deprecated.'
+    echom 'Use `let g:ale_use_deprecated_neovim = 1` to silence this warning for now.'
+endif
+
 " This flag can be set to 0 to disable emitting conflict warnings.
 let g:ale_emit_conflict_warnings = get(g:, 'ale_emit_conflict_warnings', 1)
 
@@ -298,9 +303,19 @@ augroup END
 " Backwards Compatibility
 
 function! ALELint(delay) abort
+    if !get(g:, 'ale_deprecation_ale_lint', 0)
+        echom 'ALELint() is deprecated, use ale#Queue() instead.'
+        let g:ale_deprecation_ale_lint = 1
+    endif
+
     call ale#Queue(a:delay)
 endfunction
 
 function! ALEGetStatusLine() abort
+    if !get(g:, 'ale_deprecation_ale_get_status_line', 0)
+        echom 'ALEGetStatusLine() is deprecated.'
+        let g:ale_deprecation_ale_get_status_line = 1
+    endif
+
     return ale#statusline#Status()
 endfunction

@@ -95,6 +95,11 @@ endfunction
 " This function is deprecated, and should not be used. Use the airline plugin
 " instead, or write your own status function with ale#statusline#Count()
 function! ale#statusline#Status() abort
+    if !get(g:, 'ale_deprecation_ale_statusline_status', 0)
+        echom 'ale#statusline#Status() is deprecated, use ale#statusline#Count() to write your own function.'
+        let g:ale_deprecation_ale_statusline_status = 1
+    endif
+
     if !exists('g:ale_statusline_format')
         return 'OK'
     endif
