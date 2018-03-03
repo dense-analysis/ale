@@ -1,0 +1,28 @@
+Before:
+  Save g:ale_markdown_mdl_executable
+  Save g:ale_markdown_mdl_options
+
+  unlet! g:ale_markdown_mdl_executable
+  unlet! g:ale_markdown_mdl_options
+
+  runtime ale_linters/markdown/mdl.vim
+
+After:
+  Restore
+
+  call ale#linter#Reset()
+
+Execute(The default command should be correct):
+  AssertEqual ale_linters#markdown#mdl#GetExecutable(bufnr('')), 'mdl'
+  AssertEqual
+  \ ale_linters#markdown#mdl#GetCommand(bufnr('')),
+  \ ale#Escape('mdl')
+
+Execute(The executable and options should be configurable):
+  let g:ale_markdown_mdl_executable = 'foo bar'
+  let g:ale_markdown_mdl_options = '--wat'
+
+  AssertEqual ale_linters#markdown#mdl#GetExecutable(bufnr('')), 'foo bar'
+  AssertEqual
+  \ ale_linters#markdown#mdl#GetCommand(bufnr('')),
+  \ ale#Escape('foo bar') . ' --wat'

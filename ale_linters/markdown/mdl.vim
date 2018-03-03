@@ -4,6 +4,18 @@
 call ale#Set('markdown_mdl_executable', 'mdl')
 call ale#Set('markdown_mdl_options', '')
 
+function! ale_linters#markdown#mdl#GetExecutable(buffer) abort
+    return ale#Var(a:buffer, 'markdown_mdl_executable')
+endfunction
+
+function! ale_linters#markdown#mdl#GetCommand(buffer) abort
+    let l:executable = ale_linters#markdown#mdl#GetExecutable(a:buffer)
+    let l:options = ale#Var(a:buffer, 'markdown_mdl_options')
+
+    return ale#Escape(l:executable)
+    \   . (!empty(l:options) ? ' ' . l:options : '')
+endfunction
+
 function! ale_linters#markdown#mdl#Handle(buffer, lines) abort
     " matches: '(stdin):173: MD004 Unordered list style'
     let l:pattern = ':\(\d*\): \(.*\)$'
@@ -20,17 +32,9 @@ function! ale_linters#markdown#mdl#Handle(buffer, lines) abort
     return l:output
 endfunction
 
-function! ale_linters#markdown#mdl#GetCommand(buffer) abort
-    let l:executable = ale#Var(a:buffer, 'markdown_mdl_executable')
-    let l:options = ale#Var(a:buffer, 'markdown_mdl_options')
-
-    return l:executable . (!empty(l:options) ? ' ' . l:options : '')
-endfunction
-
-
 call ale#linter#Define('markdown', {
 \   'name': 'mdl',
-\   'executable': 'mdl',
+\   'executable_callback': 'ale_linters#markdown#mdl#GetExecutable',
 \   'command_callback': 'ale_linters#markdown#mdl#GetCommand',
 \   'callback': 'ale_linters#markdown#mdl#Handle'
 \})
