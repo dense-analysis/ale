@@ -344,7 +344,7 @@ Notes:
 * Lua: `luac`, `luacheck`
 * Mail: `alex`!!, `proselint`, `vale`
 * Make: `checkmake`
-* Markdown: `alex`!!, `mdl`, `prettier`, `proselint`, `redpen`, `remark-lint`, `vale`, `write-good`
+* Markdown: `alex`!!, `markdownlint`!!, `mdl`, `prettier`, `proselint`, `redpen`, `remark-lint`, `vale`, `write-good`
 * MATLAB: `mlint`
 * Nim: `nim check`!!
 * nix: `nix-instantiate`
