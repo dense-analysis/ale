@@ -1,0 +1,24 @@
+Before:
+  runtime ale_linters/markdown/markdownlint.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The Markdownlint handler should parse output correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'text': '(MD002/first-header-h1) First header should be a top level header [Expected: h1; Actual: h2]',
+  \     'type': 'W'
+  \   },
+  \   {
+  \     'lnum': 298,
+  \     'text': '(MD033/no-inline-html) Inline HTML [Element: p]',
+  \     'type': 'W'
+  \   }
+  \ ],
+  \ ale#handlers#markdownlint#Handle(0, [
+  \ 'README.md: 1: MD002/first-header-h1 First header should be a top level header [Expected: h1; Actual: h2]',
+  \ 'README.md: 298: MD033/no-inline-html Inline HTML [Element: p]'
+  \ ])
