@@ -2,7 +2,7 @@
 " Description: Redpen, a proofreading tool (http://redpen.cc)
 
 function! ale#handlers#textlint#HandleTextlintOutput(buffer, lines) abort
-    let l:res = json_decode(join(a:lines))[0]
+    let l:res = get(ale#util#FuzzyJSONDecode(a:lines, []), 0, {'messages': []})
     let l:output = []
     for l:err in l:res.messages
         let l:item = {
@@ -14,5 +14,6 @@ function! ale#handlers#textlint#HandleTextlintOutput(buffer, lines) abort
         let l:item.col = l:err.column
         call add(l:output, l:item)
     endfor
+
     return l:output
 endfunction
