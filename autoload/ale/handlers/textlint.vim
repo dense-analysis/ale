@@ -9,9 +9,9 @@ function! ale#handlers#textlint#HandleTextlintOutput(buffer, lines) abort
         \   'text': l:err.message,
         \   'type': 'W',
         \   'code': l:err.ruleId,
-		\   'lnum': l:err.line,
-		\   'col' : l:err.column
-		\})
+        \   'lnum': l:err.line,
+        \   'col' : l:err.column
+        \})
     endfor
 
     return l:output
