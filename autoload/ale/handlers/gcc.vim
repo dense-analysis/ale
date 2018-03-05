@@ -55,7 +55,7 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
            let l:type = 'E'
         elseif l:match[4] =~ '\[[0-5]\]'
            let l:severity = str2nr(matchstr(split(l:match[4])[0], "[0-5]"))
-           let l:type = (l:severity < ale#Var(a:buffer, 'c_flawfinder_severity_error'))
+           let l:type = (l:severity < ale#Var(a:buffer, 'flawfinder_error_severity'))
            \   ? 'W' : 'E' 
            let l:text = join(split(l:match[4])[1:]) . ": " . l:text
         else
