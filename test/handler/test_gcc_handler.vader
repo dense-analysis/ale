@@ -1,3 +1,13 @@
+Before:
+  Save g:ale_flawfinder_error_severity
+
+  unlet! g:ale_flawfinder_error_severity
+  unlet! b:ale_flawfinder_error_severity
+
+After:
+  unlet! g:ale_flawfinder_error_severity
+  Restore
+
 Execute(The GCC handler should ignore other lines of output):
   AssertEqual
   \ [],
@@ -147,4 +157,27 @@ Execute(The GCC handler should interpret - as being the current file):
   \ ],
   \ ale#handlers#gcc#HandleGCCFormat(347, [
   \ '-:6:12: error: Some error',
+  \ ])
+
+Execute(The Flawfinder error severity level should be configurable):
+  let g:ale_flawfinder_error_severity = 2
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 12,
+  \     'col': 4,
+  \     'type': 'E',
+  \     'text': "(buffer) char: Statically-sized arrays can be bad",
+  \   },
+  \   {
+  \     'lnum': 31,
+  \     'col': 4,
+  \     'type': 'W',
+  \     'text': "(buffer) strncpy: Easily used incorrectly;",
+  \   },
+  \ ],
+  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \ "<stdin>:12:4:  [2] (buffer) char:Statically-sized arrays can be bad",
+  \ "<stdin>:31:4:  [1] (buffer) strncpy:Easily used incorrectly;",
   \ ])

@@ -46,10 +46,26 @@ function! ale#handlers#gcc#HandleGCCFormat(buffer, lines) abort
             continue
         endif
 
+        " If the 'error type' is a warning or error, set type to 'E' or 'W'
+        " respectively. Otherwise if it is a flawfinder result, use severity
+        " level to determine if it should be considered a warning or error.
+        " Also append additional type information to text string if Flawfinder.
+        let l:text = l:match[5]
+        if l:match[4] is# 'error'
+           let l:type = 'E'
+        elseif l:match[4] =~ '\[[0-5]\]'
+           let l:severity = str2nr(matchstr(split(l:match[4])[0], "[0-5]"))
+           let l:type = (l:severity < ale#Var(a:buffer, 'c_flawfinder_severity_error'))
+           \   ? 'W' : 'E' 
+           let l:text = join(split(l:match[4])[1:]) . ": " . l:text
+        else
+           let l:type = 'W'
+        endif
+
         let l:item = {
         \   'lnum': str2nr(l:match[2]),
-        \   'type': l:match[4] is# 'error' ? 'E' : 'W',
-        \   'text': s:RemoveUnicodeQuotes(l:match[5]),
+        \   'type': l:type,
+        \   'text': s:RemoveUnicodeQuotes(l:text),
         \}
 
         if !empty(l:match[3])
