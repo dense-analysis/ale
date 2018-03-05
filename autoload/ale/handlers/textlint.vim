@@ -5,14 +5,13 @@ function! ale#handlers#textlint#HandleTextlintOutput(buffer, lines) abort
     let l:res = get(ale#util#FuzzyJSONDecode(a:lines, []), 0, {'messages': []})
     let l:output = []
     for l:err in l:res.messages
-        let l:item = {
+        call add(l:output, {
         \   'text': l:err.message,
         \   'type': 'W',
         \   'code': l:err.ruleId,
-        \}
-        let l:item.lnum = l:err.line
-        let l:item.col = l:err.column
-        call add(l:output, l:item)
+		\   'lnum': l:err.line,
+		\   'col' : l:err.column
+		\})
     endfor
 
     return l:output
