@@ -1251,8 +1251,8 @@ g:ale_pattern_options                                   *g:ale_pattern_options*
   See |b:ale_linters| and |b:ale_fixers| for information for those options.
 
   Filenames are matched with |match()|, and patterns depend on the |magic|
-  setting, unless prefixed with the special escape sequences like `'\v'`,
-  etc.The patterns can match any part of a filename. The absolute path of the
+  setting, unless prefixed with the special escape sequences like `'\v'`, etc.
+  The patterns can match any part of a filename. The absolute path of the
   filename will be used for matching, taken from `expand('%:p')`.
 
   The options for every match for the filename will be applied, with the
