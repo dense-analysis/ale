@@ -20,4 +20,3 @@ call ale#linter#Define('markdown', {
 \   'command_callback': 'ale_linters#markdown#textlint#GetCommand',
 \   'callback': 'ale#handlers#textlint#HandleTextlintOutput',
 \})
-
