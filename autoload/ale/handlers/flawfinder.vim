@@ -24,14 +24,14 @@ function! ale#handlers#flawfinder#HandleFlawfinderFormat(buffer, lines) abort
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         " Use severity level to determine if it should be considered a warning
         " or error.
-        let l:severity = str2nr(matchstr(split(l:match[4])[0], "[0-5]"))
+        let l:severity = str2nr(matchstr(split(l:match[4])[0], '[0-5]'))
 
         let l:item = {
         \   'lnum': str2nr(l:match[2]),
         \   'col': str2nr(l:match[3]),
         \   'type': (l:severity < ale#Var(a:buffer, 'c_flawfinder_error_severity'))
             \   ? 'W' : 'E',
-        \   'text': s:RemoveUnicodeQuotes(join(split(l:match[4])[1:]) . ": " . l:match[5]),
+        \   'text': s:RemoveUnicodeQuotes(join(split(l:match[4])[1:]) . ': ' . l:match[5]),
         \}
 
         " If the filename is something like <stdin>, <nofile> or -, then
