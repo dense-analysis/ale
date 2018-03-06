@@ -169,8 +169,8 @@ g:ale_c_flawfinder_options                                 *g:ale-c-flawfinder*
 
   This variable can be used to pass extra options into the flawfinder command.
 
-g:ale_flawfinder_error_severity               *g:ale_flawfinder_error_severity*
-                                              *b:ale_flawfinder_error_severity*
+g:ale_c_flawfinder_error_severity           *g:ale_c_flawfinder_error_severity*
+                                            *b:ale_c_flawfinder_error_severity*
   Type: |Number|
   Default: `6`
 
