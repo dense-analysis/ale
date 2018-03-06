@@ -19,6 +19,10 @@ function! ale#definition#Execute(expr) abort
     execute a:expr
 endfunction
 
+function! ale#definition#ClearLSPData() abort
+    let s:go_to_definition_map = {}
+endfunction
+
 function! ale#definition#Open(options, filename, line, column) abort
     if a:options.open_in_tab
         call ale#definition#Execute('tabedit ' . fnameescape(a:filename))

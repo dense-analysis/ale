@@ -76,6 +76,11 @@ function! ale#engine#InitBufferInfo(buffer) abort
     return 0
 endfunction
 
+" Clear LSP linter data for the linting engine.
+function! ale#engine#ClearLSPData() abort
+    let s:lsp_linter_map = {}
+endfunction
+
 " This function is documented and part of the public API.
 "
 " Return 1 if ALE is busy checking a given buffer
@@ -144,7 +149,7 @@ function! s:GatherOutput(job_id, line) abort
     endif
 endfunction
 
-function! s:HandleLoclist(linter_name, buffer, loclist) abort
+function! ale#engine#HandleLoclist(linter_name, buffer, loclist) abort
     let l:info = get(g:ale_buffer_info, a:buffer, {})
 
     if empty(l:info)
@@ -223,7 +228,7 @@ function! s:HandleExit(job_id, exit_code) abort
 
     let l:loclist = ale#util#GetFunction(l:linter.callback)(l:buffer, l:output)
 
-    call s:HandleLoclist(l:linter.name, l:buffer, l:loclist)
+    call ale#engine#HandleLoclist(l:linter.name, l:buffer, l:loclist)
 endfunction
 
 function! s:HandleLSPDiagnostics(conn_id, response) abort
@@ -237,7 +242,7 @@ function! s:HandleLSPDiagnostics(conn_id, response) abort
 
     let l:loclist = ale#lsp#response#ReadDiagnostics(a:response)
 
-    call s:HandleLoclist(l:linter_name, l:buffer, l:loclist)
+    call ale#engine#HandleLoclist(l:linter_name, l:buffer, l:loclist)
 endfunction
 
 function! s:HandleTSServerDiagnostics(response, error_type) abort
@@ -262,7 +267,7 @@ function! s:HandleTSServerDiagnostics(response, error_type) abort
     let l:loclist = get(l:info, 'semantic_loclist', [])
     \   + get(l:info, 'syntax_loclist', [])
 
-    call s:HandleLoclist('tsserver', l:buffer, l:loclist)
+    call ale#engine#HandleLoclist('tsserver', l:buffer, l:loclist)
 endfunction
 
 function! s:HandleLSPErrorMessage(error_message) abort

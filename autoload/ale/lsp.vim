@@ -325,6 +325,20 @@ function! ale#lsp#ConnectToAddress(address, project_root, callback) abort
     return 1
 endfunction
 
+" Stop all LSP connections, closing all jobs and channels, and removing any
+" queued messages.
+function! ale#lsp#StopAll() abort
+    for l:conn in s:connections
+        if has_key(l:conn, 'channel')
+            call ch_close(l:conn.channel)
+        else
+            call ale#job#Stop(l:conn.id)
+        endif
+    endfor
+
+    let s:connections = []
+endfunction
+
 function! s:SendMessageData(conn, data) abort
     if has_key(a:conn, 'executable')
         call ale#job#SendRaw(a:conn.id, a:data)

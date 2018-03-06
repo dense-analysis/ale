@@ -1871,6 +1871,15 @@ ALEResetBuffer                                                 *ALEResetBuffer*
   |ALEDisableBuffer|.
 
 
+ALEStopAllLSPs                                                 *ALEStopAllLSPs*
+
+  `ALEStopAllLSPs` will close and stop all channels and jobs for all LSP-like
+  clients, including tsserver, remove all of the data stored for them, and
+  delete all of the problems found for them, updating every linted buffer.
+
+  This command can be used when LSP clients mess up and need to be restarted.
+
+
 ===============================================================================
 9. API                                                                *ale-api*
 

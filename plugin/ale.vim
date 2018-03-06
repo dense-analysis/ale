@@ -249,6 +249,8 @@ command! -bar ALEToggleBuffer :call ale#toggle#ToggleBuffer(bufnr(''))
 command! -bar ALEEnableBuffer :call ale#toggle#EnableBuffer(bufnr(''))
 command! -bar ALEDisableBuffer :call ale#toggle#DisableBuffer(bufnr(''))
 command! -bar ALEResetBuffer :call ale#toggle#ResetBuffer(bufnr(''))
+" A command to stop all LSP-like clients, including tsserver.
+command! -bar ALEStopAllLSPs :call ale#lsp#reset#StopAllLSPs()
 
 " A command for linting manually.
 command! -bar ALELint :call ale#Queue(0, 'lint_file')
