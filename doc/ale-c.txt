@@ -175,7 +175,7 @@ g:ale_flawfinder_error_severity               *g:ale_flawfinder_error_severity*
   Default: `6`
 
   This variable can be changed to set the minimum severity to be treated as an
-  error.
+  error.  This setting also applies to flawfinder for c++.
 
 
 ===============================================================================
