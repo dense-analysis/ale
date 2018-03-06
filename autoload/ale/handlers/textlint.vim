@@ -4,6 +4,7 @@
 function! ale#handlers#textlint#HandleTextlintOutput(buffer, lines) abort
     let l:res = get(ale#util#FuzzyJSONDecode(a:lines, []), 0, {'messages': []})
     let l:output = []
+
     for l:err in l:res.messages
         call add(l:output, {
         \   'text': l:err.message,
