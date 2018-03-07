@@ -3,14 +3,15 @@
 
 function! ale_linters#markdown#textlint#GetCommand(buffer) abort
     let l:cmd_path = ale#path#FindNearestFile(a:buffer, '.textlintrc')
+
     if !empty(l:cmd_path)
         return 'textlint'
         \    . ' -c '
         \    . l:cmd_path
         \     . ' -f json %t'
-    else
-        return "[{\'filePath\':\'%t\',\'messages\':[]}]"
     endif
+
+    return ''
 endfunction
 
 

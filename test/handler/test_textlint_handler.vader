@@ -38,10 +38,4 @@ Execute(textlint handler should no error output):
   AssertEqual
   \ [],
   \ ale#handlers#textlint#HandleTextlintOutput(bufnr(''), [
-  \   '[',
-  \   '  {',
-  \   '    "filePath": "test.md",',
-  \   '    "messages": []',
-  \   '  }',
-  \   ']',
   \ ])
