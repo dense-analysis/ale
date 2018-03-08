@@ -698,3 +698,12 @@ let g:ale_pattern_options_enabled = 1
 ```
 
 Buffer-local variables for settings always override the global settings.
+
+### 5.xvi. How can I configure the height of the list in which ALE displays errors?
+
+To set a default height for the error list, use the `g:ale_list_window_size` variable.
+
+```vim
+" Show 5 lines of errors (default: 10)
+let g:ale_list_window_size = 5
+```
