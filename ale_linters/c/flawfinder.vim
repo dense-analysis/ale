@@ -4,6 +4,7 @@
 call ale#Set('c_flawfinder_executable', 'flawfinder')
 call ale#Set('c_flawfinder_options', '')
 call ale#Set('c_flawfinder_minlevel', 1)
+call ale#Set('c_flawfinder_error_severity', 6)
 
 function! ale_linters#c#flawfinder#GetExecutable(buffer) abort
    return ale#Var(a:buffer, 'c_flawfinder_executable')
@@ -26,5 +27,5 @@ call ale#linter#Define('c', {
 \  'output_stream': 'stdout',
 \  'executable_callback': 'ale_linters#c#flawfinder#GetExecutable',
 \  'command_callback': 'ale_linters#c#flawfinder#GetCommand',
-\  'callback': 'ale#handlers#gcc#HandleGCCFormat',
+\  'callback': 'ale#handlers#flawfinder#HandleFlawfinderFormat',
 \})

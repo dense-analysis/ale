@@ -169,6 +169,14 @@ g:ale_c_flawfinder_options                                 *g:ale-c-flawfinder*
 
   This variable can be used to pass extra options into the flawfinder command.
 
+g:ale_c_flawfinder_error_severity           *g:ale_c_flawfinder_error_severity*
+                                            *b:ale_c_flawfinder_error_severity*
+  Type: |Number|
+  Default: `6`
+
+  This variable can be changed to set the minimum severity to be treated as an
+  error.  This setting also applies to flawfinder for c++.
+
 
 ===============================================================================
 gcc                                                                 *ale-c-gcc*
