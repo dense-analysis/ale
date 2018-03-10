@@ -18,7 +18,7 @@ Execute(The elm-format command should have default params):
   \     ale#Escape(ale#path#Simplify(g:dir . '/../elm-test-files/node_modules/.bin/elm-format'))
   \     . ' %t --yes',
   \ },
-  \ ale#fixers#format#Fix(bufnr(''))
+  \ ale#fixers#elm_format#Fix(bufnr(''))
 
 Execute(The elm-format command should manage use_global = 1 param):
   call ale#test#SetFilename('../elm-test-files/src/subdir/testfile.elm')
@@ -31,7 +31,7 @@ Execute(The elm-format command should manage use_global = 1 param):
   \     ale#Escape('elm-format')
   \     . ' %t --yes',
   \ },
-  \ ale#fixers#format#Fix(bufnr(''))
+  \ ale#fixers#elm_format#Fix(bufnr(''))
 
 Execute(The elm-format command should manage executable param):
   call ale#test#SetFilename('../elm-test-files/src/subdir/testfile.elm')
@@ -45,7 +45,7 @@ Execute(The elm-format command should manage executable param):
   \     ale#Escape('elmformat')
   \     . ' %t --yes',
   \ },
-  \ ale#fixers#format#Fix(bufnr(''))
+  \ ale#fixers#elm_format#Fix(bufnr(''))
 
 Execute(The elm-format command should manage empty options):
   call ale#test#SetFilename('../elm-test-files/src/subdir/testfile.elm')
@@ -58,7 +58,7 @@ Execute(The elm-format command should manage empty options):
   \     ale#Escape(ale#path#Simplify(g:dir . '/../elm-test-files/node_modules/.bin/elm-format'))
   \     . ' %t',
   \ },
-  \ ale#fixers#format#Fix(bufnr(''))
+  \ ale#fixers#elm_format#Fix(bufnr(''))
 
 Execute(The elm-format command should manage custom options):
   call ale#test#SetFilename('../elm-test-files/src/subdir/testfile.elm')
@@ -71,4 +71,4 @@ Execute(The elm-format command should manage custom options):
   \     ale#Escape(ale#path#Simplify(g:dir . '/../elm-test-files/node_modules/.bin/elm-format'))
   \     . ' %t --param1 --param2',
   \ },
-  \ ale#fixers#format#Fix(bufnr(''))
+  \ ale#fixers#elm_format#Fix(bufnr(''))
