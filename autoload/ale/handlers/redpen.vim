@@ -28,7 +28,7 @@ function! ale#handlers#redpen#HandleRedpenOutput(buffer, lines) abort
 
         " Adjust column number for multibyte string
         let l:line = getline(l:item.lnum)
-        if l:line == ""
+        if l:line is# ''
             let l:line = l:err.sentence
         endif
         let l:line = split(l:line, '\zs')
