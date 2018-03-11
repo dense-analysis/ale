@@ -27,14 +27,26 @@ function! ale#handlers#redpen#HandleRedpenOutput(buffer, lines) abort
         endif
 
         " Adjust column number for multibyte string
-        let l:line = split(getline(l:item.lnum), '\zs')
+        let l:line = getline(l:item.lnum)
+        if l:line == ""
+            let l:line = l:err.sentence
+        endif
+        let l:line = split(l:line, '\zs')
 
-        if (l:item.col >= 2)
-            let l:item.col = eval(join(map(l:line[0:(l:item.col - 2)], 'strlen(v:val)'), '+')) + 1
+        if l:item.col >= 2
+            let l:col = 0
+            for l:strlen in map(l:line[0:(l:item.col - 2)], 'strlen(v:val)')
+                let l:col = l:col + l:strlen
+            endfor
+            let l:item.col = l:col + 1
         endif
 
         if has_key(l:item, 'end_col')
-            let l:item.end_col = eval(join(map(l:line[0:(l:item.end_col - 1)], 'strlen(v:val)'), '+'))
+            let l:col = 0
+            for l:strlen in map(l:line[0:(l:item.end_col - 1)], 'strlen(v:val)')
+                let l:col = l:col + l:strlen
+            endfor
+            let l:item.end_col = l:col
         endif
 
         call add(l:output, l:item)
