@@ -4,6 +4,9 @@
 let g:ale_awk_gawk_executable =
 \   get(g:, 'ale_awk_gawk_executable', 'gawk')
 
+let g:ale_awk_gawk_options =
+\   get(g:, 'ale_awk_gawk_options', '')
+
 function! ale_linters#awk#gawk#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'awk_gawk_executable')
 endfunction
@@ -14,6 +17,7 @@ function! ale_linters#awk#gawk#GetCommand(buffer) abort
     " it is linting.
     return ale_linters#awk#gawk#GetExecutable(a:buffer)
     \   . " --source 'BEGIN { exit } END { exit 1 }'"
+    \   . ' ' . ale#Var(a:buffer, 'awk_gawk_options')
     \   . ' ' . '-f %t --lint /dev/null'
 endfunction
 
