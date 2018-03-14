@@ -12,7 +12,11 @@ function! ale_linters#awk#gawk#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#awk#gawk#GetCommand(buffer) abort
+    " note the --source 'BEGIN ...' is to prevent
+    " gawk from attempting to execute the body of the script
+    " it is linting.
     return ale_linters#awk#gawk#GetExecutable(a:buffer)
+    \   . " --source 'BEGIN { exit } END { exit 1 }'"
     \   . ' ' . ale#Var(a:buffer, 'awk_gawk_options')
     \   . ' ' . '-f %t --lint /dev/null'
 endfunction
@@ -21,6 +25,6 @@ call ale#linter#Define('awk', {
 \   'name': 'gawk',
 \   'executable_callback': 'ale_linters#awk#gawk#GetExecutable',
 \   'command_callback': 'ale_linters#awk#gawk#GetCommand',
-\   'callback': 'ale#handlers#cpplint#HandleCppLintFormat',
+\   'callback': 'ale#handlers#gawk#HandleGawkFormat',
 \   'output_stream': 'both'
 \})
