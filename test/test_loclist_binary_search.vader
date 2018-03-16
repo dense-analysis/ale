@@ -13,6 +13,8 @@ Before:
   \ {'bufnr': 2, 'lnum': 9, 'col': 2},
   \ {'bufnr': 2, 'lnum': 10, 'col': 2},
   \ {'bufnr': 2, 'lnum': 11, 'col': 2},
+  \ {'bufnr': 2, 'lnum': 11, 'col': 5},
+  \ {'bufnr': 2, 'lnum': 11, 'col': 2},
   \]
 
 After:
@@ -45,5 +47,34 @@ Execute(Searches for buffers later in the list should work):
 
 Execute(Searches should work with just one item):
   let g:loclist = [{'bufnr': 1, 'lnum': 3, 'col': 10}]
-
   AssertEqual 0, ale#util#BinarySearch(g:loclist, 1, 3, 2)
+
+Execute(SearchToLine should find no match if none on the line):
+  AssertEqual -1, ale#util#BinarySearchToLine(g:loclist, 1, 0)
+
+Execute(SearchToLine should find the first on the line):
+  AssertEqual 0, ale#util#BinarySearchToLine(g:loclist, 1, 2)
+  AssertEqual 5, ale#util#BinarySearchToLine(g:loclist, 1, 5)
+
+Execute(SmartSearch should find nothing if no line):
+  AssertEqual [], ale#util#BinarySearchSmart(g:loclist, 1, 0, 1)
+
+Execute(SmartSearch should find all on the line if no column match):
+  AssertEqual [12, 13, 14], ale#util#BinarySearchSmart(g:loclist, 2, 11, 1)
+  AssertEqual [12, 13, 14], ale#util#BinarySearchSmart(g:loclist, 2, 11, 4)
+  AssertEqual [12, 13, 14], ale#util#BinarySearchSmart(g:loclist, 2, 11, 7)
+
+Execute(SmartSearch should find only indexes on line/column if exact match):
+  AssertEqual [12, 14], ale#util#BinarySearchSmart(g:loclist, 2, 11, 2)
+
+Execute(SmartSearch should sort indexes based on error priority and column):
+  let g:loclist = [
+  \{'bufnr': 1, 'lnum': 3, 'col': 10, 'type': 'W'},
+  \{'bufnr': 1, 'lnum': 3, 'col': 10, 'type': 'E'},
+  \{'bufnr': 1, 'lnum': 3, 'col': 10, 'type': 'W'},
+  \{'bufnr': 1, 'lnum': 3, 'col': 10, 'type': ''},
+  \{'bufnr': 1, 'lnum': 3, 'col': 10},
+  \{'bufnr': 1, 'lnum': 3, 'col': 10, 'type': 'I'},
+  \]
+  AssertEqual [1, 0, 2, 5, 3, 4],
+  \ale#util#BinarySearchSmart(g:loclist, 1, 3, 10)
