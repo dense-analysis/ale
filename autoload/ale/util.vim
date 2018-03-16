@@ -95,11 +95,11 @@ function! ale#util#LocItemCompareWithText(left, right) abort
 endfunction
 
 " This function will perform a binary search and a small sequential search
-" on the list to find the last problem in the buffer and line which is
-" on or before the column. The index of the problem will be returned.
+" on the list to find the first problem in the buffer and line. The index of
+" this problem will be returned.
 "
 " -1 will be returned if nothing can be found.
-function! ale#util#BinarySearch(loclist, buffer, line, column) abort
+function! ale#util#BinarySearchToLine(loclist, buffer, line) abort
     let l:min = 0
     let l:max = len(a:loclist) - 1
 
@@ -130,18 +130,80 @@ function! ale#util#BinarySearch(loclist, buffer, line, column) abort
             \&& a:loclist[l:index - 1].lnum == a:line
                 let l:index -= 1
             endwhile
-
-            " Find the last problem on or before this column.
-            while l:index < l:max
-            \&& a:loclist[l:index + 1].bufnr == a:buffer
-            \&& a:loclist[l:index + 1].lnum == a:line
-            \&& a:loclist[l:index + 1].col <= a:column
-                let l:index += 1
-            endwhile
-
             return l:index
         endif
     endwhile
+endfunction
+
+" This function will perform a binary search and a small sequential search
+" on the list to find:
+"   * the list of indexes of problems at buffer, line and column, or,
+"   * the list of indexes of problems at buffer and line (if no exact match
+"     on column)
+" In both cases, the list will be sorted first by decreasing error priority,
+" and then based on order within the line.
+function! ale#util#BinarySearchSmart(loclist, buffer, line, column) abort
+    let l:index = ale#util#BinarySearchToLine(a:loclist, a:buffer, a:line)
+    if l:index == -1
+        return []
+    endif
+
+    let l:max = len(a:loclist) - 1
+
+    " Constant time bucket sort
+    let l:probs = {}
+    let l:types = ['E', 'W', 'I', 'EMPTY']
+    for l:t in l:types
+        let l:probs[l:t] = []
+    endfor
+    let l:probs_exact = deepcopy(l:probs)
+    let l:use_exact = 0
+
+    while l:index <= l:max
+    \&& a:loclist[l:index].bufnr == a:buffer
+    \&& a:loclist[l:index].lnum == a:line
+        let l:type = get(a:loclist[l:index], 'type', 'EMPTY')
+        if index(l:types, l:type) == -1
+            let l:type = 'EMPTY'
+        endif
+        call add(l:probs[l:type], l:index)
+        if a:loclist[l:index].col == a:column
+            call add(l:probs_exact[l:type], l:index)
+            let l:use_exact = 1
+        endif
+        let l:index += 1
+    endwhile
+
+    if l:use_exact
+        let l:probs = l:probs_exact
+    endif
+
+    let l:indexes = []
+    for l:t in l:types
+        let l:indexes = l:indexes + l:probs[l:t]
+    endfor
+    return l:indexes
+endfunction
+
+" This function will perform a binary search and a small sequential search
+" on the list to find the last problem in the buffer and line which is
+" on or before the column. The index of the problem will be returned.
+"
+" -1 will be returned if nothing can be found.
+function! ale#util#BinarySearch(loclist, buffer, line, column) abort
+    " Find the last most severe problem on or before this column.
+    let l:index = ale#util#BinarySearchToLine(a:loclist, a:buffer, a:line)
+    let l:max = len(a:loclist) - 1
+
+    let l:severe = l:index
+    while l:index < l:max
+    \&& a:loclist[l:index + 1].bufnr == a:buffer
+    \&& a:loclist[l:index + 1].lnum == a:line
+    \&& a:loclist[l:index + 1].col <= a:column
+        let l:index += 1
+    endwhile
+
+    return l:index
 endfunction
 
 " A function for testing if a function is running inside a sandbox.

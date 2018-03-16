@@ -32,15 +32,19 @@ function! ale#cursor#TruncatedEcho(original_message) abort
     endtry
 endfunction
 
-function! s:FindItemAtCursor() abort
+function! s:FindItemsAtCursor() abort
     let l:buf = bufnr('')
     let l:info = get(g:ale_buffer_info, l:buf, {})
     let l:loclist = get(l:info, 'loclist', [])
     let l:pos = getcurpos()
-    let l:index = ale#util#BinarySearch(l:loclist, l:buf, l:pos[1], l:pos[2])
-    let l:loc = l:index >= 0 ? l:loclist[l:index] : {}
+    let l:indexes = ale#util#BinarySearchSmart(l:loclist, l:buf, l:pos[1],
+                \l:pos[2])
+    let l:locs = []
+    for l:index in l:indexes
+        call add(l:locs, l:index >= 0 ? l:loclist[l:index] : {})
+    endfor
 
-    return [l:info, l:loc]
+    return [l:info, l:locs]
 endfunction
 
 function! s:StopCursorTimer() abort
@@ -69,12 +73,16 @@ function! s:EchoImpl() abort
     endif
 
     let l:buffer = bufnr('')
-    let [l:info, l:loc] = s:FindItemAtCursor()
+    let [l:info, l:locs] = s:FindItemsAtCursor()
 
-    if !empty(l:loc)
-        let l:format = ale#Var(l:buffer, 'echo_msg_format')
-        let l:msg = ale#GetLocItemMessage(l:loc, l:format)
-        call ale#cursor#TruncatedEcho(l:msg)
+    if !empty(l:locs)
+        let l:msgs = []
+        for l:loc in l:locs
+            let l:format = ale#Var(l:buffer, 'echo_msg_format')
+            let l:msg = ale#GetLocItemMessage(l:loc, l:format)
+            call add(l:msgs, l:msg)
+        endfor
+        call ale#cursor#TruncatedEcho(join(l:msgs, '; '))
         let l:info.echoed = 1
     elseif get(l:info, 'echoed')
         " We'll only clear the echoed message when moving off errors once,
@@ -125,12 +133,16 @@ function! ale#cursor#ShowCursorDetail() abort
 
     call s:StopCursorTimer()
 
-    let [l:info, l:loc] = s:FindItemAtCursor()
+    let [l:info, l:locs] = s:FindItemsAtCursor()
 
-    if !empty(l:loc)
-        let l:message = get(l:loc, 'detail', l:loc.text)
+    if !empty(l:locs)
+        let l:lines = []
+        for l:loc in l:locs
+            let l:message = get(l:loc, 'detail', l:loc.text)
+            let l:lines = l:lines + split(l:message, "\n")
+        endfor
 
-        call ale#preview#Show(split(l:message, "\n"))
+        call ale#preview#Show(l:lines)
         execute 'echo'
     endif
 endfunction

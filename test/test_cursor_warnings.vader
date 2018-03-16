@@ -114,19 +114,21 @@ Execute(Messages should be shown for the correct lines):
   call cursor(1, 1)
   call ale#cursor#EchoCursorWarning()
 
-  AssertEqual 'semi: Missing semicolon.', GetLastMessage()
+  AssertEqual 'semi: Missing semicolon.; Some information', GetLastMessage()
 
 Execute(Messages should be shown for earlier columns):
   call cursor(2, 1)
   call ale#cursor#EchoCursorWarning()
 
-  AssertEqual 'space-infix-ops: Infix operators must be spaced.', GetLastMessage()
+  AssertEqual 'radix: Missing radix parameter; space-infix-ops: Infix
+    \ operators must be spaced.', GetLastMessage()
 
 Execute(Messages should be shown for later columns):
   call cursor(2, 16)
   call ale#cursor#EchoCursorWarning()
 
-  AssertEqual 'radix: Missing radix parameter', GetLastMessage()
+  AssertEqual 'radix: Missing radix parameter; space-infix-ops: Infix
+    \ operators must be spaced.', GetLastMessage()
 
 Execute(The message at the cursor should be shown when linting ends):
   call cursor(1, 1)
@@ -135,13 +137,14 @@ Execute(The message at the cursor should be shown when linting ends):
   \ g:ale_buffer_info[bufnr('%')].loclist,
   \)
 
-  AssertEqual 'semi: Missing semicolon.', GetLastMessage()
+  AssertEqual 'semi: Missing semicolon.; Some information', GetLastMessage()
 
 Execute(The message at the cursor should be shown on InsertLeave):
   call cursor(2, 9)
   doautocmd InsertLeave
 
-  AssertEqual 'space-infix-ops: Infix operators must be spaced.', GetLastMessage()
+  AssertEqual 'radix: Missing radix parameter; space-infix-ops: Infix
+    \ operators must be spaced.', GetLastMessage()
 
 Execute(ALEDetail should print 'detail' attributes):
   call cursor(1, 1)
@@ -149,7 +152,8 @@ Execute(ALEDetail should print 'detail' attributes):
   ALEDetail
 
   AssertEqual
-  \ ['Every statement should end with a semicolon', 'second line'],
+  \ ['Every statement should end with a semicolon', 'second line',
+  \ 'Some information'],
   \ getline(1, '$')
 
 Execute(ALEDetail should print regular 'text' attributes):
@@ -175,7 +179,7 @@ Execute(The linter name should be formatted into the message correctly):
   call ale#cursor#EchoCursorWarning()
 
   AssertEqual
-  \ 'eslint: Infix operators must be spaced.',
+  \ 'eslint: Missing radix parameter; eslint: Infix operators must be spaced.',
   \ GetLastMessage()
 
 Execute(The severity should be formatted into the message correctly):
@@ -185,7 +189,7 @@ Execute(The severity should be formatted into the message correctly):
   call ale#cursor#EchoCursorWarning()
 
   AssertEqual
-  \ 'Warning: Infix operators must be spaced.',
+  \ 'Error: Missing radix parameter; Warning: Infix operators must be spaced.',
   \ GetLastMessage()
 
   call cursor(1, 10)
@@ -205,7 +209,8 @@ Execute(The %code% and %ifcode% should show the code and some text):
   call ale#cursor#EchoCursorWarning()
 
   AssertEqual
-  \ '(space-infix-ops) Infix operators must be spaced.',
+  \ '(radix) Missing radix parameter; (space-infix-ops) Infix operators
+  \ must be spaced.',
   \ GetLastMessage()
 
 Execute(The %code% and %ifcode% should be removed when there's no code):
