@@ -502,15 +502,17 @@ Will give you:
 ### 5.viii. How can I execute some code when ALE starts or stops linting?
 
 ALE runs its own [autocmd](http://vimdoc.sourceforge.net/htmldoc/autocmd.html)
-events whenever has a linter is started and has been successfully executed and
-processed. These events can be used to call arbitrary functions before and after
-ALE stops linting.
+events when a lint or fix cycle are started and stopped. These events can be
+used to call arbitrary functions before and after ALE stops linting.
 
 ```vim
 augroup YourGroup
     autocmd!
     autocmd User ALELintPre  call YourFunction()
     autocmd User ALELintPost call YourFunction()
+
+    autocmd User ALEFixPre   call YourFunction()
+    autocmd User ALEFixPost  call YourFunction()
 augroup END
 ```
 
