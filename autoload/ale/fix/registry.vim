@@ -85,6 +85,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['ruby'],
 \       'description': 'Fix ruby files with rubocop --auto-correct.',
 \   },
+\   'rufo': {
+\       'function': 'ale#fixers#rufo#Fix',
+\       'suggested_filetypes': ['ruby'],
+\       'description': 'Fix ruby files with rufo',
+\   },
 \   'standard': {
 \       'function': 'ale#fixers#standard#Fix',
 \       'suggested_filetypes': ['javascript'],
