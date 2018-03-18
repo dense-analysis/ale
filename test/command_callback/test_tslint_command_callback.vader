@@ -17,7 +17,10 @@ Before:
 After:
   Restore
 
+  unlet! b:ale_typescript_tslint_executable
+  unlet! b:ale_typescript_tslint_config_path
   unlet! b:ale_typescript_tslint_rules_dir
+  unlet! b:ale_typescript_tslint_use_global
 
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
@@ -25,7 +28,7 @@ After:
 Execute(The default tslint command should be correct):
   AssertEqual
   \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
-  \   . 'tslint --format json %t',
+  \   . ale#Escape('tslint') . ' --format json %t',
   \ ale_linters#typescript#tslint#GetCommand(bufnr(''))
 
 Execute(The rules directory option should be included if set):
@@ -33,7 +36,16 @@ Execute(The rules directory option should be included if set):
 
   AssertEqual
   \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
-  \   . 'tslint --format json'
+  \   . ale#Escape('tslint') . ' --format json'
   \   . ' -r ' . ale#Escape('/foo/bar')
   \   . ' %t',
+  \ ale_linters#typescript#tslint#GetCommand(bufnr(''))
+
+Execute(The executable should be configurable and escaped):
+  let b:ale_typescript_tslint_executable = 'foo bar'
+
+  AssertEqual 'foo bar', ale_linters#typescript#tslint#GetExecutable(bufnr(''))
+  AssertEqual
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   . ale#Escape('foo bar') . ' --format json %t',
   \ ale_linters#typescript#tslint#GetCommand(bufnr(''))

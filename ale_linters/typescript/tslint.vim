@@ -70,7 +70,7 @@ function! ale_linters#typescript#tslint#GetCommand(buffer) abort
     \  : ''
 
     return ale#path#BufferCdString(a:buffer)
-    \   . ale_linters#typescript#tslint#GetExecutable(a:buffer)
+    \   . ale#Escape(ale_linters#typescript#tslint#GetExecutable(a:buffer))
     \   . ' --format json'
     \   . l:tslint_config_option
     \   . l:tslint_rules_option
