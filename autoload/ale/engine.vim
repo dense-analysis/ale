@@ -366,9 +366,6 @@ function! s:RemapItemTypes(type_map, loclist) abort
     endfor
 endfunction
 
-" Save the temporary directory so we can figure out if files are in it.
-let s:temp_dir = fnamemodify(tempname(), ':h')
-
 function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
     let l:bufnr_map = {}
     let l:new_loclist = []
