@@ -14,6 +14,18 @@ g:ale_elixir_mix_options                             *g:ale_elixir_mix_options*
   This variable can be changed to specify the mix executable.
 
 ===============================================================================
+mix_format                                              *ale-elixir-mix-format*
+
+g:ale_elixir_mix_format_options               *g:ale_elixir_mix_format_options*
+                                              *b:ale_elixir_mix_format_options*
+  Type: |String|
+  Default: `''`
+
+
+  This variable can be changed to specify the mix options passed to the
+  mix_format fixer
+
+===============================================================================
 dialyxir                                                  *ale-elixir-dialyxir*
 
 Dialyzer, a DIscrepancy AnaLYZer for ERlang programs.
