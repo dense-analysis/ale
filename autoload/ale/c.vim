@@ -22,6 +22,69 @@ function! ale#c#FindProjectRoot(buffer) abort
     return ''
 endfunction
 
+function! ale#c#ParseCFlags(project_root, stdout_make) abort
+    let l:cflags_list = []
+    let l:cflags = split(a:stdout_make, " ")
+    let l:shell_option = 0
+    let l:macro_option = 0
+    let l:previous_option = ''
+    for l:option in l:cflags
+        " Check if cflag contained spaces
+        if l:shell_option || stridx(l:option, "=`") >= 0
+            " Cflag contained shell command with spaces (ex. -D='date +%s')
+            let l:shell_option = 1
+            let l:previous_option .= l:option . ' '
+            if l:option[-1: -1] != "`"
+                continue
+            endif
+            let l:shell_option = 0
+        elseif l:macro_option || stridx(l:option, "$((") > 0
+            " Cflag contained macro with spaces (ex -Da=$(( 4 * 20  )))
+            let l:macro_option = 1
+            let l:previous_option .= l:option . ' '
+            if stridx(l:option, "))") < 0
+                continue
+            endif
+            let l:macro_option = 0
+        endif
+        if l:previous_option != ''
+            let l:option = l:previous_option
+            let l:previous_option = ''
+        endif
+        " Fix relative paths if needed
+        if stridx(l:option, "-I") >= 0
+            if stridx(l:option, "-I/") < 0
+                let l:option = '-I' . a:project_root . s:sep . l:option[2:]
+            endif
+        endif
+        " Parse the cflag
+        if stridx(l:option, "-I") >= 0 ||
+           \ stridx(l:option, "-D") >= 0
+            if index(l:cflags_list, l:option) < 0
+                call add(l:cflags_list, l:option)
+            endif
+        endif
+    endfor
+    return l:cflags_list
+endfunction
+
+function! ale#c#ParseMakefile(buffer) abort
+    let l:project_root = ale#c#FindProjectRoot(a:buffer)
+    let l:project_cflags = []
+
+    if !empty(l:project_root)
+        if !empty(globpath(l:project_root, 'Makefile', 0))
+            let stdout_make = system('cd '. l:project_root . ' && make -n')
+             for l:object in split(l:stdout_make, '\n')
+                 if stridx(l:object, expand("%t"))
+                     return ale#c#ParseCFlags(l:project_root, l:object)
+                 endif
+             endfor
+        endif
+    endif
+    return []
+endfunction
+
 " Given a buffer number, search for a project root, and output a List
 " of directories to include based on some heuristics.
 "
