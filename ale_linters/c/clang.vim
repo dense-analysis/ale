@@ -3,16 +3,15 @@
 
 call ale#Set('c_clang_executable', 'clang')
 call ale#Set('c_clang_options', '-std=c11 -Wall')
-call ale#Set('c_clang_parse_makefile', 0)
 
 function! ale_linters#c#clang#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'c_clang_executable')
 endfunction
 
-function! ale_linters#c#clang#GetCommand(buffer) abort
-let l:cflags = []
-    if g:ale_c_clang_parse_makefile
-        let l:cflags = join(ale#c#ParseMakefile(a:buffer), ' ')
+function! ale_linters#c#clang#GetCommand(buffer, output) abort
+    let l:cflags = []
+    if !empty(a:output)
+        let l:cflags = join(ale#c#ParseMakefile(a:buffer, join(a:output, '\n')), ' ')
     endif
     if empty(l:cflags)
         let l:cflags = ale#c#IncludeOptions(ale#c#FindLocalHeaderPaths(a:buffer))
@@ -33,6 +32,9 @@ call ale#linter#Define('c', {
 \   'name': 'clang',
 \   'output_stream': 'stderr',
 \   'executable_callback': 'ale_linters#c#clang#GetExecutable',
-\   'command_callback': 'ale_linters#c#clang#GetCommand',
+\   'command_chain': [
+\       {'callback': 'ale#c#ParseMakefile', 'output_stream': 'stdout'},
+\       {'callback': 'ale_linters#c#clang#GetCommand'}
+\   ],
 \   'callback': 'ale#handlers#gcc#HandleGCCFormat',
 \})

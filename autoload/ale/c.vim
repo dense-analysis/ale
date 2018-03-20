@@ -1,6 +1,7 @@
 " Author: gagbo <gagbobada@gmail.com>, w0rp <devw0rp@gmail.com>
 " Description: Functions for integrating with C-family linters.
 
+call ale#Set('c_parse_makefile', 0)
 let s:sep = has('win32') ? '\' : '/'
 
 function! ale#c#FindProjectRoot(buffer) abort
@@ -22,27 +23,30 @@ function! ale#c#FindProjectRoot(buffer) abort
     return ''
 endfunction
 
-function! ale#c#ParseCFlags(project_root, stdout_make) abort
-    let l:cflags_list = []
-    let l:cflags = split(a:stdout_make)
+function! ale#c#ParseCFlagsToList(buffer, cflags) abort
+    let l:project_root = ale#c#FindProjectRoot(a:buffer)
+    let l:previous_option = ''
     let l:shell_option = 0
     let l:macro_option = 0
-    let l:previous_option = ''
-    for l:option in l:cflags
+    let l:cflags_list = []
+
+    for l:option in a:cflags
         " Check if cflag contained spaces
         if l:shell_option || stridx(l:option, '=`') >= 0
             " Cflag contained shell command with spaces (ex. -D='date +%s')
             let l:shell_option = 1
-            let l:previous_option .= l:option . ' '
+            let l:previous_option .= l:option
             if l:option[-1: -1] isnot? '`'
+                let l:previous_option .= ' '
                 continue
             endif
             let l:shell_option = 0
         elseif l:macro_option || stridx(l:option, '$((') > 0
             " Cflag contained macro with spaces (ex -Da=$(( 4 * 20  )))
             let l:macro_option = 1
-            let l:previous_option .= l:option . ' '
+            let l:previous_option .= l:option
             if stridx(l:option, '))') < 0
+                let l:previous_option .= ' '
                 continue
             endif
             let l:macro_option = 0
@@ -54,7 +58,7 @@ function! ale#c#ParseCFlags(project_root, stdout_make) abort
         " Fix relative paths if needed
         if stridx(l:option, '-I') >= 0
             if stridx(l:option, '-I' . s:sep) < 0
-                let l:option = '-I' . a:project_root . s:sep . l:option[2:]
+                let l:option = '-I' . l:project_root . s:sep . l:option[2:]
             endif
         endif
         " Parse the cflag
@@ -68,21 +72,33 @@ function! ale#c#ParseCFlags(project_root, stdout_make) abort
     return l:cflags_list
 endfunction
 
-function! ale#c#ParseMakefile(buffer) abort
-    let l:project_root = ale#c#FindProjectRoot(a:buffer)
-    let l:project_cflags = []
+function! ale#c#ParseCFlags(buffer, stdout_make) abort
+    if g:ale_c_parse_makefile
+        for l:cflags in split(a:stdout_make, '\n')
+            if stridx(l:cflags, expand('#' . a:buffer . '...'))
+                let l:cflags = split(l:cflags)
+                break
+            endif
+        endfor
+        if !empty(l:cflags)
+            return ale#c#ParseCFlagsToList(a:buffer, l:cflags)
+       endif
+    endif
+    retur []
+endfunction
 
-    if !empty(l:project_root)
-        if !empty(globpath(l:project_root, 'Makefile', 0))
-            let l:stdout_make = system('cd '. l:project_root . ' && make -n')
-            for l:object in split(l:stdout_make, '\n')
-                if stridx(l:object, expand('#' . a:buffer . '...'))
-                    return ale#c#ParseCFlags(l:project_root, l:object)
-                endif
-            endfor
+function! ale#c#ParseMakefile(buffer) abort
+    if g:ale_c_parse_makefile
+        let l:project_root = ale#c#FindProjectRoot(a:buffer)
+        let l:project_cflags = []
+
+        if !empty(l:project_root)
+            if !empty(globpath(l:project_root, 'Makefile', 0))
+                return 'cd '. l:project_root . ' && make -n'
+            endif
         endif
     endif
-    return []
+    return ''
 endfunction
 
 " Given a buffer number, search for a project root, and output a List

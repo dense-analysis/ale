@@ -1,15 +1,13 @@
 Before:
+  Save g:ale_c_parse_makefile
   Save g:ale_c_gcc_options
-  Save g:ale_c_gcc_parse_makefile
   Save g:ale_c_clang_options
-  Save g:ale_c_clang_parse_makefile
   Save g:ale_cpp_gcc_options
   Save g:ale_cpp_clang_options
 
   call ale#test#SetDirectory('/testplugin/test')
 
-  let g:ale_c_gcc_parse_makefile=1
-  let g:ale_c_clang_parse_makefile=1
+  let g:ale_c_parse_makefile=1
   let g:ale_c_gcc_options = ''
   let g:ale_c_clang_options = ''
   let g:ale_cpp_gcc_options = ''
@@ -35,32 +33,44 @@ Execute(Move .git/HEAD to a temp dir):
     call delete(g:head_filename)
   endif
 
-Execute(The C GCC handler should include directories specified in the include path for projects with a Makefile):
+Execute(The CFlags parser should be able to parse include directives):
   runtime! ale_linters/c/gcc.vim
 
   call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
 
   AssertEqual
-  \ ale#Escape('gcc')
-  \   . ' -S -x c -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/test_c_projects/makefile_project/subdir'))
-  \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/test_c_projects/makefile_project/subdir/'))[1:-3] . ' '
-  \   . ' -'
-  \ , ale_linters#c#gcc#GetCommand(bufnr(''))
+  \   ['-I/testplugin/test/test_c_projects/makefile_project/subdir']
+  \ , ale#c#ParseCFlags(bufnr(''), 'gcc -Isubdir -c file.c')
 
-Execute(The C++ Clang handler should include directories specified in the include path for projects with a Makefile):
-  runtime! ale_linters/c/clang.vim
+Execute(The CFlags parser should be able to parse macro directives):
+  runtime! ale_linters/c/gcc.vim
 
   call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
 
   AssertEqual
-  \   ale#Escape('clang')
-  \   . ' -S -x c -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/test_c_projects/makefile_project/subdir'))
-  \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/test_c_projects/makefile_project/subdir'))[1:-2] . ' '
-  \   . ' -'
-  \ , ale_linters#c#clang#GetCommand(bufnr(''))
+  \   ['-I/testplugin/test/test_c_projects/makefile_project/subdir',
+  \    '-DTEST=1']
+  \ , ale#c#ParseCFlags(bufnr(''), 'gcc -Isubdir -DTEST=1 -c file.c')
 
+Execute(The CFlags parser should be able to parse macro directives with spaces):
+  runtime! ale_linters/c/gcc.vim
+
+  call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
+
+  AssertEqual
+  \   ['-I/testplugin/test/test_c_projects/makefile_project/subdir',
+  \    '-DTEST=$(( 2 * 4 ))']
+  \ , ale#c#ParseCFlags(bufnr(''), 'gcc -Isubdir -DTEST=$(( 2 * 4 )) -c file.c')
+
+Execute(The CFlags parser should be able to parse shell directives with spaces):
+  runtime! ale_linters/c/gcc.vim
+
+  call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
+
+  AssertEqual
+  \   ['-I/testplugin/test/test_c_projects/makefile_project/subdir',
+  \    '-DTEST=`date +%s`']
+  \ , ale#c#ParseCFlags(bufnr(''), 'gcc -Isubdir -DTEST=`date +%s` -c file.c')
 
 Execute(Move .git/HEAD back):
   if !empty(g:head_filename)
