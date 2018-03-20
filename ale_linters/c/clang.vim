@@ -12,7 +12,7 @@ endfunction
 function! ale_linters#c#clang#GetCommand(buffer) abort
 let l:cflags = []
     if g:ale_c_clang_parse_makefile
-        let l:cflags = join(ale#c#ParseMakefile(a:buffer), ' ') . ' '
+        let l:cflags = join(ale#c#ParseMakefile(a:buffer), ' ')
     endif
     if empty(l:cflags)
         let l:cflags = ale#c#IncludeOptions(ale#c#FindLocalHeaderPaths(a:buffer))

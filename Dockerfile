@@ -6,6 +6,7 @@ RUN install_vim -tag v8.0.0027 -build \
 ENV PACKAGES="\
     bash \
     git \
+    make \
     python \
     py-pip \
 "
