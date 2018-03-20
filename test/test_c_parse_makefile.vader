@@ -1,0 +1,72 @@
+Before:
+  Save g:ale_c_gcc_options
+  Save g:ale_c_gcc_parse_makefile
+  Save g:ale_c_clang_options
+  Save g:ale_c_clang_parse_makefile
+  Save g:ale_cpp_gcc_options
+  Save g:ale_cpp_clang_options
+
+  call ale#test#SetDirectory('/testplugin/test')
+
+  let g:ale_c_gcc_parse_makefile=1
+  let g:ale_c_clang_parse_makefile=1
+  let g:ale_c_gcc_options = ''
+  let g:ale_c_clang_options = ''
+  let g:ale_cpp_gcc_options = ''
+  let g:ale_cpp_clang_options = ''
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+" Run this only once for this series of tests. The cleanup Execute step
+" will run at the bottom of this file.
+"
+" We need to move .git/HEAD away so we don't match it, as we need to test
+" functions which look for .git/HEAD.
+Execute(Move .git/HEAD to a temp dir):
+  let g:temp_head_filename = tempname()
+  let g:head_filename = findfile('.git/HEAD', ';')
+
+  if !empty(g:head_filename)
+    call writefile(readfile(g:head_filename, 'b'), g:temp_head_filename, 'b')
+    call delete(g:head_filename)
+  endif
+
+Execute(The C GCC handler should include directories specified in the include path for projects with a Makefile):
+  runtime! ale_linters/c/gcc.vim
+
+  call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
+
+  AssertEqual
+  \ ale#Escape('gcc')
+  \   . ' -S -x c -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/test_c_projects/makefile_project/subdir'))
+  \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/test_c_projects/makefile_project/subdir/'))[1:-3] . ' '
+  \   . ' -'
+  \ , ale_linters#c#gcc#GetCommand(bufnr(''))
+
+Execute(The C++ Clang handler should include directories specified in the include path for projects with a Makefile):
+  runtime! ale_linters/c/clang.vim
+
+  call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
+
+  AssertEqual
+  \   ale#Escape('clang')
+  \   . ' -S -x c -fsyntax-only '
+  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/test_c_projects/makefile_project/subdir'))
+  \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/test_c_projects/makefile_project/subdir'))[1:-2] . ' '
+  \   . ' -'
+  \ , ale_linters#c#clang#GetCommand(bufnr(''))
+
+
+Execute(Move .git/HEAD back):
+  if !empty(g:head_filename)
+    call writefile(readfile(g:temp_head_filename, 'b'), g:head_filename, 'b')
+    call delete(g:temp_head_filename)
+  endif
+
+  unlet! g:temp_head_filename
+  unlet! g:head_filename
