@@ -15,6 +15,6 @@ call ale#linter#Define('go', {
 \   'output_stream': 'stderr',
 \   'executable': 'gotype',
 \   'command_callback': 'ale_linters#go#gotype#GetCommand',
-\   'callback': 'ale#handlers#unix#HandleAsError',
+\   'callback': 'ale#handlers#go#Handler',
 \   'lint_file': 1,
 \})

@@ -1,10 +1,4 @@
-Before:
-  runtime ale_linters/go/govet.vim
-
-After:
-  call ale#linter#Reset()
-
-Execute(The govet handler should return the correct filenames):
+Execute(The golang handler should return the correct filenames):
   AssertEqual
   \ [
   \   {
@@ -22,7 +16,7 @@ Execute(The govet handler should return the correct filenames):
   \     'filename': ale#path#Simplify(expand('%:p:h') . '/other.go'),
   \   },
   \ ],
-  \ ale_linters#go#govet#Handler(bufnr(''), [
+  \ ale#handlers#go#Handler(bufnr(''), [
   \   'test.go:27: some error',
   \   'other.go:27:5: some error with a column',
   \ ])
