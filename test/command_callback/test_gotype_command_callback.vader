@@ -6,7 +6,9 @@ After:
   call ale#linter#Reset()
 
 Execute(The default gotype command should be correct):
-  AssertEqual 'gotype %s', ale_linters#go#gotype#GetCommand(bufnr(''))
+  AssertEqual 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \ . ' gotype .',
+  \ ale_linters#go#gotype#GetCommand(bufnr(''))
 
 Execute(The gotype callback should ignore test files):
   call ale#test#SetFilename('bla_test.go')
