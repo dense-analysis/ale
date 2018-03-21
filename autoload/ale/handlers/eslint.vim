@@ -149,5 +149,14 @@ function! ale#handlers#eslint#Handle(buffer, lines) abort
         call s:AddHintsForTypeScriptParsingErrors(l:output)
     endif
 
+    " (it seems Eslint emits nothing when everything works fine.)
+    if !empty(a:lines) && empty(l:output)
+        return [{
+        \   'lnum': 1,
+        \   'text': 'Unknown eslint internal error (type :ALEDetail for more information)',
+        \   'detail': join(a:lines, "\n"),
+        \}]
+    endif
+   
     return l:output
 endfunction
