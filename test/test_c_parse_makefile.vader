@@ -39,7 +39,7 @@ Execute(The CFlags parser should be able to parse include directives):
   call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
 
   AssertEqual
-  \   ['-I/testplugin/test/test_c_projects/makefile_project/subdir']
+  \   ['-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir')]
   \ , ale#c#ParseCFlags(bufnr(''), 'gcc -Isubdir -c file.c')
 
 Execute(The CFlags parser should be able to parse macro directives):
@@ -48,7 +48,7 @@ Execute(The CFlags parser should be able to parse macro directives):
   call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
 
   AssertEqual
-  \   ['-I/testplugin/test/test_c_projects/makefile_project/subdir',
+  \   ['-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir'),
   \    '-DTEST=1']
   \ , ale#c#ParseCFlags(bufnr(''), 'gcc -Isubdir -DTEST=1 -c file.c')
 
@@ -58,7 +58,7 @@ Execute(The CFlags parser should be able to parse macro directives with spaces):
   call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
 
   AssertEqual
-  \   ['-I/testplugin/test/test_c_projects/makefile_project/subdir',
+  \   ['-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir'),
   \    '-DTEST=$(( 2 * 4 ))']
   \ , ale#c#ParseCFlags(bufnr(''), 'gcc -Isubdir -DTEST=$(( 2 * 4 )) -c file.c')
 
@@ -68,7 +68,7 @@ Execute(The CFlags parser should be able to parse shell directives with spaces):
   call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
 
   AssertEqual
-  \   ['-I/testplugin/test/test_c_projects/makefile_project/subdir',
+  \   ['-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir'),
   \    '-DTEST=`date +%s`']
   \ , ale#c#ParseCFlags(bufnr(''), 'gcc -Isubdir -DTEST=`date +%s` -c file.c')
 
