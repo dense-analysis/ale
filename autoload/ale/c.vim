@@ -23,14 +23,14 @@ function! ale#c#FindProjectRoot(buffer) abort
     return ''
 endfunction
 
-function! ale#c#ParseCFlagsToList(buffer, cflags) abort
-    let l:project_root = ale#c#FindProjectRoot(a:buffer)
+function! ale#c#ParseCFlagsToList(path_prefix, cflags) abort
     let l:previous_option = ''
     let l:shell_option = 0
     let l:macro_option = 0
     let l:cflags_list = []
 
     for l:option in a:cflags
+
         " Check if cflag contained spaces
         if l:shell_option || stridx(l:option, '=`') >= 0
             " Cflag contained shell command with spaces (ex. -D='date +%s')
@@ -51,16 +51,19 @@ function! ale#c#ParseCFlagsToList(buffer, cflags) abort
             endif
             let l:macro_option = 0
         endif
+
         if l:previous_option isnot? ''
             let l:option = l:previous_option
             let l:previous_option = ''
         endif
+
         " Fix relative paths if needed
         if stridx(l:option, '-I') >= 0
             if stridx(l:option, '-I' . s:sep) < 0
-                let l:option = '-I' . l:project_root . s:sep . l:option[2:]
+                let l:option = '-I' . a:path_prefix . s:sep . l:option[2:]
             endif
         endif
+
         " Parse the cflag
         if stridx(l:option, '-I') >= 0 ||
            \ stridx(l:option, '-D') >= 0
@@ -69,35 +72,50 @@ function! ale#c#ParseCFlagsToList(buffer, cflags) abort
             endif
         endif
     endfor
+
     return l:cflags_list
 endfunction
 
 function! ale#c#ParseCFlags(buffer, stdout_make) abort
-    if g:ale_c_parse_makefile
-        for l:cflags in split(a:stdout_make, '\n')
-            if stridx(l:cflags, expand('#' . a:buffer . '...'))
-                let l:cflags = split(l:cflags)
-                break
-            endif
-        endfor
-        if !empty(l:cflags)
-            return ale#c#ParseCFlagsToList(a:buffer, l:cflags)
-       endif
+    if !g:ale_c_parse_makefile
+        return []
     endif
-    retur []
+
+    let l:buffer_filename = expand('#' . a:buffer . '...')
+
+    for l:cflags in split(a:stdout_make, '\n')
+        if stridx(l:cflags, l:buffer_filename)
+            let l:cflags = split(l:cflags)
+            break
+        endif
+    endfor
+
+    let l:makefile_path = ale#path#FindNearestFile(a:buffer, 'Makefile')
+    return ale#c#ParseCFlagsToList(fnamemodify(l:makefile_path, ':p:h'), l:cflags)
 endfunction
 
-function! ale#c#ParseMakefile(buffer) abort
-    if g:ale_c_parse_makefile
-        let l:project_root = ale#c#FindProjectRoot(a:buffer)
-        let l:project_cflags = []
+function! ale#c#GetCFlags(buffer, output) abort
+    let l:cflags = ' '
 
-        if !empty(l:project_root)
-            if !empty(globpath(l:project_root, 'Makefile', 0))
-                return 'cd '. l:project_root . ' && make -n'
-            endif
+    if g:ale_c_parse_makefile && !empty(a:output)
+        let l:cflags = join(ale#c#ParseCFlags(a:buffer, join(a:output, '\n')), ' ') . ' '
+    endif
+
+    if l:cflags is# ' '
+        let l:cflags = ale#c#IncludeOptions(ale#c#FindLocalHeaderPaths(a:buffer))
+    endif
+
+    return l:cflags
+endfunction
+
+function! ale#c#GetMakeCommand(buffer) abort
+    if g:ale_c_parse_makefile
+        let l:makefile_path = ale#path#FindNearestFile(a:buffer, 'Makefile')
+        if !empty(l:makefile_path)
+            return 'cd '. fnamemodify(l:makefile_path, ':p:h') . ' && make -n'
         endif
     endif
+
     return ''
 endfunction
 

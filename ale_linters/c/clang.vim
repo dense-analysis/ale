@@ -9,15 +9,7 @@ function! ale_linters#c#clang#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#c#clang#GetCommand(buffer, output) abort
-    let l:cflags = []
-    if !empty(a:output)
-        let l:cflags = join(ale#c#ParseMakefile(a:buffer, join(a:output, '\n')), ' ')
-    endif
-    if empty(l:cflags)
-        let l:cflags = ale#c#IncludeOptions(ale#c#FindLocalHeaderPaths(a:buffer))
-    else
-        let l:cflags .= ' '
-    endif
+    let l:cflags = ale#c#GetCFlags(a:buffer, a:output)
 
     " -iquote with the directory the file is in makes #include work for
     "  headers in the same directory.
@@ -33,7 +25,7 @@ call ale#linter#Define('c', {
 \   'output_stream': 'stderr',
 \   'executable_callback': 'ale_linters#c#clang#GetExecutable',
 \   'command_chain': [
-\       {'callback': 'ale#c#ParseMakefile', 'output_stream': 'stdout'},
+\       {'callback': 'ale#c#GetMakeCommand', 'output_stream': 'stdout'},
 \       {'callback': 'ale_linters#c#clang#GetCommand'}
 \   ],
 \   'callback': 'ale#handlers#gcc#HandleGCCFormat',

@@ -19,20 +19,6 @@ After:
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
-" Run this only once for this series of tests. The cleanup Execute step
-" will run at the bottom of this file.
-"
-" We need to move .git/HEAD away so we don't match it, as we need to test
-" functions which look for .git/HEAD.
-Execute(Move .git/HEAD to a temp dir):
-  let g:temp_head_filename = tempname()
-  let g:head_filename = findfile('.git/HEAD', ';')
-
-  if !empty(g:head_filename)
-    call writefile(readfile(g:head_filename, 'b'), g:temp_head_filename, 'b')
-    call delete(g:head_filename)
-  endif
-
 Execute(The CFlags parser should be able to parse include directives):
   runtime! ale_linters/c/gcc.vim
 
@@ -72,11 +58,52 @@ Execute(The CFlags parser should be able to parse shell directives with spaces):
   \    '-DTEST=`date +%s`']
   \ , ale#c#ParseCFlags(bufnr(''), 'gcc -Isubdir -DTEST=`date +%s` -c file.c')
 
-Execute(Move .git/HEAD back):
-  if !empty(g:head_filename)
-    call writefile(readfile(g:temp_head_filename, 'b'), g:head_filename, 'b')
-    call delete(g:temp_head_filename)
-  endif
+Execute(The CFlagsToList parser should be able to parse multiple cflags):
+  runtime! ale_linters/c/gcc.vim
 
-  unlet! g:temp_head_filename
-  unlet! g:head_filename
+  call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
+
+  AssertEqual
+  \   ['-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir'),
+  \    '-DTEST=`date +%s`']
+  \ , ale#c#ParseCFlagsToList(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
+  \                           split('gcc -Isubdir -DTEST=`date +%s` -c file.c'))
+
+Execute(The CFlagsToList parser should be able to parse multiple cflags #2):
+  runtime! ale_linters/c/gcc.vim
+
+  call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
+
+  AssertEqual
+  \   ['-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir'),
+  \    '-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/kernel/include'),
+  \    '-DTEST=`date +%s`']
+  \ , ale#c#ParseCFlagsToList(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
+  \                           split('gcc -Isubdir -Ikernel/include -DTEST=`date +%s` -c file.c'))
+
+Execute(The CFlagsToList parser should be able to parse multiple cflags #3):
+  runtime! ale_linters/c/gcc.vim
+
+  call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
+
+  AssertEqual
+  \   ['-Dgoal=9',
+  \    '-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir'),
+  \    '-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/kernel/include'),
+  \    '-DTEST=`date +%s`']
+  \ , ale#c#ParseCFlagsToList(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
+  \                           split('gcc -Dgoal=9 -Isubdir -Ikernel/include -DTEST=`date +%s` -c file.c'))
+
+Execute(The CFlagsToList parser should be able to parse multiple cflags #4):
+  runtime! ale_linters/c/gcc.vim
+
+  call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
+
+  AssertEqual
+  \   ['-Dgoal=9',
+  \    '-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir'),
+  \    '-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/kernel/include'),
+  \    '-DTEST=`date +%s`']
+  \ , ale#c#ParseCFlagsToList(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
+  \                           split('gcc -Dgoal=9 -Tlinkerfile.ld blabla -Isubdir ' .
+  \                                 '-Ikernel/include -DTEST=`date +%s` -c file.c'))
