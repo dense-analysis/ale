@@ -9,6 +9,17 @@ function! ale_linters#cpp#gcc#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#cpp#gcc#GetCommand(buffer) abort
+    " attempt to get args from compilation database
+    let l:args = ale#c#FindCompileArgs(a:buffer)
+
+    " if we've found compile args then just use those
+    if has_key(l:args, 'args') && has_key(l:args, 'directory')
+        return 'cd ' . l:args.directory . ' && '
+        \   . 'gcc -S -x c++ -fsyntax-only '
+        \   . l:args.args
+        \   . ' -'
+    endif
+
     let l:paths = ale#c#FindLocalHeaderPaths(a:buffer)
 
     " -iquote with the directory the file is in makes #include work for

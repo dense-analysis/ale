@@ -91,3 +91,43 @@ function! ale#c#FindCompileCommands(buffer) abort
 
     return ''
 endfunction
+
+" Given a buffer number, find a compilation database (compile_commands.json)
+" and parse this into an argument string
+function! ale#c#FindCompileArgs(buffer) abort
+    let l:compile_args = {}
+
+    let l:compile_commands_path = ale#path#FindNearestFile(a:buffer, 'compile_commands.json')
+    if !empty(l:compile_commands_path)
+        for l:elem in json_decode(readfile(l:compile_commands_path))
+            if ale#path#IsBufferPath(a:buffer, l:elem.file)
+                let l:compile_args.directory = l:elem.directory
+                " skip unwanted stuff
+                "   first arg (compiler)
+                "   last arg (filename)
+                "    -o objectfile
+                "    -c
+                let l:skip = 0
+                let l:args = []
+                for l:arg in split(l:elem.command, ' ')[2:-2]
+                    if l:skip == 1
+                        let l:skip = 0
+                    elseif l:arg ==# '-o'
+                        " skip next 1 arg as well
+                        let l:skip = 1
+                    elseif l:arg ==# '-c'
+                        " simply omit
+                    else
+                        let l:args += [l:arg]
+                    endif
+                endfor
+
+                let l:compile_args.args = join(l:args, ' ')
+
+                break
+            endif
+        endfor
+    endif
+
+    return l:compile_args
+endfunction
