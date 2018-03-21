@@ -79,7 +79,9 @@ Execute(The CFlagsToList parser should be able to parse multiple cflags #2):
   \    '-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/kernel/include'),
   \    '-DTEST=`date +%s`']
   \ , ale#c#ParseCFlagsToList(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
-  \                           split('gcc -Isubdir -Ikernel/include -DTEST=`date +%s` -c file.c'))
+  \                           split('gcc -Isubdir  ' .
+  \                                 '-I'. ale#path#Simplify('kernel/include') .
+  \                                 ' -DTEST=`date +%s` -c file.c'))
 
 Execute(The CFlagsToList parser should be able to parse multiple cflags #3):
   runtime! ale_linters/c/gcc.vim
@@ -92,7 +94,9 @@ Execute(The CFlagsToList parser should be able to parse multiple cflags #3):
   \    '-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/kernel/include'),
   \    '-DTEST=`date +%s`']
   \ , ale#c#ParseCFlagsToList(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
-  \                           split('gcc -Dgoal=9 -Isubdir -Ikernel/include -DTEST=`date +%s` -c file.c'))
+  \                           split('gcc -Dgoal=9 -Isubdir ' .
+  \                                 '-I'. ale#path#Simplify('kernel/include') .
+  \                                 ' -DTEST=`date +%s` -c file.c'))
 
 Execute(The CFlagsToList parser should be able to parse multiple cflags #4):
   runtime! ale_linters/c/gcc.vim
@@ -106,4 +110,5 @@ Execute(The CFlagsToList parser should be able to parse multiple cflags #4):
   \    '-DTEST=`date +%s`']
   \ , ale#c#ParseCFlagsToList(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
   \                           split('gcc -Dgoal=9 -Tlinkerfile.ld blabla -Isubdir ' .
-  \                                 '-Ikernel/include -DTEST=`date +%s` -c file.c'))
+  \                                 '-I'. ale#path#Simplify('kernel/include') .
+  \                                 ' -DTEST=`date +%s` -c file.c'))
