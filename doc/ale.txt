@@ -269,7 +269,7 @@ CONTENTS                                                         *ale-contents*
 ALE provides the means to run linters asynchronously in Vim in a variety of
 languages and tools. ALE sends the contents of buffers to linter programs
 using the |job-control| features available in Vim 8 and NeoVim. For Vim 8,
-Vim must be compiled with the |job| and |channel| and |timer| features
+Vim must be compiled with the |job| and |channel| and |timers| features
 as a minimum.
 
 ALE supports the following key features for linting:
