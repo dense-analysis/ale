@@ -75,6 +75,19 @@ Execute(ale#lsp#message#DidChange() should return correct messages):
   \ 36,
   \ ale#lsp#message#DidChange(bufnr(''))[2].textDocument.version
 
+Execute(ale#lsp#message#DidChangeConfiguration() should return correct messages):
+  AssertEqual
+  \ [
+  \   1,
+  \   'workspace/didChangeConfiguration',
+  \   {
+  \     'settings': {
+  \       'test': 42,
+  \     },
+  \   }
+  \ ],
+  \ ale#lsp#message#DidChangeConfiguration({'test': 42})
+
 Execute(ale#lsp#message#DidSave() should return correct messages):
   AssertEqual
   \ [

@@ -15,6 +15,8 @@ let s:default_ale_linter_aliases = {
 \   'zsh': 'sh',
 \}
 
+call ale#Set('lsp_settings', {})
+
 " Default linters to run for particular filetypes.
 " The user defined linter selections will be merged with this Dictionary.
 "
@@ -463,6 +465,11 @@ function! ale#linter#StartLSP(buffer, linter, callback) abort
     " The change message needs to be sent for tsserver before doing anything.
     if a:linter.lsp is# 'tsserver'
         call ale#lsp#Send(l:conn_id, ale#lsp#tsserver_message#Change(a:buffer))
+    endif
+
+    let l:settings = ale#Var(a:buffer, 'lsp_settings')
+    if has_key(l:settings, a:linter['name'])
+        call ale#lsp#Send(l:conn_id, ale#lsp#message#DidChangeConfiguration(l:settings[a:linter['name']]), l:root)
     endif
 
     return {

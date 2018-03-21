@@ -71,6 +71,12 @@ function! ale#lsp#message#DidChange(buffer) abort
     \}]
 endfunction
 
+function! ale#lsp#message#DidChangeConfiguration(settings) abort
+    return [1, 'workspace/didChangeConfiguration', {
+    \   'settings': a:settings,
+    \}]
+endfunction
+
 function! ale#lsp#message#DidSave(buffer) abort
     return [1, 'textDocument/didSave', {
     \   'textDocument': {
