@@ -48,6 +48,7 @@ formatting tools, and some Language Server Protocol and `tsserver` features.
     13. [Will this plugin eat all of my laptop battery power?](#faq-my-battery-is-sad)
     14. [How can I configure my C or C++ project?](#faq-c-configuration)
     15. [How can I configure ALE differently for different buffers?](#faq-buffer-configuration)
+    16. [How can I configure the height of the list in which ALE displays errors?](#faq-list-window-height)
 
 <a name="supported-languages"></a>
 
@@ -700,3 +701,14 @@ let g:ale_pattern_options_enabled = 1
 ```
 
 Buffer-local variables for settings always override the global settings.
+
+<a name="faq-list-window-height"></a>
+
+### 5.xvi. How can I configure the height of the list in which ALE displays errors?
+
+To set a default height for the error list, use the `g:ale_list_window_size` variable.
+
+```vim
+" Show 5 lines of errors (default: 10)
+let g:ale_list_window_size = 5
+```
