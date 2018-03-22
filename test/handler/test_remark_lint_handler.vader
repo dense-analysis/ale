@@ -19,12 +19,21 @@ Execute(Warning and error messages should be handled correctly):
   \      'type': 'E',
   \      'text': 'Incorrect list-item indent: remove 1 space  list-item-indent  remark-lint',
   \   },
+  \   {
+  \     'lnum': 18,
+  \     'col': 71,
+  \     'end_lnum': 19,
+  \     'end_col': 1,
+  \     'type': 'E',
+  \     'text': 'Missing new line after list item  list-item-spacing  remark-lint',
+  \   },
   \ ],
   \ ale_linters#markdown#remark_lint#Handle(1, [
   \   'foo.md',
   \   '  1:4  warning  Incorrect list-item indent: add 1 space  list-item-indent  remark-lint',
   \   '  3:5  error  Incorrect list-item indent: remove 1 space  list-item-indent  remark-lint',
+  \   '  18:71-19:1  error  Missing new line after list item  list-item-spacing  remark-lint',
   \   '',
   \   '⚠ 1 warnings',
-  \   '✘ 1 errors',
+  \   '✘ 2 errors',
   \])
