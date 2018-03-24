@@ -139,6 +139,7 @@ CONTENTS                                                         *ale-contents*
     markdown..............................|ale-markdown-options|
       mdl.................................|ale-markdown-mdl|
       prettier............................|ale-markdown-prettier|
+      textlint............................|ale-markdown-textlint|
       write-good..........................|ale-markdown-write-good|
     nroff.................................|ale-nroff-options|
       write-good..........................|ale-nroff-write-good|
@@ -234,6 +235,7 @@ CONTENTS                                                         *ale-contents*
     texinfo...............................|ale-texinfo-options|
       write-good..........................|ale-texinfo-write-good|
     text..................................|ale-text-options|
+      textlint............................|ale-text-textlint|
       write-good..........................|ale-text-write-good|
     thrift................................|ale-thrift-options|
       thrift..............................|ale-thrift-thrift|
@@ -346,7 +348,7 @@ Notes:
 * Lua: `luac`, `luacheck`
 * Mail: `alex`!!, `proselint`, `vale`
 * Make: `checkmake`
-* Markdown: `alex`!!, `markdownlint`!!, `mdl`, `prettier`, `proselint`, `redpen`, `remark-lint`, `vale`, `write-good`, `textlint`
+* Markdown: `alex`!!, `markdownlint`!!, `mdl`, `prettier`, `proselint`, `redpen`, `remark-lint`, `textlint`, `vale`, `write-good`
 * MATLAB: `mlint`
 * Nim: `nim check`!!
 * nix: `nix-instantiate`
@@ -382,7 +384,7 @@ Notes:
 * Tcl: `nagelfar`!!
 * Terraform: `tflint`
 * Texinfo: `alex`!!, `proselint`, `write-good`
-* Text^: `alex`!!, `proselint`, `vale`, `write-good`, `redpen`
+* Text^: `alex`!!, `proselint`, `redpen`, `textlint`, `vale`, `write-good`
 * Thrift: `thrift`
 * TypeScript: `eslint`, `prettier`, `tslint`, `tsserver`, `typecheck`
 * Verilog: `iverilog`, `verilator`
