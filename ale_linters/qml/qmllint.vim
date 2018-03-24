@@ -1,4 +1,4 @@
-" Author: pylipp
+" Author: pylipp (www.github.com/pylipp)
 " Description: qmllint for QML files
 
 " Find lines like
@@ -12,7 +12,6 @@ function! ale_linters#qml#qmllint#Handle(buffer, lines) abort
         \   'lnum': l:match[1] + 0,
         \   'col': 0,
         \   'text': l:match[2],
-        \   'code': '',
         \   'type': 'E',
         \}
         call add(l:output, l:item)
@@ -25,6 +24,6 @@ call ale#linter#Define('qml', {
 \   'name': 'qmllint',
 \   'output_stream': 'stderr',
 \   'executable': 'qmllint',
-\   'command': 'qmllint %s',
+\   'command': 'qmllint %t',
 \   'callback': 'ale_linters#qml#qmllint#Handle',
 \})
