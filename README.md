@@ -123,6 +123,7 @@ formatting.
 | Make | [checkmake](https://github.com/mrtazz/checkmake) |
 | Markdown | [alex](https://github.com/wooorm/alex) !!, [mdl](https://github.com/mivok/markdownlint), [prettier](https://github.com/prettier/prettier), [proselint](http://proselint.com/), [redpen](http://redpen.cc/), [remark-lint](https://github.com/wooorm/remark-lint) !!, [vale](https://github.com/ValeLint/vale), [write-good](https://github.com/btford/write-good) |
 | MATLAB | [mlint](https://www.mathworks.com/help/matlab/ref/mlint.html) |
+| Mercury | [mmc](http://mercurylang.org) !! |
 | Nim | [nim check](https://nim-lang.org/docs/nimc.html) !! |
 | nix | [nix-instantiate](http://nixos.org/nix/manual/#sec-nix-instantiate) |
 | nroff | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good)|
