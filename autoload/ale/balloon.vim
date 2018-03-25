@@ -2,6 +2,13 @@
 " Description: balloonexpr support for ALE.
 
 function! ale#balloon#MessageForPos(bufnr, lnum, col) abort
+    " Don't show balloons if they are disabled, or linting is disabled.
+    if !ale#Var(a:bufnr, 'set_balloons')
+    \|| !g:ale_enabled
+    \|| !getbufvar(a:bufnr, 'ale_enabled', 1)
+        return ''
+    endif
+
     let l:loclist = get(g:ale_buffer_info, a:bufnr, {'loclist': []}).loclist
     let l:index = ale#util#BinarySearch(l:loclist, a:bufnr, a:lnum, a:col)
 
@@ -13,7 +20,7 @@ function! ale#balloon#Expr() abort
 endfunction
 
 function! ale#balloon#Disable() abort
-    set noballooneval
+    set noballooneval balloonexpr=
 endfunction
 
 function! ale#balloon#Enable() abort

@@ -84,20 +84,12 @@ function! s:EnablePreamble() abort
 
     " Lint immediately, including running linters against the file.
     call ale#Queue(0, 'lint_file')
-
-    if g:ale_set_balloons
-        call ale#balloon#Enable()
-    endif
 endfunction
 
 function! s:DisablePostamble() abort
     " Remove highlights for the current buffer now.
     if g:ale_set_highlights
         call ale#highlight#UpdateHighlights()
-    endif
-
-    if g:ale_set_balloons
-        call ale#balloon#Disable()
     endif
 endfunction
 
@@ -121,9 +113,17 @@ function! ale#toggle#Toggle() abort
 
     if g:ale_enabled
         call s:EnablePreamble()
+
+        if g:ale_set_balloons
+            call ale#balloon#Enable()
+        endif
     else
         call s:CleanupEveryBuffer()
         call s:DisablePostamble()
+
+        if has('balloon_eval')
+            call ale#balloon#Disable()
+        endif
     endif
 
     call ale#toggle#InitAuGroups()

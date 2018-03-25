@@ -1291,13 +1291,19 @@ g:ale_pattern_options_enabled                   *g:ale_pattern_options_enabled*
 
 
 g:ale_set_balloons                                         *g:ale_set_balloons*
+                                                           *b:ale_set_balloons*
 
   Type: |Number|
   Default: `has('balloon_eval')`
 
   When this option is set to `1`, balloon messages will be displayed for
   problems. Problems nearest to the cursor on the line the cursor is over will
-  be displayed.
+  be displayed. Balloons will not be shown when either |g:ale_enabled| is `0`
+  or |b:ale_enabled| is `0`.
+
+  `b:ale_set_balloons` can be set to `0` to disable balloons for a buffer.
+  Balloons cannot be enabled for a specific buffer when not initially enabled
+  globally.
 
 
 g:ale_set_highlights                                     *g:ale_set_highlights*

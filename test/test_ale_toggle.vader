@@ -5,12 +5,14 @@ Before:
   Save g:ale_run_synchronously
   Save g:ale_pattern_options
   Save g:ale_pattern_options_enabled
+  Save g:ale_set_balloons
 
   let g:ale_set_signs = 1
   let g:ale_set_lists_synchronously = 1
   let g:ale_run_synchronously = 1
   let g:ale_pattern_options = {}
   let g:ale_pattern_options_enabled = 1
+  let g:ale_set_balloons = has('balloon_eval')
 
   unlet! b:ale_enabled
 
@@ -344,3 +346,41 @@ Execute(ALEResetBuffer should reset everything for a buffer):
 
   AssertEqual 1, g:ale_enabled
   AssertEqual 1, get(b:, 'ale_enabled', 1)
+
+Execute(Disabling ALE should disable balloons):
+  " These tests won't run in the console, but we can run them manually in GVim.
+  if has('balloon_eval')
+    call ale#linter#Reset()
+
+    " Enable balloons, so we can check the expr value.
+    call ale#balloon#Enable()
+
+    AssertEqual 1, &ballooneval
+    AssertEqual 'ale#balloon#Expr()', &balloonexpr
+
+    " Toggle ALE off.
+    ALEToggle
+
+    " The balloon settings should be reset.
+    AssertEqual 0, &ballooneval
+    AssertEqual '', &balloonexpr
+  endif
+
+Execute(Enabling ALE should enable balloons if the setting is on):
+  if has('balloon_eval')
+    call ale#linter#Reset()
+    call ale#balloon#Disable()
+    ALEDisable
+    let g:ale_set_balloons = 0
+    ALEEnable
+
+    AssertEqual 0, &ballooneval
+    AssertEqual '', &balloonexpr
+
+    ALEDisable
+    let g:ale_set_balloons = 1
+    ALEEnable
+
+    AssertEqual 1, &ballooneval
+    AssertEqual 'ale#balloon#Expr()', &balloonexpr
+  endif
