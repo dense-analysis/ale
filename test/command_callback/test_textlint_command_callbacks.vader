@@ -1,0 +1,50 @@
+Before:
+  Save g:ale_textlint_executable
+  Save g:ale_textlint_use_global
+  Save g:ale_textlint_options
+
+  unlet! g:ale_textlint_executable
+  unlet! b:ale_textlint_executable
+  unlet! g:ale_textlint_use_global
+  unlet! b:ale_textlint_use_global
+  unlet! g:ale_textlint_options
+  unlet! b:ale_textlint_options
+
+  runtime autoload/ale/handlers/textlint.vim
+
+After:
+  Restore
+  unlet! b:command_tail
+  unlet! b:ale_textlint_executable
+  unlet! b:ale_textlint_use_global
+  unlet! b:ale_textlint_options
+  call ale#linter#Reset()
+
+Execute(The executable should be configurable):
+  AssertEqual 'textlint', ale#handlers#textlint#GetExecutable(bufnr(''))
+
+  let b:ale_textlint_executable = 'foobar'
+
+  AssertEqual 'foobar', ale#handlers#textlint#GetExecutable(bufnr(''))
+
+Execute(The config path is empty when config is non-existent):
+  AssertEqual '', ale#handlers#textlint#GetConfig(bufnr(''))
+
+Execute(The executable should be used in the command):
+  AssertEqual
+  \ ale#Escape('textlint') . ' %s -f json',
+  \ ale#handlers#textlint#GetCommand(bufnr(''))
+
+  let b:ale_textlint_executable = 'foobar'
+
+  AssertEqual
+  \ ale#Escape('foobar') . ' %s -f json',
+  \ ale#handlers#textlint#GetCommand(bufnr(''))
+  \
+
+Execute(The options should be configurable):
+  let b:ale_textlint_options = '--something'
+
+  AssertEqual
+  \ ale#Escape('textlint') . ' %s -f json --something',
+  \ ale#handlers#textlint#GetCommand(bufnr(''))
