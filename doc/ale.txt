@@ -177,6 +177,7 @@ CONTENTS                                                         *ale-contents*
       puppetlint..........................|ale-puppet-puppetlint|
     python................................|ale-python-options|
       autopep8............................|ale-python-autopep8|
+      black...............................|ale-python-black|
       flake8..............................|ale-python-flake8|
       isort...............................|ale-python-isort|
       mypy................................|ale-python-mypy|
@@ -364,7 +365,7 @@ Notes:
 * proto: `protoc-gen-lint`
 * Pug: `pug-lint`
 * Puppet: `puppet`, `puppet-lint`
-* Python: `autopep8`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pyls`, `pylint`!!, `yapf`
+* Python: `autopep8`, `black`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pyls`, `pylint`!!, `yapf`
 * QML: `qmllint`
 * R: `lintr`
 * ReasonML: `merlin`, `ols`, `refmt`

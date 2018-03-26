@@ -30,6 +30,33 @@ g:ale_python_autopep8_use_global             *g:ale_python_autopep8_use_global*
 
 
 ===============================================================================
+black                                                        *ale-python-black*
+
+g:ale_python_black_executable                   *g:ale_python_black_executable*
+                                                *b:ale_python_black_executable*
+  Type: |String|
+  Default: `'black'`
+
+  See |ale-integrations-local-executables|
+
+autopep8
+g:ale_python_black_options                         *g:ale_python_black_options*
+                                                   *b:ale_python_black_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass extra options to black.
+
+
+g:ale_python_black_use_global                   *g:ale_python_black_use_global*
+                                                *b:ale_python_black_use_global*
+  Type: |Number|
+  Default: `0`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
 flake8                                                      *ale-python-flake8*
 
 g:ale_python_flake8_executable                 *g:ale_python_flake8_executable*
