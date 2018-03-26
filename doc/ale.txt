@@ -1263,7 +1263,7 @@ g:ale_pattern_options                                   *g:ale_pattern_options*
   let g:ale_pattern_options = {
   \   '\.foo\.js$': {
   \       'ale_linters': ['eslint'],
-  \       'ale_fixers: ['eslint'],
+  \       'ale_fixers': ['eslint'],
   \   },
   \}
 <
