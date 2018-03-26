@@ -13,22 +13,15 @@ function! ale#handlers#textlint#GetExecutable(buffer) abort
 endfunction
 
 function! ale#handlers#textlint#GetCommand(buffer) abort
-    let l:cmd_path = ale#path#FindNearestFile(a:buffer, '.textlintrc')
+    let l:executable = ale#handlers#textlint#GetExecutable(a:buffer)
+    let l:config = ale#path#FindNearestFile(a:buffer, '.textlintrc')
     let l:options = ale#Var(a:buffer, 'textlint_options')
 
-    if !empty(l:cmd_path)
-        return 'textlint'
-        \    . ' -c '
-        \    . l:cmd_path
-        \    . (!empty(l:options) ? ' ' . l:options : '')
-        \    . ' -f json %t'
-    endif
-
-    return 'textlint'
+    return ale#node#Executable(a:buffer, l:executable)
     \    . (!empty(l:options) ? ' ' . l:options : '')
+    \    . (!empty(l:config) ? ' -c ' . ale#Escape(l:config) : '')
     \    . ' -f json %t'
 endfunction
-
 
 function! ale#handlers#textlint#HandleTextlintOutput(buffer, lines) abort
     let l:res = get(ale#util#FuzzyJSONDecode(a:lines, []), 0, {'messages': []})
