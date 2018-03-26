@@ -14,13 +14,11 @@ endfunction
 
 function! ale#handlers#textlint#GetCommand(buffer) abort
     let l:executable = ale#handlers#textlint#GetExecutable(a:buffer)
-    let l:config = ale#path#FindNearestFile(a:buffer, '.textlintrc')
     let l:options = ale#Var(a:buffer, 'textlint_options')
 
     return ale#node#Executable(a:buffer, l:executable)
     \    . (!empty(l:options) ? ' ' . l:options : '')
-    \    . (!empty(l:config) ? ' -c ' . ale#Escape(l:config) : '')
-    \    . ' -f json %t'
+    \    . ' -f json --stdin --stdin-filename %s'
 endfunction
 
 function! ale#handlers#textlint#HandleTextlintOutput(buffer, lines) abort
