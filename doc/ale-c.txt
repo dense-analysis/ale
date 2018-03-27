@@ -31,7 +31,18 @@ g:ale_c_build_dir                                           *g:ale_c_build_dir*
   database (it can be useful if multiple builds are in multiple build
   subdirectories in the project tree).
   This feature is also most useful for the clang tools linters, wrapped
-  aroung LibTooling (namely clang-tidy here)
+  around LibTooling (namely clang-tidy here)
+
+
+g:ale_c_parse_makefile                                 *g:ale_c_parse_makefile*
+                                                       *b:ale_c_parse_makefile*
+  Type: |Number|
+  Default: `0`
+
+  If set to `1`, ALE will run `make -n` to automatically determine flags to
+  set for C or C++ compilers. This can make it easier to determine the correct
+  build flags to use for different files.
+
 
 ===============================================================================
 clang                                                             *ale-c-clang*

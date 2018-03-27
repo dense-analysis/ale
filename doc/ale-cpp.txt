@@ -5,8 +5,11 @@ ALE C++ Integration                                           *ale-cpp-options*
 ===============================================================================
 Global Options
 
-The |g:ale_c_build_dir_names| and |g:ale_c_build_dir| also apply to some C++
-linters too.
+The following C options also apply to some C++ linters too.
+
+* |g:ale_c_build_dir_names|
+* |g:ale_c_build_dir|
+* |g:ale_c_parse_makefile|
 
 
 ===============================================================================
