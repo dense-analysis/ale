@@ -24,44 +24,30 @@ function! ale#c#FindProjectRoot(buffer) abort
 endfunction
 
 function! ale#c#ParseCFlagsToList(path_prefix, cflags) abort
-    let l:previous_option = ''
-    let l:shell_option = 0
-    let l:macro_option = 0
     let l:cflags_list = []
+    let l:previous_options = []
 
     for l:option in a:cflags
-
-        " Check if cflag contained spaces
-        if l:shell_option || stridx(l:option, '=`') >= 0
-            " Cflag contained shell command with spaces (ex. -D='date +%s')
-            let l:shell_option = 1
-            let l:previous_option .= l:option
-            if l:option[-1: -1] isnot? '`'
-                let l:previous_option .= ' '
-                continue
-            endif
-            let l:shell_option = 0
-        elseif l:macro_option || stridx(l:option, '$((') > 0
-            " Cflag contained macro with spaces (ex -Da=$(( 4 * 20  )))
-            let l:macro_option = 1
-            let l:previous_option .= l:option
-            if stridx(l:option, '))') < 0
-                let l:previous_option .= ' '
-                continue
-            endif
-            let l:macro_option = 0
+        call add(l:previous_options, l:option)
+        " Check if cflag contained a '-' and should not have been splitted
+        let l:option_list = split(l:option, '\zs')
+        if l:option_list[-1] isnot# ' '
+            continue
         endif
 
-        if l:previous_option isnot? ''
-            let l:option = l:previous_option
-            let l:previous_option = ''
-        endif
+        let l:option = join(l:previous_options, '-')
+        let l:previous_options = []
+
+        let l:option = '-' . substitute(l:option, '^\s*\(.\{-}\)\s*$', '\1', '')
 
         " Fix relative paths if needed
-        if stridx(l:option, '-I') >= 0
-            if stridx(l:option, '-I' . s:sep) < 0
-                let l:option = '-I' . a:path_prefix . s:sep . l:option[2:]
-            endif
+        if stridx(l:option, '-I') >= 0 &&
+           \ stridx(l:option, '-I' . s:sep) < 0
+            let l:rel_path = join(split(l:option, '\zs')[2:], '')
+            let l:rel_path = substitute(l:rel_path, '"', '', 'g')
+            let l:rel_path = substitute(l:rel_path, '''', '', 'g')
+            let l:option = ale#Escape('-I' . a:path_prefix .
+                                      \ s:sep . l:rel_path)
         endif
 
         " Parse the cflag
@@ -81,11 +67,11 @@ function! ale#c#ParseCFlags(buffer, stdout_make) abort
         return []
     endif
 
-    let l:buffer_filename = expand('#' . a:buffer . '...')
-
-    for l:cflags in split(a:stdout_make, '\n')
-        if stridx(l:cflags, l:buffer_filename)
-            let l:cflags = split(l:cflags)
+    let l:buffer_filename = expand('#' . a:buffer . ':t')
+    let l:cflags = []
+    for l:lines in split(a:stdout_make, '\\n')
+        if stridx(l:lines, l:buffer_filename) >= 0
+            let l:cflags = split(l:lines, '-')
             break
         endif
     endfor
