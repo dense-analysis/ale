@@ -375,10 +375,10 @@ Notes:
 * Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|), `rustfmt`
 * SASS: `sass-lint`, `stylelint`
 * SCSS: `prettier`, `sass-lint`, `scss-lint`, `stylelint`
-* Scala: `fsc, scalac`, `scalastyle`
+* Scala: `fsc`, `scalac`, `scalastyle`
 * Slim: `slim-lint`
 * SML: `smlnj`
-* Solidity: `solhint, solium`
+* Solidity: `solhint`, `solium`
 * Stylus: `stylelint`
 * SQL: `sqlint`
 * Swift: `swiftlint`, `swiftformat`
