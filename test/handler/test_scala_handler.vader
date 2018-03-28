@@ -1,24 +1,32 @@
 After:
   call ale#linter#Reset()
 
-Given scala(An empty Scala file):
-Execute(The handler should return the correct scalac command and executable):
-  AssertEqual 'scalac', ale#scala#GetExecutableForLinter(bufnr(''), 'scalac')
-  AssertEqual
-  \ ale#Escape('scalac') . ' -Ystop-after:parser %t',
-  \ ale#scala#GetCommandForLinter(bufnr(''), 'scalac')
+Execute(The handler shouldn't return anything with empty input):
+  AssertEqual [], ale#handlers#scala#HandleScalacLintFormat(bufnr(''), [])
 
-Given scala(An empty Scala file):
-Execute(The handler should return the correct fsc command and executable):
-  AssertEqual 'fsc', ale#scala#GetExecutableForLinter(bufnr(''), 'fsc')
-  AssertEqual
-  \ ale#Escape('fsc') . ' -Ystop-after:parser %t',
-  \ ale#scala#GetCommandForLinter(bufnr(''), 'fsc')
-
-Given scala.sbt(An empty SBT file):
-Execute(The fsc handler should return an empty executable for sbt files):
-  AssertEqual '', ale#scala#GetExecutableForLinter(bufnr(''), 'fsc')
-
-Given scala.sbt(An empty SBT file):
-Execute(The scalac handler should return an empty executable for sbt files):
-  AssertEqual '', ale#scala#GetExecutableForLinter(bufnr(''), 'scalac')
+Execute(The handler should correctly parse error messages):
+  AssertEqual 
+  \ [
+  \   { 
+  \     'lnum': 4,
+  \     'col':  8,
+  \     'text': ''':'' expected but identifier found.',
+  \     'type': 'E'
+  \   },
+  \   {
+  \     'lnum': 6,
+  \     'col':  2,
+  \     'text': 'identifier expected but eof found.',
+  \     'type': 'E'
+  \   }
+  \ ],
+  \ ale#handlers#scala#HandleScalacLintFormat(bufnr(''),
+  \ [
+  \ "hi.scala:4: error: ':' expected but identifier found.",
+  \ "  Some stupid scala code",
+  \ "       ^",
+  \ "hi.scala:6: error: identifier expected but eof found.",
+  \ ")",
+  \ " ^",
+  \ "two errors found",
+  \ ])
