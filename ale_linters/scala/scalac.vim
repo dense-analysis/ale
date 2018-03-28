@@ -3,11 +3,22 @@
 " Description: Basic scala support using scalac
 
 function! ale_linters#scala#scalac#GetExecutable(buffer) abort
-    return ale#scala#GetExecutableForLinter(a:buffer, 'scalac')
+    if index(split(getbufvar(a:buffer, '&filetype'), '\.'), 'sbt') >= 0
+        " Don't check sbt files
+        return ''
+    endif
+
+    return 'scalac'
 endfunction
 
 function! ale_linters#scala#scalac#GetCommand(buffer) abort
-    return ale#scala#GetCommandForLinter(a:buffer, 'scalac')
+    let l:executable = ale_linters#scala#scalac#GetExecutable(a:buffer)
+
+    if empty(l:executable)
+        return ''
+    endif
+
+    return ale#Escape(l:executable) . ' -Ystop-after:parser %t'
 endfunction
 
 call ale#linter#Define('scala', {

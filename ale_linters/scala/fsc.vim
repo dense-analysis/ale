@@ -2,11 +2,22 @@
 " Description: Basic scala support using fsc
 "
 function! ale_linters#scala#fsc#GetExecutable(buffer) abort
-    return ale#scala#GetExecutableForLinter(a:buffer, 'fsc')
+    if index(split(getbufvar(a:buffer, '&filetype'), '\.'), 'sbt') >= 0
+        " Don't check sbt files
+        return ''
+    endif
+
+    return 'fsc'
 endfunction
 
 function! ale_linters#scala#fsc#GetCommand(buffer) abort
-    return ale#scala#GetCommandForLinter(a:buffer, 'fsc')
+    let l:executable = ale_linters#scala#fsc#GetExecutable(a:buffer)
+
+    if empty(l:executable)
+        return ''
+    endif
+
+    return ale#Escape(l:executable) . ' -Ystop-after:parser %t'
 endfunction
 
 call ale#linter#Define('scala', {
