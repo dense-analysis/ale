@@ -1,7 +1,7 @@
 After:
   call ale#linter#Reset()
 
-Execute(The handler shouldn't return anything with empty input):
+Execute(The handler should return an empty list with empty input):
   AssertEqual [], ale#handlers#scala#HandleScalacLintFormat(bufnr(''), [])
 
 Execute(The handler should correctly parse error messages):
