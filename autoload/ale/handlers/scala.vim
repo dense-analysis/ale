@@ -1,5 +1,4 @@
 " Author: Nils Leuzinger - https://github.com/PawkyPenguin
-"         PawkyPenguin <nilsl@student.ethz.ch>
 " Description: Scala linting handlers for scalac-like compilers.
 
 function! ale#handlers#scala#HandleScalacLintFormat(buffer, lines) abort
