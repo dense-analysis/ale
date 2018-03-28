@@ -5,7 +5,6 @@ After:
   call ale#linter#Reset()
 
 Given scala(An empty Scala file):
-
 Execute(The default executable and command should be correct):
   AssertEqual 'fsc', ale_linters#scala#fsc#GetExecutable(bufnr(''))
   AssertEqual
