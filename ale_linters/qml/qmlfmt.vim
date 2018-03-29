@@ -7,6 +7,11 @@ function! ale_linters#qml#qmlfmt#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'qml_qmlfmt_executable')
 endfunction
 
+function! ale_linters#qml#qmlfmt#GetCommand(buffer) abort
+    return ale#Escape(ale_linters#qml#qmlfmt#GetExecutable(a:buffer))
+    \   . ' -e'
+endfunction
+
 " Find lines like
 " Error:11:1: Expected token `}'
 function! ale_linters#qml#qmlfmt#Handle(buffer, lines) abort
@@ -30,6 +35,6 @@ call ale#linter#Define('qml', {
 \   'name': 'qmlfmt',
 \   'output_stream': 'stderr',
 \   'executable_callback': 'ale_linters#qml#qmlfmt#GetExecutable',
-\   'command': g:ale_linters#qml#qmlfmt#GetExecutable . ' -e %t',
+\   'command_callback': 'ale_linters#qml#qmlfmt#GetCommand',
 \   'callback': 'ale_linters#qml#qmlfmt#Handle',
 \})
