@@ -1,0 +1,18 @@
+Before:
+  runtime ale_linters/qml/qmlfmt.vim
+
+After:
+  let g:ale_qml_qmlfmt_executable = 'qmlfmt'
+
+  call ale#linter#Reset()
+
+Execute(The qml qmlfmt command callback should return the correct default string):
+  AssertEqual ale#Escape('qmlfmt') . ' -e',
+  \ join(split(ale_linters#qml#qmlfmt#GetCommand(1)))
+
+Execute(The qmlfmt executable should be configurable):
+  let g:ale_qml_qmlfmt_executable = '~/.local/bin/qmlfmt'
+
+  AssertEqual '~/.local/bin/qmlfmt', ale_linters#qml#qmlfmt#GetExecutable(1)
+  AssertEqual ale#Escape('~/.local/bin/qmlfmt') . ' -e',
+  \ join(split(ale_linters#qml#qmlfmt#GetCommand(1)))
