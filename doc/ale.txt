@@ -185,6 +185,8 @@ CONTENTS                                                         *ale-contents*
       pylint..............................|ale-python-pylint|
       pyls................................|ale-python-pyls|
       yapf................................|ale-python-yapf|
+    qml...................................|ale-qml-options|
+      qmlfmt..............................|ale-qml-qmlfmt|
     r.....................................|ale-r-options|
       lintr...............................|ale-r-lintr|
     reasonml..............................|ale-reasonml-options|
@@ -365,7 +367,7 @@ Notes:
 * Pug: `pug-lint`
 * Puppet: `puppet`, `puppet-lint`
 * Python: `autopep8`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pyls`, `pylint`!!, `yapf`
-* QML: `qmllint`
+* QML: `qmlfmt`, `qmllint`
 * R: `lintr`
 * ReasonML: `merlin`, `ols`, `refmt`
 * reStructuredText: `alex`!!, `proselint`, `redpen`, `rstcheck`, `vale`, `write-good`
