@@ -14,11 +14,14 @@ function! ale_linters#python#pylint#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#python#pylint#FindPylintrc(buffer) abort
-    let l:path = ale#path#FindNearestFile(a:buffer, '.pylintrc')
-    if empty(l:path)
-        let l:path = ale#path#FindNearestFile(a:buffer, 'pylintrc')
+    let l:dot = ale#path#FindNearestFile(a:buffer, '.pylintrc')
+    let l:not_dot = ale#path#FindNearestFile(a:buffer, 'pylintrc')
+    " Choose the nearest config file
+    if l:dot !=# '' && l:not_dot !=# ''
+        return strlen(l:dot) < strlen(l:not_dot) + 1 ? l:not_dot : l:dot
+    else
+        return l:dot !=# '' ? l:dot : l:not_dot
     endif
-    return l:path
 endfunction
 
 function! ale_linters#python#pylint#GetCommand(buffer) abort
@@ -26,7 +29,7 @@ function! ale_linters#python#pylint#GetCommand(buffer) abort
     \   . ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'
     let l:pylintrc = ale_linters#python#pylint#FindPylintrc(a:buffer)
     if !empty(l:pylintrc)
-        let l:options .= ' --rcfile=' . l:pylintrc
+        let l:options .= ' --rcfile="' . l:pylintrc . '"'
     endif
     return ale#Escape(ale_linters#python#pylint#GetExecutable(a:buffer))
     \   . ' ' . l:options . ' %s'
