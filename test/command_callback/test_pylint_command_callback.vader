@@ -12,7 +12,17 @@ Before:
 
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
 
-  let b:command_tail = ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n %s'
+  " Consider that a global config file may be put in home directory
+  let b:pylintrc = ''
+  if filereadable(expand('~/.pylintrc'))
+    let b:pylintrc = ' --rcfile="' . expand('~/.pylintrc') . '"'
+  elseif filereadable(expand('~/pylintrc'))
+    let b:pylintrc = ' --rcfile="' . expand('~/pylintrc') . '"'
+  endif
+
+  let b:command_opts = ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'
+  let b:command_tail = b:command_opts . b:pylintrc . ' %s'
+  unlet! b:pylintrc
 
 After:
   Restore
@@ -21,6 +31,7 @@ After:
   call ale#linter#Reset()
 
   unlet! b:bin_dir
+  unlet! b:command_opts
   unlet! b:executable
 
 Execute(The pylint callbacks should return the correct default values):
@@ -82,4 +93,10 @@ Execute(You should able able to use the global pylint instead):
   \ ale_linters#python#pylint#GetExecutable(bufnr(''))
   AssertEqual
   \ ale#Escape('pylint') . ' ' . b:command_tail,
+  \ ale_linters#python#pylint#GetCommand(bufnr(''))
+
+Execute(The pylint command callback should detect pylintrc config in parent directory):
+  call ale#test#SetFilename('pylint_project/src/__init__.py')
+  AssertEqual
+  \ ale#Escape('pylint') . ' ' . b:command_opts . ' --rcfile="' . g:dir . '/pylint_project/pylintrc' . '" %s',
   \ ale_linters#python#pylint#GetCommand(bufnr(''))
