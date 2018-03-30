@@ -13,11 +13,23 @@ function! ale_linters#python#pylint#GetExecutable(buffer) abort
     return ale#python#FindExecutable(a:buffer, 'python_pylint', ['pylint'])
 endfunction
 
+function! ale_linters#python#pylint#FindPylintrc(buffer) abort
+    let l:path = ale#path#FindNearestFile(a:buffer, '.pylintrc')
+    if empty(l:path)
+        let l:path = ale#path#FindNearestFile(a:buffer, 'pylintrc')
+    endif
+    return l:path
+endfunction
+
 function! ale_linters#python#pylint#GetCommand(buffer) abort
-    return ale#Escape(ale_linters#python#pylint#GetExecutable(a:buffer))
-    \   . ' ' . ale#Var(a:buffer, 'python_pylint_options')
+    let l:options = ale#Var(a:buffer, 'python_pylint_options')
     \   . ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'
-    \   . ' %s'
+    let l:pylintrc = ale_linters#python#pylint#FindPylintrc(a:buffer)
+    if !empty(l:pylintrc)
+        let l:options .= ' --rcfile=' . l:pylintrc
+    endif
+    return ale#Escape(ale_linters#python#pylint#GetExecutable(a:buffer))
+    \   . ' ' . l:options . ' %s'
 endfunction
 
 function! ale_linters#python#pylint#Handle(buffer, lines) abort
