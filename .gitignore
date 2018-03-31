@@ -2,5 +2,6 @@
 /doc/tags
 .*
 !.editorconfig
+!/test/command_callback/pylint_project/nested/.pylintrc
 *.obj
 tags
