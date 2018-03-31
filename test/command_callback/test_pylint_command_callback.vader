@@ -98,13 +98,13 @@ Execute(You should able able to use the global pylint instead):
 Execute(The pylint command callback should detect pylintrc config in parent directory):
   call ale#test#SetFilename('pylint_project/src/__init__.py')
   AssertEqual
-  \ ale#Escape('pylint') . ' ' . b:command_opts . ' --rcfile="' . g:dir . '/pylint_project/pylintrc' . '" %s',
+  \ ale#Escape('pylint') . ' ' . b:command_opts . ' --rcfile="' . ale#path#Simplify(g:dir . '/pylint_project/pylintrc') . '" %s',
   \ ale_linters#python#pylint#GetCommand(bufnr(''))
 
 Execute(The pylint command callback should detect the nearest pylintrc config):
   call ale#test#SetFilename('pylint_project/nested/src/__init__.py')
   AssertEqual
-  \ ale#Escape('pylint') . ' ' . b:command_opts . ' --rcfile="' . g:dir . '/pylint_project/nested/.pylintrc' . '" %s',
+  \ ale#Escape('pylint') . ' ' . b:command_opts . ' --rcfile="' . ale#path#Simplify(g:dir . '/pylint_project/nested/.pylintrc') . '" %s',
   \ ale_linters#python#pylint#GetCommand(bufnr(''))
 
 Execute(The pylint command callback should not detect pylintrc if user specified --rcfile in g:ale_python_pylint_options):
