@@ -106,3 +106,9 @@ Execute(The pylint command callback should detect the nearest pylintrc config):
   AssertEqual
   \ ale#Escape('pylint') . ' ' . b:command_opts . ' --rcfile="' . g:dir . '/pylint_project/nested/.pylintrc' . '" %s',
   \ ale_linters#python#pylint#GetCommand(bufnr(''))
+
+Execute(The pylint command callback should not detect pylintrc if user specified --rcfile in g:ale_python_pylint_options):
+  let g:ale_python_pylint_options = '--rcfile=/path/to/somewhere'
+  AssertEqual
+  \ ale#Escape('pylint') . ' --rcfile=/path/to/somewhere' . b:command_opts . ' %s',
+  \ ale_linters#python#pylint#GetCommand(bufnr(''))

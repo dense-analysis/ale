@@ -28,7 +28,7 @@ function! ale_linters#python#pylint#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'python_pylint_options')
     \   . ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'
     let l:pylintrc = ale_linters#python#pylint#FindPylintrc(a:buffer)
-    if !empty(l:pylintrc)
+    if !empty(l:pylintrc) && stridx(l:options, '--rcfile') == -1
         let l:options .= ' --rcfile="' . l:pylintrc . '"'
     endif
     return ale#Escape(ale_linters#python#pylint#GetExecutable(a:buffer))
