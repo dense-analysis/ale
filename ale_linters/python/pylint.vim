@@ -17,10 +17,10 @@ function! ale_linters#python#pylint#FindPylintrc(buffer) abort
     let l:dot = ale#path#FindNearestFile(a:buffer, '.pylintrc')
     let l:not_dot = ale#path#FindNearestFile(a:buffer, 'pylintrc')
     " Choose the nearest config file
-    if l:dot !=# '' && l:not_dot !=# ''
+    if l:dot isnot# '' && l:not_dot isnot# ''
         return strlen(l:dot) < strlen(l:not_dot) + 1 ? l:not_dot : l:dot
     else
-        return l:dot !=# '' ? l:dot : l:not_dot
+        return l:dot isnot# '' ? l:dot : l:not_dot
     endif
 endfunction
 
