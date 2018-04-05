@@ -1,0 +1,42 @@
+Before:
+  Save g:ale_mercury_mmc_executable
+  Save g:ale_mercury_mmc_options
+
+  unlet! g:ale_mercury_mmc_executable
+  unlet! b:ale_mercury_mmc_executable
+  unlet! g:ale_mercury_mmc_options
+  unlet! b:ale_mercury_mmc_options
+
+  runtime ale_linters/mercury/mmc.vim
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+After:
+  unlet! b:ale_mercury_mmc_executable
+  unlet! b:ale_mercury_mmc_options
+
+  Restore
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(The default command should be correct):
+  AssertEqual
+  \ ale#path#BufferCdString(bufnr(''))
+  \ . 'mmc --errorcheck-only --make --output-compile-error-lines 100 dummy',
+  \
+  \ ale_linters#mercury#mmc#GetCommand(bufnr(''))
+
+Execute(The executable should be configurable):
+  let b:ale_mercury_mmc_executable = 'foo'
+  AssertEqual
+  \ ale#path#BufferCdString(bufnr(''))
+  \ . 'foo --errorcheck-only --make --output-compile-error-lines 100 dummy',
+  \
+  \ ale_linters#mercury#mmc#GetCommand(bufnr(''))
+
+Execute(The options should be configurable):
+  let b:ale_mercury_mmc_options = '--bar'
+  AssertEqual
+  \ ale#path#BufferCdString(bufnr(''))
+  \ . 'mmc --errorcheck-only --bar dummy',
+  \
+  \ ale_linters#mercury#mmc#GetCommand(bufnr(''))

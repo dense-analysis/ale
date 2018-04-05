@@ -141,6 +141,8 @@ CONTENTS                                                         *ale-contents*
       prettier............................|ale-markdown-prettier|
       textlint............................|ale-markdown-textlint|
       write-good..........................|ale-markdown-write-good|
+    mercury...............................|ale-mercury-options|
+      mmc.................................|ale-mercury-mmc|
     nroff.................................|ale-nroff-options|
       write-good..........................|ale-nroff-write-good|
     objc..................................|ale-objc-options|
@@ -350,6 +352,7 @@ Notes:
 * Make: `checkmake`
 * Markdown: `alex`!!, `markdownlint`!!, `mdl`, `prettier`, `proselint`, `redpen`, `remark-lint`, `textlint`, `vale`, `write-good`
 * MATLAB: `mlint`
+* Mercury: `mmc`!!
 * Nim: `nim check`!!
 * nix: `nix-instantiate`
 * nroff: `alex`!!, `proselint`, `write-good`
