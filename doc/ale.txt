@@ -141,6 +141,8 @@ CONTENTS                                                         *ale-contents*
       prettier............................|ale-markdown-prettier|
       textlint............................|ale-markdown-textlint|
       write-good..........................|ale-markdown-write-good|
+    mercury...............................|ale-mercury-options|
+      mmc.................................|ale-mercury-mmc|
     nroff.................................|ale-nroff-options|
       write-good..........................|ale-nroff-write-good|
     objc..................................|ale-objc-options|
@@ -186,6 +188,8 @@ CONTENTS                                                         *ale-contents*
       pylint..............................|ale-python-pylint|
       pyls................................|ale-python-pyls|
       yapf................................|ale-python-yapf|
+    qml...................................|ale-qml-options|
+      qmlfmt..............................|ale-qml-qmlfmt|
     r.....................................|ale-r-options|
       lintr...............................|ale-r-lintr|
     reasonml..............................|ale-reasonml-options|
@@ -351,6 +355,7 @@ Notes:
 * Make: `checkmake`
 * Markdown: `alex`!!, `markdownlint`!!, `mdl`, `prettier`, `proselint`, `redpen`, `remark-lint`, `textlint`, `vale`, `write-good`
 * MATLAB: `mlint`
+* Mercury: `mmc`!!
 * Nim: `nim check`!!
 * nix: `nix-instantiate`
 * nroff: `alex`!!, `proselint`, `write-good`
@@ -366,7 +371,7 @@ Notes:
 * Pug: `pug-lint`
 * Puppet: `puppet`, `puppet-lint`
 * Python: `autopep8`, `black`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pyls`, `pylint`!!, `yapf`
-* QML: `qmllint`
+* QML: `qmlfmt`, `qmllint`
 * R: `lintr`
 * ReasonML: `merlin`, `ols`, `refmt`
 * reStructuredText: `alex`!!, `proselint`, `redpen`, `rstcheck`, `vale`, `write-good`
@@ -376,10 +381,10 @@ Notes:
 * Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|), `rustfmt`
 * SASS: `sass-lint`, `stylelint`
 * SCSS: `prettier`, `sass-lint`, `scss-lint`, `stylelint`
-* Scala: `scalac`, `scalastyle`
+* Scala: `fsc`, `scalac`, `scalastyle`
 * Slim: `slim-lint`
 * SML: `smlnj`
-* Solidity: `solhint, solium`
+* Solidity: `solhint`, `solium`
 * Stylus: `stylelint`
 * SQL: `sqlint`
 * Swift: `swiftlint`, `swiftformat`

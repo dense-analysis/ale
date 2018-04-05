@@ -30,10 +30,10 @@ Execute(The executable should be configurable):
 Execute(The executable should be used in the command):
   AssertEqual
   \ ale#Escape('clang') . b:command_tail,
-  \ ale_linters#c#clang#GetCommand(bufnr(''))
+  \ ale_linters#c#clang#GetCommand(bufnr(''), [])
 
   let b:ale_c_clang_executable = 'foobar'
 
   AssertEqual
   \ ale#Escape('foobar') . b:command_tail,
-  \ ale_linters#c#clang#GetCommand(bufnr(''))
+  \ ale_linters#c#clang#GetCommand(bufnr(''), [])

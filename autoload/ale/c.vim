@@ -1,6 +1,7 @@
-" Author: gagbo <gagbobada@gmail.com>, w0rp <devw0rp@gmail.com>
+" Author: gagbo <gagbobada@gmail.com>, w0rp <devw0rp@gmail.com>, roel0 <postelmansroel@gmail.com>
 " Description: Functions for integrating with C-family linters.
 
+call ale#Set('c_parse_makefile', 0)
 let s:sep = has('win32') ? '\' : '/'
 
 function! ale#c#FindProjectRoot(buffer) abort
@@ -18,6 +19,88 @@ function! ale#c#FindProjectRoot(buffer) abort
             return l:path
         endif
     endfor
+
+    return ''
+endfunction
+
+function! ale#c#ParseCFlagsToList(path_prefix, cflags) abort
+    let l:cflags_list = []
+    let l:previous_options = []
+
+    for l:option in a:cflags
+        call add(l:previous_options, l:option)
+        " Check if cflag contained a '-' and should not have been splitted
+        let l:option_list = split(l:option, '\zs')
+        if l:option_list[-1] isnot# ' '
+            continue
+        endif
+
+        let l:option = join(l:previous_options, '-')
+        let l:previous_options = []
+
+        let l:option = '-' . substitute(l:option, '^\s*\(.\{-}\)\s*$', '\1', '')
+
+        " Fix relative paths if needed
+        if stridx(l:option, '-I') >= 0 &&
+           \ stridx(l:option, '-I' . s:sep) < 0
+            let l:rel_path = join(split(l:option, '\zs')[2:], '')
+            let l:rel_path = substitute(l:rel_path, '"', '', 'g')
+            let l:rel_path = substitute(l:rel_path, '''', '', 'g')
+            let l:option = ale#Escape('-I' . a:path_prefix .
+                                      \ s:sep . l:rel_path)
+        endif
+
+        " Parse the cflag
+        if stridx(l:option, '-I') >= 0 ||
+           \ stridx(l:option, '-D') >= 0
+            if index(l:cflags_list, l:option) < 0
+                call add(l:cflags_list, l:option)
+            endif
+        endif
+    endfor
+
+    return l:cflags_list
+endfunction
+
+function! ale#c#ParseCFlags(buffer, stdout_make) abort
+    if !g:ale_c_parse_makefile
+        return []
+    endif
+
+    let l:buffer_filename = expand('#' . a:buffer . ':t')
+    let l:cflags = []
+    for l:lines in split(a:stdout_make, '\\n')
+        if stridx(l:lines, l:buffer_filename) >= 0
+            let l:cflags = split(l:lines, '-')
+            break
+        endif
+    endfor
+
+    let l:makefile_path = ale#path#FindNearestFile(a:buffer, 'Makefile')
+    return ale#c#ParseCFlagsToList(fnamemodify(l:makefile_path, ':p:h'), l:cflags)
+endfunction
+
+function! ale#c#GetCFlags(buffer, output) abort
+    let l:cflags = ' '
+
+    if g:ale_c_parse_makefile && !empty(a:output)
+        let l:cflags = join(ale#c#ParseCFlags(a:buffer, join(a:output, '\n')), ' ') . ' '
+    endif
+
+    if l:cflags is# ' '
+        let l:cflags = ale#c#IncludeOptions(ale#c#FindLocalHeaderPaths(a:buffer))
+    endif
+
+    return l:cflags
+endfunction
+
+function! ale#c#GetMakeCommand(buffer) abort
+    if g:ale_c_parse_makefile
+        let l:makefile_path = ale#path#FindNearestFile(a:buffer, 'Makefile')
+        if !empty(l:makefile_path)
+            return 'cd '. fnamemodify(l:makefile_path, ':p:h') . ' && make -n'
+        endif
+    endif
 
     return ''
 endfunction
