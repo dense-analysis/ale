@@ -18,6 +18,7 @@ Execute(The brittany callback should return the correct default values):
   \ {
   \   'read_temporary_file': 1,
   \   'command': ale#Escape('xxxinvalid')
+  \     . ' --write-mode inplace'
   \     . ' %t',
   \ },
   \ ale#fixers#brittany#Fix(bufnr(''))
