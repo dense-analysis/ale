@@ -311,3 +311,13 @@ function! ale#util#StopPartialTimer(timer_id) abort
         call remove(s:partial_timers, a:timer_id)
     endif
 endfunction
+
+" Given a possibly multi-byte string and a 1-based character position on a
+" line, return the 1-based byte position on that line.
+function! ale#util#Col(str, chr) abort
+    if a:chr < 2
+        return a:chr
+    endif
+
+    return strlen(join(split(a:str, '\zs')[0:a:chr - 2], '')) + 1
+endfunction

@@ -2072,6 +2072,13 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                            key is also set with a valid number for some other
                            buffer.
                          `vcol` - Defaults to `0`.
+
+                           If set to `1`, ALE will convert virtual column
+                           positions for `col` and `end_col` to byte column
+                           positions. If the buffer is changed in-between
+                           checking it and displaying the results, the
+                           calculated byte column positions will probably be
+                           wrong.
                          `type` - Defaults to `'E'`.
                          `nr` - Defaults to `-1`.
 

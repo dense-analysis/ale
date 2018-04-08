@@ -393,7 +393,7 @@ function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
         \   'text': l:old_item.text,
         \   'lnum': str2nr(l:old_item.lnum),
         \   'col': str2nr(get(l:old_item, 'col', 0)),
-        \   'vcol': get(l:old_item, 'vcol', 0),
+        \   'vcol': 0,
         \   'type': get(l:old_item, 'type', 'E'),
         \   'nr': get(l:old_item, 'nr', -1),
         \   'linter_name': a:linter_name,
@@ -453,6 +453,20 @@ function! ale#engine#FixLocList(buffer, linter_name, loclist) abort
             " When errors go beyond the end of the file, put them at the end.
             " This is only done for the current buffer.
             let l:item.lnum = l:last_line_number
+        elseif get(l:old_item, 'vcol', 0)
+            " Convert virtual column positions to byte positions.
+            " The positions will be off if the buffer has changed recently.
+            let l:line = getbufline(a:buffer, l:item.lnum)[0]
+
+            let l:item.col = ale#util#Col(l:line, l:item.col)
+
+            if has_key(l:item, 'end_col')
+                let l:end_line = get(l:item, 'end_lnum', l:line) != l:line
+                \   ? getbufline(a:buffer, l:item.end_lnum)[0]
+                \   : l:line
+
+                let l:item.end_col = ale#util#Col(l:end_line, l:item.end_col)
+            endif
         endif
 
         call add(l:new_loclist, l:item)

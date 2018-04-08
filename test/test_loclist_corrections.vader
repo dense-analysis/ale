@@ -52,7 +52,7 @@ Execute(FixLocList should use the values we supply):
   \     'lnum': 3,
   \     'col': 4,
   \     'bufnr': 10000,
-  \     'vcol': 1,
+  \     'vcol': 0,
   \     'type': 'W',
   \     'nr': 42,
   \     'linter_name': 'foobar',
@@ -347,4 +347,34 @@ Execute(The error code should be passed on):
   \   bufnr('%'),
   \   'foobar',
   \   [{'text': 'a', 'lnum': 11, 'code': 'some-code'}],
+  \ )
+
+Given(A file with Japanese multi-byte text):
+  はじめまして!
+  -私はワープです。
+Execute(character positions should be converted to byte positions):
+  AssertEqual
+  \ [
+  \   {'lnum': 1, 'bufnr': bufnr(''), 'col': 0, 'linter_name': 'foobar', 'nr': -1, 'type': 'E', 'vcol': 0, 'text': 'a'},
+  \   {'lnum': 1, 'bufnr': bufnr(''), 'col': 1, 'linter_name': 'foobar', 'nr': -1, 'type': 'E', 'vcol': 0, 'text': 'a'},
+  \   {'lnum': 1, 'bufnr': bufnr(''), 'col': 4, 'linter_name': 'foobar', 'nr': -1, 'type': 'E', 'vcol': 0, 'text': 'a'},
+  \   {'lnum': 1, 'bufnr': bufnr(''), 'col': 7, 'linter_name': 'foobar', 'nr': -1, 'type': 'E', 'vcol': 0, 'text': 'a'},
+  \   {'lnum': 1, 'bufnr': bufnr(''), 'col': 7, 'end_col': 13, 'linter_name': 'foobar', 'nr': -1, 'type': 'E', 'vcol': 0, 'text': 'a'},
+  \   {'lnum': 1, 'bufnr': bufnr(''), 'col': 7, 'end_col': 13, 'end_lnum': 1, 'linter_name': 'foobar', 'nr': -1, 'type': 'E', 'vcol': 0, 'text': 'a'},
+  \   {'lnum': 1, 'bufnr': bufnr(''), 'col': 7, 'end_col': 17, 'end_lnum': 2, 'linter_name': 'foobar', 'nr': -1, 'type': 'E', 'vcol': 0, 'text': 'a'},
+  \   {'lnum': 2, 'bufnr': bufnr(''), 'col': 17, 'linter_name': 'foobar', 'nr': -1, 'type': 'E', 'vcol': 0, 'text': 'a'},
+  \],
+  \ ale#engine#FixLocList(
+  \   bufnr('%'),
+  \   'foobar',
+  \   [
+  \     {'text': 'a', 'lnum': 1, 'col': 0, 'vcol': 1},
+  \     {'text': 'a', 'lnum': 1, 'col': 1, 'vcol': 1},
+  \     {'text': 'a', 'lnum': 1, 'col': 2, 'vcol': 1},
+  \     {'text': 'a', 'lnum': 1, 'col': 3, 'vcol': 1},
+  \     {'text': 'a', 'lnum': 1, 'col': 3, 'end_col': 5, 'vcol': 1},
+  \     {'text': 'a', 'lnum': 1, 'col': 3, 'end_col': 5, 'end_lnum': 1, 'vcol': 1},
+  \     {'text': 'a', 'lnum': 1, 'col': 3, 'end_col': 7, 'end_lnum': 2, 'vcol': 1},
+  \     {'text': 'a', 'lnum': 2, 'col': 7, 'vcol': 1},
+  \   ],
   \ )
