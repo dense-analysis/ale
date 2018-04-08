@@ -25,6 +25,14 @@ g:ale_java_javac_classpath                         *g:ale_java_javac_classpath*
   This variable can be set to change the global classpath for Java.
 
 
+g:ale_java_javac_executable                       *g:ale_java_javac_executable*
+                                                  *b:ale_java_javac_executable*
+  Type: |String|
+  Default: `'javac'`
+
+  This variable can be set to change the executable path used for javac.
+
+
 g:ale_java_javac_options                             *g:ale_java_javac_options*
                                                      *b:ale_java_javac_options*
   Type: |String|

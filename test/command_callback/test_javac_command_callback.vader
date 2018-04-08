@@ -1,9 +1,11 @@
 Before:
   call ale#test#SetDirectory('/testplugin/test/command_callback')
 
+  Save g:ale_java_javac_executable
   Save g:ale_java_javac_options
   Save g:ale_java_javac_classpath
 
+  unlet! g:ale_java_javac_executable
   unlet! g:ale_java_javac_options
   unlet! g:ale_java_javac_classpath
 
@@ -28,7 +30,8 @@ Before:
 
   call ale#test#SetFilename('dummy.java')
 
-  let g:prefix = 'cd ' . ale#Escape(expand('%:p:h')) . ' && javac -Xlint'
+  let g:prefix = 'cd ' . ale#Escape(expand('%:p:h'))  . ' && '
+  \ . ale#Escape('javac') . ' -Xlint'
 
 After:
   call ale#test#RestoreDirectory()
@@ -55,6 +58,17 @@ Execute(The javac callback should use g:ale_java_javac_classpath correctly):
   \ g:prefix
   \   . ' -cp ' . ale#Escape('foo.jar')
   \   . ' -d TEMP %t',
+  \ GetCommand([])
+
+Execute(The executable should be configurable):
+  let g:ale_java_javac_executable = 'foobar'
+
+  AssertEqual 'foobar', ale_linters#java#javac#GetExecutable(bufnr(''))
+
+  AssertEqual
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \ . ale#Escape('foobar') . ' -Xlint'
+  \ . ' -d TEMP %t',
   \ GetCommand([])
 
 Execute(The javac callback should include discovered classpaths):
@@ -120,7 +134,7 @@ Execute(The javac callback should detect source directories):
   call ale#engine#InitBufferInfo(bufnr(''))
 
   AssertEqual
-  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && javac -Xlint'
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && ' . ale#Escape('javac') . ' -Xlint'
   \   . ' -sourcepath ' . ale#Escape(
   \     ale#path#Simplify(g:dir . '/java_paths/src/main/java/')
   \   )
@@ -133,7 +147,7 @@ Execute(The javac callback should combine detected source directories and classp
   call ale#engine#InitBufferInfo(bufnr(''))
 
   AssertEqual
-  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && javac -Xlint'
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && ' . ale#Escape('javac') . ' -Xlint'
   \   . ' -cp ' . ale#Escape(join(['/foo/bar.jar', '/xyz/abc.jar'], g:cp_sep))
   \   . ' -sourcepath ' . ale#Escape(
   \     ale#path#Simplify(g:dir . '/java_paths/src/main/java/')
@@ -164,7 +178,7 @@ Execute(The javac callback should include src/test/java for test paths):
   call ale#engine#InitBufferInfo(bufnr(''))
 
   AssertEqual
-  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && javac -Xlint'
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && ' . ale#Escape('javac') . ' -Xlint'
   \   . ' -sourcepath ' . ale#Escape(join([
   \     ale#path#Simplify(g:dir . '/java_paths/src/main/java/'),
   \     ale#path#Simplify(g:dir . '/java_paths/src/test/java/'),
@@ -178,7 +192,7 @@ Execute(The javac callback should include src/main/jaxb when available):
   call ale#engine#InitBufferInfo(bufnr(''))
 
   AssertEqual
-  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && javac -Xlint'
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && ' . ale#Escape('javac') . ' -Xlint'
   \   . ' -sourcepath ' . ale#Escape(join([
   \     ale#path#Simplify(g:dir . '/java_paths_with_jaxb/src/main/java/'),
   \     ale#path#Simplify(g:dir . '/java_paths_with_jaxb/src/main/jaxb/'),
