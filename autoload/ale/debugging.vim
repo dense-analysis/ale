@@ -211,3 +211,14 @@ function! ale#debugging#InfoToClipboard() abort
 
     call s:Echo('ALEInfo copied to your clipboard')
 endfunction
+
+function! ale#debugging#InfoToFile(filename) abort
+    let l:expanded_filename = expand(a:filename)
+
+    redir => l:output
+        silent call ale#debugging#Info()
+    redir END
+
+    call writefile(split(l:output, "\n"), l:expanded_filename)
+    call s:Echo('ALEInfo written to ' . l:expanded_filename)
+endfunction

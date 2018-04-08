@@ -1869,6 +1869,9 @@ ALEInfoToClipboard                                         *ALEInfoToClipboard*
   The command `:ALEInfoToClipboard` can be used to output ALEInfo directly to
   your clipboard. This might not work on every machine.
 
+  `:ALEInfoToFile` will write the ALE runtime information to a given filename.
+  The filename works just like |:w|.
+
 
 ALEReset                                                             *ALEReset*
 ALEResetBuffer                                                 *ALEResetBuffer*
