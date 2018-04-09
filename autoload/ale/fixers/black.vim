@@ -2,7 +2,7 @@
 " Description: Fixing Python files with black.
 "
 call ale#Set('python_black_executable', 'black')
-call ale#Set('python_black_use_global', 0)
+call ale#Set('python_black_use_global', get(g:, 'ale_use_global_executables', 0))
 call ale#Set('python_black_options', '')
 
 function! ale#fixers#black#Fix(buffer) abort

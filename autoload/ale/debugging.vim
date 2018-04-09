@@ -51,6 +51,7 @@ let s:global_variable_list = [
 \    'ale_sign_warning',
 \    'ale_statusline_format',
 \    'ale_type_map',
+\    'ale_use_global_executables',
 \    'ale_warn_about_trailing_blank_lines',
 \    'ale_warn_about_trailing_whitespace',
 \]

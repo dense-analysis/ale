@@ -8,7 +8,7 @@ let g:ale_python_flake8_executable =
 let s:default_options = get(g:, 'ale_python_flake8_args', '')
 let g:ale_python_flake8_options =
 \   get(g:, 'ale_python_flake8_options', s:default_options)
-let g:ale_python_flake8_use_global = get(g:, 'ale_python_flake8_use_global', 0)
+let g:ale_python_flake8_use_global = get(g:, 'ale_python_flake8_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! s:UsingModule(buffer) abort
     return ale#Var(a:buffer, 'python_flake8_options') =~# ' *-m flake8'

@@ -3,7 +3,7 @@
 
 call ale#Set('python_pycodestyle_executable', 'pycodestyle')
 call ale#Set('python_pycodestyle_options', '')
-call ale#Set('python_pycodestyle_use_global', 0)
+call ale#Set('python_pycodestyle_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! ale_linters#python#pycodestyle#GetExecutable(buffer) abort
     return ale#python#FindExecutable(a:buffer, 'python_pycodestyle', ['pycodestyle'])

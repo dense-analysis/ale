@@ -4,7 +4,7 @@
 let g:ale_gitcommit_gitlint_executable =
 \   get(g:, 'ale_gitcommit_gitlint_executable', 'gitlint')
 let g:ale_gitcommit_gitlint_options = get(g:, 'ale_gitcommit_gitlint_options', '')
-let g:ale_gitcommit_gitlint_use_global = get(g:, 'ale_gitcommit_gitlint_use_global', 0)
+let g:ale_gitcommit_gitlint_use_global = get(g:, 'ale_gitcommit_gitlint_use_global', get(g:, 'ale_use_global_executables', 0))
 
 
 function! ale_linters#gitcommit#gitlint#GetExecutable(buffer) abort

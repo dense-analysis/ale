@@ -7,7 +7,7 @@ let g:ale_python_prospector_executable =
 let g:ale_python_prospector_options =
 \   get(g:, 'ale_python_prospector_options', '')
 
-let g:ale_python_prospector_use_global = get(g:, 'ale_python_prospector_use_global', 0)
+let g:ale_python_prospector_use_global = get(g:, 'ale_python_prospector_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! ale_linters#python#prospector#GetExecutable(buffer) abort
     return ale#python#FindExecutable(a:buffer, 'python_prospector', ['prospector'])

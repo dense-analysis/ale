@@ -2,7 +2,7 @@
 " Description: A language server for Python
 
 call ale#Set('python_pyls_executable', 'pyls')
-call ale#Set('python_pyls_use_global', 0)
+call ale#Set('python_pyls_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! ale_linters#python#pyls#GetExecutable(buffer) abort
     return ale#python#FindExecutable(a:buffer, 'python_pyls', ['pyls'])

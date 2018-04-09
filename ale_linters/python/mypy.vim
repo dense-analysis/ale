@@ -4,7 +4,7 @@
 call ale#Set('python_mypy_executable', 'mypy')
 call ale#Set('python_mypy_ignore_invalid_syntax', 0)
 call ale#Set('python_mypy_options', '')
-call ale#Set('python_mypy_use_global', 0)
+call ale#Set('python_mypy_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! ale_linters#python#mypy#GetExecutable(buffer) abort
     return ale#python#FindExecutable(a:buffer, 'python_mypy', ['mypy'])

@@ -2,7 +2,7 @@
 " Description: Fixing files with php-cs-fixer.
 
 call ale#Set('php_cs_fixer_executable', 'php-cs-fixer')
-call ale#Set('php_cs_fixer_use_global', 0)
+call ale#Set('php_cs_fixer_use_global', get(g:, 'ale_use_global_executables', 0))
 call ale#Set('php_cs_fixer_options', '')
 
 function! ale#fixers#php_cs_fixer#GetExecutable(buffer) abort

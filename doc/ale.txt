@@ -1498,6 +1498,18 @@ g:ale_type_map                                                 *g:ale_type_map*
   Type maps can be set per-buffer with `b:ale_type_map`.
 
 
+g:ale_use_global_executables                     *g:ale_use_global_executables*
+
+  Type: |Number|
+  Default: not set
+
+  This option can be set to change the default for all `_use_global` options.
+  This option must be set before ALE is loaded, preferably in a vimrc file.
+
+  See |ale-integrations-local-executables| for more information on those
+  options.
+
+
 g:ale_virtualenv_dir_names                         *g:ale_virtualenv_dir_names*
 b:ale_virtualenv_dir_names                         *b:ale_virtualenv_dir_names*
 
@@ -1685,7 +1697,7 @@ g:ale_writegood_options                               *g:ale_writegood_options*
 g:ale_writegood_use_global                         *g:ale_writegood_use_global*
                                                    *b:ale_writegood_use_global*
   Type: |Number|
-  Default: `0`
+  Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
 
@@ -1718,6 +1730,9 @@ If you prefer to use global executables for those tools, set the relevant
   let g:ale_python_flake8_executable = '/foo/bar/flake8'
   let g:ale_python_flake8_use_global = 1
 <
+
+|g:ale_use_global_executables| can be set to `1` in your vimrc file to make
+ALE use global executables for all linters by default.
 
 The option |g:ale_virtualenv_dir_names| controls the local virtualenv paths
 ALE will use to search for Python executables.

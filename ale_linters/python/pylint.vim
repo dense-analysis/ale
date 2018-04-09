@@ -7,7 +7,7 @@ let g:ale_python_pylint_executable =
 let g:ale_python_pylint_options =
 \   get(g:, 'ale_python_pylint_options', '')
 
-let g:ale_python_pylint_use_global = get(g:, 'ale_python_pylint_use_global', 0)
+let g:ale_python_pylint_use_global = get(g:, 'ale_python_pylint_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! ale_linters#python#pylint#GetExecutable(buffer) abort
     return ale#python#FindExecutable(a:buffer, 'python_pylint', ['pylint'])

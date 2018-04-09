@@ -4,7 +4,7 @@
 
 call ale#Set('javascript_flow_executable', 'flow')
 call ale#Set('javascript_flow_use_home_config', 0)
-call ale#Set('javascript_flow_use_global', 0)
+call ale#Set('javascript_flow_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! ale_linters#javascript#flow#GetExecutable(buffer) abort
     let l:flow_config = ale#path#FindNearestFile(a:buffer, '.flowconfig')
