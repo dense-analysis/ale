@@ -28,7 +28,8 @@ Execute(The pylint callbacks should return the correct default values):
   \ 'pylint',
   \ ale_linters#python#pylint#GetExecutable(bufnr(''))
   AssertEqual
-  \ ale#Escape('pylint') . ' ' . b:command_tail,
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('pylint') . ' ' . b:command_tail,
   \ ale_linters#python#pylint#GetCommand(bufnr(''))
 
 Execute(The pylint executable should be configurable, and escaped properly):
@@ -38,14 +39,16 @@ Execute(The pylint executable should be configurable, and escaped properly):
   \ 'executable with spaces',
   \ ale_linters#python#pylint#GetExecutable(bufnr(''))
   AssertEqual
-  \ ale#Escape('executable with spaces') . ' ' . b:command_tail,
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('executable with spaces') . ' ' . b:command_tail,
   \ ale_linters#python#pylint#GetCommand(bufnr(''))
 
 Execute(The pylint command callback should let you set options):
   let g:ale_python_pylint_options = '--some-option'
 
   AssertEqual
-  \ ale#Escape('pylint') . ' --some-option' . b:command_tail,
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('pylint') . ' --some-option' . b:command_tail,
   \ ale_linters#python#pylint#GetCommand(bufnr(''))
 
 Execute(The pylint callbacks shouldn't detect virtualenv directories where they don't exist):
@@ -55,7 +58,8 @@ Execute(The pylint callbacks shouldn't detect virtualenv directories where they 
   \ 'pylint',
   \ ale_linters#python#pylint#GetExecutable(bufnr(''))
   AssertEqual
-  \ ale#Escape('pylint') . ' ' . b:command_tail,
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('pylint') . ' ' . b:command_tail,
   \ ale_linters#python#pylint#GetCommand(bufnr(''))
 
 Execute(The pylint callbacks should detect virtualenv directories):
@@ -70,7 +74,8 @@ Execute(The pylint callbacks should detect virtualenv directories):
   \ ale_linters#python#pylint#GetExecutable(bufnr(''))
 
   AssertEqual
-  \ ale#Escape(b:executable) . ' ' . b:command_tail,
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape(b:executable) . ' ' . b:command_tail,
   \ ale_linters#python#pylint#GetCommand(bufnr(''))
 
 Execute(You should able able to use the global pylint instead):
@@ -81,5 +86,6 @@ Execute(You should able able to use the global pylint instead):
   \ 'pylint',
   \ ale_linters#python#pylint#GetExecutable(bufnr(''))
   AssertEqual
-  \ ale#Escape('pylint') . ' ' . b:command_tail,
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('pylint') . ' ' . b:command_tail,
   \ ale_linters#python#pylint#GetCommand(bufnr(''))
