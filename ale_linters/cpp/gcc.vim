@@ -21,7 +21,7 @@ function! ale_linters#cpp#gcc#GetCommand(buffer, output) abort
 endfunction
 
 call ale#linter#Define('cpp', {
-\   'name': 'g++',
+\   'name': 'gcc',
 \   'output_stream': 'stderr',
 \   'executable_callback': 'ale_linters#cpp#gcc#GetExecutable',
 \   'command_chain': [
