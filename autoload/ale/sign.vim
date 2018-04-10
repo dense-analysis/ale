@@ -60,55 +60,35 @@ execute 'sign define ALEInfoSign text=' . g:ale_sign_info
 \   . ' texthl=ALEInfoSign linehl=ALEInfoLine'
 sign define ALEDummySign
 
-let s:error_priority = 1
-let s:warning_priority = 2
-let s:info_priority = 3
-let s:style_error_priority = 4
-let s:style_warning_priority = 5
-
 function! ale#sign#GetSignName(sublist) abort
-    let l:priority = s:style_warning_priority
+    let l:priority = g:ale#util#style_warning_priority
 
     " Determine the highest priority item for the line.
     for l:item in a:sublist
-        if l:item.type is# 'I'
-            let l:item_priority = s:info_priority
-        elseif l:item.type is# 'W'
-            if get(l:item, 'sub_type', '') is# 'style'
-                let l:item_priority = s:style_warning_priority
-            else
-                let l:item_priority = s:warning_priority
-            endif
-        else
-            if get(l:item, 'sub_type', '') is# 'style'
-                let l:item_priority = s:style_error_priority
-            else
-                let l:item_priority = s:error_priority
-            endif
-        endif
+        let l:item_priority = ale#util#GetItemPriority(l:item)
 
-        if l:item_priority < l:priority
+        if l:item_priority > l:priority
             let l:priority = l:item_priority
         endif
     endfor
 
-    if l:priority is# s:error_priority
+    if l:priority is# g:ale#util#error_priority
         return 'ALEErrorSign'
     endif
 
-    if l:priority is# s:warning_priority
+    if l:priority is# g:ale#util#warning_priority
         return 'ALEWarningSign'
     endif
 
-    if l:priority is# s:style_error_priority
+    if l:priority is# g:ale#util#style_error_priority
         return 'ALEStyleErrorSign'
     endif
 
-    if l:priority is# s:style_warning_priority
+    if l:priority is# g:ale#util#style_warning_priority
         return 'ALEStyleWarningSign'
     endif
 
-    if l:priority is# s:info_priority
+    if l:priority is# g:ale#util#info_priority
         return 'ALEInfoSign'
     endif
 

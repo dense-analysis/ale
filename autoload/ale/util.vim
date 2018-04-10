@@ -33,6 +33,32 @@ function! ale#util#GetFunction(string_or_ref) abort
     return a:string_or_ref
 endfunction
 
+let g:ale#util#error_priority = 5
+let g:ale#util#warning_priority = 4
+let g:ale#util#info_priority = 3
+let g:ale#util#style_error_priority = 2
+let g:ale#util#style_warning_priority = 1
+
+function! ale#util#GetItemPriority(item) abort
+    if a:item.type is# 'I'
+        return g:ale#util#info_priority
+    endif
+
+    if a:item.type is# 'W'
+        if get(a:item, 'sub_type', '') is# 'style'
+            return g:ale#util#style_warning_priority
+        endif
+
+        return g:ale#util#warning_priority
+    endif
+
+    if get(a:item, 'sub_type', '') is# 'style'
+        return g:ale#util#style_error_priority
+    endif
+
+    return g:ale#util#error_priority
+endfunction
+
 " Compare two loclist items for ALE, sorted by their buffers, filenames, and
 " line numbers and column numbers.
 function! ale#util#LocItemCompare(left, right) abort
@@ -67,6 +93,23 @@ function! ale#util#LocItemCompare(left, right) abort
     endif
 
     if a:left.col > a:right.col
+        return 1
+    endif
+
+    " When either of the items lacks a problem type, then the two items should
+    " be considered equal. This is important for loclist jumping.
+    if !has_key(a:left, 'type') || !has_key(a:right, 'type')
+        return 0
+    endif
+
+    let l:left_priority = ale#util#GetItemPriority(a:left)
+    let l:right_priority = ale#util#GetItemPriority(a:right)
+
+    if l:left_priority < l:right_priority
+        return -1
+    endif
+
+    if l:left_priority > l:right_priority
         return 1
     endif
 
@@ -136,6 +179,17 @@ function! ale#util#BinarySearch(loclist, buffer, line, column) abort
             \&& a:loclist[l:index + 1].bufnr == a:buffer
             \&& a:loclist[l:index + 1].lnum == a:line
             \&& a:loclist[l:index + 1].col <= a:column
+                let l:index += 1
+            endwhile
+
+            " Scan forwards to find the last item on the column for the item
+            " we found, which will have the most serious problem.
+            let l:item_column = a:loclist[l:index].col
+
+            while l:index < l:max
+            \&& a:loclist[l:index + 1].bufnr == a:buffer
+            \&& a:loclist[l:index + 1].lnum == a:line
+            \&& a:loclist[l:index + 1].col == l:item_column
                 let l:index += 1
             endwhile
 

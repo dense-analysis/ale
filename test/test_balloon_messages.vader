@@ -7,10 +7,19 @@ Before:
 
   let g:ale_buffer_info[bufnr('')] = {'loclist': [
   \ {
+  \   'bufnr': bufnr('%'),
+  \   'lnum': 1,
+  \   'col': 10,
+  \   'linter_name': 'eslint',
+  \   'type': 'W',
+  \   'text': 'Ignore me.',
+  \ },
+  \ {
   \   'bufnr': bufnr(''),
   \   'lnum': 1,
   \   'col': 10,
   \   'text': 'Missing semicolon. (semi)',
+  \   'type': 'E',
   \ },
   \ {
   \   'bufnr': bufnr(''),

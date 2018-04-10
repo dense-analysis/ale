@@ -2,15 +2,15 @@ Before:
   let g:ale_buffer_info = {
   \ bufnr(''): {
   \   'loclist': [
-  \     {'bufnr': bufnr('') - 1, 'lnum': 3, 'col': 2},
-  \     {'bufnr': bufnr(''), 'lnum': 1, 'col': 2},
-  \     {'bufnr': bufnr(''), 'lnum': 1, 'col': 3},
-  \     {'bufnr': bufnr(''), 'lnum': 2, 'col': 1},
-  \     {'bufnr': bufnr(''), 'lnum': 2, 'col': 2},
-  \     {'bufnr': bufnr(''), 'lnum': 2, 'col': 3},
-  \     {'bufnr': bufnr(''), 'lnum': 2, 'col': 6},
-  \     {'bufnr': bufnr(''), 'lnum': 2, 'col': 700},
-  \     {'bufnr': bufnr('') + 1, 'lnum': 3, 'col': 2},
+  \     {'type': 'E', 'bufnr': bufnr('') - 1, 'lnum': 3, 'col': 2},
+  \     {'type': 'E', 'bufnr': bufnr(''), 'lnum': 1, 'col': 2},
+  \     {'type': 'E', 'bufnr': bufnr(''), 'lnum': 1, 'col': 3},
+  \     {'type': 'E', 'bufnr': bufnr(''), 'lnum': 2, 'col': 1},
+  \     {'type': 'E', 'bufnr': bufnr(''), 'lnum': 2, 'col': 2},
+  \     {'type': 'E', 'bufnr': bufnr(''), 'lnum': 2, 'col': 3},
+  \     {'type': 'E', 'bufnr': bufnr(''), 'lnum': 2, 'col': 6},
+  \     {'type': 'E', 'bufnr': bufnr(''), 'lnum': 2, 'col': 700},
+  \     {'type': 'E', 'bufnr': bufnr('') + 1, 'lnum': 3, 'col': 2},
   \   ],
   \ },
   \}
@@ -81,7 +81,7 @@ Execute(We should be able to jump when the error line is blank):
   " Add a blank line at the end.
   call setline(1, getline('.', '$') + [''])
   " Add a problem on the blank line.
-  call add(g:ale_buffer_info[bufnr('%')].loclist, {'bufnr': bufnr(''), 'lnum': 3, 'col': 1})
+  call add(g:ale_buffer_info[bufnr('%')].loclist, {'type': 'E', 'bufnr': bufnr(''), 'lnum': 3, 'col': 1})
 
   AssertEqual 0, len(getline(3))
   AssertEqual [2, 8], TestJump('before', 0, [3, 1])

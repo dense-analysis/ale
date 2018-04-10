@@ -2,9 +2,21 @@ Before:
   Save g:ale_echo_msg_format
   Save g:ale_echo_cursor
 
+  " We should prefer the error message at column 10 instead of the warning.
   let g:ale_buffer_info = {
   \ bufnr('%'): {
   \   'loclist': [
+  \     {
+  \       'lnum': 1,
+  \       'col': 10,
+  \       'bufnr': bufnr('%'),
+  \       'vcol': 0,
+  \       'linter_name': 'eslint',
+  \       'nr': -1,
+  \       'type': 'W',
+  \       'code': 'semi',
+  \       'text': 'Ignore me.',
+  \     },
   \     {
   \       'lnum': 1,
   \       'col': 10,
