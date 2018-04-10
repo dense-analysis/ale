@@ -94,3 +94,22 @@ Execute(Ignoring trailing whitespace messages should work):
   \ '------------------------------------------------------------------',
   \ 'Your code has been rated at 0.00/10 (previous run: 2.50/10, -2.50)',
   \ ])
+
+Execute(The pylint handler should parse Windows filenames):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 13,
+  \     'col': 6,
+  \     'text': 'Undefined variable ''x''',
+  \     'code': 'undefined-variable',
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale_linters#python#pylint#Handle(bufnr(''), [
+  \   '************* Module test',
+  \   'D:\acm\github\vim\tools\test.py:13:5: E0602 (undefined-variable) Undefined variable ''x''',
+  \   '',
+  \   '------------------------------------------------------------------',
+  \   'Your code has been rated at 5.83/10 (previous run: 5.83/10, +0.00)',
+  \ ])
