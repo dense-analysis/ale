@@ -17,7 +17,7 @@ function! ale_linters#python#pylint#GetCommand(buffer) abort
     return ale#path#BufferCdString(a:buffer)
     \   . ale#Escape(ale_linters#python#pylint#GetExecutable(a:buffer))
     \   . ' ' . ale#Var(a:buffer, 'python_pylint_options')
-    \   . ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'
+    \   . ' --output-format text --msg-template="{module}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'
     \   . ' %s'
 endfunction
 
