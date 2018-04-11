@@ -1,4 +1,5 @@
 " Author: Tomota Nakamura <https://github.com/tomotanakamura>
+" Author: tbodt <https://github.com/tbodt>
 " Description: clang linter for cpp files
 
 call ale#Set('cpp_clang_executable', 'clang++')
@@ -9,6 +10,11 @@ function! ale_linters#cpp#clang#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#cpp#clang#GetCommand(buffer, output) abort
+    let l:compile_command = ale#c#GetCompileCommand(a:buffer)
+    if l:compile_command isnot 0
+        return l:compile_command
+    endif
+
     let l:cflags = ale#c#GetCFlags(a:buffer, a:output)
 
     " -iquote with the directory the file is in makes #include work for
