@@ -12,7 +12,7 @@ endfunction
 function! ale_linters#cpp#clang#GetCommand(buffer, output) abort
     let l:compile_command = ale#c#GetCompileCommand(a:buffer)
     if l:compile_command isnot 0
-        return l:compile_command
+        return l:compile_command . ' ' . ale#Var(a:buffer, 'cpp_clang_options')
     endif
 
     let l:cflags = ale#c#GetCFlags(a:buffer, a:output)
