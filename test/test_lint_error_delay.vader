@@ -1,11 +1,13 @@
 Before:
-  Save g:ale_filetype_blacklist
+  runtime autoload/ale.vim
 
-  " Delete some variable which should be defined.
-  unlet! g:ale_filetype_blacklist
+  " Replace one of the key ALE functions and make it throw.
+  function! ale#FileTooLarge() abort
+    throw 'broken'
+  endfunction
 
 After:
-  Restore
+  runtime autoload/ale.vim
 
   call ale#ResetErrorDelays()
 
