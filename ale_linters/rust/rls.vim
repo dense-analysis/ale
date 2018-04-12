@@ -12,8 +12,11 @@ function! ale_linters#rust#rls#GetCommand(buffer) abort
     let l:executable = ale_linters#rust#rls#GetExecutable(a:buffer)
     let l:toolchain = ale#Var(a:buffer, 'rust_rls_toolchain')
 
-    return ale#Escape(l:executable)
-    \   . ' +' . ale#Escape(l:toolchain)
+    if empty(l:toolchain)
+      return ale#Escape(l:executable)
+    else
+      return ale#Escape(l:executable) . ' +' . ale#Escape(l:toolchain)
+    endif
 endfunction
 
 function! ale_linters#rust#rls#GetLanguage(buffer) abort

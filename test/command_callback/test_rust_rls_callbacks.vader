@@ -28,6 +28,13 @@ Execute(The toolchain should be configurable):
   \ ale#Escape('rls') . ' +' . ale#Escape('stable'),
   \ ale_linters#rust#rls#GetCommand(bufnr(''))
 
+Execute(The toolchain should be ommitted if not given):
+  let g:ale_rust_rls_toolchain = ''
+
+  AssertEqual
+  \ ale#Escape('rls'),
+  \ ale_linters#rust#rls#GetCommand(bufnr(''))
+
 Execute(The language string should be correct):
   AssertEqual 'rust', ale_linters#rust#rls#GetLanguage(bufnr(''))
 
