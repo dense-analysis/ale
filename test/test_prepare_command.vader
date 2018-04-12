@@ -22,6 +22,23 @@ Execute(sh should be used when the shell is fish):
     AssertEqual ['/bin/sh', '-c', 'foobar'], ale#job#PrepareCommand(bufnr(''), 'foobar')
   endif
 
+Execute(sh should be used when the shell is powershell):
+  if !has('win32')
+    " Set something else, so we will replace that too.
+    let &shellcmdflag = '-f'
+    let &shell = 'pwsh'
+
+    AssertEqual ['/bin/sh', '-c', 'foobar'], ale#job#PrepareCommand(bufnr(''), 'foobar')
+
+    let &shell = '/usr/bin/pwsh'
+
+    AssertEqual ['/bin/sh', '-c', 'foobar'], ale#job#PrepareCommand(bufnr(''), 'foobar')
+
+    let &shell = '/usr/local/bin/pwsh'
+
+    AssertEqual ['/bin/sh', '-c', 'foobar'], ale#job#PrepareCommand(bufnr(''), 'foobar')
+  endif
+
 Execute(Other shells should be used when set):
   if !has('win32')
     let &shell = '/bin/bash'
