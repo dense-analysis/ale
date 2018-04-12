@@ -1,0 +1,7 @@
+[
+    {
+        "directory": "/testplugin/test/test_c_projects/json_project/build",
+        "command": "clang -I../include test.c",
+        "file": "../test.c"
+    }
+]
