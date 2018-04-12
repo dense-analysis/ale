@@ -1,4 +1,7 @@
 Before:
+  Save g:ale_filetype_blacklist
+  Save g:ale_maximum_file_size
+  Save g:ale_enabled
   Save &l:statusline
 
   call ale#test#SetDirectory('/testplugin/test')
@@ -12,6 +15,8 @@ Before:
   endif
 
 After:
+  Restore
+
   call ale#test#RestoreDirectory()
 
   if b:funky_command_created
@@ -20,8 +25,6 @@ After:
   endif
 
   unlet! b:funky_command_created
-
-  Restore
 
 Execute(ALE shouldn't do much of anything for ctrlp-funky buffers):
   Assert !ale#ShouldDoNothing(bufnr('')), 'The preliminary check failed'
@@ -39,3 +42,11 @@ Execute(ALE shouldn't try to check buffers with '.' as the filename):
   silent! noautocmd file .
 
   Assert ale#ShouldDoNothing(bufnr(''))
+
+Execute(The DoNothing check should work if the ALE globals aren't defined):
+  unlet! g:ale_filetype_blacklist
+  unlet! g:ale_maximum_file_size
+  unlet! g:ale_enabled
+
+  " This shouldn't throw exceptions.
+  call ale#ShouldDoNothing(bufnr(''))

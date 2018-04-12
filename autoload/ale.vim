@@ -33,6 +33,10 @@ endfunction
 
 " Return 1 if a file is too large for ALE to handle.
 function! ale#FileTooLarge() abort
+    if !exists('g:ale_maximum_file_size')
+        return 0
+    endif
+
     let l:max = ale#Var(bufnr(''), 'maximum_file_size')
 
     return l:max > 0 ? (line2byte(line('$') + 1) > l:max) : 0
@@ -46,13 +50,18 @@ function! ale#ShouldDoNothing(buffer) abort
     " The checks are split into separate if statements to make it possible to
     " profile each check individually with Vim's profiling tools.
 
+    " Do nothing if ALE is disabled.
+    if !getbufvar(a:buffer, 'ale_enabled', get(g:, 'ale_enabled', 0))
+        return 1
+    endif
+
     " Don't perform any checks when newer NeoVim versions are exiting.
     if get(v:, 'exiting', v:null) isnot v:null
         return 1
     endif
 
     " Do nothing for blacklisted files
-    if index(g:ale_filetype_blacklist, getbufvar(a:buffer, '&filetype')) >= 0
+    if index(get(g:, 'ale_filetype_blacklist', []), getbufvar(a:buffer, '&filetype')) >= 0
         return 1
     endif
 
@@ -69,11 +78,6 @@ function! ale#ShouldDoNothing(buffer) abort
 
     " Do nothing if running in the sandbox
     if ale#util#InSandbox()
-        return 1
-    endif
-
-    " Do nothing if ALE is disabled.
-    if !ale#Var(a:buffer, 'enabled')
         return 1
     endif
 
