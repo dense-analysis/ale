@@ -208,7 +208,7 @@ function! ale#job#PrepareCommand(buffer, command) abort
         return 'cmd /s/c "' . l:command . '"'
     endif
 
-    if &shell =~? 'fish$'
+    if &shell =~? 'fish$\|pwsh$'
         return ['/bin/sh', '-c', l:command]
     endif
 
