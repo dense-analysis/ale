@@ -41,8 +41,19 @@ function! ale#handlers#eslint#GetCommand(buffer) abort
     let l:executable = ale#handlers#eslint#GetExecutable(a:buffer)
 
     let l:options = ale#Var(a:buffer, 'javascript_eslint_options')
+    let l:cd_string = ''
 
-    return ale#node#Executable(a:buffer, l:executable)
+    " Change directory to where `node_modules` is, if running eslint_d.
+    " eslint_d looks up which eslint version to use based on the CWD.
+    if l:executable =~# 'eslint_d'
+        let l:node_modules_dir = ale#path#FindNearestDirectory(a:buffer, 'node_modules')
+
+        if !empty(l:node_modules_dir)
+            let l:cd_string = ale#path#CdString(l:node_modules_dir)
+        endif
+    endif
+
+    return l:cd_string . ale#node#Executable(a:buffer, l:executable)
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' -f unix --stdin --stdin-filename %s'
 endfunction
