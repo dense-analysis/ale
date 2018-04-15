@@ -1,8 +1,11 @@
 Before:
   runtime ale_linters/javascript/flow.vim
+
   call ale#test#SetDirectory('/testplugin/test')
 
 After:
+  unlet! b:ale_javascript_flow_use_respect_pragma
+
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
   call ale#semver#ResetVersionCache()
@@ -13,6 +16,16 @@ Execute(flow should return a command to run if a .flowconfig file exists):
   AssertEqual
   \ ale#Escape('flow')
   \   . ' check-contents --respect-pragma --json --from ale %s',
+  \ ale_linters#javascript#flow#GetCommand(bufnr('%'), [])
+
+Execute(flow should not use the respect pragma argument if the option is off):
+  call ale#test#SetFilename('flow/a/sub/dummy')
+
+  let b:ale_javascript_flow_use_respect_pragma = 0
+
+  AssertEqual
+  \ ale#Escape('flow')
+  \   . ' check-contents --json --from ale %s',
   \ ale_linters#javascript#flow#GetCommand(bufnr('%'), [])
 
 Execute(flow should should not use --respect-pragma for old versions):
