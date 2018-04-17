@@ -231,6 +231,17 @@ g:ale_python_pycodestyle_use_global       *g:ale_python_pycodestyle_use_global*
 ===============================================================================
 pylint                                                      *ale-python-pylint*
 
+g:ale_python_pylint_change_directory     *g:ale_python_pylint_change_directory*
+                                         *b:ale_python_pylint_change_directory*
+  Type: |Number|
+  Default: `1`
+
+  If set to `1`, ALE will switch to the directory the Python file being
+  checked with `pylint` is in before checking it. This helps `pylint` find
+  configuration files more easily. This option can be turned off if you want
+  to control the directory Python is executed from yourself.
+
+
 g:ale_python_pylint_executable                 *g:ale_python_pylint_executable*
                                                *b:ale_python_pylint_executable*
   Type: |String|

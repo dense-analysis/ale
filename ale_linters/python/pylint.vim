@@ -1,20 +1,21 @@
 " Author: keith <k@keith.so>
 " Description: pylint for python files
 
-let g:ale_python_pylint_executable =
-\   get(g:, 'ale_python_pylint_executable', 'pylint')
-
-let g:ale_python_pylint_options =
-\   get(g:, 'ale_python_pylint_options', '')
-
-let g:ale_python_pylint_use_global = get(g:, 'ale_python_pylint_use_global', get(g:, 'ale_use_global_executables', 0))
+call ale#Set('python_pylint_executable', 'pylint')
+call ale#Set('python_pylint_options', '')
+call ale#Set('python_pylint_use_global', get(g:, 'ale_use_global_executables', 0))
+call ale#Set('python_pylint_change_directory', 1)
 
 function! ale_linters#python#pylint#GetExecutable(buffer) abort
     return ale#python#FindExecutable(a:buffer, 'python_pylint', ['pylint'])
 endfunction
 
 function! ale_linters#python#pylint#GetCommand(buffer) abort
-    return ale#path#BufferCdString(a:buffer)
+    let l:cd_string = ale#Var(a:buffer, 'python_pylint_change_directory')
+    \   ? ale#path#BufferCdString(a:buffer)
+    \   : ''
+
+    return l:cd_string
     \   . ale#Escape(ale_linters#python#pylint#GetExecutable(a:buffer))
     \   . ' ' . ale#Var(a:buffer, 'python_pylint_options')
     \   . ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'

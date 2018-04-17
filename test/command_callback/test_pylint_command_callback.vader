@@ -2,10 +2,12 @@ Before:
   Save g:ale_python_pylint_executable
   Save g:ale_python_pylint_options
   Save g:ale_python_pylint_use_global
+  Save g:ale_python_pylint_change_directory
 
   unlet! g:ale_python_pylint_executable
   unlet! g:ale_python_pylint_options
   unlet! g:ale_python_pylint_use_global
+  unlet! g:ale_python_pylint_change_directory
 
   runtime ale_linters/python/pylint.vim
   call ale#test#SetDirectory('/testplugin/test/command_callback')
@@ -30,6 +32,17 @@ Execute(The pylint callbacks should return the correct default values):
   AssertEqual
   \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('pylint') . ' ' . b:command_tail,
+  \ ale_linters#python#pylint#GetCommand(bufnr(''))
+
+Execute(The option for disabling changing directories should work):
+  let g:ale_python_pylint_change_directory = 0
+
+  AssertEqual
+  \ 'pylint',
+  \ ale_linters#python#pylint#GetExecutable(bufnr(''))
+  \
+  AssertEqual
+  \ ale#Escape('pylint') . ' ' . b:command_tail,
   \ ale_linters#python#pylint#GetCommand(bufnr(''))
 
 Execute(The pylint executable should be configurable, and escaped properly):
