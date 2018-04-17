@@ -272,6 +272,15 @@ Expect(An extra line should be added):
   c
   d
 
+Execute(ALEFix should use fixers passed in commandline when provided):
+  let g:ale_fixers.testft = ['RemoveLastLine']
+  ALEFix AddCarets AddDollars
+
+Expect(Only fixers passed via command line should be run):
+  $^a
+  $^b
+  $^c
+
 Execute(ALEFix should allow temporary files to be read):
   if has('win32')
     " Just skip this test on Windows, we can't run it.
