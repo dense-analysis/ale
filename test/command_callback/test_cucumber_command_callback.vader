@@ -1,0 +1,25 @@
+Before:
+  runtime ale_linters/ruby/rubocop.vim
+  call ale#test#SetDirectory('/testplugin/test/')
+
+After:
+  Restore
+
+  call ale#linter#Reset()
+  call ale#test#RestoreDirectory()
+
+Execute(Should require the nearest features dir, if one is found):
+  call ale#test#SetFilename('cucumber_fixtures/features/cuke.feature')
+
+  AssertEqual
+  \   'cucumber --dry-run --quiet --strict --format=json '
+  \   . '-r ' . ale#Escape(ale#path#Simplify(g:dir . '/cucumber_fixtures/features/')) . ' %t',
+  \   ale_linters#cucumber#cucumber#GetCommand(bufnr(''))
+
+Execute(Should require nothing if no features dir is found):
+  call ale#test#SetFilename('something/without/a/features/dir')
+
+  AssertEqual
+  \   'cucumber --dry-run --quiet --strict --format=json '
+  \   . ' %t',
+  \   ale_linters#cucumber#cucumber#GetCommand(bufnr(''))
