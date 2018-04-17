@@ -356,8 +356,7 @@ function! s:RunFixer(options) abort
     call ale#fix#ApplyFixes(l:buffer, l:input)
 endfunction
 
-function! s:GetCallbacks(linters) abort
-function! s:GetCallbacks(buffer) abort
+function! s:GetCallbacks(buffer, linters) abort
     if len(a:linters)
         let l:callback_list = a:linters
     elseif type(get(b:, 'ale_fixers')) is type([])

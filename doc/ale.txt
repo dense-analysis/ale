@@ -473,10 +473,12 @@ ftplugin files for different filetypes.
 ===============================================================================
 4. Fixing Problems                                                    *ale-fix*
 
-ALE can fix problems with files with the |ALEFix| command. When |ALEFix| is
-run, the variable |g:ale_fixers| will be read for getting a |List| of commands
-for filetypes, split on `.`, and the functions named in |g:ale_fixers| will be
-executed for fixing the errors.
+ALE can fix problems with files with the |ALEFix| command. |ALEFix|
+accepts names of fixers to be applied as arguments. Alternatively,
+when no arguments are provided, the variable |g:ale_fixers| will be
+read for getting a |List| of commands for filetypes, split on `.`, and
+the functions named in |g:ale_fixers| will be executed for fixing the
+errors.
 
 The |ALEFixSuggest| command can be used to suggest tools that be used to
 fix problems for the current buffer.
