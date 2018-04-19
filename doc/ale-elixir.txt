@@ -5,13 +5,25 @@ ALE Elixir Integration                                     *ale-elixir-options*
 ===============================================================================
 mix                                                            *ale-elixir-mix*
 
+g:ale_elixir_mix_command                             *g:ale_elixir_mix_command*
+                                                     *b:ale_elixir_mix_command*
+  Type: |String|
+  Default: `'mix compile'`
+
+
+  This variable can be changed to specify the command used to compile when
+  linting. This is useful to specify a different enviroment when compiling on
+  a phoenix project to avoid issues with code reloading 'MIX_ENV=test mix
+  compile'
+
 g:ale_elixir_mix_options                             *g:ale_elixir_mix_options*
                                                      *b:ale_elixir_mix_options*
   Type: |String|
-  Default: `'mix'`
+  Default: `''`
 
 
-  This variable can be changed to specify the mix executable.
+  This is useful to add extra options to the compiler. For example '--no-docs'
+  to avoid adding docs to the compiled code when linting.
 
 ===============================================================================
 mix_format                                              *ale-elixir-mix-format*
