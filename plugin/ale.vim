@@ -263,7 +263,7 @@ command! -bar ALEInfoToClipboard :call ale#debugging#InfoToClipboard()
 command! -bar -nargs=1 ALEInfoToFile :call ale#debugging#InfoToFile(<f-args>)
 
 " Fix problems in files.
-command! -bar ALEFix :call ale#fix#Fix(bufnr(''), '')
+command! -bar -nargs=* -complete=customlist,ale#fix#registry#CompleteFixers ALEFix :call ale#fix#Fix(bufnr(''), '', <f-args>)
 " Suggest registered functions to use for fixing problems.
 command! -bar ALEFixSuggest :call ale#fix#registry#Suggest(&filetype)
 

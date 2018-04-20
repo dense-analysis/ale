@@ -277,6 +277,14 @@ function! s:ShouldSuggestForType(suggested_filetypes, type_list) abort
     return 0
 endfunction
 
+function! s:IsGenericFixer(suggested_filetypes) abort
+    if empty(a:suggested_filetypes)
+        return 1
+    endif
+
+    return 0
+endfunction
+
 function! s:FormatEntry(key, entry) abort
     let l:aliases_str = ''
 
@@ -294,6 +302,27 @@ function! s:FormatEntry(key, entry) abort
     \   l:aliases_str,
     \   a:entry.description,
     \)
+endfunction
+
+" Get list of applicable fixers for filetype, including generic fixers
+function! ale#fix#registry#GetApplicableFixers(filetype) abort
+    let l:type_list = split(a:filetype, '\.')
+    let l:fixer_name_list = []
+
+    for l:key in sort(keys(s:entries))
+        let l:suggested_filetypes = s:entries[l:key].suggested_filetypes
+
+        if s:IsGenericFixer(l:suggested_filetypes) || s:ShouldSuggestForType(l:suggested_filetypes, l:type_list)
+            call add(l:fixer_name_list, l:key)
+        endif
+    endfor
+
+    return l:fixer_name_list
+endfunction
+
+" Function that returns autocomplete candidates for ALEFix command
+function! ale#fix#registry#CompleteFixers(ArgLead, CmdLine, CursorPos) abort
+    return ale#fix#registry#GetApplicableFixers(&filetype)
 endfunction
 
 " Suggest functions to use from the registry.
@@ -315,7 +344,7 @@ function! ale#fix#registry#Suggest(filetype) abort
     let l:generic_fixer_list = []
 
     for l:key in sort(keys(s:entries))
-        if empty(s:entries[l:key].suggested_filetypes)
+        if s:IsGenericFixer(s:entries[l:key].suggested_filetypes)
             call add(
             \   l:generic_fixer_list,
             \   s:FormatEntry(l:key, s:entries[l:key]),

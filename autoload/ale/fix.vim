@@ -356,8 +356,10 @@ function! s:RunFixer(options) abort
     call ale#fix#ApplyFixes(l:buffer, l:input)
 endfunction
 
-function! s:GetCallbacks(buffer) abort
-    if type(get(b:, 'ale_fixers')) is type([])
+function! s:GetCallbacks(buffer, linters) abort
+    if len(a:linters)
+        let l:callback_list = a:linters
+    elseif type(get(b:, 'ale_fixers')) is type([])
         " Lists can be used for buffer-local variables only
         let l:callback_list = b:ale_fixers
     else
@@ -422,13 +424,13 @@ endfunction
 " Accepts an optional argument for what to do when fixing.
 "
 " Returns 0 if no fixes can be applied, and 1 if fixing can be done.
-function! ale#fix#Fix(buffer, fixing_flag) abort
+function! ale#fix#Fix(buffer, fixing_flag, ...) abort
     if a:fixing_flag isnot# '' && a:fixing_flag isnot# 'save_file'
         throw "fixing_flag must be either '' or 'save_file'"
     endif
 
     try
-        let l:callback_list = s:GetCallbacks(a:buffer)
+        let l:callback_list = s:GetCallbacks(a:buffer, a:000)
     catch /E700\|BADNAME/
         let l:function_name = join(split(split(v:exception, ':')[3]))
         let l:echo_message = printf(
