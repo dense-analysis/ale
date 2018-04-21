@@ -322,6 +322,7 @@ Notes:
 * CoffeeScript: `coffee`, `coffeelint`
 * Crystal: `crystal`!!
 * CSS: `csslint`, `prettier`, `stylelint`
+* Cucumber: `cucumber`
 * Cython (pyrex filetype): `cython`
 * D: `dmd`
 * Dafny: `dafny`!!

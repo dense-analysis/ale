@@ -90,6 +90,7 @@ formatting.
 | CoffeeScript | [coffee](http://coffeescript.org/), [coffeelint](https://www.npmjs.com/package/coffeelint) |
 | Crystal | [crystal](https://crystal-lang.org/) !! |
 | CSS | [csslint](http://csslint.net/), [prettier](https://github.com/prettier/prettier), [stylelint](https://github.com/stylelint/stylelint) |
+| Cucumber | [cucumber](https://cucumber.io/) |
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
 | D | [dmd](https://dlang.org/dmd-linux.html) |
 | Dafny | [dafny](https://rise4fun.com/Dafny) !! |
