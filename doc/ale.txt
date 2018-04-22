@@ -649,7 +649,7 @@ information returned by LSP servers. The following commands are supported:
 ALE supports finding references for symbols though any enabled LSP linters.
 ALE will display a preview window showing the places where a symbol is
 referenced in a codebase when a command is run. The following commands are
-supporte3:
+supported:
 
 |ALEFindReferences| - Find references for the word under the cursor.
 
