@@ -11,6 +11,11 @@ function! ale#util#FeedKeys(...) abort
     return call('feedkeys', a:000)
 endfunction
 
+" A wrapper function for execute, so we can test executing some commands.
+function! ale#util#Execute(expr) abort
+    execute a:expr
+endfunction
+
 if !exists('g:ale#util#nul_file')
     " A null file for sending output to nothing.
     let g:ale#util#nul_file = '/dev/null'
@@ -31,6 +36,16 @@ function! ale#util#GetFunction(string_or_ref) abort
     endif
 
     return a:string_or_ref
+endfunction
+
+function! ale#util#Open(filename, line, column, options) abort
+    if get(a:options, 'open_in_tab', 0)
+        call ale#util#Execute('tabedit ' . fnameescape(a:filename))
+    else
+        call ale#util#Execute('edit ' . fnameescape(a:filename))
+    endif
+
+    call cursor(a:line, a:column)
 endfunction
 
 let g:ale#util#error_priority = 5
@@ -341,8 +356,10 @@ if !exists('s:patial_timers')
 endif
 
 function! s:ApplyPartialTimer(timer_id) abort
-    let [l:Callback, l:args] = remove(s:partial_timers, a:timer_id)
-    call call(l:Callback, [a:timer_id] + l:args)
+    if has_key(s:partial_timers, a:timer_id)
+        let [l:Callback, l:args] = remove(s:partial_timers, a:timer_id)
+        call call(l:Callback, [a:timer_id] + l:args)
+    endif
 endfunction
 
 " Given a delay, a callback, a List of arguments, start a timer with

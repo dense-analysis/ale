@@ -7,9 +7,9 @@ Before:
   let g:message_list = []
   let g:expr_list = []
 
-  runtime autoload/ale/definition.vim
   runtime autoload/ale/linter.vim
   runtime autoload/ale/lsp.vim
+  runtime autoload/ale/util.vim
 
   function! ale#linter#StartLSP(buffer, linter, callback) abort
     let g:Callback = a:callback
@@ -26,11 +26,12 @@ Before:
     return 42
   endfunction
 
-  function! ale#definition#Execute(expr) abort
+  function! ale#util#Execute(expr) abort
     call add(g:expr_list, a:expr)
   endfunction
 
 After:
+  call ale#definition#SetMap({})
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
@@ -40,9 +41,9 @@ After:
   unlet! g:expr_list
   unlet! b:ale_linters
 
-  runtime autoload/ale/definition.vim
   runtime autoload/ale/linter.vim
   runtime autoload/ale/lsp.vim
+  runtime autoload/ale/util.vim
 
 Execute(Other messages for the tsserver handler should be ignored):
   call ale#definition#HandleTSServerResponse(1, {'command': 'foo'})
