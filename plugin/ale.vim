@@ -271,6 +271,9 @@ command! -bar ALEFixSuggest :call ale#fix#registry#Suggest(&filetype)
 command! -bar ALEGoToDefinition :call ale#definition#GoTo({})
 command! -bar ALEGoToDefinitionInTab :call ale#definition#GoTo({'open_in_tab': 1})
 
+" Find references for tsserver and LSP
+command! -bar ALEFindReferences :call ale#references#Find()
+
 " <Plug> mappings for commands
 nnoremap <silent> <Plug>(ale_previous) :ALEPrevious<Return>
 nnoremap <silent> <Plug>(ale_previous_wrap) :ALEPreviousWrap<Return>
@@ -291,6 +294,7 @@ nnoremap <silent> <Plug>(ale_detail) :ALEDetail<Return>
 nnoremap <silent> <Plug>(ale_fix) :ALEFix<Return>
 nnoremap <silent> <Plug>(ale_go_to_definition) :ALEGoToDefinition<Return>
 nnoremap <silent> <Plug>(ale_go_to_definition_in_tab) :ALEGoToDefinitionInTab<Return>
+nnoremap <silent> <Plug>(ale_find_references) :ALEFindReferences<Return>
 
 " Set up autocmd groups now.
 call ale#toggle#InitAuGroups()

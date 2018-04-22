@@ -1,0 +1,243 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test')
+  call ale#test#SetFilename('dummy.txt')
+
+  let g:old_filename = expand('%:p')
+  let g:Callback = 0
+  let g:expr_list = []
+  let g:message_list = []
+  let g:preview_called = 0
+  let g:item_list = []
+
+  runtime autoload/ale/linter.vim
+  runtime autoload/ale/lsp.vim
+  runtime autoload/ale/util.vim
+  runtime autoload/ale/preview.vim
+
+  function! ale#linter#StartLSP(buffer, linter, callback) abort
+    let g:Callback = a:callback
+
+    return {
+    \ 'connection_id': 347,
+    \ 'project_root': '/foo/bar',
+    \}
+  endfunction
+
+  function! ale#lsp#Send(conn_id, message, root) abort
+    call add(g:message_list, a:message)
+
+    return 42
+  endfunction
+
+  function! ale#util#Execute(expr) abort
+    call add(g:expr_list, a:expr)
+  endfunction
+
+  function! ale#preview#ShowSelection(item_list) abort
+    let g:preview_called = 1
+    let g:item_list = a:item_list
+  endfunction
+
+After:
+  call ale#references#SetMap({})
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+  unlet! g:old_filename
+  unlet! g:Callback
+  unlet! g:message_list
+  unlet! g:expr_list
+  unlet! b:ale_linters
+  unlet! g:item_list
+  unlet! g:preview_called
+
+  runtime autoload/ale/linter.vim
+  runtime autoload/ale/lsp.vim
+  runtime autoload/ale/util.vim
+  runtime autoload/ale/preview.vim
+
+Execute(Other messages for the tsserver handler should be ignored):
+  call ale#references#HandleTSServerResponse(1, {'command': 'foo'})
+
+Execute(Failed reference responses should be handled correctly):
+  call ale#references#SetMap({3: {}})
+  call ale#references#HandleTSServerResponse(
+  \ 1,
+  \ {'command': 'references', 'request_seq': 3}
+  \)
+  AssertEqual {}, ale#references#GetMap()
+
+Given typescript(Some typescript file):
+  foo
+  somelongerline
+  bazxyzxyzxyz
+
+Execute(Results should be shown for tsserver responses):
+  call ale#references#SetMap({3: {}})
+  call ale#references#HandleTSServerResponse(1, {
+  \ 'command': 'references',
+  \ 'request_seq': 3,
+  \ 'success': v:true,
+  \ 'body': {
+  \   'symbolStartOffset': 9,
+  \   'refs': [
+  \     {
+  \       'file': '/foo/bar/app.ts',
+  \       'isWriteAccess': v:true,
+  \       'lineText': 'import {doSomething} from ''./whatever''',
+  \       'end': {'offset': 24, 'line': 9},
+  \       'start': {'offset': 9, 'line': 9},
+  \       'isDefinition': v:true,
+  \     },
+  \     {
+  \       'file': '/foo/bar/app.ts',
+  \       'isWriteAccess': v:false,
+  \       'lineText': '  doSomething()',
+  \       'end': {'offset': 18, 'line': 804},
+  \       'start': {'offset': 3, 'line': 804},
+  \       'isDefinition': v:false,
+  \     },
+  \     {
+  \       'file': '/foo/bar/other/app.ts',
+  \       'isWriteAccess': v:false,
+  \       'lineText': '  doSomething()',
+  \       'end': {'offset': 18, 'line': 51},
+  \       'start': {'offset': 3, 'line': 51},
+  \       'isDefinition': v:false,
+  \     },
+  \   ],
+  \   'symbolDisplayString': 'import doSomething',
+  \   'symbolName': 'doSomething()',
+  \ },
+  \})
+
+  AssertEqual
+  \ [
+  \   {'filename': '/foo/bar/app.ts', 'column': 9, 'line': 9},
+  \   {'filename': '/foo/bar/app.ts', 'column': 3, 'line': 804},
+  \   {'filename': '/foo/bar/other/app.ts', 'column': 3, 'line': 51},
+  \ ],
+  \ g:item_list
+  AssertEqual {}, ale#references#GetMap()
+
+Execute(The preview window should not be opened for empty tsserver responses):
+  call ale#references#SetMap({3: {}})
+  call ale#references#HandleTSServerResponse(1, {
+  \ 'command': 'references',
+  \ 'request_seq': 3,
+  \ 'success': v:true,
+  \ 'body': {
+  \   'symbolStartOffset': 9,
+  \   'refs': [
+  \   ],
+  \   'symbolDisplayString': 'import doSomething',
+  \   'symbolName': 'doSomething()',
+  \ },
+  \})
+
+  Assert !g:preview_called
+  AssertEqual {}, ale#references#GetMap()
+  AssertEqual ['echom ''No references found.'''], g:expr_list
+
+Execute(tsserver reference requests should be sent):
+  runtime ale_linters/typescript/tsserver.vim
+  call setpos('.', [bufnr(''), 2, 5, 0])
+
+  ALEFindReferences
+
+  AssertEqual
+  \ 'function(''ale#references#HandleTSServerResponse'')',
+  \ string(g:Callback)
+  AssertEqual
+  \ [[0, 'ts@references', {'file': expand('%:p'), 'line': 2, 'offset': 5}]],
+  \ g:message_list
+  AssertEqual {'42': {}}, ale#references#GetMap()
+
+Given python(Some Python file):
+  foo
+  somelongerline
+  bazxyzxyzxyz
+
+Execute(LSP reference responses should be handled):
+  call ale#references#SetMap({3: {}})
+  call ale#references#HandleLSPResponse(
+  \ 1,
+  \ {
+  \   'id': 3,
+  \   'result': [
+  \     {
+  \       'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \       'range': {
+  \         'start': {'line': 2, 'character': 7},
+  \       },
+  \     },
+  \     {
+  \       'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/other_file')),
+  \       'range': {
+  \         'start': {'line': 7, 'character': 15},
+  \       },
+  \     },
+  \   ],
+  \ }
+  \)
+
+  AssertEqual
+  \ [
+  \   {
+  \     'filename': ale#path#Simplify(g:dir . '/completion_dummy_file'),
+  \     'line': 3,
+  \     'column': 8,
+  \   },
+  \   {
+  \     'filename': ale#path#Simplify(g:dir . '/other_file'),
+  \     'line': 8,
+  \     'column': 16,
+  \   },
+  \ ],
+  \ g:item_list
+  AssertEqual {}, ale#references#GetMap()
+
+Execute(Preview windows should not be opened for empty LSP reference responses):
+  call ale#references#SetMap({3: {}})
+  call ale#references#HandleLSPResponse(
+  \ 1,
+  \ {
+  \   'id': 3,
+  \   'result': [
+  \   ],
+  \ }
+  \)
+
+  Assert !g:preview_called
+  AssertEqual {}, ale#references#GetMap()
+  AssertEqual ['echom ''No references found.'''], g:expr_list
+
+Execute(LSP reference requests should be sent):
+  runtime ale_linters/python/pyls.vim
+  let b:ale_linters = ['pyls']
+  call setpos('.', [bufnr(''), 1, 5, 0])
+
+  ALEFindReferences
+
+  AssertEqual
+  \ 'function(''ale#references#HandleLSPResponse'')',
+  \ string(g:Callback)
+
+  AssertEqual
+  \ [
+  \   [1, 'textDocument/didChange', {
+  \     'textDocument': {
+  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'version': g:ale_lsp_next_version_id - 1,
+  \     },
+  \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
+  \   }],
+  \   [0, 'textDocument/references', {
+  \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \   'position': {'line': 0, 'character': 3},
+  \   'context': {'includeDeclaration': v:false},
+  \   }],
+  \ ],
+  \ g:message_list
+
+  AssertEqual {'42': {}}, ale#references#GetMap()

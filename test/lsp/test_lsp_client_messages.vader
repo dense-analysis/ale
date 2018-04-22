@@ -144,6 +144,21 @@ Execute(ale#lsp#message#Definition() should return correct messages):
   \ ],
   \ ale#lsp#message#Definition(bufnr(''), 12, 34)
 
+Execute(ale#lsp#message#References() should return correct messages):
+  AssertEqual
+  \ [
+  \   0,
+  \   'textDocument/references',
+  \   {
+  \     'textDocument': {
+  \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
+  \     },
+  \     'position': {'line': 11, 'character': 34},
+  \     'context': {'includeDeclaration': v:false},
+  \   }
+  \ ],
+  \ ale#lsp#message#References(bufnr(''), 12, 34)
+
 Execute(ale#lsp#tsserver_message#Open() should return correct messages):
   AssertEqual
   \ [
@@ -233,3 +248,16 @@ Execute(ale#lsp#tsserver_message#Definition() should return correct messages):
   \   }
   \ ],
   \ ale#lsp#tsserver_message#Definition(bufnr(''), 347, 12)
+
+Execute(ale#lsp#tsserver_message#References() should return correct messages):
+  AssertEqual
+  \ [
+  \   0,
+  \   'ts@references',
+  \   {
+  \     'file': ale#path#Simplify(g:dir . '/foo/bar.ts'),
+  \     'line': 347,
+  \     'offset': 12,
+  \   }
+  \ ],
+  \ ale#lsp#tsserver_message#References(bufnr(''), 347, 12)

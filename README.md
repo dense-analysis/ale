@@ -27,6 +27,7 @@ formatting tools, and some Language Server Protocol and `tsserver` features.
     2. [Fixing](#usage-fixing)
     3. [Completion](#usage-completion)
     4. [Go To Definition](#usage-go-to-definition)
+    5. [Find References](#usage-find-references)
 3. [Installation](#installation)
     1. [Installation with Vim package management](#standard-installation)
     2. [Installation with Pathogen](#installation-with-pathogen)
@@ -239,6 +240,15 @@ ALE supports jumping to the definition of words under your cursor with the
 `:ALEGoToDefinition` command using any enabled LSP linters and `tsserver`.
 
 See `:help ale-go-to-definition` for more information.
+
+<a name="usage-find-references"></a>
+
+### 2.v Find References
+
+ALE supports finding references for words under your cursor with the
+`:ALEFindReferences` command using any enabled LSP linters and `tsserver`.
+
+See `:help ale-find-references` for more information.
 
 <a name="installation"></a>
 

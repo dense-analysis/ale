@@ -13,6 +13,7 @@ CONTENTS                                                         *ale-contents*
   5. Language Server Protocol Support.....|ale-lsp|
     5.1 Completion........................|ale-completion|
     5.2 Go To Definition..................|ale-go-to-definition|
+    5.3 Find References...................|ale-find-references|
   6. Global Options.......................|ale-options|
     6.1 Highlights........................|ale-highlights|
     6.2 Options for write-good Linter.....|ale-write-good-options|
@@ -640,6 +641,17 @@ information returned by LSP servers. The following commands are supported:
 
 |ALEGoToDefinition|      - Open the definition of the symbol under the cursor.
 |ALEGoToDefinitionInTab| - The same, but for opening the file in a new tab.
+
+
+-------------------------------------------------------------------------------
+5.3 Find References                                       *ale-find-references*
+
+ALE supports finding references for symbols though any enabled LSP linters.
+ALE will display a preview window showing the places where a symbol is
+referenced in a codebase when a command is run. The following commands are
+supporte3:
+
+|ALEFindReferences| - Find references for the word under the cursor.
 
 
 ===============================================================================
@@ -1745,6 +1757,18 @@ ALE will use to search for Python executables.
 
 ===============================================================================
 8. Commands/Keybinds                                             *ale-commands*
+
+ALEFindReferences                                           *ALEFindReferences*
+
+  Find references in the codebase for the symbol under the cursor using the
+  enabled LSP linters for the buffer. ALE will display a preview window
+  containing the results if some references are found.
+
+  The window can be navigated using the usual Vim navigation commands. The
+  Enter key (`<CR>`) can be used to jump to a referencing location, or the `t`
+  key can be used to jump to the location in a new tab.
+
+  A plug mapping `<Plug>(ale_find_references)` is defined for this command.
 
 ALEFix                                                                 *ALEFix*
 
