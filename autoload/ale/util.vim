@@ -11,6 +11,11 @@ function! ale#util#FeedKeys(...) abort
     return call('feedkeys', a:000)
 endfunction
 
+" A wrapper function for echo so we can test calls for it.
+function! ale#util#Echo(string) abort
+    execute 'echo a:string'
+endfunction
+
 " A wrapper function for execute, so we can test executing some commands.
 function! ale#util#Execute(expr) abort
     execute a:expr
