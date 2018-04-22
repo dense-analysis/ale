@@ -17,3 +17,20 @@ Execute(Completion should not be done after parens in TypeScript):
 
 Execute(Completion prefixes should work for other filetypes):
   AssertEqual 'ab', ale#completion#GetPrefix('xxxyyyzzz', 3, 14)
+
+Given rust():
+  let abc = y.
+  let abc = String::
+  let foo = (ab)
+
+Execute(Completion should be done after dots in Rust):
+  AssertEqual '.', ale#completion#GetPrefix(&filetype, 1, 13)
+
+Execute(Completion should be done after colons in Rust):
+  AssertEqual '::', ale#completion#GetPrefix(&filetype, 2, 19)
+
+Execute(Completion should be done after words in parens in Rust):
+  AssertEqual 'ab', ale#completion#GetPrefix(&filetype, 3, 14)
+
+Execute(Completion should not be done after parens in Rust):
+  AssertEqual '', ale#completion#GetPrefix(&filetype, 3, 15)

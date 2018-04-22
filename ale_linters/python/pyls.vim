@@ -25,4 +25,5 @@ call ale#linter#Define('python', {
 \   'command_callback': 'ale_linters#python#pyls#GetCommand',
 \   'language_callback': 'ale_linters#python#pyls#GetLanguage',
 \   'project_root_callback': 'ale#python#FindProjectRoot',
+\   'completion_filter': 'ale#completion#python#CompletionItemFilter',
 \})

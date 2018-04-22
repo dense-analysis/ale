@@ -2,11 +2,8 @@ Before:
   Save g:ale_completion_delay
   Save g:ale_completion_max_suggestions
   Save g:ale_completion_info
-  Save g:ale_completion_experimental_lsp_support
   Save &l:omnifunc
   Save &l:completeopt
-
-  unlet! g:ale_completion_experimental_lsp_support
 
   let g:ale_completion_enabled = 1
 
@@ -44,7 +41,6 @@ After:
   unlet! b:ale_completion_parser
   unlet! b:ale_complete_done_time
   unlet! b:ale_linters
-  unlet! g:ale_completion_experimental_lsp_support
 
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
@@ -136,8 +132,6 @@ Given python(Some Python file):
   bazxyzxyzxyz
 
 Execute(The right message should be sent for the initial LSP request):
-  let g:ale_completion_experimental_lsp_support = 1
-
   runtime ale_linters/python/pyls.vim
   let b:ale_linters = ['pyls']
   " The cursor position needs to match what was saved before.

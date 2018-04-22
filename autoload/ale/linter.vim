@@ -194,6 +194,14 @@ function! ale#linter#PreProcess(linter) abort
         if !s:IsCallback(l:obj.project_root_callback)
             throw '`project_root_callback` must be a callback for LSP linters'
         endif
+
+        if has_key(a:linter, 'completion_filter')
+            let l:obj.completion_filter = a:linter.completion_filter
+
+            if !s:IsCallback(l:obj.completion_filter)
+                throw '`completion_filter` must be a callback'
+            endif
+        endif
     endif
 
     let l:obj.output_stream = get(a:linter, 'output_stream', 'stdout')

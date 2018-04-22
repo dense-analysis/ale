@@ -2,11 +2,8 @@ Before:
   Save g:ale_completion_enabled
   Save g:ale_completion_delay
   Save g:ale_completion_max_suggestions
-  Save g:ale_completion_experimental_lsp_support
   Save &l:omnifunc
   Save &l:completeopt
-
-  unlet! g:ale_completion_experimental_lsp_support
 
   let g:ale_completion_enabled = 1
   let g:get_completions_called = 0
@@ -43,7 +40,6 @@ After:
   unlet! b:ale_completion_response
   unlet! b:ale_completion_parser
   unlet! b:ale_complete_done_time
-  unlet! g:ale_completion_experimental_lsp_support
 
   delfunction CheckCompletionCalled
 

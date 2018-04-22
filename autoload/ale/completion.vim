@@ -28,6 +28,7 @@ let s:LSP_COMPLETION_REFERENCE_KIND = 18
 " the insert cursor is. If one of these matches, we'll check for completions.
 let s:should_complete_map = {
 \   '<default>': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$|\.$',
+\   'rust': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$|\.$|::$',
 \}
 
 " Regular expressions for finding the start column to replace with completion.
@@ -38,6 +39,7 @@ let s:omni_start_map = {
 " A map of exact characters for triggering LSP completions.
 let s:trigger_character_map = {
 \   '<default>': ['.'],
+\   'rust': ['.', '::'],
 \}
 
 function! s:GetFiletypeValue(map, filetype) abort
@@ -215,7 +217,21 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
     return l:results
 endfunction
 
+function! ale#completion#NullFilter(buffer, item) abort
+   return 1
+endfunction
+
 function! ale#completion#ParseLSPCompletions(response) abort
+    let l:buffer = bufnr('')
+    let l:info = get(b:, 'ale_completion_info', {})
+    let l:Filter = get(l:info, 'completion_filter', v:null)
+
+    if l:Filter is v:null
+        let l:Filter = function('ale#completion#NullFilter')
+    else
+        let l:Filter = ale#util#GetFunction(l:Filter)
+    endif
+
     let l:item_list = []
 
     if type(get(a:response, 'result')) is type([])
@@ -228,6 +244,16 @@ function! ale#completion#ParseLSPCompletions(response) abort
     let l:results = []
 
     for l:item in l:item_list
+        if !call(l:Filter, [l:buffer, l:item])
+            continue
+        endif
+
+        let l:word = matchstr(l:item.label, '\v^[^(]+')
+
+        if empty(l:word)
+            continue
+        endif
+
         " See :help complete-items for Vim completion kinds
         if l:item.kind is s:LSP_COMPLETION_METHOD_KIND
             let l:kind = 'm'
@@ -244,11 +270,11 @@ function! ale#completion#ParseLSPCompletions(response) abort
         endif
 
         call add(l:results, {
-        \   'word': l:item.label,
+        \   'word': l:word,
         \   'kind': l:kind,
         \   'icase': 1,
         \   'menu': l:item.detail,
-        \   'info': l:item.documentation,
+        \   'info': get(l:item, 'documentation', ''),
         \})
     endfor
 
@@ -349,6 +375,10 @@ function! s:GetLSPCompletions(linter) abort
     if l:request_id
         let b:ale_completion_info.conn_id = l:id
         let b:ale_completion_info.request_id = l:request_id
+
+        if has_key(a:linter, 'completion_filter')
+            let b:ale_completion_info.completion_filter = a:linter.completion_filter
+        endif
     endif
 endfunction
 
@@ -378,10 +408,7 @@ function! ale#completion#GetCompletions() abort
 
     for l:linter in ale#linter#Get(&filetype)
         if !empty(l:linter.lsp)
-            if l:linter.lsp is# 'tsserver'
-            \|| get(g:, 'ale_completion_experimental_lsp_support', 0)
-                call s:GetLSPCompletions(l:linter)
-            endif
+            call s:GetLSPCompletions(l:linter)
         endif
     endfor
 endfunction

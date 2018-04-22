@@ -222,9 +222,7 @@ too. See `:help ale-fix` for detailed information.
 
 ALE offers some support for completion via hijacking of omnicompletion while you
 type. All of ALE's completion information must come from Language Server
-Protocol linters, or similar protocols. At the moment, completion is only
-supported for TypeScript code with `tsserver`, when `tsserver` is enabled. You
-can enable completion like so:
+Protocol linters, or from `tsserver` for TypeSript.
 
 ```vim
 " Enable completion where available.
