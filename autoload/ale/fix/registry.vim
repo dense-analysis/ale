@@ -185,6 +185,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['json'],
 \       'description': 'Fix JSON files with jq.',
 \   },
+\   'perltidy': {
+\       'function': 'ale#fixers#perltidy#Fix',
+\       'suggested_filetypes': ['perl'],
+\       'description': 'Fix Perl files with perltidy.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
