@@ -1,0 +1,47 @@
+Before:
+  let g:unchanged_success = 1
+  let g:ale_run_synchronously = 1
+
+  Save g:ale_pattern_options
+  Save g:ale_pattern_options_enabled
+  Save &filetype
+
+  let g:ale_pattern_options_enabled = 1
+  let g:ale_pattern_options = {}
+
+After:
+  Restore
+  let g:ale_run_synchronously = 0
+  augroup VaderTest
+      autocmd!
+  augroup end
+  augroup! VaderTest
+
+Execute (Setup pattern options to override global variables ale_lint_on_*, verify they are respected):
+  let g:ale_pattern_options = {
+  \ '.*\.js': {
+  \   'ale_enabled': 1,
+  \   'ale_lint_on_enter': 0,
+  \   'ale_lint_on_text_changed': 0,
+  \   'ale_lint_on_insert_leave': 0,
+  \   'ale_lint_on_save': 0,
+  \   'ale_lint_on_filetype_changed': 0,
+  \ },
+  \}
+
+  augroup VaderTest
+    autocmd!
+    autocmd User ALELintPost let g:unchanged_success = 0
+  augroup end
+
+  call ale#test#SetFilename('foobar.js')
+  call ale#pattern_options#SetOptions(bufnr(''))
+  set filetype=javascript
+
+  call ale#events#EnterEvent(bufnr(''))
+  call ale#events#TextChangedEvent(bufnr(''))
+  call ale#events#InsertLeaveEvent(bufnr(''))
+  call ale#events#SaveEvent(bufnr(''))
+  call ale#events#FileTypeEvent(bufnr(''), 'javascript')
+
+  AssertEqual 1, g:unchanged_success
