@@ -301,7 +301,7 @@ nnoremap <silent> <Plug>(ale_find_references) :ALEFindReferences<Return>
 nnoremap <silent> <Plug>(ale_hover) :ALEHover<Return>
 
 " Set up autocmd groups now.
-call ale#toggle#InitAuGroups()
+call ale#autocmd#InitAuGroups()
 
 " Housekeeping
 

@@ -1,6 +1,6 @@
 Before:
   function! CheckAutocmd(group)
-    call ale#toggle#InitAuGroups()
+    call ale#autocmd#InitAuGroups()
 
     redir => l:output
       execute 'silent! autocmd ' . a:group
@@ -59,7 +59,7 @@ After:
     call ale#completion#Disable()
   endif
 
-  call ale#toggle#InitAuGroups()
+  call ale#autocmd#InitAuGroups()
 
 Execute (g:ale_lint_on_text_changed = 0 should bind no events):
   let g:ale_lint_on_text_changed = 0
