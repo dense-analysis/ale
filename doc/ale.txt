@@ -1768,6 +1768,9 @@ ALEFindReferences                                           *ALEFindReferences*
   Enter key (`<CR>`) can be used to jump to a referencing location, or the `t`
   key can be used to jump to the location in a new tab.
 
+  You can jump back to the position you were at before going to a reference of
+  something with jump motions like CTRL-O. See |jump-motions|.
+
   A plug mapping `<Plug>(ale_find_references)` is defined for this command.
 
 ALEFix                                                                 *ALEFix*
@@ -1789,6 +1792,9 @@ ALEGoToDefinition                                           *ALEGoToDefinition*
   Jump to the definition of a symbol under the cursor using the enabled LSP
   linters for the buffer. ALE will jump to a definition if an LSP server
   provides a location to jump to. Otherwise, ALE will do nothing.
+
+  You can jump back to the position you were at before going to the definition
+  of something with jump motions like CTRL-O. See |jump-motions|.
 
   A plug mapping `<Plug>(ale_go_to_definition)` is defined for this command.
 
