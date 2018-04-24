@@ -32,6 +32,7 @@ Before:
 
   call ale#engine#ResetExecutableCache()
   call ale#linter#Reset()
+  call ale#linter#PreventLoading('testft')
   let g:ale_linters = {}
   let g:ale_fixers = {}
   let g:ale_linter_aliases = {}

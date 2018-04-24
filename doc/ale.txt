@@ -2359,6 +2359,21 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
   containing `.` characters will be split into individual parts, and files
   will be loaded for each filetype between the `.` characters.
 
+  Linters can be defined from vimrc and other files as long as this function
+  is loaded first. For example, the following code will define a Hello World
+  linter in vimrc in Vim 8: >
+
+  " Plugins have to be loaded first.
+  " If you are using a plugin manager, run that first.
+  packloadall
+
+  call ale#linter#Define('vim', {
+  \   'name': 'echo-test',
+  \   'executable': 'echo',
+  \   'command': 'echo hello world',
+  \   'callback': {buffer, lines -> map(lines, '{"text": v:val, "lnum": 1}')},
+  \})
+<
 
 ale#linter#Get(filetype)                                     *ale#linter#Get()*
 
@@ -2372,6 +2387,13 @@ ale#linter#Get(filetype)                                     *ale#linter#Get()*
   Aliases may be defined in as described in |g:ale_linter_aliases|. Aliases
   are applied after dot-separated filetypes are broken up into their
   components.
+
+
+ale#linter#PreventLoading(filetype)               *ale#linter#PreventLoading()*
+
+  Given a `filetype`, prevent any more linters from being loaded from
+  |runtimepath| for that filetype. This function can be called from vimrc or
+  similar to prevent ALE from loading linters.
 
 
 ale#statusline#Count(buffer)                           *ale#statusline#Count()*

@@ -5,6 +5,9 @@ Before:
   let g:testlinter1 = {'name': 'testlinter1', 'executable': 'testlinter1', 'command': 'testlinter1', 'callback': 'testCB1', 'output_stream': 'stdout', 'read_buffer': 1, 'lint_file': 0, 'aliases': [], 'lsp': '', 'add_newline': 0}
   let g:testlinter2 = {'name': 'testlinter2', 'executable': 'testlinter2', 'command': 'testlinter2', 'callback': 'testCB2', 'output_stream': 'stdout', 'read_buffer': 0, 'lint_file': 1, 'aliases': [], 'lsp': '', 'add_newline': 0}
   call ale#linter#Reset()
+  call ale#linter#PreventLoading('testft')
+  call ale#linter#PreventLoading('javascript')
+  call ale#linter#PreventLoading('typescript')
 
 After:
   Restore
@@ -145,6 +148,7 @@ Execute (Buffer-local overrides for aliases should be used):
   AssertEqual [g:testlinter1, g:testlinter2], ale#linter#Get('testft1')
 
 Execute (Linters should be loaded from disk appropriately):
+  call ale#linter#Reset()
   AssertEqual [{'name': 'testlinter', 'output_stream': 'stdout', 'executable': 'testlinter', 'command': 'testlinter', 'callback': 'testCB', 'read_buffer': 1, 'lint_file': 0, 'aliases': [], 'lsp': '', 'add_newline': 0}], ale#linter#Get('testft')
 
 
