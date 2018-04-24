@@ -654,6 +654,15 @@ supported:
 |ALEFindReferences| - Find references for the word under the cursor.
 
 
+-------------------------------------------------------------------------------
+5.4 Hovering                                                        *ale-hover*
+
+ALE supports "hover" information for printing brief information about symbols
+at the cursor taken from LSP linters. The following commands are supported:
+
+|ALEHover| - Print information about the symbol at the cursor.
+
+
 ===============================================================================
 6. Global Options                                                 *ale-options*
 
@@ -1805,6 +1814,19 @@ ALEGoToDefinitionInTab                                 *ALEGoToDefinitionInTab*
 
   A plug mapping `<Plug>(ale_go_to_definition_in_tab)` is defined for this
   command.
+
+
+ALEHover                                                             *ALEHover*
+
+  Print brief information about the symbol under the cursor, taken from any
+  available LSP linters. There may be a small non-blocking delay before
+  information is printed.
+
+  NOTE: In Vim 8, long messages will be shown in a preview window, as Vim 8
+  does not support showing a prompt to press enter to continue for long
+  messages from asynchronous callbacks.
+
+  A plug mapping `<Plug>(ale_hover)` is defined for this command.
 
                                                                      *:ALELint*
 ALELint                                                               *ALELint*

@@ -11,9 +11,18 @@ function! ale#util#FeedKeys(...) abort
     return call('feedkeys', a:000)
 endfunction
 
-" A wrapper function for echo so we can test calls for it.
-function! ale#util#Echo(string) abort
-    execute 'echo a:string'
+" Show a message in as small a window as possible.
+"
+" Vim 8 does not support echoing long messages from asynchronous callbacks,
+" but NeoVim does. Small messages can be echoed in Vim 8, and larger messages
+" have to be shown in preview windows.
+function! ale#util#ShowMessage(string) abort
+    " We have to assume the user is using a monospace font.
+    if has('nvim') || (a:string !~? "\n" && len(a:string) < &columns)
+        execute 'echo a:string'
+    else
+        call ale#preview#Show(split(a:string, "\n"))
+    endif
 endfunction
 
 " A wrapper function for execute, so we can test executing some commands.

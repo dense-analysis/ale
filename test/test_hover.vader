@@ -26,7 +26,7 @@ Before:
     return 42
   endfunction
 
-  function! ale#util#Echo(string) abort
+  function! ale#util#ShowMessage(string) abort
       call add(g:echo_list, a:string)
   endfunction
 
@@ -94,7 +94,7 @@ Execute(LSP hover response with lists of strings should be handled):
   \  "bar\n",
   \]})
 
-  AssertEqual ['foo bar'], g:echo_list
+  AssertEqual ["foo\n\nbar\n"], g:echo_list
   AssertEqual {}, ale#hover#GetMap()
 
 Execute(LSP hover response with lists of strings and marked strings should be handled):
@@ -103,5 +103,5 @@ Execute(LSP hover response with lists of strings and marked strings should be ha
   \  "bar\n",
   \]})
 
-  AssertEqual ['foo bar'], g:echo_list
+  AssertEqual ["foo\nbar\n"], g:echo_list
   AssertEqual {}, ale#hover#GetMap()

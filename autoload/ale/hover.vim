@@ -62,12 +62,7 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
             let l:str = substitute(l:str, '^\s*\(.\{-}\)\s*$', '\1', '')
 
             if !empty(l:str)
-                " Compress multi-line hover messages into one line.
-                let l:str = substitute(l:str, "\n", ' ', 'g')
-                let l:str = substitute(l:str, ' \+', ' ', 'g')
-                let l:str = substitute(l:str, '^\s*\(.\{-}\)\s*$', '\1', '')
-
-                call ale#util#Echo(l:str)
+                call ale#util#ShowMessage(l:str)
             endif
         endif
     endif
