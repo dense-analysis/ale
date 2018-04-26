@@ -39,6 +39,7 @@ function! ale_linters#python#flake8#VersionCheck(buffer) abort
 endfunction
 
 function! ale_linters#python#flake8#GetCommand(buffer, version_output) abort
+    let l:cd_string = ale#path#BufferCdString(a:buffer)
     let l:executable = ale_linters#python#flake8#GetExecutable(a:buffer)
     let l:version = ale#semver#GetVersion(l:executable, a:version_output)
 
@@ -50,7 +51,8 @@ function! ale_linters#python#flake8#GetCommand(buffer, version_output) abort
 
     let l:options = ale#Var(a:buffer, 'python_flake8_options')
 
-    return ale#Escape(l:executable)
+    return l:cd_string
+    \   . ale#Escape(l:executable)
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' --format=default'
     \   . l:display_name_args . ' -'

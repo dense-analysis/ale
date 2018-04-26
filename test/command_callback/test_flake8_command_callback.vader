@@ -33,20 +33,23 @@ Execute(The flake8 callbacks should return the correct default values):
   \ ale#Escape('flake8') . ' --version',
   \ ale_linters#python#flake8#VersionCheck(bufnr(''))
   AssertEqual
-  \ ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
 
   " Try with older versions.
   call ale#semver#ResetVersionCache()
   AssertEqual
-  \ ale#Escape('flake8') . ' --format=default -',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('flake8') . ' --format=default -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
 
 Execute(The flake8 command callback should let you set options):
   let g:ale_python_flake8_options = '--some-option'
 
   AssertEqual
-  \ ale#Escape('flake8')
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('flake8')
   \   . ' --some-option --format=default'
   \   . ' --stdin-display-name %s -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.4'])
@@ -54,7 +57,8 @@ Execute(The flake8 command callback should let you set options):
   call ale#semver#ResetVersionCache()
 
   AssertEqual
-  \ ale#Escape('flake8')
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('flake8')
   \   . ' --some-option --format=default -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
 
@@ -68,7 +72,8 @@ Execute(You should be able to set a custom executable and it should be escaped):
   \ ale#Escape('executable with spaces') . ' --version',
   \ ale_linters#python#flake8#VersionCheck(bufnr(''))
   AssertEqual
-  \ ale#Escape('executable with spaces')
+  \ ale#path#BufferCdString(bufnr(''))
+  \   .  ale#Escape('executable with spaces')
   \   . ' --format=default'
   \   . ' --stdin-display-name %s -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
@@ -87,7 +92,8 @@ Execute(The flake8 callbacks should detect virtualenv directories):
   \ ale#Escape(b:executable) . ' --version',
   \ ale_linters#python#flake8#VersionCheck(bufnr(''))
   AssertEqual
-  \ ale#Escape(b:executable)
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape(b:executable)
   \   . ' --format=default --stdin-display-name %s -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
 
@@ -140,7 +146,8 @@ Execute(Using `python -m flake8` should be supported for running flake8):
   \ ale#Escape('python') . ' -m flake8 --version',
   \ ale_linters#python#flake8#VersionCheck(bufnr(''))
   AssertEqual
-  \ ale#Escape('python') . ' -m flake8 --some-option --format=default -',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('python') . ' -m flake8 --some-option --format=default -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
 
   call ale#semver#ResetVersionCache()
@@ -155,7 +162,8 @@ Execute(Using `python -m flake8` should be supported for running flake8):
   \ ale#Escape('python') . ' -m flake8 --version',
   \ ale_linters#python#flake8#VersionCheck(bufnr(''))
   AssertEqual
-  \ ale#Escape('python') . '   -m flake8 --some-option --format=default -',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('python') . '   -m flake8 --some-option --format=default -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
 
 Execute(Using `python2 -m flake8` should be supported with the old args option):
@@ -177,5 +185,6 @@ Execute(Using `python2 -m flake8` should be supported with the old args option):
   \ ale#Escape('python2') . ' -m flake8 --version',
   \ ale_linters#python#flake8#VersionCheck(bufnr(''))
   AssertEqual
-  \ ale#Escape('python2') . ' -m flake8 --format=default -',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('python2') . ' -m flake8 --format=default -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
