@@ -18,6 +18,15 @@ function! ale#hover#ClearLSPData() abort
 endfunction
 
 function! ale#hover#HandleTSServerResponse(conn_id, response) abort
+    if get(a:response, 'command', '') is# 'quickinfo'
+    \&& has_key(s:hover_map, a:response.request_seq)
+        let l:options = remove(s:hover_map, a:response.request_seq)
+
+        if get(a:response, 'success', v:false) is v:true
+        \&& get(a:response, 'body', v:null) isnot v:null
+            call ale#util#ShowMessage(a:response.body.displayString)
+        endif
+    endif
 endfunction
 
 function! ale#hover#HandleLSPResponse(conn_id, response) abort
@@ -86,8 +95,11 @@ function! s:ShowDetails(linter) abort
     let l:root = l:lsp_details.project_root
 
     if a:linter.lsp is# 'tsserver'
-        " TODO: Implement this.
-        return
+        let l:message = ale#lsp#tsserver_message#Quickinfo(
+        \   l:buffer,
+        \   l:line,
+        \   l:column
+        \)
     else
         " Send a message saying the buffer has changed first, or the
         " hover position probably won't make sense.
@@ -109,7 +121,7 @@ endfunction
 
 function! ale#hover#Show() abort
     for l:linter in ale#linter#Get(&filetype)
-        if !empty(l:linter.lsp) && l:linter.lsp isnot# 'tsserver'
+        if !empty(l:linter.lsp)
             call s:ShowDetails(l:linter)
         endif
     endfor

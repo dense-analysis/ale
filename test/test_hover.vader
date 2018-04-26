@@ -70,6 +70,50 @@ Given python(Some Python file):
   somelongerline
   bazxyzxyzxyz
 
+Execute(Other messages for the tsserver handler should be ignored):
+  call ale#hover#HandleTSServerResponse(1, {'command': 'foo'})
+
+Execute(Failed hover responses should be handled correctly):
+  call ale#hover#SetMap({3: {}})
+  call ale#hover#HandleTSServerResponse(
+  \ 1,
+  \ {'command': 'quickinfo', 'request_seq': 3}
+  \)
+  AssertEqual {}, ale#hover#GetMap()
+
+Given typescript(Some typescript file):
+  foo
+  somelongerline
+  bazxyzxyzxyz
+
+Execute(tsserver quickinfo responses will null missing bodies should be handled):
+  call ale#hover#SetMap({3: {}})
+  call ale#hover#HandleTSServerResponse(
+  \ 1,
+  \ {
+  \   'command': 'quickinfo',
+  \   'request_seq': 3,
+  \   'success': v:true,
+  \ }
+  \)
+
+  AssertEqual {}, ale#hover#GetMap()
+
+Execute(tsserver quickinfo displayString values should be displayed):
+  call ale#hover#SetMap({3: {}})
+  call ale#hover#HandleTSServerResponse(
+  \ 1,
+  \ {
+  \   'command': 'quickinfo',
+  \   'request_seq': 3,
+  \   'success': v:true,
+  \   'body': {'displayString': 'foo bar'},
+  \ }
+  \)
+
+  AssertEqual ['foo bar'], g:echo_list
+  AssertEqual {}, ale#hover#GetMap()
+
 Execute(LSP hover responses with just a string should be handled):
   call HandleValidLSPResult({'contents': 'foobar'})
 
