@@ -586,6 +586,8 @@ function! s:RunJob(options) abort
         \   'output': [],
         \   'next_chain_index': l:next_chain_index,
         \}
+
+        silent doautocmd <nomodeline> User ALEJobStarted
     endif
 
     if g:ale_history_enabled
