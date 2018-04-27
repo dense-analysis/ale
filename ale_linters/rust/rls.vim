@@ -19,10 +19,6 @@ function! ale_linters#rust#rls#GetCommand(buffer) abort
     endif
 endfunction
 
-function! ale_linters#rust#rls#GetLanguage(buffer) abort
-    return 'rust'
-endfunction
-
 function! ale_linters#rust#rls#GetProjectRoot(buffer) abort
     let l:cargo_file = ale#path#FindNearestFile(a:buffer, 'Cargo.toml')
 
@@ -34,6 +30,6 @@ call ale#linter#Define('rust', {
 \   'lsp': 'stdio',
 \   'executable_callback': 'ale_linters#rust#rls#GetExecutable',
 \   'command_callback': 'ale_linters#rust#rls#GetCommand',
-\   'language_callback': 'ale_linters#rust#rls#GetLanguage',
+\   'language': 'rust',
 \   'project_root_callback': 'ale_linters#rust#rls#GetProjectRoot',
 \})

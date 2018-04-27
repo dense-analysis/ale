@@ -14,16 +14,12 @@ function! ale_linters#python#pyls#GetCommand(buffer) abort
     return ale#Escape(l:executable)
 endfunction
 
-function! ale_linters#python#pyls#GetLanguage(buffer) abort
-    return 'python'
-endfunction
-
 call ale#linter#Define('python', {
 \   'name': 'pyls',
 \   'lsp': 'stdio',
 \   'executable_callback': 'ale_linters#python#pyls#GetExecutable',
 \   'command_callback': 'ale_linters#python#pyls#GetCommand',
-\   'language_callback': 'ale_linters#python#pyls#GetLanguage',
+\   'language': 'python',
 \   'project_root_callback': 'ale#python#FindProjectRoot',
 \   'completion_filter': 'ale#completion#python#CompletionItemFilter',
 \})

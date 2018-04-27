@@ -421,6 +421,30 @@ Execute(PreProcess should accept LSP server configurations):
 
   AssertEqual 'socket', ale#linter#PreProcess(g:linter).lsp
 
+Execute(PreProcess should accept let you specify the language as just a string):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address_callback': 'X',
+  \ 'language': 'foobar',
+  \ 'project_root_callback': 'x',
+  \}
+
+  AssertEqual 'foobar', ale#linter#PreProcess(g:linter).language_callback(0)
+
+Execute(PreProcess should complain about using language and language_callback together):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address_callback': 'X',
+  \ 'language': 'x',
+  \ 'language_callback': 'x',
+  \ 'project_root_callback': 'x',
+  \}
+
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual 'Only one of `language` or `language_callback` should be set', g:vader_exception
+
 Execute(PreProcess should require an address_callback for LSP socket configurations):
   let g:linter = {
   \ 'name': 'x',

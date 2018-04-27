@@ -42,9 +42,6 @@ Execute(Vendor executables should be detected):
   \ )),
   \ ale_linters#php#langserver#GetCommand(bufnr(''))
 
-Execute(The language string should be correct):
-  AssertEqual 'php', ale_linters#php#langserver#GetLanguage(bufnr(''))
-
 Execute(The project path should be correct for .git directories):
   call ale#test#SetFilename('php-langserver-project/test.php')
   call mkdir(g:dir . '/.git')

@@ -2272,9 +2272,9 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          process for a language server runnning, and
                          communicates with it directly via a |channel|.
 
-                         When this argument is not empty, then the
-                         `project_callback` and `language_callback` arguments
-                         must also be defined.
+                         When this argument is not empty, `project_callback`
+                         must be defined, and only one of either `language` or
+                         `language_callback` must be defined.
 
                          LSP linters handle diagnostics automatically, so
                          the `callback` argument must not be defined.
@@ -2289,13 +2289,20 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          This argument must only be set if the `lsp` argument
                          is also set to a non-empty string.
 
+  `language`               A |String| representing the name of the language
+                         being checked. This string will be sent to the LSP to
+                         tell it what type of language is being checked.
+
+                         This argument must only be set if the `lsp` argument
+                         is also set to a non-empty string.
+
   `language_callback`      A |String| or |Funcref| for a callback function
                          accepting a buffer number. A |String| should be
                          returned representing the name of the language being
                          checked.
 
-                         This argument must only be set if the `lsp` argument
-                         is also set to a non-empty string.
+                         This option can be used instead of `language` if a
+                         linter can check multiple languages.
 
   `aliases`                A |List| of aliases for the linter name.
 

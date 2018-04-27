@@ -14,10 +14,6 @@ function! ale_linters#php#langserver#GetCommand(buffer) abort
     return 'php ' . ale#Escape(ale_linters#php#langserver#GetExecutable(a:buffer))
 endfunction
 
-function! ale_linters#php#langserver#GetLanguage(buffer) abort
-    return 'php'
-endfunction
-
 function! ale_linters#php#langserver#GetProjectRoot(buffer) abort
     let l:git_path = ale#path#FindNearestDirectory(a:buffer, '.git')
 
@@ -29,6 +25,6 @@ call ale#linter#Define('php', {
 \   'lsp': 'stdio',
 \   'executable_callback': 'ale_linters#php#langserver#GetExecutable',
 \   'command_callback': 'ale_linters#php#langserver#GetCommand',
-\   'language_callback': 'ale_linters#php#langserver#GetLanguage',
+\   'language': 'php',
 \   'project_root_callback': 'ale_linters#php#langserver#GetProjectRoot',
 \})

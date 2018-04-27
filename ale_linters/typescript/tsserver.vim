@@ -10,10 +10,6 @@ function! ale_linters#typescript#tsserver#GetProjectRoot(buffer) abort
     return ''
 endfunction
 
-function! ale_linters#typescript#tsserver#GetLanguage(buffer) abort
-    return ''
-endfunction
-
 function! ale_linters#typescript#tsserver#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'typescript_tsserver', [
     \   'node_modules/.bin/tsserver',
@@ -26,5 +22,5 @@ call ale#linter#Define('typescript', {
 \   'executable_callback': 'ale_linters#typescript#tsserver#GetExecutable',
 \   'command_callback': 'ale_linters#typescript#tsserver#GetExecutable',
 \   'project_root_callback': 'ale_linters#typescript#tsserver#GetProjectRoot',
-\   'language_callback': 'ale_linters#typescript#tsserver#GetLanguage',
+\   'language': '',
 \})

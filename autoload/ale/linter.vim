@@ -51,6 +51,10 @@ function! s:IsBoolean(value) abort
     return type(a:value) == type(0) && (a:value == 0 || a:value == 1)
 endfunction
 
+function! s:LanguageGetter(buffer) dict abort
+    return l:self.language
+endfunction
+
 function! ale#linter#PreProcess(linter) abort
     if type(a:linter) != type({})
         throw 'The linter object must be a Dictionary'
@@ -185,10 +189,26 @@ function! ale#linter#PreProcess(linter) abort
     endif
 
     if l:needs_lsp_details
-        let l:obj.language_callback = get(a:linter, 'language_callback')
+        if has_key(a:linter, 'language')
+            if has_key(a:linter, 'language_callback')
+                throw 'Only one of `language` or `language_callback` '
+                \   . 'should be set'
+            endif
 
-        if !s:IsCallback(l:obj.language_callback)
-            throw '`language_callback` must be a callback for LSP linters'
+            let l:obj.language = get(a:linter, 'language')
+
+            if type(l:obj.language) != type('')
+                throw '`language` must be a string'
+            endif
+
+            " Make 'language_callback' return the 'language' value.
+            let l:obj.language_callback = function('s:LanguageGetter')
+        else
+            let l:obj.language_callback = get(a:linter, 'language_callback')
+
+            if !s:IsCallback(l:obj.language_callback)
+                throw '`language_callback` must be a callback for LSP linters'
+            endif
         endif
 
         let l:obj.project_root_callback = get(a:linter, 'project_root_callback')
