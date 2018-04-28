@@ -2461,6 +2461,7 @@ ALEJobStarted                                           *ALEJobStarted-autocmd*
   |ale#engine#IsCheckingBuffer()| over |ALELintPre-autocmd|, which is actually
   triggered before any linters are executed.
 
+
 ===============================================================================
 10. Special Thanks                                         *ale-special-thanks*
 
