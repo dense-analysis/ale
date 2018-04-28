@@ -12,8 +12,8 @@ endfunction
 
 function! ale_linters#matlab#mlint#GetCommand(buffer) abort
     let l:executable = ale_linters#matlab#mlint#GetExecutable(a:buffer)
-    
-    if ale#Var(a:buffer,'matlab_mlint_options') is# '' 
+
+    if ale#Var(a:buffer,'matlab_mlint_options') is# ''
         return l:executable.' -id %t'
     else
         return l:executable.' '.ale#Var(a:buffer, 'matlab_mlint_options').' %t'
