@@ -2458,7 +2458,7 @@ ALEJobStarted                                           *ALEJobStarted-autocmd*
 
   This |User| autocommand is triggered immediately after a job is successfully
   run. This provides better accuracy for checking linter status with
-  |ale#engine#IsCheckingBuffer()| over |ALELintPre|, which is actually
+  |ale#engine#IsCheckingBuffer()| over |ALELintPre-autocmd|, which is actually
   triggered before any linters are executed.
 
 ===============================================================================
