@@ -3,6 +3,8 @@
 
 let g:ale_matlab_mlint_executable =
 \   get(g:, 'ale_matlab_mlint_executable', 'mlint')
+let g:ale_matlab_mlint_options = get(g:, 'ale_matlab_mlint_options', '')
+let g:ale_matlab_mlint_use_global = get(g:, 'ale_matlab_mlint_use_global', 0)
 
 function! ale_linters#matlab#mlint#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'matlab_mlint_executable')
@@ -10,8 +12,11 @@ endfunction
 
 function! ale_linters#matlab#mlint#GetCommand(buffer) abort
     let l:executable = ale_linters#matlab#mlint#GetExecutable(a:buffer)
-
-    return l:executable . ' -id %t'
+    
+    if(ale#Var(a:buffer,'matlab_mlint_options') == '')
+        return l:executable.' -id %t'
+    else
+        return l:executable.' '.ale#Var(a:buffer, 'matlab_mlint_options').' %t'
 endfunction
 
 function! ale_linters#matlab#mlint#Handle(buffer, lines) abort
