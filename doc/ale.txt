@@ -2459,7 +2459,15 @@ ALEFixPost                                                 *ALEFixPost-autocmd*
         autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
         autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
     augroup end
+
 <
+ALEJobStarted                                           *ALEJobStarted-autocmd*
+
+  This |User| autocommand is triggered immediately after a job is successfully
+  run. This provides better accuracy for checking linter status with
+  |ale#engine#IsCheckingBuffer()| over |ALELintPre-autocmd|, which is actually
+  triggered before any linters are executed.
+
 
 ===============================================================================
 10. Special Thanks                                         *ale-special-thanks*
