@@ -58,7 +58,7 @@ function! ale#highlight#RemoveHighlights() abort
 endfunction
 
 function! ale#highlight#UpdateHighlights() abort
-    let l:item_list = get(b:, 'ale_enabled', 1) && g:ale_enabled
+    let l:item_list = get(b:, 'ale_enabled', g:ale_enabled)
     \   ? get(b:, 'ale_highlight_items', [])
     \   : []
 
@@ -116,18 +116,6 @@ function! ale#highlight#UpdateHighlights() abort
         endfor
     endif
 endfunction
-
-function! ale#highlight#BufferHidden(buffer) abort
-    " Remove highlights right away when buffers are hidden.
-    " They will be restored later when buffers are entered.
-    call ale#highlight#RemoveHighlights()
-endfunction
-
-augroup ALEHighlightBufferGroup
-    autocmd!
-    autocmd BufEnter * call ale#highlight#UpdateHighlights()
-    autocmd BufHidden * call ale#highlight#BufferHidden(expand('<abuf>'))
-augroup END
 
 function! ale#highlight#SetHighlights(buffer, loclist) abort
     let l:new_list = getbufvar(a:buffer, 'ale_enabled', 1) && g:ale_enabled
