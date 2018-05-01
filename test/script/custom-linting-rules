@@ -1,4 +1,7 @@
-#!/bin/bash -eu
+#!/usr/bin/env bash
+
+set -e
+set -u
 
 # This Bash script implements custom sanity checks for scripts beyond what
 # Vint covers, which are easy to check with regex.
