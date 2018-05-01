@@ -1,4 +1,7 @@
-#!/bin/bash -eu
+#!/usr/bin/env bash
+
+set -e
+set -u
 
 # Author: w0rp <devw0rp@gmail.com>
 #

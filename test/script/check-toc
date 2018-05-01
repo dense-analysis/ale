@@ -1,4 +1,7 @@
-#!/bin/bash -eu
+#!/usr/bin/env bash
+
+set -e
+set -u
 
 # This script checks that the table of contents for the supported tools is
 # sorted, and that the table matches the files.

@@ -1,4 +1,7 @@
-#!/bin/bash -eu
+#!/usr/bin/env bash
+
+set -e
+set -u
 
 image=w0rp/ale
 docker_flags=(--rm -v "$PWD:/testplugin" -v "$PWD/test:/home" -w /testplugin "$image")

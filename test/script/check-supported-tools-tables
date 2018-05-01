@@ -1,4 +1,7 @@
-#!/bin/bash -eu
+#!/usr/bin/env bash
+
+set -e
+set -u
 
 # This script compares the table of supported tools in both the README file
 # and the doc/ale.txt file, so we can complain if they don't match up.
