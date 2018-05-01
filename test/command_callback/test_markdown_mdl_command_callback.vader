@@ -26,3 +26,10 @@ Execute(The executable and options should be configurable):
   AssertEqual
   \ ale_linters#markdown#mdl#GetCommand(bufnr('')),
   \ ale#Escape('foo bar') . ' --wat'
+
+Execute(Setting bundle appends 'exec mdl'):
+  let g:ale_markdown_mdl_executable = 'path to/bundle'
+
+  AssertEqual
+  \ ale#Escape('path to/bundle') . ' exec mdl',
+  \ ale_linters#markdown#mdl#GetCommand(bufnr(''))
