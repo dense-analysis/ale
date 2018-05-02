@@ -190,6 +190,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['perl'],
 \       'description': 'Fix Perl files with perltidy.',
 \   },
+\   'xo': {
+\       'function': 'ale#fixers#xo#Fix',
+\       'suggested_filetypes': ['javascript'],
+\       'description': 'Fix JavaScript files using xo --fix.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
