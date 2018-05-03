@@ -28,8 +28,6 @@ function! ale#fix#ApplyQueuedFixes() abort
     call remove(g:ale_fix_buffer_data, l:buffer)
 
     if l:data.changes_made
-        call setline(1, l:data.output)
-
         let l:start_line = len(l:data.output) + 1
         let l:end_line = len(l:data.lines_before)
 
@@ -38,6 +36,8 @@ function! ale#fix#ApplyQueuedFixes() abort
             silent execute l:start_line . ',' . l:end_line . 'd_'
             call winrestview(l:save)
         endif
+
+        call setline(1, l:data.output)
 
         if l:data.should_save
             if empty(&buftype)
