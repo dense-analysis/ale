@@ -1,15 +1,27 @@
+Before:
+  Save g:ale_completion_excluded_words
+
+  let g:ale_completion_excluded_words = []
+
+After:
+  Restore
+
+  unlet! b:ale_completion_excluded_words
+  unlet! b:suggestions
+
 Execute(Prefix filtering should work for Lists of strings):
   AssertEqual
   \ ['FooBar', 'foo'],
-  \ ale#completion#Filter(['FooBar', 'FongBar', 'baz', 'foo'], 'foo')
+  \ ale#completion#Filter(bufnr(''), ['FooBar', 'FongBar', 'baz', 'foo'], 'foo')
   AssertEqual
   \ ['FooBar', 'FongBar', 'baz', 'foo'],
-  \ ale#completion#Filter(['FooBar', 'FongBar', 'baz', 'foo'], '.')
+  \ ale#completion#Filter(bufnr(''), ['FooBar', 'FongBar', 'baz', 'foo'], '.')
 
 Execute(Prefix filtering should work for completion items):
   AssertEqual
   \ [{'word': 'FooBar'}, {'word': 'foo'}],
   \ ale#completion#Filter(
+  \   bufnr(''),
   \   [
   \     {'word': 'FooBar'},
   \     {'word': 'FongBar'},
@@ -18,6 +30,7 @@ Execute(Prefix filtering should work for completion items):
   \   ],
   \   'foo'
   \ )
+
   AssertEqual
   \ [
   \   {'word': 'FooBar'},
@@ -26,6 +39,7 @@ Execute(Prefix filtering should work for completion items):
   \   {'word': 'foo'},
   \ ],
   \ ale#completion#Filter(
+  \   bufnr(''),
   \   [
   \     {'word': 'FooBar'},
   \     {'word': 'FongBar'},
@@ -34,3 +48,61 @@ Execute(Prefix filtering should work for completion items):
   \   ],
   \   '.'
   \ )
+
+Execute(Excluding words from completion results should work):
+  let b:ale_completion_excluded_words = ['it', 'describe']
+
+  AssertEqual
+  \ [{'word': 'Italian'}],
+  \ ale#completion#Filter(
+  \   bufnr(''),
+  \   [
+  \     {'word': 'Italian'},
+  \     {'word': 'it'},
+  \   ],
+  \   'it'
+  \ )
+
+  AssertEqual
+  \ [{'word': 'Deutsch'}],
+  \ ale#completion#Filter(
+  \   bufnr(''),
+  \   [
+  \     {'word': 'describe'},
+  \     {'word': 'Deutsch'},
+  \   ],
+  \   'de'
+  \ )
+
+  AssertEqual
+  \ [{'word': 'Deutsch'}],
+  \ ale#completion#Filter(
+  \   bufnr(''),
+  \   [
+  \     {'word': 'describe'},
+  \     {'word': 'Deutsch'},
+  \   ],
+  \   '.'
+  \ )
+
+Execute(Excluding words from completion results should work with lists of Strings):
+  let b:ale_completion_excluded_words = ['it', 'describe']
+
+  AssertEqual
+  \ ['Italian'],
+  \ ale#completion#Filter(bufnr(''), ['Italian', 'it'], 'it')
+  AssertEqual
+  \ ['Deutsch'],
+  \ ale#completion#Filter(bufnr(''), ['describe', 'Deutsch'], 'de')
+  AssertEqual
+  \ ['Deutsch'],
+  \ ale#completion#Filter(bufnr(''), ['describe', 'Deutsch'], '.')
+
+Execute(Filtering shouldn't modify the original list):
+  let b:ale_completion_excluded_words = ['it', 'describe']
+  let b:suggestions = [{'word': 'describe'}]
+
+  AssertEqual [], ale#completion#Filter(bufnr(''), b:suggestions, '.')
+  AssertEqual b:suggestions, [{'word': 'describe'}]
+  AssertEqual [], ale#completion#Filter(bufnr(''), b:suggestions, 'de')
+  AssertEqual b:suggestions, [{'word': 'describe'}]

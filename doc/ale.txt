@@ -631,6 +631,9 @@ delay for completion can be configured with |g:ale_completion_delay|. ALE will
 only suggest so many possible matches for completion. The maximum number of
 items can be controlled with |g:ale_completion_max_suggestions|.
 
+If you don't like some of the suggestions you see, you can filter them out
+with |g:ale_completion_excluded_words| or |b:ale_completion_excluded_words|.
+
 
 -------------------------------------------------------------------------------
 5.2 Go To Definition                                     *ale-go-to-definition*
@@ -762,6 +765,24 @@ g:ale_completion_enabled                             *g:ale_completion_enabled*
 
   See |ale-completion|
 
+
+g:ale_completion_excluded_words               *g:ale_completion_excluded_words*
+                                              *b:ale_completion_excluded_words*
+  Type: |List|
+  Default: `[]`
+
+  This option can be set to a list of |String| values for "words" to exclude
+  from completion results, as in the words for |complete-items|. The strings
+  will be matched exactly in a case-sensitive manner. (|==#|)
+
+  This setting can be configured in ftplugin files with buffer variables, so
+  that different lists can be used for different filetypes. For example: >
+
+  " In ~/.vim/ftplugin/typescript.vim
+
+  " Don't suggest `it` or `describe` so we can use snippets for those words.
+  let b:ale_completion_excluded_words = ['it', 'describe']
+<
 
 g:ale_completion_max_suggestions             *g:ale_completion_max_suggestions*
 

@@ -1,6 +1,8 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Completion support for LSP linters
 
+call ale#Set('completion_excluded_words', [])
+
 let s:timer_id = -1
 let s:last_done_pos = []
 
@@ -76,33 +78,49 @@ function! ale#completion#GetTriggerCharacter(filetype, prefix) abort
     return ''
 endfunction
 
-function! ale#completion#Filter(suggestions, prefix) abort
+function! ale#completion#Filter(buffer, suggestions, prefix) abort
+    let l:excluded_words = ale#Var(a:buffer, 'completion_excluded_words')
+
     " For completing...
     "   foo.
     "       ^
     " We need to include all of the given suggestions.
     if a:prefix is# '.'
-        return a:suggestions
+        let l:filtered_suggestions = a:suggestions
+    else
+        let l:filtered_suggestions = []
+
+        " Filter suggestions down to those starting with the prefix we used for
+        " finding suggestions in the first place.
+        "
+        " Some completion tools will include suggestions which don't even start
+        " with the characters we have already typed.
+        for l:item in a:suggestions
+            " A List of String values or a List of completion item Dictionaries
+            " is accepted here.
+            let l:word = type(l:item) == type('') ? l:item : l:item.word
+
+            " Add suggestions if the suggestion starts with a case-insensitive
+            " match for the prefix.
+            if l:word[: len(a:prefix) - 1] is? a:prefix
+                call add(l:filtered_suggestions, l:item)
+            endif
+        endfor
     endif
 
-    let l:filtered_suggestions = []
-
-    " Filter suggestions down to those starting with the prefix we used for
-    " finding suggestions in the first place.
-    "
-    " Some completion tools will include suggestions which don't even start
-    " with the characters we have already typed.
-    for l:item in a:suggestions
-        " A List of String values or a List of completion item Dictionaries
-        " is accepted here.
-        let l:word = type(l:item) == type('') ? l:item : l:item.word
-
-        " Add suggestions if the suggestion starts with a case-insensitive
-        " match for the prefix.
-        if l:word[: len(a:prefix) - 1] is? a:prefix
-            call add(l:filtered_suggestions, l:item)
+    if !empty(l:excluded_words)
+        " Copy the List if needed. We don't want to modify the argument.
+        " We shouldn't make a copy if we don't need to.
+        if l:filtered_suggestions is a:suggestions
+            let l:filtered_suggestions = copy(a:suggestions)
         endif
-    endfor
+
+        " Remove suggestions with words in the exclusion List.
+        call filter(
+        \   l:filtered_suggestions,
+        \   'index(l:excluded_words, type(v:val) is type('''') ? v:val : v:val.word) < 0',
+        \)
+    endif
 
     return l:filtered_suggestions
 endfunction
@@ -290,10 +308,12 @@ function! ale#completion#HandleTSServerResponse(conn_id, response) abort
         return
     endif
 
+    let l:buffer = bufnr('')
     let l:command = get(a:response, 'command', '')
 
     if l:command is# 'completions'
         let l:names = ale#completion#Filter(
+        \   l:buffer,
         \   ale#completion#ParseTSServerCompletions(a:response),
         \   b:ale_completion_info.prefix,
         \)[: g:ale_completion_max_suggestions - 1]
@@ -302,7 +322,7 @@ function! ale#completion#HandleTSServerResponse(conn_id, response) abort
             let b:ale_completion_info.request_id = ale#lsp#Send(
             \   b:ale_completion_info.conn_id,
             \   ale#lsp#tsserver_message#CompletionEntryDetails(
-            \       bufnr(''),
+            \       l:buffer,
             \       b:ale_completion_info.line,
             \       b:ale_completion_info.column,
             \       l:names,
