@@ -23,7 +23,7 @@ Execute(The nasm handler should parse GCC style output from nasm correctly):
   \     'type': 'E',
   \   },
   \ ],
-  \ ale_linters#nasm#nasm#Handle(357, [
+  \ ale_linters#nasm#nasm#Handle(bufnr(''), [
   \   "tmp.asm:2: warning: label alone on a line without a colon might be in error",
   \   "tmp.asm:4: error: invalid combination of opcode and operands",
   \   "tmp.asm:7: fatal: unable to open include file `bar.asm'"
