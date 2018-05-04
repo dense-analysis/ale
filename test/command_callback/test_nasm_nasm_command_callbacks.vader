@@ -10,9 +10,9 @@ Before:
   runtime ale_linters/nasm/nasm.vim
 
   let b:command_tail =
-  \ ' -X gnu -I ' . ale#Escape(getcwd() . '/') . '  %s'
+  \ ' -X gnu -I ' . ale#Escape(getcwd() . (has('win32') ? '\' : '/')) . '  %s'
   let b:command_tail_opt =
-  \ ' -X gnu -I ' . ale#Escape(getcwd() . '/') . ' -w+orphan-labels %s'
+  \ ' -X gnu -I ' . ale#Escape(getcwd() . (has('win32') ? '\' : '/')) . ' -w+orphan-labels %s'
 
 After:
   Restore
