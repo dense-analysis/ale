@@ -1,0 +1,24 @@
+Before:
+  runtime ale_linters/php/psalm.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The php static analyzer handler should parse errors from psalm):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'type': 'W',
+  \     'text': 'somewarning',
+  \   },
+  \   {
+  \     'lnum': 11,
+  \     'type': 'E',
+  \     'text': 'someerror',
+  \   },
+  \ ],
+  \ ale_linters#php#psalm#Handle(347, [
+  \ "/file:1:3:warning - somewarning",
+  \ "/file:11:33:error - someerror",
+  \ ])
