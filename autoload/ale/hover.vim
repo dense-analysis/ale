@@ -81,7 +81,9 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
                 " XXX: Find a way to know if we're targetting Messages or
                 " Balloon, since here we're just writing output to all
                 " positions
-                call balloon_show(l:str)
+                if has('balloon_eval') || has('ballon_eval_term')
+                    call balloon_show(l:str)
+                endif
             endif
         endif
     endif
