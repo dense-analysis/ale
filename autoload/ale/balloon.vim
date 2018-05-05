@@ -20,10 +20,10 @@ function! ale#balloon#Expr() abort
 endfunction
 
 function! ale#balloon#HoverExpr() abort
-    " TODO : Find a way with ale#hover API to just extract the message, given
-    " beval_bufnr, beval_lnum, beval_col.
-    " Note : Termdebug uses beval_text
-    return 'Test'
+    " XXX: This function will (eventually) pass a call to balloon_show, so it can
+    " return a placeholder '', see :h balloon_show()
+    call ale#hover#Show_overload(v:beval_bufnr, v:beval_lnum, v:beval_col)
+    return ''
 endfunction
 
 function! ale#balloon#Disable() abort
@@ -55,5 +55,7 @@ function! ale#balloon#Enable() abort
         set balloonevalterm
     endif
 
-    set balloonexpr=ale#balloon#Expr()
+    " XXX: Here we probably want an option to change the source of the
+    " ballonexpr (loclist or Hover ?)
+    set balloonexpr=ale#balloon#HoverExpr()
 endfunction

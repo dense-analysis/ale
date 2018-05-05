@@ -38,6 +38,12 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
         let [l:line, l:column] = getcurpos()[1:2]
         let l:end = len(getline(l:line))
 
+        " XXX: This block prevents the use of the handler for mouse tooltips,
+        " since the line and columns of the request (=mouse pos) is often
+        " different than the getcurpos() we use for comparison
+        "
+        " Note : commenting this block makes a relevant tooltip appear at
+        " least from rls
         if l:buffer isnot l:options.buffer
         \|| l:line isnot l:options.line
         \|| min([l:column, l:end]) isnot min([l:options.column, l:end])
@@ -72,14 +78,19 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
 
             if !empty(l:str)
                 call ale#util#ShowMessage(l:str)
+                " XXX: Find a way to know if we're targetting Messages or
+                " Balloon, since here we're just writing output to all
+                " positions
+                call balloon_show(l:str)
             endif
         endif
     endif
 endfunction
 
-function! s:ShowDetails(linter) abort
-    let l:buffer = bufnr('')
-    let [l:line, l:column] = getcurpos()[1:2]
+function! s:ShowDetails(linter, buffer, line, col) abort
+    let l:buffer = a:buffer
+    let l:line = a:line
+    let l:column = a:col
 
     let l:Callback = a:linter.lsp is# 'tsserver'
     \   ? function('ale#hover#HandleTSServerResponse')
@@ -122,7 +133,16 @@ endfunction
 function! ale#hover#Show() abort
     for l:linter in ale#linter#Get(&filetype)
         if !empty(l:linter.lsp)
-            call s:ShowDetails(l:linter)
+            call s:ShowDetails(l:linter, bufnr(''), getcurpos()[1], getcurpos()[2])
+        endif
+    endfor
+endfunction
+
+" XXX: Overload written for the RFC
+function! ale#hover#Show_overload(buffer, line, col) abort
+    for l:linter in ale#linter#Get(getbufvar(a:buffer, '&filetype'))
+        if !empty(l:linter.lsp)
+            call s:ShowDetails(l:linter, a:buffer, a:line, a:col)
         endif
     endfor
 endfunction
