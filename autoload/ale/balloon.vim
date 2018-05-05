@@ -19,6 +19,13 @@ function! ale#balloon#Expr() abort
     return ale#balloon#MessageForPos(v:beval_bufnr, v:beval_lnum, v:beval_col)
 endfunction
 
+function! ale#balloon#HoverExpr() abort
+    " TODO : Find a way with ale#hover API to just extract the message, given
+    " beval_bufnr, beval_lnum, beval_col.
+    " Note : Termdebug uses beval_text
+    return 'Test'
+endfunction
+
 function! ale#balloon#Disable() abort
     if !has('balloon_eval') && !has('balloon_eval_term')
         finish
