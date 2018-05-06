@@ -28,7 +28,7 @@ endfunction
 
 function! ale#balloon#Disable() abort
     if !has('balloon_eval') && !has('balloon_eval_term')
-        finish
+        return
     endif
 
     if has('balloon_eval')
@@ -44,7 +44,7 @@ endfunction
 
 function! ale#balloon#Enable() abort
     if !has('balloon_eval') && !has('balloon_eval_term')
-        finish
+        return
     endif
 
     if has('balloon_eval')
