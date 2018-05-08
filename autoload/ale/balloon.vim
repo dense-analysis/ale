@@ -12,17 +12,16 @@ function! ale#balloon#MessageForPos(bufnr, lnum, col) abort
     let l:loclist = get(g:ale_buffer_info, a:bufnr, {'loclist': []}).loclist
     let l:index = ale#util#BinarySearch(l:loclist, a:bufnr, a:lnum, a:col)
 
-    return l:index >= 0 ? l:loclist[l:index].text : ''
+    " Show the diagnostics message if found, 'Hover' output otherwise
+    if l:index >= 0
+        call balloon_show(l:loclist[l:index].text)
+    else
+        call ale#hover#Show(a:bufnr, a:lnum, a:col)
+    endif
 endfunction
 
 function! ale#balloon#Expr() abort
-    return ale#balloon#MessageForPos(v:beval_bufnr, v:beval_lnum, v:beval_col)
-endfunction
-
-function! ale#balloon#HoverExpr() abort
-    " XXX: This function will (eventually) pass a call to balloon_show, so it can
-    " return a placeholder '', see :h balloon_show()
-    call ale#hover#Show_overload(v:beval_bufnr, v:beval_lnum, v:beval_col)
+    call ale#balloon#MessageForPos(v:beval_bufnr, v:beval_lnum, v:beval_col)
     return ''
 endfunction
 
@@ -44,7 +43,5 @@ function! ale#balloon#Enable() abort
         set balloonevalterm
     endif
 
-    " XXX: Here we probably want an option to change the source of the
-    " ballonexpr (loclist or Hover ?)
-    set balloonexpr=ale#balloon#HoverExpr()
+    set balloonexpr=ale#balloon#Expr()
 endfunction
