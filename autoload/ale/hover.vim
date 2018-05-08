@@ -24,7 +24,13 @@ function! ale#hover#HandleTSServerResponse(conn_id, response) abort
 
         if get(a:response, 'success', v:false) is v:true
         \&& get(a:response, 'body', v:null) isnot v:null
-            call ale#util#ShowMessage(a:response.body.displayString)
+            " Also write on balloons if set
+            if ale#Var(bufnr(''), 'set_balloons')
+            \&& (has('balloon_eval') || has('ballon_eval_term'))
+                call balloon_show(a:response.body.displayString)
+            else
+                call ale#util#ShowMessage(a:response.body.displayString)
+            endif
         endif
     endif
 endfunction
@@ -37,19 +43,6 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
         let l:buffer = bufnr('')
         let [l:line, l:column] = getcurpos()[1:2]
         let l:end = len(getline(l:line))
-
-        " XXX: This block prevents the use of the handler for mouse tooltips,
-        " since the line and columns of the request (=mouse pos) is often
-        " different than the getcurpos() we use for comparison
-        "
-        " Note : commenting this block makes a relevant tooltip appear at
-        " least from rls
-        if l:buffer isnot l:options.buffer
-        \|| l:line isnot l:options.line
-        \|| min([l:column, l:end]) isnot min([l:options.column, l:end])
-            " Cancel display the message if the cursor has moved.
-            return
-        endif
 
         " The result can be a Dictionary item, a List of the same, or null.
         let l:result = get(a:response, 'result', v:null)
@@ -77,12 +70,12 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
             let l:str = substitute(l:str, '^\s*\(.\{-}\)\s*$', '\1', '')
 
             if !empty(l:str)
-                call ale#util#ShowMessage(l:str)
-                " XXX: Find a way to know if we're targetting Messages or
-                " Balloon, since here we're just writing output to all
-                " positions
-                if has('balloon_eval') || has('ballon_eval_term')
+                " Also write on balloons if set
+                if ale#Var(l:buffer, 'set_balloons')
+                \&& (has('balloon_eval') || has('ballon_eval_term'))
                     call balloon_show(l:str)
+                else
+                    call ale#util#ShowMessage(l:str)
                 endif
             endif
         endif
