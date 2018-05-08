@@ -148,3 +148,17 @@ Execute(The GCC handler should interpret - as being the current file):
   \ ale#handlers#gcc#HandleGCCFormat(347, [
   \ '-:6:12: error: Some error',
   \ ])
+
+Execute(The GCC handler should handle fatal error messages due to missing files):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 3,
+  \     'col': 12,
+  \     'type': 'E',
+  \     'text': 'foo.h: No such file or directory'
+  \   },
+  \ ],
+  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \ '<stdin>:3:12: fatal error: foo.h: No such file or directory',
+  \ ])
