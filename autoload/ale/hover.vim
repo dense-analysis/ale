@@ -28,9 +28,8 @@ function! ale#hover#HandleTSServerResponse(conn_id, response) abort
             if exists('*balloon_show') && ale#Var(bufnr(''), 'set_balloons')
             \&& (has('balloon_eval') || has('ballon_eval_term'))
                 call balloon_show(a:response.body.displayString)
-            else
-                call ale#util#ShowMessage(a:response.body.displayString)
             endif
+            call ale#util#ShowMessage(a:response.body.displayString)
         endif
     endif
 endfunction
@@ -74,9 +73,8 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
                 if exists('*balloon_show') && ale#Var(l:buffer, 'set_balloons')
                 \&& (has('balloon_eval') || has('ballon_eval_term'))
                     call balloon_show(l:str)
-                else
-                    call ale#util#ShowMessage(l:str)
                 endif
+                call ale#util#ShowMessage(l:str)
             endif
         endif
     endif
@@ -123,6 +121,9 @@ function! s:ShowDetails(linter, buffer, line, column) abort
     \}
 endfunction
 
+" Obtain Hover information for the specified position
+" Currently, the callbacks displays the info in the balloon if possible, and in
+" messages in any case.
 function! ale#hover#Show(buffer, line, col) abort
     for l:linter in ale#linter#Get(getbufvar(a:buffer, '&filetype'))
         if !empty(l:linter.lsp)
