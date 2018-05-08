@@ -25,7 +25,7 @@ function! ale#hover#HandleTSServerResponse(conn_id, response) abort
         if get(a:response, 'success', v:false) is v:true
         \&& get(a:response, 'body', v:null) isnot v:null
             " Also write on balloons if set
-            if ale#Var(bufnr(''), 'set_balloons')
+            if exists('*balloon_show') && ale#Var(bufnr(''), 'set_balloons')
             \&& (has('balloon_eval') || has('ballon_eval_term'))
                 call balloon_show(a:response.body.displayString)
             else
@@ -71,7 +71,7 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
 
             if !empty(l:str)
                 " Also write on balloons if set
-                if ale#Var(l:buffer, 'set_balloons')
+                if exists('*balloon_show') && ale#Var(l:buffer, 'set_balloons')
                 \&& (has('balloon_eval') || has('ballon_eval_term'))
                     call balloon_show(l:str)
                 else
