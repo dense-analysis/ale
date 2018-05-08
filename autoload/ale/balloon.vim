@@ -14,15 +14,15 @@ function! ale#balloon#MessageForPos(bufnr, lnum, col) abort
 
     " Show the diagnostics message if found, 'Hover' output otherwise
     if l:index >= 0
-        call balloon_show(l:loclist[l:index].text)
+        return l:loclist[l:index].text
     else
         call ale#hover#Show(a:bufnr, a:lnum, a:col)
+        return ''
     endif
 endfunction
 
 function! ale#balloon#Expr() abort
-    call ale#balloon#MessageForPos(v:beval_bufnr, v:beval_lnum, v:beval_col)
-    return ''
+    return ale#balloon#MessageForPos(v:beval_bufnr, v:beval_lnum, v:beval_col)
 endfunction
 
 function! ale#balloon#Disable() abort
