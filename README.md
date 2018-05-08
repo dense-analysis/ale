@@ -138,6 +138,7 @@ formatting.
 | Markdown | [alex](https://github.com/wooorm/alex) !!, [markdownlint](https://github.com/DavidAnson/markdownlint) !!, [mdl](https://github.com/mivok/markdownlint), [prettier](https://github.com/prettier/prettier), [proselint](http://proselint.com/), [redpen](http://redpen.cc/), [remark-lint](https://github.com/wooorm/remark-lint) !!, [textlint](https://textlint.github.io/), [vale](https://github.com/ValeLint/vale), [write-good](https://github.com/btford/write-good) |
 | MATLAB | [mlint](https://www.mathworks.com/help/matlab/ref/mlint.html) |
 | Mercury | [mmc](http://mercurylang.org) !! |
+| NASM | [nasm](https://www.nasm.us/) !! |
 | Nim | [nim check](https://nim-lang.org/docs/nimc.html) !! |
 | nix | [nix-instantiate](http://nixos.org/nix/manual/#sec-nix-instantiate) |
 | nroff | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good)|
@@ -515,6 +516,8 @@ There are 3 global options that allow customizing the echoed message.
 
 - `g:ale_echo_msg_format` where:
     * `%s` is the error message itself
+    * `%...code...%` is an optional error code, and most characters can be
+      written between the `%` characters.
     * `%linter%` is the linter name
     * `%severity` is the severity type
 - `g:ale_echo_msg_error_str` is the string used for error severity.
@@ -531,6 +534,8 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 Will give you:
 
 ![Echoed message](img/echo.png)
+
+See `:help g:ale_echo_msg_format` for more information.
 
 <a name="faq-autocmd"></a>
 
