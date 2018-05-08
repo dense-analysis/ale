@@ -89,16 +89,12 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
     endif
 endfunction
 
-function! s:ShowDetails(linter, buffer, line, col) abort
-    let l:buffer = a:buffer
-    let l:line = a:line
-    let l:column = a:col
-
+function! s:ShowDetails(linter, buffer, line, column) abort
     let l:Callback = a:linter.lsp is# 'tsserver'
     \   ? function('ale#hover#HandleTSServerResponse')
     \   : function('ale#hover#HandleLSPResponse')
 
-    let l:lsp_details = ale#linter#StartLSP(l:buffer, a:linter, l:Callback)
+    let l:lsp_details = ale#linter#StartLSP(a:buffer, a:linter, l:Callback)
 
     if empty(l:lsp_details)
         return 0
@@ -108,40 +104,33 @@ function! s:ShowDetails(linter, buffer, line, col) abort
     let l:root = l:lsp_details.project_root
 
     if a:linter.lsp is# 'tsserver'
+        let l:column = a:column
+
         let l:message = ale#lsp#tsserver_message#Quickinfo(
-        \   l:buffer,
-        \   l:line,
+        \   a:buffer,
+        \   a:line,
         \   l:column
         \)
     else
         " Send a message saying the buffer has changed first, or the
         " hover position probably won't make sense.
-        call ale#lsp#Send(l:id, ale#lsp#message#DidChange(l:buffer), l:root)
+        call ale#lsp#Send(l:id, ale#lsp#message#DidChange(a:buffer), l:root)
 
-        let l:column = min([l:column, len(getline(l:line))])
+        let l:column = min([a:column, len(getline(a:line))])
 
-        let l:message = ale#lsp#message#Hover(l:buffer, l:line, l:column)
+        let l:message = ale#lsp#message#Hover(a:buffer, a:line, l:column)
     endif
 
     let l:request_id = ale#lsp#Send(l:id, l:message, l:root)
 
     let s:hover_map[l:request_id] = {
-    \   'buffer': l:buffer,
-    \   'line': l:line,
+    \   'buffer': a:buffer,
+    \   'line': a:line,
     \   'column': l:column,
     \}
 endfunction
 
-function! ale#hover#Show() abort
-    for l:linter in ale#linter#Get(&filetype)
-        if !empty(l:linter.lsp)
-            call s:ShowDetails(l:linter, bufnr(''), getcurpos()[1], getcurpos()[2])
-        endif
-    endfor
-endfunction
-
-" XXX: Overload written for the RFC
-function! ale#hover#Show_overload(buffer, line, col) abort
+function! ale#hover#Show(buffer, line, col) abort
     for l:linter in ale#linter#Get(getbufvar(a:buffer, '&filetype'))
         if !empty(l:linter.lsp)
             call s:ShowDetails(l:linter, a:buffer, a:line, a:col)
