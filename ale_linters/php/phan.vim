@@ -9,7 +9,7 @@ let g:ale_php_phan_use_client = get(g:, 'ale_php_phan_use_client', 0)
 
 function! ale_linters#php#phan#GetExecutable(buffer) abort
     let l:executable = ale#Var(a:buffer, 'php_phan_executable')
-    if g:ale_php_phan_use_client == 1 && l:executable == 'phan'
+    if g:ale_php_phan_use_client == 1 && l:executable ==# 'phan'
         let l:executable = 'phan_client'
     endif
 
