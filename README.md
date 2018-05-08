@@ -515,6 +515,8 @@ There are 3 global options that allow customizing the echoed message.
 
 - `g:ale_echo_msg_format` where:
     * `%s` is the error message itself
+    * `%...code...%` is an optional error code, and most characters can be
+      written between the `%` characters.
     * `%linter%` is the linter name
     * `%severity` is the severity type
 - `g:ale_echo_msg_error_str` is the string used for error severity.
@@ -531,6 +533,8 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 Will give you:
 
 ![Echoed message](img/echo.png)
+
+See `:help g:ale_echo_msg_format` for more information.
 
 <a name="faq-autocmd"></a>
 
