@@ -1,4 +1,4 @@
-" Author: diegoholiveira <https://github.com/diegoholiveira>, haginaga
+" Author: diegoholiveira <https://github.com/diegoholiveira>, haginaga <https://github.com/haginaga>
 " Description: static analyzer for PHP
 
 " Define the minimum severity
@@ -8,12 +8,16 @@ let g:ale_php_phan_executable = get(g:, 'ale_php_phan_executable', 'phan')
 let g:ale_php_phan_use_client = get(g:, 'ale_php_phan_use_client', 0)
 
 function! ale_linters#php#phan#GetExecutable(buffer) abort
-    return ale#Var(a:buffer, 'php_phan_executable')
+    let l:executable = ale#Var(a:buffer, 'php_phan_executable')
+    if g:ale_php_phan_use_client == 1 && l:executable == 'phan'
+        let l:executable = 'phan_client'
+    endif
+
+    return l:executable
 endfunction
 
 function! ale_linters#php#phan#GetCommand(buffer) abort
-    let l:use_client = ale#Var(a:buffer, 'php_phan_use_client')
-    if l:use_client == 1
+    if g:ale_php_phan_use_client == 1
         let l:args = '-l '
         \   . ' %s'
     else
@@ -28,10 +32,8 @@ function! ale_linters#php#phan#GetCommand(buffer) abort
 endfunction
 
 function! ale_linters#php#phan#Handle(buffer, lines) abort
-    let l:use_client = ale#Var(a:buffer, 'php_phan_use_client')
-
     " Matches against lines like the following:
-    if l:use_client == 1
+    if g:ale_php_phan_use_client == 1
         " Phan error: ERRORTYPE: message in /path/to/some-filename.php on line nnn
         let l:pattern = '^Phan error: \(\w\+\): \(.\+\) in \(.\+\) on line \(\d\+\)$'
     else
@@ -41,7 +43,7 @@ function! ale_linters#php#phan#Handle(buffer, lines) abort
 
     let l:output = []
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        if l:use_client == 1
+        if g:ale_php_phan_use_client == 1
             let l:dict = {
             \   'lnum': l:match[4] + 0,
             \   'text': l:match[2],
