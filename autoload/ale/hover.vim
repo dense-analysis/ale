@@ -105,7 +105,7 @@ function! s:ShowDetails(linter, buffer, line, column) abort
         " hover position probably won't make sense.
         call ale#lsp#Send(l:id, ale#lsp#message#DidChange(a:buffer), l:root)
 
-        let l:column = min([a:column, len(getline(a:line))])
+        let l:column = min([a:column, len(getbufline(a:buffer, a:line)[0])])
 
         let l:message = ale#lsp#message#Hover(a:buffer, a:line, l:column)
     endif
