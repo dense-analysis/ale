@@ -9,7 +9,26 @@ After:
 
   call ale#linter#Reset()
 
-Execute(The elm-make handler should parse lines correctly):
+Execute(The elm make handler should parse general problems correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'type': 'E',
+  \     'text': 'UNKNOWN IMPORT',
+  \     'detail': "error details 1\n\nstyled details"
+  \   }
+  \ ],
+  \ ale_linters#elm#make#Handle(347, [
+  \   '{
+  \      "type": "error",
+  \      "path": "' . b:tmp . '/Module.elm",
+  \      "title": "UNKNOWN IMPORT",
+  \      "message": ["error details 1\n\n", { "string": "styled details" }]
+  \    }'
+  \ ])
+
+Execute(The elm make handler should parse compilation errors correctly):
   AssertEqual
   \ [
   \   {
@@ -19,7 +38,7 @@ Execute(The elm-make handler should parse lines correctly):
   \     'end_col': 18,
   \     'type': 'E',
   \     'text': 'TYPE MISMATCH',
-  \     'detail': "error details 1 styled details"
+  \     'detail': "error details 1\n\nstyled details"
   \   },
   \   {
   \     'lnum': 406,
@@ -42,25 +61,25 @@ Execute(The elm-make handler should parse lines correctly):
   \ ],
   \ ale_linters#elm#make#Handle(347, [
   \   '{
-  \      "type":"compile-errors",
+  \      "type": "compile-errors",
   \      "errors": [
   \        {
-  \          "path": "' . b:tmp . 'Module.elm",
+  \          "path": "' . b:tmp . '/Module.elm",
   \          "problems": [
   \            {
   \              "title": "TYPE MISMATCH",
-  \              "message": ["error details 1 ", { "string": "styled details" }],
-  \              "region": { "start": { "line": 404, "column":1 }, "end": { "line":408, "column":18} }
+  \              "message": ["error details 1\n\n", { "string": "styled details" }],
+  \              "region": { "start": { "line": 404, "column": 1 }, "end": { "line": 408, "column": 18 } }
   \            },
   \            {
   \              "title": "TYPE MISMATCH",
   \              "message": ["error details 2"],
-  \              "region": { "start": {"line": 406, "column": 5}, "end": {"line": 407, "column": 17} }
+  \              "region": { "start": {"line": 406, "column": 5}, "end": {"line": 407, "column": 17 } }
   \            },
   \            {
   \              "title": "TYPE MISMATCH",
   \              "message": ["error details 3"],
-  \              "region": { "start": { "line": 406, "column": 5}, "end": {"line": 406, "column":93 } }
+  \              "region": { "start": { "line": 406, "column": 5}, "end": {"line": 406, "column": 93 } }
   \            }
   \          ]
   \        }
@@ -68,7 +87,35 @@ Execute(The elm-make handler should parse lines correctly):
   \    }'
   \ ])
 
-Execute(The elm-make handler should put an error on the first line if a line cannot be parsed):
+Execute(The elm make handler should put an error on the first line for compilation errors in imported modules):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'type': 'E',
+  \     'text': 'src/Module.elm:404 - TYPE MISMATCH',
+  \     'detail': "src/Module.elm:404 -------\n\nerror details\n\nstyled details"
+  \   },
+  \ ],
+  \ ale_linters#elm#make#Handle(347, [
+  \   '{
+  \      "type": "compile-errors",
+  \      "errors": [
+  \        {
+  \          "path": "src/Module.elm",
+  \          "problems": [
+  \            {
+  \              "title": "TYPE MISMATCH",
+  \              "message": ["error details\n\n", { "string": "styled details" }],
+  \              "region": { "start": { "line": 404, "column": 1 }, "end": { "line": 408, "column": 18 } }
+  \            }
+  \          ]
+  \        }
+  \      ]
+  \    }'
+  \ ])
+
+Execute(The elm make handler should put an error on the first line if a line cannot be parsed):
   AssertEqual
   \ [
   \   {
@@ -89,15 +136,15 @@ Execute(The elm-make handler should put an error on the first line if a line can
   \ ],
   \ ale_linters#elm#make#Handle(347, [
   \   '{
-  \      "type":"compile-errors",
+  \      "type": "compile-errors",
   \      "errors": [
   \        {
-  \          "path": "' . b:tmp . 'Module.elm",
+  \          "path": "' . b:tmp . '/Module.elm",
   \          "problems": [
   \            {
   \              "title": "TYPE MISMATCH",
   \              "message": ["error details 1 ", { "string": "styled details" }],
-  \              "region": { "start": { "line": 404, "column":1 }, "end": { "line":408, "column":18} }
+  \              "region": { "start": { "line": 404, "column": 1 }, "end": { "line": 408, "column": 18 } }
   \            }
   \          ]
   \        }

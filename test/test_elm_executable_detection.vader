@@ -3,8 +3,8 @@ Before:
   runtime ale_linters/elm/make.vim
 
 After:
-  unlet! g:ale_elm_use_global
-  unlet! g:ale_elm_executable
+  unlet! g:ale_elm_make_use_global
+  unlet! g:ale_elm_make_executable
 
   call ale#test#RestoreDirectory()
 
@@ -16,7 +16,7 @@ Execute(should get valid executable with default params):
   \ ale_linters#elm#make#GetExecutable(bufnr(''))
 
 Execute(should get valid executable with 'use_global' params):
-  let g:ale_elm_use_global = 1
+  let g:ale_elm_make_use_global = 1
 
   call ale#test#SetFilename('elm-test-files/app/testfile.elm')
 
@@ -25,8 +25,8 @@ Execute(should get valid executable with 'use_global' params):
   \ ale_linters#elm#make#GetExecutable(bufnr(''))
 
 Execute(should get valid executable with 'use_global' and 'executable' params):
-  let g:ale_elm_executable = 'other-elm'
-  let g:ale_elm_use_global = 1
+  let g:ale_elm_make_executable = 'other-elm'
+  let g:ale_elm_make_use_global = 1
 
   call ale#test#SetFilename('elm-test-files/app/testfile.elm')
 
