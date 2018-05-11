@@ -3,6 +3,7 @@
 
 call ale#Set('c_splint_executable', 'splint')
 call ale#Set('c_splint_options', '')
+call ale#Set('c_splint_type', 'W')
 
 function! ale_linters#c#splint#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'c_splint_executable')
@@ -35,6 +36,7 @@ function! ale_linters#c#splint#Handler(buffer, lines) abort
     let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):?(\d+)?:? ?(.+)$'
     let l:output = []
     let l:dir = expand('#' . a:buffer . ':p:h')
+	let l:msg_type = ale#Var(a:buffer, 'c_splint_type')
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
@@ -42,7 +44,7 @@ function! ale_linters#c#splint#Handler(buffer, lines) abort
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
         \   'text': l:match[4],
-        \   'type': 'E',
+        \   'type': l:msg_type,
         \})
     endfor
     return l:output

@@ -223,8 +223,16 @@ g:ale_c_splint_options                                 *g:ale_c_splint_options*
   Type: |String|
   Default: `''`
 
-  This variable can be change to modify flags given to splint.
+  This variable can be changed to modify flags given to splint.
 
+
+g:ale_c_splint_type                                       *g:ale_c_splint_type*
+                                                          *b:ale_c_splint_type*
+  Type: |String|
+  Default: `'W'`
+
+  By default, results of splint will be treated as warnings in ALE, change
+  it to `'E'` if you want ALE take them as errors.
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
