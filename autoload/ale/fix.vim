@@ -17,15 +17,14 @@ endfunction
 
 " Apply fixes queued up for buffers which may be hidden.
 " Vim doesn't let you modify hidden buffers.
-function! ale#fix#ApplyQueuedFixes() abort
-    let l:buffer = bufnr('')
-    let l:data = get(g:ale_fix_buffer_data, l:buffer, {'done': 0})
+function! ale#fix#ApplyQueuedFixes(buffer) abort
+    let l:data = get(g:ale_fix_buffer_data, a:buffer, {'done': 0})
 
     if !l:data.done
         return
     endif
 
-    call remove(g:ale_fix_buffer_data, l:buffer)
+    call remove(g:ale_fix_buffer_data, a:buffer)
 
     if l:data.changes_made
         let l:start_line = len(l:data.output) + 1
@@ -60,7 +59,7 @@ function! ale#fix#ApplyQueuedFixes() abort
     " fixing problems.
     if g:ale_enabled
     \&& l:should_lint
-    \&& !ale#events#QuitRecently(l:buffer)
+    \&& !ale#events#QuitRecently(a:buffer)
         call ale#Queue(0, l:data.should_save ? 'lint_file' : '')
     endif
 endfunction
@@ -91,7 +90,7 @@ function! ale#fix#ApplyFixes(buffer, output) abort
 
     " We can only change the lines of a buffer which is currently open,
     " so try and apply the fixes to the current buffer.
-    call ale#fix#ApplyQueuedFixes()
+    call ale#fix#ApplyQueuedFixes(a:buffer)
 endfunction
 
 function! s:HandleExit(job_id, exit_code) abort
@@ -470,9 +469,3 @@ function! ale#fix#Fix(buffer, fixing_flag, ...) abort
 
     return 1
 endfunction
-
-" Set up an autocmd command to try and apply buffer fixes when available.
-augroup ALEBufferFixGroup
-    autocmd!
-    autocmd BufEnter * call ale#fix#ApplyQueuedFixes()
-augroup END

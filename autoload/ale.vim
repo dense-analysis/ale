@@ -55,28 +55,34 @@ function! ale#ShouldDoNothing(buffer) abort
         return 1
     endif
 
+    let l:filetype = getbufvar(a:buffer, '&filetype')
+
+    " Do nothing without a defined filetype.
+    if l:filetype is# ''
+        return 1
+    endif
+
+    " Do nothing for blacklisted files.
+    if index(get(g:, 'ale_filetype_blacklist', []), l:filetype) >= 0
+        return 1
+    endif
+
+    " Do nothing for directories.
+    if fnamemodify(bufname(a:buffer), ':t') is# '.'
+        return 1
+    endif
+
     " Don't perform any checks when newer NeoVim versions are exiting.
     if get(v:, 'exiting', v:null) isnot v:null
         return 1
     endif
 
-    " Do nothing for blacklisted files
-    if index(get(g:, 'ale_filetype_blacklist', []), getbufvar(a:buffer, '&filetype')) >= 0
-        return 1
-    endif
-
-    " Do nothing if running from command mode
+    " Do nothing if running from command mode.
     if s:getcmdwintype_exists && !empty(getcmdwintype())
         return 1
     endif
 
-    let l:filename = fnamemodify(bufname(a:buffer), ':t')
-
-    if l:filename is# '.'
-        return 1
-    endif
-
-    " Do nothing if running in the sandbox
+    " Do nothing if running in the sandbox.
     if ale#util#InSandbox()
         return 1
     endif
@@ -105,6 +111,10 @@ function! ale#Queue(delay, ...) abort
     let l:linting_flag = get(a:000, 0, '')
     let l:buffer = get(a:000, 1, bufnr(''))
 
+    if ale#ShouldDoNothing(l:buffer)
+        return
+    endif
+
     return ale#CallWithCooldown(
     \   'dont_queue_until',
     \   function('s:ALEQueueImpl'),
@@ -119,10 +129,6 @@ function! s:ALEQueueImpl(delay, linting_flag, buffer) abort
 
     if type(a:buffer) != type(0)
         throw 'buffer_number must be a Number'
-    endif
-
-    if ale#ShouldDoNothing(a:buffer)
-        return
     endif
 
     " Remember that we want to check files for this buffer.
@@ -169,6 +175,10 @@ function! ale#Lint(...) abort
         let l:buffer = bufnr('')
     endif
 
+    if ale#ShouldDoNothing(l:buffer)
+        return
+    endif
+
     return ale#CallWithCooldown(
     \   'dont_lint_until',
     \   function('s:ALELintImpl'),
@@ -177,10 +187,6 @@ function! ale#Lint(...) abort
 endfunction
 
 function! s:ALELintImpl(buffer) abort
-    if ale#ShouldDoNothing(a:buffer)
-        return
-    endif
-
     " Use the filetype from the buffer
     let l:linters = ale#linter#Get(getbufvar(a:buffer, '&filetype'))
     let l:should_lint_file = 0

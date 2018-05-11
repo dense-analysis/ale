@@ -14,7 +14,7 @@ let g:loaded_ale_dont_use_this_in_other_plugins_please = 1
 
 " A flag for detecting if the required features are set.
 if has('nvim')
-    let s:has_features = has('timers')
+    let s:has_features = has('nvim-0.2.0')
 else
     " Check if Job and Channel functions are available, instead of the
     " features. This works better on old MacVim versions.
@@ -23,8 +23,8 @@ endif
 
 if !s:has_features
     " Only output a warning if editing some special files.
-    if index(['', 'gitcommit'], &filetype) == -1
-        execute 'echoerr ''ALE requires NeoVim >= 0.1.5 or Vim 8 with +timers +job +channel'''
+    if index(['', 'gitcommit'], &filetype) != -1
+        execute 'echoerr ''ALE requires NeoVim >= 0.2.5 or Vim 8 with +timers +job +channel'''
         execute 'echoerr ''Please update your editor appropriately.'''
     endif
 
@@ -32,16 +32,12 @@ if !s:has_features
     finish
 endif
 
-if has('nvim') && !has('nvim-0.2.0') && !get(g:, 'ale_use_deprecated_neovim')
-    execute 'echom ''ALE support for NeoVim versions below 0.2.0 is deprecated.'''
-    execute 'echom ''Use `let g:ale_use_deprecated_neovim = 1` to silence this warning for now.'''
-endif
-
 " This flag can be set to 0 to disable emitting conflict warnings.
 let g:ale_emit_conflict_warnings = get(g:, 'ale_emit_conflict_warnings', 1)
 
-if g:ale_emit_conflict_warnings
-\&& match(&runtimepath, '[/\\]ale[/\\]after') < 0
+if g:ale_emit_conflict_warnings &&
+\ matchstr(&runtimepath, '/ale/after') is# ''
+\ && matchstr(&runtimepath, '\\ale\\after') is# ''
     " Add the after directory to the runtimepath
     " This is only done if the after directory isn't already in runtimepath
     let &runtimepath .= ',' . expand('<sfile>:p:h:h') . '/after'
@@ -73,9 +69,9 @@ let g:ale_filetype_blacklist = [
 \]
 
 " This Dictionary configures which linters are enabled for which languages.
-call ale#Set('linters', {})
+let g:ale_linters = get(g:, 'ale_linters', {})
 " This option can be changed to only enable explicitly selected linters.
-call ale#Set('linters_explicit', 0)
+let g:ale_linters_explicit = get(g:, 'ale_linters_explicit', 0)
 
 " This Dictionary configures which functions will be used for fixing problems.
 let g:ale_fixers = get(g:, 'ale_fixers', {})
@@ -106,7 +102,8 @@ let g:ale_lint_on_save = get(g:, 'ale_lint_on_save', 1)
 " This flag can be set to 1 to enable linting when the filetype is changed.
 let g:ale_lint_on_filetype_changed = get(g:, 'ale_lint_on_filetype_changed', 1)
 
-call ale#Set('fix_on_save', 0)
+" This flag can be set to 1 to fix on every write.
+let g:ale_fix_on_save = get(g:, 'ale_fix_on_save', 0)
 
 " This flag may be set to 0 to disable ale. After ale is loaded, :ALEToggle
 " should be used instead.
@@ -127,7 +124,7 @@ let g:ale_keep_list_window_open = get(g:, 'ale_keep_list_window_open', 0)
 let g:ale_list_vertical = get(g:, 'ale_list_vertical', 0)
 
 " The window size to set for the quickfix and loclist windows
-call ale#Set('list_window_size', 10)
+let g:ale_list_window_size = get(g:, 'ale_list_window_size', 10)
 
 " This flag can be set to 0 to disable setting signs.
 " This is enabled by default only if the 'signs' feature exists.
@@ -138,17 +135,17 @@ let g:ale_max_signs = get(g:, 'ale_max_signs', -1)
 
 " This flag can be set to 1 to enable changing the sign column colors when
 " there are errors.
-call ale#Set('change_sign_column_color', 0)
+let g:ale_change_sign_column_color = get(g:, 'ale_change_sign_column_color', 0)
 
 " This flag can be set to 0 to disable setting error highlights.
 let g:ale_set_highlights = get(g:, 'ale_set_highlights', has('syntax'))
 
 " These variables dictate what sign is used to indicate errors and warnings.
-call ale#Set('sign_error', '>>')
-call ale#Set('sign_style_error', g:ale_sign_error)
-call ale#Set('sign_warning', '--')
-call ale#Set('sign_style_warning', g:ale_sign_warning)
-call ale#Set('sign_info', g:ale_sign_warning)
+let g:ale_sign_error = get(g:, 'ale_sign_error', '>>')
+let g:ale_sign_style_error = get(g:, 'ale_sign_style_error', g:ale_sign_error)
+let g:ale_sign_warning = get(g:, 'ale_sign_warning', '--')
+let g:ale_sign_style_warning = get(g:, 'ale_sign_warning', g:ale_sign_warning)
+let g:ale_sign_info = get(g:, 'ale_sign_info', g:ale_sign_warning)
 
 " This variable sets an offset which can be set for sign IDs.
 " This ID can be changed depending on what IDs are set for other plugins.
@@ -159,9 +156,9 @@ let g:ale_sign_offset = get(g:, 'ale_sign_offset', 1000000)
 let g:ale_sign_column_always = get(g:, 'ale_sign_column_always', 0)
 
 " A string format for the echoed message
-call ale#Set('echo_msg_format', '%code: %%s')
+let g:ale_echo_msg_format = get(g:, 'ale_echo_msg_format', '%code: %%s')
 " The same for the loclist.
-call ale#Set('loclist_msg_format', g:ale_echo_msg_format)
+let g:ale_loclist_msg_format = get(g:, 'ale_loclist_msg_format', g:ale_echo_msg_format)
 
 " Strings used for severity in the echoed message
 let g:ale_echo_msg_error_str = get(g:, 'ale_echo_msg_error_str', 'Error')
@@ -174,7 +171,7 @@ let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
 let g:ale_echo_delay = get(g:, 'ale_echo_delay', 10)
 
 " This flag can be set to 0 to disable balloon support.
-call ale#Set('set_balloons', has('balloon_eval'))
+let g:ale_set_balloons = get(g:, 'ale_set_balloons', has('balloon_eval'))
 
 " A deprecated setting for ale#statusline#Status()
 " See :help ale#statusline#Count() for getting status reports.
@@ -183,9 +180,9 @@ let g:ale_statusline_format = get(g:, 'ale_statusline_format',
 \)
 
 " This flag can be set to 0 to disable warnings for trailing whitespace
-call ale#Set('warn_about_trailing_whitespace', 1)
+let g:ale_warn_about_trailing_whitespace = get(g:, 'ale_warn_about_trailing_whitespace', 1)
 " This flag can be set to 0 to disable warnings for trailing blank lines
-call ale#Set('warn_about_trailing_blank_lines', 1)
+let g:ale_warn_about_trailing_blank_lines = get(g:, 'ale_warn_about_trailing_blank_lines', 1)
 
 " A flag for controlling the maximum size of the command history to store.
 let g:ale_max_buffer_history_size = get(g:, 'ale_max_buffer_history_size', 20)
@@ -198,27 +195,27 @@ let g:ale_history_log_output = get(g:, 'ale_history_log_output', 1)
 
 " A flag for caching failed executable checks.
 " This is off by default, because it will cause problems.
-call ale#Set('cache_executable_check_failures', 0)
+let g:ale_cache_executable_check_failures = get(g:, 'ale_cache_executable_check_failures', 0)
 
 " A dictionary mapping regular expression patterns to arbitrary buffer
 " variables to be set. Useful for configuration ALE based on filename
 " patterns.
-call ale#Set('pattern_options', {})
-call ale#Set('pattern_options_enabled', !empty(g:ale_pattern_options))
+let g:ale_pattern_options = get(g:, 'ale_pattern_options', {})
+let g:ale_pattern_options_enabled = get(g:, 'ale_pattern_options_enabled', !empty(g:ale_pattern_options))
 
 " A maximum file size for checking for errors.
-call ale#Set('maximum_file_size', 0)
+let g:ale_maximum_file_size = get(g:, 'ale_maximum_file_size', 0)
 
 " Remapping of linter problems.
-call ale#Set('type_map', {})
+let g:ale_type_map = get(g:, 'ale_type_map', {})
 
 " Enable automatic completion with LSP servers and tsserver
-call ale#Set('completion_enabled', 0)
-call ale#Set('completion_delay', 100)
-call ale#Set('completion_max_suggestions', 50)
+let g:ale_completion_enabled = get(g:, 'ale_completion_enabled', 0)
+let g:ale_completion_delay = get(g:, 'ale_completion_delay', 100)
+let g:ale_completion_max_suggestions = get(g:, 'ale_completion_max_suggestions', 50)
 
 " A setting for wrapping commands.
-call ale#Set('command_wrapper', '')
+let g:ale_command_wrapper = get(g:, 'ale_command_wrapper', '')
 
 if g:ale_set_balloons
     call ale#balloon#Enable()
@@ -227,6 +224,9 @@ endif
 if g:ale_completion_enabled
     call ale#completion#Enable()
 endif
+
+" Set up autocmd groups now.
+call ale#autocmd#InitAuGroups()
 
 " Define commands for moving through warnings and errors.
 command! -bar ALEPrevious :call ale#loclist_jumping#Jump('before', 0)
@@ -299,35 +299,3 @@ nnoremap <silent> <Plug>(ale_go_to_definition) :ALEGoToDefinition<Return>
 nnoremap <silent> <Plug>(ale_go_to_definition_in_tab) :ALEGoToDefinitionInTab<Return>
 nnoremap <silent> <Plug>(ale_find_references) :ALEFindReferences<Return>
 nnoremap <silent> <Plug>(ale_hover) :ALEHover<Return>
-
-" Set up autocmd groups now.
-call ale#autocmd#InitAuGroups()
-
-" Housekeeping
-
-augroup ALECleanupGroup
-    autocmd!
-    " Clean up buffers automatically when they are unloaded.
-    autocmd BufDelete * call ale#engine#Cleanup(str2nr(expand('<abuf>')))
-    autocmd QuitPre * call ale#events#QuitEvent(str2nr(expand('<abuf>')))
-augroup END
-
-" Backwards Compatibility
-
-function! ALELint(delay) abort
-    if !get(g:, 'ale_deprecation_ale_lint', 0)
-        execute 'echom ''ALELint() is deprecated, use ale#Queue() instead.'''
-        let g:ale_deprecation_ale_lint = 1
-    endif
-
-    call ale#Queue(a:delay)
-endfunction
-
-function! ALEGetStatusLine() abort
-    if !get(g:, 'ale_deprecation_ale_get_status_line', 0)
-        execute 'echom ''ALEGetStatusLine() is deprecated.'''
-        let g:ale_deprecation_ale_get_status_line = 1
-    endif
-
-    return ale#statusline#Status()
-endfunction

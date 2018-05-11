@@ -40,10 +40,10 @@ function! ale#toggle#Toggle() abort
             call ale#balloon#Enable()
         endif
     else
-        call s:CleanupEveryBuffer()
         call s:DisablePostamble()
+        call s:CleanupEveryBuffer()
 
-        if has('balloon_eval')
+        if exists('*ale#balloon#Disable')
             call ale#balloon#Disable()
         endif
     endif
@@ -53,11 +53,6 @@ endfunction
 
 function! ale#toggle#Enable() abort
     if !g:ale_enabled
-        " Set pattern options again, if enabled.
-        if g:ale_pattern_options_enabled
-            call ale#pattern_options#SetOptions(bufnr(''))
-        endif
-
         call ale#toggle#Toggle()
     endif
 endfunction
@@ -89,10 +84,10 @@ function! ale#toggle#ToggleBuffer(buffer) abort
     if l:enabled
         call s:EnablePreamble()
     else
+        call s:DisablePostamble()
         " Stop all jobs and clear the results for everything, and delete
         " all of the data we stored for the buffer.
         call ale#engine#Cleanup(a:buffer)
-        call s:DisablePostamble()
     endif
 endfunction
 

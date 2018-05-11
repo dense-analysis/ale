@@ -9,9 +9,8 @@ endif
 " Set the flag so this file is not run more than one time.
 let g:loaded_ale_after = 1
 
-" Check if the flag is available and set to 0 to disable checking for and
-" emitting conflicting plugin warnings.
-if exists('g:ale_emit_conflict_warnings') && !g:ale_emit_conflict_warnings
+" Check if the conflict warnings are disabled.
+if !get(g:, 'ale_emit_conflict_warnings', 1)
     finish
 endif
 
