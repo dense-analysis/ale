@@ -25,7 +25,8 @@ function! ale#hover#HandleTSServerResponse(conn_id, response) abort
         if get(a:response, 'success', v:false) is v:true
         \&& get(a:response, 'body', v:null) isnot v:null
             " Also write on balloons if set
-            if exists('*balloon_show') && ale#Var(bufnr(''), 'set_balloons')
+            if exists('*balloon_show')
+            \&& ale#Var(l:options.buffer, 'set_balloons')
             \&& (has('balloon_eval') || has('ballon_eval_term'))
                 call balloon_show(a:response.body.displayString)
             endif
@@ -38,10 +39,6 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
     if has_key(a:response, 'id')
     \&& has_key(s:hover_map, a:response.id)
         let l:options = remove(s:hover_map, a:response.id)
-
-        let l:buffer = bufnr('')
-        let [l:line, l:column] = getcurpos()[1:2]
-        let l:end = len(getline(l:line))
 
         " The result can be a Dictionary item, a List of the same, or null.
         let l:result = get(a:response, 'result', v:null)
@@ -70,7 +67,8 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
 
             if !empty(l:str)
                 " Also write on balloons if set
-                if exists('*balloon_show') && ale#Var(l:buffer, 'set_balloons')
+                if exists('*balloon_show')
+                \&& ale#Var(l:options.buffer, 'set_balloons')
                 \&& (has('balloon_eval') || has('ballon_eval_term'))
                     call balloon_show(l:str)
                 endif
