@@ -16,7 +16,7 @@ function! ale#balloon#MessageForPos(bufnr, lnum, col) abort
     if l:index >= 0
         return l:loclist[l:index].text
     else
-        call ale#hover#Show(a:bufnr, a:lnum, a:col)
+        call ale#hover#Show(a:bufnr, a:lnum, a:col, 1)
         return ''
     endif
 endfunction

@@ -24,12 +24,13 @@ function! ale#hover#HandleTSServerResponse(conn_id, response) abort
 
         if get(a:response, 'success', v:false) is v:true
         \&& get(a:response, 'body', v:null) isnot v:null
-            " Also write on balloons if set
-            if exists('*balloon_show')
+            if l:options.hover_from_balloonexpr
+            \&& exists('*balloon_show')
             \&& ale#Var(l:options.buffer, 'set_balloons')
                 call balloon_show(a:response.body.displayString)
+            else
+                call ale#util#ShowMessage(a:response.body.displayString)
             endif
-            call ale#util#ShowMessage(a:response.body.displayString)
         endif
     endif
 endfunction
@@ -38,6 +39,21 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
     if has_key(a:response, 'id')
     \&& has_key(s:hover_map, a:response.id)
         let l:options = remove(s:hover_map, a:response.id)
+
+
+        if !l:options.hover_from_balloonexpr  " If the call did __not__
+                                              " come from balloonexpr
+            let l:buffer = bufnr('')
+            let [l:line, l:column] = getcurpos()[1:2]
+            let l:end = len(getline(l:line))
+
+            if l:buffer isnot l:options.buffer
+            \|| l:line isnot l:options.line
+            \|| min([l:column, l:end]) isnot min([l:options.column, l:end])
+                " Cancel display the message if the cursor has moved.
+                return
+            endif
+        endif
 
         " The result can be a Dictionary item, a List of the same, or null.
         let l:result = get(a:response, 'result', v:null)
@@ -65,18 +81,19 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
             let l:str = substitute(l:str, '^\s*\(.\{-}\)\s*$', '\1', '')
 
             if !empty(l:str)
-                " Also write on balloons if set
-                if exists('*balloon_show')
+                if l:options.hover_from_balloonexpr
+                \&& exists('*balloon_show')
                 \&& ale#Var(l:options.buffer, 'set_balloons')
                     call balloon_show(l:str)
+                else
+                    call ale#util#ShowMessage(l:str)
                 endif
-                call ale#util#ShowMessage(l:str)
             endif
         endif
     endif
 endfunction
 
-function! s:ShowDetails(linter, buffer, line, column) abort
+function! s:ShowDetails(linter, buffer, line, column, called_from_balloonexpr) abort
     let l:Callback = a:linter.lsp is# 'tsserver'
     \   ? function('ale#hover#HandleTSServerResponse')
     \   : function('ale#hover#HandleLSPResponse')
@@ -114,16 +131,22 @@ function! s:ShowDetails(linter, buffer, line, column) abort
     \   'buffer': a:buffer,
     \   'line': a:line,
     \   'column': l:column,
+    \   'hover_from_balloonexpr': a:called_from_balloonexpr,
     \}
 endfunction
 
 " Obtain Hover information for the specified position
-" Currently, the callbacks displays the info in the balloon if possible, and in
-" messages in any case.
-function! ale#hover#Show(buffer, line, col) abort
+" Only 1 optional argument is expected :
+"   - called_from_balloonexpr, this flag marks if we want the result from this
+"     ale#hover#Show to display in a balloon if possible
+"
+" Currently, the callbacks displays the info
+" - in the balloon if requested from balloonexpr and balloon_show is detected
+" - as status message otherwise
+function! ale#hover#Show(buffer, line, col, ...) abort
     for l:linter in ale#linter#Get(getbufvar(a:buffer, '&filetype'))
         if !empty(l:linter.lsp)
-            call s:ShowDetails(l:linter, a:buffer, a:line, a:col)
+            call s:ShowDetails(l:linter, a:buffer, a:line, a:col, (a:0 > 0) ? a:1 : 0)
         endif
     endfor
 endfunction
