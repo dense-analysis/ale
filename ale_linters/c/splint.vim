@@ -36,7 +36,7 @@ function! ale_linters#c#splint#Handler(buffer, lines) abort
     let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):?(\d+)?:? ?(.+)$'
     let l:output = []
     let l:dir = expand('#' . a:buffer . ':p:h')
-	let l:msg_type = ale#Var(a:buffer, 'c_splint_type')
+    let l:msg_type = ale#Var(a:buffer, 'c_splint_type')
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
