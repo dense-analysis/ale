@@ -1,4 +1,4 @@
-" Author: buffalocoder - https://github.com/buffalocoder, soywod - https://github.com/soywod
+" Author: buffalocoder - https://github.com/buffalocoder, soywod - https://github.com/soywod, hecrj - https://github.com/hecrj
 " Description: Elm linting in Ale. Closely follows the Syntastic checker in https://github.com/ElmCast/elm-vim.
 
 call ale#Set('elm_make_executable', 'elm')
