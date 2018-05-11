@@ -24,7 +24,7 @@ function! ale#hover#HandleTSServerResponse(conn_id, response) abort
 
         if get(a:response, 'success', v:false) is v:true
         \&& get(a:response, 'body', v:null) isnot v:null
-            if l:options.hover_from_balloonexpr
+            if get(l:options, 'hover_from_balloonexpr', 0)
             \&& exists('*balloon_show')
             \&& ale#Var(l:options.buffer, 'set_balloons')
                 call balloon_show(a:response.body.displayString)
@@ -41,8 +41,8 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
         let l:options = remove(s:hover_map, a:response.id)
 
 
-        if !l:options.hover_from_balloonexpr  " If the call did __not__
-                                              " come from balloonexpr
+        if !get(l:options, 'hover_from_balloonexpr', 0)  " If the call did __not__
+                                                         " come from balloonexpr
             let l:buffer = bufnr('')
             let [l:line, l:column] = getcurpos()[1:2]
             let l:end = len(getline(l:line))
@@ -81,7 +81,7 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
             let l:str = substitute(l:str, '^\s*\(.\{-}\)\s*$', '\1', '')
 
             if !empty(l:str)
-                if l:options.hover_from_balloonexpr
+                if get(l:options, 'hover_from_balloonexpr', 0)
                 \&& exists('*balloon_show')
                 \&& ale#Var(l:options.buffer, 'set_balloons')
                     call balloon_show(l:str)
