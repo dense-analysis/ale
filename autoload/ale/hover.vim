@@ -27,7 +27,6 @@ function! ale#hover#HandleTSServerResponse(conn_id, response) abort
             " Also write on balloons if set
             if exists('*balloon_show')
             \&& ale#Var(l:options.buffer, 'set_balloons')
-            \&& (has('balloon_eval') || has('ballon_eval_term'))
                 call balloon_show(a:response.body.displayString)
             endif
             call ale#util#ShowMessage(a:response.body.displayString)
@@ -69,7 +68,6 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
                 " Also write on balloons if set
                 if exists('*balloon_show')
                 \&& ale#Var(l:options.buffer, 'set_balloons')
-                \&& (has('balloon_eval') || has('ballon_eval_term'))
                     call balloon_show(l:str)
                 endif
                 call ale#util#ShowMessage(l:str)
