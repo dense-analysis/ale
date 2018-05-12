@@ -20,21 +20,30 @@ function! ale_linters#elm#make#Handle(buffer, lines) abort
 
             if l:report.type is? 'error'
                 " General problem
-                let l:details = map(copy(l:report.message), 'ale_linters#elm#make#ParseMessageItem(v:val)')
+                let l:details = ale_linters#elm#make#ParseMessage(l:report.message)
 
-                call add(l:output, {
-                            \    'lnum': 1,
-                            \    'type': 'E',
-                            \    'text': l:report.title,
-                            \    'detail': join(l:details, '')
-                            \})
+                if ale_linters#elm#make#FileIsBuffer(l:report.path)
+                    call add(l:output, {
+                                \    'lnum': 1,
+                                \    'type': 'E',
+                                \    'text': l:details,
+                                \})
+                else
+                    call add(l:output, {
+                                \    'lnum': 1,
+                                \    'type': 'E',
+                                \    'text': l:report.path .' - '. l:details,
+                                \    'detail': l:report.path ." ----------\n\n". l:details,
+                                \})
+                endif
+
             else
                 " Compilation errors
                 for l:error in l:report.errors
                     let l:file_is_buffer = ale_linters#elm#make#FileIsBuffer(l:error.path)
 
                     for l:problem in l:error.problems
-                        let l:details = map(copy(l:problem.message), 'ale_linters#elm#make#ParseMessageItem(v:val)')
+                        let l:details = ale_linters#elm#make#ParseMessage(l:problem.message)
 
                         if l:file_is_buffer
                             " Buffer module has problems
@@ -44,8 +53,7 @@ function! ale_linters#elm#make#Handle(buffer, lines) abort
                                         \    'end_lnum': l:problem.region.end.line,
                                         \    'end_col': l:problem.region.end.column,
                                         \    'type': 'E',
-                                        \    'text': l:problem.title,
-                                        \    'detail': join(l:details, '')
+                                        \    'text': l:details,
                                         \})
                         else
                             " Imported module has problems
@@ -53,8 +61,8 @@ function! ale_linters#elm#make#Handle(buffer, lines) abort
                             call add(l:output, {
                                         \    'lnum': 1,
                                         \    'type': 'E',
-                                        \    'text': l:location .' - '. l:problem.title,
-                                        \    'detail':  l:location ." -------\n\n" . join(l:details, '')
+                                        \    'text': l:location .' - '. l:details,
+                                        \    'detail': l:location ." ----------\n\n". l:details,
                                         \})
                         endif
                     endfor
@@ -86,6 +94,10 @@ function! ale_linters#elm#make#FileIsBuffer(path) abort
     else
         return a:path[0:len(l:temp_dir) - 1] is# l:temp_dir
     endif
+endfunction
+
+function! ale_linters#elm#make#ParseMessage(message) abort
+    return join(map(copy(a:message), 'ale_linters#elm#make#ParseMessageItem(v:val)'), '')
 endfunction
 
 function! ale_linters#elm#make#ParseMessageItem(item) abort
