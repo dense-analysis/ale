@@ -95,6 +95,12 @@ Execute(The elm make handler should handle errors in imported modules):
   \   {
   \     'lnum': 1,
   \     'type': 'E',
+  \     'text': "Elm.Kernel - error details\n\nstyled details",
+  \     'detail': "Elm.Kernel ----------\n\nerror details\n\nstyled details"
+  \   },
+  \   {
+  \     'lnum': 1,
+  \     'type': 'E',
   \     'text': "src/Module.elm:404 - error details\n\nstyled details",
   \     'detail': "src/Module.elm:404 ----------\n\nerror details\n\nstyled details"
   \   },
@@ -103,6 +109,12 @@ Execute(The elm make handler should handle errors in imported modules):
   \   '{
   \      "type": "error",
   \      "path": "src/Module.elm",
+  \      "title": "UNKNOWN IMPORT",
+  \      "message": ["error details\n\n", { "string": "styled details" }]
+  \    }',
+  \   '{
+  \      "type": "error",
+  \      "path": null,
   \      "title": "UNKNOWN IMPORT",
   \      "message": ["error details\n\n", { "string": "styled details" }]
   \    }',

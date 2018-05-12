@@ -22,6 +22,10 @@ function! ale_linters#elm#make#Handle(buffer, lines) abort
                 " General problem
                 let l:details = ale_linters#elm#make#ParseMessage(l:report.message)
 
+                if empty(l:report.path)
+                    let l:report.path = 'Elm.Kernel'
+                endif
+
                 if ale_linters#elm#make#FileIsBuffer(l:report.path)
                     call add(l:output, {
                                 \    'lnum': 1,
@@ -36,7 +40,6 @@ function! ale_linters#elm#make#Handle(buffer, lines) abort
                                 \    'detail': l:report.path ." ----------\n\n". l:details,
                                 \})
                 endif
-
             else
                 " Compilation errors
                 for l:error in l:report.errors
