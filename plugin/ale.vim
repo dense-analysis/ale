@@ -174,7 +174,10 @@ let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
 let g:ale_echo_delay = get(g:, 'ale_echo_delay', 10)
 
 " This flag can be set to 0 to disable balloon support.
-call ale#Set('set_balloons', has('balloon_eval'))
+call ale#Set('set_balloons',
+\   has('balloon_eval') && has('gui_running') ||
+\   has('balloon_eval_term') && !has('gui_running')
+\)
 
 " A deprecated setting for ale#statusline#Status()
 " See :help ale#statusline#Count() for getting status reports.

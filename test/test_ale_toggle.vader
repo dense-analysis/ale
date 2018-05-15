@@ -12,7 +12,9 @@ Before:
   let g:ale_run_synchronously = 1
   let g:ale_pattern_options = {}
   let g:ale_pattern_options_enabled = 1
-  let g:ale_set_balloons = has('balloon_eval')
+  let g:ale_set_balloons =
+  \   has('balloon_eval') && has('gui_running') ||
+  \   has('balloon_eval_term') && !has('gui_running')
 
   unlet! b:ale_enabled
 
@@ -349,7 +351,8 @@ Execute(ALEResetBuffer should reset everything for a buffer):
 
 Execute(Disabling ALE should disable balloons):
   " These tests won't run in the console, but we can run them manually in GVim.
-  if has('balloon_eval')
+  if has('balloon_eval') && has('gui_running') ||
+  \  has('balloon_eval_term') && !has('gui_running')
     call ale#linter#Reset()
 
     " Enable balloons, so we can check the expr value.
@@ -367,7 +370,8 @@ Execute(Disabling ALE should disable balloons):
   endif
 
 Execute(Enabling ALE should enable balloons if the setting is on):
-  if has('balloon_eval')
+  if has('balloon_eval') && has('gui_running') ||
+  \  has('balloon_eval_term') && !has('gui_running')
     call ale#linter#Reset()
     call ale#balloon#Disable()
     ALEDisable
