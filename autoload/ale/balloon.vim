@@ -12,7 +12,13 @@ function! ale#balloon#MessageForPos(bufnr, lnum, col) abort
     let l:loclist = get(g:ale_buffer_info, a:bufnr, {'loclist': []}).loclist
     let l:index = ale#util#BinarySearch(l:loclist, a:bufnr, a:lnum, a:col)
 
-    return l:index >= 0 ? l:loclist[l:index].text : ''
+    " Show the diagnostics message if found, 'Hover' output otherwise
+    if l:index >= 0
+        return l:loclist[l:index].text
+    else
+        call ale#hover#Show(a:bufnr, a:lnum, a:col, {'called_from_balloonexpr': 1})
+        return ''
+    endif
 endfunction
 
 function! ale#balloon#Expr() abort
@@ -20,9 +26,22 @@ function! ale#balloon#Expr() abort
 endfunction
 
 function! ale#balloon#Disable() abort
-    set noballooneval balloonexpr=
+    set noballooneval noballoonevalterm
+    set balloonexpr=
 endfunction
 
 function! ale#balloon#Enable() abort
-    set ballooneval balloonexpr=ale#balloon#Expr()
+    if !has('balloon_eval') && !has('balloon_eval_term')
+        return
+    endif
+
+    if has('balloon_eval')
+        set ballooneval
+    endif
+
+    if has('balloon_eval_term')
+        set balloonevalterm
+    endif
+
+    set balloonexpr=ale#balloon#Expr()
 endfunction

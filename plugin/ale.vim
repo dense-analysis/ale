@@ -278,7 +278,8 @@ command! -bar ALEGoToDefinitionInTab :call ale#definition#GoTo({'open_in_tab': 1
 command! -bar ALEFindReferences :call ale#references#Find()
 
 " Get information for the cursor.
-command! -bar ALEHover :call ale#hover#Show()
+command! -bar ALEHover :call ale#hover#Show(bufnr(''), getcurpos()[1],
+                                            \ getcurpos()[2], {})
 
 " <Plug> mappings for commands
 nnoremap <silent> <Plug>(ale_previous) :ALEPrevious<Return>

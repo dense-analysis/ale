@@ -93,7 +93,7 @@ Execute(Linters should run in PowerShell too):
     \})
 
     call ale#Lint()
-    call ale#engine#WaitForJobs(2000)
+    call ale#engine#WaitForJobs(4000)
 
     AssertEqual [
     \ {
