@@ -1350,7 +1350,8 @@ g:ale_set_balloons                                         *g:ale_set_balloons*
                                                            *b:ale_set_balloons*
 
   Type: |Number|
-  Default: `has('balloon_eval')`
+  Default: `has('balloon_eval') && has('gui_running') ||`
+           `has('balloon_eval_term') && !has('gui_running')`
 
   When this option is set to `1`, balloon messages will be displayed for
   problems. Problems nearest to the cursor on the line the cursor is over will
