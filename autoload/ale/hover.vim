@@ -92,7 +92,7 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
     endif
 endfunction
 
-function! s:ShowDetails(linter, buffer, line, column, called_from_balloonexpr) abort
+function! s:ShowDetails(linter, buffer, line, column, opt) abort
     let l:Callback = a:linter.lsp is# 'tsserver'
     \   ? function('ale#hover#HandleTSServerResponse')
     \   : function('ale#hover#HandleLSPResponse')
@@ -130,22 +130,23 @@ function! s:ShowDetails(linter, buffer, line, column, called_from_balloonexpr) a
     \   'buffer': a:buffer,
     \   'line': a:line,
     \   'column': l:column,
-    \   'hover_from_balloonexpr': a:called_from_balloonexpr,
+    \   'hover_from_balloonexpr': get(a:opt, 'called_from_balloonexpr', 0),
     \}
 endfunction
 
 " Obtain Hover information for the specified position
-" Only 1 optional argument is expected :
+" Pass optional arguments in the dictionary opt.
+" Currently, only one key/value is useful:
 "   - called_from_balloonexpr, this flag marks if we want the result from this
 "     ale#hover#Show to display in a balloon if possible
 "
-" Currently, the callbacks displays the info
-" - in the balloon if requested from balloonexpr and balloon_show is detected
+" Currently, the callbacks displays the info from hover :
+" - in the balloon if opt.called_from_balloonexpr and balloon_show is detected
 " - as status message otherwise
-function! ale#hover#Show(buffer, line, col, ...) abort
+function! ale#hover#Show(buffer, line, col, opt) abort
     for l:linter in ale#linter#Get(getbufvar(a:buffer, '&filetype'))
         if !empty(l:linter.lsp)
-            call s:ShowDetails(l:linter, a:buffer, a:line, a:col, (a:0 > 0) ? a:1 : 0)
+            call s:ShowDetails(l:linter, a:buffer, a:line, a:col, a:opt)
         endif
     endfor
 endfunction
