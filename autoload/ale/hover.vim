@@ -40,9 +40,8 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
     \&& has_key(s:hover_map, a:response.id)
         let l:options = remove(s:hover_map, a:response.id)
 
-
-        if !get(l:options, 'hover_from_balloonexpr', 0)  " If the call did __not__
-                                                         " come from balloonexpr
+        " If the call did __not__ come from balloonexpr...
+        if !get(l:options, 'hover_from_balloonexpr', 0)
             let l:buffer = bufnr('')
             let [l:line, l:column] = getcurpos()[1:2]
             let l:end = len(getline(l:line))
@@ -50,7 +49,7 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
             if l:buffer isnot l:options.buffer
             \|| l:line isnot l:options.line
             \|| min([l:column, l:end]) isnot min([l:options.column, l:end])
-                " Cancel display the message if the cursor has moved.
+                " ... Cancel display the message if the cursor has moved.
                 return
             endif
         endif
