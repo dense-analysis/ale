@@ -8,7 +8,7 @@ if !exists('g:ale_rust_ignore_error_codes')
 endif
 
 function! s:FindSpan(buffer, span) abort
-    if ale#path#IsBufferPath(a:buffer, a:span.file_name) || a:span.file_name is# '<anon>'
+    if (ale#path#IsBufferPath(a:buffer, a:span.file_name) || a:span.file_name is# '<anon>') && a:span.file_name[:0] != '<'
         return a:span
     endif
 
