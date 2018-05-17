@@ -1363,6 +1363,21 @@ g:ale_set_balloons                                         *g:ale_set_balloons*
   globally.
 
 
+g:ale_set_balloons_legacy_echo                 *g:ale_set_balloons_legacy_echo*
+                                               *b:ale_set_balloons_legacy_echo*
+  Type: |Number|
+  Default: undefined
+
+  If set to `1`, moving your mouse over documents in Vim will make ALE ask
+  `tsserver` or `LSP` servers for information about the symbol where the mouse
+  cursor is, and print that information into Vim's echo line. This is an
+  option for supporting older versions of Vim which do not properly support
+  balloons in an asynchronous manner.
+
+  If your version of Vim supports the |balloon_show| function, then this
+  option does nothing meaningful.
+
+
 g:ale_set_highlights                                     *g:ale_set_highlights*
 
   Type: |Number|
