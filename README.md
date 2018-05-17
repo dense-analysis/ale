@@ -272,6 +272,9 @@ ALE supports "hover" information for printing brief information about symbols at
 the cursor taken from Language Server Protocol linters and `tsserver` with the
 `ALEHover` command.
 
+On vim/gvim with `balloon` support you can see the information in a tooltip
+that appears under the mouse when you mouseover a symbol.
+
 See `:help ale-hover` for more information.
 
 <a name="installation"></a>
