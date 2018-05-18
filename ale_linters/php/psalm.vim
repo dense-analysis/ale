@@ -1,7 +1,7 @@
 " Author: richard marmorstein <https://github.com/twitchard>
 " Description: plugin for Psalm, static analyzer for PHP
 
-let g:ale_php_phpstan_executable = get(g:, 'ale_php_psalm_executable', 'psalm')
+let g:ale_php_psalm_executable = get(g:, 'ale_php_psalm_executable', 'psalm')
 
 function! ale_linters#php#psalm#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'php_psalm_executable')
