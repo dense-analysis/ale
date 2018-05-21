@@ -9,6 +9,15 @@ call ale#Set('javascript_eslint_use_global', get(g:, 'ale_use_global_executables
 call ale#Set('javascript_eslint_suppress_eslintignore', 0)
 call ale#Set('javascript_eslint_suppress_missing_config', 0)
 
+function! ale#handlers#eslint#PrepConfigForEslint(config) abort
+    " For now just a fix for cygwin environment on windows
+    " ESLint will run in cmd which requires windows path
+    if executable('cygpath')
+        return system('cygpath -w ' . a:config)
+    endif
+    return a:config
+endfunction
+
 function! ale#handlers#eslint#FindConfig(buffer) abort
     for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
         for l:basename in [
@@ -19,14 +28,14 @@ function! ale#handlers#eslint#FindConfig(buffer) abort
         \   '.eslintrc',
         \]
             let l:config = ale#path#Simplify(join([l:path, l:basename], s:sep))
-
             if filereadable(l:config)
-                return l:config
+                return ale#handlers#eslint#PrepConfigForEslint(l:config)
             endif
         endfor
     endfor
 
-    return ale#path#FindNearestFile(a:buffer, 'package.json')
+    let l:config = ale#path#FindNearestFile(a:buffer, 'package.json')
+    return ale#handlers#eslint#PrepConfigForEslint(l:config)
 endfunction
 
 function! ale#handlers#eslint#GetExecutable(buffer) abort
@@ -39,12 +48,14 @@ endfunction
 
 function! ale#handlers#eslint#GetCommand(buffer) abort
     let l:executable = ale#handlers#eslint#GetExecutable(a:buffer)
+    let l:config = ale#handlers#eslint#FindConfig(a:buffer)
 
     let l:options = ale#Var(a:buffer, 'javascript_eslint_options')
 
     return ale#node#Executable(a:buffer, l:executable)
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' -f unix --stdin --stdin-filename %s'
+    \   . ' -c ' . l:config
 endfunction
 
 let s:col_end_patterns = [
