@@ -51,17 +51,17 @@ function! ale_linters#elm#make#HandleElm019Line(line, output) abort
 
         if ale_linters#elm#make#FileIsBuffer(l:report.path)
             call add(a:output, {
-                        \    'lnum': 1,
-                        \    'type': 'E',
-                        \    'text': l:details,
-                        \})
+            \    'lnum': 1,
+            \    'type': 'E',
+            \    'text': l:details,
+            \})
         else
             call add(a:output, {
-                        \    'lnum': 1,
-                        \    'type': 'E',
-                        \    'text': l:report.path .' - '. l:details,
-                        \    'detail': l:report.path ." ----------\n\n". l:details,
-                        \})
+            \    'lnum': 1,
+            \    'type': 'E',
+            \    'text': l:report.path .' - '. l:details,
+            \    'detail': l:report.path ." ----------\n\n". l:details,
+            \})
         endif
     else
         " Compilation errors
@@ -74,22 +74,22 @@ function! ale_linters#elm#make#HandleElm019Line(line, output) abort
                 if l:file_is_buffer
                     " Buffer module has problems
                     call add(a:output, {
-                                \    'lnum': l:problem.region.start.line,
-                                \    'col': l:problem.region.start.column,
-                                \    'end_lnum': l:problem.region.end.line,
-                                \    'end_col': l:problem.region.end.column,
-                                \    'type': 'E',
-                                \    'text': l:details,
-                                \})
+                    \    'lnum': l:problem.region.start.line,
+                    \    'col': l:problem.region.start.column,
+                    \    'end_lnum': l:problem.region.end.line,
+                    \    'end_col': l:problem.region.end.column,
+                    \    'type': 'E',
+                    \    'text': l:details,
+                    \})
                 else
                     " Imported module has problems
                     let l:location = l:error.path .':'. l:problem.region.start.line
                     call add(a:output, {
-                                \    'lnum': 1,
-                                \    'type': 'E',
-                                \    'text': l:location .' - '. l:details,
-                                \    'detail': l:location ." ----------\n\n". l:details,
-                                \})
+                    \    'lnum': 1,
+                    \    'type': 'E',
+                    \    'text': l:location .' - '. l:details,
+                    \    'detail': l:location ." ----------\n\n". l:details,
+                    \})
                 endif
             endfor
         endfor
@@ -105,24 +105,24 @@ function! ale_linters#elm#make#HandleElm018Line(line, output) abort
         if l:file_is_buffer
             " Current buffer has problems
             call add(a:output, {
-                        \    'lnum': l:error.region.start.line,
-                        \    'col': l:error.region.start.column,
-                        \    'end_lnum': l:error.region.end.line,
-                        \    'end_col': l:error.region.end.column,
-                        \    'type': (l:error.type is? 'error') ? 'E' : 'W',
-                        \    'text': l:error.overview,
-                        \    'detail': l:error.overview . "\n\n" . l:error.details
-                        \})
+            \    'lnum': l:error.region.start.line,
+            \    'col': l:error.region.start.column,
+            \    'end_lnum': l:error.region.end.line,
+            \    'end_col': l:error.region.end.column,
+            \    'type': (l:error.type is? 'error') ? 'E' : 'W',
+            \    'text': l:error.overview,
+            \    'detail': l:error.overview . "\n\n" . l:error.details
+            \})
         elseif l:error.type is? 'error'
             " Imported module has errors
             let l:location = l:error.file .':'. l:error.region.start.line
 
             call add(a:output, {
-                        \    'lnum': 1,
-                        \    'type': 'E',
-                        \    'text': l:location .' - '. l:error.overview,
-                        \    'detail': l:location ." ----------\n\n". l:error.overview . "\n\n" . l:error.details
-                        \})
+            \    'lnum': 1,
+            \    'type': 'E',
+            \    'text': l:location .' - '. l:error.overview,
+            \    'detail': l:location ." ----------\n\n". l:error.overview . "\n\n" . l:error.details
+            \})
         endif
     endfor
 endfunction
