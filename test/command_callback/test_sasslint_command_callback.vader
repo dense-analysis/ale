@@ -1,0 +1,17 @@
+Before:
+  runtime ale_linters/sass/sasslint.vim
+
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#test#SetFilename('test.sass')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(The default sasslint command should be correct):
+  AssertEqual
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   . ale#Escape('sass-lint') . ' -v -q -f compact %t',
+  \ ale_linters#sass#sasslint#GetCommand(bufnr(''))
