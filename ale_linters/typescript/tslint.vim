@@ -74,7 +74,7 @@ function! ale_linters#typescript#tslint#GetCommand(buffer) abort
     \   . ' --format json'
     \   . l:tslint_config_option
     \   . l:tslint_rules_option
-    \   . ' %t'
+    \   . ' %s'
 endfunction
 
 call ale#linter#Define('typescript', {
