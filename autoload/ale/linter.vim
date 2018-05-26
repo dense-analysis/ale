@@ -8,11 +8,14 @@ let s:linters = {}
 
 " Default filetype aliases.
 " The user defined aliases will be merged with this Dictionary.
+"
+" NOTE: Update the g:ale_linter_aliases documentation when modifying this.
 let s:default_ale_linter_aliases = {
 \   'Dockerfile': 'dockerfile',
 \   'csh': 'sh',
 \   'plaintex': 'tex',
 \   'systemverilog': 'verilog',
+\   'vimwiki': 'markdown',
 \   'zsh': 'sh',
 \}
 

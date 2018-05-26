@@ -1109,8 +1109,12 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
   following values: >
 
   {
-  \   'zsh': 'sh',
+  \   'Dockerfile': 'dockerfile',
   \   'csh': 'sh',
+  \   'plaintex': 'tex',
+  \   'systemverilog': 'verilog',
+  \   'vimwiki': 'markdown',
+  \   'zsh': 'sh',
   \}
 <
   For example, if you wish to map a new filetype `'foobar'` to run the `'php'`
