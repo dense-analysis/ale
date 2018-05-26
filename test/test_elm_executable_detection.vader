@@ -12,7 +12,7 @@ Execute(should get valid executable with default params):
   call ale#test#SetFilename('elm-test-files/app/testfile.elm')
 
   AssertEqual
-  \ ale#path#Simplify(g:dir . '/elm-test-files/app/node_modules/.bin/elm-make'),
+  \ ale#path#Simplify(g:dir . '/elm-test-files/app/node_modules/.bin/elm'),
   \ ale_linters#elm#make#GetExecutable(bufnr(''))
 
 Execute(should get valid executable with 'use_global' params):
@@ -21,16 +21,16 @@ Execute(should get valid executable with 'use_global' params):
   call ale#test#SetFilename('elm-test-files/app/testfile.elm')
 
   AssertEqual
-  \ 'elm-make',
+  \ 'elm',
   \ ale_linters#elm#make#GetExecutable(bufnr(''))
 
 Execute(should get valid executable with 'use_global' and 'executable' params):
-  let g:ale_elm_make_executable = 'other-elm-make'
+  let g:ale_elm_make_executable = 'other-elm'
   let g:ale_elm_make_use_global = 1
 
   call ale#test#SetFilename('elm-test-files/app/testfile.elm')
 
   AssertEqual
-  \ 'other-elm-make',
+  \ 'other-elm',
   \ ale_linters#elm#make#GetExecutable(bufnr(''))
 
