@@ -332,7 +332,7 @@ endfunction
 
 " Function that returns autocomplete candidates for ALEFix command
 function! ale#fix#registry#CompleteFixers(ArgLead, CmdLine, CursorPos) abort
-    return ale#fix#registry#GetApplicableFixers(&filetype)
+    return filter(ale#fix#registry#GetApplicableFixers(&filetype), 'v:val =~? a:ArgLead')
 endfunction
 
 " Suggest functions to use from the registry.
