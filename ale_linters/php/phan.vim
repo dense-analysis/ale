@@ -45,7 +45,7 @@ function! ale_linters#php#phan#Handle(buffer, lines) abort
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        if ale#Var('php_phan_use_client') == 1
+        if ale#Var(a:buffer, 'php_phan_use_client') == 1
             let l:dict = {
             \   'lnum': l:match[4] + 0,
             \   'text': l:match[2],
