@@ -9,7 +9,8 @@ let g:ale_php_phan_use_client = get(g:, 'ale_php_phan_use_client', 0)
 
 function! ale_linters#php#phan#GetExecutable(buffer) abort
     let l:executable = ale#Var(a:buffer, 'php_phan_executable')
-    if g:ale_php_phan_use_client == 1 && l:executable is# 'phan'
+
+    if ale#Var(a:buffer, 'php_phan_use_client') == 1 && l:executable is# 'phan'
         let l:executable = 'phan_client'
     endif
 
@@ -17,7 +18,7 @@ function! ale_linters#php#phan#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#php#phan#GetCommand(buffer) abort
-    if g:ale_php_phan_use_client == 1
+    if ale#Var(a:buffer, 'php_phan_use_client') == 1
         let l:args = '-l '
         \   . ' %s'
     else
@@ -33,7 +34,7 @@ endfunction
 
 function! ale_linters#php#phan#Handle(buffer, lines) abort
     " Matches against lines like the following:
-    if g:ale_php_phan_use_client == 1
+    if ale#Var(a:buffer, 'php_phan_use_client') == 1
         " Phan error: ERRORTYPE: message in /path/to/some-filename.php on line nnn
         let l:pattern = '^Phan error: \(\w\+\): \(.\+\) in \(.\+\) on line \(\d\+\)$'
     else
@@ -42,8 +43,9 @@ function! ale_linters#php#phan#Handle(buffer, lines) abort
     endif
 
     let l:output = []
+
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        if g:ale_php_phan_use_client == 1
+        if ale#Var('php_phan_use_client') == 1
             let l:dict = {
             \   'lnum': l:match[4] + 0,
             \   'text': l:match[2],
