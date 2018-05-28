@@ -886,20 +886,6 @@ g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
   The string used for `%severity%` for warnings. See |g:ale_echo_msg_format|
 
 
-g:ale_emit_conflict_warnings                     *g:ale_emit_conflict_warnings*
-
-  Type: |Number|
-  Default: `1`
-
-  When set to `0`, ALE will not emit any warnings on startup about conflicting
-  plugins. ALE will probably not work if other linting plugins are installed.
-
-  When this option is set to `1`, ALE will add its `after` directory to
-  |runtimepath| automatically, so the checks can be applied. Setting this
-  option to `0` before ALE is loaded will prevent ALE from modifying
-  |runtimepath|.
-
-
 g:ale_enabled                                                   *g:ale_enabled*
                                                                 *b:ale_enabled*
 

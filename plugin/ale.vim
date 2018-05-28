@@ -37,16 +37,6 @@ if has('nvim') && !has('nvim-0.2.0') && !get(g:, 'ale_use_deprecated_neovim')
     execute 'echom ''Use `let g:ale_use_deprecated_neovim = 1` to silence this warning for now.'''
 endif
 
-" This flag can be set to 0 to disable emitting conflict warnings.
-let g:ale_emit_conflict_warnings = get(g:, 'ale_emit_conflict_warnings', 1)
-
-if g:ale_emit_conflict_warnings
-\&& match(&runtimepath, '[/\\]ale[/\\]after') < 0
-    " Add the after directory to the runtimepath
-    " This is only done if the after directory isn't already in runtimepath
-    let &runtimepath .= ',' . expand('<sfile>:p:h:h') . '/after'
-endif
-
 " Set this flag so that other plugins can use it, like airline.
 let g:loaded_ale = 1
 
