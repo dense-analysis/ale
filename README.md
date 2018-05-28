@@ -4,7 +4,7 @@
 ![ALE Logo by Mark Grealish - https://www.bhalash.com/](img/logo.jpg?raw=true)
 
 ALE (Asynchronous Lint Engine) is a plugin for providing linting in NeoVim
-and Vim 8 while you edit your text files.
+0.2.0+ and Vim 8 while you edit your text files.
 
 ![linting example](img/example.gif?raw=true)
 
