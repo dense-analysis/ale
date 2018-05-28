@@ -22,4 +22,3 @@ Execute(Set Verilog Verilator linter additional options to `-sv --default-langua
   \   g:matched ,
   \   -1 ,
   \  'Additionnal arguments not found in the run command'
-

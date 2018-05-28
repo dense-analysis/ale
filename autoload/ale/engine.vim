@@ -98,11 +98,13 @@ endfunction
 " Register a temporary file to be managed with the ALE engine for
 " a current job run.
 function! ale#engine#ManageFile(buffer, filename) abort
+    call ale#engine#InitBufferInfo(a:buffer)
     call add(g:ale_buffer_info[a:buffer].temporary_file_list, a:filename)
 endfunction
 
 " Same as the above, but manage an entire directory.
 function! ale#engine#ManageDirectory(buffer, directory) abort
+    call ale#engine#InitBufferInfo(a:buffer)
     call add(g:ale_buffer_info[a:buffer].temporary_directory_list, a:directory)
 endfunction
 

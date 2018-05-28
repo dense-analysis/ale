@@ -11,6 +11,7 @@ After:
 
   call ale#ResetErrorDelays()
 
+Given foobar(An empty file):
 Execute(ALE should stop queuing for a while after exceptions are thrown):
   AssertThrows call ale#Queue(100)
   call ale#Queue(100)

@@ -1,7 +1,9 @@
 Before:
   Save g:ale_set_signs
+  Save g:ale_buffer_info
 
   let g:ale_set_signs = 1
+  let g:ale_buffer_info = {}
 
   call ale#linter#Reset()
   sign unplace *

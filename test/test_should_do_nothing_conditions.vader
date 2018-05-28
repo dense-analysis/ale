@@ -26,6 +26,7 @@ After:
 
   unlet! b:funky_command_created
 
+Given foobar(An empty file):
 Execute(ALE shouldn't do much of anything for ctrlp-funky buffers):
   Assert !ale#ShouldDoNothing(bufnr('')), 'The preliminary check failed'
 
@@ -42,6 +43,16 @@ Execute(ALE shouldn't try to check buffers with '.' as the filename):
   silent! noautocmd file .
 
   Assert ale#ShouldDoNothing(bufnr(''))
+
+Execute(DoNothing should return 0 when the filetype is empty):
+  AssertEqual
+  \ 0,
+  \ ale#ShouldDoNothing(bufnr('')),
+  \ 'ShouldDoNothing() was 1 for some other reason'
+
+  set filetype=
+
+  AssertEqual 1, ale#ShouldDoNothing(bufnr(''))
 
 Execute(The DoNothing check should work if the ALE globals aren't defined):
   unlet! g:ale_filetype_blacklist

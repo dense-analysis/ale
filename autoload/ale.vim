@@ -60,23 +60,31 @@ function! ale#ShouldDoNothing(buffer) abort
         return 1
     endif
 
-    " Do nothing for blacklisted files
-    if index(get(g:, 'ale_filetype_blacklist', []), getbufvar(a:buffer, '&filetype')) >= 0
+    let l:filetype = getbufvar(a:buffer, '&filetype')
+
+    " Do nothing when there's no filetype.
+    if l:filetype is# ''
         return 1
     endif
 
-    " Do nothing if running from command mode
+    " Do nothing for blacklisted files.
+    if index(get(g:, 'ale_filetype_blacklist', []), l:filetype) >= 0
+        return 1
+    endif
+
+    " Do nothing if running from command mode.
     if s:getcmdwintype_exists && !empty(getcmdwintype())
         return 1
     endif
 
     let l:filename = fnamemodify(bufname(a:buffer), ':t')
 
+    " Do nothing for directories.
     if l:filename is# '.'
         return 1
     endif
 
-    " Do nothing if running in the sandbox
+    " Do nothing if running in the sandbox.
     if ale#util#InSandbox()
         return 1
     endif

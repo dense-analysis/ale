@@ -13,6 +13,7 @@ After:
   call ale#linter#Reset()
   call ale#engine#ClearLSPData()
 
+Given foobar(An empty file):
 Execute(tsserver syntax error responses should be handled correctly):
   runtime ale_linters/typescript/tsserver.vim
   call ale#test#SetFilename('filename.ts')
