@@ -12,6 +12,12 @@ Before:
   Save g:ale_pattern_options_enabled
   Save g:ale_set_balloons
   Save g:ale_warn_about_trailing_whitespace
+  Save g:ale_sign_error
+  Save g:ale_sign_warning
+  Save g:ale_sign_info
+  Save g:ale_sign_style_error
+  Save g:ale_sign_style_warning
+  Save g:ale_lsp_error_messages
 
   unlet! b:ale_history
 
@@ -26,6 +32,12 @@ Before:
   let g:ale_pattern_options_enabled = 0
   let g:ale_set_balloons = 0
   let g:ale_warn_about_trailing_whitespace = 1
+  let g:ale_sign_error = '>>'
+  let g:ale_sign_warning = '--'
+  let g:ale_sign_info = '--'
+  let g:ale_sign_style_error = '>>'
+  let g:ale_sign_style_warning = '--'
+  let g:ale_lsp_error_messages = {}
 
   let g:testlinter1 = {'name': 'testlinter1', 'executable': 'testlinter1', 'command': 'testlinter1', 'callback': 'testCB1', 'output_stream': 'stdout'}
   let g:testlinter2 = {'name': 'testlinter2', 'executable': 'testlinter2', 'command': 'testlinter2', 'callback': 'testCB2', 'output_stream': 'stdout'}
@@ -469,3 +481,44 @@ Execute (The option for caching failing executable checks should work):
   \ '(executable check - success) ' . (has('win32') ? 'cmd' : 'echo'),
   \ '(executable check - failure) TheresNoWayThisIsExecutable',
   \])
+
+Given testft (Empty buffer):
+Execute (LSP errors for a linter should be outputted):
+  let g:ale_lsp_error_messages = {'testlinter1': ['foo', 'bar']}
+  call ale#linter#Define('testft', g:testlinter1)
+
+  call CheckInfo(
+  \ [
+  \   ' Current Filetype: testft',
+  \   'Available Linters: [''testlinter1'']',
+  \   '  Enabled Linters: [''testlinter1'']',
+  \   ' Linter Variables:',
+  \   '',
+  \ ]
+  \ + g:globals_lines
+  \ + [
+  \   ' LSP Error Messages:',
+  \   '',
+  \   '(Errors for testlinter1)',
+  \   'foo',
+  \   'bar',
+  \ ]
+  \ + g:command_header
+  \)
+
+Given testft (Empty buffer):
+Execute (LSP errors for other linters shouldn't appear):
+  let g:ale_lsp_error_messages = {'testlinter2': ['foo']}
+  call ale#linter#Define('testft', g:testlinter1)
+
+  call CheckInfo(
+  \ [
+  \   ' Current Filetype: testft',
+  \   'Available Linters: [''testlinter1'']',
+  \   '  Enabled Linters: [''testlinter1'']',
+  \   ' Linter Variables:',
+  \   '',
+  \ ]
+  \ + g:globals_lines
+  \ + g:command_header
+  \)

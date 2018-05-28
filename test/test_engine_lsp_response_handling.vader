@@ -1,5 +1,9 @@
 Before:
   Save g:ale_buffer_info
+  Save g:ale_lsp_error_messages
+
+  unlet! g:ale_lsp_error_messages
+
   call ale#test#SetDirectory('/testplugin/test')
 
 After:
@@ -7,6 +11,7 @@ After:
 
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
+  call ale#engine#ClearLSPData()
 
 Execute(tsserver syntax error responses should be handled correctly):
   runtime ale_linters/typescript/tsserver.vim
@@ -153,3 +158,20 @@ Execute(tsserver semantic error responses should be handled correctly):
   \ [
   \ ],
   \ getloclist(0)
+
+Execute(LSP errors should be logged in the history):
+  call ale#engine#SetLSPLinterMap({'347': 'foobar'})
+  call ale#engine#HandleLSPResponse(347, {
+  \ 'jsonrpc': '2.0',
+  \ 'error': {
+  \   'code': -32602,
+  \   'message': 'xyz',
+  \   'data': {
+  \     'traceback': ['123', '456'],
+  \   },
+  \ },
+  \})
+
+  AssertEqual
+  \ {'foobar': ["xyz\n123\n456"]},
+  \ get(g:, 'ale_lsp_error_messages', {})
