@@ -174,26 +174,3 @@ Execute(Using `python -m flake8` should be supported for running flake8):
   \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('python') . '   -m flake8 --some-option --format=default -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
-
-Execute(Using `python2 -m flake8` should be supported with the old args option):
-  let g:ale_python_flake8_executable = 'python2'
-  let g:ale_python_flake8_args = '-m flake8'
-  let g:ale_python_flake8_use_global = 0
-
-  unlet! g:ale_python_flake8_options
-
-  call ale#linter#Reset()
-  runtime ale_linters/python/flake8.vim
-
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
-
-  AssertEqual
-  \ 'python2',
-  \ ale_linters#python#flake8#GetExecutable(bufnr(''))
-  AssertEqual
-  \ ale#Escape('python2') . ' -m flake8 --version',
-  \ ale_linters#python#flake8#VersionCheck(bufnr(''))
-  AssertEqual
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('python2') . ' -m flake8 --format=default -',
-  \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
