@@ -1,3 +1,6 @@
+After:
+  unlet! b:ale_tsserver_completion_names
+
 Execute(TypeScript completions responses should be parsed correctly):
   AssertEqual [],
   \ ale#completion#ParseTSServerCompletions({
@@ -27,6 +30,77 @@ Execute(TypeScript completion details responses should be parsed correctly):
   \     'menu': '(property) Foo.def: number',
   \     'info': 'foo bar baz',
   \     'kind': 'f',
+  \     'icase': 1,
+  \   },
+  \ ],
+  \ ale#completion#ParseTSServerCompletionEntryDetails({
+  \ 'body': [
+  \   {
+  \     'name': 'abc',
+  \     'kind': 'parameterName',
+  \     'displayParts': [
+  \       {'text': '('},
+  \       {'text': 'property'},
+  \       {'text': ')'},
+  \       {'text': ' '},
+  \       {'text': 'Foo'},
+  \       {'text': '.'},
+  \       {'text': 'abc'},
+  \       {'text': ':'},
+  \       {'text': ' '},
+  \       {'text': 'number'},
+  \     ],
+  \   },
+  \   {
+  \     'name': 'def',
+  \     'kind': 'parameterName',
+  \     'displayParts': [
+  \       {'text': '('},
+  \       {'text': 'property'},
+  \       {'text': ')'},
+  \       {'text': ' '},
+  \       {'text': 'Foo'},
+  \       {'text': '.'},
+  \       {'text': 'def'},
+  \       {'text': ':'},
+  \       {'text': ' '},
+  \       {'text': 'number'},
+  \     ],
+  \     'documentation': [
+  \       {'text': 'foo'},
+  \       {'text': ' '},
+  \       {'text': 'bar'},
+  \       {'text': ' '},
+  \       {'text': 'baz'},
+  \     ],
+  \   },
+  \ ],
+  \})
+
+Execute(Entries without details should be included in the responses):
+  let b:ale_tsserver_completion_names = ['xyz']
+
+  AssertEqual
+  \ [
+  \   {
+  \     'word': 'abc',
+  \     'menu': '(property) Foo.abc: number',
+  \     'info': '',
+  \     'kind': 'f',
+  \     'icase': 1,
+  \   },
+  \   {
+  \     'word': 'def',
+  \     'menu': '(property) Foo.def: number',
+  \     'info': 'foo bar baz',
+  \     'kind': 'f',
+  \     'icase': 1,
+  \   },
+  \   {
+  \     'word': 'xyz',
+  \     'menu': '',
+  \     'info': '',
+  \     'kind': 'v',
   \     'icase': 1,
   \   },
   \ ],

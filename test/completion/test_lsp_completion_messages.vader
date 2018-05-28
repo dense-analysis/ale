@@ -41,6 +41,7 @@ After:
   unlet! b:ale_completion_parser
   unlet! b:ale_complete_done_time
   unlet! b:ale_linters
+  unlet! b:ale_tsserver_completion_names
 
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
@@ -111,6 +112,12 @@ Execute(The right message sent to the tsserver LSP when the first completion mes
   \   {'name': 'FFS'},
   \ ],
   \})
+
+  " We should save the names we got in the buffer, as TSServer doesn't return
+  " details for every name.
+  AssertEqual
+  \ ['Foo', 'FooBar', 'frazzle'],
+  \ get(b:, 'ale_tsserver_completion_names', [])
 
   " The entry details messages should have been sent.
   AssertEqual
