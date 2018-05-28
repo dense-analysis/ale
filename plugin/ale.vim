@@ -32,6 +32,7 @@ if !s:has_features
     finish
 endif
 
+" remove in 2.0
 if has('nvim') && !has('nvim-0.2.0') && !get(g:, 'ale_use_deprecated_neovim')
     execute 'echom ''ALE support for NeoVim versions below 0.2.0 is deprecated.'''
     execute 'echom ''Use `let g:ale_use_deprecated_neovim = 1` to silence this warning for now.'''
@@ -233,6 +234,7 @@ augroup END
 
 " Backwards Compatibility
 
+" remove in 2.0
 function! ALELint(delay) abort
     if !get(g:, 'ale_deprecation_ale_lint', 0)
         execute 'echom ''ALELint() is deprecated, use ale#Queue() instead.'''
@@ -242,6 +244,7 @@ function! ALELint(delay) abort
     call ale#Queue(a:delay)
 endfunction
 
+" remove in 2.0
 function! ALEGetStatusLine() abort
     if !get(g:, 'ale_deprecation_ale_get_status_line', 0)
         execute 'echom ''ALEGetStatusLine() is deprecated.'''
