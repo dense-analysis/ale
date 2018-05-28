@@ -296,6 +296,10 @@ function! ale#completion#ParseLSPCompletions(response) abort
         \})
     endfor
 
+    if has_key(l:info, 'prefix')
+        return ale#completion#Filter(l:buffer, l:results, l:info.prefix)
+    endif
+
     return l:results
 endfunction
 
