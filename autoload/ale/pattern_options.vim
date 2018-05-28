@@ -1,6 +1,11 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Set options in files based on regex patterns.
 
+" A dictionary mapping regular expression patterns to arbitrary buffer
+" variables to be set. Useful for configuring ALE based on filename patterns.
+let g:ale_pattern_options = get(g:, 'ale_pattern_options', {})
+let g:ale_pattern_options_enabled = get(g:, 'ale_pattern_options_enabled', !empty(g:ale_pattern_options))
+
 " These variables are used to cache the sorting of patterns below.
 let s:last_pattern_options = {}
 let s:sorted_items = []

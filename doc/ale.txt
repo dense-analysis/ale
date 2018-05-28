@@ -686,7 +686,7 @@ g:airline#extensions#ale#enabled             *g:airline#extensions#ale#enabled*
 g:ale_cache_executable_check_failures   *g:ale_cache_executable_check_failures*
 
   Type: |Number|
-  Default: `0`
+  Default: undefined
 
   When set to `1`, ALE will cache failing executable checks for linters. By
   default, only executable checks which succeed will be cached.
@@ -1259,7 +1259,7 @@ g:ale_max_signs                                               *g:ale_max_signs*
 g:ale_maximum_file_size                               *g:ale_maximum_file_size*
                                                       *b:ale_maximum_file_size*
   Type: |Number|
-  Default: `0`
+  Default: undefined
 
   A maximum file size in bytes for ALE to check. If set to any positive
   number, ALE will skip checking files larger than the given size.

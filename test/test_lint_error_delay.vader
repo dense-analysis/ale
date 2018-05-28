@@ -2,7 +2,7 @@ Before:
   runtime autoload/ale.vim
 
   " Replace one of the key ALE functions and make it throw.
-  function! ale#FileTooLarge() abort
+  function! ale#FileTooLarge(buffer) abort
     throw 'broken'
   endfunction
 

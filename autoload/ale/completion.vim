@@ -1,7 +1,9 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Completion support for LSP linters
 
-call ale#Set('completion_excluded_words', [])
+let g:ale_completion_delay = get(g:, 'ale_completion_delay', 100)
+let g:ale_completion_excluded_words = get(g:, 'ale_completion_excluded_words', [])
+let g:ale_completion_max_suggestions = get(g:, 'ale_completion_max_suggestions', 50)
 
 let s:timer_id = -1
 let s:last_done_pos = []

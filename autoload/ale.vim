@@ -2,6 +2,11 @@
 " Description: Primary code path for the plugin
 "   Manages execution of linters when requested by autocommands
 
+" Strings used for severity in the echoed message
+let g:ale_echo_msg_error_str = get(g:, 'ale_echo_msg_error_str', 'Error')
+let g:ale_echo_msg_info_str = get(g:, 'ale_echo_msg_info_str', 'Info')
+let g:ale_echo_msg_warning_str = get(g:, 'ale_echo_msg_warning_str', 'Warning')
+
 let s:lint_timer = -1
 let s:queued_buffer_number = -1
 let s:should_lint_file_for_buffer = {}
@@ -32,12 +37,8 @@ function! ale#CallWithCooldown(timestamp_key, func, arglist) abort
 endfunction
 
 " Return 1 if a file is too large for ALE to handle.
-function! ale#FileTooLarge() abort
-    if !exists('g:ale_maximum_file_size')
-        return 0
-    endif
-
-    let l:max = ale#Var(bufnr(''), 'maximum_file_size')
+function! ale#FileTooLarge(buffer) abort
+    let l:max = getbufvar(a:buffer, 'ale_maximum_file_size', get(g:, 'ale_maximum_file_size', 0))
 
     return l:max > 0 ? (line2byte(line('$') + 1) > l:max) : 0
 endfunction
@@ -90,7 +91,7 @@ function! ale#ShouldDoNothing(buffer) abort
     endif
 
     " Do nothing if the file is too large.
-    if ale#FileTooLarge()
+    if ale#FileTooLarge(a:buffer)
         return 1
     endif
 

@@ -96,6 +96,7 @@ let g:ale_lint_on_save = get(g:, 'ale_lint_on_save', 1)
 " This flag can be set to 1 to enable linting when the filetype is changed.
 let g:ale_lint_on_filetype_changed = get(g:, 'ale_lint_on_filetype_changed', 1)
 
+" This flag can be set to 1 to enable automatically fixing files on save.
 let g:ale_fix_on_save = get(g:, 'ale_fix_on_save', 0)
 
 " This flag may be set to 0 to disable ale. After ale is loaded, :ALEToggle
@@ -107,72 +108,20 @@ let g:ale_enabled = get(g:, 'ale_enabled', 1)
 let g:ale_set_loclist = get(g:, 'ale_set_loclist', 1)
 let g:ale_set_quickfix = get(g:, 'ale_set_quickfix', 0)
 
-" This flag dictates if ale open the configured loclist
-let g:ale_open_list = get(g:, 'ale_open_list', 0)
-
-" This flag dictates if ale keeps open loclist even if there is no error in loclist
-let g:ale_keep_list_window_open = get(g:, 'ale_keep_list_window_open', 0)
-
-" This flag dictates that quickfix windows should be opened vertically
-let g:ale_list_vertical = get(g:, 'ale_list_vertical', 0)
-
-" The window size to set for the quickfix and loclist windows
-let g:ale_list_window_size = get(g:, 'ale_list_window_size', 10)
-
 " This flag can be set to 0 to disable setting signs.
 " This is enabled by default only if the 'signs' feature exists.
 let g:ale_set_signs = get(g:, 'ale_set_signs', has('signs'))
-" This flag can be set to some integer to control the maximum number of signs
-" that ALE will set.
-let g:ale_max_signs = get(g:, 'ale_max_signs', -1)
-
-" This flag can be set to 1 to enable changing the sign column colors when
-" there are errors.
-let g:ale_change_sign_column_color = get(g:, 'ale_change_sign_column_color', 0)
 
 " This flag can be set to 0 to disable setting error highlights.
 let g:ale_set_highlights = get(g:, 'ale_set_highlights', has('syntax'))
 
-" These variables dictate what sign is used to indicate errors and warnings.
-let g:ale_sign_error = get(g:, 'ale_sign_error', '>>')
-let g:ale_sign_style_error = get(g:, 'ale_sign_style_error', g:ale_sign_error)
-let g:ale_sign_warning = get(g:, 'ale_sign_warning', '--')
-let g:ale_sign_style_warning = get(g:, 'ale_sign_style_warning', g:ale_sign_warning)
-let g:ale_sign_info = get(g:, 'ale_sign_info', g:ale_sign_warning)
-
-" This variable sets an offset which can be set for sign IDs.
-" This ID can be changed depending on what IDs are set for other plugins.
-" The dummy sign will use the ID exactly equal to the offset.
-let g:ale_sign_offset = get(g:, 'ale_sign_offset', 1000000)
-
-" This flag can be set to 1 to keep sign gutter always open
-let g:ale_sign_column_always = get(g:, 'ale_sign_column_always', 0)
-
-" A string format for the echoed message
-let g:ale_echo_msg_format = get(g:, 'ale_echo_msg_format', '%code: %%s')
-" The same for the loclist.
-let g:ale_loclist_msg_format = get(g:, 'ale_loclist_msg_format', g:ale_echo_msg_format)
-
-" Strings used for severity in the echoed message
-let g:ale_echo_msg_error_str = get(g:, 'ale_echo_msg_error_str', 'Error')
-let g:ale_echo_msg_info_str = get(g:, 'ale_echo_msg_info_str', 'Info')
-let g:ale_echo_msg_warning_str = get(g:, 'ale_echo_msg_warning_str', 'Warning')
-
 " This flag can be set to 0 to disable echoing when the cursor moves.
 let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
-" Controls the milliseconds delay before echoing a message.
-let g:ale_echo_delay = get(g:, 'ale_echo_delay', 10)
 
 " This flag can be set to 0 to disable balloon support.
 let g:ale_set_balloons = get(g:, 'ale_set_balloons',
-\   has('balloon_eval') && has('gui_running') ||
-\   has('balloon_eval_term') && !has('gui_running')
-\)
-
-" A deprecated setting for ale#statusline#Status()
-" See :help ale#statusline#Count() for getting status reports.
-let g:ale_statusline_format = get(g:, 'ale_statusline_format',
-\   ['%d error(s)', '%d warning(s)', 'OK']
+\   (has('balloon_eval') && has('gui_running'))
+\   || (has('balloon_eval_term') && !has('gui_running'))
 \)
 
 " This flag can be set to 0 to disable warnings for trailing whitespace
@@ -180,38 +129,14 @@ let g:ale_warn_about_trailing_whitespace = get(g:, 'ale_warn_about_trailing_whit
 " This flag can be set to 0 to disable warnings for trailing blank lines
 let g:ale_warn_about_trailing_blank_lines = get(g:, 'ale_warn_about_trailing_blank_lines', 1)
 
-" A flag for controlling the maximum size of the command history to store.
-let g:ale_max_buffer_history_size = get(g:, 'ale_max_buffer_history_size', 20)
-
 " A flag for enabling or disabling the command history.
 let g:ale_history_enabled = get(g:, 'ale_history_enabled', 1)
 
 " A flag for storing the full output of commands in the history.
 let g:ale_history_log_output = get(g:, 'ale_history_log_output', 1)
 
-" A flag for caching failed executable checks.
-" This is off by default, because it will cause problems.
-let g:ale_cache_executable_check_failures = get(g:, 'ale_cache_executable_check_failures', 0)
-
-" A dictionary mapping regular expression patterns to arbitrary buffer
-" variables to be set. Useful for configuration ALE based on filename
-" patterns.
-let g:ale_pattern_options = get(g:, 'ale_pattern_options', {})
-let g:ale_pattern_options_enabled = get(g:, 'ale_pattern_options_enabled', !empty(g:ale_pattern_options))
-
-" A maximum file size for checking for errors.
-let g:ale_maximum_file_size = get(g:, 'ale_maximum_file_size', 0)
-
-" Remapping of linter problems.
-let g:ale_type_map = get(g:, 'ale_type_map', {})
-
 " Enable automatic completion with LSP servers and tsserver
 let g:ale_completion_enabled = get(g:, 'ale_completion_enabled', 0)
-let g:ale_completion_delay = get(g:, 'ale_completion_delay', 100)
-let g:ale_completion_max_suggestions = get(g:, 'ale_completion_max_suggestions', 50)
-
-" A setting for wrapping commands.
-let g:ale_command_wrapper = get(g:, 'ale_command_wrapper', '')
 
 if g:ale_set_balloons
     call ale#balloon#Enable()

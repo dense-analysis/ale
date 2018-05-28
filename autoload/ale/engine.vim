@@ -2,6 +2,9 @@
 " Description: Backend execution and job management
 "   Executes linters in the background, using NeoVim or Vim 8 jobs
 
+" Remapping of linter problems.
+let g:ale_type_map = get(g:, 'ale_type_map', {})
+
 " Stores information for each job including:
 "
 " linter: The linter dictionary for the job.
@@ -44,7 +47,7 @@ function! ale#engine#IsExecutable(buffer, executable) abort
 
     " Cache the executable check if we found it, or if the option to cache
     " failing checks is on.
-    if l:result || g:ale_cache_executable_check_failures
+    if l:result || get(g:, 'ale_cache_executable_check_failures', 0)
         let s:executable_cache_map[a:executable] = l:result
     endif
 

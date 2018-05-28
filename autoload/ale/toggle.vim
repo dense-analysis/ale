@@ -1,6 +1,6 @@
 function! s:EnablePreamble() abort
     " Set pattern options again, if enabled.
-    if g:ale_pattern_options_enabled
+    if get(g:, 'ale_pattern_options_enabled', 0)
         call ale#pattern_options#SetOptions(bufnr(''))
     endif
 
@@ -53,11 +53,6 @@ endfunction
 
 function! ale#toggle#Enable() abort
     if !g:ale_enabled
-        " Set pattern options again, if enabled.
-        if g:ale_pattern_options_enabled
-            call ale#pattern_options#SetOptions(bufnr(''))
-        endif
-
         call ale#toggle#Toggle()
     endif
 endfunction

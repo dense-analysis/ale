@@ -8,6 +8,9 @@
 "   ale#job#IsRunning(job_id) -> 1 if running, 0 otherwise.
 "   ale#job#Stop(job_id)
 
+" A setting for wrapping commands.
+let g:ale_command_wrapper = get(g:, 'ale_command_wrapper', '')
+
 if !has_key(s:, 'job_map')
     let s:job_map = {}
 endif

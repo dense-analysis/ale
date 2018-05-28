@@ -1,6 +1,12 @@
 " Author: KabbAmine <amine.kabb@gmail.com>
 " Description: Statusline related function(s)
 
+" A deprecated setting for ale#statusline#Status()
+" See :help ale#statusline#Count() for getting status reports.
+let g:ale_statusline_format = get(g:, 'ale_statusline_format',
+\   ['%d error(s)', '%d warning(s)', 'OK']
+\)
+
 function! s:CreateCountDict() abort
     " Keys 0 and 1 are for backwards compatibility.
     " The count object used to be a List of [error_count, warning_count].

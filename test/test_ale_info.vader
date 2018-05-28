@@ -1,43 +1,51 @@
 Before:
   Save g:ale_buffer_info
   Save g:ale_cache_executable_check_failures
+  Save g:ale_completion_delay
   Save g:ale_completion_enabled
+  Save g:ale_completion_max_suggestions
   Save g:ale_fixers
   Save g:ale_history_log_output
   Save g:ale_lint_on_insert_leave
   Save g:ale_lint_on_text_changed
   Save g:ale_linters
+  Save g:ale_lsp_error_messages
   Save g:ale_maximum_file_size
   Save g:ale_pattern_options
   Save g:ale_pattern_options_enabled
   Save g:ale_set_balloons
-  Save g:ale_warn_about_trailing_whitespace
   Save g:ale_sign_error
-  Save g:ale_sign_warning
   Save g:ale_sign_info
   Save g:ale_sign_style_error
   Save g:ale_sign_style_warning
-  Save g:ale_lsp_error_messages
+  Save g:ale_sign_warning
+  Save g:ale_statusline_format
+  Save g:ale_type_map
+  Save g:ale_warn_about_trailing_whitespace
 
   unlet! b:ale_history
 
   let g:ale_buffer_info = {}
   let g:ale_cache_executable_check_failures = 0
+  let g:ale_completion_delay = 100
   let g:ale_completion_enabled = 0
+  let g:ale_completion_max_suggestions = 50
   let g:ale_history_log_output = 1
   let g:ale_lint_on_insert_leave = 0
   let g:ale_lint_on_text_changed = 'always'
+  let g:ale_lsp_error_messages = {}
   let g:ale_maximum_file_size = 0
   let g:ale_pattern_options = {}
   let g:ale_pattern_options_enabled = 0
   let g:ale_set_balloons = 0
-  let g:ale_warn_about_trailing_whitespace = 1
   let g:ale_sign_error = '>>'
-  let g:ale_sign_warning = '--'
   let g:ale_sign_info = '--'
   let g:ale_sign_style_error = '>>'
   let g:ale_sign_style_warning = '--'
-  let g:ale_lsp_error_messages = {}
+  let g:ale_sign_warning = '--'
+  let g:ale_statusline_format = ['%d error(s)', '%d warning(s)', 'OK']
+  let g:ale_type_map = {}
+  let g:ale_warn_about_trailing_whitespace = 1
 
   let g:testlinter1 = {'name': 'testlinter1', 'executable': 'testlinter1', 'command': 'testlinter1', 'callback': 'testCB1', 'output_stream': 'stdout'}
   let g:testlinter2 = {'name': 'testlinter2', 'executable': 'testlinter2', 'command': 'testlinter2', 'callback': 'testCB2', 'output_stream': 'stdout'}
