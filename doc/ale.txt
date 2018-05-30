@@ -2320,6 +2320,9 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          LSP linters handle diagnostics automatically, so
                          the `callback` argument must not be defined.
 
+                         An optional `completion_filter` callback may be
+                         defined for filtering completion results.
+
   `project_root_callback`  A |String| or |Funcref| for a callback function
                          accepting a buffer number. A |String| should be
                          returned representing the path to the project for the
@@ -2344,6 +2347,15 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
 
                          This option can be used instead of `language` if a
                          linter can check multiple languages.
+
+  `completion_filter`      A |String| or |Funcref| for a callback function
+                         accepting a buffer number and a completion item.
+
+                         The completion item will be a |Dictionary| following
+                         the Language Server Protocol `CompletionItem`
+                         interface as described in the specification,
+                         available online here:
+                         https://microsoft.github.io/language-server-protocol
 
   `aliases`                A |List| of aliases for the linter name.
 
