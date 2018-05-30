@@ -435,6 +435,14 @@ be run for those languages, just as when the dictionary is not defined.
 Running many linters should not typically obstruct editing in Vim,
 as they will all be executed in separate processes simultaneously.
 
+If you don't want ALE to run anything other than what you've explicitly asked
+for, you can set `g:ale_linters_explicit` to `1`.
+
+```vim
+" Only run linters named in ale_linters settings.
+let g:ale_linters_explicit = 1
+```
+
 This plugin will look for linters in the [`ale_linters`](ale_linters) directory.
 Each directory within corresponds to a particular filetype in Vim, and each file
 in each directory corresponds to the name of a particular linter.
