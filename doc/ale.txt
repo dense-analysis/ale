@@ -668,6 +668,15 @@ at the cursor taken from LSP linters. The following commands are supported:
 
 |ALEHover| - Print information about the symbol at the cursor.
 
+If |b:ale_set_balloons| is set and you are are using vim with the
+|balloon_show()| feature (tested with vim 8 patch 1318), then "hover"
+information also show up when you put the mouse on a symbol in a buffer
+("mouseover").
+Diagnostics information have priority over hover information for the balloon
+space : if there is a diagnostics message (warning or error) on the line the
+mouse points to, then the mouseover will print this information instead of
+hover information.
+
 
 ===============================================================================
 6. Global Options                                                 *ale-options*
@@ -1344,9 +1353,11 @@ g:ale_set_balloons                                         *g:ale_set_balloons*
            `has('balloon_eval_term') && !has('gui_running')`
 
   When this option is set to `1`, balloon messages will be displayed for
-  problems. Problems nearest to the cursor on the line the cursor is over will
-  be displayed. Balloons will not be shown when either |g:ale_enabled| is `0`
-  or |b:ale_enabled| is `0`.
+  problems or hover information if relevant. Problems nearest to the cursor on
+  the line the cursor is over will be displayed. If there are no problem, and
+  one of the linters support |ale-hover|, then brief information about the
+  symbol under the cursor will be shown. Balloons will not be shown when
+  either |g:ale_enabled| is `0` or |b:ale_enabled| is `0`.
 
   `b:ale_set_balloons` can be set to `0` to disable balloons for a buffer.
   Balloons cannot be enabled for a specific buffer when not initially enabled
