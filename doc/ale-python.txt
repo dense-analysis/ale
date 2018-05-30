@@ -3,6 +3,31 @@ ALE Python Integration                                     *ale-python-options*
 
 
 ===============================================================================
+ALE Python Project Root Behavior                              *ale-python-root*
+
+For some linters, ALE will search for a Python project root by looking at the
+files in directories on or above where a file being checked is. ALE applies
+the following methods, in order:
+
+1. Find the first directory containing a common Python configuration file.
+2. If no configuration file can be found, use the first directory which does
+   not contain a readable file named `__init__.py`.
+
+ALE will look for configuration files with the following filenames. >
+
+  MANIFEST.in
+  setup.cfg
+  pytest.ini
+  tox.ini
+  mypy.ini
+  pycodestyle.cfg
+  flake8.cfg
+<
+
+The first directory containing any of the files named above will be used.
+
+
+===============================================================================
 autopep8                                                  *ale-python-autopep8*
 
 g:ale_python_autopep8_executable             *g:ale_python_autopep8_executable*
@@ -133,6 +158,8 @@ mypy                                                          *ale-python-mypy*
 The minimum supported version of mypy that ALE supports is v0.4.4. This is
 the first version containing the `--shadow-file` option ALE needs to be able
 to check for errors while you type.
+
+`mypy` will be run from a detected project root, per |ale-python-root|.
 
 
 g:ale_python_mypy_executable                     *g:ale_python_mypy_executable*
@@ -291,6 +318,9 @@ g:ale_python_pylint_use_global                 *g:ale_python_pylint_use_global*
 
 ===============================================================================
 pyls                                                          *ale-python-pyls*
+
+`pyls` will be run from a detected project root, per |ale-python-root|.
+
 
 g:ale_python_pyls_executable                     *g:ale_python_pyls_executable*
                                                  *b:ale_python_pyls_executable*
