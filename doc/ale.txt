@@ -475,6 +475,12 @@ the buffer-local options can be used with external plugins for reading Vim
 project configuration files. Buffer-local settings can also be used in
 ftplugin files for different filetypes.
 
+ALE offers several options for controlling which linters are run.
+
+* Selecting linters to run.            - |g:ale_linters|
+* Aliasing filetypes for linters       - |g:ale_linter_aliases|
+* Only running linters you asked for.  - |g:ale_linters_explicit|
+
 
 ===============================================================================
 4. Fixing Problems                                                    *ale-fix*
