@@ -2313,14 +2313,14 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          process for a language server runnning, and
                          communicates with it directly via a |channel|.
 
-                         When this argument is not empty, `project_callback`
-                         must be defined, and only one of either `language` or
-                         `language_callback` must be defined.
+                         When this argument is not empty, only one of either
+                         `language` or `language_callback` must be defined,
+                         and `project_root_callback` must be defined.
 
                          LSP linters handle diagnostics automatically, so
                          the `callback` argument must not be defined.
 
-  `project_callback`       A |String| or |Funcref| for a callback function
+  `project_root_callback`  A |String| or |Funcref| for a callback function
                          accepting a buffer number. A |String| should be
                          returned representing the path to the project for the
                          file being checked with the language server. If an
