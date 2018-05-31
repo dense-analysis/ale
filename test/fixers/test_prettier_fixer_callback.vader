@@ -26,6 +26,7 @@ Execute(The prettier callback should return the correct default values):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
+  \     . ' --parser babylon',
   \     . ' --write',
   \ },
   \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), [])
@@ -39,6 +40,7 @@ Execute(The --config option should not be set automatically):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
+  \     . ' --parser babylon',
   \     . ' --write',
   \ },
   \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), [])
@@ -53,6 +55,7 @@ Execute(The prettier callback should include custom prettier options):
   \   'command': ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' %t'
   \     . ' --no-semi'
+  \     . ' --parser babylon',
   \     . ' --write',
   \ },
   \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), [])
@@ -77,6 +80,7 @@ Execute(--stdin-filepath should be used when prettier is new enough):
   \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
   \     . ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' --no-semi'
+  \     . ' --parser babylon',
   \     . ' --stdin-filepath %s --stdin',
   \ },
   \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), ['1.6.0'])
@@ -92,6 +96,7 @@ Execute(The version number should be cached):
   \ {
   \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
   \     . ale#Escape(g:ale_javascript_prettier_executable)
+  \     . ' --parser babylon',
   \     . ' --stdin-filepath %s --stdin',
   \ },
   \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), [])
