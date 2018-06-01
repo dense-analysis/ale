@@ -23,7 +23,8 @@ function! s:CmpPatterns(left_item, right_item) abort
 endfunction
 
 function! ale#pattern_options#SetOptions(buffer) abort
-    if !g:ale_pattern_options_enabled || empty(g:ale_pattern_options)
+    if !get(g:, 'ale_pattern_options_enabled', 0)
+    \|| empty(get(g:, 'ale_pattern_options', 0))
         return
     endif
 

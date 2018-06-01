@@ -90,3 +90,14 @@ Execute(Patterns should be applied after the Dictionary changes):
   call ale#pattern_options#SetOptions(bufnr(''))
 
   AssertEqual 666, b:some_option
+
+Execute(SetOptions should tolerate settings being unset):
+  " This might happen if ALE is loaded in a weird way, so tolerate it.
+  unlet! g:ale_pattern_options
+  unlet! g:ale_pattern_options_enabled
+
+  call ale#pattern_options#SetOptions(bufnr(''))
+
+  let g:ale_pattern_options_enabled = 1
+
+  call ale#pattern_options#SetOptions(bufnr(''))
