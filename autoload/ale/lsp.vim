@@ -207,6 +207,11 @@ function! ale#lsp#HandleOtherInitializeResponses(conn, response) abort
 endfunction
 
 function! ale#lsp#HandleMessage(conn, message) abort
+    if type(a:message) != type('')
+        " Ignore messages that aren't strings.
+        return
+    endif
+
     let a:conn.data .= a:message
 
     " Parse the objects now if we can, and keep the remaining text.
