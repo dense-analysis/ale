@@ -31,7 +31,7 @@ endfunction
 
 function! ale_linters#elixir#mix#Command(buffer) abort
     let l:project_dir = fnamemodify(ale#path#FindNearestFile(a:buffer, 'mix.exs'), ':h')
-    return  'cd ' . l:project_dir . ' && mix compile %s'
+    return  'cd ' . l:project_dir . ' && MIX_BUILD_PATH=/tmp/mix mix compile %s'
 endfunction
 
 call ale#linter#Define('elixir', {
