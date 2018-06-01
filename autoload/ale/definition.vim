@@ -22,7 +22,7 @@ function! ale#definition#HandleTSServerResponse(conn_id, response) abort
     \&& has_key(s:go_to_definition_map, a:response.request_seq)
         let l:options = remove(s:go_to_definition_map, a:response.request_seq)
 
-        if get(a:response, 'success', v:false) is v:true
+        if get(a:response, 'success', v:false) is v:true && !empty(a:response.body)
             let l:filename = a:response.body[0].file
             let l:line = a:response.body[0].start.line
             let l:column = a:response.body[0].start.offset
