@@ -56,6 +56,19 @@ Execute(Failed definition responses should be handled correctly):
   \)
   AssertEqual {}, ale#definition#GetMap()
 
+Execute(Failed definition responses with no files should be handled correctly):
+  call ale#definition#SetMap({3: {'open_in_tab': 0}})
+  call ale#definition#HandleTSServerResponse(
+  \ 1,
+  \ {
+  \   'command': 'definition',
+  \   'request_seq': 3,
+  \   'success': v:true,
+  \   'body': [],
+  \ }
+  \)
+  AssertEqual {}, ale#definition#GetMap()
+
 Given typescript(Some typescript file):
   foo
   somelongerline
