@@ -1,5 +1,6 @@
 " Author: evnu - https://github.com/evnu
 " Author: colbydehart - https://github.com/colbydehart
+" Description: Mix compile checking for Elixir files
 
 function! ale_linters#elixir#mix#Handle(buffer, lines) abort
     " Matches patterns like the following:
@@ -29,14 +30,23 @@ function! ale_linters#elixir#mix#Handle(buffer, lines) abort
     return l:output
 endfunction
 
-function! ale_linters#elixir#mix#Command(buffer) abort
-    let l:project_dir = fnamemodify(ale#path#FindNearestFile(a:buffer, 'mix.exs'), ':h')
-    return  'cd ' . l:project_dir . ' && MIX_BUILD_PATH=/tmp/mix mix compile %s'
+function! ale_linters#elixir#mix#GetCommand(buffer) abort
+    let l:project_root = fnamemodify(ale#path#FindNearestFile(a:buffer, 'mix.exs'), ':h')
+
+    let l:temp_dir = ale#engine#CreateDirectory(a:buffer)
+
+    let l:mix_build_path = has('win32')
+    \   ? 'set MIX_BUILD_PATH=' . ale#Escape(l:temp_dir) . ' && '
+    \   : 'MIX_BUILD_PATH=' . ale#Escape(l:temp_dir) . ' '
+
+    return  ale#path#CdString(l:project_root)
+          \ . l:mix_build_path
+          \ . ' mix compile %s'
 endfunction
 
 call ale#linter#Define('elixir', {
 \   'name': 'mix',
 \   'executable': 'mix',
-\   'command_callback': 'ale_linters#elixir#mix#Command',
+\   'command_callback': 'ale_linters#elixir#mix#GetCommand',
 \   'callback': 'ale_linters#elixir#mix#Handle',
 \})
