@@ -95,6 +95,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['ruby'],
 \       'description': 'Fix ruby files with rufo',
 \   },
+\   'scalafmt': {
+\       'function': 'ale#fixers#scalafmt#Fix',
+\       'suggested_filetypes': ['scala'],
+\       'description': 'Fix Scala files using scalafmt',
+\   },
 \   'standard': {
 \       'function': 'ale#fixers#standard#Fix',
 \       'suggested_filetypes': ['javascript'],
