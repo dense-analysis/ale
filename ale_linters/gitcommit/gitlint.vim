@@ -28,6 +28,10 @@ function! ale_linters#gitcommit#gitlint#Handle(buffer, lines) abort
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:code = l:match[2]
 
+        if l:code is# 'T2' && !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
+            continue
+        endif
+
         let l:item = {
         \   'lnum': l:match[1] + 0,
         \   'text': l:match[3],

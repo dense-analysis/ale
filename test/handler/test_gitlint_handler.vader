@@ -1,8 +1,16 @@
 Before:
-    runtime ale_linters/gitcommit/gitlint.vim
+  Save g:ale_warn_about_trailing_whitespace
+
+  let g:ale_warn_about_trailing_whitespace = 1
+
+  runtime ale_linters/gitcommit/gitlint.vim
 
 After:
-    call ale#linter#Reset()
+  Restore
+
+  unlet! b:ale_warn_about_trailing_whitespace
+
+  call ale#linter#Reset()
 
 Execute(The gitlint handler should handle basic warnings and syntax errors):
   AssertEqual
@@ -39,3 +47,24 @@ Execute(The gitlint handler should handle basic warnings and syntax errors):
   \   '8: T1 Title exceeds max length (92>72): "some very long commit subject line where the author can''t wait to explain what he just fixed"'
   \ ])
 
+Execute(Disabling trailing whitespace warnings should work):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 8,
+  \     'type': 'E',
+  \     'text': 'Trailing whitespace',
+  \     'code': 'T2',
+  \   },
+  \ ],
+  \ ale_linters#gitcommit#gitlint#Handle(bufnr(''), [
+  \   '8: T2 Trailing whitespace',
+  \])
+
+  let b:ale_warn_about_trailing_whitespace = 0
+
+  AssertEqual
+  \ [],
+  \ ale_linters#gitcommit#gitlint#Handle(bufnr(''), [
+  \   '8: T2 Trailing whitespace',
+  \ ])
