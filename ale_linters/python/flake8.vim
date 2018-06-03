@@ -52,6 +52,10 @@ function! ale_linters#python#flake8#GetCommand(buffer, version_output) abort
     let l:executable = ale_linters#python#flake8#GetExecutable(a:buffer)
     let l:version = ale#semver#GetVersion(l:executable, a:version_output)
 
+    let l:exec_args = l:executable =~? 'pipenv$'
+    \   ? ' run flake8'
+    \   : ''
+
     " Only include the --stdin-display-name argument if we can parse the
     " flake8 version, and it is recent enough to support it.
     let l:display_name_args = ale#semver#GTE(l:version, [3, 0, 0])
@@ -61,7 +65,7 @@ function! ale_linters#python#flake8#GetCommand(buffer, version_output) abort
     let l:options = ale#Var(a:buffer, 'python_flake8_options')
 
     return l:cd_string
-    \   . ale#Escape(l:executable)
+    \   . ale#Escape(l:executable) . l:exec_args
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' --format=default'
     \   . l:display_name_args . ' -'
