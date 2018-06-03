@@ -174,3 +174,11 @@ Execute(Using `python -m flake8` should be supported for running flake8):
   \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('python') . '   -m flake8 --some-option --format=default -',
   \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
+
+Execute(Setting executable to 'pipenv' appends 'run flake8'):
+  let g:ale_python_flake8_executable = 'path/to/pipenv'
+
+  AssertEqual
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('path/to/pipenv') . ' run flake8 --format=default --stdin-display-name %s -',
+  \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
