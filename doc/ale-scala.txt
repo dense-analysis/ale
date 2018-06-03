@@ -8,12 +8,6 @@ scalafmt                                                   *ale-scala-scalafmt*
 If Nailgun is used, override `g:ale_scala_scalafmt_executable` like so: >
   let g:ale_scala_scalafmt_executable = 'ng'
 
-To disable `scalafmt` globally, use |g:ale_fixers| like so: >
-  let g:ale_fixers = {'scala': []}
-<
-
-See |g:ale_fixers| for more information on disabling fixers.
-
 
 g:ale_scala_scalafmt_executable               *g:ale_scala_scalafmt_executable*
                                               *b:ale_scala_scalafmt_executable*
