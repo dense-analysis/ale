@@ -1,11 +1,15 @@
 Before:
   Save g:ale_rust_cargo_use_check
   Save g:ale_rust_cargo_check_all_targets
+  Save g:ale_rust_cargo_check_tests
+  Save g:ale_rust_cargo_check_examples
   Save g:ale_rust_cargo_default_feature_behavior
   Save g:ale_rust_cargo_include_features
 
   unlet! g:ale_rust_cargo_use_check
-  unlet! g:ale_cargo_check_all_targets
+  unlet! g:ale_rust_cargo_check_all_targets
+  unlet! g:ale_rust_cargo_check_tests
+  unlet! g:ale_rust_cargo_check_examples
   unlet! g:ale_rust_cargo_default_feature_behavior
   unlet! g:ale_rust_cargo_include_features
 
@@ -115,6 +119,38 @@ Execute(--all-targets should be used when g:ale_rust_cargo_check_all_targets is 
   " We should cache the version check
   AssertEqual
   \ 'cargo check --all-targets' . g:suffix,
+  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [])
+
+  AssertEqual '', ale_linters#rust#cargo#VersionCheck(bufnr(''))
+
+Execute(--tests should be used when g:ale_rust_cargo_check_tests is set to 1):
+  let g:ale_rust_cargo_check_tests = 1
+
+  AssertEqual
+  \ 'cargo check --tests' . g:suffix,
+  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
+  \   'cargo 0.22.0 (3423351a5 2017-10-06)',
+  \ ])
+
+  " We should cache the version check
+  AssertEqual
+  \ 'cargo check --tests' . g:suffix,
+  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [])
+
+  AssertEqual '', ale_linters#rust#cargo#VersionCheck(bufnr(''))
+
+Execute(--examples should be used when g:ale_rust_cargo_check_examples is set to 1):
+  let g:ale_rust_cargo_check_examples = 1
+
+  AssertEqual
+  \ 'cargo check --examples' . g:suffix,
+  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
+  \   'cargo 0.22.0 (3423351a5 2017-10-06)',
+  \ ])
+
+  " We should cache the version check
+  AssertEqual
+  \ 'cargo check --examples' . g:suffix,
   \ ale_linters#rust#cargo#GetCommand(bufnr(''), [])
 
   AssertEqual '', ale_linters#rust#cargo#VersionCheck(bufnr(''))
