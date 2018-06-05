@@ -253,7 +253,7 @@ See `:help ale-fix` for complete information on how to fix files with ALE.
 
 ALE offers some support for completion via hijacking of omnicompletion while you
 type. All of ALE's completion information must come from Language Server
-Protocol linters, or from `tsserver` for TypeSript.
+Protocol linters, or from `tsserver` for TypeScript.
 
 ```vim
 " Enable completion where available.
