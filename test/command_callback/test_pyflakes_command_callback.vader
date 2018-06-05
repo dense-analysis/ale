@@ -47,3 +47,10 @@ Execute(You should be able to override the pyflakes virtualenv lookup):
 
   AssertEqual ale#Escape('pyflakes') . ' %t',
   \ ale_linters#python#pyflakes#GetCommand(bufnr(''))
+
+Execute(Setting executable to 'pipenv' appends 'run pyflakes'):
+  let g:ale_python_pyflakes_executable = 'path/to/pipenv'
+
+  AssertEqual
+  \ ale#Escape('path/to/pipenv') . ' run pyflakes %t',
+  \ ale_linters#python#pyflakes#GetCommand(bufnr(''))

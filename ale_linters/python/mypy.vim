@@ -23,10 +23,14 @@ function! ale_linters#python#mypy#GetCommand(buffer) abort
     let l:dir = s:GetDir(a:buffer)
     let l:executable = ale_linters#python#mypy#GetExecutable(a:buffer)
 
+    let l:exec_args = l:executable =~? 'pipenv$'
+    \   ? ' run mypy'
+    \   : ''
+
     " We have to always switch to an explicit directory for a command so
     " we can know with certainty the base path for the 'filename' keys below.
     return ale#path#CdString(l:dir)
-    \   . ale#Escape(l:executable)
+    \   . ale#Escape(l:executable) . l:exec_args
     \   . ' --show-column-numbers '
     \   . ale#Var(a:buffer, 'python_mypy_options')
     \   . ' --shadow-file %s %t %s'

@@ -190,6 +190,7 @@ CONTENTS                                                         *ale-contents*
       mypy................................|ale-python-mypy|
       prospector..........................|ale-python-prospector|
       pycodestyle.........................|ale-python-pycodestyle|
+      pyflakes............................|ale-python-pyflakes|
       pylint..............................|ale-python-pylint|
       pyls................................|ale-python-pyls|
       yapf................................|ale-python-yapf|

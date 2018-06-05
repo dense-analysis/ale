@@ -14,7 +14,14 @@ function! ale_linters#python#prospector#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#python#prospector#GetCommand(buffer) abort
-    return ale#Escape(ale_linters#python#prospector#GetExecutable(a:buffer))
+    let l:executable = ale_linters#python#prospector#GetExecutable(a:buffer)
+
+    let l:exec_args = l:executable =~? 'pipenv$'
+    \   ? ' run prospector'
+    \   : ''
+
+    return ale#Escape(l:executable)
+    \   . l:exec_args
     \   . ' ' . ale#Var(a:buffer, 'python_prospector_options')
     \   . ' --messages-only --absolute-paths --zero-exit --output-format json'
     \   . ' %s'

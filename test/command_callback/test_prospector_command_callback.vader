@@ -1,0 +1,23 @@
+Before:
+  Save g:ale_python_mypy_executable
+  Save g:ale_python_mypy_options
+
+  unlet! g:ale_python_mypy_executable
+  unlet! g:ale_python_mypy_options
+
+  runtime ale_linters/python/prospector.vim
+
+After:
+  Restore
+
+  unlet! b:executable
+
+  call ale#linter#Reset()
+
+Execute(Setting executable to 'pipenv' appends 'run prospector'):
+  let g:ale_python_prospector_executable = 'path/to/pipenv'
+
+  AssertEqual
+  \ ale#Escape('path/to/pipenv') . ' run prospector'
+  \   .  '  --messages-only --absolute-paths --zero-exit --output-format json %s',
+  \ ale_linters#python#prospector#GetCommand(bufnr(''))

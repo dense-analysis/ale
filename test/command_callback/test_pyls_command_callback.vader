@@ -47,3 +47,10 @@ Execute(You should be able to override the pyls virtualenv lookup):
 
   AssertEqual ale#Escape('pyls'),
   \ ale_linters#python#pyls#GetCommand(bufnr(''))
+
+Execute(Setting executable to 'pipenv' appends 'run pyls'):
+  let g:ale_python_pyls_executable = 'path/to/pipenv'
+
+  AssertEqual
+  \ ale#Escape('path/to/pipenv') . ' run pyls',
+  \ ale_linters#python#pyls#GetCommand(bufnr(''))
