@@ -95,3 +95,15 @@ Execute(The version number should be cached):
   \     . ' --stdin-filepath %s --stdin',
   \ },
   \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), [])
+
+Execute(If no file extension, --parser should be set based on filetype, TypeScript):
+  setf typescript
+
+  AssertEqual
+  \ {
+  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \     . ale#Escape(g:ale_javascript_prettier_executable)
+  \     . ' --parser typescript'
+  \     . ' --stdin-filepath %s --stdin',
+  \ },
+  \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), [])
