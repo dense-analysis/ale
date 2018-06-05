@@ -102,3 +102,12 @@ Execute(You should able able to use the global pylint instead):
   \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('pylint') . ' ' . b:command_tail,
   \ ale_linters#python#pylint#GetCommand(bufnr(''))
+
+Execute(Setting executable to 'pipenv' appends 'run pylint'):
+  let g:ale_python_pylint_executable = 'path/to/pipenv'
+
+  AssertEqual
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('path/to/pipenv') . ' run pylint'
+  \   . '  --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n %s',
+  \ ale_linters#python#pylint#GetCommand(bufnr(''))

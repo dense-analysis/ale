@@ -100,7 +100,8 @@ g:ale_python_flake8_executable                 *g:ale_python_flake8_executable*
   Type: |String|
   Default: `'flake8'`
 
-  This variable can be changed to modify the executable used for flake8.
+  This variable can be changed to modify the executable used for flake8. Set
+  this to `'pipenv'` to invoke `'pipenv` `run` `flake8'`.
 
 
 g:ale_python_flake8_options                       *g:ale_python_flake8_options*
@@ -169,6 +170,8 @@ g:ale_python_mypy_executable                     *g:ale_python_mypy_executable*
 
   See |ale-integrations-local-executables|
 
+  Set this to `'pipenv'` to invoke `'pipenv` `run` `mypy'`.
+
 g:ale_python_mypy_ignore_invalid_syntax
                                       *g:ale_python_mypy_ignore_invalid_syntax*
                                       *b:ale_python_mypy_ignore_invalid_syntax*
@@ -206,6 +209,8 @@ g:ale_python_prospector_executable         *g:ale_python_prospector_executable*
   Default: `'prospector'`
 
   See |ale-integrations-local-executables|
+
+  Set this to `'pipenv'` to invoke `'pipenv` `run` `prospector'`.
 
 
 g:ale_python_prospector_options               *g:ale_python_prospector_options*
@@ -248,6 +253,8 @@ g:ale_python_pycodestyle_executable       *g:ale_python_pycodestyle_executable*
 
   See |ale-integrations-local-executables|
 
+  Set this to `'pipenv'` to invoke `'pipenv` `run` `pycodestyle'`.
+
 
 g:ale_python_pycodestyle_options             *g:ale_python_pycodestyle_options*
                                              *b:ale_python_pycodestyle_options*
@@ -264,6 +271,20 @@ g:ale_python_pycodestyle_use_global       *g:ale_python_pycodestyle_use_global*
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
+
+
+===============================================================================
+pyflakes                                                  *ale-python-pyflakes*
+
+
+g:ale_python_pyflakes_executable             *g:ale_python_pyflakes_executable*
+                                             *b:ale_python_pyflakes_executable*
+  Type: |String|
+  Default: `'pyflakes'`
+
+  See |ale-integrations-local-executables|
+
+  Set this to `'pipenv'` to invoke `'pipenv` `run` `pyflakes'`.
 
 
 ===============================================================================
@@ -286,6 +307,8 @@ g:ale_python_pylint_executable                 *g:ale_python_pylint_executable*
   Default: `'pylint'`
 
   See |ale-integrations-local-executables|
+
+  Set this to `'pipenv'` to invoke `'pipenv` `run` `pylint'`.
 
 
 g:ale_python_pylint_options                       *g:ale_python_pylint_options*
@@ -328,6 +351,8 @@ g:ale_python_pyls_executable                     *g:ale_python_pyls_executable*
   Default: `'pyls'`
 
   See |ale-integrations-local-executables|
+
+  Set this to `'pipenv'` to invoke `'pipenv` `run` `pyls'`.
 
 
 g:ale_python_pyls_use_global                     *g:ale_python_pyls_use_global*

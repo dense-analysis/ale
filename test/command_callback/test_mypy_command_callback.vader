@@ -95,3 +95,12 @@ Execute(You should able able to use the global mypy instead):
   \   . ' --show-column-numbers  '
   \   . '--shadow-file %s %t %s',
   \ ale_linters#python#mypy#GetCommand(bufnr(''))
+
+Execute(Setting executable to 'pipenv' appends 'run mypy'):
+  let g:ale_python_mypy_executable = 'path/to/pipenv'
+
+  AssertEqual
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('path/to/pipenv') . ' run mypy'
+  \   . ' --show-column-numbers  --shadow-file %s %t %s',
+  \ ale_linters#python#mypy#GetCommand(bufnr(''))

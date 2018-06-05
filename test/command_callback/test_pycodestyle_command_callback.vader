@@ -25,3 +25,10 @@ Execute(The pycodestyle executable should be configurable):
 
   AssertEqual ale#Escape('~/.local/bin/pycodestyle') . '  -',
   \ ale_linters#python#pycodestyle#GetCommand(bufnr(''))
+
+Execute(Setting executable to 'pipenv' appends 'run pycodestyle'):
+  let g:ale_python_pycodestyle_executable = 'path/to/pipenv'
+
+  AssertEqual
+  \ ale#Escape('path/to/pipenv') . ' run pycodestyle  -',
+  \ ale_linters#python#pycodestyle#GetCommand(bufnr(''))
