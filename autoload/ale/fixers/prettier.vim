@@ -38,6 +38,7 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version_output) abort
     if empty(expand('#' . a:buffer . ':e')) && match(l:options, '--parser') == -1
       let l:prettier_parsers = ['typescript', 'css', 'less', 'scss', 'json', 'json5', 'graphql', 'markdown', 'vue']
 
+      let l:parser = 'babylon'
       for l:filetype in split(getbufvar(a:buffer, '&filetype'), '\.')
         if index(l:prettier_parsers, l:filetype) > -1
           let l:parser = l:filetype
