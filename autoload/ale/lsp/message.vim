@@ -24,12 +24,13 @@ function! ale#lsp#message#GetNextVersionID() abort
     return l:id
 endfunction
 
-function! ale#lsp#message#Initialize(root_path) abort
+function! ale#lsp#message#Initialize(root_path, initialization_options) abort
     " TODO: Define needed capabilities.
     return [0, 'initialize', {
     \   'processId': getpid(),
     \   'rootPath': a:root_path,
     \   'capabilities': {},
+    \   'initializationOptions': a:initialization_options,
     \}]
 endfunction
 

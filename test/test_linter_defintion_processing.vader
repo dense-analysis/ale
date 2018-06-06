@@ -465,3 +465,28 @@ Execute(PreProcess should complain about address_callback for non-LSP linters):
 
   AssertThrows call ale#linter#PreProcess(g:linter)
   AssertEqual '`address_callback` cannot be used when lsp != ''socket''', g:vader_exception
+
+Execute(PreProcess should complain about using initialization_options and initialization_options_callback together):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address_callback': 'X',
+  \ 'language': 'x',
+  \ 'project_root_callback': 'x',
+  \ 'initialization_options': 'x',
+  \ 'initialization_options_callback': 'x',
+  \}
+
+  AssertThrows call ale#linter#PreProcess(g:linter)
+  AssertEqual 'Only one of `initialization_options` or `initialization_options_callback` should be set', g:vader_exception
+
+Execute (PreProcess should throw when initialization_options_callback is not a callback):
+  AssertThrows call ale#linter#PreProcess({
+  \ 'name': 'foo',
+  \ 'lsp': 'socket',
+  \ 'address_callback': 'X',
+  \ 'language': 'x',
+  \ 'project_root_callback': 'x',
+  \ 'initialization_options_callback': {},
+  \})
+  AssertEqual '`initialization_options_callback` must be a callback if defined', g:vader_exception
