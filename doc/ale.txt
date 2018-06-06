@@ -44,6 +44,7 @@ CONTENTS                                                         *ale-contents*
       clangtidy...........................|ale-cpp-clangtidy|
       cppcheck............................|ale-cpp-cppcheck|
       cpplint.............................|ale-cpp-cpplint|
+      cquery..............................|ale-cpp-cquery|
       flawfinder..........................|ale-cpp-flawfinder|
       gcc.................................|ale-cpp-gcc|
     c#....................................|ale-cs-options|
@@ -319,7 +320,7 @@ Notes:
 * Bash: `shell` (-n flag), `shellcheck`, `shfmt`
 * Bourne Shell: `shell` (-n flag), `shellcheck`, `shfmt`
 * C: `cppcheck`, `cpplint`!!, `clang`, `clangtidy`!!, `clang-format`, `flawfinder`, `gcc`
-* C++ (filetype cpp): `clang`, `clangcheck`!!, `clangtidy`!!, `clang-format`, `cppcheck`, `cpplint`!!, `flawfinder`, `gcc`
+* C++ (filetype cpp): `clang`, `clangcheck`!!, `clangtidy`!!, `clang-format`, `cppcheck`, `cpplint`!!, `cquery`, `flawfinder`, `gcc`
 * CUDA: `nvcc`!!
 * C#: `mcs`, `mcsc`!!
 * Chef: `foodcritic`
@@ -2331,6 +2332,10 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          An optional `completion_filter` callback may be
                          defined for filtering completion results.
 
+                         An optional `initialization_options` or
+                         `initialization_options_callback` may be defined to
+                         pass initialization options to the LSP.
+
   `project_root_callback`  A |String| or |Funcref| for a callback function
                          accepting a buffer number. A |String| should be
                          returned representing the path to the project for the
@@ -2371,6 +2376,17 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          selecting the linter with |g:ale_linters|. This
                          setting can make it easier to guess the linter name
                          by offering a few alternatives.
+
+  `initialization_options` A |Dictionary| of initialization options for LSPs.
+                         This will be fed (as JSON) to the LSP in the
+                         initialize command.
+
+  `initialization_options_callback`
+                         A |String| or |Funcref| for a callback function
+                         accepting a buffer number. A |Dictionary| should be
+                         returned for initialization options to pass the LSP.
+                         This can be used in place of `initialization_options`
+                         when more complicated processing is needed.
 
   Only one of `command`, `command_callback`, or `command_chain` should be
   specified. `command_callback` is generally recommended when a command string

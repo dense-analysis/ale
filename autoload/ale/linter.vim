@@ -227,6 +227,21 @@ function! ale#linter#PreProcess(linter) abort
                 throw '`completion_filter` must be a callback'
             endif
         endif
+
+        if has_key(a:linter, 'initialization_options_callback')
+            if has_key(a:linter, 'initialization_options')
+                throw 'Only one of `initialization_options` or '
+                \   . '`initialization_options_callback` should be set'
+            endif
+
+            let l:obj.initialization_options_callback = a:linter.initialization_options_callback
+
+            if !s:IsCallback(l:obj.initialization_options_callback)
+                throw '`initialization_options_callback` must be a callback if defined'
+            endif
+        elseif has_key(a:linter, 'initialization_options')
+            let l:obj.initialization_options = a:linter.initialization_options
+        endif
     endif
 
     let l:obj.output_stream = get(a:linter, 'output_stream', 'stdout')
@@ -451,12 +466,20 @@ function! ale#linter#StartLSP(buffer, linter, callback) abort
         return {}
     endif
 
+    let l:initialization_options = {}
+    if has_key(a:linter, 'initialization_options_callback')
+        let l:initialization_options = ale#util#GetFunction(a:linter.initialization_options_callback)(a:buffer)
+    elseif has_key(a:linter, 'initialization_options')
+        let l:initialization_options = a:linter.initialization_options
+    endif
+
     if a:linter.lsp is# 'socket'
         let l:address = ale#linter#GetAddress(a:buffer, a:linter)
         let l:conn_id = ale#lsp#ConnectToAddress(
         \   l:address,
         \   l:root,
         \   a:callback,
+        \   l:initialization_options,
         \)
     else
         let l:executable = ale#linter#GetExecutable(a:buffer, a:linter)
@@ -474,6 +497,7 @@ function! ale#linter#StartLSP(buffer, linter, callback) abort
         \   l:command,
         \   l:root,
         \   a:callback,
+        \   l:initialization_options,
         \)
     endif
 
