@@ -1,0 +1,36 @@
+Before:
+  runtime ale_linters/elixir/mix.vim
+
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+  let g:env_prefix = has('win32')
+  \ ? 'set MIX_BUILD_PATH=TEMP && '
+  \ : 'MIX_BUILD_PATH=TEMP '
+
+
+  function! GetCommand() abort
+    let l:command = ale_linters#elixir#mix#GetCommand(bufnr(''))
+
+    let l:split_command = split(l:command, 'MIX_BUILD_PATH=[^ ]*\s')
+
+    return l:split_command[0] . 'MIX_BUILD_PATH=TEMP' .  l:split_command[1]
+  endfunction
+
+
+
+After:
+  Restore
+
+  unlet! g:env_prefix
+
+  call ale#linter#Reset()
+  call ale#test#RestoreDirectory()
+
+  delfunction GetCommand
+
+Execute(The default mix command should be correct):
+  AssertEqual
+  \ GetCommand(),
+  \ 'cd '''' && '
+  \ . g:env_prefix
+  \ . 'mix compile %s'

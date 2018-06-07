@@ -30,8 +30,16 @@ function! ale_linters#elixir#mix#Handle(buffer, lines) abort
     return l:output
 endfunction
 
+function! ale_linters#elixir#mix#FindProjectRoot(buffer) abort
+    let l:project_root = ale#path#FindNearestFile(a:buffer, 'mix.exs')
+    if !empty(l:project_root)
+      return fnamemodify(l:project_root, ':h')
+    endif
+    return ''
+endfunction
+
 function! ale_linters#elixir#mix#GetCommand(buffer) abort
-    let l:project_root = fnamemodify(ale#path#FindNearestFile(a:buffer, 'mix.exs'), ':h')
+    let l:project_root = ale_linters#elixir#mix#FindProjectRoot(a:buffer)
 
     let l:temp_dir = ale#engine#CreateDirectory(a:buffer)
 
@@ -49,4 +57,5 @@ call ale#linter#Define('elixir', {
 \   'executable': 'mix',
 \   'command_callback': 'ale_linters#elixir#mix#GetCommand',
 \   'callback': 'ale_linters#elixir#mix#Handle',
+\   'lint_file': 1,
 \})
