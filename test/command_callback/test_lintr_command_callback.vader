@@ -16,7 +16,7 @@ After:
 Execute(The default lintr command should be correct):
   AssertEqual
   \   'cd ' . ale#Escape(getcwd()) . ' && '
-  \   . 'Rscript -e '
+  \   . 'Rscript --vanilla -e '
   \   . ale#Escape('suppressPackageStartupMessages(library(lintr));'
       \   .            'lint(cache = FALSE, commandArgs(TRUE), '
       \   .            'with_defaults())')
@@ -28,7 +28,7 @@ Execute(The lintr options should be configurable):
 
   AssertEqual
   \   'cd ' . ale#Escape(getcwd()) . ' && '
-  \   . 'Rscript -e '
+  \   . 'Rscript --vanilla -e '
   \   . ale#Escape('suppressPackageStartupMessages(library(lintr));'
       \   .            'lint(cache = FALSE, commandArgs(TRUE), '
       \   .            'with_defaults(object_usage_linter = NULL))')
@@ -40,7 +40,7 @@ Execute(If the lint_package flag is set, lintr::lint_package should be called):
 
   AssertEqual
   \   'cd ' . ale#Escape(getcwd()) . ' && '
-  \   . 'Rscript -e '
+  \   . 'Rscript --vanilla -e '
   \   . ale#Escape('suppressPackageStartupMessages(library(lintr));'
       \    .           'lint_package(cache = FALSE, '
       \    .           'linters = with_defaults())')
