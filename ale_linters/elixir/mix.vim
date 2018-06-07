@@ -31,11 +31,11 @@ function! ale_linters#elixir#mix#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#elixir#mix#FindProjectRoot(buffer) abort
-    let l:project_root = ale#path#FindNearestFile(a:buffer, 'mix.exs')
-    if !empty(l:project_root)
-      return fnamemodify(l:project_root, ':h')
+    let l:mix_file = ale#path#FindNearestFile(a:buffer, 'mix.exs')
+    if !empty(l:mix_file)
+      return fnamemodify(l:mix_file, ':p:h')
     endif
-    return ''
+    return '.'
 endfunction
 
 function! ale_linters#elixir#mix#GetCommand(buffer) abort
@@ -47,7 +47,7 @@ function! ale_linters#elixir#mix#GetCommand(buffer) abort
     \   ? 'set MIX_BUILD_PATH=' . ale#Escape(l:temp_dir) . ' && '
     \   : 'MIX_BUILD_PATH=' . ale#Escape(l:temp_dir) . ' '
 
-    return  ale#path#CdString(l:project_root)
+    return ale#path#CdString(l:project_root)
           \ . l:mix_build_path
           \ . ' mix compile %s'
 endfunction

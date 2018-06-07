@@ -3,13 +3,15 @@ Before:
 
   call ale#test#SetDirectory('/testplugin/test/command_callback')
 
+  let g:project_root = ale#path#Simplify(g:dir . '/mix_paths/wrapped_project')
+
   let g:env_prefix = has('win32')
   \ ? 'set MIX_BUILD_PATH=TEMP && '
   \ : 'MIX_BUILD_PATH=TEMP '
 
 
-  function! GetCommand() abort
-    let l:command = ale_linters#elixir#mix#GetCommand(bufnr(''))
+  function! GetCommand(buffer) abort
+    let l:command = ale_linters#elixir#mix#GetCommand(a:buffer)
 
     let l:split_command = split(l:command, 'MIX_BUILD_PATH=[^ ]*\s')
 
@@ -22,6 +24,7 @@ After:
   Restore
 
   unlet! g:env_prefix
+  unlet! g:project_root
 
   call ale#linter#Reset()
   call ale#test#RestoreDirectory()
@@ -29,8 +32,10 @@ After:
   delfunction GetCommand
 
 Execute(The default mix command should be correct):
+  call ale#test#SetFilename('mix_paths/wrapped_project/lib/app.ex')
+
   AssertEqual
-  \ GetCommand(),
-  \ 'cd '''' && '
+  \ GetCommand(bufnr('')),
+  \ ale#path#CdString(g:project_root)
   \ . g:env_prefix
   \ . 'mix compile %s'
