@@ -228,6 +228,7 @@ CONTENTS                                                         *ale-contents*
       prettier............................|ale-scss-prettier|
       stylelint...........................|ale-scss-stylelint|
     sh....................................|ale-sh-options|
+      sh-language-server..................|ale-sh-language-server|
       shell...............................|ale-sh-shell|
       shellcheck..........................|ale-sh-shellcheck|
       shfmt...............................|ale-sh-shfmt|
@@ -319,7 +320,7 @@ Notes:
 * API Blueprint: `drafter`
 * AsciiDoc: `alex`!!, `proselint`, `redpen`, `write-good`
 * Awk: `gawk`
-* Bash: `shell` (-n flag), `shellcheck`, `shfmt`
+* Bash: `language-server`, `shell` (-n flag), `shellcheck`, `shfmt`
 * Bourne Shell: `shell` (-n flag), `shellcheck`, `shfmt`
 * C: `cppcheck`, `cpplint`!!, `clang`, `clangtidy`!!, `clang-format`, `flawfinder`, `gcc`
 * C++ (filetype cpp): `clang`, `clangcheck`!!, `clangtidy`!!, `clang-format`, `cppcheck`, `cpplint`!!, `cquery`, `flawfinder`, `gcc`
