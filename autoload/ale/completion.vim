@@ -317,7 +317,7 @@ function! ale#completion#ParseLSPCompletions(response) abort
         \   'word': l:word,
         \   'kind': l:kind,
         \   'icase': 1,
-        \   'menu': l:item.detail,
+        \   'menu': get(l:item, 'detail', ''),
         \   'info': get(l:item, 'documentation', ''),
         \})
     endfor
