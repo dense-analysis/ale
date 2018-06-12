@@ -1,4 +1,4 @@
-call ale#Set('ale_qml_qmlfmt_executable', 'qmlfmt')
+call ale#Set('qml_qmlfmt_executable', 'qmlfmt')
 
 function! ale#fixers#qmlfmt#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'ale_qml_qmlfmt_executable')
