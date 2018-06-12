@@ -2,6 +2,6 @@
 sudo: required
 services:
     - docker
-language: python
+language: generic
 script: |
     ./run-tests
