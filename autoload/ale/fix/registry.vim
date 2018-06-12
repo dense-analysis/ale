@@ -200,6 +200,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['javascript'],
 \       'description': 'Fix JavaScript files using xo --fix.',
 \   },
+\   'qmlfmt': {
+\       'function': 'ale#fixers#qmlfmt#Fix',
+\       'suggested_filetypes': ['qml'],
+\       'description': 'Fix QML files with qmlfmt.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
