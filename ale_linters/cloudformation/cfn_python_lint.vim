@@ -15,6 +15,8 @@ function! ale_linters#cloudformation#cfn_python_lint#Handle(buffer, lines) abort
             call add(l:output, {
             \   'lnum': l:match[2] + 0,
             \   'col': l:match[3] + 0,
+            \   'end_lnum': l:match[4] + 0,
+            \   'end_col': l:match[5] + 0,
             \   'text': l:match[7],
             \   'code': l:code,
             \   'type': l:code[:0] is# 'E' ? 'E' : 'W',
