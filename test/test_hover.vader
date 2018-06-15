@@ -11,7 +11,7 @@ Before:
   runtime autoload/ale/lsp.vim
   runtime autoload/ale/util.vim
 
-  function! ale#linter#StartLSP(buffer, linter, callback) abort
+  function! ale#lsp_linter#StartLSP(buffer, linter, callback) abort
     let g:Callback = a:callback
 
     return {

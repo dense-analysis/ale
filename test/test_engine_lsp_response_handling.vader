@@ -11,7 +11,7 @@ After:
 
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
-  call ale#engine#ClearLSPData()
+  call ale#lsp_linter#ClearLSPData()
 
 Given foobar(An empty file):
 Execute(tsserver syntax error responses should be handled correctly):
@@ -21,7 +21,7 @@ Execute(tsserver syntax error responses should be handled correctly):
 
   " When we get syntax errors and no semantic errors, we should keep the
   " syntax errors.
-  call ale#engine#HandleLSPResponse(1, {
+  call ale#lsp_linter#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'syntaxDiag',
@@ -43,7 +43,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   \   ],
   \ },
   \})
-  call ale#engine#HandleLSPResponse(1, {
+  call ale#lsp_linter#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'semanticDiag',
@@ -71,7 +71,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   \ getloclist(0)
 
   " After we get empty syntax errors, we should clear them.
-  call ale#engine#HandleLSPResponse(1, {
+  call ale#lsp_linter#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'syntaxDiag',
@@ -94,7 +94,7 @@ Execute(tsserver semantic error responses should be handled correctly):
 
   " When we get syntax errors and no semantic errors, we should keep the
   " syntax errors.
-  call ale#engine#HandleLSPResponse(1, {
+  call ale#lsp_linter#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'syntaxDiag',
@@ -104,7 +104,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   \   ],
   \ },
   \})
-  call ale#engine#HandleLSPResponse(1, {
+  call ale#lsp_linter#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'semanticDiag',
@@ -144,7 +144,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   \ getloclist(0)
 
   " After we get empty syntax errors, we should clear them.
-  call ale#engine#HandleLSPResponse(1, {
+  call ale#lsp_linter#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'semanticDiag',
@@ -161,8 +161,8 @@ Execute(tsserver semantic error responses should be handled correctly):
   \ getloclist(0)
 
 Execute(LSP errors should be logged in the history):
-  call ale#engine#SetLSPLinterMap({'347': 'foobar'})
-  call ale#engine#HandleLSPResponse(347, {
+  call ale#lsp_linter#SetLSPLinterMap({'347': 'foobar'})
+  call ale#lsp_linter#HandleLSPResponse(347, {
   \ 'jsonrpc': '2.0',
   \ 'error': {
   \   'code': -32602,

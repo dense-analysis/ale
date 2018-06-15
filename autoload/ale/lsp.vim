@@ -6,17 +6,20 @@
 let s:connections = []
 let g:ale_lsp_next_message_id = 1
 
-function! s:NewConnection(initialization_options) abort
+" Exposed only so tests can get at it.
+" Do not call this function basically anywhere.
+function! ale#lsp#NewConnection(initialization_options) abort
     " id: The job ID as a Number, or the server address as a string.
     " data: The message data received so far.
     " executable: An executable only set for program connections.
-    " open_documents: A list of buffers we told the server we opened.
+    " open_documents: A Dictionary mapping buffers to b:changedtick, keeping
+    "   track of when documents were opened, and when we last changed them.
     " callback_list: A list of callbacks for handling LSP responses.
     let l:conn = {
     \   'id': '',
     \   'data': '',
     \   'projects': {},
-    \   'open_documents': [],
+    \   'open_documents': {},
     \   'callback_list': [],
     \   'initialization_options': a:initialization_options,
     \}
@@ -24,6 +27,11 @@ function! s:NewConnection(initialization_options) abort
     call add(s:connections, l:conn)
 
     return l:conn
+endfunction
+
+" Remove an LSP connection with a given ID. This is only for tests.
+function! ale#lsp#RemoveConnectionWithID(id) abort
+    call filter(s:connections, 'v:val.id isnot a:id')
 endfunction
 
 function! s:FindConnection(key, value) abort
@@ -280,7 +288,7 @@ function! ale#lsp#StartProgram(executable, command, project_root, callback, init
     let l:conn = s:FindConnection('executable', a:executable)
 
     " Get the current connection or a new one.
-    let l:conn = !empty(l:conn) ? l:conn : s:NewConnection(a:initialization_options)
+    let l:conn = !empty(l:conn) ? l:conn : ale#lsp#NewConnection(a:initialization_options)
     let l:conn.executable = a:executable
 
     if !has_key(l:conn, 'id') || !ale#job#IsRunning(l:conn.id)
@@ -309,7 +317,7 @@ endfunction
 function! ale#lsp#ConnectToAddress(address, project_root, callback, initialization_options) abort
     let l:conn = s:FindConnection('id', a:address)
     " Get the current connection or a new one.
-    let l:conn = !empty(l:conn) ? l:conn : s:NewConnection(a:initialization_options)
+    let l:conn = !empty(l:conn) ? l:conn : ale#lsp#NewConnection(a:initialization_options)
 
     if !has_key(l:conn, 'channel') || ch_status(l:conn.channel) isnot# 'open'
         let l:conn.channnel = ch_open(a:address, {
@@ -406,21 +414,72 @@ function! ale#lsp#Send(conn_id, message, ...) abort
     return l:id == 0 ? -1 : l:id
 endfunction
 
-function! ale#lsp#OpenDocumentIfNeeded(conn_id, buffer, project_root, language_id) abort
-    let l:conn = s:FindConnection('id', a:conn_id)
+" The Document details Dictionary should contain the following keys.
+"
+"  buffer - The buffer number for the document.
+"  connection_id - The connection ID for the LSP server.
+"  command - The command to run to start the LSP connection.
+"  project_root - The project root for the LSP project.
+"  language_id - The language ID for the project, like 'python', 'rust', etc.
+
+" Create a new Dictionary containing more connection details, with the
+" following information added:
+"
+"   conn - An existing LSP connection for the document.
+"   document_open - 1 if the document is currently open, 0 otherwise.
+function! s:ExtendDocumentDetails(details) abort
+    let l:extended = copy(a:details)
+    let l:conn = s:FindConnection('id', a:details.connection_id)
+
+    let l:extended.conn = l:conn
+    let l:extended.document_open = !empty(l:conn)
+    \   && has_key(l:conn.open_documents, a:details.buffer)
+
+    return l:extended
+endfunction
+
+" Notify LSP servers or tsserver if a document is opened, if needed.
+" If a document is opened, 1 will be returned, otherwise 0 will be returned.
+function! ale#lsp#OpenDocument(basic_details) abort
+    let l:d = s:ExtendDocumentDetails(a:basic_details)
     let l:opened = 0
 
-    if !empty(l:conn) && index(l:conn.open_documents, a:buffer) < 0
-        if empty(a:language_id)
-            let l:message = ale#lsp#tsserver_message#Open(a:buffer)
+    if !empty(l:d.conn) && !l:d.document_open
+        if empty(l:d.language_id)
+            let l:message = ale#lsp#tsserver_message#Open(l:d.buffer)
         else
-            let l:message = ale#lsp#message#DidOpen(a:buffer, a:language_id)
+            let l:message = ale#lsp#message#DidOpen(l:d.buffer, l:d.language_id)
         endif
 
-        call ale#lsp#Send(a:conn_id, l:message, a:project_root)
-        call add(l:conn.open_documents, a:buffer)
+        call ale#lsp#Send(l:d.connection_id, l:message, l:d.project_root)
+        let l:d.conn.open_documents[l:d.buffer] = getbufvar(l:d.buffer, 'changedtick')
         let l:opened = 1
     endif
 
     return l:opened
+endfunction
+
+" Notify LSP servers or tsserver that a document has changed, if needed.
+" If a notification is sent, 1 will be returned, otherwise 0 will be returned.
+function! ale#lsp#NotifyForChanges(basic_details) abort
+    let l:d = s:ExtendDocumentDetails(a:basic_details)
+    let l:notified = 0
+
+    if l:d.document_open
+        let l:new_tick = getbufvar(l:d.buffer, 'changedtick')
+
+        if l:d.conn.open_documents[l:d.buffer] < l:new_tick
+            if empty(l:d.language_id)
+                let l:message = ale#lsp#tsserver_message#Change(l:d.buffer)
+            else
+                let l:message = ale#lsp#message#DidChange(l:d.buffer)
+            endif
+
+            call ale#lsp#Send(l:d.connection_id, l:message, l:d.project_root)
+            let l:d.conn.open_documents[l:d.buffer] = l:new_tick
+            let l:notified = 1
+        endif
+    endif
+
+    return l:notified
 endfunction
