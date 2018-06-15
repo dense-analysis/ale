@@ -29,6 +29,10 @@ features, including:
 * Finding references (`:ALEFindReferences`)
 * Hover information (`:ALEHover`)
 
+If you don't care about Language Server Protocol, ALE won't load any of the code
+for working with it unless needed. One of ALE's general missions is that you
+won't pay for the features that you don't use.
+
 ## Table of Contents
 
 1. [Supported Languages and Tools](#supported-languages)
