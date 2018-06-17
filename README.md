@@ -102,6 +102,7 @@ formatting.
 | C# | [mcs](http://www.mono-project.com/docs/about-mono/languages/csharp/) see:`help ale-cs-mcs` for details, [mcsc](http://www.mono-project.com/docs/about-mono/languages/csharp/) !! see:`help ale-cs-mcsc` for details and configuration|
 | Chef | [foodcritic](http://www.foodcritic.io/) |
 | Clojure | [joker](https://github.com/candid82/joker) |
+| CloudFormation | [cfn-python-lint](https://github.com/awslabs/cfn-python-lint) |
 | CMake | [cmakelint](https://github.com/richq/cmake-lint) |
 | CoffeeScript | [coffee](http://coffeescript.org/), [coffeelint](https://www.npmjs.com/package/coffeelint) |
 | Crystal | [crystal](https://crystal-lang.org/) !! |
