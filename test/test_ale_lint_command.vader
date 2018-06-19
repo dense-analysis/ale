@@ -14,13 +14,6 @@ Before:
   \ 'pattern': '',
   \ 'valid': 1,
   \}]
-  let g:expected_groups = [
-  \ 'ALECleanupGroup',
-  \ 'ALECursorGroup',
-  \ 'ALEHighlightBufferGroup',
-  \ 'ALERunOnEnterGroup',
-  \ 'ALERunOnTextChangedGroup',
-  \]
 
   function! ToggleTestCallback(buffer, output)
     return [{
@@ -45,7 +38,6 @@ After:
   Restore
 
   unlet! g:expected_loclist
-  unlet! g:expected_groups
 
   let g:ale_buffer_info = {}
   call ale#linter#Reset()
