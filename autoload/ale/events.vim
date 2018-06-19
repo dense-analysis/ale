@@ -1,15 +1,25 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: ALE functions for autocmd events.
 
+" Get the number of milliseconds since some vague, but consistent, point in
+" the past.
+"
+" This function can be used for timing execution, etc.
+"
+" The time will be returned as a Number.
+function! ale#events#ClockMilliseconds() abort
+    return float2nr(reltimefloat(reltime()) * 1000)
+endfunction
+
 function! ale#events#QuitEvent(buffer) abort
     " Remember when ALE is quitting for BufWrite, etc.
-    call setbufvar(a:buffer, 'ale_quitting', ale#util#ClockMilliseconds())
+    call setbufvar(a:buffer, 'ale_quitting', ale#events#ClockMilliseconds())
 endfunction
 
 function! ale#events#QuitRecently(buffer) abort
     let l:time = getbufvar(a:buffer, 'ale_quitting', 0)
 
-    return l:time && ale#util#ClockMilliseconds() - l:time < 1000
+    return l:time && ale#events#ClockMilliseconds() - l:time < 1000
 endfunction
 
 function! ale#events#SaveEvent(buffer) abort

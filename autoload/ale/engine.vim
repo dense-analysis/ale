@@ -779,7 +779,7 @@ endfunction
 " The time taken will be a very rough approximation, and more time may be
 " permitted than is specified.
 function! ale#engine#WaitForJobs(deadline) abort
-    let l:start_time = ale#util#ClockMilliseconds()
+    let l:start_time = ale#events#ClockMilliseconds()
 
     if l:start_time == 0
         throw 'Failed to read milliseconds from the clock!'
@@ -810,7 +810,7 @@ function! ale#engine#WaitForJobs(deadline) abort
 
         for l:job_id in l:job_list
             if ale#job#IsRunning(l:job_id)
-                let l:now = ale#util#ClockMilliseconds()
+                let l:now = ale#events#ClockMilliseconds()
 
                 if l:now - l:start_time > a:deadline
                     " Stop waiting after a timeout, so we don't wait forever.
@@ -847,7 +847,7 @@ function! ale#engine#WaitForJobs(deadline) abort
 
     if l:has_new_jobs
         " We have to wait more. Offset the timeout by the time taken so far.
-        let l:now = ale#util#ClockMilliseconds()
+        let l:now = ale#events#ClockMilliseconds()
         let l:new_deadline = a:deadline - (l:now - l:start_time)
 
         if l:new_deadline <= 0

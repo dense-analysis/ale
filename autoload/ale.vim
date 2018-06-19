@@ -21,7 +21,7 @@ let s:timestamp_map = {}
 " If the function throws an exception, then the function will not be called
 " for a while, and 0 will be returned instead.
 function! ale#CallWithCooldown(timestamp_key, func, arglist) abort
-    let l:now = ale#util#ClockMilliseconds()
+    let l:now = ale#events#ClockMilliseconds()
 
     if l:now < get(s:timestamp_map, a:timestamp_key, -1)
         return 0
