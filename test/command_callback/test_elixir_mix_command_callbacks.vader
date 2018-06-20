@@ -1,0 +1,37 @@
+Before:
+  runtime ale_linters/elixir/mix.vim
+
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+  let g:project_root = ale#path#Simplify(g:dir . '/mix_paths/wrapped_project')
+
+  let g:env_prefix = has('win32')
+  \ ? 'set MIX_BUILD_PATH=TEMP && '
+  \ : 'MIX_BUILD_PATH=TEMP '
+
+
+  function! GetCommand(buffer) abort
+    let l:command = ale_linters#elixir#mix#GetCommand(a:buffer)
+
+    return substitute(l:command, 'MIX_BUILD_PATH=[^ ]\+', 'MIX_BUILD_PATH=TEMP', '')
+  endfunction
+
+After:
+  Restore
+
+  unlet! g:env_prefix
+  unlet! g:project_root
+
+  call ale#linter#Reset()
+  call ale#test#RestoreDirectory()
+
+  delfunction GetCommand
+
+Execute(The default mix command should be correct):
+  call ale#test#SetFilename('mix_paths/wrapped_project/lib/app.ex')
+
+  AssertEqual
+  \ GetCommand(bufnr('')),
+  \ ale#path#CdString(g:project_root)
+  \ . g:env_prefix
+  \ . 'mix compile %s'
