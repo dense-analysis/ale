@@ -1970,9 +1970,13 @@ ALEDisableBuffer                                             *ALEDisableBuffer*
                                                                    *:ALEDetail*
 ALEDetail                                                           *ALEDetail*
 
-  Show the full linter message for the current line in the preview window.
-  This will only have an effect on lines that contain a linter message. The
-  preview window can be easily closed with the `q` key.
+  Show the full linter message for the problem nearest to the cursor on the
+  given line in the preview window. The preview window can be easily closed
+  with the `q` key. If there is no message to show, the window will not be
+  opened.
+
+  If a loclist item has a `detail` key set, the message for that key will be
+  preferred over `text`. See |ale-loclist-format|.
 
   A plug mapping `<Plug>(ale_detail)` is defined for this command.
 
@@ -2163,6 +2167,9 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          the following manner:
                                                            *ale-loclist-format*
                          `text` - This error message is required.
+                         `detail` - An optional, more descriptive message.
+                           This message can be displayed with the |ALEDetail|
+                           command instead of the message for `text`, if set.
                          `lnum` - The line number is required. Any strings
                            will be automatically converted to numbers by
                            using `str2nr()`.
