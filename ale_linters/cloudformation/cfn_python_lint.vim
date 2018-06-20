@@ -4,8 +4,8 @@
 function! ale_linters#cloudformation#cfn_python_lint#Handle(buffer, lines) abort
     " Matches patterns line the following:
     "
-    " sample.template.yaml:96:7:96:15: [E3012] Property Resources/Sample/Properties/FromPort should be of type Integer
-    let l:pattern = '\v^(.*):(\d+):(\d+):(\d+):(\d+): \[([[:alnum:]]+)\] (.*)$'
+    " sample.template.yaml:96:7:96:15:E3012:Property Resources/Sample/Properties/FromPort should be of type Integer
+    let l:pattern = '\v^(.*):(\d+):(\d+):(\d+):(\d+):([[:alnum:]]+):(.*)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
@@ -13,13 +13,13 @@ function! ale_linters#cloudformation#cfn_python_lint#Handle(buffer, lines) abort
 
         if ale#path#IsBufferPath(a:buffer, l:match[1])
             call add(l:output, {
-            \   'lnum': l:match[2] + 0,
-            \   'col': l:match[3] + 0,
-            \   'end_lnum': l:match[4] + 0,
-            \   'end_col': l:match[5] + 0,
-            \   'text': l:match[7],
+            \   'lnum': l:match[2],
+            \   'col': l:match[3],
+            \   'end_lnum': l:match[4],
+            \   'end_col': l:match[5],
             \   'code': l:code,
             \   'type': l:code[:0] is# 'E' ? 'E' : 'W',
+            \   'text': l:match[7]
             \})
         endif
     endfor
