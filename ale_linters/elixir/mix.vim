@@ -44,8 +44,8 @@ function! ale_linters#elixir#mix#GetCommand(buffer) abort
     let l:temp_dir = ale#engine#CreateDirectory(a:buffer)
 
     let l:mix_build_path = has('win32')
-    \   ? 'set MIX_BUILD_PATH=' . ale#Escape(l:temp_dir) . ' && '
-    \   : 'MIX_BUILD_PATH=' . ale#Escape(l:temp_dir) . ' '
+    \   ? 'set MIX_BUILD_PATH=' . ale#Escape(l:temp_dir) . ' &&'
+    \   : 'MIX_BUILD_PATH=' . ale#Escape(l:temp_dir)
 
     return ale#path#CdString(l:project_root)
           \ . l:mix_build_path
