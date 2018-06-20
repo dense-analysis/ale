@@ -13,12 +13,8 @@ Before:
   function! GetCommand(buffer) abort
     let l:command = ale_linters#elixir#mix#GetCommand(a:buffer)
 
-    let l:split_command = split(l:command, 'MIX_BUILD_PATH=[^ ]*\s')
-
-    return l:split_command[0] . 'MIX_BUILD_PATH=TEMP' .  l:split_command[1]
+    return substitute(l:command, 'MIX_BUILD_PATH=[^ ]\+', 'MIX_BUILD_PATH=TEMP', '')
   endfunction
-
-
 
 After:
   Restore
