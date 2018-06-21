@@ -56,7 +56,10 @@ function! ale#util#Open(filename, line, column, options) abort
     if get(a:options, 'open_in_tab', 0)
         call ale#util#Execute('tabedit ' . fnameescape(a:filename))
     else
-        call ale#util#Execute('edit ' . fnameescape(a:filename))
+        " Open another file only if we need to.
+        if bufnr(a:filename) isnot bufnr('')
+            call ale#util#Execute('edit ' . fnameescape(a:filename))
+        endif
     endif
 
     call cursor(a:line, a:column)
