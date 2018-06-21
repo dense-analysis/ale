@@ -938,6 +938,14 @@ g:ale_fixers                                                     *g:ale_fixers*
   `b:ale_fixers` can be set to a |List| of callbacks instead, which can be
   more convenient.
 
+  A special `'*'` key be used as a wildcard filetype for configuring fixers
+  for every other type of file. For example: >
+
+    " Fix Python files with 'bar'.
+    " Don't fix 'html' files.
+    " Fix everything else with 'foo'.
+    let g:ale_fixers = {'python': ['bar'], 'html': [], '*': ['foo']}
+<
 
 g:ale_fix_on_save                                           *g:ale_fix_on_save*
 b:ale_fix_on_save                                           *b:ale_fix_on_save*

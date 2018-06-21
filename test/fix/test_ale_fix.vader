@@ -257,6 +257,25 @@ Expect(Only the second function should be applied):
   $b
   $c
 
+Execute(The * fixers shouldn't be used if an empty list is set for fixers):
+  let g:ale_fixers.testft = []
+  let g:ale_fixers['*'] = ['AddDollars']
+  ALEFix
+
+Expect(Nothing should be changed):
+  a
+  b
+  c
+
+Execute(* fixers should be used if no filetype is matched):
+  let g:ale_fixers = {'*': ['AddDollars']}
+  ALEFix
+
+Expect(The file should be changed):
+  $a
+  $b
+  $c
+
 Execute(ALEFix should allow commands to be run):
   if has('win32')
     " Just skip this test on Windows, we can't run it.
