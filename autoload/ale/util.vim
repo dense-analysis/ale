@@ -17,11 +17,18 @@ endfunction
 " but NeoVim does. Small messages can be echoed in Vim 8, and larger messages
 " have to be shown in preview windows.
 function! ale#util#ShowMessage(string) abort
+    if !has('nvim')
+        call ale#preview#CloseIfTypeMatches('ale-preview.message')
+    endif
+
     " We have to assume the user is using a monospace font.
     if has('nvim') || (a:string !~? "\n" && len(a:string) < &columns)
         execute 'echo a:string'
     else
-        call ale#preview#Show(split(a:string, "\n"))
+        call ale#preview#Show(split(a:string, "\n"), {
+        \   'filetype': 'ale-preview.message',
+        \   'stay_here': 1,
+        \})
     endif
 endfunction
 
