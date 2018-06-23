@@ -26,7 +26,8 @@ After:
 Execute(The clangtidy command default should be correct):
   AssertEqual
   \ ale#Escape('clang-tidy')
-  \   . ' -checks=' . ale#Escape('*') . ' %s',
+  \   . ' -checks=' . ale#Escape('*') . ' %s'
+  \   . ' -- -std=c++14 -Wall',
   \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
 
 Execute(You should be able to remove the -checks option for clang-tidy):
@@ -34,7 +35,8 @@ Execute(You should be able to remove the -checks option for clang-tidy):
 
   AssertEqual
   \ ale#Escape('clang-tidy')
-  \   . ' %s',
+  \   . ' %s'
+  \   . ' -- -std=c++14 -Wall',
   \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
 
 Execute(You should be able to set other checks for clang-tidy):
@@ -42,7 +44,8 @@ Execute(You should be able to set other checks for clang-tidy):
 
   AssertEqual
   \ ale#Escape('clang-tidy')
-  \   . ' -checks=' . ale#Escape('-*,clang-analyzer-*') . ' %s',
+  \   . ' -checks=' . ale#Escape('-*,clang-analyzer-*') . ' %s'
+  \   . ' -- -std=c++14 -Wall',
   \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
 
 Execute(You should be able to manually set compiler flags for clang-tidy):
@@ -93,5 +96,6 @@ Execute(The executable should be configurable):
 
   AssertEqual
   \ ale#Escape('foobar')
-  \   . ' -checks=' . ale#Escape('*') . ' %s',
+  \   . ' -checks=' . ale#Escape('*') . ' %s'
+  \   . ' -- -std=c++14 -Wall',
   \ ale_linters#cpp#clangtidy#GetCommand(bufnr(''))

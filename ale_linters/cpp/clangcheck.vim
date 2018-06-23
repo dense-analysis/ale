@@ -2,7 +2,7 @@
 " Description: clang-check linter for cpp files
 
 call ale#Set('cpp_clangcheck_executable', 'clang-check')
-call ale#Set('cpp_clangcheck_options', '')
+call ale#Set('cpp_clangcheck_options', '-- -std=c++14 -Wall')
 call ale#Set('c_build_dir', '')
 
 function! ale_linters#cpp#clangcheck#GetExecutable(buffer) abort

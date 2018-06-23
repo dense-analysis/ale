@@ -7,7 +7,7 @@ call ale#Set('cpp_clangtidy_executable', 'clang-tidy')
 call ale#Set('cpp_clangtidy_checks', ['*'])
 " Set this option to manually set some options for clang-tidy.
 " This will disable compile_commands.json detection.
-call ale#Set('cpp_clangtidy_options', '')
+call ale#Set('cpp_clangtidy_options', '-std=c++14 -Wall')
 call ale#Set('c_build_dir', '')
 
 function! ale_linters#cpp#clangtidy#GetExecutable(buffer) abort

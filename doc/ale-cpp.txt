@@ -53,7 +53,7 @@ g:ale_cpp_clangcheck_executable               *g:ale_cpp_clangcheck_executable*
 g:ale_cpp_clangcheck_options                     *g:ale_cpp_clangcheck_options*
                                                  *b:ale_cpp_clangcheck_options*
   Type: |String|
-  Default: `''`
+  Default: `'-- -std=c++14 -Wall'`
 
   This variable can be changed to modify flags given to clang-check.
 
@@ -103,7 +103,7 @@ g:ale_cpp_clangtidy_executable                 *g:ale_cpp_clangtidy_executable*
 g:ale_cpp_clangtidy_options                       *g:ale_cpp_clangtidy_options*
                                                   *b:ale_cpp_clangtidy_options*
   Type: |String|
-  Default: `''`
+  Default: `'-std=c++14 -Wall'`
 
   This variable can be changed to modify flags given to clang-tidy.
 
