@@ -1231,6 +1231,32 @@ g:ale_linters_explicit                                 *g:ale_linters_explicit*
   as possible, unless otherwise specified.
 
 
+g:ale_linters_ignore                                     *g:ale_linters_ignore*
+                                                         *b:ale_linters_ignore*
+
+  Type: |Dictionary| or |List|
+  Default: `{}`
+
+  Linters to ignore. Commands for ignored linters will not be run, and
+  diagnostics for LSP linters will be ignored. (See |ale-lsp|)
+
+  This setting can be set to a |Dictionary| mapping filetypes to linter names,
+  just like |g:ale_linters|, to list linters to ignore. Ignore lists will be
+  applied after everything else. >
+
+  " Select flake8 and pylint, and ignore pylint, so only flake8 is run.
+  let g:ale_linters = {'python': ['flake8', 'pylint']}
+  let g:ale_linters_ignore = {'python': ['pylint']}
+<
+  This setting can be set to simply a |List| of linter names, which is
+  especially more convenient when using the setting in ftplugin files for
+  particular buffers. >
+
+  " The same as above, in a ftplugin/python.vim.
+  let b:ale_linters = ['flake8', 'pylint']
+  let b:ale_linters_ignore = ['pylint']
+<
+
 g:ale_list_vertical                                       *g:ale_list_vertical*
                                                           *b:ale_list_vertical*
   Type: |Number|

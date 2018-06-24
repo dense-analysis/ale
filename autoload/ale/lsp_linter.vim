@@ -8,10 +8,29 @@ if !has_key(s:, 'lsp_linter_map')
     let s:lsp_linter_map = {}
 endif
 
+" Check if diagnostics for a particular linter should be ignored.
+function! s:ShouldIgnore(buffer, linter_name) abort
+    let l:config = ale#Var(a:buffer, 'linters_ignore')
+
+    " Don't load code for ignoring diagnostics if there's nothing to ignore.
+    if empty(l:config)
+        return 0
+    endif
+
+    let l:filetype = getbufvar(a:buffer, '&filetype')
+    let l:ignore_list = ale#engine#ignore#GetList(l:filetype, l:config)
+
+    return index(l:ignore_list, a:linter_name) >= 0
+endfunction
+
 function! s:HandleLSPDiagnostics(conn_id, response) abort
     let l:linter_name = s:lsp_linter_map[a:conn_id]
     let l:filename = ale#path#FromURI(a:response.params.uri)
     let l:buffer = bufnr(l:filename)
+
+    if s:ShouldIgnore(l:buffer, l:linter_name)
+        return
+    endif
 
     if l:buffer <= 0
         return
@@ -23,10 +42,15 @@ function! s:HandleLSPDiagnostics(conn_id, response) abort
 endfunction
 
 function! s:HandleTSServerDiagnostics(response, error_type) abort
+    let l:linter_name = 'tsserver'
     let l:buffer = bufnr(a:response.body.file)
     let l:info = get(g:ale_buffer_info, l:buffer, {})
 
     if empty(l:info)
+        return
+    endif
+
+    if s:ShouldIgnore(l:buffer, l:linter_name)
         return
     endif
 
@@ -44,7 +68,7 @@ function! s:HandleTSServerDiagnostics(response, error_type) abort
     let l:loclist = get(l:info, 'semantic_loclist', [])
     \   + get(l:info, 'syntax_loclist', [])
 
-    call ale#engine#HandleLoclist('tsserver', l:buffer, l:loclist)
+    call ale#engine#HandleLoclist(l:linter_name, l:buffer, l:loclist)
 endfunction
 
 function! s:HandleLSPErrorMessage(linter_name, response) abort

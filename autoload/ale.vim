@@ -6,6 +6,8 @@
 let g:ale_echo_msg_error_str = get(g:, 'ale_echo_msg_error_str', 'Error')
 let g:ale_echo_msg_info_str = get(g:, 'ale_echo_msg_info_str', 'Info')
 let g:ale_echo_msg_warning_str = get(g:, 'ale_echo_msg_warning_str', 'Warning')
+" Ignoring linters, for disabling some, or ignoring LSP diagnostics.
+let g:ale_linters_ignore = get(g:, 'ale_linters_ignore', {})
 
 let s:lint_timer = -1
 let s:queued_buffer_number = -1
@@ -150,7 +152,8 @@ function! ale#Lint(...) abort
     endif
 
     " Use the filetype from the buffer
-    let l:linters = ale#linter#Get(getbufvar(l:buffer, '&filetype'))
+    let l:filetype = getbufvar(l:buffer, '&filetype')
+    let l:linters = ale#linter#Get(l:filetype)
     let l:should_lint_file = 0
 
     " Check if we previously requested checking the file.
@@ -159,6 +162,12 @@ function! ale#Lint(...) abort
         " Lint files if they exist.
         let l:should_lint_file = filereadable(expand('#' . l:buffer . ':p'))
     endif
+
+    " Apply ignore lists for linters only if needed.
+    let l:ignore_config = ale#Var(l:buffer, 'linters_ignore')
+    let l:linters = !empty(l:ignore_config)
+    \   ? ale#engine#ignore#Exclude(l:filetype, l:linters, l:ignore_config)
+    \   : l:linters
 
     call ale#engine#RunLinters(l:buffer, l:linters, l:should_lint_file)
 endfunction
