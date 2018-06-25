@@ -1,0 +1,50 @@
+Before:
+  Save g:ale_pyrex_cython_executable
+  Save g:ale_pyrex_cython_options
+
+  unlet! g:ale_pyrex_cython_executable
+  unlet! b:ale_pyrex_cython_executable
+  unlet! g:ale_pyrex_cython_options
+  unlet! b:ale_pyrex_cython_options
+
+  runtime ale_linters/pyrex/cython.vim
+
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+After:
+  Restore
+  unlet! b:ale_pyrex_cython_options
+  unlet! b:ale_pyrex_cython_executable
+  call ale#linter#Reset()
+  call ale#test#RestoreDirectory()
+
+Execute(The default cython command should be correct):
+  AssertEqual
+  \ ale#Escape('cython')
+  \   . ' --working ' . ale#Escape(g:dir)
+  \   . ' --include-dir ' . ale#Escape(g:dir)
+  \   . ' --warning-extra'
+  \   . ' --output-file ' . g:ale#util#nul_file . ' %t',
+  \ ale_linters#pyrex#cython#GetCommand(bufnr(''))
+
+Execute(The cython executable should be configurable):
+  let b:ale_pyrex_cython_executable = 'cython_foobar'
+
+  AssertEqual
+  \ ale#Escape('cython_foobar')
+  \   . ' --working ' . ale#Escape(g:dir)
+  \   . ' --include-dir ' . ale#Escape(g:dir)
+  \   . ' --warning-extra'
+  \   . ' --output-file ' . g:ale#util#nul_file . ' %t',
+  \ ale_linters#pyrex#cython#GetCommand(bufnr(''))
+
+Execute(Additional cython options should be configurable):
+  let b:ale_pyrex_cython_options = '--foobar'
+
+  AssertEqual
+  \ ale#Escape('cython')
+  \   . ' --working ' . ale#Escape(g:dir)
+  \   . ' --include-dir ' . ale#Escape(g:dir)
+  \   . ' --foobar'
+  \   . ' --output-file ' . g:ale#util#nul_file . ' %t',
+  \ ale_linters#pyrex#cython#GetCommand(bufnr(''))
