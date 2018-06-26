@@ -51,7 +51,7 @@ function! ale_linters#rust#cargo#GetCommand(buffer, version_output) abort
     if l:avoid_whole_workspace
       let l:nearest_cargo = ale#path#FindNearestFile(a:buffer, 'Cargo.toml')
       let l:nearest_cargo_dir = fnamemodify(l:nearest_cargo, ':h')
-      if l:nearest_cargo_dir !=# '.'
+      if l:nearest_cargo_dir isnot# '.'
         let l:nearest_cargo_prefix = 'cd '. ale#Escape(l:nearest_cargo_dir) .' && '
       endif
     endif
