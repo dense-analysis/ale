@@ -204,8 +204,14 @@ Execute(--all-features should be used when g:ale_rust_cargo_default_feature_beha
 Execute(When a crate belongs to a workspace we chdir into the crate.):
   call ale#test#SetFilename('cargo_workspace_paths/subpath/test.rs')
 
+  if ale#Has('win32')
+    let test_cdprefix = "C:\\testplugin\\test\\command_callback\\cargo_workspace_paths\subpath"
+  else
+    let test_cdprefix = "'/testplugin/test/command_callback/cargo_workspace_paths/subpath'"
+  endif
+                    
   AssertEqual
-  \ "cd '/testplugin/test/command_callback/cargo_workspace_paths/subpath' && cargo build --frozen --message-format=json -q",
+  \ "cd ".test_cdprefix." && cargo build --frozen --message-format=json -q",
   \ ale_linters#rust#cargo#GetCommand(bufnr(''), [])
 
 Execute(When a crate belongs to a workspace we chdir into the crate, unless we disabled it):
