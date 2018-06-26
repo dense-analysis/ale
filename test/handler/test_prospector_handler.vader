@@ -156,3 +156,8 @@ Execute(Ignoring trailing whitespace messages should work):
   \ '  ]',
   \ '}',
   \ ])
+
+Execute(The prospector handler should handle empty output):
+  AssertEqual
+  \ [],
+  \ ale_linters#python#prospector#Handle(bufnr(''), [])
