@@ -205,7 +205,7 @@ Execute(When a crate belongs to a workspace we chdir into the crate.):
   call ale#test#SetFilename('cargo_workspace_paths/subpath/test.rs')
 
   if ale#Has('win32')
-    let test_cdprefix = "C:\\testplugin\\test\\command_callback\\cargo_workspace_paths\subpath"
+    let test_cdprefix = "C:\\testplugin\\test\\command_callback\\cargo_workspace_paths\\subpath"
   else
     let test_cdprefix = "'/testplugin/test/command_callback/cargo_workspace_paths/subpath'"
   endif
