@@ -35,10 +35,10 @@ g:ale_dart_dartanalyzer_executable         *g:ale_dart_dartanalyzer_executable*
 
 
 ===============================================================================
-dartfmt                                                            *ale-dart-dartfmt*
+dartfmt                                                       *ale-dart-dartfmt*
 
-g:ale_dart_dartfmt_options                             *g:ale_dart_dartfmt_options*
-                                                       *b:ale_dart_dartfmt_options*
+g:ale_dart_dartfmt_option                           *g:ale_dart_dartfmt_options*
+                                                   *b:ale_dart_dartfmt_options*
   Type: |String|
   Default: `''`
 
