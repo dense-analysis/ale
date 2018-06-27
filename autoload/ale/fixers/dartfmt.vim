@@ -1,4 +1,4 @@
-" Author: reisub0
+" Author: reisub0 <reisub0@gmail.com>
 " Description: Integration of dartfmt with ALE.
 
 call ale#Set('dart_dartfmt_executable', 'dartfmt')
