@@ -48,12 +48,14 @@ function! ale_linters#rust#cargo#GetCommand(buffer, version_output) abort
 
     let l:avoid_whole_workspace = ale#Var(a:buffer, 'rust_cargo_avoid_whole_workspace')
     let l:nearest_cargo_prefix = ''
+
     if l:avoid_whole_workspace
-      let l:nearest_cargo = ale#path#FindNearestFile(a:buffer, 'Cargo.toml')
-      let l:nearest_cargo_dir = fnamemodify(l:nearest_cargo, ':h')
-      if l:nearest_cargo_dir isnot# '.'
-        let l:nearest_cargo_prefix = 'cd '. ale#Escape(l:nearest_cargo_dir) .' && '
-      endif
+        let l:nearest_cargo = ale#path#FindNearestFile(a:buffer, 'Cargo.toml')
+        let l:nearest_cargo_dir = fnamemodify(l:nearest_cargo, ':h')
+
+        if l:nearest_cargo_dir isnot# '.'
+            let l:nearest_cargo_prefix = 'cd '. ale#Escape(l:nearest_cargo_dir) .' && '
+        endif
     endif
 
     let l:default_feature_behavior = ale#Var(a:buffer, 'rust_cargo_default_feature_behavior')
@@ -66,7 +68,7 @@ function! ale_linters#rust#cargo#GetCommand(buffer, version_output) abort
         let l:default_feature = ''
     endif
 
-    return l:nearest_cargo_prefix.'cargo '
+    return l:nearest_cargo_prefix . 'cargo '
     \   . (l:use_check ? 'check' : 'build')
     \   . (l:use_all_targets ? ' --all-targets' : '')
     \   . (l:use_examples ? ' --examples' : '')
