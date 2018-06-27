@@ -210,6 +210,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['qml'],
 \       'description': 'Fix QML files with qmlfmt.',
 \   },
+\   'dartfmt': {
+\       'function': 'ale#fixers#dartfmt#Fix',
+\       'suggested_filetypes': ['dart'],
+\       'description': 'Fix Dart files with dartfmt.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
