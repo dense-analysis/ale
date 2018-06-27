@@ -5,6 +5,7 @@ Before:
   Save g:ale_rust_cargo_check_examples
   Save g:ale_rust_cargo_default_feature_behavior
   Save g:ale_rust_cargo_include_features
+  Save g:ale_rust_cargo_avoid_whole_workspace
 
   unlet! g:ale_rust_cargo_use_check
   unlet! g:ale_rust_cargo_check_all_targets
@@ -12,6 +13,7 @@ Before:
   unlet! g:ale_rust_cargo_check_examples
   unlet! g:ale_rust_cargo_default_feature_behavior
   unlet! g:ale_rust_cargo_include_features
+  unlet! g:ale_rust_cargo_avoid_whole_workspace
 
   runtime ale_linters/rust/cargo.vim
   call ale#test#SetDirectory('/testplugin/test/command_callback')
@@ -198,3 +200,24 @@ Execute(--all-features should be used when g:ale_rust_cargo_default_feature_beha
   \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
   \   'cargo 0.22.0 (3423351a5 2017-10-06)',
   \ ])
+
+Execute(When a crate belongs to a workspace we chdir into the crate.):
+  call ale#test#SetFilename('cargo_workspace_paths/subpath/test.rs')
+
+  if ale#Has('win32')
+    let test_cdprefix = "C:\\testplugin\\test\\command_callback\\cargo_workspace_paths\\subpath"
+  else
+    let test_cdprefix = "'/testplugin/test/command_callback/cargo_workspace_paths/subpath'"
+  endif
+                    
+  AssertEqual
+  \ "cd ".test_cdprefix." && cargo build --frozen --message-format=json -q",
+  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [])
+
+Execute(When a crate belongs to a workspace we chdir into the crate, unless we disabled it):
+  let g:ale_rust_cargo_avoid_whole_workspace = 0
+  call ale#test#SetFilename('cargo_workspace_paths/subpath/test.rs')
+
+  AssertEqual
+  \ "cargo build --frozen --message-format=json -q",
+  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [])
