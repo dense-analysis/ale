@@ -20,7 +20,7 @@ Execute(The dartfmt callback should return the correct default values):
   \ {
   \   'read_temporary_file': 1,
   \   'command': ale#Escape('xxxinvalid')
-  \     . ' -l -w'
+  \     . ' -w'
   \     . ' %t',
   \ },
   \ ale#fixers#dartfmt#Fix(bufnr(''))
@@ -33,7 +33,7 @@ Execute(The dartfmt callback should include custom dartfmt options):
   \ {
   \   'read_temporary_file': 1,
   \   'command': ale#Escape('xxxinvalid')
-  \     . ' -l -w'
+  \     . '  -w'
   \     . ' ' . g:ale_dart_dartfmt_options
   \     . ' %t',
   \ },
