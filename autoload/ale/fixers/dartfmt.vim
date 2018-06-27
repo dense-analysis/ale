@@ -4,7 +4,7 @@
 call ale#Set('dart_dartfmt_executable', 'dartfmt')
 call ale#Set('dart_dartfmt_options', '')
 
-function! FormatWithDartFmt(buffer) abort
+function! ale#fixers#dartfmt#Fix(buffer) abort
     let l:executable = ale#Var(a:buffer, 'dart_dartfmt_executable')
     let l:options = ale#Var(a:buffer, 'dart_dartfmt_options')
 
@@ -16,5 +16,3 @@ function! FormatWithDartFmt(buffer) abort
     \   'read_temporary_file': 1,
     \}
 endfunction
-
-let b:ale_fixers = ['FormatWithDartFmt']
