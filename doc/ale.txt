@@ -185,6 +185,8 @@ CONTENTS                                                         *ale-contents*
       puglint.............................|ale-pug-puglint|
     puppet................................|ale-puppet-options|
       puppetlint..........................|ale-puppet-puppetlint|
+    pyrex (cython)........................|ale-pyrex-options|
+      cython..............................|ale-pyrex-cython|
     python................................|ale-python-options|
       autopep8............................|ale-python-autopep8|
       black...............................|ale-python-black|
