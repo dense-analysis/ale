@@ -26,7 +26,7 @@ Execute(The dartfmt callback should return the correct default values):
   \ ale#fixers#dartfmt#Fix(bufnr(''))
 
 Execute(The dartfmt callback should include custom dartfmt options):
-  let g:ale_dart_dartfmt_options = "-r '(a) -> a'"
+  let g:ale_dart_dartfmt_options = "-l 80"
   call ale#test#SetFilename('../dart_files/testfile.dart')
 
   AssertEqual
