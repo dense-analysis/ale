@@ -3,8 +3,7 @@
 set -e
 set -u
 
-image=w0rp/ale
-docker_flags=(--rm -v "$PWD:/testplugin" -v "$PWD/test:/home" -w /testplugin "$image")
+docker_flags=(--rm -v "$PWD:/testplugin" -v "$PWD/test:/home" -w /testplugin "$DOCKER_RUN_IMAGE")
 red='\033[0;31m'
 green='\033[0;32m'
 nc='\033[0m'

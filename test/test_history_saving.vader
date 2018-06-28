@@ -52,9 +52,12 @@ After:
   let g:ale_history_enabled = 1
   let g:ale_history_log_output = 0
   unlet g:history
+
+  call ale#engine#Cleanup(bufnr(''))
+  call ale#linter#Reset()
+
   let g:ale_buffer_info = {}
   let g:ale_max_buffer_history_size = 20
-  call ale#linter#Reset()
   delfunction TestFixer
   delfunction CollectResults
 
