@@ -108,6 +108,10 @@ if [ $# -ne 0 ]; then
     # This doesn't perfectly handle work splitting, but none of our files
     # have spaces in the names.
     tests="$*"
+
+    # Don't run other tools when targeting tests.
+    run_custom_checks=0
+    run_vint=0
 fi
 
 # Delete .swp files in the test directory, which cause Vim 8 to hang.
