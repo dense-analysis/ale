@@ -85,7 +85,7 @@ Before:
 
 After:
   if !g:ale_run_synchronously
-    call ale#engine#WaitForJobs(2000)
+    call ale#engine#Cleanup(bufnr(''))
   endif
 
   Restore

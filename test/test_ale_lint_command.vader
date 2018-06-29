@@ -39,8 +39,10 @@ After:
 
   unlet! g:expected_loclist
 
-  let g:ale_buffer_info = {}
+  call ale#engine#Cleanup(bufnr(''))
   call ale#linter#Reset()
+
+  let g:ale_buffer_info = {}
 
   delfunction ToggleTestCallback
 

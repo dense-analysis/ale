@@ -110,13 +110,9 @@ Given foobar (Some imaginary filetype):
   baz
 
 Execute(ALEToggle should reset everything and then run again):
-  " Run this test asynchrously.
-  let g:ale_run_synchronously = 0
-
   AssertEqual 'foobar', &filetype
 
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
+  ALELint
 
   " First check that everything is there...
   AssertEqual g:expected_loclist, getloclist(0)
@@ -139,7 +135,6 @@ Execute(ALEToggle should reset everything and then run again):
 
   " Toggle ALE on, everything should be set up and run again.
   ALEToggle
-  call ale#engine#WaitForJobs(2000)
 
   AssertEqual g:expected_loclist, getloclist(0)
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
@@ -150,9 +145,6 @@ Execute(ALEToggle should reset everything and then run again):
   AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
 
 Execute(ALEToggle should skip filename keys and preserve them):
-  " Run this test asynchrously.
-  let g:ale_run_synchronously = 0
-
   AssertEqual 'foobar', &filetype
 
   let g:ale_buffer_info['/foo/bar/baz.txt'] = {
@@ -164,8 +156,7 @@ Execute(ALEToggle should skip filename keys and preserve them):
   \ 'history': [],
   \}
 
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
+  ALELint
 
   " Now Toggle ALE off.
   ALEToggle
@@ -183,7 +174,6 @@ Execute(ALEToggle should skip filename keys and preserve them):
 
   " Toggle ALE on again.
   ALEToggle
-  call ale#engine#WaitForJobs(2000)
 
   AssertEqual
   \ {
@@ -197,7 +187,7 @@ Execute(ALEToggle should skip filename keys and preserve them):
   \ get(g:ale_buffer_info, '/foo/bar/baz.txt', {})
 
 Execute(ALEDisable should reset everything and stay disabled):
-  call ale#Lint()
+  ALELint
 
   AssertEqual g:expected_loclist, getloclist(0)
 
@@ -222,7 +212,7 @@ Execute(ALEEnable should enable ALE and lint again):
 Execute(ALEReset should reset everything for a buffer):
   AssertEqual 'foobar', &filetype
 
-  call ale#Lint()
+  ALELint
 
   " First check that everything is there...
   AssertEqual g:expected_loclist, getloclist(0)
@@ -244,13 +234,9 @@ Execute(ALEReset should reset everything for a buffer):
   AssertEqual 1, g:ale_enabled
 
 Execute(ALEToggleBuffer should reset everything and then run again):
-  " Run this test asynchrously.
-  let g:ale_run_synchronously = 0
-
   AssertEqual 'foobar', &filetype
 
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
+  ALELint
 
   " First check that everything is there...
   AssertEqual g:expected_loclist, getloclist(0)
@@ -271,7 +257,6 @@ Execute(ALEToggleBuffer should reset everything and then run again):
 
   " Toggle ALE on, everything should be set up and run again.
   ALEToggleBuffer
-  call ale#engine#WaitForJobs(2000)
 
   AssertEqual g:expected_loclist, getloclist(0)
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
@@ -282,7 +267,7 @@ Execute(ALEToggleBuffer should reset everything and then run again):
   AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
 
 Execute(ALEDisableBuffer should reset everything and stay disabled):
-  call ale#Lint()
+  ALELint
 
   AssertEqual g:expected_loclist, getloclist(0)
 
@@ -317,7 +302,7 @@ Execute(ALEEnableBuffer should complain when ALE is disabled globally):
 Execute(ALEResetBuffer should reset everything for a buffer):
   AssertEqual 'foobar', &filetype
 
-  call ale#Lint()
+  ALELint
 
   " First check that everything is there...
   AssertEqual g:expected_loclist, getloclist(0)

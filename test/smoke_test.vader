@@ -35,6 +35,7 @@ After:
 
   delfunction TestCallback
   delfunction TestCallback2
+  call ale#engine#Cleanup(bufnr(''))
   call ale#linter#Reset()
 
 Given foobar (Some imaginary filetype):

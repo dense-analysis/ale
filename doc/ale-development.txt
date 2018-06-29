@@ -1,0 +1,55 @@
+*ale-development.txt*  For Vim version 8.0.
+*ale-development*
+
+ALE Development Documentation
+
+===============================================================================
+CONTENTS                                             *ale-development-contents*
+
+  1. Introduction.........................|ale-development-introduction|
+  2. Design Goals.........................|ale-design-goals|
+
+===============================================================================
+1. Introduction                                  *ale-development-introduction*
+
+This document contains helpful information for ALE developers, including
+design goals, information on how to run the tests, coding standards, and so
+on. You should read this document if you want to get involved with ALE
+development.
+
+===============================================================================
+2. Design Goals                                              *ale-design-goals*
+
+This section lists design goals for ALE, in no particular order.
+
+ALE code should be almost 100% VimL. This makes the plugin as portable as
+possible.
+
+ALE should run without needing any other plugins to be installed, to make
+installation simple. ALE can integrate with other plugins for more advanced
+functionality, non-essential functionality, or improving on basic first party
+functionality.
+
+ALE should check files with as many tools as possible by default, except where
+they cause security issues or make excessive use of resources on modern
+machines.
+
+ALE should be free of breaking changes to the public API, which is comprised of
+documented functions and options, until a major version is planned. Breaking
+changes should be preceded by a deprecation phase complete with warnings.
+Changes required for security may be an exception.
+
+Just about everything should be documented and covered with tests.
+
+By and large, people shouldn't pay for the functionality they don't use. Care
+should be taken when adding new features, so supporting new features doesn't
+degrade the general performance of anything ALE does.
+
+LSP support will become more important as time goes on. ALE should provide
+better support for LSP features as time goes on.
+
+When merging pull requests, you should respond with `Cheers! :beers:`, purely
+for comedy value.
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

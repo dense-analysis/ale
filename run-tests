@@ -12,14 +12,20 @@ set -u
 # --neovim-only  Run tests only for NeoVim
 #    --vim-only  Run tests only for Vim
 
-current_image_id=d5a1b5915b09
 image=w0rp/ale
+current_image_id=13b990377be9
+current_digest=sha256:4b0f7c69e5a8cbb4e401aee039e5b468d6d9ad6cd01de62e918d98f0df1a5340
+
+# Used in all test scripts for running the selected Docker image.
+DOCKER_RUN_IMAGE="$image:$current_image_id"
+export DOCKER_RUN_IMAGE
 
 tests='test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader'
 # These flags are forwarded to the script for running Vader tests.
 verbose_flag=''
 quiet_flag=''
-run_neovim_tests=1
+run_neovim_02_tests=1
+run_neovim_03_tests=1
 run_vim_tests=1
 run_vint=1
 run_custom_checks=1
@@ -40,8 +46,23 @@ while [ $# -ne 0 ]; do
         run_custom_checks=0
         shift
     ;;
+    --neovim-02-only)
+        run_neovim_03_tests=0
+        run_vim_tests=0
+        run_vint=0
+        run_custom_checks=0
+        shift
+    ;;
+    --neovim-03-only)
+        run_neovim_02_tests=0
+        run_vim_tests=0
+        run_vint=0
+        run_custom_checks=0
+        shift
+    ;;
     --vim-only)
-        run_neovim_tests=0
+        run_neovim_02_tests=0
+        run_neovim_03_tests=0
         run_vint=0
         run_custom_checks=0
         shift
@@ -52,7 +73,8 @@ while [ $# -ne 0 ]; do
     ;;
     --vint-only)
         run_vim_tests=0
-        run_neovim_tests=0
+        run_neovim_02_tests=0
+        run_neovim_03_tests=0
         run_custom_checks=0
         shift
     ;;
@@ -62,7 +84,8 @@ while [ $# -ne 0 ]; do
     ;;
     --custom-checks-only)
         run_vim_tests=0
-        run_neovim_tests=0
+        run_neovim_02_tests=0
+        run_neovim_03_tests=0
         run_vint=0
         shift
     ;;
@@ -85,13 +108,16 @@ if [ $# -ne 0 ]; then
     # This doesn't perfectly handle work splitting, but none of our files
     # have spaces in the names.
     tests="$*"
+
+    # Don't run other tools when targeting tests.
+    run_custom_checks=0
+    run_vint=0
 fi
 
 # Delete .swp files in the test directory, which cause Vim 8 to hang.
 find test -name '*.swp' -delete
 
-docker images -q w0rp/ale | grep "^$current_image_id" > /dev/null \
-    || docker pull "$image"
+docker pull "$image"@"$current_digest"
 
 output_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
 
@@ -100,8 +126,10 @@ trap '{ rm -rf "$output_dir"; }' EXIT
 file_number=0
 pid_list=''
 
-for vim in $(docker run --rm "$image" ls /vim-build/bin | grep '^neovim\|^vim' ); do
-    if ((run_vim_tests)) || [[ $vim =~ ^neovim ]] && ((run_neovim_tests)); then
+for vim in $(docker run --rm "$DOCKER_RUN_IMAGE" ls /vim-build/bin | grep '^neovim\|^vim' ); do
+    if ( [[ $vim =~ ^vim ]] && ((run_vim_tests)) ) \
+    || ( [[ $vim =~ ^neovim-v0.2 ]] && ((run_neovim_02_tests)) ) \
+    || ( [[ $vim =~ ^neovim-v0.3 ]] && ((run_neovim_03_tests)) ); then
         echo "Starting Vim: $vim..."
         file_number=$((file_number+1))
         test/script/run-vader-tests $quiet_flag $verbose_flag "$vim" "$tests" \
@@ -138,5 +166,11 @@ for pid in $pid_list; do
 
     cat "$output_dir/$index"
 done
+
+if ((failed)); then
+    echo 'Something went wrong!'
+else
+    echo 'All tests passed!'
+fi
 
 exit $failed

@@ -17,6 +17,8 @@ Before:
 After:
   unlet! g:output
   delfunction TestCallback
+
+  call ale#engine#Cleanup(bufnr(''))
   call ale#linter#Reset()
 
 Given foobar (Some imaginary filetype):

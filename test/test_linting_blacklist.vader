@@ -2,6 +2,8 @@ Before:
   let g:ale_buffer_info = {}
 
 After:
+  call ale#engine#Cleanup(bufnr(''))
+
   let g:ale_buffer_info = {}
 
 Given unite (A Unite.vim file):
