@@ -59,6 +59,7 @@ CONTENTS                                                         *ale-contents*
       nvcc................................|ale-cuda-nvcc|
     dart..................................|ale-dart-options|
       dartanalyzer........................|ale-dart-dartanalyzer|
+      dartfmt.............................|ale-dart-dartfmt|
     dockerfile............................|ale-dockerfile-options|
       hadolint............................|ale-dockerfile-hadolint|
     elixir................................|ale-elixir-options|
@@ -342,7 +343,7 @@ Notes:
 * Cython (pyrex filetype): `cython`
 * D: `dmd`
 * Dafny: `dafny`!!
-* Dart: `dartanalyzer`!!, `language_server`
+* Dart: `dartanalyzer`!!, `language_server`, dartfmt!!
 * Dockerfile: `hadolint`
 * Elixir: `credo`, `dialyxir`, `dogma`, `mix`!!
 * Elm: `elm-format, elm-make`
