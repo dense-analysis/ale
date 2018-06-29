@@ -59,6 +59,7 @@ CONTENTS                                                         *ale-contents*
       nvcc................................|ale-cuda-nvcc|
     dart..................................|ale-dart-options|
       dartanalyzer........................|ale-dart-dartanalyzer|
+      dartfmt.............................|ale-dart-dartfmt|
     dockerfile............................|ale-dockerfile-options|
       hadolint............................|ale-dockerfile-hadolint|
     elixir................................|ale-elixir-options|
