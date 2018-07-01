@@ -3,9 +3,5 @@ sudo: required
 services:
     - docker
 language: generic
-env:
-    - TESTOPTIONS=--vim-only
-    - TESTOPTIONS=--neovim-02-only
-    - TESTOPTIONS=--neovim-03-only
-    - TESTOPTIONS=--linters-only
-script: "./run-tests $TESTOPTIONS"
+script: |
+    ./run-tests
