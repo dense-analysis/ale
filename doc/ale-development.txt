@@ -196,7 +196,7 @@ margin. For example, if you add a heading for an `aardvark` tool to
   ========================================
   Badly aligned tags follow:
 
-  doc/ale-python.txt:aardvark *ale-python-aardvark*
+  doc/ale-python.txt:aardvark ...
   ========================================
   Look for table of contents issues
   ========================================
