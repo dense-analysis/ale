@@ -1,0 +1,26 @@
+Before:
+  runtime! ale_linters/yaml/yamllint.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute:
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'col': 1,
+  \     'type': 'W',
+  \     'text': 'missing document start "---" (document-start)',
+  \   },
+  \   {
+  \     'lnum': 2,
+  \     'col': 1,
+  \     'type': 'E',
+  \     'text': 'syntax error: expected the node content, but found ''<stream end>''',
+  \   },
+  \ ],
+  \ ale_linters#yaml#yamllint#Handle(bufnr(''), [
+  \   'something.yaml:1:1: [warning] missing document start "---" (document-start)',
+  \   'something.yml:2:1: [error] syntax error: expected the node content, but found ''<stream end>''',
+  \ ])
