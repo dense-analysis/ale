@@ -3,5 +3,8 @@ sudo: required
 services:
     - docker
 language: generic
-script: |
-    ./run-tests
+script:
+    - "./run-tests --vim-only"
+    - "./run-tests --neovim-02-only"
+    - "./run-tests --neovim-03-only"
+    - "./run-tests --linters-only"
