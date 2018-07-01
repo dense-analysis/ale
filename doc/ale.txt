@@ -2202,7 +2202,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
 
                          This argument is required, unless the linter is an
                          LSP linter. In which case, this argument must not be
-                         defined, as LSP linters handle diangostics
+                         defined, as LSP linters handle diagnostics
                          automatically. See |ale-lsp-linters|.
 
                          The keys for each item in the List will be handled in
