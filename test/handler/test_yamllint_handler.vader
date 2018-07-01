@@ -11,7 +11,8 @@ Execute:
   \     'lnum': 1,
   \     'col': 1,
   \     'type': 'W',
-  \     'text': 'missing document start "---" (document-start)',
+  \     'text': 'missing document start "---"',
+  \     'code': 'document-start',
   \   },
   \   {
   \     'lnum': 2,
