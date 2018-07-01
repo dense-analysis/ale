@@ -1,0 +1,34 @@
+Before:
+  runtime ale_linters/ruby/reek.vim
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+
+After:
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+  call ale#semver#ResetVersionCache()
+
+Execute(The reek callbacks should return the correct default values):
+  AssertEqual
+  \ 'reek --version',
+  \ ale_linters#ruby#reek#VersionCheck(bufnr(''))
+  AssertEqual
+  \ 'reek -f json --no-progress --no-color --stdin-filename %s',
+  \ ale_linters#ruby#reek#GetCommand(bufnr(''), ['reek 5.0.0'])
+
+  " Try with older versions.
+  call ale#semver#ResetVersionCache()
+  AssertEqual
+  \ 'reek -f json --no-progress --no-color',
+  \ ale_linters#ruby#reek#GetCommand(bufnr(''), ['reek 4.8.2'])
+
+Execute(The reek version check should be cached):
+  AssertEqual
+  \ 'reek -f json --no-progress --no-color --stdin-filename %s',
+  \ ale_linters#ruby#reek#GetCommand(bufnr(''), ['reek 5.0.0'])
+
+  AssertEqual
+  \ '',
+  \ ale_linters#ruby#reek#VersionCheck(bufnr(''))
+  AssertEqual
+  \ 'reek -f json --no-progress --no-color --stdin-filename %s',
+  \ ale_linters#ruby#reek#GetCommand(bufnr(''), [])
