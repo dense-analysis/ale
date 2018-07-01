@@ -27,8 +27,7 @@ quiet_flag=''
 run_neovim_02_tests=1
 run_neovim_03_tests=1
 run_vim_tests=1
-run_vint=1
-run_custom_checks=1
+run_linters=1
 
 while [ $# -ne 0 ]; do
     case $1 in
@@ -42,51 +41,31 @@ while [ $# -ne 0 ]; do
     ;;
     --neovim-only)
         run_vim_tests=0
-        run_vint=0
-        run_custom_checks=0
+        run_linters=0
         shift
     ;;
     --neovim-02-only)
         run_neovim_03_tests=0
         run_vim_tests=0
-        run_vint=0
-        run_custom_checks=0
+        run_linters=0
         shift
     ;;
     --neovim-03-only)
         run_neovim_02_tests=0
         run_vim_tests=0
-        run_vint=0
-        run_custom_checks=0
+        run_linters=0
         shift
     ;;
     --vim-only)
         run_neovim_02_tests=0
         run_neovim_03_tests=0
-        run_vint=0
-        run_custom_checks=0
+        run_linters=0
         shift
     ;;
-    --no-vint)
-        run_vint=0
-        shift
-    ;;
-    --vint-only)
+    --linters-only)
         run_vim_tests=0
         run_neovim_02_tests=0
         run_neovim_03_tests=0
-        run_custom_checks=0
-        shift
-    ;;
-    --no-custom-checks)
-        run_custom_checks=0
-        shift
-    ;;
-    --custom-checks-only)
-        run_vim_tests=0
-        run_neovim_02_tests=0
-        run_neovim_03_tests=0
-        run_vint=0
         shift
     ;;
     --)
@@ -110,8 +89,7 @@ if [ $# -ne 0 ]; then
     tests="$*"
 
     # Don't run other tools when targeting tests.
-    run_custom_checks=0
-    run_vint=0
+    run_linters=0
 fi
 
 # Delete .swp files in the test directory, which cause Vim 8 to hang.
@@ -138,14 +116,12 @@ for vim in $(docker run --rm "$DOCKER_RUN_IMAGE" ls /vim-build/bin | grep '^neov
     fi
 done
 
-if ((run_vint)); then
+if ((run_linters)); then
     echo "Starting Vint..."
     file_number=$((file_number+1))
     test/script/run-vint > "$output_dir/$file_number" 2>&1 &
     pid_list="$pid_list $!"
-fi
 
-if ((run_custom_checks)); then
     echo "Starting Custom checks..."
     file_number=$((file_number+1))
     test/script/custom-checks &> "$output_dir/$file_number" 2>&1 &
