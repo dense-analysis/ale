@@ -34,6 +34,12 @@ function! ale_linters#yaml#yamllint#Handle(buffer, lines) abort
         let l:code_match = matchlist(l:item.text, '\v^(.+) \(([^)]+)\)$')
 
         if !empty(l:code_match)
+            if l:code_match[2] is# 'trailing-spaces'
+            \&& !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
+                " Skip warnings for trailing whitespace if the option is off.
+                continue
+            endif
+
             let l:item.text = l:code_match[1]
             let l:item.code = l:code_match[2]
         endif
