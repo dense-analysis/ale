@@ -199,6 +199,7 @@ CONTENTS                                                         *ale-contents*
       pyflakes............................|ale-python-pyflakes|
       pylint..............................|ale-python-pylint|
       pyls................................|ale-python-pyls|
+      pyre................................|ale-python-pyre|
       yapf................................|ale-python-yapf|
     qml...................................|ale-qml-options|
       qmlfmt..............................|ale-qml-qmlfmt|
