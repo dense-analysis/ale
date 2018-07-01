@@ -5,12 +5,9 @@ set -u
 
 # Author: w0rp <devw0rp@gmail.com>
 #
-# This script runs tests for the ALE project. The following options are
-# accepted:
+# This script runs tests for the ALE project. Run `./run-tests --help` for
+# options, or read the output below.
 #
-#            -v  Enable verbose output
-# --neovim-only  Run tests only for NeoVim
-#    --vim-only  Run tests only for Vim
 
 image=w0rp/ale
 current_image_id=13b990377be9
@@ -67,6 +64,24 @@ while [ $# -ne 0 ]; do
         run_neovim_02_tests=0
         run_neovim_03_tests=0
         shift
+    ;;
+    --help)
+        echo 'Usage: ./run-tests [OPTION]... [FILE]...'
+        echo
+        echo 'Filenames can be given as arguments to run a subset of tests.'
+        echo 'For example: ./run-tests test/test_ale_var.vader'
+        echo
+        echo 'Options:'
+        echo '  -v                Enable verbose output'
+        echo '  -q                Hide output for successful tests'
+        echo '  --neovim-only     Run tests only for NeoVim 0.2 and 0.3'
+        echo '  --neovim-02-only  Run tests only for NeoVim 0.2'
+        echo '  --neovim-03-only  Run tests only for NeoVim 0.3'
+        echo '  --vim-only        Run tests only for Vim'
+        echo '  --linters-only    Run only Vint and custom checks'
+        echo '  --help            Show this help text'
+        echo '  --                Stop parsing options after this'
+        exit 0
     ;;
     --)
         shift
