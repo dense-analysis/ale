@@ -9,6 +9,7 @@
 "   ale#socket#IsOpen(channel_id) -> 1 if open, 0 otherwise
 "   ale#socket#Close(channel_id)
 "   ale#socket#Send(channel_id, data)
+"   ale#socket#GetAddress(channel_id) -> Return the address for a job
 
 let s:channel_map = get(s:, 'channel_map', {})
 
@@ -47,6 +48,7 @@ function! ale#socket#Open(address, options) abort
     let l:Callback = a:options.callback
 
     let l:channel_info = {
+    \   'address': a:address,
     \   'mode': l:mode,
     \   'callback': a:options.callback,
     \}
@@ -134,4 +136,9 @@ function! ale#socket#Send(channel_id, data) abort
     else
         call ch_sendraw(l:channel, a:data)
     endif
+endfunction
+
+" Get an address for a channel, or an empty string.
+function! ale#socket#GetAddress(channel_id) abort
+    return get(get(s:channel_map, a:channel_id, {}), 'address', '')
 endfunction

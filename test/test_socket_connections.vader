@@ -75,10 +75,12 @@ Execute(Sending and receiving connections to sockets should work):
 
     AssertEqual g:channel_id, g:channel_id_received
     AssertEqual 'hello world', g:data_received
+    AssertEqual '127.0.0.1:' . g:port, ale#socket#GetAddress(g:channel_id)
 
     call ale#socket#Close(g:channel_id)
 
     AssertEqual 0, ale#socket#IsOpen(g:channel_id)
+    AssertEqual '', ale#socket#GetAddress(g:channel_id)
   endif
 
   " NeoVim versions which can't connect to sockets should just fail.
