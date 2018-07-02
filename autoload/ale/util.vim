@@ -46,6 +46,33 @@ if !exists('g:ale#util#nul_file')
     endif
 endif
 
+" Given a job, a buffered line of data, a list of parts of lines, a mode data
+" is being read in, and a callback, join the lines of output for a NeoVim job
+" or socket together, and call the callback with the joined output.
+"
+" Note that jobs and IDs are the same thing on NeoVim.
+function! ale#util#JoinNeovimOutput(job, last_line, data, mode, callback) abort
+    if a:mode is# 'raw'
+        call a:callback(a:job, join(a:data, "\n"))
+        return ''
+    endif
+
+    let l:lines = a:data[:-2]
+
+    if len(a:data) > 1
+        let l:lines[0] = a:last_line . l:lines[0]
+        let l:new_last_line = a:data[-1]
+    else
+        let l:new_last_line = a:last_line . get(a:data, 0, '')
+    endif
+
+    for l:line in l:lines
+        call a:callback(a:job, l:line)
+    endfor
+
+    return l:new_last_line
+endfunction
+
 " Return the number of lines for a given buffer.
 function! ale#util#GetLineCount(buffer) abort
     return len(getbufline(a:buffer, 1, '$'))
