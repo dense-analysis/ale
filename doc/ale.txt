@@ -2371,8 +2371,16 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
 
                          When this argument is set to `'stdio'`, then the
                          linter will be defined as an LSP linter which keeps a
-                         process for a language server runnning, and
+                         process for a language server running, and
                          communicates with it directly via a |channel|.
+                         `executable` or `executable_callback` must be set,
+                         and `command` or `command_callback` must be set.
+
+                         When this argument is set to `'socket'`, then the
+                         linter will be defined as an LSP linter via a TCP
+                         socket connection. `address_callback` must be set
+                         with a callback returning an address to connect to.
+                         ALE will not start a server automatically.
 
                          When this argument is not empty, only one of either
                          `language` or `language_callback` must be defined,
@@ -2387,6 +2395,13 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          An optional `initialization_options` or
                          `initialization_options_callback` may be defined to
                          pass initialization options to the LSP.
+
+  `address_callback`       A |String| or |Funcref| for a callback function
+                         accepting a buffer number. A |String| should be
+                         returned with an address to connect to.
+
+                         This argument must only be set if the `lsp` argument
+                         is set to `'socket'`.
 
   `project_root_callback`  A |String| or |Funcref| for a callback function
                          accepting a buffer number. A |String| should be

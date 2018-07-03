@@ -166,7 +166,7 @@ function! ale#lsp_linter#StartLSP(buffer, linter, callback) abort
 
     let l:language_id = ale#util#GetFunction(a:linter.language_callback)(a:buffer)
 
-    if !l:conn_id
+    if empty(l:conn_id)
         if g:ale_history_enabled && !empty(l:command)
             call ale#history#Add(a:buffer, 'failed', l:conn_id, l:command)
         endif

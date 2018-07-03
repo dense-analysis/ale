@@ -3,7 +3,7 @@
 
 " A List of connections, used for tracking servers which have been connected
 " to, and programs which are run.
-let s:connections = []
+let s:connections = get(s:, 'connections', [])
 let g:ale_lsp_next_message_id = 1
 
 " Exposed only so tests can get at it.
@@ -36,7 +36,7 @@ endfunction
 
 function! s:FindConnection(key, value) abort
     for l:conn in s:connections
-        if has_key(l:conn, a:key) && get(l:conn, a:key) == a:value
+        if has_key(l:conn, a:key) && get(l:conn, a:key) is# a:value
             return l:conn
         endif
     endfor
@@ -319,13 +319,13 @@ function! ale#lsp#ConnectToAddress(address, project_root, callback, initializati
     let l:conn = !empty(l:conn) ? l:conn : ale#lsp#NewConnection(a:initialization_options)
 
     if !has_key(l:conn, 'channel_id') || !ale#socket#IsOpen(l:conn.channel_id)
-        let l:conn.channnel_id = ale#socket#Open(a:address, {
+        let l:conn.channel_id = ale#socket#Open(a:address, {
         \   'callback': function('s:HandleChannelMessage'),
         \})
     endif
 
-    if l:conn.channnel_id < 0
-        return 0
+    if l:conn.channel_id < 0
+        return ''
     endif
 
     let l:conn.id = a:address
@@ -333,7 +333,7 @@ function! ale#lsp#ConnectToAddress(address, project_root, callback, initializati
     call uniq(sort(add(l:conn.callback_list, a:callback)))
     call ale#lsp#RegisterProject(l:conn, a:project_root)
 
-    return 1
+    return a:address
 endfunction
 
 " Stop all LSP connections, closing all jobs and channels, and removing any
