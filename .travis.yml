@@ -4,4 +4,4 @@ services:
     - docker
 language: generic
 script: |
-    ./run-tests
+    ./run-tests -v
