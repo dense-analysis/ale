@@ -10,8 +10,8 @@ set -u
 #
 
 image=w0rp/ale
-current_image_id=13b990377be9
-current_digest=sha256:4b0f7c69e5a8cbb4e401aee039e5b468d6d9ad6cd01de62e918d98f0df1a5340
+current_image_id=71553d0ab3e8
+current_digest=sha256:fea0ddf220c080af9d615d86c277cdecbd63682e430cba92fff2014ebf2a5f3a
 
 # Used in all test scripts for running the selected Docker image.
 DOCKER_RUN_IMAGE="$image:$current_image_id"
