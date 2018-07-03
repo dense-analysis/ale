@@ -49,6 +49,8 @@ Execute(Linters should run with the default options):
   call ale#Lint()
   call ale#engine#WaitForJobs(2000)
 
+  AssertEqual 1, 0
+
   AssertEqual [{
   \   'bufnr': bufnr('%'),
   \   'lnum': 2,
