@@ -11,10 +11,9 @@ set -u
 
 image=w0rp/ale
 current_image_id=71553d0ab3e8
-current_digest=sha256:fea0ddf220c080af9d615d86c277cdecbd63682e430cba92fff2014ebf2a5f3a
 
 # Used in all test scripts for running the selected Docker image.
-DOCKER_RUN_IMAGE="$image:$current_image_id"
+DOCKER_RUN_IMAGE="$image"
 export DOCKER_RUN_IMAGE
 
 tests='test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader'
@@ -110,7 +109,8 @@ fi
 # Delete .swp files in the test directory, which cause Vim 8 to hang.
 find test -name '*.swp' -delete
 
-docker pull "$image"@"$current_digest"
+docker images -q w0rp/ale | grep "^$current_image_id" > /dev/null \
+    || docker pull "$image"
 
 output_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
 
