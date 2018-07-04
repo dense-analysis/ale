@@ -134,7 +134,11 @@ function! s:ReplaceCompleteopt() abort
         let b:ale_old_completopt = &l:completeopt
     endif
 
-    let &l:completeopt = 'menu,menuone,preview,noselect,noinsert'
+    if &l:completeopt =~# 'preview'
+        let &l:completeopt = 'menu,menuone,preview,noselect,noinsert'
+    else
+        let &l:completeopt = 'menu,menuone,noselect,noinsert'
+    endif
 endfunction
 
 function! ale#completion#OmniFunc(findstart, base) abort
