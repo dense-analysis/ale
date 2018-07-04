@@ -207,10 +207,10 @@ endfunction
 " Every variable name will be prefixed with 'ale_'.
 function! ale#Set(variable_name, default) abort
     let l:full_name = 'ale_' . a:variable_name
-    let l:value = get(g:, l:full_name, a:default)
-    let g:[l:full_name] = l:value
 
-    return l:value
+    if !has_key(g:, l:full_name)
+        let g:[l:full_name] = a:default
+    endif
 endfunction
 
 " Escape a string suitably for each platform.
