@@ -270,9 +270,6 @@ function! ale#engine#SetResults(buffer, loclist) abort
 
         " Call user autocommands. This allows users to hook into ALE's lint cycle.
         silent doautocmd <nomodeline> User ALELintPost
-        " remove in 2.0
-        " Old DEPRECATED name; call it for backwards compatibility.
-        silent doautocmd <nomodeline> User ALELint
     endif
 endfunction
 
