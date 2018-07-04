@@ -34,8 +34,3 @@ Execute(ale#Var should return the global variable for unknown variables):
   let g:ale_fix_buffer_data = {}
 
   AssertEqual 'abc', ale#Var(1347347, 'some_variable')
-
-Execute(ale#Var should return the global variables when the ALE fix variable is undefined):
-  unlet! g:ale_fix_buffer_data
-
-  AssertEqual 'abc', ale#Var(1347347, 'some_variable')
