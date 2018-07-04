@@ -59,7 +59,7 @@ function! s:LanguageGetter(buffer) dict abort
     return l:self.language
 endfunction
 
-function! ale#linter#PreProcess(linter) abort
+function! ale#linter#PreProcess(filetype, linter) abort
     if type(a:linter) != type({})
         throw 'The linter object must be a Dictionary'
     endif
@@ -193,13 +193,20 @@ function! ale#linter#PreProcess(linter) abort
     endif
 
     if l:needs_lsp_details
-        if has_key(a:linter, 'language')
-            if has_key(a:linter, 'language_callback')
+        if has_key(a:linter, 'language_callback')
+            if has_key(a:linter, 'language')
                 throw 'Only one of `language` or `language_callback` '
                 \   . 'should be set'
             endif
 
-            let l:obj.language = get(a:linter, 'language')
+            let l:obj.language_callback = get(a:linter, 'language_callback')
+
+            if !s:IsCallback(l:obj.language_callback)
+                throw '`language_callback` must be a callback for LSP linters'
+            endif
+        else
+            " Default to using the filetype as the language.
+            let l:obj.language = get(a:linter, 'language', a:filetype)
 
             if type(l:obj.language) != type('')
                 throw '`language` must be a string'
@@ -207,12 +214,6 @@ function! ale#linter#PreProcess(linter) abort
 
             " Make 'language_callback' return the 'language' value.
             let l:obj.language_callback = function('s:LanguageGetter')
-        else
-            let l:obj.language_callback = get(a:linter, 'language_callback')
-
-            if !s:IsCallback(l:obj.language_callback)
-                throw '`language_callback` must be a callback for LSP linters'
-            endif
         endif
 
         let l:obj.project_root_callback = get(a:linter, 'project_root_callback')
@@ -286,7 +287,7 @@ function! ale#linter#Define(filetype, linter) abort
         let s:linters[a:filetype] = []
     endif
 
-    let l:new_linter = ale#linter#PreProcess(a:linter)
+    let l:new_linter = ale#linter#PreProcess(a:filetype, a:linter)
 
     call add(s:linters[a:filetype], l:new_linter)
 endfunction

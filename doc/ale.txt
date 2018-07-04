@@ -2383,9 +2383,12 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          with a callback returning an address to connect to.
                          ALE will not start a server automatically.
 
-                         When this argument is not empty, only one of either
-                         `language` or `language_callback` must be defined,
-                         and `project_root_callback` must be defined.
+                         When this argument is not empty
+                         `project_root_callback` must be defined.
+
+                         `language` or `language_callback` can be defined to
+                         describe the language for a file. The filetype will
+                         be used as the language by default.
 
                          LSP linters handle diagnostics automatically, so
                          the `callback` argument must not be defined.
@@ -2418,8 +2421,9 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          being checked. This string will be sent to the LSP to
                          tell it what type of language is being checked.
 
-                         This argument must only be set if the `lsp` argument
-                         is also set to a non-empty string.
+                         If this or `language_callback` isn't set, the
+                         language will default to the value of the filetype
+                         given to |ale#linter#Define|.
 
   `language_callback`      A |String| or |Funcref| for a callback function
                          accepting a buffer number. A |String| should be
