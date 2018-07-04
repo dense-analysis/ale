@@ -5,6 +5,8 @@ call ale#Set('python_isort_executable', 'isort')
 call ale#Set('python_isort_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! ale#fixers#isort#Fix(buffer) abort
+    let l:options = ale#Var(a:buffer, 'python_isort_options')
+
     let l:executable = ale#python#FindExecutable(
     \   a:buffer,
     \   'python_isort',
@@ -17,6 +19,6 @@ function! ale#fixers#isort#Fix(buffer) abort
 
     return {
     \   'command': ale#path#BufferCdString(a:buffer)
-    \   .   ale#Escape(l:executable) . ' -',
+    \   .   ale#Escape(l:executable) . ' ' . l:options . ' -',
     \}
 endfunction
