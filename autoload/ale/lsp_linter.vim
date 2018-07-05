@@ -147,16 +147,14 @@ function! ale#lsp_linter#StartLSP(buffer, linter, callback) abort
     else
         let l:executable = ale#linter#GetExecutable(a:buffer, a:linter)
 
-        if !executable(l:executable)
+        if empty(l:executable) || !executable(l:executable)
             return {}
         endif
 
+        let l:command = ale#linter#GetCommand(a:buffer, a:linter)
         " Format the command, so %e can be formatted into it.
         let l:command = ale#command#FormatCommand(a:buffer, l:executable, l:command, 0)[1]
-        let l:command = ale#job#PrepareCommand(
-        \   a:buffer,
-        \   ale#linter#GetCommand(a:buffer, a:linter),
-        \)
+        let l:command = ale#job#PrepareCommand(a:buffer, l:command)
         let l:conn_id = ale#lsp#StartProgram(
         \   l:executable,
         \   l:command,

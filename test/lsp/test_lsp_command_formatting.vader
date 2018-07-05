@@ -1,0 +1,37 @@
+Before:
+  runtime autoload/ale/lsp.vim
+
+  let g:args = []
+
+  " Mock the StartProgram function so we can just capture the arguments.
+  function! ale#lsp#StartProgram(...) abort
+    let g:args = a:000
+  endfunction
+
+After:
+  unlet! g:args
+
+  runtime autoload/ale/lsp.vim
+
+Execute(Command formatting should be applied correctly for LSP linters):
+  call ale#lsp_linter#StartLSP(
+  \ bufnr(''),
+  \ {
+  \   'language_callback': {-> 'x'},
+  \   'project_root_callback': {-> '/foo/bar'},
+  \   'lsp': 'stdio',
+  \   'executable': has('win32') ? 'cmd': 'true',
+  \   'command': '%e --foo',
+  \ },
+  \ {->0}
+  \)
+
+  if has('win32')
+    AssertEqual
+    \ ['true', 'cmd /s/c cmd --foo', '/foo/bar'],
+    \ g:args[:2]
+  else
+    AssertEqual
+    \ ['true', ['/bin/bash', '-c', '''true'' --foo'], '/foo/bar'],
+    \ g:args[:2]
+  endif
