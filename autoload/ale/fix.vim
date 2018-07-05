@@ -212,6 +212,7 @@ function! s:RunJob(options) abort
 
     let [l:temporary_file, l:command] = ale#command#FormatCommand(
     \   l:buffer,
+    \   '',
     \   l:command,
     \   l:read_buffer,
     \)

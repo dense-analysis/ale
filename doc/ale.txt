@@ -2495,14 +2495,22 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
   For example: >
   'command': 'ghc -fno-code -v0 %t',
 <
+  Any substring `%e` will be replaced with the escaped executable supplied
+  with `executable` or `executable_callback`. This provides a convenient way
+  to define a command string which needs to include a dynamic executable name,
+  but which is otherwise static.
+
+  For example: >
+  'command': '%e --some-argument',
+<
   The character sequence `%%` can be used to emit a literal `%` into a
   command, so literal character sequences `%s` and `%t` can be escaped by
   using `%%s` and `%%t` instead, etc.
 
   If a callback for a command generates part of a command string which might
-  possibly contain `%%`, `%s`, or `%t` where the special formatting behaviour
-  is not desired, the |ale#engine#EscapeCommandPart()| function can be used to
-  replace those characters to avoid formatting issues.
+  possibly contain `%%`, `%s`, `%t`, or `%e`, where the special formatting
+  behavior is not desired, the |ale#engine#EscapeCommandPart()| function can
+  be used to replace those characters to avoid formatting issues.
 
                                                   *ale-linter-loading-behavior*
                                                  *ale-linter-loading-behaviour*
