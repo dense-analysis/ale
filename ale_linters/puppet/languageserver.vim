@@ -14,15 +14,25 @@ function! ale_linters#puppet#languageserver#GetCommand(buffer) abort
 endfunction
 
 function! ale_linters#puppet#languageserver#GetProjectRoot(buffer) abort
-    " Note: while manifest.json is a strong recommendation, the only
-    " *required* path for a Puppet module is the manifests folder.
+    " Note: The metadata.json file is recommended for Puppet 4+ modules, but
+    " there's no requirement to have it, so fall back to the other possible
+    " Puppet module directories
     let l:root_path = ale#path#FindNearestFile(a:buffer, 'metadata.json')
-
-    if empty(l:root_path)
-        let l:root_path = ale#path#FindNearestDirectory(a:buffer, 'manifests')
+    if !empty(l:root_path)
+        return fnamemodify(l:root_path, ':h')
     endif
 
-    return !empty(l:root_path) ? fnamemodify(l:root_path, ':h') : ''
+    for l:test_path in [
+    \   'manifests',
+    \   'templates',
+    \]
+        let l:root_path = ale#path#FindNearestDirectory(a:buffer, l:test_path)
+        if !empty(l:root_path)
+            return fnamemodify(l:root_path, ':h:h')
+        endif
+    endfor
+
+    return ''
 endfunction
 
 call ale#linter#Define('puppet', {
