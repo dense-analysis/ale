@@ -273,6 +273,7 @@ CONTENTS                                                         *ale-contents*
       write-good..........................|ale-vim-help-write-good|
     vue...................................|ale-vue-options|
       prettier............................|ale-vue-prettier|
+      vls.................................|ale-vue-vls|
     xhtml.................................|ale-xhtml-options|
       write-good..........................|ale-xhtml-write-good|
     xml...................................|ale-xml-options|
@@ -418,7 +419,7 @@ Notes:
 * Verilog: `iverilog`, `verilator`
 * Vim: `vint`
 * Vim help^: `alex`!!, `proselint`, `write-good`
-* Vue: `prettier`
+* Vue: `prettier`, `vls`
 * XHTML: `alex`!!, `proselint`, `write-good`
 * XML: `xmllint`
 * YAML: `swaglint`, `yamllint`
