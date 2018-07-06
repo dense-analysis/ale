@@ -59,6 +59,7 @@ After:
 
   runtime autoload/ale/completion.vim
   runtime autoload/ale/lsp.vim
+  runtime autoload/ale/lsp_linter.vim
 
 Given typescript(Some typescript file):
   foo

@@ -61,7 +61,7 @@ After:
 
   delfunction HandleValidLSPResult
 
-  runtime autoload/ale/linter.vim
+  runtime autoload/ale/lsp_linter.vim
   runtime autoload/ale/lsp.vim
   runtime autoload/ale/util.vim
 

@@ -32,6 +32,6 @@ Execute(Command formatting should be applied correctly for LSP linters):
     \ g:args[:2]
   else
     AssertEqual
-    \ ['true', ['/bin/bash', '-c', '''true'' --foo'], '/foo/bar'],
+    \ ['true', [&shell, '-c', '''true'' --foo'], '/foo/bar'],
     \ g:args[:2]
   endif

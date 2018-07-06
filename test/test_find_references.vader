@@ -58,7 +58,7 @@ After:
   unlet! g:item_list
   unlet! g:preview_called
 
-  runtime autoload/ale/linter.vim
+  runtime autoload/ale/lsp_linter.vim
   runtime autoload/ale/lsp.vim
   runtime autoload/ale/util.vim
   runtime autoload/ale/preview.vim
