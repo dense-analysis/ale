@@ -642,9 +642,6 @@ ALE supports the following LSP/tsserver features.
 -------------------------------------------------------------------------------
 5.1 Completion                                                 *ale-completion*
 
-NOTE: At the moment, only `tsserver` for TypeScript code is supported for
-completion.
-
 ALE offers limited support for automatic completion of code while you type.
 Completion is only supported while a least one LSP linter is enabled. ALE
 will only suggest symbols provided by the LSP servers.
