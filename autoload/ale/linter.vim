@@ -47,6 +47,13 @@ function! ale#linter#Reset() abort
     let s:linters = {}
 endfunction
 
+" Return a reference to the linters loaded.
+" This is only for tests.
+" Do not call this function.
+function! ale#linter#GetLintersLoaded() abort
+    return s:linters
+endfunction
+
 function! s:IsCallback(value) abort
     return type(a:value) == type('') || type(a:value) == type(function('type'))
 endfunction
