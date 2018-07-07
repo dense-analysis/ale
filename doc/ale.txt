@@ -186,6 +186,7 @@ CONTENTS                                                         *ale-contents*
       puglint.............................|ale-pug-puglint|
     puppet................................|ale-puppet-options|
       puppetlint..........................|ale-puppet-puppetlint|
+      puppet-languageserver...............|ale-puppet-languageserver|
     pyrex (cython)........................|ale-pyrex-options|
       cython..............................|ale-pyrex-cython|
     python................................|ale-python-options|
@@ -391,7 +392,7 @@ Notes:
 * Pony: `ponyc`
 * proto: `protoc-gen-lint`
 * Pug: `pug-lint`
-* Puppet: `puppet`, `puppet-lint`
+* Puppet: `languageserver`, `puppet`, `puppet-lint`
 * Python: `autopep8`, `black`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pyls`, `pyre`, `pylint`!!, `yapf`
 * QML: `qmlfmt`, `qmllint`
 * R: `lintr`

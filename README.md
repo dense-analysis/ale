@@ -157,7 +157,7 @@ formatting.
 | Pony | [ponyc](https://github.com/ponylang/ponyc) |
 | proto | [protoc-gen-lint](https://github.com/ckaznocha/protoc-gen-lint) |
 | Pug | [pug-lint](https://github.com/pugjs/pug-lint) |
-| Puppet | [puppet](https://puppet.com), [puppet-lint](https://puppet-lint.com) |
+| Puppet | [languageserver](https://github.com/lingua-pupuli/puppet-editor-services), [puppet](https://puppet.com), [puppet-lint](https://puppet-lint.com) |
 | Python | [autopep8](https://github.com/hhatto/autopep8), [black](https://github.com/ambv/black), [flake8](http://flake8.pycqa.org/en/latest/), [isort](https://github.com/timothycrosley/isort), [mypy](http://mypy-lang.org/), [prospector](http://github.com/landscapeio/prospector), [pycodestyle](https://github.com/PyCQA/pycodestyle), [pyls](https://github.com/palantir/python-language-server), [pyre](https://github.com/facebook/pyre-check), [pylint](https://www.pylint.org/) !!, [yapf](https://github.com/google/yapf) |
 | QML | [qmlfmt](https://github.com/jesperhh/qmlfmt), [qmllint](https://github.com/qt/qtdeclarative/tree/5.11/tools/qmllint) |
 | R | [lintr](https://github.com/jimhester/lintr) |
