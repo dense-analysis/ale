@@ -16,7 +16,7 @@ function! ale_linters#markdown#remark_lint#GetCommand(buffer) abort
 
     return ale#node#Executable(a:buffer, l:executable)
     \    . (!empty(l:options) ? ' ' . l:options : '')
-    \    . ' --no-stdout --no-color %s'
+    \    . ' --no-stdout --no-color'
 endfunction
 
 function! ale_linters#markdown#remark_lint#Handle(buffer, lines) abort
@@ -47,6 +47,5 @@ call ale#linter#Define('markdown', {
 \   'executable_callback': 'ale_linters#markdown#remark_lint#GetExecutable',
 \   'command_callback': 'ale_linters#markdown#remark_lint#GetCommand',
 \   'callback': 'ale_linters#markdown#remark_lint#Handle',
-\   'lint_file': 1,
 \   'output_stream': 'stderr',
 \})
