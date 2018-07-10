@@ -17,7 +17,6 @@ function! ale_linters#c#checkpatch#GetExecutable(buffer) abort
     endif
 
     return l:checkpatch_executable
-
 endfunction
 
 function! ale_linters#c#checkpatch#GetCommand(buffer) abort
