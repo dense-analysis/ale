@@ -16,7 +16,7 @@ function! ale#handlers#remark_lint#GetCommand(buffer) abort
 
     return ale#node#Executable(a:buffer, l:executable)
     \    . (!empty(l:options) ? ' ' . l:options : '')
-    \    . ' --no-stdout --no-color %s'
+    \    . ' --no-stdout --no-color'
 endfunction
 
 function! ale#handlers#remark_lint#Handle(buffer, lines) abort
