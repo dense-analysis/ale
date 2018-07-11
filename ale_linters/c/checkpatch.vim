@@ -35,8 +35,8 @@ function! ale_linters#c#checkpatch#Handle(buffer, lines) abort
 
     for l:match in ale#util#GetMatches(a:lines, l:regex)
         let l:message = {
-        \     'text': l:match[2] . ': ' . l:match[3],
-        \     'lnum': l:match[1],
+        \     'text': l:match[2] . ':' . l:match[3],
+        \     'lnum': str2nr(l:match[1]),
         \     'type': l:match[2] is# 'ERROR' ? 'E' : 'W'
         \ }
 

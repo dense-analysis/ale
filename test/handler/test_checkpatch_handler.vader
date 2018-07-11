@@ -1,1 +1,62 @@
-TODO write tests
+Before:
+  runtime ale_linters/c/checkpatch.vim
+
+After:
+  Restore
+  call ale#linter#Reset()
+
+Execute(Basic checkpatch errors should be handled):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'text': 'WARNING: Missing or malformed SPDX-License-Identifier tag in line 1',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 52,
+  \     'text': 'WARNING: please, no space before tabs',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 62,
+  \     'text': 'WARNING: Prefer ARRAY_SIZE(platform_image_devices)',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 62,
+  \     'text': 'ERROR: spaces required around that ''='' (ctx:VxV)',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 67,
+  \     'text': 'WARNING: line over 80 characters',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'lnum': 117,
+  \     'text': 'ERROR: trailing statements should be on next line',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 118,
+  \     'text': 'ERROR: trailing whitespace',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 118,
+  \     'text': 'CHECK: this is a fake message',
+  \     'type': 'W',
+  \   }
+  \ ],
+  \ ale_linters#c#checkpatch#Handle(bufnr(''), [
+  \  '/home/user/kern/boot.c:1: WARNING: Missing or malformed SPDX-License-Identifier tag in line 1',
+  \  '/home/user/kern/boot.c:52: WARNING: please, no space before tabs',
+  \  '/home/user/kern/boot.c:62: WARNING: Prefer ARRAY_SIZE(platform_image_devices)',
+  \  '/home/user/kern/boot.c:62: ERROR: spaces required around that ''='' (ctx:VxV)',
+  \  '/home/user/kern/boot.c:67: WARNING: line over 80 characters',
+  \  '/home/user/kern/boot.c:117: ERROR: trailing statements should be on next line',
+  \  '/home/user/kern/boot.c:118: ERROR: trailing whitespace',
+  \  '/home/user/kern/boot.c:118: CHECK: this is a fake message'
+  \ ])
+
