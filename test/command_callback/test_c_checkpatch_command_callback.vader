@@ -1,2 +1,51 @@
-TODO write tests
+Before:
+  Save g:ale_c_checkpatch_executable
+  Save g:ale_c_checkpatch_options
+
+  unlet! g:ale_c_checkpatch_executable
+  unlet! b:ale_c_checkpatch_executable
+  unlet! g:ale_c_checkpatch_options
+  unlet! b:ale_c_checkpatch_options
+
+  let b:required_options = ' --terse --no-summary'
+  let b:default_options = ' --strict --no-tree'
+  let b:default_executable = fnamemodify('./scripts/checkpatch.pl', ':p')
+
+  runtime ale_linters/c/checkpatch.vim
+
+After:
+  unlet! b:ale_c_checkpatch_executable
+  unlet! b:ale_c_checkpatch_options
+
+  Restore
+  call ale#linter#Reset()
+
+Execute(The executable should be configurable):
+  AssertEqual b:default_executable, 
+  \ ale_linters#c#checkpatch#GetExecutable(bufnr(''))
+
+  let b:ale_c_checkpatch_executable = 'foo'
+
+  AssertEqual 'foo', ale_linters#c#checkpatch#GetExecutable(bufnr(''))
+
+Execute(The command should include the executable):
+  let b:ale_c_checkpatch_executable = 'executable'
+  
+  AssertEqual
+  \ ale#Escape(b:ale_c_checkpatch_executable)
+  \   . b:required_options . b:default_options . ' -f %s',
+  \ ale_linters#c#checkpatch#GetCommand(bufnr(''))
+
+Execute(The checkpatch executable options should be configurable):
+  AssertEqual
+  \ ale#Escape(ale_linters#c#checkpatch#GetExecutable(bufnr('')))
+  \   . b:required_options . b:default_options . ' -f %s',
+  \ ale_linters#c#checkpatch#GetCommand(bufnr(''))
+
+  let b:ale_c_checkpatch_options = '--foo'
+
+  AssertEqual
+  \ ale#Escape(ale_linters#c#checkpatch#GetExecutable(bufnr('')))
+  \   . b:required_options . ' --foo -f %s',
+  \ ale_linters#c#checkpatch#GetCommand(bufnr(''))
 
