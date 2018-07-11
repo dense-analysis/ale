@@ -268,9 +268,8 @@ endfunction
 " See :help sandbox
 function! ale#util#InSandbox() abort
     try
-        function! s:SandboxCheck() abort
-        endfunction
-    catch /^Vim\%((\a\+)\)\=:E48/
+        let &equalprg=&equalprg
+    catch /E48/
         " E48 is the sandbox error.
         return 1
     endtry
