@@ -33,6 +33,10 @@ Before:
 After:
   Restore
 
+  unlet! g:i
+  unlet! g:results
+  unlet! g:expected_results
+
   delfunction TestCallback
   delfunction TestCallback2
   call ale#engine#Cleanup(bufnr(''))
@@ -135,17 +139,28 @@ Execute(Previous errors should be removed when linters change):
   \ 'command': has('win32') ? 'echo baz boz' : '/bin/sh -c ''echo baz boz''',
   \})
 
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
+  let g:expected_results = [{
+  \ 'bufnr': bufnr('%'),
+  \ 'lnum': 3,
+  \ 'vcol': 0,
+  \ 'col': 4,
+  \ 'text': 'baz boz',
+  \ 'type': 'E',
+  \ 'nr': -1,
+  \ 'pattern': '',
+  \ 'valid': 1,
+  \}]
 
-  AssertEqual [{
-  \   'bufnr': bufnr('%'),
-  \   'lnum': 3,
-  \   'vcol': 0,
-  \   'col': 4,
-  \   'text': 'baz boz',
-  \   'type': 'E',
-  \   'nr': -1,
-  \   'pattern': '',
-  \   'valid': 1,
-  \ }], getloclist(0)
+  " Try the test a few times over in NeoVim 0.3, where tests fail randomly.
+  for g:i in range(has('nvim-0.3') ? 5 : 1)
+    call ale#Lint()
+    call ale#engine#WaitForJobs(2000)
+
+    let g:results = getloclist(0)
+
+    if g:results == g:expected_results
+      break
+    endif
+  endfor
+
+  AssertEqual g:expected_results, g:results
