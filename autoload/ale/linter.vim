@@ -1,4 +1,3 @@
-call ale#Set('wrap_command_as_one_argument', 0)
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Linter registration and lazy-loading
 "   Retrieves linters as requested by the engine, loading them if needed.
