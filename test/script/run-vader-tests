@@ -126,7 +126,7 @@ echo
 
 tries=0
 
-while [ "$tries" -lt 3 ]; do
+while [ "$tries" -lt 5 ]; do
     tries=$((tries + 1))
 
     exit_code=0
