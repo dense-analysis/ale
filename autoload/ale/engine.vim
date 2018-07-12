@@ -98,7 +98,7 @@ endfunction
 
 " Create a new temporary directory and manage it in one go.
 function! ale#engine#CreateDirectory(buffer) abort
-    let l:temporary_directory = tempname()
+    let l:temporary_directory = ale#util#Tempname()
     " Create the temporary directory for the file, unreadable by 'other'
     " users.
     call mkdir(l:temporary_directory, '', 0750)

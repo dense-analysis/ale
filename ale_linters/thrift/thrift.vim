@@ -20,7 +20,7 @@ function! ale_linters#thrift#thrift#GetCommand(buffer) abort
         let l:generators = ['cpp']
     endif
 
-    let l:output_dir = tempname()
+    let l:output_dir = ale#util#Tempname()
     call mkdir(l:output_dir)
     call ale#engine#ManageDirectory(a:buffer, l:output_dir)
 

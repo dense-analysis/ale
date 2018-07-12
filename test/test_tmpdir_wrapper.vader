@@ -1,0 +1,13 @@
+Before:
+  Save $TMPDIR
+
+After:
+  Restore
+
+Execute(ale#util#Tempname should create files in /tmp if $TMPDIR isn't set):
+  if has('unix')
+    let $TMPDIR = ''
+    Assert ale#util#Tempname() =~# '^/tmp'
+    " We should unlet the environment variable again.
+    AssertEqual '', $TMPDIR
+  endif

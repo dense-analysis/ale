@@ -111,6 +111,9 @@ these are reported with ALE's `custom-linting-rules` script. See
 * Don't use the `shellescape()` function. It doesn't escape arguments properly
   on Windows. Use `ale#Escape()` instead, which will avoid escaping where it
   isn't needed, and generally escape arguments better on Windows.
+* Don't use the `tempname()` function. It doesn't work when `$TMPDIR` isn't
+  set. Use `ale#util#Tempname()` instead, which temporarily sets `$TMPDIR`
+  appropriately where needed.
 
 Apply the following guidelines when writing Vader test files.
 

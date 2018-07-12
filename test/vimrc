@@ -35,7 +35,3 @@ set ttimeoutlen=0
 execute 'set encoding=utf-8'
 
 let g:mapleader=','
-
-" Clear the TMPDIR value for tests.
-" The plugin should set this to /tmp by default, which we will test.
-let $TMPDIR = ''

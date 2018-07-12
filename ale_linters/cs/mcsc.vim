@@ -29,7 +29,7 @@ function! ale_linters#cs#mcsc#GetCommand(buffer) abort
     \   : ''
 
     " register temporary module target file with ale
-    let l:out = tempname()
+    let l:out = ale#util#Tempname()
     call ale#engine#ManageFile(a:buffer, l:out)
 
     " The code is compiled as a module and the output is redirected to a
