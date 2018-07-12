@@ -13,7 +13,7 @@ function! s:TemporaryFilename(buffer) abort
 
     " Create a temporary filename, <temp_dir>/<original_basename>
     " The file itself will not be created by this function.
-    return tempname() . (has('win32') ? '\' : '/') . l:filename
+    return ale#util#Tempname() . (has('win32') ? '\' : '/') . l:filename
 endfunction
 
 " Given a command string, replace every...

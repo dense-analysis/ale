@@ -277,6 +277,25 @@ function! ale#util#InSandbox() abort
     return 0
 endfunction
 
+function! ale#util#Tempname() abort
+    let l:clear_tempdir = 0
+
+    if has('unix') && empty($TMPDIR)
+        let l:clear_tempdir = 1
+        let $TMPDIR = '/tmp'
+    endif
+
+    try
+        let l:name = tempname() " no-custom-checks
+    finally
+        if l:clear_tempdir
+            let $TMPDIR = ''
+        endif
+    endtry
+
+    return l:name
+endfunction
+
 " Given a single line, or a List of lines, and a single pattern, or a List
 " of patterns, return all of the matches for the lines(s) from the given
 " patterns, using matchlist().
