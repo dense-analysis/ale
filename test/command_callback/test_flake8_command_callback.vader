@@ -1,5 +1,6 @@
 Before:
   call ale#assert#SetUpLinterTest('python', 'flake8')
+
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
 
   WithChainResults ['3.0.0']
@@ -152,8 +153,16 @@ Execute(Using `python -m flake8` should be supported for running flake8):
 Execute(Setting executable to 'pipenv' should append 'run flake8'):
   let g:ale_python_flake8_executable = 'path/to/pipenv'
 
-  " FIXME: pipenv should check the vresion with flake8.
+  " FIXME: pipenv should check the version with flake8.
   WithChainResults []
   AssertLinter 'path/to/pipenv',
   \ ale#path#BufferCdString(bufnr(''))
   \   .  ale#Escape('path/to/pipenv') . ' run flake8 --format=default -'
+
+Execute(Pipenv is detected when python_flake8_auto_pipenv is set):
+  let g:ale_python_flake8_auto_pipenv = 1
+  call ale#test#SetFilename('/testplugin/test/python_fixtures/pipenv/whatever.py')
+
+  AssertLinter 'pipenv',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('pipenv') . ' run flake8 --format=default --stdin-display-name %s -'

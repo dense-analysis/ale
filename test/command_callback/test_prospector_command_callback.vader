@@ -10,3 +10,11 @@ Execute(Setting executable to 'pipenv' appends 'run prospector'):
   AssertLinter 'path/to/pipenv',
   \ ale#Escape('path/to/pipenv') . ' run prospector'
   \   .  '  --messages-only --absolute-paths --zero-exit --output-format json %s'
+
+Execute(Pipenv is detected when python_prospector_auto_pipenv is set):
+  let g:ale_python_prospector_auto_pipenv = 1
+  call ale#test#SetFilename('/testplugin/test/python_fixtures/pipenv/whatever.py')
+
+  AssertLinter 'pipenv',
+  \ ale#Escape('pipenv') . ' run prospector'
+  \   .  '  --messages-only --absolute-paths --zero-exit --output-format json %s'

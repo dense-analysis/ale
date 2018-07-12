@@ -37,3 +37,10 @@ Execute(Setting executable to 'pipenv' appends 'run pyre'):
 
   AssertLinter 'path/to/pipenv',
   \ ale#Escape('path/to/pipenv') . ' run pyre persistent'
+
+Execute(Pipenv is detected when python_pyre_auto_pipenv is set):
+  let g:ale_python_pyre_auto_pipenv = 1
+  call ale#test#SetFilename('/testplugin/test/python_fixtures/pipenv/whatever.py')
+
+  AssertLinter 'pipenv',
+  \ ale#Escape('pipenv') . ' run pyre persistent'

@@ -37,3 +37,10 @@ Execute(Setting executable to 'pipenv' appends 'run pyflakes'):
 
   AssertLinter 'path/to/pipenv',
   \ ale#Escape('path/to/pipenv') . ' run pyflakes %t',
+
+Execute(Pipenv is detected when python_pyflakes_auto_pipenv is set):
+  let g:ale_python_pyflakes_auto_pipenv = 1
+  call ale#test#SetFilename('/testplugin/test/python_fixtures/pipenv/whatever.py')
+
+  AssertLinter 'pipenv',
+  \ ale#Escape('pipenv') . ' run pyflakes %t'

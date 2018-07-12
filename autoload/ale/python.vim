@@ -107,3 +107,8 @@ function! ale#python#FindExecutable(buffer, base_var_name, path_list) abort
 
     return ale#Var(a:buffer, a:base_var_name . '_executable')
 endfunction
+
+" Detects whether a pipenv environment is present.
+function! ale#python#PipenvPresent(buffer) abort
+    return findfile('Pipfile.lock', expand('#' . a:buffer . ':p:h') . ';') isnot# ''
+endfunction
