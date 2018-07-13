@@ -151,8 +151,9 @@ Execute(Previous errors should be removed when linters change):
   \ 'valid': 1,
   \}]
 
-  " Try the test a few times over in NeoVim 0.3, where tests fail randomly.
-  for g:i in range(has('nvim-0.3') ? 5 : 1)
+  " Try the test a few times over in NeoVim 0.3 or Windows,
+  " where tests fail randomly.
+  for g:i in range(has('nvim-0.3') || has('win32') ? 5 : 1)
     call ale#Lint()
     call ale#engine#WaitForJobs(2000)
 
