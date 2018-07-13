@@ -63,3 +63,12 @@ Execute(Messages with tracebacks should be handled):
   \   },
   \ },
   \})
+
+Execute(Messages with string data should be handled):
+  AssertEqual "xyz\nUncaught Exception", ale#lsp#response#GetErrorMessage({
+  \ 'error': {
+  \   'code': -32602,
+  \   'message': 'xyz',
+  \   'data': 'Uncaught Exception',
+  \ },
+  \})
