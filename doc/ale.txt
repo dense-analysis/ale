@@ -2205,6 +2205,10 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          defined, as LSP linters handle diagnostics
                          automatically. See |ale-lsp-linters|.
 
+                         If the function named does not exist, including if
+                         the function is later deleted, ALE will behave as if
+                         the callback returned an empty list.
+
                          The keys for each item in the List will be handled in
                          the following manner:
                                                            *ale-loclist-format*

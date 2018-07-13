@@ -222,7 +222,12 @@ function! s:HandleExit(job_id, exit_code) abort
         call ale#history#RememberOutput(l:buffer, a:job_id, l:output[:])
     endif
 
-    let l:loclist = ale#util#GetFunction(l:linter.callback)(l:buffer, l:output)
+    try
+        let l:loclist = ale#util#GetFunction(l:linter.callback)(l:buffer, l:output)
+    " Handle the function being unknown, or being deleted.
+    catch /E700/
+        let l:loclist = []
+    endtry
 
     call ale#engine#HandleLoclist(l:linter.name, l:buffer, l:loclist)
 endfunction
