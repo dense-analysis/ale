@@ -6,6 +6,7 @@ let s:sep = has('win32') ? '\' : '/'
 let s:bin_dir = has('unix') ? 'bin' : 'Scripts'
 let g:ale_virtualenv_dir_names = get(g:, 'ale_virtualenv_dir_names', [
 \   '.env',
+\   '.venv',
 \   'env',
 \   've-py3',
 \   've',
