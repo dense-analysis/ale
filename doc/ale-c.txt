@@ -209,4 +209,25 @@ g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
 
 
 ===============================================================================
+checkpatch                                                   *ale-c-checkpatch*
+
+g:ale_c_checkpatch_executable                   *g:ale_c_checkpatch_executable*
+                                                *b:ale_c_checkpatch_executable*
+
+  Type: |String|
+  Default: ''
+
+  This variable can be set to set a static path to the checkpatch
+  executable. If not set the linter will check for a ./scripts/checkpath.pl
+  file.
+
+
+g:ale_c_checkpatch_options                         *g:ale_c_checkpatch_options*
+                                                   *b:ale_c_checkpatch_options*
+
+  Type: |String|
+  Default: '--strict --no-tree'
+
+  This variable can be changed to pass extra options to checkpatch
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
