@@ -217,9 +217,9 @@ g:ale_c_checkpatch_executable                   *g:ale_c_checkpatch_executable*
   Type: |String|
   Default: ''
 
-  This variable can be set to set a static path to the checkpatch
-  executable. If not set the linter will check for a ./scripts/checkpath.pl
-  file.
+  This variable can be set to a static path to the checkpatch
+  executable. If this option is not set and *g:ale_use_global_executables*
+  is set, the linter will check for the nearest scripts/checkpath.pl file.
 
 
 g:ale_c_checkpatch_options                         *g:ale_c_checkpatch_options*
