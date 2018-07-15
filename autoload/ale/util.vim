@@ -290,6 +290,7 @@ function! ale#util#Tempname() abort
     finally
         if l:clear_tempdir
             let $TMPDIR = ''
+            silent! unlet! $TMPDIR
         endif
     endtry
 
