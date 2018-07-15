@@ -38,6 +38,7 @@ After:
   Restore
 
   unlet! g:expected_loclist
+  unlet! b:i
 
   call ale#engine#Cleanup(bufnr(''))
   call ale#linter#Reset()
@@ -54,14 +55,21 @@ Given foobar (Some imaginary filetype):
 Execute(ALELint should run the linters):
   AssertEqual 'foobar', &filetype
 
-  ALELint
-  call ale#engine#WaitForJobs(2000)
+  " Try to run the linter a few times, as it fails randomly in NeoVim.
+  for b:i in range(5)
+    ALELint
+    call ale#engine#WaitForJobs(2000)
 
-  if !has('nvim')
-    " Sleep so the delayed list function can run.
-    " This breaks the tests in NeoVim for some reason.
-    sleep 1ms
-  endif
+    if !has('nvim')
+      " Sleep so the delayed list function can run.
+      " This breaks the tests in NeoVim for some reason.
+      sleep 1ms
+    endif
+
+    if getloclist(0) == g:expected_loclist
+      break
+    endif
+  endfor
 
   " Check the loclist
   AssertEqual g:expected_loclist, getloclist(0)

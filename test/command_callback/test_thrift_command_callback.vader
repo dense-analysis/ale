@@ -1,13 +1,6 @@
 Before:
-  Save g:ale_thrift_thrift_executable
-  Save g:ale_thrift_thrift_generators
-  Save g:ale_thrift_thrift_includes
-  Save g:ale_thrift_thrift_options
-
-  unlet! b:ale_thrift_thrift_executable
-  unlet! b:ale_thrift_thrift_generators
-  unlet! b:ale_thrift_thrift_includes
-  unlet! b:ale_thrift_thrift_options
+  call ale#assert#SetUpLinterTest('thrift', 'thrift')
+  let b:suffix = ' -out ' . ale#Escape('TEMP_DIR') . ' %t'
 
   function! GetCommand(buffer) abort
     call ale#engine#InitBufferInfo(a:buffer)
@@ -24,62 +17,37 @@ Before:
     return join(l:split_command)
   endfunction
 
-  runtime ale_linters/thrift/thrift.vim
-
 After:
-  Restore
-
+  unlet! b:suffix
   delfunction GetCommand
-  unlet! b:ale_thrift_thrift_executable
-  unlet! b:ale_thrift_thrift_generators
-  unlet! b:ale_thrift_thrift_includes
-  unlet! b:ale_thrift_thrift_options
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'thrift', ale#Escape('thrift') . ' --gen cpp -strict' . b:suffix
 
 Execute(The executable should be configurable):
-  AssertEqual 'thrift', ale_linters#thrift#thrift#GetExecutable(bufnr(''))
-
   let b:ale_thrift_thrift_executable = 'foobar'
-  AssertEqual 'foobar', ale_linters#thrift#thrift#GetExecutable(bufnr(''))
 
-Execute(The executable should be used in the command):
-  AssertEqual
-  \ ale#Escape('thrift') . ' --gen cpp -strict -out TEMP %t',
-  \ GetCommand(bufnr('%'))
-
-  let b:ale_thrift_thrift_executable = 'foobar'
-  AssertEqual
-  \ ale#Escape('foobar') . ' --gen cpp -strict -out TEMP %t',
-  \ GetCommand(bufnr('%'))
+  AssertLinter 'foobar', ale#Escape('foobar') . ' --gen cpp -strict' . b:suffix
 
 Execute(The list of generators should be configurable):
   let b:ale_thrift_thrift_generators = ['java', 'py:dynamic']
 
-  AssertEqual
-  \ ale#Escape('thrift') . ' --gen java --gen py:dynamic -strict -out TEMP %t',
-  \ GetCommand(bufnr('%'))
+  AssertLinter 'thrift', ale#Escape('thrift')
+  \ . ' --gen java --gen py:dynamic -strict' . b:suffix
 
   let b:ale_thrift_thrift_generators = []
 
-  AssertEqual
-  \ ale#Escape('thrift') . ' --gen cpp -strict -out TEMP %t',
-  \ GetCommand(bufnr('%'))
+  AssertLinter 'thrift', ale#Escape('thrift') . ' --gen cpp -strict' . b:suffix
 
 Execute(The list of include paths should be configurable):
   let b:ale_thrift_thrift_includes = ['included/path']
 
-  AssertEqual
-  \ ale#Escape('thrift')
-  \   . ' --gen cpp'
-  \   . ' -I included/path'
-  \   . ' -strict -out TEMP %t',
-  \ GetCommand(bufnr('%'))
+  AssertLinter 'thrift', ale#Escape('thrift')
+  \ . ' --gen cpp -I included/path -strict' . b:suffix
 
 Execute(The string of compiler options should be configurable):
   let b:ale_thrift_thrift_options = '-strict --allow-64bit-consts'
 
-  AssertEqual
-  \ ale#Escape('thrift')
-  \   . ' --gen cpp -strict --allow-64bit-consts'
-  \   . ' -out TEMP %t',
-  \ GetCommand(bufnr('%'))
+  AssertLinter 'thrift', ale#Escape('thrift')
+  \   . ' --gen cpp -strict --allow-64bit-consts' . b:suffix

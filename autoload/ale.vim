@@ -213,6 +213,25 @@ function! ale#Set(variable_name, default) abort
     endif
 endfunction
 
+" Given a string for adding to a command, return the string padded with a
+" space on the left if it is not empty. Otherwise return an empty string.
+"
+" This can be used for making command strings cleaner and easier to test.
+function! ale#Pad(string) abort
+    return !empty(a:string) ? ' ' . a:string : ''
+endfunction
+
+" Given a environment variable name and a value, produce part of a command for
+" setting an environment variable before running a command. The syntax will be
+" valid for cmd on Windows, or most shells on Unix.
+function! ale#Env(variable_name, value) abort
+    if has('win32')
+        return 'set ' . a:variable_name . '=' . ale#Escape(a:value) . ' && '
+    endif
+
+    return a:variable_name . '=' . ale#Escape(a:value) . ' '
+endfunction
+
 " Escape a string suitably for each platform.
 " shellescape does not work on Windows.
 function! ale#Escape(str) abort

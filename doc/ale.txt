@@ -2074,6 +2074,29 @@ ALEStopAllLSPs                                                 *ALEStopAllLSPs*
 ===============================================================================
 9. API                                                                *ale-api*
 
+ALE offers a number of functions for running linters or fixers, or defining
+them. The following functions are part of the publicly documented part of that
+API, and should be expected to continue to work.
+
+
+ale#Env(variable_name, value)                                       *ale#Env()*
+
+  Given a variable name and a string value, produce a string for including in
+  a command for setting environment variables. This function can be used for
+  building a command like so. >
+
+    :echo string(ale#Env('VAR', 'some value') . 'command')
+    'VAR=''some value'' command'      # On Linux or Mac OSX
+    'set VAR="some value" && command' # On Windows
+
+
+ale#Pad(string)                                                     *ale#Pad()*
+
+  Given a string or any |empty()| value, return either the string prefixed
+  with a single space, or an empty string. This function can be used to build
+  parts of a command from variables.
+
+
 ale#Queue(delay, [linting_flag, buffer_number])                   *ale#Queue()*
 
   Run linters for the current buffer, based on the filetype of the buffer,
@@ -2098,8 +2121,17 @@ ale#Queue(delay, [linting_flag, buffer_number])                   *ale#Queue()*
 ale#engine#CreateDirectory(buffer)               *ale#engine#CreateDirectory()*
 
   Create a new temporary directory with a unique name, and manage that
-  directory with |ale#engine#ManageDirectory()|, so it will be removed as
-  soon as possible.
+  directory with |ale#engine#ManageDirectory()|, so it will be removed as soon
+  as possible.
+
+  It is advised to only call this function from a callback function for
+  returning a linter command to run.
+
+
+ale#engine#CreateFile(buffer)                         *ale#engine#CreateFile()*
+
+  Create a new temporary file with a unique name, and manage that file with
+  |ale#engine#ManageFile()|, so it will be removed as soon as possible.
 
   It is advised to only call this function from a callback function for
   returning a linter command to run.

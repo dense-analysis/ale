@@ -1,91 +1,75 @@
 Before:
-  Save g:ale_python_flake8_executable
-  Save g:ale_python_flake8_options
-  Save g:ale_python_flake8_use_global
-  Save g:ale_python_flake8_change_directory
-
-  unlet! g:ale_python_flake8_executable
-  unlet! g:ale_python_flake8_args
-  unlet! g:ale_python_flake8_options
-  unlet! g:ale_python_flake8_use_global
-  unlet! g:ale_python_flake8_change_directory
-
+  call ale#assert#SetUpLinterTest('python', 'flake8')
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
 
-  runtime ale_linters/python/flake8.vim
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  WithChainResults ['3.0.0']
 
 After:
-  Restore
-
-  unlet! g:ale_python_flake8_args
-
-  unlet! b:bin_dir
   unlet! b:executable
-
-  call ale#test#RestoreDirectory()
-  call ale#linter#Reset()
-  call ale#semver#ResetVersionCache()
+  unlet! b:bin_dir
+  call ale#assert#TearDownLinterTest()
 
 Execute(The flake8 callbacks should return the correct default values):
-  AssertEqual
-  \ 'flake8',
-  \ ale_linters#python#flake8#GetExecutable(bufnr(''))
-  AssertEqual
+  AssertLinter 'flake8', [
   \ ale#Escape('flake8') . ' --version',
-  \ ale_linters#python#flake8#VersionCheck(bufnr(''))
-  AssertEqual
   \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
-  \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
+  \]
+
+  " The version check should be cached.
+  WithChainResults []
+  AssertLinter 'flake8', [
+  \ '',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
+  \]
 
   " Try with older versions.
   call ale#semver#ResetVersionCache()
-  AssertEqual
+  WithChainResults ['2.9.9']
+  AssertLinter 'flake8', [
+  \ ale#Escape('flake8') . ' --version',
   \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('flake8') . ' --format=default -',
-  \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
+  \]
 
 Execute(The option for disabling changing directories should work):
   let g:ale_python_flake8_change_directory = 0
 
-  AssertEqual
+  AssertLinter 'flake8', [
+  \ ale#Escape('flake8') . ' --version',
   \ ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
-  \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
+  \]
 
 Execute(The flake8 command callback should let you set options):
   let g:ale_python_flake8_options = '--some-option'
 
-  AssertEqual
+  WithChainResults ['3.0.4']
+  AssertLinter 'flake8', [
+  \ ale#Escape('flake8') . ' --version',
   \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('flake8')
-  \   . ' --some-option --format=default'
-  \   . ' --stdin-display-name %s -',
-  \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.4'])
+  \   . ale#Escape('flake8') . ' --some-option'
+  \   . ' --format=default --stdin-display-name %s -',
+  \]
 
   call ale#semver#ResetVersionCache()
-
-  AssertEqual
+  WithChainResults ['2.9.9']
+  AssertLinter 'flake8', [
+  \ ale#Escape('flake8') . ' --version',
   \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('flake8')
-  \   . ' --some-option --format=default -',
-  \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
+  \   . ale#Escape('flake8') . ' --some-option --format=default -',
+  \]
 
 Execute(You should be able to set a custom executable and it should be escaped):
   let g:ale_python_flake8_executable = 'executable with spaces'
 
-  AssertEqual
-  \ 'executable with spaces',
-  \ ale_linters#python#flake8#GetExecutable(bufnr(''))
-  AssertEqual
+  AssertLinter 'executable with spaces', [
   \ ale#Escape('executable with spaces') . ' --version',
-  \ ale_linters#python#flake8#VersionCheck(bufnr(''))
-  AssertEqual
   \ ale#path#BufferCdString(bufnr(''))
   \   .  ale#Escape('executable with spaces')
   \   . ' --format=default'
   \   . ' --stdin-display-name %s -',
-  \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
+  \]
 
 Execute(The flake8 callbacks should detect virtualenv directories):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
@@ -94,17 +78,13 @@ Execute(The flake8 callbacks should detect virtualenv directories):
   \ g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/flake8'
   \)
 
-  AssertEqual
-  \ b:executable,
-  \ ale_linters#python#flake8#GetExecutable(bufnr(''))
-  AssertEqual
+  AssertLinter b:executable, [
   \ ale#Escape(b:executable) . ' --version',
-  \ ale_linters#python#flake8#VersionCheck(bufnr(''))
-  AssertEqual
   \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape(b:executable)
-  \   . ' --format=default --stdin-display-name %s -',
-  \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
+  \   .  ale#Escape(b:executable)
+  \   . ' --format=default'
+  \   . ' --stdin-display-name %s -',
+  \]
 
 Execute(The FindProjectRoot should detect the project root directory for namespace package via Manifest.in):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/namespace_package_manifest/namespace/foo/bar.py')
@@ -148,37 +128,32 @@ Execute(Using `python -m flake8` should be supported for running flake8):
   let g:ale_python_flake8_executable = 'python'
   let g:ale_python_flake8_options = '-m flake8 --some-option'
 
-  AssertEqual
-  \ 'python',
-  \ ale_linters#python#flake8#GetExecutable(bufnr(''))
-  AssertEqual
+  WithChainResults ['2.9.9']
+  AssertLinter 'python', [
   \ ale#Escape('python') . ' -m flake8 --version',
-  \ ale_linters#python#flake8#VersionCheck(bufnr(''))
-  AssertEqual
   \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('python') . ' -m flake8 --some-option --format=default -',
-  \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
+  \   .  ale#Escape('python')
+  \   . ' -m flake8 --some-option --format=default -'
+  \]
 
   call ale#semver#ResetVersionCache()
 
   " Leading spaces shouldn't matter
   let g:ale_python_flake8_options = '  -m flake8 --some-option'
 
-  AssertEqual
-  \ 'python',
-  \ ale_linters#python#flake8#GetExecutable(bufnr(''))
-  AssertEqual
+  WithChainResults ['2.9.9']
+  AssertLinter 'python', [
   \ ale#Escape('python') . ' -m flake8 --version',
-  \ ale_linters#python#flake8#VersionCheck(bufnr(''))
-  AssertEqual
   \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('python') . '   -m flake8 --some-option --format=default -',
-  \ ale_linters#python#flake8#GetCommand(bufnr(''), ['2.9.9'])
+  \   .  ale#Escape('python')
+  \   . '   -m flake8 --some-option --format=default -'
+  \]
 
-Execute(Setting executable to 'pipenv' appends 'run flake8'):
+Execute(Setting executable to 'pipenv' should append 'run flake8'):
   let g:ale_python_flake8_executable = 'path/to/pipenv'
 
-  AssertEqual
+  " FIXME: pipenv should check the vresion with flake8.
+  WithChainResults []
+  AssertLinter 'path/to/pipenv',
   \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('path/to/pipenv') . ' run flake8 --format=default --stdin-display-name %s -',
-  \ ale_linters#python#flake8#GetCommand(bufnr(''), ['3.0.0'])
+  \   .  ale#Escape('path/to/pipenv') . ' run flake8 --format=default -'

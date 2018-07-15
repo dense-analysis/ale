@@ -1,25 +1,15 @@
 Before:
-  runtime ale_linters/javascript/jscs.vim
+  call ale#assert#SetUpLinterTest('javascript', 'jscs')
 
 After:
-  call ale#linter#Reset()
-  let g:ale_javascript_jscs_executable = 'jscs'
+  call ale#assert#TearDownLinterTest()
 
 Execute(Should return the correct default values):
-  AssertEqual
-  \ 'jscs',
-  \ ale_linters#javascript#jscs#GetExecutable(bufnr(''))
-  AssertEqual
-  \ ale#Escape('jscs') . ' --reporter inline --no-colors -',
-  \ ale_linters#javascript#jscs#GetCommand(bufnr(''))
-
+  AssertLinter 'jscs',
+  \ ale#Escape('jscs') . ' --reporter inline --no-colors -'
 
 Execute(Should allow using a custom executable):
   let g:ale_javascript_jscs_executable = 'foobar'
 
-  AssertEqual
-  \ 'foobar',
-  \ ale_linters#javascript#jscs#GetExecutable(bufnr(''))
-  AssertEqual
-  \ ale#Escape('foobar') . ' --reporter inline --no-colors -',
-  \ ale_linters#javascript#jscs#GetCommand(bufnr(''))
+  AssertLinter 'foobar',
+  \ ale#Escape('foobar') . ' --reporter inline --no-colors -'

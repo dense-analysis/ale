@@ -1,39 +1,23 @@
 Before:
-  Save g:ale_vim_vint_executable
-
-  unlet! g:ale_vim_vint_executable
-
-  runtime ale_linters/vim/vint.vim
-
+  call ale#assert#SetUpLinterTest('vim', 'vint')
   let b:command_tail = (has('nvim') ? ' --enable-neovim' : '')
   \ . ' -f "{file_path}:{line_number}:{column_number}: {severity}: {description} (see {reference})" %t'
-  call ale#semver#ResetVersionCache()
 
 After:
-  Restore
-
-  call ale#linter#Reset()
-  call ale#semver#ResetVersionCache()
-
   unlet! b:bin_dir
   unlet! b:executable
+  call ale#assert#TearDownLinterTest()
 
 Execute(The default command should be correct):
-  AssertEqual 'vint', ale_linters#vim#vint#GetExecutable(bufnr(''))
-  AssertEqual
+  AssertLinter 'vint', [
   \ ale#Escape('vint') .' --version',
-  \ ale_linters#vim#vint#VersionCommand(bufnr(''))
-  AssertEqual
   \ ale#Escape('vint') .' -s --no-color' . b:command_tail,
-  \ ale_linters#vim#vint#GetCommand(bufnr(''), [])
+  \]
 
 Execute(The executable should be configurable):
   let g:ale_vim_vint_executable = 'foobar'
 
-  AssertEqual 'foobar', ale_linters#vim#vint#GetExecutable(bufnr(''))
-  AssertEqual
+  AssertLinter 'foobar', [
   \ ale#Escape('foobar') .' --version',
-  \ ale_linters#vim#vint#VersionCommand(bufnr(''))
-  AssertEqual
   \ ale#Escape('foobar') .' -s --no-color' . b:command_tail,
-  \ ale_linters#vim#vint#GetCommand(bufnr(''), [])
+  \]

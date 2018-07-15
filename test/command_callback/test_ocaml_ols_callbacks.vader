@@ -1,54 +1,40 @@
 Before:
+  call ale#assert#SetUpLinterTest('ocaml', 'ols')
+
   Save &filetype
-  Save g:ale_ocaml_ols_executable
-  Save g:ale_ocaml_ols_use_global
-
   let &filetype = 'ocaml'
-  unlet! g:ale_ocaml_ols_executable
-  unlet! g:ale_ocaml_ols_use_global
-
-  runtime ale_linters/ocaml/ols.vim
-
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
 
 After:
-  Restore
-
-  call ale#test#RestoreDirectory()
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The language string should be correct):
-  AssertEqual 'ocaml', ale#handlers#ols#GetLanguage(bufnr(''))
+  AssertLSPLanguage 'ocaml'
 
 Execute(The default executable should be correct):
-  AssertEqual 'ocaml-language-server', ale#handlers#ols#GetExecutable(bufnr(''))
-  AssertEqual
-  \ ale#Escape('ocaml-language-server') . ' --stdio',
-  \ ale#handlers#ols#GetCommand(bufnr(''))
+  AssertLinter 'ocaml-language-server',
+  \ ale#Escape('ocaml-language-server') . ' --stdio'
 
 Execute(The project root should be detected correctly):
-  AssertEqual '', ale#handlers#ols#GetProjectRoot(bufnr(''))
+  AssertLSPProject ''
 
   call ale#test#SetFilename('ols_paths/file.ml')
 
-  AssertEqual
-  \ ale#path#Simplify(g:dir . '/ols_paths'),
-  \ ale#handlers#ols#GetProjectRoot(bufnr(''))
+  AssertLSPProject ale#path#Simplify(g:dir . '/ols_paths')
 
 Execute(The local executable should be used when available):
   call ale#test#SetFilename('ols_paths/file.ml')
 
-  AssertEqual
-  \ ale#path#Simplify(g:dir . '/ols_paths/node_modules/.bin/ocaml-language-server'),
-  \ ale#handlers#ols#GetExecutable(bufnr(''))
+  AssertLinter ale#path#Simplify(g:dir . '/ols_paths/node_modules/.bin/ocaml-language-server'),
+  \ ale#Escape(ale#path#Simplify(g:dir . '/ols_paths/node_modules/.bin/ocaml-language-server')) . ' --stdio'
 
 Execute(The gloabl executable should always be used when use_global is set):
   let g:ale_ocaml_ols_use_global = 1
   call ale#test#SetFilename('ols_paths/file.ml')
 
-  AssertEqual 'ocaml-language-server', ale#handlers#ols#GetExecutable(bufnr(''))
+  AssertLinter 'ocaml-language-server',
+  \ ale#Escape('ocaml-language-server') . ' --stdio'
 
 Execute(The executable should be configurable):
   let g:ale_ocaml_ols_executable = 'foobar'
 
-  AssertEqual 'foobar', ale#handlers#ols#GetExecutable(bufnr(''))
+  AssertLinter 'foobar', ale#Escape('foobar') . ' --stdio'

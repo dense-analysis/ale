@@ -1,34 +1,20 @@
 Before:
-  Save g:ale_python_pyre_executable
-  Save g:ale_python_pyre_use_global
-
-  unlet! g:ale_python_pyre_executable
-  unlet! g:ale_python_pyre_use_global
-
+  call ale#assert#SetUpLinterTest('python', 'pyre')
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
 
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
-
-  runtime ale_linters/python/pyre.vim
-
 After:
-  Restore
-
   unlet! b:bin_dir
   unlet! b:executable
-
-  call ale#test#RestoreDirectory()
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The pyre command callback should return default string):
-  AssertEqual ale#Escape('pyre') . ' persistent',
-  \ ale_linters#python#pyre#GetCommand(bufnr(''))
+  AssertLinter 'pyre',  ale#Escape('pyre') . ' persistent'
 
 Execute(The pyre executable should be configurable):
   let g:ale_python_pyre_executable = '~/.local/bin/pyre'
 
-  AssertEqual ale#Escape('~/.local/bin/pyre') . ' persistent',
-  \ ale_linters#python#pyre#GetCommand(bufnr(''))
+  AssertLinter '~/.local/bin/pyre',
+  \ ale#Escape('~/.local/bin/pyre') . ' persistent'
 
 Execute(The pyre executable should be run from the virtualenv path):
   call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
@@ -37,20 +23,17 @@ Execute(The pyre executable should be run from the virtualenv path):
   \ g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/pyre'
   \)
 
-  AssertEqual ale#Escape(b:executable) . ' persistent',
-  \ ale_linters#python#pyre#GetCommand(bufnr(''))
+  AssertLinter b:executable, ale#Escape(b:executable) . ' persistent'
 
 Execute(You should be able to override the pyre virtualenv lookup):
   call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
 
   let g:ale_python_pyre_use_global = 1
 
-  AssertEqual ale#Escape('pyre') . ' persistent',
-  \ ale_linters#python#pyre#GetCommand(bufnr(''))
+  AssertLinter 'pyre', ale#Escape('pyre') . ' persistent'
 
 Execute(Setting executable to 'pipenv' appends 'run pyre'):
   let g:ale_python_pyre_executable = 'path/to/pipenv'
 
-  AssertEqual
-  \ ale#Escape('path/to/pipenv') . ' run pyre persistent',
-  \ ale_linters#python#pyre#GetCommand(bufnr(''))
+  AssertLinter 'path/to/pipenv',
+  \ ale#Escape('path/to/pipenv') . ' run pyre persistent'

@@ -149,13 +149,18 @@ failed=0
 index=0
 
 for pid in $pid_list; do
+    this_failed=0
     index=$((index+1))
 
     if ! wait "$pid"; then
         failed=1
+        this_failed=1
     fi
 
-    cat "$output_dir/$index"
+    # Hide output for things that passed if -q is set.
+    if [ "$quiet_flag" != '-q' ] || ((this_failed)); then
+        cat "$output_dir/$index"
+    fi
 done
 
 if ((failed)); then

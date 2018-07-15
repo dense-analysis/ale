@@ -1,77 +1,49 @@
 Before:
-  Save g:ale_c_clangtidy_checks
-  Save g:ale_c_clangtidy_options
-  Save g:ale_c_build_dir
-
-  unlet! g:ale_c_build_dir
-  unlet! b:ale_c_build_dir
-  unlet! g:ale_c_clangtidy_checks
-  unlet! b:ale_c_clangtidy_checks
-  unlet! g:ale_c_clangtidy_options
-  unlet! b:ale_c_clangtidy_options
-
-  runtime ale_linters/c/clangtidy.vim
-
+  call ale#assert#SetUpLinterTest('c', 'clangtidy')
   call ale#test#SetFilename('test.c')
 
 After:
-  unlet! b:ale_c_build_dir
-  unlet! b:ale_c_clangtidy_checks
-  unlet! b:ale_c_clangtidy_options
-  unlet! b:ale_c_clangtidy_executable
-
-  Restore
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The clangtidy command default should be correct):
-  AssertEqual
-  \ ale#Escape('clang-tidy')
-  \   . ' -checks=' . ale#Escape('*') . ' %s',
-  \ ale_linters#c#clangtidy#GetCommand(bufnr(''))
+  AssertLinter 'clang-tidy',
+  \ ale#Escape('clang-tidy') . ' -checks=' . ale#Escape('*') . ' %s'
 
 Execute(You should be able to remove the -checks option for clang-tidy):
   let b:ale_c_clangtidy_checks = []
 
-  AssertEqual
-  \ ale#Escape('clang-tidy')
-  \   . ' %s',
-  \ ale_linters#c#clangtidy#GetCommand(bufnr(''))
+  AssertLinter 'clang-tidy',
+  \ ale#Escape('clang-tidy') . ' %s'
 
 Execute(You should be able to set other checks for clang-tidy):
   let b:ale_c_clangtidy_checks = ['-*', 'clang-analyzer-*']
 
-  AssertEqual
+  AssertLinter 'clang-tidy',
   \ ale#Escape('clang-tidy')
-  \   . ' -checks=' . ale#Escape('-*,clang-analyzer-*') . ' %s',
-  \ ale_linters#c#clangtidy#GetCommand(bufnr(''))
+  \   . ' -checks=' . ale#Escape('-*,clang-analyzer-*') . ' %s'
 
 Execute(You should be able to manually set compiler flags for clang-tidy):
   let b:ale_c_clangtidy_options = '-Wall'
 
-  AssertEqual
-  \ ale#Escape('clang-tidy')
-  \   . ' -checks=' . ale#Escape('*') . ' %s'
-  \   . ' -- -Wall',
-  \ ale_linters#c#clangtidy#GetCommand(bufnr(''))
-  \
+  AssertLinter 'clang-tidy',
+  \ ale#Escape('clang-tidy') . ' -checks=' . ale#Escape('*') . ' %s -- -Wall'
+
 Execute(The build directory should be configurable):
   let b:ale_c_build_dir = '/foo/bar'
 
-  AssertEqual
+  AssertLinter 'clang-tidy',
   \ ale#Escape('clang-tidy')
   \   . ' -checks=' . ale#Escape('*') . ' %s'
-  \   . ' -p ' . ale#Escape('/foo/bar'),
-  \ ale_linters#c#clangtidy#GetCommand(bufnr(''))
+  \   . ' -p ' . ale#Escape('/foo/bar')
 
 Execute(The build directory setting should override the options):
   let b:ale_c_build_dir = '/foo/bar'
   let b:ale_c_clangtidy_options = '-Wall'
 
-  AssertEqual
+  AssertLinter 'clang-tidy',
   \ ale#Escape('clang-tidy')
   \   . ' -checks=' . ale#Escape('*') . ' %s'
-  \   . ' -p ' . ale#Escape('/foo/bar'),
-  \ ale_linters#c#clangtidy#GetCommand(bufnr(''))
+  \   . ' -p ' . ale#Escape('/foo/bar')
 
 Execute(The build directory should be ignored for header files):
   call ale#test#SetFilename('test.h')
@@ -79,24 +51,17 @@ Execute(The build directory should be ignored for header files):
   let b:ale_c_build_dir = '/foo/bar'
   let b:ale_c_clangtidy_options = '-Wall'
 
-  AssertEqual
+  AssertLinter 'clang-tidy',
   \ ale#Escape('clang-tidy')
-  \   . ' -checks=' . ale#Escape('*') . ' %s'
-  \   . ' -- -Wall',
-  \ ale_linters#c#clangtidy#GetCommand(bufnr(''))
-  \
+  \   . ' -checks=' . ale#Escape('*') . ' %s -- -Wall'
+
   call ale#test#SetFilename('test.h')
 
-  AssertEqual
-  \ ale#Escape('clang-tidy')
-  \   . ' -checks=' . ale#Escape('*') . ' %s'
-  \   . ' -- -Wall',
-  \ ale_linters#c#clangtidy#GetCommand(bufnr(''))
+  AssertLinter 'clang-tidy',
+  \ ale#Escape('clang-tidy') . ' -checks=' . ale#Escape('*') . ' %s -- -Wall'
 
 Execute(The executable should be configurable):
   let b:ale_c_clangtidy_executable = 'foobar'
 
-  AssertEqual
-  \ ale#Escape('foobar')
-  \   . ' -checks=' . ale#Escape('*') . ' %s',
-  \ ale_linters#c#clangtidy#GetCommand(bufnr(''))
+  AssertLinter 'foobar',
+  \ ale#Escape('foobar') . ' -checks=' . ale#Escape('*') . ' %s'

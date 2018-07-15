@@ -2,47 +2,21 @@
 " Description: A language server for C++
 
 Before:
-  Save g:ale_cpp_cquery_executable
-  Save g:ale_cpp_cquery_cache_directory
-
-  unlet! g:ale_cpp_cquery_executable
-  unlet! b:ale_cpp_cquery_executable
-  unlet! g:ale_cpp_cquery_cache_directory
-  unlet! b:ale_cpp_cquery_cache_directory
-
-  runtime ale_linters/cpp/cquery.vim
+  call ale#assert#SetUpLinterTest('cpp', 'cquery')
 
 After:
-  Restore
-  unlet! b:ale_cpp_cquery_executable
-  unlet! b:ale_cpp_cquery_cache_directory
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The executable should be configurable):
-  AssertEqual 'cquery', ale_linters#cpp#cquery#GetExecutable(bufnr(''))
+  AssertLinter 'cquery', ale#Escape('cquery')
 
   let b:ale_cpp_cquery_executable = 'foobar'
 
-  AssertEqual 'foobar', ale_linters#cpp#cquery#GetExecutable(bufnr(''))
-
-Execute(The executable should be used in the command):
-  AssertEqual
-  \ ale#Escape('cquery'),
-  \ ale_linters#cpp#cquery#GetCommand(bufnr(''))
-
-  let b:ale_cpp_cquery_executable = 'foobar'
-
-  AssertEqual
-  \ ale#Escape('foobar'),
-  \ ale_linters#cpp#cquery#GetCommand(bufnr(''))
+  AssertLinter 'foobar', ale#Escape('foobar')
 
 Execute(The cache directory should be configurable):
-  AssertEqual
-  \ {'cacheDirectory': expand('$HOME/.cache/cquery')},
-  \ ale_linters#cpp#cquery#GetInitializationOptions(bufnr(''))
+  AssertLSPOptions {'cacheDirectory': expand('$HOME/.cache/cquery')}
 
   let b:ale_cpp_cquery_cache_directory = '/foo/bar'
 
-  AssertEqual
-  \ {'cacheDirectory': '/foo/bar'},
-  \ ale_linters#cpp#cquery#GetInitializationOptions(bufnr(''))
+  AssertLSPOptions {'cacheDirectory': '/foo/bar'}

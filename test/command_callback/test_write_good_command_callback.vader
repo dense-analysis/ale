@@ -1,6 +1,8 @@
 Before:
-  call ale#assert#Init()
+  " This is just one example of a language using the linter.
+  call ale#assert#SetUpLinterTest('markdown', 'writegood')
 
+  " The options are shared between many languages.
   Save g:ale_writegood_options
   Save g:ale_writegood_executable
   Save g:ale_writegood_use_global
@@ -9,18 +11,11 @@ Before:
   unlet! g:ale_writegood_executable
   unlet! g:ale_writegood_use_global
 
-  runtime ale_linters/markdown/write-good.vim
-
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
   call ale#test#SetFilename('testfile.txt')
-
   call ale#handlers#writegood#ResetOptions()
 
 After:
-  Restore
-
-  call ale#test#RestoreDirectory()
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The global executable should be used when the local one cannot be found):
   AssertLinter

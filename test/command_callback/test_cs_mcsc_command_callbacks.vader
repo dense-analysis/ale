@@ -1,93 +1,47 @@
 Before:
-  Save g:ale_cs_mcsc_options
-  Save g:ale_cs_mcsc_source
-  Save g:ale_cs_mcsc_assembly_path
-  Save g:ale_cs_mcsc_assemblies
-  Save g:ale_buffer_info
-
-  let g:ale_buffer_info = {bufnr(''): {'temporary_file_list': []}}
-
-  unlet! g:ale_cs_mcsc_options
-  unlet! g:ale_cs_mcsc_source
-  unlet! g:ale_cs_mcsc_assembly_path
-  unlet! g:ale_cs_mcsc_assemblies
-
-  let g:prefix = ' -out:TEMP -t:module -recurse:' . ale#Escape('*.cs')
-
-  function! GetCommand()
-    let l:command = ale_linters#cs#mcsc#GetCommand(bufnr(''))
-    let l:command = join(split(l:command))
-
-    return substitute(l:command, ':[^ ]\+ -t:module', ':TEMP -t:module', '')
-  endfunction
-
-  runtime ale_linters/cs/mcsc.vim
+  call ale#assert#SetUpLinterTest('cs', 'mcsc')
 
 After:
-  Restore
-
-  unlet! b:ale_cs_mcsc_options
-  unlet! g:ale_cs_mcsc_source
-  unlet! g:ale_cs_mcsc_assembly_path
-  unlet! g:ale_cs_mcsc_assemblies
-  unlet! g:ale_prefix
-
-  delfunction GetCommand
-
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The mcsc linter should return the correct default command):
-  AssertEqual
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . 'mcs -unsafe' . g:prefix,
-  \ GetCommand()
+  AssertLinter 'mcs', 'cd ' . ale#Escape(g:dir) . ' && '
+  \ . 'mcs -unsafe -out:TEMP -t:module -recurse:' . ale#Escape('*.cs')
 
 Execute(The options should be be used in the command):
   let g:ale_cs_mcsc_options = '-pkg:dotnet'
 
-  AssertEqual
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . 'mcs -unsafe -pkg:dotnet' . g:prefix,
-  \ GetCommand()
+  AssertLinter 'mcs', 'cd ' . ale#Escape(g:dir) . ' && '
+  \ . 'mcs -unsafe -pkg:dotnet -out:TEMP -t:module -recurse:' . ale#Escape('*.cs')
 
 Execute(The souce path should be be used in the command):
   let g:ale_cs_mcsc_source = '../foo/bar'
 
-  AssertEqual
-  \ 'cd ' . ale#Escape('../foo/bar') . ' && '
-  \   . 'mcs -unsafe' . g:prefix,
-  \ GetCommand()
+  AssertLinter 'mcs', 'cd ' . ale#Escape('../foo/bar') . ' && '
+  \ . 'mcs -unsafe -out:TEMP -t:module -recurse:' . ale#Escape('*.cs')
 
 Execute(The list of search pathes for assemblies should be be used in the command if not empty):
   let g:ale_cs_mcsc_assembly_path = ['/usr/lib/mono', '../foo/bar']
 
-  AssertEqual
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . 'mcs -unsafe'
-  \   . ' -lib:' . ale#Escape('/usr/lib/mono') . ',' . ale#Escape('../foo/bar')
-  \   . g:prefix,
-  \ GetCommand()
+  AssertLinter 'mcs', 'cd ' . ale#Escape(g:dir) . ' && '
+  \ . 'mcs -unsafe'
+  \ . ' -lib:' . ale#Escape('/usr/lib/mono') . ',' . ale#Escape('../foo/bar')
+  \ . ' -out:TEMP -t:module -recurse:' . ale#Escape('*.cs')
 
   let g:ale_cs_mcsc_assembly_path = []
 
-  AssertEqual
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . 'mcs -unsafe' . g:prefix,
-  \ GetCommand()
+  AssertLinter 'mcs', 'cd ' . ale#Escape(g:dir) . ' && '
+  \ . 'mcs -unsafe -out:TEMP -t:module -recurse:' . ale#Escape('*.cs')
 
 Execute(The list of assemblies should be be used in the command if not empty):
   let g:ale_cs_mcsc_assemblies = ['foo.dll', 'bar.dll']
 
-  AssertEqual
-  \ ale#path#BufferCdString(bufnr(''))
-  \   .  'mcs -unsafe'
-  \   . ' -r:' . ale#Escape('foo.dll') . ',' . ale#Escape('bar.dll')
-  \   . g:prefix,
-  \ GetCommand()
+  AssertLinter 'mcs', 'cd ' . ale#Escape(g:dir) . ' && '
+  \ . 'mcs -unsafe'
+  \ . ' -r:' . ale#Escape('foo.dll') . ',' . ale#Escape('bar.dll')
+  \ . ' -out:TEMP -t:module -recurse:' . ale#Escape('*.cs')
 
   let g:ale_cs_mcsc_assemblies = []
 
-  AssertEqual
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . 'mcs -unsafe' . g:prefix,
-  \ GetCommand()
+  AssertLinter 'mcs', 'cd ' . ale#Escape(g:dir) . ' && '
+  \ . 'mcs -unsafe -out:TEMP -t:module -recurse:' . ale#Escape('*.cs')

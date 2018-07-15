@@ -1,34 +1,13 @@
 Before:
-  Save g:ale_cs_mcs_options
-
-  unlet! g:ale_cs_mcs_options
-
-  runtime ale_linters/cs/mcs.vim
-
-  let b:command_tail = ' -unsafe --parse'
+  call ale#assert#SetUpLinterTest('cs', 'mcs')
 
 After:
-  Restore
-  unlet! b:command_tail
-  unlet! b:ale_cs_mcs_options
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
-Execute(Check for proper default command):
-
-  let b:command = ale_linters#cs#mcs#GetCommand(bufnr(''))
-  let b:command = substitute(b:command,'\s\+',' ','g')
-
-  AssertEqual
-  \  b:command,
-  \  'mcs -unsafe --parse %t'
+Execute(The default command should be correct):
+  AssertLinter 'mcs', 'mcs -unsafe --parse %t'
 
 Execute(The options should be be used in the command):
-
   let b:ale_cs_mcs_options = '-pkg:dotnet'
-  let b:command = ale_linters#cs#mcs#GetCommand(bufnr(''))
-  let b:command = substitute(b:command,'\s\+',' ','g')
 
-  AssertEqual
-  \ b:command,
-  \ 'mcs' . b:command_tail . ' ' . b:ale_cs_mcs_options . ' %t',
-
+  AssertLinter 'mcs', 'mcs -unsafe --parse -pkg:dotnet %t'

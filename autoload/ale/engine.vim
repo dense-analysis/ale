@@ -96,8 +96,25 @@ function! ale#engine#ManageDirectory(buffer, directory) abort
     call add(g:ale_buffer_info[a:buffer].temporary_directory_list, a:directory)
 endfunction
 
+function! ale#engine#CreateFile(buffer) abort
+    " This variable can be set to 1 in tests to stub this out.
+    if get(g:, 'ale_create_dummy_temporary_file')
+        return 'TEMP'
+    endif
+
+    let l:temporary_file = ale#util#Tempname()
+    call ale#engine#ManageFile(a:buffer, l:temporary_file)
+
+    return l:temporary_file
+endfunction
+
 " Create a new temporary directory and manage it in one go.
 function! ale#engine#CreateDirectory(buffer) abort
+    " This variable can be set to 1 in tests to stub this out.
+    if get(g:, 'ale_create_dummy_temporary_file')
+        return 'TEMP_DIR'
+    endif
+
     let l:temporary_directory = ale#util#Tempname()
     " Create the temporary directory for the file, unreadable by 'other'
     " users.
