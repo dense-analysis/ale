@@ -280,7 +280,7 @@ endfunction
 function! ale#util#Tempname() abort
     let l:clear_tempdir = 0
 
-    if has('unix') && empty($TMPDIR)
+    if exists('$TMPDIR') && empty($TMPDIR)
         let l:clear_tempdir = 1
         let $TMPDIR = '/tmp'
     endif
@@ -290,7 +290,6 @@ function! ale#util#Tempname() abort
     finally
         if l:clear_tempdir
             let $TMPDIR = ''
-            silent! unlet! $TMPDIR
         endif
     endtry
 
