@@ -31,6 +31,7 @@ Before:
 
   call ale#test#SetDirectory('/testplugin/test')
   call ale#test#SetFilename('test.txt')
+  call ale#linter#PreventLoading('testft')
 
   function AddCarets(buffer, lines) abort
     " map() is applied to the original lines here.

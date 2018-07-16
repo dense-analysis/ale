@@ -18,10 +18,10 @@ Execute(QuitEvent should set b:ale_quitting some time from the clock):
   Assert b:ale_quitting >= b:time_before
   Assert b:ale_quitting <= ale#events#ClockMilliseconds()
 
-Execute(EnterEvent should set b:ale_quitting to 0):
+Execute(ReadOrEnterEvent should set b:ale_quitting to 0):
   let b:ale_quitting = 1
 
-  call ale#events#EnterEvent(bufnr(''))
+  call ale#events#ReadOrEnterEvent(bufnr(''))
 
   AssertEqual 0, b:ale_quitting
 

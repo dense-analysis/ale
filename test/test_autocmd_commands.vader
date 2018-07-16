@@ -79,11 +79,9 @@ Execute (All events should be set up when everything is on):
 
   AssertEqual
   \ [
-  \   'BufEnter * call ale#pattern_options#SetOptions(str2nr(expand(''<abuf>'')))',
-  \   'BufEnter call ale#events#EnterEvent(str2nr(expand(''<abuf>'')))',
-  \   'BufReadPost * call ale#pattern_options#SetOptions(str2nr(expand(''<abuf>'')))',
-  \   'BufReadPost call ale#Queue(0, ''lint_file'', str2nr(expand(''<abuf>'')))',
-  \   'BufWinEnter * call ale#Queue(0, ''lint_file'', str2nr(expand(''<abuf>'')))',
+  \   'BufEnter * call ale#events#ReadOrEnterEvent(str2nr(expand(''<abuf>'')))',
+  \   'BufReadPost * call ale#events#ReadOrEnterEvent(str2nr(expand(''<abuf>'')))',
+  \   'BufWinEnter * call ale#events#LintOnEnter(str2nr(expand(''<abuf>'')))',
   \   'BufWritePost * call ale#events#SaveEvent(str2nr(expand(''<abuf>'')))',
   \   'CursorHold * if exists(''*ale#engine#Cleanup'') | call ale#cursor#EchoCursorWarningWithDelay() | endif',
   \   'CursorMoved * if exists(''*ale#engine#Cleanup'') | call ale#cursor#EchoCursorWarningWithDelay() | endif',
@@ -110,8 +108,8 @@ Execute (Only the required events should be bound even if various settings are o
 
   AssertEqual
   \ [
-  \   'BufEnter * call ale#pattern_options#SetOptions(str2nr(expand(''<abuf>'')))',
-  \   'BufReadPost * call ale#pattern_options#SetOptions(str2nr(expand(''<abuf>'')))',
+  \   'BufEnter * call ale#events#ReadOrEnterEvent(str2nr(expand(''<abuf>'')))',
+  \   'BufReadPost * call ale#events#ReadOrEnterEvent(str2nr(expand(''<abuf>'')))',
   \   'BufWritePost * call ale#events#SaveEvent(str2nr(expand(''<abuf>'')))',
   \ ],
   \ CheckAutocmd('ALEEvents')
