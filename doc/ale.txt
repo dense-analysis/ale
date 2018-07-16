@@ -146,6 +146,7 @@ CONTENTS                                                         *ale-contents*
     markdown..............................|ale-markdown-options|
       mdl.................................|ale-markdown-mdl|
       prettier............................|ale-markdown-prettier|
+      remark-lint.........................|ale-markdown-remark-lint|
       textlint............................|ale-markdown-textlint|
       write-good..........................|ale-markdown-write-good|
     mercury...............................|ale-mercury-options|
