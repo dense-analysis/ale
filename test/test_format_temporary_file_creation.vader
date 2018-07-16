@@ -21,7 +21,11 @@ Before:
   let g:output = []
 
   function! TestCallback(buffer, output)
-    let g:output = a:output
+    " Extract just letters from the output.
+    let g:output = filter(
+    \ map(a:output, 'matchstr(v:val, ''[a-zA-Z]\+'')'),
+    \ '!empty(v:val)'
+    \)
 
     return []
   endfunction
