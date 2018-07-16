@@ -28,7 +28,7 @@ Execute(Warning and error messages should be handled correctly):
   \     'text': 'Missing new line after list item  list-item-spacing  remark-lint',
   \   },
   \ ],
-  \ ale_linters#markdown#remark_lint#Handle(1, [
+  \ ale#handlers#remark_lint#Handle(1, [
   \   'foo.md',
   \   '  1:4  warning  Incorrect list-item indent: add 1 space  list-item-indent  remark-lint',
   \   '  3:5  error  Incorrect list-item indent: remove 1 space  list-item-indent  remark-lint',
