@@ -170,6 +170,10 @@ function! ale#completion#OmniFunc(findstart, base) abort
 endfunction
 
 function! ale#completion#Show(response, completion_parser) abort
+    if ale#util#Mode() isnot# 'i'
+        return
+    endif
+
     " Remember the old omnifunc value, if there is one.
     " If we don't store an old one, we'll just never reset the option.
     " This will stop some random exceptions from appearing.
@@ -189,7 +193,8 @@ endfunction
 function! s:CompletionStillValid(request_id) abort
     let [l:line, l:column] = getcurpos()[1:2]
 
-    return has_key(b:, 'ale_completion_info')
+    return ale#util#Mode() is# 'i'
+    \&& has_key(b:, 'ale_completion_info')
     \&& b:ale_completion_info.request_id == a:request_id
     \&& b:ale_completion_info.line == l:line
     \&& b:ale_completion_info.column == l:column
@@ -477,7 +482,7 @@ function! s:TimerHandler(...) abort
 
     " When running the timer callback, we have to be sure that the cursor
     " hasn't moved from where it was when we requested completions by typing.
-    if s:timer_pos == [l:line, l:column]
+    if s:timer_pos == [l:line, l:column] && ale#util#Mode() is# 'i'
         call ale#completion#GetCompletions()
     endif
 endfunction

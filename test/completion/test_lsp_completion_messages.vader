@@ -30,6 +30,11 @@ Before:
     \}
   endfunction
 
+  " Pretend we're in insert mode for most tests.
+  function! ale#util#Mode(...) abort
+    return 'i'
+  endfunction
+
   " Replace the Send function for LSP, so we can monitor calls to it.
   function! ale#lsp#Send(conn_id, message, ...) abort
     call add(g:message_list, a:message)
@@ -48,6 +53,11 @@ After:
   unlet! b:ale_complete_done_time
   unlet! b:ale_linters
   unlet! b:ale_tsserver_completion_names
+
+  " Reset the function.
+  function! ale#util#Mode(...) abort
+    return call('mode', a:000)
+  endfunction
 
   call ale#lsp#RemoveConnectionWithID(347)
   call ale#test#RestoreDirectory()

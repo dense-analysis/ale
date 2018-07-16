@@ -8,6 +8,7 @@ Before:
   let g:ale_completion_enabled = 1
   let g:get_completions_called = 0
   let g:feedkeys_calls = []
+  let g:fake_mode = 'i'
 
   let &l:completeopt = 'menu,menuone,preview,noselect,noinsert'
 
@@ -15,6 +16,11 @@ Before:
 
   function! ale#util#FeedKeys(string, mode) abort
     call add(g:feedkeys_calls, [a:string, a:mode])
+  endfunction
+
+  " Pretend we're in insert mode for most tests.
+  function! ale#util#Mode(...) abort
+    return g:fake_mode
   endfunction
 
   function! CheckCompletionCalled(expect_success) abort
@@ -35,6 +41,7 @@ Before:
 After:
   Restore
 
+  unlet! g:fake_mode
   unlet! g:get_completions_called
   unlet! b:ale_old_omnifunc
   unlet! b:ale_old_completopt
@@ -48,6 +55,12 @@ After:
   " Stop any timers we left behind.
   " This stops the tests from failing randomly.
   call ale#completion#StopTimer()
+
+  " Reset the function. The runtime command below should fix this, but doesn't
+  " seem to fix it.
+  function! ale#util#Mode(...) abort
+    return call('mode', a:000)
+  endfunction
 
   runtime autoload/ale/completion.vim
   runtime autoload/ale/util.vim
@@ -73,6 +86,22 @@ Execute(ale#completion#GetCompletions should not be called when the cursor posit
 
   " Change the cursor position before the callback is triggered.
   call setpos('.', [bufnr(''), 2, 2, 0])
+
+  sleep 1m
+
+  Assert !g:get_completions_called
+
+Execute(ale#completion#GetCompletions should not be called if you switch to normal mode):
+  let &l:completeopt = 'menu,preview'
+  let g:fake_mode = 'n'
+
+  " We just want to check if the function is called.
+  function! ale#completion#GetCompletions()
+    let g:get_completions_called = 1
+  endfunction
+
+  let g:ale_completion_delay = 0
+  call ale#completion#Queue()
 
   sleep 1m
 
@@ -127,6 +156,19 @@ Execute(ale#completion#Show() should make the correct feedkeys() call):
   call ale#completion#Show('Response', 'Parser')
 
   AssertEqual [["\<C-x>\<C-o>", 'n']], g:feedkeys_calls
+
+Execute(ale#completion#Show() shouldn't do anything if you switch back to normal mode):
+  let &l:completeopt = 'menu,preview'
+  let g:fake_mode = 'n'
+
+  call ale#completion#Show('Response', 'Parser')
+
+  AssertEqual 'menu,preview', &l:completeopt
+  Assert !exists('b:ale_old_omnifunc')
+  Assert !exists('b:ale_old_completopt')
+  Assert !exists('b:ale_completion_response')
+  Assert !exists('b:ale_completion_parser')
+  AssertEqual [], g:feedkeys_calls
 
 Execute(ale#completion#Show() should set up the response and parser):
   call ale#completion#Show('Response', 'Parser')
