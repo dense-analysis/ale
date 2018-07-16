@@ -35,6 +35,7 @@ After:
 
   unlet! g:i
   unlet! g:results
+  unlet! g:item
   unlet! g:expected_results
 
   delfunction TestCallback
@@ -50,10 +51,7 @@ Given foobar (Some imaginary filetype):
 Execute(Linters should run with the default options):
   AssertEqual 'foobar', &filetype
 
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
-
-  AssertEqual [{
+  let g:expected_results = [{
   \   'bufnr': bufnr('%'),
   \   'lnum': 2,
   \   'vcol': 0,
@@ -63,7 +61,28 @@ Execute(Linters should run with the default options):
   \   'nr': -1,
   \   'pattern': '',
   \   'valid': 1,
-  \ }], getloclist(0)
+  \ }]
+
+  " Try the test a few times over in NeoVim 0.3 or Windows,
+  " where tests fail randomly.
+  for g:i in range(has('nvim-0.3') || has('win32') ? 5 : 1)
+    call ale#Lint()
+    call ale#engine#WaitForJobs(2000)
+
+    let g:results = getloclist(0)
+
+    for g:item in g:results
+      if has_key(g:item, 'module')
+        call remove(g:item, 'module')
+      endif
+    endfor
+
+    if g:results == g:expected_results
+      break
+    endif
+  endfor
+
+  AssertEqual g:expected_results, g:results
 
 Execute(Linters should run in PowerShell too):
   if has('win32')
@@ -158,6 +177,12 @@ Execute(Previous errors should be removed when linters change):
     call ale#engine#WaitForJobs(2000)
 
     let g:results = getloclist(0)
+
+    for g:item in g:results
+      if has_key(g:item, 'module')
+        call remove(g:item, 'module')
+      endif
+    endfor
 
     if g:results == g:expected_results
       break
