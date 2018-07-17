@@ -50,6 +50,9 @@ endfunction
 " This is only for tests.
 " Do not call this function.
 function! ale#linter#GetLintersLoaded() abort
+    " This command will throw from the sandbox.
+    let &equalprg=&equalprg
+
     return s:linters
 endfunction
 
@@ -289,6 +292,9 @@ function! ale#linter#PreProcess(filetype, linter) abort
 endfunction
 
 function! ale#linter#Define(filetype, linter) abort
+    " This command will throw from the sandbox.
+    let &equalprg=&equalprg
+
     if !has_key(s:linters, a:filetype)
         let s:linters[a:filetype] = []
     endif
@@ -304,6 +310,12 @@ function! ale#linter#PreventLoading(filetype) abort
 endfunction
 
 function! ale#linter#GetAll(filetypes) abort
+    " Don't return linters in the sandbox.
+    " Otherwise a sandboxed script could modify them.
+    if ale#util#InSandbox()
+        return []
+    endif
+
     let l:combined_linters = []
 
     for l:filetype in a:filetypes
