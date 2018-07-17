@@ -14,8 +14,8 @@ Before:
 
   runtime autoload/ale/util.vim
 
-  function! ale#util#FeedKeys(string, mode) abort
-    call add(g:feedkeys_calls, [a:string, a:mode])
+  function! ale#util#FeedKeys(string) abort
+    call add(g:feedkeys_calls, [a:string])
   endfunction
 
   " Pretend we're in insert mode for most tests.
@@ -41,6 +41,7 @@ Before:
 After:
   Restore
 
+  unlet! g:output
   unlet! g:fake_mode
   unlet! g:get_completions_called
   unlet! b:ale_old_omnifunc
@@ -155,7 +156,7 @@ Execute(ale#completion#OmniFunc() should set the preview option if it's set):
 Execute(ale#completion#Show() should make the correct feedkeys() call):
   call ale#completion#Show('Response', 'Parser')
 
-  AssertEqual [["\<C-x>\<C-o>", 'n']], g:feedkeys_calls
+  AssertEqual [["\<Plug>(ale_show_completion_menu)"]], g:feedkeys_calls
 
 Execute(ale#completion#Show() shouldn't do anything if you switch back to normal mode):
   let &l:completeopt = 'menu,preview'
@@ -225,3 +226,28 @@ Execute(b:ale_completion_info should be set up correctly when requesting complet
   \   'prefix': 'ab',
   \ },
   \ b:ale_completion_info
+
+Execute(The correct keybinds should be configured):
+  redir => g:output
+    silent map <Plug>(ale_show_completion_menu)
+  redir END
+
+  AssertEqual
+  \ [
+  \   'n  <Plug>(ale_show_completion_menu) * :call ale#completion#RestoreCompletionOptions()<CR>',
+  \   'o  <Plug>(ale_show_completion_menu) * <Nop>',
+  \   'v  <Plug>(ale_show_completion_menu) * <Nop>',
+  \ ],
+  \ sort(split(g:output, "\n"))
+
+Execute(Running the normal mode <Plug> keybind should reset the settings):
+  let b:ale_old_omnifunc = 'FooBar'
+  let b:ale_old_completopt = 'menu'
+
+  " We can't run the keybind, but we can call the function.
+  call ale#completion#RestoreCompletionOptions()
+
+  AssertEqual 'FooBar', &l:omnifunc
+  AssertEqual 'menu', &l:completeopt
+  Assert !has_key(b:, 'ale_old_omnifunc')
+  Assert !has_key(b:, 'ale_old_completopt')
