@@ -15,6 +15,8 @@ function! ale#lsp#NewConnection(initialization_options) abort
     " open_documents: A Dictionary mapping buffers to b:changedtick, keeping
     "   track of when documents were opened, and when we last changed them.
     " callback_list: A list of callbacks for handling LSP responses.
+    " initialization_options: Options to send to the server.
+    " capabilities: Features the server supports.
     let l:conn = {
     \   'id': '',
     \   'data': '',
@@ -22,6 +24,13 @@ function! ale#lsp#NewConnection(initialization_options) abort
     \   'open_documents': {},
     \   'callback_list': [],
     \   'initialization_options': a:initialization_options,
+    \   'capabilities': {
+    \       'hover': 0,
+    \       'references': 0,
+    \       'completion': 0,
+    \       'completion_trigger_characters': [],
+    \       'definition': 0,
+    \   },
     \}
 
     call add(s:connections, l:conn)
@@ -42,6 +51,11 @@ function! s:FindConnection(key, value) abort
     endfor
 
     return {}
+endfunction
+
+" Get the capabilities for a connection, or an empty Dictionary.
+function! ale#lsp#GetConnectionCapabilities(id) abort
+    return get(s:FindConnection('id', a:id), 'capabilities', {})
 endfunction
 
 function! ale#lsp#GetNextMessageID() abort
@@ -185,6 +199,38 @@ function! s:HandleInitializeResponse(conn, response) abort
     endif
 endfunction
 
+" Update capabilities from the server, so we know which features the server
+" supports.
+function! s:UpdateCapabilities(conn, capabilities) abort
+    if type(a:capabilities) != type({})
+        return
+    endif
+
+    if get(a:capabilities, 'hoverProvider') is v:true
+        let a:conn.capabilities.hover = 1
+    endif
+
+    if get(a:capabilities, 'referencesProvider') is v:true
+        let a:conn.capabilities.references = 1
+    endif
+
+    if !empty(get(a:capabilities, 'completionProvider'))
+        let a:conn.capabilities.completion = 1
+    endif
+
+    if type(get(a:capabilities, 'completionProvider')) is type({})
+        let l:chars = get(a:capabilities.completionProvider, 'triggerCharacters')
+
+        if type(l:chars) is type([])
+            let a:conn.capabilities.completion_trigger_characters = l:chars
+        endif
+    endif
+
+    if get(a:capabilities, 'definitionProvider') is v:true
+        let a:conn.capabilities.definition = 1
+    endif
+endfunction
+
 function! ale#lsp#HandleOtherInitializeResponses(conn, response) abort
     let l:uninitialized_projects = []
 
@@ -200,6 +246,8 @@ function! ale#lsp#HandleOtherInitializeResponses(conn, response) abort
 
     if get(a:response, 'method', '') is# ''
         if has_key(get(a:response, 'result', {}), 'capabilities')
+            call s:UpdateCapabilities(a:conn, a:response.result.capabilities)
+
             for [l:dir, l:project] in l:uninitialized_projects
                 call s:MarkProjectAsInitialized(a:conn, l:project)
             endfor

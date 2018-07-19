@@ -9,6 +9,13 @@ Before:
   \ 'projects': {
   \   '/foo/bar': b:project,
   \ },
+  \ 'capabilities': {
+  \   'hover': 0,
+  \   'references': 0,
+  \   'completion': 0,
+  \   'completion_trigger_characters': [],
+  \   'definition': 0,
+  \ },
   \}
 
 After:
@@ -64,3 +71,107 @@ Execute(Other messages should not initialize projects):
   call ale#lsp#HandleOtherInitializeResponses(b:conn, {'result': {'x': {}}})
 
   AssertEqual 0, b:project.initialized
+
+Execute(Capabilities should bet set up correctly):
+  call ale#lsp#HandleOtherInitializeResponses(b:conn, {
+  \ 'jsonrpc': '2.0',
+  \ 'id': 1,
+  \ 'result': {
+  \   'capabilities': {
+  \     'renameProvider': v:true,
+  \     'executeCommandProvider': {
+  \       'commands': [],
+  \     },
+  \     'hoverProvider': v:true,
+  \     'documentSymbolProvider': v:true,
+  \     'documentRangeFormattingProvider': v:true,
+  \     'codeLensProvider': {
+  \       'resolveProvider': v:false
+  \     },
+  \     'referencesProvider': v:true,
+  \     'textDocumentSync': 2,
+  \     'documentFormattingProvider': v:true,
+  \     'codeActionProvider': v:true,
+  \     'signatureHelpProvider': {
+  \       'triggerCharacters': ['(', ','],
+  \     },
+  \     'completionProvider': {
+  \       'triggerCharacters': ['.'],
+  \       'resolveProvider': v:false
+  \     },
+  \     'definitionProvider': v:true,
+  \     'experimental': {},
+  \     'documentHighlightProvider': v:true
+  \   },
+  \ },
+  \})
+
+  AssertEqual
+  \ {
+  \   'capabilities': {
+  \     'completion_trigger_characters': ['.'],
+  \     'completion': 1,
+  \     'references': 1,
+  \     'hover': 1,
+  \     'definition': 1,
+  \   },
+  \   'message_queue': [],
+  \   'projects': {
+  \     '/foo/bar': {
+  \       'initialized': 1,
+  \       'message_queue': [],
+  \       'init_request_id': 3,
+  \     },
+  \   },
+  \ },
+  \ b:conn
+
+Execute(Disabled capabilities should be recognised correctly):
+  call ale#lsp#HandleOtherInitializeResponses(b:conn, {
+  \ 'jsonrpc': '2.0',
+  \ 'id': 1,
+  \ 'result': {
+  \   'capabilities': {
+  \     'renameProvider': v:true,
+  \     'executeCommandProvider': {
+  \       'commands': [],
+  \     },
+  \     'hoverProvider': v:false,
+  \     'documentSymbolProvider': v:true,
+  \     'documentRangeFormattingProvider': v:true,
+  \     'codeLensProvider': {
+  \       'resolveProvider': v:false
+  \     },
+  \     'referencesProvider': v:false,
+  \     'textDocumentSync': 2,
+  \     'documentFormattingProvider': v:true,
+  \     'codeActionProvider': v:true,
+  \     'signatureHelpProvider': {
+  \       'triggerCharacters': ['(', ','],
+  \     },
+  \     'definitionProvider': v:false,
+  \     'experimental': {},
+  \     'documentHighlightProvider': v:true
+  \   },
+  \ },
+  \})
+
+  AssertEqual
+  \ {
+  \   'capabilities': {
+  \     'completion_trigger_characters': [],
+  \     'completion': 0,
+  \     'references': 0,
+  \     'hover': 0,
+  \     'definition': 0,
+  \   },
+  \   'message_queue': [],
+  \   'projects': {
+  \     '/foo/bar': {
+  \       'initialized': 1,
+  \       'message_queue': [],
+  \       'init_request_id': 3,
+  \     },
+  \   },
+  \ },
+  \ b:conn
