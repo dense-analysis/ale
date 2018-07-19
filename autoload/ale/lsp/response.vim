@@ -29,6 +29,7 @@ function! ale#lsp#response#ReadDiagnostics(response) abort
         let l:severity = get(l:diagnostic, 'severity', 0)
         let l:loclist_item = {
         \   'text': l:diagnostic.message,
+        \   'detail': printf("[%s] %s", l:diagnostic.source, l:diagnostic.message),
         \   'type': 'E',
         \   'lnum': l:diagnostic.range.start.line + 1,
         \   'col': l:diagnostic.range.start.character + 1,
