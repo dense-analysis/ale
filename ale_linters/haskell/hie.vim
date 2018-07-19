@@ -1,7 +1,7 @@
 " Author: Luxed <devildead13@gmail.com>
 " Description: A language server for Haskell
 
-call ale#Set('haskell_hie_executable', 'hie-wrapper')
+call ale#Set('haskell_hie_executable', 'hie')
 
 function! ale_linters#haskell#hie#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'haskell_hie_executable')
