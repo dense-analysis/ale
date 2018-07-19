@@ -10,7 +10,7 @@ endfunction
 function! ale_linters#haskell#hie#GetProjectRoot(buffer) abort
     let l:stack_file = ale#path#FindNearestFile(a:buffer, 'stack.yaml')
 
-    return !empty(l:stack_file) ? fnamemodify(l:stack_file, ':h') : getcwd()
+    return !empty(l:stack_file) ? fnamemodify(l:stack_file, ':h') : expand('#' . a:buffer . ':p:h')
 endfunction
 
 call ale#linter#Define('haskell', {
