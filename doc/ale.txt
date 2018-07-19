@@ -355,7 +355,7 @@ Notes:
 * Erb: `erb`, `erubi`, `erubis`
 * Erlang: `erlc`, `SyntaxErl`
 * Fish: `fish` (-n flag)
-* Fortran: `gcc`
+* Fortran: `gcc`, `language_server`
 * Fountain: `proselint`
 * FusionScript: `fusion-lint`
 * Git Commit Messages: `gitlint`
