@@ -15,7 +15,7 @@ endfunction
 function! ale_linters#purescript#pure_ls#GetCommand(buffer) abort
     let l:executable = ale_linters#purescript#pure_ls#GetExecutable(a:buffer)
 
-    return ale#Escape(l:executable) . ' --stdio'
+    return ale#Escape(l:executable) . ' --stdio --config ' . ale#Escape('{}')
 endfunction
 
 function! ale_linters#purescript#pure_ls#FindProjectRoot(buffer) abort
