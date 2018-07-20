@@ -76,6 +76,7 @@ CONTENTS                                                         *ale-contents*
     fish..................................|ale-fish-options|
     fortran...............................|ale-fortran-options|
       gcc.................................|ale-fortran-gcc|
+      language_server.....................|ale-fortran-language-server|
     fountain..............................|ale-fountain-options|
     fusionscript..........................|ale-fuse-options|
       fusion-lint.........................|ale-fuse-fusionlint|
@@ -355,7 +356,7 @@ Notes:
 * Erb: `erb`, `erubi`, `erubis`
 * Erlang: `erlc`, `SyntaxErl`
 * Fish: `fish` (-n flag)
-* Fortran: `gcc`
+* Fortran: `gcc`, `language_server`
 * Fountain: `proselint`
 * FusionScript: `fusion-lint`
 * Git Commit Messages: `gitlint`
