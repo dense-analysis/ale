@@ -215,6 +215,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['dart'],
 \       'description': 'Fix Dart files with dartfmt.',
 \   },
+\   'hclfmt': {
+\       'function': 'ale#fixers#hclfmt#Fix',
+\       'suggested_filetypes': ['hcl'],
+\       'description': 'Fix HCL files with hclfmt.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
