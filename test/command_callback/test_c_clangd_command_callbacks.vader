@@ -1,0 +1,32 @@
+Before:
+  call ale#assert#SetUpLinterTest('c', 'clangd')
+
+  Save &filetype
+  let &filetype = 'c'
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The language string should be correct):
+  AssertLSPLanguage 'c'
+
+Execute(The default executable should be correct):
+  AssertLinter 'clangd', ale#Escape('clangd')
+
+Execute(The project root should be detected correctly):
+  AssertLSPProject ''
+
+  call ale#test#SetFilename('clangd_paths/dummy.c')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/clangd_paths')
+
+Execute(The executable should be configurable):
+  let g:ale_c_clangd_executable = 'foobar'
+
+  AssertLinter 'foobar', ale#Escape('foobar')
+
+Execute(The options should be configurable):
+  let b:ale_c_clangd_options = '-compile-commands-dir=foo'
+
+  AssertLinter 'clangd', ale#Escape('clangd') . ' ' . b:ale_c_clangd_options
+
