@@ -422,54 +422,60 @@ endfunction
 
 function! s:GetLSPCompletions(linter) abort
     let l:buffer = bufnr('')
-    let l:Callback = a:linter.lsp is# 'tsserver'
-    \   ? function('ale#completion#HandleTSServerResponse')
-    \   : function('ale#completion#HandleLSPResponse')
-
-    let l:lsp_details = ale#lsp_linter#StartLSP(l:buffer, a:linter, l:Callback)
+    let l:lsp_details = ale#lsp_linter#StartLSP(l:buffer, a:linter)
 
     if empty(l:lsp_details)
         return 0
     endif
 
     let l:id = l:lsp_details.connection_id
+    let l:root = l:lsp_details.project_root
 
-    if a:linter.lsp is# 'tsserver'
-        let l:message = ale#lsp#tsserver_message#Completions(
-        \   l:buffer,
-        \   b:ale_completion_info.line,
-        \   b:ale_completion_info.column,
-        \   b:ale_completion_info.prefix,
-        \)
-    else
-        " Send a message saying the buffer has changed first, otherwise
-        " completions won't know what text is nearby.
-        call ale#lsp#NotifyForChanges(l:lsp_details)
+    function! OnReady(...) abort closure
+        let l:Callback = a:linter.lsp is# 'tsserver'
+        \   ? function('ale#completion#HandleTSServerResponse')
+        \   : function('ale#completion#HandleLSPResponse')
+        call ale#lsp#RegisterCallback(l:id, l:Callback)
 
-        " For LSP completions, we need to clamp the column to the length of
-        " the line. python-language-server and perhaps others do not implement
-        " this correctly.
-        let l:message = ale#lsp#message#Completion(
-        \   l:buffer,
-        \   b:ale_completion_info.line,
-        \   min([
-        \       b:ale_completion_info.line_length,
-        \       b:ale_completion_info.column,
-        \   ]),
-        \   ale#completion#GetTriggerCharacter(&filetype, b:ale_completion_info.prefix),
-        \)
-    endif
+        if a:linter.lsp is# 'tsserver'
+            let l:message = ale#lsp#tsserver_message#Completions(
+            \   l:buffer,
+            \   b:ale_completion_info.line,
+            \   b:ale_completion_info.column,
+            \   b:ale_completion_info.prefix,
+            \)
+        else
+            " Send a message saying the buffer has changed first, otherwise
+            " completions won't know what text is nearby.
+            call ale#lsp#NotifyForChanges(l:id, l:root, l:buffer)
 
-    let l:request_id = ale#lsp#Send(l:id, l:message, l:lsp_details.project_root)
-
-    if l:request_id
-        let b:ale_completion_info.conn_id = l:id
-        let b:ale_completion_info.request_id = l:request_id
-
-        if has_key(a:linter, 'completion_filter')
-            let b:ale_completion_info.completion_filter = a:linter.completion_filter
+            " For LSP completions, we need to clamp the column to the length of
+            " the line. python-language-server and perhaps others do not implement
+            " this correctly.
+            let l:message = ale#lsp#message#Completion(
+            \   l:buffer,
+            \   b:ale_completion_info.line,
+            \   min([
+            \       b:ale_completion_info.line_length,
+            \       b:ale_completion_info.column,
+            \   ]),
+            \   ale#completion#GetTriggerCharacter(&filetype, b:ale_completion_info.prefix),
+            \)
         endif
-    endif
+
+        let l:request_id = ale#lsp#Send(l:id, l:message, l:lsp_details.project_root)
+
+        if l:request_id
+            let b:ale_completion_info.conn_id = l:id
+            let b:ale_completion_info.request_id = l:request_id
+
+            if has_key(a:linter, 'completion_filter')
+                let b:ale_completion_info.completion_filter = a:linter.completion_filter
+            endif
+        endif
+    endfunction
+
+    call ale#lsp#WaitForCapability(l:id, l:root, 'completion', function('OnReady'))
 endfunction
 
 function! ale#completion#GetCompletions() abort

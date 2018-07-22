@@ -3,6 +3,7 @@ Before:
   \ 'initialized': 0,
   \ 'init_request_id': 3,
   \ 'message_queue': [],
+  \ 'capabilities_queue': [],
   \}
 
   let b:conn = {
@@ -34,6 +35,7 @@ Execute(publishDiagnostics messages with files inside project directories should
   \   'initialized': 0,
   \   'init_request_id': 3,
   \   'message_queue': [],
+  \   'capabilities_queue': [],
   \ },
   \ b:project
 
@@ -47,6 +49,7 @@ Execute(publishDiagnostics messages with files inside project directories should
   \   'initialized': 1,
   \   'init_request_id': 3,
   \   'message_queue': [],
+  \   'capabilities_queue': [],
   \ },
   \ b:project
 
@@ -60,6 +63,7 @@ Execute(Messages with no method and capabilities should initialize projects):
   \   'initialized': 1,
   \   'init_request_id': 3,
   \   'message_queue': [],
+  \   'capabilities_queue': [],
   \ },
   \ b:project
 
@@ -120,6 +124,7 @@ Execute(Capabilities should bet set up correctly):
   \     '/foo/bar': {
   \       'initialized': 1,
   \       'message_queue': [],
+  \       'capabilities_queue': [],
   \       'init_request_id': 3,
   \     },
   \   },
@@ -170,6 +175,7 @@ Execute(Disabled capabilities should be recognised correctly):
   \     '/foo/bar': {
   \       'initialized': 1,
   \       'message_queue': [],
+  \       'capabilities_queue': [],
   \       'init_request_id': 3,
   \     },
   \   },

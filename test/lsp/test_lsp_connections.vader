@@ -2,6 +2,10 @@ Before:
   let g:ale_lsp_next_message_id = 1
 
 After:
+  if exists('b:conn') && has_key(b:conn, 'id')
+    call ale#lsp#RemoveConnectionWithID(b:conn.id)
+  endif
+
   unlet! b:data
   unlet! b:conn
 
@@ -223,17 +227,20 @@ Execute(ale#lsp#ReadMessageData() should handle a message with part of a second 
   \ )
 
 Execute(Projects with regular project roots should be registered correctly):
-  let b:conn = {'projects': {}}
-
-  call ale#lsp#RegisterProject(b:conn, '/foo/bar')
+  let b:conn = ale#lsp#NewConnection({})
+  call ale#lsp#RegisterProject(b:conn.id, '/foo/bar')
 
   AssertEqual
   \ {
-  \   'projects': {
-  \     '/foo/bar': {'initialized': 0, 'message_queue': [], 'init_request_id': 0},
+  \   '/foo/bar': {
+  \     'root': '/foo/bar',
+  \     'initialized': 0,
+  \     'message_queue': [],
+  \     'capabilities_queue': [],
+  \     'init_request_id': 0,
   \   },
   \ },
-  \ b:conn
+  \ b:conn.projects
 
 Execute(Projects with regular project roots should be fetched correctly):
   let b:conn = {
@@ -247,17 +254,20 @@ Execute(Projects with regular project roots should be fetched correctly):
   \ ale#lsp#GetProject(b:conn, '/foo/bar')
 
 Execute(Projects with empty project roots should be registered correctly):
-  let b:conn = {'projects': {}}
-
-  call ale#lsp#RegisterProject(b:conn, '')
+  let b:conn = ale#lsp#NewConnection({})
+  call ale#lsp#RegisterProject(b:conn.id, '')
 
   AssertEqual
   \ {
-  \   'projects': {
-  \     '<<EMPTY>>': {'initialized': 1, 'message_queue': [], 'init_request_id': 0},
+  \   '<<EMPTY>>': {
+  \     'root': '',
+  \     'initialized': 1,
+  \     'message_queue': [],
+  \     'capabilities_queue': [],
+  \     'init_request_id': 0,
   \   },
   \ },
-  \ b:conn
+  \ b:conn.projects
 
 Execute(Projects with empty project roots should be fetched correctly):
   let b:conn = {
