@@ -35,5 +35,4 @@ call ale#linter#Define('purescript', {
 \   'command_callback': 'ale_linters#purescript#pure_ls#GetCommand',
 \   'project_root_callback': 'ale_linters#purescript#pure_ls#FindProjectRoot',
 \   'language': 'purescript',
-\   'output_stream': 'both'
 \})
