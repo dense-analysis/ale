@@ -552,8 +552,6 @@ Execute(ale#fix#InitBufferData() should set up the correct data):
   AssertEqual {
   \ bufnr(''): {
   \   'temporary_directory_list': [],
-  \   'vars': b:,
-  \   'filename': ale#path#Simplify(getcwd() . '/fix_test_file'),
   \   'done': 0,
   \   'lines_before': ['a', 'b', 'c'],
   \   'should_save': 1,
