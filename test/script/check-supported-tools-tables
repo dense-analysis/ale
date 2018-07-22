@@ -22,11 +22,11 @@ ale_help_end_line="$(expr "$ale_help_start_line" + "$ale_help_section_size")"
 
 # Find the start and end lines for the same section in the README.
 readme_start_line="$( \
-    grep -m1 -n '^.*[0-9][0-9]*\. *Supported Languages' README.md \
+    grep -m1 -n '^.*[0-9][0-9]*\. *Supported Languages' .github/README.md \
     | sed 's/\([0-9]*\).*/\1/' \
 )"
 readme_section_size="$( \
-    tail -n +"$readme_start_line" README.md \
+    tail -n +"$readme_start_line" .github/README.md \
     | grep -m1 -n '^##.*Usage' \
     | sed 's/\([0-9]*\).*/\1/' \
 )"
@@ -46,7 +46,7 @@ sed -n "$ale_help_start_line,$ale_help_end_line"p doc/ale.txt \
     | sed 's/^/ /' \
     > "$doc_file"
 
-sed -n "$readme_start_line,$readme_end_line"p README.md \
+sed -n "$readme_start_line,$readme_end_line"p .github/README.md \
     | grep '| .* |' \
     | sed '/^| Language/d;/^| ---/d' \
     | sed 's/^|//' \
