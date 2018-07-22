@@ -432,6 +432,11 @@ function! s:GetLSPCompletions(linter) abort
     let l:root = l:lsp_details.project_root
 
     function! OnReady(...) abort closure
+        " If we have sent a completion request already, don't send another.
+        if b:ale_completion_info.request_id
+            return
+        endif
+
         let l:Callback = a:linter.lsp is# 'tsserver'
         \   ? function('ale#completion#HandleTSServerResponse')
         \   : function('ale#completion#HandleLSPResponse')
