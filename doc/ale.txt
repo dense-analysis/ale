@@ -99,6 +99,7 @@ CONTENTS                                                         *ale-contents*
     haskell...............................|ale-haskell-options|
       brittany............................|ale-haskell-brittany|
       ghc.................................|ale-haskell-ghc|
+      cabal-ghc...........................|ale-haskell-cabal-ghc|
       hdevtools...........................|ale-haskell-hdevtools|
       hfmt................................|ale-haskell-hfmt|
       stack-build.........................|ale-haskell-stack-build|
@@ -365,7 +366,7 @@ Notes:
 * GraphQL: `eslint`, `gqlint`, `prettier`
 * Haml: `haml-lint`
 * Handlebars: `ember-template-lint`
-* Haskell: `brittany`, `ghc`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`, `hfmt`
+* Haskell: `brittany`, `ghc`, `cabal-ghc`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`, `hfmt`
 * HTML: `alex`!!, `HTMLHint`, `proselint`, `tidy`, `write-good`
 * Idris: `idris`
 * Java: `checkstyle`, `javac`, `google-java-format`, `PMD`
