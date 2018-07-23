@@ -4,7 +4,7 @@
 call ale#linter#Define('haskell', {
 \   'name': 'stack-ghc',
 \   'output_stream': 'stderr',
-\   'executable': 'stack',
+\   'executable_callback': 'ale#handlers#haskell#GetStackExecutable',
 \   'command': 'stack ghc -- -fno-code -v0 %t',
 \   'callback': 'ale#handlers#haskell#HandleGHCFormat',
 \})
