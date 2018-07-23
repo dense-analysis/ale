@@ -4,7 +4,8 @@ services:
     - docker
 language: generic
 env:
-    - OPTIONS=--vim-only
+    - OPTIONS=--vim-80-only
+    - OPTIONS=--vim-81-only
     - OPTIONS=--neovim-only
     - OPTIONS=--linters-only
 script: |
