@@ -3,5 +3,8 @@ sudo: required
 services:
     - docker
 language: generic
+env:
+    - OPTIONS=--no-neovim
+    - OPTIONS=--neovim-only
 script: |
-    ./run-tests -v
+    ./run-tests -v $OPTIONS
