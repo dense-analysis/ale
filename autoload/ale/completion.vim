@@ -336,7 +336,9 @@ function! ale#completion#ParseLSPCompletions(response) abort
         endif
 
         " See :help complete-items for Vim completion kinds
-        if l:item.kind is s:LSP_COMPLETION_METHOD_KIND
+        if !has_key(l:item, 'kind')
+            let l:kind = 'v'
+        elseif l:item.kind is s:LSP_COMPLETION_METHOD_KIND
             let l:kind = 'm'
         elseif l:item.kind is s:LSP_COMPLETION_CONSTRUCTOR_KIND
             let l:kind = 'm'
