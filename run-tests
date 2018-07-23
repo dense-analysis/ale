@@ -56,11 +56,6 @@ while [ $# -ne 0 ]; do
         run_linters=0
         shift
     ;;
-    --no-neovim)
-        run_neovim_02_tests=0
-        run_neovim_03_tests=0
-        shift
-    ;;
     --vim-only)
         run_neovim_02_tests=0
         run_neovim_03_tests=0
@@ -100,7 +95,6 @@ while [ $# -ne 0 ]; do
         echo '  --neovim-only     Run tests only for NeoVim 0.2 and 0.3'
         echo '  --neovim-02-only  Run tests only for NeoVim 0.2'
         echo '  --neovim-03-only  Run tests only for NeoVim 0.3'
-        echo '  --no-neovim       Skip NeoVim tests'
         echo '  --vim-only        Run tests only for Vim 8.0 and 8.1'
         echo '  --vim-80-only     Run tests only for Vim 8.0'
         echo '  --vim-81-only     Run tests only for Vim 8.1'

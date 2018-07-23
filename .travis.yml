@@ -4,7 +4,8 @@ services:
     - docker
 language: generic
 env:
-    - OPTIONS=--no-neovim
+    - OPTIONS=--vim-only
     - OPTIONS=--neovim-only
+    - OPTIONS=--linters-only
 script: |
     ./run-tests -v $OPTIONS
