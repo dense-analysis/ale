@@ -4,11 +4,11 @@
 function! ale#handlers#haskell#GetStackExecutable(bufnr) abort
     if ale#path#FindNearestFile(a:bufnr, 'stack.yaml') isnot# ''
         return 'stack'
-    else
-        " if there is no stack.yaml file, we don't use stack even if it exists,
-        " so we return '', because executable('') apparently always fails
-        return ''
     endif
+
+    " if there is no stack.yaml file, we don't use stack even if it exists,
+    " so we return '', because executable('') apparently always fails
+    return ''
 endfunction
 
 " Remember the directory used for temporary files for Vim.
