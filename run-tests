@@ -120,6 +120,11 @@ file_number=0
 pid_list=''
 
 for vim in $(docker run --rm "$DOCKER_RUN_IMAGE" ls /vim-build/bin | grep '^neovim\|^vim' ); do
+    # Skip Vim 8.1 for now.
+    if [[ $vim =~ ^vim-v8.1 ]]; then
+        continue
+    fi
+
     if ( [[ $vim =~ ^vim ]] && ((run_vim_tests)) ) \
     || ( [[ $vim =~ ^neovim-v0.2 ]] && ((run_neovim_02_tests)) ) \
     || ( [[ $vim =~ ^neovim-v0.3 ]] && ((run_neovim_03_tests)) ); then
