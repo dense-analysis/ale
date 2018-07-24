@@ -59,6 +59,7 @@ check_errors() {
     fi
 
     for directory in "${directories[@]}"; do
+        # shellcheck disable=SC2086
         while IFS= read -r match; do
             RETURN_CODE=1
             echo "$match $message"
