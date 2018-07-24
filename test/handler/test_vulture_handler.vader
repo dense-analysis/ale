@@ -1,0 +1,28 @@
+Before:
+  runtime ale_linters/python/vulture.vim
+
+After:
+  Restore
+
+  call ale#linter#Reset()
+
+  silent file something_else.py
+
+Execute(Basic vulture check should be handled):
+  call ale#test#SetFilename('something_else.py')
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 34,
+  \     'text': "unused variable 'foo' (60% confidence)",
+  \     'type': 'W',
+  \   },
+  \ ],
+  \ ale_linters#python#vulture#Handle(bufnr(''), [
+  \   "/testplugin/test/handler/something_else.py:34: unused variable 'foo' (60% confidence)",
+  \ ])
+
+Execute(The vulture handler should handle empty output):
+  AssertEqual
+  \ [],
+  \ ale_linters#python#vulture#Handle(bufnr(''), [])

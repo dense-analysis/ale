@@ -206,6 +206,7 @@ CONTENTS                                                         *ale-contents*
       pylint..............................|ale-python-pylint|
       pyls................................|ale-python-pyls|
       pyre................................|ale-python-pyre|
+      vulture.............................|ale-python-vulture|
       yapf................................|ale-python-yapf|
     qml...................................|ale-qml-options|
       qmlfmt..............................|ale-qml-qmlfmt|
@@ -398,7 +399,7 @@ Notes:
 * proto: `protoc-gen-lint`
 * Pug: `pug-lint`
 * Puppet: `languageserver`, `puppet`, `puppet-lint`
-* Python: `autopep8`, `black`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pyls`, `pyre`, `pylint`!!, `yapf`
+* Python: `autopep8`, `black`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pyls`, `pyre`, `pylint`!!, `vulture`, `yapf`
 * QML: `qmlfmt`, `qmllint`
 * R: `lintr`
 * ReasonML: `merlin`, `ols`, `refmt`
