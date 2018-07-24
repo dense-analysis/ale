@@ -53,7 +53,7 @@ Execute(Formatting with codes should work for the loclist):
   \     'text': 'nocode',
   \   },
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()
 
   call remove(g:loclist, 0)
   call AddItem({'text': 'withcode', 'code': 'E123'})
@@ -73,7 +73,7 @@ Execute(Formatting with codes should work for the loclist):
   \     'text': 'E123: withcode',
   \   },
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()
 
 Execute(Formatting with codes should work for the quickfix list):
   let g:ale_set_loclist = 0
@@ -96,7 +96,7 @@ Execute(Formatting with codes should work for the quickfix list):
   \     'text': 'nocode',
   \   },
   \ ],
-  \ getqflist()
+  \ ale#test#GetQflistWithoutModule()
 
   call remove(g:loclist, 0)
   call AddItem({'text': 'withcode', 'code': 'E123'})
@@ -116,7 +116,7 @@ Execute(Formatting with codes should work for the quickfix list):
   \     'text': 'E123: withcode',
   \   },
   \ ],
-  \ getqflist()
+  \ ale#test#GetQflistWithoutModule()
 
 Execute(Formatting with the linter name should work for the loclist):
   let g:ale_loclist_msg_format = '(%linter%) %s'
@@ -138,7 +138,7 @@ Execute(Formatting with the linter name should work for the loclist):
   \     'text': '(some_linter) whatever',
   \   },
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()
 
 Execute(Formatting with the linter name should work for the quickfix list):
   let g:ale_loclist_msg_format = '(%linter%) %s'
@@ -162,7 +162,7 @@ Execute(Formatting with the linter name should work for the quickfix list):
   \     'text': '(some_linter) whatever',
   \   },
   \ ],
-  \ getqflist()
+  \ ale#test#GetQflistWithoutModule()
 
 Execute(The buffer loclist format option should take precedence):
   let g:ale_loclist_msg_format = '(%linter%) %s'
@@ -185,4 +185,4 @@ Execute(The buffer loclist format option should take precedence):
   \     'text': 'FOO whatever',
   \   },
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()

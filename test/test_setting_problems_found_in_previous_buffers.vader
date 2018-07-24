@@ -95,4 +95,4 @@ Execute(Problems found from previously opened buffers should be set when linting
   \   {'lnum': 2, 'bufnr': bufnr(''), 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': 'E', 'pattern': '', 'text': 'bar'},
   \   {'lnum': 3, 'bufnr': bufnr(''), 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': 'E', 'pattern': '', 'text': 'baz'},
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()

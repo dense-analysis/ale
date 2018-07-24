@@ -1,8 +1,21 @@
 Before:
+  " Make sure the c.vim file is loaded first.
+  call ale#c#FindProjectRoot(bufnr(''))
+
   Save g:ale_c_gcc_options
   Save g:ale_c_clang_options
   Save g:ale_cpp_gcc_options
   Save g:ale_cpp_clang_options
+  Save g:__ale_c_project_filenames
+
+  let g:original_project_filenames = g:__ale_c_project_filenames
+
+  " Remove the .git/HEAD dir for C import paths for these tests.
+  " The tests run inside of a git repo.
+  let g:__ale_c_project_filenames = filter(
+  \ copy(g:__ale_c_project_filenames),
+  \ 'v:val isnot# ''.git/HEAD'''
+  \)
 
   call ale#test#SetDirectory('/testplugin/test')
 
@@ -14,22 +27,10 @@ Before:
 After:
   Restore
 
+  unlet! g:original_project_filenames
+
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
-
-" Run this only once for this series of tests. The cleanup Execute step
-" will run at the bottom of this file.
-"
-" We need to move .git/HEAD away so we don't match it, as we need to test
-" functions which look for .git/HEAD.
-Execute(Move .git/HEAD to a temp dir):
-  let g:temp_head_filename = tempname()
-  let g:head_filename = findfile('.git/HEAD', ';')
-
-  if !empty(g:head_filename)
-    call writefile(readfile(g:head_filename, 'b'), g:temp_head_filename, 'b')
-    call delete(g:head_filename)
-  endif
 
 Execute(The C GCC handler should include 'include' directories for projects with a Makefile):
   runtime! ale_linters/c/gcc.vim
@@ -239,27 +240,6 @@ Execute(The C++ Clang handler should include root directories for projects with 
   \   . ' -'
   \ , ale_linters#cpp#clang#GetCommand(bufnr(''), [])
 
-Execute(The C++ Clang handler shoud use the include directory based on the .git location):
-  runtime! ale_linters/cpp/clang.vim
-
-  if !isdirectory(g:dir . '/test_c_projects/git_and_nested_makefiles/.git')
-    call mkdir(g:dir . '/test_c_projects/git_and_nested_makefiles/.git')
-  endif
-
-  if !filereadable(g:dir . '/test_c_projects/git_and_nested_makefiles/.git/HEAD')
-    call writefile([], g:dir . '/test_c_projects/git_and_nested_makefiles/.git/HEAD')
-  endif
-
-  call ale#test#SetFilename('test_c_projects/git_and_nested_makefiles/src/file.cpp')
-
-  AssertEqual
-  \   ale#Escape('clang++')
-  \   . ' -S -x c++ -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/test_c_projects/git_and_nested_makefiles/src')) . ' '
-  \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/test_c_projects/git_and_nested_makefiles/include')) . ' '
-  \   . ' -'
-  \ , ale_linters#cpp#clang#GetCommand(bufnr(''), [])
-
 Execute(The C++ ClangTidy handler should include json folders for projects with suitable build directory in them):
   runtime! ale_linters/cpp/clangtidy.vim
 
@@ -270,12 +250,3 @@ Execute(The C++ ClangTidy handler should include json folders for projects with 
   \   . ' -checks=' . ale#Escape('*') . ' %s '
   \   . '-p ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/json_project/build'))
   \ , ale_linters#cpp#clangtidy#GetCommand(bufnr(''))
-
-Execute(Move .git/HEAD back):
-  if !empty(g:head_filename)
-    call writefile(readfile(g:temp_head_filename, 'b'), g:head_filename, 'b')
-    call delete(g:temp_head_filename)
-  endif
-
-  unlet! g:temp_head_filename
-  unlet! g:head_filename

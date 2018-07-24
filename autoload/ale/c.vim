@@ -4,8 +4,11 @@
 call ale#Set('c_parse_makefile', 0)
 let s:sep = has('win32') ? '\' : '/'
 
+" Set just so tests can override it.
+let g:__ale_c_project_filenames = ['.git/HEAD', 'configure', 'Makefile', 'CMakeLists.txt']
+
 function! ale#c#FindProjectRoot(buffer) abort
-    for l:project_filename in ['.git/HEAD', 'configure', 'Makefile', 'CMakeLists.txt']
+    for l:project_filename in g:__ale_c_project_filenames
         let l:full_path = ale#path#FindNearestFile(a:buffer, l:project_filename)
 
         if !empty(l:full_path)
