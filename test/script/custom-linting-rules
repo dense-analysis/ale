@@ -52,12 +52,17 @@ directories=("$@")
 check_errors() {
     regex="$1"
     message="$2"
+    include_arg=''
+
+    if [ $# -gt 2 ]; then
+        include_arg="--include $3"
+    fi
 
     for directory in "${directories[@]}"; do
         while IFS= read -r match; do
             RETURN_CODE=1
             echo "$match $message"
-        done < <(grep -n "$regex" "$directory"/**/*.vim \
+        done < <(grep -n "$regex" $include_arg "$directory"/**/*.vim \
             | grep -v 'no-custom-checks' \
             | grep -o '^[^:]\+:[0-9]\+' \
             | sed 's:^\./::')
@@ -75,6 +80,7 @@ if (( FIX_ERRORS )); then
     done
 fi
 
+# The arguments are: regex, explanation, [filename_filter]
 check_errors \
     '^function.*) *$' \
     'Function without abort keyword (See :help except-compat)'
@@ -95,5 +101,6 @@ check_errors '==?' "Use 'is?' instead of '==?'. 0 ==? 'foobar' is true"
 check_errors '!=#' "Use 'isnot#' instead of '!=#'. 0 !=# 'foobar' is false"
 check_errors '!=?' "Use 'isnot?' instead of '!=?'. 0 !=? 'foobar' is false"
 check_errors '^ *:\?echo' "Stray echo line. Use \`execute echo\` if you want to echo something"
+check_errors $'name.:.*\'[a-z_]*[^a-z_0-9][a-z_0-9]*\',$' 'Use snake_case names for linters' '*/ale_linters/*'
 
 exit $RETURN_CODE
