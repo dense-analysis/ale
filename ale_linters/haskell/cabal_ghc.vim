@@ -10,7 +10,8 @@ function! ale_linters#haskell#cabal_ghc#GetCommand(buffer) abort
 endfunction
 
 call ale#linter#Define('haskell', {
-\   'name': 'cabal-ghc',
+\   'name': 'cabal_ghc',
+\   'aliases': ['cabal-ghc'],
 \   'output_stream': 'stderr',
 \   'executable': 'cabal',
 \   'command_callback': 'ale_linters#haskell#cabal_ghc#GetCommand',
