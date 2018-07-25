@@ -23,6 +23,10 @@ endfunction
 
 
 function! ale_linters#python#vulture#GetCommand(buffer) abort
+    let l:change_dir = ale#Var(a:buffer, 'python_vulture_change_directory')
+    \   ? ale#path#CdString(s:GetDir(a:buffer))
+    \   : ''
+
     let l:executable = ale_linters#python#vulture#GetExecutable(a:buffer)
 
     let l:exec_args = l:executable =~? 'pipenv$'
@@ -30,10 +34,11 @@ function! ale_linters#python#vulture#GetCommand(buffer) abort
     \   : ''
 
     let l:lint_dest = ale#Var(a:buffer, 'python_vulture_change_directory')
-    \   ? s:GetDir(a:buffer)
+    \   ? ' .'
     \   : ' %s'
 
-    return ale#Escape(l:executable) . l:exec_args
+    return l:change_dir
+    \   . ale#Escape(l:executable) . l:exec_args
     \   . ' '
     \   . ale#Var(a:buffer, 'python_vulture_options')
     \   . l:lint_dest
