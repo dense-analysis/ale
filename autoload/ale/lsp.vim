@@ -213,7 +213,7 @@ endfunction
 " Update capabilities from the server, so we know which features the server
 " supports.
 function! s:UpdateCapabilities(conn, capabilities) abort
-    if type(a:capabilities) != type({})
+    if type(a:capabilities) isnot v:t_dict
         return
     endif
 
@@ -229,10 +229,10 @@ function! s:UpdateCapabilities(conn, capabilities) abort
         let a:conn.capabilities.completion = 1
     endif
 
-    if type(get(a:capabilities, 'completionProvider')) is type({})
+    if type(get(a:capabilities, 'completionProvider')) is v:t_dict
         let l:chars = get(a:capabilities.completionProvider, 'triggerCharacters')
 
-        if type(l:chars) is type([])
+        if type(l:chars) is v:t_list
             let a:conn.capabilities.completion_trigger_characters = l:chars
         endif
     endif
@@ -275,7 +275,7 @@ function! ale#lsp#HandleOtherInitializeResponses(conn, response) abort
 endfunction
 
 function! ale#lsp#HandleMessage(conn, message) abort
-    if type(a:message) != type('')
+    if type(a:message) isnot v:t_string
         " Ignore messages that aren't strings.
         return
     endif
@@ -548,7 +548,7 @@ function! ale#lsp#WaitForCapability(conn_id, project_root, capability, callback)
         return 0
     endif
 
-    if type(get(l:conn.capabilities, a:capability, v:null)) isnot type(0)
+    if type(get(l:conn.capabilities, a:capability, v:null)) isnot v:t_number
         throw 'Invalid capability ' . a:capability
     endif
 

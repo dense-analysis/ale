@@ -63,19 +63,19 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
 
         let l:result = l:result.contents
 
-        if type(l:result) is type('')
+        if type(l:result) is v:t_string
              " The result can be just a string.
              let l:result = [l:result]
         endif
 
-        if type(l:result) is type({})
+        if type(l:result) is v:t_dict
             " If the result is an object, then it's markup content.
             let l:result = [l:result.value]
         endif
 
-        if type(l:result) is type([])
+        if type(l:result) is v:t_list
             " Replace objects with text values.
-            call map(l:result, 'type(v:val) is type('''') ? v:val : v:val.value')
+            call map(l:result, 'type(v:val) is v:t_string ? v:val : v:val.value')
             let l:str = join(l:result, "\n")
             let l:str = substitute(l:str, '^\s*\(.\{-}\)\s*$', '\1', '')
 

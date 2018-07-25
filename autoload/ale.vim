@@ -95,7 +95,7 @@ function! ale#Queue(delay, ...) abort
         throw "linting_flag must be either '' or 'lint_file'"
     endif
 
-    if type(l:buffer) != type(0)
+    if type(l:buffer) isnot v:t_number
         throw 'buffer_number must be a Number'
     endif
 

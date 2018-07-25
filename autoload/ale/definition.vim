@@ -40,9 +40,9 @@ function! ale#definition#HandleLSPResponse(conn_id, response) abort
         " The result can be a Dictionary item, a List of the same, or null.
         let l:result = get(a:response, 'result', v:null)
 
-        if type(l:result) is type({})
+        if type(l:result) is v:t_dict
             let l:result = [l:result]
-        elseif type(l:result) isnot type([])
+        elseif type(l:result) isnot v:t_list
             let l:result = []
         endif
 
