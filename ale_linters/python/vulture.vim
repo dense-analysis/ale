@@ -7,7 +7,7 @@ call ale#Set('python_vulture_use_global', get(g:, 'ale_use_global_executables', 
 call ale#Set('python_vulture_change_directory', 1)
 
 
-" The directory to change to before running mypy
+" The directory to change to before running vulture
 function! s:GetDir(buffer) abort
     let l:project_root = ale#python#FindProjectRoot(a:buffer)
 
