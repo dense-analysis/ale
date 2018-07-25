@@ -1,10 +1,17 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Completion support for LSP linters
 
+function! ale#completion#TriggerOmnicompleteMenu() abort
+    " Replace completion options shortly before opening the menu.
+    call s:ReplaceCompletionOptions()
+
+    return "\<C-x>\<C-o>"
+endfunction
+
 " The omnicompletion menu is shown through a special Plug mapping which is
 " only valid in Insert mode. This way, feedkeys() won't send these keys if you
 " quit Insert mode quickly enough.
-inoremap <silent> <Plug>(ale_show_completion_menu) <C-x><C-o>
+inoremap <silent> <Plug>(ale_show_completion_menu) <C-R>=ale#completion#TriggerOmnicompleteMenu()<CR>
 " If we hit the key sequence in normal mode, then we won't show the menu, so
 " we should restore the old settings right away.
 nnoremap <silent> <Plug>(ale_show_completion_menu) :call ale#completion#RestoreCompletionOptions()<CR>
@@ -214,7 +221,6 @@ function! ale#completion#Show(response, completion_parser) abort
     " function, and then start omni-completion.
     let b:ale_completion_response = a:response
     let b:ale_completion_parser = a:completion_parser
-    call s:ReplaceCompletionOptions()
     call ale#util#FeedKeys("\<Plug>(ale_show_completion_menu)")
 endfunction
 
