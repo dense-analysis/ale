@@ -81,4 +81,5 @@ call ale#linter#Define('python', {
 \   'executable_callback': 'ale_linters#python#vulture#GetExecutable',
 \   'command_callback': 'ale_linters#python#vulture#GetCommand',
 \   'callback': 'ale_linters#python#vulture#Handle',
+\   'lint_file': 1,
 \})
