@@ -66,6 +66,7 @@ won't pay for the features that you don't use.
     14. [How can I configure my C or C++ project?](#faq-c-configuration)
     15. [How can I configure ALE differently for different buffers?](#faq-buffer-configuration)
     16. [How can I configure the height of the list in which ALE displays errors?](#faq-list-window-height)
+    17. [How can I bind instant ALE completion to \<TAB>?](#faq-instant-completion)
 
 <a name="supported-languages"></a>
 
@@ -815,4 +816,32 @@ To set a default height for the error list, use the `g:ale_list_window_size` var
 ```vim
 " Show 5 lines of errors (default: 10)
 let g:ale_list_window_size = 5
+```
+
+<a name="faq-instant-completion"></a>
+
+### 5.xvii. How can I bind instant ALE completion to \<TAB>?
+
+To call completion immediately from the current position in insert mode
+bind the following function to `<TAB>` or any other key:
+
+```vim
+function! MyAleCompletion()
+	call ale#completion#GetCompletions()
+	return "\<C-x>\<C-o>"
+endfunction
+
+function! s:check_back_space() abort
+	let col = col('.') - 1
+	return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+	\ pumvisible() ? "\<C-n>" :
+	\ <SID>check_back_space() ? "\<TAB>" :
+	\ "\<C-R>=MyAleCompletion()\<CR>"
+
+inoremap <expr><S-TAB>
+	\ pumvisible() ? "\<C-p>" :
+	\ "\<C-h>"
 ```
