@@ -118,6 +118,7 @@ these are reported with ALE's `custom-linting-rules` script. See
 * Use `snake_case` names for linter names, so they can be used as part of
   variable names. You can define `aliases` for linters, for other names people
   might try to configure linters with.
+* Use |v:t_TYPE| variables instead of `type()`, which are more readable.
 
 Apply the following guidelines when writing Vader test files.
 
