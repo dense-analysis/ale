@@ -275,6 +275,8 @@ CONTENTS                                                         *ale-contents*
     verilog/systemverilog.................|ale-verilog-options|
       iverilog............................|ale-verilog-iverilog|
       verilator...........................|ale-verilog-verilator|
+    vhdl..................................|ale-vhdl-options|
+      ghdl................................|ale-vhdl-ghdl|
     vim...................................|ale-vim-options|
       vint................................|ale-vim-vint|
     vim help..............................|ale-vim-help-options|
@@ -425,6 +427,7 @@ Notes:
 * Thrift: `thrift`
 * TypeScript: `eslint`, `prettier`, `tslint`, `tsserver`, `typecheck`
 * Verilog: `iverilog`, `verilator`
+* VHDL: `ghdl`
 * Vim: `vint`
 * Vim help^: `alex`!!, `proselint`, `write-good`
 * Vue: `prettier`, `vls`
