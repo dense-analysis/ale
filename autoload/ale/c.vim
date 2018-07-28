@@ -1,4 +1,6 @@
-" Author: gagbo <gagbobada@gmail.com>, w0rp <devw0rp@gmail.com>, roel0 <postelmansroel@gmail.com>
+" Author: gagbo <gagbobada@gmail.com>, w0rp <devw0rp@gmail.com>
+" Author: roel0 <postelmansroel@gmail.com>
+" Author: tbodt <https://github.com/tbodt>
 " Description: Functions for integrating with C-family linters.
 
 call ale#Set('c_parse_makefile', 0)
@@ -176,4 +178,28 @@ function! ale#c#FindCompileCommands(buffer) abort
     endfor
 
     return ''
+endfunction
+
+" Given a buffer number, return the relevant command from
+" compile_commands.json. Return 0 if none could be found.
+function! ale#c#GetCompileCommand(buffer) abort
+    let l:build_dir = ale#c#FindCompileCommands(a:buffer)
+    if empty(l:build_dir)
+        return 0
+    endif
+    let l:commands = json_decode(readfile(l:build_dir . '/compile_commands.json'))
+    let l:file = fnamemodify(bufname(a:buffer), ':p')
+    " save current directory, so we can restore it before returning
+    let l:cwd = getcwd()
+    for l:command in l:commands
+        " temporarily change dir to run fnamemodify
+        execute 'cd' l:command.directory
+        let l:command.file = fnamemodify(l:command.file, ':p')
+        if l:file ==# l:command.file
+            execute 'cd' l:cwd
+            return 'cd ' . ale#Escape(l:command.directory) . ';' . l:command.command
+        endif
+    endfor
+    execute 'cd' l:cwd
+    return 0
 endfunction

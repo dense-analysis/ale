@@ -1,0 +1,12 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test')
+
+After:
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(Should find compile_commands.json):
+  call ale#test#SetFilename('test_c_projects/json_project/test.c')
+  echom ale#c#GetCompileCommand(bufnr(''))
+  AssertEqual ale#c#GetCompileCommand(bufnr('')),
+  \ "cd '/testplugin/test/test_c_projects/json_project/build';clang -I../include test.c"
