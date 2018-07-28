@@ -5,19 +5,23 @@ ALE Proto Integration                                         *ale-proto-options
 ===============================================================================
 Integration Information
 
-Linting of `.proto` files requires that the `protoc` binary is installed in the
-system path and that the `protoc-gen-lint` plugin for the `protoc` binary is also
-installed.
+Two linters are available for .proto files: protoc-gen-lint and prototool.
 
 To enable `.proto` file linting, update |g:ale_linters| as appropriate:
 >
-  " Enable linter for .proto files
+  " Enable the protoc-gen-lint linter for .proto files
   let g:ale_linters = {'proto': ['protoc-gen-lint']}
+  " Enable the protoool linter for .proto files
+  let g:ale_linters = {'proto': ['prototool']}
 <
 ===============================================================================
 protoc-gen-lint                                      *ale-proto-protoc-gen-lint*
 
-  The linter is a plugin for the `protoc` binary. As long as the binary resides
+  The linter is a plugin for the `protoc` binary.
+
+  Linting of `.proto` files with protoc-gen-lint requires that the `protoc` binary
+  is installed in the system path and that the `protoc-gen-lint` plugin for the
+  `protoc` binary is also installed. As long as the binary resides
   in the system path, `protoc` will find it.
 
 g:ale_proto_protoc_gen_lint_options       *g:ale_proto_protoc_gen_lint_options*
@@ -28,6 +32,34 @@ g:ale_proto_protoc_gen_lint_options       *g:ale_proto_protoc_gen_lint_options*
   This variable can be changed to modify flags given to protoc. Note that the
   directory of the linted file is always passed as an include path with '-I'
   before any user-supplied options.
+
+===============================================================================
+prototool                                                  *ale-proto-prototool*
+
+  Prototool provides a full toolbelt for working with `.proto` files. The
+  compile, generate, and lint commands are integrated into ale.
+
+  Prototool takes care of downloading and caching `protoc` for you, so only
+  the `prototool` command must be on your path.
+
+  Prototool is in early alpha, expect breaking changes.
+
+  See https://github.com/uber/prototool for more details.
+
+g:ale_proto_prototool_command                   *g:ale_proto_prototool_command*
+
+  Type: |String|
+  Default: `'all'`
+
+  This variable controls the sub command that is used with `prototool`.
+  There are three valid options:
+
+  - `'compile'`: Compile your files with `protoc`. This does no generation.
+  - `'lint'`: Compile and then lint. This does no generation.
+  - `'all'`: Compile, then generate according to your `prototool.yaml`
+    configuration file, then lint. Any plugins referenced must be on
+    your path. If no plugins are referenced in your `prototool.yaml` file,
+    this will only compile and lint, and is equivalent to `'lint'`.
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

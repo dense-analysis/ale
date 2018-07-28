@@ -1,0 +1,28 @@
+Before:
+  call ale#test#SetFilename('test.proto')
+
+After:
+  Restore
+
+  unlet! b:ale_proto_prototool_command
+
+  call ale#linter#Reset()
+
+Execute(The default command should be correct):
+  AssertEqual
+  \ 'prototool all --disable-format --dir-mode %s',
+  \ ale_linters#proto#prototool#GetCommand(bufnr(''))
+
+Execute(The compile command should be correct):
+  let b:ale_proto_prototool_command = 'compile'
+
+  AssertEqual
+  \ 'prototool compile --dir-mode %s',
+  \ ale_linters#proto#prototool#GetCommand(bufnr(''))
+
+Execute(The lint command should be correct):
+  let b:ale_proto_prototool_command = 'lint'
+
+  AssertEqual
+  \ 'prototool lint --dir-mode %s',
+  \ ale_linters#proto#prototool#GetCommand(bufnr(''))
