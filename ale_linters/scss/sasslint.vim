@@ -2,10 +2,13 @@
 " <ben@falconers.me.uk>
 
 function! ale_linters#scss#sasslint#GetCommand(buffer) abort
+    let l:config = ale#Var(a:buffer, 'scss_config_file')
+
     return ale#path#BufferCdString(a:buffer)
     \   . ale#Escape('sass-lint')
     \   . ' -v'
     \   . ' -q'
+    \   . (!empty(l:config) ? ' -c ' . l:config : '')
     \   . ' -f compact'
     \   . ' %t'
 endfunction
