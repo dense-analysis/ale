@@ -148,14 +148,16 @@ Execute(ParseCompileCommandsFlags should tolerate empty values):
   AssertEqual '', ale#c#ParseCompileCommandsFlags(bufnr(''), '', [])
 
 Execute(ParseCompileCommandsFlags should parse some basic flags):
-  noautocmd execute 'file! ' . fnameescape('/foo/bar/xmms2-mpris/src/xmms2-mpris.c')
+  noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
 
   AssertEqual
-  \ '-I/usr/include/xmms2',
-  \ ale#c#ParseCompileCommandsFlags(bufnr(''), '/foo/bar/xmms2-mpris', [
+  \ '-I' . ale#path#Simplify('/usr/include/xmms2'),
+  \ ale#c#ParseCompileCommandsFlags(bufnr(''), ale#path#Simplify('/foo/bar/xmms2-mpris'), [
   \   {
-  \     'directory': '/foo/bar/xmms2-mpris',
-  \     'command': '/usr/bin/cc  -I/usr/include/xmms2    -o CMakeFiles/xmms2-mpris.dir/src/xmms2-mpris.c.o   -c /foo/bar/xmms2-mpris/src/xmms2-mpris.c',
-  \     'file': '/foo/bar/xmms2-mpris/src/xmms2-mpris.c'
+  \     'directory': ale#path#Simplify('/foo/bar/xmms2-mpris'),
+  \     'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/xmms2')
+  \       . '    -o CMakeFiles/xmms2-mpris.dir/src/xmms2-mpris.c.o'
+  \       . '   -c ' . ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
+  \     'file': ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
   \   },
   \ ])
