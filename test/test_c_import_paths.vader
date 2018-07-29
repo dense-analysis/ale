@@ -2,6 +2,7 @@ Before:
   " Make sure the c.vim file is loaded first.
   call ale#c#FindProjectRoot(bufnr(''))
 
+  Save g:ale_c_parse_makefile
   Save g:ale_c_gcc_options
   Save g:ale_c_clang_options
   Save g:ale_cpp_gcc_options
@@ -19,6 +20,7 @@ Before:
 
   call ale#test#SetDirectory('/testplugin/test')
 
+  let g:ale_c_parse_makefile = 0
   let g:ale_c_gcc_options = ''
   let g:ale_c_clang_options = ''
   let g:ale_cpp_gcc_options = ''

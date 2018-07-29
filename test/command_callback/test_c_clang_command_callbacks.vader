@@ -1,4 +1,7 @@
 Before:
+  Save g:ale_c_parse_makefile
+  let g:ale_c_parse_makefile = 0
+
   call ale#assert#SetUpLinterTest('c', 'clang')
   let b:command_tail = ' -S -x c -fsyntax-only -iquote'
   \   . ' ' . ale#Escape(getcwd())
