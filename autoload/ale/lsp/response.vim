@@ -47,7 +47,12 @@ function! ale#lsp#response#ReadDiagnostics(response) abort
         endif
 
         if has_key(l:diagnostic, 'code')
-            let l:loclist_item.nr = l:diagnostic.code
+            if type(l:diagnostic.code) == v:t_string
+                let l:loclist_item.code = l:diagnostic.code
+            elseif type(l:diagnostic.code) == v:t_number && l:diagnostic.code != -1
+                let l:loclist_item.code = string(l:diagnostic.code)
+                let l:loclist_item.nr = l:diagnostic.code
+            endif
         endif
 
         call add(l:loclist, l:loclist_item)
@@ -70,7 +75,12 @@ function! ale#lsp#response#ReadTSServerDiagnostics(response) abort
         \}
 
         if has_key(l:diagnostic, 'code')
-            let l:loclist_item.nr = l:diagnostic.code
+            if type(l:diagnostic.code) == v:t_string
+                let l:loclist_item.code = l:diagnostic.code
+            elseif type(l:diagnostic.code) == v:t_number && l:diagnostic.code != -1
+                let l:loclist_item.code = string(l:diagnostic.code)
+                let l:loclist_item.nr = l:diagnostic.code
+            endif
         endif
 
         if get(l:diagnostic, 'category') is# 'warning'
