@@ -8,9 +8,31 @@ function! ale_linters#haskell#hie#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#haskell#hie#GetProjectRoot(buffer) abort
-    let l:stack_file = ale#path#FindNearestFile(a:buffer, 'stack.yaml')
+    " Search for the stack file first
+    let l:project_file = ale#path#FindNearestFile(a:buffer, 'stack.yaml')
 
-    return !empty(l:stack_file) ? fnamemodify(l:stack_file, ':h') : expand('#' . a:buffer . ':p:h')
+    " If it's empty, search for the cabal file
+    if empty(l:project_file)
+        let l:cabal_file = fnamemodify(bufname(a:buffer), ':p:h')
+        let l:paths = ''
+
+        while empty(matchstr(l:cabal_file, '^\(\/\|\(\w:\\\)\)$'))
+            let l:cabal_file = fnamemodify(l:cabal_file, ':h')
+            let l:paths = l:paths . l:cabal_file . ','
+        endwhile
+
+        let l:project_file = globpath(l:paths, '*.cabal')
+    endif
+
+    " Either extract the project directory or take the current working
+    " directory
+    if !empty(l:project_file)
+        let l:project_file = fnamemodify(l:project_file, ':h')
+    else
+        let l:project_file = expand('#' . a:buffer . ':p:h')
+    endif
+
+    return l:project_file
 endfunction
 
 call ale#linter#Define('haskell', {
