@@ -14,10 +14,10 @@ function! ale_linters#c#gcc#GetCommand(buffer, output) abort
     " -iquote with the directory the file is in makes #include work for
     "  headers in the same directory.
     return ale#Escape(ale_linters#c#gcc#GetExecutable(a:buffer))
-    \   . ' -S -x c -fsyntax-only '
-    \   . '-iquote ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h')) . ' '
-    \   . l:cflags
-    \   . ale#Var(a:buffer, 'c_gcc_options') . ' -'
+    \   . ' -S -x c -fsyntax-only'
+    \   . ' -iquote ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h'))
+    \   . ale#Pad(l:cflags)
+    \   . ale#Pad(ale#Var(a:buffer, 'c_gcc_options')) . ' -'
 endfunction
 
 call ale#linter#Define('c', {

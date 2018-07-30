@@ -38,7 +38,7 @@ Execute(The loclist titles should be set appropriately):
   \ 'nr': 0,
   \ 'type': 'E',
   \ 'pattern': '',
-  \}], getloclist(0)
+  \}], ale#test#GetLoclistWithoutModule()
 
   if !has('nvim')
     AssertEqual
@@ -68,7 +68,7 @@ Execute(The quickfix titles should be set appropriately):
   \ 'nr': 0,
   \ 'type': 'E',
   \ 'pattern': '',
-  \}], getqflist()
+  \}], ale#test#GetQflistWithoutModule()
 
   if !has('nvim')
     AssertEqual

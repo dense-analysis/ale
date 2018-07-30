@@ -430,10 +430,10 @@ Execute(Should handle Python completion results correctly):
   \   }
   \ })
 
-Execute(Should handle missing detail keys):
+Execute(Should handle missing keys):
   AssertEqual
   \ [
-  \   {'word': 'x', 'menu': '', 'info': 'y', 'kind': 'f', 'icase': 1},
+  \   {'word': 'x', 'menu': '', 'info': '', 'kind': 'v', 'icase': 1},
   \ ],
   \ ale#completion#ParseLSPCompletions({
   \   'jsonrpc': '2.0',
@@ -443,8 +443,6 @@ Execute(Should handle missing detail keys):
   \     'items': [
   \       {
   \         'label': 'x',
-  \         'kind': 3,
-  \         'documentation': 'y',
   \       },
   \     ]
   \   }
