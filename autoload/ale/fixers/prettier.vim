@@ -47,6 +47,7 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version_output) abort
         \    'markdown': 'markdown',
         \    'vue': 'vue',
         \    'yaml': 'yaml',
+        \    'html': 'parse5',
         \}
         let l:parser = 'babylon'
 
