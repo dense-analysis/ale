@@ -49,7 +49,7 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version_output) abort
         \    'yaml': 'yaml',
         \    'html': 'parse5',
         \}
-        let l:parser = 'babylon'
+        let l:parser = ''
 
         for l:filetype in split(getbufvar(a:buffer, '&filetype'), '\.')
             if has_key(l:prettier_parsers, l:filetype)
