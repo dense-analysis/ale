@@ -97,7 +97,7 @@ Execute(The version number should be cached):
   \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), [])
 
 Execute(Should set --parser based on filetype, TypeScript):
-  call ale#test#SetFilename('../prettier-test-files/testfile.ts')
+  call ale#test#SetFilename('../prettier-test-files/testfile')
 
   set filetype=typescript
 
@@ -111,7 +111,7 @@ Execute(Should set --parser based on filetype, TypeScript):
   \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), ['1.6.0'])
 
 Execute(Should set --parser based on filetype, CSS):
-  call ale#test#SetFilename('../prettier-test-files/testfile.css')
+  call ale#test#SetFilename('../prettier-test-files/testfile')
 
   set filetype=css
 
@@ -139,7 +139,7 @@ Execute(Should set --parser based on filetype, LESS):
   \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), ['1.6.0'])
 
 Execute(Should set --parser based on filetype, SCSS):
-  call ale#test#SetFilename('../prettier-test-files/testfile.scss')
+  call ale#test#SetFilename('../prettier-test-files/testfile')
 
   set filetype=scss
 
@@ -153,7 +153,7 @@ Execute(Should set --parser based on filetype, SCSS):
   \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), ['1.6.0'])
 
 Execute(Should set --parser based on filetype, JSON):
-  call ale#test#SetFilename('../prettier-test-files/testfile.json')
+  call ale#test#SetFilename('../prettier-test-files/testfile')
 
   set filetype=json
 
