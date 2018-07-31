@@ -46,6 +46,7 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version_output) abort
         \    'graphql': 'graphql',
         \    'markdown': 'markdown',
         \    'vue': 'vue',
+        \    'yaml': 'yaml',
         \}
         let l:parser = 'babylon'
 
