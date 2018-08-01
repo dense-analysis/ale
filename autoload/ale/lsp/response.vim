@@ -110,7 +110,7 @@ function! ale#lsp#response#GetErrorMessage(response) abort
 
     if type(l:error_data) is v:t_string
         let l:message .= "\n" . l:error_data
-    else
+    elseif type(l:error_data) is v:t_dict
         let l:traceback = get(l:error_data, 'traceback', [])
 
         if type(l:traceback) is v:t_list && !empty(l:traceback)
