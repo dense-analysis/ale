@@ -10,6 +10,6 @@ function! ale#fixers#hclfmt#Fix(buffer) abort
           \ 'command': ale#Escape(l:executable)
           \     . ' -w'
           \     . ' %t',
-          \     'read_temporay_file': 1,
+          \     'read_temporary_file': 1,
           \}
 endfunction
