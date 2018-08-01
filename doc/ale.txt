@@ -26,9 +26,11 @@ CONTENTS                                                         *ale-contents*
       gawk................................|ale-awk-gawk|
     c.....................................|ale-c-options|
       clang...............................|ale-c-clang|
+      clangd..............................|ale-c-clangd|
       clang-format........................|ale-c-clangformat|
       clangtidy...........................|ale-c-clangtidy|
       cppcheck............................|ale-c-cppcheck|
+      cquery..............................|ale-c-cquery|
       flawfinder..........................|ale-c-flawfinder|
       gcc.................................|ale-c-gcc|
     chef..................................|ale-chef-options|
@@ -99,6 +101,7 @@ CONTENTS                                                         *ale-contents*
     haskell...............................|ale-haskell-options|
       brittany............................|ale-haskell-brittany|
       ghc.................................|ale-haskell-ghc|
+      cabal-ghc...........................|ale-haskell-cabal-ghc|
       hdevtools...........................|ale-haskell-hdevtools|
       hfmt................................|ale-haskell-hfmt|
       stack-build.........................|ale-haskell-stack-build|
@@ -204,6 +207,7 @@ CONTENTS                                                         *ale-contents*
       pylint..............................|ale-python-pylint|
       pyls................................|ale-python-pyls|
       pyre................................|ale-python-pyre|
+      vulture.............................|ale-python-vulture|
       yapf................................|ale-python-yapf|
     qml...................................|ale-qml-options|
       qmlfmt..............................|ale-qml-qmlfmt|
@@ -334,7 +338,7 @@ Notes:
 * Awk: `gawk`
 * Bash: `language-server`, `shell` (-n flag), `shellcheck`, `shfmt`
 * Bourne Shell: `shell` (-n flag), `shellcheck`, `shfmt`
-* C: `cppcheck`, `cpplint`!!, `clang`, `clangtidy`!!, `clang-format`, `flawfinder`, `gcc`
+* C: `cppcheck`, `cpplint`!!, `clang`, `clangd`, `clangtidy`!!, `clang-format`, `cquery`, `flawfinder`, `gcc`
 * C++ (filetype cpp): `clang`, `clangcheck`!!, `clangtidy`!!, `clang-format`, `cppcheck`, `cpplint`!!, `cquery`, `flawfinder`, `gcc`
 * CUDA: `nvcc`!!
 * C#: `mcs`, `mcsc`!!
@@ -365,7 +369,7 @@ Notes:
 * GraphQL: `eslint`, `gqlint`, `prettier`
 * Haml: `haml-lint`
 * Handlebars: `ember-template-lint`
-* Haskell: `brittany`, `ghc`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`, `hfmt`
+* Haskell: `brittany`, `ghc`, `cabal-ghc`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`, `hfmt`
 * HTML: `alex`!!, `HTMLHint`, `proselint`, `tidy`, `write-good`
 * Idris: `idris`
 * Java: `checkstyle`, `javac`, `google-java-format`, `PMD`
@@ -396,7 +400,7 @@ Notes:
 * proto: `protoc-gen-lint`
 * Pug: `pug-lint`
 * Puppet: `languageserver`, `puppet`, `puppet-lint`
-* Python: `autopep8`, `black`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pyls`, `pyre`, `pylint`!!, `yapf`
+* Python: `autopep8`, `black`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pyls`, `pyre`, `pylint`!!, `vulture`!!, `yapf`
 * QML: `qmlfmt`, `qmllint`
 * R: `lintr`
 * ReasonML: `merlin`, `ols`, `refmt`
@@ -665,6 +669,16 @@ items can be controlled with |g:ale_completion_max_suggestions|.
 If you don't like some of the suggestions you see, you can filter them out
 with |g:ale_completion_excluded_words| or |b:ale_completion_excluded_words|.
 
+                                                *ale-completion-completopt-bug*
+
+ALE implements completion as you type by temporarily adjusting |completeopt|
+before opening the omnicomplete menu with <C-x><C-o>. In some versions of Vim,
+the value set for the option will not be respected. If you experience issues
+with Vim automatically inserting text while you type, set the following option
+in vimrc, and your issues should go away. >
+
+  set completeopt=menu,menuone,preview,noselect,noinsert
+<
 
 -------------------------------------------------------------------------------
 5.2 Go To Definition                                     *ale-go-to-definition*

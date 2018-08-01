@@ -68,7 +68,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   \     'pattern': '',
   \   },
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()
 
   " After we get empty syntax errors, we should clear them.
   call ale#lsp_linter#HandleLSPResponse(1, {
@@ -85,7 +85,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   AssertEqual
   \ [
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()
 
 Execute(tsserver semantic error responses should be handled correctly):
   runtime ale_linters/typescript/tsserver.vim
@@ -141,7 +141,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   \     'pattern': '',
   \   },
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()
 
   " After we get empty syntax errors, we should clear them.
   call ale#lsp_linter#HandleLSPResponse(1, {
@@ -158,7 +158,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   AssertEqual
   \ [
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()
 
 Execute(LSP errors should be logged in the history):
   call ale#lsp_linter#SetLSPLinterMap({'347': 'foobar'})

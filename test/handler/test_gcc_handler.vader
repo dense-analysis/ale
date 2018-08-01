@@ -1,7 +1,7 @@
 Execute(The GCC handler should ignore other lines of output):
   AssertEqual
   \ [],
-  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \ ale#handlers#gcc#HandleGCCFormatWithIncludes(347, [
   \   'foo',
   \   'bar',
   \   'baz',
@@ -17,12 +17,24 @@ Execute(GCC errors from included files should be parsed correctly):
   \     'type': 'E',
   \     'text': 'expected identifier or ''('' before ''{'' token',
   \   },
+  \   {
+  \     'lnum': 3,
+  \     'col': 2,
+  \     'text': 'Error found in header. See :ALEDetail',
+  \     'detail': join([
+  \       'In file included from <stdin>:3:2:',
+  \       'broken.h:1:1: error: expected identifier or ''('' before ''{'' token',
+  \       ' {{{',
+  \       ' ^',
+  \     ], "\n"),
+  \   },
   \ ],
-  \ ale#handlers#gcc#HandleGCCFormat(347, [
-  \   'In file included from <stdin>:3:0:',
+  \ ale#handlers#gcc#HandleGCCFormatWithIncludes(347, [
+  \   'In file included from <stdin>:3:2:',
   \   'broken.h:1:1: error: expected identifier or ''('' before ''{'' token',
   \   ' {{{',
   \   ' ^',
+  \   'compilation terminated.',
   \ ])
 
   AssertEqual
@@ -34,13 +46,25 @@ Execute(GCC errors from included files should be parsed correctly):
   \     'type': 'E',
   \     'text': 'expected identifier or ''('' before ''{'' token',
   \   },
+  \   {
+  \     'lnum': 5,
+  \     'text': 'Error found in header. See :ALEDetail',
+  \     'detail': join([
+  \       'In file included from a.h:1:0,',
+  \       '                 from <stdin>:5:',
+  \       'b.h:1:1: error: expected identifier or ''('' before ''{'' token',
+  \       ' {{{',
+  \       ' ^',
+  \     ], "\n"),
+  \   },
   \ ],
-  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \ ale#handlers#gcc#HandleGCCFormatWithIncludes(347, [
   \   'In file included from a.h:1:0,',
-  \   '                 from test.c:3:',
+  \   '                 from <stdin>:5:',
   \   'b.h:1:1: error: expected identifier or ''('' before ''{'' token',
   \   ' {{{',
   \   ' ^',
+  \   'compilation terminated.',
   \ ])
 
   AssertEqual
@@ -59,16 +83,31 @@ Execute(GCC errors from included files should be parsed correctly):
   \     'type': 'E',
   \     'text': 'unknown type name ''other_bad_type''',
   \   },
+  \   {
+  \     'lnum': 3,
+  \     'text': 'Error found in header. See :ALEDetail',
+  \     'detail': join([
+  \       'In file included from a.h:1:0,',
+  \       '                 from <stdin>:3:',
+  \       'b.h:1:1: error: unknown type name ‘bad_type’',
+  \       ' bad_type x;',
+  \       ' ^',
+  \       'b.h:2:1: error: unknown type name ‘other_bad_type’',
+  \       ' other_bad_type y;',
+  \       ' ^',
+  \     ], "\n"),
+  \   },
   \ ],
-  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \ ale#handlers#gcc#HandleGCCFormatWithIncludes(347, [
   \   'In file included from a.h:1:0,',
-  \   '                 from test.c:3:',
+  \   '                 from <stdin>:3:',
   \   'b.h:1:1: error: unknown type name ‘bad_type’',
   \   ' bad_type x;',
   \   ' ^',
   \   'b.h:2:1: error: unknown type name ‘other_bad_type’',
   \   ' other_bad_type y;',
   \   ' ^',
+  \   'compilation terminated.',
   \ ])
 
 Execute(The GCC handler shouldn't complain about #pragma once for headers):
@@ -76,7 +115,7 @@ Execute(The GCC handler shouldn't complain about #pragma once for headers):
 
   AssertEqual
   \ [],
-  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \ ale#handlers#gcc#HandleGCCFormatWithIncludes(347, [
   \   '<stdin>:1:1: warning: #pragma once in main file [enabled by default]',
   \ ])
 
@@ -84,7 +123,7 @@ Execute(The GCC handler shouldn't complain about #pragma once for headers):
 
   AssertEqual
   \ [],
-  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \ ale#handlers#gcc#HandleGCCFormatWithIncludes(347, [
   \   '<stdin>:1:1: warning: #pragma once in main file [enabled by default]',
   \ ])
 
@@ -119,7 +158,7 @@ Execute(The GCC handler should handle syntax errors):
   \     'text': 'expected '';'' before ''o'''
   \   },
   \ ],
-  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \ ale#handlers#gcc#HandleGCCFormatWithIncludes(347, [
   \ '<stdin>:6:12: error: invalid suffix "p" on integer constant',
   \ '<stdin>:17:5: error: invalid suffix "n" on integer constant',
   \ '<stdin>:4: error: variable or field ''foo'' declared void',
@@ -130,7 +169,7 @@ Execute(The GCC handler should handle syntax errors):
 Execute(The GCC handler should handle notes with no previous message):
   AssertEqual
   \ [],
-  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \ ale#handlers#gcc#HandleGCCFormatWithIncludes(347, [
   \   '<stdin>:1:1: note: x',
   \   '<stdin>:1:1: note: x',
   \ ])
@@ -145,7 +184,7 @@ Execute(The GCC handler should interpret - as being the current file):
   \     'text': 'Some error',
   \   },
   \ ],
-  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \ ale#handlers#gcc#HandleGCCFormatWithIncludes(347, [
   \ '-:6:12: error: Some error',
   \ ])
 
@@ -159,6 +198,6 @@ Execute(The GCC handler should handle fatal error messages due to missing files)
   \     'text': 'foo.h: No such file or directory'
   \   },
   \ ],
-  \ ale#handlers#gcc#HandleGCCFormat(347, [
+  \ ale#handlers#gcc#HandleGCCFormatWithIncludes(347, [
   \ '<stdin>:3:12: fatal error: foo.h: No such file or directory',
   \ ])
