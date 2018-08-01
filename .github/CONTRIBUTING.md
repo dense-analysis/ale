@@ -3,7 +3,7 @@
 Have fun, and work on whatever floats your boat. Take It Easy :tm:.
 
 For help with contributing to ALE, see `:help ale-development` in Vim, or view
-the help file online [here](/w0rp/ale/blob/master/doc/ale-development.txt).
+the help file online [here](/doc/ale-development.txt).
 
 ## Creating Issues
 
