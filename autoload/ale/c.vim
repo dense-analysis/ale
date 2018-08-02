@@ -150,8 +150,18 @@ function! s:GetListFromCompileCommandsFile(compile_commands_file) abort
 endfunction
 
 function! ale#c#ParseCompileCommandsFlags(buffer, dir, json_list) abort
+    " Search for an exact file match first.
     for l:item in a:json_list
         if bufnr(l:item.file) is a:buffer
+            return ale#c#ParseCFlags(a:dir, l:item.command)
+        endif
+    endfor
+
+    " Look for any file in the same directory if we can't find an exact match.
+    let l:dir = ale#path#Simplify(expand('#' . a:buffer . ':p:h'))
+
+    for l:item in a:json_list
+        if ale#path#Simplify(fnamemodify(l:item.file, ':h')) is? l:dir
             return ale#c#ParseCFlags(a:dir, l:item.command)
         endif
     endfor
