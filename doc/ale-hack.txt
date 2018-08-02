@@ -1,5 +1,14 @@
 ===============================================================================
 ALE Hack Integration                                         *ale-hack-options*
+                                                         *ale-integration-hack*
+
+  HHAST is disabled by default, as it executes code in the project root.
+
+  Currently linters must be enabled globally.  HHAST can be enabled with:
+
+>
+  let g:ale_linters = {'hack': ['hack', 'hhast']}
+<
 
 ===============================================================================
 hack                                                            *ale-hack-hack*
