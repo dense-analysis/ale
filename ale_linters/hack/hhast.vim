@@ -4,12 +4,15 @@
 call ale#Set('hack_hhast_executable', 'vendor/bin/hhast-lint')
 
 function! ale_linters#hack#hhast#GetProjectRoot(buffer) abort
-    let l:root = ale_linters#hack#hack#GetProjectRoot(a:buffer)
+    " Find the hack root, then figure out if it's also an HHAST root.
+    " Don't try to use lint configurations from vendor/foo/bar/hhast-lint.json
+    let l:hhconfig = ale#path#FindNearestFile(a:buffer, '.hhconfig')
 
-    if empty(l:root)
+    if empty(l:hhconfig)
       return ''
     endif
 
+    let l:root = fnamemodify(l:hhconfig, ':h')
     let l:hhast_config = findfile('hhast-lint.json', l:root)
 
     return !empty(l:hhast_config) ? l:root : ''
@@ -23,19 +26,10 @@ function! ale_linters#hack#hhast#GetExecutable(buffer) abort
     return !empty(l:absolute) ? l:absolute : ''
 endfunction
 
-
-function! ale_linters#hack#hhast#GetCommand(buffer) abort
-    let l:executable = ale_linters#hack#hhast#GetExecutable(a:buffer)
-
-    return ale#Escape(l:executable).' --mode lsp --from vim-ale'
-endfunction
-
-function !
-
 call ale#linter#Define('hack', {
 \   'name': 'hhast',
 \   'lsp': 'stdio',
 \   'executable_callback': 'ale_linters#hack#hhast#GetExecutable',
-\   'command_callback': 'ale_linters#hack#hhast#GetCommand',
+\   'command': '%e --mode lsp --from vim-ale',
 \   'project_root_callback': 'ale_linters#hack#hhast#GetProjectRoot',
 \})

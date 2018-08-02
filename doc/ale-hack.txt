@@ -4,8 +4,8 @@ ALE Hack Integration                                         *ale-hack-options*
 ===============================================================================
 hack                                                            *ale-hack-hack*
 
-g:ale_hack_hhclient_executable                 *g:ale_hack_hhclient_executable*
-                                               *b:ale_hack_hhclient_executable*
+g:ale_hack_hack_executable                         *g:ale_hack_hack_executable*
+                                                   *b:ale_hack_hack_executable*
 
   Type: |String|
   Default: `'hh_client'`
