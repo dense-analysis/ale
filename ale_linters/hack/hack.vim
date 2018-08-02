@@ -5,6 +5,7 @@ call ale#Set('hack_hhclient_executable', 'hh_client')
 
 function! ale_linters#hack#hack#GetProjectRoot(buffer) abort
     let l:hhconfig = ale#path#FindNearestFile(a:buffer, '.hhconfig')
+
     return !empty(l:hhconfig) ? fnamemodify(l:hhconfig, ':h') : ''
 endfunction
 
@@ -15,6 +16,7 @@ endfunction
 
 function! ale_linters#hack#hack#GetCommand(buffer) abort
     let l:executable = ale_linters#hack#hack#GetExecutable(a:buffer)
+
     return ale#Escape(l:executable).' lsp --from vim-ale'
 endfunction
 
