@@ -2318,11 +2318,12 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          `type` - Defaults to `'E'`.
                          `nr` - Defaults to `-1`.
 
-                           Numeric error code. If `nr` is not `-1`, `code` should have
+                           Numeric error code. If `nr` is not `-1`, `code`
+                           likely should contain the string representation of
                            the same value.
-                         `code` - No default.
+                         `code` - No default; may be unset.
 
-                           String error code.
+                           Human-readable |String| error code.
 
   `executable`             A |String| naming the executable itself which
                          will be run. This value will be used to check if the
