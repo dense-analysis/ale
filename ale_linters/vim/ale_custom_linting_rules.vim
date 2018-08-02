@@ -2,8 +2,18 @@
 " Description: A linter for checking ALE project code itself.
 
 function! ale_linters#vim#ale_custom_linting_rules#GetExecutable(buffer) abort
-    " Look for the custom-linting-rules script.
-    return ale#path#FindNearestFile(a:buffer, 'test/script/custom-linting-rules')
+    let l:filename = expand('#' . a:buffer . ':p')
+    let l:dir_list = []
+
+    for l:dir in split(&runtimepath, ',')
+        if l:filename[:len(l:dir) - 1] is# l:dir
+            call add(l:dir_list, l:dir)
+        endif
+    endfor
+
+    return !empty(l:dir_list)
+    \   ? findfile('test/script/custom-linting-rules', join(l:dir_list, ','))
+    \   : ''
 endfunction
 
 function! s:GetALEProjectDir(buffer) abort
