@@ -89,6 +89,26 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle messages without codes)
   \   },
   \ ]}})
 
+Execute(ale#lsp#response#ReadDiagnostics() should consider -1 to be a meaningless code):
+  AssertEqual [
+  \   {
+  \     'type': 'E',
+  \     'text': 'Something went wrong!',
+  \     'lnum': 3,
+  \     'col': 11,
+  \     'end_lnum': 5,
+  \     'end_col': 16,
+  \   }
+  \ ],
+  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \   {
+  \     'range': Range(2, 10, 4, 15),
+  \     'message': 'Something went wrong!',
+  \     'code': -1,
+  \   },
+  \ ]}})
+
+
 Execute(ale#lsp#response#ReadDiagnostics() should handle multiple messages):
   AssertEqual [
   \   {
