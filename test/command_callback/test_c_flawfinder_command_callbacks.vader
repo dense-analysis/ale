@@ -13,7 +13,7 @@ Execute(The minlevel of flawfinder should be configurable):
   AssertLinter 'flawfinder', ale#Escape('flawfinder') . ' -CDQS --minlevel=8 %t'
 
 Execute(Additional flawfinder options should be configurable):
-  let b:ale_c_flawfinder_options = ' --foobar'
+  let b:ale_c_flawfinder_options = '--foobar'
 
   AssertLinter 'flawfinder',
   \ ale#Escape('flawfinder') . ' -CDQS --foobar --minlevel=1 %t'

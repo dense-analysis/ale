@@ -2,7 +2,7 @@ Before:
   call ale#assert#SetUpLinterTest('nasm', 'nasm')
 
   let b:command_tail =
-  \ ' -X gnu -I ' . ale#Escape(getcwd() . (has('win32') ? '\' : '/')) . '  %s'
+  \ ' -X gnu -I ' . ale#Escape(getcwd() . (has('win32') ? '\' : '/')) . ' %s'
   let b:command_tail_opt =
   \ ' -X gnu -I ' . ale#Escape(getcwd() . (has('win32') ? '\' : '/')) . ' -w+orphan-labels %s'
 

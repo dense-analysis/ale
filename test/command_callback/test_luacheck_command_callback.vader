@@ -6,7 +6,7 @@ After:
 
 Execute(The lua luacheck command callback should return the correct default string):
   AssertLinter 'luacheck',
-  \ ale#Escape('luacheck') . '  --formatter plain --codes --filename %s -'
+  \ ale#Escape('luacheck') . ' --formatter plain --codes --filename %s -'
 
 Execute(The lua luacheck command callback should let you set options):
   let g:ale_lua_luacheck_options = '--config filename'
@@ -20,4 +20,4 @@ Execute(The luacheck executable should be configurable):
   let g:ale_lua_luacheck_executable = 'luacheck.sh'
 
   AssertLinter 'luacheck.sh',
-  \ ale#Escape('luacheck.sh') . '  --formatter plain --codes --filename %s -'
+  \ ale#Escape('luacheck.sh') . ' --formatter plain --codes --filename %s -'

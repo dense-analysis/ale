@@ -256,7 +256,7 @@ function! ale#c#IncludeOptions(include_paths) abort
         return ''
     endif
 
-    return ' ' . join(l:option_list) . ' '
+    return join(l:option_list)
 endfunction
 
 let g:ale_c_build_dir_names = get(g:, 'ale_c_build_dir_names', [

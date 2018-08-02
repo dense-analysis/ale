@@ -12,3 +12,9 @@ Execute(The executable should be configurable):
 
   AssertLinter 'foobar',
   \ ale#Escape('foobar') . ' -cuda -std=c++11 %s -o ' . g:ale#util#nul_file
+
+Execute(The options should be configurable):
+  let g:ale_cuda_nvcc_options = '--foobar'
+
+  AssertLinter 'nvcc',
+  \ ale#Escape('nvcc') . ' -cuda --foobar %s -o ' . g:ale#util#nul_file
