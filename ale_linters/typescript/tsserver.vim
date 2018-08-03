@@ -11,7 +11,7 @@ call ale#linter#Define('typescript', {
 \   'executable_callback': ale#node#FindExecutableFunc('typescript_tsserver', [
 \       'node_modules/.bin/tsserver',
 \   ]),
-\   'command_callback': 'ale_linters#typescript#tsserver#GetExecutable',
+\   'command': '%e',
 \   'project_root_callback': {-> ''},
 \   'language': '',
 \})
