@@ -10,3 +10,10 @@ Execute(Custom executables should be used for the executable and command):
   AssertLinter 'phpmd_test',
   \ ale#Escape('phpmd_test')
   \ . ' %s text cleancode,codesize,controversial,design,naming,unusedcode --ignore-violations-on-exit %t'
+
+Execute(--suffixes option should be added to the final command):
+  let g:ale_php_phpmd_suffixes = 'php,module,theme'
+
+  AssertLinter 'phpmd',
+  \ ale#Escape('phpmd')
+  \ . ' %s text cleancode,codesize,controversial,design,naming,unusedcode --suffixes php,module,theme --ignore-violations-on-exit %t'

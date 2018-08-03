@@ -6,9 +6,18 @@ let g:ale_php_phpmd_executable = get(g:, 'ale_php_phpmd_executable', 'phpmd')
 " Set to change the ruleset
 let g:ale_php_phpmd_ruleset = get(g:, 'ale_php_phpmd_ruleset', 'cleancode,codesize,controversial,design,naming,unusedcode')
 
+" Set to tell phpmd files with which suffixes to check
+let g:ale_php_phpmd_suffixes = get(g:, 'ale_php_phpmd_suffixes', '')
+
 function! ale_linters#php#phpmd#GetCommand(buffer) abort
+    let l:suffixes = ale#Var(a:buffer, 'php_phpmd_suffixes')
+    let l:suffixes_option = !empty(l:suffixes)
+    \   ? ' --suffixes ' . l:suffixes
+    \   : ''
+
     return '%e %s text'
     \   . ale#Pad(ale#Var(a:buffer, 'php_phpmd_ruleset'))
+    \   . l:suffixes_option
     \   . ' --ignore-violations-on-exit %t'
 endfunction
 
