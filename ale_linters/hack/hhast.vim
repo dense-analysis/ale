@@ -26,10 +26,15 @@ function! ale_linters#hack#hhast#GetExecutable(buffer) abort
     return !empty(l:absolute) ? l:absolute : ''
 endfunction
 
+function! ale_linters#hack#hhast#GetInitializationOptions(buffer) abort
+    return {'lintMode': 'open-files'}
+endfunction
+
 call ale#linter#Define('hack', {
 \   'name': 'hhast',
 \   'lsp': 'stdio',
 \   'executable_callback': 'ale_linters#hack#hhast#GetExecutable',
 \   'command': '%e --mode lsp --from vim-ale',
 \   'project_root_callback': 'ale_linters#hack#hhast#GetProjectRoot',
+\   'initialization_options_callback': 'ale_linters#hack#hhast#GetInitializationOptions',
 \})
