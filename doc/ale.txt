@@ -292,6 +292,8 @@ CONTENTS                                                         *ale-contents*
     yaml..................................|ale-yaml-options|
       swaglint............................|ale-yaml-swaglint|
       yamllint............................|ale-yaml-yamllint|
+    yang..................................|ale-yang-options|
+      yang-lsp............................|ale-yang-lsp|
   8. Commands/Keybinds....................|ale-commands|
   9. API..................................|ale-api|
   10. Special Thanks......................|ale-special-thanks|
@@ -435,6 +437,7 @@ Notes:
 * XHTML: `alex`!!, `proselint`, `write-good`
 * XML: `xmllint`
 * YAML: `swaglint`, `yamllint`
+* YANG: `yang-lsp`
 
 ===============================================================================
 3. Linting                                                           *ale-lint*

@@ -191,6 +191,7 @@ formatting.
 | XHTML | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good) |
 | XML | [xmllint](http://xmlsoft.org/xmllint.html) |
 | YAML | [swaglint](https://github.com/byCedric/swaglint), [yamllint](https://yamllint.readthedocs.io/) |
+| YANG | [yang-lsp](https://github.com/theia-ide/yang-lsp) |
 
 <a name="usage"></a>
 
