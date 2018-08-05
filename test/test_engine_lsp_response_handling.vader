@@ -63,12 +63,12 @@ Execute(tsserver syntax error responses should be handled correctly):
   \     'vcol': 0,
   \     'nr': 1005,
   \     'type': 'E',
-  \     'text': ''','' expected.',
+  \     'text': '1005: '','' expected.',
   \     'valid': 1,
   \     'pattern': '',
   \   },
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()
 
   " After we get empty syntax errors, we should clear them.
   call ale#lsp_linter#HandleLSPResponse(1, {
@@ -85,7 +85,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   AssertEqual
   \ [
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()
 
 Execute(tsserver semantic error responses should be handled correctly):
   runtime ale_linters/typescript/tsserver.vim
@@ -136,12 +136,12 @@ Execute(tsserver semantic error responses should be handled correctly):
   \     'vcol': 0,
   \     'nr': 1005,
   \     'type': 'E',
-  \     'text': 'Some semantic error',
+  \     'text': '1005: Some semantic error',
   \     'valid': 1,
   \     'pattern': '',
   \   },
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()
 
   " After we get empty syntax errors, we should clear them.
   call ale#lsp_linter#HandleLSPResponse(1, {
@@ -158,7 +158,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   AssertEqual
   \ [
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()
 
 Execute(LSP errors should be logged in the history):
   call ale#lsp_linter#SetLSPLinterMap({'347': 'foobar'})

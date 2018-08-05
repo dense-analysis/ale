@@ -47,7 +47,12 @@ function! ale#lsp#response#ReadDiagnostics(response) abort
         endif
 
         if has_key(l:diagnostic, 'code')
-            let l:loclist_item.nr = l:diagnostic.code
+            if type(l:diagnostic.code) == v:t_string
+                let l:loclist_item.code = l:diagnostic.code
+            elseif type(l:diagnostic.code) == v:t_number && l:diagnostic.code != -1
+                let l:loclist_item.code = string(l:diagnostic.code)
+                let l:loclist_item.nr = l:diagnostic.code
+            endif
         endif
 
         call add(l:loclist, l:loclist_item)
@@ -70,7 +75,12 @@ function! ale#lsp#response#ReadTSServerDiagnostics(response) abort
         \}
 
         if has_key(l:diagnostic, 'code')
-            let l:loclist_item.nr = l:diagnostic.code
+            if type(l:diagnostic.code) == v:t_string
+                let l:loclist_item.code = l:diagnostic.code
+            elseif type(l:diagnostic.code) == v:t_number && l:diagnostic.code != -1
+                let l:loclist_item.code = string(l:diagnostic.code)
+                let l:loclist_item.nr = l:diagnostic.code
+            endif
         endif
 
         if get(l:diagnostic, 'category') is# 'warning'
@@ -88,7 +98,7 @@ function! ale#lsp#response#ReadTSServerDiagnostics(response) abort
 endfunction
 
 function! ale#lsp#response#GetErrorMessage(response) abort
-    if type(get(a:response, 'error', 0)) isnot type({})
+    if type(get(a:response, 'error', 0)) isnot v:t_dict
         return ''
     endif
 
@@ -108,12 +118,12 @@ function! ale#lsp#response#GetErrorMessage(response) abort
     " Include the traceback or error data as details, if present.
     let l:error_data = get(a:response.error, 'data', {})
 
-    if type(l:error_data) is type('')
+    if type(l:error_data) is v:t_string
         let l:message .= "\n" . l:error_data
-    else
+    elseif type(l:error_data) is v:t_dict
         let l:traceback = get(l:error_data, 'traceback', [])
 
-        if type(l:traceback) is type([]) && !empty(l:traceback)
+        if type(l:traceback) is v:t_list && !empty(l:traceback)
             let l:message .= "\n" . join(l:traceback, "\n")
         endif
     endif

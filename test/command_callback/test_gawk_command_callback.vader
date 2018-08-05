@@ -6,14 +6,14 @@ After:
 
 Execute(The default command should be correct):
   AssertLinter 'gawk',
-  \ ale#Escape('gawk') . ' --source ''BEGIN { exit } END { exit 1 }'''
+  \ ale#Escape('gawk') . ' --source ' . ale#Escape('BEGIN { exit } END { exit 1 }')
   \   . ' -f %t --lint /dev/null'
 
 Execute(The executable should be configurable):
   let b:ale_awk_gawk_executable = '/other/gawk'
 
   AssertLinter '/other/gawk',
-  \ ale#Escape('/other/gawk') . ' --source ''BEGIN { exit } END { exit 1 }'''
+  \ ale#Escape('/other/gawk') . ' --source ' . ale#Escape('BEGIN { exit } END { exit 1 }')
   \   . ' -f %t --lint /dev/null'
 
 Execute(The options should be configurable):
@@ -21,5 +21,5 @@ Execute(The options should be configurable):
   let b:ale_awk_gawk_options = '--something'
 
   AssertLinter 'gawk',
-  \ ale#Escape('gawk') . ' --source ''BEGIN { exit } END { exit 1 }'''
+  \ ale#Escape('gawk') . ' --source ' . ale#Escape('BEGIN { exit } END { exit 1 }')
   \   . ' --something -f %t --lint /dev/null'

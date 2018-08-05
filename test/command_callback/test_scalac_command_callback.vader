@@ -10,4 +10,4 @@ Execute(The default executable and command should be correct):
 
 Given scala.sbt(An empty SBT file):
 Execute(scalac should not be run for sbt files):
-  AssertLinter '', ''
+  AssertLinterNotExecuted

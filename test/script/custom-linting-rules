@@ -52,12 +52,18 @@ directories=("$@")
 check_errors() {
     regex="$1"
     message="$2"
+    include_arg=''
+
+    if [ $# -gt 2 ]; then
+        include_arg="--include $3"
+    fi
 
     for directory in "${directories[@]}"; do
+        # shellcheck disable=SC2086
         while IFS= read -r match; do
             RETURN_CODE=1
             echo "$match $message"
-        done < <(grep -n "$regex" "$directory"/**/*.vim \
+        done < <(grep -n "$regex" $include_arg "$directory"/**/*.vim \
             | grep -v 'no-custom-checks' \
             | grep -o '^[^:]\+:[0-9]\+' \
             | sed 's:^\./::')
@@ -72,9 +78,21 @@ if (( FIX_ERRORS )); then
         sed -i 's/==?/is?/g' "$directory"/**/*.vim
         sed -i 's/!=#/isnot#/g' "$directory"/**/*.vim
         sed -i 's/!=?/isnot?/g' "$directory"/**/*.vim
+        # Improving type checks.
+        sed -i $'s/\\(==.\\?\\|is\\) type([\'"]\+)/is v:t_string/g' "$directory"/**/*.vim
+        sed -i 's/\(==.\?\|is\) type([0-9]\+)/is v:t_number/g' "$directory"/**/*.vim
+        sed -i 's/\(==.\?\|is\) type(\[\])/is v:t_list/g' "$directory"/**/*.vim
+        sed -i 's/\(==.\?\|is\) type({})/is v:t_dict/g' "$directory"/**/*.vim
+        sed -i 's/\(==.\?\|is\) type(function([^)]\+))/is v:t_func/g' "$directory"/**/*.vim
+        sed -i $'s/\\(!=.\\?\\|isnot\\) type([\'"]\+)/isnot v:t_string/g' "$directory"/**/*.vim
+        sed -i 's/\(!=.\?\|isnot\) type([0-9]\+)/isnot v:t_number/g' "$directory"/**/*.vim
+        sed -i 's/\(!=.\?\|isnot\) type(\[\])/isnot v:t_list/g' "$directory"/**/*.vim
+        sed -i 's/\(!=.\?\|isnot\) type({})/isnot v:t_dict/g' "$directory"/**/*.vim
+        sed -i 's/\(!=.\?\|isnot\) type(function([^)]\+))/isnot v:t_func/g' "$directory"/**/*.vim
     done
 fi
 
+# The arguments are: regex, explanation, [filename_filter]
 check_errors \
     '^function.*) *$' \
     'Function without abort keyword (See :help except-compat)'
@@ -95,5 +113,17 @@ check_errors '==?' "Use 'is?' instead of '==?'. 0 ==? 'foobar' is true"
 check_errors '!=#' "Use 'isnot#' instead of '!=#'. 0 !=# 'foobar' is false"
 check_errors '!=?' "Use 'isnot?' instead of '!=?'. 0 !=? 'foobar' is false"
 check_errors '^ *:\?echo' "Stray echo line. Use \`execute echo\` if you want to echo something"
+check_errors $'name.:.*\'[a-z_]*[^a-z_0-9][a-z_0-9]*\',$' 'Use snake_case names for linters' '*/ale_linters/*'
+# Checks for improving type checks.
+check_errors $'\\(==.\\?\\|is\\) type([\'"]\+)' "Use 'is v:t_string' instead"
+check_errors '\(==.\?\|is\) type([0-9]\+)' "Use 'is v:t_number' instead"
+check_errors '\(==.\?\|is\) type(\[\])' "Use 'is v:t_list' instead"
+check_errors '\(==.\?\|is\) type({})' "Use 'is v:t_dict' instead"
+check_errors '\(==.\?\|is\) type(function([^)]\+))' "Use 'is v:t_func' instead"
+check_errors $'\\(!=.\\?\\|isnot\\) type([\'"]\+)' "Use 'isnot v:t_string' instead"
+check_errors '\(!=.\?\|isnot\) type([0-9]\+)' "Use 'isnot v:t_number' instead"
+check_errors '\(!=.\?\|isnot\) type(\[\])' "Use 'isnot v:t_list' instead"
+check_errors '\(!=.\?\|isnot\) type({})' "Use 'isnot v:t_dict' instead"
+check_errors '\(!=.\?\|isnot\) type(function([^)]\+))' "Use 'isnot v:t_func' instead"
 
 exit $RETURN_CODE
