@@ -190,7 +190,7 @@ formatting.
 | Vue | [prettier](https://github.com/prettier/prettier), [vls](https://github.com/vuejs/vetur/tree/master/server) |
 | XHTML | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good) |
 | XML | [xmllint](http://xmlsoft.org/xmllint.html) |
-| YAML | [swaglint](https://github.com/byCedric/swaglint), [yamllint](https://yamllint.readthedocs.io/) |
+| YAML | [swaglint](https://github.com/byCedric/swaglint), [yamllint](https://yamllint.readthedocs.io/), [prettier](https://github.com/prettier/prettier) |
 | YANG | [yang-lsp](https://github.com/theia-ide/yang-lsp) |
 
 <a name="usage"></a>
