@@ -653,10 +653,10 @@ servers. LSP linters can be used in combination with any other linter, and
 will automatically connect to LSP servers when needed. ALE also supports
 `tsserver` for TypeScript, which uses a different but very similar protocol.
 
-ALE supports the following LSP/tsserver features.
+ALE supports the following LSP/tsserver features:
 
 1. Diagnostics/linting - Enabled via selecting linters as usual.
-2. Completion (Only for tsserver)
+2. Completion
 3. Go to definition
 
 
@@ -664,7 +664,7 @@ ALE supports the following LSP/tsserver features.
 5.1 Completion                                                 *ale-completion*
 
 ALE offers limited support for automatic completion of code while you type.
-Completion is only supported while a least one LSP linter is enabled. ALE
+Completion is only supported while at least one LSP linter is enabled. ALE
 will only suggest symbols provided by the LSP servers.
 
 Suggestions will be made while you type after completion is enabled.
