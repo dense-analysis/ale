@@ -75,6 +75,13 @@ function! s:BufWinId(buffer) abort
 endfunction
 
 function! s:SetListsImpl(timer_id, buffer, loclist) abort
+    if ale#ShouldDoNothing(a:buffer)
+        " It's possible someone tried to turn off ale in a buffer and then
+        " immediately populated the location list. Do nothing to ensure we
+        " don't clobber the list.
+        return
+    endif
+
     let l:title = expand('#' . a:buffer . ':p')
 
     if g:ale_set_quickfix
