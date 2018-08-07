@@ -111,7 +111,7 @@ Execute(Other files should be jumped to for definition responses):
 
   AssertEqual
   \ [
-  \   'edit ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \   'edit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
   AssertEqual [3, 7], getpos('.')[1:2]
@@ -136,7 +136,7 @@ Execute(Other files should be jumped to for definition responses in tabs too):
 
   AssertEqual
   \ [
-  \   'tabedit ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \   'tabedit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
   AssertEqual [3, 7], getpos('.')[1:2]
@@ -206,7 +206,7 @@ Execute(Other files should be jumped to for LSP definition responses):
 
   AssertEqual
   \ [
-  \   'edit ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \   'edit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
   AssertEqual [3, 7], getpos('.')[1:2]
@@ -251,7 +251,7 @@ Execute(Other files should be jumped to in tabs for LSP definition responses):
 
   AssertEqual
   \ [
-  \   'tabedit ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \   'tabedit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
   AssertEqual [3, 7], getpos('.')[1:2]
@@ -282,7 +282,7 @@ Execute(Definition responses with lists should be handled):
 
   AssertEqual
   \ [
-  \   'edit ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \   'edit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
   AssertEqual [3, 7], getpos('.')[1:2]
