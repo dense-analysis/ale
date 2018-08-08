@@ -300,19 +300,6 @@ function! ale#lsp#HandleMessage(conn, message) abort
     endfor
 endfunction
 
-function! s:HandleChannelMessage(channel_id, message) abort
-    let l:address = ale#socket#GetAddress(a:channel_id)
-    let l:conn = s:FindConnection('id', l:address)
-
-    call ale#lsp#HandleMessage(l:conn, a:message)
-endfunction
-
-function! s:HandleCommandMessage(job_id, message) abort
-    let l:conn = s:FindConnection('id', a:job_id)
-
-    call ale#lsp#HandleMessage(l:conn, a:message)
-endfunction
-
 " Given a connection ID, mark it as a tsserver connection, so it will be
 " handled that way.
 function! ale#lsp#MarkConnectionAsTsserver(conn_id) abort
@@ -373,7 +360,7 @@ function! ale#lsp#StartProgram(executable, command, init_options) abort
     if !has_key(l:conn, 'id') || !ale#job#IsRunning(l:conn.id)
         let l:options = {
         \   'mode': 'raw',
-        \   'out_cb': function('s:HandleCommandMessage'),
+        \   'out_cb': {_, message -> ale#lsp#HandleMessage(l:conn, message)},
         \}
         let l:job_id = ale#job#Start(a:command, l:options)
     else
@@ -397,7 +384,7 @@ function! ale#lsp#ConnectToAddress(address, init_options) abort
 
     if !has_key(l:conn, 'channel_id') || !ale#socket#IsOpen(l:conn.channel_id)
         let l:conn.channel_id = ale#socket#Open(a:address, {
-        \   'callback': function('s:HandleChannelMessage'),
+        \   'callback': {_, message -> ale#lsp#HandleMessage(l:conn, message)},
         \})
     endif
 
