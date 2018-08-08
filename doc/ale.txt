@@ -436,7 +436,7 @@ Notes:
 * Vue: `prettier`, `vls`
 * XHTML: `alex`!!, `proselint`, `write-good`
 * XML: `xmllint`
-* YAML: `swaglint`, `yamllint`
+* YAML: `prettier`, `swaglint`, `yamllint`
 * YANG: `yang-lsp`
 
 ===============================================================================
