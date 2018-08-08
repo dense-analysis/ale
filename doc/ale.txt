@@ -290,6 +290,7 @@ CONTENTS                                                         *ale-contents*
     xml...................................|ale-xml-options|
       xmllint.............................|ale-xml-xmllint|
     yaml..................................|ale-yaml-options|
+      prettier............................|ale-yaml-prettier|
       swaglint............................|ale-yaml-swaglint|
       yamllint............................|ale-yaml-yamllint|
     yang..................................|ale-yang-options|
@@ -436,7 +437,7 @@ Notes:
 * Vue: `prettier`, `vls`
 * XHTML: `alex`!!, `proselint`, `write-good`
 * XML: `xmllint`
-* YAML: `swaglint`, `yamllint`
+* YAML: `prettier`, `swaglint`, `yamllint`
 * YANG: `yang-lsp`
 
 ===============================================================================
