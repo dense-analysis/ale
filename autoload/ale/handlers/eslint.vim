@@ -3,15 +3,11 @@
 
 let s:sep = has('win32') ? '\' : '/'
 
-function! ale#handlers#eslint#InitVariables() abort
-    call ale#Set('javascript_eslint_options', '')
-    call ale#Set('javascript_eslint_executable', 'eslint')
-    call ale#Set('javascript_eslint_use_global', get(g:, 'ale_use_global_executables', 0))
-    call ale#Set('javascript_eslint_suppress_eslintignore', 0)
-    call ale#Set('javascript_eslint_suppress_missing_config', 0)
-endfunction
-
-call ale#handlers#eslint#InitVariables()
+call ale#Set('javascript_eslint_options', '')
+call ale#Set('javascript_eslint_executable', 'eslint')
+call ale#Set('javascript_eslint_use_global', get(g:, 'ale_use_global_executables', 0))
+call ale#Set('javascript_eslint_suppress_eslintignore', 0)
+call ale#Set('javascript_eslint_suppress_missing_config', 0)
 
 function! ale#handlers#eslint#FindConfig(buffer) abort
     for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
@@ -46,8 +42,7 @@ function! ale#handlers#eslint#GetCommand(buffer) abort
 
     let l:options = ale#Var(a:buffer, 'javascript_eslint_options')
 
-    return ale#path#BufferCdString(a:buffer)
-    \   . ale#node#Executable(a:buffer, l:executable)
+    return ale#node#Executable(a:buffer, l:executable)
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' -f unix --stdin --stdin-filename %s'
 endfunction
