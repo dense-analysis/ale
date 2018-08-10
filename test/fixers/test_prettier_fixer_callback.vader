@@ -249,3 +249,21 @@ Execute(Should set --parser based on first filetype of multiple filetypes):
   \     . ' --stdin-filepath %s --stdin',
   \ },
   \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), ['1.6.0'])
+
+Execute(The prettier_d post-processor should permit regular JavaScript content):
+  AssertEqual
+  \ [
+  \   'const x = ''Error: foo''',
+  \   'const y = 3',
+  \ ],
+  \ ale#fixers#prettier#ProcessPrettierDOutput(bufnr(''), [
+  \   'const x = ''Error: foo''',
+  \   'const y = 3',
+  \ ])
+
+Execute(The prettier_d post-processor should handle error messages correctly):
+  AssertEqual
+  \ [],
+  \ ale#fixers#prettier#ProcessPrettierDOutput(bufnr(''), [
+  \   'SyntaxError: Unexpected token, expected "," (36:28)',
+  \ ])
