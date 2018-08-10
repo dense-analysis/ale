@@ -7,6 +7,10 @@ call ale#Set('cpp_cquery_cache_directory', expand('~/.cache/cquery'))
 function! ale_linters#cpp#cquery#GetProjectRoot(buffer) abort
     let l:project_root = ale#path#FindNearestFile(a:buffer, 'compile_commands.json')
 
+    if empty(l:project_root)
+        let l:project_root = ale#path#FindNearestFile(a:buffer, '.cquery')
+    endif
+
     return !empty(l:project_root) ? fnamemodify(l:project_root, ':h') : ''
 endfunction
 

@@ -1,8 +1,5 @@
-" Author: Ben Falconer <ben@falconers.me.uk>
-" Description: A language server for C++
-
 Before:
-  call ale#assert#SetUpLinterTest('cpp', 'cquery')
+  call ale#assert#SetUpLinterTest('c', 'cquery')
 
 After:
   call ale#assert#TearDownLinterTest()
@@ -10,27 +7,27 @@ After:
 Execute(The project root should be detected correctly using compile_commands.json file):
   AssertLSPProject ''
 
-  call ale#test#SetFilename('cquery_paths/with_compile_commands_json/dummy.cpp')
+  call ale#test#SetFilename('cquery_paths/with_compile_commands_json/dummy.c')
 
   AssertLSPProject ale#path#Simplify(g:dir . '/cquery_paths/with_compile_commands_json')
 
 Execute(The project root should be detected correctly using .cquery file):
   AssertLSPProject ''
 
-  call ale#test#SetFilename('cquery_paths/with_cquery/dummy.cpp')
+  call ale#test#SetFilename('cquery_paths/with_cquery/dummy.c')
 
   AssertLSPProject ale#path#Simplify(g:dir . '/cquery_paths/with_cquery')
 
 Execute(The executable should be configurable):
   AssertLinter 'cquery', ale#Escape('cquery')
 
-  let b:ale_cpp_cquery_executable = 'foobar'
+  let b:ale_c_cquery_executable = 'foobar'
 
   AssertLinter 'foobar', ale#Escape('foobar')
 
 Execute(The cache directory should be configurable):
   AssertLSPOptions {'cacheDirectory': expand('$HOME/.cache/cquery')}
 
-  let b:ale_cpp_cquery_cache_directory = '/foo/bar'
+  let b:ale_c_cquery_cache_directory = '/foo/bar'
 
   AssertLSPOptions {'cacheDirectory': '/foo/bar'}
