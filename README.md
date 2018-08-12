@@ -231,22 +231,17 @@ let b:ale_fixers = ['prettier', 'eslint']
 let b:ale_fixers = {'javascript': ['prettier', 'eslint']}
 ```
 
-You can also configure your fixers from vimrc using `g:ale_fixers`, before
-or after ALE has been loaded.
+You can also configure your fixers from vimrc using `g:ale_fixers`, before or
+after ALE has been loaded. A `*` in place of the filetype will apply the
+corresponding list of fixers to all filetypes. If a subsequent specific filetype
+match is found it will be used instead of `*`. Note that using a plain list for
+`g:ale_fixers` is not supported.
 
 ```vim
 " In ~/.vim/vimrc, or somewhere similar.
 let g:ale_fixers = {
-\   'javascript': ['eslint'],
-\}
-```
-
-A `*` in place of the filetype will apply the corresponding list of fixers to
-all filetypes. Note that using a plain list for `g:ale_fixers` is not supported.
-
-```vim
-let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'javascript': ['eslint'],
 \}
 ```
 
