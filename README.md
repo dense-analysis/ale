@@ -241,6 +241,15 @@ let g:ale_fixers = {
 \}
 ```
 
+A `*` in place of the filetype will apply the corresponding list of fixers to
+all filetypes. Note that using a plain list for `g:ale_fixers` is not supported.
+
+```vim
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\}
+```
+
 If you want to automatically fix files when you save them, you need to turn
 a setting on in vimrc.
 
