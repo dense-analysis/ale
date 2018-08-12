@@ -148,11 +148,11 @@ rustc                                                          *ale-rust-rustc*
 g:ale_rust_rustc_options                             *g:ale_rust_rustc_options*
                                                      *b:ale_rust_rustc_options*
   Type: |String|
-  Default: `'-Z no-trans'`
+  Default: `'-Z no-codegen'`
 
   The variable can be used to change the options passed to `rustc`.
 
-  `-Z no-trans` should only work with nightly builds of Rust. Be careful when
+  `-Z no-codegen` should only work with nightly builds of Rust. Be careful when
   setting the options, as running `rustc` could execute code or generate
   binary files.
 
