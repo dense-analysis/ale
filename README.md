@@ -232,10 +232,12 @@ let b:ale_fixers = {'javascript': ['prettier', 'eslint']}
 ```
 
 You can also configure your fixers from vimrc using `g:ale_fixers`, before or
-after ALE has been loaded. A `*` in place of the filetype will apply the
-corresponding list of fixers to all filetypes. If a subsequent specific filetype
-match is found it will be used instead of `*`. Note that using a plain list for
-`g:ale_fixers` is not supported.
+after ALE has been loaded.
+
+A `*` in place of the filetype will apply a List of fixers to all files which
+do not match some filetype in the Dictionary.
+
+Note that using a plain List for `g:ale_fixers` is not supported.
 
 ```vim
 " In ~/.vim/vimrc, or somewhere similar.
