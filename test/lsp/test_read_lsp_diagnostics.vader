@@ -165,7 +165,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should use relatedInformation for det
   \   {
   \     'range': Range(0, 2, 0, 2),
   \     'message': 'Something went wrong!',
-  \     'detail': 'file:///tmp/someotherfile.txt:42:79: might be this'
+  \     'detail': "Something went wrong!\n/tmp/someotherfile.txt:42:79:\n\tmight be this"
   \   }
   \ ]}})
 
