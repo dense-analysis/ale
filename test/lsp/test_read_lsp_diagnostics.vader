@@ -149,6 +149,13 @@ Execute(ale#lsp#response#ReadDiagnostics() should use relatedInformation for det
   \     'col': 3,
   \     'end_lnum': 1,
   \     'end_col': 3,
+  \     'detail': "Something went wrong!\n/tmp/someotherfile.txt:42:79:\n\tmight be this"
+  \   }
+  \ ],
+  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \   {
+  \     'range': Range(0, 2, 0, 2),
+  \     'message': 'Something went wrong!',
   \     'relatedInformation': [{
   \         'message': 'might be this',
   \         'location': {
@@ -159,13 +166,6 @@ Execute(ale#lsp#response#ReadDiagnostics() should use relatedInformation for det
   \             }
   \         }
   \     }]
-  \   }
-  \ ],
-  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
-  \   {
-  \     'range': Range(0, 2, 0, 2),
-  \     'message': 'Something went wrong!',
-  \     'detail': "Something went wrong!\n/tmp/someotherfile.txt:42:79:\n\tmight be this"
   \   }
   \ ]}})
 
