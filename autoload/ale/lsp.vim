@@ -256,7 +256,8 @@ function! ale#lsp#HandleOtherInitializeResponses(conn, response) abort
     endif
 
     if get(a:response, 'method', '') is# ''
-        if has_key(get(a:response, 'result', {}), 'capabilities')
+        if type(get(a:response, 'result')) is v:t_dict
+        \&& has_key(a:response.result, 'capabilities')
             call s:UpdateCapabilities(a:conn, a:response.result.capabilities)
 
             for [l:dir, l:project] in l:uninitialized_projects
