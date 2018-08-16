@@ -181,3 +181,10 @@ Execute(Disabled capabilities should be recognised correctly):
   \   },
   \ },
   \ b:conn
+
+Execute(Results that are not dictionaries should be handled correctly):
+  call ale#lsp#HandleOtherInitializeResponses(b:conn, {
+  \ 'jsonrpc': '2.0',
+  \ 'id': 1,
+  \ 'result': v:null,
+  \})
