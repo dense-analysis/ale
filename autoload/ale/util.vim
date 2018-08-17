@@ -268,7 +268,7 @@ endfunction
 " See :help sandbox
 function! ale#util#InSandbox() abort
     try
-        let &equalprg=&equalprg
+        let &l:equalprg=&l:equalprg
     catch /E48/
         " E48 is the sandbox error.
         return 1
