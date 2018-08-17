@@ -243,7 +243,7 @@ endfunction
 " (name, func, filetypes, desc, aliases)
 function! ale#fix#registry#Add(name, func, filetypes, desc, ...) abort
     " This command will throw from the sandbox.
-    let &equalprg=&equalprg
+    let &l:equalprg=&l:equalprg
 
     if type(a:name) isnot v:t_string
         throw '''name'' must be a String'

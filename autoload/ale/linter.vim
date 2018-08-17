@@ -53,7 +53,7 @@ endfunction
 " Do not call this function.
 function! ale#linter#GetLintersLoaded() abort
     " This command will throw from the sandbox.
-    let &equalprg=&equalprg
+    let &l:equalprg=&l:equalprg
 
     return s:linters
 endfunction
@@ -295,7 +295,7 @@ endfunction
 
 function! ale#linter#Define(filetype, linter) abort
     " This command will throw from the sandbox.
-    let &equalprg=&equalprg
+    let &l:equalprg=&l:equalprg
 
     if !has_key(s:linters, a:filetype)
         let s:linters[a:filetype] = []
