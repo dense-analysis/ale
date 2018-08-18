@@ -16,7 +16,7 @@ function! ale_linters#php#phpcs#GetCommand(buffer) abort
 
     return '%e -s --report=emacs --stdin-path=%s'
     \    . ale#Pad(l:standard_option)
-    \    . ' ' . l:options
+    \    . ale#Pad(l:options)
 endfunction
 
 function! ale_linters#php#phpcs#Handle(buffer, lines) abort
