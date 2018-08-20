@@ -55,6 +55,17 @@ function! ale#lsp#response#ReadDiagnostics(response) abort
             endif
         endif
 
+        if has_key(l:diagnostic, 'relatedInformation')
+            let l:related = deepcopy(l:diagnostic.relatedInformation)
+            call map(l:related, {key, val ->
+                \ ale#path#FromURI(val.location.uri) .
+                \ ':' . (val.location.range.start.line + 1) .
+                \ ':' . (val.location.range.start.character + 1) .
+                \ ":\n\t" . val.message
+                \ })
+            let l:loclist_item.detail = l:diagnostic.message . "\n" . join(l:related, "\n")
+        endif
+
         call add(l:loclist, l:loclist_item)
     endfor
 

@@ -140,6 +140,35 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle multiple messages):
   \   },
   \ ]}})
 
+Execute(ale#lsp#response#ReadDiagnostics() should use relatedInformation for detail):
+  AssertEqual [
+  \   {
+  \     'type': 'E',
+  \     'text': 'Something went wrong!',
+  \     'lnum': 1,
+  \     'col': 3,
+  \     'end_lnum': 1,
+  \     'end_col': 3,
+  \     'detail': "Something went wrong!\n/tmp/someotherfile.txt:43:80:\n\tmight be this"
+  \   }
+  \ ],
+  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \   {
+  \     'range': Range(0, 2, 0, 2),
+  \     'message': 'Something went wrong!',
+  \     'relatedInformation': [{
+  \         'message': 'might be this',
+  \         'location': {
+  \             'uri': 'file:///tmp/someotherfile.txt',
+  \             'range': {
+  \                 'start': { 'line': 42, 'character': 79 },
+  \                 'end': { 'line': 142, 'character': 179},
+  \             }
+  \         }
+  \     }]
+  \   }
+  \ ]}})
+
 Execute(ale#lsp#response#ReadTSServerDiagnostics() should handle tsserver responses):
   AssertEqual
   \ [
