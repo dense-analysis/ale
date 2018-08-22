@@ -21,4 +21,4 @@ Execute(The stylish-haskell callback should return the correct default values):
   \     . ' --inplace'
   \     . ' %t',
   \ },
-  \ ale#fixers#stylish-haskell#Fix(bufnr(''))
+  \ ale#fixers#stylish_haskell#Fix(bufnr(''))

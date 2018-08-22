@@ -3,7 +3,7 @@
 "
 call ale#Set('haskell_stylish_haskell_executable', 'stylish-haskell')
 
-function! ale#fixers#stylish-haskell#Fix(buffer) abort
+function! ale#fixers#stylish_haskell#Fix(buffer) abort
     let l:executable = ale#Var(a:buffer, 'haskell_stylish_haskell_executable')
 
     return {
