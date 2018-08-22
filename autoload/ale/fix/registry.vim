@@ -171,7 +171,7 @@ let s:default_registry = {
 \       'description': 'Fix Haskell files with brittany.',
 \   },
 \   'stylish-haskell': {
-\       'function': 'ale#fixers#stylish-haskell#Fix',
+\       'function': 'ale#fixers#stylish_haskell#Fix',
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'Refactor Haskell files with stylish-haskell.',
 \   },
