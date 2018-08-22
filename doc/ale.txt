@@ -109,6 +109,7 @@ CONTENTS                                                         *ale-contents*
       cabal-ghc...........................|ale-haskell-cabal-ghc|
       hdevtools...........................|ale-haskell-hdevtools|
       hfmt................................|ale-haskell-hfmt|
+      hlint...............................|ale-haskell-hlint|
       stack-build.........................|ale-haskell-stack-build|
       hie.................................|ale-haskell-hie|
     html..................................|ale-html-options|
