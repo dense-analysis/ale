@@ -111,6 +111,7 @@ CONTENTS                                                         *ale-contents*
       hdevtools...........................|ale-haskell-hdevtools|
       hfmt................................|ale-haskell-hfmt|
       stack-build.........................|ale-haskell-stack-build|
+      stylish-haskell.....................|ale-haskell-stylish-haskell|
       hie.................................|ale-haskell-hie|
     html..................................|ale-html-options|
       htmlhint............................|ale-html-htmlhint|
@@ -380,7 +381,7 @@ Notes:
 * Hack: `hack`, `hackfmt`, `hhast`
 * Haml: `haml-lint`
 * Handlebars: `ember-template-lint`
-* Haskell: `brittany`, `ghc`, `cabal-ghc`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`, `hfmt`, `hie`
+* Haskell: `brittany`, `ghc`, `cabal-ghc`, `stylish-haskell`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `stack-ghc-mod`, `hlint`, `hdevtools`, `hfmt`, `hie`
 * HTML: `alex`!!, `HTMLHint`, `proselint`, `tidy`, `write-good`
 * Idris: `idris`
 * Java: `checkstyle`, `javac`, `google-java-format`, `PMD`
