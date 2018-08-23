@@ -114,6 +114,13 @@ g:ale_php_phpcs_use_global                         *g:ale_php_phpcs_use_global*
   See |ale-integrations-local-executables|
 
 
+g:ale_php_phpcs_options                               *g:ale_php_phpcs_options*
+                                                      *b:ale_php_phpcs_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to php-cs
+
 ===============================================================================
 phpmd                                                           *ale-php-phpmd*
 

@@ -27,3 +27,9 @@ Execute(Projects without local executables should use the global one):
 
   AssertLinter 'phpcs',
   \ ale#Escape('phpcs') . ' -s --report=emacs --stdin-path=%s'
+
+Execute(User provided options are used):
+  let g:ale_php_phpcs_options = '--my-user-provided-option my-value'
+
+  AssertLinter 'phpcs',
+  \ ale#Escape('phpcs') . ' -s --report=emacs --stdin-path=%s --my-user-provided-option my-value'
