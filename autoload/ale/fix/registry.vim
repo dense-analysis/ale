@@ -175,6 +175,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'Refactor Haskell files with hlint.',
 \   },
+\   'stylish-haskell': {
+\       'function': 'ale#fixers#stylish_haskell#Fix',
+\       'suggested_filetypes': ['haskell'],
+\       'description': 'Refactor Haskell files with stylish-haskell.',
+\   },
 \   'refmt': {
 \       'function': 'ale#fixers#refmt#Fix',
 \       'suggested_filetypes': ['reason'],
