@@ -2689,7 +2689,7 @@ ALEFixPost                                                 *ALEFixPost-autocmd*
     augroup ALEProgress
         autocmd!
         autocmd User ALELintPre  hi Statusline ctermfg=darkgrey
-        autocmd User ALELintPOST hi Statusline ctermfg=NONE
+        autocmd User ALELintPost hi Statusline ctermfg=NONE
     augroup end
 <
   Or to display the progress in the statusline:
