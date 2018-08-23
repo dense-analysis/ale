@@ -170,6 +170,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'Fix Haskell files with brittany.',
 \   },
+\   'hlint': {
+\       'function': 'ale#fixers#hlint#Fix',
+\       'suggested_filetypes': ['haskell'],
+\       'description': 'Refactor Haskell files with hlint.',
+\   },
 \   'stylish-haskell': {
 \       'function': 'ale#fixers#stylish_haskell#Fix',
 \       'suggested_filetypes': ['haskell'],

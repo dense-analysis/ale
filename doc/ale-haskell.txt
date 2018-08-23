@@ -68,6 +68,16 @@ g:ale_haskell_hfmt_executable                   *g:ale_haskell_hfmt_executable*
   This variable can be changed to use a different executable for hfmt.
 
 ===============================================================================
+hlint                                                       *ale-haskell-hlint*
+
+g:ale_haskell_hlint_executable                 *g:ale_haskell_hlint_executable*
+                                               *b:ale_haskell_hlint_executable*
+  Type: |String|
+  Default: `'hlint'`
+
+  This variable can be changed to use a different executable for hlint.
+
+===============================================================================
 stack-build                                           *ale-haskell-stack-build*
 
 g:ale_haskell_stack_build_options           *g:ale_haskell_stack_build_options*
