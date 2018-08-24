@@ -13,6 +13,7 @@ Before:
   let b:ale_enabled = 1
   let g:ale_lsp_next_message_id = 1
   let g:ale_run_synchronously = 1
+  let g:conn_id = v:null
   let g:message_list = []
 
   function! LanguageCallback() abort
@@ -34,25 +35,28 @@ Before:
   let g:ale_linters = {'foobar': ['dummy_linter']}
 
   function! ale#lsp_linter#StartLSP(buffer, linter) abort
-    let l:conn = ale#lsp#NewConnection({})
-    let l:conn.id = 347
-    let l:conn.open_documents = {a:buffer : -1}
+    let g:conn_id = ale#lsp#Register('executable', '/foo/bar', {})
+    call ale#lsp#MarkDocumentAsOpen(g:conn_id, a:buffer)
 
     return {
     \ 'buffer': a:buffer,
-    \ 'connection_id': 347,
+    \ 'connection_id': g:conn_id,
     \ 'project_root': '/foo/bar',
     \ 'language_id': 'foobar',
     \}
   endfunction
 
   " Replace the Send function for LSP, so we can monitor calls to it.
-  function! ale#lsp#Send(conn_id, message, ...) abort
+  function! ale#lsp#Send(conn_id, message) abort
     call add(g:message_list, a:message)
   endfunction
 
 After:
   Restore
+
+  if g:conn_id isnot v:null
+    call ale#lsp#RemoveConnectionWithID(g:conn_id)
+  endif
 
   unlet! b:ale_enabled
   unlet! b:ale_linters
@@ -61,7 +65,6 @@ After:
   delfunction LanguageCallback
   delfunction ProjectRootCallback
 
-  call ale#lsp#RemoveConnectionWithID(347)
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 

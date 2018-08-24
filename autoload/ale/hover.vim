@@ -95,7 +95,6 @@ endfunction
 function! s:OnReady(linter, lsp_details, line, column, opt, ...) abort
     let l:buffer = a:lsp_details.buffer
     let l:id = a:lsp_details.connection_id
-    let l:root = a:lsp_details.project_root
 
     let l:Callback = a:linter.lsp is# 'tsserver'
     \   ? function('ale#hover#HandleTSServerResponse')
@@ -113,14 +112,14 @@ function! s:OnReady(linter, lsp_details, line, column, opt, ...) abort
     else
         " Send a message saying the buffer has changed first, or the
         " hover position probably won't make sense.
-        call ale#lsp#NotifyForChanges(l:id, l:root, l:buffer)
+        call ale#lsp#NotifyForChanges(l:id, l:buffer)
 
         let l:column = min([a:column, len(getbufline(l:buffer, a:line)[0])])
 
         let l:message = ale#lsp#message#Hover(l:buffer, a:line, l:column)
     endif
 
-    let l:request_id = ale#lsp#Send(l:id, l:message, l:root)
+    let l:request_id = ale#lsp#Send(l:id, l:message)
 
     let s:hover_map[l:request_id] = {
     \   'buffer': l:buffer,
@@ -138,13 +137,10 @@ function! s:ShowDetails(linter, buffer, line, column, opt, ...) abort
     endif
 
     let l:id = l:lsp_details.connection_id
-    let l:root = l:lsp_details.project_root
 
-    let l:OnReady = function('s:OnReady', [
+    call ale#lsp#WaitForCapability(l:id, 'hover', function('s:OnReady', [
     \   a:linter, l:lsp_details, a:line, a:column, a:opt
-    \])
-
-    call ale#lsp#WaitForCapability(l:id, l:root, 'hover', l:OnReady)
+    \]))
 endfunction
 
 " Obtain Hover information for the specified position

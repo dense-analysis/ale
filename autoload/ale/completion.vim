@@ -427,7 +427,6 @@ endfunction
 function! s:OnReady(linter, lsp_details, ...) abort
     let l:buffer = a:lsp_details.buffer
     let l:id = a:lsp_details.connection_id
-    let l:root = a:lsp_details.project_root
 
     " If we have sent a completion request already, don't send another.
     if b:ale_completion_info.request_id
@@ -449,7 +448,7 @@ function! s:OnReady(linter, lsp_details, ...) abort
     else
         " Send a message saying the buffer has changed first, otherwise
         " completions won't know what text is nearby.
-        call ale#lsp#NotifyForChanges(l:id, l:root, l:buffer)
+        call ale#lsp#NotifyForChanges(l:id, l:buffer)
 
         " For LSP completions, we need to clamp the column to the length of
         " the line. python-language-server and perhaps others do not implement
@@ -465,7 +464,7 @@ function! s:OnReady(linter, lsp_details, ...) abort
         \)
     endif
 
-    let l:request_id = ale#lsp#Send(l:id, l:message, l:root)
+    let l:request_id = ale#lsp#Send(l:id, l:message)
 
     if l:request_id
         let b:ale_completion_info.conn_id = l:id
@@ -486,11 +485,10 @@ function! s:GetLSPCompletions(linter) abort
     endif
 
     let l:id = l:lsp_details.connection_id
-    let l:root = l:lsp_details.project_root
 
     let l:OnReady = function('s:OnReady', [a:linter, l:lsp_details])
 
-    call ale#lsp#WaitForCapability(l:id, l:root, 'completion', l:OnReady)
+    call ale#lsp#WaitForCapability(l:id, 'completion', l:OnReady)
 endfunction
 
 function! ale#completion#GetCompletions() abort

@@ -1,15 +1,15 @@
 Before:
-  let b:project = {
+  let b:conn = {
+  \ 'is_tsserver': 0,
+  \ 'data': '',
+  \ 'root': '/foo/bar',
+  \ 'open_documents': {},
   \ 'initialized': 0,
-  \ 'init_request_id': 3,
+  \ 'init_request_id': 0,
+  \ 'init_options': {},
+  \ 'callback_list': [],
   \ 'message_queue': [],
   \ 'capabilities_queue': [],
-  \}
-
-  let b:conn = {
-  \ 'projects': {
-  \   '/foo/bar': b:project,
-  \ },
   \ 'capabilities': {
   \   'hover': 0,
   \   'references': 0,
@@ -20,64 +20,26 @@ Before:
   \}
 
 After:
-  unlet! b:project
   unlet! b:conn
 
-Execute(publishDiagnostics messages with files inside project directories should initialize projects):
-  " This is for some other file, ignore this one.
-  call ale#lsp#HandleOtherInitializeResponses(b:conn, {
-  \ 'method': 'textDocument/publishDiagnostics',
-  \ 'params': {'uri': 'file:///xyz/bar/baz.txt'},
-  \})
-
-  AssertEqual
-  \ {
-  \   'initialized': 0,
-  \   'init_request_id': 3,
-  \   'message_queue': [],
-  \   'capabilities_queue': [],
-  \ },
-  \ b:project
-
-  call ale#lsp#HandleOtherInitializeResponses(b:conn, {
-  \ 'method': 'textDocument/publishDiagnostics',
-  \ 'params': {'uri': 'file:///foo/bar/baz.txt'},
-  \})
-
-  AssertEqual
-  \ {
-  \   'initialized': 1,
-  \   'init_request_id': 3,
-  \   'message_queue': [],
-  \   'capabilities_queue': [],
-  \ },
-  \ b:project
-
 Execute(Messages with no method and capabilities should initialize projects):
-  call ale#lsp#HandleOtherInitializeResponses(b:conn, {
+  call ale#lsp#HandleInitResponse(b:conn, {
   \ 'result': {'capabilities': {}},
   \})
 
-  AssertEqual
-  \ {
-  \   'initialized': 1,
-  \   'init_request_id': 3,
-  \   'message_queue': [],
-  \   'capabilities_queue': [],
-  \ },
-  \ b:project
+  AssertEqual 1, b:conn.initialized
 
 Execute(Other messages should not initialize projects):
-  call ale#lsp#HandleOtherInitializeResponses(b:conn, {'method': 'lolwat'})
+  call ale#lsp#HandleInitResponse(b:conn, {'method': 'lolwat'})
 
-  AssertEqual 0, b:project.initialized
+  AssertEqual 0, b:conn.initialized
 
-  call ale#lsp#HandleOtherInitializeResponses(b:conn, {'result': {'x': {}}})
+  call ale#lsp#HandleInitResponse(b:conn, {'result': {'x': {}}})
 
-  AssertEqual 0, b:project.initialized
+  AssertEqual 0, b:conn.initialized
 
 Execute(Capabilities should bet set up correctly):
-  call ale#lsp#HandleOtherInitializeResponses(b:conn, {
+  call ale#lsp#HandleInitResponse(b:conn, {
   \ 'jsonrpc': '2.0',
   \ 'id': 1,
   \ 'result': {
@@ -110,29 +72,19 @@ Execute(Capabilities should bet set up correctly):
   \ },
   \})
 
+  AssertEqual 1, b:conn.initialized
   AssertEqual
   \ {
-  \   'capabilities': {
-  \     'completion_trigger_characters': ['.'],
-  \     'completion': 1,
-  \     'references': 1,
-  \     'hover': 1,
-  \     'definition': 1,
-  \   },
-  \   'message_queue': [],
-  \   'projects': {
-  \     '/foo/bar': {
-  \       'initialized': 1,
-  \       'message_queue': [],
-  \       'capabilities_queue': [],
-  \       'init_request_id': 3,
-  \     },
-  \   },
+  \   'completion_trigger_characters': ['.'],
+  \   'completion': 1,
+  \   'references': 1,
+  \   'hover': 1,
+  \   'definition': 1,
   \ },
-  \ b:conn
+  \ b:conn.capabilities
 
 Execute(Disabled capabilities should be recognised correctly):
-  call ale#lsp#HandleOtherInitializeResponses(b:conn, {
+  call ale#lsp#HandleInitResponse(b:conn, {
   \ 'jsonrpc': '2.0',
   \ 'id': 1,
   \ 'result': {
@@ -161,29 +113,19 @@ Execute(Disabled capabilities should be recognised correctly):
   \ },
   \})
 
+  AssertEqual 1, b:conn.initialized
   AssertEqual
   \ {
-  \   'capabilities': {
-  \     'completion_trigger_characters': [],
-  \     'completion': 0,
-  \     'references': 0,
-  \     'hover': 0,
-  \     'definition': 0,
-  \   },
-  \   'message_queue': [],
-  \   'projects': {
-  \     '/foo/bar': {
-  \       'initialized': 1,
-  \       'message_queue': [],
-  \       'capabilities_queue': [],
-  \       'init_request_id': 3,
-  \     },
-  \   },
+  \   'completion_trigger_characters': [],
+  \   'completion': 0,
+  \   'references': 0,
+  \   'hover': 0,
+  \   'definition': 0,
   \ },
-  \ b:conn
+  \ b:conn.capabilities
 
 Execute(Results that are not dictionaries should be handled correctly):
-  call ale#lsp#HandleOtherInitializeResponses(b:conn, {
+  call ale#lsp#HandleInitResponse(b:conn, {
   \ 'jsonrpc': '2.0',
   \ 'id': 1,
   \ 'result': v:null,

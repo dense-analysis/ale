@@ -67,7 +67,6 @@ endfunction
 function! s:OnReady(linter, lsp_details, line, column, ...) abort
     let l:buffer = a:lsp_details.buffer
     let l:id = a:lsp_details.connection_id
-    let l:root = a:lsp_details.project_root
 
     let l:Callback = a:linter.lsp is# 'tsserver'
     \   ? function('ale#references#HandleTSServerResponse')
@@ -84,12 +83,12 @@ function! s:OnReady(linter, lsp_details, line, column, ...) abort
     else
         " Send a message saying the buffer has changed first, or the
         " references position probably won't make sense.
-        call ale#lsp#NotifyForChanges(l:id, l:root, l:buffer)
+        call ale#lsp#NotifyForChanges(l:id, l:buffer)
 
         let l:message = ale#lsp#message#References(l:buffer, a:line, a:column)
     endif
 
-    let l:request_id = ale#lsp#Send(l:id, l:message, a:lsp_details.project_root)
+    let l:request_id = ale#lsp#Send(l:id, l:message)
 
     let s:references_map[l:request_id] = {}
 endfunction
@@ -109,13 +108,10 @@ function! s:FindReferences(linter) abort
     endif
 
     let l:id = l:lsp_details.connection_id
-    let l:root = l:lsp_details.project_root
 
-    let l:OnReady = function('s:OnReady', [
+    call ale#lsp#WaitForCapability(l:id, 'references', function('s:OnReady', [
     \   a:linter, l:lsp_details, l:line, l:column
-    \])
-
-    call ale#lsp#WaitForCapability(l:id, l:root, 'references', l:OnReady)
+    \]))
 endfunction
 
 function! ale#references#Find() abort

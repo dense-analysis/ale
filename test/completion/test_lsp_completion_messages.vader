@@ -14,17 +14,17 @@ Before:
 
   let g:message_list = []
   let g:capability_checked = ''
+  let g:conn_id = v:null
   let g:Callback = ''
   let g:wait_callback_list = []
 
   function! ale#lsp_linter#StartLSP(buffer, linter) abort
-    let l:conn = ale#lsp#NewConnection({})
-    let l:conn.id = 347
-    let l:conn.open_documents = {a:buffer : -1}
+    let g:conn_id = ale#lsp#Register('executable', '/foo/bar', {})
+    call ale#lsp#MarkDocumentAsOpen(g:conn_id, a:buffer)
 
     return {
     \ 'buffer': a:buffer,
-    \ 'connection_id': 347,
+    \ 'connection_id': g:conn_id,
     \ 'project_root': '/foo/bar',
     \ 'language_id': 'python',
     \}
@@ -35,7 +35,7 @@ Before:
     return 'i'
   endfunction
 
-  function! ale#lsp#WaitForCapability(conn_id, project_root, capability, callback) abort
+  function! ale#lsp#WaitForCapability(conn_id, capability, callback) abort
     let g:capability_checked = a:capability
     call add(g:wait_callback_list, a:callback)
   endfunction
@@ -45,7 +45,7 @@ Before:
   endfunction
 
   " Replace the Send function for LSP, so we can monitor calls to it.
-  function! ale#lsp#Send(conn_id, message, ...) abort
+  function! ale#lsp#Send(conn_id, message) abort
     call add(g:message_list, a:message)
 
     return 1
@@ -54,9 +54,14 @@ Before:
 After:
   Restore
 
+  if g:conn_id isnot v:null
+    call ale#lsp#RemoveConnectionWithID(g:conn_id)
+  endif
+
   unlet! g:message_list
   unlet! g:capability_checked
   unlet! g:wait_callback_list
+  unlet! g:conn_id
   unlet! g:Callback
   unlet! b:ale_old_omnifunc
   unlet! b:ale_old_completopt
@@ -72,7 +77,6 @@ After:
     return call('mode', a:000)
   endfunction
 
-  call ale#lsp#RemoveConnectionWithID(347)
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
@@ -102,7 +106,7 @@ Execute(The right message should be sent for the initial tsserver request):
 
   AssertEqual 1, len(g:wait_callback_list)
   AssertEqual 'completion', g:capability_checked
-  call map(g:wait_callback_list, 'v:val([347, ''/foo/bar''])')
+  call map(g:wait_callback_list, 'v:val([g:conn_id, ''/foo/bar''])')
 
   " We should send the right callback.
   AssertEqual
@@ -116,7 +120,7 @@ Execute(The right message should be sent for the initial tsserver request):
   AssertEqual
   \ {
   \   'line_length': 3,
-  \   'conn_id': 347,
+  \   'conn_id': g:conn_id,
   \   'column': 3,
   \   'request_id': 1,
   \   'line': 1,
@@ -189,7 +193,7 @@ Execute(The right message should be sent for the initial LSP request):
 
   AssertEqual 1, len(g:wait_callback_list)
   AssertEqual 'completion', g:capability_checked
-  call map(g:wait_callback_list, 'v:val([347, ''/foo/bar''])')
+  call map(g:wait_callback_list, 'v:val([g:conn_id, ''/foo/bar''])')
 
   " We should send the right callback.
   AssertEqual
@@ -219,7 +223,7 @@ Execute(The right message should be sent for the initial LSP request):
   AssertEqual
   \ {
   \   'line_length': 3,
-  \   'conn_id': 347,
+  \   'conn_id': g:conn_id,
   \   'column': 3,
   \   'request_id': 1,
   \   'line': 1,
