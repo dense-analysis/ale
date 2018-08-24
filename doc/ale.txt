@@ -119,6 +119,7 @@ CONTENTS                                                         *ale-contents*
       htmlhint............................|ale-html-htmlhint|
       tidy................................|ale-html-tidy|
       write-good..........................|ale-html-write-good|
+      stylelint...........................|ale-html-stylelint|
     idris.................................|ale-idris-options|
       idris...............................|ale-idris-idris|
     java..................................|ale-java-options|
