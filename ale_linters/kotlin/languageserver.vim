@@ -23,7 +23,7 @@ call ale#linter#Define('kotlin', {
 \   'name': 'languageserver',
 \   'lsp': 'stdio',
 \   'executable_callback': ale#VarFunc('kotlin_languageserver_executable'),
-\   'command_callback': '%e',
+\   'command': '%e',
 \   'language': 'kotlin',
 \   'project_root_callback': 'ale_linters#kotlin#languageserver#GetProjectRoot',
 \})
