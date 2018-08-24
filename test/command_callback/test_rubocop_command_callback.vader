@@ -21,9 +21,9 @@ Execute(Should be able to set a custom executable):
   \   . ale#Escape(ale#path#Simplify(g:dir . '/dummy.rb'))
 
 Execute(Setting bundle appends 'exec rubocop'):
-  let g:ale_ruby_rubocop_executable = 'path to/bundle'
+  let g:ale_ruby_rubocop_executable = 'bundle'
 
-  AssertLinter 'path to/bundle', ale#Escape('path to/bundle')
+  AssertLinter 'bundle', ale#Escape('bundle')
   \   . ' exec rubocop'
   \   . ' --format json --force-exclusion  --stdin '
   \   . ale#Escape(ale#path#Simplify(g:dir . '/dummy.rb'))

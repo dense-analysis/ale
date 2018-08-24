@@ -3,11 +3,8 @@
 
 function! ale_linters#ruby#rubocop#GetCommand(buffer) abort
     let l:executable = ale#handlers#rubocop#GetExecutable(a:buffer)
-    let l:exec_args = l:executable =~? 'bundle$'
-    \   ? ' exec rubocop'
-    \   : ''
 
-    return ale#Escape(l:executable) . l:exec_args
+    return l:executable
     \   . ' --format json --force-exclusion '
     \   . ale#Var(a:buffer, 'ruby_rubocop_options')
     \   . ' --stdin ' . ale#Escape(expand('#' . a:buffer . ':p'))
@@ -55,7 +52,7 @@ endfunction
 
 call ale#linter#Define('ruby', {
 \   'name': 'rubocop',
-\   'executable_callback': 'ale#handlers#rubocop#GetExecutable',
+\   'executable_callback': ale#VarFunc('ruby_rubocop_executable'),
 \   'command_callback': 'ale_linters#ruby#rubocop#GetCommand',
 \   'callback': 'ale_linters#ruby#rubocop#Handle',
 \})

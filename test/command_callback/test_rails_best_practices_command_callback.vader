@@ -28,9 +28,9 @@ Execute(Should be able to set a custom executable):
   \   . b:suffix
 
 Execute(Setting bundle appends 'exec rails_best_practices'):
-  let g:ale_ruby_rails_best_practices_executable = 'path to/bundle'
+  let g:ale_ruby_rails_best_practices_executable = 'bundle'
 
-  AssertLinter 'path to/bundle', ale#Escape('path to/bundle')
+  AssertLinter 'bundle', ale#Escape('bundle')
   \   . ' exec rails_best_practices'
   \   . ' ' . b:args
   \   . ' ' . ale#Escape(b:app_path)
