@@ -139,6 +139,37 @@ g:ale_cpp_clangtidy_options                       *g:ale_cpp_clangtidy_options*
 
 
 ===============================================================================
+clazy                                                           *ale-cpp-clazy*
+
+g:ale_cpp_clazy_executable                         *g:ale_cpp_clazy_executable*
+                                                   *b:ale_cpp_clazy_executable*
+  Type: |String|
+  Default: `'clazy-standalone'`
+
+  This variable can be changed to use a different executable for clazy.
+
+
+g:ale_cpp_clazy_checks                                 *g:ale_cpp_clazy_checks*
+                                                       *b:ale_cpp_clazy_checks*
+  Type: |List|
+  Default: `['level1']`
+
+  The checks to enable for clazy with the `-checks` argument.
+
+  All options will be joined with commas, and escaped appropriately for
+  the shell. The `-checks` flag can be removed entirely by setting this
+  option to an empty List.
+
+
+g:ale_cpp_clazy_options                               *g:ale_cpp_clazy_options*
+                                                      *b:ale_cpp_clazy_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to modify flags given to clazy.
+
+
+===============================================================================
 cppcheck                                                     *ale-cpp-cppcheck*
 
 g:ale_cpp_cppcheck_executable                   *g:ale_cpp_cppcheck_executable*

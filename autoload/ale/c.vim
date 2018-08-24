@@ -8,6 +8,25 @@ let s:sep = has('win32') ? '\' : '/'
 " Set just so tests can override it.
 let g:__ale_c_project_filenames = ['.git/HEAD', 'configure', 'Makefile', 'CMakeLists.txt']
 
+function! ale#c#GetBuildDirectory(buffer) abort
+    " Don't include build directory for header files, as compile_commands.json
+    " files don't consider headers to be translation units, and provide no
+    " commands for compiling header files.
+    if expand('#' . a:buffer) =~# '\v\.(h|hpp)$'
+        return ''
+    endif
+
+    let l:build_dir = ale#Var(a:buffer, 'c_build_dir')
+
+    " c_build_dir has the priority if defined
+    if !empty(l:build_dir)
+        return l:build_dir
+    endif
+
+    return ale#path#Dirname(ale#c#FindCompileCommands(a:buffer))
+endfunction
+
+
 function! ale#c#FindProjectRoot(buffer) abort
     for l:project_filename in g:__ale_c_project_filenames
         let l:full_path = ale#path#FindNearestFile(a:buffer, l:project_filename)
