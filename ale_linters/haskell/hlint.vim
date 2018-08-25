@@ -31,7 +31,8 @@ function! ale_linters#haskell#hlint#GetCommand(buffer) abort
 
     return ale#handlers#hlint#GetExecutable(a:buffer)
     \      . ' ' . ale#Var(a:buffer, 'haskell_hlint_options')
-    \      . ' ' . l:hlintopts . ' -'
+    \      . ' ' . l:hlintopts
+    \      . ' -'
 endfunction
 
 call ale#linter#Define('haskell', {
