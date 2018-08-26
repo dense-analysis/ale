@@ -3,5 +3,5 @@ Before:
 
 Execute(Escape stack should correctly identify a stack exec command):
   AssertEqual
-  \ "'stack' exec 'hlint' --",
+  \ ale#Escape('stack') . ' exec ' . ale#Escape('hlint') . ' --',
   \ ale#handlers#haskell_stack#EscapeExecutable('stack', 'hlint')
