@@ -4,18 +4,12 @@
 call ale#Set('java_javalsp_jar', 'javacs.jar')
 
 function! ale_linters#java#javalsp#Executable(buffer) abort
-    let l:jar = ale#VarFunc('java_javalsp_jar')(a:buffer)
-
-    if filereadable(l:jar)
-        return 'java'
-    endif
-
-    return ''
+    return 'java'
 endfunction
 
 function! ale_linters#java#javalsp#Command(buffer) abort
-    let l:jar = ale#VarFunc('java_javalsp_jar')(a:buffer)
-    return 'exec java -cp ' . l:jar . ' -Xverify:none org.javacs.Main'
+    let l:jar = ale#Var(a:buffer, 'java_javalsp_jar')
+    return ale#Escape('java -cp ' . l:jar . ' -Xverify:none org.javacs.Main')
 endfunction
 
 call ale#linter#Define('java', {
