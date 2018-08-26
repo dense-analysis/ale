@@ -179,6 +179,7 @@ CONTENTS                                                         *ale-contents*
     ocaml.................................|ale-ocaml-options|
       merlin..............................|ale-ocaml-merlin|
       ols.................................|ale-ocaml-ols|
+      ocamlformat.........................|ale-ocaml-ocamlformat|
     perl..................................|ale-perl-options|
       perl................................|ale-perl-perl|
       perlcritic..........................|ale-perl-perlcritic|
@@ -406,7 +407,7 @@ Notes:
 * nroff: `alex`!!, `proselint`, `write-good`
 * Objective-C: `clang`, `clangd`
 * Objective-C++: `clang`, `clangd`
-* OCaml: `merlin` (see |ale-ocaml-merlin|), `ols`
+* OCaml: `merlin` (see |ale-ocaml-merlin|), `ols`, `ocamlformat`
 * Perl: `perl -c`, `perl-critic`, `perltidy`
 * PHP: `langserver`, `phan`, `php -l`, `phpcs`, `phpmd`, `phpstan`, `phpcbf`, `php-cs-fixer`
 * PO: `alex`!!, `msgfmt`, `proselint`, `write-good`
