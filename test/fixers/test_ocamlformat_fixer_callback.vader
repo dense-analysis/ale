@@ -23,7 +23,7 @@ Execute(The ocamlformat callback should return the correct default values):
   \     . ' --inplace'
   \     . ' %t',
   \ },
-  \ ale#fixers#ocamlformat(bufnr(''))
+  \ ale#fixers#ocamlformat#Fix(bufnr(''))
 
 Execute(The ocamlformat callback should include custom ocamlformat options):
   let g:ale_ocaml_ocamlformat_options = "-m 78"
@@ -37,4 +37,4 @@ Execute(The ocamlformat callback should include custom ocamlformat options):
   \     . ' --inplace'
   \     . ' %t',
   \ },
-  \ ale#fixers#ocamlformat(bufnr(''))
+  \ ale#fixers#ocamlformat#Fix(bufnr(''))
