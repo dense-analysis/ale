@@ -3,6 +3,35 @@ ALE Scala Integration                                       *ale-scala-options*
 
 
 ===============================================================================
+sbtserver                                                 *ale-scala-sbtserver*
+
+`sbtserver` requires a running ^1.1.x sbt shell to connect to. It will look
+for this shell by searching upwards from the current working directory for
+the `project/target/active.json` file. This will only work when `sbtserver` is
+configured to listen via tcp. An easy way to accomplish that is to put
+`serverConnectionType := ConnectionType.Tcp` in `~/.sbt/1.0/global.sbt`.
+
+
+g:ale_scala_sbtserver_address                   *g:ale_scala_sbtserver_address*
+                                                *b:ale_scala_sbtserver_address*
+  Type: |String|
+  Default: `''`
+
+  By default the address is found by parsing `active.json`. If the server is
+  running elsewhere, you can override the address here to `host:port`.
+
+
+g:ale_scala_sbtserver_project_root         *g:ale_scala_sbtserver_project_root*
+                                           *b:ale_scala_sbtserver_project_root*
+  Type: |String|
+  Default: `''`
+
+  By default the project root is found by searching upwards for `active.json`.
+  If the project root is elsewhere, you can override the project root
+  directory.
+
+
+===============================================================================
 scalafmt                                                   *ale-scala-scalafmt*
 
 If Nailgun is used, override `g:ale_scala_scalafmt_executable` like so: >
