@@ -213,7 +213,7 @@ Execute(Other files should be jumped to for LSP definition responses):
   \   'edit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
-  AssertEqual [3, 7], getpos('.')[1:2]
+  AssertEqual [3, 8], getpos('.')[1:2]
   AssertEqual {}, ale#definition#GetMap()
 
 Execute(Locations inside the same file should be jumped to without using :edit):
@@ -235,7 +235,7 @@ Execute(Locations inside the same file should be jumped to without using :edit):
   \ [
   \ ],
   \ g:expr_list
-  AssertEqual [3, 7], getpos('.')[1:2]
+  AssertEqual [3, 8], getpos('.')[1:2]
   AssertEqual {}, ale#definition#GetMap()
 
 Execute(Other files should be jumped to in tabs for LSP definition responses):
@@ -258,7 +258,7 @@ Execute(Other files should be jumped to in tabs for LSP definition responses):
   \   'tabedit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
-  AssertEqual [3, 7], getpos('.')[1:2]
+  AssertEqual [3, 8], getpos('.')[1:2]
   AssertEqual {}, ale#definition#GetMap()
 
 Execute(Definition responses with lists should be handled):
@@ -289,7 +289,7 @@ Execute(Definition responses with lists should be handled):
   \   'edit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
-  AssertEqual [3, 7], getpos('.')[1:2]
+  AssertEqual [3, 8], getpos('.')[1:2]
   AssertEqual {}, ale#definition#GetMap()
 
 Execute(Definition responses with null response should be handled):
