@@ -230,6 +230,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['dart'],
 \       'description': 'Fix Dart files with dartfmt.',
 \   },
+\   'xmllint': {
+\       'function': 'ale#fixers#xmllint#Fix',
+\       'suggested_filetypes': ['xml'],
+\       'description': 'Fix XML files with xmllint.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
