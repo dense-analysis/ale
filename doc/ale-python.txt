@@ -374,8 +374,8 @@ g:ale_python_pyls_use_global                     *g:ale_python_pyls_use_global*
   See |ale-integrations-local-executables|
 
 
-g:ale_python_pyls_config                         *g:ale_python_pyls_config*
-                                                 *b:ale_python_pyls_config*
+g:ale_python_pyls_config                            *g:ale_python_pyls_config*
+                                                    *b:ale_python_pyls_config*
   Type: |Dictionary|
   Default: `{}`
 
