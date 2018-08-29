@@ -204,6 +204,7 @@ CONTENTS                                                         *ale-contents*
     pug...................................|ale-pug-options|
       puglint.............................|ale-pug-puglint|
     puppet................................|ale-puppet-options|
+      puppet..............................|ale-puppet-puppet|
       puppetlint..........................|ale-puppet-puppetlint|
       puppet-languageserver...............|ale-puppet-languageserver|
     pyrex (cython)........................|ale-pyrex-options|
