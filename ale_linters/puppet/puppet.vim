@@ -1,7 +1,7 @@
 " Author: Alexander Olofsson <alexander.olofsson@liu.se>
 
 call ale#Set('puppet_puppet_executable', 'puppet')
-call ale#Set('puppet_puppet_options', '--color=false')
+call ale#Set('puppet_puppet_options', '')
 
 function! ale_linters#puppet#puppet#Handle(buffer, lines) abort
     " Matches patterns like the following:
@@ -24,7 +24,7 @@ function! ale_linters#puppet#puppet#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#puppet#puppet#GetCommand(buffer) abort
-    return '%e parser validate '
+    return '%e parser validate --color=false '
     \    . ale#Pad(ale#Var(a:buffer, 'puppet_puppet_options'))
     \    . ' %t'
 endfunction

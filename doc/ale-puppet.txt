@@ -16,7 +16,7 @@ g:ale_puppet_puppet_executable                 *g:ale_puppet_puppet_executable*
 g:ale_puppet_puppet_options                       *g:ale_puppet_puppet_options*
                                                   *b:ale_puppet_puppet_options*
   Type: |String|
-  Default: `'--color=false'`
+  Default: `''`
 
   This variable can be changed to add command-line arguments to the
   puppet parser validate invocation.
