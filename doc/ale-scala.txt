@@ -5,20 +5,24 @@ ALE Scala Integration                                       *ale-scala-options*
 ===============================================================================
 sbtserver                                                 *ale-scala-sbtserver*
 
-`sbtserver` requires a running ^1.1.x sbt shell to connect to. It will look
-for this shell by searching upwards from the current working directory for
-the `project/target/active.json` file. This will only work when `sbtserver` is
-configured to listen via tcp. An easy way to accomplish that is to put
-`serverConnectionType := ConnectionType.Tcp` in `~/.sbt/1.0/global.sbt`.
+`sbtserver` requires a running ^1.1.x sbt shell to connect to. It will attempt
+to connect via TCP to the address defined in `g:ale_scala_sbtserver_address`.
+As `sbt` defaults to listening via unix sockets, place these settings into
+your `~/.sbt/1.0/global.sbt` to ensure that ale will always attempt to connect
+to the right socket:
+
+`serverConnectionType := ConnectionType.Tcp` and `serverPort := 4273`
 
 
 g:ale_scala_sbtserver_address                   *g:ale_scala_sbtserver_address*
                                                 *b:ale_scala_sbtserver_address*
   Type: |String|
-  Default: `''`
+  Default: `'127.0.0.1:4273'`
 
-  By default the address is found by parsing `active.json`. If the server is
-  running elsewhere, you can override the address here to `host:port`.
+  By default the address is found by parsing `active.json`, however, reading a
+  file is a blocking operation which should be avoided in ale. The easy way
+  around this is to configure sbt to always connect to the same port, which
+  the instructions above describe.
 
 
 g:ale_scala_sbtserver_project_root         *g:ale_scala_sbtserver_project_root*
@@ -26,7 +30,7 @@ g:ale_scala_sbtserver_project_root         *g:ale_scala_sbtserver_project_root*
   Type: |String|
   Default: `''`
 
-  By default the project root is found by searching upwards for `active.json`.
+  By default the project root is found by searching upwards for `build.sbt`.
   If the project root is elsewhere, you can override the project root
   directory.
 
