@@ -62,6 +62,11 @@ function! ale#ShouldDoNothing(buffer) abort
         return 1
     endif
 
+    " Don't start linting and so on when an operator is pending.
+    if ale#util#Mode(1) is# 'no'
+        return 1
+    endif
+
     " Do nothing if running in the sandbox.
     if ale#util#InSandbox()
         return 1
