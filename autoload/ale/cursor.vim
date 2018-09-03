@@ -61,7 +61,7 @@ function! ale#cursor#EchoCursorWarning(...) abort
     endif
 
     " Only echo the warnings in normal mode, otherwise we will get problems.
-    if mode() isnot# 'n'
+    if mode(1) isnot# 'n'
         return
     endif
 
@@ -91,7 +91,7 @@ function! ale#cursor#EchoCursorWarningWithDelay() abort
     endif
 
     " Only echo the warnings in normal mode, otherwise we will get problems.
-    if mode() isnot# 'n'
+    if mode(1) isnot# 'n'
         return
     endif
 
