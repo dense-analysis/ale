@@ -8,6 +8,7 @@ call ale#Set('go_govet_options', '')
 
 function! ale_linters#go#govet#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'go_govet_options')
+
     return ale#path#BufferCdString(a:buffer) . ' go vet .'
     \   . (!empty(l:options) ? ' ' . l:options : '')
 endfunction

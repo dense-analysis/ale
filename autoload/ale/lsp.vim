@@ -99,6 +99,7 @@ function! s:CreateTSServerMessageData(message) abort
     endif
 
     let l:data = json_encode(l:obj) . "\n"
+
     return [l:is_notification ? 0 : l:obj.seq, l:data]
 endfunction
 

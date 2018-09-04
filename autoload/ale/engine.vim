@@ -231,6 +231,7 @@ function! s:HandleExit(job_id, exit_code) abort
 
     if l:next_chain_index < len(get(l:linter, 'command_chain', []))
         call s:InvokeChain(l:buffer, l:executable, l:linter, l:next_chain_index, l:output)
+
         return
     endif
 
@@ -595,9 +596,8 @@ function! ale#engine#ProcessChain(buffer, linter, chain_index, input) abort
                 \)
             endif
 
+            " If we have a command to run, execute that.
             if !empty(l:command)
-                " We hit a command to run, so we'll execute that
-
                 " The chain item can override the output_stream option.
                 if has_key(l:chain_item, 'output_stream')
                     let l:output_stream = l:chain_item.output_stream

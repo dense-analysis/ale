@@ -6,15 +6,19 @@ call ale#Set('scala_sbtserver_project_root', '')
 
 function! ale_linters#scala#sbtserver#GetProjectRoot(buffer) abort
     let l:project_root = ale#Var(a:buffer, 'scala_sbtserver_project_root')
+
     if l:project_root is? ''
         let l:project_root = ale#path#FindNearestFile(a:buffer, 'build.sbt')
+
         return !empty(l:project_root) ? fnamemodify(l:project_root, ':h') : ''
     endif
+
     return l:project_root
 endfunction
 
 function! ale_linters#scala#sbtserver#GetAddress(buffer) abort
     let l:address = ale#Var(a:buffer, 'scala_sbtserver_address')
+
     return l:address
 endfunction
 

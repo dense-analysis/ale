@@ -54,6 +54,7 @@ endif
 function! ale#util#JoinNeovimOutput(job, last_line, data, mode, callback) abort
     if a:mode is# 'raw'
         call a:callback(a:job, join(a:data, "\n"))
+
         return ''
     endif
 

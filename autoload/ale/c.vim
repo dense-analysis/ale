@@ -54,6 +54,7 @@ function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
         call add(l:previous_options, l:option)
         " Check if cflag contained a '-' and should not have been splitted
         let l:option_list = split(l:option, '\zs')
+
         if l:option_list[-1] isnot# ' '
             continue
         endif

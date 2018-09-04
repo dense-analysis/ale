@@ -60,10 +60,10 @@ check_errors() {
 
     for directory in "${directories[@]}"; do
         # shellcheck disable=SC2086
-        while IFS= read -r match; do
+        while read -r; do
             RETURN_CODE=1
-            echo "$match $message"
-        done < <(grep -n "$regex" $include_arg "$directory"/**/*.vim \
+            echo "$REPLY $message"
+        done < <(grep -H -n "$regex" $include_arg "$directory"/**/*.vim \
             | grep -v 'no-custom-checks' \
             | grep -o '^[^:]\+:[0-9]\+' \
             | sed 's:^\./::')
@@ -125,5 +125,14 @@ check_errors '\(!=.\?\|isnot\) type([0-9]\+)' "Use 'isnot v:t_number' instead"
 check_errors '\(!=.\?\|isnot\) type(\[\])' "Use 'isnot v:t_list' instead"
 check_errors '\(!=.\?\|isnot\) type({})' "Use 'isnot v:t_dict' instead"
 check_errors '\(!=.\?\|isnot\) type(function([^)]\+))' "Use 'isnot v:t_func' instead"
+
+# Run a Python script to find lines that require padding around them.  For
+# users without Python installed, we'll skip these checks. Travis CI will run
+# the script.
+if command -v python > /dev/null; then
+    if ! test/script/block-padding-checker "$directory"/**/*.vim; then
+        RETURN_CODE=1
+    fi
+fi
 
 exit $RETURN_CODE

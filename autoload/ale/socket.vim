@@ -104,6 +104,7 @@ function! ale#socket#IsOpen(channel_id) abort
     endif
 
     let l:channel = s:channel_map[a:channel_id].channel
+
     return ch_status(l:channel) is# 'open'
 endfunction
 

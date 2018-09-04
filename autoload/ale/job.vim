@@ -278,11 +278,13 @@ function! ale#job#IsRunning(job_id) abort
         try
             " In NeoVim, if the job isn't running, jobpid() will throw.
             call jobpid(a:job_id)
+
             return 1
         catch
         endtry
     elseif has_key(s:job_map, a:job_id)
         let l:job = s:job_map[a:job_id].job
+
         return job_status(l:job) is# 'run'
     endif
 

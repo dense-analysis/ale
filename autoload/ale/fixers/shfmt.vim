@@ -13,5 +13,4 @@ function! ale#fixers#shfmt#Fix(buffer) abort
     \   'command': ale#Escape(l:executable)
     \       . (empty(l:options) ? '' : ' ' . l:options)
     \}
-
 endfunction

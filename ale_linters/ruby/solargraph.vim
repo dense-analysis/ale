@@ -7,6 +7,7 @@ call ale#Set('ruby_solargraph_port', '7658')
 function! ale_linters#ruby#solargraph#GetAddress(buffer) abort
     let l:host = ale#Var(a:buffer, 'ruby_solargraph_host')
     let l:port = ale#Var(a:buffer, 'ruby_solargraph_port')
+
     return l:host . ':' . l:port
 endfunction
 

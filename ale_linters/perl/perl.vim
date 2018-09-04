@@ -19,6 +19,7 @@ function! ale_linters#perl#perl#Handle(buffer, lines) abort
     let l:basename = expand('#' . a:buffer . ':t')
 
     let l:type = 'E'
+
     if a:lines[-1] =~# 'syntax OK'
         let l:type = 'W'
     endif

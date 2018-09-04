@@ -71,6 +71,7 @@ function! ale#fix#ApplyFixes(buffer, output) abort
         if l:data.lines_before != l:lines
             call remove(g:ale_fix_buffer_data, a:buffer)
             execute 'echoerr ''The file was changed before fixing finished'''
+
             return
         endif
     endif

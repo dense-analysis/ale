@@ -27,7 +27,7 @@ let s:getcmdwintype_exists = exists('*getcmdwintype')
 function! ale#ShouldDoNothing(buffer) abort
     " The checks are split into separate if statements to make it possible to
     " profile each check individually with Vim's profiling tools.
-
+    "
     " Do nothing if ALE is disabled.
     if !getbufvar(a:buffer, 'ale_enabled', get(g:, 'ale_enabled', 0))
         return 1

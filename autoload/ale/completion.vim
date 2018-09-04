@@ -75,6 +75,7 @@ endfunction
 " Check if we should look for completions for a language.
 function! ale#completion#GetPrefix(filetype, line, column) abort
     let l:regex = s:GetFiletypeValue(s:should_complete_map, a:filetype)
+
     " The column we're using completions for is where we are inserting text,
     " like so:
     "   abc

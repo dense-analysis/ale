@@ -9,6 +9,7 @@ endfunction
 
 function! ale_linters#java#javalsp#Command(buffer) abort
     let l:jar = ale#Var(a:buffer, 'java_javalsp_jar')
+
     return ale#Escape('java -cp ' . l:jar . ' -Xverify:none org.javacs.Main')
 endfunction
 

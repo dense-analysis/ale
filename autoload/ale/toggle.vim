@@ -76,6 +76,7 @@ function! ale#toggle#ToggleBuffer(buffer) abort
     " linting locally when linting is disabled globally
     if l:enabled && !g:ale_enabled
         execute 'echom ''ALE cannot be enabled locally when disabled globally'''
+
         return
     endif
 

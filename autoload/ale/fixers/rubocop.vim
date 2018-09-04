@@ -10,7 +10,6 @@ function! ale#fixers#rubocop#GetCommand(buffer) abort
     \   . (!empty(l:config) ? ' --config ' . ale#Escape(l:config) : '')
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' --auto-correct %t'
-
 endfunction
 
 function! ale#fixers#rubocop#Fix(buffer) abort
