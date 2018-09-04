@@ -249,6 +249,7 @@ CONTENTS                                                         *ale-contents*
     sass..................................|ale-sass-options|
       stylelint...........................|ale-sass-stylelint|
     scala.................................|ale-scala-options|
+      sbtserver...........................|ale-scala-sbtserver|
       scalafmt............................|ale-scala-scalafmt|
       scalastyle..........................|ale-scala-scalastyle|
     scss..................................|ale-scss-options|
@@ -430,7 +431,7 @@ Notes:
 * Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|), `rustfmt`
 * SASS: `sass-lint`, `stylelint`
 * SCSS: `prettier`, `sass-lint`, `scss-lint`, `stylelint`
-* Scala: `fsc`, `scalac`, `scalafmt`, `scalastyle`
+* Scala: `fsc`, `sbtserver`, `scalac`, `scalafmt`, `scalastyle`
 * Slim: `slim-lint`
 * SML: `smlnj`
 * Solidity: `solhint`, `solium`
