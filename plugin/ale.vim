@@ -218,6 +218,9 @@ command! -nargs=1 ALESymbolSearch :call ale#symbol#Search(<q-args>)
 
 command! -bar ALEComplete :call ale#completion#AlwaysGetCompletions(0)
 
+" Rename symbols using tsserver and LSP
+command! -bar -nargs=? ALERename :call ale#rename#Execute(<f-args>)
+
 " <Plug> mappings for commands
 nnoremap <silent> <Plug>(ale_previous) :ALEPrevious<Return>
 nnoremap <silent> <Plug>(ale_previous_wrap) :ALEPreviousWrap<Return>
@@ -256,6 +259,7 @@ nnoremap <silent> <Plug>(ale_find_references) :ALEFindReferences<Return>
 nnoremap <silent> <Plug>(ale_hover) :ALEHover<Return>
 nnoremap <silent> <Plug>(ale_documentation) :ALEDocumentation<Return>
 inoremap <silent> <Plug>(ale_complete) <C-\><C-O>:ALEComplete<Return>
+nnoremap <silent> <Plug>(ale_rename) :ALERename<Return>
 
 " Set up autocmd groups now.
 call ale#events#Init()

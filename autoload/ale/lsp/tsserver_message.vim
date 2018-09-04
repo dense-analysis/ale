@@ -77,3 +77,12 @@ function! ale#lsp#tsserver_message#Quickinfo(buffer, line, column) abort
     \   'file': expand('#' . a:buffer . ':p'),
     \}]
 endfunction
+
+function! ale#lsp#tsserver_message#Rename(buffer, line, column) abort
+    return [0, 'ts@rename', {
+    \   'line': a:line,
+    \   'offset': a:column,
+    \   'file': expand('#' . a:buffer . ':p'),
+    \   'arguments': {'findInComments': 'true', 'findInStrings': 'true'}
+    \}]
+endfunction
