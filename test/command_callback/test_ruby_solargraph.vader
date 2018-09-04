@@ -27,3 +27,10 @@ Execute(should set solargraph for ruby app2):
   AssertLSPOptions {}
   AssertLSPProject ale#path#Simplify(g:dir . 'command_callback/../ruby_fixtures/valid_ruby_app2')
   AssertLSPAddress '127.0.0.1:7658'
+
+Execute(should set solargraph for ruby app3):
+  call ale#test#SetFilename('../ruby_fixtures/valid_ruby_app3/lib/file.rb')
+  AssertLSPLanguage 'ruby'
+  AssertLSPOptions {}
+  AssertLSPProject ale#path#Simplify(g:dir . 'command_callback/../ruby_fixtures/valid_ruby_app3')
+  AssertLSPAddress '127.0.0.1:7658'
