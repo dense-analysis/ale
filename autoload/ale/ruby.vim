@@ -29,7 +29,7 @@ function! ale#ruby#FindProjectRoot(buffer) abort
       return l:dir
     endif
 
-    for l:name in ['Rakefile', 'Gemfile']
+    for l:name in ['.solargraph.yml', 'Rakefile', 'Gemfile']
         let l:dir = fnamemodify(
         \   ale#path#FindNearestFile(a:buffer, l:name),
         \   ':h'
