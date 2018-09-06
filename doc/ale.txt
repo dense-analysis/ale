@@ -506,12 +506,13 @@ circumstances.
 ALE will report problems with your code in the following ways, listed with
 their relevant options.
 
-* By updating loclist. (On by default)       - |g:ale_set_loclist|
-* By updating quickfix. (Off by default)     - |g:ale_set_quickfix|
-* By setting error highlights.               - |g:ale_set_highlights|
-* By creating signs in the sign column.      - |g:ale_set_signs|
-* By echoing messages based on your cursor.  - |g:ale_echo_cursor|
-* By showing balloons for your mouse cursor  - |g:ale_set_balloons|
+* By updating loclist. (On by default)             - |g:ale_set_loclist|
+* By updating quickfix. (Off by default)           - |g:ale_set_quickfix|
+* By setting error highlights.                     - |g:ale_set_highlights|
+* By creating signs in the sign column.            - |g:ale_set_signs|
+* By echoing messages based on your cursor.        - |g:ale_echo_cursor|
+* By displaying the preview based on your cursor.  - |g:ale_show_cursor_detail|
+* By showing balloons for your mouse cursor        - |g:ale_set_balloons|
 
 Please consult the documentation for each option, which can reveal some other
 ways of tweaking the behaviour of each way of displaying problems. You can
@@ -886,6 +887,13 @@ g:ale_show_cursor_details                           *g:ale_show_cursor_details*
   The preview window is opened without stealing focus, which means your cursor
   will stay in the same buffer as it currently is.
 
+g:ale_close_preview_on_insert                   *g:ale_close_preview_on_insert*
+
+  Type: |Number|
+  Default: `0`
+
+  When this option is set to `1`, the ALE Preview Window will be automatically
+  closed upon entering Insert Mode.
 
 g:ale_echo_cursor                                           *g:ale_echo_cursor*
 
