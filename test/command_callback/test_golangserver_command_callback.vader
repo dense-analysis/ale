@@ -1,0 +1,50 @@
+Before:
+  Save $GOPATH
+  call ale#assert#SetUpLinterTest('go', 'golangserver')
+  let sep = has('win32') ? ';' : ':'
+  let $GOPATH=ale#path#Simplify(g:dir . '/go_paths/go1')
+      \ . sep
+      \ . ale#path#Simplify(g:dir . '/go_paths/go2')
+
+After:
+  Restore
+  call ale#assert#TearDownLinterTest()
+
+Execute(should set correct defaults):
+  AssertLinter 'go-langserver', ale#Escape('go-langserver')
+
+Execute(should configure go-langserver callback executable):
+  let b:ale_go_langserver_executable = 'boo'
+  AssertLinter 'boo', ale#Escape('boo')
+  unlet b:ale_go_langserver_executable
+
+Execute(should set go-langserver options):
+  call ale#test#SetFilename('go_paths/go1/prj1/file.go')
+  let b:ale_completion_enabled = 1
+  let b:ale_go_langserver_options = ''
+  AssertEqual ale_linters#go#golangserver#GetCommand(bufnr('%')), ale#Escape('go-langserver') . ' -gocodecompletion'
+
+  let b:ale_go_langserver_options = '-trace'
+  AssertEqual ale_linters#go#golangserver#GetCommand(bufnr('%')), ale#Escape('go-langserver') . ' -gocodecompletion -trace'
+
+Execute(should ignore go-langserver -gocodecompletion option):
+  call ale#test#SetFilename('go_paths/go1/prj1/file.go')
+
+  let b:ale_go_langserver_options = '-trace -gocodecompletion'
+  let b:ale_completion_enabled = 1
+  AssertEqual ale_linters#go#golangserver#GetCommand(bufnr('%')), ale#Escape('go-langserver') . ' -gocodecompletion -trace'
+
+  let b:ale_completion_enabled = 0
+  AssertEqual ale_linters#go#golangserver#GetCommand(bufnr('%')), ale#Escape('go-langserver') . ' -trace'
+
+Execute(should set go-langserver for go app1):
+  call ale#test#SetFilename('go_paths/go1/prj1/file.go')
+  AssertLSPLanguage 'go'
+  AssertLSPOptions {}
+  AssertLSPProject ale#path#Simplify(g:dir . '/go_paths/go1')
+
+Execute(should set go-langserver for go app2):
+  call ale#test#SetFilename('go_paths/go2/prj1/file.go')
+  AssertLSPLanguage 'go'
+  AssertLSPOptions {}
+  AssertLSPProject ale#path#Simplify(g:dir . '/go_paths/go2')
