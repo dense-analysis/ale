@@ -872,6 +872,20 @@ g:ale_completion_max_suggestions             *g:ale_completion_max_suggestions*
   Adjust this option as needed, depending on the complexity of your codebase
   and your available processing power.
 
+g:ale_show_cursor_details                           *g:ale_show_cursor_details*
+
+  Type: |Number|
+  Default: `0`
+
+  When this option is set to `1`, the ALE Preview Window will be automatically
+  opened when moving into a line which has errors. ALE will attempt to find the
+  warning or error at a column nearest to the cursor when the cursor is resting
+  on a line which contains a warning or error. The preview window automatically
+  closes when you move away from the line.
+
+  The preview window is opened without stealing focus, which means your cursor
+  will stay in the same buffer as it currently is.
+
 
 g:ale_echo_cursor                                           *g:ale_echo_cursor*
 

@@ -114,7 +114,7 @@ function! ale#cursor#EchoCursorWarningWithDelay() abort
     endif
 endfunction
 
-function! ale#cursor#ShowCursorDetail() abort
+function! ale#cursor#ShowCursorDetail(...) abort
     " Only echo the warnings in normal mode, otherwise we will get problems.
     if mode() isnot# 'n'
         return
@@ -130,8 +130,14 @@ function! ale#cursor#ShowCursorDetail() abort
 
     if !empty(l:loc)
         let l:message = get(l:loc, 'detail', l:loc.text)
-
-        call ale#preview#Show(split(l:message, "\n"))
+        " In case options have been received, pass them down to the called
+        " method.
+        let options = get(a:000, 0, {})
+        if len(options) 
+            call ale#preview#Show(split(l:message, "\n"), options)
+        else
+            call ale#preview#Show(split(l:message, "\n"))
+        endif
         execute 'echo'
     endif
 endfunction

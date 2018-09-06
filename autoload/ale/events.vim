@@ -138,6 +138,22 @@ function! ale#events#Init() abort
                 " not be changed here.
                 autocmd InsertLeave * if exists('*ale#engine#Cleanup') | call ale#cursor#EchoCursorWarning() | endif
             endif
+
+            function! AleShowCursorDetailCmd() abort
+                if exists('*ale#engine#Cleanup')
+                    call ale#preview#CloseIfTypeMatches('ale-preview')
+                    " Don't jump to the preview window during cursor movement.
+                    call ale#cursor#ShowCursorDetail({'stay_here': 1})
+                endif
+            endfunction
+
+            if g:ale_show_cursor_detail
+                autocmd CursorMoved,CursorHold * call AleShowCursorDetailCmd()
+            endif
+
+            if g:ale_close_preview_on_insert
+                autocmd InsertEnter * call ale#preview#CloseIfTypeMatches('ale-preview')
+            endif
         endif
     augroup END
 endfunction
