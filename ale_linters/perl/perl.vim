@@ -22,6 +22,10 @@ function! ale_linters#perl#perl#Handle(buffer, lines) abort
     let l:output = []
     let l:basename = expand('#' . a:buffer . ':t')
 
+    if (!len(a:lines))
+        return l:output
+    endif
+
     let l:type = 'E'
 
     if a:lines[-1] =~# 'syntax OK'
