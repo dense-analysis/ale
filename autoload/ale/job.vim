@@ -249,6 +249,11 @@ function! ale#job#Start(command, options) abort
             let l:job_options.exit_cb = function('s:VimExitCallback')
         endif
 
+        " Use non-blocking writes for Vim versions that support the option.
+        if has('patch-8.1.350')
+            let l:job_options.noblock = 1
+        endif
+
         " Vim 8 will read the stdin from the file's buffer.
         let l:job_info.job = job_start(a:command, l:job_options)
         let l:job_id = ale#job#ParseVim8ProcessID(string(l:job_info.job))
