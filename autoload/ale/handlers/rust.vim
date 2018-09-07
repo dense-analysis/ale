@@ -50,6 +50,7 @@ function! ale#handlers#rust#HandleRustErrors(buffer, lines) abort
 
         for l:root_span in l:error.spans
             let l:span = s:FindSpan(a:buffer, l:root_span)
+
             if ale#Var(a:buffer, 'rust_ignore_secondary_spans') && !get(l:span, 'is_primary', 1)
                 continue
             endif
