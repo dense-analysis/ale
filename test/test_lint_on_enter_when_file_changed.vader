@@ -61,13 +61,13 @@ Execute(The file changed event function should lint the current buffer when it h
   \   'nr': -1,
   \   'pattern': '',
   \   'valid': 1,
-  \ }], getloclist(0)
+  \ }], ale#test#GetLoclistWithoutModule()
 
 Execute(The buffer should be checked after entering it after the file has changed):
   let b:ale_file_changed = 1
 
   set filetype=foobar
-  call ale#events#EnterEvent(bufnr(''))
+  call ale#events#ReadOrEnterEvent(bufnr(''))
 
   AssertEqual [{
   \   'bufnr': bufnr(''),
@@ -79,4 +79,4 @@ Execute(The buffer should be checked after entering it after the file has change
   \   'nr': -1,
   \   'pattern': '',
   \   'valid': 1,
-  \ }], getloclist(0)
+  \ }], ale#test#GetLoclistWithoutModule()

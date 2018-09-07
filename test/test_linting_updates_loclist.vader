@@ -1,31 +1,24 @@
 Before:
+  Save g:ale_echo_cursor
+  Save g:ale_set_highlights
+  Save g:ale_set_loclist
+  Save g:ale_set_quickfix
   Save g:ale_set_signs
-  let g:ale_set_signs = 1
+  Save g:ale_run_synchronously
+  Save g:ale_set_lists_synchronously
+  Save g:ale_buffer_info
 
-  let g:expected_data = [
-  \ {
-  \   'lnum': 1,
-  \   'bufnr': bufnr('%'),
-  \   'vcol': 0,
-  \   'linter_name': 'testlinter',
-  \   'nr': -1,
-  \   'type': 'W',
-  \   'col': 10,
-  \   'text': 'Infix operators must be spaced. [Warning/space-infix-ops]',
-  \   'sign_id': 1000001,
-  \ },
-  \ {
-  \   'lnum': 2,
-  \   'bufnr': bufnr('%'),
-  \   'vcol': 0,
-  \   'linter_name': 'testlinter',
-  \   'nr': -1,
-  \   'type': 'E',
-  \   'col': 10,
-  \   'text': 'Missing semicolon. [Error/semi]',
-  \   'sign_id': 1000002,
-  \ }
-  \]
+  " We want to check that sign IDs are set for this test.
+  let g:ale_set_signs = 1
+  let g:ale_set_loclist = 1
+  " Disable features we don't need for these tests.
+  let g:ale_set_quickfix = 0
+  let g:ale_set_highlights = 0
+  let g:ale_echo_cursor = 0
+
+  let g:ale_run_synchronously = 1
+  let g:ale_set_lists_synchronously = 1
+  let g:ale_buffer_info = {}
 
   function! TestCallback(buffer, output)
     return [
@@ -54,22 +47,47 @@ Before:
 
   sign unplace *
 
+  call ale#engine#Cleanup(bufnr(''))
+
 After:
   Restore
 
   delfunction TestCallback
 
-  unlet! g:expected_data
-  let g:ale_buffer_info = {}
   call ale#linter#Reset()
+
+  sign unplace *
 
 Given foobar (Some JavaScript with problems):
   var y = 3+3;
   var y = 3
 
 Execute(The loclist should be updated after linting is done):
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
+  ALELint
 
-  AssertEqual ['' . bufnr('%')], keys(g:ale_buffer_info)
-  AssertEqual g:expected_data, g:ale_buffer_info[bufnr('%')].loclist
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'bufnr': bufnr('%'),
+  \     'vcol': 0,
+  \     'linter_name': 'testlinter',
+  \     'nr': -1,
+  \     'type': 'W',
+  \     'col': 10,
+  \     'text': 'Infix operators must be spaced. [Warning/space-infix-ops]',
+  \     'sign_id': 1000001,
+  \   },
+  \   {
+  \     'lnum': 2,
+  \     'bufnr': bufnr('%'),
+  \     'vcol': 0,
+  \     'linter_name': 'testlinter',
+  \     'nr': -1,
+  \     'type': 'E',
+  \     'col': 10,
+  \     'text': 'Missing semicolon. [Error/semi]',
+  \     'sign_id': 1000002,
+  \   }
+  \ ],
+  \ get(get(g:ale_buffer_info, bufnr('%'), {}), 'loclist', [])

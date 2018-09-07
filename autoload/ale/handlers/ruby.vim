@@ -13,8 +13,10 @@ function! s:HandleSyntaxError(buffer, lines) abort
 
     for l:line in a:lines
         let l:match = matchlist(l:line, l:pattern)
+
         if len(l:match) == 0
             let l:match = matchlist(l:line, l:column)
+
             if len(l:match) != 0
                 let l:output[len(l:output) - 1]['col'] = len(l:match[1])
             endif

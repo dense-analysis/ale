@@ -1,16 +1,12 @@
 Before:
-  runtime ale_linters/go/govet.vim
-
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#assert#SetUpLinterTest('go', 'govet')
 
 After:
-  Restore
-
-  call ale#linter#Reset()
-  call ale#test#RestoreDirectory()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The default command should be correct):
-  AssertEqual
-  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
-  \ . ' go vet .',
-  \ ale_linters#go#govet#GetCommand(bufnr(''))
+  AssertLinter 'go', 'cd ' . ale#Escape(expand('%:p:h')) . ' &&  go vet .'
+
+Execute(Extra options should be supported):
+  let g:ale_go_govet_options = '--foo-bar'
+  AssertLinter 'go', 'cd ' . ale#Escape(expand('%:p:h')) . ' &&  go vet . --foo-bar'

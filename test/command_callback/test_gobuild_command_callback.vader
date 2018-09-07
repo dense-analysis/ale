@@ -1,52 +1,19 @@
 Before:
-  Save g:ale_go_gobuild_options
+  call ale#assert#SetUpLinterTest('go', 'gobuild')
 
-  unlet! g:ale_go_gobuild_options
-
-  let g:env_prefix = has('win32')
-  \ ? 'set GOPATH=' . ale#Escape('/foo/bar') . ' && '
-  \ : 'GOPATH=' . ale#Escape('/foo/bar') . ' '
-
-  runtime ale_linters/go/gobuild.vim
-
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
-
-  call ale_linters#go#gobuild#ResetEnv()
+  WithChainResults ['/foo/bar', '/foo/baz']
 
 After:
-  Restore
+  call ale#assert#TearDownLinterTest()
 
-  unlet! g:env_prefix
-
-  call ale#linter#Reset()
-  call ale#test#RestoreDirectory()
-
-Execute(The default gobuild command should be correct):
-  AssertEqual
-  \ ale_linters#go#gobuild#GetCommand(bufnr(''), ['/foo/bar', '/foo/baz']),
-  \ g:env_prefix . 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
-  \   . 'go test -c -o /dev/null ./'
-
-Execute(The command for getting GOPATH should be correct):
-  AssertEqual ale_linters#go#gobuild#GoEnv(bufnr('')), 'go env GOPATH GOROOT'
-
-  call ale_linters#go#gobuild#GetCommand(bufnr(''), ['/foo/bar', '/foo/baz'])
-
-  " We shouldn't run `go env` many times after we've got it.
-  AssertEqual ale_linters#go#gobuild#GoEnv(bufnr('')), ''
-
-Execute(The GOPATH output should be used after it has been read once):
-  call ale_linters#go#gobuild#GetCommand(bufnr(''), ['/foo/bar', '/foo/baz'])
-
-  AssertEqual
-  \ ale_linters#go#gobuild#GetCommand(bufnr(''), []),
-  \ g:env_prefix . 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+Execute(The default commands should be correct):
+  AssertLinter 'go',
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
   \   . 'go test -c -o /dev/null ./'
 
 Execute(Extra options should be supported):
   let g:ale_go_gobuild_options = '--foo-bar'
 
-  AssertEqual
-  \ ale_linters#go#gobuild#GetCommand(bufnr(''), ['/foo/bar', '/foo/baz']),
-  \ g:env_prefix . 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  AssertLinter 'go',
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
   \   . 'go test --foo-bar -c -o /dev/null ./'

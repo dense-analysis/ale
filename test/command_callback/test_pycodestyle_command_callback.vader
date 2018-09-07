@@ -1,27 +1,26 @@
 Before:
-  Save g:ale_python_pycodestyle_executable
-  Save g:ale_python_pycodestyle_options
-  Save g:ale_python_pycodestyle_use_global
-
-  runtime ale_linters/python/pycodestyle.vim
+  call ale#assert#SetUpLinterTest('python', 'pycodestyle')
 
 After:
-  Restore
-
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The pycodestyle command callback should return default string):
-  AssertEqual ale#Escape('pycodestyle') . '  -',
-  \ ale_linters#python#pycodestyle#GetCommand(bufnr(''))
+  AssertLinter 'pycodestyle', ale#Escape('pycodestyle') . '  -'
 
 Execute(The pycodestyle command callback should allow options):
   let g:ale_python_pycodestyle_options = '--exclude=test*.py'
 
-  AssertEqual ale#Escape('pycodestyle') . ' --exclude=test*.py -',
-  \ ale_linters#python#pycodestyle#GetCommand(bufnr(''))
+  AssertLinter 'pycodestyle',
+  \ ale#Escape('pycodestyle') . ' --exclude=test*.py -'
 
 Execute(The pycodestyle executable should be configurable):
   let g:ale_python_pycodestyle_executable = '~/.local/bin/pycodestyle'
 
-  AssertEqual ale#Escape('~/.local/bin/pycodestyle') . '  -',
-  \ ale_linters#python#pycodestyle#GetCommand(bufnr(''))
+  AssertLinter '~/.local/bin/pycodestyle',
+  \ ale#Escape('~/.local/bin/pycodestyle') . '  -'
+
+Execute(Setting executable to 'pipenv' appends 'run pycodestyle'):
+  let g:ale_python_pycodestyle_executable = 'path/to/pipenv'
+
+  AssertLinter 'path/to/pipenv',
+  \ ale#Escape('path/to/pipenv') . ' run pycodestyle  -'

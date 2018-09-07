@@ -5,8 +5,9 @@ ALE Rust Integration                                         *ale-rust-options*
 ===============================================================================
 Integration Information
 
-  Since Vim does not detect the rust file type out-of-the-box, you need the
-  runtime files for rust from here: https://github.com/rust-lang/rust.vim
+  If Vim does not detect the Rust file type out-of-the-box, you need the runtime
+  files for Rust distributed in Vim >=8.0.0501 or upstream:
+  https://github.com/rust-lang/rust.vim
 
   Note that there are three possible linters for Rust files:
 
@@ -59,6 +60,26 @@ g:ale_rust_cargo_check_all_targets         *g:ale_rust_cargo_check_all_targets*
   is used. See |g:ale_rust_cargo_use_check|,
 
 
+g:ale_rust_cargo_check_tests                     *g:ale_rust_cargo_check_tests*
+                                                 *b:ale_rust_cargo_check_tests*
+  Type: |Number|
+  Default: `0`
+
+  When set to `1`, ALE will set the `--tests` option when `cargo check`
+  is used. This allows for linting of tests which are normally excluded.
+  See |g:ale_rust_cargo_use_check|,
+
+
+g:ale_rust_cargo_check_examples               *g:ale_rust_cargo_check_examples*
+                                              *b:ale_rust_cargo_check_examples*
+  Type: |Number|
+  Default: `0`
+
+  When set to `1`, ALE will set the `--examples` option when `cargo check`
+  is used. This allows for linting of examples which are normally excluded.
+  See |g:ale_rust_cargo_use_check|,
+
+
 g:ale_rust_cargo_default_feature_behavior
                                     *g:ale_rust_cargo_default_feature_behavior*
                                     *b:ale_rust_cargo_default_feature_behavior*
@@ -87,6 +108,15 @@ g:ale_rust_cargo_include_features           *g:ale_rust_cargo_include_features*
 
   When defined, ALE will set the `--features` option when invoking `cargo` to
   perform the lint check. See |g:ale_rust_cargo_default_feature_behavior|.
+
+g:ale_rust_cargo_avoid_whole_workspace *g:ale_rust_cargo_avoid_whole_workspace*
+                                       *b:ale_rust_cargo_avoid_whole_workspace*
+  Type: |Number|
+  Default: `1`
+
+  When set to 1, and ALE is used to edit a crate that is part of a Cargo
+  workspace, avoid building the entire entire workspace by invoking
+  `cargo` directly in the crate's directory. Otherwise, behave as usual.
 
 
 ===============================================================================
@@ -118,11 +148,11 @@ rustc                                                          *ale-rust-rustc*
 g:ale_rust_rustc_options                             *g:ale_rust_rustc_options*
                                                      *b:ale_rust_rustc_options*
   Type: |String|
-  Default: `'-Z no-trans'`
+  Default: `'-Z no-codegen'`
 
   The variable can be used to change the options passed to `rustc`.
 
-  `-Z no-trans` should only work with nightly builds of Rust. Be careful when
+  `-Z no-codegen` should only work with nightly builds of Rust. Be careful when
   setting the options, as running `rustc` could execute code or generate
   binary files.
 

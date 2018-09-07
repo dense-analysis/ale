@@ -1,11 +1,8 @@
 " Author: KabbAmine <amine.kabb@gmail.com>
 " Description: This file adds support for checking HTML code with tidy.
 
-" CLI options
 let g:ale_html_tidy_executable = get(g:, 'ale_html_tidy_executable', 'tidy')
-" Look for the old _args variable first.
-let s:default_options = get(g:, 'ale_html_tidy_args', '-q -e -language en')
-let g:ale_html_tidy_options = get(g:, 'ale_html_tidy_options', s:default_options)
+let g:ale_html_tidy_options = get(g:, 'ale_html_tidy_options', '-q -e -language en')
 
 function! ale_linters#html#tidy#GetCommand(buffer) abort
     " Specify file encoding in options
@@ -28,6 +25,7 @@ function! ale_linters#html#tidy#GetCommand(buffer) abort
     " On macOS, old tidy (released on 31 Oct 2006) is installed. It does not
     " consider HTML5 so we should avoid it.
     let l:executable = ale#Var(a:buffer, 'html_tidy_executable')
+
     if has('mac') && l:executable is# 'tidy' && exists('*exepath')
     \  && exepath(l:executable) is# '/usr/bin/tidy'
         return ''
@@ -40,14 +38,9 @@ function! ale_linters#html#tidy#GetCommand(buffer) abort
     \)
 endfunction
 
-function! ale_linters#html#tidy#GetExecutable(buffer) abort
-    return ale#Var(a:buffer, 'html_tidy_executable')
-endfunction
-
 function! ale_linters#html#tidy#Handle(buffer, lines) abort
     " Matches patterns lines like the following:
     " line 7 column 5 - Warning: missing </title> before </head>
-
     let l:pattern = '^line \(\d\+\) column \(\d\+\) - \(Warning\|Error\): \(.\+\)$'
     let l:output = []
 
@@ -70,7 +63,7 @@ endfunction
 
 call ale#linter#Define('html', {
 \   'name': 'tidy',
-\   'executable_callback': 'ale_linters#html#tidy#GetExecutable',
+\   'executable_callback': ale#VarFunc('html_tidy_executable'),
 \   'output_stream': 'stderr',
 \   'command_callback': 'ale_linters#html#tidy#GetCommand',
 \   'callback': 'ale_linters#html#tidy#Handle',

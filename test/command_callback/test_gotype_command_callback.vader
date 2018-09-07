@@ -1,15 +1,15 @@
 Before:
-  runtime ale_linters/go/gotype.vim
+  call ale#assert#SetUpLinterTest('go', 'gotype')
   call ale#test#SetFilename('../go_files/testfile2.go')
 
 After:
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The default gotype command should be correct):
-  AssertEqual 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
-  \ . ' gotype .',
-  \ ale_linters#go#gotype#GetCommand(bufnr(''))
+  AssertLinter 'gotype',
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' &&  gotype .'
 
 Execute(The gotype callback should ignore test files):
   call ale#test#SetFilename('bla_test.go')
-  AssertEqual 0, ale_linters#go#gotype#GetCommand(bufnr(''))
+
+  AssertLinter 'gotype', ''

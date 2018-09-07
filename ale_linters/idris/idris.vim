@@ -4,21 +4,15 @@
 call ale#Set('idris_idris_executable', 'idris')
 call ale#Set('idris_idris_options', '--total --warnpartial --warnreach --warnipkg')
 
-function! ale_linters#idris#idris#GetExecutable(buffer) abort
-    return ale#Var(a:buffer, 'idris_idris_executable')
-endfunction
-
 function! ale_linters#idris#idris#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'idris_idris_options')
 
-    return ale#Escape(ale_linters#idris#idris#GetExecutable(a:buffer))
-    \   . (!empty(l:options) ? ' ' . l:options : '')
-    \   . ' --check %s'
+    return '%e' . ale#Pad(l:options) . ' --check %s'
 endfunction
 
 function! ale_linters#idris#idris#Handle(buffer, lines) abort
     " This was copied almost verbatim from ale#handlers#haskell#HandleGHCFormat
-
+    "
     " Look for lines like the following:
     " foo.idr:2:6:When checking right hand side of main with expected type
     " bar.idr:11:11-13:
@@ -36,6 +30,7 @@ function! ale_linters#idris#idris#Handle(buffer, lines) abort
             else
                 let l:corrected_lines[-1] .= l:line
             endif
+
             let l:corrected_lines[-1] = substitute(l:corrected_lines[-1], '\s\+', ' ', 'g')
         endif
     endfor
@@ -80,8 +75,7 @@ endfunction
 
 call ale#linter#Define('idris', {
 \   'name': 'idris',
-\   'executable_callback': 'ale_linters#idris#idris#GetExecutable',
+\   'executable_callback': ale#VarFunc('idris_idris_executable'),
 \   'command_callback': 'ale_linters#idris#idris#GetCommand',
 \   'callback': 'ale_linters#idris#idris#Handle',
 \})
-

@@ -1,12 +1,10 @@
 Before:
-  runtime ale_linters/go/gosimple.vim
+  call ale#assert#SetUpLinterTest('go', 'gosimple')
   call ale#test#SetFilename('../go_files/testfile2.go')
 
 After:
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The default gosimple command should be correct):
-  AssertEqual 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
-  \ . ' gosimple .',
-  \ ale_linters#go#gosimple#GetCommand(bufnr(''))
-
+  AssertLinter 'gosimple',
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' &&  gosimple .'

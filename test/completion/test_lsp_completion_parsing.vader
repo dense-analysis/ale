@@ -390,3 +390,60 @@ Execute(Should handle Python completion results correctly):
   \       ]
   \    }
   \ })
+
+Execute(Should handle Python completion results correctly):
+  let b:ale_completion_info = {
+  \ 'completion_filter': 'ale#completion#python#CompletionItemFilter',
+  \ 'prefix': 'mig',
+  \}
+
+  AssertEqual
+  \ [
+  \   {'word': 'migrations', 'menu': 'xxx', 'info': 'migrations', 'kind': 'f', 'icase': 1},
+  \   {'word': 'MigEngine', 'menu': 'xxx', 'info': 'mig engine', 'kind': 'f', 'icase': 1},
+  \ ],
+  \ ale#completion#ParseLSPCompletions({
+  \   'jsonrpc': '2.0',
+  \   'id': 6,
+  \   'result': {
+  \     'isIncomplete': v:false,
+  \     'items': [
+  \       {
+  \         'label': 'migrations',
+  \         'kind': 3,
+  \         'detail': 'xxx',
+  \         'documentation': 'migrations',
+  \       },
+  \       {
+  \         'label': 'MigEngine',
+  \         'kind': 3,
+  \         'detail': 'xxx',
+  \         'documentation': 'mig engine',
+  \       },
+  \       {
+  \         'label': 'ignore me',
+  \         'kind': 3,
+  \         'detail': 'nope',
+  \         'documentation': 'nope',
+  \       },
+  \     ]
+  \   }
+  \ })
+
+Execute(Should handle missing keys):
+  AssertEqual
+  \ [
+  \   {'word': 'x', 'menu': '', 'info': '', 'kind': 'v', 'icase': 1},
+  \ ],
+  \ ale#completion#ParseLSPCompletions({
+  \   'jsonrpc': '2.0',
+  \   'id': 6,
+  \   'result': {
+  \     'isIncomplete': v:false,
+  \     'items': [
+  \       {
+  \         'label': 'x',
+  \       },
+  \     ]
+  \   }
+  \ })

@@ -1,24 +1,6 @@
 ===============================================================================
 ALE PHP Integration                                           *ale-php-options*
 
-
-===============================================================================
-hack                                                             *ale-php-hack*
-
-There are no options for this linter.
-
-
-===============================================================================
-hackfmt                                                       *ale-php-hackfmt*
-
-g:ale_php_hackfmt_options                           *g:ale_php_hackfmt_options*
-                                                    *b:ale_php_hackfmt_options*
-  Type: |String|
-  Default: `''`
-
-  This variable can be set to pass additional options to the hackfmt fixer.
-
-
 ===============================================================================
 langserver                                                 *ale-php-langserver*
 
@@ -48,7 +30,7 @@ g:ale_php_langserver_use_global               *g:ale_php_langserver_use_global*
 ===============================================================================
 phan                                                             *ale-php-phan*
 
-WARNING: please do not use this linter if you have an configuration file
+WARNING: please use the phan_client linter if you have an configuration file
 for your project because the phan will look into your entirely project and
 ale will display in the current buffer warnings that may belong to other file.
 
@@ -57,8 +39,22 @@ g:ale_php_phan_minimum_severity               *g:ale_php_phan_minimum_severity*
   Type: |Number|
   Default: `0`
 
-  This variable defines the minimum severity level
+  This variable defines the minimum severity level.
 
+g:ale_php_phan_executable                           *g:ale_php_phan_executable*
+                                                    *b:ale_php_phan_executable*
+  Type: |String|
+  Default: `'phan'`
+
+  This variable sets executable used for phan or phan_client.
+
+g:ale_php_phan_use_client                           *g:ale_php_phan_use_client*
+                                                    *b:ale_php_phan_use_client*
+  Type: |Number|
+  Default: `get(g:, 'ale_php_phan_use_client', 0)`
+
+  This variable can be set to 1 to use the phan_client with phan daemon mode
+  instead of the phan standalone.
 
 ===============================================================================
 phpcbf                                                         *ale-php-phpcbf*
@@ -117,6 +113,13 @@ g:ale_php_phpcs_use_global                         *g:ale_php_phpcs_use_global*
 
   See |ale-integrations-local-executables|
 
+
+g:ale_php_phpcs_options                               *g:ale_php_phpcs_options*
+                                                      *b:ale_php_phpcs_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to php-cs
 
 ===============================================================================
 phpmd                                                           *ale-php-phpmd*

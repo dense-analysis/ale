@@ -11,7 +11,13 @@ endfunction
 function! ale_linters#python#pyflakes#GetCommand(buffer) abort
     let l:executable = ale_linters#python#pyflakes#GetExecutable(a:buffer)
 
-    return ale#Escape(l:executable) . ' %t'
+    let l:exec_args = l:executable =~? 'pipenv$'
+    \   ? ' run pyflakes'
+    \   : ''
+
+    return ale#Escape(l:executable)
+    \   . l:exec_args
+    \   . ' %t'
 endfunction
 
 function! ale_linters#python#pyflakes#Handle(buffer, lines) abort

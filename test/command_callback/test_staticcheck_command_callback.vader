@@ -1,41 +1,26 @@
 Before:
-  Save b:ale_go_staticcheck_options
-  Save b:ale_go_staticcheck_lint_package
-
-  let b:ale_go_staticcheck_options = ''
-  let b:ale_go_staticcheck_lint_package = 0
-
-  runtime ale_linters/go/staticcheck.vim
-
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#assert#SetUpLinterTest('go', 'staticcheck')
   call ale#test#SetFilename('test.go')
 
 After:
-  Restore
-
-  call ale#test#RestoreDirectory()
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The staticcheck callback should return the right defaults):
-  AssertEqual
+  AssertLinter 'staticcheck',
   \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
   \   . 'staticcheck '
-  \   . ale#Escape(expand('%' . ':t')),
-  \ ale_linters#go#staticcheck#GetCommand(bufnr(''))
+  \   . ale#Escape(expand('%' . ':t'))
 
 Execute(The staticcheck callback should use configured options):
   let b:ale_go_staticcheck_options = '-test'
 
-  AssertEqual
+  AssertLinter 'staticcheck',
   \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
   \   . 'staticcheck '
-  \   . '-test ' . ale#Escape(expand('%' . ':t')),
-  \ ale_linters#go#staticcheck#GetCommand(bufnr(''))
+  \   . '-test ' . ale#Escape(expand('%' . ':t'))
 
 Execute(The staticcheck `lint_package` option should use the correct command):
   let b:ale_go_staticcheck_lint_package = 1
 
-  AssertEqual
-  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
-  \   . 'staticcheck .',
-  \ ale_linters#go#staticcheck#GetCommand(bufnr(''))
+  AssertLinter 'staticcheck',
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && staticcheck .',

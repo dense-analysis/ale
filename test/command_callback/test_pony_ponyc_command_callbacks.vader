@@ -1,23 +1,12 @@
 Before:
-  Save g:ale_pony_ponyc_options
-
-  unlet! g:ale_pony_ponyc_options
-  unlet! b:ale_pony_ponyc_options
-
-  runtime ale_linters/pony/ponyc.vim
+  call ale#assert#SetUpLinterTest('pony', 'ponyc')
 
 After:
-  Restore
-  unlet! b:ale_pony_ponyc_options
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The options should be used in the command):
-  AssertEqual
-  \ ale#Escape('ponyc') . ' --pass paint',
-  \ ale_linters#pony#ponyc#GetCommand(bufnr(''))
+  AssertLinter 'ponyc', ale#Escape('ponyc') . ' --pass paint'
 
   let b:ale_pony_ponyc_options = 'foobar'
 
-  AssertEqual
-  \ ale#Escape('ponyc') . ' foobar',
-  \ ale_linters#pony#ponyc#GetCommand(bufnr(''))
+  AssertLinter 'ponyc', ale#Escape('ponyc') . ' foobar'

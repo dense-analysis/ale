@@ -1,37 +1,19 @@
 Before:
-  Save g:ale_glsl_glslls_executable
-  Save g:ale_glsl_glslls_logfile
-
-  unlet! g:ale_glsl_glslls_executable
-  unlet! g:ale_glsl_glslls_logfile
-
-  runtime ale_linters/glsl/glslls.vim
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#assert#SetUpLinterTest('glsl', 'glslls')
 
 After:
-  Restore
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
-Execute(Executable should default to 'glslls'):
-  AssertEqual
-  \ 'glslls',
-  \ ale_linters#glsl#glslls#GetExecutable(bufnr(''))
+Execute(The default command should be correct):
+  AssertLinter 'glslls', ale#Escape('glslls') . ' --stdin'
 
 Execute(Executable should be configurable):
-  let g:ale_glsl_glslls_executable = 'foobar'
-  AssertEqual
-  \ 'foobar',
-  \ ale_linters#glsl#glslls#GetExecutable(bufnr(''))
+  let b:ale_glsl_glslls_executable = 'foobar'
 
-Execute(Command should use executable):
-  let command1 = ale_linters#glsl#glslls#GetCommand(bufnr(''))
-  AssertEqual command1, ale#Escape('glslls') . ' --stdin'
-
-  let g:ale_glsl_glslls_executable = 'foobar'
-  let command2 = ale_linters#glsl#glslls#GetCommand(bufnr(''))
-  AssertEqual command2, ale#Escape('foobar') . ' --stdin'
+  AssertLinter 'foobar', ale#Escape('foobar') . ' --stdin'
 
 Execute(Setting logfile should work):
-  let g:ale_glsl_glslls_logfile = '/tmp/test.log'
-  let command = ale_linters#glsl#glslls#GetCommand(bufnr(''))
-  AssertEqual command, ale#Escape('glslls') . ' --verbose -l /tmp/test.log --stdin'
+  let b:ale_glsl_glslls_logfile = '/tmp/test.log'
+
+  AssertLinter 'glslls',
+  \ ale#Escape('glslls') . ' --verbose -l /tmp/test.log --stdin'

@@ -168,6 +168,30 @@ function! s:EchoLinterAliases(all_linters) abort
     endfor
 endfunction
 
+function! s:EchoLSPErrorMessages(all_linter_names) abort
+    let l:lsp_error_messages = get(g:, 'ale_lsp_error_messages', {})
+    let l:header_echoed = 0
+
+    for l:linter_name in a:all_linter_names
+        let l:error_list = get(l:lsp_error_messages, l:linter_name, [])
+
+        if !empty(l:error_list)
+            if !l:header_echoed
+                call s:Echo(' LSP Error Messages:')
+                call s:Echo('')
+            endif
+
+            call s:Echo('(Errors for ' . l:linter_name . ')')
+
+            for l:message in l:error_list
+                for l:line in split(l:message, "\n")
+                    call s:Echo(l:line)
+                endfor
+            endfor
+        endif
+    endfor
+endfunction
+
 function! ale#debugging#Info() abort
     let l:filetype = &filetype
 
@@ -190,16 +214,22 @@ function! ale#debugging#Info() abort
     " This must be done after linters are loaded.
     let l:variable_list = s:GetLinterVariables(l:filetype, l:enabled_names)
 
+    let l:fixers = ale#fix#registry#SuggestedFixers(l:filetype)
+    let l:fixers = uniq(sort(l:fixers[0] + l:fixers[1]))
+    let l:fixers_string = join(map(copy(l:fixers), '"\n  " . v:val'), '')
+
     call s:Echo(' Current Filetype: ' . l:filetype)
     call s:Echo('Available Linters: ' . string(l:all_names))
     call s:EchoLinterAliases(l:all_linters)
     call s:Echo('  Enabled Linters: ' . string(l:enabled_names))
+    call s:Echo(' Suggested Fixers: ' . l:fixers_string)
     call s:Echo(' Linter Variables:')
     call s:Echo('')
     call s:EchoLinterVariables(l:variable_list)
     call s:Echo(' Global Variables:')
     call s:Echo('')
     call s:EchoGlobalVariables()
+    call s:EchoLSPErrorMessages(l:all_names)
     call s:Echo('  Command History:')
     call s:Echo('')
     call s:EchoCommandHistory()

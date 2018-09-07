@@ -10,7 +10,13 @@ function! ale_linters#python#pycodestyle#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#python#pycodestyle#GetCommand(buffer) abort
-    return ale#Escape(ale_linters#python#pycodestyle#GetExecutable(a:buffer))
+    let l:executable = ale_linters#python#pycodestyle#GetExecutable(a:buffer)
+
+    let l:exec_args = l:executable =~? 'pipenv$'
+    \   ? ' run pycodestyle'
+    \   : ''
+
+    return ale#Escape(l:executable) . l:exec_args
     \   . ' '
     \   . ale#Var(a:buffer, 'python_pycodestyle_options')
     \   . ' -'

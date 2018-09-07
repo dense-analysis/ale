@@ -1,5 +1,9 @@
 Before:
   Save g:ale_buffer_info
+  Save g:ale_lsp_error_messages
+
+  unlet! g:ale_lsp_error_messages
+
   call ale#test#SetDirectory('/testplugin/test')
 
 After:
@@ -7,7 +11,9 @@ After:
 
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
+  call ale#lsp_linter#ClearLSPData()
 
+Given foobar(An empty file):
 Execute(tsserver syntax error responses should be handled correctly):
   runtime ale_linters/typescript/tsserver.vim
   call ale#test#SetFilename('filename.ts')
@@ -15,7 +21,7 @@ Execute(tsserver syntax error responses should be handled correctly):
 
   " When we get syntax errors and no semantic errors, we should keep the
   " syntax errors.
-  call ale#engine#HandleLSPResponse(1, {
+  call ale#lsp_linter#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'syntaxDiag',
@@ -37,7 +43,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   \   ],
   \ },
   \})
-  call ale#engine#HandleLSPResponse(1, {
+  call ale#lsp_linter#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'semanticDiag',
@@ -57,15 +63,15 @@ Execute(tsserver syntax error responses should be handled correctly):
   \     'vcol': 0,
   \     'nr': 1005,
   \     'type': 'E',
-  \     'text': ''','' expected.',
+  \     'text': '1005: '','' expected.',
   \     'valid': 1,
   \     'pattern': '',
   \   },
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()
 
   " After we get empty syntax errors, we should clear them.
-  call ale#engine#HandleLSPResponse(1, {
+  call ale#lsp_linter#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'syntaxDiag',
@@ -79,7 +85,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   AssertEqual
   \ [
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()
 
 Execute(tsserver semantic error responses should be handled correctly):
   runtime ale_linters/typescript/tsserver.vim
@@ -88,7 +94,7 @@ Execute(tsserver semantic error responses should be handled correctly):
 
   " When we get syntax errors and no semantic errors, we should keep the
   " syntax errors.
-  call ale#engine#HandleLSPResponse(1, {
+  call ale#lsp_linter#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'syntaxDiag',
@@ -98,7 +104,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   \   ],
   \ },
   \})
-  call ale#engine#HandleLSPResponse(1, {
+  call ale#lsp_linter#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'semanticDiag',
@@ -130,15 +136,15 @@ Execute(tsserver semantic error responses should be handled correctly):
   \     'vcol': 0,
   \     'nr': 1005,
   \     'type': 'E',
-  \     'text': 'Some semantic error',
+  \     'text': '1005: Some semantic error',
   \     'valid': 1,
   \     'pattern': '',
   \   },
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()
 
   " After we get empty syntax errors, we should clear them.
-  call ale#engine#HandleLSPResponse(1, {
+  call ale#lsp_linter#HandleLSPResponse(1, {
   \ 'seq': 0,
   \ 'type': 'event',
   \ 'event': 'semanticDiag',
@@ -152,4 +158,21 @@ Execute(tsserver semantic error responses should be handled correctly):
   AssertEqual
   \ [
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()
+
+Execute(LSP errors should be logged in the history):
+  call ale#lsp_linter#SetLSPLinterMap({'347': 'foobar'})
+  call ale#lsp_linter#HandleLSPResponse(347, {
+  \ 'jsonrpc': '2.0',
+  \ 'error': {
+  \   'code': -32602,
+  \   'message': 'xyz',
+  \   'data': {
+  \     'traceback': ['123', '456'],
+  \   },
+  \ },
+  \})
+
+  AssertEqual
+  \ {'foobar': ["xyz\n123\n456"]},
+  \ get(g:, 'ale_lsp_error_messages', {})

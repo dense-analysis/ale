@@ -1,8 +1,23 @@
 Before:
+  Save &filetype
+  Save g:ale_buffer_info
+  Save g:ale_echo_cursor
   Save g:ale_run_synchronously
+  Save g:ale_run_synchronously
+  Save g:ale_set_highlights
+  Save g:ale_set_loclist
+  Save g:ale_set_quickfix
+  Save g:ale_set_signs
 
-  let b:old_filetype = &filetype
+  " Enable only the one feature we need.
+  let g:ale_set_signs = 0
+  let g:ale_set_quickfix = 0
+  let g:ale_set_loclist = 1
+  let g:ale_set_highlights = 0
+  let g:ale_echo_cursor = 0
+
   let g:ale_run_synchronously = 1
+  call setloclist(0, [])
 
   noautocmd let &filetype = 'foobar'
 
@@ -10,6 +25,7 @@ Before:
     return [{'text': 'x', 'lnum': 1}]
   endfunction
 
+  call ale#linter#PreventLoading('foobar')
   call ale#linter#Define('foobar', {
   \ 'name': 'buffer_linter',
   \ 'callback': 'TestCallback',
@@ -17,7 +33,7 @@ Before:
   \ 'command': 'true',
   \ 'read_buffer': 0,
   \})
-
+  call ale#linter#PreventLoading('foobar2')
   call ale#linter#Define('foobar2', {
   \ 'name': 'buffer_linter',
   \ 'callback': 'TestCallback',
@@ -28,22 +44,16 @@ Before:
 
 After:
   Restore
-
-  noautocmd let &filetype = b:old_filetype
-  unlet b:old_filetype
   delfunction TestCallback
 
-  if has_key(g:ale_buffer_info, bufnr(''))
-    call remove(g:ale_buffer_info, bufnr(''))
-  endif
-
-  call ale#Queue(0)
+  call ale#linter#Reset()
+  call setloclist(0, [])
 
 Execute(Error should be removed when the filetype changes to something else we cannot check):
   call ale#Queue(0)
   sleep 1ms
 
-  AssertEqual 1, len(getloclist(0))
+  AssertEqual 1, len(ale#test#GetLoclistWithoutModule())
 
   noautocmd let &filetype = 'foobar2'
 
@@ -51,11 +61,11 @@ Execute(Error should be removed when the filetype changes to something else we c
   sleep 1ms
 
   " We should get some items from the second filetype.
-  AssertEqual 1, len(getloclist(0))
+  AssertEqual 1, len(ale#test#GetLoclistWithoutModule())
 
   noautocmd let &filetype = 'xxx'
 
   call ale#Queue(0)
   sleep 1ms
 
-  AssertEqual 0, len(getloclist(0))
+  AssertEqual 0, len(ale#test#GetLoclistWithoutModule())

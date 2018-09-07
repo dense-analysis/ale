@@ -51,7 +51,7 @@ Before:
   function! GetSimplerLoclist()
     let l:loclist = []
 
-    for l:item in getloclist(0)
+    for l:item in ale#test#GetLoclistWithoutModule()
       call add(l:loclist, {
       \ 'lnum': l:item.lnum,
       \ 'col': l:item.col,
@@ -85,7 +85,7 @@ Before:
 
 After:
   if !g:ale_run_synchronously
-    call ale#engine#WaitForJobs(2000)
+    call ale#engine#Cleanup(bufnr(''))
   endif
 
   Restore

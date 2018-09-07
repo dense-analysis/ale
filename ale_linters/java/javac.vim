@@ -16,6 +16,7 @@ function! ale_linters#java#javac#GetImportPaths(buffer) abort
     endif
 
     let l:classpath_command = ale#gradle#BuildClasspathCommand(a:buffer)
+
     if !empty(l:classpath_command)
         return l:classpath_command
     endif
@@ -34,10 +35,6 @@ function! s:BuildClassPathOption(buffer, import_paths) abort
     return !empty(l:class_paths)
     \   ? '-cp ' . ale#Escape(join(l:class_paths, s:classpath_sep))
     \   : ''
-endfunction
-
-function! ale_linters#java#javac#GetExecutable(buffer) abort
-    return ale#Var(a:buffer, 'java_javac_executable')
 endfunction
 
 function! ale_linters#java#javac#GetCommand(buffer, import_paths) abort
@@ -77,17 +74,15 @@ function! ale_linters#java#javac#GetCommand(buffer, import_paths) abort
 
     " Create .class files in a temporary directory, which we will delete later.
     let l:class_file_directory = ale#engine#CreateDirectory(a:buffer)
-    let l:executable = ale_linters#java#javac#GetExecutable(a:buffer)
 
     " Always run javac from the directory the file is in, so we can resolve
     " relative paths correctly.
     return ale#path#BufferCdString(a:buffer)
-    \ . ale#Escape(l:executable)
-    \ . ' -Xlint'
-    \ . ' ' . l:cp_option
-    \ . ' ' . l:sp_option
+    \ . '%e -Xlint'
+    \ . ale#Pad(l:cp_option)
+    \ . ale#Pad(l:sp_option)
     \ . ' -d ' . ale#Escape(l:class_file_directory)
-    \ . ' ' . ale#Var(a:buffer, 'java_javac_options')
+    \ . ale#Pad(ale#Var(a:buffer, 'java_javac_options'))
     \ . ' %t'
 endfunction
 
@@ -96,7 +91,6 @@ function! ale_linters#java#javac#Handle(buffer, lines) abort
     "
     " Main.java:13: warning: [deprecation] donaught() in Testclass has been deprecated
     " Main.java:16: error: ';' expected
-
     let l:directory = expand('#' . a:buffer . ':p:h')
     let l:pattern = '\v^(.*):(\d+): (.+):(.+)$'
     let l:col_pattern = '\v^(\s*\^)$'
@@ -126,7 +120,7 @@ endfunction
 
 call ale#linter#Define('java', {
 \   'name': 'javac',
-\   'executable_callback': 'ale_linters#java#javac#GetExecutable',
+\   'executable_callback': ale#VarFunc('java_javac_executable'),
 \   'command_chain': [
 \       {'callback': 'ale_linters#java#javac#GetImportPaths', 'output_stream': 'stdout'},
 \       {'callback': 'ale_linters#java#javac#GetCommand', 'output_stream': 'stderr'},

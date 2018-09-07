@@ -52,12 +52,18 @@ directories=("$@")
 check_errors() {
     regex="$1"
     message="$2"
+    include_arg=''
+
+    if [ $# -gt 2 ]; then
+        include_arg="--include $3"
+    fi
 
     for directory in "${directories[@]}"; do
-        while IFS= read -r match; do
+        # shellcheck disable=SC2086
+        while read -r; do
             RETURN_CODE=1
-            echo "$match $message"
-        done < <(grep -n "$regex" "$directory"/**/*.vim \
+            echo "$REPLY $message"
+        done < <(grep -H -n "$regex" $include_arg "$directory"/**/*.vim \
             | grep -v 'no-custom-checks' \
             | grep -o '^[^:]\+:[0-9]\+' \
             | sed 's:^\./::')
@@ -72,9 +78,21 @@ if (( FIX_ERRORS )); then
         sed -i 's/==?/is?/g' "$directory"/**/*.vim
         sed -i 's/!=#/isnot#/g' "$directory"/**/*.vim
         sed -i 's/!=?/isnot?/g' "$directory"/**/*.vim
+        # Improving type checks.
+        sed -i $'s/\\(==.\\?\\|is\\) type([\'"]\+)/is v:t_string/g' "$directory"/**/*.vim
+        sed -i 's/\(==.\?\|is\) type([0-9]\+)/is v:t_number/g' "$directory"/**/*.vim
+        sed -i 's/\(==.\?\|is\) type(\[\])/is v:t_list/g' "$directory"/**/*.vim
+        sed -i 's/\(==.\?\|is\) type({})/is v:t_dict/g' "$directory"/**/*.vim
+        sed -i 's/\(==.\?\|is\) type(function([^)]\+))/is v:t_func/g' "$directory"/**/*.vim
+        sed -i $'s/\\(!=.\\?\\|isnot\\) type([\'"]\+)/isnot v:t_string/g' "$directory"/**/*.vim
+        sed -i 's/\(!=.\?\|isnot\) type([0-9]\+)/isnot v:t_number/g' "$directory"/**/*.vim
+        sed -i 's/\(!=.\?\|isnot\) type(\[\])/isnot v:t_list/g' "$directory"/**/*.vim
+        sed -i 's/\(!=.\?\|isnot\) type({})/isnot v:t_dict/g' "$directory"/**/*.vim
+        sed -i 's/\(!=.\?\|isnot\) type(function([^)]\+))/isnot v:t_func/g' "$directory"/**/*.vim
     done
 fi
 
+# The arguments are: regex, explanation, [filename_filter]
 check_errors \
     '^function.*) *$' \
     'Function without abort keyword (See :help except-compat)'
@@ -87,6 +105,7 @@ check_errors $'\t' 'Use four spaces, not tabs'
 check_errors 'let g:ale_\w\+_\w\+_args =' 'Name your option g:ale_<filetype>_<lintername>_options instead'
 check_errors 'shellescape(' 'Use ale#Escape instead of shellescape'
 check_errors 'simplify(' 'Use ale#path#Simplify instead of simplify'
+check_errors 'tempname(' 'Use ale#util#Tempname instead of tempname'
 check_errors "expand(['\"]%" "Use expand('#' . a:buffer . '...') instead. You might get a filename for the wrong buffer."
 check_errors 'getcwd()' "Do not use getcwd(), as it could run from the wrong buffer. Use expand('#' . a:buffer . ':p:h') instead."
 check_errors '==#' "Use 'is#' instead of '==#'. 0 ==# 'foobar' is true"
@@ -94,5 +113,26 @@ check_errors '==?' "Use 'is?' instead of '==?'. 0 ==? 'foobar' is true"
 check_errors '!=#' "Use 'isnot#' instead of '!=#'. 0 !=# 'foobar' is false"
 check_errors '!=?' "Use 'isnot?' instead of '!=?'. 0 !=? 'foobar' is false"
 check_errors '^ *:\?echo' "Stray echo line. Use \`execute echo\` if you want to echo something"
+check_errors $'name.:.*\'[a-z_]*[^a-z_0-9][a-z_0-9]*\',$' 'Use snake_case names for linters' '*/ale_linters/*'
+# Checks for improving type checks.
+check_errors $'\\(==.\\?\\|is\\) type([\'"]\+)' "Use 'is v:t_string' instead"
+check_errors '\(==.\?\|is\) type([0-9]\+)' "Use 'is v:t_number' instead"
+check_errors '\(==.\?\|is\) type(\[\])' "Use 'is v:t_list' instead"
+check_errors '\(==.\?\|is\) type({})' "Use 'is v:t_dict' instead"
+check_errors '\(==.\?\|is\) type(function([^)]\+))' "Use 'is v:t_func' instead"
+check_errors $'\\(!=.\\?\\|isnot\\) type([\'"]\+)' "Use 'isnot v:t_string' instead"
+check_errors '\(!=.\?\|isnot\) type([0-9]\+)' "Use 'isnot v:t_number' instead"
+check_errors '\(!=.\?\|isnot\) type(\[\])' "Use 'isnot v:t_list' instead"
+check_errors '\(!=.\?\|isnot\) type({})' "Use 'isnot v:t_dict' instead"
+check_errors '\(!=.\?\|isnot\) type(function([^)]\+))' "Use 'isnot v:t_func' instead"
+
+# Run a Python script to find lines that require padding around them.  For
+# users without Python installed, we'll skip these checks. Travis CI will run
+# the script.
+if command -v python > /dev/null; then
+    if ! test/script/block-padding-checker "$directory"/**/*.vim; then
+        RETURN_CODE=1
+    fi
+fi
 
 exit $RETURN_CODE

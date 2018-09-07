@@ -18,7 +18,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle errors):
   \     'col': 11,
   \     'end_lnum': 5,
   \     'end_col': 16,
-  \     'nr': 'some-error',
+  \     'code': 'some-error',
   \   }
   \ ],
   \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
@@ -39,7 +39,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle warnings):
   \     'col': 4,
   \     'end_lnum': 2,
   \     'end_col': 4,
-  \     'nr': 'some-warning',
+  \     'code': 'some-warning',
   \   }
   \ ],
   \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
@@ -60,7 +60,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should treat messages with missing se
   \     'col': 11,
   \     'end_lnum': 5,
   \     'end_col': 16,
-  \     'nr': 'some-error',
+  \     'code': 'some-error',
   \   }
   \ ],
   \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
@@ -88,6 +88,26 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle messages without codes)
   \     'message': 'Something went wrong!',
   \   },
   \ ]}})
+
+Execute(ale#lsp#response#ReadDiagnostics() should consider -1 to be a meaningless code):
+  AssertEqual [
+  \   {
+  \     'type': 'E',
+  \     'text': 'Something went wrong!',
+  \     'lnum': 3,
+  \     'col': 11,
+  \     'end_lnum': 5,
+  \     'end_col': 16,
+  \   }
+  \ ],
+  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \   {
+  \     'range': Range(2, 10, 4, 15),
+  \     'message': 'Something went wrong!',
+  \     'code': -1,
+  \   },
+  \ ]}})
+
 
 Execute(ale#lsp#response#ReadDiagnostics() should handle multiple messages):
   AssertEqual [
@@ -120,12 +140,42 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle multiple messages):
   \   },
   \ ]}})
 
+Execute(ale#lsp#response#ReadDiagnostics() should use relatedInformation for detail):
+  AssertEqual [
+  \   {
+  \     'type': 'E',
+  \     'text': 'Something went wrong!',
+  \     'lnum': 1,
+  \     'col': 3,
+  \     'end_lnum': 1,
+  \     'end_col': 3,
+  \     'detail': "Something went wrong!\n/tmp/someotherfile.txt:43:80:\n\tmight be this"
+  \   }
+  \ ],
+  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \   {
+  \     'range': Range(0, 2, 0, 2),
+  \     'message': 'Something went wrong!',
+  \     'relatedInformation': [{
+  \         'message': 'might be this',
+  \         'location': {
+  \             'uri': 'file:///tmp/someotherfile.txt',
+  \             'range': {
+  \                 'start': { 'line': 42, 'character': 79 },
+  \                 'end': { 'line': 142, 'character': 179},
+  \             }
+  \         }
+  \     }]
+  \   }
+  \ ]}})
+
 Execute(ale#lsp#response#ReadTSServerDiagnostics() should handle tsserver responses):
   AssertEqual
   \ [
   \   {
   \     'type': 'E',
   \     'nr': 2365,
+  \     'code': '2365',
   \     'text': 'Operator ''''+'''' cannot be applied to types ''''3'''' and ''''{}''''.',
   \     'lnum': 1,
   \     'col': 11,
@@ -142,6 +192,7 @@ Execute(ale#lsp#response#ReadTSServerDiagnostics() should handle warnings from t
   \     'lnum': 27,
   \     'col': 3,
   \     'nr': 2515,
+  \     'code': '2515',
   \     'end_lnum': 27,
   \     'type': 'W',
   \     'end_col': 14,
@@ -157,6 +208,7 @@ Execute(ale#lsp#response#ReadTSServerDiagnostics() should handle suggestions fro
   \     'lnum': 27,
   \     'col': 3,
   \     'nr': 2515,
+  \     'code': '2515',
   \     'end_lnum': 27,
   \     'type': 'I',
   \     'end_col': 14,

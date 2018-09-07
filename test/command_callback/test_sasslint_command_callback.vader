@@ -1,0 +1,11 @@
+Before:
+  call ale#assert#SetUpLinterTest('sass', 'sasslint')
+  call ale#test#SetFilename('test.sass')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default sasslint command should be correct):
+  AssertLinter 'sass-lint',
+  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   . ale#Escape('sass-lint') . ' -v -q -f compact %t'

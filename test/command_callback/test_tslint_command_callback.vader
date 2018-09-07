@@ -1,51 +1,27 @@
 Before:
-  Save g:ale_typescript_tslint_executable
-  Save g:ale_typescript_tslint_config_path
-  Save g:ale_typescript_tslint_rules_dir
-  Save g:ale_typescript_tslint_use_global
-
-  unlet! g:ale_typescript_tslint_executable
-  unlet! g:ale_typescript_tslint_config_path
-  unlet! g:ale_typescript_tslint_rules_dir
-  unlet! g:ale_typescript_tslint_use_global
-
-  runtime ale_linters/typescript/tslint.vim
-
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#assert#SetUpLinterTest('typescript', 'tslint')
   call ale#test#SetFilename('test.ts')
 
 After:
-  Restore
-
-  unlet! b:ale_typescript_tslint_executable
-  unlet! b:ale_typescript_tslint_config_path
-  unlet! b:ale_typescript_tslint_rules_dir
-  unlet! b:ale_typescript_tslint_use_global
-
-  call ale#test#RestoreDirectory()
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The default tslint command should be correct):
-  AssertEqual
+  AssertLinter 'tslint',
   \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
-  \   . ale#Escape('tslint') . ' --format json %t',
-  \ ale_linters#typescript#tslint#GetCommand(bufnr(''))
+  \   . ale#Escape('tslint') . ' --format json %t'
 
 Execute(The rules directory option should be included if set):
   let b:ale_typescript_tslint_rules_dir = '/foo/bar'
 
-  AssertEqual
+  AssertLinter 'tslint',
   \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
   \   . ale#Escape('tslint') . ' --format json'
   \   . ' -r ' . ale#Escape('/foo/bar')
-  \   . ' %t',
-  \ ale_linters#typescript#tslint#GetCommand(bufnr(''))
+  \   . ' %t'
 
 Execute(The executable should be configurable and escaped):
   let b:ale_typescript_tslint_executable = 'foo bar'
 
-  AssertEqual 'foo bar', ale_linters#typescript#tslint#GetExecutable(bufnr(''))
-  AssertEqual
+  AssertLinter 'foo bar',
   \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
-  \   . ale#Escape('foo bar') . ' --format json %t',
-  \ ale_linters#typescript#tslint#GetCommand(bufnr(''))
+  \   . ale#Escape('foo bar') . ' --format json %t'

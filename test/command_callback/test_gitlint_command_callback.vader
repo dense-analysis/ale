@@ -1,84 +1,43 @@
 Before:
-  Save g:ale_gitcommit_gitlint_executable
-  Save g:ale_gitcommit_gitlint_options
-  Save g:ale_gitcommit_gitlint_use_global
-
-  unlet! g:ale_gitcommit_gitlint_executable
-  unlet! g:ale_gitcommit_gitlint_options
-  unlet! g:ale_gitcommit_gitlint_use_global
-
-  runtime ale_linters/gitcommit/gitlint.vim
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#assert#SetUpLinterTest('gitcommit', 'gitlint')
 
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
-  let b:command_tail = ' lint'
 
 After:
-  Restore
-
-  call ale#test#RestoreDirectory()
-  call ale#linter#Reset()
-
   unlet! b:bin_dir
   unlet! b:executable
 
+  call ale#assert#TearDownLinterTest()
+
 Execute(The gitlint callbacks should return the correct default values):
-  AssertEqual
-  \ 'gitlint',
-  \ ale_linters#gitcommit#gitlint#GetExecutable(bufnr(''))
-  AssertEqual
-  \ ale#Escape('gitlint') . b:command_tail,
-  \ ale_linters#gitcommit#gitlint#GetCommand(bufnr(''))
+  AssertLinter 'gitlint', ale#Escape('gitlint') . ' lint'
 
 Execute(The gitlint executable should be configurable, and escaped properly):
   let g:ale_gitcommit_gitlint_executable = 'executable with spaces'
 
-  AssertEqual
-  \ 'executable with spaces',
-  \ ale_linters#gitcommit#gitlint#GetExecutable(bufnr(''))
-  AssertEqual
-  \ ale#Escape('executable with spaces') . b:command_tail,
-  \ ale_linters#gitcommit#gitlint#GetCommand(bufnr(''))
+  AssertLinter 'executable with spaces',
+  \ ale#Escape('executable with spaces') . ' lint'
 
 Execute(The gitlint command callback should let you set options):
   let g:ale_gitcommit_gitlint_options = '--some-option'
 
-  AssertEqual
-  \ ale#Escape('gitlint') . ' --some-option' . b:command_tail,
-  \ ale_linters#gitcommit#gitlint#GetCommand(bufnr(''))
+  AssertLinter 'gitlint', ale#Escape('gitlint') . ' --some-option lint'
 
 Execute(The gitlint callbacks shouldn't detect virtualenv directories where they don't exist):
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/no_virtualenv/subdir/foo/COMMIT_EDITMSG')
+  call ale#test#SetFilename('python_paths/no_virtualenv/subdir/foo/COMMIT_EDITMSG')
 
-  AssertEqual
-  \ 'gitlint',
-  \ ale_linters#gitcommit#gitlint#GetExecutable(bufnr(''))
-  AssertEqual
-  \ ale#Escape('gitlint') . b:command_tail,
-  \ ale_linters#gitcommit#gitlint#GetCommand(bufnr(''))
+  AssertLinter 'gitlint', ale#Escape('gitlint') . ' lint'
 
 Execute(The gitlint callbacks should detect virtualenv directories):
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/COMMIT_EDITMSG')
-
+  call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/COMMIT_EDITMSG')
   let b:executable = ale#path#Simplify(
   \ g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/gitlint'
   \)
 
-  AssertEqual
-  \ b:executable,
-  \ ale_linters#gitcommit#gitlint#GetExecutable(bufnr(''))
-
-  AssertEqual
-  \ ale#Escape(b:executable) . b:command_tail,
-  \ ale_linters#gitcommit#gitlint#GetCommand(bufnr(''))
+  AssertLinter b:executable, ale#Escape(b:executable) . ' lint'
 
 Execute(You should able able to use the global gitlint instead):
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/COMMIT_EDITMSG')
+  call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/COMMIT_EDITMSG')
   let g:ale_gitcommit_gitlint_use_global = 1
 
-  AssertEqual
-  \ 'gitlint',
-  \ ale_linters#gitcommit#gitlint#GetExecutable(bufnr(''))
-  AssertEqual
-  \ ale#Escape('gitlint') . b:command_tail,
-  \ ale_linters#gitcommit#gitlint#GetCommand(bufnr(''))
+  AssertLinter 'gitlint', ale#Escape('gitlint') . ' lint'

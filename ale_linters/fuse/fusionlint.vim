@@ -1,19 +1,11 @@
 " Author: RyanSquared <vandor2012@gmail.com>
 " Description: `fusion-lint` linter for FusionScript files
 
-let g:ale_fuse_fusionlint_executable =
-\   get(g:, 'ale_fuse_fusionlint_executable', 'fusion-lint')
-
-let g:ale_fuse_fusionlint_options =
-\   get(g:, 'ale_fuse_fusionlint_options', '')
-
-function! ale_linters#fuse#fusionlint#GetExecutable(buffer) abort
-    return ale#Var(a:buffer, 'fuse_fusionlint_executable')
-endfunction
+call ale#Set('fuse_fusionlint_executable', 'fusion-lint')
+call ale#Set('fuse_fusionlint_options', '')
 
 function! ale_linters#fuse#fusionlint#GetCommand(buffer) abort
-    return ale#Escape(ale_linters#fuse#fusionlint#GetExecutable(a:buffer))
-    \   . ' ' . ale#Var(a:buffer, 'fuse_fusionlint_options')
+    return '%e' . ale#Pad(ale#Var(a:buffer, 'fuse_fusionlint_options'))
     \   . ' --filename %s -i'
 endfunction
 
@@ -35,7 +27,7 @@ endfunction
 
 call ale#linter#Define('fuse', {
 \   'name': 'fusionlint',
-\   'executable_callback': 'ale_linters#fuse#fusionlint#GetExecutable',
+\   'executable_callback': ale#VarFunc('fuse_fusionlint_executable'),
 \   'command_callback': 'ale_linters#fuse#fusionlint#GetCommand',
 \   'callback': 'ale_linters#fuse#fusionlint#Handle',
 \})

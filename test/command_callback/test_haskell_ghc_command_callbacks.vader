@@ -1,23 +1,12 @@
 Before:
-  Save g:ale_haskell_ghc_options
-
-  unlet! g:ale_haskell_ghc_options
-  unlet! b:ale_haskell_ghc_options
-
-  runtime ale_linters/haskell/ghc.vim
+  call ale#assert#SetUpLinterTest('haskell', 'ghc')
 
 After:
-  Restore
-  unlet! b:ale_haskell_ghc_options
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The options should be used in the command):
-  AssertEqual
-  \ 'ghc -fno-code -v0 %t',
-  \ ale_linters#haskell#ghc#GetCommand(bufnr(''))
+  AssertLinter 'ghc', 'ghc -fno-code -v0 %t'
 
   let b:ale_haskell_ghc_options = 'foobar'
 
-  AssertEqual
-  \ 'ghc foobar %t',
-  \ ale_linters#haskell#ghc#GetCommand(bufnr(''))
+  AssertLinter 'ghc', 'ghc foobar %t'

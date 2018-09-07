@@ -91,43 +91,6 @@ Execute (Count should be match the loclist):
 Execute (Output should be empty for non-existent buffer):
   AssertEqual Counts({}), ale#statusline#Count(9001)
 
-Execute (Status() should return just errors for the old format):
-  let g:ale_statusline_format = ['%sE', '%sW', 'OKIE']
-  let g:ale_buffer_info = {bufnr(''): {}}
-  call ale#statusline#Update(bufnr(''), [
-  \ {'bufnr': bufnr(''), 'type': 'E'},
-  \ {'bufnr': bufnr(''), 'type': 'E', 'sub_type': 'style'},
-  \])
-  AssertEqual '2E', ale#statusline#Status()
-
-Execute (Status() should return just warnings for the old format):
-  let g:ale_statusline_format = ['%sE', '%sW', 'OKIE']
-  let g:ale_buffer_info = {bufnr(''): {}}
-  call ale#statusline#Update(bufnr(''), [
-  \ {'bufnr': bufnr(''), 'type': 'W'},
-  \ {'bufnr': bufnr(''), 'type': 'W', 'sub_type': 'style'},
-  \ {'bufnr': bufnr(''), 'type': 'I'},
-  \])
-  AssertEqual '3W', ale#statusline#Status()
-
-Execute (Status() should return errors and warnings for the old format):
-  let g:ale_statusline_format = ['%sE', '%sW', 'OKIE']
-  let g:ale_buffer_info = {bufnr(''): {}}
-  call ale#statusline#Update(bufnr(''), [
-  \ {'bufnr': bufnr(''), 'type': 'E'},
-  \ {'bufnr': bufnr(''), 'type': 'E', 'sub_type': 'style'},
-  \ {'bufnr': bufnr(''), 'type': 'W'},
-  \ {'bufnr': bufnr(''), 'type': 'W', 'sub_type': 'style'},
-  \ {'bufnr': bufnr(''), 'type': 'I'},
-  \])
-  AssertEqual '2E 3W', ale#statusline#Status()
-
-Execute (Status() should return the custom 'OK' string with the old format):
-  let g:ale_statusline_format = ['%sE', '%sW', 'OKIE']
-  let g:ale_buffer_info = {bufnr(''): {}}
-  call ale#statusline#Update(bufnr(''), [])
-  AssertEqual 'OKIE', ale#statusline#Status()
-
 Execute(ale#statusline#Update shouldn't blow up when globals are undefined):
   unlet! g:ale_statusline_format
   call ale#statusline#Update(1, [])
@@ -135,7 +98,3 @@ Execute(ale#statusline#Update shouldn't blow up when globals are undefined):
 Execute(ale#statusline#Count should return 0 counts when globals are undefined):
   unlet! g:ale_statusline_format
   AssertEqual Counts({}), ale#statusline#Count(1)
-
-Execute(ale#statusline#Status should return 'OK' when globals are undefined):
-  unlet! g:ale_statusline_format
-  AssertEqual 'OK', ale#statusline#Status()

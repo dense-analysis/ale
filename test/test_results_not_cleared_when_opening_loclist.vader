@@ -1,31 +1,11 @@
 Before:
-  Save g:ale_run_synchronously
+  Save g:ale_buffer_info
 
-  let g:ale_run_synchronously = 1
-
-  function! TestCallback(buffer, output)
-    return [
-    \ {
-    \   'lnum': 1,
-    \   'text': 'Something is wrong',
-    \ },
-    \]
-  endfunction
-
-  call ale#linter#Define('foobar', {
-  \ 'name': 'testlinter',
-  \ 'callback': 'TestCallback',
-  \ 'executable': has('win32') ? 'cmd' : 'true',
-  \ 'command': 'true',
-  \ 'read_buffer': 0,
-  \})
+  call ale#linter#Reset()
 
 After:
   Restore
 
-  delfunction TestCallback
-  let g:ale_buffer_info = {}
-  call ale#linter#Reset()
   call setloclist(0, [])
   call clearmatches()
   sign unplace *
@@ -34,10 +14,11 @@ Given foobar (Some file):
   abc
 
 Execute(The loclist shouldn't be cleared when opening the loclist):
-  call ale#Lint()
-  sleep 1ms
-
-  AssertEqual 1, len(getloclist(0)), 'The loclist was never set'
+  call ale#engine#InitBufferInfo(bufnr(''))
+  let g:ale_buffer_info[bufnr('')].loclist = [
+  \ {'bufnr': bufnr('%'), 'type': 'E', 'lnum': 3, 'col': 2},
+  \]
+  call setloclist(0, g:ale_buffer_info[bufnr('')].loclist)
 
   " The cleanup function is called when the loclist window is closed.
   " If some cleanup is done for this buffer, for which nothing is wrong,
@@ -46,4 +27,4 @@ Execute(The loclist shouldn't be cleared when opening the loclist):
   :lopen
   :q
 
-  AssertEqual 1, len(getloclist(0)), 'The loclist was cleared'
+  AssertEqual 1, len(ale#test#GetLoclistWithoutModule()), 'The loclist was cleared'

@@ -1,0 +1,12 @@
+Before:
+  call ale#assert#SetUpLinterTest('python', 'prospector')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(Setting executable to 'pipenv' appends 'run prospector'):
+  let g:ale_python_prospector_executable = 'path/to/pipenv'
+
+  AssertLinter 'path/to/pipenv',
+  \ ale#Escape('path/to/pipenv') . ' run prospector'
+  \   .  '  --messages-only --absolute-paths --zero-exit --output-format json %s'

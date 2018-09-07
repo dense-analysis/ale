@@ -1,40 +1,19 @@
 Before:
-  Save g:ale_glsl_glslang_executable
-  Save g:ale_glsl_glslang_options
-
-  unlet! g:ale_glsl_glslang_executable
-  unlet! g:ale_glsl_glslang_options
-
-  runtime ale_linters/glsl/glslang.vim
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#assert#SetUpLinterTest('glsl', 'glslang')
 
 After:
-  Restore
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
-Execute(Executable should default to glslangValidator):
-  AssertEqual
-  \ 'glslangValidator',
-  \ ale_linters#glsl#glslang#GetExecutable(bufnr(''))
+Execute(The default command should be correct):
+  AssertLinter 'glslangValidator', ale#Escape('glslangValidator') . ' -C %t'
 
-Execute(Executable should be configurable):
-  let g:ale_glsl_glslang_executable = 'foobar'
-  AssertEqual
-  \ 'foobar',
-  \ ale_linters#glsl#glslang#GetExecutable(bufnr(''))
+Execute(The executable should be configurable):
+  let b:ale_glsl_glslang_executable = 'foobar'
 
-Execute(Command should use executable):
-  AssertEqual
-  \ 'glslangValidator  -C %t',
-  \ ale_linters#glsl#glslang#GetCommand(bufnr(''))
-
-  let g:ale_glsl_glslang_executable = 'foobar'
-  AssertEqual
-  \ 'foobar  -C %t',
-  \ ale_linters#glsl#glslang#GetCommand(bufnr(''))
+  AssertLinter 'foobar', ale#Escape('foobar') . ' -C %t'
 
 Execute(Options should work):
   let g:ale_glsl_glslang_options = '--test'
-  AssertEqual
-  \ 'glslangValidator --test -C %t',
-  \ ale_linters#glsl#glslang#GetCommand(bufnr(''))
+
+  AssertLinter 'glslangValidator',
+  \ ale#Escape('glslangValidator') . ' --test -C %t'

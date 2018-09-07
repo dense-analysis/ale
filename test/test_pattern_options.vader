@@ -1,7 +1,11 @@
 Before:
   Save g:ale_pattern_options
   Save g:ale_pattern_options_enabled
+  Save b:ale_quitting
+  Save b:ale_original_filetype
   Save &filetype
+
+  unlet! b:ale_file_changed
 
   let g:ale_pattern_options_enabled = 1
   let g:ale_pattern_options = {}
@@ -21,7 +25,7 @@ After:
 
 Execute(The pattern options function should work when there are no patterns):
   call ale#test#SetFilename('foobar.js')
-  call ale#pattern_options#SetOptions(bufnr(''))
+  call ale#events#ReadOrEnterEvent(bufnr(''))
 
 Execute(Buffer variables should be set when filename patterns match):
   let g:ale_pattern_options = {
@@ -33,13 +37,13 @@ Execute(Buffer variables should be set when filename patterns match):
   \}
 
   call ale#test#SetFilename('foobar.js')
-  call ale#pattern_options#SetOptions(bufnr(''))
+  call ale#events#ReadOrEnterEvent(bufnr(''))
 
   AssertEqual 0, b:ale_enabled
   AssertEqual 0, b:some_option
 
   call ale#test#SetFilename('bazboz.js')
-  call ale#pattern_options#SetOptions(bufnr(''))
+  call ale#events#ReadOrEnterEvent(bufnr(''))
 
   AssertEqual 1, b:ale_enabled
   AssertEqual 347, b:some_option
@@ -61,7 +65,7 @@ Execute(Multiple pattern matches should be applied):
   \}
 
   call ale#test#SetFilename('foobar.js')
-  call ale#pattern_options#SetOptions(bufnr(''))
+  call ale#events#ReadOrEnterEvent(bufnr(''))
 
   AssertEqual 1, b:ale_enabled
   AssertEqual 666, b:some_option
@@ -71,7 +75,7 @@ Execute(Patterns should not be applied when the setting is disabled):
   let g:ale_pattern_options = {'foo': {'some_option': 666}}
 
   call ale#test#SetFilename('foobar.js')
-  call ale#pattern_options#SetOptions(bufnr(''))
+  call ale#events#ReadOrEnterEvent(bufnr(''))
 
   AssertEqual 0, b:some_option
 
@@ -81,12 +85,23 @@ Execute(Patterns should be applied after the Dictionary changes):
 
   let g:ale_pattern_options = {}
 
-  call ale#pattern_options#SetOptions(bufnr(''))
+  call ale#events#ReadOrEnterEvent(bufnr(''))
 
   AssertEqual 0, b:some_option
 
   let g:ale_pattern_options['foo'] = {'some_option': 666}
 
-  call ale#pattern_options#SetOptions(bufnr(''))
+  call ale#events#ReadOrEnterEvent(bufnr(''))
 
   AssertEqual 666, b:some_option
+
+Execute(SetOptions should tolerate settings being unset):
+  " This might happen if ALE is loaded in a weird way, so tolerate it.
+  unlet! g:ale_pattern_options
+  unlet! g:ale_pattern_options_enabled
+
+  call ale#events#ReadOrEnterEvent(bufnr(''))
+
+  let g:ale_pattern_options_enabled = 1
+
+  call ale#events#ReadOrEnterEvent(bufnr(''))

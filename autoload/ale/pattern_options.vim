@@ -18,16 +18,19 @@ function! s:CmpPatterns(left_item, right_item) abort
 endfunction
 
 function! ale#pattern_options#SetOptions(buffer) abort
-    if !g:ale_pattern_options_enabled || empty(g:ale_pattern_options)
+    let l:pattern_options = get(g:, 'ale_pattern_options', {})
+
+    if empty(l:pattern_options)
+        " Stop if no options are set.
         return
     endif
 
     " The items will only be sorted whenever the patterns change.
-    if g:ale_pattern_options != s:last_pattern_options
-        let s:last_pattern_options = deepcopy(g:ale_pattern_options)
+    if l:pattern_options != s:last_pattern_options
+        let s:last_pattern_options = deepcopy(l:pattern_options)
         " The patterns are sorted, so they are applied consistently.
         let s:sorted_items = sort(
-        \   items(g:ale_pattern_options),
+        \   items(l:pattern_options),
         \   function('s:CmpPatterns')
         \)
     endif

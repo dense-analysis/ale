@@ -1,164 +1,130 @@
 Before:
-  Save g:ale_rust_cargo_use_check
-  Save g:ale_rust_cargo_check_all_targets
-  Save g:ale_rust_cargo_default_feature_behavior
-  Save g:ale_rust_cargo_include_features
-
-  unlet! g:ale_rust_cargo_use_check
-  unlet! g:ale_cargo_check_all_targets
-  unlet! g:ale_rust_cargo_default_feature_behavior
-  unlet! g:ale_rust_cargo_include_features
-
-  runtime ale_linters/rust/cargo.vim
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#assert#SetUpLinterTest('rust', 'cargo')
 
   let g:suffix = ' --frozen --message-format=json -q'
 
+  " Test with version 0.22.0 by default.
+  WithChainResults ['cargo 0.22.0 (3423351a5 2017-10-06)']
+
 After:
-  Restore
+  call ale#assert#TearDownLinterTest()
 
   unlet! g:suffix
 
-  call ale#test#RestoreDirectory()
-  call ale#linter#Reset()
-  call ale#semver#ResetVersionCache()
+Execute(The linter should not be executed when there's no Cargo.toml file):
+  AssertLinterNotExecuted
 
-Execute(An empty string should be returned for the cargo executable when there's no Cargo.toml file):
-  AssertEqual
-  \ '',
-  \ ale_linters#rust#cargo#GetCargoExecutable(bufnr(''))
-
-Execute(The executable should be returned when there is a Cargo.toml file):
+Execute(The linter should be executed when there is a Cargo.toml file):
   call ale#test#SetFilename('cargo_paths/test.rs')
 
-  AssertEqual
-  \ 'cargo',
-  \ ale_linters#rust#cargo#GetCargoExecutable(bufnr(''))
-
-Execute(The VersionCheck function should return the --version command):
-  AssertEqual
-  \ 'cargo --version',
-  \ ale_linters#rust#cargo#VersionCheck(bufnr(''))
+  WithChainResults []
+  AssertLinter 'cargo',
+  \ 'cd ' . ale#Escape(ale#path#Simplify(g:dir . '/cargo_paths')) . ' && '
+  \ . 'cargo build --frozen --message-format=json -q'
 
 Execute(The default command should be correct):
-  AssertEqual
-  \ 'cargo build' . g:suffix,
-  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [])
+  WithChainResults []
+  AssertLinter '', ['cargo --version', 'cargo build' . g:suffix]
 
 Execute(`cargo check` should be used when the version is new enough):
-  AssertEqual
-  \ 'cargo check' . g:suffix,
-  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
-  \   'cargo 0.17.0 (3423351a5 2017-10-06)',
-  \ ])
+  WithChainResults ['cargo 0.17.0 (3423351a5 2017-10-06)']
+  AssertLinter '', ['cargo --version', 'cargo check' . g:suffix]
 
   " We should cache the version check
-  AssertEqual
-  \ 'cargo check' . g:suffix,
-  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [])
-
-  AssertEqual '', ale_linters#rust#cargo#VersionCheck(bufnr(''))
+  WithChainResults []
+  AssertLinter '', ['', 'cargo check' . g:suffix]
 
 Execute(`cargo build` should be used when cargo is too old):
-  AssertEqual
-  \ 'cargo build' . g:suffix,
-  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
-  \   'cargo 0.16.0 (3423351a5 2017-10-06)',
-  \ ])
+  WithChainResults ['cargo 0.16.0 (3423351a5 2017-10-06)']
+  AssertLinter '', ['cargo --version', 'cargo build' . g:suffix]
 
-  " We should cache the version check
-  AssertEqual
-  \ 'cargo build' . g:suffix,
-  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [])
-
-  AssertEqual '', ale_linters#rust#cargo#VersionCheck(bufnr(''))
+  WithChainResults []
+  AssertLinter '', ['', 'cargo build' . g:suffix]
 
 Execute(`cargo build` should be used when g:ale_rust_cargo_use_check is set to 0):
   let g:ale_rust_cargo_use_check = 0
 
-  AssertEqual
-  \ 'cargo build' . g:suffix,
-  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
-  \   'cargo 0.24.0 (3423351a5 2017-10-06)',
-  \ ])
+  WithChainResults ['cargo 0.24.0 (3423351a5 2017-10-06)']
+  AssertLinter '', ['cargo --version', 'cargo build' . g:suffix]
 
   " We should cache the version check
-  AssertEqual
-  \ 'cargo build' . g:suffix,
-  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [])
-
-  AssertEqual '', ale_linters#rust#cargo#VersionCheck(bufnr(''))
+  WithChainResults []
+  AssertLinter '', ['', 'cargo build' . g:suffix]
 
 Execute(`cargo check` should be used when the version is new enough):
-  AssertEqual
-  \ 'cargo check' . g:suffix,
-  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
-  \   'cargo 0.22.0 (3423351a5 2017-10-06)',
-  \ ])
+  AssertLinter '', ['cargo --version', 'cargo check' . g:suffix]
 
   " We should cache the version check
-  AssertEqual
-  \ 'cargo check' . g:suffix,
-  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [])
-
-  AssertEqual '', ale_linters#rust#cargo#VersionCheck(bufnr(''))
+  WithChainResults []
+  AssertLinter '', ['', 'cargo check' . g:suffix]
 
 Execute(--all-targets should be used when g:ale_rust_cargo_check_all_targets is set to 1):
   let g:ale_rust_cargo_check_all_targets = 1
 
-  AssertEqual
-  \ 'cargo check --all-targets' . g:suffix,
-  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
-  \   'cargo 0.22.0 (3423351a5 2017-10-06)',
-  \ ])
+  AssertLinter '', ['cargo --version', 'cargo check --all-targets' . g:suffix]
 
   " We should cache the version check
-  AssertEqual
-  \ 'cargo check --all-targets' . g:suffix,
-  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [])
+  WithChainResults []
+  AssertLinter '', ['', 'cargo check --all-targets' . g:suffix]
 
-  AssertEqual '', ale_linters#rust#cargo#VersionCheck(bufnr(''))
+Execute(--tests should be used when g:ale_rust_cargo_check_tests is set to 1):
+  let g:ale_rust_cargo_check_tests = 1
+
+  AssertLinter '', ['cargo --version', 'cargo check --tests' . g:suffix]
+
+  " We should cache the version check
+  WithChainResults []
+  AssertLinter '', ['', 'cargo check --tests' . g:suffix]
+
+Execute(--examples should be used when g:ale_rust_cargo_check_examples is set to 1):
+  let g:ale_rust_cargo_check_examples = 1
+
+  AssertLinter '', ['cargo --version', 'cargo check --examples' . g:suffix]
+
+  " We should cache the version check
+  WithChainResults []
+  AssertLinter '', ['', 'cargo check --examples' . g:suffix]
 
 Execute(--no-default-features should be used when g:ale_rust_cargo_default_feature_behavior is none):
-  let g:ale_rust_cargo_default_feature_behavior = 'none'
+  let b:ale_rust_cargo_default_feature_behavior = 'none'
 
-  AssertEqual
-  \ 'cargo check' . g:suffix . ' --no-default-features',
-  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
-  \   'cargo 0.22.0 (3423351a5 2017-10-06)',
-  \ ])
+  AssertLinter '', ['cargo --version', 'cargo check --frozen --message-format=json -q --no-default-features']
 
 Execute(g:ale_rust_cargo_include_features added when g:ale_rust_cargo_default_feature_behavior is none):
-  let g:ale_rust_cargo_default_feature_behavior = 'none'
-  let g:ale_rust_cargo_include_features = 'foo bar'
+  let b:ale_rust_cargo_default_feature_behavior = 'none'
+  let b:ale_rust_cargo_include_features = 'foo bar'
 
-  AssertEqual
-  \ 'cargo check' . g:suffix . ' --no-default-features --features ' .
-  \ (fnamemodify(&shell, ':t') is? 'cmd.exe' ? '"foo bar"' : "'foo bar'"),
-  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
-  \   'cargo 0.22.0 (3423351a5 2017-10-06)',
-  \ ])
+  AssertLinter '', ['cargo --version', 'cargo check --frozen --message-format=json -q --no-default-features --features ' . ale#Escape('foo bar')]
 
 Execute(g:ale_rust_cargo_include_features added and escaped):
-  let g:ale_rust_cargo_default_feature_behavior = 'default'
-  let g:ale_rust_cargo_include_features = "foo bar baz"
+  let b:ale_rust_cargo_default_feature_behavior = 'default'
+  let b:ale_rust_cargo_include_features = "foo bar baz"
 
-  AssertEqual
-  \ 'cargo check' . g:suffix . ' --features ' .
-  \ (fnamemodify(&shell, ':t') is? 'cmd.exe' ? '"foo bar baz"' : "'foo bar baz'"),
-  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
-  \   'cargo 0.22.0 (3423351a5 2017-10-06)',
-  \ ])
+  AssertLinter '', ['cargo --version', 'cargo check --frozen --message-format=json -q --features ' . ale#Escape('foo bar baz')]
 
 Execute(--all-features should be used when g:ale_rust_cargo_default_feature_behavior is all):
-  let g:ale_rust_cargo_default_feature_behavior = 'all'
-
+  let b:ale_rust_cargo_default_feature_behavior = 'all'
   " When all features are enabled we should ignore extra features to add
   " since it won't do anything
-  let g:ale_rust_cargo_include_features = 'foo bar'
+  let b:ale_rust_cargo_include_features = 'foo bar'
 
-  AssertEqual
-  \ 'cargo check' . g:suffix . ' --all-features',
-  \ ale_linters#rust#cargo#GetCommand(bufnr(''), [
-  \   'cargo 0.22.0 (3423351a5 2017-10-06)',
-  \ ])
+  WithChainResults ['cargo 0.22.0 (3423351a5 2017-10-06)']
+  AssertLinter '', ['cargo --version', 'cargo check --frozen --message-format=json -q --all-features']
+
+Execute(When a crate belongs to a workspace we should cd into the crate):
+  call ale#test#SetFilename('cargo_workspace_paths/subpath/test.rs')
+
+  AssertLinter 'cargo', [
+  \ 'cargo --version',
+  \ 'cd ' . ale#Escape(ale#path#Simplify(g:dir . '/cargo_workspace_paths/subpath')) . ' && '
+  \   . 'cargo check --frozen --message-format=json -q',
+  \]
+
+Execute(When a crate belongs to a workspace we chdir into the crate, unless we disabled it):
+  let g:ale_rust_cargo_avoid_whole_workspace = 0
+  call ale#test#SetFilename('cargo_workspace_paths/subpath/test.rs')
+
+  AssertLinter 'cargo', [
+  \ 'cargo --version',
+  \ 'cargo check --frozen --message-format=json -q',
+  \]

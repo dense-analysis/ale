@@ -1,39 +1,21 @@
 Before:
-  Save g:ale_c_gcc_executable
-  Save g:ale_c_gcc_options
+  Save g:ale_c_parse_makefile
+  let g:ale_c_parse_makefile = 0
 
-  unlet! g:ale_c_gcc_executable
-  unlet! b:ale_c_gcc_executable
-  unlet! g:ale_c_gcc_options
-  unlet! b:ale_c_gcc_options
-
-  runtime ale_linters/c/gcc.vim
+  call ale#assert#SetUpLinterTest('c', 'gcc')
 
   let b:command_tail = ' -S -x c -fsyntax-only -iquote'
   \   . ' ' . ale#Escape(getcwd())
   \   . ' -std=c11 -Wall -'
 
 After:
-  Restore
+  call ale#assert#TearDownLinterTest()
+
   unlet! b:command_tail
-  unlet! b:ale_c_gcc_executable
-  unlet! b:ale_c_gcc_options
-  call ale#linter#Reset()
 
 Execute(The executable should be configurable):
-  AssertEqual 'gcc', ale_linters#c#gcc#GetExecutable(bufnr(''))
+  AssertLinter 'gcc', ['', ale#Escape('gcc') . b:command_tail]
 
   let b:ale_c_gcc_executable = 'foobar'
 
-  AssertEqual 'foobar', ale_linters#c#gcc#GetExecutable(bufnr(''))
-
-Execute(The executable should be used in the command):
-  AssertEqual
-  \ ale#Escape('gcc') . b:command_tail,
-  \ ale_linters#c#gcc#GetCommand(bufnr(''), [])
-
-  let b:ale_c_gcc_executable = 'foobar'
-
-  AssertEqual
-  \ ale#Escape('foobar') . b:command_tail,
-  \ ale_linters#c#gcc#GetCommand(bufnr(''), [])
+  AssertLinter 'foobar', ['', ale#Escape('foobar') . b:command_tail]

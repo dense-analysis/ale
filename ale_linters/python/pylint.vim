@@ -15,8 +15,14 @@ function! ale_linters#python#pylint#GetCommand(buffer) abort
     \   ? ale#path#BufferCdString(a:buffer)
     \   : ''
 
+    let l:executable = ale_linters#python#pylint#GetExecutable(a:buffer)
+
+    let l:exec_args = l:executable =~? 'pipenv$'
+    \   ? ' run pylint'
+    \   : ''
+
     return l:cd_string
-    \   . ale#Escape(ale_linters#python#pylint#GetExecutable(a:buffer))
+    \   . ale#Escape(l:executable) . l:exec_args
     \   . ' ' . ale#Var(a:buffer, 'python_pylint_options')
     \   . ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'
     \   . ' %s'

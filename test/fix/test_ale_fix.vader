@@ -31,6 +31,7 @@ Before:
 
   call ale#test#SetDirectory('/testplugin/test')
   call ale#test#SetFilename('test.txt')
+  call ale#linter#PreventLoading('testft')
 
   function AddCarets(buffer, lines) abort
     " map() is applied to the original lines here.
@@ -257,6 +258,25 @@ Expect(Only the second function should be applied):
   $b
   $c
 
+Execute(The * fixers shouldn't be used if an empty list is set for fixers):
+  let g:ale_fixers.testft = []
+  let g:ale_fixers['*'] = ['AddDollars']
+  ALEFix
+
+Expect(Nothing should be changed):
+  a
+  b
+  c
+
+Execute(* fixers should be used if no filetype is matched):
+  let g:ale_fixers = {'*': ['AddDollars']}
+  ALEFix
+
+Expect(The file should be changed):
+  $a
+  $b
+  $c
+
 Execute(ALEFix should allow commands to be run):
   if has('win32')
     " Just skip this test on Windows, we can't run it.
@@ -438,7 +458,7 @@ Execute(ALEFix should save files on the save event):
     \   'nr': -1,
     \   'pattern': '',
     \   'valid': 1,
-    \}], getloclist(0)
+    \}], ale#test#GetLoclistWithoutModule()
   endif
 
 Expect(The buffer should be modified):
@@ -477,7 +497,7 @@ Execute(ALEFix should still lint with no linters to be applied):
     \   'nr': -1,
     \   'pattern': '',
     \   'valid': 1,
-    \}], getloclist(0)
+    \}], ale#test#GetLoclistWithoutModule()
   endif
 
 Expect(The buffer should be the same):
@@ -511,7 +531,7 @@ Execute(ALEFix should still lint when nothing was fixed on save):
     \   'nr': -1,
     \   'pattern': '',
     \   'valid': 1,
-    \}], getloclist(0)
+    \}], ale#test#GetLoclistWithoutModule()
   endif
 
 Expect(The buffer should be the same):
@@ -532,8 +552,6 @@ Execute(ale#fix#InitBufferData() should set up the correct data):
   AssertEqual {
   \ bufnr(''): {
   \   'temporary_directory_list': [],
-  \   'vars': b:,
-  \   'filename': ale#path#Simplify(getcwd() . '/fix_test_file'),
   \   'done': 0,
   \   'lines_before': ['a', 'b', 'c'],
   \   'should_save': 1,

@@ -1,37 +1,21 @@
 Before:
-  Save g:ale_rust_rustc_options
-
-  unlet! g:ale_rust_rustc_options
-
-  runtime ale_linters/rust/rustc.vim
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#assert#SetUpLinterTest('rust', 'rustc')
 
 After:
-  Restore
-
-  unlet! b:ale_rust_rustc_options
-
-  call ale#test#RestoreDirectory()
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The default command should be correct):
-  AssertEqual
-  \ 'rustc --error-format=json -Z no-trans -',
-  \ ale_linters#rust#rustc#RustcCommand(bufnr(''))
+  AssertLinter 'rustc', 'rustc --error-format=json -Z no-codegen -'
 
 Execute(The options should be configurable):
   let b:ale_rust_rustc_options = '--foo'
 
-  AssertEqual
-  \ 'rustc --error-format=json --foo -',
-  \ ale_linters#rust#rustc#RustcCommand(bufnr(''))
+  AssertLinter 'rustc', 'rustc --error-format=json --foo -'
 
 Execute(Some default paths should be included when the project is a Cargo project):
   call ale#test#SetFilename('cargo_paths/test.rs')
 
-  AssertEqual
-  \ 'rustc --error-format=json -Z no-trans'
+  AssertLinter 'rustc', 'rustc --error-format=json -Z no-codegen'
   \   . ' -L ' . ale#Escape(ale#path#GetAbsPath(g:dir,  'cargo_paths/target/debug/deps'))
   \   . ' -L ' . ale#Escape(ale#path#GetAbsPath(g:dir, 'cargo_paths/target/release/deps'))
-  \   . ' -',
-  \ ale_linters#rust#rustc#RustcCommand(bufnr(''))
+  \   . ' -'

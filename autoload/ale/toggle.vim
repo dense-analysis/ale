@@ -1,6 +1,6 @@
 function! s:EnablePreamble() abort
     " Set pattern options again, if enabled.
-    if g:ale_pattern_options_enabled
+    if get(g:, 'ale_pattern_options_enabled', 0)
         call ale#pattern_options#SetOptions(bufnr(''))
     endif
 
@@ -43,21 +43,16 @@ function! ale#toggle#Toggle() abort
         call s:CleanupEveryBuffer()
         call s:DisablePostamble()
 
-        if has('balloon_eval')
+        if exists('*ale#balloon#Disable')
             call ale#balloon#Disable()
         endif
     endif
 
-    call ale#autocmd#InitAuGroups()
+    call ale#events#Init()
 endfunction
 
 function! ale#toggle#Enable() abort
     if !g:ale_enabled
-        " Set pattern options again, if enabled.
-        if g:ale_pattern_options_enabled
-            call ale#pattern_options#SetOptions(bufnr(''))
-        endif
-
         call ale#toggle#Toggle()
     endif
 endfunction
@@ -81,6 +76,7 @@ function! ale#toggle#ToggleBuffer(buffer) abort
     " linting locally when linting is disabled globally
     if l:enabled && !g:ale_enabled
         execute 'echom ''ALE cannot be enabled locally when disabled globally'''
+
         return
     endif
 

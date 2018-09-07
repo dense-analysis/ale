@@ -12,7 +12,9 @@ Before:
   let g:ale_run_synchronously = 1
   let g:ale_pattern_options = {}
   let g:ale_pattern_options_enabled = 1
-  let g:ale_set_balloons = has('balloon_eval')
+  let g:ale_set_balloons =
+  \   has('balloon_eval') && has('gui_running') ||
+  \   has('balloon_eval_term') && !has('gui_running')
 
   unlet! b:ale_enabled
 
@@ -30,12 +32,8 @@ Before:
   \}]
   let g:expected_groups = [
   \ 'ALECleanupGroup',
-  \ 'ALECursorGroup',
+  \ 'ALEEvents',
   \ 'ALEHighlightBufferGroup',
-  \ 'ALERunOnEnterGroup',
-  \ 'ALERunOnFiletypeChangeGroup',
-  \ 'ALERunOnSaveGroup',
-  \ 'ALERunOnTextChangedGroup',
   \]
 
   function! ToggleTestCallback(buffer, output)
@@ -58,7 +56,7 @@ Before:
     let l:results = []
 
     for l:line in split(l:output, "\n")
-      let l:match = matchlist(l:line, '^ALE[a-zA-Z]\+Group')
+      let l:match = matchlist(l:line, '^ALE[a-zA-Z]\+')
 
       " We don't care about some groups here.
       if !empty(l:match)
@@ -112,16 +110,12 @@ Given foobar (Some imaginary filetype):
   baz
 
 Execute(ALEToggle should reset everything and then run again):
-  " Run this test asynchrously.
-  let g:ale_run_synchronously = 0
-
   AssertEqual 'foobar', &filetype
 
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
+  ALELint
 
   " First check that everything is there...
-  AssertEqual g:expected_loclist, getloclist(0)
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
   AssertEqual
   \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
@@ -134,22 +128,15 @@ Execute(ALEToggle should reset everything and then run again):
 
   " Everything should be cleared.
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
-  AssertEqual [], getloclist(0), 'The loclist was not cleared'
+  AssertEqual [], ale#test#GetLoclistWithoutModule(), 'The loclist was not cleared'
   AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
   AssertEqual [], getmatches(), 'The highlights were not cleared'
-  AssertEqual
-  \ [
-  \   'ALECleanupGroup',
-  \   'ALEHighlightBufferGroup',
-  \   'ALERunOnSaveGroup',
-  \ ],
-  \ ParseAuGroups()
+  AssertEqual g:expected_groups, ParseAuGroups()
 
   " Toggle ALE on, everything should be set up and run again.
   ALEToggle
-  call ale#engine#WaitForJobs(2000)
 
-  AssertEqual g:expected_loclist, getloclist(0)
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
   AssertEqual
   \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
@@ -158,9 +145,6 @@ Execute(ALEToggle should reset everything and then run again):
   AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
 
 Execute(ALEToggle should skip filename keys and preserve them):
-  " Run this test asynchrously.
-  let g:ale_run_synchronously = 0
-
   AssertEqual 'foobar', &filetype
 
   let g:ale_buffer_info['/foo/bar/baz.txt'] = {
@@ -172,8 +156,7 @@ Execute(ALEToggle should skip filename keys and preserve them):
   \ 'history': [],
   \}
 
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
+  ALELint
 
   " Now Toggle ALE off.
   ALEToggle
@@ -191,7 +174,6 @@ Execute(ALEToggle should skip filename keys and preserve them):
 
   " Toggle ALE on again.
   ALEToggle
-  call ale#engine#WaitForJobs(2000)
 
   AssertEqual
   \ {
@@ -205,18 +187,18 @@ Execute(ALEToggle should skip filename keys and preserve them):
   \ get(g:ale_buffer_info, '/foo/bar/baz.txt', {})
 
 Execute(ALEDisable should reset everything and stay disabled):
-  call ale#Lint()
+  ALELint
 
-  AssertEqual g:expected_loclist, getloclist(0)
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
 
   ALEDisable
 
-  AssertEqual [], getloclist(0)
+  AssertEqual [], ale#test#GetLoclistWithoutModule()
   AssertEqual 0, g:ale_enabled
 
   ALEDisable
 
-  AssertEqual [], getloclist(0)
+  AssertEqual [], ale#test#GetLoclistWithoutModule()
   AssertEqual 0, g:ale_enabled
 
 Execute(ALEEnable should enable ALE and lint again):
@@ -224,16 +206,16 @@ Execute(ALEEnable should enable ALE and lint again):
 
   ALEEnable
 
-  AssertEqual g:expected_loclist, getloclist(0)
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual 1, g:ale_enabled
 
 Execute(ALEReset should reset everything for a buffer):
   AssertEqual 'foobar', &filetype
 
-  call ale#Lint()
+  ALELint
 
   " First check that everything is there...
-  AssertEqual g:expected_loclist, getloclist(0)
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
   AssertEqual
   \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
@@ -245,23 +227,19 @@ Execute(ALEReset should reset everything for a buffer):
 
   " Everything should be cleared.
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
-  AssertEqual [], getloclist(0), 'The loclist was not cleared'
+  AssertEqual [], ale#test#GetLoclistWithoutModule(), 'The loclist was not cleared'
   AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
   AssertEqual [], getmatches(), 'The highlights were not cleared'
 
   AssertEqual 1, g:ale_enabled
 
 Execute(ALEToggleBuffer should reset everything and then run again):
-  " Run this test asynchrously.
-  let g:ale_run_synchronously = 0
-
   AssertEqual 'foobar', &filetype
 
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
+  ALELint
 
   " First check that everything is there...
-  AssertEqual g:expected_loclist, getloclist(0)
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
   AssertEqual
   \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
@@ -273,15 +251,14 @@ Execute(ALEToggleBuffer should reset everything and then run again):
 
   " Everything should be cleared.
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
-  AssertEqual [], getloclist(0), 'The loclist was not cleared'
+  AssertEqual [], ale#test#GetLoclistWithoutModule(), 'The loclist was not cleared'
   AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
   AssertEqual [], getmatches(), 'The highlights were not cleared'
 
   " Toggle ALE on, everything should be set up and run again.
   ALEToggleBuffer
-  call ale#engine#WaitForJobs(2000)
 
-  AssertEqual g:expected_loclist, getloclist(0)
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
   AssertEqual
   \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
@@ -290,13 +267,13 @@ Execute(ALEToggleBuffer should reset everything and then run again):
   AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
 
 Execute(ALEDisableBuffer should reset everything and stay disabled):
-  call ale#Lint()
+  ALELint
 
-  AssertEqual g:expected_loclist, getloclist(0)
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
 
   ALEDisableBuffer
 
-  AssertEqual [], getloclist(0)
+  AssertEqual [], ale#test#GetLoclistWithoutModule()
   AssertEqual 0, b:ale_enabled
 
 Execute(ALEEnableBuffer should enable ALE and lint again):
@@ -304,7 +281,7 @@ Execute(ALEEnableBuffer should enable ALE and lint again):
 
   ALEEnableBuffer
 
-  AssertEqual g:expected_loclist, getloclist(0)
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual 1, b:ale_enabled
 
 Execute(ALEEnableBuffer should complain when ALE is disabled globally):
@@ -315,7 +292,7 @@ Execute(ALEEnableBuffer should complain when ALE is disabled globally):
     ALEEnableBuffer
   redir END
 
-  AssertEqual [], getloclist(0)
+  AssertEqual [], ale#test#GetLoclistWithoutModule()
   AssertEqual 0, b:ale_enabled
   AssertEqual 0, g:ale_enabled
   AssertEqual
@@ -325,10 +302,10 @@ Execute(ALEEnableBuffer should complain when ALE is disabled globally):
 Execute(ALEResetBuffer should reset everything for a buffer):
   AssertEqual 'foobar', &filetype
 
-  call ale#Lint()
+  ALELint
 
   " First check that everything is there...
-  AssertEqual g:expected_loclist, getloclist(0)
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
   AssertEqual
   \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
@@ -340,7 +317,7 @@ Execute(ALEResetBuffer should reset everything for a buffer):
 
   " Everything should be cleared.
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
-  AssertEqual [], getloclist(0), 'The loclist was not cleared'
+  AssertEqual [], ale#test#GetLoclistWithoutModule(), 'The loclist was not cleared'
   AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
   AssertEqual [], getmatches(), 'The highlights were not cleared'
 
@@ -349,38 +326,60 @@ Execute(ALEResetBuffer should reset everything for a buffer):
 
 Execute(Disabling ALE should disable balloons):
   " These tests won't run in the console, but we can run them manually in GVim.
-  if has('balloon_eval')
+  if has('balloon_eval') && has('gui_running')
+  \|| (has('balloon_eval_term') && !has('gui_running'))
     call ale#linter#Reset()
 
     " Enable balloons, so we can check the expr value.
     call ale#balloon#Enable()
 
-    AssertEqual 1, &ballooneval
+    if has('balloon_eval') && has('gui_running')
+      AssertEqual 1, &ballooneval
+    else
+      AssertEqual 1, &balloonevalterm
+    endif
+
     AssertEqual 'ale#balloon#Expr()', &balloonexpr
 
     " Toggle ALE off.
     ALEToggle
 
     " The balloon settings should be reset.
-    AssertEqual 0, &ballooneval
+    if has('balloon_eval') && has('gui_running')
+      AssertEqual 0, &ballooneval
+    else
+      AssertEqual 0, &balloonevalterm
+    endif
+
     AssertEqual '', &balloonexpr
   endif
 
 Execute(Enabling ALE should enable balloons if the setting is on):
-  if has('balloon_eval')
+  if has('balloon_eval') && has('gui_running')
+  \|| (has('balloon_eval_term') && !has('gui_running'))
     call ale#linter#Reset()
     call ale#balloon#Disable()
     ALEDisable
     let g:ale_set_balloons = 0
     ALEEnable
 
-    AssertEqual 0, &ballooneval
+    if has('balloon_eval') && has('gui_running')
+      AssertEqual 0, &ballooneval
+    else
+      AssertEqual 0, &balloonevalterm
+    endif
+
     AssertEqual '', &balloonexpr
 
     ALEDisable
     let g:ale_set_balloons = 1
     ALEEnable
 
-    AssertEqual 1, &ballooneval
+    if has('balloon_eval') && has('gui_running')
+      AssertEqual 1, &ballooneval
+    else
+      AssertEqual 1, &balloonevalterm
+    endif
+
     AssertEqual 'ale#balloon#Expr()', &balloonexpr
   endif

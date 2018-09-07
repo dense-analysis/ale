@@ -1,9 +1,9 @@
 Before:
   Save &filetype
+  Save g:ale_lint_on_filetype_changed
 
+  let g:ale_lint_on_filetype_changed = 1
   let g:queue_calls = []
-
-  unlet! b:ale_lint_on_enter
 
   function! ale#Queue(...)
     call add(g:queue_calls, a:000)
@@ -12,7 +12,6 @@ Before:
 After:
   Restore
 
-  unlet! b:ale_lint_on_enter
   unlet! g:queue_calls
 
   " Reload the ALE code to load the real function again.
@@ -23,13 +22,13 @@ After:
 Execute(The original filetype should be set on BufEnter):
   let &filetype = 'foobar'
 
-  call ale#events#EnterEvent(bufnr(''))
+  call ale#events#ReadOrEnterEvent(bufnr(''))
 
   AssertEqual 'foobar', b:ale_original_filetype
 
   let &filetype = 'bazboz'
 
-  call ale#events#EnterEvent(bufnr(''))
+  call ale#events#ReadOrEnterEvent(bufnr(''))
 
   AssertEqual 'bazboz', b:ale_original_filetype
 
@@ -48,27 +47,31 @@ Execute(Linting should be queued when the filetype changes):
   call ale#events#FileTypeEvent(bufnr(''), 'bazboz')
 
   AssertEqual [[300, 'lint_file', bufnr('')]], g:queue_calls
+  " The original filetype should be updated, so we don't trigger linting
+  " by setting a filetype equal to what it already is.
+  AssertEqual 'bazboz', b:ale_original_filetype
 
-Execute(Linting shouldn't be done when the original filetype was blank and linting on enter is off):
-  let b:ale_lint_on_enter = 0
-  let b:ale_original_filetype = ''
-
-  call ale#events#FileTypeEvent(bufnr(''), 'bazboz')
-
-  AssertEqual [], g:queue_calls
-
-Execute(Linting should be done when the original filetype was blank and linting on enter is on):
-  let b:ale_lint_on_enter = 1
+Execute(Linting should be done when the original filetype was blank):
   let b:ale_original_filetype = ''
 
   call ale#events#FileTypeEvent(bufnr(''), 'bazboz')
 
   AssertEqual [[300, 'lint_file', bufnr('')]], g:queue_calls
+  AssertEqual 'bazboz', b:ale_original_filetype
 
-Execute(The new filetype should become the "original" one if the original was blank and linting on enter is off):
-  let b:ale_lint_on_enter = 0
-  let b:ale_original_filetype = ''
+Execute(Linting should not be done when the setting is off):
+  let b:ale_original_filetype = 'foobar'
+  let g:ale_lint_on_filetype_changed = 0
 
   call ale#events#FileTypeEvent(bufnr(''), 'bazboz')
 
+  AssertEqual [], g:queue_calls
+  " We should still update the old filetype
   AssertEqual 'bazboz', b:ale_original_filetype
+
+Execute(Linting should be done when the original filetype was not set):
+  unlet! b:ale_original_filetype
+
+  call ale#events#FileTypeEvent(bufnr(''), 'bazboz')
+
+  AssertEqual [], g:queue_calls

@@ -6,6 +6,7 @@ let s:sep = has('win32') ? '\' : '/'
 let s:bin_dir = has('unix') ? 'bin' : 'Scripts'
 let g:ale_virtualenv_dir_names = get(g:, 'ale_virtualenv_dir_names', [
 \   '.env',
+\   '.venv',
 \   'env',
 \   've-py3',
 \   've',
@@ -15,6 +16,7 @@ let g:ale_virtualenv_dir_names = get(g:, 'ale_virtualenv_dir_names', [
 
 function! ale#python#FindProjectRootIni(buffer) abort
     for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
+        " If you change this, update ale-python-root documentation.
         if filereadable(l:path . '/MANIFEST.in')
         \|| filereadable(l:path . '/setup.cfg')
         \|| filereadable(l:path . '/pytest.ini')
@@ -22,6 +24,9 @@ function! ale#python#FindProjectRootIni(buffer) abort
         \|| filereadable(l:path . '/mypy.ini')
         \|| filereadable(l:path . '/pycodestyle.cfg')
         \|| filereadable(l:path . '/flake8.cfg')
+        \|| filereadable(l:path . '/.flake8rc')
+        \|| filereadable(l:path . '/Pipfile')
+        \|| filereadable(l:path . '/Pipfile.lock')
             return l:path
         endif
     endfor

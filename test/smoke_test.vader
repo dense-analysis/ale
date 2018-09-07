@@ -33,8 +33,13 @@ Before:
 After:
   Restore
 
+  unlet! g:i
+  unlet! g:results
+  unlet! g:expected_results
+
   delfunction TestCallback
   delfunction TestCallback2
+  call ale#engine#Cleanup(bufnr(''))
   call ale#linter#Reset()
 
 Given foobar (Some imaginary filetype):
@@ -45,10 +50,7 @@ Given foobar (Some imaginary filetype):
 Execute(Linters should run with the default options):
   AssertEqual 'foobar', &filetype
 
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
-
-  AssertEqual [{
+  let g:expected_results = [{
   \   'bufnr': bufnr('%'),
   \   'lnum': 2,
   \   'vcol': 0,
@@ -58,7 +60,22 @@ Execute(Linters should run with the default options):
   \   'nr': -1,
   \   'pattern': '',
   \   'valid': 1,
-  \ }], getloclist(0)
+  \ }]
+
+  " Try the test a few times over in NeoVim 0.3 or Windows,
+  " where tests fail randomly.
+  for g:i in range(has('nvim-0.3') || has('win32') ? 5 : 1)
+    call ale#Lint()
+    call ale#engine#WaitForJobs(2000)
+
+    let g:results = ale#test#GetLoclistWithoutModule()
+
+    if g:results == g:expected_results
+      break
+    endif
+  endfor
+
+  AssertEqual g:expected_results, g:results
 
 Execute(Linters should run in PowerShell too):
   if has('win32')
@@ -93,7 +110,7 @@ Execute(Linters should run in PowerShell too):
     \})
 
     call ale#Lint()
-    call ale#engine#WaitForJobs(2000)
+    call ale#engine#WaitForJobs(4000)
 
     AssertEqual [
     \ {
@@ -118,7 +135,7 @@ Execute(Linters should run in PowerShell too):
     \   'pattern': '',
     \   'valid': 1,
     \ },
-    \], getloclist(0)
+    \], ale#test#GetLoclistWithoutModule()
   endif
 
 Execute(Previous errors should be removed when linters change):
@@ -134,17 +151,29 @@ Execute(Previous errors should be removed when linters change):
   \ 'command': has('win32') ? 'echo baz boz' : '/bin/sh -c ''echo baz boz''',
   \})
 
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
+  let g:expected_results = [{
+  \ 'bufnr': bufnr('%'),
+  \ 'lnum': 3,
+  \ 'vcol': 0,
+  \ 'col': 4,
+  \ 'text': 'baz boz',
+  \ 'type': 'E',
+  \ 'nr': -1,
+  \ 'pattern': '',
+  \ 'valid': 1,
+  \}]
 
-  AssertEqual [{
-  \   'bufnr': bufnr('%'),
-  \   'lnum': 3,
-  \   'vcol': 0,
-  \   'col': 4,
-  \   'text': 'baz boz',
-  \   'type': 'E',
-  \   'nr': -1,
-  \   'pattern': '',
-  \   'valid': 1,
-  \ }], getloclist(0)
+  " Try the test a few times over in NeoVim 0.3 or Windows,
+  " where tests fail randomly.
+  for g:i in range(has('nvim-0.3') || has('win32') ? 5 : 1)
+    call ale#Lint()
+    call ale#engine#WaitForJobs(2000)
+
+    let g:results = ale#test#GetLoclistWithoutModule()
+
+    if g:results == g:expected_results
+      break
+    endif
+  endfor
+
+  AssertEqual g:expected_results, g:results

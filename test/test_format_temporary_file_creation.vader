@@ -1,12 +1,36 @@
 Before:
+  Save g:ale_buffer_info
+  Save g:ale_echo_cursor
+  Save g:ale_enabled
+  Save g:ale_run_synchronously
+  Save g:ale_set_highlights
+  Save g:ale_set_loclist
+  Save g:ale_set_quickfix
+  Save g:ale_set_signs
+
+  " Disable the features we don't need to check.
+  let g:ale_buffer_info = {}
+  let g:ale_echo_cursor = 0
+  let g:ale_enabled = 1
+  let g:ale_run_synchronously = 1
+  let g:ale_set_highlights = 0
+  let g:ale_set_loclist = 0
+  let g:ale_set_quickfix = 0
+  let g:ale_set_signs = 0
+
   let g:output = []
 
   function! TestCallback(buffer, output)
-    let g:output = a:output
+    " Extract just letters from the output.
+    let g:output = filter(
+    \ map(a:output, 'matchstr(v:val, ''[a-zA-Z]\+'')'),
+    \ '!empty(v:val)'
+    \)
 
     return []
   endfunction
 
+  call ale#linter#PreventLoading('foobar')
   call ale#linter#Define('foobar', {
   \ 'name': 'testlinter',
   \ 'callback': 'TestCallback',
@@ -15,8 +39,12 @@ Before:
   \})
 
 After:
+  Restore
+
   unlet! g:output
   delfunction TestCallback
+
+  call ale#engine#Cleanup(bufnr(''))
   call ale#linter#Reset()
 
 Given foobar (Some imaginary filetype):
@@ -27,9 +55,6 @@ Given foobar (Some imaginary filetype):
 Execute(ALE should be able to read the %t file):
   AssertEqual 'foobar', &filetype
 
-  " Sleep a little so the test passes more.
-  sleep 100ms
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
+  ALELint
 
   AssertEqual ['foo', 'bar', 'baz'], g:output

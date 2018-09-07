@@ -1,40 +1,25 @@
 Before:
-  Save g:ale_awk_gawk_executable
-  Save g:ale_awk_gawk_options
-  unlet! g:ale_awk_gawk_executable
-  unlet! g:ale_awk_gawk_options
-
-  runtime ale_linters/awk/gawk.vim
+  call ale#assert#SetUpLinterTest('awk', 'gawk')
 
 After:
-  Restore
-  unlet! b:command_tail
-  unlet! b:ale_awk_gawk_executable
-  unlet! b:ale_awk_gawk_options
+  call ale#assert#TearDownLinterTest()
 
-  call ale#linter#Reset()
+Execute(The default command should be correct):
+  AssertLinter 'gawk',
+  \ ale#Escape('gawk') . ' --source ' . ale#Escape('BEGIN { exit } END { exit 1 }')
+  \   . ' -f %t --lint /dev/null'
 
-Execute(The executable should be used in the command):
-  AssertEqual
-  \ 'gawk'
-    \ . " --source 'BEGIN { exit } END { exit 1 }'"
-    \ . '  ' . '-f %t --lint /dev/null',
-  \ ale_linters#awk#gawk#GetCommand(bufnr(''))
-
+Execute(The executable should be configurable):
   let b:ale_awk_gawk_executable = '/other/gawk'
 
-  AssertEqual
-  \ '/other/gawk'
-    \ . " --source 'BEGIN { exit } END { exit 1 }'"
-    \ . '  ' . '-f %t --lint /dev/null',
-  \ ale_linters#awk#gawk#GetCommand(bufnr(''))
+  AssertLinter '/other/gawk',
+  \ ale#Escape('/other/gawk') . ' --source ' . ale#Escape('BEGIN { exit } END { exit 1 }')
+  \   . ' -f %t --lint /dev/null'
 
+Execute(The options should be configurable):
   let b:ale_awk_gawk_executable = 'gawk'
   let b:ale_awk_gawk_options = '--something'
 
-  AssertEqual
-  \ 'gawk'
-    \ . " --source 'BEGIN { exit } END { exit 1 }'"
-    \ . ' --something'
-    \ . ' ' . '-f %t --lint /dev/null',
-  \ ale_linters#awk#gawk#GetCommand(bufnr(''))
+  AssertLinter 'gawk',
+  \ ale#Escape('gawk') . ' --source ' . ale#Escape('BEGIN { exit } END { exit 1 }')
+  \   . ' --something -f %t --lint /dev/null'

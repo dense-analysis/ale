@@ -1,48 +1,36 @@
 Before:
-  Save g:ale_r_lintr_options
-
-  unlet! g:ale_r_lintr_options
-  unlet! b:ale_r_lintr_options
-
-  runtime ale_linters/r/lintr.vim
+  call ale#assert#SetUpLinterTest('r', 'lintr')
 
 After:
-  Restore
-
-  unlet! b:ale_r_lintr_options
-
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The default lintr command should be correct):
-  AssertEqual
+  AssertLinter 'Rscript',
   \   'cd ' . ale#Escape(getcwd()) . ' && '
-  \   . 'Rscript -e '
+  \   . 'Rscript --vanilla -e '
   \   . ale#Escape('suppressPackageStartupMessages(library(lintr));'
-      \   .            'lint(cache = FALSE, commandArgs(TRUE), '
-      \   .            'with_defaults())')
-  \   . ' %t',
-  \ ale_linters#r#lintr#GetCommand(bufnr(''))
+  \   .            'lint(cache = FALSE, commandArgs(TRUE), '
+  \   .            'with_defaults())')
+  \   . ' %t'
 
 Execute(The lintr options should be configurable):
   let b:ale_r_lintr_options = 'with_defaults(object_usage_linter = NULL)'
 
-  AssertEqual
+  AssertLinter 'Rscript',
   \   'cd ' . ale#Escape(getcwd()) . ' && '
-  \   . 'Rscript -e '
+  \   . 'Rscript --vanilla -e '
   \   . ale#Escape('suppressPackageStartupMessages(library(lintr));'
-      \   .            'lint(cache = FALSE, commandArgs(TRUE), '
-      \   .            'with_defaults(object_usage_linter = NULL))')
-  \   . ' %t',
-  \ ale_linters#r#lintr#GetCommand(bufnr(''))
+  \   .            'lint(cache = FALSE, commandArgs(TRUE), '
+  \   .            'with_defaults(object_usage_linter = NULL))')
+  \   . ' %t'
 
 Execute(If the lint_package flag is set, lintr::lint_package should be called):
   let b:ale_r_lintr_lint_package = 1
 
-  AssertEqual
+  AssertLinter 'Rscript',
   \   'cd ' . ale#Escape(getcwd()) . ' && '
-  \   . 'Rscript -e '
+  \   . 'Rscript --vanilla -e '
   \   . ale#Escape('suppressPackageStartupMessages(library(lintr));'
-      \    .           'lint_package(cache = FALSE, '
-      \    .           'linters = with_defaults())')
-  \   . ' %t',
-  \ ale_linters#r#lintr#GetCommand(bufnr(''))
+  \   .            'lint_package(cache = FALSE, '
+  \   .            'linters = with_defaults())')
+  \   . ' %t'

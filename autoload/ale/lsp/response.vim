@@ -1,6 +1,20 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Parsing and transforming of LSP server responses.
 
+" Constants for error codes.
+" Defined by JSON RPC
+let s:PARSE_ERROR = -32700
+let s:INVALID_REQUEST = -32600
+let s:METHOD_NOT_FOUND = -32601
+let s:INVALID_PARAMS = -32602
+let s:INTERNAL_ERROR = -32603
+let s:SERVER_ERROR_START = -32099
+let s:SERVER_ERROR_END = -32000
+let s:SERVER_NOT_INITIALIZED = -32002
+let s:UNKNOWN_ERROR_CODE = -32001
+" Defined by the protocol.
+let s:REQUEST_CANCELLED = -32800
+
 " Constants for message severity codes.
 let s:SEVERITY_ERROR = 1
 let s:SEVERITY_WARNING = 2
@@ -33,7 +47,23 @@ function! ale#lsp#response#ReadDiagnostics(response) abort
         endif
 
         if has_key(l:diagnostic, 'code')
-            let l:loclist_item.nr = l:diagnostic.code
+            if type(l:diagnostic.code) == v:t_string
+                let l:loclist_item.code = l:diagnostic.code
+            elseif type(l:diagnostic.code) == v:t_number && l:diagnostic.code != -1
+                let l:loclist_item.code = string(l:diagnostic.code)
+                let l:loclist_item.nr = l:diagnostic.code
+            endif
+        endif
+
+        if has_key(l:diagnostic, 'relatedInformation')
+            let l:related = deepcopy(l:diagnostic.relatedInformation)
+            call map(l:related, {key, val ->
+                \ ale#path#FromURI(val.location.uri) .
+                \ ':' . (val.location.range.start.line + 1) .
+                \ ':' . (val.location.range.start.character + 1) .
+                \ ":\n\t" . val.message
+                \ })
+            let l:loclist_item.detail = l:diagnostic.message . "\n" . join(l:related, "\n")
         endif
 
         call add(l:loclist, l:loclist_item)
@@ -56,7 +86,12 @@ function! ale#lsp#response#ReadTSServerDiagnostics(response) abort
         \}
 
         if has_key(l:diagnostic, 'code')
-            let l:loclist_item.nr = l:diagnostic.code
+            if type(l:diagnostic.code) == v:t_string
+                let l:loclist_item.code = l:diagnostic.code
+            elseif type(l:diagnostic.code) == v:t_number && l:diagnostic.code != -1
+                let l:loclist_item.code = string(l:diagnostic.code)
+                let l:loclist_item.nr = l:diagnostic.code
+            endif
         endif
 
         if get(l:diagnostic, 'category') is# 'warning'
@@ -71,4 +106,38 @@ function! ale#lsp#response#ReadTSServerDiagnostics(response) abort
     endfor
 
     return l:loclist
+endfunction
+
+function! ale#lsp#response#GetErrorMessage(response) abort
+    if type(get(a:response, 'error', 0)) isnot v:t_dict
+        return ''
+    endif
+
+    let l:code = get(a:response.error, 'code')
+
+    " Only report things for these error codes.
+    if l:code isnot s:INVALID_PARAMS && l:code isnot s:INTERNAL_ERROR
+        return ''
+    endif
+
+    let l:message = get(a:response.error, 'message', '')
+
+    if empty(l:message)
+        return ''
+    endif
+
+    " Include the traceback or error data as details, if present.
+    let l:error_data = get(a:response.error, 'data', {})
+
+    if type(l:error_data) is v:t_string
+        let l:message .= "\n" . l:error_data
+    elseif type(l:error_data) is v:t_dict
+        let l:traceback = get(l:error_data, 'traceback', [])
+
+        if type(l:traceback) is v:t_list && !empty(l:traceback)
+            let l:message .= "\n" . join(l:traceback, "\n")
+        endif
+    endif
+
+    return l:message
 endfunction

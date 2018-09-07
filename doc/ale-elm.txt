@@ -34,7 +34,7 @@ elm-make                                                     *ale-elm-elm-make*
 g:ale_elm_make_executable                           *g:ale_elm_make_executable*
                                                     *b:ale_elm_make_executable*
   Type: |String|
-  Default: `'elm-make'`
+  Default: `'elm'`
 
   See |ale-integrations-local-executables|
 

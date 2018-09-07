@@ -1,26 +1,15 @@
 " Author: Vincent Lequertier <https://github.com/SkySymbol>, Chris Weyl <cweyl@alumni.drew.edu>
 " Description: This file adds support for checking perl with perl critic
 
-let g:ale_perl_perlcritic_executable =
-\   get(g:, 'ale_perl_perlcritic_executable', 'perlcritic')
-
-let g:ale_perl_perlcritic_profile =
-\   get(g:, 'ale_perl_perlcritic_profile', '.perlcriticrc')
-
-let g:ale_perl_perlcritic_options =
-\   get(g:, 'ale_perl_perlcritic_options', '')
-
-let g:ale_perl_perlcritic_showrules =
-\   get(g:, 'ale_perl_perlcritic_showrules', 0)
-
-function! ale_linters#perl#perlcritic#GetExecutable(buffer) abort
-    return ale#Var(a:buffer, 'perl_perlcritic_executable')
-endfunction
+call ale#Set('perl_perlcritic_executable', 'perlcritic')
+call ale#Set('perl_perlcritic_profile', '.perlcriticrc')
+call ale#Set('perl_perlcritic_options', '')
+call ale#Set('perl_perlcritic_showrules', 0)
 
 function! ale_linters#perl#perlcritic#GetProfile(buffer) abort
-
     " first see if we've been overridden
     let l:profile = ale#Var(a:buffer, 'perl_perlcritic_profile')
+
     if l:profile is? ''
         return ''
     endif
@@ -31,6 +20,7 @@ endfunction
 
 function! ale_linters#perl#perlcritic#GetCommand(buffer) abort
     let l:critic_verbosity = '%l:%c %m\n'
+
     if ale#Var(a:buffer, 'perl_perlcritic_showrules')
         let l:critic_verbosity = '%l:%c %m [%p]\n'
     endif
@@ -38,17 +28,11 @@ function! ale_linters#perl#perlcritic#GetCommand(buffer) abort
     let l:profile = ale_linters#perl#perlcritic#GetProfile(a:buffer)
     let l:options = ale#Var(a:buffer, 'perl_perlcritic_options')
 
-    let l:command = ale#Escape(ale_linters#perl#perlcritic#GetExecutable(a:buffer))
-    \   . " --verbose '". l:critic_verbosity . "' --nocolor"
-
-    if l:profile isnot? ''
-        let l:command .= ' --profile ' . ale#Escape(l:profile)
-    endif
-    if l:options isnot? ''
-        let l:command .= ' ' . l:options
-    endif
-
-    return l:command
+    return '%e'
+    \   . ' --verbose ' . ale#Escape(l:critic_verbosity)
+    \   . ' --nocolor'
+    \   . (!empty(l:profile) ? ' --profile ' . ale#Escape(l:profile) : '')
+    \   . ale#Pad(l:options)
 endfunction
 
 
@@ -71,7 +55,7 @@ endfunction
 call ale#linter#Define('perl', {
 \   'name': 'perlcritic',
 \   'output_stream': 'stdout',
-\   'executable_callback': 'ale_linters#perl#perlcritic#GetExecutable',
+\   'executable_callback': ale#VarFunc('perl_perlcritic_executable'),
 \   'command_callback': 'ale_linters#perl#perlcritic#GetCommand',
 \   'callback': 'ale_linters#perl#perlcritic#Handle',
 \})

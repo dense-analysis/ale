@@ -1,25 +1,18 @@
 Before:
-  runtime ale_linters/ruby/rubocop.vim
-  call ale#test#SetDirectory('/testplugin/test/')
+  call ale#assert#SetUpLinterTest('cucumber', 'cucumber')
 
 After:
-  Restore
-
-  call ale#linter#Reset()
-  call ale#test#RestoreDirectory()
+  call ale#assert#TearDownLinterTest()
 
 Execute(Should require the nearest features dir, if one is found):
-  call ale#test#SetFilename('cucumber_fixtures/features/cuke.feature')
+  call ale#test#SetFilename('../cucumber_fixtures/features/cuke.feature')
 
-  AssertEqual
-  \   'cucumber --dry-run --quiet --strict --format=json '
-  \   . '-r ' . ale#Escape(ale#path#Simplify(g:dir . '/cucumber_fixtures/features/')) . ' %t',
-  \   ale_linters#cucumber#cucumber#GetCommand(bufnr(''))
+  AssertLinter 'cucumber',
+  \ 'cucumber --dry-run --quiet --strict --format=json '
+  \ . '-r ' . ale#Escape(ale#path#Simplify(g:dir . '/../cucumber_fixtures/features/')) . ' %t'
 
 Execute(Should require nothing if no features dir is found):
   call ale#test#SetFilename('something/without/a/features/dir')
 
-  AssertEqual
-  \   'cucumber --dry-run --quiet --strict --format=json '
-  \   . ' %t',
-  \   ale_linters#cucumber#cucumber#GetCommand(bufnr(''))
+  AssertLinter 'cucumber',
+  \ 'cucumber --dry-run --quiet --strict --format=json  %t'
