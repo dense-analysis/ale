@@ -34,8 +34,6 @@ CONTENTS                                                         *ale-contents*
       flawfinder..........................|ale-c-flawfinder|
       gcc.................................|ale-c-gcc|
       uncrustify..........................|ale-c-uncrustify|
-    d.....................................|ale-d-options|
-      uncrustify..........................|ale-d-uncrustify|
     chef..................................|ale-chef-options|
       foodcritic..........................|ale-chef-foodcritic|
     clojure...............................|ale-clojure-options|
@@ -67,6 +65,7 @@ CONTENTS                                                         *ale-contents*
     cuda..................................|ale-cuda-options|
       nvcc................................|ale-cuda-nvcc|
     d.....................................|ale-d-options|
+      uncrustify..........................|ale-d-uncrustify|
     dart..................................|ale-dart-options|
       dartanalyzer........................|ale-dart-dartanalyzer|
       dartfmt.............................|ale-dart-dartfmt|
