@@ -136,6 +136,7 @@ formatting.
 | JavaScript | [eslint](http://eslint.org/), [flow](https://flowtype.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/), [prettier](https://github.com/prettier/prettier), [prettier-eslint](https://github.com/prettier/prettier-eslint-cli), [prettier-standard](https://github.com/sheerun/prettier-standard), [standard](http://standardjs.com/), [xo](https://github.com/sindresorhus/xo)
 | JSON | [fixjson](https://github.com/rhysd/fixjson), [jsonlint](http://zaa.ch/jsonlint/), [jq](https://stedolan.github.io/jq/), [prettier](https://github.com/prettier/prettier) |
 | Kotlin | [kotlinc](https://kotlinlang.org) !!, [ktlint](https://ktlint.github.io) !!, [languageserver](https://github.com/fwcd/KotlinLanguageServer) see `:help ale-integration-kotlin` for configuration instructions |
+| Julia | [LanguageServer.jl](https://github.com/JuliaEditorSupport/LanguageServer.jl) |
 | LaTeX | [alex](https://github.com/wooorm/alex) !!, [chktex](http://www.nongnu.org/chktex/), [lacheck](https://www.ctan.org/pkg/lacheck), [proselint](http://proselint.com/), [redpen](http://redpen.cc/), [vale](https://github.com/ValeLint/vale), [write-good](https://github.com/btford/write-good) |
 | Less | [lessc](https://www.npmjs.com/package/less), [prettier](https://github.com/prettier/prettier), [stylelint](https://github.com/stylelint/stylelint) |
 | LLVM | [llc](https://llvm.org/docs/CommandGuide/llc.html) |
