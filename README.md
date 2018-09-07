@@ -176,7 +176,7 @@ formatting.
 | SML | [smlnj](http://www.smlnj.org/) |
 | Solidity | [solhint](https://github.com/protofire/solhint), [solium](https://github.com/duaraghav8/Solium) |
 | Stylus | [stylelint](https://github.com/stylelint/stylelint) |
-| SQL | [sqlint](https://github.com/purcell/sqlint) |
+| SQL | [sqlint](https://github.com/purcell/sqlint), [sqlfmt](https://github.com/jackc/sqlfmt) |
 | Swift | [swiftlint](https://github.com/realm/SwiftLint), [swiftformat](https://github.com/nicklockwood/SwiftFormat) |
 | Tcl | [nagelfar](http://nagelfar.sourceforge.net) !! |
 | Terraform | [tflint](https://github.com/wata727/tflint) |

@@ -195,6 +195,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['sh'],
 \       'description': 'Fix sh files with shfmt.',
 \   },
+\   'sqlfmt': {
+\       'function': 'ale#fixers#sqlfmt#Fix',
+\       'suggested_filetypes': ['sql'],
+\       'description': 'Fix SQL files with sqlfmt.',
+\   },
 \   'google_java_format': {
 \       'function': 'ale#fixers#google_java_format#Fix',
 \       'suggested_filetypes': ['java'],
