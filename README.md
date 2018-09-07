@@ -152,6 +152,7 @@ formatting.
 | Objective-C | [clang](http://clang.llvm.org/), [clangd](https://clang.llvm.org/extra/clangd.html), [uncrustify](https://github.com/uncrustify/uncrustify) |
 | Objective-C++ | [clang](http://clang.llvm.org/), [clangd](https://clang.llvm.org/extra/clangd.html), [uncrustify](https://github.com/uncrustify/uncrustify) |
 | OCaml | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-ocaml-merlin` for configuration instructions, [ols](https://github.com/freebroccolo/ocaml-language-server), [ocamlformat](https://github.com/ocaml-ppx/ocamlformat) |
+| Pawn | [uncrustify](https://github.com/uncrustify/uncrustify) |
 | Perl | [perl -c](https://perl.org/), [perl-critic](https://metacpan.org/pod/Perl::Critic), [perltidy](https://metacpan.org/pod/distribution/Perl-Tidy/bin/perltidy) |
 | PHP | [langserver](https://github.com/felixfbecker/php-language-server), [phan](https://github.com/phan/phan) see `:help ale-php-phan` to instructions, [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer), [phpmd](https://phpmd.org), [phpstan](https://github.com/phpstan/phpstan), [phpcbf](https://github.com/squizlabs/PHP_CodeSniffer), [php-cs-fixer](http://cs.sensiolabs.org/) |
 | PO | [alex](https://github.com/wooorm/alex) !!, [msgfmt](https://www.gnu.org/software/gettext/manual/html_node/msgfmt-Invocation.html), [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good) |
@@ -185,6 +186,7 @@ formatting.
 | Thrift | [thrift](http://thrift.apache.org/) |
 | TypeScript | [eslint](http://eslint.org/), [prettier](https://github.com/prettier/prettier), [tslint](https://github.com/palantir/tslint), tsserver, typecheck |
 | Verilog | [iverilog](https://github.com/steveicarus/iverilog), [verilator](http://www.veripool.org/projects/verilator/wiki/Intro) |
+| VALA | [uncrustify](https://github.com/uncrustify/uncrustify) |
 | Vim | [vint](https://github.com/Kuniwak/vint) |
 | Vim help^ | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good) |
 | Vue | [prettier](https://github.com/prettier/prettier), [vls](https://github.com/vuejs/vetur/tree/master/server) |

@@ -33,7 +33,7 @@ g:ale_objcpp_clangd_options                       *g:ale_objcpp_clangd_options*
 
 
 ===============================================================================
-uncrustify                                                *ale-objc-uncrustify*
+uncrustify                                              *ale-objcpp-uncrustify*
 
 See |ale-c-uncrustify| for information about the available options.
 

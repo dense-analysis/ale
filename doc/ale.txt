@@ -34,6 +34,8 @@ CONTENTS                                                         *ale-contents*
       flawfinder..........................|ale-c-flawfinder|
       gcc.................................|ale-c-gcc|
       uncrustify..........................|ale-c-uncrustify|
+    d.....................................|ale-d-options|
+      uncrustify..........................|ale-d-uncrustify|
     chef..................................|ale-chef-options|
       foodcritic..........................|ale-chef-foodcritic|
     clojure...............................|ale-clojure-options|
@@ -54,11 +56,11 @@ CONTENTS                                                         *ale-contents*
       cquery..............................|ale-cpp-cquery|
       flawfinder..........................|ale-cpp-flawfinder|
       gcc.................................|ale-cpp-gcc|
-      uncrustify..........................|ale-c-uncrustify|
+      uncrustify..........................|ale-cpp-uncrustify|
     c#....................................|ale-cs-options|
       mcs.................................|ale-cs-mcs|
       mcsc................................|ale-cs-mcsc|
-      uncrustify..........................|ale-c-uncrustify|
+      uncrustify..........................|ale-cs-uncrustify|
     css...................................|ale-css-options|
       prettier............................|ale-css-prettier|
       stylelint...........................|ale-css-stylelint|
@@ -132,7 +134,7 @@ CONTENTS                                                         *ale-contents*
       google-java-format..................|ale-java-google-java-format|
       pmd.................................|ale-java-pmd|
       javalsp.............................|ale-java-javalsp|
-      uncrustify..........................|ale-c-uncrustify|
+      uncrustify..........................|ale-java-uncrustify|
     javascript............................|ale-javascript-options|
       eslint..............................|ale-javascript-eslint|
       flow................................|ale-javascript-flow|
@@ -179,15 +181,17 @@ CONTENTS                                                         *ale-contents*
     objc..................................|ale-objc-options|
       clang...............................|ale-objc-clang|
       clangd..............................|ale-objc-clangd|
-      uncrustify..........................|ale-c-uncrustify|
+      uncrustify..........................|ale-objc-uncrustify|
     objcpp................................|ale-objcpp-options|
       clang...............................|ale-objcpp-clang|
       clangd..............................|ale-objcpp-clangd|
+      uncrustify..........................|ale-objcpp-uncrustify|
     ocaml.................................|ale-ocaml-options|
       merlin..............................|ale-ocaml-merlin|
       ols.................................|ale-ocaml-ols|
       ocamlformat.........................|ale-ocaml-ocamlformat|
     pawn..................................|ale-pawn-options|
+      uncrustify..........................|ale-pawn-uncrustify|
     perl..................................|ale-perl-options|
       perl................................|ale-perl-perl|
       perlcritic..........................|ale-perl-perlcritic|
@@ -296,6 +300,7 @@ CONTENTS                                                         *ale-contents*
       tslint..............................|ale-typescript-tslint|
       tsserver............................|ale-typescript-tsserver|
     vala..................................|ale-vala-options|
+      uncrustify..........................|ale-vala-uncrustify|
     verilog/systemverilog.................|ale-verilog-options|
       iverilog............................|ale-verilog-iverilog|
       verilator...........................|ale-verilog-verilator|
@@ -418,7 +423,7 @@ Notes:
 * nix: `nix-instantiate`
 * nroff: `alex`!!, `proselint`, `write-good`
 * Objective-C: `clang`, `clangd`, `uncrustify`
-* Objective-C++: `clang`, `clangd`
+* Objective-C++: `clang`, `clangd`, `uncrustify`
 * OCaml: `merlin` (see |ale-ocaml-merlin|), `ols`, `ocamlformat`
 * Pawn: `uncrustify`
 * Perl: `perl -c`, `perl-critic`, `perltidy`
