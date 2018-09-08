@@ -148,7 +148,17 @@ function! ale#events#Init() abort
             endfunction
 
             if g:ale_show_cursor_detail
-                autocmd CursorMoved,CursorHold * call AleShowCursorDetailCmd()
+                if len(g:ale_cursor_detail_fileextensions)
+                    let ftStr=""
+
+                    for ft in g:ale_cursor_detail_fileextensions
+                        let ftStr .= ft . ","
+                    endfor
+
+                    execute "autocmd CursorMoved,CursorHold *.{" . strpart(ftStr, 0, len(ftStr)-1) . "} call AleShowCursorDetailCmd()"
+                else
+                    autocmd CursorMoved,CursorHold * call AleShowCursorDetailCmd()
+                endif
             endif
 
             if g:ale_close_preview_on_insert

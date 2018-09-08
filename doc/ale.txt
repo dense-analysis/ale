@@ -873,7 +873,7 @@ g:ale_completion_max_suggestions             *g:ale_completion_max_suggestions*
   Adjust this option as needed, depending on the complexity of your codebase
   and your available processing power.
 
-g:ale_show_cursor_details                           *g:ale_show_cursor_details*
+g:ale_show_cursor_detail                             *g:ale_show_cursor_detail*
 
   Type: |Number|
   Default: `0`
@@ -886,6 +886,14 @@ g:ale_show_cursor_details                           *g:ale_show_cursor_details*
 
   The preview window is opened without stealing focus, which means your cursor
   will stay in the same buffer as it currently is.
+
+g:ale_cursor_detail_fileextensions         *g:ale_cursor_detail_fileextensions*
+
+  Type: |List|
+  Default: `[]`
+
+  Limits the functionality of *g:ale_show_cursor_detail* by only enabling the
+  behavior on certain file extensions.
 
 g:ale_close_preview_on_insert                   *g:ale_close_preview_on_insert*
 
