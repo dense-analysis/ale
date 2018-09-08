@@ -10,7 +10,7 @@ within julia.
 g:ale_julia_executable                                 *g:ale_julia_executable*
                                                        *b:ale_julia_executable*
 
-  Type: String
+  Type: |String|
   Default: 'julia'
 
   Path to the julia exetuable.

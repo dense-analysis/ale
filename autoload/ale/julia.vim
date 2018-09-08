@@ -10,8 +10,10 @@ function! ale#julia#FindProjectRoot(buffer) abort
 
         if !empty(l:full_path)
             let l:path = fnamemodify(l:full_path, ':p:h')
+
             return l:path
         endif
     endfor
+
     return ''
 endfunction
