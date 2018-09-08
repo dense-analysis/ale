@@ -1,14 +1,14 @@
 ===============================================================================
-ALE Julia Integration                                        *ale-julia-options*
+ALE Julia Integration                                       *ale-julia-options*
 
 ===============================================================================
-languageserver                                        *ale-julia-languageserver*
+languageserver                                       *ale-julia-languageserver*
 
 To enable Julia LSP linter you need to install the LanguageServer.jl package
 within julia.
 
-g:ale_julia_executable                                  *g:ale_julia_executable*
-                                                        *b:ale_julia_executable*
+g:ale_julia_executable                                 *g:ale_julia_executable*
+                                                       *b:ale_julia_executable*
 
   Type: String
   Default: 'julia'
