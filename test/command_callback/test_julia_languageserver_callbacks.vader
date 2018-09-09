@@ -6,7 +6,7 @@ After:
 
 Execute(The default executable path should be correct):
   AssertLinter 'julia',
-  \'julia' .
+  \ ale#Escape('julia') .
   \' --startup-file=no --history-file=no -e ' .
   \ ale#Escape('using LanguageServer; server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false); server.runlinter = true; run(server);')
 
@@ -14,7 +14,7 @@ Execute(The executable should be configurable):
   let g:ale_julia_executable = 'julia-new'
 
   AssertLinter 'julia-new',
-  \'julia-new' .
+  \ ale#Escape('julia-new') .
   \' --startup-file=no --history-file=no -e ' .
   \ ale#Escape('using LanguageServer; server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false); server.runlinter = true; run(server);')
 
