@@ -235,6 +235,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['xml'],
 \       'description': 'Fix XML files with xmllint.',
 \   },
+\   'uncrustify': {
+\       'function': 'ale#fixers#uncrustify#Fix',
+\       'suggested_filetypes': ['c', 'cpp', 'cs', 'objc', 'objcpp', 'd', 'java', 'p', 'vala' ],
+\       'description': 'Fix C, C++, C#, ObjectiveC, ObjectiveC++, D, Java, Pawn, and VALA files with uncrustify.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
