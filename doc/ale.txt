@@ -279,6 +279,8 @@ CONTENTS                                                         *ale-contents*
       solium..............................|ale-solidity-solium|
     spec..................................|ale-spec-options|
       rpmlint.............................|ale-spec-rpmlint|
+    sql...................................|ale-sql-options|
+      sqlfmt..............................|ale-sql-sqlfmt|
     stylus................................|ale-stylus-options|
       stylelint...........................|ale-stylus-stylelint|
     tcl...................................|ale-tcl-options|
@@ -451,7 +453,7 @@ Notes:
 * SML: `smlnj`
 * Solidity: `solhint`, `solium`
 * Stylus: `stylelint`
-* SQL: `sqlint`
+* SQL: `sqlint`, `sqlfmt`
 * Swift: `swiftlint`, `swiftformat`
 * Tcl: `nagelfar`!!
 * Terraform: `tflint`
