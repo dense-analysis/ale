@@ -152,6 +152,8 @@ CONTENTS                                                         *ale-contents*
       jsonlint............................|ale-json-jsonlint|
       jq..................................|ale-json-jq|
       prettier............................|ale-json-prettier|
+    julia.................................|ale-julia-options|
+      languageserver......................|ale-julia-languageserver|
     kotlin................................|ale-kotlin-options|
       kotlinc.............................|ale-kotlin-kotlinc|
       ktlint..............................|ale-kotlin-ktlint|
@@ -411,6 +413,7 @@ Notes:
 * Java: `checkstyle`, `javac`, `google-java-format`, `PMD`, `javalsp`, `uncrustify`
 * JavaScript: `eslint`, `flow`, `jscs`, `jshint`, `prettier`, `prettier-eslint`, `prettier-standard`, `standard`, `xo`
 * JSON: `fixjson`, `jsonlint`, `jq`, `prettier`
+* Julia: `languageserver`
 * Kotlin: `kotlinc`!!, `ktlint`!!, `languageserver`
 * LaTeX (tex): `alex`!!, `chktex`, `lacheck`, `proselint`, `redpen`, `vale`, `write-good`
 * Less: `lessc`, `prettier`, `stylelint`
