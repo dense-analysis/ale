@@ -1,22 +1,12 @@
 " Author: richard marmorstein <https://github.com/twitchard>
 " Description: plugin for Psalm, static analyzer for PHP
 
-let g:ale_php_psalm_executable = get(g:, 'ale_php_psalm_executable', 'psalm')
-
-function! ale_linters#php#psalm#GetExecutable(buffer) abort
-    return ale#Var(a:buffer, 'php_psalm_executable')
-endfunction
-
-function! ale_linters#php#psalm#GetCommand(buffer) abort
-    return ale#Escape(ale_linters#php#psalm#GetExecutable(a:buffer)) . ' --diff --output-format=emacs %s'
-endfunction
+call ale#Set('php_psalm_executable', 'psalm')
 
 function! ale_linters#php#psalm#Handle(buffer, lines) abort
     " Matches patterns like the following:
-
     let l:pattern = '^.*:\(\d\+\):\(\d\+\):\(\w\+\) - \(.*\)$'
     let l:output = []
-
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
@@ -32,6 +22,8 @@ endfunction
 call ale#linter#Define('php', {
 \   'name': 'psalm',
 \   'executable': 'echo',
+\   'command': '%e --diff --output-format=emacs %s',
+\   'executable_callback': ale#VarFunc('php_psalm_executable'),
 \   'command_callback': 'ale_linters#php#psalm#GetCommand',
 \   'callback': 'ale_linters#php#psalm#Handle',
 \   'lint_file': 1,

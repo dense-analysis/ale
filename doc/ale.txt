@@ -194,6 +194,7 @@ CONTENTS                                                         *ale-contents*
       phpcs...............................|ale-php-phpcs|
       phpmd...............................|ale-php-phpmd|
       phpstan.............................|ale-php-phpstan|
+      psalm...............................|ale-php-psalm|
       php-cs-fixer........................|ale-php-php-cs-fixer|
     po....................................|ale-po-options|
       write-good..........................|ale-po-write-good|
