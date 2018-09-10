@@ -8,4 +8,3 @@ function! ale#fixers#gomod#Fix(buffer) abort
     \   'read_temporary_file': 1,
     \}
 endfunction
-
