@@ -24,7 +24,6 @@ call ale#linter#Define('php', {
 \   'executable': 'echo',
 \   'command': '%e --diff --output-format=emacs %s',
 \   'executable_callback': ale#VarFunc('php_psalm_executable'),
-\   'command_callback': 'ale_linters#php#psalm#GetCommand',
 \   'callback': 'ale_linters#php#psalm#Handle',
 \   'lint_file': 1,
 \})
