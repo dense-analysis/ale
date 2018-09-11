@@ -264,7 +264,7 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
             call add(l:documentationParts, l:part.text)
         endfor
 
-        if l:suggestion.kind is# 'clasName'
+        if l:suggestion.kind is# 'className'
             let l:kind = 'f'
         elseif l:suggestion.kind is# 'parameterName'
             let l:kind = 'f'
