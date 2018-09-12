@@ -56,7 +56,7 @@ function! s:StopCursorTimer() abort
 endfunction
 
 function! ale#cursor#EchoCursorWarning(...) abort
-    if !g:ale_echo_cursor
+    if !ale#util#WarningsEnabled()
         return
     endif
 
@@ -72,21 +72,28 @@ function! ale#cursor#EchoCursorWarning(...) abort
     let l:buffer = bufnr('')
     let [l:info, l:loc] = s:FindItemAtCursor()
 
-    if !empty(l:loc)
-        let l:format = ale#Var(l:buffer, 'echo_msg_format')
-        let l:msg = ale#GetLocItemMessage(l:loc, l:format)
-        call ale#cursor#TruncatedEcho(l:msg)
-        let l:info.echoed = 1
-    elseif get(l:info, 'echoed')
-        " We'll only clear the echoed message when moving off errors once,
-        " so we don't continually clear the echo line.
-        execute 'echo'
-        let l:info.echoed = 0
+    if ale#Var(bufnr(''), 'echo_cursor')
+        if !empty(l:loc)
+            let l:format = ale#Var(l:buffer, 'echo_msg_format')
+            let l:msg = ale#GetLocItemMessage(l:loc, l:format)
+            call ale#cursor#TruncatedEcho(l:msg)
+            let l:info.echoed = 1
+        elseif get(l:info, 'echoed')
+            " We'll only clear the echoed message when moving off errors once,
+            " so we don't continually clear the echo line.
+            execute 'echo'
+            let l:info.echoed = 0
+        endif
+    endif
+
+    if ale#Var(bufnr(''), 'cursor_detail')
+        call ale#preview#CloseIfTypeMatches('ale-preview')
+        call ale#cursor#ShowCursorDetail({'stay_here': 1})
     endif
 endfunction
 
 function! ale#cursor#EchoCursorWarningWithDelay() abort
-    if !g:ale_echo_cursor
+    if !ale#util#WarningsEnabled()
         return
     endif
 
@@ -95,22 +102,29 @@ function! ale#cursor#EchoCursorWarningWithDelay() abort
         return
     endif
 
-    call s:StopCursorTimer()
+    if ale#Var(bufnr(''), 'echo_cursor')
+        call s:StopCursorTimer()
 
-    let l:pos = getcurpos()[0:2]
+        let l:pos = getcurpos()[0:2]
 
-    " Check the current buffer, line, and column number against the last
-    " recorded position. If the position has actually changed, *then*
-    " we should echo something. Otherwise we can end up doing processing
-    " the echo message far too frequently.
-    if l:pos != s:last_pos
-        let l:delay = ale#Var(bufnr(''), 'echo_delay')
+        " Check the current buffer, line, and column number against the last
+        " recorded position. If the position has actually changed, *then*
+        " we should echo something. Otherwise we can end up doing processing
+        " the echo message far too frequently.
+        if l:pos != s:last_pos
+            let l:delay = ale#Var(bufnr(''), 'echo_delay')
 
-        let s:last_pos = l:pos
-        let s:cursor_timer = timer_start(
-        \   l:delay,
-        \   function('ale#cursor#EchoCursorWarning')
-        \)
+            let s:last_pos = l:pos
+            let s:cursor_timer = timer_start(
+                        \   l:delay,
+                        \   function('ale#cursor#EchoCursorWarning')
+                        \)
+        endif
+    endif
+
+    if ale#Var(bufnr(''), 'cursor_detail')
+        call ale#preview#CloseIfTypeMatches('ale-preview')
+        call ale#cursor#ShowCursorDetail({'stay_here': 1})
     endif
 endfunction
 
@@ -133,11 +147,18 @@ function! ale#cursor#ShowCursorDetail(...) abort
         " In case options have been received, pass them down to the called
         " method.
         let options = get(a:000, 0, {})
-        if len(options) 
-            call ale#preview#Show(split(l:message, "\n"), options)
+
+        if len(options)
+            call ale#preview#Show(
+       \        split(l:message, "\n"),
+       \        {
+       \            'stay_here': get(options, 'stay_here', 0)
+       \        }
+       \    )
         else
             call ale#preview#Show(split(l:message, "\n"))
         endif
+
         execute 'echo'
     endif
 endfunction

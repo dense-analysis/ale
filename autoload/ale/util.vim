@@ -32,6 +32,12 @@ function! ale#util#ShowMessage(string) abort
     endif
 endfunction
 
+" Returns a true/false value specifying if the warnings are enabled for the
+" current context.
+function! ale#util#WarningsEnabled() abort
+    return ale#Var(bufnr(''), 'cursor_detail') || ale#Var(bufnr(''), 'echo_cursor')
+endfunction
+
 " A wrapper function for execute, so we can test executing some commands.
 function! ale#util#Execute(expr) abort
     execute a:expr

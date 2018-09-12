@@ -131,7 +131,7 @@ function! ale#events#Init() abort
                 autocmd InsertLeave * call ale#Queue(0)
             endif
 
-            if g:ale_echo_cursor
+            if ale#util#WarningsEnabled()
                 autocmd CursorMoved,CursorHold * if exists('*ale#engine#Cleanup') | call ale#cursor#EchoCursorWarningWithDelay() | endif
                 " Look for a warning to echo as soon as we leave Insert mode.
                 " The script's position variable used when moving the cursor will
@@ -139,30 +139,8 @@ function! ale#events#Init() abort
                 autocmd InsertLeave * if exists('*ale#engine#Cleanup') | call ale#cursor#EchoCursorWarning() | endif
             endif
 
-            function! AleShowCursorDetailCmd() abort
-                if exists('*ale#engine#Cleanup')
-                    call ale#preview#CloseIfTypeMatches('ale-preview')
-                    " Don't jump to the preview window during cursor movement.
-                    call ale#cursor#ShowCursorDetail({'stay_here': 1})
-                endif
-            endfunction
-
-            if g:ale_show_cursor_detail
-                if len(g:ale_cursor_detail_fileextensions)
-                    let ftStr=""
-
-                    for ft in g:ale_cursor_detail_fileextensions
-                        let ftStr .= ft . ","
-                    endfor
-
-                    execute "autocmd CursorMoved,CursorHold *.{" . strpart(ftStr, 0, len(ftStr)-1) . "} call AleShowCursorDetailCmd()"
-                else
-                    autocmd CursorMoved,CursorHold * call AleShowCursorDetailCmd()
-                endif
-            endif
-
             if g:ale_close_preview_on_insert
-                autocmd InsertEnter * call ale#preview#CloseIfTypeMatches('ale-preview')
+                autocmd InsertEnter * if exists('*ale#preview#CloseIfTypeMatches') | call ale#preview#CloseIfTypeMatches('ale-preview') | endif
             endif
         endif
     augroup END

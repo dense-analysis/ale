@@ -111,11 +111,7 @@ let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
 
 " This flag can be set to 1 to automatically display the preview on errored
 " lines.
-let g:ale_show_cursor_detail = get(g:, 'ale_show_cursor_detail', 0)
-
-" This option can be set to limit ale_show_cursor_detail to only work for
-" certain file extensions.
-let g:ale_cursor_detail_fileextensions = get(g:, 'ale_cursor_detail_fileextensions', [])
+let g:ale_cursor_detail = get(g:, 'ale_cursor_detail', 0)
 
 " This flag can be set to 1 to automatically close the preview window upon
 " entering Insert Mode.
