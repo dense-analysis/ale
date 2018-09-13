@@ -28,15 +28,20 @@ function! ale#preview#Show(lines, ...) abort
     endif
 endfunction
 
+function! ale#preview#ProbeWindowType(filetype, options) abort
+    let l:terminate_type = get(options, 'terminate_type', 0)
+    let l:is_filetype = gettabwinvar(l:win.tabnr, l:win.winnr, '&filetype') is# a:filetype
+
+    if l:terminate_type && l:is_filetype
+        silent! pclose!
+    endif
+
+    return l:is_filetype
+endfunction
+
 " Close the preview window if the filetype matches the given one.
 function! ale#preview#CloseIfTypeMatches(filetype) abort
-    for l:win in getwininfo()
-        let l:wintype = gettabwinvar(l:win.tabnr, l:win.winnr, '&filetype')
-
-        if l:wintype is# a:filetype
-            silent! pclose!
-        endif
-    endfor
+    call ale#preview#ProbeWindowType(filetype, { 'terminate_type': 1 })
 endfunction
 
 " Show a location selection preview window, given some items.
