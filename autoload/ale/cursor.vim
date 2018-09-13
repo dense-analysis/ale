@@ -72,7 +72,7 @@ function! ale#cursor#EchoCursorWarning(...) abort
     let l:buffer = bufnr('')
     let [l:info, l:loc] = s:FindItemAtCursor()
 
-    if ale#Var(bufnr(''), 'echo_cursor')
+    if ale#Var(l:buffer, 'echo_cursor')
         if !empty(l:loc)
             let l:format = ale#Var(l:buffer, 'echo_msg_format')
             let l:msg = ale#GetLocItemMessage(l:loc, l:format)
@@ -86,7 +86,7 @@ function! ale#cursor#EchoCursorWarning(...) abort
         endif
     endif
 
-    if ale#Var(bufnr(''), 'cursor_detail')
+    if ale#Var(l:buffer, 'cursor_detail')
         call ale#preview#CloseIfTypeMatches('ale-preview')
         call ale#cursor#ShowCursorDetail({'stay_here': 1})
     endif
@@ -102,7 +102,9 @@ function! ale#cursor#EchoCursorWarningWithDelay() abort
         return
     endif
 
-    if ale#Var(bufnr(''), 'echo_cursor')
+    let l:buffer = bufnr('')
+
+    if ale#Var(l:buffer, 'echo_cursor')
         call s:StopCursorTimer()
 
         let l:pos = getcurpos()[0:2]
@@ -122,7 +124,7 @@ function! ale#cursor#EchoCursorWarningWithDelay() abort
         endif
     endif
 
-    if ale#Var(bufnr(''), 'cursor_detail')
+    if ale#Var(l:buffer, 'cursor_detail')
         call ale#preview#CloseIfTypeMatches('ale-preview')
         call ale#cursor#ShowCursorDetail({'stay_here': 1})
     endif
@@ -146,15 +148,10 @@ function! ale#cursor#ShowCursorDetail(...) abort
         let l:message = get(l:loc, 'detail', l:loc.text)
         " In case options have been received, pass them down to the called
         " method.
-        let options = get(a:000, 0, {})
+        let l:options = get(a:000, 0, {})
 
-        if len(options)
-            call ale#preview#Show(
-       \        split(l:message, "\n"),
-       \        {
-       \            'stay_here': get(options, 'stay_here', 0)
-       \        }
-       \    )
+        if len(l:options)
+            call ale#preview#Show(split(l:message, "\n"),{ 'stay_here': get(l:options, 'stay_here', 0) })
         else
             call ale#preview#Show(split(l:message, "\n"))
         endif
