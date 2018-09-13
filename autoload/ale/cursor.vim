@@ -8,6 +8,8 @@ let g:ale_echo_msg_format = get(g:, 'ale_echo_msg_format', '%code: %%s')
 
 let s:cursor_timer = -1
 let s:last_pos = [0, 0, 0]
+let s:last_line = -1
+let s:last_detailed_line = -1
 
 function! ale#cursor#TruncatedEcho(original_message) abort
     let l:message = a:original_message
@@ -56,41 +58,16 @@ function! s:StopCursorTimer() abort
 endfunction
 
 function! ale#cursor#EnactCursorWarnings() abort
-    let l:buffer = bufnr('')
+    let s:last_line = line('.')
 
-    if mode(1) isnot# 'n'
+    if mode(1) isnot# 'n' || ale#ShouldDoNothing(bufnr(''))
         return
     endif
 
-    if ale#ShouldDoNothing(l:buffer)
-        return
-    endif
-
-    let [l:info, l:loc] = s:FindItemAtCursor()
-
-    if !empty(l:loc)
-        call ale#cursor#EchoCursorWarningWithDelay()
-
-        if !ale#util#ProbeWindowType('ale-preview')
-            call s:ShowCursorDetail(l:info, l:loc, l:buffer, { 'stay_here': 1 })
-        endif
-    elseif ale#Var(l:buffer, 'cursor_detail')
-        call ale#preview#CloseIfTypeMatches('ale-preview')
-    endif
-endfunction
-
-function! s:EchoCursorWarning(loc, info, buffer) abort
-    if !empty(a:loc)
-        let a:format = ale#Var(a:buffer, 'echo_msg_format')
-        let a:msg = ale#GetLocItemMessage(a:loc, a:format)
-        call ale#cursor#TruncatedEcho(a:msg)
-        let a:info.echoed = 1
-    elseif get(a:info, 'echoed')
-        " We'll only clear the echoed message when moving off errors once,
-        " so we don't continually clear the echo line.
-        execute 'echo'
-        let a:info.echoed = 0
-    endif
+    " Not necessary to know if 'ale_cursor_detail' or 'ale_echo_cursor' are set
+    " because the functions themselves check it.
+    call ale#cursor#EchoCursorWarningWithDelay()
+    call ale#cursor#ShowCursorDetail({ 'stay_here': 1 })
 endfunction
 
 function! ale#cursor#EchoCursorWarning(...) abort
@@ -100,17 +77,23 @@ function! ale#cursor#EchoCursorWarning(...) abort
         return
     endif
 
-    " Only echo the warnings in normal mode, otherwise we will get problems.
-    if mode(1) isnot# 'n'
-        return
-    endif
-
-    if ale#ShouldDoNothing(l:buffer)
+    if mode(1) isnot# 'n' || ale#ShouldDoNothing(l:buffer)
         return
     endif
 
     let [l:info, l:loc] = s:FindItemAtCursor()
-    call s:EchoCursorWarning(l:loc, l:info, l:buffer)
+
+    if !empty(l:loc)
+        let l:format = ale#Var(l:buffer, 'echo_msg_format')
+        let l:msg = ale#GetLocItemMessage(l:loc, l:format)
+        call ale#cursor#TruncatedEcho(l:msg)
+        let l:info.echoed = 1
+    elseif get(l:info, 'echoed')
+        " We'll only clear the echoed message when moving off errors once,
+        " so we don't continually clear the echo line.
+        execute 'echo'
+        let l:info.echoed = 0
+    endif
 endfunction
 
 function! ale#cursor#EchoCursorWarningWithDelay() abort
@@ -119,8 +102,7 @@ function! ale#cursor#EchoCursorWarningWithDelay() abort
     if !ale#Var(l:buffer, 'echo_cursor')
         return
     endif
-
-    " Only echo the warnings in normal mode, otherwise we will get problems.
+    
     if mode(1) isnot# 'n'
         return
     endif
@@ -144,41 +126,41 @@ function! ale#cursor#EchoCursorWarningWithDelay() abort
     endif
 endfunction
 
-function! s:ShowCursorDetail(loc, info, buffer, options) abort
-    if !empty(a:loc)
-        let a:message = get(a:loc, 'detail', a:loc.text)
-        " In case options have been received, pass them down to the called
-        " method.
-
-        if len(a:options)
-            call ale#preview#Show(split(a:message, "\n"),{ 'stay_here': get(a:options, 'stay_here', 0) })
-        else
-            call ale#preview#Show(split(a:message, "\n"))
-        endif
-
-        execute 'echo'
-    endif
-endfunction
-
 function! ale#cursor#ShowCursorDetail(...) abort
     let l:buffer = bufnr('')
-
+    
     if !ale#Var(l:buffer, 'cursor_detail')
         return
     endif
 
-    " Only echo the warnings in normal mode, otherwise we will get problems.
-    if mode() isnot# 'n'
+    if mode() isnot# 'n' || ale#ShouldDoNothing(l:buffer)
         return
     endif
 
-    if ale#ShouldDoNothing(l:buffer)
+    " Exit if the preview for the line is already open.
+    if s:last_detailed_line == s:last_line
         return
     endif
-
-    call s:StopCursorTimer()
-
+    
     let [l:info, l:loc] = s:FindItemAtCursor()
     let l:options = get(a:000, 0, {})
-    call s:ShowCursorDetail(l:loc, l:info, l:buffer, l:options)
+
+    if !empty(l:loc)
+        let s:last_detailed_line = line('.')
+        let l:message = get(l:loc, 'detail', l:loc.text)
+
+        if len(l:options)
+            call ale#preview#Show(
+          \   split(l:message, "\n"),
+          \   { 'stay_here': get(l:options, 'stay_here', 0) }
+          \ )
+        else
+            call ale#preview#Show(split(l:message, "\n"))
+        endif
+
+        execute 'echo'
+    else
+        let s:last_detailed_line = -1
+        call ale#preview#CloseIfTypeMatches('ale-preview')
+    endif
 endfunction
