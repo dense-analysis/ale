@@ -8,7 +8,7 @@ let g:ale_echo_msg_format = get(g:, 'ale_echo_msg_format', '%code: %%s')
 
 let s:cursor_timer = -1
 let s:last_pos = [0, 0, 0]
-let s:last_line = -1
+let s:current_line = -1
 let s:last_detailed_line = -1
 
 function! ale#cursor#TruncatedEcho(original_message) abort
@@ -58,7 +58,7 @@ function! s:StopCursorTimer() abort
 endfunction
 
 function! ale#cursor#EnactCursorWarnings() abort
-    let s:last_line = line('.')
+    let s:current_line = line('.')
 
     if mode(1) isnot# 'n' || ale#ShouldDoNothing(bufnr(''))
         return
@@ -102,7 +102,7 @@ function! ale#cursor#EchoCursorWarningWithDelay() abort
     if !ale#Var(l:buffer, 'echo_cursor')
         return
     endif
-    
+
     if mode(1) isnot# 'n'
         return
     endif
@@ -128,7 +128,7 @@ endfunction
 
 function! ale#cursor#ShowCursorDetail(...) abort
     let l:buffer = bufnr('')
-    
+
     if !ale#Var(l:buffer, 'cursor_detail')
         return
     endif
@@ -138,15 +138,15 @@ function! ale#cursor#ShowCursorDetail(...) abort
     endif
 
     " Exit if the preview for the line is already open.
-    if s:last_detailed_line == s:last_line
+    if s:last_detailed_line == s:current_line
         return
     endif
-    
+
     let [l:info, l:loc] = s:FindItemAtCursor()
     let l:options = get(a:000, 0, {})
 
     if !empty(l:loc)
-        let s:last_detailed_line = line('.')
+        let s:last_detailed_line = s:current_line
         let l:message = get(l:loc, 'detail', l:loc.text)
 
         if len(l:options)
