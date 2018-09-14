@@ -1,6 +1,9 @@
 " Author: ynonp - https://github.com/ynonp, Eddie Lebow https://github.com/elebow
 " Description: RuboCop, a code style analyzer for Ruby files
 
+call ale#Set('ruby_rubocop_executable', 'rubocop')
+call ale#Set('ruby_rubocop_options', '')
+
 function! ale_linters#ruby#rubocop#GetCommand(buffer) abort
     let l:executable = ale#Var(a:buffer, 'ruby_rubocop_executable')
 
