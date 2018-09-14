@@ -12,7 +12,8 @@ Execute(The brakeman command callback should detect absence of a valid Rails app
 Execute(The brakeman command callback should find a valid Rails app root):
   call ale#test#SetFilename('../ruby_fixtures/valid_rails_app/db/test.rb')
 
-  AssertLinter 'brakeman', 'brakeman -f json -q  -p '
+  AssertLinter 'brakeman', ale#Escape('brakeman')
+  \ . ' -f json -q  -p '
   \ . ale#Escape(ale#path#Simplify(g:dir . '/../ruby_fixtures/valid_rails_app'))
 
 Execute(The brakeman command callback should include configured options):
@@ -20,5 +21,17 @@ Execute(The brakeman command callback should include configured options):
 
   let g:ale_ruby_brakeman_options = '--combobulate'
 
-  AssertLinter 'brakeman', 'brakeman -f json -q --combobulate -p '
+  AssertLinter 'brakeman', ale#Escape('brakeman')
+  \ . ' -f json -q --combobulate -p '
+  \ . ale#Escape(ale#path#Simplify(g:dir . '/../ruby_fixtures/valid_rails_app'))
+
+Execute(Setting bundle appends 'exec brakeman'):
+  call ale#test#SetFilename('../ruby_fixtures/valid_rails_app/db/test.rb')
+
+  let g:ale_ruby_brakeman_executable = 'bundle'
+  let g:ale_ruby_brakeman_options = '--combobulate'
+
+  AssertLinter 'bundle', ale#Escape('bundle')
+  \ . ' exec brakeman'
+  \ . ' -f json -q --combobulate -p '
   \ . ale#Escape(ale#path#Simplify(g:dir . '/../ruby_fixtures/valid_rails_app'))
