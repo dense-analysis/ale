@@ -6,12 +6,6 @@ call ale#Set('ruby_reek_show_wiki_link', 0)
 call ale#Set('ruby_reek_options', '')
 call ale#Set('ruby_reek_executable', 'reek')
 
-function! ale_linters#ruby#reek#GetExecutable(buffer) abort
-    let l:executable = ale#Var(a:buffer, 'ruby_reek_executable')
-
-    return ale#handlers#ruby#EscapeExecutable(l:executable, 'reek')
-endfunction
-
 function! ale_linters#ruby#reek#VersionCheck(buffer) abort
     " If we have previously stored the version number in a cache, then
     " don't look it up again.
@@ -20,21 +14,22 @@ function! ale_linters#ruby#reek#VersionCheck(buffer) abort
         return ''
     endif
 
-    let l:executable = ale_linters#ruby#reek#GetExecutable(a:buffer)
+    let l:executable = ale#Var(a:buffer, 'ruby_reek_executable')
 
-    return l:executable . ' --version'
+    return ale#handlers#ruby#EscapeExecutable(l:executable, 'reek')
+    \   . ' --version'
 endfunction
 
 function! ale_linters#ruby#reek#GetCommand(buffer, version_output) abort
     let l:version = ale#semver#GetVersion('reek', a:version_output)
-    let l:executable = ale_linters#ruby#reek#GetExecutable(a:buffer)
+    let l:executable = ale#Var(a:buffer, 'ruby_reek_executable')
 
     " Tell reek what the filename is if the version of reek is new enough.
     let l:display_name_args = ale#semver#GTE(l:version, [5, 0, 0])
     \   ? ' --stdin-filename %s'
     \   : ''
 
-    return l:executable
+    return ale#handlers#ruby#EscapeExecutable(l:executable, 'reek')
     \   . ' -f json --no-progress --no-color'
     \   . l:display_name_args
 endfunction

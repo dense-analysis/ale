@@ -3,15 +3,7 @@
 
 call ale#Set('ruby_brakeman_options', '')
 call ale#Set('ruby_brakeman_executable', 'brakeman')
-
-let g:ale_ruby_brakeman_options =
-\   get(g:, 'ale_ruby_brakeman_options', '')
-
-function! ale_linters#ruby#brakeman#GetExecutable(buffer) abort
-    let l:executable = ale#Var(a:buffer, 'ruby_brakeman_executable')
-
-    return ale#handlers#ruby#EscapeExecutable(l:executable, 'brakeman')
-endfunction
+call ale#Set('ruby_brakeman_options', '')
 
 function! ale_linters#ruby#brakeman#Handle(buffer, lines) abort
     let l:output = []
@@ -36,14 +28,15 @@ function! ale_linters#ruby#brakeman#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#ruby#brakeman#GetCommand(buffer) abort
-    let l:executable = ale_linters#ruby#brakeman#GetExecutable(a:buffer)
     let l:rails_root = ale#ruby#FindRailsRoot(a:buffer)
 
     if l:rails_root is? ''
         return ''
     endif
 
-    return l:executable
+    let l:executable = ale#Var(a:buffer, 'ruby_brakeman_executable')
+
+    return ale#handlers#ruby#EscapeExecutable(l:executable, 'brakeman')
     \    . ' -f json -q '
     \    . ale#Var(a:buffer, 'ruby_brakeman_options')
     \    . ' -p ' . ale#Escape(l:rails_root)
