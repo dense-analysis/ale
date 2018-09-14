@@ -18,7 +18,7 @@ function! ale_linters#go#golangci_lint#GetCommand(buffer) abort
 
     return ale#path#BufferCdString(a:buffer)
     \   . '%e run '
-    \   . ale#util#EscapePCRE(l:filename)
+    \   . ale#Escape(l:filename)
     \   . ' ' . l:options
 endfunction
 
