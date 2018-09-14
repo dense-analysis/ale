@@ -9,7 +9,7 @@ Execute(The golangci-lint defaults should be correct):
   AssertLinter 'golangci-lint',
   \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
   \   . ale#Escape('golangci-lint')
-  \   . ' run ' . ale#util#EscapePCRE(expand('%' . ':t'))
+  \   . ' run ' . ale#Escape(expand('%' . ':t'))
   \   . ' --enable-all'
 
 Execute(The golangci-lint callback should use a configured executable):
@@ -18,7 +18,7 @@ Execute(The golangci-lint callback should use a configured executable):
   AssertLinter 'something else',
   \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
   \   . ale#Escape('something else')
-  \   . ' run ' . ale#util#EscapePCRE(expand('%' . ':t'))
+  \   . ' run ' . ale#Escape(expand('%' . ':t'))
   \   . ' --enable-all'
 
 Execute(The golangci-lint callback should use configured options):
@@ -27,7 +27,7 @@ Execute(The golangci-lint callback should use configured options):
   AssertLinter 'golangci-lint',
   \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
   \   . ale#Escape('golangci-lint')
-  \   . ' run ' . ale#util#EscapePCRE(expand('%' . ':t'))
+  \   . ' run ' . ale#Escape(expand('%' . ':t'))
   \   . ' --foobar'
 
 Execute(The golangci-lint `lint_package` option should use the correct command):
