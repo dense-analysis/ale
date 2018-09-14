@@ -2,7 +2,7 @@
 
 call ale#Set('thrift_thrift_executable', 'thrift')
 call ale#Set('thrift_thrift_generators', ['cpp'])
-call ale#Set('thrift_thrift_includes', [])
+call ale#Set('thrift_thrift_includes', ['.'])
 call ale#Set('thrift_thrift_options', '-strict')
 
 function! ale_linters#thrift#thrift#GetCommand(buffer) abort
