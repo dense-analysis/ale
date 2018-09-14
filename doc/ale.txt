@@ -527,12 +527,13 @@ circumstances.
 ALE will report problems with your code in the following ways, listed with
 their relevant options.
 
-* By updating loclist. (On by default)       - |g:ale_set_loclist|
-* By updating quickfix. (Off by default)     - |g:ale_set_quickfix|
-* By setting error highlights.               - |g:ale_set_highlights|
-* By creating signs in the sign column.      - |g:ale_set_signs|
-* By echoing messages based on your cursor.  - |g:ale_echo_cursor|
-* By showing balloons for your mouse cursor  - |g:ale_set_balloons|
+* By updating loclist. (On by default)             - |g:ale_set_loclist|
+* By updating quickfix. (Off by default)           - |g:ale_set_quickfix|
+* By setting error highlights.                     - |g:ale_set_highlights|
+* By creating signs in the sign column.            - |g:ale_set_signs|
+* By echoing messages based on your cursor.        - |g:ale_echo_cursor|
+* By displaying the preview based on your cursor.  - |g:ale_cursor_detail|
+* By showing balloons for your mouse cursor        - |g:ale_set_balloons|
 
 Please consult the documentation for each option, which can reveal some other
 ways of tweaking the behaviour of each way of displaying problems. You can
@@ -893,7 +894,6 @@ g:ale_completion_max_suggestions             *g:ale_completion_max_suggestions*
   Adjust this option as needed, depending on the complexity of your codebase
   and your available processing power.
 
-
 g:ale_echo_cursor                                           *g:ale_echo_cursor*
 
   Type: |Number|
@@ -909,6 +909,27 @@ g:ale_echo_cursor                                           *g:ale_echo_cursor*
   You should set this setting once before ALE is loaded, and restart Vim if
   you want to change your preferences. See |ale-lint-settings-on-startup|.
 
+g:ale_cursor_detail                                       *g:ale_cursor_detail*
+
+  Type: |Number|
+  Default: `0`
+
+  When this option is set to `1`, the ALE Preview Window will be automatically
+  opened when moving into a line which has errors. ALE will attempt to find the
+  warning or error at a column nearest to the cursor when the cursor is resting
+  on a line which contains a warning or error. The preview window automatically
+  closes when you move away from the line.
+
+  The preview window is opened without stealing focus, which means your cursor
+  will stay in the same buffer as it currently is.
+
+g:ale_close_preview_on_insert                   *g:ale_close_preview_on_insert*
+
+  Type: |Number|
+  Default: `0`
+
+  When this option is set to `1`, the ALE Preview Window will be automatically
+  closed upon entering Insert Mode.
 
 g:ale_echo_delay                                             *g:ale_echo_delay*
                                                              *b:ale_echo_delay*

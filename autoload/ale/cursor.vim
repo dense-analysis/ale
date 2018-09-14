@@ -8,6 +8,8 @@ let g:ale_echo_msg_format = get(g:, 'ale_echo_msg_format', '%code: %%s')
 
 let s:cursor_timer = -1
 let s:last_pos = [0, 0, 0]
+let s:current_line = -1
+let s:last_detailed_line = -1
 
 function! ale#cursor#TruncatedEcho(original_message) abort
     let l:message = a:original_message
@@ -55,21 +57,30 @@ function! s:StopCursorTimer() abort
     endif
 endfunction
 
+function! ale#cursor#EnactCursorWarnings() abort
+    let s:current_line = line('.')
+
+    if mode(1) isnot# 'n' || ale#ShouldDoNothing(bufnr(''))
+        return
+    endif
+
+    " Not necessary to know if 'ale_cursor_detail' or 'ale_echo_cursor' are set
+    " because the functions themselves check it.
+    call ale#cursor#EchoCursorWarningWithDelay()
+    call ale#cursor#ShowCursorDetailAutomatic()
+endfunction
+
 function! ale#cursor#EchoCursorWarning(...) abort
-    if !g:ale_echo_cursor
-        return
-    endif
-
-    " Only echo the warnings in normal mode, otherwise we will get problems.
-    if mode(1) isnot# 'n'
-        return
-    endif
-
-    if ale#ShouldDoNothing(bufnr(''))
-        return
-    endif
-
     let l:buffer = bufnr('')
+
+    if !ale#Var(l:buffer, 'echo_cursor')
+        return
+    endif
+
+    if mode(1) isnot# 'n' || ale#ShouldDoNothing(l:buffer)
+        return
+    endif
+
     let [l:info, l:loc] = s:FindItemAtCursor()
 
     if !empty(l:loc)
@@ -86,11 +97,12 @@ function! ale#cursor#EchoCursorWarning(...) abort
 endfunction
 
 function! ale#cursor#EchoCursorWarningWithDelay() abort
-    if !g:ale_echo_cursor
+    let l:buffer = bufnr('')
+
+    if !ale#Var(l:buffer, 'echo_cursor')
         return
     endif
 
-    " Only echo the warnings in normal mode, otherwise we will get problems.
     if mode(1) isnot# 'n'
         return
     endif
@@ -104,34 +116,70 @@ function! ale#cursor#EchoCursorWarningWithDelay() abort
     " we should echo something. Otherwise we can end up doing processing
     " the echo message far too frequently.
     if l:pos != s:last_pos
-        let l:delay = ale#Var(bufnr(''), 'echo_delay')
+        let l:delay = ale#Var(l:buffer, 'echo_delay')
 
         let s:last_pos = l:pos
         let s:cursor_timer = timer_start(
-        \   l:delay,
-        \   function('ale#cursor#EchoCursorWarning')
-        \)
+                    \   l:delay,
+                    \   function('ale#cursor#EchoCursorWarning')
+                    \)
     endif
 endfunction
 
-function! ale#cursor#ShowCursorDetail() abort
-    " Only echo the warnings in normal mode, otherwise we will get problems.
-    if mode() isnot# 'n'
+function! s:ShowCursorDetail(loc, options) abort
+    let l:message = get(a:loc, 'detail', a:loc.text)
+    let l:stay_here = get(a:options, 'stay_here', 0)
+
+    if !empty(a:loc)
+        let s:last_detailed_line = line('.')
+        let l:message = get(a:loc, 'detail', a:loc.text)
+
+        if len(a:options)
+            call ale#preview#Show(split(l:message, "\n"), { 'stay_here': l:stay_here })
+        else
+            call ale#preview#Show(split(l:message, "\n"))
+        endif
+
+        execute 'echo'
+    endif
+endfunction
+
+function! ale#cursor#ShowCursorDetail(...) abort
+    let l:buffer = bufnr('')
+
+    if mode() isnot# 'n' || ale#ShouldDoNothing(l:buffer)
         return
     endif
-
-    if ale#ShouldDoNothing(bufnr(''))
-        return
-    endif
-
-    call s:StopCursorTimer()
 
     let [l:info, l:loc] = s:FindItemAtCursor()
+    let l:options = get(a:000, 0, {})
+
+    call s:ShowCursorDetail(l:loc, l:options)
+endfunction
+
+function! ale#cursor#ShowCursorDetailAutomatic(...) abort
+    let l:buffer = bufnr('')
+
+    if !ale#Var(l:buffer, 'cursor_detail')
+        return
+    endif
+
+    if mode() isnot# 'n' || ale#ShouldDoNothing(l:buffer)
+        return
+    endif
+
+    " Exit if the preview for the line is already open.
+    if s:last_detailed_line == s:current_line
+        return
+    endif
+
+    let [l:info, l:loc] = s:FindItemAtCursor()
+    let l:options = get(a:000, 0, { 'stay_here' : 1 })
 
     if !empty(l:loc)
-        let l:message = get(l:loc, 'detail', l:loc.text)
-
-        call ale#preview#Show(split(l:message, "\n"))
-        execute 'echo'
+        call s:ShowCursorDetail(l:loc, l:options)
+    else
+        let s:last_detailed_line = -1
+        call ale#preview#CloseIfTypeMatches('ale-preview')
     endif
 endfunction
