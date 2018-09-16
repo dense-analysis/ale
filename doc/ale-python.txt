@@ -165,6 +165,25 @@ g:ale_python_isort_use_global                   *g:ale_python_isort_use_global*
 
 
 ===============================================================================
+python-language-server                      *ale-python-python-language-server*
+
+g:ale_python_langserver_executable         *g:ale_python_langserver_executable*
+                                           *b:ale_python_langserver_executable*
+  Type: |String|
+  Default: `'pyls'`
+
+  Location of the python-language-server binary.
+
+g:ale_python_langserver_options               *g:ale_python_langserver_options*
+                                              *b:ale_python_langserver_options*
+
+  Type: |String|
+  Default: `''`
+
+  Additional options passed to the python-language-server command.
+
+
+===============================================================================
 mypy                                                          *ale-python-mypy*
 
 The minimum supported version of mypy that ALE supports is v0.4.4. This is
