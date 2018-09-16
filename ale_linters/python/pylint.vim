@@ -8,7 +8,8 @@ call ale#Set('python_pylint_change_directory', 1)
 call ale#Set('python_pylint_auto_pipenv', 0)
 
 function! ale_linters#python#pylint#GetExecutable(buffer) abort
-    if ale#Var(a:buffer, 'python_pylint_auto_pipenv') && ale#python#PipenvPresent(a:buffer)
+    if (ale#Var(a:buffer, 'python_auto_pipenv') || ale#Var(a:buffer, 'python_pylint_auto_pipenv'))
+    \ && ale#python#PipenvPresent(a:buffer)
         return 'pipenv'
     endif
 

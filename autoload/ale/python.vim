@@ -1,6 +1,8 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Functions for integrating with Python linters.
 
+call ale#Set('python_auto_pipenv', '0')
+
 let s:sep = has('win32') ? '\' : '/'
 " bin is used for Unix virtualenv directories, and Scripts is for Windows.
 let s:bin_dir = has('unix') ? 'bin' : 'Scripts'

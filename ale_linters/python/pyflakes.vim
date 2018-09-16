@@ -6,7 +6,8 @@ call ale#Set('python_pyflakes_use_global', get(g:, 'ale_use_global_executables',
 call ale#Set('python_pyflakes_auto_pipenv', 0)
 
 function! ale_linters#python#pyflakes#GetExecutable(buffer) abort
-    if ale#Var(a:buffer, 'python_pyflakes_auto_pipenv') && ale#python#PipenvPresent(a:buffer)
+    if (ale#Var(a:buffer, 'python_auto_pipenv') || ale#Var(a:buffer, 'python_pyflakes_auto_pipenv'))
+    \ && ale#python#PipenvPresent(a:buffer)
         return 'pipenv'
     endif
 

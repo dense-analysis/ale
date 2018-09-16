@@ -7,7 +7,8 @@ call ale#Set('python_pycodestyle_use_global', get(g:, 'ale_use_global_executable
 call ale#Set('python_pycodestyle_auto_pipenv', 0)
 
 function! ale_linters#python#pycodestyle#GetExecutable(buffer) abort
-    if ale#Var(a:buffer, 'python_pycodestyle_auto_pipenv') && ale#python#PipenvPresent(a:buffer)
+    if (ale#Var(a:buffer, 'python_auto_pipenv') || ale#Var(a:buffer, 'python_pycodestyle_auto_pipenv'))
+    \ && ale#python#PipenvPresent(a:buffer)
         return 'pipenv'
     endif
 

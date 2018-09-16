@@ -12,7 +12,8 @@ function! s:UsingModule(buffer) abort
 endfunction
 
 function! ale_linters#python#flake8#GetExecutable(buffer) abort
-    if ale#Var(a:buffer, 'python_flake8_auto_pipenv') && ale#python#PipenvPresent(a:buffer)
+    if (ale#Var(a:buffer, 'python_auto_pipenv') || ale#Var(a:buffer, 'python_flake8_auto_pipenv'))
+    \ && ale#python#PipenvPresent(a:buffer)
         return 'pipenv'
     endif
 
