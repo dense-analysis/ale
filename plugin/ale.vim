@@ -218,3 +218,8 @@ augroup ALECleanupGroup
     autocmd BufDelete * if exists('*ale#engine#Cleanup') | call ale#engine#Cleanup(str2nr(expand('<abuf>'))) | endif
     autocmd QuitPre * call ale#events#QuitEvent(str2nr(expand('<abuf>')))
 augroup END
+
+if exists('##VimSuspend')
+   autocmd VimSuspend * call ale#engine#CleanupEveryBuffer()
+end
+
