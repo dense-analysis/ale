@@ -1,0 +1,28 @@
+Before:
+  Save g:ale_completion_enabled
+  
+  let g:ale_completion_enabled = 0
+  call ale#assert#SetUpLinterTest('python', 'langserver')
+
+After:
+  Restore
+  unlet! b:ale_completion_enabled
+  call ale#assert#TearDownLinterTest()
+
+Execute(should set correct defaults):
+  AssertLinter 'pyls', ale#Escape('pyls')
+
+Execute(should configure python-language-server callback executable):
+  let b:ale_python_langserver_executable = 'foobar'
+  AssertLinter 'foobar', ale#Escape('foobar')
+
+Execute(should set python-language-server options):
+  let b:ale_completion_enabled = 1
+  let b:ale_python_langserver_options = ''
+
+  AssertLinter 'pyls', ale#Escape('pyls')
+
+  let b:ale_python_langserver_options = '--log-file FOOBAR'
+
+  AssertLinter 'pyls',
+  \ ale#Escape('pyls') . ' --log-file FOOBAR'
