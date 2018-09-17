@@ -365,3 +365,15 @@ Execute(eslint should handle react errors correctly):
   \ ale#handlers#eslint#Handle(bufnr(''), [
   \  '/path/editor-help.jsx:59:9: Property should be placed on the same line as the component declaration [Error/react/jsx-first-prop-new-line]',
   \ ])
+
+Execute(Failing to connect to eslint_d should be handled correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'text': 'Could not connect to eslint_d. Try updating eslint_d or killing it.',
+  \   },
+  \ ],
+  \ ale#handlers#eslint#Handle(bufnr(''), [
+  \  'Could not connect',
+  \ ])
