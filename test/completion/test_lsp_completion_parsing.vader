@@ -447,3 +447,27 @@ Execute(Should handle missing keys):
   \     ]
   \   }
   \ })
+
+Execute(Should handle documentation in the markdown format):
+  AssertEqual
+  \ [
+  \   {'word': 'migrations', 'menu': 'xxx', 'info': 'Markdown documentation', 'kind': 'f', 'icase': 1},
+  \ ],
+  \ ale#completion#ParseLSPCompletions({
+  \   'jsonrpc': '2.0',
+  \   'id': 6,
+  \   'result': {
+  \     'isIncomplete': v:false,
+  \     'items': [
+  \       {
+  \         'label': 'migrations',
+  \         'kind': 3,
+  \         'detail': 'xxx',
+  \         'documentation': {
+  \           'kind': 'markdown',
+  \           'value': 'Markdown documentation',
+  \         },
+  \       },
+  \     ],
+  \   },
+  \ })

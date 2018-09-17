@@ -360,12 +360,18 @@ function! ale#completion#ParseLSPCompletions(response) abort
             let l:kind = 'v'
         endif
 
+        let l:doc = get(l:item, 'documentation', '')
+
+        if type(l:doc) is v:t_dict && has_key(l:doc, 'value')
+            let l:doc = l:doc.value
+        endif
+
         call add(l:results, {
         \   'word': l:word,
         \   'kind': l:kind,
         \   'icase': 1,
         \   'menu': get(l:item, 'detail', ''),
-        \   'info': get(l:item, 'documentation', ''),
+        \   'info': (type(l:doc) is v:t_string ? l:doc : ''),
         \})
     endfor
 
