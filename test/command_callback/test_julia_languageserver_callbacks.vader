@@ -1,14 +1,18 @@
 Before:
+  Save g:ale_julia_executable
+
   call ale#assert#SetUpLinterTest('julia', 'languageserver')
 
 After:
+  Restore
+
   call ale#assert#TearDownLinterTest()
 
 Execute(The default executable path should be correct):
   AssertLinter 'julia',
   \ ale#Escape('julia') .
   \' --startup-file=no --history-file=no -e ' .
-  \ ale#Escape('using LanguageServer; server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false); server.runlinter = true; run(server);')
+  \ ale#Escape('using LanguageServer; server = LanguageServer.LanguageServerInstance(stdin, stdout, false); server.runlinter = true; run(server);')
 
 Execute(The executable should be configurable):
   let g:ale_julia_executable = 'julia-new'
@@ -16,7 +20,7 @@ Execute(The executable should be configurable):
   AssertLinter 'julia-new',
   \ ale#Escape('julia-new') .
   \' --startup-file=no --history-file=no -e ' .
-  \ ale#Escape('using LanguageServer; server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false); server.runlinter = true; run(server);')
+  \ ale#Escape('using LanguageServer; server = LanguageServer.LanguageServerInstance(stdin, stdout, false); server.runlinter = true; run(server);')
 
 Execute(The project root should be detected correctly):
   AssertLSPProject ''

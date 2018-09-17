@@ -6,7 +6,7 @@ call ale#Set('julia_executable', 'julia')
 
 function! ale_linters#julia#languageserver#GetCommand(buffer) abort
     let l:julia_executable = ale#Var(a:buffer, 'julia_executable')
-    let l:cmd_string = 'using LanguageServer; server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false); server.runlinter = true; run(server);'
+    let l:cmd_string = 'using LanguageServer; server = LanguageServer.LanguageServerInstance(stdin, stdout, false); server.runlinter = true; run(server);'
 
     return ale#Escape(l:julia_executable) . ' --startup-file=no --history-file=no -e ' . ale#Escape(l:cmd_string)
 endfunction
