@@ -224,4 +224,8 @@ augroup ALECleanupGroup
     " Clean up buffers automatically when they are unloaded.
     autocmd BufDelete * if exists('*ale#engine#Cleanup') | call ale#engine#Cleanup(str2nr(expand('<abuf>'))) | endif
     autocmd QuitPre * call ale#events#QuitEvent(str2nr(expand('<abuf>')))
+
+    if exists('##VimSuspend')
+      autocmd VimSuspend * if exists('*ale#engine#CleanupEveryBuffer') | call ale#engine#CleanupEveryBuffer() | endif
+    endif
 augroup END
