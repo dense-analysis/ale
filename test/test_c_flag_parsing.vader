@@ -74,7 +74,7 @@ Execute(ParseCFlags should ignore -T and other arguments):
   \   . ' -DTEST=`date +%s`',
   \ ale#c#ParseCFlags(
   \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
-  \   'gcc -Dgoal=9 -Tlinkerfile.ld blabla -Isubdir '
+  \   'gcc -Dgoal=9 -Tlinkerfile.ld blabla -Isubdir --sysroot=subdir '
   \     .  '-I'. ale#path#Simplify('kernel/include')
   \     .  ' -DTEST=`date +%s` -c file.c'
   \ )
