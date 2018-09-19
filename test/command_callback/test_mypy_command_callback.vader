@@ -69,3 +69,11 @@ Execute(Setting executable to 'pipenv' appends 'run mypy'):
   \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('path/to/pipenv') . ' run mypy'
   \   . ' --show-column-numbers  --shadow-file %s %t %s'
+
+Execute(Pipenv is detected when python_mypy_auto_pipenv is set):
+  let g:ale_python_mypy_auto_pipenv = 1
+  call ale#test#SetFilename('/testplugin/test/python_fixtures/pipenv/whatever.py')
+
+  AssertLinter 'pipenv',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('pipenv') . ' run mypy --show-column-numbers  --shadow-file %s %t %s'

@@ -68,3 +68,12 @@ Execute(Setting executable to 'pipenv' appends 'run pylint'):
   \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('path/to/pipenv') . ' run pylint'
   \   . '  --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n %s'
+
+Execute(Pipenv is detected when python_pylint_auto_pipenv is set):
+  let g:ale_python_pylint_auto_pipenv = 1
+  call ale#test#SetFilename('/testplugin/test/python_fixtures/pipenv/whatever.py')
+
+  AssertLinter 'pipenv',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('pipenv') . ' run pylint'
+  \   . '  --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n %s'
