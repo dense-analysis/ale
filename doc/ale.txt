@@ -402,7 +402,7 @@ Notes:
 * FusionScript: `fusion-lint`
 * Git Commit Messages: `gitlint`
 * GLSL: glslang, `glslls`
-* Go: `gofmt`, `goimports`, `go vet`!!, `golint`, `gotype`!!, `gometalinter`!!, `go build`!!, `gosimple`!!, `staticcheck`!!, `golangserver`, `golangci-lint`!!
+* Go: `gofmt`, `goimports`, `go mod`!!, `go vet`!!, `golint`, `gotype`!!, `gometalinter`!!, `go build`!!, `gosimple`!!, `staticcheck`!!, `golangserver`, `golangci-lint`!!
 * GraphQL: `eslint`, `gqlint`, `prettier`
 * Hack: `hack`, `hackfmt`, `hhast`
 * Haml: `haml-lint`

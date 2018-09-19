@@ -1,0 +1,24 @@
+Before:
+  Save g:ale_go_go_executable
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_go_go_executable = 'xxxinvalid'
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The gomod callback should return the correct default values):
+  call ale#test#SetFilename('../go_files/go.mod')
+  setl ft=gomod
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' mod edit -fmt'
+  \     . ' %t',
+  \ },
+  \ ale#fixers#gomod#Fix(bufnr(''))
