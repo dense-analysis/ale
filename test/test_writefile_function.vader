@@ -28,7 +28,26 @@ Execute(Carriage returns should be included for ale#util#Writefile):
   AssertEqual
   \ ["first\r", "second\r", "third\r", ''],
   \ readfile('.newline-test', 'b')
-  \
+
+Given(A file with extra carriage returns):
+  first
+  second
+  third
+  fourth
+
+Execute(Carriage returns should be de-depulicated):
+  call ale#test#SetFilename('.newline-test')
+
+  setlocal buftype=
+  noautocmd :w
+  noautocmd :e! ++ff=dos
+
+  call ale#util#Writefile(bufnr(''), getline(1, '$'), '.newline-test')
+
+  AssertEqual
+  \ ["first\r", "second\r", "third\r", "fourth\r", ''],
+  \ readfile('.newline-test', 'b')
+
 Given(A file with Unix line ending characters):
   first
   second
