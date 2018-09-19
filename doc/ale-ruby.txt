@@ -120,19 +120,13 @@ g:ale_ruby_rufo_executable                         *g:ale_ruby_rufo_executable*
 ===============================================================================
 solargraph                                                *ale-ruby-solargraph*
 
-g:ale_ruby_solargraph_host                         *g:ale_ruby_solargraph_host*
-                                                   *b:ale_ruby_solargraph_host*
+g:ale_ruby_solargraph_executable             *g:ale_ruby_solargraph_executable*
+                                             *b:ale_ruby_solargraph_executable*
   Type: String
-  Default: `'127.0.0.1'`
+  Default: `'solargraph'`
 
-  The host/ip where the solargraph language server is running.
-
-g:ale_ruby_solargraph_port                         *g:ale_ruby_solargraph_port*
-                                                   *b:ale_ruby_solargraph_port*
-  Type: String
-  Default: `'7658'`
-
-  The listening port where the solargraph language server is running.
+  Override the invoked solargraph binary. This is useful for running rufo from
+  binstubs or a bundle.
 
 
 ===============================================================================
