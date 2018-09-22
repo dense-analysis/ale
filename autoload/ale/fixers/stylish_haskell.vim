@@ -5,6 +5,7 @@ call ale#Set('haskell_stylish_haskell_executable', 'stylish-haskell')
 
 function! ale#fixers#stylish_haskell#GetExecutable(buffer) abort
     let l:executable = ale#Var(a:buffer, 'haskell_stylish_haskell_executable')
+
     return ale#handlers#haskell_stack#EscapeExecutable(l:executable, 'stylish-haskell')
 endfunction
 
