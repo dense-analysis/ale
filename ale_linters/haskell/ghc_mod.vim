@@ -9,10 +9,14 @@ function! ale_linters#haskell#ghc_mod#GetCommand (buffer) abort
 \       . ' --map-file %s=%t check %s'
 endfunction
 
+function! ale_linters#haskell#ghc_mod#GetExecutable(buffer) abort
+    return ale#Var(a:buffer, 'haskell_ghc_mod_executable')
+endfunction
+
 call ale#linter#Define('haskell', {
 \   'name': 'ghc_mod',
 \   'aliases': ['ghc-mod'],
-\   'executable': 'ghc-mod',
+\   'executable_callback': 'ale_linters#haskell#ghc_mod#GetExecutable',
 \   'command_callback': 'ale_linters#haskell#ghc_mod#GetCommand',
 \   'callback': 'ale#handlers#haskell#HandleGHCFormat',
 \})
