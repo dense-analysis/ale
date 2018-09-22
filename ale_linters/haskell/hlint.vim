@@ -35,10 +35,6 @@ function! ale_linters#haskell#hlint#GetCommand(buffer) abort
     \      . ' -'
 endfunction
 
-function! ale_linters#haskell#hlint#GetExecutable(buffer) abort
-    return ale#Var(a:buffer, 'haskell_hlint_executable')
-endfunction
-
 call ale#linter#Define('haskell', {
 \   'name': 'hlint',
 \   'executable_callback': ale#VarFunc('haskell_hlint_executable'),
