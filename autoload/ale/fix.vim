@@ -300,9 +300,12 @@ endfunction
 
 function! s:RunFixer(options) abort
     let l:buffer = a:options.buffer
-    let l:input = a:options.input
+    let l:input = get(a:options, 'input', g:ale_fix_buffer_data[l:buffer].lines_before)
     let l:index = a:options.callback_index
+	let l:current_fixer = get(a:options, 'current_fixer')
     let l:ChainCallback = get(a:options, 'chain_callback', v:null)
+
+    let l:pre_init_function = ale#fix#registry#PreInit(l:current_fixer)
 
     while len(a:options.callback_list) > l:index
         let l:Function = l:ChainCallback isnot v:null
@@ -332,7 +335,7 @@ function! s:RunFixer(options) abort
             " Default to piping the buffer for the last fixer in the chain.
             let l:read_buffer = get(l:result, 'read_buffer', l:ChainWith is v:null)
 
-            let l:job_ran = s:RunJob({
+            let l:job_ran = s:RunJob(extend({
             \   'buffer': l:buffer,
             \   'command': l:result.command,
             \   'input': l:input,
@@ -343,7 +346,7 @@ function! s:RunFixer(options) abort
             \   'callback_list': a:options.callback_list,
             \   'callback_index': l:index,
             \   'process_with': get(l:result, 'process_with', v:null),
-            \})
+            \}, l:pre_init_function ? l:pre_init_function(l:buffer, a:options) || {} : {}))
 
             if !l:job_ran
                 " The job failed to run, so skip to the next item.
@@ -443,6 +446,8 @@ function! ale#fix#Fix(buffer, fixing_flag, ...) abort
         throw "fixing_flag must be either '' or 'save_file'"
     endif
 
+    let l:input_list = []
+
     try
         let l:callback_list = s:GetCallbacks(a:buffer, a:000)
     catch /E700\|BADNAME/
@@ -477,7 +482,6 @@ function! ale#fix#Fix(buffer, fixing_flag, ...) abort
 
     call s:RunFixer({
     \   'buffer': a:buffer,
-    \   'input': g:ale_fix_buffer_data[a:buffer].lines_before,
     \   'callback_index': 0,
     \   'callback_list': l:callback_list,
     \})

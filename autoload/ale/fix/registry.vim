@@ -45,6 +45,7 @@ let s:default_registry = {
 \       'description': 'Apply eslint --fix to a file.',
 \   },
 \   'js-beautify-html': {
+\       'pre_init': 'ale#fixers#js_beautify_html#ExtractTemplateTag',
 \       'function': 'ale#fixers#js_beautify_html#Fix',
 \       'suggested_filetypes': ['html', 'vue'],
 \       'description': 'Apply the JS-Beautify-HTML to the current file.',
@@ -339,6 +340,16 @@ function! ale#fix#registry#GetFunc(name) abort
     \   : a:name
 
     return get(s:entries, l:resolved_name, {'function': ''}).function
+endfunction
+
+" In case a fixer needs to perform some action before it starts running.
+function! ale#fix#registry#PreInit(name) abort
+    " Use the exact name, or an alias.
+    let l:resolved_name = !has_key(s:entries, a:name)
+    \   ? get(s:aliases, a:name, a:name)
+    \   : a:name
+
+    return get(s:entries, l:resolved_name, {'pre_init': 0})['pre_init']
 endfunction
 
 function! s:ShouldSuggestForType(suggested_filetypes, type_list) abort
