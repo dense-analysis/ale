@@ -109,3 +109,31 @@ Expect python(extra newlines shouldn't be added to the main block):
 
   if __name__ == '__main__':
       main()
+
+
+Given python(A file with variables/docstring that start with a control statement):
+  def some():
+      continue_some_var = True
+      forward_something = False
+
+      if (
+          continue_some_var and
+          forwarded_something
+      ):
+          return True
+
+
+Execute(Fix the file):
+  let g:ale_fixers = {'python': ['add_blank_lines_for_python_control_statements']}
+  ALEFix
+
+Expect python(Extra new lines are not added to the file):
+  def some():
+      continue_some_var = True
+      forward_something = False
+
+      if (
+          continue_some_var and
+          forwarded_something
+      ):
+          return True
