@@ -45,9 +45,10 @@ let s:default_registry = {
 \       'description': 'Apply eslint --fix to a file.',
 \   },
 \   'js-beautify-html': {
-\       'function': 'ale#fixers#jsBeautifyHTML#Fix',
+\       'function': 'ale#fixers#js_beautify_html#Fix',
 \       'suggested_filetypes': ['html', 'vue'],
 \       'description': 'Apply the JS-Beautify-HTML to the current file.',
+\       'aliases': ['js_beautify_html']
 \   },
 \   'mix_format': {
 \       'function': 'ale#fixers#mix_format#Fix',
