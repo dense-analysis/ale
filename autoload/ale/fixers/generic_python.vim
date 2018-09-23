@@ -12,7 +12,7 @@ function! ale#fixers#generic_python#AddLinesBeforeControlStatements(buffer, line
 
         if !l:last_line_is_blank
         \&& l:indent_size <= l:last_indent_size
-        \&& match(l:line, '\v^ *(return|if|for|while|break|continue)') >= 0
+        \&& match(l:line, '\v^ *(return|if|for|while|break|continue)(\(| |$)') >= 0
             call add(l:new_lines, '')
         endif
 
