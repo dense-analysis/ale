@@ -349,7 +349,8 @@ function! ale#fix#registry#PreInit(name) abort
     \   ? get(s:aliases, a:name, a:name)
     \   : a:name
 
-    return get(s:entries, l:resolved_name, {'pre_init': 0})['pre_init']
+    " Pre-init function isn't always there so it needs the double-check.
+    return get(get(s:entries, l:resolved_name), 'pre_init', '')
 endfunction
 
 function! s:ShouldSuggestForType(suggested_filetypes, type_list) abort

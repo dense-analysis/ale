@@ -302,10 +302,8 @@ function! s:RunFixer(options) abort
     let l:buffer = a:options.buffer
     let l:input = get(a:options, 'input', g:ale_fix_buffer_data[l:buffer].lines_before)
     let l:index = a:options.callback_index
-	let l:current_fixer = get(a:options, 'current_fixer')
     let l:ChainCallback = get(a:options, 'chain_callback', v:null)
 
-    let l:pre_init_function = ale#fix#registry#PreInit(l:current_fixer)
 
     while len(a:options.callback_list) > l:index
         let l:Function = l:ChainCallback isnot v:null
@@ -335,7 +333,7 @@ function! s:RunFixer(options) abort
             " Default to piping the buffer for the last fixer in the chain.
             let l:read_buffer = get(l:result, 'read_buffer', l:ChainWith is v:null)
 
-            let l:job_ran = s:RunJob(extend({
+            let l:job_ran = s:RunJob({
             \   'buffer': l:buffer,
             \   'command': l:result.command,
             \   'input': l:input,
@@ -346,7 +344,7 @@ function! s:RunFixer(options) abort
             \   'callback_list': a:options.callback_list,
             \   'callback_index': l:index,
             \   'process_with': get(l:result, 'process_with', v:null),
-            \}, l:pre_init_function ? l:pre_init_function(l:buffer, a:options) || {} : {}))
+            \})
 
             if !l:job_ran
                 " The job failed to run, so skip to the next item.
@@ -434,7 +432,7 @@ function! ale#fix#InitBufferData(buffer, fixing_flag) abort
     \   'lines_before': getbufline(a:buffer, 1, '$'),
     \   'done': 0,
     \   'should_save': a:fixing_flag is# 'save_file',
-    \   'temporary_directory_list': [],
+    \   'temporary_directory_list': []
     \}
 endfunction
 
@@ -480,11 +478,25 @@ function! ale#fix#Fix(buffer, fixing_flag, ...) abort
 
     silent doautocmd <nomodeline> User ALEFixPre
 
-    call s:RunFixer({
+    let l:fixers = ale#Var(a:buffer, 'fixers')
+    let l:options = {
     \   'buffer': a:buffer,
+    \   'input': g:ale_fix_buffer_data[a:buffer].lines_before,
     \   'callback_index': 0,
     \   'callback_list': l:callback_list,
-    \})
+    \}
+
+    for l:sub_type in split(&filetype, '\.')
+        for l:fixer in get(l:fixers, l:sub_type)
+            let l:pre_init_function = ale#fix#registry#PreInit(l:fixer)
+
+            if len(l:pre_init_function)
+                let l:options = extend(l:options, call (ale#util#GetFunction(l:pre_init_function), [l:options]))
+            endif
+        endfor
+    endfor
+
+    call s:RunFixer(l:options)
 
     return 1
 endfunction

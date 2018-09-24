@@ -3,7 +3,8 @@
 
 let s:KnownTemplateDelimiters = {
 \    'html': { 'opening': '<html>', 'closing': '</html>' },
-\    'vue': { 'opening': '<template>', 'closing': '</template>' }
+\    'vue': { 'opening': '<template>', 'closing': '</template>' },
+\    'javascript': { 'regex': 1, 'match_start': 'render(.*)\(\)', 'opening': 'return\(.*\)(', 'closing': '\(.*\))' }
 \}
 
 call ale#Set('js_beautify_html_executable', 'html-beautify')
@@ -18,60 +19,92 @@ function! ale#fixers#js_beautify_html#GetExecutable(buffer) abort
     \])
 endfunction
 
-function! s:TemplateLineRangeDelimiter(buffer, buffer_lines) abort
+function! s:TemplateLineRangeDelimiter(buffer, ...) abort
+    let l:options = get(a:000, 0, {})
+    let l:no_output = get(l:options, 'no_output')
+    let l:buffer_lines = get(l:options, 'buffer_lines', getline(a:buffer, '$'))
+
     let l:template_delimiters = ale#Var(a:buffer, 'js_beautify_html_template_delimiters')
-    let l:buffer_line_length = len(a:buffer_lines) - 1
+    let l:buffer_line_length = len(l:buffer_lines) - 1
     let l:initial_line = 0
     let l:ending_line = 0
 
     for key in keys(l:template_delimiters)
         if &filetype == key
-            let l:tags_found = 0
-            let l:tags_needed = len(l:template_delimiters[key])
+            let l:extracting_opts = l:template_delimiters[key]
 
-            let l:opening_tag = get(l:template_delimiters[key], 'opening')
-            let l:closing_tag = get(l:template_delimiters[key], 'closing')
+            if len(get(l:extracting_opts, 'regex', ''))
+                for line_number in range(0, l:buffer_line_length, 1)
+                    if l:buffer_lines[line_number] =~ l:extracting_opts['match_start']
+                        let l:remaining_content = join(l:buffer_lines[line_number : ], " ")
+                        let l:start = matchend(l:remaining_content, 'return\(.*\)(')
+                        let l:ending = matchend(l:remaining_content, '\(.*\))') - 1
 
-            for line_number in range(0, l:buffer_line_length, 1)
-                if a:buffer_lines[line_number] == l:opening_tag
-                    let l:initial_line = line_number
-                    let l:tags_found += 1
-                endif
+                        if l:start > -1 && l:ending > -1
+                            let l:match = strpart(l:remaining_content, l:start, l:ending - l:start)
 
-                if a:buffer_lines[line_number] == l:closing_tag
-                    let l:ending_line = line_number
-                    let l:tags_found +=1
-                endif
+                            return {'initial_line': l:initial_line,
+                                  \ 'ending_line': l:ending_line,
+                                  \ 'output': l:no_output
+                                  \         ? []
+                                  \         : [l:match] }
+                        endif
+                    endif
+                endfor
+            else
+                let l:tags_found = 0
+                let l:opening_tag = l:extracting_opts['opening']
+                let l:closing_tag = l:extracting_opts['closing']
 
-                if l:tags_found == l:tags_needed
-                    return [l:initial_line, l:ending_line]
-                endif
-            endfor
+                for line_number in range(0, l:buffer_line_length, 1)
+                    if l:buffer_lines[line_number] == l:opening_tag
+                        let l:initial_line = line_number
+                        let l:tags_found += 1
+                    endif
+
+                    if l:buffer_lines[line_number] == l:closing_tag
+                        let l:ending_line = line_number
+                        let l:tags_found +=1
+                    endif
+
+                    if l:tags_found == 2
+                        return {'initial_line': l:initial_line,
+                              \ 'ending_line': l:ending_line,
+                              \ 'output': l:no_output
+                              \         ? []
+                              \         : l:buffer_lines[l:first_line : l:last_line] }
+                    endif
+                endfor
+            endif
         endif
     endfor
 
-    return [0 : l:buffer_line_length]
+    return {'initial_line': l:initial_line,
+          \ 'ending_line': l:ending_line,
+          \ 'output': l:no_output
+          \         ? []
+          \         : l:buffer_lines[l:first_line : l:last_line] }
 endfunction
 
 function! ale#fixers#js_beautify_html#ProcessTemplateOutput(buffer, output) abort
-    let l:buffer_lines = getline(a:buffer, '$')
-    let [l:first_line, l:last_line] = s:TemplateLineRangeDelimiter(a:buffer, l:buffer_lines)
+    let [l:first_line, l:last_line] = s:TemplateLineRangeDelimiter(a:buffer)
 
     " Glue the beautified part back together in the middle.
-    " Check for negative indexes because it may get the array's tail instead.
     " Out-of-bounds positive indexes just yields an empty array so no worries.
-    return ((l:first_line - 1 > 0) ? l:buffer_lines[:l:first_line - 1] : [])
-    \    + a:output
-    \    + l:buffer_lines[l:last_line + 1:]
+    return (l:first_line == 0 ? [] : l:buffer_lines[:l:first_line - 1])
+    \      + a:output
+    \      + l:buffer_lines[l:last_line + 1:]
 endfunction
 
-function! ale#fixers#js_beautify_html#ExtractTemplateTag(buffer, ...) abort
-    let l:buffer_lines = getline(a:buffer, '$')
-    let [l:first_line, l:last_line] = s:TemplateLineRangeDelimiter(a:buffer, l:buffer_lines)
+function! ale#fixers#js_beautify_html#ExtractTemplateTag(options) abort
+    let l:extracted = s:TemplateLineRangeDelimiter(
+                    \   a:options['buffer'],
+                    \   { 'buffer_lines': a:options['input'] }
+                    \ )
 
-    let l:template_tag = buffer_lines[l:first_line : l:last_line]
+    echo l:extracted
 
-    return { 'input': l:template_tag }
+    return { 'input': l:extracted['output'] }
 endfunction
 
 function! ale#fixers#js_beautify_html#Fix(buffer) abort
