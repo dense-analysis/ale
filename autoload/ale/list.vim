@@ -81,17 +81,23 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
     if g:ale_set_quickfix
         let l:quickfix_list = ale#list#GetCombinedList()
 
+        silent doautocmd <nomodeline> QuickFixCmdPre cexpr
+
         if has('nvim')
             call setqflist(s:FixList(a:buffer, l:quickfix_list), ' ', l:title)
         else
             call setqflist(s:FixList(a:buffer, l:quickfix_list))
             call setqflist([], 'r', {'title': l:title})
         endif
+
+        silent doautocmd <nomodeline> QuickFixCmdPost cexpr
     elseif g:ale_set_loclist
         " If windows support is off, bufwinid() may not exist.
         " We'll set result in the current window, which might not be correct,
         " but it's better than nothing.
         let l:id = s:BufWinId(a:buffer)
+
+        silent doautocmd <nomodeline> QuickFixCmdPre lexpr
 
         if has('nvim')
             call setloclist(l:id, s:FixList(a:buffer, a:loclist), ' ', l:title)
@@ -99,6 +105,8 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
             call setloclist(l:id, s:FixList(a:buffer, a:loclist))
             call setloclist(l:id, [], 'r', {'title': l:title})
         endif
+
+        silent doautocmd <nomodeline> QuickFixCmdPost lexpr
     endif
 
     " Open a window to show the problems if we need to.
