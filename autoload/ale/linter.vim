@@ -255,6 +255,13 @@ function! ale#linter#PreProcess(filetype, linter) abort
         elseif has_key(a:linter, 'initialization_options')
             let l:obj.initialization_options = a:linter.initialization_options
         endif
+
+        if has_key(a:linter, 'lsp_config')
+            if type(a:linter.lsp_config) isnot v:t_dict
+                throw '`lsp_config` must be a Dictionary'
+            endif
+        endif
+
     endif
 
     let l:obj.output_stream = get(a:linter, 'output_stream', 'stdout')

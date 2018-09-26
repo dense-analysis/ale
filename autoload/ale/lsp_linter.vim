@@ -180,12 +180,10 @@ function! ale#lsp_linter#StartLSP(buffer, linter) abort
 
     let l:language_id = ale#util#GetFunction(a:linter.language_callback)(a:buffer)
 
-    if has_key(a:linter, 'lsp_config')
-        if !empty(a:linter.lsp_config)
-            " set LSP configuration options (workspace/didChangeConfiguration)
-            let l:config_message = ale#lsp#message#DidChangeConfiguration(a:buffer, a:linter.lsp_config)
-            call ale#lsp#Send(l:conn_id, l:config_message)
-        endif
+    if !empty(get(a:linter, 'lsp_config'))
+        " set LSP configuration options (workspace/didChangeConfiguration)
+        let l:config_message = ale#lsp#message#DidChangeConfiguration(a:buffer, a:linter.lsp_config)
+        call ale#lsp#Send(l:conn_id, l:config_message)
     endif
 
     let l:details = {
