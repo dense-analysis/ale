@@ -77,6 +77,15 @@ g:ale_haskell_hlint_executable                 *g:ale_haskell_hlint_executable*
 
   This variable can be changed to use a different executable for hlint.
 
+
+g:ale_haskell_hlint_options                       g:ale_haskell_hlint_options
+                                                  b:ale_haskell_hlint_options
+  Type: String
+  Default: ''
+
+  This variable can be used to pass extra options to the underlying hlint
+  executable.
+
 ===============================================================================
 stack-build                                           *ale-haskell-stack-build*
 
