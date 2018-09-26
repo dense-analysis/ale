@@ -44,12 +44,12 @@ let s:default_registry = {
 \       'suggested_filetypes': ['javascript', 'typescript'],
 \       'description': 'Apply eslint --fix to a file.',
 \   },
-\   'js-beautify-html': {
-\       'pre_init': 'ale#fixers#js_beautify_html#ExtractTemplateTag',
-\       'function': 'ale#fixers#js_beautify_html#Fix',
-\       'suggested_filetypes': ['html', 'vue'],
-\       'description': 'Apply the JS-Beautify-HTML to the current file.',
-\       'aliases': ['js_beautify_html']
+\   'beautify-template': {
+\       'pre_init': 'ale#fixers#beautify_template#ExtractTemplateTag',
+\       'function': 'ale#fixers#beautify_template#Fix',
+\       'suggested_filetypes': ['html', 'vue', 'javascript'],
+\       'description': 'Apply Beautify-HTML to the template portions of the file.',
+\       'aliases': ['beautify_template']
 \   },
 \   'mix_format': {
 \       'function': 'ale#fixers#mix_format#Fix',

@@ -151,6 +151,7 @@ function! ale#fix#ManageDirectory(buffer, directory) abort
 endfunction
 
 function! ale#fix#RemoveManagedFiles(buffer) abort
+    return
     if !has_key(g:ale_fix_buffer_data, a:buffer)
         return
     endif
