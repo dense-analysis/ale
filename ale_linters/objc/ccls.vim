@@ -9,7 +9,9 @@ function! ale_linters#objc#ccls#GetProjectRoot(buffer) abort
 
     if empty(l:project_root)
         let l:project_root = ale#path#FindNearestFile(a:buffer, 'compile_commands.json')
-    elseif empty(l:project_root)
+    endif
+
+    if empty(l:project_root)
         let l:project_root = ale#path#FindNearestFile(a:buffer, '.ccls')
     endif
 
