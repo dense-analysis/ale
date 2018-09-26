@@ -34,6 +34,7 @@ CONTENTS                                                         *ale-contents*
       flawfinder..........................|ale-c-flawfinder|
       gcc.................................|ale-c-gcc|
       uncrustify..........................|ale-c-uncrustify|
+      ccls................................|ale-c-ccls|
     chef..................................|ale-chef-options|
       foodcritic..........................|ale-chef-foodcritic|
     clojure...............................|ale-clojure-options|
@@ -55,6 +56,7 @@ CONTENTS                                                         *ale-contents*
       flawfinder..........................|ale-cpp-flawfinder|
       gcc.................................|ale-cpp-gcc|
       uncrustify..........................|ale-cpp-uncrustify|
+      ccls................................|ale-cpp-ccls|
     c#....................................|ale-cs-options|
       mcs.................................|ale-cs-mcs|
       mcsc................................|ale-cs-mcsc|
@@ -185,6 +187,7 @@ CONTENTS                                                         *ale-contents*
       clang...............................|ale-objc-clang|
       clangd..............................|ale-objc-clangd|
       uncrustify..........................|ale-objc-uncrustify|
+      ccls................................|ale-objc-ccls|
     objcpp................................|ale-objcpp-options|
       clang...............................|ale-objcpp-clang|
       clangd..............................|ale-objcpp-clangd|
