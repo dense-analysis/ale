@@ -22,7 +22,7 @@ let s:KnownTemplateDelimiters = {
 
 call ale#Set('beautify_template_executable', 'html-beautify')
 call ale#Set('beautify_template_use_global', get(g:, 'ale_use_global_executables', 0))
-call ale#Set('beautify_template_options', ' --type html ')
+call ale#Set('beautify_template_options', ' --type html -S keep ')
 call ale#Set('beautify_template_delimiters', s:KnownTemplateDelimiters)
 
 function! ale#fixers#beautify_template#GetExecutable(buffer) abort
