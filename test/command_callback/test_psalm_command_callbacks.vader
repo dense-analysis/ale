@@ -1,0 +1,12 @@
+Before:
+  call ale#assert#SetUpLinterTest('php', 'psalm')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(Custom executables should be used for the executable and command):
+  let g:ale_php_psalm_executable = 'psalm_test'
+
+  AssertLinter 'psalm_test',
+  \ ale#Escape('psalm_test') . ' --diff --output-format=emacs %s'
+
