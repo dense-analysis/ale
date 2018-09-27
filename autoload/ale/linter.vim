@@ -260,6 +260,7 @@ function! ale#linter#PreProcess(filetype, linter) abort
             if type(a:linter.lsp_config) isnot v:t_dict
                 throw '`lsp_config` must be a Dictionary'
             endif
+            let l:obj.lsp_config = a:linter.lsp_config
         endif
 
     endif
