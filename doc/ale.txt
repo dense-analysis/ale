@@ -203,6 +203,8 @@ CONTENTS                                                         *ale-contents*
       perl................................|ale-perl-perl|
       perlcritic..........................|ale-perl-perlcritic|
       perltidy............................|ale-perl-perltidy|
+    perl6.................................|ale-perl6-options|
+      perl6...............................|ale-perl6-perl6|
     php...................................|ale-php-options|
       langserver..........................|ale-php-langserver|
       phan................................|ale-php-phan|
@@ -438,6 +440,7 @@ Notes:
 * OCaml: `merlin` (see |ale-ocaml-merlin|), `ols`, `ocamlformat`
 * Pawn: `uncrustify`
 * Perl: `perl -c`, `perl-critic`, `perltidy`
+* Perl6: `perl6 -c`
 * PHP: `langserver`, `phan`, `php -l`, `phpcs`, `phpmd`, `phpstan`, `phpcbf`, `php-cs-fixer`, `psalm`!!
 * PO: `alex`!!, `msgfmt`, `proselint`, `write-good`
 * Pod: `alex`!!, `proselint`, `write-good`
@@ -1306,6 +1309,7 @@ g:ale_linters                                                   *g:ale_linters*
   \   'hack': ['hack'],
   \   'help': [],
   \   'perl': ['perlcritic'],
+  \   'perl6': [],
   \   'python': ['flake8', 'mypy', 'pylint'],
   \   'rust': ['cargo'],
   \   'spec': [],
