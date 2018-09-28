@@ -39,8 +39,8 @@ function! ale_linters#elixir#mix#GetCommand(buffer) abort
     \   : 'MIX_BUILD_PATH=' . ale#Escape(l:temp_dir)
 
     return ale#path#CdString(l:project_root)
-          \ . l:mix_build_path
-          \ . ' mix compile %s'
+    \ . l:mix_build_path
+    \ . ' mix compile %s'
 endfunction
 
 call ale#linter#Define('elixir', {

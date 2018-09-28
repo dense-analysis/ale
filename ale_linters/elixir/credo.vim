@@ -33,7 +33,7 @@ function! ale_linters#elixir#credo#GetCommand(buffer) abort
     let l:project_root = ale#handlers#elixir#FindMixProjectRoot(a:buffer)
 
     return ale#path#CdString(l:project_root)
-          \ . ' mix help credo && mix credo suggest --format=flycheck --read-from-stdin %s'
+    \ . ' mix help credo && mix credo suggest --format=flycheck --read-from-stdin %s'
 endfunction
 
 call ale#linter#Define('elixir', {

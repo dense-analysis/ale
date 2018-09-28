@@ -29,7 +29,7 @@ function! ale_linters#elixir#dialyxir#GetCommand(buffer) abort
     let l:project_root = ale#handlers#elixir#FindMixProjectRoot(a:buffer)
 
     return ale#path#CdString(l:project_root)
-          \ . ' mix help dialyzer && mix dialyzer'
+    \ . ' mix help dialyzer && mix dialyzer'
 endfunction
 
 call ale#linter#Define('elixir', {
