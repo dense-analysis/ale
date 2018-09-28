@@ -170,7 +170,7 @@ function! ale#fixers#beautify_template#ExtractTemplateTag(options) abort
                     \   { 'buffer_lines': a:options['input'] }
                     \ )
 
-    return { 'input': l:extracted['output'] }
+    return extend(l:options, { 'input': l:extracted['output'] })
 endfunction
 
 function! ale#fixers#beautify_template#Fix(buffer) abort

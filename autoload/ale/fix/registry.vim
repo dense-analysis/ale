@@ -44,12 +44,18 @@ let s:default_registry = {
 \       'suggested_filetypes': ['javascript', 'typescript'],
 \       'description': 'Apply eslint --fix to a file.',
 \   },
-\   'beautify-template': {
+\   'beautify_html': {
+\       'function': 'ale#fixers#beautify_html#Fix',
+\       'suggested_filetypes': ['html', 'vue'],
+\       'description': 'Apply Beautify-HTML to an HTML file.',
+\       'aliases': ['beautify_html']
+\   },
+\   'beautify_template': {
 \       'pre_init': 'ale#fixers#beautify_template#ExtractTemplateTag',
 \       'function': 'ale#fixers#beautify_template#Fix',
 \       'suggested_filetypes': ['html', 'vue', 'javascript'],
 \       'description': 'Apply Beautify-HTML to the template portions of the file.',
-\       'aliases': ['beautify_template']
+\       'aliases': ['beautify-template']
 \   },
 \   'mix_format': {
 \       'function': 'ale#fixers#mix_format#Fix',
@@ -350,7 +356,7 @@ function! ale#fix#registry#PreInit(name) abort
     \   : a:name
 
     " Pre-init function isn't always there so it needs the double-check.
-    return get(get(s:entries, l:resolved_name), 'pre_init', '')
+    return get(get(s:entries, l:resolved_name, {'pre_init': ''}), 'pre_init', '')
 endfunction
 
 function! s:ShouldSuggestForType(suggested_filetypes, type_list) abort
