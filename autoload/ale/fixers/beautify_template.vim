@@ -2,22 +2,22 @@
 " Description: Integration of the JS-Beautify library for HTML and Vue files.
 
 let s:KnownTemplateDelimiters = {
-\    'html':       {
-\                    'opening': '<html>',
-\                    'closing': '</html>',
-\                    'line_offset': 0
-\                  },
-\    'vue':        {
-\                    'opening': '<template>',
-\                    'closing': '</template>',
-\                    'line_offset': 0
-\                  },
-\    'javascript': {
-\                    'regex_starting_chain': ['render(.*)\(\)', 'return\(.*\)('],
-\                    'regex_closing_chain': ['\s\+)'],
-\                    'opening_line_offset': 1,
-\                    'closing_line_offset': -1,
-\                  }
+\ 'html': {
+\    'opening': '<html>',
+\    'closing': '</html>',
+\    'line_offset': 0
+\ },
+\ 'vue': {
+\    'opening': '<template>',
+\    'closing': '</template>',
+\    'line_offset': 0
+\ },
+\ 'javascript': {
+\    'regex_starting_chain': ['render(.*)\(\)', 'return\(.*\)('],
+\    'regex_closing_chain': ['\s\+)'],
+\    'opening_line_offset': 1,
+\    'closing_line_offset': -1
+\ }
 \}
 
 call ale#Set('beautify_template_executable', 'html-beautify')
@@ -41,9 +41,9 @@ function! s:TemplateLineRangeDelimiter(buffer, ...) abort
     let l:starting_line = 0
     let l:ending_line = 0
 
-    for key in keys(l:template_delimiters)
-        if &filetype == key
-            let l:extracting_opts = l:template_delimiters[key]
+    for l:key in keys(l:template_delimiters)
+        if &filetype == l:key
+            let l:extracting_opts = l:template_delimiters[l:key]
             let l:indent_size = 0
 
             if len(get(l:extracting_opts, 'regex_starting_chain', []))
@@ -74,11 +74,11 @@ function! s:TemplateLineRangeDelimiter(buffer, ...) abort
                         let l:output = l:buffer_lines[l:starting_line : l:ending_line]
 
                         return {
-                              \ 'starting_line': l:starting_line,
-                              \ 'ending_line': l:ending_line,
-                              \ 'output': l:output,
-                              \ 'indent_size': l:indent_size
-                              \}
+                        \ 'starting_line': l:starting_line,
+                        \ 'ending_line': l:ending_line,
+                        \ 'output': l:output,
+                        \ 'indent_size': l:indent_size
+                        \ }
                     endif
                 endfor
             else
@@ -99,48 +99,49 @@ function! s:TemplateLineRangeDelimiter(buffer, ...) abort
 
                     if l:tags_found == 2
                         return {
-                              \ 'starting_line': l:starting_line,
-                              \ 'ending_line': l:ending_line,
-                              \ 'output': l:buffer_lines[l:starting_line : l:ending_line],
-                              \ 'indent_size': l:indent_size
-                              \}
+                        \ 'starting_line': l:starting_line,
+                        \ 'ending_line': l:ending_line,
+                        \ 'output': l:buffer_lines[l:starting_line : l:ending_line],
+                        \ 'indent_size': l:indent_size
+                        \ }
                     endif
                 endfor
             endif
         endif
     endfor
 
-    return {'starting_line': l:starting_line,
-          \ 'ending_line': l:buffer_line_count,
-          \ 'output': l:buffer_lines[l:starting_line : l:buffer_line_count]
-          \ 'indent_size': l:indent_size
-          \ }
+    return {
+    \ 'starting_line': l:starting_line,
+    \ 'ending_line': l:buffer_line_count,
+    \ 'output': l:buffer_lines[l:starting_line : l:buffer_line_count],
+    \ 'indent_size': l:indent_size
+    \ }
 endfunction
 
 function! s:PadOutput(output, indent_size) abort
     if !a:indent_size
-        return output
+        return a:output
     endif
 
     let l:tab_size = !&expandtab ? (&softtabstop || &tabstop) : 0
     let l:indent_size = a:indent_size
-    let l:indent_string = ""
+    let l:indent_string = ''
     let l:padded_output = []
 
     if l:tab_size
         let l:indent_size = l:indent_size/l:tab_size
 
-        for i in range(1, l:indent_size, 1)
-            let l:indent_string .= "\x9"
+        for l:i in range(1, l:indent_size, 1)
+            let l:indent_string .= '\x9'
         endfor
     else
-        for i in range(1, l:indent_size, 1)
-            let l:indent_string .= " "
+        for l:i in range(1, l:indent_size, 1)
+            let l:indent_string .= ' '
         endfor
     endif
 
-    for line in a:output
-        call add(l:padded_output, l:indent_string . line)
+    for l:line in a:output
+        call add(l:padded_output, l:indent_string . l:line)
     endfor
 
     return l:padded_output
@@ -170,7 +171,7 @@ function! ale#fixers#beautify_template#ExtractTemplateTag(options) abort
                     \   { 'buffer_lines': a:options['input'] }
                     \ )
 
-    return extend(l:options, { 'input': l:extracted['output'] })
+    return extend(a:options, { 'input': l:extracted['output'] })
 endfunction
 
 function! ale#fixers#beautify_template#Fix(buffer) abort
@@ -179,7 +180,7 @@ function! ale#fixers#beautify_template#Fix(buffer) abort
     " Usage at https://github.com/beautify-web/js-beautify/blob/master/js/src/cli.js#L323
     return {
     \   'command': ale#fixers#beautify_template#GetExecutable(a:buffer)
-    \       . (l:config_path ? (" --config " . l:config_path) : "")
+    \       . (l:config_path ? (' --config ' . l:config_path) : '')
     \       . ale#Var(a:buffer, 'beautify_template_options'),
     \   'process_with': 'ale#fixers#beautify_template#ProcessTemplateOutput'
     \}

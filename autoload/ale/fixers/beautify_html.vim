@@ -18,7 +18,7 @@ function! ale#fixers#beautify_html#Fix(buffer) abort
     " Usage at https://github.com/beautify-web/js-beautify/blob/master/js/src/cli.js#L323
     return {
     \   'command': ale#fixers#beautify_html#GetExecutable(a:buffer)
-    \       . (l:config_path ? (" --config " . l:config_path) : "")
+    \       . (l:config_path ? (' --config ' . l:config_path) : '')
     \       . ale#Var(a:buffer, 'beautify_html_options')
     \}
 endfunction
