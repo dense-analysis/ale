@@ -30,7 +30,7 @@ function! ale_linters#elixir#dogma#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#elixir#dogma#GetCommand(buffer) abort
-    let l:project_root = ale_linters#elixir#mix#FindProjectRoot(a:buffer)
+    let l:project_root = ale#handlers#elixir#FindMixProjectRoot(a:buffer)
 
     return ale#path#CdString(l:project_root)
           \ . ' mix help dogma && mix dogma %s --format=flycheck'
