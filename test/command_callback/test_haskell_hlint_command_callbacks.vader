@@ -1,9 +1,6 @@
 Before:
   call ale#assert#SetUpLinterTest('haskell', 'hlint')
 
-  let g:ale_haskell_hlint_executable = 'hlint'
-  let g:ale_haskell_hlint_options = ''
-
   let b:base_opts = '--color=never --json -'
 
 After:
