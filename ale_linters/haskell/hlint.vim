@@ -1,6 +1,9 @@
 " Author: jparoz <jesse.paroz@gmail.com>
 " Description: hlint for Haskell files
 
+call ale#Set('haskell_hlint_executable', 'hlint')
+call ale#Set('haskell_hlint_options', get(g:, 'hlint_options', ''))
+
 function! ale_linters#haskell#hlint#Handle(buffer, lines) abort
     let l:output = []
 
