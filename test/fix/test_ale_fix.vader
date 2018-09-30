@@ -354,7 +354,6 @@ Expect(Only the second function should be applied):
 
 Execute(ALEFix should use functions from the registry):
   call ale#fix#registry#Add('add_carets', 'AddCarets', [], 'Add some carets')
-  execute 'echo ale#fix#registry#GetFunc(''AddCarets'')'
   let g:ale_fixers.testft = ['add_carets']
   ALEFix
 
