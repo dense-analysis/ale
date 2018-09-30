@@ -130,6 +130,7 @@ function! s:PadOutput(output, indent_size) abort
         let l:indent_size = l:indent_size/l:tab_size
 
         for l:i in range(1, l:indent_size, 1)
+            " vint: next-line -ProhibitUnnecessaryDoubleQuote
             let l:indent_string .= "\x9"
         endfor
     else
