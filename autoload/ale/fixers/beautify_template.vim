@@ -59,7 +59,9 @@ function! s:TemplateLineRangeDelimiter(buffer, ...) abort
                   \ && l:buffer_lines[l:line_number] =~ l:regex_starting_chain[l:regex_starting_chain_index]
                         let l:regex_starting_chain_index += 1
                         let l:starting_line = l:line_number
-                        let l:indent_size = match(l:buffer_lines[l:line_number], '\S') + &shiftwidth
+                        " If the file is using tabs, each character 'column' equals to the length of the tab
+                        let l:tab_size = &expandtab ? 1 : &shiftwidth
+                        let l:indent_size = (match(l:buffer_lines[l:line_number], '\S') * l:tab_size) + &shiftwidth
                     endif
 
                     if l:buffer_lines[l:line_number] =~ l:regex_closing_chain[l:regex_closing_chain_index]
@@ -119,11 +121,7 @@ function! s:TemplateLineRangeDelimiter(buffer, ...) abort
 endfunction
 
 function! s:PadOutput(output, indent_size) abort
-    if !a:indent_size
-        return a:output
-    endif
-
-    let l:tab_size = !&expandtab ? (&softtabstop || &tabstop) : 0
+    let l:tab_size = &expandtab ? 0 : &shiftwidth
     let l:indent_size = a:indent_size
     let l:indent_string = ''
     let l:padded_output = []
@@ -132,11 +130,11 @@ function! s:PadOutput(output, indent_size) abort
         let l:indent_size = l:indent_size/l:tab_size
 
         for l:i in range(1, l:indent_size, 1)
-            let l:indent_string .= '\x9'
+            let l:indent_string .= "\x9"
         endfor
     else
         for l:i in range(1, l:indent_size, 1)
-            let l:indent_string .= ' '
+            let l:indent_string .= " "
         endfor
     endif
 
@@ -152,11 +150,7 @@ function! ale#fixers#beautify_template#ProcessTemplateOutput(buffer, output) abo
     let l:extracted = s:TemplateLineRangeDelimiter(a:buffer)
     let l:first_line = l:extracted['starting_line']
     let l:last_line = l:extracted['ending_line']
-    let l:output = a:output
-
-    if l:extracted['indent_size']
-        let l:output = s:PadOutput(a:output, l:extracted['indent_size'])
-    endif
+    let l:output = s:PadOutput(a:output, l:extracted['indent_size'])
 
     " Glue the beautified part back together in the middle.
     " Out-of-bounds positive indexes just yields an empty array so no worries.
