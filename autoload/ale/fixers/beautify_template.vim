@@ -55,16 +55,21 @@ function! s:TemplateLineRangeDelimiter(buffer, ...) abort
                 let l:regex_closing_chain_index = 0
 
                 for l:line_number in range(0, l:buffer_line_count, 1)
+                    let l:current_line = l:buffer_lines[l:line_number]
+
                     if l:regex_starting_chain_index < l:regex_starting_chain_length
                   \ && l:buffer_lines[l:line_number] =~ l:regex_starting_chain[l:regex_starting_chain_index]
                         let l:regex_starting_chain_index += 1
                         let l:starting_line = l:line_number
+
                         " If the file is using tabs, each character 'column' equals to the length of the tab
-                        let l:tab_size = &expandtab ? 1 : &shiftwidth
-                        let l:indent_size = (match(l:buffer_lines[l:line_number], '\S') * l:tab_size) + &shiftwidth
+                        " vint: next-line -ProhibitUnnecessaryDoubleQuote
+                        let l:line_tabs = l:current_line =~ "^\x9"
+                        let l:column_size = l:line_tabs ? &shiftwidth : 1
+                        let l:indent_size = (match(l:buffer_lines[l:line_number], '\S') * l:column_size) + &shiftwidth
                     endif
 
-                    if l:buffer_lines[l:line_number] =~ l:regex_closing_chain[l:regex_closing_chain_index]
+                    if l:current_line =~ l:regex_closing_chain[l:regex_closing_chain_index]
                         let l:ending_line = l:line_number
                         let l:regex_closing_chain_index += 1
                     endif
@@ -121,7 +126,21 @@ function! s:TemplateLineRangeDelimiter(buffer, ...) abort
 endfunction
 
 function! s:PadOutput(output, indent_size) abort
+    if empty(a:output)
+        return a:output
+    endif
+
+    " Guess if the output should be padded with tabs based on &expandtab
     let l:tab_size = &expandtab ? 0 : &shiftwidth
+
+    " Confirm if the file is using tabs based on Beautify's output
+    for l:line in a:output
+        if l:line =~ "^\x9"
+            let l:tab_size = &shiftwidth
+            break
+        endif
+    endfor
+
     let l:indent_size = a:indent_size
     let l:indent_string = ''
     let l:padded_output = []

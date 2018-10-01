@@ -300,10 +300,10 @@ endfunction
 
 function! s:RunFixer(options) abort
     let l:buffer = a:options.buffer
-    let l:input = get(a:options, 'input', g:ale_fix_buffer_data[l:buffer].lines_before)
+    let l:ale_fix_buffer_data = get(g:ale_fix_buffer_data, l:buffer)
+    let l:input = get(a:options, 'input', l:ale_fix_buffer_data.lines_before)
     let l:index = a:options.callback_index
     let l:callback_list = a:options.callback_list
-    let l:ale_fix_buffer_data = get(g:ale_fix_buffer_data, l:buffer)
     let l:ChainCallback = get(a:options, 'chain_callback', v:null)
 
     while len(l:callback_list) > l:index
@@ -536,8 +536,8 @@ function! ale#fix#Fix(buffer, fixing_flag, ...) abort
     call ale#fix#RemoveManagedFiles(a:buffer)
     " In case fixers have been selected as fargs for the command, pass them on
     call ale#fix#InitBufferData(a:buffer, a:fixing_flag, a:000)
-    let l:ale_fix_buffer_data = g:ale_fix_buffer_data[a:buffer]
 
+    let l:ale_fix_buffer_data = g:ale_fix_buffer_data[a:buffer]
 
     if empty(l:ale_fix_buffer_data.fixers_callbacks) && empty(a:fixing_flag)
         " Prioritize error messages before the default one
