@@ -64,7 +64,7 @@ function! s:TemplateLineRangeDelimiter(buffer, ...) abort
 
                         " If the file is using tabs, each character 'column' equals to the length of the tab
                         " vint: next-line -ProhibitUnnecessaryDoubleQuote
-                        let l:line_tabs = l:current_line =~ "^\x9"
+                        let l:line_tabs = l:current_line =~? "^\x9"
                         let l:column_size = l:line_tabs ? &shiftwidth : 1
                         let l:indent_size = (match(l:buffer_lines[l:line_number], '\S') * l:column_size) + &shiftwidth
                     endif
@@ -135,7 +135,7 @@ function! s:PadOutput(output, indent_size) abort
 
     " Confirm if the file is using tabs based on Beautify's output
     for l:line in a:output
-        if l:line =~ "^\x9"
+        if l:line =~? "^\x9"
             let l:tab_size = &shiftwidth
             break
         endif
