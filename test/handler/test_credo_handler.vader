@@ -10,9 +10,30 @@ Execute(The credo handler should parse lines correctly):
   \   {
   \     'bufnr': 347,
   \     'lnum': 1,
+  \     'col': 24,
+  \     'text': 'This code can be refactored',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 1,
   \     'col': 4,
   \     'text': 'There is no whitespace around parentheses/brackets most of the time, but here there is.',
-  \     'type': 'E',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 5,
+  \     'col': 21,
+  \     'text': 'TODO comment',
+  \     'type': 'W',
+  \   },
+  \   {
+  \     'bufnr': 347,
+  \     'lnum': 15,
+  \     'col': 1,
+  \     'text': 'Code is not readable',
+  \     'type': 'W',
   \   },
   \   {
   \     'bufnr': 347,
@@ -24,6 +45,9 @@ Execute(The credo handler should parse lines correctly):
   \ ],
   \ ale_linters#elixir#credo#Handle(347, [
   \   'This line should be ignored completely',
+  \   'lib/my_code/test.ex:1:24: F: This code can be refactored',
   \   'lib/filename.ex:1:4: C: There is no whitespace around parentheses/brackets most of the time, but here there is.',
+  \   'lib/my_code/test.ex:5:21: D: TODO comment',
+  \   'lib/my_code/test.ex:15:1: R: Code is not readable',
   \   'lib/phoenix/channel.ex:26: R: If/else blocks should not have a negated condition in `if`.',
   \ ])
