@@ -17,12 +17,12 @@ function! ale_linters#elixir#credo#Handle(buffer, lines) abort
         " Consistency
         elseif l:type is# 'C'
             let l:type = 'W'
-        " Software Design (info message)
+        " Software Design
         elseif l:type is# 'D'
-            let l:type = 'W'  " 'I'?
-        " Code Readability (info message)
+            let l:type = 'I'
+        " Code Readability
         elseif l:type is# 'R'
-            let l:type = 'W'  " 'I'?
+            let l:type = 'I'
         endif
 
         call add(l:output, {
