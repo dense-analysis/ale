@@ -200,3 +200,78 @@ Execute(The Perl6 linter should gracefully handle non-JSON messages):
   \   '    ------> /win<HERE> 3/',
   \   'Syntax OK'
   \ ])
+
+Execute(The Perl6 linter should gracefully handle messages without a line number):
+  call ale#test#SetFilename('bar.pl6')
+
+  AssertEqual
+  \ [
+  \    {
+  \     'lnum': '1',
+  \     'end_lnum': '',
+  \     'text': 'Cannot find method ''has_compile_time_value'' on object of type NQPMu',
+  \     'type': 'E',
+  \     'col' : '',
+  \     'code': 'X::AdHoc',
+  \    }
+  \ ],
+  \ ale_linters#perl6#perl6#Handle(bufnr(''), [
+  \   '{',
+  \     '"X::AdHoc" : {',
+  \       '"message" : "Cannot find method ''has_compile_time_value'' on object of type NQPMu",',
+  \       '"payload" : "Cannot find method ''has_compile_time_value'' on object of type NQPMu"',
+  \      '}',
+  \    '}',
+  \ ])
+
+Execute(The Perl6 linter should not include errors from a known separate file):
+  call ale#test#SetFilename('bar.pl6')
+
+  AssertEqual
+  \ [],
+  \ ale_linters#perl6#perl6#Handle(bufnr(''), [
+  \ '{
+  \   "X::Undeclared" : {
+  \     "highexpect" : [ ],
+  \     "is-compile-time" : 1,
+  \     "modules" : [ ],
+  \     "column" : null,
+  \     "pos" : 18,
+  \     "symbol" : "$tes",
+  \     "filename" : "foo.pl6",
+  \     "what" : "Variable",
+  \     "pre" : "my $test = 0; say ",
+  \     "post" : "$tes",
+  \     "suggestions" : [
+  \       "$res",
+  \       "$test"
+  \     ],
+  \     "line" : 6,
+  \     "message" : "Variable ''$tes'' is not declared. Did you mean any of these?\n    $res\n    $test\n"
+  \   }
+  \ }'
+  \ ])
+
+Execute(The Perl6 linter should not ignore errors without a filename):
+  call ale#test#SetFilename('bar.pl6')
+
+  AssertEqual
+  \ [
+  \    {
+  \     'lnum': '3',
+  \     'end_lnum': '',
+  \     'text': 'Cannot find method ''has_compile_time_value'' on object of type NQPMu',
+  \     'type': 'E',
+  \     'col' : '',
+  \     'code': 'X::AdHoc',
+  \    }
+  \ ],
+  \ ale_linters#perl6#perl6#Handle(bufnr(''), [
+  \   '{',
+  \     '"X::AdHoc" : {',
+  \       '"line" : 3,',
+  \       '"message" : "Cannot find method ''has_compile_time_value'' on object of type NQPMu",',
+  \       '"payload" : "Cannot find method ''has_compile_time_value'' on object of type NQPMu"',
+  \      '}',
+  \    '}',
+  \ ])
