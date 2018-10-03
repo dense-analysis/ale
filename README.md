@@ -113,7 +113,7 @@ formatting.
 | D | [dmd](https://dlang.org/dmd-linux.html), [uncrustify](https://github.com/uncrustify/uncrustify) |
 | Dafny | [dafny](https://rise4fun.com/Dafny) !! |
 | Dart | [dartanalyzer](https://github.com/dart-lang/sdk/tree/master/pkg/analyzer_cli) !!, [language_server](https://github.com/natebosch/dart_language_server), [dartfmt](https://github.com/dart-lang/sdk/tree/master/utils/dartfmt) |
-| Dockerfile | [hadolint](https://github.com/hadolint/hadolint) |
+| Dockerfile | [dockerfile_lint](https://github.com/projectatomic/dockerfile_lint) | [hadolint](https://github.com/hadolint/hadolint) |
 | Elixir | [credo](https://github.com/rrrene/credo), [dialyxir](https://github.com/jeremyjh/dialyxir), [dogma](https://github.com/lpil/dogma), [mix](https://hexdocs.pm/mix/Mix.html) !!|
 | Elm | [elm-format](https://github.com/avh4/elm-format), [elm-make](https://github.com/elm-lang/elm-make) |
 | Erb | [erb](https://apidock.com/ruby/ERB), [erubi](https://github.com/jeremyevans/erubi), [erubis](https://github.com/kwatch/erubis) |
