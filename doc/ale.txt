@@ -288,10 +288,10 @@ CONTENTS                                                         *ale-contents*
       rpmlint.............................|ale-spec-rpmlint|
     sql...................................|ale-sql-options|
       sqlfmt..............................|ale-sql-sqlfmt|
-    sugarss...............................|ale-sugarss-options|
-      stylelint...........................|ale-sugarss-stylelint|
     stylus................................|ale-stylus-options|
       stylelint...........................|ale-stylus-stylelint|
+    sugarss...............................|ale-sugarss-options|
+      stylelint...........................|ale-sugarss-stylelint|
     tcl...................................|ale-tcl-options|
       nagelfar............................|ale-tcl-nagelfar|
     terraform.............................|ale-terraform-options|
@@ -463,6 +463,7 @@ Notes:
 * SML: `smlnj`
 * Solidity: `solhint`, `solium`
 * Stylus: `stylelint`
+* SugarSS: `stylint`
 * SQL: `sqlint`, `sqlfmt`
 * Swift: `swiftlint`, `swiftformat`
 * Tcl: `nagelfar`!!
