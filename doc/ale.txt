@@ -2409,7 +2409,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                            and have been checked at least once.
 
                            Temporary files in directories used for Vim
-                           temporary files with `tempname()` will be asugarssumed
+                           temporary files with `tempname()` will be assumed
                            to be the buffer being checked, unless the `bufnr`
                            key is also set with a valid number for some other
                            buffer.
