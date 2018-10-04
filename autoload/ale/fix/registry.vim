@@ -44,6 +44,19 @@ let s:default_registry = {
 \       'suggested_filetypes': ['javascript', 'typescript'],
 \       'description': 'Apply eslint --fix to a file.',
 \   },
+\   'beautify_html': {
+\       'function': 'ale#fixers#beautify_html#Fix',
+\       'suggested_filetypes': ['html', 'vue'],
+\       'description': 'Apply Beautify-HTML to an HTML file.',
+\       'aliases': ['beautify_html']
+\   },
+\   'beautify_template': {
+\       'pre_init': 'ale#fixers#beautify_template#ExtractTemplateTag',
+\       'function': 'ale#fixers#beautify_template#Fix',
+\       'suggested_filetypes': ['html', 'vue', 'javascript'],
+\       'description': 'Apply Beautify-HTML to the template portions of the file.',
+\       'aliases': ['beautify-template']
+\   },
 \   'mix_format': {
 \       'function': 'ale#fixers#mix_format#Fix',
 \       'suggested_filetypes': ['elixir'],
@@ -333,6 +346,17 @@ function! ale#fix#registry#GetFunc(name) abort
     \   : a:name
 
     return get(s:entries, l:resolved_name, {'function': ''}).function
+endfunction
+
+" In case a fixer needs to perform some action before it starts running.
+function! ale#fix#registry#PreInit(name) abort
+    " Use the exact name, or an alias.
+    let l:resolved_name = !has_key(s:entries, a:name)
+    \   ? get(s:aliases, a:name, a:name)
+    \   : a:name
+
+    " Pre-init function isn't always there so it needs the double-check.
+    return get(get(s:entries, l:resolved_name, {'pre_init': ''}), 'pre_init', '')
 endfunction
 
 function! s:ShouldSuggestForType(suggested_filetypes, type_list) abort

@@ -258,8 +258,8 @@ Expect(Only the second function should be applied):
   $b
   $c
 
-Execute(The * fixers shouldn't be used if an empty list is set for fixers):
-  let g:ale_fixers.testft = []
+Execute(The * fixers shouldn't be used if an empty list is set for them):
+  let b:ale_fixers = {'*': []}
   let g:ale_fixers['*'] = ['AddDollars']
   ALEFix
 
@@ -352,15 +352,6 @@ Expect(Only the second function should be applied):
   $b
   $c
 
-Execute(ALEFix should handle strings for selecting a single function):
-  let g:ale_fixers.testft = 'AddCarets'
-  ALEFix
-
-Expect(The first function should be used):
-  ^a
-  ^b
-  ^c
-
 Execute(ALEFix should use functions from the registry):
   call ale#fix#registry#Add('add_carets', 'AddCarets', [], 'Add some carets')
   let g:ale_fixers.testft = ['add_carets']
@@ -432,12 +423,12 @@ Execute(ALEFix should save files on the save event):
   let g:ale_enabled = 1
 
   noautocmd silent file fix_test_file
+  " We have to set the buftype to empty so the file will be written.
+  setlocal buftype=
+
   call writefile(getline(1, '$'), 'fix_test_file')
 
   let g:ale_fixers.testft = ['AddDollars']
-
-  " We have to set the buftype to empty so the file will be written.
-  setlocal buftype=
 
   call SetUpLinters()
   call ale#events#SaveEvent(bufnr(''))
@@ -551,10 +542,15 @@ Execute(ale#fix#InitBufferData() should set up the correct data):
 
   AssertEqual {
   \ bufnr(''): {
+  \   'last_error': '',
   \   'temporary_directory_list': [],
   \   'done': 0,
+  \   'fixers_callbacks': [],
   \   'lines_before': ['a', 'b', 'c'],
   \   'should_save': 1,
+  \   'initialized_fixers': {},
+  \   'callbacks_fixers': [],
+  \   'fixer_index': 0
   \ },
   \}, g:ale_fix_buffer_data
 
@@ -608,13 +604,13 @@ Execute(ALE should print a message telling you something isn't a valid fixer whe
   let g:ale_fixers.testft = ['CatLine', 'invalidname']
   ALEFix
 
-  AssertEqual 'There is no fixer named `invalidname`. Check :ALEFixSuggest', GetLastMessage()
+  AssertEqual 'INVALIDFIXER There is no fixer named `invalidname`. Check :ALEFixSuggest', GetLastMessage()
 
 Execute(ALE should complain about invalid fixers with minuses in the name):
   let g:ale_fixers.testft = ['foo-bar']
   ALEFix
 
-  AssertEqual 'There is no fixer named `foo-bar`. Check :ALEFixSuggest', GetLastMessage()
+  AssertEqual 'INVALIDFIXER There is no fixer named `foo-bar`. Check :ALEFixSuggest', GetLastMessage()
 
 Execute(ALE should tolerate valid fixers with minuses in the name):
   let g:ale_fixers.testft = ['prettier-standard']

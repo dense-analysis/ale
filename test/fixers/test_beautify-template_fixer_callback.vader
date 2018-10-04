@@ -1,0 +1,36 @@
+Before:
+  Save g:beautify_template_executable
+  Save g:beautify_template_options
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_beautify_template_executable = 'xxxinvalid'
+  let g:ale_beautify_template_options = ''
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The beautify_template callback should return the correct default values):
+  call ale#test#SetFilename('../beautify_files/dummy.html')
+
+  AssertEqual
+  \ {
+  \   'process_with': 'ale#fixers#beautify_template#ProcessTemplateOutput',
+  \   'command': 'xxxinvalid'
+  \ },
+  \ ale#fixers#beautify_template#Fix(bufnr(''))
+
+Execute(The beautify_template callback should include custom beautify_template options):
+  let g:ale_beautify_template_options = " -S "
+
+  call ale#test#SetFilename('../beautify_files/dummy.html')
+
+  AssertEqual
+  \ {
+  \   'process_with': 'ale#fixers#beautify_template#ProcessTemplateOutput',
+  \   'command': 'xxxinvalid' . g:ale_beautify_template_options
+  \ },
+  \ ale#fixers#beautify_template#Fix(bufnr(''))
