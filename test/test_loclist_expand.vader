@@ -1,0 +1,13 @@
+Execute(multiline text should be expanded):
+  AssertEqual ale#util#LocItemExpandMultilineText([
+  \   {'lnum': 1, 'text': '1-1'},
+  \   {'lnum': 2, 'text': ['2-1', '2-2', '2-3']},
+  \   {'lnum': 3, 'text': '3-1'},
+  \ ]),
+  \ [
+  \   {'lnum': 1, 'text': '1-1'},
+  \   {'lnum': 2, 'text': '2-1'},
+  \   {'text': '2-2'},
+  \   {'text': '2-3'},
+  \   {'lnum': 3, 'text': '3-1'},
+  \ ]

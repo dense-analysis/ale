@@ -204,6 +204,25 @@ function! ale#util#LocItemCompareWithText(left, right) abort
     return 0
 endfunction
 
+function! ale#util#LocItemExpandMultilineText(loclist) abort
+  let l:expanded = []
+
+  for item in a:loclist
+    if has_key(item, 'text') && type(item.text) == type([])
+      let lines = item.text
+      for line in lines
+        let item.text = line
+        call add(l:expanded, item)
+        let item = {}
+      endfor
+    else
+      call add(l:expanded, item)
+    endif
+  endfor
+
+  return l:expanded
+endfunction
+
 " This function will perform a binary search and a small sequential search
 " on the list to find the last problem in the buffer and line which is
 " on or before the column. The index of the problem will be returned.
