@@ -1,8 +1,8 @@
 " Author: Takuya Fujiwara <tyru.exe@gmail.com>
-" Description: swipl syntax check for Prolog files
+" Description: swipl syntax / semantic check for Prolog files
 
 call ale#Set('prolog_swipl_executable', 'swipl')
-" sandboxed(true) prohibits some directives such as 'initialization main'
+" sandboxed(true) prohibits executing some directives such as 'initialization main'
 call ale#Set('prolog_swipl_goals', 'current_prolog_flag(argv, [File]), load_files(File, [sandboxed(true)]), halt.')
 
 function! ale_linters#prolog#swipl#GetCommand(buffer) abort
@@ -66,7 +66,7 @@ endfunction
 " because what we want is syntactic or semantic check.
 function! s:Ignore(item) abort
     return a:item.type is# 'E' &&
-    \       a:item.text =~# 'No permission to call sandboxed '
+    \      a:item.text =~# 'No permission to call sandboxed '
 endfunction
 
 call ale#linter#Define('prolog', {
