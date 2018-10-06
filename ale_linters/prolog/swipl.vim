@@ -12,7 +12,7 @@ function! ale_linters#prolog#swipl#GetCommand(buffer) abort
 endfunction
 
 function! ale_linters#prolog#swipl#Handle(buffer, lines) abort
-    let l:pattern = '\v^(ERROR|Warning)+:\s*[^:]+:(\d+)%(:(\d+))?:\s*(.*)$'
+    let l:pattern = '\v^(ERROR|Warning)+%(:\s*[^:]+:(\d+)%(:(\d+))?)?:\s*(.*)$'
     let l:output = []
     let l:i = 0
     while l:i < len(a:lines)
@@ -28,6 +28,9 @@ function! ale_linters#prolog#swipl#Handle(buffer, lines) abort
         \   'text': l:text,
         \   'type': (l:match[1] is# 'ERROR' ? 'E' : 'W'),
         \}
+        if l:item.lnum is# 0
+            let l:item.lnum = 1
+        endif
         if !s:Ignore(l:item)
             call add(l:output, l:item)
         endif
@@ -54,12 +57,11 @@ function! s:Trim(str) abort
     return substitute(a:str, '\v^\s+|\s+$', '', 'g')
 endfunction
 
-" Skip 'initialization main' error because
-" what we want is syntactic or semantic check.
+" Skip sandbox error which is caused by directives
+" because what we want is syntactic or semantic check.
 function! s:Ignore(item) abort
     return a:item.type is# 'E' &&
-    \       a:item.text =~# 'No permission to call sandboxed `source_location(\w\+,\w\+)''' &&
-    \       getline(a:item.lnum) =~# '^\s*[:?]-\s*\<initialization\>'
+    \       a:item.text =~# 'No permission to call sandboxed '
 endfunction
 
 call ale#linter#Define('prolog', {
