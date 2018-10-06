@@ -8,6 +8,7 @@ call ale#Set('prolog_swipl_goals', 'current_prolog_flag(argv, [File]), load_file
 function! ale_linters#prolog#swipl#GetCommand(buffer) abort
     let l:goals = ale#Var(a:buffer, 'prolog_swipl_goals')
     let l:goals = ale#Escape(l:goals =~# '^\s*$' ? 'halt' : l:goals)
+
     return '%e -g ' . l:goals . ' -- %s'
 endfunction
 
@@ -15,22 +16,23 @@ function! ale_linters#prolog#swipl#Handle(buffer, lines) abort
     let l:pattern = '\v^(ERROR|Warning)+%(:\s*[^:]+:(\d+)%(:(\d+))?)?:\s*(.*)$'
     let l:output = []
     let l:i = 0
+
     while l:i < len(a:lines)
         let l:match = matchlist(a:lines[l:i], l:pattern)
+
         if empty(l:match)
             let l:i += 1
             continue
         endif
+
         let [l:i, l:text] = s:GetErrMsg(l:i, a:lines, l:match[4])
         let l:item = {
-        \   'lnum': l:match[2] + 0,
+        \   'lnum': (l:match[2] + 0 ? l:match[2] + 0 : 1),
         \   'col': l:match[3] + 0,
         \   'text': l:text,
         \   'type': (l:match[1] is# 'ERROR' ? 'E' : 'W'),
         \}
-        if l:item.lnum is# 0
-            let l:item.lnum = 1
-        endif
+
         if !s:Ignore(l:item)
             call add(l:output, l:item)
         endif
@@ -44,12 +46,15 @@ function! s:GetErrMsg(i, lines, text) abort
     if a:text !~# '^\s*$'
         return [a:i + 1, a:text]
     endif
+
     let l:i = a:i + 1
     let l:text = []
+
     while l:i < len(a:lines) && a:lines[l:i] =~# '^\s'
         call add(l:text, s:Trim(a:lines[l:i]))
         let l:i += 1
     endwhile
+
     return [l:i, join(l:text, '. ')]
 endfunction
 
