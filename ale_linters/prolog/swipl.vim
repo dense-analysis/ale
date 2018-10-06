@@ -2,9 +2,8 @@
 " Description: swipl syntax check for Prolog files
 
 call ale#Set('prolog_swipl_executable', 'swipl')
-" Read all terms until end of file.
-" If no exceptions are occurred, halt with zero status code
-call ale#Set('prolog_swipl_goals', 'current_prolog_flag(argv, [File]), see(File), repeat, read_term(T, [singletons(warning), syntax_errors(fail)]), T == end_of_file, halt.')
+" sandboxed(true) prohibits some directives such as 'initialization main'
+call ale#Set('prolog_swipl_goals', 'current_prolog_flag(argv, [File]), load_files(File, [sandboxed(true)]), halt.')
 
 function! ale_linters#prolog#swipl#GetCommand(buffer) abort
     let l:goals = ale#Var(a:buffer, 'prolog_swipl_goals')
@@ -22,22 +21,45 @@ function! ale_linters#prolog#swipl#Handle(buffer, lines) abort
             let l:i += 1
             continue
         endif
-        if l:match[4] =~# '^\s*$' && l:i + 1 < len(a:lines)
-            let l:i += 1
-            let l:text = a:lines[l:i]
-        else
-            let l:text = l:match[4]
-        endif
-        call add(l:output, {
+        let [l:i, l:text] = s:GetErrMsg(l:i, a:lines, l:match[4])
+        let l:item = {
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
         \   'text': l:text,
         \   'type': (l:match[1] is# 'ERROR' ? 'E' : 'W'),
-        \})
-        let l:i += 1
+        \}
+        if !s:Ignore(l:item)
+            call add(l:output, l:item)
+        endif
     endwhile
 
     return l:output
+endfunction
+
+" This returns [<next line number>, <error message string>]
+function! s:GetErrMsg(i, lines, text) abort
+    if a:text !~# '^\s*$'
+        return [a:i + 1, a:text]
+    endif
+    let l:i = a:i + 1
+    let l:text = []
+    while l:i < len(a:lines) && a:lines[l:i] =~# '^\s'
+        call add(l:text, s:Trim(a:lines[l:i]))
+        let l:i += 1
+    endwhile
+    return [l:i, join(l:text, '. ')]
+endfunction
+
+function! s:Trim(str) abort
+    return substitute(a:str, '\v^\s+|\s+$', '', 'g')
+endfunction
+
+" Skip 'initialization main' error because
+" what we want is syntactic or semantic check.
+function! s:Ignore(item) abort
+    return a:item.type is# 'E' &&
+    \       a:item.text =~# 'No permission to call sandboxed `source_location(\w\+,\w\+)''' &&
+    \       getline(a:item.lnum) =~# '^\s*[:?]-\s*\<initialization\>'
 endfunction
 
 call ale#linter#Define('prolog', {
