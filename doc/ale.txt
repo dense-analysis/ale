@@ -397,7 +397,7 @@ Notes:
 * D: `dmd`, `uncrustify`
 * Dafny: `dafny`!!
 * Dart: `dartanalyzer`!!, `language_server`, dartfmt!!
-* Dockerfile: `hadolint`
+* Dockerfile: `dockerfile_lint`, `hadolint`
 * Elixir: `credo`, `dialyxir`, `dogma`, `mix`!!
 * Elm: `elm-format, elm-make`
 * Erb: `erb`, `erubi`, `erubis`
