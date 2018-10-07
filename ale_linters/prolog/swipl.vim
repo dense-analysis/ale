@@ -88,7 +88,7 @@ endfunction
 " because what we want is syntactic or semantic check.
 function! s:Ignore(item) abort
     return a:item.type is# 'E' &&
-    \      a:item.text =~# 'No permission to call sandboxed '
+    \      a:item.text =~# '\vNo permission to (call|directive|assert) sandboxed'
 endfunction
 
 call ale#linter#Define('prolog', {
