@@ -2,14 +2,37 @@
 " Description: swipl syntax / semantic check for Prolog files
 
 call ale#Set('prolog_swipl_executable', 'swipl')
+call ale#Set('prolog_swipl_timeout', 3)
+call ale#Set('prolog_swipl_alarm', 'alarm(%t, (%h), _, [])')
+call ale#Set('prolog_swipl_alarm_handler', 'writeln(user_error, "ERROR: Exceeded %t seconds, Please change g:prolog_swipl_timeout to modify the limit."), halt(1)')
 " sandboxed(true) prohibits executing some directives such as 'initialization main'
 call ale#Set('prolog_swipl_goals', 'current_prolog_flag(argv, [File]), load_files(File, [sandboxed(true)]), halt.')
 
 function! ale_linters#prolog#swipl#GetCommand(buffer) abort
     let l:goals = ale#Var(a:buffer, 'prolog_swipl_goals')
-    let l:goals = ale#Escape(l:goals =~# '^\s*$' ? 'halt' : l:goals)
+    let l:goals = l:goals =~# '^\s*$' ? 'halt' : l:goals
+    let l:timeout = ale#Var(a:buffer, 'prolog_swipl_timeout') + 0
 
-    return '%e -g ' . l:goals . ' -- %s'
+    if l:timeout > 0
+        let l:goals = s:GetAlarm(a:buffer, l:timeout) . ', ' . l:goals
+    endif
+
+    return '%e -g ' . ale#Escape(l:goals) . ' -- %s'
+endfunction
+
+function! s:GetAlarm(buffer, timeout) abort
+    let l:handler = ale#Var(a:buffer, 'prolog_swipl_alarm_handler')
+    let l:handler = s:Subst(l:handler, {'t': a:timeout})
+    let l:alarm = ale#Var(a:buffer, 'prolog_swipl_alarm')
+    let l:alarm = s:Subst(l:alarm, {'t': a:timeout, 'h': l:handler})
+
+    return l:alarm
+endfunction
+
+function! s:Subst(format, vars) abort
+    let l:vars = extend(copy(a:vars), {'%': '%'})
+
+    return substitute(a:format, '%\(.\)', '\=get(l:vars, submatch(1), "")', 'g')
 endfunction
 
 function! ale_linters#prolog#swipl#Handle(buffer, lines) abort
