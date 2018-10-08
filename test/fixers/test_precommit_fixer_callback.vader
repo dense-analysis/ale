@@ -1,0 +1,18 @@
+Before:
+  Save g:ale_precommit_executable
+  Save g:ale_precommit_options
+  Save g:ale_precommit_hooks
+
+After:
+  Restore
+
+Execute(The precommit callback should have configurable variables):
+  call ale#test#SetFilename('testname.py')
+
+  let g:ale_precommit_executable = '/path/to/pre-commit'
+  let g:ale_precommit_options = '--some-option'
+  let g:ale_precommit_hooks = ['flake8']
+
+  AssertEqual
+  \ {'command': ale#Escape('/path/to/pre-commit run flake8 --files testname.py --some-option'),},
+  \ ale#fixers#precommit#Fix(bufnr(''))
