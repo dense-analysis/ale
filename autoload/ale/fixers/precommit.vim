@@ -11,8 +11,8 @@ function! ale#fixers#precommit#Fix(buffer) abort
     let l:hooks = ale#Var(a:buffer, 'ale_precommit_hooks')
     let l:options = ale#Var(a:buffer, 'ale_precommit_options')
     let l:file_path = ale#Escape(bufname(a:buffer))
-
     let l:command = ''
+
     if empty(l:hooks)
         l:command = l:executable . ' --files ' . l:file_path
     else
@@ -26,5 +26,4 @@ function! ale#fixers#precommit#Fix(buffer) abort
     endif
 
     return {'command': ale#Escape(l:command)}
-
 endfunction
