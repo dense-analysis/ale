@@ -193,12 +193,30 @@ function! ale#util#LocItemCompareWithText(left, right) abort
         return l:cmp_value
     endif
 
-    if a:left.text < a:right.text
-        return -1
-    endif
+    if type(a:left.text) is v:t_string && type(a:right.text) is v:t_string
+        if a:left.text < a:right.text
+            return -1
+        endif
 
-    if a:left.text > a:right.text
+        if a:left.text > a:right.text
+            return 1
+        endif
+    elseif type(a:left.text) is v:t_string
+        return -1
+    elseif type(a:right.text) is v:t_string
         return 1
+    elseif type(a:left.text) is v:t_list && type(a:right.text) is v:t_list
+        if a:left.text == a:right.text
+            return 0
+        elseif empty(a:left.text)
+            return -1
+        elseif empty(a:right.text)
+            return 1
+        elseif a:left.text[0] < a:right.text[0]
+            return -1
+        else
+            return 1
+        endif
     endif
 
     return 0
