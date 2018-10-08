@@ -250,6 +250,12 @@ let s:default_registry = {
 \       'suggested_filetypes': ['c', 'cpp', 'cs', 'objc', 'objcpp', 'd', 'java', 'p', 'vala' ],
 \       'description': 'Fix C, C++, C#, ObjectiveC, ObjectiveC++, D, Java, Pawn, and VALA files with uncrustify.',
 \   },
+\   'precommit': {
+\       'function': 'ale#fixers#precommit#Fix'
+\       'suggested_filetypes': [],
+\       'description': 'Apply pre-commit hooks to a file',
+\       'aliases': ['pre-commit'],
+\   },
 \}
 
 " Reset the function registry to the default entries.
