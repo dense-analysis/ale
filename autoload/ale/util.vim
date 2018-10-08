@@ -205,22 +205,23 @@ function! ale#util#LocItemCompareWithText(left, right) abort
 endfunction
 
 function! ale#util#LocItemExpandMultilineText(loclist) abort
-  let l:expanded = []
+    let l:expanded = []
 
-  for item in a:loclist
-    if has_key(item, 'text') && type(item.text) == type([])
-      let lines = item.text
-      for line in lines
-        let item.text = line
-        call add(l:expanded, item)
-        let item = {}
-      endfor
-    else
-      call add(l:expanded, item)
-    endif
-  endfor
+    for l:item in a:loclist
+        if has_key(l:item, 'text') && type(l:item.text) is v:t_list
+            let l:lines = l:item.text
 
-  return l:expanded
+            for l:line in l:lines
+                let l:item.text = l:line
+                call add(l:expanded, l:item)
+                let l:item = {}
+            endfor
+        else
+            call add(l:expanded, l:item)
+        endif
+    endfor
+
+    return l:expanded
 endfunction
 
 " This function will perform a binary search and a small sequential search
