@@ -284,20 +284,15 @@ Execute(ALEEnableBuffer should enable ALE and lint again):
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual 1, b:ale_enabled
 
-Execute(ALEEnableBuffer should complain when ALE is disabled globally):
+Execute(ALEEnableBuffer should work when ALE is disabled globally):
   let g:ale_enabled = 0
   let b:ale_enabled = 0
 
-  redir => g:output
-    ALEEnableBuffer
-  redir END
+  ALEEnableBuffer
 
-  AssertEqual [], ale#test#GetLoclistWithoutModule()
-  AssertEqual 0, b:ale_enabled
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual 0, g:ale_enabled
-  AssertEqual
-  \ 'ALE cannot be enabled locally when disabled globally',
-  \ join(split(g:output))
+  AssertEqual 1, b:ale_enabled
 
 Execute(ALEResetBuffer should reset everything for a buffer):
   AssertEqual 'foobar', &filetype
