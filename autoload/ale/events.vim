@@ -102,8 +102,7 @@ function! ale#events#Init() abort
         " These events always need to be set up.
         autocmd BufEnter,BufRead * call ale#events#ReadOrEnterEvent(str2nr(expand('<abuf>')))
         autocmd BufWritePost * call ale#events#SaveEvent(str2nr(expand('<abuf>')))
-
-        if g:ale_enabled
+        if g:ale_enabled || len(filter(range(1, bufnr('$')), 'getbufvar(v:val, "ale_enabled")'))
             if l:text_changed is? 'always' || l:text_changed is# '1'
                 autocmd TextChanged,TextChangedI * call ale#Queue(g:ale_lint_delay)
             elseif l:text_changed is? 'normal'

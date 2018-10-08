@@ -55,15 +55,7 @@ endfunction
 
 function! ale#toggle#ToggleBuffer(buffer) abort
     " Get the new value for the toggle.
-    let l:enabled = !getbufvar(a:buffer, 'ale_enabled', 1)
-
-    " Disabling ALE globally removes autocmd events, so we cannot enable
-    " linting locally when linting is disabled globally
-    if l:enabled && !g:ale_enabled
-        execute 'echom ''ALE cannot be enabled locally when disabled globally'''
-
-        return
-    endif
+    let l:enabled = !getbufvar(a:buffer, 'ale_enabled', g:ale_enabled)
 
     call setbufvar(a:buffer, 'ale_enabled', l:enabled)
 
@@ -75,17 +67,19 @@ function! ale#toggle#ToggleBuffer(buffer) abort
         call ale#engine#Cleanup(a:buffer)
         call s:DisablePostamble()
     endif
+
+    call ale#events#Init()
 endfunction
 
 function! ale#toggle#EnableBuffer(buffer) abort
     " ALE is enabled by default for all buffers.
-    if !getbufvar(a:buffer, 'ale_enabled', 1)
+    if !getbufvar(a:buffer, 'ale_enabled', g:ale_enabled)
         call ale#toggle#ToggleBuffer(a:buffer)
     endif
 endfunction
 
 function! ale#toggle#DisableBuffer(buffer) abort
-    if getbufvar(a:buffer, 'ale_enabled', 1)
+    if getbufvar(a:buffer, 'ale_enabled', g:ale_enabled)
         call ale#toggle#ToggleBuffer(a:buffer)
     endif
 endfunction
