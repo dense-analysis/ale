@@ -7,6 +7,7 @@ function! ale_linters#erlang#erlc#GetCommand(buffer) abort
     call ale#engine#ManageFile(a:buffer, l:output_file)
 
     return 'erlc -o ' . ale#Escape(l:output_file)
+    \   . ' -I' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h'))
     \   . ' ' . ale#Var(a:buffer, 'erlang_erlc_options')
     \   . ' %t'
 endfunction
