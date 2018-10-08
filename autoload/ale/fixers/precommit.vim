@@ -18,6 +18,7 @@ function! ale#fixers#precommit#Fix(buffer) abort
     else
         for l:hook in ale#Var(a:buffer, 'ale_precommit_hooks')
             let l:command .= l:executable . ' run ' . l:hook . ' --files ' . l:file_path . ';'
+        endfor
     endif
 
     if l:options isnot# ''
