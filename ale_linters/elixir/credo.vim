@@ -29,9 +29,16 @@ function! ale_linters#elixir#credo#Handle(buffer, lines) abort
     return l:output
 endfunction
 
+function! ale_linters#elixir#credo#GetCommand(buffer) abort
+    let l:project_root = ale#handlers#elixir#FindMixProjectRoot(a:buffer)
+
+    return ale#path#CdString(l:project_root)
+    \ . ' mix help credo && mix credo suggest --format=flycheck --read-from-stdin %s'
+endfunction
+
 call ale#linter#Define('elixir', {
 \   'name': 'credo',
 \   'executable': 'mix',
-\   'command': 'mix help credo && mix credo suggest --format=flycheck --read-from-stdin %s',
+\   'command_callback': 'ale_linters#elixir#credo#GetCommand',
 \   'callback': 'ale_linters#elixir#credo#Handle',
 \})
