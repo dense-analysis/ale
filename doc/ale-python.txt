@@ -91,6 +91,14 @@ g:ale_python_black_use_global                   *g:ale_python_black_use_global*
 
   See |ale-integrations-local-executables|
 
+g:ale_python_black_auto_pipenv                  *g:ale_python_black_auto_pipenv*
+                                                *b:ale_python_black_auto_pipenv*
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a pipenv, and set the executable to `pipenv`
+  if true. This is overridden by a manually-set executable.
+
 
 ===============================================================================
 flake8                                                      *ale-python-flake8*
