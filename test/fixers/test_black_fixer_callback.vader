@@ -37,3 +37,10 @@ Execute(The black callback should include options):
   AssertEqual
   \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/black')) . ' --some-option -' },
   \ ale#fixers#black#Fix(bufnr(''))
+
+Execute(Pipenv is detected when python_black_auto_pipenv is set):
+  let g:ale_python_black_auto_pipenv = 1
+
+  AssertEqual 
+  \ {'command': 'pipenv run mypy' },
+  \ ale#fixers#black#Fix(bufnr(''))
