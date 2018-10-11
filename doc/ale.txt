@@ -77,6 +77,7 @@ CONTENTS                                                         *ale-contents*
       mix.................................|ale-elixir-mix|
       mix_format..........................|ale-elixir-mix-format|
       dialyxir............................|ale-elixir-dialyxir|
+      elixir-ls...........................|ale-elixir-elixir-ls|
     elm...................................|ale-elm-options|
       elm-format..........................|ale-elm-elm-format|
       elm-make............................|ale-elm-elm-make|
@@ -397,7 +398,7 @@ Notes:
 * Dafny: `dafny`!!
 * Dart: `dartanalyzer`!!, `language_server`, dartfmt!!
 * Dockerfile: `hadolint`
-* Elixir: `credo`, `dialyxir`, `dogma`, `mix`!!
+* Elixir: `credo`, `dialyxir`, `dogma`, `mix`!!, `elixir-ls`
 * Elm: `elm-format, elm-make`
 * Erb: `erb`, `erubi`, `erubis`
 * Erlang: `erlc`, `SyntaxErl`
