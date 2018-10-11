@@ -11,10 +11,18 @@ function! ale_linters#elixir#credo#Handle(buffer, lines) abort
         let l:type = l:match[3]
         let l:text = l:match[4]
 
-        if l:type is# 'C'
-            let l:type = 'E'
-        elseif l:type is# 'R'
+        " Refactoring opportunities
+        if l:type is# 'F'
             let l:type = 'W'
+        " Consistency
+        elseif l:type is# 'C'
+            let l:type = 'W'
+        " Software Design
+        elseif l:type is# 'D'
+            let l:type = 'I'
+        " Code Readability
+        elseif l:type is# 'R'
+            let l:type = 'I'
         endif
 
         call add(l:output, {
