@@ -18,10 +18,6 @@ endfunction
 function! ale#fixers#black#Fix(buffer) abort
     let l:executable = ale#fixers#black#GetExecutable(a:buffer)
 
-    if !executable(l:executable)
-        return 0
-    endif
-
     let l:exec_args = l:executable =~? 'pipenv$'
     \   ? ' run black'
     \   : ''
@@ -29,7 +25,7 @@ function! ale#fixers#black#Fix(buffer) abort
     let l:options = ale#Var(a:buffer, 'python_black_options')
 
     return {
-    \   'command': ale#Escape(l:executable) . l:exec_args
+    \   'command': ale#Escape(l:executable. l:exec_args)
     \       . (!empty(l:options) ? ' ' . l:options : '')
     \       . ' -',
     \}
