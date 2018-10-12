@@ -18,6 +18,8 @@ CONTENTS                                                         *ale-contents*
     6.1 Highlights........................|ale-highlights|
     6.2 Options for write-good Linter.....|ale-write-good-options|
   7. Integration Documentation............|ale-integrations|
+    ansible...............................|ale-ansible-options|
+      ansible-lint........................|ale-ansible-ansible-lint|
     asciidoc..............................|ale-asciidoc-options|
       write-good..........................|ale-asciidoc-write-good|
     asm...................................|ale-asm-options|
