@@ -48,7 +48,8 @@ function! ale_linters#ansible#ansible_lint#Handle(buffer, lines) abort
 endfunction
 
 call ale#linter#Define('ansible', {
-\   'name': 'ansible',
+\   'name': 'ansible_lint',
+\   'aliases': ['ansible'],
 \   'executable_callback': 'ale_linters#ansible#ansible_lint#GetExecutable',
 \   'command': '%e -p %t',
 \   'callback': 'ale_linters#ansible#ansible_lint#Handle',
