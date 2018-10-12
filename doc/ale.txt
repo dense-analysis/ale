@@ -67,6 +67,7 @@ CONTENTS                                                         *ale-contents*
     cuda..................................|ale-cuda-options|
       nvcc................................|ale-cuda-nvcc|
     d.....................................|ale-d-options|
+      dls.................................|ale-d-dls|
       uncrustify..........................|ale-d-uncrustify|
     dart..................................|ale-dart-options|
       dartanalyzer........................|ale-dart-dartanalyzer|
@@ -394,7 +395,7 @@ Notes:
 * CSS: `csslint`, `prettier`, `stylelint`
 * Cucumber: `cucumber`
 * Cython (pyrex filetype): `cython`
-* D: `dmd`, `uncrustify`
+* D: `dls`, `dmd`, `uncrustify`
 * Dafny: `dafny`!!
 * Dart: `dartanalyzer`!!, `language_server`, dartfmt!!
 * Dockerfile: `hadolint`

@@ -113,7 +113,7 @@ formatting.
 | CSS | [csslint](http://csslint.net/), [prettier](https://github.com/prettier/prettier), [stylelint](https://github.com/stylelint/stylelint) |
 | Cucumber | [cucumber](https://cucumber.io/) |
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
-| D | [dmd](https://dlang.org/dmd-linux.html), [uncrustify](https://github.com/uncrustify/uncrustify) |
+| D | [dls](https://github.com/d-language-server/dls), [dmd](https://dlang.org/dmd-linux.html), [uncrustify](https://github.com/uncrustify/uncrustify) |
 | Dafny | [dafny](https://rise4fun.com/Dafny) !! |
 | Dart | [dartanalyzer](https://github.com/dart-lang/sdk/tree/master/pkg/analyzer_cli) !!, [language_server](https://github.com/natebosch/dart_language_server), [dartfmt](https://github.com/dart-lang/sdk/tree/master/utils/dartfmt) |
 | Dockerfile | [hadolint](https://github.com/hadolint/hadolint) |
