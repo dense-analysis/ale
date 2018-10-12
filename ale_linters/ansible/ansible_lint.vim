@@ -7,13 +7,6 @@ function! ale_linters#ansible#ansible_lint#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'ansible_ansible_lint_executable')
 endfunction
 
-function! ale_linters#ansible#ansible_lint#GetCommand(buffer) abort
-    let l:executable = ale_linters#ansible#ansible_lint#GetExecutable(a:buffer)
-
-    return ale#Escape(l:executable)
-    \  . ' -p %t'
-endfunction
-
 function! ale_linters#ansible#ansible_lint#Handle(buffer, lines) abort
     for l:line in a:lines[:10]
         if match(l:line, '^Traceback') >= 0
@@ -57,6 +50,6 @@ endfunction
 call ale#linter#Define('ansible', {
 \   'name': 'ansible',
 \   'executable_callback': 'ale_linters#ansible#ansible_lint#GetExecutable',
-\   'command_callback': 'ale_linters#ansible#ansible_lint#GetCommand',
+\   'command': '%e -p %t',
 \   'callback': 'ale_linters#ansible#ansible_lint#Handle',
 \})
