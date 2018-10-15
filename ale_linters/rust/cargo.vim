@@ -4,7 +4,7 @@
 " Description: rustc invoked by cargo for rust files
 
 call ale#Set('rust_cargo_use_check', 1)
-call ale#Set('rust_cargo_use_clippy', 0)
+call ale#Set('rust_cargo_use_clippy', 1)
 call ale#Set('rust_cargo_check_all_targets', 0)
 call ale#Set('rust_cargo_check_examples', 0)
 call ale#Set('rust_cargo_check_tests', 0)
@@ -30,10 +30,13 @@ endfunction
 
 function! ale_linters#rust#cargo#GetCommand(buffer, version_output) abort
     let l:version = ale#semver#GetVersion('cargo', a:version_output)
+    let l:clippy_version = ale#semver#GetVersion('cargo-clippy',
+    \   systemlist('cargo clippy -V'))
 
     let l:use_check = ale#Var(a:buffer, 'rust_cargo_use_check')
     \   && ale#semver#GTE(l:version, [0, 17, 0])
     let l:use_clippy = ale#Var(a:buffer, 'rust_cargo_use_clippy')
+    \   && ale#semver#GTE(l:clippy_version, [0, 0, 1])
     let l:use_all_targets = l:use_check
     \   && ale#Var(a:buffer, 'rust_cargo_check_all_targets')
     \   && ale#semver#GTE(l:version, [0, 22, 0])

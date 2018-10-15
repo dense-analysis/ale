@@ -54,10 +54,10 @@ g:ale_rust_cargo_use_check                         *g:ale_rust_cargo_use_check*
 g:ale_rust_cargo_use_clippy                        *g:ale_rust_cargo_use_clippy*
                                                    *b:ale_rust_cargo_use_clippy*
   Type: |Number|
-  Default: `0`
+  Default: `1`
 
   When set to `1`, this option will cause ALE to use `cargo clippy` instead of
-  `cargo build` or `cargo check` . This will override
+  `cargo build` or `cargo check` if `cargo-clippy` is available. This will override
   |g:ale_rust_cargo_use_check|.
 
 
