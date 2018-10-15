@@ -759,12 +759,25 @@ at the cursor taken from LSP linters. The following commands are supported:
 
 |ALEHover| - Print information about the symbol at the cursor.
 
-If |b:ale_set_balloons| is set to `1` and your version of Vim supports the
+If |g:ale_set_balloons| is set to `1` and your version of Vim supports the
 |balloon_show()| function, then "hover" information also show up when you move
 the mouse over a symbol in a buffer. Diagnostic information will take priority
 over hover information for balloons. If a line contains a problem, that
 problem will be displayed in a balloon instead of hover information.
 
+For Vim 8.1+ terminals, mouse hovering is disabled by default. Enabling
+|balloonexpr| commands in terminals can cause scrolling issues in terminals,
+so ALE will not attempt to show balloons unless |g:ale_set_balloons| is set to
+`1` before ALE is loaded.
+
+For enabling mouse support in terminals, you may have to change your mouse
+settings. For example: >
+
+  " Example mouse settings.
+  " You will need to try different settings, depending on your terminal.
+  set mouse=a
+  set ttymouse=xterm
+<
 
 ===============================================================================
 6. Global Options                                                 *ale-options*
