@@ -20,6 +20,8 @@ Execute:
   \   {'type': 'E', 'bufnr': -1, 'filename': 'b', 'lnum': 4, 'col': 2, 'text': 'x'},
   \   {'type': 'E', 'bufnr': -1, 'filename': 'b', 'lnum': 5, 'col': 2, 'text': 'x'},
   \   {'type': 'E', 'bufnr': 3, 'lnum': 1, 'col': 1, 'text': 'foo'},
+  \   {'type': 'E', 'bufnr': 2, 'lnum': 5, 'col': 5, 'text': ['1', '2']},
+  \   {'type': 'E', 'bufnr': 2, 'lnum': 5, 'col': 5, 'text': []},
   \ ]},
   \ '2': {'loclist': [
   \   {'type': 'E', 'bufnr': 1, 'lnum': 2, 'col': 10, 'text': 'x'},
@@ -29,6 +31,8 @@ Execute:
   \   {'type': 'E', 'bufnr': 1, 'lnum': 5, 'col': 4, 'text': 'x'},
   \   {'type': 'E', 'bufnr': 2, 'lnum': 1, 'col': 5, 'text': 'bar'},
   \   {'type': 'E', 'bufnr': 2, 'lnum': 5, 'col': 5, 'text': 'another error'},
+  \   {'type': 'E', 'bufnr': 2, 'lnum': 5, 'col': 5, 'text': ['1', '2']},
+  \   {'type': 'E', 'bufnr': 2, 'lnum': 5, 'col': 5, 'text': ['2', '3']},
   \ ]},
   \}
 
@@ -45,6 +49,9 @@ Execute:
   \   {'type': 'E', 'bufnr': 2, 'lnum': 1, 'col': 5, 'text': 'bar'},
   \   {'type': 'E', 'bufnr': 2, 'lnum': 5, 'col': 5, 'text': 'another error'},
   \   {'type': 'E', 'bufnr': 2, 'lnum': 5, 'col': 5, 'text': 'foo'},
+  \   {'type': 'E', 'bufnr': 2, 'lnum': 5, 'col': 5, 'text': []},
+  \   {'type': 'E', 'bufnr': 2, 'lnum': 5, 'col': 5, 'text': ['1', '2']},
+  \   {'type': 'E', 'bufnr': 2, 'lnum': 5, 'col': 5, 'text': ['2', '3']},
   \   {'type': 'E', 'bufnr': 3, 'lnum': 1, 'col': 1, 'text': 'foo'},
   \ ],
   \ ale#list#GetCombinedList()

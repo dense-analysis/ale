@@ -60,7 +60,7 @@ function! s:FixList(buffer, list) abort
 
         let l:fixed_item.text = ale#GetLocItemMessage(l:item, l:format)
 
-        if l:item.bufnr == -1
+        if has_key(l:item, 'bufnr') && l:item.bufnr == -1
             " If the buffer number is invalid, remove it.
             call remove(l:fixed_item, 'bufnr')
         endif
@@ -80,6 +80,7 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
 
     if g:ale_set_quickfix
         let l:quickfix_list = ale#list#GetCombinedList()
+        let l:quickfix_list = ale#util#LocItemExpandMultilineText(l:quickfix_list)
 
         if has('nvim')
             call setqflist(s:FixList(a:buffer, l:quickfix_list), ' ', l:title)
@@ -93,10 +94,12 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
         " but it's better than nothing.
         let l:id = s:BufWinId(a:buffer)
 
+        let l:loclist = ale#util#LocItemExpandMultilineText(a:loclist)
+
         if has('nvim')
-            call setloclist(l:id, s:FixList(a:buffer, a:loclist), ' ', l:title)
+            call setloclist(l:id, s:FixList(a:buffer, l:loclist), ' ', l:title)
         else
-            call setloclist(l:id, s:FixList(a:buffer, a:loclist))
+            call setloclist(l:id, s:FixList(a:buffer, l:loclist))
             call setloclist(l:id, [], 'r', {'title': l:title})
         endif
     endif
