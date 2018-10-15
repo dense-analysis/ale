@@ -51,6 +51,12 @@ Execute(`cargo build` should be used when g:ale_rust_cargo_use_check is set to 0
   WithChainResults []
   AssertLinter '', ['', 'cargo build' . g:suffix]
 
+Execute(`cargo clippy` should be used when g:ale_rust_cargo_use_clippy is set to 1):
+  let g:ale_rust_cargo_use_clippy = 1
+
+  WithChainResults []
+  AssertLinter '', ['cargo --version', 'cargo clippy' . g:suffix]
+
 Execute(`cargo check` should be used when the version is new enough):
   AssertLinter '', ['cargo --version', 'cargo check' . g:suffix]
 
