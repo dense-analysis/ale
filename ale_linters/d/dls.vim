@@ -7,10 +7,6 @@ function! ale_linters#d#dls#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'd_dls_executable')
 endfunction
 
-function! ale_linters#d#dls#GetLanguage(buffer) abort
-    return 'd'
-endfunction
-
 function! ale_linters#d#dls#FindProjectRoot(buffer) abort
     " Note: this will return . if dub config is empty
     " dls can run outside DUB projects just fine
@@ -22,6 +18,5 @@ call ale#linter#Define('d', {
 \   'lsp': 'stdio',
 \   'executable_callback': 'ale_linters#d#dls#GetExecutable',
 \   'command_callback': 'ale_linters#d#dls#GetExecutable',
-\   'language_callback': 'ale_linters#d#dls#GetLanguage',
 \   'project_root_callback': 'ale_linters#d#dls#FindProjectRoot',
 \})
