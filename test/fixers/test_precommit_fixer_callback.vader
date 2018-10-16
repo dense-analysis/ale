@@ -3,16 +3,32 @@ Before:
   Save g:ale_precommit_options
   Save g:ale_precommit_hooks
 
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_precommit_executable = 'xxxinvalid'
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
 After:
   Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The precommit callback should return the correct default values):
+  call ale#test#SetFilename('testname.py')
+  setl ft=gomod
+
+  AssertEqual
+  \ {'command': ale#Escape('xxxinvalid') . ' run --files %t'},
+  \ ale#fixers#precommit#Fix(bufnr(''))
 
 Execute(The precommit callback should have configurable variables):
   call ale#test#SetFilename('testname.py')
 
   let g:ale_precommit_executable = '/path/to/pre-commit'
   let g:ale_precommit_options = '--some-option'
-  let g:ale_precommit_hooks = ['flake8']
+  let g:ale_precommit_hooks = ['flake8', 'mypy']
 
   AssertEqual
-  \ {'command': ale#Escape('/path/to/pre-commit run flake8 --files testname.py --some-option'),},
+  \ {'command': ale#Escape(g:ale_precommit_executable) . ' run flake8 --files %t --some-option;'
+  \   . ale#Escape(g:ale_precommit_executable) . ' run mypy --files %t --some-option;'
+  \ },
   \ ale#fixers#precommit#Fix(bufnr(''))
