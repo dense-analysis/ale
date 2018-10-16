@@ -218,6 +218,7 @@ CONTENTS                                                         *ale-contents*
       write-good..........................|ale-pod-write-good|
     pony..................................|ale-pony-options|
       ponyc...............................|ale-pony-ponyc|
+    pre-commit............................|ale-precommit-options|
     proto.................................|ale-proto-options|
       protoc-gen-lint.....................|ale-proto-protoc-gen-lint|
     pug...................................|ale-pug-options|
