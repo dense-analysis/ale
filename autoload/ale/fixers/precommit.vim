@@ -17,7 +17,7 @@ function! ale#fixers#precommit#Fix(buffer) abort
         let l:command = l:executable . ' run --files ' . l:file_path
     else
         for l:hook in l:hooks
-            let l:command .= l:executable . ' run ' . l:hook . ' --files ' . l:file_path . ';'
+            let l:command .= ale#Escape(l:executable) . ' run ' . l:hook . ' --files ' . l:file_path . ';'
         endfor
     endif
 
@@ -25,5 +25,5 @@ function! ale#fixers#precommit#Fix(buffer) abort
         let l:command .= ' ' . l:options
     endif
 
-    return {'command': ale#Escape(l:command)}
+    return {'command': l:command}
 endfunction

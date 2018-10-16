@@ -1,31 +1,32 @@
 ===============================================================================
-ALE pre-commit Integration                                           *ale-precommit-options*
+ALE pre-commit Integration                              *ale-precommit-options*
 
 
 ===============================================================================
-pre-commit                                                           *ale-precommit*
+pre-commit                                                      *ale-precommit*
 
-g:ale_precommit_executable                          *g:ale_precommit_executable*
-                                                    *b:ale_precommit_executable*
+g:ale_precommit_executable                         *g:ale_precommit_executable*
+                                                   *b:ale_precommit_executable*
   Type: |String|
   Default: `'pre-commit'`
 
   This variable sets the executable used for pre-commit.
 
-g:ale_precommit_options                             *g:ale_precommit_options*
-                                                    *b:ale_precommit_options*
+g:ale_precommit_options                               *g:ale_precommit_options*
+                                                      *b:ale_precommit_options*
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to the pre-commit fixer.
 
-g:ale_precommit_hooks                               *g:ale_precommit_hooks*
-                                                    *b:ale_precommit_hooks*
+g:ale_precommit_hooks                                   *g:ale_precommit_hooks*
+                                                        *b:ale_precommit_hooks*
   Type: |List|
   Default: `[]`
 
-  This variable can be set to pass specific hooks to the pre-commit fixer. If none
-  are specified, pre-commit will run for all hooks defined in your config.
+  This variable can be set to pass specific hooks to the pre-commit fixer. If
+  none are specified, pre-commit will run for all hooks defined in your
+  config.
 
 
 ===============================================================================
