@@ -126,9 +126,9 @@ g:ale_rust_cargo_use_clippy
   Type: |Number|
   Default: `0`
 
-  When set to 1 and `cargo-clippy` is executable on your system, `cargo clippy`
-  will be used instead of `cargo check` or `cargo build` as linter.
-  For details of `cargo clippy` please visit the following link:
+  When set to 1, `cargo clippy` will be used instead of `cargo check` or
+  `cargo build` as linter.
+  For details of `cargo clippy`, please visit the following link:
 
   https://github.com/rust-lang-nursery/rust-clippy
 
