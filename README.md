@@ -26,7 +26,7 @@ features, including:
 
 * Diagnostics (via Language Server Protocol linters)
 * Go To Definition (`:ALEGoToDefinition`)
-* Completion (`let g:ale_completion_enabled = 1`)
+* Completion (`let g:ale_completion_enabled = 1` before ALE is loaded)
 * Finding references (`:ALEFindReferences`)
 * Hover information (`:ALEHover`)
 
@@ -277,6 +277,7 @@ Protocol linters, or from `tsserver` for TypeScript.
 
 ```vim
 " Enable completion where available.
+" This setting must be set before ALE is loaded.
 let g:ale_completion_enabled = 1
 ```
 
