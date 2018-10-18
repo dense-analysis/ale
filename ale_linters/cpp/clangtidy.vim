@@ -4,7 +4,8 @@
 
 call ale#Set('cpp_clangtidy_executable', 'clang-tidy')
 " Set this option to check the checks clang-tidy will apply.
-call ale#Set('cpp_clangtidy_checks', ['*'])
+" Use ['*'] to enable all checks.
+call ale#Set('cpp_clangtidy_checks', [])
 " Set this option to manually set some options for clang-tidy.
 " This will disable compile_commands.json detection.
 call ale#Set('cpp_clangtidy_options', '')
