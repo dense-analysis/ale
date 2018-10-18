@@ -75,7 +75,7 @@ function! ale_linters#rust#cargo#GetCommand(buffer, version_output) abort
     let l:subcommand = l:use_check ? 'check' : 'build'
     let l:clippy_options = ''
 
-    if ale#Var(a:buffer, 'rust_cargo_use_clippy') && executable('cargo-clippy')
+    if ale#Var(a:buffer, 'rust_cargo_use_clippy')
         let l:subcommand = 'clippy'
         let l:clippy_options = ' ' . ale#Var(a:buffer, 'rust_cargo_clippy_options')
     endif
