@@ -132,6 +132,11 @@ g:ale_rust_cargo_use_clippy
 
   https://github.com/rust-lang-nursery/rust-clippy
 
+  Since `cargo clippy` is optional toolchain, it's safer to check whether
+  `cargo-clippy` is executable as follows:
+>
+    let g:ale_rust_cargo_use_clippy = executable('cargo-clippy')
+<
 
 g:ale_rust_cargo_clippy_options
                                               *g:ale_rust_cargo_clippy_options*
