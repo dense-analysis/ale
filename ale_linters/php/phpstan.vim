@@ -14,7 +14,7 @@ function! ale_linters#php#phpstan#GetCommand(buffer) abort
 
     return '%e analyze -l'
     \   . ale#Var(a:buffer, 'php_phpstan_level')
-    \   . ' --errorFormat raw'
+    \   . ' --error-format raw'
     \   . l:configuration_option
     \   . ' %s'
 endfunction
