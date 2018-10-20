@@ -18,6 +18,8 @@ CONTENTS                                                         *ale-contents*
     6.1 Highlights........................|ale-highlights|
     6.2 Options for write-good Linter.....|ale-write-good-options|
   7. Integration Documentation............|ale-integrations|
+    ansible...............................|ale-ansible-options|
+      ansible-lint........................|ale-ansible-ansible-lint|
     asciidoc..............................|ale-asciidoc-options|
       write-good..........................|ale-asciidoc-write-good|
     asm...................................|ale-asm-options|
@@ -67,6 +69,7 @@ CONTENTS                                                         *ale-contents*
     cuda..................................|ale-cuda-options|
       nvcc................................|ale-cuda-nvcc|
     d.....................................|ale-d-options|
+      dls.................................|ale-d-dls|
       uncrustify..........................|ale-d-uncrustify|
     dart..................................|ale-dart-options|
       dartanalyzer........................|ale-dart-dartanalyzer|
@@ -396,7 +399,7 @@ Notes:
 * CSS: `csslint`, `prettier`, `stylelint`
 * Cucumber: `cucumber`
 * Cython (pyrex filetype): `cython`
-* D: `dmd`, `uncrustify`
+* D: `dls`, `dmd`, `uncrustify`
 * Dafny: `dafny`!!
 * Dart: `dartanalyzer`!!, `language_server`, dartfmt!!
 * Dockerfile: `hadolint`
@@ -713,10 +716,11 @@ Completion is only supported while at least one LSP linter is enabled. ALE
 will only suggest symbols provided by the LSP servers.
 
 Suggestions will be made while you type after completion is enabled.
-Completion can be enabled by setting |g:ale_completion_enabled| to `1`. The
-delay for completion can be configured with |g:ale_completion_delay|. ALE will
-only suggest so many possible matches for completion. The maximum number of
-items can be controlled with |g:ale_completion_max_suggestions|.
+Completion can be enabled by setting |g:ale_completion_enabled| to `1`.  This
+setting must be set to `1` before ALE is loaded. The delay for completion can
+be configured with |g:ale_completion_delay|. ALE will only suggest so many
+possible matches for completion. The maximum number of items can be controlled
+with |g:ale_completion_max_suggestions|.
 
 If you don't like some of the suggestions you see, you can filter them out
 with |g:ale_completion_excluded_words| or |b:ale_completion_excluded_words|.
@@ -892,6 +896,9 @@ g:ale_completion_enabled                             *g:ale_completion_enabled*
   Default: `0`
 
   When this option is set to `1`, completion support will be enabled.
+
+  This setting must be set to `1` before ALE is loaded for this behavior
+  to be enabled.
 
   See |ale-completion|
 

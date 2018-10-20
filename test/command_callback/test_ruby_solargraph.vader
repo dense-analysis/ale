@@ -37,3 +37,8 @@ Execute(should set solargraph for ruby app3):
   AssertLSPLanguage 'ruby'
   AssertLSPOptions {}
   AssertLSPProject ale#path#Simplify(g:dir . 'command_callback/../ruby_fixtures/valid_ruby_app3')
+
+Execute(should accept initialization options):
+  AssertLSPOptions {}
+  let b:ale_ruby_solargraph_options = { 'diagnostics': 'true' }
+  AssertLSPOptions { 'diagnostics': 'true' }
