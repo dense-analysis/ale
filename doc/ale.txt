@@ -18,6 +18,8 @@ CONTENTS                                                         *ale-contents*
     6.1 Highlights........................|ale-highlights|
     6.2 Options for write-good Linter.....|ale-write-good-options|
   7. Integration Documentation............|ale-integrations|
+    ansible...............................|ale-ansible-options|
+      ansible-lint........................|ale-ansible-ansible-lint|
     asciidoc..............................|ale-asciidoc-options|
       write-good..........................|ale-asciidoc-write-good|
     asm...................................|ale-asm-options|
@@ -67,6 +69,7 @@ CONTENTS                                                         *ale-contents*
     cuda..................................|ale-cuda-options|
       nvcc................................|ale-cuda-nvcc|
     d.....................................|ale-d-options|
+      dls.................................|ale-d-dls|
       uncrustify..........................|ale-d-uncrustify|
     dart..................................|ale-dart-options|
       dartanalyzer........................|ale-dart-dartanalyzer|
@@ -78,6 +81,7 @@ CONTENTS                                                         *ale-contents*
       mix.................................|ale-elixir-mix|
       mix_format..........................|ale-elixir-mix-format|
       dialyxir............................|ale-elixir-dialyxir|
+      elixir-ls...........................|ale-elixir-elixir-ls|
     elm...................................|ale-elm-options|
       elm-format..........................|ale-elm-elm-format|
       elm-make............................|ale-elm-elm-make|
@@ -394,11 +398,11 @@ Notes:
 * CSS: `csslint`, `prettier`, `stylelint`
 * Cucumber: `cucumber`
 * Cython (pyrex filetype): `cython`
-* D: `dmd`, `uncrustify`
+* D: `dls`, `dmd`, `uncrustify`
 * Dafny: `dafny`!!
 * Dart: `dartanalyzer`!!, `language_server`, dartfmt!!
 * Dockerfile: `dockerfile_lint`, `hadolint`
-* Elixir: `credo`, `dialyxir`, `dogma`, `mix`!!
+* Elixir: `credo`, `dialyxir`, `dogma`, `mix`!!, `elixir-ls`
 * Elm: `elm-format, elm-make`
 * Erb: `erb`, `erubi`, `erubis`
 * Erlang: `erlc`, `SyntaxErl`
@@ -710,10 +714,11 @@ Completion is only supported while at least one LSP linter is enabled. ALE
 will only suggest symbols provided by the LSP servers.
 
 Suggestions will be made while you type after completion is enabled.
-Completion can be enabled by setting |g:ale_completion_enabled| to `1`. The
-delay for completion can be configured with |g:ale_completion_delay|. ALE will
-only suggest so many possible matches for completion. The maximum number of
-items can be controlled with |g:ale_completion_max_suggestions|.
+Completion can be enabled by setting |g:ale_completion_enabled| to `1`.  This
+setting must be set to `1` before ALE is loaded. The delay for completion can
+be configured with |g:ale_completion_delay|. ALE will only suggest so many
+possible matches for completion. The maximum number of items can be controlled
+with |g:ale_completion_max_suggestions|.
 
 If you don't like some of the suggestions you see, you can filter them out
 with |g:ale_completion_excluded_words| or |b:ale_completion_excluded_words|.
@@ -759,12 +764,25 @@ at the cursor taken from LSP linters. The following commands are supported:
 
 |ALEHover| - Print information about the symbol at the cursor.
 
-If |b:ale_set_balloons| is set to `1` and your version of Vim supports the
+If |g:ale_set_balloons| is set to `1` and your version of Vim supports the
 |balloon_show()| function, then "hover" information also show up when you move
 the mouse over a symbol in a buffer. Diagnostic information will take priority
 over hover information for balloons. If a line contains a problem, that
 problem will be displayed in a balloon instead of hover information.
 
+For Vim 8.1+ terminals, mouse hovering is disabled by default. Enabling
+|balloonexpr| commands in terminals can cause scrolling issues in terminals,
+so ALE will not attempt to show balloons unless |g:ale_set_balloons| is set to
+`1` before ALE is loaded.
+
+For enabling mouse support in terminals, you may have to change your mouse
+settings. For example: >
+
+  " Example mouse settings.
+  " You will need to try different settings, depending on your terminal.
+  set mouse=a
+  set ttymouse=xterm
+<
 
 ===============================================================================
 6. Global Options                                                 *ale-options*
@@ -876,6 +894,9 @@ g:ale_completion_enabled                             *g:ale_completion_enabled*
   Default: `0`
 
   When this option is set to `1`, completion support will be enabled.
+
+  This setting must be set to `1` before ALE is loaded for this behavior
+  to be enabled.
 
   See |ale-completion|
 
