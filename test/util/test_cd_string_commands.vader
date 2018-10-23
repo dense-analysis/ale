@@ -8,21 +8,13 @@ After:
 
 Execute(CdString should output the correct command string):
   " We will check that escaping is done correctly for each platform.
-  if has('win32')
-    AssertEqual
-    \ 'cd /d "/foo bar/baz" && ',
-    \ ale#path#CdString('/foo bar/baz')
-  else
-    AssertEqual
-    \ has('unix') ? 'cd ''/foo bar/baz'' && ' : 'cd "/foo bar/baz" && ',
-    \ ale#path#CdString('/foo bar/baz')
-  endif
+  AssertEqual
+  \ has('unix') ? 'cd ''/foo bar/baz'' && ' : 'cd /d "/foo bar/baz" && ',
+  \ ale#path#CdString('/foo bar/baz')
 
 Execute(BufferCdString should output the correct command string):
   call ale#test#SetFilename('foo.txt')
 
-  if has('win32')
-    AssertEqual 'cd /d ' .ale#Escape(g:dir) . ' && ', ale#path#BufferCdString(bufnr(''))
-  else
-    AssertEqual 'cd ' . ale#Escape(g:dir) . ' && ', ale#path#BufferCdString(bufnr(''))
-  endif
+  AssertEqual
+  \ has('unix') ? 'cd ' . ale#Escape(g:dir) . ' && ' : 'cd /d ' . ale#Escape(g:dir) . ' && ',
+  \ ale#path#BufferCdString(bufnr(''))
