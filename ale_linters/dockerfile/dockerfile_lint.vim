@@ -32,7 +32,7 @@ function! ale_linters#dockerfile#dockerfile_lint#Handle(buffer, lines) abort
             let l:line = get(l:object, 'line', -1)
             let l:message = l:object['message']
 
-            if get(l:object, 'description', 'None') != 'None'
+            if get(l:object, 'description', 'None') isnot# 'None'
                 let l:message = l:message . '. ' . l:object['description']
             endif
 
