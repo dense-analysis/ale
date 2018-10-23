@@ -29,15 +29,10 @@ function! ale_linters#dockerfile#dockerfile_lint#Handle(buffer, lines) abort
 
     for l:type in ['error', 'warn', 'info']
         for l:object in l:data[l:type]['data']
-            try
-                let l:line = l:object['line']
-            catch
-                let l:line = -1
-            endtry
-
+            let l:line = get(l:object, 'line', -1)
             let l:message = l:object['message']
 
-            if has_key(l:object, 'description') && l:object['description'] != 'None'
+            if get(l:object, 'description', 'None') != 'None'
                 let l:message = l:message . '. ' . l:object['description']
             endif
 
