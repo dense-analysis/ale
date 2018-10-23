@@ -42,10 +42,10 @@ function! ale_linters#dockerfile#dockerfile_lint#Handle(buffer, lines) abort
             endif
 
             call add(l:messages, {
-                        \ 'lnum': l:line,
-                        \ 'text': l:message,
-                        \ 'type': ale_linters#dockerfile#dockerfile_lint#GetType(l:type),
-                        \})
+            \   'lnum': l:line,
+            \   'text': l:message,
+            \   'type': ale_linters#dockerfile#dockerfile_lint#GetType(l:type),
+            \})
         endfor
     endfor
 
