@@ -184,7 +184,7 @@ g:ale_php_psalm_lsp_use_global                 *g:ale_php_psalm_lsp_use_global*
   Type: |Boolean|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
-  This variable force globally installed Psalm language server.
+  This variable forces a globally installed Psalm language server.
 
 ===============================================================================
 psalm                                                           *ale-php-psalm*
@@ -211,7 +211,7 @@ g:ale_php_cs_fixer_use_global                   *g:ale_php_cs_fixer_use_global*
   Type: |Boolean|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
-  This variable force globally installed fixer.
+  This variable forces a globally installed fixer.
 
 g:ale_php_cs_fixer_options                         *g:ale_php_cs_fixer_options*
                                                    *b:ale_php_cs_fixer_options*
