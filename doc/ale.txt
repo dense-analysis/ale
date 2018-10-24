@@ -129,6 +129,8 @@ CONTENTS                                                         *ale-contents*
       stack-build.........................|ale-haskell-stack-build|
       stylish-haskell.....................|ale-haskell-stylish-haskell|
       hie.................................|ale-haskell-hie|
+    hcl...................................|ale-hcl-options|
+      terraform-fmt.......................|ale-hcl-terraform-fmt|
     html..................................|ale-html-options|
       htmlhint............................|ale-html-htmlhint|
       tidy................................|ale-html-tidy|
@@ -297,6 +299,7 @@ CONTENTS                                                         *ale-contents*
     tcl...................................|ale-tcl-options|
       nagelfar............................|ale-tcl-nagelfar|
     terraform.............................|ale-terraform-options|
+      fmt.................................|ale-terraform-fmt|
       tflint..............................|ale-terraform-tflint|
     tex...................................|ale-tex-options|
       chktex..............................|ale-tex-chktex|
