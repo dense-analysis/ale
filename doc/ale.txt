@@ -420,6 +420,7 @@ Notes:
 * Haml: `haml-lint`
 * Handlebars: `ember-template-lint`
 * Haskell: `brittany`, `ghc`, `cabal-ghc`, `stylish-haskell`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `hlint`, `hdevtools`, `hfmt`, `hie`
+* HCL: `terraform-fmt`
 * HTML: `alex`!!, `HTMLHint`, `proselint`, `tidy`, `write-good`
 * Idris: `idris`
 * Java: `checkstyle`, `javac`, `google-java-format`, `PMD`, `javalsp`, `uncrustify`
@@ -471,7 +472,7 @@ Notes:
 * SQL: `sqlint`, `sqlfmt`
 * Swift: `swiftlint`, `swiftformat`
 * Tcl: `nagelfar`!!
-* Terraform: `tflint`
+* Terraform: `fmt`, `tflint`
 * Texinfo: `alex`!!, `proselint`, `write-good`
 * Text^: `alex`!!, `proselint`, `redpen`, `textlint`, `vale`, `write-good`
 * Thrift: `thrift`
