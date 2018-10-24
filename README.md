@@ -133,6 +133,7 @@ formatting.
 | Haml | [haml-lint](https://github.com/brigade/haml-lint) |
 | Handlebars | [ember-template-lint](https://github.com/rwjblue/ember-template-lint) |
 | Haskell | [brittany](https://github.com/lspitzner/brittany), [ghc](https://www.haskell.org/ghc/), [cabal-ghc](https://www.haskell.org/cabal/), [stylish-haskell](https://github.com/jaspervdj/stylish-haskell), [stack-ghc](https://haskellstack.org/), [stack-build](https://haskellstack.org/) !!, [ghc-mod](https://github.com/DanielG/ghc-mod), [hlint](https://hackage.haskell.org/package/hlint), [hdevtools](https://hackage.haskell.org/package/hdevtools), [hfmt](https://github.com/danstiner/hfmt), [hie](https://github.com/haskell/haskell-ide-engine) |
+| HCL | [terraform-fmt](https://github.com/hashicorp/terraform) |
 | HTML | [alex](https://github.com/wooorm/alex) !!, [HTMLHint](http://htmlhint.com/), [proselint](http://proselint.com/), [tidy](http://www.html-tidy.org/), [write-good](https://github.com/btford/write-good) |
 | Idris | [idris](http://www.idris-lang.org/) |
 | Java | [checkstyle](http://checkstyle.sourceforge.net), [javac](http://www.oracle.com/technetwork/java/javase/downloads/index.html), [google-java-format](https://github.com/google/google-java-format), [PMD](https://pmd.github.io/), [javalsp](https://github.com/georgewfraser/vscode-javac), [uncrustify](https://github.com/uncrustify/uncrustify) |
@@ -184,7 +185,7 @@ formatting.
 | SQL | [sqlint](https://github.com/purcell/sqlint), [sqlfmt](https://github.com/jackc/sqlfmt) |
 | Swift | [swiftlint](https://github.com/realm/SwiftLint), [swiftformat](https://github.com/nicklockwood/SwiftFormat) |
 | Tcl | [nagelfar](http://nagelfar.sourceforge.net) !! |
-| Terraform | [tflint](https://github.com/wata727/tflint) |
+| Terraform | [fmt](https://github.com/hashicorp/terraform), [tflint](https://github.com/wata727/tflint) |
 | Texinfo | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good)|
 | Text^ | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [redpen](http://redpen.cc/), [textlint](https://textlint.github.io/), [vale](https://github.com/ValeLint/vale), [write-good](https://github.com/btford/write-good) |
 | Thrift | [thrift](http://thrift.apache.org/) |
