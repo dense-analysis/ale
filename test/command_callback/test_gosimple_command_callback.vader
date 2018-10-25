@@ -7,4 +7,4 @@ After:
 
 Execute(The default gosimple command should be correct):
   AssertLinter 'gosimple',
-  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' &&  gosimple .'
+  \ ale#path#CdString(expand('%:p:h')) . ' gosimple .'

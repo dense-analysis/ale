@@ -7,5 +7,5 @@ After:
 
 Execute(The default sasslint command should be correct):
   AssertLinter 'sass-lint',
-  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \ ale#path#CdString(expand('%:p:h'))
   \   . ale#Escape('sass-lint') . ' -v -q -f compact %t'
