@@ -7,7 +7,7 @@ After:
 
 Execute(The gometalinter defaults should be correct):
   AssertLinter 'gometalinter',
-  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \ ale#path#CdString(expand('%:p:h'))
   \   . ale#Escape('gometalinter')
   \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(expand('%' . ':t')))
   \   . ' .'
@@ -16,7 +16,7 @@ Execute(The gometalinter callback should use a configured executable):
   let b:ale_go_gometalinter_executable = 'something else'
 
   AssertLinter 'something else',
-  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \ ale#path#CdString(expand('%:p:h'))
   \   . ale#Escape('something else')
   \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(expand('%' . ':t')))
   \   . ' .'
@@ -25,7 +25,7 @@ Execute(The gometalinter callback should use configured options):
   let b:ale_go_gometalinter_options = '--foobar'
 
   AssertLinter 'gometalinter',
-  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \ ale#path#CdString(expand('%:p:h'))
   \   . ale#Escape('gometalinter')
   \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(expand('%' . ':t')))
   \   . ' --foobar' . ' .'
@@ -34,5 +34,5 @@ Execute(The gometalinter `lint_package` option should use the correct command):
   let b:ale_go_gometalinter_lint_package = 1
 
   AssertLinter 'gometalinter',
-  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \ ale#path#CdString(expand('%:p:h'))
   \   . ale#Escape('gometalinter') . ' .'

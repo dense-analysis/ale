@@ -74,7 +74,7 @@ Execute(--stdin-filepath should be used when prettier is new enough):
 
   AssertEqual
   \ {
-  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   'command': ale#path#CdString(expand('%:p:h'))
   \     . ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' --no-semi'
   \     . ' --stdin-filepath %s --stdin',
@@ -90,7 +90,7 @@ Execute(The version number should be cached):
   " Call it again without the version output. We should use the newer command.
   AssertEqual
   \ {
-  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   'command': ale#path#CdString(expand('%:p:h'))
   \     . ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' --stdin-filepath %s --stdin',
   \ },
@@ -103,7 +103,7 @@ Execute(Should set --parser based on filetype, TypeScript):
 
   AssertEqual
   \ {
-  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   'command': ale#path#CdString(expand('%:p:h'))
   \     . ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' --parser typescript'
   \     . ' --stdin-filepath %s --stdin',
@@ -117,7 +117,7 @@ Execute(Should set --parser based on filetype, CSS):
 
   AssertEqual
   \ {
-  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   'command': ale#path#CdString(expand('%:p:h'))
   \     . ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' --parser css'
   \     . ' --stdin-filepath %s --stdin',
@@ -131,7 +131,7 @@ Execute(Should set --parser based on filetype, LESS):
 
   AssertEqual
   \ {
-  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   'command': ale#path#CdString(expand('%:p:h'))
   \     . ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' --parser less'
   \     . ' --stdin-filepath %s --stdin',
@@ -145,7 +145,7 @@ Execute(Should set --parser based on filetype, SCSS):
 
   AssertEqual
   \ {
-  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   'command': ale#path#CdString(expand('%:p:h'))
   \     . ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' --parser scss'
   \     . ' --stdin-filepath %s --stdin',
@@ -159,7 +159,7 @@ Execute(Should set --parser based on filetype, JSON):
 
   AssertEqual
   \ {
-  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   'command': ale#path#CdString(expand('%:p:h'))
   \     . ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' --parser json'
   \     . ' --stdin-filepath %s --stdin',
@@ -173,7 +173,7 @@ Execute(Should set --parser based on filetype, JSON5):
 
   AssertEqual
   \ {
-  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   'command': ale#path#CdString(expand('%:p:h'))
   \     . ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' --parser json5'
   \     . ' --stdin-filepath %s --stdin',
@@ -187,7 +187,7 @@ Execute(Should set --parser based on filetype, GraphQL):
 
   AssertEqual
   \ {
-  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   'command': ale#path#CdString(expand('%:p:h'))
   \     . ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' --parser graphql'
   \     . ' --stdin-filepath %s --stdin',
@@ -201,7 +201,7 @@ Execute(Should set --parser based on filetype, Markdown):
 
   AssertEqual
   \ {
-  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   'command': ale#path#CdString(expand('%:p:h'))
   \     . ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' --parser markdown'
   \     . ' --stdin-filepath %s --stdin',
@@ -215,7 +215,7 @@ Execute(Should set --parser based on filetype, Vue):
 
   AssertEqual
   \ {
-  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   'command': ale#path#CdString(expand('%:p:h'))
   \     . ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' --parser vue'
   \     . ' --stdin-filepath %s --stdin',
@@ -229,7 +229,7 @@ Execute(Should set --parser based on filetype, YAML):
 
   AssertEqual
   \ {
-  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   'command': ale#path#CdString(expand('%:p:h'))
   \     . ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' --parser yaml'
   \     . ' --stdin-filepath %s --stdin',
@@ -243,7 +243,7 @@ Execute(Should set --parser based on first filetype of multiple filetypes):
 
   AssertEqual
   \ {
-  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   'command': ale#path#CdString(expand('%:p:h'))
   \     . ale#Escape(g:ale_javascript_prettier_executable)
   \     . ' --parser css'
   \     . ' --stdin-filepath %s --stdin',

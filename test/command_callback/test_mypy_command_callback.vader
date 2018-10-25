@@ -12,7 +12,7 @@ After:
 
 Execute(The mypy callbacks should return the correct default values):
   AssertLinter 'mypy',
-  \ 'cd ' . ale#Escape(g:dir) . ' && ' . ale#Escape('mypy')
+  \ ale#path#CdString(g:dir) . ale#Escape('mypy')
   \   . ' --show-column-numbers  '
   \   . '--shadow-file %s %t %s'
 
@@ -20,7 +20,7 @@ Execute(The mypy executable should be configurable, and escaped properly):
   let g:ale_python_mypy_executable = 'executable with spaces'
 
   AssertLinter 'executable with spaces',
-  \ 'cd ' . ale#Escape(g:dir) . ' && ' . ale#Escape('executable with spaces')
+  \ ale#path#CdString(g:dir) . ale#Escape('executable with spaces')
   \   . ' --show-column-numbers  '
   \   . '--shadow-file %s %t %s'
 
@@ -28,7 +28,7 @@ Execute(The mypy command callback should let you set options):
   let g:ale_python_mypy_options = '--some-option'
 
   AssertLinter 'mypy',
-  \ 'cd ' . ale#Escape(g:dir) . ' && ' . ale#Escape('mypy')
+  \ ale#path#CdString(g:dir) . ale#Escape('mypy')
   \   . ' --show-column-numbers --some-option '
   \   . '--shadow-file %s %t %s'
 
@@ -36,8 +36,8 @@ Execute(The mypy command should switch directories to the detected project root)
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/no_virtualenv/subdir/foo/bar.py')
 
   AssertLinter 'mypy',
-  \ 'cd ' . ale#Escape(ale#path#Simplify(g:dir . '/python_paths/no_virtualenv/subdir'))
-  \   . ' && ' . ale#Escape('mypy')
+  \ ale#path#CdString(ale#path#Simplify(g:dir . '/python_paths/no_virtualenv/subdir'))
+  \   . ale#Escape('mypy')
   \   . ' --show-column-numbers  '
   \   . '--shadow-file %s %t %s'
 
@@ -47,8 +47,8 @@ Execute(The mypy callbacks should detect virtualenv directories and switch to th
   let b:executable = ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/mypy')
 
   AssertLinter b:executable,
-  \   'cd ' . ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/subdir'))
-  \   . ' && ' . ale#Escape(b:executable)
+  \   ale#path#CdString(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/subdir'))
+  \   . ale#Escape(b:executable)
   \   . ' --show-column-numbers  '
   \   . '--shadow-file %s %t %s'
 
@@ -57,8 +57,8 @@ Execute(You should able able to use the global mypy instead):
   let g:ale_python_mypy_use_global = 1
 
   AssertLinter 'mypy',
-  \   'cd ' . ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/subdir'))
-  \   . ' && ' . ale#Escape('mypy')
+  \   ale#path#CdString(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/subdir'))
+  \   . ale#Escape('mypy')
   \   . ' --show-column-numbers  '
   \   . '--shadow-file %s %t %s'
 

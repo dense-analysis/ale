@@ -7,7 +7,7 @@ After:
 
 Execute(The staticcheck callback should return the right defaults):
   AssertLinter 'staticcheck',
-  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \ ale#path#CdString(expand('%:p:h'))
   \   . 'staticcheck '
   \   . ale#Escape(expand('%' . ':t'))
 
@@ -15,7 +15,7 @@ Execute(The staticcheck callback should use configured options):
   let b:ale_go_staticcheck_options = '-test'
 
   AssertLinter 'staticcheck',
-  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \ ale#path#CdString(expand('%:p:h'))
   \   . 'staticcheck '
   \   . '-test ' . ale#Escape(expand('%' . ':t'))
 
@@ -23,4 +23,4 @@ Execute(The staticcheck `lint_package` option should use the correct command):
   let b:ale_go_staticcheck_lint_package = 1
 
   AssertLinter 'staticcheck',
-  \ 'cd ' . ale#Escape(expand('%:p:h')) . ' && staticcheck .',
+  \ ale#path#CdString(expand('%:p:h')) . 'staticcheck .',
