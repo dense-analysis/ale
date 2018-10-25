@@ -35,6 +35,7 @@ let s:default_ale_linters = {
 \   'hack': ['hack'],
 \   'help': [],
 \   'perl': ['perlcritic'],
+\   'perl6': [],
 \   'python': ['flake8', 'mypy', 'pylint'],
 \   'rust': ['cargo'],
 \   'spec': [],
