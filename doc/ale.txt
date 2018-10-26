@@ -75,6 +75,7 @@ CONTENTS                                                         *ale-contents*
       dartanalyzer........................|ale-dart-dartanalyzer|
       dartfmt.............................|ale-dart-dartfmt|
     dockerfile............................|ale-dockerfile-options|
+      dockerfile_lint.....................|ale-dockerfile-dockerfile_lint|
       hadolint............................|ale-dockerfile-hadolint|
     elixir................................|ale-elixir-options|
       mix.................................|ale-elixir-mix|
@@ -407,7 +408,7 @@ Notes:
 * D: `dls`, `dmd`, `uncrustify`
 * Dafny: `dafny`!!
 * Dart: `dartanalyzer`!!, `language_server`, dartfmt!!
-* Dockerfile: `hadolint`
+* Dockerfile: `dockerfile_lint`, `hadolint`
 * Elixir: `credo`, `dialyxir`, `dogma`, `mix`!!, `elixir-ls`
 * Elm: `elm-format, elm-make`
 * Erb: `erb`, `erubi`, `erubis`
