@@ -346,8 +346,9 @@ endfunction
 function! s:GetAliasedFiletype(original_filetype) abort
     let l:buffer_aliases = get(b:, 'ale_linter_aliases', {})
 
-    " b:ale_linter_aliases can be set to a List.
+    " b:ale_linter_aliases can be set to a List or String.
     if type(l:buffer_aliases) is v:t_list
+    \|| type(l:buffer_aliases) is v:t_string
         return l:buffer_aliases
     endif
 

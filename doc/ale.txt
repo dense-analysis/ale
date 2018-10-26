@@ -1310,10 +1310,12 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
   ALE will first look for aliases for filetypes in the `b:ale_linter_aliases`
   variable, then `g:ale_linter_aliases`, and then a default Dictionary.
 
-  `b:ale_linter_aliases` can be set to a |List|, to tell ALE to load the
-  linters for specific filetypes for a given buffer. >
+  `b:ale_linter_aliases` can be set to a |List| or a |String|, to tell ALE to
+  load the linters for specific filetypes for a given buffer. >
 
   let b:ale_linter_aliases = ['html', 'javascript', 'css']
+  " OR, Alias a filetype to only a single filetype with a String.
+  let b:ale_linter_aliases = 'javascript'
 <
   No linters will be loaded when the buffer's filetype is empty.
 
