@@ -165,6 +165,7 @@ formatting.
 | PO | [alex](https://github.com/wooorm/alex) !!, [msgfmt](https://www.gnu.org/software/gettext/manual/html_node/msgfmt-Invocation.html), [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good) |
 | Pod | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good) |
 | Pony | [ponyc](https://github.com/ponylang/ponyc) |
+| Prolog | [swipl](https://github.com/SWI-Prolog/swipl-devel) |
 | proto | [protoc-gen-lint](https://github.com/ckaznocha/protoc-gen-lint) |
 | Pug | [pug-lint](https://github.com/pugjs/pug-lint) |
 | Puppet | [languageserver](https://github.com/lingua-pupuli/puppet-editor-services), [puppet](https://puppet.com), [puppet-lint](https://puppet-lint.com) |

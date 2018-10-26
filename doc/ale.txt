@@ -226,6 +226,8 @@ CONTENTS                                                         *ale-contents*
       write-good..........................|ale-pod-write-good|
     pony..................................|ale-pony-options|
       ponyc...............................|ale-pony-ponyc|
+    prolog................................|ale-prolog-options|
+      swipl...............................|ale-prolog-swipl|
     proto.................................|ale-proto-options|
       protoc-gen-lint.....................|ale-proto-protoc-gen-lint|
     pug...................................|ale-pug-options|
@@ -453,6 +455,7 @@ Notes:
 * PO: `alex`!!, `msgfmt`, `proselint`, `write-good`
 * Pod: `alex`!!, `proselint`, `write-good`
 * Pony: `ponyc`
+* Prolog: `swipl`
 * proto: `protoc-gen-lint`
 * Pug: `pug-lint`
 * Puppet: `languageserver`, `puppet`, `puppet-lint`
