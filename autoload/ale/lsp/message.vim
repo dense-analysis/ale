@@ -138,3 +138,9 @@ function! ale#lsp#message#Hover(buffer, line, column) abort
     \   'position': {'line': a:line - 1, 'character': a:column},
     \}]
 endfunction
+
+function! ale#lsp#message#DidChangeConfiguration(buffer, config) abort
+    return [0, 'workspace/didChangeConfiguration', {
+    \   'settings': a:config,
+    \}]
+endfunction

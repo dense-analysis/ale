@@ -2,11 +2,28 @@ Before:
   call ale#assert#SetUpLinterTest('php', 'psalm')
 
 After:
+  if isdirectory(g:dir . '/.git')
+    call delete(g:dir . '/.git', 'd')
+  endif
+
   call ale#assert#TearDownLinterTest()
 
-Execute(Custom executables should be used for the executable and command):
-  let g:ale_php_psalm_executable = 'psalm_test'
+Execute(The default executable path should be correct):
+  AssertLinter 'psalm-language-server',
+  \ ale#Escape('psalm-language-server')
 
-  AssertLinter 'psalm_test',
-  \ ale#Escape('psalm_test') . ' --diff --output-format=emacs %s'
+Execute(Vendor executables should be detected):
+  call ale#test#SetFilename('psalm-project/test.php')
 
+  AssertLinter
+  \ ale#path#Simplify(g:dir . '/psalm-project/vendor/bin/psalm-language-server'),
+  \ ale#Escape(ale#path#Simplify(
+  \   g:dir
+  \   . '/psalm-project/vendor/bin/psalm-language-server'
+  \ ))
+
+Execute(The project path should be correct for .git directories):
+  call ale#test#SetFilename('psalm-project/test.php')
+  call mkdir(g:dir . '/.git')
+
+  AssertLSPProject g:dir

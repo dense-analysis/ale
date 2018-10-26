@@ -25,8 +25,8 @@ Execute(Should return 'gradlew' command if project includes gradle wapper):
   call ale#test#SetFilename('gradle-test-files/wrapped-project/src/main/kotlin/dummy.kt')
 
   AssertEqual
-  \ 'cd ' . ale#Escape(ale#path#Simplify(g:dir . '/gradle-test-files/wrapped-project'))
-  \   . ' && ' . ale#Escape(ale#path#Simplify(g:dir . '/gradle-test-files/wrapped-project/gradlew'))
+  \ ale#path#CdString(ale#path#Simplify(g:dir . '/gradle-test-files/wrapped-project'))
+  \   . ale#Escape(ale#path#Simplify(g:dir . '/gradle-test-files/wrapped-project/gradlew'))
   \   . g:command_tail,
   \ ale#gradle#BuildClasspathCommand(bufnr(''))
 
@@ -36,8 +36,8 @@ Execute(Should return 'gradle' command if project does not include gradle wapper
   \ . ale#path#Simplify(g:dir . '/gradle-test-files')
 
   AssertEqual
-  \ 'cd ' . ale#Escape(ale#path#Simplify(g:dir . '/gradle-test-files/unwrapped-project'))
-  \   . ' && ' . ale#Escape('gradle')
+  \ ale#path#CdString(ale#path#Simplify(g:dir . '/gradle-test-files/unwrapped-project'))
+  \   . ale#Escape('gradle')
   \   . g:command_tail,
   \ ale#gradle#BuildClasspathCommand(bufnr(''))
 

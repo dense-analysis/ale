@@ -19,6 +19,6 @@ Execute(cppcheck for C++ should detect compile_commands.json files):
   call ale#test#SetFilename('cppcheck_paths/one/foo.cpp')
 
   AssertLinter 'cppcheck',
-  \ 'cd ' . ale#Escape(ale#path#Simplify(g:dir . '/cppcheck_paths/one')) . ' && '
+  \ ale#path#CdString(ale#path#Simplify(g:dir . '/cppcheck_paths/one'))
   \   . ale#Escape('cppcheck')
   \   . ' -q --language=c --project=compile_commands.json --enable=style %t'

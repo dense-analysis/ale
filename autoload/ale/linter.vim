@@ -35,6 +35,7 @@ let s:default_ale_linters = {
 \   'hack': ['hack'],
 \   'help': [],
 \   'perl': ['perlcritic'],
+\   'perl6': [],
 \   'python': ['flake8', 'mypy', 'pylint'],
 \   'rust': ['cargo'],
 \   'spec': [],
@@ -254,6 +255,14 @@ function! ale#linter#PreProcess(filetype, linter) abort
             endif
         elseif has_key(a:linter, 'initialization_options')
             let l:obj.initialization_options = a:linter.initialization_options
+        endif
+
+        if has_key(a:linter, 'lsp_config')
+            if type(a:linter.lsp_config) isnot v:t_dict
+                throw '`lsp_config` must be a Dictionary'
+            endif
+
+            let l:obj.lsp_config = a:linter.lsp_config
         endif
     endif
 

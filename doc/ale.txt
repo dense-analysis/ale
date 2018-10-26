@@ -129,6 +129,8 @@ CONTENTS                                                         *ale-contents*
       stack-build.........................|ale-haskell-stack-build|
       stylish-haskell.....................|ale-haskell-stylish-haskell|
       hie.................................|ale-haskell-hie|
+    hcl...................................|ale-hcl-options|
+      terraform-fmt.......................|ale-hcl-terraform-fmt|
     html..................................|ale-html-options|
       htmlhint............................|ale-html-htmlhint|
       tidy................................|ale-html-tidy|
@@ -207,6 +209,8 @@ CONTENTS                                                         *ale-contents*
       perl................................|ale-perl-perl|
       perlcritic..........................|ale-perl-perlcritic|
       perltidy............................|ale-perl-perltidy|
+    perl6.................................|ale-perl6-options|
+      perl6...............................|ale-perl6-perl6|
     php...................................|ale-php-options|
       langserver..........................|ale-php-langserver|
       phan................................|ale-php-phan|
@@ -299,6 +303,7 @@ CONTENTS                                                         *ale-contents*
     tcl...................................|ale-tcl-options|
       nagelfar............................|ale-tcl-nagelfar|
     terraform.............................|ale-terraform-options|
+      fmt.................................|ale-terraform-fmt|
       tflint..............................|ale-terraform-tflint|
     tex...................................|ale-tex-options|
       chktex..............................|ale-tex-chktex|
@@ -419,6 +424,7 @@ Notes:
 * Haml: `haml-lint`
 * Handlebars: `ember-template-lint`
 * Haskell: `brittany`, `ghc`, `cabal-ghc`, `stylish-haskell`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `hlint`, `hdevtools`, `hfmt`, `hie`
+* HCL: `terraform-fmt`
 * HTML: `alex`!!, `HTMLHint`, `proselint`, `tidy`, `write-good`
 * Idris: `idris`
 * Java: `checkstyle`, `javac`, `google-java-format`, `PMD`, `javalsp`, `uncrustify`
@@ -444,6 +450,7 @@ Notes:
 * OCaml: `merlin` (see |ale-ocaml-merlin|), `ols`, `ocamlformat`
 * Pawn: `uncrustify`
 * Perl: `perl -c`, `perl-critic`, `perltidy`
+* Perl6: `perl6 -c`
 * PHP: `langserver`, `phan`, `php -l`, `phpcs`, `phpmd`, `phpstan`, `phpcbf`, `php-cs-fixer`, `psalm`!!
 * PO: `alex`!!, `msgfmt`, `proselint`, `write-good`
 * Pod: `alex`!!, `proselint`, `write-good`
@@ -471,7 +478,7 @@ Notes:
 * SQL: `sqlint`, `sqlfmt`
 * Swift: `swiftlint`, `swiftformat`
 * Tcl: `nagelfar`!!
-* Terraform: `tflint`
+* Terraform: `fmt`, `tflint`
 * Texinfo: `alex`!!, `proselint`, `write-good`
 * Text^: `alex`!!, `proselint`, `redpen`, `textlint`, `vale`, `write-good`
 * Thrift: `thrift`
@@ -1330,6 +1337,7 @@ g:ale_linters                                                   *g:ale_linters*
   \   'hack': ['hack'],
   \   'help': [],
   \   'perl': ['perlcritic'],
+  \   'perl6': [],
   \   'python': ['flake8', 'mypy', 'pylint'],
   \   'rust': ['cargo'],
   \   'spec': [],

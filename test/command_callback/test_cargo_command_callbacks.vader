@@ -128,3 +128,27 @@ Execute(When a crate belongs to a workspace we chdir into the crate, unless we d
   \ 'cargo --version',
   \ 'cargo check --frozen --message-format=json -q',
   \]
+
+Execute(When ale_rust_cargo_use_clippy is set, cargo-clippy is used as linter):
+  let b:ale_rust_cargo_use_clippy = 1
+  AssertLinter '', [
+  \ 'cargo --version',
+  \ 'cargo clippy --frozen --message-format=json -q ',
+  \]
+
+Execute(When ale_rust_cargo_clippy_options is set, cargo-clippy appends it to commandline):
+  let b:ale_rust_cargo_use_clippy = 1
+  let b:ale_rust_cargo_clippy_options = '-- -D warnings'
+  AssertLinter '', [
+  \ 'cargo --version',
+  \ 'cargo clippy --frozen --message-format=json -q -- -D warnings',
+  \]
+
+Execute(cargo-check does not refer ale_rust_cargo_clippy_options):
+  let b:ale_rust_cargo_use_clippy = 0
+  let b:ale_rust_cargo_use_check = 1
+  let b:ale_rust_cargo_clippy_options = '-- -D warnings'
+  AssertLinter '', [
+  \ 'cargo --version',
+  \ 'cargo check --frozen --message-format=json -q',
+  \]
