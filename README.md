@@ -51,6 +51,7 @@ other content at [w0rp.com](https://w0rp.com).
     1. [Installation with Vim package management](#standard-installation)
     2. [Installation with Pathogen](#installation-with-pathogen)
     3. [Installation with Vundle](#installation-with-vundle)
+    4. [Installation with Vim-Plug](#installation-with-vim-plug)
 4. [Contributing](#contributing)
 5. [FAQ](#faq)
     1. [How do I disable particular linters?](#faq-disable-linters)
@@ -401,6 +402,18 @@ Plugin 'w0rp/ale'
 ```
 
 See the Vundle documentation for more information.
+
+<a name="installation-with-vim-plug"></a>
+
+### 3.iiii. Installation with Vim-Plug
+
+You can install this plugin using [Vim-Plug](https://github.com/junegunn/vim-plug)
+by adding the GitHub path for this repository to your `~/.vimrc`
+and running `:PlugInstall`.
+
+```vim
+Plug 'w0rp/ale'
+```
 
 <a name="contributing"></a>
 
