@@ -321,6 +321,7 @@ CONTENTS                                                         *ale-contents*
       prettier............................|ale-typescript-prettier|
       tslint..............................|ale-typescript-tslint|
       tsserver............................|ale-typescript-tsserver|
+      xo..................................|ale-javascript-xo|
     vala..................................|ale-vala-options|
       uncrustify..........................|ale-vala-uncrustify|
     verilog/systemverilog.................|ale-verilog-options|
@@ -483,7 +484,7 @@ Notes:
 * Texinfo: `alex`!!, `proselint`, `write-good`
 * Text^: `alex`!!, `proselint`, `redpen`, `textlint`, `vale`, `write-good`
 * Thrift: `thrift`
-* TypeScript: `eslint`, `prettier`, `tslint`, `tsserver`, `typecheck`
+* TypeScript: `eslint`, `prettier`, `tslint`, `tsserver`, `typecheck`, `xo`
 * VALA: `uncrustify`
 * Verilog: `iverilog`, `verilator`
 * Vim: `vint`
