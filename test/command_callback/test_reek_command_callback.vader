@@ -8,7 +8,7 @@ Execute(The reek callbacks should return the correct default values):
   WithChainResults ['reek 5.0.0']
   AssertLinter 'reek', [
   \ ale#Escape('reek') . ' --version',
-  \ ale#Escape('reek') . ' -f json --no-progress --no-color --stdin-filename %s',
+  \ ale#Escape('reek') . ' -f json --no-progress --no-color --force-exclusion --stdin-filename %s',
   \]
 
   " Try with older versions.
@@ -17,7 +17,7 @@ Execute(The reek callbacks should return the correct default values):
   WithChainResults ['reek 4.8.2']
   AssertLinter 'reek', [
   \ ale#Escape('reek') . ' --version',
-  \ ale#Escape('reek') . ' -f json --no-progress --no-color',
+  \ ale#Escape('reek') . ' -f json --no-progress --no-color --force-exclusion',
   \]
 
 Execute(Setting bundle appends 'exec reek'):
@@ -26,7 +26,7 @@ Execute(Setting bundle appends 'exec reek'):
   WithChainResults ['reek 5.0.0']
   AssertLinter 'bundle', ale#Escape('bundle')
   \ . ' exec reek'
-  \ . ' -f json --no-progress --no-color --stdin-filename %s',
+  \ . ' -f json --no-progress --no-color --force-exclusion --stdin-filename %s',
 
   " Try with older versions.
   call ale#semver#ResetVersionCache()
@@ -34,17 +34,17 @@ Execute(Setting bundle appends 'exec reek'):
   WithChainResults ['reek 4.8.2']
   AssertLinter 'bundle', ale#Escape('bundle')
   \ . ' exec reek'
-  \ . ' -f json --no-progress --no-color'
+  \ . ' -f json --no-progress --no-color --force-exclusion'
 
 Execute(The reek version check should be cached):
   WithChainResults ['reek 5.0.0']
   AssertLinter 'reek', [
   \ ale#Escape('reek') . ' --version',
-  \ ale#Escape('reek') . ' -f json --no-progress --no-color --stdin-filename %s',
+  \ ale#Escape('reek') . ' -f json --no-progress --no-color --force-exclusion --stdin-filename %s',
   \]
 
   WithChainResults []
   AssertLinter 'reek', [
   \ '',
-  \ ale#Escape('reek') . ' -f json --no-progress --no-color --stdin-filename %s',
+  \ ale#Escape('reek') . ' -f json --no-progress --no-color --force-exclusion --stdin-filename %s',
   \]

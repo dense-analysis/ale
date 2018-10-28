@@ -51,6 +51,7 @@ other content at [w0rp.com](https://w0rp.com).
     1. [Installation with Vim package management](#standard-installation)
     2. [Installation with Pathogen](#installation-with-pathogen)
     3. [Installation with Vundle](#installation-with-vundle)
+    4. [Installation with Vim-Plug](#installation-with-vim-plug)
 4. [Contributing](#contributing)
 5. [FAQ](#faq)
     1. [How do I disable particular linters?](#faq-disable-linters)
@@ -116,7 +117,7 @@ formatting.
 | D | [dls](https://github.com/d-language-server/dls), [dmd](https://dlang.org/dmd-linux.html), [uncrustify](https://github.com/uncrustify/uncrustify) |
 | Dafny | [dafny](https://rise4fun.com/Dafny) !! |
 | Dart | [dartanalyzer](https://github.com/dart-lang/sdk/tree/master/pkg/analyzer_cli) !!, [language_server](https://github.com/natebosch/dart_language_server), [dartfmt](https://github.com/dart-lang/sdk/tree/master/utils/dartfmt) |
-| Dockerfile | [hadolint](https://github.com/hadolint/hadolint) |
+| Dockerfile | [dockerfile_lint](https://github.com/projectatomic/dockerfile_lint), [hadolint](https://github.com/hadolint/hadolint) |
 | Elixir | [credo](https://github.com/rrrene/credo), [dialyxir](https://github.com/jeremyjh/dialyxir), [dogma](https://github.com/lpil/dogma), [mix](https://hexdocs.pm/mix/Mix.html) !!, [elixir-ls](https://github.com/JakeBecker/elixir-ls) |
 | Elm | [elm-format](https://github.com/avh4/elm-format), [elm-make](https://github.com/elm-lang/elm-make) |
 | Erb | [erb](https://apidock.com/ruby/ERB), [erubi](https://github.com/jeremyevans/erubi), [erubis](https://github.com/kwatch/erubis) |
@@ -164,6 +165,7 @@ formatting.
 | PO | [alex](https://github.com/wooorm/alex) !!, [msgfmt](https://www.gnu.org/software/gettext/manual/html_node/msgfmt-Invocation.html), [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good) |
 | Pod | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good) |
 | Pony | [ponyc](https://github.com/ponylang/ponyc) |
+| Prolog | [swipl](https://github.com/SWI-Prolog/swipl-devel) |
 | proto | [protoc-gen-lint](https://github.com/ckaznocha/protoc-gen-lint) |
 | Pug | [pug-lint](https://github.com/pugjs/pug-lint) |
 | Puppet | [languageserver](https://github.com/lingua-pupuli/puppet-editor-services), [puppet](https://puppet.com), [puppet-lint](https://puppet-lint.com) |
@@ -402,6 +404,18 @@ Plugin 'w0rp/ale'
 ```
 
 See the Vundle documentation for more information.
+
+<a name="installation-with-vim-plug"></a>
+
+### 3.iiii. Installation with Vim-Plug
+
+You can install this plugin using [Vim-Plug](https://github.com/junegunn/vim-plug)
+by adding the GitHub path for this repository to your `~/.vimrc`
+and running `:PlugInstall`.
+
+```vim
+Plug 'w0rp/ale'
+```
 
 <a name="contributing"></a>
 

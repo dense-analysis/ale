@@ -75,6 +75,7 @@ CONTENTS                                                         *ale-contents*
       dartanalyzer........................|ale-dart-dartanalyzer|
       dartfmt.............................|ale-dart-dartfmt|
     dockerfile............................|ale-dockerfile-options|
+      dockerfile_lint.....................|ale-dockerfile-dockerfile_lint|
       hadolint............................|ale-dockerfile-hadolint|
     elixir................................|ale-elixir-options|
       mix.................................|ale-elixir-mix|
@@ -226,6 +227,8 @@ CONTENTS                                                         *ale-contents*
       write-good..........................|ale-pod-write-good|
     pony..................................|ale-pony-options|
       ponyc...............................|ale-pony-ponyc|
+    prolog................................|ale-prolog-options|
+      swipl...............................|ale-prolog-swipl|
     proto.................................|ale-proto-options|
       protoc-gen-lint.....................|ale-proto-protoc-gen-lint|
     pug...................................|ale-pug-options|
@@ -407,7 +410,7 @@ Notes:
 * D: `dls`, `dmd`, `uncrustify`
 * Dafny: `dafny`!!
 * Dart: `dartanalyzer`!!, `language_server`, dartfmt!!
-* Dockerfile: `hadolint`
+* Dockerfile: `dockerfile_lint`, `hadolint`
 * Elixir: `credo`, `dialyxir`, `dogma`, `mix`!!, `elixir-ls`
 * Elm: `elm-format, elm-make`
 * Erb: `erb`, `erubi`, `erubis`
@@ -455,6 +458,7 @@ Notes:
 * PO: `alex`!!, `msgfmt`, `proselint`, `write-good`
 * Pod: `alex`!!, `proselint`, `write-good`
 * Pony: `ponyc`
+* Prolog: `swipl`
 * proto: `protoc-gen-lint`
 * Pug: `pug-lint`
 * Puppet: `languageserver`, `puppet`, `puppet-lint`
@@ -1313,10 +1317,12 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
   ALE will first look for aliases for filetypes in the `b:ale_linter_aliases`
   variable, then `g:ale_linter_aliases`, and then a default Dictionary.
 
-  `b:ale_linter_aliases` can be set to a |List|, to tell ALE to load the
-  linters for specific filetypes for a given buffer. >
+  `b:ale_linter_aliases` can be set to a |List| or a |String|, to tell ALE to
+  load the linters for specific filetypes for a given buffer. >
 
   let b:ale_linter_aliases = ['html', 'javascript', 'css']
+  " OR, Alias a filetype to only a single filetype with a String.
+  let b:ale_linter_aliases = 'javascript'
 <
   No linters will be loaded when the buffer's filetype is empty.
 
