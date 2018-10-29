@@ -593,7 +593,7 @@ ALE's loclist format. (See |ale-loclist-format|) For example: >
   " Tell ALE to show some results.
   " This function can be called at any time.
   call ale#other_source#ShowResults(bufnr(''), 'some-linter-name', [
-  \ {'text': 'Something went wrong', lnum: 13},
+  \ {'text': 'Something went wrong', 'lnum': 13},
   \])
 <
 
