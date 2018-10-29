@@ -9,6 +9,7 @@ CONTENTS                                                         *ale-contents*
   1. Introduction.........................|ale-introduction|
   2. Supported Languages & Tools..........|ale-support|
   3. Linting..............................|ale-lint|
+    3.1 Other Sources.....................|ale-lint-other-sources|
   4. Fixing Problems......................|ale-fix|
   5. Language Server Protocol Support.....|ale-lsp|
     5.1 Completion........................|ale-completion|
@@ -573,6 +574,68 @@ ALE offers several options for controlling which linters are run.
 * Aliasing filetypes for linters       - |g:ale_linter_aliases|
 * Only running linters you asked for.  - |g:ale_linters_explicit|
 
+
+-------------------------------------------------------------------------------
+3.1 Other Sources                                      *ale-lint-other-sources*
+
+Problems for a buffer can be taken from other sources and rendered by ALE.
+This allows ALE to be used in combination with other plugins which also want
+to display any problems they might find with a buffer. ALE's API includes the
+following components for making this possible.
+
+* |ale#other_source#StartChecking()| - Tell ALE that a buffer is being checked.
+* |ale#other_source#ShowResults()|   - Show results from another source.
+* |ALEWantResults|                   - A signal for when ALE wants results.
+
+Other resources can provide results for ALE to display at any time, following
+ALE's loclist format. (See |ale-loclist-format|) For example: >
+
+  " Tell ALE to show some results.
+  " This function can be called at any time.
+  call ale#other_source#ShowResults(bufnr(''), 'some-linter-name', [
+  \ {'text': 'Something went wrong', lnum: 13},
+  \])
+<
+
+Other sources should use a unique name for identifying themselves. A single
+linter name can be used for all problems from another source, or a series of
+unique linter names can be used. Results can be cleared for that source by
+providing an empty List.
+
+|ale#other_source#StartChecking()| should be called whenever another source
+starts checking a buffer, so other tools can know that a buffer is being
+checked by some plugin. The |ALEWantResults| autocmd event can be used to
+start checking a buffer for problems every time that ALE does. When
+|ALEWantResults| is signaled, |g:ale_want_results_buffer| will be set to the
+number of the buffer that ALE wants to check.
+|ale#other_source#StartChecking()| should be called synchronously, and other
+sources should perform their checks on a buffer in the background
+asynchronously, so they don't interrupt editing.
+
+A plugin might integrate its own checks with ALE like so: >
+
+  augroup SomeGroupName
+    autocmd!
+    autocmd User ALEWantResults call Hook(g:ale_want_results_buffer)
+  augroup END
+
+  function! DoBackgroundWork(buffer) abort
+    " Start some work in the background here.
+    " ...
+    " Then call WorkDone(a:buffer, results)
+  endfunction
+
+  function! Hook(buffer) abort
+    " Tell ALE we're going to check this buffer.
+    call ale#other_source#StartChecking(a:buffer, 'some-name')
+    call DoBackgroundWork(a:buffer)
+  endfunction
+
+  function! WorkDone(buffer, results) abort
+    " Send results to ALE after they have been collected.
+    call ale#other_source#ShowResults(buffer, 'some-name', a:results)
+  endfunction
+<
 
 ===============================================================================
 4. Fixing Problems                                                    *ale-fix*
@@ -2763,6 +2826,25 @@ ale#linter#PreventLoading(filetype)               *ale#linter#PreventLoading()*
   |runtimepath| for that filetype. This function can be called from vimrc or
   similar to prevent ALE from loading linters.
 
+ale#other_source#ShowResults(buffer, linter_name, loclist)
+                                               *ale#other_source#ShowResults()*
+
+  Show results from another source of information.
+
+  `buffer` must be a valid buffer number, and `linter_name` must be a unique
+  name for identifying another source of information. The `loclist` given
+  where the problems in a buffer are, and should be provided in the format ALE
+  uses for regular linter results. See |ale-loclist-format|.
+
+
+ale#other_source#StartChecking(buffer, linter_name)
+                                             *ale#other_source#StartChecking()*
+
+  Tell ALE that another source of information has started checking a buffer.
+
+  `buffer` must be a valid buffer number, and `linter_name` must be a unique
+  name for identifying another source of information.
+
 
 ale#statusline#Count(buffer)                           *ale#statusline#Count()*
 
@@ -2791,10 +2873,21 @@ b:ale_linted                                                     *b:ale_linted*
     echo getbufvar(bufnr(''), 'ale_linted', 0) > 0 ? 'checked' : 'not checked'
 <
 
+g:ale_want_results_buffer                           *g:ale_want_results_buffer*
+
+  `g:ale_want_results_buffer` is set to the number of the buffer being checked
+  when the |ALEWantResults| event is signaled. This variable should be read to
+  figure out which buffer other sources should lint.
+
+
 ALELintPre                                                 *ALELintPre-autocmd*
+                                                                   *ALELintPre*
 ALELintPost                                               *ALELintPost-autocmd*
+                                                                  *ALELintPost*
 ALEFixPre                                                   *ALEFixPre-autocmd*
+                                                                    *ALEFixPre*
 ALEFixPost                                                 *ALEFixPost-autocmd*
+                                                                   *ALEFixPost*
 
   These |User| autocommands are triggered before and after every lint or fix
   cycle. They can be used to update statuslines, send notifications, etc.
@@ -2808,7 +2901,7 @@ ALEFixPost                                                 *ALEFixPost-autocmd*
         autocmd!
         autocmd User ALELintPre  hi Statusline ctermfg=darkgrey
         autocmd User ALELintPost hi Statusline ctermfg=NONE
-    augroup end
+    augroup END
 <
   Or to display the progress in the statusline:
 >
@@ -2818,15 +2911,32 @@ ALEFixPost                                                 *ALEFixPost-autocmd*
         autocmd!
         autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
         autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
-    augroup end
+    augroup END
 
 <
 ALEJobStarted                                           *ALEJobStarted-autocmd*
+                                                                *ALEJobStarted*
 
   This |User| autocommand is triggered immediately after a job is successfully
   run. This provides better accuracy for checking linter status with
   |ale#engine#IsCheckingBuffer()| over |ALELintPre-autocmd|, which is actually
   triggered before any linters are executed.
+
+
+ALEWantResults                                         *ALEWantResults-autocmd*
+                                                               *ALEWantResults*
+
+  This |User| autocommand is triggered before ALE begins a lint cycle. Another
+  source can respond by calling |ale#other_source#StartChecking()|, and
+  |ALELintPre| will be signaled thereafter, to allow other plugins to know
+  that another source is checking the buffer.
+
+  |g:ale_want_results_buffer| will be set to the number for a buffer being
+  checked when the event is signaled, and deleted after the event is done.
+  This variable should be read to know which buffer to check.
+
+  Other plugins can use this event to start checking buffers when ALE events
+  for checking buffers are triggered.
 
 
 ===============================================================================

@@ -108,7 +108,7 @@ Before:
     let g:run_linters_called = 1
   endfunction
 
-  function! ale#engine#HandleLoclist(linter_name, buffer, loclist) abort
+  function! ale#engine#HandleLoclist(linter_name, buffer, loclist, from_other_source) abort
     let g:loclist = a:loclist
   endfunction
 

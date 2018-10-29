@@ -23,7 +23,7 @@ Before:
     autocmd!
     autocmd User ALEFixPre let g:pre_success = 1
     autocmd User ALEFixPost let g:post_success = 1
-  augroup end
+  augroup END
 
   if !has('win32')
     let &shell = '/bin/bash'
@@ -180,7 +180,6 @@ After:
   unlet! g:ale_emulate_job_failure
   unlet! b:ale_fixers
   unlet! b:ale_fix_on_save
-  augroup! VaderTest
   delfunction AddCarets
   delfunction AddDollars
   delfunction DoNothing
@@ -203,6 +202,12 @@ After:
   delfunction EchoLineNoPipe
   delfunction FixWithJSONPostProcessing
   delfunction JSONPostProcessor
+
+  augroup VaderTest
+    autocmd!
+  augroup END
+
+  augroup! VaderTest
 
   call ale#test#RestoreDirectory()
 

@@ -31,7 +31,7 @@ After:
 
   augroup VaderTest
     autocmd!
-  augroup end
+  augroup END
 
   augroup! VaderTest
 
@@ -40,7 +40,7 @@ Execute(ALELintPre should not return success on ale#engine#IsCheckingBuffer):
   augroup VaderTest
     autocmd!
     autocmd User ALELintPre let g:checking_buffer = ale#engine#IsCheckingBuffer(bufnr('')) ? 1 : 0
-  augroup end
+  augroup END
 
   ALELint
 
@@ -50,7 +50,7 @@ Execute(ALEJobStarted should return success on ale#engine#IsCheckingBuffer):
   augroup VaderTest
     autocmd!
     autocmd User ALEJobStarted let g:checking_buffer = ale#engine#IsCheckingBuffer(bufnr('')) ? 1 : 0
-  augroup end
+  augroup END
 
   ALELint
 

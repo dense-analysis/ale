@@ -9,10 +9,11 @@ After:
   let g:ale_run_synchronously = 0
   let g:ale_buffer_info = {}
 
-  try
-    augroup! VaderTest
-  catch
-  endtry
+  augroup VaderTest
+    autocmd!
+  augroup END
+
+  augroup! VaderTest
 
 Given testft(An empty file):
 Execute(Run a lint cycle, and check that a variable is set in the autocmd):
@@ -20,7 +21,7 @@ Execute(Run a lint cycle, and check that a variable is set in the autocmd):
     autocmd!
     autocmd User ALELintPre let g:pre_success = 1
     autocmd User ALELintPost let g:post_success = 1
-  augroup end
+  augroup END
 
   call ale#Queue(0)
 
