@@ -10,7 +10,6 @@ Before:
   let g:ale_run_synchronously = 1
   let g:ale_set_lists_synchronously = 1
   let b:ale_save_event_fired = 0
-  call ale#ResetLintFileMarkers()
 
   let g:buffer_result = [
   \ {

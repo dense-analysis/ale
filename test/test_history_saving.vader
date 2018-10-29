@@ -73,7 +73,7 @@ Execute(History should be set when commands are run):
   " Retry this test until it works. This one can randomly fail.
   for g:i in range(has('nvim-0.3') || has('win32') ? 5 : 1)
     let b:ale_history = []
-    call ale#Lint()
+    call ale#Queue(0)
     call ale#engine#WaitForJobs(2000)
 
     let g:history = filter(
@@ -106,7 +106,7 @@ Execute(History should be not set when disabled):
 
   let g:ale_history_enabled = 0
 
-  call ale#Lint()
+  call ale#Queue(0)
   call ale#engine#WaitForJobs(2000)
 
   AssertEqual [], ale#history#Get(bufnr(''))
@@ -120,7 +120,7 @@ Execute(History should include command output if logging is enabled):
   " Retry this test until it works. This one can randomly fail.
   for g:i in range(has('nvim-0.3') || has('win32') ? 5 : 1)
     let b:ale_history = []
-    call ale#Lint()
+    call ale#Queue(0)
     call ale#engine#WaitForJobs(2000)
 
     let g:history = ale#history#Get(bufnr(''))

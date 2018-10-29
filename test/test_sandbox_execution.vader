@@ -47,7 +47,6 @@ Execute(ALE shouldn't blow up when run from a sandbox):
 
   sandbox call ale#Queue(0)
   sandbox call ale#Queue(1)
-  sandbox call ale#Lint()
 
 Execute(ALE shouldn't blow up if file cleanup happens in a sandbox):
   " Make a call to an engine function first, so the function will be defined
