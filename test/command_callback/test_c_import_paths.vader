@@ -219,5 +219,5 @@ Execute(The C++ ClangTidy handler should include json folders for projects with 
 
   AssertLinter 'clang-tidy',
   \ ale#Escape('clang-tidy')
-  \   . ' -checks=' . ale#Escape('*') . ' %s '
+  \   . ' %s '
   \   . '-p ' . ale#Escape(ale#path#Simplify(g:dir . '/../test_c_projects/json_project/build'))

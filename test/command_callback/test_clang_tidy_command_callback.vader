@@ -7,12 +7,13 @@ After:
 
 Execute(The clangtidy command default should be correct):
   AssertLinter 'clang-tidy',
-  \ ale#Escape('clang-tidy') . ' -checks=' . ale#Escape('*') . ' %s'
+  \ ale#Escape('clang-tidy') . ' %s'
 
 Execute(You should be able to remove the -checks option for clang-tidy):
   let b:ale_cpp_clangtidy_checks = []
 
-  AssertLinter 'clang-tidy', ale#Escape('clang-tidy') . ' %s'
+  AssertLinter 'clang-tidy',
+  \ ale#Escape('clang-tidy') . ' %s'
 
 Execute(You should be able to set other checks for clang-tidy):
   let b:ale_cpp_clangtidy_checks = ['-*', 'clang-analyzer-*']
@@ -22,34 +23,41 @@ Execute(You should be able to set other checks for clang-tidy):
   \   . ' -checks=' . ale#Escape('-*,clang-analyzer-*') . ' %s'
 
 Execute(You should be able to manually set compiler flags for clang-tidy):
+  let b:ale_cpp_clangtidy_checks = ['*']
   let b:ale_cpp_clangtidy_options = '-Wall'
 
   AssertLinter 'clang-tidy',
   \ ale#Escape('clang-tidy') . ' -checks=' . ale#Escape('*') . ' %s -- -Wall'
-  \
+
 Execute(The build directory should be configurable):
+  let b:ale_cpp_clangtidy_checks = ['*']
   let b:ale_c_build_dir = '/foo/bar'
 
   AssertLinter 'clang-tidy',
   \ ale#Escape('clang-tidy')
-  \   . ' -checks=' . ale#Escape('*') . ' %s -p ' . ale#Escape('/foo/bar')
+  \   . ' -checks=' . ale#Escape('*') . ' %s'
+  \   . ' -p ' . ale#Escape('/foo/bar')
 
 Execute(The build directory setting should override the options):
+  let b:ale_cpp_clangtidy_checks = ['*']
   let b:ale_c_build_dir = '/foo/bar'
   let b:ale_cpp_clangtidy_options = '-Wall'
 
   AssertLinter 'clang-tidy',
   \ ale#Escape('clang-tidy')
-  \   . ' -checks=' . ale#Escape('*') . ' %s -p ' . ale#Escape('/foo/bar')
+  \   . ' -checks=' . ale#Escape('*') . ' %s'
+  \   . ' -p ' . ale#Escape('/foo/bar')
 
 Execute(The build directory should be ignored for header files):
   call ale#test#SetFilename('test.h')
 
+  let b:ale_cpp_clangtidy_checks = ['*']
   let b:ale_c_build_dir = '/foo/bar'
   let b:ale_cpp_clangtidy_options = '-Wall'
 
   AssertLinter 'clang-tidy',
-  \ ale#Escape('clang-tidy') . ' -checks=' . ale#Escape('*') . ' %s -- -Wall'
+  \ ale#Escape('clang-tidy')
+  \   . ' -checks=' . ale#Escape('*') . ' %s -- -Wall'
 
   call ale#test#SetFilename('test.hpp')
 
@@ -57,6 +65,7 @@ Execute(The build directory should be ignored for header files):
   \ ale#Escape('clang-tidy') . ' -checks=' . ale#Escape('*') . ' %s -- -Wall'
 
 Execute(The executable should be configurable):
+  let b:ale_cpp_clangtidy_checks = ['*']
   let b:ale_cpp_clangtidy_executable = 'foobar'
 
   AssertLinter 'foobar',
