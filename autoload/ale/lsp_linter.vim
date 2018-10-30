@@ -201,13 +201,6 @@ function! ale#lsp_linter#StartLSP(buffer, linter) abort
     endif
 
     let l:config = ale#lsp_linter#GetConfig(a:buffer, a:linter)
-
-    if !empty(l:config)
-        " set LSP configuration options (workspace/didChangeConfiguration)
-        let l:config_message = ale#lsp#message#DidChangeConfiguration(a:buffer, l:config)
-        call ale#lsp#Send(l:conn_id, l:config_message)
-    endif
-
     let l:language_id = ale#util#GetFunction(a:linter.language_callback)(a:buffer)
 
     let l:details = {
@@ -217,6 +210,8 @@ function! ale#lsp_linter#StartLSP(buffer, linter) abort
     \   'project_root': l:root,
     \   'language_id': l:language_id,
     \}
+
+    call ale#lsp#UpdateConfig(l:conn_id, a:buffer, l:config)
 
     if ale#lsp#OpenDocument(l:conn_id, a:buffer, l:language_id)
         if g:ale_history_enabled && !empty(l:command)
