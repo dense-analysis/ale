@@ -2,6 +2,8 @@ Before:
   Save g:ale_buffer_info
   Save g:ale_lsp_error_messages
 
+  let g:ale_buffer_info = {}
+
   unlet! g:ale_lsp_error_messages
 
   call ale#test#SetDirectory('/testplugin/test')
