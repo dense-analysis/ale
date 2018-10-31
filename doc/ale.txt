@@ -15,6 +15,8 @@ CONTENTS                                                         *ale-contents*
     5.1 Completion........................|ale-completion|
     5.2 Go To Definition..................|ale-go-to-definition|
     5.3 Find References...................|ale-find-references|
+    5.4 Hovering..........................|ale-hover|
+    5.5 Symbol Search.....................|ale-symbol-search|
   6. Global Options.......................|ale-options|
     6.1 Highlights........................|ale-highlights|
     6.2 Options for write-good Linter.....|ale-write-good-options|
@@ -856,6 +858,15 @@ settings. For example: >
   set mouse=a
   set ttymouse=xterm
 <
+
+-------------------------------------------------------------------------------
+5.5 Symbol Search                                           *ale-symbol-search*
+
+ALE supports searching for workspace symbols via LSP linters. The following
+commands are supported:
+
+|ALESymbolSearch| - Search for symbols in the workspace.
+
 
 ===============================================================================
 6. Global Options                                                 *ale-options*
@@ -2146,6 +2157,14 @@ ALEHover                                                             *ALEHover*
   messages from asynchronous callbacks.
 
   A plug mapping `<Plug>(ale_hover)` is defined for this command.
+
+
+ALESymbolSearch `<query>`                                     *ALESymbolSearch*
+
+  Search for symbols in the workspace, taken from any available LSP linters.
+
+  The arguments provided to this command will be used as a search query for
+  finding symbols in the workspace, such as functions, types, etc.
 
                                                                      *:ALELint*
 ALELint                                                               *ALELint*

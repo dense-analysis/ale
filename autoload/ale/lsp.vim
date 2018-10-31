@@ -41,6 +41,7 @@ function! ale#lsp#Register(executable_or_address, project, init_options) abort
         \       'completion': 0,
         \       'completion_trigger_characters': [],
         \       'definition': 0,
+        \       'symbol_search': 0,
         \   },
         \}
     endif
@@ -203,6 +204,10 @@ function! s:UpdateCapabilities(conn, capabilities) abort
     if get(a:capabilities, 'definitionProvider') is v:true
         let a:conn.capabilities.definition = 1
     endif
+
+    if get(a:capabilities, 'workspaceSymbolProvider') is v:true
+        let a:conn.capabilities.symbol_search = 1
+    endif
 endfunction
 
 function! ale#lsp#HandleInitResponse(conn, response) abort
@@ -285,6 +290,7 @@ function! ale#lsp#MarkConnectionAsTsserver(conn_id) abort
     let l:conn.capabilities.completion = 1
     let l:conn.capabilities.completion_trigger_characters = ['.']
     let l:conn.capabilities.definition = 1
+    let l:conn.capabilities.symbol_search = 1
 endfunction
 
 " Start a program for LSP servers.
