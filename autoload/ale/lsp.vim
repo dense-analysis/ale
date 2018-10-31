@@ -19,6 +19,7 @@ function! ale#lsp#Register(executable_or_address, project, init_options) abort
         " initialized: 0 if the connection is ready, 1 otherwise.
         " init_request_id: The ID for the init request.
         " init_options: Options to send to the server.
+        " config: Configuration settings to send to the server.
         " callback_list: A list of callbacks for handling LSP responses.
         " message_queue: Messages queued for sending to callbacks.
         " capabilities_queue: The list of callbacks to call with capabilities.
@@ -32,6 +33,7 @@ function! ale#lsp#Register(executable_or_address, project, init_options) abort
         \   'initialized': 0,
         \   'init_request_id': 0,
         \   'init_options': a:init_options,
+        \   'config': {},
         \   'callback_list': [],
         \   'message_queue': [],
         \   'capabilities_queue': [],
@@ -209,6 +211,25 @@ function! s:UpdateCapabilities(conn, capabilities) abort
         let a:conn.capabilities.symbol_search = 1
     endif
 endfunction
+
+" Update a connection's configuration dictionary and notify LSP servers
+" of any changes since the last update. Returns 1 if a configuration
+" update was sent; otherwise 0 will be returned.
+function! ale#lsp#UpdateConfig(conn_id, buffer, config) abort
+    let l:conn = get(s:connections, a:conn_id, {})
+
+    if empty(l:conn) || a:config ==# l:conn.config " no-custom-checks
+        return 0
+    endif
+
+    let l:conn.config = a:config
+    let l:message = ale#lsp#message#DidChangeConfiguration(a:buffer, a:config)
+
+    call ale#lsp#Send(a:conn_id, l:message)
+
+    return 1
+endfunction
+
 
 function! ale#lsp#HandleInitResponse(conn, response) abort
     if get(a:response, 'method', '') is# 'initialize'

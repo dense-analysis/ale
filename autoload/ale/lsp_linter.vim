@@ -140,6 +140,18 @@ function! ale#lsp_linter#GetOptions(buffer, linter) abort
     return l:initialization_options
 endfunction
 
+function! ale#lsp_linter#GetConfig(buffer, linter) abort
+    let l:config = {}
+
+    if has_key(a:linter, 'lsp_config_callback')
+        let l:config = ale#util#GetFunction(a:linter.lsp_config_callback)(a:buffer)
+    elseif has_key(a:linter, 'lsp_config')
+        let l:config = a:linter.lsp_config
+    endif
+
+    return l:config
+endfunction
+
 " Given a buffer, an LSP linter, start up an LSP linter and get ready to
 " receive messages for the document.
 function! ale#lsp_linter#StartLSP(buffer, linter) abort
@@ -188,13 +200,8 @@ function! ale#lsp_linter#StartLSP(buffer, linter) abort
         call ale#lsp#MarkConnectionAsTsserver(l:conn_id)
     endif
 
+    let l:config = ale#lsp_linter#GetConfig(a:buffer, a:linter)
     let l:language_id = ale#util#GetFunction(a:linter.language_callback)(a:buffer)
-
-    if !empty(get(a:linter, 'lsp_config'))
-        " set LSP configuration options (workspace/didChangeConfiguration)
-        let l:config_message = ale#lsp#message#DidChangeConfiguration(a:buffer, a:linter.lsp_config)
-        call ale#lsp#Send(l:conn_id, l:config_message)
-    endif
 
     let l:details = {
     \   'buffer': a:buffer,
@@ -203,6 +210,8 @@ function! ale#lsp_linter#StartLSP(buffer, linter) abort
     \   'project_root': l:root,
     \   'language_id': l:language_id,
     \}
+
+    call ale#lsp#UpdateConfig(l:conn_id, a:buffer, l:config)
 
     if ale#lsp#OpenDocument(l:conn_id, a:buffer, l:language_id)
         if g:ale_history_enabled && !empty(l:command)

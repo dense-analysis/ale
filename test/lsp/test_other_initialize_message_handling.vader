@@ -7,6 +7,7 @@ Before:
   \ 'initialized': 0,
   \ 'init_request_id': 0,
   \ 'init_options': {},
+  \ 'config': {},
   \ 'callback_list': [],
   \ 'message_queue': [],
   \ 'capabilities_queue': [],
