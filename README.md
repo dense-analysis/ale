@@ -29,6 +29,7 @@ features, including:
 * Completion (`let g:ale_completion_enabled = 1` before ALE is loaded)
 * Finding references (`:ALEFindReferences`)
 * Hover information (`:ALEHover`)
+* Symbol search (`:ALESymbolSearch`)
 
 If you don't care about Language Server Protocol, ALE won't load any of the code
 for working with it unless needed. One of ALE's general missions is that you
