@@ -224,6 +224,7 @@ CONTENTS                                                         *ale-contents*
       phpstan.............................|ale-php-phpstan|
       psalm...............................|ale-php-psalm|
       php-cs-fixer........................|ale-php-php-cs-fixer|
+      php.................................|ale-php-php|
     po....................................|ale-po-options|
       write-good..........................|ale-po-write-good|
     pod...................................|ale-pod-options|
