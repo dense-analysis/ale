@@ -26,4 +26,5 @@ Execute(should set correct LSP values):
 
   AssertLSPLanguage 'elixir'
   AssertLSPOptions {}
+  AssertLSPConfig {}
   AssertLSPProject ale#path#Simplify(g:dir . '/mix_paths/wrapped_project')

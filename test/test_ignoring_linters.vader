@@ -108,7 +108,7 @@ Before:
     let g:run_linters_called = 1
   endfunction
 
-  function! ale#engine#HandleLoclist(linter_name, buffer, loclist) abort
+  function! ale#engine#HandleLoclist(linter_name, buffer, loclist, from_other_source) abort
     let g:loclist = a:loclist
   endfunction
 
@@ -138,6 +138,9 @@ After:
 
 Given foobar(An empty file):
 Execute(Global ignore lists should be applied for linters):
+  " We have to set up buffer info so RunLinters is called.
+  let g:ale_buffer_info = {bufnr(''): {}}
+
   ALELint
   Assert g:run_linters_called, "The mock callback wasn't called"
   AssertEqual ['testlinter'], map(g:linters, 'v:val.name')
@@ -147,6 +150,9 @@ Execute(Global ignore lists should be applied for linters):
   AssertEqual [], g:linters
 
 Execute(buffer ignore lists should be applied for linters):
+  " We have to set up buffer info so RunLinters is called.
+  let g:ale_buffer_info = {bufnr(''): {}}
+
   ALELint
   Assert g:run_linters_called, "The mock callback wasn't called"
   AssertEqual ['testlinter'], map(g:linters, 'v:val.name')

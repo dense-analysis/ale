@@ -23,7 +23,7 @@ Execute(The rubocop callback should return the correct default values):
   \ {
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
-  \     . ' --auto-correct --force-exclusions %t',
+  \     . ' --auto-correct --force-exclusion %t',
   \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))
 
@@ -35,7 +35,7 @@ Execute(The rubocop callback should include configuration files):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
   \     . ' --config ' . ale#Escape(ale#path#Simplify(g:dir . '/ruby_paths/with_config/.rubocop.yml'))
-  \     . ' --auto-correct --force-exclusions %t',
+  \     . ' --auto-correct --force-exclusion %t',
   \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))
 
@@ -49,6 +49,6 @@ Execute(The rubocop callback should include custom rubocop options):
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
   \     . ' --config ' . ale#Escape(ale#path#Simplify(g:dir . '/ruby_paths/with_config/.rubocop.yml'))
   \     . ' --except Lint/Debugger'
-  \     . ' --auto-correct --force-exclusions %t',
+  \     . ' --auto-correct --force-exclusion %t',
   \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))

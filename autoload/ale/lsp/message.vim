@@ -130,6 +130,12 @@ function! ale#lsp#message#References(buffer, line, column) abort
     \}]
 endfunction
 
+function! ale#lsp#message#Symbol(query) abort
+    return [0, 'workspace/symbol', {
+    \   'query': a:query,
+    \}]
+endfunction
+
 function! ale#lsp#message#Hover(buffer, line, column) abort
     return [0, 'textDocument/hover', {
     \   'textDocument': {

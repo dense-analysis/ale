@@ -257,7 +257,17 @@ function! ale#linter#PreProcess(filetype, linter) abort
             let l:obj.initialization_options = a:linter.initialization_options
         endif
 
-        if has_key(a:linter, 'lsp_config')
+        if has_key(a:linter, 'lsp_config_callback')
+            if has_key(a:linter, 'lsp_config')
+                throw 'Only one of `lsp_config` or `lsp_config_callback` should be set'
+            endif
+
+            let l:obj.lsp_config_callback = a:linter.lsp_config_callback
+
+            if !s:IsCallback(l:obj.lsp_config_callback)
+                throw '`lsp_config_callback` must be a callback if defined'
+            endif
+        elseif has_key(a:linter, 'lsp_config')
             if type(a:linter.lsp_config) isnot v:t_dict
                 throw '`lsp_config` must be a Dictionary'
             endif

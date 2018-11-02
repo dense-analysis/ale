@@ -29,6 +29,7 @@ features, including:
 * Completion (`let g:ale_completion_enabled = 1` before ALE is loaded)
 * Finding references (`:ALEFindReferences`)
 * Hover information (`:ALEHover`)
+* Symbol search (`:ALESymbolSearch`)
 
 If you don't care about Language Server Protocol, ALE won't load any of the code
 for working with it unless needed. One of ALE's general missions is that you
@@ -47,6 +48,7 @@ other content at [w0rp.com](https://w0rp.com).
     4. [Go To Definition](#usage-go-to-definition)
     5. [Find References](#usage-find-references)
     6. [Hovering](#usage-hover)
+    7. [Symbol Search](#usage-symbol-search)
 3. [Installation](#installation)
     1. [Installation with Vim package management](#standard-installation)
     2. [Installation with Pathogen](#installation-with-pathogen)
@@ -321,6 +323,18 @@ hovering your mouse over symbols. Mouse hovering is enabled by default in GVim,
 and needs to be configured for Vim 8.1+ in terminals.
 
 See `:help ale-hover` for more information.
+
+<a name="usage-symbol-search"></a>
+
+### 2.vii Symbol Search
+
+ALE supports searching for workspace symbols via Language Server Protocol
+linters with the `ALESymbolSearch` command.
+
+Search queries can be performed to find functions, types, and more which are
+similar to a given query string.
+
+See `:help ale-symbol-search` for more information.
 
 <a name="installation"></a>
 

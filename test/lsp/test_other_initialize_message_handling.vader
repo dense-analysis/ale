@@ -7,6 +7,7 @@ Before:
   \ 'initialized': 0,
   \ 'init_request_id': 0,
   \ 'init_options': {},
+  \ 'config': {},
   \ 'callback_list': [],
   \ 'message_queue': [],
   \ 'capabilities_queue': [],
@@ -16,6 +17,7 @@ Before:
   \   'completion': 0,
   \   'completion_trigger_characters': [],
   \   'definition': 0,
+  \   'symbol_search': 0,
   \ },
   \}
 
@@ -67,7 +69,8 @@ Execute(Capabilities should bet set up correctly):
   \     },
   \     'definitionProvider': v:true,
   \     'experimental': {},
-  \     'documentHighlightProvider': v:true
+  \     'documentHighlightProvider': v:true,
+  \     'workspaceSymbolProvider': v:true
   \   },
   \ },
   \})
@@ -80,6 +83,7 @@ Execute(Capabilities should bet set up correctly):
   \   'references': 1,
   \   'hover': 1,
   \   'definition': 1,
+  \   'symbol_search': 1,
   \ },
   \ b:conn.capabilities
 
@@ -121,6 +125,7 @@ Execute(Disabled capabilities should be recognised correctly):
   \   'references': 0,
   \   'hover': 0,
   \   'definition': 0,
+  \   'symbol_search': 0,
   \ },
   \ b:conn.capabilities
 

@@ -56,7 +56,7 @@ Execute(should set go-langserver for go app1):
   call ale#test#SetFilename('go_paths/go1/prj1/file.go')
 
   AssertLSPLanguage 'go'
-  AssertLSPOptions {}
+  AssertLSPConfig {}
   AssertLSPProject ale#path#Simplify(g:dir . '/go_paths/go1')
 
 Execute(should set go-langserver for go app2):
@@ -64,4 +64,5 @@ Execute(should set go-langserver for go app2):
 
   AssertLSPLanguage 'go'
   AssertLSPOptions {}
+  AssertLSPConfig {}
   AssertLSPProject ale#path#Simplify(g:dir . '/go_paths/go2')

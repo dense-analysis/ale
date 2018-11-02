@@ -161,6 +161,17 @@ Execute(ale#lsp#message#References() should return correct messages):
   \ ],
   \ ale#lsp#message#References(bufnr(''), 12, 34)
 
+Execute(ale#lsp#message#Symbol() should return correct messages):
+  AssertEqual
+  \ [
+  \   0,
+  \   'workspace/symbol',
+  \   {
+  \     'query': 'foobar',
+  \   }
+  \ ],
+  \ ale#lsp#message#Symbol('foobar')
+
 Execute(ale#lsp#message#Hover() should return correct messages):
   AssertEqual
   \ [

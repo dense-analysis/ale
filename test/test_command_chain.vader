@@ -62,7 +62,7 @@ Given foobar (Some imaginary filetype):
 
 Execute(Check the results of running the chain):
   AssertEqual 'foobar', &filetype
-  call ale#Lint()
+  call ale#Queue(0)
 
   Assert g:first_echo_called, 'The first chain item was not called'
   Assert g:second_echo_called, 'The second chain item was not called'
