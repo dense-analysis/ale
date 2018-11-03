@@ -12,7 +12,7 @@ Execute(The local phpcs executable should be used):
   let g:executable = ale#path#Simplify(g:dir . '/../phpcs-test-files/project-with-phpcs/vendor/bin/phpcs')
 
   AssertLinter g:executable,
-  \ ale#Escape(g:executable) . ' -s --report=emacs --stdin-path=%s'
+  \ ale#Escape(g:executable) . ' -s --report=emacs %s'
 
 Execute(use_global should override local executable detection):
   let g:ale_php_phpcs_use_global = 1
@@ -20,16 +20,16 @@ Execute(use_global should override local executable detection):
   call ale#test#SetFilename('../phpcs-test-files/project-with-phpcs/foo/test.php')
 
   AssertLinter 'phpcs',
-  \ ale#Escape('phpcs') . ' -s --report=emacs --stdin-path=%s'
+  \ ale#Escape('phpcs') . ' -s --report=emacs %s'
 
 Execute(Projects without local executables should use the global one):
   call ale#test#SetFilename('../phpcs-test-files/project-without-phpcs/foo/test.php')
 
   AssertLinter 'phpcs',
-  \ ale#Escape('phpcs') . ' -s --report=emacs --stdin-path=%s'
+  \ ale#Escape('phpcs') . ' -s --report=emacs %s'
 
 Execute(User provided options are used):
   let g:ale_php_phpcs_options = '--my-user-provided-option my-value'
 
   AssertLinter 'phpcs',
-  \ ale#Escape('phpcs') . ' -s --report=emacs --stdin-path=%s --my-user-provided-option my-value'
+  \ ale#Escape('phpcs') . ' -s --report=emacs %s --my-user-provided-option my-value'
