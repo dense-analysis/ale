@@ -14,7 +14,7 @@ function! ale_linters#php#phpcs#GetCommand(buffer) abort
     \   : ''
     let l:options = ale#Var(a:buffer, 'php_phpcs_options')
 
-    return '%e -s --report=emacs --stdin-path=%s'
+    return '%e -s --report=emacs %s'
     \    . ale#Pad(l:standard_option)
     \    . ale#Pad(l:options)
 endfunction
