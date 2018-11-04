@@ -4,6 +4,7 @@ Before:
   \   . ' -d log_errors=0 --'
 
 After:
+  unlet! b:command_tail
   call ale#assert#TearDownLinterTest()
 
 Execute(The executable should be configurable):
