@@ -20,10 +20,10 @@ See |ale-javascript-prettier| for information about the available options.
 tslint                                                  *ale-typescript-tslint*
 
 This linter isn't recommended, because TSLint can't be used for checking for
-problems while you type. You should probably use the tsserver plugin instead.
+problems while you type. You should probably a Typescript [language service plugin](https://github.com/Microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin) instead.
 
 Follow the instructions on the plugin website for installing it:
-https://github.com/angelozerr/tsserver-plugins
+https://github.com/Microsoft/typescript-tslint-plugin
 
 Then disable TSLint in vimrc or any other Vim configuration file. >
   let g:ale_linters_ignore = {'typescript': ['tslint']}
