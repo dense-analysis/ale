@@ -92,6 +92,7 @@ CONTENTS                                                         *ale-contents*
       erlc................................|ale-erlang-erlc|
       syntaxerl...........................|ale-erlang-syntaxerl|
     eruby.................................|ale-eruby-options|
+      ruumba..............................|ale-eruby-ruumba|
     fish..................................|ale-fish-options|
     fortran...............................|ale-fortran-options|
       gcc.................................|ale-fortran-gcc|
@@ -415,7 +416,7 @@ Notes:
 * Dockerfile: `dockerfile_lint`, `hadolint`
 * Elixir: `credo`, `dialyxir`, `dogma`, `mix`!!, `elixir-ls`
 * Elm: `elm-format, elm-make`
-* Erb: `erb`, `erubi`, `erubis`
+* Erb: `erb`, `erubi`, `erubis`, `ruumba`
 * Erlang: `erlc`, `SyntaxErl`
 * Fish: `fish` (-n flag)
 * Fortran: `gcc`, `language_server`

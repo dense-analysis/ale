@@ -122,7 +122,7 @@ formatting.
 | Dockerfile | [dockerfile_lint](https://github.com/projectatomic/dockerfile_lint), [hadolint](https://github.com/hadolint/hadolint) |
 | Elixir | [credo](https://github.com/rrrene/credo), [dialyxir](https://github.com/jeremyjh/dialyxir), [dogma](https://github.com/lpil/dogma), [mix](https://hexdocs.pm/mix/Mix.html) !!, [elixir-ls](https://github.com/JakeBecker/elixir-ls) |
 | Elm | [elm-format](https://github.com/avh4/elm-format), [elm-make](https://github.com/elm-lang/elm-make) |
-| Erb | [erb](https://apidock.com/ruby/ERB), [erubi](https://github.com/jeremyevans/erubi), [erubis](https://github.com/kwatch/erubis) |
+| Erb | [erb](https://apidock.com/ruby/ERB), [erubi](https://github.com/jeremyevans/erubi), [erubis](https://github.com/kwatch/erubis), [ruumba](https://github.com/ericqweinstein/ruumba) |
 | Erlang | [erlc](http://erlang.org/doc/man/erlc.html), [SyntaxErl](https://github.com/ten0s/syntaxerl) |
 | Fish | fish [-n flag](https://linux.die.net/man/1/fish)
 | Fortran | [gcc](https://gcc.gnu.org/), [language_server](https://github.com/hansec/fortran-language-server) |
