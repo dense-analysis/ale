@@ -1,6 +1,5 @@
 " Author: Patrick Lewis - https://github.com/patricklewis, thenoseman - https://github.com/thenoseman
 " Description: haml-lint for Haml files
-"
 
 call ale#Set('haml_hamllint_executable', 'haml-lint')
 
