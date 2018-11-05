@@ -68,10 +68,11 @@ other content at [w0rp.com](https://w0rp.com).
     10. [How can I run linters only when I save files?](#faq-lint-on-save)
     11. [How can I use the quickfix list instead of the loclist?](#faq-quickfix)
     12. [How can I check JSX files with both stylelint and eslint?](#faq-jsx-stylelint-eslint)
-    13. [Will this plugin eat all of my laptop battery power?](#faq-my-battery-is-sad)
-    14. [How can I configure my C or C++ project?](#faq-c-configuration)
-    15. [How can I configure ALE differently for different buffers?](#faq-buffer-configuration)
-    16. [How can I configure the height of the list in which ALE displays errors?](#faq-list-window-height)
+    13. [How can I check Vue files with ESLint?](#faq-vue-eslint)
+    14. [Will this plugin eat all of my laptop battery power?](#faq-my-battery-is-sad)
+    15. [How can I configure my C or C++ project?](#faq-c-configuration)
+    16. [How can I configure ALE differently for different buffers?](#faq-buffer-configuration)
+    17. [How can I configure the height of the list in which ALE displays errors?](#faq-list-window-height)
 
 <a name="supported-languages"></a>
 
@@ -748,16 +749,16 @@ options in a jsx.vim ftplugin file.
 
 ```vim
 " In ~/.vim/ftplugin/jsx.vim, or somewhere similar.
+let b:ale_linter_aliases = ['css', 'javascript']
 let b:ale_linters = ['stylelint', 'eslint']
-let b:ale_linter_aliases = ['css']
 ```
 
 Or if you want, you can configure the linters from your vimrc file.
 
 ```vim
 " In ~/.vim/vimrc, or somewhere similar.
+let g:ale_linter_aliases = {'jsx': ['css, 'javascript']}
 let g:ale_linters = {'jsx': ['stylelint', 'eslint']}
-let g:ale_linter_aliases = {'jsx': 'css'}
 ```
 
 ALE will alias the `jsx` filetype so it uses the `css` filetype linters, and
@@ -765,9 +766,40 @@ use the original Array of selected linters for `jsx` from the `g:ale_linters`
 object. All available linters will be used for the filetype `javascript`, and
 no linter will be run twice for the same file.
 
+<a name="faq-vue-eslint"></a>
+
+### 5.xiii. How can I check Vue files with ESLint?
+
+To check Vue files with ESLint, your ESLint project configuration file must be
+configured to use the [Vue plugin](https://github.com/vuejs/eslint-plugin-vue).
+After that, you need to configure ALE so it will run the JavaScript ESLint
+linter on your files. The settings you need are similar to the settings needed
+for checking JSX code with both stylelint and ESLint, in the previous section.
+
+```vim
+" In ~/.vim/ftplugin/vue.vim, or somewhere similar.
+
+" Run both javascript and vue linters for vue files.
+let b:ale_linter_aliases = ['javascript', 'vue']
+" Select the eslint and vls linters.
+let b:ale_linters = ['eslint', 'vls']
+```
+
+Run `:ALEInfo` to see which linters are available after telling ALE to run
+JavaScript linters on Vue files. Not all linters support checking Vue files.
+
+If you don't want to configure your linters in ftplugin files for some reason,
+you can configure them from your vimrc file instead.
+
+```vim
+" In ~/.vim/vimrc, or somewhere similar.
+let g:ale_linter_aliases = {'vue': ['vue', 'javascript']}
+let g:ale_linters = {'vue': ['eslint', 'vls']}
+```
+
 <a name="faq-my-battery-is-sad"></a>
 
-### 5.xiii. Will this plugin eat all of my laptop battery power?
+### 5.xiv. Will this plugin eat all of my laptop battery power?
 
 ALE takes advantage of the power of various tools to check your code. This of
 course means that CPU time will be used to continuously check your code. If you
@@ -792,7 +824,7 @@ including the option `g:ale_lint_on_enter`, and you can run ALE manually with
 
 <a name="faq-c-configuration"></a>
 
-### 5.xiv. How can I configure my C or C++ project?
+### 5.xv. How can I configure my C or C++ project?
 
 The structure of C and C++ projects varies wildly from project to project, with
 many different build tools being used for building them, and many different
@@ -818,7 +850,7 @@ used for executing local vimrc files which can be shared in your project.
 
 <a name="faq-buffer-configuration"></a>
 
-### 5.xv. How can I configure ALE differently for different buffers?
+### 5.xvi. How can I configure ALE differently for different buffers?
 
 ALE offers various ways to configure which linters or fixers are run, and
 other settings. For the majority of ALE's settings, they can either be
@@ -854,7 +886,7 @@ Buffer-local variables for settings always override the global settings.
 
 <a name="faq-list-window-height"></a>
 
-### 5.xvi. How can I configure the height of the list in which ALE displays errors?
+### 5.xvii. How can I configure the height of the list in which ALE displays errors?
 
 To set a default height for the error list, use the `g:ale_list_window_size` variable.
 
