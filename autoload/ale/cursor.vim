@@ -7,6 +7,8 @@ scriptencoding utf-8
 let g:ale_echo_delay = get(g:, 'ale_echo_delay', 10)
 " A string format for the echoed message.
 let g:ale_echo_msg_format = get(g:, 'ale_echo_msg_format', '%code: %%s')
+" Use this Ex command to output message when a cursor is near a warning or error.
+let g:ale_echo_command = get(g:, 'ale_echo_command', 'echomsg')
 
 let s:cursor_timer = -1
 let s:last_pos = [0, 0, 0]
@@ -27,8 +29,10 @@ function! ale#cursor#TruncatedEcho(original_message) abort
         " The message is truncated and saved to the history.
         setlocal shortmess+=T
 
+        let l:buffer = bufnr('')
+        let l:echo = ale#Var(l:buffer, 'echo_command')
         try
-            exec "norm! :echomsg l:message\n"
+            exec l:echo string(l:message)
         catch /^Vim\%((\a\+)\)\=:E523/
             " Fallback into manual truncate (#1987)
             let l:winwidth = winwidth(0)
@@ -38,7 +42,7 @@ function! ale#cursor#TruncatedEcho(original_message) abort
                 let l:message = l:message[:l:winwidth - 4] . '...'
             endif
 
-            exec 'echomsg l:message'
+            exec l:echo string(l:message)
         endtry
 
         " Reset the cursor position if we moved off the end of the line.

@@ -1131,6 +1131,17 @@ g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
   The string used for `%severity%` for warnings. See |g:ale_echo_msg_format|
 
 
+g:ale_echo_command                                 *g:ale_echo_command*
+
+  Type: |String|
+  Default: `'echomsg'`
+
+  The string used for echoing messages to command-line.
+  For example, you can specify `'echo'` not to record messages in |message-history|: >
+
+  let g:ale_echo_command = 'echo'
+<
+
 g:ale_enabled                                                   *g:ale_enabled*
                                                                 *b:ale_enabled*
 
