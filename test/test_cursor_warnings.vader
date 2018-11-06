@@ -1,6 +1,7 @@
 Before:
   Save g:ale_echo_msg_format
   Save g:ale_echo_cursor
+  Save g:ale_echo_command
 
   " We should prefer the error message at column 10 instead of the warning.
   let g:ale_buffer_info = {
