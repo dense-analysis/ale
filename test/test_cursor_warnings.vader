@@ -91,6 +91,8 @@ Before:
     return empty(l:lines) ? '' : l:lines[-1]
   endfunction
 
+  command -nargs=+ TestEchoCommand let g:test_echo_command_is_called = 1
+
 After:
   Restore
 
@@ -116,6 +118,9 @@ After:
   if &filetype is# 'ale-preview'
     noautocmd :q!
   endif
+
+  silent! delcommand TestEchoCommand
+  unlet! g:test_echo_command_is_called
 
 Given javascript(A Javscript file with warnings/errors):
   var x = 3 + 12345678
@@ -245,3 +250,13 @@ Execute(The cursor message shouldn't be echoed if the option is off):
   call ale#cursor#EchoCursorWarning()
 
   AssertEqual 'foo', GetLastMessage()
+
+Execute(The cursor message is passed to echo command):
+  let g:ale_echo_command = 'TestEchoCommand'
+  echom 'foo'
+
+  call cursor(1, 1)
+  call ale#cursor#EchoCursorWarning()
+
+  AssertEqual 'foo', GetLastMessage()
+  AssertEqual 1, exists('g:test_echo_command_is_called')
