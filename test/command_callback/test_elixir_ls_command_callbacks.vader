@@ -28,3 +28,8 @@ Execute(should set correct LSP values):
   AssertLSPOptions {}
   AssertLSPConfig {}
   AssertLSPProject ale#path#Simplify(g:dir . '/mix_paths/wrapped_project')
+
+Execute(should accept configuration settings):
+  AssertLSPConfig {}
+  let b:ale_elixir_elixir_ls_config = {'elixirLS': {'dialyzerEnabled': v:false}}
+  AssertLSPConfig {'elixirLS': {'dialyzerEnabled': v:false}}
