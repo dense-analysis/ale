@@ -1131,7 +1131,7 @@ g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
   The string used for `%severity%` for warnings. See |g:ale_echo_msg_format|
 
 
-g:ale_echo_command                                 *g:ale_echo_command*
+g:ale_echo_command                                         *g:ale_echo_command*
 
   Type: |String|
   Default: `'echomsg'`

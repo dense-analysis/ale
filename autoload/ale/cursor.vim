@@ -29,8 +29,10 @@ function! ale#cursor#TruncatedEcho(original_message) abort
         " The message is truncated and saved to the history.
         setlocal shortmess+=T
 
+        " The message is truncated and saved to the history.
         let l:buffer = bufnr('')
         let l:echo = ale#Var(l:buffer, 'echo_command')
+
         try
             exec l:echo string(l:message)
         catch /^Vim\%((\a\+)\)\=:E523/
