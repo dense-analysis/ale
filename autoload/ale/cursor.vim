@@ -142,7 +142,7 @@ function! ale#cursor#EchoCursorWarning(...) abort
 
             if l:type is# 'E'
                 let l:hl_group = 'ALEError'
-            elseif l:type is# 'I'
+            elseif l:type is# 'W'
                 let l:hl_group = 'ALEWarning'
             endif
 
