@@ -557,6 +557,7 @@ their relevant options.
 * By setting error highlights.                     - |g:ale_set_highlights|
 * By creating signs in the sign column.            - |g:ale_set_signs|
 * By echoing messages based on your cursor.        - |g:ale_echo_cursor|
+* By inline text based on your cursor.             - |g:ale_virtualtext_cursor|
 * By displaying the preview based on your cursor.  - |g:ale_cursor_detail|
 * By showing balloons for your mouse cursor        - |g:ale_set_balloons|
 
@@ -1867,6 +1868,29 @@ g:ale_use_global_executables                     *g:ale_use_global_executables*
   See |ale-integrations-local-executables| for more information on those
   options.
 
+
+g:ale_virtualtext_cursor                                           *g:ale_virtualtext_cursor*
+
+  Type: |Number|
+  Default: `0`
+
+  When this option is set to `1`, a message will be shown when a cursor is
+  near a warning or error. ALE will attempt to find the warning or error at a
+  column nearest to the cursor when the cursor is resting on a line which
+  contains a warning or error. This option can be set to `0` to disable this
+  behavior.
+
+  Messages are only displayed after a short delay. See |g:ale_echo_delay|.
+
+  Messages can be prefixed prefixed with a string. See |g:ale_virtualtext_prefix|.
+
+
+g:ale_virtualtext_prefix                                           *g:ale_virtualtext_prefix*
+
+  Type: |String|
+  Default: `'> '`
+
+  Prefix to be used with |g:ale_virtualtext_cursor|.
 
 g:ale_virtualenv_dir_names                         *g:ale_virtualenv_dir_names*
 b:ale_virtualenv_dir_names                         *b:ale_virtualenv_dir_names*

@@ -298,7 +298,7 @@ function! ale#engine#SetResults(buffer, loclist) abort
     endif
 
     if l:linting_is_done
-        if g:ale_echo_cursor
+        if g:ale_echo_cursor || g:ale_virtualtext_cursor
             " Try and echo the warning now.
             " This will only do something meaningful if we're in normal mode.
             call ale#cursor#EchoCursorWarning()

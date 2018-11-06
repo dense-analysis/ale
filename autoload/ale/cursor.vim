@@ -52,6 +52,29 @@ function! ale#cursor#TruncatedEcho(original_message) abort
     endtry
 endfunction
 
+function! ale#cursor#ClearVirtualText() abort
+    if !has('nvim-0.3.2')
+        return
+    endif
+
+    let l:buffer = bufnr('')
+
+    call nvim_buf_clear_highlight(l:buffer, 1000, 0, -1)
+endfunction
+
+function! ale#cursor#ShowVirtualText(message, hl_group) abort
+    if !has('nvim-0.3.2')
+        return
+    endif
+
+    let l:cursor_position = getcurpos()
+    let l:line = line('.')
+    let l:buffer = bufnr('')
+    let l:prefix = get(g:, 'ale_virtualtext_prefix', '> ')
+
+    call nvim_buf_set_virtual_text(l:buffer, 1000, l:line-1, [[l:prefix.a:message, a:hl_group]], {})
+endfunction
+
 function! s:FindItemAtCursor(buffer) abort
     let l:info = get(g:ale_buffer_info, a:buffer, {})
     let l:loclist = get(l:info, 'loclist', [])
@@ -72,7 +95,7 @@ endfunction
 function! ale#cursor#EchoCursorWarning(...) abort
     let l:buffer = bufnr('')
 
-    if !g:ale_echo_cursor && !g:ale_cursor_detail
+    if !g:ale_echo_cursor && !g:ale_cursor_detail && !g:ale_virtualtext_cursor
         return
     endif
 
@@ -108,12 +131,30 @@ function! ale#cursor#EchoCursorWarning(...) abort
             call ale#preview#CloseIfTypeMatches('ale-preview')
         endif
     endif
+
+    if g:ale_virtualtext_cursor
+        call ale#cursor#ClearVirtualText()
+
+        if !empty(l:loc)
+            let l:msg = get(l:loc, 'detail', l:loc.text)
+            let l:hl_group = 'ALEInfo'
+            let l:type = get(l:loc, 'type', 'E')
+
+            if l:type is# 'E'
+                let l:hl_group = 'ALEError'
+            elseif l:type is# 'I'
+                let l:hl_group = 'ALEWarning'
+            endif
+
+            call ale#cursor#ShowVirtualText(l:msg, l:hl_group)
+        endif
+    endif
 endfunction
 
 function! ale#cursor#EchoCursorWarningWithDelay() abort
     let l:buffer = bufnr('')
 
-    if !g:ale_echo_cursor && !g:ale_cursor_detail
+    if !g:ale_echo_cursor && !g:ale_cursor_detail && !g:ale_virtualtext_cursor
         return
     endif
 

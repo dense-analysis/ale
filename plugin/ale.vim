@@ -109,6 +109,9 @@ let g:ale_set_highlights = get(g:, 'ale_set_highlights', has('syntax'))
 " This flag can be set to 0 to disable echoing when the cursor moves.
 let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
 
+" This flag can be set to 1 to enable virtual text when the cursor moves.
+let g:ale_virtualtext_cursor = get(g:, 'ale_virtualtext_cursor', 0)
+
 " This flag can be set to 1 to automatically show errors in the preview window.
 let g:ale_cursor_detail = get(g:, 'ale_cursor_detail', 0)
 
