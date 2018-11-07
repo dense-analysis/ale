@@ -34,7 +34,7 @@ endfunction
 function! ale_linters#java#checkstyle#GetCommand(buffer) abort
     return 'checkstyle '
     \ . ale#Var(a:buffer, 'java_checkstyle_options')
-    \ . ' %t'
+    \ . ' %s'
 endfunction
 
 if !exists('g:ale_java_checkstyle_options')
@@ -46,4 +46,5 @@ call ale#linter#Define('java', {
 \   'executable': 'checkstyle',
 \   'command_callback': 'ale_linters#java#checkstyle#GetCommand',
 \   'callback': 'ale_linters#java#checkstyle#Handle',
+\   'lint_file': 1,
 \})
