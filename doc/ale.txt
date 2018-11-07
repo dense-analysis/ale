@@ -139,6 +139,7 @@ CONTENTS                                                         *ale-contents*
     html..................................|ale-html-options|
       htmlhint............................|ale-html-htmlhint|
       tidy................................|ale-html-tidy|
+      prettier............................|ale-html-prettier|
       stylelint...........................|ale-html-stylelint|
       write-good..........................|ale-html-write-good|
     idris.................................|ale-idris-options|
@@ -431,7 +432,7 @@ Notes:
 * Handlebars: `ember-template-lint`
 * Haskell: `brittany`, `ghc`, `cabal-ghc`, `stylish-haskell`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `hlint`, `hdevtools`, `hfmt`, `hie`
 * HCL: `terraform-fmt`
-* HTML: `alex`!!, `HTMLHint`, `proselint`, `tidy`, `write-good`
+* HTML: `alex`!!, `HTMLHint`, `proselint`, `tidy`, `prettier`, `write-good`
 * Idris: `idris`
 * Java: `checkstyle`, `javac`, `google-java-format`, `PMD`, `javalsp`, `uncrustify`
 * JavaScript: `eslint`, `flow`, `jscs`, `jshint`, `prettier`, `prettier-eslint`, `prettier-standard`, `standard`, `xo`
