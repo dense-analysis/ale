@@ -53,7 +53,6 @@ let s:global_variable_list = [
 \    'ale_type_map',
 \    'ale_use_global_executables',
 \    'ale_virtualtext_cursor',
-\    'ale_virtualtext_prefix',
 \    'ale_warn_about_trailing_blank_lines',
 \    'ale_warn_about_trailing_whitespace',
 \]
