@@ -5,9 +5,9 @@ call ale#Set('psalm_langserver_executable', 'psalm-language-server')
 call ale#Set('psalm_langserver_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! ale_linters#php#psalm#GetProjectRoot(buffer) abort
-    let l:git_path = ale#path#FindNearestDirectory(a:buffer, '.git')
+    let l:composer_path = ale#path#FindNearestFile(a:buffer, 'composer.json')
 
-    return !empty(l:git_path) ? fnamemodify(l:git_path, ':h:h') : ''
+    return !empty(l:composer_path) ? fnamemodify(l:composer_path, ':h') : ''
 endfunction
 
 call ale#linter#Define('php', {
