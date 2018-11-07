@@ -2,8 +2,8 @@ Before:
   call ale#assert#SetUpLinterTest('php', 'langserver')
 
 After:
-  if isdirectory(g:dir . '/.git')
-    call delete(g:dir . '/.git', 'd')
+  if filereadable(g:dir . '/composer.json')
+    call delete(g:dir . '/composer.json')
   endif
 
   call ale#assert#TearDownLinterTest()
@@ -22,8 +22,8 @@ Execute(Vendor executables should be detected):
   \   . '/php-langserver-project/vendor/bin/php-language-server.php'
   \ ))
 
-Execute(The project path should be correct for .git directories):
+Execute(The project path should be correct for composer.json file):
   call ale#test#SetFilename('php-langserver-project/test.php')
-  call mkdir(g:dir . '/.git')
+  call system('touch ' . g:dir . '/composer.json')
 
   AssertLSPProject g:dir
