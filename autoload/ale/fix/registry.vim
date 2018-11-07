@@ -17,6 +17,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix PEP8 issues with autopep8.',
 \   },
+\   'bibclean': {
+\       'function': 'ale#fixers#bibclean#Fix',
+\       'suggested_filetypes': ['bib'],
+\       'description': 'Format bib files using bibclean.',
+\   },
 \   'black': {
 \       'function': 'ale#fixers#black#Fix',
 \       'suggested_filetypes': ['python'],
