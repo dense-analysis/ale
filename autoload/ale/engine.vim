@@ -298,10 +298,16 @@ function! ale#engine#SetResults(buffer, loclist) abort
     endif
 
     if l:linting_is_done
-        if g:ale_echo_cursor || g:ale_virtualtext_cursor
+        if g:ale_echo_cursor
             " Try and echo the warning now.
             " This will only do something meaningful if we're in normal mode.
             call ale#cursor#EchoCursorWarning()
+        endif
+
+        if g:ale_virtualtext_cursor
+            " Try and show the warning now.
+            " This will only do something meaningful if we're in normal mode.
+            call ale#virtualtext#ShowCursorWarning()
         endif
 
         " Reset the save event marker, used for opening windows, etc.
