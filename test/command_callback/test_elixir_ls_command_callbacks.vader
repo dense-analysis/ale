@@ -22,12 +22,12 @@ Execute(should configure elixir-ls release location):
   AssertLinter 'boo/language_server.sh', 'boo/language_server.sh'
 
 Execute(should set correct LSP values):
-  call ale#test#SetFilename('mix_paths/wrapped_project/lib/app.ex')
+  call ale#test#SetFilename('elixir_paths/umbrella_project/apps/app1/lib/app.ex')
 
   AssertLSPLanguage 'elixir'
   AssertLSPOptions {}
   AssertLSPConfig {}
-  AssertLSPProject ale#path#Simplify(g:dir . '/mix_paths/wrapped_project')
+  AssertLSPProject ale#path#Simplify(g:dir . '/elixir_paths/umbrella_project')
 
 Execute(should accept configuration settings):
   AssertLSPConfig {}

@@ -16,6 +16,6 @@ call ale#linter#Define('elixir', {
 \   'lsp': 'stdio',
 \   'executable_callback': 'ale_linters#elixir#elixir_ls#GetExecutable',
 \   'command_callback': 'ale_linters#elixir#elixir_ls#GetExecutable',
-\   'project_root_callback': 'ale#handlers#elixir#FindMixProjectRoot',
+\   'project_root_callback': 'ale#handlers#elixir#FindMixUmbrellaRoot',
 \   'lsp_config_callback': ale#VarFunc('elixir_elixir_ls_config'),
 \})
