@@ -1186,6 +1186,9 @@ b:ale_fix_on_save                                           *b:ale_fix_on_save*
   after files are fixed, only when the buffer is open, or re-opened. Changes
   to the file will be saved to the file on disk.
 
+  Files will not be fixed on `:wq`, so you should check your code before
+  closing a buffer.
+
   Fixing files can be disabled or enabled for individual buffers by setting
   `b:ale_fix_on_save` to `0` or `1`.
 
