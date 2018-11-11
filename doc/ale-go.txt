@@ -54,6 +54,25 @@ g:ale_go_gofmt_options                                 *g:ale_go_gofmt_options*
 
 
 ===============================================================================
+golint                                                          *ale-go-golint*
+
+g:ale_go_golint_executable                         *g:ale_go_golint_executable*
+                                                   *b:ale_go_golint_executable*
+  Type: |String|
+  Default: `'golint'`
+
+  This variable can be set to change the golint executable path.
+
+
+g:ale_go_golint_options                               *g:ale_go_golint_options*
+                                                      *b:ale_go_golint_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to the golint linter.
+
+
+===============================================================================
 govet                                                            *ale-go-govet*
 
 g:ale_go_govet_options                                 *g:ale_go_govet_options*

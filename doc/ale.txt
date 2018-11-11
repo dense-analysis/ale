@@ -108,6 +108,7 @@ CONTENTS                                                         *ale-contents*
     go....................................|ale-go-options|
       gobuild.............................|ale-go-gobuild|
       gofmt...............................|ale-go-gofmt|
+      golint..............................|ale-go-golint|
       govet...............................|ale-go-govet|
       gometalinter........................|ale-go-gometalinter|
       staticcheck.........................|ale-go-staticcheck|

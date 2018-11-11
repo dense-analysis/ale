@@ -1,0 +1,18 @@
+Before:
+  call ale#assert#SetUpLinterTest('go', 'golint')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default golint command should be correct):
+  AssertLinter 'golint', ale#Escape('golint') . ' %t'
+
+Execute(The golint executable should be configurable):
+  let b:ale_go_golint_executable = 'foobar'
+
+  AssertLinter 'foobar', ale#Escape('foobar') . ' %t'
+
+Execute(The golint options should be configurable):
+  let b:ale_go_golint_options = '--foo'
+
+  AssertLinter 'golint', ale#Escape('golint') . ' --foo %t'
