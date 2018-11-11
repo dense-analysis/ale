@@ -6,22 +6,15 @@ After:
 
 Execute(The executable should be configurable):
   AssertLinter 'ispc',
-  \ ale#Escape('ispc')
-  \ . ' -I ' . ale#Escape(getcwd())
-  \ . ' -'
+  \ ale#Escape('ispc') . ' %s'
 
   let b:ale_ispc_ispc_executable = 'foo'
 
   AssertLinter 'foo',
-  \ ale#Escape('foo')
-  \ . ' -I ' . ale#Escape(getcwd())
-  \ . ' -'
+  \ ale#Escape('foo') . ' %s'
 
 Execute(The options should be configurable):
   let g:ale_ispc_ispc_options = '--foo'
 
   AssertLinter 'ispc',
-  \ ale#Escape('ispc')
-  \ . ' -I ' . ale#Escape(getcwd())
-  \ . ' --foo'
-  \ . ' -'
+  \ ale#Escape('ispc') . ' --foo' . ' %s'

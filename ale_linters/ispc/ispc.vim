@@ -4,14 +4,11 @@
 call ale#Set('ispc_ispc_executable', 'ispc')
 call ale#Set('ispc_ispc_options', '')
 
-" ISPC has no equivalent of gcc's -iquote argument, so use a -I for headers
-" in the same directory. Not perfect, since now local headers are accepted
-" by #include<> while they should not, but better than nothing.
 function! ale_linters#ispc#ispc#GetCommand(buffer) abort
-    return '%e '
-    \   . '-I ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h'))
+    return '%e'
     \   . ale#Pad(ale#c#IncludeOptions(ale#c#FindLocalHeaderPaths(a:buffer)))
-    \   . ale#Pad(ale#Var(a:buffer, 'ispc_ispc_options')) . ' -'
+    \   . ale#Pad(ale#Var(a:buffer, 'ispc_ispc_options'))
+    \   . ' %s'
 endfunction
 
 " Note that we ignore the two warnings in the beginning of the compiler output
@@ -65,4 +62,5 @@ call ale#linter#Define('ispc', {
 \   'executable_callback': ale#VarFunc('ispc_ispc_executable'),
 \   'command_callback': 'ale_linters#ispc#ispc#GetCommand',
 \   'callback': 'ale_linters#ispc#ispc#Handle',
+\   'lint_file': 1,
 \})
