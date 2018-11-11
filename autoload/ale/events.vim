@@ -29,7 +29,7 @@ function! ale#events#SaveEvent(buffer) abort
         call setbufvar(a:buffer, 'ale_save_event_fired', 1)
     endif
 
-    if ale#Var(a:buffer, 'fix_on_save')
+    if ale#Var(a:buffer, 'fix_on_save') && !ale#events#QuitRecently(a:buffer)
         let l:will_fix = ale#fix#Fix(a:buffer, 'save_file')
         let l:should_lint = l:should_lint && !l:will_fix
     endif
