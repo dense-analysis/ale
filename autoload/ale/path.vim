@@ -22,16 +22,16 @@ endfunction
 function! ale#path#FindNearestMarker(buffer, markers) abort
     let l:buffer_filename = fnamemodify(bufname(a:buffer), ':p')
     let l:buffer_filename = fnameescape(l:buffer_filename)
-    for marker in a:markers
+    for l:marker in a:markers
         let l:pivot = l:buffer_filename
         while 1
             let l:prev = l:pivot
             let l:pivot = fnamemodify(l:pivot, ':h')
-            let l:fn = l:pivot.(l:pivot == '/' ? '' : '/').marker
+            let l:fn = l:pivot.(l:pivot ==# '/' ? '' : '/').l:marker
             if filereadable(l:fn) || isdirectory(l:fn)
                 return l:fn
             endif
-            if l:pivot == l:prev
+            if l:pivot ==# l:prev
                 break
             endif
         endwhile
