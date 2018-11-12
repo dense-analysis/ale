@@ -30,7 +30,6 @@ function! ale#path#FindNearestMarker(buffer, markers) abort
             if filereadable(l:fn) || isdirectory(l:fn)
                 return l:fn
             endif
-
         endfor
     endfor
 
