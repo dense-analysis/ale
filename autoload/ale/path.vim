@@ -22,7 +22,7 @@ endfunction
 function! ale#path#FindNearestMarker(buffer, markers) abort
     let l:buffer_filename = fnamemodify(bufname(a:buffer), ':p')
     let l:buffer_filename = fnameescape(l:buffer_filename)
-    
+
     for l:path in ale#path#Upwards(l:buffer_filename)
         for l:marker in a:markers
             let l:fn = l:path.(l:path is# '/' ? '' : '/').l:marker
