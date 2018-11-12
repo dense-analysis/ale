@@ -8,6 +8,7 @@ call ale#Set('psalm_langserver_use_global', get(g:, 'ale_use_global_executables'
 
 function! ale_linters#php#psalm#GetProjectRoot(buffer) abort
     let l:project_path = ale#path#FindNearestMarker(a:buffer, g:ale_php_project_root_markers)
+
     return !empty(l:project_path) ? fnamemodify(l:project_path, ':h') : ''
 endfunction
 
