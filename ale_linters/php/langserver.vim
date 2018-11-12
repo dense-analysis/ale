@@ -8,7 +8,7 @@ call ale#Set('php_langserver_use_global', get(g:, 'ale_use_global_executables', 
 
 function! ale_linters#php#langserver#GetProjectRoot(buffer) abort
     let l:project_path = ale#path#FindNearestMarker(a:buffer, g:ale_php_project_root_markers)
-    return !empty(l:project_path) ? fnamemodify(l:project_path, ':h') : getcwd()
+    return !empty(l:project_path) ? fnamemodify(l:project_path, ':h') : ''
 endfunction
 
 call ale#linter#Define('php', {
