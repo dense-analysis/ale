@@ -17,6 +17,28 @@ function! ale#path#Simplify(path) abort
     return substitute(simplify(l:win_path), '^\\\+', '\', 'g') " no-custom-checks
 endfunction
 
+" Given a buffer and a file or directory name list, find the nearest file or directory by searching upwards
+" through the paths relative to the given buffer.
+function! ale#path#FindNearestMarker(buffer, markers) abort
+    let l:buffer_filename = fnamemodify(bufname(a:buffer), ':p')
+    let l:buffer_filename = fnameescape(l:buffer_filename)
+    for marker in a:markers
+        let l:pivot = l:buffer_filename
+        while 1
+            let l:prev = l:pivot
+            let l:pivot = fnamemodify(l:pivot, ':h')
+            let l:fn = l:pivot.(l:pivot == '/' ? '' : '/').marker
+            if filereadable(l:fn) || isdirectory(l:fn)
+                return l:fn
+            endif
+            if l:pivot == l:prev
+                break
+            endif
+        endwhile
+    endfor
+    return ''
+endfunction
+
 " Given a buffer and a filename, find the nearest file by searching upwards
 " through the paths relative to the given buffer.
 function! ale#path#FindNearestFile(buffer, filename) abort
@@ -129,8 +151,8 @@ endfunction
 function! ale#path#IsBufferPath(buffer, complex_filename) abort
     " If the path is one of many different names for stdin, we have a match.
     if a:complex_filename is# '-'
-    \|| a:complex_filename is# 'stdin'
-    \|| a:complex_filename[:0] is# '<'
+                \|| a:complex_filename is# 'stdin'
+                \|| a:complex_filename[:0] is# '<'
         return 1
     endif
 
@@ -153,7 +175,7 @@ function! ale#path#IsBufferPath(buffer, complex_filename) abort
     let l:buffer_filename = expand('#' . a:buffer . ':p')
 
     return l:buffer_filename is# l:test_filename
-    \   || l:buffer_filename[-len(l:test_filename):] is# l:test_filename
+                \   || l:buffer_filename[-len(l:test_filename):] is# l:test_filename
 endfunction
 
 " Given a path, return every component of the path, moving upwards.
@@ -187,13 +209,13 @@ function! ale#path#ToURI(path) abort
     let l:has_drive_letter = a:path[1:2] is# ':\'
 
     return substitute(
-    \   ((l:has_drive_letter || a:path[:0] is# '/') ? 'file://' : '')
-    \       . (l:has_drive_letter ? '/' . a:path[:2] : '')
-    \       . ale#uri#Encode(l:has_drive_letter ? a:path[3:] : a:path),
-    \   '\\',
-    \   '/',
-    \   'g',
-    \)
+                \   ((l:has_drive_letter || a:path[:0] is# '/') ? 'file://' : '')
+                \       . (l:has_drive_letter ? '/' . a:path[:2] : '')
+                \       . ale#uri#Encode(l:has_drive_letter ? a:path[3:] : a:path),
+                \   '\\',
+                \   '/',
+                \   'g',
+                \)
 endfunction
 
 function! ale#path#FromURI(uri) abort
