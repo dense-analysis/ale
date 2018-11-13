@@ -20,7 +20,7 @@ function! ale_linters#typescript#tslint#Handle(buffer, lines) abort
 
         let l:item = {
         \   'type': (get(l:error, 'ruleSeverity', '') is# 'WARNING' ? 'W' : 'E'),
-        \   'text': l:error.failure,
+        \   'text': l:error.failure . ' (' . l:error.ruleName . ')',
         \   'lnum': l:error.startPosition.line + 1,
         \   'col': l:error.startPosition.character + 1,
         \   'end_lnum': l:error.endPosition.line + 1,
