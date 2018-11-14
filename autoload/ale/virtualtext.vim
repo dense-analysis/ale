@@ -72,7 +72,6 @@ function! ale#virtualtext#ShowCursorWarning(...) abort
 
         if l:type is# 'E'
           let l:hl_group = 'ALEVirtualTextError'
-        endif
         elseif l:type is# 'W'
             let l:hl_group = 'ALEVirtualTextWarning'
         endif
