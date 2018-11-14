@@ -9,11 +9,11 @@ let s:cursor_timer = -1
 let s:last_pos = [0, 0, 0]
 
 if !hlexists('ALEVirtualTextWarning')
-  highlight link ALEVirtualTextWarning ALEWarning
+    highlight link ALEVirtualTextWarning ALEWarning
 endif
 
 if !hlexists('ALEVirtualTextError')
-  highlight link ALEVirtualTextError ALEError
+    highlight link ALEVirtualTextError ALEError
 endif
 
 function! ale#virtualtext#Clear() abort
