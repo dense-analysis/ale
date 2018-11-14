@@ -8,6 +8,14 @@ let g:ale_virtualtext_delay = get(g:, 'ale_virtualtext_delay', 10)
 let s:cursor_timer = -1
 let s:last_pos = [0, 0, 0]
 
+if !hlexists('ALEVirtualTextWarning')
+  highlight link ALEVirtualTextWarning ALEWarning
+endif
+
+if !hlexists('ALEVirtualTextError')
+  highlight link ALEVirtualTextError ALEError
+endif
+
 function! ale#virtualtext#Clear() abort
     if !has('nvim-0.3.2')
         return
@@ -63,17 +71,10 @@ function! ale#virtualtext#ShowCursorWarning(...) abort
         let l:type = get(l:loc, 'type', 'E')
 
         if l:type is# 'E'
-            if exists('g:ale_virtualtext_error_hi')
-              let l:hl_group = g:ale_virtualtext_error_hi
-            else
-              let l:hl_group = 'ALEError'
-            endif
+          let l:hl_group = 'ALEVirtualTextError'
+        endif
         elseif l:type is# 'W'
-            if exists('g:ale_virtualtext_warning_hi')
-              let l:hl_group = g:ale_virtualtext_warning_hi
-            else
-              let l:hl_group = 'ALEWarning'
-            endif
+            let l:hl_group = 'ALEVirtualTextWarning'
         endif
         call ale#virtualtext#ShowMessage(l:msg, l:hl_group)
     endif
