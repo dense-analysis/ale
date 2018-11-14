@@ -1876,7 +1876,7 @@ g:ale_use_global_executables                     *g:ale_use_global_executables*
   options.
 
 
-g:ale_virtualtext_cursor                                           *g:ale_virtualtext_cursor*
+g:ale_virtualtext_cursor                             *g:ale_virtualtext_cursor*
 
   Type: |Number|
   Default: `0`
@@ -1891,13 +1891,17 @@ g:ale_virtualtext_cursor                                           *g:ale_virtua
 
   Messages can be prefixed prefixed with a string. See |g:ale_virtualtext_prefix|.
 
-  Message appearance can be changed by modifying these highlight groups:
-  |ALEVirtualTextError| |ALEVirtualTextWarning|
+  ALE will use the following highlight groups for problems:
+
+  |ALEVirtualTextError|        - Items with `'type': 'E'`
+  |ALEVirtualTextWarning|      - Items with `'type': 'W'`
+  |ALEVirtualTextInfo|         - Items with `'type': 'I'`
+  |ALEVirtualTextStyleError|   - Items with `'type': 'E'` and `'sub_type': 'style'`
+  |ALEVirtualTextStyleWarning| - Items with `'type': 'W'` and `'sub_type': 'style'`
 
 
-
-g:ale_virtualtext_delay                                             *g:ale_virtualtext_delay*
-b:ale_virtualtext_delay                                             *b:ale_virtualtext_delay*
+g:ale_virtualtext_delay                               *g:ale_virtualtext_delay*
+b:ale_virtualtext_delay                               *b:ale_virtualtext_delay*
   Type: |Number|
   Default: `10`
 
@@ -1908,7 +1912,7 @@ b:ale_virtualtext_delay                                             *b:ale_virtu
   for files displaying a large number of problems.
 
 
-g:ale_virtualtext_prefix                                           *g:ale_virtualtext_prefix*
+g:ale_virtualtext_prefix                             *g:ale_virtualtext_prefix*
 
   Type: |String|
   Default: `'> '`
@@ -1981,7 +1985,7 @@ ALEError                                                             *ALEError*
 
   Default: `highlight link ALEError SpellBad`
 
-  The highlight used for highlighted errors. See |g:ale_set_highlights|.
+  The highlight for highlighted errors. See |g:ale_set_highlights|.
 
 
 ALEErrorLine                                                     *ALEErrorLine*
@@ -1998,21 +2002,21 @@ ALEErrorSign                                                     *ALEErrorSign*
 
   Default: `highlight link ALEErrorSign error`
 
-  The highlight used for error signs. See |g:ale_set_signs|.
+  The highlight for error signs. See |g:ale_set_signs|.
 
 
 ALEInfo                                                              *ALEInfo.*
                                                             *ALEInfo-highlight*
   Default: `highlight link ALEInfo ALEWarning`
 
-  The highlight used for highlighted info messages. See |g:ale_set_highlights|.
+  The highlight for highlighted info messages. See |g:ale_set_highlights|.
 
 
 ALEInfoSign                                                       *ALEInfoSign*
 
   Default: `highlight link ALEInfoSign ALEWarningSign`
 
-  The highlight used for info message signs. See |g:ale_set_signs|.
+  The highlight for info message signs. See |g:ale_set_signs|.
 
 
 ALEInfoLine                                                       *ALEInfoLine*
@@ -2029,35 +2033,70 @@ ALEStyleError                                                   *ALEStyleError*
 
   Default: `highlight link ALEStyleError ALEError`
 
-  The highlight used for highlighted style errors. See |g:ale_set_highlights|.
+  The highlight for highlighted style errors. See |g:ale_set_highlights|.
 
 
 ALEStyleErrorSign                                           *ALEStyleErrorSign*
 
   Default: `highlight link ALEStyleErrorSign ALEErrorSign`
 
-  The highlight used for style error signs. See |g:ale_set_signs|.
+  The highlight for style error signs. See |g:ale_set_signs|.
 
 
 ALEStyleWarning                                               *ALEStyleWarning*
 
   Default: `highlight link ALEStyleWarning ALEError`
 
-  The highlight used for highlighted style warnings. See |g:ale_set_highlights|.
+  The highlight for highlighted style warnings. See |g:ale_set_highlights|.
 
 
 ALEStyleWarningSign                                       *ALEStyleWarningSign*
 
   Default: `highlight link ALEStyleWarningSign ALEWarningSign`
 
-  The highlight used for style warning signs. See |g:ale_set_signs|.
+  The highlight for style warning signs. See |g:ale_set_signs|.
+
+
+ALEVirtualTextError                                       *ALEVirtualTextError*
+
+  Default: `highlight link ALEVirtualTextError ALEError`
+
+  The highlight for virtualtext errors. See |g:ale_virtualtext_cursor|.
+
+
+ALEVirtualTextInfo                                         *ALEVirtualTextInfo*
+
+  Default: `highlight link ALEVirtualTextInfo ALEVirtualTextWarning`
+
+  The highlight for virtualtext info. See |g:ale_virtualtext_cursor|.
+
+
+ALEVirtualTextStyleError                             *ALEVirtualTextStyleError*
+
+  Default: `highlight link ALEVirtualTextStyleError ALEVirtualTextError`
+
+  The highlight for virtualtext style errors. See |g:ale_virtualtext_cursor|.
+
+
+ALEVirtualTextStyleWarning                         *ALEVirtualTextStyleWarning*
+
+  Default: `highlight link ALEVirtualTextStyleWarning ALEVirtualTextWarning`
+
+  The highlight for virtualtext style warnings. See |g:ale_virtualtext_cursor|.
+
+
+ALEVirtualTextWarning                                   *ALEVirtualTextWarning*
+
+  Default: `highlight link ALEVirtualTextWarning ALEWarning`
+
+  The highlight for virtualtext errors. See |g:ale_virtualtext_cursor|.
 
 
 ALEWarning                                                         *ALEWarning*
 
   Default: `highlight link ALEWarning SpellCap`
 
-  The highlight used for highlighted warnings. See |g:ale_set_highlights|.
+  The highlight for highlighted warnings. See |g:ale_set_highlights|.
 
 
 ALEWarningLine                                                 *ALEWarningLine*
@@ -2074,7 +2113,7 @@ ALEWarningSign                                                 *ALEWarningSign*
 
   Default: `highlight link ALEWarningSign todo`
 
-  The highlight used for warning signs. See |g:ale_set_signs|.
+  The highlight for warning signs. See |g:ale_set_signs|.
 
 
 -------------------------------------------------------------------------------
