@@ -141,6 +141,22 @@ Execute(ParseCFlags should handle -D with minuses):
   \     . ' -DTEST=`date +%s` -c file.c'
   \ )
 
+Execute(ParseCFlags should handle flags at the end of the line):
+  AssertEqual
+  \ '-Dgoal=9'
+  \   . ' ' . ale#Escape('-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir'))
+  \   . ' -Dmacro-with-dash'
+  \   . ' ' . ale#Escape('-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/dir with spaces'))
+  \   . ' ' . ale#Escape('-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/dir-with-dash'))
+  \   . ' ' . ale#Escape('-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/kernel/include')),
+  \ ale#c#ParseCFlags(
+  \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
+  \   'gcc -Dgoal=9 -Tlinkerfile.ld blabla -Isubdir '
+  \     . '-Dmacro-with-dash '
+  \     . '-I''dir with spaces''' . ' -Idir-with-dash'
+  \     . ' -I'. ale#path#Simplify('kernel/include')
+  \ )
+
 Execute(FlagsFromCompileCommands should tolerate empty values):
   AssertEqual '', ale#c#FlagsFromCompileCommands(bufnr(''), '')
 
