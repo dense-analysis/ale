@@ -1,6 +1,8 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Completion support for LSP linters
 
+let g:ale_autocompletion_enabled = 0
+
 " The omnicompletion menu is shown through a special Plug mapping which is
 " only valid in Insert mode. This way, feedkeys() won't send these keys if you
 " quit Insert mode quickly enough.
@@ -193,33 +195,19 @@ function! ale#completion#OmniFunc(findstart, base) abort
 
         return l:column - len(l:match) - 1
     else
-        " Parse a new response if there is one.
-        if exists('b:ale_completion_response')
-        \&& exists('b:ale_completion_parser')
-            let l:response = b:ale_completion_response
-            let l:parser = b:ale_completion_parser
-
-            unlet b:ale_completion_response
-            unlet b:ale_completion_parser
-
-            let b:ale_completion_result = function(l:parser)(l:response)
+        if g:ale_autocompletion_enabled
+            return get(b:, 'ale_completion_result', [])
+        else
+            return ale#completion#ProcessCompletions()
         endif
-
-        call s:ReplaceCompletionOptions()
-
-        return get(b:, 'ale_completion_result', [])
     endif
 endfunction
 
-function! ale#completion#Show(response, completion_parser) abort
-    if ale#util#Mode() isnot# 'i'
+function! ale#completion#Show() abort
+    if !g:ale_autocompletion_enabled || !g:ale#util#Mode() isnot# 'i'
         return
     endif
 
-    " Set the list in the buffer, temporarily replace omnifunc with our
-    " function, and then start omni-completion.
-    let b:ale_completion_response = a:response
-    let b:ale_completion_parser = a:completion_parser
     " Replace completion options shortly before opening the menu.
     call s:ReplaceCompletionOptions()
 
@@ -228,6 +216,11 @@ endfunction
 
 function! s:CompletionStillValid(request_id) abort
     let [l:line, l:column] = getcurpos()[1:2]
+
+    return has_key(b:, 'ale_completion_info')
+    \&& b:ale_completion_info.request_id == a:request_id
+    \&& b:ale_completion_info.line == l:line
+    \&& b:ale_completion_info.column == l:column
 
     return ale#util#Mode() is# 'i'
     \&& has_key(b:, 'ale_completion_info')
@@ -418,10 +411,9 @@ function! ale#completion#HandleTSServerResponse(conn_id, response) abort
             \)
         endif
     elseif l:command is# 'completionEntryDetails'
-        call ale#completion#Show(
-        \   a:response,
-        \   'ale#completion#ParseTSServerCompletionEntryDetails',
-        \)
+        let b:ale_completion_result = ale#completion#ParseTSServerCompletionEntryDetails(a:response)
+
+        call ale#completion#Show()
     endif
 endfunction
 
@@ -431,10 +423,9 @@ function! ale#completion#HandleLSPResponse(conn_id, response) abort
         return
     endif
 
-    call ale#completion#Show(
-    \   a:response,
-    \   'ale#completion#ParseLSPCompletions',
-    \)
+    let b:ale_completion_result = ale#completion#ParseLSPCompletions(a:response)
+
+    call ale#completion#Show()
 endfunction
 
 function! s:OnReady(linter, lsp_details, ...) abort
@@ -489,6 +480,12 @@ function! s:OnReady(linter, lsp_details, ...) abort
     endif
 endfunction
 
+function! ale#completion#ProcessCompletions() abort
+    call ale#completion#GetCompletions()
+
+    return get(b:, 'ale_completion_result', [])
+endfunction
+
 function! s:GetLSPCompletions(linter) abort
     let l:buffer = bufnr('')
     let l:lsp_details = ale#lsp_linter#StartLSP(l:buffer, a:linter)
@@ -505,10 +502,6 @@ function! s:GetLSPCompletions(linter) abort
 endfunction
 
 function! ale#completion#GetCompletions() abort
-    if !g:ale_completion_enabled
-        return
-    endif
-
     let [l:line, l:column] = getcurpos()[1:2]
 
     let l:prefix = ale#completion#GetPrefix(&filetype, l:line, l:column)
@@ -557,7 +550,7 @@ function! ale#completion#StopTimer() abort
 endfunction
 
 function! ale#completion#Queue() abort
-    if !g:ale_completion_enabled
+    if !g:ale_autocompletion_enabled
         return
     endif
 
