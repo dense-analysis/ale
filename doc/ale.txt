@@ -21,6 +21,8 @@ CONTENTS                                                         *ale-contents*
     6.1 Highlights........................|ale-highlights|
     6.2 Options for write-good Linter.....|ale-write-good-options|
   7. Integration Documentation............|ale-integrations|
+    ada...................................|ale-ada-options|
+      gcc.................................|ale-ada-gcc|
     ansible...............................|ale-ansible-options|
       ansible-lint........................|ale-ansible-ansible-lint|
     asciidoc..............................|ale-asciidoc-options|
@@ -392,6 +394,7 @@ Notes:
 `^` No linters for text or Vim help filetypes are enabled by default.
 `!!` These linters check only files on disk. See |ale-lint-file-linters|
 
+* Ada: `gcc`
 * ASM: `gcc`
 * Ansible: `ansible-lint`
 * API Blueprint: `drafter`
