@@ -5,6 +5,11 @@ ALE Elixir Integration                                     *ale-elixir-options*
 ===============================================================================
 mix                                                            *ale-elixir-mix*
 
+
+The `mix` linter is disabled by default, as it can bee too expensive to run.
+See `:help g:ale_linters`
+
+
 g:ale_elixir_mix_options                             *g:ale_elixir_mix_options*
                                                      *b:ale_elixir_mix_options*
   Type: |String|
