@@ -97,6 +97,7 @@ formatting.
 
 | Language | Tools |
 | -------- | ----- |
+| Ada | [gcc](https://gcc.gnu.org) |
 | ASM | [gcc](https://gcc.gnu.org) |
 | Ansible | [ansible-lint](https://github.com/willthames/ansible-lint) |
 | API Blueprint | [drafter](https://github.com/apiaryio/drafter) |
