@@ -236,6 +236,20 @@ Execute(Should set --parser based on filetype, YAML):
   \ },
   \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), ['1.6.0'])
 
+Execute(Should set --parser based on filetype, HTML):
+  call ale#test#SetFilename('../prettier-test-files/testfile')
+
+  set filetype=html
+
+  AssertEqual
+  \ {
+  \   'command': ale#path#CdString(expand('%:p:h'))
+  \     . ale#Escape(g:ale_javascript_prettier_executable)
+  \     . ' --parser html'
+  \     . ' --stdin-filepath %s --stdin',
+  \ },
+  \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), ['1.6.0'])
+
 Execute(Should set --parser based on first filetype of multiple filetypes):
   call ale#test#SetFilename('../prettier-test-files/testfile')
 
