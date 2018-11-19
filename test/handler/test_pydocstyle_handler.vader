@@ -28,7 +28,7 @@ After:
 "
 " The command to generate the handler input is:
 "
-"    $ pydocstyle --verbose --source --explain sample.py
+"    $ python -m pydocstyle --verbose --source --explain sample.py
 "    [...]
 "    $
 
@@ -66,7 +66,7 @@ Execute(Basic pydocstyle warnings should be handled):
   \ ],
   \ ale_linters#python#pydocstyle#Handle(bufnr(''), [
   \ 'Checking file ' . fnamemodify(bufname(bufnr('')), ':p') . '.',
-  \ fnamemodify(bufname(bufnr('')), ':p') . ':1 at module level:',
+  \ fnamemodify(bufname(bufnr('')), ':t') . ':1 at module level:',
   \ '        D100: Missing docstring in public module',
   \ '',
   \ '        All modules should normally have docstrings.  [...] all functions and',
@@ -80,7 +80,7 @@ Execute(Basic pydocstyle warnings should be handled):
   \ '  1: #  2:    3: s  4: a  5: m  6: p  7: l        ...',
   \ '',
   \ '',
-  \ fnamemodify(bufname(bufnr('')), ':p') . ':4 in public function `main`:',
+  \ fnamemodify(bufname(bufnr('')), ':t') . ':4 in public function `main`:',
   \ '        D205: 1 blank line required between summary line and description (found 0)',
   \ '',
   \ '        Multi-line docstrings consist of a summary line just like a one-line',
@@ -92,7 +92,7 @@ Execute(Basic pydocstyle warnings should be handled):
   \ '  3: d  4: e  5: f  6:    7: m  8: a  9: i        ...',
   \ '',
   \ '',
-  \ fnamemodify(bufname(bufnr('')), ':p') . ':4 in public function `main`:',
+  \ fnamemodify(bufname(bufnr('')), ':t') . ':4 in public function `main`:',
   \ '        D400: First line should end with a period (not ''e'')',
   \ '',
   \ '        The [first line of a] docstring is a phrase ending in a period.',
@@ -100,7 +100,7 @@ Execute(Basic pydocstyle warnings should be handled):
   \ '  3: d  4: e  5: f  6:    7: m  8: a  9: i        ...',
   \ '',
   \ '',
-  \ fnamemodify(bufname(bufnr('')), ':p') . ':4 in public function `main`:',
+  \ fnamemodify(bufname(bufnr('')), ':t') . ':4 in public function `main`:',
   \ '        D401: First line should be in imperative mood; try rephrasing (found ''This'')',
   \ '',
   \ '        [Docstring] prescribes the function or method''s effect as a command:',

@@ -40,6 +40,13 @@ function! ale#command#FormatCommand(buffer, executable, command, pipe_file_if_ne
         let l:command = substitute(l:command, '%s', '\=ale#Escape(l:filename)', 'g')
     endif
 
+    " Replace all %b occurrences in the string with the base name of the current
+    " file.
+    if l:command =~# '%b'
+        let l:filename = fnamemodify(bufname(a:buffer), ':t')
+        let l:command = substitute(l:command, '%b', '\=ale#Escape(l:filename)', 'g')
+    endif
+
     if l:command =~# '%t'
         " Create a temporary filename, <temp_dir>/<original_basename>
         " The file itself will not be created by this function.
