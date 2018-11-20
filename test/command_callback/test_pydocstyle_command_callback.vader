@@ -7,28 +7,28 @@ After:
 Execute(The pydocstyle command callback should return default string):
   AssertLinter 'pydocstyle',
   \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('pydocstyle') . '  ''dummy.txt'''
+  \   . ale#Escape('pydocstyle') . '  ' . ale#Escape('dummy.txt')
 
 Execute(The pydocstyle command callback should allow options):
   let g:ale_python_pydocstyle_options = '--verbose'
 
   AssertLinter 'pydocstyle',
   \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('pydocstyle') . ' --verbose ''dummy.txt'''
+  \   . ale#Escape('pydocstyle') . ' --verbose ' . ale#Escape('dummy.txt')
 
 Execute(The pydocstyle executable should be configurable):
   let g:ale_python_pydocstyle_executable = '~/.local/bin/pydocstyle'
 
   AssertLinter '~/.local/bin/pydocstyle',
   \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('~/.local/bin/pydocstyle') . '  ''dummy.txt'''
+  \   . ale#Escape('~/.local/bin/pydocstyle') . '  ' . ale#Escape('dummy.txt')
 
 Execute(Setting executable to 'pipenv' appends 'run pydocstyle'):
   let g:ale_python_pydocstyle_executable = 'path/to/pipenv'
 
   AssertLinter 'path/to/pipenv',
   \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('path/to/pipenv') . ' run pydocstyle  ''dummy.txt'''
+  \   . ale#Escape('path/to/pipenv') . ' run pydocstyle  ' . ale#Escape('dummy.txt')
 
 Execute(Pipenv is detected when python_pydocstyle_auto_pipenv is set):
   let g:ale_python_pydocstyle_auto_pipenv = 1
@@ -36,4 +36,4 @@ Execute(Pipenv is detected when python_pydocstyle_auto_pipenv is set):
 
   AssertLinter 'pipenv',
   \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('pipenv') . ' run pydocstyle  ''whatever.py'''
+  \   . ale#Escape('pipenv') . ' run pydocstyle  ' . ale#Escape('whatever.py')
