@@ -26,14 +26,14 @@ function! ale_linters#python#pydocstyle#GetCommand(buffer) abort
     return ale#path#CdString(l:dir)
     \   . ale#Escape(l:executable) . l:exec_args
     \   . ' ' . ale#Var(a:buffer, 'python_pydocstyle_options')
-    \   . ' ' . fnamemodify(bufname(a:buffer), ':p:t')
+    \   . ' ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:t'))
 endfunction
 
 function! ale_linters#python#pydocstyle#Handle(buffer, lines) abort
     " Matches patterns like the following:
     " mydir/myfile.py:33 in public function `myfunction`:
     "         DXXX: Error description
-    let l:fname = fnamemodify(bufname(a:buffer), ':p:t')
+    let l:fname = ale#Escape(fnamemodify(bufname(a:buffer), ':p:t'))
     let l:line1_pattern = '\v^' . l:fname . ':\s*(\d+)\s+.*$'
     let l:line2_pattern = '\v^.*([a-zA-Z]\d+):\s*(.*)$'
     let l:output = []
