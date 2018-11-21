@@ -5,7 +5,8 @@ call ale#Set('ispc_ispc_executable', 'ispc')
 call ale#Set('ispc_ispc_options', '')
 
 function! ale_linters#ispc#ispc#GetCommand(buffer) abort
-    return '%e'
+    " --nowrap: do not wrap message lines
+    return '%e --nowrap'
     \   . ale#Pad(ale#c#IncludeOptions(ale#c#FindLocalHeaderPaths(a:buffer)))
     \   . ale#Pad(ale#Var(a:buffer, 'ispc_ispc_options'))
     \   . ' %s'
@@ -18,39 +19,17 @@ function! ale_linters#ispc#ispc#Handle(buffer, lines) abort
     " Message format: <filename>:<lnum>:<col> <type>: <text>
     " As far as I know, <type> can be any of:
     "   'error', 'Error', 'fatal error', 'Warning', 'Performance Warning'
-    let l:re = '\v(.+):([0-9]+):([0-9]+):\s+([^:]+):\s+(.+)\s*'
-    let l:Trim = {s -> substitute(s, '^\s*\(.\{-}\)\s*$', '\1', '')}
-    let l:line_count = len(a:lines)
+    let l:re = '\v.+:([0-9]+):([0-9]+):\s+([^:]+):\s+(.+)'
     let l:output = []
 
-    for l:index in range(l:line_count)
-        let l:match = matchlist(a:lines[l:index], l:re)
-
-        if l:match != []
-            let l:text = l:Trim(l:match[5])
-
-            " The text may continue over multiple lines.
-            " Look for a full stop, question, or exclamation mark
-            " ending the text.
-            " Also, for some reason, 'file not found' messages are on
-            " one line but not terminated by punctuation.
-            while match(l:text, '[.?!]\s*$') == -1
-                    \ && match(l:text, 'file not found') == -1
-                    \ && l:index < l:line_count - 1
-                let l:index += 1
-                let l:text .= ' ' . l:Trim(a:lines[l:index])
-            endwhile
-
-            call add(l:output, {
-            \   'filename': fnamemodify(l:match[1], ':p'),
-            \   'bufnr': a:buffer,
-            \   'lnum': str2nr(l:match[2]),
-            \   'col': str2nr(l:match[3]),
-            \   'type': l:match[4] =~? 'error' ? 'E' : 'W',
-            \   'text': l:text,
-            \})
-            continue
-        endif
+    for l:match in ale#util#GetMatches(a:lines, l:re)
+        call add(l:output, {
+        \   'bufnr': a:buffer,
+        \   'lnum': str2nr(l:match[1]),
+        \   'col': str2nr(l:match[2]),
+        \   'type': l:match[3] =~? 'error' ? 'E' : 'W',
+        \   'text': l:match[4],
+        \})
     endfor
 
     return l:output
