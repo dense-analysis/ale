@@ -126,7 +126,7 @@ echo
 
 tries=0
 
-while [ "$tries" -lt 1 ]; do
+while [ "$tries" -lt 5 ]; do
     tries=$((tries + 1))
 
     exit_code=0
@@ -141,7 +141,7 @@ while [ "$tries" -lt 1 ]; do
     fi
 done
 
-if [ "$tries" -gt 5 ]; then
+if [ "$tries" -gt 1 ]; then
     echo
     echo "Tried to run tests $tries times"
 fi
