@@ -141,7 +141,7 @@ while [ "$tries" -lt 1 ]; do
     fi
 done
 
-if [ "$tries" -gt 1 ]; then
+if [ "$tries" -gt 5 ]; then
     echo
     echo "Tried to run tests $tries times"
 fi
