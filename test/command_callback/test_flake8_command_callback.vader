@@ -166,4 +166,3 @@ Execute(Pipenv is detected when python_flake8_auto_pipenv is set):
   AssertLinter 'pipenv',
   \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('pipenv') . ' run flake8 --format=default --stdin-display-name %s -'
-
