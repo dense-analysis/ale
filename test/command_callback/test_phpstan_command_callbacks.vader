@@ -1,24 +1,28 @@
 Before:
   call ale#assert#SetUpLinterTest('php', 'phpstan')
 
+  WithChainResults ['0.10.2']
+
 After:
   call ale#assert#TearDownLinterTest()
 
 Execute(Custom executables should be used for the executable and command):
   let g:ale_php_phpstan_executable = 'phpstan_test'
 
-  AssertLinter 'phpstan_test',
-  \ ale#Escape('phpstan_test') . ' analyze -l4 --error-format raw %s'
+  AssertLinter 'phpstan_test', [
+  \ ale#Escape('phpstan_test') . ' --version',
+  \ ale#Escape('phpstan_test') . ' analyze -l4 --errorFormat raw %s'
+  \ ]
 
 Execute(project with level set to 3):
   call ale#test#SetFilename('phpstan-test-files/foo/test.php')
   let g:ale_php_phpstan_level = 3
 
   AssertLinter 'phpstan',
-  \ ale#Escape('phpstan') . ' analyze -l3 --error-format raw %s'
+  \ ale#Escape('phpstan') . ' analyze -l3 --errorFormat raw %s'
 
 Execute(Custom phpstan configuration file):
   let g:ale_php_phpstan_configuration = 'phpstan_config'
 
   AssertLinter 'phpstan',
-  \ ale#Escape('phpstan') . ' analyze -l4 --error-format raw -c phpstan_config %s'
+  \ ale#Escape('phpstan') . ' analyze -l4 --errorFormat raw -c phpstan_config %s'

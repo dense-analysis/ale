@@ -166,3 +166,35 @@ Execute(Pipenv is detected when python_flake8_auto_pipenv is set):
   AssertLinter 'pipenv',
   \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('pipenv') . ' run flake8 --format=default --stdin-display-name %s -'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*Execute(project with level set to 3):*/
+  /*call ale#test#SetFilename('phpstan-test-files/foo/test.php')*/
+  /*let g:ale_php_phpstan_level = 3*/
+
+  /*AssertLinter 'phpstan',*/
+  /*\ ale#Escape('phpstan') . ' analyze -l3 --errorFormat raw %s'*/
+
+/*Execute(Custom phpstan configuration file):*/
+  /*let g:ale_php_phpstan_configuration = 'phpstan_config'*/
+
+  /*AssertLinter 'phpstan',*/
+  /*\ ale#Escape('phpstan') . ' analyze -l4 --errorFormat raw -c phpstan_config %s'*/
