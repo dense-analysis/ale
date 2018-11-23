@@ -12,7 +12,7 @@ endfunction
 
 function! ale_linters#php#phpstan#VersionCheck(buffer) abort
     let l:executable = ale_linters#php#phpstan#GetExecutable(a:buffer)
-    
+
     " If we have previously stored the version number in a cache, then
     " don't look it up again.
     if ale#semver#HasVersion(l:executable)
