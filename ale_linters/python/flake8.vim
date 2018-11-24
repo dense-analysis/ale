@@ -2,7 +2,7 @@
 " Description: flake8 for python files
 
 call ale#Set('python_flake8_executable', 'flake8')
-call ale#Set('python_flake8_options', '')
+call ale#Set('python_flake8_options', get(g:, 'ale_python_flake8_args', 0))
 call ale#Set('python_flake8_use_global', get(g:, 'ale_use_global_executables', 0))
 call ale#Set('python_flake8_change_directory', 1)
 call ale#Set('python_flake8_auto_pipenv', 0)
