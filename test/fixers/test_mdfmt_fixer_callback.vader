@@ -1,0 +1,40 @@
+Before:
+  Save g:ale_markdown_mdfmt_executable
+  Save g:ale_markdown_mdfmt_options
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_markdown_mdfmt_executable = 'xxxinvalid'
+  let g:ale_markdown_mdfmt_options = ''
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The mdfmt callback should return the correct default values):
+  call ale#test#SetFilename('../markdown_files/testfile.md')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' -l -w'
+  \     . ' %t',
+  \ },
+  \ ale#fixers#mdfmt#Fix(bufnr(''))
+
+Execute(The mdfmt callback should include custom mdfmt options):
+  let g:ale_markdown_mdfmt_options = "-r '(a) -> a'"
+  call ale#test#SetFilename('../markdown_files/testfile.md')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' -l -w'
+  \     . ' ' . g:ale_markdown_mdfmt_options
+  \     . ' %t',
+  \ },
+  \ ale#fixers#mdfmt#Fix(bufnr(''))
