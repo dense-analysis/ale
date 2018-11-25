@@ -7,8 +7,9 @@ scriptencoding utf-8
 let g:ale_virtualtext_delay = get(g:, 'ale_virtualtext_delay', 10)
 let s:cursor_timer = -1
 let s:last_pos = [0, 0, 0]
+
 if has('nvim-0.3.2')
-  let s:ns_id = nvim_create_namespace('ale')
+    let s:ns_id = nvim_create_namespace('ale')
 endif
 
 if !hlexists('ALEVirtualTextError')
