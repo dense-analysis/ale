@@ -51,7 +51,7 @@ function! ale#lsp#response#ReadDiagnostics(response) abort
         endif
 
         if has_key(l:diagnostic, 'source')
-           let l:loclist_item.detail = printf("[%s] %s", l:diagnostic.source, l:diagnostic.message)
+           let l:loclist_item.detail = printf('[%s] %s', l:diagnostic.source, l:diagnostic.message)
         endif
 
         call add(l:loclist, l:loclist_item)
