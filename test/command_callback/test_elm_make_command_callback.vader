@@ -1,0 +1,32 @@
+Before:
+  call ale#assert#SetUpLinterTest('elm', 'make')
+
+After:
+  unlet! g:executable
+
+  call ale#assert#TearDownLinterTest()
+
+Execute(should get valid executable with default params):
+  call ale#test#SetFilename('../elm-test-files/app/testfile.elm')
+
+  let g:executable = ale#path#Simplify(g:dir . '/../elm-test-files/app/node_modules/.bin/elm')
+
+  AssertLinter g:executable,
+  \ ale#Escape(g:executable) . ' make --report=json --output=/dev/null %t'
+
+Execute(should get valid executable with 'use_global' params):
+  let g:ale_elm_make_use_global = 1
+
+  call ale#test#SetFilename('../elm-test-files/app/testfile.elm')
+
+  AssertLinter 'elm',
+  \ ale#Escape('elm') . ' make --report=json --output=/dev/null %t'
+
+Execute(should get valid executable with 'use_global' and 'executable' params):
+  let g:ale_elm_make_executable = 'other-elm'
+  let g:ale_elm_make_use_global = 1
+
+  call ale#test#SetFilename('../elm-test-files/app/testfile.elm')
+
+  AssertLinter 'other-elm',
+  \ ale#Escape('other-elm') . ' make --report=json --output=/dev/null %t'

@@ -5,7 +5,7 @@ Before:
 
   " Mock the StartProgram function so we can just capture the arguments.
   function! ale#lsp#StartProgram(...) abort
-    let g:args = a:000
+    let g:args = a:000[1:]
   endfunction
 
 After:
@@ -27,10 +27,10 @@ Execute(Command formatting should be applied correctly for LSP linters):
 
   if has('win32')
     AssertEqual
-    \ ['cmd', 'cmd /s/c "cmd --foo"', {}],
+    \ ['cmd', 'cmd /s/c "cmd --foo"'],
     \ g:args
   else
     AssertEqual
-    \ ['true', [&shell, '-c', '''true'' --foo'], {}],
+    \ ['true', [&shell, '-c', '''true'' --foo']],
     \ g:args
   endif

@@ -41,6 +41,7 @@ Execute(FixLocList should set all the default values correctly):
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
+  \   0,
   \   [{'text': 'a', 'lnum': 2}, {'text': 'b', 'lnum': 2}],
   \ )
 
@@ -61,6 +62,7 @@ Execute(FixLocList should use the values we supply):
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
+  \   0,
   \   [{
   \     'text': 'a',
   \     'lnum': 3,
@@ -89,6 +91,7 @@ Execute(FixLocList should set items with lines beyond the end to the last line):
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
+  \   0,
   \   [{'text': 'a', 'lnum': 11}],
   \ )
 
@@ -109,6 +112,7 @@ Execute(FixLocList should move line 0 to line 1):
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
+  \   0,
   \   [{'text': 'a', 'lnum': 0}],
   \ )
 
@@ -130,6 +134,7 @@ Execute(FixLocList should convert line and column numbers correctly):
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
+  \   0,
   \   [{'text': 'a', 'lnum': '010', 'col': '010'}],
   \ )
 
@@ -163,6 +168,7 @@ Execute(FixLocList should pass on end_col values):
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
+  \   0,
   \   [
   \     {'text': 'a', 'lnum': '010', 'col': '010', 'end_col': '012'},
   \     {'text': 'a', 'lnum': '010', 'col': '011', 'end_col': 12},
@@ -200,6 +206,7 @@ Execute(FixLocList should pass on end_lnum values):
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
+  \   0,
   \   [
   \     {'text': 'a', 'lnum': '010', 'col': '010', 'end_col': '012', 'end_lnum': '013'},
   \     {'text': 'a', 'lnum': '010', 'col': '011', 'end_col': 12, 'end_lnum': 13},
@@ -224,6 +231,7 @@ Execute(FixLocList should allow subtypes to be set):
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
+  \   0,
   \   [{'text': 'a', 'lnum': 11, 'sub_type': 'style'}],
   \ )
 
@@ -285,6 +293,7 @@ Execute(FixLocList should accept filenames):
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
+  \   0,
   \   [
   \     {'text': 'a', 'lnum': 2, 'filename': expand('%:p')},
   \     {'text': 'a', 'lnum': 3, 'filename': expand('%:p')},
@@ -322,6 +331,7 @@ Execute(FixLocList should interpret temporary filenames as being the current buf
   \ ale#engine#FixLocList(
   \   bufnr(''),
   \   'foobar',
+  \   0,
   \   [
   \     {'text': 'a', 'lnum': 2, 'filename': b:temp_name},
   \     {'text': 'a', 'lnum': 3, 'filename': substitute(b:temp_name, '\\', '/', 'g')},
@@ -346,7 +356,41 @@ Execute(The error code should be passed on):
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
+  \   0,
   \   [{'text': 'a', 'lnum': 11, 'code': 'some-code'}],
+  \ )
+
+Execute(FixLocList should mark problems as coming from other sources if requested):
+  AssertEqual
+  \ [
+  \   {
+  \     'text': 'a',
+  \     'lnum': 2,
+  \     'col': 0,
+  \     'bufnr': bufnr('%'),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \     'from_other_source': 1,
+  \   },
+  \   {
+  \     'text': 'b',
+  \     'lnum': 2,
+  \     'col': 0,
+  \     'bufnr': bufnr('%'),
+  \     'vcol': 0,
+  \     'type': 'E',
+  \     'nr': -1,
+  \     'linter_name': 'foobar',
+  \     'from_other_source': 1,
+  \   },
+  \],
+  \ ale#engine#FixLocList(
+  \   bufnr('%'),
+  \   'foobar',
+  \   1,
+  \   [{'text': 'a', 'lnum': 2}, {'text': 'b', 'lnum': 2}],
   \ )
 
 Given(A file with Japanese multi-byte text):
@@ -367,6 +411,7 @@ Execute(character positions should be converted to byte positions):
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
+  \   0,
   \   [
   \     {'text': 'a', 'lnum': 1, 'col': 0, 'vcol': 1},
   \     {'text': 'a', 'lnum': 1, 'col': 1, 'vcol': 1},

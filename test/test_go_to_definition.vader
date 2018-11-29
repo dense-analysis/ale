@@ -7,6 +7,7 @@ Before:
   let g:message_list = []
   let g:expr_list = []
   let g:capability_checked = ''
+  let g:conn_id = v:null
   let g:WaitCallback = v:null
 
   runtime autoload/ale/linter.vim
@@ -14,19 +15,18 @@ Before:
   runtime autoload/ale/util.vim
 
   function! ale#lsp_linter#StartLSP(buffer, linter) abort
-    let l:conn = ale#lsp#NewConnection({})
-    let l:conn.id = 347
-    let l:conn.open_documents = {a:buffer : -1}
+    let g:conn_id = ale#lsp#Register('executable', '/foo/bar', {})
+    call ale#lsp#MarkDocumentAsOpen(g:conn_id, a:buffer)
 
     return {
     \ 'buffer': a:buffer,
-    \ 'connection_id': 347,
+    \ 'connection_id': g:conn_id,
     \ 'project_root': '/foo/bar',
     \ 'language_id': 'python',
     \}
   endfunction
 
-  function! ale#lsp#WaitForCapability(conn_id, project_root, capability, callback) abort
+  function! ale#lsp#WaitForCapability(conn_id, capability, callback) abort
     let g:capability_checked = a:capability
     let g:WaitCallback = a:callback
   endfunction
@@ -35,7 +35,7 @@ Before:
     let g:Callback = a:callback
   endfunction
 
-  function! ale#lsp#Send(conn_id, message, root) abort
+  function! ale#lsp#Send(conn_id, message) abort
     call add(g:message_list, a:message)
 
     return 42
@@ -46,7 +46,10 @@ Before:
   endfunction
 
 After:
-  call ale#lsp#RemoveConnectionWithID(347)
+  if g:conn_id isnot v:null
+    call ale#lsp#RemoveConnectionWithID(g:conn_id)
+  endif
+
   call ale#definition#SetMap({})
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
@@ -54,6 +57,7 @@ After:
   unlet! g:capability_checked
   unlet! g:WaitCallback
   unlet! g:old_filename
+  unlet! g:conn_id
   unlet! g:Callback
   unlet! g:message_list
   unlet! g:expr_list
@@ -111,7 +115,7 @@ Execute(Other files should be jumped to for definition responses):
 
   AssertEqual
   \ [
-  \   'edit ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \   'edit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
   AssertEqual [3, 7], getpos('.')[1:2]
@@ -136,7 +140,7 @@ Execute(Other files should be jumped to for definition responses in tabs too):
 
   AssertEqual
   \ [
-  \   'tabedit ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \   'tabedit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
   AssertEqual [3, 7], getpos('.')[1:2]
@@ -153,7 +157,7 @@ Execute(tsserver completion requests should be sent):
 
   AssertEqual type(function('type')), type(g:WaitCallback)
   AssertEqual 'definition', g:capability_checked
-  call call(g:WaitCallback, [347, '/foo/bar'])
+  call call(g:WaitCallback, [g:conn_id, '/foo/bar'])
 
   AssertEqual
   \ 'function(''ale#definition#HandleTSServerResponse'')',
@@ -174,7 +178,7 @@ Execute(tsserver tab completion requests should be sent):
 
   AssertEqual type(function('type')), type(g:WaitCallback)
   AssertEqual 'definition', g:capability_checked
-  call call(g:WaitCallback, [347, '/foo/bar'])
+  call call(g:WaitCallback, [g:conn_id, '/foo/bar'])
 
   AssertEqual
   \ 'function(''ale#definition#HandleTSServerResponse'')',
@@ -206,10 +210,10 @@ Execute(Other files should be jumped to for LSP definition responses):
 
   AssertEqual
   \ [
-  \   'edit ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \   'edit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
-  AssertEqual [3, 7], getpos('.')[1:2]
+  AssertEqual [3, 8], getpos('.')[1:2]
   AssertEqual {}, ale#definition#GetMap()
 
 Execute(Locations inside the same file should be jumped to without using :edit):
@@ -231,7 +235,7 @@ Execute(Locations inside the same file should be jumped to without using :edit):
   \ [
   \ ],
   \ g:expr_list
-  AssertEqual [3, 7], getpos('.')[1:2]
+  AssertEqual [3, 8], getpos('.')[1:2]
   AssertEqual {}, ale#definition#GetMap()
 
 Execute(Other files should be jumped to in tabs for LSP definition responses):
@@ -251,10 +255,10 @@ Execute(Other files should be jumped to in tabs for LSP definition responses):
 
   AssertEqual
   \ [
-  \   'tabedit ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \   'tabedit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
-  AssertEqual [3, 7], getpos('.')[1:2]
+  AssertEqual [3, 8], getpos('.')[1:2]
   AssertEqual {}, ale#definition#GetMap()
 
 Execute(Definition responses with lists should be handled):
@@ -282,10 +286,10 @@ Execute(Definition responses with lists should be handled):
 
   AssertEqual
   \ [
-  \   'edit ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \   'edit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \ ],
   \ g:expr_list
-  AssertEqual [3, 7], getpos('.')[1:2]
+  AssertEqual [3, 8], getpos('.')[1:2]
   AssertEqual {}, ale#definition#GetMap()
 
 Execute(Definition responses with null response should be handled):
@@ -306,7 +310,7 @@ Execute(LSP completion requests should be sent):
 
   AssertEqual type(function('type')), type(g:WaitCallback)
   AssertEqual 'definition', g:capability_checked
-  call call(g:WaitCallback, [347, '/foo/bar'])
+  call call(g:WaitCallback, [g:conn_id, '/foo/bar'])
 
   AssertEqual
   \ 'function(''ale#definition#HandleLSPResponse'')',
@@ -342,7 +346,7 @@ Execute(LSP tab completion requests should be sent):
 
   AssertEqual type(function('type')), type(g:WaitCallback)
   AssertEqual 'definition', g:capability_checked
-  call call(g:WaitCallback, [347, '/foo/bar'])
+  call call(g:WaitCallback, [g:conn_id, '/foo/bar'])
 
   AssertEqual
   \ 'function(''ale#definition#HandleLSPResponse'')',

@@ -23,7 +23,7 @@ Before:
     autocmd!
     autocmd User ALEFixPre let g:pre_success = 1
     autocmd User ALEFixPost let g:post_success = 1
-  augroup end
+  augroup END
 
   if !has('win32')
     let &shell = '/bin/bash'
@@ -180,7 +180,7 @@ After:
   unlet! g:ale_emulate_job_failure
   unlet! b:ale_fixers
   unlet! b:ale_fix_on_save
-  augroup! VaderTest
+  unlet! b:ale_quitting
   delfunction AddCarets
   delfunction AddDollars
   delfunction DoNothing
@@ -203,6 +203,12 @@ After:
   delfunction EchoLineNoPipe
   delfunction FixWithJSONPostProcessing
   delfunction JSONPostProcessor
+
+  augroup VaderTest
+    autocmd!
+  augroup END
+
+  augroup! VaderTest
 
   call ale#test#RestoreDirectory()
 
@@ -426,7 +432,7 @@ Given testft (A file with three lines):
   b
   c
 
-Execute(ALEFix should save files on the save event):
+Execute(ALEFix should fix files on the save event):
   let g:ale_fix_on_save = 1
   let g:ale_lint_on_save = 1
   let g:ale_enabled = 1
@@ -465,6 +471,36 @@ Expect(The buffer should be modified):
   $a
   $b
   $c
+
+Execute(ALEFix should not fix files on :wq):
+  let g:ale_fix_on_save = 1
+  let g:ale_lint_on_save = 1
+  let g:ale_enabled = 1
+
+  noautocmd silent file fix_test_file
+  call writefile(getline(1, '$'), 'fix_test_file')
+
+  let g:ale_fixers.testft = ['AddDollars']
+
+  " We have to set the buftype to empty so the file will be written.
+  setlocal buftype=
+
+  call ale#events#QuitEvent(bufnr(''))
+
+  call SetUpLinters()
+  call ale#events#SaveEvent(bufnr(''))
+
+  " We should save the file.
+  AssertEqual ['a', 'b', 'c'], readfile('fix_test_file')
+  Assert &modified, 'The was not marked as ''modified'''
+
+  " We should not run the linter.
+  AssertEqual [], ale#test#GetLoclistWithoutModule()
+
+Expect(The buffer should not be modified):
+  a
+  b
+  c
 
 Given testft (A file with three lines):
   a

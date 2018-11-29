@@ -5,19 +5,10 @@ call ale#Set('markdown_remark_lint_executable', 'remark')
 call ale#Set('markdown_remark_lint_use_global', get(g:, 'ale_use_global_executables', 0))
 call ale#Set('markdown_remark_lint_options', '')
 
-function! ale_linters#markdown#remark_lint#GetExecutable(buffer) abort
-    return ale#node#FindExecutable(a:buffer, 'markdown_remark_lint', [
-    \   'node_modules/.bin/remark',
-    \])
-endfunction
-
 function! ale_linters#markdown#remark_lint#GetCommand(buffer) abort
-    let l:executable = ale_linters#markdown#remark_lint#GetExecutable(a:buffer)
     let l:options = ale#Var(a:buffer, 'markdown_remark_lint_options')
 
-    return ale#node#Executable(a:buffer, l:executable)
-    \    . (!empty(l:options) ? ' ' . l:options : '')
-    \    . ' --no-stdout --no-color'
+    return '%e' . ale#Pad(l:options) . ' --no-stdout --no-color'
 endfunction
 
 function! ale_linters#markdown#remark_lint#Handle(buffer, lines) abort
@@ -33,10 +24,12 @@ function! ale_linters#markdown#remark_lint#Handle(buffer, lines) abort
         \   'type': l:match[6] is# 'error' ? 'E' : 'W',
         \   'text': l:match[7],
         \}
+
         if l:match[3] isnot# ''
             let l:item.end_lnum = l:match[4] + 0
             let l:item.end_col = l:match[5] + 0
         endif
+
         call add(l:output, l:item)
     endfor
 
@@ -46,7 +39,9 @@ endfunction
 call ale#linter#Define('markdown', {
 \   'name': 'remark_lint',
 \   'aliases': ['remark-lint'],
-\   'executable_callback': 'ale_linters#markdown#remark_lint#GetExecutable',
+\   'executable_callback': ale#node#FindExecutableFunc('markdown_remark_lint', [
+\       'node_modules/.bin/remark',
+\   ]),
 \   'command_callback': 'ale_linters#markdown#remark_lint#GetCommand',
 \   'callback': 'ale_linters#markdown#remark_lint#Handle',
 \   'output_stream': 'stderr',

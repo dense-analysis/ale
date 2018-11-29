@@ -26,3 +26,16 @@ Execute(The checkstyle handler should parse lines correctly):
   \   '[WARN] whatever:101: ''method def rcurly'' has incorrect indentation level 4, expected level should be 2. [Indentation]',
   \   '[WARN] whatever:63:3: Missing a Javadoc comment. [JavadocMethod]',
   \ ])
+
+Execute(The checkstyle handler should parse lines from older checkstyle versions correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 289,
+  \     'text': '''method def modifier'' have incorrect indentation level 4, expected level should be 2.',
+  \     'type': 'W',
+  \   },
+  \ ],
+  \ ale_linters#java#checkstyle#Handle(666, [
+  \   '/home/languitar/src/rsb-java/rsb-java/src/main/java/rsb/Listener.java:289: warning: ''method def modifier'' have incorrect indentation level 4, expected level should be 2.',
+  \ ])

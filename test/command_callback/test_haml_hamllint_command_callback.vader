@@ -35,3 +35,7 @@ Execute(The command should include a .rubocop.yml and a .haml-lint if both are f
   AssertLinter 'haml-lint',
   \ ale#Env('HAML_LINT_RUBOCOP_CONF', b:conf_rubocop)
   \   .  'haml-lint --config ' . ale#Escape(b:conf_hamllint) .  ' %t'
+
+Execute(The executable can be overridden):
+  let b:ale_haml_hamllint_executable = 'bin/haml-lint'
+  AssertLinter 'bin/haml-lint', 'bin/haml-lint %t'

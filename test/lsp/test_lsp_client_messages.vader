@@ -161,6 +161,17 @@ Execute(ale#lsp#message#References() should return correct messages):
   \ ],
   \ ale#lsp#message#References(bufnr(''), 12, 34)
 
+Execute(ale#lsp#message#Symbol() should return correct messages):
+  AssertEqual
+  \ [
+  \   0,
+  \   'workspace/symbol',
+  \   {
+  \     'query': 'foobar',
+  \   }
+  \ ],
+  \ ale#lsp#message#Symbol('foobar')
+
 Execute(ale#lsp#message#Hover() should return correct messages):
   AssertEqual
   \ [
@@ -174,6 +185,22 @@ Execute(ale#lsp#message#Hover() should return correct messages):
   \   }
   \ ],
   \ ale#lsp#message#Hover(bufnr(''), 12, 34)
+
+Execute(ale#lsp#message#DidChangeConfiguration() should return correct messages):
+  let g:ale_lsp_configuration = {
+  \ 'foo': 'bar'
+  \ }
+  AssertEqual
+  \ [
+  \   0,
+  \   'workspace/didChangeConfiguration',
+  \   {
+  \     'settings': {
+  \         'foo': 'bar',
+  \     }
+  \   }
+  \ ],
+  \ ale#lsp#message#DidChangeConfiguration(bufnr(''), g:ale_lsp_configuration)
 
 Execute(ale#lsp#tsserver_message#Open() should return correct messages):
   AssertEqual

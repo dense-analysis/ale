@@ -7,7 +7,7 @@ ALE (Asynchronous Lint Engine) is a plugin for providing linting in NeoVim
 0.2.0+ and Vim 8 while you edit your text files, and acts as a Vim
 [Language Server Protocol](https://langserver.org/) client.
 
-![linting example](img/example.gif?raw=true)
+<img src="img/example.gif?raw=true" alt="A linting example with the darkspectrum color scheme in GVim." title="A linting example with the darkspectrum color scheme in GVim.">
 
 ALE makes use of NeoVim and Vim 8 job control functions and timers to
 run linters on the contents of text buffers and return errors as
@@ -26,13 +26,17 @@ features, including:
 
 * Diagnostics (via Language Server Protocol linters)
 * Go To Definition (`:ALEGoToDefinition`)
-* Completion (`let g:ale_completion_enabled = 1`)
+* Completion (`let g:ale_completion_enabled = 1` before ALE is loaded)
 * Finding references (`:ALEFindReferences`)
 * Hover information (`:ALEHover`)
+* Symbol search (`:ALESymbolSearch`)
 
 If you don't care about Language Server Protocol, ALE won't load any of the code
 for working with it unless needed. One of ALE's general missions is that you
 won't pay for the features that you don't use.
+
+If you enjoy this plugin, feel free to contribute or check out the author's
+other content at [w0rp.com](https://w0rp.com).
 
 ## Table of Contents
 
@@ -44,10 +48,12 @@ won't pay for the features that you don't use.
     4. [Go To Definition](#usage-go-to-definition)
     5. [Find References](#usage-find-references)
     6. [Hovering](#usage-hover)
+    7. [Symbol Search](#usage-symbol-search)
 3. [Installation](#installation)
     1. [Installation with Vim package management](#standard-installation)
     2. [Installation with Pathogen](#installation-with-pathogen)
     3. [Installation with Vundle](#installation-with-vundle)
+    4. [Installation with Vim-Plug](#installation-with-vim-plug)
 4. [Contributing](#contributing)
 5. [FAQ](#faq)
     1. [How do I disable particular linters?](#faq-disable-linters)
@@ -62,10 +68,11 @@ won't pay for the features that you don't use.
     10. [How can I run linters only when I save files?](#faq-lint-on-save)
     11. [How can I use the quickfix list instead of the loclist?](#faq-quickfix)
     12. [How can I check JSX files with both stylelint and eslint?](#faq-jsx-stylelint-eslint)
-    13. [Will this plugin eat all of my laptop battery power?](#faq-my-battery-is-sad)
-    14. [How can I configure my C or C++ project?](#faq-c-configuration)
-    15. [How can I configure ALE differently for different buffers?](#faq-buffer-configuration)
-    16. [How can I configure the height of the list in which ALE displays errors?](#faq-list-window-height)
+    13. [How can I check Vue files with ESLint?](#faq-vue-eslint)
+    14. [Will this plugin eat all of my laptop battery power?](#faq-my-battery-is-sad)
+    15. [How can I configure my C or C++ project?](#faq-c-configuration)
+    16. [How can I configure ALE differently for different buffers?](#faq-buffer-configuration)
+    17. [How can I configure the height of the list in which ALE displays errors?](#faq-list-window-height)
 
 <a name="supported-languages"></a>
 
@@ -90,17 +97,18 @@ formatting.
 
 | Language | Tools |
 | -------- | ----- |
+| Ada | [gcc](https://gcc.gnu.org) |
 | ASM | [gcc](https://gcc.gnu.org) |
 | Ansible | [ansible-lint](https://github.com/willthames/ansible-lint) |
 | API Blueprint | [drafter](https://github.com/apiaryio/drafter) |
-| AsciiDoc | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [redpen](http://redpen.cc/), [write-good](https://github.com/btford/write-good) |
+| AsciiDoc | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [redpen](http://redpen.cc/), [write-good](https://github.com/btford/write-good), [vale](https://github.com/ValeLint/vale) |
 | Awk | [gawk](https://www.gnu.org/software/gawk/)|
 | Bash | [language-server](https://github.com/mads-hartmann/bash-language-server), shell [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set), [shellcheck](https://www.shellcheck.net/), [shfmt](https://github.com/mvdan/sh) |
 | Bourne Shell | shell [-n flag](http://linux.die.net/man/1/sh), [shellcheck](https://www.shellcheck.net/), [shfmt](https://github.com/mvdan/sh) |
-| C | [cppcheck](http://cppcheck.sourceforge.net), [cpplint](https://github.com/google/styleguide/tree/gh-pages/cpplint), [clang](http://clang.llvm.org/), [clangd](https://clang.llvm.org/extra/clangd.html), [clangtidy](http://clang.llvm.org/extra/clang-tidy/) !!, [clang-format](https://clang.llvm.org/docs/ClangFormat.html), [flawfinder](https://www.dwheeler.com/flawfinder/), [gcc](https://gcc.gnu.org/) |
-| C++ (filetype cpp) | [clang](http://clang.llvm.org/), [clangcheck](http://clang.llvm.org/docs/ClangCheck.html) !!, [clangtidy](http://clang.llvm.org/extra/clang-tidy/) !!, [clang-format](https://clang.llvm.org/docs/ClangFormat.html), [cppcheck](http://cppcheck.sourceforge.net), [cpplint](https://github.com/google/styleguide/tree/gh-pages/cpplint) !!, [cquery](https://github.com/cquery-project/cquery), [flawfinder](https://www.dwheeler.com/flawfinder/), [gcc](https://gcc.gnu.org/) |
+| C | [cppcheck](http://cppcheck.sourceforge.net), [cpplint](https://github.com/google/styleguide/tree/gh-pages/cpplint), [clang](http://clang.llvm.org/), [clangd](https://clang.llvm.org/extra/clangd.html), [clangtidy](http://clang.llvm.org/extra/clang-tidy/) !!, [clang-format](https://clang.llvm.org/docs/ClangFormat.html), [cquery](https://github.com/cquery-project/cquery), [flawfinder](https://www.dwheeler.com/flawfinder/), [gcc](https://gcc.gnu.org/), [uncrustify](https://github.com/uncrustify/uncrustify), [ccls](https://github.com/MaskRay/ccls) |
+| C++ (filetype cpp) | [clang](http://clang.llvm.org/), [clangd](https://clang.llvm.org/extra/clangd.html), [clangcheck](http://clang.llvm.org/docs/ClangCheck.html) !!, [clangtidy](http://clang.llvm.org/extra/clang-tidy/) !!, [clang-format](https://clang.llvm.org/docs/ClangFormat.html), [clazy](https://github.com/KDE/clazy) !!, [cppcheck](http://cppcheck.sourceforge.net), [cpplint](https://github.com/google/styleguide/tree/gh-pages/cpplint) !!, [cquery](https://github.com/cquery-project/cquery), [flawfinder](https://www.dwheeler.com/flawfinder/), [gcc](https://gcc.gnu.org/), [uncrustify](https://github.com/uncrustify/uncrustify), [ccls](https://github.com/MaskRay/ccls) |
 | CUDA | [nvcc](http://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html) |
-| C# | [mcs](http://www.mono-project.com/docs/about-mono/languages/csharp/) see:`help ale-cs-mcs` for details, [mcsc](http://www.mono-project.com/docs/about-mono/languages/csharp/) !! see:`help ale-cs-mcsc` for details and configuration|
+| C# | [mcs](http://www.mono-project.com/docs/about-mono/languages/csharp/) see:`help ale-cs-mcs` for details, [mcsc](http://www.mono-project.com/docs/about-mono/languages/csharp/) !! see:`help ale-cs-mcsc` for details and configuration, [uncrustify](https://github.com/uncrustify/uncrustify) |
 | Chef | [foodcritic](http://www.foodcritic.io/) |
 | Clojure | [joker](https://github.com/candid82/joker) |
 | CloudFormation | [cfn-python-lint](https://github.com/awslabs/cfn-python-lint) |
@@ -110,13 +118,13 @@ formatting.
 | CSS | [csslint](http://csslint.net/), [prettier](https://github.com/prettier/prettier), [stylelint](https://github.com/stylelint/stylelint) |
 | Cucumber | [cucumber](https://cucumber.io/) |
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
-| D | [dmd](https://dlang.org/dmd-linux.html) |
+| D | [dls](https://github.com/d-language-server/dls), [dmd](https://dlang.org/dmd-linux.html), [uncrustify](https://github.com/uncrustify/uncrustify) |
 | Dafny | [dafny](https://rise4fun.com/Dafny) !! |
 | Dart | [dartanalyzer](https://github.com/dart-lang/sdk/tree/master/pkg/analyzer_cli) !!, [language_server](https://github.com/natebosch/dart_language_server), [dartfmt](https://github.com/dart-lang/sdk/tree/master/utils/dartfmt) |
-| Dockerfile | [hadolint](https://github.com/hadolint/hadolint) |
-| Elixir | [credo](https://github.com/rrrene/credo), [dialyxir](https://github.com/jeremyjh/dialyxir), [dogma](https://github.com/lpil/dogma), [mix](https://hexdocs.pm/mix/Mix.html) !!|
+| Dockerfile | [dockerfile_lint](https://github.com/projectatomic/dockerfile_lint), [hadolint](https://github.com/hadolint/hadolint) |
+| Elixir | [credo](https://github.com/rrrene/credo), [dialyxir](https://github.com/jeremyjh/dialyxir), [dogma](https://github.com/lpil/dogma), [mix](https://hexdocs.pm/mix/Mix.html) !!, [elixir-ls](https://github.com/JakeBecker/elixir-ls) |
 | Elm | [elm-format](https://github.com/avh4/elm-format), [elm-make](https://github.com/elm-lang/elm-make) |
-| Erb | [erb](https://apidock.com/ruby/ERB), [erubi](https://github.com/jeremyevans/erubi), [erubis](https://github.com/kwatch/erubis) |
+| Erb | [erb](https://apidock.com/ruby/ERB), [erubi](https://github.com/jeremyevans/erubi), [erubis](https://github.com/kwatch/erubis), [ruumba](https://github.com/ericqweinstein/ruumba) |
 | Erlang | [erlc](http://erlang.org/doc/man/erlc.html), [SyntaxErl](https://github.com/ten0s/syntaxerl) |
 | Fish | fish [-n flag](https://linux.die.net/man/1/fish)
 | Fortran | [gcc](https://gcc.gnu.org/), [language_server](https://github.com/hansec/fortran-language-server) |
@@ -124,16 +132,20 @@ formatting.
 | FusionScript | [fusion-lint](https://github.com/RyanSquared/fusionscript) |
 | Git Commit Messages | [gitlint](https://github.com/jorisroovers/gitlint) |
 | GLSL | [glslang](https://github.com/KhronosGroup/glslang), [glslls](https://github.com/svenstaro/glsl-language-server) |
-| Go | [gofmt](https://golang.org/cmd/gofmt/), [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports), [go vet](https://golang.org/cmd/vet/) !!, [golint](https://godoc.org/github.com/golang/lint), [gotype](https://godoc.org/golang.org/x/tools/cmd/gotype) !!, [gometalinter](https://github.com/alecthomas/gometalinter) !!, [go build](https://golang.org/cmd/go/) !!, [gosimple](https://github.com/dominikh/go-tools/tree/master/cmd/gosimple) !!, [staticcheck](https://github.com/dominikh/go-tools/tree/master/cmd/staticcheck) !! |
+| Go | [gofmt](https://golang.org/cmd/gofmt/), [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports), [go mod](https://golang.org/cmd/go/) !!, [go vet](https://golang.org/cmd/vet/) !!, [golint](https://godoc.org/github.com/golang/lint), [gotype](https://godoc.org/golang.org/x/tools/cmd/gotype) !!, [gometalinter](https://github.com/alecthomas/gometalinter) !!, [go build](https://golang.org/cmd/go/) !!, [gosimple](https://github.com/dominikh/go-tools/tree/master/cmd/gosimple) !!, [staticcheck](https://github.com/dominikh/go-tools/tree/master/cmd/staticcheck) !!, [golangserver](https://github.com/sourcegraph/go-langserver), [golangci-lint](https://github.com/golangci/golangci-lint) !! |
 | GraphQL | [eslint](http://eslint.org/), [gqlint](https://github.com/happylinks/gqlint), [prettier](https://github.com/prettier/prettier) |
+| Hack | [hack](http://hacklang.org/), [hackfmt](https://github.com/facebook/hhvm/tree/master/hphp/hack/hackfmt), [hhast](https://github.com/hhvm/hhast) (disabled by default; see `:help ale-integration-hack`) |
 | Haml | [haml-lint](https://github.com/brigade/haml-lint) |
 | Handlebars | [ember-template-lint](https://github.com/rwjblue/ember-template-lint) |
-| Haskell | [brittany](https://github.com/lspitzner/brittany), [ghc](https://www.haskell.org/ghc/), [cabal-ghc](https://www.haskell.org/cabal/), [stack-ghc](https://haskellstack.org/), [stack-build](https://haskellstack.org/) !!, [ghc-mod](https://github.com/DanielG/ghc-mod), [stack-ghc-mod](https://github.com/DanielG/ghc-mod), [hlint](https://hackage.haskell.org/package/hlint), [hdevtools](https://hackage.haskell.org/package/hdevtools), [hfmt](https://github.com/danstiner/hfmt) |
-| HTML | [alex](https://github.com/wooorm/alex) !!, [HTMLHint](http://htmlhint.com/), [proselint](http://proselint.com/), [tidy](http://www.html-tidy.org/), [write-good](https://github.com/btford/write-good) |
+| Haskell | [brittany](https://github.com/lspitzner/brittany), [ghc](https://www.haskell.org/ghc/), [cabal-ghc](https://www.haskell.org/cabal/), [stylish-haskell](https://github.com/jaspervdj/stylish-haskell), [stack-ghc](https://haskellstack.org/), [stack-build](https://haskellstack.org/) !!, [ghc-mod](https://github.com/DanielG/ghc-mod), [hlint](https://hackage.haskell.org/package/hlint), [hdevtools](https://hackage.haskell.org/package/hdevtools), [hfmt](https://github.com/danstiner/hfmt), [hie](https://github.com/haskell/haskell-ide-engine) |
+| HCL | [terraform-fmt](https://github.com/hashicorp/terraform) |
+| HTML | [alex](https://github.com/wooorm/alex) !!, [HTMLHint](http://htmlhint.com/), [proselint](http://proselint.com/), [tidy](http://www.html-tidy.org/), [prettier](https://github.com/prettier/prettier), [write-good](https://github.com/btford/write-good) |
 | Idris | [idris](http://www.idris-lang.org/) |
-| Java | [checkstyle](http://checkstyle.sourceforge.net), [javac](http://www.oracle.com/technetwork/java/javase/downloads/index.html), [google-java-format](https://github.com/google/google-java-format), [PMD](https://pmd.github.io/) |
+| ISPC | [ispc](https://ispc.github.io/) !! |
+| Java | [checkstyle](http://checkstyle.sourceforge.net), [javac](http://www.oracle.com/technetwork/java/javase/downloads/index.html), [google-java-format](https://github.com/google/google-java-format), [PMD](https://pmd.github.io/), [javalsp](https://github.com/georgewfraser/vscode-javac), [uncrustify](https://github.com/uncrustify/uncrustify) |
 | JavaScript | [eslint](http://eslint.org/), [flow](https://flowtype.org/), [jscs](http://jscs.info/), [jshint](http://jshint.com/), [prettier](https://github.com/prettier/prettier), [prettier-eslint](https://github.com/prettier/prettier-eslint-cli), [prettier-standard](https://github.com/sheerun/prettier-standard), [standard](http://standardjs.com/), [xo](https://github.com/sindresorhus/xo)
 | JSON | [fixjson](https://github.com/rhysd/fixjson), [jsonlint](http://zaa.ch/jsonlint/), [jq](https://stedolan.github.io/jq/), [prettier](https://github.com/prettier/prettier) |
+| Julia | [languageserver](https://github.com/JuliaEditorSupport/LanguageServer.jl) |
 | Kotlin | [kotlinc](https://kotlinlang.org) !!, [ktlint](https://ktlint.github.io) !!, [languageserver](https://github.com/fwcd/KotlinLanguageServer) see `:help ale-integration-kotlin` for configuration instructions |
 | LaTeX | [alex](https://github.com/wooorm/alex) !!, [chktex](http://www.nongnu.org/chktex/), [lacheck](https://www.ctan.org/pkg/lacheck), [proselint](http://proselint.com/), [redpen](http://redpen.cc/), [vale](https://github.com/ValeLint/vale), [write-good](https://github.com/btford/write-good) |
 | Less | [lessc](https://www.npmjs.com/package/less), [prettier](https://github.com/prettier/prettier), [stylelint](https://github.com/stylelint/stylelint) |
@@ -148,48 +160,53 @@ formatting.
 | Nim | [nim check](https://nim-lang.org/docs/nimc.html) !! |
 | nix | [nix-instantiate](http://nixos.org/nix/manual/#sec-nix-instantiate) |
 | nroff | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good)|
-| Objective-C | [clang](http://clang.llvm.org/) |
-| Objective-C++ | [clang](http://clang.llvm.org/) |
-| OCaml | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-ocaml-merlin` for configuration instructions, [ols](https://github.com/freebroccolo/ocaml-language-server) |
+| Objective-C | [clang](http://clang.llvm.org/), [clangd](https://clang.llvm.org/extra/clangd.html), [uncrustify](https://github.com/uncrustify/uncrustify), [ccls](https://github.com/MaskRay/ccls) |
+| Objective-C++ | [clang](http://clang.llvm.org/), [clangd](https://clang.llvm.org/extra/clangd.html), [uncrustify](https://github.com/uncrustify/uncrustify) |
+| OCaml | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-ocaml-merlin` for configuration instructions, [ols](https://github.com/freebroccolo/ocaml-language-server), [ocamlformat](https://github.com/ocaml-ppx/ocamlformat) |
+| Pawn | [uncrustify](https://github.com/uncrustify/uncrustify) |
 | Perl | [perl -c](https://perl.org/), [perl-critic](https://metacpan.org/pod/Perl::Critic), [perltidy](https://metacpan.org/pod/distribution/Perl-Tidy/bin/perltidy) |
-| PHP | [hack](http://hacklang.org/), [hackfmt](https://github.com/facebook/flow/tree/master/hack/hackfmt), [langserver](https://github.com/felixfbecker/php-language-server), [phan](https://github.com/phan/phan) see `:help ale-php-phan` to instructions, [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer), [phpmd](https://phpmd.org), [phpstan](https://github.com/phpstan/phpstan), [phpcbf](https://github.com/squizlabs/PHP_CodeSniffer), [php-cs-fixer](http://cs.sensiolabs.org/) |
+| Perl6 | [perl6 -c](https://perl6.org) |
+| PHP | [langserver](https://github.com/felixfbecker/php-language-server), [phan](https://github.com/phan/phan) see `:help ale-php-phan` to instructions, [php -l](https://secure.php.net/), [phpcs](https://github.com/squizlabs/PHP_CodeSniffer), [phpmd](https://phpmd.org), [phpstan](https://github.com/phpstan/phpstan), [phpcbf](https://github.com/squizlabs/PHP_CodeSniffer), [php-cs-fixer](http://cs.sensiolabs.org/), [psalm](https://getpsalm.org) !!  |
 | PO | [alex](https://github.com/wooorm/alex) !!, [msgfmt](https://www.gnu.org/software/gettext/manual/html_node/msgfmt-Invocation.html), [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good) |
 | Pod | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good) |
 | Pony | [ponyc](https://github.com/ponylang/ponyc) |
+| Prolog | [swipl](https://github.com/SWI-Prolog/swipl-devel) |
 | proto | [protoc-gen-lint](https://github.com/ckaznocha/protoc-gen-lint) |
 | Pug | [pug-lint](https://github.com/pugjs/pug-lint) |
 | Puppet | [languageserver](https://github.com/lingua-pupuli/puppet-editor-services), [puppet](https://puppet.com), [puppet-lint](https://puppet-lint.com) |
-| Python | [autopep8](https://github.com/hhatto/autopep8), [black](https://github.com/ambv/black), [flake8](http://flake8.pycqa.org/en/latest/), [isort](https://github.com/timothycrosley/isort), [mypy](http://mypy-lang.org/), [prospector](http://github.com/landscapeio/prospector), [pycodestyle](https://github.com/PyCQA/pycodestyle), [pyls](https://github.com/palantir/python-language-server), [pyre](https://github.com/facebook/pyre-check), [pylint](https://www.pylint.org/) !!, [yapf](https://github.com/google/yapf) |
+| Python | [autopep8](https://github.com/hhatto/autopep8), [black](https://github.com/ambv/black), [flake8](http://flake8.pycqa.org/en/latest/), [isort](https://github.com/timothycrosley/isort), [mypy](http://mypy-lang.org/), [prospector](https://github.com/PyCQA/prospector), [pycodestyle](https://github.com/PyCQA/pycodestyle), [pyls](https://github.com/palantir/python-language-server), [pyre](https://github.com/facebook/pyre-check), [pylint](https://www.pylint.org/) !!, [vulture](https://github.com/jendrikseipp/vulture) !!, [yapf](https://github.com/google/yapf) |
 | QML | [qmlfmt](https://github.com/jesperhh/qmlfmt), [qmllint](https://github.com/qt/qtdeclarative/tree/5.11/tools/qmllint) |
 | R | [lintr](https://github.com/jimhester/lintr) |
 | ReasonML | [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-reasonml-ols` for configuration instructions, [ols](https://github.com/freebroccolo/ocaml-language-server), [refmt](https://github.com/reasonml/reason-cli) |
 | reStructuredText | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [redpen](http://redpen.cc/), [rstcheck](https://github.com/myint/rstcheck), [vale](https://github.com/ValeLint/vale), [write-good](https://github.com/btford/write-good) |
 | Re:VIEW | [redpen](http://redpen.cc/) |
 | RPM spec | [rpmlint](https://github.com/rpm-software-management/rpmlint) (disabled by default; see `:help ale-integration-spec`) |
-| Ruby | [brakeman](http://brakemanscanner.org/) !!, [rails_best_practices](https://github.com/flyerhzm/rails_best_practices) !!, [reek](https://github.com/troessner/reek), [rubocop](https://github.com/bbatsov/rubocop), [ruby](https://www.ruby-lang.org), [rufo](https://github.com/ruby-formatter/rufo) |
-| Rust |  cargo !! (see `:help ale-integration-rust` for configuration instructions), [rls](https://github.com/rust-lang-nursery/rls), [rustc](https://www.rust-lang.org/), [rustfmt](https://github.com/rust-lang-nursery/rustfmt) |
+| Ruby | [brakeman](http://brakemanscanner.org/) !!, [rails_best_practices](https://github.com/flyerhzm/rails_best_practices) !!, [reek](https://github.com/troessner/reek), [rubocop](https://github.com/bbatsov/rubocop), [ruby](https://www.ruby-lang.org), [rufo](https://github.com/ruby-formatter/rufo), [solargraph](https://solargraph.org) |
+| Rust |  [cargo](https://github.com/rust-lang/cargo) !! (see `:help ale-integration-rust` for configuration instructions), [rls](https://github.com/rust-lang-nursery/rls), [rustc](https://www.rust-lang.org/), [rustfmt](https://github.com/rust-lang-nursery/rustfmt) |
 | SASS | [sass-lint](https://www.npmjs.com/package/sass-lint), [stylelint](https://github.com/stylelint/stylelint) |
 | SCSS | [prettier](https://github.com/prettier/prettier), [sass-lint](https://www.npmjs.com/package/sass-lint), [scss-lint](https://github.com/brigade/scss-lint), [stylelint](https://github.com/stylelint/stylelint) |
-| Scala | [fsc](https://www.scala-lang.org/old/sites/default/files/linuxsoft_archives/docu/files/tools/fsc.html), [scalac](http://scala-lang.org), [scalafmt](https://scalameta.org/scalafmt/), [scalastyle](http://www.scalastyle.org) |
+| Scala | [fsc](https://www.scala-lang.org/old/sites/default/files/linuxsoft_archives/docu/files/tools/fsc.html), [sbtserver](https://www.scala-sbt.org/1.x/docs/sbt-server.html), [scalac](http://scala-lang.org), [scalafmt](https://scalameta.org/scalafmt/), [scalastyle](http://www.scalastyle.org)|
 | Slim | [slim-lint](https://github.com/sds/slim-lint) |
 | SML | [smlnj](http://www.smlnj.org/) |
 | Solidity | [solhint](https://github.com/protofire/solhint), [solium](https://github.com/duaraghav8/Solium) |
 | Stylus | [stylelint](https://github.com/stylelint/stylelint) |
-| SQL | [sqlint](https://github.com/purcell/sqlint) |
+| SQL | [sqlint](https://github.com/purcell/sqlint), [sqlfmt](https://github.com/jackc/sqlfmt) |
 | Swift | [swiftlint](https://github.com/realm/SwiftLint), [swiftformat](https://github.com/nicklockwood/SwiftFormat) |
 | Tcl | [nagelfar](http://nagelfar.sourceforge.net) !! |
-| Terraform | [tflint](https://github.com/wata727/tflint) |
+| Terraform | [fmt](https://github.com/hashicorp/terraform), [tflint](https://github.com/wata727/tflint) |
 | Texinfo | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good)|
 | Text^ | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [redpen](http://redpen.cc/), [textlint](https://textlint.github.io/), [vale](https://github.com/ValeLint/vale), [write-good](https://github.com/btford/write-good) |
 | Thrift | [thrift](http://thrift.apache.org/) |
-| TypeScript | [eslint](http://eslint.org/), [prettier](https://github.com/prettier/prettier), [tslint](https://github.com/palantir/tslint), tsserver, typecheck |
+| TypeScript | [eslint](http://eslint.org/), [prettier](https://github.com/prettier/prettier), [tslint](https://github.com/palantir/tslint), [tsserver](https://github.com/Microsoft/TypeScript/wiki/Standalone-Server-%28tsserver%29), typecheck |
+| VALA | [uncrustify](https://github.com/uncrustify/uncrustify) |
 | Verilog | [iverilog](https://github.com/steveicarus/iverilog), [verilator](http://www.veripool.org/projects/verilator/wiki/Intro) |
 | Vim | [vint](https://github.com/Kuniwak/vint) |
 | Vim help^ | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good) |
 | Vue | [prettier](https://github.com/prettier/prettier), [vls](https://github.com/vuejs/vetur/tree/master/server) |
 | XHTML | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good) |
 | XML | [xmllint](http://xmlsoft.org/xmllint.html) |
-| YAML | [swaglint](https://github.com/byCedric/swaglint), [yamllint](https://yamllint.readthedocs.io/) |
+| YAML | [prettier](https://github.com/prettier/prettier), [swaglint](https://github.com/byCedric/swaglint), [yamllint](https://yamllint.readthedocs.io/) |
+| YANG | [yang-lsp](https://github.com/theia-ide/yang-lsp) |
 
 <a name="usage"></a>
 
@@ -229,12 +246,18 @@ let b:ale_fixers = ['prettier', 'eslint']
 let b:ale_fixers = {'javascript': ['prettier', 'eslint']}
 ```
 
-You can also configure your fixers from vimrc using `g:ale_fixers`, before
-or after ALE has been loaded.
+You can also configure your fixers from vimrc using `g:ale_fixers`, before or
+after ALE has been loaded.
+
+A `*` in place of the filetype will apply a List of fixers to all files which
+do not match some filetype in the Dictionary.
+
+Note that using a plain List for `g:ale_fixers` is not supported.
 
 ```vim
 " In ~/.vim/vimrc, or somewhere similar.
 let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
 \   'javascript': ['eslint'],
 \}
 ```
@@ -263,6 +286,7 @@ Protocol linters, or from `tsserver` for TypeScript.
 
 ```vim
 " Enable completion where available.
+" This setting must be set before ALE is loaded.
 let g:ale_completion_enabled = 1
 ```
 
@@ -296,10 +320,23 @@ ALE supports "hover" information for printing brief information about symbols at
 the cursor taken from Language Server Protocol linters and `tsserver` with the
 `ALEHover` command.
 
-On vim/gvim with `balloon` support you can see the information in a tooltip
-that appears under the mouse when you mouseover a symbol.
+The information can be displayed in a `balloon` tooltip in Vim or GVim by
+hovering your mouse over symbols. Mouse hovering is enabled by default in GVim,
+and needs to be configured for Vim 8.1+ in terminals.
 
 See `:help ale-hover` for more information.
+
+<a name="usage-symbol-search"></a>
+
+### 2.vii Symbol Search
+
+ALE supports searching for workspace symbols via Language Server Protocol
+linters with the `ALESymbolSearch` command.
+
+Search queries can be performed to find functions, types, and more which are
+similar to a given query string.
+
+See `:help ale-symbol-search` for more information.
 
 <a name="installation"></a>
 
@@ -383,6 +420,18 @@ Plugin 'w0rp/ale'
 ```
 
 See the Vundle documentation for more information.
+
+<a name="installation-with-vim-plug"></a>
+
+### 3.iiii. Installation with Vim-Plug
+
+You can install this plugin using [Vim-Plug](https://github.com/junegunn/vim-plug)
+by adding the GitHub path for this repository to your `~/.vimrc`
+and running `:PlugInstall`.
+
+```vim
+Plug 'w0rp/ale'
+```
 
 <a name="contributing"></a>
 
@@ -702,16 +751,16 @@ options in a jsx.vim ftplugin file.
 
 ```vim
 " In ~/.vim/ftplugin/jsx.vim, or somewhere similar.
+let b:ale_linter_aliases = ['css', 'javascript']
 let b:ale_linters = ['stylelint', 'eslint']
-let b:ale_linter_aliases = ['css']
 ```
 
 Or if you want, you can configure the linters from your vimrc file.
 
 ```vim
 " In ~/.vim/vimrc, or somewhere similar.
+let g:ale_linter_aliases = {'jsx': ['css, 'javascript']}
 let g:ale_linters = {'jsx': ['stylelint', 'eslint']}
-let g:ale_linter_aliases = {'jsx': 'css'}
 ```
 
 ALE will alias the `jsx` filetype so it uses the `css` filetype linters, and
@@ -719,9 +768,40 @@ use the original Array of selected linters for `jsx` from the `g:ale_linters`
 object. All available linters will be used for the filetype `javascript`, and
 no linter will be run twice for the same file.
 
+<a name="faq-vue-eslint"></a>
+
+### 5.xiii. How can I check Vue files with ESLint?
+
+To check Vue files with ESLint, your ESLint project configuration file must be
+configured to use the [Vue plugin](https://github.com/vuejs/eslint-plugin-vue).
+After that, you need to configure ALE so it will run the JavaScript ESLint
+linter on your files. The settings you need are similar to the settings needed
+for checking JSX code with both stylelint and ESLint, in the previous section.
+
+```vim
+" In ~/.vim/ftplugin/vue.vim, or somewhere similar.
+
+" Run both javascript and vue linters for vue files.
+let b:ale_linter_aliases = ['javascript', 'vue']
+" Select the eslint and vls linters.
+let b:ale_linters = ['eslint', 'vls']
+```
+
+Run `:ALEInfo` to see which linters are available after telling ALE to run
+JavaScript linters on Vue files. Not all linters support checking Vue files.
+
+If you don't want to configure your linters in ftplugin files for some reason,
+you can configure them from your vimrc file instead.
+
+```vim
+" In ~/.vim/vimrc, or somewhere similar.
+let g:ale_linter_aliases = {'vue': ['vue', 'javascript']}
+let g:ale_linters = {'vue': ['eslint', 'vls']}
+```
+
 <a name="faq-my-battery-is-sad"></a>
 
-### 5.xiii. Will this plugin eat all of my laptop battery power?
+### 5.xiv. Will this plugin eat all of my laptop battery power?
 
 ALE takes advantage of the power of various tools to check your code. This of
 course means that CPU time will be used to continuously check your code. If you
@@ -746,7 +826,7 @@ including the option `g:ale_lint_on_enter`, and you can run ALE manually with
 
 <a name="faq-c-configuration"></a>
 
-### 5.xiv. How can I configure my C or C++ project?
+### 5.xv. How can I configure my C or C++ project?
 
 The structure of C and C++ projects varies wildly from project to project, with
 many different build tools being used for building them, and many different
@@ -772,7 +852,7 @@ used for executing local vimrc files which can be shared in your project.
 
 <a name="faq-buffer-configuration"></a>
 
-### 5.xv. How can I configure ALE differently for different buffers?
+### 5.xvi. How can I configure ALE differently for different buffers?
 
 ALE offers various ways to configure which linters or fixers are run, and
 other settings. For the majority of ALE's settings, they can either be
@@ -808,7 +888,7 @@ Buffer-local variables for settings always override the global settings.
 
 <a name="faq-list-window-height"></a>
 
-### 5.xvi. How can I configure the height of the list in which ALE displays errors?
+### 5.xvii. How can I configure the height of the list in which ALE displays errors?
 
 To set a default height for the error list, use the `g:ale_list_window_size` variable.
 

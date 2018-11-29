@@ -15,13 +15,13 @@ function! ale#preview#Show(lines, ...) abort
     setlocal modifiable
     setlocal noreadonly
     setlocal nobuflisted
-    let &l:filetype = get(l:options, 'filetype', 'ale-preview')
     setlocal buftype=nofile
     setlocal bufhidden=wipe
     :%d
     call setline(1, a:lines)
     setlocal nomodifiable
     setlocal readonly
+    let &l:filetype = get(l:options, 'filetype', 'ale-preview')
 
     if get(l:options, 'stay_here')
         wincmd p
@@ -46,11 +46,14 @@ function! ale#preview#ShowSelection(item_list) abort
 
     " Create lines to display to users.
     for l:item in a:item_list
+        let l:match = get(l:item, 'match', '')
+
         call add(
         \   l:lines,
         \   l:item.filename
         \       . ':' . l:item.line
-        \       . ':' . l:item.column,
+        \       . ':' . l:item.column
+        \       . (!empty(l:match) ? ' ' . l:match : ''),
         \)
     endfor
 

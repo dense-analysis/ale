@@ -67,7 +67,7 @@ Given foobar (Some imaginary filetype):
 Execute(ALE should delete managed files/directories appropriately after linting):
   AssertEqual 'foobar', &filetype
 
-  call ale#Lint()
+  call ale#Queue(0)
   call ale#engine#WaitForJobs(2000)
 
   Assert !filereadable(g:filename), 'The temporary file was not deleted'
@@ -79,7 +79,7 @@ Execute(ALE should delete managed files even if no command is run):
 
   let g:command = ''
 
-  call ale#Lint()
+  call ale#Queue(0)
   call ale#engine#WaitForJobs(2000)
 
   Assert !filereadable(g:filename), 'The temporary file was not deleted'

@@ -29,7 +29,7 @@ function! ale#events#SaveEvent(buffer) abort
         call setbufvar(a:buffer, 'ale_save_event_fired', 1)
     endif
 
-    if ale#Var(a:buffer, 'fix_on_save')
+    if ale#Var(a:buffer, 'fix_on_save') && !ale#events#QuitRecently(a:buffer)
         let l:will_fix = ale#fix#Fix(a:buffer, 'save_file')
         let l:should_lint = l:should_lint && !l:will_fix
     endif
@@ -131,12 +131,24 @@ function! ale#events#Init() abort
                 autocmd InsertLeave * call ale#Queue(0)
             endif
 
-            if g:ale_echo_cursor
+            if g:ale_echo_cursor || g:ale_cursor_detail
                 autocmd CursorMoved,CursorHold * if exists('*ale#engine#Cleanup') | call ale#cursor#EchoCursorWarningWithDelay() | endif
                 " Look for a warning to echo as soon as we leave Insert mode.
                 " The script's position variable used when moving the cursor will
                 " not be changed here.
                 autocmd InsertLeave * if exists('*ale#engine#Cleanup') | call ale#cursor#EchoCursorWarning() | endif
+            endif
+
+            if g:ale_virtualtext_cursor
+                autocmd CursorMoved,CursorHold * if exists('*ale#engine#Cleanup') | call ale#virtualtext#ShowCursorWarningWithDelay() | endif
+                " Look for a warning to echo as soon as we leave Insert mode.
+                " The script's position variable used when moving the cursor will
+                " not be changed here.
+                autocmd InsertLeave * if exists('*ale#engine#Cleanup') | call ale#virtualtext#ShowCursorWarning() | endif
+            endif
+
+            if g:ale_close_preview_on_insert
+                autocmd InsertEnter * if exists('*ale#preview#CloseIfTypeMatches') | call ale#preview#CloseIfTypeMatches('ale-preview') | endif
             endif
         endif
     augroup END

@@ -8,18 +8,18 @@ After:
 Execute(The default command should be correct):
   AssertLinter 'mmc',
   \ ale#path#BufferCdString(bufnr(''))
-  \ . 'mmc --errorcheck-only --make --output-compile-error-lines 100 dummy'
+  \ . ale#Escape('mmc') . ' --errorcheck-only --make --output-compile-error-lines 100 dummy'
 
 Execute(The executable should be configurable):
   let b:ale_mercury_mmc_executable = 'foo'
 
   AssertLinter 'foo',
   \ ale#path#BufferCdString(bufnr(''))
-  \ . 'foo --errorcheck-only --make --output-compile-error-lines 100 dummy'
+  \ . ale#Escape('foo') . ' --errorcheck-only --make --output-compile-error-lines 100 dummy'
 
 Execute(The options should be configurable):
   let b:ale_mercury_mmc_options = '--bar'
 
   AssertLinter 'mmc',
   \ ale#path#BufferCdString(bufnr(''))
-  \ . 'mmc --errorcheck-only --bar dummy'
+  \ . ale#Escape('mmc') . ' --errorcheck-only --bar dummy'

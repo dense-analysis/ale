@@ -1,24 +1,6 @@
 ===============================================================================
 ALE PHP Integration                                           *ale-php-options*
 
-
-===============================================================================
-hack                                                             *ale-php-hack*
-
-There are no options for this linter.
-
-
-===============================================================================
-hackfmt                                                       *ale-php-hackfmt*
-
-g:ale_php_hackfmt_options                           *g:ale_php_hackfmt_options*
-                                                    *b:ale_php_hackfmt_options*
-  Type: |String|
-  Default: `''`
-
-  This variable can be set to pass additional options to the hackfmt fixer.
-
-
 ===============================================================================
 langserver                                                 *ale-php-langserver*
 
@@ -132,6 +114,13 @@ g:ale_php_phpcs_use_global                         *g:ale_php_phpcs_use_global*
   See |ale-integrations-local-executables|
 
 
+g:ale_php_phpcs_options                               *g:ale_php_phpcs_options*
+                                                      *b:ale_php_phpcs_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to php-cs
+
 ===============================================================================
 phpmd                                                           *ale-php-phpmd*
 
@@ -181,6 +170,16 @@ g:ale_php_phpstan_configuration               *g:ale_php_phpstan_configuration*
 
 
 ===============================================================================
+psalm                                                           *ale-php-psalm*
+
+g:ale_php_psalm_executable                         *g:ale_php_psalm_executable*
+                                                   *b:ale_php_psalm_executable*
+  Type: |String|
+  Default: `'psalm'`
+
+  This variable sets the executable used for psalm.
+
+===============================================================================
 php-cs-fixer                                              *ale-php-php-cs-fixer*
 
 g:ale_php_cs_fixer_executable                    *g:ale_php_cs_fixer_executable*
@@ -203,6 +202,16 @@ g:ale_php_cs_fixer_options                          *g:ale_php_cs_fixer_options*
   Default: `''`
 
   This variable can be set to pass additional options to php-cs-fixer.
+
+===============================================================================
+php                                                                *ale-php-php*
+
+g:ale_php_php_executable                              *g:ale_php_php_executable*
+                                                      *b:ale_php_php_executable*
+  Type: |String|
+  Default: `'php'`
+
+  This variable sets the executable used for php.
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

@@ -2,6 +2,10 @@
 ALE C# Integration                                             *ale-cs-options*
 
 
+In addition to the linters that are provided with ALE, C# code can be checked
+with the OmniSharp plugin. See here: https://github.com/OmniSharp/omnisharp-vim
+
+
 ===============================================================================
 mcs                                                                *ale-cs-mcs*
 
@@ -97,6 +101,12 @@ g:ale_cs_mcsc_assemblies                             *g:ale_cs_mcsc_assemblies*
     \ 'path-to-unityproject/obj/Debug',
     \]
 <
+
+===============================================================================
+uncrustify                                                  *ale-cs-uncrustify*
+
+See |ale-c-uncrustify| for information about the available options.
+
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

@@ -30,7 +30,7 @@ function! ale#assert#Linter(expected_executable, expected_command) abort
         let l:callbacks = map(copy(l:linter.command_chain), 'v:val.callback')
 
         " If the expected command is a string, just check the last one.
-        if type(a:expected_command) is type('')
+        if type(a:expected_command) is v:t_string
             if len(l:callbacks) is 1
                 let l:command = call(l:callbacks[0], [l:buffer])
             else
@@ -54,9 +54,14 @@ function! ale#assert#Linter(expected_executable, expected_command) abort
         endif
     else
         let l:command = ale#linter#GetCommand(l:buffer, l:linter)
+    endif
+
+    if type(l:command) is v:t_string
         " Replace %e with the escaped executable, so tests keep passing after
         " linters are changed to use %e.
         let l:command = substitute(l:command, '%e', '\=ale#Escape(l:executable)', 'g')
+    else
+        call map(l:command, 'substitute(v:val, ''%e'', ''\=ale#Escape(l:executable)'', ''g'')')
     endif
 
     AssertEqual
@@ -80,6 +85,14 @@ function! ale#assert#LSPOptions(expected_options) abort
     AssertEqual a:expected_options, l:initialization_options
 endfunction
 
+function! ale#assert#LSPConfig(expected_config) abort
+    let l:buffer = bufnr('')
+    let l:linter = s:GetLinter()
+    let l:config = ale#lsp_linter#GetConfig(l:buffer, l:linter)
+
+    AssertEqual a:expected_config, l:config
+endfunction
+
 function! ale#assert#LSPLanguage(expected_language) abort
     let l:buffer = bufnr('')
     let l:linter = s:GetLinter()
@@ -94,6 +107,14 @@ function! ale#assert#LSPProject(expected_root) abort
     let l:root = ale#util#GetFunction(l:linter.project_root_callback)(l:buffer)
 
     AssertEqual a:expected_root, l:root
+endfunction
+
+function! ale#assert#LSPAddress(expected_address) abort
+    let l:buffer = bufnr('')
+    let l:linter = s:GetLinter()
+    let l:address = ale#util#GetFunction(l:linter.address_callback)(l:buffer)
+
+    AssertEqual a:expected_address, l:address
 endfunction
 
 " A dummy function for making sure this module is loaded.
@@ -126,28 +147,59 @@ function! ale#assert#SetUpLinterTest(filetype, name) abort
 
     execute 'runtime ale_linters/' . a:filetype . '/' . a:name . '.vim'
 
-    call ale#test#SetDirectory('/testplugin/test/command_callback')
+    if !exists('g:dir')
+        call ale#test#SetDirectory('/testplugin/test/command_callback')
+    endif
 
     command! -nargs=+ WithChainResults :call ale#assert#WithChainResults(<args>)
     command! -nargs=+ AssertLinter :call ale#assert#Linter(<args>)
     command! -nargs=0 AssertLinterNotExecuted :call ale#assert#LinterNotExecuted()
     command! -nargs=+ AssertLSPOptions :call ale#assert#LSPOptions(<args>)
+    command! -nargs=+ AssertLSPConfig :call ale#assert#LSPConfig(<args>)
     command! -nargs=+ AssertLSPLanguage :call ale#assert#LSPLanguage(<args>)
     command! -nargs=+ AssertLSPProject :call ale#assert#LSPProject(<args>)
+    command! -nargs=+ AssertLSPAddress :call ale#assert#LSPAddress(<args>)
 endfunction
 
 function! ale#assert#TearDownLinterTest() abort
     unlet! g:ale_create_dummy_temporary_file
     let s:chain_results = []
 
-    delcommand WithChainResults
-    delcommand AssertLinter
-    delcommand AssertLinterNotExecuted
-    delcommand AssertLSPOptions
-    delcommand AssertLSPLanguage
-    delcommand AssertLSPProject
+    if exists(':WithChainResults')
+        delcommand WithChainResults
+    endif
 
-    call ale#test#RestoreDirectory()
+    if exists(':AssertLinter')
+        delcommand AssertLinter
+    endif
+
+    if exists(':AssertLinterNotExecuted')
+        delcommand AssertLinterNotExecuted
+    endif
+
+    if exists(':AssertLSPOptions')
+        delcommand AssertLSPOptions
+    endif
+
+    if exists(':AssertLSPConfig')
+        delcommand AssertLSPConfig
+    endif
+
+    if exists(':AssertLSPLanguage')
+        delcommand AssertLSPLanguage
+    endif
+
+    if exists(':AssertLSPProject')
+        delcommand AssertLSPProject
+    endif
+
+    if exists(':AssertLSPAddress')
+        delcommand AssertLSPAddress
+    endif
+
+    if exists('g:dir')
+        call ale#test#RestoreDirectory()
+    endif
 
     Restore
 

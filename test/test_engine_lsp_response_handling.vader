@@ -2,6 +2,8 @@ Before:
   Save g:ale_buffer_info
   Save g:ale_lsp_error_messages
 
+  let g:ale_buffer_info = {}
+
   unlet! g:ale_lsp_error_messages
 
   call ale#test#SetDirectory('/testplugin/test')
@@ -63,7 +65,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   \     'vcol': 0,
   \     'nr': 1005,
   \     'type': 'E',
-  \     'text': ''','' expected.',
+  \     'text': '1005: '','' expected.',
   \     'valid': 1,
   \     'pattern': '',
   \   },
@@ -136,7 +138,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   \     'vcol': 0,
   \     'nr': 1005,
   \     'type': 'E',
-  \     'text': 'Some semantic error',
+  \     'text': '1005: Some semantic error',
   \     'valid': 1,
   \     'pattern': '',
   \   },

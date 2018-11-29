@@ -4,9 +4,17 @@ Before:
   Save g:ale_enabled
   Save &l:statusline
 
+  let b:fake_mode = 'n'
+
   call ale#test#SetDirectory('/testplugin/test')
 
   let b:funky_command_created = 0
+
+  runtime autoload/ale/util.vim
+
+  function! ale#util#Mode(...) abort
+    return b:fake_mode
+  endfunction
 
   " We will test for the existence of this command, so create one if needed.
   if !exists(':CtrlPFunky')
@@ -25,6 +33,9 @@ After:
   endif
 
   unlet! b:funky_command_created
+  unlet! b:fake_mode
+
+  runtime autoload/ale/util.vim
 
 Given foobar(An empty file):
 Execute(ALE shouldn't do much of anything for ctrlp-funky buffers):
@@ -44,13 +55,18 @@ Execute(ALE shouldn't try to check buffers with '.' as the filename):
 
   Assert ale#ShouldDoNothing(bufnr(''))
 
-Execute(DoNothing should return 0 when the filetype is empty):
+Execute(DoNothing should return 1 when the filetype is empty):
   AssertEqual
   \ 0,
   \ ale#ShouldDoNothing(bufnr('')),
   \ 'ShouldDoNothing() was 1 for some other reason'
 
   set filetype=
+
+  AssertEqual 1, ale#ShouldDoNothing(bufnr(''))
+
+Execute(DoNothing should return 1 when an operator is pending):
+  let b:fake_mode = 'no'
 
   AssertEqual 1, ale#ShouldDoNothing(bufnr(''))
 

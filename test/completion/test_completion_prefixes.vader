@@ -43,3 +43,23 @@ Execute(Completion should be done after words in parens in Rust):
 
 Execute(Completion should not be done after parens in Rust):
   AssertEqual '', ale#completion#GetPrefix(&filetype, 3, 15)
+
+Given lisp():
+  (minus-name
+  (full-name)
+
+Execute(Completion should be done for function names with minuses in Lisp):
+  AssertEqual 'minus-name', ale#completion#GetPrefix(&filetype, 1, 12)
+
+Execute(Completion should not be done after parens in Lisp):
+  AssertEqual '', ale#completion#GetPrefix(&filetype, 2, 12)
+
+Given clojure():
+  (minus-name
+  (full-name)
+
+Execute(Completion should be done for function names with minuses in Clojure):
+  AssertEqual 'minus-name', ale#completion#GetPrefix(&filetype, 1, 12)
+
+Execute(Completion should not be done after parens in Clojure):
+  AssertEqual '', ale#completion#GetPrefix(&filetype, 2, 12)

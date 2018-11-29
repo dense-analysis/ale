@@ -32,6 +32,13 @@ Execute(TypeScript completion details responses should be parsed correctly):
   \     'kind': 'f',
   \     'icase': 1,
   \   },
+  \   {
+  \     'word': 'ghi',
+  \     'menu': '(class) Foo',
+  \     'info': '',
+  \     'kind': 'f',
+  \     'icase': 1,
+  \   },
   \ ],
   \ ale#completion#ParseTSServerCompletionEntryDetails({
   \ 'body': [
@@ -72,6 +79,17 @@ Execute(TypeScript completion details responses should be parsed correctly):
   \       {'text': 'bar'},
   \       {'text': ' '},
   \       {'text': 'baz'},
+  \     ],
+  \   },
+  \   {
+  \     'name': 'ghi',
+  \     'kind': 'className',
+  \     'displayParts': [
+  \       {'text': '('},
+  \       {'text': 'class'},
+  \       {'text': ')'},
+  \       {'text': ' '},
+  \       {'text': 'Foo'},
   \     ],
   \   },
   \ ],

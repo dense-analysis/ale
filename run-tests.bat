@@ -13,7 +13,7 @@ set VADER_OUTPUT_FILE=%~dp0\vader_output
 REM Automatically re-run Windows tests, which can fail some times.
 set tries=0
 
-RUN_TESTS:
+:RUN_TESTS
 set /a tries=%tries%+1
 type nul > "%VADER_OUTPUT_FILE%"
 C:\vim\vim\vim80\vim.exe -u test/vimrc "+Vader! %tests%"
@@ -23,7 +23,7 @@ IF %code% EQU 0 GOTO :SHOW_RESULTS
 IF %tries%  GEQ 2 GOTO :SHOW_RESULTS
 GOTO :RUN_TESTS
 
-SHOW_RESULTS:
+:SHOW_RESULTS
 type "%VADER_OUTPUT_FILE%"
 del "%VADER_OUTPUT_FILE%"
 

@@ -1,6 +1,8 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Functions for integrating with Python linters.
 
+call ale#Set('python_auto_pipenv', '0')
+
 let s:sep = has('win32') ? '\' : '/'
 " bin is used for Unix virtualenv directories, and Scripts is for Windows.
 let s:bin_dir = has('unix') ? 'bin' : 'Scripts'
@@ -24,6 +26,7 @@ function! ale#python#FindProjectRootIni(buffer) abort
         \|| filereadable(l:path . '/mypy.ini')
         \|| filereadable(l:path . '/pycodestyle.cfg')
         \|| filereadable(l:path . '/flake8.cfg')
+        \|| filereadable(l:path . '/.flake8rc')
         \|| filereadable(l:path . '/Pipfile')
         \|| filereadable(l:path . '/Pipfile.lock')
             return l:path
@@ -105,4 +108,9 @@ function! ale#python#FindExecutable(buffer, base_var_name, path_list) abort
     endif
 
     return ale#Var(a:buffer, a:base_var_name . '_executable')
+endfunction
+
+" Detects whether a pipenv environment is present.
+function! ale#python#PipenvPresent(buffer) abort
+    return findfile('Pipfile.lock', expand('#' . a:buffer . ':p:h') . ';') isnot# ''
 endfunction

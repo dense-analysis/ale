@@ -23,10 +23,11 @@ After:
 
   let g:ale_run_synchronously = 0
 
-  try
-    augroup! VaderTest
-  catch
-  endtry
+  augroup VaderTest
+    autocmd!
+  augroup END
+
+  augroup! VaderTest
 
   unlet! g:job_started_success
 
@@ -38,7 +39,7 @@ Execute(Run a lint cycle with an actual job to check for ALEJobStarted):
   augroup VaderTest
     autocmd!
     autocmd User ALEJobStarted let g:job_started_success = 1
-  augroup end
+  augroup END
 
   ALELint
 

@@ -175,10 +175,19 @@ Execute (g:ale_lint_on_filetype_changed = 1 should bind the FileType event):
   \ filter(CheckAutocmd('ALEEvents'), 'v:val =~ ''\v^FileType''')
 
 Execute (ALECleanupGroup should include the right commands):
-  AssertEqual [
-  \ 'BufDelete * if exists(''*ale#engine#Cleanup'') | call ale#engine#Cleanup(str2nr(expand(''<abuf>''))) | endif',
-  \ 'QuitPre * call ale#events#QuitEvent(str2nr(expand(''<abuf>'')))',
-  \], CheckAutocmd('ALECleanupGroup')
+  if exists('##VimSuspend')
+    AssertEqual [
+    \ 'BufDelete * if exists(''*ale#engine#Cleanup'') | call ale#engine#Cleanup(str2nr(expand(''<abuf>''))) | endif',
+    \ 'QuitPre * call ale#events#QuitEvent(str2nr(expand(''<abuf>'')))',
+    \ 'VimSuspend * if exists(''*ale#engine#CleanupEveryBuffer'') | call ale#engine#CleanupEveryBuffer() | endif',
+    \], CheckAutocmd('ALECleanupGroup')
+  else
+    AssertEqual [
+    \ 'BufDelete * if exists(''*ale#engine#Cleanup'') | call ale#engine#Cleanup(str2nr(expand(''<abuf>''))) | endif',
+    \ 'QuitPre * call ale#events#QuitEvent(str2nr(expand(''<abuf>'')))',
+    \], CheckAutocmd('ALECleanupGroup')
+  endif
+
 
 Execute(Enabling completion should set up autocmd events correctly):
   let g:ale_completion_enabled = 0

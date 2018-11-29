@@ -61,10 +61,29 @@ Execute(Disabling trailing whitespace warnings should work):
   \   '8: T2 Trailing whitespace',
   \])
 
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 8,
+  \     'type': 'E',
+  \     'text': 'Trailing whitespace',
+  \     'code': 'B2',
+  \   },
+  \ ],
+  \ ale_linters#gitcommit#gitlint#Handle(bufnr(''), [
+  \   '8: B2 Trailing whitespace',
+  \])
+
   let b:ale_warn_about_trailing_whitespace = 0
 
   AssertEqual
   \ [],
   \ ale_linters#gitcommit#gitlint#Handle(bufnr(''), [
   \   '8: T2 Trailing whitespace',
+  \ ])
+
+  AssertEqual
+  \ [],
+  \ ale_linters#gitcommit#gitlint#Handle(bufnr(''), [
+  \   '8: B2 Trailing whitespace',
   \ ])
