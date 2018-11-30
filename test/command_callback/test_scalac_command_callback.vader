@@ -6,7 +6,7 @@ After:
 
 Given scala(An empty Scala file):
 Execute(The default executable and command should be correct):
-  AssertLinter 'scalac', ale#Escape('scalac') . ' -Ystop-after:parser %t'
+  AssertLinter 'scalac', ale#Escape('scalac') . ' -Ystop-before:jvm %t'
 
 Given scala.sbt(An empty SBT file):
 Execute(scalac should not be run for sbt files):

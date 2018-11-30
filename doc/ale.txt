@@ -21,6 +21,8 @@ CONTENTS                                                         *ale-contents*
     6.1 Highlights........................|ale-highlights|
     6.2 Options for write-good Linter.....|ale-write-good-options|
   7. Integration Documentation............|ale-integrations|
+    ada...................................|ale-ada-options|
+      gcc.................................|ale-ada-gcc|
     ansible...............................|ale-ansible-options|
       ansible-lint........................|ale-ansible-ansible-lint|
     asciidoc..............................|ale-asciidoc-options|
@@ -145,6 +147,8 @@ CONTENTS                                                         *ale-contents*
       write-good..........................|ale-html-write-good|
     idris.................................|ale-idris-options|
       idris...............................|ale-idris-idris|
+    ispc..................................|ale-ispc-options|
+      ispc................................|ale-ispc-ispc|
     java..................................|ale-java-options|
       checkstyle..........................|ale-java-checkstyle|
       javac...............................|ale-java-javac|
@@ -394,6 +398,7 @@ Notes:
 `^` No linters for text or Vim help filetypes are enabled by default.
 `!!` These linters check only files on disk. See |ale-lint-file-linters|
 
+* Ada: `gcc`
 * ASM: `gcc`
 * Ansible: `ansible-lint`
 * API Blueprint: `drafter`
@@ -437,6 +442,7 @@ Notes:
 * HCL: `terraform-fmt`
 * HTML: `alex`!!, `HTMLHint`, `proselint`, `tidy`, `prettier`, `write-good`
 * Idris: `idris`
+* ISPC: `ispc`!!
 * Java: `checkstyle`, `javac`, `google-java-format`, `PMD`, `javalsp`, `uncrustify`
 * JavaScript: `eslint`, `flow`, `jscs`, `jshint`, `prettier`, `prettier-eslint`, `prettier-standard`, `standard`, `xo`
 * JSON: `fixjson`, `jsonlint`, `jq`, `prettier`
@@ -1422,6 +1428,7 @@ g:ale_linters                                                   *g:ale_linters*
 
   {
   \   'csh': ['shell'],
+  \   'elixir': ['credo', 'dialyxir', 'dogma', 'elixir-ls'],
   \   'go': ['gofmt', 'golint', 'go vet'],
   \   'hack': ['hack'],
   \   'help': [],

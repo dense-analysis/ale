@@ -8,6 +8,10 @@ let g:ale_virtualtext_delay = get(g:, 'ale_virtualtext_delay', 10)
 let s:cursor_timer = -1
 let s:last_pos = [0, 0, 0]
 
+if has('nvim-0.3.2')
+    let s:ns_id = nvim_create_namespace('ale')
+endif
+
 if !hlexists('ALEVirtualTextError')
     highlight link ALEVirtualTextError ALEError
 endif
@@ -35,7 +39,7 @@ function! ale#virtualtext#Clear() abort
 
     let l:buffer = bufnr('')
 
-    call nvim_buf_clear_highlight(l:buffer, 1000, 0, -1)
+    call nvim_buf_clear_highlight(l:buffer, s:ns_id, 0, -1)
 endfunction
 
 function! ale#virtualtext#ShowMessage(message, hl_group) abort
@@ -48,7 +52,7 @@ function! ale#virtualtext#ShowMessage(message, hl_group) abort
     let l:buffer = bufnr('')
     let l:prefix = get(g:, 'ale_virtualtext_prefix', '> ')
 
-    call nvim_buf_set_virtual_text(l:buffer, 1000, l:line-1, [[l:prefix.a:message, a:hl_group]], {})
+    call nvim_buf_set_virtual_text(l:buffer, s:ns_id, l:line-1, [[l:prefix.a:message, a:hl_group]], {})
 endfunction
 
 function! s:StopCursorTimer() abort
