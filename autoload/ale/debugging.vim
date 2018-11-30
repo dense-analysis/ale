@@ -237,10 +237,11 @@ function! ale#debugging#Info() abort
 endfunction
 
 function! ale#debugging#InfoToClipboard() abort
-    redir @+>
+    redir => l:output
         silent call ale#debugging#Info()
     redir END
 
+    let @+ = l:output
     call s:Echo('ALEInfo copied to your clipboard')
 endfunction
 
