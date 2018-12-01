@@ -195,6 +195,7 @@ Notes:
   * `ispc`!!
 * Java
   * `checkstyle`
+  * `eclipselsp`
   * `google-java-format`
   * `javac`
   * `javalsp`

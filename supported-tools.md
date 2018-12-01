@@ -204,6 +204,7 @@ formatting.
   * [ispc](https://ispc.github.io/) :floppy_disk:
 * Java
   * [checkstyle](http://checkstyle.sourceforge.net)
+  * [eclipselsp](https://github.com/eclipse/eclipse.jdt.ls)
   * [google-java-format](https://github.com/google/google-java-format)
   * [javac](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
   * [javalsp](https://github.com/georgewfraser/vscode-javac)
