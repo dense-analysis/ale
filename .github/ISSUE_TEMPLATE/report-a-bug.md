@@ -30,6 +30,11 @@ Operating System: <!-- Describe your operating system version. -->
 Something went wrong in specifically this place, and I also searched through
 both open and closed issues for the same problem before reporting a bug here.
 
+Are you having trouble configuring ALE? You should ask tech support style
+questions for ALE on [https://vi.stackexchange.com/](Stack Overflow) or perhaps
+on [Reddit](https://www.reddit.com/r/vim/) instead. GitHub issues are for
+reporting problems with software, not for tech support.
+
 ## Reproducing the bug
 
 <!-- Write a list of steps below. -->
