@@ -1,13 +1,13 @@
 # Asynchronous Lint Engine [![Travis CI Build Status](https://travis-ci.org/w0rp/ale.svg?branch=master)](https://travis-ci.org/w0rp/ale) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/r0ef1xu8xjmik58d/branch/master?svg=true)](https://ci.appveyor.com/project/w0rp/ale)
 
 
-![ALE Logo by Mark Grealish - https://www.bhalash.com/](img/logo.jpg?raw=true)
+![ALE Logo by Mark Grealish - https://www.bhalash.com/](https://raw.github.com/w0rp/ale/gh-pages/img/logo.jpg?raw=true)
 
 ALE (Asynchronous Lint Engine) is a plugin for providing linting in NeoVim
 0.2.0+ and Vim 8 while you edit your text files, and acts as a Vim
 [Language Server Protocol](https://langserver.org/) client.
 
-![linting example](img/example.gif?raw=true)
+![linting example](https://raw.github.com/w0rp/ale/gh-pages/img/example.gif?raw=true)
 
 ALE makes use of NeoVim and Vim 8 job control functions and timers to
 run linters on the contents of text buffers and return errors as
@@ -586,7 +586,7 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 
 Will give you:
 
-![Echoed message](img/echo.png)
+![Echoed message](https://raw.github.com/w0rp/ale/gh-pages/img/echo.png)
 
 See `:help g:ale_echo_msg_format` for more information.
 
