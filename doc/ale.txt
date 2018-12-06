@@ -31,6 +31,8 @@ CONTENTS                                                         *ale-contents*
       gcc.................................|ale-asm-gcc|
     awk...................................|ale-awk-options|
       gawk................................|ale-awk-gawk|
+    bib...................................|ale-bib-options|
+      bibclean............................|ale-bib-bibclean|
     c.....................................|ale-c-options|
       clang...............................|ale-c-clang|
       clangd..............................|ale-c-clangd|
@@ -406,6 +408,7 @@ Notes:
 * AsciiDoc: `alex`!!, `proselint`, `redpen`, `write-good`, `vale`
 * Awk: `gawk`
 * Bash: `language-server`, `shell` (-n flag), `shellcheck`, `shfmt`
+* BibTeX: `bibclean`
 * Bourne Shell: `shell` (-n flag), `shellcheck`, `shfmt`
 * C: `cppcheck`, `cpplint`!!, `clang`, `clangd`, `clangtidy`!!, `clang-format`, `cquery`, `flawfinder`, `gcc`, `uncrustify`, `ccls`
 * C++ (filetype cpp): `clang`, `clangd`, `clangcheck`!!, `clangtidy`!!, `clang-format`, `clazy`!!, `cppcheck`, `cpplint`!!, `cquery`, `flawfinder`, `gcc`, `uncrustify`, `ccls`
