@@ -174,11 +174,21 @@ function! s:GetListFromCompileCommandsFile(compile_commands_file) abort
     return []
 endfunction
 
+function! ale#c#GetCompileCommand(json_item) abort
+    if has_key(a:json_item, "command")
+        return a:json_item.command
+    elseif has_key(a:json_item, "arguments")
+        return join(a:json_item.arguments, " ")
+    endif
+
+    return ""
+endfunction
+
 function! ale#c#ParseCompileCommandsFlags(buffer, dir, json_list) abort
     " Search for an exact file match first.
     for l:item in a:json_list
         if bufnr(l:item.file) is a:buffer
-            return ale#c#ParseCFlags(a:dir, l:item.command)
+            return ale#c#ParseCFlags(a:dir, ale#c#GetCompileCommand(l:item))
         endif
     endfor
 
@@ -187,7 +197,7 @@ function! ale#c#ParseCompileCommandsFlags(buffer, dir, json_list) abort
 
     for l:item in a:json_list
         if ale#path#Simplify(fnamemodify(l:item.file, ':h')) is? l:dir
-            return ale#c#ParseCFlags(a:dir, l:item.command)
+            return ale#c#ParseCFlags(a:dir, ale#c#GetCompileCommand(l:item))
         endif
     endfor
 
