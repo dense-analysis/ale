@@ -11,6 +11,12 @@
 " A setting for wrapping commands.
 let g:ale_command_wrapper = get(g:, 'ale_command_wrapper', '')
 
+" A setting for the shell used to execute commands
+let g:ale_shell = get(g:, 'ale_shell', &shell)
+
+" A setting for the arguments we pass to the shell when executing commands
+let g:ale_shell_arguments = get(g:, 'ale_shell_arguments', &shellcmdflag)
+
 if !has_key(s:, 'job_map')
     let s:job_map = {}
 endif
@@ -188,11 +194,11 @@ function! ale#job#PrepareCommand(buffer, command) abort
         return 'cmd /s/c "' . l:command . '"'
     endif
 
-    if &shell =~? 'fish$\|pwsh$'
-        return ['/bin/sh', '-c', l:command]
+    if g:ale_shell =~? 'fish$\|pwsh$'
+        return ['/bin/sh', g:ale_shell_arguments, l:command]
     endif
 
-    return split(&shell) + split(&shellcmdflag) + [l:command]
+    return [g:ale_shell] + split(g:ale_shell_arguments) + [l:command]
 endfunction
 
 " Start a job with options which are agnostic to Vim and NeoVim.
