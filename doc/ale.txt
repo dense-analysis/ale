@@ -31,6 +31,8 @@ CONTENTS                                                         *ale-contents*
       gcc.................................|ale-asm-gcc|
     awk...................................|ale-awk-options|
       gawk................................|ale-awk-gawk|
+    bib...................................|ale-bib-options|
+      bibclean............................|ale-bib-bibclean|
     c.....................................|ale-c-options|
       clang...............................|ale-c-clang|
       clangd..............................|ale-c-clangd|
@@ -258,6 +260,7 @@ CONTENTS                                                         *ale-contents*
       mypy................................|ale-python-mypy|
       prospector..........................|ale-python-prospector|
       pycodestyle.........................|ale-python-pycodestyle|
+      pydocstyle..........................|ale-python-pydocstyle|
       pyflakes............................|ale-python-pyflakes|
       pylint..............................|ale-python-pylint|
       pyls................................|ale-python-pyls|
@@ -288,6 +291,7 @@ CONTENTS                                                         *ale-contents*
       rustc...............................|ale-rust-rustc|
       rustfmt.............................|ale-rust-rustfmt|
     sass..................................|ale-sass-options|
+      sasslint............................|ale-sass-sasslint|
       stylelint...........................|ale-sass-stylelint|
     scala.................................|ale-scala-options|
       sbtserver...........................|ale-scala-sbtserver|
@@ -295,6 +299,7 @@ CONTENTS                                                         *ale-contents*
       scalastyle..........................|ale-scala-scalastyle|
     scss..................................|ale-scss-options|
       prettier............................|ale-scss-prettier|
+      sasslint............................|ale-scss-sasslint|
       stylelint...........................|ale-scss-stylelint|
     sh....................................|ale-sh-options|
       sh-language-server..................|ale-sh-language-server|
@@ -403,6 +408,7 @@ Notes:
 * AsciiDoc: `alex`!!, `proselint`, `redpen`, `write-good`, `vale`
 * Awk: `gawk`
 * Bash: `language-server`, `shell` (-n flag), `shellcheck`, `shfmt`
+* BibTeX: `bibclean`
 * Bourne Shell: `shell` (-n flag), `shellcheck`, `shfmt`
 * C: `cppcheck`, `cpplint`!!, `clang`, `clangd`, `clangtidy`!!, `clang-format`, `cquery`, `flawfinder`, `gcc`, `uncrustify`, `ccls`
 * C++ (filetype cpp): `clang`, `clangd`, `clangcheck`!!, `clangtidy`!!, `clang-format`, `clazy`!!, `cppcheck`, `cpplint`!!, `cquery`, `flawfinder`, `gcc`, `uncrustify`, `ccls`
@@ -473,7 +479,7 @@ Notes:
 * proto: `protoc-gen-lint`
 * Pug: `pug-lint`
 * Puppet: `languageserver`, `puppet`, `puppet-lint`
-* Python: `autopep8`, `black`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pyls`, `pyre`, `pylint`!!, `vulture`!!, `yapf`
+* Python: `autopep8`, `black`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pydocstyle`, `pyls`, `pyre`, `pylint`!!, `vulture`!!, `yapf`
 * QML: `qmlfmt`, `qmllint`
 * R: `lintr`
 * ReasonML: `merlin`, `ols`, `refmt`
