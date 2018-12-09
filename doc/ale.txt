@@ -285,6 +285,7 @@ CONTENTS                                                         *ale-contents*
       ruby................................|ale-ruby-ruby|
       rufo................................|ale-ruby-rufo|
       solargraph..........................|ale-ruby-solargraph|
+      standardrb..........................|ale-ruby-standardrb|
     rust..................................|ale-rust-options|
       cargo...............................|ale-rust-cargo|
       rls.................................|ale-rust-rls|
