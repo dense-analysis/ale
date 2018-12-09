@@ -44,6 +44,13 @@ Execute(The javac handler should handle cannot find symbol errors):
   \     'text': 'error: cannot find symbol: bar()',
   \     'type': 'E',
   \   },
+  \   {
+  \     'filename': ale#path#Simplify('/tmp/vLPr4Q5/33/foo.java'),
+  \     'lnum': 58,
+  \     'col': 19,
+  \     'text': 'error: incompatible types: Bar cannot be converted to Foo',
+  \     'type': 'E',
+  \   },
   \ ],
   \ ale_linters#java#javac#Handle(bufnr(''), [
   \   '/tmp/vLPr4Q5/33/foo.java:1: error: some error',
@@ -62,7 +69,10 @@ Execute(The javac handler should handle cannot find symbol errors):
   \   '      this.bar();',
   \   '          ^',
   \   '  symbol: method bar()',
-  \   '5 errors',
+  \   '/tmp/vLPr4Q5/33/foo.java:58: error: incompatible types: Bar cannot be converted to Foo',
+  \   '      this.setFoo(bar);',
+  \   '                  ^',
+  \   '6 errors',
   \ ])
 
 Execute(The javac handler should resolve files from different directories):
