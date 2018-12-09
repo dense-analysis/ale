@@ -1,20 +1,22 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: flake8 for python files
 
-let g:ale_python_flake8_executable =
-\   get(g:, 'ale_python_flake8_executable', 'flake8')
-
-" Support an old setting as a fallback.
-let s:default_options = get(g:, 'ale_python_flake8_args', '')
-let g:ale_python_flake8_options =
-\   get(g:, 'ale_python_flake8_options', s:default_options)
-let g:ale_python_flake8_use_global = get(g:, 'ale_python_flake8_use_global', get(g:, 'ale_use_global_executables', 0))
+call ale#Set('python_flake8_executable', 'flake8')
+call ale#Set('python_flake8_options', '')
+call ale#Set('python_flake8_use_global', get(g:, 'ale_use_global_executables', 0))
+call ale#Set('python_flake8_change_directory', 1)
+call ale#Set('python_flake8_auto_pipenv', 0)
 
 function! s:UsingModule(buffer) abort
     return ale#Var(a:buffer, 'python_flake8_options') =~# ' *-m flake8'
 endfunction
 
 function! ale_linters#python#flake8#GetExecutable(buffer) abort
+    if (ale#Var(a:buffer, 'python_auto_pipenv') || ale#Var(a:buffer, 'python_flake8_auto_pipenv'))
+    \ && ale#python#PipenvPresent(a:buffer)
+        return 'pipenv'
+    endif
+
     if !s:UsingModule(a:buffer)
         return ale#python#FindExecutable(a:buffer, 'python_flake8', ['flake8'])
     endif
@@ -39,9 +41,15 @@ function! ale_linters#python#flake8#VersionCheck(buffer) abort
 endfunction
 
 function! ale_linters#python#flake8#GetCommand(buffer, version_output) abort
-    let l:cd_string = ale#path#BufferCdString(a:buffer)
+    let l:cd_string = ale#Var(a:buffer, 'python_flake8_change_directory')
+    \   ? ale#path#BufferCdString(a:buffer)
+    \   : ''
     let l:executable = ale_linters#python#flake8#GetExecutable(a:buffer)
     let l:version = ale#semver#GetVersion(l:executable, a:version_output)
+
+    let l:exec_args = l:executable =~? 'pipenv$'
+    \   ? ' run flake8'
+    \   : ''
 
     " Only include the --stdin-display-name argument if we can parse the
     " flake8 version, and it is recent enough to support it.
@@ -52,7 +60,7 @@ function! ale_linters#python#flake8#GetCommand(buffer, version_output) abort
     let l:options = ale#Var(a:buffer, 'python_flake8_options')
 
     return l:cd_string
-    \   . ale#Escape(l:executable)
+    \   . ale#Escape(l:executable) . l:exec_args
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' --format=default'
     \   . l:display_name_args . ' -'
@@ -102,6 +110,7 @@ function! ale_linters#python#flake8#Handle(buffer, lines) abort
         let l:item = {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
+        \   'vcol': 1,
         \   'text': l:match[4],
         \   'code': l:code,
         \   'type': 'W',

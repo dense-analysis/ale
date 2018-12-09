@@ -1,39 +1,29 @@
 Before:
-  Save g:ale_ruby_rubocop_executable
-
-  let g:ale_ruby_rubocop_executable = 'rubocop'
-
-  runtime ale_linters/ruby/rubocop.vim
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#assert#SetUpLinterTest('ruby', 'rubocop')
   call ale#test#SetFilename('dummy.rb')
 
-After:
-  Restore
+  let g:ale_ruby_rubocop_executable = 'rubocop'
+  let g:ale_ruby_rubocop_options = ''
 
-  call ale#linter#Reset()
-  call ale#test#RestoreDirectory()
+After:
+  call ale#assert#TearDownLinterTest()
 
 Execute(Executable should default to rubocop):
-  AssertEqual
-  \ ale#Escape('rubocop')
+  AssertLinter 'rubocop', ale#Escape('rubocop')
   \   . ' --format json --force-exclusion  --stdin '
-  \   . ale#Escape(ale#path#Simplify(g:dir . '/dummy.rb')),
-  \ ale_linters#ruby#rubocop#GetCommand(bufnr(''))
+  \   . ale#Escape(ale#path#Simplify(g:dir . '/dummy.rb'))
 
 Execute(Should be able to set a custom executable):
   let g:ale_ruby_rubocop_executable = 'bin/rubocop'
 
-  AssertEqual
-  \ ale#Escape('bin/rubocop')
+  AssertLinter 'bin/rubocop' , ale#Escape('bin/rubocop')
   \   . ' --format json --force-exclusion  --stdin '
-  \   . ale#Escape(ale#path#Simplify(g:dir . '/dummy.rb')),
-  \ ale_linters#ruby#rubocop#GetCommand(bufnr(''))
+  \   . ale#Escape(ale#path#Simplify(g:dir . '/dummy.rb'))
 
 Execute(Setting bundle appends 'exec rubocop'):
   let g:ale_ruby_rubocop_executable = 'path to/bundle'
 
-  AssertEqual
-  \ ale#Escape('path to/bundle') . ' exec rubocop'
+  AssertLinter 'path to/bundle', ale#Escape('path to/bundle')
+  \   . ' exec rubocop'
   \   . ' --format json --force-exclusion  --stdin '
-  \   . ale#Escape(ale#path#Simplify(g:dir . '/dummy.rb')),
-  \ ale_linters#ruby#rubocop#GetCommand(bufnr(''))
+  \   . ale#Escape(ale#path#Simplify(g:dir . '/dummy.rb'))

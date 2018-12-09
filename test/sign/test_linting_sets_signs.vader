@@ -3,6 +3,23 @@ Given foobar (Some imaginary filetype):
   var y = 3
 
 Before:
+  Save g:ale_buffer_info
+  Save g:ale_echo_cursor
+  Save g:ale_run_synchronously
+  Save g:ale_set_highlights
+  Save g:ale_set_loclist
+  Save g:ale_set_quickfix
+  Save g:ale_set_signs
+
+  let g:ale_buffer_info = {}
+  let g:ale_run_synchronously = 1
+  let g:ale_set_signs = 1
+  " Disable features we don't need for these tests.
+  let g:ale_set_quickfix = 0
+  let g:ale_set_loclist = 0
+  let g:ale_set_highlights = 0
+  let g:ale_echo_cursor = 0
+
   sign unplace *
 
   function! TestCallback(buffer, output)
@@ -37,17 +54,14 @@ Before:
   \ 'command': has('win32') ? 'echo foo bar' : '/bin/sh -c ''echo foo bar''',
   \})
 
-
 After:
   delfunction TestCallback
   delfunction CollectSigns
 
   sign unplace *
-  let g:ale_buffer_info = {}
   call ale#linter#Reset()
 
 Execute(The signs should be updated after linting is done):
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
+  ALELint
 
   AssertEqual [['1', 'ALEWarningSign'], ['2', 'ALEErrorSign']], CollectSigns()

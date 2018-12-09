@@ -1,6 +1,22 @@
 Before:
+  Save g:ale_buffer_info
+  Save g:ale_echo_cursor
   Save g:ale_enabled
+  Save g:ale_run_synchronously
+  Save g:ale_set_highlights
+  Save g:ale_set_loclist
+  Save g:ale_set_quickfix
   Save g:ale_set_signs
+
+  let g:ale_run_synchronously = 1
+  let g:ale_set_highlights = 1
+  let g:ale_set_signs = 1
+  let g:ale_buffer_info = {}
+
+  " Disable features we don't need for these tests.
+  let g:ale_set_quickfix = 0
+  let g:ale_set_loclist = 0
+  let g:ale_echo_cursor = 0
 
   function! GenerateResults(buffer, output)
     return [
@@ -53,8 +69,8 @@ After:
 
   delfunction GenerateResults
   call ale#linter#Reset()
-  let g:ale_buffer_info = {}
   call clearmatches()
+  sign unplace *
   highlight clear SomeOtherGroup
 
 Given testft(A Javscript file with warnings/errors):
@@ -64,8 +80,7 @@ Given testft(A Javscript file with warnings/errors):
   line four
 
 Execute(Highlights should be set when a linter runs):
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
+  ALELint
 
   AssertEqual
   \ [

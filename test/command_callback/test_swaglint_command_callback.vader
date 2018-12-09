@@ -1,43 +1,29 @@
 Before:
-  runtime ale_linters/yaml/swaglint.vim
-
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#assert#SetUpLinterTest('yaml', 'swaglint')
 
 After:
-  let g:ale_yaml_swaglint_executable = 'swaglint'
-  let g:ale_yaml_swaglint_use_global = 0
-
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The yaml swaglint command callback should return the correct default string):
-  AssertEqual 'swaglint',
-  \ ale_linters#yaml#swaglint#GetExecutable(bufnr(''))
-  AssertEqual 'swaglint -r compact --stdin',
-  \ ale_linters#yaml#swaglint#GetCommand(bufnr(''))
+  AssertLinter 'swaglint', ale#Escape('swaglint') . ' -r compact --stdin'
 
 Execute(The yaml swaglint command callback should be configurable):
   let g:ale_yaml_swaglint_executable = '~/.local/bin/swaglint'
-  AssertEqual '~/.local/bin/swaglint',
-  \ ale_linters#yaml#swaglint#GetExecutable(bufnr(''))
-  AssertEqual '~/.local/bin/swaglint -r compact --stdin',
-  \ ale_linters#yaml#swaglint#GetCommand(bufnr(''))
+
+  AssertLinter '~/.local/bin/swaglint',
+  \ ale#Escape('~/.local/bin/swaglint') . ' -r compact --stdin'
 
 Execute(The yaml swaglint command callback should allow a global installation to be used):
   let g:ale_yaml_swaglint_executable = '/usr/local/bin/swaglint'
   let g:ale_yaml_swaglint_use_global = 1
-  AssertEqual '/usr/local/bin/swaglint',
-  \ ale_linters#yaml#swaglint#GetExecutable(bufnr(''))
-  AssertEqual '/usr/local/bin/swaglint -r compact --stdin',
-  \ ale_linters#yaml#swaglint#GetCommand(bufnr(''))
+
+  AssertLinter '/usr/local/bin/swaglint',
+  \ ale#Escape('/usr/local/bin/swaglint') . ' -r compact --stdin'
 
 Execute(The yaml swaglint command callback should allow a local installation to be used):
   call ale#test#SetFilename('swaglint_paths/docs/swagger.yaml')
 
-  AssertEqual
+  AssertLinter
   \ ale#path#Simplify(g:dir . '/swaglint_paths/node_modules/.bin/swaglint'),
-  \ ale_linters#yaml#swaglint#GetExecutable(bufnr(''))
-
-  AssertEqual
-  \ ale#path#Simplify(g:dir . '/swaglint_paths/node_modules/.bin/swaglint')
-  \   . ' -r compact --stdin',
-  \ ale_linters#yaml#swaglint#GetCommand(bufnr(''))
+  \ ale#Escape(ale#path#Simplify(g:dir . '/swaglint_paths/node_modules/.bin/swaglint'))
+  \   . ' -r compact --stdin'

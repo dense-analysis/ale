@@ -2,6 +2,8 @@ Given typescript():
   let abc = y.
   let foo = ab
   let foo = (ab)
+  let string1 = '
+  let string2 = "
 
 Execute(Completion should be done after dots in TypeScript):
   AssertEqual '.', ale#completion#GetPrefix(&filetype, 1, 13)
@@ -14,6 +16,13 @@ Execute(Completion should be done after words in parens in TypeScript):
 
 Execute(Completion should not be done after parens in TypeScript):
   AssertEqual '', ale#completion#GetPrefix(&filetype, 3, 15)
+
+Execute(Completion should be done after strings in TypeScript):
+  AssertEqual '''', ale#completion#GetPrefix(&filetype, 4, 16)
+  AssertEqual '"', ale#completion#GetPrefix(&filetype, 5, 16)
+
+Execute(Completion prefixes should work for other filetypes):
+  AssertEqual 'ab', ale#completion#GetPrefix('xxxyyyzzz', 3, 14)
 
 Execute(Completion prefixes should work for other filetypes):
   AssertEqual 'ab', ale#completion#GetPrefix('xxxyyyzzz', 3, 14)
@@ -34,3 +43,23 @@ Execute(Completion should be done after words in parens in Rust):
 
 Execute(Completion should not be done after parens in Rust):
   AssertEqual '', ale#completion#GetPrefix(&filetype, 3, 15)
+
+Given lisp():
+  (minus-name
+  (full-name)
+
+Execute(Completion should be done for function names with minuses in Lisp):
+  AssertEqual 'minus-name', ale#completion#GetPrefix(&filetype, 1, 12)
+
+Execute(Completion should not be done after parens in Lisp):
+  AssertEqual '', ale#completion#GetPrefix(&filetype, 2, 12)
+
+Given clojure():
+  (minus-name
+  (full-name)
+
+Execute(Completion should be done for function names with minuses in Clojure):
+  AssertEqual 'minus-name', ale#completion#GetPrefix(&filetype, 1, 12)
+
+Execute(Completion should not be done after parens in Clojure):
+  AssertEqual '', ale#completion#GetPrefix(&filetype, 2, 12)

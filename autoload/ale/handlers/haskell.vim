@@ -1,8 +1,18 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Error handling for the format GHC outputs.
+"
+function! ale#handlers#haskell#GetStackExecutable(bufnr) abort
+    if ale#path#FindNearestFile(a:bufnr, 'stack.yaml') isnot# ''
+        return 'stack'
+    endif
+
+    " if there is no stack.yaml file, we don't use stack even if it exists,
+    " so we return '', because executable('') apparently always fails
+    return ''
+endfunction
 
 " Remember the directory used for temporary files for Vim.
-let s:temp_dir = fnamemodify(tempname(), ':h')
+let s:temp_dir = fnamemodify(ale#util#Tempname(), ':h')
 " Build part of a regular expression for matching ALE temporary filenames.
 let s:temp_regex_prefix =
 \   '\M'

@@ -21,6 +21,7 @@ Execute(The flake8 handler should handle basic warnings and syntax errors):
   \   {
   \     'lnum': 6,
   \     'col': 6,
+  \     'vcol': 1,
   \     'type': 'E',
   \     'text': 'indentation is not a multiple of four',
   \     'code': 'E111',
@@ -29,6 +30,7 @@ Execute(The flake8 handler should handle basic warnings and syntax errors):
   \   {
   \     'lnum': 7,
   \     'col': 6,
+  \     'vcol': 1,
   \     'type': 'W',
   \     'text': 'some warning',
   \     'code': 'W123',
@@ -37,6 +39,7 @@ Execute(The flake8 handler should handle basic warnings and syntax errors):
   \   {
   \     'lnum': 8,
   \     'col': 3,
+  \     'vcol': 1,
   \     'type': 'E',
   \     'text': 'SyntaxError: invalid syntax',
   \     'code': 'E999',
@@ -54,6 +57,7 @@ Execute(The flake8 handler should set end column indexes for certain errors):
   \   {
   \     'lnum': 25,
   \     'col': 1,
+  \     'vcol': 1,
   \     'type': 'E',
   \     'end_col': 3,
   \     'text': 'undefined name ''foo''',
@@ -62,6 +66,7 @@ Execute(The flake8 handler should set end column indexes for certain errors):
   \   {
   \     'lnum': 28,
   \     'col': 5,
+  \     'vcol': 1,
   \     'type': 'E',
   \     'end_col': 9,
   \     'text': 'hello may be undefined, or defined from star imports: x',
@@ -70,6 +75,7 @@ Execute(The flake8 handler should set end column indexes for certain errors):
   \   {
   \     'lnum': 104,
   \     'col': 5,
+  \     'vcol': 1,
   \     'type': 'E',
   \     'end_col': 12,
   \     'text': '''continue'' not properly in loop',
@@ -78,6 +84,7 @@ Execute(The flake8 handler should set end column indexes for certain errors):
   \   {
   \     'lnum': 106,
   \     'col': 5,
+  \     'vcol': 1,
   \     'type': 'E',
   \     'end_col': 9,
   \     'text': '''break'' outside loop',
@@ -86,6 +93,7 @@ Execute(The flake8 handler should set end column indexes for certain errors):
   \   {
   \     'lnum': 109,
   \     'col': 5,
+  \     'vcol': 1,
   \     'type': 'E',
   \     'end_col': 8,
   \     'text': 'local variable ''test'' is assigned to but never used',
@@ -143,6 +151,7 @@ Execute(The flake8 handler should handle names with spaces):
   \   {
   \     'lnum': 6,
   \     'col': 6,
+  \     'vcol': 1,
   \     'type': 'E',
   \     'text': 'indentation is not a multiple of four',
   \     'code': 'E111',
@@ -159,6 +168,7 @@ Execute(Warnings about trailing whitespace should be reported by default):
   \   {
   \     'lnum': 6,
   \     'col': 1,
+  \     'vcol': 1,
   \     'code': 'W291',
   \     'type': 'W',
   \     'sub_type': 'style',
@@ -167,6 +177,7 @@ Execute(Warnings about trailing whitespace should be reported by default):
   \   {
   \     'lnum': 6,
   \     'col': 1,
+  \     'vcol': 1,
   \     'code': 'W293',
   \     'type': 'W',
   \     'sub_type': 'style',
@@ -195,6 +206,7 @@ Execute(Warnings about trailing blank lines should be reported by default):
   \   {
   \     'lnum': 6,
   \     'col': 1,
+  \     'vcol': 1,
   \     'code': 'W391',
   \     'type': 'W',
   \     'sub_type': 'style',
@@ -221,6 +233,7 @@ Execute(F401 should be a warning):
   \   {
   \     'lnum': 6,
   \     'col': 1,
+  \     'vcol': 1,
   \     'code': 'F401',
   \     'type': 'W',
   \     'text': 'module imported but unused',
@@ -236,6 +249,7 @@ Execute(E112 should be a syntax error):
   \   {
   \     'lnum': 6,
   \     'col': 1,
+  \     'vcol': 1,
   \     'code': 'E112',
   \     'type': 'E',
   \     'text': 'expected an indented block',

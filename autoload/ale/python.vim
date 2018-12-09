@@ -1,11 +1,14 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Functions for integrating with Python linters.
 
+call ale#Set('python_auto_pipenv', '0')
+
 let s:sep = has('win32') ? '\' : '/'
 " bin is used for Unix virtualenv directories, and Scripts is for Windows.
 let s:bin_dir = has('unix') ? 'bin' : 'Scripts'
 let g:ale_virtualenv_dir_names = get(g:, 'ale_virtualenv_dir_names', [
 \   '.env',
+\   '.venv',
 \   'env',
 \   've-py3',
 \   've',
@@ -15,6 +18,7 @@ let g:ale_virtualenv_dir_names = get(g:, 'ale_virtualenv_dir_names', [
 
 function! ale#python#FindProjectRootIni(buffer) abort
     for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
+        " If you change this, update ale-python-root documentation.
         if filereadable(l:path . '/MANIFEST.in')
         \|| filereadable(l:path . '/setup.cfg')
         \|| filereadable(l:path . '/pytest.ini')
@@ -22,6 +26,9 @@ function! ale#python#FindProjectRootIni(buffer) abort
         \|| filereadable(l:path . '/mypy.ini')
         \|| filereadable(l:path . '/pycodestyle.cfg')
         \|| filereadable(l:path . '/flake8.cfg')
+        \|| filereadable(l:path . '/.flake8rc')
+        \|| filereadable(l:path . '/Pipfile')
+        \|| filereadable(l:path . '/Pipfile.lock')
             return l:path
         endif
     endfor
@@ -101,4 +108,9 @@ function! ale#python#FindExecutable(buffer, base_var_name, path_list) abort
     endif
 
     return ale#Var(a:buffer, a:base_var_name . '_executable')
+endfunction
+
+" Detects whether a pipenv environment is present.
+function! ale#python#PipenvPresent(buffer) abort
+    return findfile('Pipfile.lock', expand('#' . a:buffer . ':p:h') . ';') isnot# ''
 endfunction

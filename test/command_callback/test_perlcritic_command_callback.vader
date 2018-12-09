@@ -1,59 +1,36 @@
 Before:
-  Save g:ale_perl_perlcritic_profile
-  Save g:ale_perl_perlcritic_options
-  Save g:ale_perl_perlcritic_executable
-  Save g:ale_perl_perlcritic_showrules
-
-  unlet! g:ale_perl_perlcritic_options
-  unlet! g:ale_perl_perlcritic_executable
-  unlet! g:ale_perl_perlcritic_showrules
+  call ale#assert#SetUpLinterTest('perl', 'perlcritic')
+  call ale#test#SetFilename('test.pl')
   let g:ale_perl_perlcritic_profile = ''
 
-  runtime ale_linters/perl/perlcritic.vim
-
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
-  call ale#test#SetFilename('test.pl')
-
 After:
-  Restore
-
-  unlet! b:ale_perl_perlcritic_profile
-  unlet! b:ale_perl_perlcritic_options
-  unlet! b:ale_perl_perlcritic_executable
-  unlet! b:ale_perl_perlcritic_showrules
   unlet! b:readme_path
-
-  call ale#test#RestoreDirectory()
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The command should be correct with g:ale_perl_perlcritic_showrules off):
   let b:ale_perl_perlcritic_showrules = 0
 
-  AssertEqual
-  \ ale#Escape('perlcritic') . ' --verbose ''%l:%c %m\n'' --nocolor',
-  \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))
+  AssertLinter 'perlcritic', ale#Escape('perlcritic')
+  \   . ' --verbose ' . ale#Escape('%l:%c %m\n') . ' --nocolor'
 
 Execute(The command should be correct with g:ale_perl_perlcritic_showrules on):
   let b:ale_perl_perlcritic_showrules = 1
 
-  AssertEqual
-  \ ale#Escape('perlcritic') . ' --verbose ''%l:%c %m [%p]\n'' --nocolor',
-  \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))
+  AssertLinter 'perlcritic', ale#Escape('perlcritic')
+  \   . ' --verbose ' . ale#Escape('%l:%c %m [%p]\n') . ' --nocolor'
 
 Execute(The command search for the profile file when set):
   let b:ale_perl_perlcritic_profile = 'README.md'
 
   let b:readme_path = ale#path#Simplify(expand('%:p:h:h:h') . '/README.md')
 
-  AssertEqual
-  \ ale#Escape('perlcritic') . ' --verbose ''%l:%c %m\n'' --nocolor'
-  \   . ' --profile ' . ale#Escape(b:readme_path),
-  \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))
+  AssertLinter 'perlcritic', ale#Escape('perlcritic')
+  \   . ' --verbose ' . ale#Escape('%l:%c %m\n') . ' --nocolor'
+  \   . ' --profile ' . ale#Escape(b:readme_path)
 
 Execute(Extra options should be set appropriately):
   let b:ale_perl_perlcritic_options = 'beep boop'
 
-  AssertEqual
-  \ ale#Escape('perlcritic') . ' --verbose ''%l:%c %m\n'' --nocolor'
-  \   . ' beep boop',
-  \ ale_linters#perl#perlcritic#GetCommand(bufnr(''))
+  AssertLinter 'perlcritic', ale#Escape('perlcritic')
+  \   . ' --verbose ' . ale#Escape('%l:%c %m\n') . ' --nocolor'
+  \   . ' beep boop'

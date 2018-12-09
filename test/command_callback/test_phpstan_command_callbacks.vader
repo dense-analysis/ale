@@ -1,38 +1,34 @@
 Before:
-  Save g:ale_php_phpstan_executable
-  Save g:ale_php_phpstan_level
-  Save g:ale_php_phpstan_configuration
+  call ale#assert#SetUpLinterTest('php', 'phpstan')
 
-  unlet! g:ale_php_phpstan_executable
-  unlet! g:ale_php_phpstan_level
-  unlet! g:ale_php_phpstan_configuration
-
-  runtime ale_linters/php/phpstan.vim
+  WithChainResults ['0.10.2']
 
 After:
-  Restore
-
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(Custom executables should be used for the executable and command):
   let g:ale_php_phpstan_executable = 'phpstan_test'
 
-  AssertEqual 'phpstan_test', ale_linters#php#phpstan#GetExecutable(bufnr(''))
-  AssertEqual
-  \ ale#Escape('phpstan_test') . ' analyze -l4 --errorFormat raw %s',
-  \ ale_linters#php#phpstan#GetCommand(bufnr(''))
+  AssertLinter 'phpstan_test',
+  \ ale#Escape('phpstan_test') . ' analyze -l4 --errorFormat raw %s'
 
 Execute(project with level set to 3):
   call ale#test#SetFilename('phpstan-test-files/foo/test.php')
   let g:ale_php_phpstan_level = 3
 
-  AssertEqual
-  \ ale#Escape('phpstan') . ' analyze -l3 --errorFormat raw %s',
-  \ ale_linters#php#phpstan#GetCommand(bufnr(''))
+  AssertLinter 'phpstan',
+  \ ale#Escape('phpstan') . ' analyze -l3 --errorFormat raw %s'
 
 Execute(Custom phpstan configuration file):
   let g:ale_php_phpstan_configuration = 'phpstan_config'
 
-  AssertEqual
-  \ ale#Escape('phpstan') . ' analyze -l4 --errorFormat raw -c phpstan_config %s',
-  \ ale_linters#php#phpstan#GetCommand(bufnr(''))
+  AssertLinter 'phpstan',
+  \ ale#Escape('phpstan') . ' analyze -l4 --errorFormat raw -c phpstan_config %s'
+
+Execute(Choose the right format for error format param):
+  WithChainResults ['0.10.3']
+
+  AssertLinter 'phpstan', [
+  \ ale#Escape('phpstan') . ' --version',
+  \ ale#Escape('phpstan') . ' analyze -l4 --error-format raw %s'
+  \ ]

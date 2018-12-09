@@ -1,25 +1,13 @@
 Before:
-  Save g:ale_ruby_ruby_executable
-
-  unlet! g:ale_ruby_ruby_executable
-
-  runtime ale_linters/ruby/ruby.vim
+  call ale#assert#SetUpLinterTest('ruby', 'ruby')
 
 After:
-  Restore
-
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The default command should be correct):
-  AssertEqual 'ruby', ale_linters#ruby#ruby#GetExecutable(bufnr(''))
-  AssertEqual
-  \ ale#Escape('ruby') . ' -w -c -T1 %t',
-  \ ale_linters#ruby#ruby#GetCommand(bufnr(''))
+  AssertLinter 'ruby', ale#Escape('ruby') . ' -w -c -T1 %t'
 
 Execute(The executable should be configurable):
   let g:ale_ruby_ruby_executable = 'foobar'
 
-  AssertEqual 'foobar', ale_linters#ruby#ruby#GetExecutable(bufnr(''))
-  AssertEqual
-  \ ale#Escape('foobar') . ' -w -c -T1 %t',
-  \ ale_linters#ruby#ruby#GetCommand(bufnr(''))
+  AssertLinter 'foobar', ale#Escape('foobar') . ' -w -c -T1 %t'

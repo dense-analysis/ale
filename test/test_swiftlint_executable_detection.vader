@@ -1,0 +1,50 @@
+Before:
+  let g:ale_swift_swiftlint_executable = 'swiftlint_d'
+
+  call ale#test#SetDirectory('/testplugin/test')
+
+  runtime ale_linters/swift/swiftlint.vim
+
+After:
+  let g:ale_has_override = {}
+  let g:ale_swift_swiftlint_executable = 'swiftlint'
+  let g:ale_swift_swiftlint_use_global = 0
+
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(Global installation should be the default executable):
+  call ale#test#SetFilename('swiftlint-test-files/global/testfile.swift')
+
+  AssertEqual
+  \ 'swiftlint_d',
+  \ ale_linters#swift#swiftlint#GetExecutable(bufnr(''))
+
+Execute(React Native apps using CocoaPods should take precedence over the default executable):
+  call ale#test#SetFilename('swiftlint-test-files/react-native/testfile.swift')
+
+  AssertEqual
+  \ ale#path#Simplify(g:dir . '/swiftlint-test-files/react-native/ios/Pods/SwiftLint/swiftlint'),
+  \ ale_linters#swift#swiftlint#GetExecutable(bufnr(''))
+
+Execute(CocoaPods installation should take precedence over the default executable):
+  call ale#test#SetFilename('swiftlint-test-files/cocoapods/testfile.swift')
+
+  AssertEqual
+  \ ale#path#Simplify(g:dir . '/swiftlint-test-files/cocoapods/Pods/SwiftLint/swiftlint'),
+  \ ale_linters#swift#swiftlint#GetExecutable(bufnr(''))
+
+Execute(Top level CocoaPods installation should take precedence over React Native installation):
+  call ale#test#SetFilename('swiftlint-test-files/cocoapods-and-react-native/testfile.swift')
+
+  AssertEqual
+  \ ale#path#Simplify(g:dir . '/swiftlint-test-files/cocoapods-and-react-native/Pods/SwiftLint/swiftlint'),
+  \ ale_linters#swift#swiftlint#GetExecutable(bufnr(''))
+
+Execute(use-global should override other versions):
+  let g:ale_swift_swiftlint_use_global = 1
+  call ale#test#SetFilename('swiftlint-test-files/cocoapods-and-react-native/testfile.swift')
+
+  AssertEqual
+  \ 'swiftlint_d',
+  \ ale_linters#swift#swiftlint#GetExecutable(bufnr(''))

@@ -1,6 +1,6 @@
-Given testft (An empty file):
-
 Before:
+  Save g:ale_buffer_info
+
   let g:job_started_success = 0
   let g:ale_run_synchronously = 1
 
@@ -10,6 +10,7 @@ Before:
     return []
   endfunction
 
+  call ale#linter#PreventLoading('testft')
   call ale#linter#Define('testft', {
   \ 'name': 'testlinter',
   \ 'callback': 'TestCallback',
@@ -18,25 +19,28 @@ Before:
   \})
 
 After:
-  let g:ale_run_synchronously = 0
-  let g:ale_buffer_info = {}
+  Restore
 
-  try
-    augroup! VaderTest
-  catch
-  endtry
+  let g:ale_run_synchronously = 0
+
+  augroup VaderTest
+    autocmd!
+  augroup END
+
+  augroup! VaderTest
 
   unlet! g:job_started_success
 
   delfunction TestCallback
   call ale#linter#Reset()
 
+Given testft (An empty file):
 Execute(Run a lint cycle with an actual job to check for ALEJobStarted):
   augroup VaderTest
     autocmd!
     autocmd User ALEJobStarted let g:job_started_success = 1
-  augroup end
+  augroup END
 
-  call ale#Lint()
+  ALELint
 
   AssertEqual g:job_started_success, 1

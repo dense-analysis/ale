@@ -63,19 +63,19 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
 
         let l:result = l:result.contents
 
-        if type(l:result) is type('')
+        if type(l:result) is v:t_string
              " The result can be just a string.
              let l:result = [l:result]
         endif
 
-        if type(l:result) is type({})
+        if type(l:result) is v:t_dict
             " If the result is an object, then it's markup content.
             let l:result = [l:result.value]
         endif
 
-        if type(l:result) is type([])
+        if type(l:result) is v:t_list
             " Replace objects with text values.
-            call map(l:result, 'type(v:val) is type('''') ? v:val : v:val.value')
+            call map(l:result, 'type(v:val) is v:t_string ? v:val : v:val.value')
             let l:str = join(l:result, "\n")
             let l:str = substitute(l:str, '^\s*\(.\{-}\)\s*$', '\1', '')
 
@@ -92,46 +92,55 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
     endif
 endfunction
 
-function! s:ShowDetails(linter, buffer, line, column, opt) abort
+function! s:OnReady(linter, lsp_details, line, column, opt, ...) abort
+    let l:buffer = a:lsp_details.buffer
+    let l:id = a:lsp_details.connection_id
+
     let l:Callback = a:linter.lsp is# 'tsserver'
     \   ? function('ale#hover#HandleTSServerResponse')
     \   : function('ale#hover#HandleLSPResponse')
-
-    let l:lsp_details = ale#linter#StartLSP(a:buffer, a:linter, l:Callback)
-
-    if empty(l:lsp_details)
-        return 0
-    endif
-
-    let l:id = l:lsp_details.connection_id
-    let l:root = l:lsp_details.project_root
+    call ale#lsp#RegisterCallback(l:id, l:Callback)
 
     if a:linter.lsp is# 'tsserver'
         let l:column = a:column
 
         let l:message = ale#lsp#tsserver_message#Quickinfo(
-        \   a:buffer,
+        \   l:buffer,
         \   a:line,
         \   l:column
         \)
     else
         " Send a message saying the buffer has changed first, or the
         " hover position probably won't make sense.
-        call ale#lsp#Send(l:id, ale#lsp#message#DidChange(a:buffer), l:root)
+        call ale#lsp#NotifyForChanges(l:id, l:buffer)
 
-        let l:column = min([a:column, len(getbufline(a:buffer, a:line)[0])])
+        let l:column = min([a:column, len(getbufline(l:buffer, a:line)[0])])
 
-        let l:message = ale#lsp#message#Hover(a:buffer, a:line, l:column)
+        let l:message = ale#lsp#message#Hover(l:buffer, a:line, l:column)
     endif
 
-    let l:request_id = ale#lsp#Send(l:id, l:message, l:root)
+    let l:request_id = ale#lsp#Send(l:id, l:message)
 
     let s:hover_map[l:request_id] = {
-    \   'buffer': a:buffer,
+    \   'buffer': l:buffer,
     \   'line': a:line,
     \   'column': l:column,
     \   'hover_from_balloonexpr': get(a:opt, 'called_from_balloonexpr', 0),
     \}
+endfunction
+
+function! s:ShowDetails(linter, buffer, line, column, opt, ...) abort
+    let l:lsp_details = ale#lsp_linter#StartLSP(a:buffer, a:linter)
+
+    if empty(l:lsp_details)
+        return 0
+    endif
+
+    let l:id = l:lsp_details.connection_id
+
+    call ale#lsp#WaitForCapability(l:id, 'hover', function('s:OnReady', [
+    \   a:linter, l:lsp_details, a:line, a:column, a:opt
+    \]))
 endfunction
 
 " Obtain Hover information for the specified position

@@ -1,16 +1,13 @@
 Before:
-  runtime ale_linters/lua/luac.vim
+  call ale#assert#SetUpLinterTest('lua', 'luac')
 
 After:
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The default command should be correct):
-  AssertEqual ale#Escape('luac') . ' -p -',
-  \ join(split(ale_linters#lua#luac#GetCommand(1)))
+  AssertLinter 'luac', ale#Escape('luac') . ' -p -'
 
 Execute(The luac executable should be configurable):
   let g:ale_lua_luac_executable = 'luac.sh'
 
-  AssertEqual 'luac.sh', ale_linters#lua#luac#GetExecutable(1)
-  AssertEqual ale#Escape('luac.sh') . ' -p -',
-  \ join(split(ale_linters#lua#luac#GetCommand(1)))
+  AssertLinter 'luac.sh', ale#Escape('luac.sh') . ' -p -'

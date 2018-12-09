@@ -8,6 +8,9 @@
 "   ale#job#IsRunning(job_id) -> 1 if running, 0 otherwise.
 "   ale#job#Stop(job_id)
 
+" A setting for wrapping commands.
+let g:ale_command_wrapper = get(g:, 'ale_command_wrapper', '')
+
 if !has_key(s:, 'job_map')
     let s:job_map = {}
 endif
@@ -23,34 +26,11 @@ function! s:KillHandler(timer) abort
     call job_stop(l:job, 'kill')
 endfunction
 
-" Note that jobs and IDs are the same thing on NeoVim.
-function! ale#job#JoinNeovimOutput(job, last_line, data, mode, callback) abort
-    if a:mode is# 'raw'
-        call a:callback(a:job, join(a:data, "\n"))
-        return ''
-    endif
-
-    let l:lines = a:data[:-2]
-
-    if len(a:data) > 1
-        let l:lines[0] = a:last_line . l:lines[0]
-        let l:new_last_line = a:data[-1]
-    else
-        let l:new_last_line = a:last_line . get(a:data, 0, '')
-    endif
-
-    for l:line in l:lines
-        call a:callback(a:job, l:line)
-    endfor
-
-    return l:new_last_line
-endfunction
-
 function! s:NeoVimCallback(job, data, event) abort
     let l:info = s:job_map[a:job]
 
     if a:event is# 'stdout'
-        let l:info.out_cb_line = ale#job#JoinNeovimOutput(
+        let l:info.out_cb_line = ale#util#JoinNeovimOutput(
         \   a:job,
         \   l:info.out_cb_line,
         \   a:data,
@@ -58,7 +38,7 @@ function! s:NeoVimCallback(job, data, event) abort
         \   ale#util#GetFunction(l:info.out_cb),
         \)
     elseif a:event is# 'stderr'
-        let l:info.err_cb_line = ale#job#JoinNeovimOutput(
+        let l:info.err_cb_line = ale#util#JoinNeovimOutput(
         \   a:job,
         \   l:info.err_cb_line,
         \   a:data,
@@ -269,6 +249,11 @@ function! ale#job#Start(command, options) abort
             let l:job_options.exit_cb = function('s:VimExitCallback')
         endif
 
+        " Use non-blocking writes for Vim versions that support the option.
+        if has('patch-8.1.350')
+            let l:job_options.noblock = 1
+        endif
+
         " Vim 8 will read the stdin from the file's buffer.
         let l:job_info.job = job_start(a:command, l:job_options)
         let l:job_id = ale#job#ParseVim8ProcessID(string(l:job_info.job))
@@ -298,11 +283,13 @@ function! ale#job#IsRunning(job_id) abort
         try
             " In NeoVim, if the job isn't running, jobpid() will throw.
             call jobpid(a:job_id)
+
             return 1
         catch
         endtry
     elseif has_key(s:job_map, a:job_id)
         let l:job = s:job_map[a:job_id].job
+
         return job_status(l:job) is# 'run'
     endif
 

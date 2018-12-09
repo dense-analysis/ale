@@ -1,0 +1,17 @@
+Before:
+  call ale#assert#SetUpLinterTest('ansible', 'ansible_lint')
+  let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
+
+After:
+  unlet! b:bin_dir
+  unlet! b:executable
+  call ale#assert#TearDownLinterTest()
+
+Execute(The ansible_lint command callback should return default string):
+  AssertLinter 'ansible-lint', ale#Escape('ansible-lint') . ' -p %t'
+
+Execute(The ansible_lint executable should be configurable):
+  let g:ale_ansible_ansible_lint_executable = '~/.local/bin/ansible-lint'
+
+  AssertLinter '~/.local/bin/ansible-lint',
+  \ ale#Escape('~/.local/bin/ansible-lint') . ' -p %t'

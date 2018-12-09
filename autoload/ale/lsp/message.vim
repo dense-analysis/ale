@@ -24,12 +24,15 @@ function! ale#lsp#message#GetNextVersionID() abort
     return l:id
 endfunction
 
-function! ale#lsp#message#Initialize(root_path) abort
+function! ale#lsp#message#Initialize(root_path, initialization_options) abort
     " TODO: Define needed capabilities.
+    " NOTE: rootPath is deprecated in favour of rootUri
     return [0, 'initialize', {
     \   'processId': getpid(),
     \   'rootPath': a:root_path,
     \   'capabilities': {},
+    \   'initializationOptions': a:initialization_options,
+    \   'rootUri': ale#path#ToURI(a:root_path),
     \}]
 endfunction
 
@@ -127,11 +130,23 @@ function! ale#lsp#message#References(buffer, line, column) abort
     \}]
 endfunction
 
+function! ale#lsp#message#Symbol(query) abort
+    return [0, 'workspace/symbol', {
+    \   'query': a:query,
+    \}]
+endfunction
+
 function! ale#lsp#message#Hover(buffer, line, column) abort
     return [0, 'textDocument/hover', {
     \   'textDocument': {
     \       'uri': ale#path#ToURI(expand('#' . a:buffer . ':p')),
     \   },
     \   'position': {'line': a:line - 1, 'character': a:column},
+    \}]
+endfunction
+
+function! ale#lsp#message#DidChangeConfiguration(buffer, config) abort
+    return [0, 'workspace/didChangeConfiguration', {
+    \   'settings': a:config,
     \}]
 endfunction

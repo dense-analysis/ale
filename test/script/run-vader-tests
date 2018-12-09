@@ -3,14 +3,12 @@
 set -e
 set -u
 
-image=w0rp/ale
-docker_flags=(--rm -v "$PWD:/testplugin" -v "$PWD/test:/home" -w /testplugin "$image")
+docker_flags=(--rm -v "$PWD:/testplugin" -v "$PWD/test:/home" -w /testplugin "$DOCKER_RUN_IMAGE")
 red='\033[0;31m'
 green='\033[0;32m'
 nc='\033[0m'
 verbose=0
 quiet=0
-exit_code=0
 
 while [ $# -ne 0 ]; do
     case $1 in
@@ -38,15 +36,27 @@ done
 
 vim="$1"
 tests="$2"
+# This file will be used to track if tests ran or not.
+# We can't use a variable, because we need to set a value in a sub-shell.
+run_file="$(mktemp -t tests_ran.XXXXXXXX)"
 
 function filter-vader-output() {
+    local hit_first_vader_line=0
     # When verbose mode is off, suppress output until Vader starts.
     local start_output="$verbose"
     local filtered_data=''
 
     while read -r; do
-        if ((!start_output)); then
+        # Search for the first Vader output line.
+        # We can try starting tests again if they don't start.
+        if ((!hit_first_vader_line)); then
             if [[ "$REPLY" = *'Starting Vader:'* ]]; then
+                hit_first_vader_line=1
+            fi
+        fi
+
+        if ((!start_output)); then
+            if ((hit_first_vader_line)); then
                 start_output=1
             else
                 continue
@@ -73,6 +83,11 @@ function filter-vader-output() {
             echo "$REPLY"
         fi
     done
+
+    # Note that we managed to get the Vader tests started if we did.
+    if ((hit_first_vader_line)); then
+        echo 1 > "$run_file"
+    fi
 }
 
 function color-vader-output() {
@@ -109,10 +124,28 @@ echo "Running tests for $vim"
 echo '========================================'
 echo
 
-set -o pipefail
-docker run -a stderr -e VADER_OUTPUT_FILE=/dev/stderr "${docker_flags[@]}" \
-    "/vim-build/bin/$vim" -u test/vimrc \
-    "+Vader! $tests" 2>&1 | filter-vader-output | color-vader-output || exit_code=$?
-set +o pipefail
+tries=0
+
+while [ "$tries" -lt 5 ]; do
+    tries=$((tries + 1))
+
+    exit_code=0
+    set -o pipefail
+    docker run -a stderr -e VADER_OUTPUT_FILE=/dev/stderr "${docker_flags[@]}" \
+        "/vim-build/bin/$vim" -u test/vimrc \
+        "+Vader! $tests" 2>&1 | filter-vader-output | color-vader-output || exit_code=$?
+    set +o pipefail
+
+    if [ -s "$run_file" ]; then
+        break
+    fi
+done
+
+if [ "$tries" -gt 1 ]; then
+    echo
+    echo "Tried to run tests $tries times"
+fi
+
+rm "$run_file"
 
 exit "$exit_code"

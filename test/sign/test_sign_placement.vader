@@ -1,7 +1,20 @@
 Before:
+  Save g:ale_buffer_info
+  Save g:ale_echo_cursor
+  Save g:ale_run_synchronously
+  Save g:ale_set_highlights
+  Save g:ale_set_loclist
+  Save g:ale_set_quickfix
   Save g:ale_set_signs
 
+  let g:ale_buffer_info = {}
+  let g:ale_run_synchronously = 1
   let g:ale_set_signs = 1
+  " Disable features we don't need for these tests.
+  let g:ale_set_quickfix = 0
+  let g:ale_set_loclist = 0
+  let g:ale_set_highlights = 0
+  let g:ale_echo_cursor = 0
 
   call ale#linter#Reset()
   sign unplace *
@@ -120,8 +133,7 @@ Given testft(A file with warnings/errors):
   fifth line
 
 Execute(The current signs should be set for running a job):
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
+  ALELint
 
   AssertEqual
   \ [

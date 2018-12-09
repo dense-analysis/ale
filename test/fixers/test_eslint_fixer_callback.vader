@@ -170,3 +170,10 @@ Execute(The eslint_d post-processor should handle error messages correctly):
   \ ale#fixers#eslint#ProcessEslintDOutput(bufnr(''), [
   \   'Error: No ESLint configuration found.',
   \ ])
+
+Execute(The eslint_d post-processor should handle failing to connect properly):
+  AssertEqual
+  \ [],
+  \ ale#fixers#eslint#ProcessEslintDOutput(bufnr(''), [
+  \   'Could not connect',
+  \ ])

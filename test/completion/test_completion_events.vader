@@ -8,11 +8,19 @@ Before:
   let g:ale_completion_enabled = 1
   let g:get_completions_called = 0
   let g:feedkeys_calls = []
+  let g:fake_mode = 'i'
+
+  let &l:completeopt = 'menu,menuone,preview,noselect,noinsert'
 
   runtime autoload/ale/util.vim
 
-  function! ale#util#FeedKeys(string, mode) abort
-    call add(g:feedkeys_calls, [a:string, a:mode])
+  function! ale#util#FeedKeys(string) abort
+    call add(g:feedkeys_calls, [a:string])
+  endfunction
+
+  " Pretend we're in insert mode for most tests.
+  function! ale#util#Mode(...) abort
+    return g:fake_mode
   endfunction
 
   function! CheckCompletionCalled(expect_success) abort
@@ -24,8 +32,16 @@ Before:
     endfunction
 
     let g:ale_completion_delay = 0
-    call ale#completion#Queue()
-    sleep 1m
+
+    " Run this check a few times, as it can fail randomly.
+    for g:i in range(has('nvim-0.3') || has('win32') ? 5 : 1)
+      call ale#completion#Queue()
+      sleep 1m
+
+      if g:get_completions_called is a:expect_success
+        break
+      endif
+    endfor
 
     AssertEqual a:expect_success, g:get_completions_called
   endfunction
@@ -33,6 +49,8 @@ Before:
 After:
   Restore
 
+  unlet! g:output
+  unlet! g:fake_mode
   unlet! g:get_completions_called
   unlet! b:ale_old_omnifunc
   unlet! b:ale_old_completopt
@@ -46,6 +64,12 @@ After:
   " Stop any timers we left behind.
   " This stops the tests from failing randomly.
   call ale#completion#StopTimer()
+
+  " Reset the function. The runtime command below should fix this, but doesn't
+  " seem to fix it.
+  function! ale#util#Mode(...) abort
+    return call('mode', a:000)
+  endfunction
 
   runtime autoload/ale/completion.vim
   runtime autoload/ale/util.vim
@@ -76,6 +100,22 @@ Execute(ale#completion#GetCompletions should not be called when the cursor posit
 
   Assert !g:get_completions_called
 
+Execute(ale#completion#GetCompletions should not be called if you switch to normal mode):
+  let &l:completeopt = 'menu,preview'
+  let g:fake_mode = 'n'
+
+  " We just want to check if the function is called.
+  function! ale#completion#GetCompletions()
+    let g:get_completions_called = 1
+  endfunction
+
+  let g:ale_completion_delay = 0
+  call ale#completion#Queue()
+
+  sleep 1m
+
+  Assert !g:get_completions_called
+
 Execute(Completion should not be done shortly after the CompleteDone function):
   call CheckCompletionCalled(1)
   call ale#completion#Done()
@@ -89,13 +129,33 @@ Execute(ale#completion#Show() should remember the omnifunc setting and replace i
   AssertEqual 'FooBar', b:ale_old_omnifunc
   AssertEqual 'ale#completion#OmniFunc', &l:omnifunc
 
+  AssertEqual [], g:feedkeys_calls
+  sleep 1ms
+  AssertEqual [["\<Plug>(ale_show_completion_menu)"]], g:feedkeys_calls
+
 Execute(ale#completion#Show() should remember the completeopt setting and replace it):
   let &l:completeopt = 'menu'
 
   call ale#completion#Show('Response', 'Parser')
 
   AssertEqual 'menu', b:ale_old_completopt
+  AssertEqual 'menu,menuone,noselect,noinsert', &l:completeopt
+
+  AssertEqual [], g:feedkeys_calls
+  sleep 1ms
+  AssertEqual [["\<Plug>(ale_show_completion_menu)"]], g:feedkeys_calls
+
+Execute(ale#completion#Show() should set the preview option if it's set):
+  let &l:completeopt = 'menu,preview'
+
+  call ale#completion#Show('Response', 'Parser')
+
+  AssertEqual 'menu,preview', b:ale_old_completopt
   AssertEqual 'menu,menuone,preview,noselect,noinsert', &l:completeopt
+
+  AssertEqual [], g:feedkeys_calls
+  sleep 1ms
+  AssertEqual [["\<Plug>(ale_show_completion_menu)"]], g:feedkeys_calls
 
 Execute(ale#completion#OmniFunc() should also remember the completeopt setting and replace it):
   let &l:completeopt = 'menu'
@@ -103,12 +163,35 @@ Execute(ale#completion#OmniFunc() should also remember the completeopt setting a
   call ale#completion#OmniFunc(0, '')
 
   AssertEqual 'menu', b:ale_old_completopt
+  AssertEqual 'menu,menuone,noselect,noinsert', &l:completeopt
+
+Execute(ale#completion#OmniFunc() should set the preview option if it's set):
+  let &l:completeopt = 'menu,preview'
+
+  call ale#completion#OmniFunc(0, '')
+
+  AssertEqual 'menu,preview', b:ale_old_completopt
   AssertEqual 'menu,menuone,preview,noselect,noinsert', &l:completeopt
 
 Execute(ale#completion#Show() should make the correct feedkeys() call):
   call ale#completion#Show('Response', 'Parser')
 
-  AssertEqual [["\<C-x>\<C-o>", 'n']], g:feedkeys_calls
+  AssertEqual [], g:feedkeys_calls
+  sleep 1ms
+  AssertEqual [["\<Plug>(ale_show_completion_menu)"]], g:feedkeys_calls
+
+Execute(ale#completion#Show() shouldn't do anything if you switch back to normal mode):
+  let &l:completeopt = 'menu,preview'
+  let g:fake_mode = 'n'
+
+  call ale#completion#Show('Response', 'Parser')
+
+  AssertEqual 'menu,preview', &l:completeopt
+  Assert !exists('b:ale_old_omnifunc')
+  Assert !exists('b:ale_old_completopt')
+  Assert !exists('b:ale_completion_response')
+  Assert !exists('b:ale_completion_parser')
+  AssertEqual [], g:feedkeys_calls
 
 Execute(ale#completion#Show() should set up the response and parser):
   call ale#completion#Show('Response', 'Parser')
@@ -127,7 +210,6 @@ Execute(ale#completion#Done() should restore old omnifunc values):
 
 Execute(ale#completion#Done() should restore the old completeopt setting):
   let b:ale_old_completopt = 'menu'
-  let &l:completeopt = 'menu,menuone,preview,noselect,noinsert'
 
   call ale#completion#Done()
 
@@ -166,3 +248,28 @@ Execute(b:ale_completion_info should be set up correctly when requesting complet
   \   'prefix': 'ab',
   \ },
   \ b:ale_completion_info
+
+Execute(The correct keybinds should be configured):
+  redir => g:output
+    silent map <Plug>(ale_show_completion_menu)
+  redir END
+
+  AssertEqual
+  \ [
+  \   'n  <Plug>(ale_show_completion_menu) * :call ale#completion#RestoreCompletionOptions()<CR>',
+  \   'o  <Plug>(ale_show_completion_menu) * <Nop>',
+  \   'v  <Plug>(ale_show_completion_menu) * <Nop>',
+  \ ],
+  \ sort(split(g:output, "\n"))
+
+Execute(Running the normal mode <Plug> keybind should reset the settings):
+  let b:ale_old_omnifunc = 'FooBar'
+  let b:ale_old_completopt = 'menu'
+
+  " We can't run the keybind, but we can call the function.
+  call ale#completion#RestoreCompletionOptions()
+
+  AssertEqual 'FooBar', &l:omnifunc
+  AssertEqual 'menu', &l:completeopt
+  Assert !has_key(b:, 'ale_old_omnifunc')
+  Assert !has_key(b:, 'ale_old_completopt')

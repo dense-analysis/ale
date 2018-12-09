@@ -15,10 +15,10 @@ After:
   delfunction CheckTempFile
 
 Execute(FormatCommand should do nothing to basic command strings):
-  AssertEqual ['', 'awesome-linter do something'], ale#command#FormatCommand(bufnr('%'), 'awesome-linter do something', 0)
+  AssertEqual ['', 'awesome-linter do something'], ale#command#FormatCommand(bufnr('%'), '', 'awesome-linter do something', 0)
 
 Execute(FormatCommand should handle %%, and ignore other percents):
-  AssertEqual ['', '% %%d %%f %x %'], ale#command#FormatCommand(bufnr('%'), '%% %%%d %%%f %x %', 0)
+  AssertEqual ['', '% %%d %%f %x %'], ale#command#FormatCommand(bufnr('%'), '', '%% %%%d %%%f %x %', 0)
 
 Execute(FormatCommand should convert %s to the current filename):
   AssertEqual
@@ -26,10 +26,10 @@ Execute(FormatCommand should convert %s to the current filename):
   \   '',
   \   'foo ' . ale#Escape(expand('%:p')) . ' bar ' . ale#Escape(expand('%:p'))
   \ ],
-  \ ale#command#FormatCommand(bufnr('%'), 'foo %s bar %s', 0)
+  \ ale#command#FormatCommand(bufnr('%'), '', 'foo %s bar %s', 0)
 
 Execute(FormatCommand should convert %t to a new temporary filename):
-  let g:result = ale#command#FormatCommand(bufnr('%'), 'foo %t bar %t', 0)
+  let g:result = ale#command#FormatCommand(bufnr('%'), '', 'foo %t bar %t', 0)
 
   call CheckTempFile(g:result[0])
 
@@ -43,7 +43,7 @@ Execute(FormatCommand should convert %t to a new temporary filename):
   AssertEqual g:match[1], g:match[2]
 
 Execute(FormatCommand should let you combine %s and %t):
-  let g:result = ale#command#FormatCommand(bufnr('%'), 'foo %t bar %s', 0)
+  let g:result = ale#command#FormatCommand(bufnr('%'), '', 'foo %t bar %s', 0)
 
   call CheckTempFile(g:result[0])
 
@@ -56,11 +56,34 @@ Execute(FormatCommand should let you combine %s and %t):
   " The second item should be equal to the original filename.
   AssertEqual ale#Escape(expand('%:p')), g:match[2]
 
+Execute(FormatCommand should replace %e with the escaped executable):
+  if has('win32')
+    AssertEqual
+    \ ['', 'foo foo'],
+    \ ale#command#FormatCommand(bufnr('%'), 'foo', '%e %e', 0)
+    AssertEqual
+    \ ['', '"foo bar"'],
+    \ ale#command#FormatCommand(bufnr('%'), 'foo bar', '%e', 0)
+    AssertEqual
+    \ ['', '%e %e'],
+    \ ale#command#FormatCommand(bufnr('%'), '', '%e %e', 0)
+  else
+    AssertEqual
+    \ ['', '''foo'' ''foo'''],
+    \ ale#command#FormatCommand(bufnr('%'), 'foo', '%e %e', 0)
+    AssertEqual
+    \ ['', '''foo bar'''],
+    \ ale#command#FormatCommand(bufnr('%'), 'foo bar', '%e', 0)
+    AssertEqual
+    \ ['', '%e %e'],
+    \ ale#command#FormatCommand(bufnr('%'), '', '%e %e', 0)
+  endif
+
 Execute(EscapeCommandPart should escape all percent signs):
   AssertEqual '%%s %%t %%%% %%s %%t %%%%', ale#engine#EscapeCommandPart('%s %t %% %s %t %%')
 
 Execute(EscapeCommandPart should pipe in temporary files appropriately):
-  let g:result = ale#command#FormatCommand(bufnr('%'), 'foo bar', 1)
+  let g:result = ale#command#FormatCommand(bufnr('%'), '', 'foo bar', 1)
 
   call CheckTempFile(g:result[0])
 
@@ -68,7 +91,7 @@ Execute(EscapeCommandPart should pipe in temporary files appropriately):
   Assert !empty(g:match), 'No match found! Result was: ' . g:result[1]
   AssertEqual ale#Escape(g:result[0]), g:match[1]
 
-  let g:result = ale#command#FormatCommand(bufnr('%'), 'foo bar %t', 1)
+  let g:result = ale#command#FormatCommand(bufnr('%'), '', 'foo bar %t', 1)
 
   call CheckTempFile(g:result[0])
 

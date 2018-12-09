@@ -5,8 +5,14 @@ call ale#Set('python_pylint_executable', 'pylint')
 call ale#Set('python_pylint_options', '')
 call ale#Set('python_pylint_use_global', get(g:, 'ale_use_global_executables', 0))
 call ale#Set('python_pylint_change_directory', 1)
+call ale#Set('python_pylint_auto_pipenv', 0)
 
 function! ale_linters#python#pylint#GetExecutable(buffer) abort
+    if (ale#Var(a:buffer, 'python_auto_pipenv') || ale#Var(a:buffer, 'python_pylint_auto_pipenv'))
+    \ && ale#python#PipenvPresent(a:buffer)
+        return 'pipenv'
+    endif
+
     return ale#python#FindExecutable(a:buffer, 'python_pylint', ['pylint'])
 endfunction
 
@@ -15,8 +21,14 @@ function! ale_linters#python#pylint#GetCommand(buffer) abort
     \   ? ale#path#BufferCdString(a:buffer)
     \   : ''
 
+    let l:executable = ale_linters#python#pylint#GetExecutable(a:buffer)
+
+    let l:exec_args = l:executable =~? 'pipenv$'
+    \   ? ' run pylint'
+    \   : ''
+
     return l:cd_string
-    \   . ale#Escape(ale_linters#python#pylint#GetExecutable(a:buffer))
+    \   . ale#Escape(l:executable) . l:exec_args
     \   . ' ' . ale#Var(a:buffer, 'python_pylint_options')
     \   . ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'
     \   . ' %s'

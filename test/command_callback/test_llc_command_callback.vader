@@ -1,10 +1,5 @@
 Before:
-  Save g:ale_llvm_llc_executable
-
-  unlet! g:ale_llvm_llc_executable
-  unlet! b:ale_llvm_llc_executable
-
-  runtime ale_linters/llvm/llc.vim
+  call ale#assert#SetUpLinterTest('llvm', 'llc')
 
   function! AssertHasPrefix(str, prefix) abort
     let msg = printf("'%s' is expected to be prefixed with '%s'", a:str, a:prefix)
@@ -12,28 +7,15 @@ Before:
   endfunction
 
 After:
-  unlet! g:ale_llvm_llc_executable
-  unlet! b:ale_llvm_llc_executable
   delfunction AssertHasPrefix
-  Restore
 
-Execute(llc command is customizable):
-  let cmd = ale_linters#llvm#llc#GetCommand(bufnr(''))
-  call AssertHasPrefix(cmd, ale#Escape('llc'))
+  call ale#assert#TearDownLinterTest()
+
+Execute(The llc command should be customizable):
+  AssertLinter 'llc',
+  \ ale#Escape('llc') . ' -filetype=null -o=' . g:ale#util#nul_file
 
   let g:ale_llvm_llc_executable = 'llc-5.0'
-  let cmd = ale_linters#llvm#llc#GetCommand(bufnr(''))
-  call AssertHasPrefix(cmd, ale#Escape('llc-5.0'))
 
-  let b:ale_llvm_llc_executable = 'llc-4.0'
-  let cmd = ale_linters#llvm#llc#GetCommand(bufnr(''))
-  call AssertHasPrefix(cmd, ale#Escape('llc-4.0'))
-
-Execute(GetCommand() escapes the returned path):
-  let b:ale_llvm_llc_executable = '/path/space contained/llc'
-  let cmd = ale_linters#llvm#llc#GetCommand(bufnr(''))
-  call AssertHasPrefix(cmd, ale#Escape('/path/space contained/llc'))
-
-Execute(GetExecutable() does not escape the returned path):
-  let b:ale_llvm_llc_executable = '/path/space contained/llc'
-  AssertEqual ale_linters#llvm#llc#GetExecutable(bufnr('')), '/path/space contained/llc'
+  AssertLinter 'llc-5.0',
+  \ ale#Escape('llc-5.0') . ' -filetype=null -o=' . g:ale#util#nul_file

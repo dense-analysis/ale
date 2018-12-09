@@ -16,10 +16,12 @@ function! ale_linters#apiblueprint#drafter#HandleErrors(buffer, lines) abort
         \   'lnum': l:match[3] + 0,
         \   'col': l:match[4] + 0,
         \}
+
         if l:match[5] isnot# ''
             let l:item.end_lnum = l:match[6] + 0
             let l:item.end_col = l:match[7] + 0
         endif
+
         call add(l:output, l:item)
     endfor
 
@@ -31,6 +33,6 @@ call ale#linter#Define('apiblueprint', {
 \   'name': 'drafter',
 \   'output_stream': 'stderr',
 \   'executable': 'drafter',
-\   'command': 'drafter --use-line-num --validate %t',
+\   'command': 'drafter --use-line-num --validate',
 \   'callback': 'ale_linters#apiblueprint#drafter#HandleErrors',
 \})

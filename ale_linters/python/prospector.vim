@@ -1,6 +1,8 @@
 " Author: chocoelho <carlospecter@gmail.com>
 " Description: prospector linter python files
 
+call ale#Set('python_prospector_auto_pipenv', 0)
+
 let g:ale_python_prospector_executable =
 \   get(g:, 'ale_python_prospector_executable', 'prospector')
 
@@ -10,11 +12,23 @@ let g:ale_python_prospector_options =
 let g:ale_python_prospector_use_global = get(g:, 'ale_python_prospector_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! ale_linters#python#prospector#GetExecutable(buffer) abort
+    if (ale#Var(a:buffer, 'python_auto_pipenv') || ale#Var(a:buffer, 'python_prospector_auto_pipenv'))
+    \ && ale#python#PipenvPresent(a:buffer)
+        return 'pipenv'
+    endif
+
     return ale#python#FindExecutable(a:buffer, 'python_prospector', ['prospector'])
 endfunction
 
 function! ale_linters#python#prospector#GetCommand(buffer) abort
-    return ale#Escape(ale_linters#python#prospector#GetExecutable(a:buffer))
+    let l:executable = ale_linters#python#prospector#GetExecutable(a:buffer)
+
+    let l:exec_args = l:executable =~? 'pipenv$'
+    \   ? ' run prospector'
+    \   : ''
+
+    return ale#Escape(l:executable)
+    \   . l:exec_args
     \   . ' ' . ale#Var(a:buffer, 'python_prospector_options')
     \   . ' --messages-only --absolute-paths --zero-exit --output-format json'
     \   . ' %s'
@@ -22,6 +36,10 @@ endfunction
 
 function! ale_linters#python#prospector#Handle(buffer, lines) abort
     let l:output = []
+
+    if empty(a:lines)
+        return []
+    endif
 
     let l:prospector_error = json_decode(join(a:lines, ''))
 

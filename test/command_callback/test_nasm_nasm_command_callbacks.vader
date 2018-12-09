@@ -1,52 +1,31 @@
 Before:
-  Save g:ale_nasm_nasm_executable
-  Save g:ale_nasm_nasm_options
-
-  unlet! g:ale_nasm_nasm_executable
-  unlet! b:ale_nasm_nasm_executable
-  unlet! g:ale_nasm_nasm_options
-  unlet! b:ale_nasm_nasm_options
-
-  runtime ale_linters/nasm/nasm.vim
+  call ale#assert#SetUpLinterTest('nasm', 'nasm')
 
   let b:command_tail =
-  \ ' -X gnu -I ' . ale#Escape(getcwd() . (has('win32') ? '\' : '/')) . '  %s'
+  \ ' -X gnu -I ' . ale#Escape(getcwd() . (has('win32') ? '\' : '/')) . ' %s -o ' . (has('win32') ? 'NUL' : '/dev/null')
   let b:command_tail_opt =
-  \ ' -X gnu -I ' . ale#Escape(getcwd() . (has('win32') ? '\' : '/')) . ' -w+orphan-labels %s'
+  \ ' -X gnu -I ' . ale#Escape(getcwd() . (has('win32') ? '\' : '/')) . ' -w+orphan-labels %s -o ' . (has('win32') ? 'NUL' : '/dev/null')
 
 After:
-  Restore
   unlet! b:command_tail
   unlet! b:command_tail_opt
-  unlet! b:ale_nasm_nasm_executable
-  unlet! b:ale_nasm_nasm_options
-  call ale#linter#Reset()
+
+  call ale#assert#TearDownLinterTest()
 
 Execute(The executable should be configurable):
-  AssertEqual 'nasm', ale_linters#nasm#nasm#GetExecutable(bufnr(''))
-
-  let b:ale_nasm_nasm_executable = '/opt/nasm/nasm'
-
-  AssertEqual '/opt/nasm/nasm', ale_linters#nasm#nasm#GetExecutable(bufnr(''))
-
-Execute(The executable should be used in the command):
-  AssertEqual
-  \ ale#Escape('nasm') . b:command_tail,
-  \ ale_linters#nasm#nasm#GetCommand(bufnr(''))
+  AssertLinter 'nasm', ale#Escape('nasm') . b:command_tail,
 
   let b:ale_nasm_nasm_executable = '~/nasm'
 
-  AssertEqual
-  \ ale#Escape('~/nasm') . b:command_tail,
-  \ ale_linters#nasm#nasm#GetCommand(bufnr(''))
+  AssertLinter '~/nasm', ale#Escape('~/nasm') . b:command_tail
 
 Execute(The options should be configurable):
-  AssertEqual '', ale_linters#nasm#nasm#GetOptions(bufnr(''))
   let b:ale_nasm_nasm_options = '-w-macro-params'
-  AssertEqual '-w-macro-params', ale_linters#nasm#nasm#GetOptions(bufnr(''))
+
+  AssertLinter 'nasm', ale#Escape('nasm')
+  \ . ' -X gnu -I ' . ale#Escape(getcwd() . (has('win32') ? '\' : '/')) . ' -w-macro-params %s -o ' . (has('win32') ? 'NUL' : '/dev/null')
 
 Execute(The options should be used in command):
-    let b:ale_nasm_nasm_options = '-w+orphan-labels'
-    AssertEqual
-    \ ale#Escape('nasm') . b:command_tail_opt,
-    \ ale_linters#nasm#nasm#GetCommand(bufnr(''))
+  let b:ale_nasm_nasm_options = '-w+orphan-labels'
+
+  AssertLinter 'nasm', ale#Escape('nasm') . b:command_tail_opt

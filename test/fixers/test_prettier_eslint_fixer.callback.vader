@@ -85,7 +85,7 @@ Execute(The new --stdin-filepath option should be used when the version is new e
 
   AssertEqual
   \ {
-  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   'command': ale#path#CdString(expand('%:p:h'))
   \     . ale#Escape('prettier-eslint')
   \     . ' --eslint-config-path ' . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --stdin-filepath %s --stdin',
@@ -106,7 +106,7 @@ Execute(The version number should be cached):
   " The newer command should be used.
   AssertEqual
   \ {
-  \   'command': 'cd ' . ale#Escape(expand('%:p:h')) . ' && '
+  \   'command': ale#path#CdString(expand('%:p:h'))
   \     . ale#Escape('prettier-eslint')
   \     . ' --stdin-filepath %s --stdin',
   \ },

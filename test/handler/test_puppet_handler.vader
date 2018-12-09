@@ -37,9 +37,15 @@ Execute(The puppet handler should parse lines and column correctly):
   \     'lnum': 54,
   \     'col': 9,
   \     'text': "Syntax error at ':'"
-  \   }
+  \   },
+  \   {
+  \     'lnum': 45,
+  \     'col': 12,
+  \     'text': "Syntax error at 'parameter1'"
+  \   },
   \ ],
   \ ale_linters#puppet#puppet#Handle(255, [
   \   "Error: Could not parse for environment production: Syntax error at ':' at /root/puppetcode/modules/nginx/manifests/init.pp:43:12",
   \   "Error: Could not parse for environment production: Syntax error at ':' at C:/puppet/modules/nginx/manifests/init.pp:54:9",
+  \   "Error: Could not parse for environment production: Syntax error at 'parameter1' (file: /tmp/modules/mariadb/manifests/slave.pp, line: 45, column: 12)",
   \ ])

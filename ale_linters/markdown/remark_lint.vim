@@ -1,5 +1,15 @@
+scriptencoding utf-8
 " Author rhysd https://rhysd.github.io/, Dirk Roorda (dirkroorda), Adrián González Rus (@adrigzr)
 " Description: remark-lint for Markdown files
+call ale#Set('markdown_remark_lint_executable', 'remark')
+call ale#Set('markdown_remark_lint_use_global', get(g:, 'ale_use_global_executables', 0))
+call ale#Set('markdown_remark_lint_options', '')
+
+function! ale_linters#markdown#remark_lint#GetCommand(buffer) abort
+    let l:options = ale#Var(a:buffer, 'markdown_remark_lint_options')
+
+    return '%e' . ale#Pad(l:options) . ' --no-stdout --no-color'
+endfunction
 
 function! ale_linters#markdown#remark_lint#Handle(buffer, lines) abort
     " matches: '  1:4  warning  Incorrect list-item indent: add 1 space  list-item-indent  remark-lint'
@@ -14,10 +24,12 @@ function! ale_linters#markdown#remark_lint#Handle(buffer, lines) abort
         \   'type': l:match[6] is# 'error' ? 'E' : 'W',
         \   'text': l:match[7],
         \}
+
         if l:match[3] isnot# ''
             let l:item.end_lnum = l:match[4] + 0
             let l:item.end_col = l:match[5] + 0
         endif
+
         call add(l:output, l:item)
     endfor
 
@@ -25,10 +37,12 @@ function! ale_linters#markdown#remark_lint#Handle(buffer, lines) abort
 endfunction
 
 call ale#linter#Define('markdown', {
-\   'name': 'remark-lint',
-\   'executable': 'remark',
-\   'command': 'remark --no-stdout --no-color %s',
+\   'name': 'remark_lint',
+\   'aliases': ['remark-lint'],
+\   'executable_callback': ale#node#FindExecutableFunc('markdown_remark_lint', [
+\       'node_modules/.bin/remark',
+\   ]),
+\   'command_callback': 'ale_linters#markdown#remark_lint#GetCommand',
 \   'callback': 'ale_linters#markdown#remark_lint#Handle',
-\   'lint_file': 1,
 \   'output_stream': 'stderr',
 \})
