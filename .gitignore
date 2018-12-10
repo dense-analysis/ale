@@ -1,5 +1,7 @@
 !.editorconfig
 *.obj
+# Ignore all hidden files everywhere.
+# Use `git add -f` to add hidden files.
 .*
 /doc/tags
 /init.vim
