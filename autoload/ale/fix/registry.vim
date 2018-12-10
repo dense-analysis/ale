@@ -115,6 +115,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['javascript'],
 \       'description': 'Fix JavaScript files using standard --fix',
 \   },
+\   'standardrb': {
+\       'function': 'ale#fixers#standardrb#Fix',
+\       'suggested_filetypes': ['ruby'],
+\       'description': 'Fix ruby files with standardrb --fix',
+\   },
 \   'stylelint': {
 \       'function': 'ale#fixers#stylelint#Fix',
 \       'suggested_filetypes': ['css', 'sass', 'scss', 'stylus'],

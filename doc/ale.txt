@@ -285,6 +285,7 @@ CONTENTS                                                         *ale-contents*
       ruby................................|ale-ruby-ruby|
       rufo................................|ale-ruby-rufo|
       solargraph..........................|ale-ruby-solargraph|
+      standardrb..........................|ale-ruby-standardrb|
     rust..................................|ale-rust-options|
       cargo...............................|ale-rust-cargo|
       rls.................................|ale-rust-rls|
@@ -486,7 +487,7 @@ Notes:
 * reStructuredText: `alex`!!, `proselint`, `redpen`, `rstcheck`, `vale`, `write-good`
 * Re:VIEW: `redpen`
 * RPM spec: `rpmlint`
-* Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`, `rufo`, `solargraph`
+* Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`, `rufo`, `solargraph`, `standardrb`
 * Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|), `rustfmt`
 * SASS: `sass-lint`, `stylelint`
 * SCSS: `prettier`, `sass-lint`, `scss-lint`, `stylelint`
