@@ -876,6 +876,9 @@ settings. For example: >
   set ttymouse=xterm
 <
 
+Documentation for symbols at the cursor can be retrieved using the
+|ALEDocumentation| command. This command is only available for `tsserver`.
+
 -------------------------------------------------------------------------------
 5.5 Symbol Search                                           *ale-symbol-search*
 
@@ -2197,6 +2200,17 @@ ALE will use to search for Python executables.
 
 ===============================================================================
 8. Commands/Keybinds                                             *ale-commands*
+
+ALEDocumentation                                             *ALEDocumentation*
+
+  Similar to the |ALEHover| command, retrieve documentation information for
+  the symbol at the cursor. Documentation data will always be shown in a
+  preview window, no matter how small the documentation content is.
+
+  NOTE: This command is only available for `tsserver`.
+
+  A plug mapping `<Plug>(ale_documentation)` is defined for this command.
+
 
 ALEFindReferences                                           *ALEFindReferences*
 
