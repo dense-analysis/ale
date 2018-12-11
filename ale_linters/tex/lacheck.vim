@@ -21,7 +21,7 @@ function! ale_linters#tex#lacheck#Handle(buffer, lines) abort
 
         " lacheck follows `\input{}` commands. We are only interested in
         " reporting errors for the current buffer only.
-        if empty(matchstr(fnamemodify(l:match[1], ':t'), bufname(a:buffer)))
+        if empty(matchstr(fnamemodify(l:match[1], ':t'), fnamemodify(bufname(a:buffer), ':t')))
             continue
         endif
 
