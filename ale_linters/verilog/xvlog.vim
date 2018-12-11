@@ -11,7 +11,6 @@ endfunction
 function! ale_linters#verilog#xvlog#Handle(buffer, lines) abort
   "Matches patterns like the following:
   " ERROR: [VRFC 10-1412] syntax error near output [/path/to/file.v:5]
-  "let l:pattern = '^ERROR:\s\[\h*\s\d*\-\d*\]\s\+\(.*\)\[.*:\([0-9]\+\)\]'
   let l:pattern = '^ERROR:\s\+\(\[.*\)\[.*:\([0-9]\+\)\]'
   let l:output = []
 
