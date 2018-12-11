@@ -1,8 +1,6 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Completion support for LSP linters
 
-let g:ale_autocompletion_enabled = 0
-
 " The omnicompletion menu is shown through a special Plug mapping which is
 " only valid in Insert mode. This way, feedkeys() won't send these keys if you
 " quit Insert mode quickly enough.
@@ -19,7 +17,9 @@ let g:ale_completion_excluded_words = get(g:, 'ale_completion_excluded_words', [
 let g:ale_completion_max_suggestions = get(g:, 'ale_completion_max_suggestions', 50)
 
 let s:timer_id = -1
+let s:timer_pos = []
 let s:last_done_pos = []
+let s:Results_callback = 0
 
 " CompletionItemKind values from the LSP protocol.
 let s:LSP_COMPLETION_TEXT_KIND = 1
@@ -187,29 +187,42 @@ endfunction
 
 function! ale#completion#OmniFunc(findstart, base) abort
     if a:findstart
-        let l:line = b:ale_completion_info.line
-        let l:column = b:ale_completion_info.column
+        let l:completion_info = get(b:, 'ale_completion_info', {})
+
+        if empty(l:completion_info)
+            let [l:line, l:column] = getcurpos()[1:2]
+        else
+            let l:line = b:ale_completion_info.line
+            let l:column = b:ale_completion_info.column
+        endif
+
         let l:regex = s:GetFiletypeValue(s:omni_start_map, &filetype)
         let l:up_to_column = getline(l:line)[: l:column - 2]
         let l:match = matchstr(l:up_to_column, l:regex)
 
         return l:column - len(l:match) - 1
     else
-        if g:ale_autocompletion_enabled
-            return get(b:, 'ale_completion_result', [])
+        if ale#completion#Queue()
+            return []
         else
-            return ale#completion#ProcessCompletions()
+            return get(b:, 'ale_completion_result', [])
         endif
     endif
 endfunction
 
 function! ale#completion#Show() abort
-    if !g:ale_autocompletion_enabled || !g:ale#util#Mode() isnot# 'i'
+    if !ale#util#Mode() is# 'i'
         return
     endif
 
-    " Replace completion options shortly before opening the menu.
-    call s:ReplaceCompletionOptions()
+    let s:last_done_pos = getcurpos()[1:2]
+
+    " If the autocompletion events are not managed by ALE, don't mess with
+    " the omnifunc option. Otherwise, replace completion options shortly
+    " before opening the menu.
+    if g:ale_autocompletion_enabled
+        call s:ReplaceCompletionOptions()
+    endif
 
     call timer_start(0, {-> ale#util#FeedKeys("\<Plug>(ale_show_completion_menu)")})
 endfunction
@@ -480,10 +493,12 @@ function! s:OnReady(linter, lsp_details, ...) abort
     endif
 endfunction
 
-function! ale#completion#ProcessCompletions() abort
-    call ale#completion#GetCompletions()
-
-    return get(b:, 'ale_completion_result', [])
+function! ale#completion#ProcessCompletions(Callback) abort
+    if ale#completion#Queue()
+        let s:Results_callback = a:Callback
+    else
+        return call(a:Callback, [get(b:, 'ale_completion_result', [])])
+    endif
 endfunction
 
 function! s:GetLSPCompletions(linter) abort
@@ -533,9 +548,12 @@ function! s:TimerHandler(...) abort
 
     let [l:line, l:column] = getcurpos()[1:2]
 
+    "echo "getcmolp" . localtime()
+
     " When running the timer callback, we have to be sure that the cursor
     " hasn't moved from where it was when we requested completions by typing.
     if s:timer_pos == [l:line, l:column] && ale#util#Mode() is# 'i'
+    "echo "getcmolp2" . localtime()
         call ale#completion#GetCompletions()
     endif
 endfunction
@@ -550,16 +568,12 @@ function! ale#completion#StopTimer() abort
 endfunction
 
 function! ale#completion#Queue() abort
-    if !g:ale_autocompletion_enabled
-        return
-    endif
-
     let s:timer_pos = getcurpos()[1:2]
 
     if s:timer_pos == s:last_done_pos
         " Do not ask for completions if the cursor rests on the position we
         " last completed on.
-        return
+        return 0
     endif
 
     " If we changed the text again while we're still waiting for a response,
@@ -571,6 +585,8 @@ function! ale#completion#Queue() abort
     call ale#completion#StopTimer()
 
     let s:timer_id = timer_start(g:ale_completion_delay, function('s:TimerHandler'))
+
+    return 1
 endfunction
 
 function! ale#completion#Done() abort
@@ -597,11 +613,11 @@ function! s:Setup(enabled) abort
 endfunction
 
 function! ale#completion#Enable() abort
-    let g:ale_completion_enabled = 1
+    let g:ale_autocompletion_enabled = 1
     call s:Setup(1)
 endfunction
 
 function! ale#completion#Disable() abort
-    let g:ale_completion_enabled = 0
+    let g:ale_autocompletion_enabled = 0
     call s:Setup(0)
 endfunction
