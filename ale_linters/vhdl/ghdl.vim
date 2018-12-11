@@ -1,34 +1,26 @@
-" File: ghdl.vim
 " Author: John Gentile <johncgentile17@gmail.com>
-" Description: This file adds support for ghdl for VHDL
+" Description: Adds support for `ghdl` VHDL compiler/checker
 
-call ale#Set('vhdl_ghdl_options', '')
+call ale#Set('vhdl_ghdl_executable', 'ghdl')
+" Compile w/VHDL-2008 support
+call ale#Set('vhdl_ghdl_options', '--std=08')
 
 function! ale_linters#vhdl#ghdl#GetCommand(buffer) abort
-    return 'ghdl -s --std=08 '
-    \   . ale#Var(a:buffer, 'vhdl_ghdl_options')
-    \   . ' %t'
+    return '%e ' . ale#Pad(ale#Var(a:buffer, 'vhdl_ghdl_options')) . ' %t'
 endfunction
 
 function! ale_linters#vhdl#ghdl#Handle(buffer, lines) abort
-    " Look for lines like the following.
-    "
+    " Look for 'error' lines like the following:
     " dff_en.vhd:41:5:error: 'begin' is expected instead of 'if'
-    let l:pattern = '^\s*\u\=:\=[^:]\+:\(\d\+\):\(\d\+\): \(.\+\)'
+    let l:pattern = '^[a-zA-Z0-9\-\.\_ ]\+:\(\d\+\):\(\d\+\):error:\s\(.*\)'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        let l:line = l:match[1] + 0
-        let l:col = l:match[2] + 0
-        " GHDL syntax output does not parse warning|error
-        let l:type = 'E'
-        let l:text = l:match[3]
-
         call add(l:output, {
-        \   'lnum': l:line,
-        \   'text': l:text,
-        \   'col' : l:col,
-        \   'type': l:type,
+        \   'lnum': l:match[1] + 0,
+        \   'col' : l:match[2] + 0,
+        \   'text': l:match[3],
+        \   'type': 'E',
         \})
     endfor
 
@@ -38,7 +30,7 @@ endfunction
 call ale#linter#Define('vhdl', {
 \   'name': 'ghdl',
 \   'output_stream': 'stderr',
-\   'executable': 'ghdl',
+\   'executable_callback': ale#VarFunc('vhdl_ghdl_executable'),
 \   'command_callback': 'ale_linters#vhdl#ghdl#GetCommand',
 \   'callback': 'ale_linters#vhdl#ghdl#Handle',
 \})
