@@ -11,11 +11,6 @@ function! ale_linters#racket#raco#Handle(buffer, lines) abort
     let l:pattern = '^\(\s\)\@!\(.\+\):\(\d\+\):\(\d\+\)\(.\+\)$'
     let l:output = []
 
-    "echo a:lines
-    for l:match in ale#util#GetMatches(a:lines, l:pattern)
-      "echo l:match
-    endfor
-
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
         \   'filename': l:match[2],
