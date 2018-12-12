@@ -36,6 +36,7 @@ doc_files="$(/bin/ls -1v doc | grep ^ale- | sed 's/^/doc\//' | paste -sd ' ' -)"
 grep -h '\*ale-.*-options\|^[a-z].*\*ale-.*\*$' $doc_files \
     | sed 's/^/  /' \
     | sed 's/ALE Shell Integration/ALE sh Integration/' \
+    | sed 's/ALE BibTeX Integration/ALE bib Integration/' \
     | sed 's/  ALE \(.*\) Integration/\1/' \
     | sed 's/ *\*\(..*\)\*$/, \1/' \
     | tr '[:upper:]' '[:lower:]' \

@@ -89,6 +89,26 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle messages without codes)
   \   },
   \ ]}})
 
+Execute(ale#lsp#response#ReadDiagnostics() should include sources in detail):
+  AssertEqual [
+  \   {
+  \     'type': 'E',
+  \     'text': 'Something went wrong!',
+  \     'detail': '[tslint] Something went wrong!',
+  \     'lnum': 10,
+  \     'col': 15,
+  \     'end_lnum': 12,
+  \     'end_col': 23,
+  \   }
+  \ ],
+  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \   {
+  \     'range': Range(9, 14, 11, 22),
+  \     'message': 'Something went wrong!',
+  \     'source': 'tslint',
+  \   }
+  \ ]}})
+
 Execute(ale#lsp#response#ReadDiagnostics() should consider -1 to be a meaningless code):
   AssertEqual [
   \   {
@@ -107,7 +127,6 @@ Execute(ale#lsp#response#ReadDiagnostics() should consider -1 to be a meaningles
   \     'code': -1,
   \   },
   \ ]}})
-
 
 Execute(ale#lsp#response#ReadDiagnostics() should handle multiple messages):
   AssertEqual [

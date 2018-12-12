@@ -31,6 +31,8 @@ CONTENTS                                                         *ale-contents*
       gcc.................................|ale-asm-gcc|
     awk...................................|ale-awk-options|
       gawk................................|ale-awk-gawk|
+    bib...................................|ale-bib-options|
+      bibclean............................|ale-bib-bibclean|
     c.....................................|ale-c-options|
       clang...............................|ale-c-clang|
       clangd..............................|ale-c-clangd|
@@ -258,6 +260,7 @@ CONTENTS                                                         *ale-contents*
       mypy................................|ale-python-mypy|
       prospector..........................|ale-python-prospector|
       pycodestyle.........................|ale-python-pycodestyle|
+      pydocstyle..........................|ale-python-pydocstyle|
       pyflakes............................|ale-python-pyflakes|
       pylint..............................|ale-python-pylint|
       pyls................................|ale-python-pyls|
@@ -282,12 +285,14 @@ CONTENTS                                                         *ale-contents*
       ruby................................|ale-ruby-ruby|
       rufo................................|ale-ruby-rufo|
       solargraph..........................|ale-ruby-solargraph|
+      standardrb..........................|ale-ruby-standardrb|
     rust..................................|ale-rust-options|
       cargo...............................|ale-rust-cargo|
       rls.................................|ale-rust-rls|
       rustc...............................|ale-rust-rustc|
       rustfmt.............................|ale-rust-rustfmt|
     sass..................................|ale-sass-options|
+      sasslint............................|ale-sass-sasslint|
       stylelint...........................|ale-sass-stylelint|
     scala.................................|ale-scala-options|
       sbtserver...........................|ale-scala-sbtserver|
@@ -295,6 +300,7 @@ CONTENTS                                                         *ale-contents*
       scalastyle..........................|ale-scala-scalastyle|
     scss..................................|ale-scss-options|
       prettier............................|ale-scss-prettier|
+      sasslint............................|ale-scss-sasslint|
       stylelint...........................|ale-scss-stylelint|
     sh....................................|ale-sh-options|
       sh-language-server..................|ale-sh-language-server|
@@ -405,6 +411,7 @@ Notes:
 * AsciiDoc: `alex`!!, `proselint`, `redpen`, `write-good`, `vale`
 * Awk: `gawk`
 * Bash: `language-server`, `shell` (-n flag), `shellcheck`, `shfmt`
+* BibTeX: `bibclean`
 * Bourne Shell: `shell` (-n flag), `shellcheck`, `shfmt`
 * C: `cppcheck`, `cpplint`!!, `clang`, `clangd`, `clangtidy`!!, `clang-format`, `cquery`, `flawfinder`, `gcc`, `uncrustify`, `ccls`
 * C++ (filetype cpp): `clang`, `clangd`, `clangcheck`!!, `clangtidy`!!, `clang-format`, `clazy`!!, `cppcheck`, `cpplint`!!, `cquery`, `flawfinder`, `gcc`, `uncrustify`, `ccls`
@@ -475,14 +482,14 @@ Notes:
 * proto: `protoc-gen-lint`
 * Pug: `pug-lint`
 * Puppet: `languageserver`, `puppet`, `puppet-lint`
-* Python: `autopep8`, `black`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pyls`, `pyre`, `pylint`!!, `vulture`!!, `yapf`
+* Python: `autopep8`, `black`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pydocstyle`, `pyls`, `pyre`, `pylint`!!, `vulture`!!, `yapf`
 * QML: `qmlfmt`, `qmllint`
 * R: `lintr`
 * ReasonML: `merlin`, `ols`, `refmt`
 * reStructuredText: `alex`!!, `proselint`, `redpen`, `rstcheck`, `vale`, `write-good`
 * Re:VIEW: `redpen`
 * RPM spec: `rpmlint`
-* Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`, `rufo`, `solargraph`
+* Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`, `rufo`, `solargraph`, `standardrb`
 * Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|), `rustfmt`
 * Sass: `sass-lint`, `stylelint`
 * SCSS: `prettier`, `sass-lint`, `scss-lint`, `stylelint`
@@ -872,6 +879,9 @@ settings. For example: >
   set mouse=a
   set ttymouse=xterm
 <
+
+Documentation for symbols at the cursor can be retrieved using the
+|ALEDocumentation| command. This command is only available for `tsserver`.
 
 -------------------------------------------------------------------------------
 5.5 Symbol Search                                           *ale-symbol-search*
@@ -2194,6 +2204,17 @@ ALE will use to search for Python executables.
 
 ===============================================================================
 8. Commands/Keybinds                                             *ale-commands*
+
+ALEDocumentation                                             *ALEDocumentation*
+
+  Similar to the |ALEHover| command, retrieve documentation information for
+  the symbol at the cursor. Documentation data will always be shown in a
+  preview window, no matter how small the documentation content is.
+
+  NOTE: This command is only available for `tsserver`.
+
+  A plug mapping `<Plug>(ale_documentation)` is defined for this command.
+
 
 ALEFindReferences                                           *ALEFindReferences*
 

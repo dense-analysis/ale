@@ -41,21 +41,21 @@ Execute(The rubocop handler should parse lines correctly):
   \     'type': 'E',
   \   },
   \ ],
-  \ ale_linters#ruby#rubocop#Handle(347, [
+  \ ale#ruby#HandleRubocopOutput(347, [
   \     '{"metadata":{"rubocop_version":"0.47.1","ruby_engine":"ruby","ruby_version":"2.1.5","ruby_patchlevel":"273","ruby_platform":"x86_64-linux-gnu"},"files":[{"path":"my_great_file.rb","offenses":[{"severity":"convention","message":"Prefer single-quoted strings...","cop_name":"Style/SomeCop","corrected":false,"location":{"line":83,"column":29,"length":7}},{"severity":"fatal","message":"Some error","cop_name":"Style/SomeOtherCop","corrected":false,"location":{"line":12,"column":2,"length":1}},{"severity":"warning","message":"Regular warning","cop_name":"Style/WarningCop","corrected":false,"location":{"line":10,"column":5,"length":8}},{"severity":"error","message":"Another error","cop_name":"Style/SpaceBeforeBlockBraces","corrected":false,"location":{"line":11,"column":1,"length":1}}]}],"summary":{"offense_count":4,"target_file_count":1,"inspected_file_count":1}}'
   \ ])
 
 Execute(The rubocop handler should handle when files are checked and no offenses are found):
   AssertEqual
   \ [],
-  \ ale_linters#ruby#rubocop#Handle(347, [
+  \ ale#ruby#HandleRubocopOutput(347, [
   \     '{"metadata":{"rubocop_version":"0.47.1","ruby_engine":"ruby","ruby_version":"2.1.5","ruby_patchlevel":"273","ruby_platform":"x86_64-linux-gnu"},"files":[{"path":"my_great_file.rb","offenses":[]}],"summary":{"offense_count":0,"target_file_count":1,"inspected_file_count":1}}'
   \ ])
 
 Execute(The rubocop handler should handle when no files are checked):
   AssertEqual
   \ [],
-  \ ale_linters#ruby#rubocop#Handle(347, [
+  \ ale#ruby#HandleRubocopOutput(347, [
   \     '{"metadata":{"rubocop_version":"0.47.1","ruby_engine":"ruby","ruby_version":"2.1.5","ruby_patchlevel":"273","ruby_platform":"x86_64-linux-gnu"},"files":[],"summary":{"offense_count":0,"target_file_count":0,"inspected_file_count":0}}'
   \ ])
 
@@ -66,11 +66,11 @@ Execute(The rubocop handler should handle output without any errors):
 
   AssertEqual
   \ [],
-  \ ale_linters#ruby#rubocop#Handle(347, g:lines)
+  \ ale#ruby#HandleRubocopOutput(347, g:lines)
   \
   AssertEqual
   \ [],
-  \ ale_linters#ruby#rubocop#Handle(347, ['{}'])
+  \ ale#ruby#HandleRubocopOutput(347, ['{}'])
   AssertEqual
   \ [],
-  \ ale_linters#ruby#rubocop#Handle(347, [])
+  \ ale#ruby#HandleRubocopOutput(347, [])
