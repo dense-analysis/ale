@@ -19,6 +19,7 @@ let g:ale_completion_max_suggestions = get(g:, 'ale_completion_max_suggestions',
 let s:timer_id = -1
 let s:timer_pos = []
 let s:last_done_pos = []
+let s:currently_queued_pos = []
 
 " CompletionItemKind values from the LSP protocol.
 let s:LSP_COMPLETION_TEXT_KIND = 1
@@ -184,40 +185,50 @@ function! ale#completion#RestoreCompletionOptions() abort
     endif
 endfunction
 
-function! ale#completion#OmniFunc(findstart, base) abort
-    if a:findstart
-        let [l:line, l:column] = getcurpos()[1:2]
-        let l:regex = s:GetFiletypeValue(s:omni_start_map, &filetype)
-        let l:up_to_column = getline(l:line)[: l:column - 2]
-        let l:match = matchstr(l:up_to_column, l:regex)
+function! ale#completion#FindCompletionStart() abort
+    let [l:line, l:column] = getcurpos()[1:2]
+    let l:regex = s:GetFiletypeValue(s:omni_start_map, &filetype)
+    let l:up_to_column = getline(l:line)[: l:column - 2]
+    let l:match = matchstr(l:up_to_column, l:regex)
 
-        let b:ale_completion_start = l:column - len(l:match) - 1
+    let b:ale_completion_start = l:column - len(l:match) - 1
 
-        return b:ale_completion_start
+    return b:ale_completion_start
+endfunction
+
+function! ale#completion#PollCompletionResults() abort
+    if ale#completion#Queue()
+        return []
     else
-        if ale#completion#Queue()
-            return []
-        else
-            return get(b:, 'ale_completion_result', [])
-        endif
+        return get(b:, 'ale_completion_result', [])
     endif
 endfunction
 
-function! ale#completion#Results() abort
+function! ale#completion#OmniFunc(findstart, base) abort
+    if a:findstart
+        return ale#completion#FindCompletionStart()
+    else
+        return ale#completion#PollCompletionResults()
+    endif
+endfunction
+
+function! ale#completion#QueryDone() abort
     let s:last_done_pos = getcurpos()[1:2]
 
-    call ale#completion#ProcessResults(get(b:, 'ale_completion_result', []))
+    let b:ale_completion_result = ALEProcessCompletionResults(get(b:, 'ale_completion_result', []))
 
-    call ale#completion#AfterResults()
+    call ALEAfterCompletionResults()
 endfunction
 
-function! ale#completion#ProcessResults(completion_result) abort
-    " Users may override this function to process the results however they
-    " see fit.
-    return a:completion_result
+function! ALEProcessCompletionResults(completion_results) abort
+    " Users may override this function to act on the results however they
+    " see fit. Needs to be not namespaced.
+    return a:completion_results
 endfunction
 
-function! ale#completion#AfterResults() abort
+function! ALEAfterCompletionResults() abort
+    " Users may override this function to act on the results however they
+    " see fit. Needs to be not namespaced.
     if !ale#util#Mode() is# 'i'
         return
     endif
@@ -430,7 +441,7 @@ function! ale#completion#HandleTSServerResponse(conn_id, response) abort
     elseif l:command is# 'completionEntryDetails'
         let b:ale_completion_result = ale#completion#ParseTSServerCompletionEntryDetails(a:response)
 
-        call ale#completion#Results()
+        call ale#completion#QueryDone()
     endif
 endfunction
 
@@ -442,7 +453,7 @@ function! ale#completion#HandleLSPResponse(conn_id, response) abort
 
     let b:ale_completion_result = ale#completion#ParseLSPCompletions(a:response)
 
-    call ale#completion#Results()
+    call ale#completion#QueryDone()
 endfunction
 
 function! s:OnReady(linter, lsp_details, ...) abort
@@ -563,11 +574,14 @@ endfunction
 function! ale#completion#Queue() abort
     let s:timer_pos = getcurpos()[1:2]
 
-    if s:timer_pos == s:last_done_pos
+    if s:timer_pos == s:last_done_pos || s:timer_pos == s:currently_queued_pos
         " Do not ask for completions if the cursor rests on the position we
-        " last completed on.
+        " last completed on, or if the position is the one currently being
+        " queried by the engine.
         return 0
     endif
+
+    let s:currently_queued_pos = s:timer_pos
 
     " If we changed the text again while we're still waiting for a response,
     " then invalidate the requests before the timer ticks again.
@@ -582,12 +596,17 @@ function! ale#completion#Queue() abort
     return 1
 endfunction
 
-function! ale#completion#Done() abort
+function! ale#completion#Finished() abort
     silent! pclose
 
     call ale#completion#RestoreCompletionOptions()
 
     let s:last_done_pos = getcurpos()[1:2]
+endfunction
+
+function! ale#completion#ClearBufferResults() abort
+    let b:ale_completion_result = []
+    let b:ale_completion_info = {}
 endfunction
 
 function! s:Setup(enabled) abort
@@ -596,7 +615,7 @@ function! s:Setup(enabled) abort
 
         if a:enabled
             autocmd TextChangedI * call ale#completion#Queue()
-            autocmd CompleteDone * call ale#completion#Done()
+            autocmd CompleteDone * call ale#completion#Finished()
         endif
     augroup END
 
