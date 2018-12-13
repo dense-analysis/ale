@@ -133,11 +133,8 @@ let g:ale_history_enabled = get(g:, 'ale_history_enabled', 1)
 " A flag for storing the full output of commands in the history.
 let g:ale_history_log_output = get(g:, 'ale_history_log_output', 1)
 
-" Enable completion with LSP servers and tsserver
+" Enable automatic completion events with LSP servers and tsserver
 let g:ale_completion_enabled = get(g:, 'ale_completion_enabled', 0)
-
-" Enable automatic events for triggering completion
-let g:ale_autocompletion_enabled = get(g:, 'ale_autocompletion_enabled', g:ale_completion_enabled)
 
 " Enable automatic detection of pipenv for Python linters.
 let g:ale_python_auto_pipenv = get(g:, 'ale_python_auto_pipenv', 0)
@@ -146,7 +143,7 @@ if g:ale_set_balloons
     call ale#balloon#Enable()
 endif
 
-if g:ale_autocompletion_enabled
+if g:ale_completion_enabled
     call ale#completion#Enable()
 endif
 
