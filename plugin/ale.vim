@@ -136,7 +136,7 @@ let g:ale_history_log_output = get(g:, 'ale_history_log_output', 1)
 " Enable completion with LSP servers and tsserver
 let g:ale_completion_enabled = get(g:, 'ale_completion_enabled', 0)
 
-" Enable automatic completion with LSP servers and tsserver
+" Enable automatic events for triggering completion
 let g:ale_autocompletion_enabled = get(g:, 'ale_autocompletion_enabled', g:ale_completion_enabled)
 
 " Enable automatic detection of pipenv for Python linters.

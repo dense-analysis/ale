@@ -1,0 +1,17 @@
+" For testing ALE autocompletion with TSServer.
+" You need to include ALE at $VIMRUNTIME/pack/completion/opt/ale
+
+" Launch with VIMRUNTIME=[dummy directory] vim -u [path to this file] --noplugin new.js
+
+" Example: VIMRUNTIME=~/vim/mock vim -u ~/vim/mock/pack/completion/opt/ale/test/completion/vimrc/minimal_autocompletion_vimrc --noplugin new.js
+
+set nocompatible
+filetype on
+set filetype=javascript
+
+" Should enable autocompletion automatically
+let g:ale_completion_enabled = 1
+" Set up TSServer to enable completion
+let g:ale_linters = { 'javascript': ['tsserver'] }
+
+packadd ale
