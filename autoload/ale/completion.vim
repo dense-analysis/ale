@@ -233,10 +233,10 @@ function! ALEAfterCompletionResults() abort
         return
     endif
 
-    " If the autocompletion events are not managed by ALE, don't mess with
+    " If the completion events are not managed by ALE, don't mess with
     " the omnifunc option. Otherwise, replace completion options shortly
     " before opening the menu.
-    if g:ale_autocompletion_enabled
+    if g:ale_completion_enabled
         call s:ReplaceCompletionOptions()
         call timer_start(0, {-> ale#util#FeedKeys("\<Plug>(ale_show_completion_menu)")})
     endif
@@ -625,11 +625,11 @@ function! s:Setup(enabled) abort
 endfunction
 
 function! ale#completion#Enable() abort
-    let g:ale_autocompletion_enabled = 1
-    call s:Setup(g:ale_autocompletion_enabled)
+    let g:ale_completion_enabled = 1
+    call s:Setup(g:ale_completion_enabled)
 endfunction
 
 function! ale#completion#Disable() abort
-    let g:ale_autocompletion_enabled = 0
-    call s:Setup(g:ale_autocompletion_enabled)
+    let g:ale_completion_enabled = 0
+    call s:Setup(g:ale_completion_enabled)
 endfunction
