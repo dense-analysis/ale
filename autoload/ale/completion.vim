@@ -606,7 +606,6 @@ endfunction
 
 function! ale#completion#ClearBufferResults() abort
     let b:ale_completion_result = []
-    let b:ale_completion_info = {}
 endfunction
 
 function! s:Setup(enabled) abort
