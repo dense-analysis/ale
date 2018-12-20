@@ -33,21 +33,21 @@ Before:
   call ale#test#SetFilename('test.txt')
   call ale#linter#PreventLoading('testft')
 
-  function AddCarets(buffer, lines) abort
+  function AddCarets(buffer, done, lines) abort
     " map() is applied to the original lines here.
     " This way, we can ensure that defensive copies are made.
     return map(a:lines, '''^'' . v:val')
   endfunction
 
-  function AddDollars(buffer, lines) abort
+  function AddDollars(buffer, done, lines) abort
     return map(a:lines, '''$'' . v:val')
   endfunction
 
-  function DoNothing(buffer, lines) abort
+  function DoNothing(buffer, done, lines) abort
     return 0
   endfunction
 
-  function CatLine(buffer, lines) abort
+  function CatLine(buffer, done, lines) abort
     return {'command': 'cat - <(echo d)'}
   endfunction
 
@@ -55,11 +55,11 @@ Before:
     return {'command': 'cat - <(echo d)'}
   endfunction
 
-  function ReplaceWithTempFile(buffer, lines) abort
+  function ReplaceWithTempFile(buffer, done, lines) abort
     return {'command': 'echo x > %t', 'read_temporary_file': 1}
   endfunction
 
-  function RemoveLastLine(buffer, lines) abort
+  function RemoveLastLine(buffer, done, lines) abort
     return ['a', 'b']
   endfunction
 
@@ -122,11 +122,11 @@ Before:
   endfunction
 
   " echo will output a single blank line, and we should ingore it.
-  function! IgnoredEmptyOutput(buffer, output)
+  function! IgnoredEmptyOutput(buffer, done, output)
     return {'command': has('win32') ? 'echo(' : 'echo'}
   endfunction
 
-  function! EchoLineNoPipe(buffer, output)
+  function! EchoLineNoPipe(buffer, done, output)
     return {'command': 'echo new line', 'read_buffer': 0}
   endfunction
 
@@ -399,7 +399,7 @@ Execute(ALEFix should accept lambdas):
     " to make the test pass.
     call setline(1, ['a', 'b', 'c', 'd'])
   else
-    let g:ale_fixers.testft = [{buffer, lines -> lines + ['d']}]
+    let g:ale_fixers.testft = [{buffer, done, lines -> lines + ['d']}]
     ALEFix
   endif
 
