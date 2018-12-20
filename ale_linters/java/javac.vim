@@ -55,15 +55,14 @@ function! ale_linters#java#javac#GetCommand(buffer, import_paths) abort
         if isdirectory(l:jaxb_dir)
             call add(l:sp_dirs, l:jaxb_dir)
         endif
+    endif
 
-        " Automatically include the test directory, but only for test code.
-        if expand('#' . a:buffer . ':p') =~? '\vsrc[/\\]test[/\\]java'
-            let l:test_dir = fnamemodify(l:src_dir, ':h:h:h')
-            \   . (has('win32') ? '\test\java\' : '/test/java/')
+    " Automatically include the test directory, but only for test code.
+    if expand('#' . a:buffer . ':p') =~? '\vsrc[/\\]test[/\\]java'
+        let l:test_dir = ale#path#FindNearestDirectory(a:buffer, 'src/test/java')
 
-            if isdirectory(l:test_dir)
-                call add(l:sp_dirs, l:test_dir)
-            endif
+        if isdirectory(l:test_dir)
+            call add(l:sp_dirs, l:test_dir)
         endif
     endif
 
