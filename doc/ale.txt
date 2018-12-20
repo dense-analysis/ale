@@ -840,6 +840,8 @@ information returned by LSP servers. The following commands are supported:
 
 |ALEGoToDefinition|      - Open the definition of the symbol under the cursor.
 |ALEGoToDefinitionInTab| - The same, but for opening the file in a new tab.
+|ALEGoToDefinitionInSplit| - The same, but in a new split.
+|ALEGoToDefinitionInVSplit| - The same, but in a new vertical split.
 
 
 -------------------------------------------------------------------------------
@@ -2263,6 +2265,22 @@ ALEGoToDefinitionInTab                                 *ALEGoToDefinitionInTab*
   The same as |ALEGoToDefinition|, but opens results in a new tab.
 
   A plug mapping `<Plug>(ale_go_to_definition_in_tab)` is defined for this
+  command.
+
+
+ALEGoToDefinitionInSplit                             *ALEGoToDefinitionInSplit*
+
+  The same as |ALEGoToDefinition|, but opens results in a new split.
+
+  A plug mapping `<Plug>(ale_go_to_definition_in_split)` is defined for this
+  command.
+
+
+ALEGoToDefinitionInVSplit                           *ALEGoToDefinitionInVSplit*
+
+  The same as |ALEGoToDefinition|, but opens results in a new vertical split.
+
+  A plug mapping `<Plug>(ale_go_to_definition_in_vsplit)` is defined for this
   command.
 
 
