@@ -6,47 +6,44 @@
 " SENT_START_CONJUNCTIVE_LINKING_ADVERB_COMMA[1]
 " Message: Did you forget a comma after a conjunctive/linking adverb?
 " Suggestion: Therefore,
-"
-
 function! ale_linters#markdown#languagetool#Handle(buffer, lines) abort
-	let l:head_pattern = '^\v.+.\) Line (\d+), column (\d+), Rule ID. (.+)$'
-	let l:message_pattern = '^\vMessage. (.+)$'
-	let l:output = []
-	
-	" Extract the header line first
-	let l:head_matches = []
-	call extend(l:head_matches, ale#util#GetMatches(a:lines, l:head_pattern))
+    let l:head_pattern = '^\v.+.\) Line (\d+), column (\d+), Rule ID. (.+)$'
+    let l:message_pattern = '^\vMessage. (.+)$'
+    let l:output = []
 
-	" Extract all messages
-	let l:message_matches = []
-	call extend(l:message_matches, ale#util#GetMatches(a:lines, l:message_pattern))
+    " Extract the header line first
+    let l:head_matches = []
+    call extend(l:head_matches, ale#util#GetMatches(a:lines, l:head_pattern))
 
+    " Extract all messages
+    let l:message_matches = []
+    call extend(l:message_matches, ale#util#GetMatches(a:lines, l:message_pattern))
 
-	let i = 0
-	" Okay tbh I was to lazy to figure out a smarter solution here
-	" We just assume that the arrays are same sized and merge everything
-	" togther
-	while i < len(head_matches)
-		let l:item = {
-			\   'lnum': str2nr(l:head_matches[i][1]),
-			\   'col' : str2nr(l:head_matches[i][2]),
-			\   'type': 'W',
-			\   'code': l:head_matches[i][3],
-			\   'text': l:message_matches[i][1]
-			\}
-        	call add(l:output, l:item)
-		let i+=1
+    " Okay tbh I was to lazy to figure out a smarter solution here
+    " We just assume that the arrays are same sized and merge everything
+    " together
+    let l:i = 0
 
-	endwhile
+    while l:i < len(l:head_matches)
+        let l:item = {
+            \   'lnum': str2nr(l:head_matches[l:i][1]),
+            \   'col' : str2nr(l:head_matches[l:i][2]),
+            \   'type': 'W',
+            \   'code': l:head_matches[l:i][3],
+            \   'text': l:message_matches[l:i][1]
+            \}
+        call add(l:output, l:item)
+        let l:i+=1
+    endwhile
 
-	return l:output
+    return l:output
 endfunction
 
 call ale#linter#Define('markdown', {
-			\   'name': 'languagetool',
-			\   'executable': 'languagetool',
-			\   'command': 'languagetool --line-by-line %s ',
-			\   'output_stream': 'stdout',
-			\   'callback': 'ale_linters#markdown#languagetool#Handle',
-			\   'lint_file': 1,
-			\})
+            \   'name': 'languagetool',
+            \   'executable': 'languagetool',
+            \   'command': 'languagetool --line-by-line %s ',
+            \   'output_stream': 'stdout',
+            \   'callback': 'ale_linters#markdown#languagetool#Handle',
+            \   'lint_file': 1,
+            \})
