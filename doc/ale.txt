@@ -285,6 +285,7 @@ CONTENTS                                                         *ale-contents*
       ruby................................|ale-ruby-ruby|
       rufo................................|ale-ruby-rufo|
       solargraph..........................|ale-ruby-solargraph|
+      standardrb..........................|ale-ruby-standardrb|
     rust..................................|ale-rust-options|
       cargo...............................|ale-rust-cargo|
       rls.................................|ale-rust-rls|
@@ -488,7 +489,7 @@ Notes:
 * reStructuredText: `alex`!!, `proselint`, `redpen`, `rstcheck`, `vale`, `write-good`
 * Re:VIEW: `redpen`
 * RPM spec: `rpmlint`
-* Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`, `rufo`, `solargraph`
+* Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`, `rufo`, `solargraph`, `standardrb`
 * Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|), `rustfmt`
 * SASS: `sass-lint`, `stylelint`
 * SCSS: `prettier`, `sass-lint`, `scss-lint`, `stylelint`
@@ -677,10 +678,14 @@ The values for `g:ale_fixers` can be a list of |String|, |Funcref|, or
 for a function set in the ALE fixer registry.
 
 Each function for fixing errors must accept either one argument `(buffer)` or
-two arguments `(buffer, lines)`, representing the buffer being fixed and the
-lines to fix. The functions must return either `0`, for changing nothing, a
-|List| for new lines to set, or a |Dictionary| for describing a command to be
-run in the background.
+three arguments `(buffer, done, lines)`, representing the buffer being fixed,
+a function to call with results, and the lines to fix. The functions must
+return either `0`, for changing nothing, a |List| for new lines to set, a
+|Dictionary| for describing a command to be run in the background, or `v:true`
+for indicating that results will be provided asynchronously via the `done`
+callback.
+
+NOTE: The `done` function has not been implemented yet.
 
 Functions receiving a variable number of arguments will not receive the second
 argument `lines`. Functions should name two arguments if the `lines` argument
@@ -838,6 +843,8 @@ information returned by LSP servers. The following commands are supported:
 
 |ALEGoToDefinition|      - Open the definition of the symbol under the cursor.
 |ALEGoToDefinitionInTab| - The same, but for opening the file in a new tab.
+|ALEGoToDefinitionInSplit| - The same, but in a new split.
+|ALEGoToDefinitionInVSplit| - The same, but in a new vertical split.
 
 
 -------------------------------------------------------------------------------
@@ -878,6 +885,9 @@ settings. For example: >
   set mouse=a
   set ttymouse=xterm
 <
+
+Documentation for symbols at the cursor can be retrieved using the
+|ALEDocumentation| command. This command is only available for `tsserver`.
 
 -------------------------------------------------------------------------------
 5.5 Symbol Search                                           *ale-symbol-search*
@@ -2201,6 +2211,17 @@ ALE will use to search for Python executables.
 ===============================================================================
 8. Commands/Keybinds                                             *ale-commands*
 
+ALEDocumentation                                             *ALEDocumentation*
+
+  Similar to the |ALEHover| command, retrieve documentation information for
+  the symbol at the cursor. Documentation data will always be shown in a
+  preview window, no matter how small the documentation content is.
+
+  NOTE: This command is only available for `tsserver`.
+
+  A plug mapping `<Plug>(ale_documentation)` is defined for this command.
+
+
 ALEFindReferences                                           *ALEFindReferences*
 
   Find references in the codebase for the symbol under the cursor using the
@@ -2247,6 +2268,22 @@ ALEGoToDefinitionInTab                                 *ALEGoToDefinitionInTab*
   The same as |ALEGoToDefinition|, but opens results in a new tab.
 
   A plug mapping `<Plug>(ale_go_to_definition_in_tab)` is defined for this
+  command.
+
+
+ALEGoToDefinitionInSplit                             *ALEGoToDefinitionInSplit*
+
+  The same as |ALEGoToDefinition|, but opens results in a new split.
+
+  A plug mapping `<Plug>(ale_go_to_definition_in_split)` is defined for this
+  command.
+
+
+ALEGoToDefinitionInVSplit                           *ALEGoToDefinitionInVSplit*
+
+  The same as |ALEGoToDefinition|, but opens results in a new vertical split.
+
+  A plug mapping `<Plug>(ale_go_to_definition_in_vsplit)` is defined for this
   command.
 
 
