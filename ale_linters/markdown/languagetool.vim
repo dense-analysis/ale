@@ -42,7 +42,7 @@ endfunction
 call ale#linter#Define('markdown', {
             \   'name': 'languagetool',
             \   'executable': 'languagetool',
-            \   'command': 'languagetool --line-by-line %s ',
+            \   'command': 'languagetool %s ',
             \   'output_stream': 'stdout',
             \   'callback': 'ale_linters#markdown#languagetool#Handle',
             \   'lint_file': 1,
