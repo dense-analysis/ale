@@ -40,5 +40,5 @@ Execute(Pipenv is detected when python_black_auto_pipenv is set):
   call ale#test#SetFilename('/testplugin/test/python_fixtures/pipenv/whatever.py')
 
   AssertEqual 
-  \ {'command': ale#Escape('pipenv run black') . ' -'},
+  \ {'command': ale#Escape('pipenv') . ' run black -'},
   \ ale#fixers#black#Fix(bufnr(''))
