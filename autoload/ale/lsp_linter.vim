@@ -152,12 +152,33 @@ function! ale#lsp_linter#GetConfig(buffer, linter) abort
     return l:config
 endfunction
 
+function! ale#lsp_linter#FindProjectRoot(buffer, linter) abort
+    let l:root = ale#util#GetFunction(a:linter.project_root_callback)(a:buffer)
+
+    if !empty(l:root)
+        return l:root
+    endif
+
+    " If we're in a submodule, .git will often, but not always, be a file, not a
+    " directory. Check both and pick the more deeply nested one.
+    let l:git_file = fnamemodify(ale#path#FindNearestFile(a:buffer, '.git'), ':h')
+    let l:git_dir = fnamemodify(ale#path#FindNearestDirectory(a:buffer, '.git'), ':h:h')
+
+    if empty(l:git_file)
+        return l:git_dir
+    elseif empty(l:git_dir)
+        return l:git_file
+    endif
+
+    return len(l:git_file) > len(l:git_dir) ? l:git_file : l:git_dir
+endfunction
+
 " Given a buffer, an LSP linter, start up an LSP linter and get ready to
 " receive messages for the document.
 function! ale#lsp_linter#StartLSP(buffer, linter) abort
     let l:command = ''
     let l:address = ''
-    let l:root = ale#util#GetFunction(a:linter.project_root_callback)(a:buffer)
+    let l:root = ale#lsp_linter#FindProjectRoot(a:buffer, a:linter)
 
     if empty(l:root) && a:linter.lsp isnot# 'tsserver'
         " If there's no project root, then we can't check files with LSP,

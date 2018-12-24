@@ -1,0 +1,41 @@
+Before:
+  call ale#assert#SetUpLinterTest('c', 'clangd')
+
+After:
+  if isdirectory(g:dir . '/.git')
+    call delete(g:dir . '/.git', 'd')
+  endif
+
+  if filereadable(g:dir . '/.git')
+    call delete(g:dir . '/.git')
+  endif
+
+  if filereadable(g:dir . '/example/.git')
+    call delete(g:dir . '/example/.git')
+  endif
+
+  if isdirectory(g:dir . '/example')
+    call delete(g:dir . '/example', 'd')
+  endif
+
+  call ale#assert#TearDownLinterTest()
+
+Execute(The project path should be correct for .git directories):
+  call ale#test#SetFilename('other-file.c')
+  call mkdir(g:dir . '/.git')
+
+  AssertLSPProjectFull g:dir
+
+Execute(The project path should be correct for .git files):
+  call ale#test#SetFilename('other-file.c')
+  call writefile([], g:dir . '/.git')
+
+  AssertLSPProjectFull g:dir
+
+Execute(The project path should be correct for .git submodules):
+  call ale#test#SetFilename('example/other-file.c')
+  call mkdir(g:dir . '/.git')
+  call mkdir(g:dir . '/example')
+  call writefile([], g:dir . '/example/.git')
+
+  AssertLSPProjectFull has('win32') ? g:dir . '\example' : g:dir . '/example'
