@@ -1,0 +1,10 @@
+Before:
+  runtime! ale_linters/markdown/languagetool.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(languagetool handler should handle errors output):
+  AssertEqual
+  / [
+  /
