@@ -2,7 +2,6 @@
 " Description: languagetool for markdown files
 
 function! ale#handlers#languagetool#HandleOutput(buffer, lines) abort
-
     " Match lines like:
     " 1.) Line 5, column 1, Rule ID:
     let l:head_pattern = '^\v.+.\) Line (\d+), column (\d+), Rule ID. (.+)$'
@@ -22,7 +21,7 @@ function! ale#handlers#languagetool#HandleOutput(buffer, lines) abort
 
 
     " Okay tbh I was to lazy to figure out a smarter solution here
-    " We just assume that the arrays are same sized and merge everything
+    " We just check that the arrays are same sized and merge everything
     " together
     let l:i = 0
 
