@@ -118,6 +118,7 @@ CONTENTS                                                         *ale-contents*
       staticcheck.........................|ale-go-staticcheck|
       golangserver........................|ale-go-golangserver|
       golangci-lint.......................|ale-go-golangci-lint|
+      bingo...............................|ale-go-bingo|
     graphql...............................|ale-graphql-options|
       eslint..............................|ale-graphql-eslint|
       gqlint..............................|ale-graphql-gqlint|
@@ -438,7 +439,7 @@ Notes:
 * FusionScript: `fusion-lint`
 * Git Commit Messages: `gitlint`
 * GLSL: glslang, `glslls`
-* Go: `gofmt`, `goimports`, `go mod`!!, `go vet`!!, `golint`, `gotype`!!, `gometalinter`!!, `go build`!!, `gosimple`!!, `staticcheck`!!, `golangserver`, `golangci-lint`!!
+* Go: `gofmt`, `goimports`, `go mod`!!, `go vet`!!, `golint`, `gotype`!!, `gometalinter`!!, `go build`!!, `gosimple`!!, `staticcheck`!!, `golangserver`, `golangci-lint`!!, `bingo`
 * GraphQL: `eslint`, `gqlint`, `prettier`
 * Hack: `hack`, `hackfmt`, `hhast`
 * Haml: `haml-lint`
