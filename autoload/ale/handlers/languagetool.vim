@@ -30,7 +30,6 @@ function! ale#handlers#languagetool#HandleOutput(buffer, lines) abort
     \       (len(l:head_matches) == len(l:markers_matches)) &&
     \       (len(l:head_matches) == len(l:message_matches))
     \   )
-
         let l:item = {
         \   'lnum'    : str2nr(l:head_matches[l:i][1]),
         \   'col'     : str2nr(l:head_matches[l:i][2]),
