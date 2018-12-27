@@ -14,9 +14,15 @@ function! ale_linters#go#bingo#GetCommand(buffer) abort
 endfunction
 
 function! ale_linters#go#bingo#FindProjectRoot(buffer) abort
-    let l:git_path = ale#path#FindNearestDirectory(a:buffer, '.git')
+    let l:project_root = ale#path#FindNearestFile(a:buffer, 'go.mod')
+    let l:mods = ':h'
 
-    return !empty(l:git_path) ? fnamemodify(l:git_path, ':h:h') : ''
+    if empty(l:project_root)
+        let l:project_root = ale#path#FindNearestDirectory(a:buffer, '.git')
+        let l:mods = ':h:h'
+    endif
+
+    return !empty(l:project_root) ? fnamemodify(l:project_root, l:mods) : ''
 endfunction
 
 call ale#linter#Define('go', {
