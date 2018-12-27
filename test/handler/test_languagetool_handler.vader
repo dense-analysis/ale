@@ -1,5 +1,5 @@
 Before:
-  runtime! ale_linters/markdown/languagetool.vim
+  runtime! ale_linters/text/languagetool.vim
 
 After:
   call ale#linter#Reset()
