@@ -45,3 +45,19 @@ function! ale#handlers#languagetool#HandleOutput(buffer, lines) abort
 
     return l:output
 endfunction
+
+" Define the languagetool linter for a given filetype.
+" TODO:
+" - Add language detection settings based on user env (for mothertongue)
+" - Add fixer
+" - Add config options for rules
+function! ale#handlers#languagetool#DefineLinter(filetype) abort
+    call ale#linter#Define(a:filetype, {
+    \   'name': 'languagetool',
+    \   'executable': 'languagetool',
+    \   'command': 'languagetool --autoDetect %s ',
+    \   'output_stream': 'stdout',
+    \   'callback': 'ale#handlers#languagetool#HandleOutput',
+    \   'lint_file': 1,
+    \})
+endfunction
