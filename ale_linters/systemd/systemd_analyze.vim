@@ -2,24 +2,26 @@
 " Description: systemd-analyze unit for systemd files
 
 function! ale_linters#systemd#systemd_analyze#Handle(buffer, lines) abort
-   " Example output
-   " $ systemd-analyze
+   " Match lines like:
    " /home/bar/.config/systemd/user/synergys.socket:3: Unknown lvalue 'Bar' in section 'Unit'
-   " /home/bar/.config/systemd/user/synergys.socket:4: Unknown lvalue 'Accept' in section 'Unit'
-   " Proceeding WITHOUT firewalling in effect! (This warning is only shown for the first loaded unit using IP firewalling.)
     let l:pattern = '^\v(.+):(\d+): (.+)$'
     let l:output = []
 
+    "Get current filename:
+    let l:buff_name = expand('#' . a:buffer . ':p')
+
     " Extract the header line first
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        let l:item = {
-            \   'lnum'    : str2nr(l:match[2]),
-            \   'col'     : 1,
-            \   'end_col' : len(l:match[0]),
-            \   'type'    : 'E',
-            \   'text'    : l:match[3]
-            \}
-        call add(l:output, l:item)
+        if l:match[1] is? l:buff_name
+            let l:item = {
+                \   'lnum'    : str2nr(l:match[2]),
+                \   'col'     : 1,
+                \   'end_col' : len(l:match[0]),
+                \   'type'    : 'E',
+                \   'text'    : l:match[3]
+                \}
+            call add(l:output, l:item)
+        endif
     endfor
 
     return l:output
