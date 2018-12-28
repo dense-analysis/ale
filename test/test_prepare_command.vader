@@ -58,6 +58,8 @@ Execute(cmd /s/c as a string should be used on Windows):
   endif
 
 Execute(Setting ale_shell should cause ale#job#PrepareCommand to use set shell):
-  let g:ale_shell = '/foo/bar'
+  if !has('win32')
+    let g:ale_shell = '/foo/bar'
 
-  AssertEqual ['/foo/bar', '-c', 'foobar'], ale#job#PrepareCommand(bufnr(''), "foobar")
+    AssertEqual ['/foo/bar', '-c', 'foobar'], ale#job#PrepareCommand(bufnr(''), "foobar")
+  endif
