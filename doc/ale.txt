@@ -1999,6 +1999,12 @@ g:ale_shell                                                       *g:ale_shell*
   commands. This variables defaults to the value of the vim option '&shell'
   which corresponds to the $SHELL environment variable. For example 
   if `$SHELL == '/bin/bash'`, but you want to use zsh, set `g:ale_shell = '/bin/zsh'.`
+  If this option is set to either `fish` or `pwsh` (either by default or set
+  with this command), ale will still execute commands with `bin/sh`. 
+
+  Please note - if you are using this option you should consider additionally 
+  setting `g:ale``g:ale_shell_arguments` since the default values for that
+  option might be incompatable with the newly set shell. 
 
 g:ale_shell_arguments                                   *g:ale_shell_arguments*
 
@@ -2007,7 +2013,8 @@ g:ale_shell_arguments                                   *g:ale_shell_arguments*
 
   This variable is used to determine what commands vim will pass to the shell
   to execute it's commands. By default, `&shellcmdflag` would be set to the
-  value of '`-c'`.
+  value of '`-c'`. Similar to `g:ale_shell`, if the shell is set to either
+  `fish` or `pwsh`, `g:ale_shell_arguments` will no be used.
 
 -------------------------------------------------------------------------------
 6.1. Highlights                                                *ale-highlights*

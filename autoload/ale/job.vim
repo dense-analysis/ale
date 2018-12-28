@@ -195,7 +195,7 @@ function! ale#job#PrepareCommand(buffer, command) abort
     endif
 
     if g:ale_shell =~? 'fish$\|pwsh$'
-        return ['/bin/sh', g:ale_shell_arguments, l:command]
+        return ['/bin/sh', '-c', l:command]
     endif
 
     return [g:ale_shell] + split(g:ale_shell_arguments) + [l:command]
