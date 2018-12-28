@@ -1990,7 +1990,7 @@ g:ale_windows_node_executable_path         *g:ale_windows_node_executable_path*
   scripts are executed with whatever executable is configured with this
   setting.
 
-g:ale_shell                                                      *g:ale_shell*
+g:ale_shell                                                       *g:ale_shell*
 
   Type: |String|
   Default: `'&shell'`
@@ -2000,7 +2000,7 @@ g:ale_shell                                                      *g:ale_shell*
   which corresponds to the $SHELL environment variable. For example 
   if `$SHELL == '/bin/bash'`, but you want to use zsh, set `g:ale_shell = '/bin/zsh'.`
 
-g:ale_shell_arguments                                  *g:ale_shell_arguments*
+g:ale_shell_arguments                                   *g:ale_shell_arguments*
 
   Type: |String|
   Default: `'&shellcmdflag'`

@@ -26,7 +26,7 @@ Before:
   augroup END
 
   if !has('win32')
-    let &shell = '/bin/bash'
+    let g:ale_shell = '/bin/bash'
   endif
 
   call ale#test#SetDirectory('/testplugin/test')
