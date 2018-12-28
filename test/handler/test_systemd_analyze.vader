@@ -1,0 +1,25 @@
+Before:
+  " Load the file which defines the linter.
+  runtime! ale_linters/systemd/systemd_analyze.vim
+
+After:
+  " Unload all linters again.
+  call ale#linter#Reset()
+
+Execute(Prepare Buffer):
+Execute(The output should be correct):
+" Test that the right loclist items are parsed from the handler.
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 3,
+  \     'type': 'W',
+  \     'text': "Unknown lvalue 'Foo' in section 'Unit'"
+  \   }
+  \ ],
+  \ ale_linters#systemd#systemd_analyze#Handle(bufnr(''), [
+  \ 'File /usr/lib/systemd/system/systemd-udevd.service:36 configures an IP firewall (IPAddressDeny=any), but the local system does not support BPF/cgroup based firewalling.',
+  \ 'Proceeding WITHOUT firewalling in effect! (This warning is only shown for the first loaded unit using IP firewalling.)',
+  \ "/etc/systemd/system/certbot.timer:6: Unknown lvalue 'RandomizeDelaySec' in section 'Timer'",
+  \ "/tmp/demo.service:3: Unknown lvalue 'Foo' in section 'Unit'"
+  \ ])
