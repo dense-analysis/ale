@@ -27,6 +27,7 @@ function! ale#references#HandleTSServerResponse(conn_id, response) abort
                 \ 'filename': l:response_item.file,
                 \ 'line': l:response_item.start.line,
                 \ 'column': l:response_item.start.offset,
+                \ 'match': trim(l:response_item.lineText),
                 \})
             endfor
 
