@@ -135,9 +135,9 @@ Execute(Results should be shown for tsserver responses):
 
   AssertEqual
   \ [
-  \   {'filename': '/foo/bar/app.ts', 'column': 9, 'line': 9},
-  \   {'filename': '/foo/bar/app.ts', 'column': 3, 'line': 804},
-  \   {'filename': '/foo/bar/other/app.ts', 'column': 3, 'line': 51},
+  \   {'filename': '/foo/bar/app.ts', 'column': 9, 'line': 9, 'match': 'import {doSomething} from ''./whatever'''},
+  \   {'filename': '/foo/bar/app.ts', 'column': 3, 'line': 804, 'match': 'doSomething()'},
+  \   {'filename': '/foo/bar/other/app.ts', 'column': 3, 'line': 51, 'match': 'doSomething()'},
   \ ],
   \ g:item_list
   AssertEqual {}, ale#references#GetMap()
