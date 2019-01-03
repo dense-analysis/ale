@@ -11,12 +11,6 @@
 " A setting for wrapping commands.
 let g:ale_command_wrapper = get(g:, 'ale_command_wrapper', '')
 
-" A setting for the shell used to execute commands
-let g:ale_shell = get(g:, 'ale_shell', v:null)
-
-" A setting for the arguments we pass to the shell when executing commands
-let g:ale_shell_arguments = get(g:, 'ale_shell_arguments', v:null)
-
 if !has_key(s:, 'job_map')
     let s:job_map = {}
 endif
@@ -179,10 +173,6 @@ endfunction
 function! ale#job#PrepareCommand(buffer, command) abort
     let l:wrapper = ale#Var(a:buffer, 'command_wrapper')
 
-    let l:command = !empty(l:wrapper)
-    \ ? s:PrepareWrappedCommand(l:wrapper, a:command)
-    \ : a:command
-
     " The command will be executed in a subshell. This fixes a number of
     " issues, including reading the PATH variables correctly, %PATHEXT%
     " expansion on Windows, etc.
@@ -190,27 +180,26 @@ function! ale#job#PrepareCommand(buffer, command) abort
     " NeoVim handles this issue automatically if the command is a String,
     " but we'll do this explicitly, so we use the same exact command for both
     " versions.
-    if g:ale_shell is v:null
-      if has('win32')
-          return 'cmd /s/c "' . l:command . '"'
-      endif
+    let l:command = !empty(l:wrapper)
+    \ ? s:PrepareWrappedCommand(l:wrapper, a:command)
+    \ : a:command
 
-      if &shell =~? 'fish$\|pwsh$'
-          return ['/bin/sh', '-c', l:command]
-      endif
+    " If a custom shell is specified, use that.
+    if exists('g:ale_shell')
+        let l:shell_arguments = get(g:, 'ale_shell_arguments', &shellcmdflag)
 
-      return split(&shell) + split(&shellcmdflag) + [l:command]
-    else
-      if has('win32')
-          return g:ale_shell . l:command . '"'
-      endif
-
-      let l:shell_arguments = g:ale_shell_arguments is v:null
-      \ ? &shellcmdflag
-      \ : g:ale_shell_arguments
-
-      return split(g:ale_shell) + split(l:shell_arguments) + [l:command]
+        return split(g:ale_shell) + split(l:shell_arguments) + [l:command]
     endif
+
+    if has('win32')
+        return 'cmd /s/c "' . l:command . '"'
+    endif
+
+    if &shell =~? 'fish$\|pwsh$'
+        return ['/bin/sh', '-c', l:command]
+    endif
+
+    return split(&shell) + split(&shellcmdflag) + [l:command]
 endfunction
 
 " Start a job with options which are agnostic to Vim and NeoVim.
