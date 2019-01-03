@@ -31,6 +31,6 @@ Execute(Command formatting should be applied correctly for LSP linters):
     \ g:args
   else
     AssertEqual
-    \ ['true', [g:ale_shell, '-c', '''true'' --foo']],
+    \ ['true', [&shell, '-c', '''true'' --foo']],
     \ g:args
   endif

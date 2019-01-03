@@ -4,7 +4,7 @@ Before:
 
 After:
   Restore
-  let g:ale_shell = &shell
+  let g:ale_shell = v:null
 
 Execute(sh should be used when the shell is fish):
   if !has('win32')
