@@ -2000,6 +2000,33 @@ g:ale_windows_node_executable_path         *g:ale_windows_node_executable_path*
   scripts are executed with whatever executable is configured with this
   setting.
 
+g:ale_shell                                                       *g:ale_shell*
+
+  Type: |String|
+  Default: not set
+
+  This variable is used to determine which shell ale will use to execute 
+  commands. By default this variable is undefined, meaning that ALE will use
+  it's default behavior. Which is to run shells via the shell determined by
+  the `&shell` vim variable, with the arguments `&shellcmdflag`. Ale will fall
+  back to using `/bin/sh`if it detects the underlying `&shell`is either `fish`
+  or `pwsh`. However, if you set this variable ALE will no longer fall back to
+  other shells, meaning if you wanted to use `fish` you could do so via this
+  option. For example if `$SHELL == '/bin/bash'`, but you want to use zsh, 
+  set `g:ale_shell = '/bin/zsh'. 
+
+  Please note - if you are using this option you should consider additionally 
+  setting `g:ale``g:ale_shell_arguments` since the default values for that
+  option might be incompatable with the newly set shell. 
+
+g:ale_shell_arguments                                   *g:ale_shell_arguments*
+
+  Type: |String|
+  Default: not set
+
+  This variable is used to determine what commands vim will pass to the shell
+  to execute it's commands. If this command is not set, but g:ale_shell is
+  set, ale will use `&shellcmdflag` as command arguments.
 
 -------------------------------------------------------------------------------
 6.1. Highlights                                                *ale-highlights*

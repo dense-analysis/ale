@@ -11,6 +11,12 @@
 " A setting for wrapping commands.
 let g:ale_command_wrapper = get(g:, 'ale_command_wrapper', '')
 
+" A setting for the shell used to execute commands
+let g:ale_shell = get(g:, 'ale_shell', v:null)
+
+" A setting for the arguments we pass to the shell when executing commands
+let g:ale_shell_arguments = get(g:, 'ale_shell_arguments', v:null)
+
 if !has_key(s:, 'job_map')
     let s:job_map = {}
 endif
@@ -184,15 +190,27 @@ function! ale#job#PrepareCommand(buffer, command) abort
     " NeoVim handles this issue automatically if the command is a String,
     " but we'll do this explicitly, so we use the same exact command for both
     " versions.
-    if has('win32')
-        return 'cmd /s/c "' . l:command . '"'
-    endif
+    if g:ale_shell is v:null
+      if has('win32')
+          return 'cmd /s/c "' . l:command . '"'
+      endif
 
-    if &shell =~? 'fish$\|pwsh$'
-        return ['/bin/sh', '-c', l:command]
-    endif
+      if &shell =~? 'fish$\|pwsh$'
+          return ['/bin/sh', '-c', l:command]
+      endif
 
-    return split(&shell) + split(&shellcmdflag) + [l:command]
+      return split(&shell) + split(&shellcmdflag) + [l:command]
+    else
+      if has('win32')
+          return g:ale_shell . l:command . '"'
+      endif
+
+      let l:shell_arguments = g:ale_shell_arguments is v:null
+      \ ? &shellcmdflag
+      \ : g:ale_shell_arguments
+
+      return split(g:ale_shell) + split(l:shell_arguments) + [l:command]
+    endif
 endfunction
 
 " Start a job with options which are agnostic to Vim and NeoVim.
