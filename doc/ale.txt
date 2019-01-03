@@ -820,6 +820,9 @@ with |g:ale_completion_max_suggestions|.
 If you don't like some of the suggestions you see, you can filter them out
 with |g:ale_completion_excluded_words| or |b:ale_completion_excluded_words|.
 
+The |ALEComplete| command can be used to show completion suggestions manually,
+even when |g:ale_completion_enabled| is set to `0`.
+
                                                 *ale-completion-completopt-bug*
 
 ALE implements completion as you type by temporarily adjusting |completeopt|
