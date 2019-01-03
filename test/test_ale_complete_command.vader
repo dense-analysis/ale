@@ -1,0 +1,15 @@
+Before:
+  call ale#completion#AlwaysGetCompletions()
+
+  let g:get_completions_called = 0
+  function! ale#completion#AlwaysGetCompletions() abort
+    let g:get_completions_called = 1
+  endfunction
+
+After:
+  delfunction ale#completion#AlwaysGetCompletions
+
+Execute(ale#completion#AlwaysGetCompletions should be called when ALEComplete is executed):
+  AssertEqual 0, g:get_completions_called
+  ALEComplete
+  AssertEqual 1, g:get_completions_called
