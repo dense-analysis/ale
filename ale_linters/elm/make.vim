@@ -179,7 +179,7 @@ function! ale_linters#elm#make#IsTest(buffer) abort
 
     let l:buffer_path = fnamemodify(bufname(a:buffer), ':p')
 
-    if match(l:buffer_path, l:tests_dir) == 0
+    if stridx(l:buffer_path, l:tests_dir) == 0
         return 1
     else
         return 0
