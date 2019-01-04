@@ -35,15 +35,15 @@ function! ale_linters#crystal#ameba#HandleAmebaOutput(buffer, lines) abort
     let l:output = []
 
     for l:error in l:errors['sources'][0]['issues']
-        let l:start_col = l:error['location']['column'] + 0
-        let l:end_col = l:error['end_location']['column'] + 0
+        let l:start_col = str2nr(l:error['location']['column'])
+        let l:end_col = str2nr(l:error['end_location']['column'])
 
         if !l:end_col
           let l:end_col = l:start_col + 1
         endif
 
         call add(l:output, {
-        \   'lnum': l:error['location']['line'] + 0,
+        \   'lnum': str2nr(l:error['location']['line']),
         \   'col': l:start_col,
         \   'end_col': l:end_col,
         \   'code': l:error['rule_name'],
