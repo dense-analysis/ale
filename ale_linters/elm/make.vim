@@ -209,7 +209,11 @@ function! ale_linters#elm#make#GetExecutable(buffer) abort
     let l:is_v19 = ale_linters#elm#make#IsVersionGte19(a:buffer)
 
     if l:is_test && l:is_v19
-        return ale#node#FindExecutable(a:buffer, 'elm_make', ['node_modules/.bin/elm-test'])
+        return ale#node#FindExecutable(
+\           a:buffer,
+\           'elm_make',
+\           ['node_modules/.bin/elm-test', 'node_modules/.bin/elm']
+\       )
     else
         return ale#node#FindExecutable(a:buffer, 'elm_make', ['node_modules/.bin/elm'])
     endif
