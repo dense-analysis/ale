@@ -3,7 +3,6 @@
 
 call ale#Set('ruby_brakeman_options', '')
 call ale#Set('ruby_brakeman_executable', 'brakeman')
-call ale#Set('ruby_brakeman_options', '')
 
 function! ale_linters#ruby#brakeman#Handle(buffer, lines) abort
     let l:output = []
@@ -40,6 +39,7 @@ function! ale_linters#ruby#brakeman#GetCommand(buffer) abort
     \    . ' -f json -q '
     \    . ale#Var(a:buffer, 'ruby_brakeman_options')
     \    . ' -p ' . ale#Escape(l:rails_root)
+    \    . ' --only-files ' . expand('#' . a:buffer . '...')
 endfunction
 
 call ale#linter#Define('ruby', {

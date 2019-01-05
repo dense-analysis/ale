@@ -15,6 +15,8 @@ Execute(The brakeman command callback should find a valid Rails app root):
   AssertLinter 'brakeman', ale#Escape('brakeman')
   \ . ' -f json -q  -p '
   \ . ale#Escape(ale#path#Simplify(g:dir . '/../ruby_fixtures/valid_rails_app'))
+  \ . ' --only-files '
+  \ . ale#path#Simplify(g:dir . '/../ruby_fixtures/valid_rails_app/db/test.rb')
 
 Execute(The brakeman command callback should include configured options):
   call ale#test#SetFilename('../ruby_fixtures/valid_rails_app/db/test.rb')
@@ -24,6 +26,17 @@ Execute(The brakeman command callback should include configured options):
   AssertLinter 'brakeman', ale#Escape('brakeman')
   \ . ' -f json -q --combobulate -p '
   \ . ale#Escape(ale#path#Simplify(g:dir . '/../ruby_fixtures/valid_rails_app'))
+  \ . ' --only-files '
+  \ . ale#path#Simplify(g:dir . '/../ruby_fixtures/valid_rails_app/db/test.rb')
+
+Execute(The brakeman command callback should use the relative path of the buffer):
+  call ale#test#SetFilename('../ruby_fixtures/valid_rails_app/db/test.rb')
+
+  AssertLinter 'brakeman', ale#Escape('brakeman')
+  \ . ' -f json -q  -p '
+  \ . ale#Escape(ale#path#Simplify(g:dir . '/../ruby_fixtures/valid_rails_app'))
+  \ . ' --only-files '
+  \ . ale#path#Simplify(g:dir . '/../ruby_fixtures/valid_rails_app/db/test.rb')
 
 Execute(Setting bundle appends 'exec brakeman'):
   call ale#test#SetFilename('../ruby_fixtures/valid_rails_app/db/test.rb')
@@ -35,3 +48,5 @@ Execute(Setting bundle appends 'exec brakeman'):
   \ . ' exec brakeman'
   \ . ' -f json -q --combobulate -p '
   \ . ale#Escape(ale#path#Simplify(g:dir . '/../ruby_fixtures/valid_rails_app'))
+  \ . ' --only-files '
+  \ . ale#path#Simplify(g:dir . '/../ruby_fixtures/valid_rails_app/db/test.rb')
