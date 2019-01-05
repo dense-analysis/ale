@@ -5,12 +5,7 @@ call ale#Set('go_bingo_executable', 'bingo')
 call ale#Set('go_bingo_options', '--mode stdio')
 
 function! ale_linters#go#bingo#GetCommand(buffer) abort
-    let l:executable = [ale#Escape(ale#Var(a:buffer, 'go_bingo_executable'))]
-    let l:options = ale#Var(a:buffer, 'go_bingo_options')
-    let l:options = filter(split(l:options, ' '), 'empty(v:val) != 1')
-    let l:command = join(extend(l:executable, l:options), ' ')
-
-    return l:command
+    return '%e' . ale#Pad(ale#Var(a:buffer, 'go_bingo_options'))
 endfunction
 
 function! ale_linters#go#bingo#FindProjectRoot(buffer) abort
