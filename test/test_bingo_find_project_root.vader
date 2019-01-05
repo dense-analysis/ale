@@ -1,0 +1,21 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test')
+  runtime ale_linters/go/bingo.vim
+
+After:
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(Should return directory for 'go.mod' if found in parent directory):
+  call ale#test#SetFilename('go_files/test.go')
+
+  AssertEqual
+  \ ale#path#Simplify(g:dir . '/go_files'),
+  \ ale_linters#go#bingo#FindProjectRoot(bufnr(''))
+
+Execute(Should return nearest directory with '.git' if found in parent directory):
+  call ale#test#SetFilename('test.go')
+
+  AssertEqual
+  \ fnamemodify(ale#path#Simplify('/testplugin'), ':p:h'),
+  \ ale_linters#go#bingo#FindProjectRoot(bufnr(''))
