@@ -177,3 +177,20 @@ Execute(ParseCompileCommandsFlags should parse some basic flags):
   \     'file': ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
   \   },
   \ ])
+
+Execute(ParseCFlags should not merge flags):
+  AssertEqual
+  \ '-Dgoal=9'
+  \   . ' ' . ale#Escape('-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir'))
+  \   . ' ' . ale#Escape('-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/dir with spaces'))
+  \   . ' ' . ale#Escape('-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/dir-with-dash'))
+  \   . ' ' . ale#Escape('-I' . ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/kernel/include')),
+  \ ale#c#ParseCFlags(
+  \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
+  \   'gcc -Dgoal=9 -Tlinkerfile.ld blabla -Isubdir '
+  \     . 'subdir/somedep1.o ' . 'subdir/somedep2.o '
+  \     . '-I''dir with spaces''' . ' -Idir-with-dash '
+  \     . 'subdir/somedep3.o ' . 'subdir/somedep4.o '
+  \     . ' -I'. ale#path#Simplify('kernel/include') . ' '
+  \     . 'subdir/somedep5.o ' . 'subdir/somedep6.o '
+  \ )

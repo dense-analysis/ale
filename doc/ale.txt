@@ -1796,6 +1796,33 @@ g:ale_set_signs                                               *g:ale_set_signs*
   To limit the number of signs ALE will set, see |g:ale_max_signs|.
 
 
+g:ale_shell                                                       *g:ale_shell*
+
+  Type: |String|
+  Default: not set
+
+  Override the shell used by ALE for executing commands. ALE uses 'shell' by
+  default, but falls back in `/bin/sh` if the default shell looks like `fish`
+  or `pwsh`, which are not compatible with all of the commands run by ALE. The
+  shell specified with this option will be used even if it might not work in
+  all cases.
+
+  For Windows, ALE uses `cmd` when this option isn't set. Setting this option
+  will apply shell escaping to the command string, even on Windows.
+
+  NOTE: Consider setting |g:ale_shell_arguments| if this option is defined.
+
+
+g:ale_shell_arguments                                   *g:ale_shell_arguments*
+
+  Type: |String|
+  Default: not set
+
+  This option specifies the arguments to use for executing a command with a
+  custom shell, per |g:ale_shell|. If this option is not set, 'shellcmdflag'
+  will be used instead.
+
+
 g:ale_sign_column_always                             *g:ale_sign_column_always*
 
   Type: |Number|
