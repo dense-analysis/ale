@@ -8,13 +8,19 @@ call ale#Set('sh_language_server_use_global', get(g:, 'ale_use_global_executable
 function! ale_linters#sh#language_server#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'sh_language_server', [
     \   'node_modules/.bin/bash-language-server',
+    \   'node_modules/.bin/npx',
+    \   exepath('npx')
     \])
 endfunction
 
 function! ale_linters#sh#language_server#GetCommand(buffer) abort
     let l:exe = ale#Escape(ale_linters#sh#language_server#GetExecutable(a:buffer))
 
-    return l:exe . ' start'
+    if l:exe=~?'npx[^/\\]*$'
+      return l:exe . ' -q bash-language-server start'
+    else
+      return l:exe . ' start'
+    endif
 endfunction
 
 function! ale_linters#sh#language_server#GetProjectRoot(buffer) abort
