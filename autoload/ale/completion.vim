@@ -106,7 +106,7 @@ function! ale#completion#Filter(buffer, filetype, suggestions, prefix) abort
     "   foo.
     "       ^
     " We need to include all of the given suggestions.
-    if index(l:triggers, a:prefix) >= 0
+    if index(l:triggers, a:prefix) >= 0 || empty(a:prefix)
         let l:filtered_suggestions = a:suggestions
     else
         let l:filtered_suggestions = []
@@ -509,17 +509,18 @@ function! ale#completion#GetCompletions() abort
         return
     endif
 
-    call ale#completion#AlwaysGetCompletions()
+    call ale#completion#AlwaysGetCompletions(1)
 endfunction
 
 " This function can be used to manually trigger autocomplete, even when
 " g:ale_completion_enabled is set to false
-function! ale#completion#AlwaysGetCompletions() abort
+function! ale#completion#AlwaysGetCompletions(...) abort
+    let l:need_prefix = get(a:, 1, 0)
     let [l:line, l:column] = getcurpos()[1:2]
 
     let l:prefix = ale#completion#GetPrefix(&filetype, l:line, l:column)
 
-    if empty(l:prefix)
+    if l:need_prefix && empty(l:prefix)
         return
     endif
 
