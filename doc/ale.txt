@@ -821,6 +821,9 @@ with |g:ale_completion_max_suggestions|.
 If you don't like some of the suggestions you see, you can filter them out
 with |g:ale_completion_excluded_words| or |b:ale_completion_excluded_words|.
 
+The |ALEComplete| command can be used to show completion suggestions manually,
+even when |g:ale_completion_enabled| is set to `0`.
+
                                                 *ale-completion-completopt-bug*
 
 ALE implements completion as you type by temporarily adjusting |completeopt|
@@ -2236,6 +2239,17 @@ ALE will use to search for Python executables.
 ===============================================================================
 8. Commands/Keybinds                                             *ale-commands*
 
+ALEComplete                                                       *ALEComplete*
+
+  Manually trigger LSP autocomplete and show the menu. Works only when called
+  from insert mode. >
+
+    inoremap <silent> <C-Space> <C-\><C-O>:AleComplete<CR>
+<
+  A plug mapping `<Plug>(ale_complete)` is defined for this command. >
+
+    imap <C-Space> <Plug>(ale_complete)
+<
 ALEDocumentation                                             *ALEDocumentation*
 
   Similar to the |ALEHover| command, retrieve documentation information for

@@ -1,0 +1,22 @@
+Before:
+  function! MockAlwaysGetCompletions() abort
+    let g:get_completions_called = 0
+
+    function! ale#completion#AlwaysGetCompletions() abort
+      let g:get_completions_called = 1
+    endfunction
+  endfunction
+
+  call MockAlwaysGetCompletions()
+
+After:
+  unlet! g:get_completions_called
+  delfunction MockAlwaysGetCompletions
+  delfunction ale#completion#AlwaysGetCompletions
+
+  runtime autoload/ale/completion.vim
+
+Execute(ale#completion#AlwaysGetCompletions should be called when ALEComplete is executed):
+  AssertEqual 0, g:get_completions_called
+  ALEComplete
+  AssertEqual 1, g:get_completions_called
