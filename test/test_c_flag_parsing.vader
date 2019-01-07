@@ -161,14 +161,14 @@ Execute(FlagsFromCompileCommands should tolerate empty values):
   AssertEqual '', ale#c#FlagsFromCompileCommands(bufnr(''), '')
 
 Execute(ParseCompileCommandsFlags should tolerate empty values):
-  AssertEqual '', ale#c#ParseCompileCommandsFlags(bufnr(''), '', {}, {})
+  AssertEqual '', ale#c#ParseCompileCommandsFlags(bufnr(''), {}, {})
 
 Execute(ParseCompileCommandsFlags should parse some basic flags):
   noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
 
   AssertEqual
   \ '-I' . ale#path#Simplify('/usr/include/xmms2'),
-  \ ale#c#ParseCompileCommandsFlags(bufnr(''), ale#path#Simplify('/foo/bar/xmms2-mpris'), { "xmms2-mpris.c": [
+  \ ale#c#ParseCompileCommandsFlags(bufnr(''), { "xmms2-mpris.c": [
   \   {
   \     'directory': ale#path#Simplify('/foo/bar/xmms2-mpris'),
   \     'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/xmms2')
@@ -183,7 +183,7 @@ Execute(ParseCompileCommandsFlags should fall back to files in the same director
 
   AssertEqual
   \ '-I' . ale#path#Simplify('/usr/include/xmms2'),
-  \ ale#c#ParseCompileCommandsFlags(bufnr(''), ale#path#Simplify('/foo/bar/xmms2-mpris'), {}, { "src": [
+  \ ale#c#ParseCompileCommandsFlags(bufnr(''), {}, { "src": [
   \   {
   \     'directory': ale#path#Simplify('/foo/bar/xmms2-mpris'),
   \     'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/xmms2')

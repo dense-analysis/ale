@@ -200,14 +200,14 @@ function! s:GetLookupFromCompileCommandsFile(compile_commands_file) abort
     return l:empty
 endfunction
 
-function! ale#c#ParseCompileCommandsFlags(buffer, dir, file_lookup, dir_lookup) abort
+function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
     " Search for an exact file match first.
     let l:basename = tolower(expand('#' . a:buffer . ':t'))
     let l:file_list = get(a:file_lookup, l:basename, [])
 
     for l:item in l:file_list
         if bufnr(l:item.file) is a:buffer
-            return ale#c#ParseCFlags(a:dir, l:item.command)
+            return ale#c#ParseCFlags(l:item.directory, l:item.command)
         endif
     endfor
 
@@ -219,7 +219,7 @@ function! ale#c#ParseCompileCommandsFlags(buffer, dir, file_lookup, dir_lookup) 
 
     for l:item in l:dir_list
         if ale#path#Simplify(fnamemodify(l:item.file, ':h')) is? l:dir
-            return ale#c#ParseCFlags(a:dir, l:item.command)
+            return ale#c#ParseCFlags(l:item.directory, l:item.command)
         endif
     endfor
 
@@ -227,12 +227,11 @@ function! ale#c#ParseCompileCommandsFlags(buffer, dir, file_lookup, dir_lookup) 
 endfunction
 
 function! ale#c#FlagsFromCompileCommands(buffer, compile_commands_file) abort
-    let l:dir = ale#path#Dirname(a:compile_commands_file)
     let l:lookups = s:GetLookupFromCompileCommandsFile(a:compile_commands_file)
     let l:file_lookup = l:lookups[0]
     let l:dir_lookup = l:lookups[1]
 
-    return ale#c#ParseCompileCommandsFlags(a:buffer, l:dir, l:file_lookup, l:dir_lookup)
+    return ale#c#ParseCompileCommandsFlags(a:buffer, l:file_lookup, l:dir_lookup)
 endfunction
 
 function! ale#c#GetCFlags(buffer, output) abort
