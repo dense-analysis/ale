@@ -447,7 +447,7 @@ Notes:
 * Handlebars: `ember-template-lint`
 * Haskell: `brittany`, `ghc`, `cabal-ghc`, `stylish-haskell`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `hlint`, `hdevtools`, `hfmt`, `hie`
 * HCL: `terraform-fmt`
-* HTML: `alex`!!, `HTMLHint`, `proselint`, `tidy`, `prettier`, `write-good`
+* HTML: `alex`!!, `HTMLHint`, `proselint`, `tidy`, `prettier`, `write-good`, `textlint`
 * Idris: `idris`
 * ISPC: `ispc`!!
 * Java: `checkstyle`, `javac`, `google-java-format`, `PMD`, `javalsp`, `uncrustify`
