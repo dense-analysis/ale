@@ -148,6 +148,7 @@ CONTENTS                                                         *ale-contents*
       prettier............................|ale-html-prettier|
       stylelint...........................|ale-html-stylelint|
       write-good..........................|ale-html-write-good|
+      textlint............................|ale-html-textlint|
     idris.................................|ale-idris-options|
       idris...............................|ale-idris-idris|
     ispc..................................|ale-ispc-options|

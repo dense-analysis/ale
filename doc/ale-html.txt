@@ -119,4 +119,16 @@ See |ale-write-good-options|
 
 
 ===============================================================================
+textlint                                                    *ale-html-textlint*
+
+Textlint HTML support is provided by the plugin textlint-plugin-html:
+https://github.com/textlint/textlint-plugin-html
+
+To use the plugin, follow the installation instructions in the README of the
+plugin's homepage.
+
+See |ale-text-textlint|
+
+
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
