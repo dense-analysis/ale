@@ -105,6 +105,9 @@ Execute(Excluding words from completion results should work with lists of String
   AssertEqual
   \ ['Deutsch'],
   \ ale#completion#Filter(bufnr(''), '', ['describe', 'Deutsch'], '.')
+  AssertEqual
+  \ ['Deutsch'],
+  \ ale#completion#Filter(bufnr(''), '', ['Deutsch'], '')
 
 Execute(Filtering shouldn't modify the original list):
   let b:ale_completion_excluded_words = ['it', 'describe']
