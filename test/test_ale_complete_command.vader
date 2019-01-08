@@ -1,9 +1,11 @@
 Before:
   function! MockAlwaysGetCompletions() abort
     let g:get_completions_called = 0
+    let g:always_get_completions_argument = -1
 
-    function! ale#completion#AlwaysGetCompletions() abort
+    function! ale#completion#AlwaysGetCompletions(need_prefix) abort
       let g:get_completions_called = 1
+      let g:always_get_completions_argument = a:need_prefix
     endfunction
   endfunction
 
@@ -11,6 +13,7 @@ Before:
 
 After:
   unlet! g:get_completions_called
+  unlet! g:always_get_completions_argument
   delfunction MockAlwaysGetCompletions
   delfunction ale#completion#AlwaysGetCompletions
 
@@ -20,3 +23,4 @@ Execute(ale#completion#AlwaysGetCompletions should be called when ALEComplete is
   AssertEqual 0, g:get_completions_called
   ALEComplete
   AssertEqual 1, g:get_completions_called
+  AssertEqual 0, g:always_get_completions_argument
