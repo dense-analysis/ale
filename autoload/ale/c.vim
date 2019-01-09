@@ -46,6 +46,38 @@ function! ale#c#FindProjectRoot(buffer) abort
     return ''
 endfunction
 
+function! ale#c#AreSpecialCharsBalanced(option) abort
+    " Escape \"
+    let l:option_escaped = substitute(a:option, '\\"', '', 'g')
+
+    " Retain special chars only
+    let l:special_chars = substitute(l:option_escaped, '[^"''()`]', '', 'g')
+    let l:special_chars = split(l:special_chars, '\zs')
+
+    " Check if they are balanced
+    let l:stack = []
+
+    for l:char in l:special_chars
+        if l:char is# ')'
+            if len(l:stack) == 0 || get(l:stack, -1) isnot# '('
+                return 0
+            endif
+
+            call remove(l:stack, -1)
+        elseif l:char is# '('
+            call add(l:stack, l:char)
+        else
+            if len(l:stack) > 0 && get(l:stack, -1) is# l:char
+                call remove(l:stack, -1)
+            else
+                call add(l:stack, l:char)
+            endif
+        endif
+    endfor
+
+    return len(l:stack) == 0
+endfunction
+
 function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
     let l:cflags_list = []
     let l:previous_options = ''
@@ -57,17 +89,8 @@ function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
         let l:option = l:previous_options . l:split_lines[l:option_index]
         let l:option_index = l:option_index + 1
 
-        " Check if cflag contained an unmatched characters and should not have been splitted
-        let l:option_special = substitute(l:option, '\\"', '', 'g')
-        let l:option_special = substitute(l:option_special, '[^"''()`]', '', 'g')
-        let l:option_special = substitute(l:option_special, '""', '', 'g')
-        let l:option_special = substitute(l:option_special, '''''', '', 'g')
-        let l:option_special = substitute(l:option_special, '``', '', 'g')
-        let l:option_special = substitute(l:option_special, '((', '(', 'g')
-        let l:option_special = substitute(l:option_special, '))', ')', 'g')
-        let l:option_special = substitute(l:option_special, '()', '', 'g')
-
-        if len(l:option_special) > 0 && l:option_index < len(l:split_lines)
+        " Check if cflag contained an unmatched special character and should not have been splitted
+        if ale#c#AreSpecialCharsBalanced(l:option) == 0 && l:option_index < len(l:split_lines)
             let l:previous_options = l:option . ' '
             continue
         endif
