@@ -101,7 +101,7 @@ formatting.
 | ASM | [gcc](https://gcc.gnu.org) |
 | Ansible | [ansible-lint](https://github.com/willthames/ansible-lint) |
 | API Blueprint | [drafter](https://github.com/apiaryio/drafter) |
-| AsciiDoc | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [redpen](http://redpen.cc/), [write-good](https://github.com/btford/write-good), [vale](https://github.com/ValeLint/vale) |
+| AsciiDoc | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [redpen](http://redpen.cc/), [write-good](https://github.com/btford/write-good), [vale](https://github.com/ValeLint/vale), [textlint](https://textlint.github.io/) |
 | Awk | [gawk](https://www.gnu.org/software/gawk/)|
 | Bash | [language-server](https://github.com/mads-hartmann/bash-language-server), shell [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set), [shellcheck](https://www.shellcheck.net/), [shfmt](https://github.com/mvdan/sh) |
 | BibTeX | [bibclean](http://ftp.math.utah.edu/pub/bibclean/) |
