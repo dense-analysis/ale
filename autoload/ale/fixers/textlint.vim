@@ -3,10 +3,10 @@
 
 function! ale#fixers#textlint#Fix(buffer) abort
     let l:executable = ale#handlers#textlint#GetExecutable(a:buffer)
-    let l:options = ale#Var(a:buffer, 'textlint_options') 
+    let l:options = ale#Var(a:buffer, 'textlint_options')
 
     return {
-    \   'command': ale#Escape(l:executable) 
+    \   'command': ale#Escape(l:executable)
     \       . ' --fix'
     \       . (empty(l:options) ? '' : ' ' . l:options)
     \       . ' %t',
