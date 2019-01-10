@@ -27,6 +27,7 @@ CONTENTS                                                         *ale-contents*
       ansible-lint........................|ale-ansible-ansible-lint|
     asciidoc..............................|ale-asciidoc-options|
       write-good..........................|ale-asciidoc-write-good|
+      textlint............................|ale-asciidoc-textlint|
     asm...................................|ale-asm-options|
       gcc.................................|ale-asm-gcc|
     awk...................................|ale-awk-options|
@@ -407,7 +408,7 @@ Notes:
 * ASM: `gcc`
 * Ansible: `ansible-lint`
 * API Blueprint: `drafter`
-* AsciiDoc: `alex`!!, `proselint`, `redpen`, `write-good`, `vale`
+* AsciiDoc: `alex`!!, `proselint`, `redpen`, `write-good`, `vale`, `textlint`
 * Awk: `gawk`
 * Bash: `language-server`, `shell` (-n flag), `shellcheck`, `shfmt`
 * BibTeX: `bibclean`

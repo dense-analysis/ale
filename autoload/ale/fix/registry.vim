@@ -170,6 +170,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['rust'],
 \       'description': 'Fix Rust files with Rustfmt.',
 \   },
+\   'textlint': {
+\       'function': 'ale#fixers#textlint#Fix',
+\       'suggested_filetypes': ['text','markdown','asciidoc'],
+\       'description': 'Fix text files with textlint --fix',
+\   },
 \   'hackfmt': {
 \       'function': 'ale#fixers#hackfmt#Fix',
 \       'suggested_filetypes': ['hack'],
