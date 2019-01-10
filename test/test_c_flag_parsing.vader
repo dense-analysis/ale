@@ -209,3 +209,14 @@ Execute(ParseCFlags should not merge flags):
   \     . ' -I'. ale#path#Simplify('kernel/include') . ' '
   \     . 'subdir/somedep5.o ' . 'subdir/somedep6.o '
   \ )
+
+Execute(ParseCFlags should handle parenthesis and quotes):
+  AssertEqual
+  \ '-Dgoal=9 -Dtest1="('' '')" -Dtest2=''(` `)'' -Dtest3=`(" ")`',
+  \ ale#c#ParseCFlags(
+  \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
+  \   'gcc -Dgoal=9 -Tlinkerfile.ld blabla '
+  \     . '-Dtest1="('' '')" file1.o '
+  \     . '-Dtest2=''(` `)'' file2.o '
+  \     . '-Dtest3=`(" ")` file3.o '
+  \ )
