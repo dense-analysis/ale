@@ -278,6 +278,7 @@ CONTENTS                                                         *ale-contents*
       ols.................................|ale-reasonml-ols|
       refmt...............................|ale-reasonml-refmt|
     restructuredtext......................|ale-restructuredtext-options|
+      textlint............................|ale-restructuredtext-textlint|
       write-good..........................|ale-restructuredtext-write-good|
     ruby..................................|ale-ruby-options|
       brakeman............................|ale-ruby-brakeman|
@@ -486,7 +487,7 @@ Notes:
 * QML: `qmlfmt`, `qmllint`
 * R: `lintr`
 * ReasonML: `merlin`, `ols`, `refmt`
-* reStructuredText: `alex`!!, `proselint`, `redpen`, `rstcheck`, `vale`, `write-good`
+* reStructuredText: `alex`!!, `proselint`, `redpen`, `rstcheck`, `textlint`, `vale`, `write-good`
 * Re:VIEW: `redpen`
 * RPM spec: `rpmlint`
 * Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`, `rufo`, `solargraph`, `standardrb`
