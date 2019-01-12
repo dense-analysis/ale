@@ -4,6 +4,10 @@ Before:
 After:
   Restore
 
+  if isdirectory(g:dir . '/.git')
+    call delete(g:dir . '/.git', 'd')
+  endif
+
   unlet! b:ale_completion_enabled
 
   call ale#assert#TearDownLinterTest()
@@ -29,3 +33,14 @@ Execute(should set bingo options):
 
   AssertLinter 'bingo',
   \ ale#Escape('bingo') . ' --mode stdio --trace'
+
+Execute(Should return directory for 'go.mod' if found in parent directory):
+  call ale#test#SetFilename('../go_files/test.go')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/../go_files')
+
+Execute(Should return nearest directory with '.git' if found in parent directory):
+  call ale#test#SetFilename('test.go')
+  call mkdir(g:dir . '/.git')
+
+  AssertLSPProject g:dir
