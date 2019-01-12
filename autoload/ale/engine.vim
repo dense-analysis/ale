@@ -525,16 +525,6 @@ function! s:RunJob(options) abort
         let l:read_buffer = 0
     endif
 
-    " Add a newline to commands which need it.
-    " This is only used for Flow for now, and is not documented.
-    if l:linter.add_newline
-        if has('win32')
-            let l:command = l:command . '; echo.'
-        else
-            let l:command = l:command . '; echo'
-        endif
-    endif
-
     let l:command = ale#job#PrepareCommand(l:buffer, l:command)
     let l:job_options = {
     \   'mode': 'nl',

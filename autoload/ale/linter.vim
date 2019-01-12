@@ -80,7 +80,6 @@ function! ale#linter#PreProcess(filetype, linter) abort
     endif
 
     let l:obj = {
-    \   'add_newline': get(a:linter, 'add_newline', 0),
     \   'name': get(a:linter, 'name'),
     \   'lsp': get(a:linter, 'lsp', ''),
     \}
