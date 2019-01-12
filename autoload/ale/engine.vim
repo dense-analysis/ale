@@ -512,14 +512,15 @@ function! s:RunJob(options) abort
     let l:read_buffer = a:options.read_buffer
     let l:info = g:ale_buffer_info[l:buffer]
 
-    let [l:temporary_file, l:command] = ale#command#FormatCommand(
+    let [l:temporary_file, l:command, l:file_created] = ale#command#FormatCommand(
     \   l:buffer,
     \   l:executable,
     \   l:command,
     \   l:read_buffer,
+    \   function('s:CreateTemporaryFileForJob'),
     \)
 
-    if s:CreateTemporaryFileForJob(l:buffer, l:temporary_file)
+    if l:file_created
         " If a temporary filename has been formatted in to the command, then
         " we do not need to send the Vim buffer to the command.
         let l:read_buffer = 0
