@@ -1,27 +1,24 @@
 " Author: Horacio Sanson https://github.com/hsanson
 " Description: Functions for integrating with Go tools
 
+" Paths that indicate the root path, in decreasing order of confidence. End
+" directories with a slash.
+let s:checks = ['go.mod', 'Gopkg.toml', 'Glide.yaml', 'vendor/', '.git/', '.hg/', '.svn/']
+
 " Find the nearest dir listed in GOPATH and assume it the root of the go
 " project.
 function! ale#go#FindProjectRoot(buffer) abort
-    let l:sep = has('win32') ? ';' : ':'
-
-    let l:filename = ale#path#Simplify(expand('#' . a:buffer . ':p'))
-
-    for l:name in split($GOPATH, l:sep)
-      let l:path_dir = ale#path#Simplify(l:name)
-
-      " Use the directory from GOPATH if the current filename starts with it.
-      if l:filename[: len(l:path_dir) - 1] is? l:path_dir
-          return l:path_dir
-      endif
+    for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
+        for l:check in s:checks
+            if l:check[-1:] is# '/'
+                if isdirectory(l:path . '/' . l:check)
+                    return l:path
+                endif
+            elseif filereadable(l:path . '/' . l:check)
+                return l:path
+            endif
+        endfor
     endfor
-
-    let l:default_go_path = ale#path#Simplify(expand('~/go'))
-
-    if isdirectory(l:default_go_path)
-      return l:default_go_path
-    endif
 
     return ''
 endfunction

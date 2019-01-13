@@ -152,6 +152,8 @@ g:ale_go_langserver_executable                 *g:ale_go_langserver_executable*
 
   Location of the go-langserver binary file.
 
+  Additionally supported Go language servers are `bingo` and `golsp`.
+
 g:ale_go_langserver_options                       *g:ale_go_langserver_options*
                                                   *b:ale_go_langserver_options*
   Type: |String|
