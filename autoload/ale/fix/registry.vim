@@ -195,6 +195,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'Refactor Haskell files with hlint.',
 \   },
+\   'hindent': {
+\       'function': 'ale#fixers#hindent#Fix',
+\       'suggested_filetypes': ['haskell'],
+\       'description': 'Format Haskell files with hindent.',
+\   },
 \   'stylish-haskell': {
 \       'function': 'ale#fixers#stylish_haskell#Fix',
 \       'suggested_filetypes': ['haskell'],
