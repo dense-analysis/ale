@@ -46,28 +46,63 @@ function! ale#c#FindProjectRoot(buffer) abort
     return ''
 endfunction
 
+function! ale#c#AreSpecialCharsBalanced(option) abort
+    " Escape \"
+    let l:option_escaped = substitute(a:option, '\\"', '', 'g')
+
+    " Retain special chars only
+    let l:special_chars = substitute(l:option_escaped, '[^"''()`]', '', 'g')
+    let l:special_chars = split(l:special_chars, '\zs')
+
+    " Check if they are balanced
+    let l:stack = []
+
+    for l:char in l:special_chars
+        if l:char is# ')'
+            if len(l:stack) == 0 || get(l:stack, -1) isnot# '('
+                return 0
+            endif
+
+            call remove(l:stack, -1)
+        elseif l:char is# '('
+            call add(l:stack, l:char)
+        else
+            if len(l:stack) > 0 && get(l:stack, -1) is# l:char
+                call remove(l:stack, -1)
+            else
+                call add(l:stack, l:char)
+            endif
+        endif
+    endfor
+
+    return len(l:stack) == 0
+endfunction
+
 function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
     let l:cflags_list = []
-    let l:previous_options = []
+    let l:previous_options = ''
 
-    let l:split_lines = split(a:cflag_line, '-')
+    let l:split_lines = split(a:cflag_line, ' ')
     let l:option_index = 0
 
     while l:option_index < len(l:split_lines)
-        let l:option = l:split_lines[l:option_index]
+        let l:option = l:previous_options . l:split_lines[l:option_index]
         let l:option_index = l:option_index + 1
-        call add(l:previous_options, l:option)
-        " Check if cflag contained a '-' and should not have been splitted
-        let l:option_list = split(l:option, '\zs')
 
-        if len(l:option_list) > 0 && l:option_list[-1] isnot# ' ' && l:option_index < len(l:split_lines)
+        " Check if cflag contained an unmatched special character and should not have been splitted
+        if ale#c#AreSpecialCharsBalanced(l:option) == 0 && l:option_index < len(l:split_lines)
+            let l:previous_options = l:option . ' '
             continue
         endif
 
-        let l:option = join(l:previous_options, '-')
-        let l:previous_options = []
+        " Check if there was spaces after -D/-I and the flag should not have been splitted
+        if l:option is# '-D' || l:option is# '-I'
+            let l:previous_options = l:option
+            continue
+        endif
 
-        let l:option = '-' . substitute(l:option, '^\s*\(.\{-}\)\s*$', '\1', '')
+        let l:previous_options = ''
+
 
         " Fix relative paths if needed
         if stridx(l:option, '-I') >= 0 &&
@@ -145,15 +180,17 @@ if !exists('s:compile_commands_cache')
     let s:compile_commands_cache = {}
 endif
 
-function! s:GetListFromCompileCommandsFile(compile_commands_file) abort
+function! s:GetLookupFromCompileCommandsFile(compile_commands_file) abort
+    let l:empty = [{}, {}]
+
     if empty(a:compile_commands_file)
-        return []
+        return l:empty
     endif
 
     let l:time = getftime(a:compile_commands_file)
 
     if l:time < 0
-        return []
+        return l:empty
     endif
 
     let l:key = a:compile_commands_file . ':' . l:time
@@ -162,32 +199,50 @@ function! s:GetListFromCompileCommandsFile(compile_commands_file) abort
         return s:compile_commands_cache[l:key]
     endif
 
-    let l:data = []
-    silent! let l:data = json_decode(join(readfile(a:compile_commands_file), ''))
+    let l:raw_data = []
+    silent! let l:raw_data = json_decode(join(readfile(a:compile_commands_file), ''))
 
-    if !empty(l:data)
-        let s:compile_commands_cache[l:key] = l:data
+    let l:file_lookup = {}
+    let l:dir_lookup = {}
 
-        return l:data
+    for l:entry in l:raw_data
+        let l:basename = tolower(fnamemodify(l:entry.file, ':t'))
+        let l:file_lookup[l:basename] = get(l:file_lookup, l:basename, []) + [l:entry]
+
+        let l:dirbasename = tolower(fnamemodify(l:entry.directory, ':p:h:t'))
+        let l:dir_lookup[l:dirbasename] = get(l:dir_lookup, l:basename, []) + [l:entry]
+    endfor
+
+    if !empty(l:file_lookup) && !empty(l:dir_lookup)
+        let l:result = [l:file_lookup, l:dir_lookup]
+        let s:compile_commands_cache[l:key] = l:result
+
+        return l:result
     endif
 
-    return []
+    return l:empty
 endfunction
 
-function! ale#c#ParseCompileCommandsFlags(buffer, dir, json_list) abort
+function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
     " Search for an exact file match first.
-    for l:item in a:json_list
+    let l:basename = tolower(expand('#' . a:buffer . ':t'))
+    let l:file_list = get(a:file_lookup, l:basename, [])
+
+    for l:item in l:file_list
         if bufnr(l:item.file) is a:buffer
-            return ale#c#ParseCFlags(a:dir, l:item.command)
+            return ale#c#ParseCFlags(l:item.directory, l:item.command)
         endif
     endfor
 
     " Look for any file in the same directory if we can't find an exact match.
     let l:dir = ale#path#Simplify(expand('#' . a:buffer . ':p:h'))
 
-    for l:item in a:json_list
+    let l:dirbasename = tolower(expand('#' . a:buffer . ':p:h:t'))
+    let l:dir_list = get(a:dir_lookup, l:dirbasename, [])
+
+    for l:item in l:dir_list
         if ale#path#Simplify(fnamemodify(l:item.file, ':h')) is? l:dir
-            return ale#c#ParseCFlags(a:dir, l:item.command)
+            return ale#c#ParseCFlags(l:item.directory, l:item.command)
         endif
     endfor
 
@@ -195,10 +250,11 @@ function! ale#c#ParseCompileCommandsFlags(buffer, dir, json_list) abort
 endfunction
 
 function! ale#c#FlagsFromCompileCommands(buffer, compile_commands_file) abort
-    let l:dir = ale#path#Dirname(a:compile_commands_file)
-    let l:json_list = s:GetListFromCompileCommandsFile(a:compile_commands_file)
+    let l:lookups = s:GetLookupFromCompileCommandsFile(a:compile_commands_file)
+    let l:file_lookup = l:lookups[0]
+    let l:dir_lookup = l:lookups[1]
 
-    return ale#c#ParseCompileCommandsFlags(a:buffer, l:dir, l:json_list)
+    return ale#c#ParseCompileCommandsFlags(a:buffer, l:file_lookup, l:dir_lookup)
 endfunction
 
 function! ale#c#GetCFlags(buffer, output) abort

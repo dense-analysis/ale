@@ -54,7 +54,8 @@ function! ale_linters#javascript#flow#GetCommand(buffer, version_lines) abort
     return ale#Escape(l:executable)
     \   . ' check-contents'
     \   . (l:use_respect_pragma ? ' --respect-pragma': '')
-    \   . ' --json --from ale %s'
+    \   . ' --json --from ale %s < %t'
+    \   . (!has('win32') ? '; echo' : '')
 endfunction
 
 " Filter lines of flow output until we find the first line where the JSON
@@ -172,5 +173,5 @@ call ale#linter#Define('javascript', {
 \       {'callback': 'ale_linters#javascript#flow#GetCommand'},
 \   ],
 \   'callback': 'ale_linters#javascript#flow#Handle',
-\   'add_newline': !has('win32'),
+\   'read_buffer': 0,
 \})

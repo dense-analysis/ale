@@ -89,6 +89,10 @@ function! ale#completion#GetPrefix(filetype, line, column) abort
 endfunction
 
 function! ale#completion#GetTriggerCharacter(filetype, prefix) abort
+    if empty(a:prefix)
+        return ''
+    endif
+
     let l:char_list = s:GetFiletypeValue(s:trigger_character_map, a:filetype)
 
     if index(l:char_list, a:prefix) >= 0
@@ -100,33 +104,38 @@ endfunction
 
 function! ale#completion#Filter(buffer, filetype, suggestions, prefix) abort
     let l:excluded_words = ale#Var(a:buffer, 'completion_excluded_words')
-    let l:triggers = s:GetFiletypeValue(s:trigger_character_map, a:filetype)
 
-    " For completing...
-    "   foo.
-    "       ^
-    " We need to include all of the given suggestions.
-    if index(l:triggers, a:prefix) >= 0
+    if empty(a:prefix)
         let l:filtered_suggestions = a:suggestions
     else
-        let l:filtered_suggestions = []
+        let l:triggers = s:GetFiletypeValue(s:trigger_character_map, a:filetype)
 
-        " Filter suggestions down to those starting with the prefix we used for
-        " finding suggestions in the first place.
-        "
-        " Some completion tools will include suggestions which don't even start
-        " with the characters we have already typed.
-        for l:item in a:suggestions
-            " A List of String values or a List of completion item Dictionaries
-            " is accepted here.
-            let l:word = type(l:item) is v:t_string ? l:item : l:item.word
+        " For completing...
+        "   foo.
+        "       ^
+        " We need to include all of the given suggestions.
+        if index(l:triggers, a:prefix) >= 0 || empty(a:prefix)
+            let l:filtered_suggestions = a:suggestions
+        else
+            let l:filtered_suggestions = []
 
-            " Add suggestions if the suggestion starts with a case-insensitive
-            " match for the prefix.
-            if l:word[: len(a:prefix) - 1] is? a:prefix
-                call add(l:filtered_suggestions, l:item)
-            endif
-        endfor
+            " Filter suggestions down to those starting with the prefix we
+            " used for finding suggestions in the first place.
+            "
+            " Some completion tools will include suggestions which don't even
+            " start with the characters we have already typed.
+            for l:item in a:suggestions
+                " A List of String values or a List of completion item
+                " Dictionaries is accepted here.
+                let l:word = type(l:item) is v:t_string ? l:item : l:item.word
+
+                " Add suggestions if the suggestion starts with a
+                " case-insensitive match for the prefix.
+                if l:word[: len(a:prefix) - 1] is? a:prefix
+                    call add(l:filtered_suggestions, l:item)
+                endif
+            endfor
+        endif
     endif
 
     if !empty(l:excluded_words)
@@ -509,11 +518,17 @@ function! ale#completion#GetCompletions() abort
         return
     endif
 
+    call ale#completion#AlwaysGetCompletions(1)
+endfunction
+
+" This function can be used to manually trigger autocomplete, even when
+" g:ale_completion_enabled is set to false
+function! ale#completion#AlwaysGetCompletions(need_prefix) abort
     let [l:line, l:column] = getcurpos()[1:2]
 
     let l:prefix = ale#completion#GetPrefix(&filetype, l:line, l:column)
 
-    if empty(l:prefix)
+    if a:need_prefix && empty(l:prefix)
         return
     endif
 
