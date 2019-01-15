@@ -20,11 +20,11 @@ call ale#linter#Define('crystal', {
 
 " Handle output from ameba
 function! ale_linters#crystal#ameba#HandleAmebaOutput(buffer, lines) abort
-    try
-        let l:errors = json_decode(a:lines[0])
-    catch
-        return []
-    endtry
+    if len(a:lines) == 0
+      return []
+    endif
+
+    let l:errors = ale#util#FuzzyJSONDecode(a:lines[0], {})
 
     if !has_key(l:errors, 'summary')
     \|| l:errors['summary']['issues_count'] == 0
