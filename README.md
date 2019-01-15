@@ -761,7 +761,7 @@ Or if you want, you can configure the linters from your vimrc file.
 
 ```vim
 " In ~/.vim/vimrc, or somewhere similar.
-let g:ale_linter_aliases = {'jsx': ['css, 'javascript']}
+let g:ale_linter_aliases = {'jsx': ['css', 'javascript']}
 let g:ale_linters = {'jsx': ['stylelint', 'eslint']}
 ```
 
