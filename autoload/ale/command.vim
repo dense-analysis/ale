@@ -20,7 +20,7 @@ endfunction
 " %s -> with the current filename
 " %t -> with the name of an unused file in a temporary directory
 " %% -> with a literal %
-function! ale#command#FormatCommand(buffer, executable, command, pipe_file_if_needed) abort
+function! ale#command#FormatCommand(buffer, executable, command, pipe_file_if_needed, CreateTemporaryFileForJob) abort
     let l:temporary_file = ''
     let l:command = a:command
 
@@ -58,5 +58,7 @@ function! ale#command#FormatCommand(buffer, executable, command, pipe_file_if_ne
         let l:command = l:command . ' < ' . ale#Escape(l:temporary_file)
     endif
 
-    return [l:temporary_file, l:command]
+    let l:file_created = a:CreateTemporaryFileForJob(a:buffer, l:temporary_file)
+
+    return [l:temporary_file, l:command, l:file_created]
 endfunction

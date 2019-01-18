@@ -161,14 +161,14 @@ Execute(FlagsFromCompileCommands should tolerate empty values):
   AssertEqual '', ale#c#FlagsFromCompileCommands(bufnr(''), '')
 
 Execute(ParseCompileCommandsFlags should tolerate empty values):
-  AssertEqual '', ale#c#ParseCompileCommandsFlags(bufnr(''), '', [])
+  AssertEqual '', ale#c#ParseCompileCommandsFlags(bufnr(''), {}, {})
 
 Execute(ParseCompileCommandsFlags should parse some basic flags):
   noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
 
   AssertEqual
   \ '-I' . ale#path#Simplify('/usr/include/xmms2'),
-  \ ale#c#ParseCompileCommandsFlags(bufnr(''), ale#path#Simplify('/foo/bar/xmms2-mpris'), [
+  \ ale#c#ParseCompileCommandsFlags(bufnr(''), { "xmms2-mpris.c": [
   \   {
   \     'directory': ale#path#Simplify('/foo/bar/xmms2-mpris'),
   \     'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/xmms2')
@@ -176,7 +176,22 @@ Execute(ParseCompileCommandsFlags should parse some basic flags):
   \       . '   -c ' . ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
   \     'file': ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
   \   },
-  \ ])
+  \ ] }, {})
+
+Execute(ParseCompileCommandsFlags should fall back to files in the same directory):
+  noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
+
+  AssertEqual
+  \ '-I' . ale#path#Simplify('/usr/include/xmms2'),
+  \ ale#c#ParseCompileCommandsFlags(bufnr(''), {}, { "src": [
+  \   {
+  \     'directory': ale#path#Simplify('/foo/bar/xmms2-mpris'),
+  \     'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/xmms2')
+  \       . '    -o CMakeFiles/xmms2-mpris.dir/src/xmms2-mpris.c.o'
+  \       . '   -c ' . ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
+  \     'file': ale#path#Simplify((has('win32') ? 'C:' : '') . '/foo/bar/xmms2-mpris/src/xmms2-other.c'),
+  \   },
+  \ ] })
 
 Execute(ParseCFlags should not merge flags):
   AssertEqual
@@ -193,4 +208,15 @@ Execute(ParseCFlags should not merge flags):
   \     . 'subdir/somedep3.o ' . 'subdir/somedep4.o '
   \     . ' -I'. ale#path#Simplify('kernel/include') . ' '
   \     . 'subdir/somedep5.o ' . 'subdir/somedep6.o '
+  \ )
+
+Execute(ParseCFlags should handle parenthesis and quotes):
+  AssertEqual
+  \ '-Dgoal=9 -Dtest1="('' '')" -Dtest2=''(` `)'' -Dtest3=`(" ")`',
+  \ ale#c#ParseCFlags(
+  \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
+  \   'gcc -Dgoal=9 -Tlinkerfile.ld blabla '
+  \     . '-Dtest1="('' '')" file1.o '
+  \     . '-Dtest2=''(` `)'' file2.o '
+  \     . '-Dtest3=`(" ")` file3.o '
   \ )
