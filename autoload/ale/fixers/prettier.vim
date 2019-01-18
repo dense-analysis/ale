@@ -48,6 +48,7 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version_output) abort
     " already set in g:javascript_prettier_options).
     if empty(expand('#' . a:buffer . ':e')) && match(l:options, '--parser') == -1
         let l:prettier_parsers = {
+        \    'javascript': 'babylon',
         \    'typescript': 'typescript',
         \    'css': 'css',
         \    'less': 'less',
