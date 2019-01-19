@@ -120,6 +120,15 @@ function! ale#lsp#message#Definition(buffer, line, column) abort
     \}]
 endfunction
 
+function! ale#lsp#message#TypeDefinition(buffer, line, column) abort
+    return [0, 'textDocument/typeDefinition', {
+    \   'textDocument': {
+    \       'uri': ale#path#ToURI(expand('#' . a:buffer . ':p')),
+    \   },
+    \   'position': {'line': a:line - 1, 'character': a:column},
+    \}]
+endfunction
+
 function! ale#lsp#message#References(buffer, line, column) abort
     return [0, 'textDocument/references', {
     \   'textDocument': {
