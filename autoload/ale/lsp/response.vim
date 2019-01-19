@@ -33,7 +33,7 @@ function! ale#lsp#response#ReadDiagnostics(response) abort
         \   'lnum': l:diagnostic.range.start.line + 1,
         \   'col': l:diagnostic.range.start.character + 1,
         \   'end_lnum': l:diagnostic.range.end.line + 1,
-        \   'end_col': l:diagnostic.range.end.character + 1,
+        \   'end_col': l:diagnostic.range.end.character,
         \}
 
         if l:severity == s:SEVERITY_WARNING
