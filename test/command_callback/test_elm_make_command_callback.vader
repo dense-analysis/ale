@@ -22,7 +22,8 @@ Execute(should get elm-test executable for test code with elm >= 0.19):
 
   AssertLinter g:executable,
   \ 'cd ' . ale#Escape(ale#path#Simplify(g:dir . '/../elm-test-files/newapp')) . ' && '
-  \ . ale#Escape(g:executable) . ' make --report=json --output=/dev/null %t'
+  \ . ale#Escape(g:executable) . ' make --report=json --output=/dev/null --compiler '
+  \ . ale#path#Simplify(g:dir . '/../elm-test-files/newapp/node_modules/.bin/elm') . ' %t'
 
 Execute(should fallback to elm executable with elm >= 0.19):
   call ale#test#SetFilename('../elm-test-files/newapp-notests/tests/TestMain.elm')
