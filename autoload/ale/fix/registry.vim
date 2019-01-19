@@ -270,6 +270,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['hcl', 'terraform'],
 \       'description': 'Fix tf and hcl files with terraform fmt.',
 \   },
+\   'ktlint': {
+\       'function': 'ale#fixers#ktlint#Fix',
+\       'suggested_filetypes': ['kt'],
+\       'description': 'Fix Kotlin files with ktlint.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
