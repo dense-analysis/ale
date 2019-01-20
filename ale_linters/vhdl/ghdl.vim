@@ -6,13 +6,14 @@ call ale#Set('vhdl_ghdl_executable', 'ghdl')
 call ale#Set('vhdl_ghdl_options', '--std=08')
 
 function! ale_linters#vhdl#ghdl#GetCommand(buffer) abort
-    return '%e ' . ale#Pad(ale#Var(a:buffer, 'vhdl_ghdl_options')) . ' %t'
+   return '%e -s ' . ale#Pad(ale#Var(a:buffer, 'vhdl_ghdl_options')) . ' %t'
 endfunction
 
 function! ale_linters#vhdl#ghdl#Handle(buffer, lines) abort
     " Look for 'error' lines like the following:
     " dff_en.vhd:41:5:error: 'begin' is expected instead of 'if'
-    let l:pattern = '^[a-zA-Z0-9\-\.\_ ]\+:\(\d\+\):\(\d\+\):error:\s\(.*\)'
+    " /path/to/file.vhdl:12:8: no declaration for "i0"
+    let l:pattern = '^[a-zA-Z0-9\-\.\_\/ ]\+:\(\d\+\):\(\d\+\):\(.*\)'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)

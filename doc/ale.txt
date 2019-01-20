@@ -346,8 +346,12 @@ CONTENTS                                                         *ale-contents*
     verilog/systemverilog.................|ale-verilog-options|
       iverilog............................|ale-verilog-iverilog|
       verilator...........................|ale-verilog-verilator|
+      vlog................................|ale-verilog-vlog|
+      xvlog...............................|ale-verilog-xvlog|
     vhdl..................................|ale-vhdl-options|
       ghdl................................|ale-vhdl-ghdl|
+      vcom................................|ale-vhdl-vcom|
+      xvhdl...............................|ale-vhdl-xvhdl|
     vim...................................|ale-vim-options|
       vint................................|ale-vim-vint|
     vim help..............................|ale-vim-help-options|

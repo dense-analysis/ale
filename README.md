@@ -201,8 +201,8 @@ formatting.
 | Thrift | [thrift](http://thrift.apache.org/) |
 | TypeScript | [eslint](http://eslint.org/), [prettier](https://github.com/prettier/prettier), [tslint](https://github.com/palantir/tslint), [tsserver](https://github.com/Microsoft/TypeScript/wiki/Standalone-Server-%28tsserver%29), typecheck |
 | VALA | [uncrustify](https://github.com/uncrustify/uncrustify) |
-| Verilog | [iverilog](https://github.com/steveicarus/iverilog), [verilator](http://www.veripool.org/projects/verilator/wiki/Intro) |
-| VHDL | [ghdl](https://github.com/ghdl/ghdl) |
+| Verilog | [iverilog](https://github.com/steveicarus/iverilog), [verilator](http://www.veripool.org/projects/verilator/wiki/Intro), [vlog](https://www.mentor.com/products/fv/questa/), [xvlog](https://www.xilinx.com/products/design-tools/vivado.html) |
+| VHDL | [ghdl](https://github.com/ghdl/ghdl), [vcom](https://www.mentor.com/products/fv/questa/), [xvhdl](https://www.xilinx.com/products/design-tools/vivado.html) |
 | Vim | [vint](https://github.com/Kuniwak/vint) |
 | Vim help^ | [alex](https://github.com/wooorm/alex) !!, [proselint](http://proselint.com/), [write-good](https://github.com/btford/write-good) |
 | Vue | [prettier](https://github.com/prettier/prettier), [vls](https://github.com/vuejs/vetur/tree/master/server) |
