@@ -42,13 +42,12 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version_output) abort
     let l:executable = ale#fixers#prettier#GetExecutable(a:buffer)
     let l:options = ale#Var(a:buffer, 'javascript_prettier_options')
     let l:version = ale#semver#GetVersion(l:executable, a:version_output)
-    let l:parser = ''
+    let l:parser = 'babylon'
 
     " Append the --parser flag depending on the current filetype (unless it's
     " already set in g:javascript_prettier_options).
     if empty(expand('#' . a:buffer . ':e')) && match(l:options, '--parser') == -1
         let l:prettier_parsers = {
-        \    'javascript': 'babylon',
         \    'typescript': 'typescript',
         \    'css': 'css',
         \    'less': 'less',
