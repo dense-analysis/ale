@@ -99,7 +99,7 @@ Execute(The version number should be cached):
 Execute(Should set --parser to babylon by default):
   call ale#test#SetFilename('../prettier-test-files/testfile')
 
-  set filetype=
+  set filetype=javascript
 
   AssertEqual
   \ {

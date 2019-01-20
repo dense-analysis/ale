@@ -42,15 +42,16 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version_output) abort
     let l:executable = ale#fixers#prettier#GetExecutable(a:buffer)
     let l:options = ale#Var(a:buffer, 'javascript_prettier_options')
     let l:version = ale#semver#GetVersion(l:executable, a:version_output)
-
-    " Set to `babylon` to mimic Prettier's defaults. In cases without a
-    " file extension or filetype (scratch buffer), Prettier needs `parser` set
-    " to know how to process the buffer.
-    let l:parser = 'babylon'
+    let l:parser = ''
 
     " Append the --parser flag depending on the current filetype (unless it's
     " already set in g:javascript_prettier_options).
     if empty(expand('#' . a:buffer . ':e')) && match(l:options, '--parser') == -1
+        " Set to `babylon` to mimic Prettier's defaults. In cases without a
+        " file extension or filetype (scratch buffer), Prettier needs `parser` set
+        " to know how to process the buffer.
+        let l:parser = 'babylon'
+
         let l:prettier_parsers = {
         \    'typescript': 'typescript',
         \    'css': 'css',
@@ -64,7 +65,6 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version_output) abort
         \    'yaml': 'yaml',
         \    'html': 'html',
         \}
-        let l:parser = ''
 
         for l:filetype in split(getbufvar(a:buffer, '&filetype'), '\.')
             if has_key(l:prettier_parsers, l:filetype)
