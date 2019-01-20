@@ -42,6 +42,10 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version_output) abort
     let l:executable = ale#fixers#prettier#GetExecutable(a:buffer)
     let l:options = ale#Var(a:buffer, 'javascript_prettier_options')
     let l:version = ale#semver#GetVersion(l:executable, a:version_output)
+
+    " Set to `babylon` to mimic Prettier's defaults. In cases without a
+    " file extension or filetype (scratch buffer), Prettier needs `parser` set
+    " to know how to process the buffer.
     let l:parser = 'babylon'
 
     " Append the --parser flag depending on the current filetype (unless it's
