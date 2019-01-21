@@ -196,7 +196,7 @@ Execute(Other files should be jumped to for definition responses in vsplits too)
   AssertEqual [3, 7], getpos('.')[1:2]
   AssertEqual {}, ale#definition#GetMap()
 
-Execute(tsserver completion requests should be sent):
+Execute(tsserver definition requests should be sent):
   runtime ale_linters/typescript/tsserver.vim
   call setpos('.', [bufnr(''), 2, 5, 0])
 
@@ -217,7 +217,7 @@ Execute(tsserver completion requests should be sent):
   \ g:message_list
   AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
 
-Execute(tsserver tab completion requests should be sent):
+Execute(tsserver tab definition requests should be sent):
   runtime ale_linters/typescript/tsserver.vim
   call setpos('.', [bufnr(''), 2, 5, 0])
 
@@ -348,7 +348,7 @@ Execute(Definition responses with null response should be handled):
 
   AssertEqual [], g:expr_list
 
-Execute(LSP completion requests should be sent):
+Execute(LSP definition requests should be sent):
   runtime ale_linters/python/pyls.vim
   let b:ale_linters = ['pyls']
   call setpos('.', [bufnr(''), 1, 5, 0])
@@ -384,7 +384,7 @@ Execute(LSP completion requests should be sent):
 
   AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
 
-Execute(LSP tab completion requests should be sent):
+Execute(LSP tab definition requests should be sent):
   runtime ale_linters/python/pyls.vim
   let b:ale_linters = ['pyls']
   call setpos('.', [bufnr(''), 1, 5, 0])
