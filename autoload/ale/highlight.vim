@@ -36,12 +36,13 @@ let s:MAX_COL_SIZE = 1073741824 " pow(2, 30)
 let s:nvim_api = exists('*nvim_buf_add_highlight') && exists('*nvim_buf_clear_namespace')
 
 function! s:ale_nvim_highlight_id(bufnr) abort
-    if get(b:, 'ale_nvim_highlight_id', -1) == -1
-        " NOTE: This will highlights nothing but will allocate new id
-        let b:ale_nvim_highlight_id = nvim_buf_add_highlight(a:bufnr, 0, '', 0, 0, -1)
+    let l:id = getbufvar(a:bufnr, 'ale_nvim_highlight_id', -1)
+    if l:id is -1
+        " NOTE: This will highlight nothing but will allocate new id
+        let l:id = nvim_buf_add_highlight(a:bufnr, 0, '', 0, 0, -1)
+        call setbufvar(a:bufnr, 'ale_nvim_highlight_id', l:id)
     endif
-
-    return b:ale_nvim_highlight_id
+    return l:id
 endfunction
 
 function! ale#highlight#CreatePositions(line, col, end_line, end_col) abort
