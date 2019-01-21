@@ -480,7 +480,7 @@ function! s:OnReady(linter, lsp_details, ...) abort
         \   b:ale_completion_info.line,
         \   min([
         \       b:ale_completion_info.line_length,
-        \       b:ale_completion_info.column,
+        \       b:ale_completion_info.column + 1,
         \   ]),
         \   ale#completion#GetTriggerCharacter(&filetype, b:ale_completion_info.prefix),
         \)

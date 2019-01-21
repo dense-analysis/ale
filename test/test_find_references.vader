@@ -270,7 +270,7 @@ Execute(LSP reference requests should be sent):
   \   }],
   \   [0, 'textDocument/references', {
   \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
-  \   'position': {'line': 0, 'character': 3},
+  \   'position': {'line': 0, 'character': 2},
   \   'context': {'includeDeclaration': v:false},
   \   }],
   \ ],
