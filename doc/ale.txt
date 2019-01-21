@@ -2343,6 +2343,7 @@ ALEGoToDefinitionInVSplit                           *ALEGoToDefinitionInVSplit*
   A plug mapping `<Plug>(ale_go_to_definition_in_vsplit)` is defined for this
   command.
 
+
 ALEGoToTypeDefinition                                   *ALEGoToTypeDefinition*
 
   This works similar to |ALEGoToDefinition| but instead jumps to the
@@ -2355,6 +2356,7 @@ ALEGoToTypeDefinition                                   *ALEGoToTypeDefinition*
 
   A plug mapping `<Plug>(ale_go_to_type_definition)` is defined for this
   command.
+
 
 ALEGoToTypeDefinitionInTab                         *ALEGoToTypeDefinitionInTab*
 
@@ -2379,6 +2381,7 @@ ALEGoToTypeDefinitionInVSplit                   *ALEGoToTypeDefinitionInVSplit*
 
   A plug mapping `<Plug>(ale_go_to_type_definition_in_vsplit)` is defined for
   this command.
+
 
 ALEHover                                                             *ALEHover*
 
