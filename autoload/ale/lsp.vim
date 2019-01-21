@@ -43,6 +43,7 @@ function! ale#lsp#Register(executable_or_address, project, init_options) abort
         \       'completion': 0,
         \       'completion_trigger_characters': [],
         \       'definition': 0,
+        \       'typeDefinition': 0,
         \       'symbol_search': 0,
         \   },
         \}
@@ -205,6 +206,10 @@ function! s:UpdateCapabilities(conn, capabilities) abort
 
     if get(a:capabilities, 'definitionProvider') is v:true
         let a:conn.capabilities.definition = 1
+    endif
+
+    if get(a:capabilities, 'typeDefinitionProvider') is v:true
+        let a:conn.capabilities.typeDefinition = 1
     endif
 
     if get(a:capabilities, 'workspaceSymbolProvider') is v:true

@@ -14,9 +14,10 @@ CONTENTS                                                         *ale-contents*
   5. Language Server Protocol Support.....|ale-lsp|
     5.1 Completion........................|ale-completion|
     5.2 Go To Definition..................|ale-go-to-definition|
-    5.3 Find References...................|ale-find-references|
-    5.4 Hovering..........................|ale-hover|
-    5.5 Symbol Search.....................|ale-symbol-search|
+    5.3 Go To Type Definition.............|ale-go-to-type-definition|
+    5.4 Find References...................|ale-find-references|
+    5.5 Hovering..........................|ale-hover|
+    5.6 Symbol Search.....................|ale-symbol-search|
   6. Global Options.......................|ale-options|
     6.1 Highlights........................|ale-highlights|
     6.2 Options for write-good Linter.....|ale-write-good-options|
@@ -850,9 +851,23 @@ information returned by LSP servers. The following commands are supported:
 |ALEGoToDefinitionInSplit| - The same, but in a new split.
 |ALEGoToDefinitionInVSplit| - The same, but in a new vertical split.
 
+-------------------------------------------------------------------------------
+5.3 Go To Type Definition                           *ale-go-to-type-definition*
+
+ALE supports jumping to the files and locations where symbols' types are
+defined through any enabled LSP linters. The locations ALE will jump to depend
+on the information returned by LSP servers. The following commands are
+supported:
+
+|ALEGoToTypeDefinition|      - Open the definition of the symbol's type under
+                             the cursor.
+|ALEGoToTypeDefinitionInTab| - The same, but for opening the file in a new tab.
+|ALEGoToTypeDefinitionInSplit| - The same, but in a new split.
+|ALEGoToTypeDefinitionInVSplit| - The same, but in a new vertical split.
+
 
 -------------------------------------------------------------------------------
-5.3 Find References                                       *ale-find-references*
+5.4 Find References                                       *ale-find-references*
 
 ALE supports finding references for symbols though any enabled LSP linters.
 ALE will display a preview window showing the places where a symbol is
@@ -863,7 +878,7 @@ supported:
 
 
 -------------------------------------------------------------------------------
-5.4 Hovering                                                        *ale-hover*
+5.5 Hovering                                                        *ale-hover*
 
 ALE supports "hover" information for printing brief information about symbols
 at the cursor taken from LSP linters. The following commands are supported:
@@ -894,7 +909,7 @@ Documentation for symbols at the cursor can be retrieved using the
 |ALEDocumentation| command. This command is only available for `tsserver`.
 
 -------------------------------------------------------------------------------
-5.5 Symbol Search                                           *ale-symbol-search*
+5.6 Symbol Search                                           *ale-symbol-search*
 
 ALE supports searching for workspace symbols via LSP linters. The following
 commands are supported:
@@ -2327,6 +2342,45 @@ ALEGoToDefinitionInVSplit                           *ALEGoToDefinitionInVSplit*
 
   A plug mapping `<Plug>(ale_go_to_definition_in_vsplit)` is defined for this
   command.
+
+
+ALEGoToTypeDefinition                                   *ALEGoToTypeDefinition*
+
+  This works similar to |ALEGoToDefinition| but instead jumps to the
+  definition of a type of a symbol undert the cursor. ALE will jump to a
+  definition if an LSP server provides a location to jump to. Otherwise, ALE
+  will do nothing.
+
+  You can jump back to the position you were at before going to the definition
+  of something with jump motions like CTRL-O. See |jump-motions|.
+
+  A plug mapping `<Plug>(ale_go_to_type_definition)` is defined for this
+  command.
+
+
+ALEGoToTypeDefinitionInTab                         *ALEGoToTypeDefinitionInTab*
+
+  The same as |ALEGoToTypeDefinition|, but opens results in a new tab.
+
+  A plug mapping `<Plug>(ale_go_to_type_definition_in_tab)` is defined for
+  this command.
+
+
+ALEGoToTypeDefinitionInSplit                     *ALEGoToTypeDefinitionInSplit*
+
+  The same as |ALEGoToTypeDefinition|, but opens results in a new split.
+
+  A plug mapping `<Plug>(ale_go_to_type_definition_in_split)` is defined for
+  this command.
+
+
+ALEGoToTypeDefinitionInVSplit                   *ALEGoToTypeDefinitionInVSplit*
+
+  The same as |ALEGoToTypeDefinition|, but opens results in a new vertical
+  split.
+
+  A plug mapping `<Plug>(ale_go_to_type_definition_in_vsplit)` is defined for
+  this command.
 
 
 ALEHover                                                             *ALEHover*
