@@ -494,6 +494,24 @@ g:ale_python_pyls_auto_pipenv                   *g:ale_python_pyls_auto_pipenv*
   if true. This is overridden by a manually-set executable.
 
 
+g:ale_python_pyls_config                             *g:ale_python_pyls_config*
+                                                     *b:ale_python_pyls_config*
+  Type: |Dictionary|
+  Default: `{}`
+
+  Dictionary with configuration settings for pyls. For example, to disable
+  the pycodestyle linter: >
+        {
+      \   'pyls': {
+      \     'plugins': {
+      \       'pycodestyle': {
+      \         'enabled': v:false
+      \       }
+      \     }
+      \   },
+      \ }
+<
+
 ===============================================================================
 pyre                                                          *ale-python-pyre*
 
