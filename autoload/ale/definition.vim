@@ -67,7 +67,6 @@ function! s:OnReady(linter, lsp_details, line, column, options, capability, ...)
     call ale#lsp#RegisterCallback(l:id, l:Callback)
 
     if a:linter.lsp is# 'tsserver'
-        " XXX: Does tsserver support typeDefinition?
         let l:message = ale#lsp#tsserver_message#Definition(
         \   l:buffer,
         \   a:line,
@@ -81,9 +80,9 @@ function! s:OnReady(linter, lsp_details, line, column, options, capability, ...)
         " For LSP completions, we need to clamp the column to the length of
         " the line. python-language-server and perhaps others do not implement
         " this correctly.
-        if a:capability ==# 'definition'
+        if a:capability is# 'definition'
             let l:message = ale#lsp#message#Definition(l:buffer, a:line, a:column)
-        elseif a:capability ==# 'typeDefinition'
+        elseif a:capability is# 'typeDefinition'
             let l:message = ale#lsp#message#TypeDefinition(l:buffer, a:line, a:column)
         else
             " XXX: log here?
@@ -129,6 +128,12 @@ endfunction
 function! ale#definition#GoToType(options) abort
     for l:linter in ale#linter#Get(&filetype)
         if !empty(l:linter.lsp)
+            " TODO: handle typeDefinition for tsserver if supported by the
+            " protocol
+            if l:linter.lsp is# 'tsserver'
+                continue
+            endif
+
             call s:GoToLSPDefinition(l:linter, a:options, 'typeDefinition')
         endif
     endfor
