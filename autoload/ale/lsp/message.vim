@@ -125,7 +125,7 @@ function! ale#lsp#message#TypeDefinition(buffer, line, column) abort
     \   'textDocument': {
     \       'uri': ale#path#ToURI(expand('#' . a:buffer . ':p')),
     \   },
-    \   'position': {'line': a:line - 1, 'character': a:column},
+    \   'position': {'line': a:line - 1, 'character': a:column - 1},
     \}]
 endfunction
 
