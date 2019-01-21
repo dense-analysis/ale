@@ -377,7 +377,7 @@ Execute(LSP completion requests should be sent):
   \   }],
   \   [0, 'textDocument/definition', {
   \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
-  \   'position': {'line': 0, 'character': 3},
+  \   'position': {'line': 0, 'character': 2},
   \   }],
   \ ],
   \ g:message_list
@@ -413,7 +413,7 @@ Execute(LSP tab completion requests should be sent):
   \   }],
   \   [0, 'textDocument/definition', {
   \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
-  \   'position': {'line': 0, 'character': 3},
+  \   'position': {'line': 0, 'character': 2},
   \   }],
   \ ],
   \ g:message_list
