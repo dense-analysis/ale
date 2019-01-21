@@ -3,7 +3,7 @@ ALE VHDL Integration                                         *ale-vhdl-options*
 
 
 ===============================================================================
-ALE can use four different linters for VHDL:
+ALE can use three different linters for VHDL:
 
   iverilog:
     Using `iverilog -t null -Wall`
