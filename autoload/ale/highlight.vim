@@ -37,11 +37,13 @@ let s:nvim_api = exists('*nvim_buf_add_highlight') && exists('*nvim_buf_clear_na
 
 function! s:ale_nvim_highlight_id(bufnr) abort
     let l:id = getbufvar(a:bufnr, 'ale_nvim_highlight_id', -1)
+
     if l:id is -1
         " NOTE: This will highlight nothing but will allocate new id
         let l:id = nvim_buf_add_highlight(a:bufnr, 0, '', 0, 0, -1)
         call setbufvar(a:bufnr, 'ale_nvim_highlight_id', l:id)
     endif
+
     return l:id
 endfunction
 
