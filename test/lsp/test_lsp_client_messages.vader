@@ -146,6 +146,20 @@ Execute(ale#lsp#message#Definition() should return correct messages):
   \ ],
   \ ale#lsp#message#Definition(bufnr(''), 12, 34)
 
+Execute(ale#lsp#message#TypeDefinition() should return correct messages):
+  AssertEqual
+  \ [
+  \   0,
+  \   'textDocument/typeDefinition',
+  \   {
+  \     'textDocument': {
+  \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
+  \     },
+  \     'position': {'line': 11, 'character': 33},
+  \   }
+  \ ],
+  \ ale#lsp#message#TypeDefinition(bufnr(''), 12, 34)
+
 Execute(ale#lsp#message#References() should return correct messages):
   AssertEqual
   \ [
