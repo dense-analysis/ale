@@ -242,7 +242,7 @@ Execute(Buffer ignore lists should be applied for LSP linters):
   \     'lnum': 1,
   \     'col': 10,
   \     'type': 'E',
-  \     'end_col': 10,
+  \     'end_col': 9,
   \     'end_lnum': 1,
   \     'text': 'x',
   \   }

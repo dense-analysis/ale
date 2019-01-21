@@ -17,7 +17,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle errors):
   \     'lnum': 3,
   \     'col': 11,
   \     'end_lnum': 5,
-  \     'end_col': 16,
+  \     'end_col': 15,
   \     'code': 'some-error',
   \   }
   \ ],
@@ -38,7 +38,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle warnings):
   \     'lnum': 2,
   \     'col': 4,
   \     'end_lnum': 2,
-  \     'end_col': 4,
+  \     'end_col': 3,
   \     'code': 'some-warning',
   \   }
   \ ],
@@ -59,7 +59,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should treat messages with missing se
   \     'lnum': 3,
   \     'col': 11,
   \     'end_lnum': 5,
-  \     'end_col': 16,
+  \     'end_col': 15,
   \     'code': 'some-error',
   \   }
   \ ],
@@ -79,7 +79,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle messages without codes)
   \     'lnum': 3,
   \     'col': 11,
   \     'end_lnum': 5,
-  \     'end_col': 16,
+  \     'end_col': 15,
   \   }
   \ ],
   \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
@@ -98,7 +98,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should include sources in detail):
   \     'lnum': 10,
   \     'col': 15,
   \     'end_lnum': 12,
-  \     'end_col': 23,
+  \     'end_col': 22,
   \   }
   \ ],
   \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
@@ -117,7 +117,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should consider -1 to be a meaningles
   \     'lnum': 3,
   \     'col': 11,
   \     'end_lnum': 5,
-  \     'end_col': 16,
+  \     'end_col': 15,
   \   }
   \ ],
   \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
@@ -136,7 +136,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle multiple messages):
   \     'lnum': 1,
   \     'col': 3,
   \     'end_lnum': 1,
-  \     'end_col': 3,
+  \     'end_col': 2,
   \   },
   \   {
   \     'type': 'W',
@@ -144,7 +144,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle multiple messages):
   \     'lnum': 2,
   \     'col': 5,
   \     'end_lnum': 2,
-  \     'end_col': 5,
+  \     'end_col': 4,
   \   },
   \ ],
   \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
@@ -167,7 +167,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should use relatedInformation for det
   \     'lnum': 1,
   \     'col': 3,
   \     'end_lnum': 1,
-  \     'end_col': 3,
+  \     'end_col': 2,
   \     'detail': "Something went wrong!\n/tmp/someotherfile.txt:43:80:\n\tmight be this"
   \   }
   \ ],
