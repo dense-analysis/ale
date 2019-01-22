@@ -172,7 +172,7 @@ let s:default_registry = {
 \   },
 \   'textlint': {
 \       'function': 'ale#fixers#textlint#Fix',
-\       'suggested_filetypes': ['text','markdown','asciidoc','plaintex'],
+\       'suggested_filetypes': ['text','markdown','asciidoc','tex'],
 \       'description': 'Fix text files with textlint --fix',
 \   },
 \   'hackfmt': {
