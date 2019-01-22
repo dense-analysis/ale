@@ -140,6 +140,7 @@ CONTENTS                                                         *ale-contents*
       hfmt................................|ale-haskell-hfmt|
       hlint...............................|ale-haskell-hlint|
       stack-build.........................|ale-haskell-stack-build|
+      stack-ghc...........................|ale-haskell-stack-ghc|
       stylish-haskell.....................|ale-haskell-stylish-haskell|
       hie.................................|ale-haskell-hie|
     hcl...................................|ale-hcl-options|

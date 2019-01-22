@@ -12,3 +12,6 @@ Execute(The linter should be executed when there is a stack.yaml file):
 
   AssertLinter 'stack', 'stack ghc -- -fno-code -v0 %t'
 
+  let b:ale_haskell_stack_ghc_options = 'foobar'
+
+  AssertLinter 'stack', 'stack ghc -- foobar %t'
