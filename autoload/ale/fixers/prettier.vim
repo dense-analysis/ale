@@ -50,7 +50,11 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version_output) abort
         " Set to `babylon` to mimic Prettier's defaults. In cases without a
         " file extension or filetype (scratch buffer), Prettier needs `parser` set
         " to know how to process the buffer.
-        let l:parser = 'babylon'
+        if ale#semver#GTE(l:version, [1, 16, 0])
+          let l:parser = 'babel'
+        else
+          let l:parser = 'babylon'
+        endif
 
         let l:prettier_parsers = {
         \    'typescript': 'typescript',
