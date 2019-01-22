@@ -96,6 +96,34 @@ Execute(The version number should be cached):
   \ },
   \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), [])
 
+Execute(Should set --parser to `babylon` by default, < 1.16.0):
+  call ale#test#SetFilename('../prettier-test-files/testfile')
+
+  set filetype=javascript
+
+  AssertEqual
+  \ {
+  \   'command': ale#path#CdString(expand('%:p:h'))
+  \     . ale#Escape(g:ale_javascript_prettier_executable)
+  \     . ' --parser babylon'
+  \     . ' --stdin-filepath %s --stdin',
+  \ },
+  \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), ['1.6.0'])
+
+Execute(Should set --parser to `babel` by default, >= 1.16.0):
+  call ale#test#SetFilename('../prettier-test-files/testfile')
+
+  set filetype=javascript
+
+  AssertEqual
+  \ {
+  \   'command': ale#path#CdString(expand('%:p:h'))
+  \     . ale#Escape(g:ale_javascript_prettier_executable)
+  \     . ' --parser babel'
+  \     . ' --stdin-filepath %s --stdin',
+  \ },
+  \ ale#fixers#prettier#ApplyFixForVersion(bufnr(''), ['1.16.0'])
+
 Execute(Should set --parser based on filetype, TypeScript):
   call ale#test#SetFilename('../prettier-test-files/testfile')
 
