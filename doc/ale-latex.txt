@@ -9,7 +9,7 @@ See |ale-write-good-options|
 
 
 ===============================================================================
-textlint                                                      *ale-tex-textlint*
+textlint                                                    *ale-latex-textlint*
 
 See |ale-text-textlint|
 
