@@ -51,7 +51,7 @@ function! ale#preview#ShowSelection(item_list) abort
 
         call add(
         \   l:lines,
-        \   substitute(l:item.filename, '^' . getcwd() . l:sep, '', '')
+        \   substitute(l:item.filename, '^' . getcwd() . l:sep, '', '') " no-custom-checks
         \       . ':' . l:item.line
         \       . ':' . l:item.column
         \       . (!empty(l:match) ? ' ' . l:match : ''),
