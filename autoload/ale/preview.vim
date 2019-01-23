@@ -49,9 +49,11 @@ function! ale#preview#ShowSelection(item_list, ...) abort
     " Create lines to display to users.
     for l:item in a:item_list
         let l:match = get(l:item, 'match', '')
-        let l:filename = get(l:options, 'use_relative_paths')
-        \   ? substitute(l:item.filename, '^' . getcwd() . l:sep, '', '')
-        \   : l:item.filename " no-custom-checks
+        let l:filename = l:item.filename
+
+        if get(l:options, 'use_relative_paths')
+          let l:filename = substitute(l:item.filename, '^' . getcwd() . l:sep, '', '') " no-custom-checks
+        endif
 
         call add(
         \   l:lines,
