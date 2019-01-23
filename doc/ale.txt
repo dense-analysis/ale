@@ -3129,6 +3129,22 @@ ale#statusline#Count(buffer)                           *ale#statusline#Count()*
   `total`         -> The total number of problems.
 
 
+ale#statusline#FirstProblem(buffer, problem_type) 
+                                                *ale#statusline#FirstProblem()*
+
+  Returns a copy of the first entry in the `loclist` that matches the supplied
+  buffer number and problem type. If there is no such enty, an empty dictionary
+  is returned.
+  Problem type should be one of the strings listed below:
+
+  `error`         -> Returns the first `loclist` item with type `E` and 
+                     `sub_type != 'style'` 
+  `warning`       -> First item with type `W` and `sub_type != 'style'`
+  `info`          -> First item with type `I`
+  `style_error`   -> First item with type `E` and `sub_type == 'style'`
+  `style_warning` -> First item with type `W` and `sub_type == 'style'`
+
+
 b:ale_linted                                                     *b:ale_linted*
 
   `b:ale_linted` is set to the number of times a buffer has been checked by
