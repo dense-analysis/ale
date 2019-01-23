@@ -28,25 +28,9 @@ Before:
     return l:res
   endfunction
 
-After:
-  Restore
-
-  delfunction Counts
-
-Execute (Count should be 0 when data is empty):
-  AssertEqual Counts({}), ale#statusline#Count(bufnr(''))
-
-Execute (Count should read data from the cache):
-  let g:ale_buffer_info = {'44': {'count': Counts({'error': 1, 'warning': 2})}}
-  AssertEqual Counts({'error': 1, 'warning': 2}), ale#statusline#Count(44)
-
-Execute (The count should be correct after an update):
-  let g:ale_buffer_info = {'44': {}}
-  call ale#statusline#Update(44, [])
-  AssertEqual Counts({}), ale#statusline#Count(44)
-
-Execute (Count should be match the loclist):
-  let g:ale_buffer_info = {
+  " A test simplified loclist that will be used for some of the
+  " tests in this module.
+  let s:test_buffer_info = {
   \ bufnr(''): {
   \   'loclist': [
   \     {'bufnr': bufnr('') - 1, 'type': 'E'},
@@ -77,6 +61,60 @@ Execute (Count should be match the loclist):
   \   ],
   \ },
   \}
+After:
+  Restore
+
+  delfunction Counts
+
+Execute (Count should be 0 when data is empty):
+  AssertEqual Counts({}), ale#statusline#Count(bufnr(''))
+
+Execute (FirstIssue should be 0 when data is empty):
+  AssertEqual {}, ale#statusline#FirstIssue(bufnr(''), 'error')
+  AssertEqual {}, ale#statusline#FirstIssue(bufnr(''), 'warning')
+  AssertEqual {}, ale#statusline#FirstIssue(bufnr(''), 'style_error')
+  AssertEqual {}, ale#statusline#FirstIssue(bufnr(''), 'style_warning')
+  AssertEqual {}, ale#statusline#FirstIssue(bufnr(''), 'info')
+
+Execute (Count should read data from the cache):
+  let g:ale_buffer_info = {'44': {'count': Counts({'error': 1, 'warning': 2})}}
+  AssertEqual Counts({'error': 1, 'warning': 2}), ale#statusline#Count(44)
+
+Execute (FirstIssue should read data from the cache):
+  let g:ale_buffer_info = 
+    \{"44": 
+        \{'count': 0,
+         \'firsts':
+              \{'error': {'lnum': 3},
+              \'warning': {'lnum': 44},
+              \'style_error': {'lnum': 22},
+              \'style_warning': {'lnum': 223},
+              \'info': {'lnum': 2}
+           \} 
+        \}
+    \}
+  AssertEqual {'lnum': 3}, ale#statusline#FirstIssue(44, 'error')
+  AssertEqual {'lnum': 44}, ale#statusline#FirstIssue(44, 'warning')
+  AssertEqual {'lnum': 223}, ale#statusline#FirstIssue(44, 'style_warning')
+  AssertEqual {'lnum': 22}, ale#statusline#FirstIssue(44, 'style_error')
+  AssertEqual {'lnum': 2}, ale#statusline#FirstIssue(44, 'info')
+
+Execute (The count should be correct after an update):
+  let g:ale_buffer_info = {'44': {}}
+  call ale#statusline#Update(44, [])
+  AssertEqual Counts({}), ale#statusline#Count(44)
+
+Execute (FirstIssue should be correct after an update):
+  let g:ale_buffer_info = {'44': {}}
+  call ale#statusline#Update(44, [])
+  AssertEqual {}, ale#statusline#FirstIssue(bufnr(''), 'error')
+  AssertEqual {}, ale#statusline#FirstIssue(bufnr(''), 'warning')
+  AssertEqual {}, ale#statusline#FirstIssue(bufnr(''), 'style_error')
+  AssertEqual {}, ale#statusline#FirstIssue(bufnr(''), 'style_warning')
+  AssertEqual {}, ale#statusline#FirstIssue(bufnr(''), 'info')
+
+Execute (Count should match the loclist):
+  let g:ale_buffer_info = s:test_buffer_info
   AssertEqual {
   \ 'error': 1,
   \ 'style_error': 2,
@@ -88,8 +126,22 @@ Execute (Count should be match the loclist):
   \ 'total': 15,
   \}, ale#statusline#Count(bufnr(''))
 
+Execute (FirstIssue should pull the first matching value from the loclist):
+  let g:ale_buffer_info = s:test_buffer_info
+  AssertEqual {'bufnr': bufnr(''), 'type': 'E'}, ale#statusline#FirstIssue(bufnr(''), 'error')
+  AssertEqual {'bufnr': bufnr(''), 'type': 'W'}, ale#statusline#FirstIssue(bufnr(''), 'warning')
+  AssertEqual {'bufnr': bufnr(''), 'type': 'E', 'sub_type': 'style'}, ale#statusline#FirstIssue(bufnr(''), 'style_error')
+  AssertEqual {'bufnr': bufnr(''), 'type': 'W', 'sub_type': 'style'}, ale#statusline#FirstIssue(bufnr(''), 'style_warning')
+  AssertEqual {'bufnr': bufnr(''), 'type': 'I'}, ale#statusline#FirstIssue(bufnr(''), 'info')
+
 Execute (Output should be empty for non-existent buffer):
+  let g:ale_buffer_info = s:test_buffer_info
   AssertEqual Counts({}), ale#statusline#Count(9001)
+  AssertEqual {}, ale#statusline#FirstIssue(9001, 'error')
+  AssertEqual {}, ale#statusline#FirstIssue(9001, 'warning')
+  AssertEqual {}, ale#statusline#FirstIssue(9001, 'style_error')
+  AssertEqual {}, ale#statusline#FirstIssue(9001, 'style_warning')
+  AssertEqual {}, ale#statusline#FirstIssue(9001, 'info')
 
 Execute(ale#statusline#Update shouldn't blow up when globals are undefined):
   unlet! g:ale_statusline_format
@@ -98,3 +150,7 @@ Execute(ale#statusline#Update shouldn't blow up when globals are undefined):
 Execute(ale#statusline#Count should return 0 counts when globals are undefined):
   unlet! g:ale_statusline_format
   AssertEqual Counts({}), ale#statusline#Count(1)
+
+Execute(FirstIssue should return an empty dict when globals are undefined):
+  unlet! g:ale_statusline_format
+  AssertEqual {}, ale#statusline#FirstIssue(bufnr(''), 'info')
