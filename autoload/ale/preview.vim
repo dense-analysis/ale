@@ -43,6 +43,7 @@ endfunction
 " Each item should have 'filename', 'line', and 'column' keys.
 function! ale#preview#ShowSelection(item_list) abort
     let l:lines = []
+    let l:sep = has('win32') ? '\' : '/'
 
     " Create lines to display to users.
     for l:item in a:item_list
@@ -50,7 +51,7 @@ function! ale#preview#ShowSelection(item_list) abort
 
         call add(
         \   l:lines,
-        \   l:item.filename
+        \   substitute(l:item.filename, '^' . getcwd() . l:sep, '', '')
         \       . ':' . l:item.line
         \       . ':' . l:item.column
         \       . (!empty(l:match) ? ' ' . l:match : ''),
