@@ -41,17 +41,21 @@ endfunction
 
 " Show a location selection preview window, given some items.
 " Each item should have 'filename', 'line', and 'column' keys.
-function! ale#preview#ShowSelection(item_list) abort
-    let l:lines = []
+function! ale#preview#ShowSelection(item_list, ...) abort
+    let l:options = get(a:000, 0, {})
     let l:sep = has('win32') ? '\' : '/'
+    let l:lines = []
 
     " Create lines to display to users.
     for l:item in a:item_list
         let l:match = get(l:item, 'match', '')
+        let l:filename = get(l:options, 'use_relative_paths')
+        \   ? substitute(l:item.filename, '^' . getcwd() . l:sep, '', '')
+        \   : l:item.filename " no-custom-checks
 
         call add(
         \   l:lines,
-        \   substitute(l:item.filename, '^' . getcwd() . l:sep, '', '') " no-custom-checks
+        \   l:filename
         \       . ':' . l:item.line
         \       . ':' . l:item.column
         \       . (!empty(l:match) ? ' ' . l:match : ''),
