@@ -26,19 +26,42 @@ function! ale#statusline#Update(buffer, loclist) abort
     let l:count = s:CreateCountDict()
     let l:count.total = len(l:loclist)
 
+    " Allows easy access to the first instance of each issue type.
+    let l:first_issues = {}
+
     for l:entry in l:loclist
         if l:entry.type is# 'W'
             if get(l:entry, 'sub_type', '') is# 'style'
                 let l:count.style_warning += 1
+
+                if l:count.style_warning == 1
+                    let l:first_issues.style_warning = l:entry
+                endif
             else
                 let l:count.warning += 1
+
+                if l:count.warning == 1
+                    let l:first_issues.warning = l:entry
+                endif
             endif
         elseif l:entry.type is# 'I'
             let l:count.info += 1
+
+            if l:count.info == 1
+                let l:first_issues.info = l:entry
+            endif
         elseif get(l:entry, 'sub_type', '') is# 'style'
             let l:count.style_error += 1
+
+            if l:count.style_error == 1
+                let l:first_issues.style_error = l:entry
+            endif
         else
             let l:count.error += 1
+
+            if l:count.error == 1
+                let l:first_issues.error = l:entry
+            endif
         endif
     endfor
 
@@ -47,24 +70,62 @@ function! ale#statusline#Update(buffer, loclist) abort
     let l:count[1] = l:count.total - l:count[0]
 
     let g:ale_buffer_info[a:buffer].count = l:count
+    let g:ale_buffer_info[a:buffer].firsts = l:first_issues
 endfunction
 
 " Get the counts for the buffer, and update the counts if needed.
-function! s:GetCounts(buffer) abort
-    if !exists('g:ale_buffer_info') || !has_key(g:ale_buffer_info, a:buffer)
-        return s:CreateCountDict()
-    endif
-
+function! s:UpdateCacheIfNecessary(buffer) abort
     " Cache is cold, so manually ask for an update.
     if !has_key(g:ale_buffer_info[a:buffer], 'count')
         call ale#statusline#Update(a:buffer, g:ale_buffer_info[a:buffer].loclist)
     endif
+endfunction
+
+function! s:BufferCacheExists(buffer) abort
+    if !exists('g:ale_buffer_info') || !has_key(g:ale_buffer_info, a:buffer)
+        return 0
+    endif
+
+    return 1
+endfunction
+
+" Get the counts for the buffer, and update the counts if needed.
+function! s:GetCounts(buffer) abort
+    if s:BufferCacheExists(a:buffer)
+        return s:CreateCountDict()
+    endif
+
+    call s:UpdateCacheIfNecessary(a:buffer)
 
     return g:ale_buffer_info[a:buffer].count
+endfunction
+
+" Get the dict of 'firsts', update the buffer info cache if necessary.
+function! s:GetFirsts(buffer) abort
+    if s:BufferCacheExists(a:buffer)
+        return 0
+    endif
+
+    call s:UpdateCacheIfNecessary(a:buffer)
+
+    return g:ale_buffer_info[a:buffer].firsts
 endfunction
 
 " Returns a Dictionary with counts for use in third party integrations.
 function! ale#statusline#Count(buffer) abort
     " The Dictionary is copied here before exposing it to other plugins.
     return copy(s:GetCounts(a:buffer))
+endfunction
+
+" Returns a copy of the *first* locline instance of the specified issue
+" type. (so this would allow an external integration to know all the info
+" about the first style warning in the file, for example.)
+function! ale#statusline#FirstIssue(buffer, issue_type) abort
+    let l:firsts = s:GetFirsts(a:buffer)
+
+    if l:firsts && has_key(l:firsts, a:issue_type)
+        return copy(l:firsts[a:issue_type])
+    else
+        return 0
+    endif
 endfunction
