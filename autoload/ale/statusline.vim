@@ -1,4 +1,5 @@
 " Author: KabbAmine <amine.kabb@gmail.com>
+" Additions by: petpetpetpet <chris@freelanceninjas.com>
 " Description: Statusline related function(s)
 
 function! s:CreateCountDict() abort
