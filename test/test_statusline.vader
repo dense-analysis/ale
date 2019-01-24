@@ -30,7 +30,7 @@ Before:
 
   " A test simplified loclist that will be used for some of the
   " tests in this module.
-  let s:test_buffer_info = {
+  let g:test_buffer_info = {
   \ bufnr(''): {
   \   'loclist': [
   \     {'bufnr': bufnr('') - 1, 'type': 'E'},
@@ -65,6 +65,7 @@ After:
   Restore
 
   delfunction Counts
+  unlet g:test_buffer_info
 
 Execute (Count should be 0 when data is empty):
   AssertEqual Counts({}), ale#statusline#Count(bufnr(''))
@@ -114,7 +115,7 @@ Execute (FirstProblem should be correct after an update):
   AssertEqual {}, ale#statusline#FirstProblem(bufnr(''), 'info')
 
 Execute (Count should match the loclist):
-  let g:ale_buffer_info = s:test_buffer_info
+  let g:ale_buffer_info = g:test_buffer_info
   AssertEqual {
   \ 'error': 1,
   \ 'style_error': 2,
@@ -127,7 +128,7 @@ Execute (Count should match the loclist):
   \}, ale#statusline#Count(bufnr(''))
 
 Execute (FirstProblem should pull the first matching value from the loclist):
-  let g:ale_buffer_info = s:test_buffer_info
+  let g:ale_buffer_info = g:test_buffer_info
   AssertEqual {'bufnr': bufnr(''), 'type': 'E'}, ale#statusline#FirstProblem(bufnr(''), 'error')
   AssertEqual {'bufnr': bufnr(''), 'type': 'W'}, ale#statusline#FirstProblem(bufnr(''), 'warning')
   AssertEqual {'bufnr': bufnr(''), 'type': 'E', 'sub_type': 'style'}, ale#statusline#FirstProblem(bufnr(''), 'style_error')
@@ -135,7 +136,7 @@ Execute (FirstProblem should pull the first matching value from the loclist):
   AssertEqual {'bufnr': bufnr(''), 'type': 'I'}, ale#statusline#FirstProblem(bufnr(''), 'info')
 
 Execute (Output should be empty for non-existent buffer):
-  let g:ale_buffer_info = s:test_buffer_info
+  let g:ale_buffer_info = g:test_buffer_info
   AssertEqual Counts({}), ale#statusline#Count(9001)
   AssertEqual {}, ale#statusline#FirstProblem(9001, 'error')
   AssertEqual {}, ale#statusline#FirstProblem(9001, 'warning')
