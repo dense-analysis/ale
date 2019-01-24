@@ -52,7 +52,7 @@ Execute(zsh should be detected appropriately):
 Given(A file with a csh hash bang and arguments):
   #!/usr/bin/env csh -eu --foobar
 
-Execute(zsh should be detected appropriately):
+Execute(csh should be detected appropriately):
   AssertEqual 'csh', ale#handlers#sh#GetShellType(bufnr(''))
   AssertEqual 'csh', ale_linters#sh#shell#GetExecutable(bufnr(''))
   AssertEqual 'csh', ale_linters#sh#shellcheck#GetDialectArgument(bufnr(''))
