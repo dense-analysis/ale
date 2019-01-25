@@ -26,6 +26,20 @@ defining 'g:ale_linters' variable:
     \ let g:ale_linters = {'systemverilog' : ['verilator'],}
 <
 
+Linters/compilers that utilize a "work" directory for analyzing designs- such
+as ModelSim and Vivado- can be passed the location of these directories as
+part of their respective option strings listed below. This is useful for
+holistic analysis of a file (e.g. a design with components, packages, or other
+code defined external to the current file as part of a larger project) or
+when wanting to simply pass an alternative location for the auto-generated
+work directories (such as '/tmp') so as to not muddle the current directory.
+Since these type of linters often use this work directory for holding compiled
+design data as part of a single build process, they sometimes cannot handle
+the frequent, asynchronous application launches when linting while text is
+changing. This can happen in the form of hangs or crashes. To help prevent
+this when using these linters, it may help to run linting less frequently; for
+example, only when a file is saved.
+
 ===============================================================================
 iverilog                                                 *ale-verilog-iverilog*
 
