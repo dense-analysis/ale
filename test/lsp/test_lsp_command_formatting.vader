@@ -17,6 +17,7 @@ Execute(Command formatting should be applied correctly for LSP linters):
   call ale#lsp_linter#StartLSP(
   \ bufnr(''),
   \ {
+  \   'name': 'linter',
   \   'language_callback': {-> 'x'},
   \   'project_root_callback': {-> '/foo/bar'},
   \   'lsp': 'stdio',
