@@ -97,6 +97,7 @@ Before:
   \  'let g:ale_list_vertical = 0',
   \  'let g:ale_list_window_size = 10',
   \  'let g:ale_loclist_msg_format = ''%code: %%s''',
+  \  'let g:ale_lsp_root = {}',
   \  'let g:ale_max_buffer_history_size = 20',
   \  'let g:ale_max_signs = -1',
   \  'let g:ale_maximum_file_size = 0',

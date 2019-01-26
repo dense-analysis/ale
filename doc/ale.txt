@@ -1572,6 +1572,22 @@ b:ale_loclist_msg_format                             *b:ale_loclist_msg_format*
 
   The strings for configuring `%severity%` are also used for this option.
 
+g:ale_lsp_root                                                 *g:ale_lsp_root*
+b:ale_lsp_root                                                 *b:ale_lsp_root*
+
+  Type: |Dictionary| or |String|
+  Default: {}
+
+  This option is used to determine the project root for the LSP linter. If the
+  value is a |Dictionary|, it maps a linter to either a string containing the
+  project root or a |Funcref| to call to look up the root. The funcref is
+  provided the buffer number as its argument.
+
+  The buffer-specific variable may additionally be a string containing the
+  project root itself.
+
+  If neither variable yields a result, a linter-specific function is invoked to
+  detect a project root. If this, too, yields no result, the linter is disabled.
 
 g:ale_max_buffer_history_size                   *g:ale_max_buffer_history_size*
 
