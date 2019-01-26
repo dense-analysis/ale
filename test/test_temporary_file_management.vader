@@ -13,21 +13,21 @@ Before:
     " We are registering a temporary file, so we should delete it.
     let g:filename = tempname()
     call writefile(['foo'], g:filename)
-    call ale#engine#ManageFile(a:buffer, g:filename)
+    call ale#command#ManageFile(a:buffer, g:filename)
 
     " We are registering this directory appropriately, so we should delete
     " the whole thing.
     let g:directory = tempname()
     call mkdir(g:directory)
     call writefile(['foo'], g:directory . '/bar')
-    call ale#engine#ManageDirectory(a:buffer, g:directory)
+    call ale#command#ManageDirectory(a:buffer, g:directory)
 
     " We are registering this directory as temporary file, so we
     " shouldn't delete it.
     let g:preserved_directory = tempname()
     call mkdir(g:preserved_directory)
     call writefile(['foo'], g:preserved_directory . '/bar')
-    call ale#engine#ManageFile(a:buffer, g:preserved_directory)
+    call ale#command#ManageFile(a:buffer, g:preserved_directory)
 
     return g:command
   endfunction
@@ -42,6 +42,7 @@ Before:
   \ 'callback': 'TestCallback',
   \ 'command_callback': 'TestCommandCallback',
   \})
+  call ale#command#ClearData()
 
 After:
   Restore
@@ -58,6 +59,7 @@ After:
   delfunction TestCommandCallback
   delfunction TestCallback
   call ale#linter#Reset()
+  call ale#command#ClearData()
 
 Given foobar (Some imaginary filetype):
   foo
@@ -95,11 +97,11 @@ Execute(ALE should delete managed files when the buffer is removed):
   Assert !isdirectory(g:directory), 'The temporary directory was not deleted'
   Assert isdirectory(g:preserved_directory), 'The tempoary directory was not kept'
 
-Execute(ALE should create and delete directories for ale#engine#CreateDirectory()):
+Execute(ALE should create and delete directories for ale#command#CreateDirectory()):
   call ale#engine#InitBufferInfo(bufnr('%'))
 
-  let b:dir = ale#engine#CreateDirectory(bufnr('%'))
-  let b:dir2 = ale#engine#CreateDirectory(bufnr('%'))
+  let b:dir = ale#command#CreateDirectory(bufnr('%'))
+  let b:dir2 = ale#command#CreateDirectory(bufnr('%'))
 
   Assert isdirectory(b:dir), 'The directory was not created'
 
@@ -117,16 +119,26 @@ Execute(ALE should create and delete directories for ale#engine#CreateDirectory(
   Assert !isdirectory(b:dir), 'The directory was not deleted'
   Assert !isdirectory(b:dir2), 'The second directory was not deleted'
 
-Execute(ale#engine#ManageFile should add the file even if the buffer info hasn't be set yet):
-  let g:ale_buffer_info = {}
-  call ale#engine#ManageFile(bufnr(''), '/foo/bar')
-  AssertEqual
-  \ ['/foo/bar'],
-  \ g:ale_buffer_info[bufnr('')].temporary_file_list
+Execute(ale#command#ManageFile should add the file even if the buffer info hasn't be set yet):
+  call ale#command#ManageFile(bufnr(''), '/foo/bar')
 
-Execute(ale#engine#ManageDirectory should add the directory even if the buffer info hasn't be set yet):
-  let g:ale_buffer_info = {}
-  call ale#engine#ManageDirectory(bufnr(''), '/foo/bar')
   AssertEqual
-  \ ['/foo/bar'],
-  \ g:ale_buffer_info[bufnr('')].temporary_directory_list
+  \ {
+  \   bufnr(''): {
+  \     'file_list': ['/foo/bar'],
+  \     'directory_list': [],
+  \   },
+  \ },
+  \ ale#command#GetData()
+
+Execute(ale#command#ManageDirectory should add the directory even if the buffer info hasn't be set yet):
+  call ale#command#ManageDirectory(bufnr(''), '/foo/bar')
+
+  AssertEqual
+  \ {
+  \   bufnr(''): {
+  \     'file_list': [],
+  \     'directory_list': ['/foo/bar'],
+  \   },
+  \ },
+  \ ale#command#GetData()

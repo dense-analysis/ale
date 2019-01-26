@@ -7,7 +7,7 @@ call ale#Set('cuda_nvcc_options', '-std=c++11')
 function! ale_linters#cuda#nvcc#GetCommand(buffer) abort
     " Unused: use ale#util#nul_file
     " let l:output_file = ale#util#Tempname() . '.ii'
-    " call ale#engine#ManageFile(a:buffer, l:output_file)
+    " call ale#command#ManageFile(a:buffer, l:output_file)
     return '%e -cuda'
     \   . ale#Pad(ale#c#IncludeOptions(ale#c#FindLocalHeaderPaths(a:buffer)))
     \   . ale#Pad(ale#Var(a:buffer, 'cuda_nvcc_options'))

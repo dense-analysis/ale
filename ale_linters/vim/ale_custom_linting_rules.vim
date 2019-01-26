@@ -25,7 +25,7 @@ endfunction
 function! ale_linters#vim#ale_custom_linting_rules#GetCommand(buffer) abort
     let l:dir = s:GetALEProjectDir(a:buffer)
 
-    let l:temp_dir = ale#engine#CreateDirectory(a:buffer)
+    let l:temp_dir = ale#command#CreateDirectory(a:buffer)
     let l:temp_file = l:temp_dir . '/example.vim'
 
     let l:lines = getbufline(a:buffer, 1, '$')

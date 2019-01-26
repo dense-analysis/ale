@@ -2598,32 +2598,61 @@ ale#Queue(delay, [linting_flag, buffer_number])                   *ale#Queue()*
   is broken, or when developing ALE itself.
 
 
-ale#engine#CreateDirectory(buffer)               *ale#engine#CreateDirectory()*
+ale#command#CreateDirectory(buffer)             *ale#command#CreateDirectory()*
 
   Create a new temporary directory with a unique name, and manage that
-  directory with |ale#engine#ManageDirectory()|, so it will be removed as soon
+  directory with |ale#command#ManageDirectory()|, so it will be removed as soon
   as possible.
 
   It is advised to only call this function from a callback function for
   returning a linter command to run.
 
 
-ale#engine#CreateFile(buffer)                         *ale#engine#CreateFile()*
+ale#command#CreateFile(buffer)                       *ale#command#CreateFile()*
 
   Create a new temporary file with a unique name, and manage that file with
-  |ale#engine#ManageFile()|, so it will be removed as soon as possible.
+  |ale#command#ManageFile()|, so it will be removed as soon as possible.
 
   It is advised to only call this function from a callback function for
   returning a linter command to run.
 
 
-ale#engine#EscapeCommandPart(command_part)     *ale#engine#EscapeCommandPart()*
+ale#command#EscapeCommandPart(command_part)   *ale#command#EscapeCommandPart()*
 
   Given a |String|, return a |String| with all `%` characters replaced with
   `%%` instead. This function can be used to escape strings which are
   dynamically generated for commands before handing them over to ALE,
   so that ALE doesn't treat any strings with `%` formatting sequences
   specially.
+
+
+ale#command#ManageFile(buffer, filename)             *ale#command#ManageFile()*
+
+  Given a buffer number for a buffer currently running some linting tasks
+  and a filename, register a filename with ALE for automatic deletion after
+  linting is complete, or when Vim exits.
+
+  If Vim exits suddenly, ALE will try its best to remove temporary files, but
+  ALE cannot guarantee with absolute certainty that the files will be removed.
+  It is advised to create temporary files in the operating system's managed
+  temporary file directory, such as with |tempname()|.
+
+  Directory names should not be given to this function. ALE will only delete
+  files and symlinks given to this function. This is to prevent entire
+  directories from being accidentally deleted, say in cases of writing
+  `dir . '/' . filename` where `filename` is actually `''`, etc. ALE instead
+  manages directories separetly with the |ale#command#ManageDirectory| function.
+
+
+ale#command#ManageDirectory(buffer, directory)  *ale#command#ManageDirectory()*
+
+  Like |ale#command#ManageFile()|, but directories and all of their contents
+  will be deleted, akin to `rm -rf directory`, which could lead to loss of
+  data if mistakes are made. This command will also delete any temporary
+  filenames given to it.
+
+  It is advised to use |ale#command#ManageFile()| instead for deleting single
+  files.
 
 
 ale#engine#GetLoclist(buffer)                         *ale#engine#GetLoclist()*
@@ -2640,35 +2669,6 @@ ale#engine#IsCheckingBuffer(buffer)             *ale#engine#IsCheckingBuffer()*
   Given a buffer number, returns `1` when ALE is busy checking that buffer.
 
   This function can be used for status lines, tab names, etc.
-
-
-ale#engine#ManageFile(buffer, filename)               *ale#engine#ManageFile()*
-
-  Given a buffer number for a buffer currently running some linting tasks
-  and a filename, register a filename with ALE for automatic deletion after
-  linting is complete, or when Vim exits.
-
-  If Vim exits suddenly, ALE will try its best to remove temporary files, but
-  ALE cannot guarantee with absolute certainty that the files will be removed.
-  It is advised to create temporary files in the operating system's managed
-  temporary file directory, such as with |tempname()|.
-
-  Directory names should not be given to this function. ALE will only delete
-  files and symlinks given to this function. This is to prevent entire
-  directories from being accidentally deleted, say in cases of writing
-  `dir . '/' . filename` where `filename` is actually `''`, etc. ALE instead
-  manages directories separetly with the |ale#engine#ManageDirectory| function.
-
-
-ale#engine#ManageDirectory(buffer, directory)    *ale#engine#ManageDirectory()*
-
-  Like |ale#engine#ManageFile()|, but directories and all of their contents
-  will be deleted, akin to `rm -rf directory`, which could lead to loss of
-  data if mistakes are made. This command will also delete any temporary
-  filenames given to it.
-
-  It is advised to use |ale#engine#ManageFile()| instead for deleting single
-  files.
 
 
 ale#fix#registry#Add(name, func, filetypes, desc, [aliases])

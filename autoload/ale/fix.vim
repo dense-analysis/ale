@@ -66,11 +66,17 @@ function! ale#fix#ApplyQueuedFixes() abort
 endfunction
 
 function! ale#fix#ApplyFixes(buffer, output) abort
-    call ale#fix#RemoveManagedFiles(a:buffer)
-
     let l:data = g:ale_fix_buffer_data[a:buffer]
     let l:data.output = a:output
     let l:data.changes_made = l:data.lines_before != l:data.output
+    let l:data.done = 1
+
+    call ale#command#RemoveManagedFiles(a:buffer)
+
+    if !bufexists(a:buffer)
+        " Remove the buffer data when it doesn't exist.
+        call remove(g:ale_fix_buffer_data, a:buffer)
+    endif
 
     if l:data.changes_made && bufexists(a:buffer)
         let l:lines = getbufline(a:buffer, 1, '$')
@@ -82,13 +88,6 @@ function! ale#fix#ApplyFixes(buffer, output) abort
             return
         endif
     endif
-
-    if !bufexists(a:buffer)
-        " Remove the buffer data when it doesn't exist.
-        call remove(g:ale_fix_buffer_data, a:buffer)
-    endif
-
-    let l:data.done = 1
 
     " We can only change the lines of a buffer which is currently open,
     " so try and apply the fixes to the current buffer.
@@ -146,50 +145,6 @@ function! s:HandleExit(job_id, exit_code) abort
     \})
 endfunction
 
-function! ale#fix#ManageDirectory(buffer, directory) abort
-    call add(g:ale_fix_buffer_data[a:buffer].temporary_directory_list, a:directory)
-endfunction
-
-function! ale#fix#RemoveManagedFiles(buffer) abort
-    if !has_key(g:ale_fix_buffer_data, a:buffer)
-        return
-    endif
-
-    " We can't delete anything in a sandbox, so wait until we escape from
-    " it to delete temporary files and directories.
-    if ale#util#InSandbox()
-        return
-    endif
-
-    " Delete directories like `rm -rf`.
-    " Directories are handled differently from files, so paths that are
-    " intended to be single files can be set up for automatic deletion without
-    " accidentally deleting entire directories.
-    for l:directory in g:ale_fix_buffer_data[a:buffer].temporary_directory_list
-        call delete(l:directory, 'rf')
-    endfor
-
-    let g:ale_fix_buffer_data[a:buffer].temporary_directory_list = []
-endfunction
-
-function! s:CreateTemporaryFileForJob(input, buffer, temporary_file) abort
-    if empty(a:temporary_file)
-        " There is no file, so we didn't create anything.
-        return 0
-    endif
-
-    let l:temporary_directory = fnamemodify(a:temporary_file, ':h')
-    " Create the temporary directory for the file, unreadable by 'other'
-    " users.
-    call mkdir(l:temporary_directory, '', 0750)
-    " Automatically delete the directory later.
-    call ale#fix#ManageDirectory(a:buffer, l:temporary_directory)
-    " Write the buffer out to a file.
-    call ale#util#Writefile(a:buffer, a:input, a:temporary_file)
-
-    return 1
-endfunction
-
 function! s:RunJob(options) abort
     let l:buffer = a:options.buffer
     let l:command = a:options.command
@@ -223,7 +178,7 @@ function! s:RunJob(options) abort
     \   '',
     \   l:command,
     \   l:read_buffer,
-    \   function('s:CreateTemporaryFileForJob', [l:input]),
+    \   l:input,
     \)
 
     let l:command = ale#job#PrepareCommand(l:buffer, l:command)
@@ -469,8 +424,13 @@ function! ale#fix#Fix(buffer, fixing_flag, ...) abort
         call ale#job#Stop(l:job_id)
     endfor
 
+    " Mark the buffer as `done` so files can be removed.
+    if has_key(g:ale_fix_buffer_data, a:buffer)
+        let g:ale_fix_buffer_data[a:buffer].done = 1
+    endif
+
     " Clean up any files we might have left behind from a previous run.
-    call ale#fix#RemoveManagedFiles(a:buffer)
+    call ale#command#RemoveManagedFiles(a:buffer)
     call ale#fix#InitBufferData(a:buffer, a:fixing_flag)
 
     silent doautocmd <nomodeline> User ALEFixPre

@@ -73,7 +73,7 @@ function! ale_linters#java#javac#GetCommand(buffer, import_paths) abort
     endif
 
     " Create .class files in a temporary directory, which we will delete later.
-    let l:class_file_directory = ale#engine#CreateDirectory(a:buffer)
+    let l:class_file_directory = ale#command#CreateDirectory(a:buffer)
 
     " Always run javac from the directory the file is in, so we can resolve
     " relative paths correctly.

@@ -12,7 +12,7 @@ function! ale_linters#ada#gcc#GetCommand(buffer) abort
     " the .ali file may be created even if no code generation is attempted.
     " The output file name must match the source file name (except for the
     " extension), so here we cannot use the null file as output.
-    let l:tmp_dir = fnamemodify(ale#engine#CreateDirectory(a:buffer), ':p')
+    let l:tmp_dir = fnamemodify(ale#command#CreateDirectory(a:buffer), ':p')
     let l:out_file = l:tmp_dir . fnamemodify(bufname(a:buffer), ':t:r') . '.o'
 
     " -gnatc: Check syntax and semantics only (no code generation attempted)

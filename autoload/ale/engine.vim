@@ -74,15 +74,11 @@ function! ale#engine#InitBufferInfo(buffer) abort
         " job_list will hold the list of job IDs
         " active_linter_list will hold the list of active linter names
         " loclist holds the loclist items after all jobs have completed.
-        " temporary_file_list holds temporary files to be cleaned up
-        " temporary_directory_list holds temporary directories to be cleaned up
         let g:ale_buffer_info[a:buffer] = {
         \   'job_list': [],
         \   'active_linter_list': [],
         \   'active_other_sources_list': [],
         \   'loclist': [],
-        \   'temporary_file_list': [],
-        \   'temporary_directory_list': [],
         \}
 
         return 1
@@ -104,73 +100,25 @@ endfunction
 " Register a temporary file to be managed with the ALE engine for
 " a current job run.
 function! ale#engine#ManageFile(buffer, filename) abort
-    call ale#engine#InitBufferInfo(a:buffer)
-    call add(g:ale_buffer_info[a:buffer].temporary_file_list, a:filename)
+    " TODO: Emit deprecation warning here later.
+    call ale#command#ManageFile(a:buffer, a:filename)
 endfunction
 
 " Same as the above, but manage an entire directory.
 function! ale#engine#ManageDirectory(buffer, directory) abort
-    call ale#engine#InitBufferInfo(a:buffer)
-    call add(g:ale_buffer_info[a:buffer].temporary_directory_list, a:directory)
+    " TODO: Emit deprecation warning here later.
+    call ale#command#ManageDirectory(a:buffer, a:directory)
 endfunction
 
 function! ale#engine#CreateFile(buffer) abort
-    " This variable can be set to 1 in tests to stub this out.
-    if get(g:, 'ale_create_dummy_temporary_file')
-        return 'TEMP'
-    endif
-
-    let l:temporary_file = ale#util#Tempname()
-    call ale#engine#ManageFile(a:buffer, l:temporary_file)
-
-    return l:temporary_file
+    " TODO: Emit deprecation warning here later.
+    return ale#command#CreateFile(a:buffer)
 endfunction
 
 " Create a new temporary directory and manage it in one go.
 function! ale#engine#CreateDirectory(buffer) abort
-    " This variable can be set to 1 in tests to stub this out.
-    if get(g:, 'ale_create_dummy_temporary_file')
-        return 'TEMP_DIR'
-    endif
-
-    let l:temporary_directory = ale#util#Tempname()
-    " Create the temporary directory for the file, unreadable by 'other'
-    " users.
-    call mkdir(l:temporary_directory, '', 0750)
-    call ale#engine#ManageDirectory(a:buffer, l:temporary_directory)
-
-    return l:temporary_directory
-endfunction
-
-function! ale#engine#RemoveManagedFiles(buffer) abort
-    let l:info = get(g:ale_buffer_info, a:buffer, {})
-
-    " We can't delete anything in a sandbox, so wait until we escape from
-    " it to delete temporary files and directories.
-    if ale#util#InSandbox()
-        return
-    endif
-
-    " Delete files with a call akin to a plan `rm` command.
-    if has_key(l:info, 'temporary_file_list')
-        for l:filename in l:info.temporary_file_list
-            call delete(l:filename)
-        endfor
-
-        let l:info.temporary_file_list = []
-    endif
-
-    " Delete directories like `rm -rf`.
-    " Directories are handled differently from files, so paths that are
-    " intended to be single files can be set up for automatic deletion without
-    " accidentally deleting entire directories.
-    if has_key(l:info, 'temporary_directory_list')
-        for l:directory in l:info.temporary_directory_list
-            call delete(l:directory, 'rf')
-        endfor
-
-        let l:info.temporary_directory_list = []
-    endif
+    " TODO: Emit deprecation warning here later.
+    return ale#command#CreateDirectory(a:buffer)
 endfunction
 
 function! s:GatherOutput(job_id, line) abort
@@ -321,7 +269,7 @@ function! ale#engine#SetResults(buffer, loclist) abort
 
         " Automatically remove all managed temporary files and directories
         " now that all jobs have completed.
-        call ale#engine#RemoveManagedFiles(a:buffer)
+        call ale#command#RemoveManagedFiles(a:buffer)
 
         " Call user autocommands. This allows users to hook into ALE's lint cycle.
         silent doautocmd <nomodeline> User ALELintPost
@@ -472,26 +420,8 @@ endfunction
 " Given part of a command, replace any % with %%, so that no characters in
 " the string will be replaced with filenames, etc.
 function! ale#engine#EscapeCommandPart(command_part) abort
-    return substitute(a:command_part, '%', '%%', 'g')
-endfunction
-
-function! s:CreateTemporaryFileForJob(buffer, temporary_file) abort
-    if empty(a:temporary_file)
-        " There is no file, so we didn't create anything.
-        return 0
-    endif
-
-    let l:temporary_directory = fnamemodify(a:temporary_file, ':h')
-    " Create the temporary directory for the file, unreadable by 'other'
-    " users.
-    call mkdir(l:temporary_directory, '', 0750)
-    " Automatically delete the directory later.
-    call ale#engine#ManageDirectory(a:buffer, l:temporary_directory)
-    " Write the buffer out to a file.
-    let l:lines = getbufline(a:buffer, 1, '$')
-    call ale#util#Writefile(a:buffer, l:lines, a:temporary_file)
-
-    return 1
+    " TODO: Emit deprecation warning here later.
+    return ale#command#EscapeCommandPart(a:command_part)
 endfunction
 
 " Run a job.
@@ -517,7 +447,7 @@ function! s:RunJob(options) abort
     \   l:executable,
     \   l:command,
     \   l:read_buffer,
-    \   function('s:CreateTemporaryFileForJob'),
+    \   v:null,
     \)
 
     if l:file_created
