@@ -152,12 +152,45 @@ function! ale#lsp_linter#GetConfig(buffer, linter) abort
     return l:config
 endfunction
 
+function! ale#lsp_linter#FindProjectRoot(buffer, linter) abort
+    let l:buffer_ale_root = getbufvar(a:buffer, 'ale_lsp_root', {})
+
+    if type(l:buffer_ale_root) is v:t_string
+        return l:buffer_ale_root
+    endif
+
+    " Try to get a buffer-local setting for the root
+    if has_key(l:buffer_ale_root, a:linter.name)
+        let l:Root = l:buffer_ale_root[a:linter.name]
+
+        if type(l:Root) is v:t_func
+            return l:Root(a:buffer)
+        else
+            return l:Root
+        endif
+    endif
+
+    " Try to get a global setting for the root
+    if has_key(g:ale_lsp_root, a:linter.name)
+        let l:Root = g:ale_lsp_root[a:linter.name]
+
+        if type(l:Root) is v:t_func
+            return l:Root(a:buffer)
+        else
+            return l:Root
+        endif
+    endif
+
+    " Fall back to the linter-specific configuration
+    return ale#util#GetFunction(a:linter.project_root_callback)(a:buffer)
+endfunction
+
 " Given a buffer, an LSP linter, start up an LSP linter and get ready to
 " receive messages for the document.
 function! ale#lsp_linter#StartLSP(buffer, linter) abort
     let l:command = ''
     let l:address = ''
-    let l:root = ale#util#GetFunction(a:linter.project_root_callback)(a:buffer)
+    let l:root = ale#lsp_linter#FindProjectRoot(a:buffer, a:linter)
 
     if empty(l:root) && a:linter.lsp isnot# 'tsserver'
         " If there's no project root, then we can't check files with LSP,
