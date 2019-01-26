@@ -257,6 +257,7 @@ CONTENTS                                                         *ale-contents*
       cython..............................|ale-pyrex-cython|
     python................................|ale-python-options|
       autopep8............................|ale-python-autopep8|
+      bandit..............................|ale-python-bandit|
       black...............................|ale-python-black|
       flake8..............................|ale-python-flake8|
       isort...............................|ale-python-isort|
@@ -484,7 +485,7 @@ Notes:
 * proto: `protoc-gen-lint`
 * Pug: `pug-lint`
 * Puppet: `languageserver`, `puppet`, `puppet-lint`
-* Python: `autopep8`, `black`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pydocstyle`, `pyls`, `pyre`, `pylint`!!, `vulture`!!, `yapf`
+* Python: `autopep8`, `bandit`, `black`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pydocstyle`, `pyls`, `pyre`, `pylint`!!, `vulture`!!, `yapf`
 * QML: `qmlfmt`, `qmllint`
 * R: `lintr`
 * Racket: `raco`
