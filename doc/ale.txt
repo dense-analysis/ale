@@ -436,7 +436,7 @@ Notes:
 * CloudFormation: `cfn-python-lint`
 * CMake: `cmakelint`, `cmake-format`
 * CoffeeScript: `coffee`, `coffeelint`
-* Crystal: `crystal`!!
+* Crystal: `ameba`!!, `crystal`!!
 * CSS: `csslint`, `prettier`, `stylelint`
 * Cucumber: `cucumber`
 * Cython (pyrex filetype): `cython`

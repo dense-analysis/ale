@@ -115,7 +115,7 @@ formatting.
 | CloudFormation | [cfn-python-lint](https://github.com/awslabs/cfn-python-lint) |
 | CMake | [cmakelint](https://github.com/richq/cmake-lint), [cmake-format](https://github.com/cheshirekow/cmake_format) |
 | CoffeeScript | [coffee](http://coffeescript.org/), [coffeelint](https://www.npmjs.com/package/coffeelint) |
-| Crystal | [crystal](https://crystal-lang.org/) !! |
+| Crystal | [ameba](https://github.com/veelenga/ameba) !!, [crystal](https://crystal-lang.org/) !! |
 | CSS | [csslint](http://csslint.net/), [prettier](https://github.com/prettier/prettier), [stylelint](https://github.com/stylelint/stylelint) |
 | Cucumber | [cucumber](https://cucumber.io/) |
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
