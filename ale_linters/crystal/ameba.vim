@@ -11,13 +11,6 @@ function! ale_linters#crystal#ameba#GetCommand(buffer) abort
     \   .  ale#Escape(expand('#' . a:buffer . ':p'))
 endfunction
 
-call ale#linter#Define('crystal', {
-\   'name': 'ameba',
-\   'executable_callback': ale#VarFunc('crystal_ameba_executable'),
-\   'command_callback': 'ale_linters#crystal#ameba#GetCommand',
-\   'callback': 'ale_linters#crystal#ameba#HandleAmebaOutput',
-\})
-
 " Handle output from ameba
 function! ale_linters#crystal#ameba#HandleAmebaOutput(buffer, lines) abort
     if len(a:lines) == 0
@@ -54,3 +47,11 @@ function! ale_linters#crystal#ameba#HandleAmebaOutput(buffer, lines) abort
 
     return l:output
 endfunction
+
+call ale#linter#Define('crystal', {
+\   'name': 'ameba',
+\   'executable_callback': ale#VarFunc('crystal_ameba_executable'),
+\   'command_callback': 'ale_linters#crystal#ameba#GetCommand',
+\   'callback': 'ale_linters#crystal#ameba#HandleAmebaOutput',
+\   'lint_file': 1,
+\})
