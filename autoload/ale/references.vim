@@ -1,4 +1,5 @@
 let s:references_map = {}
+let s:use_relative_paths = 0
 
 " Used to get the references map in tests.
 function! ale#references#GetMap() abort
@@ -21,6 +22,9 @@ function! ale#references#HandleTSServerResponse(conn_id, response) abort
 
         if get(a:response, 'success', v:false) is v:true
             let l:item_list = []
+            let l:options = {
+            \ 'use_relative_paths': s:use_relative_paths
+            \}
 
             for l:response_item in a:response.body.refs
                 call add(l:item_list, {
@@ -34,7 +38,7 @@ function! ale#references#HandleTSServerResponse(conn_id, response) abort
             if empty(l:item_list)
                 call ale#util#Execute('echom ''No references found.''')
             else
-                call ale#preview#ShowSelection(l:item_list)
+                call ale#preview#ShowSelection(l:item_list, l:options)
             endif
         endif
     endif
@@ -48,6 +52,9 @@ function! ale#references#HandleLSPResponse(conn_id, response) abort
         " The result can be a Dictionary item, a List of the same, or null.
         let l:result = get(a:response, 'result', [])
         let l:item_list = []
+        let l:options = {
+        \ 'use_relative_paths': s:use_relative_paths
+        \}
 
         for l:response_item in l:result
             call add(l:item_list, {
@@ -60,7 +67,7 @@ function! ale#references#HandleLSPResponse(conn_id, response) abort
         if empty(l:item_list)
             call ale#util#Execute('echom ''No references found.''')
         else
-            call ale#preview#ShowSelection(l:item_list)
+            call ale#preview#ShowSelection(l:item_list, l:options)
         endif
     endif
 endfunction
@@ -115,7 +122,17 @@ function! s:FindReferences(linter) abort
     \]))
 endfunction
 
-function! ale#references#Find() abort
+function! ale#references#Find(...) abort
+    let s:use_relative_paths = 0
+
+    if len(a:000) > 0
+        for l:option in a:000
+            if l:option == '-relative'
+                let s:use_relative_paths = 1
+            endif
+        endfor
+    endif
+
     for l:linter in ale#linter#Get(&filetype)
         if !empty(l:linter.lsp)
             call s:FindReferences(l:linter)

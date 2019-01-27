@@ -199,7 +199,7 @@ command! -bar ALEGoToTypeDefinitionInSplit :call ale#definition#GoToType({'open_
 command! -bar ALEGoToTypeDefinitionInVSplit :call ale#definition#GoToType({'open_in': 'vertical-split'})
 
 " Find references for tsserver and LSP
-command! -bar ALEFindReferences :call ale#references#Find()
+command! -bar -nargs=* ALEFindReferences :call ale#references#Find(<f-args>)
 
 " Show summary information for the cursor.
 command! -bar ALEHover :call ale#hover#ShowAtCursor()
