@@ -578,8 +578,16 @@ let g:airline#extensions#ale#enabled = 1
 ```
 
 If you don't want to use vim-airline, you can implement your own statusline
-function without adding any other plugins. ALE provides a function for counting
-the number of problems for this purpose, named `ale#statusline#Count`.
+function without adding any other plugins. ALE provides some functions to 
+assist in this endeavour, including:
+
+* `ale#statusline#Count`: Which returns the number of problems found by ALE
+  for a specified buffer.
+* `ale#statusline#FirstProblem`: Which returns a dictionary containing the
+  full loclist details of the first problem of a specified type found by ALE 
+  in a buffer. (e.g. The first style warning in the current buffer.)
+  This can be useful for displaying more detailed information such as the
+  line number of the first problem in a file.
 
 Say you want to display all errors as one figure, and all non-errors as another
 figure. You can do the following:
@@ -601,7 +609,8 @@ endfunction
 set statusline=%{LinterStatus()}
 ```
 
-See `:help ale#statusline#Count()` for more information.
+See `:help ale#statusline#Count()` or `:help ale#statusline#FirstProblem()`
+for more information.
 
 <a name="faq-lightline"></a>
 
