@@ -17,6 +17,10 @@ Execute(GetVersion should cache the version):
   AssertEqual [3, 4, 7], ale#semver#GetVersion('dummy', ['Version 3.4.7'])
   AssertEqual [3, 4, 7], ale#semver#GetVersion('dummy', [])
 
+Execute(GetVersion should tolerate missing patch numbers):
+  " This goes against the semver spec, but we handle it anyway.
+  AssertEqual [3, 4, 0], ale#semver#GetVersion('dummy', ['Version 3.4'])
+
 Execute(HasVersion should return 1 when the version has been cached):
   call ale#semver#GetVersion('dummy', [])
   AssertEqual 0, ale#semver#HasVersion('dummy')
