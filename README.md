@@ -579,7 +579,7 @@ If you don't want to use vim-airline, you can implement your own statusline
 function without adding any other plugins. ALE provides some functions to 
 assist in this endeavour, including:
 
-* `ale#statusline#Count`: Which returns the number of problems found by ale
+* `ale#statusline#Count`: Which returns the number of problems found by ALE
   for a specified buffer.
 * `ale#statusline#FirstProblem`: Which returns a dictionary containing the
   full loclist details of the first problem of a specified type found by ale 
