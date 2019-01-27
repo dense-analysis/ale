@@ -1,5 +1,4 @@
 let s:references_map = {}
-let s:use_relative_paths = 0
 
 " Used to get the references map in tests.
 function! ale#references#GetMap() abort
@@ -18,13 +17,10 @@ endfunction
 function! ale#references#HandleTSServerResponse(conn_id, response) abort
     if get(a:response, 'command', '') is# 'references'
     \&& has_key(s:references_map, a:response.request_seq)
-        call remove(s:references_map, a:response.request_seq)
+        let l:options = remove(s:references_map, a:response.request_seq)
 
         if get(a:response, 'success', v:false) is v:true
             let l:item_list = []
-            let l:options = {
-            \ 'use_relative_paths': s:use_relative_paths
-            \}
 
             for l:response_item in a:response.body.refs
                 call add(l:item_list, {
@@ -47,14 +43,11 @@ endfunction
 function! ale#references#HandleLSPResponse(conn_id, response) abort
     if has_key(a:response, 'id')
     \&& has_key(s:references_map, a:response.id)
-        call remove(s:references_map, a:response.id)
+        let l:options = remove(s:references_map, a:response.id)
 
         " The result can be a Dictionary item, a List of the same, or null.
         let l:result = get(a:response, 'result', [])
         let l:item_list = []
-        let l:options = {
-        \ 'use_relative_paths': s:use_relative_paths
-        \}
 
         for l:response_item in l:result
             call add(l:item_list, {
@@ -72,7 +65,7 @@ function! ale#references#HandleLSPResponse(conn_id, response) abort
     endif
 endfunction
 
-function! s:OnReady(linter, lsp_details, line, column, ...) abort
+function! s:OnReady(linter, lsp_details, line, column, options, ...) abort
     let l:buffer = a:lsp_details.buffer
     let l:id = a:lsp_details.connection_id
 
@@ -98,10 +91,12 @@ function! s:OnReady(linter, lsp_details, line, column, ...) abort
 
     let l:request_id = ale#lsp#Send(l:id, l:message)
 
-    let s:references_map[l:request_id] = {}
+    let s:references_map[l:request_id] = {
+    \ 'use_relative_paths': has_key(a:options, 'use_relative_paths') ? a:options.use_relative_paths : 0
+    \}
 endfunction
 
-function! s:FindReferences(linter) abort
+function! s:FindReferences(linter, options) abort
     let l:buffer = bufnr('')
     let [l:line, l:column] = getcurpos()[1:2]
 
@@ -118,24 +113,24 @@ function! s:FindReferences(linter) abort
     let l:id = l:lsp_details.connection_id
 
     call ale#lsp#WaitForCapability(l:id, 'references', function('s:OnReady', [
-    \   a:linter, l:lsp_details, l:line, l:column
+    \   a:linter, l:lsp_details, l:line, l:column, a:options
     \]))
 endfunction
 
 function! ale#references#Find(...) abort
-    let s:use_relative_paths = 0
+    let l:options = {}
 
     if len(a:000) > 0
         for l:option in a:000
             if l:option == '-relative'
-                let s:use_relative_paths = 1
+                let l:options.use_relative_paths = 1
             endif
         endfor
     endif
 
     for l:linter in ale#linter#Get(&filetype)
         if !empty(l:linter.lsp)
-            call s:FindReferences(l:linter)
+            call s:FindReferences(l:linter, l:options)
         endif
     endfor
 endfunction
