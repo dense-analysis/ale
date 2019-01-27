@@ -183,7 +183,17 @@ Execute(tsserver reference requests should be sent):
   AssertEqual
   \ [[0, 'ts@references', {'file': expand('%:p'), 'line': 2, 'offset': 5}]],
   \ g:message_list
-  AssertEqual {'42': {}}, ale#references#GetMap()
+  AssertEqual {'42': {'use_relative_paths': 0}}, ale#references#GetMap()
+
+Execute('-relative' argument should enable 'use_relative_paths' in HandleTSServerResponse):
+  runtime ale_linters/typescript/tsserver.vim
+  call setpos('.', [bufnr(''), 2, 5, 0])
+
+  ALEFindReferences -relative
+
+  call call(g:WaitCallback, [g:conn_id, '/foo/bar'])
+
+  AssertEqual {'42': {'use_relative_paths': 1}}, ale#references#GetMap()
 
 Given python(Some Python file):
   foo
@@ -279,4 +289,15 @@ Execute(LSP reference requests should be sent):
   \ ],
   \ g:message_list
 
-  AssertEqual {'42': {}}, ale#references#GetMap()
+  AssertEqual {'42': {'use_relative_paths': 0}}, ale#references#GetMap()
+
+Execute('-relative' argument should enable 'use_relative_paths' in HandleLSPResponse):
+  runtime ale_linters/python/pyls.vim
+  let b:ale_linters = ['pyls']
+  call setpos('.', [bufnr(''), 1, 5, 0])
+
+  ALEFindReferences -relative
+
+  call call(g:WaitCallback, [g:conn_id, '/foo/bar'])
+
+  AssertEqual {'42': {'use_relative_paths': 1}}, ale#references#GetMap()
