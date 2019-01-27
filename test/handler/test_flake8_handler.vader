@@ -258,3 +258,19 @@ Execute(E112 should be a syntax error):
   \ ale_linters#python#flake8#Handle(bufnr(''), [
   \   'foo.py:6:1: E112 expected an indented block',
   \ ])
+
+Execute(Compatibility with hacking which uses older style flake8):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 6,
+  \     'col': 1,
+  \     'vcol': 1,
+  \     'code': 'H306',
+  \     'type': 'W',
+  \     'text': 'imports not in alphabetical order (smtplib, io)',
+  \   },
+  \ ],
+  \ ale_linters#python#flake8#Handle(bufnr(''), [
+  \   'foo.py:6:1: H306: imports not in alphabetical order (smtplib, io)',
+  \ ])

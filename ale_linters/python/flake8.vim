@@ -89,7 +89,7 @@ function! ale_linters#python#flake8#Handle(buffer, lines) abort
     " Matches patterns line the following:
     "
     " stdin:6:6: E111 indentation is not a multiple of four
-    let l:pattern = '\v^[a-zA-Z]?:?[^:]+:(\d+):?(\d+)?: ([[:alnum:]]+) (.*)$'
+    let l:pattern = '\v^[a-zA-Z]?:?[^:]+:(\d+):?(\d+)?: ([[:alnum:]]+):? (.*)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
