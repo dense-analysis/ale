@@ -282,6 +282,9 @@ Execute(LSP reference requests should be sent):
   AssertEqual {'42': {}}, ale#references#GetMap()
 
 Execute(Show absolute paths by default):
+  runtime ale_linters/typescript/tsserver.vim
+  call setpos('.', [bufnr(''), 2, 5, 0])
+
   ALEFindReferences
 
   AssertEqual
@@ -291,6 +294,9 @@ Execute(Show absolute paths by default):
   \ g:options
 
 Execute(Show relative paths with -relative):
+  runtime ale_linters/typescript/tsserver.vim
+  call setpos('.', [bufnr(''), 2, 5, 0])
+
   ALEFindReferences -relative
 
   AssertEqual
