@@ -54,6 +54,7 @@ CONTENTS                                                         *ale-contents*
       cfn-python-lint.....................|ale-cloudformation-cfn-python-lint|
     cmake.................................|ale-cmake-options|
       cmakelint...........................|ale-cmake-cmakelint|
+      cmake-format........................|ale-cmake-cmakeformat|
     cpp...................................|ale-cpp-options|
       clang...............................|ale-cpp-clang|
       clangd..............................|ale-cpp-clangd|
@@ -432,7 +433,7 @@ Notes:
 * Chef: `foodcritic`
 * Clojure: `joker`
 * CloudFormation: `cfn-python-lint`
-* CMake: `cmakelint`
+* CMake: `cmakelint`, `cmake-format`
 * CoffeeScript: `coffee`, `coffeelint`
 * Crystal: `crystal`!!
 * CSS: `csslint`, `prettier`, `stylelint`
