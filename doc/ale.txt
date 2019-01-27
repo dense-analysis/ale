@@ -2643,6 +2643,17 @@ ale#command#EscapeCommandPart(command_part)   *ale#command#EscapeCommandPart()*
   specially.
 
 
+ale#command#ManageDirectory(buffer, directory)  *ale#command#ManageDirectory()*
+
+  Like |ale#command#ManageFile()|, but directories and all of their contents
+  will be deleted, akin to `rm -rf directory`, which could lead to loss of
+  data if mistakes are made. This command will also delete any temporary
+  filenames given to it.
+
+  It is advised to use |ale#command#ManageFile()| instead for deleting single
+  files.
+
+
 ale#command#ManageFile(buffer, filename)             *ale#command#ManageFile()*
 
   Given a buffer number for a buffer currently running some linting tasks
@@ -2659,17 +2670,6 @@ ale#command#ManageFile(buffer, filename)             *ale#command#ManageFile()*
   directories from being accidentally deleted, say in cases of writing
   `dir . '/' . filename` where `filename` is actually `''`, etc. ALE instead
   manages directories separetly with the |ale#command#ManageDirectory| function.
-
-
-ale#command#ManageDirectory(buffer, directory)  *ale#command#ManageDirectory()*
-
-  Like |ale#command#ManageFile()|, but directories and all of their contents
-  will be deleted, akin to `rm -rf directory`, which could lead to loss of
-  data if mistakes are made. This command will also delete any temporary
-  filenames given to it.
-
-  It is advised to use |ale#command#ManageFile()| instead for deleting single
-  files.
 
 
 ale#engine#GetLoclist(buffer)                         *ale#engine#GetLoclist()*
