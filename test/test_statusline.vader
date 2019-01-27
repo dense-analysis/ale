@@ -85,7 +85,7 @@ Execute (FirstProblem should read data from the cache):
   let g:ale_buffer_info = 
     \{"44": 
         \{'count': 0,
-         \'firsts':
+         \'first_problems':
               \{'error': {'lnum': 3},
               \'warning': {'lnum': 44},
               \'style_error': {'lnum': 22},

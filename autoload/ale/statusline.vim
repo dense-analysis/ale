@@ -71,14 +71,15 @@ function! ale#statusline#Update(buffer, loclist) abort
     let l:count[1] = l:count.total - l:count[0]
 
     let g:ale_buffer_info[a:buffer].count = l:count
-    let g:ale_buffer_info[a:buffer].firsts = l:first_problems
+    let g:ale_buffer_info[a:buffer].first_problems = l:first_problems
 endfunction
 
 " Get the counts for the buffer, and update the counts if needed.
 function! s:UpdateCacheIfNecessary(buffer) abort
     " Cache is cold, so manually ask for an update.
     if !has_key(g:ale_buffer_info[a:buffer], 'count')
-        call ale#statusline#Update(a:buffer, g:ale_buffer_info[a:buffer].loclist)
+        call ale#statusline#Update(a:buffer,
+            \ g:ale_buffer_info[a:buffer].loclist)
     endif
 endfunction
 
@@ -101,15 +102,15 @@ function! s:GetCounts(buffer) abort
     return g:ale_buffer_info[a:buffer].count
 endfunction
 
-" Get the dict of 'firsts', update the buffer info cache if necessary.
-function! s:GetFirsts(buffer) abort
+" Get the dict of first_problems, update the buffer info cache if necessary.
+function! s:GetFirstProblems(buffer) abort
     if !s:BufferCacheExists(a:buffer)
         return {}
     endif
 
     call s:UpdateCacheIfNecessary(a:buffer)
 
-    return g:ale_buffer_info[a:buffer].firsts
+    return g:ale_buffer_info[a:buffer].first_problems
 endfunction
 
 " Returns a Dictionary with counts for use in third party integrations.
@@ -121,11 +122,11 @@ endfunction
 " Returns a copy of the *first* locline instance of the specified problem
 " type. (so this would allow an external integration to know all the info
 " about the first style warning in the file, for example.)
-function! ale#statusline#FirstProblem(buffer, problem_type) abort
-    let l:firsts = s:GetFirsts(a:buffer)
+function! ale#statusline#FirstProblem(buffer, type) abort
+    let l:first_problems = s:GetFirstProblems(a:buffer)
 
-    if !empty(l:firsts) && has_key(l:firsts, a:problem_type)
-        return copy(l:firsts[a:problem_type])
+    if !empty(l:first_problems) && has_key(l:first_problems, a:type)
+        return copy(l:first_problems[a:type])
     endif
 
     return {}
