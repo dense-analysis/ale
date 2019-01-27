@@ -342,6 +342,17 @@ Execute(eslint should warn about ignored files by default):
   \  '/path/to/some/ignored.js:0:0: File ignored because of a matching ignore pattern. Use "--no-ignore" to override. [Warning]',
   \ ])
 
+  AssertEqual
+  \ [{
+  \    'lnum': 0,
+  \    'col': 0,
+  \    'type': 'W',
+  \    'text': 'File ignored by default. Use "--ignore-pattern ''!node_modules/*''" to override.',
+  \ }],
+  \ ale#handlers#eslint#Handle(bufnr(''), [
+  \  '/path/to/some/ignored.js:0:0: File ignored by default. Use "--ignore-pattern ''!node_modules/*''" to override. [Warning]',
+  \ ])
+
 Execute(eslint should not warn about ignored files when explicitly disabled):
   let g:ale_javascript_eslint_suppress_eslintignore = 1
 
@@ -349,6 +360,12 @@ Execute(eslint should not warn about ignored files when explicitly disabled):
   \ [],
   \ ale#handlers#eslint#Handle(bufnr(''), [
   \  '/path/to/some/ignored.js:0:0: File ignored because of a matching ignore pattern. Use "--no-ignore" to override. [Warning]',
+  \ ])
+
+  AssertEqual
+  \ [],
+  \ ale#handlers#eslint#Handle(bufnr(''), [
+  \  '/path/to/some/ignored.js:0:0: File ignored by default. Use "--ignore-pattern ''!node_modules/*''" to override. [Warning]',
   \ ])
 
 Execute(eslint should handle react errors correctly):
