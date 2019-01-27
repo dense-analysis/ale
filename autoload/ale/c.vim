@@ -221,7 +221,7 @@ function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
     let l:file_list = get(a:file_lookup, l:basename, [])
 
     for l:item in l:file_list
-        if bufnr(l:item.file) is a:buffer
+        if bufnr(l:item.file) is a:buffer && has_key(l:item, 'command')
             return ale#c#ParseCFlags(l:item.directory, l:item.command)
         endif
     endfor
@@ -234,6 +234,7 @@ function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
 
     for l:item in l:dir_list
         if ale#path#Simplify(fnamemodify(l:item.file, ':h')) is? l:dir
+        \&& has_key(l:item, 'command')
             return ale#c#ParseCFlags(l:item.directory, l:item.command)
         endif
     endfor

@@ -167,6 +167,18 @@ Execute(ParseCompileCommandsFlags should parse some basic flags):
   \   },
   \ ] }, {})
 
+Execute(ParseCompileCommandsFlags should tolerate items without commands):
+  noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
+
+  AssertEqual
+  \ '',
+  \ ale#c#ParseCompileCommandsFlags(bufnr(''), { "xmms2-mpris.c": [
+  \   {
+  \     'directory': '/foo/bar/xmms2-mpris',
+  \     'file': '/foo/bar/xmms2-mpris/src/xmms2-mpris.c',
+  \   },
+  \ ] }, {})
+
 Execute(ParseCompileCommandsFlags should fall back to files in the same directory):
   noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
 
