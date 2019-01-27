@@ -122,7 +122,7 @@ let s:default_registry = {
 \   },
 \   'stylelint': {
 \       'function': 'ale#fixers#stylelint#Fix',
-\       'suggested_filetypes': ['css', 'sass', 'scss', 'stylus'],
+\       'suggested_filetypes': ['css', 'sass', 'scss', 'sugarss', 'stylus'],
 \       'description': 'Fix stylesheet files using stylelint --fix.',
 \   },
 \   'swiftformat': {

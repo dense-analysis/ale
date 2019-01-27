@@ -324,6 +324,8 @@ CONTENTS                                                         *ale-contents*
       sqlfmt..............................|ale-sql-sqlfmt|
     stylus................................|ale-stylus-options|
       stylelint...........................|ale-stylus-stylelint|
+    sugarss...............................|ale-sugarss-options|
+      stylelint...........................|ale-sugarss-stylelint|
     tcl...................................|ale-tcl-options|
       nagelfar............................|ale-tcl-nagelfar|
     terraform.............................|ale-terraform-options|
@@ -502,13 +504,14 @@ Notes:
 * RPM spec: `rpmlint`
 * Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`, `rufo`, `solargraph`, `standardrb`
 * Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|), `rustfmt`
-* SASS: `sass-lint`, `stylelint`
+* Sass: `sass-lint`, `stylelint`
 * SCSS: `prettier`, `sass-lint`, `scss-lint`, `stylelint`
 * Scala: `fsc`, `sbtserver`, `scalac`, `scalafmt`, `scalastyle`
 * Slim: `slim-lint`
 * SML: `smlnj`
 * Solidity: `solhint`, `solium`
 * Stylus: `stylelint`
+* SugarSS: `stylelint`
 * SQL: `sqlint`, `sqlfmt`
 * Swift: `swiftlint`, `swiftformat`
 * Tcl: `nagelfar`!!
@@ -2785,7 +2788,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                            and have been checked at least once.
 
                            Temporary files in directories used for Vim
-                           temporary files with `tempname()` will be asssumed
+                           temporary files with `tempname()` will be assumed
                            to be the buffer being checked, unless the `bufnr`
                            key is also set with a valid number for some other
                            buffer.
