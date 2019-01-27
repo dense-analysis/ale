@@ -187,6 +187,7 @@ CONTENTS                                                         *ale-contents*
       languageserver......................|ale-kotlin-languageserver|
     latex.................................|ale-latex-options|
       write-good..........................|ale-latex-write-good|
+      textlint............................|ale-latex-textlint|
     less..................................|ale-less-options|
       lessc...............................|ale-less-lessc|
       prettier............................|ale-less-prettier|
@@ -468,7 +469,7 @@ Notes:
 * JSON: `fixjson`, `jsonlint`, `jq`, `prettier`
 * Julia: `languageserver`
 * Kotlin: `kotlinc`!!, `ktlint`!!, `languageserver`
-* LaTeX (tex): `alex`!!, `chktex`, `lacheck`, `proselint`, `redpen`, `vale`, `write-good`
+* LaTeX (tex): `alex`!!, `chktex`, `lacheck`, `proselint`, `redpen`, `vale`, `write-good`, `textlint`
 * Less: `lessc`, `prettier`, `stylelint`
 * LLVM: `llc`
 * Lua: `luac`, `luacheck`
