@@ -583,7 +583,7 @@ assist in this endeavour, including:
   for a specified buffer.
 * `ale#statusline#FirstProblem`: Which returns a dictionary containing the
   full loclist details of the first problem of a specified type found by ale 
-  in a buffer (for example: The first style warning in the current buffer.)
+  in a buffer. (e.g. The first style warning in the current buffer.)
   This can be useful for displaying more detailed information such as the
   line number of the first problem in a file.
 
