@@ -122,7 +122,7 @@ function! ale#references#Find(...) abort
 
     if len(a:000) > 0
         for l:option in a:000
-            if l:option ==? '-relative'
+            if l:option is? '-relative'
                 let l:options.use_relative_paths = 1
             endif
         endfor
