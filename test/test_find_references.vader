@@ -8,6 +8,7 @@ Before:
   let g:message_list = []
   let g:preview_called = 0
   let g:item_list = []
+  let g:options = {}
   let g:capability_checked = ''
   let g:conn_id = v:null
   let g:WaitCallback = v:null
@@ -48,9 +49,10 @@ Before:
     call add(g:expr_list, a:expr)
   endfunction
 
-  function! ale#preview#ShowSelection(item_list) abort
+  function! ale#preview#ShowSelection(item_list, options) abort
     let g:preview_called = 1
     let g:item_list = a:item_list
+    let g:options = a:options
   endfunction
 
 After:
@@ -70,6 +72,7 @@ After:
   unlet! g:message_list
   unlet! g:expr_list
   unlet! b:ale_linters
+  unlet! g:options
   unlet! g:item_list
   unlet! g:preview_called
 
@@ -180,7 +183,17 @@ Execute(tsserver reference requests should be sent):
   AssertEqual
   \ [[0, 'ts@references', {'file': expand('%:p'), 'line': 2, 'offset': 5}]],
   \ g:message_list
-  AssertEqual {'42': {}}, ale#references#GetMap()
+  AssertEqual {'42': {'use_relative_paths': 0}}, ale#references#GetMap()
+
+Execute('-relative' argument should enable 'use_relative_paths' in HandleTSServerResponse):
+  runtime ale_linters/typescript/tsserver.vim
+  call setpos('.', [bufnr(''), 2, 5, 0])
+
+  ALEFindReferences -relative
+
+  call call(g:WaitCallback, [g:conn_id, '/foo/bar'])
+
+  AssertEqual {'42': {'use_relative_paths': 1}}, ale#references#GetMap()
 
 Given python(Some Python file):
   foo
@@ -276,4 +289,15 @@ Execute(LSP reference requests should be sent):
   \ ],
   \ g:message_list
 
-  AssertEqual {'42': {}}, ale#references#GetMap()
+  AssertEqual {'42': {'use_relative_paths': 0}}, ale#references#GetMap()
+
+Execute('-relative' argument should enable 'use_relative_paths' in HandleLSPResponse):
+  runtime ale_linters/python/pyls.vim
+  let b:ale_linters = ['pyls']
+  call setpos('.', [bufnr(''), 1, 5, 0])
+
+  ALEFindReferences -relative
+
+  call call(g:WaitCallback, [g:conn_id, '/foo/bar'])
+
+  AssertEqual {'42': {'use_relative_paths': 1}}, ale#references#GetMap()
