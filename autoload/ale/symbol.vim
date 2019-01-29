@@ -97,7 +97,7 @@ function! ale#symbol#ParseArgs(args) abort
     let l:opts = []
 
     for l:arg in l:args
-        if l:arg =~ '^-'
+        if l:arg =~? '^-'
             call add(l:opts, l:arg)
         else
             break
