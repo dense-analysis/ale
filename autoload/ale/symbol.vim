@@ -92,30 +92,43 @@ function! s:Search(linter, buffer, query, options) abort
     endif
 endfunction
 
+function! ale#symbol#ParseArgs(args) abort
+    let l:args = split(a:args)
+    let l:opts = []
+
+    for l:arg in l:args
+        if l:arg =~ '^-'
+            call add(l:opts, l:arg)
+        else
+            break
+        endif
+    endfor
+
+    let l:query = join(l:args[len(l:opts):-1])
+
+    return [l:opts, l:query]
+endfunction
+
 function! ale#symbol#Search(args) abort
-    if type(a:args) isnot v:t_string || empty(a:args)
+    let [l:opts, l:query] = ale#symbol#ParseArgs(a:args)
+
+    if empty(l:query)
         throw 'A non-empty string must be provided!'
     endif
 
     let l:buffer = bufnr('')
-    let l:query = []
     let l:options = {}
 
-    " Separate arguments from flags
-    for l:arg in split(a:args)
-        if l:arg is? '-relative'
-            let l:options.use_relative_paths = 1
-        else
-            call add(l:query, l:arg)
-        endif
-    endfor
+    if index(l:opts, '-relative') > -1
+        let l:options.use_relative_paths = 1
+    endif
 
     " Set a flag so we only make one request.
     call setbufvar(l:buffer, 'ale_symbol_request_made', 0)
 
     for l:linter in ale#linter#Get(getbufvar(l:buffer, '&filetype'))
         if !empty(l:linter.lsp) && l:linter.lsp isnot# 'tsserver'
-            call s:Search(l:linter, l:buffer, join(l:query), l:options)
+            call s:Search(l:linter, l:buffer, l:query, l:options)
         endif
     endfor
 endfunction
