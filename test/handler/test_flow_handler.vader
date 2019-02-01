@@ -499,7 +499,8 @@ Execute(The flow handler should handle extra errors):
   \   'col': 35,
   \   'type': 'E',
   \   'text': 'props of React element `New`: This type is incompatible with object type',
-  \   'detail': 'Property `setVector` is incompatible: number  This type is incompatible with  function type ',
+  \   'detail': 'props of React element `New`: This type is incompatible with object type'
+  \     .  "\nProperty `setVector` is incompatible: number  This type is incompatible with  function type ",
   \ }
   \]
 

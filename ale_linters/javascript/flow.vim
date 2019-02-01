@@ -156,7 +156,8 @@ function! ale_linters#javascript#flow#Handle(buffer, lines) abort
         \}
 
         if has_key(l:error, 'extra')
-            let l:errorToAdd.detail = s:GetDetails(l:error)
+            let l:errorToAdd.detail = l:errorToAdd.text
+            \   . "\n" . s:GetDetails(l:error)
         endif
 
         call add(l:output, l:errorToAdd)
