@@ -269,6 +269,7 @@ CONTENTS                                                         *ale-contents*
       pycodestyle.........................|ale-python-pycodestyle|
       pydocstyle..........................|ale-python-pydocstyle|
       pyflakes............................|ale-python-pyflakes|
+      pylama..............................|ale-python-pylama|
       pylint..............................|ale-python-pylint|
       pyls................................|ale-python-pyls|
       pyre................................|ale-python-pyre|
