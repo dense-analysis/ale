@@ -532,6 +532,7 @@ Notes:
 * XML: `xmllint`
 * YAML: `prettier`, `swaglint`, `yamllint`
 * YANG: `yang-lsp`
+* Cypher: `cypher-lint`!!
 
 ===============================================================================
 3. Linting                                                           *ale-lint*
