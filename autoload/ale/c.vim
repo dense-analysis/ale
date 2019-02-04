@@ -202,7 +202,7 @@ function! s:GetLookupFromCompileCommandsFile(compile_commands_file) abort
         let l:file_lookup[l:basename] = get(l:file_lookup, l:basename, []) + [l:entry]
 
         let l:dirbasename = tolower(fnamemodify(l:entry.directory, ':p:h:t'))
-        let l:dir_lookup[l:dirbasename] = get(l:dir_lookup, l:basename, []) + [l:entry]
+        let l:dir_lookup[l:dirbasename] = get(l:dir_lookup, l:dirbasename, []) + [l:entry]
     endfor
 
     if !empty(l:file_lookup) && !empty(l:dir_lookup)
