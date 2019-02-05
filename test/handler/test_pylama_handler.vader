@@ -100,7 +100,7 @@ Execute(The pylama handler should handle tracebacks with parsable messages):
   \ [
   \   {
   \     'lnum': 1,
-  \     'text': 'An exception was thrown. See :ALEDetail',
+  \     'text': 'ParseError: Cannot parse file. (See :ALEDetail)',
   \     'detail': join([
   \       'Traceback (most recent call last):',
   \       '  File "/usr/local/lib/python2.7/site-packages/pylama/core.py", line 66, in run',
@@ -116,9 +116,6 @@ Execute(The pylama handler should handle tracebacks with parsable messages):
   \       '  File "/usr/local/lib/python2.7/site-packages/six.py", line 737, in raise_from',
   \       '    raise value',
   \       'ParseError: Cannot parse file.',
-  \       '',
-  \       'index.py:11:1: E302 expected 2 blank lines, found 1 [pycodestyle]',
-  \       'index.py:16:81: E501 line too long (96 > 80 characters) [pycodestyle]',
   \     ], "\n"),
   \   },
   \   {

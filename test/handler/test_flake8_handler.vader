@@ -113,7 +113,7 @@ Execute(The flake8 handler should handle stack traces):
   \ [
   \   {
   \     'lnum': 1,
-  \     'text': 'An exception was thrown. See :ALEDetail',
+  \     'text': 'ImportError: No module named parser (See :ALEDetail)',
   \     'detail': join([
   \       'Traceback (most recent call last):',
   \       '  File "/usr/local/bin/flake8", line 7, in <module>',

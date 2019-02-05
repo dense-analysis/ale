@@ -41,20 +41,11 @@ function! ale_linters#python#pylama#GetCommand(buffer) abort
 endfunction
 
 function! ale_linters#python#pylama#Handle(buffer, lines) abort
-    let l:output = []
-
     if empty(a:lines)
-        return l:output
+        return []
     endif
 
-    if a:lines[0] =~# '^Traceback'
-        call add(l:output, {
-        \   'lnum': 1,
-        \   'text': 'An exception was thrown. See :ALEDetail',
-        \   'detail': join(a:lines, "\n"),
-        \})
-    endif
-
+    let l:output = ale#python#HandleTraceback(a:lines, 1)
     let l:pattern = '\v^.{-}:([0-9]+):([0-9]+): ([A-Z][0-9]+)? ?(.*)$'
 
     " First letter of error code is a pylint-compatible message type
