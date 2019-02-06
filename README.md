@@ -211,6 +211,7 @@ formatting.
 | XML | [xmllint](http://xmlsoft.org/xmllint.html) |
 | YAML | [prettier](https://github.com/prettier/prettier), [swaglint](https://github.com/byCedric/swaglint), [yamllint](https://yamllint.readthedocs.io/) |
 | YANG | [yang-lsp](https://github.com/theia-ide/yang-lsp) |
+| Cypher | [cypher-lint](https://github.com/cleishm/libcypher-parser) !! |
 
 <a name="usage"></a>
 
