@@ -9,13 +9,19 @@
 " If there are no items or we have hit the end with wrapping off, an empty
 " List will be returned, otherwise a pair of [line_number, column_number] will
 " be returned.
-function! ale#loclist_jumping#FindNearest(direction, wrap) abort
+function! ale#loclist_jumping#FindNearest(direction, wrap, ...) abort
     let l:buffer = bufnr('')
     let l:pos = getcurpos()
     let l:info = get(g:ale_buffer_info, bufnr('%'), {'loclist': []})
     " Copy the list and filter to only the items in this buffer.
     let l:loclist = filter(copy(l:info.loclist), 'v:val.bufnr == l:buffer')
     let l:search_item = {'bufnr': l:buffer, 'lnum': l:pos[1], 'col': l:pos[2]}
+
+    if a:0 > 0
+        let l:filter = a:1
+    else
+        let l:filter = 'A'
+    endif
 
     " When searching backwards, so we can find the next smallest match.
     if a:direction is# 'before'
@@ -42,28 +48,47 @@ function! ale#loclist_jumping#FindNearest(direction, wrap) abort
         \)
 
         if a:direction is# 'before' && l:cmp_value < 0
-            return [l:item.lnum, l:item.col]
+            if l:filter is# 'A' || l:filter is# l:item.type
+                return [l:item.lnum, l:item.col]
+            endif
         endif
 
         if a:direction is# 'after' && l:cmp_value > 0
-            return [l:item.lnum, l:item.col]
+            if l:filter is# 'A' || l:filter is# l:item.type
+                return [l:item.lnum, l:item.col]
+            endif
         endif
     endfor
 
     " If we found nothing, and the wrap option is set to 1, then we should
     " wrap around the list of warnings/errors
-    if a:wrap && !empty(l:loclist)
-        let l:item = l:loclist[0]
-
-        return [l:item.lnum, l:item.col]
+    if a:wrap
+        for l:item in l:loclist
+            if l:filter is# 'A' || l:filter is# l:item.type
+                return [l:item.lnum, l:item.col]
+            endif
+        endfor
     endif
 
     return []
 endfunction
 
 " As before, find the nearest match, but position the cursor at it.
-function! ale#loclist_jumping#Jump(direction, wrap) abort
-    let l:nearest = ale#loclist_jumping#FindNearest(a:direction, a:wrap)
+function! ale#loclist_jumping#Jump(direction, ...) abort
+    if a:0 > 0
+        let l:wrap = a:1
+    else
+        let l:wrap = 0
+    endif
+
+    if a:0 > 1
+        let l:filter = a:2
+    else
+        let l:filter = 'A'  " A is for All -> no filter
+    endif
+
+    let l:nearest = ale#loclist_jumping#FindNearest(a:direction,
+    \   l:wrap, l:filter)
 
     if !empty(l:nearest)
         normal! m`

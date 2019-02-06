@@ -151,9 +151,12 @@ if g:ale_completion_enabled
 endif
 
 " Define commands for moving through warnings and errors.
-command! -bar ALEPrevious :call ale#loclist_jumping#Jump('before', 0)
+command! -bar -nargs=* ALEPrevious
+\    :call ale#loclist_jumping#Jump('before', <f-args>)
+command! -bar -nargs=* ALENext
+\    :call ale#loclist_jumping#Jump('after', <f-args>)
+
 command! -bar ALEPreviousWrap :call ale#loclist_jumping#Jump('before', 1)
-command! -bar ALENext :call ale#loclist_jumping#Jump('after', 0)
 command! -bar ALENextWrap :call ale#loclist_jumping#Jump('after', 1)
 command! -bar ALEFirst :call ale#loclist_jumping#JumpToIndex(0)
 command! -bar ALELast :call ale#loclist_jumping#JumpToIndex(-1)
@@ -220,6 +223,10 @@ nnoremap <silent> <Plug>(ale_previous) :ALEPrevious<Return>
 nnoremap <silent> <Plug>(ale_previous_wrap) :ALEPreviousWrap<Return>
 nnoremap <silent> <Plug>(ale_next) :ALENext<Return>
 nnoremap <silent> <Plug>(ale_next_wrap) :ALENextWrap<Return>
+nnoremap <silent> <Plug>(ale_next_error) :ALENext 0 E<Return>
+nnoremap <silent> <Plug>(ale_next_wrap_error) :ALENext 1 E<Return>
+nnoremap <silent> <Plug>(ale_next_warning) :ALENext 0 W<Return>
+nnoremap <silent> <Plug>(ale_next_wrap_warning) :ALENext 1 W<Return>
 nnoremap <silent> <Plug>(ale_first) :ALEFirst<Return>
 nnoremap <silent> <Plug>(ale_last) :ALELast<Return>
 nnoremap <silent> <Plug>(ale_toggle) :ALEToggle<Return>
