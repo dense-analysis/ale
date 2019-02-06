@@ -51,9 +51,9 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version_output) abort
         " filetype (scratch buffer), Prettier needs `parser` set to know how
         " to process the buffer.
         if ale#semver#GTE(l:version, [1, 16, 0])
-          let l:parser = 'babel'
+            let l:parser = 'babel'
         else
-          let l:parser = 'babylon'
+            let l:parser = 'babylon'
         endif
 
         let l:prettier_parsers = {

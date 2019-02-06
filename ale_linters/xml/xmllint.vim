@@ -29,27 +29,27 @@ function! ale_linters#xml#xmllint#Handle(buffer, lines) abort
         let l:match_message = matchlist(l:line, l:pattern_message)
 
         if !empty(l:match_message)
-          let l:line = l:match_message[2] + 0
-          let l:type = l:match_message[4] =~? 'warning' ? 'W' : 'E'
-          let l:text = l:match_message[3]
+            let l:line = l:match_message[2] + 0
+            let l:type = l:match_message[4] =~? 'warning' ? 'W' : 'E'
+            let l:text = l:match_message[3]
 
-          call add(l:output, {
-          \   'lnum': l:line,
-          \   'text': l:text,
-          \   'type': l:type,
-          \})
+            call add(l:output, {
+            \   'lnum': l:line,
+            \   'text': l:text,
+            \   'type': l:type,
+            \})
 
-          continue
+            continue
         endif
 
         " Parse column position
         let l:match_column_token = matchlist(l:line, l:pattern_column_token)
 
         if !empty(l:output) && !empty(l:match_column_token)
-          let l:previous = l:output[len(l:output) - 1]
-          let l:previous['col'] = len(l:match_column_token[0])
+            let l:previous = l:output[len(l:output) - 1]
+            let l:previous['col'] = len(l:match_column_token[0])
 
-          continue
+            continue
         endif
     endfor
 

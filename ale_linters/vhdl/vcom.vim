@@ -19,11 +19,11 @@ function! ale_linters#vhdl#vcom#Handle(buffer, lines) abort
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-      call add(l:output, {
-      \   'lnum': l:match[2] + 0,
-      \   'type': l:match[1] is? 'Error' ? 'E' : 'W',
-      \   'text': l:match[3],
-      \})
+        call add(l:output, {
+        \   'lnum': l:match[2] + 0,
+        \   'type': l:match[1] is? 'Error' ? 'E' : 'W',
+        \   'text': l:match[3],
+        \})
     endfor
 
     return l:output

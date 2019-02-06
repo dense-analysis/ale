@@ -16,11 +16,11 @@ function! ale_linters#verilog#xvlog#Handle(buffer, lines) abort
 
     " NOTE: `xvlog` only prints 'INFO' and 'ERROR' messages
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-      call add(l:output, {
-      \   'lnum': l:match[2] + 0,
-      \   'type': 'E',
-      \   'text': l:match[1],
-      \})
+        call add(l:output, {
+        \   'lnum': l:match[2] + 0,
+        \   'type': 'E',
+        \   'text': l:match[1],
+        \})
     endfor
 
     return l:output

@@ -53,7 +53,7 @@ function! ale_linters#python#pylint#Handle(buffer, lines) abort
 
         if l:code is# 'I0011'
             " Skip 'Locally disabling' message
-             continue
+            continue
         endif
 
         call add(l:output, {

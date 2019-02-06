@@ -7,13 +7,13 @@ call ale#Set('cpp_flawfinder_minlevel', 1)
 call ale#Set('c_flawfinder_error_severity', 6)
 
 function! ale_linters#cpp#flawfinder#GetCommand(buffer) abort
-   " Set the minimum vulnerability level for flawfinder to bother with
-   let l:minlevel = ' --minlevel=' . ale#Var(a:buffer, 'cpp_flawfinder_minlevel')
+    " Set the minimum vulnerability level for flawfinder to bother with
+    let l:minlevel = ' --minlevel=' . ale#Var(a:buffer, 'cpp_flawfinder_minlevel')
 
-   return '%e -CDQS'
-   \  . ale#Var(a:buffer, 'cpp_flawfinder_options')
-   \  . l:minlevel
-   \  . ' %t'
+    return '%e -CDQS'
+    \  . ale#Var(a:buffer, 'cpp_flawfinder_options')
+    \  . l:minlevel
+    \  . ' %t'
 endfunction
 
 call ale#linter#Define('cpp', {

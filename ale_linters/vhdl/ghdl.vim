@@ -6,7 +6,7 @@ call ale#Set('vhdl_ghdl_executable', 'ghdl')
 call ale#Set('vhdl_ghdl_options', '--std=08')
 
 function! ale_linters#vhdl#ghdl#GetCommand(buffer) abort
-   return '%e -s ' . ale#Pad(ale#Var(a:buffer, 'vhdl_ghdl_options')) . ' %t'
+    return '%e -s ' . ale#Pad(ale#Var(a:buffer, 'vhdl_ghdl_options')) . ' %t'
 endfunction
 
 function! ale_linters#vhdl#ghdl#Handle(buffer, lines) abort

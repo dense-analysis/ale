@@ -35,7 +35,7 @@ function! ale_linters#haskell#hie#GetCommand(buffer) abort
     let l:executable = ale#Var(a:buffer, 'haskell_hie_executable')
 
     return ale#handlers#haskell_stack#EscapeExecutable(l:executable, 'hie')
-\        . ' --lsp'
+    \   . ' --lsp'
 endfunction
 
 call ale#linter#Define('haskell', {

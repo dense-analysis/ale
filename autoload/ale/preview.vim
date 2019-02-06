@@ -52,7 +52,8 @@ function! ale#preview#ShowSelection(item_list, ...) abort
         let l:filename = l:item.filename
 
         if get(l:options, 'use_relative_paths')
-          let l:filename = substitute(l:item.filename, '^' . getcwd() . l:sep, '', '') " no-custom-checks
+            let l:cwd = getcwd() " no-custom-checks
+            let l:filename = substitute(l:filename, '^' . l:cwd . l:sep, '', '')
         endif
 
         call add(

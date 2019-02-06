@@ -78,8 +78,10 @@ endfunction
 function! s:UpdateCacheIfNecessary(buffer) abort
     " Cache is cold, so manually ask for an update.
     if !has_key(g:ale_buffer_info[a:buffer], 'count')
-        call ale#statusline#Update(a:buffer,
-            \ g:ale_buffer_info[a:buffer].loclist)
+        call ale#statusline#Update(
+        \   a:buffer,
+        \   g:ale_buffer_info[a:buffer].loclist
+        \)
     endif
 endfunction
 

@@ -55,9 +55,9 @@ endfunction
 
 function! s:RemoveModule(results) abort
     for l:item in a:results
-      if has_key(l:item, 'module')
-        call remove(l:item, 'module')
-      endif
+        if has_key(l:item, 'module')
+            call remove(l:item, 'module')
+        endif
     endfor
 endfunction
 

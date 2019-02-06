@@ -222,10 +222,10 @@ function! ale_linters#elm#make#GetExecutable(buffer) abort
 
     if l:is_test && l:is_v19
         return ale#node#FindExecutable(
-\           a:buffer,
-\           'elm_make',
-\           ['node_modules/.bin/elm-test', 'node_modules/.bin/elm']
-\       )
+        \   a:buffer,
+        \   'elm_make',
+        \   ['node_modules/.bin/elm-test', 'node_modules/.bin/elm']
+        \)
     else
         return ale#node#FindExecutable(a:buffer, 'elm_make', ['node_modules/.bin/elm'])
     endif

@@ -316,7 +316,7 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
 endfunction
 
 function! ale#completion#NullFilter(buffer, item) abort
-   return 1
+    return 1
 endfunction
 
 function! ale#completion#ParseLSPCompletions(response) abort

@@ -14,7 +14,7 @@ endfunction
 " Handle output from ameba
 function! ale_linters#crystal#ameba#HandleAmebaOutput(buffer, lines) abort
     if len(a:lines) == 0
-      return []
+        return []
     endif
 
     let l:errors = ale#util#FuzzyJSONDecode(a:lines[0], {})
@@ -32,7 +32,7 @@ function! ale_linters#crystal#ameba#HandleAmebaOutput(buffer, lines) abort
         let l:end_col = str2nr(l:error['end_location']['column'])
 
         if !l:end_col
-          let l:end_col = l:start_col + 1
+            let l:end_col = l:start_col + 1
         endif
 
         call add(l:output, {

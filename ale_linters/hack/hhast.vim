@@ -9,7 +9,7 @@ function! ale_linters#hack#hhast#GetProjectRoot(buffer) abort
     let l:hhconfig = ale#path#FindNearestFile(a:buffer, '.hhconfig')
 
     if empty(l:hhconfig)
-      return ''
+        return ''
     endif
 
     let l:root = fnamemodify(l:hhconfig, ':h')

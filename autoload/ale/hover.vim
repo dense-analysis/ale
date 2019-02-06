@@ -78,8 +78,8 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
         let l:result = l:result.contents
 
         if type(l:result) is v:t_string
-             " The result can be just a string.
-             let l:result = [l:result]
+            " The result can be just a string.
+            let l:result = [l:result]
         endif
 
         if type(l:result) is v:t_dict
