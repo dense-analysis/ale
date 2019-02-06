@@ -11,6 +11,7 @@ Before:
   let g:ale_enabled = 0
   let g:ale_echo_cursor = 0
   let g:ale_run_synchronously = 1
+  unlet! g:ale_run_synchronously_callbacks
   let g:ale_set_lists_synchronously = 1
   let g:ale_fix_buffer_data = {}
   let g:ale_fixers = {
@@ -57,6 +58,10 @@ Before:
 
   function ReplaceWithTempFile(buffer, done, lines) abort
     return {'command': 'echo x > %t', 'read_temporary_file': 1}
+  endfunction
+
+  function CatWithTempFile(buffer, done, lines) abort
+    return {'command': 'cat %t <(echo d)'}
   endfunction
 
   function RemoveLastLine(buffer, done, lines) abort
@@ -177,6 +182,7 @@ After:
   Restore
   unlet! g:ale_run_synchronously
   unlet! g:ale_set_lists_synchronously
+  unlet! g:ale_run_synchronously_callbacks
   unlet! g:ale_emulate_job_failure
   unlet! b:ale_fixers
   unlet! b:ale_fix_on_save
@@ -187,6 +193,7 @@ After:
   delfunction CatLine
   delfunction CatLineOneArg
   delfunction ReplaceWithTempFile
+  delfunction CatWithTempFile
   delfunction RemoveLastLine
   delfunction RemoveLastLineOneArg
   delfunction TestCallback
@@ -235,11 +242,13 @@ Given testft (A file with three lines):
 
 Execute(ALEFix should complain when there are no functions to call):
   ALEFix
+  call ale#test#FlushJobs()
   AssertEqual 'No fixers have been defined. Try :ALEFixSuggest', GetLastMessage()
 
 Execute(ALEFix should apply simple functions):
   let g:ale_fixers.testft = ['AddCarets']
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(The first function should be used):
   ^a
@@ -249,6 +258,7 @@ Expect(The first function should be used):
 Execute(ALEFix should apply simple functions in a chain):
   let g:ale_fixers.testft = ['AddCarets', 'AddDollars']
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(Both functions should be used):
   $^a
@@ -258,6 +268,7 @@ Expect(Both functions should be used):
 Execute(ALEFix should allow 0 to be returned to skip functions):
   let g:ale_fixers.testft = ['DoNothing', 'AddDollars']
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(Only the second function should be applied):
   $a
@@ -268,6 +279,7 @@ Execute(The * fixers shouldn't be used if an empty list is set for fixers):
   let g:ale_fixers.testft = []
   let g:ale_fixers['*'] = ['AddDollars']
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(Nothing should be changed):
   a
@@ -277,6 +289,7 @@ Expect(Nothing should be changed):
 Execute(* fixers should be used if no filetype is matched):
   let g:ale_fixers = {'*': ['AddDollars']}
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(The file should be changed):
   $a
@@ -290,6 +303,7 @@ Execute(ALEFix should allow commands to be run):
   else
     let g:ale_fixers.testft = ['CatLine']
     ALEFix
+    call ale#test#FlushJobs()
   endif
 
 Expect(An extra line should be added):
@@ -301,6 +315,7 @@ Expect(An extra line should be added):
 Execute(ALEFix should use fixers passed in commandline when provided):
   let g:ale_fixers.testft = ['RemoveLastLine']
   ALEFix AddCarets AddDollars
+  call ale#test#FlushJobs()
 
 Expect(Only fixers passed via command line should be run):
   $^a
@@ -315,10 +330,27 @@ Execute(ALEFix should allow temporary files to be read):
   else
     let g:ale_fixers.testft = ['ReplaceWithTempFile']
     ALEFix
+    call ale#test#FlushJobs()
   endif
 
 Expect(The line we wrote to the temporary file should be used here):
   x
+
+Execute(ALEFix should not read the temporary file when the option is not set):
+  if has('win32')
+    " Just skip this test on Windows, we can't run it.
+    call setline(1, ['a', 'b', 'c', 'd'])
+  else
+    let g:ale_fixers.testft = ['CatWithTempFile']
+    ALEFix
+    call ale#test#FlushJobs()
+  endif
+
+Expect(An extra line should be added):
+  a
+  b
+  c
+  d
 
 Execute(ALEFix should allow jobs and simple functions to be combined):
   if has('win32')
@@ -328,6 +360,7 @@ Execute(ALEFix should allow jobs and simple functions to be combined):
   else
     let g:ale_fixers.testft = ['ReplaceWithTempFile', 'AddDollars']
     ALEFix
+    call ale#test#FlushJobs()
   endif
 
 Expect(The lines from the temporary file should be modified):
@@ -340,6 +373,7 @@ Execute(ALEFix should send lines modified by functions to jobs):
   else
     let g:ale_fixers.testft = ['AddDollars', 'CatLine']
     ALEFix
+    call ale#test#FlushJobs()
   endif
 
 Expect(The lines should first be modified by the function, then the job):
@@ -352,6 +386,7 @@ Execute(ALEFix should skip commands when jobs fail to run):
   let g:ale_emulate_job_failure = 1
   let g:ale_fixers.testft = ['CatLine', 'AddDollars']
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(Only the second function should be applied):
   $a
@@ -361,6 +396,7 @@ Expect(Only the second function should be applied):
 Execute(ALEFix should handle strings for selecting a single function):
   let g:ale_fixers.testft = 'AddCarets'
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(The first function should be used):
   ^a
@@ -371,6 +407,7 @@ Execute(ALEFix should use functions from the registry):
   call ale#fix#registry#Add('add_carets', 'AddCarets', [], 'Add some carets')
   let g:ale_fixers.testft = ['add_carets']
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(The registry function should be used):
   ^a
@@ -380,6 +417,7 @@ Expect(The registry function should be used):
 Execute(ALEFix should be able to remove the last line for files):
   let g:ale_fixers.testft = ['RemoveLastLine']
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(There should be only two lines):
   a
@@ -388,6 +426,7 @@ Expect(There should be only two lines):
 Execute(ALEFix should accept funcrefs):
   let g:ale_fixers.testft = [function('RemoveLastLine')]
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(There should be only two lines):
   a
@@ -401,6 +440,7 @@ Execute(ALEFix should accept lambdas):
   else
     let g:ale_fixers.testft = [{buffer, done, lines -> lines + ['d']}]
     ALEFix
+    call ale#test#FlushJobs()
   endif
 
 Expect(There should be an extra line):
@@ -413,6 +453,7 @@ Execute(ALEFix should user buffer-local fixer settings):
   let g:ale_fixers.testft = ['AddCarets', 'AddDollars']
   let b:ale_fixers = {'testft': ['RemoveLastLine']}
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(There should be only two lines):
   a
@@ -422,6 +463,7 @@ Execute(ALEFix should allow Lists to be used for buffer-local fixer settings):
   let g:ale_fixers.testft = ['AddCarets', 'AddDollars']
   let b:ale_fixers = ['RemoveLastLine']
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(There should be only two lines):
   a
@@ -447,6 +489,7 @@ Execute(ALEFix should fix files on the save event):
 
   call SetUpLinters()
   call ale#events#SaveEvent(bufnr(''))
+  call ale#test#FlushJobs()
 
   " We should save the file.
   AssertEqual ['$a', '$b', '$c'], readfile('fix_test_file')
@@ -518,6 +561,7 @@ Execute(ALEFix should still lint with no linters to be applied):
 
   call SetUpLinters()
   call ale#events#SaveEvent(bufnr(''))
+  call ale#test#FlushJobs()
 
   Assert !filereadable('fix_test_file'), 'The file should not have been saved'
 
@@ -552,6 +596,7 @@ Execute(ALEFix should still lint when nothing was fixed on save):
 
   call SetUpLinters()
   call ale#events#SaveEvent(bufnr(''))
+  call ale#test#FlushJobs()
 
   Assert !filereadable('fix_test_file'), 'The file should not have been saved'
 
@@ -597,6 +642,7 @@ Execute(ale#fix#InitBufferData() should set up the correct data):
 Execute(ALEFix simple functions should be able to accept one argument, the buffer):
   let g:ale_fixers.testft = ['RemoveLastLineOneArg']
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(There should be only two lines):
   a
@@ -632,6 +678,7 @@ Execute(ALEFix functions returning jobs should be able to accept one argument):
   else
     let g:ale_fixers.testft = ['CatLine']
     ALEFix
+    call ale#test#FlushJobs()
   endif
 
 Expect(An extra line should be added):
@@ -643,22 +690,26 @@ Expect(An extra line should be added):
 Execute(ALE should print a message telling you something isn't a valid fixer when you type some nonsense):
   let g:ale_fixers.testft = ['CatLine', 'invalidname']
   ALEFix
+  call ale#test#FlushJobs()
 
   AssertEqual 'There is no fixer named `invalidname`. Check :ALEFixSuggest', GetLastMessage()
 
 Execute(ALE should complain about invalid fixers with minuses in the name):
   let g:ale_fixers.testft = ['foo-bar']
   ALEFix
+  call ale#test#FlushJobs()
 
   AssertEqual 'There is no fixer named `foo-bar`. Check :ALEFixSuggest', GetLastMessage()
 
 Execute(ALE should tolerate valid fixers with minuses in the name):
   let g:ale_fixers.testft = ['prettier-standard']
   ALEFix
+  call ale#test#FlushJobs()
 
 Execute(Test fixing with chained callbacks):
   let g:ale_fixers.testft = ['FirstChainCallback']
   ALEFix
+  call ale#test#FlushJobs()
 
   " The buffer shouldn't be piped in for earlier commands in the chain.
   AssertEqual
@@ -677,6 +728,7 @@ Expect(The echoed line should be added):
 Execute(Test fixing with chained callback where the first command is skipped):
   let g:ale_fixers.testft = ['FirstChainCallbackSkipped']
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(The default line should be added):
   a
@@ -687,6 +739,7 @@ Expect(The default line should be added):
 Execute(Test fixing with chained callback where the second command is skipped):
   let g:ale_fixers.testft = ['FirstChainCallbackSecondSkipped']
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(The default line should be added):
   a
@@ -697,6 +750,7 @@ Expect(The default line should be added):
 Execute(Test fixing with chained callback where the final callback is skipped):
   let g:ale_fixers.testft = ['ChainWhereLastIsSkipped']
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(The lines should be the same):
   a
@@ -706,6 +760,7 @@ Expect(The lines should be the same):
 Execute(Empty output should be ignored):
   let g:ale_fixers.testft = ['IgnoredEmptyOutput']
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(The lines should be the same):
   a
@@ -715,6 +770,7 @@ Expect(The lines should be the same):
 Execute(A temporary file shouldn't be piped into the command when disabled):
   let g:ale_fixers.testft = ['EchoLineNoPipe']
   ALEFix
+  call ale#test#FlushJobs()
 
   AssertEqual
   \ string(ale#job#PrepareCommand(bufnr(''), 'echo new line')),
@@ -731,6 +787,7 @@ Expect(The new line should be used):
 Execute(Post-processing should work):
   let g:ale_fixers.testft = ['FixWithJSONPostProcessing']
   ALEFix
+  call ale#test#FlushJobs()
 
 Expect(The lines in the JSON should be used):
   x
@@ -740,5 +797,7 @@ Expect(The lines in the JSON should be used):
 Execute(ALEFix should apply autocmds):
   let g:ale_fixers.testft = ['AddCarets']
   ALEFix
+  call ale#test#FlushJobs()
+
   AssertEqual g:pre_success, 1
   AssertEqual g:post_success, 1

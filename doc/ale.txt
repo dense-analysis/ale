@@ -2669,9 +2669,9 @@ ale#command#ManageDirectory(buffer, directory)  *ale#command#ManageDirectory()*
 
 ale#command#ManageFile(buffer, filename)             *ale#command#ManageFile()*
 
-  Given a buffer number for a buffer currently running some linting tasks
-  and a filename, register a filename with ALE for automatic deletion after
-  linting is complete, or when Vim exits.
+  Given a buffer number for a buffer currently running some linting or fixing
+  tasks and a filename, register a filename with ALE for automatic deletion
+  after linting or fixing is complete, or when Vim exits.
 
   If Vim exits suddenly, ALE will try its best to remove temporary files, but
   ALE cannot guarantee with absolute certainty that the files will be removed.
@@ -2682,7 +2682,7 @@ ale#command#ManageFile(buffer, filename)             *ale#command#ManageFile()*
   files and symlinks given to this function. This is to prevent entire
   directories from being accidentally deleted, say in cases of writing
   `dir . '/' . filename` where `filename` is actually `''`, etc. ALE instead
-  manages directories separetly with the |ale#command#ManageDirectory| function.
+  manages directories separately with the |ale#command#ManageDirectory| function.
 
 
 ale#engine#GetLoclist(buffer)                         *ale#engine#GetLoclist()*

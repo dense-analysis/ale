@@ -134,6 +134,7 @@ Given testft(A file with warnings/errors):
 
 Execute(The current signs should be set for running a job):
   ALELint
+  call ale#test#FlushJobs()
 
   AssertEqual
   \ [

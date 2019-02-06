@@ -3,7 +3,6 @@ Before:
   Save g:ale_buffer_info
   Save g:ale_echo_cursor
   Save g:ale_run_synchronously
-  Save g:ale_run_synchronously
   Save g:ale_set_highlights
   Save g:ale_set_loclist
   Save g:ale_set_quickfix
@@ -17,6 +16,7 @@ Before:
   let g:ale_echo_cursor = 0
 
   let g:ale_run_synchronously = 1
+  unlet! g:ale_run_synchronously_callbacks
   call setloclist(0, [])
 
   noautocmd let &filetype = 'foobar'
@@ -44,6 +44,8 @@ Before:
 
 After:
   Restore
+
+  unlet! g:ale_run_synchronously_callbacks
   delfunction TestCallback
 
   call ale#linter#Reset()
@@ -51,6 +53,7 @@ After:
 
 Execute(Error should be removed when the filetype changes to something else we cannot check):
   call ale#Queue(0)
+  call ale#test#FlushJobs()
   sleep 1ms
 
   AssertEqual 1, len(ale#test#GetLoclistWithoutModule())
@@ -58,6 +61,7 @@ Execute(Error should be removed when the filetype changes to something else we c
   noautocmd let &filetype = 'foobar2'
 
   call ale#Queue(0)
+  call ale#test#FlushJobs()
   sleep 1ms
 
   " We should get some items from the second filetype.
@@ -66,6 +70,7 @@ Execute(Error should be removed when the filetype changes to something else we c
   noautocmd let &filetype = 'xxx'
 
   call ale#Queue(0)
+  call ale#test#FlushJobs()
   sleep 1ms
 
   AssertEqual 0, len(ale#test#GetLoclistWithoutModule())

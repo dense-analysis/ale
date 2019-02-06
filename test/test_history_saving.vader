@@ -2,6 +2,10 @@ Before:
   Save g:ale_max_buffer_history_size
   Save g:ale_history_log_output
   Save g:ale_run_synchronously
+  Save g:ale_enabled
+
+  let g:ale_enabled = 1
+  let g:ale_run_synchronously = 1
 
   unlet! b:ale_fixers
   unlet! b:ale_enabled
@@ -68,27 +72,19 @@ Given foobar (Some imaginary filetype):
 Execute(History should be set when commands are run):
   AssertEqual 'foobar', &filetype
 
-  let g:expected_results = ['command', 'exit_code', 'job_id', 'status']
+  let b:ale_history = []
+  ALELint
+  call ale#test#FlushJobs()
 
-  " Retry this test until it works. This one can randomly fail.
-  for g:i in range(has('nvim-0.3') || has('win32') ? 5 : 1)
-    let b:ale_history = []
-    call ale#Queue(0)
-    call ale#engine#WaitForJobs(2000)
+  let g:history = filter(
+  \ copy(ale#history#Get(bufnr(''))),
+  \ 'v:val.job_id isnot# ''executable''',
+  \)
 
-    let g:history = filter(
-    \ copy(ale#history#Get(bufnr(''))),
-    \ 'v:val.job_id isnot# ''executable''',
-    \)
-
-    AssertEqual 1, len(g:history)
-
-    if sort(keys(g:history[0])) == g:expected_results
-      break
-    endif
-  endfor
-
-  AssertEqual g:expected_results, sort(keys(g:history[0]))
+  AssertEqual 1, len(g:history)
+  AssertEqual
+  \ ['command', 'exit_code', 'job_id', 'status'],
+  \ sort(keys(g:history[0]))
 
   if has('win32')
     AssertEqual 'cmd /s/c "echo command history test"', g:history[0].command
@@ -106,8 +102,8 @@ Execute(History should be not set when disabled):
 
   let g:ale_history_enabled = 0
 
-  call ale#Queue(0)
-  call ale#engine#WaitForJobs(2000)
+  ALELint
+  call ale#test#FlushJobs()
 
   AssertEqual [], ale#history#Get(bufnr(''))
 
@@ -115,24 +111,21 @@ Execute(History should include command output if logging is enabled):
   AssertEqual 'foobar', &filetype
 
   let g:ale_history_log_output = 1
-  let g:expected_results = ['command history test']
 
   " Retry this test until it works. This one can randomly fail.
-  for g:i in range(has('nvim-0.3') || has('win32') ? 5 : 1)
-    let b:ale_history = []
-    call ale#Queue(0)
-    call ale#engine#WaitForJobs(2000)
+  let b:ale_history = []
+  ALELint
+  call ale#test#FlushJobs()
 
-    let g:history = ale#history#Get(bufnr(''))
+  let g:history = ale#history#Get(bufnr(''))
 
-    AssertEqual 1, len(g:history)
-
-    if get(g:history[0], 'output', []) == g:expected_results
-      break
-    endif
-  endfor
-
-  AssertEqual g:expected_results, get(g:history[0], 'output', [])
+  AssertEqual 1, len(g:history)
+  AssertEqual
+  \ ['command history test'],
+  \ map(
+  \   copy(get(g:history[0], 'output', [])),
+  \   'substitute(v:val, ''[\r ]*$'', '''', ''g'')'
+  \ )
 
 Execute(History items should be popped after going over the max):
   let b:ale_history = map(range(20), '{''status'': ''started'', ''job_id'': v:val, ''command'': ''foobar''}')
@@ -169,9 +162,12 @@ Execute(The history should be updated when fixers are run):
 
   let b:ale_fixers = {'foobar': ['TestFixer']}
   let b:ale_enabled = 0
-  let g:ale_run_synchronously = 1
 
   ALEFix
+
+  AssertEqual ['started'], map(copy(b:ale_history), 'v:val.status')
+
+  call ale#test#FlushJobs()
 
   AssertEqual ['finished'], map(copy(b:ale_history), 'v:val.status')
 

@@ -9,6 +9,7 @@ Before:
   Save g:ale_set_signs
 
   let g:ale_run_synchronously = 1
+  unlet! g:ale_run_synchronously_callbacks
   let g:ale_set_highlights = 1
   let g:ale_set_signs = 1
   let g:ale_buffer_info = {}
@@ -64,6 +65,7 @@ Before:
 After:
   Restore
 
+  unlet! g:ale_run_synchronously_callbacks
   unlet! g:items
   unlet! b:ale_enabled
 
@@ -81,6 +83,7 @@ Given testft(A Javscript file with warnings/errors):
 
 Execute(Highlights should be set when a linter runs):
   ALELint
+  call ale#test#FlushJobs()
 
   AssertEqual
   \ [

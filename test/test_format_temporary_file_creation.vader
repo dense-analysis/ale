@@ -13,6 +13,7 @@ Before:
   let g:ale_echo_cursor = 0
   let g:ale_enabled = 1
   let g:ale_run_synchronously = 1
+  unlet! g:ale_run_synchronously_callbacks
   let g:ale_set_highlights = 0
   let g:ale_set_loclist = 0
   let g:ale_set_quickfix = 0
@@ -41,6 +42,7 @@ Before:
 After:
   Restore
 
+  unlet! g:ale_run_synchronously_callbacks
   unlet! g:output
   delfunction TestCallback
 
@@ -56,5 +58,6 @@ Execute(ALE should be able to read the %t file):
   AssertEqual 'foobar', &filetype
 
   ALELint
+  call ale#test#FlushJobs()
 
   AssertEqual ['foo', 'bar', 'baz'], g:output

@@ -10,6 +10,7 @@ Before:
   let g:ale_set_signs = 1
   let g:ale_set_lists_synchronously = 1
   let g:ale_run_synchronously = 1
+  unlet! g:ale_run_synchronously_callbacks
   let g:ale_pattern_options = {}
   let g:ale_pattern_options_enabled = 1
   let g:ale_set_balloons =
@@ -85,6 +86,7 @@ Before:
 After:
   Restore
 
+  unlet! g:ale_run_synchronously_callbacks
   unlet! g:expected_loclist
   unlet! g:expected_groups
   unlet! b:ale_enabled
@@ -113,6 +115,7 @@ Execute(ALEToggle should reset everything and then run again):
   AssertEqual 'foobar', &filetype
 
   ALELint
+  call ale#test#FlushJobs()
 
   " First check that everything is there...
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
@@ -135,6 +138,7 @@ Execute(ALEToggle should reset everything and then run again):
 
   " Toggle ALE on, everything should be set up and run again.
   ALEToggle
+  call ale#test#FlushJobs()
 
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
@@ -157,6 +161,7 @@ Execute(ALEToggle should skip filename keys and preserve them):
   \}
 
   ALELint
+  call ale#test#FlushJobs()
 
   " Now Toggle ALE off.
   ALEToggle
@@ -174,6 +179,7 @@ Execute(ALEToggle should skip filename keys and preserve them):
 
   " Toggle ALE on again.
   ALEToggle
+  call ale#test#FlushJobs()
 
   AssertEqual
   \ {
@@ -188,15 +194,18 @@ Execute(ALEToggle should skip filename keys and preserve them):
 
 Execute(ALEDisable should reset everything and stay disabled):
   ALELint
+  call ale#test#FlushJobs()
 
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
 
   ALEDisable
+  call ale#test#FlushJobs()
 
   AssertEqual [], ale#test#GetLoclistWithoutModule()
   AssertEqual 0, g:ale_enabled
 
   ALEDisable
+  call ale#test#FlushJobs()
 
   AssertEqual [], ale#test#GetLoclistWithoutModule()
   AssertEqual 0, g:ale_enabled
@@ -205,6 +214,7 @@ Execute(ALEEnable should enable ALE and lint again):
   let g:ale_enabled = 0
 
   ALEEnable
+  call ale#test#FlushJobs()
 
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual 1, g:ale_enabled
@@ -213,6 +223,7 @@ Execute(ALEReset should reset everything for a buffer):
   AssertEqual 'foobar', &filetype
 
   ALELint
+  call ale#test#FlushJobs()
 
   " First check that everything is there...
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
@@ -224,6 +235,7 @@ Execute(ALEReset should reset everything for a buffer):
 
   " Now Toggle ALE off.
   ALEReset
+  call ale#test#FlushJobs()
 
   " Everything should be cleared.
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
@@ -237,6 +249,7 @@ Execute(ALEToggleBuffer should reset everything and then run again):
   AssertEqual 'foobar', &filetype
 
   ALELint
+  call ale#test#FlushJobs()
 
   " First check that everything is there...
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
@@ -257,6 +270,7 @@ Execute(ALEToggleBuffer should reset everything and then run again):
 
   " Toggle ALE on, everything should be set up and run again.
   ALEToggleBuffer
+  call ale#test#FlushJobs()
 
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
@@ -268,10 +282,12 @@ Execute(ALEToggleBuffer should reset everything and then run again):
 
 Execute(ALEDisableBuffer should reset everything and stay disabled):
   ALELint
+  call ale#test#FlushJobs()
 
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
 
   ALEDisableBuffer
+  call ale#test#FlushJobs()
 
   AssertEqual [], ale#test#GetLoclistWithoutModule()
   AssertEqual 0, b:ale_enabled
@@ -280,6 +296,7 @@ Execute(ALEEnableBuffer should enable ALE and lint again):
   let b:ale_enabled = 0
 
   ALEEnableBuffer
+  call ale#test#FlushJobs()
 
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual 1, b:ale_enabled
@@ -303,6 +320,7 @@ Execute(ALEResetBuffer should reset everything for a buffer):
   AssertEqual 'foobar', &filetype
 
   ALELint
+  call ale#test#FlushJobs()
 
   " First check that everything is there...
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
@@ -314,6 +332,7 @@ Execute(ALEResetBuffer should reset everything for a buffer):
 
   " Now Toggle ALE off.
   ALEResetBuffer
+  call ale#test#FlushJobs()
 
   " Everything should be cleared.
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'

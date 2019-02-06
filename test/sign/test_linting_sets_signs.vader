@@ -63,5 +63,6 @@ After:
 
 Execute(The signs should be updated after linting is done):
   ALELint
+  call ale#test#FlushJobs()
 
   AssertEqual [['1', 'ALEWarningSign'], ['2', 'ALEErrorSign']], CollectSigns()

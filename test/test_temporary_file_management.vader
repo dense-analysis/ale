@@ -70,7 +70,7 @@ Execute(ALE should delete managed files/directories appropriately after linting)
   AssertEqual 'foobar', &filetype
 
   call ale#Queue(0)
-  call ale#engine#WaitForJobs(2000)
+  call ale#test#FlushJobs()
 
   Assert !filereadable(g:filename), 'The temporary file was not deleted'
   Assert !isdirectory(g:directory), 'The temporary directory was not deleted'
@@ -82,7 +82,7 @@ Execute(ALE should delete managed files even if no command is run):
   let g:command = ''
 
   call ale#Queue(0)
-  call ale#engine#WaitForJobs(2000)
+  call ale#test#WaitForJobs(2000)
 
   Assert !filereadable(g:filename), 'The temporary file was not deleted'
   Assert !isdirectory(g:directory), 'The temporary directory was not deleted'
@@ -119,24 +119,26 @@ Execute(ALE should create and delete directories for ale#command#CreateDirectory
   Assert !isdirectory(b:dir), 'The directory was not deleted'
   Assert !isdirectory(b:dir2), 'The second directory was not deleted'
 
-Execute(ale#command#ManageFile should add the file even if the buffer info hasn't be set yet):
+Execute(ale#command#ManageFile should add the file even if the buffer info hasn't been set yet):
   call ale#command#ManageFile(bufnr(''), '/foo/bar')
 
   AssertEqual
   \ {
   \   bufnr(''): {
+  \     'jobs': {},
   \     'file_list': ['/foo/bar'],
   \     'directory_list': [],
   \   },
   \ },
   \ ale#command#GetData()
 
-Execute(ale#command#ManageDirectory should add the directory even if the buffer info hasn't be set yet):
+Execute(ale#command#ManageDirectory should add the directory even if the buffer info hasn't been set yet):
   call ale#command#ManageDirectory(bufnr(''), '/foo/bar')
 
   AssertEqual
   \ {
   \   bufnr(''): {
+  \     'jobs': {},
   \     'file_list': [],
   \     'directory_list': ['/foo/bar'],
   \   },

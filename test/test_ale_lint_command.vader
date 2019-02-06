@@ -1,7 +1,9 @@
 Before:
   Save g:ale_buffer_info
+  Save g:ale_enabled
 
   let g:ale_buffer_info = {}
+  let g:ale_enabled = 1
 
   let g:expected_loclist = [{
   \ 'bufnr': bufnr('%'),
@@ -58,7 +60,7 @@ Execute(ALELint should run the linters):
   " Try to run the linter a few times, as it fails randomly in NeoVim.
   for b:i in range(5)
     ALELint
-    call ale#engine#WaitForJobs(2000)
+    call ale#test#WaitForJobs(2000)
 
     if !has('nvim')
       " Sleep so the delayed list function can run.
