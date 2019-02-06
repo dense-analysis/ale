@@ -111,6 +111,7 @@ function! ale#util#Open(filename, line, column, options) abort
     endif
 
     call cursor(a:line, a:column)
+    redraw!
 endfunction
 
 let g:ale#util#error_priority = 5
