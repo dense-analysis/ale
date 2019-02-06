@@ -111,7 +111,6 @@ function! ale#util#Open(filename, line, column, options) abort
     endif
 
     call cursor(a:line, a:column)
-    redraw!
     normal zz
 endfunction
 
