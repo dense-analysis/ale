@@ -112,6 +112,7 @@ function! ale#util#Open(filename, line, column, options) abort
 
     call cursor(a:line, a:column)
     redraw!
+    normal zz
 endfunction
 
 let g:ale#util#error_priority = 5
