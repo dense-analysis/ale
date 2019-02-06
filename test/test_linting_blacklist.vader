@@ -11,6 +11,6 @@ Given unite (A Unite.vim file):
 
 Execute(Running ALE on a blacklisted file shouldn't change anything):
   call ale#Queue(0)
-  call ale#engine#WaitForJobs(2000)
+  call ale#test#WaitForJobs(2000)
 
   AssertEqual {}, g:ale_buffer_info

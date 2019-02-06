@@ -3,33 +3,37 @@
 "   managing files during linting and fixing cycles.
 
 " This dictionary holds lists of files and directories to remove later.
-if !exists('s:managed_data')
-    let s:managed_data = {}
+if !exists('s:buffer_data')
+    let s:buffer_data = {}
 endif
 
 " Used to get the data in tests.
 function! ale#command#GetData() abort
-    return deepcopy(s:managed_data)
+    return deepcopy(s:buffer_data)
 endfunction
 
 function! ale#command#ClearData() abort
-    let s:managed_data = {}
+    let s:buffer_data = {}
+endfunction
+
+function! ale#command#InitData(buffer) abort
+    if !has_key(s:buffer_data, a:buffer)
+        let s:buffer_data[a:buffer] = {
+        \   'jobs': {},
+        \   'file_list': [],
+        \   'directory_list': [],
+        \}
+    endif
 endfunction
 
 function! ale#command#ManageFile(buffer, file) abort
-    if !has_key(s:managed_data, a:buffer)
-        let s:managed_data[a:buffer] = {'file_list': [], 'directory_list': []}
-    endif
-
-    call add(s:managed_data[a:buffer].file_list, a:file)
+    call ale#command#InitData(a:buffer)
+    call add(s:buffer_data[a:buffer].file_list, a:file)
 endfunction
 
 function! ale#command#ManageDirectory(buffer, directory) abort
-    if !has_key(s:managed_data, a:buffer)
-        let s:managed_data[a:buffer] = {'file_list': [], 'directory_list': []}
-    endif
-
-    call add(s:managed_data[a:buffer].directory_list, a:directory)
+    call ale#command#InitData(a:buffer)
+    call add(s:buffer_data[a:buffer].directory_list, a:directory)
 endfunction
 
 function! ale#command#CreateFile(buffer) abort
@@ -61,17 +65,9 @@ function! ale#command#CreateDirectory(buffer) abort
 endfunction
 
 function! ale#command#RemoveManagedFiles(buffer) abort
-    let l:info = get(s:managed_data, a:buffer, {})
+    let l:info = get(s:buffer_data, a:buffer, {})
 
-    if !empty(l:info)
-    \&& (
-    \   !exists('*ale#engine#IsCheckingBuffer')
-    \   || !ale#engine#IsCheckingBuffer(a:buffer)
-    \)
-    \&& (
-    \   !has_key(g:ale_fix_buffer_data, a:buffer)
-    \   || g:ale_fix_buffer_data[a:buffer].done
-    \)
+    if !empty(l:info) && empty(l:info.jobs)
         " We can't delete anything in a sandbox, so wait until we escape from
         " it to delete temporary files and directories.
         if ale#util#InSandbox()
@@ -91,7 +87,7 @@ function! ale#command#RemoveManagedFiles(buffer) abort
             call delete(l:directory, 'rf')
         endfor
 
-        call remove(s:managed_data, a:buffer)
+        call remove(s:buffer_data, a:buffer)
     endif
 endfunction
 
@@ -186,4 +182,149 @@ function! ale#command#FormatCommand(buffer, executable, command, pipe_file_if_ne
     \)
 
     return [l:temporary_file, l:command, l:file_created]
+endfunction
+
+function! ale#command#StopJobs(buffer, job_type) abort
+    let l:info = get(s:buffer_data, a:buffer, {})
+
+    if !empty(l:info)
+        let l:new_map = {}
+
+        for [l:job_id, l:job_type] in items(l:info.jobs)
+            let l:job_id = str2nr(l:job_id)
+
+            if a:job_type is# 'all' || a:job_type is# l:job_type
+                call ale#job#Stop(l:job_id)
+            else
+                let l:new_map[l:job_id] = l:job_type
+            endif
+        endfor
+
+        let l:info.jobs = l:new_map
+    endif
+endfunction
+
+function! s:GatherOutput(line_list, job_id, line) abort
+    call add(a:line_list, a:line)
+endfunction
+
+function! s:ExitCallback(buffer, line_list, Callback, data) abort
+    if !has_key(s:buffer_data, a:buffer)
+        return
+    endif
+
+    let l:jobs = s:buffer_data[a:buffer].jobs
+
+    if !has_key(l:jobs, a:data.job_id)
+        return
+    endif
+
+    let l:job_type = remove(l:jobs, a:data.job_id)
+
+    if g:ale_history_enabled
+        call ale#history#SetExitCode(a:buffer, a:data.job_id, a:data.exit_code)
+
+        " Log the output of the command for ALEInfo if we should.
+        if g:ale_history_log_output && a:data.log_output is 1
+            call ale#history#RememberOutput(
+            \   a:buffer,
+            \   a:data.job_id,
+            \   a:line_list[:]
+            \)
+        endif
+    endif
+
+    " If the callback starts any new jobs, use the same job type for them.
+    call setbufvar(a:buffer, 'ale_job_type', l:job_type)
+    call a:Callback(a:buffer, a:line_list, a:data)
+endfunction
+
+function! ale#command#Run(buffer, command, options) abort
+    let l:Callback = a:options.callback
+    let l:output_stream = get(a:options, 'output_stream', 'stdout')
+    let l:line_list = []
+
+    let [l:temporary_file, l:command, l:file_created] = ale#command#FormatCommand(
+    \   a:buffer,
+    \   get(a:options, 'executable', ''),
+    \   a:command,
+    \   get(a:options, 'read_buffer', 0),
+    \   get(a:options, 'input', v:null),
+    \)
+    let l:command = ale#job#PrepareCommand(a:buffer, l:command)
+    let l:job_options = {
+    \   'exit_cb': {job_id, exit_code -> s:ExitCallback(
+    \       a:buffer,
+    \       l:line_list,
+    \       l:Callback,
+    \       {
+    \           'job_id': job_id,
+    \           'exit_code': exit_code,
+    \           'temporary_file': l:temporary_file,
+    \           'log_output': get(a:options, 'log_output', 1),
+    \       }
+    \   )},
+    \   'mode': 'nl',
+    \}
+
+    if l:output_stream is# 'stdout'
+        let l:job_options.out_cb = function('s:GatherOutput', [l:line_list])
+    elseif l:output_stream is# 'stderr'
+        let l:job_options.err_cb = function('s:GatherOutput', [l:line_list])
+    elseif l:output_stream is# 'both'
+        let l:job_options.out_cb = function('s:GatherOutput', [l:line_list])
+        let l:job_options.err_cb = function('s:GatherOutput', [l:line_list])
+    endif
+
+    let l:status = 'failed'
+
+    if get(g:, 'ale_run_synchronously') == 1
+        if get(g:, 'ale_emulate_job_failure') == 1
+            let l:job_id = 0
+        else
+            " Generate a fake job ID for tests.
+            let s:fake_job_id = get(s:, 'fake_job_id', 0) + 1
+            let l:job_id = s:fake_job_id
+        endif
+    else
+        let l:job_id = ale#job#Start(l:command, l:job_options)
+    endif
+
+    if l:job_id
+        let l:status = 'started'
+        let l:job_type = getbufvar(a:buffer, 'ale_job_type', 'all')
+
+        call ale#command#InitData(a:buffer)
+        let s:buffer_data[a:buffer].jobs[l:job_id] = l:job_type
+    endif
+
+    if g:ale_history_enabled
+        call ale#history#Add(a:buffer, l:status, l:job_id, l:command)
+    endif
+
+    if get(g:, 'ale_run_synchronously') == 1 && l:job_id
+        " Run a command synchronously if this test option is set.
+        call extend(l:line_list, systemlist(
+        \   type(l:command) is v:t_list
+        \       ? join(l:command[0:1]) . ' ' . ale#Escape(l:command[2])
+        \       : l:command
+        \))
+
+        " Don't capture output when the callbacks aren't set.
+        if !has_key(l:job_options, 'out_cb')
+        \&& !has_key(l:job_options, 'err_cb')
+            let l:line_list = []
+        endif
+
+        if !exists('g:ale_run_synchronously_callbacks')
+            let g:ale_run_synchronously_callbacks = []
+        endif
+
+        call add(
+        \   g:ale_run_synchronously_callbacks,
+        \   {-> l:job_options.exit_cb(l:job_id, v:shell_error)}
+        \)
+    endif
+
+    return l:job_id ? v:true : v:false
 endfunction

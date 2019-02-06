@@ -292,8 +292,17 @@ function! ale#lsp_linter#CheckWithLSP(buffer, linter) abort
     endif
 
     if l:notified
-        if index(l:info.active_linter_list, a:linter.name) < 0
-            call add(l:info.active_linter_list, a:linter.name)
+        let l:found = 0
+
+        for l:other_linter in l:info.active_linter_list
+            if l:other_linter.name is# a:linter.name
+                let l:found = 1
+                break
+            endif
+        endfor
+
+        if !l:found
+            call add(l:info.active_linter_list, a:linter)
         endif
     endif
 

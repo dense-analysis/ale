@@ -99,7 +99,8 @@ function! s:VimCloseCallback(channel) abort
     if job_status(l:job) is# 'dead'
         try
             if !empty(l:info) && has_key(l:info, 'exit_cb')
-                call ale#util#GetFunction(l:info.exit_cb)(l:job_id, get(l:info, 'exit_code', 1))
+                " We have to remove the callback, so we don't call it twice.
+                call ale#util#GetFunction(remove(l:info, 'exit_cb'))(l:job_id, get(l:info, 'exit_code', 1))
             endif
         finally
             " Automatically forget about the job after it's done.
@@ -124,7 +125,8 @@ function! s:VimExitCallback(job, exit_code) abort
     if ch_status(job_getchannel(a:job)) is# 'closed'
         try
             if !empty(l:info) && has_key(l:info, 'exit_cb')
-                call ale#util#GetFunction(l:info.exit_cb)(l:job_id, a:exit_code)
+                " We have to remove the callback, so we don't call it twice.
+                call ale#util#GetFunction(remove(l:info, 'exit_cb'))(l:job_id, a:exit_code)
             endif
         finally
             " Automatically forget about the job after it's done.
