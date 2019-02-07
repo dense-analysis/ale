@@ -439,6 +439,7 @@ Notes:
 * Crystal: `ameba`!!, `crystal`!!
 * CSS: `csslint`, `prettier`, `stylelint`
 * Cucumber: `cucumber`
+* Cypher: `cypher-lint`
 * Cython (pyrex filetype): `cython`
 * D: `dls`, `dmd`, `uncrustify`
 * Dafny: `dafny`!!
@@ -532,7 +533,6 @@ Notes:
 * XML: `xmllint`
 * YAML: `prettier`, `swaglint`, `yamllint`
 * YANG: `yang-lsp`
-* Cypher: `cypher-lint`!!
 
 ===============================================================================
 3. Linting                                                           *ale-lint*

@@ -118,6 +118,7 @@ formatting.
 | Crystal | [ameba](https://github.com/veelenga/ameba) !!, [crystal](https://crystal-lang.org/) !! |
 | CSS | [csslint](http://csslint.net/), [prettier](https://github.com/prettier/prettier), [stylelint](https://github.com/stylelint/stylelint) |
 | Cucumber | [cucumber](https://cucumber.io/) |
+| Cypher | [cypher-lint](https://github.com/cleishm/libcypher-parser) |
 | Cython (pyrex filetype) | [cython](http://cython.org/) |
 | D | [dls](https://github.com/d-language-server/dls), [dmd](https://dlang.org/dmd-linux.html), [uncrustify](https://github.com/uncrustify/uncrustify) |
 | Dafny | [dafny](https://rise4fun.com/Dafny) !! |
@@ -211,7 +212,6 @@ formatting.
 | XML | [xmllint](http://xmlsoft.org/xmllint.html) |
 | YAML | [prettier](https://github.com/prettier/prettier), [swaglint](https://github.com/byCedric/swaglint), [yamllint](https://yamllint.readthedocs.io/) |
 | YANG | [yang-lsp](https://github.com/theia-ide/yang-lsp) |
-| Cypher | [cypher-lint](https://github.com/cleishm/libcypher-parser) !! |
 
 <a name="usage"></a>
 

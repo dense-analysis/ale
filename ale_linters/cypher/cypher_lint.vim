@@ -20,7 +20,7 @@ endfunction
 call ale#linter#Define('cypher', {
 \   'name': 'cypher_lint',
 \   'executable': 'cypher-lint',
-\   'command': 'cypher-lint %s',
+\   'command': 'cypher-lint',
 \   'output_stream': 'stderr',
 \   'callback': 'ale_linters#cypher#cypher_lint#Handle',
 \})
