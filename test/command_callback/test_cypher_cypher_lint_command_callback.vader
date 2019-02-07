@@ -5,4 +5,4 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default command and executable should be correct):
-  AssertLinter 'cypher-lint', 'cypher-lint %s'
+  AssertLinter 'cypher-lint', 'cypher-lint'
