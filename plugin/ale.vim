@@ -221,6 +221,10 @@ command! -bar ALEComplete :call ale#completion#AlwaysGetCompletions(0)
 " <Plug> mappings for commands
 nnoremap <silent> <Plug>(ale_previous) :ALEPrevious<Return>
 nnoremap <silent> <Plug>(ale_previous_wrap) :ALEPreviousWrap<Return>
+nnoremap <silent> <Plug>(ale_previous_error) :ALEPrevious -error<Return>
+nnoremap <silent> <Plug>(ale_previous_wrap_error) :ALEPrevious -wrap -error<Return>
+nnoremap <silent> <Plug>(ale_previous_warning) :ALEPrevious -warning<Return>
+nnoremap <silent> <Plug>(ale_previous_wrap_warning) :ALEPrevious -wrap -warning<Return>
 nnoremap <silent> <Plug>(ale_next) :ALENext<Return>
 nnoremap <silent> <Plug>(ale_next_wrap) :ALENextWrap<Return>
 nnoremap <silent> <Plug>(ale_next_error) :ALENext -error<Return>
