@@ -56,6 +56,10 @@ function! ale#fix#ApplyQueuedFixes() abort
 endfunction
 
 function! ale#fix#ApplyFixes(buffer, output) abort
+    if !g:ale_enabled || !getbufvar(a:buffer, 'ale_enabled', 1)
+        return
+    endif
+
     let l:data = g:ale_fix_buffer_data[a:buffer]
     let l:data.output = a:output
     let l:data.changes_made = l:data.lines_before != l:data.output
