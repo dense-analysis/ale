@@ -92,25 +92,8 @@ function! s:Search(linter, buffer, query, options) abort
     endif
 endfunction
 
-function! ale#symbol#ParseArgs(args) abort
-    let l:args = split(a:args)
-    let l:opts = []
-
-    for l:arg in l:args
-        if l:arg =~? '^-'
-            call add(l:opts, l:arg)
-        else
-            break
-        endif
-    endfor
-
-    let l:query = join(l:args[len(l:opts):-1])
-
-    return [l:opts, l:query]
-endfunction
-
 function! ale#symbol#Search(args) abort
-    let [l:opts, l:query] = ale#symbol#ParseArgs(a:args)
+    let [l:opts, l:query] = ale#args#Parse(['relative'], a:args)
 
     if empty(l:query)
         throw 'A non-empty string must be provided!'
@@ -119,7 +102,7 @@ function! ale#symbol#Search(args) abort
     let l:buffer = bufnr('')
     let l:options = {}
 
-    if index(l:opts, '-relative') > -1
+    if has_key(l:opts, 'relative')
         let l:options.use_relative_paths = 1
     endif
 
