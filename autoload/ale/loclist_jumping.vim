@@ -20,7 +20,13 @@ function! ale#loclist_jumping#FindNearest(direction, wrap, ...) abort
     if a:0 > 0
         let l:filter = a:1
     else
-        let l:filter = 'A'
+        let l:filter = 'any'
+    endif
+
+    if a:0 > 1
+        let l:subtype_filter = a:2
+    else
+        let l:subtype_filter = 'any'
     endif
 
     " When searching backwards, so we can find the next smallest match.
@@ -47,14 +53,15 @@ function! ale#loclist_jumping#FindNearest(direction, wrap, ...) abort
         \   l:search_item
         \)
 
-        if a:direction is# 'before' && l:cmp_value < 0
-            if l:filter is# 'A' || l:filter is# l:item.type
+        if (l:filter is# 'any' || l:filter is# l:item.type) &&
+        \  (l:subtype_filter is# 'any' ||
+        \   l:subtype_filter is# get(l:item, 'sub_type', ''))
+
+            if a:direction is# 'before' && l:cmp_value < 0
                 return [l:item.lnum, l:item.col]
             endif
-        endif
 
-        if a:direction is# 'after' && l:cmp_value > 0
-            if l:filter is# 'A' || l:filter is# l:item.type
+            if a:direction is# 'after' && l:cmp_value > 0
                 return [l:item.lnum, l:item.col]
             endif
         endif
@@ -64,7 +71,9 @@ function! ale#loclist_jumping#FindNearest(direction, wrap, ...) abort
     " wrap around the list of warnings/errors
     if a:wrap
         for l:item in l:loclist
-            if l:filter is# 'A' || l:filter is# l:item.type
+            if (l:filter is# 'any' || l:filter is# l:item.type) &&
+            \  (l:subtype_filter is# 'any' ||
+            \   l:subtype_filter is# get(l:item, 'sub_type', ''))
                 return [l:item.lnum, l:item.col]
             endif
         endfor
@@ -84,16 +93,47 @@ function! ale#loclist_jumping#Jump(direction, ...) abort
     if a:0 > 1
         let l:filter = a:2
     else
-        let l:filter = 'A'  " A is for All -> no filter
+        let l:filter = 'any'
+    endif
+
+    if a:0 > 2
+        let l:subtype_filter = a:3
+    else
+        let l:subtype_filter = 'any'
     endif
 
     let l:nearest = ale#loclist_jumping#FindNearest(a:direction,
-    \   l:wrap, l:filter)
+    \   l:wrap, l:filter, l:subtype_filter)
 
     if !empty(l:nearest)
         normal! m`
         call cursor(l:nearest)
     endif
+endfunction
+
+function! ale#loclist_jumping#WrapJump(direction, ...) abort
+    let l:wrap = 0
+    let l:type_filter = 'any'
+    let l:subtype_filter = 'any'
+
+    for l:flag in a:000
+        if l:flag is# '-wrap'
+            let l:wrap = 1
+        elseif l:flag is# '-error'
+            let l:type_filter = 'E'
+        elseif l:flag is# '-warning'
+            let l:type_filter = 'W'
+        elseif l:flag is# '-info'
+            let l:type_filter = 'I'
+        elseif l:flag is# '-style'
+            let l:subtype_filter = 'style'
+        elseif l:flag is# '-nostyle'
+            let l:subtype_filter = ''
+        endif
+    endfor
+
+    call ale#loclist_jumping#Jump(a:direction, l:wrap, l:type_filter,
+    \                             l:subtype_filter)
 endfunction
 
 function! ale#loclist_jumping#JumpToIndex(index) abort
