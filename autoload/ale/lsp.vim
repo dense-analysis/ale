@@ -331,7 +331,12 @@ function! ale#lsp#StartProgram(conn_id, executable, command) abort
         \   'mode': 'raw',
         \   'out_cb': {_, message -> ale#lsp#HandleMessage(a:conn_id, message)},
         \}
-        let l:job_id = ale#job#Start(a:command, l:options)
+
+        if has('win32')
+            let l:job_id = ale#job#StartWithCmd(a:command, l:options)
+        else
+            let l:job_id = ale#job#Start(a:command, l:options)
+        endif
     else
         let l:job_id = l:conn.job_id
     endif

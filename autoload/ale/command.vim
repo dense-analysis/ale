@@ -293,6 +293,8 @@ function! ale#command#Run(buffer, command, Callback, options) abort
             let s:fake_job_id = get(s:, 'fake_job_id', 0) + 1
             let l:job_id = s:fake_job_id
         endif
+    elseif has('win32')
+        let l:job_id = ale#job#StartWithCmd(l:command, l:job_options)
     else
         let l:job_id = ale#job#Start(l:command, l:job_options)
     endif
