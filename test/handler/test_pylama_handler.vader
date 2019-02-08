@@ -155,20 +155,58 @@ Execute(The pylama handler should handle tracebacks with parsable messages):
   \   'index.py:16:81: E501 line too long (96 > 80 characters) [pycodestyle]',
   \ ])
 
-" This should not occur, but does not appear to be enforced by pylama.
-" Ensure it is handled correctly in case it occurs in the wild.
+" Note: This is probably a bug, since all pylama plugins produce codes, but
+" should be handled for compatibility.
+" Note: The pylama isort plugin is distributed in the isort package.
 Execute(The pylama handler should handle messages without codes):
   AssertEqual
   \ [
   \   {
-  \     'lnum': 16,
-  \     'col': 81,
+  \     'lnum': 0,
+  \     'col': 0,
   \     'code': '',
   \     'type': 'W',
   \     'sub_type': '',
-  \     'text': 'line too long (96 > 80 characters) [pycodestyle]',
+  \     'text': 'Incorrectly sorted imports. [isort]'
   \   },
   \ ],
   \ ale_linters#python#pylama#Handle(bufnr(''), [
-  \   'index.py:16:81: line too long (96 > 80 characters) [pycodestyle]',
+  \   'index.py:0:0: Incorrectly sorted imports. [isort]',
+  \ ])
+
+" Note: This is a pylama bug, but should be handled for compatibility.
+" See https://github.com/klen/pylama/pull/146
+Execute(The pylama handler should handle message codes followed by a colon):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 31,
+  \     'col': 1,
+  \     'code': 'E800',
+  \     'type': 'E',
+  \     'sub_type': '',
+  \     'text': 'Found commented out code: # needs_sphinx = ''1.0'' [eradicate]',
+  \   },
+  \ ],
+  \ ale_linters#python#pylama#Handle(bufnr(''), [
+  \   'index.py:31:1: E800: Found commented out code: # needs_sphinx = ''1.0'' [eradicate]',
+  \ ])
+
+" The directory created for %t may not comply with pylint module name config.
+" This should not be reported to users.
+Execute(The pylama handler should ignore C0103 from temp dir, not others):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 29,
+  \     'col': 0,
+  \     'code': 'C0103',
+  \     'type': 'W',
+  \     'sub_type': 'style',
+  \     'text': 'Constant name "badname" doesn''t conform to UPPER_CASE naming style [pylint]',
+  \   },
+  \ ],
+  \ ale_linters#python#pylama#Handle(bufnr(''), [
+  \   '../../../../tmp/vmynR33/456/__init__.py:1:0: C0103 Module name "456" doesn''t conform to snake_case naming style [pylint]',
+  \   '../../../../tmp/vmynR33/456/__init__.py:29:0: C0103 Constant name "badname" doesn''t conform to UPPER_CASE naming style [pylint]',
   \ ])

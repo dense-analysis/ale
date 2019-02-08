@@ -46,7 +46,7 @@ function! ale_linters#python#pylama#Handle(buffer, lines) abort
     endif
 
     let l:output = ale#python#HandleTraceback(a:lines, 1)
-    let l:pattern = '\v^.{-}:([0-9]+):([0-9]+): ([A-Z][0-9]+)? ?(.*)$'
+    let l:pattern = '\v^.{-}:([0-9]+):([0-9]+): +%(([A-Z][0-9]+):? +)?(.*)$'
 
     " First letter of error code is a pylint-compatible message type
     " http://pylint.pycqa.org/en/latest/user_guide/output.html#source-code-analysis-section
@@ -67,6 +67,12 @@ function! ale_linters#python#pylama#Handle(buffer, lines) abort
     \}
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
+        " Ignore C0103 for module name from temporary path (%t) which may not
+        " comply with module-rgx.
+        if l:match[3] is# 'C0103' && l:match[4] =~# '^Module name '
+            continue
+        endif
+
         call add(l:output, {
         \   'lnum': str2nr(l:match[1]),
         \   'col': str2nr(l:match[2]),
