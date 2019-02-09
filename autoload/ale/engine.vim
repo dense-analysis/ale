@@ -411,37 +411,39 @@ function! s:RunJob(options) abort
     let l:read_buffer = a:options.read_buffer
     let l:info = g:ale_buffer_info[l:buffer]
 
-    let l:run = ale#command#Run(l:buffer, l:command, {
+    let l:Callback = function('s:HandleExit', [{
+    \   'linter': l:linter,
+    \   'executable': l:executable,
+    \   'next_chain_index': l:next_chain_index,
+    \}])
+    let l:result = ale#command#Run(l:buffer, l:command, l:Callback, {
     \   'output_stream': l:output_stream,
     \   'executable': l:executable,
     \   'read_buffer': l:read_buffer,
     \   'log_output': l:next_chain_index >= len(get(l:linter, 'command_chain', [])),
-    \   'callback': function('s:HandleExit', [{
-    \       'linter': l:linter,
-    \       'executable': l:executable,
-    \       'next_chain_index': l:next_chain_index,
-    \   }]),
     \})
 
-    " Only proceed if the job is being run.
-    if l:run
-        let l:found = 0
-
-        for l:other_linter in l:info.active_linter_list
-            if l:other_linter.name is# l:linter.name
-                let l:found = 1
-                break
-            endif
-        endfor
-
-        if !l:found
-            call add(l:info.active_linter_list, l:linter)
-        endif
-
-        silent doautocmd <nomodeline> User ALEJobStarted
+    if !l:result._deferred_job_id
+        return 0
     endif
 
-    return l:run
+    " Only proceed if the job is being run.
+    let l:found = 0
+
+    for l:other_linter in l:info.active_linter_list
+        if l:other_linter.name is# l:linter.name
+            let l:found = 1
+            break
+        endif
+    endfor
+
+    if !l:found
+        call add(l:info.active_linter_list, l:linter)
+    endif
+
+    silent doautocmd <nomodeline> User ALEJobStarted
+
+    return 1
 endfunction
 
 " Determine which commands to run for a link in a command chain, or

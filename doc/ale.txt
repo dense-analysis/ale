@@ -269,6 +269,7 @@ CONTENTS                                                         *ale-contents*
       pycodestyle.........................|ale-python-pycodestyle|
       pydocstyle..........................|ale-python-pydocstyle|
       pyflakes............................|ale-python-pyflakes|
+      pylama..............................|ale-python-pylama|
       pylint..............................|ale-python-pylint|
       pyls................................|ale-python-pyls|
       pyre................................|ale-python-pyre|
@@ -891,6 +892,8 @@ supported:
 
 |ALEFindReferences| - Find references for the word under the cursor.
 
+Options:
+  `-relative`       Show file paths in the results relative to the working dir
 
 -------------------------------------------------------------------------------
 5.5 Hovering                                                        *ale-hover*
@@ -931,6 +934,8 @@ commands are supported:
 
 |ALESymbolSearch| - Search for symbols in the workspace.
 
+Options:
+  `-relative`     Show file paths in the results relative to the working dir
 
 ===============================================================================
 6. Global Options                                                 *ale-options*

@@ -276,6 +276,24 @@ function! ale#job#Start(command, options) abort
     return l:job_id
 endfunction
 
+" Force running commands in a Windows CMD command line.
+" This means the same command syntax works everywhere.
+function! ale#job#StartWithCmd(command, options) abort
+    let l:shell = &l:shell
+    let l:shellcmdflag = &l:shellcmdflag
+    let &l:shell = 'cmd'
+    let &l:shellcmdflag = '/c'
+
+    try
+        let l:job_id = ale#job#Start(a:command, a:options)
+    finally
+        let &l:shell = l:shell
+        let &l:shellcmdflag = l:shellcmdflag
+    endtry
+
+    return l:job_id
+endfunction
+
 " Send raw data to the job.
 function! ale#job#SendRaw(job_id, string) abort
     if has('nvim')

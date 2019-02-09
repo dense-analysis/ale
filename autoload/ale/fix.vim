@@ -163,21 +163,23 @@ function! s:RunJob(options) abort
         let l:output_stream = 'none'
     endif
 
-    return ale#command#Run(l:buffer, l:command, {
+    let l:Callback = function('s:HandleExit', [{
+    \   'input': l:input,
+    \   'chain_with': l:ChainWith,
+    \   'callback_index': a:options.callback_index,
+    \   'callback_list': a:options.callback_list,
+    \   'process_with': a:options.process_with,
+    \   'read_temporary_file': a:options.read_temporary_file,
+    \}])
+    let l:result = ale#command#Run(l:buffer, l:command, l:Callback, {
     \   'output_stream': l:output_stream,
     \   'executable': '',
     \   'read_buffer': l:read_buffer,
     \   'input': l:input,
     \   'log_output': 0,
-    \   'callback': function('s:HandleExit', [{
-    \       'input': l:input,
-    \       'chain_with': l:ChainWith,
-    \       'callback_index': a:options.callback_index,
-    \       'callback_list': a:options.callback_list,
-    \       'process_with': a:options.process_with,
-    \       'read_temporary_file': a:options.read_temporary_file,
-    \   }]),
     \})
+
+    return l:result._deferred_job_id != 0
 endfunction
 
 function! s:RunFixer(options) abort

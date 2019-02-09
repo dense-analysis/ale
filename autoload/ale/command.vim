@@ -236,11 +236,17 @@ function! s:ExitCallback(buffer, line_list, Callback, data) abort
 
     " If the callback starts any new jobs, use the same job type for them.
     call setbufvar(a:buffer, 'ale_job_type', l:job_type)
-    call a:Callback(a:buffer, a:line_list, a:data)
+    let l:result = a:Callback(a:buffer, a:line_list, {
+    \   'exit_code': a:data.exit_code,
+    \   'temporary_file': a:data.temporary_file,
+    \})
+
+    if get(a:data, 'result_callback', v:null) isnot v:null
+        call call(a:data.result_callback, [l:result])
+    endif
 endfunction
 
-function! ale#command#Run(buffer, command, options) abort
-    let l:Callback = a:options.callback
+function! ale#command#Run(buffer, command, Callback, options) abort
     let l:output_stream = get(a:options, 'output_stream', 'stdout')
     let l:line_list = []
 
@@ -256,12 +262,13 @@ function! ale#command#Run(buffer, command, options) abort
     \   'exit_cb': {job_id, exit_code -> s:ExitCallback(
     \       a:buffer,
     \       l:line_list,
-    \       l:Callback,
+    \       a:Callback,
     \       {
     \           'job_id': job_id,
     \           'exit_code': exit_code,
     \           'temporary_file': l:temporary_file,
     \           'log_output': get(a:options, 'log_output', 1),
+    \           'result_callback': get(l:result, 'result_callback', v:null),
     \       }
     \   )},
     \   'mode': 'nl',
@@ -286,6 +293,8 @@ function! ale#command#Run(buffer, command, options) abort
             let s:fake_job_id = get(s:, 'fake_job_id', 0) + 1
             let l:job_id = s:fake_job_id
         endif
+    elseif has('win32')
+        let l:job_id = ale#job#StartWithCmd(l:command, l:job_options)
     else
         let l:job_id = ale#job#Start(l:command, l:job_options)
     endif
@@ -301,6 +310,13 @@ function! ale#command#Run(buffer, command, options) abort
     if g:ale_history_enabled
         call ale#history#Add(a:buffer, l:status, l:job_id, l:command)
     endif
+
+    " We'll return this Dictionary. A `result_callback` can be assigned to it
+    " later for capturing the result of a:Callback.
+    "
+    " The `_deferred_job_id` is used for both checking the type of object, and
+    " for checking the job ID and status.
+    let l:result = {'_deferred_job_id': l:job_id}
 
     if get(g:, 'ale_run_synchronously') == 1 && l:job_id
         " Run a command synchronously if this test option is set.
@@ -326,5 +342,5 @@ function! ale#command#Run(buffer, command, options) abort
         \)
     endif
 
-    return l:job_id ? v:true : v:false
+    return l:result
 endfunction
