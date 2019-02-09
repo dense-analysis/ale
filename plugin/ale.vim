@@ -152,9 +152,9 @@ endif
 
 " Define commands for moving through warnings and errors.
 command! -bar -nargs=* ALEPrevious
-\    :call ale#loclist_jumping#WrapJump('before', <f-args>)
+\    :call ale#loclist_jumping#WrapJump('before', <q-args>)
 command! -bar -nargs=* ALENext
-\    :call ale#loclist_jumping#WrapJump('after', <f-args>)
+\    :call ale#loclist_jumping#WrapJump('after', <q-args>)
 
 command! -bar ALEPreviousWrap :call ale#loclist_jumping#Jump('before', 1)
 command! -bar ALENextWrap :call ale#loclist_jumping#Jump('after', 1)

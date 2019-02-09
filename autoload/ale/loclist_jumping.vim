@@ -111,26 +111,31 @@ function! ale#loclist_jumping#Jump(direction, ...) abort
     endif
 endfunction
 
-function! ale#loclist_jumping#WrapJump(direction, ...) abort
+function! ale#loclist_jumping#WrapJump(direction, sargs) abort
+    let [l:args, l:rest] = ale#args#Parse(['error', 'warning', 'info', 'wrap',
+    \                                      'style', 'nostyle'], a:sargs)
+
     let l:wrap = 0
     let l:type_filter = 'any'
     let l:subtype_filter = 'any'
 
-    for l:flag in a:000
-        if l:flag is# '-wrap'
-            let l:wrap = 1
-        elseif l:flag is# '-error'
-            let l:type_filter = 'E'
-        elseif l:flag is# '-warning'
-            let l:type_filter = 'W'
-        elseif l:flag is# '-info'
-            let l:type_filter = 'I'
-        elseif l:flag is# '-style'
-            let l:subtype_filter = 'style'
-        elseif l:flag is# '-nostyle'
-            let l:subtype_filter = ''
-        endif
-    endfor
+    if get(l:args, 'wrap', 'nil') is# ''
+        let l:wrap = 1
+    endif
+
+    if get(l:args, 'error', 'nil') is# ''
+        let l:type_filter = 'E'
+    elseif get(l:args, 'warning', 'nil') is# ''
+        let l:type_filter = 'W'
+    elseif get(l:args, 'info', 'nil') is# ''
+        let l:type_filter = 'I'
+    endif
+
+    if get(l:args, 'nostyle', 'nil') is# ''
+        let l:subtype_filter = 'style'
+    elseif get(l:args, 'style', 'nil') is# ''
+        let l:subtype_filter = ''
+    endif
 
     call ale#loclist_jumping#Jump(a:direction, l:wrap, l:type_filter,
     \                             l:subtype_filter)

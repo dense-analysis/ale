@@ -2471,11 +2471,11 @@ ALELast                                                               *ALELast*
   behaviour :
   `-wrap` enable wrapping around the file
   `-error`, `-warning` and `-info` enable jumping to errors, warnings or infos
-    respectively, ignoring anything else. They are mutually exclusive and only
-    the last one will have effect.
+    respectively, ignoring anything else. They are mutually exclusive and if
+    several are provided the priority is the following: error > warning > info.
   `-style` and `-nostyle` allow you to jump respectively to style error or
     warning and to not style error or warning. They also are mutually
-    exclusive.
+    exclusive and nostyle has priority over style.
   
   Flags can be combined to create create custom jumping. Thus you can use
   ":ALENext -wrap -error -nosyle" to jump to the next error which is not a
