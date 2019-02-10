@@ -671,6 +671,15 @@ g:ale_python_vulture_executable               *g:ale_python_vulture_executable*
   See |ale-integrations-local-executables|
 
 
+g:ale_python_vulture_options                     *g:ale_python_vulture_options*
+                                                 *b:ale_python_vulture_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to add command-line arguments to the vulture
+  invocation.
+
+
 g:ale_python_vulture_use_global               *g:ale_python_vulture_use_global*
                                               *b:ale_python_vulture_use_global*
   Type: |Number|
