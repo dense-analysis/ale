@@ -87,8 +87,8 @@ endfunction
 " Skip sandbox error which is caused by directives
 " because what we want is syntactic or semantic check.
 function! s:Ignore(item) abort
-    return a:item.type is# 'E' &&
-    \      a:item.text =~# '\vNo permission to (call|directive|assert) sandboxed'
+    return a:item.type is# 'E'
+    \   && a:item.text =~# '\vNo permission to (call|directive|assert) sandboxed'
 endfunction
 
 call ale#linter#Define('prolog', {

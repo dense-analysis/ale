@@ -101,8 +101,8 @@ function! ale_linters#perl6#perl6#Handle(buffer, lines) abort
 
     if type(l:json) is v:t_dict
         for l:key in keys(l:json)
-            if has_key(l:json[l:key], 'sorrows') &&
-            \  has_key(l:json[l:key], 'worries')
+            if has_key(l:json[l:key], 'sorrows')
+            \&& has_key(l:json[l:key], 'worries')
                 if !empty(l:json[l:key]['sorrows'])
                     for l:dictionary in get(l:json[l:key], 'sorrows')
                         for l:item in keys(l:dictionary)

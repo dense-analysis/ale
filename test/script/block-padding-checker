@@ -11,6 +11,7 @@ import re
 INDENTATION_RE = re.compile(r'^ *')
 COMMENT_LINE_RE = re.compile(r'^ *"')
 COMMAND_RE = re.compile(r'^ *([a-zA-Z\\]+)')
+OPERATOR_END_RE = re.compile(r'(&&|\|\||\+|-|\*\| /)$')
 
 START_BLOCKS = set(['if', 'for', 'while', 'try', 'function'])
 END_BLOCKS = set(['endif', 'endfor', 'endwhile', 'endtry', 'endfunction'])
@@ -70,7 +71,7 @@ def check_lines(line_iter):
                 if (
                     previous_indentation_level is not None
                     and indentation_level != previous_indentation_level
-                    and abs(indentation_level - previous_indentation_level) != 4
+                    and abs(indentation_level - previous_indentation_level) != 4  # noqa
                 ):
                     yield (
                         line_number,
@@ -118,6 +119,12 @@ def check_lines(line_iter):
                 previous_command = command
                 previous_line_blank = False
                 previous_indentation_level = indentation_level
+
+            if OPERATOR_END_RE.search(line):
+                yield (
+                    line_number,
+                    'Put operators at the start of lines instead'
+                )
 
 
 def main():

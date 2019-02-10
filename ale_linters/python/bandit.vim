@@ -7,9 +7,10 @@ call ale#Set('python_bandit_use_global', get(g:, 'ale_use_global_executables', 0
 call ale#Set('python_bandit_auto_pipenv', 0)
 
 function! ale_linters#python#bandit#GetExecutable(buffer) abort
-    if (ale#Var(a:buffer, 'python_auto_pipenv') ||
-    \   ale#Var(a:buffer, 'python_bandit_auto_pipenv'))
-    \ && ale#python#PipenvPresent(a:buffer)
+    if (
+    \   ale#Var(a:buffer, 'python_auto_pipenv')
+    \   || ale#Var(a:buffer, 'python_bandit_auto_pipenv')
+    \) && ale#python#PipenvPresent(a:buffer)
         return 'pipenv'
     endif
 

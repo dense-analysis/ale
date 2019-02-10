@@ -53,9 +53,11 @@ function! ale#loclist_jumping#FindNearest(direction, wrap, ...) abort
         \   l:search_item
         \)
 
-        if (l:filter is# 'any' || l:filter is# l:item.type) &&
-        \  (l:subtype_filter is# 'any' ||
-        \   l:subtype_filter is# get(l:item, 'sub_type', ''))
+        if (l:filter is# 'any' || l:filter is# l:item.type)
+        \&& (
+        \   l:subtype_filter is# 'any'
+        \   || l:subtype_filter is# get(l:item, 'sub_type', '')
+        \)
 
             if a:direction is# 'before' && l:cmp_value < 0
                 return [l:item.lnum, l:item.col]
@@ -71,9 +73,11 @@ function! ale#loclist_jumping#FindNearest(direction, wrap, ...) abort
     " wrap around the list of warnings/errors
     if a:wrap
         for l:item in l:loclist
-            if (l:filter is# 'any' || l:filter is# l:item.type) &&
-            \  (l:subtype_filter is# 'any' ||
-            \   l:subtype_filter is# get(l:item, 'sub_type', ''))
+            if (l:filter is# 'any' || l:filter is# l:item.type)
+            \&& (
+            \   l:subtype_filter is# 'any'
+            \   || l:subtype_filter is# get(l:item, 'sub_type', '')
+            \)
                 return [l:item.lnum, l:item.col]
             endif
         endfor
