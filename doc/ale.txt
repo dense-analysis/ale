@@ -2467,14 +2467,36 @@ ALELast                                                               *ALELast*
   `ALEPreviousWrap` and `ALENextWrap` will wrap around the file to find
   the last or first warning or error in the file, respectively.
 
+  `ALEPrevious` and `ALENext` take optional flags arguments to custom their
+  behaviour :
+  `-wrap` enable wrapping around the file
+  `-error`, `-warning` and `-info` enable jumping to errors, warnings or infos
+    respectively, ignoring anything else. They are mutually exclusive and if
+    several are provided the priority is the following: error > warning > info.
+  `-style` and `-nostyle` allow you to jump respectively to style error or
+    warning and to not style error or warning. They also are mutually
+    exclusive and nostyle has priority over style.
+  
+  Flags can be combined to create create custom jumping. Thus you can use
+  ":ALENext -wrap -error -nosyle" to jump to the next error which is not a
+  style error while going back to the begining of the file if needed.
+
   `ALEFirst` goes to the first error or warning in the buffer, while `ALELast`
   goes to the last one.
 
   The following |<Plug>| mappings are defined for the commands: >
   <Plug>(ale_previous) - ALEPrevious
   <Plug>(ale_previous_wrap) - ALEPreviousWrap
+  <Plug>(ale_previous_error) - ALEPrevious -error
+  <Plug>(ale_previous_wrap_error) - ALEPrevious -wrap -error
+  <Plug>(ale_previous_warning) - ALEPrevious -warning
+  <Plug>(ale_previous_wrap_warning) - ALEPrevious -wrap -warning
   <Plug>(ale_next) - ALENext
   <Plug>(ale_next_wrap) - ALENextWrap
+  <Plug>(ale_next_error) - ALENext -error
+  <Plug>(ale_next_wrap_error) - ALENext -wrap -error
+  <Plug>(ale_next_warning) - ALENext -warning
+  <Plug>(ale_next_wrap_warning) - ALENext -wrap -warning
   <Plug>(ale_first) - ALEFirst
   <Plug>(ale_last) - ALELast
 <
