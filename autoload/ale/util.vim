@@ -111,6 +111,7 @@ function! ale#util#Open(filename, line, column, options) abort
     endif
 
     call cursor(a:line, a:column)
+    normal! zz
 endfunction
 
 let g:ale#util#error_priority = 5
