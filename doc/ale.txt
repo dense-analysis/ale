@@ -20,7 +20,8 @@ CONTENTS                                                         *ale-contents*
     5.6 Symbol Search.....................|ale-symbol-search|
   6. Global Options.......................|ale-options|
     6.1 Highlights........................|ale-highlights|
-    6.2 Options for write-good Linter.....|ale-write-good-options|
+    6.2 Options for alex Linter...........|ale-alex-options|
+    6.3 Options for write-good Linter.....|ale-write-good-options|
   7. Integration Documentation............|ale-integrations|
     ada...................................|ale-ada-options|
       gcc.................................|ale-ada-gcc|
@@ -2225,7 +2226,29 @@ ALEWarningSign                                                 *ALEWarningSign*
 
 
 -------------------------------------------------------------------------------
-6.2. Options for write-good                            *ale-write-good-options*
+6.2. Options for alex                                        *ale-alex-options*
+
+The options for the alex linter are global because it does not make sense to
+have them specified on a per-language basis.
+
+g:ale_alex_executable                                   *g:ale_alex_executable*
+                                                        *b:ale_alex_executable*
+  Type: |String|
+  Default: `'alex'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_alex_use_global                                   *g:ale_alex_use_global*
+                                                        *b:ale_alex_use_global*
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+
+-------------------------------------------------------------------------------
+6.3. Options for write-good                            *ale-write-good-options*
 
 The options for the write-good linter are global because it does not make
 sense to have them specified on a per-language basis.
