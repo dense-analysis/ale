@@ -9,7 +9,7 @@ Execute(The default command should be correct):
 
 Execute(should resolve correct path when nested 1):
   call ale#test#SetFilename('tsserver_paths/src/level-1/level-2/file3.ts')
-  AssertLSPProject ale#path#Simplify(g:dir . '/tsserver_paths/src/level-1/tsconfig.json')
+  AssertLSPProject ale#path#Simplify(g:dir . '/tsserver_paths/src/level-1')
 
 Execute(should resolve correct path when nested 2):
   call ale#test#SetFilename('tsserver_paths/src/file1.ts')
