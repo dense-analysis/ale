@@ -170,7 +170,7 @@ formatting.
   * [prettier](https://github.com/prettier/prettier)
 * Hack
   * [hack](http://hacklang.org/)
-  * [hackfmt](https://github.com/facebook/hhvm/tree/master/hphp/hack/hackfmt) :warning:
+  * [hackfmt](https://github.com/facebook/hhvm/tree/master/hphp/hack/hackfmt)
   * [hhast](https://github.com/hhvm/hhast) :warning: (see `:help ale-integration-hack`)
 * Haml
   * [haml-lint](https://github.com/brigade/haml-lint)
@@ -297,7 +297,7 @@ formatting.
 * Perl
   * [perl -c](https://perl.org/) :warning:
   * [perl-critic](https://metacpan.org/pod/Perl::Critic)
-  * [perltidy](https://metacpan.org/pod/distribution/Perl-Tidy/bin/perltidy) :warning:
+  * [perltidy](https://metacpan.org/pod/distribution/Perl-Tidy/bin/perltidy)
 * Perl6
   * [perl6 -c](https://perl6.org) :warning:
 * PHP
@@ -332,11 +332,11 @@ formatting.
   * [puppet](https://puppet.com)
   * [puppet-lint](https://puppet-lint.com)
 * Python
-  * [autopep8](https://github.com/hhatto/autopep8) :warning:
+  * [autopep8](https://github.com/hhatto/autopep8)
   * [bandit](https://github.com/PyCQA/bandit) :warning:
-  * [black](https://github.com/ambv/black) :warning:
+  * [black](https://github.com/ambv/black)
   * [flake8](http://flake8.pycqa.org/en/latest/)
-  * [isort](https://github.com/timothycrosley/isort) :warning:
+  * [isort](https://github.com/timothycrosley/isort)
   * [mypy](http://mypy-lang.org/)
   * [prospector](https://github.com/PyCQA/prospector) :warning:
   * [pycodestyle](https://github.com/PyCQA/pycodestyle) :warning:
@@ -345,7 +345,7 @@ formatting.
   * [pyls](https://github.com/palantir/python-language-server) :warning:
   * [pyre](https://github.com/facebook/pyre-check) :warning:
   * [vulture](https://github.com/jendrikseipp/vulture) :warning: :floppy_disk:
-  * [yapf](https://github.com/google/yapf) :warning:
+  * [yapf](https://github.com/google/yapf)
 * QML
   * [qmlfmt](https://github.com/jesperhh/qmlfmt)
   * [qmllint](https://github.com/qt/qtdeclarative/tree/5.11/tools/qmllint)
