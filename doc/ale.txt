@@ -413,128 +413,8 @@ developer documentation. See |ale-development|
 ===============================================================================
 2. Supported Languages & Tools                                    *ale-support*
 
-The following languages and tools are supported.
-
-Notes:
-
-`^` No linters for text or Vim help filetypes are enabled by default.
-`!!` These linters check only files on disk. See |ale-lint-file-linters|
-
-* Ada: `gcc`
-* ASM: `gcc`
-* Ansible: `ansible-lint`
-* API Blueprint: `drafter`
-* AsciiDoc: `alex`!!, `proselint`, `redpen`, `write-good`, `vale`, `textlint`
-* Awk: `gawk`
-* Bash: `language-server`, `shell` (-n flag), `shellcheck`, `shfmt`
-* BibTeX: `bibclean`
-* Bourne Shell: `shell` (-n flag), `shellcheck`, `shfmt`
-* C: `cppcheck`, `cpplint`!!, `clang`, `clangd`, `clangtidy`!!, `clang-format`, `cquery`, `flawfinder`, `gcc`, `uncrustify`, `ccls`
-* C++ (filetype cpp): `clang`, `clangd`, `clangcheck`!!, `clangtidy`!!, `clang-format`, `clazy`!!, `cppcheck`, `cpplint`!!, `cquery`, `flawfinder`, `gcc`, `uncrustify`, `ccls`
-* CUDA: `nvcc`!!
-* C#: `mcs`, `mcsc`!!, `uncrustify`
-* Chef: `foodcritic`
-* Clojure: `joker`
-* CloudFormation: `cfn-python-lint`
-* CMake: `cmakelint`, `cmake-format`
-* CoffeeScript: `coffee`, `coffeelint`
-* Crystal: `ameba`!!, `crystal`!!
-* CSS: `csslint`, `prettier`, `stylelint`
-* Cucumber: `cucumber`
-* Cypher: `cypher-lint`
-* Cython (pyrex filetype): `cython`
-* D: `dls`, `dmd`, `uncrustify`
-* Dafny: `dafny`!!
-* Dart: `dartanalyzer`!!, `language_server`, dartfmt!!
-* Dockerfile: `dockerfile_lint`, `hadolint`
-* Elixir: `credo`, `dialyxir`, `dogma`, `mix`!!, `elixir-ls`
-* Elm: `elm-format, elm-make`
-* Erb: `erb`, `erubi`, `erubis`, `ruumba`
-* Erlang: `erlc`, `SyntaxErl`
-* Fish: `fish` (-n flag)
-* Fortran: `gcc`, `language_server`
-* Fountain: `proselint`
-* FusionScript: `fusion-lint`
-* Git Commit Messages: `gitlint`
-* GLSL: glslang, `glslls`
-* Go: `gofmt`, `goimports`, `go mod`!!, `go vet`!!, `golint`, `gotype`!!, `gometalinter`!!, `go build`!!, `gosimple`!!, `staticcheck`!!, `golangserver`, `golangci-lint`!!, `bingo`
-* GraphQL: `eslint`, `gqlint`, `prettier`
-* Hack: `hack`, `hackfmt`, `hhast`
-* Haml: `haml-lint`
-* Handlebars: `ember-template-lint`
-* Haskell: `brittany`, `ghc`, `cabal-ghc`, `stylish-haskell`, `stack-ghc`, `stack-build`!!, `ghc-mod`, `hlint`, `hdevtools`, `hfmt`, `hie`
-* HCL: `terraform-fmt`
-* HTML: `alex`!!, `HTMLHint`, `proselint`, `tidy`, `prettier`, `write-good`
-* Idris: `idris`
-* ISPC: `ispc`!!
-* Java: `checkstyle`, `javac`, `google-java-format`, `PMD`, `javalsp`, `uncrustify`
-* JavaScript: `eslint`, `flow`, `jscs`, `jshint`, `prettier`, `prettier-eslint`, `prettier-standard`, `standard`, `tsserver`, `xo`
-* JSON: `fixjson`, `jsonlint`, `jq`, `prettier`
-* Julia: `languageserver`
-* Kotlin: `kotlinc`!!, `ktlint`!!, `languageserver`
-* LaTeX (tex): `alex`!!, `chktex`, `lacheck`, `proselint`, `redpen`, `vale`, `write-good`, `textlint`
-* Less: `lessc`, `prettier`, `stylelint`
-* LLVM: `llc`
-* Lua: `luac`, `luacheck`
-* Mail: `alex`!!, `proselint`, `vale`
-* Make: `checkmake`
-* Markdown: `alex`!!, `markdownlint`!!, `mdl`, `prettier`, `proselint`, `redpen`, `remark-lint`, `textlint`, `vale`, `write-good`
-* MATLAB: `mlint`
-* Mercury: `mmc`!!
-* NASM: `nasm`!!
-* Nim: `nim check`!!
-* nix: `nix-instantiate`
-* nroff: `alex`!!, `proselint`, `write-good`
-* Objective-C: `clang`, `clangd`, `uncrustify`, `ccls`
-* Objective-C++: `clang`, `clangd`, `uncrustify`
-* OCaml: `merlin` (see |ale-ocaml-merlin|), `ols`, `ocamlformat`
-* Pawn: `uncrustify`
-* Perl: `perl -c`, `perl-critic`, `perltidy`
-* Perl6: `perl6 -c`
-* PHP: `langserver`, `phan`, `php -l`, `phpcs`, `phpmd`, `phpstan`, `phpcbf`, `php-cs-fixer`, `psalm`!!
-* PO: `alex`!!, `msgfmt`, `proselint`, `write-good`
-* Pod: `alex`!!, `proselint`, `write-good`
-* Pony: `ponyc`
-* Prolog: `swipl`
-* proto: `protoc-gen-lint`
-* Pug: `pug-lint`
-* Puppet: `languageserver`, `puppet`, `puppet-lint`
-* Python: `autopep8`, `bandit`, `black`, `flake8`, `isort`, `mypy`, `prospector`, `pycodestyle`, `pydocstyle`, `pyls`, `pyre`, `pylint`!!, `vulture`!!, `yapf`
-* QML: `qmlfmt`, `qmllint`
-* R: `lintr`
-* Racket: `raco`
-* ReasonML: `merlin`, `ols`, `refmt`
-* reStructuredText: `alex`!!, `proselint`, `redpen`, `rstcheck`, `textlint`, `vale`, `write-good`
-* Re:VIEW: `redpen`
-* RPM spec: `rpmlint`
-* Ruby: `brakeman`, `rails_best_practices`!!, `reek`, `rubocop`, `ruby`, `rufo`, `solargraph`, `standardrb`
-* Rust: `cargo`!!, `rls`, `rustc` (see |ale-integration-rust|), `rustfmt`
-* Sass: `sass-lint`, `stylelint`
-* SCSS: `prettier`, `sass-lint`, `scss-lint`, `stylelint`
-* Scala: `fsc`, `sbtserver`, `scalac`, `scalafmt`, `scalastyle`
-* Slim: `slim-lint`
-* SML: `smlnj`
-* Solidity: `solhint`, `solium`
-* Stylus: `stylelint`
-* SugarSS: `stylelint`
-* SQL: `sqlint`, `sqlfmt`
-* Swift: `swiftlint`, `swiftformat`
-* Tcl: `nagelfar`!!
-* Terraform: `fmt`, `tflint`
-* Texinfo: `alex`!!, `proselint`, `write-good`
-* Text^: `alex`!!, `proselint`, `redpen`, `textlint`, `vale`, `write-good`
-* Thrift: `thrift`
-* TypeScript: `eslint`, `prettier`, `tslint`, `tsserver`, `typecheck`
-* VALA: `uncrustify`
-* Verilog: `iverilog`, `verilator`, `vlog`, `xvlog`
-* VHDL: `ghdl`, `vcom`, `xvhdl`
-* Vim: `vint`
-* Vim help^: `alex`!!, `proselint`, `write-good`
-* Vue: `prettier`, `vls`
-* XHTML: `alex`!!, `proselint`, `write-good`
-* XML: `xmllint`
-* YAML: `prettier`, `swaglint`, `yamllint`
-* YANG: `yang-lsp`
+ALE supports a wide variety of languages and tools. See |ale-supported-list|
+for the full list.
 
 ===============================================================================
 3. Linting                                                           *ale-lint*
@@ -2499,7 +2379,7 @@ ALELast                                                               *ALELast*
   `-style` and `-nostyle` allow you to jump respectively to style error or
     warning and to not style error or warning. They also are mutually
     exclusive and nostyle has priority over style.
-  
+
   Flags can be combined to create create custom jumping. Thus you can use
   ":ALENext -wrap -error -nosyle" to jump to the next error which is not a
   style error while going back to the begining of the file if needed.
