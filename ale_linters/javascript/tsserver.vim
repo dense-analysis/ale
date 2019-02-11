@@ -12,6 +12,6 @@ call ale#linter#Define('javascript', {
 \       'node_modules/.bin/tsserver',
 \   ]),
 \   'command': '%e',
-\   'project_root_callback': {-> ''},
+\   'project_root_callback': 'ale#handlers#tsserver#GetProjectRoot',
 \   'language': '',
 \})
