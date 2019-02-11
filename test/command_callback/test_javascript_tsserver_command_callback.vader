@@ -13,4 +13,4 @@ Execute(should resolve correct path when nested 1):
 
 Execute(should resolve correct path when nested 2):
   call ale#test#SetFilename('tsserver_paths/src/file1.ts')
-  AssertLSPProject ale#path#Simplify(g:dir . '/tsserver_paths/tsconfig.json')
+  AssertLSPProject ale#path#Simplify(g:dir . '/tsserver_paths')
