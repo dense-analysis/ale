@@ -34,10 +34,13 @@ function! ale_linters#python#pylama#GetCommand(buffer) abort
     \   ? ' run pylama'
     \   : ''
 
+    " Note: Using %t to lint changes would be preferable, but many pylama
+    " checks use surrounding paths (e.g. C0103 module name, E0402 relative
+    " import beyond top, etc.).  Neither is ideal.
     return l:cd_string
     \   . ale#Escape(l:executable) . l:exec_args
     \   . ale#Pad(ale#Var(a:buffer, 'python_pylama_options'))
-    \   . ' %t'
+    \   . ' %s'
 endfunction
 
 function! ale_linters#python#pylama#Handle(buffer, lines) abort
@@ -67,12 +70,6 @@ function! ale_linters#python#pylama#Handle(buffer, lines) abort
     \}
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        " Ignore C0103 for module name from temporary path (%t) which may not
-        " comply with module-rgx.
-        if l:match[3] is# 'C0103' && l:match[4] =~# '^Module name '
-            continue
-        endif
-
         call add(l:output, {
         \   'lnum': str2nr(l:match[1]),
         \   'col': str2nr(l:match[2]),
@@ -91,4 +88,5 @@ call ale#linter#Define('python', {
 \   'executable_callback': 'ale_linters#python#pylama#GetExecutable',
 \   'command_callback': 'ale_linters#python#pylama#GetCommand',
 \   'callback': 'ale_linters#python#pylama#Handle',
+\   'lint_file': 1,
 \})
