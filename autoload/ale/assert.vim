@@ -26,6 +26,11 @@ function! ale#assert#Linter(expected_executable, expected_command) abort
     let l:linter = s:GetLinter()
     let l:executable = ale#linter#GetExecutable(l:buffer, l:linter)
 
+    while ale#command#IsDeferred(l:executable)
+        call ale#test#FlushJobs()
+        let l:executable = l:executable.value
+    endwhile
+
     if has_key(l:linter, 'command_chain')
         let l:callbacks = map(copy(l:linter.command_chain), 'v:val.callback')
 
@@ -125,6 +130,18 @@ function! ale#assert#LSPAddress(expected_address) abort
     AssertEqual a:expected_address, l:address
 endfunction
 
+function! ale#assert#SetUpLinterTestCommands() abort
+    command! -nargs=+ WithChainResults :call ale#assert#WithChainResults(<args>)
+    command! -nargs=+ AssertLinter :call ale#assert#Linter(<args>)
+    command! -nargs=0 AssertLinterNotExecuted :call ale#assert#LinterNotExecuted()
+    command! -nargs=+ AssertLSPOptions :call ale#assert#LSPOptions(<args>)
+    command! -nargs=+ AssertLSPConfig :call ale#assert#LSPConfig(<args>)
+    command! -nargs=+ AssertLSPLanguage :call ale#assert#LSPLanguage(<args>)
+    command! -nargs=+ AssertLSPProject :call ale#assert#LSPProject(<args>)
+    command! -nargs=+ AssertLSPProjectFull :call ale#assert#LSPProjectFull(<args>)
+    command! -nargs=+ AssertLSPAddress :call ale#assert#LSPAddress(<args>)
+endfunction
+
 " A dummy function for making sure this module is loaded.
 function! ale#assert#SetUpLinterTest(filetype, name) abort
     " Set up a marker so ALE doesn't create real random temporary filenames.
@@ -159,15 +176,7 @@ function! ale#assert#SetUpLinterTest(filetype, name) abort
         call ale#test#SetDirectory('/testplugin/test/command_callback')
     endif
 
-    command! -nargs=+ WithChainResults :call ale#assert#WithChainResults(<args>)
-    command! -nargs=+ AssertLinter :call ale#assert#Linter(<args>)
-    command! -nargs=0 AssertLinterNotExecuted :call ale#assert#LinterNotExecuted()
-    command! -nargs=+ AssertLSPOptions :call ale#assert#LSPOptions(<args>)
-    command! -nargs=+ AssertLSPConfig :call ale#assert#LSPConfig(<args>)
-    command! -nargs=+ AssertLSPLanguage :call ale#assert#LSPLanguage(<args>)
-    command! -nargs=+ AssertLSPProject :call ale#assert#LSPProject(<args>)
-    command! -nargs=+ AssertLSPProjectFull :call ale#assert#LSPProjectFull(<args>)
-    command! -nargs=+ AssertLSPAddress :call ale#assert#LSPAddress(<args>)
+    call ale#assert#SetUpLinterTestCommands()
 endfunction
 
 function! ale#assert#TearDownLinterTest() abort

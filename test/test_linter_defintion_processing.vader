@@ -48,7 +48,7 @@ Execute (PreProcess should throw when executable is not a string):
   \ 'executable': 123,
   \ 'command': 'echo',
   \})
-  AssertEqual '`executable` must be a string if defined', g:vader_exception
+  AssertEqual '`executable` must be a String or Function if defined', g:vader_exception
 
 Execute (PreProcess should throw when executable_callback is not a callback):
   AssertThrows call ale#linter#PreProcess('testft', {
@@ -58,6 +58,14 @@ Execute (PreProcess should throw when executable_callback is not a callback):
   \ 'command': 'echo',
   \})
   AssertEqual '`executable_callback` must be a callback if defined', g:vader_exception
+
+Execute (PreProcess should allow executable to be a callback):
+  call ale#linter#PreProcess('testft', {
+  \ 'name': 'foo',
+  \ 'callback': 'SomeFunction',
+  \ 'executable': function('type'),
+  \ 'command': 'echo',
+  \})
 
 Execute (PreProcess should throw when there is no command):
   AssertThrows call ale#linter#PreProcess('testft', {

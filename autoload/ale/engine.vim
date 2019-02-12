@@ -590,6 +590,26 @@ function! s:AddProblemsFromOtherBuffers(buffer, linters) abort
     endif
 endfunction
 
+function! s:RunIfExecutable(buffer, linter, executable) abort
+    if ale#command#IsDeferred(a:executable)
+        let a:executable.result_callback = {
+        \   executable -> s:RunIfExecutable(a:buffer, a:linter, executable)
+        \}
+
+        return 1
+    endif
+
+    if ale#engine#IsExecutable(a:buffer, a:executable)
+        " Use different job types for file or linter jobs.
+        let l:job_type = a:linter.lint_file ? 'file_linter' : 'linter'
+        call setbufvar(a:buffer, 'ale_job_type', l:job_type)
+
+        return s:InvokeChain(a:buffer, a:executable, a:linter, 0, [])
+    endif
+
+    return 0
+endfunction
+
 " Run a linter for a buffer.
 "
 " Returns 1 if the linter was successfully run.
@@ -599,13 +619,7 @@ function! s:RunLinter(buffer, linter) abort
     else
         let l:executable = ale#linter#GetExecutable(a:buffer, a:linter)
 
-        " Use different job types for file or linter jobs.
-        let l:job_type = a:linter.lint_file ? 'file_linter' : 'linter'
-        call setbufvar(a:buffer, 'ale_job_type', l:job_type)
-
-        if ale#engine#IsExecutable(a:buffer, l:executable)
-            return s:InvokeChain(a:buffer, l:executable, a:linter, 0, [])
-        endif
+        return s:RunIfExecutable(a:buffer, a:linter, l:executable)
     endif
 
     return 0

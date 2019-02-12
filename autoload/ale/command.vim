@@ -236,26 +236,35 @@ function! s:ExitCallback(buffer, line_list, Callback, data) abort
 
     " If the callback starts any new jobs, use the same job type for them.
     call setbufvar(a:buffer, 'ale_job_type', l:job_type)
-    let l:result = a:Callback(a:buffer, a:line_list, {
+    let l:value = a:Callback(a:buffer, a:line_list, {
     \   'exit_code': a:data.exit_code,
     \   'temporary_file': a:data.temporary_file,
     \})
 
-    if get(a:data, 'result_callback', v:null) isnot v:null
-        call call(a:data.result_callback, [l:result])
+    let l:result = a:data.result
+    let l:result.value = l:value
+
+    if get(l:result, 'result_callback', v:null) isnot v:null
+        call call(l:result.result_callback, [l:value])
     endif
 endfunction
 
-function! ale#command#Run(buffer, command, Callback, options) abort
-    let l:output_stream = get(a:options, 'output_stream', 'stdout')
+function! ale#command#Run(buffer, command, Callback, ...) abort
+    let l:options = get(a:000, 0, {})
+
+    if len(a:000) > 1
+        throw 'Too many arguments!'
+    endif
+
+    let l:output_stream = get(l:options, 'output_stream', 'stdout')
     let l:line_list = []
 
     let [l:temporary_file, l:command, l:file_created] = ale#command#FormatCommand(
     \   a:buffer,
-    \   get(a:options, 'executable', ''),
+    \   get(l:options, 'executable', ''),
     \   a:command,
-    \   get(a:options, 'read_buffer', 0),
-    \   get(a:options, 'input', v:null),
+    \   get(l:options, 'read_buffer', 0),
+    \   get(l:options, 'input', v:null),
     \)
     let l:command = ale#job#PrepareCommand(a:buffer, l:command)
     let l:job_options = {
@@ -267,8 +276,8 @@ function! ale#command#Run(buffer, command, Callback, options) abort
     \           'job_id': job_id,
     \           'exit_code': exit_code,
     \           'temporary_file': l:temporary_file,
-    \           'log_output': get(a:options, 'log_output', 1),
-    \           'result_callback': get(l:result, 'result_callback', v:null),
+    \           'log_output': get(l:options, 'log_output', 1),
+    \           'result': l:result,
     \       }
     \   )},
     \   'mode': 'nl',
@@ -343,4 +352,8 @@ function! ale#command#Run(buffer, command, Callback, options) abort
     endif
 
     return l:result
+endfunction
+
+function! ale#command#IsDeferred(value) abort
+    return type(a:value) is v:t_dict && has_key(a:value, '_deferred_job_id')
 endfunction

@@ -120,7 +120,8 @@ function! ale#linter#PreProcess(filetype, linter) abort
         let l:obj.executable = a:linter.executable
 
         if type(l:obj.executable) isnot v:t_string
-            throw '`executable` must be a string if defined'
+        \&& type(l:obj.executable) isnot v:t_func
+            throw '`executable` must be a String or Function if defined'
         endif
     else
         throw 'Either `executable` or `executable_callback` must be defined'
@@ -476,9 +477,13 @@ endfunction
 
 " Given a buffer and linter, get the executable String for the linter.
 function! ale#linter#GetExecutable(buffer, linter) abort
-    return has_key(a:linter, 'executable_callback')
-    \   ? ale#util#GetFunction(a:linter.executable_callback)(a:buffer)
+    let l:Executable = has_key(a:linter, 'executable_callback')
+    \   ? function(a:linter.executable_callback)
     \   : a:linter.executable
+
+    return type(l:Executable) is v:t_func
+    \   ? l:Executable(a:buffer)
+    \   : l:Executable
 endfunction
 
 " Given a buffer and linter, get the command String for the linter.

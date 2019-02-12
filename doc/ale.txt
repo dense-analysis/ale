@@ -2744,7 +2744,11 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                            Human-readable |String| error code.
 
   `executable`             A |String| naming the executable itself which
-                         will be run. This value will be used to check if the
+                         will be run, or a |Funcref| for a function to call
+                         for computing the executable, accepting a buffer
+                         number.
+
+                         This value will be used to check if the
                          program requested is installed or not.
 
                          Either this or the `executable_callback` argument
