@@ -3,7 +3,7 @@ Before:
   call ale#test#SetFilename('test.py')
 
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
-  let b:command_tail = ' %t'
+  let b:command_tail = ' %s'
 
 After:
   unlet! b:bin_dir

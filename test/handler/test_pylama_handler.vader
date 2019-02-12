@@ -191,22 +191,3 @@ Execute(The pylama handler should handle message codes followed by a colon):
   \ ale_linters#python#pylama#Handle(bufnr(''), [
   \   'index.py:31:1: E800: Found commented out code: # needs_sphinx = ''1.0'' [eradicate]',
   \ ])
-
-" The directory created for %t may not comply with pylint module name config.
-" This should not be reported to users.
-Execute(The pylama handler should ignore C0103 from temp dir, not others):
-  AssertEqual
-  \ [
-  \   {
-  \     'lnum': 29,
-  \     'col': 0,
-  \     'code': 'C0103',
-  \     'type': 'W',
-  \     'sub_type': 'style',
-  \     'text': 'Constant name "badname" doesn''t conform to UPPER_CASE naming style [pylint]',
-  \   },
-  \ ],
-  \ ale_linters#python#pylama#Handle(bufnr(''), [
-  \   '../../../../tmp/vmynR33/456/__init__.py:1:0: C0103 Module name "456" doesn''t conform to snake_case naming style [pylint]',
-  \   '../../../../tmp/vmynR33/456/__init__.py:29:0: C0103 Constant name "badname" doesn''t conform to UPPER_CASE naming style [pylint]',
-  \ ])

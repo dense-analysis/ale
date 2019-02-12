@@ -341,6 +341,7 @@ formatting.
   * [prospector](https://github.com/PyCQA/prospector) :warning:
   * [pycodestyle](https://github.com/PyCQA/pycodestyle) :warning:
   * [pydocstyle](https://www.pydocstyle.org/) :warning:
+  * [pylama](https://github.com/klen/pylama) :floppy_disk:
   * [pylint](https://www.pylint.org/) :floppy_disk:
   * [pyls](https://github.com/palantir/python-language-server) :warning:
   * [pyre](https://github.com/facebook/pyre-check) :warning:

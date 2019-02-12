@@ -332,6 +332,7 @@ Notes:
   * `prospector`
   * `pycodestyle`
   * `pydocstyle`
+  * `pylama`!!
   * `pylint`!!
   * `pyls`
   * `pyre`
