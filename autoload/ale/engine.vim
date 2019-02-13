@@ -462,53 +462,49 @@ function! ale#engine#ProcessChain(buffer, executable, linter, chain_index, input
     let l:chain_index = a:chain_index
     let l:input = a:input
 
-    if has_key(a:linter, 'command_chain')
-        while l:chain_index < len(a:linter.command_chain)
-            " Run a chain of commands, one asynchronous command after the other,
-            " so that many programs can be run in a sequence.
-            let l:chain_item = a:linter.command_chain[l:chain_index]
+    while l:chain_index < len(a:linter.command_chain)
+        " Run a chain of commands, one asynchronous command after the other,
+        " so that many programs can be run in a sequence.
+        let l:chain_item = a:linter.command_chain[l:chain_index]
 
-            if l:chain_index == 0
-                " The first callback in the chain takes only a buffer number.
-                let l:command = ale#util#GetFunction(l:chain_item.callback)(
-                \   a:buffer
-                \)
-            else
-                " The second callback in the chain takes some input too.
-                let l:command = ale#util#GetFunction(l:chain_item.callback)(
-                \   a:buffer,
-                \   l:input
-                \)
+        if l:chain_index == 0
+            " The first callback in the chain takes only a buffer number.
+            let l:command = ale#util#GetFunction(l:chain_item.callback)(
+            \   a:buffer
+            \)
+        else
+            " The second callback in the chain takes some input too.
+            let l:command = ale#util#GetFunction(l:chain_item.callback)(
+            \   a:buffer,
+            \   l:input
+            \)
+        endif
+
+        " If we have a command to run, execute that.
+        if !empty(l:command)
+            " The chain item can override the output_stream option.
+            if has_key(l:chain_item, 'output_stream')
+                let l:output_stream = l:chain_item.output_stream
             endif
 
-            " If we have a command to run, execute that.
-            if !empty(l:command)
-                " The chain item can override the output_stream option.
-                if has_key(l:chain_item, 'output_stream')
-                    let l:output_stream = l:chain_item.output_stream
-                endif
-
-                " The chain item can override the read_buffer option.
-                if has_key(l:chain_item, 'read_buffer')
-                    let l:read_buffer = l:chain_item.read_buffer
-                elseif l:chain_index != len(a:linter.command_chain) - 1
-                    " Don't read the buffer for commands besides the last one
-                    " in the chain by default.
-                    let l:read_buffer = 0
-                endif
-
-                break
+            " The chain item can override the read_buffer option.
+            if has_key(l:chain_item, 'read_buffer')
+                let l:read_buffer = l:chain_item.read_buffer
+            elseif l:chain_index != len(a:linter.command_chain) - 1
+                " Don't read the buffer for commands besides the last one
+                " in the chain by default.
+                let l:read_buffer = 0
             endif
 
-            " Command chain items can return an empty string to indicate that
-            " a command should be skipped, so we should try the next item
-            " with no input.
-            let l:input = []
-            let l:chain_index += 1
-        endwhile
-    else
-        let l:command = ale#linter#GetCommand(a:buffer, a:linter)
-    endif
+            break
+        endif
+
+        " Command chain items can return an empty string to indicate that
+        " a command should be skipped, so we should try the next item
+        " with no input.
+        let l:input = []
+        let l:chain_index += 1
+    endwhile
 
     return [l:command, {
     \   'executable': a:executable,
