@@ -3,18 +3,18 @@
 
 call ale#Set('haskell_cabal_ghc_options', '-fno-code -v0')
 
-function! ale_linters#haskell#cabal_ghc#GetCommand(buffer) abort
+function! ale_linters#haskell#cabal_v2_ghc#GetCommand(buffer) abort
     return ale#path#BufferCdString(a:buffer)
-    \   . 'cabal exec -- ghc '
+    \   . 'cabal v2-exec -- ghc '
     \   . ale#Var(a:buffer, 'haskell_cabal_ghc_options')
     \   . ' %t'
 endfunction
 
 call ale#linter#Define('haskell', {
-\   'name': 'cabal_ghc',
-\   'aliases': ['cabal-ghc'],
+\   'name': 'cabal_v2_ghc',
+\   'aliases': ['cabal-v2-ghc'],
 \   'output_stream': 'stderr',
 \   'executable': 'cabal',
-\   'command': function('ale_linters#haskell#cabal_ghc#GetCommand'),
+\   'command_callback': 'ale_linters#haskell#cabal_v2_ghc#GetCommand',
 \   'callback': 'ale#handlers#haskell#HandleGHCFormat',
 \})
