@@ -6,19 +6,24 @@ set -u
 # This script checks that the table of contents for the supported tools is
 # sorted, and that the table matches the files.
 
-toc_start_line="$( \
-    grep -m1 -n 'Integration Documentation.*|ale-integrations|' doc/ale.txt \
+toc_section_start_line="$(
+    grep -m1 -n '^7\..*\*ale-other-integration-options\*' doc/ale.txt \
+    | sed 's/\([0-9]*\).*/\1/' \
+)"
+toc_start_offset="$( \
+    tail -n +"$toc_section_start_line" doc/ale.txt \
+    | grep -m1 -n '^  .*\.\.\.' \
     | sed 's/\([0-9]*\).*/\1/' \
 )"
 # shellcheck disable=SC2003
-toc_start_line="$(expr "$toc_start_line" + 1)"
+toc_start_line="$(expr "$toc_section_start_line" + "$toc_start_offset" - 1)"
 toc_section_size="$( \
     tail -n +"$toc_start_line" doc/ale.txt \
-    | grep -m1 -n '^  [0-9]\+\.' \
+    | grep -m1 -n '^===*$' \
     | sed 's/\([0-9]*\).*/\1/' \
 )"
 # shellcheck disable=SC2003
-toc_end_line="$(expr "$toc_start_line" + "$toc_section_size" - 2)"
+toc_end_line="$(expr "$toc_start_line" + "$toc_section_size" - 4)"
 
 toc_file="$(mktemp -t table-of-contents.XXXXXXXX)"
 heading_file="$(mktemp -t headings.XXXXXXXX)"
@@ -26,7 +31,7 @@ tagged_toc_file="$(mktemp -t ale.txt.XXXXXXXX)"
 sorted_toc_file="$(mktemp -t sorted-ale.txt.XXXXXXXX)"
 
 sed -n "$toc_start_line,$toc_end_line"p doc/ale.txt \
-    | sed 's/^    \( *[^.][^.]*\)\.\.*|\(..*\)|/\1, \2/' \
+    | sed 's/^  \( *[^.][^.]*\)\.\.*|\(..*\)|/\1, \2/' \
     > "$toc_file"
 
 # Get all of the doc files in a natural sorted order.
