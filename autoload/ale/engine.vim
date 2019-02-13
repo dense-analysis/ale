@@ -177,7 +177,15 @@ function! s:HandleExit(job_info, buffer, output, data) abort
     endif
 
     if l:next_chain_index < len(get(l:linter, 'command_chain', []))
-        call s:InvokeChain(a:buffer, l:executable, l:linter, l:next_chain_index, a:output)
+        let [l:command, l:options] = ale#engine#ProcessChain(
+        \   a:buffer,
+        \   l:executable,
+        \   l:linter,
+        \   l:next_chain_index,
+        \   a:output,
+        \)
+
+        call s:RunJob(l:command, l:options)
 
         return
     endif
@@ -396,11 +404,11 @@ endfunction
 " Run a job.
 "
 " Returns 1 when the job was started successfully.
-function! s:RunJob(options) abort
-    let l:command = a:options.command
+function! s:RunJob(command, options) abort
+    let l:command = a:command
 
     if empty(l:command)
-        return v:false
+        return 0
     endif
 
     let l:executable = a:options.executable
@@ -448,7 +456,7 @@ endfunction
 
 " Determine which commands to run for a link in a command chain, or
 " just a regular command.
-function! ale#engine#ProcessChain(buffer, linter, chain_index, input) abort
+function! ale#engine#ProcessChain(buffer, executable, linter, chain_index, input) abort
     let l:output_stream = get(a:linter, 'output_stream', 'stdout')
     let l:read_buffer = a:linter.read_buffer
     let l:chain_index = a:chain_index
@@ -502,21 +510,14 @@ function! ale#engine#ProcessChain(buffer, linter, chain_index, input) abort
         let l:command = ale#linter#GetCommand(a:buffer, a:linter)
     endif
 
-    return {
-    \   'command': l:command,
+    return [l:command, {
+    \   'executable': a:executable,
     \   'buffer': a:buffer,
     \   'linter': a:linter,
     \   'output_stream': l:output_stream,
     \   'next_chain_index': l:chain_index + 1,
     \   'read_buffer': l:read_buffer,
-    \}
-endfunction
-
-function! s:InvokeChain(buffer, executable, linter, chain_index, input) abort
-    let l:options = ale#engine#ProcessChain(a:buffer, a:linter, a:chain_index, a:input)
-    let l:options.executable = a:executable
-
-    return s:RunJob(l:options)
+    \}]
 endfunction
 
 function! s:StopCurrentJobs(buffer, include_lint_file_jobs) abort
@@ -604,7 +605,29 @@ function! s:RunIfExecutable(buffer, linter, executable) abort
         let l:job_type = a:linter.lint_file ? 'file_linter' : 'linter'
         call setbufvar(a:buffer, 'ale_job_type', l:job_type)
 
-        return s:InvokeChain(a:buffer, a:executable, a:linter, 0, [])
+        if has_key(a:linter, 'command_chain')
+            let [l:command, l:options] = ale#engine#ProcessChain(
+            \   a:buffer,
+            \   a:executable,
+            \   a:linter,
+            \   0,
+            \   []
+            \)
+
+            return s:RunJob(l:command, l:options)
+        endif
+
+        let l:command = ale#linter#GetCommand(a:buffer, a:linter)
+        let l:options = {
+        \   'executable': a:executable,
+        \   'buffer': a:buffer,
+        \   'linter': a:linter,
+        \   'output_stream': get(a:linter, 'output_stream', 'stdout'),
+        \   'next_chain_index': 1,
+        \   'read_buffer': a:linter.read_buffer,
+        \}
+
+        return s:RunJob(l:command, l:options)
     endif
 
     return 0

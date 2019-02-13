@@ -34,7 +34,10 @@ Before:
   \}
 
   function! ProcessIndex(chain_index)
-    return ale#engine#ProcessChain(347, g:linter, a:chain_index, [])
+    let [l:command, l:options] = ale#engine#ProcessChain(347, '', g:linter, a:chain_index, [])
+    let l:options.command = l:command
+
+    return l:options
   endfunction
 
 After:
