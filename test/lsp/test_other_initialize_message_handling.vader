@@ -10,7 +10,7 @@ Before:
   \ 'config': {},
   \ 'callback_list': [],
   \ 'message_queue': [],
-  \ 'capabilities_queue': [],
+  \ 'init_queue': [],
   \ 'capabilities': {
   \   'hover': 0,
   \   'references': 0,

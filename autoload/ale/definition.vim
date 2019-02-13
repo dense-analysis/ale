@@ -57,9 +57,14 @@ function! ale#definition#HandleLSPResponse(conn_id, response) abort
     endif
 endfunction
 
-function! s:OnReady(linter, lsp_details, line, column, options, capability, ...) abort
-    let l:buffer = a:lsp_details.buffer
+function! s:OnReady(line, column, options, capability, linter, lsp_details) abort
     let l:id = a:lsp_details.connection_id
+
+    if !ale#lsp#HasCapability(l:id, a:capability)
+        return
+    endif
+
+    let l:buffer = a:lsp_details.buffer
 
     let l:Callback = a:linter.lsp is# 'tsserver'
     \   ? function('ale#definition#HandleTSServerResponse')
@@ -100,21 +105,13 @@ endfunction
 function! s:GoToLSPDefinition(linter, options, capability) abort
     let l:buffer = bufnr('')
     let [l:line, l:column] = getcurpos()[1:2]
-    let l:lsp_details = ale#lsp_linter#StartLSP(l:buffer, a:linter)
+    let l:column = min([l:column, len(getline(l:line))])
 
-    if a:linter.lsp isnot# 'tsserver'
-        let l:column = min([l:column, len(getline(l:line))])
-    endif
-
-    if empty(l:lsp_details)
-        return 0
-    endif
-
-    let l:id = l:lsp_details.connection_id
-
-    call ale#lsp#WaitForCapability(l:id, a:capability, function('s:OnReady', [
-    \   a:linter, l:lsp_details, l:line, l:column, a:options, a:capability
-    \]))
+    let l:Callback = function(
+    \   's:OnReady',
+    \   [l:line, l:column, a:options, a:capability]
+    \)
+    call ale#lsp_linter#StartLSP(l:buffer, a:linter, l:Callback)
 endfunction
 
 function! ale#definition#GoTo(options) abort

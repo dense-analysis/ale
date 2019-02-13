@@ -36,7 +36,7 @@ function! ale#lsp#Register(executable_or_address, project, init_options) abort
         \   'config': {},
         \   'callback_list': [],
         \   'message_queue': [],
-        \   'capabilities_queue': [],
+        \   'init_queue': [],
         \   'capabilities': {
         \       'hover': 0,
         \       'references': 0,
@@ -259,13 +259,11 @@ function! ale#lsp#HandleInitResponse(conn, response) abort
     let a:conn.message_queue = []
 
     " Call capabilities callbacks queued for the project.
-    for [l:capability, l:Callback] in a:conn.capabilities_queue
-        if a:conn.capabilities[l:capability]
-            call call(l:Callback, [a:conn.id])
-        endif
+    for [l:Callback] in a:conn.init_queue
+        call l:Callback()
     endfor
 
-    let a:conn.capabilities_queue = []
+    let a:conn.init_queue = []
 endfunction
 
 function! ale#lsp#HandleMessage(conn_id, message) abort
@@ -501,26 +499,32 @@ function! ale#lsp#NotifyForChanges(conn_id, buffer) abort
     return l:notified
 endfunction
 
-" Given some LSP details that must contain at least `connection_id` and
-" `project_root` keys,
-function! ale#lsp#WaitForCapability(conn_id, capability, callback) abort
+" Wait for an LSP server to be initialized.
+function! ale#lsp#OnInit(conn_id, Callback) abort
     let l:conn = get(s:connections, a:conn_id, {})
 
     if empty(l:conn)
         return
     endif
 
+    if l:conn.initialized
+        call a:Callback()
+    else
+        call add(l:conn.init_queue, a:Callback)
+    endif
+endfunction
+
+" Check if an LSP has a given capability.
+function! ale#lsp#HasCapability(conn_id, capability) abort
+    let l:conn = get(s:connections, a:conn_id, {})
+
+    if empty(l:conn)
+        return 0
+    endif
+
     if type(get(l:conn.capabilities, a:capability, v:null)) isnot v:t_number
         throw 'Invalid capability ' . a:capability
     endif
 
-    if l:conn.initialized
-        if l:conn.capabilities[a:capability]
-            " The project has been initialized, so call the callback now.
-            call call(a:callback, [a:conn_id])
-        endif
-    else
-        " Call the callback later, once we have the information we need.
-        call add(l:conn.capabilities_queue, [a:capability, a:callback])
-    endif
+    return l:conn.capabilities[a:capability]
 endfunction

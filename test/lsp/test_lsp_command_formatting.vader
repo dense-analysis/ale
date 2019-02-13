@@ -24,6 +24,7 @@ Execute(Command formatting should be applied correctly for LSP linters):
   \   'executable': has('win32') ? 'cmd': 'true',
   \   'command': '%e --foo',
   \ },
+  \ {-> 0}
   \)
 
   if has('win32')

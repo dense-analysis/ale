@@ -65,9 +65,14 @@ function! ale#references#HandleLSPResponse(conn_id, response) abort
     endif
 endfunction
 
-function! s:OnReady(linter, lsp_details, line, column, options, ...) abort
-    let l:buffer = a:lsp_details.buffer
+function! s:OnReady(line, column, options, linter, lsp_details) abort
     let l:id = a:lsp_details.connection_id
+
+    if !ale#lsp#HasCapability(l:id, 'references')
+        return
+    endif
+
+    let l:buffer = a:lsp_details.buffer
 
     let l:Callback = a:linter.lsp is# 'tsserver'
     \   ? function('ale#references#HandleTSServerResponse')
@@ -96,27 +101,6 @@ function! s:OnReady(linter, lsp_details, line, column, options, ...) abort
     \}
 endfunction
 
-function! s:FindReferences(linter, options) abort
-    let l:buffer = bufnr('')
-    let [l:line, l:column] = getcurpos()[1:2]
-
-    if a:linter.lsp isnot# 'tsserver'
-        let l:column = min([l:column, len(getline(l:line))])
-    endif
-
-    let l:lsp_details = ale#lsp_linter#StartLSP(l:buffer, a:linter)
-
-    if empty(l:lsp_details)
-        return 0
-    endif
-
-    let l:id = l:lsp_details.connection_id
-
-    call ale#lsp#WaitForCapability(l:id, 'references', function('s:OnReady', [
-    \   a:linter, l:lsp_details, l:line, l:column, a:options
-    \]))
-endfunction
-
 function! ale#references#Find(...) abort
     let l:options = {}
 
@@ -128,9 +112,14 @@ function! ale#references#Find(...) abort
         endfor
     endif
 
+    let l:buffer = bufnr('')
+    let [l:line, l:column] = getcurpos()[1:2]
+    let l:column = min([l:column, len(getline(l:line))])
+    let l:Callback = function('s:OnReady', [l:line, l:column, l:options])
+
     for l:linter in ale#linter#Get(&filetype)
         if !empty(l:linter.lsp)
-            call s:FindReferences(l:linter, l:options)
+            call ale#lsp_linter#StartLSP(l:buffer, l:linter, l:Callback)
         endif
     endfor
 endfunction

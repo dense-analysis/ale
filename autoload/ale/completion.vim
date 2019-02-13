@@ -446,9 +446,14 @@ function! ale#completion#HandleLSPResponse(conn_id, response) abort
     \)
 endfunction
 
-function! s:OnReady(linter, lsp_details, ...) abort
-    let l:buffer = a:lsp_details.buffer
+function! s:OnReady(linter, lsp_details) abort
     let l:id = a:lsp_details.connection_id
+
+    if !ale#lsp#HasCapability(l:id, 'completion')
+        return
+    endif
+
+    let l:buffer = a:lsp_details.buffer
 
     " If we have sent a completion request already, don't send another.
     if b:ale_completion_info.request_id
@@ -498,21 +503,6 @@ function! s:OnReady(linter, lsp_details, ...) abort
     endif
 endfunction
 
-function! s:GetLSPCompletions(linter) abort
-    let l:buffer = bufnr('')
-    let l:lsp_details = ale#lsp_linter#StartLSP(l:buffer, a:linter)
-
-    if empty(l:lsp_details)
-        return 0
-    endif
-
-    let l:id = l:lsp_details.connection_id
-
-    let l:OnReady = function('s:OnReady', [a:linter, l:lsp_details])
-
-    call ale#lsp#WaitForCapability(l:id, 'completion', l:OnReady)
-endfunction
-
 function! ale#completion#GetCompletions() abort
     if !g:ale_completion_enabled
         return
@@ -543,9 +533,12 @@ function! ale#completion#AlwaysGetCompletions(need_prefix) abort
     \   'request_id': 0,
     \}
 
+    let l:buffer = bufnr('')
+    let l:Callback = function('s:OnReady')
+
     for l:linter in ale#linter#Get(&filetype)
         if !empty(l:linter.lsp)
-            call s:GetLSPCompletions(l:linter)
+            call ale#lsp_linter#StartLSP(l:buffer, l:linter, l:Callback)
         endif
     endfor
 endfunction

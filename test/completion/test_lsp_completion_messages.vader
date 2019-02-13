@@ -16,18 +16,20 @@ Before:
   let g:capability_checked = ''
   let g:conn_id = v:null
   let g:Callback = ''
-  let g:wait_callback_list = []
+  let g:init_callback_list = []
 
-  function! ale#lsp_linter#StartLSP(buffer, linter) abort
+  function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
     let g:conn_id = ale#lsp#Register('executable', '/foo/bar', {})
     call ale#lsp#MarkDocumentAsOpen(g:conn_id, a:buffer)
 
-    return {
+    let l:details = {
     \ 'buffer': a:buffer,
     \ 'connection_id': g:conn_id,
     \ 'project_root': '/foo/bar',
     \ 'language_id': 'python',
     \}
+
+    call add(g:init_callback_list, {-> a:Callback(a:linter, l:details)})
   endfunction
 
   " Pretend we're in insert mode for most tests.
@@ -35,9 +37,10 @@ Before:
     return 'i'
   endfunction
 
-  function! ale#lsp#WaitForCapability(conn_id, capability, callback) abort
+  function! ale#lsp#HasCapability(conn_id, capability) abort
     let g:capability_checked = a:capability
-    call add(g:wait_callback_list, a:callback)
+
+    return 1
   endfunction
 
   function! ale#lsp#RegisterCallback(conn_id, callback) abort
@@ -60,7 +63,7 @@ After:
 
   unlet! g:message_list
   unlet! g:capability_checked
-  unlet! g:wait_callback_list
+  unlet! g:init_callback_list
   unlet! g:conn_id
   unlet! g:Callback
   unlet! b:ale_old_omnifunc
@@ -104,9 +107,10 @@ Execute(The right message should be sent for the initial tsserver request):
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)
 
-  AssertEqual 1, len(g:wait_callback_list)
+  AssertEqual 1, len(g:init_callback_list)
+  call map(g:init_callback_list, 'v:val()')
+
   AssertEqual 'completion', g:capability_checked
-  call map(g:wait_callback_list, 'v:val([g:conn_id, ''/foo/bar''])')
 
   " We should send the right callback.
   AssertEqual
@@ -191,9 +195,10 @@ Execute(The right message should be sent for the initial LSP request):
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)
 
-  AssertEqual 1, len(g:wait_callback_list)
+  AssertEqual 1, len(g:init_callback_list)
+  call map(g:init_callback_list, 'v:val()')
+
   AssertEqual 'completion', g:capability_checked
-  call map(g:wait_callback_list, 'v:val([g:conn_id, ''/foo/bar''])')
 
   " We should send the right callback.
   AssertEqual
@@ -258,9 +263,10 @@ Execute(Two completion requests shouldn't be sent in a row):
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)
 
-  AssertEqual 2, len(g:wait_callback_list)
+  AssertEqual 2, len(g:init_callback_list)
+  call map(g:init_callback_list, 'v:val()')
+
   AssertEqual 'completion', g:capability_checked
-  call map(g:wait_callback_list, 'v:val([347, ''/foo/bar''])')
 
   " We should only send one completion message for two LSP servers.
   AssertEqual

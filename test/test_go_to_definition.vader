@@ -8,27 +8,29 @@ Before:
   let g:expr_list = []
   let g:capability_checked = ''
   let g:conn_id = v:null
-  let g:WaitCallback = v:null
+  let g:InitCallback = v:null
 
   runtime autoload/ale/linter.vim
   runtime autoload/ale/lsp.vim
   runtime autoload/ale/util.vim
 
-  function! ale#lsp_linter#StartLSP(buffer, linter) abort
+  function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
     let g:conn_id = ale#lsp#Register('executable', '/foo/bar', {})
     call ale#lsp#MarkDocumentAsOpen(g:conn_id, a:buffer)
-
-    return {
+    let l:details = {
     \ 'buffer': a:buffer,
     \ 'connection_id': g:conn_id,
     \ 'project_root': '/foo/bar',
     \ 'language_id': 'python',
     \}
+
+    let g:InitCallback = {-> a:Callback(a:linter, l:details)}
   endfunction
 
-  function! ale#lsp#WaitForCapability(conn_id, capability, callback) abort
+  function! ale#lsp#HasCapability(conn_id, capability) abort
     let g:capability_checked = a:capability
-    let g:WaitCallback = a:callback
+
+    return 1
   endfunction
 
   function! ale#lsp#RegisterCallback(conn_id, callback) abort
@@ -55,7 +57,7 @@ After:
   call ale#linter#Reset()
 
   unlet! g:capability_checked
-  unlet! g:WaitCallback
+  unlet! g:InitCallback
   unlet! g:old_filename
   unlet! g:conn_id
   unlet! g:Callback
@@ -205,10 +207,10 @@ Execute(tsserver definition requests should be sent):
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)
 
-  AssertEqual type(function('type')), type(g:WaitCallback)
-  AssertEqual 'definition', g:capability_checked
-  call call(g:WaitCallback, [g:conn_id, '/foo/bar'])
+  AssertEqual type(function('type')), type(g:InitCallback)
+  call g:InitCallback()
 
+  AssertEqual 'definition', g:capability_checked
   AssertEqual
   \ 'function(''ale#definition#HandleTSServerResponse'')',
   \ string(g:Callback)
@@ -226,10 +228,10 @@ Execute(tsserver tab definition requests should be sent):
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)
 
-  AssertEqual type(function('type')), type(g:WaitCallback)
-  AssertEqual 'definition', g:capability_checked
-  call call(g:WaitCallback, [g:conn_id, '/foo/bar'])
+  AssertEqual type(function('type')), type(g:InitCallback)
+  call g:InitCallback()
 
+  AssertEqual 'definition', g:capability_checked
   AssertEqual
   \ 'function(''ale#definition#HandleTSServerResponse'')',
   \ string(g:Callback)
@@ -358,10 +360,10 @@ Execute(LSP definition requests should be sent):
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)
 
-  AssertEqual type(function('type')), type(g:WaitCallback)
-  AssertEqual 'definition', g:capability_checked
-  call call(g:WaitCallback, [g:conn_id, '/foo/bar'])
+  AssertEqual type(function('type')), type(g:InitCallback)
+  call g:InitCallback()
 
+  AssertEqual 'definition', g:capability_checked
   AssertEqual
   \ 'function(''ale#definition#HandleLSPResponse'')',
   \ string(g:Callback)
@@ -394,10 +396,10 @@ Execute(LSP type definition requests should be sent):
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)
 
-  AssertEqual type(function('type')), type(g:WaitCallback)
-  AssertEqual 'typeDefinition', g:capability_checked
-  call call(g:WaitCallback, [g:conn_id, '/foo/bar'])
+  AssertEqual type(function('type')), type(g:InitCallback)
+  call g:InitCallback()
 
+  AssertEqual 'typeDefinition', g:capability_checked
   AssertEqual
   \ 'function(''ale#definition#HandleLSPResponse'')',
   \ string(g:Callback)
@@ -430,10 +432,10 @@ Execute(LSP tab definition requests should be sent):
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)
 
-  AssertEqual type(function('type')), type(g:WaitCallback)
-  AssertEqual 'definition', g:capability_checked
-  call call(g:WaitCallback, [g:conn_id, '/foo/bar'])
+  AssertEqual type(function('type')), type(g:InitCallback)
+  call g:InitCallback()
 
+  AssertEqual 'definition', g:capability_checked
   AssertEqual
   \ 'function(''ale#definition#HandleLSPResponse'')',
   \ string(g:Callback)
@@ -466,10 +468,10 @@ Execute(LSP tab type definition requests should be sent):
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)
 
-  AssertEqual type(function('type')), type(g:WaitCallback)
-  AssertEqual 'typeDefinition', g:capability_checked
-  call call(g:WaitCallback, [g:conn_id, '/foo/bar'])
+  AssertEqual type(function('type')), type(g:InitCallback)
+  call g:InitCallback()
 
+  AssertEqual 'typeDefinition', g:capability_checked
   AssertEqual
   \ 'function(''ale#definition#HandleLSPResponse'')',
   \ string(g:Callback)

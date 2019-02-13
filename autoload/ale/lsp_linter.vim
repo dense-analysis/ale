@@ -187,7 +187,7 @@ endfunction
 
 " Given a buffer, an LSP linter, start up an LSP linter and get ready to
 " receive messages for the document.
-function! ale#lsp_linter#StartLSP(buffer, linter) abort
+function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
     let l:command = ''
     let l:address = ''
     let l:root = ale#lsp_linter#FindProjectRoot(a:buffer, a:linter)
@@ -195,7 +195,7 @@ function! ale#lsp_linter#StartLSP(buffer, linter) abort
     if empty(l:root) && a:linter.lsp isnot# 'tsserver'
         " If there's no project root, then we can't check files with LSP,
         " unless we are using tsserver, which doesn't use project roots.
-        return {}
+        return 0
     endif
 
     let l:init_options = ale#lsp_linter#GetOptions(a:buffer, a:linter)
@@ -208,7 +208,7 @@ function! ale#lsp_linter#StartLSP(buffer, linter) abort
         let l:executable = ale#linter#GetExecutable(a:buffer, a:linter)
 
         if empty(l:executable) || !executable(l:executable)
-            return {}
+            return 0
         endif
 
         let l:conn_id = ale#lsp#Register(l:executable, l:root, l:init_options)
@@ -225,7 +225,7 @@ function! ale#lsp_linter#StartLSP(buffer, linter) abort
             call ale#history#Add(a:buffer, 'failed', l:conn_id, l:command)
         endif
 
-        return {}
+        return 0
     endif
 
     " tsserver behaves differently, so tell the LSP API that it is tsserver.
@@ -257,18 +257,20 @@ function! ale#lsp_linter#StartLSP(buffer, linter) abort
         call ale#lsp#NotifyForChanges(l:conn_id, a:buffer)
     endif
 
-    return l:details
+    call ale#lsp#OnInit(l:conn_id, {-> a:Callback(a:linter, l:details)})
+
+    return 1
 endfunction
 
-function! ale#lsp_linter#CheckWithLSP(buffer, linter) abort
-    let l:info = g:ale_buffer_info[a:buffer]
-    let l:lsp_details = ale#lsp_linter#StartLSP(a:buffer, a:linter)
+function! s:CheckWithLSP(linter, details) abort
+    let l:buffer = a:details.buffer
+    let l:info = get(g:ale_buffer_info, l:buffer)
 
-    if empty(l:lsp_details)
-        return 0
+    if empty(l:info)
+        return
     endif
 
-    let l:id = l:lsp_details.connection_id
+    let l:id = a:details.connection_id
 
     " Register a callback now for handling errors now.
     let l:Callback = function('ale#lsp_linter#HandleLSPResponse')
@@ -278,16 +280,16 @@ function! ale#lsp_linter#CheckWithLSP(buffer, linter) abort
     let s:lsp_linter_map[l:id] = a:linter.name
 
     if a:linter.lsp is# 'tsserver'
-        let l:message = ale#lsp#tsserver_message#Geterr(a:buffer)
+        let l:message = ale#lsp#tsserver_message#Geterr(l:buffer)
         let l:notified = ale#lsp#Send(l:id, l:message) != 0
     else
-        let l:notified = ale#lsp#NotifyForChanges(l:id, a:buffer)
+        let l:notified = ale#lsp#NotifyForChanges(l:id, l:buffer)
     endif
 
     " If this was a file save event, also notify the server of that.
     if a:linter.lsp isnot# 'tsserver'
-    \&& getbufvar(a:buffer, 'ale_save_event_fired', 0)
-        let l:save_message = ale#lsp#message#DidSave(a:buffer)
+    \&& getbufvar(l:buffer, 'ale_save_event_fired', 0)
+        let l:save_message = ale#lsp#message#DidSave(l:buffer)
         let l:notified = ale#lsp#Send(l:id, l:save_message) != 0
     endif
 
@@ -305,8 +307,10 @@ function! ale#lsp_linter#CheckWithLSP(buffer, linter) abort
             call add(l:info.active_linter_list, a:linter)
         endif
     endif
+endfunction
 
-    return l:notified
+function! ale#lsp_linter#CheckWithLSP(buffer, linter) abort
+    return ale#lsp_linter#StartLSP(a:buffer, a:linter, function('s:CheckWithLSP'))
 endfunction
 
 " Clear LSP linter data for the linting engine.

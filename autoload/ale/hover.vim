@@ -106,9 +106,14 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
     endif
 endfunction
 
-function! s:OnReady(linter, lsp_details, line, column, opt, ...) abort
-    let l:buffer = a:lsp_details.buffer
+function! s:OnReady(line, column, opt, linter, lsp_details) abort
     let l:id = a:lsp_details.connection_id
+
+    if !ale#lsp#HasCapability(l:id, 'hover')
+        return
+    endif
+
+    let l:buffer = a:lsp_details.buffer
 
     let l:Callback = a:linter.lsp is# 'tsserver'
     \   ? function('ale#hover#HandleTSServerResponse')
@@ -144,20 +149,6 @@ function! s:OnReady(linter, lsp_details, line, column, opt, ...) abort
     \}
 endfunction
 
-function! s:ShowDetails(linter, buffer, line, column, opt, ...) abort
-    let l:lsp_details = ale#lsp_linter#StartLSP(a:buffer, a:linter)
-
-    if empty(l:lsp_details)
-        return 0
-    endif
-
-    let l:id = l:lsp_details.connection_id
-
-    call ale#lsp#WaitForCapability(l:id, 'hover', function('s:OnReady', [
-    \   a:linter, l:lsp_details, a:line, a:column, a:opt
-    \]))
-endfunction
-
 " Obtain Hover information for the specified position
 " Pass optional arguments in the dictionary opt.
 " Currently, only one key/value is useful:
@@ -169,12 +160,13 @@ endfunction
 " - as status message otherwise
 function! ale#hover#Show(buffer, line, col, opt) abort
     let l:show_documentation = get(a:opt, 'show_documentation', 0)
+    let l:Callback = function('s:OnReady', [a:line, a:col, a:opt])
 
     for l:linter in ale#linter#Get(getbufvar(a:buffer, '&filetype'))
         " Only tsserver supports documentation requests at the moment.
         if !empty(l:linter.lsp)
         \&& (!l:show_documentation || l:linter.lsp is# 'tsserver')
-            call s:ShowDetails(l:linter, a:buffer, a:line, a:col, a:opt)
+            call ale#lsp_linter#StartLSP(a:buffer, l:linter, l:Callback)
         endif
     endfor
 endfunction
