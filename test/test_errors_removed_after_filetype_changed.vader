@@ -8,6 +8,8 @@ Before:
   Save g:ale_set_quickfix
   Save g:ale_set_signs
 
+  let g:ale_buffer_info = {}
+
   " Enable only the one feature we need.
   let g:ale_set_signs = 0
   let g:ale_set_quickfix = 0

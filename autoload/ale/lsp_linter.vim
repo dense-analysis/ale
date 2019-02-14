@@ -294,18 +294,7 @@ function! s:CheckWithLSP(linter, details) abort
     endif
 
     if l:notified
-        let l:found = 0
-
-        for l:other_linter in l:info.active_linter_list
-            if l:other_linter.name is# a:linter.name
-                let l:found = 1
-                break
-            endif
-        endfor
-
-        if !l:found
-            call add(l:info.active_linter_list, a:linter)
-        endif
+        call ale#engine#MarkLinterActive(l:info, a:linter)
     endif
 endfunction
 

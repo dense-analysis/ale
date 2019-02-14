@@ -24,6 +24,25 @@ function! ale#engine#CleanupEveryBuffer() abort
     endfor
 endfunction
 
+function! ale#engine#MarkLinterActive(info, linter) abort
+    let l:found = 0
+
+    for l:other_linter in a:info.active_linter_list
+        if l:other_linter.name is# a:linter.name
+            let l:found = 1
+            break
+        endif
+    endfor
+
+    if !l:found
+        call add(a:info.active_linter_list, a:linter)
+    endif
+endfunction
+
+function! ale#engine#MarkLinterInactive(info, linter) abort
+    call filter(a:info.active_linter_list, 'v:val.name isnot# a:linter.name')
+endfunction
+
 function! ale#engine#ResetExecutableCache() abort
     let s:executable_cache_map = {}
 endfunction
@@ -164,7 +183,7 @@ function! s:HandleExit(job_info, buffer, output, data) abort
     let l:next_chain_index = a:job_info.next_chain_index
 
     " Remove this job from the list.
-    call filter(l:buffer_info.active_linter_list, 'v:val.name isnot# l:linter.name')
+    call ale#engine#MarkLinterInactive(l:buffer_info, l:linter)
 
     " Stop here if we land in the handle for a job completing if we're in
     " a sandbox.
@@ -431,23 +450,12 @@ function! s:RunJob(command, options) abort
     \   'log_output': l:next_chain_index >= len(get(l:linter, 'command_chain', [])),
     \})
 
+    " Only proceed if the job is being run.
     if !l:result._deferred_job_id
         return 0
     endif
 
-    " Only proceed if the job is being run.
-    let l:found = 0
-
-    for l:other_linter in l:info.active_linter_list
-        if l:other_linter.name is# l:linter.name
-            let l:found = 1
-            break
-        endif
-    endfor
-
-    if !l:found
-        call add(l:info.active_linter_list, l:linter)
-    endif
+    call ale#engine#MarkLinterActive(l:info, l:linter)
 
     silent doautocmd <nomodeline> User ALEJobStarted
 
@@ -516,25 +524,18 @@ function! ale#engine#ProcessChain(buffer, executable, linter, chain_index, input
     \}]
 endfunction
 
-function! s:StopCurrentJobs(buffer, include_lint_file_jobs) abort
+function! s:StopCurrentJobs(buffer, clear_lint_file_jobs) abort
+    let l:info = get(g:ale_buffer_info, a:buffer, {})
     call ale#command#StopJobs(a:buffer, 'linter')
 
-    if a:include_lint_file_jobs
-        call ale#command#StopJobs(a:buffer, 'file_linter')
-    endif
-
-    let l:info = get(g:ale_buffer_info, a:buffer, {})
-    let l:new_active_linter_list = []
-
-    for l:linter in get(l:info, 'active_linter_list', [])
-        " Keep jobs for linting files when we're only linting buffers.
-        if !a:include_lint_file_jobs && get(l:linter, 'lint_file')
-            call add(l:new_active_linter_list, l:linter)
-        endif
-    endfor
-
     " Update the active linter list, clearing out anything not running.
-    let l:info.active_linter_list = l:new_active_linter_list
+    if a:clear_lint_file_jobs
+        call ale#command#StopJobs(a:buffer, 'file_linter')
+        let l:info.active_linter_list = []
+    else
+        " Keep jobs for linting files when we're only linting buffers.
+        call filter(l:info.active_linter_list, 'get(v:val, ''lint_file'')')
+    endif
 endfunction
 
 function! s:RemoveProblemsForDisabledLinters(buffer, linters) abort
