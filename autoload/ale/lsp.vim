@@ -259,7 +259,7 @@ function! ale#lsp#HandleInitResponse(conn, response) abort
     let a:conn.message_queue = []
 
     " Call capabilities callbacks queued for the project.
-    for [l:Callback] in a:conn.init_queue
+    for l:Callback in a:conn.init_queue
         call l:Callback()
     endfor
 
