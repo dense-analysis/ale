@@ -23,7 +23,7 @@ Execute(ale#lsp#message#Initialize() should return correct messages):
   \ ale#lsp#message#Initialize('/foo/bar', {'foo': 'bar'})
 
 Execute(ale#lsp#message#Initialized() should return correct messages):
-  AssertEqual [1, 'initialized'], ale#lsp#message#Initialized()
+  AssertEqual [1, 'initialized', {}], ale#lsp#message#Initialized()
 
 Execute(ale#lsp#message#Shutdown() should return correct messages):
   AssertEqual [0, 'shutdown'], ale#lsp#message#Shutdown()

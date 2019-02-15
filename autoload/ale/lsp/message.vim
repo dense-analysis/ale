@@ -41,7 +41,7 @@ function! ale#lsp#message#Initialize(root_path, initialization_options) abort
 endfunction
 
 function! ale#lsp#message#Initialized() abort
-    return [1, 'initialized']
+    return [1, 'initialized', {}]
 endfunction
 
 function! ale#lsp#message#Shutdown() abort

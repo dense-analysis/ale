@@ -43,7 +43,7 @@ Execute(Messages with no method and capabilities should initialize projects):
   \})
 
   AssertEqual 1, b:conn.initialized
-  AssertEqual [[1, 'initialized']], g:message_list
+  AssertEqual [[1, 'initialized', {}]], g:message_list
 
 Execute(Other messages should not initialize projects):
   call ale#lsp#HandleInitResponse(b:conn, {'method': 'lolwat'})
@@ -102,7 +102,7 @@ Execute(Capabilities should bet set up correctly):
   \   'symbol_search': 1,
   \ },
   \ b:conn.capabilities
-  AssertEqual [[1, 'initialized']], g:message_list
+  AssertEqual [[1, 'initialized', {}]], g:message_list
 
 Execute(Disabled capabilities should be recognised correctly):
   call ale#lsp#HandleInitResponse(b:conn, {
@@ -145,7 +145,7 @@ Execute(Disabled capabilities should be recognised correctly):
   \   'symbol_search': 0,
   \ },
   \ b:conn.capabilities
-  AssertEqual [[1, 'initialized']], g:message_list
+  AssertEqual [[1, 'initialized', {}]], g:message_list
 
 Execute(Results that are not dictionaries should be handled correctly):
   call ale#lsp#HandleInitResponse(b:conn, {
