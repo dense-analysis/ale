@@ -347,7 +347,7 @@ function! ale#lsp#StartProgram(conn_id, executable, command) abort
         let l:conn.job_id = l:job_id
     endif
 
-    if l:started
+    if l:started && !l:conn.is_tsserver
         call s:SendInitMessage(l:conn)
     endif
 

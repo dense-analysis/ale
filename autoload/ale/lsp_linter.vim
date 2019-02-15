@@ -238,6 +238,11 @@ function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
 
         let l:conn_id = ale#lsp#Register(l:executable, l:root, l:init_options)
 
+        " tsserver behaves differently, so tell the LSP API that it is tsserver.
+        if a:linter.lsp is# 'tsserver'
+            call ale#lsp#MarkConnectionAsTsserver(l:conn_id)
+        endif
+
         let l:command = ale#linter#GetCommand(a:buffer, a:linter)
         " Format the command, so %e can be formatted into it.
         let l:command = ale#command#FormatCommand(a:buffer, l:executable, l:command, 0, v:false)[1]
@@ -253,10 +258,6 @@ function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
         return 0
     endif
 
-    " tsserver behaves differently, so tell the LSP API that it is tsserver.
-    if a:linter.lsp is# 'tsserver'
-        call ale#lsp#MarkConnectionAsTsserver(l:conn_id)
-    endif
 
     let l:details = {
     \   'buffer': a:buffer,
