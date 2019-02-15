@@ -15,6 +15,7 @@ Before:
     let g:Callback = a:callback
 
     return {
+    \ 'command': 'foobar',
     \ 'connection_id': 347,
     \ 'project_root': '/foo/bar',
     \}

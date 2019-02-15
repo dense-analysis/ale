@@ -23,10 +23,10 @@ Before:
     call ale#lsp#MarkDocumentAsOpen(g:conn_id, a:buffer)
 
     let l:details = {
+    \ 'command': 'foobar',
     \ 'buffer': a:buffer,
     \ 'connection_id': g:conn_id,
     \ 'project_root': '/foo/bar',
-    \ 'language_id': 'python',
     \}
 
     call add(g:init_callback_list, {-> a:Callback(a:linter, l:details)})

@@ -185,6 +185,31 @@ function! ale#lsp_linter#FindProjectRoot(buffer, linter) abort
     return ale#util#GetFunction(a:linter.project_root_callback)(a:buffer)
 endfunction
 
+" This function is accessible so tests can call it.
+function! ale#lsp_linter#OnInit(linter, details, Callback) abort
+    let l:buffer = a:details.buffer
+    let l:conn_id = a:details.connection_id
+    let l:command = a:details.command
+
+    let l:config = ale#lsp_linter#GetConfig(l:buffer, a:linter)
+    let l:language_id = ale#util#GetFunction(a:linter.language_callback)(l:buffer)
+
+    call ale#lsp#UpdateConfig(l:conn_id, l:buffer, l:config)
+
+    if ale#lsp#OpenDocument(l:conn_id, l:buffer, l:language_id)
+        if g:ale_history_enabled && !empty(l:command)
+            call ale#history#Add(l:buffer, 'started', l:conn_id, l:command)
+        endif
+    endif
+
+    " The change message needs to be sent for tsserver before doing anything.
+    if a:linter.lsp is# 'tsserver'
+        call ale#lsp#NotifyForChanges(l:conn_id, l:buffer)
+    endif
+
+    call a:Callback(a:linter, a:details)
+endfunction
+
 " Given a buffer, an LSP linter, start up an LSP linter and get ready to
 " receive messages for the document.
 function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
@@ -207,7 +232,7 @@ function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
     else
         let l:executable = ale#linter#GetExecutable(a:buffer, a:linter)
 
-        if empty(l:executable) || !executable(l:executable)
+        if !ale#engine#IsExecutable(a:buffer, l:executable)
             return 0
         endif
 
@@ -233,31 +258,16 @@ function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
         call ale#lsp#MarkConnectionAsTsserver(l:conn_id)
     endif
 
-    let l:config = ale#lsp_linter#GetConfig(a:buffer, a:linter)
-    let l:language_id = ale#util#GetFunction(a:linter.language_callback)(a:buffer)
-
     let l:details = {
     \   'buffer': a:buffer,
     \   'connection_id': l:conn_id,
     \   'command': l:command,
     \   'project_root': l:root,
-    \   'language_id': l:language_id,
     \}
 
-    call ale#lsp#UpdateConfig(l:conn_id, a:buffer, l:config)
-
-    if ale#lsp#OpenDocument(l:conn_id, a:buffer, l:language_id)
-        if g:ale_history_enabled && !empty(l:command)
-            call ale#history#Add(a:buffer, 'started', l:conn_id, l:command)
-        endif
-    endif
-
-    " The change message needs to be sent for tsserver before doing anything.
-    if a:linter.lsp is# 'tsserver'
-        call ale#lsp#NotifyForChanges(l:conn_id, a:buffer)
-    endif
-
-    call ale#lsp#OnInit(l:conn_id, {-> a:Callback(a:linter, l:details)})
+    call ale#lsp#OnInit(l:conn_id, {->
+    \   ale#lsp_linter#OnInit(a:linter, l:details, a:Callback)
+    \})
 
     return 1
 endfunction

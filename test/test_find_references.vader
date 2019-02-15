@@ -13,7 +13,7 @@ Before:
   let g:conn_id = v:null
   let g:InitCallback = v:null
 
-  runtime autoload/ale/linter.vim
+  runtime autoload/ale/lsp_linter.vim
   runtime autoload/ale/lsp.vim
   runtime autoload/ale/util.vim
   runtime autoload/ale/preview.vim
@@ -21,14 +21,19 @@ Before:
   function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
     let g:conn_id = ale#lsp#Register('executable', '/foo/bar', {})
     call ale#lsp#MarkDocumentAsOpen(g:conn_id, a:buffer)
+
+    if a:linter.lsp is# 'tsserver'
+        call ale#lsp#MarkConnectionAsTsserver(g:conn_id)
+    endif
+
     let l:details = {
+    \ 'command': 'foobar',
     \ 'buffer': a:buffer,
     \ 'connection_id': g:conn_id,
     \ 'project_root': '/foo/bar',
-    \ 'language_id': 'python',
     \}
 
-    let g:InitCallback = {-> a:Callback(a:linter, l:details)}
+    let g:InitCallback = {-> ale#lsp_linter#OnInit(a:linter, l:details, a:Callback)}
   endfunction
 
   function! ale#lsp#HasCapability(conn_id, capability) abort
@@ -167,6 +172,8 @@ Execute(The preview window should not be opened for empty tsserver responses):
   AssertEqual ['echom ''No references found.'''], g:expr_list
 
 Execute(tsserver reference requests should be sent):
+  call ale#linter#Reset()
+
   runtime ale_linters/typescript/tsserver.vim
   call setpos('.', [bufnr(''), 2, 5, 0])
 
@@ -183,7 +190,10 @@ Execute(tsserver reference requests should be sent):
   \ 'function(''ale#references#HandleTSServerResponse'')',
   \ string(g:Callback)
   AssertEqual
-  \ [[0, 'ts@references', {'file': expand('%:p'), 'line': 2, 'offset': 5}]],
+  \ [
+  \   ale#lsp#tsserver_message#Change(bufnr('')),
+  \   [0, 'ts@references', {'file': expand('%:p'), 'line': 2, 'offset': 5}]
+  \ ],
   \ g:message_list
   AssertEqual {'42': {'use_relative_paths': 0}}, ale#references#GetMap()
 

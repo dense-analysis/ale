@@ -11,20 +11,26 @@ Before:
   let g:InitCallback = v:null
 
   runtime autoload/ale/linter.vim
+  runtime autoload/ale/lsp_linter.vim
   runtime autoload/ale/lsp.vim
   runtime autoload/ale/util.vim
 
   function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
     let g:conn_id = ale#lsp#Register('executable', '/foo/bar', {})
     call ale#lsp#MarkDocumentAsOpen(g:conn_id, a:buffer)
+
+    if a:linter.lsp is# 'tsserver'
+        call ale#lsp#MarkConnectionAsTsserver(g:conn_id)
+    endif
+
     let l:details = {
+    \ 'command': 'foobar',
     \ 'buffer': a:buffer,
     \ 'connection_id': g:conn_id,
     \ 'project_root': '/foo/bar',
-    \ 'language_id': 'python',
     \}
 
-    let g:InitCallback = {-> a:Callback(a:linter, l:details)}
+    let g:InitCallback = {-> ale#lsp_linter#OnInit(a:linter, l:details, a:Callback)}
   endfunction
 
   function! ale#lsp#HasCapability(conn_id, capability) abort
@@ -215,7 +221,10 @@ Execute(tsserver definition requests should be sent):
   \ 'function(''ale#definition#HandleTSServerResponse'')',
   \ string(g:Callback)
   AssertEqual
-  \ [[0, 'ts@definition', {'file': expand('%:p'), 'line': 2, 'offset': 5}]],
+  \ [
+  \   ale#lsp#tsserver_message#Change(bufnr('')),
+  \   [0, 'ts@definition', {'file': expand('%:p'), 'line': 2, 'offset': 5}]
+  \ ],
   \ g:message_list
   AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
 
@@ -236,7 +245,10 @@ Execute(tsserver tab definition requests should be sent):
   \ 'function(''ale#definition#HandleTSServerResponse'')',
   \ string(g:Callback)
   AssertEqual
-  \ [[0, 'ts@definition', {'file': expand('%:p'), 'line': 2, 'offset': 5}]],
+  \ [
+  \   ale#lsp#tsserver_message#Change(bufnr('')),
+  \   [0, 'ts@definition', {'file': expand('%:p'), 'line': 2, 'offset': 5}]
+  \ ],
   \ g:message_list
   AssertEqual {'42': {'open_in': 'tab'}}, ale#definition#GetMap()
 

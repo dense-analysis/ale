@@ -299,7 +299,11 @@ function! ale#job#SendRaw(job_id, string) abort
     if has('nvim')
         call jobsend(a:job_id, a:string)
     else
-        call ch_sendraw(job_getchannel(s:job_map[a:job_id].job), a:string)
+        let l:job = s:job_map[a:job_id].job
+
+        if ch_status(l:job) is# 'open'
+            call ch_sendraw(job_getchannel(l:job), a:string)
+        endif
     endif
 endfunction
 
@@ -318,6 +322,20 @@ function! ale#job#IsRunning(job_id) abort
         let l:job = s:job_map[a:job_id].job
 
         return job_status(l:job) is# 'run'
+    endif
+
+    return 0
+endfunction
+
+function! ale#job#HasOpenChannel(job_id) abort
+    if ale#job#IsRunning(a:job_id)
+        if has('nvim')
+            " TODO: Implement a check for NeoVim.
+            return 1
+        endif
+
+        " Check if the Job's channel can be written to.
+        return ch_status(s:job_map[a:job_id].job) is# 'open'
     endif
 
     return 0
