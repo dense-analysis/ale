@@ -1,7 +1,9 @@
 Before:
   Save g:ale_run_synchronously
+  Save g:ale_buffer_info
 
   let g:ale_run_synchronously = 1
+  let g:ale_buffer_info = {}
 
   call ale#linter#Reset()
   call ale#assert#SetUpLinterTestCommands()
