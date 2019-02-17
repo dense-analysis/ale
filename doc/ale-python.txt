@@ -32,6 +32,8 @@ ALE will look for configuration files with the following filenames. >
   flake8.cfg
   .flake8rc
   pylama.ini
+  pylintrc
+  .pylintrc
   Pipfile
   Pipfile.lock
 <
@@ -512,10 +514,12 @@ g:ale_python_pylint_change_directory     *g:ale_python_pylint_change_directory*
   Type: |Number|
   Default: `1`
 
-  If set to `1`, ALE will switch to the directory the Python file being
-  checked with `pylint` is in before checking it. This helps `pylint` find
-  configuration files more easily. This option can be turned off if you want
-  to control the directory Python is executed from yourself.
+  If set to `1`, `pylint` will be run from a detected project root, per
+  |ale-python-root|.  Since `pylint` only checks for `pylintrc` in the packages
+  above its current directory before falling back to user and global `pylintrc`
+  files, this is necessary for `pylint` to use a project `pylintrc` file, if
+  present.  This option can be turned off if you want to control the directory
+  Python is executed from yourself.
 
 
 g:ale_python_pylint_executable                 *g:ale_python_pylint_executable*
