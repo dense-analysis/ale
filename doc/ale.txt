@@ -2648,7 +2648,7 @@ ALEGoToDefinitionInVSplit                           *ALEGoToDefinitionInVSplit*
 ALEGoToTypeDefinition                                   *ALEGoToTypeDefinition*
 
   This works similar to |ALEGoToDefinition| but instead jumps to the
-  definition of a type of a symbol undert the cursor. ALE will jump to a
+  definition of a type of a symbol under the cursor. ALE will jump to a
   definition if an LSP server provides a location to jump to. Otherwise, ALE
   will do nothing.
 
