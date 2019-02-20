@@ -90,6 +90,17 @@ g:ale_python_bandit_options                       *g:ale_python_bandit_options*
   bandit invocation.
 
 
+g:ale_python_bandit_use_config                 *g:ale_python_bandit_use_config*
+                                               *b:ale_python_bandit_use_config*
+  Type: |Number|
+  Default: `1`
+
+  If this variable is true and a `.bandit` file exists in the directory of the
+  file being checked or a parent directory, an `--ini` option is added to the
+  `bandit` command for the nearest `.bandit` file.  Set this variable false to
+  disable adding the `--ini` option automatically.
+
+
 g:ale_python_bandit_use_global                 *g:ale_python_bandit_use_global*
                                                *b:ale_python_bandit_use_global*
   Type: |Number|
