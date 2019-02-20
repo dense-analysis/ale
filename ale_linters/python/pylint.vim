@@ -17,9 +17,17 @@ function! ale_linters#python#pylint#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#python#pylint#GetCommand(buffer) abort
-    let l:cd_string = ale#Var(a:buffer, 'python_pylint_change_directory')
-    \   ? ale#path#BufferCdString(a:buffer)
-    \   : ''
+    let l:cd_string = ''
+
+    if ale#Var(a:buffer, 'python_pylint_change_directory')
+        " pylint only checks for pylintrc in the packages above its current
+        " directory before falling back to user and global pylintrc.
+        " Run from project root, if found, otherwise buffer dir.
+        let l:project_root = ale#python#FindProjectRoot(a:buffer)
+        let l:cd_string = l:project_root isnot# ''
+        \   ? ale#path#CdString(l:project_root)
+        \   : ale#path#BufferCdString(a:buffer)
+    endif
 
     let l:executable = ale_linters#python#pylint#GetExecutable(a:buffer)
 

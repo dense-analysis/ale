@@ -28,6 +28,8 @@ function! ale#python#FindProjectRootIni(buffer) abort
         \|| filereadable(l:path . '/flake8.cfg')
         \|| filereadable(l:path . '/.flake8rc')
         \|| filereadable(l:path . '/pylama.ini')
+        \|| filereadable(l:path . '/pylintrc')
+        \|| filereadable(l:path . '/.pylintrc')
         \|| filereadable(l:path . '/Pipfile')
         \|| filereadable(l:path . '/Pipfile.lock')
             return l:path

@@ -39,7 +39,7 @@ Execute(The pylint callbacks shouldn't detect virtualenv directories where they 
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/no_virtualenv/subdir/foo/bar.py')
 
   AssertLinter 'pylint',
-  \ ale#path#BufferCdString(bufnr(''))
+  \ ale#path#CdString(ale#path#Simplify(g:dir . '/python_paths/no_virtualenv/subdir'))
   \   . ale#Escape('pylint') . ' ' . b:command_tail
 
 Execute(The pylint callbacks should detect virtualenv directories):
@@ -50,7 +50,7 @@ Execute(The pylint callbacks should detect virtualenv directories):
   \)
 
   AssertLinter b:executable,
-  \ ale#path#BufferCdString(bufnr(''))
+  \ ale#path#CdString(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/subdir'))
   \   . ale#Escape(b:executable) . ' ' . b:command_tail
 
 Execute(You should able able to use the global pylint instead):
@@ -58,7 +58,7 @@ Execute(You should able able to use the global pylint instead):
   let g:ale_python_pylint_use_global = 1
 
   AssertLinter 'pylint',
-  \ ale#path#BufferCdString(bufnr(''))
+  \ ale#path#CdString(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/subdir'))
   \   . ale#Escape('pylint') . ' ' . b:command_tail
 
 Execute(Setting executable to 'pipenv' appends 'run pylint'):
