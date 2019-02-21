@@ -309,6 +309,15 @@ g:ale_python_mypy_auto_pipenv                   *g:ale_python_mypy_auto_pipenv*
   if true. This is overridden by a manually-set executable.
 
 
+g:ale_python_mypy_detect_notes                 *g:ale_python_mypy_detect_notes*
+                                               *b:ale_python_mypy_detect_notes*
+  Type: |Number|
+  Default: `0`
+
+  Show the `note` level information in addition to `error` and `warning`. But it
+  ignores the `note`'s that have no line numbers to reduce redundancy.
+
+
 ===============================================================================
 prospector                                              *ale-python-prospector*
 
