@@ -1,7 +1,9 @@
 Before:
   Save g:ale_python_mypy_ignore_invalid_syntax
+  Save g:ale_python_mypy_detect_notes
 
   unlet! g:ale_python_mypy_ignore_invalid_syntax
+  unlet! g:ale_python_mypy_detect_notes
 
   runtime ale_linters/python/mypy.vim
 
@@ -67,6 +69,67 @@ Execute(The mypy handler should parse lines correctly):
   \ 'another_module/bar.py:14: note: In module imported here,',
   \ 'another_module/__init__.py:16: note: ... from here,',
   \ '__init__.py:72:1: warning: Some warning',
+  \ ])
+
+Execute(The mypy handler should parse `note` lines correctly, too):
+  call ale#test#SetFilename('__init__.py')
+
+  let g:ale_python_mypy_detect_notes = 1
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 768,
+  \     'col': 38,
+  \     'filename': ale#path#Simplify(g:dir . '/baz.py'),
+  \     'type': 'E',
+  \     'text': 'Cannot determine type of ''SOME_SYMBOL''',
+  \   },
+  \   {
+  \     'lnum': 15,
+  \     'col': 3,
+  \     'filename': ale#path#Simplify(g:dir . '/__init__.py'),
+  \     'type': 'E',
+  \     'text': 'Argument 1 to "somefunc" has incompatible type "int"; expected "str"'
+  \   },
+  \   {
+  \     'lnum': 14,
+  \     'col': 0,
+  \     'filename': ale#path#Simplify(g:dir . '/another_module/bar.py'),
+  \     'type': 'I',
+  \     'text': 'In module imported here,',
+  \   },
+  \   {
+  \     'lnum': 16,
+  \     'col': 0,
+  \     'filename': ale#path#Simplify(g:dir . '/another_module/__init__.py'),
+  \     'type': 'I',
+  \     'text': '... from here,',
+  \   },
+  \   {
+  \     'lnum': 72,
+  \     'col': 1,
+  \     'filename': ale#path#Simplify(g:dir . '/__init__.py'),
+  \     'type': 'W',
+  \     'text': 'Some warning',
+  \   },
+  \   {
+  \     'lnum': 95,
+  \     'col': 0,
+  \     'filename': ale#path#Simplify(g:dir . '/__init__.py'),
+  \     'type': 'I',
+  \     'text': 'Redundant cast to "str"',
+  \   },
+  \ ],
+  \ ale_linters#python#mypy#Handle(bufnr(''), [
+  \ 'baz.py: note: In class "SomeClass":',
+  \ 'baz.py:768:38: error: Cannot determine type of ''SOME_SYMBOL''',
+  \ '__init__.py: note: At top level:',
+  \ '__init__.py:15:3: error: Argument 1 to "somefunc" has incompatible type "int"; expected "str"',
+  \ 'another_module/bar.py:14: note: In module imported here,',
+  \ 'another_module/__init__.py:16: note: ... from here,',
+  \ '__init__.py:72:1: warning: Some warning',
+  \ '__init__.py:95: note: Redundant cast to "str"',
   \ ])
 
 Execute(The mypy handler should handle Windows names with spaces):
