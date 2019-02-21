@@ -422,8 +422,16 @@ endfunction
 
 " Run a job.
 "
-" Returns 1 when the job was started successfully.
+" Returns 1 when a job was started successfully.
 function! s:RunJob(command, options) abort
+    if ale#command#IsDeferred(a:command)
+        let a:command.result_callback = {
+        \   command -> s:RunJob(command, a:options)
+        \}
+
+        return 1
+    endif
+
     let l:command = a:command
 
     if empty(l:command)
@@ -451,7 +459,7 @@ function! s:RunJob(command, options) abort
     \})
 
     " Only proceed if the job is being run.
-    if !l:result._deferred_job_id
+    if empty(l:result)
         return 0
     endif
 

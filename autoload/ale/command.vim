@@ -320,6 +320,10 @@ function! ale#command#Run(buffer, command, Callback, ...) abort
         call ale#history#Add(a:buffer, l:status, l:job_id, l:command)
     endif
 
+    if !l:job_id
+        return 0
+    endif
+
     " We'll return this Dictionary. A `result_callback` can be assigned to it
     " later for capturing the result of a:Callback.
     "

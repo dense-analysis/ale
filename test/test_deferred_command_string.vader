@@ -12,8 +12,8 @@ Before:
   call ale#linter#Define('foobar', {
   \ 'name': 'lint_file_linter',
   \ 'callback': 'LintFileCallback',
-  \ 'executable': {b -> ale#command#Run(b, 'echo', {-> ale#command#Run(b, 'echo', {-> 'foo'})})},
-  \ 'command': 'echo',
+  \ 'executable': 'echo',
+  \ 'command': {b -> ale#command#Run(b, 'echo', {-> ale#command#Run(b, 'echo', {-> 'foo'})})},
   \ 'read_buffer': 0,
   \})
 
@@ -24,23 +24,23 @@ After:
 
 Given foobar (Some imaginary filetype):
 Execute(It should be possible to compute an executable to check based on the result of commands):
-  AssertLinter 'foo', 'echo'
+  AssertLinter 'echo', 'foo'
 
   ALELint
   call ale#test#FlushJobs()
 
   AssertEqual
-  \ [{'status': 0, 'job_id': 'executable', 'command': 'foo'}],
-  \ filter(copy(b:ale_history), 'v:val.job_id is# ''executable''')
+  \ 1,
+  \ len(filter(copy(b:ale_history), 'string(v:val.command) =~# ''foo'''))
 
 Execute(It handle the deferred command failing):
   let g:ale_emulate_job_failure = 1
 
-  AssertLinter 0, 'echo'
+  AssertLinter 'echo', 0
 
   ALELint
   call ale#test#FlushJobs()
 
   AssertEqual
-  \ [],
-  \ filter(copy(b:ale_history), 'v:val.job_id is# ''executable''')
+  \ 0,
+  \ len(filter(copy(b:ale_history), 'string(v:val.command) =~# ''foo'''))

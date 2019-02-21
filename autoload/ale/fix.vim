@@ -179,7 +179,7 @@ function! s:RunJob(options) abort
     \   'log_output': 0,
     \})
 
-    return l:result._deferred_job_id != 0
+    return !empty(l:result)
 endfunction
 
 function! s:RunFixer(options) abort

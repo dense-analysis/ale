@@ -3122,7 +3122,10 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          used in place of `executable` when more complicated
                          processing is needed.
 
-  `command`                A |String| for an  executable to run asynchronously.
+  `command`                A |String| for a command to run asynchronously, or a
+                         |Funcref| for a function to call for computing the
+                         command, accepting a buffer number.
+
                          This command will be fed the lines from the buffer to
                          check, and will produce the lines of output given to
                          the `callback`.

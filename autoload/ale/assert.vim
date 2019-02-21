@@ -59,13 +59,18 @@ function! ale#assert#Linter(expected_executable, expected_command) abort
         endif
     else
         let l:command = ale#linter#GetCommand(l:buffer, l:linter)
+
+        while ale#command#IsDeferred(l:command)
+            call ale#test#FlushJobs()
+            let l:command = l:command.value
+        endwhile
     endif
 
     if type(l:command) is v:t_string
         " Replace %e with the escaped executable, so tests keep passing after
         " linters are changed to use %e.
         let l:command = substitute(l:command, '%e', '\=ale#Escape(l:executable)', 'g')
-    else
+    elseif type(l:command) is v:t_list
         call map(l:command, 'substitute(v:val, ''%e'', ''\=ale#Escape(l:executable)'', ''g'')')
     endif
 

@@ -177,7 +177,8 @@ function! ale#linter#PreProcess(filetype, linter) abort
         let l:obj.command = a:linter.command
 
         if type(l:obj.command) isnot v:t_string
-            throw '`command` must be a string if defined'
+        \&& type(l:obj.command) isnot v:t_func
+            throw '`command` must be a String or Function if defined'
         endif
     else
         throw 'Either `command`, `executable_callback`, `command_chain` '
@@ -489,9 +490,13 @@ endfunction
 " Given a buffer and linter, get the command String for the linter.
 " The command_chain key is not supported.
 function! ale#linter#GetCommand(buffer, linter) abort
-    return has_key(a:linter, 'command_callback')
-    \   ? ale#util#GetFunction(a:linter.command_callback)(a:buffer)
+    let l:Command = has_key(a:linter, 'command_callback')
+    \   ? function(a:linter.command_callback)
     \   : a:linter.command
+
+    return type(l:Command) is v:t_func
+    \   ? l:Command(a:buffer)
+    \   : l:Command
 endfunction
 
 " Given a buffer and linter, get the address for connecting to the server.
