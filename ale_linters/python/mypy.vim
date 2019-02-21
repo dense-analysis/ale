@@ -6,6 +6,7 @@ call ale#Set('python_mypy_ignore_invalid_syntax', 0)
 call ale#Set('python_mypy_options', '')
 call ale#Set('python_mypy_use_global', get(g:, 'ale_use_global_executables', 0))
 call ale#Set('python_mypy_auto_pipenv', 0)
+call ale#Set('python_mypy_detect_notes', 0)
 
 function! ale_linters#python#mypy#GetExecutable(buffer) abort
     if (ale#Var(a:buffer, 'python_auto_pipenv') || ale#Var(a:buffer, 'python_mypy_auto_pipenv'))
@@ -48,10 +49,20 @@ function! ale_linters#python#mypy#Handle(buffer, lines) abort
     "
     " file.py:4: error: No library stub file for module 'django.db'
     "
-    " Lines like these should be ignored below:
+    " The `note` lines like these should be ignored below in default:
     "
     " file.py:4: note: (Stub files are from https://github.com/python/typeshed)
-    let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):?(\d+)?: (error|warning): (.+)$'
+    "
+    " With g:ale_python_mypy_show_note_lines, these lines should be shown
+    " as infos.
+
+    if ale#Var(a:buffer, 'python_mypy_detect_notes')
+        let l:lines = '(error|warning|note)'
+    else
+        let l:lines = '(error|warning)'
+    endif
+
+    let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):?(\d+)?: ' . l:lines . ': (.+)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
@@ -61,11 +72,19 @@ function! ale_linters#python#mypy#Handle(buffer, lines) abort
             continue
         endif
 
+        let l:type = l:match[4] is# 'error' ? 'E' :
+        \   l:match[4] is# 'warning' ? 'W' : 'I'
+
+        " Skip unimportant notes that have no line numbers.
+        if l:type is# 'I' && l:match[2] is# ''
+            continue
+        endif
+
         call add(l:output, {
         \   'filename': ale#path#GetAbsPath(l:dir, l:match[1]),
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
-        \   'type': l:match[4] is# 'error' ? 'E' : 'W',
+        \   'type': l:type,
         \   'text': l:match[5],
         \})
     endfor
