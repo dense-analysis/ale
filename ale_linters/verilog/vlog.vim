@@ -30,7 +30,7 @@ endfunction
 call ale#linter#Define('verilog', {
 \   'name': 'vlog',
 \   'output_stream': 'stdout',
-\   'executable_callback': ale#VarFunc('verilog_vlog_executable'),
-\   'command_callback': 'ale_linters#verilog#vlog#GetCommand',
+\   'executable': {b -> ale#Var(b, 'verilog_vlog_executable')},
+\   'command': function('ale_linters#verilog#vlog#GetCommand'),
 \   'callback': 'ale_linters#verilog#vlog#Handle',
 \})

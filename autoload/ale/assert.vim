@@ -114,14 +114,6 @@ endfunction
 function! ale#assert#LSPProject(expected_root) abort
     let l:buffer = bufnr('')
     let l:linter = s:GetLinter()
-    let l:root = ale#util#GetFunction(l:linter.project_root_callback)(l:buffer)
-
-    AssertEqual a:expected_root, l:root
-endfunction
-
-function! ale#assert#LSPProjectFull(expected_root) abort
-    let l:buffer = bufnr('')
-    let l:linter = s:GetLinter()
     let l:root = ale#lsp_linter#FindProjectRoot(l:buffer, l:linter)
 
     AssertEqual a:expected_root, l:root
@@ -130,7 +122,7 @@ endfunction
 function! ale#assert#LSPAddress(expected_address) abort
     let l:buffer = bufnr('')
     let l:linter = s:GetLinter()
-    let l:address = ale#util#GetFunction(l:linter.address_callback)(l:buffer)
+    let l:address = ale#linter#GetAddress(l:buffer, l:linter)
 
     AssertEqual a:expected_address, l:address
 endfunction
@@ -143,7 +135,6 @@ function! ale#assert#SetUpLinterTestCommands() abort
     command! -nargs=+ AssertLSPConfig :call ale#assert#LSPConfig(<args>)
     command! -nargs=+ AssertLSPLanguage :call ale#assert#LSPLanguage(<args>)
     command! -nargs=+ AssertLSPProject :call ale#assert#LSPProject(<args>)
-    command! -nargs=+ AssertLSPProjectFull :call ale#assert#LSPProjectFull(<args>)
     command! -nargs=+ AssertLSPAddress :call ale#assert#LSPAddress(<args>)
 endfunction
 
@@ -158,6 +149,12 @@ function! ale#assert#SetUpLinterTest(filetype, name) abort
 
     let l:prefix = 'ale_' . a:filetype . '_' . a:name
     let b:filter_expr = 'v:val[: len(l:prefix) - 1] is# l:prefix'
+
+    Save g:ale_lsp_root
+    let g:ale_lsp_root = {}
+
+    Save b:ale_lsp_root
+    unlet! b:ale_lsp_root
 
     Save g:ale_c_build_dir
     unlet! g:ale_c_build_dir
@@ -214,10 +211,6 @@ function! ale#assert#TearDownLinterTest() abort
 
     if exists(':AssertLSPProject')
         delcommand AssertLSPProject
-    endif
-
-    if exists(':AssertLSPProjectFull')
-        delcommand AssertLSPProjectFull
     endif
 
     if exists(':AssertLSPAddress')

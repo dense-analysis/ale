@@ -78,8 +78,8 @@ endfunction
 
 call ale#linter#Define('python', {
 \   'name': 'pylint',
-\   'executable_callback': 'ale_linters#python#pylint#GetExecutable',
-\   'command_callback': 'ale_linters#python#pylint#GetCommand',
+\   'executable': function('ale_linters#python#pylint#GetExecutable'),
+\   'command': function('ale_linters#python#pylint#GetCommand'),
 \   'callback': 'ale_linters#python#pylint#Handle',
 \   'lint_file': 1,
 \})

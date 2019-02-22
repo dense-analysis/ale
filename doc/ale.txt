@@ -3110,17 +3110,13 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          for computing the executable, accepting a buffer
                          number.
 
-                         This value will be used to check if the
-                         program requested is installed or not.
+                         This value will be used to check if the program
+                         requested is installed or not.
 
-                         Either this or the `executable_callback` argument
-                         must be provided.
-
-  `executable_callback  `  A |String| or |Funcref| for a callback function
-                         accepting a buffer number. A |String| should be
-                         returned for the executable to check. This can be
-                         used in place of `executable` when more complicated
-                         processing is needed.
+                         If an `executable` is not defined, the command will
+                         be run without checking if a program is executable
+                         first. Defining an executable path is recommended to
+                         avoid starting too many processes.
 
   `command`                A |String| for a command to run asynchronously, or a
                          |Funcref| for a function to call for computing the
@@ -3129,17 +3125,6 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          This command will be fed the lines from the buffer to
                          check, and will produce the lines of output given to
                          the `callback`.
-
-  `command_callback`       A |String| or |Funcref| for a callback function
-                         accepting a buffer number. A |String| should be
-                         returned for a command to run. This can be used in
-                         place of `command` when more complicated processing
-                         is needed.
-
-                         If an empty string is returned from the callback,
-                         no jobs for linting will be run for that linter.
-                         This can be used for skipping a linter call,
-                         say if no configuration file was found.
 
                                                             *ale-command-chain*
   `command_chain`          A |List| of |Dictionary| items defining a series
@@ -3226,22 +3211,20 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          linter will be defined as an LSP linter which keeps a
                          process for a language server running, and
                          communicates with it directly via a |channel|.
-                         `executable` or `executable_callback` must be set,
-                         and `command` or `command_callback` must be set.
+                         `executable` and `command` must be set.
 
                          When this argument is set to `'socket'`, then the
                          linter will be defined as an LSP linter via a TCP
-                         socket connection. Either `address` or
-                         `address_callback` must be set.
+                         socket connection. `address` must be set.
 
                          ALE will not start a server automatically.
 
-                         When this argument is not empty
-                         `project_root_callback` must be defined.
+                         When this argument is not empty `project_root` must
+                         be defined.
 
-                         `language` or `language_callback` can be defined to
-                         describe the language for a file. The filetype will
-                         be used as the language by default.
+                         `language` can be defined to describe the language
+                         for a file. The filetype will be used as the language
+                         by default.
 
                          LSP linters handle diagnostics automatically, so
                          the `callback` argument must not be defined.
@@ -3249,23 +3232,15 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          An optional `completion_filter` callback may be
                          defined for filtering completion results.
 
-                         An optional `initialization_options` or
-                         `initialization_options_callback` may be defined to
-                         pass initialization options to the LSP.
+                         `initialization_options` may be defined to pass
+                         initialization options to the LSP.
 
-                         An optional `lsp_config` or `lsp_config_callback` may
-                         be defined to pass configuration settings to the LSP.
+                         `lsp_config` may be defined to pass configuration
+                         settings to the LSP.
 
   `address`                A |String| representing an address to connect to,
                          or a |Funcref| accepting a buffer number and
                          returning the |String|.
-
-                         This argument must only be set if the `lsp` argument
-                         is set to `'socket'`.
-
-  `address_callback`       A |String| or |Funcref| for a callback function
-                         accepting a buffer number. A |String| should be
-                         returned with an address to connect to.
 
                          This argument must only be set if the `lsp` argument
                          is set to `'socket'`.
@@ -3281,27 +3256,15 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          This argument must only be set if the `lsp` argument
                          is also set to a non-empty string.
 
-  `project_root_callback`  A |String| or |Funcref| for a callback function
-                         accepting a buffer number and returning the
-                         `project_root` |String| as documented above.
-
   `language`               A |String| representing the name of the language
                          being checked, or a |Funcref| accepting a buffer
                          number and returning the |String|. This string will
                          be sent to the LSP to tell it what type of language
                          is being checked.
 
-                         If this or `language_callback` isn't set, the
-                         language will default to the value of the filetype
-                         given to |ale#linter#Define|.
-
-  `language_callback`      A |String| or |Funcref| for a callback function
-                         accepting a buffer number. A |String| should be
-                         returned representing the name of the language being
-                         checked.
-
-                         This option can be used instead of `language` if a
-                         linter can check multiple languages.
+                         If a language isn't provided, the language will
+                         default to the value of the filetype given to
+                         |ale#linter#Define|.
 
   `completion_filter`      A |String| or |Funcref| for a callback function
                          accepting a buffer number and a completion item.
@@ -3326,13 +3289,6 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          This will be fed (as JSON) to the LSP in the
                          initialize command.
 
-  `initialization_options_callback`
-                         A |String| or |Funcref| for a callback function
-                         accepting a buffer number. A |Dictionary| should be
-                         returned for initialization options to pass the LSP.
-                         This can be used in place of `initialization_options`
-                         when more complicated processing is needed.
-
   `lsp_config`             A |Dictionary| for configuring a language server,
                          or a |Funcref| for a callback function accepting
                          a buffer number and returning the |Dictionary|.
@@ -3340,23 +3296,12 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          This will be fed (as JSON) to the LSP in the
                          workspace/didChangeConfiguration command.
 
-  `lsp_config_callback`    A |String| or |Funcref| for a callback function
-                         accepting a buffer number. A |Dictionary| should be
-                         returned for configuration settings to pass the LSP.
-                         This can be used in place of `lsp_config` when more
-                         complicated processing is needed.
-
-  Only one of `command`, `command_callback`, or `command_chain` should be
-  specified. `command_callback` is generally recommended when a command string
-  needs to be generated dynamically, or any global options are used.
-  `command_chain` is recommended where any system calls need to be made to
-  retrieve some kind of information before running the final command.
+  Only one of `command` or `command_chain` should be specified.
 
   If temporary files or directories are created for commands run with
-  `command_callback` or `command_chain`, then these tempoary files or
-  directories can be managed by ALE, for automatic deletion.
-  See |ale#engine#ManageFile()| and |ale#engine#ManageDirectory| for more
-  information.
+  `command` or `command_chain`, then these temporary files or directories can
+  be managed by ALE, for automatic deletion.  See |ale#command#ManageFile()|
+  and |ale#command#ManageDirectory| for more information.
 
                                                    *ale-command-format-strings*
 
@@ -3374,16 +3319,16 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
   strings will reference the one temporary file. The temporary file will be
   created inside a temporary directory, and the entire temporary directory
   will be automatically deleted, following the behaviour of
-  |ale#engine#ManageDirectory|. This option can be used for some linters which
+  |ale#command#ManageDirectory|. This option can be used for some linters which
   do not support reading from stdin.
 
   For example: >
   'command': 'ghc -fno-code -v0 %t',
 <
   Any substring `%e` will be replaced with the escaped executable supplied
-  with `executable` or `executable_callback`. This provides a convenient way
-  to define a command string which needs to include a dynamic executable name,
-  but which is otherwise static.
+  with `executable`. This provides a convenient way to define a command string
+  which needs to include a dynamic executable name, but which is otherwise
+  static.
 
   For example: >
   'command': '%e --some-argument',
@@ -3394,7 +3339,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
 
   If a callback for a command generates part of a command string which might
   possibly contain `%%`, `%s`, `%t`, or `%e`, where the special formatting
-  behavior is not desired, the |ale#engine#EscapeCommandPart()| function can
+  behavior is not desired, the |ale#command#EscapeCommandPart()| function can
   be used to replace those characters to avoid formatting issues.
 
                                                   *ale-linter-loading-behavior*

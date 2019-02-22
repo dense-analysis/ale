@@ -75,7 +75,7 @@ call ale#linter#Define('cs',{
 \   'name': 'mcsc',
 \   'output_stream': 'stderr',
 \   'executable': 'mcs',
-\   'command_callback': 'ale_linters#cs#mcsc#GetCommand',
+\   'command': function('ale_linters#cs#mcsc#GetCommand'),
 \   'callback': 'ale_linters#cs#mcsc#Handle',
 \   'lint_file': 1
 \})

@@ -68,8 +68,8 @@ endfunction
 
 call ale#linter#Define('bib', {
 \   'name': 'bibclean',
-\   'executable_callback': ale#VarFunc('bib_bibclean_executable'),
-\   'command_callback': 'ale_linters#bib#bibclean#GetCommand',
+\   'executable': {b -> ale#Var(b, 'bib_bibclean_executable')},
+\   'command': function('ale_linters#bib#bibclean#GetCommand'),
 \   'output_stream': 'stderr',
 \   'callback': 'ale_linters#bib#bibclean#Handle',
 \})

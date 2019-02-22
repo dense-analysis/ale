@@ -46,7 +46,7 @@ endfunction
 call ale#linter#Define('elixir', {
 \   'name': 'mix',
 \   'executable': 'mix',
-\   'command_callback': 'ale_linters#elixir#mix#GetCommand',
+\   'command': function('ale_linters#elixir#mix#GetCommand'),
 \   'callback': 'ale_linters#elixir#mix#Handle',
 \   'lint_file': 1,
 \})

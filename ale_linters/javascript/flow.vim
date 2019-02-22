@@ -168,7 +168,7 @@ endfunction
 
 call ale#linter#Define('javascript', {
 \   'name': 'flow',
-\   'executable_callback': 'ale_linters#javascript#flow#GetExecutable',
+\   'executable': function('ale_linters#javascript#flow#GetExecutable'),
 \   'command_chain': [
 \       {'callback': 'ale_linters#javascript#flow#VersionCheck'},
 \       {'callback': 'ale_linters#javascript#flow#GetCommand'},

@@ -58,8 +58,8 @@ endfunction
 
 call ale#linter#Define('vim', {
 \   'name': 'ale_custom_linting_rules',
-\   'executable_callback': 'ale_linters#vim#ale_custom_linting_rules#GetExecutable',
-\   'command_callback': 'ale_linters#vim#ale_custom_linting_rules#GetCommand',
+\   'executable': function('ale_linters#vim#ale_custom_linting_rules#GetExecutable'),
+\   'command': function('ale_linters#vim#ale_custom_linting_rules#GetCommand'),
 \   'callback': 'ale_linters#vim#ale_custom_linting_rules#Handle',
 \   'read_buffer': 0,
 \})

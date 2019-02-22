@@ -62,7 +62,7 @@ endfunction
 
 call ale#linter#Define('python', {
 \   'name': 'bandit',
-\   'executable_callback': 'ale_linters#python#bandit#GetExecutable',
-\   'command_callback': 'ale_linters#python#bandit#GetCommand',
+\   'executable': function('ale_linters#python#bandit#GetExecutable'),
+\   'command': function('ale_linters#python#bandit#GetCommand'),
 \   'callback': 'ale_linters#python#bandit#Handle',
 \})

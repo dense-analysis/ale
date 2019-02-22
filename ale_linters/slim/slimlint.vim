@@ -50,6 +50,6 @@ endfunction
 call ale#linter#Define('slim', {
 \   'name': 'slimlint',
 \   'executable': 'slim-lint',
-\   'command_callback': 'ale_linters#slim#slimlint#GetCommand',
+\   'command': function('ale_linters#slim#slimlint#GetCommand'),
 \   'callback': 'ale_linters#slim#slimlint#Handle'
 \})

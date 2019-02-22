@@ -85,8 +85,8 @@ endfunction
 
 call ale#linter#Define('python', {
 \   'name': 'pylama',
-\   'executable_callback': 'ale_linters#python#pylama#GetExecutable',
-\   'command_callback': 'ale_linters#python#pylama#GetCommand',
+\   'executable': function('ale_linters#python#pylama#GetExecutable'),
+\   'command': function('ale_linters#python#pylama#GetCommand'),
 \   'callback': 'ale_linters#python#pylama#Handle',
 \   'lint_file': 1,
 \})

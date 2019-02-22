@@ -108,7 +108,7 @@ endfunction
 
 call ale#linter#Define('sh', {
 \   'name': 'shellcheck',
-\   'executable_callback': 'ale_linters#sh#shellcheck#GetExecutable',
+\   'executable': function('ale_linters#sh#shellcheck#GetExecutable'),
 \   'command_chain': [
 \       {'callback': 'ale_linters#sh#shellcheck#VersionCheck'},
 \       {'callback': 'ale_linters#sh#shellcheck#GetCommand'},

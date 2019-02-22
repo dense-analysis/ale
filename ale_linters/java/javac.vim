@@ -120,7 +120,7 @@ endfunction
 
 call ale#linter#Define('java', {
 \   'name': 'javac',
-\   'executable_callback': ale#VarFunc('java_javac_executable'),
+\   'executable': {b -> ale#Var(b, 'java_javac_executable')},
 \   'command_chain': [
 \       {'callback': 'ale_linters#java#javac#GetImportPaths', 'output_stream': 'stdout'},
 \       {'callback': 'ale_linters#java#javac#GetCommand', 'output_stream': 'stderr'},

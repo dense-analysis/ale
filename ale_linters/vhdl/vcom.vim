@@ -32,7 +32,7 @@ endfunction
 call ale#linter#Define('vhdl', {
 \   'name': 'vcom',
 \   'output_stream': 'stdout',
-\   'executable_callback': ale#VarFunc('vhdl_vcom_executable'),
-\   'command_callback': 'ale_linters#vhdl#vcom#GetCommand',
+\   'executable': {b -> ale#Var(b, 'vhdl_vcom_executable')},
+\   'command': function('ale_linters#vhdl#vcom#GetCommand'),
 \   'callback': 'ale_linters#vhdl#vcom#Handle',
 \})

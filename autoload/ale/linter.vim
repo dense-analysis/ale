@@ -340,6 +340,8 @@ function! ale#linter#PreProcess(filetype, linter) abort
         throw '`aliases` must be a List of String values'
     endif
 
+    " TODO: Emit deprecation warnings for deprecated options later.
+
     return l:obj
 endfunction
 

@@ -16,8 +16,8 @@ endfunction
 call ale#linter#Define('java', {
 \   'name': 'javalsp',
 \   'lsp': 'stdio',
-\   'executable_callback': 'ale_linters#java#javalsp#Executable',
-\   'command_callback': 'ale_linters#java#javalsp#Command',
+\   'executable': function('ale_linters#java#javalsp#Executable'),
+\   'command': function('ale_linters#java#javalsp#Command'),
 \   'language': 'java',
-\   'project_root_callback': 'ale#java#FindProjectRoot',
+\   'project_root': function('ale#java#FindProjectRoot'),
 \})

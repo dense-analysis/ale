@@ -94,7 +94,7 @@ endfunction
 call ale#linter#Define('prolog', {
 \   'name': 'swipl',
 \   'output_stream': 'stderr',
-\   'executable_callback': ale#VarFunc('prolog_swipl_executable'),
-\   'command_callback': 'ale_linters#prolog#swipl#GetCommand',
+\   'executable': {b -> ale#Var(b, 'prolog_swipl_executable')},
+\   'command': function('ale_linters#prolog#swipl#GetCommand'),
 \   'callback': 'ale_linters#prolog#swipl#Handle',
 \})

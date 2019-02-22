@@ -53,7 +53,7 @@ call ale#linter#Define('verilog', {
 \   'name': 'verilator',
 \   'output_stream': 'stderr',
 \   'executable': 'verilator',
-\   'command_callback': 'ale_linters#verilog#verilator#GetCommand',
+\   'command': function('ale_linters#verilog#verilator#GetCommand'),
 \   'callback': 'ale_linters#verilog#verilator#Handle',
 \   'read_buffer': 0,
 \})

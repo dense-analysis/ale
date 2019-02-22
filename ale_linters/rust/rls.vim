@@ -19,7 +19,7 @@ endfunction
 call ale#linter#Define('rust', {
 \   'name': 'rls',
 \   'lsp': 'stdio',
-\   'executable_callback': ale#VarFunc('rust_rls_executable'),
-\   'command_callback': 'ale_linters#rust#rls#GetCommand',
-\   'project_root_callback': 'ale_linters#rust#rls#GetProjectRoot',
+\   'executable': {b -> ale#Var(b, 'rust_rls_executable')},
+\   'command': function('ale_linters#rust#rls#GetCommand'),
+\   'project_root': function('ale_linters#rust#rls#GetProjectRoot'),
 \})

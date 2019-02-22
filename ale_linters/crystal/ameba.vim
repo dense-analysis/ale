@@ -50,8 +50,8 @@ endfunction
 
 call ale#linter#Define('crystal', {
 \   'name': 'ameba',
-\   'executable_callback': ale#VarFunc('crystal_ameba_executable'),
-\   'command_callback': 'ale_linters#crystal#ameba#GetCommand',
+\   'executable': {b -> ale#Var(b, 'crystal_ameba_executable')},
+\   'command': function('ale_linters#crystal#ameba#GetCommand'),
 \   'callback': 'ale_linters#crystal#ameba#HandleAmebaOutput',
 \   'lint_file': 1,
 \})
