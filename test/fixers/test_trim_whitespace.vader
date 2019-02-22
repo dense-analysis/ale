@@ -16,13 +16,13 @@ Execute(Should delete all whitespace at the end of different lines):
   \   ' bar,',
   \   '))',
   \ ],
-  \ ale#fixers#generic#TrimWhitespace(bufnr(''), v:null, [
-  \   'def foo():',
-  \   '    some_variable = this_is_a_longer_function(',
-  \   'first_argument,',
-  \   ' second_argument,',
-  \   ' third_with_function_call(',
-  \   'foo,',
-  \   ' bar,',
-  \   '))',
+  \ ale#fixers#generic#TrimWhitespace(bufnr(''), [
+  \   'def foo():',     
+  \   '    some_variable = this_is_a_longer_function(', 
+  \   'first_argument,',  
+  \   ' second_argument,',   
+  \   ' third_with_function_call(',      
+  \   'foo,', 
+  \   ' bar,',   
+  \   '))',              
   \ ])

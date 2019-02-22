@@ -23,7 +23,7 @@ Before:
     return [{'lnum': 1, 'col': 1, 'text': 'xxx'}]
   endfunction
 
-  function AddLine(buffer, done, lines) abort
+  function AddLine(buffer, lines) abort
     return a:lines + ['x']
   endfunction
 
