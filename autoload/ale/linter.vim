@@ -242,10 +242,21 @@ function! ale#linter#PreProcess(filetype, linter) abort
             endif
         endif
 
-        let l:obj.project_root_callback = get(a:linter, 'project_root_callback')
+        if has_key(a:linter, 'project_root')
+            let l:obj.project_root = a:linter.project_root
 
-        if !s:IsCallback(l:obj.project_root_callback)
-            throw '`project_root_callback` must be a callback for LSP linters'
+            if type(l:obj.project_root) isnot v:t_string
+            \&& type(l:obj.project_root) isnot v:t_func
+                throw '`project_root` must be a String or Function if defined'
+            endif
+        elseif has_key(a:linter, 'project_root_callback')
+            let l:obj.project_root_callback = a:linter.project_root_callback
+
+            if !s:IsCallback(l:obj.project_root_callback)
+                throw '`project_root_callback` must be a callback if defined'
+            endif
+        else
+            throw '`project_root` or `project_root_callback` must be defined for LSP linters'
         endif
 
         if has_key(a:linter, 'completion_filter')

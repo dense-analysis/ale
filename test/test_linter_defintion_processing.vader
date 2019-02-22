@@ -1,4 +1,10 @@
 Before:
+  Save g:ale_lsp_root
+  Save b:ale_lsp_root
+
+  let g:ale_lsp_root = {}
+  unlet! b:ale_lsp_root
+
   let g:linter = {}
 
 After:
@@ -557,6 +563,68 @@ Execute(PreProcess should complain about invalid address values):
   \ 'project_root_callback': 'x',
   \})
   AssertEqual '`address` must be a String or Function if defined', g:vader_exception
+
+Execute(PreProcess should accept allow the project root be set as a String):
+  let g:linter = ale#linter#PreProcess('testft', {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address': 'foo:123',
+  \ 'language': 'x',
+  \ 'project_root': '/foo/bar',
+  \})
+
+  AssertEqual '/foo/bar', ale#lsp_linter#FindProjectRoot(0, g:linter)
+
+Execute(PreProcess should accept allow the project root be set as a Function):
+  let g:linter = ale#linter#PreProcess('testft', {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address': 'foo:123',
+  \ 'language': 'x',
+  \ 'project_root': {-> '/foo/bar'},
+  \})
+
+  AssertEqual '/foo/bar', ale#lsp_linter#FindProjectRoot(0, g:linter)
+
+Execute(PreProcess should complain when the project_root valid is invalid):
+  AssertThrows call ale#linter#PreProcess('testft', {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address': 'foo:123',
+  \ 'language': 'x',
+  \ 'project_root': 0,
+  \})
+  AssertEqual '`project_root` must be a String or Function if defined', g:vader_exception
+
+Execute(PreProcess should accept project_root_callback as a String):
+  call ale#linter#PreProcess('testft', {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address': 'foo:123',
+  \ 'language': 'x',
+  \ 'project_root_callback': 'Foobar',
+  \})
+
+Execute(PreProcess should accept project_root_callback as a Function):
+  let g:linter = ale#linter#PreProcess('testft', {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address': 'foo:123',
+  \ 'language': 'x',
+  \ 'project_root_callback': {-> '/foo/bar'},
+  \})
+
+  AssertEqual '/foo/bar', ale#lsp_linter#FindProjectRoot(0, g:linter)
+
+Execute(PreProcess should complain when the project_root_callback valid is invalid):
+  AssertThrows call ale#linter#PreProcess('testft', {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address': 'foo:123',
+  \ 'language': 'x',
+  \ 'project_root_callback': 0,
+  \})
+  AssertEqual '`project_root_callback` must be a callback if defined', g:vader_exception
 
 Execute(PreProcess should complain about using initialization_options and initialization_options_callback together):
   let g:linter = {

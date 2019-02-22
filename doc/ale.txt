@@ -3270,15 +3270,20 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          This argument must only be set if the `lsp` argument
                          is set to `'socket'`.
 
-  `project_root_callback`  A |String| or |Funcref| for a callback function
-                         accepting a buffer number. A |String| should be
-                         returned representing the path to the project for the
-                         file being checked with the language server. If an
-                         empty string is returned, the file will not be
+  `project_root`           A |String| representing a path to the project for
+                         the file being checked with the language server, or
+                         a |Funcref| accepting a buffer number and returning
+                         the |String|.
+
+                         If an empty string is returned, the file will not be
                          checked at all.
 
                          This argument must only be set if the `lsp` argument
                          is also set to a non-empty string.
+
+  `project_root_callback`  A |String| or |Funcref| for a callback function
+                         accepting a buffer number and returning the
+                         `project_root` |String| as documented above.
 
   `language`               A |String| representing the name of the language
                          being checked, or a |Funcref| accepting a buffer

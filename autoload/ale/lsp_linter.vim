@@ -194,6 +194,12 @@ function! ale#lsp_linter#FindProjectRoot(buffer, linter) abort
     endif
 
     " Fall back to the linter-specific configuration
+    if has_key(a:linter, 'project_root')
+        let l:Root = a:linter.project_root
+
+        return type(l:Root) is v:t_func ? l:Root(a:buffer) : l:Root
+    endif
+
     return ale#util#GetFunction(a:linter.project_root_callback)(a:buffer)
 endfunction
 
