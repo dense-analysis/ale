@@ -3231,8 +3231,9 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
 
                          When this argument is set to `'socket'`, then the
                          linter will be defined as an LSP linter via a TCP
-                         socket connection. `address_callback` must be set
-                         with a callback returning an address to connect to.
+                         socket connection. Either `address` or
+                         `address_callback` must be set.
+
                          ALE will not start a server automatically.
 
                          When this argument is not empty
@@ -3255,6 +3256,13 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          An optional `lsp_config` or `lsp_config_callback` may
                          be defined to pass configuration settings to the LSP.
 
+  `address`                A |String| representing an address to connect to,
+                         or a |Funcref| accepting a buffer number and
+                         returning the |String|.
+
+                         This argument must only be set if the `lsp` argument
+                         is set to `'socket'`.
+
   `address_callback`       A |String| or |Funcref| for a callback function
                          accepting a buffer number. A |String| should be
                          returned with an address to connect to.
@@ -3273,8 +3281,10 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          is also set to a non-empty string.
 
   `language`               A |String| representing the name of the language
-                         being checked. This string will be sent to the LSP to
-                         tell it what type of language is being checked.
+                         being checked, or a |Funcref| accepting a buffer
+                         number and returning the |String|. This string will
+                         be sent to the LSP to tell it what type of language
+                         is being checked.
 
                          If this or `language_callback` isn't set, the
                          language will default to the value of the filetype
@@ -3304,7 +3314,10 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          setting can make it easier to guess the linter name
                          by offering a few alternatives.
 
-  `initialization_options` A |Dictionary| of initialization options for LSPs.
+  `initialization_options` A |Dictionary| of initialization options for LSPs,
+                         or a |Funcref| for a callback function accepting
+                         a buffer number and returning the |Dictionary|.
+
                          This will be fed (as JSON) to the LSP in the
                          initialize command.
 
@@ -3315,11 +3328,14 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          This can be used in place of `initialization_options`
                          when more complicated processing is needed.
 
-  `lsp_config`           A |Dictionary| of configuration settings for LSPs.
+  `lsp_config`             A |Dictionary| for configuring a language server,
+                         or a |Funcref| for a callback function accepting
+                         a buffer number and returning the |Dictionary|.
+
                          This will be fed (as JSON) to the LSP in the
                          workspace/didChangeConfiguration command.
 
-  `lsp_config_callback`  A |String| or |Funcref| for a callback function
+  `lsp_config_callback`    A |String| or |Funcref| for a callback function
                          accepting a buffer number. A |Dictionary| should be
                          returned for configuration settings to pass the LSP.
                          This can be used in place of `lsp_config` when more

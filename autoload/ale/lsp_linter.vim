@@ -129,27 +129,39 @@ function! ale#lsp_linter#HandleLSPResponse(conn_id, response) abort
 endfunction
 
 function! ale#lsp_linter#GetOptions(buffer, linter) abort
-    let l:initialization_options = {}
-
     if has_key(a:linter, 'initialization_options_callback')
-        let l:initialization_options = ale#util#GetFunction(a:linter.initialization_options_callback)(a:buffer)
-    elseif has_key(a:linter, 'initialization_options')
-        let l:initialization_options = a:linter.initialization_options
+        return ale#util#GetFunction(a:linter.initialization_options_callback)(a:buffer)
     endif
 
-    return l:initialization_options
+    if has_key(a:linter, 'initialization_options')
+        let l:Options = a:linter.initialization_options
+
+        if type(l:Options) is v:t_func
+            let l:Options = l:Options(a:buffer)
+        endif
+
+        return l:Options
+    endif
+
+    return {}
 endfunction
 
 function! ale#lsp_linter#GetConfig(buffer, linter) abort
-    let l:config = {}
-
     if has_key(a:linter, 'lsp_config_callback')
-        let l:config = ale#util#GetFunction(a:linter.lsp_config_callback)(a:buffer)
-    elseif has_key(a:linter, 'lsp_config')
-        let l:config = a:linter.lsp_config
+        return ale#util#GetFunction(a:linter.lsp_config_callback)(a:buffer)
     endif
 
-    return l:config
+    if has_key(a:linter, 'lsp_config')
+        let l:Config = a:linter.lsp_config
+
+        if type(l:Config) is v:t_func
+            let l:Config = l:Config(a:buffer)
+        endif
+
+        return l:Config
+    endif
+
+    return {}
 endfunction
 
 function! ale#lsp_linter#FindProjectRoot(buffer, linter) abort

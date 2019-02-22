@@ -195,9 +195,16 @@ function! ale#linter#PreProcess(filetype, linter) abort
     endif
 
     if !l:needs_address
-        if has_key(a:linter, 'address_callback')
-            throw '`address_callback` cannot be used when lsp != ''socket'''
+        if has_key(a:linter, 'address') || has_key(a:linter, 'address_callback')
+            throw '`address` or `address_callback` cannot be used when lsp != ''socket'''
         endif
+    elseif has_key(a:linter, 'address')
+        if type(a:linter.address) isnot v:t_string
+        \&& type(a:linter.address) isnot v:t_func
+            throw '`address` must be a String or Function if defined'
+        endif
+
+        let l:obj.address = a:linter.address
     elseif has_key(a:linter, 'address_callback')
         let l:obj.address_callback = a:linter.address_callback
 
@@ -205,7 +212,7 @@ function! ale#linter#PreProcess(filetype, linter) abort
             throw '`address_callback` must be a callback if defined'
         endif
     else
-        throw '`address_callback` must be defined for getting the LSP address'
+        throw '`address` or `address_callback` must be defined for getting the LSP address'
     endif
 
     if l:needs_lsp_details
@@ -222,14 +229,17 @@ function! ale#linter#PreProcess(filetype, linter) abort
             endif
         else
             " Default to using the filetype as the language.
-            let l:obj.language = get(a:linter, 'language', a:filetype)
+            let l:Language = get(a:linter, 'language', a:filetype)
 
-            if type(l:obj.language) isnot v:t_string
-                throw '`language` must be a string'
+            if type(l:Language) is v:t_string
+                " Make 'language_callback' return the 'language' value.
+                let l:obj.language = l:Language
+                let l:obj.language_callback = function('s:LanguageGetter')
+            elseif type(l:Language) is v:t_func
+                let l:obj.language_callback = l:Language
+            else
+                throw '`language` must be a String or Funcref'
             endif
-
-            " Make 'language_callback' return the 'language' value.
-            let l:obj.language_callback = function('s:LanguageGetter')
         endif
 
         let l:obj.project_root_callback = get(a:linter, 'project_root_callback')
@@ -259,6 +269,11 @@ function! ale#linter#PreProcess(filetype, linter) abort
             endif
         elseif has_key(a:linter, 'initialization_options')
             let l:obj.initialization_options = a:linter.initialization_options
+
+            if type(l:obj.initialization_options) isnot v:t_dict
+            \&& type(l:obj.initialization_options) isnot v:t_func
+                throw '`initialization_options` must be a String or Function if defined'
+            endif
         endif
 
         if has_key(a:linter, 'lsp_config_callback')
@@ -273,7 +288,8 @@ function! ale#linter#PreProcess(filetype, linter) abort
             endif
         elseif has_key(a:linter, 'lsp_config')
             if type(a:linter.lsp_config) isnot v:t_dict
-                throw '`lsp_config` must be a Dictionary'
+            \&& type(a:linter.lsp_config) isnot v:t_func
+                throw '`lsp_config` must be a Dictionary or Function if defined'
             endif
 
             let l:obj.lsp_config = a:linter.lsp_config
@@ -501,7 +517,11 @@ endfunction
 
 " Given a buffer and linter, get the address for connecting to the server.
 function! ale#linter#GetAddress(buffer, linter) abort
-    return has_key(a:linter, 'address_callback')
-    \   ? ale#util#GetFunction(a:linter.address_callback)(a:buffer)
+    let l:Address = has_key(a:linter, 'address_callback')
+    \   ? function(a:linter.address_callback)
     \   : a:linter.address
+
+    return type(l:Address) is v:t_func
+    \   ? l:Address(a:buffer)
+    \   : l:Address
 endfunction
