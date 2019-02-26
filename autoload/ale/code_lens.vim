@@ -89,7 +89,7 @@ function! ale#code_lens#Show(buffer, items) abort
         let text = '  ' . substitute(l:item.title, '\n', ' ', 'g')
         call nvim_buf_set_virtual_text(
         \ a:buffer, l:namespace,
-        \ item.range.start.line, [[text, 'Comment']], {}
+        \ item.line, [[text, 'Comment']], {}
         \)
     endfor
 endfunction
@@ -99,7 +99,7 @@ function! ale#code_lens#Clear(buffer) abort
     call nvim_buf_clear_namespace(a:buffer, l:namespace, 0, -1)
 endfunction
 
-function! ale#code_lens#HandleLSPResponse(buffer, conn_id, response) abort
+function! ale#code_lens#HandleLSPResponse(conn_id, response) abort
     if has_key(a:response, 'id')
     \&& has_key(s:code_lens_map, a:response.id)
         let l:options = remove(s:code_lens_map, a:response.id)
@@ -118,14 +118,14 @@ function! ale#code_lens#HandleLSPResponse(buffer, conn_id, response) abort
             "}
             for l:response_item in l:result
                 call add(l:item_list, {
-                \ 'range': l:response_item.range,
+                \ 'line': l:response_item.range.start.line,
                 \ 'title': l:response_item.command.title,
                 \})
             endfor
         endif
 
         if !empty(l:item_list)
-            call ale#code_lens#Show(a:buffer, l:item_list)
+            call ale#code_lens#Show(l:options.buffer, l:item_list)
         else
         endif
     endif
@@ -141,7 +141,7 @@ function! s:OnReady(linter, lsp_details, ...) abort
 
     let l:id = a:lsp_details.connection_id
 
-    let l:Callback = function('ale#code_lens#HandleLSPResponse', [l:buffer])
+    let l:Callback = function('ale#code_lens#HandleLSPResponse')
     call ale#lsp#RegisterCallback(l:id, l:Callback)
 
     let l:message = ale#lsp#message#CodeLens(l:buffer)
