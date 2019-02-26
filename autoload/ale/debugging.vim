@@ -4,6 +4,7 @@
 let s:global_variable_list = [
 \    'ale_cache_executable_check_failures',
 \    'ale_change_sign_column_color',
+\    'ale_code_lens_enabled',
 \    'ale_command_wrapper',
 \    'ale_completion_delay',
 \    'ale_completion_enabled',
