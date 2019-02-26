@@ -149,6 +149,14 @@ function! ale#lsp#message#Symbol(query) abort
     \}]
 endfunction
 
+function! ale#lsp#message#CodeLens(buffer) abort
+    return [0, 'textDocument/codeLens', {
+    \   'textDocument': {
+    \       'uri': ale#path#ToURI(expand('#' . a:buffer . ':p')),
+    \   },
+    \}]
+endfunction
+
 function! ale#lsp#message#Hover(buffer, line, column) abort
     return [0, 'textDocument/hover', {
     \   'textDocument': {
