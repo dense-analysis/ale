@@ -56,6 +56,12 @@ Before:
     return {'command': 'cat - <(echo d)'}
   endfunction
 
+  function CatLineDeferred(buffer, lines) abort
+    return ale#command#Run(a:buffer, 'echo', {
+    \ -> ale#command#Run(a:buffer, 'echo', {-> {'command': 'cat - <(echo d)'}})
+    \})
+  endfunction
+
   function ReplaceWithTempFile(buffer, lines) abort
     return {'command': 'echo x > %t', 'read_temporary_file': 1}
   endfunction
@@ -193,6 +199,7 @@ After:
   delfunction DoNothing
   delfunction CatLine
   delfunction CatLineOneArg
+  delfunction CatLineDeferred
   delfunction ReplaceWithTempFile
   delfunction CatWithTempFile
   delfunction RemoveLastLine
@@ -807,3 +814,14 @@ Execute(ALEFix should apply autocmds):
 
   AssertEqual g:pre_success, 1
   AssertEqual g:post_success, 1
+
+Execute(ALEFix should support ale#command#Run):
+  let g:ale_fixers.testft = ['CatLineDeferred']
+  ALEFix
+  call ale#test#FlushJobs()
+
+Expect(The extra line should be added):
+  a
+  b
+  c
+  d
