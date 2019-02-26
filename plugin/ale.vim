@@ -201,6 +201,14 @@ command! -bar ALEGoToTypeDefinitionInTab :call ale#definition#GoToType({'open_in
 command! -bar ALEGoToTypeDefinitionInSplit :call ale#definition#GoToType({'open_in': 'horizontal-split'})
 command! -bar ALEGoToTypeDefinitionInVSplit :call ale#definition#GoToType({'open_in': 'vertical-split'})
 
+" CodeLens toggles for LSP
+command! -bar ALECodeLensToggle  :call ale#code_lens#Toggle()
+command! -bar ALECodeLensEnable  :call ale#code_lens#Enable()
+command! -bar ALECodeLensDisable :call ale#code_lens#Disable()
+command! -bar ALECodeLensToggleBuffer  :call ale#code_lens#ToggleBuffer(bufnr(''))
+command! -bar ALECodeLensEnableBuffer  :call ale#code_lens#EnableBuffer(bufnr(''))
+command! -bar ALECodeLensDisableBuffer :call ale#code_lens#DisableBuffer(bufnr(''))
+
 " Find references for tsserver and LSP
 command! -bar -nargs=* ALEFindReferences :call ale#references#Find(<f-args>)
 
