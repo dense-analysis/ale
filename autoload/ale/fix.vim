@@ -131,35 +131,55 @@ function! s:HandleExit(job_info, buffer, job_output, data) abort
     \})
 endfunction
 
-function! s:RunJob(options) abort
-    let l:buffer = a:options.buffer
-    let l:command = a:options.command
-    let l:input = a:options.input
-    let l:ChainWith = a:options.chain_with
-    let l:read_buffer = a:options.read_buffer
+function! s:RunJob(result, options) abort
+    if ale#command#IsDeferred(a:result)
+        let a:result.result_callback = {x -> s:RunJob(x, a:options)}
 
-    if empty(l:command)
-        " If there's nothing further to chain the command with, stop here.
-        if l:ChainWith is v:null
-            return v:false
+        return
+    endif
+
+    let l:buffer = a:options.buffer
+    let l:input = a:options.input
+
+    if a:result is 0 || type(a:result) is v:t_list
+        if type(a:result) is v:t_list
+            let l:input = a:result
         endif
 
-        " If there's another chained callback to run, then run that.
         call s:RunFixer({
         \   'buffer': l:buffer,
         \   'input': l:input,
-        \   'callback_index': a:options.callback_index,
+        \   'callback_index': a:options.callback_index + 1,
+        \   'callback_list': a:options.callback_list,
+        \})
+
+        return
+    endif
+
+    let l:command = get(a:result, 'command', '')
+    let l:ChainWith = get(a:result, 'chain_with', v:null)
+
+    if empty(l:command)
+        " If the command is empty, skip to the next item, or call the
+        " chain_with function.
+        call s:RunFixer({
+        \   'buffer': l:buffer,
+        \   'input': l:input,
+        \   'callback_index': a:options.callback_index + (l:ChainWith is v:null),
         \   'callback_list': a:options.callback_list,
         \   'chain_callback': l:ChainWith,
         \   'output': [],
         \})
 
-        return v:true
+        return
     endif
 
-    let l:output_stream = a:options.output_stream
+    let l:read_temporary_file = get(a:result, 'read_temporary_file', 0)
+    " Default to piping the buffer for the last fixer in the chain.
+    let l:read_buffer = get(a:result, 'read_buffer', l:ChainWith is v:null)
+    let l:output_stream = get(a:result, 'output_stream', 'stdout')
 
-    if a:options.read_temporary_file
+    if l:read_temporary_file
         let l:output_stream = 'none'
     endif
 
@@ -168,10 +188,10 @@ function! s:RunJob(options) abort
     \   'chain_with': l:ChainWith,
     \   'callback_index': a:options.callback_index,
     \   'callback_list': a:options.callback_list,
-    \   'process_with': a:options.process_with,
-    \   'read_temporary_file': a:options.read_temporary_file,
+    \   'process_with': get(a:result, 'process_with', v:null),
+    \   'read_temporary_file': l:read_temporary_file,
     \}])
-    let l:result = ale#command#Run(l:buffer, l:command, l:Callback, {
+    let l:run_result = ale#command#Run(l:buffer, l:command, l:Callback, {
     \   'output_stream': l:output_stream,
     \   'executable': '',
     \   'read_buffer': l:read_buffer,
@@ -179,70 +199,54 @@ function! s:RunJob(options) abort
     \   'log_output': 0,
     \})
 
-    return !empty(l:result)
+    if empty(l:run_result)
+        call s:RunFixer({
+        \   'buffer': l:buffer,
+        \   'input': l:input,
+        \   'callback_index': a:options.callback_index + 1,
+        \   'callback_list': a:options.callback_list,
+        \})
+    endif
 endfunction
 
 function! s:RunFixer(options) abort
     let l:buffer = a:options.buffer
     let l:input = a:options.input
     let l:index = a:options.callback_index
+
+    if len(a:options.callback_list) <= l:index
+        call ale#fix#ApplyFixes(l:buffer, l:input)
+
+        return
+    endif
+
     let l:ChainCallback = get(a:options, 'chain_callback', v:null)
+
+    let l:Function = l:ChainCallback isnot v:null
+    \   ? ale#util#GetFunction(l:ChainCallback)
+    \   : a:options.callback_list[l:index]
 
     " Record new jobs started as fixer jobs.
     call setbufvar(l:buffer, 'ale_job_type', 'fixer')
 
-    while len(a:options.callback_list) > l:index
-        let l:Function = l:ChainCallback isnot v:null
-        \   ? ale#util#GetFunction(l:ChainCallback)
-        \   : a:options.callback_list[l:index]
+    if l:ChainCallback isnot v:null
+        " Chained commands accept (buffer, output, [input])
+        let l:result = ale#util#FunctionArgCount(l:Function) == 2
+        \   ? call(l:Function, [l:buffer, a:options.output])
+        \   : call(l:Function, [l:buffer, a:options.output, copy(l:input)])
+    else
+        " Regular fixer commands accept (buffer, [input])
+        let l:result = ale#util#FunctionArgCount(l:Function) == 1
+        \   ? call(l:Function, [l:buffer])
+        \   : call(l:Function, [l:buffer, copy(l:input)])
+    endif
 
-        if l:ChainCallback isnot v:null
-            " Chained commands accept (buffer, output, [input])
-            let l:result = ale#util#FunctionArgCount(l:Function) == 2
-            \   ? call(l:Function, [l:buffer, a:options.output])
-            \   : call(l:Function, [l:buffer, a:options.output, copy(l:input)])
-        else
-            " Chained commands accept (buffer, [input])
-            let l:result = ale#util#FunctionArgCount(l:Function) == 1
-            \   ? call(l:Function, [l:buffer])
-            \   : call(l:Function, [l:buffer, copy(l:input)])
-        endif
-
-        if type(l:result) is v:t_number && l:result == 0
-            " When `0` is returned, skip this item.
-            let l:index += 1
-        elseif type(l:result) is v:t_list
-            let l:input = l:result
-            let l:index += 1
-        else
-            let l:ChainWith = get(l:result, 'chain_with', v:null)
-            " Default to piping the buffer for the last fixer in the chain.
-            let l:read_buffer = get(l:result, 'read_buffer', l:ChainWith is v:null)
-
-            let l:job_ran = s:RunJob({
-            \   'buffer': l:buffer,
-            \   'command': l:result.command,
-            \   'input': l:input,
-            \   'output_stream': get(l:result, 'output_stream', 'stdout'),
-            \   'read_temporary_file': get(l:result, 'read_temporary_file', 0),
-            \   'read_buffer': l:read_buffer,
-            \   'chain_with': l:ChainWith,
-            \   'callback_list': a:options.callback_list,
-            \   'callback_index': l:index,
-            \   'process_with': get(l:result, 'process_with', v:null),
-            \})
-
-            if !l:job_ran
-                " The job failed to run, so skip to the next item.
-                let l:index += 1
-            else
-                " Stop here, we will handle exit later on.
-                return
-            endif
-        endif
-    endwhile
-
-    call ale#fix#ApplyFixes(l:buffer, l:input)
+    call s:RunJob(l:result, {
+    \   'buffer': l:buffer,
+    \   'input': l:input,
+    \   'callback_list': a:options.callback_list,
+    \   'callback_index': l:index,
+    \})
 endfunction
 
 function! s:AddSubCallbacks(full_list, callbacks) abort

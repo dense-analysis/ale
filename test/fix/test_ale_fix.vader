@@ -180,6 +180,7 @@ Before:
 
 After:
   Restore
+  unlet! g:test_filename
   unlet! g:ale_run_synchronously
   unlet! g:ale_set_lists_synchronously
   unlet! g:ale_run_synchronously_callbacks
@@ -224,8 +225,8 @@ After:
 
   setlocal buftype=nofile
 
-  if filereadable('fix_test_file')
-    call delete('fix_test_file')
+  if exists('g:test_filename') && filereadable(g:test_filename)
+    call delete(g:test_filename)
   endif
 
   call setloclist(0, [])
@@ -479,8 +480,9 @@ Execute(ALEFix should fix files on the save event):
   let g:ale_lint_on_save = 1
   let g:ale_enabled = 1
 
-  noautocmd silent file fix_test_file
-  call writefile(getline(1, '$'), 'fix_test_file')
+  let g:test_filename = tempname()
+  execute 'noautocmd silent file ' . fnameescape(g:test_filename)
+  call writefile(getline(1, '$'), g:test_filename)
 
   let g:ale_fixers.testft = ['AddDollars']
 
@@ -492,8 +494,8 @@ Execute(ALEFix should fix files on the save event):
   call ale#test#FlushJobs()
 
   " We should save the file.
-  AssertEqual ['$a', '$b', '$c'], readfile('fix_test_file')
-  Assert !&modified, 'The was marked as ''modified'''
+  AssertEqual ['$a', '$b', '$c'], readfile(g:test_filename)
+  Assert !&modified, 'The file was marked as ''modified'''
 
   if !has('win32')
     " We should have run the linter.
@@ -520,8 +522,9 @@ Execute(ALEFix should not fix files on :wq):
   let g:ale_lint_on_save = 1
   let g:ale_enabled = 1
 
-  noautocmd silent file fix_test_file
-  call writefile(getline(1, '$'), 'fix_test_file')
+  let g:test_filename = tempname()
+  execute 'noautocmd silent file ' . fnameescape(g:test_filename)
+  call writefile(getline(1, '$'), g:test_filename)
 
   let g:ale_fixers.testft = ['AddDollars']
 
@@ -534,7 +537,7 @@ Execute(ALEFix should not fix files on :wq):
   call ale#events#SaveEvent(bufnr(''))
 
   " We should save the file.
-  AssertEqual ['a', 'b', 'c'], readfile('fix_test_file')
+  AssertEqual ['a', 'b', 'c'], readfile(g:test_filename)
   Assert &modified, 'The was not marked as ''modified'''
 
   " We should not run the linter.
@@ -555,7 +558,8 @@ Execute(ALEFix should still lint with no linters to be applied):
   let g:ale_lint_on_save = 1
   let g:ale_enabled = 1
 
-  noautocmd silent file fix_test_file
+  let g:test_filename = tempname()
+  execute 'noautocmd silent file ' . fnameescape(g:test_filename)
 
   let g:ale_fixers.testft = []
 
@@ -563,7 +567,7 @@ Execute(ALEFix should still lint with no linters to be applied):
   call ale#events#SaveEvent(bufnr(''))
   call ale#test#FlushJobs()
 
-  Assert !filereadable('fix_test_file'), 'The file should not have been saved'
+  Assert !filereadable(g:test_filename), 'The file should not have been saved'
 
   if !has('win32')
     " We have run the linter.
@@ -590,7 +594,8 @@ Execute(ALEFix should still lint when nothing was fixed on save):
   let g:ale_lint_on_save = 1
   let g:ale_enabled = 1
 
-  noautocmd silent file fix_test_file
+  let g:test_filename = tempname()
+  execute 'noautocmd silent file ' . fnameescape(g:test_filename)
 
   let g:ale_fixers.testft = ['DoNothing']
 
@@ -598,7 +603,7 @@ Execute(ALEFix should still lint when nothing was fixed on save):
   call ale#events#SaveEvent(bufnr(''))
   call ale#test#FlushJobs()
 
-  Assert !filereadable('fix_test_file'), 'The file should not have been saved'
+  Assert !filereadable(g:test_filename), 'The file should not have been saved'
 
   if !has('win32')
     " We should have run the linter.
@@ -626,7 +631,8 @@ Given testft (A file with three lines):
   c
 
 Execute(ale#fix#InitBufferData() should set up the correct data):
-  noautocmd silent file fix_test_file
+  let g:test_filename = tempname()
+  execute 'noautocmd silent file ' . fnameescape(g:test_filename)
 
   call ale#fix#InitBufferData(bufnr(''), 'save_file')
 
