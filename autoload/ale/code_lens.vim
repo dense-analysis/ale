@@ -17,10 +17,10 @@ endfunction
 " TODO: maybe check with exists instead?
 let s:supported = exists('*nvim_buf_set_virtual_text')
 
-let s:enabled = 0
+let g:ale_code_lens_enabled = 0
 
 function! ale#code_lens#Toggle() abort
-    if s:enabled
+    if g:ale_code_lens_enabled
         call ale#code_lens#Disable()
     else
         call ale#code_lens#Enable()
@@ -28,23 +28,21 @@ function! ale#code_lens#Toggle() abort
 endfunction
 
 function! ale#code_lens#Enable() abort
-    let s:enabled = 1
+    let g:ale_code_lens_enabled = 1
     " We try to request code lens for the current buffer.
     call ale#code_lens#Request(bufnr('%'))
 endfunction
 
 function! ale#code_lens#Disable() abort
-    let s:enabled = 0
+    let g:ale_code_lens_enabled = 0
     call ale#code_lens#Clear(bufnr('%'))
 endfunction
 
-let s:enabled_buf_var = 'ale_code_lens_enabled'
-
 function! ale#code_lens#ToggleBuffer(buffer) abort
     " Get the new value for the code_lens.
-    let l:enabled = !getbufvar(a:buffer, s:enabled_buf_var, 1)
+    let l:enabled = !getbufvar(a:buffer, 'ale_code_lens_enabled', 1)
 
-    call setbufvar(a:buffer, s:enabled_buf_var, l:enabled)
+    call setbufvar(a:buffer, 'ale_code_lens_enabled', l:enabled)
 
     if l:enabled
         call ale#code_lens#Request(a:buffer)
@@ -55,36 +53,34 @@ endfunction
 
 function! ale#code_lens#EnableBuffer(buffer) abort
     " ALE is enabled by default for all buffers.
-    if !getbufvar(a:buffer, s:enabled_buf_var, 1)
+    if !getbufvar(a:buffer, 'ale_code_lens_enabled', 1)
         call ale#code_lens#ToggleBuffer(a:buffer)
     endif
 endfunction
 
 function! ale#code_lens#DisableBuffer(buffer) abort
-    if getbufvar(a:buffer, s:enabled_buf_var, 1)
+    if getbufvar(a:buffer, 'ale_code_lens_enabled', 1)
         call ale#code_lens#ToggleBuffer(a:buffer)
     endif
 endfunction
 
 function! ale#code_lens#IsEnabled(buffer) abort
     return s:supported
-         \ && s:enabled
-         \ && getbufvar(a:buffer, s:enabled_buf_var, 1)
+         \ && g:ale_code_lens_enabled
+         \ && getbufvar(a:buffer, 'ale_code_lens_enabled', 1)
 endfunction
 
-let s:ale_code_lens_ns_var = 'ale_code_lens_ns'
-
 function! s:GetNamespace(buffer) abort
-    if getbufvar(a:buffer, s:ale_code_lens_ns_var, -1) == -1
+    if getbufvar(a:buffer, 'ale_code_lens_ns', -1) == -1
         " NOTE: This will highlights nothing but will allocate new id
         call setbufvar(
         \ a:buffer,
-        \ s:ale_code_lens_ns_var,
+        \ 'ale_code_lens_ns',
         \ nvim_buf_add_highlight(a:buffer, 0, '', 0, 0, -1)
         \)
     endif
 
-    return getbufvar(a:buffer, s:ale_code_lens_ns_var)
+    return getbufvar(a:buffer, 'ale_code_lens_ns')
 endfunction
 
 function! ale#code_lens#Show(buffer, items) abort

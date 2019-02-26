@@ -109,7 +109,10 @@ function! s:Lint(buffer, should_lint_file, timer_id) abort
     \   || (a:should_lint_file && filereadable(expand('#' . a:buffer . ':p')))
 
     call ale#engine#RunLinters(a:buffer, l:linters, l:lint_file)
-    call ale#code_lens#Request(a:buffer)
+
+    if get(g:, 'ale_code_lens_enabled', 0)
+        call ale#code_lens#Request(a:buffer)
+    endif
 endfunction
 
 " (delay, [linting_flag, buffer_number])
