@@ -228,6 +228,103 @@ function! ale#lsp_linter#OnInit(linter, details, Callback) abort
     call a:Callback(a:linter, a:details)
 endfunction
 
+function! s:StartLSP(options, address, executable, command) abort
+    let l:buffer = a:options.buffer
+    let l:linter = a:options.linter
+    let l:root = a:options.root
+    let l:Callback = a:options.callback
+
+    let l:init_options = ale#lsp_linter#GetOptions(l:buffer, l:linter)
+
+    if l:linter.lsp is# 'socket'
+        let l:conn_id = ale#lsp#Register(a:address, l:root, l:init_options)
+        let l:ready = ale#lsp#ConnectToAddress(l:conn_id, a:address)
+        let l:command = ''
+    else
+        let l:conn_id = ale#lsp#Register(a:executable, l:root, l:init_options)
+
+        " tsserver behaves differently, so tell the LSP API that it is tsserver.
+        if l:linter.lsp is# 'tsserver'
+            call ale#lsp#MarkConnectionAsTsserver(l:conn_id)
+        endif
+
+        let l:command = ale#command#FormatCommand(l:buffer, a:executable, a:command, 0, v:false)[1]
+        let l:command = ale#job#PrepareCommand(l:buffer, l:command)
+        let l:ready = ale#lsp#StartProgram(l:conn_id, a:executable, l:command)
+    endif
+
+    if !l:ready
+        if g:ale_history_enabled && !empty(a:command)
+            call ale#history#Add(l:buffer, 'failed', l:conn_id, a:command)
+        endif
+
+        return 0
+    endif
+
+    let l:details = {
+    \   'buffer': l:buffer,
+    \   'connection_id': l:conn_id,
+    \   'command': l:command,
+    \   'project_root': l:root,
+    \}
+
+    call ale#lsp#OnInit(l:conn_id, {->
+    \   ale#lsp_linter#OnInit(l:linter, l:details, l:Callback)
+    \})
+
+    return 1
+endfunction
+
+function! s:StartWithAddress(options, address) abort
+    if ale#command#IsDeferred(a:address)
+        let a:address.result_callback = {
+        \   address -> s:StartWithAddress(a:options, address)
+        \}
+
+        return 1
+    endif
+
+    if empty(a:address)
+        return 0
+    endif
+
+    return s:StartLSP(a:options, a:address, '', '')
+endfunction
+
+function! s:StartWithCommand(options, executable, command) abort
+    if ale#command#IsDeferred(a:command)
+        let a:command.result_callback = {
+        \   command -> s:StartWithCommand(a:options, a:executable, command)
+        \}
+
+        return 1
+    endif
+
+    if empty(a:command)
+        return 0
+    endif
+
+    return s:StartLSP(a:options, '', a:executable, a:command)
+endfunction
+
+function! s:StartIfExecutable(options, executable) abort
+    if ale#command#IsDeferred(a:executable)
+        let a:executable.result_callback = {
+        \   executable -> s:StartIfExecutable(a:options, executable)
+        \}
+
+        return 1
+    endif
+
+    if !ale#engine#IsExecutable(a:options.buffer, a:executable)
+        return 0
+    endif
+
+    let l:command = ale#linter#GetCommand(a:options.buffer, a:options.linter)
+
+    return s:StartWithCommand(a:options, a:executable, l:command)
+endfunction
+
 " Given a buffer, an LSP linter, start up an LSP linter and get ready to
 " receive messages for the document.
 function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
@@ -241,54 +338,22 @@ function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
         return 0
     endif
 
-    let l:init_options = ale#lsp_linter#GetOptions(a:buffer, a:linter)
+    let l:options = {
+    \   'buffer': a:buffer,
+    \   'linter': a:linter,
+    \   'callback': a:Callback,
+    \   'root': l:root,
+    \}
 
     if a:linter.lsp is# 'socket'
         let l:address = ale#linter#GetAddress(a:buffer, a:linter)
-        let l:conn_id = ale#lsp#Register(l:address, l:root, l:init_options)
-        let l:ready = ale#lsp#ConnectToAddress(l:conn_id, l:address)
-    else
-        let l:executable = ale#linter#GetExecutable(a:buffer, a:linter)
 
-        if !ale#engine#IsExecutable(a:buffer, l:executable)
-            return 0
-        endif
-
-        let l:conn_id = ale#lsp#Register(l:executable, l:root, l:init_options)
-
-        " tsserver behaves differently, so tell the LSP API that it is tsserver.
-        if a:linter.lsp is# 'tsserver'
-            call ale#lsp#MarkConnectionAsTsserver(l:conn_id)
-        endif
-
-        let l:command = ale#linter#GetCommand(a:buffer, a:linter)
-        " Format the command, so %e can be formatted into it.
-        let l:command = ale#command#FormatCommand(a:buffer, l:executable, l:command, 0, v:false)[1]
-        let l:command = ale#job#PrepareCommand(a:buffer, l:command)
-        let l:ready = ale#lsp#StartProgram(l:conn_id, l:executable, l:command)
+        return s:StartWithAddress(l:options, l:address)
     endif
 
-    if !l:ready
-        if g:ale_history_enabled && !empty(l:command)
-            call ale#history#Add(a:buffer, 'failed', l:conn_id, l:command)
-        endif
+    let l:executable = ale#linter#GetExecutable(a:buffer, a:linter)
 
-        return 0
-    endif
-
-
-    let l:details = {
-    \   'buffer': a:buffer,
-    \   'connection_id': l:conn_id,
-    \   'command': l:command,
-    \   'project_root': l:root,
-    \}
-
-    call ale#lsp#OnInit(l:conn_id, {->
-    \   ale#lsp_linter#OnInit(a:linter, l:details, a:Callback)
-    \})
-
-    return 1
+    return s:StartIfExecutable(l:options, l:executable)
 endfunction
 
 function! s:CheckWithLSP(linter, details) abort

@@ -57,6 +57,15 @@ function! ale#lsp#RemoveConnectionWithID(id) abort
     endif
 endfunction
 
+function! ale#lsp#ResetConnections() abort
+    let s:connections = {}
+endfunction
+
+" Used only in tests.
+function! ale#lsp#GetConnections() abort
+    return s:connections
+endfunction
+
 " This is only needed for tests
 function! ale#lsp#MarkDocumentAsOpen(id, buffer) abort
     let l:conn = get(s:connections, a:id, {})
