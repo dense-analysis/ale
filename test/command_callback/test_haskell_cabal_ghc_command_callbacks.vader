@@ -13,7 +13,7 @@ After:
 
 Execute(The options should be used in the command):
   AssertEqual
-  \ 'cabal exec -- ghc -fno-code -v0 %t',
+  \ 'cabal v1-exec -- ghc -fno-code -v0 %t',
   \ ale_linters#haskell#cabal_ghc#GetCommand(bufnr(''))
 
   let b:ale_haskell_cabal_ghc_options = 'foobar'
