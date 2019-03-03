@@ -103,6 +103,7 @@ ALE supports the following key features for linting:
       stylelint...........................|ale-css-stylelint|
     cuda..................................|ale-cuda-options|
       nvcc................................|ale-cuda-nvcc|
+      clang-format........................|ale-cuda-clangformat|
     d.....................................|ale-d-options|
       dls.................................|ale-d-dls|
       uncrustify..........................|ale-d-uncrustify|
