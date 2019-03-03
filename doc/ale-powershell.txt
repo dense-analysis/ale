@@ -1,0 +1,39 @@
+===============================================================================
+psscriptanalyzer                              *ale-powershell-psscriptanalyzer*
+
+g:ale_powershell_psscriptanalyzer_executable
+*g:ale_powershell_psscriptanalyzer_executable*
+                                 *b:ale_powershell_psscriptanalyzer_executable*
+  Type: |String|
+  Default: `'pwsh'`
+
+  This variable sets executable used for powershell.
+  
+  For example, on Windows we could set powershell to be Windows Powershell:
+>
+  let g:ale_powershell_psscriptanalyzer_executable = 'powershell.exe'
+<
+
+g:ale_powershell_psscriptanalyzer_module
+*g:ale_powershell_psscriptanalyzer_module*
+                                     *b:ale_powershell_psscriptanalyzer_module*
+  Type: |String
+  Default: `'psscriptanalyzer'`
+
+  This variable sets the name of the psscriptanalyzer module.
+  for psscriptanalyzer invocation.
+
+
+g:ale_powershell_psscriptanalyzer_exclusions 
+*g:ale_powershell_psscriptanalyzer_exclusions*
+                                 *b:ale_powershell_psscriptanalyzer_exclusions*
+  Type: |String|
+  Default: `''`
+
+  Set this variable to exclude test(s) for psscriptanalyzer
+  (-ExcludeRule option).  To exclude more than one option, separate them with
+  commas.
+
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
