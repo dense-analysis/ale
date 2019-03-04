@@ -1,6 +1,6 @@
 " Author: Jesse Harris - https://github.com/zigford
-" Description: PowerShell MRI for PS1 files using PowerShell
-" module PSScriptAnalyzer
+" Description: This file adds support for lintng powershell scripts
+"   using the PSScriptAnalyzer module.
 
 " let g:ale_powershell_psscriptanalyzer_exclusions = 'PSAvoidUsingWriteHost,PSAvoidGlobalVars'
 call ale#Set('powershell_psscriptanalyzer_exclusions', get(g:, 'ale_linters_powershell_psscriptanalyzer_exclusions', ''))
