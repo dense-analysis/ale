@@ -1,0 +1,29 @@
+===============================================================================
+ALE Bazel Integration                                         *ale-bzl-options*
+
+
+===============================================================================
+buildifier                                                 *ale-bzl-buildifier*
+
+Installation
+-------------------------------------------------------------------------------
+
+Instructions for installing `buildifier` can be found here:
+https://github.com/bazelbuild/buildtools/blob/master/buildifier/README.md
+
+Ensure that `$GOPATH/bin` is in your `$PATH` variable, or set
+`g:ale_bzl_buildifier_executable` to an absolute path.
+
+Options
+-------------------------------------------------------------------------------
+
+g:ale_bzl_buildifier_executable               *g:ale_bzl_buildifier_executable*
+                                              *b:ale_bzl_buildifier_executable*
+  Type: |String|
+  Default: `'buildifier'`
+
+  This variable can be set to change the path to buildifier.
+
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

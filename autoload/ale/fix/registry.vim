@@ -32,6 +32,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['javascript', 'css', 'html'],
 \       'description': 'Apply fecs format to a file.',
 \   },
+\   'buildifier': {
+\       'function': 'ale#fixers#buildifier#Fix',
+\       'suggested_filetypes': ['bzl'],
+\       'description': 'Format Bazel build and Starlark files with buildifier.',
+\   },
 \   'tidy': {
 \       'function': 'ale#fixers#tidy#Fix',
 \       'suggested_filetypes': ['html'],

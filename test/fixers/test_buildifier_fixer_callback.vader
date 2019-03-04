@@ -1,0 +1,24 @@
+Before:
+  Save g:ale_bzl_buildifier_executable
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_bzl_buildifier_executable = 'xxxinvalid'
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+  silent cd ..
+  silent cd command_callback
+  let g:dir = getcwd()
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The buildifier callback should return the correct default values):
+  call ale#test#SetFilename('bzl_paths/BUILD')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_bzl_buildifier_executable)
+  \ },
+  \ ale#fixers#buildifier#Fix(bufnr(''))
