@@ -580,8 +580,8 @@ for a function set in the ALE fixer registry.
 Each function for fixing errors must accept either one argument `(buffer)` or
 two arguments `(buffer, lines)`, representing the buffer being fixed and the
 lines to fix. The functions must return either `0`, for changing nothing, a
-|List| for new lines to set, or a |Dictionary| for describing a command to be
-run in the background.
+|List| for new lines to set, a |Dictionary| for describing a command to be
+run in the background, or the result of |ale#command#Run()|.
 
 Functions receiving a variable number of arguments will not receive the second
 argument `lines`. Functions should name two arguments if the `lines` argument
@@ -611,26 +611,6 @@ are supported for running the commands.
 
                       A |List| of |String|s must be returned.
 
-  `chain_with`          An optional key for defining a callback to call next.
-
-                      The callback must accept two or three arguments,
-                      `(buffer, output)` or `(buffer, output, input)` .
-                      Functions receiving a variable number of arguments will
-                      only receive the first two values. The `output` argument
-                      will contain the lines of output from the command run.
-                      The `input` argument is the List of lines for the
-                      buffer, after applying any previous fixers.
-
-                      The callback must return the same values returned for
-                      any fixer function. This allows fixer functions to be
-                      chained recursively.
-
-                      When the command string returned for a fixer is an empty
-                      string, the next command in the chain will still be run.
-                      This allows commands to be skipped, like version checks
-                      that are cached. An empty List will be passed to the
-                      next callback in the chain for the `output`.
-
   `read_buffer`         An optional key for disabling reading the buffer.
 
                       When set to `0`, ALE will not pipe the buffer's data
@@ -638,10 +618,7 @@ are supported for running the commands.
                       the buffer is not read when `read_temporary_file` is
                       `1`.
 
-                      This option defaults to `0` when `chain_with` is defined
-                      as anything other than `v:null`, and defaults to `1`
-                      otherwise. This is so earlier commands in a chain
-                      do not receive the buffer's data by default.
+                      This option defaults to `1`.
 
                                                         *ale-fix-configuration*
 
@@ -2936,6 +2913,85 @@ ale#command#CreateFile(buffer)                       *ale#command#CreateFile()*
   returning a linter command to run.
 
 
+ale#command#Run(buffer, command, callback, [options])       *ale#command#Run()*
+
+  Start running a job in the background, and pass the results to the given
+  callback later.
+
+  This function can be used for computing the results of ALE linter or fixer
+  functions asynchronously with jobs. `buffer` must match the buffer being
+  linted or fixed, `command` must be a |String| for a shell command to
+  execute, `callback` must be defined as a |Funcref| to call later with the
+  results, and an optional |Dictionary| of `options` can be provided.
+
+  The `callback` will receive the arguments `(buffer, output, metadata)`,
+  where the `buffer` will match the buffer given to the function, the `output`
+  will be a `List` of lines of output from the job that was run, and the
+  `metadata` will be a |Dictionary| with additional information about the job
+  that was run, including:
+
+    `exit_code` - A |Number| with the exit code for the program that was run.
+
+  The result of this function is either a special |Dictionary| ALE will use
+  for waiting for the command to finish, or `0` if the job is not started. The
+  The return value of the `callback` will be used as the eventual result for
+  whatever value is being given to ALE. For example: >
+
+    function! s:GetCommand(buffer, output, meta) abort
+        " Do something with a:output here, from the foo command.
+
+        " This is used as the command to run for linting.
+        return 'final command'
+    endfunction
+
+    " ...
+
+    'command': {b -> ale#command#Run(b, 'foo', function('s:GetCommand'))}
+<
+  The result of a callback can also be the result of another call to this
+  function, so that several commands can be arbitrarily chained together. For
+  example: >
+
+    function! s:GetAnotherCommand(buffer, output, meta) abort
+        " We can finally return this command.
+        return 'last command'
+    endfunction
+
+    function! s:GetCommand(buffer, output, meta) abort
+        " We can return another deferred result.
+        return ale#command#Run(
+        \   a:buffer,
+        \   'second command',
+        \   function('s:GetAnotherCommand')
+        \)
+    endfunction
+
+    " ...
+
+    'command': {b -> ale#command#Run(b, 'foo', function('s:GetCommand'))}
+<
+
+  The following `options` can be provided.
+
+    `output_stream` - Either `'stdout'`, `'stderr'`, `'both'`, or `'none`' for
+                    selecting which output streams to read lines from.
+
+                    The default is `'stdout'`
+
+    `executable`    - An executable for formatting into `%e` in the command.
+                    If this option is not provided, formatting commands with
+                    `%e` will not work.
+
+    `read_buffer`   - If set to `1`, the buffer will be piped into the
+                    command.
+
+                    The default is `0`.
+
+    `input`         - When creating temporary files with `%t` or piping text
+                    into a command `input` can be set to a |List| of text to
+                    use instead of the buffer's text.
+
+
 ale#command#EscapeCommandPart(command_part)   *ale#command#EscapeCommandPart()*
 
   Given a |String|, return a |String| with all `%` characters replaced with
@@ -3106,6 +3162,8 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          for computing the executable, accepting a buffer
                          number.
 
+                         The result can be computed with |ale#command#Run()|.
+
                          This value will be used to check if the program
                          requested is installed or not.
 
@@ -3118,49 +3176,11 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          |Funcref| for a function to call for computing the
                          command, accepting a buffer number.
 
+                         The result can be computed with |ale#command#Run()|.
+
                          This command will be fed the lines from the buffer to
                          check, and will produce the lines of output given to
                          the `callback`.
-
-                                                            *ale-command-chain*
-  `command_chain`          A |List| of |Dictionary| items defining a series
-                         of commands to be run. At least one |Dictionary|
-                         should be provided. Each Dictionary must contain the
-                         key `callback`, defining a |String| or |Funcref| for
-                         a function returning a |String| for a command to run.
-
-                         The callback functions for each command after the
-                         first command in in the chain should accept two
-                         arguments `(buffer, output)`, a buffer number and a
-                         |List| of lines of output from the previous command
-                         in the chain.
-
-                         The first callback function in a chain accepts only
-                         a `(buffer)` argument, as there are no previous
-                         commands to run which return `output`.
-
-                         If an empty string is returned for a command in a
-                         chain, that command in the chain will be skipped,
-                         and the next function in the chain will be called
-                         immediately instead. If the last command in a chain
-                         returns an empty string, then no linting will be
-                         performed.
-
-                         Commands in the chain will all use the
-                         `output_stream` value provided in the root
-                         |Dictionary|. Each command in the chain can also
-                         provide an `output_stream` key to override this value.
-                         See the `output_stream` description for more
-                         information.
-
-                         Commands in the chain all behave as if `read_buffer`
-                         is set to `0` by default, except for the last command
-                         in the chain, which uses the value set for
-                         `read_buffer` in the root |Dictionary|. Each command
-                         in the chain can also provide a `read_buffer` key
-                         to override these values.
-                         See the `read_buffer` description for more
-                         information.
 
   `output_stream`          A |String| for the output stream the lines of output
                          should be read from for the command which is run. The
@@ -3238,6 +3258,8 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          or a |Funcref| accepting a buffer number and
                          returning the |String|.
 
+                         The result can be computed with |ale#command#Run()|.
+
                          This argument must only be set if the `lsp` argument
                          is set to `'socket'`.
 
@@ -3292,12 +3314,10 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          This will be fed (as JSON) to the LSP in the
                          workspace/didChangeConfiguration command.
 
-  Only one of `command` or `command_chain` should be specified.
-
   If temporary files or directories are created for commands run with
-  `command` or `command_chain`, then these temporary files or directories can
-  be managed by ALE, for automatic deletion.  See |ale#command#ManageFile()|
-  and |ale#command#ManageDirectory| for more information.
+  `command`, then these temporary files or directories can be managed by ALE,
+  for automatic deletion. See |ale#command#ManageFile()| and
+  |ale#command#ManageDirectory| for more information.
 
                                                    *ale-command-format-strings*
 
