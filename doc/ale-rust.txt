@@ -172,8 +172,8 @@ g:ale_rust_rls_toolchain                             *g:ale_rust_rls_toolchain*
   The `rls` server will only be started once per executable.
 
 
-g:ale_rust_rls_config                                *g:ale_rust_rls_config*
-                                                     *b:ale_rust_rls_config*
+g:ale_rust_rls_config                                   *g:ale_rust_rls_config*
+                                                        *b:ale_rust_rls_config*
   Type: |Dictionary|
   Default: `{}`
 
