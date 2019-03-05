@@ -3,7 +3,7 @@
 
 call ale#Set('rust_rls_executable', 'rls')
 call ale#Set('rust_rls_toolchain', 'nightly')
-call ale#Set('rust_rls_config', '')
+call ale#Set('rust_rls_config', {})
 
 function! ale_linters#rust#rls#GetCommand(buffer) abort
     let l:toolchain = ale#Var(a:buffer, 'rust_rls_toolchain')
