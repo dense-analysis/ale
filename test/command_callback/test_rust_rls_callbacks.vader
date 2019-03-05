@@ -28,4 +28,3 @@ Execute(Should accept configuration settings):
   AssertLSPConfig {}
   let b:ale_rust_rls_config = {'rust': {'clippy_preference': 'on'}}
   AssertLSPConfig {'rust': {'clippy_preference': 'on'}}
-
