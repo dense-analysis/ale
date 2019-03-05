@@ -180,7 +180,7 @@ g:ale_rust_rls_config                                   *g:ale_rust_rls_config*
   Dictionary with configuration settings for rls. For example, to force
   using clippy as linter: >
         {
-      \   'rls': {
+      \   'rust': {
       \     'clippy_preference': 'on'
       \   }
       \ }
