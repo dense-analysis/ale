@@ -23,3 +23,8 @@ Execute(The project root should be detected correctly):
   call ale#test#SetFilename('rust-rls-project/test.rs')
 
   AssertLSPProject ale#path#Simplify(g:dir . '/rust-rls-project')
+
+Execute(Should accept configuration settings):
+  AssertLSPConfig {}
+  let b:ale_rust_rls_config = {'rust': {'clippy_preference': 'on'}}
+  AssertLSPConfig {'rust': {'clippy_preference': 'on'}}
