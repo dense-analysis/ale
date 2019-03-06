@@ -17,7 +17,24 @@ function! ale_linters#go#bingo#FindProjectRoot(buffer) abort
         let l:mods = ':h:h'
     endif
 
-    return !empty(l:project_root) ? fnamemodify(l:project_root, l:mods) : ''
+    if empty(l:project_root)
+	let l:project_root = ale#path#FindNearestFile(a:buffer,'main.go')
+	let l:mods = ':h'
+    endif
+
+    if empty(l:project_root)
+	let l:project_root = fnamemodify(bufname(a:buffer),':p')
+	let l:project_root = fnameescape(l:project_root)
+	let l:mods = ':h'
+    else
+        if empty($GOPATH) || stridx(l:project_root,$GOPATH)==-1
+	    let l:project_root = fnamemodify(bufname(a:buffer),':p')
+	    let l:project_root = fnameescape(l:project_root)
+	    let l:mods = ':h'
+        endif
+    endif
+
+    return fnamemodify(l:project_root, l:mods) 
 endfunction
 
 call ale#linter#Define('go', {
