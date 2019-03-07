@@ -42,9 +42,11 @@ function! ale_linters#elixir#credo#GetCommand(buffer) abort
 
     if get(g:, 'ale_elixir_credo_strict', 0)
         let l:credo_cmd = ' mix help credo && mix credo --strict --format=flycheck --read-from-stdin %s'
+
         return ale#path#CdString(l:project_root) . l:credo_cmd
     else
         let l:credo_cmd = ' mix help credo && mix credo suggest --format=flycheck --read-from-stdin %s'
+
         return ale#path#CdString(l:project_root) . l:credo_cmd
     endif
 endfunction
