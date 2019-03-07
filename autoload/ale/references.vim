@@ -113,7 +113,7 @@ function! ale#references#Find(...) abort
     endif
 
     let l:buffer = bufnr('')
-    let [l:line, l:column] = getcurpos()[1:2]
+    let [l:line, l:column] = getpos('.')[1:2]
     let l:column = min([l:column, len(getline(l:line))])
     let l:Callback = function('s:OnReady', [l:line, l:column, l:options])
 

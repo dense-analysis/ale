@@ -236,7 +236,7 @@ function! ale#completion#Show(response, completion_parser) abort
 endfunction
 
 function! s:CompletionStillValid(request_id) abort
-    let [l:line, l:column] = getcurpos()[1:2]
+    let [l:line, l:column] = getpos('.')[1:2]
 
     return ale#util#Mode() is# 'i'
     \&& has_key(b:, 'ale_completion_info')
@@ -514,7 +514,7 @@ endfunction
 " This function can be used to manually trigger autocomplete, even when
 " g:ale_completion_enabled is set to false
 function! ale#completion#AlwaysGetCompletions(need_prefix) abort
-    let [l:line, l:column] = getcurpos()[1:2]
+    let [l:line, l:column] = getpos('.')[1:2]
 
     let l:prefix = ale#completion#GetPrefix(&filetype, l:line, l:column)
 
@@ -546,7 +546,7 @@ endfunction
 function! s:TimerHandler(...) abort
     let s:timer_id = -1
 
-    let [l:line, l:column] = getcurpos()[1:2]
+    let [l:line, l:column] = getpos('.')[1:2]
 
     " When running the timer callback, we have to be sure that the cursor
     " hasn't moved from where it was when we requested completions by typing.
@@ -569,7 +569,7 @@ function! ale#completion#Queue() abort
         return
     endif
 
-    let s:timer_pos = getcurpos()[1:2]
+    let s:timer_pos = getpos('.')[1:2]
 
     if s:timer_pos == s:last_done_pos
         " Do not ask for completions if the cursor rests on the position we
@@ -593,7 +593,7 @@ function! ale#completion#Done() abort
 
     call ale#completion#RestoreCompletionOptions()
 
-    let s:last_done_pos = getcurpos()[1:2]
+    let s:last_done_pos = getpos('.')[1:2]
 endfunction
 
 function! s:Setup(enabled) abort

@@ -11,7 +11,7 @@
 " be returned.
 function! ale#loclist_jumping#FindNearest(direction, wrap, ...) abort
     let l:buffer = bufnr('')
-    let l:pos = getcurpos()
+    let l:pos = getpos('.')
     let l:info = get(g:ale_buffer_info, bufnr('%'), {'loclist': []})
     " Copy the list and filter to only the items in this buffer.
     let l:loclist = filter(copy(l:info.loclist), 'v:val.bufnr == l:buffer')

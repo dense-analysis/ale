@@ -57,7 +57,7 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
         " If the call did __not__ come from balloonexpr...
         if !get(l:options, 'hover_from_balloonexpr', 0)
             let l:buffer = bufnr('')
-            let [l:line, l:column] = getcurpos()[1:2]
+            let [l:line, l:column] = getpos('.')[1:2]
             let l:end = len(getline(l:line))
 
             if l:buffer isnot l:options.buffer
@@ -174,7 +174,7 @@ endfunction
 " This function implements the :ALEHover command.
 function! ale#hover#ShowAtCursor() abort
     let l:buffer = bufnr('')
-    let l:pos = getcurpos()
+    let l:pos = getpos('.')
 
     call ale#hover#Show(l:buffer, l:pos[1], l:pos[2], {})
 endfunction
@@ -182,7 +182,7 @@ endfunction
 " This function implements the :ALEDocumentation command.
 function! ale#hover#ShowDocumentationAtCursor() abort
     let l:buffer = bufnr('')
-    let l:pos = getcurpos()
+    let l:pos = getpos('.')
     let l:options = {'show_documentation': 1}
 
     call ale#hover#Show(l:buffer, l:pos[1], l:pos[2], l:options)

@@ -71,7 +71,7 @@ endfunction
 
 function! s:Open(open_in_tab) abort
     let l:item_list = get(b:, 'ale_preview_item_list', [])
-    let l:item = get(l:item_list, getcurpos()[1] - 1, {})
+    let l:item = get(l:item_list, getpos('.')[1] - 1, {})
 
     if empty(l:item)
         return
