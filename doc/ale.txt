@@ -699,13 +699,13 @@ with |g:ale_completion_excluded_words| or |b:ale_completion_excluded_words|.
 The |ALEComplete| command can be used to show completion suggestions manually,
 even when |g:ale_completion_enabled| is set to `0`.
 
-                                                *ale-completion-completopt-bug*
+                                               *ale-completion-completeopt-bug*
 
-ALE implements completion as you type by temporarily adjusting |completeopt|
-before opening the omnicomplete menu with <C-x><C-o>. In some versions of Vim,
-the value set for the option will not be respected. If you experience issues
-with Vim automatically inserting text while you type, set the following option
-in vimrc, and your issues should go away. >
+Automatic completion replaces |completeopt| before opening the omnicomplete
+menu with <C-x><C-o>. In some versions of Vim, the value set for the option
+will not be respected. If you experience issues with Vim automatically
+inserting text while you type, set the following option in vimrc, and your
+issues should go away. >
 
   set completeopt=menu,menuone,preview,noselect,noinsert
 <

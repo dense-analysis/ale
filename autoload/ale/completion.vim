@@ -165,14 +165,18 @@ function! s:ReplaceCompletionOptions() abort
 
     let &l:omnifunc = 'ale#completion#OmniFunc'
 
-    if !exists('b:ale_old_completopt')
-        let b:ale_old_completopt = &l:completeopt
-    endif
+    let l:info = get(b:, 'ale_completion_info', {})
 
-    if &l:completeopt =~# 'preview'
-        let &l:completeopt = 'menu,menuone,preview,noselect,noinsert'
-    else
-        let &l:completeopt = 'menu,menuone,noselect,noinsert'
+    if !get(l:info, 'manual')
+        if !exists('b:ale_old_completeopt')
+            let b:ale_old_completeopt = &l:completeopt
+        endif
+
+        if &l:completeopt =~# 'preview'
+            let &l:completeopt = 'menu,menuone,preview,noselect,noinsert'
+        else
+            let &l:completeopt = 'menu,menuone,noselect,noinsert'
+        endif
     endif
 endfunction
 
@@ -186,9 +190,9 @@ function! ale#completion#RestoreCompletionOptions() abort
         unlet b:ale_old_omnifunc
     endif
 
-    if exists('b:ale_old_completopt')
-        let &l:completeopt = b:ale_old_completopt
-        unlet b:ale_old_completopt
+    if exists('b:ale_old_completeopt')
+        let &l:completeopt = b:ale_old_completeopt
+        unlet b:ale_old_completeopt
     endif
 endfunction
 
@@ -503,22 +507,14 @@ function! s:OnReady(linter, lsp_details) abort
     endif
 endfunction
 
-function! ale#completion#GetCompletions() abort
-    if !g:ale_completion_enabled
-        return
-    endif
-
-    call ale#completion#AlwaysGetCompletions(1)
-endfunction
-
 " This function can be used to manually trigger autocomplete, even when
 " g:ale_completion_enabled is set to false
-function! ale#completion#AlwaysGetCompletions(need_prefix) abort
+function! ale#completion#GetCompletions(manual) abort
     let [l:line, l:column] = getpos('.')[1:2]
 
     let l:prefix = ale#completion#GetPrefix(&filetype, l:line, l:column)
 
-    if a:need_prefix && empty(l:prefix)
+    if !a:manual && empty(l:prefix)
         return
     endif
 
@@ -531,6 +527,7 @@ function! ale#completion#AlwaysGetCompletions(need_prefix) abort
     \   'prefix': l:prefix,
     \   'conn_id': 0,
     \   'request_id': 0,
+    \   'manual': a:manual,
     \}
 
     let l:buffer = bufnr('')
@@ -544,6 +541,10 @@ function! ale#completion#AlwaysGetCompletions(need_prefix) abort
 endfunction
 
 function! s:TimerHandler(...) abort
+    if !g:ale_completion_enabled
+        return
+    endif
+
     let s:timer_id = -1
 
     let [l:line, l:column] = getpos('.')[1:2]
@@ -551,7 +552,7 @@ function! s:TimerHandler(...) abort
     " When running the timer callback, we have to be sure that the cursor
     " hasn't moved from where it was when we requested completions by typing.
     if s:timer_pos == [l:line, l:column] && ale#util#Mode() is# 'i'
-        call ale#completion#GetCompletions()
+        call ale#completion#GetCompletions(0)
     endif
 endfunction
 
