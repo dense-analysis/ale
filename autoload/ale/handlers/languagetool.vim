@@ -3,8 +3,12 @@
 "
 call ale#Set('languagetool_executable', 'languagetool')
 
+function! ale#handlers#languagetool#GetExecutable(buffer) abort
+    return ale#Var(a:buffer, 'languagetool_executable')
+endfunction
+
 function! ale#handlers#languagetool#GetCommand(buffer) abort
-    let l:executable = ale#Var(a:buffer, 'languagetool_executable')
+    let l:executable = ale#handlers#languagetool#GetExecutable(a:buffer)
 
     return ale#Escape(l:executable) . ' --autoDetect '
 endfunction
@@ -61,7 +65,7 @@ endfunction
 function! ale#handlers#languagetool#DefineLinter(filetype) abort
     call ale#linter#Define(a:filetype, {
     \   'name': 'languagetool',
-    \   'executable_callback': ale#VarFunc('languagetool_executable'),
+    \   'executable_callback': 'ale#handlers#languagetool#GetExecutable',
     \   'command_callback': 'ale#handlers#languagetool#GetCommand',
     \   'output_stream': 'stdout',
     \   'callback': 'ale#handlers#languagetool#HandleOutput',
