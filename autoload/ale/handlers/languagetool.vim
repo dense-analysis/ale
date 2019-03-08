@@ -1,5 +1,13 @@
 " Author: Vincent (wahrwolf [ät] wolfpit.net)
 " Description: languagetool for markdown files
+"
+call ale#Set('languagetool_executable', 'languagetool')
+
+function! ale#handlers#languagetool#GetCommand(buffer) abort
+    let l:executable = ale#Var(a:buffer, 'languagetool_executable')
+
+    return ale#Escape(l:executable) . ' --autoDetect '
+endfunction
 
 function! ale#handlers#languagetool#HandleOutput(buffer, lines) abort
     " Match lines like:
@@ -25,10 +33,10 @@ function! ale#handlers#languagetool#HandleOutput(buffer, lines) abort
     " together
     let l:i = 0
 
-    while l:i < len(l:head_matches) &&
-    \   (
-    \       (len(l:head_matches) == len(l:markers_matches)) &&
-    \       (len(l:head_matches) == len(l:message_matches))
+    while l:i < len(l:head_matches)
+    \   && (
+    \       (len(l:head_matches) == len(l:markers_matches))
+    \       && (len(l:head_matches) == len(l:message_matches))
     \   )
         let l:item = {
         \   'lnum'    : str2nr(l:head_matches[l:i][1]),
@@ -53,8 +61,8 @@ endfunction
 function! ale#handlers#languagetool#DefineLinter(filetype) abort
     call ale#linter#Define(a:filetype, {
     \   'name': 'languagetool',
-    \   'executable': 'languagetool',
-    \   'command': 'languagetool --autoDetect %s ',
+    \   'executable_callback': ale#VarFunc('languagetool_executable'),
+    \   'command_callback': 'ale#handlers#languagetool#GetCommand',
     \   'output_stream': 'stdout',
     \   'callback': 'ale#handlers#languagetool#HandleOutput',
     \   'lint_file': 1,
