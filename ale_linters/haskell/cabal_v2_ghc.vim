@@ -15,6 +15,6 @@ call ale#linter#Define('haskell', {
 \   'aliases': ['cabal-v2-ghc'],
 \   'output_stream': 'stderr',
 \   'executable': 'cabal',
-\   'command_callback': 'ale_linters#haskell#cabal_v2_ghc#GetCommand',
+\   'command': function('ale_linters#haskell#cabal_v2_ghc#GetCommand'),
 \   'callback': 'ale#handlers#haskell#HandleGHCFormat',
 \})
