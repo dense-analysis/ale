@@ -250,12 +250,14 @@ formatting.
   * [luacheck](https://github.com/mpeterv/luacheck)
 * Mail
   * [alex](https://github.com/wooorm/alex) :floppy_disk:
+  * [languagetool](https://languagetool.org/) :floppy_disk:
   * [proselint](http://proselint.com/)
   * [vale](https://github.com/ValeLint/vale)
 * Make
   * [checkmake](https://github.com/mrtazz/checkmake)
 * Markdown
   * [alex](https://github.com/wooorm/alex) :floppy_disk:
+  * [languagetool](https://languagetool.org/) :floppy_disk:
   * [markdownlint](https://github.com/DavidAnson/markdownlint) :floppy_disk:
   * [mdl](https://github.com/mivok/markdownlint)
   * [prettier](https://github.com/prettier/prettier)
@@ -426,6 +428,7 @@ formatting.
   * [write-good](https://github.com/btford/write-good)
 * Text
   * [alex](https://github.com/wooorm/alex) :warning: :floppy_disk:
+  * [languagetool](https://languagetool.org/) :floppy_disk:
   * [proselint](http://proselint.com/) :warning:
   * [redpen](http://redpen.cc/) :warning:
   * [textlint](https://textlint.github.io/) :warning:
