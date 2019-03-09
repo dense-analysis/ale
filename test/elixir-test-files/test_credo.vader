@@ -1,0 +1,27 @@
+Before:
+  runtime ale_linters/elixir/elixir.vim
+  runtime ale_linters/elixir/credo.vim
+
+After:
+  unlet! g:ale_elixir_credo_strict
+
+  call ale#linter#Reset()
+
+Execute(Builds credo command with --strict mode when set to 1):
+  let g:ale_elixir_credo_strict = 1
+
+  AssertEqual
+  \ "cd '.' && mix help credo && mix credo --strict --format=flycheck --read-from-stdin %s",
+  \ ale_linters#elixir#credo#GetCommand(bufnr(''))
+
+Execute(Builds credo command with suggest mode by default):
+  AssertEqual
+  \ "cd '.' && mix help credo && mix credo suggest --format=flycheck --read-from-stdin %s",
+  \ ale_linters#elixir#credo#GetCommand(bufnr(''))
+
+Execute(Builds credo command with suggest mode when set to 0):
+  let g:ale_elixir_credo_strict = 0
+
+  AssertEqual
+  \ "cd '.' && mix help credo && mix credo suggest --format=flycheck --read-from-stdin %s",
+  \ ale_linters#elixir#credo#GetCommand(bufnr(''))

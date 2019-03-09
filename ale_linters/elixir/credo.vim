@@ -37,18 +37,22 @@ function! ale_linters#elixir#credo#Handle(buffer, lines) abort
     return l:output
 endfunction
 
+function! ale_linters#elixir#credo#GetMode() abort
+    if get(g:, 'ale_elixir_credo_strict', 0)
+      return '--strict'
+    else
+      return 'suggest'
+    endif
+endfunction
+
 function! ale_linters#elixir#credo#GetCommand(buffer) abort
     let l:project_root = ale#handlers#elixir#FindMixProjectRoot(a:buffer)
+    let l:mode = ale_linters#elixir#credo#GetMode()
 
-    if get(g:, 'ale_elixir_credo_strict', 0)
-        let l:credo_cmd = ' mix help credo && mix credo --strict --format=flycheck --read-from-stdin %s'
-
-        return ale#path#CdString(l:project_root) . l:credo_cmd
-    else
-        let l:credo_cmd = ' mix help credo && mix credo suggest --format=flycheck --read-from-stdin %s'
-
-        return ale#path#CdString(l:project_root) . l:credo_cmd
-    endif
+    return ale#path#CdString(l:project_root)
+          \ . 'mix help credo && '
+          \ . 'mix credo ' . ale_linters#elixir#credo#GetMode()
+          \ . ' --format=flycheck --read-from-stdin %s'
 endfunction
 
 call ale#linter#Define('elixir', {
