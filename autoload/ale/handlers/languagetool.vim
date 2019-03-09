@@ -1,4 +1,4 @@
-" Author: Vincent (wahrwolf [ät] wolfpit.net)
+" Author: Vincent (wahrwolf [at] wolfpit.net)
 " Description: languagetool for markdown files
 "
 call ale#Set('languagetool_executable', 'languagetool')
@@ -65,8 +65,8 @@ endfunction
 function! ale#handlers#languagetool#DefineLinter(filetype) abort
     call ale#linter#Define(a:filetype, {
     \   'name': 'languagetool',
-    \   'executable_callback': 'ale#handlers#languagetool#GetExecutable',
-    \   'command_callback': 'ale#handlers#languagetool#GetCommand',
+    \   'executable': function('ale#handlers#languagetool#GetExecutable'),
+    \   'command': function('ale#handlers#languagetool#GetCommand'),
     \   'output_stream': 'stdout',
     \   'callback': 'ale#handlers#languagetool#HandleOutput',
     \   'lint_file': 1,
