@@ -39,9 +39,9 @@ endfunction
 
 function! ale_linters#elixir#credo#GetMode() abort
     if get(g:, 'ale_elixir_credo_strict', 0)
-      return '--strict'
+        return '--strict'
     else
-      return 'suggest'
+        return 'suggest'
     endif
 endfunction
 
