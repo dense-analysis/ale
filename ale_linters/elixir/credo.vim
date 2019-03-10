@@ -50,9 +50,9 @@ function! ale_linters#elixir#credo#GetCommand(buffer) abort
     let l:mode = ale_linters#elixir#credo#GetMode()
 
     return ale#path#CdString(l:project_root)
-          \ . 'mix help credo && '
-          \ . 'mix credo ' . ale_linters#elixir#credo#GetMode()
-          \ . ' --format=flycheck --read-from-stdin %s'
+    \ . 'mix help credo && '
+    \ . 'mix credo ' . ale_linters#elixir#credo#GetMode()
+    \ . ' --format=flycheck --read-from-stdin %s'
 endfunction
 
 call ale#linter#Define('elixir', {
