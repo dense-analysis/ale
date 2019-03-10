@@ -39,6 +39,9 @@ let s:LSP_COMPLETION_COLOR_KIND = 16
 let s:LSP_COMPLETION_FILE_KIND = 17
 let s:LSP_COMPLETION_REFERENCE_KIND = 18
 
+let s:LSP_INSERT_TEXT_FORMAT_PLAIN = 1
+let s:LSP_INSERT_TEXT_FORMAT_SNIPPET = 2
+
 let s:lisp_regex = '\v[a-zA-Z_\-][a-zA-Z_\-0-9]*$'
 
 " Regular expressions for checking the characters in the line before where
@@ -350,7 +353,14 @@ function! ale#completion#ParseLSPCompletions(response) abort
             continue
         endif
 
-        let l:word = matchstr(l:item.label, '\v^[^(]+')
+        if get(l:item, 'insertTextFormat') is s:LSP_INSERT_TEXT_FORMAT_PLAIN
+        \&& type(get(l:item, 'textEdit')) is v:t_dict
+            let l:text = l:item.textEdit.newText
+        else
+            let l:text = l:item.label
+        endif
+
+        let l:word = matchstr(l:text, '\v^[^(]+')
 
         if empty(l:word)
             continue
