@@ -2,6 +2,10 @@ Before:
   call ale#assert#SetUpLinterTest('elixir', 'credo')
   call ale#test#SetFilename('elixir_paths/mix_project/lib/app.ex')
 
+  let g:env_prefix = has('win32')
+  \ ? 'set MIX_BUILD_PATH=' . ale#Escape('TEMP_DIR') . ' && '
+  \ : 'MIX_BUILD_PATH=' . ale#Escape('TEMP_DIR') . ' '
+
 After:
   unlet! g:ale_elixir_credo_strict
 
