@@ -119,6 +119,7 @@ ALE supports the following key features for linting:
       mix_format..........................|ale-elixir-mix-format|
       dialyxir............................|ale-elixir-dialyxir|
       elixir-ls...........................|ale-elixir-elixir-ls|
+      credo...............................|ale-elixir-credo|
     elm...................................|ale-elm-options|
       elm-format..........................|ale-elm-elm-format|
       elm-make............................|ale-elm-elm-make|
@@ -2256,6 +2257,7 @@ documented in additional help files.
     mix_format............................|ale-elixir-mix-format|
     dialyxir..............................|ale-elixir-dialyxir|
     elixir-ls.............................|ale-elixir-elixir-ls|
+    credo.................................|ale-elixir-credo|
   elm.....................................|ale-elm-options|
     elm-format............................|ale-elm-elm-format|
     elm-make..............................|ale-elm-elm-make|
