@@ -399,10 +399,10 @@ function! ale#completion#ParseLSPCompletions(response) abort
     endfor
 
     if has_key(l:info, 'prefix')
-        return ale#completion#Filter(l:buffer, &filetype, l:results, l:info.prefix)
+        let l:results = ale#completion#Filter(l:buffer, &filetype, l:results, l:info.prefix)
     endif
 
-    return l:results
+    return l:results[: g:ale_completion_max_suggestions - 1]
 endfunction
 
 function! ale#completion#HandleTSServerResponse(conn_id, response) abort
