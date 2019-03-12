@@ -260,3 +260,39 @@ Execute(The window shouldn't open on save when ale_open_list=0):
   call ale#list#SetLists(bufnr('%'), g:loclist)
   " Now the list should have opened.
   Assert !ale#list#IsQuickfixOpen()
+
+Execute(The quickfix window height should match the number of errors lines):
+  let g:ale_open_list = 1
+  let g:ale_list_window_size = -1
+
+  " Set the number of errors in the loclist to the default (4)
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+  " The list should have opened.
+  Assert ale#list#IsQuickfixOpen()
+  " The window height should match the number of errors in the loclist (4)
+  AssertEqual 4, GetQuickfixHeight()
+
+  " Set the number of errors in the loclist to 2
+  let g:loclist = [
+  \ {'bufnr': bufnr(''), 'lnum': 5, 'col': 6, 'text': 'a'},
+  \ {'bufnr': bufnr(''), 'lnum': 1, 'col': 12, 'text': 'b'},
+  \]
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+  " The list should still be open.
+  Assert ale#list#IsQuickfixOpen()
+  " The window height should now match the new number of errors in the loclist (2)
+  AssertEqual 2, GetQuickfixHeight()
+
+  " Set the number of errors in the loclist to 1
+  let g:loclist = [
+  \ {'bufnr': bufnr(''), 'lnum': 0, 'col': 0, 'text': 'z'},
+  \]
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+  " The list should still be open.
+  Assert ale#list#IsQuickfixOpen()
+  " The window height should now match the new number of errors in the loclist (1)
+  AssertEqual 1, GetQuickfixHeight()
+
+  call ale#list#SetLists(bufnr('%'), [])
+  " The window should close again when the loclist is empty.
+  Assert !ale#list#IsQuickfixOpen()
