@@ -778,4 +778,7 @@ To set a default height for the error list, use the `g:ale_list_window_size` var
 ```vim
 " Show 5 lines of errors (default: 10)
 let g:ale_list_window_size = 5
+
+" Show all lines of errors. This matches window height to error line count.
+let g:ale_list_window_size = -1
 ```

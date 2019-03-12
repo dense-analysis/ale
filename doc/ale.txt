@@ -1170,6 +1170,8 @@ g:ale_list_window_size                                 *g:ale_list_window_size*
   opened automatically for ALE problems. The default of `10` matches the Vim
   default height.
 
+  To have the to have the window height always match the number of error lines, use `-1`. There is no maximum. Only works with location list (not quickfix).
+
   See |g:ale_open_list| for information on automatically opening windows
   for quickfix or the loclist.
 

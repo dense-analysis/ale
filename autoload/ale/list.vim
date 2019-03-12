@@ -123,7 +123,11 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
                 silent! execute l:open_type . 'copen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
             endif
         elseif g:ale_set_loclist
-            silent! execute l:open_type . 'lopen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
+            if g:ale_list_window_size == -1
+                silent! execute l:open_type . 'lopen ' . str2nr(len(a:loclist))
+            else
+                silent! execute l:open_type . 'lopen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
+            endif
         endif
 
         " If focus changed, restore it (jump to the last window).
