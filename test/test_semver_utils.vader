@@ -15,7 +15,8 @@ Execute(GetVersion should return an empty list when no vesrion can be found):
 Execute(GetVersion should cache the version):
   AssertEqual [], ale#semver#GetVersion('dummy', [])
   AssertEqual [3, 4, 7], ale#semver#GetVersion('dummy', ['Version 3.4.7'])
-  AssertEqual [3, 4, 7], ale#semver#GetVersion('dummy', [])
+  AssertEqual [3, 4, 17], ale#semver#GetVersion('dummy', ['Version 3.4.17'])
+  AssertEqual [3, 4, 17], ale#semver#GetVersion('dummy', [])
 
 Execute(GetVersion should tolerate missing patch numbers):
   " This goes against the semver spec, but we handle it anyway.
