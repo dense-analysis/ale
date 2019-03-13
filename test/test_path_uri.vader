@@ -16,6 +16,14 @@ Execute(ale#path#FromURI should work for Windows paths):
   AssertEqual 'C:\foo\bar\baz.tst', ale#path#FromURI('FILE:///C:/foo/bar/baz.tst')
   AssertEqual 'C:\foo\bar\baz.tst', ale#path#FromURI('FILE:/C:/foo/bar/baz.tst')
 
+Execute(ale#path#FromURI parse Windows paths with a pipe):
+  AssertEqual 'C:\foo\bar\baz.tst', ale#path#FromURI('file:///C|/foo/bar/baz.tst')
+  AssertEqual 'C:\foo\bar\baz.tst', ale#path#FromURI('file:/C|/foo/bar/baz.tst')
+  AssertEqual 'c:\foo\bar\baz.tst', ale#path#FromURI('file:///c|/foo/bar/baz.tst')
+  AssertEqual 'c:\foo\bar\baz.tst', ale#path#FromURI('file:/c|/foo/bar/baz.tst')
+  AssertEqual 'C:\foo\bar\baz.tst', ale#path#FromURI('FILE:///C|/foo/bar/baz.tst')
+  AssertEqual 'C:\foo\bar\baz.tst', ale#path#FromURI('FILE:/C|/foo/bar/baz.tst')
+
 Execute(ale#path#FromURI should handle encoded paths that look like drive letters):
   AssertEqual '/C:/foo/bar/baz.tst', ale#path#FromURI('file:///C%3A/foo/bar/baz.tst')
 

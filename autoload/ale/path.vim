@@ -206,8 +206,9 @@ function! ale#path#FromURI(uri) abort
     endif
 
     " If the path is like /C:/foo/bar, it should be C:\foo\bar instead.
-    if l:encoded_path =~# '^/[a-zA-Z]:'
+    if l:encoded_path =~# '^/[a-zA-Z][:|]'
         let l:encoded_path = substitute(l:encoded_path[1:], '/', '\\', 'g')
+        let l:encoded_path = l:encoded_path[0] . ':' . l:encoded_path[2:]
     endif
 
     return ale#uri#Decode(l:encoded_path)
