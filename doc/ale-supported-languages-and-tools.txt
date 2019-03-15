@@ -71,6 +71,7 @@ Notes:
   * `gcc`
   * `uncrustify`
 * Chef
+  * `cookstyle`
   * `foodcritic`
 * Clojure
   * `joker`
