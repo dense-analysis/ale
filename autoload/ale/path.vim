@@ -215,3 +215,21 @@ function! ale#path#FromURI(uri) abort
 
     return l:path
 endfunction
+
+function! ale#path#findGitToplevel(path)
+  if 0 is executable('git')
+    throw 'Git executable not found'
+  endif
+
+  let l:start_dir = fnamemodify(a:path, ':p:h')
+
+  let l:command = 'git -C '.l:start_dir.' rev-parse --show-toplevel'
+
+  let l:top_level = systemlist(l:command)
+
+  if 0 isnot# v:shell_error
+    throw 'Git error '.v:shell_error.'\n'.join(l:top_level, '\n')
+  endif
+
+  return empty(l:top_level) ? '' : l:top_level[0]
+endfunction
