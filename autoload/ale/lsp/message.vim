@@ -34,7 +34,13 @@ function! ale#lsp#message#Initialize(root_path, initialization_options) abort
     return [0, 'initialize', {
     \   'processId': getpid(),
     \   'rootPath': a:root_path,
-    \   'capabilities': {},
+    \   'capabilities': {
+    \       'textDocument': {
+    \           'documentSymbol': {
+    \               'hierarchicalDocumentSymbolSupport': v:true
+    \           }
+    \       },
+    \   },
     \   'initializationOptions': a:initialization_options,
     \   'rootUri': ale#path#ToURI(a:root_path),
     \}]
@@ -155,6 +161,14 @@ function! ale#lsp#message#Hover(buffer, line, column) abort
     \       'uri': ale#path#ToURI(expand('#' . a:buffer . ':p')),
     \   },
     \   'position': {'line': a:line - 1, 'character': a:column - 1},
+    \}]
+endfunction
+
+function! ale#lsp#message#DocumentSymbol(buffer) abort
+    return [0, 'textDocument/documentSymbol', {
+    \   'textDocument': {
+    \       'uri': ale#path#ToURI(expand('#' . a:buffer . ':p')),
+    \   },
     \}]
 endfunction
 

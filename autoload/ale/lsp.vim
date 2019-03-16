@@ -38,6 +38,7 @@ function! ale#lsp#Register(executable_or_address, project, init_options) abort
         \   'capabilities': {
         \       'hover': 0,
         \       'references': 0,
+        \       'document_symbol': 0,
         \       'completion': 0,
         \       'completion_trigger_characters': [],
         \       'definition': 0,
@@ -197,6 +198,10 @@ function! s:UpdateCapabilities(conn, capabilities) abort
 
     if get(a:capabilities, 'referencesProvider') is v:true
         let a:conn.capabilities.references = 1
+    endif
+
+    if get(a:capabilities, 'documentSymbolProvider') is v:true
+        let a:conn.capabilities.document_symbol = 1
     endif
 
     if !empty(get(a:capabilities, 'completionProvider'))
