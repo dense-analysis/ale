@@ -76,7 +76,6 @@ function! s:TemporaryPSScript(buffer, input) abort
 endfunction
 
 function! ale_linters#powershell#psscriptanalyzer#RunPowerShell(buffer, command) abort
-
     let l:executable = ale_linters#powershell#psscriptanalyzer#GetExecutable(
     \ a:buffer)
     let l:tempscript = s:TemporaryPSScript(a:buffer, a:command)
@@ -93,7 +92,6 @@ endfunction
 " for each parsing
 
 function! ale_linters#powershell#psscriptanalyzer#GetCommand(buffer) abort
-
     let l:exclude_option = ale#Var(
     \   a:buffer, 'powershell_psscriptanalyzer_exclusions')
     let l:module = ale#Var(
