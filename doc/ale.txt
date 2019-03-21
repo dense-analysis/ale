@@ -75,6 +75,7 @@ ALE supports the following key features for linting:
     chef..................................|ale-chef-options|
       foodcritic..........................|ale-chef-foodcritic|
     clojure...............................|ale-clojure-options|
+      clj-kondo...........................|ale-clojure-clj-kondo|
       joker...............................|ale-clojure-joker|
     cloudformation........................|ale-cloudformation-options|
       cfn-python-lint.....................|ale-cloudformation-cfn-python-lint|
@@ -2213,6 +2214,7 @@ documented in additional help files.
   chef....................................|ale-chef-options|
     foodcritic............................|ale-chef-foodcritic|
   clojure.................................|ale-clojure-options|
+    clj-kondo.............................|ale-clojure-clj-kondo|
     joker.................................|ale-clojure-joker|
   cloudformation..........................|ale-cloudformation-options|
     cfn-python-lint.......................|ale-cloudformation-cfn-python-lint|

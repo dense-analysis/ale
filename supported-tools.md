@@ -82,6 +82,7 @@ formatting.
 * Chef
   * [foodcritic](http://www.foodcritic.io/)
 * Clojure
+  * [clj-kondo](https://github.com/borkdude/clj-kondo)
   * [joker](https://github.com/candid82/joker)
 * CloudFormation
   * [cfn-python-lint](https://github.com/awslabs/cfn-python-lint)

@@ -73,6 +73,7 @@ Notes:
 * Chef
   * `foodcritic`
 * Clojure
+  * `clj-kondo`
   * `joker`
 * CloudFormation
   * `cfn-python-lint`
