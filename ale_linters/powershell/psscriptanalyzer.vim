@@ -81,7 +81,7 @@ function! ale_linters#powershell#psscriptanalyzer#RunPowerShell(buffer, command)
     let l:tempscript = s:TemporaryPSScript(a:buffer, a:command)
 
     return ale#Escape(l:executable)
-    \ . ' -NoProfile -File '
+    \ . ' -Exe Bypass -NoProfile -File '
     \ . ale#Escape(l:tempscript)
     \ . ' %t'
 endfunction

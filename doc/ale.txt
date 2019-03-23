@@ -271,6 +271,8 @@ ALE supports the following key features for linting:
       write-good..........................|ale-pod-write-good|
     pony..................................|ale-pony-options|
       ponyc...............................|ale-pony-ponyc|
+    powershell............................|ale-powershell-options|
+      psscriptanalyzer....................|ale-powershell-psscriptanalyzer|
     prolog................................|ale-prolog-options|
       swipl...............................|ale-prolog-swipl|
     proto.................................|ale-proto-options|
