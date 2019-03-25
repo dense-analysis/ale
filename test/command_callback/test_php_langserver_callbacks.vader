@@ -22,3 +22,8 @@ Execute(The project path should be correct for .git directories):
   call ale#test#SetFilename('php-langserver-project/with-git/test.php')
 
   AssertLSPProject g:dir . '/php-langserver-project/with-git'
+
+Execute(The project path should be correct for composer.json file):
+  call ale#test#SetFilename('php-langserver-project/with-composer/test.php')
+
+  AssertLSPProject g:dir . '/php-langserver-project/with-composer'
