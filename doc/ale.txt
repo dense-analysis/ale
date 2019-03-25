@@ -122,6 +122,7 @@ ALE supports the following key features for linting:
       credo...............................|ale-elixir-credo|
     elm...................................|ale-elm-options|
       elm-format..........................|ale-elm-elm-format|
+      elm-lsp.............................|ale-elm-elm-lsp|
       elm-make............................|ale-elm-elm-make|
     erlang................................|ale-erlang-options|
       erlc................................|ale-erlang-erlc|
@@ -2260,6 +2261,7 @@ documented in additional help files.
     credo.................................|ale-elixir-credo|
   elm.....................................|ale-elm-options|
     elm-format............................|ale-elm-elm-format|
+    elm-lsp...............................|ale-elm-elm-lsp|
     elm-make..............................|ale-elm-elm-make|
   erlang..................................|ale-erlang-options|
     erlc..................................|ale-erlang-erlc|
