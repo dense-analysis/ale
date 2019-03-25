@@ -20,6 +20,7 @@ Execute(Vendor executables should be detected):
 
 Execute(The project path should be correct for .git directories):
   call ale#test#SetFilename('php-langserver-project/with-git/test.php')
+  silent! call mkdir('php-langserver-project/with-git/.git')
 
   AssertLSPProject ale#path#Simplify(g:dir . '/php-langserver-project/with-git')
 
