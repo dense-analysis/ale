@@ -1,0 +1,56 @@
+
+Before:
+  Save g:ale_graphql_gqlint_executable
+  Save g:ale_graphql_gqlint_use_global
+
+  unlet! b:executable
+
+  unlet! g:ale_graphql_gqlint_executable
+  unlet! g:ale_graphql_gqlint_use_global
+
+  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#test#SetFilename('testfile.graphql')
+
+  runtime ale_linters/graphql/gqlint.vim
+
+After:
+  Restore
+
+  unlet! b:executable
+  unlet! b:ale_graphql_gqlint_executable
+  unlet! b:ale_graphql_gqlint_use_global
+
+  call ale#test#SetFilename('test.txt')
+
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(node_modules directories should be discovered):
+  call ale#test#SetFilename('gqlint_paths/nested/testfile.graphql')
+
+  let b:executable = ale#path#Simplify(
+  \   g:dir
+  \   . '/gqlint_paths/node_modules/.bin/gqlint'
+  \)
+
+  let b:workingdir = ale#Escape(ale#path#Simplify(g:dir . '/gqlint_paths/nested'))
+
+  AssertEqual b:executable, ale_linters#graphql#gqlint#GetExecutable(bufnr(''))
+  AssertEqual
+  \ 'cd ' . b:workingdir  . ' && ' .
+  \ ale#Escape(b:executable) . ' --reporter=simple %t',
+  \ ale_linters#graphql#gqlint#GetCommand(bufnr(''))
+
+Execute(The global override should work):
+  let b:ale_graphql_gqlint_executable = 'foobar'
+  let b:ale_graphql_gqlint_use_global = 1
+
+  call ale#test#SetFilename('gqlint_paths/nested/testfile.graphql')
+
+  let b:workingdir = ale#Escape(ale#path#Simplify(g:dir . '/gqlint_paths/nested'))
+
+  AssertEqual 'foobar', ale_linters#graphql#gqlint#GetExecutable(bufnr(''))
+  AssertEqual
+  \ 'cd ' . b:workingdir  . ' && ' .
+  \ ale#Escape('foobar') . ' --reporter=simple %t',
+  \ ale_linters#graphql#gqlint#GetCommand(bufnr(''))

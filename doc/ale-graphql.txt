@@ -13,6 +13,21 @@ You will need the GraphQL ESLint plugin installed for this to work.
 ===============================================================================
 gqlint                                                     *ale-graphql-gqlint*
 
+g:ale_graphql_gqlint_executable         *g:ale_graphql_gqlint_executable*
+                                           *b:ale_graphql_gqlint_executable*
+  Type: |String|
+  Default: `'gqlint'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_graphql_gqlint_use_global         *g:ale_graphql_gqlint_use_global*
+                                           *b:ale_graphql_gqlint_use_global*
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
 ===============================================================================
 prettier                                                 *ale-graphql-prettier*
 
