@@ -38,9 +38,9 @@ function! ale#handlers#fecs#Handle(buffer, lines) abort
             let l:obj.text = l:code_match[1]
         endif
 
-        if l:match[1] ==# 'WARN'
+        if l:match[1] is# 'WARN'
             let l:obj.type = 'W'
-        elseif l:match[1] ==# 'ERROR'
+        elseif l:match[1] is# 'ERROR'
             let l:obj.type = 'E'
         endif
 

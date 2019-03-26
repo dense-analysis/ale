@@ -89,6 +89,7 @@ Notes:
   * `crystal`!!
 * CSS
   * `csslint`
+  * `fecs`
   * `prettier`
   * `stylelint`
 * Cucumber
