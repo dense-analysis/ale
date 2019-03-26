@@ -187,6 +187,7 @@ Notes:
   * `terraform-fmt`
 * HTML
   * `alex`!!
+  * `fecs`
   * `HTMLHint`
   * `prettier`
   * `proselint`
@@ -205,6 +206,7 @@ Notes:
   * `uncrustify`
 * JavaScript
   * `eslint`
+  * `fecs`
   * `flow`
   * `jscs`
   * `jshint`
@@ -437,6 +439,7 @@ Notes:
   * `thrift`
 * TypeScript
   * `eslint`
+  * `fecs`
   * `prettier`
   * `tslint`
   * `tsserver`

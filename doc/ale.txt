@@ -1893,6 +1893,7 @@ documented in additional help files.
     mcsc..................................|ale-cs-mcsc|
     uncrustify............................|ale-cs-uncrustify|
   css.....................................|ale-css-options|
+    fecs..................................|ale-css-fecs|
     prettier..............................|ale-css-prettier|
     stylelint.............................|ale-css-stylelint|
   cuda....................................|ale-cuda-options|
@@ -1970,6 +1971,7 @@ documented in additional help files.
   hcl.....................................|ale-hcl-options|
     terraform-fmt.........................|ale-hcl-terraform-fmt|
   html....................................|ale-html-options|
+    fecs..................................|ale-html-fecs|
     htmlhint..............................|ale-html-htmlhint|
     tidy..................................|ale-html-tidy|
     prettier..............................|ale-html-prettier|
@@ -1988,6 +1990,7 @@ documented in additional help files.
     uncrustify............................|ale-java-uncrustify|
   javascript..............................|ale-javascript-options|
     eslint................................|ale-javascript-eslint|
+    fecs..................................|ale-javascript-fecs|
     flow..................................|ale-javascript-flow|
     importjs..............................|ale-javascript-importjs|
     jscs..................................|ale-javascript-jscs|

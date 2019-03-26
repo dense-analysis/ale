@@ -27,6 +27,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix PEP8 issues with black.',
 \   },
+\   'fecs': {
+\       'function': 'ale#fixers#fecs#Fix',
+\       'suggested_filetypes': ['javascript', 'css', 'html'],
+\       'description': 'Apply fecs format to a file.',
+\   },
 \   'tidy': {
 \       'function': 'ale#fixers#tidy#Fix',
 \       'suggested_filetypes': ['html'],
