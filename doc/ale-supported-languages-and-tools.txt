@@ -312,6 +312,8 @@ Notes:
   * `write-good`
 * Pony
   * `ponyc`
+* PowerShell
+  * `psscriptanalyzer`
 * Prolog
   * `swipl`
 * proto
