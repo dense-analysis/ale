@@ -7,9 +7,9 @@ call ale#Set('r_styler_options', 'tidyverse_style')
 function! ale#fixers#styler#Fix(buffer) abort
     return {
     \   'command': 'Rscript --vanilla -e '
-    \       . 'suppressPackageStartupMessages(library(styler));'
+    \       . '"suppressPackageStartupMessages(library(styler));'
     \       . 'style_file(commandArgs(TRUE), style = '
-    \       . ale#Var(a:buffer, 'r_styler_options') . ')'
+    \       . ale#Var(a:buffer, 'r_styler_options') . ')"'
     \       . ' %t',
     \   'read_temporary_file': 1,
     \}
