@@ -253,14 +253,15 @@ Execute(LSP reference responses should be handled):
 
 Execute(Preview windows should not be opened for empty LSP reference responses):
   call ale#references#SetMap({3: {}})
-  call ale#references#HandleLSPResponse(
-  \ 1,
-  \ {
-  \   'id': 3,
-  \   'result': [
-  \   ],
-  \ }
-  \)
+  call ale#references#HandleLSPResponse(1, {'id': 3, 'result': []})
+
+  Assert !g:preview_called
+  AssertEqual {}, ale#references#GetMap()
+  AssertEqual ['echom ''No references found.'''], g:expr_list
+
+Execute(LSP reference responses with a null result should be handled):
+  call ale#references#SetMap({3: {}})
+  call ale#references#HandleLSPResponse(1, {'id': 3, 'result': v:null})
 
   Assert !g:preview_called
   AssertEqual {}, ale#references#GetMap()
