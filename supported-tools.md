@@ -324,6 +324,8 @@ formatting.
   * [write-good](https://github.com/btford/write-good)
 * Pony
   * [ponyc](https://github.com/ponylang/ponyc)
+* PowerShell
+  * [psscriptanalyzer](https://github.com/PowerShell/PSScriptAnalyzer) :floppy_disk
 * Prolog
   * [swipl](https://github.com/SWI-Prolog/swipl-devel)
 * proto
