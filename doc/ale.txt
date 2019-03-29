@@ -1342,7 +1342,7 @@ g:ale_linters                                                   *g:ale_linters*
 
   {
   \   'csh': ['shell'],
-  \   'elixir': ['credo', 'dialyxir', 'dogma', 'elixir-ls'],
+  \   'elixir': ['credo', 'dialyxir', 'dogma'],
   \   'go': ['gofmt', 'golint', 'go vet'],
   \   'hack': ['hack'],
   \   'help': [],
