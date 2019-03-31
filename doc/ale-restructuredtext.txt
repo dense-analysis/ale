@@ -3,6 +3,32 @@ ALE reStructuredText Integration                 *ale-restructuredtext-options*
 
 
 ===============================================================================
+rstcheck                                        *ale-restructuredtext-rstcheck*
+
+To use the rstcheck linter, install it according to the instruction at
+https://github.com/myint/rstcheck
+
+g:ale_rst_rstcheck_options                        *g:ale_rst_rstcheck_options*
+                                                  *b:ale_rst_rstcheck_options*
+  Type: |String|
+  Default: `''`
+
+  Additional options to pass to `rstcheck`. For example, `--debug` will print
+  the config file that `rstcheck` uses (see below).
+
+
+g:ale_rst_rstcheck_use_project_config  *g:ale_rst_rstcheck_use_project_config*
+                                       *b:ale_rst_rstcheck_use_project_config*
+  Type: |Number|
+  Default: `1`
+
+  If set to `1`, search for a `rstcheck` config file `.rstcheck.cfg` or
+  `setup.cfg` by traversing up from the location of the current buffer. This
+  requires `rstcheck` in a version > 3.3.1. If set to 0, no project config
+  file will be used.
+
+
+===============================================================================
 textlint                                        *ale-restructuredtext-textlint*
 
 To use textlint at reStructuredText, please install `textlint-plugin-rst`.

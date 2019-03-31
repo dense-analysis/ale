@@ -2096,6 +2096,7 @@ documented in additional help files.
     ols...................................|ale-reasonml-ols|
     refmt.................................|ale-reasonml-refmt|
   restructuredtext........................|ale-restructuredtext-options|
+    rstcheck..............................|ale-restructuredtext-rstcheck|
     textlint..............................|ale-restructuredtext-textlint|
     write-good............................|ale-restructuredtext-write-good|
   ruby....................................|ale-ruby-options|
