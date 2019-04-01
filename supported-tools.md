@@ -208,6 +208,7 @@ formatting.
   * [javac](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
   * [javalsp](https://github.com/georgewfraser/vscode-javac)
   * [PMD](https://pmd.github.io/)
+  * [sbtserver](https://www.scala-sbt.org/1.x/docs/sbt-server.html)
   * [uncrustify](https://github.com/uncrustify/uncrustify)
 * JavaScript
   * [eslint](http://eslint.org/)

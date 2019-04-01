@@ -199,6 +199,7 @@ Notes:
   * `javac`
   * `javalsp`
   * `PMD`
+  * `sbtserver`
   * `uncrustify`
 * JavaScript
   * `eslint`

@@ -1972,6 +1972,7 @@ documented in additional help files.
     google-java-format....................|ale-java-google-java-format|
     pmd...................................|ale-java-pmd|
     javalsp...............................|ale-java-javalsp|
+    sbtserver.............................|ale-java-sbtserver|
     uncrustify............................|ale-java-uncrustify|
   javascript..............................|ale-javascript-options|
     eslint................................|ale-javascript-eslint|
