@@ -206,7 +206,7 @@ Execute(ale#lsp#message#DidChangeConfiguration() should return correct messages)
   \ }
   AssertEqual
   \ [
-  \   0,
+  \   1,
   \   'workspace/didChangeConfiguration',
   \   {
   \     'settings': {
