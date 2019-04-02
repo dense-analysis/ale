@@ -1587,6 +1587,15 @@ g:ale_windows_node_executable_path         *g:ale_windows_node_executable_path*
   setting.
 
 
+g:ale_disable_lsp                                            *g:ale_disable_lsp*
+                                                             *b:ale_disable_lsp*
+
+  Type: |Number|
+  Default: `0`
+
+  When this option is set to `1`, ALE ignores all linters powered by LSP.
+  Please see also |ale-lsp|.
+
 -------------------------------------------------------------------------------
 6.1. Highlights                                                *ale-highlights*
 

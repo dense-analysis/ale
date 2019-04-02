@@ -8,6 +8,7 @@ let g:ale_echo_msg_info_str = get(g:, 'ale_echo_msg_info_str', 'Info')
 let g:ale_echo_msg_warning_str = get(g:, 'ale_echo_msg_warning_str', 'Warning')
 " Ignoring linters, for disabling some, or ignoring LSP diagnostics.
 let g:ale_linters_ignore = get(g:, 'ale_linters_ignore', {})
+let g:ale_disable_lsp = get(g:, 'ale_disable_lsp', 0)
 
 let s:lint_timer = -1
 let s:getcmdwintype_exists = exists('*getcmdwintype')
@@ -90,8 +91,9 @@ function! s:Lint(buffer, should_lint_file, timer_id) abort
 
     " Apply ignore lists for linters only if needed.
     let l:ignore_config = ale#Var(a:buffer, 'linters_ignore')
+    let l:disable_lsp = ale#Var(a:buffer, 'disable_lsp')
     let l:linters = !empty(l:ignore_config)
-    \   ? ale#engine#ignore#Exclude(l:filetype, l:linters, l:ignore_config)
+    \   ? ale#engine#ignore#Exclude(l:filetype, l:linters, l:ignore_config, l:disable_lsp)
     \   : l:linters
 
     " Tell other sources that they can start checking the buffer now.
