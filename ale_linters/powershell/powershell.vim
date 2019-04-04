@@ -32,12 +32,13 @@ function! ale_linters#powershell#powershell#Handle(buffer, lines) abort
     \   '\vFullyQualifiedErrorId : (\w+)',
     \]
 
-    let matchcount = 0
+    let l:matchcount = 0
 
     for l:match in ale#util#GetMatches(a:lines, l:patterns)
         " We want to work with 3 matches per syntax error
         echom len(l:match)
         let l:matchcount = l:matchcount + 1
+
         if l:matchcount == 1 || str2nr(l:match[1])
             " First match consists of 2 capture groups, and
             " can capture the line and col
@@ -53,6 +54,7 @@ function! ale_linters#powershell#powershell#Handle(buffer, lines) abort
             \   'col': str2nr(l:match[2]),
             \   'type': 'E',
             \}
+
         elseif l:matchcount == 2
             " Second match[0] grabs the full line in order
             " to handles the text
@@ -65,6 +67,7 @@ function! ale_linters#powershell#powershell#Handle(buffer, lines) abort
             " append the code we now know
             call add(l:output, l:item)
             unlet l:item
+
             if len(l:match[1]) > 0
                 for l:i in l:output
                     let l:i['code'] = l:match[1]
@@ -73,8 +76,8 @@ function! ale_linters#powershell#powershell#Handle(buffer, lines) abort
             " Reset the matchcount so we can begin gathering
             " matches for the next syntax error
             let l:matchcount = 0
-        endif
 
+        endif
     endfor
 
     return l:output
