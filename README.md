@@ -503,7 +503,7 @@ There are 3 global options that allow customizing the echoed message.
     * `%...code...%` is an optional error code, and most characters can be
       written between the `%` characters.
     * `%linter%` is the linter name
-    * `%severity` is the severity type
+    * `%severity%` is the severity type
 - `g:ale_echo_msg_error_str` is the string used for error severity.
 - `g:ale_echo_msg_warning_str` is the string used for warning severity.
 
