@@ -36,7 +36,6 @@ function! ale_linters#powershell#powershell#Handle(buffer, lines) abort
 
     for l:match in ale#util#GetMatches(a:lines, l:patterns)
         " We want to work with 3 matches per syntax error
-        echom len(l:match)
         let l:matchcount = l:matchcount + 1
 
         if l:matchcount == 1 || str2nr(l:match[1])
