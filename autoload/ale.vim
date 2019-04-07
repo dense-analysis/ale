@@ -151,12 +151,19 @@ function! ale#Queue(delay, ...) abort
     endif
 endfunction
 
-let g:ale_has_override = get(g:, 'ale_has_override', {})
+let s:current_ale_version = [2, 4, 0]
 
-" Call has(), but check a global Dictionary so we can force flags on or off
-" for testing purposes.
+" A function used to check for ALE features in files outside of the project.
 function! ale#Has(feature) abort
-    return get(g:ale_has_override, a:feature, has(a:feature))
+    let l:match = matchlist(a:feature, '\c\v^ale-(\d+)\.(\d+)(\.(\d+))?$')
+
+    if !empty(l:match)
+        let l:version = [l:match[1] + 0, l:match[2] + 0, l:match[4] + 0]
+
+        return ale#semver#GTE(s:current_ale_version, l:version)
+    endif
+
+    return 0
 endfunction
 
 " Given a buffer number and a variable name, look for that variable in the

@@ -8,8 +8,6 @@ Before:
 After:
   call ale#assert#TearDownFixerTest()
 
-  let g:ale_has_override = {}
-
 Execute(The prettier callback should return the correct default values):
   call ale#test#SetFilename('../prettier-test-files/testfile.js')
 
