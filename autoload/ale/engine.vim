@@ -107,24 +107,36 @@ endfunction
 " Register a temporary file to be managed with the ALE engine for
 " a current job run.
 function! ale#engine#ManageFile(buffer, filename) abort
-    " TODO: Emit deprecation warning here later.
+    if !get(g:, 'ale_ignore_2_4_warnings')
+        execute 'echom ''ale#engine#ManageFile is deprecated. Use `let g:ale_ignore_2_4_warnings = 1` to disable this message.'''
+    endif
+
     call ale#command#ManageFile(a:buffer, a:filename)
 endfunction
 
 " Same as the above, but manage an entire directory.
 function! ale#engine#ManageDirectory(buffer, directory) abort
-    " TODO: Emit deprecation warning here later.
+    if !get(g:, 'ale_ignore_2_4_warnings')
+        execute 'echom ''ale#engine#ManageDirectory is deprecated. Use `let g:ale_ignore_2_4_warnings = 1` to disable this message.'''
+    endif
+
     call ale#command#ManageDirectory(a:buffer, a:directory)
 endfunction
 
 function! ale#engine#CreateFile(buffer) abort
-    " TODO: Emit deprecation warning here later.
+    if !get(g:, 'ale_ignore_2_4_warnings')
+        execute 'echom ''ale#engine#CreateFile is deprecated. Use `let g:ale_ignore_2_4_warnings = 1` to disable this message.'''
+    endif
+
     return ale#command#CreateFile(a:buffer)
 endfunction
 
 " Create a new temporary directory and manage it in one go.
 function! ale#engine#CreateDirectory(buffer) abort
-    " TODO: Emit deprecation warning here later.
+    if !get(g:, 'ale_ignore_2_4_warnings')
+        execute 'echom ''ale#engine#CreateDirectory is deprecated. Use `let g:ale_ignore_2_4_warnings = 1` to disable this message.'''
+    endif
+
     return ale#command#CreateDirectory(a:buffer)
 endfunction
 

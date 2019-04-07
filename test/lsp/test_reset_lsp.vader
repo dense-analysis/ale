@@ -25,10 +25,10 @@ Before:
   call ale#linter#Define('testft', {
   \   'name': 'lsplinter',
   \   'lsp': 'tsserver',
-  \   'executable_callback': 'EmptyString',
-  \   'command_callback': 'EmptyString',
-  \   'project_root_callback': 'EmptyString',
-  \   'language_callback': 'EmptyString',
+  \   'executable': function('EmptyString'),
+  \   'command': function('EmptyString'),
+  \   'project_root': function('EmptyString'),
+  \   'language': function('EmptyString'),
   \})
 
   call ale#linter#Define('testft', {

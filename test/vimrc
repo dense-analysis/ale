@@ -35,3 +35,5 @@ set ttimeoutlen=0
 execute 'set encoding=utf-8'
 
 let g:mapleader=','
+
+let g:ale_ignore_2_4_warnings = 1
