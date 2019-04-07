@@ -1,54 +1,36 @@
 Before:
-  call ale#test#SetDirectory('/testplugin/test/fixers')
-
-  Save g:ale_javascript_prettier_eslint_executable
-  Save g:ale_javascript_prettier_eslint_use_global
-  Save g:ale_javascript_prettier_eslint_options
-
-  unlet! g:ale_javascript_prettier_eslint_executable
-  unlet! g:ale_javascript_prettier_eslint_use_global
-  unlet! g:ale_javascript_prettier_eslint_options
-
-  call ale#fixers#prettier_eslint#SetOptionDefaults()
+  call ale#assert#SetUpFixerTest('javascript', 'prettier_eslint')
 
 After:
-  Restore
-
-  unlet! b:ale_javascript_prettier_eslint_executable
-  unlet! b:ale_javascript_prettier_eslint_use_global
-  unlet! b:ale_javascript_prettier_eslint_options
-
-  call ale#test#RestoreDirectory()
-  call ale#semver#ResetVersionCache()
+  call ale#assert#TearDownFixerTest()
 
 Execute(The default command should be correct):
-  AssertEqual
+  AssertFixer
   \ {
   \   'read_temporary_file': 1,
   \   'command':
   \     ale#Escape('prettier-eslint')
   \     . ' %t'
   \     . ' --write'
-  \ },
-  \ ale#fixers#prettier_eslint#ApplyFixForVersion(bufnr(''), [])
+  \ }
 
 Execute(Additional options should be used when set):
   let b:ale_javascript_prettier_eslint_options = '--foobar'
 
-  AssertEqual
+  AssertFixer
   \ {
   \   'read_temporary_file': 1,
   \   'command':
   \     ale#Escape('prettier-eslint')
   \     . ' %t'
   \     . ' --foobar --write'
-  \ },
-  \ ale#fixers#prettier_eslint#ApplyFixForVersion(bufnr(''), [])
+  \ }
 
 Execute(--eslint-config-path should be set for 4.2.0 and up):
   call ale#test#SetFilename('eslint-test-files/react-app/foo/bar.js')
 
-  AssertEqual
+  GivenCommandOutput ['4.2.0']
+  AssertFixer
   \ {
   \   'read_temporary_file': 1,
   \   'command':
@@ -56,58 +38,57 @@ Execute(--eslint-config-path should be set for 4.2.0 and up):
   \     . ' %t'
   \     . ' --eslint-config-path ' . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --write'
-  \ },
-  \ ale#fixers#prettier_eslint#ApplyFixForVersion(bufnr(''), ['4.2.0'])
+  \ }
 
 Execute(--eslint-config-path shouldn't be used for older versions):
   call ale#test#SetFilename('eslint-test-files/react-app/foo/bar.js')
 
-  AssertEqual
+  AssertFixer
   \ {
   \   'read_temporary_file': 1,
   \   'command':
   \     ale#Escape('prettier-eslint')
   \     . ' %t'
   \     . ' --write'
-  \ },
-  \ ale#fixers#prettier_eslint#ApplyFixForVersion(bufnr(''), [])
+  \ }
 
 Execute(The version check should be correct):
-  AssertEqual
+  AssertFixer [
+  \ ale#Escape('prettier-eslint') . ' --version',
   \ {
-  \   'chain_with': 'ale#fixers#prettier_eslint#ApplyFixForVersion',
-  \   'command': ale#Escape('prettier-eslint') . ' --version',
-  \ },
-  \ ale#fixers#prettier_eslint#Fix(bufnr(''))
+  \   'read_temporary_file': 1,
+  \   'command':
+  \     ale#Escape('prettier-eslint')
+  \     . ' %t'
+  \     . ' --write'
+  \ }
+  \]
 
 Execute(The new --stdin-filepath option should be used when the version is new enough):
   call ale#test#SetFilename('eslint-test-files/react-app/foo/bar.js')
 
-  AssertEqual
+  GivenCommandOutput ['4.4.0']
+  AssertFixer
   \ {
   \   'command': ale#path#CdString(expand('%:p:h'))
   \     . ale#Escape('prettier-eslint')
   \     . ' --eslint-config-path ' . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --stdin-filepath %s --stdin',
-  \ },
-  \ ale#fixers#prettier_eslint#ApplyFixForVersion(bufnr(''), ['4.4.0'])
+  \ }
 
 Execute(The version number should be cached):
-  call ale#fixers#prettier_eslint#ApplyFixForVersion(bufnr(''), ['4.4.0'])
-
-  " The version command should be skipped.
-  AssertEqual
-  \ {
-  \   'chain_with': 'ale#fixers#prettier_eslint#ApplyFixForVersion',
-  \   'command': '',
-  \ },
-  \ ale#fixers#prettier_eslint#Fix(bufnr(''))
-
-  " The newer command should be used.
-  AssertEqual
+  GivenCommandOutput ['4.4.0']
+  AssertFixer
   \ {
   \   'command': ale#path#CdString(expand('%:p:h'))
   \     . ale#Escape('prettier-eslint')
   \     . ' --stdin-filepath %s --stdin',
-  \ },
-  \ ale#fixers#prettier_eslint#ApplyFixForVersion(bufnr(''), [])
+  \ }
+
+  GivenCommandOutput []
+  AssertFixer
+  \ {
+  \   'command': ale#path#CdString(expand('%:p:h'))
+  \     . ale#Escape('prettier-eslint')
+  \     . ' --stdin-filepath %s --stdin',
+  \ }

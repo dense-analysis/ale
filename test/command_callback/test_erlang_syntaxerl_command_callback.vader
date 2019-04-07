@@ -19,7 +19,7 @@ Execute (The executable should be configurable):
   \]
 
 Execute (The -b option should be used when available):
-  WithChainResults [
+  GivenCommandOutput [
   \ 'Syntax checker for Erlang (0.14.0)',
   \ 'Usage: syntaxerl [-d | --debug] <FILENAME>',
   \ '       syntaxerl <-h | --help>',
@@ -31,7 +31,7 @@ Execute (The -b option should be used when available):
   \ ale#Escape('syntaxerl') . ' %t',
   \]
 
-  WithChainResults [
+  GivenCommandOutput [
   \ 'Syntax checker for Erlang (0.14.0)',
   \ 'Usage: syntaxerl [-b | --base <FILENAME>] [-d | --debug] <FILENAME>',
   \ '       syntaxerl <-h | --help>',

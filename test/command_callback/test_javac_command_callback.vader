@@ -48,30 +48,30 @@ Execute(The executable should be configurable):
   \ . ' -d ' . ale#Escape('TEMP_DIR') . ' %t'
 
 Execute(The javac callback should include discovered classpaths):
-  WithChainResults [
+  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [
   \ '[DEBUG] Ignore this.',
   \ '[INFO] Something we should ignore.',
   \ '/foo/bar.jar',
   \ '/xyz/abc.jar',
-  \]
+  \], {})
 
-  AssertLinter 'javac',
+  AssertEqual
   \ g:prefix
   \   . ' -cp '
   \   . ale#Escape(join(['/foo/bar.jar', '/xyz/abc.jar'], g:cp_sep))
-  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t'
+  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t',
+  \ substitute(b:command, '%e', '\=ale#Escape(''javac'')', 'g')
 
 Execute(The javac callback should combine discovered classpaths and manual ones):
   let g:ale_java_javac_classpath = 'configured.jar'
-
-  WithChainResults [
+  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [
   \ '[DEBUG] Ignore this.',
   \ '[INFO] Something we should ignore.',
   \ '/foo/bar.jar',
   \ '/xyz/abc.jar',
-  \]
+  \], {})
 
-  AssertLinter 'javac',
+  AssertEqual
   \ g:prefix
   \   . ' -cp '
   \   . ale#Escape(join(
@@ -82,11 +82,18 @@ Execute(The javac callback should combine discovered classpaths and manual ones)
   \     ],
   \     g:cp_sep
   \   ))
-  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t'
+  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t',
+  \ substitute(b:command, '%e', '\=ale#Escape(''javac'')', 'g')
 
   let g:ale_java_javac_classpath = 'configured.jar' . g:cp_sep . 'configured2.jar'
+  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [
+  \ '[DEBUG] Ignore this.',
+  \ '[INFO] Something we should ignore.',
+  \ '/foo/bar.jar',
+  \ '/xyz/abc.jar',
+  \], {})
 
-  AssertLinter 'javac',
+  AssertEqual
   \ g:prefix
   \   . ' -cp '
   \   . ale#Escape(join(
@@ -98,7 +105,8 @@ Execute(The javac callback should combine discovered classpaths and manual ones)
   \     ],
   \     g:cp_sep
   \   ))
-  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t'
+  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t',
+  \ substitute(b:command, '%e', '\=ale#Escape(''javac'')', 'g')
 
 Execute(The javac callback should detect source directories):
   call ale#engine#Cleanup(bufnr(''))
@@ -117,24 +125,24 @@ Execute(The javac callback should combine detected source directories and classp
   call ale#test#SetFilename('java_paths/src/main/java/com/something/dummy.java')
   call ale#engine#InitBufferInfo(bufnr(''))
 
-  WithChainResults [
+  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [
   \ '[DEBUG] Ignore this.',
   \ '[INFO] Something we should ignore.',
   \ '/foo/bar.jar',
   \ '/xyz/abc.jar',
-  \]
-  AssertLinter 'javac',
+  \], {})
+
+  AssertEqual
   \ ale#path#CdString(expand('%:p:h')) . ale#Escape('javac') . ' -Xlint'
   \   . ' -cp ' . ale#Escape(join(['/foo/bar.jar', '/xyz/abc.jar'], g:cp_sep))
   \   . ' -sourcepath ' . ale#Escape(
   \     ale#path#Simplify(g:dir . '/java_paths/src/main/java/')
   \   )
-  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t'
+  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t',
+  \ substitute(b:command, '%e', '\=ale#Escape(''javac'')', 'g')
 
 Execute(The javac callback should use g:ale_java_javac_options correctly):
   let g:ale_java_javac_options = '--anything --else'
-
-  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
 
   AssertLinter 'javac',
   \ g:prefix . ' -d ' . ale#Escape('TEMP_DIR') . ' --anything --else %t'

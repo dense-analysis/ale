@@ -1,32 +1,20 @@
 After:
   call ale#semver#ResetVersionCache()
 
-Execute(GetVersion should return the version from the lines of output):
+Execute(ParseVersion should return the version from the lines of output):
   " We should be able to parse the semver string from flake8
-  AssertEqual [3, 0, 4], ale#semver#GetVersion('dummy', [
+  AssertEqual [3, 0, 4], ale#semver#ParseVersion([
   \ '3.0.4 (mccabe: 0.5.2, pyflakes: 1.2.3, pycodestyle: 2.0.0) CPython 2.7.12 on Linux',
   \ '1.2.3',
   \])
 
-Execute(GetVersion should return an empty list when no vesrion can be found):
-  AssertEqual [], ale#semver#GetVersion('dummy', ['x'])
-  AssertEqual [], ale#semver#GetVersion('dummy', [])
+Execute(ParseVersion should return an empty list when no vesrion can be found):
+  AssertEqual [], ale#semver#ParseVersion(['x'])
+  AssertEqual [], ale#semver#ParseVersion([])
 
-Execute(GetVersion should cache the version):
-  AssertEqual [], ale#semver#GetVersion('dummy', [])
-  AssertEqual [3, 4, 7], ale#semver#GetVersion('dummy', ['Version 3.4.7'])
-  AssertEqual [3, 4, 17], ale#semver#GetVersion('dummy', ['Version 3.4.17'])
-  AssertEqual [3, 4, 17], ale#semver#GetVersion('dummy', [])
-
-Execute(GetVersion should tolerate missing patch numbers):
+Execute(ParseVersion should tolerate missing patch numbers):
   " This goes against the semver spec, but we handle it anyway.
-  AssertEqual [3, 4, 0], ale#semver#GetVersion('dummy', ['Version 3.4'])
-
-Execute(HasVersion should return 1 when the version has been cached):
-  call ale#semver#GetVersion('dummy', [])
-  AssertEqual 0, ale#semver#HasVersion('dummy')
-  call ale#semver#GetVersion('dummy', ['3.4.7'])
-  AssertEqual 1, ale#semver#HasVersion('dummy')
+  AssertEqual [3, 4, 0], ale#semver#ParseVersion(['Version 3.4'])
 
 Execute(GTE should compare triples correctly):
   Assert ale#semver#GTE([3, 0, 4], [3, 0, 0])

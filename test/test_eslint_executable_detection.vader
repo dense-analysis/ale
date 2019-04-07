@@ -54,11 +54,17 @@ Execute(eslint_d should be detected correctly):
 
 Execute(eslint.js executables should be run with node on Windows):
   call ale#test#SetFilename('eslint-test-files/react-app/subdir/testfile.js')
-  let g:ale_has_override['win32'] = 1
 
   " We have to execute the file with node.
-  AssertEqual
-  \   ale#Escape('node.exe') . ' '
-  \   . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
-  \   . ' -f unix --stdin --stdin-filename %s',
-  \ ale#handlers#eslint#GetCommand(bufnr(''))
+  if has('win32')
+    AssertEqual
+    \ ale#Escape('node.exe') . ' '
+    \   . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+    \   . ' -f unix --stdin --stdin-filename %s',
+    \ ale#handlers#eslint#GetCommand(bufnr(''))
+  else
+    AssertEqual
+    \ ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+    \   . ' -f unix --stdin --stdin-filename %s',
+    \ ale#handlers#eslint#GetCommand(bufnr(''))
+  endif

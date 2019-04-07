@@ -284,6 +284,20 @@ function! ale#c#GetMakeCommand(buffer) abort
     return ''
 endfunction
 
+function! ale#c#RunMakeCommand(buffer, Callback) abort
+    let l:command = ale#c#GetMakeCommand(a:buffer)
+
+    if empty(l:command)
+        return a:Callback(a:buffer, [])
+    endif
+
+    return ale#command#Run(
+    \   a:buffer,
+    \   l:command,
+    \   {b, output -> a:Callback(a:buffer, output)},
+    \)
+endfunction
+
 " Given a buffer number, search for a project root, and output a List
 " of directories to include based on some heuristics.
 "

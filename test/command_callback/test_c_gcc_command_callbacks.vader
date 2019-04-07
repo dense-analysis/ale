@@ -14,8 +14,8 @@ After:
   unlet! b:command_tail
 
 Execute(The executable should be configurable):
-  AssertLinter 'gcc', ['', ale#Escape('gcc') . b:command_tail]
+  AssertLinter 'gcc', [ale#Escape('gcc') . b:command_tail]
 
   let b:ale_c_gcc_executable = 'foobar'
 
-  AssertLinter 'foobar', ['', ale#Escape('foobar') . b:command_tail]
+  AssertLinter 'foobar', [ale#Escape('foobar') . b:command_tail]

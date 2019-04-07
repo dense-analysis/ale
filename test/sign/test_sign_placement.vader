@@ -87,6 +87,7 @@ Before:
 After:
   Restore
 
+  unlet! g:ale_run_synchronously_callbacks
   unlet! g:loclist
   delfunction GenerateResults
   delfunction ParseSigns

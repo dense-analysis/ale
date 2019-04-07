@@ -17,10 +17,14 @@ Before:
   \ 'read_buffer': 0,
   \})
 
+  " Run the test commands in the shell.
+  let g:ale_run_synchronously_emulate_commands = 0
+
 After:
   Restore
 
   call ale#assert#TearDownLinterTest()
+  unlet! g:ale_run_synchronously_callbacks
 
 Given foobar (Some imaginary filetype):
 Execute(It should be possible to compute an executable to check based on the result of commands):

@@ -1,7 +1,7 @@
 Before:
   call ale#assert#SetUpLinterTest('php', 'phpstan')
 
-  WithChainResults ['0.10.2']
+  GivenCommandOutput ['0.10.2']
 
 After:
   call ale#assert#TearDownLinterTest()
@@ -26,7 +26,7 @@ Execute(Custom phpstan configuration file):
   \ ale#Escape('phpstan') . ' analyze -l4 --errorFormat raw -c phpstan_config %s'
 
 Execute(Choose the right format for error format param):
-  WithChainResults ['0.10.3']
+  GivenCommandOutput ['0.10.3']
 
   AssertLinter 'phpstan', [
   \ ale#Escape('phpstan') . ' --version',

@@ -3,6 +3,7 @@ Before:
 
   let g:ale_run_synchronously = 1
   unlet! g:ale_run_synchronously_callbacks
+  unlet! g:ale_run_synchronously_emulate_commands
 
   runtime autoload/ale/lsp.vim
   runtime autoload/ale/lsp_linter.vim
@@ -234,6 +235,7 @@ After:
   call ale#linter#Reset()
   call ale#lsp#ResetConnections()
 
+  unlet! g:ale_run_synchronously_callbacks
   unlet! g:job_map
   unlet! g:emulate_job_failure
   unlet! g:next_job_id

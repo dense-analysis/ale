@@ -3,7 +3,7 @@ Before:
 
   call ale#assert#SetUpLinterTest('go', 'gobuild')
 
-  WithChainResults ['/foo/bar', '/foo/baz']
+  GivenCommandOutput ['/foo/bar', '/foo/baz']
 
 After:
   Restore
