@@ -2151,6 +2151,8 @@ documented in additional help files.
     stylelint.............................|ale-stylus-stylelint|
   sugarss.................................|ale-sugarss-options|
     stylelint.............................|ale-sugarss-stylelint|
+  swift...................................|ale-swift-options|
+    sourcekitlsp..........................|ale-swift-sourcekitlsp|
   tcl.....................................|ale-tcl-options|
     nagelfar..............................|ale-tcl-nagelfar|
   terraform...............................|ale-terraform-options|
