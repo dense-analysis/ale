@@ -410,7 +410,7 @@ Notes:
 * SugarSS
   * `stylelint`
 * Swift
-  * `sourcekitlsp`
+  * `sourcekit-lsp`
   * `swiftformat`
   * `swiftlint`
 * Tcl
