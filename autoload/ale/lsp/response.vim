@@ -27,6 +27,7 @@ function! ale#lsp#response#ReadDiagnostics(response) abort
 
     for l:diagnostic in a:response.params.diagnostics
         let l:severity = get(l:diagnostic, 'severity', 0)
+        let l:diagnostic.message = substitute(l:diagnostic.message, "\n", ' ', 'g')
         let l:loclist_item = {
         \   'text': l:diagnostic.message,
         \   'type': 'E',
