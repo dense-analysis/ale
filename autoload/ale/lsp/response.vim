@@ -66,7 +66,7 @@ function! ale#lsp#response#ReadDiagnostics(response) abort
             \   ale#path#FromURI(val.location.uri) .
             \   ':' . (val.location.range.start.line + 1) .
             \   ':' . (val.location.range.start.character + 1) .
-            \   ":\n\t" . val.text
+            \   ":\n\t" . val.message
             \})
             let l:loclist_item.detail = l:diagnostic.detail . "\n" . join(l:related, "\n")
         endif
