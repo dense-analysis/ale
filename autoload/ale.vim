@@ -43,6 +43,11 @@ function! ale#ShouldDoNothing(buffer) abort
         return 1
     endif
 
+    " Do nothing for diff buffers.
+    if getbufvar(a:buffer, '&diff')
+        return 1
+    endif
+
     " Do nothing for blacklisted files.
     if index(get(g:, 'ale_filetype_blacklist', []), l:filetype) >= 0
         return 1

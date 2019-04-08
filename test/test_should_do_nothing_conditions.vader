@@ -35,6 +35,10 @@ After:
   unlet! b:funky_command_created
   unlet! b:fake_mode
 
+  if &diff is 1
+    let &diff = 0
+  endif
+
   runtime autoload/ale/util.vim
 
 Given foobar(An empty file):
@@ -67,6 +71,11 @@ Execute(DoNothing should return 1 when the filetype is empty):
 
 Execute(DoNothing should return 1 when an operator is pending):
   let b:fake_mode = 'no'
+
+  AssertEqual 1, ale#ShouldDoNothing(bufnr(''))
+
+Execute(DoNothing should return 1 for diff buffers):
+  let &diff = 1
 
   AssertEqual 1, ale#ShouldDoNothing(bufnr(''))
 
