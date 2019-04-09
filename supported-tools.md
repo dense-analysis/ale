@@ -326,7 +326,7 @@ formatting.
   * [ponyc](https://github.com/ponylang/ponyc)
 * PowerShell
   * [psscriptanalyzer](https://github.com/PowerShell/PSScriptAnalyzer) :floppy_disk
-  * [PowerShell](https://github.com/PowerShell/PowerShell) :floppy_disk
+  * [powershell](https://github.com/PowerShell/PowerShell) :floppy_disk
 * Prolog
   * [swipl](https://github.com/SWI-Prolog/swipl-devel)
 * proto
