@@ -48,12 +48,12 @@ function! ale_linters#powershell#powershell#Handle(buffer, lines) abort
                 call add(l:output, l:item)
                 let l:matchcount = 1
             endif
+
             let l:item = {
             \   'lnum': str2nr(l:match[1]),
             \   'col': str2nr(l:match[2]),
             \   'type': 'E',
             \}
-
         elseif l:matchcount == 2
             " Second match[0] grabs the full line in order
             " to handles the text
@@ -72,10 +72,10 @@ function! ale_linters#powershell#powershell#Handle(buffer, lines) abort
                     let l:i['code'] = l:match[1]
                 endfor
             endif
+
             " Reset the matchcount so we can begin gathering
             " matches for the next syntax error
             let l:matchcount = 0
-
         endif
     endfor
 
