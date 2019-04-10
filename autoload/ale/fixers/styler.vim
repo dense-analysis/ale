@@ -1,5 +1,5 @@
 " Author: tvatter <thibault.vatter@gmail.com>
-" Description: Fixing R files with syler.
+" Description: Fixing R files with styler.
 
 call ale#Set('r_styler_executable', 'Rscript')
 call ale#Set('r_styler_options', 'tidyverse_style')
