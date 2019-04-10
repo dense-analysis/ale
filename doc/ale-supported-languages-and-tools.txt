@@ -119,6 +119,7 @@ Notes:
   * `mix`!!
 * Elm
   * `elm-format`
+  * `elm-lsp`
   * `elm-make`
 * Erb
   * `erb`
@@ -315,6 +316,8 @@ Notes:
   * `write-good`
 * Pony
   * `ponyc`
+* PowerShell
+  * `psscriptanalyzer`
 * Prolog
   * `swipl`
 * proto
@@ -335,6 +338,7 @@ Notes:
   * `prospector`
   * `pycodestyle`
   * `pydocstyle`
+  * `pyflakes`
   * `pylama`!!
   * `pylint`!!
   * `pyls`
@@ -407,6 +411,7 @@ Notes:
 * SugarSS
   * `stylelint`
 * Swift
+  * `sourcekit-lsp`
   * `swiftformat`
   * `swiftlint`
 * Tcl
