@@ -31,6 +31,7 @@ function! ale#lsp#response#ReadDiagnostics(response) abort
         " spaces for text
         let l:diagnostic.detail = l:diagnostic.message
         let l:diagnostic.text = substitute(l:diagnostic.message, "\n", ' ', 'g')
+        let l:diagnostic.text= l:diagnostic.message
 
         let l:loclist_item = {
         \   'text': l:diagnostic.text,
