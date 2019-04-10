@@ -1867,6 +1867,7 @@ documented in additional help files.
     cookstyle.............................|ale-chef-cookstyle|
     foodcritic............................|ale-chef-foodcritic|
   clojure.................................|ale-clojure-options|
+    clj-kondo.............................|ale-clojure-clj-kondo|
     joker.................................|ale-clojure-joker|
   cloudformation..........................|ale-cloudformation-options|
     cfn-python-lint.......................|ale-cloudformation-cfn-python-lint|
