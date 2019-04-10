@@ -80,6 +80,7 @@ formatting.
   * [gcc](https://gcc.gnu.org/)
   * [uncrustify](https://github.com/uncrustify/uncrustify)
 * Chef
+  * [cookstyle](https://docs.chef.io/cookstyle.html)
   * [foodcritic](http://www.foodcritic.io/)
 * Clojure
   * [clj-kondo](https://github.com/borkdude/clj-kondo)
@@ -124,10 +125,11 @@ formatting.
   * [credo](https://github.com/rrrene/credo)
   * [dialyxir](https://github.com/jeremyjh/dialyxir)
   * [dogma](https://github.com/lpil/dogma)
-  * [elixir-ls](https://github.com/JakeBecker/elixir-ls)
+  * [elixir-ls](https://github.com/JakeBecker/elixir-ls) :warning:
   * [mix](https://hexdocs.pm/mix/Mix.html) :warning: :floppy_disk:
 * Elm
   * [elm-format](https://github.com/avh4/elm-format)
+  * [elm-lsp](https://github.com/antew/elm-lsp)
   * [elm-make](https://github.com/elm-lang/elm-make)
 * Erb
   * [erb](https://apidock.com/ruby/ERB)
@@ -161,6 +163,7 @@ formatting.
   * [golint](https://godoc.org/github.com/golang/lint)
   * [gometalinter](https://github.com/alecthomas/gometalinter) :warning: :floppy_disk:
   * [go mod](https://golang.org/cmd/go/) :warning: :floppy_disk:
+  * [gopls](https://github.com/golang/go/wiki/gopls) :warning:
   * [gosimple](https://github.com/dominikh/go-tools/tree/master/cmd/gosimple) :warning: :floppy_disk:
   * [gotype](https://godoc.org/golang.org/x/tools/cmd/gotype) :warning: :floppy_disk:
   * [go vet](https://golang.org/cmd/vet/) :floppy_disk:
@@ -324,6 +327,8 @@ formatting.
   * [write-good](https://github.com/btford/write-good)
 * Pony
   * [ponyc](https://github.com/ponylang/ponyc)
+* PowerShell
+  * [psscriptanalyzer](https://github.com/PowerShell/PSScriptAnalyzer) :floppy_disk
 * Prolog
   * [swipl](https://github.com/SWI-Prolog/swipl-devel)
 * proto
@@ -344,6 +349,7 @@ formatting.
   * [prospector](https://github.com/PyCQA/prospector) :warning:
   * [pycodestyle](https://github.com/PyCQA/pycodestyle) :warning:
   * [pydocstyle](https://www.pydocstyle.org/) :warning:
+  * [pyflakes](https://github.com/PyCQA/pyflakes)
   * [pylama](https://github.com/klen/pylama) :floppy_disk:
   * [pylint](https://www.pylint.org/) :floppy_disk:
   * [pyls](https://github.com/palantir/python-language-server) :warning:
@@ -416,6 +422,7 @@ formatting.
 * SugarSS
   * [stylelint](https://github.com/stylelint/stylelint)
 * Swift
+  * [sourcekit-lsp](https://github.com/apple/sourcekit-lsp)
   * [swiftformat](https://github.com/nicklockwood/SwiftFormat)
   * [swiftlint](https://github.com/realm/SwiftLint)
 * Tcl

@@ -80,7 +80,7 @@ Execute(redpen handler should handle errors output):
   \   ']',
   \ ])
 
-Execute(redpen handler should no error output):
+Execute(The redpen handler should handle an empty error list):
   AssertEqual
   \ [],
   \ ale#handlers#redpen#HandleRedpenOutput(bufnr(''), [
@@ -91,3 +91,8 @@ Execute(redpen handler should no error output):
   \   '  }',
   \   ']',
   \ ])
+
+Execute(The redpen handler should handle totally empty output):
+  AssertEqual
+  \ [],
+  \ ale#handlers#redpen#HandleRedpenOutput(bufnr(''), [])
