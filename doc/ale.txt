@@ -1864,6 +1864,7 @@ documented in additional help files.
     uncrustify............................|ale-c-uncrustify|
     ccls..................................|ale-c-ccls|
   chef....................................|ale-chef-options|
+    cookstyle.............................|ale-chef-cookstyle|
     foodcritic............................|ale-chef-foodcritic|
   clojure.................................|ale-clojure-options|
     joker.................................|ale-clojure-joker|

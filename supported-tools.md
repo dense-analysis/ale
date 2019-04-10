@@ -80,6 +80,7 @@ formatting.
   * [gcc](https://gcc.gnu.org/)
   * [uncrustify](https://github.com/uncrustify/uncrustify)
 * Chef
+  * [cookstyle](https://docs.chef.io/cookstyle.html)
   * [foodcritic](http://www.foodcritic.io/)
 * Clojure
   * [joker](https://github.com/candid82/joker)
