@@ -1934,15 +1934,16 @@ documented in additional help files.
     glslang...............................|ale-glsl-glslang|
     glslls................................|ale-glsl-glslls|
   go......................................|ale-go-options|
+    bingo.................................|ale-go-bingo|
     gobuild...............................|ale-go-gobuild|
     gofmt.................................|ale-go-gofmt|
-    golint................................|ale-go-golint|
-    govet.................................|ale-go-govet|
-    gometalinter..........................|ale-go-gometalinter|
-    staticcheck...........................|ale-go-staticcheck|
-    golangserver..........................|ale-go-golangserver|
     golangci-lint.........................|ale-go-golangci-lint|
-    bingo.................................|ale-go-bingo|
+    golangserver..........................|ale-go-golangserver|
+    golint................................|ale-go-golint|
+    gometalinter..........................|ale-go-gometalinter|
+    gopls.................................|ale-go-gopls|
+    govet.................................|ale-go-govet|
+    staticcheck...........................|ale-go-staticcheck|
   graphql.................................|ale-graphql-options|
     eslint................................|ale-graphql-eslint|
     gqlint................................|ale-graphql-gqlint|

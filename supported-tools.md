@@ -162,6 +162,7 @@ formatting.
   * [golint](https://godoc.org/github.com/golang/lint)
   * [gometalinter](https://github.com/alecthomas/gometalinter) :warning: :floppy_disk:
   * [go mod](https://golang.org/cmd/go/) :warning: :floppy_disk:
+  * [gopls](https://github.com/golang/go/wiki/gopls) :warning:
   * [gosimple](https://github.com/dominikh/go-tools/tree/master/cmd/gosimple) :warning: :floppy_disk:
   * [gotype](https://godoc.org/golang.org/x/tools/cmd/gotype) :warning: :floppy_disk:
   * [go vet](https://golang.org/cmd/vet/) :floppy_disk:

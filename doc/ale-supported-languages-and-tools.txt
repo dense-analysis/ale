@@ -153,6 +153,7 @@ Notes:
   * `golint`
   * `gometalinter`!!
   * `go mod`!!
+  * `gopls`
   * `gosimple`!!
   * `gotype`!!
   * `go vet`!!
