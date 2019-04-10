@@ -340,7 +340,7 @@ function! ale#linter#PreProcess(filetype, linter) abort
         throw '`aliases` must be a List of String values'
     endif
 
-    for l:key in filter(keys(l:obj), 'v:val[-9:] is# ''_callback'' || v:val is# ''command_chain''')
+    for l:key in filter(keys(a:linter), 'v:val[-9:] is# ''_callback'' || v:val is# ''command_chain''')
         if !get(g:, 'ale_ignore_2_4_warnings')
             execute 'echom l:key . '' is deprecated. Use `let g:ale_ignore_2_4_warnings = 1` to disable this message.'''
         endif
