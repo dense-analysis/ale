@@ -98,8 +98,8 @@ endfunction
 
 call ale#linter#Define('powershell', {
 \   'name': 'psscriptanalyzer',
-\   'executable_callback': 'ale_linters#powershell#psscriptanalyzer#GetExecutable',
-\   'command_callback': 'ale_linters#powershell#psscriptanalyzer#GetCommand',
+\   'executable': function('ale_linters#powershell#psscriptanalyzer#GetExecutable'),
+\   'command': function('ale_linters#powershell#psscriptanalyzer#GetCommand'),
 \   'output_stream': 'stdout',
 \   'callback': 'ale_linters#powershell#psscriptanalyzer#Handle',
 \})
