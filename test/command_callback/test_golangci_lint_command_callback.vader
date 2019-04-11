@@ -30,6 +30,18 @@ Execute(The golangci-lint callback should use configured options):
   \   . ' run ' . ale#Escape(expand('%' . ':t'))
   \   . ' --foobar'
 
+Execute(The golangci-lint callback should support environment variables):
+  let b:ale_go_go111module = 'on'
+
+  AssertLinter 'golangci-lint',
+  \ ale#path#CdString(expand('%:p:h'))
+  \   . ale#Env('GO111MODULE', 'on')
+  \   . ale#Escape('golangci-lint')
+  \   . ' run ' . ale#Escape(expand('%' . ':t'))
+  \   . ' --enable-all'
+
+  unlet! b:ale_go_go111module
+
 Execute(The golangci-lint `lint_package` option should use the correct command):
   let b:ale_go_golangci_lint_package = 1
 

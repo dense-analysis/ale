@@ -17,3 +17,11 @@ Execute(Extra options should be supported):
 Execute(The executable should be configurable):
   let g:ale_go_go_executable = 'foobar'
   AssertLinter 'foobar', ale#path#CdString(expand('%:p:h')) . ' foobar vet  .'
+
+Execute(Go environment variables should be supported):
+  let b:ale_go_go111module = 'on'
+  AssertLinter 'go',
+  \ ale#path#CdString(expand('%:p:h')) . ' '
+  \ . ale#Env('GO111MODULE', 'on')
+  \ . 'go vet  .'
+  unlet! b:ale_go_go111module

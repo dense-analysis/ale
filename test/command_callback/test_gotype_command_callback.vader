@@ -13,3 +13,13 @@ Execute(The gotype callback should ignore test files):
   call ale#test#SetFilename('bla_test.go')
 
   AssertLinter 'gotype', ''
+
+Execute(The gotype callback should support Go environment variables):
+  let b:ale_go_go111module = 'on'
+
+  AssertLinter 'gotype',
+  \ ale#path#CdString(expand('%:p:h')) . ' '
+  \ . ale#Env('GO111MODULE', 'on')
+  \ . 'gotype -e .'
+
+  unlet! b:ale_go_go111module
