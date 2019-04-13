@@ -2169,6 +2169,7 @@ documented in additional help files.
   tex.....................................|ale-tex-options|
     chktex................................|ale-tex-chktex|
     lacheck...............................|ale-tex-lacheck|
+    latexindent...........................|ale-tex-latexindent|
   texinfo.................................|ale-texinfo-options|
     write-good............................|ale-texinfo-write-good|
   text....................................|ale-text-options|

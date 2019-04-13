@@ -285,6 +285,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['kt'],
 \       'description': 'Fix Kotlin files with ktlint.',
 \   },
+\   'latexindent': {
+\       'function': 'ale#fixers#latexindent#Fix',
+\       'suggested_filetypes': ['tex'],
+\       'description' : 'Indent code within environments, commands, after headings and within special code blocks.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
