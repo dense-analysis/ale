@@ -13,6 +13,7 @@ Before:
 
   let g:ale_buffer_info = {}
   let g:ale_run_synchronously = 1
+  unlet! g:ale_run_synchronously_callbacks
   let g:ale_set_signs = 1
   " Disable features we don't need for these tests.
   let g:ale_set_quickfix = 0
@@ -58,6 +59,7 @@ After:
   delfunction TestCallback
   delfunction CollectSigns
 
+  unlet! g:ale_run_synchronously_callbacks
   sign unplace *
   call ale#linter#Reset()
 

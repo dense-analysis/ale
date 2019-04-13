@@ -2,10 +2,6 @@ Before:
   call ale#assert#SetUpLinterTest('php', 'langserver')
 
 After:
-  if isdirectory(g:dir . '/.git')
-    call delete(g:dir . '/.git', 'd')
-  endif
-
   call ale#assert#TearDownLinterTest()
 
 Execute(The default executable path should be correct):
@@ -23,7 +19,12 @@ Execute(Vendor executables should be detected):
   \ ))
 
 Execute(The project path should be correct for .git directories):
-  call ale#test#SetFilename('php-langserver-project/test.php')
-  call mkdir(g:dir . '/.git')
+  call ale#test#SetFilename('php-langserver-project/with-git/test.php')
+  silent! call mkdir('php-langserver-project/with-git/.git')
 
-  AssertLSPProject g:dir
+  AssertLSPProject ale#path#Simplify(g:dir . '/php-langserver-project/with-git')
+
+Execute(The project path should be correct for composer.json file):
+  call ale#test#SetFilename('php-langserver-project/with-composer/test.php')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/php-langserver-project/with-composer')

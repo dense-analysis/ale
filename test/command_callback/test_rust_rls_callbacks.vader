@@ -5,7 +5,7 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default executable path should be correct):
-  AssertLinter 'rls', ale#Escape('rls') . ' +' . ale#Escape('nightly')
+  AssertLinter 'rls', ale#Escape('rls')
 
 Execute(The toolchain should be configurable):
   let g:ale_rust_rls_toolchain = 'stable'

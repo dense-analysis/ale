@@ -73,6 +73,7 @@ other content at [w0rp.com](https://w0rp.com).
     15. [How can I configure my C or C++ project?](#faq-c-configuration)
     16. [How can I configure ALE differently for different buffers?](#faq-buffer-configuration)
     17. [How can I configure the height of the list in which ALE displays errors?](#faq-list-window-height)
+    18. [How can I see what ALE has configured for the current file?](#faq-get-info)
 
 <a name="supported-languages"></a>
 
@@ -502,7 +503,7 @@ There are 3 global options that allow customizing the echoed message.
     * `%...code...%` is an optional error code, and most characters can be
       written between the `%` characters.
     * `%linter%` is the linter name
-    * `%severity` is the severity type
+    * `%severity%` is the severity type
 - `g:ale_echo_msg_error_str` is the string used for error severity.
 - `g:ale_echo_msg_warning_str` is the string used for warning severity.
 
@@ -778,4 +779,14 @@ To set a default height for the error list, use the `g:ale_list_window_size` var
 ```vim
 " Show 5 lines of errors (default: 10)
 let g:ale_list_window_size = 5
+```
+
+<a name="faq-get-info"></a>
+
+### 5.xviii. How can I see what ALE has configured for the current file?
+
+Run the following to see what is currently configured:
+
+```vim
+:ALEInfo
 ```

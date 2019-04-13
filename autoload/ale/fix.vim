@@ -117,6 +117,10 @@ function! s:HandleExit(job_info, buffer, job_output, data) abort
         let l:input = a:job_info.input
     endif
 
+    if l:ChainCallback isnot v:null && !get(g:, 'ale_ignore_2_4_warnings')
+        execute 'echom ''chain_with is deprecated. Use `let g:ale_ignore_2_4_warnings = 1` to disable this message.'''
+    endif
+
     let l:next_index = l:ChainCallback is v:null
     \   ? a:job_info.callback_index + 1
     \   : a:job_info.callback_index

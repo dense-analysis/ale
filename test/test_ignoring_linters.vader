@@ -30,6 +30,7 @@ Execute(Exclude should ignore some invalid values):
   \     {'name': 'linter3', 'aliases': []},
   \   ],
   \   'foo',
+  \   0,
   \ )
   AssertEqual
   \ [
@@ -44,6 +45,7 @@ Execute(Exclude should ignore some invalid values):
   \     {'name': 'linter2', 'aliases': ['alias1']},
   \     {'name': 'linter3', 'aliases': []},
   \   ],
+  \   0,
   \   0,
   \ )
   AssertEqual
@@ -60,6 +62,7 @@ Execute(Exclude should ignore some invalid values):
   \     {'name': 'linter3', 'aliases': []},
   \   ],
   \   v:null,
+  \   0,
   \ )
 
 Execute(Exclude should handle Lists):
@@ -75,6 +78,7 @@ Execute(Exclude should handle Lists):
   \     {'name': 'linter3', 'aliases': []},
   \   ],
   \   ['linter1', 'alias1'],
+  \   0,
   \ )
 
 Execute(Exclude should handle Dictionaries):
@@ -90,11 +94,51 @@ Execute(Exclude should handle Dictionaries):
   \     {'name': 'linter3', 'aliases': []},
   \   ],
   \   {'foo': ['linter1'], 'bar': ['alias1']},
+  \   0,
+  \ )
+
+Execute(Exclude should filter LSP linters when g:ale_disable_lsp is set to 1):
+  let g:ale_disable_lsp = 1
+  AssertEqual
+  \ [
+  \   {'name': 'linter1', 'aliases': [], 'lsp': ''},
+  \   {'name': 'linter2', 'aliases': []},
+  \ ],
+  \ ale#engine#ignore#Exclude(
+  \   'foo',
+  \   [
+  \       {'name': 'linter1', 'aliases': [], 'lsp': ''},
+  \       {'name': 'linter2', 'aliases': []},
+  \       {'name': 'linter3', 'aliases': [], 'lsp': 'stdio'},
+  \   ],
+  \   [],
+  \   1,
+  \ )
+
+Execute(Exclude should filter LSP linters when b:ale_disable_lsp is set to 1):
+  let b:ale_disable_lsp = 1
+  AssertEqual
+  \ [
+  \   {'name': 'linter1', 'aliases': [], 'lsp': ''},
+  \   {'name': 'linter2', 'aliases': []},
+  \ ],
+  \ ale#engine#ignore#Exclude(
+  \   'foo',
+  \   [
+  \       {'name': 'linter1', 'aliases': [], 'lsp': ''},
+  \       {'name': 'linter2', 'aliases': []},
+  \       {'name': 'linter3', 'aliases': [], 'lsp': 'stdio'},
+  \   ],
+  \   [],
+  \   1,
   \ )
 
 Before:
   Save g:ale_linters_ignore
   Save g:ale_buffer_info
+  Save g:ale_disable_lsp
+
+  let g:ale_disable_lsp = 0
 
   let g:linters = []
   let g:loclist = []
@@ -127,6 +171,7 @@ After:
   unlet! b:ale_linters_ignore
   unlet! b:ale_quitting
   unlet! b:ale_save_event_fired
+  unlet! b:ale_disable_lsp
   unlet! g:linters
   unlet! g:loclist
   unlet! g:lsp_message
