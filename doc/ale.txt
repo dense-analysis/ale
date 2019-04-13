@@ -2070,6 +2070,7 @@ documented in additional help files.
   pony....................................|ale-pony-options|
     ponyc.................................|ale-pony-ponyc|
   powershell............................|ale-powershell-options|
+    powershell..........................|ale-powershell-powershell|
     psscriptanalyzer....................|ale-powershell-psscriptanalyzer|
   prolog..................................|ale-prolog-options|
     swipl.................................|ale-prolog-swipl|

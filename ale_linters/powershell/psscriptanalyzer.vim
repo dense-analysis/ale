@@ -13,37 +13,6 @@ function! ale_linters#powershell#psscriptanalyzer#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'powershell_psscriptanalyzer_executable')
 endfunction
 
-" Write a powershell script to a temp file for execution
-" return the command used to execute it
-function! s:TemporaryPSScript(buffer, input) abort
-    let l:filename = 'script.ps1'
-    " Create a temp dir to house our temp .ps1 script
-    " a temp dir is needed as powershell needs the .ps1
-    " extension
-    let l:tempdir = ale#util#Tempname() . (has('win32') ? '\' : '/')
-    let l:tempscript = l:tempdir . l:filename
-    " Create the temporary directory for the file, unreadable by 'other'
-    " users.
-    call mkdir(l:tempdir, '', 0750)
-    " Automatically delete the directory later.
-    call ale#command#ManageDirectory(a:buffer, l:tempdir)
-    " Write the script input out to a file.
-    call ale#util#Writefile(a:buffer, a:input, l:tempscript)
-
-    return l:tempscript
-endfunction
-
-function! ale_linters#powershell#psscriptanalyzer#RunPowerShell(buffer, command) abort
-    let l:executable = ale_linters#powershell#psscriptanalyzer#GetExecutable(
-    \ a:buffer)
-    let l:tempscript = s:TemporaryPSScript(a:buffer, a:command)
-
-    return ale#Escape(l:executable)
-    \ . ' -Exe Bypass -NoProfile -File '
-    \ . ale#Escape(l:tempscript)
-    \ . ' %t'
-endfunction
-
 " Run Invoke-ScriptAnalyzer and output each linting message as 4 seperate lines
 " for each parsing
 function! ale_linters#powershell#psscriptanalyzer#GetCommand(buffer) abort
@@ -60,8 +29,10 @@ function! ale_linters#powershell#psscriptanalyzer#GetCommand(buffer) abort
     \   $_.Message;
     \   $_.RuleName}']
 
-    return ale_linters#powershell#psscriptanalyzer#RunPowerShell(
-    \   a:buffer, l:script)
+    return ale#powershell#RunPowerShell(
+    \   a:buffer,
+    \   'powershell_psscriptanalyzer',
+    \   l:script)
 endfunction
 
 " add every 4 lines to an item(Dict) and every item to a list

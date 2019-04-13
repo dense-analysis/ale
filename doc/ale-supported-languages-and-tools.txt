@@ -319,6 +319,7 @@ Notes:
 * Pony
   * `ponyc`
 * PowerShell
+  * `powershell`
   * `psscriptanalyzer`
 * Prolog
   * `swipl`

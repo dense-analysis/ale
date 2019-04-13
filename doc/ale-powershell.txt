@@ -3,6 +3,21 @@ ALE PowerShell Integration                             *ale-powershell-options*
 
 
 ===============================================================================
+powershell                                          *ale-powershell-powershell*
+
+g:ale_powershell_powershell_executable  *g:ale_powershell_powershell_executable*
+                                        *b:ale_powershell_powershell_executable*
+  Type: String
+  Default: `'pwsh'`
+
+  This variable can be changed to use a different executable for powershell.
+
+>
+  " Use powershell.exe rather than the default pwsh
+  let g:ale_powershell_powershell_executable = 'powershell.exe'
+>
+
+===============================================================================
 psscriptanalyzer                              *ale-powershell-psscriptanalyzer*
 
 Installation
