@@ -1,10 +1,6 @@
 " Author: Auri <me@aurieh.me>
 " Description: Functions for integrating with D linters.
 
-function! otherproject#util#Double(x) abort
-    return a:x * 2
-endfunction
-
 function! ale#d#FindDUBConfig(buffer) abort
     " Find a DUB configuration file in ancestor paths.
     " The most DUB-specific names will be tried first.
