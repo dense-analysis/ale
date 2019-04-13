@@ -292,6 +292,7 @@ Notes:
 * OCaml
   * `merlin` (see |ale-ocaml-merlin|)
   * `ocamlformat`
+  * `ocp-indent`
   * `ols`
 * Pawn
   * `uncrustify`
