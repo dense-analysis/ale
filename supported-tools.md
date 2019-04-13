@@ -98,6 +98,7 @@ formatting.
   * [crystal](https://crystal-lang.org/) :floppy_disk:
 * CSS
   * [csslint](http://csslint.net/)
+  * [fecs](http://fecs.baidu.com/)
   * [prettier](https://github.com/prettier/prettier)
   * [stylelint](https://github.com/stylelint/stylelint)
 * Cucumber
@@ -196,6 +197,7 @@ formatting.
   * [terraform-fmt](https://github.com/hashicorp/terraform)
 * HTML
   * [alex](https://github.com/wooorm/alex) :floppy_disk:
+  * [fecs](http://fecs.baidu.com/)
   * [HTMLHint](http://htmlhint.com/)
   * [prettier](https://github.com/prettier/prettier)
   * [proselint](http://proselint.com/)
@@ -214,6 +216,7 @@ formatting.
   * [uncrustify](https://github.com/uncrustify/uncrustify)
 * JavaScript
   * [eslint](http://eslint.org/)
+  * [fecs](http://fecs.baidu.com/)
   * [flow](https://flowtype.org/)
   * [jscs](http://jscs.info/)
   * [jshint](http://jshint.com/)
@@ -447,6 +450,7 @@ formatting.
   * [thrift](http://thrift.apache.org/)
 * TypeScript
   * [eslint](http://eslint.org/)
+  * [fecs](http://fecs.baidu.com/)
   * [prettier](https://github.com/prettier/prettier)
   * [tslint](https://github.com/palantir/tslint)
   * [tsserver](https://github.com/Microsoft/TypeScript/wiki/Standalone-Server-%28tsserver%29)
