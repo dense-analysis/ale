@@ -114,7 +114,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should keep detail with line breaks b
   \   {
   \     'type': 'E',
   \     'text': 'cannot borrow `cap` as mutable more than once at a time  mutable borrow starts here in previous iteration of loop',
-  \     'detail': '[rustc] cannot borrow `cap` as mutable more than once at a time\n\nmutable borrow starts here in previous iteration of loop',
+  \     'detail': "[rustc] cannot borrow `cap` as mutable\r\nmore than once at a time\n\nmutable borrow starts here\rin previous iteration of loop",
   \     'lnum': 10,
   \     'col': 15,
   \     'end_lnum': 12,
@@ -124,7 +124,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should keep detail with line breaks b
   \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
   \   {
   \     'range': Range(9, 14, 11, 22),
-  \     'message': 'cannot borrow `cap` as mutable more than once at a time\n\nmutable borrow starts here in previous iteration of loop',
+  \     'message': "cannot borrow `cap` as mutable\r\nmore than once at a time\n\nmutable borrow starts here\rin previous iteration of loop",
   \     'source': 'rustc',
   \   }
   \ ]}})
