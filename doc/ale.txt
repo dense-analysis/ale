@@ -1958,6 +1958,7 @@ documented in additional help files.
     ember-template-lint...................|ale-handlebars-embertemplatelint|
   haskell.................................|ale-haskell-options|
     brittany..............................|ale-haskell-brittany|
+    floskell..............................|ale-haskell-floskell|
     ghc...................................|ale-haskell-ghc|
     ghc-mod...............................|ale-haskell-ghc-mod|
     cabal-ghc.............................|ale-haskell-cabal-ghc|

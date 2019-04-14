@@ -184,6 +184,7 @@ formatting.
 * Haskell
   * [brittany](https://github.com/lspitzner/brittany)
   * [cabal-ghc](https://www.haskell.org/cabal/)
+  * [floskell](https://github.com/ennocramer/floskell)
   * [ghc](https://www.haskell.org/ghc/)
   * [ghc-mod](https://github.com/DanielG/ghc-mod)
   * [hdevtools](https://hackage.haskell.org/package/hdevtools)

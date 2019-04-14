@@ -190,6 +190,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['hack'],
 \       'description': 'Fix Hack files with hackfmt.',
 \   },
+\   'floskell': {
+\       'function': 'ale#fixers#floskell#Fix',
+\       'suggested_filetypes': ['haskell'],
+\       'description': 'Fix Haskell files with floskell.',
+\   },
 \   'hfmt': {
 \       'function': 'ale#fixers#hfmt#Fix',
 \       'suggested_filetypes': ['haskell'],
