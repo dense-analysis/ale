@@ -309,6 +309,9 @@ by default.
 
 |g:ale_fix_on_save| - Fix files when they are saved.
 
+Fixers can be disabled on save with |g:ale_fix_on_save_ignore|. They will
+still be run when you manually run |ALEFix|.
+
 
 ===============================================================================
 5. Language Server Protocol Support                                   *ale-lsp*
@@ -770,6 +773,43 @@ b:ale_fix_on_save                                           *b:ale_fix_on_save*
   Fixing files can be disabled or enabled for individual buffers by setting
   `b:ale_fix_on_save` to `0` or `1`.
 
+  Some fixers can be excluded from being run automatically when you save files
+  with the |g:ale_fix_on_save_ignore| setting.
+
+
+g:ale_fix_on_save_ignore                             *g:ale_fix_on_save_ignore*
+b:ale_fix_on_save_ignore                             *b:ale_fix_on_save_ignore*
+
+  Type: |Dictionary| or |List|
+  Default: `{}`
+
+  Given a |Dictionary| mapping filetypes to |Lists| of fixers to ignore, or
+  just a |List| of fixers to ignore, exclude those fixers from being run
+  automatically when files are saved.
+
+  You can disable some fixers in your ftplugin file: >
+
+  " Disable fixers 'b' and 'c' when fixing on safe for this buffer.
+  let b:ale_fix_on_save_ignore = ['b', 'c']
+  " Alternatively, define ignore lists for different filetypes.
+  let b:ale_fix_on_save_ignore = {'foo': ['b'], 'bar': ['c']}
+<
+  You can disable some fixers globally per filetype like so: >
+
+  let g:ale_fixers = {'foo': ['a', 'b'], 'bar': ['c', 'd']}
+  let g:ale_fix_on_save = 1
+  " For filetype `foo.bar`, only fixers 'b' and 'd' will be run on save.
+  let g:ale_fix_on_save_ignore = {'foo': ['a'], 'bar': ['c']}
+  " Alternatively, disable these fixers on save for all filetypes.
+  let g:ale_fix_on_save_ignore = ['a', 'c']
+<
+  You can ignore fixers based on matching |Funcref| values too: >
+
+  let g:AddBar = {buffer, lines -> lines + ['bar']}
+  let g:ale_fixers = {'foo': g:AddBar}
+  " The lambda fixer will be ignored, as it will be found in the ignore list.
+  let g:ale_fix_on_save_ignore = [g:AddBar]
+<
 
 g:ale_history_enabled                                   *g:ale_history_enabled*
 

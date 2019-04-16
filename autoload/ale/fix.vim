@@ -270,13 +270,13 @@ endfunction
 function! s:IgnoreFixers(callback_list, filetype, config) abort
     if type(a:config) is v:t_list
         let l:ignore_list = a:config
+    else
+        let l:ignore_list = []
+
+        for l:part in split(a:filetype , '\.')
+            call extend(l:ignore_list, get(a:config, l:part, []))
+        endfor
     endif
-
-    let l:ignore_list = []
-
-    for l:part in split(a:filetype , '\.')
-        call extend(l:ignore_list, get(a:config, l:part, []))
-    endfor
 
     call filter(a:callback_list, 'index(l:ignore_list, v:val) < 0')
 endfunction
