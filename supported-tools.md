@@ -355,6 +355,7 @@ formatting.
   * [qmllint](https://github.com/qt/qtdeclarative/tree/5.11/tools/qmllint)
 * R
   * [lintr](https://github.com/jimhester/lintr)
+  * [styler](https://github.com/r-lib/styler)
 * Racket
   * [raco](https://docs.racket-lang.org/raco/)
 * ReasonML
