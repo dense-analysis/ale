@@ -346,6 +346,7 @@ Notes:
   * `qmllint`
 * R
   * `lintr`
+  * `styler`
 * Racket
   * `raco`
 * ReasonML
