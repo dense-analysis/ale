@@ -13,10 +13,12 @@ function! ale_linters#php#phpstan#GetCommand(buffer, version) abort
     \   : ''
 
     let l:level =  ale#Var(a:buffer, 'php_phpstan_level')
+
     if empty(l:level) && !filereadable('phpstan.neon')
         " if no configuration file is found, then use 4 as a default level
         let l:level = '4'
     endif
+
     let l:level_option = !empty(l:level)
     \   ? ' -l ' . l:level
     \   : ''
