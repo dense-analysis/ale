@@ -5,11 +5,14 @@ Before:
   let g:ale_buffer_info = {}
 
   unlet! g:ale_lsp_error_messages
+  unlet! b:ale_linters
 
   call ale#test#SetDirectory('/testplugin/test')
 
 After:
   Restore
+
+  unlet! b:ale_linters
 
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
@@ -161,6 +164,47 @@ Execute(tsserver semantic error responses should be handled correctly):
   \ [
   \ ],
   \ ale#test#GetLoclistWithoutModule()
+
+Execute(tsserver errors should mark tsserver no longer active):
+  let b:ale_linters = ['tsserver']
+  runtime ale_linters/typescript/tsserver.vim
+  call ale#test#SetFilename('filename.ts')
+  call ale#engine#InitBufferInfo(bufnr(''))
+
+  let g:ale_buffer_info[bufnr('')].active_linter_list = ale#linter#Get('typescript')
+  Assert !empty(g:ale_buffer_info[bufnr('')].active_linter_list)
+
+  call ale#lsp_linter#HandleLSPResponse(1, {
+  \ 'seq': 0,
+  \ 'type': 'event',
+  \ 'event': 'semanticDiag',
+  \ 'body': {
+  \   'file': g:dir . '/filename.ts',
+  \   'diagnostics':[],
+  \ },
+  \})
+
+  AssertEqual [], g:ale_buffer_info[bufnr('')].active_linter_list
+
+Execute(LSP errors should mark linters no longer active):
+  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pyls.vim
+  call ale#test#SetFilename('filename.py')
+  call ale#engine#InitBufferInfo(bufnr(''))
+  call ale#lsp_linter#SetLSPLinterMap({1: 'pyls'})
+
+  let g:ale_buffer_info[bufnr('')].active_linter_list = ale#linter#Get('python')
+  Assert !empty(g:ale_buffer_info[bufnr('')].active_linter_list)
+
+  call ale#lsp_linter#HandleLSPResponse(1, {
+  \ 'method': 'textDocument/publishDiagnostics',
+  \ 'params': {
+  \   'uri': ale#path#ToURI(g:dir . '/filename.py'),
+  \   'diagnostics': [],
+  \ },
+  \})
+
+  AssertEqual [], g:ale_buffer_info[bufnr('')].active_linter_list
 
 Execute(LSP errors should be logged in the history):
   call ale#lsp_linter#SetLSPLinterMap({'347': 'foobar'})

@@ -27,12 +27,15 @@ function! s:HandleLSPDiagnostics(conn_id, response) abort
     let l:linter_name = s:lsp_linter_map[a:conn_id]
     let l:filename = ale#path#FromURI(a:response.params.uri)
     let l:buffer = bufnr(l:filename)
+    let l:info = get(g:ale_buffer_info, l:buffer, {})
 
-    if s:ShouldIgnore(l:buffer, l:linter_name)
+    if empty(l:info)
         return
     endif
 
-    if l:buffer <= 0
+    call ale#engine#MarkLinterInactive(l:info, l:linter_name)
+
+    if s:ShouldIgnore(l:buffer, l:linter_name)
         return
     endif
 
@@ -49,6 +52,8 @@ function! s:HandleTSServerDiagnostics(response, error_type) abort
     if empty(l:info)
         return
     endif
+
+    call ale#engine#MarkLinterInactive(l:info, l:linter_name)
 
     if s:ShouldIgnore(l:buffer, l:linter_name)
         return
