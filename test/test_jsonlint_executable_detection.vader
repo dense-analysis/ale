@@ -4,7 +4,6 @@ Before:
   runtime ale_linters/json/jsonlint.vim
 
 After:
-  let g:ale_has_override = {}
   let g:ale_json_jsonlint_executable = 'jsonlint'
   let g:ale_json_jsonlint_use_global = 0
 

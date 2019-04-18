@@ -27,6 +27,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix PEP8 issues with black.',
 \   },
+\   'fecs': {
+\       'function': 'ale#fixers#fecs#Fix',
+\       'suggested_filetypes': ['javascript', 'css', 'html'],
+\       'description': 'Apply fecs format to a file.',
+\   },
 \   'tidy': {
 \       'function': 'ale#fixers#tidy#Fix',
 \       'suggested_filetypes': ['html'],
@@ -284,6 +289,10 @@ let s:default_registry = {
 \       'function': 'ale#fixers#styler#Fix',
 \       'suggested_filetypes': ['r'],
 \       'description': 'Fix R files with styler.',
+\   'latexindent': {
+\       'function': 'ale#fixers#latexindent#Fix',
+\       'suggested_filetypes': ['tex'],
+\       'description' : 'Indent code within environments, commands, after headings and within special code blocks.',
 \   },
 \}
 

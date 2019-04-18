@@ -42,7 +42,7 @@ Before:
 
   runtime autoload/ale/engine.vim
 
-  let g:ale_buffer_info = {bufnr(''): {'loclist': []}}
+  let g:ale_buffer_info = {bufnr(''): {'loclist': [], 'active_linter_list': []}}
   let g:ale_handle_loclist_called = 0
 
   function! ale#engine#HandleLoclist(linter_name, buffer, loclist, from_other_source) abort

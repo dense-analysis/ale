@@ -1,143 +1,129 @@
 Before:
-  call ale#test#SetDirectory('/testplugin/test/fixers')
+  call ale#assert#SetUpFixerTest('javascript', 'eslint')
+  runtime autoload/ale/handlers/eslint.vim
 
 After:
-  call ale#test#RestoreDirectory()
-  call ale#semver#ResetVersionCache()
+  call ale#assert#TearDownFixerTest()
 
 Execute(The executable path should be correct):
   call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.js')
 
   " eslint_d output with an older eslint version is used here.
-  AssertEqual
+  GivenCommandOutput ['v4.4.1 (eslint_d v5.1.0)']
+  AssertFixer
   \ {
   \   'read_temporary_file': 1,
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --fix %t',
-  \ },
-  \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), ['v4.4.1 (eslint_d v5.1.0)'])
+  \ }
 
 Execute(The lower priority configuration file in a nested directory should be preferred):
   call ale#test#SetFilename('../eslint-test-files/react-app/subdir-with-config/testfile.js')
 
-  AssertEqual
+  AssertFixer
   \ {
   \   'read_temporary_file': 1,
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/subdir-with-config/.eslintrc'))
   \     . ' --fix %t',
-  \ },
-  \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), [])
+  \ }
 
 Execute(package.json should be used as a last resort):
   call ale#test#SetFilename('../eslint-test-files/react-app/subdir-with-package-json/testfile.js')
 
-  AssertEqual
+  AssertFixer
   \ {
   \   'read_temporary_file': 1,
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --fix %t',
-  \ },
-  \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), [])
+  \ }
 
   call ale#test#SetFilename('../eslint-test-files/package.json')
 
-  AssertEqual
+  AssertFixer
   \ {
   \   'read_temporary_file': 1,
   \   'command':
   \     ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/node_modules/.bin/eslint'))
   \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/package.json'))
   \     . ' --fix %t',
-  \ },
-  \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), [])
+  \ }
 
 Execute(The version check should be correct):
-  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.js')
+  call ale#test#SetFilename('../eslint-test-files/react-app/subdir-with-config/testfile.js')
 
-  AssertEqual
-  \ {
-  \   'chain_with': 'ale#fixers#eslint#ApplyFixForVersion',
-  \   'command': (has('win32') ? 'node.exe ' : '')
-  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
-  \     . ' --version'
-  \ },
-  \ ale#fixers#eslint#Fix(bufnr(''))
-
-Execute(--fix-dry-run should be used for 4.9.0 and up):
-  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.js')
-
-  AssertEqual
+  " We should run the command to get the version the first time.
+  GivenCommandOutput ['4.9.0']
+  AssertFixer [
+  \ (has('win32') ? 'node.exe ' : '')
+  \   . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \   . ' --version',
   \ {
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
   \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
   \ },
-  \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), ['4.9.0'])
+  \]
+
+  AssertFixer [
+  \ {
+  \   'command': (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
+  \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
+  \ },
+  \]
+
+Execute(--fix-dry-run should be used for 4.9.0 and up):
+  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.js')
+
+  GivenCommandOutput ['4.9.0']
+  AssertFixer
+  \ {
+  \   'command': (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
+  \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
+  \ }
 
 Execute(--fix-to-stdout should be used for eslint_d):
   call ale#test#SetFilename('../eslint-test-files/app-with-eslint-d/testfile.js')
 
-  AssertEqual
+  AssertFixer
   \ {
   \   'read_temporary_file': 1,
   \   'command':
   \     ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
   \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/package.json'))
   \     . ' --fix %t',
-  \ },
-  \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), [''])
+  \ }
 
   " The option should be used when eslint_d is new enough.
   " We look at the ESLint version instead of the eslint_d version.
-  AssertEqual
+  GivenCommandOutput ['v3.19.0 (eslint_d v4.2.0)']
+  AssertFixer
   \ {
   \   'command':
   \     ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
   \     . ' --stdin-filename %s --stdin --fix-to-stdout',
   \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
-  \ },
-  \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), ['v3.19.0 (eslint_d v4.2.0)'])
+  \ }
 
   " The option should be used for new versions too.
-  AssertEqual
+  GivenCommandOutput ['4.9.0']
+  AssertFixer
   \ {
   \   'command':
   \     ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
   \     . ' --stdin-filename %s --stdin --fix-to-stdout',
   \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
-  \ },
-  \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), ['4.9.0'])
-
-Execute(The version number should be cached):
-  call ale#test#SetFilename('../eslint-test-files/react-app/subdir-with-config/testfile.js')
-
-  " Call the second callback with the version output.
-  call ale#fixers#eslint#ApplyFixForVersion(bufnr(''), ['4.9.0'])
-
-  " The version command should be skipped.
-  AssertEqual
-  \ {
-  \   'chain_with': 'ale#fixers#eslint#ApplyFixForVersion',
-  \   'command': '',
-  \ },
-  \ ale#fixers#eslint#Fix(bufnr(''))
-
-  " Call it again without the version output. We should use the newer command.
-  AssertEqual
-  \ {
-  \   'command': (has('win32') ? 'node.exe ' : '')
-  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
-  \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
-  \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
-  \ },
-  \ ale#fixers#eslint#ApplyFixForVersion(bufnr(''), [])
+  \ }
 
 Execute(The --fix-dry-run post-processor should handle JSON output correctly):
   AssertEqual
