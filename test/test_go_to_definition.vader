@@ -78,6 +78,15 @@ After:
 Execute(Other messages for the tsserver handler should be ignored):
   call ale#definition#HandleTSServerResponse(1, {'command': 'foo'})
 
+Execute(Tagstack should be incremented if supported):
+  if exists('*gettagstack') && exists('*settagstack')
+    let original_stack_depth = gettagstack().length
+  endif
+  call ale#definition#UpdateTagStack()
+  if exists('*gettagstack') && exists('*settagstack')
+    AssertEqual original_stack_depth + 1, gettagstack().length
+  endif
+
 Execute(Failed definition responses should be handled correctly):
   call ale#definition#SetMap({3: {'open_in': 'current-buffer'}})
   call ale#definition#HandleTSServerResponse(
