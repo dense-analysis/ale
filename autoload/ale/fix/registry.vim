@@ -289,6 +289,7 @@ let s:default_registry = {
 \       'function': 'ale#fixers#styler#Fix',
 \       'suggested_filetypes': ['r'],
 \       'description': 'Fix R files with styler.',
+\   },
 \   'latexindent': {
 \       'function': 'ale#fixers#latexindent#Fix',
 \       'suggested_filetypes': ['tex'],
