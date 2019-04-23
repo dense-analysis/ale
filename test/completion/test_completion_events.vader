@@ -27,7 +27,7 @@ Before:
     let g:get_completions_called = 0
 
     " We just want to check if the function is called.
-    function! ale#completion#GetCompletions(manual)
+    function! ale#completion#GetCompletions(source)
       let g:get_completions_called = 1
     endfunction
 
@@ -57,6 +57,7 @@ After:
   unlet! b:ale_completion_info
   unlet! b:ale_completion_response
   unlet! b:ale_completion_parser
+  unlet! b:ale_completion_result
   unlet! b:ale_complete_done_time
 
   delfunction CheckCompletionCalled
@@ -86,7 +87,7 @@ Execute(ale#completion#GetCompletions should not be called when the cursor posit
   call setpos('.', [bufnr(''), 1, 2, 0])
 
   " We just want to check if the function is called.
-  function! ale#completion#GetCompletions(manual)
+  function! ale#completion#GetCompletions(source)
     let g:get_completions_called = 1
   endfunction
 
@@ -105,7 +106,7 @@ Execute(ale#completion#GetCompletions should not be called if you switch to norm
   let g:fake_mode = 'n'
 
   " We just want to check if the function is called.
-  function! ale#completion#GetCompletions(manual)
+  function! ale#completion#GetCompletions(source)
     let g:get_completions_called = 1
   endfunction
 
@@ -124,6 +125,7 @@ Execute(Completion should not be done shortly after the CompleteDone function):
 Execute(ale#completion#Show() should remember the omnifunc setting and replace it):
   let &l:omnifunc = 'FooBar'
 
+  let b:ale_completion_info = {'source': 'ale-automatic'}
   call ale#completion#Show('Response', 'Parser')
 
   AssertEqual 'FooBar', b:ale_old_omnifunc
@@ -136,6 +138,7 @@ Execute(ale#completion#Show() should remember the omnifunc setting and replace i
 Execute(ale#completion#Show() should remember the completeopt setting and replace it):
   let &l:completeopt = 'menu'
 
+  let b:ale_completion_info = {'source': 'ale-automatic'}
   call ale#completion#Show('Response', 'Parser')
 
   AssertEqual 'menu', b:ale_old_completeopt
@@ -148,6 +151,7 @@ Execute(ale#completion#Show() should remember the completeopt setting and replac
 Execute(ale#completion#Show() should set the preview option if it's set):
   let &l:completeopt = 'menu,preview'
 
+  let b:ale_completion_info = {'source': 'ale-automatic'}
   call ale#completion#Show('Response', 'Parser')
 
   AssertEqual 'menu,preview', b:ale_old_completeopt
@@ -158,7 +162,7 @@ Execute(ale#completion#Show() should set the preview option if it's set):
   AssertEqual [["\<Plug>(ale_show_completion_menu)"]], g:feedkeys_calls
 
 Execute(ale#completion#Show() should not replace the completeopt setting for manual completion):
-  let b:ale_completion_info = {'manual': 1}
+  let b:ale_completion_info = {'source': 'ale-manual'}
 
   let &l:completeopt = 'menu,preview'
 
@@ -173,6 +177,7 @@ Execute(ale#completion#Show() should not replace the completeopt setting for man
 Execute(ale#completion#OmniFunc() should also remember the completeopt setting and replace it):
   let &l:completeopt = 'menu'
 
+  let b:ale_completion_info = {'source': 'ale-automatic'}
   call ale#completion#OmniFunc(0, '')
 
   AssertEqual 'menu', b:ale_old_completeopt
@@ -181,17 +186,34 @@ Execute(ale#completion#OmniFunc() should also remember the completeopt setting a
 Execute(ale#completion#OmniFunc() should set the preview option if it's set):
   let &l:completeopt = 'menu,preview'
 
+  let b:ale_completion_info = {'source': 'ale-automatic'}
   call ale#completion#OmniFunc(0, '')
 
   AssertEqual 'menu,preview', b:ale_old_completeopt
   AssertEqual 'menu,menuone,preview,noselect,noinsert', &l:completeopt
 
-Execute(ale#completion#Show() should make the correct feedkeys() call):
+Execute(ale#completion#Show() should make the correct feedkeys() call for automatic completion):
+  let b:ale_completion_info = {'source': 'ale-automatic'}
   call ale#completion#Show('Response', 'Parser')
 
   AssertEqual [], g:feedkeys_calls
   sleep 1ms
   AssertEqual [["\<Plug>(ale_show_completion_menu)"]], g:feedkeys_calls
+
+Execute(ale#completion#Show() should make the correct feedkeys() call for manual completion):
+  let b:ale_completion_info = {'source': 'ale-automatic'}
+  call ale#completion#Show('Response', 'Parser')
+
+  AssertEqual [], g:feedkeys_calls
+  sleep 1ms
+  AssertEqual [["\<Plug>(ale_show_completion_menu)"]], g:feedkeys_calls
+
+Execute(ale#completion#Show() should not call feedkeys() for other sources):
+  let b:ale_completion_info = {'source': 'deoplete'}
+  call ale#completion#Show('Response', 'Parser')
+
+  sleep 1ms
+  AssertEqual [], g:feedkeys_calls
 
 Execute(ale#completion#Show() shouldn't do anything if you switch back to normal mode):
   let &l:completeopt = 'menu,preview'
@@ -247,9 +269,10 @@ Execute(The completion request_id should be reset when queuing again):
 
   AssertEqual 0, b:ale_completion_info.request_id
 
-Execute(b:ale_completion_info should be set up correctly when requesting completions):
+Execute(b:ale_completion_info should be set up correctly when requesting completions automatically):
+  let b:ale_completion_result = []
   call setpos('.', [bufnr(''), 3, 14, 0])
-  call ale#completion#GetCompletions(0)
+  call ale#completion#GetCompletions('ale-automatic')
 
   AssertEqual
   \ {
@@ -259,11 +282,13 @@ Execute(b:ale_completion_info should be set up correctly when requesting complet
   \   'line_length': 14,
   \   'line': 3,
   \   'prefix': 'ab',
-  \   'manual': 0,
+  \   'source': 'ale-automatic',
   \ },
   \ b:ale_completion_info
+  Assert !exists('b:ale_completion_result')
 
-Execute(b:ale_completion_info should be set up correctly when requesting completions):
+Execute(b:ale_completion_info should be set up correctly when requesting completions manually):
+  let b:ale_completion_result = []
   call setpos('.', [bufnr(''), 3, 14, 0])
   ALEComplete
 
@@ -275,9 +300,28 @@ Execute(b:ale_completion_info should be set up correctly when requesting complet
   \   'line_length': 14,
   \   'line': 3,
   \   'prefix': 'ab',
-  \   'manual': 1,
+  \   'source': 'ale-manual',
   \ },
   \ b:ale_completion_info
+  Assert !exists('b:ale_completion_result')
+
+Execute(b:ale_completion_info should be set up correctly for other sources):
+  let b:ale_completion_result = []
+  call setpos('.', [bufnr(''), 3, 14, 0])
+  call ale#completion#GetCompletions('deoplete')
+
+  AssertEqual
+  \ {
+  \   'request_id': 0,
+  \   'conn_id': 0,
+  \   'column': 14,
+  \   'line_length': 14,
+  \   'line': 3,
+  \   'prefix': 'ab',
+  \   'source': 'deoplete',
+  \ },
+  \ b:ale_completion_info
+  Assert !exists('b:ale_completion_result')
 
 Execute(The correct keybinds should be configured):
   redir => g:output

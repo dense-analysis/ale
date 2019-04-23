@@ -102,7 +102,7 @@ Execute(The right message should be sent for the initial tsserver request):
   " The cursor position needs to match what was saved before.
   call setpos('.', [bufnr(''), 1, 3, 0])
 
-  call ale#completion#GetCompletions(0)
+  call ale#completion#GetCompletions('ale-automatic')
 
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)
@@ -129,7 +129,7 @@ Execute(The right message should be sent for the initial tsserver request):
   \   'request_id': 1,
   \   'line': 1,
   \   'prefix': 'fo',
-  \   'manual': 0,
+  \   'source': 'ale-automatic',
   \ },
   \ get(b:, 'ale_completion_info', {})
 
@@ -191,7 +191,7 @@ Execute(The right message should be sent for the initial LSP request):
   " The cursor position needs to match what was saved before.
   call setpos('.', [bufnr(''), 1, 5, 0])
 
-  call ale#completion#GetCompletions(0)
+  call ale#completion#GetCompletions('ale-automatic')
 
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)
@@ -234,7 +234,7 @@ Execute(The right message should be sent for the initial LSP request):
   \   'request_id': 1,
   \   'line': 1,
   \   'prefix': 'fo',
-  \   'manual': 0,
+  \   'source': 'ale-automatic',
   \   'completion_filter': 'ale#completion#python#CompletionItemFilter',
   \ },
   \ get(b:, 'ale_completion_info', {})
@@ -260,7 +260,7 @@ Execute(Two completion requests shouldn't be sent in a row):
   " The cursor position needs to match what was saved before.
   call setpos('.', [bufnr(''), 1, 5, 0])
 
-  call ale#completion#GetCompletions(0)
+  call ale#completion#GetCompletions('ale-automatic')
 
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)
