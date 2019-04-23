@@ -285,6 +285,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['kt'],
 \       'description': 'Fix Kotlin files with ktlint.',
 \   },
+\   'styler': {
+\       'function': 'ale#fixers#styler#Fix',
+\       'suggested_filetypes': ['r'],
+\       'description': 'Fix R files with styler.',
+\   },
 \   'latexindent': {
 \       'function': 'ale#fixers#latexindent#Fix',
 \       'suggested_filetypes': ['tex'],

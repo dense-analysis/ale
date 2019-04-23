@@ -2149,6 +2149,7 @@ documented in additional help files.
     qmlfmt................................|ale-qml-qmlfmt|
   r.......................................|ale-r-options|
     lintr.................................|ale-r-lintr|
+    styler................................|ale-r-styler|
   reasonml................................|ale-reasonml-options|
     merlin................................|ale-reasonml-merlin|
     ols...................................|ale-reasonml-ols|
