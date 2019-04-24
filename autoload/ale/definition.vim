@@ -24,10 +24,12 @@ function! ale#definition#UpdateTagStack() abort
     let l:should_update_tagstack = exists('*gettagstack') && exists('*settagstack') && g:ale_update_tagstack
 
     if l:should_update_tagstack
-        let l:from = [bufnr('%'), line('.'), col('.'), 0]
+        " Grab the old location (to jump back to) and the word under the
+        " cursor (as a label for the tagstack)
+        let l:old_location = [bufnr('%'), line('.'), col('.'), 0]
         let l:tagname = expand('<cword>')
         let l:winid = win_getid()
-        call settagstack(l:winid, {'items': [{'from': l:from, 'tagname': l:tagname}]}, 'a')
+        call settagstack(l:winid, {'items': [{'from': l:old_location, 'tagname': l:tagname}]}, 'a')
         call settagstack(l:winid, {'curidx': len(gettagstack(l:winid)['items']) + 1})
     endif
 endfunction
