@@ -180,6 +180,7 @@ Notes:
   * `hdevtools`
   * `hfmt`
   * `hie`
+  * `hindent`
   * `hlint`
   * `stack-build`!!
   * `stack-ghc`

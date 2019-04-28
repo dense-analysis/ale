@@ -2007,6 +2007,7 @@ documented in additional help files.
     cabal-ghc.............................|ale-haskell-cabal-ghc|
     hdevtools.............................|ale-haskell-hdevtools|
     hfmt..................................|ale-haskell-hfmt|
+    hindent...............................|ale-haskell-hindent|
     hlint.................................|ale-haskell-hlint|
     stack-build...........................|ale-haskell-stack-build|
     stack-ghc.............................|ale-haskell-stack-ghc|

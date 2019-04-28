@@ -13,6 +13,16 @@ g:ale_haskell_brittany_executable           *g:ale_haskell_brittany_executable*
   This variable can be changed to use a different executable for brittany.
 
 ===============================================================================
+hindent                                                   *ale-haskell-hindent*
+
+g:ale_haskell_hindent_executable             *g:ale_haskell_hindent_executable*
+                                             *b:ale_haskell_hindent_executable*
+  Type: |String|
+  Default: `'hindent'`
+
+  This variable can be changed to use a different executable for hindent.
+
+===============================================================================
 ghc                                                           *ale-haskell-ghc*
 
 g:ale_haskell_ghc_options                           *g:ale_haskell_ghc_options*

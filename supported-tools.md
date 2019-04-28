@@ -189,6 +189,7 @@ formatting.
   * [hdevtools](https://hackage.haskell.org/package/hdevtools)
   * [hfmt](https://github.com/danstiner/hfmt)
   * [hie](https://github.com/haskell/haskell-ide-engine)
+  * [hindent](https://hackage.haskell.org/package/hindent)
   * [hlint](https://hackage.haskell.org/package/hlint)
   * [stack-build](https://haskellstack.org/) :floppy_disk:
   * [stack-ghc](https://haskellstack.org/)
