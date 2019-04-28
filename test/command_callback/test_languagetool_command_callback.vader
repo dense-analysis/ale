@@ -1,12 +1,26 @@
 Before:
     call ale#assert#SetUpLinterTest('text', 'languagetool')
 
+    Save g:ale_languagetool_executable
+    Save g:ale_languagetool_disable_rules
+
+    unlet! g:ale_languagetool_disable_rules
+    unlet! g:ale_languagetool_executable
+
+    call ale#handlers#languagetool#ResetOptions()
 After:
     call ale#assert#TearDownLinterTest()
 
 Execute(The default command should be correct):
   AssertLinter 'languagetool', ale#Escape('languagetool')
   \ . ' --autoDetect %s'
+
+Execute(The disabled rules should be used in the command):
+  let g:ale_languagetool_disable_rules = 'DASH_RULE,EN_QUOTES'
+
+  AssertLinter
+  \ 'languagetool',
+  \ ale#Escape('languagetool') . ' -d ' . 'DASH_RULE,EN_QUOTES --autoDetect %s',
 
 Execute(Should be able to set a custom executable):
   let g:ale_languagetool_executable = 'foobar'

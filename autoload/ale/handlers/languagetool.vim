@@ -3,14 +3,22 @@
 "
 call ale#Set('languagetool_executable', 'languagetool')
 
+function! ale#handlers#languagetool#ResetOptions() abort
+    call ale#Set('languagetool_disable_rules', '')
+    call ale#Set('languagetool_executable', 'languagetool')
+endfunction
+
 function! ale#handlers#languagetool#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'languagetool_executable')
 endfunction
 
 function! ale#handlers#languagetool#GetCommand(buffer) abort
     let l:executable = ale#handlers#languagetool#GetExecutable(a:buffer)
+    let l:disabled_rules = ale#Var(a:buffer, 'languagetool_disable_rules')
 
-    return ale#Escape(l:executable) . ' --autoDetect %s'
+    return ale#Escape(l:executable)
+    \   . (!empty(l:disabled_rules) ? ' -d ' . l:disabled_rules : '')
+    \   . ' --autoDetect %s'
 endfunction
 
 function! ale#handlers#languagetool#HandleOutput(buffer, lines) abort
