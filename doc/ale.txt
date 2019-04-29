@@ -375,6 +375,9 @@ information returned by LSP servers. The following commands are supported:
 |ALEGoToDefinitionInSplit| - The same, but in a new split.
 |ALEGoToDefinitionInVSplit| - The same, but in a new vertical split.
 
+ALE will update Vim's |tagstack| automatically unless |g:ale_update_tagstack| is
+set to `0`.
+
 -------------------------------------------------------------------------------
 5.3 Go To Type Definition                           *ale-go-to-type-definition*
 
@@ -1496,6 +1499,14 @@ g:ale_sign_warning                                         *g:ale_sign_warning*
   Default: `'--'`
 
   The sign for warnings in the sign gutter.
+
+
+g:ale_update_tagstack                                   *g:ale_update_tagstack*
+                                                        *b:ale_update_tagstack*
+ Type: |Number|
+ Default: `1`
+
+ This option can be set to disable updating Vim's |tagstack| automatically.
 
 
 g:ale_type_map                                                 *g:ale_type_map*
