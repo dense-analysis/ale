@@ -1,4 +1,4 @@
-*ale.txt*  For Vim version 8.0.
+*ale.txt*	Plugin to lint and fix files asynchronously
 *ale*
 
 ALE - Asynchronous Lint Engine
