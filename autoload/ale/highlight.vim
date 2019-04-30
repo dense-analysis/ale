@@ -35,12 +35,26 @@ let s:MAX_COL_SIZE = 1073741824 " pow(2, 30)
 " rebases during edits so we see less stalled highlights.
 let s:nvim_api = exists('*nvim_buf_add_highlight') && exists('*nvim_buf_clear_namespace')
 
+function! ale#highlight#has_nvim_api() abort
+    return s:nvim_api
+endfunction
+
+function! ale#highlight#nvim_buf_clear_namespace(...) abort
+    return call('nvim_buf_clear_namespace', a:000)
+endfunction
+
+function! ale#highlight#nvim_buf_add_highlight(...) abort
+    return call('nvim_buf_add_highlight', a:000)
+endfunction
+
 function! s:ale_nvim_highlight_id(bufnr) abort
     let l:id = getbufvar(a:bufnr, 'ale_nvim_highlight_id', -1)
 
     if l:id is -1
         " NOTE: This will highlight nothing but will allocate new id
-        let l:id = nvim_buf_add_highlight(a:bufnr, 0, '', 0, 0, -1)
+        let l:id = ale#highlight#nvim_buf_add_highlight(
+        \   a:bufnr, 0, '', 0, 0, -1
+        \)
         call setbufvar(a:bufnr, 'ale_nvim_highlight_id', l:id)
     endif
 
@@ -72,11 +86,15 @@ endfunction
 " except these which have matching loclist item entries.
 
 function! ale#highlight#RemoveHighlights() abort
-    if s:nvim_api
+    if ale#highlight#has_nvim_api()
         if get(b:, 'ale_nvim_highlight_id', 0)
             let l:bufnr = bufnr('%')
             " NOTE: 0, -1 means from 0 line till the end of buffer
-            call nvim_buf_clear_namespace(l:bufnr, b:ale_nvim_highlight_id, 0, -1)
+            call ale#highlight#nvim_buf_clear_namespace(
+            \   l:bufnr,
+            \   b:ale_nvim_highlight_id,
+            \   0, -1
+            \)
         endif
     else
         for l:match in getmatches()
@@ -88,9 +106,9 @@ function! ale#highlight#RemoveHighlights() abort
 endfunction
 
 function! s:highlight_line(bufnr, lnum, group) abort
-    if s:nvim_api
+    if ale#highlight#has_nvim_api()
         let l:highlight_id = s:ale_nvim_highlight_id(a:bufnr)
-        call nvim_buf_add_highlight(
+        call ale#highlight#nvim_buf_add_highlight(
         \   a:bufnr, l:highlight_id, a:group,
         \   a:lnum, 0, -1
         \)
@@ -100,7 +118,7 @@ function! s:highlight_line(bufnr, lnum, group) abort
 endfunction
 
 function! s:highlight_range(bufnr, range, group) abort
-    if s:nvim_api
+    if ale#highlight#has_nvim_api()
         let l:highlight_id = s:ale_nvim_highlight_id(a:bufnr)
         " NOTE: lines and columns indicies are 0-based in nvim_buf_* API.
         let l:lnum = a:range.lnum - 1
@@ -110,13 +128,13 @@ function! s:highlight_range(bufnr, range, group) abort
 
         if l:lnum >= l:end_lnum
             " For single lines, just return the one position.
-            call nvim_buf_add_highlight(
+            call ale#highlight#nvim_buf_add_highlight(
             \   a:bufnr, l:highlight_id, a:group,
             \   l:lnum, l:col, l:end_col
             \)
         else
             " highlight first line from start till the line end
-            call nvim_buf_add_highlight(
+            call ale#highlight#nvim_buf_add_highlight(
             \   a:bufnr, l:highlight_id, a:group,
             \   l:lnum, l:col, -1
             \)
@@ -125,14 +143,14 @@ function! s:highlight_range(bufnr, range, group) abort
             let l:cur = l:lnum + 1
 
             while l:cur < l:end_lnum
-                call nvim_buf_add_highlight(
+                call ale#highlight#nvim_buf_add_highlight(
                 \   a:bufnr, l:highlight_id, a:group,
                 \   l:cur, 0, -1
                 \   )
                 let l:cur += 1
             endwhile
 
-            call nvim_buf_add_highlight(
+            call ale#highlight#nvim_buf_add_highlight(
             \   a:bufnr, l:highlight_id, a:group,
             \   l:end_lnum, 0, l:end_col
             \)
