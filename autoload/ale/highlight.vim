@@ -35,7 +35,7 @@ let s:MAX_COL_SIZE = 1073741824 " pow(2, 30)
 " rebases during edits so we see less stalled highlights.
 let s:nvim_api = exists('*nvim_buf_add_highlight') && exists('*nvim_buf_clear_namespace')
 
-function! ale#highlight#has_nvim_api() abort
+function! ale#highlight#HasNeovimApi() abort
     return s:nvim_api
 endfunction
 
@@ -86,7 +86,7 @@ endfunction
 " except these which have matching loclist item entries.
 
 function! ale#highlight#RemoveHighlights() abort
-    if ale#highlight#has_nvim_api()
+    if ale#highlight#HasNeovimApi()
         if get(b:, 'ale_nvim_highlight_id', 0)
             let l:bufnr = bufnr('%')
             " NOTE: 0, -1 means from 0 line till the end of buffer
@@ -106,7 +106,7 @@ function! ale#highlight#RemoveHighlights() abort
 endfunction
 
 function! s:highlight_line(bufnr, lnum, group) abort
-    if ale#highlight#has_nvim_api()
+    if ale#highlight#HasNeovimApi()
         let l:highlight_id = s:ale_nvim_highlight_id(a:bufnr)
         call ale#highlight#nvim_buf_add_highlight(
         \   a:bufnr, l:highlight_id, a:group,
@@ -118,7 +118,7 @@ function! s:highlight_line(bufnr, lnum, group) abort
 endfunction
 
 function! s:highlight_range(bufnr, range, group) abort
-    if ale#highlight#has_nvim_api()
+    if ale#highlight#HasNeovimApi()
         let l:highlight_id = s:ale_nvim_highlight_id(a:bufnr)
         " NOTE: lines and columns indicies are 0-based in nvim_buf_* API.
         let l:lnum = a:range.lnum - 1

@@ -43,7 +43,7 @@ Given foobar (Some imaginary filetype):
   <contents>
 
 Execute(Check usage of nvim_buf_clear_namespace):
-  if ale#highlight#has_nvim_api()
+  if ale#highlight#HasNeovimApi()
     call ale#highlight#SetHighlights(bufnr(''), [])
 
     AssertEqual 1, len(g:nvim_buf_clear_namespace_calls)
@@ -53,7 +53,7 @@ Execute(Check usage of nvim_buf_clear_namespace):
   endif
 
 Execute(Check usage of nvim_buf_add_highlight / single char):
-  if ale#highlight#has_nvim_api()
+  if ale#highlight#HasNeovimApi()
     call ale#highlight#SetHighlights(bufnr(''), [
     \ {
     \   'bufnr': bufnr(''),
@@ -75,7 +75,7 @@ Execute(Check usage of nvim_buf_add_highlight / single char):
   endif
 
 Execute(Check usage of nvim_buf_add_highlight / single line span):
-  if ale#highlight#has_nvim_api()
+  if ale#highlight#HasNeovimApi()
     call ale#highlight#SetHighlights(bufnr(''), [
     \ {
     \   'bufnr': bufnr(''),
@@ -99,7 +99,7 @@ Execute(Check usage of nvim_buf_add_highlight / single line span):
   endif
 
 Execute(Check usage of nvim_buf_add_highlight / multiple lines span):
-  if ale#highlight#has_nvim_api()
+  if ale#highlight#HasNeovimApi()
     call ale#highlight#SetHighlights(bufnr(''), [
     \ {
     \   'bufnr': bufnr(''),
@@ -130,7 +130,7 @@ Execute(Check usage of nvim_buf_add_highlight / multiple lines span):
 Execute(Check usage of nvim_buf_add_highlight / line highights):
   let g:ale_set_signs = 0
 
-  if ale#highlight#has_nvim_api()
+  if ale#highlight#HasNeovimApi()
     call ale#highlight#SetHighlights(bufnr(''), [
     \ {
     \   'bufnr': bufnr(''),
