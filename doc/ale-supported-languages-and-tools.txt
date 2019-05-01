@@ -175,6 +175,7 @@ Notes:
 * Haskell
   * `brittany`
   * `cabal-ghc`
+  * `floskell`
   * `ghc`
   * `ghc-mod`
   * `hdevtools`
