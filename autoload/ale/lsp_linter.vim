@@ -33,8 +33,6 @@ function! s:HandleLSPDiagnostics(conn_id, response) abort
         return
     endif
 
-    call ale#engine#MarkLinterInactive(l:info, l:linter_name)
-
     if s:ShouldIgnore(l:buffer, l:linter_name)
         return
     endif
@@ -381,6 +379,10 @@ function! s:CheckWithLSP(linter, details) abort
     if a:linter.lsp is# 'tsserver'
         let l:message = ale#lsp#tsserver_message#Geterr(l:buffer)
         let l:notified = ale#lsp#Send(l:id, l:message) != 0
+
+        if l:notified
+            call ale#engine#MarkLinterActive(l:info, a:linter)
+        endif
     else
         let l:notified = ale#lsp#NotifyForChanges(l:id, l:buffer)
     endif
@@ -390,10 +392,6 @@ function! s:CheckWithLSP(linter, details) abort
     \&& getbufvar(l:buffer, 'ale_save_event_fired', 0)
         let l:save_message = ale#lsp#message#DidSave(l:buffer)
         let l:notified = ale#lsp#Send(l:id, l:save_message) != 0
-    endif
-
-    if l:notified
-        call ale#engine#MarkLinterActive(l:info, a:linter)
     endif
 endfunction
 
