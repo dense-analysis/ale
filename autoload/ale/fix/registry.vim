@@ -257,8 +257,8 @@ let s:default_registry = {
 \   },
 \   'xo': {
 \       'function': 'ale#fixers#xo#Fix',
-\       'suggested_filetypes': ['javascript'],
-\       'description': 'Fix JavaScript files using xo --fix.',
+\       'suggested_filetypes': ['javascript', 'typescript'],
+\       'description': 'Fix JavaScript/TypeScript files using xo --fix.',
 \   },
 \   'qmlfmt': {
 \       'function': 'ale#fixers#qmlfmt#Fix',
