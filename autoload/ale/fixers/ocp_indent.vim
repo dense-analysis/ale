@@ -13,6 +13,6 @@ function! ale#fixers#ocp_indent#Fix(buffer) abort
     return {
     \   'command': ale#Escape(l:executable)
     \       . (empty(l:config) ? '' : ' --config=' . ale#Escape(l:config))
-    \       . (empty(l:options) ? '': ' ' . ale#Escape(l:options))
+    \       . (empty(l:options) ? '': ' ' . l:options)
     \}
 endfunction
