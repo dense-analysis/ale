@@ -29,6 +29,6 @@ Execute(The ocp_indent callback should include custom ocp_indent options):
   AssertEqual
   \ {
   \   'command': ale#Escape('xxxinvalid')
-  \     . " --config='base=4, type=4'"
+  \     . ' --config=' . ale#Escape(g:ale_ocaml_ocp_indent_config)
   \ },
   \ ale#fixers#ocp_indent#Fix(bufnr(''))
