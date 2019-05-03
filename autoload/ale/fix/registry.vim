@@ -120,6 +120,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['ruby'],
 \       'description': 'Fix ruby files with rufo',
 \   },
+\   'ruumba': {
+\       'function': 'ale#fixers#ruumba#Fix',
+\       'suggested_filetypes': ['eruby'],
+\       'description': 'Fix eruby files with ruumba --auto-correct.',
+\   },
 \   'scalafmt': {
 \       'function': 'ale#fixers#scalafmt#Fix',
 \       'suggested_filetypes': ['scala'],
