@@ -154,7 +154,7 @@ Execute(Check usage of nvim_buf_add_highlight / line highights):
     \   [bufnr(''), 42, 'ALEError', 2, 0, -1],
     \   [bufnr(''), 42, 'ALEError', 3, 0, -1],
     \   [bufnr(''), 42, 'ALEError', 4, 0, 10],
-    \   [bufnr(''), 42, 'ALEErrorLine', 2, 0, -1]
+    \   [bufnr(''), 42, 'ALEErrorLine', 1, 0, -1]
     \ ],
     \ g:nvim_buf_add_highlight_calls
   endif
