@@ -220,6 +220,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['ocaml'],
 \       'description': 'Fix OCaml files with ocamlformat.',
 \   },
+\   'ocp-indent': {
+\       'function': 'ale#fixers#ocp_indent#Fix',
+\       'suggested_filetypes': ['ocaml'],
+\       'description': 'Fix OCaml files with ocp-indent.',
+\   },
 \   'refmt': {
 \       'function': 'ale#fixers#refmt#Fix',
 \       'suggested_filetypes': ['reason'],

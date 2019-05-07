@@ -2105,6 +2105,7 @@ documented in additional help files.
     merlin................................|ale-ocaml-merlin|
     ols...................................|ale-ocaml-ols|
     ocamlformat...........................|ale-ocaml-ocamlformat|
+    ocp-indent............................|ale-ocaml-ocp-indent|
   pawn....................................|ale-pawn-options|
     uncrustify............................|ale-pawn-uncrustify|
   perl....................................|ale-perl-options|
