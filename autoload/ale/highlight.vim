@@ -110,7 +110,7 @@ function! s:highlight_line(bufnr, lnum, group) abort
         let l:highlight_id = s:ale_nvim_highlight_id(a:bufnr)
         call ale#highlight#nvim_buf_add_highlight(
         \   a:bufnr, l:highlight_id, a:group,
-        \   a:lnum, 0, -1
+        \   a:lnum - 1, 0, -1
         \)
     else
         call matchaddpos(a:group, [a:lnum])
