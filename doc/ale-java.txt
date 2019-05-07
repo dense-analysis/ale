@@ -114,8 +114,8 @@ Note: currently, the build can only run when launched with JDK 8. JDK 9 or more
 recent versions can be used to run the server though.
 
 After build completes the files required to run the language server will be
-located inside the folder `org.eclipse.jdt.ls.product/target/repository`.
-Ensure to set |g:ale_java_eclipselsp_path| to the absolute path of that folder.
+located inside the repositoy folder `eclipse.jdt.ls`. Ensure to set
+|g:ale_java_eclipselsp_path| to the absolute path of that folder.
 
 You could customize compiler options and code assists of the server.
 Under your project folder, modify the file
@@ -126,9 +126,9 @@ g:ale_java_eclipselsp_path                         *g:ale_java_eclipselsp_path*
                                                    *b:ale_java_eclipselsp_path*
 
   Type: |String|
-  Default: `'eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository'`
+  Default: `'eclipse.jdt.ls'`
 
-  Path to the location of the eclipse.jdt.ls product repository.
+  Absolute path to the location of the eclipse.jdt.ls repository folder.
 
 
 g:ale_java_eclipselsp_executable                *g:ale_java_eclipse_executable*
