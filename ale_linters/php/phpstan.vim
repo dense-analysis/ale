@@ -9,7 +9,7 @@ let g:ale_php_phpstan_configuration = get(g:, 'ale_php_phpstan_configuration', '
 function! ale_linters#php#phpstan#GetCommand(buffer, version) abort
     let l:configuration = ale#Var(a:buffer, 'php_phpstan_configuration')
     let l:configuration_option = !empty(l:configuration)
-    \   ? ' -c ' . l:configuration
+    \   ? ' -c ' . ale#Escape(l:configuration)
     \   : ''
 
     let l:level =  ale#Var(a:buffer, 'php_phpstan_level')
@@ -21,7 +21,7 @@ function! ale_linters#php#phpstan#GetCommand(buffer, version) abort
     endif
 
     let l:level_option = !empty(l:level)
-    \   ? ' -l ' . l:level
+    \   ? ' -l ' . ale#Escape(l:level)
     \   : ''
 
     let l:error_format = ale#semver#GTE(a:version, [0, 10, 3])

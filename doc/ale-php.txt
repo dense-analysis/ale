@@ -154,11 +154,13 @@ g:ale_php_phpstan_executable                     *g:ale_php_phpstan_executable*
 
 g:ale_php_phpstan_level                               *g:ale_php_phpstan_level*
                                                       *b:ale_php_phpstan_level*
-  Type: |Number|
-  Default: `4`
+  Type: |String|
+  Default: `''`
 
   This variable controls the rule levels. 0 is the loosest and 4 is the
-  strictest.
+  strictest. If this option isn't set, the rule level will be controlled by
+  the configuration file. If no configuration file can be detected, `'4'` will
+  be used instead.
 
 
 g:ale_php_phpstan_configuration               *g:ale_php_phpstan_configuration*
