@@ -3,12 +3,12 @@ Before:
   let b:ale_java_eclipselsp_path = '/home/user/eclipse.dst.ls'
   call ale#test#SetFilename('dummy.java')
 
-  let b:cfg = '/home/user/eclipse.dst.ls/org.eclipse.jdt.ls.product/target/repository/config_linux'
+  let b:cfg = '/testplugin/test/config_linux'
 
   if has('win32')
-    let b:cfg = '\home\user\eclipse.dst.ls\org.eclipse.jdt.ls.product\target\repository\config_win'
+    let b:cfg = 'C:\testplugin\test\config_win'
   elseif has('macunix')
-    let b:cfg = '/home/user/eclipse.dst.ls/org.eclipse.jdt.ls.product/target/repository/config_mac'
+    let b:cfg = '/testplugin/test/config_mac'
   endif
 
 
