@@ -99,7 +99,7 @@ function! ale_linters#java#javac#Handle(buffer, lines) abort
     " Main.java:13: warning: [deprecation] donaught() in Testclass has been deprecated
     " Main.java:16: error: ';' expected
     let l:directory = expand('#' . a:buffer . ':p:h')
-    let l:pattern = '\v^(.*):(\d+): (.+):(.+)$'
+    let l:pattern = '\v^(.*):(\d+): (.{-1,}):(.+)$'
     let l:col_pattern = '\v^(\s*\^)$'
     let l:symbol_pattern = '\v^ +symbol: *(class|method) +([^ ]+)'
     let l:output = []
