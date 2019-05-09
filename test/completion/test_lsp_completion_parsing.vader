@@ -486,7 +486,7 @@ Execute(Should handle completion messages with textEdit objects):
   \       {
   \         'detail': 'PlayTimeCallback',
   \         'filterText': 'next_callback',
-  \         'insertText': 'next_callback',
+  \         'insertText': 'ignoreme',
   \         'insertTextFormat': 1,
   \         'kind': 6,
   \         'label': ' next_callback',
@@ -498,6 +498,30 @@ Execute(Should handle completion messages with textEdit objects):
   \             'start': {'character': 4, 'line': 12},
   \           },
   \         },
+  \       },
+  \     ],
+  \   },
+  \ })
+
+Execute(Should handle completion messages with the deprecated insertText attribute):
+  AssertEqual
+  \ [
+  \   {'word': 'next_callback', 'menu': 'PlayTimeCallback', 'info': '', 'kind': 'v', 'icase': 1},
+  \ ],
+  \ ale#completion#ParseLSPCompletions({
+  \   'id': 226,
+  \   'jsonrpc': '2.0',
+  \   'result': {
+  \     'isIncomplete': v:false,
+  \     'items': [
+  \       {
+  \         'detail': 'PlayTimeCallback',
+  \         'filterText': 'next_callback',
+  \         'insertText': 'next_callback',
+  \         'insertTextFormat': 1,
+  \         'kind': 6,
+  \         'label': ' next_callback',
+  \         'sortText': '3ee19999next_callback',
   \       },
   \     ],
   \   },

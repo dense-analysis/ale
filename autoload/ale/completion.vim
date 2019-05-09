@@ -386,6 +386,8 @@ function! ale#completion#ParseLSPCompletions(response) abort
         if get(l:item, 'insertTextFormat') is s:LSP_INSERT_TEXT_FORMAT_PLAIN
         \&& type(get(l:item, 'textEdit')) is v:t_dict
             let l:text = l:item.textEdit.newText
+        elseif type(get(l:item, 'insertText')) is v:t_string
+            let l:text = l:item.insertText
         else
             let l:text = l:item.label
         endif
