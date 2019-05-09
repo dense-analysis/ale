@@ -137,8 +137,13 @@ function! ale#definition#GoTo(options) abort
     for l:linter in ale#linter#Get(&filetype)
         if !empty(l:linter.lsp)
             call s:GoToLSPDefinition(l:linter, a:options, 'definition')
+
+            return
         endif
     endfor
+
+    " Fall back to vim's tags
+    call ale#util#Tag(a:options)
 endfunction
 
 function! ale#definition#GoToType(options) abort

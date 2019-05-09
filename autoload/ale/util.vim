@@ -114,6 +114,30 @@ function! ale#util#Open(filename, line, column, options) abort
     normal! zz
 endfunction
 
+" Jump to tag under cursor (using CTRL-]) respecting options['open_in']
+" (see above).
+function! ale#util#Tag(options) abort
+    let l:open_in = get(a:options, 'open_in', 'current-buffer')
+
+    if l:open_in is# 'tab'
+        call ale#util#Execute('tab split')
+    elseif l:open_in is# 'horizontal-split'
+        call ale#util#Execute('split')
+    elseif l:open_in is# 'vertical-split'
+        call ale#util#Execute('vsplit')
+    endif
+
+    try
+        call ale#util#Execute("normal! \<c-]>")
+    catch
+        if l:open_in isnot# 'current-buffer'
+            call ale#util#Execute('close')
+        endif
+
+        execute 'echohl ErrorMsg | echomsg v:exception | echohl None'
+    endtry
+endfunction
+
 let g:ale#util#error_priority = 5
 let g:ale#util#warning_priority = 4
 let g:ale#util#info_priority = 3
