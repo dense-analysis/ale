@@ -682,7 +682,7 @@ b:ale_echo_msg_format                                   *b:ale_echo_msg_format*
     `%s`           - replaced with the text for the problem
     `%...code...% `- replaced with the error code
     `%linter%`     - replaced with the name of the linter
-    `%severity%`   - replaced withe severity of the problem
+    `%severity%`   - replaced with the severity of the problem
 
   The strings for `%severity%` can be configured with the following options.
 
@@ -699,7 +699,7 @@ b:ale_echo_msg_format                                   *b:ale_echo_msg_format*
   |g:ale_echo_cursor| needs to be set to 1 for messages to be displayed.
 
   The echo message format can also be configured separately for each buffer,
-  so different formats can be used for differnt languages. (Say in ftplugin
+  so different formats can be used for different languages. (Say in ftplugin
   files.)
 
 
@@ -2459,7 +2459,7 @@ ALELast                                                               *ALELast*
 
   Flags can be combined to create create custom jumping. Thus you can use
   ":ALENext -wrap -error -nosyle" to jump to the next error which is not a
-  style error while going back to the begining of the file if needed.
+  style error while going back to the beginning of the file if needed.
 
   `ALEFirst` goes to the first error or warning in the buffer, while `ALELast`
   goes to the last one.
@@ -3194,7 +3194,7 @@ ale#statusline#Count(buffer)                           *ale#statusline#Count()*
 ale#statusline#FirstProblem(buffer, type)       *ale#statusline#FirstProblem()*
 
   Returns a copy of the first entry in the `loclist` that matches the supplied
-  buffer number and problem type. If there is no such enty, an empty dictionary
+  buffer number and problem type. If there is no such entry, an empty dictionary
   is returned.
   Problem type should be one of the strings listed below:
 
