@@ -113,3 +113,23 @@ Execute(The pylint handler should parse Windows filenames):
   \   '------------------------------------------------------------------',
   \   'Your code has been rated at 5.83/10 (previous run: 5.83/10, +0.00)',
   \ ])
+
+Execute(Use msg_id):
+  let g:ale_python_pylint_use_msg_id = 1
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 13,
+  \     'col': 6,
+  \     'text': 'Undefined variable ''x''',
+  \     'code': 'E0602',
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale_linters#python#pylint#Handle(bufnr(''), [
+  \   '************* Module test',
+  \   'D:\acm\github\vim\tools\test.py:13:5: E0602 (undefined-variable) Undefined variable ''x''',
+  \   '',
+  \   '------------------------------------------------------------------',
+  \   'Your code has been rated at 5.83/10 (previous run: 5.83/10, +0.00)',
+  \ ])
