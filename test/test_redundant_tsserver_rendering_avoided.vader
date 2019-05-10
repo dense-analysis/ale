@@ -1,5 +1,9 @@
 Before:
   Save g:ale_buffer_info
+  Save g:ale_disable_lsp
+
+  let g:ale_disable_lsp = 0
+  unlet! b:ale_disable_lsp
 
   function! CreateError(type, message) abort
     let l:diagnostics = []

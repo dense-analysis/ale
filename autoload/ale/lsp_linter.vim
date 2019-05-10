@@ -10,6 +10,11 @@ endif
 
 " Check if diagnostics for a particular linter should be ignored.
 function! s:ShouldIgnore(buffer, linter_name) abort
+    " Ignore all diagnostics if LSP integration is disabled.
+    if ale#Var(a:buffer, 'disable_lsp')
+        return 1
+    endif
+
     let l:config = ale#Var(a:buffer, 'linters_ignore')
 
     " Don't load code for ignoring diagnostics if there's nothing to ignore.

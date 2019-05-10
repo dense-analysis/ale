@@ -142,6 +142,8 @@ ALE offers several options for controlling which linters are run.
 * Selecting linters to run.            - |g:ale_linters|
 * Aliasing filetypes for linters       - |g:ale_linter_aliases|
 * Only running linters you asked for.  - |g:ale_linters_explicit|
+* Disabling only a subset of linters.  - |g:ale_linters_ignore|
+* Disabling LSP linters and `tsserver`.  - |g:ale_disable_lsp|
 
 
 -------------------------------------------------------------------------------
@@ -321,6 +323,9 @@ servers. LSP linters can be used in combination with any other linter, and
 will automatically connect to LSP servers when needed. ALE also supports
 `tsserver` for TypeScript, which uses a different but very similar protocol.
 
+If you want to use another plugin for LSP features and tsserver, you can use
+the |g:ale_disable_lsp| setting to disable ALE's own LSP integrations, or
+ignore particular linters with |g:ale_linters_ignore|.
 
 -------------------------------------------------------------------------------
 5.1 Completion                                                 *ale-completion*
@@ -627,7 +632,9 @@ g:ale_disable_lsp                                           *g:ale_disable_lsp*
   Type: |Number|
   Default: `0`
 
-  When this option is set to `1`, ALE ignores all linters powered by LSP.
+  When this option is set to `1`, ALE ignores all linters powered by LSP,
+  and also `tsserver`.
+
   Please see also |ale-lsp|.
 
 
