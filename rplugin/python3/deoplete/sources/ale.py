@@ -47,4 +47,4 @@ class Source(Base):
             # Request some completion results.
             self.vim.call('ale#completion#GetCompletions', 'deoplete')
 
-        return []
+        return None

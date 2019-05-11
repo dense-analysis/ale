@@ -59,7 +59,7 @@ class DeopleteSourceTest(unittest.TestCase):
     def test_request_completion_results(self):
         context = {'is_async': False}
 
-        self.assertEqual(self.source.gather_candidates(context), [])
+        self.assertIsNone(self.source.gather_candidates(context))
         self.assertEqual(context, {'is_async': True})
         self.assertEqual(self.call_list, [
             ('ale#completion#GetCompletions', ('deoplete',)),
@@ -68,7 +68,7 @@ class DeopleteSourceTest(unittest.TestCase):
     def test_refresh_completion_results(self):
         context = {'is_async': False}
 
-        self.assertEqual(self.source.gather_candidates(context), [])
+        self.assertIsNone(self.source.gather_candidates(context))
         self.assertEqual(context, {'is_async': True})
         self.assertEqual(self.call_list, [
             ('ale#completion#GetCompletions', ('deoplete',)),
@@ -76,7 +76,7 @@ class DeopleteSourceTest(unittest.TestCase):
 
         context = {'is_async': True, 'is_refresh': True}
 
-        self.assertEqual(self.source.gather_candidates(context), [])
+        self.assertIsNone(self.source.gather_candidates(context))
         self.assertEqual(context, {'is_async': True, 'is_refresh': True})
         self.assertEqual(self.call_list, [
             ('ale#completion#GetCompletions', ('deoplete',)),
@@ -87,7 +87,7 @@ class DeopleteSourceTest(unittest.TestCase):
         context = {'is_async': True}
         self.call_results['ale#completion#GetCompletionResult'] = None
 
-        self.assertEqual(self.source.gather_candidates(context), [])
+        self.assertIsNone(self.source.gather_candidates(context))
         self.assertEqual(context, {'is_async': True})
         self.assertEqual(self.call_list, [
             ('ale#completion#GetCompletionResult', ()),
