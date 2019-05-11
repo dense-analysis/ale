@@ -560,6 +560,7 @@ g:ale_completion_delay                                 *g:ale_completion_delay*
 
 
 g:ale_completion_enabled                             *g:ale_completion_enabled*
+b:ale_completion_enabled                             *b:ale_completion_enabled*
 
   Type: |Number|
   Default: `0`
@@ -571,6 +572,10 @@ g:ale_completion_enabled                             *g:ale_completion_enabled*
 
   This setting should not be enabled if you wish to use ALE as a completion
   source for other completion plugins.
+
+  A buffer-local version of this setting `b:ale_completion_enabled` can be set
+  to `0` to disable ALE's automatic completion support for a single buffer.
+  ALE's completion support must be enabled globally to be enabled locally.
 
   See |ale-completion|
 

@@ -584,7 +584,7 @@ function! ale#completion#GetCompletions(source) abort
 endfunction
 
 function! s:TimerHandler(...) abort
-    if !g:ale_completion_enabled
+    if !get(b:, 'ale_completion_enabled', g:ale_completion_enabled)
         return
     endif
 
@@ -609,7 +609,7 @@ function! ale#completion#StopTimer() abort
 endfunction
 
 function! ale#completion#Queue() abort
-    if !g:ale_completion_enabled
+    if !get(b:, 'ale_completion_enabled', g:ale_completion_enabled)
         return
     endif
 

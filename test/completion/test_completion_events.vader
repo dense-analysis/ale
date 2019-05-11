@@ -5,6 +5,7 @@ Before:
   Save &l:omnifunc
   Save &l:completeopt
 
+  unlet! b:ale_completion_enabled
   let g:ale_completion_enabled = 1
   let g:get_completions_called = 0
   let g:feedkeys_calls = []
@@ -49,6 +50,7 @@ Before:
 After:
   Restore
 
+  unlet! b:ale_completion_enabled
   unlet! g:output
   unlet! g:fake_mode
   unlet! g:get_completions_called
@@ -77,6 +79,14 @@ After:
 
 Execute(ale#completion#GetCompletions should be called when the cursor position stays the same):
   call CheckCompletionCalled(1)
+
+Execute(ale#completion#GetCompletions should not be called if the global setting is disabled):
+  let g:ale_completion_enabled = 0
+  call CheckCompletionCalled(0)
+
+Execute(ale#completion#GetCompletions should not be called if the buffer setting is disabled):
+  let b:ale_completion_enabled = 0
+  call CheckCompletionCalled(0)
 
 Given typescript():
   let abc = y.
