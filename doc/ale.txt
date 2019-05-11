@@ -343,9 +343,11 @@ integration should not be combined with ALE's own implementation.
 
 ALE also offers its own completion implementation, which does not require any
 other plugins. Suggestions will be made while you type after completion is
-enabled.  Completion can be enabled by setting |g:ale_completion_enabled| to
-`1`. This setting must be set to `1` before ALE is loaded. The delay for
-completion can be configured with |g:ale_completion_delay|.
+enabled. ALE's own completion implementation can be enabled by setting
+|g:ale_completion_enabled| to `1`. This setting must be set to `1` before ALE
+is loaded. The delay for completion can be configured with
+|g:ale_completion_delay|. This setting should not be enabled if you wish to
+use ALE as a completion source for other plugins.
 
 ALE will only suggest so many possible matches for completion. The maximum
 number of items can be controlled with |g:ale_completion_max_suggestions|.
@@ -566,6 +568,9 @@ g:ale_completion_enabled                             *g:ale_completion_enabled*
 
   This setting must be set to `1` before ALE is loaded for this behavior
   to be enabled.
+
+  This setting should not be enabled if you wish to use ALE as a completion
+  source for other completion plugins.
 
   See |ale-completion|
 
