@@ -492,8 +492,10 @@ function! ale#lsp#NotifyForChanges(conn_id, buffer) abort
 
     if !empty(l:conn) && has_key(l:conn.open_documents, a:buffer)
         let l:new_tick = getbufvar(a:buffer, 'changedtick')
+        let l:force = getbufvar(a:buffer, 'force_changedtick', 0)
 
-        if l:conn.open_documents[a:buffer] < l:new_tick
+        if l:conn.open_documents[a:buffer] < l:new_tick || l:force
+            call setbufvar(a:buffer, 'force_changedtick', 0)
             if l:conn.is_tsserver
                 let l:message = ale#lsp#tsserver_message#Change(a:buffer)
             else

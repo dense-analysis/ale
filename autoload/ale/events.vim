@@ -92,6 +92,11 @@ function! ale#events#FileChangedEvent(buffer) abort
     endif
 endfunction
 
+function! ale#events#FocusGained(buffer) abort
+    call setbufvar(a:buffer, 'force_changedtick', 1)
+    call ale#Queue(0, 'lint_file', a:buffer)
+endfunction
+
 function! ale#events#Init() abort
     " This value used to be a Boolean as a Number, and is now a String.
     let l:text_changed = '' . g:ale_lint_on_text_changed
@@ -125,6 +130,19 @@ function! ale#events#Init() abort
                 \   str2nr(expand('<abuf>')),
                 \   expand('<amatch>')
                 \)
+            endif
+
+            if g:ale_lint_on_focus_gained
+                if exists('##FocusGained')
+                    autocmd FocusGained * call ale#events#FocusGained(
+                    \   str2nr(expand('<abuf>'))
+                    \)
+                endif
+                if exists('##VimResume')
+                    autocmd VimResume * call ale#events#FocusGained(
+                    \   str2nr(expand('<abuf>'))
+                    \)
+                endif
             endif
 
             if g:ale_lint_on_insert_leave

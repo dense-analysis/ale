@@ -87,6 +87,9 @@ let g:ale_lint_on_save = get(g:, 'ale_lint_on_save', 1)
 " This flag can be set to 1 to enable linting when the filetype is changed.
 let g:ale_lint_on_filetype_changed = get(g:, 'ale_lint_on_filetype_changed', 1)
 
+" This flag can be set to 1 to enable linting when vim gains focus.
+let g:ale_lint_on_focus_gained = get(g:, 'ale_lint_on_focus_gained', 1)
+
 " This Dictionary configures the default LSP roots for various linters.
 let g:ale_lsp_root = get(g:, 'ale_lsp_root', {})
 
