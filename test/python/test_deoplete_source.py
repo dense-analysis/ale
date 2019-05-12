@@ -23,7 +23,7 @@ class DeopleteSourceTest(unittest.TestCase):
         super(DeopleteSourceTest, self).setUp()
 
         self.call_list = []
-        self.call_results = {}
+        self.call_results = {'ale#completion#CanProvideCompletions': 1}
         self.source = ale_module.Source('vim')
         self.source.vim = VimMock(self.call_list, self.call_results)
 
@@ -59,27 +59,41 @@ class DeopleteSourceTest(unittest.TestCase):
     def test_request_completion_results(self):
         context = {'is_async': False}
 
-        self.assertIsNone(self.source.gather_candidates(context))
+        self.assertEqual(self.source.gather_candidates(context), [])
         self.assertEqual(context, {'is_async': True})
         self.assertEqual(self.call_list, [
+            ('ale#completion#CanProvideCompletions', ()),
             ('ale#completion#GetCompletions', ('deoplete',)),
+        ])
+
+    def test_request_completion_results_from_buffer_without_providers(self):
+        self.call_results['ale#completion#CanProvideCompletions'] = 0
+        context = {'is_async': False}
+
+        self.assertIsNone(self.source.gather_candidates(context), [])
+        self.assertEqual(context, {'is_async': False})
+        self.assertEqual(self.call_list, [
+            ('ale#completion#CanProvideCompletions', ()),
         ])
 
     def test_refresh_completion_results(self):
         context = {'is_async': False}
 
-        self.assertIsNone(self.source.gather_candidates(context))
+        self.assertEqual(self.source.gather_candidates(context), [])
         self.assertEqual(context, {'is_async': True})
         self.assertEqual(self.call_list, [
+            ('ale#completion#CanProvideCompletions', ()),
             ('ale#completion#GetCompletions', ('deoplete',)),
         ])
 
         context = {'is_async': True, 'is_refresh': True}
 
-        self.assertIsNone(self.source.gather_candidates(context))
+        self.assertEqual(self.source.gather_candidates(context), [])
         self.assertEqual(context, {'is_async': True, 'is_refresh': True})
         self.assertEqual(self.call_list, [
+            ('ale#completion#CanProvideCompletions', ()),
             ('ale#completion#GetCompletions', ('deoplete',)),
+            ('ale#completion#CanProvideCompletions', ()),
             ('ale#completion#GetCompletions', ('deoplete',)),
         ])
 
@@ -87,9 +101,10 @@ class DeopleteSourceTest(unittest.TestCase):
         context = {'is_async': True}
         self.call_results['ale#completion#GetCompletionResult'] = None
 
-        self.assertIsNone(self.source.gather_candidates(context))
+        self.assertEqual(self.source.gather_candidates(context), [])
         self.assertEqual(context, {'is_async': True})
         self.assertEqual(self.call_list, [
+            ('ale#completion#CanProvideCompletions', ()),
             ('ale#completion#GetCompletionResult', ()),
         ])
 
@@ -100,6 +115,7 @@ class DeopleteSourceTest(unittest.TestCase):
         self.assertEqual(self.source.gather_candidates(context), [])
         self.assertEqual(context, {'is_async': False})
         self.assertEqual(self.call_list, [
+            ('ale#completion#CanProvideCompletions', ()),
             ('ale#completion#GetCompletionResult', ()),
         ])
 
@@ -126,5 +142,6 @@ class DeopleteSourceTest(unittest.TestCase):
         ])
         self.assertEqual(context, {'is_async': False})
         self.assertEqual(self.call_list, [
+            ('ale#completion#CanProvideCompletions', ()),
             ('ale#completion#GetCompletionResult', ()),
         ])

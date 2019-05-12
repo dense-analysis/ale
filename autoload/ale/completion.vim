@@ -549,6 +549,19 @@ function! s:OnReady(linter, lsp_details) abort
     endif
 endfunction
 
+" This function can be called to check if ALE can provide completion data for
+" the current buffer. 1 will be returned if there's a potential source of
+" completion data ALE can use, and 0 will be returned otherwise.
+function! ale#completion#CanProvideCompletions() abort
+    for l:linter in ale#linter#Get(&filetype)
+        if !empty(l:linter.lsp)
+            return 1
+        endif
+    endfor
+
+    return 0
+endfunction
+
 " This function can be used to manually trigger autocomplete, even when
 " g:ale_completion_enabled is set to false
 function! ale#completion#GetCompletions(source) abort

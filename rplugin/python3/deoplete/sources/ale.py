@@ -30,6 +30,10 @@ class Source(Base):
         return self.vim.call('ale#completion#GetCompletionPosition')
 
     def gather_candidates(self, context):
+        # Stop early if ALE can't provide completion data for this buffer.
+        if not self.vim.call('ale#completion#CanProvideCompletions'):
+            return None
+
         if context.get('is_refresh'):
             context['is_async'] = False
 
@@ -47,4 +51,4 @@ class Source(Base):
             # Request some completion results.
             self.vim.call('ale#completion#GetCompletions', 'deoplete')
 
-        return None
+        return []
