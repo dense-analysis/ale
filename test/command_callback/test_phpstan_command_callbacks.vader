@@ -64,3 +64,9 @@ Execute(Configuration file exists in current directory, but force phpstan config
   \ ale#Escape('phpstan') . ' --version',
   \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat raw -c ' . ale#Escape('phpstan.custom.neon') . ' %s'
   \ ]
+
+Execute(Autoload parameter is added to the command):
+  let g:ale_php_phpstan_autoload = 'autoload.php'
+
+  AssertLinter 'phpstan',
+  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat raw -a ' . ale#Escape('autoload.php') . ' -l ' . ale#Escape('4') . ' %s'
