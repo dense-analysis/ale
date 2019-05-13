@@ -86,7 +86,7 @@ Execute(No linting should be for :w after :q fails):
   AssertEqual 1, len(ale#test#GetLoclistWithoutModule())
 
 Execute(No linting should be done on :wq or :x after fixing files):
-  let g:ale_lint_on_save = 0
+  let g:ale_lint_on_save = 1
   let g:ale_fix_on_save = 1
 
   call ale#events#SaveEvent(bufnr(''))
@@ -103,7 +103,7 @@ Execute(No linting should be done on :wq or :x after fixing files):
   AssertEqual [], ale#test#GetLoclistWithoutModule()
 
 Execute(Linting should be done after :q fails and fixing files):
-  let g:ale_lint_on_save = 0
+  let g:ale_lint_on_save = 1
   let g:ale_fix_on_save = 1
 
   call ale#events#QuitEvent(bufnr(''))

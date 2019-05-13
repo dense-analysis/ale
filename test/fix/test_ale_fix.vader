@@ -8,6 +8,7 @@ Before:
 
   silent! cd /testplugin/test/fix
 
+  unlet! b:ale_lint_on_save
   let g:ale_enabled = 0
   let g:ale_echo_cursor = 0
   let g:ale_run_synchronously = 1
@@ -191,6 +192,7 @@ After:
   unlet! g:ale_run_synchronously_callbacks
   unlet! g:ale_emulate_job_failure
   unlet! b:ale_fixers
+  unlet! b:ale_lint_on_save
   unlet! b:ale_fix_on_save
   unlet! b:ale_quitting
   delfunction AddCarets
@@ -625,6 +627,52 @@ Execute(ALEFix should still lint when nothing was fixed on save):
     \   'valid': 1,
     \}], ale#test#GetLoclistWithoutModule()
   endif
+
+Expect(The buffer should be the same):
+  a
+  b
+  c
+
+Execute(ALEFix should not lint the buffer on save if linting on save is disabled globally):
+  let g:ale_fix_on_save = 1
+  let g:ale_lint_on_save = 0
+  let g:ale_enabled = 1
+
+  let g:test_filename = tempname()
+  execute 'noautocmd silent file ' . fnameescape(g:test_filename)
+
+  let g:ale_fixers.testft = ['DoNothing']
+
+  call SetUpLinters()
+  call ale#events#SaveEvent(bufnr(''))
+  call ale#test#FlushJobs()
+
+  Assert !filereadable(g:test_filename), 'The file should not have been saved'
+
+  AssertEqual [], ale#test#GetLoclistWithoutModule()
+
+Expect(The buffer should be the same):
+  a
+  b
+  c
+
+Execute(ALEFix should not lint the buffer on save if linting on save is disabled locally):
+  let g:ale_fix_on_save = 1
+  let b:ale_lint_on_save = 0
+  let g:ale_enabled = 1
+
+  let g:test_filename = tempname()
+  execute 'noautocmd silent file ' . fnameescape(g:test_filename)
+
+  let g:ale_fixers.testft = ['DoNothing']
+
+  call SetUpLinters()
+  call ale#events#SaveEvent(bufnr(''))
+  call ale#test#FlushJobs()
+
+  Assert !filereadable(g:test_filename), 'The file should not have been saved'
+
+  AssertEqual [], ale#test#GetLoclistWithoutModule()
 
 Expect(The buffer should be the same):
   a

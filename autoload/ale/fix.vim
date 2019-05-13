@@ -42,6 +42,7 @@ function! ale#fix#ApplyQueuedFixes() abort
 
     if l:data.should_save
         let l:should_lint = g:ale_fix_on_save
+        \   && ale#Var(l:buffer, 'lint_on_save')
     else
         let l:should_lint = l:data.changes_made
     endif
