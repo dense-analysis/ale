@@ -236,6 +236,7 @@ Notes:
   * `lacheck`
   * `proselint`
   * `redpen`
+  * `texlab`
   * `textlint`
   * `vale`
   * `write-good`
