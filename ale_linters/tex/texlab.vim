@@ -5,7 +5,7 @@ call ale#Set('tex_texlab_executable', 'texlab')
 call ale#Set('tex_texlab_options', '')
 
 function! ale_linters#tex#texlab#GetProjectRoot(buffer) abort
-    return ''
+    return expand('#' . a:buffer . ':p:h')
 endfunction
 
 function! ale_linters#tex#texlab#GetCommand(buffer) abort
