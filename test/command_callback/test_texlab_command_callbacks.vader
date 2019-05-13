@@ -14,7 +14,7 @@ Execute(The default executable path should be correct):
   AssertLinter 'texlab', ale#Escape('texlab')
 
 Execute(The project root should be detected correctly):
-  AssertLSPProject ''
+  AssertLSPProject ale#path#Simplify(g:dir)
   
   call ale#test#SetFilename('tex_paths/sample1.tex')
 
