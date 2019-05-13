@@ -15,6 +15,10 @@ Execute(The default executable path should be correct):
 
 Execute(The project root should be detected correctly):
   AssertLSPProject ''
+  
+  call ale#test#SetFilename('tex_paths/sample1.tex')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/tex_paths')
 
 Execute(The executable should be configurable):
   let b:ale_tex_texlab_executable = 'foobar'
