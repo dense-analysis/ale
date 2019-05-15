@@ -1,6 +1,6 @@
 Before:
   call ale#assert#SetUpLinterTest('cpp', 'cppcheck')
-  let b:command_tail = ' -q --language=c++ --enable=style -I/testplugin/test/command_callback %t'
+  let b:command_tail = ' -q --language=c++ --enable=style -I' . g:dir .' %t'
 
 After:
   unlet! b:command_tail
