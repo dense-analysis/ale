@@ -1,7 +1,7 @@
 Before:
   call ale#assert#SetUpLinterTest('c', 'cppcheck')
 
-  let b:command_tail = ' -q --language=c --enable=style %t'
+  let b:command_tail = ' -q --language=c --enable=style -I/testplugin/test/command_callback %t'
 
 After:
   call ale#assert#TearDownLinterTest()
@@ -15,10 +15,26 @@ Execute(The executable should be configurable):
 
   AssertLinter 'foobar', ale#Escape('foobar') . b:command_tail
 
-Execute(cppcheck for C++ should detect compile_commands.json files):
-  call ale#test#SetFilename('cppcheck_paths/one/foo.cpp')
+Execute(cppcheck for C should detect compile_commands.json files):
+  call ale#test#SetFilename('cppcheck_paths/one/foo.c')
 
   AssertLinter 'cppcheck',
   \ ale#path#CdString(ale#path#Simplify(g:dir . '/cppcheck_paths/one'))
   \   . ale#Escape('cppcheck')
   \   . ' -q --language=c --project=compile_commands.json --enable=style %t'
+
+Execute(cppcheck for C should include file dir if compile_commands.json file is not found):
+  call ale#test#SetFilename('cppcheck_paths/foo.cpp')
+
+  AssertLinter 'cppcheck',
+  \   ale#Escape('cppcheck')
+  \   . ' -q --language=c --enable=style -I' . ale#path#Simplify(g:dir . '/cppcheck_paths') . ' %t'
+
+Execute(cppcheck for C should ignore compile_commands.json file if buffer is modified):
+  call ale#test#SetFilename('cppcheck_paths/one/foo.c')
+  " modify buffer here
+
+  AssertLinter 'cppcheck',
+  \   ale#Escape('cppcheck')
+  \   . ' -q --language=c --enable=style -I' . ale#path#Simplify(g:dir . '/cppcheck_paths/one') . ' %t'
+
