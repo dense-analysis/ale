@@ -119,20 +119,22 @@ endfunction
 
 function! s:highlight_range(bufnr, range, group) abort
     if ale#highlight#HasNeovimApi()
+        let l:line_count = len(getbufline(a:bufnr, 1, '$'))
+
         let l:highlight_id = s:ale_nvim_highlight_id(a:bufnr)
         " NOTE: lines and columns indicies are 0-based in nvim_buf_* API.
         let l:lnum = a:range.lnum - 1
-        let l:end_lnum = a:range.end_lnum - 1
+        let l:end_lnum = min([a:range.end_lnum, l:line_count]) - 1
         let l:col = a:range.col - 1
         let l:end_col = a:range.end_col
 
-        if l:lnum >= l:end_lnum
+        if l:lnum is l:end_lnum
             " For single lines, just return the one position.
             call ale#highlight#nvim_buf_add_highlight(
             \   a:bufnr, l:highlight_id, a:group,
             \   l:lnum, l:col, l:end_col
             \)
-        else
+        elseif l:lnum < l:end_lnum
             " highlight first line from start till the line end
             call ale#highlight#nvim_buf_add_highlight(
             \   a:bufnr, l:highlight_id, a:group,
