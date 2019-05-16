@@ -50,7 +50,7 @@ function! ale_linters#erlang#dialyzer#Handle(buffer, lines) abort
             let l:code = l:match[2]
 
             call add(l:output, {
-            \   'lnum': l:match[1] + 0,
+            \   'lnum': str2nr(l:match[1]),
             \   'lcol': 0,
             \   'text': l:code,
             \   'type': 'W'
