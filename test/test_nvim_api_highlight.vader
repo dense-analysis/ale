@@ -1,0 +1,160 @@
+Before:
+  Save g:ale_enabled
+  Save g:ale_set_signs
+
+  let g:nvim_buf_clear_namespace_calls = []
+  let g:nvim_buf_add_highlight_calls = []
+
+  call ale#test#SetDirectory('/testplugin/test/highlight')
+  call ale#test#SetFilename('dummy.txt')
+
+  runtime autoload/ale/highlight.vim
+
+  let g:ale_set_signs = 1
+  let g:ale_enabled = 1
+  let b:ale_nvim_highlight_id = 42
+  let b:ale_highlight_items = []
+
+  function! ale#highlight#nvim_buf_clear_namespace(...) abort
+    call add(g:nvim_buf_clear_namespace_calls, a:000)
+  endfunction
+
+  function! ale#highlight#nvim_buf_add_highlight(...) abort
+    call add(g:nvim_buf_add_highlight_calls, a:000)
+    return 42 " returns namespace id
+  endfunction
+
+After:
+  Restore
+
+  unlet! b:ale_enabled
+  unlet! b:ale_nvim_highlight_id
+  unlet! b:ale_highlight_items
+
+  unlet! g:nvim_buf_clear_namespace_calls
+  unlet! g:nvim_buf_add_highlight_calls
+
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+  runtime autoload/ale/highlight.vim
+
+Given foobar (Some imaginary filetype):
+  <contents>
+
+Execute(Check usage of nvim_buf_clear_namespace):
+  if ale#highlight#HasNeovimApi()
+    call ale#highlight#SetHighlights(bufnr(''), [])
+
+    AssertEqual 1, len(g:nvim_buf_clear_namespace_calls)
+    AssertEqual
+    \ [[bufnr(''), 42, 0, -1]],
+    \ g:nvim_buf_clear_namespace_calls
+  endif
+
+Execute(Check usage of nvim_buf_add_highlight / single char):
+  if ale#highlight#HasNeovimApi()
+    call ale#highlight#SetHighlights(bufnr(''), [
+    \ {
+    \   'bufnr': bufnr(''),
+    \   'type': 'E',
+    \   'lnum': 2,
+    \   'col': 4,
+    \ }
+    \])
+
+    " Highlights are cleared on update
+    AssertEqual 1, len(g:nvim_buf_clear_namespace_calls)
+    AssertEqual [[bufnr(''), 42, 0, -1]], g:nvim_buf_clear_namespace_calls
+
+    " Should highlight a single char by lnum, col
+    AssertEqual 1, len(g:nvim_buf_add_highlight_calls)
+    AssertEqual
+    \ [[bufnr(''), 42, 'ALEError', 1, 3, 4]],
+    \ g:nvim_buf_add_highlight_calls
+  endif
+
+Execute(Check usage of nvim_buf_add_highlight / single line span):
+  if ale#highlight#HasNeovimApi()
+    call ale#highlight#SetHighlights(bufnr(''), [
+    \ {
+    \   'bufnr': bufnr(''),
+    \   'type': 'E',
+    \   'lnum': 2,
+    \   'col': 4,
+    \   'end_lnum': 2,
+    \   'end_col': 10,
+    \ }
+    \])
+
+    " Highlights are cleared on update
+    AssertEqual 1, len(g:nvim_buf_clear_namespace_calls)
+    AssertEqual [[bufnr(''), 42, 0, -1]], g:nvim_buf_clear_namespace_calls
+
+    " Should highlight a span between col and end_col on lnum
+    AssertEqual 1, len(g:nvim_buf_add_highlight_calls)
+    AssertEqual
+    \ [[bufnr(''), 42, 'ALEError', 1, 3, 10]],
+    \ g:nvim_buf_add_highlight_calls
+  endif
+
+Execute(Check usage of nvim_buf_add_highlight / multiple lines span):
+  if ale#highlight#HasNeovimApi()
+    call ale#highlight#SetHighlights(bufnr(''), [
+    \ {
+    \   'bufnr': bufnr(''),
+    \   'type': 'E',
+    \   'lnum': 2,
+    \   'col': 4,
+    \   'end_lnum': 5,
+    \   'end_col': 10,
+    \ }
+    \])
+
+    " Highlights are cleared on update
+    AssertEqual 1, len(g:nvim_buf_clear_namespace_calls)
+    AssertEqual [[bufnr(''), 42, 0, -1]], g:nvim_buf_clear_namespace_calls
+
+    " Should highlight all lines from lnum till end_lnum
+    AssertEqual 4, len(g:nvim_buf_add_highlight_calls)
+    AssertEqual
+    \ [
+    \   [bufnr(''), 42, 'ALEError', 1, 3, -1],
+    \   [bufnr(''), 42, 'ALEError', 2, 0, -1],
+    \   [bufnr(''), 42, 'ALEError', 3, 0, -1],
+    \   [bufnr(''), 42, 'ALEError', 4, 0, 10]
+    \ ],
+    \ g:nvim_buf_add_highlight_calls
+  endif
+
+Execute(Check usage of nvim_buf_add_highlight / line highights):
+  let g:ale_set_signs = 0
+
+  if ale#highlight#HasNeovimApi()
+    call ale#highlight#SetHighlights(bufnr(''), [
+    \ {
+    \   'bufnr': bufnr(''),
+    \   'type': 'E',
+    \   'lnum': 2,
+    \   'col': 4,
+    \   'end_lnum': 5,
+    \   'end_col': 10,
+    \ }
+    \])
+
+    " Highlights are cleared on update
+    AssertEqual 1, len(g:nvim_buf_clear_namespace_calls)
+    AssertEqual [[bufnr(''), 42, 0, -1]], g:nvim_buf_clear_namespace_calls
+
+    " Now the last highlight should be put on the entire line
+    AssertEqual 5, len(g:nvim_buf_add_highlight_calls)
+    AssertEqual
+    \ [
+    \   [bufnr(''), 42, 'ALEError', 1, 3, -1],
+    \   [bufnr(''), 42, 'ALEError', 2, 0, -1],
+    \   [bufnr(''), 42, 'ALEError', 3, 0, -1],
+    \   [bufnr(''), 42, 'ALEError', 4, 0, 10],
+    \   [bufnr(''), 42, 'ALEErrorLine', 1, 0, -1]
+    \ ],
+    \ g:nvim_buf_add_highlight_calls
+  endif
