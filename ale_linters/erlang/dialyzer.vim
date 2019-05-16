@@ -1,4 +1,5 @@
-" Author: Autoine Gagné - https://github.com/AntoineGagne
+" Author: Autoine Gagne - https://github.com/AntoineGagne
+" Description: Define a checker that runs dialyzer on Erlang files.
 
 function! ale_linters#erlang#dialyzer#FindPlt() abort
     let plt_file = split(globpath('_build', '**/*_plt'), '\n')
@@ -7,10 +8,10 @@ function! ale_linters#erlang#dialyzer#FindPlt() abort
     endif
 
     if !empty($REBAR_PLT_DIR)
-        return expand("$REBAR_PLT_DIR/dialyzer/plt")
+        return expand('$REBAR_PLT_DIR/dialyzer/plt')
     endif
 
-    return expand("$HOME/.dialyzer_plt")
+    return expand('$HOME/.dialyzer_plt')
 endfunction
 
 function! ale_linters#erlang#dialyzer#GetPlt(buffer) abort
