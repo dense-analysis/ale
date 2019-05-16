@@ -3,6 +3,27 @@ ALE Erlang Integration                                     *ale-erlang-options*
 
 
 ===============================================================================
+dialyzer                                                *ale-erlang-dialyzer*
+
+g:ale_erlang_syntaxerl_executable           *g:ale_erlang_dialyzer_executable*
+                                            *b:ale_erlang_dialyzer_executable*
+  Type: |String|
+  Default: `'dialyzer'`
+
+  This variable can be changed to specify the dialyzer executable.
+
+
+g:ale_erlang_plt_file                       *g:ale_erlang_plt_file*
+                                            *b:ale_erlang_plt_file*
+  Type: |String|
+
+  This variable can be changed to specify the path to the PLT file. By
+  default, it will search for the PLT file inside the `_build` directory. If
+  there isn't one, it will fallback to the path `$REBAR_PLT_DIR/dialyzer/plt`.
+  Otherwise, it will default to `$HOME/.dialyzer_plt`.
+
+
+-------------------------------------------------------------------------------
 erlc                                                          *ale-erlang-erlc*
 
 g:ale_erlang_erlc_options                           *g:ale_erlang_erlc_options*
@@ -23,27 +44,6 @@ g:ale_erlang_syntaxerl_executable           *g:ale_erlang_syntaxerl_executable*
   Default: `'syntaxerl'`
 
   This variable can be changed to specify the syntaxerl executable.
-
-
--------------------------------------------------------------------------------
-dialyzer                                                *ale-erlang-dialyzer*
-
-g:ale_erlang_syntaxerl_executable           *g:ale_erlang_dialyzer_executable*
-                                            *b:ale_erlang_dialyzer_executable*
-  Type: |String|
-  Default: `'dialyzer'`
-
-  This variable can be changed to specify the dialyzer executable.
-
-
-g:ale_erlang_plt_file                       *g:ale_erlang_plt_file*
-                                            *b:ale_erlang_plt_file*
-  Type: |String|
-
-  This variable can be changed to specify the path to the PLT file. By
-  default, it will search for the PLT file inside the `_build` directory. If
-  there isn't one, it will fallback to the path `$REBAR_PLT_DIR/dialyzer/plt`.
-  Otherwise, it will default to `$HOME/.dialyzer_plt`.
 
 
 ===============================================================================
