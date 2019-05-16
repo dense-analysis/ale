@@ -3,18 +3,18 @@ ALE Erlang Integration                                     *ale-erlang-options*
 
 
 ===============================================================================
-dialyzer                                                *ale-erlang-dialyzer*
+dialyzer                                                  *ale-erlang-dialyzer*
 
-g:ale_erlang_syntaxerl_executable           *g:ale_erlang_dialyzer_executable*
-                                            *b:ale_erlang_dialyzer_executable*
+g:ale_erlang_syntaxerl_executable            *g:ale_erlang_dialyzer_executable*
+                                             *b:ale_erlang_dialyzer_executable*
   Type: |String|
   Default: `'dialyzer'`
 
   This variable can be changed to specify the dialyzer executable.
 
 
-g:ale_erlang_plt_file                       *g:ale_erlang_plt_file*
-                                            *b:ale_erlang_plt_file*
+g:ale_erlang_plt_file                                   *g:ale_erlang_plt_file*
+                                                        *b:ale_erlang_plt_file*
   Type: |String|
 
   This variable can be changed to specify the path to the PLT file. By
