@@ -16,7 +16,7 @@ function! ale_linters#erlang#dialyzer#FindPlt() abort
 endfunction
 
 function! ale_linters#erlang#dialyzer#GetPlt(buffer) abort
-    return ale#Var(a:buffer, 'erlang_plt_file')
+    return ale#Var(a:buffer, 'erlang_dialyzer_plt_file')
 endfunction
 
 function! ale_linters#erlang#dialyzer#GetExecutable(buffer) abort
@@ -63,8 +63,8 @@ endfunction
 
 let g:ale_erlang_dialyzer_executable =
 \   get(g:, 'ale_erlang_dialyzer_executable', 'dialyzer')
-let g:ale_erlang_plt_file =
-\   get(g:, 'ale_erlang_plt_file', ale_linters#erlang#dialyzer#FindPlt())
+let g:ale_erlang_dialyzer_plt_file =
+\   get(g:, 'ale_erlang_dialyzer_plt_file', ale_linters#erlang#dialyzer#FindPlt())
 
 call ale#linter#Define('erlang', {
 \   'name': 'dialyzer',
