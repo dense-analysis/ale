@@ -107,10 +107,12 @@ endfunction
 
 function! s:highlight_line(bufnr, lnum, group) abort
     if ale#highlight#HasNeovimApi()
+        " NOTE: lines and columns indicies are 0-based in nvim_buf_* API.
+        " NOTE: it's important not to pass negative line nums to nvim_buf_* API
         let l:highlight_id = s:ale_nvim_highlight_id(a:bufnr)
         call ale#highlight#nvim_buf_add_highlight(
         \   a:bufnr, l:highlight_id, a:group,
-        \   a:lnum - 1, 0, -1
+        \   max([a:lnum, 1]) - 1, 0, -1
         \)
     else
         call matchaddpos(a:group, [a:lnum])
@@ -119,12 +121,11 @@ endfunction
 
 function! s:highlight_range(bufnr, range, group) abort
     if ale#highlight#HasNeovimApi()
-        let l:line_count = len(getbufline(a:bufnr, 1, '$'))
-
-        let l:highlight_id = s:ale_nvim_highlight_id(a:bufnr)
         " NOTE: lines and columns indicies are 0-based in nvim_buf_* API.
-        let l:lnum = a:range.lnum - 1
-        let l:end_lnum = min([a:range.end_lnum, l:line_count]) - 1
+        " NOTE: it's important not to pass negative line nums to nvim_buf_* API
+        let l:highlight_id = s:ale_nvim_highlight_id(a:bufnr)
+        let l:lnum = max([a:range.lnum, 1]) - 1
+        let l:end_lnum = max([a:range.end_lnum, 1]) - 1
         let l:col = a:range.col - 1
         let l:end_col = a:range.end_col
 
