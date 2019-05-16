@@ -168,6 +168,13 @@ other plugins, and can be enabled by changing a setting before ALE is loaded.
 let g:ale_completion_enabled = 1
 ```
 
+ALE provides an omni-completion function you can use for triggering
+completion manually with `<C-x><C-o>`.
+
+```vim
+set omnifunc=ale#completion#OmniFunc
+```
+
 See `:help ale-completion` for more information.
 
 <a name="usage-go-to-definition"></a>
