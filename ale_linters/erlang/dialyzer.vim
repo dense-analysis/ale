@@ -84,5 +84,6 @@ call ale#linter#Define('erlang', {
 \   'name': 'dialyzer',
 \   'executable': function('ale_linters#erlang#dialyzer#GetExecutable'),
 \   'command': function('ale_linters#erlang#dialyzer#GetCommand'),
-\   'callback': function('ale_linters#erlang#dialyzer#Handle')
+\   'callback': function('ale_linters#erlang#dialyzer#Handle'),
+\   'lint_file': 1
 \})
