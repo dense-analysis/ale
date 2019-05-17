@@ -36,9 +36,9 @@ function! ale_linters#erlang#dialyzer#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#erlang#dialyzer#GetCommand(buffer) abort
-    let l:command = fnameescape(ale_linters#erlang#dialyzer#GetExecutable(a:buffer))
+    let l:command = ale#Escape(ale_linters#erlang#dialyzer#GetExecutable(a:buffer))
     \   . ' -n'
-    \   . ' --plt ' . fnameescape(ale_linters#erlang#dialyzer#GetPlt(a:buffer))
+    \   . ' --plt ' . ale#Escape(ale_linters#erlang#dialyzer#GetPlt(a:buffer))
     \   . ' -Wunmatched_returns'
     \   . ' -Werror_handling'
     \   . ' -Wrace_conditions'
