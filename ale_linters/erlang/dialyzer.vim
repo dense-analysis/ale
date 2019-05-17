@@ -8,7 +8,10 @@ endfunction
 function! ale_linters#erlang#dialyzer#FindPlt(buffer) abort
     let l:rebar3_profile = ale_linters#erlang#dialyzer#GetRebar3Profile(a:buffer)
     let l:plt_file_directory = ale#path#FindNearestDirectory(a:buffer, '_build' . l:rebar3_profile)
-    let l:plt_file = split(globpath(l:plt_file_directory, '/*_plt'), '\n')
+
+    if !empty(l:plt_file_directory)
+        let l:plt_file = split(globpath(l:plt_file_directory, '/*_plt'), '\n')
+    endif
 
     if !empty(l:plt_file)
         return l:plt_file[0]
