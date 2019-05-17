@@ -1,8 +1,14 @@
 " Author: Autoine Gagne - https://github.com/AntoineGagne
 " Description: Define a checker that runs dialyzer on Erlang files.
 
-function! ale_linters#erlang#dialyzer#FindPlt() abort
-    let l:plt_file = split(globpath('_build', '**/*_plt'), '\n')
+function! ale_linters#erlang#dialyzer#GetRebar3Profile(buffer) abort
+    return ale#Var(a:buffer, 'erlang_dialyzer_rebar3_profile')
+endfunction
+
+function! ale_linters#erlang#dialyzer#FindPlt(buffer) abort
+    let l:rebar3_profile = ale_linters#erlang#dialyzer#GetRebar3Profile(a:buffer)
+    let l:plt_file_directory = ale#path#FindNearestDirectory(a:buffer, '_build' . l:rebar3_profile)
+    let l:plt_file = split(globpath(l:plt_file_directory, '/*_plt'), '\n')
 
     if !empty(l:plt_file)
         return l:plt_file[0]
@@ -16,7 +22,13 @@ function! ale_linters#erlang#dialyzer#FindPlt() abort
 endfunction
 
 function! ale_linters#erlang#dialyzer#GetPlt(buffer) abort
-    return ale#Var(a:buffer, 'erlang_dialyzer_plt_file')
+    let l:plt_file = ale#Var(a:buffer, 'erlang_dialyzer_plt_file')
+
+    if !empty(l:plt_file)
+        return l:plt_file
+    endif
+
+    return ale_linters#erlang#dialyzer#FindPlt(a:buffer)
 endfunction
 
 function! ale_linters#erlang#dialyzer#GetExecutable(buffer) abort
@@ -64,7 +76,9 @@ endfunction
 let g:ale_erlang_dialyzer_executable =
 \   get(g:, 'ale_erlang_dialyzer_executable', 'dialyzer')
 let g:ale_erlang_dialyzer_plt_file =
-\   get(g:, 'ale_erlang_dialyzer_plt_file', ale_linters#erlang#dialyzer#FindPlt())
+\   get(g:, 'ale_erlang_dialyzer_plt_file', '')
+let g:ale_erlang_dialyzer_rebar3_profile =
+\   get(g:, 'ale_erlang_dialyzer_rebar3_profile', 'default')
 
 call ale#linter#Define('erlang', {
 \   'name': 'dialyzer',
