@@ -45,13 +45,39 @@ Before:
   " We don't care what the IDs are, just that we have some matches.
   " The IDs are generated.
   function! GetMatchesWithoutIDs() abort
+    let l:result = []
+
+    if ale#highlight#HasNeovimApi()
+      let l:list = g:nvim_buf_add_highlight_calls
+
+      for l:item in l:list
+        let l:group = l:item[2]
+        let l:lnum = l:item[3]
+        let l:col = l:item[4]
+        let l:end_col = l:item[5]
+        if l:col + 1 is l:end_col
+          let l:end_col = 1
+        endif
+        if l:col is 0 && l:end_col is -1
+            let l:pos1 = [l:lnum + 1]
+        else
+            let l:pos1 = [l:lnum + 1, l:col + 1, l:end_col]
+        endif
+        call add(l:result, {'group': l:group, 'pos1': l:pos1})
+      endfor
+
+    endif
+
     let l:list = getmatches()
 
     for l:item in l:list
       call remove(l:item, 'id')
+      call remove(l:item, 'priority')
+      call add(l:result, l:item)
     endfor
 
-    return l:list
+    call sort(l:result)
+    return l:result
   endfunction
 
   call ale#linter#Define('testft', {
@@ -62,9 +88,27 @@ Before:
   \})
   highlight link SomeOtherGroup SpellBad
 
+  let g:nvim_buf_add_highlight_calls = []
+  let b:ale_nvim_highlight_id = 42
+
+  runtime autoload/ale/highlight.vim
+  " NOTE: This dummy call is needed so namespace is sourced by vim before we do
+  " our overrides.
+  call ale#highlight#HasNeovimApi()
+
+  function! ale#highlight#nvim_buf_add_highlight(...) abort
+    call add(g:nvim_buf_add_highlight_calls, a:000)
+    return 42 " returns namespace id
+  endfunction
+
+  function! ale#highlight#nvim_buf_clear_namespace(...) abort
+    let g:nvim_buf_add_highlight_calls = []
+  endfunction
+
 After:
   Restore
 
+  unlet! g:nvim_buf_add_highlight_calls
   unlet! g:ale_run_synchronously_callbacks
   unlet! g:items
   unlet! b:ale_enabled
@@ -74,6 +118,8 @@ After:
   call clearmatches()
   sign unplace *
   highlight clear SomeOtherGroup
+
+  runtime autoload/ale/highlight.vim
 
 Given testft(A Javscript file with warnings/errors):
   foo
@@ -87,9 +133,9 @@ Execute(Highlights should be set when a linter runs):
 
   AssertEqual
   \ [
-  \   {'group': 'ALEError', 'priority': 10, 'pos1': [1, 1, 1]},
-  \   {'group': 'ALEWarning', 'priority': 10, 'pos1': [2, 1, 1]},
-  \   {'group': 'ALEError', 'priority': 10, 'pos1': [3, 5, 1]}
+  \   {'group': 'ALEError', 'pos1': [1, 1, 1]},
+  \   {'group': 'ALEError', 'pos1': [3, 5, 1]},
+  \   {'group': 'ALEWarning', 'pos1': [2, 1, 1]},
   \ ],
   \ GetMatchesWithoutIDs()
 
@@ -103,7 +149,7 @@ Execute(Highlights set by ALE should be removed when buffer cleanup is done):
   \])
 
   AssertEqual
-  \ [{'group': 'ALEError', 'priority': 10, 'pos1': [3, 2, 1]}],
+  \ [{'group': 'ALEError', 'pos1': [3, 2, 1]}],
   \ GetMatchesWithoutIDs()
 
   call ale#engine#Cleanup(bufnr('%'))
@@ -147,8 +193,8 @@ Execute(Only ALE highlights should be restored when buffers are restored):
   " We should have both highlights.
   AssertEqual
   \ [
-  \   {'group': 'ALEError', 'priority': 10, 'pos1': [3, 2, 1]},
-  \   {'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]},
+  \   {'group': 'ALEError', 'pos1': [3, 2, 1]},
+  \   {'group': 'SomeOtherGroup', 'pos1': [1, 1, 1]},
   \ ],
   \ GetMatchesWithoutIDs()
 
@@ -157,7 +203,7 @@ Execute(Only ALE highlights should be restored when buffers are restored):
   " We should remove our highlight, but not the other one.
   AssertEqual
   \ [
-  \   {'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]}
+  \   {'group': 'SomeOtherGroup', 'pos1': [1, 1, 1]}
   \ ],
   \ GetMatchesWithoutIDs()
 
@@ -166,8 +212,8 @@ Execute(Only ALE highlights should be restored when buffers are restored):
   " Our highlight should apper again.
   AssertEqual
   \ [
-  \   {'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]},
-  \   {'group': 'ALEError', 'priority': 10, 'pos1': [3, 2, 1]},
+  \   {'group': 'ALEError', 'pos1': [3, 2, 1]},
+  \   {'group': 'SomeOtherGroup', 'pos1': [1, 1, 1]},
   \ ],
   \ GetMatchesWithoutIDs()
 
@@ -179,8 +225,8 @@ Execute(Higlight end columns should set an appropriate size):
 
   AssertEqual
   \ [
-  \   {'group': 'ALEError', 'priority': 10, 'pos1': [3, 2, 4]},
-  \   {'group': 'ALEWarning', 'priority': 10, 'pos1': [4, 1, 5]},
+  \   {'group': 'ALEError', 'pos1': [3, 2, 4]},
+  \   {'group': 'ALEWarning', 'pos1': [4, 1, 5]},
   \ ],
   \ GetMatchesWithoutIDs()
 
@@ -199,13 +245,13 @@ Execute(Higlight end columns should set an appropriate size):
 
   AssertEqual
   \ [
-  \   {'group': 'ALEError', 'priority': 10, 'pos1': [1, 1, 1]},
-  \   {'group': 'ALEError', 'priority': 10, 'pos1': [2, 1, 1]},
-  \   {'group': 'ALEStyleError', 'priority': 10, 'pos1': [3, 1, 1]},
-  \   {'group': 'ALEWarning', 'priority': 10, 'pos1': [4, 1, 1]},
-  \   {'group': 'ALEWarning', 'priority': 10, 'pos1': [5, 1, 1]},
-  \   {'group': 'ALEStyleWarning', 'priority': 10, 'pos1': [6, 1, 1]},
-  \   {'group': 'ALEInfo', 'priority': 10, 'pos1': [7, 1, 1]},
+  \   {'group': 'ALEError', 'pos1': [1, 1, 1]},
+  \   {'group': 'ALEError', 'pos1': [2, 1, 1]},
+  \   {'group': 'ALEInfo', 'pos1': [7, 1, 1]},
+  \   {'group': 'ALEStyleError', 'pos1': [3, 1, 1]},
+  \   {'group': 'ALEStyleWarning', 'pos1': [6, 1, 1]},
+  \   {'group': 'ALEWarning', 'pos1': [4, 1, 1]},
+  \   {'group': 'ALEWarning', 'pos1': [5, 1, 1]},
   \ ],
   \ GetMatchesWithoutIDs()
 
@@ -220,7 +266,7 @@ Execute(Highlighting should support errors spanning many lines):
   AssertEqual
   \ [
   \   {
-  \     'group': 'ALEError', 'priority': 10, 'pos1': [1, 1, 1073741824],
+  \     'group': 'ALEError', 'pos1': [1, 1, 1073741824],
   \     'pos2': [2], 'pos3': [3], 'pos4': [4], 'pos5': [5], 'pos6': [6],
   \     'pos7': [7], 'pos8': [8],
   \   },
@@ -238,8 +284,8 @@ Execute(Highlights should always be cleared when the buffer highlight list is em
 
   AssertEqual
   \ [
-  \   {'group': 'ALEError', 'priority': 10, 'pos1': [1, 1, 1]},
-  \   {'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]},
+  \   {'group': 'ALEError', 'pos1': [1, 1, 1]},
+  \   {'group': 'SomeOtherGroup', 'pos1': [1, 1, 1]},
   \ ],
   \ GetMatchesWithoutIDs()
 
@@ -253,7 +299,7 @@ Execute(Highlights should always be cleared when the buffer highlight list is em
   " Check that we remove our highlights.
   AssertEqual
   \ [
-  \   {'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]},
+  \   {'group': 'SomeOtherGroup', 'pos1': [1, 1, 1]},
   \ ],
   \ GetMatchesWithoutIDs()
 
@@ -289,11 +335,11 @@ Execute(Line highlights should be set when signs are disabled):
 
   AssertEqual
   \ [
-  \   {'group': 'ALEError', 'priority': 10, 'pos1': [1, 1, 1]},
-  \   {'group': 'ALEWarning', 'priority': 10, 'pos1': [2, 1, 1]},
-  \   {'group': 'ALEInfo', 'priority': 10, 'pos1': [3, 1, 1]},
-  \   {'group': 'ALEErrorLine', 'priority': 10, 'pos1': [1]},
-  \   {'group': 'ALEWarningLine', 'priority': 10, 'pos1': [2]},
-  \   {'group': 'ALEInfoLine', 'priority': 10, 'pos1': [3]},
+  \   {'group': 'ALEError', 'pos1': [1, 1, 1]},
+  \   {'group': 'ALEErrorLine', 'pos1': [1]},
+  \   {'group': 'ALEInfo', 'pos1': [3, 1, 1]},
+  \   {'group': 'ALEInfoLine', 'pos1': [3]},
+  \   {'group': 'ALEWarning', 'pos1': [2, 1, 1]},
+  \   {'group': 'ALEWarningLine', 'pos1': [2]},
   \ ],
   \ GetMatchesWithoutIDs()
