@@ -351,6 +351,7 @@ given the above setup are as follows.
 
 `GivenCommandOutput [...]`         - Define output for ale#command#Run.
 `AssertFixer results`              - Check the fixer results
+`AssertFixerNotExecuted`           - Check that fixers will not be executed.
 
 
 ===============================================================================

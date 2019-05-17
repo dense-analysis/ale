@@ -19,6 +19,131 @@ Execute(The executable path should be correct):
   \     . ' --fix %t',
   \ }
 
+Execute(The ESLint fixer shouldn't run if no configuration file can be found):
+  call ale#test#SetFilename('../no-configuration')
+  AssertFixerNotExecuted
+
+Execute(The ESLint fixer should use a config file option if set for old versions):
+  call ale#test#SetFilename('../no-configuration')
+  let b:ale_javascript_eslint_options = '-c /foo.cfg'
+
+  AssertFixer
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('eslint') . ' -c /foo.cfg --fix %t',
+  \ }
+
+  let b:ale_javascript_eslint_options = '--bar -c /foo.cfg'
+
+  AssertFixer
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('eslint') . ' --bar -c /foo.cfg --fix %t',
+  \ }
+
+  let b:ale_javascript_eslint_options = '--config /foo.cfg'
+
+  AssertFixer
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('eslint') . ' --config /foo.cfg --fix %t',
+  \ }
+
+  let b:ale_javascript_eslint_options = '--bar --config /foo.cfg'
+
+  AssertFixer
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('eslint') . ' --bar --config /foo.cfg --fix %t',
+  \ }
+
+Execute(The ESLint fixer should use a -c file option if set for eslint_d):
+  let b:ale_javascript_eslint_executable = '/bin/eslint_d'
+  GivenCommandOutput ['v3.19.0 (eslint_d v4.2.0)']
+  call ale#test#SetFilename('../no-configuration')
+  let b:ale_javascript_eslint_options = '-c /foo.cfg'
+
+  AssertFixer
+  \ {
+  \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
+  \   'command': ale#Escape('/bin/eslint_d')
+  \     . ' -c /foo.cfg'
+  \     . ' --stdin-filename %s --stdin --fix-to-stdout'
+  \ }
+
+  let b:ale_javascript_eslint_options = '--bar -c /foo.cfg'
+
+  AssertFixer
+  \ {
+  \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
+  \   'command': ale#Escape('/bin/eslint_d')
+  \     . ' --bar -c /foo.cfg'
+  \     . ' --stdin-filename %s --stdin --fix-to-stdout'
+  \ }
+
+  let b:ale_javascript_eslint_options = '--config /foo.cfg'
+
+  AssertFixer
+  \ {
+  \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
+  \   'command': ale#Escape('/bin/eslint_d')
+  \     . ' --config /foo.cfg'
+  \     . ' --stdin-filename %s --stdin --fix-to-stdout'
+  \ }
+
+  let b:ale_javascript_eslint_options = '--bar --config /foo.cfg'
+
+  AssertFixer
+  \ {
+  \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
+  \   'command': ale#Escape('/bin/eslint_d')
+  \     . ' --bar --config /foo.cfg'
+  \     . ' --stdin-filename %s --stdin --fix-to-stdout'
+  \ }
+
+Execute(The ESLint fixer should use a config file option if set for new versions):
+  GivenCommandOutput ['4.9.0']
+  call ale#test#SetFilename('../no-configuration')
+  let b:ale_javascript_eslint_options = '-c /foo.cfg'
+
+  AssertFixer
+  \ {
+  \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
+  \   'command': ale#Escape('eslint')
+  \     . ' -c /foo.cfg'
+  \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json'
+  \ }
+
+  let b:ale_javascript_eslint_options = '--bar -c /foo.cfg'
+
+  AssertFixer
+  \ {
+  \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
+  \   'command': ale#Escape('eslint')
+  \     . ' --bar -c /foo.cfg'
+  \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json'
+  \ }
+
+  let b:ale_javascript_eslint_options = '--config /foo.cfg'
+
+  AssertFixer
+  \ {
+  \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
+  \   'command': ale#Escape('eslint')
+  \     . ' --config /foo.cfg'
+  \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json'
+  \ }
+
+  let b:ale_javascript_eslint_options = '--bar --config /foo.cfg'
+
+  AssertFixer
+  \ {
+  \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
+  \   'command': ale#Escape('eslint')
+  \     . ' --bar --config /foo.cfg'
+  \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json'
+  \ }
+
 Execute(The lower priority configuration file in a nested directory should be preferred):
   call ale#test#SetFilename('../eslint-test-files/react-app/subdir-with-config/testfile.js')
 
@@ -28,6 +153,31 @@ Execute(The lower priority configuration file in a nested directory should be pr
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/subdir-with-config/.eslintrc'))
+  \     . ' --fix %t',
+  \ }
+
+Execute(--config in options should override configuration file detection for old versions):
+  call ale#test#SetFilename('../eslint-test-files/react-app/subdir-with-config/testfile.js')
+
+  let b:ale_javascript_eslint_options = '--config /foo.cfg'
+
+  AssertFixer
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \     . ' --config /foo.cfg'
+  \     . ' --fix %t',
+  \ }
+
+  let b:ale_javascript_eslint_options = '-c /foo.cfg'
+
+  AssertFixer
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+  \     . ' -c /foo.cfg'
   \     . ' --fix %t',
   \ }
 
