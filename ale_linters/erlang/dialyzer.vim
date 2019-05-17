@@ -83,6 +83,7 @@ function! ale_linters#erlang#dialyzer#Handle(buffer, lines) abort
 
     return l:output
 endfunction
+
 call ale#linter#Define('erlang', {
 \   'name': 'dialyzer',
 \   'executable': function('ale_linters#erlang#dialyzer#GetExecutable'),
