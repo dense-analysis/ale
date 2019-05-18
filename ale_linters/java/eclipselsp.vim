@@ -32,18 +32,36 @@ function! ale_linters#java#eclipselsp#JarPath(buffer) abort
         return l:files[0]
     endif
 
+    " Search jar file within system package path
+    let l:files = globpath('/usr/share/java/jdtls/plugins', 'org.eclipse.equinox.launcher_\d\.\d\.\d\d\d\.*\.jar', 1, 1)
+
+    if len(l:files) == 1
+        return l:files[0]
+    endif
+
     return ''
 endfunction
 
 function! ale_linters#java#eclipselsp#ConfigurationPath(buffer) abort
     let l:path = fnamemodify(ale_linters#java#eclipselsp#JarPath(a:buffer), ':p:h:h')
 
-    if has('win32')
-        let l:path = l:path . '/config_win'
-    elseif has('macunix')
-        let l:path = l:path . '/config_mac'
+    if l:path =~# '^/usr/share'
+        let l:home_path = $HOME . '/.jdtls'
+
+        if !isdirectory(l:home_path)
+            call mkdir(l:home_path)
+            execute '!ln -s ' . l:path . '/config_linux/config.ini ' . l:home_path . '/config.ini'
+        endif
+        let l:path = l:home_path
+
     else
-        let l:path = l:path . '/config_linux'
+        if has('win32')
+            let l:path = l:path . '/config_win'
+        elseif has('macunix')
+            let l:path = l:path . '/config_mac'
+        else
+            let l:path = l:path . '/config_linux'
+        endif
     endif
 
     return ale#path#Simplify(l:path)
