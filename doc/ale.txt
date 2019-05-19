@@ -1989,6 +1989,7 @@ documented in additional help files.
     elm-lsp...............................|ale-elm-elm-lsp|
     elm-make..............................|ale-elm-elm-make|
   erlang..................................|ale-erlang-options|
+    dialyzer..............................|ale-erlang-dialyzer|
     erlc..................................|ale-erlang-erlc|
     syntaxerl.............................|ale-erlang-syntaxerl|
   eruby...................................|ale-eruby-options|
