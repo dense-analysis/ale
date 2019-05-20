@@ -30,5 +30,5 @@ Execute(cppcheck for C++ should detect compile_commands.json files in build dire
   \ ale#path#CdString(ale#path#Simplify(g:dir . '/cppcheck_paths/with_build_dir'))
   \   . ale#Escape('cppcheck')
   \   . ' -q --language=c++'
-  \   . ' --project=' . ale#Escape('build/compile_commands.json')
+  \   . ' --project=' . ale#Escape(ale#path#Simplify('build/compile_commands.json'))
   \   . ' --enable=style %t'
