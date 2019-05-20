@@ -20,7 +20,7 @@ Execute(ale#lsp#message#Initialize() should return correct messages):
   \    'rootUri': 'file:///foo/bar',
   \   }
   \ ],
-  \ ale#lsp#message#Initialize('/foo/bar', {'foo': 'bar'})
+  \ ale#lsp#message#Initialize('/foo/bar', {'foo': 'bar'}, {})
 
 Execute(ale#lsp#message#Initialized() should return correct messages):
   AssertEqual [1, 'initialized', {}], ale#lsp#message#Initialized()
