@@ -10,9 +10,9 @@ After:
 Execute(The project root should be detected correctly using compile_commands.json file):
   AssertLSPProject ''
 
-  call ale#test#SetFilename('cquery_paths/with_compile_commands_json/dummy.cpp')
+  call ale#test#SetFilename('cquery_paths/dummy.cpp')
 
-  AssertLSPProject ale#path#Simplify(g:dir . '/cquery_paths/with_compile_commands_json')
+  AssertLSPProject ale#path#Simplify(g:dir . '/cquery_paths')
 
 Execute(The project root should be detected correctly using .cquery file):
   AssertLSPProject ''

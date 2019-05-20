@@ -2,6 +2,7 @@ Before:
   " Make sure the c.vim file is loaded first.
   call ale#c#FindProjectRoot(bufnr(''))
 
+  Save g:ale_c_parse_compile_commands
   Save g:ale_c_parse_makefile
   Save g:__ale_c_project_filenames
 
@@ -14,6 +15,7 @@ Before:
   \ 'v:val isnot# ''.git/HEAD'''
   \)
 
+  let g:ale_c_parse_compile_commands = 0
   let g:ale_c_parse_makefile = 0
 
 After:
