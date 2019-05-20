@@ -14,6 +14,8 @@ Execute(The default executable should be correct):
   AssertLinter 'clangd', ale#Escape('clangd')
 
 Execute(The project root should be detected correctly):
+  call ale#test#SetFilename(tempname() . '/dummy.c')
+
   AssertLSPProject ''
 
   call ale#test#SetFilename('clangd_paths/dummy.c')

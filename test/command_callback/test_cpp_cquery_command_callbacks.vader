@@ -8,6 +8,8 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The project root should be detected correctly using compile_commands.json file):
+  call ale#test#SetFilename(tempname() . '/dummy.cpp')
+
   AssertLSPProject ''
 
   call ale#test#SetFilename('cquery_paths/dummy.cpp')
@@ -15,6 +17,8 @@ Execute(The project root should be detected correctly using compile_commands.jso
   AssertLSPProject ale#path#Simplify(g:dir . '/cquery_paths')
 
 Execute(The project root should be detected correctly using .cquery file):
+  call ale#test#SetFilename(tempname() . '/dummy.cpp')
+
   AssertLSPProject ''
 
   call ale#test#SetFilename('cquery_paths/with_cquery/dummy.cpp')
