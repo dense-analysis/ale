@@ -3,8 +3,9 @@ Before:
   let g:ale_c_parse_makefile = 0
 
   call ale#assert#SetUpLinterTest('cpp', 'gcc')
-  let b:command_tail = ' -S -x c++ -fsyntax-only -iquote'
-  \   . ' ' . ale#Escape(getcwd())
+  let b:command_tail = ' -S -x c++'
+  \   . ' -o ' . (has('win32') ? 'nul': '/dev/null')
+  \   . ' -iquote ' . ale#Escape(getcwd())
   \   . ' -std=c++14 -Wall -'
 
 After:

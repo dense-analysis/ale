@@ -194,6 +194,10 @@ function! s:GetLookupFromCompileCommandsFile(compile_commands_file) abort
     let l:raw_data = []
     silent! let l:raw_data = json_decode(join(readfile(a:compile_commands_file), ''))
 
+    if type(l:raw_data) isnot v:t_list
+        let l:raw_data = []
+    endif
+
     let l:file_lookup = {}
     let l:dir_lookup = {}
 

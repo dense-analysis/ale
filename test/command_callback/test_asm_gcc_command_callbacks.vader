@@ -1,8 +1,9 @@
 Before:
   call ale#assert#SetUpLinterTest('asm', 'gcc')
   call ale#test#SetFilename('test.cpp')
-  let b:command_tail = ' -x assembler -fsyntax-only -iquote'
-  \   . ' ' . ale#Escape(g:dir)
+  let b:command_tail = ' -x assembler'
+  \   . ' -o ' . (has('win32') ? 'nul': '/dev/null')
+  \   . '-iquote ' . ale#Escape(g:dir)
   \   . ' -Wall -'
 
 After:
