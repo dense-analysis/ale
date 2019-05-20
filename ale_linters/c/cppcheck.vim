@@ -35,7 +35,7 @@ function! ale_linters#c#cppcheck#GetCommand(buffer) abort
       " This could be expanded to get more -I directives from the compile
       " command in compile_commands.json, if it's found.
       let l:buffer_path = fnamemodify(bufname(a:buffer), ':p:h')
-      let l:buffer_path_include = ' -I'.l:buffer_path
+      let l:buffer_path_include = ' -I' . ale#Escape(l:buffer_path)
     endif
 
     return l:cd_command
