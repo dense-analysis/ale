@@ -26,7 +26,7 @@ features, including:
 
 * Diagnostics (via Language Server Protocol linters)
 * Go To Definition (`:ALEGoToDefinition`)
-* Completion (Built in completion support)
+* Completion (Built in completion support, or with Deoplete)
 * Finding references (`:ALEFindReferences`)
 * Hover information (`:ALEHover`)
 * Symbol search (`:ALESymbolSearch`)
@@ -159,12 +159,24 @@ ALE offers some support for completion via hijacking of omnicompletion while you
 type. All of ALE's completion information must come from Language Server
 Protocol linters, or from `tsserver` for TypeScript.
 
-ALE offers its own automatic completion support, which does not require any
+ALE integrates with [Deoplete](https://github.com/Shougo/deoplete.nvim) as a
+completion source, named `'ale'`. You can configure Deoplete to only use ALE as
+the source of completion information, or mix it with other sources.
+
+```vim
+" Use ALE and also some plugin 'foobar' as completion sources for all code.
+let g:deoplete#sources = {'_': ['ale', 'foobar']}
+```
+
+ALE also offers its own automatic completion support, which does not require any
 other plugins, and can be enabled by changing a setting before ALE is loaded.
 
 ```vim
 " Enable completion where available.
 " This setting must be set before ALE is loaded.
+"
+" You should not turn this setting on if you wish to use ALE as a completion
+" source for other completion plugins, like Deoplete.
 let g:ale_completion_enabled = 1
 ```
 

@@ -67,4 +67,14 @@ echo
 
 test/script/check-toc || exit_code=$?
 
+echo '========================================'
+echo 'Check Python code'
+echo '========================================'
+echo
+
+docker run --rm -v "$PWD:/testplugin" "$DOCKER_RUN_IMAGE" \
+    python -W ignore -m unittest discover /testplugin/test/python \
+    || exit_code=$?
+echo
+
 exit $exit_code
