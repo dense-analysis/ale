@@ -141,6 +141,19 @@ g:ale_java_eclipselsp_executable                *g:ale_java_eclipse_executable*
   This variable can be set to change the executable path used for java.
 
 
+g:ale_java_eclipselsp_config_path                *g:ale_java_eclipse_config_path*
+                                                 *b:ale_java_eclipse_config_path*
+  Type: |String|
+  Default: `''`
+
+  Set this variable to change the configuration directory path used by
+  eclipselsp (e.g. `$HOME/.jdtls` in Linux).
+  By default ALE will attempt to use the configuration within the installation
+  directory.
+  This setting is particularly useful when eclipselsp is installed in a
+  non-writable directory like `/usr/share/java/jdtls`, as is the case when
+  installed via system package.
+
 ===============================================================================
 uncrustify                                                *ale-java-uncrustify*
 

@@ -4,6 +4,7 @@
 let s:version_cache = {}
 
 call ale#Set('java_eclipselsp_path', ale#path#Simplify($HOME . '/eclipse.jdt.ls'))
+call ale#Set('java_eclipselsp_config_path', '')
 call ale#Set('java_eclipselsp_executable', 'java')
 
 function! ale_linters#java#eclipselsp#Executable(buffer) abort
@@ -44,24 +45,18 @@ endfunction
 
 function! ale_linters#java#eclipselsp#ConfigurationPath(buffer) abort
     let l:path = fnamemodify(ale_linters#java#eclipselsp#JarPath(a:buffer), ':p:h:h')
+    let l:config_path = ale#Var(a:buffer, 'java_eclipselsp_config_path')
 
-    if l:path =~# '^/usr/share'
-        let l:home_path = $HOME . '/.jdtls'
+    if !empty(l:config_path)
+        return ale#path#Simplify(l:config_path)
+    endif
 
-        if !isdirectory(l:home_path)
-            call mkdir(l:home_path)
-            execute '!ln -s ' . l:path . '/config_linux/config.ini ' . l:home_path . '/config.ini'
-        endif
-        let l:path = l:home_path
-
+    if has('win32')
+        let l:path = l:path . '/config_win'
+    elseif has('macunix')
+        let l:path = l:path . '/config_mac'
     else
-        if has('win32')
-            let l:path = l:path . '/config_win'
-        elseif has('macunix')
-            let l:path = l:path . '/config_mac'
-        else
-            let l:path = l:path . '/config_linux'
-        endif
+        let l:path = l:path . '/config_linux'
     endif
 
     return ale#path#Simplify(l:path)
