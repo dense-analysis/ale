@@ -1,4 +1,4 @@
-# Asynchronous Lint Engine [![Travis CI Build Status](https://travis-ci.org/w0rp/ale.svg?branch=master)](https://travis-ci.org/w0rp/ale) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/r0ef1xu8xjmik58d/branch/master?svg=true)](https://ci.appveyor.com/project/w0rp/ale) [![Join the chat at https://gitter.im/vim-ale/Lobby](https://badges.gitter.im/vim-ale/Lobby.svg)](https://gitter.im/vim-ale/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# Asynchronous Lint Engine [![Travis CI Build Status](https://travis-ci.com/w0rp/ale.svg?branch=master)](https://travis-ci.com/w0rp/ale) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/r0ef1xu8xjmik58d/branch/master?svg=true)](https://ci.appveyor.com/project/w0rp/ale) [![Join the chat at https://gitter.im/vim-ale/Lobby](https://badges.gitter.im/vim-ale/Lobby.svg)](https://gitter.im/vim-ale/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
 ![ALE Logo by Mark Grealish - https://www.bhalash.com/](img/logo.jpg?raw=true)
