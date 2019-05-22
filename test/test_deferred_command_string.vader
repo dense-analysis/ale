@@ -46,5 +46,5 @@ Execute(It handle the deferred command failing):
   call ale#test#FlushJobs()
 
   AssertEqual
-  \ 0,
+  \ 1,
   \ len(filter(copy(b:ale_history), 'string(v:val.command) =~# ''foo'''))
