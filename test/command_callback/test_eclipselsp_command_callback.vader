@@ -61,11 +61,11 @@ Execute(The eclipselsp callback should return the correct default value):
     \ '-noverify',
     \ '-Xmx1G',
     \ '-jar',
-    \ '',
+    \ ale#Escape(''),
     \ '-configuration',
-    \ b:cfg,
+    \ ale#Escape(b:cfg),
     \ '-data',
-    \ ''
+    \ ale#Escape(ale#path#Simplify(''))
     \]
   AssertLinter 'java', join(cmd, ' ')
 
@@ -79,11 +79,11 @@ Execute(The eclipselsp callback should allow custom executable):
     \ '-noverify',
     \ '-Xmx1G',
     \ '-jar',
-    \ '',
+    \ ale#Escape(''),
     \ '-configuration',
-    \ b:cfg,
+    \ ale#Escape(b:cfg),
     \ '-data',
-    \ ''
+    \ ale#Escape(ale#path#Simplify(''))
     \]
   AssertLinter '/bin/foobar', join(cmd, ' ')
 
@@ -97,10 +97,10 @@ Execute(The eclipselsp callback should allow custom configuration path):
     \ '-noverify',
     \ '-Xmx1G',
     \ '-jar',
-    \ '',
+    \ ale#Escape(''),
     \ '-configuration',
-    \ ale#path#Simplify('/home/config'),
+    \ ale#Escape(ale#path#Simplify('/home/config')),
     \ '-data',
-    \ ''
+    \ ale#Escape(ale#path#Simplify(''))
     \]
   AssertLinter 'java', join(cmd, ' ')
