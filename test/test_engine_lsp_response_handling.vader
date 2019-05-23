@@ -92,6 +92,35 @@ Execute(tsserver syntax error responses should be handled correctly):
   \ ],
   \ ale#test#GetLoclistWithoutModule()
 
+  " Syntax errors on the project root should not populate the LocList.
+  call ale#lsp_linter#HandleLSPResponse(1, {
+  \ 'seq': 0,
+  \ 'type': 'event',
+  \ 'event': 'syntaxDiag',
+  \ 'body': {
+  \   'file': g:dir,
+  \   'diagnostics':[
+  \     {
+  \       'start': {
+  \         'line':2,
+  \         'offset':14,
+  \       },
+  \       'end': {
+  \         'line':2,
+  \         'offset':15,
+  \       },
+  \       'text': ''','' expected.',
+  \       "code":1005
+  \     },
+  \   ],
+  \ },
+  \})
+
+  AssertEqual
+  \ [
+  \ ],
+  \ ale#test#GetLoclistWithoutModule()
+
 Execute(tsserver semantic error responses should be handled correctly):
   runtime ale_linters/typescript/tsserver.vim
   call ale#test#SetFilename('filename.ts')
@@ -156,6 +185,35 @@ Execute(tsserver semantic error responses should be handled correctly):
   \ 'body': {
   \   'file': g:dir . '/filename.ts',
   \   'diagnostics':[
+  \   ],
+  \ },
+  \})
+
+  AssertEqual
+  \ [
+  \ ],
+  \ ale#test#GetLoclistWithoutModule()
+
+  " Semantic errors on the project root should not populate the LocList.
+  call ale#lsp_linter#HandleLSPResponse(1, {
+  \ 'seq': 0,
+  \ 'type': 'event',
+  \ 'event': 'semanticDiag',
+  \ 'body': {
+  \   'file': g:dir,
+  \   'diagnostics':[
+  \     {
+  \       'start': {
+  \         'line':2,
+  \         'offset':14,
+  \       },
+  \       'end': {
+  \         'line':2,
+  \         'offset':15,
+  \       },
+  \       'text': 'Some semantic error',
+  \       "code":1005
+  \     },
   \   ],
   \ },
   \})
