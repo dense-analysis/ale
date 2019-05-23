@@ -2246,7 +2246,8 @@ documented in additional help files.
   tcl.....................................|ale-tcl-options|
     nagelfar..............................|ale-tcl-nagelfar|
   terraform...............................|ale-terraform-options|
-    fmt...................................|ale-terraform-fmt|
+    terraform-fmt-fixer...................|ale-terraform-fmt-fixer|
+    terraform.............................|ale-terraform-terraform|
     tflint................................|ale-terraform-tflint|
   tex.....................................|ale-tex-options|
     chktex................................|ale-tex-chktex|
