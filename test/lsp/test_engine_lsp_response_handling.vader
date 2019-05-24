@@ -1,19 +1,42 @@
 Before:
+  Save g:ale_set_lists_synchronously
   Save g:ale_buffer_info
   Save g:ale_lsp_error_messages
+  Save g:ale_set_loclist
+  Save g:ale_set_signs
+  Save g:ale_set_quickfix
+  Save g:ale_set_highlights
+  Save g:ale_echo_cursor
+  Save g:ale_disable_lsp
+  Save g:ale_history_enabled
+  Save g:ale_history_log_output
 
+  let g:ale_disable_lsp = 0
+  let g:ale_set_lists_synchronously = 1
   let g:ale_buffer_info = {}
+  let g:ale_set_loclist = 1
+  " Disable features we don't need for these tests.
+  let g:ale_set_signs = 0
+  let g:ale_set_quickfix = 0
+  let g:ale_set_highlights = 0
+  let g:ale_echo_cursor = 0
+  let g:ale_history_enabled = 1
+  let g:ale_history_log_output = 1
 
   unlet! g:ale_lsp_error_messages
   unlet! b:ale_linters
+  unlet! b:ale_disable_lsp
 
+  call ale#linter#Reset()
   call ale#test#SetDirectory('/testplugin/test')
+  call setloclist(0, [])
 
 After:
   Restore
 
   unlet! b:ale_linters
 
+  call setloclist(0, [])
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
   call ale#lsp_linter#ClearLSPData()
@@ -281,7 +304,7 @@ Execute(LSP diagnostics responses should be handled correctly):
   \ [
   \   {
   \     'lnum': 1,
-  \     'bufnr': 3,
+  \     'bufnr': bufnr(''),
   \     'col': 1,
   \     'pattern': '',
   \     'valid': 1,
