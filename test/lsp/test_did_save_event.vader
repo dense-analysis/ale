@@ -9,6 +9,7 @@ Before:
   call ale#test#SetFilename('dummy.txt')
 
   runtime autoload/ale/lsp.vim
+  runtime autoload/ale/lsp_linter.vim
 
   let g:ale_disable_lsp = 0
   unlet! b:ale_disable_lsp
