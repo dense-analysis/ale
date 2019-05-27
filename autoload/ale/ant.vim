@@ -33,8 +33,8 @@ function! ale#ant#BuildClasspathCommand(buffer) abort
         return ale#path#CdString(l:project_root)
         \   . ale#Escape(l:executable)
         \   . ' classpath'
-        \   . ' -S' " Silent : print nothing but task outputs and build failure
-        \   . ' -q' " Quiet  : be extra quiet
+        \   . ' -S'
+        \   . ' -q'
     endif
 
     return ''
