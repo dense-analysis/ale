@@ -1,4 +1,4 @@
-# Asynchronous Lint Engine [![Travis CI Build Status](https://travis-ci.org/w0rp/ale.svg?branch=master)](https://travis-ci.org/w0rp/ale) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/r0ef1xu8xjmik58d/branch/master?svg=true)](https://ci.appveyor.com/project/w0rp/ale) [![Join the chat at https://gitter.im/vim-ale/Lobby](https://badges.gitter.im/vim-ale/Lobby.svg)](https://gitter.im/vim-ale/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# Asynchronous Lint Engine [![Travis CI Build Status](https://travis-ci.com/w0rp/ale.svg?branch=master)](https://travis-ci.com/w0rp/ale) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/r0ef1xu8xjmik58d/branch/master?svg=true)](https://ci.appveyor.com/project/w0rp/ale) [![Join the chat at https://gitter.im/vim-ale/Lobby](https://badges.gitter.im/vim-ale/Lobby.svg)](https://gitter.im/vim-ale/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
 ![ALE Logo by Mark Grealish - https://www.bhalash.com/](img/logo.jpg?raw=true)
@@ -178,6 +178,13 @@ other plugins, and can be enabled by changing a setting before ALE is loaded.
 " You should not turn this setting on if you wish to use ALE as a completion
 " source for other completion plugins, like Deoplete.
 let g:ale_completion_enabled = 1
+```
+
+ALE provides an omni-completion function you can use for triggering
+completion manually with `<C-x><C-o>`.
+
+```vim
+set omnifunc=ale#completion#OmniFunc
 ```
 
 See `:help ale-completion` for more information.

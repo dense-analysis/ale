@@ -4,8 +4,9 @@ Before:
 
   call ale#assert#SetUpLinterTest('c', 'gcc')
 
-  let b:command_tail = ' -S -x c -fsyntax-only -iquote'
-  \   . ' ' . ale#Escape(getcwd())
+  let b:command_tail = ' -S -x c'
+  \   . ' -o ' . (has('win32') ? 'nul': '/dev/null')
+  \   . ' -iquote ' . ale#Escape(getcwd())
   \   . ' -std=c11 -Wall -'
 
 After:

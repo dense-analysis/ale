@@ -1,5 +1,6 @@
 Before:
   Save g:ale_max_buffer_history_size
+  Save g:ale_history_enabled
   Save g:ale_history_log_output
   Save g:ale_run_synchronously
   Save g:ale_enabled
@@ -54,8 +55,6 @@ After:
   " Reset the shell back to what it was before.
   let &shell = g:current_shell
   unlet g:current_shell
-  let g:ale_history_enabled = 1
-  let g:ale_history_log_output = 0
   unlet g:history
 
   call ale#engine#Cleanup(bufnr(''))

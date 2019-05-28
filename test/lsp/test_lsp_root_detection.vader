@@ -56,7 +56,7 @@ Execute(The global variable is queried if the buffer-specific has no value):
 
   AssertLSPProject '/some/path'
 
-Execute(The default hook value is acceptable):
-  call ale#test#SetFilename('other-file.c')
+Execute(No path should be returned by default):
+  call ale#test#SetFilename(tempname() . '/other-file.c')
 
   AssertLSPProject ''

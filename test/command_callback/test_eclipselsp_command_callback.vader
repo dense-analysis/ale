@@ -1,19 +1,21 @@
 Before:
   call ale#assert#SetUpLinterTest('java', 'eclipselsp')
-  let b:ale_java_eclipselsp_path = '/home/user/eclipse.dst.ls'
   call ale#test#SetFilename('dummy.java')
 
-  let b:cfg = '/testplugin/test/config_linux'
+  let b:ale_java_eclipselsp_path = '/home/user/eclipse.dst.ls'
+
+  let b:cfg = ale#path#Simplify(g:dir . '/../config_linux')
 
   if has('win32')
-    let b:cfg = 'C:\testplugin\test\config_win'
+    let b:cfg = ale#path#Simplify(g:dir . '/../config_win')
   elseif has('macunix')
-    let b:cfg = '/testplugin/test/config_mac'
+    let b:cfg = ale#path#Simplify(g:dir . '/../config_mac')
   endif
 
-
 After:
-  unlet b:ale_java_eclipselsp_path
+  unlet! b:ale_java_eclipselsp_path
+  unlet! b:cfg
+
   call ale#assert#TearDownLinterTest()
 
 Execute(VersionCheck should return correct version):
@@ -59,11 +61,11 @@ Execute(The eclipselsp callback should return the correct default value):
     \ '-noverify',
     \ '-Xmx1G',
     \ '-jar',
-    \ '',
+    \ ale#Escape(''),
     \ '-configuration',
-    \ b:cfg,
+    \ ale#Escape(b:cfg),
     \ '-data',
-    \ ''
+    \ ale#Escape(ale#path#Simplify(''))
     \]
   AssertLinter 'java', join(cmd, ' ')
 
@@ -77,11 +79,28 @@ Execute(The eclipselsp callback should allow custom executable):
     \ '-noverify',
     \ '-Xmx1G',
     \ '-jar',
-    \ '',
+    \ ale#Escape(''),
     \ '-configuration',
-    \ b:cfg,
+    \ ale#Escape(b:cfg),
     \ '-data',
-    \ ''
+    \ ale#Escape(ale#path#Simplify(''))
     \]
   AssertLinter '/bin/foobar', join(cmd, ' ')
 
+Execute(The eclipselsp callback should allow custom configuration path):
+  let b:ale_java_eclipselsp_config_path = '/home/config'
+  let cmd = [ ale#Escape('java'),
+    \ '-Declipse.application=org.eclipse.jdt.ls.core.id1',
+    \ '-Dosgi.bundles.defaultStartLevel=4',
+    \ '-Declipse.product=org.eclipse.jdt.ls.core.product',
+    \ '-Dlog.level=ALL',
+    \ '-noverify',
+    \ '-Xmx1G',
+    \ '-jar',
+    \ ale#Escape(''),
+    \ '-configuration',
+    \ ale#Escape(ale#path#Simplify('/home/config')),
+    \ '-data',
+    \ ale#Escape(ale#path#Simplify(''))
+    \]
+  AssertLinter 'java', join(cmd, ' ')

@@ -1,3 +1,11 @@
+Before:
+  Save g:ale_disable_lsp
+
+After:
+  Restore
+
+  unlet! b:ale_disable_lsp
+
 Execute(GetList should ignore some invalid values):
   AssertEqual [], ale#engine#ignore#GetList('', 'foo')
   AssertEqual [], ale#engine#ignore#GetList('', 0)
@@ -98,7 +106,6 @@ Execute(Exclude should handle Dictionaries):
   \ )
 
 Execute(Exclude should filter LSP linters when g:ale_disable_lsp is set to 1):
-  let g:ale_disable_lsp = 1
   AssertEqual
   \ [
   \   {'name': 'linter1', 'aliases': [], 'lsp': ''},
@@ -116,7 +123,6 @@ Execute(Exclude should filter LSP linters when g:ale_disable_lsp is set to 1):
   \ )
 
 Execute(Exclude should filter LSP linters when b:ale_disable_lsp is set to 1):
-  let b:ale_disable_lsp = 1
   AssertEqual
   \ [
   \   {'name': 'linter1', 'aliases': [], 'lsp': ''},
@@ -351,7 +357,7 @@ Execute(ale_disable_lsp should be applied for tsserver):
 
   AssertEqual [], g:loclist
 
-Execute(ale_disable_lsp  should be applied for LSP linters):
+Execute(ale_disable_lsp should be applied for LSP linters):
   call ale#test#SetFilename('filename.py')
   call ale#engine#InitBufferInfo(bufnr(''))
   call ale#lsp_linter#SetLSPLinterMap({'347': 'lsplinter'})

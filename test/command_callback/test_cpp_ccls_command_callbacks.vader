@@ -8,6 +8,8 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The project root should be detected correctly using compile_commands.json file):
+  call ale#test#SetFilename(tempname() . '/dummy.cpp')
+
   AssertLSPProject ''
 
   call ale#test#SetFilename('ccls_paths/with_compile_commands_json/dummy.cpp')
@@ -15,6 +17,8 @@ Execute(The project root should be detected correctly using compile_commands.jso
   AssertLSPProject ale#path#Simplify(g:dir . '/ccls_paths/with_compile_commands_json')
 
 Execute(The project root should be detected correctly using .ccls file):
+  call ale#test#SetFilename(tempname() . '/dummy.cpp')
+
   AssertLSPProject ''
 
   call ale#test#SetFilename('ccls_paths/with_ccls/dummy.cpp')
@@ -22,6 +26,8 @@ Execute(The project root should be detected correctly using .ccls file):
   AssertLSPProject ale#path#Simplify(g:dir . '/ccls_paths/with_ccls')
 
 Execute(The project root should be detected correctly using .ccls-root file):
+  call ale#test#SetFilename(tempname() . '/dummy.cpp')
+
   AssertLSPProject ''
 
   call ale#test#SetFilename('ccls_paths/with_ccls-root/dummy.cpp')

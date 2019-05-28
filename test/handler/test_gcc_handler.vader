@@ -217,3 +217,65 @@ Execute(The GCC handler should handle fatal error messages due to missing files)
   \ ale#handlers#gcc#HandleGCCFormatWithIncludes(347, [
   \ '<stdin>:3:12: fatal error: foo.h: No such file or directory',
   \ ])
+
+Execute(The GCC handler should handle errors for inlined header functions):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 50,
+  \     'col': 4,
+  \     'filename': '/usr/include/bits/fcntl2.h',
+  \     'type': 'E',
+  \     'text': 'call to ''__open_missing_mode'' declared with attribute error: open with O_CREAT or O_TMPFILE in second argument needs 3 arguments',
+  \   },
+  \   {
+  \     'lnum': 44,
+  \     'col': 5,
+  \     'filename': '/usr/include/bits/fcntl2.h',
+  \     'type': 'E',
+  \     'text': 'call to ''__open_too_many_args'' declared with attribute error: open can be called either with 2 or 3 arguments, not more',
+  \   },
+  \   {
+  \     'lnum': 7,
+  \     'col': 10,
+  \     'type': 'E',
+  \     'text': 'call to ''__open_missing_mode'' declared with attribute error: open with O_CREAT or O_TMPFILE in second argument needs 3 arguments',
+  \   },
+  \   {
+  \     'lnum': 13,
+  \     'col': 11,
+  \     'type': 'E',
+  \     'text': 'call to ''__open_too_many_args'' declared with attribute error: open can be called either with 2 or 3 arguments, not more',
+  \   },
+  \   {
+  \     'lnum': 1,
+  \     'text': 'Error found in header. See :ALEDetail',
+  \     'detail': join([
+  \       'In file included from /usr/include/fcntl.h:328,',
+  \       '                 from <stdin>:1:',
+  \       'In function ‘open’,',
+  \       '    inlined from ‘main’ at <stdin>:7:10:',
+  \       '/usr/include/bits/fcntl2.h:50:4: error: call to ‘__open_missing_mode’ declared with attribute error: open with O_CREAT or O_TMPFILE in second argument needs 3 arguments',
+  \       '    __open_missing_mode ();',
+  \       '    ^~~~~~~~~~~~~~~~~~~~~~',
+  \       'In function ‘open’,',
+  \       '    inlined from ‘main’ at <stdin>:13:11:',
+  \       '/usr/include/bits/fcntl2.h:44:5: error: call to ‘__open_too_many_args’ declared with attribute error: open can be called either with 2 or 3 arguments, not more',
+  \       '     __open_too_many_args ();',
+  \     ], "\n")
+  \   },
+  \],
+  \ ale#handlers#gcc#HandleGCCFormatWithIncludes(347, [
+  \ 'In file included from /usr/include/fcntl.h:328,',
+  \ '                 from <stdin>:1:',
+  \ 'In function ‘open’,',
+  \ '    inlined from ‘main’ at <stdin>:7:10:',
+  \ '/usr/include/bits/fcntl2.h:50:4: error: call to ‘__open_missing_mode’ declared with attribute error: open with O_CREAT or O_TMPFILE in second argument needs 3 arguments',
+  \ '    __open_missing_mode ();',
+  \ '    ^~~~~~~~~~~~~~~~~~~~~~',
+  \ 'In function ‘open’,',
+  \ '    inlined from ‘main’ at <stdin>:13:11:',
+  \ '/usr/include/bits/fcntl2.h:44:5: error: call to ‘__open_too_many_args’ declared with attribute error: open can be called either with 2 or 3 arguments, not more',
+  \ '     __open_too_many_args ();',
+  \ '     ^~~~~~~~~~~~~~~~~~~~~~~',
+  \ ])
