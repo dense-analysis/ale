@@ -21,6 +21,8 @@ function! ale#handlers#cppcheck#GetBufferPathIncludeOptions(buffer) abort
         let l:buffer_path = fnamemodify(bufname(a:buffer), ':p:h')
         let l:buffer_path_include = ' -I' . ale#Escape(l:buffer_path)
     endif
+
+    return l:buffer_path_include
 endfunction
 
 function! ale#handlers#cppcheck#GetCompileCommandsOptions(buffer) abort
