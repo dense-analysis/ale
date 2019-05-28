@@ -3,42 +3,21 @@ Before:
 
   unlet! b:ale_linters
   unlet! b:ale_completion_info
-  unlet! b:ale_completion_response
-  unlet! b:ale_completion_parser
   unlet! b:ale_completion_result
 
-  function! Identity(x) abort
-    return a:x
-  endfunction
-
 After:
-  delfunction Identity
-
   call ale#linter#Reset()
 
   unlet! b:ale_linters
   unlet! b:ale_completion_info
-  unlet! b:ale_completion_response
-  unlet! b:ale_completion_parser
   unlet! b:ale_completion_result
 
 Execute(ale#completion#GetCompletionResult() should return v:null when there are no results):
   AssertEqual v:null, ale#completion#GetCompletionResult()
 
-Execute(ale#completion#GetCompletionResult() should parse the result when it has yet to be parsed):
-  let b:ale_completion_response = [1]
-  let b:ale_completion_parser = 'Identity'
-
-  AssertEqual [1], ale#completion#GetCompletionResult()
-  Assert !exists('b:ale_completion_response')
-  Assert !exists('b:ale_completion_parser')
-  AssertEqual [1], b:ale_completion_result
-
 Execute(ale#completion#GetCompletionResult() should return a result computed previously):
   let b:ale_completion_result = [1]
 
-  Assert !exists('b:ale_completion_response')
-  Assert !exists('b:ale_completion_parser')
   AssertEqual [1], ale#completion#GetCompletionResult()
 
 Execute(ale#completion#GetCompletionPosition() should return 0 when there is no completion information):

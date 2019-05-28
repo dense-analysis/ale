@@ -1,7 +1,5 @@
 Before:
   unlet! b:ale_completion_info
-  unlet! b:ale_completion_response
-  unlet! b:ale_completion_parser
   unlet! b:ale_completion_result
 
   let b:lsp_started = 0
@@ -12,27 +10,19 @@ Before:
     return b:lsp_started
   endfunction
 
-  function! Identity(x) abort
-    return a:x
-  endfunction
-
   function! SetCompletionResult(...) abort
     let b:ale_completion_result = ['foo']
   endfunction
 
   function! SetCompletionResponse(...) abort
-    let b:ale_completion_response = ['foo']
-    let b:ale_completion_parser = 'Identity'
+    let b:ale_completion_result = ['foo']
   endfunction
 
 After:
   unlet! b:ale_completion_info
-  unlet! b:ale_completion_response
-  unlet! b:ale_completion_parser
   unlet! b:ale_completion_result
   unlet! b:lsp_started
 
-  delfunction Identity
   delfunction SetCompletionResult
   delfunction SetCompletionResponse
 

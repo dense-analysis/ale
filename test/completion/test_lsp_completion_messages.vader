@@ -69,8 +69,6 @@ After:
   unlet! b:ale_old_omnifunc
   unlet! b:ale_old_completeopt
   unlet! b:ale_completion_info
-  unlet! b:ale_completion_response
-  unlet! b:ale_completion_parser
   unlet! b:ale_complete_done_time
   unlet! b:ale_linters
   unlet! b:ale_tsserver_completion_names
@@ -246,14 +244,14 @@ Execute(Two completion requests shouldn't be sent in a row):
   \   'lsp': 'stdio',
   \   'executable': 'foo',
   \   'command': 'foo',
-  \   'project_root_callback': {-> '/foo/bar'},
+  \   'project_root': {-> '/foo/bar'},
   \})
   call ale#linter#Define('python', {
   \   'name': 'bar',
   \   'lsp': 'stdio',
   \   'executable': 'foo',
   \   'command': 'foo',
-  \   'project_root_callback': {-> '/foo/bar'},
+  \   'project_root': {-> '/foo/bar'},
   \})
   let b:ale_linters = ['foo', 'bar']
 
