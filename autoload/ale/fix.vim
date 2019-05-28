@@ -4,8 +4,9 @@ call ale#Set('fix_on_save_ignore', {})
 " Vim doesn't let you modify hidden buffers.
 function! ale#fix#ApplyQueuedFixes(buffer) abort
     let l:data = get(g:ale_fix_buffer_data, a:buffer, {'done': 0})
+    let l:has_bufline_api = exists('*deletebufline') && exists('*setbufline')
 
-    if !l:data.done || (!exists('*deletebufline') && a:buffer isnot bufnr(''))
+    if !l:data.done || (!l:has_bufline_api && a:buffer isnot bufnr(''))
         return
     endif
 
@@ -21,7 +22,7 @@ function! ale#fix#ApplyQueuedFixes(buffer) abort
         let l:first_line_to_remove = len(l:new_lines) + 1
 
         " Use a Vim API for setting lines in other buffers, if available.
-        if exists('*deletebufline')
+        if l:has_bufline_api
             call setbufline(a:buffer, 1, l:new_lines)
             call deletebufline(a:buffer, l:first_line_to_remove, '$')
         " Fall back on setting lines the old way, for the current buffer.
