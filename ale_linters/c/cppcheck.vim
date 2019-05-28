@@ -5,7 +5,6 @@ call ale#Set('c_cppcheck_executable', 'cppcheck')
 call ale#Set('c_cppcheck_options', '--enable=style')
 
 function! ale_linters#c#cppcheck#GetCommand(buffer) abort
-
     let l:cd_command = ale#handlers#cppcheck#GetCdCommand(a:buffer)
     let l:compile_commands_option = ale#handlers#cppcheck#GetCompileCommandsOptions(a:buffer)
     let l:buffer_path_include = ale#handlers#cppcheck#GetBufferPathIncludeOptions(a:buffer)
