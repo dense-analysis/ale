@@ -1,6 +1,6 @@
 Before:
   call ale#assert#SetUpLinterTest('cpp', 'cppcheck')
-  let b:command_tail = ' -q --language=c++ --enable=style -I' . g:dir .' %t'
+  let b:command_tail = ' -q --language=c++ --enable=style -I' . ale#Escape(ale#path#Simplify(g:dir)) .' %t'
 
 After:
   unlet! b:command_tail
@@ -36,7 +36,7 @@ Execute(cppcheck for C++ should include file dir if compile_commands.json file i
 
   AssertLinter 'cppcheck',
   \   ale#Escape('cppcheck')
-  \   . ' -q --language=c'
+  \   . ' -q --language=c++'
   \   . ' --enable=style'
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir . '/cppcheck_paths'))
   \   . ' %t'
@@ -48,7 +48,7 @@ Execute(cppcheck for C++ should ignore compile_commands.json file if buffer is m
 
   AssertLinter 'cppcheck',
   \   ale#Escape('cppcheck')
-  \   . ' -q --language=c'
+  \   . ' -q --language=c++'
   \   . ' --enable=style'
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir . '/cppcheck_paths'))
   \   . ' %t'

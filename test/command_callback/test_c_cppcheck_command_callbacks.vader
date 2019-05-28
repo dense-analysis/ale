@@ -1,7 +1,7 @@
 Before:
   call ale#assert#SetUpLinterTest('c', 'cppcheck')
 
-  let b:command_tail = ' -q --language=c --enable=style -I' . g:dir .' %t'
+  let b:command_tail = ' -q --language=c --enable=style -I' . ale#Escape(ale#path#Simplify(g:dir)) .' %t'
 
 After:
   call ale#assert#TearDownLinterTest()
