@@ -1,6 +1,9 @@
 " Author: Devon Meunier <devon.meunier@gmail.com>
 " Description: checkstyle for Java files
 
+call ale#Set('java_checkstyle_executable', 'checkstyle')
+call ale#Set('java_checkstyle_config', 'google_checks.xml')
+
 function! ale_linters#java#checkstyle#Handle(buffer, lines) abort
     let l:output = []
 
@@ -35,15 +38,22 @@ function! ale_linters#java#checkstyle#Handle(buffer, lines) abort
     return l:output
 endfunction
 
-function! ale_linters#java#checkstyle#GetCommand(buffer) abort
-    return 'checkstyle '
-    \ . ale#Var(a:buffer, 'java_checkstyle_options')
-    \ . ' %s'
+function! ale_linters#java#checkstyle#GetConfig(buffer) abort
+    let l:cfg = ale#Var(a:buffer, 'java_checkstyle_config')
+
+    if filereadable(l:cfg)
+        return l:cfg
+    endif
+
+    return ale#path#ResolveLocalPath(a:buffer, l:cfg, '/google_checks.xml')
 endfunction
 
-if !exists('g:ale_java_checkstyle_options')
-    let g:ale_java_checkstyle_options = '-c /google_checks.xml'
-endif
+function! ale_linters#java#checkstyle#GetCommand(buffer) abort
+    return ale#Escape(ale#Var(a:buffer, 'java_checkstyle_executable'))
+    \ . ' -c '
+    \ . ale_linters#java#checkstyle#GetConfig(a:buffer)
+    \ . ' %s'
+endfunction
 
 call ale#linter#Define('java', {
 \   'name': 'checkstyle',

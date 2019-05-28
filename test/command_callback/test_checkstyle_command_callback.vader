@@ -1,0 +1,22 @@
+Before:
+  call ale#assert#SetUpLinterTest('java', 'checkstyle')
+  call ale#test#SetFilename('dummy.java')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The checkstyle callback should return the correct default value):
+  let cmd = [ ale#Escape('checkstyle'),
+    \ '-c /google_checks.xml',
+    \ '%s'
+    \]
+  AssertLinter 'checkstyle', join(cmd, ' ')
+
+Execute(The checkstyle callback should override executable):
+  let g:ale_java_checkstyle_executable = 'bin/checkstyle'
+  let cmd = [ ale#Escape('bin/checkstyle'),
+    \ '-c /google_checks.xml',
+    \ '%s'
+    \]
+  AssertLinter 'checkstyle', join(cmd, ' ')
+
