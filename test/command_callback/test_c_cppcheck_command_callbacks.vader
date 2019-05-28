@@ -21,7 +21,7 @@ Execute(cppcheck for C should detect compile_commands.json files):
   AssertLinter 'cppcheck',
   \ ale#path#CdString(ale#path#Simplify(g:dir . '/cppcheck_paths/one'))
   \   . ale#Escape('cppcheck')
-  \   . ' -q --language=c --project=compile_commands.json --enable=style %t'
+  \   . ' -q --language=c --project=''compile_commands.json'' --enable=style %t'
 
 Execute(cppcheck for C should detect compile_commands.json files in build directories):
   call ale#test#SetFilename('cppcheck_paths/with_build_dir/foo.cpp')
