@@ -45,7 +45,8 @@ Execute(cppcheck for C should include file dir if compile_commands.json file is 
 
 Execute(cppcheck for C should ignore compile_commands.json file if buffer is modified):
   call ale#test#SetFilename('cppcheck_paths/one/foo.c')
-  " modify buffer here
+
+  set modified
 
   AssertLinter 'cppcheck',
   \   ale#Escape('cppcheck')
