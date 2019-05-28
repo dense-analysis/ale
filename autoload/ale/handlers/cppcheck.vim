@@ -10,17 +10,11 @@ endfunction
 function! ale#handlers#cppcheck#GetBufferPathIncludeOptions(buffer) abort
     let l:buffer_path_include = ''
 
-    let l:modified = getbufvar(a:buffer, '&modified')
-
-    " if the buffer is modified or we haven't found compile_commands.json,
-    " include the file's directory.
-    if l:modified
-        " Get path to this buffer so we can include it into cppcheck with -I
-        " This could be expanded to get more -I directives from the compile
-        " command in compile_commands.json, if it's found.
-        let l:buffer_path = fnamemodify(bufname(a:buffer), ':p:h')
-        let l:buffer_path_include = ' -I' . ale#Escape(l:buffer_path)
-    endif
+    " Get path to this buffer so we can include it into cppcheck with -I
+    " This could be expanded to get more -I directives from the compile
+    " command in compile_commands.json, if it's found.
+    let l:buffer_path = fnamemodify(bufname(a:buffer), ':p:h')
+    let l:buffer_path_include = ' -I' . ale#Escape(l:buffer_path)
 
     return l:buffer_path_include
 endfunction

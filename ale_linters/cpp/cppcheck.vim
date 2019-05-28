@@ -12,7 +12,7 @@ function! ale_linters#cpp#cppcheck#GetCommand(buffer) abort
           \ : ''
 
     return l:cd_command
-    \   . '%e -q --language=cpp'
+    \   . '%e -q --language=c++'
     \   . ale#Pad(l:compile_commands_option)
     \   . ale#Pad(ale#Var(a:buffer, 'cpp_cppcheck_options'))
     \   . l:buffer_path_include
