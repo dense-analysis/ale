@@ -2236,6 +2236,7 @@ documented in additional help files.
   spec....................................|ale-spec-options|
     rpmlint...............................|ale-spec-rpmlint|
   sql.....................................|ale-sql-options|
+    pgformatter...........................|ale-sql-pgformatter|
     sqlfmt................................|ale-sql-sqlfmt|
   stylus..................................|ale-stylus-options|
     stylelint.............................|ale-stylus-stylelint|
