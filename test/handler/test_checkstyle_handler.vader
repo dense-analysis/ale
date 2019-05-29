@@ -21,10 +21,18 @@ Execute(The checkstyle handler should parse lines correctly):
   \     'code': 'JavadocMethod',
   \     'type': 'W',
   \   },
+  \   {
+  \     'lnum': 11,
+  \     'col': 7,
+  \     'text': 'WhitespaceAround: ''if'' is not followed by whitespace.',
+  \     'code': 'WhitespaceAround',
+  \     'type': 'W',
+  \   },
   \ ],
   \ ale_linters#java#checkstyle#Handle(666, [
   \   '[WARN] whatever:101: ''method def rcurly'' has incorrect indentation level 4, expected level should be 2. [Indentation]',
   \   '[WARN] whatever:63:3: Missing a Javadoc comment. [JavadocMethod]',
+  \   '[WARN] whatever:11:7: WhitespaceAround: ''if'' is not followed by whitespace. [WhitespaceAround]',
   \ ])
 
 Execute(The checkstyle handler should parse lines from older checkstyle versions correctly):
