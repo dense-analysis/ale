@@ -1,0 +1,34 @@
+Before:
+  " Load the file which defines the linter.
+  runtime ale_linters/terraform/terraform.vim
+
+After:
+  " Unload all linters again.
+  call ale#linter#Reset()
+
+Execute(The output should be correct):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'col': 20,
+  \     'type': 'E',
+  \     'text': 'illegal char',
+  \   },
+  \   {
+  \     'lnum': 2,
+  \     'col': 14,
+  \     'type': 'E',
+  \     'text': 'literal not terminated',
+  \   },
+  \   {
+  \     'lnum': 1,
+  \     'type': 'E',
+  \     'text': 'object expected closing RBRACE got: EOF',
+  \   },
+  \ ],
+  \ ale_linters#terraform#terraform#Handle(bufnr(''), [
+  \ 'Error running fmt: In <standard input>: At 1:20: illegal char',
+  \ 'Error running fmt: In <standard input>: At 2:14: literal not terminated',
+  \ 'Error running fmt: In <standard input>: object expected closing RBRACE got: EOF',
+  \ ])
