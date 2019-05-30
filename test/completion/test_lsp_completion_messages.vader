@@ -219,7 +219,7 @@ Execute(The right message should be sent for the initial LSP request):
   \   }],
   \   [0, 'textDocument/completion', {
   \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
-  \   'position': {'line': 0, 'character': 3},
+  \   'position': {'line': 0, 'character': 2},
   \   }],
   \ ],
   \ g:message_list
@@ -280,7 +280,7 @@ Execute(Two completion requests shouldn't be sent in a row):
   \   }],
   \   [0, 'textDocument/completion', {
   \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
-  \   'position': {'line': 0, 'character': 3},
+  \   'position': {'line': 0, 'character': 2},
   \   }],
   \ ],
   \ g:message_list

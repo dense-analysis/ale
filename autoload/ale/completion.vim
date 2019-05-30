@@ -521,10 +521,7 @@ function! s:OnReady(linter, lsp_details) abort
         let l:message = ale#lsp#message#Completion(
         \   l:buffer,
         \   b:ale_completion_info.line,
-        \   min([
-        \       b:ale_completion_info.line_length,
-        \       b:ale_completion_info.column,
-        \   ]) + 1,
+        \   b:ale_completion_info.column,
         \   ale#completion#GetTriggerCharacter(&filetype, b:ale_completion_info.prefix),
         \)
     endif
