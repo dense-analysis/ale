@@ -3,6 +3,7 @@
 
 call ale#Set('java_checkstyle_executable', 'checkstyle')
 call ale#Set('java_checkstyle_config', 'google_checks.xml')
+call ale#Set('java_checkstyle_options', '')
 
 function! ale_linters#java#checkstyle#Handle(buffer, lines) abort
     let l:output = []
@@ -38,8 +39,19 @@ function! ale_linters#java#checkstyle#Handle(buffer, lines) abort
     return l:output
 endfunction
 
+function! ale_linters#java#checkstyle#GetOptions(buffer) abort
+    " Check _options setting and use it if defined for backward compatibility.
+    let l:cfg = ale#Var(a:buffer, 'java_checkstyle_options')
+
+    if !empty(l:cfg)
+        return l:cfg
+    endif
+
+    return '-c ' . ale_linters#java#checkstyle#GetConfig(a:buffer)
+endfunction
+
 function! ale_linters#java#checkstyle#GetConfig(buffer) abort
-    let l:cfg = ale#Var(a:buffer, 'java_checkstyle_config')
+    let l:cfg = ale#Var(a:buffer, 'java_checkstyle_options')
 
     if filereadable(l:cfg)
         return l:cfg
@@ -50,8 +62,8 @@ endfunction
 
 function! ale_linters#java#checkstyle#GetCommand(buffer) abort
     return ale#Escape(ale#Var(a:buffer, 'java_checkstyle_executable'))
-    \ . ' -c '
-    \ . ale_linters#java#checkstyle#GetConfig(a:buffer)
+    \ . ' '
+    \ . ale_linters#java#checkstyle#GetOptions(a:buffer)
     \ . ' %s'
 endfunction
 

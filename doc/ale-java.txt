@@ -26,7 +26,18 @@ g:ale_java_checkstyle_executable             *g:ale_java_checkstyle_executable*
   Type: String
   Default: 'checkstyle'
 
-  Path to the checkstyle executable.
+  Path to the checkstyle executable or launch script.
+
+g:ale_java_checkstyle_options                   *g:ale_java_checkstyle_options*
+                                                *b:ale_java_checkstyle_options*
+
+  Type: String
+  Default: ''
+
+  This configuration exists only for backward compatibility. Is recommended to
+  use |g:ale_java_checkstyle_executable| and |g:ale_java_checkstyle_config|
+  instead. If defined, this variable will take precedence over the other two.
+
 
 ===============================================================================
 javac                                                          *ale-java-javac*
