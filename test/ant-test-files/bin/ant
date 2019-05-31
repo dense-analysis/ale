@@ -1,4 +1,0 @@
-# /bin/bash
-# this file exists to provide an 'executable' to run ant tests
-# it doesn't need to do anything-- it just needs to exist
-echo ':)'
