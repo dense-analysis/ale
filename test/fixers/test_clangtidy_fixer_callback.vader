@@ -1,0 +1,39 @@
+Before:
+  Save g:ale_c_clangtidy_executable
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_c_clangtidy_executable = 'xxxinvalid'
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+  silent cd ..
+  silent cd command_callback
+  let g:dir = getcwd()
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The clangtidy callback should return the correct default values):
+  call ale#test#SetFilename('c_paths/dummy.c')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape(g:ale_c_clangtidy_executable)
+  \       . ' -fix -fix-errors %t'
+  \ },
+  \ ale#fixers#clangtidy#Fix(bufnr(''))
+
+Execute(The clangtidy callback should include any additional options):
+  call ale#test#SetFilename('c_paths/dummy.c')
+  let g:ale_c_clangtidy_options = '--some-option'
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape(g:ale_c_clangtidy_executable)
+  \     . ' -fix -fix-errors %t -- --some-option',
+  \ },
+  \ ale#fixers#clangtidy#Fix(bufnr(''))
+

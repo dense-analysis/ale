@@ -138,6 +138,15 @@ g:ale_cpp_clangtidy_options                       *g:ale_cpp_clangtidy_options*
   of the |g:ale_c_build_dir_names| directories of the project tree.
 
 
+g:ale_cpp_clangtidy_fix_errors                 *g:ale_cpp_clangtidy_fix_errors*
+                                               *b:ale_cpp_clangtidy_fix_errors*
+  Type: |Number|
+  Default: `1`
+
+  This variable can be changed to disable the `-fix-errors` option for the
+  |clangtidy| fixer.
+
+
 ===============================================================================
 clazy                                                           *ale-cpp-clazy*
 
