@@ -3205,9 +3205,6 @@ ale#lsp_linter#SendRequest(buffer, linter_name, method, parameters, Callback)
   request is received, and takes as unique argument a dictionary representing
   the response to the request obtained from the server.
 
-  The function returns zero if the request is succesfully sent, non-zero
-  otherwise.
-
 
 ale#other_source#ShowResults(buffer, linter_name, loclist)
                                                *ale#other_source#ShowResults()*

@@ -8,6 +8,9 @@ if !has_key(s:, 'lsp_linter_map')
     let s:lsp_linter_map = {}
 endif
 
+" A Dictionary to track one-shot callbacks for custom LSP requests
+let s:custom_callbacks_map = get(s:, 'custom_callbacks_map', {})
+
 " Check if diagnostics for a particular linter should be ignored.
 function! s:ShouldIgnore(buffer, linter_name) abort
     " Ignore all diagnostics if LSP integration is disabled.
@@ -407,11 +410,30 @@ endfunction
 " Clear LSP linter data for the linting engine.
 function! ale#lsp_linter#ClearLSPData() abort
     let s:lsp_linter_map = {}
+    let s:custom_callbacks_map = {}
 endfunction
 
 " Just for tests.
 function! ale#lsp_linter#SetLSPLinterMap(replacement_map) abort
     let s:lsp_linter_map = a:replacement_map
+endfunction
+
+function! s:HandleLSPResponseToCustomRequests(conn_id, response) abort
+    if has_key(a:response, 'id')
+    \&& has_key(s:custom_callbacks_map, a:response.id)
+        let l:Callback = remove(s:custom_callbacks_map, a:response.id)
+        call l:Callback(a:response)
+    endif
+endfunction
+
+function! s:OnReadyForCustomRequests(message, Callback, linter, lsp_details) abort
+    let l:id = a:lsp_details.connection_id
+    let l:Callback = function('s:HandleLSPResponseToCustomRequests')
+
+    call ale#lsp#RegisterCallback(l:id, l:Callback)
+
+    let l:request_id = ale#lsp#Send(l:id, a:message)
+    let s:custom_callbacks_map[l:request_id] = a:Callback
 endfunction
 
 " Send a custom request to an LSP linter.
@@ -425,17 +447,13 @@ function! ale#lsp_linter#SendRequest(buffer, linter_name, method, parameters, Ca
     endif
 
     let l:linter = l:linter_list[0]
-    let l:executable_or_address = ''
 
-    if l:linter.lsp is# 'socket'
-        let l:executable_or_address = ale#linter#GetAddress(a:buffer, l:linter)
-    else
-        let l:executable_or_address = ale#linter#GetExecutable(a:buffer, l:linter)
+    if empty(l:linter.lsp)
+        throw 'Linter "' . a:linter_name . '" does not support LSP!'
     endif
 
-    let l:root = ale#util#GetFunction(l:linter.project_root)(a:buffer)
-    let l:conn_id = l:executable_or_address . ':' . l:root
     let l:message = [0, a:method, a:parameters]
+    let l:Callback = function('s:OnReadyForCustomRequests', [l:message, a:Callback])
 
-    return ale#lsp#SendCustomRequest(l:conn_id, l:message, a:Callback) == 0
+    return ale#lsp_linter#StartLSP(a:buffer, l:linter, l:Callback)
 endfunction
