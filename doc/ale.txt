@@ -3191,6 +3191,24 @@ ale#linter#PreventLoading(filetype)               *ale#linter#PreventLoading()*
   |runtimepath| for that filetype. This function can be called from vimrc or
   similar to prevent ALE from loading linters.
 
+
+ale#lsp_linter#SendRequest(buffer, linter_name, method, parameters, Callback)
+                                                 *ale#lsp_linter#SendRequest()*
+
+  Send a custom request to an LSP linter.
+
+  `buffer` must be a valid buffer number, and `linter_name` is a |String|
+  identifying an LSP linter that is available and enabled for the |filetype|
+  of `buffer`. `method` is a |String| identifying an LSP method supported by
+  `linter`, while `parameters` is a |dictionary| of LSP parameters applicable
+  to `method`. `Callback` is a |Funcref| that is called when a response to the
+  request is received, and takes as unique argument a dictionary representing
+  the response to the request obtained from the server.
+
+  The function returns zero if the request is succesfully sent, non-zero
+  otherwise.
+
+
 ale#other_source#ShowResults(buffer, linter_name, loclist)
                                                *ale#other_source#ShowResults()*
 

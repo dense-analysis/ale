@@ -5,6 +5,9 @@
 let s:connections = get(s:, 'connections', {})
 let g:ale_lsp_next_message_id = 1
 
+" A Dictionary to track one-shot callbacks for custom LSP requests
+let s:custom_callbacks = get(s:, 'custom_callbacks', {})
+
 " Given an id, which can be an executable or address, and a project path,
 " create a new connection if needed. Return a unique ID for the connection.
 function! ale#lsp#Register(executable_or_address, project, init_options) abort
@@ -296,10 +299,19 @@ function! ale#lsp#HandleMessage(conn_id, message) abort
     " responses.
     if l:conn.initialized
         for l:response in l:response_list
-            " Call all of the registered handlers with the response.
-            for l:Callback in l:conn.callback_list
-                call ale#util#GetFunction(l:Callback)(a:conn_id, l:response)
-            endfor
+            if has_key(l:response, 'id') && has_key(s:custom_callbacks, l:response.id)
+                " Response to a custom request, call the registered one-shot handler.
+                try
+                    call s:custom_callbacks[l:response.id](l:response)
+                finally
+                    call remove(s:custom_callbacks, l:response.id)
+                endtry
+            else
+                " Call all of the registered handlers with the response.
+                for l:Callback in l:conn.callback_list
+                    call ale#util#GetFunction(l:Callback)(a:conn_id, l:response)
+                endfor
+            endif
         endfor
     endif
 endfunction
@@ -523,6 +535,18 @@ function! ale#lsp#Send(conn_id, message) abort
     call s:SendMessageData(l:conn, l:data)
 
     return l:id == 0 ? -1 : l:id
+endfunction
+
+" Send a custom request to an LSP server.
+" The given callback is called on response.
+function! ale#lsp#SendCustomRequest(conn_id, message, Callback) abort
+    let l:id = ale#lsp#Send(a:conn_id, a:message)
+
+    if l:id > 0
+        let s:custom_callbacks[l:id] = a:Callback
+    endif
+
+    return l:id
 endfunction
 
 " Notify LSP servers or tsserver if a document is opened, if needed.

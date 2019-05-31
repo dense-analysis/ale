@@ -413,3 +413,29 @@ endfunction
 function! ale#lsp_linter#SetLSPLinterMap(replacement_map) abort
     let s:lsp_linter_map = a:replacement_map
 endfunction
+
+" Send a custom request to an LSP linter.
+function! ale#lsp_linter#SendRequest(buffer, linter_name, method, parameters, Callback) abort
+    let l:filetype = ale#linter#ResolveFiletype(getbufvar(a:buffer, '&filetype'))
+    let l:linter_list = ale#linter#GetAll(l:filetype)
+    let l:linter_list = filter(l:linter_list, {_, v -> v.name is# a:linter_name})
+
+    if len(l:linter_list) < 1
+        throw 'Linter "' . a:linter_name . '" not found!'
+    endif
+
+    let l:linter = l:linter_list[0]
+    let l:executable_or_address = ''
+
+    if l:linter.lsp is# 'socket'
+        let l:executable_or_address = ale#linter#GetAddress(a:buffer, l:linter)
+    else
+        let l:executable_or_address = ale#linter#GetExecutable(a:buffer, l:linter)
+    endif
+
+    let l:root = ale#util#GetFunction(l:linter.project_root)(a:buffer)
+    let l:conn_id = l:executable_or_address . ':' . l:root
+    let l:message = [0, a:method, a:parameters]
+
+    return ale#lsp#SendCustomRequest(l:conn_id, l:message, a:Callback) == 0
+endfunction
