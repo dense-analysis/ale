@@ -4,12 +4,12 @@ Before:
   runtime autoload/ale/lsp_linter.vim
 
   let g:address = 'ccls_address'
-  let g:callback_result = 0
   let g:conn_id = -1
   let g:executable = 'ccls'
   let g:executable_or_address = ''
   let g:linter_name = 'ccls'
   let g:magic_number = 42
+  let g:no_result = 0
   let g:message_list = []
   let g:message_id = 1
   let g:method = '$ccls/call'
@@ -29,6 +29,8 @@ Before:
   \   'read_buffer': 1,
   \   'command': '%e'
   \ }]
+
+  let g:callback_result = g:no_result
 
   " Encode dictionary to jsonrpc
   function! Encode(obj) abort
@@ -69,16 +71,15 @@ Before:
   endfunction
 
   " Code for a test case
-  function! TestCase() abort
+  function! TestCase(is_notification) abort
     " Test sending a custom request
     let g:return_value = ale#lsp_linter#SendRequest(
     \  bufnr('%'),
     \  g:linter_name,
-    \  g:method,
-    \  g:parameters,
+    \  [a:is_notification, g:method, g:parameters],
     \  function('Callback'))
 
-    Assert index(g:message_list, [0, g:method, g:parameters]) >= 0
+    Assert index(g:message_list, [a:is_notification, g:method, g:parameters]) >= 0
 
     " Mock an incoming response to the request
     let g:response = Encode({
@@ -89,7 +90,7 @@ Before:
     call ale#lsp#HandleMessage(g:conn_id, g:response)
 
     AssertEqual
-    \ g:magic_number,
+    \ a:is_notification ? g:no_result : g:magic_number,
     \ g:callback_result
   endfunction
 
@@ -101,11 +102,13 @@ After:
   unlet! g:callback_result
   unlet! g:conn_id
   unlet! g:executable
+  unlet! g:is_notification
   unlet! g:linter_name
   unlet! g:magic_number
   unlet! g:message_list
   unlet! g:message_id
   unlet! g:method
+  unlet! g:no_result
   unlet! g:parameters
   unlet! g:project_root
   unlet! g:response
@@ -124,13 +127,33 @@ Execute(Test custom request to server identified by executable):
   let g:executable_or_address = g:executable
   let g:linter_list[0].executable = {b -> g:executable}
   let g:linter_list[0].lsp = 'stdio'
+  let g:is_notification = 0
 
-  call TestCase()
+  call TestCase(g:is_notification)
+
+Given cpp(Empty cpp file):
+Execute(Test custom notification to server identified by executable):
+  let g:executable_or_address = g:executable
+  let g:linter_list[0].executable = {b -> g:executable}
+  let g:linter_list[0].lsp = 'stdio'
+  let g:is_notification = 1
+
+  call TestCase(g:is_notification)
 
 Given cpp(Empty cpp file):
 Execute(Test custom request to server identified by address):
   let g:executable_or_address = g:address
   let g:linter_list[0].address = {b -> g:address}
   let g:linter_list[0].lsp = 'socket'
+  let g:is_notification = 0
 
-  call TestCase()
+  call TestCase(g:is_notification)
+
+Given cpp(Empty cpp file):
+Execute(Test custom notification to server identified by address):
+  let g:executable_or_address = g:address
+  let g:linter_list[0].address = {b -> g:address}
+  let g:linter_list[0].lsp = 'socket'
+  let g:is_notification = 1
+
+  call TestCase(g:is_notification)

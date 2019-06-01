@@ -8,8 +8,8 @@ if !has_key(s:, 'lsp_linter_map')
     let s:lsp_linter_map = {}
 endif
 
-" A Dictionary to track one-shot callbacks for custom LSP requests
-let s:custom_callbacks_map = get(s:, 'custom_callbacks_map', {})
+" A Dictionary to track one-shot handlers for custom LSP requests
+let s:custom_handlers_map = get(s:, 'custom_handlers_map', {})
 
 " Check if diagnostics for a particular linter should be ignored.
 function! s:ShouldIgnore(buffer, linter_name) abort
@@ -410,7 +410,7 @@ endfunction
 " Clear LSP linter data for the linting engine.
 function! ale#lsp_linter#ClearLSPData() abort
     let s:lsp_linter_map = {}
-    let s:custom_callbacks_map = {}
+    let s:custom_handlers_map = {}
 endfunction
 
 " Just for tests.
@@ -420,24 +420,25 @@ endfunction
 
 function! s:HandleLSPResponseToCustomRequests(conn_id, response) abort
     if has_key(a:response, 'id')
-    \&& has_key(s:custom_callbacks_map, a:response.id)
-        let l:Callback = remove(s:custom_callbacks_map, a:response.id)
-        call l:Callback(a:response)
+    \&& has_key(s:custom_handlers_map, a:response.id)
+        let l:Handler = remove(s:custom_handlers_map, a:response.id)
+        call l:Handler(a:response)
     endif
 endfunction
 
-function! s:OnReadyForCustomRequests(message, Callback, linter, lsp_details) abort
+function! s:OnReadyForCustomRequests(args, linter, lsp_details) abort
     let l:id = a:lsp_details.connection_id
-    let l:Callback = function('s:HandleLSPResponseToCustomRequests')
+    let l:request_id = ale#lsp#Send(l:id, a:args.message)
 
-    call ale#lsp#RegisterCallback(l:id, l:Callback)
-
-    let l:request_id = ale#lsp#Send(l:id, a:message)
-    let s:custom_callbacks_map[l:request_id] = a:Callback
+    if l:request_id > 0 && has_key(a:args, 'handler')
+        let l:Callback = function('s:HandleLSPResponseToCustomRequests')
+        call ale#lsp#RegisterCallback(l:id, l:Callback)
+        let s:custom_handlers_map[l:request_id] = a:args.handler
+    endif
 endfunction
 
 " Send a custom request to an LSP linter.
-function! ale#lsp_linter#SendRequest(buffer, linter_name, method, parameters, Callback) abort
+function! ale#lsp_linter#SendRequest(buffer, linter_name, message, ...) abort
     let l:filetype = ale#linter#ResolveFiletype(getbufvar(a:buffer, '&filetype'))
     let l:linter_list = ale#linter#GetAll(l:filetype)
     let l:linter_list = filter(l:linter_list, {_, v -> v.name is# a:linter_name})
@@ -452,8 +453,14 @@ function! ale#lsp_linter#SendRequest(buffer, linter_name, method, parameters, Ca
         throw 'Linter "' . a:linter_name . '" does not support LSP!'
     endif
 
-    let l:message = [0, a:method, a:parameters]
-    let l:Callback = function('s:OnReadyForCustomRequests', [l:message, a:Callback])
+    let l:is_notification = a:message[0]
+    let l:callback_args = {'message': a:message}
+
+    if !l:is_notification && a:0
+        let l:callback_args.handler = a:1
+    endif
+
+    let l:Callback = function('s:OnReadyForCustomRequests', [l:callback_args])
 
     return ale#lsp_linter#StartLSP(a:buffer, l:linter, l:Callback)
 endfunction
