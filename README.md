@@ -165,7 +165,9 @@ the source of completion information, or mix it with other sources.
 
 ```vim
 " Use ALE and also some plugin 'foobar' as completion sources for all code.
-let g:deoplete#sources = {'_': ['ale', 'foobar']}
+call deoplete#custom#option('sources', {
+\ '_': ['ale', 'foobar'],
+\})
 ```
 
 ALE also offers its own automatic completion support, which does not require any
