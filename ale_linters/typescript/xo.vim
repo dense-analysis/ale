@@ -19,5 +19,5 @@ call ale#linter#Define('typescript', {
 \   'name': 'xo',
 \   'executable': function('ale_linters#typescript#xo#GetExecutable'),
 \   'command': function('ale_linters#typescript#xo#GetCommand'),
-\   'callback': 'ale#handlers#eslint#Handle',
+\   'callback': 'ale#handlers#eslint#HandleJSON',
 \})
