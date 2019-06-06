@@ -152,20 +152,20 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
     endif
 endfunction
 
-function! s:RestoreViewIfNeeded()
-  if ! has_key(b:, 'view')
-    return
-  endif
+function! s:RestoreViewIfNeeded() abort
+    if ! has_key(b:, 'view')
+        return
+    endif
 
-  " Check wether the cursor has moved since linting was actually requested. If
-  " the user has indeed moved lines, buffer view can be very different
-  let l:current_view = winsaveview()
-  if l:current_view['lnum'] != b:view['lnum']
-    return
-  endif
+    " Check wether the cursor has moved since linting was actually requested. If
+    " the user has indeed moved lines, buffer view can be very different
+    let l:current_view = winsaveview()
 
-  call winrestview({'topline': b:view['topline']})
+    if l:current_view['lnum'] != b:view['lnum']
+        return
+    endif
 
+    call winrestview({'topline': b:view['topline']})
 endfunction
 
 function! ale#list#SetLists(buffer, loclist) abort
