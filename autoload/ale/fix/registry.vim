@@ -310,6 +310,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['sql'],
 \       'description': 'A PostgreSQL SQL syntax beautifier',
 \   },
+\   'reorder-python-imports': {
+\       'function': 'ale#fixers#reorder_python_imports#Fix',
+\       'suggested_filetypes': ['python'],
+\       'description': 'Sort Python imports with reorder-python-imports.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
