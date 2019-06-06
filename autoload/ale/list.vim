@@ -142,12 +142,30 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
         endif
     endif
 
+    call s:RestoreViewIfNeeded()
+
     " If ALE isn't currently checking for more problems, close the window if
     " needed now. This check happens inside of this timer function, so
     " the window can be closed reliably.
     if !ale#engine#IsCheckingBuffer(a:buffer)
         call s:CloseWindowIfNeeded(a:buffer)
     endif
+endfunction
+
+function! s:RestoreViewIfNeeded()
+  if ! has_key(b:, 'view')
+    return
+  endif
+
+  " Check wether the cursor has moved since linting was actually requested. If
+  " the user has indeed moved lines, buffer view can be very different
+  let l:current_view = winsaveview()
+  if l:current_view['lnum'] != b:view['lnum']
+    return
+  endif
+
+  call winrestview({'topline': b:view['topline']})
+
 endfunction
 
 function! ale#list#SetLists(buffer, loclist) abort
@@ -185,6 +203,10 @@ function! s:CloseWindowIfNeeded(buffer) abort
 
             if g:ale_set_loclist && empty(getloclist(l:win_id))
                 lclose
+                " If the window view was set, restore it to avoid having the
+                " sceen bouncing like crazy while the user is editing and the
+                " location list pops in and out
+                call s:RestoreViewIfNeeded()
             endif
         endif
     " Ignore 'Cannot close last window' errors.
