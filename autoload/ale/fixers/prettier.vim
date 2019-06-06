@@ -41,36 +41,49 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version) abort
 
     " Append the --parser flag depending on the current filetype (unless it's
     " already set in g:javascript_prettier_options).
-    if empty(expand('#' . a:buffer . ':e')) && match(l:options, '--parser') == -1
-        " Mimic Prettier's defaults. In cases without a file extension or
-        " filetype (scratch buffer), Prettier needs `parser` set to know how
-        " to process the buffer.
-        if ale#semver#GTE(a:version, [1, 16, 0])
-            let l:parser = 'babel'
-        else
-            let l:parser = 'babylon'
-        endif
-
-        let l:prettier_parsers = {
-        \    'typescript': 'typescript',
-        \    'css': 'css',
-        \    'less': 'less',
-        \    'scss': 'scss',
-        \    'json': 'json',
-        \    'json5': 'json5',
-        \    'graphql': 'graphql',
-        \    'markdown': 'markdown',
-        \    'vue': 'vue',
-        \    'yaml': 'yaml',
-        \    'html': 'html',
-        \}
-
-        for l:filetype in split(getbufvar(a:buffer, '&filetype'), '\.')
-            if has_key(l:prettier_parsers, l:filetype)
-                let l:parser = l:prettier_parsers[l:filetype]
-                break
+    if match(l:options, '--parser') == -1
+        if empty(expand('#' . a:buffer . ':e'))
+            " Mimic Prettier's defaults. In cases without a file extension or
+            " filetype (scratch buffer), Prettier needs `parser` set to know how
+            " to process the buffer.
+            if ale#semver#GTE(a:version, [1, 16, 0])
+                let l:parser = 'babel'
+            else
+                let l:parser = 'babylon'
             endif
-        endfor
+
+            let l:prettier_parsers = {
+            \    'typescript': 'typescript',
+            \    'css': 'css',
+            \    'less': 'less',
+            \    'scss': 'scss',
+            \    'json': 'json',
+            \    'json5': 'json5',
+            \    'graphql': 'graphql',
+            \    'markdown': 'markdown',
+            \    'vue': 'vue',
+            \    'yaml': 'yaml',
+            \    'html': 'html',
+            \}
+
+            for l:filetype in split(getbufvar(a:buffer, '&filetype'), '\.')
+                if has_key(l:prettier_parsers, l:filetype)
+                    let l:parser = l:prettier_parsers[l:filetype]
+                    break
+                endif
+            endfor
+        else
+            " Append a --parser flag. In cases the filetype has an exprimental
+            " support in Prettier and has to be appended manually.
+            let l:prettier_experimental_parsers = {
+            \    'html.handlebars': 'glimmer',
+            \}
+            let l:filetype = getbufvar(a:buffer, '&filetype')
+
+            if has_key(l:prettier_experimental_parsers, l:filetype)
+                let l:parser = l:prettier_experimental_parsers[l:filetype]
+            endif
+        endif
     endif
 
     if !empty(l:parser)

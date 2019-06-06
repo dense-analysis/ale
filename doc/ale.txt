@@ -2034,6 +2034,7 @@ documented in additional help files.
     hackfmt...............................|ale-hack-hackfmt|
     hhast.................................|ale-hack-hhast|
   handlebars..............................|ale-handlebars-options|
+    prettier..............................|ale-handlebars-prettier|
     ember-template-lint...................|ale-handlebars-embertemplatelint|
   haskell.................................|ale-haskell-options|
     brittany..............................|ale-haskell-brittany|
