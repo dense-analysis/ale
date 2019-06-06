@@ -146,8 +146,6 @@ function! ale#Queue(delay, ...) abort
         let s:lint_timer = -1
     endif
 
-    let b:view = winsaveview()
-
     if a:delay > 0
         let s:lint_timer = timer_start(
         \   a:delay,

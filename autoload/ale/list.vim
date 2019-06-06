@@ -101,6 +101,8 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
         endif
     endif
 
+    let b:view = winsaveview()
+
     " Open a window to show the problems if we need to.
     "
     " We'll check if the current buffer's List is not empty here, so the
@@ -140,9 +142,11 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
                 normal! "\<c-g>"
             endif
         endif
+
     endif
 
     call s:RestoreViewIfNeeded()
+
 
     " If ALE isn't currently checking for more problems, close the window if
     " needed now. This check happens inside of this timer function, so
