@@ -247,6 +247,57 @@ Execute(The Rust handler should show detailed errors):
   \   }),
   \ ])
 
+Execute(The Rust handler should show detailed clippy errors with rendered field if it's available):
+  call ale#test#SetFilename('src/playpen.rs')
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 4,
+  \     'end_lnum': 4,
+  \     'type': 'E',
+  \     'col': 21,
+  \     'end_col': 22,
+  \     'text': 'mismatched types: expected bool, found integral variable',
+  \     'detail': 'this is a detailed description',
+  \   },
+  \ ],
+  \ ale#handlers#rust#HandleRustErrors(bufnr(''), [
+  \   '',
+  \   'ignore this',
+  \   json_encode({
+  \     'message': {
+  \       'code': v:null,
+  \       'level': 'error',
+  \       'message': 'mismatched types',
+  \       'rendered': 'this is a detailed description',
+  \       'spans': [
+  \         {
+  \           'byte_end': 54,
+  \           'byte_start': 52,
+  \           'column_end': 23,
+  \           'column_start': 21,
+  \           'expansion': v:null,
+  \           'file_name': ale#path#Simplify('src/playpen.rs'),
+  \           'is_primary': v:true,
+  \           'label': 'expected bool, found integral variable',
+  \           'line_end': 4,
+  \           'line_start': 4,
+  \         }
+  \       ]
+  \     },
+  \   }),
+  \   json_encode({
+  \     'message': {
+  \       'code': v:null,
+  \       'level': 'error',
+  \       'message': 'aborting due to previous error(s)',
+  \       'spans': [
+  \       ]
+  \     },
+  \   }),
+  \ ])
+
 Execute(The Rust handler should find correct files):
   call ale#test#SetFilename('src/noerrors/mod.rs')
 
