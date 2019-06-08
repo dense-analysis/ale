@@ -1,7 +1,9 @@
 " Author: David Buchan-Swanson <github@deecewan.com>
 " Description: Integrate ALE with reason-language-server.
 
-function! ale_linters#reason#reason_ls#FindProjectRoot(buffer) abort
+call ale#Set('reason_ls_executable', '')
+
+function! ale_linters#reason#ls#FindProjectRoot(buffer) abort
     let l:reason_config = ale#path#FindNearestFile(a:buffer, 'bsconfig.json')
 
     if !empty(l:reason_config)
@@ -14,8 +16,8 @@ endfunction
 call ale#linter#Define('reason', {
 \   'name': 'reason-language-server',
 \   'lsp': 'stdio',
-\   'executable':{buffer -> ale#Var(buffer, 'reason_ls_executable')},
+\   'executable': {buffer -> ale#Var(buffer, 'reason_ls_executable')},
 \   'command': '%e',
-\   'project_root': function('ale_linters#reason#reason_ls#FindProjectRoot'),
+\   'project_root': function('ale_linters#reason#ls#FindProjectRoot'),
 \   'language': 'reason',
 \})

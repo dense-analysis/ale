@@ -2196,6 +2196,7 @@ documented in additional help files.
   reasonml................................|ale-reasonml-options|
     merlin................................|ale-reasonml-merlin|
     ols...................................|ale-reasonml-ols|
+    reason-language-server................|ale-reasonml-language-server|
     refmt.................................|ale-reasonml-refmt|
   restructuredtext........................|ale-restructuredtext-options|
     textlint..............................|ale-restructuredtext-textlint|
