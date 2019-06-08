@@ -29,6 +29,12 @@ Execute(You should be able to manually set compiler flags for clang-tidy):
   AssertLinter 'clang-tidy',
   \ ale#Escape('clang-tidy') . ' -checks=' . ale#Escape('*') . ' %s -- -Wall'
 
+Execute(You should be able to manually set flags for clang-tidy):
+  let b:ale_cpp_clangtidy_extra_options = '-config='
+
+  AssertLinter 'clang-tidy',
+  \ ale#Escape('clang-tidy') . ' ' . ale#Escape('-config=') . ' %s'
+
 Execute(The build directory should be configurable):
   let b:ale_cpp_clangtidy_checks = ['*']
   let b:ale_c_build_dir = '/foo/bar'
