@@ -39,7 +39,7 @@ g:ale_reason_ols_use_global                       *g:ale_reason_ols_use_global*
 ===============================================================================
 reason-language-server                           *ale-reasonml-language-server*
 
-Note: You *must* set an executable - there is no 'default' install location.
+Note: You must set an executable - there is no 'default' install location.
 Go to https://github.com/jaredly/reason-language-server and download the
 latest release. You can place it anywhere, but ensure you set the executable
 path.
@@ -50,7 +50,7 @@ g:ale_reason_ls_executable                         *g:ale_reason_ls_executable*
   Type: |String|
 
   This variable defines the standard location of the language server
-  executable. This *must* be set.
+  executable. This must be set.
 
 
 ===============================================================================
