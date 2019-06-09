@@ -1,0 +1,33 @@
+===============================================================================
+ALE Purescript Integration                             ale-purescript-options
+
+
+===============================================================================
+purels                                                  ale-purescript-purels
+
+Purescript Language Server
+(https://github.com/nwolverson/purescript-language-server)
+
+g:ale_purescript_purels_executable         g:ale_purescript_purels_executable
+                                           b:ale_purescript_purels_executable
+  Type: |String|
+  Default: `'purescript-language-server'`
+
+  Purescript language server executable.
+
+g:ale_purescript_purels_config                 g:ale_purescript_purels_config
+                                               b:ale_purescript_purels_config
+  Type: |Dictionary|
+  Default: `{}`
+
+  Dictionary containing configuration settings that will be passed to the
+  language server. For example, with a spago project:
+		{
+		\  'purescript': {
+		\    'addSpagoSources': v:true,
+		\    'addNpmPath': v:true,
+		\    'buildCommand': 'spago build -- --json-errors'
+		\  }
+		\}
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
