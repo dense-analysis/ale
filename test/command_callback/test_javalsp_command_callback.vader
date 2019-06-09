@@ -6,7 +6,7 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The javalsp callback should return the correct default value):
-  AssertLinter 'launcher', ale#Escape('launcher')
+  AssertLinter '', ale#Escape('')
 
 Execute(The javalsp java executable should be configurable):
   let b:ale_java_javalsp_executable = '/bin/foobar'

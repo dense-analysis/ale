@@ -1,7 +1,7 @@
 " Author: Horacio Sanson <https://github.com/hsanson>
 " Description: Support for the Java language server https://github.com/georgewfraser/vscode-javac
 
-call ale#Set('java_javalsp_executable', 'launcher')
+call ale#Set('java_javalsp_executable', '')
 
 function! ale_linters#java#javalsp#Executable(buffer) abort
     return ale#Var(a:buffer, 'java_javalsp_executable')
