@@ -375,6 +375,7 @@ formatting.
 * ReasonML
   * [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-reasonml-ols` for configuration instructions
   * [ols](https://github.com/freebroccolo/ocaml-language-server)
+  * [reason-language-server](https://github.com/jaredly/reason-language-server)
   * [refmt](https://github.com/reasonml/reason-cli)
 * reStructuredText
   * [alex](https://github.com/wooorm/alex) :floppy_disk:

@@ -59,11 +59,11 @@ Execute(eslint.js executables should be run with node on Windows):
     AssertEqual
     \ ale#Escape('node.exe') . ' '
     \   . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
-    \   . ' -f unix --stdin --stdin-filename %s',
+    \   . ' -f json --stdin --stdin-filename %s',
     \ ale#handlers#eslint#GetCommand(bufnr(''))
   else
     AssertEqual
     \ ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
-    \   . ' -f unix --stdin --stdin-filename %s',
+    \   . ' -f json --stdin --stdin-filename %s',
     \ ale#handlers#eslint#GetCommand(bufnr(''))
   endif

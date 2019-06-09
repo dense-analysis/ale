@@ -17,6 +17,8 @@ let s:default_ale_linter_aliases = {
 \   'verilog_systemverilog': ['verilog_systemverilog', 'verilog'],
 \   'vimwiki': 'markdown',
 \   'vue': ['vue', 'javascript'],
+\   'xsd': ['xsd', 'xml'],
+\   'xslt': ['xslt', 'xml'],
 \   'zsh': 'sh',
 \}
 

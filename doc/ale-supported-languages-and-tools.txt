@@ -366,6 +366,7 @@ Notes:
 * ReasonML
   * `merlin`
   * `ols`
+  * `reason-language-server`
   * `refmt`
 * reStructuredText
   * `alex`!!
