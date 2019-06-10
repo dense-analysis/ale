@@ -87,7 +87,7 @@ Execute (All events should be set up when everything is on):
   \   'CursorMoved * if exists(''*ale#engine#Cleanup'') | call ale#cursor#EchoCursorWarningWithDelay() | endif',
   \   'FileChangedShellPost * call ale#events#FileChangedEvent(str2nr(expand(''<abuf>'')))',
   \   'FileType * call ale#events#FileTypeEvent( str2nr(expand(''<abuf>'')), expand(''<amatch>''))',
-  \   'InsertLeave * call ale#Queue(0)',
+  \   'InsertLeave * if ale#Var(str2nr(expand(''<abuf>'')), ''lint_on_insert_leave'') | call ale#Queue(0) | endif',
   \   'InsertLeave if exists(''*ale#engine#Cleanup'') | call ale#cursor#EchoCursorWarning() | endif',
   \   'TextChanged * call ale#Queue(g:ale_lint_delay)',
   \   'TextChangedI * call ale#Queue(g:ale_lint_delay)',
@@ -158,7 +158,7 @@ Execute (g:ale_lint_on_insert_leave = 1 should bind InsertLeave):
 
   AssertEqual
   \ [
-  \   'InsertLeave * call ale#Queue(0)',
+  \   'InsertLeave * if ale#Var(str2nr(expand(''<abuf>'')), ''lint_on_insert_leave'') | call ale#Queue(0) | endif',
   \ ],
   \ filter(CheckAutocmd('ALEEvents'), 'v:val =~ ''^InsertLeave''')
 

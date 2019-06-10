@@ -1,6 +1,10 @@
 Before:
   Save g:ale_echo_msg_format
   Save g:ale_echo_cursor
+  Save b:ale_lint_on_insert_leave
+
+  let g:ale_echo_msg_format = '%code: %%s'
+  let b:ale_lint_on_insert_leave = 0
 
   " We should prefer the error message at column 10 instead of the warning.
   let g:ale_buffer_info = {
@@ -91,6 +95,9 @@ Before:
     return empty(l:lines) ? '' : l:lines[-1]
   endfunction
 
+  call ale#linter#Reset()
+  call ale#linter#PreventLoading('javascript')
+
 After:
   Restore
 
@@ -116,6 +123,8 @@ After:
   if &filetype is# 'ale-preview'
     noautocmd :q!
   endif
+
+  call ale#linter#Reset()
 
 Given javascript(A Javscript file with warnings/errors):
   var x = 3 + 12345678
