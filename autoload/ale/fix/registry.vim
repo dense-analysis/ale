@@ -297,7 +297,7 @@ let s:default_registry = {
 \   },
 \   'styler': {
 \       'function': 'ale#fixers#styler#Fix',
-\       'suggested_filetypes': ['r'],
+\       'suggested_filetypes': ['r', 'rmarkdown'],
 \       'description': 'Fix R files with styler.',
 \   },
 \   'latexindent': {
