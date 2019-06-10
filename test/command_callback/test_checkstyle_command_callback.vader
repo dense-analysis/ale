@@ -6,17 +6,27 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The checkstyle callback should return the correct default value):
-  AssertLinter 'checkstyle', ale#Escape('checkstyle') . ' %s'
+  AssertLinter 'checkstyle',
+  \ ale#Escape('checkstyle')
+  \ . ' -c ' . ale#Escape('/google_checks.xml')
+  \ . ' %s'
 
 Execute(The checkstyle executable should be configurable):
   let b:ale_java_checkstyle_executable = 'foobar'
 
-  AssertLinter 'foobar', ale#Escape('foobar') . ' %s'
+  AssertLinter 'foobar',
+  \ ale#Escape('foobar')
+  \ . ' -c ' . ale#Escape('/google_checks.xml')
+  \ . ' %s'
 
 Execute(Custom options should be supported):
   let b:ale_java_checkstyle_options = '--foobar'
 
-  AssertLinter 'checkstyle', ale#Escape('checkstyle') . ' --foobar %s'
+  AssertLinter 'checkstyle',
+  \ ale#Escape('checkstyle')
+  \ . ' --foobar'
+  \ . ' -c ' . ale#Escape('/google_checks.xml')
+  \ . ' %s'
 
 Execute(configuration files set in _config should be supported):
   let b:ale_java_checkstyle_config = ale#path#Simplify(g:dir . '/checkstyle_paths/other_config.xml')
@@ -36,12 +46,12 @@ Execute(configuration files set in _options should be preferred over _config):
 
   AssertLinter 'checkstyle', ale#Escape('checkstyle') . ' -x -c /bar.xml %s'
 
-Execute(google_checks.xml should be detected automatically):
+Execute(google_checks.xml should be used by default):
   call ale#test#SetFilename('checkstyle_paths/test.java')
 
   AssertLinter 'checkstyle',
   \ ale#Escape('checkstyle')
-  \ . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/checkstyle_paths/google_checks.xml'))
+  \ . ' -c ' . ale#Escape('/google_checks.xml')
   \ . ' %s'
 
 Execute(Other relative paths should be supported):

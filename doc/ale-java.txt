@@ -9,7 +9,7 @@ g:ale_java_checkstyle_config                     *g:ale_java_checkstyle_config*
                                                  *b:ale_java_checkstyle_config*
 
   Type: |String|
-  Default: `'google_checks.xml'`
+  Default: `'/google_checks.xml'`
 
   A path to a checkstyle configuration file.
 
