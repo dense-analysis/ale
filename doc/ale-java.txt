@@ -117,16 +117,19 @@ or
 
 This generates a dist/mac or dist/windows directory that contains the
 language server. To let ALE use this language server you need to set the
-g:ale_java_javalsp_executable variable to the absolute path of the java
+g:ale_java_javalsp_executable variable to the absolute path of the launcher
 executable in this directory.
 
 g:ale_java_javalsp_executable                   *g:ale_java_javalsp_executable*
                                                 *b:ale_java_javalsp_executable*
   Type: |String|
-  Default: `'java'`
+  Default: `'launcher'`
 
-This variable can be changed to use a different executable for java.
-
+This variable must be set to the absolute path of the language server launcher
+executable. For example:
+>
+  let g:ale_java_javalsp_executable=/java-language-server/dist/mac/bin/launcher
+<
 
 ===============================================================================
 eclipselsp                                                *ale-java-eclipselsp*
