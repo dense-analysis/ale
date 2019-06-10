@@ -158,6 +158,14 @@ Execute (Buffer-local overrides for aliases should be used):
 
   AssertEqual [g:testlinter1, g:testlinter2], ale#linter#Get('testft1')
 
+Execute (Linters new linters with the same name should replace old ones):
+  let g:testlinter1.name = g:testlinter2.name
+
+  call ale#linter#Define('testft1', g:testlinter1)
+  call ale#linter#Define('testft1', g:testlinter2)
+
+  AssertEqual [g:testlinter2], ale#linter#GetAll(['testft1'])
+
 Execute (Linters should be loaded from disk appropriately):
   call ale#linter#Reset()
   AssertEqual [{'name': 'testlinter', 'output_stream': 'stdout', 'executable': 'testlinter', 'command': 'testlinter', 'callback': 'testCB', 'read_buffer': 1, 'lint_file': 0, 'aliases': [], 'lsp': ''}], ale#linter#Get('testft')
