@@ -353,6 +353,7 @@ Notes:
   * `pylint`!!
   * `pyls`
   * `pyre`
+  * `reorder-python-imports`
   * `vulture`!!
   * `yapf`
 * QML
