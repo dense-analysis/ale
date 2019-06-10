@@ -3,6 +3,7 @@ Before:
 
   " Use an invalid global executable, so we don't match it.
   let g:ale_c_clangtidy_executable = 'xxxinvalid'
+  let g:ale_cpp_clangtidy_executable = 'xxxinvalidpp'
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
   silent cd ..
@@ -27,13 +28,23 @@ Execute(The clangtidy callback should return the correct default values):
 
 Execute(The clangtidy callback should include any additional options):
   call ale#test#SetFilename('c_paths/dummy.c')
-  let g:ale_c_clangtidy_options = '--some-option'
+  let g:ale_c_clangtidy_extra_options = '--some-option'
 
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_c_clangtidy_executable)
-  \     . ' -fix -fix-errors %t -- --some-option',
+  \     . ' -fix -fix-errors --some-option %t',
   \ },
   \ ale#fixers#clangtidy#Fix(bufnr(''))
 
+Execute(The clangtidy callback should support cpp files):
+  call ale#test#SetFilename('c_paths/dummy.cpp')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape(g:ale_cpp_clangtidy_executable)
+  \     . ' -fix -fix-errors %t',
+  \ },
+  \ ale#fixers#clangtidy#Fix(bufnr(''))
