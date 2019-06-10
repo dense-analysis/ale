@@ -258,14 +258,14 @@ any other tools. Simply clone the plugin into your `pack` directory.
 
 ```bash
 mkdir -p ~/.vim/pack/git-plugins/start
-git clone https://github.com/w0rp/ale.git ~/.vim/pack/git-plugins/start/ale
+git clone --depth 1 https://github.com/w0rp/ale.git ~/.vim/pack/git-plugins/start/ale
 ```
 
 #### NeoVim on Unix
 
 ```bash
 mkdir -p ~/.local/share/nvim/site/pack/git-plugins/start
-git clone https://github.com/w0rp/ale.git ~/.local/share/nvim/site/pack/git-plugins/start/ale
+git clone --depth 1 https://github.com/w0rp/ale.git ~/.local/share/nvim/site/pack/git-plugins/start/ale
 ```
 
 #### Vim 8 on Windows
@@ -273,7 +273,7 @@ git clone https://github.com/w0rp/ale.git ~/.local/share/nvim/site/pack/git-plug
 ```bash
 # Run these commands in the "Git for Windows" Bash terminal
 mkdir -p ~/vimfiles/pack/git-plugins/start
-git clone https://github.com/w0rp/ale.git ~/vimfiles/pack/git-plugins/start/ale
+git clone --depth 1 https://github.com/w0rp/ale.git ~/vimfiles/pack/git-plugins/start/ale
 ```
 
 #### Generating Vim help files
