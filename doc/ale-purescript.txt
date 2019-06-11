@@ -1,22 +1,22 @@
 ===============================================================================
-ALE Purescript Integration                             ale-purescript-options
+ALE PureScript Integration                             *ale-purescript-options*
 
 
 ===============================================================================
-purels                                                  ale-purescript-purels
+purescript-language-server                     *ale-purescript-language-server*
 
-Purescript Language Server
-(https://github.com/nwolverson/purescript-language-server)
+PureScript Language Server
+  (https://github.com/nwolverson/purescript-language-server)
 
-g:ale_purescript_purels_executable         g:ale_purescript_purels_executable
-                                           b:ale_purescript_purels_executable
+g:ale_purescript_ls_executable                 g:ale_purescript_ls_executable
+                                               b:ale_purescript_ls_executable
   Type: |String|
   Default: `'purescript-language-server'`
 
-  Purescript language server executable.
+  PureScript language server executable.
 
-g:ale_purescript_purels_config                 g:ale_purescript_purels_config
-                                               b:ale_purescript_purels_config
+g:ale_purescript_ls_config                         g:ale_purescript_ls_config
+                                                   b:ale_purescript_ls_config
   Type: |Dictionary|
   Default: `{}`
 

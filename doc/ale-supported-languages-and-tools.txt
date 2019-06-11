@@ -338,8 +338,8 @@ Notes:
   * `languageserver`
   * `puppet`
   * `puppet-lint`
-* Purescript
-  * `purels`
+* PureScript
+  * `purescript-language-server`
 * Python
   * `autopep8`
   * `bandit`

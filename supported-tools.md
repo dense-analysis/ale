@@ -347,6 +347,8 @@ formatting.
   * [languageserver](https://github.com/lingua-pupuli/puppet-editor-services)
   * [puppet](https://puppet.com)
   * [puppet-lint](https://puppet-lint.com)
+* PureScript
+  * [purescript-language-server](https://github.com/nwolverson/purescript-language-server)
 * Python
   * [autopep8](https://github.com/hhatto/autopep8)
   * [bandit](https://github.com/PyCQA/bandit) :warning:
