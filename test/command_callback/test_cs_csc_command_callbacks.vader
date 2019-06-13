@@ -9,10 +9,10 @@ Execute(The csc linter should return the correct default command):
   \ . 'csc /unsafe /out:TEMP /t:module /recurse:' . ale#Escape('*.cs')
 
 Execute(The options should be be used in the command):
-  let g:ale_cs_mcsc_options = '/pkg:dotnet'
+  let g:ale_cs_csc_options = ''
 
   AssertLinter 'csc', ale#path#CdString(g:dir)
-  \ . 'csc /unsafe /pkg:dotnet /out:TEMP /t:module /recurse:' . ale#Escape('*.cs')
+  \ . 'csc /unsafe /out:TEMP /t:module /recurse:' . ale#Escape('*.cs')
 
 Execute(The souce path should be be used in the command):
   let g:ale_cs_csc_source = '../foo/bar'
@@ -37,7 +37,7 @@ Execute(The list of assemblies should be be used in the command if not empty):
   let g:ale_cs_csc_assemblies = ['foo.dll', 'bar.dll']
 
   AssertLinter 'csc', ale#path#CdString(g:dir)
-  \ . 'csc -unsafe'
+  \ . 'csc /unsafe'
   \ . ' /r:' . ale#Escape('foo.dll') . ',' . ale#Escape('bar.dll')
   \ . ' /out:TEMP /t:module /recurse:' . ale#Escape('*.cs')
 
