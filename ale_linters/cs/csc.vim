@@ -61,7 +61,7 @@ function! ale_linters#cs#csc#Handle(buffer, lines) abort
     let l:dir = s:GetWorkingDirectory(a:buffer)
 
     for l:match in ale#util#GetMatches(a:lines, l:patterns)
-        if len(l:match) > 4
+        if len(l:match) > 6 && strlen(l:match[5]) > 2 && l:match[5][:1] == 'CS'
             call add(l:output, {
             \   'filename': ale#path#GetAbsPath(l:dir, l:match[1]),
             \   'lnum': l:match[2] + 0,
@@ -70,7 +70,7 @@ function! ale_linters#cs#csc#Handle(buffer, lines) abort
             \   'code': l:match[5],
             \   'text': l:match[6] ,
             \})
-        else
+        elseif strlen(l:match[3]) > 2 && l:match[3][:1] == 'CS'
             call add(l:output, {
             \   'filename':'<csc>',
             \   'lnum': -1,
