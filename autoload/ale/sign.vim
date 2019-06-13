@@ -45,13 +45,24 @@ if !hlexists('ALESignColumnWithErrors')
     highlight link ALESignColumnWithErrors error
 endif
 
-function! ale#sign#SetUpDefaultColumnWithoutErrorsHighlight() abort
+function! ale#sign#getSignColumn() abort
     redir => l:output
         0verbose silent highlight SignColumn
     redir end
+    return l:output
+endfunction
 
+function! ale#sign#SetUpDefaultColumnWithoutErrorsHighlight() abort
+    "redir => l:output
+    "    0verbose silent highlight SignColumn
+    "redir end
+    0verbose silent let l:output = ale#sign#getSignColumn()
+	echo l:output
+	echo split(l:output)
     let l:highlight_syntax = join(split(l:output)[2:])
+	echo l:highlight_syntax
     let l:match = matchlist(l:highlight_syntax, '\vlinks to (.+)$')
+	echo l:match
 
     if !empty(l:match)
         execute 'highlight link ALESignColumnWithoutErrors ' . l:match[1]

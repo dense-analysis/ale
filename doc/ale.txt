@@ -1977,6 +1977,7 @@ documented in additional help files.
   c#......................................|ale-cs-options|
     mcs...................................|ale-cs-mcs|
     mcsc..................................|ale-cs-mcsc|
+    csc...................................|ale-cs-csc|
     uncrustify............................|ale-cs-uncrustify|
   css.....................................|ale-css-options|
     fecs..................................|ale-css-fecs|
