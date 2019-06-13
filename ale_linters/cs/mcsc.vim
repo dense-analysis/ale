@@ -68,7 +68,7 @@ function! ale_linters#cs#mcsc#Handle(buffer, lines) abort
             \   'col': l:match[3] + 0,
             \   'type': l:match[4] is# 'error' ? 'E' : 'W',
             \   'code': l:match[5],
-            \   'text': join(l:match[6:]) ,
+            \   'text': join(l:match[6]) ,
             \})
         else
             call add(l:output, {
@@ -77,7 +77,7 @@ function! ale_linters#cs#mcsc#Handle(buffer, lines) abort
             \   'col': -1,
             \   'type': l:match[1] is# 'error' ? 'E' : 'W',
             \   'code': l:match[2],
-            \   'text': l:match[3:],
+            \   'text': l:match[3],
             \})            
         endif
     endfor
