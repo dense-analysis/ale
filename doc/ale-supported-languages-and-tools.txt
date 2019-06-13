@@ -55,6 +55,7 @@ Notes:
 * C#
   * `mcs`
   * `mcsc`!!
+  * `csc`!!
   * `uncrustify`
 * C++ (filetype cpp)
   * `ccls`

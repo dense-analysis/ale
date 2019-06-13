@@ -53,8 +53,8 @@ function! ale_linters#cs#csc#Handle(buffer, lines) abort
     " files within the source tree rooted at the specified source
     " path and not just the file loaded in the buffer
     let l:patterns = [
-    \    '^\v(.+\.cs)\((\d+),(\d+)\)\: ([^ ]+) ([^ ]+): (.+)$',
-    \    '^\v([^ ]+) ([^ ]+): (.+)$',
+    \    '^\v(.+\.cs)\((\d+),(\d+)\)\:\s+([^ ]+)\s+([^ ]+):\s(.+)$',
+    \    '^\v([^ ]+)\s+([^ ]+):\s+(.+)$',
     \]	
     let l:output = []
 
@@ -87,7 +87,7 @@ endfunction
 
 call ale#linter#Define('cs',{
 \   'name': 'csc',
-\   'output_stream': 'stderr',
+\   'output_stream': 'stdout',
 \   'executable': 'csc',
 \   'command': function('ale_linters#cs#csc#GetCommand'),
 \   'callback': 'ale_linters#cs#csc#Handle',
