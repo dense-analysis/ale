@@ -50,7 +50,7 @@ sed -n "$readme_start_line,$readme_end_line"p README.md \
     | sed 's/ \?|/:/' \
     | sed 's/[`!^|]\|([^)]*)//g' \
     | sed 's/\[\|\]//g' \
-    | sed 's/see.*\(,\|$\)/\1/g' \
+    | sed 's/see[^,]*\(,\|$\)/\1/g' \
     | sed 's/ *\([,:]\)/\1/g' \
     | sed 's/  */ /g' \
     | sed 's/^ *\| *$//g' \
