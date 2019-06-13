@@ -55,7 +55,7 @@ function! ale_linters#cs#csc#Handle(buffer, lines) abort
     let l:patterns = [
     \    '^\v(.+\.cs)\((\d+),(\d+)\)\:\s+([^ ]+)\s+([^ ]+):\s(.+)$',
     \    '^\v([^ ]+)\s+([^ ]+):\s+(.+)$',
-    \]	
+    \]    
     let l:output = []
 
     let l:dir = s:GetWorkingDirectory(a:buffer)

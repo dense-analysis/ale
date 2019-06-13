@@ -103,7 +103,7 @@ g:ale_cs_mcsc_assemblies                             *g:ale_cs_mcsc_assemblies*
 <
 
 ===============================================================================
-csc                                                               *ale-cs-csc*
+csc                                                                *ale-cs-csc*
 
   The |ale-cs-csc| linter checks for semantic errors when files are opened or
   saved.
