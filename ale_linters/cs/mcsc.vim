@@ -53,8 +53,8 @@ function! ale_linters#cs#mcsc#Handle(buffer, lines) abort
     " files within the source tree rooted at the specified source
     " path and not just the file loaded in the buffer
     let l:patterns = [
-    \    '^\v(.+\.cs)\((\d+),(\d+)\)\: ([^ ]+) ([^ ]+): (.+)$',
-    \    '^\v([^ ]+) ([^ ]+): (.+)$',
+    \    '^\v(.+\.cs)\((\d+),(\d+)\)\: ([^ ]+) (CS[^ ]+): (.+)$',
+    \    '^\v([^ ]+) (CS[^ ]+): (.+)$',
     \]    
     let l:output = []
 
@@ -77,7 +77,7 @@ function! ale_linters#cs#mcsc#Handle(buffer, lines) abort
             \   'col': -1,
             \   'type': l:match[1] is# 'error' ? 'E' : 'W',
             \   'code': l:match[2],
-            \   'text': l:match[3],
+            \   'text': l:match[3:],
             \})            
         endif
     endfor

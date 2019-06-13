@@ -18,7 +18,7 @@ Execute(The souce path should be be used in the command):
   let g:ale_cs_csc_source = '../foo/bar'
 
   AssertLinter 'csc', ale#path#CdString('../foo/bar')
-  \ . 'mcs /unsafe /out:TEMP /t:module /recurse:' . ale#Escape('*.cs')
+  \ . 'csc /unsafe /out:TEMP /t:module /recurse:' . ale#Escape('*.cs')
 
 Execute(The list of search pathes for assemblies should be be used in the command if not empty):
   let g:ale_cs_csc_assembly_path = ['/usr/lib/mono', '../foo/bar']
@@ -44,4 +44,4 @@ Execute(The list of assemblies should be be used in the command if not empty):
   let g:ale_cs_csc_assemblies = []
 
   AssertLinter 'csc', ale#path#CdString(g:dir)
-  \ . 'mcs /unsafe /out:TEMP /t:module /recurse:' . ale#Escape('*.cs')
+  \ . 'csc /unsafe /out:TEMP /t:module /recurse:' . ale#Escape('*.cs')

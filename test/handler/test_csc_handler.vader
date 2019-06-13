@@ -67,3 +67,32 @@ Execute(The csc handler should handle cannot find symbol errors):
   \   'Test.cs(10,12): warning CS0123: some warning',
   \   'Compilation failed: 2 error(s), 1 warnings',
   \ ])
+
+Execute(The csc handler should handle non file specific compiler errors without reporting overal status report as error):
+  let g:ale_cs_csc_source = '/home/foo/project/bar'
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': -1,
+  \     'col' : -1,
+  \     'text': 'No source files specified.',
+  \     'code': 'CS2008',
+  \     'type': 'W',
+  \     'filename': '<csc>',
+  \   },
+  \   {
+  \     'lnum': -1,
+  \     'col': -1,
+  \     'text': 'Outputs without source must have the /out option specified',
+  \     'code': 'CS1562',
+  \     'type': 'E',
+  \     'filename': '<csc>',
+  \   },
+  \ ],
+  \ ale_linters#cs#csc#Handle(bufnr(''), [
+  \   'Microsoft (R) Visual C# Compiler version 2.8.2.62916 (2ad4aabc)',
+  \   'Copyright (C) Microsoft Corporation. All rights reserved.',
+  \   'warning CS2008: No source files specified.',
+  \   'error CS1562: Outputs without source must have the /out option specified',
+  \ ])
