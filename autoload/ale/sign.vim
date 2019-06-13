@@ -57,13 +57,8 @@ function! ale#sign#SetUpDefaultColumnWithoutErrorsHighlight() abort
     "    0verbose silent highlight SignColumn
     "redir end
     0verbose silent let l:output = ale#sign#getSignColumn()
-    echo l:output
-    echo split(l:output)
     let l:highlight_syntax = join(split(l:output)[2:])
-    echo l:highlight_syntax
     let l:match = matchlist(l:highlight_syntax, '\vlinks to (.+)$')
-    echo l:match
-
     if !empty(l:match)
         execute 'highlight link ALESignColumnWithoutErrors ' . l:match[1]
     elseif l:highlight_syntax isnot# 'cleared'
