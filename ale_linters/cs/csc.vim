@@ -53,15 +53,15 @@ function! ale_linters#cs#csc#Handle(buffer, lines) abort
     " files within the source tree rooted at the specified source
     " path and not just the file loaded in the buffer
     let l:patterns = [
-    \    '^\v(.+\.cs)\((\d+),(\d+)\)\:\s+([^ ]+)\s+(CS[^ ]+):\s(.+)$',
-    \    '^\v([^ ]+)\s+(CS[^ ]+):\s+(.+)$',
-    \]    
+    \    '^\v(.+\.cs)\((\d+),(\d+)\)\:\s+([^ ]+)\s+([cC][sS][^ ]+):\s(.+)$',
+    \    '^\v([^ ]+)\s+([Cc][sS][^ ]+):\s+(.+)$',
+    \]
     let l:output = []
 
     let l:dir = s:GetWorkingDirectory(a:buffer)
 
     for l:match in ale#util#GetMatches(a:lines, l:patterns)
-        if len(l:match) > 6 && strlen(l:match[5]) > 2 && l:match[5][:1] == 'CS'
+        if len(l:match) > 6 && strlen(l:match[5]) > 2 && l:match[5][:1] ==? 'CS'
             call add(l:output, {
             \   'filename': ale#path#GetAbsPath(l:dir, l:match[1]),
             \   'lnum': l:match[2] + 0,
@@ -70,7 +70,7 @@ function! ale_linters#cs#csc#Handle(buffer, lines) abort
             \   'code': l:match[5],
             \   'text': l:match[6] ,
             \})
-        elseif strlen(l:match[2]) > 2 && l:match[2][:1] == 'CS'
+        elseif strlen(l:match[2]) > 2 && l:match[2][:1] ==? 'CS'
             call add(l:output, {
             \   'filename':'<csc>',
             \   'lnum': -1,
@@ -78,7 +78,7 @@ function! ale_linters#cs#csc#Handle(buffer, lines) abort
             \   'type': l:match[1] is# 'error' ? 'E' : 'W',
             \   'code': l:match[2],
             \   'text': l:match[3],
-            \})            
+            \})
         endif
     endfor
 

@@ -49,6 +49,7 @@ function! ale#sign#getSignColumn() abort
     redir => l:output
         0verbose silent highlight SignColumn
     redir end
+
     return l:output
 endfunction
 
@@ -59,6 +60,7 @@ function! ale#sign#SetUpDefaultColumnWithoutErrorsHighlight() abort
     0verbose silent let l:output = ale#sign#getSignColumn()
     let l:highlight_syntax = join(split(l:output)[2:])
     let l:match = matchlist(l:highlight_syntax, '\vlinks to (.+)$')
+
     if !empty(l:match)
         execute 'highlight link ALESignColumnWithoutErrors ' . l:match[1]
     elseif l:highlight_syntax isnot# 'cleared'
