@@ -70,7 +70,7 @@ function! ale_linters#cs#mcsc#Handle(buffer, lines) abort
             \   'code': l:match[5],
             \   'text': l:match[6] ,
             \})
-        elseif strlen(l:match[3]) > 2 && l:match[3][:1] == 'CS'
+        elseif strlen(l:match[2]) > 2 && l:match[2][:1] == 'CS'
             call add(l:output, {
             \   'filename':'<mcs>',
             \   'lnum': -1,
