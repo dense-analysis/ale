@@ -1,0 +1,25 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test')
+  runtime ale_linters/kotlin/languageserver.vim
+
+After:
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(Detect root of gradle project with build.gradle correctly):
+  call ale#test#SetFilename('gradle-test-files/build-gradle-project/src/main/kotlin/dummy.kt')
+  AssertEqual
+  \ ale#path#Simplify(g:dir . '/gradle-test-files/build-gradle-project'),
+  \ ale_linters#kotlin#languageserver#GetProjectRoot(bufnr(''))
+
+Execute(Detect root of maven project with pom.xml correctly):
+  call ale#test#SetFilename('maven-test-files/maven-kotlin-project/src/main/kotlin/dummy.kt')
+  AssertEqual
+  \ ale#path#Simplify(g:dir . '/maven-test-files/maven-kotlin-project'),
+  \ ale_linters#kotlin#languageserver#GetProjectRoot(bufnr(''))
+
+Execute(Detect no root in case of non maven/gradle project):
+  call ale#test#SetFilename('gradle-test-files/non-gradle-project/src/main/kotlin/dummy.kt')
+  AssertEqual
+  \ '',
+  \ ale_linters#kotlin#languageserver#GetProjectRoot(bufnr(''))

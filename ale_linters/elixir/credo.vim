@@ -11,10 +11,18 @@ function! ale_linters#elixir#credo#Handle(buffer, lines) abort
         let l:type = l:match[3]
         let l:text = l:match[4]
 
-        if l:type is# 'C'
-            let l:type = 'E'
-        elseif l:type is# 'R'
+        " Refactoring opportunities
+        if l:type is# 'F'
             let l:type = 'W'
+        " Consistency
+        elseif l:type is# 'C'
+            let l:type = 'W'
+        " Software Design
+        elseif l:type is# 'D'
+            let l:type = 'I'
+        " Code Readability
+        elseif l:type is# 'R'
+            let l:type = 'I'
         endif
 
         call add(l:output, {
@@ -29,9 +37,27 @@ function! ale_linters#elixir#credo#Handle(buffer, lines) abort
     return l:output
 endfunction
 
+function! ale_linters#elixir#credo#GetMode() abort
+    if get(g:, 'ale_elixir_credo_strict', 0)
+        return '--strict'
+    else
+        return 'suggest'
+    endif
+endfunction
+
+function! ale_linters#elixir#credo#GetCommand(buffer) abort
+    let l:project_root = ale#handlers#elixir#FindMixProjectRoot(a:buffer)
+    let l:mode = ale_linters#elixir#credo#GetMode()
+
+    return ale#path#CdString(l:project_root)
+    \ . 'mix help credo && '
+    \ . 'mix credo ' . ale_linters#elixir#credo#GetMode()
+    \ . ' --format=flycheck --read-from-stdin %s'
+endfunction
+
 call ale#linter#Define('elixir', {
 \   'name': 'credo',
 \   'executable': 'mix',
-\   'command': 'mix credo suggest --format=flycheck --read-from-stdin %s',
+\   'command': function('ale_linters#elixir#credo#GetCommand'),
 \   'callback': 'ale_linters#elixir#credo#Handle',
 \})

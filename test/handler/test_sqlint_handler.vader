@@ -1,6 +1,10 @@
-Execute(The sqlint handler should parse lines correctly):
+Before:
   runtime! ale_linters/sql/sqlint.vim
 
+After:
+  call ale#linter#Reset()
+
+Execute(The sqlint handler should parse lines correctly):
   AssertEqual
   \ [
   \   {
@@ -28,6 +32,3 @@ Execute(The sqlint handler should parse lines correctly):
   \   'stdin:47:11:ERROR unterminated quoted string at or near "''',
   \   'stdin:50:12:WARNING some warning at end of input',
   \ ])
-
-After:
-  call ale#linter#Reset()

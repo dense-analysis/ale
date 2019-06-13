@@ -1,30 +1,51 @@
 Before:
-  runtime ale_linters/java/javac.vim
-  call ale#engine#InitBufferInfo(bufnr(''))
+  call ale#assert#SetUpLinterTest('java', 'javac')
+  call ale#test#SetFilename('dummy.java')
 
-  silent! cd /testplugin/test/command_callback
+  let g:cp_sep = has('unix') ? ':' : ';'
+  let g:prefix = ale#path#CdString(expand('%:p:h'))
+  \ . ale#Escape('javac') . ' -Xlint'
+
+  function! GetCommand(previous_output) abort
+    let l:command = ale_linters#java#javac#GetCommand(
+    \ bufnr(''),
+    \ a:previous_output
+    \)
+
+    let l:split_command = split(l:command)
+    let l:index = index(l:split_command, '-d')
+
+    let l:split_command[l:index + 1] = 'TEMP'
+
+    return join(l:split_command)
+  endfunction
 
 After:
-  call ale#linter#Reset()
-  " We need to clean up the buffer to remove the temporary directories created
-  " for the command.
-  call ale#engine#Cleanup(bufnr(''))
-  let g:ale_java_javac_options = ''
-  let g:ale_java_javac_classpath = ''
+  unlet! g:cp_sep
+  unlet! g:prefix
+
+  delfunction GetCommand
+
+  call ale#assert#TearDownLinterTest()
 
 Execute(The javac callback should return the correct default value):
-  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
-
-  Assert match(b:command, '\v^javac +-Xlint +-d +''/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
-  \ 'Invalid command string: ' . b:command
+  AssertLinter 'javac', g:prefix . ' -d ' . ale#Escape('TEMP_DIR') . ' %t'
 
 Execute(The javac callback should use g:ale_java_javac_classpath correctly):
   let g:ale_java_javac_classpath = 'foo.jar'
 
-  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
+  AssertLinter 'javac',
+  \ g:prefix
+  \   . ' -cp ' . ale#Escape('foo.jar')
+  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t'
 
-  Assert match(b:command, '\v^javac +-Xlint +-cp ''+foo\.jar'' +-d ''+/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
-  \ 'Invalid command string: ' . b:command
+Execute(The executable should be configurable):
+  let g:ale_java_javac_executable = 'foobar'
+
+  AssertLinter 'foobar',
+  \ ale#path#CdString(expand('%:p:h'))
+  \ . ale#Escape('foobar') . ' -Xlint'
+  \ . ' -d ' . ale#Escape('TEMP_DIR') . ' %t'
 
 Execute(The javac callback should include discovered classpaths):
   let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [
@@ -32,49 +53,76 @@ Execute(The javac callback should include discovered classpaths):
   \ '[INFO] Something we should ignore.',
   \ '/foo/bar.jar',
   \ '/xyz/abc.jar',
-  \])
+  \], {})
 
-  Assert match(b:command, '\v^javac +-Xlint +-cp ''+/foo/bar\.jar:/xyz/abc\.jar'' +-d +''/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
-  \ 'Invalid command string: ' . b:command
+  AssertEqual
+  \ g:prefix
+  \   . ' -cp '
+  \   . ale#Escape(join(['/foo/bar.jar', '/xyz/abc.jar'], g:cp_sep))
+  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t',
+  \ substitute(b:command, '%e', '\=ale#Escape(''javac'')', 'g')
 
 Execute(The javac callback should combine discovered classpaths and manual ones):
   let g:ale_java_javac_classpath = 'configured.jar'
-
   let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [
   \ '[DEBUG] Ignore this.',
   \ '[INFO] Something we should ignore.',
   \ '/foo/bar.jar',
   \ '/xyz/abc.jar',
-  \])
+  \], {})
 
-  Assert match(b:command, '\v^javac +-Xlint +-cp +''/foo/bar\.jar:/xyz/abc\.jar:configured\.jar'' +-d ''+/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
-  \ 'Invalid command string: ' . b:command
+  AssertEqual
+  \ g:prefix
+  \   . ' -cp '
+  \   . ale#Escape(join(
+  \     [
+  \       '/foo/bar.jar',
+  \       '/xyz/abc.jar',
+  \       'configured.jar',
+  \     ],
+  \     g:cp_sep
+  \   ))
+  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t',
+  \ substitute(b:command, '%e', '\=ale#Escape(''javac'')', 'g')
 
-  let g:ale_java_javac_classpath = 'configured.jar:configured2.jar'
-
+  let g:ale_java_javac_classpath = 'configured.jar' . g:cp_sep . 'configured2.jar'
   let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [
   \ '[DEBUG] Ignore this.',
   \ '[INFO] Something we should ignore.',
   \ '/foo/bar.jar',
   \ '/xyz/abc.jar',
-  \])
+  \], {})
 
-  Assert match(b:command, '\v^javac +-Xlint +-cp +''/foo/bar\.jar:/xyz/abc\.jar:configured\.jar:configured2\.jar'' +-d +''/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
-  \ 'Invalid command string: ' . b:command
+  AssertEqual
+  \ g:prefix
+  \   . ' -cp '
+  \   . ale#Escape(join(
+  \     [
+  \       '/foo/bar.jar',
+  \       '/xyz/abc.jar',
+  \       'configured.jar',
+  \       'configured2.jar',
+  \     ],
+  \     g:cp_sep
+  \   ))
+  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t',
+  \ substitute(b:command, '%e', '\=ale#Escape(''javac'')', 'g')
 
 Execute(The javac callback should detect source directories):
   call ale#engine#Cleanup(bufnr(''))
-  :e! java_paths/src/main/java/com/something/dummy
+  noautocmd e! java_paths/src/main/java/com/something/dummy
   call ale#engine#InitBufferInfo(bufnr(''))
 
-  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
-
-  Assert match(b:command, '\v^javac +-Xlint +-sourcepath ''/.*java_paths/src/main/java/'' +-d +''/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
-  \ 'Invalid command string: ' . b:command
+  AssertLinter 'javac',
+  \ ale#path#CdString(expand('%:p:h')) . ale#Escape('javac') . ' -Xlint'
+  \   . ' -sourcepath ' . ale#Escape(
+  \     ale#path#Simplify(g:dir . '/java_paths/src/main/java/')
+  \   )
+  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t'
 
 Execute(The javac callback should combine detected source directories and classpaths):
   call ale#engine#Cleanup(bufnr(''))
-  :e! java_paths/src/main/java/com/something/dummy
+  call ale#test#SetFilename('java_paths/src/main/java/com/something/dummy.java')
   call ale#engine#InitBufferInfo(bufnr(''))
 
   let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [
@@ -82,16 +130,59 @@ Execute(The javac callback should combine detected source directories and classp
   \ '[INFO] Something we should ignore.',
   \ '/foo/bar.jar',
   \ '/xyz/abc.jar',
-  \])
+  \], {})
 
-  Assert match(b:command, '\v^javac +-Xlint +-cp +''/foo/bar\.jar:/xyz/abc\.jar'' +-sourcepath ''/.*java_paths/src/main/java/'' +-d +''/tmp/[0-9a-zA-Z/]+'' +\%t$') >= 0,
-  \ 'Invalid command string: ' . b:command
+  AssertEqual
+  \ ale#path#CdString(expand('%:p:h')) . ale#Escape('javac') . ' -Xlint'
+  \   . ' -cp ' . ale#Escape(join(['/foo/bar.jar', '/xyz/abc.jar'], g:cp_sep))
+  \   . ' -sourcepath ' . ale#Escape(
+  \     ale#path#Simplify(g:dir . '/java_paths/src/main/java/')
+  \   )
+  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t',
+  \ substitute(b:command, '%e', '\=ale#Escape(''javac'')', 'g')
 
 Execute(The javac callback should use g:ale_java_javac_options correctly):
-
   let g:ale_java_javac_options = '--anything --else'
 
-  let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [])
+  AssertLinter 'javac',
+  \ g:prefix . ' -d ' . ale#Escape('TEMP_DIR') . ' --anything --else %t'
 
-  Assert match(b:command, '\v^javac +-Xlint +-d +''/tmp/[0-9a-zA-Z/]+'' --anything --else +\%t$') >= 0,
-  \ 'Invalid command string: ' . b:command
+Execute(The javac callback should include src/test/java for test paths):
+  call ale#engine#Cleanup(bufnr(''))
+  " The test path is only included for test files.
+  " Regular Java files shouldn't import from tests.
+  noautocmd e! java_paths/src/test/java/com/something/dummy
+  call ale#engine#InitBufferInfo(bufnr(''))
+
+  AssertLinter 'javac',
+  \ ale#path#CdString(expand('%:p:h')) . ale#Escape('javac') . ' -Xlint'
+  \   . ' -sourcepath ' . ale#Escape(join([
+  \     ale#path#Simplify(g:dir . '/java_paths/src/main/java/'),
+  \     ale#path#Simplify(g:dir . '/java_paths/src/test/java/'),
+  \   ], g:cp_sep))
+  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t'
+
+Execute(The javac callback should include src/main/jaxb when available):
+  call ale#engine#Cleanup(bufnr(''))
+  noautocmd e! java_paths_with_jaxb/src/main/java/com/something/dummy
+  call ale#engine#InitBufferInfo(bufnr(''))
+
+  AssertLinter 'javac',
+  \ ale#path#CdString(expand('%:p:h')) . ale#Escape('javac') . ' -Xlint'
+  \   . ' -sourcepath ' . ale#Escape(join([
+  \     ale#path#Simplify(g:dir . '/java_paths_with_jaxb/src/main/java/'),
+  \     ale#path#Simplify(g:dir . '/java_paths_with_jaxb/src/main/jaxb/'),
+  \   ], g:cp_sep))
+  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t'
+
+Execute(The javac callback should add -sourcepath even if src/java/main doesn't exist):
+  call ale#engine#Cleanup(bufnr(''))
+  call ale#test#SetFilename('java_paths_no_main/src/test/java/com/something/dummy.java')
+  call ale#engine#InitBufferInfo(bufnr(''))
+
+  AssertLinter 'javac',
+  \ ale#path#CdString(expand('%:p:h')) . ale#Escape('javac') . ' -Xlint'
+  \   . ' -sourcepath ' . ale#Escape(join([
+  \     ale#path#Simplify(g:dir . '/java_paths_no_main/src/test/java/'),
+  \   ], g:cp_sep))
+  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t'

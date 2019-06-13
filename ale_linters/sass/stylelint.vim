@@ -1,22 +1,13 @@
 " Author: diartyz <diartyz@gmail.com>
 
 call ale#Set('sass_stylelint_executable', 'stylelint')
-call ale#Set('sass_stylelint_use_global', 0)
-
-function! ale_linters#sass#stylelint#GetExecutable(buffer) abort
-    return ale#node#FindExecutable(a:buffer, 'sass_stylelint', [
-    \   'node_modules/.bin/stylelint',
-    \])
-endfunction
-
-function! ale_linters#sass#stylelint#GetCommand(buffer) abort
-    return ale_linters#sass#stylelint#GetExecutable(a:buffer)
-    \   . ' --stdin-filename %s'
-endfunction
+call ale#Set('sass_stylelint_use_global', get(g:, 'ale_use_global_executables', 0))
 
 call ale#linter#Define('sass', {
 \   'name': 'stylelint',
-\   'executable_callback': 'ale_linters#sass#stylelint#GetExecutable',
-\   'command_callback': 'ale_linters#sass#stylelint#GetCommand',
+\   'executable': {b -> ale#node#FindExecutable(b, 'sass_stylelint', [
+\       'node_modules/.bin/stylelint',
+\   ])},
+\   'command': '%e --stdin-filename %s',
 \   'callback': 'ale#handlers#css#HandleStyleLintFormat',
 \})

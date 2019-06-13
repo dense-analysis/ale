@@ -1,0 +1,15 @@
+Before:
+  call ale#assert#SetUpLinterTest('go', 'gotype')
+  call ale#test#SetFilename('../go_files/testfile2.go')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default gotype command should be correct):
+  AssertLinter 'gotype',
+  \ ale#path#CdString(expand('%:p:h')) . ' gotype -e .'
+
+Execute(The gotype callback should ignore test files):
+  call ale#test#SetFilename('bla_test.go')
+
+  AssertLinter 'gotype', ''

@@ -1,9 +1,25 @@
-" Author: KabbAmine <amine.kabb@gmail.com>
+" Author: KabbAmine <amine.kabb@gmail.com>, David Sierra <https://github.com/davidsierradz>
+
+call ale#Set('json_jsonlint_executable', 'jsonlint')
+call ale#Set('json_jsonlint_use_global', get(g:, 'ale_use_global_executables', 0))
+
+function! ale_linters#json#jsonlint#GetExecutable(buffer) abort
+    return ale#node#FindExecutable(a:buffer, 'json_jsonlint', [
+    \   'node_modules/.bin/jsonlint',
+    \   'node_modules/jsonlint/lib/cli.js',
+    \])
+endfunction
+
+function! ale_linters#json#jsonlint#GetCommand(buffer) abort
+    let l:executable = ale_linters#json#jsonlint#GetExecutable(a:buffer)
+
+    return ale#node#Executable(a:buffer, l:executable)
+    \   . ' --compact -'
+endfunction
 
 function! ale_linters#json#jsonlint#Handle(buffer, lines) abort
     " Matches patterns like the following:
     " line 2, col 15, found: 'STRING' - expected: 'EOF', '}', ',', ']'.
-
     let l:pattern = '^line \(\d\+\), col \(\d*\), \(.\+\)$'
     let l:output = []
 
@@ -20,8 +36,8 @@ endfunction
 
 call ale#linter#Define('json', {
 \   'name': 'jsonlint',
-\   'executable': 'jsonlint',
+\   'executable': function('ale_linters#json#jsonlint#GetExecutable'),
 \   'output_stream': 'stderr',
-\   'command': 'jsonlint --compact -',
+\   'command': function('ale_linters#json#jsonlint#GetCommand'),
 \   'callback': 'ale_linters#json#jsonlint#Handle',
 \})

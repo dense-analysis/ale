@@ -47,3 +47,20 @@ Execute(Searches should work with just one item):
   let g:loclist = [{'bufnr': 1, 'lnum': 3, 'col': 10}]
 
   AssertEqual 0, ale#util#BinarySearch(g:loclist, 1, 3, 2)
+
+Execute(Searches should return the last item on a single column):
+  let g:loclist = [
+  \ {'bufnr': 1, 'lnum': 1, 'col': 10, 'type': 'W'},
+  \ {'bufnr': 1, 'lnum': 1, 'col': 10, 'type': 'E'},
+  \ {'bufnr': 1, 'lnum': 1, 'col': 11, 'type': 'W'},
+  \ {'bufnr': 1, 'lnum': 1, 'col': 11, 'type': 'E'},
+  \ {'bufnr': 1, 'lnum': 1, 'col': 20, 'type': 'W'},
+  \ {'bufnr': 1, 'lnum': 1, 'col': 20, 'type': 'E'},
+  \]
+
+  " We should return the index for the last item at some column to the right.
+  AssertEqual 1, ale#util#BinarySearch(g:loclist, 1, 1, 1)
+  " We should return the index for the last item at the column we are on.
+  AssertEqual 3, ale#util#BinarySearch(g:loclist, 1, 1, 11)
+  " We should prefer items to the left of the cursor, over the right.
+  AssertEqual 3, ale#util#BinarySearch(g:loclist, 1, 1, 19)

@@ -2,18 +2,7 @@
 " Description: This file adds support for linting Swagger / OpenAPI documents using swaglint
 
 call ale#Set('yaml_swaglint_executable', 'swaglint')
-call ale#Set('yaml_swaglint_use_global', 0)
-
-function! ale_linters#yaml#swaglint#GetExecutable(buffer) abort
-    return ale#node#FindExecutable(a:buffer, 'yaml_swaglint', [
-    \   'node_modules/.bin/swaglint',
-    \])
-endfunction
-
-function! ale_linters#yaml#swaglint#GetCommand(buffer) abort
-    return ale_linters#yaml#swaglint#GetExecutable(a:buffer)
-    \    . ' -r compact --stdin'
-endfunction
+call ale#Set('yaml_swaglint_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! ale_linters#yaml#swaglint#Handle(buffer, lines) abort
     let l:pattern = ': \([^\s]\+\) @ \(\d\+\):\(\d\+\) - \(.\+\)$'
@@ -27,6 +16,14 @@ function! ale_linters#yaml#swaglint#Handle(buffer, lines) abort
         \   'text': l:match[4],
         \}
 
+        " Parse the code if it's there.
+        let l:code_match = matchlist(l:obj.text, '\v^(.+) \(([^ (]+)\)$')
+
+        if !empty(l:code_match)
+            let l:obj.text = l:code_match[1]
+            let l:obj.code = l:code_match[2]
+        endif
+
         call add(l:output, l:obj)
     endfor
 
@@ -35,7 +32,9 @@ endfunction
 
 call ale#linter#Define('yaml', {
 \   'name': 'swaglint',
-\   'executable_callback': 'ale_linters#yaml#swaglint#GetExecutable',
-\   'command_callback': 'ale_linters#yaml#swaglint#GetCommand',
+\   'executable': {b -> ale#node#FindExecutable(b, 'yaml_swaglint', [
+\       'node_modules/.bin/swaglint',
+\   ])},
+\   'command': '%e -r compact --stdin',
 \   'callback': 'ale_linters#yaml#swaglint#Handle',
 \})

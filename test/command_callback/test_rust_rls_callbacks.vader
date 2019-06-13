@@ -1,32 +1,30 @@
 Before:
-  Save g:ale_rust_rls_executable
-
-  unlet! g:ale_rust_rls_executable
-
-  runtime ale_linters/rust/rls.vim
-
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#assert#SetUpLinterTest('rust', 'rls')
 
 After:
-  Restore
-
-  call ale#test#RestoreDirectory()
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The default executable path should be correct):
-  AssertEqual 'rls', ale_linters#rust#rls#GetExecutable(bufnr(''))
-  AssertEqual
-  \ ale#Escape('rls') . ' +nightly',
-  \ ale_linters#rust#rls#GetCommand(bufnr(''))
+  AssertLinter 'rls', ale#Escape('rls')
 
-Execute(The language string should be correct):
-  AssertEqual 'rust', ale_linters#rust#rls#GetLanguage(bufnr(''))
+Execute(The toolchain should be configurable):
+  let g:ale_rust_rls_toolchain = 'stable'
+
+  AssertLinter 'rls', ale#Escape('rls') . ' +' . ale#Escape('stable')
+
+Execute(The toolchain should be ommitted if not given):
+  let g:ale_rust_rls_toolchain = ''
+
+  AssertLinter 'rls', ale#Escape('rls')
 
 Execute(The project root should be detected correctly):
-  AssertEqual '', ale_linters#rust#rls#GetProjectRoot(bufnr(''))
+  AssertLSPProject ''
 
   call ale#test#SetFilename('rust-rls-project/test.rs')
 
-  AssertEqual
-  \ g:dir . '/rust-rls-project',
-  \ ale_linters#rust#rls#GetProjectRoot(bufnr(''))
+  AssertLSPProject ale#path#Simplify(g:dir . '/rust-rls-project')
+
+Execute(Should accept configuration settings):
+  AssertLSPConfig {}
+  let b:ale_rust_rls_config = {'rust': {'clippy_preference': 'on'}}
+  AssertLSPConfig {'rust': {'clippy_preference': 'on'}}

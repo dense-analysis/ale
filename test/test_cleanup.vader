@@ -1,15 +1,14 @@
-Before:
-    let g:buffer = bufnr('%')
-
-    let g:ale_buffer_info = {
-    \  g:buffer : {'temporary_file_list': [], 'temporary_directory_list': []},
-    \  10347: {'temporary_file_list': [], 'temporary_directory_list': []},
-    \}
-
 After:
-    unlet! g:buffer
-    let g:ale_buffer_info = {}
+  unlet! g:buffer
+  let g:ale_buffer_info = {}
 
-Execute('ALE globals should be cleared when the buffer is closed.'):
-    :q!
-    AssertEqual {10347: {'temporary_file_list': [], 'temporary_directory_list': []}}, g:ale_buffer_info
+Execute('ALE globals should be cleared when the buffer is deleted):
+  new
+
+  let g:ale_buffer_info = {
+  \  bufnr(''): {'temporary_file_list': [], 'temporary_directory_list': []},
+  \  10347: {'temporary_file_list': [], 'temporary_directory_list': []},
+  \}
+
+  bdelete
+  AssertEqual {10347: {'temporary_file_list': [], 'temporary_directory_list': []}}, g:ale_buffer_info

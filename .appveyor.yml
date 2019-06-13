@@ -36,4 +36,5 @@ install:
 
 test_script:
   - cd C:\testplugin
-  - 'C:\vim\vim\vim80\vim.exe -u test\vimrc "+Vader! test/test_path_uri.vader"'
+  - 'C:\vim\vim\vim80\vim.exe -u test\vimrc "+Vader!
+    test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader"'

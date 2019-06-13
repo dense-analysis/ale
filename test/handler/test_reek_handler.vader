@@ -12,17 +12,20 @@ Execute(The reek handler should parse JSON correctly, with only context enabled)
   \ [
   \     {
   \         'lnum': 12,
-  \         'text': 'Rule1: Context#method violates rule number one',
+  \         'text': 'Context#method violates rule number one',
+  \         'code': 'Rule1',
   \         'type': 'W',
   \     },
   \     {
   \         'lnum': 34,
-  \         'text': 'Rule2: Context#method violates rule number two',
+  \         'text': 'Context#method violates rule number two',
+  \         'code': 'Rule2',
   \         'type': 'W',
   \     },
   \     {
   \         'lnum': 56,
-  \         'text': 'Rule2: Context#method violates rule number two',
+  \         'text': 'Context#method violates rule number two',
+  \         'code': 'Rule2',
   \         'type': 'W',
   \     },
   \ ],
@@ -38,7 +41,8 @@ Execute(The reek handler should parse JSON correctly, with no context or wiki li
   \ [
   \     {
   \         'lnum': 12,
-  \         'text': 'Rule1: violates rule number one',
+  \         'text': 'violates rule number one',
+  \         'code': 'Rule1',
   \         'type': 'W',
   \     },
   \ ],
@@ -54,7 +58,8 @@ Execute(The reek handler should parse JSON correctly, with both context and wiki
   \ [
   \     {
   \         'lnum': 12,
-  \         'text': 'Rule1: Context#method violates rule number one [https://example.com/Rule1.md]',
+  \         'text': 'Context#method violates rule number one [https://example.com/Rule1.md]',
+  \         'code': 'Rule1',
   \         'type': 'W',
   \     },
   \ ],

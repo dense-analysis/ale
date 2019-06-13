@@ -1,6 +1,9 @@
 Before:
   runtime ale_linters/xml/xmllint.vim
 
+After:
+  call ale#linter#Reset()
+
 Execute(The xmllint handler should parse error messages correctly):
   AssertEqual
   \ [
@@ -25,6 +28,3 @@ Execute(The xmllint handler should parse error messages correctly):
   \   'blahblah>',
   \   '^'
   \ ])
-
-After:
-  call ale#linter#Reset()

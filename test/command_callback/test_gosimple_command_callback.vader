@@ -1,0 +1,10 @@
+Before:
+  call ale#assert#SetUpLinterTest('go', 'gosimple')
+  call ale#test#SetFilename('../go_files/testfile2.go')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default gosimple command should be correct):
+  AssertLinter 'gosimple',
+  \ ale#path#CdString(expand('%:p:h')) . ' gosimple .'

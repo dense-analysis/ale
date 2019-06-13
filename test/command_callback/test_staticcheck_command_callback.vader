@@ -1,0 +1,26 @@
+Before:
+  call ale#assert#SetUpLinterTest('go', 'staticcheck')
+  call ale#test#SetFilename('test.go')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The staticcheck callback should return the right defaults):
+  AssertLinter 'staticcheck',
+  \ ale#path#CdString(expand('%:p:h'))
+  \   . 'staticcheck '
+  \   . ale#Escape(expand('%' . ':t'))
+
+Execute(The staticcheck callback should use configured options):
+  let b:ale_go_staticcheck_options = '-test'
+
+  AssertLinter 'staticcheck',
+  \ ale#path#CdString(expand('%:p:h'))
+  \   . 'staticcheck '
+  \   . '-test ' . ale#Escape(expand('%' . ':t'))
+
+Execute(The staticcheck `lint_package` option should use the correct command):
+  let b:ale_go_staticcheck_lint_package = 1
+
+  AssertLinter 'staticcheck',
+  \ ale#path#CdString(expand('%:p:h')) . 'staticcheck .',

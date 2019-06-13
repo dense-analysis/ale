@@ -11,11 +11,11 @@ function! ale_linters#slim#slimlint#GetCommand(buffer) abort
     "
     " See https://github.com/sds/slim-lint/blob/master/lib/slim_lint/linter/README.md#rubocop
     if !empty(l:rubocop_config)
-      if ale#Has('win32')
-        let l:command = 'set SLIM_LINT_RUBOCOP_CONF=' . ale#Escape(l:rubocop_config) . ' && ' . l:command
-      else
-        let l:command = 'SLIM_LINT_RUBOCOP_CONF=' . ale#Escape(l:rubocop_config) . ' ' . l:command
-      endif
+        if has('win32')
+            let l:command = 'set SLIM_LINT_RUBOCOP_CONF=' . ale#Escape(l:rubocop_config) . ' && ' . l:command
+        else
+            let l:command = 'SLIM_LINT_RUBOCOP_CONF=' . ale#Escape(l:rubocop_config) . ' ' . l:command
+        endif
     endif
 
     return l:command
@@ -28,11 +28,20 @@ function! ale_linters#slim#slimlint#Handle(buffer, lines) abort
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        call add(l:output, {
+        let l:item = {
         \   'lnum': l:match[1] + 0,
         \   'type': l:match[2],
         \   'text': l:match[3]
-        \})
+        \}
+
+        let l:code_match = matchlist(l:item.text, '\v^([^:]+): (.+)$')
+
+        if !empty(l:code_match)
+            let l:item.code = l:code_match[1]
+            let l:item.text = l:code_match[2]
+        endif
+
+        call add(l:output, l:item)
     endfor
 
     return l:output
@@ -41,6 +50,6 @@ endfunction
 call ale#linter#Define('slim', {
 \   'name': 'slimlint',
 \   'executable': 'slim-lint',
-\   'command_callback': 'ale_linters#slim#slimlint#GetCommand',
+\   'command': function('ale_linters#slim#slimlint#GetCommand'),
 \   'callback': 'ale_linters#slim#slimlint#Handle'
 \})

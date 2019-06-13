@@ -1,0 +1,32 @@
+Before:
+  call ale#assert#SetUpLinterTest('php', 'psalm')
+
+After:
+  if isdirectory(g:dir . '/.git')
+    call delete(g:dir . '/.git', 'd')
+  endif
+
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default executable path should be correct):
+  AssertLinter 'psalm-language-server',
+  \ ale#Escape('psalm-language-server')
+
+Execute(Vendor executables should be detected):
+  call ale#test#SetFilename('psalm-project/test.php')
+
+  AssertLinter
+  \ ale#path#Simplify(g:dir . '/psalm-project/vendor/bin/psalm-language-server'),
+  \ ale#Escape(ale#path#Simplify(
+  \   g:dir
+  \   . '/psalm-project/vendor/bin/psalm-language-server'
+  \ ))
+
+Execute(The project path should be correct for .git directories):
+  call ale#test#SetFilename('psalm-project/test.php')
+
+  if !isdirectory(g:dir . '/.git')
+    call mkdir(g:dir . '/.git')
+  endif
+
+  AssertLSPProject g:dir

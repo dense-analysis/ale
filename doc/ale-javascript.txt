@@ -45,7 +45,7 @@ g:ale_javascript_eslint_options               *g:ale_javascript_eslint_options*
 g:ale_javascript_eslint_use_global         *g:ale_javascript_eslint_use_global*
                                            *b:ale_javascript_eslint_use_global*
   Type: |Number|
-  Default: `0`
+  Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
 
@@ -56,8 +56,48 @@ g:ale_javascript_eslint_suppress_eslintignore
   Type: |Number|
   Default: `0`
 
-  This variable can be set to disable the warning that linting is disabled on
-  the current file due to being covered by `.eslintignore`.
+  This variable can be set to `1` to disable warnings for files being ignored
+  by eslint.
+
+
+g:ale_javascript_eslint_suppress_missing_config
+                              *g:ale_javascript_eslint_suppress_missing_config*
+                              *b:ale_javascript_eslint_suppress_missing_config*
+  Type: |Number|
+  Default: `0`
+
+  This variable can be set to `1` to disable errors for missing eslint
+  configuration files.
+
+  When turning this option on, eslint will not report any problems when no
+  configuration files are found.
+
+
+===============================================================================
+fecs                                                      *ale-javascript-fecs*
+
+`fecs` is a lint tool for HTML/CSS/JavaScript, can be installed via:
+
+  `$ npm install --save-dev fecs`
+
+And the configuration file is located at `./fecsrc`, see http://fecs.baidu.com
+for more options.
+
+
+g:ale_javascript_fecs_executable             *g:ale_javascript_fecs_executable*
+                                             *b:ale_javascript_fecs_executable*
+  Type: |String|
+  Default: `'fecs'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_javascript_fecs_use_global             *g:ale_javascript_fecs_use_global*
+                                             *b:ale_javascript_fecs_use_global*
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
 
 
 ===============================================================================
@@ -71,12 +111,43 @@ g:ale_javascript_flow_executable             *g:ale_javascript_flow_executable*
   See |ale-integrations-local-executables|
 
 
-g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
-                                             *b:ale_javascript_flow_use_global*
+g:ale_javascript_flow_use_home_config   *g:ale_javascript_flow_use_home_config*
+                                        *b:ale_javascript_flow_use_home_config*
   Type: |Number|
   Default: `0`
 
+  When set to `1`, ALE will allow Flow to be executed with configuration files
+  from your home directory. ALE will not run Flow with home directory
+  configuration files by default, as doing so can lead to Vim consuming all of
+  your RAM and CPU power.
+
+
+g:ale_javascript_flow_use_global             *g:ale_javascript_flow_use_global*
+                                             *b:ale_javascript_flow_use_global*
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
   See |ale-integrations-local-executables|
+
+
+g:ale_javascript_flow_use_respect_pragma
+                                     *g:ale_javascript_flow_use_respect_pragma*
+                                     *b:ale_javascript_flow_use_respect_pragma*
+  Type: |Number|
+  Default: `1`
+
+  By default, ALE will use the `--respect-pragma` option for `flow`, so only
+  files with the `@flow` pragma are checked by ALE. This option can be set to
+  `0` to disable that behaviour, so all files can be checked by `flow`.
+
+
+===============================================================================
+importjs                                              *ale-javascript-importjs*
+
+g:ale_javascript_importjs_executable     *g:ale_javascript_importjs_executable*
+                                         *b:ale_javascript_importjs_executable*
+  Type: |String|
+  Default: `'importjs'`
 
 
 ===============================================================================
@@ -93,7 +164,7 @@ g:ale_javascript_jscs_executable             *g:ale_javascript_jscs_executable*
 g:ale_javascript_jscs_use_global             *g:ale_javascript_jscs_use_global*
                                              *b:ale_javascript_jscs_use_global*
   Type: |Number|
-  Default: `0`
+  Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
 
@@ -112,7 +183,7 @@ g:ale_javascript_jshint_executable         *g:ale_javascript_jshint_executable*
 g:ale_javascript_jshint_use_global         *g:ale_javascript_jshint_use_global*
                                            *b:ale_javascript_jshint_use_global*
   Type: |Number|
-  Default: `0`
+  Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
 
@@ -139,26 +210,13 @@ g:ale_javascript_prettier_options           *g:ale_javascript_prettier_options*
 g:ale_javascript_prettier_use_global     *g:ale_javascript_prettier_use_global*
                                          *b:ale_javascript_prettier_use_global*
   Type: |Number|
-  Default: `0`
+  Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
-
-g:ale_javascript_prettier_use_local_config
-                                   *g:ale_javascript_prettier_use_local_config*
-                                   *b:ale_javascript_prettier_use_local_config*
-  Type: |Number|
-  Default: `0`
-
-  This variable can be set to use the local prettier configuration file.
 
 
 ===============================================================================
 prettier-eslint                                *ale-javascript-prettier-eslint*
-
-ALE supports `prettier-eslint` >= 4.2.0. Using lower version is not recommended
-because it cannot be configured to use the ESLint configuration file for input
-given via stdin. However ALE could be set up on your own risk with older
-versions with |g:ale_javascript_prettier_eslint_legacy|
 
 g:ale_javascript_prettier_eslint_executable
                                   *g:ale_javascript_prettier_eslint_executable*
@@ -182,17 +240,9 @@ g:ale_javascript_prettier_eslint_use_global
                                   *g:ale_javascript_prettier_eslint_use_global*
                                   *b:ale_javascript_prettier_eslint_use_global*
   Type: |Number|
-  Default: `0`
+  Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
-
-g:ale_javascript_prettier_eslint_legacy
-                                      *g:ale_javascript_prettier_eslint_legacy*
-                                      *b:ale_javascript_prettier_eslint_legacy*
-  Type: |Number|
-  Default: `0`
-
-  Fallback option for `prettier-eslint` < 4.2.0
 
 
 ===============================================================================
@@ -221,7 +271,7 @@ g:ale_javascript_prettier_standard_use_global
                                 *g:ale_javascript_prettier_standard_use_global*
                                 *b:ale_javascript_prettier_standard_use_global*
   Type: |Number|
-  Default: `0`
+  Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
 
@@ -250,7 +300,7 @@ g:ale_javascript_standard_options           *g:ale_javascript_standard_options*
 g:ale_javascript_standard_use_global     *g:ale_javascript_standard_use_global*
                                          *b:ale_javascript_standard_use_global*
   Type: |Number|
-  Default: `0`
+  Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
 
@@ -277,7 +327,7 @@ g:ale_javascript_xo_options                       *g:ale_javascript_xo_options*
 g:ale_javascript_xo_use_global                 *g:ale_javascript_xo_use_global*
                                                *b:ale_javascript_xo_use_global*
   Type: |Number|
-  Default: `0`
+  Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
 

@@ -1,9 +1,13 @@
 Before:
-    runtime ale_linters/ansible/ansible_lint.vim
-    call ale#test#SetFilename('main.yml')
+  runtime ale_linters/ansible/ansible_lint.vim
+  call ale#test#SetFilename('main.yml')
+
+  let b:ale_warn_about_trailing_whitespace = 1
 
 After:
-    call ale#linter#Reset()
+  unlet! b:ale_warn_about_trailing_whitespace
+
+  call ale#linter#Reset()
 
 Execute(The ansible-lint handler should handle basic errors):
   AssertEqual
@@ -12,8 +16,19 @@ Execute(The ansible-lint handler should handle basic errors):
   \    'lnum': 35,
   \    'col': 0,
   \    'type': 'E',
-  \    'text': 'EANSIBLE0002: Trailing whitespace',
+  \    'text': 'Trailing whitespace',
+  \    'code': 'EANSIBLE0002',
   \   },
+  \ ],
+  \ ale_linters#ansible#ansible_lint#Handle(bufnr(''), [
+  \ fnamemodify(tempname(), ':h') . '/main.yml:35: [EANSIBLE0002] Trailing whitespace',
+  \ ])
+
+Execute(The ansible-lint handler should supress trailing whitespace output when the option is used):
+  let b:ale_warn_about_trailing_whitespace = 0
+
+  AssertEqual
+  \ [
   \ ],
   \ ale_linters#ansible#ansible_lint#Handle(bufnr(''), [
   \ fnamemodify(tempname(), ':h') . '/main.yml:35: [EANSIBLE0002] Trailing whitespace',
@@ -26,7 +41,8 @@ Execute (The ansible-lint handler should handle names with spaces):
   \     'lnum': 6,
   \     'col': 6,
   \     'type': 'E',
-  \     'text': 'E111: indentation is not a multiple of four',
+  \     'text': 'indentation is not a multiple of four',
+  \     'code': 'E111',
   \   },
   \ ],
   \ ale_linters#ansible#ansible_lint#Handle(bufnr(''), [

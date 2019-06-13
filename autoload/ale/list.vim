@@ -1,6 +1,19 @@
 " Author: Bjorn Neergaard <bjorn@neersighted.com>, modified by Yann fery <yann@fery.me>
 " Description: Manages the loclist and quickfix lists
 
+" This flag dictates if ale open the configured loclist
+let g:ale_open_list = get(g:, 'ale_open_list', 0)
+" This flag dictates if ale keeps open loclist even if there is no error in loclist
+let g:ale_keep_list_window_open = get(g:, 'ale_keep_list_window_open', 0)
+" This flag dictates that quickfix windows should be opened vertically
+let g:ale_list_vertical = get(g:, 'ale_list_vertical', 0)
+" The window size to set for the quickfix and loclist windows
+let g:ale_list_window_size = get(g:, 'ale_list_window_size', 10)
+" A string format for the loclist messages.
+let g:ale_loclist_msg_format = get(g:, 'ale_loclist_msg_format',
+\   get(g:, 'ale_echo_msg_format', '%code: %%s')
+\)
+
 if !exists('s:timer_args')
     let s:timer_args = {}
 endif
@@ -12,6 +25,7 @@ function! ale#list#IsQuickfixOpen() abort
             return 1
         endif
     endfor
+
     return 0
 endfunction
 
@@ -37,17 +51,18 @@ function! ale#list#GetCombinedList() abort
     return l:list
 endfunction
 
-function! s:FixList(list) abort
+function! s:FixList(buffer, list) abort
+    let l:format = ale#Var(a:buffer, 'loclist_msg_format')
     let l:new_list = []
 
     for l:item in a:list
+        let l:fixed_item = copy(l:item)
+
+        let l:fixed_item.text = ale#GetLocItemMessage(l:item, l:format)
+
         if l:item.bufnr == -1
             " If the buffer number is invalid, remove it.
-            let l:fixed_item = copy(l:item)
             call remove(l:fixed_item, 'bufnr')
-        else
-            " Don't copy the Dictionary if we do not need to.
-            let l:fixed_item = l:item
         endif
 
         call add(l:new_list, l:fixed_item)
@@ -56,8 +71,8 @@ function! s:FixList(list) abort
     return l:new_list
 endfunction
 
-function! s:BufWinId(buffer) abort
-    return exists('*bufwinid') ? bufwinid(str2nr(a:buffer)) : 0
+function! s:WinFindBuf(buffer) abort
+    return exists('*win_findbuf') ? win_findbuf(str2nr(a:buffer)) : [0]
 endfunction
 
 function! s:SetListsImpl(timer_id, buffer, loclist) abort
@@ -67,23 +82,25 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
         let l:quickfix_list = ale#list#GetCombinedList()
 
         if has('nvim')
-            call setqflist(s:FixList(l:quickfix_list), ' ', l:title)
+            call setqflist(s:FixList(a:buffer, l:quickfix_list), ' ', l:title)
         else
-            call setqflist(s:FixList(l:quickfix_list))
+            call setqflist(s:FixList(a:buffer, l:quickfix_list))
             call setqflist([], 'r', {'title': l:title})
         endif
     elseif g:ale_set_loclist
-        " If windows support is off, bufwinid() may not exist.
+        " If windows support is off, win_findbuf() may not exist.
         " We'll set result in the current window, which might not be correct,
-        " but is better than nothing.
-        let l:win_id = s:BufWinId(a:buffer)
+        " but it's better than nothing.
+        let l:ids = s:WinFindBuf(a:buffer)
 
-        if has('nvim')
-            call setloclist(l:win_id, s:FixList(a:loclist), ' ', l:title)
-        else
-            call setloclist(l:win_id, s:FixList(a:loclist))
-            call setloclist(l:win_id, [], 'r', {'title': l:title})
-        endif
+        for l:id in l:ids
+            if has('nvim')
+                call setloclist(l:id, s:FixList(a:buffer, a:loclist), ' ', l:title)
+            else
+                call setloclist(l:id, s:FixList(a:buffer, a:loclist))
+                call setloclist(l:id, [], 'r', {'title': l:title})
+            endif
+        endfor
     endif
 
     " Open a window to show the problems if we need to.
@@ -96,12 +113,19 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
         let l:reset_visual_selection = l:mode is? 'v' || l:mode is# "\<c-v>"
         let l:reset_character_selection = l:mode is? 's' || l:mode is# "\<c-s>"
 
+        " open windows vertically instead of default horizontally
+        let l:open_type = ''
+
+        if ale#Var(a:buffer, 'list_vertical') == 1
+            let l:open_type = 'vert rightbelow '
+        endif
+
         if g:ale_set_quickfix
             if !ale#list#IsQuickfixOpen()
-                silent! execute 'copen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
+                silent! execute l:open_type . 'copen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
             endif
         elseif g:ale_set_loclist
-            silent! execute 'lopen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
+            silent! execute l:open_type . 'lopen ' . str2nr(ale#Var(a:buffer, 'list_window_size'))
         endif
 
         " If focus changed, restore it (jump to the last window).
@@ -159,11 +183,13 @@ function! s:CloseWindowIfNeeded(buffer) abort
                 cclose
             endif
         else
-            let l:win_id = s:BufWinId(a:buffer)
+            let l:win_ids = s:WinFindBuf(a:buffer)
 
-            if g:ale_set_loclist && empty(getloclist(l:win_id))
-                lclose
-            endif
+            for l:win_id in l:win_ids
+                if g:ale_set_loclist && empty(getloclist(l:win_id))
+                    lclose
+                endif
+            endfor
         endif
     " Ignore 'Cannot close last window' errors.
     catch /E444/

@@ -2,9 +2,12 @@
 " Description: Fixing Python imports with isort.
 
 call ale#Set('python_isort_executable', 'isort')
-call ale#Set('python_isort_use_global', 0)
+call ale#Set('python_isort_options', '')
+call ale#Set('python_isort_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! ale#fixers#isort#Fix(buffer) abort
+    let l:options = ale#Var(a:buffer, 'python_isort_options')
+
     let l:executable = ale#python#FindExecutable(
     \   a:buffer,
     \   'python_isort',
@@ -15,12 +18,8 @@ function! ale#fixers#isort#Fix(buffer) abort
         return 0
     endif
 
-    let l:config = ale#path#FindNearestFile(a:buffer, '.isort.cfg')
-    let l:config_options = !empty(l:config)
-    \   ? ' --settings-path ' . ale#Escape(l:config)
-    \   : ''
-
     return {
-    \   'command': ale#Escape(l:executable) . l:config_options . ' -',
+    \   'command': ale#path#BufferCdString(a:buffer)
+    \   .   ale#Escape(l:executable) . (!empty(l:options) ? ' ' . l:options : '') . ' -',
     \}
 endfunction

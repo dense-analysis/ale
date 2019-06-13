@@ -1,0 +1,22 @@
+Execute(The golang handler should return the correct filenames):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 27,
+  \     'col': 0,
+  \     'text': 'some error',
+  \     'type': 'E',
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/test.go'),
+  \   },
+  \   {
+  \     'lnum': 27,
+  \     'col': 5,
+  \     'text': 'some error with a column',
+  \     'type': 'E',
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/other.go'),
+  \   },
+  \ ],
+  \ ale#handlers#go#Handler(bufnr(''), [
+  \   'test.go:27: some error',
+  \   'other.go:27:5: some error with a column',
+  \ ])

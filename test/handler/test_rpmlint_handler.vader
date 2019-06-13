@@ -1,6 +1,10 @@
-Execute(The rpmlint handler should parse error messages correctly):
+Before:
   runtime ale_linters/spec/rpmlint.vim
 
+After:
+  call ale#linter#Reset()
+
+Execute(The rpmlint handler should parse error messages correctly):
   AssertEqual
   \ [
   \   {

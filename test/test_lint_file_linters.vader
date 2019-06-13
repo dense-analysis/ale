@@ -1,4 +1,6 @@
 Before:
+  Save g:ale_fix_on_save
+  Save g:ale_enabled
   Save g:ale_run_synchronously
   Save g:ale_set_lists_synchronously
   Save g:ale_buffer_info
@@ -6,8 +8,9 @@ Before:
 
   let g:ale_buffer_info = {}
   let g:ale_run_synchronously = 1
+  unlet! g:ale_run_synchronously_callbacks
   let g:ale_set_lists_synchronously = 1
-  call ale#ResetLintFileMarkers()
+  let b:ale_save_event_fired = 0
 
   let g:buffer_result = [
   \ {
@@ -48,7 +51,7 @@ Before:
   function! GetSimplerLoclist()
     let l:loclist = []
 
-    for l:item in getloclist(0)
+    for l:item in ale#test#GetLoclistWithoutModule()
       call add(l:loclist, {
       \ 'lnum': l:item.lnum,
       \ 'col': l:item.col,
@@ -82,11 +85,12 @@ Before:
 
 After:
   if !g:ale_run_synchronously
-    call ale#engine#WaitForJobs(2000)
+    call ale#engine#Cleanup(bufnr(''))
   endif
 
   Restore
 
+  unlet! g:ale_run_synchronously_callbacks
   unlet! b:ale_save_event_fired
   unlet! b:ale_enabled
   unlet g:buffer_result
@@ -109,6 +113,7 @@ Given foobar (Some imaginary filetype):
 
 Execute(Running linters without 'lint_file' should run only buffer linters):
   call ale#Queue(0)
+  call ale#test#FlushJobs()
 
   AssertEqual [
   \ {
@@ -129,6 +134,7 @@ Execute(Running linters with 'lint_file' should run all linters):
   Assert filereadable(expand('%:p')), 'The file was not readable'
 
   call ale#Queue(0, 'lint_file')
+  call ale#test#FlushJobs()
 
   AssertEqual [
   \ {
@@ -161,6 +167,7 @@ Execute(Linter errors from files should be kept):
   Assert filereadable(expand('%:p')), 'The file was not readable'
 
   call ale#Queue(0, 'lint_file')
+  call ale#test#FlushJobs()
 
   " Change the results for the buffer callback.
   let g:buffer_result = [
@@ -173,6 +180,7 @@ Execute(Linter errors from files should be kept):
   \]
 
   call ale#Queue(0)
+  call ale#test#FlushJobs()
 
   AssertEqual [
   \ {
@@ -200,6 +208,7 @@ Execute(Linter errors from files should be kept when no other linters are run):
   Assert filereadable(expand('%:p')), 'The file was not readable'
 
   call ale#Queue(0, 'lint_file')
+  call ale#test#FlushJobs()
 
   AssertEqual [
   \ {
@@ -238,11 +247,13 @@ Execute(The Save event should respect the buffer number):
   Assert filereadable(expand('%:p')), 'The file was not readable'
 
   call ale#events#SaveEvent(bufnr('') + 1)
+  call ale#test#FlushJobs()
 
   " We shouldn't get any prblems yet.
   AssertEqual [], GetSimplerLoclist()
 
   call ale#events#SaveEvent(bufnr(''))
+  call ale#test#FlushJobs()
 
   " We should get them now we used the right buffer number.
   AssertEqual [
@@ -261,8 +272,12 @@ Execute(The Save event should respect the buffer number):
   \], GetSimplerLoclist()
 
 Execute(The Save event should set b:ale_save_event_fired to 1):
-  let b:ale_enabled = 0
+  let g:ale_lint_on_save = 1
+  let b:ale_enabled = 1
+
+  call ale#linter#Reset()
   call ale#events#SaveEvent(bufnr(''))
+  call ale#test#FlushJobs()
 
   " This flag needs to be set so windows can be opened, etc.
   AssertEqual 1, b:ale_save_event_fired
@@ -271,6 +286,7 @@ Execute(b:ale_save_event_fired should be set to 0 when results are set):
   let b:ale_save_event_fired = 1
 
   call ale#engine#SetResults(bufnr(''), [])
+  call ale#test#FlushJobs()
 
   AssertEqual 0, b:ale_save_event_fired
 
@@ -284,8 +300,18 @@ Execute(lint_file linters should stay running after checking without them):
   " The lint_file linter should still be running.
   AssertEqual
   \ ['lint_file_linter', 'buffer_linter'],
-  \ g:ale_buffer_info[bufnr('')].active_linter_list
+  \ map(copy(g:ale_buffer_info[bufnr('')].active_linter_list), 'v:val.name')
   " We should have 1 job for each linter.
-  AssertEqual 2, len(g:ale_buffer_info[bufnr('')].job_list)
+  AssertEqual
+  \ 2,
+  \ len(keys(get(get(ale#command#GetData(), bufnr(''), {}), 'jobs', {})))
 
-  call ale#engine#WaitForJobs(2000)
+  call ale#test#WaitForJobs(2000)
+
+Execute(The save event should not lint the buffer when ALE is disabled):
+  let g:ale_enabled = 0
+  call ale#events#SaveEvent(bufnr(''))
+  call ale#test#FlushJobs()
+
+  AssertEqual [], GetSimplerLoclist()
+  AssertEqual 0, b:ale_save_event_fired

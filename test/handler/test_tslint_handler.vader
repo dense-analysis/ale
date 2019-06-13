@@ -12,6 +12,9 @@ After:
   Restore
 
   unlet! b:ale_typescript_tslint_ignore_empty_files
+  unlet! b:relative_to_root
+  unlet! b:tempname_suffix
+  unlet! b:relative_tempname
 
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
@@ -24,38 +27,41 @@ Execute(The tslint handler should parse lines correctly):
   \   {
   \     'lnum': 1,
   \     'col': 15,
-  \     'filename': ale#path#Winify(expand('%:p:h') . '/test.ts'),
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/test.ts'),
   \     'end_lnum': 1,
   \     'type': 'E',
   \     'end_col': 15,
-  \     'text': 'semicolon: Missing semicolon'
+  \     'text': 'Missing semicolon',
+  \     'code': 'semicolon',
   \   },
   \   {
   \     'lnum': 2,
   \     'col': 8,
-  \     'filename': ale#path#Winify(expand('%:p:h') . '/test.ts'),
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/test.ts'),
   \     'end_lnum': 3,
   \     'type': 'W',
   \     'end_col': 12,
-  \     'text': 'Something else'
+  \     'text': 'Something else',
   \   },
   \   {
   \     'lnum': 2,
   \     'col': 8,
-  \     'filename': ale#path#Winify(expand('%:p:h') . '/something-else.ts'),
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/something-else.ts'),
   \     'end_lnum': 3,
   \     'type': 'W',
   \     'end_col': 12,
-  \     'text': 'something: Something else'
+  \     'text': 'Something else',
+  \     'code': 'something',
   \   },
   \   {
   \     'lnum': 31,
   \     'col': 9,
-  \     'filename': ale#path#Winify(expand('%:p:h') . '/test.ts'),
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/test.ts'),
   \     'end_lnum': 31,
   \     'type': 'E',
   \     'end_col': 20,
-  \     'text': 'no-console: Calls to console.log are not allowed.'
+  \     'text': 'Calls to console.log are not allowed.',
+  \     'code': 'no-console',
   \   },
   \ ] ,
   \ ale_linters#typescript#tslint#Handle(bufnr(''), [json_encode([
@@ -151,11 +157,12 @@ Execute(The tslint handler report errors for empty files by default):
   \   {
   \     'lnum': 2,
   \     'col': 1,
-  \     'filename': ale#path#Winify(expand('%:p:h') . '/test.ts'),
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/test.ts'),
   \     'end_lnum': 2,
   \     'type': 'E',
   \     'end_col': 1,
-  \     'text': 'no-consecutive-blank-lines: Consecutive blank lines are forbidden',
+  \     'text': 'Consecutive blank lines are forbidden',
+  \     'code': 'no-consecutive-blank-lines',
   \   },
   \ ],
   \ ale_linters#typescript#tslint#Handle(bufnr(''), [json_encode([{
@@ -224,11 +231,12 @@ Execute(The tslint handler should report errors when the ignore option is on, bu
   \   {
   \     'lnum': 2,
   \     'col': 1,
-  \     'filename': ale#path#Winify(expand('%:p:h') . '/test.ts'),
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/test.ts'),
   \     'end_lnum': 2,
   \     'type': 'E',
   \     'end_col': 1,
-  \     'text': 'no-consecutive-blank-lines: Consecutive blank lines are forbidden',
+  \     'text': 'Consecutive blank lines are forbidden',
+  \     'code': 'no-consecutive-blank-lines',
   \   },
   \ ],
   \ ale_linters#typescript#tslint#Handle(bufnr(''), [json_encode([{
@@ -252,3 +260,56 @@ Execute(The tslint handler should report errors when the ignore option is on, bu
   \     'position': 1
   \   }
   \ }])])
+
+Execute(The tslint handler should not report no-implicit-dependencies errors):
+  call ale#test#SetFilename('app/test.ts')
+
+  AssertEqual
+  \ [
+  \ ],
+  \ ale_linters#typescript#tslint#Handle(bufnr(''), [json_encode([{
+  \   'endPosition': {
+  \     'character': 0,
+  \     'line': 1,
+  \     'position': 1
+  \   },
+  \   'failure': 'this is ignored',
+  \   'name': 'test.ts',
+  \   'ruleName': 'no-implicit-dependencies',
+  \   'ruleSeverity': 'ERROR',
+  \   'startPosition': {
+  \     'character': 0,
+  \     'line': 1,
+  \     'position': 1
+  \   },
+  \ }])])
+
+Execute(The tslint handler should set filename keys for temporary files):
+  " The temporay filename below is hacked into being a relative path so we can
+  " test that we resolve the temporary filename first.
+  let b:relative_to_root = substitute(expand('%:p'), '\v[^/\\]*([/\\])[^/\\]*', '../', 'g')
+  let b:tempname_suffix = substitute(tempname(), '^\v([A-Z]:)?[/\\]', '', '')
+  let b:relative_tempname = substitute(b:relative_to_root . b:tempname_suffix, '\\', '/', 'g')
+
+  AssertEqual
+  \ [
+  \   {'lnum': 47, 'col': 1, 'code': 'curly', 'end_lnum': 47, 'type': 'E', 'end_col': 26, 'text': 'if statements must be braced'},
+  \ ],
+  \ ale_linters#typescript#tslint#Handle(bufnr(''), [json_encode([
+  \   {
+  \     'endPosition': {
+  \       'character':25,
+  \       'line':46,
+  \       'position':1383,
+  \     },
+  \     'failure': 'if statements must be braced',
+  \     'name': b:relative_tempname,
+  \     'ruleName': 'curly',
+  \     'ruleSeverity':'ERROR',
+  \     'startPosition': {
+  \       'character':0,
+  \       'line':46,
+  \       'position':1358,
+  \     }
+  \   },
+  \ ])])

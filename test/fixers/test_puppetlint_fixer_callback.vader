@@ -21,7 +21,7 @@ Execute(The puppetlint callback should return the correct default values):
 
   AssertEqual
   \ {'read_temporary_file': 1,
-  \  'command': "'" . g:ale_puppet_puppetlint_executable . "'"
+  \  'command': ale#Escape(g:ale_puppet_puppetlint_executable)
   \      . ' ' . g:ale_puppet_puppetlint_options
   \      . ' --fix %t' },
   \ ale#fixers#puppetlint#Fix(bufnr(''))

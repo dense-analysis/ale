@@ -2,9 +2,12 @@ Before:
   Save &filetype
   Save g:ale_buffer_info
   Save g:ale_lint_on_enter
+  Save g:ale_set_lists_synchronously
+
   let g:buf = bufnr('')
   let g:ale_lint_on_enter = 1
   let g:ale_run_synchronously = 1
+  let g:ale_set_lists_synchronously = 1
 
   function! TestCallback(buffer, output)
     return [{
@@ -17,8 +20,8 @@ Before:
   call ale#linter#Define('foobar', {
   \ 'name': 'testlinter',
   \ 'callback': 'TestCallback',
-  \ 'executable': 'true',
-  \ 'command': 'true',
+  \ 'executable': has('win32') ? 'cmd' : 'true',
+  \ 'command': has('win32') ? 'echo' : 'true',
   \})
 
 After:
@@ -47,6 +50,7 @@ Execute(The file changed event function should set b:ale_file_changed):
 Execute(The file changed event function should lint the current buffer when it has changed):
   set filetype=foobar
   call ale#events#FileChangedEvent(bufnr(''))
+  call ale#test#FlushJobs()
 
   AssertEqual [{
   \   'bufnr': bufnr(''),
@@ -58,13 +62,14 @@ Execute(The file changed event function should lint the current buffer when it h
   \   'nr': -1,
   \   'pattern': '',
   \   'valid': 1,
-  \ }], getloclist(0)
+  \ }], ale#test#GetLoclistWithoutModule()
 
 Execute(The buffer should be checked after entering it after the file has changed):
   let b:ale_file_changed = 1
 
   set filetype=foobar
-  call ale#events#EnterEvent(bufnr(''))
+  call ale#events#ReadOrEnterEvent(bufnr(''))
+  call ale#test#FlushJobs()
 
   AssertEqual [{
   \   'bufnr': bufnr(''),
@@ -76,4 +81,4 @@ Execute(The buffer should be checked after entering it after the file has change
   \   'nr': -1,
   \   'pattern': '',
   \   'valid': 1,
-  \ }], getloclist(0)
+  \ }], ale#test#GetLoclistWithoutModule()

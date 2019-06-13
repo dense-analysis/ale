@@ -1,9 +1,15 @@
 Before:
+  Save g:ale_python_mypy_ignore_invalid_syntax
+
+  unlet! g:ale_python_mypy_ignore_invalid_syntax
+
   runtime ale_linters/python/mypy.vim
 
   call ale#test#SetDirectory('/testplugin/test/handler')
 
 After:
+  Restore
+
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
@@ -15,35 +21,35 @@ Execute(The mypy handler should parse lines correctly):
   \   {
   \     'lnum': 768,
   \     'col': 38,
-  \     'filename': ale#path#Winify(g:dir . '/baz.py'),
+  \     'filename': ale#path#Simplify(g:dir . '/baz.py'),
   \     'type': 'E',
   \     'text': 'Cannot determine type of ''SOME_SYMBOL''',
   \   },
   \   {
   \     'lnum': 821,
   \     'col': 38,
-  \     'filename': ale#path#Winify(g:dir . '/baz.py'),
+  \     'filename': ale#path#Simplify(g:dir . '/baz.py'),
   \     'type': 'E',
   \     'text': 'Cannot determine type of ''SOME_SYMBOL''',
   \   },
   \   {
   \     'lnum': 38,
   \     'col': 44,
-  \     'filename': ale#path#Winify(g:dir . '/other.py'),
+  \     'filename': ale#path#Simplify(g:dir . '/other.py'),
   \     'type': 'E',
   \     'text': 'Cannot determine type of ''ANOTHER_SYMBOL''',
   \   },
   \   {
   \     'lnum': 15,
   \     'col': 3,
-  \     'filename': ale#path#Winify(g:dir . '/__init__.py'),
+  \     'filename': ale#path#Simplify(g:dir . '/__init__.py'),
   \     'type': 'E',
   \     'text': 'Argument 1 to "somefunc" has incompatible type "int"; expected "str"'
   \   },
   \   {
   \     'lnum': 72,
   \     'col': 1,
-  \     'filename': ale#path#Winify(g:dir . '/__init__.py'),
+  \     'filename': ale#path#Simplify(g:dir . '/__init__.py'),
   \     'type': 'W',
   \     'text': 'Some warning',
   \   },
@@ -72,11 +78,35 @@ Execute(The mypy handler should handle Windows names with spaces):
   \   {
   \     'lnum': 4,
   \     'col': 0,
-  \     'filename': 'C:\something\with spaces.py',
+  \     'filename': ale#path#Simplify('C:\something\with spaces.py'),
   \     'type': 'E',
   \     'text': 'No library stub file for module ''django.db''',
   \   },
   \ ],
   \ ale_linters#python#mypy#Handle(bufnr(''), [
   \   'C:\something\with spaces.py:4: error: No library stub file for module ''django.db''',
+  \ ])
+
+Execute(The mypy syntax errors shouldn't be ignored by default):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 4,
+  \     'col': 0,
+  \     'filename': ale#path#Simplify(g:dir . '/foo.py'),
+  \     'type': 'E',
+  \     'text': 'invalid syntax',
+  \   },
+  \ ],
+  \ ale_linters#python#mypy#Handle(bufnr(''), [
+  \   'foo.py:4: error: invalid syntax',
+  \ ])
+
+Execute(The mypy syntax errors should be ignored when the option is on):
+  let g:ale_python_mypy_ignore_invalid_syntax = 1
+
+  AssertEqual
+  \ [],
+  \ ale_linters#python#mypy#Handle(bufnr(''), [
+  \   'foo.py:4: error: invalid syntax',
   \ ])

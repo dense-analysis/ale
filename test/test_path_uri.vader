@@ -2,6 +2,54 @@ Execute(ale#path#ToURI should work for Windows paths):
   AssertEqual 'file:///C:/foo/bar/baz.tst', ale#path#ToURI('C:\foo\bar\baz.tst')
   AssertEqual 'foo/bar/baz.tst', ale#path#ToURI('foo\bar\baz.tst')
 
+Execute(ale#path#FromURI should work for Unix paths):
+  AssertEqual '/foo/bar/baz.tst', ale#path#FromURI('file:///foo/bar/baz.tst')
+  AssertEqual '/foo/bar/baz.tst', ale#path#FromURI('file:/foo/bar/baz.tst')
+  AssertEqual '/foo/bar/baz.tst', ale#path#FromURI('FILE:///foo/bar/baz.tst')
+  AssertEqual '/foo/bar/baz.tst', ale#path#FromURI('FILE:/foo/bar/baz.tst')
+
+Execute(ale#path#FromURI should work for Windows paths):
+  if has('win32')
+    AssertEqual 'C:\foo\bar\baz.tst', ale#path#FromURI('file:///C:/foo/bar/baz.tst')
+    AssertEqual 'C:\foo\bar\baz.tst', ale#path#FromURI('file:/C:/foo/bar/baz.tst')
+    AssertEqual 'c:\foo\bar\baz.tst', ale#path#FromURI('file:///c:/foo/bar/baz.tst')
+    AssertEqual 'c:\foo\bar\baz.tst', ale#path#FromURI('file:/c:/foo/bar/baz.tst')
+    AssertEqual 'C:\foo\bar\baz.tst', ale#path#FromURI('FILE:///C:/foo/bar/baz.tst')
+    AssertEqual 'C:\foo\bar\baz.tst', ale#path#FromURI('FILE:/C:/foo/bar/baz.tst')
+  else
+    AssertEqual '/C:/foo/bar/baz.tst', ale#path#FromURI('file:///C:/foo/bar/baz.tst')
+    AssertEqual '/C:/foo/bar/baz.tst', ale#path#FromURI('file:/C:/foo/bar/baz.tst')
+    AssertEqual '/c:/foo/bar/baz.tst', ale#path#FromURI('file:///c:/foo/bar/baz.tst')
+    AssertEqual '/c:/foo/bar/baz.tst', ale#path#FromURI('file:/c:/foo/bar/baz.tst')
+    AssertEqual '/C:/foo/bar/baz.tst', ale#path#FromURI('FILE:///C:/foo/bar/baz.tst')
+    AssertEqual '/C:/foo/bar/baz.tst', ale#path#FromURI('FILE:/C:/foo/bar/baz.tst')
+  endif
+
+Execute(ale#path#FromURI parse Windows paths with a pipe):
+  if has('win32')
+    AssertEqual 'C:\foo\bar\baz.tst', ale#path#FromURI('file:///C|/foo/bar/baz.tst')
+    AssertEqual 'C:\foo\bar\baz.tst', ale#path#FromURI('file:/C|/foo/bar/baz.tst')
+    AssertEqual 'c:\foo\bar\baz.tst', ale#path#FromURI('file:///c|/foo/bar/baz.tst')
+    AssertEqual 'c:\foo\bar\baz.tst', ale#path#FromURI('file:/c|/foo/bar/baz.tst')
+    AssertEqual 'C:\foo\bar\baz.tst', ale#path#FromURI('FILE:///C|/foo/bar/baz.tst')
+    AssertEqual 'C:\foo\bar\baz.tst', ale#path#FromURI('FILE:/C|/foo/bar/baz.tst')
+  else
+    AssertEqual '/C|/foo/bar/baz.tst', ale#path#FromURI('file:///C|/foo/bar/baz.tst')
+    AssertEqual '/C|/foo/bar/baz.tst', ale#path#FromURI('file:/C|/foo/bar/baz.tst')
+    AssertEqual '/c|/foo/bar/baz.tst', ale#path#FromURI('file:///c|/foo/bar/baz.tst')
+    AssertEqual '/c|/foo/bar/baz.tst', ale#path#FromURI('file:/c|/foo/bar/baz.tst')
+    AssertEqual '/C|/foo/bar/baz.tst', ale#path#FromURI('FILE:///C|/foo/bar/baz.tst')
+    AssertEqual '/C|/foo/bar/baz.tst', ale#path#FromURI('FILE:/C|/foo/bar/baz.tst')
+  endif
+
+Execute(ale#path#FromURI should handle the colon for the drive letter being encoded):
+  " These URIs shouldn't be created, but we'll handle them anyway.
+  if has('win32')
+    AssertEqual 'C:\foo\bar\baz.tst', ale#path#FromURI('file:///C%3A/foo/bar/baz.tst')
+  else
+    AssertEqual '/C:/foo/bar/baz.tst', ale#path#FromURI('file:///C%3A/foo/bar/baz.tst')
+  endif
+
 Execute(ale#path#ToURI should work for Unix paths):
   AssertEqual 'file:///foo/bar/baz.tst', ale#path#ToURI('/foo/bar/baz.tst')
   AssertEqual 'foo/bar/baz.tst', ale#path#ToURI('foo/bar/baz.tst')

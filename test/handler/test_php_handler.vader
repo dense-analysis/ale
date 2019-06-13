@@ -1,6 +1,9 @@
 Before:
   runtime ale_linters/php/php.vim
 
+After:
+  call ale#linter#Reset()
+
 Given (Some invalid lines of PHP):
   [foo;]
   class Foo { / }
@@ -51,6 +54,18 @@ Execute (The php handler should ignore lines starting with 'PHP Parse error'):
   \   "PHP Parse error:  syntax error, This line should be ignored completely in - on line 1",
   \ ])
 
+Execute (The php handler should handle lines containing 'Standard input code'):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 47,
+  \     'col': 0,
+  \     'text': "Invalid numeric literal",
+  \   },
+  \ ],
+  \ ale_linters#php#php#Handle(347, [
+  \   "Parse error: Invalid numeric literal in Standard input code on line 47",
+  \ ])
 Execute (The php handler should parse lines without column indication):
   AssertEqual
   \ [
@@ -76,6 +91,3 @@ Execute (The php handler should parse lines without column indication):
   \   "Parse error:  syntax error, unexpected end of file in - on line 21",
   \   "Parse error: Invalid numeric literal in - on line 47",
   \ ])
-
-After:
-  call ale#linter#Reset()

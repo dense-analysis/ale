@@ -1,7 +1,12 @@
 Before:
   Save g:ale_max_buffer_history_size
+  Save g:ale_history_enabled
   Save g:ale_history_log_output
   Save g:ale_run_synchronously
+  Save g:ale_enabled
+
+  let g:ale_enabled = 1
+  let g:ale_run_synchronously = 1
 
   unlet! b:ale_fixers
   unlet! b:ale_enabled
@@ -41,6 +46,7 @@ Before:
 After:
   Restore
 
+  unlet! g:expected_results
   unlet! b:ale_fixers
   unlet! b:ale_enabled
   " Clear the history we changed.
@@ -49,12 +55,13 @@ After:
   " Reset the shell back to what it was before.
   let &shell = g:current_shell
   unlet g:current_shell
-  let g:ale_history_enabled = 1
-  let g:ale_history_log_output = 0
   unlet g:history
+
+  call ale#engine#Cleanup(bufnr(''))
+  call ale#linter#Reset()
+
   let g:ale_buffer_info = {}
   let g:ale_max_buffer_history_size = 20
-  call ale#linter#Reset()
   delfunction TestFixer
   delfunction CollectResults
 
@@ -64,16 +71,22 @@ Given foobar (Some imaginary filetype):
 Execute(History should be set when commands are run):
   AssertEqual 'foobar', &filetype
 
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
+  let b:ale_history = []
+  ALELint
+  call ale#test#FlushJobs()
 
-  let g:history = ale#history#Get(bufnr(''))
+  let g:history = filter(
+  \ copy(ale#history#Get(bufnr(''))),
+  \ 'v:val.job_id isnot# ''executable''',
+  \)
 
   AssertEqual 1, len(g:history)
-  AssertEqual sort(['status', 'exit_code', 'job_id', 'command']), sort(keys(g:history[0]))
+  AssertEqual
+  \ ['command', 'exit_code', 'job_id', 'status'],
+  \ sort(keys(g:history[0]))
 
   if has('win32')
-    AssertEqual 'cmd /c echo command history test', g:history[0].command
+    AssertEqual 'cmd /s/c "echo command history test"', g:history[0].command
   else
     AssertEqual ['/bin/sh', '-c', '/bin/sh -c ''echo command history test'''], g:history[0].command
   endif
@@ -88,8 +101,8 @@ Execute(History should be not set when disabled):
 
   let g:ale_history_enabled = 0
 
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
+  ALELint
+  call ale#test#FlushJobs()
 
   AssertEqual [], ale#history#Get(bufnr(''))
 
@@ -98,13 +111,20 @@ Execute(History should include command output if logging is enabled):
 
   let g:ale_history_log_output = 1
 
-  call ale#Lint()
-  call ale#engine#WaitForJobs(2000)
+  " Retry this test until it works. This one can randomly fail.
+  let b:ale_history = []
+  ALELint
+  call ale#test#FlushJobs()
 
   let g:history = ale#history#Get(bufnr(''))
 
   AssertEqual 1, len(g:history)
-  AssertEqual ['command history test'], g:history[0].output
+  AssertEqual
+  \ ['command history test'],
+  \ map(
+  \   copy(get(g:history[0], 'output', [])),
+  \   'substitute(v:val, ''[\r ]*$'', '''', ''g'')'
+  \ )
 
 Execute(History items should be popped after going over the max):
   let b:ale_history = map(range(20), '{''status'': ''started'', ''job_id'': v:val, ''command'': ''foobar''}')
@@ -141,14 +161,17 @@ Execute(The history should be updated when fixers are run):
 
   let b:ale_fixers = {'foobar': ['TestFixer']}
   let b:ale_enabled = 0
-  let g:ale_run_synchronously = 1
 
   ALEFix
+
+  AssertEqual ['started'], map(copy(b:ale_history), 'v:val.status')
+
+  call ale#test#FlushJobs()
 
   AssertEqual ['finished'], map(copy(b:ale_history), 'v:val.status')
 
   if has('win32')
-    AssertEqual 'cmd /c echo foo ', split(b:ale_history[0].command, '<')[0]
+    AssertEqual 'cmd /s/c "echo foo ', split(b:ale_history[0].command, '<')[0]
   else
     AssertEqual '/bin/sh -c echo foo ', split(join(b:ale_history[0].command), '<')[0]
   endif

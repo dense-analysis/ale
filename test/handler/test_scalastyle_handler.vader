@@ -1,6 +1,10 @@
-Execute(The scalastyle handler should parse lines correctly):
+Before:
   runtime! ale_linters/scala/scalastyle.vim
 
+After:
+  call ale#linter#Reset()
+
+Execute(The scalastyle handler should parse lines correctly):
   AssertEqual
   \ [
   \   {
@@ -34,5 +38,16 @@ Execute(The scalastyle handler should parse lines correctly):
   \    'Finished in 934 ms',
   \ ])
 
-After:
-  call ale#linter#Reset()
+Execute(The scalastyle linter should complain when there is no configuration file):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'text': '(See :help ale-scala-scalastyle) No scalastyle configuration file was found.',
+  \   },
+  \ ],
+  \ ale_linters#scala#scalastyle#Handle(347, [
+  \   'scalastyle 1.0.0',
+  \   'Usage: scalastyle [options] <source directory>',
+  \   ' -c, --config FILE               configuration file (required)',
+  \ ])

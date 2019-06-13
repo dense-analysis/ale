@@ -28,7 +28,7 @@ function! ale#lsp#tsserver_message#Change(buffer) abort
     \   'offset': 1,
     \   'endLine': 1073741824,
     \   'endOffset': 1,
-    \   'insertString': join(l:lines, "\n"),
+    \   'insertString': join(l:lines, "\n") . "\n",
     \}]
 endfunction
 
@@ -51,5 +51,29 @@ function! ale#lsp#tsserver_message#CompletionEntryDetails(buffer, line, column, 
     \   'offset': a:column,
     \   'file': expand('#' . a:buffer . ':p'),
     \   'entryNames': a:entry_names,
+    \}]
+endfunction
+
+function! ale#lsp#tsserver_message#Definition(buffer, line, column) abort
+    return [0, 'ts@definition', {
+    \   'line': a:line,
+    \   'offset': a:column,
+    \   'file': expand('#' . a:buffer . ':p'),
+    \}]
+endfunction
+
+function! ale#lsp#tsserver_message#References(buffer, line, column) abort
+    return [0, 'ts@references', {
+    \   'line': a:line,
+    \   'offset': a:column,
+    \   'file': expand('#' . a:buffer . ':p'),
+    \}]
+endfunction
+
+function! ale#lsp#tsserver_message#Quickinfo(buffer, line, column) abort
+    return [0, 'ts@quickinfo', {
+    \   'line': a:line,
+    \   'offset': a:column,
+    \   'file': expand('#' . a:buffer . ':p'),
     \}]
 endfunction

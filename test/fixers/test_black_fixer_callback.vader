@@ -1,0 +1,47 @@
+Before:
+  Save g:ale_python_black_executable
+  Save g:ale_python_black_options
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_python_black_executable = 'xxxinvalid'
+  let g:ale_python_black_options = ''
+  let g:ale_python_black_auto_pipenv = 0
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+  silent cd ..
+  silent cd command_callback
+  let g:dir = getcwd()
+
+  let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
+
+After:
+  Restore
+
+  unlet! b:bin_dir
+
+  call ale#test#RestoreDirectory()
+
+Execute(The black callback should return the correct default values):
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  AssertEqual
+  \ {'command': ale#path#BufferCdString(bufnr('')) . ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/black')) . ' -'},
+  \ ale#fixers#black#Fix(bufnr(''))
+
+Execute(The black callback should include options):
+  let g:ale_python_black_options = '--some-option'
+  let g:ale_python_black_change_directory = 0
+
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  AssertEqual
+  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/black')) . ' --some-option -' },
+  \ ale#fixers#black#Fix(bufnr(''))
+
+Execute(Pipenv is detected when python_black_auto_pipenv is set):
+  let g:ale_python_black_auto_pipenv = 1
+  let g:ale_python_black_change_directory = 0
+
+  call ale#test#SetFilename('/testplugin/test/python_fixtures/pipenv/whatever.py')
+
+  AssertEqual
+  \ {'command': ale#Escape('pipenv') . ' run black -'},
+  \ ale#fixers#black#Fix(bufnr(''))

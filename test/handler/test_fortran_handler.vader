@@ -1,6 +1,10 @@
-Execute(The fortran handler should parse lines from GCC 4.1.2 correctly):
+Before:
   runtime ale_linters/fortran/gcc.vim
 
+After:
+  call ale#linter#Reset()
+
+Execute(The fortran handler should parse lines from GCC 4.1.2 correctly):
   AssertEqual
   \ [
   \   {
@@ -31,13 +35,8 @@ Execute(The fortran handler should parse lines from GCC 4.1.2 correctly):
   \   "Error: Symbol ‘a’ at (1) has no IMPLICIT type",
   \ ])
 
-After:
-  call ale#linter#Reset()
-
 
 Execute(The fortran handler should parse lines from GCC 4.9.3 correctly):
-  runtime ale_linters/fortran/gcc.vim
-
   AssertEqual
   \ [
   \   {
@@ -68,14 +67,7 @@ Execute(The fortran handler should parse lines from GCC 4.9.3 correctly):
   \   "Error: Symbol ‘b’ at (1) has no IMPLICIT type",
   \ ])
 
-After:
-  call ale#linter#Reset()
-
-
-
 Execute(The fortran handler should parse lines from GCC 6.3.1 correctly):
-  runtime ale_linters/fortran/gcc.vim
-
   AssertEqual
   \ [
   \   {
@@ -101,6 +93,3 @@ Execute(The fortran handler should parse lines from GCC 6.3.1 correctly):
   \   "",
   \   "Error: Symbol ‘b’ at (1) has no IMPLICIT type",
   \ ])
-
-After:
-  call ale#linter#Reset()

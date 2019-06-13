@@ -1,6 +1,12 @@
 " Author: Bjorn Neergaard <bjorn@neersighted.com>
 " Description: ansible-lint for ansible-yaml files
 
+call ale#Set('ansible_ansible_lint_executable', 'ansible-lint')
+
+function! ale_linters#ansible#ansible_lint#GetExecutable(buffer) abort
+    return ale#Var(a:buffer, 'ansible_ansible_lint_executable')
+endfunction
+
 function! ale_linters#ansible#ansible_lint#Handle(buffer, lines) abort
     for l:line in a:lines[:10]
         if match(l:line, '^Traceback') >= 0
@@ -21,7 +27,7 @@ function! ale_linters#ansible#ansible_lint#Handle(buffer, lines) abort
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:code = l:match[4]
 
-        if l:code is# 'EANSIBLE002'
+        if l:code is# 'EANSIBLE0002'
         \&& !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
             " Skip warnings for trailing whitespace if the option is off.
             continue
@@ -31,7 +37,8 @@ function! ale_linters#ansible#ansible_lint#Handle(buffer, lines) abort
             call add(l:output, {
             \   'lnum': l:match[2] + 0,
             \   'col': l:match[3] + 0,
-            \   'text': l:code . ': ' . l:match[5],
+            \   'text': l:match[5],
+            \   'code': l:code,
             \   'type': l:code[:0] is# 'E' ? 'E' : 'W',
             \})
         endif
@@ -41,8 +48,9 @@ function! ale_linters#ansible#ansible_lint#Handle(buffer, lines) abort
 endfunction
 
 call ale#linter#Define('ansible', {
-\   'name': 'ansible',
-\   'executable': 'ansible',
-\   'command': 'ansible-lint -p %t',
+\   'name': 'ansible_lint',
+\   'aliases': ['ansible', 'ansible-lint'],
+\   'executable': function('ale_linters#ansible#ansible_lint#GetExecutable'),
+\   'command': '%e -p %t',
 \   'callback': 'ale_linters#ansible#ansible_lint#Handle',
 \})

@@ -1,0 +1,34 @@
+Before:
+  Save g:ale_rust_rustfmt_executable
+  Save g:ale_rust_rustfmt_options
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_rust_rustfmt_executable = 'xxxinvalid'
+  let g:ale_rust_rustfmt_options = ''
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The rustfmt callback should return the correct default values):
+  call ale#test#SetFilename('../rust_files/testfile.rs')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('xxxinvalid'),
+  \ },
+  \ ale#fixers#rustfmt#Fix(bufnr(''))
+
+Execute(The rustfmt callback should include custom rustfmt options):
+  let g:ale_rust_rustfmt_options = "--skip-children"
+  call ale#test#SetFilename('../rust_files/testfile.rs')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' ' . g:ale_rust_rustfmt_options,
+  \ },
+  \ ale#fixers#rustfmt#Fix(bufnr(''))

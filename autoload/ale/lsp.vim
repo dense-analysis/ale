@@ -1,38 +1,78 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Language Server Protocol client code
 
-" A List of connections, used for tracking servers which have been connected
-" to, and programs which are run.
-let s:connections = []
+" A Dictionary for tracking connections.
+let s:connections = get(s:, 'connections', {})
 let g:ale_lsp_next_message_id = 1
 
-function! s:NewConnection() abort
-    " id: The job ID as a Number, or the server address as a string.
-    " data: The message data received so far.
-    " executable: An executable only set for program connections.
-    " open_documents: A list of buffers we told the server we opened.
-    " callback_list: A list of callbacks for handling LSP responses.
-    let l:conn = {
-    \   'id': '',
-    \   'data': '',
-    \   'projects': {},
-    \   'open_documents': [],
-    \   'callback_list': [],
-    \}
+" Given an id, which can be an executable or address, and a project path,
+" create a new connection if needed. Return a unique ID for the connection.
+function! ale#lsp#Register(executable_or_address, project, init_options) abort
+    let l:conn_id = a:executable_or_address . ':' . a:project
 
-    call add(s:connections, l:conn)
+    if !has_key(s:connections, l:conn_id)
+        " is_tsserver: 1 if the connection is for tsserver.
+        " data: The message data received so far.
+        " root: The project root.
+        " open_documents: A Dictionary mapping buffers to b:changedtick, keeping
+        "   track of when documents were opened, and when we last changed them.
+        " initialized: 0 if the connection is ready, 1 otherwise.
+        " init_request_id: The ID for the init request.
+        " init_options: Options to send to the server.
+        " config: Configuration settings to send to the server.
+        " callback_list: A list of callbacks for handling LSP responses.
+        " capabilities_queue: The list of callbacks to call with capabilities.
+        " capabilities: Features the server supports.
+        let s:connections[l:conn_id] = {
+        \   'id': l:conn_id,
+        \   'is_tsserver': 0,
+        \   'data': '',
+        \   'root': a:project,
+        \   'open_documents': {},
+        \   'initialized': 0,
+        \   'init_request_id': 0,
+        \   'init_options': a:init_options,
+        \   'config': {},
+        \   'callback_list': [],
+        \   'init_queue': [],
+        \   'capabilities': {
+        \       'hover': 0,
+        \       'references': 0,
+        \       'completion': 0,
+        \       'completion_trigger_characters': [],
+        \       'definition': 0,
+        \       'typeDefinition': 0,
+        \       'symbol_search': 0,
+        \   },
+        \}
+    endif
 
-    return l:conn
+    return l:conn_id
 endfunction
 
-function! s:FindConnection(key, value) abort
-    for l:conn in s:connections
-        if has_key(l:conn, a:key) && get(l:conn, a:key) == a:value
-            return l:conn
-        endif
-    endfor
+" Remove an LSP connection with a given ID. This is only for tests.
+function! ale#lsp#RemoveConnectionWithID(id) abort
+    if has_key(s:connections, a:id)
+        call remove(s:connections, a:id)
+    endif
+endfunction
 
-    return {}
+function! ale#lsp#ResetConnections() abort
+    let s:connections = {}
+endfunction
+
+" Used only in tests.
+function! ale#lsp#GetConnections() abort
+    return s:connections
+endfunction
+
+" This is only needed for tests
+function! ale#lsp#MarkDocumentAsOpen(id, buffer) abort
+    let l:conn = get(s:connections, a:id, {})
+
+    if !empty(l:conn)
+        let l:conn.open_documents[a:buffer] = -1
+    endif
 endfunction
 
 function! ale#lsp#GetNextMessageID() abort
@@ -70,22 +110,22 @@ function! s:CreateTSServerMessageData(message) abort
     endif
 
     let l:data = json_encode(l:obj) . "\n"
+
     return [l:is_notification ? 0 : l:obj.seq, l:data]
 endfunction
 
 " Given a List of one or two items, [method_name] or [method_name, params],
 " return a List containing [message_id, message_data]
 function! ale#lsp#CreateMessageData(message) abort
-    if a:message[1] =~# '^ts@'
+    if a:message[1][:2] is# 'ts@'
         return s:CreateTSServerMessageData(a:message)
     endif
 
     let l:is_notification = a:message[0]
 
     let l:obj = {
-    \   'id': v:null,
-    \   'jsonrpc': '2.0',
     \   'method': a:message[1],
+    \   'jsonrpc': '2.0',
     \}
 
     if !l:is_notification
@@ -144,194 +184,317 @@ function! ale#lsp#ReadMessageData(data) abort
     return [l:remainder, l:response_list]
 endfunction
 
-function! s:FindProjectWithInitRequestID(conn, init_request_id) abort
-    for l:project_root in keys(a:conn.projects)
-        let l:project = a:conn.projects[l:project_root]
-
-        if l:project.init_request_id == a:init_request_id
-            return l:project
-        endif
-    endfor
-
-    return {}
-endfunction
-
-function! s:MarkProjectAsInitialized(conn, project) abort
-    let a:project.initialized = 1
-
-    " After the server starts, send messages we had queued previously.
-    for l:message_data in a:project.message_queue
-        call s:SendMessageData(a:conn, l:message_data)
-    endfor
-
-    " Remove the messages now.
-    let a:conn.message_queue = []
-endfunction
-
-function! s:HandleInitializeResponse(conn, response) abort
-    let l:request_id = a:response.request_id
-    let l:project = s:FindProjectWithInitRequestID(a:conn, l:request_id)
-
-    if !empty(l:project)
-        call s:MarkProjectAsInitialized(a:conn, l:project)
-    endif
-endfunction
-
-function! ale#lsp#HandleOtherInitializeResponses(conn, response) abort
-    let l:uninitialized_projects = []
-
-    for [l:key, l:value] in items(a:conn.projects)
-        if l:value.initialized == 0
-            call add(l:uninitialized_projects, [l:key, l:value])
-        endif
-    endfor
-
-    if empty(l:uninitialized_projects)
+" Update capabilities from the server, so we know which features the server
+" supports.
+function! s:UpdateCapabilities(conn, capabilities) abort
+    if type(a:capabilities) isnot v:t_dict
         return
     endif
 
-    if get(a:response, 'method', '') is# ''
-        if has_key(get(a:response, 'result', {}), 'capabilities')
-            for [l:dir, l:project] in l:uninitialized_projects
-                call s:MarkProjectAsInitialized(a:conn, l:project)
-            endfor
+    if get(a:capabilities, 'hoverProvider') is v:true
+        let a:conn.capabilities.hover = 1
+    endif
+
+    if get(a:capabilities, 'referencesProvider') is v:true
+        let a:conn.capabilities.references = 1
+    endif
+
+    if !empty(get(a:capabilities, 'completionProvider'))
+        let a:conn.capabilities.completion = 1
+    endif
+
+    if type(get(a:capabilities, 'completionProvider')) is v:t_dict
+        let l:chars = get(a:capabilities.completionProvider, 'triggerCharacters')
+
+        if type(l:chars) is v:t_list
+            let a:conn.capabilities.completion_trigger_characters = l:chars
         endif
-    elseif get(a:response, 'method', '') is# 'textDocument/publishDiagnostics'
-        let l:filename = ale#path#FromURI(a:response.params.uri)
+    endif
 
-        for [l:dir, l:project] in l:uninitialized_projects
-            if l:filename[:len(l:dir) - 1] is# l:dir
-                call s:MarkProjectAsInitialized(a:conn, l:project)
-            endif
-        endfor
+    if get(a:capabilities, 'definitionProvider') is v:true
+        let a:conn.capabilities.definition = 1
+    endif
+
+    if get(a:capabilities, 'typeDefinitionProvider') is v:true
+        let a:conn.capabilities.typeDefinition = 1
+    endif
+
+    if get(a:capabilities, 'workspaceSymbolProvider') is v:true
+        let a:conn.capabilities.symbol_search = 1
     endif
 endfunction
 
-function! ale#lsp#HandleMessage(conn, message) abort
-    let a:conn.data .= a:message
+" Update a connection's configuration dictionary and notify LSP servers
+" of any changes since the last update. Returns 1 if a configuration
+" update was sent; otherwise 0 will be returned.
+function! ale#lsp#UpdateConfig(conn_id, buffer, config) abort
+    let l:conn = get(s:connections, a:conn_id, {})
 
-    " Parse the objects now if we can, and keep the remaining text.
-    let [a:conn.data, l:response_list] = ale#lsp#ReadMessageData(a:conn.data)
-
-    " Call our callbacks.
-    for l:response in l:response_list
-        if get(l:response, 'method', '') is# 'initialize'
-            call s:HandleInitializeResponse(a:conn, l:response)
-        else
-            call ale#lsp#HandleOtherInitializeResponses(a:conn, l:response)
-
-            " Call all of the registered handlers with the response.
-            for l:Callback in a:conn.callback_list
-                call ale#util#GetFunction(l:Callback)(a:conn.id, l:response)
-            endfor
-        endif
-    endfor
-endfunction
-
-function! s:HandleChannelMessage(channel, message) abort
-    let l:info = ch_info(a:channel)
-    let l:address = l:info.hostname . l:info.address
-    let l:conn = s:FindConnection('id', l:address)
-
-    call ale#lsp#HandleMessage(l:conn, a:message)
-endfunction
-
-function! s:HandleCommandMessage(job_id, message) abort
-    let l:conn = s:FindConnection('id', a:job_id)
-
-    call ale#lsp#HandleMessage(l:conn, a:message)
-endfunction
-
-function! ale#lsp#RegisterProject(conn, project_root) abort
-    " Empty strings can't be used for Dictionary keys in NeoVim, due to E713.
-    " This appears to be a nonsensical bug in NeoVim.
-    let l:key = empty(a:project_root) ? '<<EMPTY>>' : a:project_root
-
-    if !has_key(a:conn.projects, l:key)
-        " Tools without project roots are ready right away, like tsserver.
-        let a:conn.projects[l:key] = {
-        \   'initialized': empty(a:project_root),
-        \   'init_request_id': 0,
-        \   'message_queue': [],
-        \}
-    endif
-endfunction
-
-function! ale#lsp#GetProject(conn, project_root) abort
-    let l:key = empty(a:project_root) ? '<<EMPTY>>' : a:project_root
-
-    return get(a:conn.projects, l:key, {})
-endfunction
-
-" Start a program for LSP servers which run with executables.
-"
-" The job ID will be returned for for the program if it ran, otherwise
-" 0 will be returned.
-function! ale#lsp#StartProgram(executable, command, project_root, callback) abort
-    if !executable(a:executable)
+    if empty(l:conn) || a:config ==# l:conn.config " no-custom-checks
         return 0
     endif
 
-    let l:conn = s:FindConnection('executable', a:executable)
+    let l:conn.config = a:config
+    let l:message = ale#lsp#message#DidChangeConfiguration(a:buffer, a:config)
 
-    " Get the current connection or a new one.
-    let l:conn = !empty(l:conn) ? l:conn : s:NewConnection()
-    let l:conn.executable = a:executable
-
-    if !has_key(l:conn, 'id') || !ale#job#IsRunning(l:conn.id)
-        let l:options = {
-        \   'mode': 'raw',
-        \   'out_cb': function('s:HandleCommandMessage'),
-        \}
-        let l:job_id = ale#job#Start(a:command, l:options)
-    else
-        let l:job_id = l:conn.id
-    endif
-
-    if l:job_id <= 0
-        return 0
-    endif
-
-    let l:conn.id = l:job_id
-    " Add the callback to the List if it's not there already.
-    call uniq(sort(add(l:conn.callback_list, a:callback)))
-    call ale#lsp#RegisterProject(l:conn, a:project_root)
-
-    return l:job_id
-endfunction
-
-" Connect to an address and set up a callback for handling responses.
-function! ale#lsp#ConnectToAddress(address, project_root, callback) abort
-    let l:conn = s:FindConnection('id', a:address)
-    " Get the current connection or a new one.
-    let l:conn = !empty(l:conn) ? l:conn : s:NewConnection()
-
-    if !has_key(l:conn, 'channel') || ch_status(l:conn.channel) isnot# 'open'
-        let l:conn.channnel = ch_open(a:address, {
-        \   'mode': 'raw',
-        \   'waittime': 0,
-        \   'callback': function('s:HandleChannelMessage'),
-        \})
-    endif
-
-    if ch_status(l:conn.channnel) is# 'fail'
-        return 0
-    endif
-
-    let l:conn.id = a:address
-    " Add the callback to the List if it's not there already.
-    call uniq(sort(add(l:conn.callback_list, a:callback)))
-    call ale#lsp#RegisterProject(l:conn, a:project_root)
+    call ale#lsp#Send(a:conn_id, l:message)
 
     return 1
 endfunction
 
+
+function! ale#lsp#HandleInitResponse(conn, response) abort
+    if get(a:response, 'method', '') is# 'initialize'
+        let a:conn.initialized = 1
+    elseif type(get(a:response, 'result')) is v:t_dict
+    \&& has_key(a:response.result, 'capabilities')
+        call s:UpdateCapabilities(a:conn, a:response.result.capabilities)
+
+        let a:conn.initialized = 1
+    endif
+
+    if !a:conn.initialized
+        return
+    endif
+
+    " The initialized message must be sent before everything else.
+    call ale#lsp#Send(a:conn.id, ale#lsp#message#Initialized())
+
+    " Call capabilities callbacks queued for the project.
+    for l:Callback in a:conn.init_queue
+        call l:Callback()
+    endfor
+
+    let a:conn.init_queue = []
+endfunction
+
+function! ale#lsp#HandleMessage(conn_id, message) abort
+    let l:conn = get(s:connections, a:conn_id, {})
+
+    if empty(l:conn)
+        return
+    endif
+
+    if type(a:message) isnot v:t_string
+        " Ignore messages that aren't strings.
+        return
+    endif
+
+    let l:conn.data .= a:message
+
+    " Parse the objects now if we can, and keep the remaining text.
+    let [l:conn.data, l:response_list] = ale#lsp#ReadMessageData(l:conn.data)
+
+    " Look for initialize responses first.
+    if !l:conn.initialized
+        for l:response in l:response_list
+            call ale#lsp#HandleInitResponse(l:conn, l:response)
+        endfor
+    endif
+
+    " If the connection is marked as initialized, call the callbacks with the
+    " responses.
+    if l:conn.initialized
+        for l:response in l:response_list
+            " Call all of the registered handlers with the response.
+            for l:Callback in l:conn.callback_list
+                call ale#util#GetFunction(l:Callback)(a:conn_id, l:response)
+            endfor
+        endfor
+    endif
+endfunction
+
+" Given a connection ID, mark it as a tsserver connection, so it will be
+" handled that way.
+function! ale#lsp#MarkConnectionAsTsserver(conn_id) abort
+    let l:conn = s:connections[a:conn_id]
+    let l:conn.is_tsserver = 1
+    let l:conn.initialized = 1
+    " Set capabilities which are supported by tsserver.
+    let l:conn.capabilities.hover = 1
+    let l:conn.capabilities.references = 1
+    let l:conn.capabilities.completion = 1
+    let l:conn.capabilities.completion_trigger_characters = ['.']
+    let l:conn.capabilities.definition = 1
+    let l:conn.capabilities.symbol_search = 1
+endfunction
+
+function! s:SendInitMessage(conn) abort
+    let [l:init_id, l:init_data] = ale#lsp#CreateMessageData(
+    \   ale#lsp#message#Initialize(
+    \       a:conn.root,
+    \       a:conn.init_options,
+    \       {
+    \           'workspace': {
+    \               'applyEdit': v:false,
+    \               'didChangeConfiguration': {
+    \                   'dynamicRegistration': v:false,
+    \               },
+    \               'symbol': {
+    \                   'dynamicRegistration': v:false,
+    \               },
+    \               'workspaceFolders': v:false,
+    \               'configuration': v:false,
+    \           },
+    \           'textDocument': {
+    \               'synchronization': {
+    \                   'dynamicRegistration': v:false,
+    \                   'willSave': v:false,
+    \                   'willSaveWaitUntil': v:false,
+    \                   'didSave': v:true,
+    \               },
+    \               'completion': {
+    \                   'dynamicRegistration': v:false,
+    \                   'completionItem': {
+    \                       'snippetSupport': v:false,
+    \                       'commitCharactersSupport': v:false,
+    \                       'documentationFormat': ['plaintext'],
+    \                       'deprecatedSupport': v:false,
+    \                       'preselectSupport': v:false,
+    \                   },
+    \                   'contextSupport': v:false,
+    \               },
+    \               'hover': {
+    \                   'dynamicRegistration': v:false,
+    \                   'contentFormat': ['plaintext'],
+    \               },
+    \               'references': {
+    \                   'dynamicRegistration': v:false,
+    \               },
+    \               'documentSymbol': {
+    \                   'dynamicRegistration': v:false,
+    \                   'hierarchicalDocumentSymbolSupport': v:false,
+    \               },
+    \               'definition': {
+    \                   'dynamicRegistration': v:false,
+    \                   'linkSupport': v:false,
+    \               },
+    \               'typeDefinition': {
+    \                   'dynamicRegistration': v:false,
+    \               },
+    \               'publishDiagnostics': {
+    \                   'relatedInformation': v:true,
+    \               },
+    \               'codeAction': {
+    \                   'dynamicRegistration': v:false,
+    \               },
+    \               'rename': {
+    \                   'dynamicRegistration': v:false,
+    \               },
+    \           },
+    \       },
+    \   ),
+    \)
+    let a:conn.init_request_id = l:init_id
+    call s:SendMessageData(a:conn, l:init_data)
+endfunction
+
+" Start a program for LSP servers.
+"
+" 1 will be returned if the program is running, or 0 if the program could
+" not be started.
+function! ale#lsp#StartProgram(conn_id, executable, command) abort
+    let l:conn = s:connections[a:conn_id]
+    let l:started = 0
+
+    if !has_key(l:conn, 'job_id') || !ale#job#HasOpenChannel(l:conn.job_id)
+        let l:options = {
+        \   'mode': 'raw',
+        \   'out_cb': {_, message -> ale#lsp#HandleMessage(a:conn_id, message)},
+        \}
+
+        if has('win32')
+            let l:job_id = ale#job#StartWithCmd(a:command, l:options)
+        else
+            let l:job_id = ale#job#Start(a:command, l:options)
+        endif
+
+        let l:started = 1
+    else
+        let l:job_id = l:conn.job_id
+    endif
+
+    if l:job_id > 0
+        let l:conn.job_id = l:job_id
+    endif
+
+    if l:started && !l:conn.is_tsserver
+        call s:SendInitMessage(l:conn)
+    endif
+
+    return l:job_id > 0
+endfunction
+
+" Connect to an LSP server via TCP.
+"
+" 1 will be returned if the connection is running, or 0 if the connection could
+" not be opened.
+function! ale#lsp#ConnectToAddress(conn_id, address) abort
+    let l:conn = s:connections[a:conn_id]
+    let l:started = 0
+
+    if !has_key(l:conn, 'channel_id') || !ale#socket#IsOpen(l:conn.channel_id)
+        let l:channel_id = ale#socket#Open(a:address, {
+        \   'callback': {_, mess -> ale#lsp#HandleMessage(a:conn_id, mess)},
+        \})
+
+        let l:started = 1
+    else
+        let l:channel_id = l:conn.channel_id
+    endif
+
+    if l:channel_id >= 0
+        let l:conn.channel_id = l:channel_id
+    endif
+
+    if l:started
+        call s:SendInitMessage(l:conn)
+    endif
+
+    return l:channel_id >= 0
+endfunction
+
+" Given a connection ID and a callback, register that callback for handling
+" messages if the connection exists.
+function! ale#lsp#RegisterCallback(conn_id, callback) abort
+    let l:conn = get(s:connections, a:conn_id, {})
+
+    if !empty(l:conn)
+        " Add the callback to the List if it's not there already.
+        call uniq(sort(add(l:conn.callback_list, a:callback)))
+    endif
+endfunction
+
+" Stop a single LSP connection.
+function! ale#lsp#Stop(conn_id) abort
+    if has_key(s:connections, a:conn_id)
+        let l:conn = remove(s:connections, a:conn_id)
+
+        if has_key(l:conn, 'channel_id')
+            call ale#socket#Close(l:conn.channel_id)
+        elseif has_key(l:conn, 'job_id')
+            call ale#job#Stop(l:conn.job_id)
+        endif
+    endif
+endfunction
+
+function! ale#lsp#CloseDocument(conn_id) abort
+endfunction
+
+" Stop all LSP connections, closing all jobs and channels, and removing any
+" queued messages.
+function! ale#lsp#StopAll() abort
+    for l:conn_id in keys(s:connections)
+        call ale#lsp#Stop(l:conn_id)
+    endfor
+endfunction
+
 function! s:SendMessageData(conn, data) abort
-    if has_key(a:conn, 'executable')
-        call ale#job#SendRaw(a:conn.id, a:data)
-    elseif has_key(a:conn, 'channel') && ch_status(a:conn.channnel) is# 'open'
+    if has_key(a:conn, 'job_id')
+        call ale#job#SendRaw(a:conn.job_id, a:data)
+    elseif has_key(a:conn, 'channel_id') && ale#socket#IsOpen(a:conn.channel_id)
         " Send the message to the server
-        call ch_sendraw(a:conn.channel, a:data)
+        call ale#socket#Send(a:conn.channel_id, a:data)
     else
         return 0
     endif
@@ -345,63 +508,124 @@ endfunction
 " Returns -1 when a message is sent, but no response is expected
 "          0 when the message is not sent and
 "          >= 1 with the message ID when a response is expected.
-function! ale#lsp#Send(conn_id, message, ...) abort
-    let l:project_root = get(a:000, 0, '')
-
-    let l:conn = s:FindConnection('id', a:conn_id)
+function! ale#lsp#Send(conn_id, message) abort
+    let l:conn = get(s:connections, a:conn_id, {})
 
     if empty(l:conn)
         return 0
     endif
 
-    let l:project = ale#lsp#GetProject(l:conn, l:project_root)
-
-    if empty(l:project)
-        return 0
-    endif
-
-    " If we haven't initialized the server yet, then send the message for it.
-    if !l:project.initialized
-        " Only send the init message once.
-        if !l:project.init_request_id
-            let [l:init_id, l:init_data] = ale#lsp#CreateMessageData(
-            \   ale#lsp#message#Initialize(l:project_root),
-            \)
-
-            let l:project.init_request_id = l:init_id
-
-            call s:SendMessageData(l:conn, l:init_data)
-        endif
+    if !l:conn.initialized
+        throw 'LSP server not initialized yet!'
     endif
 
     let [l:id, l:data] = ale#lsp#CreateMessageData(a:message)
-
-    if l:project.initialized
-        " Send the message now.
-        call s:SendMessageData(l:conn, l:data)
-    else
-        " Add the message we wanted to send to a List to send later.
-        call add(l:project.message_queue, l:data)
-    endif
+    call s:SendMessageData(l:conn, l:data)
 
     return l:id == 0 ? -1 : l:id
 endfunction
 
-function! ale#lsp#OpenDocumentIfNeeded(conn_id, buffer, project_root, language_id) abort
-    let l:conn = s:FindConnection('id', a:conn_id)
+" Notify LSP servers or tsserver if a document is opened, if needed.
+" If a document is opened, 1 will be returned, otherwise 0 will be returned.
+function! ale#lsp#OpenDocument(conn_id, buffer, language_id) abort
+    let l:conn = get(s:connections, a:conn_id, {})
     let l:opened = 0
 
-    if !empty(l:conn) && index(l:conn.open_documents, a:buffer) < 0
-        if empty(a:language_id)
+    if !empty(l:conn) && !has_key(l:conn.open_documents, a:buffer)
+        if l:conn.is_tsserver
             let l:message = ale#lsp#tsserver_message#Open(a:buffer)
         else
             let l:message = ale#lsp#message#DidOpen(a:buffer, a:language_id)
         endif
 
-        call ale#lsp#Send(a:conn_id, l:message, a:project_root)
-        call add(l:conn.open_documents, a:buffer)
+        call ale#lsp#Send(a:conn_id, l:message)
+        let l:conn.open_documents[a:buffer] = getbufvar(a:buffer, 'changedtick')
         let l:opened = 1
     endif
 
     return l:opened
+endfunction
+
+" Notify LSP servers or tsserver that a document is closed, if opened before.
+" If a document is closed, 1 will be returned, otherwise 0 will be returned.
+"
+" Only the buffer number is required here. A message will be sent to every
+" language server that was notified previously of the document being opened.
+function! ale#lsp#CloseDocument(buffer) abort
+    let l:closed = 0
+
+    " The connection keys are sorted so the messages are easier to test, and
+    " so messages are sent in a consistent order.
+    for l:conn_id in sort(keys(s:connections))
+        let l:conn = s:connections[l:conn_id]
+
+        if l:conn.initialized && has_key(l:conn.open_documents, a:buffer)
+            if l:conn.is_tsserver
+                let l:message = ale#lsp#tsserver_message#Close(a:buffer)
+            else
+                let l:message = ale#lsp#message#DidClose(a:buffer)
+            endif
+
+            call ale#lsp#Send(l:conn_id, l:message)
+            call remove(l:conn.open_documents, a:buffer)
+            let l:closed = 1
+        endif
+    endfor
+
+    return l:closed
+endfunction
+
+" Notify LSP servers or tsserver that a document has changed, if needed.
+" If a notification is sent, 1 will be returned, otherwise 0 will be returned.
+function! ale#lsp#NotifyForChanges(conn_id, buffer) abort
+    let l:conn = get(s:connections, a:conn_id, {})
+    let l:notified = 0
+
+    if !empty(l:conn) && has_key(l:conn.open_documents, a:buffer)
+        let l:new_tick = getbufvar(a:buffer, 'changedtick')
+
+        if l:conn.open_documents[a:buffer] < l:new_tick
+            if l:conn.is_tsserver
+                let l:message = ale#lsp#tsserver_message#Change(a:buffer)
+            else
+                let l:message = ale#lsp#message#DidChange(a:buffer)
+            endif
+
+            call ale#lsp#Send(a:conn_id, l:message)
+            let l:conn.open_documents[a:buffer] = l:new_tick
+            let l:notified = 1
+        endif
+    endif
+
+    return l:notified
+endfunction
+
+" Wait for an LSP server to be initialized.
+function! ale#lsp#OnInit(conn_id, Callback) abort
+    let l:conn = get(s:connections, a:conn_id, {})
+
+    if empty(l:conn)
+        return
+    endif
+
+    if l:conn.initialized
+        call a:Callback()
+    else
+        call add(l:conn.init_queue, a:Callback)
+    endif
+endfunction
+
+" Check if an LSP has a given capability.
+function! ale#lsp#HasCapability(conn_id, capability) abort
+    let l:conn = get(s:connections, a:conn_id, {})
+
+    if empty(l:conn)
+        return 0
+    endif
+
+    if type(get(l:conn.capabilities, a:capability, v:null)) isnot v:t_number
+        throw 'Invalid capability ' . a:capability
+    endif
+
+    return l:conn.capabilities[a:capability]
 endfunction

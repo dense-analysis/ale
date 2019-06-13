@@ -3,13 +3,7 @@
 
 call ale#Set('pug_puglint_options', '')
 call ale#Set('pug_puglint_executable', 'pug-lint')
-call ale#Set('pug_puglint_use_global', 0)
-
-function! ale_linters#pug#puglint#GetExecutable(buffer) abort
-    return ale#node#FindExecutable(a:buffer, 'pug_puglint', [
-    \   'node_modules/.bin/pug-lint',
-    \])
-endfunction
+call ale#Set('pug_puglint_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! s:FindConfig(buffer) abort
     for l:filename in [
@@ -29,20 +23,34 @@ function! s:FindConfig(buffer) abort
 endfunction
 
 function! ale_linters#pug#puglint#GetCommand(buffer) abort
-    let l:executable = ale_linters#pug#puglint#GetExecutable(a:buffer)
     let l:options = ale#Var(a:buffer, 'pug_puglint_options')
     let l:config = s:FindConfig(a:buffer)
 
-    return ale#Escape(l:executable)
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    return '%e' . ale#Pad(l:options)
     \   . (!empty(l:config) ? ' -c ' . ale#Escape(l:config) : '')
     \   . ' -r inline %t'
 endfunction
 
+function! ale_linters#pug#puglint#Handle(buffer, lines) abort
+    for l:line in a:lines[:10]
+        if l:line =~# '^SyntaxError: '
+            return [{
+            \   'lnum': 1,
+            \   'text': 'puglint configuration error (type :ALEDetail for more information)',
+            \   'detail': join(a:lines, "\n"),
+            \}]
+        endif
+    endfor
+
+    return ale#handlers#unix#HandleAsError(a:buffer, a:lines)
+endfunction
+
 call ale#linter#Define('pug', {
 \   'name': 'puglint',
-\   'executable_callback': 'ale_linters#pug#puglint#GetExecutable',
+\   'executable': {b -> ale#node#FindExecutable(b, 'pug_puglint', [
+\       'node_modules/.bin/pug-lint',
+\   ])},
 \   'output_stream': 'stderr',
-\   'command_callback': 'ale_linters#pug#puglint#GetCommand',
-\   'callback': 'ale#handlers#unix#HandleAsError',
+\   'command': function('ale_linters#pug#puglint#GetCommand'),
+\   'callback': 'ale_linters#pug#puglint#Handle',
 \})

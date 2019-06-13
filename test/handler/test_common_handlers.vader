@@ -5,13 +5,15 @@ Execute(HandleCSSLintFormat should handle CSS errors):
   \     'lnum': 2,
   \     'col': 1,
   \     'type': 'E',
-  \     'text': '(errors) Expected RBRACE at line 2, col 1.',
+  \     'text': 'Expected RBRACE at line 2, col 1.',
+  \     'code': 'errors',
   \   },
   \   {
   \    'lnum': 2,
   \    'col': 5,
   \    'type': 'W',
-  \    'text': '(known-properties) Expected ... but found ''wat''.',
+  \    'text': 'Expected ... but found ''wat''.',
+  \    'code': 'known-properties',
   \   },
   \ ],
   \ ale#handlers#css#HandleCSSLintFormat(42, [

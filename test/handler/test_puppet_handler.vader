@@ -1,0 +1,51 @@
+Before:
+  runtime ale_linters/puppet/puppet.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The puppet handler should parse lines correctly when no column is supplied):
+  " Line Error
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 5,
+  \     'col': 0,
+  \     'text': "Syntax error at '='; expected '}'"
+  \   },
+  \   {
+  \     'lnum': 3,
+  \     'col': 0,
+  \     'text': "Syntax error at '='; expected '}'"
+  \   },
+  \ ],
+  \ ale_linters#puppet#puppet#Handle(255, [
+  \   "Error: Could not parse for environment production: Syntax error at '='; expected '}' at /root/puppetcode/modules/pancakes/manifests/init.pp:5",
+  \   "Error: Could not parse for environment production: Syntax error at '='; expected '}' at C:/puppet/modules/pancakes/manifests/init.pp:3",
+  \ ])
+
+Execute(The puppet handler should parse lines and column correctly):
+  " Line Error
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 43,
+  \     'col': 12,
+  \     'text': "Syntax error at ':'"
+  \   },
+  \   {
+  \     'lnum': 54,
+  \     'col': 9,
+  \     'text': "Syntax error at ':'"
+  \   },
+  \   {
+  \     'lnum': 45,
+  \     'col': 12,
+  \     'text': "Syntax error at 'parameter1'"
+  \   },
+  \ ],
+  \ ale_linters#puppet#puppet#Handle(255, [
+  \   "Error: Could not parse for environment production: Syntax error at ':' at /root/puppetcode/modules/nginx/manifests/init.pp:43:12",
+  \   "Error: Could not parse for environment production: Syntax error at ':' at C:/puppet/modules/nginx/manifests/init.pp:54:9",
+  \   "Error: Could not parse for environment production: Syntax error at 'parameter1' (file: /tmp/modules/mariadb/manifests/slave.pp, line: 45, column: 12)",
+  \ ])

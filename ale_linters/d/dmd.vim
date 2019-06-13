@@ -1,28 +1,14 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: "dmd for D files"
 
-function! s:FindDUBConfig(buffer) abort
-    " Find a DUB configuration file in ancestor paths.
-    " The most DUB-specific names will be tried first.
-    for l:possible_filename in ['dub.sdl', 'dub.json', 'package.json']
-        let l:dub_file = ale#path#FindNearestFile(a:buffer, l:possible_filename)
-
-        if !empty(l:dub_file)
-            return l:dub_file
-        endif
-    endfor
-
-    return ''
-endfunction
-
-function! ale_linters#d#dmd#DUBCommand(buffer) abort
+function! ale_linters#d#dmd#GetDUBCommand(buffer) abort
     " If we can't run dub, then skip this command.
     if !executable('dub')
         " Returning an empty string skips to the DMD command.
         return ''
     endif
 
-    let l:dub_file = s:FindDUBConfig(a:buffer)
+    let l:dub_file = ale#d#FindDUBConfig(a:buffer)
 
     if empty(l:dub_file)
         return ''
@@ -35,7 +21,18 @@ function! ale_linters#d#dmd#DUBCommand(buffer) abort
     \   . ' && dub describe --import-paths'
 endfunction
 
-function! ale_linters#d#dmd#DMDCommand(buffer, dub_output) abort
+function! ale_linters#d#dmd#RunDUBCommand(buffer) abort
+    let l:command = ale_linters#d#dmd#GetDUBCommand(a:buffer)
+
+    if empty(l:command)
+        " If we can't run DUB, just run DMD.
+        return ale_linters#d#dmd#DMDCommand(a:buffer, [], {})
+    endif
+
+    return ale#command#Run(a:buffer, l:command, function('ale_linters#d#dmd#DMDCommand'))
+endfunction
+
+function! ale_linters#d#dmd#DMDCommand(buffer, dub_output, meta) abort
     let l:import_list = []
 
     " Build a list of import paths generated from DUB, if available.
@@ -46,7 +43,7 @@ function! ale_linters#d#dmd#DMDCommand(buffer, dub_output) abort
         endif
     endfor
 
-    return 'dmd '. join(l:import_list) . ' -o- -vcolumns -c %t'
+    return 'dmd '. join(l:import_list) . ' -o- -wi -vcolumns -c %t'
 endfunction
 
 function! ale_linters#d#dmd#Handle(buffer, lines) abort
@@ -71,9 +68,7 @@ endfunction
 call ale#linter#Define('d', {
 \   'name': 'dmd',
 \   'executable': 'dmd',
-\   'command_chain': [
-\       {'callback': 'ale_linters#d#dmd#DUBCommand', 'output_stream': 'stdout'},
-\       {'callback': 'ale_linters#d#dmd#DMDCommand', 'output_stream': 'stderr'},
-\   ],
+\   'command': function('ale_linters#d#dmd#RunDUBCommand'),
 \   'callback': 'ale_linters#d#dmd#Handle',
+\   'output_stream': 'stderr',
 \})

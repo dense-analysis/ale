@@ -3,8 +3,8 @@
 let g:ale_erlang_erlc_options = get(g:, 'ale_erlang_erlc_options', '')
 
 function! ale_linters#erlang#erlc#GetCommand(buffer) abort
-    let l:output_file = tempname()
-    call ale#engine#ManageFile(a:buffer, l:output_file)
+    let l:output_file = ale#util#Tempname()
+    call ale#command#ManageFile(a:buffer, l:output_file)
 
     return 'erlc -o ' . ale#Escape(l:output_file)
     \   . ' ' . ale#Var(a:buffer, 'erlang_erlc_options')
@@ -17,7 +17,7 @@ function! ale_linters#erlang#erlc#Handle(buffer, lines) abort
     " error.erl:4: variable 'B' is unbound
     " error.erl:3: Warning: function main/0 is unused
     " error.erl:4: Warning: variable 'A' is unused
-    let l:pattern = '\v^([^:]+):(\d+): (Warning: )?(.+)$'
+    let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+): (Warning: )?(.+)$'
 
     " parse_transforms are a special case. The error message does not indicate a location:
     " error.erl: undefined parse transform 'some_parse_transform'
@@ -91,6 +91,6 @@ endfunction
 call ale#linter#Define('erlang', {
 \   'name': 'erlc',
 \   'executable': 'erlc',
-\   'command_callback': 'ale_linters#erlang#erlc#GetCommand',
+\   'command': function('ale_linters#erlang#erlc#GetCommand'),
 \   'callback': 'ale_linters#erlang#erlc#Handle',
 \})

@@ -2,6 +2,7 @@
 /CODE_OF_CONDUCT.md export-ignore
 /CONTRIBUTING.md export-ignore
 /Dockerfile export-ignore
+/ISSUE_TEMPLATE export-ignore
 /ISSUE_TEMPLATE.md export-ignore
 /Makefile export-ignore
 /PULL_REQUEST_TEMPLATE.md export-ignore

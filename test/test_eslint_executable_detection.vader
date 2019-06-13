@@ -6,7 +6,6 @@ Before:
   runtime ale_linters/javascript/eslint.vim
 
 After:
-  let g:ale_has_override = {}
   let g:ale_javascript_eslint_executable = 'eslint'
   let g:ale_javascript_eslint_use_global = 0
 
@@ -17,7 +16,7 @@ Execute(create-react-app directories should be detected correctly):
   call ale#test#SetFilename('eslint-test-files/react-app/subdir/testfile.js')
 
   AssertEqual
-  \ g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js',
+  \ ale#path#Simplify(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'),
   \ ale#handlers#eslint#GetExecutable(bufnr(''))
 
 Execute(use-global should override create-react-app detection):
@@ -33,7 +32,7 @@ Execute(other app directories should be detected correctly):
   call ale#test#SetFilename('eslint-test-files/other-app/subdir/testfile.js')
 
   AssertEqual
-  \ g:dir . '/eslint-test-files/node_modules/.bin/eslint',
+  \ ale#path#Simplify(g:dir . '/eslint-test-files/node_modules/.bin/eslint'),
   \ ale#handlers#eslint#GetExecutable(bufnr(''))
 
 Execute(use-global should override other app directories):
@@ -49,16 +48,22 @@ Execute(eslint_d should be detected correctly):
   call ale#test#SetFilename('eslint-test-files/app-with-eslint-d/testfile.js')
 
   AssertEqual
-  \ g:dir . '/eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d',
+  \ ale#path#Simplify(g:dir . '/eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'),
   \ ale#handlers#eslint#GetExecutable(bufnr(''))
 
 Execute(eslint.js executables should be run with node on Windows):
   call ale#test#SetFilename('eslint-test-files/react-app/subdir/testfile.js')
-  let g:ale_has_override['win32'] = 1
 
   " We have to execute the file with node.
-  AssertEqual
-  \   ale#Escape('node.exe') . ' '
-  \   . ale#Escape(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js')
-  \   . ' -f unix --stdin --stdin-filename %s',
-  \ ale#handlers#eslint#GetCommand(bufnr(''))
+  if has('win32')
+    AssertEqual
+    \ ale#Escape('node.exe') . ' '
+    \   . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+    \   . ' -f json --stdin --stdin-filename %s',
+    \ ale#handlers#eslint#GetCommand(bufnr(''))
+  else
+    AssertEqual
+    \ ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+    \   . ' -f json --stdin --stdin-filename %s',
+    \ ale#handlers#eslint#GetCommand(bufnr(''))
+  endif

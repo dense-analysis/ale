@@ -7,10 +7,10 @@ if !exists('g:ale_verilog_verilator_options')
 endif
 
 function! ale_linters#verilog#verilator#GetCommand(buffer) abort
-    let l:filename = tempname() . '_verilator_linted.v'
+    let l:filename = ale#util#Tempname() . '_verilator_linted.v'
 
     " Create a special filename, so we can detect it in the handler.
-    call ale#engine#ManageFile(a:buffer, l:filename)
+    call ale#command#ManageFile(a:buffer, l:filename)
     let l:lines = getbufline(a:buffer, 1, '$')
     call ale#util#Writefile(a:buffer, l:lines, l:filename)
 
@@ -53,7 +53,7 @@ call ale#linter#Define('verilog', {
 \   'name': 'verilator',
 \   'output_stream': 'stderr',
 \   'executable': 'verilator',
-\   'command_callback': 'ale_linters#verilog#verilator#GetCommand',
+\   'command': function('ale_linters#verilog#verilator#GetCommand'),
 \   'callback': 'ale_linters#verilog#verilator#Handle',
 \   'read_buffer': 0,
 \})

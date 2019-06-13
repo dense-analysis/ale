@@ -9,14 +9,14 @@ Before:
   let g:ale_buffer_info = {}
   call ale#engine#InitBufferInfo(bufnr('') + 1)
   let g:ale_buffer_info[bufnr('') + 1].loclist =
-  \ ale#engine#FixLocList(bufnr('') + 1, 'linter_one', [
+  \ ale#engine#FixLocList(bufnr('') + 1, 'linter_one', 0, [
   \   {'lnum': 1, 'filename': expand('%:p'), 'text': 'foo'},
   \   {'lnum': 2, 'filename': expand('%:p'), 'text': 'bar'},
   \   {'lnum': 2, 'text': 'ignore this one'},
   \ ])
   call ale#engine#InitBufferInfo(bufnr('') + 2)
   let g:ale_buffer_info[bufnr('') + 2].loclist =
-  \ ale#engine#FixLocList(bufnr('') + 2, 'linter_one', [
+  \ ale#engine#FixLocList(bufnr('') + 2, 'linter_one', 0, [
   \   {'lnum': 1, 'filename': expand('%:p'), 'text': 'foo'},
   \   {'lnum': 3, 'filename': expand('%:p'), 'text': 'baz'},
   \   {'lnum': 5, 'text': 'ignore this one'},
@@ -95,4 +95,4 @@ Execute(Problems found from previously opened buffers should be set when linting
   \   {'lnum': 2, 'bufnr': bufnr(''), 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': 'E', 'pattern': '', 'text': 'bar'},
   \   {'lnum': 3, 'bufnr': bufnr(''), 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': 'E', 'pattern': '', 'text': 'baz'},
   \ ],
-  \ getloclist(0)
+  \ ale#test#GetLoclistWithoutModule()

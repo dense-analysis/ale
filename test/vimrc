@@ -3,6 +3,9 @@
 " Make most tests just set lists synchronously when run in Docker, etc.
 let g:ale_set_lists_synchronously = 1
 
+" This lowercase highlight definition is needed for highlight tests.
+hi link aleerrorline spellbad
+
 " Load builtin plugins
 " We need this because run_vim.sh sets -i NONE
 if has('win32')
@@ -36,6 +39,4 @@ execute 'set encoding=utf-8'
 
 let g:mapleader=','
 
-" Clear the TMPDIR value for tests.
-" The plugin should set this to /tmp by default, which we will test.
-let $TMPDIR = ''
+let g:ale_ignore_2_4_warnings = 1

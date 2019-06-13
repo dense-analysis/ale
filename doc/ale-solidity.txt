@@ -3,6 +3,14 @@ ALE Solidity Integration                                 *ale-solidity-options*
 
 
 ===============================================================================
+solhint                                                  *ale-solidity-solhint*
+
+  Solhint should work out-of-the-box. You can further configure it using a
+  `.solihint.json` file. See https://github.com/protofire/solhint for more
+  information.
+
+
+===============================================================================
 solium                                                    *ale-solidity-solium*
 
   Use of Solium linter for Solidity source code requires a .soliumrc.json

@@ -1,75 +1,55 @@
+scriptencoding utf-8
 " Author: w0rp <devw0rp@gmail.com>
+" Author: João Paulo S. de Souza <joao.paulo.silvasouza@hotmail.com>
 " Description: Echoes lint message for the current line, if any
+
+" Controls the milliseconds delay before echoing a message.
+let g:ale_echo_delay = get(g:, 'ale_echo_delay', 10)
+" A string format for the echoed message.
+let g:ale_echo_msg_format = get(g:, 'ale_echo_msg_format', '%code: %%s')
 
 let s:cursor_timer = -1
 let s:last_pos = [0, 0, 0]
-let s:error_delay_ms = 1000 * 60 * 2
 
-if !exists('s:dont_queue_until')
-    let s:dont_queue_until = -1
-endif
-
-if !exists('s:dont_echo_until')
-    let s:dont_echo_until = -1
-endif
-
-" Return a formatted message according to g:ale_echo_msg_format variable
-function! s:GetMessage(linter, type, text) abort
-    let l:msg = g:ale_echo_msg_format
-    let l:type = a:type is# 'E'
-    \   ? g:ale_echo_msg_error_str
-    \   : g:ale_echo_msg_warning_str
-
-    " Replace handlers if they exist
-    for [l:k, l:v] in items({'linter': a:linter, 'severity': l:type})
-        let l:msg = substitute(l:msg, '\V%' . l:k . '%', l:v, '')
-    endfor
-
-    return printf(l:msg, a:text)
-endfunction
-
-function! s:EchoWithShortMess(setting, message) abort
-    " We need to remember the setting for shormess and reset it again.
-    let l:shortmess_options = getbufvar('%', '&shortmess')
-
-    try
-        " Turn shortmess on or off.
-        if a:setting is# 'on'
-            setlocal shortmess+=T
-            " echomsg is needed for the message to get truncated and appear in
-            " the message history.
-            exec "norm! :echomsg a:message\n"
-        elseif a:setting is# 'off'
-            setlocal shortmess-=T
-            " Regular echo is needed for printing newline characters.
-            echo a:message
-        else
-            throw 'Invalid setting: ' . string(a:setting)
-        endif
-    finally
-        call setbufvar('%', '&shortmess', l:shortmess_options)
-    endtry
-endfunction
-
-function! ale#cursor#TruncatedEcho(message) abort
-    let l:message = a:message
+function! ale#cursor#TruncatedEcho(original_message) abort
+    let l:message = a:original_message
     " Change tabs to spaces.
     let l:message = substitute(l:message, "\t", ' ', 'g')
     " Remove any newlines in the message.
     let l:message = substitute(l:message, "\n", '', 'g')
 
-    call s:EchoWithShortMess('on', l:message)
-endfunction
+    " We need to remember the setting for shortmess and reset it again.
+    let l:shortmess_options = &l:shortmess
 
-function! s:FindItemAtCursor() abort
-    let l:buf = bufnr('')
-    let l:info = get(g:ale_buffer_info, l:buf, {})
-    let l:loclist = get(l:info, 'loclist', [])
-    let l:pos = getcurpos()
-    let l:index = ale#util#BinarySearch(l:loclist, l:buf, l:pos[1], l:pos[2])
-    let l:loc = l:index >= 0 ? l:loclist[l:index] : {}
+    try
+        let l:cursor_position = getpos('.')
 
-    return [l:info, l:loc]
+        " The message is truncated and saved to the history.
+        silent! setlocal shortmess+=T
+
+        try
+            exec "norm! :echomsg l:message\n"
+        catch /^Vim\%((\a\+)\)\=:E523/
+            " Fallback into manual truncate (#1987)
+            let l:winwidth = winwidth(0)
+
+            if l:winwidth < strdisplaywidth(l:message)
+                " Truncate message longer than window width with trailing '...'
+                let l:message = l:message[:l:winwidth - 4] . '...'
+            endif
+
+            exec 'echomsg l:message'
+        endtry
+
+        " Reset the cursor position if we moved off the end of the line.
+        " Using :norm and :echomsg can move the cursor off the end of the
+        " line.
+        if l:cursor_position != getpos('.')
+            call setpos('.', l:cursor_position)
+        endif
+    finally
+        let &l:shortmess = l:shortmess_options
+    endtry
 endfunction
 
 function! s:StopCursorTimer() abort
@@ -80,80 +60,108 @@ function! s:StopCursorTimer() abort
 endfunction
 
 function! ale#cursor#EchoCursorWarning(...) abort
-    return ale#CallWithCooldown('dont_echo_until', function('s:EchoImpl'), [])
-endfunction
+    let l:buffer = bufnr('')
 
-function! s:EchoImpl() abort
-    if ale#ShouldDoNothing(bufnr(''))
+    if !g:ale_echo_cursor && !g:ale_cursor_detail
         return
     endif
 
     " Only echo the warnings in normal mode, otherwise we will get problems.
-    if mode() isnot# 'n'
+    if mode(1) isnot# 'n'
         return
     endif
 
-    let [l:info, l:loc] = s:FindItemAtCursor()
+    if ale#ShouldDoNothing(l:buffer)
+        return
+    endif
 
-    if !empty(l:loc)
-        let l:msg = s:GetMessage(l:loc.linter_name, l:loc.type, l:loc.text)
-        call ale#cursor#TruncatedEcho(l:msg)
-        let l:info.echoed = 1
-    elseif get(l:info, 'echoed')
-        " We'll only clear the echoed message when moving off errors once,
-        " so we don't continually clear the echo line.
-        echo
-        let l:info.echoed = 0
+    let [l:info, l:loc] = ale#util#FindItemAtCursor(l:buffer)
+
+    if g:ale_echo_cursor
+        if !empty(l:loc)
+            let l:format = ale#Var(l:buffer, 'echo_msg_format')
+            let l:msg = ale#GetLocItemMessage(l:loc, l:format)
+            call ale#cursor#TruncatedEcho(l:msg)
+            let l:info.echoed = 1
+        elseif get(l:info, 'echoed')
+            " We'll only clear the echoed message when moving off errors once,
+            " so we don't continually clear the echo line.
+            execute 'echo'
+            let l:info.echoed = 0
+        endif
+    endif
+
+    if g:ale_cursor_detail
+        if !empty(l:loc)
+            call s:ShowCursorDetailForItem(l:loc, {'stay_here': 1})
+        else
+            call ale#preview#CloseIfTypeMatches('ale-preview')
+        endif
     endif
 endfunction
 
 function! ale#cursor#EchoCursorWarningWithDelay() abort
-    return ale#CallWithCooldown(
-    \   'dont_echo_with_delay_until',
-    \   function('s:EchoWithDelayImpl'),
-    \   [],
-    \)
-endfunction
+    let l:buffer = bufnr('')
 
-function! s:EchoWithDelayImpl() abort
-    if ale#ShouldDoNothing(bufnr(''))
+    if !g:ale_echo_cursor && !g:ale_cursor_detail
+        return
+    endif
+
+    " Only echo the warnings in normal mode, otherwise we will get problems.
+    if mode(1) isnot# 'n'
         return
     endif
 
     call s:StopCursorTimer()
 
-    let l:pos = getcurpos()[0:2]
+    let l:pos = getpos('.')[0:2]
 
     " Check the current buffer, line, and column number against the last
     " recorded position. If the position has actually changed, *then*
     " we should echo something. Otherwise we can end up doing processing
     " the echo message far too frequently.
     if l:pos != s:last_pos
+        let l:delay = ale#Var(l:buffer, 'echo_delay')
+
         let s:last_pos = l:pos
-        let s:cursor_timer = timer_start(10, function('ale#cursor#EchoCursorWarning'))
+        let s:cursor_timer = timer_start(
+        \   l:delay,
+        \   function('ale#cursor#EchoCursorWarning')
+        \)
+    endif
+endfunction
+
+function! s:ShowCursorDetailForItem(loc, options) abort
+    let l:stay_here = get(a:options, 'stay_here', 0)
+
+    let s:last_detailed_line = line('.')
+    let l:message = get(a:loc, 'detail', a:loc.text)
+    let l:lines = split(l:message, "\n")
+    call ale#preview#Show(l:lines, {'stay_here': l:stay_here})
+
+    " Clear the echo message if we manually displayed details.
+    if !l:stay_here
+        execute 'echo'
     endif
 endfunction
 
 function! ale#cursor#ShowCursorDetail() abort
-    if ale#ShouldDoNothing(bufnr(''))
-        return
-    endif
+    let l:buffer = bufnr('')
 
     " Only echo the warnings in normal mode, otherwise we will get problems.
     if mode() isnot# 'n'
         return
     endif
 
+    if ale#ShouldDoNothing(l:buffer)
+        return
+    endif
+
     call s:StopCursorTimer()
 
-    let [l:info, l:loc] = s:FindItemAtCursor()
+    let [l:info, l:loc] = ale#util#FindItemAtCursor(l:buffer)
 
     if !empty(l:loc)
-        let l:message = get(l:loc, 'detail', l:loc.text)
-
-        call s:EchoWithShortMess('off', l:message)
-
-        " Set the echo marker, so we can clear it by moving the cursor.
-        let l:info.echoed = 1
+        call s:ShowCursorDetailForItem(l:loc, {'stay_here': 0})
     endif
 endfunction

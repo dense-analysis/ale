@@ -16,7 +16,7 @@ Execute(It should be possible to remap errors to style errors):
   \   {'type': 'W', 'sub_type': 'style', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1, 'linter_name': 'foo'},
   \   {'type': 'I', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1, 'linter_name': 'foo'},
   \ ],
-  \ ale#engine#FixLocList(bufnr(''), 'foo', [
+  \ ale#engine#FixLocList(bufnr(''), 'foo', 0, [
   \   {'type': 'E', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},
   \   {'type': 'E', 'sub_type': 'style', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},
   \   {'type': 'W', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},
@@ -35,7 +35,7 @@ Execute(It should be possible to remap errors to style errors with buffer-local 
   \   {'type': 'W', 'sub_type': 'style', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1, 'linter_name': 'foo'},
   \   {'type': 'I', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1, 'linter_name': 'foo'},
   \ ],
-  \ ale#engine#FixLocList(bufnr(''), 'foo', [
+  \ ale#engine#FixLocList(bufnr(''), 'foo', 0, [
   \   {'type': 'E', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},
   \   {'type': 'E', 'sub_type': 'style', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},
   \   {'type': 'W', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},
@@ -54,7 +54,7 @@ Execute(It should be possible to remap warnings to style warnings):
   \   {'type': 'W', 'sub_type': 'style', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1, 'linter_name': 'foo'},
   \   {'type': 'I', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1, 'linter_name': 'foo'},
   \ ],
-  \ ale#engine#FixLocList(bufnr(''), 'foo', [
+  \ ale#engine#FixLocList(bufnr(''), 'foo', 0, [
   \   {'type': 'E', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},
   \   {'type': 'E', 'sub_type': 'style', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},
   \   {'type': 'W', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},
@@ -73,7 +73,7 @@ Execute(It should be possible to remap style errors to errors):
   \   {'type': 'W', 'sub_type': 'style', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1, 'linter_name': 'foo'},
   \   {'type': 'I', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1, 'linter_name': 'foo'},
   \ ],
-  \ ale#engine#FixLocList(bufnr(''), 'foo', [
+  \ ale#engine#FixLocList(bufnr(''), 'foo', 0, [
   \   {'type': 'E', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},
   \   {'type': 'E', 'sub_type': 'style', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},
   \   {'type': 'W', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},
@@ -92,7 +92,7 @@ Execute(It should be possible to remap style warnings to warnings):
   \   {'type': 'W', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1, 'linter_name': 'foo'},
   \   {'type': 'I', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1, 'linter_name': 'foo'},
   \ ],
-  \ ale#engine#FixLocList(bufnr(''), 'foo', [
+  \ ale#engine#FixLocList(bufnr(''), 'foo', 0, [
   \   {'type': 'E', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},
   \   {'type': 'E', 'sub_type': 'style', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},
   \   {'type': 'W', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},
@@ -111,7 +111,7 @@ Execute(It should be possible to info problems to warnings):
   \   {'type': 'W', 'sub_type': 'style', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1, 'linter_name': 'foo'},
   \   {'type': 'W', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1, 'linter_name': 'foo'},
   \ ],
-  \ ale#engine#FixLocList(bufnr(''), 'foo', [
+  \ ale#engine#FixLocList(bufnr(''), 'foo', 0, [
   \   {'type': 'E', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},
   \   {'type': 'E', 'sub_type': 'style', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},
   \   {'type': 'W', 'lnum': 1, 'text': 'x', 'bufnr': bufnr(''), 'col': 0, 'vcol': 0, 'nr': -1},

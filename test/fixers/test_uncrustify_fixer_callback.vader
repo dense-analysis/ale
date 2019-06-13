@@ -1,0 +1,36 @@
+Before:
+  Save g:ale_c_uncrustify_executable
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_c_uncrustify_executable = 'xxxinvalid'
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+  silent cd ..
+  silent cd command_callback
+  let g:dir = getcwd()
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The clang-format callback should return the correct default values):
+  call ale#test#SetFilename('c_paths/dummy.c')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_c_uncrustify_executable)
+  \       . ' --no-backup'
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+Execute(The uncrustify callback should include any additional options):
+  call ale#test#SetFilename('c_paths/dummy.c')
+  let b:ale_c_uncrustify_options = '--some-option'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_c_uncrustify_executable)
+  \     . ' --no-backup --some-option',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))

@@ -17,8 +17,8 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle errors):
   \     'lnum': 3,
   \     'col': 11,
   \     'end_lnum': 5,
-  \     'end_col': 16,
-  \     'nr': 'some-error',
+  \     'end_col': 15,
+  \     'code': 'some-error',
   \   }
   \ ],
   \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
@@ -38,8 +38,8 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle warnings):
   \     'lnum': 2,
   \     'col': 4,
   \     'end_lnum': 2,
-  \     'end_col': 4,
-  \     'nr': 'some-warning',
+  \     'end_col': 3,
+  \     'code': 'some-warning',
   \   }
   \ ],
   \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
@@ -59,8 +59,8 @@ Execute(ale#lsp#response#ReadDiagnostics() should treat messages with missing se
   \     'lnum': 3,
   \     'col': 11,
   \     'end_lnum': 5,
-  \     'end_col': 16,
-  \     'nr': 'some-error',
+  \     'end_col': 15,
+  \     'code': 'some-error',
   \   }
   \ ],
   \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
@@ -79,13 +79,72 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle messages without codes)
   \     'lnum': 3,
   \     'col': 11,
   \     'end_lnum': 5,
-  \     'end_col': 16,
+  \     'end_col': 15,
   \   }
   \ ],
   \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
   \   {
   \     'range': Range(2, 10, 4, 15),
   \     'message': 'Something went wrong!',
+  \   },
+  \ ]}})
+
+Execute(ale#lsp#response#ReadDiagnostics() should include sources in detail):
+  AssertEqual [
+  \   {
+  \     'type': 'E',
+  \     'text': 'Something went wrong!',
+  \     'detail': '[tslint] Something went wrong!',
+  \     'lnum': 10,
+  \     'col': 15,
+  \     'end_lnum': 12,
+  \     'end_col': 22,
+  \   }
+  \ ],
+  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \   {
+  \     'range': Range(9, 14, 11, 22),
+  \     'message': 'Something went wrong!',
+  \     'source': 'tslint',
+  \   }
+  \ ]}})
+
+Execute(ale#lsp#response#ReadDiagnostics() should keep detail with line breaks but replace with spaces in text):
+  AssertEqual [
+  \   {
+  \     'type': 'E',
+  \     'text': 'cannot borrow `cap` as mutable more than once at a time  mutable borrow starts here in previous iteration of loop',
+  \     'detail': "[rustc] cannot borrow `cap` as mutable\r\nmore than once at a time\n\nmutable borrow starts here\rin previous iteration of loop",
+  \     'lnum': 10,
+  \     'col': 15,
+  \     'end_lnum': 12,
+  \     'end_col': 22,
+  \   }
+  \ ],
+  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \   {
+  \     'range': Range(9, 14, 11, 22),
+  \     'message': "cannot borrow `cap` as mutable\r\nmore than once at a time\n\nmutable borrow starts here\rin previous iteration of loop",
+  \     'source': 'rustc',
+  \   }
+  \ ]}})
+
+Execute(ale#lsp#response#ReadDiagnostics() should consider -1 to be a meaningless code):
+  AssertEqual [
+  \   {
+  \     'type': 'E',
+  \     'text': 'Something went wrong!',
+  \     'lnum': 3,
+  \     'col': 11,
+  \     'end_lnum': 5,
+  \     'end_col': 15,
+  \   }
+  \ ],
+  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \   {
+  \     'range': Range(2, 10, 4, 15),
+  \     'message': 'Something went wrong!',
+  \     'code': -1,
   \   },
   \ ]}})
 
@@ -97,7 +156,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle multiple messages):
   \     'lnum': 1,
   \     'col': 3,
   \     'end_lnum': 1,
-  \     'end_col': 3,
+  \     'end_col': 2,
   \   },
   \   {
   \     'type': 'W',
@@ -105,7 +164,7 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle multiple messages):
   \     'lnum': 2,
   \     'col': 5,
   \     'end_lnum': 2,
-  \     'end_col': 5,
+  \     'end_col': 4,
   \   },
   \ ],
   \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
@@ -120,16 +179,79 @@ Execute(ale#lsp#response#ReadDiagnostics() should handle multiple messages):
   \   },
   \ ]}})
 
-Execute(ale#lsp#response#ReadTSServerDiagnostics() should handle tsserver responses):
+Execute(ale#lsp#response#ReadDiagnostics() should use relatedInformation for detail):
   AssertEqual [
   \   {
   \     'type': 'E',
+  \     'text': 'Something went wrong!',
+  \     'lnum': 1,
+  \     'col': 3,
+  \     'end_lnum': 1,
+  \     'end_col': 2,
+  \     'detail': "Something went wrong!\n/tmp/someotherfile.txt:43:80:\n\tmight be this"
+  \   }
+  \ ],
+  \ ale#lsp#response#ReadDiagnostics({'params': {'uri': 'filename.ts', 'diagnostics': [
+  \   {
+  \     'range': Range(0, 2, 0, 2),
+  \     'message': 'Something went wrong!',
+  \     'relatedInformation': [{
+  \         'message': 'might be this',
+  \         'location': {
+  \             'uri': 'file:///tmp/someotherfile.txt',
+  \             'range': {
+  \                 'start': { 'line': 42, 'character': 79 },
+  \                 'end': { 'line': 142, 'character': 179},
+  \             }
+  \         }
+  \     }]
+  \   }
+  \ ]}})
+
+Execute(ale#lsp#response#ReadTSServerDiagnostics() should handle tsserver responses):
+  AssertEqual
+  \ [
+  \   {
+  \     'type': 'E',
   \     'nr': 2365,
+  \     'code': '2365',
   \     'text': 'Operator ''''+'''' cannot be applied to types ''''3'''' and ''''{}''''.',
   \     'lnum': 1,
   \     'col': 11,
   \     'end_lnum': 1,
-  \     'end_col': 17,
+  \     'end_col': 16,
   \   },
-  \],
+  \ ],
   \ ale#lsp#response#ReadTSServerDiagnostics({"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/bar/foo.ts","diagnostics":[{"start":{"line":1,"offset":11},"end":{"line":1,"offset":17},"text":"Operator ''+'' cannot be applied to types ''3'' and ''{}''.","code":2365}]}})
+
+Execute(ale#lsp#response#ReadTSServerDiagnostics() should handle warnings from tsserver):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 27,
+  \     'col': 3,
+  \     'nr': 2515,
+  \     'code': '2515',
+  \     'end_lnum': 27,
+  \     'type': 'W',
+  \     'end_col': 13,
+  \     'text': 'Calls to ''console.log'' are not allowed. (no-console)',
+  \   }
+  \ ],
+  \ ale#lsp#response#ReadTSServerDiagnostics({"seq":0,"type":"event","event":"semanticDiag","body":{"file":"<removed>","diagnostics":[{"start":{"line":27,"offset":3},"end":{"line":27,"offset":14},"text":"Calls to 'console.log' are not allowed. (no-console)","code":2515,"category":"warning","source":"tslint"}]}})
+
+Execute(ale#lsp#response#ReadTSServerDiagnostics() should handle suggestions from tsserver):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 27,
+  \     'col': 3,
+  \     'nr': 2515,
+  \     'code': '2515',
+  \     'end_lnum': 27,
+  \     'type': 'I',
+  \     'end_col': 13,
+  \     'text': 'Some info',
+  \   }
+  \ ],
+  \ ale#lsp#response#ReadTSServerDiagnostics({"seq":0,"type":"event","event":"semanticDiag","body":{"file":"<removed>","diagnostics":[{"start":{"line":27,"offset":3},"end":{"line":27,"offset":14},"text":"Some info","code":2515,"category":"suggestion","source":"tslint"}]}})

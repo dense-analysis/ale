@@ -1,0 +1,40 @@
+Before:
+  Save g:ale_go_gofmt_executable
+  Save g:ale_go_gofmt_options
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_go_gofmt_executable = 'xxxinvalid'
+  let g:ale_go_gofmt_options = ''
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The gofmt callback should return the correct default values):
+  call ale#test#SetFilename('../go_files/testfile.go')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' -l -w'
+  \     . ' %t',
+  \ },
+  \ ale#fixers#gofmt#Fix(bufnr(''))
+
+Execute(The gofmt callback should include custom gofmt options):
+  let g:ale_go_gofmt_options = "-r '(a) -> a'"
+  call ale#test#SetFilename('../go_files/testfile.go')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' -l -w'
+  \     . ' ' . g:ale_go_gofmt_options
+  \     . ' %t',
+  \ },
+  \ ale#fixers#gofmt#Fix(bufnr(''))

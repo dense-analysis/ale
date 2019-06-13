@@ -3,6 +3,14 @@ ALE CSS Integration                                           *ale-css-options*
 
 
 ===============================================================================
+fecs                                                             *ale-css-fecs*
+
+`fecs` options for CSS is the same as the options for JavaScript, and both of
+them reads `./.fecsrc` as the default configuration file. See:
+|ale-javascript-fecs|.
+
+
+===============================================================================
 prettier                                                     *ale-css-prettier*
 
 See |ale-javascript-prettier| for information about the available options.
@@ -30,7 +38,7 @@ g:ale_css_stylelint_options                       *g:ale_css_stylelint_options*
 g:ale_css_stylelint_use_global                 *g:ale_css_stylelint_use_global*
                                                *b:ale_css_stylelint_use_global*
   Type: |String|
-  Default: `0`
+  Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
 

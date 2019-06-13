@@ -1,61 +1,53 @@
 Before:
-  Save g:ale_thrift_thrift_executable
-  Save g:ale_thrift_thrift_generators
-  Save g:ale_thrift_thrift_includes
-  Save g:ale_thrift_thrift_options
-
-  unlet! b:ale_thrift_thrift_executable
-  unlet! b:ale_thrift_thrift_generators
-  unlet! b:ale_thrift_thrift_includes
-  unlet! b:ale_thrift_thrift_options
+  call ale#assert#SetUpLinterTest('thrift', 'thrift')
+  let b:suffix = ' -out ' . ale#Escape('TEMP_DIR') . ' %t'
 
   function! GetCommand(buffer) abort
     call ale#engine#InitBufferInfo(a:buffer)
-    let l:result = ale_linters#thrift#thrift#GetCommand(a:buffer)
+    let l:command = ale_linters#thrift#thrift#GetCommand(a:buffer)
     call ale#engine#Cleanup(a:buffer)
-    return l:result
+
+    let l:split_command = split(l:command)
+    let l:index = index(l:split_command, '-out')
+
+    if l:index >= 0
+      let l:split_command[l:index + 1] = 'TEMP'
+    endif
+
+    return join(l:split_command)
   endfunction
 
-  runtime ale_linters/thrift/thrift.vim
-
 After:
-  Restore
+  unlet! b:suffix
   delfunction GetCommand
-  unlet! b:ale_thrift_thrift_executable
-  unlet! b:ale_thrift_thrift_generators
-  unlet! b:ale_thrift_thrift_includes
-  unlet! b:ale_thrift_thrift_options
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'thrift', ale#Escape('thrift') . ' --gen cpp -I . -strict' . b:suffix
 
 Execute(The executable should be configurable):
-  AssertEqual 'thrift', ale_linters#thrift#thrift#GetExecutable(bufnr(''))
-
   let b:ale_thrift_thrift_executable = 'foobar'
-  AssertEqual 'foobar', ale_linters#thrift#thrift#GetExecutable(bufnr(''))
 
-Execute(The executable should be used in the command):
-  Assert GetCommand(bufnr('%')) =~# "^'thrift'"
-
-  let b:ale_thrift_thrift_executable = 'foobar'
-  Assert GetCommand(bufnr('%')) =~# "^'foobar'"
+  AssertLinter 'foobar', ale#Escape('foobar') . ' --gen cpp -I . -strict' . b:suffix
 
 Execute(The list of generators should be configurable):
-  Assert GetCommand(bufnr('%')) =~# '--gen cpp'
-
   let b:ale_thrift_thrift_generators = ['java', 'py:dynamic']
-  Assert GetCommand(bufnr('%')) =~# '--gen java --gen py:dynamic'
+
+  AssertLinter 'thrift', ale#Escape('thrift')
+  \ . ' --gen java --gen py:dynamic -I . -strict' . b:suffix
 
   let b:ale_thrift_thrift_generators = []
-  Assert GetCommand(bufnr('%')) =~# '--gen cpp'
+
+  AssertLinter 'thrift', ale#Escape('thrift') . ' --gen cpp -I . -strict' . b:suffix
 
 Execute(The list of include paths should be configurable):
-  Assert GetCommand(bufnr('%')) !~# '-I'
-
   let b:ale_thrift_thrift_includes = ['included/path']
-  Assert GetCommand(bufnr('%')) =~# '-I included/path'
+
+  AssertLinter 'thrift', ale#Escape('thrift')
+  \ . ' --gen cpp -I included/path -strict' . b:suffix
 
 Execute(The string of compiler options should be configurable):
-  Assert GetCommand(bufnr('%')) =~# '-strict'
-
   let b:ale_thrift_thrift_options = '-strict --allow-64bit-consts'
-  Assert GetCommand(bufnr('%')) =~# '-strict --allow-64bit-consts'
+
+  AssertLinter 'thrift', ale#Escape('thrift')
+  \   . ' --gen cpp -I . -strict --allow-64bit-consts' . b:suffix

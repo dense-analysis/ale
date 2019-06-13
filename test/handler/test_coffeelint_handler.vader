@@ -1,5 +1,10 @@
-Execute(The coffeelint handler should parse lines correctly):
+Before:
   runtime ale_linters/coffee/coffeelint.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The coffeelint handler should parse lines correctly):
 
   AssertEqual
   \ [
@@ -13,6 +18,3 @@ Execute(The coffeelint handler should parse lines correctly):
   \   "path,lineNumber,lineNumberEnd,level,message",
   \   "stdin,125,,error,Line exceeds maximum allowed length Length is 122, max is 120.",
   \ ])
-
-After:
-  call ale#linter#Reset()

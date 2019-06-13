@@ -1,19 +1,11 @@
 " Author: Sol Bekic https://github.com/s-ol
 " Description: luacheck linter for lua files
 
-let g:ale_lua_luacheck_executable =
-\   get(g:, 'ale_lua_luacheck_executable', 'luacheck')
-
-let g:ale_lua_luacheck_options =
-\   get(g:, 'ale_lua_luacheck_options', '')
-
-function! ale_linters#lua#luacheck#GetExecutable(buffer) abort
-    return ale#Var(a:buffer, 'lua_luacheck_executable')
-endfunction
+call ale#Set('lua_luacheck_executable', 'luacheck')
+call ale#Set('lua_luacheck_options', '')
 
 function! ale_linters#lua#luacheck#GetCommand(buffer) abort
-    return ale#Escape(ale_linters#lua#luacheck#GetExecutable(a:buffer))
-    \   . ' ' . ale#Var(a:buffer, 'lua_luacheck_options')
+    return '%e' . ale#Pad(ale#Var(a:buffer, 'lua_luacheck_options'))
     \   . ' --formatter plain --codes --filename %s -'
 endfunction
 
@@ -26,11 +18,18 @@ function! ale_linters#lua#luacheck#Handle(buffer, lines) abort
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
+        if !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
+        \   && l:match[3] is# 'W'
+        \   && index(range(611, 614), str2nr(l:match[4])) >= 0
+            continue
+        endif
+
         call add(l:output, {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
-        \   'text': l:match[3] . l:match[4] . ': ' . l:match[5],
         \   'type': l:match[3],
+        \   'code': l:match[3] . l:match[4],
+        \   'text': l:match[5],
         \})
     endfor
 
@@ -39,7 +38,7 @@ endfunction
 
 call ale#linter#Define('lua', {
 \   'name': 'luacheck',
-\   'executable_callback': 'ale_linters#lua#luacheck#GetExecutable',
-\   'command_callback': 'ale_linters#lua#luacheck#GetCommand',
+\   'executable': {b -> ale#Var(b, 'lua_luacheck_executable')},
+\   'command': function('ale_linters#lua#luacheck#GetCommand'),
 \   'callback': 'ale_linters#lua#luacheck#Handle',
 \})

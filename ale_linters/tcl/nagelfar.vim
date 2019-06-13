@@ -4,16 +4,10 @@
 call ale#Set('tcl_nagelfar_executable', 'nagelfar.tcl')
 call ale#Set('tcl_nagelfar_options', '')
 
-function! ale_linters#tcl#nagelfar#GetExecutable(buffer) abort
-    return ale#Var(a:buffer, 'tcl_nagelfar_executable')
-endfunction
-
 function! ale_linters#tcl#nagelfar#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'tcl_nagelfar_options')
 
-    return ale#Escape(ale_linters#tcl#nagelfar#GetExecutable(a:buffer))
-    \   . (!empty(l:options) ? ' ' . l:options : '')
-    \   . ' %s'
+    return '%e' . ale#Pad(l:options) . ' %s'
 endfunction
 
 function! ale_linters#tcl#nagelfar#Handle(buffer, lines) abort
@@ -21,7 +15,6 @@ function! ale_linters#tcl#nagelfar#Handle(buffer, lines) abort
     " Line   5: W Found constant "bepa" which is also a variable.
     " Line  13: E Wrong number of arguments (3) to "set"
     " Line  93: N Close brace not aligned with line 90 (4 0)
-
     let l:pattern = '^Line\s\+\([0-9]\+\): \([NEW]\) \(.*\)$'
     let l:output = []
 
@@ -39,8 +32,8 @@ endfunction
 call ale#linter#Define('tcl', {
 \   'name': 'nagelfar',
 \   'output_stream': 'stdout',
-\   'executable_callback': 'ale_linters#tcl#nagelfar#GetExecutable',
-\   'command_callback': 'ale_linters#tcl#nagelfar#GetCommand',
+\   'executable': {b -> ale#Var(b, 'tcl_nagelfar_executable')},
+\   'command': function('ale_linters#tcl#nagelfar#GetCommand'),
 \   'callback': 'ale_linters#tcl#nagelfar#Handle',
 \   'lint_file': 1,
 \})

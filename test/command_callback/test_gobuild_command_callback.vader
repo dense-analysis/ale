@@ -1,0 +1,31 @@
+Before:
+  Save g:ale_go_go_executable
+
+  call ale#assert#SetUpLinterTest('go', 'gobuild')
+
+  GivenCommandOutput ['/foo/bar', '/foo/baz']
+
+After:
+  Restore
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default commands should be correct):
+  AssertLinter 'go',
+  \ ale#path#CdString(expand('%:p:h'))
+  \   . 'go test -c -o /dev/null ./'
+
+Execute(Extra options should be supported):
+  let g:ale_go_gobuild_options = '--foo-bar'
+
+  AssertLinter 'go',
+  \ ale#path#CdString(expand('%:p:h'))
+  \   . 'go test --foo-bar -c -o /dev/null ./'
+
+  let g:ale_go_gobuild_options = ''
+
+Execute(The executable should be configurable):
+  let g:ale_go_go_executable = 'foobar'
+
+  AssertLinter 'foobar',
+  \ ale#path#CdString(expand('%:p:h'))
+  \   . 'foobar test -c -o /dev/null ./'

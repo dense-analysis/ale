@@ -1,12 +1,13 @@
 Before:
   Save g:ale_change_sign_column_color
+  Save &verbose
 
   function! ParseHighlight(name) abort
     redir => l:output
       silent execute 'highlight ' . a:name
     redir end
 
-    return join(split(l:output)[2:])
+    return substitute(join(split(l:output)[2:]), ' Last set.*', '', '')
   endfunction
 
   function! SetHighlight(name, syntax) abort
@@ -53,3 +54,15 @@ Execute(The SignColumn highlight should be set and reset):
 
   call ale#sign#SetSigns(bufnr(''), [])
   AssertEqual 'links to ALESignColumnWithoutErrors', ParseHighlight('SignColumn')
+
+Execute(The SignColumn should be correctly parsed when verbose=1):
+  set verbose=1
+  highlight SignColumn ctermfg=246 ctermbg=7 guifg=#839496 guibg=Grey
+
+  call ale#sign#SetUpDefaultColumnWithoutErrorsHighlight()
+
+  AssertEqual
+  \ has('nvim')
+  \   ? 'ctermfg=246 ctermbg=7 guifg=#839496 guibg=Grey'
+  \   : 'term=standout ctermfg=246 ctermbg=7 guifg=#839496 guibg=Grey',
+  \ ParseHighlight('ALESignColumnWithoutErrors')
