@@ -76,6 +76,7 @@ function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
         let l:option = l:split_lines[l:option_index]
         let l:option_index = l:option_index + 1
 
+        " Include options, that may need relative path fix
         if stridx(l:option, '-I') == 0 ||
                     \ stridx(l:option, '-iquote') == 0 ||
                     \ stridx(l:option, '-isystem') == 0 ||
@@ -95,17 +96,23 @@ function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
             endif
             call add(l:cflags_list, l:option)
             call add(l:cflags_list, l:arg)
+
+        " Options with arg that can be grouped with the option or separate
         elseif stridx(l:option, '-D') == 0 || stridx(l:option, '-B') == 0
             call add(l:cflags_list, l:option)
             if l:option is# '-D' || l:option is# '-B'
                 call add(l:cflags_list, l:split_lines[l:option_index])
                 let l:option_index = l:option_index + 1
             endif
+
+        " Options that have an argument (always separate)
         elseif l:option is# '-iprefix' || stridx(l:option, '-iwithprefix') == 0 ||
                     \ l:option is# '-isysroot' || l:option is# '-imultilib'
             call add(l:cflags_list, l:option)
             call add(l:cflags_list, l:split_lines[l:option_index])
             let l:option_index = l:option_index + 1
+
+        " Options without argument
         elseif (stridx(l:option, '-W') == 0 && stridx(l:option, '-Wa,') != 0 && stridx(l:option, '-Wl,') != 0 && stridx(l:option, '-Wp,') != 0) ||
 					\ l:option is '-w' || stridx(l:option, '-pedantic') == 0 ||
 					\ l:option is# '-ansi' || stridx(l:option, '-std=') == 0 ||
