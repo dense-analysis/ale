@@ -28,81 +28,96 @@ function! ale#c#GetBuildDirectory(buffer) abort
     return ale#path#Dirname(l:json_file)
 endfunction
 
-function! ale#c#AreSpecialCharsBalanced(option) abort
-    " Escape \"
-    let l:option_escaped = substitute(a:option, '\\"', '', 'g')
-
-    " Retain special chars only
-    let l:special_chars = substitute(l:option_escaped, '[^"''()`]', '', 'g')
-    let l:special_chars = split(l:special_chars, '\zs')
-
-    " Check if they are balanced
+function! ale#c#ShellSplit(line) abort
     let l:stack = []
+    let l:args = ['']
+    let l:prev = ''
 
-    for l:char in l:special_chars
-        if l:char is# ')'
-            if len(l:stack) == 0 || get(l:stack, -1) isnot# '('
-                return 0
-            endif
-
-            call remove(l:stack, -1)
-        elseif l:char is# '('
-            call add(l:stack, l:char)
-        else
-            if len(l:stack) > 0 && get(l:stack, -1) is# l:char
+    for l:char in split(a:line, '\zs')
+        if l:char is# ''''
+            if len(l:stack) > 0 && get(l:stack, -1) is# ''''
                 call remove(l:stack, -1)
-            else
+            elseif (len(l:stack) == 0 || get(l:stack, -1) isnot# '"') && l:prev isnot# '\'
                 call add(l:stack, l:char)
             endif
+        elseif (l:char is# '"' || l:char is# '`') && l:prev isnot# '\'
+            if len(l:stack) > 0 && get(l:stack, -1) is# l:char
+                call remove(l:stack, -1)
+            elseif len(l:stack) == 0 || get(l:stack, -1) isnot# ''''
+                call add(l:stack, l:char)
+            endif
+        elseif (l:char is# '(' || l:char is# '[' || l:char is# '{') && l:prev isnot# '\'
+            if len(l:stack) == 0 || get(l:stack, -1) isnot# ''''
+                call add(l:stack, l:char)
+            endif
+        elseif (l:char is# ')' || l:char is# ']' || l:char is# '}') && l:prev isnot# '\'
+            if len(l:stack) > 0 && get(l:stack, -1) is# {')': '(', ']': '[', '}': '{'}[l:char]
+                call remove(l:stack, -1)
+            endif
+        elseif l:char is# ' ' && len(l:stack) == 0
+            if len(get(l:args, -1)) > 0
+                call add(l:args, '')
+            endif
+            continue
         endif
+        let l:args[-1] = get(l:args, -1) . l:char
     endfor
 
-    return len(l:stack) == 0
+    return l:args
 endfunction
 
 function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
     let l:cflags_list = []
-    let l:previous_options = ''
 
-    let l:split_lines = split(a:cflag_line, ' ')
+    let l:split_lines = ale#c#ShellSplit(a:cflag_line)
     let l:option_index = 0
 
     while l:option_index < len(l:split_lines)
-        let l:option = l:previous_options . l:split_lines[l:option_index]
+        let l:option = l:split_lines[l:option_index]
         let l:option_index = l:option_index + 1
 
-        " Check if cflag contained an unmatched special character and should not have been splitted
-        if ale#c#AreSpecialCharsBalanced(l:option) == 0 && l:option_index < len(l:split_lines)
-            let l:previous_options = l:option . ' '
-            continue
-        endif
-
-        " Check if there was spaces after -D/-I and the flag should not have been splitted
-        if l:option is# '-D' || l:option is# '-I'
-            let l:previous_options = l:option
-            continue
-        endif
-
-        let l:previous_options = ''
-
-
-        " Fix relative paths if needed
-        if stridx(l:option, '-I') >= 0 &&
-           \ stridx(l:option, '-I' . s:sep) < 0
-            let l:rel_path = join(split(l:option, '\zs')[2:], '')
-            let l:rel_path = substitute(l:rel_path, '"', '', 'g')
-            let l:rel_path = substitute(l:rel_path, '''', '', 'g')
-            let l:option = ale#Escape('-I' . a:path_prefix .
-                                      \ s:sep . l:rel_path)
-        endif
-
-        " Parse the cflag
-        if stridx(l:option, '-I') >= 0 ||
-           \ stridx(l:option, '-D') >= 0
-            if index(l:cflags_list, l:option) < 0
-                call add(l:cflags_list, l:option)
+        if stridx(l:option, '-I') == 0 ||
+                    \ stridx(l:option, '-iquote') == 0 ||
+                    \ stridx(l:option, '-isystem') == 0 ||
+                    \ stridx(l:option, '-idirafter') == 0
+            if stridx(l:option, '-I') == 0 && l:option isnot# '-I'
+                let l:arg = join(split(l:option, '\zs')[2:], '')
+                let l:option = '-I'
+            else
+                let l:arg = l:split_lines[l:option_index]
+                let l:option_index = l:option_index + 1
             endif
+            " Fix relative paths if needed
+            if stridx(l:arg, s:sep) != 0
+                let l:rel_path = substitute(l:arg, '"', '', 'g')
+                let l:rel_path = substitute(l:rel_path, '''', '', 'g')
+                let l:arg = ale#Escape(a:path_prefix . s:sep . l:rel_path)
+            endif
+            call add(l:cflags_list, l:option)
+            call add(l:cflags_list, l:arg)
+        elseif stridx(l:option, '-D') == 0 || stridx(l:option, '-B') == 0
+            call add(l:cflags_list, l:option)
+            if l:option is# '-D' || l:option is# '-B'
+                call add(l:cflags_list, l:split_lines[l:option_index])
+                let l:option_index = l:option_index + 1
+            endif
+        elseif l:option is# '-iprefix' || stridx(l:option, '-iwithprefix') == 0 ||
+                    \ l:option is# '-isysroot' || l:option is# '-imultilib'
+            call add(l:cflags_list, l:option)
+            call add(l:cflags_list, l:split_lines[l:option_index])
+            let l:option_index = l:option_index + 1
+        elseif (stridx(l:option, '-W') == 0 && stridx(l:option, '-Wa,') != 0 && stridx(l:option, '-Wl,') != 0 && stridx(l:option, '-Wp,') != 0) ||
+					\ l:option is '-w' || stridx(l:option, '-pedantic') == 0 ||
+					\ l:option is# '-ansi' || stridx(l:option, '-std=') == 0 ||
+					\ (stridx(l:option, '-f') == 0 && stridx(l:option, '-fdump') != 0 && stridx(l:option, '-fdiagnostics') != 0 && stridx(l:option, '-fno-show-column') != 0) ||
+                    \ stridx(l:option, '-O') == 0 ||
+                    \ l:option is# '-C' || l:option is# '-CC' || l:option is# '-trigraphs' ||
+                    \ stridx(l:option, '-nostdinc') == 0 || stridx(l:option, '-iplugindir=') == 0 ||
+                    \ stridx(l:option, '--sysroot=') == 0 || l:option is# '--no-sysroot-suffix' ||
+                    \ stridx(l:option, '-m') == 0
+            call add(l:cflags_list, l:option)
         endif
+
     endwhile
 
     return join(l:cflags_list, ' ')
