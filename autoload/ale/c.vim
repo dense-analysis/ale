@@ -61,43 +61,51 @@ function! ale#c#AreSpecialCharsBalanced(option) abort
 endfunction
 
 function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
-    let l:split_lines = split(a:cflag_line)
+    let l:cflags_list = []
+    let l:previous_options = ''
+
+    let l:split_lines = split(a:cflag_line, ' ')
     let l:option_index = 0
 
     while l:option_index < len(l:split_lines)
-        let l:next_option_index = l:option_index + 1
+        let l:option = l:previous_options . l:split_lines[l:option_index]
+        let l:option_index = l:option_index + 1
 
-        " Join space-separated option
-        while l:next_option_index < len(l:split_lines)
-        \&& stridx(l:split_lines[l:next_option_index], '-') != 0
-            let l:next_option_index += 1
-        endwhile
-
-        let l:option = join(l:split_lines[l:option_index : l:next_option_index-1], ' ')
-        call remove(l:split_lines, l:option_index, l:next_option_index-1)
-        call insert(l:split_lines, l:option, l:option_index)
-
-        " Ignore invalid or conflicting options
-        if stridx(l:option, '-') != 0
-        \|| stridx(l:option, '-o') == 0
-        \|| stridx(l:option, '-c') == 0
-            call remove(l:split_lines, l:option_index)
-            let l:option_index = l:option_index - 1
-        " Fix relative path
-        elseif stridx(l:option, '-I') == 0
-            if !(stridx(l:option, ':') == 2+1 || stridx(l:option, '/') == 2+0)
-                let l:option = '-I' . a:path_prefix . s:sep . l:option[2:]
-                call remove(l:split_lines, l:option_index)
-                call insert(l:split_lines, l:option, l:option_index)
-            endif
+        " Check if cflag contained an unmatched special character and should not have been splitted
+        if ale#c#AreSpecialCharsBalanced(l:option) == 0 && l:option_index < len(l:split_lines)
+            let l:previous_options = l:option . ' '
+            continue
         endif
 
-        let l:option_index = l:option_index + 1
+        " Check if there was spaces after -D/-I and the flag should not have been splitted
+        if l:option is# '-D' || l:option is# '-I'
+            let l:previous_options = l:option
+            continue
+        endif
+
+        let l:previous_options = ''
+
+
+        " Fix relative paths if needed
+        if stridx(l:option, '-I') >= 0 &&
+           \ stridx(l:option, '-I' . s:sep) < 0
+            let l:rel_path = join(split(l:option, '\zs')[2:], '')
+            let l:rel_path = substitute(l:rel_path, '"', '', 'g')
+            let l:rel_path = substitute(l:rel_path, '''', '', 'g')
+            let l:option = ale#Escape('-I' . a:path_prefix .
+                                      \ s:sep . l:rel_path)
+        endif
+
+        " Parse the cflag
+        if stridx(l:option, '-I') >= 0 ||
+           \ stridx(l:option, '-D') >= 0
+            if index(l:cflags_list, l:option) < 0
+                call add(l:cflags_list, l:option)
+            endif
+        endif
     endwhile
 
-    call uniq(l:split_lines)
-
-    return join(l:split_lines, ' ')
+    return join(l:cflags_list, ' ')
 endfunction
 
 function! ale#c#ParseCFlagsFromMakeOutput(buffer, make_output) abort
