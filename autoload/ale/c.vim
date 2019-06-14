@@ -89,7 +89,7 @@ function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
                 let l:option_index = l:option_index + 1
             endif
             " Fix relative paths if needed
-            if stridx(l:arg, s:sep) != 0
+            if stridx(l:arg, s:sep) != 0 && stridx(l:arg, '/') != 0
                 let l:rel_path = substitute(l:arg, '"', '', 'g')
                 let l:rel_path = substitute(l:rel_path, '''', '', 'g')
                 let l:arg = ale#Escape(a:path_prefix . s:sep . l:rel_path)
