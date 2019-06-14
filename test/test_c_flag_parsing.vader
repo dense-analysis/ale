@@ -321,3 +321,37 @@ Execute(ParseCFlags should handle parenthesis and quotes):
   \     . '-Dtest2=''(` `)'' file2.o '
   \     . '-Dtest3=`(" ")` file3.o '
   \ )
+
+Execute(CFlags we want to pass):
+  AssertEqual
+  \ '-I ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/inc'))
+  \ . ' -I ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/include'))
+  \ . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/incquote'))
+  \ . ' -isystem ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/incsystem'))
+  \ . ' -idirafter ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/incafter'))
+  \ . ' -Dmacro=value -D macro2 -Bbdir -B bdir2'
+  \ . ' -iprefix prefix -iwithprefix prefix2 -iwithprefixbefore prefix3'
+  \ . ' -isysroot sysroot --sysroot=test --no-sysroot-suffix -imultilib multidir'
+  \ . ' -Wsome-warning -std=c89 -pedantic -pedantic-errors -ansi'
+  \ . ' -foption -O2 -C -CC -trigraphs -nostdinc -nostdinc++'
+  \ . ' -iplugindir=dir -march=native -w',
+  \ ale#c#ParseCFlags(
+  \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
+  \   'gcc'
+  \ . ' -Iinc -I include -iquote incquote -isystem incsystem -idirafter incafter'
+  \ . ' -Dmacro=value -D macro2 -Bbdir -B bdir2'
+  \ . ' -iprefix prefix -iwithprefix prefix2 -iwithprefixbefore prefix3'
+  \ . ' -isysroot sysroot --sysroot=test --no-sysroot-suffix -imultilib multidir'
+  \ . ' -Wsome-warning -std=c89 -pedantic -pedantic-errors -ansi'
+  \ . ' -foption -O2 -C -CC -trigraphs -nostdinc -nostdinc++'
+  \ . ' -iplugindir=dir -march=native -w'
+  \ )
+
+Execute(CFlags we dont want to pass):
+  AssertEqual
+  \ '',
+  \ ale#c#ParseCFlags(
+  \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
+  \   'gcc -Wl,option -Wa,option -Wp,option filename.c somelib.a '
+  \ . '-fdump-file=name -fdiagnostics-arg -fno-show-column'
+  \ )
