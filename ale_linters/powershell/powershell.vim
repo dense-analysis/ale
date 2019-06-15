@@ -48,7 +48,7 @@ function! ale_linters#powershell#powershell#Handle(buffer, lines) abort
                 call add(l:output, l:item)
                 let l:matchcount = 1
             endif
-            
+
             " If the match is 0, it was a failed match
             " probably due to an unexpected token which
             " contained a newline. Reset matchcount and
