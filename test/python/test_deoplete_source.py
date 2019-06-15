@@ -45,7 +45,7 @@ class DeopleteSourceTest(unittest.TestCase):
             'mark': '[L]',
             'min_pattern_length': 1,
             'name': 'ale',
-            'rank': 100,
+            'rank': 1000,
         })
 
     def test_completion_position(self):
