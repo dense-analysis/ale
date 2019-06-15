@@ -54,7 +54,6 @@ function! ale_linters#powershell#powershell#Handle(buffer, lines) abort
             " contained a newline. Reset matchcount and
             " continue to next set of matches
             if ! l:match[1] | let l:matchcount = 0 | continue | endif
-
             let l:item = {
             \   'lnum': str2nr(l:match[1]),
             \   'col': str2nr(l:match[2]),
