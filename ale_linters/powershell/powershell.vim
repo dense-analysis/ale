@@ -89,8 +89,8 @@ endfunction
 
 call ale#linter#Define('powershell', {
 \   'name': 'powershell',
-\   'executable_callback': 'ale_linters#powershell#powershell#GetExecutable',
-\   'command_callback': 'ale_linters#powershell#powershell#GetCommand',
+\   'executable': function('ale_linters#powershell#powershell#GetExecutable'),
+\   'command': function('ale_linters#powershell#powershell#GetCommand'),
 \   'output_stream': 'stdout',
 \   'callback': 'ale_linters#powershell#powershell#Handle',
 \})
