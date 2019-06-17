@@ -131,7 +131,7 @@ formatting.
 * Elm
   * [elm-format](https://github.com/avh4/elm-format)
   * [elm-lsp](https://github.com/antew/elm-lsp)
-  * [elm-make](https://github.com/elm-lang/elm-make)
+  * [elm-make](https://github.com/elm/compiler)
 * Erb
   * [erb](https://apidock.com/ruby/ERB)
   * [erubi](https://github.com/jeremyevans/erubi)
