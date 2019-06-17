@@ -3,11 +3,10 @@ Before:
 
   " Use an invalid global executable, so we don't match it.
   let g:ale_c_clangtidy_executable = 'xxxinvalid'
-  let g:ale_cpp_clangtidy_executable = 'xxxinvalidpp'
+  let g:ale_c_build_dir = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  silent cd ..
-  silent cd command_callback
+  silent cd ../command_callback
   let g:dir = getcwd()
 
 After:
@@ -40,6 +39,8 @@ Execute(The clangtidy callback should include any additional options):
 
 Execute(The clangtidy callback should support cpp files):
   call ale#test#SetFilename('c_paths/dummy.cpp')
+  let g:ale_cpp_clangtidy_executable = 'invalidpp'
+  set filetype=cpp " The test fails without this
 
   AssertEqual
   \ {

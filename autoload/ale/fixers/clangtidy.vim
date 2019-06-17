@@ -11,14 +11,15 @@ function! s:set_variables() abort
         call ale#Set(l:ft . '_clangtidy_options', '')
         call ale#Set(l:ft . '_clangtidy_extra_options', '')
         call ale#Set(l:ft . '_clangtidy_fix_errors', 1)
-        call ale#Set(l:ft . '_build_dir', '')
     endfor
+    call ale#Set('c_build_dir', '')
 endfunction
 
 call s:set_variables()
 
 function! ale#fixers#clangtidy#Var(buffer, name) abort
-    let l:ft = getbufvar(a:buffer, '&filetype')
+    let l:ft = getbufvar(str2nr(a:buffer), '&filetype')
+    let l:ft = l:ft =~# 'cpp' ? 'cpp' : 'c'
     return ale#Var(a:buffer, l:ft . '_clangtidy_' . a:name)
 endfunction
 
@@ -32,7 +33,7 @@ function! ale#fixers#clangtidy#GetCommand(buffer) abort
 
     return ' -fix' . (l:fix_errors ? ' -fix-errors' : '')
     \   . (empty(l:checks) ? '' : ' -checks=' . ale#Escape(l:checks))
-    \   . (empty(l:extra_options) ? '' : ' ' . ale#Escape(l:extra_options))
+    \   . (empty(l:extra_options) ? '' : ' ' . l:extra_options)
     \   . (empty(l:build_dir) ? '' : ' -p ' . ale#Escape(l:build_dir))
     \   . ' %t' . (empty(l:options) ? '' : ' -- ' . l:options)
 endfunction
