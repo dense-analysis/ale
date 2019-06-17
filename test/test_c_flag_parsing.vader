@@ -17,6 +17,17 @@ Execute(The CFlags parser should be able to parse include directives):
   \ '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir')),
   \ ale#c#ParseCFlagsFromMakeOutput(bufnr(''), ['gcc -Isubdir -c file.c'])
 
+  AssertEqual
+  \ '-isystem ' . '/usr/include/dir',
+  \ ale#c#ParseCFlagsFromMakeOutput(bufnr(''), ['gcc -isystem /usr/include/dir -c file.c'])
+
+Execute(ParseCFlags should ignore -c and -o):
+  call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
+
+  AssertEqual
+  \ '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir')),
+  \ ale#c#ParseCFlagsFromMakeOutput(bufnr(''), ['gcc -Isubdir -c file.c -o a.out'])
+
 Execute(The CFlags parser should be able to parse macro directives):
   call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
 
