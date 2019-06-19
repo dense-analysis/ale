@@ -27,8 +27,10 @@ class Source(Base):
         self.input_pattern = r'(\.|::|->)\w*$'
 
     # Returns an integer for the start position, as with omnifunc.
-    def get_completion_position(self):
-        return self.vim.call('ale#completion#GetCompletionPosition')
+    def get_complete_position(self, context):
+        return self.vim.call(
+            'ale#completion#GetCompletionPositionForDeoplete', context['input']
+        )
 
     def gather_candidates(self, context):
         # Stop early if ALE can't provide completion data for this buffer.

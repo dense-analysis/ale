@@ -215,6 +215,10 @@ function! ale#completion#GetCompletionPosition() abort
     return l:column - len(l:match) - 1
 endfunction
 
+function! ale#completion#GetCompletionPositionForDeoplete(input) abort
+    return match(a:input, '\k*$')
+endfunction
+
 function! ale#completion#GetCompletionResult() abort
     if exists('b:ale_completion_result')
         return b:ale_completion_result
