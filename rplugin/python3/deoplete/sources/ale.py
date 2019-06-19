@@ -24,6 +24,7 @@ class Source(Base):
         self.rank = 1000
         self.is_bytepos = True
         self.min_pattern_length = 1
+        self.input_pattern = r'(\.|::|->)\w*$'
 
     # Returns an integer for the start position, as with omnifunc.
     def get_completion_position(self):
