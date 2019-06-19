@@ -981,7 +981,7 @@ g:ale_lint_on_insert_leave                         *g:ale_lint_on_insert_leave*
                                                    *b:ale_lint_on_insert_leave*
 
   Type: |Number|
-  Default: `0`
+  Default: `1`
 
   When set to `1` in your vimrc file, this option will cause ALE to run
   linters when you leave insert mode.
