@@ -51,14 +51,17 @@ function! ale_linters#powershell#powershell#Handle(buffer, lines) abort
 
             " If the match is 0, it was a failed match
             " probably due to an unexpected token which
-            " contained a newline. Reset matchcount and
-            " continue to next set of matches
-            if ! l:match[1] | let l:matchcount = 0 | continue | endif
-            let l:item = {
-            \   'lnum': str2nr(l:match[1]),
-            \   'col': str2nr(l:match[2]),
-            \   'type': 'E',
-            \}
+            " contained a newline. Reset matchcount. to
+            " continue to the next match
+            if !empty(l:match[1])
+                let l:item = {
+                \   'lnum': str2nr(l:match[1]),
+                \   'col': str2nr(l:match[2]),
+                \   'type': 'E',
+                \}
+            else
+                let l:matchcount = 0
+            endif
         elseif l:matchcount == 2
             " Second match[0] grabs the full line in order
             " to handles the text
