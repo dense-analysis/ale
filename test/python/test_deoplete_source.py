@@ -41,6 +41,7 @@ class DeopleteSourceTest(unittest.TestCase):
         )
 
         self.assertEqual(attributes, {
+            'input_pattern': r'(\.|::|->)\w*$',
             'is_bytepos': True,
             'mark': '[L]',
             'min_pattern_length': 1,
@@ -48,12 +49,13 @@ class DeopleteSourceTest(unittest.TestCase):
             'rank': 1000,
         })
 
-    def test_completion_position(self):
-        self.call_results['ale#completion#GetCompletionPosition'] = 2
+    def test_complete_position(self):
+        self.call_results['ale#completion#GetCompletionPositionForDeoplete'] = 2
+        context = {'input': 'foo'}
 
-        self.assertEqual(self.source.get_completion_position(), 2)
+        self.assertEqual(self.source.get_complete_position(context), 2)
         self.assertEqual(self.call_list, [
-            ('ale#completion#GetCompletionPosition', ()),
+            ('ale#completion#GetCompletionPositionForDeoplete', ('foo',)),
         ])
 
     def test_request_completion_results(self):
