@@ -29,3 +29,52 @@ Execute(The javalsp callback should return backward compatible value):
   \]
   AssertLinter '/bin/java', join(cmd, ' ')
 
+Execute(The javalsp should have default config):
+  AssertEqual
+  \ {
+  \   'java': {
+  \     'classPath': [],
+  \     'externalDependencies': []
+  \   }
+  \ },
+  \ ale_linters#java#javalsp#Config(bufnr(''))
+
+Execute(The javalsp should have default config if user sets empty hash):
+  let b:ale_java_javalsp_config = {}
+
+  AssertEqual
+  \ {
+  \   'java': {
+  \     'classPath': [],
+  \     'externalDependencies': []
+  \   }
+  \ },
+  \ ale_linters#java#javalsp#Config(bufnr(''))
+
+Execute(The javalsp should have add missing config):
+  let b:ale_java_javalsp_config = { 'java': { 'classPath': ['aaa.jar'] } }
+
+  AssertEqual
+  \ {
+  \   'java': {
+  \     'classPath': ['aaa.jar'],
+  \     'externalDependencies': []
+  \   }
+  \ },
+  \ ale_linters#java#javalsp#Config(bufnr(''))
+
+  let b:ale_java_javalsp_config =
+  \ {
+  \   'java': {
+  \     'externalDependencies': ['unit-test:2.0.0']
+  \   }
+  \ }
+
+  AssertEqual
+  \ {
+  \   'java': {
+  \     'classPath': [],
+  \     'externalDependencies': ['unit-test:2.0.0']
+  \   }
+  \ },
+  \ ale_linters#java#javalsp#Config(bufnr(''))

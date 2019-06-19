@@ -2,9 +2,22 @@
 " Description: Support for the Java language server https://github.com/georgewfraser/vscode-javac
 
 call ale#Set('java_javalsp_executable', '')
+call ale#Set('java_javalsp_config', {})
 
 function! ale_linters#java#javalsp#Executable(buffer) abort
     return ale#Var(a:buffer, 'java_javalsp_executable')
+endfunction
+
+function! ale_linters#java#javalsp#Config(buffer) abort
+    let l:defaults = { 'java': { 'classPath': [], 'externalDependencies': [] } }
+    let l:config = ale#Var(a:buffer, 'java_javalsp_config')
+
+    " Ensure the config dictionary contains both classPath and
+    " externalDependencies keys to avoid a NPE crash on Java Language Server.
+    call extend(l:config, l:defaults, 'keep')
+    call extend(l:config['java'], l:defaults['java'], 'keep')
+
+    return l:config
 endfunction
 
 function! ale_linters#java#javalsp#Command(buffer) abort
@@ -38,4 +51,5 @@ call ale#linter#Define('java', {
 \   'command': function('ale_linters#java#javalsp#Command'),
 \   'language': 'java',
 \   'project_root': function('ale#java#FindProjectRoot'),
+\   'lsp_config': function('ale_linters#java#javalsp#Config')
 \})
