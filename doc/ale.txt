@@ -2002,7 +2002,7 @@ documented in additional help files.
     credo.................................|ale-elixir-credo|
   elm.....................................|ale-elm-options|
     elm-format............................|ale-elm-elm-format|
-    elm-lsp...............................|ale-elm-elm-lsp|
+    elm-ls................................|ale-elm-elm-ls|
     elm-make..............................|ale-elm-elm-make|
   erlang..................................|ale-erlang-options|
     dialyzer..............................|ale-erlang-dialyzer|
