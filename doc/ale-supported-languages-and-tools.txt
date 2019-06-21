@@ -387,6 +387,7 @@ Notes:
   * `ruby`
   * `rufo`
   * `solargraph`
+  * `sorbet`
   * `standardrb`
 * Rust
   * `cargo`!!

@@ -2206,6 +2206,7 @@ documented in additional help files.
     ruby..................................|ale-ruby-ruby|
     rufo..................................|ale-ruby-rufo|
     solargraph............................|ale-ruby-solargraph|
+    sorbet................................|ale-ruby-sorbet|
     standardrb............................|ale-ruby-standardrb|
   rust....................................|ale-rust-options|
     cargo.................................|ale-rust-cargo|
