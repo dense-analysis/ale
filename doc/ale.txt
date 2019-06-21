@@ -3220,7 +3220,7 @@ ale#lsp_linter#SendRequest(buffer, linter_name, message, [Handler])
                  containing three elements:
                  `is_notification` - an |Integer| that has value 1 if the
                    request is a notification, 0 otherwise;
-                 `methdod` - a |String|, identifying an LSP method supported
+                 `method` - a |String|, identifying an LSP method supported
                    by `linter`;
                  `parameters` - a |dictionary| of LSP parameters that are
                    applicable to `method`.
