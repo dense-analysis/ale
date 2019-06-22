@@ -130,10 +130,10 @@ g:ale_ruby_solargraph_executable             *g:ale_ruby_solargraph_executable*
 
 
 ===============================================================================
-sorbet                                                       *ale-ruby-sorbet*
+sorbet                                                        *ale-ruby-sorbet*
 
-g:ale_ruby_sorbet_executable                    *g:ale_ruby_sorbet_executable*
-                                                *b:ale_ruby_sorbet_executable*
+g:ale_ruby_sorbet_executable                     *g:ale_ruby_sorbet_executable*
+                                                 *b:ale_ruby_sorbet_executable*
   Type: String
   Default: `'srb'`
 
@@ -141,8 +141,8 @@ g:ale_ruby_sorbet_executable                    *g:ale_ruby_sorbet_executable*
   `'bundle` `exec` srb'.
 
 
-g:ale_ruby_sorbet_options                         *g:ale_ruby_sorbet_options*
-                                                   *b:ale_ruby_sorbet_options*
+g:ale_ruby_sorbet_options                           *g:ale_ruby_sorbet_options*
+                                                    *b:ale_ruby_sorbet_options*
   Type: |String|
   Default: `''`
 
