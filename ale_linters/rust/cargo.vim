@@ -25,14 +25,11 @@ endfunction
 function! ale_linters#rust#cargo#GetCommand(buffer, version) abort
     let l:use_check = ale#Var(a:buffer, 'rust_cargo_use_check')
     \   && ale#semver#GTE(a:version, [0, 17, 0])
-    let l:use_all_targets = l:use_check
-    \   && ale#Var(a:buffer, 'rust_cargo_check_all_targets')
+    let l:use_all_targets = ale#Var(a:buffer, 'rust_cargo_check_all_targets')
     \   && ale#semver#GTE(a:version, [0, 22, 0])
-    let l:use_examples = l:use_check
-    \   && ale#Var(a:buffer, 'rust_cargo_check_examples')
+    let l:use_examples = ale#Var(a:buffer, 'rust_cargo_check_examples')
     \   && ale#semver#GTE(a:version, [0, 22, 0])
-    let l:use_tests = l:use_check
-    \   && ale#Var(a:buffer, 'rust_cargo_check_tests')
+    let l:use_tests = ale#Var(a:buffer, 'rust_cargo_check_tests')
     \   && ale#semver#GTE(a:version, [0, 22, 0])
 
     let l:include_features = ale#Var(a:buffer, 'rust_cargo_include_features')
@@ -69,9 +66,9 @@ function! ale_linters#rust#cargo#GetCommand(buffer, version) abort
 
     if ale#Var(a:buffer, 'rust_cargo_use_clippy')
         let l:subcommand = 'clippy'
-
         let l:clippy_options = ale#Var(a:buffer, 'rust_cargo_clippy_options')
-        if l:clippy_options =~ "^-- "
+
+        if l:clippy_options =~# '^-- '
             let l:clippy_options = join(split(l:clippy_options, '-- '))
         endif
 
