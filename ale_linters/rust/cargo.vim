@@ -69,7 +69,15 @@ function! ale_linters#rust#cargo#GetCommand(buffer, version) abort
 
     if ale#Var(a:buffer, 'rust_cargo_use_clippy')
         let l:subcommand = 'clippy'
-        let l:clippy_options = ' ' . ale#Var(a:buffer, 'rust_cargo_clippy_options')
+
+        let l:clippy_options = ale#Var(a:buffer, 'rust_cargo_clippy_options')
+        if l:clippy_options =~ "^-- "
+            let l:clippy_options = join(split(l:clippy_options, '-- '))
+        endif
+
+        if l:clippy_options isnot# ''
+            let l:clippy_options = ' -- ' . l:clippy_options
+        endif
     endif
 
     return l:nearest_cargo_prefix . 'cargo '

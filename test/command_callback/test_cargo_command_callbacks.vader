@@ -141,12 +141,20 @@ Execute(When ale_rust_cargo_use_clippy is set, cargo-clippy is used as linter):
   let b:ale_rust_cargo_use_clippy = 1
   AssertLinter 'cargo', [
   \ ale#Escape('cargo') . ' --version',
-  \ 'cargo clippy --frozen --message-format=json -q ',
+  \ 'cargo clippy --frozen --message-format=json -q',
   \]
 
 Execute(When ale_rust_cargo_clippy_options is set, cargo-clippy appends it to commandline):
   let b:ale_rust_cargo_use_clippy = 1
   let b:ale_rust_cargo_clippy_options = '-- -D warnings'
+  AssertLinter 'cargo', [
+  \ ale#Escape('cargo') . ' --version',
+  \ 'cargo clippy --frozen --message-format=json -q -- -D warnings',
+  \]
+
+Execute(When ale_rust_cargo_clippy_options does not start with --, it is added):
+  let b:ale_rust_cargo_use_clippy = 1
+  let b:ale_rust_cargo_clippy_options = '-D warnings'
   AssertLinter 'cargo', [
   \ ale#Escape('cargo') . ' --version',
   \ 'cargo clippy --frozen --message-format=json -q -- -D warnings',
