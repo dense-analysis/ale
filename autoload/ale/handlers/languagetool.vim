@@ -10,7 +10,7 @@ endfunction
 function! ale#handlers#languagetool#GetCommand(buffer) abort
     let l:executable = ale#handlers#languagetool#GetExecutable(a:buffer)
 
-    return ale#Escape(l:executable) . ' --autoDetect %s'
+    return ale#Escape(l:executable) . ' %s'
 endfunction
 
 function! ale#handlers#languagetool#HandleOutput(buffer, lines) abort
