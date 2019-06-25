@@ -24,7 +24,13 @@ class Source(Base):
         self.rank = 1000
         self.is_bytepos = True
         self.min_pattern_length = 1
-        self.input_pattern = r'(\.|::|->)\w*$'
+        # Do not forget to update s:trigger_character_map in completion.vim in
+        # updating entries in this map.
+        self.input_patterns = {
+            '_': r'\.\w*$',
+            'rust': r'(\.|::)\w*$',
+            'typescript': r'(\.|\'|")\w*$',
+        }
 
     # Returns an integer for the start position, as with omnifunc.
     def get_complete_position(self, context):

@@ -59,7 +59,8 @@ let s:omni_start_map = {
 \   '<default>': '\v[a-zA-Z$_][a-zA-Z$_0-9]*$',
 \}
 
-" A map of exact characters for triggering LSP completions.
+" A map of exact characters for triggering LSP completions. Do not forget to
+" update self.input_patterns in ale.py in updating entries in this map.
 let s:trigger_character_map = {
 \   '<default>': ['.'],
 \   'typescript': ['.', '''', '"'],

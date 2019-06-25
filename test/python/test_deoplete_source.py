@@ -41,7 +41,11 @@ class DeopleteSourceTest(unittest.TestCase):
         )
 
         self.assertEqual(attributes, {
-            'input_pattern': r'(\.|::|->)\w*$',
+            'input_patterns': {
+                '_': r'\.\w*$',
+                'rust': r'(\.|::)\w*$',
+                'typescript': r'(\.|\'|")\w*$',
+            },
             'is_bytepos': True,
             'mark': '[L]',
             'min_pattern_length': 1,
