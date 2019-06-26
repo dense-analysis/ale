@@ -297,7 +297,7 @@ let s:default_registry = {
 \   },
 \   'styler': {
 \       'function': 'ale#fixers#styler#Fix',
-\       'suggested_filetypes': ['r'],
+\       'suggested_filetypes': ['r', 'rmarkdown'],
 \       'description': 'Fix R files with styler.',
 \   },
 \   'latexindent': {
@@ -309,6 +309,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#pgformatter#Fix',
 \       'suggested_filetypes': ['sql'],
 \       'description': 'A PostgreSQL SQL syntax beautifier',
+\   },
+\   'reorder-python-imports': {
+\       'function': 'ale#fixers#reorder_python_imports#Fix',
+\       'suggested_filetypes': ['python'],
+\       'description': 'Sort Python imports with reorder-python-imports.',
 \   },
 \}
 

@@ -1,13 +1,13 @@
 # Asynchronous Lint Engine [![Travis CI Build Status](https://travis-ci.com/w0rp/ale.svg?branch=master)](https://travis-ci.com/w0rp/ale) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/r0ef1xu8xjmik58d/branch/master?svg=true)](https://ci.appveyor.com/project/w0rp/ale) [![Join the chat at https://gitter.im/vim-ale/Lobby](https://badges.gitter.im/vim-ale/Lobby.svg)](https://gitter.im/vim-ale/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
-![ALE Logo by Mark Grealish - https://www.bhalash.com/](img/logo.jpg?raw=true)
+![ALE Logo by Mark Grealish - https://www.bhalash.com/](https://user-images.githubusercontent.com/3518142/59195920-2c339500-8b85-11e9-9c22-f6b7f69637b8.jpg)
 
 ALE (Asynchronous Lint Engine) is a plugin providing linting (syntax checking
 and semantic errors) in NeoVim 0.2.0+ and Vim 8 while you edit your text files,
 and acts as a Vim [Language Server Protocol](https://langserver.org/) client.
 
-<img src="img/example.gif?raw=true" alt="A linting example with the darkspectrum color scheme in GVim." title="A linting example with the darkspectrum color scheme in GVim.">
+<img src="https://user-images.githubusercontent.com/3518142/59195938-3a81b100-8b85-11e9-8e8d-6a601b1db908.gif" alt="A linting example with the darkspectrum color scheme in GVim." title="A linting example with the darkspectrum color scheme in GVim.">
 
 ALE makes use of NeoVim and Vim 8 job control functions and timers to
 run linters on the contents of text buffers and return errors as
@@ -258,14 +258,14 @@ any other tools. Simply clone the plugin into your `pack` directory.
 
 ```bash
 mkdir -p ~/.vim/pack/git-plugins/start
-git clone https://github.com/w0rp/ale.git ~/.vim/pack/git-plugins/start/ale
+git clone --depth 1 https://github.com/w0rp/ale.git ~/.vim/pack/git-plugins/start/ale
 ```
 
 #### NeoVim on Unix
 
 ```bash
 mkdir -p ~/.local/share/nvim/site/pack/git-plugins/start
-git clone https://github.com/w0rp/ale.git ~/.local/share/nvim/site/pack/git-plugins/start/ale
+git clone --depth 1 https://github.com/w0rp/ale.git ~/.local/share/nvim/site/pack/git-plugins/start/ale
 ```
 
 #### Vim 8 on Windows
@@ -273,7 +273,7 @@ git clone https://github.com/w0rp/ale.git ~/.local/share/nvim/site/pack/git-plug
 ```bash
 # Run these commands in the "Git for Windows" Bash terminal
 mkdir -p ~/vimfiles/pack/git-plugins/start
-git clone https://github.com/w0rp/ale.git ~/vimfiles/pack/git-plugins/start/ale
+git clone --depth 1 https://github.com/w0rp/ale.git ~/vimfiles/pack/git-plugins/start/ale
 ```
 
 #### Generating Vim help files
@@ -541,7 +541,7 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 
 Will give you:
 
-![Echoed message](img/echo.png)
+![Echoed message](https://user-images.githubusercontent.com/3518142/59195927-348bd000-8b85-11e9-88b6-508a094f1548.png)
 
 See `:help g:ale_echo_msg_format` for more information.
 
@@ -722,11 +722,10 @@ while you type. ALE uses a timeout which is cancelled and reset every time you
 type, and this delay can be increased so linters are run less often. See
 `:help g:ale_lint_delay` for more information.
 
-If you don't wish to run linters while you type, you can disable that
-behaviour. Set `g:ale_lint_on_text_changed` to `never` or `normal`. You won't
-get as frequent error checking, but ALE shouldn't block your ability to edit a
-document after you save a file, so the asynchronous nature of the plugin will
-still be an advantage.
+If you don't wish to run linters while you type, you can disable that behaviour.
+Set `g:ale_lint_on_text_changed` to `never`. You won't get as frequent error
+checking, but ALE shouldn't block your ability to edit a document after you save
+a file, so the asynchronous nature of the plugin will still be an advantage.
 
 If you are still concerned, you can turn the automatic linting off altogether,
 including the option `g:ale_lint_on_enter`, and you can run ALE manually with

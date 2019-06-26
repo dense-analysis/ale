@@ -71,8 +71,8 @@ function! s:FixList(buffer, list) abort
     return l:new_list
 endfunction
 
-function! s:BufWinId(buffer) abort
-    return exists('*bufwinid') ? bufwinid(str2nr(a:buffer)) : 0
+function! s:WinFindBuf(buffer) abort
+    return exists('*win_findbuf') ? win_findbuf(str2nr(a:buffer)) : [0]
 endfunction
 
 function! s:SetListsImpl(timer_id, buffer, loclist) abort
@@ -88,17 +88,19 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
             call setqflist([], 'r', {'title': l:title})
         endif
     elseif g:ale_set_loclist
-        " If windows support is off, bufwinid() may not exist.
+        " If windows support is off, win_findbuf() may not exist.
         " We'll set result in the current window, which might not be correct,
         " but it's better than nothing.
-        let l:id = s:BufWinId(a:buffer)
+        let l:ids = s:WinFindBuf(a:buffer)
 
-        if has('nvim')
-            call setloclist(l:id, s:FixList(a:buffer, a:loclist), ' ', l:title)
-        else
-            call setloclist(l:id, s:FixList(a:buffer, a:loclist))
-            call setloclist(l:id, [], 'r', {'title': l:title})
-        endif
+        for l:id in l:ids
+            if has('nvim')
+                call setloclist(l:id, s:FixList(a:buffer, a:loclist), ' ', l:title)
+            else
+                call setloclist(l:id, s:FixList(a:buffer, a:loclist))
+                call setloclist(l:id, [], 'r', {'title': l:title})
+            endif
+        endfor
     endif
 
     " TODO: Can either be a buffer variable or go into g:ale_buffer_info?
@@ -146,7 +148,6 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
     endif
 
     call s:RestoreViewIfNeeded(a:buffer)
-
 
     " If ALE isn't currently checking for more problems, close the window if
     " needed now. This check happens inside of this timer function, so
@@ -221,15 +222,17 @@ function! s:CloseWindowIfNeeded(buffer) abort
                 cclose
             endif
         else
-            let l:win_id = s:BufWinId(a:buffer)
+            let l:win_ids = s:WinFindBuf(a:buffer)
 
-            if g:ale_set_loclist && empty(getloclist(l:win_id))
-                lclose
-                " If the window view was set, restore it to avoid having the
-                " sceen bouncing like crazy while the user is editing and the
-                " location list pops in and out
-                call s:RestoreViewIfNeeded(a:buffer)
-            endif
+            for l:win_id in l:win_ids
+                if g:ale_set_loclist && empty(getloclist(l:win_id))
+                    lclose
+                    " If the window view was set, restore it to avoid having
+                    " the sceen bouncing like crazy while the user is editing
+                    " and the location list pops in and out
+                    call s:RestoreViewIfNeeded(a:buffer)
+                endif
+            endfor
         endif
     " Ignore 'Cannot close last window' errors.
     catch /E444/

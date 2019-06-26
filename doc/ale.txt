@@ -84,7 +84,7 @@ have even saved your changes. ALE will check your code in the following
 circumstances, which can be configured with the associated options.
 
 * When you modify a buffer.                - |g:ale_lint_on_text_changed|
-* On leaving insert mode. (off by default) - |g:ale_lint_on_insert_leave|
+* On leaving insert mode.                  - |g:ale_lint_on_insert_leave|
 * When you open a new or modified buffer.  - |g:ale_lint_on_enter|
 * When you save a buffer.                  - |g:ale_lint_on_save|
 * When the filetype changes for a buffer.  - |g:ale_lint_on_filetype_changed|
@@ -953,7 +953,7 @@ g:ale_lint_on_save                                         *g:ale_lint_on_save*
 g:ale_lint_on_text_changed                         *g:ale_lint_on_text_changed*
 
   Type: |String|
-  Default: `'always'`
+  Default: `'normal'`
 
   This option controls how ALE will check your files as you make changes.
   The following values can be used.
@@ -978,9 +978,10 @@ g:ale_lint_on_text_changed                         *g:ale_lint_on_text_changed*
 
 
 g:ale_lint_on_insert_leave                         *g:ale_lint_on_insert_leave*
+                                                   *b:ale_lint_on_insert_leave*
 
   Type: |Number|
-  Default: `0`
+  Default: `1`
 
   When set to `1` in your vimrc file, this option will cause ALE to run
   linters when you leave insert mode.
@@ -992,6 +993,10 @@ g:ale_lint_on_insert_leave                         *g:ale_lint_on_insert_leave*
     " Make using Ctrl+C do the same as Escape, to trigger autocmd commands
     inoremap <C-c> <Esc>
 <
+  A buffer-local version of this setting `b:ale_lint_on_insert_leave` can be
+  set to `0` to disable linting when leaving insert mode. The setting must
+  be enabled globally to be enabled locally.
+
   You should set this setting once before ALE is loaded, and restart Vim if
   you want to change your preferences. See |ale-lint-settings-on-startup|.
 
@@ -1012,10 +1017,13 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
   \   'Dockerfile': 'dockerfile',
   \   'csh': 'sh',
   \   'plaintex': 'tex',
+  \   'rmarkdown': 'r',
   \   'systemverilog': 'verilog',
   \   'verilog_systemverilog': ['verilog_systemverilog', 'verilog'],
   \   'vimwiki': 'markdown',
   \   'vue': ['vue', 'javascript'],
+  \   'xsd': ['xsd', 'xml'],
+  \   'xslt': ['xslt', 'xml'],
   \   'zsh': 'sh',
   \}
 <
@@ -2034,6 +2042,7 @@ documented in additional help files.
     hackfmt...............................|ale-hack-hackfmt|
     hhast.................................|ale-hack-hhast|
   handlebars..............................|ale-handlebars-options|
+    prettier..............................|ale-handlebars-prettier|
     ember-template-lint...................|ale-handlebars-embertemplatelint|
   haskell.................................|ale-haskell-options|
     brittany..............................|ale-haskell-brittany|
@@ -2167,6 +2176,8 @@ documented in additional help files.
     puppet................................|ale-puppet-puppet|
     puppetlint............................|ale-puppet-puppetlint|
     puppet-languageserver.................|ale-puppet-languageserver|
+  purescript..............................|ale-purescript-options|
+    purescript-language-server............|ale-purescript-language-server|
   pyrex (cython)..........................|ale-pyrex-options|
     cython................................|ale-pyrex-cython|
   python..................................|ale-python-options|
@@ -2184,6 +2195,7 @@ documented in additional help files.
     pylint................................|ale-python-pylint|
     pyls..................................|ale-python-pyls|
     pyre..................................|ale-python-pyre|
+    reorder-python-imports................|ale-python-reorder_python_imports|
     vulture...............................|ale-python-vulture|
     yapf..................................|ale-python-yapf|
   qml.....................................|ale-qml-options|
@@ -2194,6 +2206,7 @@ documented in additional help files.
   reasonml................................|ale-reasonml-options|
     merlin................................|ale-reasonml-merlin|
     ols...................................|ale-reasonml-ols|
+    reason-language-server................|ale-reasonml-language-server|
     refmt.................................|ale-reasonml-refmt|
   restructuredtext........................|ale-restructuredtext-options|
     textlint..............................|ale-restructuredtext-textlint|
@@ -3207,7 +3220,7 @@ ale#lsp_linter#SendRequest(buffer, linter_name, message, [Handler])
                  containing three elements:
                  `is_notification` - an |Integer| that has value 1 if the
                    request is a notification, 0 otherwise;
-                 `methdod` - a |String|, identifying an LSP method supported
+                 `method` - a |String|, identifying an LSP method supported
                    by `linter`;
                  `parameters` - a |dictionary| of LSP parameters that are
                    applicable to `method`.

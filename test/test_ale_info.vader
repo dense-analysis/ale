@@ -31,8 +31,8 @@ Before:
   let g:ale_completion_enabled = 0
   let g:ale_completion_max_suggestions = 50
   let g:ale_history_log_output = 1
-  let g:ale_lint_on_insert_leave = 0
-  let g:ale_lint_on_text_changed = 'always'
+  let g:ale_lint_on_insert_leave = 1
+  let g:ale_lint_on_text_changed = 'normal'
   let g:ale_lsp_error_messages = {}
   let g:ale_maximum_file_size = 0
   let g:ale_pattern_options = {}
@@ -88,9 +88,9 @@ Before:
   \  'let g:ale_lint_delay = 200',
   \  'let g:ale_lint_on_enter = 1',
   \  'let g:ale_lint_on_filetype_changed = 1',
-  \  'let g:ale_lint_on_insert_leave = 0',
+  \  'let g:ale_lint_on_insert_leave = 1',
   \  'let g:ale_lint_on_save = 1',
-  \  'let g:ale_lint_on_text_changed = ''always''',
+  \  'let g:ale_lint_on_text_changed = ''normal''',
   \  'let g:ale_linter_aliases = {}',
   \  'let g:ale_linters = {}',
   \  'let g:ale_linters_explicit = 0',

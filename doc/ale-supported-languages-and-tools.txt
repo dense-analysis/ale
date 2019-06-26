@@ -338,6 +338,8 @@ Notes:
   * `languageserver`
   * `puppet`
   * `puppet-lint`
+* PureScript
+  * `purescript-language-server`
 * Python
   * `autopep8`
   * `bandit`
@@ -353,6 +355,7 @@ Notes:
   * `pylint`!!
   * `pyls`
   * `pyre`
+  * `reorder-python-imports`
   * `vulture`!!
   * `yapf`
 * QML
@@ -366,6 +369,7 @@ Notes:
 * ReasonML
   * `merlin`
   * `ols`
+  * `reason-language-server`
   * `refmt`
 * reStructuredText
   * `alex`!!
