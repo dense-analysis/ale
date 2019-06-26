@@ -101,7 +101,8 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
         endif
     endif
 
-    let b:view = winsaveview()
+    " TODO: Can either be a buffer variable or go into g:ale_buffer_info?
+    let b:ale_winview = winsaveview()
 
     " Open a window to show the problems if we need to.
     "
@@ -142,10 +143,9 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
                 normal! "\<c-g>"
             endif
         endif
-
     endif
 
-    call s:RestoreViewIfNeeded()
+    call s:RestoreViewIfNeeded(a:buffer)
 
 
     " If ALE isn't currently checking for more problems, close the window if
@@ -156,20 +156,38 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
     endif
 endfunction
 
-function! s:RestoreViewIfNeeded() abort
-    if ! has_key(b:, 'view')
+function! s:RestoreViewIfNeeded(buffer) abort
+    let l:buffer = getbufvar(str2nr(a:buffer), '', {})
+
+    if ! has_key(l:buffer, 'ale_winview')
         return
     endif
+
+    let l:saved_view = get(l:buffer, 'ale_winview')
 
     " Check wether the cursor has moved since linting was actually requested. If
-    " the user has indeed moved lines, buffer view can be very different
+    " the user has indeed moved lines, do nothing
     let l:current_view = winsaveview()
 
-    if l:current_view['lnum'] != b:view['lnum']
+    if l:current_view['lnum'] != l:saved_view['lnum']
         return
     endif
 
-    call winrestview({'topline': b:view['topline']})
+    " Anchor view by topline if the list open horizontally or by left column
+    " if vertical
+    " Note:
+    " Calls to winrestview below only differ by the anchor, but Vim doesn't
+    " allow for
+    "
+    " let l:anchor = 'foo'
+    " call winrestview({l:anchor : l:saved_view[l:anchor]})
+    "                   '-------'
+    "                   This is invalid!
+    if ale#Var(a:buffer, 'list_vertical') == 1
+        call winrestview({'leftcol': l:saved_view['leftcol']})
+    else
+        call winrestview({'topline': l:saved_view['topline']})
+    endif
 endfunction
 
 function! ale#list#SetLists(buffer, loclist) abort
@@ -210,7 +228,7 @@ function! s:CloseWindowIfNeeded(buffer) abort
                 " If the window view was set, restore it to avoid having the
                 " sceen bouncing like crazy while the user is editing and the
                 " location list pops in and out
-                call s:RestoreViewIfNeeded()
+                call s:RestoreViewIfNeeded(a:buffer)
             endif
         endif
     " Ignore 'Cannot close last window' errors.
