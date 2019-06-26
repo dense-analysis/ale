@@ -34,6 +34,6 @@ call ale#linter#Define('handlebars', {
 \   'executable': {b -> ale#node#FindExecutable(b, 'handlebars_embertemplatelint', [
 \       'node_modules/.bin/ember-template-lint',
 \   ])},
-\   'command': '%e --json %t',
+\   'command': '%e --json',
 \   'callback': 'ale_linters#handlebars#embertemplatelint#Handle',
 \})
