@@ -145,9 +145,9 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
                 normal! "\<c-g>"
             endif
         endif
+        
+        call s:RestoreViewIfNeeded(a:buffer)
     endif
-
-    call s:RestoreViewIfNeeded(a:buffer)
 
     " If ALE isn't currently checking for more problems, close the window if
     " needed now. This check happens inside of this timer function, so
@@ -157,6 +157,8 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
     endif
 endfunction
 
+" Try to restore the window view after closing any of the lists to avoid making
+" the it moving around, especially useful when on insert mode
 function! s:RestoreViewIfNeeded(buffer) abort
     let l:buffer = getbufvar(str2nr(a:buffer), '', {})
 
@@ -214,12 +216,15 @@ function! s:CloseWindowIfNeeded(buffer) abort
         return
     endif
 
+    let l:did_close_any_list = 0
+
     try
         " Only close windows if the quickfix list or loclist is completely empty,
         " including errors set through other means.
         if g:ale_set_quickfix
             if empty(getqflist())
                 cclose
+                let l:did_close_any_list = 1
             endif
         else
             let l:win_ids = s:WinFindBuf(a:buffer)
@@ -227,14 +232,16 @@ function! s:CloseWindowIfNeeded(buffer) abort
             for l:win_id in l:win_ids
                 if g:ale_set_loclist && empty(getloclist(l:win_id))
                     lclose
-                    " If the window view was set, restore it to avoid having
-                    " the sceen bouncing like crazy while the user is editing
-                    " and the location list pops in and out
-                    call s:RestoreViewIfNeeded(a:buffer)
+                    let l:did_close_any_list = 1
                 endif
             endfor
         endif
     " Ignore 'Cannot close last window' errors.
     catch /E444/
     endtry
+
+    if l:did_close_any_list
+        call s:RestoreViewIfNeeded(a:buffer)
+    endif
+
 endfunction
