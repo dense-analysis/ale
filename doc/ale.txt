@@ -386,7 +386,44 @@ vimrc, and your issues should go away. >
 
   set completeopt=menu,menuone,preview,noselect,noinsert
 <
+                                                                  *ale-symbols*
 
+ALE provides a set of basic completion symbols. If you want to replace those
+symbols with others, you can set the variable |g:ale_completion_symbols| with
+a mapping of the type of completion to the symbol or other string that you
+would like to use. An example here shows the available options for symbols  >
+
+  let g:ale_completion_symbols = {
+  \ 'keyword': 'keyword',
+  \ 'class': '',
+  \ 'interface': '',
+  \ 'script': 'script',
+  \ 'module': '',
+  \ 'local class': 'local class',
+  \ 'type': '',
+  \ 'enum': '',
+  \ 'enum member': '',
+  \ 'alias': '',
+  \ 'type parameter': 'type param',
+  \ 'primitive type': 'primitive type',
+  \ 'var': '',
+  \ 'local var': '',
+  \ 'property': '',
+  \ 'let': '',
+  \ 'const': '',
+  \ 'label': 'label',
+  \ 'parameter': 'param',
+  \ 'index': 'index',
+  \ 'function': '',
+  \ 'local function': 'local function',
+  \ 'method': '',
+  \ 'getter': '',
+  \ 'setter': '',
+  \ 'call': 'call',
+  \ 'constructor': '',
+  \ '<default>': 'v',
+  \ }
+<
 -------------------------------------------------------------------------------
 5.2 Go To Definition                                     *ale-go-to-definition*
 

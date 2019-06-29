@@ -39,6 +39,17 @@ let s:LSP_COMPLETION_COLOR_KIND = 16
 let s:LSP_COMPLETION_FILE_KIND = 17
 let s:LSP_COMPLETION_REFERENCE_KIND = 18
 
+let g:ale_completion_symbols = get(g:, 'ale_completion_symbols', {
+\ '<default>': 'v',
+\ 'class': 'f',
+\ 'parameter': 'f',
+\ s:LSP_COMPLETION_METHOD_KIND: 'm',
+\ s:LSP_COMPLETION_CONSTRUCTOR_KIND: 'm',
+\ s:LSP_COMPLETION_FUNCTION_KIND: 'f',
+\ s:LSP_COMPLETION_CLASS_KIND: 'f',
+\ s:LSP_COMPLETION_INTERFACE_KIND: 'f',
+\ })
+
 let s:LSP_INSERT_TEXT_FORMAT_PLAIN = 1
 let s:LSP_INSERT_TEXT_FORMAT_SNIPPET = 2
 
@@ -302,6 +313,16 @@ function! ale#completion#ParseTSServerCompletions(response) abort
     return l:names
 endfunction
 
+function! ale#completion#GetCompletionSymbols(kind) abort
+    let l:symbol = get(g:ale_completion_symbols, a:kind, '')
+
+    if !empty(l:symbol)
+        return l:symbol
+    endif
+
+    return get(g:ale_completion_symbols, '<default>', 'v')
+endfunction
+
 function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
     let l:buffer = bufnr('')
     let l:results = []
@@ -321,18 +342,10 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
             call add(l:documentationParts, l:part.text)
         endfor
 
-        if l:suggestion.kind is# 'className'
-            let l:kind = 'f'
-        elseif l:suggestion.kind is# 'parameterName'
-            let l:kind = 'f'
-        else
-            let l:kind = 'v'
-        endif
-
         " See :help complete-items
         call add(l:results, {
         \   'word': l:suggestion.name,
-        \   'kind': l:kind,
+        \   'kind': ale#completion#GetCompletionSymbols(l:suggestion.kind),
         \   'icase': 1,
         \   'menu': join(l:displayParts, ''),
         \   'info': join(l:documentationParts, ''),
@@ -408,23 +421,6 @@ function! ale#completion#ParseLSPCompletions(response) abort
             continue
         endif
 
-        " See :help complete-items for Vim completion kinds
-        if !has_key(l:item, 'kind')
-            let l:kind = 'v'
-        elseif l:item.kind is s:LSP_COMPLETION_METHOD_KIND
-            let l:kind = 'm'
-        elseif l:item.kind is s:LSP_COMPLETION_CONSTRUCTOR_KIND
-            let l:kind = 'm'
-        elseif l:item.kind is s:LSP_COMPLETION_FUNCTION_KIND
-            let l:kind = 'f'
-        elseif l:item.kind is s:LSP_COMPLETION_CLASS_KIND
-            let l:kind = 'f'
-        elseif l:item.kind is s:LSP_COMPLETION_INTERFACE_KIND
-            let l:kind = 'f'
-        else
-            let l:kind = 'v'
-        endif
-
         let l:doc = get(l:item, 'documentation', '')
 
         if type(l:doc) is v:t_dict && has_key(l:doc, 'value')
@@ -433,7 +429,7 @@ function! ale#completion#ParseLSPCompletions(response) abort
 
         call add(l:results, {
         \   'word': l:word,
-        \   'kind': l:kind,
+        \   'kind': ale#completion#GetCompletionSymbols(get(l:item, 'kind', '')),
         \   'icase': 1,
         \   'menu': get(l:item, 'detail', ''),
         \   'info': (type(l:doc) is v:t_string ? l:doc : ''),
