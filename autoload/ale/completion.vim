@@ -262,6 +262,24 @@ function! ale#completion#Show(result) abort
         \   {-> ale#util#FeedKeys("\<Plug>(ale_show_completion_menu)")}
         \)
     endif
+
+    if l:source is# 'ale-callback'
+        call ale#completion#CallbackComplete()
+    endif
+endfunction
+
+function! ale#completion#CallbackComplete() abort
+    call b:asyncomplete_callback(b:ale_completion_result)
+endfunction
+
+function! ale#completion#GetAllTriggers() abort
+    return s:trigger_character_map
+endfunction
+
+function! ale#completion#RequestCallbackCompletions(callback) abort
+    let b:asyncomplete_callback = a:callback
+
+    call ale#completion#GetCompletions('ale-callback')
 endfunction
 
 function! s:CompletionStillValid(request_id) abort
@@ -275,6 +293,7 @@ function! s:CompletionStillValid(request_id) abort
     \   b:ale_completion_info.column == l:column
     \   || b:ale_completion_info.source is# 'deoplete'
     \   || b:ale_completion_info.source is# 'ale-omnifunc'
+    \   || b:ale_completion_info.source is# 'ale-callback'
     \)
 endfunction
 
