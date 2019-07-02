@@ -4,6 +4,7 @@ scriptencoding utf-8
 
 function! s:set_variables() abort
     let l:use_global = get(g:, 'ale_use_global_executables', 0)
+
     for l:ft in ['c', 'cpp']
         call ale#Set(l:ft . '_clangtidy_executable', 'clang-tidy')
         call ale#Set(l:ft . '_clangtidy_use_global', l:use_global)
@@ -12,6 +13,7 @@ function! s:set_variables() abort
         call ale#Set(l:ft . '_clangtidy_extra_options', '')
         call ale#Set(l:ft . '_clangtidy_fix_errors', 1)
     endfor
+
     call ale#Set('c_build_dir', '')
 endfunction
 
@@ -20,6 +22,7 @@ call s:set_variables()
 function! ale#fixers#clangtidy#Var(buffer, name) abort
     let l:ft = getbufvar(str2nr(a:buffer), '&filetype')
     let l:ft = l:ft =~# 'cpp' ? 'cpp' : 'c'
+
     return ale#Var(a:buffer, l:ft . '_clangtidy_' . a:name)
 endfunction
 
