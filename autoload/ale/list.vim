@@ -132,7 +132,7 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
         endif
 
         " Return to original mode when applicable
-        if (mode() != l:mode)
+        if mode() != l:mode
             if l:mode is? 'v' || l:mode is# "\<c-v>"
                 " Reset our last visual selection
                 normal! gv
