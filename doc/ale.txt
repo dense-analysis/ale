@@ -1927,6 +1927,7 @@ documented in additional help files.
 
   ada.....................................|ale-ada-options|
     gcc...................................|ale-ada-gcc|
+    gnatpp................................|ale-ada-gnatpp|
   ansible.................................|ale-ansible-options|
     ansible-lint..........................|ale-ansible-ansible-lint|
   asciidoc................................|ale-asciidoc-options|
