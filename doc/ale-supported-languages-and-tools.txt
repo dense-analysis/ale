@@ -53,6 +53,7 @@ Notes:
   * `gcc`
   * `uncrustify`
 * C#
+  * `csc`!!
   * `mcs`
   * `mcsc`!!
   * `uncrustify`
