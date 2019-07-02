@@ -110,8 +110,6 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
     if s:ShouldOpen(a:buffer) && !empty(a:loclist)
         let l:winnr = winnr()
         let l:mode = mode()
-        let l:reset_visual_selection = l:mode is? 'v' || l:mode is# "\<c-v>"
-        let l:reset_character_selection = l:mode is? 's' || l:mode is# "\<c-s>"
 
         " open windows vertically instead of default horizontally
         let l:open_type = ''
@@ -133,12 +131,13 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
             wincmd p
         endif
 
-        if l:reset_visual_selection || l:reset_character_selection
-            " If we were in a selection mode before, select the last selection.
-            normal! gv
-
-            if l:reset_character_selection
-                " Switch back to Select mode, if we were in that.
+        " Return to original mode when applicable
+        if mode() != l:mode
+            if l:mode is? 'v' || l:mode is# "\<c-v>"
+                " Reset our last visual selection
+                normal! gv
+            elseif l:mode is? 's' || l:mode is# "\<c-s>"
+                " Reset our last character selection
                 normal! "\<c-g>"
             endif
         endif
