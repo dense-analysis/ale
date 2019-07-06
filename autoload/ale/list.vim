@@ -176,19 +176,8 @@ function! s:RestoreViewIfNeeded(buffer) abort
         return
     endif
 
-    " Anchor view by topline if the list open horizontally or by left column
-    " if vertical
-    " Note:
-    " Calls to winrestview below only differ by the anchor, but Vim doesn't
-    " allow for
-    "
-    " let l:anchor = 'foo'
-    " call winrestview({l:anchor : l:saved_view[l:anchor]})
-    "                   '-------'
-    "                   This is invalid!
-    if ale#Var(a:buffer, 'list_vertical') == 1
-        call winrestview({'leftcol': l:saved_view['leftcol']})
-    else
+    " Anchor view by topline if the list is set to open horizontally
+    if ale#Var(a:buffer, 'list_vertical') == 0
         call winrestview({'topline': l:saved_view['topline']})
     endif
 endfunction
