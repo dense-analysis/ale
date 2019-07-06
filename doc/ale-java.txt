@@ -123,7 +123,7 @@ executable in this directory.
 g:ale_java_javalsp_executable                   *g:ale_java_javalsp_executable*
                                                 *b:ale_java_javalsp_executable*
   Type: |String|
-  Default: `'launcher'`
+  Default: `''`
 
 This variable must be set to the absolute path of the language server launcher
 executable. For example:
