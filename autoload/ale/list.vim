@@ -145,7 +145,7 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
                 normal! "\<c-g>"
             endif
         endif
-        
+
         call s:RestoreViewIfNeeded(a:buffer)
     endif
 
@@ -232,5 +232,4 @@ function! s:CloseWindowIfNeeded(buffer) abort
     if l:did_close_any_list
         call s:RestoreViewIfNeeded(a:buffer)
     endif
-
 endfunction
