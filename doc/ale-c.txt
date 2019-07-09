@@ -177,6 +177,15 @@ g:ale_c_clangtidy_extra_options               *g:ale_c_clangtidy_extra_options*
   This variable can be changed to modify flags given to clang-tidy.
 
 
+g:ale_c_clangtidy_fix_errors                     *g:ale_c_clangtidy_fix_errors*
+                                                 *b:ale_c_clangtidy_fix_errors*
+  Type: |Number|
+  Default: `1`
+
+  This variable can be changed to disable the `-fix-errors` option for the
+  |clangtidy| fixer.
+
+
 ===============================================================================
 cppcheck                                                       *ale-c-cppcheck*
 

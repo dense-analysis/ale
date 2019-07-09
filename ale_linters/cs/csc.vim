@@ -1,10 +1,10 @@
-call ale#Set('cs_mcsc_options', '')
-call ale#Set('cs_mcsc_source', '')
-call ale#Set('cs_mcsc_assembly_path', [])
-call ale#Set('cs_mcsc_assemblies', [])
+call ale#Set('cs_csc_options', '')
+call ale#Set('cs_csc_source', '')
+call ale#Set('cs_csc_assembly_path', [])
+call ale#Set('cs_csc_assemblies', [])
 
 function! s:GetWorkingDirectory(buffer) abort
-    let l:working_directory = ale#Var(a:buffer, 'cs_mcsc_source')
+    let l:working_directory = ale#Var(a:buffer, 'cs_csc_source')
 
     if !empty(l:working_directory)
         return l:working_directory
@@ -13,19 +13,19 @@ function! s:GetWorkingDirectory(buffer) abort
     return expand('#' . a:buffer . ':p:h')
 endfunction
 
-function! ale_linters#cs#mcsc#GetCommand(buffer) abort
+function! ale_linters#cs#csc#GetCommand(buffer) abort
     " Pass assembly paths via the -lib: parameter.
-    let l:path_list = ale#Var(a:buffer, 'cs_mcsc_assembly_path')
+    let l:path_list = ale#Var(a:buffer, 'cs_csc_assembly_path')
 
     let l:lib_option = !empty(l:path_list)
-    \   ? '-lib:' . join(map(copy(l:path_list), 'ale#Escape(v:val)'), ',')
+    \   ? '/lib:' . join(map(copy(l:path_list), 'ale#Escape(v:val)'), ',')
     \   : ''
 
     " Pass paths to DLL files via the -r: parameter.
-    let l:assembly_list = ale#Var(a:buffer, 'cs_mcsc_assemblies')
+    let l:assembly_list = ale#Var(a:buffer, 'cs_csc_assemblies')
 
     let l:r_option = !empty(l:assembly_list)
-    \   ? '-r:' . join(map(copy(l:assembly_list), 'ale#Escape(v:val)'), ',')
+    \   ? '/r:' . join(map(copy(l:assembly_list), 'ale#Escape(v:val)'), ',')
     \   : ''
 
     " register temporary module target file with ale
@@ -35,16 +35,16 @@ function! ale_linters#cs#mcsc#GetCommand(buffer) abort
     " The code is compiled as a module and the output is redirected to a
     " temporary file.
     return ale#path#CdString(s:GetWorkingDirectory(a:buffer))
-    \    . 'mcs -unsafe'
-    \    . ale#Pad(ale#Var(a:buffer, 'cs_mcsc_options'))
+    \    . 'csc /unsafe'
+    \    . ale#Pad(ale#Var(a:buffer, 'cs_csc_options'))
     \    . ale#Pad(l:lib_option)
     \    . ale#Pad(l:r_option)
-    \    . ' -out:' . l:out
-    \    . ' -t:module'
-    \    . ' -recurse:' . ale#Escape('*.cs')
+    \    . ' /out:' . l:out
+    \    . ' /t:module'
+    \    . ' /recurse:' . ale#Escape('*.cs')
 endfunction
 
-function! ale_linters#cs#mcsc#Handle(buffer, lines) abort
+function! ale_linters#cs#csc#Handle(buffer, lines) abort
     " Look for lines like the following.
     "
     " Tests.cs(12,29): error CSXXXX: ; expected
@@ -72,7 +72,7 @@ function! ale_linters#cs#mcsc#Handle(buffer, lines) abort
             \})
         elseif strlen(l:match[2]) > 2 && l:match[2][:1] is? 'CS'
             call add(l:output, {
-            \   'filename':'<mcs>',
+            \   'filename':'<csc>',
             \   'lnum': -1,
             \   'col': -1,
             \   'type': l:match[1] is# 'error' ? 'E' : 'W',
@@ -86,10 +86,10 @@ function! ale_linters#cs#mcsc#Handle(buffer, lines) abort
 endfunction
 
 call ale#linter#Define('cs',{
-\   'name': 'mcsc',
-\   'output_stream': 'stderr',
-\   'executable': 'mcs',
-\   'command': function('ale_linters#cs#mcsc#GetCommand'),
-\   'callback': 'ale_linters#cs#mcsc#Handle',
+\   'name': 'csc',
+\   'output_stream': 'stdout',
+\   'executable': 'csc',
+\   'command': function('ale_linters#cs#csc#GetCommand'),
+\   'callback': 'ale_linters#cs#csc#Handle',
 \   'lint_file': 1
 \})

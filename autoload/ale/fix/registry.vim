@@ -145,6 +145,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['php'],
 \       'description': 'Fix PHP files with php-cs-fixer.',
 \   },
+\   'clangtidy': {
+\       'function': 'ale#fixers#clangtidy#Fix',
+\       'suggested_filetypes': ['c', 'cpp', 'objc'],
+\       'description': 'Fix C/C++ and ObjectiveC files with clang-tidy.',
+\   },
 \   'clang-format': {
 \       'function': 'ale#fixers#clangformat#Fix',
 \       'suggested_filetypes': ['c', 'cpp', 'cuda'],
