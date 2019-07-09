@@ -12,8 +12,8 @@ function! ale_linters#go#golangci_lint#GetCommand(buffer) abort
 
     if l:lint_package
         return ale#path#BufferCdString(a:buffer)
-        \   . '%e run '
-        \   .  l:options
+        \   . '%e run *.go'
+        \   . ' ' . l:options
     endif
 
     return ale#path#BufferCdString(a:buffer)
