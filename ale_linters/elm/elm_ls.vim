@@ -26,7 +26,9 @@ call ale#linter#Define('elm', {
 \   'name': 'elm_ls',
 \   'lsp': 'stdio',
 \   'executable': {b -> ale#node#FindExecutable(b, 'elm_ls', [
-\       'node_modules/.bin/elm-language-server'
+\       'node_modules/.bin/elm-language-server',
+\       'node_modules/.bin/elm-lsp',
+\       'elm-lsp'
 \   ])},
 \   'command': '%e --stdio',
 \   'project_root': function('elm_ls#GetRootDir'),
