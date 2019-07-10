@@ -32,6 +32,15 @@ if s:has_nvim_highlight
     let s:ns_id = nvim_create_namespace('ale_highlight')
 endif
 
+" Wrappers are necessary to test this functionality by faking the calls in tests.
+function! ale#highlight#nvim_buf_add_highlight(buffer, ns_id, hl_group, line, col_start, col_end) abort
+    call nvim_buf_add_highlight(a:buffer, a:ns_id, a:hl_group, a:line, a:col_start, a:col_end)
+endfunction
+
+function! ale#highlight#nvim_buf_clear_namespace(buffer, ns_id, line_start, line_end) abort
+    call nvim_buf_clear_namespace(a:buffer, a:ns_id, a:line_start, a:line_end)
+endfunction
+
 function! ale#highlight#CreatePositions(line, col, end_line, end_col) abort
     if a:line >= a:end_line
         " For single lines, just return the one position.
@@ -58,7 +67,7 @@ endfunction
 
 function! ale#highlight#RemoveHighlights() abort
     if s:has_nvim_highlight
-        call nvim_buf_clear_namespace(bufnr(''), s:ns_id, 0, -1)
+        call ale#highlight#nvim_buf_clear_namespace(bufnr(''), s:ns_id, 0, -1)
     else
         for l:match in getmatches()
             if l:match.group =~? '\v^ALE(Style)?(Error|Warning|Info)(Line)?$'
@@ -82,13 +91,13 @@ function! s:matchaddpos(group, pos_list) abort
 
             if type(l:pos) == v:t_number || len(l:pos) == 1
                 let l:col_start = 0
-                let l:col_end = -1
+                let l:col_end = s:MAX_COL_SIZE
             else
                 let l:col_start = l:pos[1] - 1
                 let l:col_end = l:col_start + get(l:pos, 2, 1)
             endif
 
-            call nvim_buf_add_highlight(
+            call ale#highlight#nvim_buf_add_highlight(
             \   bufnr(''),
             \   s:ns_id,
             \   a:group,
