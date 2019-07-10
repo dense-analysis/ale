@@ -26,6 +26,12 @@ endif
 let s:MAX_POS_VALUES = 8
 let s:MAX_COL_SIZE = 1073741824 " pow(2, 30)
 
+let s:has_nvim_highlight = exists('*nvim_buf_add_highlight') && exists('*nvim_buf_clear_namespace')
+
+if s:has_nvim_highlight
+    let s:ns_id = nvim_create_namespace('ale_highlight')
+endif
+
 function! ale#highlight#CreatePositions(line, col, end_line, end_col) abort
     if a:line >= a:end_line
         " For single lines, just return the one position.
@@ -51,15 +57,53 @@ endfunction
 " except these which have matching loclist item entries.
 
 function! ale#highlight#RemoveHighlights() abort
-    for l:match in getmatches()
-        if l:match.group =~? '\v^ALE(Style)?(Error|Warning|Info)(Line)?$'
-            call matchdelete(l:match.id)
-        endif
-    endfor
+    if s:has_nvim_highlight
+        call nvim_buf_clear_namespace(bufnr(''), s:ns_id, 0, -1)
+    else
+        for l:match in getmatches()
+            if l:match.group =~? '\v^ALE(Style)?(Error|Warning|Info)(Line)?$'
+                call matchdelete(l:match.id)
+            endif
+        endfor
+    endif
+endfunction
+
+" Same semantics of matchaddpos but will use nvim_buf_add_highlight if
+" available. This involves iterating over the position list, switching from
+" 1-based indexing to 0-based indexing, and translating the multiple ways
+" that position can be specified for matchaddpos into line + col_start +
+" col_end.
+function! s:matchaddpos(group, pos_list) abort
+    if s:has_nvim_highlight
+        for l:pos in a:pos_list
+            let l:line = type(l:pos) == v:t_number
+            \   ? l:pos - 1
+            \   : l:pos[0] - 1
+
+            if type(l:pos) == v:t_number || len(l:pos) == 1
+                let l:col_start = 0
+                let l:col_end = -1
+            else
+                let l:col_start = l:pos[1] - 1
+                let l:col_end = l:col_start + get(l:pos, 2, 1)
+            endif
+
+            call nvim_buf_add_highlight(
+            \   bufnr(''),
+            \   s:ns_id,
+            \   a:group,
+            \   l:line,
+            \   l:col_start,
+            \   l:col_end,
+            \)
+        endfor
+    else
+        call matchaddpos(a:group, a:pos_list)
+    endif
 endfunction
 
 function! s:highlight_line(bufnr, lnum, group) abort
-    call matchaddpos(a:group, [a:lnum])
+    call s:matchaddpos(a:group, [a:lnum])
 endfunction
 
 function! s:highlight_range(bufnr, range, group) abort
@@ -72,7 +116,7 @@ function! s:highlight_range(bufnr, range, group) abort
     \       a:range.end_lnum,
     \       a:range.end_col
     \   ),
-    \   'matchaddpos(a:group, v:val)'
+    \   's:matchaddpos(a:group, v:val)'
     \)
 endfunction
 
