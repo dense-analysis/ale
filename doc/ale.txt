@@ -1775,7 +1775,7 @@ ALEStyleErrorSign                                           *ALEStyleErrorSign*
   The highlight for style error signs. See |g:ale_set_signs|.
 
 
-ALEStyleErrorSignLineNr                                    *ALEErrorSignLineNr*
+ALEStyleErrorSignLineNr                               *ALEStyleErrorSignLineNr*
 
   Default: `highlight link ALEStyleErrorSignLineNr CursorLineNr`
 
@@ -1798,7 +1798,7 @@ ALEStyleWarningSign                                       *ALEStyleWarningSign*
   The highlight for style warning signs. See |g:ale_set_signs|.
 
 
-ALEStyleWarningSignLineNr                                  *ALEErrorSignLineNr*
+ALEStyleWarningSignLineNr                           *ALEStyleWarningSignLineNr*
 
   Default: `highlight link ALEStyleWarningSignLineNr CursorLineNr`
 
@@ -1866,7 +1866,7 @@ ALEWarningSign                                                 *ALEWarningSign*
   The highlight for warning signs. See |g:ale_set_signs|.
 
 
-ALEWarningSignLineNr                                       *ALEErrorSignLineNr*
+ALEWarningSignLineNr                                     *ALEWarningSignLineNr*
 
   Default: `highlight link ALEWarningSignLineNr CursorLineNr`
 
