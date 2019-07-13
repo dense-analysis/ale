@@ -150,6 +150,8 @@ formatting.
   * [proselint](http://proselint.com/)
 * FusionScript
   * [fusion-lint](https://github.com/RyanSquared/fusionscript)
+* GDScript3
+  * [godot_server](https://github.com/godotengine/godot)
 * Git Commit Messages
   * [gitlint](https://github.com/jorisroovers/gitlint)
 * GLSL

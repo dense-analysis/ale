@@ -2018,6 +2018,8 @@ documented in additional help files.
   fountain................................|ale-fountain-options|
   fusionscript............................|ale-fuse-options|
     fusion-lint...........................|ale-fuse-fusionlint|
+  gdscript3...............................|ale-gdscript3-options|
+    godot_server..........................|ale-gdscript3-godot_server|
   git commit..............................|ale-gitcommit-options|
     gitlint...............................|ale-gitcommit-gitlint|
   glsl....................................|ale-glsl-options|

@@ -1,0 +1,19 @@
+Before:
+  call ale#assert#SetUpLinterTest('gdscript3', 'godot_server')
+  call ale#test#SetFilename('dummy.gd')
+
+  let g:ale_gdscript3_godot_server_executable = 'godot_server'
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(Executable should default to godot_server):
+  AssertLinter 'godot_server', 'godot_server'
+  \   . ' --check-only -s %s'
+
+Execute(Should be able to set a custom executable):
+  let g:ale_gdscript3_godot_server_executable = 'bin/godot_server'
+
+  AssertLinter 'bin/godot_server', 'bin/godot_server'
+  \   . ' --check-only -s %s'
+

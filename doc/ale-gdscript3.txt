@@ -1,0 +1,17 @@
+================================================================================
+ALE GDScript3 Integration                                  *ale-gdscript3-options*
+
+
+================================================================================
+godot_server                                          *ale-gdscript3-godot_server*
+
+g:ale_gdscript3_godot_server_executable  *g:ale_gdscript3_godot_server_executable*
+                                         *b:ale_gdscript3_godot_server_executable*
+  Type: String
+  Default: `'godot_server'`
+
+  Override the invoked godot_server binary.
+===============================================================================
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

@@ -141,6 +141,8 @@ Notes:
   * `proselint`
 * FusionScript
   * `fusion-lint`
+* GDScript3
+  * `godot_server`
 * Git Commit Messages
   * `gitlint`
 * GLSL
