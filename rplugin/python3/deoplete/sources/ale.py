@@ -30,6 +30,7 @@ class Source(Base):
             '_': r'\.\w*$',
             'rust': r'(\.|::)\w*$',
             'typescript': r'(\.|\'|")\w*$',
+            'cpp': r'(\.|::|->)\w*$',
         }
 
     # Returns an integer for the start position, as with omnifunc.
