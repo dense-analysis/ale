@@ -1,5 +1,7 @@
 let s:references_map = {}
 
+let g:ale_use_quickfix_findref = get(g:, 'ale_use_quickfix_findref', 0)
+
 " Used to get the references map in tests.
 function! ale#references#GetMap() abort
     return deepcopy(s:references_map)
@@ -51,18 +53,44 @@ function! ale#references#HandleLSPResponse(conn_id, response) abort
 
         if type(l:result) is v:t_list
             for l:response_item in l:result
-                call add(l:item_list, {
-                \ 'filename': ale#path#FromURI(l:response_item.uri),
-                \ 'line': l:response_item.range.start.line + 1,
-                \ 'column': l:response_item.range.start.character + 1,
-                \})
+                let l:col = l:response_item.range.start.character + 1
+                let l:lnum = l:response_item.range.start.line + 1
+                let l:filename = ale#path#FromURI(l:response_item.uri)
+
+                if g:ale_use_quickfix_findref
+                    let l:cwd = getcwd()
+                    call add(l:item_list, {
+                    \ 'filename': substitute(l:filename, l:cwd . '/', "", ""),
+                    \ 'lnum': l:lnum,
+                    \ 'col': l:col,
+                    \ 'text': system('sed "' . l:lnum . 'q;d" ' . l:filename),
+                    \ 'vcol': 1,
+                    \})
+                else
+                    call add(l:item_list, {
+                    \ 'filename': l:filename,
+                    \ 'line': l:lnum,
+                    \ 'column': l:col,
+                    \})
+                endif
             endfor
+        else
+            if type(l:result) is v:t_list
+                for l:response_item in l:result
+                endfor
+            endif
         endif
 
         if empty(l:item_list)
             call ale#util#Execute('echom ''No references found.''')
         else
-            call ale#preview#ShowSelection(l:item_list, l:options)
+            if g:ale_use_quickfix_findref
+                call setqflist([], 'r')
+                call setqflist(l:item_list, 'a')
+                execute "botright copen"
+            else
+                call ale#preview#ShowSelection(l:item_list, l:options)
+            endif
         endif
     endif
 endfunction

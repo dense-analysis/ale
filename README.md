@@ -635,6 +635,9 @@ let g:ale_keep_list_window_open = 1
 You can also set `let g:ale_list_vertical = 1` to open the windows vertically
 instead of the default horizontally.
 
+To present `ALEFindReferences` results in the quickfix window, use
+`let g:ale_use_quickfix_findref = 1`.
+
 <a name="faq-jsx-stylelint-eslint"></a>
 
 ### 5.xii. How can I check JSX files with both stylelint and eslint?

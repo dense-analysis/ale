@@ -416,6 +416,9 @@ supported:
 
 |ALEFindReferences| - Find references for the word under the cursor.
 
+If |g:ale_use_quickfix_findref| is set to `1`, then found reference locations
+will be reported in the quickfix window.
+
 Options:
   `-relative`       Show file paths in the results relative to the working dir
 
@@ -1401,6 +1404,15 @@ g:ale_set_quickfix                                         *g:ale_set_quickfix*
   matches and commands like |:cfdo|, as ALE will replace the quickfix list
   pretty frequently. If you wish to use such tools, you should populate the
   loclist instead.
+
+
+g:ale_use_quickfix_findref                         *g:ale_use_quickfix_findref*
+
+  Type: |Number|
+  Default: `0`
+
+  When this option is set to `1`, the |quickfix| list will be populated with
+  locations found by |ALEFindReferences|.
 
 
 g:ale_set_signs                                               *g:ale_set_signs*
