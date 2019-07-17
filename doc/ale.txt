@@ -1954,6 +1954,14 @@ g:ale_languagetool_executable                   *g:ale_languagetool_executable*
   The executable to run for languagetool.
 
 
+g:ale_languagetool_options                         *g:ale_languagetool_options*
+                                                   *b:ale_languagetool_options*
+  Type: |String|
+  Default: `'--autoDetect'`
+
+  This variable can be set to pass additional options to languagetool.
+
+
 -------------------------------------------------------------------------------
 7.3. Options for write-good                            *ale-write-good-options*
 
