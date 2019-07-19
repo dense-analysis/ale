@@ -11,12 +11,6 @@ endif
 " A Dictionary to track one-shot handlers for custom LSP requests
 let s:custom_handlers_map = get(s:, 'custom_handlers_map', {})
 
-" Constants for message type codes
-let s:LSP_MESSAGE_TYPE_ERROR = 1
-let s:LSP_MESSAGE_TYPE_WARNING = 2
-let s:LSP_MESSAGE_TYPE_INFORMATION = 3
-let s:LSP_MESSAGE_TYPE_LOG = 4
-
 " Check if diagnostics for a particular linter should be ignored.
 function! s:ShouldIgnore(buffer, linter_name) abort
     " Ignore all diagnostics if LSP integration is disabled.
@@ -54,41 +48,6 @@ function! s:HandleLSPDiagnostics(conn_id, response) abort
     let l:loclist = ale#lsp#response#ReadDiagnostics(a:response)
 
     call ale#engine#HandleLoclist(l:linter_name, l:buffer, l:loclist, 0)
-endfunction
-
-function! s:showLSPErrorMessage(linter_name, message)
-    let l:text = '[' . g:ale_echo_msg_error_str . '@' . a:linter_name . '] ' . a:message
-    redraw | echohl ErrorMsg | echom l:text | echohl None
-endfunction
-
-function! s:showLSPWarningMessage(linter_name, message)
-    let l:text = '[' . g:ale_echo_msg_warning_str . '@' . a:linter_name . '] ' . a:message
-    redraw | echohl WarningMsg | echom l:text | echohl None
-endfunction
-
-function! s:showLSPInfoMessage(linter_name, message)
-    let l:text = '[' . g:ale_echo_msg_info_str . '@' . a:linter_name . '] ' . a:message
-    redraw | echom l:text
-endfunction
-
-function! s:HandleLSPShowMessage(conn_id, response) abort
-    let l:linter_name = s:lsp_linter_map[a:conn_id]
-    let l:message = a:response.params.message
-    let l:type = a:response.params.type
-
-    let l:warning = 2
-    let l:info = 3
-    let l:log = 4
-
-    if l:type is# s:LSP_MESSAGE_TYPE_ERROR
-        call s:showLSPErrorMessage(l:linter_name, l:message)
-    elseif l:type is# s:LSP_MESSAGE_TYPE_WARNING
-        call s:showLSPWarningMessage(l:linter_name, l:message)
-    else
-        " 'info' and 'log' will be shown as info
-        call s:showLSPInfoMessage(l:linter_name, l:message)
-    endif
-
 endfunction
 
 function! s:HandleTSServerDiagnostics(response, error_type) abort
@@ -172,7 +131,7 @@ function! ale#lsp_linter#HandleLSPResponse(conn_id, response) abort
     elseif l:method is# 'textDocument/publishDiagnostics'
         call s:HandleLSPDiagnostics(a:conn_id, a:response)
     elseif l:method is# 'window/showMessage'
-        call s:HandleLSPShowMessage(a:conn_id, a:response)
+        call ale#lsp#window#showMessage(s:lsp_linter_map[a:conn_id], a:response)
     elseif get(a:response, 'type', '') is# 'event'
     \&& get(a:response, 'event', '') is# 'semanticDiag'
         call s:HandleTSServerDiagnostics(a:response, 'semantic')
