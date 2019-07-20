@@ -1,0 +1,44 @@
+Before:
+  let g:expr_list = []
+
+  function! ale#util#Execute(expr) abort
+    call add(g:expr_list, a:expr)
+  endfunction
+
+
+After:
+  unlet! g:expr_list
+
+Execute(ale#lsp#window#showMessage() should handle severity Error):
+  call ale#lsp#window#showMessage(
+      \ 'some_linter',
+      \ {'params': {'type':1,'message':'an error'}})
+
+  AssertEqual
+    \ ['redraw | ' .
+    \  'echohl ErrorMsg | ' .
+    \  'echomsg ''Error:some_linter: an error'' | ' .
+    \  'echohl None'],
+    \ g:expr_list
+
+Execute(ale#lsp#window#showMessage() should handle severity Warning):
+  call ale#lsp#window#showMessage(
+      \ 'some_linter',
+      \ {'params': {'type':2,'message':'a warning'}})
+
+  AssertEqual
+    \ ['redraw | ' .
+    \  'echohl WarningMsg | '. 
+    \  'echomsg ''Warning:some_linter: a warning'' | ' .
+    \  'echohl None'],
+    \ g:expr_list
+
+Execute(ale#lsp#window#showMessage() should handle severity Info):
+  call ale#lsp#window#showMessage(
+      \ 'some_linter',
+      \ {'params': {'type':3,'message':'an info'}})
+
+  AssertEqual
+    \ ['redraw | echomsg ''Info:some_linter: an info'''],
+    \ g:expr_list
+
