@@ -131,7 +131,10 @@ function! ale#lsp_linter#HandleLSPResponse(conn_id, response) abort
     elseif l:method is# 'textDocument/publishDiagnostics'
         call s:HandleLSPDiagnostics(a:conn_id, a:response)
     elseif l:method is# 'window/showMessage'
-        call ale#lsp#window#showMessage(s:lsp_linter_map[a:conn_id], a:response)
+        call ale#lsp#window#showMessage(
+        \ s:lsp_linter_map[a:conn_id],
+        \ g:ale_lsp_show_message_format,
+        \ a:response.params)
     elseif get(a:response, 'type', '') is# 'event'
     \&& get(a:response, 'event', '') is# 'semanticDiag'
         call s:HandleTSServerDiagnostics(a:response, 'semantic')

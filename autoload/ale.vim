@@ -10,6 +10,9 @@ let g:ale_echo_msg_warning_str = get(g:, 'ale_echo_msg_warning_str', 'Warning')
 let g:ale_linters_ignore = get(g:, 'ale_linters_ignore', {})
 let g:ale_disable_lsp = get(g:, 'ale_disable_lsp', 0)
 
+" LSP window/showMessage format
+let g:ale_lsp_show_message_format = get(g:, 'ale_lsp_show_message_format', '%severity%:%linter%: %text%')
+
 let s:lint_timer = -1
 let s:getcmdwintype_exists = exists('*getcmdwintype')
 
