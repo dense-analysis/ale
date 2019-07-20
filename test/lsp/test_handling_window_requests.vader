@@ -11,34 +11,34 @@ After:
 
 Execute(ale#lsp#window#showMessage() should handle severity Error):
   call ale#lsp#window#showMessage(
-      \ 'some_linter',
-      \ {'params': {'type':1,'message':'an error'}})
+  \ 'some_linter',
+  \ {'params': {'type':1,'message':'an error'}})
 
   AssertEqual
-    \ ['redraw | ' .
-    \  'echohl ErrorMsg | ' .
-    \  'echomsg ''Error:some_linter: an error'' | ' .
-    \  'echohl None'],
-    \ g:expr_list
+  \ ['redraw | ' .
+  \  'echohl ErrorMsg | ' .
+  \  'echomsg ''Error:some_linter: an error'' | ' .
+  \  'echohl None'],
+  \ g:expr_list
 
 Execute(ale#lsp#window#showMessage() should handle severity Warning):
   call ale#lsp#window#showMessage(
-      \ 'some_linter',
-      \ {'params': {'type':2,'message':'a warning'}})
+  \ 'some_linter',
+  \ {'params': {'type':2,'message':'a warning'}})
 
   AssertEqual
-    \ ['redraw | ' .
-    \  'echohl WarningMsg | '. 
-    \  'echomsg ''Warning:some_linter: a warning'' | ' .
-    \  'echohl None'],
-    \ g:expr_list
+  \ ['redraw | ' .
+  \  'echohl WarningMsg | '. 
+  \  'echomsg ''Warning:some_linter: a warning'' | ' .
+  \  'echohl None'],
+  \ g:expr_list
 
 Execute(ale#lsp#window#showMessage() should handle severity Info):
   call ale#lsp#window#showMessage(
-      \ 'some_linter',
-      \ {'params': {'type':3,'message':'an info'}})
+  \ 'some_linter',
+  \ {'params': {'type':3,'message':'an info'}})
 
   AssertEqual
-    \ ['redraw | echomsg ''Info:some_linter: an info'''],
-    \ g:expr_list
+  \ ['redraw | echomsg ''Info:some_linter: an info'''],
+  \ g:expr_list
 
