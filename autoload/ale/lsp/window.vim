@@ -39,6 +39,7 @@ function! ale#lsp#window#formatString(format, args) abort
             throw 'Invalid argument ''' . l:key . '''. Arguments must follow ' .
             \ 'pattern [a-zA-Z][a-zA-Z0-9_]*'
         endif
+
         let l:string = substitute(l:string, '\V%' . l:key . '%', '\=l:value', 'g')
     endfor
 
@@ -52,6 +53,11 @@ function! ale#lsp#window#showMessage(linter_name, format, params) abort
     let l:message = a:params.message
     let l:type = a:params.type
 
+    if l:type is# s:LSP_MESSAGE_TYPE_LOG
+        " Discard log severity for now
+        return
+    endif
+
     " Common formatting arguments
     let l:format_args = {'linter': a:linter_name, 'text': l:message}
 
@@ -63,11 +69,6 @@ function! ale#lsp#window#showMessage(linter_name, format, params) abort
         let l:format_args['severity'] = g:ale_echo_msg_warning_str
         let l:Handler = funcref('s:echoWarning')
     elseif l:type is# s:LSP_MESSAGE_TYPE_INFORMATION
-        let l:format_args['severity'] = g:ale_echo_msg_info_str
-        let l:Handler = funcref('s:echoInfo')
-    elseif l:type is# s:LSP_MESSAGE_TYPE_LOG
-        " TODO: If/when there's logging, we can handle it here. Until then,
-        " handle it as a regular info
         let l:format_args['severity'] = g:ale_echo_msg_info_str
         let l:Handler = funcref('s:echoInfo')
     endif

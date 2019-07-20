@@ -28,6 +28,7 @@ Execute(ale#lsp#window#showMessage() should handle severity Error):
   \  'echohl None'],
   \ g:expr_list
 
+
 Execute(ale#lsp#window#showMessage() should handle severity Warning):
   call ale#lsp#window#showMessage(
   \  g:linter_name,
@@ -40,6 +41,7 @@ Execute(ale#lsp#window#showMessage() should handle severity Warning):
   \  'echomsg ''Warning:some_linter: a warning'' | ' .
   \  'echohl None'],
   \ g:expr_list
+
 
 Execute(ale#lsp#window#showMessage() should handle severity Info):
   call ale#lsp#window#showMessage(
@@ -58,9 +60,7 @@ Execute(ale#lsp#window#showMessage() should handle severity Log):
   \  g:format,
   \  {'type':4,'message':'just log this'})
 
-  AssertEqual
-  \ ['redraw | echomsg ''Info:some_linter: just log this'''],
-  \ g:expr_list
+  AssertEqual [], g:expr_list
 
 
 Execute(ale#lsp#window#formatString should format strings properly):
