@@ -43,6 +43,8 @@ formatting.
   * shell [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set)
   * [shellcheck](https://www.shellcheck.net/)
   * [shfmt](https://github.com/mvdan/sh)
+* Bazel
+  * [buildifier](https://github.com/bazelbuild/buildtools/tree/master/buildifier)
 * BibTeX
   * [bibclean](http://ftp.math.utah.edu/pub/bibclean/)
 * Bourne Shell
