@@ -47,6 +47,7 @@ grep -h '\*ale-.*-options\|^[a-z].*\*ale-.*\*$' $doc_files \
     | tr '[:upper:]' '[:lower:]' \
     | sed 's/objective-c/objc/' \
     | sed 's/c++/cpp/' \
+    | sed 's/bazel/bzl/' \
     > "$heading_file"
 
 exit_code=0

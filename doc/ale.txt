@@ -1938,6 +1938,8 @@ documented in additional help files.
     gawk..................................|ale-awk-gawk|
   bib.....................................|ale-bib-options|
     bibclean..............................|ale-bib-bibclean|
+  bzl.....................................|ale-bzl-options|
+    buildifier............................|ale-bzl-buildifier|
   c.......................................|ale-c-options|
     clang.................................|ale-c-clang|
     clangd................................|ale-c-clangd|

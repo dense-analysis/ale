@@ -34,6 +34,8 @@ Notes:
   * `shell` (-n flag)
   * `shellcheck`
   * `shfmt`
+* Bazel (bzl)
+  * `buildifier`
 * BibTeX
   * `bibclean`
 * Bourne Shell
