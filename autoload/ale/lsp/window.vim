@@ -8,18 +8,24 @@ let s:LSP_MESSAGE_TYPE_WARNING = 2
 let s:LSP_MESSAGE_TYPE_INFORMATION = 3
 let s:LSP_MESSAGE_TYPE_LOG = 4
 
+" Text is going to be echo'ed by ale#util#Execute, so any single quote the
+" text has must be reescaped
+function! s:escapeQuotes(text) abort
+    return substitute(a:text, '''', '''''', 'g')
+endfunction
+
 function! s:echoError(text) abort
     call ale#util#Execute(
-    \ 'redraw | echohl ErrorMsg | echomsg ''' . a:text . ''' | echohl None')
+    \ 'redraw | echohl ErrorMsg | echomsg ''' . s:escapeQuotes(a:text) . ''' | echohl None')
 endfunction
 
 function! s:echoWarning(text) abort
     call ale#util#Execute(
-    \ 'redraw | echohl WarningMsg | echomsg ''' . a:text . ''' | echohl None')
+    \ 'redraw | echohl WarningMsg | echomsg ''' . s:escapeQuotes(a:text) . ''' | echohl None')
 endfunction
 
 function! s:echoInfo(text) abort
-    call ale#util#Execute('redraw | echomsg ''' . a:text . '''')
+    call ale#util#Execute('redraw | echomsg ''' . s:escapeQuotes(a:text) . '''')
 endfunction
 
 function! s:isKeyValid(key) abort

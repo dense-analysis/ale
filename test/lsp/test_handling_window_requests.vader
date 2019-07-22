@@ -63,6 +63,17 @@ Execute(ale#lsp#window#showMessage() should handle severity Log):
   AssertEqual [], g:expr_list
 
 
+Execute(ale#lsp#window#showMessage() should escape quotes on messages):
+  call ale#lsp#window#showMessage(
+  \  g:linter_name,
+  \  g:format,
+  \  {'type':3,'message':"this is an 'info'"})
+
+  AssertEqual
+  \ ['redraw | echomsg ''Info:some_linter: this is an ''''info'''''''],
+  \ g:expr_list
+
+
 Execute(ale#lsp#window#formatString should format strings properly):
   " Replacement at the beginning
   AssertEqual
