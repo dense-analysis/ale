@@ -207,6 +207,8 @@ formatting.
   * [write-good](https://github.com/btford/write-good)
 * Idris
   * [idris](http://www.idris-lang.org/)
+* Ink
+  * [ink-language-server](https://github.com/ephread/ink-language-server)
 * ISPC
   * [ispc](https://ispc.github.io/) :floppy_disk:
 * Java

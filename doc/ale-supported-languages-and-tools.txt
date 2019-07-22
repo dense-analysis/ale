@@ -198,6 +198,8 @@ Notes:
   * `write-good`
 * Idris
   * `idris`
+* Ink
+  * `ink-language-server`
 * ISPC
   * `ispc`!!
 * Java
