@@ -189,6 +189,13 @@ g:ale_php_psalm_executable                         *g:ale_php_psalm_executable*
 
   This variable sets the executable used for psalm.
 
+g:ale_psalm_langserver_options                 *g:ale_psalm_langserver_options*
+                                               *b:ale_psalm_langserver_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to psalm.
+
 ===============================================================================
 php-cs-fixer                                              *ale-php-php-cs-fixer*
 
