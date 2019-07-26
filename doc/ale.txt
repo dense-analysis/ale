@@ -2522,6 +2522,7 @@ documented in additional help files.
   typescript..............................|ale-typescript-options|
     eslint................................|ale-typescript-eslint|
     prettier..............................|ale-typescript-prettier|
+    standard..............................|ale-typescript-standard|
     tslint................................|ale-typescript-tslint|
     tsserver..............................|ale-typescript-tsserver|
   vala....................................|ale-vala-options|
