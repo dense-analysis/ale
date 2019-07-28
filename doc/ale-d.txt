@@ -2,14 +2,14 @@
 ALE D Integration                                               *ale-d-options*
 
 ===============================================================================
-dfmt                                                            *ale-d-dfmt*
+dfmt                                                               *ale-d-dfmt*
 
-g:ale_d_dfmt_options                                 *g:ale_d_dfmt_options*
-                                                       *b:ale_d_dfmt_options*
+g:ale_d_dfmt_options                                     *g:ale_d_dfmt_options*
+                                                         *b:ale_d_dfmt_options*
   Type: |String|
   Default: `''`
 
-  This variable can be set to pass additional options to the dfmt fixer.
+This variable can be set to pass additional options to the dfmt fixer.
 
 ===============================================================================
 dls                                                                 *ale-d-dls*

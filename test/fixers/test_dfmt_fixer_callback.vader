@@ -14,7 +14,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The dfmt callback should return the correct default values):
-  call ale#test#SetFilename('../d_files/test.go')
+  call ale#test#SetFilename('../d_files/test.d')
 
   AssertEqual
   \ {
@@ -26,7 +26,7 @@ Execute(The dfmt callback should return the correct default values):
   \ ale#fixers#dfmt#Fix(bufnr(''))
 
 Execute(The dfmt callback should include custom dfmt options):
-  let g:ale_d_gofmt_options = "--space-after-cast"
+  let g:ale_d_dfmt_options = "--space-after-cast"
   call ale#test#SetFilename('../d_files/test.d')
 
   AssertEqual
