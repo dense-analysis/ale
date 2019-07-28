@@ -111,6 +111,7 @@ formatting.
 * Cython (pyrex filetype)
   * [cython](http://cython.org/)
 * D
+  * [dfmt](https://github.com/dlang-community/dfmt)
   * [dls](https://github.com/d-language-server/dls)
   * [dmd](https://dlang.org/dmd-linux.html)
   * [uncrustify](https://github.com/uncrustify/uncrustify)

@@ -27,6 +27,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix PEP8 issues with black.',
 \   },
+\   'dfmt': {
+\       'function': 'ale#fixers#dfmt#Fix',
+\       'suggested_filetypes': ['d'],
+\       'description': 'Fix D files with dfmt.',
+\   },
 \   'fecs': {
 \       'function': 'ale#fixers#fecs#Fix',
 \       'suggested_filetypes': ['javascript', 'css', 'html'],

@@ -1987,6 +1987,7 @@ documented in additional help files.
     nvcc..................................|ale-cuda-nvcc|
     clang-format..........................|ale-cuda-clangformat|
   d.......................................|ale-d-options|
+    dfmt..................................|ale-d-dfmt|
     dls...................................|ale-d-dls|
     uncrustify............................|ale-d-uncrustify|
   dart....................................|ale-dart-options|

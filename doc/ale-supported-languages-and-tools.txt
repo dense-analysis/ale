@@ -102,6 +102,7 @@ Notes:
 * Cython (pyrex filetype)
   * `cython`
 * D
+  * `dfmt`
   * `dls`
   * `dmd`
   * `uncrustify`
