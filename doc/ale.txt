@@ -1426,6 +1426,15 @@ g:ale_set_signs                                               *g:ale_set_signs*
   |ALEWarningLine| - All items with `'type': 'W'`
   |ALEInfoLine|    - All items with `'type': 'I'`
 
+  With Neovim 0.3.2 or higher, ALE uses `numhl` option to highlight 'number'
+  column. It uses the following highlight groups.
+
+  |ALEErrorSignLineNr|        - Items with `'type': 'E'`
+  |ALEWarningSignLineNr|      - Items with `'type': 'W'`
+  |ALEInfoSignLineNr|         - Items with `'type': 'I'`
+  |ALEStyleErrorSignLineNr|   - Items with `'type': 'E'` and `'sub_type': 'style'`
+  |ALEStyleWarningSignLineNr| - Items with `'type': 'W'` and `'sub_type': 'style'`
+
   The markers for the highlights can be customized with the following options:
 
   |g:ale_sign_error|
@@ -1710,6 +1719,15 @@ ALEErrorSign                                                     *ALEErrorSign*
   The highlight for error signs. See |g:ale_set_signs|.
 
 
+ALEErrorSignLineNr                                         *ALEErrorSignLineNr*
+
+  Default: `highlight link ALEErrorSignLineNr CursorLineNr`
+
+  The highlight for error signs. See |g:ale_set_signs|.
+
+  NOTE: This highlight is only available on Neovim 0.3.2 or higher.
+
+
 ALEInfo                                                              *ALEInfo.*
                                                             *ALEInfo-highlight*
   Default: `highlight link ALEInfo ALEWarning`
@@ -1734,6 +1752,15 @@ ALEInfoLine                                                       *ALEInfoLine*
   See |g:ale_set_signs| and |g:ale_set_highlights|.
 
 
+ALEInfoSignLineNr                                           *ALEInfoSignLineNr*
+
+  Default: `highlight link ALEInfoSignLineNr CursorLineNr`
+
+  The highlight for error signs. See |g:ale_set_signs|.
+
+  NOTE: This highlight is only available on Neovim 0.3.2 or higher.
+
+
 ALEStyleError                                                   *ALEStyleError*
 
   Default: `highlight link ALEStyleError ALEError`
@@ -1748,6 +1775,15 @@ ALEStyleErrorSign                                           *ALEStyleErrorSign*
   The highlight for style error signs. See |g:ale_set_signs|.
 
 
+ALEStyleErrorSignLineNr                               *ALEStyleErrorSignLineNr*
+
+  Default: `highlight link ALEStyleErrorSignLineNr CursorLineNr`
+
+  The highlight for error signs. See |g:ale_set_signs|.
+
+  NOTE: This highlight is only available on Neovim 0.3.2 or higher.
+
+
 ALEStyleWarning                                               *ALEStyleWarning*
 
   Default: `highlight link ALEStyleWarning ALEError`
@@ -1760,6 +1796,15 @@ ALEStyleWarningSign                                       *ALEStyleWarningSign*
   Default: `highlight link ALEStyleWarningSign ALEWarningSign`
 
   The highlight for style warning signs. See |g:ale_set_signs|.
+
+
+ALEStyleWarningSignLineNr                           *ALEStyleWarningSignLineNr*
+
+  Default: `highlight link ALEStyleWarningSignLineNr CursorLineNr`
+
+  The highlight for error signs. See |g:ale_set_signs|.
+
+  NOTE: This highlight is only available on Neovim 0.3.2 or higher.
 
 
 ALEVirtualTextError                                       *ALEVirtualTextError*
@@ -1819,6 +1864,15 @@ ALEWarningSign                                                 *ALEWarningSign*
   Default: `highlight link ALEWarningSign todo`
 
   The highlight for warning signs. See |g:ale_set_signs|.
+
+
+ALEWarningSignLineNr                                     *ALEWarningSignLineNr*
+
+  Default: `highlight link ALEWarningSignLineNr CursorLineNr`
+
+  The highlight for error signs. See |g:ale_set_signs|.
+
+  NOTE: This highlight is only available on Neovim 0.3.2 or higher.
 
 
 ===============================================================================
