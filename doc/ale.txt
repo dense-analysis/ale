@@ -3371,7 +3371,7 @@ snazzy looking ale glass logo. Cheers, Mark!
 11. Contact                                                       *ale-contact*
 
 If you like this plugin, and wish to get in touch, check out the GitHub
-page for issues and more at https://github.com/w0rp/ale
+page for issues and more at https://github.com/dense-analysis/ale
 
 If you wish to contact the author of this plugin directly, please feel
 free to send an email to devw0rp@gmail.com.
