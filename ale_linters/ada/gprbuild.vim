@@ -1,5 +1,5 @@
 " Author: Tim Lagnese <tim@inept.tech>
-" Description: Lnt Ada files with GPRBuild
+" Description: Lint Ada files with GPRBuild
 
 call ale#Set('ada_gprbuild_executable', 'gprbuild')
 call ale#Set('ada_gprbuild_options', '-gnatwa -gnatq')
