@@ -20,7 +20,7 @@ Execute(The clang-format callback should return the correct default values):
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_c_clangformat_executable)
-  \       . ' '
+  \     . ' --assume-filename=' . ale#Escape(bufname(bufnr('')))
   \ },
   \ ale#fixers#clangformat#Fix(bufnr(''))
 
@@ -31,6 +31,7 @@ Execute(The clangformat callback should include any additional options):
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_c_clangformat_executable)
+  \     . ' --assume-filename=' . ale#Escape(bufname(bufnr('')))
   \     . ' --some-option',
   \ },
   \ ale#fixers#clangformat#Fix(bufnr(''))
