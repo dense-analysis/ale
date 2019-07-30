@@ -5,6 +5,7 @@ Before:
   " Use an invalid global executable, so we don't match it.
   let g:ale_go_gofmt_executable = 'xxxinvalid'
   let g:ale_go_gofmt_options = ''
+  let g:ale_go_go111module = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
 
@@ -35,6 +36,19 @@ Execute(The gofmt callback should include custom gofmt options):
   \   'command': ale#Escape('xxxinvalid')
   \     . ' -l -w'
   \     . ' ' . g:ale_go_gofmt_options
+  \     . ' %t',
+  \ },
+  \ ale#fixers#gofmt#Fix(bufnr(''))
+
+Execute(The gofmt callback should support Go environment variables):
+  let g:ale_go_go111module = 'off'
+  call ale#test#SetFilename('../go_files/testfile.go')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Env('GO111MODULE', 'off')
+  \     . ale#Escape('xxxinvalid') . ' -l -w'
   \     . ' %t',
   \ },
   \ ale#fixers#gofmt#Fix(bufnr(''))

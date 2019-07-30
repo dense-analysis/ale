@@ -3,6 +3,7 @@ Before:
 
   " Use an invalid global executable, so we don't match it.
   let g:ale_go_go_executable = 'xxxinvalid'
+  let g:ale_go_go111module = ''
   call ale#test#SetDirectory('/testplugin/test/fixers')
 
 After:
@@ -12,7 +13,7 @@ After:
 
 Execute(The gomod callback should return the correct default values):
   call ale#test#SetFilename('../go_files/go.mod')
-  setl ft=gomod
+  setl filetype=gomod
 
   AssertEqual
   \ {
@@ -20,5 +21,18 @@ Execute(The gomod callback should return the correct default values):
   \   'command': ale#Escape('xxxinvalid')
   \     . ' mod edit -fmt'
   \     . ' %t',
+  \ },
+  \ ale#fixers#gomod#Fix(bufnr(''))
+
+Execute(The gomod callback should support Go environment variables):
+  call ale#test#SetFilename('../go_files/go.mod')
+  setl filetype=gomod
+  let g:ale_go_go111module = 'on'
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Env('GO111MODULE', 'on')
+  \     . ale#Escape('xxxinvalid') . ' mod edit -fmt %t'
   \ },
   \ ale#fixers#gomod#Fix(bufnr(''))
