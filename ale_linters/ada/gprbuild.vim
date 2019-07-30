@@ -17,6 +17,7 @@ function! ale_linters#ada#gprbuild#GetCommand(buffer) abort
     " -gnatc: Check syntax and semantics only (no code generation)
     return '%e'
     \   . ale#Pad(ale#Var(a:buffer, 'ada_gprbuild_project'))
+    \   . ale#Pad(ale#Var(a:buffer, 'ada_gprbuild_options'))
     \   . ' -c -gnatc -gnatef %s'
 endfunction
 
