@@ -8,6 +8,15 @@ let s:LSP_MESSAGE_TYPE_WARNING = 2
 let s:LSP_MESSAGE_TYPE_INFORMATION = 3
 let s:LSP_MESSAGE_TYPE_LOG = 4
 
+" Translate strings from the user config to a number so we can check
+" severities
+let s:CFG_TO_LSP_SEVERITY = {
+\   'error': s:LSP_MESSAGE_TYPE_ERROR,
+\   'warning': s:LSP_MESSAGE_TYPE_WARNING,
+\   'information': s:LSP_MESSAGE_TYPE_INFORMATION,
+\   'log': s:LSP_MESSAGE_TYPE_LOG
+\}
+
 " Text is going to be echo'ed by ale#util#Execute, so any single quote the
 " text has must be reescaped
 function! s:escapeQuotes(text) abort
@@ -55,12 +64,19 @@ endfunction
 " Handle window/showMessage response.
 " - details: dict containing linter name and format (g:ale_lsp_show_message_format)
 " - params: dict with the params for the call in the form of {type: number, message: string}
-function! ale#lsp#window#showMessage(linter_name, format, params) abort
+function! ale#lsp#window#HandleShowMessage(linter_name, format, params) abort
     let l:message = a:params.message
     let l:type = a:params.type
 
+    " Discard log severity for now
     if l:type is# s:LSP_MESSAGE_TYPE_LOG
-        " Discard log severity for now
+        return
+    endif
+
+    " Check if the message is above the the configured threshold
+    let l:cfg_severity_threshold = get(s:CFG_TO_LSP_SEVERITY, get(g:, 'ale_lsp_show_message_severity', 'error'))
+
+    if l:type > l:cfg_severity_threshold
         return
     endif
 

@@ -2,6 +2,9 @@ Before:
   let g:expr_list = []
   let g:linter_name = 'some_linter'
   let g:format = '%severity%:%linter%: %text%'
+  " Get the default value to restore it
+  let g:default_severity = g:ale_lsp_show_message_severity
+  let g:ale_lsp_show_message_severity = 'information'
 
 
   function! ale#util#Execute(expr) abort
@@ -15,8 +18,8 @@ After:
   unlet! g:format
 
 
-Execute(ale#lsp#window#showMessage() should handle severity Error):
-  call ale#lsp#window#showMessage(
+Execute(ale#lsp#window#HandleShowMessage() should handle severity Error):
+  call ale#lsp#window#HandleShowMessage(
   \  g:linter_name,
   \  g:format,
   \  {'type':1,'message':'an error'})
@@ -29,8 +32,8 @@ Execute(ale#lsp#window#showMessage() should handle severity Error):
   \ g:expr_list
 
 
-Execute(ale#lsp#window#showMessage() should handle severity Warning):
-  call ale#lsp#window#showMessage(
+Execute(ale#lsp#window#HandleShowMessage() should handle severity Warning):
+  call ale#lsp#window#HandleShowMessage(
   \  g:linter_name,
   \  g:format,
   \  {'type':2,'message':'a warning'})
@@ -43,8 +46,8 @@ Execute(ale#lsp#window#showMessage() should handle severity Warning):
   \ g:expr_list
 
 
-Execute(ale#lsp#window#showMessage() should handle severity Info):
-  call ale#lsp#window#showMessage(
+Execute(ale#lsp#window#HandleShowMessage() should handle severity Info):
+  call ale#lsp#window#HandleShowMessage(
   \  g:linter_name,
   \  g:format,
   \  {'type':3,'message':'an info'})
@@ -54,8 +57,8 @@ Execute(ale#lsp#window#showMessage() should handle severity Info):
   \ g:expr_list
 
 
-Execute(ale#lsp#window#showMessage() should handle severity Log):
-  call ale#lsp#window#showMessage(
+Execute(ale#lsp#window#HandleShowMessage() should handle severity Log):
+  call ale#lsp#window#HandleShowMessage(
   \  g:linter_name,
   \  g:format,
   \  {'type':4,'message':'just log this'})
@@ -63,8 +66,8 @@ Execute(ale#lsp#window#showMessage() should handle severity Log):
   AssertEqual [], g:expr_list
 
 
-Execute(ale#lsp#window#showMessage() should escape quotes on messages):
-  call ale#lsp#window#showMessage(
+Execute(ale#lsp#window#HandleShowMessage() should escape quotes on messages):
+  call ale#lsp#window#HandleShowMessage(
   \  g:linter_name,
   \  g:format,
   \  {'type':3,'message':"this is an 'info'"})
