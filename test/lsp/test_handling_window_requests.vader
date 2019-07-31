@@ -1,7 +1,7 @@
 Before:
   let g:expr_list = []
   let g:linter_name = 'some_linter'
-  let g:format = '%severity%:%linter%: %text%'
+  let g:format = '%severity%:%linter%: %s'
   " Get the default value to restore it
   let g:default_severity = g:ale_lsp_show_message_severity
   let g:ale_lsp_show_message_severity = 'information'
@@ -63,31 +63,10 @@ Execute(ale#lsp#window#HandleShowMessage() should escape quotes on messages):
 
 Execute(ale#lsp#window#formatString should format strings properly):
   " Replacement at the beginning
-  AssertEqual 'one two three', ale#lsp#window#formatString('%foo% two three', {'foo': 'one'})
+  AssertEqual 'one two three', ale#lsp#window#formatString('%foo% two three', {'%foo%': 'one'})
 
   " Replacement at the end
-  AssertEqual 'one two three', ale#lsp#window#formatString('one two %arg%', {'arg': 'three'})
+  AssertEqual 'one two three', ale#lsp#window#formatString('one two %arg', {'%arg': 'three'})
 
   " Replacement in the middle
-  AssertEqual 'one two three', ale#lsp#window#formatString('one %two% three', {'two': 'two'})
-
-Execute(ale#lsp#window#formatString should fail for invalid replacement):
-  AssertThrows call ale#lsp#window#formatString('', {'colon:error': 'value'})
-  AssertEqual 'Invalid argument ''colon:error''. Arguments must follow ' . 
-  \ 'pattern [a-zA-Z][a-zA-Z0-9_]*', g:vader_exception
-
-  AssertThrows call ale#lsp#window#formatString('', {'0leadingzero': 'value'})
-  AssertEqual 'Invalid argument ''0leadingzero''. Arguments must follow ' .
-  \ 'pattern [a-zA-Z][a-zA-Z0-9_]*', g:vader_exception
-
-  AssertThrows call ale#lsp#window#formatString('', {'_leadingunderscore': 'value'})
-  AssertEqual 'Invalid argument ''_leadingunderscore''. Arguments must follow ' .
-  \ 'pattern [a-zA-Z][a-zA-Z0-9_]*', g:vader_exception
-
-  AssertThrows call ale#lsp#window#formatString('', {'123': 'value'})
-  AssertEqual 'Invalid argument ''123''. Arguments must follow ' .
-  \ 'pattern [a-zA-Z][a-zA-Z0-9_]*', g:vader_exception
-
-  AssertThrows call ale#lsp#window#formatString('', {'%percent%': 'value'})
-  AssertEqual 'Invalid argument ''%percent%''. Arguments must follow ' .
-  \ 'pattern [a-zA-Z][a-zA-Z0-9_]*', g:vader_exception
+  AssertEqual 'one 2 three', ale#lsp#window#formatString('one two three', {'two': '2'})

@@ -36,12 +36,12 @@ function! ale#lsp#window#formatString(format, args) abort
     let l:string = a:format
 
     for [l:key, l:value] in items(a:args)
-        if ! s:isKeyValid(l:key)
-            throw 'Invalid argument ''' . l:key . '''. Arguments must follow ' .
-            \ 'pattern [a-zA-Z][a-zA-Z0-9_]*'
-        endif
+        " if ! s:isKeyValid(l:key)
+        "     throw 'Invalid argument ''' . l:key . '''. Arguments must follow ' .
+        "     \ 'pattern [a-zA-Z][a-zA-Z0-9_]*'
+        " endif
 
-        let l:string = substitute(l:string, '\V%' . l:key . '%', '\=l:value', 'g')
+        let l:string = substitute(l:string, '\V' . l:key, '\=l:value', 'g')
     endfor
 
     return l:string
@@ -59,23 +59,24 @@ function! ale#lsp#window#HandleShowMessage(linter_name, format, params) abort
         return
     endif
 
-    " Check if the message is above the the configured threshold
-    let l:cfg_severity_threshold = get(s:CFG_TO_LSP_SEVERITY, get(g:, 'ale_lsp_show_message_severity', 'error'))
+    " Get the configured severity level threshold and check if the message
+    " should be displayed or not
+    let l:cfg_severity_threshold = s:CFG_TO_LSP_SEVERITY[tolower(get(g:, 'ale_lsp_show_message_severity', 'error'))]
 
     if l:type > l:cfg_severity_threshold
         return
     endif
 
     " Common formatting arguments
-    let l:format_args = {'linter': a:linter_name, 'text': l:message}
+    let l:format_args = {'%linter%': a:linter_name, '%s': l:message}
 
     " Severity will depend on the message type
     if l:type is# s:LSP_MESSAGE_TYPE_ERROR
-        let l:format_args['severity'] = g:ale_echo_msg_error_str
+        let l:format_args['%severity%'] = g:ale_echo_msg_error_str
     elseif l:type is# s:LSP_MESSAGE_TYPE_WARNING
-        let l:format_args['severity'] = g:ale_echo_msg_warning_str
+        let l:format_args['%severity%'] = g:ale_echo_msg_warning_str
     elseif l:type is# s:LSP_MESSAGE_TYPE_INFORMATION
-        let l:format_args['severity'] = g:ale_echo_msg_info_str
+        let l:format_args['%severity%'] = g:ale_echo_msg_info_str
     endif
 
     call ale#util#ShowMessage(ale#lsp#window#formatString(a:format, l:format_args))
