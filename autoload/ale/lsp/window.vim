@@ -23,20 +23,6 @@ function! s:escapeQuotes(text) abort
     return substitute(a:text, '''', '''''', 'g')
 endfunction
 
-function! s:echoError(text) abort
-    call ale#util#Execute(
-    \ 'redraw | echohl ErrorMsg | echomsg ''' . s:escapeQuotes(a:text) . ''' | echohl None')
-endfunction
-
-function! s:echoWarning(text) abort
-    call ale#util#Execute(
-    \ 'redraw | echohl WarningMsg | echomsg ''' . s:escapeQuotes(a:text) . ''' | echohl None')
-endfunction
-
-function! s:echoInfo(text) abort
-    call ale#util#Execute('redraw | echomsg ''' . s:escapeQuotes(a:text) . '''')
-endfunction
-
 function! s:isKeyValid(key) abort
     return matchstr(a:key, '[a-zA-Z][a-zA-Z0-9_]*') is# a:key
 endfunction
@@ -86,14 +72,11 @@ function! ale#lsp#window#HandleShowMessage(linter_name, format, params) abort
     " Severity will depend on the message type
     if l:type is# s:LSP_MESSAGE_TYPE_ERROR
         let l:format_args['severity'] = g:ale_echo_msg_error_str
-        let l:Handler = funcref('s:echoError')
     elseif l:type is# s:LSP_MESSAGE_TYPE_WARNING
         let l:format_args['severity'] = g:ale_echo_msg_warning_str
-        let l:Handler = funcref('s:echoWarning')
     elseif l:type is# s:LSP_MESSAGE_TYPE_INFORMATION
         let l:format_args['severity'] = g:ale_echo_msg_info_str
-        let l:Handler = funcref('s:echoInfo')
     endif
 
-    call l:Handler(ale#lsp#window#formatString(a:format, l:format_args))
+    call ale#util#ShowMessage(ale#lsp#window#formatString(a:format, l:format_args))
 endfunction
