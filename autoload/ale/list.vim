@@ -103,8 +103,8 @@ function! s:SetListsImpl(timer_id, buffer, loclist) abort
         endfor
     endif
 
-    " TODO: Can either be a buffer variable or go into g:ale_buffer_info?
-    let b:ale_winview = winsaveview()
+    " Save the current view before opening/closing any window
+    call setbufvar(a:buffer, 'ale_winview', winsaveview())
 
     " Open a window to show the problems if we need to.
     "
@@ -159,13 +159,12 @@ endfunction
 " Try to restore the window view after closing any of the lists to avoid making
 " the it moving around, especially useful when on insert mode
 function! s:RestoreViewIfNeeded(buffer) abort
-    let l:buffer = getbufvar(str2nr(a:buffer), '', {})
+    let l:saved_view = getbufvar(a:buffer, 'ale_winview', {})
 
-    if ! has_key(l:buffer, 'ale_winview')
+    " Saved view is empty, can't do anything
+    if empty(l:saved_view)
         return
     endif
-
-    let l:saved_view = get(l:buffer, 'ale_winview')
 
     " Check wether the cursor has moved since linting was actually requested. If
     " the user has indeed moved lines, do nothing
