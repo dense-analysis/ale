@@ -17,16 +17,6 @@ let s:CFG_TO_LSP_SEVERITY = {
 \   'log': s:LSP_MESSAGE_TYPE_LOG
 \}
 
-" Text is going to be echo'ed by ale#util#Execute, so any single quote the
-" text has must be reescaped
-function! s:escapeQuotes(text) abort
-    return substitute(a:text, '''', '''''', 'g')
-endfunction
-
-function! s:isKeyValid(key) abort
-    return matchstr(a:key, '[a-zA-Z][a-zA-Z0-9_]*') is# a:key
-endfunction
-
 " This formats string 'a:format' by replacing a:args keys by their respective
 " values
 " - format: base format, where keys are surrounded by '%' (e.g, %linter%)
@@ -36,11 +26,6 @@ function! ale#lsp#window#formatString(format, args) abort
     let l:string = a:format
 
     for [l:key, l:value] in items(a:args)
-        " if ! s:isKeyValid(l:key)
-        "     throw 'Invalid argument ''' . l:key . '''. Arguments must follow ' .
-        "     \ 'pattern [a-zA-Z][a-zA-Z0-9_]*'
-        " endif
-
         let l:string = substitute(l:string, '\V' . l:key, '\=l:value', 'g')
     endfor
 
