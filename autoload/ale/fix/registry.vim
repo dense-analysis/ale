@@ -253,7 +253,7 @@ let s:default_registry = {
 \   'sqlformat': {
 \       'function': 'ale#fixers#sqlformat#Fix',
 \       'suggested_filetypes': ['sql'],
-\       'description': 'Fix SQL files withsqlformatt.',
+\       'description': 'Fix SQL files with sqlformat.',
 \   },
 \   'google_java_format': {
 \       'function': 'ale#fixers#google_java_format#Fix',
