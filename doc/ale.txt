@@ -2307,6 +2307,7 @@ documented in additional help files.
   sql.....................................|ale-sql-options|
     pgformatter...........................|ale-sql-pgformatter|
     sqlfmt................................|ale-sql-sqlfmt|
+    sqlformat.............................|ale-sql-sqlformat|
   stylus..................................|ale-stylus-options|
     stylelint.............................|ale-stylus-stylelint|
   sugarss.................................|ale-sugarss-options|

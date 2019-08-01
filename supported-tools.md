@@ -433,6 +433,7 @@ formatting.
   * [pgformatter](https://github.com/darold/pgFormatter)
   * [sqlfmt](https://github.com/jackc/sqlfmt)
   * [sqlint](https://github.com/purcell/sqlint)
+  * [sqlformat](https://github.com/andialbrecht/sqlparse)
 * Stylus
   * [stylelint](https://github.com/stylelint/stylelint)
 * SugarSS
