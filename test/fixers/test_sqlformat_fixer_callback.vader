@@ -8,7 +8,7 @@ After:
 Execute(The sqlformat callback should return the correct default values):
   AssertEqual
   \ {
-  \   'command': ale#Escape('sqlformat')
+  \   'command': ale#path#BufferCdString(bufnr('')) . ale#Escape('sqlformat')
   \ },
   \ ale#fixers#sqlformat#Fix(bufnr(''))
 
@@ -18,7 +18,7 @@ Execute(The sqlformat executable and options should be configurable):
 
   AssertEqual
   \ {
-  \   'command': ale#Escape('/path/to/sqlformat')
-  \     . ' -a',
+  \   'command': ale#path#BufferCdString(bufnr('')) . ale#Escape('/path/to/sqlformat')
+  \ . ' -a'
   \ },
   \ ale#fixers#sqlformat#Fix(bufnr(''))
