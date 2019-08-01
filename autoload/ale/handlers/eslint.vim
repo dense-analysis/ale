@@ -44,7 +44,7 @@ function! ale#handlers#eslint#GetCommand(buffer) abort
 
     return ale#node#Executable(a:buffer, l:executable)
     \   . (!empty(l:options) ? ' ' . l:options : '')
-    \   . ' -f json --stdin --stdin-filename %s'
+    \   . ' -f json --stdin --stdin-filename %s 2> /dev/null'
 endfunction
 
 function! s:AddHintsForTypeScriptParsingErrors(output) abort
