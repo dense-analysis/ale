@@ -1,17 +1,19 @@
 Before:
   Save g:ale_go_goimports_executable
   Save g:ale_go_goimports_options
+  Save g:ale_go_go111module
 
   " Use an invalid global executable, so we don't match it.
   let g:ale_go_goimports_executable = 'xxxinvalid'
   let g:ale_go_goimports_options = ''
-  let g:ale_go_go111module = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
   call ale#test#SetFilename('../go_files/testfile.go')
 
 After:
   Restore
+
+  unlet! b:ale_go_go111module
 
   call ale#test#RestoreDirectory()
 

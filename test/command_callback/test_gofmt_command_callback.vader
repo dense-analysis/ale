@@ -1,8 +1,14 @@
 Before:
+  Save g:ale_go_go111module
+
   call ale#assert#SetUpLinterTest('go', 'gofmt')
   call ale#test#SetFilename('../go_files/testfile2.go')
 
 After:
+  Restore
+
+  unlet! b:ale_go_go111module
+
   call ale#assert#TearDownLinterTest()
 
 Execute(The default gofmt command should be correct):
@@ -15,5 +21,3 @@ Execute(The gofmt command should support Go environment variables):
   AssertLinter 'gofmt',
   \ ale#Env('GO111MODULE', 'on')
   \ . ale#Escape('gofmt') . ' -e %t'
-
-  unlet! b:ale_go_go111module

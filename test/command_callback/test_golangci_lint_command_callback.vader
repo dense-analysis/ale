@@ -1,8 +1,14 @@
 Before:
+  Save g:ale_go_go111module
+
   call ale#assert#SetUpLinterTest('go', 'golangci_lint')
   call ale#test#SetFilename('test.go')
 
 After:
+  Restore
+
+  unlet! b:ale_go_go111module
+
   call ale#assert#TearDownLinterTest()
 
 Execute(The golangci-lint defaults should be correct):
@@ -39,8 +45,6 @@ Execute(The golangci-lint callback should support environment variables):
   \   . ale#Escape('golangci-lint')
   \   . ' run ' . ale#Escape(expand('%' . ':t'))
   \   . ' --enable-all'
-
-  unlet! b:ale_go_go111module
 
 Execute(The golangci-lint `lint_package` option should use the correct command):
   let b:ale_go_golangci_lint_package = 1

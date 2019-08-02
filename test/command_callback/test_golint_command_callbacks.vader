@@ -1,7 +1,13 @@
 Before:
+  Save g:ale_go_go111module
+
   call ale#assert#SetUpLinterTest('go', 'golint')
 
 After:
+  Restore
+
+  unlet! b:ale_go_go111module
+
   call ale#assert#TearDownLinterTest()
 
 Execute(The default golint command should be correct):
@@ -22,5 +28,3 @@ Execute(The golint command should support Go environment variables):
 
   AssertLinter 'golint',
   \ ale#Env('GO111MODULE', 'on') . ale#Escape('golint') . ' %t'
-
-  unlet! b:ale_go_go111module

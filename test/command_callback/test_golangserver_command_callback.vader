@@ -1,6 +1,7 @@
 Before:
   Save $GOPATH
   Save g:ale_completion_enabled
+  Save g:ale_go_go111module
 
   let g:ale_completion_enabled = 0
   let g:sep = has('win32') ? ';' : ':'

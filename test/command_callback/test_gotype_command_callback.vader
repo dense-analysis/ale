@@ -1,8 +1,12 @@
 Before:
+  Save g:ale_go_go111module
+
   call ale#assert#SetUpLinterTest('go', 'gotype')
   call ale#test#SetFilename('../go_files/testfile2.go')
 
 After:
+  unlet! b:ale_go_go111module
+
   call ale#assert#TearDownLinterTest()
 
 Execute(The default gotype command should be correct):
@@ -21,5 +25,3 @@ Execute(The gotype callback should support Go environment variables):
   \ ale#path#CdString(expand('%:p:h')) . ' '
   \ . ale#Env('GO111MODULE', 'on')
   \ . 'gotype -e .'
-
-  unlet! b:ale_go_go111module

@@ -1,4 +1,6 @@
 Before:
+  Save g:ale_go_go111module
+
   call ale#assert#SetUpLinterTest('go', 'bingo')
 
 After:

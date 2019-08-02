@@ -1,13 +1,14 @@
 Before:
+  Save g:ale_go_go111module
+
   call ale#assert#SetUpLinterTest('go', 'gopls')
 
 After:
-  Restore
-
   if isdirectory(g:dir . '/.git')
     call delete(g:dir . '/.git', 'd')
   endif
 
+  unlet! b:ale_go_go111module
   unlet! b:ale_go_go111module
   unlet! b:ale_completion_enabled
 
