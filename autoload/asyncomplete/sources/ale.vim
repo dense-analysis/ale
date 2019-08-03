@@ -5,6 +5,7 @@ function! asyncomplete#sources#ale#get_source_options(...) abort
     \     'whitelist': ['*'],
     \     'triggers': asyncomplete#sources#ale#get_triggers(),
     \ }, a:0 >= 1 ? a:1 : {})
+
     return extend(l:default, {'refresh_pattern': '\k\+$'})
 endfunction
 
