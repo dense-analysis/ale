@@ -15,10 +15,9 @@ function! asyncomplete#sources#ale#get_triggers() abort
     return l:triggers
 endfunction
 
-function! asyncomplete#sources#ale#completor(opts, ctx) abort
-    let l:kw = matchstr(a:ctx.typed, '\w\+$')
-    let l:kwlen = len(l:kw)
-    let l:startcol = a:ctx.col - l:kwlen
+function! asyncomplete#sources#ale#completor(options, context) abort
+    let l:keyword = matchstr(a:context.typed, '\w\+$')
+    let l:startcol = a:context.col - len(l:keyword)
 
     call ale#completion#GetCompletions('ale-callback', { 'callback': {completions ->
     \   asyncomplete#complete(a:options.name, a:context, l:startcol, completions)
