@@ -19,7 +19,7 @@ function! asyncomplete#sources#ale#completor(opts, ctx) abort
     let l:kwlen = len(l:kw)
     let l:startcol = a:ctx.col - l:kwlen
 
-    call ale#completion#RequestCallbackCompletions({completions ->
-    \   asyncomplete#complete(a:opts.name, a:ctx, l:startcol, completions)
-    \ })
+    call ale#completion#GetCompletions('ale-callback', { 'callback': {completions ->
+    \   asyncomplete#complete(a:options.name, a:context, l:startcol, completions)
+    \ }})
 endfunction
