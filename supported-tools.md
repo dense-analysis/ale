@@ -290,6 +290,7 @@ formatting.
   * [nim check](https://nim-lang.org/docs/nimc.html) :floppy_disk:
 * nix
   * [nix-instantiate](http://nixos.org/nix/manual/#sec-nix-instantiate)
+  * [nixpkgs-fmt](https://github.com/nix-community/nixpkgs-fmt)
 * nroff
   * [alex](https://github.com/wooorm/alex) :floppy_disk:
   * [proselint](http://proselint.com/)
