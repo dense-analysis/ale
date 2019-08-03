@@ -269,7 +269,7 @@ function! ale#completion#Show(result) abort
 endfunction
 
 function! ale#completion#GetAllTriggers() abort
-    return s:trigger_character_map
+    return deepcopy(s:trigger_character_map)
 endfunction
 
 function! s:CompletionStillValid(request_id) abort
