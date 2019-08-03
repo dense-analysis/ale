@@ -1,10 +1,11 @@
 function! asyncomplete#sources#ale#get_source_options(...) abort
-    return extend(extend({
+    let l:default = extend({
     \     'name': 'ale',
     \     'completor': function('asyncomplete#sources#ale#completor'),
     \     'whitelist': ['*'],
     \     'triggers': asyncomplete#sources#ale#get_triggers(),
-    \ }, a:0 >= 1 ? a:1 : {}), {'refresh_pattern': '\k\+$'})
+    \ }, a:0 >= 1 ? a:1 : {})
+    return extend(l:default, {'refresh_pattern': '\k\+$'})
 endfunction
 
 function! asyncomplete#sources#ale#get_triggers() abort
