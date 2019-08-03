@@ -61,6 +61,7 @@ After:
   unlet! b:ale_complete_done_time
 
   delfunction CheckCompletionCalled
+  delfunction CompleteCallback
 
   " Stop any timers we left behind.
   " This stops the tests from failing randomly.
@@ -336,10 +337,10 @@ Execute(b:ale_completion_info should be set up correctly for other sources):
 Execute(b:ale_completion_info should be set up correctly when requesting completions via callback):
   let b:ale_completion_result = []
   call setpos('.', [bufnr(''), 3, 14, 0])
-  function! Callback() abort
+  function! CompleteCallback() abort
     echo 'Called'
   endfunction
-  call ale#completion#RequestCallbackCompletions(funcref('Callback'))
+  call ale#completion#RequestCallbackCompletions(funcref('CompleteCallback'))
 
   AssertEqual
   \ {
