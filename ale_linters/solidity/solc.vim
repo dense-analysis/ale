@@ -1,6 +1,8 @@
 " Author: Karl Bartel <karl42@gmail.com> - http://karl.berlin/
 " Description: Report solc compiler errors in Solidity code
 
+call ale#Set('solidity_solc_options', '')
+
 function! ale_linters#solidity#solc#Handle(buffer, lines) abort
     " Matches patterns like the following:
     " /path/to/file/file.sol:1:10: Error: Identifier not found or not unique.
