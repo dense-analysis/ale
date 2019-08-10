@@ -1,4 +1,4 @@
-# Asynchronous Lint Engine [![Travis CI Build Status](https://travis-ci.com/w0rp/ale.svg?branch=master)](https://travis-ci.com/w0rp/ale) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/r0ef1xu8xjmik58d/branch/master?svg=true)](https://ci.appveyor.com/project/w0rp/ale) [![Join the chat at https://gitter.im/vim-ale/Lobby](https://badges.gitter.im/vim-ale/Lobby.svg)](https://gitter.im/vim-ale/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# Asynchronous Lint Engine [![Travis CI Build Status](https://travis-ci.com/dense-analysis/ale.svg?branch=master)](https://travis-ci.com/dense-analysis/ale) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/r0ef1xu8xjmik58d/branch/master?svg=true)](https://ci.appveyor.com/project/dense-analysis/ale) [![Join the chat at https://gitter.im/vim-ale/Lobby](https://badges.gitter.im/vim-ale/Lobby.svg)](https://gitter.im/vim-ale/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
 ![ALE Logo by Mark Grealish - https://www.bhalash.com/](https://user-images.githubusercontent.com/3518142/59195920-2c339500-8b85-11e9-9c22-f6b7f69637b8.jpg)
@@ -258,14 +258,14 @@ any other tools. Simply clone the plugin into your `pack` directory.
 
 ```bash
 mkdir -p ~/.vim/pack/git-plugins/start
-git clone --depth 1 https://github.com/w0rp/ale.git ~/.vim/pack/git-plugins/start/ale
+git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.vim/pack/git-plugins/start/ale
 ```
 
 #### NeoVim on Unix
 
 ```bash
 mkdir -p ~/.local/share/nvim/site/pack/git-plugins/start
-git clone --depth 1 https://github.com/w0rp/ale.git ~/.local/share/nvim/site/pack/git-plugins/start/ale
+git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.local/share/nvim/site/pack/git-plugins/start/ale
 ```
 
 #### Vim 8 on Windows
@@ -273,7 +273,7 @@ git clone --depth 1 https://github.com/w0rp/ale.git ~/.local/share/nvim/site/pac
 ```bash
 # Run these commands in the "Git for Windows" Bash terminal
 mkdir -p ~/vimfiles/pack/git-plugins/start
-git clone --depth 1 https://github.com/w0rp/ale.git ~/vimfiles/pack/git-plugins/start/ale
+git clone --depth 1 https://github.com/dense-analysis/ale.git ~/vimfiles/pack/git-plugins/start/ale
 ```
 
 #### Generating Vim help files
@@ -304,7 +304,7 @@ You can run the following commands in your terminal to do so:
 
 ```bash
 cd ~/.vim/bundle
-git clone https://github.com/w0rp/ale.git
+git clone https://github.com/dense-analysis/ale.git
 ```
 
 <a name="installation-with-vundle"></a>
@@ -315,7 +315,7 @@ You can install this plugin using [Vundle](https://github.com/VundleVim/Vundle.v
 by using the path on GitHub for this repository.
 
 ```vim
-Plugin 'w0rp/ale'
+Plugin 'dense-analysis/ale'
 ```
 
 See the Vundle documentation for more information.
@@ -329,7 +329,7 @@ by adding the GitHub path for this repository to your `~/.vimrc`
 and running `:PlugInstall`.
 
 ```vim
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 ```
 
 <a name="contributing"></a>
@@ -337,14 +337,14 @@ Plug 'w0rp/ale'
 ## 4. Contributing
 
 If you would like to see support for more languages and tools, please
-[create an issue](https://github.com/w0rp/ale/issues)
-or [create a pull request](https://github.com/w0rp/ale/pulls).
+[create an issue](https://github.com/dense-analysis/ale/issues)
+or [create a pull request](https://github.com/dense-analysis/ale/pulls).
 If your tool can read from stdin or you have code to suggest which is good,
 support can be happily added for it.
 
 If you are interested in the general direction of the project, check out the
-[wiki home page](https://github.com/w0rp/ale/wiki). The wiki includes a
-Roadmap for the future, and more.
+[wiki home page](https://github.com/dense-analysis/ale/wiki). The wiki includes
+a Roadmap for the future, and more.
 
 If you'd liked to discuss the project more directly, check out the `#vim-ale` channel
 on Freenode. Web chat is available [here](https://webchat.freenode.net/?channels=vim-ale).
