@@ -27,7 +27,7 @@ function! ale_linters#sh#shell#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#sh#shell#GetCommand(buffer) abort
-    return ale_linters#sh#shell#GetExecutable(a:buffer) . ' -n %t'
+    return 'export LANG=en_US.UTF-8;' . ale_linters#sh#shell#GetExecutable(a:buffer) . ' -n %t'
 endfunction
 
 function! ale_linters#sh#shell#Handle(buffer, lines) abort
