@@ -38,7 +38,7 @@ g:ale_ruby_debride_options                         *g:ale_ruby_debride_options*
   Type: |String|
   Default: `''`
 
-  This variable can be change to modify flags given to debride.
+  This variable can be changed to modify flags given to debride.
 
 
 
@@ -111,7 +111,7 @@ g:ale_ruby_rubocop_options                         *g:ale_ruby_rubocop_options*
   Type: |String|
   Default: `''`
 
-  This variable can be change to modify flags given to rubocop.
+  This variable can be changed to modify flags given to rubocop.
 
 
 ===============================================================================
@@ -166,7 +166,7 @@ g:ale_ruby_sorbet_options                           *g:ale_ruby_sorbet_options*
   Type: |String|
   Default: `''`
 
-  This variable can be change to modify flags given to sorbet.
+  This variable can be changed to modify flags given to sorbet.
 
 
 ===============================================================================
@@ -186,7 +186,7 @@ g:ale_ruby_standardrb_options                   *g:ale_ruby_standardrb_options*
   Type: |String|
   Default: `''`
 
-  This variable can be change to modify flags given to standardrb.
+  This variable can be changed to modify flags given to standardrb.
 
 
 ===============================================================================
