@@ -21,6 +21,26 @@ g:ale_ruby_brakeman_options                       *g:ale_ruby_brakeman_options*
 
   The contents of this variable will be passed through to brakeman.
 
+===============================================================================
+debride                                                      *ale-ruby-debride*
+
+g:ale_ruby_debride_executable                   *g:ale_ruby_debride_executable*
+                                                *b:ale_ruby_debride_executable*
+  Type: String
+  Default: `'debride'`
+
+  Override the invoked debride binary. Set this to `'bundle'` to invoke
+  `'bundle` `exec` debride'.
+
+
+g:ale_ruby_debride_options                         *g:ale_ruby_debride_options*
+                                                   *b:ale_ruby_debride_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be change to modify flags given to debride.
+
+
 
 ===============================================================================
 rails_best_practices                            *ale-ruby-rails_best_practices*
