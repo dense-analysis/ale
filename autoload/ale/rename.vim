@@ -51,7 +51,9 @@ function! s:ApplyRenameEdits(new_name, item_list) abort
     execute 'buffer' l:current_buffer
 endfunction
 
-function! ale#rename#HandleTSServerResponse(new_name, conn_id, response) abort
+let s:new_name = ''
+
+function! ale#rename#HandleTSServerResponse(conn_id, response) abort
     " call ale#util#Execute('echom '')
     if get(a:response, 'command', '') is# 'rename'
     \&& has_key(s:rename_map, a:response.request_seq)
@@ -59,7 +61,7 @@ function! ale#rename#HandleTSServerResponse(new_name, conn_id, response) abort
         if get(a:response, 'success', v:false) is v:true
             let l:item_list = []
 
-            echom string(a:response.body)
+            " echom string(a:response.body)
             for l:response_item in a:response.body.locs
                 let l:filename = l:response_item.file
                 let l:locs = []
@@ -84,13 +86,13 @@ function! ale#rename#HandleTSServerResponse(new_name, conn_id, response) abort
             if empty(l:item_list)
                 call ale#util#Execute('echom ''Could not rename.''')
             else
-                call s:ApplyRenameEdits(a:new_name, l:item_list)
+                call s:ApplyRenameEdits(s:new_name, l:item_list)
             endif
         endif
     endif
 endfunction
 
-function! ale#rename#HandleLSPResponse(new_name, conn_id, response) abort
+function! ale#rename#HandleLSPResponse(conn_id, response) abort
     if has_key(a:response, 'id')
     \&& has_key(s:rename_map, a:response.id)
         call remove(s:rename_map, a:response.id)
@@ -109,7 +111,7 @@ function! ale#rename#HandleLSPResponse(new_name, conn_id, response) abort
         if empty(l:item_list)
             call ale#util#Execute('echom ''Could not rename.''')
         else
-            call s:ApplyRenameEdits(a:new_name, l:item_list)
+            call s:ApplyRenameEdits(s:new_name, l:item_list)
         endif
     endif
 endfunction
@@ -124,8 +126,10 @@ function! s:OnReady(line, column, new_name, linter, lsp_details) abort
     let l:buffer = a:lsp_details.buffer
 
     let l:Callback = a:linter.lsp is# 'tsserver'
-    \   ? function('ale#rename#HandleTSServerResponse', [a:new_name])
-    \   : function('ale#rename#HandleLSPResponse', [a:new_name])
+    \   ? function('ale#rename#HandleTSServerResponse')
+    \   : function('ale#rename#HandleLSPResponse')
+
+    let s:new_name = a:new_name
 
     call ale#lsp#RegisterCallback(l:id, l:Callback)
 
