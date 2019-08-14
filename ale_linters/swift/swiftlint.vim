@@ -63,7 +63,7 @@ endfunction
 
 call ale#linter#Define('swift', {
 \   'name': 'swiftlint',
-\   'executable_callback': 'ale_linters#swift#swiftlint#GetExecutable',
-\   'command_callback': 'ale_linters#swift#swiftlint#GetCommand',
+\   'executable': function('ale_linters#swift#swiftlint#GetExecutable'),
+\   'command': function('ale_linters#swift#swiftlint#GetCommand'),
 \   'callback': 'ale_linters#swift#swiftlint#Handle',
 \})

@@ -91,6 +91,6 @@ endfunction
 call ale#linter#Define('erlang', {
 \   'name': 'erlc',
 \   'executable': 'erlc',
-\   'command_callback': 'ale_linters#erlang#erlc#GetCommand',
+\   'command': function('ale_linters#erlang#erlc#GetCommand'),
 \   'callback': 'ale_linters#erlang#erlc#Handle',
 \})

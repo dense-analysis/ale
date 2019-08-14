@@ -1,6 +1,7 @@
 Before:
   Save $GOPATH
   Save g:ale_completion_enabled
+  Save g:ale_go_go111module
 
   let g:ale_completion_enabled = 0
   let g:sep = has('win32') ? ';' : ':'
@@ -14,6 +15,7 @@ After:
   Restore
 
   unlet! b:ale_completion_enabled
+  unlet! b:ale_go_go111module
   unlet! g:sep
 
   call ale#assert#TearDownLinterTest()
@@ -51,6 +53,12 @@ Execute(should ignore go-langserver -gocodecompletion option):
   let b:ale_completion_enabled = 0
 
   AssertLinter 'go-langserver', ale#Escape('go-langserver') . ' -trace'
+
+Execute(should support Go environment variables):
+  let b:ale_go_go111module = 'on'
+
+  AssertLinter 'go-langserver',
+  \ ale#Env('GO111MODULE', 'on') . ale#Escape('go-langserver')
 
 Execute(should set go-langserver for go app1):
   call ale#test#SetFilename('go_paths/go1/prj1/file.go')

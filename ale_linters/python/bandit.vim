@@ -3,6 +3,7 @@
 
 call ale#Set('python_bandit_executable', 'bandit')
 call ale#Set('python_bandit_options', '')
+call ale#Set('python_bandit_use_config', 1)
 call ale#Set('python_bandit_use_global', get(g:, 'ale_use_global_executables', 0))
 call ale#Set('python_bandit_auto_pipenv', 0)
 
@@ -21,6 +22,14 @@ function! ale_linters#python#bandit#GetCommand(buffer) abort
     let l:executable = ale_linters#python#bandit#GetExecutable(a:buffer)
     let l:flags = ' --format custom'
     \   . ' --msg-template "{line}:{test_id}:{severity}:{msg}" '
+
+    if ale#Var(a:buffer, 'python_bandit_use_config')
+        let l:config_path = ale#path#FindNearestFile(a:buffer, '.bandit')
+
+        if !empty(l:config_path)
+            let l:flags = ' --ini ' . ale#Escape(l:config_path) . l:flags
+        endif
+    endif
 
     let l:exec_args = l:executable =~? 'pipenv$'
     \   ? ' run bandit'
@@ -53,7 +62,7 @@ endfunction
 
 call ale#linter#Define('python', {
 \   'name': 'bandit',
-\   'executable_callback': 'ale_linters#python#bandit#GetExecutable',
-\   'command_callback': 'ale_linters#python#bandit#GetCommand',
+\   'executable': function('ale_linters#python#bandit#GetExecutable'),
+\   'command': function('ale_linters#python#bandit#GetCommand'),
 \   'callback': 'ale_linters#python#bandit#Handle',
 \})

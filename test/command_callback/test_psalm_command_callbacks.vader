@@ -24,6 +24,9 @@ Execute(Vendor executables should be detected):
 
 Execute(The project path should be correct for .git directories):
   call ale#test#SetFilename('psalm-project/test.php')
-  call mkdir(g:dir . '/.git')
+
+  if !isdirectory(g:dir . '/.git')
+    call mkdir(g:dir . '/.git')
+  endif
 
   AssertLSPProject g:dir

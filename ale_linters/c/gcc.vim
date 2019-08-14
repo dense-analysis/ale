@@ -9,7 +9,11 @@ function! ale_linters#c#gcc#GetCommand(buffer, output) abort
 
     " -iquote with the directory the file is in makes #include work for
     "  headers in the same directory.
-    return '%e -S -x c -fsyntax-only'
+    "
+    " `-o /dev/null` or `-o null` is needed to catch all errors,
+    " -fsyntax-only doesn't catch everything.
+    return '%e -S -x c'
+    \   . ' -o ' . g:ale#util#nul_file
     \   . ' -iquote ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h'))
     \   . ale#Pad(l:cflags)
     \   . ale#Pad(ale#Var(a:buffer, 'c_gcc_options')) . ' -'
@@ -18,10 +22,7 @@ endfunction
 call ale#linter#Define('c', {
 \   'name': 'gcc',
 \   'output_stream': 'stderr',
-\   'executable_callback': ale#VarFunc('c_gcc_executable'),
-\   'command_chain': [
-\       {'callback': 'ale#c#GetMakeCommand', 'output_stream': 'stdout'},
-\       {'callback': 'ale_linters#c#gcc#GetCommand'}
-\   ],
+\   'executable': {b -> ale#Var(b, 'c_gcc_executable')},
+\   'command': {b -> ale#c#RunMakeCommand(b, function('ale_linters#c#gcc#GetCommand'))},
 \   'callback': 'ale#handlers#gcc#HandleGCCFormatWithIncludes',
 \})

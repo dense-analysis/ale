@@ -42,7 +42,7 @@ done < <(
 exit_code=0
 
 # Sort the tools ignoring case, and complain when things are out of order.
-sort -f -k1,2 "$doc_file" -o "$doc_sorted_file"
+LC_ALL=en_US.UTF-8 sort -f -k1,2 "$doc_file" -o "$doc_sorted_file"
 
 diff -U0 "$doc_sorted_file" "$doc_file" || exit_code=$?
 

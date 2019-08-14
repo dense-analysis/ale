@@ -8,8 +8,16 @@ if !has_key(s:, 'lsp_linter_map')
     let s:lsp_linter_map = {}
 endif
 
+" A Dictionary to track one-shot handlers for custom LSP requests
+let s:custom_handlers_map = get(s:, 'custom_handlers_map', {})
+
 " Check if diagnostics for a particular linter should be ignored.
 function! s:ShouldIgnore(buffer, linter_name) abort
+    " Ignore all diagnostics if LSP integration is disabled.
+    if ale#Var(a:buffer, 'disable_lsp')
+        return 1
+    endif
+
     let l:config = ale#Var(a:buffer, 'linters_ignore')
 
     " Don't load code for ignoring diagnostics if there's nothing to ignore.
@@ -26,13 +34,14 @@ endfunction
 function! s:HandleLSPDiagnostics(conn_id, response) abort
     let l:linter_name = s:lsp_linter_map[a:conn_id]
     let l:filename = ale#path#FromURI(a:response.params.uri)
-    let l:buffer = bufnr(l:filename)
+    let l:buffer = bufnr('^' . l:filename . '$')
+    let l:info = get(g:ale_buffer_info, l:buffer, {})
 
-    if s:ShouldIgnore(l:buffer, l:linter_name)
+    if empty(l:info)
         return
     endif
 
-    if l:buffer <= 0
+    if s:ShouldIgnore(l:buffer, l:linter_name)
         return
     endif
 
@@ -43,12 +52,14 @@ endfunction
 
 function! s:HandleTSServerDiagnostics(response, error_type) abort
     let l:linter_name = 'tsserver'
-    let l:buffer = bufnr(a:response.body.file)
+    let l:buffer = bufnr('^' . a:response.body.file . '$')
     let l:info = get(g:ale_buffer_info, l:buffer, {})
 
     if empty(l:info)
         return
     endif
+
+    call ale#engine#MarkLinterInactive(l:info, l:linter_name)
 
     if s:ShouldIgnore(l:buffer, l:linter_name)
         return
@@ -129,27 +140,39 @@ function! ale#lsp_linter#HandleLSPResponse(conn_id, response) abort
 endfunction
 
 function! ale#lsp_linter#GetOptions(buffer, linter) abort
-    let l:initialization_options = {}
-
     if has_key(a:linter, 'initialization_options_callback')
-        let l:initialization_options = ale#util#GetFunction(a:linter.initialization_options_callback)(a:buffer)
-    elseif has_key(a:linter, 'initialization_options')
-        let l:initialization_options = a:linter.initialization_options
+        return ale#util#GetFunction(a:linter.initialization_options_callback)(a:buffer)
     endif
 
-    return l:initialization_options
+    if has_key(a:linter, 'initialization_options')
+        let l:Options = a:linter.initialization_options
+
+        if type(l:Options) is v:t_func
+            let l:Options = l:Options(a:buffer)
+        endif
+
+        return l:Options
+    endif
+
+    return {}
 endfunction
 
 function! ale#lsp_linter#GetConfig(buffer, linter) abort
-    let l:config = {}
-
     if has_key(a:linter, 'lsp_config_callback')
-        let l:config = ale#util#GetFunction(a:linter.lsp_config_callback)(a:buffer)
-    elseif has_key(a:linter, 'lsp_config')
-        let l:config = a:linter.lsp_config
+        return ale#util#GetFunction(a:linter.lsp_config_callback)(a:buffer)
     endif
 
-    return l:config
+    if has_key(a:linter, 'lsp_config')
+        let l:Config = a:linter.lsp_config
+
+        if type(l:Config) is v:t_func
+            let l:Config = l:Config(a:buffer)
+        endif
+
+        return l:Config
+    endif
+
+    return {}
 endfunction
 
 function! ale#lsp_linter#FindProjectRoot(buffer, linter) abort
@@ -182,6 +205,12 @@ function! ale#lsp_linter#FindProjectRoot(buffer, linter) abort
     endif
 
     " Fall back to the linter-specific configuration
+    if has_key(a:linter, 'project_root')
+        let l:Root = a:linter.project_root
+
+        return type(l:Root) is v:t_func ? l:Root(a:buffer) : l:Root
+    endif
+
     return ale#util#GetFunction(a:linter.project_root_callback)(a:buffer)
 endfunction
 
@@ -210,6 +239,103 @@ function! ale#lsp_linter#OnInit(linter, details, Callback) abort
     call a:Callback(a:linter, a:details)
 endfunction
 
+function! s:StartLSP(options, address, executable, command) abort
+    let l:buffer = a:options.buffer
+    let l:linter = a:options.linter
+    let l:root = a:options.root
+    let l:Callback = a:options.callback
+
+    let l:init_options = ale#lsp_linter#GetOptions(l:buffer, l:linter)
+
+    if l:linter.lsp is# 'socket'
+        let l:conn_id = ale#lsp#Register(a:address, l:root, l:init_options)
+        let l:ready = ale#lsp#ConnectToAddress(l:conn_id, a:address)
+        let l:command = ''
+    else
+        let l:conn_id = ale#lsp#Register(a:executable, l:root, l:init_options)
+
+        " tsserver behaves differently, so tell the LSP API that it is tsserver.
+        if l:linter.lsp is# 'tsserver'
+            call ale#lsp#MarkConnectionAsTsserver(l:conn_id)
+        endif
+
+        let l:command = ale#command#FormatCommand(l:buffer, a:executable, a:command, 0, v:false)[1]
+        let l:command = ale#job#PrepareCommand(l:buffer, l:command)
+        let l:ready = ale#lsp#StartProgram(l:conn_id, a:executable, l:command)
+    endif
+
+    if !l:ready
+        if g:ale_history_enabled && !empty(a:command)
+            call ale#history#Add(l:buffer, 'failed', l:conn_id, a:command)
+        endif
+
+        return 0
+    endif
+
+    let l:details = {
+    \   'buffer': l:buffer,
+    \   'connection_id': l:conn_id,
+    \   'command': l:command,
+    \   'project_root': l:root,
+    \}
+
+    call ale#lsp#OnInit(l:conn_id, {->
+    \   ale#lsp_linter#OnInit(l:linter, l:details, l:Callback)
+    \})
+
+    return 1
+endfunction
+
+function! s:StartWithAddress(options, address) abort
+    if ale#command#IsDeferred(a:address)
+        let a:address.result_callback = {
+        \   address -> s:StartWithAddress(a:options, address)
+        \}
+
+        return 1
+    endif
+
+    if empty(a:address)
+        return 0
+    endif
+
+    return s:StartLSP(a:options, a:address, '', '')
+endfunction
+
+function! s:StartWithCommand(options, executable, command) abort
+    if ale#command#IsDeferred(a:command)
+        let a:command.result_callback = {
+        \   command -> s:StartWithCommand(a:options, a:executable, command)
+        \}
+
+        return 1
+    endif
+
+    if empty(a:command)
+        return 0
+    endif
+
+    return s:StartLSP(a:options, '', a:executable, a:command)
+endfunction
+
+function! s:StartIfExecutable(options, executable) abort
+    if ale#command#IsDeferred(a:executable)
+        let a:executable.result_callback = {
+        \   executable -> s:StartIfExecutable(a:options, executable)
+        \}
+
+        return 1
+    endif
+
+    if !ale#engine#IsExecutable(a:options.buffer, a:executable)
+        return 0
+    endif
+
+    let l:command = ale#linter#GetCommand(a:options.buffer, a:options.linter)
+
+    return s:StartWithCommand(a:options, a:executable, l:command)
+endfunction
+
 " Given a buffer, an LSP linter, start up an LSP linter and get ready to
 " receive messages for the document.
 function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
@@ -223,54 +349,22 @@ function! ale#lsp_linter#StartLSP(buffer, linter, Callback) abort
         return 0
     endif
 
-    let l:init_options = ale#lsp_linter#GetOptions(a:buffer, a:linter)
+    let l:options = {
+    \   'buffer': a:buffer,
+    \   'linter': a:linter,
+    \   'callback': a:Callback,
+    \   'root': l:root,
+    \}
 
     if a:linter.lsp is# 'socket'
         let l:address = ale#linter#GetAddress(a:buffer, a:linter)
-        let l:conn_id = ale#lsp#Register(l:address, l:root, l:init_options)
-        let l:ready = ale#lsp#ConnectToAddress(l:conn_id, l:address)
-    else
-        let l:executable = ale#linter#GetExecutable(a:buffer, a:linter)
 
-        if !ale#engine#IsExecutable(a:buffer, l:executable)
-            return 0
-        endif
-
-        let l:conn_id = ale#lsp#Register(l:executable, l:root, l:init_options)
-
-        " tsserver behaves differently, so tell the LSP API that it is tsserver.
-        if a:linter.lsp is# 'tsserver'
-            call ale#lsp#MarkConnectionAsTsserver(l:conn_id)
-        endif
-
-        let l:command = ale#linter#GetCommand(a:buffer, a:linter)
-        " Format the command, so %e can be formatted into it.
-        let l:command = ale#command#FormatCommand(a:buffer, l:executable, l:command, 0, v:false)[1]
-        let l:command = ale#job#PrepareCommand(a:buffer, l:command)
-        let l:ready = ale#lsp#StartProgram(l:conn_id, l:executable, l:command)
+        return s:StartWithAddress(l:options, l:address)
     endif
 
-    if !l:ready
-        if g:ale_history_enabled && !empty(l:command)
-            call ale#history#Add(a:buffer, 'failed', l:conn_id, l:command)
-        endif
+    let l:executable = ale#linter#GetExecutable(a:buffer, a:linter)
 
-        return 0
-    endif
-
-
-    let l:details = {
-    \   'buffer': a:buffer,
-    \   'connection_id': l:conn_id,
-    \   'command': l:command,
-    \   'project_root': l:root,
-    \}
-
-    call ale#lsp#OnInit(l:conn_id, {->
-    \   ale#lsp_linter#OnInit(a:linter, l:details, a:Callback)
-    \})
-
-    return 1
+    return s:StartIfExecutable(l:options, l:executable)
 endfunction
 
 function! s:CheckWithLSP(linter, details) abort
@@ -293,6 +387,10 @@ function! s:CheckWithLSP(linter, details) abort
     if a:linter.lsp is# 'tsserver'
         let l:message = ale#lsp#tsserver_message#Geterr(l:buffer)
         let l:notified = ale#lsp#Send(l:id, l:message) != 0
+
+        if l:notified
+            call ale#engine#MarkLinterActive(l:info, a:linter)
+        endif
     else
         let l:notified = ale#lsp#NotifyForChanges(l:id, l:buffer)
     endif
@@ -303,10 +401,6 @@ function! s:CheckWithLSP(linter, details) abort
         let l:save_message = ale#lsp#message#DidSave(l:buffer)
         let l:notified = ale#lsp#Send(l:id, l:save_message) != 0
     endif
-
-    if l:notified
-        call ale#engine#MarkLinterActive(l:info, a:linter)
-    endif
 endfunction
 
 function! ale#lsp_linter#CheckWithLSP(buffer, linter) abort
@@ -316,9 +410,57 @@ endfunction
 " Clear LSP linter data for the linting engine.
 function! ale#lsp_linter#ClearLSPData() abort
     let s:lsp_linter_map = {}
+    let s:custom_handlers_map = {}
 endfunction
 
 " Just for tests.
 function! ale#lsp_linter#SetLSPLinterMap(replacement_map) abort
     let s:lsp_linter_map = a:replacement_map
+endfunction
+
+function! s:HandleLSPResponseToCustomRequests(conn_id, response) abort
+    if has_key(a:response, 'id')
+    \&& has_key(s:custom_handlers_map, a:response.id)
+        let l:Handler = remove(s:custom_handlers_map, a:response.id)
+        call l:Handler(a:response)
+    endif
+endfunction
+
+function! s:OnReadyForCustomRequests(args, linter, lsp_details) abort
+    let l:id = a:lsp_details.connection_id
+    let l:request_id = ale#lsp#Send(l:id, a:args.message)
+
+    if l:request_id > 0 && has_key(a:args, 'handler')
+        let l:Callback = function('s:HandleLSPResponseToCustomRequests')
+        call ale#lsp#RegisterCallback(l:id, l:Callback)
+        let s:custom_handlers_map[l:request_id] = a:args.handler
+    endif
+endfunction
+
+" Send a custom request to an LSP linter.
+function! ale#lsp_linter#SendRequest(buffer, linter_name, message, ...) abort
+    let l:filetype = ale#linter#ResolveFiletype(getbufvar(a:buffer, '&filetype'))
+    let l:linter_list = ale#linter#GetAll(l:filetype)
+    let l:linter_list = filter(l:linter_list, {_, v -> v.name is# a:linter_name})
+
+    if len(l:linter_list) < 1
+        throw 'Linter "' . a:linter_name . '" not found!'
+    endif
+
+    let l:linter = l:linter_list[0]
+
+    if empty(l:linter.lsp)
+        throw 'Linter "' . a:linter_name . '" does not support LSP!'
+    endif
+
+    let l:is_notification = a:message[0]
+    let l:callback_args = {'message': a:message}
+
+    if !l:is_notification && a:0
+        let l:callback_args.handler = a:1
+    endif
+
+    let l:Callback = function('s:OnReadyForCustomRequests', [l:callback_args])
+
+    return ale#lsp_linter#StartLSP(a:buffer, l:linter, l:Callback)
 endfunction

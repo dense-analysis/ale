@@ -10,7 +10,7 @@ set -u
 #
 
 image=w0rp/ale
-current_image_id=67896c9c2c0f
+current_image_id=f58c7bf8900f
 
 # Used in all test scripts for running the selected Docker image.
 DOCKER_RUN_IMAGE="$image"
@@ -139,6 +139,30 @@ trap '{ rm -rf "$output_dir"; }' EXIT
 
 file_number=0
 pid_list=''
+
+# Used for killing tests when you kill the script.
+cancel_tests() {
+    set +e
+
+    if [ -n "$pid_list" ]; then
+        for pid in $pid_list; do
+            kill "$pid"
+            wait "$pid"
+        done
+    fi
+
+    # shellcheck disable=SC2046
+    docker kill $(docker ps -a -q --filter ancestor="$image" --format='{{.ID}}') &> /dev/null
+
+    if [ -d "$output_dir" ]; then
+        rm -rf "$output_dir"
+    fi
+
+    echo
+    exit 1
+}
+
+trap cancel_tests INT TERM
 
 for vim in $(docker run --rm "$DOCKER_RUN_IMAGE" ls /vim-build/bin | grep '^neovim\|^vim' ); do
     if ( [[ $vim =~ ^vim-v8.0 ]] && ((run_vim_80_tests)) ) \

@@ -35,7 +35,7 @@ endfunction
 call ale#linter#Define('haskell', {
 \   'name': 'hie',
 \   'lsp': 'stdio',
-\   'command_callback': 'ale_linters#haskell#hie#GetCommand',
-\   'executable_callback': ale#VarFunc('haskell_hie_executable'),
-\   'project_root_callback': 'ale_linters#haskell#hie#GetProjectRoot',
+\   'command': function('ale_linters#haskell#hie#GetCommand'),
+\   'executable': {b -> ale#Var(b, 'haskell_hie_executable')},
+\   'project_root': function('ale_linters#haskell#hie#GetProjectRoot'),
 \})

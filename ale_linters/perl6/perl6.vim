@@ -158,9 +158,9 @@ endfunction
 
 call ale#linter#Define('perl6', {
 \   'name': 'perl6',
-\   'executable_callback': 'ale_linters#perl6#perl6#GetExecutable',
+\   'executable': function('ale_linters#perl6#perl6#GetExecutable'),
 \   'output_stream': 'both',
-\   'command_callback': 'ale_linters#perl6#perl6#GetCommand',
+\   'command': function('ale_linters#perl6#perl6#GetCommand'),
 \   'callback': 'ale_linters#perl6#perl6#Handle',
 \})
 

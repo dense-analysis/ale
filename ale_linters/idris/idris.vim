@@ -75,7 +75,7 @@ endfunction
 
 call ale#linter#Define('idris', {
 \   'name': 'idris',
-\   'executable_callback': ale#VarFunc('idris_idris_executable'),
-\   'command_callback': 'ale_linters#idris#idris#GetCommand',
+\   'executable': {b -> ale#Var(b, 'idris_idris_executable')},
+\   'command': function('ale_linters#idris#idris#GetCommand'),
 \   'callback': 'ale_linters#idris#idris#Handle',
 \})

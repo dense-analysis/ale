@@ -1,7 +1,0 @@
-Execute(errors should include code):
-  AssertEqual
-  \ [{'lnum': 18, 'col': 3, 'type': 'E', 'text': 'Line indented incorrectly; expected 4 spaces, found 2 (Generic.WhiteSpace.ScopeIndent.IncorrectExact)'}],
-  \ ale_linters#php#phpcs#Handle(bufnr(''), [
-  \ '/path/to/some-filename.php:18:3: error - Line indented incorrectly; expected 4 spaces, found 2 (Generic.WhiteSpace.ScopeIndent.IncorrectExact)',
-  \ ])
-

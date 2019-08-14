@@ -47,3 +47,25 @@ Execute(Pipenv is detected when python_bandit_auto_pipenv is set):
   \ . ' run bandit'
   \ . b:bandit_flags
   \ . ' -'
+
+Execute(The bandit command callback should add .bandit by default):
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_bandit/namespace/foo/bar.py')
+
+  let b:config_path = ale#path#Simplify(
+  \ g:dir . '/python_paths/with_bandit/.bandit'
+  \)
+
+  AssertLinter 'bandit',
+  \ ale#Escape('bandit')
+  \ . ' --ini ' . ale#Escape(b:config_path)
+  \ . b:bandit_flags
+  \ . ' -'
+
+Execute(The bandit command callback should support not using .bandit):
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_bandit/subdir/foo/bar.py')
+  let g:ale_python_bandit_use_config = 0
+
+  AssertLinter 'bandit',
+  \ ale#Escape('bandit')
+  \ . b:bandit_flags
+  \ . ' -'

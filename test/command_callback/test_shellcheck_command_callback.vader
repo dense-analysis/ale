@@ -14,6 +14,11 @@ After:
 Execute(The default shellcheck command should be correct):
   AssertLinter 'shellcheck', b:prefix . ale#Escape('shellcheck') . b:suffix
 
+Execute(The option disabling changing directories should work):
+  let g:ale_sh_shellcheck_change_directory = 0
+
+  AssertLinter 'shellcheck', ale#Escape('shellcheck') . b:suffix
+
 Execute(The shellcheck command should accept options):
   let b:ale_sh_shellcheck_options = '--foobar'
 
@@ -60,7 +65,7 @@ Execute(The -x option should be added when the version is new enough):
   \ b:prefix . ale#Escape('shellcheck') . b:suffix,
   \]
 
-  WithChainResults [
+  GivenCommandOutput [
   \ 'ShellCheck - shell script analysis tool',
   \ 'version: 0.4.4',
   \ 'license: GNU General Public License, version 3',
@@ -72,14 +77,13 @@ Execute(The -x option should be added when the version is new enough):
   \]
 
   " We should cache the version check
-  WithChainResults []
+  GivenCommandOutput []
   AssertLinter 'shellcheck', [
-  \ '',
   \ b:prefix . ale#Escape('shellcheck') . ' -x' . b:suffix,
   \]
 
 Execute(The -x option should not be added when the version is too old):
-  WithChainResults [
+  GivenCommandOutput [
   \ 'ShellCheck - shell script analysis tool',
   \ 'version: 0.3.9',
   \ 'license: GNU General Public License, version 3',
@@ -91,7 +95,7 @@ Execute(The -x option should not be added when the version is too old):
   \]
 
 Execute(The version check shouldn't be run again for old versions):
-  WithChainResults [
+  GivenCommandOutput [
   \ 'ShellCheck - shell script analysis tool',
   \ 'version: 0.3.9',
   \ 'license: GNU General Public License, version 3',
@@ -102,6 +106,5 @@ Execute(The version check shouldn't be run again for old versions):
   \ b:prefix . ale#Escape('shellcheck') . b:suffix,
   \]
   AssertLinter 'shellcheck', [
-  \ '',
   \ b:prefix . ale#Escape('shellcheck') . b:suffix,
   \]

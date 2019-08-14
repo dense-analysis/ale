@@ -10,13 +10,16 @@ function! ale_linters#go#golangci_lint#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'go_golangci_lint_options')
     let l:lint_package = ale#Var(a:buffer, 'go_golangci_lint_package')
 
+
     if l:lint_package
         return ale#path#BufferCdString(a:buffer)
+        \   . ale#go#EnvString(a:buffer)
         \   . '%e run '
         \   .  l:options
     endif
 
     return ale#path#BufferCdString(a:buffer)
+    \   . ale#go#EnvString(a:buffer)
     \   . '%e run '
     \   . ale#Escape(l:filename)
     \   . ' ' . l:options
@@ -49,8 +52,8 @@ endfunction
 
 call ale#linter#Define('go', {
 \   'name': 'golangci-lint',
-\   'executable_callback': ale#VarFunc('go_golangci_lint_executable'),
-\   'command_callback': 'ale_linters#go#golangci_lint#GetCommand',
+\   'executable': {b -> ale#Var(b, 'go_golangci_lint_executable')},
+\   'command': function('ale_linters#go#golangci_lint#GetCommand'),
 \   'callback': 'ale_linters#go#golangci_lint#Handler',
 \   'lint_file': 1,
 \})

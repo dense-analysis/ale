@@ -53,6 +53,7 @@ Notes:
   * `gcc`
   * `uncrustify`
 * C#
+  * `csc`!!
   * `mcs`
   * `mcsc`!!
   * `uncrustify`
@@ -71,8 +72,10 @@ Notes:
   * `gcc`
   * `uncrustify`
 * Chef
+  * `cookstyle`
   * `foodcritic`
 * Clojure
+  * `clj-kondo`
   * `joker`
 * CloudFormation
   * `cfn-python-lint`
@@ -87,6 +90,7 @@ Notes:
   * `crystal`!!
 * CSS
   * `csslint`
+  * `fecs`
   * `prettier`
   * `stylelint`
 * Cucumber
@@ -118,6 +122,7 @@ Notes:
   * `mix`!!
 * Elm
   * `elm-format`
+  * `elm-lsp`
   * `elm-make`
 * Erb
   * `erb`
@@ -151,6 +156,7 @@ Notes:
   * `golint`
   * `gometalinter`!!
   * `go mod`!!
+  * `gopls`
   * `gosimple`!!
   * `gotype`!!
   * `go vet`!!
@@ -170,6 +176,7 @@ Notes:
 * Haskell
   * `brittany`
   * `cabal-ghc`
+  * `floskell`
   * `ghc`
   * `ghc-mod`
   * `hdevtools`
@@ -183,6 +190,7 @@ Notes:
   * `terraform-fmt`
 * HTML
   * `alex`!!
+  * `fecs`
   * `HTMLHint`
   * `prettier`
   * `proselint`
@@ -194,6 +202,7 @@ Notes:
   * `ispc`!!
 * Java
   * `checkstyle`
+  * `eclipselsp`
   * `google-java-format`
   * `javac`
   * `javalsp`
@@ -201,6 +210,7 @@ Notes:
   * `uncrustify`
 * JavaScript
   * `eslint`
+  * `fecs`
   * `flow`
   * `jscs`
   * `jshint`
@@ -227,6 +237,7 @@ Notes:
   * `lacheck`
   * `proselint`
   * `redpen`
+  * `texlab`
   * `textlint`
   * `vale`
   * `write-good`
@@ -241,12 +252,14 @@ Notes:
   * `luacheck`
 * Mail
   * `alex`!!
+  * `languagetool`!!
   * `proselint`
   * `vale`
 * Make
   * `checkmake`
 * Markdown
   * `alex`!!
+  * `languagetool`!!
   * `markdownlint`!!
   * `mdl`
   * `prettier`
@@ -282,6 +295,7 @@ Notes:
 * OCaml
   * `merlin` (see |ale-ocaml-merlin|)
   * `ocamlformat`
+  * `ocp-indent`
   * `ols`
 * Pawn
   * `uncrustify`
@@ -312,6 +326,9 @@ Notes:
   * `write-good`
 * Pony
   * `ponyc`
+* PowerShell
+  * `powershell`
+  * `psscriptanalyzer`
 * Prolog
   * `swipl`
 * proto
@@ -322,6 +339,8 @@ Notes:
   * `languageserver`
   * `puppet`
   * `puppet-lint`
+* PureScript
+  * `purescript-language-server`
 * Python
   * `autopep8`
   * `bandit`
@@ -332,10 +351,12 @@ Notes:
   * `prospector`
   * `pycodestyle`
   * `pydocstyle`
+  * `pyflakes`
   * `pylama`!!
   * `pylint`!!
   * `pyls`
   * `pyre`
+  * `reorder-python-imports`
   * `vulture`!!
   * `yapf`
 * QML
@@ -343,11 +364,13 @@ Notes:
   * `qmllint`
 * R
   * `lintr`
+  * `styler`
 * Racket
   * `raco`
 * ReasonML
   * `merlin`
   * `ols`
+  * `reason-language-server`
   * `refmt`
 * reStructuredText
   * `alex`!!
@@ -369,6 +392,7 @@ Notes:
   * `ruby`
   * `rufo`
   * `solargraph`
+  * `sorbet`
   * `standardrb`
 * Rust
   * `cargo`!!
@@ -397,6 +421,7 @@ Notes:
   * `solhint`
   * `solium`
 * SQL
+  * `pgformatter`
   * `sqlfmt`
   * `sqlint`
 * Stylus
@@ -404,6 +429,7 @@ Notes:
 * SugarSS
   * `stylelint`
 * Swift
+  * `sourcekit-lsp`
   * `swiftformat`
   * `swiftlint`
 * Tcl
@@ -417,6 +443,7 @@ Notes:
   * `write-good`
 * Text^
   * `alex`!!
+  * `languagetool`!!
   * `proselint`
   * `redpen`
   * `textlint`
@@ -426,6 +453,7 @@ Notes:
   * `thrift`
 * TypeScript
   * `eslint`
+  * `fecs`
   * `prettier`
   * `tslint`
   * `tsserver`

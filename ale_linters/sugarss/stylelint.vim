@@ -13,9 +13,9 @@ endfunction
 
 call ale#linter#Define('sugarss', {
 \   'name': 'stylelint',
-\   'executable_callback': ale#node#FindExecutableFunc('sugarss_stylelint', [
+\   'executable': {b -> ale#node#FindExecutable(b, 'sugarss_stylelint', [
 \       'node_modules/.bin/stylelint',
-\   ]),
-\   'command_callback': 'ale_linters#sugarss#stylelint#GetCommand',
+\   ])},
+\   'command': function('ale_linters#sugarss#stylelint#GetCommand'),
 \   'callback': 'ale#handlers#css#HandleStyleLintFormat',
 \})

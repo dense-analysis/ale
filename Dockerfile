@@ -1,9 +1,9 @@
 FROM tweekmonster/vim-testbed:latest
 
 RUN install_vim -tag v8.0.0027 -build \
-                -tag v8.1.0204 -build \
+                -tag v8.1.0519 -build \
                 -tag neovim:v0.2.0 -build \
-                -tag neovim:v0.3.0 -build
+                -tag neovim:v0.3.5 -build
 
 ENV PACKAGES="\
     bash \

@@ -15,14 +15,15 @@ function! ale_linters#go#langserver#GetCommand(buffer) abort
     endif
 
     let l:options = uniq(sort(l:options))
+    let l:env = ale#go#EnvString(a:buffer)
 
-    return join(extend(l:executable, l:options), ' ')
+    return l:env . join(extend(l:executable, l:options), ' ')
 endfunction
 
 call ale#linter#Define('go', {
 \   'name': 'golangserver',
 \   'lsp': 'stdio',
-\   'executable_callback': ale#VarFunc('go_langserver_executable'),
-\   'command_callback': 'ale_linters#go#langserver#GetCommand',
-\   'project_root_callback': 'ale#go#FindProjectRoot',
+\   'executable': {b -> ale#Var(b, 'go_langserver_executable')},
+\   'command': function('ale_linters#go#langserver#GetCommand'),
+\   'project_root': function('ale#go#FindProjectRoot'),
 \})

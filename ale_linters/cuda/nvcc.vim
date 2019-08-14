@@ -42,8 +42,8 @@ endfunction
 call ale#linter#Define('cuda', {
 \   'name': 'nvcc',
 \   'output_stream': 'stderr',
-\   'executable_callback': ale#VarFunc('cuda_nvcc_executable'),
-\   'command_callback': 'ale_linters#cuda#nvcc#GetCommand',
+\   'executable': {b -> ale#Var(b, 'cuda_nvcc_executable')},
+\   'command': function('ale_linters#cuda#nvcc#GetCommand'),
 \   'callback': 'ale_linters#cuda#nvcc#HandleNVCCFormat',
 \   'lint_file': 1,
 \})

@@ -31,7 +31,7 @@ endfunction
 call ale#linter#Define('vhdl', {
 \   'name': 'ghdl',
 \   'output_stream': 'stderr',
-\   'executable_callback': ale#VarFunc('vhdl_ghdl_executable'),
-\   'command_callback': 'ale_linters#vhdl#ghdl#GetCommand',
+\   'executable': {b -> ale#Var(b, 'vhdl_ghdl_executable')},
+\   'command': function('ale_linters#vhdl#ghdl#GetCommand'),
 \   'callback': 'ale_linters#vhdl#ghdl#Handle',
 \})

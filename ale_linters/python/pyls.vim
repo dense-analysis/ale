@@ -28,9 +28,9 @@ endfunction
 call ale#linter#Define('python', {
 \   'name': 'pyls',
 \   'lsp': 'stdio',
-\   'executable_callback': 'ale_linters#python#pyls#GetExecutable',
-\   'command_callback': 'ale_linters#python#pyls#GetCommand',
-\   'project_root_callback': 'ale#python#FindProjectRoot',
+\   'executable': function('ale_linters#python#pyls#GetExecutable'),
+\   'command': function('ale_linters#python#pyls#GetCommand'),
+\   'project_root': function('ale#python#FindProjectRoot'),
 \   'completion_filter': 'ale#completion#python#CompletionItemFilter',
-\   'lsp_config_callback': ale#VarFunc('python_pyls_config'),
+\   'lsp_config': {b -> ale#Var(b, 'python_pyls_config')},
 \})

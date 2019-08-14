@@ -1,15 +1,23 @@
 Before:
   Save g:ale_javascript_eslint_suppress_eslintignore
   Save g:ale_javascript_eslint_suppress_missing_config
+  Save g:ale_warn_about_trailing_whitespace
+  Save g:ale_warn_about_trailing_blank_lines
 
   let g:ale_javascript_eslint_suppress_eslintignore = 0
   let g:ale_javascript_eslint_suppress_missing_config = 0
+  let g:ale_warn_about_trailing_whitespace = 1
+  let g:ale_warn_about_trailing_blank_lines = 1
+  unlet! b:ale_warn_about_trailing_whitespace
+  unlet! b:ale_warn_about_trailing_blank_lines
 
 After:
   Restore
 
   unlet! b:ale_javascript_eslint_suppress_eslintignore
   unlet! b:ale_javascript_eslint_suppress_missing_config
+  unlet! b:ale_warn_about_trailing_whitespace
+  unlet! b:ale_warn_about_trailing_blank_lines
   unlet! g:config_error_lines
 
 Execute(The eslint handler should parse lines correctly):
@@ -393,4 +401,38 @@ Execute(Failing to connect to eslint_d should be handled correctly):
   \ ],
   \ ale#handlers#eslint#Handle(bufnr(''), [
   \  'Could not connect',
+  \ ])
+
+Execute(Disabling warnings about trailing spaces should work):
+  silent! noautocmd file foo.ts
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 182,
+  \     'col': 22,
+  \     'code': 'no-trailing-spaces',
+  \     'type': 'E',
+  \     'text': 'Trailing spaces not allowed.',
+  \   },
+  \ ],
+  \ ale#handlers#eslint#Handle(bufnr(''), [
+  \  'foo.js:182:22: Trailing spaces not allowed. [Error/no-trailing-spaces]',
+  \ ])
+
+  let g:ale_warn_about_trailing_whitespace = 0
+
+  AssertEqual
+  \ [],
+  \ ale#handlers#eslint#Handle(bufnr(''), [
+  \  'foo.js:182:22: Trailing spaces not allowed. [Error/no-trailing-spaces]',
+  \ ])
+
+  let g:ale_warn_about_trailing_whitespace = 1
+  let b:ale_warn_about_trailing_whitespace = 0
+
+  AssertEqual
+  \ [],
+  \ ale#handlers#eslint#Handle(bufnr(''), [
+  \  'foo.js:182:22: Trailing spaces not allowed. [Error/no-trailing-spaces]',
   \ ])

@@ -49,13 +49,15 @@ function! ale#references#HandleLSPResponse(conn_id, response) abort
         let l:result = get(a:response, 'result', [])
         let l:item_list = []
 
-        for l:response_item in l:result
-            call add(l:item_list, {
-            \ 'filename': ale#path#FromURI(l:response_item.uri),
-            \ 'line': l:response_item.range.start.line + 1,
-            \ 'column': l:response_item.range.start.character + 1,
-            \})
-        endfor
+        if type(l:result) is v:t_list
+            for l:response_item in l:result
+                call add(l:item_list, {
+                \ 'filename': ale#path#FromURI(l:response_item.uri),
+                \ 'line': l:response_item.range.start.line + 1,
+                \ 'column': l:response_item.range.start.character + 1,
+                \})
+            endfor
+        endif
 
         if empty(l:item_list)
             call ale#util#Execute('echom ''No references found.''')
@@ -113,7 +115,7 @@ function! ale#references#Find(...) abort
     endif
 
     let l:buffer = bufnr('')
-    let [l:line, l:column] = getcurpos()[1:2]
+    let [l:line, l:column] = getpos('.')[1:2]
     let l:column = min([l:column, len(getline(l:line))])
     let l:Callback = function('s:OnReady', [l:line, l:column, l:options])
 

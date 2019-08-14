@@ -1,13 +1,13 @@
-# Asynchronous Lint Engine [![Travis CI Build Status](https://travis-ci.org/w0rp/ale.svg?branch=master)](https://travis-ci.org/w0rp/ale) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/r0ef1xu8xjmik58d/branch/master?svg=true)](https://ci.appveyor.com/project/w0rp/ale) [![Join the chat at https://gitter.im/vim-ale/Lobby](https://badges.gitter.im/vim-ale/Lobby.svg)](https://gitter.im/vim-ale/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# Asynchronous Lint Engine [![Travis CI Build Status](https://travis-ci.com/dense-analysis/ale.svg?branch=master)](https://travis-ci.com/dense-analysis/ale) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/r0ef1xu8xjmik58d/branch/master?svg=true)](https://ci.appveyor.com/project/dense-analysis/ale) [![Join the chat at https://gitter.im/vim-ale/Lobby](https://badges.gitter.im/vim-ale/Lobby.svg)](https://gitter.im/vim-ale/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
-![ALE Logo by Mark Grealish - https://www.bhalash.com/](img/logo.jpg?raw=true)
+![ALE Logo by Mark Grealish - https://www.bhalash.com/](https://user-images.githubusercontent.com/3518142/59195920-2c339500-8b85-11e9-9c22-f6b7f69637b8.jpg)
 
-ALE (Asynchronous Lint Engine) is a plugin for providing linting (checking
-syntax and semantics) in NeoVim 0.2.0+ and Vim 8 while you edit your text files,
+ALE (Asynchronous Lint Engine) is a plugin providing linting (syntax checking
+and semantic errors) in NeoVim 0.2.0+ and Vim 8 while you edit your text files,
 and acts as a Vim [Language Server Protocol](https://langserver.org/) client.
 
-<img src="img/example.gif?raw=true" alt="A linting example with the darkspectrum color scheme in GVim." title="A linting example with the darkspectrum color scheme in GVim.">
+<img src="https://user-images.githubusercontent.com/3518142/59195938-3a81b100-8b85-11e9-8e8d-6a601b1db908.gif" alt="A linting example with the darkspectrum color scheme in GVim." title="A linting example with the darkspectrum color scheme in GVim.">
 
 ALE makes use of NeoVim and Vim 8 job control functions and timers to
 run linters on the contents of text buffers and return errors as
@@ -26,7 +26,7 @@ features, including:
 
 * Diagnostics (via Language Server Protocol linters)
 * Go To Definition (`:ALEGoToDefinition`)
-* Completion (`let g:ale_completion_enabled = 1` before ALE is loaded)
+* Completion (Built in completion support, or with Deoplete)
 * Finding references (`:ALEFindReferences`)
 * Hover information (`:ALEHover`)
 * Symbol search (`:ALESymbolSearch`)
@@ -73,6 +73,7 @@ other content at [w0rp.com](https://w0rp.com).
     15. [How can I configure my C or C++ project?](#faq-c-configuration)
     16. [How can I configure ALE differently for different buffers?](#faq-buffer-configuration)
     17. [How can I configure the height of the list in which ALE displays errors?](#faq-list-window-height)
+    18. [How can I see what ALE has configured for the current file?](#faq-get-info)
 
 <a name="supported-languages"></a>
 
@@ -158,10 +159,34 @@ ALE offers some support for completion via hijacking of omnicompletion while you
 type. All of ALE's completion information must come from Language Server
 Protocol linters, or from `tsserver` for TypeScript.
 
+ALE integrates with [Deoplete](https://github.com/Shougo/deoplete.nvim) as a
+completion source, named `'ale'`. You can configure Deoplete to only use ALE as
+the source of completion information, or mix it with other sources.
+
+```vim
+" Use ALE and also some plugin 'foobar' as completion sources for all code.
+call deoplete#custom#option('sources', {
+\ '_': ['ale', 'foobar'],
+\})
+```
+
+ALE also offers its own automatic completion support, which does not require any
+other plugins, and can be enabled by changing a setting before ALE is loaded.
+
 ```vim
 " Enable completion where available.
 " This setting must be set before ALE is loaded.
+"
+" You should not turn this setting on if you wish to use ALE as a completion
+" source for other completion plugins, like Deoplete.
 let g:ale_completion_enabled = 1
+```
+
+ALE provides an omni-completion function you can use for triggering
+completion manually with `<C-x><C-o>`.
+
+```vim
+set omnifunc=ale#completion#OmniFunc
 ```
 
 See `:help ale-completion` for more information.
@@ -233,14 +258,14 @@ any other tools. Simply clone the plugin into your `pack` directory.
 
 ```bash
 mkdir -p ~/.vim/pack/git-plugins/start
-git clone https://github.com/w0rp/ale.git ~/.vim/pack/git-plugins/start/ale
+git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.vim/pack/git-plugins/start/ale
 ```
 
 #### NeoVim on Unix
 
 ```bash
 mkdir -p ~/.local/share/nvim/site/pack/git-plugins/start
-git clone https://github.com/w0rp/ale.git ~/.local/share/nvim/site/pack/git-plugins/start/ale
+git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.local/share/nvim/site/pack/git-plugins/start/ale
 ```
 
 #### Vim 8 on Windows
@@ -248,7 +273,7 @@ git clone https://github.com/w0rp/ale.git ~/.local/share/nvim/site/pack/git-plug
 ```bash
 # Run these commands in the "Git for Windows" Bash terminal
 mkdir -p ~/vimfiles/pack/git-plugins/start
-git clone https://github.com/w0rp/ale.git ~/vimfiles/pack/git-plugins/start/ale
+git clone --depth 1 https://github.com/dense-analysis/ale.git ~/vimfiles/pack/git-plugins/start/ale
 ```
 
 #### Generating Vim help files
@@ -279,7 +304,7 @@ You can run the following commands in your terminal to do so:
 
 ```bash
 cd ~/.vim/bundle
-git clone https://github.com/w0rp/ale.git
+git clone https://github.com/dense-analysis/ale.git
 ```
 
 <a name="installation-with-vundle"></a>
@@ -290,7 +315,7 @@ You can install this plugin using [Vundle](https://github.com/VundleVim/Vundle.v
 by using the path on GitHub for this repository.
 
 ```vim
-Plugin 'w0rp/ale'
+Plugin 'dense-analysis/ale'
 ```
 
 See the Vundle documentation for more information.
@@ -304,7 +329,7 @@ by adding the GitHub path for this repository to your `~/.vimrc`
 and running `:PlugInstall`.
 
 ```vim
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 ```
 
 <a name="contributing"></a>
@@ -312,14 +337,14 @@ Plug 'w0rp/ale'
 ## 4. Contributing
 
 If you would like to see support for more languages and tools, please
-[create an issue](https://github.com/w0rp/ale/issues)
-or [create a pull request](https://github.com/w0rp/ale/pulls).
+[create an issue](https://github.com/dense-analysis/ale/issues)
+or [create a pull request](https://github.com/dense-analysis/ale/pulls).
 If your tool can read from stdin or you have code to suggest which is good,
 support can be happily added for it.
 
 If you are interested in the general direction of the project, check out the
-[wiki home page](https://github.com/w0rp/ale/wiki). The wiki includes a
-Roadmap for the future, and more.
+[wiki home page](https://github.com/dense-analysis/ale/wiki). The wiki includes
+a Roadmap for the future, and more.
 
 If you'd liked to discuss the project more directly, check out the `#vim-ale` channel
 on Freenode. Web chat is available [here](https://webchat.freenode.net/?channels=vim-ale).
@@ -502,7 +527,7 @@ There are 3 global options that allow customizing the echoed message.
     * `%...code...%` is an optional error code, and most characters can be
       written between the `%` characters.
     * `%linter%` is the linter name
-    * `%severity` is the severity type
+    * `%severity%` is the severity type
 - `g:ale_echo_msg_error_str` is the string used for error severity.
 - `g:ale_echo_msg_warning_str` is the string used for warning severity.
 
@@ -516,7 +541,7 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 
 Will give you:
 
-![Echoed message](img/echo.png)
+![Echoed message](https://user-images.githubusercontent.com/3518142/59195927-348bd000-8b85-11e9-88b6-508a094f1548.png)
 
 See `:help g:ale_echo_msg_format` for more information.
 
@@ -571,6 +596,7 @@ options off.
 ```vim
 " Write this in your vimrc file
 let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
 " You can disable this option too
 " if you don't want linters to run on opening a file
 let g:ale_lint_on_enter = 0
@@ -697,11 +723,10 @@ while you type. ALE uses a timeout which is cancelled and reset every time you
 type, and this delay can be increased so linters are run less often. See
 `:help g:ale_lint_delay` for more information.
 
-If you don't wish to run linters while you type, you can disable that
-behaviour. Set `g:ale_lint_on_text_changed` to `never` or `normal`. You won't
-get as frequent error checking, but ALE shouldn't block your ability to edit a
-document after you save a file, so the asynchronous nature of the plugin will
-still be an advantage.
+If you don't wish to run linters while you type, you can disable that behaviour.
+Set `g:ale_lint_on_text_changed` to `never`. You won't get as frequent error
+checking, but ALE shouldn't block your ability to edit a document after you save
+a file, so the asynchronous nature of the plugin will still be an advantage.
 
 If you are still concerned, you can turn the automatic linting off altogether,
 including the option `g:ale_lint_on_enter`, and you can run ALE manually with
@@ -778,4 +803,14 @@ To set a default height for the error list, use the `g:ale_list_window_size` var
 ```vim
 " Show 5 lines of errors (default: 10)
 let g:ale_list_window_size = 5
+```
+
+<a name="faq-get-info"></a>
+
+### 5.xviii. How can I see what ALE has configured for the current file?
+
+Run the following to see what is currently configured:
+
+```vim
+:ALEInfo
 ```

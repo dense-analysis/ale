@@ -67,7 +67,7 @@ endfunction
 
 call ale#linter#Define('python', {
 \   'name': 'pydocstyle',
-\   'executable_callback': 'ale_linters#python#pydocstyle#GetExecutable',
-\   'command_callback': 'ale_linters#python#pydocstyle#GetCommand',
+\   'executable': function('ale_linters#python#pydocstyle#GetExecutable'),
+\   'command': function('ale_linters#python#pydocstyle#GetCommand'),
 \   'callback': 'ale_linters#python#pydocstyle#Handle',
 \})

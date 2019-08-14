@@ -19,7 +19,7 @@ endfunction
 call ale#linter#Define('c', {
 \  'name': 'flawfinder',
 \  'output_stream': 'stdout',
-\  'executable_callback': ale#VarFunc('c_flawfinder_executable'),
-\  'command_callback': 'ale_linters#c#flawfinder#GetCommand',
+\  'executable': {b -> ale#Var(b, 'c_flawfinder_executable')},
+\  'command': function('ale_linters#c#flawfinder#GetCommand'),
 \  'callback': 'ale#handlers#flawfinder#HandleFlawfinderFormat',
 \})

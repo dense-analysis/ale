@@ -233,8 +233,8 @@ endfunction
 
 call ale#linter#Define('elm', {
 \   'name': 'make',
-\   'executable_callback': 'ale_linters#elm#make#GetExecutable',
+\   'executable': function('ale_linters#elm#make#GetExecutable'),
 \   'output_stream': 'both',
-\   'command_callback': 'ale_linters#elm#make#GetCommand',
+\   'command': function('ale_linters#elm#make#GetCommand'),
 \   'callback': 'ale_linters#elm#make#Handle'
 \})

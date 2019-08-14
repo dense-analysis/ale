@@ -7,21 +7,34 @@ call ale#Set('java_javac_executable', 'javac')
 call ale#Set('java_javac_options', '')
 call ale#Set('java_javac_classpath', '')
 
-function! ale_linters#java#javac#GetImportPaths(buffer) abort
+function! ale_linters#java#javac#RunWithImportPaths(buffer) abort
+    let l:command = ''
     let l:pom_path = ale#path#FindNearestFile(a:buffer, 'pom.xml')
 
     if !empty(l:pom_path) && executable('mvn')
-        return ale#path#CdString(fnamemodify(l:pom_path, ':h'))
+        let l:command = ale#path#CdString(fnamemodify(l:pom_path, ':h'))
         \ . 'mvn dependency:build-classpath'
     endif
 
-    let l:classpath_command = ale#gradle#BuildClasspathCommand(a:buffer)
-
-    if !empty(l:classpath_command)
-        return l:classpath_command
+    " Try to use Gradle if Maven isn't available.
+    if empty(l:command)
+        let l:command = ale#gradle#BuildClasspathCommand(a:buffer)
     endif
 
-    return ''
+    " Try to use Ant if Gradle and Maven aren't available
+    if empty(l:command)
+        let l:command = ale#ant#BuildClasspathCommand(a:buffer)
+    endif
+
+    if empty(l:command)
+        return ale_linters#java#javac#GetCommand(a:buffer, [], {})
+    endif
+
+    return ale#command#Run(
+    \   a:buffer,
+    \   l:command,
+    \   function('ale_linters#java#javac#GetCommand')
+    \)
 endfunction
 
 function! s:BuildClassPathOption(buffer, import_paths) abort
@@ -37,7 +50,7 @@ function! s:BuildClassPathOption(buffer, import_paths) abort
     \   : ''
 endfunction
 
-function! ale_linters#java#javac#GetCommand(buffer, import_paths) abort
+function! ale_linters#java#javac#GetCommand(buffer, import_paths, meta) abort
     let l:cp_option = s:BuildClassPathOption(a:buffer, a:import_paths)
     let l:sp_option = ''
 
@@ -55,15 +68,14 @@ function! ale_linters#java#javac#GetCommand(buffer, import_paths) abort
         if isdirectory(l:jaxb_dir)
             call add(l:sp_dirs, l:jaxb_dir)
         endif
+    endif
 
-        " Automatically include the test directory, but only for test code.
-        if expand('#' . a:buffer . ':p') =~? '\vsrc[/\\]test[/\\]java'
-            let l:test_dir = fnamemodify(l:src_dir, ':h:h:h')
-            \   . (has('win32') ? '\test\java\' : '/test/java/')
+    " Automatically include the test directory, but only for test code.
+    if expand('#' . a:buffer . ':p') =~? '\vsrc[/\\]test[/\\]java'
+        let l:test_dir = ale#path#FindNearestDirectory(a:buffer, 'src/test/java')
 
-            if isdirectory(l:test_dir)
-                call add(l:sp_dirs, l:test_dir)
-            endif
+        if isdirectory(l:test_dir)
+            call add(l:sp_dirs, l:test_dir)
         endif
     endif
 
@@ -92,7 +104,7 @@ function! ale_linters#java#javac#Handle(buffer, lines) abort
     " Main.java:13: warning: [deprecation] donaught() in Testclass has been deprecated
     " Main.java:16: error: ';' expected
     let l:directory = expand('#' . a:buffer . ':p:h')
-    let l:pattern = '\v^(.*):(\d+): (.+):(.+)$'
+    let l:pattern = '\v^(.*):(\d+): (.{-1,}):(.+)$'
     let l:col_pattern = '\v^(\s*\^)$'
     let l:symbol_pattern = '\v^ +symbol: *(class|method) +([^ ]+)'
     let l:output = []
@@ -120,10 +132,8 @@ endfunction
 
 call ale#linter#Define('java', {
 \   'name': 'javac',
-\   'executable_callback': ale#VarFunc('java_javac_executable'),
-\   'command_chain': [
-\       {'callback': 'ale_linters#java#javac#GetImportPaths', 'output_stream': 'stdout'},
-\       {'callback': 'ale_linters#java#javac#GetCommand', 'output_stream': 'stderr'},
-\   ],
+\   'executable': {b -> ale#Var(b, 'java_javac_executable')},
+\   'command': function('ale_linters#java#javac#RunWithImportPaths'),
+\   'output_stream': 'stderr',
 \   'callback': 'ale_linters#java#javac#Handle',
 \})

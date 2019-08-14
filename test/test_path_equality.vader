@@ -6,6 +6,22 @@ Before:
 After:
   delfunction CheckPath
 
+Execute(ale#path#Simplify should adjust paths correctly):
+  if has('unix')
+    " Multiple slashes should be removed correctly.
+    AssertEqual '/foo/bar/baz', ale#path#Simplify('////foo///bar///baz')
+    " Back slashes should be converted to forward slashes.
+    " This means some valid filenames are adjusted incorrectly, but in practice
+    " no filenames for code should contain back slashes, and adjusting slashes
+    " like this makes ALE work in MSYS.
+    AssertEqual 'foo/bar/baz', ale#path#Simplify('foo\bar\baz')
+  else
+    " Multiple slashes should be removed correctly.
+    AssertEqual '\foo\bar\baz', ale#path#Simplify('\\\foo\bar\baz')
+    " Forward slashes should be replaced with back slashes.
+    AssertEqual 'foo\bar\baz', ale#path#Simplify('foo/bar/baz')
+  endif
+
 Execute(ale#path#IsBufferPath should match simple relative paths):
   call ale#test#SetFilename('app/foo.txt')
 
@@ -53,3 +69,14 @@ Execute(ale#path#IsBufferPath should match files in /tmp):
   call ale#test#SetFilename('app/test.ts')
 
   Assert ale#path#IsBufferPath(bufnr(''), tempname() . '/test.ts')
+
+Execute(ale#path#IsBufferPath should match Windows paths on Unix):
+  " This test should pass Unix.
+  "
+  " Back slashes in paths should be replaced with forward slashes, even though
+  " back slashes are valid in filenames on Unix.
+  if has('unix')
+    call ale#test#SetFilename('app/foo/test.ts')
+
+    Assert ale#path#IsBufferPath(bufnr(''), 'foo\test.ts')
+  endif

@@ -14,13 +14,13 @@ endfunction
 function! ale_linters#javascript#xo#GetCommand(buffer) abort
     return ale#Escape(ale_linters#javascript#xo#GetExecutable(a:buffer))
     \   . ' ' . ale#Var(a:buffer, 'javascript_xo_options')
-    \   . ' --reporter unix --stdin --stdin-filename %s'
+    \   . ' --reporter json --stdin --stdin-filename %s'
 endfunction
 
 " xo uses eslint and the output format is the same
 call ale#linter#Define('javascript', {
 \   'name': 'xo',
-\   'executable_callback': 'ale_linters#javascript#xo#GetExecutable',
-\   'command_callback': 'ale_linters#javascript#xo#GetCommand',
-\   'callback': 'ale#handlers#eslint#Handle',
+\   'executable': function('ale_linters#javascript#xo#GetExecutable'),
+\   'command': function('ale_linters#javascript#xo#GetCommand'),
+\   'callback': 'ale#handlers#eslint#HandleJSON',
 \})

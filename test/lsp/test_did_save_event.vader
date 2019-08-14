@@ -3,12 +3,16 @@ Before:
   Save g:ale_enabled
   Save g:ale_linters
   Save g:ale_run_synchronously
+  Save g:ale_disable_lsp
 
   call ale#test#SetDirectory('/testplugin/test/completion')
   call ale#test#SetFilename('dummy.txt')
 
   runtime autoload/ale/lsp.vim
+  runtime autoload/ale/lsp_linter.vim
 
+  let g:ale_disable_lsp = 0
+  unlet! b:ale_disable_lsp
   let g:ale_lint_on_save = 1
   let b:ale_enabled = 1
   let g:ale_lsp_next_message_id = 1

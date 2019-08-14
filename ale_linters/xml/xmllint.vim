@@ -59,7 +59,7 @@ endfunction
 call ale#linter#Define('xml', {
 \   'name': 'xmllint',
 \   'output_stream': 'stderr',
-\   'executable_callback': ale#VarFunc('xml_xmllint_executable'),
-\   'command_callback': 'ale_linters#xml#xmllint#GetCommand',
+\   'executable': {b -> ale#Var(b, 'xml_xmllint_executable')},
+\   'command': function('ale_linters#xml#xmllint#GetCommand'),
 \   'callback': 'ale_linters#xml#xmllint#Handle',
 \ })

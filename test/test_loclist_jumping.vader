@@ -21,7 +21,7 @@ Before:
     if type(a:position) == type(0)
       call ale#loclist_jumping#JumpToIndex(a:position)
     else
-      call ale#loclist_jumping#Jump(a:position, a:wrap, a:filter, 
+      call ale#loclist_jumping#Jump(a:position, a:wrap, a:filter,
       \                             a:subtype_filter)
     endif
 
@@ -104,3 +104,18 @@ Execute(We should be able to jump when the error line is blank):
   AssertEqual [2, 8], TestJump('before', 1, 'any', 'any', [3, 1])
   AssertEqual [3, 1], TestJump('after', 0, 'any', 'any', [3, 1])
   AssertEqual [1, 2], TestJump('after', 1, 'any', 'any', [3, 1])
+
+Execute(ALE should jump to column 1 instead of 0):
+  let g:ale_buffer_info = {
+  \ bufnr(''): {
+  \   'loclist': [
+  \     {'type': 'E', 'bufnr': bufnr(''), 'lnum': 1, 'col': 5},
+  \     {'type': 'E', 'bufnr': bufnr(''), 'lnum': 2, 'col': 0},
+  \   ],
+  \ },
+  \}
+
+  AssertEqual [2, 1], TestJump('after', 1, 'any', 'any', [1, 5])
+  AssertEqual [1, 5], TestJump('after', 1, 'any', 'any', [2, 1])
+  AssertEqual [2, 1], TestJump('before', 1, 'any', 'any', [1, 5])
+  AssertEqual [1, 5], TestJump('before', 1, 'any', 'any', [2, 1])

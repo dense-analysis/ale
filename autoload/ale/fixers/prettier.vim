@@ -15,16 +15,12 @@ function! ale#fixers#prettier#GetExecutable(buffer) abort
 endfunction
 
 function! ale#fixers#prettier#Fix(buffer) abort
-    let l:executable = ale#fixers#prettier#GetExecutable(a:buffer)
-
-    let l:command = ale#semver#HasVersion(l:executable)
-    \   ? ''
-    \   : ale#Escape(l:executable) . ' --version'
-
-    return {
-    \   'command': l:command,
-    \   'chain_with': 'ale#fixers#prettier#ApplyFixForVersion',
-    \}
+    return ale#semver#RunWithVersionCheck(
+    \   a:buffer,
+    \   ale#fixers#prettier#GetExecutable(a:buffer),
+    \   '%e --version',
+    \   function('ale#fixers#prettier#ApplyFixForVersion'),
+    \)
 endfunction
 
 function! ale#fixers#prettier#ProcessPrettierDOutput(buffer, output) abort
@@ -38,19 +34,24 @@ function! ale#fixers#prettier#ProcessPrettierDOutput(buffer, output) abort
     return a:output
 endfunction
 
-function! ale#fixers#prettier#ApplyFixForVersion(buffer, version_output) abort
+function! ale#fixers#prettier#ApplyFixForVersion(buffer, version) abort
     let l:executable = ale#fixers#prettier#GetExecutable(a:buffer)
     let l:options = ale#Var(a:buffer, 'javascript_prettier_options')
-    let l:version = ale#semver#GetVersion(l:executable, a:version_output)
     let l:parser = ''
+
+    let l:filetypes = split(getbufvar(a:buffer, '&filetype'), '\.')
+
+    if index(l:filetypes, 'handlebars') > -1
+        let l:parser = 'glimmer'
+    endif
 
     " Append the --parser flag depending on the current filetype (unless it's
     " already set in g:javascript_prettier_options).
-    if empty(expand('#' . a:buffer . ':e')) && match(l:options, '--parser') == -1
+    if empty(expand('#' . a:buffer . ':e')) && l:parser is# ''  && match(l:options, '--parser') == -1
         " Mimic Prettier's defaults. In cases without a file extension or
         " filetype (scratch buffer), Prettier needs `parser` set to know how
         " to process the buffer.
-        if ale#semver#GTE(l:version, [1, 16, 0])
+        if ale#semver#GTE(a:version, [1, 16, 0])
             let l:parser = 'babel'
         else
             let l:parser = 'babylon'
@@ -70,7 +71,7 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version_output) abort
         \    'html': 'html',
         \}
 
-        for l:filetype in split(getbufvar(a:buffer, '&filetype'), '\.')
+        for l:filetype in l:filetypes
             if has_key(l:prettier_parsers, l:filetype)
                 let l:parser = l:prettier_parsers[l:filetype]
                 break
@@ -94,7 +95,7 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version_output) abort
     endif
 
     " 1.4.0 is the first version with --stdin-filepath
-    if ale#semver#GTE(l:version, [1, 4, 0])
+    if ale#semver#GTE(a:version, [1, 4, 0])
         return {
         \   'command': ale#path#BufferCdString(a:buffer)
         \       . ale#Escape(l:executable)

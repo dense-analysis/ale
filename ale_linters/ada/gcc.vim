@@ -48,7 +48,7 @@ endfunction
 call ale#linter#Define('ada', {
 \   'name': 'gcc',
 \   'output_stream': 'stderr',
-\   'executable_callback': ale#VarFunc('ada_gcc_executable'),
-\   'command_callback': 'ale_linters#ada#gcc#GetCommand',
+\   'executable': {b -> ale#Var(b, 'ada_gcc_executable')},
+\   'command': function('ale_linters#ada#gcc#GetCommand'),
 \   'callback': 'ale_linters#ada#gcc#Handle',
 \})

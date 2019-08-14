@@ -1,45 +1,61 @@
+call ale#Set('fix_on_save_ignore', {})
+
 " Apply fixes queued up for buffers which may be hidden.
 " Vim doesn't let you modify hidden buffers.
-function! ale#fix#ApplyQueuedFixes() abort
-    let l:buffer = bufnr('')
-    let l:data = get(g:ale_fix_buffer_data, l:buffer, {'done': 0})
+function! ale#fix#ApplyQueuedFixes(buffer) abort
+    let l:data = get(g:ale_fix_buffer_data, a:buffer, {'done': 0})
+    let l:has_bufline_api = exists('*deletebufline') && exists('*setbufline')
 
-    if !l:data.done
+    if !l:data.done || (!l:has_bufline_api && a:buffer isnot bufnr(''))
         return
     endif
 
-    call remove(g:ale_fix_buffer_data, l:buffer)
+    call remove(g:ale_fix_buffer_data, a:buffer)
 
     if l:data.changes_made
-        let l:start_line = len(l:data.output) + 1
-        let l:end_line = len(l:data.lines_before)
-
-        if l:end_line >= l:start_line
-            let l:save = winsaveview()
-            silent execute l:start_line . ',' . l:end_line . 'd_'
-            call winrestview(l:save)
-        endif
-
         " If the file is in DOS mode, we have to remove carriage returns from
         " the ends of lines before calling setline(), or we will see them
         " twice.
-        let l:lines_to_set = getbufvar(l:buffer, '&fileformat') is# 'dos'
+        let l:new_lines = getbufvar(a:buffer, '&fileformat') is# 'dos'
         \   ? map(copy(l:data.output), 'substitute(v:val, ''\r\+$'', '''', '''')')
         \   : l:data.output
+        let l:first_line_to_remove = len(l:new_lines) + 1
 
-        call setline(1, l:lines_to_set)
+        " Use a Vim API for setting lines in other buffers, if available.
+        if l:has_bufline_api
+            call setbufline(a:buffer, 1, l:new_lines)
+            call deletebufline(a:buffer, l:first_line_to_remove, '$')
+        " Fall back on setting lines the old way, for the current buffer.
+        else
+            let l:old_line_length = len(l:data.lines_before)
+
+            if l:old_line_length >= l:first_line_to_remove
+                let l:save = winsaveview()
+                silent execute
+                \   l:first_line_to_remove . ',' . l:old_line_length . 'd_'
+                call winrestview(l:save)
+            endif
+
+            call setline(1, l:new_lines)
+        endif
 
         if l:data.should_save
-            if empty(&buftype)
-                noautocmd :w!
+            if a:buffer is bufnr('')
+                if empty(&buftype)
+                    noautocmd :w!
+                else
+                    set nomodified
+                endif
             else
-                set nomodified
+                call writefile(l:new_lines, expand(a:buffer . ':p')) " no-custom-checks
+                call setbufvar(a:buffer, '&modified', 0)
             endif
         endif
     endif
 
     if l:data.should_save
-        let l:should_lint = g:ale_fix_on_save
+        let l:should_lint = ale#Var(a:buffer, 'fix_on_save')
+        \   && ale#Var(a:buffer, 'lint_on_save')
     else
         let l:should_lint = l:data.changes_made
     endif
@@ -50,7 +66,7 @@ function! ale#fix#ApplyQueuedFixes() abort
     " fixing problems.
     if g:ale_enabled
     \&& l:should_lint
-    \&& !ale#events#QuitRecently(l:buffer)
+    \&& !ale#events#QuitRecently(a:buffer)
         call ale#Queue(0, l:data.should_save ? 'lint_file' : '')
     endif
 endfunction
@@ -81,7 +97,7 @@ function! ale#fix#ApplyFixes(buffer, output) abort
 
     " We can only change the lines of a buffer which is currently open,
     " so try and apply the fixes to the current buffer.
-    call ale#fix#ApplyQueuedFixes()
+    call ale#fix#ApplyQueuedFixes(a:buffer)
 endfunction
 
 function! s:HandleExit(job_info, buffer, job_output, data) abort
@@ -117,6 +133,10 @@ function! s:HandleExit(job_info, buffer, job_output, data) abort
         let l:input = a:job_info.input
     endif
 
+    if l:ChainCallback isnot v:null && !get(g:, 'ale_ignore_2_4_warnings')
+        execute 'echom ''chain_with is deprecated. Use `let g:ale_ignore_2_4_warnings = 1` to disable this message.'''
+    endif
+
     let l:next_index = l:ChainCallback is v:null
     \   ? a:job_info.callback_index + 1
     \   : a:job_info.callback_index
@@ -131,35 +151,55 @@ function! s:HandleExit(job_info, buffer, job_output, data) abort
     \})
 endfunction
 
-function! s:RunJob(options) abort
-    let l:buffer = a:options.buffer
-    let l:command = a:options.command
-    let l:input = a:options.input
-    let l:ChainWith = a:options.chain_with
-    let l:read_buffer = a:options.read_buffer
+function! s:RunJob(result, options) abort
+    if ale#command#IsDeferred(a:result)
+        let a:result.result_callback = {x -> s:RunJob(x, a:options)}
 
-    if empty(l:command)
-        " If there's nothing further to chain the command with, stop here.
-        if l:ChainWith is v:null
-            return v:false
+        return
+    endif
+
+    let l:buffer = a:options.buffer
+    let l:input = a:options.input
+
+    if a:result is 0 || type(a:result) is v:t_list
+        if type(a:result) is v:t_list
+            let l:input = a:result
         endif
 
-        " If there's another chained callback to run, then run that.
         call s:RunFixer({
         \   'buffer': l:buffer,
         \   'input': l:input,
-        \   'callback_index': a:options.callback_index,
+        \   'callback_index': a:options.callback_index + 1,
+        \   'callback_list': a:options.callback_list,
+        \})
+
+        return
+    endif
+
+    let l:command = get(a:result, 'command', '')
+    let l:ChainWith = get(a:result, 'chain_with', v:null)
+
+    if empty(l:command)
+        " If the command is empty, skip to the next item, or call the
+        " chain_with function.
+        call s:RunFixer({
+        \   'buffer': l:buffer,
+        \   'input': l:input,
+        \   'callback_index': a:options.callback_index + (l:ChainWith is v:null),
         \   'callback_list': a:options.callback_list,
         \   'chain_callback': l:ChainWith,
         \   'output': [],
         \})
 
-        return v:true
+        return
     endif
 
-    let l:output_stream = a:options.output_stream
+    let l:read_temporary_file = get(a:result, 'read_temporary_file', 0)
+    " Default to piping the buffer for the last fixer in the chain.
+    let l:read_buffer = get(a:result, 'read_buffer', l:ChainWith is v:null)
+    let l:output_stream = get(a:result, 'output_stream', 'stdout')
 
-    if a:options.read_temporary_file
+    if l:read_temporary_file
         let l:output_stream = 'none'
     endif
 
@@ -168,10 +208,10 @@ function! s:RunJob(options) abort
     \   'chain_with': l:ChainWith,
     \   'callback_index': a:options.callback_index,
     \   'callback_list': a:options.callback_list,
-    \   'process_with': a:options.process_with,
-    \   'read_temporary_file': a:options.read_temporary_file,
+    \   'process_with': get(a:result, 'process_with', v:null),
+    \   'read_temporary_file': l:read_temporary_file,
     \}])
-    let l:result = ale#command#Run(l:buffer, l:command, l:Callback, {
+    let l:run_result = ale#command#Run(l:buffer, l:command, l:Callback, {
     \   'output_stream': l:output_stream,
     \   'executable': '',
     \   'read_buffer': l:read_buffer,
@@ -179,70 +219,54 @@ function! s:RunJob(options) abort
     \   'log_output': 0,
     \})
 
-    return l:result._deferred_job_id != 0
+    if empty(l:run_result)
+        call s:RunFixer({
+        \   'buffer': l:buffer,
+        \   'input': l:input,
+        \   'callback_index': a:options.callback_index + 1,
+        \   'callback_list': a:options.callback_list,
+        \})
+    endif
 endfunction
 
 function! s:RunFixer(options) abort
     let l:buffer = a:options.buffer
     let l:input = a:options.input
     let l:index = a:options.callback_index
+
+    if len(a:options.callback_list) <= l:index
+        call ale#fix#ApplyFixes(l:buffer, l:input)
+
+        return
+    endif
+
     let l:ChainCallback = get(a:options, 'chain_callback', v:null)
+
+    let l:Function = l:ChainCallback isnot v:null
+    \   ? ale#util#GetFunction(l:ChainCallback)
+    \   : a:options.callback_list[l:index]
 
     " Record new jobs started as fixer jobs.
     call setbufvar(l:buffer, 'ale_job_type', 'fixer')
 
-    while len(a:options.callback_list) > l:index
-        let l:Function = l:ChainCallback isnot v:null
-        \   ? ale#util#GetFunction(l:ChainCallback)
-        \   : a:options.callback_list[l:index]
+    if l:ChainCallback isnot v:null
+        " Chained commands accept (buffer, output, [input])
+        let l:result = ale#util#FunctionArgCount(l:Function) == 2
+        \   ? call(l:Function, [l:buffer, a:options.output])
+        \   : call(l:Function, [l:buffer, a:options.output, copy(l:input)])
+    else
+        " Regular fixer commands accept (buffer, [input])
+        let l:result = ale#util#FunctionArgCount(l:Function) == 1
+        \   ? call(l:Function, [l:buffer])
+        \   : call(l:Function, [l:buffer, copy(l:input)])
+    endif
 
-        if l:ChainCallback isnot v:null
-            " Chained commands accept (buffer, output, [input])
-            let l:result = ale#util#FunctionArgCount(l:Function) == 2
-            \   ? call(l:Function, [l:buffer, a:options.output])
-            \   : call(l:Function, [l:buffer, a:options.output, copy(l:input)])
-        else
-            " Chained commands accept (buffer, [done, input])
-            let l:result = ale#util#FunctionArgCount(l:Function) == 1
-            \   ? call(l:Function, [l:buffer])
-            \   : call(l:Function, [l:buffer, v:null, copy(l:input)])
-        endif
-
-        if type(l:result) is v:t_number && l:result == 0
-            " When `0` is returned, skip this item.
-            let l:index += 1
-        elseif type(l:result) is v:t_list
-            let l:input = l:result
-            let l:index += 1
-        else
-            let l:ChainWith = get(l:result, 'chain_with', v:null)
-            " Default to piping the buffer for the last fixer in the chain.
-            let l:read_buffer = get(l:result, 'read_buffer', l:ChainWith is v:null)
-
-            let l:job_ran = s:RunJob({
-            \   'buffer': l:buffer,
-            \   'command': l:result.command,
-            \   'input': l:input,
-            \   'output_stream': get(l:result, 'output_stream', 'stdout'),
-            \   'read_temporary_file': get(l:result, 'read_temporary_file', 0),
-            \   'read_buffer': l:read_buffer,
-            \   'chain_with': l:ChainWith,
-            \   'callback_list': a:options.callback_list,
-            \   'callback_index': l:index,
-            \   'process_with': get(l:result, 'process_with', v:null),
-            \})
-
-            if !l:job_ran
-                " The job failed to run, so skip to the next item.
-                let l:index += 1
-            else
-                " Stop here, we will handle exit later on.
-                return
-            endif
-        endif
-    endwhile
-
-    call ale#fix#ApplyFixes(l:buffer, l:input)
+    call s:RunJob(l:result, {
+    \   'buffer': l:buffer,
+    \   'input': l:input,
+    \   'callback_list': a:options.callback_list,
+    \   'callback_index': l:index,
+    \})
 endfunction
 
 function! s:AddSubCallbacks(full_list, callbacks) abort
@@ -257,7 +281,21 @@ function! s:AddSubCallbacks(full_list, callbacks) abort
     return 1
 endfunction
 
-function! s:GetCallbacks(buffer, fixers) abort
+function! s:IgnoreFixers(callback_list, filetype, config) abort
+    if type(a:config) is v:t_list
+        let l:ignore_list = a:config
+    else
+        let l:ignore_list = []
+
+        for l:part in split(a:filetype , '\.')
+            call extend(l:ignore_list, get(a:config, l:part, []))
+        endfor
+    endif
+
+    call filter(a:callback_list, 'index(l:ignore_list, v:val) < 0')
+endfunction
+
+function! s:GetCallbacks(buffer, fixing_flag, fixers) abort
     if len(a:fixers)
         let l:callback_list = a:fixers
     elseif type(get(b:, 'ale_fixers')) is v:t_list
@@ -282,8 +320,12 @@ function! s:GetCallbacks(buffer, fixers) abort
         endif
     endif
 
-    if empty(l:callback_list)
-        return []
+    if a:fixing_flag is# 'save_file'
+        let l:config = ale#Var(a:buffer, 'fix_on_save_ignore')
+
+        if !empty(l:config)
+            call s:IgnoreFixers(l:callback_list, &filetype, l:config)
+        endif
     endif
 
     let l:corrected_list = []
@@ -331,7 +373,7 @@ function! ale#fix#Fix(buffer, fixing_flag, ...) abort
     endif
 
     try
-        let l:callback_list = s:GetCallbacks(a:buffer, a:000)
+        let l:callback_list = s:GetCallbacks(a:buffer, a:fixing_flag, a:000)
     catch /E700\|BADNAME/
         let l:function_name = join(split(split(v:exception, ':')[3]))
         let l:echo_message = printf(
@@ -371,5 +413,4 @@ endfunction
 " Set up an autocmd command to try and apply buffer fixes when available.
 augroup ALEBufferFixGroup
     autocmd!
-    autocmd BufEnter * call ale#fix#ApplyQueuedFixes()
-augroup END
+    autocmd BufEnter * call ale#fix#ApplyQueuedFixes(str2nr(expand('<abuf>')))
