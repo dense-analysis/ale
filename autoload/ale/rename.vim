@@ -15,14 +15,24 @@ function! ale#rename#ClearLSPData() abort
 endfunction
 
 function! s:ApplyRenameEdits(new_name, item_list) abort
+    let l:current_buffer = bufnr('')
+    let l:existing_buffers = {}
+
     let l:new_length = len(a:new_name)
+    for l:file in a:item_list
+        let l:buf = bufwinnr(l:file.filename)
+        if l:buf != -1
+            let l:existing_buffers[l:buf] = 1
+            if getbufvar(l:buf, '&mod')
+                call ale#util#Execute('echom ''Aborting rename, file is modified''')
+                return
+            endif
+        endif
+    endfor
+
     for l:file in a:item_list
         execute 'edit' l:file.filename
         let l:buf = bufnr('')
-        if getbufvar(l:buf, '&mod')
-            call ale#util#Execute('echom ''Aborting rename, file is modified''')
-            break
-        endif
 
         for l:loc in reverse(l:file.locs)
             " set last visual mode to characterwise-visual
@@ -30,9 +40,15 @@ function! s:ApplyRenameEdits(new_name, item_list) abort
             call setpos("'<", [l:buf, l:loc.start.line, l:loc.start.column, 0])
             call setpos("'>", [l:buf, l:loc.end.line, l:loc.end.column - 1, 0])
             execute 'normal! gvc' . a:new_name
-            " TODO maybe save?
         endfor
+
+        write
+        if !has_key(l:existing_buffers, l:buf)
+            execute 'bd' l:buf
+        endif
     endfor
+
+    execute 'buffer' l:current_buffer
 endfunction
 
 function! ale#rename#HandleTSServerResponse(new_name, conn_id, response) abort
