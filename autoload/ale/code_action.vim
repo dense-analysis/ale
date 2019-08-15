@@ -30,13 +30,13 @@ function! ale#code_action#HandleCodeAction(code_action) abort
         for l:code_edit in reverse(l:file_code_edit.textChanges)
             let l:start = l:code_edit.start
             let l:end = l:code_edit.end
-            let l:new_text = l:code_edit.newText
+            let l:new_text = substitute(l:code_edit.newText, '\n', "\<CR>", 'g')
             if l:start.line == l:end.line && l:start.offset == l:end.offset
                 call cursor(l:start.line, l:end.offset)
                 execute 'normal! i' . l:new_text
             else
                 " set last visual mode to characterwise-visual
-                execute 'normal! v'
+                execute "normal! v\<Esc>"
                 call setpos("'<", [l:buf, l:start.line, l:start.offset, 0])
                 call setpos("'>", [l:buf, l:end.line, l:end.offset - 1, 0])
                 execute 'normal! gvc' . l:new_text
