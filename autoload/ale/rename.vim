@@ -14,79 +14,44 @@ function! ale#rename#ClearLSPData() abort
     let s:rename_map = {}
 endfunction
 
-function! s:ApplyRenameEdits(new_name, item_list) abort
-    let l:current_buffer = bufnr('')
-    let l:existing_buffers = {}
-
-    let l:new_length = len(a:new_name)
-    for l:file in a:item_list
-        let l:buf = bufwinnr(l:file.filename)
-        if l:buf != -1
-            let l:existing_buffers[l:buf] = 1
-            if getbufvar(l:buf, '&mod')
-                call ale#util#Execute('echom ''Aborting rename, file is modified''')
-                return
-            endif
-        endif
-    endfor
-
-    for l:file in a:item_list
-        execute 'edit' l:file.filename
-        let l:buf = bufnr('')
-
-        for l:loc in reverse(l:file.locs)
-            " set last visual mode to characterwise-visual
-            execute 'normal! v'
-            call setpos("'<", [l:buf, l:loc.start.line, l:loc.start.column, 0])
-            call setpos("'>", [l:buf, l:loc.end.line, l:loc.end.column - 1, 0])
-            execute 'normal! gvc' . a:new_name
-        endfor
-
-        write
-        if !has_key(l:existing_buffers, l:buf)
-            execute 'bd' l:buf
-        endif
-    endfor
-
-    execute 'buffer' l:current_buffer
-endfunction
-
-let s:new_name = ''
-
 function! ale#rename#HandleTSServerResponse(conn_id, response) abort
     " call ale#util#Execute('echom '')
     if get(a:response, 'command', '') is# 'rename'
     \&& has_key(s:rename_map, a:response.request_seq)
         call remove(s:rename_map, a:response.request_seq)
         if get(a:response, 'success', v:false) is v:true
-            let l:item_list = []
+            let l:changes = []
 
             " echom string(a:response.body)
             for l:response_item in a:response.body.locs
                 let l:filename = l:response_item.file
-                let l:locs = []
+                let l:text_changes = []
                 for l:loc in l:response_item.locs
-                    call add(l:locs, {
+                    call add(l:text_changes, {
                     \ 'start': {
                     \   'line': l:loc.start.line,
-                    \   'column': l:loc.start.offset,
+                    \   'offset': l:loc.start.offset,
                     \ },
                     \ 'end': {
                     \   'line': l:loc.end.line,
-                    \   'column': l:loc.end.offset,
+                    \   'offset': l:loc.end.offset,
                     \ },
+                    \ 'newText': b:new_name,
                     \})
                 endfor
-                call add(l:item_list, {
-                  \ 'filename': l:filename,
-                  \ 'locs': l:locs,
+                call add(l:changes, {
+                  \ 'fileName': l:filename,
+                  \ 'textChanges': l:text_changes,
                 \})
             endfor
 
-            if empty(l:item_list)
+            if empty(l:changes)
                 call ale#util#Execute('echom ''Could not rename.''')
             else
-                call s:ApplyRenameEdits(s:new_name, l:item_list)
+                call ale#code_action#HandleCodeAction({
+                \ 'description': 'rename',
+                \ 'changes': l:changes,
+                \})
             endif
         endif
     endif
@@ -111,7 +76,7 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
         if empty(l:item_list)
             call ale#util#Execute('echom ''Could not rename.''')
         else
-            call s:ApplyRenameEdits(s:new_name, l:item_list)
+            call s:ApplyRenameEdits(b:new_name, l:item_list)
         endif
     endif
 endfunction
@@ -129,7 +94,7 @@ function! s:OnReady(line, column, new_name, linter, lsp_details) abort
     \   ? function('ale#rename#HandleTSServerResponse')
     \   : function('ale#rename#HandleLSPResponse')
 
-    let s:new_name = a:new_name
+    let b:new_name = a:new_name
 
     call ale#lsp#RegisterCallback(l:id, l:Callback)
 

@@ -287,7 +287,11 @@ function! ale#completion#ParseTSServerCompletions(response) abort
     let l:names = []
 
     for l:suggestion in a:response.body
-        call add(l:names, l:suggestion.name)
+        call add(l:names, {
+        \ 'name': l:suggestion.name,
+        \ 'word': l:suggestion.name,
+        \ 'source': get(l:suggestion, 'source', ''),
+        \})
     endfor
 
     return l:names
@@ -327,6 +331,9 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
         \   'icase': 1,
         \   'menu': join(l:displayParts, ''),
         \   'info': join(l:documentationParts, ''),
+        \   'user_data': json_encode({
+        \     'codeActions': get(l:suggestion, 'codeActions', []),
+        \   })
         \})
     endfor
 
@@ -340,8 +347,9 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
         \)
 
         for l:name in l:missing_names
+            let l:code_actions = get(l:name, 'codeActions', [])
             call add(l:results, {
-            \   'word': l:name,
+            \   'word': l:name.word,
             \   'kind': 'v',
             \   'icase': 1,
             \   'menu': '',
@@ -451,10 +459,11 @@ function! ale#completion#HandleTSServerResponse(conn_id, response) abort
     let l:command = get(a:response, 'command', '')
 
     if l:command is# 'completions'
+        let l:completions = ale#completion#ParseTSServerCompletions(a:response)
         let l:names = ale#completion#Filter(
         \   l:buffer,
         \   &filetype,
-        \   ale#completion#ParseTSServerCompletions(a:response),
+        \   l:completions,
         \   b:ale_completion_info.prefix,
         \)[: g:ale_completion_max_suggestions - 1]
 
@@ -670,7 +679,39 @@ function! ale#completion#Queue() abort
     let s:timer_id = timer_start(g:ale_completion_delay, function('s:TimerHandler'))
 endfunction
 
+function! ale#completion#HandleUserData() abort
+    let l:source = get(get(b:, 'ale_completion_info', {}), 'source', '')
+
+    echom 'l:source ' . l:source
+    if l:source isnot# 'ale-automatic' && l:source isnot# 'ale-manual'
+        return
+    endif
+
+    echom 'v:completed_item '. string(v:completed_item)
+    if !has_key(v:completed_item, 'user_data')
+        return
+    endif
+
+    if v:completed_item.user_data == ''
+        return
+    endif
+
+    let l:user_data = json_decode(v:completed_item.user_data)
+    if has_key(l:user_data, 'codeActions')
+        for l:code_action in l:user_data.codeActions
+            echom 'l:code_action: ' .string(l:code_action)
+            call ale#code_action#HandleCodeAction(l:code_action)
+        endfor
+    endif
+endfunction
+
 function! ale#completion#Done() abort
+    echom 'v:completed_item: ' . string(v:completed_item)
+
+    if has_key(v:completed_item, 'user_data')
+        call ale#completion#handle_user_data(v:completed_item.user_data)
+    endif
+
     silent! pclose
 
     call ale#completion#RestoreCompletionOptions()
@@ -678,10 +719,10 @@ function! ale#completion#Done() abort
     let s:last_done_pos = getpos('.')[1:2]
 endfunction
 
+autocmd CompleteDone * call ale#completion#HandleUserData()
+
 function! s:Setup(enabled) abort
     augroup ALECompletionGroup
-        autocmd!
-
         if a:enabled
             autocmd TextChangedI * call ale#completion#Queue()
             autocmd CompleteDone * call ale#completion#Done()

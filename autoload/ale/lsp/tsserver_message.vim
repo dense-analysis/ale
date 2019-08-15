@@ -37,11 +37,14 @@ function! ale#lsp#tsserver_message#Geterr(buffer) abort
 endfunction
 
 function! ale#lsp#tsserver_message#Completions(buffer, line, column, prefix) abort
+    "TODO jeremija document this
+    let l:external = get(g:, 'ale_tsserver_include_external', v:true)
     return [0, 'ts@completions', {
     \   'line': a:line,
     \   'offset': a:column,
     \   'file': expand('#' . a:buffer . ':p'),
     \   'prefix': a:prefix,
+    \   'includeExternalModuleExports': l:external,
     \}]
 endfunction
 
