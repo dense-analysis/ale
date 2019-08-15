@@ -365,6 +365,10 @@ The |ALEComplete| command can be used to show completion suggestions manually,
 even when |g:ale_completion_enabled| is set to `0`. For manually requesting
 completion information with Deoplete, consult Deoplete's documentation.
 
+When working with TypeScript files, ALE by default supports automatic imports
+from external modules. If you wish to disable this behavior, set
+|g:ale_tsserver_include_external| to `0`.
+
                                                *ale-completion-completeopt-bug*
 
 ALE Automatic completion implementation replaces |completeopt| before opening
@@ -2507,6 +2511,12 @@ ALEHover                                                             *ALEHover*
 
   A plug mapping `<Plug>(ale_hover)` is defined for this command.
 
+ALERename `<new_name?>`                                               *ALERename*
+
+  Rename a symbol using TypeScript server or Language Server.
+
+  The argument will be used as a new name for the symbol. If not provided,
+  user will be prompted for new name.
 
 ALESymbolSearch `<query>`                                     *ALESymbolSearch*
 
