@@ -29,7 +29,7 @@ function! ale#fixers#black#Fix(buffer) abort
 
     let l:options = ale#Var(a:buffer, 'python_black_options')
 
-    if (expand('#' . a:buffer . ':e') ==? 'pyi')
+    if (expand('#' . a:buffer . ':e') is? 'pyi')
         let l:options .= '--pyi'
     endif
 
