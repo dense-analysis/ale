@@ -125,8 +125,8 @@ formatting.
   * [hadolint](https://github.com/hadolint/hadolint)
 * Elixir
   * [credo](https://github.com/rrrene/credo)
-  * [dialyxir](https://github.com/jeremyjh/dialyxir)
-  * [dogma](https://github.com/lpil/dogma)
+  * [dialyxir](https://github.com/jeremyjh/dialyxir) :floppy_disk:
+  * [dogma](https://github.com/lpil/dogma) :floppy_disk:
   * [elixir-ls](https://github.com/JakeBecker/elixir-ls) :warning:
   * [mix](https://hexdocs.pm/mix/Mix.html) :warning: :floppy_disk:
 * Elm
