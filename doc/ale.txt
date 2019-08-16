@@ -366,8 +366,8 @@ even when |g:ale_completion_enabled| is set to `0`. For manually requesting
 completion information with Deoplete, consult Deoplete's documentation.
 
 When working with TypeScript files, ALE by default supports automatic imports
-from external modules. If you wish to disable this behavior, set
-|g:ale_tsserver_include_external| to `0`.
+from external modules. This behavior can be disabled by setting the
+|g:ale_tsserver_autoimport| variable to `0`.
 
                                                *ale-completion-completeopt-bug*
 

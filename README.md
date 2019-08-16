@@ -189,6 +189,13 @@ completion manually with `<C-x><C-o>`.
 set omnifunc=ale#completion#OmniFunc
 ```
 
+When working with TypeScript files, ALE by default supports automatic imports
+from external modules. This behavior can be disabled with:
+
+```vim
+let g:ale_tsserver_autoimport = 0
+```
+
 See `:help ale-completion` for more information.
 
 <a name="usage-go-to-definition"></a>
