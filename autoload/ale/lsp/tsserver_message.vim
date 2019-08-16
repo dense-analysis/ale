@@ -37,7 +37,7 @@ function! ale#lsp#tsserver_message#Geterr(buffer) abort
 endfunction
 
 function! ale#lsp#tsserver_message#Completions(buffer, line, column, prefix) abort
-    let l:external = get(g:, 'ale_tsserver_autoimport', 1)
+    let l:external = get(g:, 'ale_completion_tsserver_autoimport', 1)
 
     return [0, 'ts@completions', {
     \   'line': a:line,
@@ -86,6 +86,6 @@ function! ale#lsp#tsserver_message#Rename(buffer, line, column) abort
     \   'line': a:line,
     \   'offset': a:column,
     \   'file': expand('#' . a:buffer . ':p'),
-    \   'arguments': {'findInComments': 'true', 'findInStrings': 'true'}
+    \   'arguments': {'findInComments': v:true, 'findInStrings': v:true}
     \}]
 endfunction

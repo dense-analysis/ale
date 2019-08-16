@@ -367,7 +367,7 @@ completion information with Deoplete, consult Deoplete's documentation.
 
 When working with TypeScript files, ALE by default supports automatic imports
 from external modules. This behavior can be disabled by setting the
-|g:ale_tsserver_autoimport| variable to `0`.
+|g:ale_completion_tsserver_autoimport| variable to `0`.
 
                                                *ale-completion-completeopt-bug*
 
@@ -568,7 +568,6 @@ g:ale_completion_delay                                 *g:ale_completion_delay*
 
   See |ale-completion|
 
-
 g:ale_completion_enabled                             *g:ale_completion_enabled*
 b:ale_completion_enabled                             *b:ale_completion_enabled*
 
@@ -589,6 +588,14 @@ b:ale_completion_enabled                             *b:ale_completion_enabled*
 
   See |ale-completion|
 
+g:ale_completion_tsserver_autoimport      *g:ale_completion_tsserver_autoimport*
+
+  Type: Number
+  Default: `1`
+
+  When this option is set to `1`, ALE will try to automatically import
+  completion results from external modules. It can be disabled by setting it
+  to `0`.
 
 g:ale_completion_excluded_words               *g:ale_completion_excluded_words*
                                               *b:ale_completion_excluded_words*

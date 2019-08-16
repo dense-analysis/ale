@@ -193,7 +193,7 @@ When working with TypeScript files, ALE by default supports automatic imports
 from external modules. This behavior can be disabled with:
 
 ```vim
-let g:ale_tsserver_autoimport = 0
+let g:ale_completion_tsserver_autoimport = 0
 ```
 
 See `:help ale-completion` for more information.
