@@ -9,8 +9,7 @@ function! ale#fixers#sqlformat#Fix(buffer) abort
     let l:options = ale#Var(a:buffer, 'sql_sqlformat_options')
 
     return {
-    \ 'command': ale#path#BufferCdString(a:buffer)
-    \ . ale#Escape(l:executable)
+    \ 'command': ale#Escape(l:executable)
     \ . (!empty(l:options) ? ' ' . l:options : '')
     \ . ' -'
     \}
