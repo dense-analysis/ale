@@ -431,6 +431,7 @@ formatting.
   * [solium](https://github.com/duaraghav8/Solium)
 * SQL
   * [pgformatter](https://github.com/darold/pgFormatter)
+  * [sql-formatter-cli](https://github.com/osv/sql-formatter-cli)
   * [sqlfmt](https://github.com/jackc/sqlfmt)
   * [sqlint](https://github.com/purcell/sqlint)
 * Stylus

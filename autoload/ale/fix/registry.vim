@@ -250,6 +250,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['sql'],
 \       'description': 'Fix SQL files with sqlfmt.',
 \   },
+\   'sql_formatter_cli': {
+\       'function': 'ale#fixers#sql_formatter_cli#Fix',
+\       'suggested_filetypes': ['sql'],
+\       'description': 'Fix SQL files with sql_formatter_cli.',
+\   },
 \   'google_java_format': {
 \       'function': 'ale#fixers#google_java_format#Fix',
 \       'suggested_filetypes': ['java'],

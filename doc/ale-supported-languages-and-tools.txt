@@ -422,6 +422,7 @@ Notes:
   * `solium`
 * SQL
   * `pgformatter`
+  * `sql-formatter-cli`
   * `sqlfmt`
   * `sqlint`
 * Stylus

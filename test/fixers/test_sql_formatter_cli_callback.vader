@@ -1,0 +1,24 @@
+Before:
+  Save g:ale_sql_sql_formatter_cli_executable
+  Save g:ale_sql_sql_formatter_cli_options
+
+After:
+  Restore
+
+Execute(The sql_formatter_cli callback should return the correct default values):
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('sql-formatter-cli'),
+  \ },
+  \ ale#fixers#sql_formatter_cli#Fix(bufnr(''))
+
+Execute(The sql_formatter_cli executable and options should be configurable):
+  let g:ale_sql_sql_formatter_cli_executable = '/path/to/sql-formatter-cli'
+  let g:ale_sql_sql_formatter_cli_options = '-s sql'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('/path/to/sql-formatter-cli')
+  \     . ' -s sql',
+  \ },
+  \ ale#fixers#sql_formatter_cli#Fix(bufnr(''))

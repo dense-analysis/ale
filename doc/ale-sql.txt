@@ -21,6 +21,32 @@ g:ale_sql_pgformatter_options                   *g:ale_sql_pgformatter_options*
 
 
 ===============================================================================
+sql-formatter-cli                                   *ale-sql-sql-formatter-cli*
+
+sql-formatter-cli is SQL whitespace formatter. It supports Standard SQL,
+Couchbase N1QL, IBM DB2 and Oracle PL/SQL dialects.
+
+You can install it using npm:
+
+  $ npm i -g sql-formatter-cli
+
+g:ale_sql_sql_formatter_cli            *g:ale_sql_sql_formatter_cli_executable*
+                                       *b:ale_sql_sql_formatter_cli_executable*
+  Type: |String|
+  Default: `'sql-formatter-cli'`
+
+  This variable sets the executable used for sql-formatter-cli.
+
+g:ale_sql_sql_formatter_options
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to the
+  sql-formatter-cli fixer.
+
+
+===============================================================================
 sqlfmt                                                         *ale-sql-sqlfmt*
 
 g:ale_sql_sqlfmt_executable                       *g:ale_sql_sqlfmt_executable*
