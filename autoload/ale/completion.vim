@@ -288,7 +288,6 @@ function! ale#completion#ParseTSServerCompletions(response) abort
 
     for l:suggestion in a:response.body
         call add(l:names, {
-        \ 'name': l:suggestion.name,
         \ 'word': l:suggestion.name,
         \ 'source': get(l:suggestion, 'source', ''),
         \})
@@ -325,16 +324,20 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
         endif
 
         " See :help complete-items
-        call add(l:results, {
+        let l:result = {
         \   'word': l:suggestion.name,
         \   'kind': l:kind,
         \   'icase': 1,
         \   'menu': join(l:displayParts, ''),
         \   'info': join(l:documentationParts, ''),
-        \   'user_data': json_encode({
-        \     'codeActions': get(l:suggestion, 'codeActions', []),
-        \   })
-        \})
+        \}
+
+        if has_key(l:suggestion, 'codeActions')
+            let l:result.user_data = json_encode({
+            \   'codeActions': l:suggestion.codeActions,
+            \ })
+        endif
+        call add(l:results, l:result)
     endfor
 
     let l:names = getbufvar(l:buffer, 'ale_tsserver_completion_names', [])
@@ -343,11 +346,10 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
         let l:names_with_details = map(copy(l:results), 'v:val.word')
         let l:missing_names = filter(
         \   copy(l:names),
-        \   'index(l:names_with_details, v:val) < 0',
+        \   'index(l:names_with_details, v:val.word) < 0',
         \)
 
         for l:name in l:missing_names
-            let l:code_actions = get(l:name, 'codeActions', [])
             call add(l:results, {
             \   'word': l:name.word,
             \   'kind': 'v',
@@ -472,13 +474,20 @@ function! ale#completion#HandleTSServerResponse(conn_id, response) abort
         call setbufvar(l:buffer, 'ale_tsserver_completion_names', l:names)
 
         if !empty(l:names)
+            let l:identifiers = []
+            for l:name in l:names
+                call add(l:identifiers, {
+                \   'name': l:name.word,
+                \   'source': get(l:name, 'source', ''),
+                \})
+            endfor
             let b:ale_completion_info.request_id = ale#lsp#Send(
             \   b:ale_completion_info.conn_id,
             \   ale#lsp#tsserver_message#CompletionEntryDetails(
             \       l:buffer,
             \       b:ale_completion_info.line,
             \       b:ale_completion_info.column,
-            \       l:names,
+            \       l:identifiers,
             \   ),
             \)
         endif
@@ -682,21 +691,17 @@ endfunction
 function! ale#completion#HandleUserData() abort
     let l:source = get(get(b:, 'ale_completion_info', {}), 'source', '')
 
-    echom 'l:source ' . l:source
     if l:source isnot# 'ale-automatic' && l:source isnot# 'ale-manual'
         return
     endif
 
-    echom 'v:completed_item '. string(v:completed_item)
-    if !has_key(v:completed_item, 'user_data')
+    let l:user_data_json = get(v:completed_item, 'user_data', '')
+
+    if l:user_data_json == ''
         return
     endif
 
-    if v:completed_item.user_data == ''
-        return
-    endif
-
-    let l:user_data = json_decode(v:completed_item.user_data)
+    let l:user_data = json_decode(l:user_data_json)
     if has_key(l:user_data, 'codeActions')
         for l:code_action in l:user_data.codeActions
             echom 'l:code_action: ' .string(l:code_action)
@@ -706,12 +711,6 @@ function! ale#completion#HandleUserData() abort
 endfunction
 
 function! ale#completion#Done() abort
-    echom 'v:completed_item: ' . string(v:completed_item)
-
-    if has_key(v:completed_item, 'user_data')
-        call ale#completion#handle_user_data(v:completed_item.user_data)
-    endif
-
     silent! pclose
 
     call ale#completion#RestoreCompletionOptions()

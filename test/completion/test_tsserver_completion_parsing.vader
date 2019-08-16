@@ -6,10 +6,24 @@ Execute(TypeScript completions responses should be parsed correctly):
   \ ale#completion#ParseTSServerCompletions({
   \ 'body': [],
   \})
-  AssertEqual ['foo', 'bar', 'baz'],
+  AssertEqual
+  \ [
+  \   {
+  \     'word': 'foo',
+  \     'source': '/path/to/foo.ts',
+  \   },
+  \   {
+  \     'word': 'bar',
+  \     'source': '',
+  \   },
+  \   {
+  \     'word': 'baz',
+  \     'source': '',
+  \   }
+  \ ],
   \ ale#completion#ParseTSServerCompletions({
   \ 'body': [
-  \   {'name': 'foo'},
+  \   {'name': 'foo', 'source': '/path/to/foo.ts'},
   \   {'name': 'bar'},
   \   {'name': 'baz'},
   \ ],
@@ -96,7 +110,10 @@ Execute(TypeScript completion details responses should be parsed correctly):
   \})
 
 Execute(Entries without details should be included in the responses):
-  let b:ale_tsserver_completion_names = ['xyz']
+  let b:ale_tsserver_completion_names = [{
+  \  'word': 'xyz',
+  \  'source': '/path/to/xyz.ts',
+  \ }]
 
   AssertEqual
   \ [
@@ -106,6 +123,12 @@ Execute(Entries without details should be included in the responses):
   \     'info': '',
   \     'kind': 'f',
   \     'icase': 1,
+  \     'user_data': json_encode({
+  \         'codeActions': [{
+  \             'description': 'abc action',
+  \             'changes': [],
+  \         }],
+  \     }),
   \   },
   \   {
   \     'word': 'def',
@@ -139,6 +162,10 @@ Execute(Entries without details should be included in the responses):
   \       {'text': ' '},
   \       {'text': 'number'},
   \     ],
+  \     'codeActions': [{
+  \        'description': 'abc action',
+  \        'changes': [],
+  \     }],
   \   },
   \   {
   \     'name': 'def',

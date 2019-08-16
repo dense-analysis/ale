@@ -167,15 +167,12 @@ Execute(The right message sent to the tsserver LSP when the first completion mes
   " We should save the names we got in the buffer, as TSServer doesn't return
   " details for every name.
   AssertEqual [{
-  \  'name': 'Foo',
   \  'word': 'Foo',
   \  'source': '/path/to/foo.ts',
   \ }, {
-  \  'name': 'FooBar',
   \  'word': 'FooBar',
   \  'source': '',
   \ }, {
-  \  'name': 'frazzle',
   \  'word': 'frazzle',
   \  'source': '',
   \}],
@@ -190,15 +187,12 @@ Execute(The right message sent to the tsserver LSP when the first completion mes
   \     'file': expand('%:p'),
   \     'entryNames': [{
   \          'name': 'Foo',
-  \          'word': 'Foo',
   \          'source': '/path/to/foo.ts',
   \         }, {
   \          'name': 'FooBar',
-  \          'word': 'FooBar',
   \          'source': '',
   \         }, {
   \          'name': 'frazzle',
-  \          'word': 'frazzle',
   \          'source': '',
   \     }],
   \     'offset': 1,
