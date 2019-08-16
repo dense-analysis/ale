@@ -64,22 +64,56 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
     if has_key(a:response, 'id')
     \&& has_key(s:rename_map, a:response.id)
         call remove(s:rename_map, a:response.id)
-        " The result can be a Dictionary item, a List of the same, or null.
-        let l:result = get(a:response, 'result', [])
-        let l:item_list = []
 
-        for l:response_item in l:result
-            call add(l:item_list, {
-            \ 'filename': ale#path#FromURI(l:response_item.uri),
-            \ 'line': l:response_item.range.start.line + 1,
-            \ 'column': l:response_item.range.start.character + 1,
+        if !has_key(a:response, 'result')
+            call ale#util#Execute('echom ''Could not rename.''')
+
+            return
+        endif
+
+        let l:workspace_edit = a:response.result
+
+        if !has_key(a:response, 'changes')
+            call ale#util#Execute('echom ''Could not rename.''')
+
+            return
+        endif
+
+        let l:changes = []
+
+        for l:file_name in keys(l:workspace_edit.changes)
+            let l:text_edits = l:workspace_edit.changes[l:file_name]
+
+            for l:edit in l:text_edits
+                let l:range = l:edit.range
+                let l:new_text = l:edit.newText
+
+                call add(l:changes, {
+                \ 'start': {
+                \   'line': l:range.start.line + 1,
+                \   'offset': l:range.start.character + 1,
+                \ },
+                \ 'end': {
+                \   'line': l:range.end.line + 1,
+                \   'offset': l:range.end.character + 1,
+                \ },
+                \ 'newText': l:new_text,
+                \})
+            endfor
+
+            call add(l:changes, {
+            \   'fileName': l:file_name,
+            \   'textChanges': l:changes,
             \})
         endfor
 
-        if empty(l:item_list)
+        if empty(l:changes)
             call ale#util#Execute('echom ''Could not rename.''')
         else
-            call s:ApplyRenameEdits(b:new_name, l:item_list)
+            call ale#code_action#HandleCodeAction(b:new_name, {
+            \   'description': 'rename',
+            \   'changes': l:changes,
+            \})
         endif
     endif
 endfunction
