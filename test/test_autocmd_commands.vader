@@ -190,7 +190,7 @@ Execute (ALECleanupGroup should include the right commands):
 
 Execute(ALECompletionActions should always be set up):
   AssertEqual [
-  \ 'CompleteDone * call ale#completion#HandleUserData()',
+  \ 'CompleteDone * call ale#completion#HandleUserData(v:completed_item)',
   \], CheckAutocmd('ALECompletionActions')
 
 Execute(Enabling completion should set up autocmd events correctly):

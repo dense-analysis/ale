@@ -688,14 +688,15 @@ function! ale#completion#Queue() abort
     let s:timer_id = timer_start(g:ale_completion_delay, function('s:TimerHandler'))
 endfunction
 
-function! ale#completion#HandleUserData() abort
+function! ale#completion#HandleUserData(completed_item) abort
+    echom 'called'
     let l:source = get(get(b:, 'ale_completion_info', {}), 'source', '')
 
     if l:source isnot# 'ale-automatic' && l:source isnot# 'ale-manual'
         return
     endif
 
-    let l:user_data_json = get(v:completed_item, 'user_data', '')
+    let l:user_data_json = get(a:completed_item, 'user_data', '')
 
     if l:user_data_json == ''
         return
@@ -719,7 +720,7 @@ function! ale#completion#Done() abort
 endfunction
 
 augroup ALECompletionActions
-    autocmd CompleteDone * call ale#completion#HandleUserData()
+    autocmd CompleteDone * call ale#completion#HandleUserData(v:completed_item)
 augroup END
 
 function! s:Setup(enabled) abort
