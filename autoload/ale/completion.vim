@@ -337,6 +337,7 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
             \   'codeActions': l:suggestion.codeActions,
             \ })
         endif
+
         call add(l:results, l:result)
     endfor
 
@@ -475,12 +476,14 @@ function! ale#completion#HandleTSServerResponse(conn_id, response) abort
 
         if !empty(l:names)
             let l:identifiers = []
+
             for l:name in l:names
                 call add(l:identifiers, {
                 \   'name': l:name.word,
                 \   'source': get(l:name, 'source', ''),
                 \})
             endfor
+
             let b:ale_completion_info.request_id = ale#lsp#Send(
             \   b:ale_completion_info.conn_id,
             \   ale#lsp#tsserver_message#CompletionEntryDetails(
@@ -689,7 +692,6 @@ function! ale#completion#Queue() abort
 endfunction
 
 function! ale#completion#HandleUserData(completed_item) abort
-    echom 'called'
     let l:source = get(get(b:, 'ale_completion_info', {}), 'source', '')
 
     if l:source isnot# 'ale-automatic' && l:source isnot# 'ale-manual'
@@ -698,14 +700,15 @@ function! ale#completion#HandleUserData(completed_item) abort
 
     let l:user_data_json = get(a:completed_item, 'user_data', '')
 
-    if l:user_data_json == ''
+    if l:user_data_json ==# ''
         return
     endif
 
     let l:user_data = json_decode(l:user_data_json)
+
     if has_key(l:user_data, 'codeActions')
         for l:code_action in l:user_data.codeActions
-            echom 'l:code_action: ' .string(l:code_action)
+            " echom 'l:code_action: ' .string(l:code_action)
             call ale#code_action#HandleCodeAction(l:code_action)
         endfor
     endif

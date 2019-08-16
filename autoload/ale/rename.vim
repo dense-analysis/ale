@@ -19,6 +19,7 @@ function! ale#rename#HandleTSServerResponse(conn_id, response) abort
     if get(a:response, 'command', '') is# 'rename'
     \&& has_key(s:rename_map, a:response.request_seq)
         call remove(s:rename_map, a:response.request_seq)
+
         if get(a:response, 'success', v:false) is v:true
             let l:changes = []
 
@@ -26,6 +27,7 @@ function! ale#rename#HandleTSServerResponse(conn_id, response) abort
             for l:response_item in a:response.body.locs
                 let l:filename = l:response_item.file
                 let l:text_changes = []
+
                 for l:loc in l:response_item.locs
                     call add(l:text_changes, {
                     \ 'start': {
@@ -39,9 +41,10 @@ function! ale#rename#HandleTSServerResponse(conn_id, response) abort
                     \ 'newText': b:new_name,
                     \})
                 endfor
+
                 call add(l:changes, {
-                  \ 'fileName': l:filename,
-                  \ 'textChanges': l:text_changes,
+                \   'fileName': l:filename,
+                \   'textChanges': l:text_changes,
                 \})
             endfor
 
@@ -123,8 +126,8 @@ function! s:OnReady(line, column, new_name, linter, lsp_details) abort
 endfunction
 
 function! s:ExecuteRename(linter, new_name) abort
-    let l:buffer = bufnr('')
-    let [l:line, l:column] = getcurpos()[1:2]
+    " let l:buffer = bufnr('')
+    let [l:buffer, l:line, l:column] = getpos('.')[1:2]
 
     if a:linter.lsp isnot# 'tsserver'
         let l:column = min([l:column, len(getline(l:line))])
@@ -136,9 +139,10 @@ endfunction
 
 function! ale#rename#Execute(...) abort
     let l:lsp_linters = []
+
     for l:linter in ale#linter#Get(&filetype)
         if !empty(l:linter.lsp)
-           call add(l:lsp_linters, l:linter)
+            call add(l:lsp_linters, l:linter)
         endif
     endfor
 
