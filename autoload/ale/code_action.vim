@@ -12,7 +12,7 @@ function! ale#code_action#HandleCodeAction(code_action) abort
             if l:buf != l:current_buffer && getbufvar(l:buf, '&mod')
                 call ale#util#Execute('echom ''Aborting action, file is modified''')
                 " Open buffer in question
-                execute 'buffer' l:buf
+                call ale#util#Execute('buffer ' .  l:buf)
 
                 return
             endif
@@ -23,9 +23,9 @@ function! ale#code_action#HandleCodeAction(code_action) abort
         let l:buf = bufwinnr(l:file_code_edit.fileName)
 
         if l:buf != -1
-            execute 'buffer' l:buf
+            call ale#util#Execute('buffer ' . l:buf)
         else
-            execute 'edit' l:file_code_edit.fileName
+            call ale#util#Execute('edit ' .  l:file_code_edit.fileName)
             let l:buf = bufnr('')
         endif
 
@@ -39,13 +39,13 @@ function! ale#code_action#HandleCodeAction(code_action) abort
 
             if l:start.line == l:end.line && l:start.offset == l:end.offset
                 call cursor(l:start.line, l:end.offset)
-                execute 'normal! i' . l:new_text
+                call ale#util#Execute('normal! i' . l:new_text)
             else
                 " set last visual mode to characterwise-visual
-                execute "normal! v\<Esc>"
+                call ale#util#Execute("normal! v\<Esc>")
                 call setpos("'<", [l:buf, l:start.line, l:start.offset, 0])
                 call setpos("'>", [l:buf, l:end.line, l:end.offset - 1, 0])
-                execute 'normal! gvc' . l:new_text
+                call ale#util#Execute('normal! gvc' . l:new_text)
             endif
 
             let l:line_after = getpos('.')[1]
@@ -54,12 +54,12 @@ function! ale#code_action#HandleCodeAction(code_action) abort
 
         call cursor(l:initial_pos[1] + l:line_diff, l:initial_pos[2])
 
-        write
+        call ale#util#Execute('write')
 
         if !has_key(l:existing_buffers, l:buf)
-            execute 'bd' l:buf
+            call ale#util#Execute('bd ' . l:buf)
         endif
     endfor
 
-    execute 'buffer' l:current_buffer
+    call ale#util#Execute('buffer ' . l:current_buffer)
 endfunction

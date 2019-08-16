@@ -700,7 +700,7 @@ function! ale#completion#HandleUserData(completed_item) abort
 
     let l:user_data_json = get(a:completed_item, 'user_data', '')
 
-    if l:user_data_json ==# ''
+    if l:user_data_json is# ''
         return
     endif
 
