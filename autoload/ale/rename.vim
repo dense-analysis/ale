@@ -15,15 +15,14 @@ function! ale#rename#ClearLSPData() abort
 endfunction
 
 function! ale#rename#HandleTSServerResponse(conn_id, response) abort
-    " call ale#util#Execute('echom '')
     if get(a:response, 'command', '') is# 'rename'
     \&& has_key(s:rename_map, a:response.request_seq)
+        let l:new_name = s:rename_map[a:response.request_seq].new_name
         call remove(s:rename_map, a:response.request_seq)
 
         if get(a:response, 'success', v:false) is v:true
             let l:changes = []
 
-            " echom string(a:response.body)
             for l:response_item in a:response.body.locs
                 let l:filename = l:response_item.file
                 let l:text_changes = []
@@ -38,7 +37,7 @@ function! ale#rename#HandleTSServerResponse(conn_id, response) abort
                     \   'line': l:loc.end.line,
                     \   'offset': l:loc.end.offset,
                     \ },
-                    \ 'newText': b:new_name,
+                    \ 'newText': l:new_name,
                     \})
                 endfor
 
@@ -110,7 +109,7 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
         if empty(l:changes)
             call ale#util#Execute('echom ''Could not rename.''')
         else
-            call ale#code_action#HandleCodeAction(b:new_name, {
+            call ale#code_action#HandleCodeAction({
             \   'description': 'rename',
             \   'changes': l:changes,
             \})
@@ -130,8 +129,6 @@ function! s:OnReady(line, column, new_name, linter, lsp_details) abort
     let l:Callback = a:linter.lsp is# 'tsserver'
     \   ? function('ale#rename#HandleTSServerResponse')
     \   : function('ale#rename#HandleLSPResponse')
-
-    let b:new_name = a:new_name
 
     call ale#lsp#RegisterCallback(l:id, l:Callback)
 
@@ -156,12 +153,14 @@ function! s:OnReady(line, column, new_name, linter, lsp_details) abort
 
     let l:request_id = ale#lsp#Send(l:id, l:message)
 
-    let s:rename_map[l:request_id] = {}
+    let s:rename_map[l:request_id] = {
+    \   'new_name': a:new_name,
+    \}
 endfunction
 
 function! s:ExecuteRename(linter, new_name) abort
-    " let l:buffer = bufnr('')
-    let [l:buffer, l:line, l:column] = getpos('.')[1:2]
+    let l:buffer = bufnr('')
+    let [l:line, l:column] = getpos('.')[1:2]
 
     if a:linter.lsp isnot# 'tsserver'
         let l:column = min([l:column, len(getline(l:line))])

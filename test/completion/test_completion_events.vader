@@ -372,7 +372,7 @@ Execute(Running the normal mode <Plug> keybind should reset the settings):
   Assert !has_key(b:, 'ale_old_omnifunc')
   Assert !has_key(b:, 'ale_old_completeopt')
 
-Execute(ale#completion#HandleCodeAction HandleUserData should process a:completed_item):
+Execute(HandleUserData should call ale#code_action#HandleCodeAction):
   let b:ale_completion_info = {'source': 'ale-manual'}
   call MockHandleCodeAction()
 
@@ -398,3 +398,16 @@ Execute(ale#completion#HandleCodeAction HandleUserData should process a:complete
   \  'user_data': '{"codeActions": [{"description":"", "changes": []}]}'
   \})
   AssertEqual g:handle_code_action_called, 1
+
+  let b:ale_completion_info = {'source': 'ale-automatic'}
+  call ale#completion#HandleUserData({
+  \  'user_data': '{"codeActions": [{"description":"", "changes": []}]}'
+  \})
+  AssertEqual g:handle_code_action_called, 2
+
+Execute(ale#code_action#HandleCodeAction should not be called when when source is not ALE):
+  let b:ale_completion_info = {'source': 'syntastic'}
+  call ale#completion#HandleUserData({
+  \  'user_data': '{"codeActions": [{"description":"", "changes": []}]}'
+  \})
+  AssertEqual g:handle_code_action_called, 0
