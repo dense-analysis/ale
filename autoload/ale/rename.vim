@@ -72,7 +72,7 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
 
         let l:workspace_edit = a:response.result
 
-        if !has_key(a:response, 'changes')
+        if !has_key(l:workspace_edit, 'changes')
             call ale#util#Execute('echom ''Could not rename.''')
 
             return
@@ -82,12 +82,13 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
 
         for l:file_name in keys(l:workspace_edit.changes)
             let l:text_edits = l:workspace_edit.changes[l:file_name]
+            let l:text_changes = []
 
             for l:edit in l:text_edits
                 let l:range = l:edit.range
                 let l:new_text = l:edit.newText
 
-                call add(l:changes, {
+                call add(l:text_changes, {
                 \ 'start': {
                 \   'line': l:range.start.line + 1,
                 \   'offset': l:range.start.character + 1,
@@ -102,7 +103,7 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
 
             call add(l:changes, {
             \   'fileName': l:file_name,
-            \   'textChanges': l:changes,
+            \   'textChanges': l:text_changes,
             \})
         endfor
 

@@ -62,6 +62,12 @@ Before:
     call add(g:code_actions, a:code_action)
   endfunction
 
+  call ale#rename#SetMap({
+  \  3: {
+  \    'new_name': 'aNewName',
+  \  },
+  \})
+
 After:
   if g:conn_id isnot v:null
     call ale#lsp#RemoveConnectionWithID(g:conn_id)
@@ -106,12 +112,7 @@ Given typescript(Some typescript file):
   somelongerline
   bazxyzxyzxyz
 
-Execute(Code actions should be handled):
-  call ale#rename#SetMap({
-  \  3: {
-  \    'new_name': 'aNewName',
-  \  },
-  \})
+Execute(Code actions from tsserver should be handled):
   call ale#rename#HandleTSServerResponse(1, {
   \ 'command': 'rename',
   \ 'request_seq': 3,
@@ -194,6 +195,29 @@ Execute(Code actions should be handled):
   \ ],
   \ g:code_actions
 
+Execute(HandleTSServerResponse does nothing when no data in rename_map):
+  call ale#rename#HandleTSServerResponse(1, {
+  \ 'command': 'rename',
+  \ 'request_seq': -9,
+  \ 'success': v:true,
+  \ 'body': {}
+  \})
+
+  AssertEqual g:handle_code_action_called, 0
+
+Execute(Does nothing when no changes):
+  call ale#rename#HandleTSServerResponse(1, {
+  \ 'command': 'rename',
+  \ 'request_seq': 3,
+  \ 'success': v:true,
+  \ 'body': {
+  \   'locs': []
+  \ }
+  \})
+
+  AssertEqual g:handle_code_action_called, 0
+  AssertEqual ['echom ''Could not rename.'''], g:expr_list
+
 " Execute(The preview window should not be opened for empty tsserver responses):
 "   call ale#references#SetMap({3: {}})
 "   call ale#references#HandleTSServerResponse(1, {
@@ -213,146 +237,155 @@ Execute(Code actions should be handled):
 "   AssertEqual {}, ale#references#GetMap()
 "   AssertEqual ['echom ''No references found.'''], g:expr_list
 
-" Execute(tsserver reference requests should be sent):
-"   call ale#linter#Reset()
+Execute(tsserver rename requests should be sent):
+  call ale#rename#SetMap({})
+  call ale#linter#Reset()
 
-"   runtime ale_linters/typescript/tsserver.vim
-"   call setpos('.', [bufnr(''), 2, 5, 0])
+  runtime ale_linters/typescript/tsserver.vim
+  call setpos('.', [bufnr(''), 2, 5, 0])
 
-"   ALEFindReferences
+  ALERename a-new-name
 
-"   " We shouldn't register the callback yet.
-"   AssertEqual '''''', string(g:Callback)
+  " We shouldn't register the callback yet.
+  AssertEqual '''''', string(g:Callback)
 
-"   AssertEqual type(function('type')), type(g:InitCallback)
-"   call g:InitCallback()
+  AssertEqual type(function('type')), type(g:InitCallback)
+  call g:InitCallback()
 
-"   AssertEqual 'references', g:capability_checked
-"   AssertEqual
-"   \ 'function(''ale#references#HandleTSServerResponse'')',
-"   \ string(g:Callback)
-"   AssertEqual
-"   \ [
-"   \   ale#lsp#tsserver_message#Change(bufnr('')),
-"   \   [0, 'ts@references', {'file': expand('%:p'), 'line': 2, 'offset': 5}]
-"   \ ],
-"   \ g:message_list
-"   AssertEqual {'42': {'use_relative_paths': 0}}, ale#references#GetMap()
+  AssertEqual 'rename', g:capability_checked
+  AssertEqual
+  \ 'function(''ale#rename#HandleTSServerResponse'')',
+  \ string(g:Callback)
+  AssertEqual
+  \ [
+  \   ale#lsp#tsserver_message#Change(bufnr('')),
+  \   [0, 'ts@rename', {
+  \     'file': expand('%:p'),
+  \     'line': 2,
+  \     'offset': 5,
+  \     'arguments': {'findInComments': v:true, 'findInStrings': v:true},
+  \   }]
+  \ ],
+  \ g:message_list
+  AssertEqual {'42': {'new_name': 'a-new-name'}}, ale#rename#GetMap()
 
-" Execute('-relative' argument should enable 'use_relative_paths' in HandleTSServerResponse):
-"   runtime ale_linters/typescript/tsserver.vim
-"   call setpos('.', [bufnr(''), 2, 5, 0])
+Given python(Some Python file):
+  foo
+  somelongerline
+  bazxyzxyzxyz
 
-"   ALEFindReferences -relative
+Execute(Code actions from LSP should be handled):
+  call ale#rename#HandleLSPResponse(1, {
+  \ 'id': 3,
+  \ 'result': {
+  \   'changes': {
+  \     '/foo/bar/file1.ts': [
+  \       {
+  \         'range': {
+  \           'start': {
+  \             'line': 1,
+  \             'character': 2,
+  \           },
+  \           'end': {
+  \             'line': 3,
+  \             'character': 4,
+  \           },
+  \         },
+  \         'newText': 'bla123'
+  \       },
+  \     ],
+  \   },
+  \ },
+  \})
 
-"   call g:InitCallback()
+  AssertEqual
+  \ [
+  \   {
+  \     'description': 'rename',
+  \     'changes': [
+  \       {
+  \         'fileName': '/foo/bar/file1.ts',
+  \         'textChanges': [
+  \            {
+  \              'start': {
+  \                'line': 2,
+  \                'offset': 3,
+  \              },
+  \              'end': {
+  \                'line': 4,
+  \                'offset': 5,
+  \              },
+  \              'newText': 'bla123',
+  \            },
+  \         ],
+  \       },
+  \     ],
+  \   }
+  \ ],
+  \ g:code_actions
 
-"   AssertEqual {'42': {'use_relative_paths': 1}}, ale#references#GetMap()
+Execute(LSP should perform no action when no result):
+  call ale#rename#HandleLSPResponse(1, {
+  \ 'id': 3,
+  \})
 
-" Given python(Some Python file):
-"   foo
-"   somelongerline
-"   bazxyzxyzxyz
+  AssertEqual g:handle_code_action_called, 0
+  AssertEqual ['echom ''Could not rename.'''], g:expr_list
 
-" Execute(LSP reference responses should be handled):
-"   call ale#references#SetMap({3: {}})
-"   call ale#references#HandleLSPResponse(
-"   \ 1,
-"   \ {
-"   \   'id': 3,
-"   \   'result': [
-"   \     {
-"   \       'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
-"   \       'range': {
-"   \         'start': {'line': 2, 'character': 7},
-"   \       },
-"   \     },
-"   \     {
-"   \       'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/other_file')),
-"   \       'range': {
-"   \         'start': {'line': 7, 'character': 15},
-"   \       },
-"   \     },
-"   \   ],
-"   \ }
-"   \)
+Execute(LSP should perform no action when no changes):
+  call ale#rename#HandleLSPResponse(1, {
+  \ 'id': 3,
+  \ 'result': {},
+  \})
 
-"   AssertEqual
-"   \ [
-"   \   {
-"   \     'filename': ale#path#Simplify(g:dir . '/completion_dummy_file'),
-"   \     'line': 3,
-"   \     'column': 8,
-"   \   },
-"   \   {
-"   \     'filename': ale#path#Simplify(g:dir . '/other_file'),
-"   \     'line': 8,
-"   \     'column': 16,
-"   \   },
-"   \ ],
-"   \ g:item_list
-"   AssertEqual {}, ale#references#GetMap()
+  AssertEqual g:handle_code_action_called, 0
+  AssertEqual ['echom ''Could not rename.'''], g:expr_list
 
-" Execute(Preview windows should not be opened for empty LSP reference responses):
-"   call ale#references#SetMap({3: {}})
-"   call ale#references#HandleLSPResponse(1, {'id': 3, 'result': []})
+Execute(LSP should perform no action when changes is empty):
+  call ale#rename#HandleLSPResponse(1, {
+  \ 'id': 3,
+  \ 'result': {
+  \   'changes': {},
+  \ },
+  \})
 
-"   Assert !g:preview_called
-"   AssertEqual {}, ale#references#GetMap()
-"   AssertEqual ['echom ''No references found.'''], g:expr_list
+  AssertEqual g:handle_code_action_called, 0
+  AssertEqual ['echom ''Could not rename.'''], g:expr_list
 
-" Execute(LSP reference responses with a null result should be handled):
-"   call ale#references#SetMap({3: {}})
-"   call ale#references#HandleLSPResponse(1, {'id': 3, 'result': v:null})
+Execute(LSP reference requests should be sent):
+  call ale#rename#SetMap({})
+  runtime ale_linters/python/pyls.vim
+  let b:ale_linters = ['pyls']
+  call setpos('.', [bufnr(''), 1, 5, 0])
 
-"   Assert !g:preview_called
-"   AssertEqual {}, ale#references#GetMap()
-"   AssertEqual ['echom ''No references found.'''], g:expr_list
+  ALERename a-new-name
 
-" Execute(LSP reference requests should be sent):
-"   runtime ale_linters/python/pyls.vim
-"   let b:ale_linters = ['pyls']
-"   call setpos('.', [bufnr(''), 1, 5, 0])
+  " We shouldn't register the callback yet.
+  AssertEqual '''''', string(g:Callback)
 
-"   ALEFindReferences
+  AssertEqual type(function('type')), type(g:InitCallback)
+  call g:InitCallback()
 
-"   " We shouldn't register the callback yet.
-"   AssertEqual '''''', string(g:Callback)
+  AssertEqual 'rename', g:capability_checked
+  AssertEqual
+  \ 'function(''ale#rename#HandleLSPResponse'')',
+  \ string(g:Callback)
 
-"   AssertEqual type(function('type')), type(g:InitCallback)
-"   call g:InitCallback()
+  AssertEqual
+  \ [
+  \   [1, 'textDocument/didChange', {
+  \     'textDocument': {
+  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'version': g:ale_lsp_next_version_id - 1,
+  \     },
+  \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
+  \   }],
+  \   [0, 'textDocument/rename', {
+  \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \   'position': {'line': 0, 'character': 2},
+  \   'newName': 'a-new-name',
+  \   }],
+  \ ],
+  \ g:message_list
 
-"   AssertEqual 'references', g:capability_checked
-"   AssertEqual
-"   \ 'function(''ale#references#HandleLSPResponse'')',
-"   \ string(g:Callback)
-
-"   AssertEqual
-"   \ [
-"   \   [1, 'textDocument/didChange', {
-"   \     'textDocument': {
-"   \         'uri': ale#path#ToURI(expand('%:p')),
-"   \         'version': g:ale_lsp_next_version_id - 1,
-"   \     },
-"   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
-"   \   }],
-"   \   [0, 'textDocument/references', {
-"   \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
-"   \   'position': {'line': 0, 'character': 2},
-"   \   'context': {'includeDeclaration': v:false},
-"   \   }],
-"   \ ],
-"   \ g:message_list
-
-"   AssertEqual {'42': {'use_relative_paths': 0}}, ale#references#GetMap()
-
-" Execute('-relative' argument should enable 'use_relative_paths' in HandleLSPResponse):
-"   runtime ale_linters/python/pyls.vim
-"   let b:ale_linters = ['pyls']
-"   call setpos('.', [bufnr(''), 1, 5, 0])
-
-"   ALEFindReferences -relative
-
-"   call g:InitCallback()
-
-"   AssertEqual {'42': {'use_relative_paths': 1}}, ale#references#GetMap()
+  AssertEqual {'42': {'new_name': 'a-new-name'}}, ale#rename#GetMap()
