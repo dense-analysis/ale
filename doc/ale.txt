@@ -2518,6 +2518,10 @@ ALEHover                                                             *ALEHover*
 
   A plug mapping `<Plug>(ale_hover)` is defined for this command.
 
+ALEOrganizeImports                                         *ALEOrganizeImports*
+
+  Organize imports using tsserver. Currently not implemented for LSPs.
+
 ALERename `<new_name?>`                                               *ALERename*
 
   Rename a symbol using TypeScript server or Language Server.

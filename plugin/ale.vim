@@ -224,6 +224,9 @@ command! -bar ALEComplete :call ale#completion#GetCompletions('ale-manual')
 " Rename symbols using tsserver and LSP
 command! -bar -nargs=? ALERename :call ale#rename#Execute(<f-args>)
 
+" Organize import statements using tsserver
+command! -bar ALEOrganizeImports :call ale#organize_imports#Execute()
+
 " <Plug> mappings for commands
 nnoremap <silent> <Plug>(ale_previous) :ALEPrevious<Return>
 nnoremap <silent> <Plug>(ale_previous_wrap) :ALEPreviousWrap<Return>
