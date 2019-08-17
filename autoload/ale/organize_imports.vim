@@ -7,7 +7,6 @@ function! ale#organize_imports#HandleTSServerResponse(conn_id, response) abort
         return
     endif
 
-    echom 'organize imports response:' . string(a:response)
     let l:file_code_edits =  a:response.body
 
     call ale#code_action#HandleCodeAction({
@@ -60,5 +59,4 @@ function! ale#organize_imports#Execute() abort
             call s:OrganizeImports(l:lsp_linter)
         endfor
     endif
-
 endfunction
