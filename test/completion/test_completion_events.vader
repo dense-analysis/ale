@@ -55,8 +55,6 @@ Before:
     endfunction
   endfunction
 
-  " call MockHandleCodeAction()
-
 After:
   Restore
 
@@ -64,7 +62,6 @@ After:
   unlet! g:output
   unlet! g:fake_mode
   unlet! g:get_completions_called
-  unlet! g:code_action
   unlet! g:handle_code_action_called
   unlet! b:ale_old_omnifunc
   unlet! b:ale_old_completeopt
@@ -73,7 +70,8 @@ After:
   unlet! b:ale_complete_done_time
 
   delfunction CheckCompletionCalled
-  delfunction! ale#code_action#HandleCodeAction
+  delfunction ale#code_action#HandleCodeAction
+  delfunction MockHandleCodeAction
 
   " Stop any timers we left behind.
   " This stops the tests from failing randomly.
@@ -406,6 +404,7 @@ Execute(HandleUserData should call ale#code_action#HandleCodeAction):
   AssertEqual g:handle_code_action_called, 2
 
 Execute(ale#code_action#HandleCodeAction should not be called when when source is not ALE):
+  call MockHandleCodeAction()
   let b:ale_completion_info = {'source': 'syntastic'}
   call ale#completion#HandleUserData({
   \  'user_data': '{"codeActions": [{"description":"", "changes": []}]}'
