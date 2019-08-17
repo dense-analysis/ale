@@ -42,6 +42,14 @@ function! ale#code_action#HandleCodeAction(code_action) abort
             let l:end = l:code_edit.end
             let l:new_text = substitute(l:code_edit.newText, '\n', "\<CR>", 'g')
 
+            " move visual selection to the top line if it is selecting the
+            " first character in the next line. this is because VIM will
+            " delete that first character.
+            if l:end.line > l:start.line && l:end.offset == 1
+                let l:end.line -= 1
+                let l:end.offset = len(getline(l:end.line)) + 3
+            endif
+
             if l:start.line == l:end.line && l:start.offset == l:end.offset
                 call ale#util#Cursor(l:start.line, l:end.offset)
                 call ale#util#Execute('normal! i' . l:new_text)
