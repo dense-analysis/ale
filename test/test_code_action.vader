@@ -1,0 +1,143 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test')
+  call ale#test#SetFilename('dummy.txt')
+
+  runtime autoload/ale/code_action.vim
+  runtime autoload/ale/util.vim
+
+  let g:expr_list = []
+  let g:buffer_map = {
+  \  '/testplugin/test/dummy.txt': 4,
+  \}
+  let g:inverse_buffer_map = {
+  \  4: '/testplugin/test/dummy.txt',
+  \}
+  let g:next_buffer_id = 4
+
+  let g:cursors = []
+  echom 'jerko'
+  function! ale#util#Cursor(line, offset) abort
+    echom 'cursor.mock'
+    call add(g:cursors, [a:line, a:offset])
+  endfunction
+
+  function! ale#util#SetPos(expr, list) abort
+     call add(g:cursors, [a:expr, a:list])
+  endfunction
+
+  function! ale#util#Execute(expr) abort
+    call add(g:expr_list, a:expr)
+    let l:expr_items = split(a:expr, ' ')
+    if expr_items[0] is# 'edit'
+      let g:next_buffer_id += 1
+      let g:buffer_map[expr_items[1]] = g:next_buffer_id
+      let g:inverse_buffer_map[g:next_buffer_id] = expr_items[1]
+    endif
+    if expr_items[0] is# 'bd'
+      let l:filename = g:inverse_buffer_map[expr_items[1]]
+      call remove(g:inverse_buffer_map, expr_items[1])
+      call remove(g:buffer_map, l:filename)
+    endif
+  endfunction
+
+  function! ale#util#GetBufferNumber(filename) abort
+    if has_key(g:buffer_map, a:filename)
+      return g:buffer_map[a:filename]
+    endif
+    return -1
+  endfunction
+
+  let g:code_action = {
+  \  'changes': [{
+  \    'fileName': '/testplugin/test/dummy.txt',
+  \    'textChanges': [{
+  \      'start': {
+  \        'line': 1,
+  \        'offset': 2,
+  \      },
+  \      'end': {
+  \        'line': 1,
+  \        'offset': 3,
+  \      },
+  \      'newText': "a-new-text\n\n",
+  \    }]
+  \  }, {
+  \    'fileName': '/testplugin/test/dummy2.txt',
+  \    'textChanges': [{
+  \      'start': {
+  \        'line': 10,
+  \        'offset': 20,
+  \      },
+  \      'end': {
+  \        'line': 10,
+  \        'offset': 20,
+  \      },
+  \      'newText': 'b-new-text',
+  \    }, {
+  \      'start': {
+  \        'line': 35,
+  \        'offset': 5,
+  \      },
+  \      'end': {
+  \        'line': 35,
+  \        'offset': 8,
+  \      },
+  \      'newText': 'c-new-text',
+  \    }]
+  \  }]
+  \}
+
+After:
+  unlet g:expr_list
+  unlet g:code_action
+  unlet g:buffer_map
+  unlet g:inverse_buffer_map
+  unlet g:next_buffer_id
+  unlet g:cursors
+
+  runtime autoload/ale/code_action.vim
+  runtime autoload/ale/util.vim
+
+Execute(It should modify multiple buffers and save):
+  let b:current_buffer = bufnr('')
+  call ale#code_action#HandleCodeAction(code_action)
+
+  AssertEqual [
+  \  ["'<", [4, 1, 2, 0]],
+  \  ["'>", [4, 1, 2, 0]],
+  \
+  \  ["'<", [5, 35, 5, 0]],
+  \  ["'>", [5, 35, 7, 0]],
+  \
+  \  [10, 20],
+  \], g:cursors
+
+  AssertEqual [
+  \  'buffer 4',
+  \
+  \  "normal! v\<Esc>",
+  \  "normal! gvca-new-text\<CR>\<CR>",
+  \
+  \  "write",
+  \
+  \  'edit /testplugin/test/dummy2.txt',
+  \
+  \  "normal! v\<Esc>",
+  \  "normal! gvcc-new-text",
+  \
+  \  'normal! ib-new-text',
+  \
+  \  'write',
+  \  'bd 5',
+  \  'buffer ' . b:current_buffer,
+  \], g:expr_list
+
+Execute(It will abort if any of the existing buffers was modified):
+  function! ale#code_action#IsModified(buffer) abort
+    return 1
+  endfunction
+  call ale#code_action#HandleCodeAction(g:code_action)
+  AssertEqual [
+  \  'echom ''Aborting action, file is unsaved''',
+  \  'buffer 4',
+  \], g:expr_list
