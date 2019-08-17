@@ -90,13 +90,13 @@ function! ale#lsp#tsserver_message#Rename(buffer, line, column) abort
     \}]
 endfunction
 
-" function! ale#lsp#tsserver_message#OrganizeImports(buffer) abort
-"     return [0, 'ts@organizeImports', {
-"     \   'scope': {
-"     \       'type': 'file',
-"     \       'args': {
-"     \           'file': expand('#' . a:buffer . ':p'),
-"     \       },
-"     \   },
-"     \}]
-" endfunction
+function! ale#lsp#tsserver_message#OrganizeImports(buffer) abort
+    return [0, 'ts@organizeImports', {
+    \   'scope': {
+    \       'type': 'file',
+    \       'args': {
+    \           'file': expand('#' . a:buffer . ':p'),
+    \       },
+    \   },
+    \}]
+endfunction

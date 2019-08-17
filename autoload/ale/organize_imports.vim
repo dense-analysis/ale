@@ -20,6 +20,8 @@ function! s:OnReady(linter, lsp_details) abort
 
     if a:linter.lsp isnot# 'tsserver'
         call ale#util#Execute('echom ''OrganizeImports currently only works with tsserver''')
+
+        return
     endif
 
     let l:buffer = a:lsp_details.buffer

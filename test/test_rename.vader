@@ -73,7 +73,7 @@ After:
     call ale#lsp#RemoveConnectionWithID(g:conn_id)
   endif
 
-  call ale#references#SetMap({})
+  call ale#rename#SetMap({})
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
@@ -100,8 +100,8 @@ Execute(Other messages for the tsserver handler should be ignored):
   AssertEqual g:handle_code_action_called, 0
 
 Execute(Failed rename responses should be handled correctly):
-  call ale#references#SetMap({3: {}})
-  call ale#references#HandleTSServerResponse(
+  call ale#rename#SetMap({3: {'new_name': 'a-test'}})
+  call ale#rename#HandleTSServerResponse(
   \ 1,
   \ {'command': 'rename', 'request_seq': 3}
   \)
@@ -218,25 +218,6 @@ Execute(Does nothing when no changes):
   AssertEqual g:handle_code_action_called, 0
   AssertEqual ['echom ''Could not rename.'''], g:expr_list
 
-" Execute(The preview window should not be opened for empty tsserver responses):
-"   call ale#references#SetMap({3: {}})
-"   call ale#references#HandleTSServerResponse(1, {
-"   \ 'command': 'references',
-"   \ 'request_seq': 3,
-"   \ 'success': v:true,
-"   \ 'body': {
-"   \   'symbolStartOffset': 9,
-"   \   'refs': [
-"   \   ],
-"   \   'symbolDisplayString': 'import doSomething',
-"   \   'symbolName': 'doSomething()',
-"   \ },
-"   \})
-
-"   Assert !g:preview_called
-"   AssertEqual {}, ale#references#GetMap()
-"   AssertEqual ['echom ''No references found.'''], g:expr_list
-
 Execute(tsserver rename requests should be sent):
   call ale#rename#SetMap({})
   call ale#linter#Reset()
@@ -352,7 +333,7 @@ Execute(LSP should perform no action when changes is empty):
   AssertEqual g:handle_code_action_called, 0
   AssertEqual ['echom ''Could not rename.'''], g:expr_list
 
-Execute(LSP reference requests should be sent):
+Execute(LSP rename requests should be sent):
   call ale#rename#SetMap({})
   runtime ale_linters/python/pyls.vim
   let b:ale_linters = ['pyls']
