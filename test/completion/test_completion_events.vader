@@ -62,6 +62,10 @@ After:
 
   delfunction CheckCompletionCalled
 
+  if exists('*CompleteCallback')
+    delfunction CompleteCallback
+  endif
+
   " Stop any timers we left behind.
   " This stops the tests from failing randomly.
   call ale#completion#StopTimer()
@@ -329,6 +333,30 @@ Execute(b:ale_completion_info should be set up correctly for other sources):
   \   'line': 3,
   \   'prefix': 'ab',
   \   'source': 'deoplete',
+  \ },
+  \ b:ale_completion_info
+  Assert !exists('b:ale_completion_result')
+
+Execute(b:ale_completion_info should be set up correctly when requesting completions via callback):
+  let b:ale_completion_result = []
+  call setpos('.', [bufnr(''), 3, 14, 0])
+
+  function! CompleteCallback() abort
+    echo 'Called'
+  endfunction
+
+
+  call ale#completion#GetCompletions('ale-callback', {'callback': funcref('CompleteCallback')})
+
+  AssertEqual
+  \ {
+  \   'request_id': 0,
+  \   'conn_id': 0,
+  \   'column': 14,
+  \   'line_length': 14,
+  \   'line': 3,
+  \   'prefix': 'ab',
+  \   'source': 'ale-callback',
   \ },
   \ b:ale_completion_info
   Assert !exists('b:ale_completion_result')
