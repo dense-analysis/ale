@@ -491,3 +491,9 @@ endfunction
 function! ale#util#SetPos(expr, list) abort
     call setpos(a:expr, a:list)
 endfunction
+
+" This method exists to make mocking in tests easier
+function! ale#util#IsModified(buffer) abort
+    return getbufvar(a:buffer, '&mod')
+endfunction
+

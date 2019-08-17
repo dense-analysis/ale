@@ -1,8 +1,3 @@
-" This method exists to make mocking in tests easier
-function! ale#code_action#IsModified(buffer) abort
-    return getbufvar(a:buffer, '&mod')
-endfunction
-
 function! ale#code_action#HandleCodeAction(code_action) abort
     let l:current_buffer = bufnr('')
     let l:existing_buffers = {}
@@ -14,7 +9,7 @@ function! ale#code_action#HandleCodeAction(code_action) abort
         if l:buf != -1
             let l:existing_buffers[l:buf] = 1
 
-            if l:buf != l:current_buffer && ale#code_action#IsModified(l:buf)
+            if l:buf != l:current_buffer && ale#util#IsModified(l:buf)
                 call ale#util#Execute('echom ''Aborting action, file is unsaved''')
                 " Open buffer in question
                 call ale#util#Execute('buffer ' .  l:buf)

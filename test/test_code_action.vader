@@ -15,9 +15,7 @@ Before:
   let g:next_buffer_id = 4
 
   let g:cursors = []
-  echom 'jerko'
   function! ale#util#Cursor(line, offset) abort
-    echom 'cursor.mock'
     call add(g:cursors, [a:line, a:offset])
   endfunction
 
@@ -133,7 +131,7 @@ Execute(It should modify multiple buffers and save):
   \], g:expr_list
 
 Execute(It will abort if any of the existing buffers was modified):
-  function! ale#code_action#IsModified(buffer) abort
+  function! ale#util#IsModified(buffer) abort
     return 1
   endfunction
   call ale#code_action#HandleCodeAction(g:code_action)
