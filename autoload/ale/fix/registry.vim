@@ -215,6 +215,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'Fix Haskell files with brittany.',
 \   },
+\   'hindent': {
+\       'function': 'ale#fixers#hindent#Fix',
+\       'suggested_filetypes': ['haskell'],
+\       'description': 'Fix Haskell files with hindent.',
+\   },
 \   'hlint': {
 \       'function': 'ale#fixers#hlint#Fix',
 \       'suggested_filetypes': ['haskell'],
