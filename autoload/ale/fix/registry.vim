@@ -335,6 +335,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['ada'],
 \       'description': 'Format Ada files with gnatpp.',
 \   },
+\   'dfmt': {
+\       'function': 'ale#fixers#dfmt#Fix',
+\       'suggested_filetypes': ['d'],
+\       'description': 'Fix D files with dfmt.',
+\   },
 \}
 
 " Reset the function registry to the default entries.

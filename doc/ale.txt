@@ -2054,6 +2054,7 @@ documented in additional help files.
     clang-format..........................|ale-cuda-clangformat|
   d.......................................|ale-d-options|
     dls...................................|ale-d-dls|
+    dfmt..................................|ale-d-dfmt|
     uncrustify............................|ale-d-uncrustify|
   dart....................................|ale-dart-options|
     dartanalyzer..........................|ale-dart-dartanalyzer|

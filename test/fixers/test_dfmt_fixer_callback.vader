@@ -1,0 +1,24 @@
+Before:
+  Save g:ale_d_dfmt_executable
+  Save g:ale_d_dfmt_options
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The dfmt fixer should use the default command unless changed):
+  AssertEqual
+  \ {'command': ale#path#CdString(getcwd()) . ale#Escape('dfmt')},
+  \ ale#fixers#dfmt#Fix(bufnr(''))
+
+Execute(The dfmt fixer should use the options you set):
+  let g:ale_d_dfmt_executable = 'dub'
+  let g:ale_d_dfmt_options = 'run --vquiet dfmt'
+
+  AssertEqual
+  \ {'command': ale#path#CdString(getcwd()) . ale#Escape('dub') . ' run --vquiet dfmt'},
+  \ ale#fixers#dfmt#Fix(bufnr(''))
+

@@ -14,6 +14,28 @@ See |ale-integrations-local-executables|
 
 
 ===============================================================================
+dfmt                                                               *ale-d-dfmt*
+
+g:ale_d_dfmt_executable                               *g:ale_d_dfmt_executable*
+                                                      *b:ale_d_dfmt_executable*
+  Type: |String|
+  Default: `dfmt`
+
+See |ale-integrations-local-executables|
+
+
+g:ale_d_dfmt_options                                     *g:ale_d_dfmt_options*
+                                                         *b:ale_d_dfmt_options*
+  Type: |String|
+  Default: `dfmt`
+
+  This variable can be set to pass extra options to dfmt.
+
+To run `dfmt` using `dub`, you can set `ale_d_dfmt_executable` to `dub`, and
+`ale_d_dfmt_options` to `run --vquiet dfmt`
+
+
+===============================================================================
 uncrustify                                                   *ale-d-uncrustify*
 
 See |ale-c-uncrustify| for information about the available options.
