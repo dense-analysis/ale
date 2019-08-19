@@ -36,15 +36,14 @@ function! ale#lsp#tsserver_message#Geterr(buffer) abort
     return [1, 'ts@geterr', {'files': [expand('#' . a:buffer . ':p')]}]
 endfunction
 
-function! ale#lsp#tsserver_message#Completions(buffer, line, column, prefix) abort
-    let l:external = get(g:, 'ale_completion_tsserver_autoimport', 1)
-
+function! ale#lsp#tsserver_message#Completions(
+\ buffer, line, column, prefix, include_external) abort
     return [0, 'ts@completions', {
     \   'line': a:line,
     \   'offset': a:column,
     \   'file': expand('#' . a:buffer . ':p'),
     \   'prefix': a:prefix,
-    \   'includeExternalModuleExports': l:external,
+    \   'includeExternalModuleExports': a:include_external,
     \}]
 endfunction
 

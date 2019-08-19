@@ -365,9 +365,9 @@ The |ALEComplete| command can be used to show completion suggestions manually,
 even when |g:ale_completion_enabled| is set to `0`. For manually requesting
 completion information with Deoplete, consult Deoplete's documentation.
 
-When working with TypeScript files, ALE by default supports automatic imports
-from external modules. This behavior can be disabled by setting the
-|g:ale_completion_tsserver_autoimport| variable to `0`.
+When working with TypeScript files, ALE by can support automatic imports
+from external modules. This behavior can be enabled by setting the
+|g:ale_completion_tsserver_autoimport| variable to `1`.
 
                                                *ale-completion-completeopt-bug*
 
@@ -591,11 +591,11 @@ b:ale_completion_enabled                             *b:ale_completion_enabled*
 g:ale_completion_tsserver_autoimport      *g:ale_completion_tsserver_autoimport*
 
   Type: Number
-  Default: `1`
+  Default: `0`
 
-  When this option is set to `1`, ALE will try to automatically import
-  completion results from external modules. It can be disabled by setting it
-  to `0`.
+  When this option is set to `0`, ALE will not try to automatically import
+  completion results from external modules. It can be enabled by setting it
+  to `1`.
 
 g:ale_completion_excluded_words               *g:ale_completion_excluded_words*
                                               *b:ale_completion_excluded_words*

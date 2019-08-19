@@ -278,7 +278,7 @@ Execute(ale#lsp#tsserver_message#Completions() should return correct messages):
   \     'includeExternalModuleExports': 1,
   \   }
   \ ],
-  \ ale#lsp#tsserver_message#Completions(bufnr(''), 347, 12, 'abc')
+  \ ale#lsp#tsserver_message#Completions(bufnr(''), 347, 12, 'abc', 1)
 
 Execute(ale#lsp#tsserver_message#CompletionEntryDetails() should return correct messages):
   AssertEqual
