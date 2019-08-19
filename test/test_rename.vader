@@ -216,7 +216,7 @@ Execute(Does nothing when no changes):
   \})
 
   AssertEqual g:handle_code_action_called, 0
-  AssertEqual ['echom ''Could not rename.'''], g:expr_list
+  AssertEqual ['echom ''Error renaming the symbol to: aNewName'''], g:expr_list
 
 Execute(tsserver rename requests should be sent):
   call ale#rename#SetMap({})

@@ -51,7 +51,8 @@ function! ale#rename#HandleTSServerResponse(conn_id, response) abort
             endfor
 
             if empty(l:changes)
-                call ale#util#Execute('echom ''Could not rename.''')
+                let l:msg = 'Error renaming the symbol to: ' . l:new_name
+                call ale#util#Execute('echom ' . string(l:msg))
             else
                 call ale#code_action#HandleCodeAction({
                 \ 'description': 'rename',
