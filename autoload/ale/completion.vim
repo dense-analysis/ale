@@ -463,11 +463,10 @@ function! ale#completion#HandleTSServerResponse(conn_id, response) abort
     let l:command = get(a:response, 'command', '')
 
     if l:command is# 'completions'
-        let l:completions = ale#completion#ParseTSServerCompletions(a:response)
         let l:names = ale#completion#Filter(
         \   l:buffer,
         \   &filetype,
-        \   l:completions,
+        \   ale#completion#ParseTSServerCompletions(a:response),
         \   b:ale_completion_info.prefix,
         \)[: g:ale_completion_max_suggestions - 1]
 
