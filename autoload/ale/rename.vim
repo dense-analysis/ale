@@ -1,3 +1,6 @@
+" Author: Jerko Steiner <jerko.steiner@gmail.com>
+" Description: Rename symbol support for LSP / tsserver
+
 let s:rename_map = {}
 
 " Used to get the rename map in tests.
