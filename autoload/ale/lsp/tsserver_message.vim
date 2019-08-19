@@ -80,12 +80,16 @@ function! ale#lsp#tsserver_message#Quickinfo(buffer, line, column) abort
     \}]
 endfunction
 
-function! ale#lsp#tsserver_message#Rename(buffer, line, column) abort
+function! ale#lsp#tsserver_message#Rename(
+\ buffer, line, column, find_in_comments, find_in_strings) abort
     return [0, 'ts@rename', {
     \   'line': a:line,
     \   'offset': a:column,
     \   'file': expand('#' . a:buffer . ':p'),
-    \   'arguments': {'findInComments': v:true, 'findInStrings': v:true}
+    \   'arguments': {
+    \       'findInComments': a:find_in_comments,
+    \       'findInStrings': a:find_in_strings,
+    \   }
     \}]
 endfunction
 

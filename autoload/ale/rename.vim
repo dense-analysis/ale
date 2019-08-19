@@ -14,6 +14,9 @@ function! ale#rename#ClearLSPData() abort
     let s:rename_map = {}
 endfunction
 
+let g:ale_rename_tsserver_find_in_comments = get(g:, 'ale_rename_tsserver_find_in_comments')
+let g:ale_rename_tsserver_find_in_strings = get(g:, 'ale_rename_tsserver_find_in_strings')
+
 function! ale#rename#HandleTSServerResponse(conn_id, response) abort
     if get(a:response, 'command', '') is# 'rename'
     \&& has_key(s:rename_map, a:response.request_seq)
@@ -137,7 +140,9 @@ function! s:OnReady(line, column, new_name, linter, lsp_details) abort
         let l:message = ale#lsp#tsserver_message#Rename(
         \   l:buffer,
         \   a:line,
-        \   a:column
+        \   a:column,
+        \   g:ale_rename_tsserver_find_in_comments,
+        \   g:ale_rename_tsserver_find_in_strings,
         \)
     else
         " Send a message saying the buffer has changed first, or the

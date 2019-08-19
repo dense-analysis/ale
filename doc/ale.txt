@@ -1320,6 +1320,27 @@ g:ale_pattern_options_enabled                   *g:ale_pattern_options_enabled*
   will not set buffer variables per |g:ale_pattern_options|.
 
 
+g:ale_rename_tsserver_find_in_comments  *g:ale_rename_tsserver_find_in_comments*
+
+  Type: |Number|
+  Default: `0`
+
+  If enabled, this option will tell tsserver to find and replace text in
+  comments when calling |ALERename|. It can be enabled by settings the value
+  to `1`.
+
+
+g:ale_rename_tsserver_find_in_strings   *g:ale_rename_tsserver_find_in_strings*
+
+
+  Type: |Number|
+  Default: `0`
+
+  If enabled, this option will tell tsserver to find and replace text in
+  strings when calling |ALERename|. It can be enabled by settings the value to
+  `1`.
+
+
 g:ale_set_balloons                                         *g:ale_set_balloons*
                                                            *b:ale_set_balloons*
 

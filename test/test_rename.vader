@@ -244,7 +244,10 @@ Execute(tsserver rename requests should be sent):
   \     'file': expand('%:p'),
   \     'line': 2,
   \     'offset': 5,
-  \     'arguments': {'findInComments': v:true, 'findInStrings': v:true},
+  \     'arguments': {
+  \         'findInComments': g:ale_rename_tsserver_find_in_comments,
+  \         'findInStrings': g:ale_rename_tsserver_find_in_strings,
+  \     },
   \   }]
   \ ],
   \ g:message_list
