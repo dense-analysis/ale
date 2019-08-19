@@ -48,17 +48,9 @@ function! s:OrganizeImports(linter) abort
 endfunction
 
 function! ale#organize_imports#Execute() abort
-    let l:lsp_linters = []
-
     for l:linter in ale#linter#Get(&filetype)
         if !empty(l:linter.lsp)
-            call add(l:lsp_linters, l:linter)
+            call s:OrganizeImports(l:linter)
         endif
     endfor
-
-    if !empty(l:lsp_linters)
-        for l:lsp_linter in l:lsp_linters
-            call s:OrganizeImports(l:lsp_linter)
-        endfor
-    endif
 endfunction
