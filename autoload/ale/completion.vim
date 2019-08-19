@@ -707,12 +707,10 @@ function! ale#completion#HandleUserData(completed_item) abort
 
     let l:user_data = json_decode(l:user_data_json)
 
-    if has_key(l:user_data, 'codeActions')
-        for l:code_action in l:user_data.codeActions
-            " echom 'l:code_action: ' .string(l:code_action)
-            call ale#code_action#HandleCodeAction(l:code_action)
-        endfor
-    endif
+    for l:code_action in get(l:user_data, 'codeActions', [])
+        " echom 'l:code_action: ' .string(l:code_action)
+        call ale#code_action#HandleCodeAction(l:code_action)
+    endfor
 endfunction
 
 function! ale#completion#Done() abort
