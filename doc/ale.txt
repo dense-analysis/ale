@@ -568,6 +568,7 @@ g:ale_completion_delay                                 *g:ale_completion_delay*
 
   See |ale-completion|
 
+
 g:ale_completion_enabled                             *g:ale_completion_enabled*
 b:ale_completion_enabled                             *b:ale_completion_enabled*
 
@@ -588,6 +589,7 @@ b:ale_completion_enabled                             *b:ale_completion_enabled*
 
   See |ale-completion|
 
+
 g:ale_completion_tsserver_autoimport      *g:ale_completion_tsserver_autoimport*
 
   Type: Number
@@ -596,6 +598,7 @@ g:ale_completion_tsserver_autoimport      *g:ale_completion_tsserver_autoimport*
   When this option is set to `0`, ALE will not try to automatically import
   completion results from external modules. It can be enabled by setting it
   to `1`.
+
 
 g:ale_completion_excluded_words               *g:ale_completion_excluded_words*
                                               *b:ale_completion_excluded_words*
@@ -2518,9 +2521,11 @@ ALEHover                                                             *ALEHover*
 
   A plug mapping `<Plug>(ale_hover)` is defined for this command.
 
+
 ALEOrganizeImports                                         *ALEOrganizeImports*
 
   Organize imports using tsserver. Currently not implemented for LSPs.
+
 
 ALERename `<new_name?>`                                               *ALERename*
 
