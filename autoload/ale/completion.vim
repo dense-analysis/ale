@@ -727,6 +727,7 @@ augroup END
 function! s:Setup(enabled) abort
     augroup ALECompletionGroup
         autocmd!
+
         if a:enabled
             autocmd TextChangedI * call ale#completion#Queue()
             autocmd CompleteDone * call ale#completion#Done()
