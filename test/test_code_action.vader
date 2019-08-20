@@ -246,7 +246,7 @@ Execute(Cursor will not move when before text change):
   call ale#code_action#HandleCodeAction(g:test.changes)
   AssertEqual [2, 2], getpos('.')[1:2]
 
-Execute(Cursor will move to the end of the change when between start/end):
+Execute(Cursor column will move to the change end when between start/end):
   let g:test.text = [
   \ 'class Name {',
   \ '  value: string',
@@ -264,6 +264,28 @@ Execute(Cursor will move to the end of the change when between start/end):
   call ale#code_action#HandleCodeAction(g:test.changes)
   AssertEqual [2, 9], getpos('.')[1:2]
 
-  " call setpos('.', [0, 2, 9, 0])
-  " call ale#code_action#HandleCodeAction(g:test.changes)
-  " AssertEqual [2, 9], getpos('.')[1:2]
+Execute(Cursor column will move back when new text is shorter):
+  let g:test.text = [
+  \ 'class Name {',
+  \ '  value: string',
+  \ '}',
+  \]
+  call writefile(g:test.text, g:file1, 'S')
+  execute 'edit ' . g:file1
+
+  call setpos('.', [0, 2, 8, 0])
+  call ale#code_action#HandleCodeAction(g:test.create_change(2, 3, 2, 8, 'val'))
+  AssertEqual [2, 6], getpos('.')[1:2]
+
+Execute(Cursor column will move forward when new text is longer):
+  let g:test.text = [
+  \ 'class Name {',
+  \ '  value: string',
+  \ '}',
+  \]
+  call writefile(g:test.text, g:file1, 'S')
+  execute 'edit ' . g:file1
+
+  call setpos('.', [0, 2, 8, 0])
+  call ale#code_action#HandleCodeAction(g:test.create_change(2, 3, 2, 8, 'longValue'))
+  AssertEqual [2, 12], getpos('.')[1:2]
