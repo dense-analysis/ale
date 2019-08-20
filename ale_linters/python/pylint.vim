@@ -7,6 +7,7 @@ call ale#Set('python_pylint_use_global', get(g:, 'ale_use_global_executables', 0
 call ale#Set('python_pylint_change_directory', 1)
 call ale#Set('python_pylint_auto_pipenv', 0)
 call ale#Set('python_pylint_use_msg_id', 0)
+call ale#Set('python_pylint_auto_indent_string', 0)
 
 function! ale_linters#python#pylint#GetExecutable(buffer) abort
     if (ale#Var(a:buffer, 'python_auto_pipenv') || ale#Var(a:buffer, 'python_pylint_auto_pipenv'))
@@ -15,6 +16,25 @@ function! ale_linters#python#pylint#GetExecutable(buffer) abort
     endif
 
     return ale#python#FindExecutable(a:buffer, 'python_pylint', ['pylint'])
+endfunction
+
+function! s:IndentStringOption(buffer) abort
+    if ale#Var(a:buffer, 'python_pylint_auto_indent_string') == 0
+        return ''
+    endif
+
+    " Generate --indent-string based on [expandtab,shiftwidth,tabstop] value
+    if getbufvar(a:buffer, '&expandtab') == 0
+        return ' --indent-string "\\t"'
+    endif
+
+    let l:tabsize = getbufvar(a:buffer, '&shiftwidth')
+
+    if l:tabsize == 0
+        let l:tabsize = getbufvar(a:buffer, '&tabstop')
+    endif
+
+    return ' --indent-string "' . repeat(' ', l:tabsize) . '"'
 endfunction
 
 function! ale_linters#python#pylint#GetCommand(buffer) abort
@@ -39,6 +59,7 @@ function! ale_linters#python#pylint#GetCommand(buffer) abort
     return l:cd_string
     \   . ale#Escape(l:executable) . l:exec_args
     \   . ' ' . ale#Var(a:buffer, 'python_pylint_options')
+    \   . s:IndentStringOption(a:buffer)
     \   . ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'
     \   . ' %s'
 endfunction

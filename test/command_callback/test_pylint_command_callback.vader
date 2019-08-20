@@ -53,6 +53,29 @@ Execute(The pylint callbacks should detect virtualenv directories):
   \ ale#path#CdString(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/subdir'))
   \   . ale#Escape(b:executable) . ' ' . b:command_tail
 
+Execute(The pylint command should send vim python default as the indent string):
+  let g:ale_python_pylint_auto_indent_string = 1
+
+  AssertLinter 'pylint',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('pylint') . ' ' . ' --indent-string "    "' . b:command_tail
+
+Execute(The pylint command should send 2 spaces as the indent string):
+  let g:ale_python_pylint_auto_indent_string = 1
+  set expandtab tabstop=2 shiftwidth=2
+
+  AssertLinter 'pylint',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('pylint') . ' ' . ' --indent-string "  "' . b:command_tail
+
+Execute(The pylint command should send tab as the indent string):
+  let g:ale_python_pylint_auto_indent_string = 1
+  set expandtab!
+
+  AssertLinter 'pylint',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('pylint') . ' ' . ' --indent-string "\\t"' . b:command_tail
+
 Execute(You should able able to use the global pylint instead):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
   let g:ale_python_pylint_use_global = 1
