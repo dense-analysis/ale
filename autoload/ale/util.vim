@@ -476,24 +476,3 @@ function! ale#util#FindItemAtCursor(buffer) abort
 
     return [l:info, l:loc]
 endfunction
-
-" A wrapper function for bufwinnr() so we can test calls for it.
-function! ale#util#GetBufferNumber(filename) abort
-    return bufwinnr(a:filename)
-endfunction
-
-" A wrapper function for cursor() so we can test calls for it.
-function! ale#util#Cursor(line, offset) abort
-    call cursor(a:line, a:offset)
-endfunction
-
-" A wrapper function for setpos() so we can test calls for it.
-function! ale#util#SetPos(expr, list) abort
-    call setpos(a:expr, a:list)
-endfunction
-
-" This method exists to make mocking in tests easier
-function! ale#util#IsModified(buffer) abort
-    return getbufvar(a:buffer, '&mod')
-endfunction
-

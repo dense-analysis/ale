@@ -1,141 +1,269 @@
 Before:
-  call ale#test#SetDirectory('/testplugin/test')
-  call ale#test#SetFilename('dummy.txt')
-
   runtime autoload/ale/code_action.vim
   runtime autoload/ale/util.vim
 
-  let g:expr_list = []
-  let g:buffer_map = {
-  \  '/testplugin/test/dummy.txt': 4,
-  \}
-  let g:inverse_buffer_map = {
-  \  4: '/testplugin/test/dummy.txt',
-  \}
-  let g:next_buffer_id = 4
+  let g:file1 = tempname()
+  let g:file2 = tempname()
+  let g:test = {}
 
-  let g:cursors = []
-  function! ale#util#Cursor(line, offset) abort
-    call add(g:cursors, [a:line, a:offset])
-  endfunction
+  let g:test.create_change = {line, offset, end_line, end_offset, value ->
+  \{
+  \   'changes': [{
+  \      'fileName': g:file1,
+  \      'textChanges': [{
+  \        'start': {
+  \          'line': line,
+  \          'offset': offset,
+  \        },
+  \        'end': {
+  \          'line': end_line,
+  \          'offset': end_offset,
+  \        },
+  \        'newText': value,
+  \      }],
+  \   }]
+  \}}
 
-  function! ale#util#SetPos(expr, list) abort
-     call add(g:cursors, [a:expr, a:list])
-  endfunction
-
-  function! ale#util#Execute(expr) abort
-    call add(g:expr_list, a:expr)
-    let l:expr_items = split(a:expr, ' ')
-    if expr_items[0] is# 'edit'
-      let g:next_buffer_id += 1
-      let g:buffer_map[expr_items[1]] = g:next_buffer_id
-      let g:inverse_buffer_map[g:next_buffer_id] = expr_items[1]
-    endif
-    if expr_items[0] is# 'bd'
-      let l:filename = g:inverse_buffer_map[expr_items[1]]
-      call remove(g:inverse_buffer_map, expr_items[1])
-      call remove(g:buffer_map, l:filename)
-    endif
-  endfunction
-
-  function! ale#util#GetBufferNumber(filename) abort
-    if has_key(g:buffer_map, a:filename)
-      return g:buffer_map[a:filename]
-    endif
-    return -1
-  endfunction
-
-  let g:code_action = {
-  \  'changes': [{
-  \    'fileName': '/testplugin/test/dummy.txt',
-  \    'textChanges': [{
-  \      'start': {
-  \        'line': 1,
-  \        'offset': 2,
-  \      },
-  \      'end': {
-  \        'line': 1,
-  \        'offset': 3,
-  \      },
-  \      'newText': "a-new-text\n\n",
-  \    }]
-  \  }, {
-  \    'fileName': '/testplugin/test/dummy2.txt',
-  \    'textChanges': [{
-  \      'start': {
-  \        'line': 10,
-  \        'offset': 20,
-  \      },
-  \      'end': {
-  \        'line': 10,
-  \        'offset': 20,
-  \      },
-  \      'newText': 'b-new-text',
-  \    }, {
-  \      'start': {
-  \        'line': 35,
-  \        'offset': 5,
-  \      },
-  \      'end': {
-  \        'line': 35,
-  \        'offset': 8,
-  \      },
-  \      'newText': 'c-new-text',
-  \    }]
-  \  }]
-  \}
 
 After:
-  unlet g:expr_list
-  unlet g:code_action
-  unlet g:buffer_map
-  unlet g:inverse_buffer_map
-  unlet g:next_buffer_id
-  unlet g:cursors
+  " Close the extra buffers if we opened it.
+  if bufnr(g:file1) != -1
+    execute 'drop ' . g:file1
+    execute ':bp | :bd ' . bufnr(g:file1)
+  endif
+  if bufnr(g:file2) != -1
+    execute 'drop ' . g:file2
+    execute ':bp | :bd ' . bufnr(g:file2)
+  endif
+
+  if filereadable(g:file1)
+    call delete(g:file1)
+  endif
+  if filereadable(g:file2)
+    call delete(g:file2)
+  endif
+
+  unlet g:file1
+  unlet g:file2
+  unlet g:test
 
   runtime autoload/ale/code_action.vim
   runtime autoload/ale/util.vim
 
-Execute(It should modify multiple buffers and save):
-  let b:current_buffer = bufnr('')
-  call ale#code_action#HandleCodeAction(code_action)
+
+Execute(It should modify and save multiple files):
+  call writefile([
+  \ 'class Name {',
+  \ '  value: string',
+  \ '}',
+  \ '',
+  \ 'class B {',
+  \ '  constructor(readonly a: Name) {}',
+  \ '}'
+  \], g:file1, 'S')
+  call writefile([
+  \ 'import A from "A"',
+  \ 'import {',
+  \ '  B,',
+  \ '  C,',
+  \ '} from "module"',
+  \ 'import D from "D"',
+  \], g:file2, 'S')
+
+  call ale#code_action#HandleCodeAction({
+  \   'changes': [{
+  \      'fileName': g:file1,
+  \      'textChanges': [{
+  \        'start': {
+  \          'line': 1,
+  \          'offset': 7,
+  \        },
+  \        'end': {
+  \          'line': 1,
+  \          'offset': 11,
+  \        },
+  \        'newText': 'Value',
+  \      }, {
+  \        'start': {
+  \          'line': 6,
+  \          'offset': 27,
+  \        },
+  \        'end': {
+  \          'line': 6,
+  \          'offset': 31,
+  \        },
+  \        'newText': 'Value',
+  \      }],
+  \   }, {
+  \     'fileName': g:file2,
+  \     'textChanges': [{
+  \       'start': {
+  \         'line': 2,
+  \         'offset': 1,
+  \       },
+  \       'end': {
+  \         'line': 6,
+  \         'offset': 1,
+  \       },
+  \       'newText': "import {A, B} from 'module'\n\n",
+  \     }]
+  \  }],
+  \})
 
   AssertEqual [
-  \  ["'<", [4, 1, 2, 0]],
-  \  ["'>", [4, 1, 2, 0]],
-  \
-  \  ["'<", [5, 35, 5, 0]],
-  \  ["'>", [5, 35, 7, 0]],
-  \
-  \  [10, 20],
-  \], g:cursors
+  \ 'class Value {',
+  \ '  value: string',
+  \ '}',
+  \ '',
+  \ 'class B {',
+  \ '  constructor(readonly a: Value) {}',
+  \ '}',
+  \ '',
+  \], readfile(g:file1, 'b')
 
   AssertEqual [
-  \  'buffer 4',
-  \
-  \  "normal! v\<Esc>",
-  \  "normal! gvca-new-text\<CR>\<CR>",
-  \
-  \  "write",
-  \
-  \  'edit /testplugin/test/dummy2.txt',
-  \
-  \  "normal! v\<Esc>",
-  \  "normal! gvcc-new-text",
-  \
-  \  'normal! ib-new-text',
-  \
-  \  'write',
-  \  'bd 5',
-  \  'buffer ' . b:current_buffer,
-  \], g:expr_list
+  \ 'import A from "A"',
+  \ 'import {A, B} from ''module''',
+  \ '',
+  \ 'import D from "D"',
+  \ '',
+  \], readfile(g:file2, 'b')
 
-Execute(It will abort if any of the existing buffers was modified):
-  function! ale#util#IsModified(buffer) abort
-    return 1
-  endfunction
-  call ale#code_action#HandleCodeAction(g:code_action)
+Execute(Beginning of file can be modified):
+  let g:test.text = [
+  \ 'class Name {',
+  \ '  value: string',
+  \ '}',
+  \]
+  call writefile(g:test.text, g:file1, 'S')
+
+  call ale#code_action#HandleCodeAction({
+  \   'changes': [{
+  \      'fileName': g:file1,
+  \      'textChanges': [{
+  \        'start': {
+  \          'line': 1,
+  \          'offset': 1,
+  \        },
+  \        'end': {
+  \          'line': 1,
+  \          'offset': 1,
+  \        },
+  \        'newText': "type A: string\ntype B: number\n",
+  \      }],
+  \   }]
+  \})
+
   AssertEqual [
-  \  'echom ''Aborting action, file is unsaved''',
-  \  'buffer 4',
-  \], g:expr_list
+  \  'type A: string',
+  \  'type B: number',
+  \] + g:test.text + [''], readfile(g:file1, 'b')
+
+Execute(End of file can be modified):
+  let g:test.text = [
+  \ 'class Name {',
+  \ '  value: string',
+  \ '}',
+  \]
+  call writefile(g:test.text, g:file1, 'S')
+
+  call ale#code_action#HandleCodeAction({
+  \   'changes': [{
+  \      'fileName': g:file1,
+  \      'textChanges': [{
+  \        'start': {
+  \          'line': 4,
+  \          'offset': 1,
+  \        },
+  \        'end': {
+  \          'line': 4,
+  \          'offset': 1,
+  \        },
+  \        'newText': "type A: string\ntype B: number\n",
+  \      }],
+  \   }]
+  \})
+
+  AssertEqual g:test.text + [
+  \  'type A: string',
+  \  'type B: number',
+  \  '',
+  \], readfile(g:file1, 'b')
+
+Execute(Current buffer contents will be reloaded):
+  let g:test.text = [
+  \ 'class Name {',
+  \ '  value: string',
+  \ '}',
+  \]
+  call writefile(g:test.text, g:file1, 'S')
+
+  execute 'edit ' . g:file1
+  let g:test.buffer = bufnr(g:file1)
+
+  call ale#code_action#HandleCodeAction({
+  \   'changes': [{
+  \      'fileName': g:file1,
+  \      'textChanges': [{
+  \        'start': {
+  \          'line': 1,
+  \          'offset': 1,
+  \        },
+  \        'end': {
+  \          'line': 1,
+  \          'offset': 1,
+  \        },
+  \        'newText': "type A: string\ntype B: number\n",
+  \      }],
+  \   }]
+  \})
+
+  AssertEqual [
+  \  'type A: string',
+  \  'type B: number',
+  \] + g:test.text + [''], readfile(g:file1, 'b')
+
+  AssertEqual [
+  \  'type A: string',
+  \  'type B: number',
+  \] + g:test.text, getbufline(g:test.buffer, 1, '$')
+
+Execute(Cursor will not move when before text change):
+  let g:test.text = [
+  \ 'class Name {',
+  \ '  value: string',
+  \ '}',
+  \]
+  call writefile(g:test.text, g:file1, 'S')
+  let g:test.changes = g:test.create_change(2, 3, 2, 8, 'value2')
+  execute 'edit ' . g:file1
+
+  call setpos('.', [0, 1, 1, 0])
+  call ale#code_action#HandleCodeAction(g:test.changes)
+  AssertEqual [1, 1], getpos('.')[1:2]
+
+  call setpos('.', [0, 2, 2, 0])
+  call ale#code_action#HandleCodeAction(g:test.changes)
+  AssertEqual [2, 2], getpos('.')[1:2]
+
+Execute(Cursor will move to the end of the change when between start/end):
+  let g:test.text = [
+  \ 'class Name {',
+  \ '  value: string',
+  \ '}',
+  \]
+  call writefile(g:test.text, g:file1, 'S')
+  let g:test.changes = g:test.create_change(2, 3, 2, 8, 'value2')
+  execute 'edit ' . g:file1
+
+  call setpos('.', [0, 2, 3, 0])
+  call ale#code_action#HandleCodeAction(g:test.changes)
+  AssertEqual [2, 9], getpos('.')[1:2]
+
+  call setpos('.', [0, 2, 4, 0])
+  call ale#code_action#HandleCodeAction(g:test.changes)
+  AssertEqual [2, 9], getpos('.')[1:2]
+
+  " call setpos('.', [0, 2, 9, 0])
+  " call ale#code_action#HandleCodeAction(g:test.changes)
+  " AssertEqual [2, 9], getpos('.')[1:2]
