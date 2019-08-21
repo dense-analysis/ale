@@ -210,7 +210,7 @@ function! ale#rename#Execute() abort
         return
     endif
 
-    let l:old_name = expand('<cWORD>')
+    let l:old_name = expand('<cword>')
     let l:new_name = ale#util#Input('New name: ', l:old_name)
 
     if empty(l:new_name)
