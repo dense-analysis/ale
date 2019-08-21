@@ -29,51 +29,62 @@ function! s:message(message) abort
 endfunction
 
 function! ale#rename#HandleTSServerResponse(conn_id, response) abort
-    if get(a:response, 'command', '') is# 'rename'
-    \&& has_key(s:rename_map, a:response.request_seq)
-        let l:old_name = s:rename_map[a:response.request_seq].old_name
-        let l:new_name = s:rename_map[a:response.request_seq].new_name
-        call remove(s:rename_map, a:response.request_seq)
-
-        if get(a:response, 'success', v:false) is v:true
-            let l:changes = []
-
-            for l:response_item in a:response.body.locs
-                let l:filename = l:response_item.file
-                let l:text_changes = []
-
-                for l:loc in l:response_item.locs
-                    call add(l:text_changes, {
-                    \ 'start': {
-                    \   'line': l:loc.start.line,
-                    \   'offset': l:loc.start.offset,
-                    \ },
-                    \ 'end': {
-                    \   'line': l:loc.end.line,
-                    \   'offset': l:loc.end.offset,
-                    \ },
-                    \ 'newText': l:new_name,
-                    \})
-                endfor
-
-                call add(l:changes, {
-                \   'fileName': l:filename,
-                \   'textChanges': l:text_changes,
-                \})
-            endfor
-
-            if empty(l:changes)
-                call s:message('Error renaming "' . l:old_name . '" to: "' . l:new_name . '"')
-
-                return
-            endif
-
-            call ale#code_action#HandleCodeAction({
-            \ 'description': 'rename',
-            \ 'changes': l:changes,
-            \})
-        endif
+    if get(a:response, 'command', '') isnot# 'rename'
+        return
     endif
+
+    if !has_key(s:rename_map, a:response.request_seq)
+        return
+    endif
+
+    let l:old_name = s:rename_map[a:response.request_seq].old_name
+    let l:new_name = s:rename_map[a:response.request_seq].new_name
+    call remove(s:rename_map, a:response.request_seq)
+
+    if get(a:response, 'success', v:false) is v:false
+        let l:message = get(a:response, 'message', 'unknown')
+        call s:message('Error renaming "' . l:old_name . '" to: "' . l:new_name
+        \ . '". Reason: ' . l:message)
+
+        return
+    endif
+
+    let l:changes = []
+
+    for l:response_item in a:response.body.locs
+        let l:filename = l:response_item.file
+        let l:text_changes = []
+
+        for l:loc in l:response_item.locs
+            call add(l:text_changes, {
+            \ 'start': {
+            \   'line': l:loc.start.line,
+            \   'offset': l:loc.start.offset,
+            \ },
+            \ 'end': {
+            \   'line': l:loc.end.line,
+            \   'offset': l:loc.end.offset,
+            \ },
+            \ 'newText': l:new_name,
+            \})
+        endfor
+
+        call add(l:changes, {
+        \   'fileName': l:filename,
+        \   'textChanges': l:text_changes,
+        \})
+    endfor
+
+    if empty(l:changes)
+        call s:message('Error renaming "' . l:old_name . '" to: "' . l:new_name . '"')
+
+        return
+    endif
+
+    call ale#code_action#HandleCodeAction({
+    \ 'description': 'rename',
+    \ 'changes': l:changes,
+    \})
 endfunction
 
 function! ale#rename#HandleLSPResponse(conn_id, response) abort

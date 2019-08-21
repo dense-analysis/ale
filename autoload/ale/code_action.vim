@@ -6,14 +6,12 @@ function! ale#code_action#HandleCodeAction(code_action) abort
     let l:changes = a:code_action.changes
 
     for l:file_code_edit in l:changes
-        let l:buf = bufwinnr(l:file_code_edit.fileName)
+        let l:buf = bufnr(l:file_code_edit.fileName)
 
-        if l:buf != -1
-            if l:buf != l:current_buffer && getbufvar(l:buf, '&mod')
-                call ale#util#Execute('echom ''Aborting action, file is unsaved''')
+        if l:buf != -1 && l:buf != l:current_buffer && getbufvar(l:buf, '&mod')
+            call ale#util#Execute('echom ''Aborting action, file is unsaved''')
 
-                return
-            endif
+            return
         endif
     endfor
 
