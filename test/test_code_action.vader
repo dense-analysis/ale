@@ -129,6 +129,7 @@ Execute(It should modify and save multiple files):
   \ '',
   \], readfile(g:file2, 'b')
 
+
 Execute(Beginning of file can be modified):
   let g:test.text = [
   \ 'class Name {',
@@ -158,6 +159,7 @@ Execute(Beginning of file can be modified):
   \  'type A: string',
   \  'type B: number',
   \] + g:test.text + [''], readfile(g:file1, 'b')
+
 
 Execute(End of file can be modified):
   let g:test.text = [
@@ -189,6 +191,7 @@ Execute(End of file can be modified):
   \  'type B: number',
   \  '',
   \], readfile(g:file1, 'b')
+
 
 Execute(Current buffer contents will be reloaded):
   let g:test.text = [
@@ -228,7 +231,12 @@ Execute(Current buffer contents will be reloaded):
   \  'type B: number',
   \] + g:test.text, getbufline(g:test.buffer, 1, '$')
 
-Execute(Cursor will not move when before text change):
+
+# Tests for cursor repositioning. In comments `=` designates change range, and
+# `C` cursor position
+
+#     C ===
+Execute(Cursor will not move when it is before text change):
   let g:test.text = [
   \ 'class Name {',
   \ '  value: string',
@@ -246,7 +254,8 @@ Execute(Cursor will not move when before text change):
   call ale#code_action#HandleCodeAction(g:test.changes)
   AssertEqual [2, 2], getpos('.')[1:2]
 
-Execute(Cursor column will move to the change end when between start/end):
+# ====C====
+Execute(Cursor column will move to the change end when cursor between start/end):
   let g:test.text = [
   \ 'class Name {',
   \ '  value: string',
@@ -264,6 +273,8 @@ Execute(Cursor column will move to the change end when between start/end):
   call ale#code_action#HandleCodeAction(g:test.changes)
   AssertEqual [2, 9], getpos('.')[1:2]
 
+
+# ====C
 Execute(Cursor column will move back when new text is shorter):
   let g:test.text = [
   \ 'class Name {',
@@ -277,6 +288,8 @@ Execute(Cursor column will move back when new text is shorter):
   call ale#code_action#HandleCodeAction(g:test.create_change(2, 3, 2, 8, 'val'))
   AssertEqual [2, 6], getpos('.')[1:2]
 
+
+# ==== C
 Execute(Cursor column will move forward when new text is longer):
   let g:test.text = [
   \ 'class Name {',
@@ -289,3 +302,66 @@ Execute(Cursor column will move forward when new text is longer):
   call setpos('.', [0, 2, 8, 0])
   call ale#code_action#HandleCodeAction(g:test.create_change(2, 3, 2, 8, 'longValue'))
   AssertEqual [2, 12], getpos('.')[1:2]
+
+# =========
+# =
+# C
+Execute(Cursor line will move when updates are happening on lines above):
+  let g:test.text = [
+  \ 'class Name {',
+  \ '  value: string',
+  \ '}',
+  \]
+  call writefile(g:test.text, g:file1, 'S')
+  execute 'edit ' . g:file1
+
+  call setpos('.', [0, 3, 1, 0])
+  call ale#code_action#HandleCodeAction(g:test.create_change(1, 1, 2, 1, "test\ntest\n"))
+  AssertEqual [4, 1], getpos('.')[1:2]
+
+
+# =========
+# =C
+Execute(Cursor line and column will move when change on lines above and just before cursor column):
+  let g:test.text = [
+  \ 'class Name {',
+  \ '  value: string',
+  \ '}',
+  \]
+  call writefile(g:test.text, g:file1, 'S')
+  execute 'edit ' . g:file1
+
+  call setpos('.', [0, 2, 2, 0])
+  call ale#code_action#HandleCodeAction(g:test.create_change(1, 1, 2, 1, "test\ntest\n123"))
+  AssertEqual [3, 5], getpos('.')[1:2]
+
+# =========
+# ======C==
+# =
+Execute(Cursor line and column will move at the end of changes):
+  let g:test.text = [
+  \ 'class Name {',
+  \ '  value: string',
+  \ '}',
+  \]
+  call writefile(g:test.text, g:file1, 'S')
+  execute 'edit ' . g:file1
+
+  call setpos('.', [0, 2, 10, 0])
+  call ale#code_action#HandleCodeAction(g:test.create_change(1, 1, 3, 1, "test\n"))
+  AssertEqual [2, 1], getpos('.')[1:2]
+
+#      C ==
+# ===
+Execute(Cursor will not move when changes happening on lines >= cursor, but after cursor):
+  let g:test.text = [
+  \ 'class Name {',
+  \ '  value: string',
+  \ '}',
+  \]
+  call writefile(g:test.text, g:file1, 'S')
+  execute 'edit ' . g:file1
+
+  call setpos('.', [0, 2, 3, 0])
+  call ale#code_action#HandleCodeAction(g:test.create_change(2, 10, 3, 1, "test\n"))
+  AssertEqual [2, 3], getpos('.')[1:2]

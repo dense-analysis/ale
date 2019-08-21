@@ -11,8 +11,6 @@ function! ale#code_action#HandleCodeAction(code_action) abort
         if l:buf != -1
             if l:buf != l:current_buffer && getbufvar(l:buf, '&mod')
                 call ale#util#Execute('echom ''Aborting action, file is unsaved''')
-                " Open buffer in question
-                " execute 'buffer ' . l:buf
                 return
             endif
         endif
@@ -32,9 +30,6 @@ function! ale#code_action#ApplyChanges(filename, changes) abort
 
     if l:buffer > 0
         let l:lines = getbufline(l:buffer, 1, '$')
-        if getbufvar(l:buffer, '&mod')
-            write
-        endif
     else
         let l:lines = readfile(a:filename, 'b')
     endif
@@ -51,7 +46,6 @@ function! ale#code_action#ApplyChanges(filename, changes) abort
     let l:column_offset = 0
     let l:last_end_line = 0
 
-    echom 'start ' . string(l:lines)
     for l:code_edit in a:changes
         if l:code_edit.start.line isnot l:last_end_line
             let l:column_offset = 0
@@ -96,58 +90,16 @@ function! ale#code_action#ApplyChanges(filename, changes) abort
         call extend(l:middle, l:insertions[1:])
         let l:middle[-1] .= l:lines[l:end_line - 1][l:end_column - 1 :]
 
-        echom 'middle ' . string(l:middle)
-
         let l:lines_before_change = len(l:lines)
-
         let l:lines = l:start + l:middle + l:lines[l:end_line :]
 
-        echom 'change ' . string(l:lines)
-
         let l:line_offset += len(l:lines) - l:lines_before_change
-
-        " echom 'lines after ' . string(l:lines)
-        echom 'l:line ' . l:line
-        echom 'l:line_offset ' . l:line_offset
-        " echom 'index ' . (l:line + l:line_offset)
         let l:column_offset = len(l:middle[-1]) - l:end_line_len
-        echom 'line offset ' . l:line_offset .   '  col offset ' . l:column_offset
 
-        if l:end_line < l:cur_line
-            " both start and end lines are before the cursor. only line offset
-            " needs to be updated
-            let l:cur_line += l:line_offset
-        elseif l:end_line == l:cur_line
-            " end line is at the same location as cursor
-            if l:column <= l:cur_column
-                " updates are happening either before or around the cursor
-                if l:end_column < l:cur_column
-                    " updates are happening before the cursor, update the
-                    " column offset for cursor
-                    let l:cur_column += l:column_offset
-                else
-                    " updates are happening around the cursor, move the cursor
-                    " to the end of the changes
-                    let l:cur_column = l:end_column + l:column_offset
-                endif
-            " else is not necessary, it means modifications are happening
-            " after the cursor so no updates need to be done
-            endif
-        else
-            " end line is behind the cursor
-            if l:line <= l:cur_line
-                " changes are happening around the cursor, move the cursor
-                " to the end of the changes
-                let l:cur_line = l:end_line + l:line_offset
-                let l:cur_offset = l:end_column + l:column_offset
-            " else is not necesary, it means modifications are happening
-            " after the cursor so no updates need to be done
-            endif
-        endif
-
-        echom 'l:pos pre  ' . string(l:pos)
-        let l:pos = [l:cur_line, l:cur_column]
-        echom 'l:pos post ' . string(l:pos)
+        let l:pos = s:UpdateCursor(l:pos,
+        \ [l:line, l:column],
+        \ [l:end_line, l:end_column],
+        \ [l:line_offset, l:column_offset])
     endfor
 
     if l:lines[-1] is# ''
@@ -163,4 +115,52 @@ function! ale#code_action#ApplyChanges(filename, changes) abort
     if l:is_current_buffer
         call setpos('.', [0, l:pos[0], l:pos[1], 0])
     endif
+endfunction
+
+function! s:UpdateCursor(cursor, start, end, offset) abort
+    let l:cur_line = a:cursor[0]
+    let l:cur_column = a:cursor[1]
+    let l:line = a:start[0]
+    let l:column = a:start[1]
+    let l:end_line = a:end[0]
+    let l:end_column = a:end[1]
+    let l:line_offset = a:offset[0]
+    let l:column_offset = a:offset[1]
+
+    if l:end_line < l:cur_line
+        " both start and end lines are before the cursor. only line offset
+        " needs to be updated
+        let l:cur_line += l:line_offset
+    elseif l:end_line == l:cur_line
+        " end line is at the same location as cursor, which means
+        " l:line <= l:cur_line
+        if l:line < l:cur_line || l:column <= l:cur_column
+            " updates are happening either before or around the cursor
+            if l:end_column < l:cur_column
+                " updates are happening before the cursor, update the
+                " column offset for cursor
+                let l:cur_line += l:line_offset
+                let l:cur_column += l:column_offset
+            else
+                " updates are happening around the cursor, move the cursor
+                " to the end of the changes
+                let l:cur_line += l:line_offset
+                let l:cur_column = l:end_column + l:column_offset
+            endif
+        " else is not necessary, it means modifications are happening
+        " after the cursor so no cursor updates need to be done
+        endif
+    else
+        " end line is after the cursor
+        if l:line < l:cur_line || l:line == l:cur_line && l:column <= l:cur_column
+            " changes are happening around the cursor, move the cursor
+            " to the end of the changes
+            let l:cur_line = l:end_line + l:line_offset
+            let l:cur_column = l:end_column + l:column_offset
+        " else is not necesary, it means modifications are happening
+        " after the cursor so no cursor updates need to be done
+        endif
+    endif
+
+    return [l:cur_line, l:cur_column]
 endfunction
