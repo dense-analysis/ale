@@ -76,3 +76,17 @@ Execute(The executable should be configurable):
 
   AssertLinter 'foobar',
   \ ale#Escape('foobar') . ' -checks=' . ale#Escape('*') . ' %s'
+
+Execute(Linting .h files should not be treated as C++ by default):
+  call ale#test#SetFilename('test.h')
+
+  AssertLinter 'clang-tidy',
+  \ ale#Escape('clang-tidy') . ' %s'
+
+Execute(Linting .h files should be treated as C++ when ale_cpp_clangtidy_h_is_hpp = 1):
+  call ale#test#SetFilename('test.h')
+  let b:ale_cpp_clangtidy_h_is_hpp = 1
+
+  AssertLinter 'clang-tidy',
+  \ ale#Escape('clang-tidy') . ' %s -- -x c++'
+

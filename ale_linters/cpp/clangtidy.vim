@@ -13,6 +13,10 @@ call ale#Set('cpp_clangtidy_options', '')
 call ale#Set('cpp_clangtidy_extra_options', '')
 call ale#Set('c_build_dir', '')
 
+" Set this to enable treating .h header files as C++
+call ale#Set('cpp_clangtidy_h_is_hpp', 0)
+
+
 function! ale_linters#cpp#clangtidy#GetCommand(buffer) abort
     let l:checks = join(ale#Var(a:buffer, 'cpp_clangtidy_checks'), ',')
     let l:build_dir = ale#c#GetBuildDirectory(a:buffer)
@@ -24,6 +28,16 @@ function! ale_linters#cpp#clangtidy#GetCommand(buffer) abort
 
     " Get the options to pass directly to clang-tidy
     let l:extra_options = ale#Var(a:buffer, 'cpp_clangtidy_extra_options')
+    let l:enable_h_is_hpp = ale#Var(a:buffer, 'cpp_clangtidy_h_is_hpp')
+
+    if l:enable_h_is_hpp && expand('#' . a:buffer . ':e') is? 'h'
+        " for .h header files, passing -x to compiler to force cpp
+        if empty(l:options)
+            let l:options .= '-x c++'
+        else
+            let l:options .= ' -x c++'
+        endif
+    endif
 
     return '%e'
     \   . (!empty(l:checks) ? ' -checks=' . ale#Escape(l:checks) : '')

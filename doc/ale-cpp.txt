@@ -155,6 +155,17 @@ g:ale_cpp_clangtidy_fix_errors                 *g:ale_cpp_clangtidy_fix_errors*
   |clangtidy| fixer.
 
 
+g:ale_cpp_clangtidy_h_is_hpp                   *g:ale_cpp_clangtidy_h_is_hpp*
+                                               *b:ale_cpp_clangtidy_h_is_hpp*
+
+  Type: |Number|
+  Default: 0
+
+  This variable can be changed to enable treating .h header files as C++.
+  This works by passing the `-x c++` option to `clang-tidy` since the default 
+  behaviour is only to parse .hpp header files.
+
+
 ===============================================================================
 clazy                                                           *ale-cpp-clazy*
 
