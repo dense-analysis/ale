@@ -2548,12 +2548,12 @@ ALEOrganizeImports                                         *ALEOrganizeImports*
   Organize imports using tsserver. Currently not implemented for LSPs.
 
 
-ALERename `<new_name?>`                                               *ALERename*
+ALERename                                                           *ALERename*
 
   Rename a symbol using TypeScript server or Language Server.
 
-  The argument will be used as a new name for the symbol. If not provided,
-  user will be prompted for new name.
+  The user will be prompted for a new name.
+
 
 ALESymbolSearch `<query>`                                     *ALESymbolSearch*
 

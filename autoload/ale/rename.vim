@@ -17,8 +17,16 @@ function! ale#rename#ClearLSPData() abort
     let s:rename_map = {}
 endfunction
 
+function! ale#util#Input(message, value) abort
+    return 'a-new-name'
+endfunction
+
 let g:ale_rename_tsserver_find_in_comments = get(g:, 'ale_rename_tsserver_find_in_comments')
 let g:ale_rename_tsserver_find_in_strings = get(g:, 'ale_rename_tsserver_find_in_strings')
+
+function! s:message(message) abort
+    call ale#util#Execute('echom ' . string(a:message))
+endfunction
 
 function! ale#rename#HandleTSServerResponse(conn_id, response) abort
     if get(a:response, 'command', '') is# 'rename'
@@ -125,7 +133,7 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
     endif
 endfunction
 
-function! s:OnReady(line, column, new_name, linter, lsp_details) abort
+function! s:OnReady(line, column, old_name, new_name, linter, lsp_details) abort
     let l:id = a:lsp_details.connection_id
 
     if !ale#lsp#HasCapability(l:id, 'rename')
@@ -165,10 +173,11 @@ function! s:OnReady(line, column, new_name, linter, lsp_details) abort
 
     let s:rename_map[l:request_id] = {
     \   'new_name': a:new_name,
+    \   'old_name': a:old_name,
     \}
 endfunction
 
-function! s:ExecuteRename(linter, new_name) abort
+function! s:ExecuteRename(linter, old_name, new_name) abort
     let l:buffer = bufnr('')
     let [l:line, l:column] = getpos('.')[1:2]
 
@@ -176,11 +185,12 @@ function! s:ExecuteRename(linter, new_name) abort
         let l:column = min([l:column, len(getline(l:line))])
     endif
 
-    let l:Callback = function('s:OnReady', [l:line, l:column, a:new_name])
+    let l:Callback = function(
+    \ 's:OnReady', [l:line, l:column, a:old_name, a:new_name])
     call ale#lsp_linter#StartLSP(l:buffer, a:linter, l:Callback)
 endfunction
 
-function! ale#rename#Execute(...) abort
+function! ale#rename#Execute() abort
     let l:lsp_linters = []
 
     for l:linter in ale#linter#Get(&filetype)
@@ -189,14 +199,20 @@ function! ale#rename#Execute(...) abort
         endif
     endfor
 
-    if !empty(l:lsp_linters)
-        let l:prompt = 'new name: '
-        let l:new_name = a:0 ? join(a:000) : input(l:prompt, expand('<cWORD>'))
-
-        if !empty(l:new_name)
-            for l:lsp_linter in l:lsp_linters
-                call s:ExecuteRename(l:lsp_linter, l:new_name)
-            endfor
-        endif
+    if empty(l:lsp_linters)
+        call s:message('No active LSPs')
+        return
     endif
+
+    let l:old_name = expand('<cWORD>')
+    let l:new_name = ale#util#Input('New name: ', l:old_name)
+
+    if empty(l:new_name)
+        call s:message('New name cannot be empty!')
+        return
+    endif
+
+    for l:lsp_linter in l:lsp_linters
+        call s:ExecuteRename(l:lsp_linter, l:old_name, l:new_name)
+    endfor
 endfunction

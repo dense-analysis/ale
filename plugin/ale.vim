@@ -222,7 +222,7 @@ command! -nargs=1 ALESymbolSearch :call ale#symbol#Search(<q-args>)
 command! -bar ALEComplete :call ale#completion#GetCompletions('ale-manual')
 
 " Rename symbols using tsserver and LSP
-command! -bar -nargs=? ALERename :call ale#rename#Execute(<f-args>)
+command! -bar ALERename :call ale#rename#Execute()
 
 " Organize import statements using tsserver
 command! -bar ALEOrganizeImports :call ale#organize_imports#Execute()

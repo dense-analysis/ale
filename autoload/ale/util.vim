@@ -476,3 +476,7 @@ function! ale#util#FindItemAtCursor(buffer) abort
 
     return [l:info, l:loc]
 endfunction
+
+function! ale#util#Input(message, value) abort
+    return input(a:message, a:value)
+endfunction
