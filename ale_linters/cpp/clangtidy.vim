@@ -25,6 +25,14 @@ function! ale_linters#cpp#clangtidy#GetCommand(buffer) abort
     " Get the options to pass directly to clang-tidy
     let l:extra_options = ale#Var(a:buffer, 'cpp_clangtidy_extra_options')
 
+    if expand('#' . a:buffer . ':e') is? 'h'
+        " for .h header files, passing -x to compiler to force cpp
+        if !empty(l:options)
+            let l:options .= ' '
+        endif
+        let l:options .= '-x c++'
+    endif
+
     return '%e'
     \   . (!empty(l:checks) ? ' -checks=' . ale#Escape(l:checks) : '')
     \   . (!empty(l:extra_options) ? ' ' . ale#Escape(l:extra_options) : '')

@@ -63,7 +63,7 @@ Execute(The build directory should be ignored for header files):
 
   AssertLinter 'clang-tidy',
   \ ale#Escape('clang-tidy')
-  \   . ' -checks=' . ale#Escape('*') . ' %s -- -Wall'
+  \   . ' -checks=' . ale#Escape('*') . ' %s -- -Wall -x c++'
 
   call ale#test#SetFilename('test.hpp')
 
@@ -76,3 +76,10 @@ Execute(The executable should be configurable):
 
   AssertLinter 'foobar',
   \ ale#Escape('foobar') . ' -checks=' . ale#Escape('*') . ' %s'
+
+Execute(Linting .h files under cpp filetype should include c++ as compiler option):
+  call ale#test#SetFilename('test.h')
+
+  AssertLinter 'clang-tidy',
+  \ ale#Escape('clang-tidy') . ' %s -- -x c++'
+
