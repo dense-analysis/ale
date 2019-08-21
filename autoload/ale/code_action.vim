@@ -107,11 +107,8 @@ function! ale#code_action#ApplyChanges(filename, changes) abort
 
     call ale#util#Writefile(l:buffer, l:lines, a:filename)
 
-    if l:buffer > 0
-        call ale#util#Execute(':e!')
-    endif
-
     if l:is_current_buffer
+        call ale#util#Execute(':e!')
         call setpos('.', [0, l:pos[0], l:pos[1], 0])
     endif
 endfunction
