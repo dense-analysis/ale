@@ -28,11 +28,9 @@ Before:
 After:
   " Close the extra buffers if we opened it.
   if bufnr(g:file1) != -1
-    execute 'drop ' . g:file1
     execute ':bp | :bd ' . bufnr(g:file1)
   endif
   if bufnr(g:file2) != -1
-    execute 'drop ' . g:file2
     execute ':bp | :bd ' . bufnr(g:file2)
   endif
 
