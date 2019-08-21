@@ -217,7 +217,7 @@ Execute(Does nothing when no changes):
   \})
 
   AssertEqual g:handle_code_action_called, 0
-  AssertEqual ['echom ''Error renaming the symbol to: aNewName'''], g:expr_list
+  AssertEqual ['echom ''Error renaming "oldName" to: "aNewName"'''], g:expr_list
 
 Execute(tsserver rename requests should be sent):
   call ale#rename#SetMap({})
@@ -316,7 +316,7 @@ Execute(LSP should perform no action when no result):
   \})
 
   AssertEqual g:handle_code_action_called, 0
-  AssertEqual ['echom ''Could not rename.'''], g:expr_list
+  AssertEqual ['echom ''No rename result received from server'''], g:expr_list
 
 Execute(LSP should perform no action when no changes):
   call ale#rename#HandleLSPResponse(1, {
@@ -325,18 +325,18 @@ Execute(LSP should perform no action when no changes):
   \})
 
   AssertEqual g:handle_code_action_called, 0
-  AssertEqual ['echom ''Could not rename.'''], g:expr_list
+  AssertEqual ['echom ''No changes received from server'''], g:expr_list
 
 Execute(LSP should perform no action when changes is empty):
   call ale#rename#HandleLSPResponse(1, {
   \ 'id': 3,
   \ 'result': {
-  \   'changes': {},
+  \   'changes': [],
   \ },
   \})
 
   AssertEqual g:handle_code_action_called, 0
-  AssertEqual ['echom ''Could not rename.'''], g:expr_list
+  AssertEqual ['echom ''No changes received from server'''], g:expr_list
 
 Execute(LSP rename requests should be sent):
   call ale#rename#SetMap({})

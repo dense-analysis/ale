@@ -31,6 +31,7 @@ endfunction
 function! ale#rename#HandleTSServerResponse(conn_id, response) abort
     if get(a:response, 'command', '') is# 'rename'
     \&& has_key(s:rename_map, a:response.request_seq)
+        let l:old_name = s:rename_map[a:response.request_seq].old_name
         let l:new_name = s:rename_map[a:response.request_seq].new_name
         call remove(s:rename_map, a:response.request_seq)
 
@@ -62,14 +63,15 @@ function! ale#rename#HandleTSServerResponse(conn_id, response) abort
             endfor
 
             if empty(l:changes)
-                let l:msg = 'Error renaming the symbol to: ' . l:new_name
-                call ale#util#Execute('echom ' . string(l:msg))
-            else
-                call ale#code_action#HandleCodeAction({
-                \ 'description': 'rename',
-                \ 'changes': l:changes,
-                \})
+                call s:message('Error renaming "' . l:old_name . '" to: "' . l:new_name . '"')
+
+                return
             endif
+
+            call ale#code_action#HandleCodeAction({
+            \ 'description': 'rename',
+            \ 'changes': l:changes,
+            \})
         endif
     endif
 endfunction
@@ -80,15 +82,15 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
         call remove(s:rename_map, a:response.id)
 
         if !has_key(a:response, 'result')
-            call ale#util#Execute('echom ''Could not rename.''')
+            call s:message('No rename result received from server')
 
             return
         endif
 
         let l:workspace_edit = a:response.result
 
-        if !has_key(l:workspace_edit, 'changes')
-            call ale#util#Execute('echom ''Could not rename.''')
+        if !has_key(l:workspace_edit, 'changes') || empty(l:workspace_edit.changes)
+            call s:message('No changes received from server')
 
             return
         endif
@@ -122,14 +124,10 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
             \})
         endfor
 
-        if empty(l:changes)
-            call ale#util#Execute('echom ''Could not rename.''')
-        else
-            call ale#code_action#HandleCodeAction({
-            \   'description': 'rename',
-            \   'changes': l:changes,
-            \})
-        endif
+        call ale#code_action#HandleCodeAction({
+        \   'description': 'rename',
+        \   'changes': l:changes,
+        \})
     endif
 endfunction
 
