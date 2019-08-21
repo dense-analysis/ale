@@ -62,6 +62,10 @@ Before:
     call add(g:code_actions, a:code_action)
   endfunction
 
+  function! ale#util#Input(message, value) abort
+    return 'a-new-name'
+  endfunction
+
   call ale#rename#SetMap({
   \  3: {
   \    'old_name': 'oldName',

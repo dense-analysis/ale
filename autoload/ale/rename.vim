@@ -17,10 +17,6 @@ function! ale#rename#ClearLSPData() abort
     let s:rename_map = {}
 endfunction
 
-function! ale#util#Input(message, value) abort
-    return 'a-new-name'
-endfunction
-
 let g:ale_rename_tsserver_find_in_comments = get(g:, 'ale_rename_tsserver_find_in_comments')
 let g:ale_rename_tsserver_find_in_strings = get(g:, 'ale_rename_tsserver_find_in_strings')
 
