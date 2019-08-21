@@ -201,6 +201,7 @@ function! ale#rename#Execute() abort
 
     if empty(l:lsp_linters)
         call s:message('No active LSPs')
+
         return
     endif
 
@@ -209,6 +210,7 @@ function! ale#rename#Execute() abort
 
     if empty(l:new_name)
         call s:message('New name cannot be empty!')
+
         return
     endif
 
