@@ -30,6 +30,7 @@ function! ale_linters#cpp#clangtidy#GetCommand(buffer) abort
         if !empty(l:options)
             let l:options .= ' '
         endif
+
         let l:options .= '-x c++'
     endif
 
