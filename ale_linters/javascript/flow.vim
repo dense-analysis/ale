@@ -55,14 +55,22 @@ function! s:GetJSONLines(lines) abort
     return a:lines[l:start_index :]
 endfunction
 
-function! s:ExtraErrorMsg(current, new) abort
+function! s:ExtraErrorMsg(current, new, source, line, context) abort
     let l:newMsg = ''
 
     if a:current is# ''
-        " extra messages appear to already have a :
-        let l:newMsg = a:new
+        if a:source is# ''
+          " extra messages appear to already have a :
+          let l:newMsg = a:new
+        else
+          let l:newMsg = '    ' . a:source . "\n" . a:new . ' ' . a:line . '|' . a:context
+        endif
     else
-        let l:newMsg = a:current . ' ' . a:new
+        if a:source is# ''
+          let l:newMsg = a:current . ' ' . a:new
+        else
+          let l:newMsg = a:current . "\n\n    " . a:source . "\n" . a:new . ' ' . a:line . '|' . a:context
+        endif
     endif
 
     return l:newMsg
@@ -74,7 +82,19 @@ function! s:GetDetails(error) abort
     for l:extra_error in a:error.extra
         if has_key(l:extra_error, 'message')
             for l:extra_message in l:extra_error.message
-                let l:detail = s:ExtraErrorMsg(l:detail, l:extra_message.descr)
+                let l:source = ''
+                let l:line = ''
+                if has_key(l:extra_message, 'loc')
+                  if has_key(l:extra_message.loc, 'source')
+                    let l:source = l:extra_message.loc.source
+                    if has_key(l:extra_message.loc, 'start')
+                      if has_key(l:extra_message.loc.start, 'line')
+                        let l:line = l:extra_message.loc.start.line
+                      endif
+                    endif
+                  endif
+                endif
+                let l:detail = s:ExtraErrorMsg(l:detail, l:extra_message.descr, l:source, l:line, l:extra_message.context)
             endfor
         endif
 
