@@ -281,7 +281,7 @@ Execute(Code actions from LSP should be handled):
   \ 'id': 3,
   \ 'result': {
   \   'changes': {
-  \     '/foo/bar/file1.ts': [
+  \     'file:///foo/bar/file1.ts': [
   \       {
   \         'range': {
   \           'start': {

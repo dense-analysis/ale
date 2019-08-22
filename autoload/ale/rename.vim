@@ -126,7 +126,7 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
             endfor
 
             call add(l:changes, {
-            \   'fileName': l:file_name,
+            \   'fileName': ale#path#FromURI(l:file_name),
             \   'textChanges': l:text_changes,
             \})
         endfor
