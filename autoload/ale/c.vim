@@ -5,14 +5,53 @@ call ale#Set('c_parse_makefile', 0)
 call ale#Set('c_parse_compile_commands', 0)
 let s:sep = has('win32') ? '\' : '/'
 
+" The filetypes that correspond to languages understood by Clang.
+let s:languages = {
+\    'c': 'c',
+\    'opencl': 'cl',
+\    'cuda': 'cuda',
+\    'hip': 'hip',
+\    'objc': 'objective-c',
+\    'cpp': 'c++',
+\    'objcpp': 'objective-c++',
+\    'ada': 'ada',
+\    'fortran': 'f95',
+\    'asm': 'assembler',
+\}
+
+" The Clang languages that have corresponding '...-header' language
+let s:languages_with_headers = {
+\    'c': 1,
+\    'cl': 1,
+\    'objective-c': 1,
+\    'objective-c++': 1,
+\    'c++': 1,
+\}
+
 " Set just so tests can override it.
 let g:__ale_c_project_filenames = ['.git/HEAD', 'configure', 'Makefile', 'CMakeLists.txt']
+
+function! ale#c#IsHeader(buffer) abort
+    return expand('#' . a:buffer) =~? '\v\.(h|hpp)$'
+endfunction
+
+function! ale#c#GetLanguage(buffer) abort
+    let l:filetype = getbufvar(a:buffer, '&filetype')
+    let l:language = get(s:languages, l:filetype, '')
+
+    if l:language isnot# '' && ale#c#IsHeader(a:buffer)
+    \ && has_key(s:languages_with_headers, l:language)
+        let l:language = l:language . '-header'
+    endif
+
+    return l:language
+endfunction
 
 function! ale#c#GetBuildDirectory(buffer) abort
     " Don't include build directory for header files, as compile_commands.json
     " files don't consider headers to be translation units, and provide no
     " commands for compiling header files.
-    if expand('#' . a:buffer) =~# '\v\.(h|hpp)$'
+    if ale#c#IsHeader(a:buffer)
         return ''
     endif
 
@@ -272,7 +311,7 @@ function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
     " A source file matching the header filename.
     let l:source_file = ''
 
-    if empty(l:file_list) && l:basename =~? '\.h$\|\.hpp$'
+    if empty(l:file_list) && ale#c#IsHeader(a:buffer)
         for l:suffix in ['.c', '.cpp']
             let l:key = fnamemodify(l:basename, ':r') . l:suffix
             let l:file_list = get(a:file_lookup, l:key, [])
