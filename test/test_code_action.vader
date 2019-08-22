@@ -24,6 +24,15 @@ Before:
   \   }]
   \}}
 
+  function! WriteFileAndEdit() abort
+    let g:test.text = [
+    \ 'class Name {',
+    \ '  value: string',
+    \ '}',
+    \]
+    call writefile(g:test.text, g:file1, 'S')
+    execute 'edit ' . g:file1
+  endfunction!
 
 After:
   " Close the extra buffers if we opened it.
@@ -44,6 +53,7 @@ After:
   unlet g:file1
   unlet g:file2
   unlet g:test
+  delfunction WriteFileAndEdit
 
   runtime autoload/ale/code_action.vim
   runtime autoload/ale/util.vim
@@ -235,14 +245,8 @@ Execute(Current buffer contents will be reloaded):
 
 #     C ===
 Execute(Cursor will not move when it is before text change):
-  let g:test.text = [
-  \ 'class Name {',
-  \ '  value: string',
-  \ '}',
-  \]
-  call writefile(g:test.text, g:file1, 'S')
+  call WriteFileAndEdit()
   let g:test.changes = g:test.create_change(2, 3, 2, 8, 'value2')
-  execute 'edit ' . g:file1
 
   call setpos('.', [0, 1, 1, 0])
   call ale#code_action#HandleCodeAction(g:test.changes)
@@ -254,112 +258,77 @@ Execute(Cursor will not move when it is before text change):
 
 # ====C====
 Execute(Cursor column will move to the change end when cursor between start/end):
-  let g:test.text = [
-  \ 'class Name {',
-  \ '  value: string',
-  \ '}',
-  \]
-  call writefile(g:test.text, g:file1, 'S')
   let g:test.changes = g:test.create_change(2, 3, 2, 8, 'value2')
-  execute 'edit ' . g:file1
 
-  call setpos('.', [0, 2, 3, 0])
-  call ale#code_action#HandleCodeAction(g:test.changes)
-  AssertEqual [2, 9], getpos('.')[1:2]
-
-  call setpos('.', [0, 2, 4, 0])
-  call ale#code_action#HandleCodeAction(g:test.changes)
-  AssertEqual [2, 9], getpos('.')[1:2]
+  for r in range(3, 8)
+    call WriteFileAndEdit()
+    call setpos('.', [0, 2, r, 0])
+    AssertEqual '  value: string', getline('.')
+    call ale#code_action#HandleCodeAction(g:test.changes)
+    AssertEqual '  value2: string', getline('.')
+    AssertEqual [2, 9], getpos('.')[1:2]
+  endfor
 
 
 # ====C
 Execute(Cursor column will move back when new text is shorter):
-  let g:test.text = [
-  \ 'class Name {',
-  \ '  value: string',
-  \ '}',
-  \]
-  call writefile(g:test.text, g:file1, 'S')
-  execute 'edit ' . g:file1
-
+  call WriteFileAndEdit()
   call setpos('.', [0, 2, 8, 0])
+  AssertEqual '  value: string', getline('.')
   call ale#code_action#HandleCodeAction(g:test.create_change(2, 3, 2, 8, 'val'))
+  AssertEqual '  val: string', getline('.')
   AssertEqual [2, 6], getpos('.')[1:2]
 
 
 # ==== C
 Execute(Cursor column will move forward when new text is longer):
-  let g:test.text = [
-  \ 'class Name {',
-  \ '  value: string',
-  \ '}',
-  \]
-  call writefile(g:test.text, g:file1, 'S')
-  execute 'edit ' . g:file1
+  call WriteFileAndEdit()
 
   call setpos('.', [0, 2, 8, 0])
+  AssertEqual '  value: string', getline('.')
   call ale#code_action#HandleCodeAction(g:test.create_change(2, 3, 2, 8, 'longValue'))
+  AssertEqual '  longValue: string', getline('.')
   AssertEqual [2, 12], getpos('.')[1:2]
 
 # =========
 # =
 # C
 Execute(Cursor line will move when updates are happening on lines above):
-  let g:test.text = [
-  \ 'class Name {',
-  \ '  value: string',
-  \ '}',
-  \]
-  call writefile(g:test.text, g:file1, 'S')
-  execute 'edit ' . g:file1
-
+  call WriteFileAndEdit()
   call setpos('.', [0, 3, 1, 0])
+  AssertEqual '}', getline('.')
   call ale#code_action#HandleCodeAction(g:test.create_change(1, 1, 2, 1, "test\ntest\n"))
+  AssertEqual '}', getline('.')
   AssertEqual [4, 1], getpos('.')[1:2]
 
 
 # =========
 # =C
 Execute(Cursor line and column will move when change on lines above and just before cursor column):
-  let g:test.text = [
-  \ 'class Name {',
-  \ '  value: string',
-  \ '}',
-  \]
-  call writefile(g:test.text, g:file1, 'S')
-  execute 'edit ' . g:file1
-
+  call WriteFileAndEdit()
   call setpos('.', [0, 2, 2, 0])
+  AssertEqual '  value: string', getline('.')
   call ale#code_action#HandleCodeAction(g:test.create_change(1, 1, 2, 1, "test\ntest\n123"))
+  AssertEqual '123  value: string', getline('.')
   AssertEqual [3, 5], getpos('.')[1:2]
 
 # =========
 # ======C==
 # =
 Execute(Cursor line and column will move at the end of changes):
-  let g:test.text = [
-  \ 'class Name {',
-  \ '  value: string',
-  \ '}',
-  \]
-  call writefile(g:test.text, g:file1, 'S')
-  execute 'edit ' . g:file1
-
+  call WriteFileAndEdit()
   call setpos('.', [0, 2, 10, 0])
+  AssertEqual '  value: string', getline('.')
   call ale#code_action#HandleCodeAction(g:test.create_change(1, 1, 3, 1, "test\n"))
+  AssertEqual '}', getline('.')
   AssertEqual [2, 1], getpos('.')[1:2]
 
 #      C ==
 # ===
 Execute(Cursor will not move when changes happening on lines >= cursor, but after cursor):
-  let g:test.text = [
-  \ 'class Name {',
-  \ '  value: string',
-  \ '}',
-  \]
-  call writefile(g:test.text, g:file1, 'S')
-  execute 'edit ' . g:file1
-
+  call WriteFileAndEdit()
   call setpos('.', [0, 2, 3, 0])
-  call ale#code_action#HandleCodeAction(g:test.create_change(2, 10, 3, 1, "test\n"))
+  AssertEqual '  value: string', getline('.')
+  call ale#code_action#HandleCodeAction(g:test.create_change(2, 10, 3, 1, "number\n"))
+  AssertEqual '  value: number', getline('.')
   AssertEqual [2, 3], getpos('.')[1:2]
