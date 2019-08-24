@@ -267,6 +267,14 @@ function! ale#completion#Show(result) abort
         \   {-> ale#util#FeedKeys("\<Plug>(ale_show_completion_menu)")}
         \)
     endif
+
+    if l:source is# 'ale-callback'
+        call b:CompleteCallback(b:ale_completion_result)
+    endif
+endfunction
+
+function! ale#completion#GetAllTriggers() abort
+    return deepcopy(s:trigger_character_map)
 endfunction
 
 function! s:CompletionStillValid(request_id) abort
@@ -280,6 +288,7 @@ function! s:CompletionStillValid(request_id) abort
     \   b:ale_completion_info.column == l:column
     \   || b:ale_completion_info.source is# 'deoplete'
     \   || b:ale_completion_info.source is# 'ale-omnifunc'
+    \   || b:ale_completion_info.source is# 'ale-callback'
     \)
 endfunction
 
@@ -560,12 +569,25 @@ endfunction
 
 " This function can be used to manually trigger autocomplete, even when
 " g:ale_completion_enabled is set to false
-function! ale#completion#GetCompletions(source) abort
+function! ale#completion#GetCompletions(...) abort
+    let l:source = get(a:000, 0, '')
+    let l:options = get(a:000, 1, {})
+
+    if len(a:000) > 2
+        throw 'Too many arguments!'
+    endif
+
+    let l:CompleteCallback = get(l:options, 'callback', v:null)
+
+    if l:CompleteCallback isnot v:null
+        let b:CompleteCallback = l:CompleteCallback
+    endif
+
     let [l:line, l:column] = getpos('.')[1:2]
 
     let l:prefix = ale#completion#GetPrefix(&filetype, l:line, l:column)
 
-    if a:source is# 'ale-automatic' && empty(l:prefix)
+    if l:source is# 'ale-automatic' && empty(l:prefix)
         return 0
     endif
 
@@ -578,7 +600,7 @@ function! ale#completion#GetCompletions(source) abort
     \   'prefix': l:prefix,
     \   'conn_id': 0,
     \   'request_id': 0,
-    \   'source': a:source,
+    \   'source': l:source,
     \}
     unlet! b:ale_completion_result
 

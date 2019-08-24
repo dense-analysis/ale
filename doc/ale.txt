@@ -341,6 +341,17 @@ completion source for Deoplete is named `'ale'`, and should enabled
 automatically if Deoplete is enabled and configured correctly. Deoplete
 integration should not be combined with ALE's own implementation.
 
+                                                 *ale-asyncomplete-integration*
+
+ALE additionally integrates with asyncomplete.vim for offering automatic
+completion data. ALE's asyncomplete source requires registration and should
+use the defaults provided by the|asyncomplete#sources#ale#get_source_options| function >
+
+  " Use ALE's function for asyncomplete defaults
+  au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ale#get_source_options({
+      \ 'priority': 10, " Provide your own overrides here
+      \ }))
+>
 ALE also offers its own completion implementation, which does not require any
 other plugins. Suggestions will be made while you type after completion is
 enabled. ALE's own completion implementation can be enabled by setting
@@ -1981,6 +1992,7 @@ documented in additional help files.
 
   ada.....................................|ale-ada-options|
     gcc...................................|ale-ada-gcc|
+    gnatpp................................|ale-ada-gnatpp|
   ansible.................................|ale-ansible-options|
     ansible-lint..........................|ale-ansible-ansible-lint|
   asciidoc................................|ale-asciidoc-options|
@@ -2107,6 +2119,7 @@ documented in additional help files.
     cabal-ghc.............................|ale-haskell-cabal-ghc|
     hdevtools.............................|ale-haskell-hdevtools|
     hfmt..................................|ale-haskell-hfmt|
+    hindent...............................|ale-haskell-hindent|
     hlint.................................|ale-haskell-hlint|
     stack-build...........................|ale-haskell-stack-build|
     stack-ghc.............................|ale-haskell-stack-ghc|

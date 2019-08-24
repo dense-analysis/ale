@@ -215,6 +215,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'Fix Haskell files with brittany.',
 \   },
+\   'hindent': {
+\       'function': 'ale#fixers#hindent#Fix',
+\       'suggested_filetypes': ['haskell'],
+\       'description': 'Fix Haskell files with hindent.',
+\   },
 \   'hlint': {
 \       'function': 'ale#fixers#hlint#Fix',
 \       'suggested_filetypes': ['haskell'],
@@ -324,6 +329,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#reorder_python_imports#Fix',
 \       'suggested_filetypes': ['python'],
 \       'description': 'Sort Python imports with reorder-python-imports.',
+\   },
+\   'gnatpp': {
+\       'function': 'ale#fixers#gnatpp#Fix',
+\       'suggested_filetypes': ['ada'],
+\       'description': 'Format Ada files with gnatpp.',
 \   },
 \}
 

@@ -14,6 +14,7 @@ Notes:
 
 * Ada
   * `gcc`
+  * `gnatpp`
 * Ansible
   * `ansible-lint`
 * API Blueprint
@@ -182,6 +183,7 @@ Notes:
   * `hdevtools`
   * `hfmt`
   * `hie`
+  * `hindent`
   * `hlint`
   * `stack-build`!!
   * `stack-ghc`

@@ -23,6 +23,7 @@ formatting.
 
 * Ada
   * [gcc](https://gcc.gnu.org)
+  * [gnatpp](https://docs.adacore.com/gnat_ugn-docs/html/gnat_ugn/gnat_ugn/gnat_utility_programs.html#the-gnat-pretty-printer-gnatpp) :floppy_disk:
 * Ansible
   * [ansible-lint](https://github.com/willthames/ansible-lint)
 * API Blueprint
@@ -125,8 +126,8 @@ formatting.
   * [hadolint](https://github.com/hadolint/hadolint)
 * Elixir
   * [credo](https://github.com/rrrene/credo)
-  * [dialyxir](https://github.com/jeremyjh/dialyxir)
-  * [dogma](https://github.com/lpil/dogma)
+  * [dialyxir](https://github.com/jeremyjh/dialyxir) :floppy_disk:
+  * [dogma](https://github.com/lpil/dogma) :floppy_disk:
   * [elixir-ls](https://github.com/JakeBecker/elixir-ls) :warning:
   * [mix](https://hexdocs.pm/mix/Mix.html) :warning: :floppy_disk:
 * Elm
@@ -191,6 +192,7 @@ formatting.
   * [hdevtools](https://hackage.haskell.org/package/hdevtools)
   * [hfmt](https://github.com/danstiner/hfmt)
   * [hie](https://github.com/haskell/haskell-ide-engine)
+  * [hindent](https://hackage.haskell.org/package/hindent)
   * [hlint](https://hackage.haskell.org/package/hlint)
   * [stack-build](https://haskellstack.org/) :floppy_disk:
   * [stack-ghc](https://haskellstack.org/)
