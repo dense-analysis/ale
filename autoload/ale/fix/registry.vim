@@ -180,6 +180,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['cmake'],
 \       'description': 'Fix CMake files with cmake-format.',
 \   },
+\   'fish_indent': {
+\       'function': 'ale#fixers#fish_indent#Fix',
+\       'suggested_filetypes': ['fish'],
+\       'description': 'Fix fish shell scripts with fish_indent.',
+\   },
 \   'gofmt': {
 \       'function': 'ale#fixers#gofmt#Fix',
 \       'suggested_filetypes': ['go'],
