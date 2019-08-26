@@ -230,6 +230,7 @@ Execute(The C++ Clang handler should include root directories for projects with 
 Execute(The C++ ClangTidy handler should include json folders for projects with suitable build directory in them):
   call ale#assert#SetUpLinterTest('cpp', 'clangtidy')
   call ale#test#SetFilename('../test_c_projects/json_project/subdir/file.cpp')
+  let b:ale_c_parse_makefile = 1
 
   AssertLinter 'clang-tidy',
   \ ale#Escape('clang-tidy')
@@ -245,4 +246,3 @@ Execute(The C++ ClangTidy handler should include 'include' directories for proje
   \ ale#Escape('clang-tidy')
   \ . ' %s '
   \ . '-- -I' . ale#Escape(ale#path#Simplify(g:dir . '/../test_c_projects/makefile_project/include'))
-
