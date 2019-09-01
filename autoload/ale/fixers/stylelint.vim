@@ -13,13 +13,33 @@ function! ale#fixers#stylelint#GetExecutable(buffer) abort
 endfunction
 
 function! ale#fixers#stylelint#Fix(buffer) abort
+    return ale#semver#RunWithVersionCheck(
+    \   a:buffer,
+    \   ale#fixers#stylelint#GetExecutable(a:buffer),
+    \   '%e --version',
+    \   function('ale#fixers#stylelint#ApplyFixForVersion'),
+    \)
+endfunction
+
+function! ale#fixers#stylelint#ApplyFixForVersion(buffer, version) abort
     let l:executable = ale#fixers#stylelint#GetExecutable(a:buffer)
     let l:options = ale#Var(a:buffer, 'stylelint_options')
 
+    " 6.3.0 is the first version with --stdin-filename
+    if ale#semver#GTE(a:version, [6, 3, 0])
+        return {
+        \   'command': ale#node#Executable(a:buffer, l:executable)
+        \       . ' --stdin-filename %s'
+        \       . ale#Pad(l:options)
+        \       . ' --fix',
+        \}
+    endif
+
     return {
     \   'command': ale#node#Executable(a:buffer, l:executable)
+    \       . ' %t'
     \       . ale#Pad(l:options)
-    \       . ' --fix %t',
+    \       . ' --fix',
     \   'read_temporary_file': 1,
     \}
 endfunction

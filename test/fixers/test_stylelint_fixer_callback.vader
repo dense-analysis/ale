@@ -12,7 +12,8 @@ Execute(The stylelint callback should return the correct default values):
   \   'read_temporary_file': 1,
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/stylelint/bin/stylelint.js'))
-  \     . ' --fix %t',
+  \     . ' %t'
+  \     . ' --fix',
   \ }
 
 Execute(The stylelint callback should include custom stylelint options):
@@ -24,6 +25,45 @@ Execute(The stylelint callback should include custom stylelint options):
   \   'read_temporary_file': 1,
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/stylelint/bin/stylelint.js'))
+  \     . ' %t'
   \     . ' --cache'
-  \     . ' --fix %t',
+  \     . ' --fix',
+  \ }
+
+Execute(--stdin-filename should be used when stylelint is new enough):
+  let g:ale_stylelint_options = '--cache'
+  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.css')
+
+  GivenCommandOutput ['6.4.0']
+  AssertFixer
+  \ {
+  \   'command': (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/stylelint/bin/stylelint.js'))
+  \     . ' --stdin-filename %s'
+  \     . ' --cache'
+  \     . ' --fix',
+  \ }
+
+
+Execute(The version number should be cached):
+  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.css')
+
+  GivenCommandOutput ['6.4.0']
+  AssertFixer
+  \ {
+  \   'command': (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/stylelint/bin/stylelint.js'))
+  \     . ' --stdin-filename %s'
+  \     . ' --cache'
+  \     . ' --fix',
+  \ }
+
+  GivenCommandOutput []
+  AssertFixer
+  \ {
+  \   'command': (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/stylelint/bin/stylelint.js'))
+  \     . ' --stdin-filename %s'
+  \     . ' --cache'
+  \     . ' --fix',
   \ }
