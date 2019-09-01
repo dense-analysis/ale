@@ -14,3 +14,16 @@ Execute(The stylelint callback should return the correct default values):
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/stylelint/bin/stylelint.js'))
   \     . ' --fix %t',
   \ }
+
+Execute(The stylelint callback should include custom stylelint options):
+  let g:ale_stylelint_options = '--cache'
+  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.css')
+
+  AssertFixer
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/stylelint/bin/stylelint.js'))
+  \     . ' --cache'
+  \     . ' --fix %t',
+  \ }
