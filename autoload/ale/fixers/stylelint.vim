@@ -28,7 +28,8 @@ function! ale#fixers#stylelint#ApplyFixForVersion(buffer, version) abort
     " 6.3.0 is the first version with --stdin-filename
     if ale#semver#GTE(a:version, [6, 3, 0])
         return {
-        \   'command': ale#node#Executable(a:buffer, l:executable)
+        \   'command': ale#path#BufferCdString(a:buffer)
+        \       . ale#node#Executable(a:buffer, l:executable)
         \       . ' --stdin-filename %s'
         \       . ale#Pad(l:options)
         \       . ' --fix',
@@ -36,7 +37,8 @@ function! ale#fixers#stylelint#ApplyFixForVersion(buffer, version) abort
     endif
 
     return {
-    \   'command': ale#node#Executable(a:buffer, l:executable)
+    \   'command': ale#path#BufferCdString(a:buffer)
+    \       . ale#node#Executable(a:buffer, l:executable)
     \       . ' %t'
     \       . ale#Pad(l:options)
     \       . ' --fix',

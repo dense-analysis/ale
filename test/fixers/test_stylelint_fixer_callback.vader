@@ -10,7 +10,8 @@ Execute(The stylelint callback should return the correct default values):
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'command': (has('win32') ? 'node.exe ' : '')
+  \   'command': ale#path#CdString(expand('%:p:h'))
+  \     . (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/stylelint/bin/stylelint.js'))
   \     . ' %t'
   \     . ' --fix',
@@ -23,7 +24,8 @@ Execute(The stylelint callback should include custom stylelint options):
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'command': (has('win32') ? 'node.exe ' : '')
+  \   'command': ale#path#CdString(expand('%:p:h'))
+  \     . (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/stylelint/bin/stylelint.js'))
   \     . ' %t'
   \     . ' --cache'
@@ -37,7 +39,8 @@ Execute(--stdin-filename should be used when stylelint is new enough):
   GivenCommandOutput ['6.4.0']
   AssertFixer
   \ {
-  \   'command': (has('win32') ? 'node.exe ' : '')
+  \   'command': ale#path#CdString(expand('%:p:h'))
+  \     . (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/stylelint/bin/stylelint.js'))
   \     . ' --stdin-filename %s'
   \     . ' --cache'
@@ -51,7 +54,8 @@ Execute(The version number should be cached):
   GivenCommandOutput ['6.4.0']
   AssertFixer
   \ {
-  \   'command': (has('win32') ? 'node.exe ' : '')
+  \   'command': ale#path#CdString(expand('%:p:h'))
+  \     . (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/stylelint/bin/stylelint.js'))
   \     . ' --stdin-filename %s'
   \     . ' --cache'
@@ -61,7 +65,8 @@ Execute(The version number should be cached):
   GivenCommandOutput []
   AssertFixer
   \ {
-  \   'command': (has('win32') ? 'node.exe ' : '')
+  \   'command': ale#path#CdString(expand('%:p:h'))
+  \     . (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/stylelint/bin/stylelint.js'))
   \     . ' --stdin-filename %s'
   \     . ' --cache'
