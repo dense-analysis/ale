@@ -140,6 +140,7 @@ Notes:
   * `erubis`
   * `ruumba`
 * Erlang
+  * `elvis`!!
   * `erlc`
   * `SyntaxErl`
 * Fish
