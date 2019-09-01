@@ -1437,15 +1437,17 @@ g:ale_set_signs                                               *g:ale_set_signs*
   |ALEWarningLine| - All items with `'type': 'W'`
   |ALEInfoLine|    - All items with `'type': 'I'`
 
-  With Neovim 0.3.2 or higher, ALE can use `numhl` option to highlight 'number'
-  column. It uses the following highlight groups. To enable this feature,
-  see |g:ale_sign_highlight_linenrs|.
+  With Neovim 0.3.2 or higher, ALE can use the `numhl` option to highlight the
+  'number' column. It uses the following highlight groups.
 
   |ALEErrorSignLineNr|        - Items with `'type': 'E'`
   |ALEWarningSignLineNr|      - Items with `'type': 'W'`
   |ALEInfoSignLineNr|         - Items with `'type': 'I'`
   |ALEStyleErrorSignLineNr|   - Items with `'type': 'E'` and `'sub_type': 'style'`
   |ALEStyleWarningSignLineNr| - Items with `'type': 'W'` and `'sub_type': 'style'`
+
+  To enable line number highlighting |g:ale_sign_highlight_linenrs| must be
+  set to `1` before ALE is loaded.
 
   The markers for the highlights can be customized with the following options:
 
@@ -1558,8 +1560,9 @@ g:ale_sign_highlight_linenrs                       *g:ale_sign_highlight_linenrs
   Type: |Number|
   Default: `0`
 
-  This option controls whether ALE should use `numhl` option to highlight 'number'
-  column in supported vim version.
+  When set to `1`, this option enables highlighting problems on the 'number'
+  column in Vim versions that support `numhl` highlights. This option must be
+  configured before ALE is loaded.
 
 
 g:ale_update_tagstack                                   *g:ale_update_tagstack*
