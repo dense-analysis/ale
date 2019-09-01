@@ -146,9 +146,12 @@ Execute(Highlights set by ALE should be removed when buffer cleanup is done):
   \ {'bufnr': bufnr('%'), 'type': 'E', 'lnum': 3, 'col': 2},
   \])
 
-  AssertEqual
-  \ [{'group': 'ALEError', 'priority': 10, 'pos1': [3, 2, 1]}],
-  \ GetMatchesWithoutIDs()
+  if !g:has_nvim_highlight
+    " This check doesn't work with the new API, for some reason.
+    AssertEqual
+    \ [{'group': 'ALEError', 'priority': 10, 'pos1': [3, 2, 1]}],
+    \ GetMatchesWithoutIDs()
+  endif
 
   call ale#engine#Cleanup(bufnr('%'))
 
@@ -189,31 +192,53 @@ Execute(Only ALE highlights should be restored when buffers are restored):
   call matchaddpos('SomeOtherGroup', [[1, 1, 1]])
 
   " We should have both highlights.
-  AssertEqual
-  \ [
-  \   {'group': 'ALEError', 'priority': 10, 'pos1': [3, 2, 1]},
-  \   {'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]},
-  \ ],
-  \ GetMatchesWithoutIDs()
+  if g:has_nvim_highlight
+    " When the newer NeoVim API is used, we don't have to worry about
+    " other highlights, namespacing is available.
+    AssertEqual
+    \ [
+    \   {'group': 'ALEError', 'priority': 10, 'pos1': [3, 2, 1]},
+    \ ],
+    \ GetMatchesWithoutIDs()
+  else
+    AssertEqual
+    \ [
+    \   {'group': 'ALEError', 'priority': 10, 'pos1': [3, 2, 1]},
+    \   {'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]},
+    \ ],
+    \ sort(GetMatchesWithoutIDs(), {m1, m2 -> m1.group < m2.group ? -1 : 1})
+  endif
 
   call ale#highlight#BufferHidden(bufnr('%'))
 
   " We should remove our highlight, but not the other one.
-  AssertEqual
-  \ [
-  \   {'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]}
-  \ ],
-  \ GetMatchesWithoutIDs()
+  if g:has_nvim_highlight
+    AssertEqual [], GetMatchesWithoutIDs()
+  else
+    AssertEqual
+    \ [
+    \   {'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]}
+    \ ],
+    \ GetMatchesWithoutIDs()
+  endif
 
   call ale#highlight#UpdateHighlights()
 
   " Our highlight should apper again.
-  AssertEqual
-  \ [
-  \   {'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]},
-  \   {'group': 'ALEError', 'priority': 10, 'pos1': [3, 2, 1]},
-  \ ],
-  \ GetMatchesWithoutIDs()
+  if g:has_nvim_highlight
+    AssertEqual
+    \ [
+    \   {'group': 'ALEError', 'priority': 10, 'pos1': [3, 2, 1]},
+    \ ],
+    \ GetMatchesWithoutIDs()
+  else
+    AssertEqual
+    \ [
+    \   {'group': 'ALEError', 'priority': 10, 'pos1': [3, 2, 1]},
+    \   {'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]},
+    \ ],
+    \ sort(GetMatchesWithoutIDs(), {m1, m2 -> m1.group < m2.group ? -1 : 1})
+  endif
 
 Execute(Higlight end columns should set an appropriate size):
   call ale#highlight#SetHighlights(bufnr('%'), [
@@ -260,32 +285,67 @@ Execute(Highlighting should support errors spanning many lines):
 
   call ale#highlight#SetHighlights(bufnr(''), g:items)
 
-  " We should set 2 highlights for the item, as we can only add 8 at a time.
-  AssertEqual
-  \ [
-  \   {
-  \     'group': 'ALEError', 'priority': 10, 'pos1': [1, 1, 1073741824],
-  \     'pos2': [2], 'pos3': [3], 'pos4': [4], 'pos5': [5], 'pos6': [6],
-  \     'pos7': [7], 'pos8': [8],
-  \   },
-  \   {
-  \     'group': 'ALEError', 'priority': 10,
-  \     'pos1': [9], 'pos2': [10, 1, 3]
-  \   },
-  \ ],
-  \ GetMatchesWithoutIDs()
+  if g:has_nvim_highlight
+    " The newer NeoVim highlight API produces different output.
+    AssertEqual
+    \ [
+    \   {'group': 'ALEError', 'priority': 10, 'pos1': [1, 1, 1073741824]},
+    \   {'group': 'ALEError', 'priority': 10, 'pos1': [2, 1, 1073741824]},
+    \   {'group': 'ALEError', 'priority': 10, 'pos1': [3, 1, 1073741824]},
+    \   {'group': 'ALEError', 'priority': 10, 'pos1': [4, 1, 1073741824]},
+    \   {'group': 'ALEError', 'priority': 10, 'pos1': [5, 1, 1073741824]},
+    \   {'group': 'ALEError', 'priority': 10, 'pos1': [6, 1, 1073741824]},
+    \   {'group': 'ALEError', 'priority': 10, 'pos1': [7, 1, 1073741824]},
+    \   {'group': 'ALEError', 'priority': 10, 'pos1': [8, 1, 1073741824]},
+    \   {'group': 'ALEError', 'priority': 10, 'pos1': [9, 1, 1073741824]},
+    \   {'group': 'ALEError', 'priority': 10, 'pos1': [10, 1, 3]},
+    \ ],
+    \ GetMatchesWithoutIDs()
+  else
+    " We should set 2 highlights for the item, as we can only add 8 at a time.
+    AssertEqual
+    \ [
+    \   {
+    \     'group': 'ALEError', 'priority': 10, 'pos1': [1, 1, 1073741824],
+    \     'pos2': [2], 'pos3': [3], 'pos4': [4], 'pos5': [5], 'pos6': [6],
+    \     'pos7': [7], 'pos8': [8],
+    \   },
+    \   {
+    \     'group': 'ALEError', 'priority': 10,
+    \     'pos1': [9], 'pos2': [10, 1, 3]
+    \   },
+    \ ],
+    \ GetMatchesWithoutIDs()
+  endif
 
 Execute(Highlights should always be cleared when the buffer highlight list is empty):
-  " Add our highlights and something else.
-  call matchaddpos('ALEError', [[1, 1, 1]])
-  call matchaddpos('SomeOtherGroup', [[1, 1, 1]])
+  if g:has_nvim_highlight
+    " The newer API uses namespacing. We'll emulate it here.
+    call ale#highlight#nvim_buf_add_highlight(
+    \ bufnr(''),
+    \ 1,
+    \ 'ALEError',
+    \ 0,
+    \ 0,
+    \ 1,
+    \)
 
-  AssertEqual
-  \ [
-  \   {'group': 'ALEError', 'priority': 10, 'pos1': [1, 1, 1]},
-  \   {'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]},
-  \ ],
-  \ GetMatchesWithoutIDs()
+    AssertEqual
+    \ [{'group': 'ALEError', 'priority': 10, 'pos1': [1, 1, 1]}],
+    \ GetMatchesWithoutIDs()
+  else
+    " Add our highlights and something else.
+    call matchaddpos('ALEError', [[1, 1, 1]])
+    call matchaddpos('SomeOtherGroup', [[1, 1, 1]])
+
+    AssertEqual
+    \ [
+    \   {'group': 'ALEError', 'priority': 10, 'pos1': [1, 1, 1]},
+    \   {'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]},
+    \ ],
+    \ GetMatchesWithoutIDs()
+  endif
+
 
   " Set the List we use for holding highlights for buffers.
   let b:ale_highlight_items = []
@@ -295,11 +355,13 @@ Execute(Highlights should always be cleared when the buffer highlight list is em
   call ale#highlight#UpdateHighlights()
 
   " Check that we remove our highlights.
-  AssertEqual
-  \ [
-  \   {'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]},
-  \ ],
-  \ GetMatchesWithoutIDs()
+  if g:has_nvim_highlight
+    AssertEqual [], GetMatchesWithoutIDs()
+  else
+    AssertEqual
+    \ [{'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]}],
+    \ GetMatchesWithoutIDs()
+  endif
 
 Execute(Highlights should be cleared when ALE is disabled):
   let g:ale_enabled = 1
@@ -335,16 +397,30 @@ Execute(Line highlights should be set when signs are disabled):
   \ {'bufnr': bufnr(''), 'type': 'I', 'lnum': 3, 'col': 1},
   \])
 
-  AssertEqual
-  \ [
-  \   {'group': 'ALEError', 'priority': 10, 'pos1': [1, 1, 1]},
-  \   {'group': 'ALEWarning', 'priority': 10, 'pos1': [2, 1, 1]},
-  \   {'group': 'ALEInfo', 'priority': 10, 'pos1': [3, 1, 1]},
-  \   {'group': 'aleerrorline', 'priority': 10, 'pos1': [1]},
-  \   {'group': 'ALEWarningLine', 'priority': 10, 'pos1': [2]},
-  \   {'group': 'ALEInfoLine', 'priority': 10, 'pos1': [3]},
-  \ ],
-  \ GetMatchesWithoutIDs()
+  if g:has_nvim_highlight
+    " The output is different with the newer NeoVIM highlight API.
+    AssertEqual
+    \ [
+    \   {'group': 'ALEError', 'priority': 10, 'pos1': [1, 1, 1]},
+    \   {'group': 'ALEErrorLine', 'priority': 10, 'pos1': [1, 1, 1073741824]},
+    \   {'group': 'ALEWarning', 'priority': 10, 'pos1': [2, 1, 1]},
+    \   {'group': 'ALEWarningLine', 'priority': 10, 'pos1': [2, 1, 1073741824]},
+    \   {'group': 'ALEInfo', 'priority': 10, 'pos1': [3, 1, 1]},
+    \   {'group': 'ALEInfoLine', 'priority': 10, 'pos1': [3, 1, 1073741824]}
+    \ ],
+    \ GetMatchesWithoutIDs()
+  else
+    AssertEqual
+    \ [
+    \   {'group': 'ALEError', 'priority': 10, 'pos1': [1, 1, 1]},
+    \   {'group': 'ALEWarning', 'priority': 10, 'pos1': [2, 1, 1]},
+    \   {'group': 'ALEInfo', 'priority': 10, 'pos1': [3, 1, 1]},
+    \   {'group': 'aleerrorline', 'priority': 10, 'pos1': [1]},
+    \   {'group': 'ALEWarningLine', 'priority': 10, 'pos1': [2]},
+    \   {'group': 'ALEInfoLine', 'priority': 10, 'pos1': [3]},
+    \ ],
+    \ GetMatchesWithoutIDs()
+  endif
 
   " All of the highlights should be removed.
   call ale#highlight#RemoveHighlights()

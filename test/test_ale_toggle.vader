@@ -36,6 +36,7 @@ Before:
   \ 'ALEEvents',
   \ 'ALEHighlightBufferGroup',
   \]
+  let g:has_nvim_highlight = exists('*nvim_buf_add_highlight') && exists('*nvim_buf_clear_namespace')
 
   function! ToggleTestCallback(buffer, output)
     return [{
@@ -91,6 +92,7 @@ After:
   unlet! g:expected_groups
   unlet! b:ale_enabled
   unlet! g:output
+  unlet! g:has_nvim_highlight
 
   call ale#linter#Reset()
 
@@ -120,9 +122,14 @@ Execute(ALEToggle should reset everything and then run again):
   " First check that everything is there...
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
-  AssertEqual
-  \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
-  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+
+  " Only check the legacy matches if not using the new NeoVIM API.
+  if !g:has_nvim_highlight
+    AssertEqual
+    \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
+    \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+  endif
+
   AssertEqual g:expected_groups, ParseAuGroups()
   AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
 
@@ -133,7 +140,11 @@ Execute(ALEToggle should reset everything and then run again):
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
   AssertEqual [], ale#test#GetLoclistWithoutModule(), 'The loclist was not cleared'
   AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
-  AssertEqual [], getmatches(), 'The highlights were not cleared'
+
+  if !g:has_nvim_highlight
+    AssertEqual [], getmatches(), 'The highlights were not cleared'
+  endif
+
   AssertEqual g:expected_groups, ParseAuGroups()
 
   " Toggle ALE on, everything should be set up and run again.
@@ -142,9 +153,13 @@ Execute(ALEToggle should reset everything and then run again):
 
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
-  AssertEqual
-  \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
-  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+
+  if !g:has_nvim_highlight
+    AssertEqual
+    \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
+    \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+  endif
+
   AssertEqual g:expected_groups, ParseAuGroups()
   AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
 
@@ -228,9 +243,13 @@ Execute(ALEReset should reset everything for a buffer):
   " First check that everything is there...
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
-  AssertEqual
-  \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
-  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+
+  if !g:has_nvim_highlight
+    AssertEqual
+    \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
+    \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+  endif
+
   AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
 
   " Now Toggle ALE off.
@@ -241,7 +260,10 @@ Execute(ALEReset should reset everything for a buffer):
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
   AssertEqual [], ale#test#GetLoclistWithoutModule(), 'The loclist was not cleared'
   AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
-  AssertEqual [], getmatches(), 'The highlights were not cleared'
+
+  if !g:has_nvim_highlight
+    AssertEqual [], getmatches(), 'The highlights were not cleared'
+  endif
 
   AssertEqual 1, g:ale_enabled
 
@@ -254,9 +276,13 @@ Execute(ALEToggleBuffer should reset everything and then run again):
   " First check that everything is there...
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
-  AssertEqual
-  \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
-  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+
+  if !g:has_nvim_highlight
+    AssertEqual
+    \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
+    \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+  endif
+
   AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
 
   " Now Toggle ALE off.
@@ -266,7 +292,10 @@ Execute(ALEToggleBuffer should reset everything and then run again):
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
   AssertEqual [], ale#test#GetLoclistWithoutModule(), 'The loclist was not cleared'
   AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
-  AssertEqual [], getmatches(), 'The highlights were not cleared'
+
+  if !g:has_nvim_highlight
+    AssertEqual [], getmatches(), 'The highlights were not cleared'
+  endif
 
   " Toggle ALE on, everything should be set up and run again.
   ALEToggleBuffer
@@ -274,9 +303,13 @@ Execute(ALEToggleBuffer should reset everything and then run again):
 
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
-  AssertEqual
-  \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
-  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+
+  if !g:has_nvim_highlight
+    AssertEqual
+    \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
+    \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+  endif
+
   AssertEqual g:expected_groups, ParseAuGroups()
   AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
 
@@ -325,9 +358,13 @@ Execute(ALEResetBuffer should reset everything for a buffer):
   " First check that everything is there...
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
-  AssertEqual
-  \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
-  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+
+  if !g:has_nvim_highlight
+    AssertEqual
+    \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
+    \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+  endif
+
   AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
 
   " Now Toggle ALE off.
@@ -338,7 +375,10 @@ Execute(ALEResetBuffer should reset everything for a buffer):
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
   AssertEqual [], ale#test#GetLoclistWithoutModule(), 'The loclist was not cleared'
   AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
-  AssertEqual [], getmatches(), 'The highlights were not cleared'
+
+  if !g:has_nvim_highlight
+    AssertEqual [], getmatches(), 'The highlights were not cleared'
+  endif
 
   AssertEqual 1, g:ale_enabled
   AssertEqual 1, get(b:, 'ale_enabled', 1)
