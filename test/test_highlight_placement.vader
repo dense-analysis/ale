@@ -8,6 +8,8 @@ Before:
   Save g:ale_set_quickfix
   Save g:ale_set_signs
 
+  runtime autoload/ale/highlight.vim
+
   let g:ale_run_synchronously = 1
   unlet! g:ale_run_synchronously_callbacks
   let g:ale_set_highlights = 1
@@ -42,16 +44,54 @@ Before:
     \]
   endfunction
 
+  let g:has_nvim_highlight = exists('*nvim_buf_add_highlight') && exists('*nvim_buf_clear_namespace')
+  let g:nvim_highlight_matches = {}
+
+  function! ale#highlight#nvim_buf_clear_namespace(buffer, ns_id, line_start, line_end) abort
+    if a:line_end != -1
+      throw 'nvim api behavior not supported'
+    endif
+
+    let l:matches = get(g:nvim_highlight_matches, a:buffer, [])
+    call filter(
+    \ l:matches,
+    \ {_, val -> val.pos1[0] < (a:line_start + 1) },
+    \)
+  endfunction
+
+  function! ale#highlight#nvim_buf_add_highlight(buffer, ns_id, hl_group, line, col_start, col_end) abort
+    if a:col_end == -1
+      throw 'nvim api behavior not supported'
+    endif
+
+    let l:matches = get(g:nvim_highlight_matches, a:buffer, [])
+    let g:nvim_highlight_matches[a:buffer] = l:matches
+
+    let l:new_match = {
+    \ 'group': a:hl_group,
+    \ 'priority': 10,
+    \ 'pos1': [a:line + 1, a:col_start + 1, a:col_end - a:col_start],
+    \}
+
+    call add(l:matches, l:new_match)
+    " sort by line number to emulate getmatches faithfully
+    call sort(l:matches, {m1, m2 -> m1.pos1[0] - m2.pos1[0]})
+  endfunction
+
   " We don't care what the IDs are, just that we have some matches.
   " The IDs are generated.
   function! GetMatchesWithoutIDs() abort
-    let l:list = getmatches()
+    if g:has_nvim_highlight
+      return get(g:nvim_highlight_matches, bufnr(''), [])
+    else
+      let l:list = getmatches()
 
-    for l:item in l:list
-      call remove(l:item, 'id')
-    endfor
+      for l:item in l:list
+        call remove(l:item, 'id')
+      endfor
 
-    return l:list
+      return l:list
+    endif
   endfunction
 
   call ale#linter#Define('testft', {
@@ -68,12 +108,16 @@ After:
   unlet! g:ale_run_synchronously_callbacks
   unlet! g:items
   unlet! b:ale_enabled
+  unlet! g:has_nvim_highlight
+  unlet! g:nvim_highlight_matches
 
   delfunction GenerateResults
   call ale#linter#Reset()
   call clearmatches()
   sign unplace *
   highlight clear SomeOtherGroup
+
+  runtime autoload/ale/highlight.vim
 
 Given testft(A Javscript file with warnings/errors):
   foo
