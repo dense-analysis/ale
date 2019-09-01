@@ -50,7 +50,7 @@ let s:global_variable_list = [
 \    'ale_sign_style_error',
 \    'ale_sign_style_warning',
 \    'ale_sign_warning',
-\    'ale_sign_highlight_linenr',
+\    'ale_sign_highlight_linenrs',
 \    'ale_statusline_format',
 \    'ale_type_map',
 \    'ale_use_global_executables',

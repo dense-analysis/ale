@@ -1428,7 +1428,7 @@ g:ale_set_signs                                               *g:ale_set_signs*
 
   With Neovim 0.3.2 or higher, ALE uses `numhl` option to highlight 'number'
   column. It uses the following highlight groups. To disable this feature,
-  see |g:ale_sign_highlight_linenr|.
+  see |g:ale_sign_highlight_linenrs|.
 
   |ALEErrorSignLineNr|        - Items with `'type': 'E'`
   |ALEWarningSignLineNr|      - Items with `'type': 'W'`
@@ -1542,7 +1542,7 @@ g:ale_sign_warning                                         *g:ale_sign_warning*
   The sign for warnings in the sign gutter.
 
 
-g:ale_sign_highlight_linenr                       *g:ale_sign_highlight_linenr*
+g:ale_sign_highlight_linenrs                       *g:ale_sign_highlight_linenrs*
 
   Type: |Number|
   Default: `1`

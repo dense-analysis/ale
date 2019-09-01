@@ -19,7 +19,7 @@ Before:
   Save g:ale_sign_style_error
   Save g:ale_sign_style_warning
   Save g:ale_sign_warning
-  Save g:ale_sign_highlight_linenr
+  Save g:ale_sign_highlight_linenrs
   Save g:ale_statusline_format
   Save g:ale_type_map
   Save g:ale_warn_about_trailing_whitespace
@@ -44,7 +44,7 @@ Before:
   let g:ale_sign_style_error = '>>'
   let g:ale_sign_style_warning = '--'
   let g:ale_sign_warning = '--'
-  let g:ale_sign_highlight_linenr = 0
+  let g:ale_sign_highlight_linenrs = 0
   let g:ale_statusline_format = ['%d error(s)', '%d warning(s)', 'OK']
   let g:ale_type_map = {}
   let g:ale_warn_about_trailing_whitespace = 1
@@ -118,7 +118,7 @@ Before:
   \  'let g:ale_sign_style_error = ''>>''',
   \  'let g:ale_sign_style_warning = ''--''',
   \  'let g:ale_sign_warning = ''--''',
-  \  'let g:ale_sign_highlight_linenr = 0',
+  \  'let g:ale_sign_highlight_linenrs = 0',
   \  'let g:ale_statusline_format = [''%d error(s)'', ''%d warning(s)'', ''OK'']',
   \  'let g:ale_type_map = {}',
   \  'let g:ale_use_global_executables = v:null',
