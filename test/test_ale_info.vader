@@ -47,6 +47,7 @@ Before:
   Save g:ale_sign_style_error
   Save g:ale_sign_style_warning
   Save g:ale_sign_warning
+  Save g:ale_sign_highlight_linenrs
   Save g:ale_statusline_format
   Save g:ale_type_map
   Save g:ale_use_global_executables
@@ -102,6 +103,7 @@ Before:
   let g:ale_sign_style_error = '>>'
   let g:ale_sign_style_warning = '--'
   let g:ale_sign_warning = '--'
+  let g:ale_sign_highlight_linenrs = 0
   let g:ale_statusline_format = ['%d error(s)', '%d warning(s)', 'OK']
   let g:ale_type_map = {}
   let g:ale_use_global_executables = v:null
@@ -178,6 +180,7 @@ Before:
   \  'let g:ale_sign_style_error = ''>>''',
   \  'let g:ale_sign_style_warning = ''--''',
   \  'let g:ale_sign_warning = ''--''',
+  \  'let g:ale_sign_highlight_linenrs = 0',
   \  'let g:ale_statusline_format = [''%d error(s)'', ''%d warning(s)'', ''OK'']',
   \  'let g:ale_type_map = {}',
   \  'let g:ale_use_global_executables = v:null',

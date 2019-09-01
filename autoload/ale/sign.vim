@@ -20,6 +20,7 @@ let g:ale_sign_info = get(g:, 'ale_sign_info', g:ale_sign_warning)
 let g:ale_sign_offset = get(g:, 'ale_sign_offset', 1000000)
 " This flag can be set to 1 to keep sign gutter always open
 let g:ale_sign_column_always = get(g:, 'ale_sign_column_always', 0)
+let g:ale_sign_highlight_linenrs = get(g:, 'ale_sign_highlight_linenrs', 0)
 
 if !hlexists('ALEErrorSign')
     highlight link ALEErrorSign error
@@ -82,7 +83,7 @@ execute 'sign define ALEInfoSign text=' . s:EscapeSignText(g:ale_sign_info)
 \   . ' texthl=ALEInfoSign linehl=ALEInfoLine'
 sign define ALEDummySign
 
-if has('nvim-0.3.2')
+if g:ale_sign_highlight_linenrs && has('nvim-0.3.2')
     if !hlexists('ALEErrorSignLineNr')
         highlight link ALEErrorSignLineNr CursorLineNr
     endif
