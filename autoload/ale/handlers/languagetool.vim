@@ -2,18 +2,26 @@
 " Description: languagetool for markdown files
 "
 call ale#Set('languagetool_executable', 'languagetool')
+call ale#Set('languagetool_commandline_jar', 'languagetool-commandline.jar')
 call ale#Set('languagetool_options', '--autoDetect')
 
 function! ale#handlers#languagetool#GetExecutable(buffer) abort
+    if !empty(ale#Var(a:buffer, 'languagetool_commandline_jar'))
+        return 'java'
+    endif
+
     return ale#Var(a:buffer, 'languagetool_executable')
 endfunction
 
 function! ale#handlers#languagetool#GetCommand(buffer) abort
-    let l:executable = ale#handlers#languagetool#GetExecutable(a:buffer)
+    let l:executable = ale#Escape(ale#handlers#languagetool#GetExecutable(a:buffer))
     let l:options = ale#Var(a:buffer, 'languagetool_options')
 
-    return ale#Escape(l:executable)
-    \ . (empty(l:options) ? '' : ' ' . l:options) . ' %s'
+    if !empty(ale#Var(a:buffer, 'languagetool_commandline_jar'))
+        let l:executable=l:executable.' -jar '.ale#Escape(ale#Var(a:buffer, 'languagetool_commandline_jar'))
+    endif
+
+    return l:executable . (empty(l:options) ? '' : ' ' . l:options) . ' %s'
 endfunction
 
 function! ale#handlers#languagetool#HandleOutput(buffer, lines) abort

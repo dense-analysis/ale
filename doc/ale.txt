@@ -1993,6 +1993,9 @@ g:ale_alex_use_global                                   *g:ale_alex_use_global*
 -------------------------------------------------------------------------------
 7.2. Options for languagetool                        *ale-languagetool-options*
 
+The options for `languagetool` are shared between all filetypes, so options can
+be configured once.
+
 g:ale_languagetool_executable                   *g:ale_languagetool_executable*
                                                 *b:ale_languagetool_executable*
 
@@ -2001,6 +2004,13 @@ g:ale_languagetool_executable                   *g:ale_languagetool_executable*
 
   The executable to run for languagetool.
 
+g:ale_languagetool_commandline_jar              g:ale_languagetool_commandline_jar
+                                                b:ale_languagetool_commandline_jar
+
+  Type: |String|
+  Default: `'languagetool-commandline.jar'`
+
+  The commandline jar for languagetool.
 
 g:ale_languagetool_options                         *g:ale_languagetool_options*
                                                    *b:ale_languagetool_options*
