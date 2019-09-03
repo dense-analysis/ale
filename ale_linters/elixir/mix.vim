@@ -2,6 +2,9 @@
 " Author: colbydehart - https://github.com/colbydehart
 " Description: Mix compile checking for Elixir files
 
+call ale#Set('elixir_mix_random_build_dir', 1)
+call ale#Set('elixir_mix_build_dir', '/tmp/vim_mix_build')
+
 function! ale_linters#elixir#mix#Handle(buffer, lines) abort
     " Matches patterns like the following:
     "
@@ -32,11 +35,13 @@ endfunction
 function! ale_linters#elixir#mix#GetCommand(buffer) abort
     let l:project_root = ale#handlers#elixir#FindMixProjectRoot(a:buffer)
 
-    let l:temp_dir = ale#command#CreateDirectory(a:buffer)
+    let l:build_dir = ale#Var(a:buffer, 'elixir_mix_random_build_dir')
+    \   ? ale#command#CreateDirectory(a:buffer)
+    \   : ale#Var(a:buffer, 'elixir_mix_build_dir')
 
     let l:mix_build_path = has('win32')
-    \   ? 'set MIX_BUILD_PATH=' . ale#Escape(l:temp_dir) . ' &&'
-    \   : 'MIX_BUILD_PATH=' . ale#Escape(l:temp_dir)
+    \   ? 'set MIX_BUILD_PATH=' . ale#Escape(l:build_dir) . ' &&'
+    \   : 'MIX_BUILD_PATH=' . ale#Escape(l:build_dir)
 
     return ale#path#CdString(l:project_root)
     \ . l:mix_build_path
