@@ -51,7 +51,7 @@ function! ale_linters#python#mypy#Handle(buffer, lines) abort
     " Lines like these should be ignored below:
     "
     " file.py:4: note: (Stub files are from https://github.com/python/typeshed)
-    let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):?(\d+)?: (error|warning): (.+)$'
+    let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):?(\d+)?: (error|warning|note): (.+)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
@@ -61,11 +61,19 @@ function! ale_linters#python#mypy#Handle(buffer, lines) abort
             continue
         endif
 
+        if l:match[4] is# 'error'
+            let l:type = 'E'
+        elseif l:match[4] is# 'warning'
+            let l:type = 'W'
+        else
+            let l:type = 'I'
+        endif
+
         call add(l:output, {
         \   'filename': ale#path#GetAbsPath(l:dir, l:match[1]),
         \   'lnum': l:match[2] + 0,
         \   'col': l:match[3] + 0,
-        \   'type': l:match[4] is# 'error' ? 'E' : 'W',
+        \   'type': l:type,
         \   'text': l:match[5],
         \})
     endfor
