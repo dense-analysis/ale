@@ -236,6 +236,7 @@ function! ale#completion#AutomaticOmniFunc(findstart, base) abort
         return ale#completion#GetCompletionPosition()
     else
         let l:result = ale#completion#GetCompletionResult()
+        echom 'results: ' . len(l:result) . ' ' . string(l:result)
 
         call s:ReplaceCompletionOptions()
 
@@ -330,6 +331,7 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
         \   'kind': l:kind,
         \   'icase': 1,
         \   'menu': join(l:displayParts, ''),
+        \   'dup': g:ale_completion_tsserver_autoimport,
         \   'info': join(l:documentationParts, ''),
         \}
 
