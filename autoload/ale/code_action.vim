@@ -92,13 +92,14 @@ function! ale#code_action#ApplyChanges(filename, changes) abort
         let l:lines_before_change = len(l:lines)
         let l:lines = l:start + l:middle + l:lines[l:end_line :]
 
-        let l:line_offset += len(l:lines) - l:lines_before_change
+        let l:current_line_offset = len(l:lines) - l:lines_before_change
+        let l:line_offset += l:current_line_offset
         let l:column_offset = len(l:middle[-1]) - l:end_line_len
 
         let l:pos = s:UpdateCursor(l:pos,
         \ [l:line, l:column],
         \ [l:end_line, l:end_column],
-        \ [l:line_offset, l:column_offset])
+        \ [l:current_line_offset, l:column_offset])
     endfor
 
     if l:lines[-1] is# ''

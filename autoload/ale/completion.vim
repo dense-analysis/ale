@@ -236,7 +236,6 @@ function! ale#completion#AutomaticOmniFunc(findstart, base) abort
         return ale#completion#GetCompletionPosition()
     else
         let l:result = ale#completion#GetCompletionResult()
-        echom 'results: ' . len(l:result) . ' ' . string(l:result)
 
         call s:ReplaceCompletionOptions()
 
