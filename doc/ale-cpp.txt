@@ -155,8 +155,8 @@ g:ale_cpp_clangtidy_fix_errors                 *g:ale_cpp_clangtidy_fix_errors*
   |clangtidy| fixer.
 
 
-g:ale_cpp_clangtidy_h_is_hpp                   *g:ale_cpp_clangtidy_h_is_hpp*
-                                               *b:ale_cpp_clangtidy_h_is_hpp*
+g:ale_cpp_clangtidy_h_is_hpp                     *g:ale_cpp_clangtidy_h_is_hpp*
+                                                 *b:ale_cpp_clangtidy_h_is_hpp*
 
   Type: |Number|
   Default: 0
