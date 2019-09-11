@@ -34,7 +34,11 @@ endif
 
 " Wrappers are necessary to test this functionality by faking the calls in tests.
 function! ale#highlight#nvim_buf_add_highlight(buffer, ns_id, hl_group, line, col_start, col_end) abort
-    call nvim_buf_add_highlight(a:buffer, a:ns_id, a:hl_group, a:line, a:col_start, a:col_end)
+    " Ignore all errors for adding highlights.
+    try
+        call nvim_buf_add_highlight(a:buffer, a:ns_id, a:hl_group, a:line, a:col_start, a:col_end)
+    catch
+    endtry
 endfunction
 
 function! ale#highlight#nvim_buf_clear_namespace(buffer, ns_id, line_start, line_end) abort
