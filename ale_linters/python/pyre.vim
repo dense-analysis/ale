@@ -20,9 +20,10 @@ function! ale_linters#python#pyre#GetCommand(buffer) abort
 
     if l:executable =~? 'pipenv$'
         let l:env_vars = ale#python#PipenvDepth(a:buffer)
-        let l:exec_args = ' run pyre'
+        let l:exec_args = ' run pyre persistent'
+    else
+        let l:exec_args = ' persistent'
     endif
-    let l:exec_args .= ' persistent'
 
     return l:env_vars . ale#Escape(l:executable) . l:exec_args
 endfunction
