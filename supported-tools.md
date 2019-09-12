@@ -224,7 +224,7 @@ formatting.
   * [eslint](http://eslint.org/)
   * [fecs](http://fecs.baidu.com/)
   * [flow](https://flowtype.org/)
-  * [jscs](http://jscs.info/)
+  * [jscs](https://jscs-dev.github.io/)
   * [jshint](http://jshint.com/)
   * [prettier](https://github.com/prettier/prettier)
   * [prettier-eslint](https://github.com/prettier/prettier-eslint-cli)
