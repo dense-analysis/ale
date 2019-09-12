@@ -5,6 +5,11 @@ clone_depth: 10
 # Use the directory C:\testplugin so test directories will mostly work.
 clone_folder: C:\testplugin
 
+branches:
+  only:
+    - master
+    - /v\d+\.\d+\.(x|\d+)/
+
 # Cache the vim and vader directories between builds.
 cache:
   - C:\vim -> .appveyor.yml
