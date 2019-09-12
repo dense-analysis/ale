@@ -3,8 +3,9 @@
 set -e
 set -u
 
-# This script compares the table of supported tools in both the README file
-# and the doc/ale.txt file, so we can complain if they don't match up.
+# This script compares the table of supported tools in both supported-tools.md
+# (for GitHub) and doc/ale-supported-languages-and-tools.txt (for vim), so we
+# can complain if they don't match up.
 
 doc_file="$(mktemp -t doc.XXXXXXXX)"
 doc_sorted_file="$(mktemp -t doc-sorted.XXXXXXXX)"
