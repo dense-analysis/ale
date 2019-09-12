@@ -10,6 +10,16 @@ g:ale_python_auto_pipenv                             *g:ale_python_auto_pipenv*
   Detect whether the file is inside a pipenv, and set the executable to `pipenv`
   if true. This is overridden by a manually-set executable.
 
+g:ale_python_auto_pipenv_maxdepth           *g:ale_python_auto_pipenv_maxdepth*
+                                            *b:ale_python_auto_pipenv_maxdepth*
+
+  Type: |Number|
+  Default: undefined
+
+  When defined with a numeric value sets PIPENV_MAX_DEPTH to the set value.
+  This controls the maximum number of directories `pipenv` recursively searches
+  for a Pipfile (default=3).
+
 ===============================================================================
 ALE Python Project Root Behavior                              *ale-python-root*
 
