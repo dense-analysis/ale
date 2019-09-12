@@ -31,12 +31,16 @@ function! ale_linters#python#pylint#GetCommand(buffer) abort
     endif
 
     let l:executable = ale_linters#python#pylint#GetExecutable(a:buffer)
+    let l:env_vars = ''
+    let l:exec_args = ''
 
-    let l:exec_args = l:executable =~? 'pipenv$'
-    \   ? ' run pylint'
-    \   : ''
+    if l:executable =~? 'pipenv$'
+        let l:env_vars = ale#python#PipenvDepth(a:buffer)
+        let l:exec_args = ' run pylint'
+    endif
 
-    return l:cd_string
+    return l:env_vars
+    \   . l:cd_string
     \   . ale#Escape(l:executable) . l:exec_args
     \   . ' ' . ale#Var(a:buffer, 'python_pylint_options')
     \   . ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'

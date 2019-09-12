@@ -17,12 +17,16 @@ endfunction
 
 function! ale_linters#python#pycodestyle#GetCommand(buffer) abort
     let l:executable = ale_linters#python#pycodestyle#GetExecutable(a:buffer)
+    let l:env_vars = ''
+    let l:exec_args = ''
 
-    let l:exec_args = l:executable =~? 'pipenv$'
-    \   ? ' run pycodestyle'
-    \   : ''
+    if l:executable =~? 'pipenv$'
+        let l:env_vars = ale#python#PipenvDepth(a:buffer)
+        let l:exec_args = ' run pycodestyle'
+    endif
 
-    return ale#Escape(l:executable) . l:exec_args
+    return l:env_vars
+    \   . ale#Escape(l:executable) . l:exec_args
     \   . ' '
     \   . ale#Var(a:buffer, 'python_pycodestyle_options')
     \   . ' -'

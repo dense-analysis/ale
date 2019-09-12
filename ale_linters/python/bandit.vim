@@ -31,11 +31,16 @@ function! ale_linters#python#bandit#GetCommand(buffer) abort
         endif
     endif
 
-    let l:exec_args = l:executable =~? 'pipenv$'
-    \   ? ' run bandit'
-    \   : ''
+    let l:env_vars = ''
+    let l:exec_args = ''
 
-    return ale#Escape(l:executable) . l:exec_args
+    if l:executable =~? 'pipenv$'
+        let l:env_vars = ale#python#PipenvDepth(a:buffer)
+        let l:exec_args = ' run bandit'
+    endif
+
+    return l:env_vars
+    \   . ale#Escape(l:executable) . l:exec_args
     \   . l:flags
     \   . ale#Pad(ale#Var(a:buffer, 'python_bandit_options'))
     \   . ' -'

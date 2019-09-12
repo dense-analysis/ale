@@ -2,6 +2,7 @@
 " Description: Functions for integrating with Python linters.
 
 call ale#Set('python_auto_pipenv', '0')
+call ale#Set('python_auto_pipenv_maxdepth', '')
 
 let s:sep = has('win32') ? '\' : '/'
 " bin is used for Unix virtualenv directories, and Scripts is for Windows.
@@ -154,4 +155,16 @@ endfunction
 " Detects whether a pipenv environment is present.
 function! ale#python#PipenvPresent(buffer) abort
     return findfile('Pipfile.lock', expand('#' . a:buffer . ':p:h') . ';') isnot# ''
+endfunction
+
+" Allows overridding of pipenv default behaviour
+" which only searches 3 levels up for Pipfile
+function! ale#python#PipenvDepth(buffer) abort
+    let l:depth = ale#Var(a:buffer, 'python_auto_pipenv_maxdepth')
+
+    if !empty(l:depth) && type(l:depth) is v:t_number
+        return ale#Env('PIPENV_MAX_DEPTH', l:depth)
+    endif
+
+    return ''
 endfunction

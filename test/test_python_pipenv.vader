@@ -1,3 +1,10 @@
+Before:
+  Save g:ale_python_auto_pipenv_maxdepth
+  let g:ale_python_auto_pipenv_maxdepth = ''
+
+After:
+  Restore
+
 Execute(ale#python#PipenvPresent is true when a pipenv environment is present):
   call ale#test#SetFilename('/testplugin/test/python_fixtures/pipenv/whatever.py')
 
@@ -11,3 +18,35 @@ Execute(ale#python#PipenvPresent is false true when no pipenv environment is pre
   AssertEqual
   \  ale#python#PipenvPresent(bufnr('%')),
   \  0
+
+Execute(ale#python#PipenvDepth returns env value when python_auto_pipenv_maxdepth is set):
+  call ale#test#SetFilename('/testplugin/test/python_fixtures/pipenv/whatever.py')
+
+  let g:ale_python_auto_pipenv_maxdepth = 8
+  let g:result = ale#python#PipenvDepth(bufnr('%')) 
+
+  AssertEqual 
+  \  g:result, 
+  \  ale#Env('PIPENV_MAX_DEPTH', 8)
+
+
+Execute(ale#python#PipenvDepth returns empty when python_auto_pipenv_maxdepth is not set):
+  call ale#test#SetFilename('/testplugin/test/python_fixtures/pipenv/whatever.py')
+
+  let g:result = ale#python#PipenvDepth(bufnr('%')) 
+
+  Assert 
+  \  empty(g:result),
+  \  'The result is not empty when g:ale_python_auto_pipenv_maxdepth is not set'
+
+Execute(ale#python#PipenvDepth returns empty when python_auto_pipenv_maxdepth is not numeric):
+  call ale#test#SetFilename('/testplugin/test/python_fixtures/pipenv/whatever.py')
+
+  let g:ale_python_auto_pipenv_maxdepth = 'X'
+  let g:result = ale#python#PipenvDepth(bufnr('%')) 
+
+  Assert 
+  \  empty(g:result),
+  \  'The result is not empty when g:ale_python_auto_pipenv_maxdepth is non-numeric'
+
+

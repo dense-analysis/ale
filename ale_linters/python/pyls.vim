@@ -17,12 +17,15 @@ endfunction
 
 function! ale_linters#python#pyls#GetCommand(buffer) abort
     let l:executable = ale_linters#python#pyls#GetExecutable(a:buffer)
+    let l:env_vars = ''
+    let l:exec_args = ''
 
-    let l:exec_args = l:executable =~? 'pipenv$'
-    \   ? ' run pyls'
-    \   : ''
+    if l:executable =~? 'pipenv$'
+        let l:env_vars = ale#python#PipenvDepth(a:buffer)
+        let l:exec_args = ' run pyls'
+    endif
 
-    return ale#Escape(l:executable) . l:exec_args
+    return l:env_vars . ale#Escape(l:executable) . l:exec_args
 endfunction
 
 call ale#linter#Define('python', {

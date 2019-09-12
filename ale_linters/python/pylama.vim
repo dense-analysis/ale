@@ -30,14 +30,19 @@ function! ale_linters#python#pylama#GetCommand(buffer) abort
     endif
 
     let l:executable = ale_linters#python#pylama#GetExecutable(a:buffer)
-    let l:exec_args = l:executable =~? 'pipenv$'
-    \   ? ' run pylama'
-    \   : ''
+    let l:env_vars = ''
+    let l:exec_args = ''
+
+    if l:executable =~? 'pipenv$'
+        let l:env_vars = ale#python#PipenvDepth(a:buffer)
+        let l:exec_args = ' run pylama'
+    endif
 
     " Note: Using %t to lint changes would be preferable, but many pylama
     " checks use surrounding paths (e.g. C0103 module name, E0402 relative
     " import beyond top, etc.).  Neither is ideal.
-    return l:cd_string
+    return l:env_vars
+    \   . l:cd_string
     \   . ale#Escape(l:executable) . l:exec_args
     \   . ale#Pad(ale#Var(a:buffer, 'python_pylama_options'))
     \   . ' %s'

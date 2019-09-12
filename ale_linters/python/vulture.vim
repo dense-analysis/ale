@@ -28,16 +28,20 @@ function! ale_linters#python#vulture#GetCommand(buffer) abort
     \   : ''
 
     let l:executable = ale_linters#python#vulture#GetExecutable(a:buffer)
+    let l:env_vars = ''
+    let l:exec_args = ''
 
-    let l:exec_args = l:executable =~? 'pipenv$'
-    \   ? ' run vulture'
-    \   : ''
+    if l:executable =~? 'pipenv$'
+        let l:env_vars = ale#python#PipenvDepth(a:buffer)
+        let l:exec_args = ' run vulture'
+    endif
 
     let l:lint_dest = ale#Var(a:buffer, 'python_vulture_change_directory')
     \   ? ' .'
     \   : ' %s'
 
-    return l:change_dir
+    return l:env_vars
+    \   . l:change_dir
     \   . ale#Escape(l:executable) . l:exec_args
     \   . ' '
     \   . ale#Var(a:buffer, 'python_vulture_options')

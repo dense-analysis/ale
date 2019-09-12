@@ -18,12 +18,16 @@ endfunction
 function! ale_linters#python#pydocstyle#GetCommand(buffer) abort
     let l:dir = fnamemodify(bufname(a:buffer), ':p:h')
     let l:executable = ale_linters#python#pydocstyle#GetExecutable(a:buffer)
+    let l:env_vars = ''
+    let l:exec_args = ''
 
-    let l:exec_args = l:executable =~? 'pipenv$'
-    \   ? ' run pydocstyle'
-    \   : ''
+    if l:executable =~? 'pipenv$'
+        let l:env_vars = ale#python#PipenvDepth(a:buffer)
+        let l:exec_args = ' run pydocstyle'
+    endif
 
-    return ale#path#CdString(l:dir)
+    return l:env_vars
+    \   . ale#path#CdString(l:dir)
     \   . ale#Escape(l:executable) . l:exec_args
     \   . ' ' . ale#Var(a:buffer, 'python_pydocstyle_options')
     \   . ' ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:t'))
