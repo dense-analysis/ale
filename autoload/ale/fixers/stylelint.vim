@@ -30,7 +30,7 @@ function! ale#fixers#stylelint#ApplyFixForVersion(buffer, version) abort
         return {
         \   'command': ale#path#BufferCdString(a:buffer)
         \       . ale#node#Executable(a:buffer, l:executable)
-        \       . ' --stdin-filename %s'
+        \       . ' --stdin-filename %s.css'
         \       . ale#Pad(l:options)
         \       . ' --fix',
         \}
