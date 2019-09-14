@@ -224,7 +224,7 @@ formatting.
   * [eslint](http://eslint.org/)
   * [fecs](http://fecs.baidu.com/)
   * [flow](https://flowtype.org/)
-  * [jscs](http://jscs.info/)
+  * [jscs](https://jscs-dev.github.io/)
   * [jshint](http://jshint.com/)
   * [prettier](https://github.com/prettier/prettier)
   * [prettier-eslint](https://github.com/prettier/prettier-eslint-cli)
@@ -435,6 +435,7 @@ formatting.
 * SQL
   * [pgformatter](https://github.com/darold/pgFormatter)
   * [sqlfmt](https://github.com/jackc/sqlfmt)
+  * [sqlformat](https://github.com/andialbrecht/sqlparse)
   * [sqlint](https://github.com/purcell/sqlint)
 * Stylus
   * [stylelint](https://github.com/stylelint/stylelint)

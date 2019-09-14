@@ -15,6 +15,7 @@ onoremap <silent> <Plug>(ale_show_completion_menu) <Nop>
 let g:ale_completion_delay = get(g:, 'ale_completion_delay', 100)
 let g:ale_completion_excluded_words = get(g:, 'ale_completion_excluded_words', [])
 let g:ale_completion_max_suggestions = get(g:, 'ale_completion_max_suggestions', 50)
+let g:ale_completion_tsserver_autoimport = get(g:, 'ale_completion_tsserver_autoimport', 0)
 
 let s:timer_id = -1
 let s:last_done_pos = []
@@ -296,7 +297,10 @@ function! ale#completion#ParseTSServerCompletions(response) abort
     let l:names = []
 
     for l:suggestion in a:response.body
-        call add(l:names, l:suggestion.name)
+        call add(l:names, {
+        \ 'word': l:suggestion.name,
+        \ 'source': get(l:suggestion, 'source', ''),
+        \})
     endfor
 
     return l:names
@@ -330,13 +334,22 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
         endif
 
         " See :help complete-items
-        call add(l:results, {
+        let l:result = {
         \   'word': l:suggestion.name,
         \   'kind': l:kind,
         \   'icase': 1,
         \   'menu': join(l:displayParts, ''),
+        \   'dup': g:ale_completion_tsserver_autoimport,
         \   'info': join(l:documentationParts, ''),
-        \})
+        \}
+
+        if has_key(l:suggestion, 'codeActions')
+            let l:result.user_data = json_encode({
+            \   'codeActions': l:suggestion.codeActions,
+            \ })
+        endif
+
+        call add(l:results, l:result)
     endfor
 
     let l:names = getbufvar(l:buffer, 'ale_tsserver_completion_names', [])
@@ -345,12 +358,12 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
         let l:names_with_details = map(copy(l:results), 'v:val.word')
         let l:missing_names = filter(
         \   copy(l:names),
-        \   'index(l:names_with_details, v:val) < 0',
+        \   'index(l:names_with_details, v:val.word) < 0',
         \)
 
         for l:name in l:missing_names
             call add(l:results, {
-            \   'word': l:name,
+            \   'word': l:name.word,
             \   'kind': 'v',
             \   'icase': 1,
             \   'menu': '',
@@ -472,13 +485,22 @@ function! ale#completion#HandleTSServerResponse(conn_id, response) abort
         call setbufvar(l:buffer, 'ale_tsserver_completion_names', l:names)
 
         if !empty(l:names)
+            let l:identifiers = []
+
+            for l:name in l:names
+                call add(l:identifiers, {
+                \   'name': l:name.word,
+                \   'source': get(l:name, 'source', ''),
+                \})
+            endfor
+
             let b:ale_completion_info.request_id = ale#lsp#Send(
             \   b:ale_completion_info.conn_id,
             \   ale#lsp#tsserver_message#CompletionEntryDetails(
             \       l:buffer,
             \       b:ale_completion_info.line,
             \       b:ale_completion_info.column,
-            \       l:names,
+            \       l:identifiers,
             \   ),
             \)
         endif
@@ -525,6 +547,7 @@ function! s:OnReady(linter, lsp_details) abort
         \   b:ale_completion_info.line,
         \   b:ale_completion_info.column,
         \   b:ale_completion_info.prefix,
+        \   g:ale_completion_tsserver_autoimport,
         \)
     else
         " Send a message saying the buffer has changed first, otherwise
@@ -692,6 +715,26 @@ function! ale#completion#Queue() abort
     let s:timer_id = timer_start(g:ale_completion_delay, function('s:TimerHandler'))
 endfunction
 
+function! ale#completion#HandleUserData(completed_item) abort
+    let l:source = get(get(b:, 'ale_completion_info', {}), 'source', '')
+
+    if l:source isnot# 'ale-automatic' && l:source isnot# 'ale-manual'
+        return
+    endif
+
+    let l:user_data_json = get(a:completed_item, 'user_data', '')
+
+    if empty(l:user_data_json)
+        return
+    endif
+
+    let l:user_data = json_decode(l:user_data_json)
+
+    for l:code_action in get(l:user_data, 'codeActions', [])
+        call ale#code_action#HandleCodeAction(l:code_action)
+    endfor
+endfunction
+
 function! ale#completion#Done() abort
     silent! pclose
 
@@ -699,6 +742,10 @@ function! ale#completion#Done() abort
 
     let s:last_done_pos = getpos('.')[1:2]
 endfunction
+
+augroup ALECompletionActions
+    autocmd CompleteDone * call ale#completion#HandleUserData(v:completed_item)
+augroup END
 
 function! s:Setup(enabled) abort
     augroup ALECompletionGroup

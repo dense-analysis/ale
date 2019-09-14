@@ -116,7 +116,13 @@ Execute(The right message should be sent for the initial tsserver request):
   \ string(g:Callback)
   " We should send the right message.
   AssertEqual
-  \ [[0, 'ts@completions', {'file': expand('%:p'), 'line': 1, 'offset': 3, 'prefix': 'fo'}]],
+  \ [[0, 'ts@completions', {
+  \  'file': expand('%:p'),
+  \  'line': 1,
+  \  'offset': 3,
+  \  'prefix': 'fo',
+  \  'includeExternalModuleExports': g:ale_completion_tsserver_autoimport,
+  \ }]],
   \ g:message_list
   " We should set up the completion info correctly.
   AssertEqual
@@ -151,7 +157,7 @@ Execute(The right message sent to the tsserver LSP when the first completion mes
   \ 'body': [
   \   {'name': 'Baz'},
   \   {'name': 'dingDong'},
-  \   {'name': 'Foo'},
+  \   {'name': 'Foo', 'source': '/path/to/foo.ts'},
   \   {'name': 'FooBar'},
   \   {'name': 'frazzle'},
   \   {'name': 'FFS'},
@@ -160,8 +166,16 @@ Execute(The right message sent to the tsserver LSP when the first completion mes
 
   " We should save the names we got in the buffer, as TSServer doesn't return
   " details for every name.
-  AssertEqual
-  \ ['Foo', 'FooBar', 'frazzle'],
+  AssertEqual [{
+  \  'word': 'Foo',
+  \  'source': '/path/to/foo.ts',
+  \ }, {
+  \  'word': 'FooBar',
+  \  'source': '',
+  \ }, {
+  \  'word': 'frazzle',
+  \  'source': '',
+  \}],
   \ get(b:, 'ale_tsserver_completion_names', [])
 
   " The entry details messages should have been sent.
@@ -171,7 +185,16 @@ Execute(The right message sent to the tsserver LSP when the first completion mes
   \   'ts@completionEntryDetails',
   \   {
   \     'file': expand('%:p'),
-  \     'entryNames': ['Foo', 'FooBar', 'frazzle'],
+  \     'entryNames': [{
+  \          'name': 'Foo',
+  \          'source': '/path/to/foo.ts',
+  \         }, {
+  \          'name': 'FooBar',
+  \          'source': '',
+  \         }, {
+  \          'name': 'frazzle',
+  \          'source': '',
+  \     }],
   \     'offset': 1,
   \     'line': 1,
   \   },

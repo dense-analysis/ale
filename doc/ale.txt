@@ -376,6 +376,10 @@ The |ALEComplete| command can be used to show completion suggestions manually,
 even when |g:ale_completion_enabled| is set to `0`. For manually requesting
 completion information with Deoplete, consult Deoplete's documentation.
 
+When working with TypeScript files, ALE by can support automatic imports
+from external modules. This behavior can be enabled by setting the
+|g:ale_completion_tsserver_autoimport| variable to `1`.
+
                                                *ale-completion-completeopt-bug*
 
 ALE Automatic completion implementation replaces |completeopt| before opening
@@ -595,6 +599,16 @@ b:ale_completion_enabled                             *b:ale_completion_enabled*
   ALE's completion support must be enabled globally to be enabled locally.
 
   See |ale-completion|
+
+
+g:ale_completion_tsserver_autoimport      *g:ale_completion_tsserver_autoimport*
+
+  Type: Number
+  Default: `0`
+
+  When this option is set to `0`, ALE will not try to automatically import
+  completion results from external modules. It can be enabled by setting it
+  to `1`.
 
 
 g:ale_completion_excluded_words               *g:ale_completion_excluded_words*
@@ -1317,6 +1331,27 @@ g:ale_pattern_options_enabled                   *g:ale_pattern_options_enabled*
   will not set buffer variables per |g:ale_pattern_options|.
 
 
+g:ale_rename_tsserver_find_in_comments  *g:ale_rename_tsserver_find_in_comments*
+
+  Type: |Number|
+  Default: `0`
+
+  If enabled, this option will tell tsserver to find and replace text in
+  comments when calling |ALERename|. It can be enabled by settings the value
+  to `1`.
+
+
+g:ale_rename_tsserver_find_in_strings   *g:ale_rename_tsserver_find_in_strings*
+
+
+  Type: |Number|
+  Default: `0`
+
+  If enabled, this option will tell tsserver to find and replace text in
+  strings when calling |ALERename|. It can be enabled by settings the value to
+  `1`.
+
+
 g:ale_set_balloons                                         *g:ale_set_balloons*
                                                            *b:ale_set_balloons*
 
@@ -1967,6 +2002,14 @@ g:ale_languagetool_executable                   *g:ale_languagetool_executable*
   The executable to run for languagetool.
 
 
+g:ale_languagetool_options                         *g:ale_languagetool_options*
+                                                   *b:ale_languagetool_options*
+  Type: |String|
+  Default: `'--autoDetect'`
+
+  This variable can be set to pass additional options to languagetool.
+
+
 -------------------------------------------------------------------------------
 7.3. Options for write-good                            *ale-write-good-options*
 
@@ -2334,6 +2377,7 @@ documented in additional help files.
   sql.....................................|ale-sql-options|
     pgformatter...........................|ale-sql-pgformatter|
     sqlfmt................................|ale-sql-sqlfmt|
+    sqlformat.............................|ale-sql-sqlformat|
   stylus..................................|ale-stylus-options|
     stylelint.............................|ale-stylus-stylelint|
   sugarss.................................|ale-sugarss-options|
@@ -2533,6 +2577,18 @@ ALEHover                                                             *ALEHover*
   messages from asynchronous callbacks.
 
   A plug mapping `<Plug>(ale_hover)` is defined for this command.
+
+
+ALEOrganizeImports                                         *ALEOrganizeImports*
+
+  Organize imports using tsserver. Currently not implemented for LSPs.
+
+
+ALERename                                                           *ALERename*
+
+  Rename a symbol using TypeScript server or Language Server.
+
+  The user will be prompted for a new name.
 
 
 ALESymbolSearch `<query>`                                     *ALESymbolSearch*

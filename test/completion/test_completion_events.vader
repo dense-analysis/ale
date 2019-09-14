@@ -47,6 +47,14 @@ Before:
     AssertEqual a:expect_success, g:get_completions_called
   endfunction
 
+  let g:handle_code_action_called = 0
+  function! MockHandleCodeAction() abort
+    " delfunction! ale#code_action#HandleCodeAction
+    function! ale#code_action#HandleCodeAction(action) abort
+      let g:handle_code_action_called += 1
+    endfunction
+  endfunction
+
 After:
   Restore
 
@@ -54,6 +62,7 @@ After:
   unlet! g:output
   unlet! g:fake_mode
   unlet! g:get_completions_called
+  unlet! g:handle_code_action_called
   unlet! b:ale_old_omnifunc
   unlet! b:ale_old_completeopt
   unlet! b:ale_completion_info
@@ -61,6 +70,8 @@ After:
   unlet! b:ale_complete_done_time
 
   delfunction CheckCompletionCalled
+  delfunction ale#code_action#HandleCodeAction
+  delfunction MockHandleCodeAction
 
   if exists('*CompleteCallback')
     delfunction CompleteCallback
@@ -77,6 +88,7 @@ After:
   endfunction
 
   runtime autoload/ale/completion.vim
+  runtime autoload/ale/code_action.vim
   runtime autoload/ale/util.vim
 
 Execute(ale#completion#GetCompletions should be called when the cursor position stays the same):
@@ -385,3 +397,44 @@ Execute(Running the normal mode <Plug> keybind should reset the settings):
   AssertEqual 'menu', &l:completeopt
   Assert !has_key(b:, 'ale_old_omnifunc')
   Assert !has_key(b:, 'ale_old_completeopt')
+
+Execute(HandleUserData should call ale#code_action#HandleCodeAction):
+  let b:ale_completion_info = {'source': 'ale-manual'}
+  call MockHandleCodeAction()
+
+  call ale#completion#HandleUserData({})
+  AssertEqual g:handle_code_action_called, 0
+
+  call ale#completion#HandleUserData({
+  \  'user_data': ''
+  \})
+  AssertEqual g:handle_code_action_called, 0
+
+  call ale#completion#HandleUserData({
+  \  'user_data': '{}'
+  \})
+  AssertEqual g:handle_code_action_called, 0
+
+  call ale#completion#HandleUserData({
+  \  'user_data': '{"codeActions": []}'
+  \})
+  AssertEqual g:handle_code_action_called, 0
+
+  call ale#completion#HandleUserData({
+  \  'user_data': '{"codeActions": [{"description":"", "changes": []}]}'
+  \})
+  AssertEqual g:handle_code_action_called, 1
+
+  let b:ale_completion_info = {'source': 'ale-automatic'}
+  call ale#completion#HandleUserData({
+  \  'user_data': '{"codeActions": [{"description":"", "changes": []}]}'
+  \})
+  AssertEqual g:handle_code_action_called, 2
+
+Execute(ale#code_action#HandleCodeAction should not be called when when source is not ALE):
+  call MockHandleCodeAction()
+  let b:ale_completion_info = {'source': 'syntastic'}
+  call ale#completion#HandleUserData({
+  \  'user_data': '{"codeActions": [{"description":"", "changes": []}]}'
+  \})
+  AssertEqual g:handle_code_action_called, 0

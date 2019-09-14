@@ -426,6 +426,7 @@ Notes:
 * SQL
   * `pgformatter`
   * `sqlfmt`
+  * `sqlformat`
   * `sqlint`
 * Stylus
   * `stylelint`
