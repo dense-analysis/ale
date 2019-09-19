@@ -17,6 +17,7 @@ function! ale_linters#terraform#tflint#Handle(buffer, lines) abort
             if l:match[4] is# ''
                 let l:match[4] = l:match[2]
             endif
+
             call add(l:output, {
             \   'filename': l:match[1],
             \   'lnum': str2nr(l:match[2]),
