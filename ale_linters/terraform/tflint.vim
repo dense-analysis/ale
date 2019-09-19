@@ -9,21 +9,45 @@ call ale#Set('terraform_tflint_executable', 'tflint')
 
 function! ale_linters#terraform#tflint#Handle(buffer, lines) abort
     let l:output = []
+    let l:pattern = '\v^(.*):(\d+),(\d+)-(\d+)?,?(\d+): (.{-1,}); (.+)$'
+    let l:json = ale#util#FuzzyJSONDecode(a:lines, {})
 
-    for l:error in ale#util#FuzzyJSONDecode(a:lines, [])
-        if l:error.type is# 'ERROR'
+    for l:error in get(l:json, 'errors', [])
+        for l:match in ale#util#GetMatches(l:error.message, [l:pattern])
+            if l:match[4] is# ''
+                let l:match[4] = l:match[2]
+            endif
+            call add(l:output, {
+            \   'filename': l:match[1],
+            \   'lnum': str2nr(l:match[2]),
+            \   'col': str2nr(l:match[3]),
+            \   'end_lnum': str2nr(l:match[4]),
+            \   'end_col': str2nr(l:match[5]),
+            \   'text': l:match[7],
+            \   'code': l:match[6],
+            \   'type': 'E',
+            \})
+        endfor
+    endfor
+
+    for l:error in get(l:json, 'issues', [])
+        if l:error.rule.severity is# 'ERROR'
             let l:type = 'E'
-        elseif l:error.type is# 'NOTICE'
+        elseif l:error.rule.severity is# 'NOTICE'
             let l:type = 'I'
         else
             let l:type = 'W'
         endif
 
         call add(l:output, {
-        \   'lnum': l:error.line,
+        \   'filename': l:error.range.filename,
+        \   'lnum': l:error.range.start.line,
+        \   'col': l:error.range.start.column,
+        \   'end_lnum': l:error.range.end.line,
+        \   'end_col': l:error.range.end.column,
         \   'text': l:error.message,
+        \   'code': l:error.rule.name,
         \   'type': l:type,
-        \   'code': l:error.detector,
         \})
     endfor
 
