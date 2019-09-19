@@ -14,6 +14,7 @@ let s:default_ale_linter_aliases = {
 \   'csh': 'sh',
 \   'plaintex': 'tex',
 \   'rmarkdown': 'r',
+\   'rmd': 'r',
 \   'systemverilog': 'verilog',
 \   'verilog_systemverilog': ['verilog_systemverilog', 'verilog'],
 \   'vimwiki': 'markdown',
