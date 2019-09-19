@@ -47,7 +47,7 @@ function! ale#fix#ApplyQueuedFixes(buffer) abort
                     set nomodified
                 endif
             else
-                call writefile(l:new_lines, expand(a:buffer . ':p')) " no-custom-checks
+                call writefile(l:new_lines, expand('#' . a:buffer . ':p')) " no-custom-checks
                 call setbufvar(a:buffer, '&modified', 0)
             endif
         endif
