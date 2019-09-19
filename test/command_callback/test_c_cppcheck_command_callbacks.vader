@@ -1,9 +1,15 @@
 Before:
   call ale#assert#SetUpLinterTest('c', 'cppcheck')
 
-  let b:command_tail = ' -q --language=c --enable=style %t'
+  let b:command_tail = ' -q --language=c --enable=style -I' . ale#Escape(ale#path#Simplify(g:dir)) .' %t'
 
 After:
+  " Remove a test file we might open for some tests.
+  if &buftype != 'nofile'
+    :q!
+    set buftype=nofile
+  endif
+
   call ale#assert#TearDownLinterTest()
 
   unlet! b:command_tail
@@ -15,10 +21,46 @@ Execute(The executable should be configurable):
 
   AssertLinter 'foobar', ale#Escape('foobar') . b:command_tail
 
-Execute(cppcheck for C++ should detect compile_commands.json files):
-  call ale#test#SetFilename('cppcheck_paths/one/foo.cpp')
+Execute(cppcheck for C should detect compile_commands.json files):
+  call ale#test#SetFilename('cppcheck_paths/one/foo.c')
 
   AssertLinter 'cppcheck',
   \ ale#path#CdString(ale#path#Simplify(g:dir . '/cppcheck_paths/one'))
   \   . ale#Escape('cppcheck')
-  \   . ' -q --language=c --project=compile_commands.json --enable=style %t'
+  \   . ' -q --language=c'
+  \   . ' --project=' . ale#Escape('compile_commands.json')
+  \   . ' --enable=style %t'
+
+Execute(cppcheck for C should detect compile_commands.json files in build directories):
+  call ale#test#SetFilename('cppcheck_paths/with_build_dir/foo.cpp')
+
+  AssertLinter 'cppcheck',
+  \ ale#path#CdString(ale#path#Simplify(g:dir . '/cppcheck_paths/with_build_dir'))
+  \   . ale#Escape('cppcheck')
+  \   . ' -q --language=c'
+  \   . ' --project=' . ale#Escape(ale#path#Simplify('build/compile_commands.json'))
+  \   . ' --enable=style %t'
+
+Execute(cppcheck for C should include file dir if compile_commands.json file is not found):
+  call ale#test#SetFilename('cppcheck_paths/foo.cpp')
+
+  AssertLinter 'cppcheck',
+  \   ale#Escape('cppcheck')
+  \   . ' -q --language=c'
+  \   . ' --enable=style'
+  \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir . '/cppcheck_paths'))
+  \   . ' %t'
+
+Execute(cppcheck for C should ignore compile_commands.json file if buffer is modified):
+  call ale#test#SetFilename('cppcheck_paths/one/foo.c')
+
+  set buftype=
+  set modified
+
+  AssertLinter 'cppcheck',
+  \   ale#path#CdString(ale#path#Simplify(g:dir . '/cppcheck_paths/one'))
+  \   . ale#Escape('cppcheck')
+  \   . ' -q --language=c'
+  \   . ' --enable=style'
+  \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir . '/cppcheck_paths/one'))
+  \   . ' %t'

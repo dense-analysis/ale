@@ -18,10 +18,7 @@ endfunction
 call ale#linter#Define('cpp', {
 \   'name': 'clang',
 \   'output_stream': 'stderr',
-\   'executable_callback': ale#VarFunc('cpp_clang_executable'),
-\   'command_chain': [
-\       {'callback': 'ale#c#GetMakeCommand', 'output_stream': 'stdout'},
-\       {'callback': 'ale_linters#cpp#clang#GetCommand'},
-\   ],
+\   'executable': {b -> ale#Var(b, 'cpp_clang_executable')},
+\   'command': {b -> ale#c#RunMakeCommand(b, function('ale_linters#cpp#clang#GetCommand'))},
 \   'callback': 'ale#handlers#gcc#HandleGCCFormatWithIncludes',
 \})

@@ -36,7 +36,7 @@ function! ale_linters#ruby#brakeman#GetCommand(buffer) abort
 
     let l:executable = ale#Var(a:buffer, 'ruby_brakeman_executable')
 
-    return ale#handlers#ruby#EscapeExecutable(l:executable, 'brakeman')
+    return ale#ruby#EscapeExecutable(l:executable, 'brakeman')
     \    . ' -f json -q '
     \    . ale#Var(a:buffer, 'ruby_brakeman_options')
     \    . ' -p ' . ale#Escape(l:rails_root)
@@ -44,8 +44,8 @@ endfunction
 
 call ale#linter#Define('ruby', {
 \    'name': 'brakeman',
-\    'executable_callback': ale#VarFunc('ruby_brakeman_executable'),
-\    'command_callback': 'ale_linters#ruby#brakeman#GetCommand',
+\    'executable': {b -> ale#Var(b, 'ruby_brakeman_executable')},
+\    'command': function('ale_linters#ruby#brakeman#GetCommand'),
 \    'callback': 'ale_linters#ruby#brakeman#Handle',
 \    'lint_file': 1,
 \})

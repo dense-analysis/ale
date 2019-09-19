@@ -91,3 +91,19 @@ Execute(The Perl linter reports errors even when mixed with warnings):
   \ 'syntax error at - line 8, at EOF',
   \ 'Execution of t.pl aborted due to compilation errors.',
   \ ])
+
+Execute(The Perl linter reports errors even when an additional file location is included):
+  AssertEqual
+  \ [
+  \ {'lnum': '5', 'type': 'E', 'text': '"my" variable $foo masks earlier declaration in same scope'},
+  \ {'lnum': '6', 'type': 'E', 'text': '"my" variable $foo masks earlier declaration in same scope'},
+  \ {'lnum': '11', 'type': 'E', 'text': 'Global symbol "$asdf" requires explicit package name (did you forget to declare "my $asdf"?)'},
+  \ {'lnum': '12', 'type': 'E', 'text': 'Global symbol "$asdf" requires explicit package name (did you forget to declare "my $asdf"?)'},
+  \ ],
+  \ ale_linters#perl#perl#Handle(bufnr(''), [
+  \ '"my" variable $foo masks earlier declaration in same scope at - line 5.',
+  \ '"my" variable $foo masks earlier declaration in same scope at - line 6, at <DATA> line 1.',
+  \ 'Global symbol "$asdf" requires explicit package name (did you forget to declare "my $asdf"?) at - line 11.',
+  \ 'Global symbol "$asdf" requires explicit package name (did you forget to declare "my $asdf"?) at - line 12, <DATA> line 1.',
+  \ 'Execution of t.pl aborted due to compilation errors.',
+  \ ])

@@ -64,6 +64,7 @@ Given foobar (Some JavaScript with problems):
 
 Execute(The loclist should be updated after linting is done):
   ALELint
+  call ale#test#FlushJobs()
 
   AssertEqual
   \ [

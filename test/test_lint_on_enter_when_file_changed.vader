@@ -50,6 +50,7 @@ Execute(The file changed event function should set b:ale_file_changed):
 Execute(The file changed event function should lint the current buffer when it has changed):
   set filetype=foobar
   call ale#events#FileChangedEvent(bufnr(''))
+  call ale#test#FlushJobs()
 
   AssertEqual [{
   \   'bufnr': bufnr(''),
@@ -68,6 +69,7 @@ Execute(The buffer should be checked after entering it after the file has change
 
   set filetype=foobar
   call ale#events#ReadOrEnterEvent(bufnr(''))
+  call ale#test#FlushJobs()
 
   AssertEqual [{
   \   'bufnr': bufnr(''),

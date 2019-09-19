@@ -3,13 +3,20 @@
 
 " simplify a path, and fix annoying issues with paths on Windows.
 "
-" Forward slashes are changed to back slashes so path equality works better.
+" Forward slashes are changed to back slashes so path equality works better
+" on Windows. Back slashes are changed to forward slashes on Unix.
+"
+" Unix paths can technically contain back slashes, but in practice no path
+" should, and replacing back slashes with forward slashes makes linters work
+" in environments like MSYS.
 "
 " Paths starting with more than one forward slash are changed to only one
 " forward slash, to prevent the paths being treated as special MSYS paths.
 function! ale#path#Simplify(path) abort
     if has('unix')
-        return substitute(simplify(a:path), '^//\+', '/', 'g') " no-custom-checks
+        let l:unix_path = substitute(a:path, '\\', '/', 'g')
+
+        return substitute(simplify(l:unix_path), '^//\+', '/', 'g') " no-custom-checks
     endif
 
     let l:win_path = substitute(a:path, '/', '\\', 'g')
@@ -197,14 +204,20 @@ function! ale#path#ToURI(path) abort
 endfunction
 
 function! ale#path#FromURI(uri) abort
-    let l:i = len('file://')
-    let l:encoded_path = a:uri[: l:i - 1] is# 'file://' ? a:uri[l:i :] : a:uri
+    if a:uri[:6] is? 'file://'
+        let l:encoded_path = a:uri[7:]
+    elseif a:uri[:4] is? 'file:'
+        let l:encoded_path = a:uri[5:]
+    else
+        let l:encoded_path = a:uri
+    endif
 
     let l:path = ale#uri#Decode(l:encoded_path)
 
     " If the path is like /C:/foo/bar, it should be C:\foo\bar instead.
-    if l:path =~# '^/[a-zA-Z]:'
+    if has('win32') && l:path =~# '^/[a-zA-Z][:|]'
         let l:path = substitute(l:path[1:], '/', '\\', 'g')
+        let l:path = l:path[0] . ':' . l:path[2:]
     endif
 
     return l:path

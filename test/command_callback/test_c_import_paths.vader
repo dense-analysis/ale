@@ -2,6 +2,7 @@ Before:
   " Make sure the c.vim file is loaded first.
   call ale#c#FindProjectRoot(bufnr(''))
 
+  Save g:ale_c_parse_compile_commands
   Save g:ale_c_parse_makefile
   Save g:__ale_c_project_filenames
 
@@ -14,9 +15,12 @@ Before:
   \ 'v:val isnot# ''.git/HEAD'''
   \)
 
+  let g:ale_c_parse_compile_commands = 0
   let g:ale_c_parse_makefile = 0
 
 After:
+  Restore
+
   unlet! g:original_project_filenames
 
   call ale#assert#TearDownLinterTest()
@@ -28,7 +32,7 @@ Execute(The C GCC handler should include 'include' directories for projects with
 
   AssertLinter 'gcc',
   \ ale#Escape('gcc')
-  \   . ' -S -x c -fsyntax-only'
+  \   . ' -S -x c -o ' . (has('win32') ? 'nul': '/dev/null')
   \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/makefile_project/subdir'))
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/makefile_project/include'))
   \   . ' -'
@@ -40,8 +44,8 @@ Execute(The C GCC handler should include 'include' directories for projects with
 
   AssertLinter 'gcc',
   \ ale#Escape('gcc')
-  \   . ' -S -x c -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/configure_project/subdir'))
+  \   . ' -S -x c -o ' . (has('win32') ? 'nul': '/dev/null')
+  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/configure_project/subdir'))
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/configure_project/include'))
   \   . ' -'
 
@@ -52,8 +56,8 @@ Execute(The C GCC handler should include root directories for projects with .h f
 
   AssertLinter 'gcc',
   \ ale#Escape('gcc')
-  \   . ' -S -x c -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project/subdir'))
+  \   . ' -S -x c -o ' . (has('win32') ? 'nul': '/dev/null')
+  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project/subdir'))
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project'))
   \   . ' -'
 
@@ -64,8 +68,8 @@ Execute(The C GCC handler should include root directories for projects with .hpp
 
   AssertLinter 'gcc',
   \ ale#Escape('gcc')
-  \   . ' -S -x c -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/hpp_file_project/subdir'))
+  \   . ' -S -x c -o ' . (has('win32') ? 'nul': '/dev/null')
+  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/hpp_file_project/subdir'))
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/hpp_file_project'))
   \   . ' -'
 
@@ -76,8 +80,8 @@ Execute(The C Clang handler should include 'include' directories for projects wi
 
   AssertLinter 'clang',
   \   ale#Escape('clang')
-  \   . ' -S -x c -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/makefile_project/subdir'))
+  \   . ' -S -x c -fsyntax-only'
+  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/makefile_project/subdir'))
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/makefile_project/include'))
   \   . ' -'
 
@@ -88,8 +92,8 @@ Execute(The C Clang handler should include 'include' directories for projects wi
 
   AssertLinter 'clang',
   \   ale#Escape('clang')
-  \   . ' -S -x c -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project/subdir'))
+  \   . ' -S -x c -fsyntax-only'
+  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project/subdir'))
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project'))
   \   . ' -'
 
@@ -100,8 +104,8 @@ Execute(The C Clang handler should include root directories for projects with .h
 
   AssertLinter 'clang',
   \   ale#Escape('clang')
-  \   . ' -S -x c -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project/subdir'))
+  \   . ' -S -x c -fsyntax-only'
+  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project/subdir'))
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project'))
   \   . ' -'
 
@@ -112,8 +116,8 @@ Execute(The C Clang handler should include root directories for projects with .h
 
   AssertLinter 'clang',
   \   ale#Escape('clang')
-  \   . ' -S -x c -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/hpp_file_project/subdir'))
+  \   . ' -S -x c -fsyntax-only'
+  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/hpp_file_project/subdir'))
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/hpp_file_project'))
   \   . ' -'
 
@@ -124,8 +128,8 @@ Execute(The C++ GCC handler should include 'include' directories for projects wi
 
   AssertLinter 'gcc',
   \   ale#Escape('gcc')
-  \   . ' -S -x c++ -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/makefile_project/subdir'))
+  \   . ' -S -x c++ -o ' . (has('win32') ? 'nul': '/dev/null')
+  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/makefile_project/subdir'))
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/makefile_project/include'))
   \   . ' -'
 
@@ -136,8 +140,8 @@ Execute(The C++ GCC handler should include 'include' directories for projects wi
 
   AssertLinter 'gcc',
   \   ale#Escape('gcc')
-  \   . ' -S -x c++ -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/configure_project/subdir'))
+  \   . ' -S -x c++ -o ' . (has('win32') ? 'nul': '/dev/null')
+  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/configure_project/subdir'))
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/configure_project/include'))
   \   . ' -'
 
@@ -148,8 +152,8 @@ Execute(The C++ GCC handler should include root directories for projects with .h
 
   AssertLinter 'gcc',
   \   ale#Escape('gcc')
-  \   . ' -S -x c++ -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project/subdir'))
+  \   . ' -S -x c++ -o ' . (has('win32') ? 'nul': '/dev/null')
+  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project/subdir'))
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project'))
   \   . ' -'
 
@@ -160,8 +164,8 @@ Execute(The C++ GCC handler should include root directories for projects with .h
 
   AssertLinter 'gcc',
   \   ale#Escape('gcc')
-  \   . ' -S -x c++ -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/hpp_file_project/subdir'))
+  \   . ' -S -x c++ -o ' . (has('win32') ? 'nul': '/dev/null')
+  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/hpp_file_project/subdir'))
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/hpp_file_project'))
   \   . ' -'
 
@@ -172,8 +176,8 @@ Execute(The C++ Clang handler should include 'include' directories for projects 
 
   AssertLinter 'clang++',
   \   ale#Escape('clang++')
-  \   . ' -S -x c++ -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/makefile_project/subdir'))
+  \   . ' -S -x c++ -fsyntax-only'
+  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/makefile_project/subdir'))
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/makefile_project/include'))
   \   . ' -'
 
@@ -184,8 +188,8 @@ Execute(The C++ Clang handler should include 'include' directories for projects 
 
   AssertLinter 'clang++',
   \   ale#Escape('clang++')
-  \   . ' -S -x c++ -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/configure_project/subdir'))
+  \   . ' -S -x c++ -fsyntax-only'
+  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/configure_project/subdir'))
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/configure_project/include'))
   \   . ' -'
 
@@ -196,8 +200,8 @@ Execute(The C++ Clang handler should include root directories for projects with 
 
   AssertLinter 'clang++',
   \   ale#Escape('clang++')
-  \   . ' -S -x c++ -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project/subdir'))
+  \   . ' -S -x c++ -fsyntax-only'
+  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project/subdir'))
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project'))
   \   . ' -'
 
@@ -208,8 +212,8 @@ Execute(The C++ Clang handler should include root directories for projects with 
 
   AssertLinter 'clang++',
   \   ale#Escape('clang++')
-  \   . ' -S -x c++ -fsyntax-only '
-  \   . '-iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/hpp_file_project/subdir'))
+  \   . ' -S -x c++ -fsyntax-only'
+  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/hpp_file_project/subdir'))
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/hpp_file_project'))
   \   . ' -'
 

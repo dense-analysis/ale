@@ -45,3 +45,8 @@ Execute(Pipenv is detected when python_pyls_auto_pipenv is set):
 
   AssertLinter 'pipenv',
   \ ale#Escape('pipenv') . ' run pyls'
+
+Execute(Should accept configuration settings):
+  AssertLSPConfig {}
+  let b:ale_python_pyls_config = {'pyls': {'plugins': {'preload': {'enabled': v:false}}}}
+  AssertLSPConfig {'pyls': {'plugins': {'preload': {'enabled': v:false}}}}

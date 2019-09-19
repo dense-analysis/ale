@@ -17,12 +17,14 @@ Execute(Command formatting should be applied correctly for LSP linters):
   call ale#lsp_linter#StartLSP(
   \ bufnr(''),
   \ {
+  \   'name': 'linter',
   \   'language_callback': {-> 'x'},
   \   'project_root_callback': {-> '/foo/bar'},
   \   'lsp': 'stdio',
   \   'executable': has('win32') ? 'cmd': 'true',
   \   'command': '%e --foo',
   \ },
+  \ {-> 0}
   \)
 
   if has('win32')

@@ -10,6 +10,7 @@ Before:
   let g:ale_set_signs = 1
   let g:ale_set_lists_synchronously = 1
   let g:ale_run_synchronously = 1
+  unlet! g:ale_run_synchronously_callbacks
   let g:ale_pattern_options = {}
   let g:ale_pattern_options_enabled = 1
   let g:ale_set_balloons =
@@ -35,6 +36,7 @@ Before:
   \ 'ALEEvents',
   \ 'ALEHighlightBufferGroup',
   \]
+  let g:has_nvim_highlight = exists('*nvim_buf_add_highlight') && exists('*nvim_buf_clear_namespace')
 
   function! ToggleTestCallback(buffer, output)
     return [{
@@ -85,10 +87,12 @@ Before:
 After:
   Restore
 
+  unlet! g:ale_run_synchronously_callbacks
   unlet! g:expected_loclist
   unlet! g:expected_groups
   unlet! b:ale_enabled
   unlet! g:output
+  unlet! g:has_nvim_highlight
 
   call ale#linter#Reset()
 
@@ -113,13 +117,19 @@ Execute(ALEToggle should reset everything and then run again):
   AssertEqual 'foobar', &filetype
 
   ALELint
+  call ale#test#FlushJobs()
 
   " First check that everything is there...
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
-  AssertEqual
-  \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
-  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+
+  " Only check the legacy matches if not using the new NeoVIM API.
+  if !g:has_nvim_highlight
+    AssertEqual
+    \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
+    \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+  endif
+
   AssertEqual g:expected_groups, ParseAuGroups()
   AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
 
@@ -130,17 +140,26 @@ Execute(ALEToggle should reset everything and then run again):
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
   AssertEqual [], ale#test#GetLoclistWithoutModule(), 'The loclist was not cleared'
   AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
-  AssertEqual [], getmatches(), 'The highlights were not cleared'
+
+  if !g:has_nvim_highlight
+    AssertEqual [], getmatches(), 'The highlights were not cleared'
+  endif
+
   AssertEqual g:expected_groups, ParseAuGroups()
 
   " Toggle ALE on, everything should be set up and run again.
   ALEToggle
+  call ale#test#FlushJobs()
 
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
-  AssertEqual
-  \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
-  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+
+  if !g:has_nvim_highlight
+    AssertEqual
+    \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
+    \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+  endif
+
   AssertEqual g:expected_groups, ParseAuGroups()
   AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
 
@@ -157,6 +176,7 @@ Execute(ALEToggle should skip filename keys and preserve them):
   \}
 
   ALELint
+  call ale#test#FlushJobs()
 
   " Now Toggle ALE off.
   ALEToggle
@@ -174,6 +194,7 @@ Execute(ALEToggle should skip filename keys and preserve them):
 
   " Toggle ALE on again.
   ALEToggle
+  call ale#test#FlushJobs()
 
   AssertEqual
   \ {
@@ -188,15 +209,18 @@ Execute(ALEToggle should skip filename keys and preserve them):
 
 Execute(ALEDisable should reset everything and stay disabled):
   ALELint
+  call ale#test#FlushJobs()
 
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
 
   ALEDisable
+  call ale#test#FlushJobs()
 
   AssertEqual [], ale#test#GetLoclistWithoutModule()
   AssertEqual 0, g:ale_enabled
 
   ALEDisable
+  call ale#test#FlushJobs()
 
   AssertEqual [], ale#test#GetLoclistWithoutModule()
   AssertEqual 0, g:ale_enabled
@@ -205,6 +229,7 @@ Execute(ALEEnable should enable ALE and lint again):
   let g:ale_enabled = 0
 
   ALEEnable
+  call ale#test#FlushJobs()
 
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual 1, g:ale_enabled
@@ -213,23 +238,32 @@ Execute(ALEReset should reset everything for a buffer):
   AssertEqual 'foobar', &filetype
 
   ALELint
+  call ale#test#FlushJobs()
 
   " First check that everything is there...
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
-  AssertEqual
-  \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
-  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+
+  if !g:has_nvim_highlight
+    AssertEqual
+    \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
+    \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+  endif
+
   AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
 
   " Now Toggle ALE off.
   ALEReset
+  call ale#test#FlushJobs()
 
   " Everything should be cleared.
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
   AssertEqual [], ale#test#GetLoclistWithoutModule(), 'The loclist was not cleared'
   AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
-  AssertEqual [], getmatches(), 'The highlights were not cleared'
+
+  if !g:has_nvim_highlight
+    AssertEqual [], getmatches(), 'The highlights were not cleared'
+  endif
 
   AssertEqual 1, g:ale_enabled
 
@@ -237,13 +271,18 @@ Execute(ALEToggleBuffer should reset everything and then run again):
   AssertEqual 'foobar', &filetype
 
   ALELint
+  call ale#test#FlushJobs()
 
   " First check that everything is there...
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
-  AssertEqual
-  \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
-  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+
+  if !g:has_nvim_highlight
+    AssertEqual
+    \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
+    \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+  endif
+
   AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
 
   " Now Toggle ALE off.
@@ -253,25 +292,35 @@ Execute(ALEToggleBuffer should reset everything and then run again):
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
   AssertEqual [], ale#test#GetLoclistWithoutModule(), 'The loclist was not cleared'
   AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
-  AssertEqual [], getmatches(), 'The highlights were not cleared'
+
+  if !g:has_nvim_highlight
+    AssertEqual [], getmatches(), 'The highlights were not cleared'
+  endif
 
   " Toggle ALE on, everything should be set up and run again.
   ALEToggleBuffer
+  call ale#test#FlushJobs()
 
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
-  AssertEqual
-  \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
-  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+
+  if !g:has_nvim_highlight
+    AssertEqual
+    \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
+    \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+  endif
+
   AssertEqual g:expected_groups, ParseAuGroups()
   AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
 
 Execute(ALEDisableBuffer should reset everything and stay disabled):
   ALELint
+  call ale#test#FlushJobs()
 
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
 
   ALEDisableBuffer
+  call ale#test#FlushJobs()
 
   AssertEqual [], ale#test#GetLoclistWithoutModule()
   AssertEqual 0, b:ale_enabled
@@ -280,6 +329,7 @@ Execute(ALEEnableBuffer should enable ALE and lint again):
   let b:ale_enabled = 0
 
   ALEEnableBuffer
+  call ale#test#FlushJobs()
 
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual 1, b:ale_enabled
@@ -303,23 +353,32 @@ Execute(ALEResetBuffer should reset everything for a buffer):
   AssertEqual 'foobar', &filetype
 
   ALELint
+  call ale#test#FlushJobs()
 
   " First check that everything is there...
   AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
-  AssertEqual
-  \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
-  \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+
+  if !g:has_nvim_highlight
+    AssertEqual
+    \ [{'group': 'ALEError', 'pos1': [2, 3, 1]}],
+    \ map(getmatches(), '{''group'': v:val.group, ''pos1'': v:val.pos1}')
+  endif
+
   AssertEqual [{'lnum': 2, 'bufnr': bufnr(''), 'col': 3, 'linter_name': 'testlinter', 'vcol': 0, 'nr': -1, 'type': 'E', 'text': 'foo bar', 'sign_id': 1000001}], g:ale_buffer_info[bufnr('')].loclist
 
   " Now Toggle ALE off.
   ALEResetBuffer
+  call ale#test#FlushJobs()
 
   " Everything should be cleared.
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
   AssertEqual [], ale#test#GetLoclistWithoutModule(), 'The loclist was not cleared'
   AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
-  AssertEqual [], getmatches(), 'The highlights were not cleared'
+
+  if !g:has_nvim_highlight
+    AssertEqual [], getmatches(), 'The highlights were not cleared'
+  endif
 
   AssertEqual 1, g:ale_enabled
   AssertEqual 1, get(b:, 'ale_enabled', 1)

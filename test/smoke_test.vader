@@ -66,7 +66,7 @@ Execute(Linters should run with the default options):
   " where tests fail randomly.
   for g:i in range(has('nvim-0.3') || has('win32') ? 5 : 1)
     call ale#Queue(0, '')
-    call ale#engine#WaitForJobs(2000)
+    call ale#test#WaitForJobs(2000)
 
     let g:results = ale#test#GetLoclistWithoutModule()
 
@@ -110,7 +110,7 @@ Execute(Linters should run in PowerShell too):
     \})
 
     call ale#Queue(0, '')
-    call ale#engine#WaitForJobs(4000)
+    call ale#test#WaitForJobs(4000)
 
     AssertEqual [
     \ {
@@ -140,7 +140,7 @@ Execute(Linters should run in PowerShell too):
 
 Execute(Previous errors should be removed when linters change):
   call ale#Queue(0, '')
-  call ale#engine#WaitForJobs(2000)
+  call ale#test#WaitForJobs(2000)
 
   call ale#linter#Reset()
 
@@ -167,7 +167,7 @@ Execute(Previous errors should be removed when linters change):
   " where tests fail randomly.
   for g:i in range(has('nvim-0.3') || has('win32') ? 5 : 1)
     call ale#Queue(0, '')
-    call ale#engine#WaitForJobs(2000)
+    call ale#test#WaitForJobs(2000)
 
     let g:results = ale#test#GetLoclistWithoutModule()
 

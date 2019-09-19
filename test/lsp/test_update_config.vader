@@ -3,6 +3,10 @@ Before:
 
   let g:conn_id = ale#lsp#Register('executable', '/foo/bar', {})
 
+  " Stub out this function, so we test updating configs.
+  function! ale#lsp#Send(conn_id, message) abort
+  endfunction
+
 After:
   Restore
 

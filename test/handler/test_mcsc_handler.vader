@@ -67,3 +67,22 @@ Execute(The mcs handler should handle cannot find symbol errors):
   \   'Test.cs(10,12): warning CS0123: some warning',
   \   'Compilation failed: 2 error(s), 1 warnings',
   \ ])
+
+Execute(The mcsc handler should handle non file specific compiler errors without reporting overal status report as error):
+  let g:ale_cs_mcsc_source = '/home/foo/project/bar'
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': -1,
+  \     'col' : -1,
+  \     'text': 'No files to compile were specified',
+  \     'code': 'CS2008',
+  \     'type': 'E',
+  \     'filename': '<mcs>',
+  \   },
+  \ ],
+  \ ale_linters#cs#mcsc#Handle(bufnr(''), [
+  \     'error CS2008: No files to compile were specified',
+  \     'Compilation failed: 1 error(s), 0 warnings',
+  \ ])

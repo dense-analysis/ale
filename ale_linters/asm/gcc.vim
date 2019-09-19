@@ -5,7 +5,10 @@ call ale#Set('asm_gcc_executable', 'gcc')
 call ale#Set('asm_gcc_options', '-Wall')
 
 function! ale_linters#asm#gcc#GetCommand(buffer) abort
-    return '%e -x assembler -fsyntax-only '
+    " `-o /dev/null` or `-o null` is needed to catch all errors,
+    " -fsyntax-only doesn't catch everything.
+    return '%e -x assembler'
+    \   . ' -o ' . g:ale#util#nul_file
     \   . '-iquote ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h'))
     \   . ' ' . ale#Var(a:buffer, 'asm_gcc_options') . ' -'
 endfunction
@@ -28,7 +31,7 @@ endfunction
 call ale#linter#Define('asm', {
 \    'name': 'gcc',
 \    'output_stream': 'stderr',
-\    'executable_callback': ale#VarFunc('asm_gcc_executable'),
-\    'command_callback': 'ale_linters#asm#gcc#GetCommand',
+\    'executable': {b -> ale#Var(b, 'asm_gcc_executable')},
+\    'command': function('ale_linters#asm#gcc#GetCommand'),
 \    'callback': 'ale_linters#asm#gcc#Handle',
 \})

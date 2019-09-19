@@ -20,10 +20,10 @@ Execute(ale#lsp#message#Initialize() should return correct messages):
   \    'rootUri': 'file:///foo/bar',
   \   }
   \ ],
-  \ ale#lsp#message#Initialize('/foo/bar', {'foo': 'bar'})
+  \ ale#lsp#message#Initialize('/foo/bar', {'foo': 'bar'}, {})
 
 Execute(ale#lsp#message#Initialized() should return correct messages):
-  AssertEqual [1, 'initialized'], ale#lsp#message#Initialized()
+  AssertEqual [1, 'initialized', {}], ale#lsp#message#Initialized()
 
 Execute(ale#lsp#message#Shutdown() should return correct messages):
   AssertEqual [0, 'shutdown'], ale#lsp#message#Shutdown()
@@ -112,7 +112,7 @@ Execute(ale#lsp#message#Completion() should return correct messages):
   \     'textDocument': {
   \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
   \     },
-  \     'position': {'line': 11, 'character': 34},
+  \     'position': {'line': 11, 'character': 33},
   \   }
   \ ],
   \ ale#lsp#message#Completion(bufnr(''), 12, 34, '')
@@ -126,7 +126,7 @@ Execute(ale#lsp#message#Completion() should return correct messages with a trigg
   \     'textDocument': {
   \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
   \     },
-  \     'position': {'line': 11, 'character': 34},
+  \     'position': {'line': 11, 'character': 33},
   \     'context': {'triggerKind': 2, 'triggerCharacter': '.'},
   \   }
   \ ],
@@ -141,10 +141,24 @@ Execute(ale#lsp#message#Definition() should return correct messages):
   \     'textDocument': {
   \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
   \     },
-  \     'position': {'line': 11, 'character': 34},
+  \     'position': {'line': 11, 'character': 33},
   \   }
   \ ],
   \ ale#lsp#message#Definition(bufnr(''), 12, 34)
+
+Execute(ale#lsp#message#TypeDefinition() should return correct messages):
+  AssertEqual
+  \ [
+  \   0,
+  \   'textDocument/typeDefinition',
+  \   {
+  \     'textDocument': {
+  \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
+  \     },
+  \     'position': {'line': 11, 'character': 33},
+  \   }
+  \ ],
+  \ ale#lsp#message#TypeDefinition(bufnr(''), 12, 34)
 
 Execute(ale#lsp#message#References() should return correct messages):
   AssertEqual
@@ -155,7 +169,7 @@ Execute(ale#lsp#message#References() should return correct messages):
   \     'textDocument': {
   \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
   \     },
-  \     'position': {'line': 11, 'character': 34},
+  \     'position': {'line': 11, 'character': 33},
   \     'context': {'includeDeclaration': v:false},
   \   }
   \ ],
@@ -181,7 +195,7 @@ Execute(ale#lsp#message#Hover() should return correct messages):
   \     'textDocument': {
   \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
   \     },
-  \     'position': {'line': 11, 'character': 34},
+  \     'position': {'line': 11, 'character': 33},
   \   }
   \ ],
   \ ale#lsp#message#Hover(bufnr(''), 12, 34)
@@ -192,7 +206,7 @@ Execute(ale#lsp#message#DidChangeConfiguration() should return correct messages)
   \ }
   AssertEqual
   \ [
-  \   0,
+  \   1,
   \   'workspace/didChangeConfiguration',
   \   {
   \     'settings': {
@@ -261,9 +275,10 @@ Execute(ale#lsp#tsserver_message#Completions() should return correct messages):
   \     'line': 347,
   \     'offset': 12,
   \     'prefix': 'abc',
+  \     'includeExternalModuleExports': 1,
   \   }
   \ ],
-  \ ale#lsp#tsserver_message#Completions(bufnr(''), 347, 12, 'abc')
+  \ ale#lsp#tsserver_message#Completions(bufnr(''), 347, 12, 'abc', 1)
 
 Execute(ale#lsp#tsserver_message#CompletionEntryDetails() should return correct messages):
   AssertEqual

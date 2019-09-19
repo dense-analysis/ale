@@ -1,6 +1,7 @@
 Before:
   Save &shell, g:ale_run_synchronously
   let g:ale_run_synchronously = 1
+  unlet! g:ale_run_synchronously_callbacks
 
   if !has('win32')
     set shell=/bin/sh
@@ -47,6 +48,7 @@ Before:
 
 After:
   Restore
+  unlet! g:ale_run_synchronously_callbacks
   unlet! g:first_echo_called
   unlet! g:second_echo_called
   unlet! g:final_callback_called
@@ -63,6 +65,7 @@ Given foobar (Some imaginary filetype):
 Execute(Check the results of running the chain):
   AssertEqual 'foobar', &filetype
   call ale#Queue(0)
+  call ale#test#FlushJobs()
 
   Assert g:first_echo_called, 'The first chain item was not called'
   Assert g:second_echo_called, 'The second chain item was not called'

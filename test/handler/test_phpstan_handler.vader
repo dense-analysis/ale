@@ -14,7 +14,7 @@ Execute(Output without errors should be parsed correctly):
 
   AssertEqual
   \ [],
-  \ ale_linters#php#phpstan#Handle(bufnr(''), [" 1/1 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%"])
+  \ ale_linters#php#phpstan#Handle(bufnr(''), [])
 
 Execute(Output with some errors should be parsed correctly):
   call ale#test#SetFilename('phpstan-test-files/foo/test.php')
@@ -24,21 +24,20 @@ Execute(Output with some errors should be parsed correctly):
   \   {
   \     'lnum': 9,
   \     'text': 'Call to method format() on an unknown class DateTimeImutable.',
-  \     'type': 'W'
+  \     'type': 'E'
   \   },
   \   {
   \     'lnum': 16,
   \     'text': 'Sample message.',
-  \     'type': 'W'
+  \     'type': 'E'
   \   },
   \   {
   \     'lnum': 192,
   \     'text': 'Invalid command testCommand.',
-  \     'type': 'W'
+  \     'type': 'E'
   \   }
   \ ],
   \ ale_linters#php#phpstan#Handle(bufnr(''), [
-  \   ' 1/1 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%',
   \   'phpstan-test-files/foo/test.php:9:Call to method format() on an unknown class DateTimeImutable.',
   \   'phpstan-test-files/foo/test.php:16:Sample message.',
   \   'phpstan-test-files/foo/test.php:192:Invalid command testCommand.',
@@ -52,11 +51,10 @@ Execute(Output should be parsed correctly with Windows paths):
   \   {
   \     'lnum': 9,
   \     'text': 'Access to an undefined property Test::$var.',
-  \     'type': 'W'
+  \     'type': 'E'
   \   }
   \ ],
   \ ale_linters#php#phpstan#Handle(bufnr(''), [
-  \   ' 1/1 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%',
   \   'D:\phpstan-test-files\foo\test.php:9:Access to an undefined property Test::$var.',
   \])
 
@@ -68,10 +66,9 @@ Execute(Output for .inc files should be parsed correctly):
   \   {
   \     'lnum': 9,
   \     'text': 'Access to an undefined property Test::$var.',
-  \     'type': 'W'
+  \     'type': 'E'
   \   }
   \ ],
   \ ale_linters#php#phpstan#Handle(bufnr(''), [
-  \   ' 1/1 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%',
   \   '/phpstan-test-files/foo/test.inc:9:Access to an undefined property Test::$var.',
   \])

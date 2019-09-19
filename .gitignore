@@ -1,6 +1,10 @@
 !.editorconfig
 *.obj
+# Ignore all hidden files everywhere.
+# Use `git add -f` to add hidden files.
 .*
+__pycache__
+*.pyc
 /doc/tags
 /init.vim
 /test/ale-info-test-file

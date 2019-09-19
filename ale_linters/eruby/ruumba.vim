@@ -8,7 +8,7 @@ call ale#Set('eruby_ruumba_options', '')
 function! ale_linters#eruby#ruumba#GetCommand(buffer) abort
     let l:executable = ale#Var(a:buffer, 'eruby_ruumba_executable')
 
-    return ale#handlers#ruby#EscapeExecutable(l:executable, 'ruumba')
+    return ale#ruby#EscapeExecutable(l:executable, 'ruumba')
     \   . ' --format json --force-exclusion '
     \   . ale#Var(a:buffer, 'eruby_ruumba_options')
     \   . ' --stdin ' . ale#Escape(expand('#' . a:buffer . ':p'))
@@ -56,7 +56,7 @@ endfunction
 
 call ale#linter#Define('eruby', {
 \   'name': 'ruumba',
-\   'executable_callback': ale#VarFunc('eruby_ruumba_executable'),
-\   'command_callback': 'ale_linters#eruby#ruumba#GetCommand',
+\   'executable': {b -> ale#Var(b, 'eruby_ruumba_executable')},
+\   'command': function('ale_linters#eruby#ruumba#GetCommand'),
 \   'callback': 'ale_linters#eruby#ruumba#Handle',
 \})

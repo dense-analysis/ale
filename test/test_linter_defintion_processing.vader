@@ -1,4 +1,10 @@
 Before:
+  Save g:ale_lsp_root
+  Save b:ale_lsp_root
+
+  let g:ale_lsp_root = {}
+  unlet! b:ale_lsp_root
+
   let g:linter = {}
 
 After:
@@ -48,7 +54,7 @@ Execute (PreProcess should throw when executable is not a string):
   \ 'executable': 123,
   \ 'command': 'echo',
   \})
-  AssertEqual '`executable` must be a string if defined', g:vader_exception
+  AssertEqual '`executable` must be a String or Function if defined', g:vader_exception
 
 Execute (PreProcess should throw when executable_callback is not a callback):
   AssertThrows call ale#linter#PreProcess('testft', {
@@ -58,6 +64,14 @@ Execute (PreProcess should throw when executable_callback is not a callback):
   \ 'command': 'echo',
   \})
   AssertEqual '`executable_callback` must be a callback if defined', g:vader_exception
+
+Execute (PreProcess should allow executable to be a callback):
+  call ale#linter#PreProcess('testft', {
+  \ 'name': 'foo',
+  \ 'callback': 'SomeFunction',
+  \ 'executable': function('type'),
+  \ 'command': 'echo',
+  \})
 
 Execute (PreProcess should throw when there is no command):
   AssertThrows call ale#linter#PreProcess('testft', {
@@ -74,7 +88,15 @@ Execute (PreProcess should throw when command is not a string):
   \ 'executable': 'echo',
   \ 'command': [],
   \})
-  AssertEqual '`command` must be a string if defined', g:vader_exception
+  AssertEqual '`command` must be a String or Function if defined', g:vader_exception
+
+Execute (PreProcess should allow command to be a callback):
+  call ale#linter#PreProcess('testft', {
+  \ 'name': 'foo',
+  \ 'callback': 'SomeFunction',
+  \ 'executable': 'echo',
+  \ 'command': function('type'),
+  \})
 
 Execute (PreProcess should throw when command_callback is not a callback):
   AssertThrows call ale#linter#PreProcess('testft', {
@@ -445,6 +467,18 @@ Execute(PreProcess should complain about using language and language_callback to
   AssertThrows call ale#linter#PreProcess('testft', g:linter)
   AssertEqual 'Only one of `language` or `language_callback` should be set', g:vader_exception
 
+Execute(PreProcess should complain about invalid language values):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address_callback': 'X',
+  \ 'language': 0,
+  \ 'project_root_callback': 'x',
+  \}
+
+  AssertThrows call ale#linter#PreProcess('testft', g:linter)
+  AssertEqual '`language` must be a String or Funcref', g:vader_exception
+
 Execute(PreProcess should use the filetype as the language string by default):
   let g:linter = {
   \ 'name': 'x',
@@ -455,6 +489,17 @@ Execute(PreProcess should use the filetype as the language string by default):
 
   AssertEqual 'testft', ale#linter#PreProcess('testft', g:linter).language_callback(0)
 
+Execute(PreProcess should allow language to be set to a callback):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address_callback': 'X',
+  \ 'language': {-> 'foo'},
+  \ 'project_root_callback': 'x',
+  \}
+
+  AssertEqual 'foo', ale#linter#PreProcess('testft', g:linter).language_callback(0)
+
 Execute(PreProcess should require an address_callback for LSP socket configurations):
   let g:linter = {
   \ 'name': 'x',
@@ -462,7 +507,7 @@ Execute(PreProcess should require an address_callback for LSP socket configurati
   \}
 
   AssertThrows call ale#linter#PreProcess('testft', g:linter)
-  AssertEqual '`address_callback` must be defined for getting the LSP address', g:vader_exception
+  AssertEqual '`address` or `address_callback` must be defined for getting the LSP address', g:vader_exception
 
 Execute(PreProcess should complain about address_callback for non-LSP linters):
   let g:linter = {
@@ -474,7 +519,112 @@ Execute(PreProcess should complain about address_callback for non-LSP linters):
   \}
 
   AssertThrows call ale#linter#PreProcess('testft', g:linter)
-  AssertEqual '`address_callback` cannot be used when lsp != ''socket''', g:vader_exception
+  AssertEqual '`address` or `address_callback` cannot be used when lsp != ''socket''', g:vader_exception
+
+Execute(PreProcess accept valid address_callback values):
+  let g:linter = ale#linter#PreProcess('testft', {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address_callback': {-> 'foo:123'},
+  \ 'language': 'x',
+  \ 'project_root_callback': 'x',
+  \})
+
+  AssertEqual 'foo:123', ale#linter#GetAddress(0, g:linter)
+
+Execute(PreProcess accept address as a String):
+  let g:linter = ale#linter#PreProcess('testft', {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address': 'foo:123',
+  \ 'language': 'x',
+  \ 'project_root_callback': 'x',
+  \})
+
+  AssertEqual 'foo:123', ale#linter#GetAddress(0, g:linter)
+
+Execute(PreProcess accept address as a Function):
+  let g:linter = ale#linter#PreProcess('testft', {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address': {-> 'foo:123'},
+  \ 'language': 'x',
+  \ 'project_root_callback': 'x',
+  \})
+
+  AssertEqual 'foo:123', ale#linter#GetAddress(0, g:linter)
+
+Execute(PreProcess should complain about invalid address values):
+  AssertThrows call ale#linter#PreProcess('testft', {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address': 0,
+  \ 'language': 'x',
+  \ 'project_root_callback': 'x',
+  \})
+  AssertEqual '`address` must be a String or Function if defined', g:vader_exception
+
+Execute(PreProcess should accept allow the project root be set as a String):
+  let g:linter = ale#linter#PreProcess('testft', {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address': 'foo:123',
+  \ 'language': 'x',
+  \ 'project_root': '/foo/bar',
+  \})
+
+  AssertEqual '/foo/bar', ale#lsp_linter#FindProjectRoot(0, g:linter)
+
+Execute(PreProcess should accept allow the project root be set as a Function):
+  let g:linter = ale#linter#PreProcess('testft', {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address': 'foo:123',
+  \ 'language': 'x',
+  \ 'project_root': {-> '/foo/bar'},
+  \})
+
+  AssertEqual '/foo/bar', ale#lsp_linter#FindProjectRoot(0, g:linter)
+
+Execute(PreProcess should complain when the project_root valid is invalid):
+  AssertThrows call ale#linter#PreProcess('testft', {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address': 'foo:123',
+  \ 'language': 'x',
+  \ 'project_root': 0,
+  \})
+  AssertEqual '`project_root` must be a String or Function if defined', g:vader_exception
+
+Execute(PreProcess should accept project_root_callback as a String):
+  call ale#linter#PreProcess('testft', {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address': 'foo:123',
+  \ 'language': 'x',
+  \ 'project_root_callback': 'Foobar',
+  \})
+
+Execute(PreProcess should accept project_root_callback as a Function):
+  let g:linter = ale#linter#PreProcess('testft', {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address': 'foo:123',
+  \ 'language': 'x',
+  \ 'project_root_callback': {-> '/foo/bar'},
+  \})
+
+  AssertEqual '/foo/bar', ale#lsp_linter#FindProjectRoot(0, g:linter)
+
+Execute(PreProcess should complain when the project_root_callback valid is invalid):
+  AssertThrows call ale#linter#PreProcess('testft', {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address': 'foo:123',
+  \ 'language': 'x',
+  \ 'project_root_callback': 0,
+  \})
+  AssertEqual '`project_root_callback` must be a callback if defined', g:vader_exception
 
 Execute(PreProcess should complain about using initialization_options and initialization_options_callback together):
   let g:linter = {
@@ -500,6 +650,41 @@ Execute(PreProcess should throw when initialization_options_callback is not a ca
   \ 'initialization_options_callback': {},
   \})
   AssertEqual '`initialization_options_callback` must be a callback if defined', g:vader_exception
+
+Execute(PreProcess should throw when initialization_options is not a Dictionary or callback):
+  AssertThrows call ale#linter#PreProcess('testft', {
+  \ 'name': 'foo',
+  \ 'lsp': 'socket',
+  \ 'address_callback': 'X',
+  \ 'language': 'x',
+  \ 'project_root_callback': 'x',
+  \ 'initialization_options': 0,
+  \})
+  AssertEqual '`initialization_options` must be a String or Function if defined', g:vader_exception
+
+Execute(PreProcess should accept initialization_options as a Dictionary):
+  let g:linter = ale#linter#PreProcess('testft', {
+  \ 'name': 'foo',
+  \ 'lsp': 'socket',
+  \ 'address_callback': 'X',
+  \ 'language': 'x',
+  \ 'project_root_callback': 'x',
+  \ 'initialization_options': {'foo': v:true},
+  \})
+
+  AssertEqual {'foo': v:true}, ale#lsp_linter#GetOptions(0, g:linter)
+
+Execute(PreProcess should accept initialization_options as a Funcref):
+  let g:linter = ale#linter#PreProcess('testft', {
+  \ 'name': 'foo',
+  \ 'lsp': 'socket',
+  \ 'address_callback': 'X',
+  \ 'language': 'x',
+  \ 'project_root_callback': 'x',
+  \ 'initialization_options': {-> {'foo': v:true}},
+  \})
+
+  AssertEqual {'foo': v:true}, ale#lsp_linter#GetOptions(0, g:linter)
 
 Execute(PreProcess should complain about using lsp_config and lsp_config_callback together):
   let g:linter = {
@@ -527,22 +712,30 @@ Execute(PreProcess should throw when lsp_config_callback is not a callback):
   AssertEqual '`lsp_config_callback` must be a callback if defined', g:vader_exception
 
 Execute(PreProcess should accept LSP configuration options via lsp_config):
-  let g:ale_lsp_configuration = {
-  \ 'foo': 'bar'
-  \}
-
   let g:linter = {
   \ 'name': 'x',
   \ 'lsp': 'socket',
   \ 'address_callback': 'X',
   \ 'language_callback': 'x',
   \ 'project_root_callback': 'x',
-  \ 'lsp_config': g:ale_lsp_configuration,
+  \ 'lsp_config': {'foo': 'bar'},
   \}
 
-  AssertEqual {'foo': 'bar'}, ale#linter#PreProcess('testft', g:linter).lsp_config
+  AssertEqual {'foo': 'bar'}, ale#lsp_linter#GetConfig(0, g:linter)
 
-Execute(PreProcess should throw when lsp_config is not a Dictionary):
+Execute(PreProcess should accept LSP configuration options via lsp_config as a function):
+  let g:linter = {
+  \ 'name': 'x',
+  \ 'lsp': 'socket',
+  \ 'address_callback': 'X',
+  \ 'language_callback': 'x',
+  \ 'project_root_callback': 'x',
+  \ 'lsp_config': {-> {'foo': 'bar'}},
+  \}
+
+  AssertEqual {'foo': 'bar'}, ale#lsp_linter#GetConfig(0, g:linter)
+
+Execute(PreProcess should throw when lsp_config is not a Dictionary or Function):
   AssertThrows call ale#linter#PreProcess('testft', {
   \ 'name': 'foo',
   \ 'lsp': 'socket',
@@ -551,4 +744,4 @@ Execute(PreProcess should throw when lsp_config is not a Dictionary):
   \ 'project_root_callback': 'x',
   \ 'lsp_config': 'x',
   \})
-  AssertEqual '`lsp_config` must be a Dictionary', g:vader_exception
+  AssertEqual '`lsp_config` must be a Dictionary or Function if defined', g:vader_exception

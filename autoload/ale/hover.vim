@@ -24,7 +24,21 @@ function! ale#hover#HandleTSServerResponse(conn_id, response) abort
 
         if get(a:response, 'success', v:false) is v:true
         \&& get(a:response, 'body', v:null) isnot v:null
-            if get(l:options, 'hover_from_balloonexpr', 0)
+            " If we pass the show_documentation flag, we should show the full
+            " documentation, and always in the preview window.
+            if get(l:options, 'show_documentation', 0)
+                let l:documentation = get(a:response.body, 'documentation', '')
+
+                " displayString is not included here, because it can be very
+                " noisy and run on for many lines for complex types. A less
+                " verbose alternative may be nice in future.
+                if !empty(l:documentation)
+                    call ale#preview#Show(split(l:documentation, "\n"), {
+                    \   'filetype': 'ale-preview.message',
+                    \   'stay_here': 1,
+                    \})
+                endif
+            elseif get(l:options, 'hover_from_balloonexpr', 0)
             \&& exists('*balloon_show')
             \&& ale#Var(l:options.buffer, 'set_balloons')
                 call balloon_show(a:response.body.displayString)
@@ -43,7 +57,7 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
         " If the call did __not__ come from balloonexpr...
         if !get(l:options, 'hover_from_balloonexpr', 0)
             let l:buffer = bufnr('')
-            let [l:line, l:column] = getcurpos()[1:2]
+            let [l:line, l:column] = getpos('.')[1:2]
             let l:end = len(getline(l:line))
 
             if l:buffer isnot l:options.buffer
@@ -64,8 +78,8 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
         let l:result = l:result.contents
 
         if type(l:result) is v:t_string
-             " The result can be just a string.
-             let l:result = [l:result]
+            " The result can be just a string.
+            let l:result = [l:result]
         endif
 
         if type(l:result) is v:t_dict
@@ -92,9 +106,14 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
     endif
 endfunction
 
-function! s:OnReady(linter, lsp_details, line, column, opt, ...) abort
-    let l:buffer = a:lsp_details.buffer
+function! s:OnReady(line, column, opt, linter, lsp_details) abort
     let l:id = a:lsp_details.connection_id
+
+    if !ale#lsp#HasCapability(l:id, 'hover')
+        return
+    endif
+
+    let l:buffer = a:lsp_details.buffer
 
     let l:Callback = a:linter.lsp is# 'tsserver'
     \   ? function('ale#hover#HandleTSServerResponse')
@@ -126,21 +145,8 @@ function! s:OnReady(linter, lsp_details, line, column, opt, ...) abort
     \   'line': a:line,
     \   'column': l:column,
     \   'hover_from_balloonexpr': get(a:opt, 'called_from_balloonexpr', 0),
+    \   'show_documentation': get(a:opt, 'show_documentation', 0),
     \}
-endfunction
-
-function! s:ShowDetails(linter, buffer, line, column, opt, ...) abort
-    let l:lsp_details = ale#lsp_linter#StartLSP(a:buffer, a:linter)
-
-    if empty(l:lsp_details)
-        return 0
-    endif
-
-    let l:id = l:lsp_details.connection_id
-
-    call ale#lsp#WaitForCapability(l:id, 'hover', function('s:OnReady', [
-    \   a:linter, l:lsp_details, a:line, a:column, a:opt
-    \]))
 endfunction
 
 " Obtain Hover information for the specified position
@@ -153,9 +159,31 @@ endfunction
 " - in the balloon if opt.called_from_balloonexpr and balloon_show is detected
 " - as status message otherwise
 function! ale#hover#Show(buffer, line, col, opt) abort
+    let l:show_documentation = get(a:opt, 'show_documentation', 0)
+    let l:Callback = function('s:OnReady', [a:line, a:col, a:opt])
+
     for l:linter in ale#linter#Get(getbufvar(a:buffer, '&filetype'))
+        " Only tsserver supports documentation requests at the moment.
         if !empty(l:linter.lsp)
-            call s:ShowDetails(l:linter, a:buffer, a:line, a:col, a:opt)
+        \&& (!l:show_documentation || l:linter.lsp is# 'tsserver')
+            call ale#lsp_linter#StartLSP(a:buffer, l:linter, l:Callback)
         endif
     endfor
+endfunction
+
+" This function implements the :ALEHover command.
+function! ale#hover#ShowAtCursor() abort
+    let l:buffer = bufnr('')
+    let l:pos = getpos('.')
+
+    call ale#hover#Show(l:buffer, l:pos[1], l:pos[2], {})
+endfunction
+
+" This function implements the :ALEDocumentation command.
+function! ale#hover#ShowDocumentationAtCursor() abort
+    let l:buffer = bufnr('')
+    let l:pos = getpos('.')
+    let l:options = {'show_documentation': 1}
+
+    call ale#hover#Show(l:buffer, l:pos[1], l:pos[2], l:options)
 endfunction

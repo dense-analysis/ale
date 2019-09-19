@@ -1,5 +1,9 @@
 Before:
+  runtime autoload/ale/lsp.vim
+
+  let g:message_list = []
   let b:conn = {
+  \ 'id': 1,
   \ 'is_tsserver': 0,
   \ 'data': '',
   \ 'root': '/foo/bar',
@@ -10,9 +14,10 @@ Before:
   \ 'config': {},
   \ 'callback_list': [],
   \ 'message_queue': [],
-  \ 'capabilities_queue': [],
+  \ 'init_queue': [],
   \ 'capabilities': {
   \   'hover': 0,
+  \   'rename': 0,
   \   'references': 0,
   \   'completion': 0,
   \   'completion_trigger_characters': [],
@@ -21,8 +26,17 @@ Before:
   \ },
   \}
 
+  function! ale#lsp#Send(conn_id, message) abort
+    call add(g:message_list, a:message)
+
+    return 42
+  endfunction
+
 After:
   unlet! b:conn
+  unlet! g:message_list
+
+  runtime autoload/ale/lsp.vim
 
 Execute(Messages with no method and capabilities should initialize projects):
   call ale#lsp#HandleInitResponse(b:conn, {
@@ -30,15 +44,18 @@ Execute(Messages with no method and capabilities should initialize projects):
   \})
 
   AssertEqual 1, b:conn.initialized
+  AssertEqual [[1, 'initialized', {}]], g:message_list
 
 Execute(Other messages should not initialize projects):
   call ale#lsp#HandleInitResponse(b:conn, {'method': 'lolwat'})
 
   AssertEqual 0, b:conn.initialized
+  AssertEqual [], g:message_list
 
   call ale#lsp#HandleInitResponse(b:conn, {'result': {'x': {}}})
 
   AssertEqual 0, b:conn.initialized
+  AssertEqual [], g:message_list
 
 Execute(Capabilities should bet set up correctly):
   call ale#lsp#HandleInitResponse(b:conn, {
@@ -84,8 +101,10 @@ Execute(Capabilities should bet set up correctly):
   \   'hover': 1,
   \   'definition': 1,
   \   'symbol_search': 1,
+  \   'rename': 1,
   \ },
   \ b:conn.capabilities
+  AssertEqual [[1, 'initialized', {}]], g:message_list
 
 Execute(Disabled capabilities should be recognised correctly):
   call ale#lsp#HandleInitResponse(b:conn, {
@@ -93,7 +112,7 @@ Execute(Disabled capabilities should be recognised correctly):
   \ 'id': 1,
   \ 'result': {
   \   'capabilities': {
-  \     'renameProvider': v:true,
+  \     'renameProvider': v:false,
   \     'executeCommandProvider': {
   \       'commands': [],
   \     },
@@ -126,8 +145,10 @@ Execute(Disabled capabilities should be recognised correctly):
   \   'hover': 0,
   \   'definition': 0,
   \   'symbol_search': 0,
+  \   'rename': 0,
   \ },
   \ b:conn.capabilities
+  AssertEqual [[1, 'initialized', {}]], g:message_list
 
 Execute(Results that are not dictionaries should be handled correctly):
   call ale#lsp#HandleInitResponse(b:conn, {
@@ -135,3 +156,4 @@ Execute(Results that are not dictionaries should be handled correctly):
   \ 'id': 1,
   \ 'result': v:null,
   \})
+  AssertEqual [], g:message_list

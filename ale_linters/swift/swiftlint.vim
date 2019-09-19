@@ -1,6 +1,24 @@
-" Author: David Mohundro <david@mohundro.com>
+" Author: David Mohundro <david@mohundro.com>, Gordon Fontenot <gordon@fonten.io>
 " Description: swiftlint for swift files
 
+call ale#Set('swift_swiftlint_executable', 'swiftlint')
+call ale#Set('swift_swiftlint_use_global', get(g:, 'ale_use_global_executables', 0))
+
+function! ale_linters#swift#swiftlint#GetExecutable(buffer) abort
+    return ale#node#FindExecutable(a:buffer, 'swift_swiftlint', [
+    \ 'Pods/SwiftLint/swiftlint',
+    \ 'ios/Pods/SwiftLint/swiftlint',
+    \ 'swiftlint',
+    \])
+endfunction
+
+function! ale_linters#swift#swiftlint#GetCommand(buffer) abort
+    let l:executable = ale_linters#swift#swiftlint#GetExecutable(a:buffer)
+    let l:args = 'lint --use-stdin'
+
+    return ale#Escape(l:executable)
+    \ . ' ' .l:args
+endfunction
 
 function! ale_linters#swift#swiftlint#Handle(buffer, lines) abort
     let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):(\d+)?:? ([^:]+): (.+)$'
@@ -45,7 +63,7 @@ endfunction
 
 call ale#linter#Define('swift', {
 \   'name': 'swiftlint',
-\   'executable': 'swiftlint',
-\   'command': 'swiftlint lint --use-stdin',
+\   'executable': function('ale_linters#swift#swiftlint#GetExecutable'),
+\   'command': function('ale_linters#swift#swiftlint#GetCommand'),
 \   'callback': 'ale_linters#swift#swiftlint#Handle',
 \})

@@ -1,5 +1,11 @@
 ===============================================================================
-ALE SASS Integration                                         *ale-sass-options*
+ALE Sass Integration                                         *ale-sass-options*
+
+
+===============================================================================
+sasslint                                                    *ale-sass-sasslint*
+
+See |ale-scss-sasslint| for information about the available options.
 
 
 ===============================================================================

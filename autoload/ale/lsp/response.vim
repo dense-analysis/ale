@@ -28,12 +28,12 @@ function! ale#lsp#response#ReadDiagnostics(response) abort
     for l:diagnostic in a:response.params.diagnostics
         let l:severity = get(l:diagnostic, 'severity', 0)
         let l:loclist_item = {
-        \   'text': l:diagnostic.message,
+        \   'text': substitute(l:diagnostic.message, '\(\r\n\|\n\|\r\)', ' ', 'g'),
         \   'type': 'E',
         \   'lnum': l:diagnostic.range.start.line + 1,
         \   'col': l:diagnostic.range.start.character + 1,
         \   'end_lnum': l:diagnostic.range.end.line + 1,
-        \   'end_col': l:diagnostic.range.end.character + 1,
+        \   'end_col': l:diagnostic.range.end.character,
         \}
 
         if l:severity == s:SEVERITY_WARNING
@@ -58,16 +58,20 @@ function! ale#lsp#response#ReadDiagnostics(response) abort
         if has_key(l:diagnostic, 'relatedInformation')
             let l:related = deepcopy(l:diagnostic.relatedInformation)
             call map(l:related, {key, val ->
-                \ ale#path#FromURI(val.location.uri) .
-                \ ':' . (val.location.range.start.line + 1) .
-                \ ':' . (val.location.range.start.character + 1) .
-                \ ":\n\t" . val.message
-                \ })
+            \   ale#path#FromURI(val.location.uri) .
+            \   ':' . (val.location.range.start.line + 1) .
+            \   ':' . (val.location.range.start.character + 1) .
+            \   ":\n\t" . val.message
+            \})
             let l:loclist_item.detail = l:diagnostic.message . "\n" . join(l:related, "\n")
         endif
 
         if has_key(l:diagnostic, 'source')
-           let l:loclist_item.detail = printf('[%s] %s', l:diagnostic.source, l:diagnostic.message)
+            let l:loclist_item.detail = printf(
+            \   '[%s] %s',
+            \   l:diagnostic.source,
+            \   l:diagnostic.message
+            \)
         endif
 
         call add(l:loclist, l:loclist_item)
@@ -86,7 +90,7 @@ function! ale#lsp#response#ReadTSServerDiagnostics(response) abort
         \   'lnum': l:diagnostic.start.line,
         \   'col': l:diagnostic.start.offset,
         \   'end_lnum': l:diagnostic.end.line,
-        \   'end_col': l:diagnostic.end.offset,
+        \   'end_col': l:diagnostic.end.offset - 1,
         \}
 
         if has_key(l:diagnostic, 'code')
