@@ -266,13 +266,13 @@ function! s:GetLookupFromCompileCommandsFile(compile_commands_file) abort
 endfunction
 
 function! ale#c#GetCompileCommand(json_item) abort
-    if has_key(a:json_item, "command")
+    if has_key(a:json_item, 'command')
         return a:json_item.command
-    elseif has_key(a:json_item, "arguments")
-        return join(a:json_item.arguments, " ")
+    elseif has_key(a:json_item, 'arguments')
+        return join(a:json_item.arguments, ' ')
     endif
 
-    return ""
+    return ''
 endfunction
 
 function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
