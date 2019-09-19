@@ -2371,6 +2371,7 @@ documented in additional help files.
   sml.....................................|ale-sml-options|
     smlnj.................................|ale-sml-smlnj|
   solidity................................|ale-solidity-options|
+    solc..................................|ale-solidity-solc|
     solhint...............................|ale-solidity-solhint|
     solium................................|ale-solidity-solium|
   spec....................................|ale-spec-options|
