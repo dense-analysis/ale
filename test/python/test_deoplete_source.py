@@ -48,6 +48,7 @@ class DeopleteSourceTest(unittest.TestCase):
                 'cpp': r'(\.|::|->)\w*$',
             },
             'is_bytepos': True,
+            'is_volatile': True,
             'mark': '[L]',
             'min_pattern_length': 1,
             'name': 'ale',
