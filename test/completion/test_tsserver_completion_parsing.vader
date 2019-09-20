@@ -122,13 +122,13 @@ Execute(Entries without details should be included in the responses):
   \ [
   \   {
   \     'word': 'abc',
-  \     'menu': '(property) Foo.abc: number',
+  \     'menu': 'import { def } from "./Foo"; (property) Foo.abc: number',
   \     'info': '',
   \     'kind': 'f',
   \     'icase': 1,
   \     'user_data': json_encode({
   \         'codeActions': [{
-  \             'description': 'abc action',
+  \             'description': 'import { def } from "./Foo";',
   \             'changes': [],
   \         }],
   \     }),
@@ -168,7 +168,7 @@ Execute(Entries without details should be included in the responses):
   \       {'text': 'number'},
   \     ],
   \     'codeActions': [{
-  \        'description': 'abc action',
+  \        'description': 'import { def } from "./Foo";',
   \        'changes': [],
   \     }],
   \   },

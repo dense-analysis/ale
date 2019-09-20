@@ -314,6 +314,10 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
     for l:suggestion in a:response.body
         let l:displayParts = []
 
+        for l:action in get(l:suggestion, 'codeActions', [])
+            call add(l:displayParts, l:action.description . ' ')
+        endfor
+
         for l:part in l:suggestion.displayParts
             call add(l:displayParts, l:part.text)
         endfor
