@@ -331,6 +331,8 @@ formatting.
   * [ocamlformat](https://github.com/ocaml-ppx/ocamlformat)
   * [ocp-indent](https://github.com/OCamlPro/ocp-indent)
   * [ols](https://github.com/freebroccolo/ocaml-language-server)
+* OpenApi
+  * [ibm-validator](https://github.com/IBM/openapi-validator)
 * Pawn
   * [uncrustify](https://github.com/uncrustify/uncrustify)
 * Perl

@@ -322,6 +322,8 @@ Notes:
   * `ocamlformat`
   * `ocp-indent`
   * `ols`
+* OpenApi
+  * `ibm-validator`
 * Pawn
   * `uncrustify`
 * Perl
