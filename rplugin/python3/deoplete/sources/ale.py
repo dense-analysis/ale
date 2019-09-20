@@ -24,6 +24,7 @@ class Source(Base):
         self.rank = 1000
         self.is_bytepos = True
         self.min_pattern_length = 1
+        self.is_volatile = True
         # Do not forget to update s:trigger_character_map in completion.vim in
         # updating entries in this map.
         self.input_patterns = {
