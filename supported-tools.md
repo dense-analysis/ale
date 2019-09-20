@@ -327,6 +327,7 @@ formatting.
   * [phpmd](https://phpmd.org)
   * [phpstan](https://github.com/phpstan/phpstan)
   * [psalm](https://getpsalm.org) :floppy_disk:
+  * [tlint](https://github.com/tightenco/tlint)
 * PO
   * [alex](https://github.com/wooorm/alex) :floppy_disk:
   * [msgfmt](https://www.gnu.org/software/gettext/manual/html_node/msgfmt-Invocation.html)

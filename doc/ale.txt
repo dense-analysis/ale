@@ -2282,6 +2282,7 @@ documented in additional help files.
     psalm.................................|ale-php-psalm|
     php-cs-fixer..........................|ale-php-php-cs-fixer|
     php...................................|ale-php-php|
+    tlint.................................|ale-php-tlint|
   po......................................|ale-po-options|
     write-good............................|ale-po-write-good|
   pod.....................................|ale-pod-options|
