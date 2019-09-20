@@ -9,7 +9,8 @@ CONTENTS                                                         *ale-contents*
   1. Introduction.........................|ale-introduction|
   2. Supported Languages & Tools..........|ale-support|
   3. Linting..............................|ale-lint|
-    3.1 Other Sources.....................|ale-lint-other-sources|
+    3.1 Adding Language Servers...........|ale-lint-language-servers|
+    3.2 Other Sources.....................|ale-lint-other-sources|
   4. Fixing Problems......................|ale-fix|
   5. Language Server Protocol Support.....|ale-lsp|
     5.1 Completion........................|ale-completion|
@@ -147,7 +148,48 @@ ALE offers several options for controlling which linters are run.
 
 
 -------------------------------------------------------------------------------
-3.1 Other Sources                                      *ale-lint-other-sources*
+3.1 Adding Language Servers                         *ale-lint-language-servers*
+
+ALE comes with many default configurations for language servers, so they can
+be detected and run automatically. ALE can connect to other language servers
+by defining a new linter for a filetype. New linters can be defined in |vimrc|,
+in plugin files, or `ale_linters` directories in |runtimepath|.
+
+See |ale-linter-loading-behavior| for more information on loading linters.
+
+A minimal configuration for a language server linter might look so. >
+
+  call ale#linter#Define('filetype_here', {
+  \   'name': 'any_name_you_want',
+  \   'lsp': 'stdio',
+  \   'executable': '/path/to/executable',
+  \   'command': '%e run',
+  \   'project_root': '/path/to/root_of_project',
+  \})
+<
+For language servers that use a TCP socket connection, you should define the
+address to connect to instead. >
+
+  call ale#linter#Define('filetype_here', {
+  \   'name': 'any_name_you_want',
+  \   'lsp': 'stdio',
+  \   'address': 'servername:1234',
+  \   'project_root': '/path/to/root_of_project',
+  \})
+<
+  Most of the options for a language server can be replaced with a |Funcref|
+  for a function accepting a buffer number for dynamically computing values
+  such as the executable path, the project path, the server address, etc,
+  most of which can also be determined based on executing some other
+  asynchronous task. See |ale#command#Run()| for computing linter options
+  based on asynchronous results.
+
+  See |ale#linter#Define()| for a detailed explanation of all of the options
+  for configuring linters.
+
+
+-------------------------------------------------------------------------------
+3.2 Other Sources                                      *ale-lint-other-sources*
 
 Problems for a buffer can be taken from other sources and rendered by ALE.
 This allows ALE to be used in combination with other plugins which also want
@@ -601,7 +643,7 @@ b:ale_completion_enabled                             *b:ale_completion_enabled*
   See |ale-completion|
 
 
-g:ale_completion_tsserver_autoimport      *g:ale_completion_tsserver_autoimport*
+g:ale_completion_tsserver_autoimport     *g:ale_completion_tsserver_autoimport*
 
   Type: Number
   Default: `0`
@@ -1334,7 +1376,7 @@ g:ale_pattern_options_enabled                   *g:ale_pattern_options_enabled*
   will not set buffer variables per |g:ale_pattern_options|.
 
 
-g:ale_rename_tsserver_find_in_comments  *g:ale_rename_tsserver_find_in_comments*
+g:ale_rename_tsserver_find_in_comments *g:ale_rename_tsserver_find_in_comments*
 
   Type: |Number|
   Default: `0`
@@ -1593,7 +1635,7 @@ g:ale_sign_warning                                         *g:ale_sign_warning*
   The sign for warnings in the sign gutter.
 
 
-g:ale_sign_highlight_linenrs                       *g:ale_sign_highlight_linenrs*
+g:ale_sign_highlight_linenrs                     *g:ale_sign_highlight_linenrs*
 
   Type: |Number|
   Default: `0`
