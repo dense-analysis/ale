@@ -2238,6 +2238,8 @@ documented in additional help files.
     write-good............................|ale-html-write-good|
   idris...................................|ale-idris-options|
     idris.................................|ale-idris-idris|
+  ink.....................................|ale-ink-options|
+    ink-language-server...................|ale-ink-language-server|
   ispc....................................|ale-ispc-options|
     ispc..................................|ale-ispc-ispc|
   java....................................|ale-java-options|
