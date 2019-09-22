@@ -287,7 +287,6 @@ function! s:CompletionStillValid(request_id) abort
     \&& b:ale_completion_info.line == l:line
     \&& (
     \   b:ale_completion_info.column == l:column
-    \   || b:ale_completion_info.source is# 'deoplete'
     \   || b:ale_completion_info.source is# 'ale-omnifunc'
     \   || b:ale_completion_info.source is# 'ale-callback'
     \)
@@ -720,7 +719,7 @@ function! ale#completion#HandleUserData(completed_item) abort
 
     if l:source isnot# 'ale-automatic'
     \&& l:source isnot# 'ale-manual'
-    \&& l:source isnot# 'deoplete'
+    \&& l:source isnot# 'ale-callback'
         return
     endif
 

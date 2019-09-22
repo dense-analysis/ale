@@ -45,21 +45,16 @@ class Source(Base):
         if not self.vim.call('ale#completion#CanProvideCompletions'):
             return None
 
-        if context.get('is_refresh'):
-            context['is_async'] = False
+        event = context.get('event')
 
-        if context['is_async']:
-            # Result is the same as for omnifunc, or None.
+        if event == 'Async':
             result = self.vim.call('ale#completion#GetCompletionResult')
+            return result or []
 
-            if result is not None:
-                context['is_async'] = False
-
-                return result
-        else:
-            context['is_async'] = True
-
-            # Request some completion results.
-            self.vim.call('ale#completion#GetCompletions', 'deoplete')
+        if context.get('is_refresh'):
+            self.vim.command(
+                "call ale#completion#GetCompletions('ale-callback', " + \
+                "{'callback': {completions -> deoplete#auto_complete() }})"
+            )
 
         return []
