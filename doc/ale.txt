@@ -2004,13 +2004,16 @@ g:ale_languagetool_executable                   *g:ale_languagetool_executable*
 
   The executable to run for languagetool.
 
-g:ale_languagetool_commandline_jar              g:ale_languagetool_commandline_jar
-                                                b:ale_languagetool_commandline_jar
+g:ale_languagetool_commandline_jar         *g:ale_languagetool_commandline_jar*
+                                           *b:ale_languagetool_commandline_jar*
 
   Type: |String|
   Default: `'languagetool-commandline.jar'`
 
   The commandline jar for languagetool.
+
+  NOTE: If both this option and ale_languagetool_executable are specified,this
+  option would take precedence over ale_languagetool_executable.
 
 g:ale_languagetool_options                         *g:ale_languagetool_options*
                                                    *b:ale_languagetool_options*

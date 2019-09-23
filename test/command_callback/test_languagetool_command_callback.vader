@@ -15,10 +15,11 @@ Execute(Should be able to set a custom executable):
   \ . ' --autoDetect %s'
 
 Execute(Should be able to use jar):
-  let g:languagetool_commandline_jar ='languagetool-commandline.jar')
+  let b:ale_languagetool_commandline_jar = 'languagetool-commandline.jar'
 
-  AssertLinter 'languagetool' , 'jave -jar languagetool-commandline.jar'
+  AssertLinter 'java' , ale#Escape('java').' -jar '.ale#Escape('languagetool-commandline.jar')
   \ . ' --autoDetect %s'
+  unlet! b:ale_languagetool_commandline_jar
 
 Execute(Should be able to include custom languagetool options):
   let g:ale_languagetool_options = '--language en'
