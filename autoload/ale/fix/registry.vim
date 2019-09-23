@@ -345,6 +345,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['ada'],
 \       'description': 'Format Ada files with gnatpp.',
 \   },
+\   'html-beautify': {
+\       'function': 'ale#fixers#html_beautify#Fix',
+\       'suggested_filetypes': ['html', 'htmldjango'],
+\       'description': 'Fix HTML files with html-beautify.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
