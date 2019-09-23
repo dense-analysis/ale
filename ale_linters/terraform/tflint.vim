@@ -12,8 +12,8 @@ function! ale_linters#terraform#tflint#Handle(buffer, lines) abort
     let l:pattern = '\v^(.*):(\d+),(\d+)-(\d+)?,?(\d+): (.{-1,}); (.+)$'
     let l:json = ale#util#FuzzyJSONDecode(a:lines, {})
 
-    if type(l:json) == type([])
-        for l:error in ale#util#FuzzyJSONDecode(a:lines, [])
+    if type(l:json) is v:t_list
+        for l:error in l:json
             if l:error.type is# 'ERROR'
                 let l:type = 'E'
             elseif l:error.type is# 'NOTICE'
