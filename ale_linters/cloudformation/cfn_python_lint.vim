@@ -1,6 +1,13 @@
 " Author: Yasuhiro Kiyota <yasuhiroki.duck@gmail.com>
 " Description: Support cfn-python-lint for AWS Cloudformation template file
 
+call ale#Set('cloudformation_cfnlint_options', '')
+
+function! ale_linters#cloudformation#cfn_python_lint#GetCommand(buffer) abort
+    return 'cfn-lint --template %t --format parseable '
+    \ . ale#Var(a:buffer, 'cloudformation_cfnlint_options')
+endfunction
+
 function! ale_linters#cloudformation#cfn_python_lint#Handle(buffer, lines) abort
     " Matches patterns line the following:
     "
@@ -30,6 +37,6 @@ endfunction
 call ale#linter#Define('cloudformation', {
 \   'name': 'cloudformation',
 \   'executable': 'cfn-lint',
-\   'command': 'cfn-lint --template %t --format parseable',
+\   'command': function('ale_linters#cloudformation#cfn_python_lint#GetCommand'),
 \   'callback': 'ale_linters#cloudformation#cfn_python_lint#Handle',
 \})
