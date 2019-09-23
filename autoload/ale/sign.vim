@@ -14,6 +14,7 @@ let g:ale_sign_style_error = get(g:, 'ale_sign_style_error', g:ale_sign_error)
 let g:ale_sign_warning = get(g:, 'ale_sign_warning', '--')
 let g:ale_sign_style_warning = get(g:, 'ale_sign_style_warning', g:ale_sign_warning)
 let g:ale_sign_info = get(g:, 'ale_sign_info', g:ale_sign_warning)
+let g:ale_sign_priority = get(g:, 'ale_sign_priority', 30)
 " This variable sets an offset which can be set for sign IDs.
 " This ID can be changed depending on what IDs are set for other plugins.
 " The dummy sign will use the ID exactly equal to the offset.
@@ -149,7 +150,7 @@ endfunction
 
 function! s:GroupCmd() abort
   if has('nvim-0.4.0') || v:version >= 801
-    return ' group=ale '
+    return ' group=ale priority=' . g:ale_sign_priority . ' '
   else
     return ' '
   endif
