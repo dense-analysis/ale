@@ -12,6 +12,8 @@ function! ale_linters#terraform#tflint#Handle(buffer, lines) abort
     let l:pattern = '\v^(.*):(\d+),(\d+)-(\d+)?,?(\d+): (.{-1,}); (.+)$'
     let l:json = ale#util#FuzzyJSONDecode(a:lines, {})
 
+    " This is a rough test for tflint's output format
+    " On versions prior to 0.11 it outputs all errors as a single level list
     if type(l:json) is v:t_list
         for l:error in l:json
             if l:error.type is# 'ERROR'
