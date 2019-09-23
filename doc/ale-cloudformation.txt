@@ -4,10 +4,25 @@ ALE CloudFormation Integration                      *ale-cloudformation-options*
 
 ===============================================================================
 cfn-python-lint                             *ale-cloudformation-cfn-python-lint*
+                                                    *ale-cloudformation-cfnlint*
 
 cfn-python-lint is a linter for AWS CloudFormation template file.
 
 https://github.com/awslabs/cfn-python-lint
+
+g:ale_cloudformation_cfnlint_options      *g:ale_cloudformation_cfnlint_options*
+                                          *b:ale_cloudformation_cfnlint_options*
+
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to add command-line arguments to the cfn-lint
+  invocation.
+
+  For example, to ignore the specific W2001 check you can do the following >
+
+  let g:ale_cloudformation_cfnlint_options = '--ignore-checks W2001'
+<
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
