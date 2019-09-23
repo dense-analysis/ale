@@ -153,6 +153,7 @@ formatting.
   * [SyntaxErl](https://github.com/ten0s/syntaxerl)
 * Fish
   * fish [-n flag](https://linux.die.net/man/1/fish)
+  * [fish_indent](https://linux.die.net/man/1/fish_indent)
 * Fortran
   * [gcc](https://gcc.gnu.org/)
   * [language_server](https://github.com/hansec/fortran-language-server)

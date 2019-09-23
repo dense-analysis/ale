@@ -183,7 +183,7 @@ let s:default_registry = {
 \   'fish_indent': {
 \       'function': 'ale#fixers#fish_indent#Fix',
 \       'suggested_filetypes': ['fish'],
-\       'description': 'Fix fish shell scripts with fish_indent.',
+\       'description': 'Format fish scripts using fish_indent.',
 \   },
 \   'gofmt': {
 \       'function': 'ale#fixers#gofmt#Fix',

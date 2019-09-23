@@ -2594,6 +2594,7 @@ documented in additional help files.
   eruby...................................|ale-eruby-options|
     ruumba................................|ale-eruby-ruumba|
   fish....................................|ale-fish-options|
+    fish_indent...........................|ale-fish-fishindent|
   fortran.................................|ale-fortran-options|
     gcc...................................|ale-fortran-gcc|
     language_server.......................|ale-fortran-language-server|
