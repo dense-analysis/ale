@@ -2,7 +2,7 @@
 " Description: languagetool for markdown files
 "
 call ale#Set('languagetool_executable', 'languagetool')
-call ale#Set('languagetool_commandline_jar', 'languagetool-commandline.jar')
+call ale#Set('languagetool_commandline_jar', '')
 call ale#Set('languagetool_options', '--autoDetect')
 
 function! ale#handlers#languagetool#GetExecutable(buffer) abort

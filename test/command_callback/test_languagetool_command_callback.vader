@@ -14,6 +14,12 @@ Execute(Should be able to set a custom executable):
   AssertLinter 'foobar' , ale#Escape('foobar')
   \ . ' --autoDetect %s'
 
+Execute(Should be able to use jar):
+  let g:languagetool_commandline_jar ='languagetool-commandline.jar')
+
+  AssertLinter 'languagetool' , 'jave -jar languagetool-commandline.jar'
+  \ . ' --autoDetect %s'
+
 Execute(Should be able to include custom languagetool options):
   let g:ale_languagetool_options = '--language en'
 
