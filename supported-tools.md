@@ -203,6 +203,7 @@ formatting.
 * HTML
   * [alex](https://github.com/wooorm/alex) :floppy_disk:
   * [fecs](http://fecs.baidu.com/)
+  * [html-beautify](https://beautifier.io/)
   * [HTMLHint](http://htmlhint.com/)
   * [prettier](https://github.com/prettier/prettier)
   * [proselint](http://proselint.com/)
