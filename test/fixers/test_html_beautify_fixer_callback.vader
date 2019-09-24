@@ -1,0 +1,31 @@
+Before:
+  Save g:ale_html_beautify_executable
+  Save g:ale_html_beautify_options
+
+  let g:ale_html_beautify_options = ''
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+  silent cd ..
+  silent cd command_callback
+  let g:dir = getcwd()
+
+After:
+  Restore
+
+  unlet! b:bin_dir
+
+  call ale#test#RestoreDirectory()
+
+Execute(The html-beautify callback should return 0 if html-beautify not found):
+  let g:ale_html_beautify_executable = 'xxxinvalidpath'
+  AssertEqual
+  \ 0,
+  \ ale#fixers#html_beautify#Fix(bufnr(''))
+
+Execute(The html-beautify callback should return the correct default command):
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('html_beautify_paths/html-beautify')
+  \     . ' -'
+  \ },
+  \ ale#fixers#html_beautify#Fix(bufnr(''))
