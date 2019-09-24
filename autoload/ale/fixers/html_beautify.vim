@@ -16,8 +16,6 @@ function! ale#fixers#html_beautify#Fix(buffer) abort
     let l:options = ale#Var(a:buffer, 'html_beautify_options')
 
     return {
-    \   'command': ale#Escape(l:executable)
-    \       . (!empty(l:options) ? ' ' . l:options : '')
-    \       . ' -',
+    \   'command': ale#Escape(l:executable). ' ' . l:options . ' -',
     \}
 endfunction
