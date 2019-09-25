@@ -82,7 +82,7 @@ Before:
   \ 'read_buffer': 0,
   \})
 
-  sign unplace *
+  call ale#sign#Clear()
 
 After:
   Restore
@@ -105,7 +105,7 @@ After:
   delfunction ParseAuGroups
 
   call setloclist(0, [])
-  sign unplace *
+  call ale#sign#Clear()
   call clearmatches()
 
 Given foobar (Some imaginary filetype):

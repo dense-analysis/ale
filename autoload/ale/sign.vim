@@ -14,6 +14,7 @@ let g:ale_sign_style_error = get(g:, 'ale_sign_style_error', g:ale_sign_error)
 let g:ale_sign_warning = get(g:, 'ale_sign_warning', '--')
 let g:ale_sign_style_warning = get(g:, 'ale_sign_style_warning', g:ale_sign_warning)
 let g:ale_sign_info = get(g:, 'ale_sign_info', g:ale_sign_warning)
+let g:ale_sign_priority = get(g:, 'ale_sign_priority', 30)
 " This variable sets an offset which can be set for sign IDs.
 " This ID can be changed depending on what IDs are set for other plugins.
 " The dummy sign will use the ID exactly equal to the offset.
@@ -147,24 +148,57 @@ function! ale#sign#GetSignName(sublist) abort
     return 'ALEErrorSign'
 endfunction
 
+function! s:PriorityCmd() abort
+    if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
+        return ' priority=' . g:ale_sign_priority . ' '
+    else
+        return ''
+    endif
+endfunction
+
+function! s:GroupCmd() abort
+    if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
+        return ' group=ale '
+    else
+        return ' '
+    endif
+endfunction
+
 " Read sign data for a buffer to a list of lines.
 function! ale#sign#ReadSigns(buffer) abort
     redir => l:output
-        silent execute 'sign place buffer=' . a:buffer
+        silent execute 'sign place ' . s:GroupCmd() . s:PriorityCmd()
+        \ . ' buffer=' . a:buffer
     redir end
 
     return split(l:output, "\n")
 endfunction
 
+function! ale#sign#ParsePattern() abort
+    if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
+        " Matches output like :
+        " line=4  id=1  group=ale  name=ALEErrorSign
+        " строка=1  id=1000001  group=ale  имя=ALEErrorSign
+        " 行=1  識別子=1000001  group=ale  名前=ALEWarningSign
+        " línea=12 id=1000001 group=ale  nombre=ALEWarningSign
+        " riga=1 id=1000001  group=ale   nome=ALEWarningSign
+        let l:pattern = '\v^.*\=(\d+).*\=(\d+).*group\=ale.*\=(ALE[a-zA-Z]+Sign)'
+    else
+        " Matches output like :
+        " line=4  id=1  name=ALEErrorSign
+        " строка=1  id=1000001  имя=ALEErrorSign
+        " 行=1  識別子=1000001  名前=ALEWarningSign
+        " línea=12 id=1000001 nombre=ALEWarningSign
+        " riga=1 id=1000001  nome=ALEWarningSign
+        let l:pattern = '\v^.*\=(\d+).*\=(\d+).*\=(ALE[a-zA-Z]+Sign)'
+    endif
+
+    return l:pattern
+endfunction
+
 " Given a list of lines for sign output, return a List of [line, id, group]
 function! ale#sign#ParseSigns(line_list) abort
-    " Matches output like :
-    " line=4  id=1  name=ALEErrorSign
-    " строка=1  id=1000001  имя=ALEErrorSign
-    " 行=1  識別子=1000001  名前=ALEWarningSign
-    " línea=12 id=1000001 nombre=ALEWarningSign
-    " riga=1 id=1000001, nome=ALEWarningSign
-    let l:pattern = '\v^.*\=(\d+).*\=(\d+).*\=(ALE[a-zA-Z]+Sign)'
+    let l:pattern =ale#sign#ParsePattern()
     let l:result = []
     let l:is_dummy_sign_set = 0
 
@@ -319,8 +353,10 @@ function! ale#sign#GetSignCommands(buffer, was_sign_set, sign_map) abort
     if !l:is_dummy_sign_set && (!empty(a:sign_map) || g:ale_sign_column_always)
         call add(l:command_list, 'sign place '
         \   .  g:ale_sign_offset
-        \   . ' line=1 name=ALEDummySign buffer='
-        \   . a:buffer
+        \   . s:GroupCmd()
+        \   . s:PriorityCmd()
+        \   . ' line=1 name=ALEDummySign '
+        \   . ' buffer=' . a:buffer
         \)
         let l:is_dummy_sign_set = 1
     endif
@@ -337,6 +373,8 @@ function! ale#sign#GetSignCommands(buffer, was_sign_set, sign_map) abort
             if index(l:info.current_id_list, l:info.new_id) < 0
                 call add(l:command_list, 'sign place '
                 \   . (l:info.new_id)
+                \   . s:GroupCmd()
+                \   . s:PriorityCmd()
                 \   . ' line=' . l:line_str
                 \   . ' name=' . (l:info.new_name)
                 \   . ' buffer=' . a:buffer
@@ -351,6 +389,7 @@ function! ale#sign#GetSignCommands(buffer, was_sign_set, sign_map) abort
             if l:current_id isnot l:info.new_id
                 call add(l:command_list, 'sign unplace '
                 \   . l:current_id
+                \   . s:GroupCmd()
                 \   . ' buffer=' . a:buffer
                 \)
             endif
@@ -361,6 +400,7 @@ function! ale#sign#GetSignCommands(buffer, was_sign_set, sign_map) abort
     if l:is_dummy_sign_set && !g:ale_sign_column_always
         call add(l:command_list, 'sign unplace '
         \   . g:ale_sign_offset
+        \   . s:GroupCmd()
         \   . ' buffer=' . a:buffer
         \)
     endif
@@ -413,5 +453,14 @@ function! ale#sign#SetSigns(buffer, loclist) abort
     if g:ale_change_sign_column_color && empty(a:loclist)
         highlight clear SignColumn
         highlight link SignColumn ALESignColumnWithoutErrors
+    endif
+endfunction
+
+" Remove all signs.
+function! ale#sign#Clear() abort
+    if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
+        sign unplace group=ale *
+    else
+        sign unplace *
     endif
 endfunction

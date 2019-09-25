@@ -30,7 +30,7 @@ After:
   delfunction SetHighlight
   unlet! g:sign_highlight
 
-  sign unplace *
+  call ale#sign#Clear()
 
 Execute(The SignColumn highlight shouldn't be changed if the option is off):
   let g:ale_change_sign_column_color = 0
