@@ -734,7 +734,7 @@ g:ale_echo_msg_info_str                               *g:ale_echo_msg_info_str*
   The string used for `%severity%` for info. See |g:ale_echo_msg_format|
 
 
-g:ale_echo_msg_log_str                               *g:ale_echo_msg_log_str*
+g:ale_echo_msg_log_str                                 *g:ale_echo_msg_log_str*
 
   Type: |String|
   Default: `'Log'`
