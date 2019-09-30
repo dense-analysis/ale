@@ -12,7 +12,6 @@ let g:ale_disable_lsp = get(g:, 'ale_disable_lsp', 0)
 
 " LSP window/showMessage format
 let g:ale_lsp_show_message_format = get(g:, 'ale_lsp_show_message_format', '%severity%:%linter%: %s')
-" FIXME(suoto): Can use severity to display only errors by default.
 " Valid values mimic LSP definitions (error, warning and information; log is
 " never shown)
 let g:ale_lsp_show_message_severity = get(g:, 'ale_lsp_show_message_severity', 'error')

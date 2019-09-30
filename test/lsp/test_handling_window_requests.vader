@@ -17,56 +17,54 @@ After:
   let g:ale_lsp_show_message_severity = g:default_severity
   unlet! g:default_severity
 
-Execute(ale#lsp#window#HandleShowMessage() should only show errors when configured severity is error):
+Execute(ale#lsp_window#HandleShowMessage() should only show errors when configured severity is error):
   let g:ale_lsp_show_message_severity = 'error'
-  call ale#lsp#window#HandleShowMessage(g:linter_name, g:format, {'type':1,'message':'an error'})
-  call ale#lsp#window#HandleShowMessage(g:linter_name, g:format, {'type':2,'message':'a warning'})
-  call ale#lsp#window#HandleShowMessage(g:linter_name, g:format, {'type':3,'message':'an info'})
-  call ale#lsp#window#HandleShowMessage(g:linter_name, g:format, {'type':4,'message':'a log'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':1,'message':'an error'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':2,'message':'a warning'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':3,'message':'an info'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':4,'message':'a log'})
   AssertEqual ['Error:some_linter: an error'], g:expr_list
 
-Execute(ale#lsp#window#HandleShowMessage() should only show errors and warnings when configured severity is warning):
+Execute(ale#lsp_window#HandleShowMessage() should only show errors and warnings when configured severity is warning):
   let g:ale_lsp_show_message_severity = 'warning'
-  call ale#lsp#window#HandleShowMessage(g:linter_name, g:format, {'type':1,'message':'an error'})
-  call ale#lsp#window#HandleShowMessage(g:linter_name, g:format, {'type':2,'message':'a warning'})
-  call ale#lsp#window#HandleShowMessage(g:linter_name, g:format, {'type':3,'message':'an info'})
-  call ale#lsp#window#HandleShowMessage(g:linter_name, g:format, {'type':4,'message':'a log'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':1,'message':'an error'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':2,'message':'a warning'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':3,'message':'an info'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':4,'message':'a log'})
   AssertEqual ['Error:some_linter: an error', 'Warning:some_linter: a warning'], g:expr_list
 
-Execute(ale#lsp#window#HandleShowMessage() should only show errors, warnings and infos when configured severity is information):
+Execute(ale#lsp_window#HandleShowMessage() should only show errors, warnings and infos when configured severity is information):
   let g:ale_lsp_show_message_severity = 'information'
-  call ale#lsp#window#HandleShowMessage(g:linter_name, g:format, {'type':1,'message':'an error'})
-  call ale#lsp#window#HandleShowMessage(g:linter_name, g:format, {'type':2,'message':'a warning'})
-  call ale#lsp#window#HandleShowMessage(g:linter_name, g:format, {'type':3,'message':'an info'})
-  call ale#lsp#window#HandleShowMessage(g:linter_name, g:format, {'type':4,'message':'a log'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':1,'message':'an error'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':2,'message':'a warning'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':3,'message':'an info'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':4,'message':'a log'})
   AssertEqual [
   \ 'Error:some_linter: an error',
   \ 'Warning:some_linter: a warning',
   \ 'Info:some_linter: an info'],
   \ g:expr_list
 
-Execute(ale#lsp#window#HandleShowMessage() should not show severity log regardless of the config):
+Execute(ale#lsp_window#HandleShowMessage() should not show severity log regardless of the config):
   let g:ale_lsp_show_message_severity = 'log'
-  call ale#lsp#window#HandleShowMessage(g:linter_name, g:format, {'type':1,'message':'an error'})
-  call ale#lsp#window#HandleShowMessage(g:linter_name, g:format, {'type':2,'message':'a warning'})
-  call ale#lsp#window#HandleShowMessage(g:linter_name, g:format, {'type':3,'message':'an info'})
-  call ale#lsp#window#HandleShowMessage(g:linter_name, g:format, {'type':4,'message':'a log'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':1,'message':'an error'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':2,'message':'a warning'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':3,'message':'an info'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':4,'message':'a log'})
   AssertEqual [
   \ 'Error:some_linter: an error',
   \ 'Warning:some_linter: a warning',
   \ 'Info:some_linter: an info'],
   \ g:expr_list
 
-Execute(ale#lsp#window#HandleShowMessage() should escape quotes on messages):
-  call ale#lsp#window#HandleShowMessage(g:linter_name, g:format, {'type':3,'message':"this is an 'info'"})
+Execute(ale#lsp_window#HandleShowMessage() should not show anything if severity is configured as disabled):
+  let g:ale_lsp_show_message_severity = 'disabled'
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':1,'message':'an error'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':2,'message':'a warning'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':3,'message':'an info'})
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':4,'message':'a log'})
+  AssertEqual [], g:expr_list
+
+Execute(ale#lsp_window#HandleShowMessage() should escape quotes on messages):
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':3,'message':"this is an 'info'"})
   AssertEqual ['Info:some_linter: this is an ''info'''], g:expr_list
-
-Execute(ale#lsp#window#formatString should format strings properly):
-  " Replacement at the beginning
-  AssertEqual 'one two three', ale#lsp#window#formatString('%foo% two three', {'%foo%': 'one'})
-
-  " Replacement at the end
-  AssertEqual 'one two three', ale#lsp#window#formatString('one two %arg', {'%arg': 'three'})
-
-  " Replacement in the middle
-  AssertEqual 'one 2 three', ale#lsp#window#formatString('one two three', {'two': '2'})
