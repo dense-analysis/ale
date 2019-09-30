@@ -43,15 +43,18 @@ function! ale#lsp_window#HandleShowMessage(linter_name, format, params) abort
     " Severity will depend on the message type
     if l:type is# s:LSP_MESSAGE_TYPE_ERROR
         let l:severity = g:ale_echo_msg_error_str
-    elseif l:type is# s:LSP_MESSAGE_TYPE_WARNING
-        let l:severity = g:ale_echo_msg_warning_str
     elseif l:type is# s:LSP_MESSAGE_TYPE_INFORMATION
         let l:severity = g:ale_echo_msg_info_str
+    elseif l:type is# s:LSP_MESSAGE_TYPE_LOG
+        let l:severity = g:ale_echo_msg_log_str
+    else
+        " Default to warning just in case
+        let l:severity = g:ale_echo_msg_warning_str
     endif
 
     let l:string = substitute(a:format, '\V%severity%', l:severity, 'g')
     let l:string = substitute(l:string, '\V%linter%', a:linter_name, 'g')
-    let l:string = substitute(l:string, '\V%s', l:message, 'g')
+    let l:string = substitute(l:string, '\V%s\>', l:message, 'g')
 
     call ale#util#ShowMessage(l:string)
 endfunction
