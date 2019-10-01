@@ -3,10 +3,10 @@ ALE VHDL Integration                                         *ale-vhdl-options*
 
 
 ===============================================================================
-ALE can use three different linters for VHDL:
+ALE can use four different linters for VHDL:
 
-  iverilog:
-    Using `iverilog -t null -Wall`
+  ghdl:
+    Using `ghdl --std=08`
 
   ModelSim/Questa
     Using `vcom -2008 -quiet -lint`
@@ -14,8 +14,12 @@ ALE can use three different linters for VHDL:
   Vivado
     Using `xvhdl --2008`
 
-Note all linters default to VHDL-2008 support. This, and other options, can be
-changed with each linter's respective option variable.
+  HDL Checker
+    Using `hdl_checker --lsp`
+
+Note ghdl, ModelSim/Questa and Vivado linters default to VHDL-2008 support.
+This, and other options, can be changed with each linter's respective option
+variable.
 
 Linters/compilers that utilize a "work" directory for analyzing designs- such
 as ModelSim and Vivado- can be passed the location of these directories as
@@ -30,6 +34,9 @@ the frequent, asynchronous application launches when linting while text is
 changing. This can happen in the form of hangs or crashes. To help prevent
 this when using these linters, it may help to run linting less frequently; for
 example, only when a file is saved.
+
+HDL Checker wraps around ghdl, Vivado and ModelSim/Questa, providing mixed
+VHDL/Verilog/SystemVerilog support for the latter.
 
 ===============================================================================
 ghdl                                                            *ale-vhdl-ghdl*
