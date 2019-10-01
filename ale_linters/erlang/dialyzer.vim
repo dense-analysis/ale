@@ -7,6 +7,8 @@ let g:ale_erlang_dialyzer_plt_file =
 \   get(g:, 'ale_erlang_dialyzer_plt_file', '')
 let g:ale_erlang_dialyzer_rebar3_profile =
 \   get(g:, 'ale_erlang_dialyzer_rebar3_profile', 'default')
+let g:ale_erlang_dialyzer_options =
+\   get(g:, 'ale_erlang_dialyzer_options', '')
 
 function! ale_linters#erlang#dialyzer#GetRebar3Profile(buffer) abort
     return ale#Var(a:buffer, 'erlang_dialyzer_rebar3_profile')
@@ -50,10 +52,8 @@ function! ale_linters#erlang#dialyzer#GetCommand(buffer) abort
     let l:command = ale#Escape(ale_linters#erlang#dialyzer#GetExecutable(a:buffer))
     \   . ' -n'
     \   . ' --plt ' . ale#Escape(ale_linters#erlang#dialyzer#GetPlt(a:buffer))
-    \   . ' -Wunmatched_returns'
-    \   . ' -Werror_handling'
-    \   . ' -Wrace_conditions'
-    \   . ' -Wunderspecs'
+    \   . ' '
+    \   . ale#Var(a:buffer, 'erlang_dialyzer_options')
     \   . ' %s'
 
     return l:command

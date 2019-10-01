@@ -31,6 +31,15 @@ g:ale_erlang_dialyzer_rebar3_profile     *g:ale_erlang_dialyzer_rebar3_profile*
   This variable can be changed to specify the profile that is used to
   run dialyzer with rebar3.
 
+g:ale_erlang_dialyzer_options                   *g:ale_erlang_dialyzer_options*
+                                                *b:ale_erlang_dialyzer_options*
+  Type: |String|
+  Default: `''`
+
+  This variable controls additional parameters passed to `dialyzer`, such as
+  `-Wunmatched_returns` or `-Wno_opaque`.
+
+
 -------------------------------------------------------------------------------
 erlc                                                          *ale-erlang-erlc*
 

@@ -8,30 +8,27 @@ Execute(The default command should be correct.):
     AssertLinter 'dialyzer',
     \ ale#Escape('dialyzer')
     \ . ' -n --plt ' . ale#Escape(expand('$HOME/.dialyzer_plt'))
-    \ . ' -Wunmatched_returns'
-    \ . ' -Werror_handling'
-    \ . ' -Wrace_conditions'
-    \ . ' -Wunderspecs'
-    \ . ' %s'
+    \ . '  %s'
 
 Execute(The command should accept configured executable.):
     let b:ale_erlang_dialyzer_executable = '/usr/bin/dialyzer'
     AssertLinter '/usr/bin/dialyzer',
     \ ale#Escape('/usr/bin/dialyzer')
     \ . ' -n --plt ' . ale#Escape(expand('$HOME/.dialyzer_plt'))
-    \ . ' -Wunmatched_returns'
-    \ . ' -Werror_handling'
-    \ . ' -Wrace_conditions'
-    \ . ' -Wunderspecs'
-    \ . ' %s'
+    \ . '  %s'
 
 Execute(The command should accept configured PLT file.):
     let b:ale_erlang_dialyzer_plt_file = 'custom-plt'
     AssertLinter 'dialyzer',
     \ ale#Escape('dialyzer')
     \ . ' -n --plt ' . ale#Escape(expand('custom-plt'))
+    \ . '  %s'
+
+Execute(The command should accept configured options.):
+    let b:ale_erlang_dialyzer_options = '-Wunmatched_returns'
+
+    AssertLinter 'dialyzer',
+    \ ale#Escape('dialyzer')
+    \ . ' -n --plt ' . ale#Escape(expand('$HOME/.dialyzer_plt'))
     \ . ' -Wunmatched_returns'
-    \ . ' -Werror_handling'
-    \ . ' -Wrace_conditions'
-    \ . ' -Wunderspecs'
     \ . ' %s'
