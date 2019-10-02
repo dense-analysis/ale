@@ -7,33 +7,53 @@ let s:executable = 'hdl_checker'
 call ale#Set('hdl_checker_config_file', has('unix') ? '.hdl_checker.config' : '_hdl_checker.config')
 call ale#Set('hdl_checker_extra_args', v:null)
 
-" Can be, in order or preference:
+" Use this as a function so we can mock it on testing. Need to do this because
+" test files are inside /testplugin (which refers to the ale repo), which will
+" always have a .git folder
+function! ale_linters#vhdl#hdl_checker#IsDotGit(path) abort
+    return isdirectory(a:path) && ! empty(a:path)
+endfunction
+
+" Sould return (in order of preference)
 " 1. Nearest config file
 " 2. Nearest .git directory
 " 3. The current path
-function! s:GetProjectRoot(buffer) abort
-    let l:project_root = ale#path#FindNearestFile(a:buffer, ale#Var(a:buffer, 'hdl_checker_config_file'))
-    let l:mods = ':h'
+function! ale_linters#vhdl#hdl_checker#GetProjectRoot(buffer) abort
+    let l:project_root = ale#path#FindNearestFile(
+    \   a:buffer,
+    \   ale#Var(a:buffer, 'hdl_checker_config_file'))
 
-    " Search for .git to use as root
-    if empty(l:project_root)
-        let l:project_root = ale#path#FindNearestDirectory(a:buffer, '.git')
-        let l:mods = ':h:h'
+    if !empty(l:project_root    )
+        return fnamemodify(l:project_root, ':h')
     endif
 
-    return !empty(l:project_root) ? fnamemodify(l:project_root, l:mods) : expand('#' . a:buffer . ':p:h')
+    " Search for .git to use as root
+    let l:project_root = ale#path#FindNearestDirectory(a:buffer, '.git')
+
+    if ale_linters#vhdl#hdl_checker#IsDotGit(l:project_root)
+        return fnamemodify(l:project_root, ':h:h')
+    endif
+
+    " As a fallback, use the path of the current buffer
+    return expand('#' . a:buffer . ':p:h')
 endfunction
 
-function! s:getLspCommand(buffer) abort
+function! ale_linters#vhdl#hdl_checker#GetCommand(buffer) abort
     let l:command = s:executable . ' --lsp'
 
     " Add extra parameters only if config has been set
     let l:extra_args = ale#Var(a:buffer, 'hdl_checker_extra_args')
+
     if l:extra_args != v:null
         let l:command = l:command . ' ' . l:extra_args
     endif
 
     return l:command
+endfunction
+
+" To allow testing
+function! ale_linters#vhdl#hdl_checker#GetInitOptions(buffer) abort
+    return {'project_file': ale#Var(a:buffer, 'hdl_checker_config_file')}
 endfunction
 
 " Setup is identical for VHDL and Verilog/SystemVerilog
@@ -43,9 +63,9 @@ for s:language in ['vhdl', 'verilog']
     \   'lsp': 'stdio',
     \   'language': s:language,
     \   'executable': s:executable,
-    \   'command': function('s:getLspCommand'),
-    \   'project_root': function('s:GetProjectRoot'),
-    \   'initialization_options': {b -> {'project_file': ale#Var(b, 'hdl_checker_config_file')}},
+    \   'command': function('ale_linters#vhdl#hdl_checker#GetCommand'),
+    \   'project_root': function('ale_linters#vhdl#hdl_checker#GetProjectRoot'),
+    \   'initialization_options': function('ale_linters#vhdl#hdl_checker#GetInitOptions'),
     \ })
 endfor
 

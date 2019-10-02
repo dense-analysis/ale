@@ -40,6 +40,8 @@ changing. This can happen in the form of hangs or crashes. To help prevent
 this when using these linters, it may help to run linting less frequently; for
 example, only when a file is saved.
 
+(WIP)
+
 ===============================================================================
 iverilog                                                 *ale-verilog-iverilog*
 
