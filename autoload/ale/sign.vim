@@ -178,11 +178,12 @@ function! ale#sign#ParsePattern() abort
     if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
         " Matches output like :
         " line=4  id=1  group=ale  name=ALEErrorSign
-        " строка=1  id=1000001  group=ale  имя=ALEErrorSign
-        " 行=1  識別子=1000001  group=ale  名前=ALEWarningSign
-        " línea=12 id=1000001 group=ale  nombre=ALEWarningSign
-        " riga=1 id=1000001  group=ale   nome=ALEWarningSign
-        let l:pattern = '\v^.*\=(\d+).*\=(\d+).*group\=ale.*\=(ALE[a-zA-Z]+Sign)'
+        " строка=1  id=1000001  группа=ale  имя=ALEErrorSign
+        " 行=1  識別子=1000001  グループ=ale  名前=ALEWarningSign
+        " línea=12 id=1000001 grupo=ale  nombre=ALEWarningSign
+        " riga=1 id=1000001  gruppo=ale   nome=ALEWarningSign
+        " Zeile=235  id=1000001 Gruppe=ale  Name=ALEErrorSign
+        let l:pattern = '\v^.*\=(\d+).*\=(\d+).*\=ale>.*\=(ALE[a-zA-Z]+Sign)'
     else
         " Matches output like :
         " line=4  id=1  name=ALEErrorSign
@@ -190,6 +191,7 @@ function! ale#sign#ParsePattern() abort
         " 行=1  識別子=1000001  名前=ALEWarningSign
         " línea=12 id=1000001 nombre=ALEWarningSign
         " riga=1 id=1000001  nome=ALEWarningSign
+        " Zeile=235  id=1000001  Name=ALEErrorSign
         let l:pattern = '\v^.*\=(\d+).*\=(\d+).*\=(ALE[a-zA-Z]+Sign)'
     endif
 

@@ -19,7 +19,7 @@ Execute (Parsing Russian signs should work):
   if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
     AssertEqual
     \ [0, [[1, 1000001, 'ALEErrorSign']]],
-    \ ale#sign#ParseSigns(['    строка=1  id=1000001  group=ale  имя=ALEErrorSign'])
+    \ ale#sign#ParseSigns(['    строка=1  id=1000001  группа=ale  имя=ALEErrorSign'])
   else
     AssertEqual
     \ [0, [[1, 1000001, 'ALEErrorSign']]],
@@ -30,7 +30,7 @@ Execute (Parsing Japanese signs should work):
   if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
     AssertEqual
     \ [0, [[1, 1000001, 'ALEWarningSign']]],
-    \ ale#sign#ParseSigns(['    行=1  識別子=1000001  group=ale  名前=ALEWarningSign'])
+    \ ale#sign#ParseSigns(['    行=1  識別子=1000001  グループ=ale  名前=ALEWarningSign'])
   else
     AssertEqual
     \ [0, [[1, 1000001, 'ALEWarningSign']]],
@@ -41,7 +41,7 @@ Execute (Parsing Spanish signs should work):
   if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
     AssertEqual
     \ [0, [[12, 1000001, 'ALEWarningSign']]],
-    \ ale#sign#ParseSigns(['    línea=12 id=1000001  group=ale  nombre=ALEWarningSign'])
+    \ ale#sign#ParseSigns(['    línea=12 id=1000001  grupo=ale  nombre=ALEWarningSign'])
   else
     AssertEqual
     \ [0, [[12, 1000001, 'ALEWarningSign']]],
@@ -52,11 +52,22 @@ Execute (Parsing Italian signs should work):
   if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
     AssertEqual
     \ [0, [[1, 1000001, 'ALEWarningSign']]],
-    \ ale#sign#ParseSigns(['    riga=1 id=1000001, group=ale  nome=ALEWarningSign'])
+    \ ale#sign#ParseSigns(['    riga=1 id=1000001, gruppo=ale  nome=ALEWarningSign'])
   else
     AssertEqual
     \ [0, [[1, 1000001, 'ALEWarningSign']]],
     \ ale#sign#ParseSigns(['    riga=1 id=1000001, nome=ALEWarningSign'])
+  endif
+
+Execute (Parsing German signs should work):
+  if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
+    AssertEqual
+    \ [0, [[235, 1000001, 'ALEErrorSign']]],
+    \ ale#sign#ParseSigns(['    Zeile=235  id=1000001 Gruppe=ale  Name=ALEErrorSign'])
+  else
+    AssertEqual
+    \ [0, [[235, 1000001, 'ALEErrorSign']]],
+    \ ale#sign#ParseSigns(['  Zeile=235  id=1000001 Name=ALEErrorSign'])
   endif
 
 Execute (The sign parser should indicate if the dummy sign is set):
