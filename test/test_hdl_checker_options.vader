@@ -2,7 +2,7 @@ Before:
   call ale#assert#SetUpLinterTest('vhdl', 'hdl_checker')
 
   Save g:ale_hdl_checker_config_file
-  Save g:ale_hdl_checker_extra_args
+  Save g:ale_hdl_checker_options
 
   let g:default_config_file = has('unix') ? '.hdl_checker.config' : '_hdl_checker.config'
 
@@ -29,10 +29,16 @@ Execute(Get the checker command without extra user parameters):
   \ ale_linters#vhdl#hdl_checker#GetCommand(bufnr(''))
 
 Execute(Get the checker command with user configured parameters):
-  let g:ale_hdl_checker_extra_args = '--log-level DEBUG'
+  let g:ale_hdl_checker_options = '--log-level DEBUG'
 
   AssertEqual
   \ 'hdl_checker --lsp --log-level DEBUG',
+  \ ale_linters#vhdl#hdl_checker#GetCommand(bufnr(''))
+
+Execute(Customize executable):
+  let g:ale_hdl_checker_executable = '/some/other/path'
+  AssertEqual
+  \ '/some/other/path --lsp',
   \ ale_linters#vhdl#hdl_checker#GetCommand(bufnr(''))
 
 Execute(Get project root based on .git):

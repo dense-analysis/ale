@@ -2,10 +2,9 @@
 " Description: Adds support for HDL Code Checker, which wraps vcom/vlog, ghdl
 "              or xvhdl. More info on https://github.com/suoto/hdl_checker
 
-let s:executable = 'hdl_checker'
-
+call ale#Set('hdl_checker_executable', 'hdl_checker')
 call ale#Set('hdl_checker_config_file', has('unix') ? '.hdl_checker.config' : '_hdl_checker.config')
-call ale#Set('hdl_checker_extra_args', v:null)
+call ale#Set('hdl_checker_options', '')
 
 " Use this as a function so we can mock it on testing. Need to do this because
 " test files are inside /testplugin (which refers to the ale repo), which will
@@ -39,13 +38,13 @@ function! ale_linters#vhdl#hdl_checker#GetProjectRoot(buffer) abort
 endfunction
 
 function! ale_linters#vhdl#hdl_checker#GetCommand(buffer) abort
-    let l:command = s:executable . ' --lsp'
+    let l:command = ale#Var(a:buffer, 'hdl_checker_executable') . ' --lsp'
 
     " Add extra parameters only if config has been set
-    let l:extra_args = ale#Var(a:buffer, 'hdl_checker_extra_args')
+    let l:options = ale#Var(a:buffer, 'hdl_checker_options')
 
-    if l:extra_args != v:null
-        let l:command = l:command . ' ' . l:extra_args
+    if ! empty(l:options)
+        let l:command = l:command . ' ' . l:options
     endif
 
     return l:command
@@ -62,7 +61,7 @@ for s:language in ['vhdl', 'verilog']
     \   'name': 'hdl_checker',
     \   'lsp': 'stdio',
     \   'language': s:language,
-    \   'executable': s:executable,
+    \   'executable': { b -> ale#Var(b, 'hdl_checker_executable')},
     \   'command': function('ale_linters#vhdl#hdl_checker#GetCommand'),
     \   'project_root': function('ale_linters#vhdl#hdl_checker#GetProjectRoot'),
     \   'initialization_options': function('ale_linters#vhdl#hdl_checker#GetInitOptions'),
