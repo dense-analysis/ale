@@ -18,29 +18,55 @@ Execute(Get default initialization dict):
 
 Execute(Get custom initialization dict):
   let g:ale_hdl_checker_config_file = 'some_file_name'
+
   AssertEqual
   \ {'project_file': 'some_file_name'},
   \ ale_linters#vhdl#hdl_checker#GetInitOptions(bufnr(''))
 
+Execute(Get the checker command without extra user parameters):
+  AssertEqual
+  \ 'hdl_checker --lsp',
+  \ ale_linters#vhdl#hdl_checker#GetCommand(bufnr(''))
+
+Execute(Get the checker command with user configured parameters):
+  let g:ale_hdl_checker_extra_args = '--log-level DEBUG'
+
+  AssertEqual
+  \ 'hdl_checker --lsp --log-level DEBUG',
+  \ ale_linters#vhdl#hdl_checker#GetCommand(bufnr(''))
+
 Execute(Get project root based on .git):
   call ale#test#SetFilename('hdl_server/with_git/files/foo.vhd')
+  " Create .git file
+  silent! call mkdir(g:dir . '/hdl_server/with_git/.git')
+  AssertNotEqual '', glob(g:dir . '/hdl_server/with_git/.git')
+
   AssertEqual
   \ g:dir . '/hdl_server/with_git',
   \ ale_linters#vhdl#hdl_checker#GetProjectRoot(bufnr(''))
 
-Execute(Get project root based on .git):
+Execute(Get project root based on config file):
   call ale#test#SetFilename('hdl_server/with_config_file/foo.vhd')
+
   AssertEqual
   \ g:dir . '/hdl_server/with_config_file',
   \ ale_linters#vhdl#hdl_checker#GetProjectRoot(bufnr(''))
 
 Execute(Use current directory if neither .git or config file are found):
-  " Fake not git path is found to avoid using ale's own .git folder
+  let g:call_count = 0
+
+  " Mock this command to avoid the test to find ale's own .git folder
   function! ale_linters#vhdl#hdl_checker#IsDotGit(path) abort
+    let g:call_count += 1
     return 0
   endfunction
 
   call ale#test#SetFilename('hdl_server/foo.vhd')
+
   AssertEqual
   \ g:dir . '/hdl_server',
   \ ale_linters#vhdl#hdl_checker#GetProjectRoot(bufnr(''))
+
+  AssertEqual g:call_count, 1
+
+  unlet! g:call_count
