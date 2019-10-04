@@ -2474,6 +2474,7 @@ documented in additional help files.
     xvlog.................................|ale-verilog-xvlog|
   vhdl....................................|ale-vhdl-options|
     ghdl..................................|ale-vhdl-ghdl|
+    hdl_checker...........................|ale-vhdl-hdl-checker|
     vcom..................................|ale-vhdl-vcom|
     xvhdl.................................|ale-vhdl-xvhdl|
   vim.....................................|ale-vim-options|

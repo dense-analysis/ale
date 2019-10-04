@@ -62,6 +62,41 @@ g:ale_vhdl_ghdl_options                               *g:ale_vhdl_ghdl_options*
 
 
 ===============================================================================
+hdl_checker                                              *ale-vhdl-hdl-checker*
+
+g:ale_hdl_checker_executable
+                                                 *g:ale_hdl_checker_executable*
+                                                 *b:ale_hdl_checker_executable*
+  Type: |String|
+  Default: `'hdl_checker'`
+
+  This variable can be changed to the path to the 'hdl_checker' executable.
+
+
+g:ale_hdl_checker_options                           *g:ale_hdl_checker_options*
+                                                    *b:ale_hdl_checker_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to modify the flags/options passed to
+  'hdl_checker'.
+
+
+g:ale_hdl_checker_config_file                   *g:ale_hdl_checker_config_file*
+                                                *b:ale_hdl_checker_config_file*
+  Type: |String|
+  Default: `'.hdl_checker.config'` (Unix),
+           `'_hdl_checker.config'` (Windows)
+
+  This variable can be changed to modify the config file passed to HDL
+  Checker. ALE will also search for a file with this name to work out the
+  project's root directory.
+
+  If ALE can't find this file, it will search for a directory named `'.git'`
+  and, if that fails, will use the path to the file currently open.
+
+
+===============================================================================
 vcom                                                            *ale-vhdl-vcom*
 
 g:ale_vhdl_vcom_executable                         *g:ale_vhdl_vcom_executable*
@@ -97,41 +132,6 @@ g:ale_vhdl_xvhdl_options                             *g:ale_vhdl_xvhdl_options*
   Default: `'--2008'`
 
   This variable can be changed to modify the flags/options passed to 'xvhdl'.
-
-
-===============================================================================
-hdl_checker                                                            *ale-vhdl-hdl_checker*
-
-g:ale_hdl_checker_executable
-                                                 *g:ale_hdl_checker_executable*
-                                                 *b:ale_hdl_checker_executable*
-  Type: |String|
-  Default: `'hdl_checker'`
-
-  This variable can be changed to the path to the 'hdl_checker' executable.
-
-
-g:ale_hdl_checker_options                           *g:ale_hdl_checker_options*
-                                                    *b:ale_hdl_checker_options*
-  Type: |String|
-  Default: `''`
-
-  This variable can be changed to modify the flags/options passed to
-  'hdl_checker'.
-
-
-g:ale_hdl_checker_config_file                   *g:ale_hdl_checker_config_file*
-                                                *b:ale_hdl_checker_config_file*
-  Type: |String|
-  Default: `'.hdl_checker.config'` (Unix),
-           `'_hdl_checker.config'` (Windows)
-
-  This variable can be changed to modify the config file passed to HDL
-  Checker. ALE will also search for a file with this name to work out the
-  project's root directory.
-
-  If ALE can't find this file, it will search for a directory named `'.git'`
-  and, if that fails, will use the path to the file currently open.
 
 
 ===============================================================================
