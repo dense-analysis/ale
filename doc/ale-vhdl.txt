@@ -17,8 +17,11 @@ ALE can use four different linters for VHDL:
   HDL Checker
     Using `hdl_checker --lsp`
 
-Note ghdl, ModelSim/Questa and Vivado linters default to VHDL-2008 support.
-This, and other options, can be changed with each linter's respective option
+===============================================================================
+General notes
+
+ghdl, ModelSim/Questa and Vivado linters default to VHDL-2008 support. This,
+and other options, can be changed with each linter's respective option
 variable.
 
 Linters/compilers that utilize a "work" directory for analyzing designs- such
@@ -35,10 +38,9 @@ changing. This can happen in the form of hangs or crashes. To help prevent
 this when using these linters, it may help to run linting less frequently; for
 example, only when a file is saved.
 
-(WIP)
-
-HDL Checker wraps around ghdl, Vivado and ModelSim/Questa, providing mixed
-VHDL/Verilog/SystemVerilog support for the latter.
+HDL Checker is an alternative for some of the issues described above. It wraps
+around ghdl, Vivado and ModelSim/Questa and, when using the latter, it can
+handle mixed language (VHDL, Verilog, SystemVerilog) designs.
 
 ===============================================================================
 ghdl                                                            *ale-vhdl-ghdl*
@@ -95,6 +97,41 @@ g:ale_vhdl_xvhdl_options                             *g:ale_vhdl_xvhdl_options*
   Default: `'--2008'`
 
   This variable can be changed to modify the flags/options passed to 'xvhdl'.
+
+
+===============================================================================
+hdl_checker                                                            *ale-vhdl-hdl_checker*
+
+g:ale_hdl_checker_executable
+                                                 *g:ale_hdl_checker_executable*
+                                                 *b:ale_hdl_checker_executable*
+  Type: |String|
+  Default: `'hdl_checker'`
+
+  This variable can be changed to the path to the 'hdl_checker' executable.
+
+
+g:ale_hdl_checker_options                           *g:ale_hdl_checker_options*
+                                                    *b:ale_hdl_checker_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to modify the flags/options passed to
+  'hdl_checker'.
+
+
+g:ale_hdl_checker_config_file                   *g:ale_hdl_checker_config_file*
+                                                *b:ale_hdl_checker_config_file*
+  Type: |String|
+  Default: `'.hdl_checker.config'` (Unix),
+           `'_hdl_checker.config'` (Windows)
+
+  This variable can be changed to modify the config file passed to HDL
+  Checker. ALE will also search for a file with this name to work out the
+  project's root directory.
+
+  If ALE can't find this file, it will search for a directory named `'.git'`
+  and, if that fails, will use the path to the file currently open.
 
 
 ===============================================================================
