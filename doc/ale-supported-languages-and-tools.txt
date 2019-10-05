@@ -124,7 +124,7 @@ Notes:
   * `mix`!!
 * Elm
   * `elm-format`
-  * `elm-lsp`
+  * `elm-ls`
   * `elm-make`
 * Erb
   * `erb`
