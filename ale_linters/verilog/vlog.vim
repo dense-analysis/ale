@@ -34,7 +34,7 @@ function! ale_linters#verilog#vlog#Handle(buffer, lines) abort
         call add(l:output, {
         \   'lnum': l:match[3] + 0,
         \   'type': l:match[1] is? 'Error' ? 'E' : 'W',
-        \   'text': l:match[2] . " " . l:match[4],
+        \   'text': l:match[2] . ' ' . l:match[4],
         \})
     endfor
 
