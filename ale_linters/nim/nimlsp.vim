@@ -13,11 +13,21 @@ function! ale_linters#nim#nimlsp#GetProjectRoot(buffer) abort
     return ''
 endfunction
 
+function! ale_linters#nim#nimlsp#GetCommand(buffer) abort
+    let l:nim_sources = ale#Var(a:buffer, 'nim_nimlsp_nim_sources')
+
+    if !empty(l:nim_sources)
+        let l:nim_sources = ale#Escape(l:nim_sources)
+    endif
+
+    return '%e' . ale#Pad(l:nim_sources)
+endfunction
+
 call ale#linter#Define('nim', {
 \   'name': 'nimlsp',
 \   'lsp': 'stdio',
 \   'executable': 'nimlsp',
-\   'command': {buffer -> '%e' . ale#Pad(ale#Var(buffer, 'nim_nimlsp_nim_sources'))},
+\   'command': function('ale_linters#nim#nimlsp#GetCommand'),
 \   'language': 'nim',
 \   'project_root': function('ale_linters#nim#nimlsp#GetProjectRoot'),
 \})
