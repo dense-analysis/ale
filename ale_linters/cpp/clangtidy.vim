@@ -16,10 +16,9 @@ call ale#Set('c_build_dir', '')
 function! ale_linters#cpp#clangtidy#GetCommand(buffer, output) abort
     let l:checks = join(ale#Var(a:buffer, 'cpp_clangtidy_checks'), ',')
     let l:build_dir = ale#c#GetBuildDirectory(a:buffer)
-
-    " Get the extra options if we couldn't find a build directory.
     let l:options = ''
 
+    " Get the extra options if we couldn't find a build directory.
     if empty(l:build_dir)
         let l:options = ale#Var(a:buffer, 'cpp_clangtidy_options')
         let l:cflags = ale#c#GetCFlags(a:buffer, a:output)
