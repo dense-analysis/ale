@@ -1543,6 +1543,16 @@ g:ale_set_signs                                               *g:ale_set_signs*
   To limit the number of signs ALE will set, see |g:ale_max_signs|.
 
 
+g:ale_sign_priority                                       *g:ale_sign_priority*
+
+  Type: |Number|
+  Default: `30`
+
+  From Neovim 0.4.0 and Vim 8.1, ALE can set sign priority to all signs. The
+  larger this value is, the higher priority ALE signs have over other plugin
+  signs. See |sign-priority| for further details on how priority works.
+
+
 g:ale_shell                                                       *g:ale_shell*
 
   Type: |String|
@@ -2298,6 +2308,8 @@ documented in additional help files.
   nim.....................................|ale-nim-options|
     nimcheck..............................|ale-nim-nimcheck|
     nimlsp................................|ale-nim-nimlsp|
+  nix.....................................|ale-nix-options|
+    nixpkgs-fmt...........................|ale-nix-nixpkgs-fmt|
   nroff...................................|ale-nroff-options|
     write-good............................|ale-nroff-write-good|
   objc....................................|ale-objc-options|
@@ -2388,6 +2400,7 @@ documented in additional help files.
     write-good............................|ale-restructuredtext-write-good|
   ruby....................................|ale-ruby-options|
     brakeman..............................|ale-ruby-brakeman|
+    debride...............................|ale-ruby-debride|
     rails_best_practices..................|ale-ruby-rails_best_practices|
     reek..................................|ale-ruby-reek|
     rubocop...............................|ale-ruby-rubocop|
@@ -2405,6 +2418,7 @@ documented in additional help files.
     sasslint..............................|ale-sass-sasslint|
     stylelint.............................|ale-sass-stylelint|
   scala...................................|ale-scala-options|
+    metals................................|ale-scala-metals|
     sbtserver.............................|ale-scala-sbtserver|
     scalafmt..............................|ale-scala-scalafmt|
     scalastyle............................|ale-scala-scalastyle|

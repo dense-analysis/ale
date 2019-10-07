@@ -124,7 +124,7 @@ Notes:
   * `mix`!!
 * Elm
   * `elm-format`
-  * `elm-lsp`
+  * `elm-ls`
   * `elm-make`
 * Erb
   * `erb`
@@ -284,6 +284,7 @@ Notes:
   * `nim check`!!
 * nix
   * `nix-instantiate`
+  * `nixpkgs-fmt`
 * nroff
   * `alex`!!
   * `proselint`
@@ -391,6 +392,7 @@ Notes:
   * `rpmlint`
 * Ruby
   * `brakeman`
+  * `debride`
   * `rails_best_practices`!!
   * `reek`
   * `rubocop`
@@ -409,6 +411,7 @@ Notes:
   * `stylelint`
 * Scala
   * `fsc`
+  * `metals`
   * `sbtserver`
   * `scalac`
   * `scalafmt`
