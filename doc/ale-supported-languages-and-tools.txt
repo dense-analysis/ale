@@ -391,6 +391,7 @@ Notes:
   * `rpmlint`
 * Ruby
   * `brakeman`
+  * `debride`
   * `rails_best_practices`!!
   * `reek`
   * `rubocop`

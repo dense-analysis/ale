@@ -400,6 +400,7 @@ formatting.
   * [rpmlint](https://github.com/rpm-software-management/rpmlint) :warning: (see `:help ale-integration-spec`)
 * Ruby
   * [brakeman](http://brakemanscanner.org/) :floppy_disk:
+  * [debride](https://github.com/seattlerb/debride) :floppy_disk:
   * [rails_best_practices](https://github.com/flyerhzm/rails_best_practices) :floppy_disk:
   * [reek](https://github.com/troessner/reek)
   * [rubocop](https://github.com/bbatsov/rubocop)
