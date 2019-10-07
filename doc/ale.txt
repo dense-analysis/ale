@@ -1709,6 +1709,8 @@ g:ale_virtualtext_cursor                             *g:ale_virtualtext_cursor*
   Type: |Number|
   Default: `0`
 
+  This option only has any effect in NeoVim.
+
   When this option is set to `1`, a message will be shown when a cursor is
   near a warning or error. ALE will attempt to find the warning or error at a
   column nearest to the cursor when the cursor is resting on a line which
