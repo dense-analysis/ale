@@ -133,7 +133,7 @@ formatting.
   * [mix](https://hexdocs.pm/mix/Mix.html) :warning: :floppy_disk:
 * Elm
   * [elm-format](https://github.com/avh4/elm-format)
-  * [elm-lsp](https://github.com/antew/elm-lsp)
+  * [elm-ls](https://github.com/elm-tooling/elm-language-server)
   * [elm-make](https://github.com/elm/compiler)
 * Erb
   * [erb](https://apidock.com/ruby/ERB)
