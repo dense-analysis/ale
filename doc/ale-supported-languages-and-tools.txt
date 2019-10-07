@@ -411,6 +411,7 @@ Notes:
   * `stylelint`
 * Scala
   * `fsc`
+  * `metals`
   * `sbtserver`
   * `scalac`
   * `scalafmt`

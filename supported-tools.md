@@ -420,6 +420,7 @@ formatting.
   * [stylelint](https://github.com/stylelint/stylelint)
 * Scala
   * [fsc](https://www.scala-lang.org/old/sites/default/files/linuxsoft_archives/docu/files/tools/fsc.html)
+  * [metals](https://scalameta.org/metals/)
   * [sbtserver](https://www.scala-sbt.org/1.x/docs/sbt-server.html)
   * [scalac](http://scala-lang.org)
   * [scalafmt](https://scalameta.org/scalafmt/)

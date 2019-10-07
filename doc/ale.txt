@@ -2415,6 +2415,7 @@ documented in additional help files.
     sasslint..............................|ale-sass-sasslint|
     stylelint.............................|ale-sass-stylelint|
   scala...................................|ale-scala-options|
+    metals................................|ale-scala-metals|
     sbtserver.............................|ale-scala-sbtserver|
     scalafmt..............................|ale-scala-scalafmt|
     scalastyle............................|ale-scala-scalastyle|
