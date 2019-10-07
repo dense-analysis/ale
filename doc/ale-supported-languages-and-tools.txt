@@ -284,6 +284,7 @@ Notes:
   * `nim check`!!
 * nix
   * `nix-instantiate`
+  * `nixpkgs-fmt`
 * nroff
   * `alex`!!
   * `proselint`
