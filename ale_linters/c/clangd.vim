@@ -3,6 +3,7 @@
 
 call ale#Set('c_clangd_executable', 'clangd')
 call ale#Set('c_clangd_options', '')
+call ale#Set('c_build_dir', '')
 
 function! ale_linters#c#clangd#GetCommand(buffer) abort
     let l:build_dir = ale#c#GetBuildDirectory(a:buffer)
