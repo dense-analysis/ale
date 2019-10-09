@@ -4,6 +4,11 @@ Before:
   Save &filetype
   let &filetype = 'c'
 
+  Save b:ale_c_clangd_options
+  Save b:ale_c_build_dir
+  Save b:ale_c_build_dir_names
+  Save b:ale_c_parse_compile_commands
+
 After:
   call ale#assert#TearDownLinterTest()
 
