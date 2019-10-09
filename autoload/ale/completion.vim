@@ -734,6 +734,10 @@ function! ale#completion#HandleUserData(completed_item) abort
 
     let l:user_data = json_decode(l:user_data_json)
 
+    if type(l:user_data) isnot v:t_dict
+        return
+    endif
+
     for l:code_action in get(l:user_data, 'codeActions', [])
         call ale#code_action#HandleCodeAction(l:code_action)
     endfor
