@@ -62,7 +62,7 @@ g:ale_vhdl_ghdl_options                               *g:ale_vhdl_ghdl_options*
 
 
 ===============================================================================
-hdl_checker                                              *ale-vhdl-hdl-checker*
+hdl-checker                                              *ale-vhdl-hdl-checker*
 
 g:ale_hdl_checker_executable
                                                  *g:ale_hdl_checker_executable*
@@ -78,8 +78,8 @@ g:ale_hdl_checker_options                           *g:ale_hdl_checker_options*
   Type: |String|
   Default: `''`
 
-  This variable can be changed to modify the flags/options passed to
-  'hdl_checker'.
+  This variable can be changed to modify the flags/options passed to the
+  'hdl_checker' server startup command.
 
 
 g:ale_hdl_checker_config_file                   *g:ale_hdl_checker_config_file*

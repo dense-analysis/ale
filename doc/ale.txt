@@ -2468,13 +2468,14 @@ documented in additional help files.
   vala....................................|ale-vala-options|
     uncrustify............................|ale-vala-uncrustify|
   verilog/systemverilog...................|ale-verilog-options|
+    hdl-checker...........................|ale-verilog-hdl-checker|
     iverilog..............................|ale-verilog-iverilog|
     verilator.............................|ale-verilog-verilator|
     vlog..................................|ale-verilog-vlog|
     xvlog.................................|ale-verilog-xvlog|
   vhdl....................................|ale-vhdl-options|
     ghdl..................................|ale-vhdl-ghdl|
-    hdl_checker...........................|ale-vhdl-hdl-checker|
+    hdl-checker...........................|ale-vhdl-hdl-checker|
     vcom..................................|ale-vhdl-vcom|
     xvhdl.................................|ale-vhdl-xvhdl|
   vim.....................................|ale-vim-options|
