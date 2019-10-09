@@ -2,4 +2,4 @@
 " Description: Adds support for HDL Code Checker, which wraps vcom/vlog, ghdl
 "              or xvhdl. More info on https://github.com/suoto/hdl_checker
 
-call ale#handlers#hdl_checker#DefineLinter('vhdl')
+call ale#handlers#hdl_checker#DefineLinter('verilog')
