@@ -7,7 +7,7 @@ call ale#Set('ruby_debride_options', '')
 function! ale_linters#ruby#debride#GetCommand(buffer) abort
     let l:executable = ale#Var(a:buffer, 'ruby_debride_executable')
 
-    return ale#handlers#ruby#EscapeExecutable(l:executable, 'debride')
+    return ale#ruby#EscapeExecutable(l:executable, 'debride')
     \   . ale#Var(a:buffer, 'ruby_debride_options')
     \   . ' %s'
 endfunction
