@@ -64,6 +64,25 @@ g:ale_vhdl_ghdl_options                               *g:ale_vhdl_ghdl_options*
 ===============================================================================
 hdl-checker                                              *ale-vhdl-hdl-checker*
 
+HDL Checker is a wrapper for VHDL/Verilg/SystemVerilog tools that aims to
+reduce the boilerplate code needed to set things up. It can automatically
+infer libraries for VHDL sources, determine the compilation order and provide
+some static checks.
+
+You can install it using pip:
+>
+  $ pip install hdl-checker
+
+`hdl-checker` will be run from a detected project root, determined by the
+following methods, in order:
+
+1. Find the first directory containing a configuration file (see
+   |g:ale_hdl_checker_config_file|)
+2. If no configuration file can be found, find the first directory containing
+   a folder named `'.git'
+3. If no such folder is found, use the directory of the current buffer
+
+
 g:ale_hdl_checker_executable
                                                  *g:ale_hdl_checker_executable*
                                                  *b:ale_hdl_checker_executable*
@@ -88,12 +107,12 @@ g:ale_hdl_checker_config_file                   *g:ale_hdl_checker_config_file*
   Default: `'.hdl_checker.config'` (Unix),
            `'_hdl_checker.config'` (Windows)
 
-  This variable can be changed to modify the config file passed to HDL
-  Checker. ALE will also search for a file with this name to work out the
-  project's root directory.
+  This variable can be changed to modify the config file HDL Checker will try
+  to look for. It will also affect how the project's root directory is
+  determined (see |ale-vhdl-hdl-checker|).
 
-  If ALE can't find this file, it will search for a directory named `'.git'`
-  and, if that fails, will use the path to the file currently open.
+  More info on the configuration file format can be found at:
+  https://github.com/suoto/hdl_checker/wiki/Setting-up-a-project
 
 
 ===============================================================================
