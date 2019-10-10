@@ -50,7 +50,8 @@ Before:
   let g:handle_code_action_called = 0
   function! MockHandleCodeAction() abort
     " delfunction! ale#code_action#HandleCodeAction
-    function! ale#code_action#HandleCodeAction(action) abort
+    function! ale#code_action#HandleCodeAction(action, should_save) abort
+      AssertEqual v:false, a:should_save
       let g:handle_code_action_called += 1
     endfunction
   endfunction
