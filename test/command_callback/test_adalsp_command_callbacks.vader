@@ -4,9 +4,6 @@ Before:
 After:
   call ale#assert#TearDownLinterTest()
 
-Execute(It does not set Ada sources by default):
-  AssertLinter 'adalsp', ale#Escape('adalsp')
-
 Execute(Sets adalsp executable):
-  let g:ale_ada_adalsp_executable = '/path/to /Ada'
-  AssertLinter 'adalsp', ale#Escape('adalsp') . ' ' . ale#Escape('/path/to /Ada')
+  let g:ale_ada_lsp_executable = '/path/to /Ada'
+  AssertLinter 'adalsp', ale#Escape('/path/to /Ada')
