@@ -1,6 +1,6 @@
 " Author: Jose Soto <jose@tighten.co>
 "
-" Description: Tighten Opinionated Linting
+" Description: Tighten Opinionated PHP Linting
 " Website: https://github.com/tightenco/tlint
 
 call ale#Set('php_tlint_executable', 'tlint')
