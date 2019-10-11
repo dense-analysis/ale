@@ -6,4 +6,4 @@ After:
 
 Execute(Sets adalsp executable):
   let g:ale_ada_lsp_executable = '/path/to /Ada'
-  AssertLinter 'adalsp', ale#Escape('/path/to /Ada')
+  AssertLinter ale#Escape('/path/to /Ada'), ale#Escape('/path/to /Ada')
