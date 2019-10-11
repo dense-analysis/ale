@@ -13,9 +13,9 @@ Notes:
 `!!` These linters check only files on disk. See |ale-lint-file-linters|
 
 * Ada
+  * `ada_language_server`
   * `gcc`
   * `gnatpp`
-  * `ada_language_server`
 * Ansible
   * `ansible-lint`
 * API Blueprint

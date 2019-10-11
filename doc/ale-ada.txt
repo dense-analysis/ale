@@ -33,7 +33,7 @@ g:ale_ada_gnatpp_options                             *g:ale_ada_gnatpp_options*
 
 
 ===============================================================================
-Ada Language Server                                               *ale-ada-lsp*
+Ada Language Server                               *ale-ada-ada_language_server*
 
 g:ale_ada_lsp_executable                              *g:ale_ada_lsp_executable*
                                                      *b:ale_ada_lsp_executable*

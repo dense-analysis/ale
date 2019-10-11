@@ -22,9 +22,9 @@ formatting.
 ---
 
 * Ada
+  * [ada_language_server](https://github.com/AdaCore/ada_language_server)
   * [gcc](https://gcc.gnu.org)
   * [gnatpp](https://docs.adacore.com/gnat_ugn-docs/html/gnat_ugn/gnat_ugn/gnat_utility_programs.html#the-gnat-pretty-printer-gnatpp) :floppy_disk:
-  * [ada_language_server](https://github.com/AdaCore/ada_language_server)
 * Ansible
   * [ansible-lint](https://github.com/willthames/ansible-lint)
 * API Blueprint
