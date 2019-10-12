@@ -30,5 +30,28 @@ g:ale_lua_luacheck_options                         *g:ale_lua_luacheck_options*
   This variable can be set to pass additional options to luacheck.
 
 
+g:ale_lua_luacheck_change_directory         *g:ale_lua_luacheck_change_directory*
+                                            *b:ale_lua_luacheck_change_directory*
+  Type: |Number|
+  Default: `1`
+
+  When set to `1` ALE will attempt to find a `'.luacheckrc'` file and change
+  to the directory before linting. If not it will fall back on 'pwd'
+
+
+g:ale_lua_luacheck_lint_project                 *g:ale_lua_luacheck_lint_project*
+
+  Type: |Number|
+  Default: `1`
+
+  When set to `1` will attempt to find a `'.luacheckrc'` file and lint that
+  directory rather than just the individual buffer. If not it will lint the
+  single current file on disk.
+  When set to `0` ALE will be able to lint the current buffer without the
+  context of the project directory.
+
+  Changing this value requires vim to be restarted or
+  `'ale_linter/lua/luacheck.vim'` to be re-sourced for changes to take place.
+
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
