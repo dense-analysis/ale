@@ -172,7 +172,7 @@ address to connect to instead. >
 
   call ale#linter#Define('filetype_here', {
   \   'name': 'any_name_you_want',
-  \   'lsp': 'stdio',
+  \   'lsp': 'socket',
   \   'address': 'servername:1234',
   \   'project_root': '/path/to/root_of_project',
   \})
