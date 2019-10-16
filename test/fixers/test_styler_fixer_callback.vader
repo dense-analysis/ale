@@ -13,7 +13,7 @@ Execute(The styler callback should include custom styler options):
   \ {
   \   'command': 'Rscript --vanilla -e '
   \       . '"suppressPackageStartupMessages(library(styler));'
-  \       . 'style_file(commandArgs(TRUE), style = '
+  \       . 'style_file(commandArgs(TRUE), transformers = '
   \       . 'a_custom_option)"'
   \       . ' %t',
   \   'read_temporary_file': 1,
