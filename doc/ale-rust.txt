@@ -42,6 +42,25 @@ Integration Information
 
 
 ===============================================================================
+analyzer                                                    *ale-rust-analyzer*
+
+g:ale_rust_analyzer_executable                 *g:ale_rust_analyzer_executable*
+                                               *b:ale_rust_analyzer_executable*
+  Type: |String|
+  Default: `'ra_lsp_server'`
+
+  This variable can be modified to change the executable path for
+  `rust-analyzer`.
+
+
+g:ale_rust_analyzer_config                         *g:ale_rust_analyzer_config*
+                                                   *b:ale_rust_analyzer_config*
+  Type: |Dictionary|
+  Default: `{}`
+
+  Dictionary with configuration settings for rust-analyzer.
+
+===============================================================================
 cargo                                                          *ale-rust-cargo*
 
 g:ale_rust_cargo_use_check                         *g:ale_rust_cargo_use_check*
@@ -194,25 +213,6 @@ g:ale_rust_rls_config                                   *g:ale_rust_rls_config*
       \   }
       \ }
 
-
-===============================================================================
-analyzer                                                    *ale-rust-analyzer*
-
-g:ale_rust_analyzer_executable                 *g:ale_rust_analyzer_executable*
-                                               *b:ale_rust_analyzer_executable*
-  Type: |String|
-  Default: `'ra_lsp_server'`
-
-  This variable can be modified to change the executable path for
-  `rust-analyzer`.
-
-
-g:ale_rust_analyzer_config                         *g:ale_rust_analyzer_config*
-                                                   *b:ale_rust_analyzer_config*
-  Type: |Dictionary|
-  Default: `{}`
-
-  Dictionary with configuration settings for rust-analyzer.
 
 ===============================================================================
 rustc                                                          *ale-rust-rustc*
