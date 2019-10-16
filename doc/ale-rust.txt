@@ -23,6 +23,11 @@ Integration Information
      over cargo. rls implements the Language Server Protocol for incremental
      compilation of Rust code, and can check Rust files while you type. `rls`
      requires Rust files to contained in Cargo projects.
+  3. analyzer -- If you have rust-analyzer installed, you might prefer using
+     this linter over cargo and rls. rust-analyzer also implements the
+     Language Server Protocol for incremental compilation of Rust code, and is
+     the next iteration of rls. rust-analyzer, like rls, requires Rust files
+     to contained in Cargo projects.
   4. rustfmt -- If you have `rustfmt` installed, you can use it as a fixer to
      consistently reformat your Rust code.
 
@@ -189,6 +194,25 @@ g:ale_rust_rls_config                                   *g:ale_rust_rls_config*
       \   }
       \ }
 
+
+===============================================================================
+analyzer                                                    *ale-rust-analyzer*
+
+g:ale_rust_analyzer_executable                 *g:ale_rust_analyzer_executable*
+                                               *b:ale_rust_analyzer_executable*
+  Type: |String|
+  Default: `'ra_lsp_server'`
+
+  This variable can be modified to change the executable path for
+  `rust-analyzer`.
+
+
+g:ale_rust_analyzer_config                         *g:ale_rust_analyzer_config*
+                                                   *b:ale_rust_analyzer_config*
+  Type: |Dictionary|
+  Default: `{}`
+
+  Dictionary with configuration settings for rust-analyzer.
 
 ===============================================================================
 rustc                                                          *ale-rust-rustc*

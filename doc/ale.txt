@@ -2411,6 +2411,7 @@ documented in additional help files.
   rust....................................|ale-rust-options|
     cargo.................................|ale-rust-cargo|
     rls...................................|ale-rust-rls|
+    rust-analyzer.........................|ale-rust-analyzer|
     rustc.................................|ale-rust-rustc|
     rustfmt...............................|ale-rust-rustfmt|
   sass....................................|ale-sass-options|
