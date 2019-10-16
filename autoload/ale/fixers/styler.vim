@@ -8,7 +8,7 @@ function! ale#fixers#styler#Fix(buffer) abort
     return {
     \   'command': 'Rscript --vanilla -e '
     \       . '"suppressPackageStartupMessages(library(styler));'
-    \       . 'style_file(commandArgs(TRUE), style = '
+    \       . 'style_file(commandArgs(TRUE), transformers = '
     \       . ale#Var(a:buffer, 'r_styler_options') . ')"'
     \       . ' %t',
     \   'read_temporary_file': 1,
