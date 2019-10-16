@@ -14,6 +14,7 @@ Notes:
 
 * Ada
   * `gcc`
+  * `gnatpp`
 * Ansible
   * `ansible-lint`
 * API Blueprint
@@ -53,6 +54,7 @@ Notes:
   * `gcc`
   * `uncrustify`
 * C#
+  * `csc`!!
   * `mcs`
   * `mcsc`!!
   * `uncrustify`
@@ -101,6 +103,7 @@ Notes:
 * Cython (pyrex filetype)
   * `cython`
 * D
+  * `dfmt`
   * `dls`
   * `dmd`
   * `uncrustify`
@@ -121,7 +124,7 @@ Notes:
   * `mix`!!
 * Elm
   * `elm-format`
-  * `elm-lsp`
+  * `elm-ls`
   * `elm-make`
 * Erb
   * `erb`
@@ -181,6 +184,7 @@ Notes:
   * `hdevtools`
   * `hfmt`
   * `hie`
+  * `hindent`
   * `hlint`
   * `stack-build`!!
   * `stack-ghc`
@@ -197,6 +201,8 @@ Notes:
   * `write-good`
 * Idris
   * `idris`
+* Ink
+  * `ink-language-server`
 * ISPC
   * `ispc`!!
 * Java
@@ -278,6 +284,7 @@ Notes:
   * `nim check`!!
 * nix
   * `nix-instantiate`
+  * `nixpkgs-fmt`
 * nroff
   * `alex`!!
   * `proselint`
@@ -338,6 +345,8 @@ Notes:
   * `languageserver`
   * `puppet`
   * `puppet-lint`
+* PureScript
+  * `purescript-language-server`
 * Python
   * `autopep8`
   * `bandit`
@@ -353,6 +362,7 @@ Notes:
   * `pylint`!!
   * `pyls`
   * `pyre`
+  * `reorder-python-imports`
   * `vulture`!!
   * `yapf`
 * QML
@@ -366,6 +376,7 @@ Notes:
 * ReasonML
   * `merlin`
   * `ols`
+  * `reason-language-server`
   * `refmt`
 * reStructuredText
   * `alex`!!
@@ -381,12 +392,14 @@ Notes:
   * `rpmlint`
 * Ruby
   * `brakeman`
+  * `debride`
   * `rails_best_practices`!!
   * `reek`
   * `rubocop`
   * `ruby`
   * `rufo`
   * `solargraph`
+  * `sorbet`
   * `standardrb`
 * Rust
   * `cargo`!!
@@ -398,6 +411,7 @@ Notes:
   * `stylelint`
 * Scala
   * `fsc`
+  * `metals`
   * `sbtserver`
   * `scalac`
   * `scalafmt`
@@ -412,11 +426,13 @@ Notes:
 * SML
   * `smlnj`
 * Solidity
+  * `solc`
   * `solhint`
   * `solium`
 * SQL
   * `pgformatter`
   * `sqlfmt`
+  * `sqlformat`
   * `sqlint`
 * Stylus
   * `stylelint`

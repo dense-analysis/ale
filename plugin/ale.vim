@@ -71,12 +71,12 @@ let g:ale_linter_aliases = get(g:, 'ale_linter_aliases', {})
 let g:ale_lint_delay = get(g:, 'ale_lint_delay', 200)
 
 " This flag can be set to 'never' to disable linting when text is changed.
-" This flag can also be set to 'insert' or 'normal' to lint when text is
-" changed only in insert or normal mode respectively.
-let g:ale_lint_on_text_changed = get(g:, 'ale_lint_on_text_changed', 'always')
+" This flag can also be set to 'always' or 'insert' to lint when text is
+" changed in both normal and insert mode, or only in insert mode respectively.
+let g:ale_lint_on_text_changed = get(g:, 'ale_lint_on_text_changed', 'normal')
 
 " This flag can be set to 1 to enable linting when leaving insert mode.
-let g:ale_lint_on_insert_leave = get(g:, 'ale_lint_on_insert_leave', 0)
+let g:ale_lint_on_insert_leave = get(g:, 'ale_lint_on_insert_leave', 1)
 
 " This flag can be set to 0 to disable linting when the buffer is entered.
 let g:ale_lint_on_enter = get(g:, 'ale_lint_on_enter', 1)
@@ -141,6 +141,9 @@ let g:ale_completion_enabled = get(g:, 'ale_completion_enabled', 0)
 
 " Enable automatic detection of pipenv for Python linters.
 let g:ale_python_auto_pipenv = get(g:, 'ale_python_auto_pipenv', 0)
+
+" This variable can be overridden to set the GO111MODULE environment variable.
+let g:ale_go_go111module = get(g:, 'ale_go_go111module', '')
 
 if g:ale_set_balloons
     call ale#balloon#Enable()
@@ -218,6 +221,12 @@ command! -nargs=1 ALESymbolSearch :call ale#symbol#Search(<q-args>)
 
 command! -bar ALEComplete :call ale#completion#GetCompletions('ale-manual')
 
+" Rename symbols using tsserver and LSP
+command! -bar ALERename :call ale#rename#Execute()
+
+" Organize import statements using tsserver
+command! -bar ALEOrganizeImports :call ale#organize_imports#Execute()
+
 " <Plug> mappings for commands
 nnoremap <silent> <Plug>(ale_previous) :ALEPrevious<Return>
 nnoremap <silent> <Plug>(ale_previous_wrap) :ALEPreviousWrap<Return>
@@ -256,6 +265,7 @@ nnoremap <silent> <Plug>(ale_find_references) :ALEFindReferences<Return>
 nnoremap <silent> <Plug>(ale_hover) :ALEHover<Return>
 nnoremap <silent> <Plug>(ale_documentation) :ALEDocumentation<Return>
 inoremap <silent> <Plug>(ale_complete) <C-\><C-O>:ALEComplete<Return>
+nnoremap <silent> <Plug>(ale_rename) :ALERename<Return>
 
 " Set up autocmd groups now.
 call ale#events#Init()

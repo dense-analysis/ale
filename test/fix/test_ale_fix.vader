@@ -40,8 +40,8 @@ Before:
     return map(a:lines, '''^'' . v:val')
   endfunction
 
-  function AddDollars(buffer, lines) abort
-    return map(a:lines, '''$'' . v:val')
+  function Capitalize(buffer, lines) abort
+    return map(a:lines, 'toupper(v:val)')
   endfunction
 
   function DoNothing(buffer, lines) abort
@@ -196,7 +196,7 @@ After:
   unlet! b:ale_fix_on_save
   unlet! b:ale_quitting
   delfunction AddCarets
-  delfunction AddDollars
+  delfunction Capitalize
   delfunction DoNothing
   delfunction CatLine
   delfunction CatLineOneArg
@@ -265,28 +265,28 @@ Expect(The first function should be used):
   ^c
 
 Execute(ALEFix should apply simple functions in a chain):
-  let g:ale_fixers.testft = ['AddCarets', 'AddDollars']
+  let g:ale_fixers.testft = ['AddCarets', 'Capitalize']
   ALEFix
   call ale#test#FlushJobs()
 
 Expect(Both functions should be used):
-  $^a
-  $^b
-  $^c
+  ^A
+  ^B
+  ^C
 
 Execute(ALEFix should allow 0 to be returned to skip functions):
-  let g:ale_fixers.testft = ['DoNothing', 'AddDollars']
+  let g:ale_fixers.testft = ['DoNothing', 'Capitalize']
   ALEFix
   call ale#test#FlushJobs()
 
 Expect(Only the second function should be applied):
-  $a
-  $b
-  $c
+  A
+  B
+  C
 
 Execute(The * fixers shouldn't be used if an empty list is set for fixers):
   let g:ale_fixers.testft = []
-  let g:ale_fixers['*'] = ['AddDollars']
+  let g:ale_fixers['*'] = ['Capitalize']
   ALEFix
   call ale#test#FlushJobs()
 
@@ -296,14 +296,14 @@ Expect(Nothing should be changed):
   c
 
 Execute(* fixers should be used if no filetype is matched):
-  let g:ale_fixers = {'*': ['AddDollars']}
+  let g:ale_fixers = {'*': ['Capitalize']}
   ALEFix
   call ale#test#FlushJobs()
 
 Expect(The file should be changed):
-  $a
-  $b
-  $c
+  A
+  B
+  C
 
 Execute(ALEFix should allow commands to be run):
   if has('win32')
@@ -323,13 +323,13 @@ Expect(An extra line should be added):
 
 Execute(ALEFix should use fixers passed in commandline when provided):
   let g:ale_fixers.testft = ['RemoveLastLine']
-  ALEFix AddCarets AddDollars
+  ALEFix AddCarets Capitalize
   call ale#test#FlushJobs()
 
 Expect(Only fixers passed via command line should be run):
-  $^a
-  $^b
-  $^c
+  ^A
+  ^B
+  ^C
 
 Execute(ALEFix should allow temporary files to be read):
   if has('win32')
@@ -364,43 +364,43 @@ Expect(An extra line should be added):
 Execute(ALEFix should allow jobs and simple functions to be combined):
   if has('win32')
     " Just skip this test on Windows, we can't run it.
-    call setline(1, ['$x'])
+    call setline(1, ['X'])
     2,3d
   else
-    let g:ale_fixers.testft = ['ReplaceWithTempFile', 'AddDollars']
+    let g:ale_fixers.testft = ['ReplaceWithTempFile', 'Capitalize']
     ALEFix
     call ale#test#FlushJobs()
   endif
 
 Expect(The lines from the temporary file should be modified):
-  $x
+  X
 
 Execute(ALEFix should send lines modified by functions to jobs):
   if has('win32')
     " Just skip this test on Windows, we can't run it.
-    call setline(1, ['$a', '$b', '$c', 'd'])
+    call setline(1, ['A', 'B', 'C', 'd'])
   else
-    let g:ale_fixers.testft = ['AddDollars', 'CatLine']
+    let g:ale_fixers.testft = ['Capitalize', 'CatLine']
     ALEFix
     call ale#test#FlushJobs()
   endif
 
 Expect(The lines should first be modified by the function, then the job):
-  $a
-  $b
-  $c
+  A
+  B
+  C
   d
 
 Execute(ALEFix should skip commands when jobs fail to run):
   let g:ale_emulate_job_failure = 1
-  let g:ale_fixers.testft = ['CatLine', 'AddDollars']
+  let g:ale_fixers.testft = ['CatLine', 'Capitalize']
   ALEFix
   call ale#test#FlushJobs()
 
 Expect(Only the second function should be applied):
-  $a
-  $b
-  $c
+  A
+  B
+  C
 
 Execute(ALEFix should handle strings for selecting a single function):
   let g:ale_fixers.testft = 'AddCarets'
@@ -459,7 +459,7 @@ Expect(There should be an extra line):
   d
 
 Execute(ALEFix should user buffer-local fixer settings):
-  let g:ale_fixers.testft = ['AddCarets', 'AddDollars']
+  let g:ale_fixers.testft = ['AddCarets', 'Capitalize']
   let b:ale_fixers = {'testft': ['RemoveLastLine']}
   ALEFix
   call ale#test#FlushJobs()
@@ -469,7 +469,7 @@ Expect(There should be only two lines):
   b
 
 Execute(ALEFix should allow Lists to be used for buffer-local fixer settings):
-  let g:ale_fixers.testft = ['AddCarets', 'AddDollars']
+  let g:ale_fixers.testft = ['AddCarets', 'Capitalize']
   let b:ale_fixers = ['RemoveLastLine']
   ALEFix
   call ale#test#FlushJobs()
@@ -492,7 +492,7 @@ Execute(ALEFix should fix files on the save event):
   execute 'noautocmd silent file ' . fnameescape(g:test_filename)
   call writefile(getline(1, '$'), g:test_filename)
 
-  let g:ale_fixers.testft = ['AddDollars']
+  let g:ale_fixers.testft = ['Capitalize']
 
   " We have to set the buftype to empty so the file will be written.
   setlocal buftype=
@@ -502,7 +502,7 @@ Execute(ALEFix should fix files on the save event):
   call ale#test#FlushJobs()
 
   " We should save the file.
-  AssertEqual ['$a', '$b', '$c'], readfile(g:test_filename)
+  AssertEqual ['A', 'B', 'C'], readfile(g:test_filename)
   Assert !&modified, 'The file was marked as ''modified'''
 
   if !has('win32')
@@ -521,9 +521,9 @@ Execute(ALEFix should fix files on the save event):
   endif
 
 Expect(The buffer should be modified):
-  $a
-  $b
-  $c
+  A
+  B
+  C
 
 Given testft (A file with three lines):
   a
@@ -540,7 +540,7 @@ Execute(ALEFix should run the linters with b:ale_lint_on_save = 1):
   execute 'noautocmd silent file ' . fnameescape(g:test_filename)
   call writefile(getline(1, '$'), g:test_filename)
 
-  let g:ale_fixers.testft = ['AddDollars']
+  let g:ale_fixers.testft = ['Capitalize']
 
   " We have to set the buftype to empty so the file will be written.
   setlocal buftype=
@@ -550,7 +550,7 @@ Execute(ALEFix should run the linters with b:ale_lint_on_save = 1):
   call ale#test#FlushJobs()
 
   " We should save the file.
-  AssertEqual ['$a', '$b', '$c'], readfile(g:test_filename)
+  AssertEqual ['A', 'B', 'C'], readfile(g:test_filename)
   Assert !&modified, 'The file was marked as ''modified'''
 
   if !has('win32')
@@ -569,9 +569,9 @@ Execute(ALEFix should run the linters with b:ale_lint_on_save = 1):
   endif
 
 Expect(The buffer should be modified):
-  $a
-  $b
-  $c
+  A
+  B
+  C
 
 Execute(ALEFix should not fix files on :wq):
   let g:ale_fix_on_save = 1
@@ -582,7 +582,7 @@ Execute(ALEFix should not fix files on :wq):
   execute 'noautocmd silent file ' . fnameescape(g:test_filename)
   call writefile(getline(1, '$'), g:test_filename)
 
-  let g:ale_fixers.testft = ['AddDollars']
+  let g:ale_fixers.testft = ['Capitalize']
 
   " We have to set the buftype to empty so the file will be written.
   setlocal buftype=

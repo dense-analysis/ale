@@ -2,7 +2,7 @@
 " Description: checkstyle for Java files
 
 call ale#Set('java_checkstyle_executable', 'checkstyle')
-call ale#Set('java_checkstyle_config', 'google_checks.xml')
+call ale#Set('java_checkstyle_config', '/google_checks.xml')
 call ale#Set('java_checkstyle_options', '')
 
 function! ale_linters#java#checkstyle#Handle(buffer, lines) abort
@@ -39,11 +39,21 @@ function! ale_linters#java#checkstyle#Handle(buffer, lines) abort
     return l:output
 endfunction
 
+function! s:GetConfig(buffer, config) abort
+    if ale#path#IsAbsolute(a:config)
+        return a:config
+    endif
+
+    let s:file = ale#path#FindNearestFile(a:buffer, a:config)
+
+    return !empty(s:file) ? s:file : a:config
+endfunction
+
 function! ale_linters#java#checkstyle#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'java_checkstyle_options')
     let l:config_option = ale#Var(a:buffer, 'java_checkstyle_config')
     let l:config = l:options !~# '\v(^| )-c' && !empty(l:config_option)
-    \   ? ale#path#FindNearestFile(a:buffer, l:config_option)
+    \   ? s:GetConfig(a:buffer, l:config_option)
     \   : ''
 
     return '%e'

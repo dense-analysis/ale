@@ -121,6 +121,16 @@ Execute(The C Clang handler should include root directories for projects with .h
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/hpp_file_project'))
   \   . ' -'
 
+Execute(The C ClangTidy handler should include 'include' directories for projects with a Makefile):
+  call ale#assert#SetUpLinterTest('c', 'clangtidy')
+  call ale#test#SetFilename('../test_c_projects/makefile_project/subdir/file.cpp')
+  let g:ale_c_clangtidy_options = ''
+
+  AssertLinter 'clang-tidy',
+  \ ale#Escape('clang-tidy')
+  \ . ' %s '
+  \ . '-- -I' . ale#Escape(ale#path#Simplify(g:dir . '/../test_c_projects/makefile_project/include'))
+
 Execute(The C++ GCC handler should include 'include' directories for projects with a Makefile):
   call ale#assert#SetUpLinterTest('cpp', 'gcc')
   call ale#test#SetFilename('../test_c_projects/makefile_project/subdir/file.cpp')
@@ -225,3 +235,14 @@ Execute(The C++ ClangTidy handler should include json folders for projects with 
   \ ale#Escape('clang-tidy')
   \   . ' %s '
   \   . '-p ' . ale#Escape(ale#path#Simplify(g:dir . '/../test_c_projects/json_project/build'))
+
+Execute(The C++ ClangTidy handler should include 'include' directories for projects with a Makefile):
+  call ale#assert#SetUpLinterTest('cpp', 'clangtidy')
+  call ale#test#SetFilename('../test_c_projects/makefile_project/subdir/file.cpp')
+  let g:ale_cpp_clangtidy_options = ''
+
+  AssertLinter 'clang-tidy',
+  \ ale#Escape('clang-tidy')
+  \ . ' %s '
+  \ . '-- -I' . ale#Escape(ale#path#Simplify(g:dir . '/../test_c_projects/makefile_project/include'))
+

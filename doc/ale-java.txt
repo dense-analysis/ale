@@ -9,7 +9,7 @@ g:ale_java_checkstyle_config                     *g:ale_java_checkstyle_config*
                                                  *b:ale_java_checkstyle_config*
 
   Type: |String|
-  Default: `'google_checks.xml'`
+  Default: `'/google_checks.xml'`
 
   A path to a checkstyle configuration file.
 
@@ -117,16 +117,46 @@ or
 
 This generates a dist/mac or dist/windows directory that contains the
 language server. To let ALE use this language server you need to set the
-g:ale_java_javalsp_executable variable to the absolute path of the java
+g:ale_java_javalsp_executable variable to the absolute path of the launcher
 executable in this directory.
 
 g:ale_java_javalsp_executable                   *g:ale_java_javalsp_executable*
                                                 *b:ale_java_javalsp_executable*
   Type: |String|
-  Default: `'java'`
+  Default: `''`
 
-This variable can be changed to use a different executable for java.
+This variable must be set to the absolute path of the language server launcher
+executable. For example:
+>
+  let g:ale_java_javalsp_executable=/java-language-server/dist/mac/bin/launcher
+<
 
+g:ale_java_javalsp_config                           *g:ale_java_javalsp_config*
+                                                    *b:ale_java_javalsp_config*
+  Type: |Dictionary|
+  Default: `{}`
+
+The javalsp linter automatically detects external depenencies for Maven and
+Gradle projects. In case the javalsp fails to detect some of them, you can
+specify them setting a dictionary to |g:ale_java_javalsp_config| variable.
+>
+  let g:ale_java_javalsp_executable =
+  \ {
+  \   'java': {
+  \     'externalDependencies': [
+  \       'junit:junit:jar:4.12:test',   " Maven format
+  \       'junit:junit:4.1'              " Gradle format
+  \     ],
+  \     'classPath': [
+  \       'lib/some-dependency.jar',
+  \       '/android-sdk/platforms/android-28.jar'
+  \     ]
+  \   }
+  \ }
+
+The Java language server will look for the dependencies you specify in
+`externalDependencies` array in your Maven and Gradle caches ~/.m2 and
+~/.gradle.
 
 ===============================================================================
 eclipselsp                                                *ale-java-eclipselsp*

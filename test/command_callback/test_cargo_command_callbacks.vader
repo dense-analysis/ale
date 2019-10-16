@@ -139,23 +139,60 @@ Execute(When a crate belongs to a workspace we chdir into the crate, unless we d
 
 Execute(When ale_rust_cargo_use_clippy is set, cargo-clippy is used as linter):
   let b:ale_rust_cargo_use_clippy = 1
+
   AssertLinter 'cargo', [
   \ ale#Escape('cargo') . ' --version',
-  \ 'cargo clippy --frozen --message-format=json -q ',
+  \ 'cargo clippy --frozen --message-format=json -q',
   \]
 
 Execute(When ale_rust_cargo_clippy_options is set, cargo-clippy appends it to commandline):
   let b:ale_rust_cargo_use_clippy = 1
   let b:ale_rust_cargo_clippy_options = '-- -D warnings'
+
   AssertLinter 'cargo', [
   \ ale#Escape('cargo') . ' --version',
   \ 'cargo clippy --frozen --message-format=json -q -- -D warnings',
+  \]
+
+Execute(Clippy options work without prepending --):
+  let b:ale_rust_cargo_use_clippy = 1
+  let b:ale_rust_cargo_clippy_options = '-D warnings'
+
+  AssertLinter 'cargo', [
+  \ ale#Escape('cargo') . ' --version',
+  \ 'cargo clippy --frozen --message-format=json -q -- -D warnings',
+  \]
+
+Execute(Build supports all cargo flags):
+  let g:ale_rust_cargo_use_check = 0
+  let g:ale_rust_cargo_check_all_targets = 1
+  let g:ale_rust_cargo_check_tests = 1
+  let g:ale_rust_cargo_check_examples = 1
+  let b:ale_rust_cargo_default_feature_behavior = 'all'
+
+  AssertLinter 'cargo', [
+  \ ale#Escape('cargo') . ' --version',
+  \ 'cargo build --all-targets --examples --tests --frozen --message-format=json -q --all-features',
+  \]
+
+Execute(Clippy supports all cargo flags):
+  let b:ale_rust_cargo_use_clippy = 1
+  let g:ale_rust_cargo_check_all_targets = 1
+  let g:ale_rust_cargo_check_tests = 1
+  let g:ale_rust_cargo_check_examples = 1
+  let b:ale_rust_cargo_default_feature_behavior = 'all'
+  let b:ale_rust_cargo_clippy_options = '-D warnings'
+
+  AssertLinter 'cargo', [
+  \ ale#Escape('cargo') . ' --version',
+  \ 'cargo clippy --all-targets --examples --tests --frozen --message-format=json -q --all-features -- -D warnings',
   \]
 
 Execute(cargo-check does not refer ale_rust_cargo_clippy_options):
   let b:ale_rust_cargo_use_clippy = 0
   let b:ale_rust_cargo_use_check = 1
   let b:ale_rust_cargo_clippy_options = '-- -D warnings'
+
   AssertLinter 'cargo', [
   \ ale#Escape('cargo') . ' --version',
   \ 'cargo check --frozen --message-format=json -q',

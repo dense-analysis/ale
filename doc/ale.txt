@@ -9,7 +9,8 @@ CONTENTS                                                         *ale-contents*
   1. Introduction.........................|ale-introduction|
   2. Supported Languages & Tools..........|ale-support|
   3. Linting..............................|ale-lint|
-    3.1 Other Sources.....................|ale-lint-other-sources|
+    3.1 Adding Language Servers...........|ale-lint-language-servers|
+    3.2 Other Sources.....................|ale-lint-other-sources|
   4. Fixing Problems......................|ale-fix|
   5. Language Server Protocol Support.....|ale-lsp|
     5.1 Completion........................|ale-completion|
@@ -84,7 +85,7 @@ have even saved your changes. ALE will check your code in the following
 circumstances, which can be configured with the associated options.
 
 * When you modify a buffer.                - |g:ale_lint_on_text_changed|
-* On leaving insert mode. (off by default) - |g:ale_lint_on_insert_leave|
+* On leaving insert mode.                  - |g:ale_lint_on_insert_leave|
 * When you open a new or modified buffer.  - |g:ale_lint_on_enter|
 * When you save a buffer.                  - |g:ale_lint_on_save|
 * When the filetype changes for a buffer.  - |g:ale_lint_on_filetype_changed|
@@ -147,7 +148,48 @@ ALE offers several options for controlling which linters are run.
 
 
 -------------------------------------------------------------------------------
-3.1 Other Sources                                      *ale-lint-other-sources*
+3.1 Adding Language Servers                         *ale-lint-language-servers*
+
+ALE comes with many default configurations for language servers, so they can
+be detected and run automatically. ALE can connect to other language servers
+by defining a new linter for a filetype. New linters can be defined in |vimrc|,
+in plugin files, or `ale_linters` directories in |runtimepath|.
+
+See |ale-linter-loading-behavior| for more information on loading linters.
+
+A minimal configuration for a language server linter might look so. >
+
+  call ale#linter#Define('filetype_here', {
+  \   'name': 'any_name_you_want',
+  \   'lsp': 'stdio',
+  \   'executable': '/path/to/executable',
+  \   'command': '%e run',
+  \   'project_root': '/path/to/root_of_project',
+  \})
+<
+For language servers that use a TCP socket connection, you should define the
+address to connect to instead. >
+
+  call ale#linter#Define('filetype_here', {
+  \   'name': 'any_name_you_want',
+  \   'lsp': 'socket',
+  \   'address': 'servername:1234',
+  \   'project_root': '/path/to/root_of_project',
+  \})
+<
+  Most of the options for a language server can be replaced with a |Funcref|
+  for a function accepting a buffer number for dynamically computing values
+  such as the executable path, the project path, the server address, etc,
+  most of which can also be determined based on executing some other
+  asynchronous task. See |ale#command#Run()| for computing linter options
+  based on asynchronous results.
+
+  See |ale#linter#Define()| for a detailed explanation of all of the options
+  for configuring linters.
+
+
+-------------------------------------------------------------------------------
+3.2 Other Sources                                      *ale-lint-other-sources*
 
 Problems for a buffer can be taken from other sources and rendered by ALE.
 This allows ALE to be used in combination with other plugins which also want
@@ -341,6 +383,17 @@ completion source for Deoplete is named `'ale'`, and should enabled
 automatically if Deoplete is enabled and configured correctly. Deoplete
 integration should not be combined with ALE's own implementation.
 
+                                                 *ale-asyncomplete-integration*
+
+ALE additionally integrates with asyncomplete.vim for offering automatic
+completion data. ALE's asyncomplete source requires registration and should
+use the defaults provided by the|asyncomplete#sources#ale#get_source_options| function >
+
+  " Use ALE's function for asyncomplete defaults
+  au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ale#get_source_options({
+      \ 'priority': 10, " Provide your own overrides here
+      \ }))
+>
 ALE also offers its own completion implementation, which does not require any
 other plugins. Suggestions will be made while you type after completion is
 enabled. ALE's own completion implementation can be enabled by setting
@@ -364,6 +417,10 @@ with |g:ale_completion_excluded_words| or |b:ale_completion_excluded_words|.
 The |ALEComplete| command can be used to show completion suggestions manually,
 even when |g:ale_completion_enabled| is set to `0`. For manually requesting
 completion information with Deoplete, consult Deoplete's documentation.
+
+When working with TypeScript files, ALE by can support automatic imports
+from external modules. This behavior can be enabled by setting the
+|g:ale_completion_tsserver_autoimport| variable to `1`.
 
                                                *ale-completion-completeopt-bug*
 
@@ -584,6 +641,16 @@ b:ale_completion_enabled                             *b:ale_completion_enabled*
   ALE's completion support must be enabled globally to be enabled locally.
 
   See |ale-completion|
+
+
+g:ale_completion_tsserver_autoimport     *g:ale_completion_tsserver_autoimport*
+
+  Type: Number
+  Default: `0`
+
+  When this option is set to `0`, ALE will not try to automatically import
+  completion results from external modules. It can be enabled by setting it
+  to `1`.
 
 
 g:ale_completion_excluded_words               *g:ale_completion_excluded_words*
@@ -953,7 +1020,7 @@ g:ale_lint_on_save                                         *g:ale_lint_on_save*
 g:ale_lint_on_text_changed                         *g:ale_lint_on_text_changed*
 
   Type: |String|
-  Default: `'always'`
+  Default: `'normal'`
 
   This option controls how ALE will check your files as you make changes.
   The following values can be used.
@@ -978,9 +1045,10 @@ g:ale_lint_on_text_changed                         *g:ale_lint_on_text_changed*
 
 
 g:ale_lint_on_insert_leave                         *g:ale_lint_on_insert_leave*
+                                                   *b:ale_lint_on_insert_leave*
 
   Type: |Number|
-  Default: `0`
+  Default: `1`
 
   When set to `1` in your vimrc file, this option will cause ALE to run
   linters when you leave insert mode.
@@ -992,6 +1060,10 @@ g:ale_lint_on_insert_leave                         *g:ale_lint_on_insert_leave*
     " Make using Ctrl+C do the same as Escape, to trigger autocmd commands
     inoremap <C-c> <Esc>
 <
+  A buffer-local version of this setting `b:ale_lint_on_insert_leave` can be
+  set to `0` to disable linting when leaving insert mode. The setting must
+  be enabled globally to be enabled locally.
+
   You should set this setting once before ALE is loaded, and restart Vim if
   you want to change your preferences. See |ale-lint-settings-on-startup|.
 
@@ -1011,12 +1083,17 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
   {
   \   'Dockerfile': 'dockerfile',
   \   'csh': 'sh',
+  \   'javascriptreact': ['javascript', 'jsx'],
   \   'plaintex': 'tex',
   \   'rmarkdown': 'r',
+  \   'rmd': 'r',
   \   'systemverilog': 'verilog',
+  \   'typescriptreact': ['typescript', 'tsx'],
   \   'verilog_systemverilog': ['verilog_systemverilog', 'verilog'],
   \   'vimwiki': 'markdown',
   \   'vue': ['vue', 'javascript'],
+  \   'xsd': ['xsd', 'xml'],
+  \   'xslt': ['xslt', 'xml'],
   \   'zsh': 'sh',
   \}
 <
@@ -1299,6 +1376,27 @@ g:ale_pattern_options_enabled                   *g:ale_pattern_options_enabled*
   will not set buffer variables per |g:ale_pattern_options|.
 
 
+g:ale_rename_tsserver_find_in_comments *g:ale_rename_tsserver_find_in_comments*
+
+  Type: |Number|
+  Default: `0`
+
+  If enabled, this option will tell tsserver to find and replace text in
+  comments when calling |ALERename|. It can be enabled by settings the value
+  to `1`.
+
+
+g:ale_rename_tsserver_find_in_strings   *g:ale_rename_tsserver_find_in_strings*
+
+
+  Type: |Number|
+  Default: `0`
+
+  If enabled, this option will tell tsserver to find and replace text in
+  strings when calling |ALERename|. It can be enabled by settings the value to
+  `1`.
+
+
 g:ale_set_balloons                                         *g:ale_set_balloons*
                                                            *b:ale_set_balloons*
 
@@ -1419,6 +1517,18 @@ g:ale_set_signs                                               *g:ale_set_signs*
   |ALEWarningLine| - All items with `'type': 'W'`
   |ALEInfoLine|    - All items with `'type': 'I'`
 
+  With Neovim 0.3.2 or higher, ALE can use the `numhl` option to highlight the
+  'number' column. It uses the following highlight groups.
+
+  |ALEErrorSignLineNr|        - Items with `'type': 'E'`
+  |ALEWarningSignLineNr|      - Items with `'type': 'W'`
+  |ALEInfoSignLineNr|         - Items with `'type': 'I'`
+  |ALEStyleErrorSignLineNr|   - Items with `'type': 'E'` and `'sub_type': 'style'`
+  |ALEStyleWarningSignLineNr| - Items with `'type': 'W'` and `'sub_type': 'style'`
+
+  To enable line number highlighting |g:ale_sign_highlight_linenrs| must be
+  set to `1` before ALE is loaded.
+
   The markers for the highlights can be customized with the following options:
 
   |g:ale_sign_error|
@@ -1431,6 +1541,16 @@ g:ale_set_signs                                               *g:ale_set_signs*
   precedence in the order above, from highest to lowest.
 
   To limit the number of signs ALE will set, see |g:ale_max_signs|.
+
+
+g:ale_sign_priority                                       *g:ale_sign_priority*
+
+  Type: |Number|
+  Default: `30`
+
+  From Neovim 0.4.0 and Vim 8.1, ALE can set sign priority to all signs. The
+  larger this value is, the higher priority ALE signs have over other plugin
+  signs. See |sign-priority| for further details on how priority works.
 
 
 g:ale_shell                                                       *g:ale_shell*
@@ -1525,6 +1645,16 @@ g:ale_sign_warning                                         *g:ale_sign_warning*
   The sign for warnings in the sign gutter.
 
 
+g:ale_sign_highlight_linenrs                     *g:ale_sign_highlight_linenrs*
+
+  Type: |Number|
+  Default: `0`
+
+  When set to `1`, this option enables highlighting problems on the 'number'
+  column in Vim versions that support `numhl` highlights. This option must be
+  configured before ALE is loaded.
+
+
 g:ale_update_tagstack                                   *g:ale_update_tagstack*
                                                         *b:ale_update_tagstack*
  Type: |Number|
@@ -1578,6 +1708,8 @@ g:ale_virtualtext_cursor                             *g:ale_virtualtext_cursor*
 
   Type: |Number|
   Default: `0`
+
+  This option only has any effect in NeoVim.
 
   When this option is set to `1`, a message will be shown when a cursor is
   near a warning or error. ALE will attempt to find the warning or error at a
@@ -1703,6 +1835,15 @@ ALEErrorSign                                                     *ALEErrorSign*
   The highlight for error signs. See |g:ale_set_signs|.
 
 
+ALEErrorSignLineNr                                         *ALEErrorSignLineNr*
+
+  Default: `highlight link ALEErrorSignLineNr CursorLineNr`
+
+  The highlight for error signs. See |g:ale_set_signs|.
+
+  NOTE: This highlight is only available on Neovim 0.3.2 or higher.
+
+
 ALEInfo                                                              *ALEInfo.*
                                                             *ALEInfo-highlight*
   Default: `highlight link ALEInfo ALEWarning`
@@ -1727,6 +1868,15 @@ ALEInfoLine                                                       *ALEInfoLine*
   See |g:ale_set_signs| and |g:ale_set_highlights|.
 
 
+ALEInfoSignLineNr                                           *ALEInfoSignLineNr*
+
+  Default: `highlight link ALEInfoSignLineNr CursorLineNr`
+
+  The highlight for error signs. See |g:ale_set_signs|.
+
+  NOTE: This highlight is only available on Neovim 0.3.2 or higher.
+
+
 ALEStyleError                                                   *ALEStyleError*
 
   Default: `highlight link ALEStyleError ALEError`
@@ -1741,6 +1891,15 @@ ALEStyleErrorSign                                           *ALEStyleErrorSign*
   The highlight for style error signs. See |g:ale_set_signs|.
 
 
+ALEStyleErrorSignLineNr                               *ALEStyleErrorSignLineNr*
+
+  Default: `highlight link ALEStyleErrorSignLineNr CursorLineNr`
+
+  The highlight for error signs. See |g:ale_set_signs|.
+
+  NOTE: This highlight is only available on Neovim 0.3.2 or higher.
+
+
 ALEStyleWarning                                               *ALEStyleWarning*
 
   Default: `highlight link ALEStyleWarning ALEError`
@@ -1753,6 +1912,15 @@ ALEStyleWarningSign                                       *ALEStyleWarningSign*
   Default: `highlight link ALEStyleWarningSign ALEWarningSign`
 
   The highlight for style warning signs. See |g:ale_set_signs|.
+
+
+ALEStyleWarningSignLineNr                           *ALEStyleWarningSignLineNr*
+
+  Default: `highlight link ALEStyleWarningSignLineNr CursorLineNr`
+
+  The highlight for error signs. See |g:ale_set_signs|.
+
+  NOTE: This highlight is only available on Neovim 0.3.2 or higher.
 
 
 ALEVirtualTextError                                       *ALEVirtualTextError*
@@ -1812,6 +1980,15 @@ ALEWarningSign                                                 *ALEWarningSign*
   Default: `highlight link ALEWarningSign todo`
 
   The highlight for warning signs. See |g:ale_set_signs|.
+
+
+ALEWarningSignLineNr                                     *ALEWarningSignLineNr*
+
+  Default: `highlight link ALEWarningSignLineNr CursorLineNr`
+
+  The highlight for error signs. See |g:ale_set_signs|.
+
+  NOTE: This highlight is only available on Neovim 0.3.2 or higher.
 
 
 ===============================================================================
@@ -1882,6 +2059,14 @@ g:ale_languagetool_executable                   *g:ale_languagetool_executable*
   The executable to run for languagetool.
 
 
+g:ale_languagetool_options                         *g:ale_languagetool_options*
+                                                   *b:ale_languagetool_options*
+  Type: |String|
+  Default: `'--autoDetect'`
+
+  This variable can be set to pass additional options to languagetool.
+
+
 -------------------------------------------------------------------------------
 7.3. Options for write-good                            *ale-write-good-options*
 
@@ -1920,6 +2105,7 @@ documented in additional help files.
 
   ada.....................................|ale-ada-options|
     gcc...................................|ale-ada-gcc|
+    gnatpp................................|ale-ada-gnatpp|
   ansible.................................|ale-ansible-options|
     ansible-lint..........................|ale-ansible-ansible-lint|
   asciidoc................................|ale-asciidoc-options|
@@ -1968,6 +2154,7 @@ documented in additional help files.
     uncrustify............................|ale-cpp-uncrustify|
     ccls..................................|ale-cpp-ccls|
   c#......................................|ale-cs-options|
+    csc...................................|ale-cs-csc|
     mcs...................................|ale-cs-mcs|
     mcsc..................................|ale-cs-mcsc|
     uncrustify............................|ale-cs-uncrustify|
@@ -1979,6 +2166,7 @@ documented in additional help files.
     nvcc..................................|ale-cuda-nvcc|
     clang-format..........................|ale-cuda-clangformat|
   d.......................................|ale-d-options|
+    dfmt..................................|ale-d-dfmt|
     dls...................................|ale-d-dls|
     uncrustify............................|ale-d-uncrustify|
   dart....................................|ale-dart-options|
@@ -1995,7 +2183,7 @@ documented in additional help files.
     credo.................................|ale-elixir-credo|
   elm.....................................|ale-elm-options|
     elm-format............................|ale-elm-elm-format|
-    elm-lsp...............................|ale-elm-elm-lsp|
+    elm-ls................................|ale-elm-elm-ls|
     elm-make..............................|ale-elm-elm-make|
   erlang..................................|ale-erlang-options|
     dialyzer..............................|ale-erlang-dialyzer|
@@ -2035,6 +2223,7 @@ documented in additional help files.
     hackfmt...............................|ale-hack-hackfmt|
     hhast.................................|ale-hack-hhast|
   handlebars..............................|ale-handlebars-options|
+    prettier..............................|ale-handlebars-prettier|
     ember-template-lint...................|ale-handlebars-embertemplatelint|
   haskell.................................|ale-haskell-options|
     brittany..............................|ale-haskell-brittany|
@@ -2044,6 +2233,7 @@ documented in additional help files.
     cabal-ghc.............................|ale-haskell-cabal-ghc|
     hdevtools.............................|ale-haskell-hdevtools|
     hfmt..................................|ale-haskell-hfmt|
+    hindent...............................|ale-haskell-hindent|
     hlint.................................|ale-haskell-hlint|
     stack-build...........................|ale-haskell-stack-build|
     stack-ghc.............................|ale-haskell-stack-ghc|
@@ -2060,6 +2250,8 @@ documented in additional help files.
     write-good............................|ale-html-write-good|
   idris...................................|ale-idris-options|
     idris.................................|ale-idris-idris|
+  ink.....................................|ale-ink-options|
+    ink-language-server...................|ale-ink-language-server|
   ispc....................................|ale-ispc-options|
     ispc..................................|ale-ispc-ispc|
   java....................................|ale-java-options|
@@ -2115,6 +2307,8 @@ documented in additional help files.
     mmc...................................|ale-mercury-mmc|
   nasm....................................|ale-nasm-options|
     nasm..................................|ale-nasm-nasm|
+  nix.....................................|ale-nix-options|
+    nixpkgs-fmt...........................|ale-nix-nixpkgs-fmt|
   nroff...................................|ale-nroff-options|
     write-good............................|ale-nroff-write-good|
   objc....................................|ale-objc-options|
@@ -2168,6 +2362,8 @@ documented in additional help files.
     puppet................................|ale-puppet-puppet|
     puppetlint............................|ale-puppet-puppetlint|
     puppet-languageserver.................|ale-puppet-languageserver|
+  purescript..............................|ale-purescript-options|
+    purescript-language-server............|ale-purescript-language-server|
   pyrex (cython)..........................|ale-pyrex-options|
     cython................................|ale-pyrex-cython|
   python..................................|ale-python-options|
@@ -2185,6 +2381,7 @@ documented in additional help files.
     pylint................................|ale-python-pylint|
     pyls..................................|ale-python-pyls|
     pyre..................................|ale-python-pyre|
+    reorder-python-imports................|ale-python-reorder_python_imports|
     vulture...............................|ale-python-vulture|
     yapf..................................|ale-python-yapf|
   qml.....................................|ale-qml-options|
@@ -2195,18 +2392,21 @@ documented in additional help files.
   reasonml................................|ale-reasonml-options|
     merlin................................|ale-reasonml-merlin|
     ols...................................|ale-reasonml-ols|
+    reason-language-server................|ale-reasonml-language-server|
     refmt.................................|ale-reasonml-refmt|
   restructuredtext........................|ale-restructuredtext-options|
     textlint..............................|ale-restructuredtext-textlint|
     write-good............................|ale-restructuredtext-write-good|
   ruby....................................|ale-ruby-options|
     brakeman..............................|ale-ruby-brakeman|
+    debride...............................|ale-ruby-debride|
     rails_best_practices..................|ale-ruby-rails_best_practices|
     reek..................................|ale-ruby-reek|
     rubocop...............................|ale-ruby-rubocop|
     ruby..................................|ale-ruby-ruby|
     rufo..................................|ale-ruby-rufo|
     solargraph............................|ale-ruby-solargraph|
+    sorbet................................|ale-ruby-sorbet|
     standardrb............................|ale-ruby-standardrb|
   rust....................................|ale-rust-options|
     cargo.................................|ale-rust-cargo|
@@ -2217,6 +2417,7 @@ documented in additional help files.
     sasslint..............................|ale-sass-sasslint|
     stylelint.............................|ale-sass-stylelint|
   scala...................................|ale-scala-options|
+    metals................................|ale-scala-metals|
     sbtserver.............................|ale-scala-sbtserver|
     scalafmt..............................|ale-scala-scalafmt|
     scalastyle............................|ale-scala-scalastyle|
@@ -2232,6 +2433,7 @@ documented in additional help files.
   sml.....................................|ale-sml-options|
     smlnj.................................|ale-sml-smlnj|
   solidity................................|ale-solidity-options|
+    solc..................................|ale-solidity-solc|
     solhint...............................|ale-solidity-solhint|
     solium................................|ale-solidity-solium|
   spec....................................|ale-spec-options|
@@ -2239,6 +2441,7 @@ documented in additional help files.
   sql.....................................|ale-sql-options|
     pgformatter...........................|ale-sql-pgformatter|
     sqlfmt................................|ale-sql-sqlfmt|
+    sqlformat.............................|ale-sql-sqlformat|
   stylus..................................|ale-stylus-options|
     stylelint.............................|ale-stylus-stylelint|
   sugarss.................................|ale-sugarss-options|
@@ -2438,6 +2641,18 @@ ALEHover                                                             *ALEHover*
   messages from asynchronous callbacks.
 
   A plug mapping `<Plug>(ale_hover)` is defined for this command.
+
+
+ALEOrganizeImports                                         *ALEOrganizeImports*
+
+  Organize imports using tsserver. Currently not implemented for LSPs.
+
+
+ALERename                                                           *ALERename*
+
+  Rename a symbol using TypeScript server or Language Server.
+
+  The user will be prompted for a new name.
 
 
 ALESymbolSearch `<query>`                                     *ALESymbolSearch*
@@ -3208,7 +3423,7 @@ ale#lsp_linter#SendRequest(buffer, linter_name, message, [Handler])
                  containing three elements:
                  `is_notification` - an |Integer| that has value 1 if the
                    request is a notification, 0 otherwise;
-                 `methdod` - a |String|, identifying an LSP method supported
+                 `method` - a |String|, identifying an LSP method supported
                    by `linter`;
                  `parameters` - a |dictionary| of LSP parameters that are
                    applicable to `method`.
@@ -3357,7 +3572,7 @@ snazzy looking ale glass logo. Cheers, Mark!
 11. Contact                                                       *ale-contact*
 
 If you like this plugin, and wish to get in touch, check out the GitHub
-page for issues and more at https://github.com/w0rp/ale
+page for issues and more at https://github.com/dense-analysis/ale
 
 If you wish to contact the author of this plugin directly, please feel
 free to send an email to devw0rp@gmail.com.

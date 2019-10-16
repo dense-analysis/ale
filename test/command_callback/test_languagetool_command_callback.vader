@@ -12,4 +12,11 @@ Execute(Should be able to set a custom executable):
   let g:ale_languagetool_executable = 'foobar'
 
   AssertLinter 'foobar' , ale#Escape('foobar')
-  \   . ' --autoDetect %s'
+  \ . ' --autoDetect %s'
+
+Execute(Should be able to include custom languagetool options):
+  let g:ale_languagetool_options = '--language en'
+
+  " is now 'foobar' based on above global
+  AssertLinter 'foobar', ale#Escape('foobar')
+  \ . ' --language en %s'
