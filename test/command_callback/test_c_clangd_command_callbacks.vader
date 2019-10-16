@@ -4,7 +4,7 @@ Before:
   Save &filetype
   let &filetype = 'c'
 
-  let b:command_tail = " -x c"
+  let b:command_tail = ' -x c'
 
 After:
   unlet! b:command_tail
@@ -34,5 +34,5 @@ Execute(The executable should be configurable):
 Execute(The options should be configurable):
   let b:ale_c_clangd_options = '-compile-commands-dir=foo'
 
-  AssertLinter 'clangd', ale#Escape('clangd') . b:command_tail . " " . b:ale_c_clangd_options
+  AssertLinter 'clangd', ale#Escape('clangd') . b:command_tail . ' ' . b:ale_c_clangd_options
 
