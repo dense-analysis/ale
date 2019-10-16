@@ -2,7 +2,7 @@
 " Description: Fixing R files with styler.
 
 call ale#Set('r_styler_executable', 'Rscript')
-call ale#Set('r_styler_options', 'tidyverse_style')
+call ale#Set('r_styler_options', 'tidyverse_style()')
 
 function! ale#fixers#styler#Fix(buffer) abort
     return {
