@@ -404,6 +404,7 @@ Notes:
 * Rust
   * `cargo`!!
   * `rls`
+  * `rust-analyzer`
   * `rustc` (see |ale-integration-rust|)
   * `rustfmt`
 * Sass
