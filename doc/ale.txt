@@ -2409,9 +2409,9 @@ documented in additional help files.
     sorbet................................|ale-ruby-sorbet|
     standardrb............................|ale-ruby-standardrb|
   rust....................................|ale-rust-options|
+    analyzer..............................|ale-rust-analyzer|
     cargo.................................|ale-rust-cargo|
     rls...................................|ale-rust-rls|
-    analyzer..............................|ale-rust-analyzer|
     rustc.................................|ale-rust-rustc|
     rustfmt...............................|ale-rust-rustfmt|
   sass....................................|ale-sass-options|
