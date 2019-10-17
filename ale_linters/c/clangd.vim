@@ -5,7 +5,7 @@ call ale#Set('c_clangd_executable', 'clangd')
 call ale#Set('c_clangd_options', '')
 
 function! ale_linters#c#clangd#GetCommand(buffer) abort
-    return '%e' . ale#Pad(ale#Var(a:buffer, 'c_clangd_options'))
+    return '%e -x c' . ale#Pad(ale#Var(a:buffer, 'c_clangd_options'))
 endfunction
 
 call ale#linter#Define('c', {

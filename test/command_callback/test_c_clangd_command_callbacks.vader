@@ -4,14 +4,18 @@ Before:
   Save &filetype
   let &filetype = 'c'
 
+  let b:command_tail = ' -x c'
+
 After:
+  unlet! b:command_tail
+
   call ale#assert#TearDownLinterTest()
 
 Execute(The language string should be correct):
   AssertLSPLanguage 'c'
 
 Execute(The default executable should be correct):
-  AssertLinter 'clangd', ale#Escape('clangd')
+  AssertLinter 'clangd', ale#Escape('clangd') . b:command_tail
 
 Execute(The project root should be detected correctly):
   call ale#test#SetFilename(tempname() . '/dummy.c')
@@ -25,10 +29,10 @@ Execute(The project root should be detected correctly):
 Execute(The executable should be configurable):
   let g:ale_c_clangd_executable = 'foobar'
 
-  AssertLinter 'foobar', ale#Escape('foobar')
+  AssertLinter 'foobar', ale#Escape('foobar') . b:command_tail
 
 Execute(The options should be configurable):
   let b:ale_c_clangd_options = '-compile-commands-dir=foo'
 
-  AssertLinter 'clangd', ale#Escape('clangd') . ' ' . b:ale_c_clangd_options
+  AssertLinter 'clangd', ale#Escape('clangd') . b:command_tail . ' ' . b:ale_c_clangd_options
 
