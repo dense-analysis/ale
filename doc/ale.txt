@@ -2307,6 +2307,9 @@ documented in additional help files.
     mmc...................................|ale-mercury-mmc|
   nasm....................................|ale-nasm-options|
     nasm..................................|ale-nasm-nasm|
+  nim.....................................|ale-nim-options|
+    nimcheck..............................|ale-nim-nimcheck|
+    nimlsp................................|ale-nim-nimlsp|
   nix.....................................|ale-nix-options|
     nixpkgs-fmt...........................|ale-nix-nixpkgs-fmt|
   nroff...................................|ale-nroff-options|
