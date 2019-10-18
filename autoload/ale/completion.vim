@@ -722,7 +722,7 @@ endfunction
 function! ale#completion#HandleUserData(completed_item) abort
     let l:source = get(get(b:, 'ale_completion_info', {}), 'source', '')
 
-    if l:source isnot# 'ale-automatic' && l:source isnot# 'ale-manual'
+    if l:source isnot# 'ale-automatic' && l:source isnot# 'ale-manual' && l:source isnot# 'ale-callback'
         return
     endif
 
