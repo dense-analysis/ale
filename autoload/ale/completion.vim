@@ -298,7 +298,9 @@ function! ale#completion#ParseTSServerCompletions(response) abort
     let l:names = []
 
     for l:suggestion in a:response.body
-        if g:ale_completion_tsserver_remove_warnings == 0 || l:suggestion.kind isnot# 'warning'
+        let l:kind = get(l:suggestion, 'kind', '')
+
+        if g:ale_completion_tsserver_remove_warnings == 0 || l:kind isnot# 'warning'
             call add(l:names, {
             \ 'word': l:suggestion.name,
             \ 'source': get(l:suggestion, 'source', ''),
