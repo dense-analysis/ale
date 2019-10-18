@@ -6,7 +6,33 @@ After:
 
 Execute(The lua luacheck command callback should return the correct default string):
   AssertLinter 'luacheck',
-  \ ale#Escape('luacheck') . ' --formatter plain --codes --filename %s -'
+  \ ale#Escape('luacheck') . ' --formatter plain --codes --ranges %s'
+
+Execute(The lua luacheck command callback should be able to lint stdin when set):
+  let g:ale_lua_luacheck_lint_project = 0
+
+  AssertLinter 'luacheck',
+  \ ale#Escape('luacheck')
+  \ . ' --formatter plain --codes --ranges'
+  \ . ' --filename %s -'
+
+Execute(The lua luacheck command callback should be able to lint the project directory):
+  call ale#test#SetFilename(g:dir . '/lua-paths/luacheck-project/.luacheckrc') 
+
+  AssertLinter 'luacheck',
+  \ ale#path#CdString(ale#path#Simplify(g:dir . '/lua-paths/luacheck-project'))
+  \ . ale#Escape('luacheck')
+  \ . ' --formatter plain --codes --ranges '
+  \ . ale#path#Simplify(g:dir . '/lua-paths/luacheck-project')
+
+Execute(The lua luacheck command callback should be able to disable the Cd callback):
+  let g:ale_lua_luacheck_change_directory = 0
+  call ale#test#SetFilename(g:dir . '/lua-paths/luacheck-project/.luacheckrc')
+
+  AssertLinter 'luacheck',
+  \ ale#Escape('luacheck')
+  \ . ' --formatter plain --codes --ranges '
+  \ . ale#path#Simplify(g:dir . '/lua-paths/luacheck-project')
 
 Execute(The lua luacheck command callback should let you set options):
   let g:ale_lua_luacheck_options = '--config filename'
@@ -14,10 +40,10 @@ Execute(The lua luacheck command callback should let you set options):
   AssertLinter 'luacheck',
   \ ale#Escape('luacheck')
   \   . ' --config filename'
-  \   . ' --formatter plain --codes --filename %s -'
+  \   . ' --formatter plain --codes --ranges %s'
 
 Execute(The luacheck executable should be configurable):
   let g:ale_lua_luacheck_executable = 'luacheck.sh'
 
   AssertLinter 'luacheck.sh',
-  \ ale#Escape('luacheck.sh') . ' --formatter plain --codes --filename %s -'
+  \ ale#Escape('luacheck.sh') . ' --formatter plain --codes --ranges %s'
