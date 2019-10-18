@@ -16,6 +16,7 @@ let g:ale_completion_delay = get(g:, 'ale_completion_delay', 100)
 let g:ale_completion_excluded_words = get(g:, 'ale_completion_excluded_words', [])
 let g:ale_completion_max_suggestions = get(g:, 'ale_completion_max_suggestions', 50)
 let g:ale_completion_tsserver_autoimport = get(g:, 'ale_completion_tsserver_autoimport', 0)
+let g:ale_completion_tsserver_remove_warnings = get(g:, 'ale_completion_tsserver_remove_warnings', 0)
 
 let s:timer_id = -1
 let s:last_done_pos = []
@@ -297,10 +298,12 @@ function! ale#completion#ParseTSServerCompletions(response) abort
     let l:names = []
 
     for l:suggestion in a:response.body
-        call add(l:names, {
-        \ 'word': l:suggestion.name,
-        \ 'source': get(l:suggestion, 'source', ''),
-        \})
+        if g:ale_completion_tsserver_remove_warnings == 0 || l:suggestion.kind isnot# 'warning'
+            call add(l:names, {
+            \ 'word': l:suggestion.name,
+            \ 'source': get(l:suggestion, 'source', ''),
+            \})
+        endif
     endfor
 
     return l:names

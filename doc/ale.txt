@@ -420,7 +420,9 @@ completion information with Deoplete, consult Deoplete's documentation.
 
 When working with TypeScript files, ALE by can support automatic imports
 from external modules. This behavior can be enabled by setting the
-|g:ale_completion_tsserver_autoimport| variable to `1`.
+|g:ale_completion_tsserver_autoimport| variable to `1`. ALE can also remove
+warnings from your completions by setting the
+|g:ale_completion_tsserver_remove_warnings| variable to 1.
 
                                                *ale-completion-completeopt-bug*
 
