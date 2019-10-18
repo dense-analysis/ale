@@ -431,6 +431,12 @@ Execute(HandleUserData should call ale#code_action#HandleCodeAction):
   \})
   AssertEqual g:handle_code_action_called, 2
 
+  let b:ale_completion_info = {'source': 'ale-callback'}
+  call ale#completion#HandleUserData({
+  \  'user_data': '{"codeActions": [{"description":"", "changes": []}]}'
+  \})
+  AssertEqual g:handle_code_action_called, 3
+
 Execute(ale#code_action#HandleCodeAction should not be called when when source is not ALE):
   call MockHandleCodeAction()
   let b:ale_completion_info = {'source': 'syntastic'}
