@@ -16,6 +16,7 @@ let g:ale_completion_delay = get(g:, 'ale_completion_delay', 100)
 let g:ale_completion_excluded_words = get(g:, 'ale_completion_excluded_words', [])
 let g:ale_completion_max_suggestions = get(g:, 'ale_completion_max_suggestions', 50)
 let g:ale_completion_tsserver_autoimport = get(g:, 'ale_completion_tsserver_autoimport', 0)
+let g:ale_completion_tsserver_remove_items_without_detail = get(g:, 'ale_completion_tsserver_remove_items_without_detail', 0)
 
 let s:timer_id = -1
 let s:last_done_pos = []
@@ -358,7 +359,7 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
 
     let l:names = getbufvar(l:buffer, 'ale_tsserver_completion_names', [])
 
-    if !empty(l:names) && len(l:names) != len(l:results)
+    if !empty(l:names) && len(l:names) != len(l:results) && g:ale_completion_tsserver_remove_items_without_detail == 0
         let l:names_with_details = map(copy(l:results), 'v:val.word')
         let l:missing_names = filter(
         \   copy(l:names),
