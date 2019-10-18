@@ -492,10 +492,17 @@ function! ale#completion#HandleTSServerResponse(conn_id, response) abort
             let l:identifiers = []
 
             for l:name in l:names
-                call add(l:identifiers, {
+                let l:identifier = {
                 \   'name': l:name.word,
-                \   'source': get(l:name, 'source', ''),
-                \})
+                \}
+                let l:source = get(l:name, 'source', '')
+
+                " Empty source results in no details for the completed item
+                if !empty(l:source)
+                    call extend(l:identifier, { 'source': l:source })
+                endif
+
+                call add(l:identifiers, l:identifier)
             endfor
 
             let b:ale_completion_info.request_id = ale#lsp#Send(

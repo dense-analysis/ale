@@ -190,10 +190,8 @@ Execute(The right message sent to the tsserver LSP when the first completion mes
   \          'source': '/path/to/foo.ts',
   \         }, {
   \          'name': 'FooBar',
-  \          'source': '',
   \         }, {
   \          'name': 'frazzle',
-  \          'source': '',
   \     }],
   \     'offset': 1,
   \     'line': 1,
