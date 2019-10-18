@@ -38,9 +38,9 @@ function! ale_linters#lua#luacheck#Handle(buffer, lines) abort
 
         call add(l:output, {
         \   'filename': l:match[1],
-        \   'lnum': l:match[2],
-        \   'col': l:match[3],
-        \   'end_col': l:match[4],
+        \   'lnum': l:match[2] + 0,
+        \   'col': l:match[3] + 0,
+        \   'end_col': l:match[4] + 0,
         \   'type': l:match[5],
         \   'code': l:match[5] . l:match[6],
         \   'text': l:match[7],
