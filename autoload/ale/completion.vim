@@ -1,5 +1,6 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Completion support for LSP linters
+scriptencoding utf-8
 
 " The omnicompletion menu is shown through a special Plug mapping which is
 " only valid in Insert mode. This way, feedkeys() won't send these keys if you
