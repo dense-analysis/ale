@@ -801,6 +801,15 @@ g:ale_echo_msg_info_str                               *g:ale_echo_msg_info_str*
   The string used for `%severity%` for info. See |g:ale_echo_msg_format|
 
 
+g:ale_echo_msg_log_str                                 *g:ale_echo_msg_log_str*
+
+  Type: |String|
+  Default: `'Log'`
+
+  The string used for `%severity%` for log, used only for handling LSP show
+  message requests. See |g:ale_lsp_show_message_format|
+
+
 g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
 
   Type: |String|
@@ -1250,6 +1259,46 @@ b:ale_loclist_msg_format                             *b:ale_loclist_msg_format*
   message used for the loclist and the quickfix list.
 
   The strings for configuring `%severity%` are also used for this option.
+
+
+g:ale_lsp_show_message_format                           *g:ale_lsp_show_message_format*
+
+  Type: |String|
+  Default: `'%severity%:%linter%: %s'`
+
+  This variable defines the format that messages received from an LSP will
+  have when echoed. The following sequences of characters will be replaced.
+
+    `%s`           - replaced with the message text
+    `%linter%`     - replaced with the name of the linter
+    `%severity%`   - replaced with the severity of the message
+
+  The strings for `%severity%` levels "error", "info" and "warning" are shared
+  with |g:ale_echo_msg_format|. Severity "log" is unique to
+  |g:ale_lsp_show_message_format| and it can be configured via
+
+    |g:ale_echo_msg_log_str|     - Defaults to `'Log'`
+
+  Please note that |g:ale_lsp_show_message_format| *can not* be configured
+  separately for each buffer like |g:ale_echo_msg_format| can.
+
+
+g:ale_lsp_show_message_severity                         *g:ale_lsp_show_message_severity*
+
+  Type: |String|
+  Default: `'error'`
+
+  This variable defines the minimum severity level an LSP message needs to be
+  displayed. Messages below this level are discarded; please note that
+  messages with `Log` severity level are always discarded.
+
+  Possible values follow the LSP spec `MessageType` definition:
+
+  `'error'`       - Displays only errors.
+  `'warning'`     - Displays errors and warnings.
+  `'information'` - Displays errors, warnings and infos
+  `'log'`         - Same as `'information'`
+
 
 g:ale_lsp_root                                                 *g:ale_lsp_root*
 b:ale_lsp_root                                                 *b:ale_lsp_root*
