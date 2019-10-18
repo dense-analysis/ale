@@ -283,6 +283,7 @@ Notes:
   * `nasm`!!
 * Nim
   * `nim check`!!
+  * `nimlsp`
 * nix
   * `nix-instantiate`
   * `nixpkgs-fmt`

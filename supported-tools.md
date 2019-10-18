@@ -292,6 +292,7 @@ formatting.
   * [nasm](https://www.nasm.us/) :floppy_disk:
 * Nim
   * [nim check](https://nim-lang.org/docs/nimc.html) :floppy_disk:
+  * [nimlsp](https://github.com/PMunch/nimlsp)
 * nix
   * [nix-instantiate](http://nixos.org/nix/manual/#sec-nix-instantiate)
   * [nixpkgs-fmt](https://github.com/nix-community/nixpkgs-fmt)
@@ -343,8 +344,8 @@ formatting.
 * Pony
   * [ponyc](https://github.com/ponylang/ponyc)
 * PowerShell
-  * [powershell](https://github.com/PowerShell/PowerShell) :floppy_disk
-  * [psscriptanalyzer](https://github.com/PowerShell/PSScriptAnalyzer) :floppy_disk
+  * [powershell](https://github.com/PowerShell/PowerShell) :floppy_disk:
+  * [psscriptanalyzer](https://github.com/PowerShell/PSScriptAnalyzer) :floppy_disk:
 * Prolog
   * [swipl](https://github.com/SWI-Prolog/swipl-devel)
 * proto
