@@ -22,58 +22,32 @@ let s:timer_id = -1
 let s:last_done_pos = []
 
 " CompletionItemKind values from the LSP protocol.
-let s:LSP_COMPLETION_TEXT_KIND = 1
-let s:LSP_COMPLETION_METHOD_KIND = 2
-let s:LSP_COMPLETION_FUNCTION_KIND = 3
-let s:LSP_COMPLETION_CONSTRUCTOR_KIND = 4
-let s:LSP_COMPLETION_FIELD_KIND = 5
-let s:LSP_COMPLETION_VARIABLE_KIND = 6
-let s:LSP_COMPLETION_CLASS_KIND = 7
-let s:LSP_COMPLETION_INTERFACE_KIND = 8
-let s:LSP_COMPLETION_MODULE_KIND = 9
-let s:LSP_COMPLETION_PROPERTY_KIND = 10
-let s:LSP_COMPLETION_UNIT_KIND = 11
-let s:LSP_COMPLETION_VALUE_KIND = 12
-let s:LSP_COMPLETION_ENUM_KIND = 13
-let s:LSP_COMPLETION_KEYWORD_KIND = 14
-let s:LSP_COMPLETION_SNIPPET_KIND = 15
-let s:LSP_COMPLETION_COLOR_KIND = 16
-let s:LSP_COMPLETION_FILE_KIND = 17
-let s:LSP_COMPLETION_REFERENCE_KIND = 18
-let s:LSP_COMPLETION_FOLDER_KIND = 19
-let s:LSP_COMPLETION_ENUM_MEMBER_KIND = 20
-let s:LSP_COMPLETION_CONSTANT_KIND = 21
-let s:LSP_COMPLETION_STRUCT_KIND = 22
-let s:LSP_COMPLETION_EVENT_KIND = 23
-let s:LSP_COMPLETION_OPERATOR_KIND = 24
-let s:LSP_COMPLETION_TYPE_PARAMETER_KIND = 25
-
 let g:ale_lsp_types = {
-\ s:LSP_COMPLETION_TEXT_KIND: 'text',
-\ s:LSP_COMPLETION_METHOD_KIND: 'method',
-\ s:LSP_COMPLETION_FUNCTION_KIND: 'function',
-\ s:LSP_COMPLETION_CONSTRUCTOR_KIND: 'constructor',
-\ s:LSP_COMPLETION_FIELD_KIND: 'field',
-\ s:LSP_COMPLETION_VARIABLE_KIND: 'variable',
-\ s:LSP_COMPLETION_CLASS_KIND: 'class',
-\ s:LSP_COMPLETION_INTERFACE_KIND: 'interface',
-\ s:LSP_COMPLETION_MODULE_KIND: 'module',
-\ s:LSP_COMPLETION_PROPERTY_KIND: 'property',
-\ s:LSP_COMPLETION_UNIT_KIND: 'unit',
-\ s:LSP_COMPLETION_VALUE_KIND: 'value',
-\ s:LSP_COMPLETION_ENUM_KIND: 'enum',
-\ s:LSP_COMPLETION_KEYWORD_KIND: 'keyword',
-\ s:LSP_COMPLETION_SNIPPET_KIND: 'snippet',
-\ s:LSP_COMPLETION_COLOR_KIND: 'color',
-\ s:LSP_COMPLETION_FILE_KIND: 'file',
-\ s:LSP_COMPLETION_REFERENCE_KIND: 'reference',
-\ s:LSP_COMPLETION_FOLDER_KIND: 'folder',
-\ s:LSP_COMPLETION_ENUM_MEMBER_KIND: 'enum_member',
-\ s:LSP_COMPLETION_CONSTANT_KIND: 'constant',
-\ s:LSP_COMPLETION_STRUCT_KIND: 'struct',
-\ s:LSP_COMPLETION_EVENT_KIND: 'event',
-\ s:LSP_COMPLETION_OPERATOR_KIND: 'operator',
-\ s:LSP_COMPLETION_TYPE_PARAMETER_KIND: 'type_parameter',
+\ 1: 'text',
+\ 2: 'method',
+\ 3: 'function',
+\ 4: 'constructor',
+\ 5: 'field',
+\ 6: 'variable',
+\ 7: 'class',
+\ 8: 'interface',
+\ 9: 'module',
+\ 10: 'property',
+\ 11: 'unit',
+\ 12: 'value',
+\ 13: 'enum',
+\ 14: 'keyword',
+\ 15: 'snippet',
+\ 16: 'color',
+\ 17: 'file',
+\ 18: 'reference',
+\ 19: 'folder',
+\ 20: 'enum_member',
+\ 21: 'constant',
+\ 22: 'struct',
+\ 23: 'event',
+\ 24: 'operator',
+\ 25: 'type_parameter',
 \ }
 
 " from https://github.com/microsoft/TypeScript/blob/29becf05012bfa7ba20d50b0d16813971e46b8a6/lib/protocol.d.ts#L2472
