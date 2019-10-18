@@ -1,7 +1,7 @@
 After:
   unlet! b:ale_completion_info
 
-Execute(uhould handle Rust completion results correctly):
+Execute(Should handle Rust completion results correctly):
   AssertEqual
   \ [
   \   {'word': 'new', 'menu': 'pub fn new() -> String', 'info': '', 'kind': 'f', 'icase': 1},
