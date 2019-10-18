@@ -30,7 +30,7 @@ function! ale#lsp_window#HandleShowMessage(linter_name, format, params) abort
     " Get the configured severity level threshold and check if the message
     " should be displayed or not
     let l:configured_severity = tolower(get(g:, 'ale_lsp_show_message_severity', 'error'))
-    " If the user has confgured with a value we can't find on the conversion
+    " If the user has configured with a value we can't find on the conversion
     " dict, fall back to warning
     let l:cfg_severity_threshold = get(s:CFG_TO_LSP_SEVERITY, l:configured_severity, s:LSP_MESSAGE_TYPE_WARNING)
 
