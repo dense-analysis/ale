@@ -1,9 +1,0 @@
-Before:
-  call ale#assert#SetUpLinterTest('ada', 'adalsp')
-
-After:
-  call ale#assert#TearDownLinterTest()
-
-Execute(Sets adalsp executable):
-  let g:ale_ada_lsp_executable = '/path/to /Ada'
-  AssertLinter '/path/to /Ada', ale#Escape('/path/to /Ada')

@@ -35,8 +35,8 @@ g:ale_ada_gnatpp_options                             *g:ale_ada_gnatpp_options*
 ===============================================================================
 ada-language-server                                   *ale-ada-language-server*
 
-g:ale_ada_lsp_executable                             *g:ale_ada_lsp_executable*
-                                                     *b:ale_ada_lsp_executable*
+g:ale_ada_adals_executable                         *g:ale_ada_adals_executable*
+                                                   *b:ale_ada_adals_executable*
   Type: |String|
   Default: `'ada_language_server'`
 
