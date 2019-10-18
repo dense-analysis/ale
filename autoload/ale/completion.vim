@@ -39,6 +39,109 @@ let s:LSP_COMPLETION_SNIPPET_KIND = 15
 let s:LSP_COMPLETION_COLOR_KIND = 16
 let s:LSP_COMPLETION_FILE_KIND = 17
 let s:LSP_COMPLETION_REFERENCE_KIND = 18
+let s:LSP_COMPLETION_FOLDER_KIND = 19
+let s:LSP_COMPLETION_ENUM_MEMBER_KIND = 20
+let s:LSP_COMPLETION_CONSTANT_KIND = 21
+let s:LSP_COMPLETION_STRUCT_KIND = 22
+let s:LSP_COMPLETION_EVENT_KIND = 23
+let s:LSP_COMPLETION_OPERATOR_KIND = 24
+let s:LSP_COMPLETION_TYPE_PARAMETER_KIND = 25
+
+let g:ale_lsp_types = {
+\ s:LSP_COMPLETION_TEXT_KIND: 'text',
+\ s:LSP_COMPLETION_METHOD_KIND: 'method',
+\ s:LSP_COMPLETION_FUNCTION_KIND: 'function',
+\ s:LSP_COMPLETION_CONSTRUCTOR_KIND: 'constructor',
+\ s:LSP_COMPLETION_FIELD_KIND: 'field',
+\ s:LSP_COMPLETION_VARIABLE_KIND: 'variable',
+\ s:LSP_COMPLETION_CLASS_KIND: 'class',
+\ s:LSP_COMPLETION_INTERFACE_KIND: 'interface',
+\ s:LSP_COMPLETION_MODULE_KIND: 'module',
+\ s:LSP_COMPLETION_PROPERTY_KIND: 'property',
+\ s:LSP_COMPLETION_UNIT_KIND: 'unit',
+\ s:LSP_COMPLETION_VALUE_KIND: 'value',
+\ s:LSP_COMPLETION_ENUM_KIND: 'enum',
+\ s:LSP_COMPLETION_KEYWORD_KIND: 'keyword',
+\ s:LSP_COMPLETION_SNIPPET_KIND: 'snippet',
+\ s:LSP_COMPLETION_COLOR_KIND: 'color',
+\ s:LSP_COMPLETION_FILE_KIND: 'file',
+\ s:LSP_COMPLETION_REFERENCE_KIND: 'reference',
+\ s:LSP_COMPLETION_FOLDER_KIND: 'folder',
+\ s:LSP_COMPLETION_ENUM_MEMBER_KIND: 'enum_member',
+\ s:LSP_COMPLETION_CONSTANT_KIND: 'constant',
+\ s:LSP_COMPLETION_STRUCT_KIND: 'struct',
+\ s:LSP_COMPLETION_EVENT_KIND: 'event',
+\ s:LSP_COMPLETION_OPERATOR_KIND: 'operator',
+\ s:LSP_COMPLETION_TYPE_PARAMETER_KIND: 'type_parameter',
+\ }
+
+" from https://github.com/microsoft/TypeScript/blob/29becf05012bfa7ba20d50b0d16813971e46b8a6/lib/protocol.d.ts#L2472
+let g:ale_tsserver_types = {
+\ 'warning': 'text',
+\ 'keyword': 'keyword',
+\ 'script': 'file',
+\ 'module': 'module',
+\ 'class': 'class',
+\ 'local class': 'class',
+\ 'interface': 'interface',
+\ 'type': 'class',
+\ 'enum': 'enum',
+\ 'enum member': 'enum_member',
+\ 'var': 'variable',
+\ 'local var': 'variable',
+\ 'function': 'function',
+\ 'local function': 'function',
+\ 'method': 'method',
+\ 'getter': 'property',
+\ 'setter': 'method',
+\ 'property': 'property',
+\ 'constructor': 'constructor',
+\ 'call': 'method',
+\ 'index': 'index',
+\ 'construct': 'constructor',
+\ 'parameter': 'parameter',
+\ 'type parameter': 'type_parameter',
+\ 'primitive type': 'unit',
+\ 'label': 'text',
+\ 'alias': 'class',
+\ 'const': 'constant',
+\ 'let': 'variable',
+\ 'directory': 'folder',
+\ 'external module name': 'text',
+\ 'JSX attribute': 'parameter',
+\ 'string': 'text'
+\ }
+
+" For compatibility reasons, we only use built in VIM completion kinds
+" See :help complete-items for Vim completion kinds
+let g:ale_completion_symbols = get(g:, 'ale_completion_symbols', {
+\ 'text': 'v',
+\ 'method': 'f',
+\ 'function': 'f',
+\ 'constructor': 'f',
+\ 'field': 'm',
+\ 'variable': 'v',
+\ 'class': 't',
+\ 'interface': 't',
+\ 'module': 'd',
+\ 'property': 'm',
+\ 'unit': 'v',
+\ 'value': 'v',
+\ 'enum': 't',
+\ 'keyword': 'v',
+\ 'snippet': 'v',
+\ 'color': 'v',
+\ 'file': 'v',
+\ 'reference': 'v',
+\ 'folder': 'v',
+\ 'enum_member': 'm',
+\ 'constant': 'm',
+\ 'struct': 't',
+\ 'event': 'v',
+\ 'operator': 'f',
+\ 'type_parameter': 'p',
+\ '<default>': 'v'
+\ })
 
 let s:LSP_INSERT_TEXT_FORMAT_PLAIN = 1
 let s:LSP_INSERT_TEXT_FORMAT_SNIPPET = 2
@@ -278,6 +381,27 @@ function! ale#completion#GetAllTriggers() abort
     return deepcopy(s:trigger_character_map)
 endfunction
 
+function! ale#completion#GetCompletionKind(kind) abort
+    let l:lsp_symbol = get(g:ale_lsp_types, a:kind, '')
+
+    if !empty(l:lsp_symbol)
+        return l:lsp_symbol
+    endif
+
+    return get(g:ale_tsserver_types, a:kind, '')
+endfunction
+
+function! ale#completion#GetCompletionSymbols(kind) abort
+    let l:kind = ale#completion#GetCompletionKind(a:kind)
+    let l:symbol = get(g:ale_completion_symbols, l:kind, '')
+
+    if !empty(l:symbol)
+        return l:symbol
+    endif
+
+    return get(g:ale_completion_symbols, '<default>', 'v')
+endfunction
+
 function! s:CompletionStillValid(request_id) abort
     let [l:line, l:column] = getpos('.')[1:2]
 
@@ -329,18 +453,10 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
             call add(l:documentationParts, l:part.text)
         endfor
 
-        if l:suggestion.kind is# 'className'
-            let l:kind = 'f'
-        elseif l:suggestion.kind is# 'parameterName'
-            let l:kind = 'f'
-        else
-            let l:kind = 'v'
-        endif
-
         " See :help complete-items
         let l:result = {
         \   'word': l:suggestion.name,
-        \   'kind': l:kind,
+        \   'kind': ale#completion#GetCompletionSymbols(l:suggestion.kind),
         \   'icase': 1,
         \   'menu': join(l:displayParts, ''),
         \   'dup': g:ale_completion_tsserver_autoimport,
@@ -425,23 +541,6 @@ function! ale#completion#ParseLSPCompletions(response) abort
             continue
         endif
 
-        " See :help complete-items for Vim completion kinds
-        if !has_key(l:item, 'kind')
-            let l:kind = 'v'
-        elseif l:item.kind is s:LSP_COMPLETION_METHOD_KIND
-            let l:kind = 'm'
-        elseif l:item.kind is s:LSP_COMPLETION_CONSTRUCTOR_KIND
-            let l:kind = 'm'
-        elseif l:item.kind is s:LSP_COMPLETION_FUNCTION_KIND
-            let l:kind = 'f'
-        elseif l:item.kind is s:LSP_COMPLETION_CLASS_KIND
-            let l:kind = 'f'
-        elseif l:item.kind is s:LSP_COMPLETION_INTERFACE_KIND
-            let l:kind = 'f'
-        else
-            let l:kind = 'v'
-        endif
-
         let l:doc = get(l:item, 'documentation', '')
 
         if type(l:doc) is v:t_dict && has_key(l:doc, 'value')
@@ -450,7 +549,7 @@ function! ale#completion#ParseLSPCompletions(response) abort
 
         call add(l:results, {
         \   'word': l:word,
-        \   'kind': l:kind,
+        \   'kind': ale#completion#GetCompletionSymbols(get(l:item, 'kind', '')),
         \   'icase': 1,
         \   'menu': get(l:item, 'detail', ''),
         \   'info': (type(l:doc) is v:t_string ? l:doc : ''),
