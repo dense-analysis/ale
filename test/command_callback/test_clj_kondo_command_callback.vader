@@ -1,0 +1,19 @@
+Before:
+  call ale#assert#SetUpLinterTest('clojure', 'clj_kondo')
+  let g:config_path = ale#path#Simplify(
+  \ g:dir . '/clj_kondo_paths/.clj-kondo/config.edn'
+  \)
+
+After:
+  unlet! g:config_path
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'clj-kondo',
+  \ 'clj-kondo  --lint %t'
+
+Execute(The configuration file should be automatically detected):
+  call ale#test#SetFilename('clj_kondo_paths/test.clj')
+  AssertLinter 'clj-kondo',
+  \ 'clj-kondo --config ' . g:config_path . ' --lint %t'
+
