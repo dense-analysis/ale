@@ -1,0 +1,22 @@
+Before:
+  runtime ale_linters/gdscript3/godot_server.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(the gdscript3 godot server handler should be able to handle errors):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 14,
+  \     'col': 1,
+  \     'type': 'E',
+  \     'text': 'GDScript::reload: Parse Error: Unexpected indent.',
+  \   },
+  \ ],
+  \ ale_linters#gdscript3#godot_server#Handle(bufnr('bullet.gd'), [
+  \   'SCRIPT ERROR: GDScript::reload: Parse Error: Unexpected indent.',
+  \   '   At: res://bullet.gd:14.',
+  \   'ERROR: reload: Method/Function Failed, returning: ERR_PARSE_ERROR',
+  \   '   At: modules/gdscript/gdscript.cpp:580.',
+  \ ])

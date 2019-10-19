@@ -17,21 +17,20 @@ function! s:CleanupMergeResult(lines) abort
     return join([l:output[0], l:output[1]], ';')
 endfunction
 
-function! ale_linters#gdscript3#godot_server#Handle(buffer, lines) abort
-    let l:buffer_filename = fnamemodify(bufname(a:buffer), ':p:t')
-    let l:pattern = '\v[a-zA-Z]?:\s(.*);\s.*At:\s(.*):(\d+)'
+function! s:ParseFilenameFromMatch(match) abort
+    return substitute(fnamemodify(a:match[2], ':p:t'), 'res://', '', 'g')
+endfunction
+
+function! s:GetCurrentBufferMatches(buffer_filename, result_lines, pattern) abort
     let l:output = []
-    let l:result_lines = s:CleanupMergeResult(a:lines)
 
-    for l:match in ale#util#GetMatches(l:result_lines, l:pattern)
+    for l:match in ale#util#GetMatches(a:result_lines, a:pattern)
         " Only show errors of the current buffer
-        let l:temp_buffer_filename = substitute(fnamemodify(l:match[2], ':p:t'), 'res://', '', 'g')
+        let l:parsed_match_filename = s:ParseFilenameFromMatch(l:match)
 
-        if l:buffer_filename isnot# '' && l:temp_buffer_filename isnot# l:buffer_filename
+        if a:buffer_filename isnot# '' && l:parsed_match_filename isnot# a:buffer_filename
             continue
         endif
-
-        execute 'echo l:temp_buffer_filename'
 
         let l:item = {
         \   'lnum': l:match[3] + 0,
@@ -44,6 +43,15 @@ function! ale_linters#gdscript3#godot_server#Handle(buffer, lines) abort
     endfor
 
     return l:output
+endfunction
+
+function! ale_linters#gdscript3#godot_server#Handle(buffer, lines) abort
+    execute 'echo a:buffer'
+    let l:buffer_filename = fnamemodify(bufname(a:buffer), ':p:t')
+    let l:result_lines = s:CleanupMergeResult(a:lines)
+    let l:pattern = '\v[a-zA-Z]?:\s(.*);\s.*At:\s(.*):(\d+)'
+
+    return s:GetCurrentBufferMatches(l:buffer_filename, l:result_lines, l:pattern)
 endfunction
 
 
