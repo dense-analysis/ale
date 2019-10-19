@@ -40,3 +40,9 @@ Execute(The yapf should include the .style.yapf file if present):
   \     . ' --style ' . ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/dir_with_yapf_config/.style.yapf')),
   \ },
   \ ale#fixers#yapf#Fix(bufnr(''))
+Execute(The yapf should ignore file if it matches regexps in .yapfignore):
+  call ale#test#SetFilename('python_paths/with_virtualenv/dir_with_yapf_config/ignored/bar.py')
+
+  AssertEqual
+  \ 0,
+  \ ale#fixers#yapf#Fix(bufnr(''))
