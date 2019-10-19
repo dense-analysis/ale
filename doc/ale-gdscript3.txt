@@ -1,9 +1,15 @@
 ================================================================================
 ALE GDScript3 Integration                                  *ale-gdscript3-options*
 
+In order to vim/nvim detects *.gd files as gdscript3 file type you will need to
+install https://github.com/calviken/vim-gdscript3
 
 ================================================================================
 godot_server                                          *ale-gdscript3-godot_server*
+
+Download the [Godot server](https://godotengine.org/download/server), rename to
+`godot_server`, and place in a `$PATH` accessible directory.
+
 
 g:ale_gdscript3_godot_server_executable  *g:ale_gdscript3_godot_server_executable*
                                          *b:ale_gdscript3_godot_server_executable*
