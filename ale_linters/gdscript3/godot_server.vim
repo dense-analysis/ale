@@ -46,7 +46,6 @@ function! s:GetCurrentBufferMatches(buffer_filename, result_lines, pattern) abor
 endfunction
 
 function! ale_linters#gdscript3#godot_server#Handle(buffer, lines) abort
-    execute 'echo a:buffer'
     let l:buffer_filename = fnamemodify(bufname(a:buffer), ':p:t')
     let l:result_lines = s:CleanupMergeResult(a:lines)
     let l:pattern = '\v[a-zA-Z]?:\s(.*);\s.*At:\s(.*):(\d+)'
