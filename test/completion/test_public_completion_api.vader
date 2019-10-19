@@ -32,6 +32,10 @@ Execute(ale#completion#GetCompletionPosition() should return the position in the
   " This is the first character of 'bar'
   AssertEqual 4, ale#completion#GetCompletionPosition()
 
+Execute(ale#completion#GetCompletionPositionForDeoplete() should return the position on the given input string):
+  " This is the first character of 'bar'
+  AssertEqual 4, ale#completion#GetCompletionPositionForDeoplete('foo bar')
+
 Execute(ale#completion#CanProvideCompletions should return 0 when no completion sources are available):
   AssertEqual 0, ale#completion#CanProvideCompletions()
 

@@ -1,6 +1,7 @@
 Before:
   Save g:ale_go_goimports_executable
   Save g:ale_go_goimports_options
+  Save g:ale_go_go111module
 
   " Use an invalid global executable, so we don't match it.
   let g:ale_go_goimports_executable = 'xxxinvalid'
@@ -11,6 +12,8 @@ Before:
 
 After:
   Restore
+
+  unlet! b:ale_go_go111module
 
   call ale#test#RestoreDirectory()
 
@@ -37,5 +40,18 @@ Execute(The goimports callback should include extra options):
   \ {
   \   'read_temporary_file': 1,
   \   'command': ale#Escape(g:ale_go_goimports_executable) . ' -l -w -srcdir %s --xxx %t'
+  \ },
+  \ ale#fixers#goimports#Fix(bufnr(''))
+
+Execute(The goimports callback should support Go environment variables):
+  let g:ale_go_goimports_executable = has('win32') ? 'cmd' : 'echo'
+  let g:ale_go_go111module = 'on'
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Env('GO111MODULE', 'on')
+  \     . ale#Escape(g:ale_go_goimports_executable)
+  \     . ' -l -w -srcdir %s %t'
   \ },
   \ ale#fixers#goimports#Fix(bufnr(''))

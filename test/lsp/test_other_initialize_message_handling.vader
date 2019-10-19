@@ -17,6 +17,7 @@ Before:
   \ 'init_queue': [],
   \ 'capabilities': {
   \   'hover': 0,
+  \   'rename': 0,
   \   'references': 0,
   \   'completion': 0,
   \   'completion_trigger_characters': [],
@@ -100,6 +101,7 @@ Execute(Capabilities should bet set up correctly):
   \   'hover': 1,
   \   'definition': 1,
   \   'symbol_search': 1,
+  \   'rename': 1,
   \ },
   \ b:conn.capabilities
   AssertEqual [[1, 'initialized', {}]], g:message_list
@@ -110,7 +112,7 @@ Execute(Disabled capabilities should be recognised correctly):
   \ 'id': 1,
   \ 'result': {
   \   'capabilities': {
-  \     'renameProvider': v:true,
+  \     'renameProvider': v:false,
   \     'executeCommandProvider': {
   \       'commands': [],
   \     },
@@ -143,6 +145,7 @@ Execute(Disabled capabilities should be recognised correctly):
   \   'hover': 0,
   \   'definition': 0,
   \   'symbol_search': 0,
+  \   'rename': 0,
   \ },
   \ b:conn.capabilities
   AssertEqual [[1, 'initialized', {}]], g:message_list
