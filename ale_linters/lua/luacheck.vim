@@ -12,7 +12,7 @@ function! ale_linters#lua#luacheck#GetCommand(buffer) abort
     let l:target = !ale#Var(a:buffer, 'lua_luacheck_lint_project') ? '--filename %s -'
     \ : !empty(l:luacheckrc)
     \ ? fnamemodify(l:luacheckrc, ':p:h')
-    \ : '%s' 
+    \ : '%s'
     let l:cd_string = !empty(l:luacheckrc) && ale#Var(a:buffer, 'lua_luacheck_change_directory')
     \   ? ale#path#CdString(fnamemodify(l:luacheckrc, ':p:h'))
     \   : ''
