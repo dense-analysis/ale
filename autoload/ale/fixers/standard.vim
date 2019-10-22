@@ -14,7 +14,14 @@ endfunction
 
 function! ale#fixers#standard#Fix(buffer) abort
     let l:executable = ale#fixers#standard#GetExecutable(a:buffer)
-    let l:options = ale#Var(a:buffer, 'javascript_standard_options')
+    let l:filetype = getbufvar(a:buffer, '&filetype')
+    let l:options_type = 'javascript_standard_options'
+
+    if l:filetype =~# 'typescript'
+        let l:options_type = 'typescript_standard_options'
+    endif
+
+    let l:options = ale#Var(a:buffer, l:options_type)
 
     return {
     \   'command': ale#node#Executable(a:buffer, l:executable)
