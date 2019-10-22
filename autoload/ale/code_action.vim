@@ -112,7 +112,7 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
     if a:should_save
         call ale#util#Writefile(l:buffer, l:lines, a:filename)
     else
-        call ale#fix#SetBufferContents(l:buffer, l:lines)
+        call ale#util#SetBufferContents(l:buffer, l:lines)
     endif
 
     if l:is_current_buffer
