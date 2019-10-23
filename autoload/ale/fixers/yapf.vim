@@ -20,8 +20,8 @@ function! ale#fixers#yapf#Fix(buffer) abort
     let l:yapfignore_path = ale#path#FindNearestFile(a:buffer, '.yapfignore')
 
     if !empty(l:yapfignore_path) && filereadable(l:yapfignore_path)
-        for line in readfile(l:yapfignore_path)
-            if l:buffer_filename =~ glob2regpat(line)
+        for l:line in readfile(l:yapfignore_path)
+            if l:buffer_filename =~ glob2regpat(l:line)
                 return 0
             endif
         endfor
