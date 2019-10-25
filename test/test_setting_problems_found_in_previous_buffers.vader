@@ -38,7 +38,7 @@ After:
   " Items and markers, etc.
   call setloclist(0, [])
   call clearmatches()
-  sign unplace *
+  call ale#sign#Clear()
 
 Given foobar(A file with some lines):
   foo

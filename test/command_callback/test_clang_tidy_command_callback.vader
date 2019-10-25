@@ -1,4 +1,7 @@
 Before:
+  Save g:ale_c_parse_makefile
+  let g:ale_c_parse_makefile = 0
+
   call ale#assert#SetUpLinterTest('cpp', 'clangtidy')
   call ale#test#SetFilename('test.cpp')
 

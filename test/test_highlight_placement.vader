@@ -114,7 +114,7 @@ After:
   delfunction GenerateResults
   call ale#linter#Reset()
   call clearmatches()
-  sign unplace *
+  call ale#sign#Clear()
   highlight clear SomeOtherGroup
 
   runtime autoload/ale/highlight.vim
