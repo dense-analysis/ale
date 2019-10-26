@@ -83,6 +83,7 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version) abort
         \    'markdown': 'markdown',
         \    'vue': 'vue',
         \    'yaml': 'yaml',
+        \    'openapi': 'yaml',
         \    'html': 'html',
         \}
 
