@@ -25,7 +25,8 @@ CONTENTS                                                         *ale-contents*
     7.1 Options for alex..................|ale-alex-options|
     7.2 Options for languagetool..........|ale-languagetool-options|
     7.3 Options for write-good............|ale-write-good-options|
-    7.4 Other Linter/Fixer Options........|ale-other-integration-options|
+    7.4 Options for vale..................|ale-vale-options|
+    7.5 Other Linter/Fixer Options........|ale-other-integration-options|
   8. Commands/Keybinds....................|ale-commands|
   9. API..................................|ale-api|
   10. Special Thanks......................|ale-special-thanks|
@@ -2148,7 +2149,27 @@ g:ale_writegood_use_global                         *g:ale_writegood_use_global*
 
 
 -------------------------------------------------------------------------------
-7.4. Other Linter/Fixer Options                 *ale-other-integration-options*
+7.4. Options for vale                                        *ale-vale-options*
+
+g:ale_vale_executable                                   *g:ale_vale_executable*
+                                                        *b:ale_vale_executable*
+
+  Type: |String|
+  Default: `'vale'`
+
+  The executable to run for vale.
+
+
+g:ale_vale_options                                         *g:ale_vale_options*
+                                                           *b:ale_vale_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to vale.
+
+
+-------------------------------------------------------------------------------
+7.5. Other Linter/Fixer Options                 *ale-other-integration-options*
 
 ALE supports a very wide variety of tools. Other linter or fixer options are
 documented in additional help files.
