@@ -194,6 +194,7 @@ Notes:
 * HTML
   * `alex`!!
   * `fecs`
+  * `html-beautify`
   * `HTMLHint`
   * `prettier`
   * `proselint`
