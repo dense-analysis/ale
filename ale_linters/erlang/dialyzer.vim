@@ -8,7 +8,8 @@ let g:ale_erlang_dialyzer_plt_file =
 let g:ale_erlang_dialyzer_rebar3_profile =
 \   get(g:, 'ale_erlang_dialyzer_rebar3_profile', 'default')
 let g:ale_erlang_dialyzer_options =
-\   get(g:, 'ale_erlang_dialyzer_options', '')
+\   get(g:, 'ale_erlang_dialyzer_options',
+\       '-Wunmatched_returns -Werror_handling -Wrace_conditions -Wunderspecs')
 
 function! ale_linters#erlang#dialyzer#GetRebar3Profile(buffer) abort
     return ale#Var(a:buffer, 'erlang_dialyzer_rebar3_profile')
