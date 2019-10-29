@@ -22,6 +22,14 @@ Execute(Vendor executables should be detected):
   \   . '/psalm-project/vendor/bin/psalm'
   \ )) . ' --language-server'
 
+Execute(User provided options should be used):
+  let g:ale_psalm_langserver_options = '--my-user-provided-option my-value'
+
+  AssertLinter 'psalm',
+  \ ale#Escape('psalm')
+  \ . ' --language-server --my-user-provided-option my-value'
+
+
 Execute(The project path should be correct for .git directories):
   call ale#test#SetFilename('psalm-project/test.php')
 
