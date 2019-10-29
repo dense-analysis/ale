@@ -235,6 +235,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'Refactor Haskell files with stylish-haskell.',
 \   },
+\   'purty': {
+\       'function': 'ale#fixers#purty#Fix',
+\       'suggested_filetypes': ['purescript'],
+\       'description': 'Format PureScript files with purty.',
+\   },
 \   'ocamlformat': {
 \       'function': 'ale#fixers#ocamlformat#Fix',
 \       'suggested_filetypes': ['ocaml'],

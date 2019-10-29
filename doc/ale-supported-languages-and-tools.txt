@@ -349,6 +349,7 @@ Notes:
   * `puppet-lint`
 * PureScript
   * `purescript-language-server`
+  * `purty`
 * Python
   * `autopep8`
   * `bandit`
