@@ -54,6 +54,9 @@ class Source(Base):
             if result is not None:
                 context['is_async'] = False
 
+                for item in result:
+                    item['menu'] = ' '.join(item['menu'].split())
+
                 return result
         else:
             context['is_async'] = True
