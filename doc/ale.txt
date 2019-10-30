@@ -706,6 +706,47 @@ g:ale_completion_excluded_words               *g:ale_completion_excluded_words*
   let b:ale_completion_excluded_words = ['it', 'describe']
 <
 
+g:ale_completion_symbols                             *g:ale_completion_symbols*
+
+  Type: |Dictionary|
+
+
+  A mapping from completion types to symbols for completions. See
+  |ale-symbols| for more information.
+
+  By default, this mapping only uses built in Vim completion kinds, but it can
+  be updated to use any unicode character for the completion kind. For
+  example: >
+    let g:ale_completion_symbols = {
+    \ 'text': '',
+    \ 'method': '',
+    \ 'function': '',
+    \ 'constructor': '',
+    \ 'field': '',
+    \ 'variable': '',
+    \ 'class': '',
+    \ 'interface': '',
+    \ 'module': '',
+    \ 'property': '',
+    \ 'unit': 'v',
+    \ 'value': 'v',
+    \ 'enum': 't',
+    \ 'keyword': 'v',
+    \ 'snippet': 'v',
+    \ 'color': 'v',
+    \ 'file': 'v',
+    \ 'reference': 'v',
+    \ 'folder': 'v',
+    \ 'enum_member': 'm',
+    \ 'constant': 'm',
+    \ 'struct': 't',
+    \ 'event': 'v',
+    \ 'operator': 'f',
+    \ 'type_parameter': 'p',
+    \ '<default>': 'v'
+    \ })
+<
+
 g:ale_completion_max_suggestions             *g:ale_completion_max_suggestions*
 
   Type: |Number|
