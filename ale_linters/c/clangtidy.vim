@@ -47,6 +47,6 @@ call ale#linter#Define('c', {
 \   'output_stream': 'stdout',
 \   'executable': {b -> ale#Var(b, 'c_clangtidy_executable')},
 \   'command': {b -> ale#c#RunMakeCommand(b, function('ale_linters#c#clangtidy#GetCommand'))},
-\   'callback': 'ale#handlers#gcc#HandleGCCFormat',
+\   'callback': 'ale#handlers#clangtidy#HandleClangTidyFormat',
 \   'lint_file': 1,
 \})
