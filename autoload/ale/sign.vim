@@ -23,6 +23,8 @@ let g:ale_sign_offset = get(g:, 'ale_sign_offset', 1000000)
 let g:ale_sign_column_always = get(g:, 'ale_sign_column_always', 0)
 let g:ale_sign_highlight_linenrs = get(g:, 'ale_sign_highlight_linenrs', 0)
 
+let s:supports_sign_groups = has('nvim-0.4.2') || (v:version >= 801 && has('patch614'))
+
 if !hlexists('ALEErrorSign')
     highlight link ALEErrorSign error
 endif
@@ -149,7 +151,7 @@ function! ale#sign#GetSignName(sublist) abort
 endfunction
 
 function! s:PriorityCmd() abort
-    if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
+    if s:supports_sign_groups
         return ' priority=' . g:ale_sign_priority . ' '
     else
         return ''
@@ -157,7 +159,7 @@ function! s:PriorityCmd() abort
 endfunction
 
 function! s:GroupCmd() abort
-    if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
+    if s:supports_sign_groups
         return ' group=ale '
     else
         return ' '
@@ -175,14 +177,15 @@ function! ale#sign#ReadSigns(buffer) abort
 endfunction
 
 function! ale#sign#ParsePattern() abort
-    if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
+    if s:supports_sign_groups
         " Matches output like :
         " line=4  id=1  group=ale  name=ALEErrorSign
-        " строка=1  id=1000001  group=ale  имя=ALEErrorSign
-        " 行=1  識別子=1000001  group=ale  名前=ALEWarningSign
-        " línea=12 id=1000001 group=ale  nombre=ALEWarningSign
-        " riga=1 id=1000001  group=ale   nome=ALEWarningSign
-        let l:pattern = '\v^.*\=(\d+).*\=(\d+).*group\=ale.*\=(ALE[a-zA-Z]+Sign)'
+        " строка=1  id=1000001  группа=ale  имя=ALEErrorSign
+        " 行=1  識別子=1000001  グループ=ale  名前=ALEWarningSign
+        " línea=12 id=1000001 grupo=ale  nombre=ALEWarningSign
+        " riga=1 id=1000001  gruppo=ale   nome=ALEWarningSign
+        " Zeile=235  id=1000001 Gruppe=ale  Name=ALEErrorSign
+        let l:pattern = '\v^.*\=(\d+).*\=(\d+).*\=ale>.*\=(ALE[a-zA-Z]+Sign)'
     else
         " Matches output like :
         " line=4  id=1  name=ALEErrorSign
@@ -190,6 +193,7 @@ function! ale#sign#ParsePattern() abort
         " 行=1  識別子=1000001  名前=ALEWarningSign
         " línea=12 id=1000001 nombre=ALEWarningSign
         " riga=1 id=1000001  nome=ALEWarningSign
+        " Zeile=235  id=1000001  Name=ALEErrorSign
         let l:pattern = '\v^.*\=(\d+).*\=(\d+).*\=(ALE[a-zA-Z]+Sign)'
     endif
 
@@ -458,7 +462,7 @@ endfunction
 
 " Remove all signs.
 function! ale#sign#Clear() abort
-    if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
+    if s:supports_sign_groups
         sign unplace group=ale *
     else
         sign unplace *

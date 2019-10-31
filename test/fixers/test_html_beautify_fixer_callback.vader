@@ -1,0 +1,16 @@
+Before:
+  call ale#assert#SetUpFixerTest('html', 'html-beautify', 'beautify')
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+  silent cd ..
+  silent cd command_callback
+
+After:
+  Restore
+
+  call ale#assert#TearDownFixerTest()
+
+Execute(The html-beautify callback should return the correct default command):
+  AssertEqual
+  \ {'command': '''html-beautify''  -'},
+  \ ale#fixers#html_beautify#Fix(bufnr(''))

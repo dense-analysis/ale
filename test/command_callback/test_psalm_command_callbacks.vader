@@ -9,18 +9,26 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default executable path should be correct):
-  AssertLinter 'psalm-language-server',
-  \ ale#Escape('psalm-language-server')
+  AssertLinter 'psalm',
+  \ ale#Escape('psalm') . ' --language-server'
 
 Execute(Vendor executables should be detected):
   call ale#test#SetFilename('psalm-project/test.php')
 
   AssertLinter
-  \ ale#path#Simplify(g:dir . '/psalm-project/vendor/bin/psalm-language-server'),
+  \ ale#path#Simplify(g:dir . '/psalm-project/vendor/bin/psalm'),
   \ ale#Escape(ale#path#Simplify(
   \   g:dir
-  \   . '/psalm-project/vendor/bin/psalm-language-server'
-  \ ))
+  \   . '/psalm-project/vendor/bin/psalm'
+  \ )) . ' --language-server'
+
+Execute(User provided options should be used):
+  let g:ale_psalm_langserver_options = '--my-user-provided-option my-value'
+
+  AssertLinter 'psalm',
+  \ ale#Escape('psalm')
+  \ . ' --language-server --my-user-provided-option my-value'
+
 
 Execute(The project path should be correct for .git directories):
   call ale#test#SetFilename('psalm-project/test.php')

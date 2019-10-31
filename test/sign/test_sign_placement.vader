@@ -68,7 +68,7 @@ Before:
 
   function! ParseSigns()
     redir => l:output
-      if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
+      if has('nvim-0.4.2') || (v:version >= 801 && has('patch614'))
         silent sign place group=ale
       else
         silent sign place
@@ -152,7 +152,7 @@ Execute(The current signs should be set for running a job):
   \ ParseSigns()
 
 Execute(Loclist items with sign_id values should be kept):
-  if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
+  if has('nvim-0.4.2') || (v:version >= 801 && has('patch614'))
     exec 'sign place 1000347 group=ale line=3 name=ALEErrorSign buffer=' . bufnr('')
     exec 'sign place 1000348 group=ale line=15 name=ALEErrorSign buffer=' . bufnr('')
     exec 'sign place 1000349 group=ale line=16 name=ALEWarningSign buffer=' . bufnr('')
@@ -297,7 +297,7 @@ Execute(No exceptions should be thrown when setting signs for invalid buffers):
 Execute(Signs should be removed when lines have multiple sign IDs on them):
   " We can fail to remove signs if there are multiple signs on one line,
   " say after deleting lines in Vim, etc.
-  if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
+  if has('nvim-0.4.2') || (v:version >= 801 && has('patch614'))
     exec 'sign place 1000347 group=ale line=3 name=ALEErrorSign buffer=' . bufnr('')
     exec 'sign place 1000348 group=ale line=3 name=ALEWarningSign buffer=' . bufnr('')
     exec 'sign place 1000349 group=ale line=10 name=ALEErrorSign buffer=' . bufnr('')

@@ -7,7 +7,7 @@ After:
 Execute(The executable should be configurable):
   AssertLinter 'clang-check',
   \ ale#Escape('clang-check')
-  \   . ' -analyze %s -extra-arg -Xclang -extra-arg -analyzer-output=text'
+  \   . ' -analyze %s --extra-arg=-Xclang --extra-arg=-analyzer-output=text --extra-arg=-fno-color-diagnostics'
 
   let b:ale_cpp_clangcheck_executable = 'foobar'
 
@@ -15,7 +15,7 @@ Execute(The executable should be configurable):
   " being generated.
   AssertLinter 'foobar',
   \ ale#Escape('foobar')
-  \   . ' -analyze %s -extra-arg -Xclang -extra-arg -analyzer-output=text'
+  \   . ' -analyze %s --extra-arg=-Xclang --extra-arg=-analyzer-output=text --extra-arg=-fno-color-diagnostics'
 
 Execute(The options should be configurable):
   let b:ale_cpp_clangcheck_options = '--something'
@@ -23,7 +23,7 @@ Execute(The options should be configurable):
   AssertLinter 'clang-check',
   \ ale#Escape('clang-check')
   \   . ' -analyze %s'
-  \   . ' -extra-arg -Xclang -extra-arg -analyzer-output=text'
+  \   . ' --extra-arg=-Xclang --extra-arg=-analyzer-output=text --extra-arg=-fno-color-diagnostics'
   \   . ' --something'
 
 Execute(The build directory should be used when set):
