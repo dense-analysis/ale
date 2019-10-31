@@ -195,6 +195,7 @@ Notes:
 * HTML
   * `alex`!!
   * `fecs`
+  * `html-beautify`
   * `HTMLHint`
   * `prettier`
   * `proselint`
@@ -349,6 +350,7 @@ Notes:
   * `puppet-lint`
 * PureScript
   * `purescript-language-server`
+  * `purty`
 * Python
   * `autopep8`
   * `bandit`

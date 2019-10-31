@@ -235,6 +235,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'Refactor Haskell files with stylish-haskell.',
 \   },
+\   'purty': {
+\       'function': 'ale#fixers#purty#Fix',
+\       'suggested_filetypes': ['purescript'],
+\       'description': 'Format PureScript files with purty.',
+\   },
 \   'ocamlformat': {
 \       'function': 'ale#fixers#ocamlformat#Fix',
 \       'suggested_filetypes': ['ocaml'],
@@ -349,6 +354,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#nixpkgsfmt#Fix',
 \       'suggested_filetypes': ['nix'],
 \       'description': 'A formatter for Nix code',
+\   },
+\   'html-beautify': {
+\       'function': 'ale#fixers#html_beautify#Fix',
+\       'suggested_filetypes': ['html', 'htmldjango'],
+\       'description': 'Fix HTML files with html-beautify.',
 \   },
 \}
 

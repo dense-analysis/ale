@@ -2294,6 +2294,7 @@ documented in additional help files.
     terraform-fmt.........................|ale-hcl-terraform-fmt|
   html....................................|ale-html-options|
     fecs..................................|ale-html-fecs|
+    html-beautify.........................|ale-html-beautify|
     htmlhint..............................|ale-html-htmlhint|
     tidy..................................|ale-html-tidy|
     prettier..............................|ale-html-prettier|
@@ -2418,6 +2419,7 @@ documented in additional help files.
     puppet-languageserver.................|ale-puppet-languageserver|
   purescript..............................|ale-purescript-options|
     purescript-language-server............|ale-purescript-language-server|
+    purty.................................|ale-purescript-purty|
   pyrex (cython)..........................|ale-pyrex-options|
     cython................................|ale-pyrex-cython|
   python..................................|ale-python-options|

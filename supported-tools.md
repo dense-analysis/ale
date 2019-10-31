@@ -204,6 +204,7 @@ formatting.
 * HTML
   * [alex](https://github.com/wooorm/alex) :floppy_disk:
   * [fecs](http://fecs.baidu.com/)
+  * [html-beautify](https://beautifier.io/)
   * [HTMLHint](http://htmlhint.com/)
   * [prettier](https://github.com/prettier/prettier)
   * [proselint](http://proselint.com/)
@@ -358,6 +359,7 @@ formatting.
   * [puppet-lint](https://puppet-lint.com)
 * PureScript
   * [purescript-language-server](https://github.com/nwolverson/purescript-language-server)
+  * [purty](https://gitlab.com/joneshf/purty)
 * Python
   * [autopep8](https://github.com/hhatto/autopep8)
   * [bandit](https://github.com/PyCQA/bandit) :warning:
