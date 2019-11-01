@@ -56,7 +56,7 @@ Execute(The mypy callbacks should cd to directory containing mypy.ini if found):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_mypy_ini_and_pytest_ini/tests/testsubfolder/my_tests.py')
 
   AssertLinter 'mypy',
-  \   ale#path#CdString(ale#path#Simplify(g:dir . '/python_paths/with_mypy_ini_and_pytest_ini/'))
+  \   ale#path#CdString(ale#path#Simplify(g:dir . '/python_paths/with_mypy_ini_and_pytest_ini'))
   \   . ale#Escape('mypy')
   \   . ' --show-column-numbers  '
   \   . '--shadow-file %s %t %s'
