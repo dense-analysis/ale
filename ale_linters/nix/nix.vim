@@ -2,14 +2,14 @@
 " Description: nix-instantiate linter for nix files
 
 function! ale_linters#nix#nix#Handle(buffer, lines) abort
-    let l:pattern = '^\(.\+\): \(.\+\), at .*:\(\d\+\):\(\d\+\)$'
+    let l:pattern = '^\(.\+\): \(.\+\) at .*:\(\d\+\):\(\d\+\)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
         \   'lnum': l:match[3] + 0,
         \   'col': l:match[4] + 0,
-        \   'text': l:match[1] . ': ' . l:match[2],
+        \   'text': l:match[1] . ': ' . substitute(l:match[2], ',$', '', ''),
         \   'type': l:match[1] =~# '^error' ? 'E' : 'W',
         \})
     endfor
