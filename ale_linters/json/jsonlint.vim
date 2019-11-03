@@ -1,6 +1,7 @@
 " Author: KabbAmine <amine.kabb@gmail.com>, David Sierra <https://github.com/davidsierradz>
 
 call ale#Set('json_jsonlint_executable', 'jsonlint')
+call ale#Set('json_jsonlint_arguments', get(g:, 'ale_json_jsonlint_arguments', '--compact'))
 call ale#Set('json_jsonlint_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! ale_linters#json#jsonlint#GetExecutable(buffer) abort
@@ -14,7 +15,7 @@ function! ale_linters#json#jsonlint#GetCommand(buffer) abort
     let l:executable = ale_linters#json#jsonlint#GetExecutable(a:buffer)
 
     return ale#node#Executable(a:buffer, l:executable)
-    \   . ' --compact -'
+    \   . ' ' . ale#Var(a:buffer, 'json_jsonlint_arguments') . ' -'
 endfunction
 
 function! ale_linters#json#jsonlint#Handle(buffer, lines) abort
