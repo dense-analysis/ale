@@ -12,10 +12,16 @@ function! ale_linters#json#jsonlint#GetExecutable(buffer) abort
 endfunction
 
 function! ale_linters#json#jsonlint#GetCommand(buffer) abort
-    let l:executable = ale_linters#json#jsonlint#GetExecutable(a:buffer)
+    let l:executable  = ale_linters#json#jsonlint#GetExecutable(a:buffer)
+    let l:arguments   = ale#Var(a:buffer, 'json_jsonlint_arguments')
+    let l:schema_file = expand('%:p:h') . '/schema.json'
+
+    if filereadable(l:schema_file) && (l:schema_file != expand('%:p'))
+      let l:arguments = l:arguments . ' --validate "' . l:schema_file . '" '
+    endif
 
     return ale#node#Executable(a:buffer, l:executable)
-    \   . ' ' . ale#Var(a:buffer, 'json_jsonlint_arguments') . ' -'
+    \   . ' ' . l:arguments . ' -'
 endfunction
 
 function! ale_linters#json#jsonlint#Handle(buffer, lines) abort
