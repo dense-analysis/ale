@@ -10,7 +10,7 @@ call ale#Set('hdl_checker_options', '')
 " test files are inside /testplugin (which refers to the ale repo), which will
 " always have a .git folder
 function! ale#handlers#hdl_checker#IsDotGit(path) abort
-    return isdirectory(a:path) && ! empty(a:path)
+    return ! empty(a:path) && isdirectory(a:path)
 endfunction
 
 " Sould return (in order of preference)
@@ -37,8 +37,12 @@ function! ale#handlers#hdl_checker#GetProjectRoot(buffer) abort
     return expand('#' . a:buffer . ':p:h')
 endfunction
 
+function! ale#handlers#hdl_checker#GetExecutable(buffer) abort
+    return ale#Var(a:buffer, 'hdl_checker_executable')
+endfunction
+
 function! ale#handlers#hdl_checker#GetCommand(buffer) abort
-    let l:command = ale#Var(a:buffer, 'hdl_checker_executable') . ' --lsp'
+    let l:command = ale#Escape(ale#handlers#hdl_checker#GetExecutable(a:buffer)) . ' --lsp'
 
     " Add extra parameters only if config has been set
     let l:options = ale#Var(a:buffer, 'hdl_checker_options')
@@ -61,7 +65,7 @@ function! ale#handlers#hdl_checker#DefineLinter(filetype) abort
     \   'name': 'hdl-checker',
     \   'lsp': 'stdio',
     \   'language': a:filetype,
-    \   'executable': { b -> ale#Var(b, 'hdl_checker_executable')},
+    \   'executable': function('ale#handlers#hdl_checker#GetExecutable'),
     \   'command': function('ale#handlers#hdl_checker#GetCommand'),
     \   'project_root': function('ale#handlers#hdl_checker#GetProjectRoot'),
     \   'initialization_options': function('ale#handlers#hdl_checker#GetInitOptions'),

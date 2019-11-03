@@ -25,20 +25,20 @@ Execute(Get custom initialization dict):
 
 Execute(Get the checker command without extra user parameters):
   AssertEqual
-  \ 'hdl_checker --lsp',
+  \ ale#Escape('hdl_checker') . ' --lsp',
   \ ale#handlers#hdl_checker#GetCommand(bufnr(''))
 
 Execute(Get the checker command with user configured parameters):
   let g:ale_hdl_checker_options = '--log-level DEBUG'
 
   AssertEqual
-  \ 'hdl_checker --lsp --log-level DEBUG',
+  \ ale#Escape('hdl_checker') . ' --lsp --log-level DEBUG',
   \ ale#handlers#hdl_checker#GetCommand(bufnr(''))
 
 Execute(Customize executable):
   let g:ale_hdl_checker_executable = '/some/other/path'
   AssertEqual
-  \ '/some/other/path --lsp',
+  \ ale#Escape('/some/other/path') . ' --lsp',
   \ ale#handlers#hdl_checker#GetCommand(bufnr(''))
 
 Execute(Get project root based on .git):
