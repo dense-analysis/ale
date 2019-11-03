@@ -238,7 +238,7 @@ formatting.
 * JSON
   * [fixjson](https://github.com/rhysd/fixjson)
   * [jq](https://stedolan.github.io/jq/)
-  * [jsonlint](http://zaa.ch/jsonlint/)
+  * [jsonlint](https://github.com/prantlf/jsonlint)
   * [prettier](https://github.com/prettier/prettier)
 * Julia
   * [languageserver](https://github.com/JuliaEditorSupport/LanguageServer.jl)

@@ -21,13 +21,13 @@ function! ale_linters#json#jsonlint#GetCommand(buffer) abort
     endif
 
     return ale#node#Executable(a:buffer, l:executable)
-    \   . ' ' . l:arguments . ' -'
+    \   . ' ' . l:arguments . ' '
 endfunction
 
 function! ale_linters#json#jsonlint#Handle(buffer, lines) abort
     " Matches patterns like the following:
     " line 2, col 15, found: 'STRING' - expected: 'EOF', '}', ',', ']'.
-    let l:pattern = '^line \(\d\+\), col \(\d*\), \(.\+\)$'
+    let l:pattern = '^<stdin>: line \(\d\+\), col \(\d*\), \(.\+\)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
