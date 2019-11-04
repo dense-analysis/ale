@@ -104,15 +104,6 @@ g:ale_go_golangci_lint_options                 *g:ale_go_golangci_lint_options*
   golangci-lint invocation.
 
 
-g:ale_go_golangci_lint_package                 *g:ale_go_golangci_lint_package*
-                                               *b:ale_go_golangci_lint_package*
-  Type: |Number|
-  Default: `0`
-
-  When set to `1`, the whole Go package will be checked instead of only the
-  current file.
-
-
 ===============================================================================
 golangserver                                              *ale-go-golangserver*
 
