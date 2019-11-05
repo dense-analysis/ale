@@ -312,7 +312,7 @@ let s:default_registry = {
 \   },
 \   'xmllint': {
 \       'function': 'ale#fixers#xmllint#Fix',
-\       'suggested_filetypes': ['xml'],
+\       'suggested_filetypes': ['xml', 'xsd'],
 \       'description': 'Fix XML files with xmllint.',
 \   },
 \   'uncrustify': {
