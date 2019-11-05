@@ -2,7 +2,7 @@
 " Description: Support for Ada Language Server
 
 call ale#Set('ada_adals_executable', 'ada_language_server')
-call ale#Set('ada_adals_project, 'default.gpr')
+call ale#Set('ada_adals_project', 'default.gpr')
 call ale#Set('ada_adals_encoding', 'utf-8')
 
 function! ale_linters#ada#adals#GetAdaLSConfig(buffer) abort
