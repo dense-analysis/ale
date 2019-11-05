@@ -22,4 +22,5 @@ call ale#linter#Define('ada', {
 \   'executable': {b -> ale#Var(b, 'ada_adals_executable')},
 \   'command': '%e',
 \   'project_root': function('ale_linters#ada#adals#GetRootDirectory'),
+\   'lsp_config': function('ale_linters#ada#adals#GetAdaLSConfig')
 \})
