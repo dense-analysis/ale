@@ -8,7 +8,7 @@ call ale#Set('c_build_dir', '')
 function! ale_linters#c#clangd#GetCommand(buffer) abort
     let l:build_dir = ale#c#GetBuildDirectory(a:buffer)
 
-    return '%e -x c'
+    return '%e'
     \    . ale#Pad(ale#Var(a:buffer, 'c_clangd_options'))
     \    . (!empty(l:build_dir) ? ' -compile-commands-dir=' . ale#Escape(l:build_dir) : '')
 endfunction
