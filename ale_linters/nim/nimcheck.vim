@@ -21,7 +21,8 @@ function! ale_linters#nim#nimcheck#Handle(buffer, lines) abort
         "       module names.
         let l:temp_buffer_filename = fnamemodify(l:match[1], ':p:t')
 
-        if l:buffer_filename isnot# '' && l:temp_buffer_filename isnot# l:buffer_filename
+        " The file name when read from stdin is 'stdinfile.nim'
+        if l:buffer_filename isnot# '' && l:temp_buffer_filename isnot# 'stdinfile.nim'
             continue
         endif
 
@@ -65,7 +66,8 @@ endfunction
 
 
 function! ale_linters#nim#nimcheck#GetCommand(buffer) abort
-    return 'nim check --verbosity:0 --colors:off --listFullPaths %s'
+    return ale#path#BufferCdString(a:buffer)
+    \   . ' nim check --verbosity:0 --colors:off -'
 endfunction
 
 
@@ -75,5 +77,4 @@ call ale#linter#Define('nim', {
 \    'output_stream': 'both',
 \    'command': function('ale_linters#nim#nimcheck#GetCommand'),
 \    'callback': 'ale_linters#nim#nimcheck#Handle',
-\    'lint_file': 1,
 \})
