@@ -58,7 +58,7 @@ Execute(Get project root based on config file):
   \ ale#path#Simplify(g:dir . '/hdl_server/with_config_file'),
   \ ale#handlers#hdl_checker#GetProjectRoot(bufnr(''))
 
-Execute(Use current directory if neither .git or config file are found):
+Execute(Return no project root if neither .git or config file are found):
   let g:call_count = 0
 
   " Mock this command to avoid the test to find ale's own .git folder
@@ -70,7 +70,7 @@ Execute(Use current directory if neither .git or config file are found):
   call ale#test#SetFilename('hdl_server/foo.vhd')
 
   AssertEqual
-  \ ale#path#Simplify(g:dir . '/hdl_server'),
+  \ '',
   \ ale#handlers#hdl_checker#GetProjectRoot(bufnr(''))
 
   AssertEqual g:call_count, 1

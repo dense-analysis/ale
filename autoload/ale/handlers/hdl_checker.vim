@@ -22,7 +22,7 @@ function! ale#handlers#hdl_checker#GetProjectRoot(buffer) abort
     \   a:buffer,
     \   ale#Var(a:buffer, 'hdl_checker_config_file'))
 
-    if !empty(l:project_root    )
+    if !empty(l:project_root)
         return fnamemodify(l:project_root, ':h')
     endif
 
@@ -32,9 +32,6 @@ function! ale#handlers#hdl_checker#GetProjectRoot(buffer) abort
     if ale#handlers#hdl_checker#IsDotGit(l:project_root)
         return fnamemodify(l:project_root, ':h:h')
     endif
-
-    " As a fallback, use the path of the current buffer
-    return expand('#' . a:buffer . ':p:h')
 endfunction
 
 function! ale#handlers#hdl_checker#GetExecutable(buffer) abort
