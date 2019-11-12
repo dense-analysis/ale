@@ -12,17 +12,19 @@ Execute(Basic errors should be handled by cppcheck):
   \   {
   \     'lnum': 5,
   \     'type': 'E',
+  \     'col': '10',
   \     'text': 'Array ''a[10]'' accessed at index 10, which is out of bounds',
   \   },
   \   {
   \     'lnum': 7,
   \     'type': 'W',
+  \     'col': '3',
   \     'text': 'Some other problem',
   \   },
   \ ],
   \ ale#handlers#cppcheck#HandleCppCheckFormat(bufnr(''), [
-  \ '[test.cpp:5]: (error) Array ''a[10]'' accessed at index 10, which is out of bounds',
-  \ '[test.cpp:7]: (warning) Some other problem',
+  \ 'test.cpp:5:10: error: Array ''a[10]'' accessed at index 10, which is out of bounds',
+  \ 'test.cpp:7:3: warning: Some other problem',
   \ ])
 
 Execute(Problems from other files should be ignored by cppcheck):
@@ -32,5 +34,5 @@ Execute(Problems from other files should be ignored by cppcheck):
   \ [
   \ ],
   \ ale#handlers#cppcheck#HandleCppCheckFormat(bufnr(''), [
-  \ '[bar.cpp:5]: (error) Array ''a[10]'' accessed at index 10, which is out of bounds',
+  \ 'bar.cpp:5:3: error: Array ''a[10]'' accessed at index 10, which is out of bounds',
   \ ])
