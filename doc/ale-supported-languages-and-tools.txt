@@ -468,6 +468,7 @@ Notes:
   * `eslint`
   * `fecs`
   * `prettier`
+  * `standard`
   * `tslint`
   * `tsserver`
   * `typecheck`
