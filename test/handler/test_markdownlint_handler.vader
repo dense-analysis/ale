@@ -22,3 +22,22 @@ Execute(The Markdownlint handler should parse output correctly):
   \ 'README.md: 1: MD002/first-header-h1 First header should be a top level header [Expected: h1; Actual: h2]',
   \ 'README.md: 298: MD033/no-inline-html Inline HTML [Element: p]'
   \ ])
+
+Execute(The Markdownlint handler should parse new output correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'text': '(MD041/first-line-heading/first-line-h1) First line in file should be a top level heading [Context: "## foo"]',
+  \     'type': 'W'
+  \   },
+  \   {
+  \     'lnum': 298,
+  \     'text': '(MD033/no-inline-html) Inline HTML [Element: p]',
+  \     'type': 'W'
+  \   }
+  \ ],
+  \ ale#handlers#markdownlint#Handle(0, [
+  \ 'README.md:1 MD041/first-line-heading/first-line-h1 First line in file should be a top level heading [Context: "## foo"]',
+  \ 'README.md:298 MD033/no-inline-html Inline HTML [Element: p]',
+  \ ])
