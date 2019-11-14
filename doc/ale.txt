@@ -2361,6 +2361,7 @@ documented in additional help files.
   nim.....................................|ale-nim-options|
     nimcheck..............................|ale-nim-nimcheck|
     nimlsp................................|ale-nim-nimlsp|
+    nimpretty.............................|ale-nim-nimpretty|
   nix.....................................|ale-nix-options|
     nixpkgs-fmt...........................|ale-nix-nixpkgs-fmt|
   nroff...................................|ale-nroff-options|

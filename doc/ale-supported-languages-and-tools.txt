@@ -284,6 +284,7 @@ Notes:
 * Nim
   * `nim check`!!
   * `nimlsp`
+  * `nimpretty`
 * nix
   * `nix-instantiate`
   * `nixpkgs-fmt`

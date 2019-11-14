@@ -2,15 +2,13 @@ Before:
   call ale#assert#SetUpFixerTest('nim', 'nimpretty')
 
 After:
-  call ale#test#RestoreDirectory()
+  call ale#assert#TearDownFixerTest()
 
 Execute(The nimpretty callback should return the correct default values):
-
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
-  \   'command': ale#Escape(g:ale_nim_nimpretty_executable)
-  \     . ' %t --maxLineLen:80'
+  \   'command': ale#Escape('nimpretty') . ' %t --maxLineLen:80'
   \ },
   \ ale#fixers#nimpretty#Fix(bufnr(''))
 
@@ -20,8 +18,6 @@ Execute(The nimpretty callback should include any additional options):
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
-  \   'command': ale#Escape(g:ale_nim_nimpretty_executable)
-  \     . ' %t'
-  \     . ' --some-option',
+  \   'command': ale#Escape('nimpretty') . ' %t --some-option'
   \ },
   \ ale#fixers#nimpretty#Fix(bufnr(''))

@@ -293,6 +293,7 @@ formatting.
 * Nim
   * [nim check](https://nim-lang.org/docs/nimc.html) :floppy_disk:
   * [nimlsp](https://github.com/PMunch/nimlsp)
+  * nimpretty
 * nix
   * [nix-instantiate](http://nixos.org/nix/manual/#sec-nix-instantiate)
   * [nixpkgs-fmt](https://github.com/nix-community/nixpkgs-fmt)
