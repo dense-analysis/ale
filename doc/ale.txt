@@ -2642,6 +2642,7 @@ documented in additional help files.
     stack-ghc.............................|ale-haskell-stack-ghc|
     stylish-haskell.......................|ale-haskell-stylish-haskell|
     hie...................................|ale-haskell-hie|
+    ormolu................................|ale-haskell-ormolu|
   hcl.....................................|ale-hcl-options|
     terraform-fmt.........................|ale-hcl-terraform-fmt|
   html....................................|ale-html-options|

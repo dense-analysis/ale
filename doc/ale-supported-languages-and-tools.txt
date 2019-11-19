@@ -195,6 +195,7 @@ Notes:
   * `hie`
   * `hindent`
   * `hlint`
+  * `ormolu`
   * `stack-build`!!
   * `stack-ghc`
   * `stylish-haskell`
