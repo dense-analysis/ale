@@ -432,7 +432,42 @@ vimrc, and your issues should go away. >
 
   set completeopt=menu,menuone,preview,noselect,noinsert
 <
+                                                                  *ale-symbols*
 
+ALE provides a set of basic completion symbols. If you want to replace those
+symbols with others, you can set the variable |g:ale_completion_symbols| with
+a mapping of the type of completion to the symbol or other string that you
+would like to use. An example here shows the available options for symbols  >
+
+  let g:ale_completion_symbols = {
+  \ 'text': '',
+  \ 'method': '',
+  \ 'function': '',
+  \ 'constructor': '',
+  \ 'field': '',
+  \ 'variable': '',
+  \ 'class': '',
+  \ 'interface': '',
+  \ 'module': '',
+  \ 'property': '',
+  \ 'unit': 'unit',
+  \ 'value': 'val',
+  \ 'enum': '',
+  \ 'keyword': 'keyword',
+  \ 'snippet': '',
+  \ 'color': 'color',
+  \ 'file': '',
+  \ 'reference': 'ref',
+  \ 'folder': '',
+  \ 'enum member': '',
+  \ 'constant': '',
+  \ 'struct': '',
+  \ 'event': 'event',
+  \ 'operator': '',
+  \ 'type_parameter': 'type param',
+  \ '<default>': 'v'
+  \ }
+<
 -------------------------------------------------------------------------------
 5.2 Go To Definition                                     *ale-go-to-definition*
 
@@ -669,6 +704,47 @@ g:ale_completion_excluded_words               *g:ale_completion_excluded_words*
 
   " Don't suggest `it` or `describe` so we can use snippets for those words.
   let b:ale_completion_excluded_words = ['it', 'describe']
+<
+
+g:ale_completion_symbols                             *g:ale_completion_symbols*
+
+  Type: |Dictionary|
+
+
+  A mapping from completion types to symbols for completions. See
+  |ale-symbols| for more information.
+
+  By default, this mapping only uses built in Vim completion kinds, but it can
+  be updated to use any unicode character for the completion kind. For
+  example: >
+    let g:ale_completion_symbols = {
+    \ 'text': '',
+    \ 'method': '',
+    \ 'function': '',
+    \ 'constructor': '',
+    \ 'field': '',
+    \ 'variable': '',
+    \ 'class': '',
+    \ 'interface': '',
+    \ 'module': '',
+    \ 'property': '',
+    \ 'unit': 'v',
+    \ 'value': 'v',
+    \ 'enum': 't',
+    \ 'keyword': 'v',
+    \ 'snippet': 'v',
+    \ 'color': 'v',
+    \ 'file': 'v',
+    \ 'reference': 'v',
+    \ 'folder': 'v',
+    \ 'enum_member': 'm',
+    \ 'constant': 'm',
+    \ 'struct': 't',
+    \ 'event': 'v',
+    \ 'operator': 'f',
+    \ 'type_parameter': 'p',
+    \ '<default>': 'v'
+    \ })
 <
 
 g:ale_completion_max_suggestions             *g:ale_completion_max_suggestions*
@@ -2361,6 +2437,7 @@ documented in additional help files.
   nim.....................................|ale-nim-options|
     nimcheck..............................|ale-nim-nimcheck|
     nimlsp................................|ale-nim-nimlsp|
+    nimpretty.............................|ale-nim-nimpretty|
   nix.....................................|ale-nix-options|
     nixpkgs-fmt...........................|ale-nix-nixpkgs-fmt|
   nroff...................................|ale-nroff-options|
@@ -2524,6 +2601,7 @@ documented in additional help files.
   typescript..............................|ale-typescript-options|
     eslint................................|ale-typescript-eslint|
     prettier..............................|ale-typescript-prettier|
+    standard..............................|ale-typescript-standard|
     tslint................................|ale-typescript-tslint|
     tsserver..............................|ale-typescript-tsserver|
   vala....................................|ale-vala-options|
