@@ -30,13 +30,18 @@ endfunction
 " function, the executable string will be escaped when returned by this
 " function.
 "
+" Node parameters can be passed as optional function params.
+"
 " The executable is only prefixed for Windows machines
-function! ale#node#Executable(buffer, executable) abort
+function! ale#node#Executable(buffer, executable, ...) abort
+    "Dont put deprecation warnings into the output
+    let l:node_options = join(get(a:, '000', []) + ['--no-deprecation'], ' ')
+
     if has('win32') && a:executable =~? '\.js$'
         let l:node = ale#Var(a:buffer, 'windows_node_executable_path')
-
-        return ale#Escape(l:node) . ' ' . ale#Escape(a:executable)
+    else
+        let l:node = 'node'
     endif
 
-    return ale#Escape(a:executable)
+    return ale#Escape(l:node) . ' ' . ale#Escape(l:node_options) . ' ' . ale#Escape(a:executable)
 endfunction

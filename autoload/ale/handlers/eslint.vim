@@ -85,7 +85,7 @@ endfunction
 
 function! s:parseJSON(buffer, lines) abort
     try
-        let l:parsed = json_decode(a:lines[-1])
+        let l:parsed = json_decode(a:lines[0])
     catch
         return []
     endtry

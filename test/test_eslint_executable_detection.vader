@@ -51,7 +51,7 @@ Execute(eslint_d should be detected correctly):
   \ ale#path#Simplify(g:dir . '/eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'),
   \ ale#handlers#eslint#GetExecutable(bufnr(''))
 
-Execute(eslint.js executables should be run with node on Windows):
+Execute(eslint.js executables should be run with node to support Windows and to disable deprecation warnings):
   call ale#test#SetFilename('eslint-test-files/react-app/subdir/testfile.js')
 
   " We have to execute the file with node.
@@ -63,7 +63,8 @@ Execute(eslint.js executables should be run with node on Windows):
     \ ale#handlers#eslint#GetCommand(bufnr(''))
   else
     AssertEqual
-    \ ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+    \ ale#Escape('node --no-deprecation') . ' '
+    \   . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
     \   . ' -f json --stdin --stdin-filename %s',
     \ ale#handlers#eslint#GetCommand(bufnr(''))
   endif
