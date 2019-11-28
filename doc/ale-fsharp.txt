@@ -1,0 +1,26 @@
+===============================================================================
+ALE F# Integration                                         *ale-fsharp-options*
+
+===============================================================================
+fsharp-language-server                             *ale-fsharp-language-server*
+
+g:ale_fsharp_language_server_executable *g:ale_fsharp_language_server_executable*
+                                        *b:ale_fsharp_language_server_executable*
+
+  Type: |String|
+  Default: `'dotnet'`
+
+  This variable can be set to change the executable path used for dotnet
+
+g:ale_fsharp_language_server_assembly   *g:ale_fsharp_language_server_assembly*
+                                        *b:ale_fsharp_language_server_assembly*
+
+  Type: |String|
+  Default: `''`
+
+  The variable can be set to configure the assembly that will be used for
+  running the F# language server. Since default value is empty, you have to set
+  a path to `FSharpLanguageServer.dll`.
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

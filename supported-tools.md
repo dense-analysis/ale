@@ -143,6 +143,8 @@ formatting.
 * Erlang
   * [erlc](http://erlang.org/doc/man/erlc.html)
   * [SyntaxErl](https://github.com/ten0s/syntaxerl)
+* F#
+  * [fsharp-language-server](https://github.com/fsprojects/fsharp/fsharp-language-server)
 * Fish
   * fish [-n flag](https://linux.die.net/man/1/fish)
 * Fortran

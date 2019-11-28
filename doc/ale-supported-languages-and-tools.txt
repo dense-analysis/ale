@@ -134,6 +134,8 @@ Notes:
 * Erlang
   * `erlc`
   * `SyntaxErl`
+* F#
+  * `fsharp-language-server`
 * Fish
   * `fish` (-n flag)
 * Fortran

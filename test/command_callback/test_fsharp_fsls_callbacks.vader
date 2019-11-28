@@ -1,0 +1,19 @@
+Before:
+  call ale#assert#SetUpLinterTest('fsharp', 'fsls')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default executable path should be correct):
+  AssertLinter 'dotnet', ale#Escape('dotnet')
+
+Execute(The toolchain should be configurable):
+  let g:ale_fsharp_fsls_assembly = '/opt/fsharp-language-server/src/FSharpLanguageServer/bin/Release/netcoreapp2.0/FSharpLanguageServer.dll'
+
+  AssertLinter 'dotnet', ale#Escape('dotnet') . ' ' . ale#Escape('/opt/fsharp-language-server/src/FSharpLanguageServer/bin/Release/netcoreapp2.0/FSharpLanguageServer.dll')
+
+Execute(The project path should be correct for .git directories):
+  call ale#test#SetFilename('fsharp-fsls-project/with-git/test.fsx')
+  silent! call mkdir('fsharp-fsls-project/with-git/.git')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/fsharp-fsls-project/with-git')

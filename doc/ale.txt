@@ -2322,6 +2322,8 @@ documented in additional help files.
     gcc...................................|ale-fortran-gcc|
     language_server.......................|ale-fortran-language-server|
   fountain................................|ale-fountain-options|
+  f#......................................|ale-fsharp-options|
+    fsharp-language-server................|ale-fsharp-language-server|
   fusionscript............................|ale-fuse-options|
     fusion-lint...........................|ale-fuse-fusionlint|
   git commit..............................|ale-gitcommit-options|
