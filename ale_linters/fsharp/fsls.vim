@@ -15,6 +15,6 @@ call ale#linter#Define('fsharp', {
 \    'name': 'fsharp-language-server',
 \    'lsp': 'stdio',
 \    'executable': {b -> ale#Var(b, 'fsharp_language_server_executable') },
-\    'command': { b -> '%e ' . ale#Var(b, 'fsharp_fsls_assembly') },
+\    'command': { b -> '%e ' . ale#Var(b, 'fsharp_language_server_assembly') },
 \    'project_root': function('ale_linters#fsharp#fsls#GetProjectRoot'),
 \})
