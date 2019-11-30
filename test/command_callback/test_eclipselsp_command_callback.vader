@@ -104,3 +104,27 @@ Execute(The eclipselsp callback should allow custom configuration path):
     \ ale#Escape(ale#path#Simplify(''))
     \]
   AssertLinter 'java', join(cmd, ' ')
+
+Execute(The eclipselsp callback should allow extra java options string):
+  let b:ale_java_eclipselsp_extra_options = [
+    \ '-Xbootclasspath/p:$HOME/jars/lombok.jar',
+    \ '-javaagent:$LOMBOK_JAR'
+    \ ]
+
+  let cmd = [ ale#Escape('java'),
+    \ '-Declipse.application=org.eclipse.jdt.ls.core.id1',
+    \ '-Dosgi.bundles.defaultStartLevel=4',
+    \ '-Declipse.product=org.eclipse.jdt.ls.core.product',
+    \ '-Dlog.level=ALL',
+    \ '-noverify',
+    \ '-Xmx1G',
+    \ '-jar',
+    \ ale#Escape(''),
+    \ '-configuration',
+    \ ale#Escape(b:cfg),
+    \ '-data',
+    \ ale#Escape(ale#path#Simplify('')),
+    \ '-Xbootclasspath/p:$HOME/jars/lombok.jar',
+    \ '-javaagent:$LOMBOK_JAR'
+    \]
+  AssertLinter 'java', join(cmd, ' ')

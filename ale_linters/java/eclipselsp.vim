@@ -7,6 +7,7 @@ call ale#Set('java_eclipselsp_path', ale#path#Simplify($HOME . '/eclipse.jdt.ls'
 call ale#Set('java_eclipselsp_config_path', '')
 call ale#Set('java_eclipselsp_workspace_path', '')
 call ale#Set('java_eclipselsp_executable', 'java')
+call ale#Set('java_eclipselsp_extra_options', [])
 
 function! ale_linters#java#eclipselsp#Executable(buffer) abort
     return ale#Var(a:buffer, 'java_eclipselsp_executable')
@@ -100,6 +101,20 @@ function! ale_linters#java#eclipselsp#WorkspacePath(buffer) abort
     return ale#path#Dirname(ale#java#FindProjectRoot(a:buffer))
 endfunction
 
+function! ale_linters#java#eclipselsp#AddExtraOptions(buffer, cmd) abort
+     let l:opts = ale#Var(a:buffer, 'java_eclipselsp_extra_options')
+
+     if type(l:opts) == v:t_string
+         return extend(a:cmd, split(l:opts, ','))
+     endif
+
+     if type(l:opts) == v:t_list
+         return extend(a:cmd, l:opts)
+     endif
+
+     return a:cmd
+endfunction
+
 function! ale_linters#java#eclipselsp#Command(buffer, version) abort
     let l:path = ale#Var(a:buffer, 'java_eclipselsp_path')
 
@@ -119,6 +134,8 @@ function! ale_linters#java#eclipselsp#Command(buffer, version) abort
     \ '-data',
     \ ale#Escape(ale_linters#java#eclipselsp#WorkspacePath(a:buffer))
     \ ]
+
+    let l:cmd = ale_linters#java#eclipselsp#AddExtraOptions(a:buffer, l:cmd)
 
     if ale#semver#GTE(a:version, [1, 9])
         call add(l:cmd, '--add-modules=ALL-SYSTEM')

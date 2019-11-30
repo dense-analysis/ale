@@ -212,6 +212,21 @@ g:ale_java_eclipselsp_config_path              *g:ale_java_eclipse_config_path*
   installed via system package.
 
 
+g:ale_java_eclipselsp_extra_options       *g:ale_java_eclipselsp_extra_options*
+                                          *b:ale_java_eclipselsp_extra_options*
+
+  Type: |String|
+  Default: `[]`
+
+  An array of java command line options to be added to the eclipselsp
+  command. For example:
+>
+  let g:ale_java_eclipselsp_extra_options = [
+    \ '-javaagent:lombok.jar'
+    \ 'Xbootclasspath/p:lombok.jar'
+    \ ]
+
+
 g:ale_java_eclipselsp_workspace_path     *g:ale_java_eclipselsp_workspace_path*
                                          *b:ale_java_eclipselsp_workspace_path*
 
