@@ -102,17 +102,17 @@ function! ale_linters#java#eclipselsp#WorkspacePath(buffer) abort
 endfunction
 
 function! ale_linters#java#eclipselsp#AddExtraOptions(buffer, cmd) abort
-     let l:opts = ale#Var(a:buffer, 'java_eclipselsp_extra_options')
+    let l:opts = ale#Var(a:buffer, 'java_eclipselsp_extra_options')
 
-     if type(l:opts) == v:t_string
-         return extend(a:cmd, split(l:opts, ','))
-     endif
+    if type(l:opts) == v:t_string
+        return extend(a:cmd, split(l:opts, ','))
+    endif
 
-     if type(l:opts) == v:t_list
-         return extend(a:cmd, l:opts)
-     endif
+    if type(l:opts) == v:t_list
+        return extend(a:cmd, l:opts)
+    endif
 
-     return a:cmd
+    return a:cmd
 endfunction
 
 function! ale_linters#java#eclipselsp#Command(buffer, version) abort
