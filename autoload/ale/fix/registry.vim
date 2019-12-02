@@ -215,6 +215,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'Fix Haskell files with floskell.',
 \   },
+\   'ormolu': {
+\       'function': 'ale#fixers#ormolu#Fix',
+\       'suggested_filetypes': ['haskell'],
+\       'description': 'Fix Haskell files with ormolu.',
+\   },
 \   'hfmt': {
 \       'function': 'ale#fixers#hfmt#Fix',
 \       'suggested_filetypes': ['haskell'],
