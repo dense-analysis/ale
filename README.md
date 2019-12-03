@@ -35,6 +35,10 @@ If you don't care about Language Server Protocol, ALE won't load any of the code
 for working with it unless needed. One of ALE's general missions is that you
 won't pay for the features that you don't use.
 
+**Help Wanted:** If you would like to help maintain this plugin by managing the
+many issues and pull requests that are submitted, please send the author an
+email at [dev@w0rp.com](mailto:dev@w0rp.com?subject=Helping%20with%20ALE).
+
 If you enjoy this plugin, feel free to contribute or check out the author's
 other content at [w0rp.com](https://w0rp.com).
 
