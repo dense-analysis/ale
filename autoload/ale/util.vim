@@ -24,20 +24,18 @@ function! ale#util#ShowMessage(string) abort
     " We have to assume the user is using a monospace font.
     if has('nvim') || (a:string !~? "\n" && len(a:string) < &columns)
         execute 'echo a:string'
+    elseif g:ale_set_balloons == 1 && has('balloon_eval')
+        call popup_atcursor(split(a:string, "\n"), {
+        \    'padding': [0, 1, 0, 1],
+        \    'borderchars': ['━','┃','━','┃','┏','┓','┛','┗'],
+        \    'border': [1, 1, 1, 1],
+        \    'moved':'any',
+        \})
     else
-        if g:ale_set_balloons == 1 && has('balloon_eval')
-            call popup_atcursor(split(a:string, "\n"), {
-            \    'padding': [0, 1, 0, 1],
-            \    'borderchars': ['━','┃','━','┃','┏','┓','┛','┗'],
-            \    'border': [1, 1, 1, 1],
-            \    'moved':'any',
-            \})
-        else
-            call ale#preview#Show(split(a:string, "\n"), {
-            \   'filetype': 'ale-preview.message',
-            \   'stay_here': 1,
-            \})
-        endif
+        call ale#preview#Show(split(a:string, "\n"), {
+        \   'filetype': 'ale-preview.message',
+        \   'stay_here': 1,
+        \})
     endif
 endfunction
 
