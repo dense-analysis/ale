@@ -525,10 +525,11 @@ at the cursor taken from LSP linters. The following commands are supported:
 |ALEHover| - Print information about the symbol at the cursor.
 
 If |g:ale_set_balloons| is set to `1` and your version of Vim supports the
-|balloon_show()| function, then "hover" information also show up when you move
-the mouse over a symbol in a buffer. Diagnostic information will take priority
-over hover information for balloons. If a line contains a problem, that
-problem will be displayed in a balloon instead of hover information.
+|balloon_show()| function, then "hover" information will appear in a balloon.
+This options will also cause balloons to show up when you move the mouse over
+a symbol in a buffer. Diagnostic information will take priority over hover
+information for balloons. If a line contains a problem, that problem will be
+displayed in a balloon instead of hover information.
 
 Hover information can be displayed in the preview window instead by setting
 |g:ale_hover_to_preview| to `1`.
@@ -2783,13 +2784,17 @@ ALEGoToTypeDefinitionInVSplit                   *ALEGoToTypeDefinitionInVSplit*
 
 ALEHover                                                             *ALEHover*
 
-  Print brief information about the symbol under the cursor, taken from any
-  available LSP linters. There may be a small non-blocking delay before
-  information is printed.
+  Print brief information about the symbol under the cursor to the prompt,
+  taken from any available LSP linters. There may be a small non-blocking
+  delay before information is printed.
 
   NOTE: In Vim 8, long messages will be shown in a preview window, as Vim 8
   does not support showing a prompt to press enter to continue for long
   messages from asynchronous callbacks.
+
+  If |g:ale_set_balloons| is set to `1` and your version of Vim supports the
+  |balloon_show()| function, then "hover" information will appear in a
+  balloon.
 
   A plug mapping `<Plug>(ale_hover)` is defined for this command.
 
@@ -2928,6 +2933,9 @@ ALEDetail                                                           *ALEDetail*
   given line in the preview window. The preview window can be easily closed
   with the `q` key. If there is no message to show, the window will not be
   opened.
+
+  If |g:ale_set_balloons| is set to `1` and your version of Vim supports the
+  |balloon_show()| function, then the message will appear in a balloon.
 
   If a loclist item has a `detail` key set, the message for that key will be
   preferred over `text`. See |ale-loclist-format|.
