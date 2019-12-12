@@ -36,6 +36,7 @@ endfunction
 function! ale#fixers#eslint#ApplyFixForVersion(buffer, version) abort
     let l:executable = ale#handlers#eslint#GetExecutable(a:buffer)
     let l:options = ale#Var(a:buffer, 'javascript_eslint_options')
+        \ . ale#Pad(ale#Var(a:buffer, 'javascript_eslint_fix_options'))
 
     " Use the configuration file from the options, if configured.
     if l:options =~# '\v(^| )-c|(^| )--config'

@@ -42,6 +42,20 @@ g:ale_javascript_eslint_options               *g:ale_javascript_eslint_options*
   This variable can be set to pass additional options to eslint.
 
 
+g:ale_javascript_eslint_fix_options       *g:ale_javascript_eslint_fix_options*
+                                          *b:ale_javascript_eslint_fix_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass options to eslint fixer in addition to any
+  other options that may be specified in ale_javascript_eslint_options.
+
+  For example, to prevent eslint fixer from removing debugger statements while
+  still reporting the presence of debugger statements as an error:
+
+  `let g:ale_javascript_eslint_fix_options="--rule 'no-debugger: off'"`
+
+
 g:ale_javascript_eslint_use_global         *g:ale_javascript_eslint_use_global*
                                            *b:ale_javascript_eslint_use_global*
   Type: |Number|
