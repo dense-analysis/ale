@@ -26,17 +26,11 @@ function! ale_linters#chef#cookstyle#Handle(buffer, lines) abort
     let l:output = []
 
     for l:error in l:errors['files'][0]['offenses']
-        let l:start_col = str2nr(l:error['location']['start_column'])
-        let l:end_col = str2nr(l:error['location']['last_column'])
-
-        if !l:end_col
-            let l:end_col = l:start_col + 1
-        endif
-
+        let l:start_col = l:error['location']['column'] + 0
         call add(l:output, {
-        \   'lnum': str2nr(l:error['location']['line']),
+        \   'lnum': l:error['location']['line'] + 0,
         \   'col': l:start_col,
-        \   'end_col': l:end_col,
+        \   'end_col': l:start_col + l:error['location']['length'] - 1,
         \   'code': l:error['cop_name'],
         \   'text': l:error['message'],
         \   'type': l:error['severity'] is? 'convention' ? 'W' : 'E',
