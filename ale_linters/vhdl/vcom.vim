@@ -6,7 +6,9 @@ call ale#Set('vhdl_vcom_executable', 'vcom')
 call ale#Set('vhdl_vcom_options', '-2008 -quiet -lint')
 
 function! ale_linters#vhdl#vcom#GetCommand(buffer) abort
-    return '%e ' . ale#Pad(ale#Var(a:buffer, 'vhdl_vcom_options')) . ' %t'
+    let l:tmpdir = ale#util#Tempname()
+
+    return '%e ' . ale#Pad(ale#Var(a:buffer, 'vhdl_vcom_options')) . ' -work ' . l:tmpdir . ' %t'
 endfunction
 
 function! ale_linters#vhdl#vcom#Handle(buffer, lines) abort

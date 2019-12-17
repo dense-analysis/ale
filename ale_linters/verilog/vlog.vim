@@ -6,7 +6,9 @@ call ale#Set('verilog_vlog_executable', 'vlog')
 call ale#Set('verilog_vlog_options', '-quiet -lint')
 
 function! ale_linters#verilog#vlog#GetCommand(buffer) abort
-    return '%e ' . ale#Pad(ale#Var(a:buffer, 'verilog_vlog_options')) . ' %t'
+    let l:tmpdir = ale#util#Tempname()
+
+    return '%e ' . ale#Pad(ale#Var(a:buffer, 'verilog_vlog_options')) . ' -work ' . l:tmpdir . ' %t'
 endfunction
 
 function! ale_linters#verilog#vlog#Handle(buffer, lines) abort
