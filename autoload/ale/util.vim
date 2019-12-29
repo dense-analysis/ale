@@ -481,9 +481,13 @@ function! ale#util#Input(message, value) abort
     return input(a:message, a:value)
 endfunction
 
+function! ale#util#HasBuflineApi() abort
+    return exists('*deletebufline') && exists('*setbufline')
+endfunction
+
 " Sets buffer contents to lines
 function! ale#util#SetBufferContents(buffer, lines) abort
-    let l:has_bufline_api = exists('*deletebufline') && exists('*setbufline')
+    let l:has_bufline_api = ale#util#HasBuflineApi()
 
     if !l:has_bufline_api && a:buffer isnot bufnr('')
         return

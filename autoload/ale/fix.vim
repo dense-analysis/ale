@@ -5,7 +5,7 @@ call ale#Set('fix_on_save_ignore', {})
 function! ale#fix#ApplyQueuedFixes(buffer) abort
     let l:data = get(g:ale_fix_buffer_data, a:buffer, {'done': 0})
 
-    if !l:data.done
+    if !l:data.done || (!ale#util#HasBuflineApi() && a:buffer isnot bufnr(''))
         return
     endif
 
