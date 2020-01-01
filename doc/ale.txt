@@ -432,6 +432,11 @@ vimrc, and your issues should go away. >
 
   set completeopt=menu,menuone,preview,noselect,noinsert
 <
+
+Or alternatively, if you want to show documentation in popups: >
+
+  set completeopt=menu,menuone,popup,noselect,noinsert
+<
                                                                   *ale-symbols*
 
 ALE provides a set of basic completion symbols. If you want to replace those
