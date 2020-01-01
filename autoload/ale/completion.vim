@@ -261,6 +261,8 @@ function! s:ReplaceCompletionOptions() abort
 
         if &l:completeopt =~# 'preview'
             let &l:completeopt = 'menu,menuone,preview,noselect,noinsert'
+        elseif &l:completeopt =~# 'popup'
+            let &l:completeopt = 'menu,menuone,popup,noselect,noinsert'
         else
             let &l:completeopt = 'menu,menuone,noselect,noinsert'
         endif
