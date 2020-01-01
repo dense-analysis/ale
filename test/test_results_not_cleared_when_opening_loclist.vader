@@ -8,7 +8,7 @@ After:
 
   call setloclist(0, [])
   call clearmatches()
-  sign unplace *
+  call ale#sign#Clear()
 
 Given foobar (Some file):
   abc

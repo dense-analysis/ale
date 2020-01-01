@@ -9,7 +9,8 @@ CONTENTS                                                         *ale-contents*
   1. Introduction.........................|ale-introduction|
   2. Supported Languages & Tools..........|ale-support|
   3. Linting..............................|ale-lint|
-    3.1 Other Sources.....................|ale-lint-other-sources|
+    3.1 Adding Language Servers...........|ale-lint-language-servers|
+    3.2 Other Sources.....................|ale-lint-other-sources|
   4. Fixing Problems......................|ale-fix|
   5. Language Server Protocol Support.....|ale-lsp|
     5.1 Completion........................|ale-completion|
@@ -147,7 +148,48 @@ ALE offers several options for controlling which linters are run.
 
 
 -------------------------------------------------------------------------------
-3.1 Other Sources                                      *ale-lint-other-sources*
+3.1 Adding Language Servers                         *ale-lint-language-servers*
+
+ALE comes with many default configurations for language servers, so they can
+be detected and run automatically. ALE can connect to other language servers
+by defining a new linter for a filetype. New linters can be defined in |vimrc|,
+in plugin files, or `ale_linters` directories in |runtimepath|.
+
+See |ale-linter-loading-behavior| for more information on loading linters.
+
+A minimal configuration for a language server linter might look so. >
+
+  call ale#linter#Define('filetype_here', {
+  \   'name': 'any_name_you_want',
+  \   'lsp': 'stdio',
+  \   'executable': '/path/to/executable',
+  \   'command': '%e run',
+  \   'project_root': '/path/to/root_of_project',
+  \})
+<
+For language servers that use a TCP socket connection, you should define the
+address to connect to instead. >
+
+  call ale#linter#Define('filetype_here', {
+  \   'name': 'any_name_you_want',
+  \   'lsp': 'socket',
+  \   'address': 'servername:1234',
+  \   'project_root': '/path/to/root_of_project',
+  \})
+<
+  Most of the options for a language server can be replaced with a |Funcref|
+  for a function accepting a buffer number for dynamically computing values
+  such as the executable path, the project path, the server address, etc,
+  most of which can also be determined based on executing some other
+  asynchronous task. See |ale#command#Run()| for computing linter options
+  based on asynchronous results.
+
+  See |ale#linter#Define()| for a detailed explanation of all of the options
+  for configuring linters.
+
+
+-------------------------------------------------------------------------------
+3.2 Other Sources                                      *ale-lint-other-sources*
 
 Problems for a buffer can be taken from other sources and rendered by ALE.
 This allows ALE to be used in combination with other plugins which also want
@@ -391,6 +433,46 @@ vimrc, and your issues should go away. >
   set completeopt=menu,menuone,preview,noselect,noinsert
 <
 
+Or alternatively, if you want to show documentation in popups: >
+
+  set completeopt=menu,menuone,popup,noselect,noinsert
+<
+                                                                  *ale-symbols*
+
+ALE provides a set of basic completion symbols. If you want to replace those
+symbols with others, you can set the variable |g:ale_completion_symbols| with
+a mapping of the type of completion to the symbol or other string that you
+would like to use. An example here shows the available options for symbols  >
+
+  let g:ale_completion_symbols = {
+  \ 'text': '',
+  \ 'method': '',
+  \ 'function': '',
+  \ 'constructor': '',
+  \ 'field': '',
+  \ 'variable': '',
+  \ 'class': '',
+  \ 'interface': '',
+  \ 'module': '',
+  \ 'property': '',
+  \ 'unit': 'unit',
+  \ 'value': 'val',
+  \ 'enum': '',
+  \ 'keyword': 'keyword',
+  \ 'snippet': '',
+  \ 'color': 'color',
+  \ 'file': '',
+  \ 'reference': 'ref',
+  \ 'folder': '',
+  \ 'enum member': '',
+  \ 'constant': '',
+  \ 'struct': '',
+  \ 'event': 'event',
+  \ 'operator': '',
+  \ 'type_parameter': 'type param',
+  \ '<default>': 'v'
+  \ }
+<
 -------------------------------------------------------------------------------
 5.2 Go To Definition                                     *ale-go-to-definition*
 
@@ -447,6 +529,9 @@ If |g:ale_set_balloons| is set to `1` and your version of Vim supports the
 the mouse over a symbol in a buffer. Diagnostic information will take priority
 over hover information for balloons. If a line contains a problem, that
 problem will be displayed in a balloon instead of hover information.
+
+Hover information can be displayed in the preview window instead by setting
+|g:ale_hover_to_preview| to `1`.
 
 For Vim 8.1+ terminals, mouse hovering is disabled by default. Enabling
 |balloonexpr| commands in terminals can cause scrolling issues in terminals,
@@ -601,7 +686,7 @@ b:ale_completion_enabled                             *b:ale_completion_enabled*
   See |ale-completion|
 
 
-g:ale_completion_tsserver_autoimport      *g:ale_completion_tsserver_autoimport*
+g:ale_completion_tsserver_autoimport     *g:ale_completion_tsserver_autoimport*
 
   Type: Number
   Default: `0`
@@ -627,6 +712,47 @@ g:ale_completion_excluded_words               *g:ale_completion_excluded_words*
 
   " Don't suggest `it` or `describe` so we can use snippets for those words.
   let b:ale_completion_excluded_words = ['it', 'describe']
+<
+
+g:ale_completion_symbols                             *g:ale_completion_symbols*
+
+  Type: |Dictionary|
+
+
+  A mapping from completion types to symbols for completions. See
+  |ale-symbols| for more information.
+
+  By default, this mapping only uses built in Vim completion kinds, but it can
+  be updated to use any unicode character for the completion kind. For
+  example: >
+    let g:ale_completion_symbols = {
+    \ 'text': '',
+    \ 'method': '',
+    \ 'function': '',
+    \ 'constructor': '',
+    \ 'field': '',
+    \ 'variable': '',
+    \ 'class': '',
+    \ 'interface': '',
+    \ 'module': '',
+    \ 'property': '',
+    \ 'unit': 'v',
+    \ 'value': 'v',
+    \ 'enum': 't',
+    \ 'keyword': 'v',
+    \ 'snippet': 'v',
+    \ 'color': 'v',
+    \ 'file': 'v',
+    \ 'reference': 'v',
+    \ 'folder': 'v',
+    \ 'enum_member': 'm',
+    \ 'constant': 'm',
+    \ 'struct': 't',
+    \ 'event': 'v',
+    \ 'operator': 'f',
+    \ 'type_parameter': 'p',
+    \ '<default>': 'v'
+    \ })
 <
 
 g:ale_completion_max_suggestions             *g:ale_completion_max_suggestions*
@@ -757,6 +883,15 @@ g:ale_echo_msg_info_str                               *g:ale_echo_msg_info_str*
   Default: `'Info'`
 
   The string used for `%severity%` for info. See |g:ale_echo_msg_format|
+
+
+g:ale_echo_msg_log_str                                 *g:ale_echo_msg_log_str*
+
+  Type: |String|
+  Default: `'Log'`
+
+  The string used for `%severity%` for log, used only for handling LSP show
+  message requests. See |g:ale_lsp_show_message_format|
 
 
 g:ale_echo_msg_warning_str                         *g:ale_echo_msg_warning_str*
@@ -894,6 +1029,16 @@ g:ale_history_log_output                             *g:ale_history_log_output*
   Some memory will be consumed by this option. It is very useful for figuring
   out what went wrong with linters, and for bug reports. Turn this option off
   if you want to save on some memory usage.
+
+
+g:ale_hover_to_preview                                 *g:ale_hover_to_preview*
+                                                       *b:ale_hover_to_preview*
+
+  Type: |Number|
+  Default: `0`
+
+  If set to `1`, hover messages will be displayed in the preview window,
+  instead of in balloons or the message line.
 
 
 g:ale_keep_list_window_open                       *g:ale_keep_list_window_open*
@@ -1209,6 +1354,47 @@ b:ale_loclist_msg_format                             *b:ale_loclist_msg_format*
 
   The strings for configuring `%severity%` are also used for this option.
 
+
+g:ale_lsp_show_message_format                   *g:ale_lsp_show_message_format*
+
+  Type: |String|
+  Default: `'%severity%:%linter%: %s'`
+
+  This variable defines the format that messages received from an LSP will
+  have when echoed. The following sequences of characters will be replaced.
+
+    `%s`           - replaced with the message text
+    `%linter%`     - replaced with the name of the linter
+    `%severity%`   - replaced with the severity of the message
+
+  The strings for `%severity%` levels "error", "info" and "warning" are shared
+  with |g:ale_echo_msg_format|. Severity "log" is unique to
+  |g:ale_lsp_show_message_format| and it can be configured via
+
+    |g:ale_echo_msg_log_str|     - Defaults to `'Log'`
+
+  Please note that |g:ale_lsp_show_message_format| *can not* be configured
+  separately for each buffer like |g:ale_echo_msg_format| can.
+
+
+g:ale_lsp_show_message_severity               *g:ale_lsp_show_message_severity*
+
+  Type: |String|
+  Default: `'error'`
+
+  This variable defines the minimum severity level an LSP message needs to be
+  displayed. Messages below this level are discarded; please note that
+  messages with `Log` severity level are always discarded.
+
+  Possible values follow the LSP spec `MessageType` definition:
+
+  `'error'`       - Displays only errors.
+  `'warning'`     - Displays errors and warnings.
+  `'information'` - Displays errors, warnings and infos
+  `'log'`         - Same as `'information'`
+  `'disabled'`    - Doesn't display any information at all.
+
+
 g:ale_lsp_root                                                 *g:ale_lsp_root*
 b:ale_lsp_root                                                 *b:ale_lsp_root*
 
@@ -1334,7 +1520,7 @@ g:ale_pattern_options_enabled                   *g:ale_pattern_options_enabled*
   will not set buffer variables per |g:ale_pattern_options|.
 
 
-g:ale_rename_tsserver_find_in_comments  *g:ale_rename_tsserver_find_in_comments*
+g:ale_rename_tsserver_find_in_comments *g:ale_rename_tsserver_find_in_comments*
 
   Type: |Number|
   Default: `0`
@@ -1501,6 +1687,16 @@ g:ale_set_signs                                               *g:ale_set_signs*
   To limit the number of signs ALE will set, see |g:ale_max_signs|.
 
 
+g:ale_sign_priority                                       *g:ale_sign_priority*
+
+  Type: |Number|
+  Default: `30`
+
+  From Neovim 0.4.0 and Vim 8.1, ALE can set sign priority to all signs. The
+  larger this value is, the higher priority ALE signs have over other plugin
+  signs. See |sign-priority| for further details on how priority works.
+
+
 g:ale_shell                                                       *g:ale_shell*
 
   Type: |String|
@@ -1593,7 +1789,7 @@ g:ale_sign_warning                                         *g:ale_sign_warning*
   The sign for warnings in the sign gutter.
 
 
-g:ale_sign_highlight_linenrs                       *g:ale_sign_highlight_linenrs*
+g:ale_sign_highlight_linenrs                     *g:ale_sign_highlight_linenrs*
 
   Type: |Number|
   Default: `0`
@@ -1656,6 +1852,8 @@ g:ale_virtualtext_cursor                             *g:ale_virtualtext_cursor*
 
   Type: |Number|
   Default: `0`
+
+  This option only has any effect in NeoVim.
 
   When this option is set to `1`, a message will be shown when a cursor is
   near a warning or error. ALE will attempt to find the warning or error at a
@@ -2189,6 +2387,7 @@ documented in additional help files.
     terraform-fmt.........................|ale-hcl-terraform-fmt|
   html....................................|ale-html-options|
     fecs..................................|ale-html-fecs|
+    html-beautify.........................|ale-html-beautify|
     htmlhint..............................|ale-html-htmlhint|
     tidy..................................|ale-html-tidy|
     prettier..............................|ale-html-prettier|
@@ -2196,6 +2395,8 @@ documented in additional help files.
     write-good............................|ale-html-write-good|
   idris...................................|ale-idris-options|
     idris.................................|ale-idris-idris|
+  ink.....................................|ale-ink-options|
+    ink-language-server...................|ale-ink-language-server|
   ispc....................................|ale-ispc-options|
     ispc..................................|ale-ispc-ispc|
   java....................................|ale-java-options|
@@ -2251,6 +2452,12 @@ documented in additional help files.
     mmc...................................|ale-mercury-mmc|
   nasm....................................|ale-nasm-options|
     nasm..................................|ale-nasm-nasm|
+  nim.....................................|ale-nim-options|
+    nimcheck..............................|ale-nim-nimcheck|
+    nimlsp................................|ale-nim-nimlsp|
+    nimpretty.............................|ale-nim-nimpretty|
+  nix.....................................|ale-nix-options|
+    nixpkgs-fmt...........................|ale-nix-nixpkgs-fmt|
   nroff...................................|ale-nroff-options|
     write-good............................|ale-nroff-write-good|
   objc....................................|ale-objc-options|
@@ -2306,6 +2513,7 @@ documented in additional help files.
     puppet-languageserver.................|ale-puppet-languageserver|
   purescript..............................|ale-purescript-options|
     purescript-language-server............|ale-purescript-language-server|
+    purty.................................|ale-purescript-purty|
   pyrex (cython)..........................|ale-pyrex-options|
     cython................................|ale-pyrex-cython|
   python..................................|ale-python-options|
@@ -2341,6 +2549,7 @@ documented in additional help files.
     write-good............................|ale-restructuredtext-write-good|
   ruby....................................|ale-ruby-options|
     brakeman..............................|ale-ruby-brakeman|
+    debride...............................|ale-ruby-debride|
     rails_best_practices..................|ale-ruby-rails_best_practices|
     reek..................................|ale-ruby-reek|
     rubocop...............................|ale-ruby-rubocop|
@@ -2358,6 +2567,7 @@ documented in additional help files.
     sasslint..............................|ale-sass-sasslint|
     stylelint.............................|ale-sass-stylelint|
   scala...................................|ale-scala-options|
+    metals................................|ale-scala-metals|
     sbtserver.............................|ale-scala-sbtserver|
     scalafmt..............................|ale-scala-scalafmt|
     scalastyle............................|ale-scala-scalastyle|
@@ -2409,6 +2619,7 @@ documented in additional help files.
   typescript..............................|ale-typescript-options|
     eslint................................|ale-typescript-eslint|
     prettier..............................|ale-typescript-prettier|
+    standard..............................|ale-typescript-standard|
     tslint................................|ale-typescript-tslint|
     tsserver..............................|ale-typescript-tsserver|
   vala....................................|ale-vala-options|

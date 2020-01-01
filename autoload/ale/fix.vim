@@ -74,7 +74,7 @@ endfunction
 function! ale#fix#ApplyFixes(buffer, output) abort
     let l:data = g:ale_fix_buffer_data[a:buffer]
     let l:data.output = a:output
-    let l:data.changes_made = l:data.lines_before != l:data.output
+    let l:data.changes_made = l:data.lines_before !=# l:data.output " no-custom-checks
     let l:data.done = 1
 
     call ale#command#RemoveManagedFiles(a:buffer)
