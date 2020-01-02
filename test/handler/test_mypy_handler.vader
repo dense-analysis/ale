@@ -18,6 +18,8 @@ After:
 Execute(The mypy handler should parse lines correctly):
   call ale#test#SetFilename('__init__.py')
 
+  let g:ale_python_mypy_show_notes = 0
+
   AssertEqual
   \ [
   \   {
