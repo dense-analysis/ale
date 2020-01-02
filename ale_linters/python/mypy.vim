@@ -19,6 +19,15 @@ endfunction
 
 " The directory to change to before running mypy
 function! s:GetDir(buffer) abort
+    " If we find a directory with "mypy.ini" in it use that,
+    " else try and find the "python project" root, or failing
+    " that, run from the same folder as the current file
+    for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
+        if filereadable(l:path . '/mypy.ini')
+            return l:path
+        endif
+    endfor
+
     let l:project_root = ale#python#FindProjectRoot(a:buffer)
 
     return !empty(l:project_root)
