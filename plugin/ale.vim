@@ -128,6 +128,9 @@ let g:ale_set_balloons = get(g:, 'ale_set_balloons', has('balloon_eval') && has(
 " Use preview window for hover messages.
 let g:ale_hover_to_preview = get(g:, 'ale_hover_to_preview', 0)
 
+" This flag can be set to 1 to enable popup support.
+let g:ale_set_popups = get(g:, 'ale_set_popups', 0)
+
 " This flag can be set to 0 to disable warnings for trailing whitespace
 let g:ale_warn_about_trailing_whitespace = get(g:, 'ale_warn_about_trailing_whitespace', 1)
 " This flag can be set to 0 to disable warnings for trailing blank lines

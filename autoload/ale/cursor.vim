@@ -137,8 +137,8 @@ function! s:ShowCursorDetailForItem(loc, options) abort
     let s:last_detailed_line = line('.')
     let l:message = get(a:loc, 'detail', a:loc.text)
 
-    if g:ale_set_balloons == 1 && has('balloon_eval')
-        call ale#util#ShowMessage(l:message)
+    if g:ale_set_popups == 1
+        call ale#popup#Show(l:message)
     else
         let l:lines = split(l:message, "\n")
         call ale#preview#Show(l:lines, {'stay_here': l:stay_here})
