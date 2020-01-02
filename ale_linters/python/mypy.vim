@@ -28,6 +28,7 @@ function! s:GetDir(buffer) abort
     endfor
 
     let l:project_root = ale#python#FindProjectRoot(a:buffer)
+
     return !empty(l:project_root)
     \   ? l:project_root
     \   : expand('#' . a:buffer . ':p:h')
