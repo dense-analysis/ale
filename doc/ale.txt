@@ -530,8 +530,9 @@ the mouse over a symbol in a buffer. Diagnostic information will take priority
 over hover information for balloons. If a line contains a problem, that
 problem will be displayed in a balloon instead of hover information.
 
-Hover information can be displayed in the preview window instead by setting
-|g:ale_hover_to_preview| to `1`.
+Hover information can be displayed in a popup instead by setting
+|g:ale_hover_to_popup| to `1`. If the preview window is preferred, it can be
+used by setting |g:ale_hover_to_preview| to `1`.
 
 For Vim 8.1+ terminals, mouse hovering is disabled by default. Enabling
 |balloonexpr| commands in terminals can cause scrolling issues in terminals,
@@ -1031,6 +1032,17 @@ g:ale_history_log_output                             *g:ale_history_log_output*
   if you want to save on some memory usage.
 
 
+g:ale_hover_to_popup                                     *g:ale_hover_to_popup*
+                                                         *b:ale_hover_to_popup*
+
+  Type: |Number|
+  Default: `0`
+
+  If set to `1`, hover messages will be displayed in popup, instead of in
+  balloons or the message line. This option takes precedence over
+  |g:ale_hover_to_preview|.
+
+
 g:ale_hover_to_preview                                 *g:ale_hover_to_preview*
                                                        *b:ale_hover_to_preview*
 
@@ -1038,7 +1050,8 @@ g:ale_hover_to_preview                                 *g:ale_hover_to_preview*
   Default: `0`
 
   If set to `1`, hover messages will be displayed in the preview window,
-  instead of in balloons or the message line.
+  instead of in balloons or the message line. This option is overridden by
+  |g:ale_hover_to_popup|.
 
 
 g:ale_keep_list_window_open                       *g:ale_keep_list_window_open*
@@ -1618,6 +1631,26 @@ g:ale_set_loclist                                           *g:ale_set_loclist*
   When this option is set to `1`, the |loclist| will be populated with any
   warnings and errors which are found by ALE. This feature can be used to
   implement jumping between errors through typical use of |lnext| and |lprev|.
+
+
+g:ale_set_popups                                             *g:ale_set_popups*
+
+  Type: |Number|
+  Default: `has('popupwin')`
+
+  When this option is set to `1`, popup messages can be used to be display for
+  problems or hover information if available. This can be preferential to
+  balloons when using terminal versions of Vim due to the strange mouse
+  behavior when balloons are enabled.
+
+  This option will cause |ALEDetail| to display diagnostic information in a
+  popup window.
+
+  When used with |g:ale_hover_to_popup| = `1`, |ALEHover| will display hover
+  information in a popup window.
+
+  If your version of Vim does not support the |popup_atcursor| function, then
+  this option does nothing meaningful.
 
 
 g:ale_set_quickfix                                         *g:ale_set_quickfix*
@@ -2929,7 +2962,8 @@ ALEDetail                                                           *ALEDetail*
   with the `q` key. If there is no message to show, the window will not be
   opened.
 
-  If |g:ale_set_popups| is set to `1`, then the message will appear in a popup.
+  If |g:ale_hover_to_popup| is set to `1`, then the message will appear in a
+  popup.
 
   If a loclist item has a `detail` key set, the message for that key will be
   preferred over `text`. See |ale-loclist-format|.
