@@ -103,6 +103,8 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
                 \&& exists('*balloon_show')
                 \&& ale#Var(l:options.buffer, 'set_balloons')
                     call balloon_show(l:str)
+                elseif g:ale_set_popups && g:ale_hover_to_popup
+                    call ale#popup#Show(l:str)
                 elseif g:ale_hover_to_preview
                     call ale#preview#Show(split(l:str, "\n"), {
                     \   'filetype': 'ale-preview.message',
