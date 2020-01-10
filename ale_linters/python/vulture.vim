@@ -29,7 +29,7 @@ function! ale_linters#python#vulture#GetCommand(buffer) abort
 
     let l:executable = ale_linters#python#vulture#GetExecutable(a:buffer)
 
-    let l:exec_args = l:executable =~? 'pipenv$'
+    let l:exec_args = l:executable =~? 'pipenv\|poetry$'
     \   ? ' run vulture'
     \   : ''
 
