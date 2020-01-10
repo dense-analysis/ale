@@ -18,3 +18,18 @@ Execute(Pipenv is detected when python_prospector_auto_pipenv is set):
   AssertLinter 'pipenv',
   \ ale#Escape('pipenv') . ' run prospector'
   \   .  '  --messages-only --absolute-paths --zero-exit --output-format json %s'
+
+Execute(Setting executable to 'poetry' appends 'run prospector'):
+  let g:ale_python_prospector_executable = 'path/to/poetry'
+
+  AssertLinter 'path/to/poetry',
+  \ ale#Escape('path/to/poetry') . ' run prospector'
+  \   .  '  --messages-only --absolute-paths --zero-exit --output-format json %s'
+
+Execute(Poetry is detected when python_prospector_auto_poetry is set):
+  let g:ale_python_prospector_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinter 'poetry',
+  \ ale#Escape('poetry') . ' run prospector'
+  \   .  '  --messages-only --absolute-paths --zero-exit --output-format json %s'

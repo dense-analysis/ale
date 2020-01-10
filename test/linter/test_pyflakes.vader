@@ -44,3 +44,16 @@ Execute(Pipenv is detected when python_pyflakes_auto_pipenv is set):
 
   AssertLinter 'pipenv',
   \ ale#Escape('pipenv') . ' run pyflakes %t'
+
+Execute(Setting executable to 'poetry' appends 'run pyflakes'):
+  let g:ale_python_pyflakes_executable = 'path/to/poetry'
+
+  AssertLinter 'path/to/poetry',
+  \ ale#Escape('path/to/poetry') . ' run pyflakes %t',
+
+Execute(Poetry is detected when python_pyflakes_auto_poetry is set):
+  let g:ale_python_pyflakes_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinter 'poetry',
+  \ ale#Escape('poetry') . ' run pyflakes %t'

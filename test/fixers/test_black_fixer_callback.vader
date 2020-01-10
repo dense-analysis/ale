@@ -55,3 +55,13 @@ Execute(Pipenv is detected when python_black_auto_pipenv is set):
   AssertEqual
   \ {'command': ale#Escape('pipenv') . ' run black -'},
   \ ale#fixers#black#Fix(bufnr(''))
+
+Execute(Poetry is detected when python_black_auto_poetry is set):
+  let g:ale_python_black_auto_poetry = 1
+  let g:ale_python_black_change_directory = 0
+
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertEqual
+  \ {'command': ale#Escape('poetry') . ' run black -'},
+  \ ale#fixers#black#Fix(bufnr(''))

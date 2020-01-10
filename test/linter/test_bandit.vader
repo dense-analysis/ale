@@ -48,6 +48,25 @@ Execute(Pipenv is detected when python_bandit_auto_pipenv is set):
   \ . b:bandit_flags
   \ . ' -'
 
+Execute(Setting executable to 'poetry' appends 'run bandit'):
+  let g:ale_python_bandit_executable = 'path/to/poetry'
+
+  AssertLinter 'path/to/poetry',
+  \ ale#Escape('path/to/poetry')
+  \ . ' run bandit'
+  \ . b:bandit_flags
+  \ . ' -'
+
+Execute(Poetry is detected when python_bandit_auto_poetry is set):
+  let g:ale_python_bandit_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinter 'poetry',
+  \ ale#Escape('poetry')
+  \ . ' run bandit'
+  \ . b:bandit_flags
+  \ . ' -'
+
 Execute(The bandit command callback should add .bandit by default):
   silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_bandit/namespace/foo/bar.py')
 
