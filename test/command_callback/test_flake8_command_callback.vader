@@ -165,3 +165,20 @@ Execute(Pipenv is detected when python_flake8_auto_pipenv is set):
   AssertLinter 'pipenv',
   \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('pipenv') . ' run flake8 --format=default --stdin-display-name %s -'
+
+Execute(Setting executable to 'poetry' should append 'run flake8'):
+  let g:ale_python_flake8_executable = 'path/to/poetry'
+
+  " FIXME: poetry should check the version with flake8.
+  GivenCommandOutput []
+  AssertLinter 'path/to/poetry',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   .  ale#Escape('path/to/poetry') . ' run flake8 --format=default -'
+
+Execute(Poetry is detected when python_flake8_auto_poetry is set):
+  let g:ale_python_flake8_auto_poetry = 1
+  call ale#test#SetFilename('../python_fixtures/poetry/whatever.py')
+
+  AssertLinter 'poetry',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('poetry') . ' run flake8 --format=default --stdin-display-name %s -'

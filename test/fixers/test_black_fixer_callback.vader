@@ -6,6 +6,7 @@ Before:
   let g:ale_python_black_executable = 'xxxinvalid'
   let g:ale_python_black_options = ''
   let g:ale_python_black_auto_pipenv = 0
+  let g:ale_python_black_auto_poetry = 0
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
   silent cd ..
@@ -52,4 +53,14 @@ Execute(Pipenv is detected when python_black_auto_pipenv is set):
 
   AssertEqual
   \ {'command': ale#Escape('pipenv') . ' run black -'},
+  \ ale#fixers#black#Fix(bufnr(''))
+
+Execute(Poetry is detected when python_black_auto_poetry is set):
+  let g:ale_python_black_auto_poetry = 1
+  let g:ale_python_black_change_directory = 0
+
+  call ale#test#SetFilename('/testplugin/test/python_fixtures/poetry/whatever.py')
+
+  AssertEqual
+  \ {'command': ale#Escape('poetry') . ' run black -'},
   \ ale#fixers#black#Fix(bufnr(''))

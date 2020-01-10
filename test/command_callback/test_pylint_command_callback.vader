@@ -77,3 +77,20 @@ Execute(Pipenv is detected when python_pylint_auto_pipenv is set):
   \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('pipenv') . ' run pylint'
   \   . '  --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n %s'
+
+Execute(Setting executable to 'poetry' appends 'run pylint'):
+  let g:ale_python_pylint_executable = 'path/to/poetry'
+
+  AssertLinter 'path/to/poetry',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('path/to/poetry') . ' run pylint'
+  \   . '  --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n %s'
+
+Execute(Poetry is detected when python_pylint_auto_poetry is set):
+  let g:ale_python_pylint_auto_poetry = 1
+  call ale#test#SetFilename('/testplugin/test/python_fixtures/poetry/whatever.py')
+
+  AssertLinter 'poetry',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('poetry') . ' run pylint'
+  \   . '  --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n %s'

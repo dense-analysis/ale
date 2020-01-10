@@ -46,6 +46,18 @@ Execute(Pipenv is detected when python_pyls_auto_pipenv is set):
   AssertLinter 'pipenv',
   \ ale#Escape('pipenv') . ' run pyls'
 
+Execute(Setting executable to 'poetry' appends 'run pyls'):
+  let g:ale_python_pyls_executable = 'path/to/poetry'
+
+  AssertLinter 'path/to/poetry', ale#Escape('path/to/poetry') . ' run pyls'
+
+Execute(Poetry is detected when python_pyls_auto_poetry is set):
+  let g:ale_python_pyls_auto_poetry = 1
+  call ale#test#SetFilename('/testplugin/test/python_fixtures/poetry/whatever.py')
+
+  AssertLinter 'poetry',
+  \ ale#Escape('poetry') . ' run pyls'
+
 Execute(Should accept configuration settings):
   AssertLSPConfig {}
   let b:ale_python_pyls_config = {'pyls': {'plugins': {'preload': {'enabled': v:false}}}}

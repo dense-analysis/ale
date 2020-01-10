@@ -86,3 +86,19 @@ Execute(Pipenv is detected when python_mypy_auto_pipenv is set):
   AssertLinter 'pipenv',
   \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('pipenv') . ' run mypy --show-column-numbers  --shadow-file %s %t %s'
+
+Execute(Setting executable to 'poetry' appends 'run mypy'):
+  let g:ale_python_mypy_executable = 'path/to/poetry'
+
+  AssertLinter 'path/to/poetry',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('path/to/poetry') . ' run mypy'
+  \   . ' --show-column-numbers  --shadow-file %s %t %s'
+
+Execute(Poetry is detected when python_mypy_auto_poetry is set):
+  let g:ale_python_mypy_auto_poetry = 1
+  call ale#test#SetFilename('/testplugin/test/python_fixtures/poetry/whatever.py')
+
+  AssertLinter 'poetry',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('poetry') . ' run mypy --show-column-numbers  --shadow-file %s %t %s'
