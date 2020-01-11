@@ -3,9 +3,7 @@
 
 call ale#Set('c_uncrustify_executable', 'uncrustify')
 call ale#Set('c_uncrustify_force_filetype', 0)
-call ale#Set('c_uncrustify_options', '')
-call ale#Set('cpp_uncrustify_options', '')
-call ale#Set('cs_global_uncrustify_options', '')
+call ale#Set('c_uncrustify_global_options', '')
 call ale#Set('c_uncrustify_options', '')
 call ale#Set('cpp_uncrustify_options', '')
 call ale#Set('cs_uncrustify_options', '')
@@ -33,7 +31,7 @@ function! ale#fixers#uncrustify#Fix(buffer) abort
     endif
 
     if ale#Var(a:buffer, 'c_uncrustify_force_filetype')
-        l:options = '-l ' . ft . (empty(l:options) ? '' : ' ' . l:options)
+        let l:options = '-l ' . ft . (empty(l:options) ? '' : ' ' . l:options)
     endif
 
     return {
