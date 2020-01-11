@@ -5,7 +5,16 @@ ALE VALA Integration                                         *ale-vala-options*
 ===============================================================================
 uncrustify                                                *ale-vala-uncrustify*
 
-See |ale-c-uncrustify| for information about the available options.
+g:ale_vala_uncrustify_options                   *g:ale_vala_uncrustify_options*
+                                                *b:ale_vala_uncrustify_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be change to modify flags given to uncrustify for VALA
+  files.
+
+
+See |ale-c-uncrustify| for information about the other available options.
 
 
 ===============================================================================

@@ -293,7 +293,16 @@ g:ale_cpp_gcc_options                                   *g:ale_cpp_gcc_options*
 ===============================================================================
 uncrustify                                                 *ale-cpp-uncrustify*
 
-See |ale-c-uncrustify| for information about the available options.
+g:ale_cpp_uncrustify_options                    *g:ale_cpp_uncrustify_options*
+                                                *b:ale_cpp_uncrustify_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be change to modify flags given to uncrustify for C++
+  files.
+
+
+See |ale-c-uncrustify| for information about the other available options.
 
 
 ===============================================================================

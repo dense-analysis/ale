@@ -289,13 +289,31 @@ g:ale_c_uncrustify_executable                   *g:ale_c_uncrustify_executable*
 
   This variable can be changed to use a different executable for uncrustify.
 
+g:ale_c_uncrustify_force_filetype           *g:ale_c_uncrustify_force_filetype*
+                                            *b:ale_c_uncrustify_force_filetype*
+  Type: |Number|
+  Default: `0`
+
+  This variable can be changed to force uncrustify to parse files as the
+  filetype reported in Vim.
+
+
+g:ale_c_uncrustify_global_options           *g:ale_c_uncrustify_global_options*
+                                            *b:ale_c_uncrustify_force_filetype*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to modify flags given to uncrustify for
+  files of any type. Per-language options override these options.
+
 
 g:ale_c_uncrustify_options                         *g:ale_c_uncrustify_options*
                                                    *b:ale_c_uncrustify_options*
   Type: |String|
   Default: `''`
 
-  This variable can be change to modify flags given to uncrustify.
+  This variable can be changed to modify flags given to uncrustify for C
+  files.
 
 
 ===============================================================================

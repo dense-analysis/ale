@@ -5,7 +5,16 @@ ALE Pawn Integration                                         *ale-pawn-options*
 ===============================================================================
 uncrustify                                                *ale-pawn-uncrustify*
 
-See |ale-c-uncrustify| for information about the available options.
+g:ale_pawn_uncrustify_options                   *g:ale_pawn_uncrustify_options*
+                                                *b:ale_pawn_uncrustify_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be change to modify flags given to uncrustify for Pawn
+  files.
+
+
+See |ale-c-uncrustify| for information about the other available options.
 
 
 ===============================================================================
