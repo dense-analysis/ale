@@ -11,6 +11,7 @@ function! ale#popup#Show(string, ...) abort
     \    'padding': [0, 1, 0, 1],
     \    'borderchars': ['━','┃','━','┃','┏','┓','┛','┗'],
     \    'border': [1, 1, 1, 1],
-    \    'moved':'any',
+    \    'pos': 'botright',
+    \    'moved': 'any',
     \})
 endfunction
