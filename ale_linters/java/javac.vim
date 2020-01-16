@@ -6,6 +6,7 @@ let s:classpath_sep = has('unix') ? ':' : ';'
 call ale#Set('java_javac_executable', 'javac')
 call ale#Set('java_javac_options', '')
 call ale#Set('java_javac_classpath', '')
+call ale#Set('java_javac_sourcepath', '')
 
 function! ale_linters#java#javac#RunWithImportPaths(buffer) abort
     let l:command = ''
@@ -50,8 +51,7 @@ function! s:BuildClassPathOption(buffer, import_paths) abort
     \   : ''
 endfunction
 
-function! ale_linters#java#javac#GetCommand(buffer, import_paths, meta) abort
-    let l:cp_option = s:BuildClassPathOption(a:buffer, a:import_paths)
+function! s:BuildSourcePathOption(buffer) abort
     let l:sp_option = ''
 
     " Find the src directory, for files in this project.
@@ -79,10 +79,22 @@ function! ale_linters#java#javac#GetCommand(buffer, import_paths, meta) abort
         endif
     endif
 
+    call extend(
+    \   l:sp_dirs,
+    \   split(ale#Var(a:buffer, 'java_javac_sourcepath'), s:classpath_sep),
+    \)
+
     if !empty(l:sp_dirs)
         let l:sp_option = '-sourcepath '
         \   . ale#Escape(join(l:sp_dirs, s:classpath_sep))
     endif
+
+    return l:sp_option
+endfunction
+
+function! ale_linters#java#javac#GetCommand(buffer, import_paths, meta) abort
+    let l:cp_option = s:BuildClassPathOption(a:buffer, a:import_paths)
+    let l:sp_option = s:BuildSourcePathOption(a:buffer)
 
     " Create .class files in a temporary directory, which we will delete later.
     let l:class_file_directory = ale#command#CreateDirectory(a:buffer)

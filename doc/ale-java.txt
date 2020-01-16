@@ -67,6 +67,13 @@ g:ale_java_javac_options                             *g:ale_java_javac_options*
 
   This variable can be set to pass additional options to javac.
 
+g:ale_java_javac_sourcepath                         *g:ale_java_javac_sourcepath*
+                                                    *b:ale_java_javac_sourcepath*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to change the global sourcepath for Java.
+
 
 ===============================================================================
 google-java-format                                *ale-java-google-java-format*
