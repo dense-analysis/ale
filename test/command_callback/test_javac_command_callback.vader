@@ -186,3 +186,17 @@ Execute(The javac callback should add -sourcepath even if src/java/main doesn't 
   \     ale#path#Simplify(g:dir . '/java_paths_no_main/src/test/java/'),
   \   ], g:cp_sep))
   \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t'
+
+Execute(The javac callback should use g:ale_java_javac_sourcepath correctly):
+  call ale#engine#Cleanup(bufnr(''))
+  noautocmd e! java_paths/src/main/java/com/something/dummy
+  call ale#engine#InitBufferInfo(bufnr(''))
+
+  let g:ale_java_javac_sourcepath = 'foopath'
+
+  AssertLinter 'javac',
+  \ ale#path#CdString(expand('%:p:h')) . ale#Escape('javac') . ' -Xlint'
+  \   . ' -sourcepath ' . ale#Escape(join([
+  \   ale#path#Simplify(g:dir . '/java_paths/src/main/java/'),
+  \   'foopath'], g:cp_sep))
+  \   . ' -d ' . ale#Escape('TEMP_DIR') . ' %t'
