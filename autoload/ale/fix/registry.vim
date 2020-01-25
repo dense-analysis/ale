@@ -12,6 +12,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['help'],
 \       'description': 'Align help tags to the right margin',
 \   },
+\   'autoflake': {
+\       'function': 'ale#fixers#autoflake#Fix',
+\       'suggested_filetypes': ['python'],
+\       'description': 'Fix flake issues with autoflake.',
+\   },
 \   'autopep8': {
 \       'function': 'ale#fixers#autopep8#Fix',
 \       'suggested_filetypes': ['python'],

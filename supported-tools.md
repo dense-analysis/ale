@@ -361,6 +361,7 @@ formatting.
   * [purescript-language-server](https://github.com/nwolverson/purescript-language-server)
   * [purty](https://gitlab.com/joneshf/purty)
 * Python
+  * [autoflake](https://github.com/myint/autoflake) :floppy_disk:
   * [autopep8](https://github.com/hhatto/autopep8)
   * [bandit](https://github.com/PyCQA/bandit) :warning:
   * [black](https://github.com/ambv/black)

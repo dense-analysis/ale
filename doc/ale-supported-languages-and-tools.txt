@@ -352,6 +352,7 @@ Notes:
   * `purescript-language-server`
   * `purty`
 * Python
+  * `autoflake`!!
   * `autopep8`
   * `bandit`
   * `black`
