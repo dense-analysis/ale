@@ -2498,9 +2498,9 @@ documented in additional help files.
     write-good............................|ale-pod-write-good|
   pony....................................|ale-pony-options|
     ponyc.................................|ale-pony-ponyc|
-  powershell............................|ale-powershell-options|
-    powershell..........................|ale-powershell-powershell|
-    psscriptanalyzer....................|ale-powershell-psscriptanalyzer|
+  powershell..............................|ale-powershell-options|
+    powershell............................|ale-powershell-powershell|
+    psscriptanalyzer......................|ale-powershell-psscriptanalyzer|
   prolog..................................|ale-prolog-options|
     swipl.................................|ale-prolog-swipl|
   proto...................................|ale-proto-options|
@@ -2517,7 +2517,7 @@ documented in additional help files.
   pyrex (cython)..........................|ale-pyrex-options|
     cython................................|ale-pyrex-cython|
   python..................................|ale-python-options|
-    autoflake..............................|ale-python-autoflake|
+    autoflake.............................|ale-python-autoflake|
     autopep8..............................|ale-python-autopep8|
     bandit................................|ale-python-bandit|
     black.................................|ale-python-black|
