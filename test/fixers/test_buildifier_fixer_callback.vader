@@ -1,24 +1,41 @@
 Before:
   Save g:ale_bzl_buildifier_executable
 
+  call ale#assert#SetUpFixerTest('bzl', 'buildifier')
   " Use an invalid global executable, so we don't match it.
   let g:ale_bzl_buildifier_executable = 'xxxinvalid'
 
-  call ale#test#SetDirectory('/testplugin/test/fixers')
   silent cd ..
   silent cd command_callback
   let g:dir = getcwd()
 
 After:
-  Restore
+  call ale#assert#TearDownFixerTest()
 
-  call ale#test#RestoreDirectory()
-
-Execute(The buildifier callback should return the correct default values):
+Execute(Should set the correct command for `BUILD` files):
   call ale#test#SetFilename('bzl_paths/BUILD')
-
-  AssertEqual
+  AssertFixer
   \ {
   \   'command': ale#Escape(g:ale_bzl_buildifier_executable)
-  \ },
-  \ ale#fixers#buildifier#Fix(bufnr(''))
+  \ }
+
+Execute(Should set the correct command for `BUILD.bazel` files):
+  call ale#test#SetFilename('bzl_paths/BUILD.bazel')
+  AssertFixer
+  \ {
+  \   'command': ale#Escape(g:ale_bzl_buildifier_executable)
+  \ }
+
+Execute(Should set correct command for `WORKSPACE` files):
+  call ale#test#SetFilename('bzl_paths/WORKSPACE')
+  AssertFixer
+  \ {
+  \   'command': ale#Escape(g:ale_bzl_buildifier_executable)
+  \ }
+
+Execute(Should set correct command for `bzl` files):
+  call ale#test#SetFilename('bzl_paths/test.bzl')
+  AssertFixer
+  \ {
+  \   'command': ale#Escape(g:ale_bzl_buildifier_executable)
+  \ }
