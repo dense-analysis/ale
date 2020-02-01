@@ -141,6 +141,14 @@ g:ale_php_phpmd_ruleset                               *g:ale_php_phpmd_ruleset*
   the available phpmd rulesets
 
 
+g:ale_php_phpmd_suffixes                              *g:ale_php_phpmd_suffixes*
+                                                      *b:ale_php_phpmd_suffixes*
+  Type: |String|
+  Default: `''`
+
+  This variable controls the suffixes used by phpmd.
+
+
 ===============================================================================
 phpstan                                                       *ale-php-phpstan*
 

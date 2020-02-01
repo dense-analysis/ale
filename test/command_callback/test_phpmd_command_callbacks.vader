@@ -10,3 +10,18 @@ Execute(Custom executables should be used for the executable and command):
   AssertLinter 'phpmd_test',
   \ ale#Escape('phpmd_test')
   \ . ' %s text cleancode,codesize,controversial,design,naming,unusedcode --ignore-violations-on-exit %t'
+
+Execute(User provided options should be used):
+  let g:ale_php_phpmd_suffixes = 'module,inc'
+
+  AssertLinter 'phpmd',
+  \ ale#Escape('phpmd')
+  \ . ' %s text cleancode,codesize,controversial,design,naming,unusedcode --suffixes module,inc --ignore-violations-on-exit %t'
+
+Given php(An empty PHP file):
+Execute(Current file extension should be used as the suffix):
+  let extension = expand('#' . bufnr('') . ':e')
+
+  AssertLinter 'phpmd',
+  \ ale#Escape('phpmd')
+  \ . ' %s text cleancode,codesize,controversial,design,naming,unusedcode --suffixes ' . extension . ' --ignore-violations-on-exit %t'
