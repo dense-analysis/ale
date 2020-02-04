@@ -40,11 +40,12 @@ g:ale_objc_uncrustify_options                   *g:ale_objc_uncrustify_options*
   Type: |String|
   Default: `''`
 
-  This variable can be change to modify flags given to uncrustify for
-  Objective-C files.
+  This variable can be changed to modify flags given to uncrustify for
+  Objective-C files. Note: |g:ale_uncrustify_per_type| must be enabled for this
+  to take effect.
 
 
-See |ale-c-uncrustify| for information about the other available options.
+See |ale-uncrustify| for information about the other available options.
 
 
 ===============================================================================

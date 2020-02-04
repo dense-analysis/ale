@@ -1,0 +1,63 @@
+===============================================================================
+ALE Uncrustify Integration                               *ale-uncrustify-options*
+
+
+===============================================================================
+When using Uncrustify, ALE can either use the same options for all filetypes
+or different options for each filetype.
+
+For per-filetype options, after setting |g:ale_uncrustify_per_type| to 1,
+use g:ale_lang_uncrustify_options where "lang" is one of "c", "cpp", "cs",
+"objc", "d", "java", "pawn", or "vala".
+
+
+===============================================================================
+uncrustify                                                       *ale-uncrustify*
+
+g:ale_uncrustify_executable                         *g:ale_uncrustify_executable*
+                                                   *b:ale_uncrustify_executable*
+  Type: |String|
+  Default: `'uncrustify'`
+
+  This variable can be changed to use a different executable for Uncrustify.
+
+
+g:ale_uncrustify_per_type                              *g:ale_uncrustify_per_type*
+                                                      *b:ale_uncrustify_per_type*
+  Type: |Number|
+  Default: `0`
+
+  If 1 then different options are passed to Uncrustify depending on the type
+  of file being edited. To set individual language options, use
+  "g:ale_lang_uncrustify_options" where "lang" is one of "c", "cpp", "cs",
+  "objc", "d", "java", "pawn", or "vala". For example
+  |g:ale_c_uncrustify_options|.
+
+  If 0 then |g:ale_uncrustify_global_options| are always passed to Uncrustify
+  and the "g:ale_lang_uncrustify_options" are ignored for all "lang'. Note: for
+  backward compatibility, if this is 0 and |g_ale_uncrustify_global_options| is
+  not set then |g:ale_c_uncrustify_options| are always passed instead.
+
+
+g:ale_uncrustify_global_options                  *g:ale_uncrustify_global_options*
+                                                *b:ale_uncrustify_global_options*
+  Type: |String|
+  Default: `''`
+
+  Options that are used for all languages. Language-specific options override
+  these (they are passed to Uncrustify before global options).
+
+
+g:ale_uncrustify_force_filetype                  *g:ale_uncrustify_force_filetype*
+                                                *b:ale_uncrustify_force_filetype*
+  Type: |Number|
+  Default: `0`
+
+  If 1 then the language that vim detects for the filetype is passed to
+  Uncrustify explicitly. This overrides any language setting in
+  |g:ale_uncrustify_global_options| or "g:ale_lang_uncrustify_options" for any
+  "lang".
+
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
