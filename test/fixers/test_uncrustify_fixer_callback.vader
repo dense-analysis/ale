@@ -1,8 +1,8 @@
 Before:
-  Save g:ale_c_uncrustify_executable
+  Save g:ale_uncrustify_executable
 
   " Use an invalid global executable, so we don't match it.
-  let g:ale_c_uncrustify_executable = 'xxxinvalid'
+  let g:ale_uncrustify_executable = 'xxxinvalid'
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
   silent cd ..
@@ -14,23 +14,135 @@ After:
 
   call ale#test#RestoreDirectory()
 
-Execute(The clang-format callback should return the correct default values):
+Execute(The callback should return the correct default values):
   call ale#test#SetFilename('c_paths/dummy.c')
 
   AssertEqual
   \ {
-  \   'command': ale#Escape(g:ale_c_uncrustify_executable)
+  \   'command': ale#Escape(g:ale_uncrustify_executable)
   \       . ' --no-backup'
   \ },
   \ ale#fixers#uncrustify#Fix(bufnr(''))
 
-Execute(The uncrustify callback should include any additional options):
+Execute(The uncrustify callback should include global options):
   call ale#test#SetFilename('c_paths/dummy.c')
-  let b:ale_c_uncrustify_options = '--some-option'
+  let b:ale_uncrustify_global_options = '--some-option'
 
   AssertEqual
   \ {
-  \   'command': ale#Escape(g:ale_c_uncrustify_executable)
+  \   'command': ale#Escape(g:ale_uncrustify_executable)
   \     . ' --no-backup --some-option',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+Execute(The uncrustify callback should include language-specific options before global options):
+  call ale#test#SetFilename('c_paths/dummy.c')
+  let b:ale_uncrustify_global_options = '--some-option'
+  let b:ale_c_uncrustify_options = '--c-option'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_uncrustify_executable)
+  \     . ' --no-backup --c-option --some-option',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+
+"Language-specific tests
+
+
+Execute(The uncrustify callback should include C specific options):
+  call ale#test#SetFilename('c_paths/dummy.c')
+  let b:ale_uncrustify_per_type = 1
+  let b:ale_c_uncrustify_options = '--c-option'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_uncrustify_executable)
+  \     . ' --no-backup --c-option',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+Execute(The uncrustify callback should include C++ options):
+  call ale#test#SetFilename('c_paths/dummy.cpp')
+  let b:ale_uncrustify_per_type = 1
+  let b:ale_cpp_uncrustify_options = '--cpp-option'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_uncrustify_executable)
+  \     . ' --no-backup --cpp-option',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+Execute(The uncrustify callback should include C# options):
+  call ale#test#SetFilename('c_paths/dummy.cs')
+  let b:ale_uncrustify_per_type = 1
+  let b:ale_cs_uncrustify_options = '--cs-option'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_uncrustify_executable)
+  \     . ' --no-backup --cs-option',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+Execute(The uncrustify callback should include Objective C options):
+  call ale#test#SetFilename('c_paths/dummy.m')
+  let b:ale_uncrustify_per_type = 1
+  let b:ale_objc_uncrustify_options = '--objc-option'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_uncrustify_executable)
+  \     . ' --no-backup --objc-option',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+Execute(The uncrustify callback should include D options):
+  call ale#test#SetFilename('c_paths/dummy.d')
+  let b:ale_uncrustify_per_type = 1
+  let b:ale_d_uncrustify_options = '--d-option'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_uncrustify_executable)
+  \     . ' --no-backup --d-option',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+Execute(The uncrustify callback should include Java options):
+  call ale#test#SetFilename('c_paths/dummy.java')
+  let b:ale_uncrustify_per_type = 1
+  let b:ale_java_uncrustify_options = '--java-option'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_uncrustify_executable)
+  \     . ' --no-backup --java-option',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+Execute(The uncrustify callback should include Pawn options):
+  call ale#test#SetFilename('c_paths/dummy.pawn')
+  let b:ale_uncrustify_per_type = 1
+  let b:ale_pawn_uncrustify_options = '--pawn-option'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_uncrustify_executable)
+  \     . ' --no-backup --pawn-option',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+Execute(The uncrustify callback should include Vala options):
+  call ale#test#SetFilename('c_paths/dummy.vala')
+  let b:ale_uncrustify_per_type = 1
+  let b:ale_pawn_uncrustify_options = '--vala-option'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_uncrustify_executable)
+  \     . ' --no-backup --vala-option',
   \ },
   \ ale#fixers#uncrustify#Fix(bufnr(''))
