@@ -15,15 +15,22 @@ call ale#Set('pawn_uncrustify_options', '')
 call ale#Set('vala_uncrustify_options', '')
 
 function! ale#fixers#uncrustify#Fix(buffer) abort
-    let l:executable = ale#Var(a:buffer, 'c_uncrustify_executable')
+    let l:executable = ale#Var(a:buffer, 'uncrustify_executable')
     let ft = getbufvar(a:buffer, '&filetype')
-    let ft_options = ale#Var(a:buffer, ft . '_uncrustify_options')
-    let all_options = ale#Var(a:buffer, 'c_uncrustify_global_options')
+    if empty(ft)
+        let ft_options = ''
+    else
+        let ft_options = ale#Var(a:buffer, ft . '_uncrustify_options')
+endif
+    let all_options = ale#Var(a:buffer, 'uncrustify_global_options')
 
-    " For backwards compatibility, use C options if
-    " all_options is empty and not using per_type
-    if !ale#Var('uncrustify_per_type') && empty(all_options)
-        let ft = 'c'
+    if !ale#Var(a:buffer, 'uncrustify_per_type')
+        let ft_options = ''
+        " For backwards compatibility, use C options if
+        " all_options is empty and not using per_type
+        if empty(all_options)
+            let all_options = ale#Var(a:buffer, 'c_uncrustify_options')
+        endif
     endif
 
     if empty(all_options)
@@ -43,6 +50,6 @@ function! ale#fixers#uncrustify#Fix(buffer) abort
     return {
     \   'command': ale#Escape(l:executable)
     \       . ' --no-backup'
-    \       . ale#Escape(empty(l:options) ? '' : ' ' . l:options)
+    \       . (empty(l:options) ? '' : ' ' . ale#Escape(l:options))
     \}
 endfunction
