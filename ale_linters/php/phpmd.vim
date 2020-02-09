@@ -11,12 +11,15 @@ let g:ale_php_phpmd_ruleset = get(g:, 'ale_php_phpmd_ruleset', 'cleancode,codesi
 
 function! ale_linters#php#phpmd#GetCommand(buffer) abort
     let l:suffixes = ale#Var(a:buffer, 'php_phpmd_suffixes')
-    if (empty(l:suffixes) && &filetype is# 'php')
-      let l:suffixes = expand('#' . a:buffer . ':e')
+
+    if empty(l:suffixes) && &filetype is# 'php'
+        let l:suffixes = expand('#' . a:buffer . ':e')
     endif
+
     let l:suffixes_option = !empty(l:suffixes)
     \   ? ' --suffixes ' . l:suffixes
     \   : ''
+
     return '%e %s text'
     \   . ale#Pad(ale#Var(a:buffer, 'php_phpmd_ruleset'))
     \   . l:suffixes_option
