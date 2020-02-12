@@ -5,14 +5,13 @@ ALE Pawn Integration                                         *ale-pawn-options*
 ===============================================================================
 uncrustify                                                *ale-pawn-uncrustify*
 
-g:ale_pawn_uncrustify_options                   *g:ale_pawn_uncrustify_options*
-                                                *b:ale_pawn_uncrustify_options*
+g:ale_uncrustify_pawn_options                   *g:ale_uncrustify_pawn_options*
+                                                *b:ale_uncrustify_pawn_options*
   Type: |String|
   Default: `''`
 
   This variable can be changed to modify flags given to uncrustify for Pawn
-  files. Note: |g:ale_uncrustify_per_type| must be enabled for this to
-  take effect.
+  files.
 
 
 See |ale-uncrustify| for information about the other available options.

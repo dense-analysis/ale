@@ -226,13 +226,13 @@ g:ale_java_eclipselsp_workspace_path     *g:ale_java_eclipselsp_workspace_path*
 ===============================================================================
 uncrustify                                                *ale-java-uncrustify*
 
-g:ale_java_uncrustify_options                    *g:ale_java_uncrustify_options*
-                                                *b:ale_java_uncrustify_options*
+g:ale_uncrustify_java_options                    *g:ale_uncrustify_java_options*
+                                                *b:ale_uncrustify_java_options*
   Type: |String|
   Default: `''`
 
   This variable can be changed to modify flags given to uncrustify for Java
-  files. Note: |g:ale_uncrustify_per_type| must be enabled for this to take effect.
+  files.
 
 
 See |ale-uncrustify| for information about the other available options.

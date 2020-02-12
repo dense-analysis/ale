@@ -282,15 +282,13 @@ g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
 ===============================================================================
 uncrustify                                                   *ale-c-uncrustify*
 
-g:ale_c_uncrustify_options                         *g:ale_c_uncrustify_options*
-                                                   *b:ale_c_uncrustify_options*
+g:ale_uncrustify_c_options                         *g:ale_uncrustify_c_options*
+                                                   *b:ale_uncrustify_c_options*
   Type: |String|
   Default: `''`
 
   This variable can be changed to modify flags given to uncrustify for C
-  files. |g:ale_uncrustify_per_type| must be enabled for this to take effect.
-  If |g:ale_uncrustify_per_type| is 0 and |g:ale_uncrustify_global_options| is
-  empty, then this option is used for all filetypes instead of just C files.
+  files.
 
 
 See |ale-uncrustify| for information about the other available options.

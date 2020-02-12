@@ -25,13 +25,13 @@ See |ale-integrations-local-executables|
 ===============================================================================
 uncrustify                                                   *ale-d-uncrustify*
 
-g:ale_d_uncrustify_options                         *g:ale_d_uncrustify_options*
-                                                   *b:ale_d_uncrustify_options*
+g:ale_uncrustify_d_options                         *g:ale_uncrustify_d_options*
+                                                   *b:ale_uncrustify_d_options*
   Type: |String|
   Default: `''`
 
   This variable can be changed to modify flags given to uncrustify for D
-  files. Note: |g:ale_uncrustify_per_type| must be enabled for this to take effect.
+  files.
 
 
 See |ale-uncrustify| for information about the other available options.

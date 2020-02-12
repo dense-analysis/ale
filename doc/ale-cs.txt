@@ -190,14 +190,13 @@ g:ale_cs_mcsc_assemblies                             *g:ale_cs_mcsc_assemblies*
 ===============================================================================
 uncrustify                                                  *ale-cs-uncrustify*
 
-g:ale_cs_uncrustify_options                       *g:ale_cs_uncrustify_options*
-                                                  *b:ale_cs_uncrustify_options*
+g:ale_uncrustify_cs_options                       *g:ale_uncrustify_cs_options*
+                                                  *b:ale_uncrustify_cs_options*
   Type: |String|
   Default: `''`
 
   This variable can be changed to modify flags given to uncrustify for C#
-  files. Note: |g:ale_uncrustify_per_type| must be enabled for this to take
-  effect.
+  files.
 
 
 See |ale-uncrustify| for information about the other available options.

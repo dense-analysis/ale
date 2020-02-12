@@ -35,14 +35,13 @@ g:ale_objc_clangd_options                           *g:ale_objc_clangd_options*
 ===============================================================================
 uncrustify                                                *ale-objc-uncrustify*
 
-g:ale_objc_uncrustify_options                   *g:ale_objc_uncrustify_options*
-                                                *b:ale_objc_uncrustify_options*
+g:ale_uncrustify_objc_options                   *g:ale_uncrustify_objc_options*
+                                                *b:ale_uncrustify_objc_options*
   Type: |String|
   Default: `''`
 
   This variable can be changed to modify flags given to uncrustify for
-  Objective-C files. Note: |g:ale_uncrustify_per_type| must be enabled for this
-  to take effect.
+  Objective-C files.
 
 
 See |ale-uncrustify| for information about the other available options.

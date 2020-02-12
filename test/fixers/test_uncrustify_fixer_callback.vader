@@ -14,14 +14,42 @@ After:
 
   call ale#test#RestoreDirectory()
 
-Execute(The callback should return the correct default values):
+Execute(The uncrustify callback should return the correct default values):
+  let &filetype = 'c'
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_uncrustify_executable)
+  \       . ' --no-backup ' . ale#Escape('-l C')
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+Execute(The uncrustify callback should include vim filetype if enabled):
+  let &filetype = 'c'
+  let b:ale_uncrustify_vim_filetype = 1
+  let b:ale_uncrustify_global_options = '--some-option'
 
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_uncrustify_executable)
-  \       . ' --no-backup'
+  \     . ' --no-backup ' . ale#Escape('-l C --some-option'),
   \ },
   \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+  let b:ale_uncrustify_global_options = ''
+
+Execute(The uncrustify callback shouldn't include vim filetype if disabled):
+  let &filetype = 'c'
+  let b:ale_uncrustify_vim_filetype = 0
+  let b:ale_uncrustify_global_options = '--some-option'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_uncrustify_executable)
+  \     . ' --no-backup ' . ale#Escape('--some-option'),
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+  let b:ale_uncrustify_global_options = ''
 
 Execute(The uncrustify callback should include global options):
   let b:ale_uncrustify_global_options = '--some-option'
@@ -35,9 +63,8 @@ Execute(The uncrustify callback should include global options):
 
 Execute(The uncrustify callback should include language-specific options before global options):
   let &filetype = 'c'
-  let b:ale_uncrustify_per_type = 1
   let b:ale_uncrustify_global_options = '--some-option'
-  let b:ale_c_uncrustify_options = '--c-option'
+  let b:ale_uncrustify_c_options = '--c-option'
 
   AssertEqual
   \ {
@@ -48,25 +75,10 @@ Execute(The uncrustify callback should include language-specific options before 
 
   let b:ale_uncrustify_global_options = ''
 
-Execute(The uncrustify callback should include only global options if available and not using per_type):
-  let &filetype = 'c'
-  let b:ale_uncrustify_per_type = 0
-  let b:ale_uncrustify_global_options = '--some-option'
-  let b:ale_c_uncrustify_options = '--c-option'
-
-  AssertEqual
-  \ {
-  \   'command': ale#Escape(g:ale_uncrustify_executable)
-  \     . ' --no-backup ' . ale#Escape('--some-option'),
-  \ },
-  \ ale#fixers#uncrustify#Fix(bufnr(''))
-
-  let b:ale_uncrustify_global_options = ''
-
-Execute(The uncrustify callback should include C options if not using per_type and global options aren't set (for backwards compatibility)):
+Execute(The uncrustify callback should use deprecated options if global options aren't set):
   let &filetype = 'cpp'
-  let b:ale_uncrustify_per_type = 0
   let b:ale_uncrustify_global_options = ''
+  let b:ale_uncrustify_cpp_options = ''
   let b:ale_c_uncrustify_options = '--c-option'
 
   AssertEqual
@@ -76,16 +88,73 @@ Execute(The uncrustify callback should include C options if not using per_type a
   \ },
   \ ale#fixers#uncrustify#Fix(bufnr(''))
 
+Execute(The uncrustify callback shouldn't use deprecated options if global options are set):
+  let &filetype = 'cpp'
+  let b:ale_uncrustify_global_options = '--option'
+  let b:ale_uncrustify_cpp_options = ''
+  let b:ale_c_uncrustify_options = '--c-option'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_uncrustify_executable)
+  \     . ' --no-backup ' . ale#Escape('--option'),
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
   let b:ale_uncrustify_global_options = ''
+
+Execute(The uncrustify callback shouldn't use deprecated options if filetype options are set):
+  let &filetype = 'cpp'
+  let b:ale_uncrustify_global_options = ''
+  let b:ale_uncrustify_cpp_options = '--cpp-option'
+  let b:ale_c_uncrustify_options = '--c-option'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_uncrustify_executable)
+  \     . ' --no-backup ' . ale#Escape('--cpp-option'),
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+  let b:ale_uncrustify_global_options = ''
+  let b:ale_uncrustify_cpp_options = ''
+  let b:ale_c_uncrustify_options = ''
+
+Execute(The uncrustify callback should use deprecated executable if it is set and new-style executable is not):
+  let &filetype = 'cpp'
+  let b:ale_c_uncrustify_executable = 'olduncrustify'
+  let b:ale_uncrustify_executable = 'uncrustify'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(b:ale_c_uncrustify_executable)
+  \     . ' --no-backup',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+  let b:ale_uncrustify_executable = 'xxxinvalid'
+
+Execute(The uncrustify callback shouldn't use deprecated executable if new-style executable is set):
+  let &filetype = 'cpp'
+  let b:ale_c_uncrustify_executable = 'olduncrustify'
+  let b:ale_uncrustify_executable = 'xxxinvalid'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(b:ale_uncrustify_executable)
+  \     . ' --no-backup',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+  let b:ale_uncrustify_executable = 'xxxinvalid'
 
 
 "Language-specific tests
 
 
-Execute(The uncrustify callback should include C specific options):
+Execute(The uncrustify callback should include C options):
   let &filetype = 'c'
-  let b:ale_uncrustify_per_type = 1
-  let b:ale_c_uncrustify_options = '--c-option'
+  let b:ale_uncrustify_c_options = '--c-option'
 
   AssertEqual
   \ {
@@ -96,8 +165,7 @@ Execute(The uncrustify callback should include C specific options):
 
 Execute(The uncrustify callback should include C++ options):
   let &filetype = 'cpp'
-  let b:ale_uncrustify_per_type = 1
-  let b:ale_cpp_uncrustify_options = '--cpp-option'
+  let b:ale_uncrustify_cpp_options = '--cpp-option'
 
   AssertEqual
   \ {
@@ -108,8 +176,7 @@ Execute(The uncrustify callback should include C++ options):
 
 Execute(The uncrustify callback should include C# options):
   let &filetype = 'cs'
-  let b:ale_uncrustify_per_type = 1
-  let b:ale_cs_uncrustify_options = '--cs-option'
+  let b:ale_uncrustify_cs_options = '--cs-option'
 
   AssertEqual
   \ {
@@ -120,8 +187,7 @@ Execute(The uncrustify callback should include C# options):
 
 Execute(The uncrustify callback should include Objective C options):
   let &filetype = 'objc'
-  let b:ale_uncrustify_per_type = 1
-  let b:ale_objc_uncrustify_options = '--objc-option'
+  let b:ale_uncrustify_objc_options = '--objc-option'
 
   AssertEqual
   \ {
@@ -132,8 +198,7 @@ Execute(The uncrustify callback should include Objective C options):
 
 Execute(The uncrustify callback should include D options):
   let &filetype = 'd'
-  let b:ale_uncrustify_per_type = 1
-  let b:ale_d_uncrustify_options = '--d-option'
+  let b:ale_uncrustify_d_options = '--d-option'
 
   AssertEqual
   \ {
@@ -144,8 +209,7 @@ Execute(The uncrustify callback should include D options):
 
 Execute(The uncrustify callback should include Java options):
   let &filetype = 'java'
-  let b:ale_uncrustify_per_type = 1
-  let b:ale_java_uncrustify_options = '--java-option'
+  let b:ale_uncrustify_java_options = '--java-option'
 
   AssertEqual
   \ {
@@ -156,8 +220,7 @@ Execute(The uncrustify callback should include Java options):
 
 Execute(The uncrustify callback should include Pawn options):
   let &filetype = 'pawn'
-  let b:ale_uncrustify_per_type = 1
-  let b:ale_pawn_uncrustify_options = '--pawn-option'
+  let b:ale_uncrustify_pawn_options = '--pawn-option'
 
   AssertEqual
   \ {
@@ -169,7 +232,7 @@ Execute(The uncrustify callback should include Pawn options):
 Execute(The uncrustify callback should include Vala options):
   let &filetype = 'vala'
   let b:ale_uncrustify_per_type = 1
-  let b:ale_vala_uncrustify_options = '--vala-option'
+  let b:ale_uncrustify_vala_options = '--vala-option'
 
   AssertEqual
   \ {
