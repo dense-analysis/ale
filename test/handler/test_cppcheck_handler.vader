@@ -10,19 +10,29 @@ Execute(Basic errors should be handled by cppcheck):
   AssertEqual
   \ [
   \   {
-  \     'lnum': 5,
+  \     'lnum': 974,
+  \     'col' : 6,
   \     'type': 'E',
-  \     'text': 'Array ''a[10]'' accessed at index 10, which is out of bounds',
+  \     'sub_type': '',
+  \     'text': 'Array ''n[3]'' accessed at index 3, which is out of bounds.',
+  \     'code': 'arrayIndexOutOfBounds'
   \   },
   \   {
-  \     'lnum': 7,
+  \     'lnum': 1185,
+  \     'col' : 10,
   \     'type': 'W',
-  \     'text': 'Some other problem',
+  \     'sub_type': 'style',
+  \     'text': 'The scope of the variable ''indxStr'' can be reduced.',
+  \     'code': 'variableScope'
   \   },
   \ ],
   \ ale#handlers#cppcheck#HandleCppCheckFormat(bufnr(''), [
-  \ '[test.cpp:5]: (error) Array ''a[10]'' accessed at index 10, which is out of bounds',
-  \ '[test.cpp:7]: (warning) Some other problem',
+  \ 'test.cpp:974:6: error: Array ''n[3]'' accessed at index 3, which is out of bounds. [arrayIndexOutOfBounds]\',
+  \ '    n[3]=3;',
+  \ '     ^',
+  \ 'test.cpp:1185:10: style: The scope of the variable ''indxStr'' can be reduced. [variableScope]\',
+  \ '    char indxStr[16];',
+  \ '         ^',
   \ ])
 
 Execute(Problems from other files should be ignored by cppcheck):
@@ -32,5 +42,7 @@ Execute(Problems from other files should be ignored by cppcheck):
   \ [
   \ ],
   \ ale#handlers#cppcheck#HandleCppCheckFormat(bufnr(''), [
-  \ '[bar.cpp:5]: (error) Array ''a[10]'' accessed at index 10, which is out of bounds',
+  \ 'bar.cpp:974:6: error: Array ''n[3]'' accessed at index 3, which is out of bounds. [arrayIndexOutOfBounds]\',
+  \ '    n[3]=3;',
+  \ '     ^',
   \ ])
