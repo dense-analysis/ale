@@ -14,7 +14,7 @@ function! ale_linters#go#govet#GetCommand(buffer) abort
     \   . ale#go#EnvString(a:buffer)
     \   . ale#Var(a:buffer, 'go_go_executable') . ' vet '
     \   . (!empty(l:options) ? ' ' . l:options : '')
-    \   . ' .'
+    \   . ' %t'
 endfunction
 
 call ale#linter#Define('go', {
