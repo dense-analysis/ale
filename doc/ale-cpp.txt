@@ -223,8 +223,8 @@ g:ale_cpp_cpplint_options                           *g:ale_cpp_cpplint_options*
 
   This variable can be changed to modify flags given to cpplint.
 
-g:ale_c_cpplint_executable                       *g:ale_c_cpplint_executable*
-                                                 *b:ale_c_cpplint_executable*
+g:ale_c_cpplint_executable                          *g:ale_c_cpplint_executable*
+                                                    *b:ale_c_cpplint_executable*
   Type: |String|
   Default: `'cpplint'`
 
