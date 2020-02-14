@@ -36,7 +36,7 @@ g:ale_uncrustify_vim_filetype                    *g:ale_uncrustify_vim_filetype*
 Language options                                        *ale-uncrustify-language*
 
 
-Options can be set for individual languages. When a file of from one of those
+Options can be set for individual languages. When a file from one of those
 languages is opened, the individual language options are passed to Uncrustify.
 Options for the current filetype will override any global options.
 Currently the supported language-specific options are
