@@ -9,8 +9,8 @@ To enable the SourceKit-LSP you need to install and build the executable as
 described here: https://github.com/apple/sourcekit-lsp#building-sourcekit-lsp
 
 
-g:ale_sourcekit_lsp_executable                 *g:ale_sourcekit_lsp_executable*
-                                               *b:ale_sourcekit_lsp_executable*
+g:ale_swift_sourcekit_lsp_executable     *g:ale_swift_sourcekit_lsp_executable*
+                                         *b:ale_swift_sourcekit_lsp_executable*
   Type: |String|
   Default: `'sourcekit-lsp'`
 

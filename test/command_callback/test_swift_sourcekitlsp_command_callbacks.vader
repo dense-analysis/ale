@@ -2,6 +2,8 @@ Before:
   call ale#assert#SetUpLinterTest('swift', 'sourcekitlsp')
 
 After:
+  let g:ale_swift_sourcekit_lsp_executable = 'sourcekit-lsp'
+  let g:ale_sourcekit_lsp_executable = 'sourcekit-lsp'
   call ale#assert#TearDownLinterTest()
 
 Execute(The default executable path should be correct):
@@ -10,6 +12,15 @@ Execute(The default executable path should be correct):
   AssertLinter 'sourcekit-lsp', ale#Escape('sourcekit-lsp')
 
 Execute(Should let users configure a global executable and override local paths):
+  call ale#test#SetFilename('../swift-test-files/swift-package-project/src/folder/dummy.swift')
+
+  let g:ale_swift_sourcekit_lsp_executable = '/path/to/custom/sourcekitlsp'
+
+  AssertLinter '/path/to/custom/sourcekitlsp',
+  \ ale#Escape('/path/to/custom/sourcekitlsp')
+
+
+Execute(Should support deprecated global executable configuration):
   call ale#test#SetFilename('../swift-test-files/swift-package-project/src/folder/dummy.swift')
 
   let g:ale_sourcekit_lsp_executable = '/path/to/custom/sourcekitlsp'
