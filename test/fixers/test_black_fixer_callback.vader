@@ -2,8 +2,8 @@ Before:
   Save g:ale_python_black_executable
   Save g:ale_python_black_options
 
-  " Use an invalid global executable, so we don't match it.
-  let g:ale_python_black_executable = 'xxxinvalid'
+  " Use a valid global executable, so we match it.
+  let g:ale_python_black_executable = 'black'
   let g:ale_python_black_options = ''
   let g:ale_python_black_auto_pipenv = 0
 
