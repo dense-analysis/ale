@@ -12,8 +12,9 @@ function! ale#fixers#black#GetExecutable(buffer) abort
     \ && ale#python#PipenvPresent(a:buffer)
         return 'pipenv'
     endif
-
-    return ale#python#FindExecutable(a:buffer, 'python_black', ['black'])
+    
+    let l:executable = ale#Var(a:buffer, 'python_black_executable')
+    return ale#python#FindExecutable(a:buffer, 'python_black', [l:executable])
 endfunction
 
 function! ale#fixers#black#Fix(buffer) abort
