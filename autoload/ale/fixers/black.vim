@@ -14,7 +14,7 @@ function! ale#fixers#black#GetExecutable(buffer) abort
     endif
 
     let l:executable = ale#Var(a:buffer, 'python_black_executable')
-    
+
     return ale#python#FindExecutable(a:buffer, 'python_black', [l:executable])
 endfunction
 
