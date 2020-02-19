@@ -12,7 +12,7 @@ function! ale#fixers#black#GetExecutable(buffer) abort
     \ && ale#python#PipenvPresent(a:buffer)
         return 'pipenv'
     endif
-    
+
     let l:executable = ale#Var(a:buffer, 'python_black_executable')
     return ale#python#FindExecutable(a:buffer, 'python_black', [l:executable])
 endfunction
@@ -31,7 +31,7 @@ function! ale#fixers#black#Fix(buffer) abort
     let l:options = ale#Var(a:buffer, 'python_black_options')
 
     if expand('#' . a:buffer . ':e') is? 'pyi'
-        let l:options .= '--pyi'
+        let l:options .= ' --pyi'
     endif
 
     return {
