@@ -1,0 +1,17 @@
+Before:
+  Save g:powershell_psscriptanalyzer_executable
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_powershell_psscriptanalyzer_executable = 'xxxinvalid'
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The psscriptanalyzer callback should return the correct default values):
+  AssertEqual
+  \ 'stdout',
+  \ ale#fixers#psscriptanalyzer#Fix(bufnr(''))['output_stream']
