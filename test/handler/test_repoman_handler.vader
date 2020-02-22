@@ -1,0 +1,63 @@
+Before:
+  runtime ale_linters/ebuild/repoman.vim
+  let b:repo = '/testplugin'
+  call ale#test#SetDirectory(b:repo . '/dev-util/foo')
+  let b:repo = fnamemodify(g:dir, ':p:h:h:h')
+
+After:
+  call ale#test#RestoreDirectory()
+  unlet! b:repo
+  call ale#linter#Reset()
+
+Execute(The repoman handler should handle basic output):
+  call ale#test#SetFilename('foo-1.ebuild')
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': '',
+  \     'type': 'W',
+  \     'text': '''>=dev-python/pytest-cov-1.8.1[python_targets_python3_6(-)?,-python_single_target_python3_6(-)]''',
+  \     'code': 'dependency.deprecated',
+  \     'filename': ale#path#Simplify(b:repo . '/dev-util/vint/vint-0.3.18.ebuild'),
+  \   },
+  \ ],
+  \ ale_linters#ebuild#repoman#Handle(bufnr(''), [
+  \   '  dependency.deprecated         1',
+  \   '   dev-util/vint/vint-0.3.18.ebuild: ''>=dev-python/pytest-cov-1.8.1[python_targets_python3_6(-)?,-python_single_target_python3_6(-)]''',
+  \   'Non-Fatal QA errors found',
+  \ ])
+
+Execute(The repoman handler should handle fatal issues and multiline output):
+  call ale#test#SetFilename('baz-9.ebuild')
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': '1',
+  \     'type': 'W',
+  \     'text': 'Invalid Copyright',
+  \     'code': 'ebuild.badheader',
+  \     'filename': ale#path#Simplify(b:repo . '/dev-util/apitrace/apitrace-9999.ebuild'),
+  \   },
+  \   {
+  \     'lnum': '5',
+  \     'type': 'E',
+  \     'text': 'Element ''email'': [facet ''pattern''] The value ''foo'' is not accepted by the pattern ''[^@]+@[^.]+\..+''.',
+  \     'code': 'metadata.bad',
+  \     'filename': ale#path#Simplify(b:repo . '/dev-util/apitrace/metadata.xml'),
+  \   },
+  \   {
+  \     'lnum': '4',
+  \     'type': 'E',
+  \     'text': 'Element ''maintainer'': Not all fields of key identity-constraint ''maintainerKeyConstraint'' evaluate to a node.',
+  \     'code': 'metadata.bad',
+  \     'filename': ale#path#Simplify(b:repo . '/dev-util/apitrace/metadata2.xml'),
+  \   },
+  \ ],
+  \ ale_linters#ebuild#repoman#Handle(bufnr(''), [
+  \   '  ebuild.badheader              1',
+  \   '   dev-util/apitrace/apitrace-9999.ebuild: line 1: Invalid Copyright',
+  \   '  metadata.bad [fatal]          2',
+  \   '   dev-util/apitrace/metadata.xml: line: 5, Element ''email'': [facet ''pattern''] The value ''foo'' is not accepted by the pattern ''[^@]+@[^.]+\..+''.',
+  \   '   dev-util/apitrace/metadata2.xml: line: 4, Element ''maintainer'': Not all fields of key identity-constraint ''maintainerKeyConstraint'' evaluate to a node.',
+  \   'Please fix these important QA issues first.',
+  \ ])

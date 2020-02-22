@@ -1,0 +1,29 @@
+Before:
+  call ale#assert#SetUpLinterTest('ebuild', 'repoman')
+  let b:prefix = ale#path#CdString(ale#path#Simplify(g:dir))
+  let b:suffix = ' full -q'
+  let b:options = ' -dx'
+
+After:
+  unlet! b:options
+  unlet! b:prefix
+  unlet! b:suffix
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default repoman command should be correct):
+  AssertLinter 'repoman',
+  \ b:prefix . ale#Escape('repoman') . b:suffix . b:options
+
+Execute(The option changing the repoman executable should work):
+  let g:ale_ebuild_repoman_executable = '/bin/foo'
+  AssertLinter '/bin/foo',
+  \ b:prefix . ale#Escape('/bin/foo') . b:suffix . b:options
+
+Execute(The option disabling changing directories should work):
+  let g:ale_ebuild_repoman_change_directory = 0
+  AssertLinter 'repoman', ale#Escape('repoman') . b:suffix . b:options
+
+Execute(The repoman command should accept options):
+  let b:ale_ebuild_repoman_options = '--foobar'
+  AssertLinter 'repoman',
+  \ b:prefix . ale#Escape('repoman') . b:suffix . ' --foobar'

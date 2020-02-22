@@ -1,0 +1,42 @@
+===============================================================================
+ALE Ebuild Integration                                      *ale-ebuild-options*
+
+
+===============================================================================
+repoman                                                    *ale-ebuild-repoman*
+
+g:ale_ebuild_repoman_executable               *g:ale_ebuild_repoman_executable*
+                                              *b:ale_ebuild_repoman_executable*
+  Type: |String|
+  Default: `'repoman'`
+
+  This variable sets the executable used for repoman.
+
+
+g:ale_ebuild_repoman_options                     *g:ale_ebuild_repoman_options*
+                                                 *b:ale_ebuild_repoman_options*
+  Type: |String|
+  Default: `'-dx'`
+
+  Use this variable to adjust arguments passed to repoman.
+
+  For example, if we want repoman to ignore masked packages, we can set
+  the variable as such:
+>
+  let g:ale_ebuild_repoman_options = '-dx --ignore-masked'
+<
+
+
+g:ale_ebuild_repoman_change_directory   *g:ale_ebuild_repoman_change_directory*
+                                        *b:ale_ebuild_repoman_change_directory*
+  Type: |Number|
+  Default: `1`
+
+  If set to `1`, ALE will switch to the directory the ebuild file being
+  checked with `repoman` is in before checking it. This helps `repoman`
+  determine the path to the ebuild repository. This option can be turned
+  off if you want to control the directory `repoman` is executed from
+  yourself.
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

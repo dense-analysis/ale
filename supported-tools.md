@@ -125,6 +125,8 @@ formatting.
 * Dockerfile
   * [dockerfile_lint](https://github.com/projectatomic/dockerfile_lint)
   * [hadolint](https://github.com/hadolint/hadolint)
+* Ebuild
+  * [repoman](https://wiki.gentoo.org/wiki/Project:Portage)
 * Elixir
   * [credo](https://github.com/rrrene/credo)
   * [dialyxir](https://github.com/jeremyjh/dialyxir) :floppy_disk:

@@ -116,6 +116,8 @@ Notes:
 * Dockerfile
   * `dockerfile_lint`
   * `hadolint`
+* Ebuild
+  * `repoman`
 * Elixir
   * `credo`
   * `dialyxir`
