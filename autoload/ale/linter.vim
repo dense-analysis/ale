@@ -12,6 +12,7 @@ let s:linters = {}
 let s:default_ale_linter_aliases = {
 \   'Dockerfile': 'dockerfile',
 \   'csh': 'sh',
+\   'gentoo-metadata': 'ebuild',
 \   'javascriptreact': ['javascript', 'jsx'],
 \   'plaintex': 'tex',
 \   'rmarkdown': 'r',

@@ -1186,6 +1186,7 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
   {
   \   'Dockerfile': 'dockerfile',
   \   'csh': 'sh',
+  \   'gentoo-metadata': 'ebuild',
   \   'javascriptreact': ['javascript', 'jsx'],
   \   'plaintex': 'tex',
   \   'rmarkdown': 'r',
