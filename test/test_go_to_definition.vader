@@ -89,6 +89,20 @@ Execute(Tagstack should be incremented if supported):
     AssertEqual original_stack_depth + 1, gettagstack().length
   endif
 
+Execute(Tagstack should be truncated before pushing):
+  call ale#definition#UpdateTagStack()
+  if exists('*gettagstack') && exists('*settagstack')
+    let original_stack = gettagstack()
+    let original_stack.curidx -= 1
+    call settagstack(win_getid(), original_stack, 'r')
+  endif
+  call ale#definition#UpdateTagStack()
+  if exists('*gettagstack') && exists('*settagstack')
+    let new_stack = gettagstack()
+    AssertEqual original_stack.length, new_stack.length
+    AssertEqual original_stack.length + 1, new_stack.curidx
+  endif
+
 Execute(Failed definition responses should be handled correctly):
   call ale#definition#SetMap({3: {'open_in': 'current-buffer'}})
   call ale#definition#HandleTSServerResponse(

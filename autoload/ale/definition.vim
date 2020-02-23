@@ -29,8 +29,19 @@ function! ale#definition#UpdateTagStack() abort
         let l:old_location = [bufnr('%'), line('.'), col('.'), 0]
         let l:tagname = expand('<cword>')
         let l:winid = win_getid()
-        call settagstack(l:winid, {'items': [{'from': l:old_location, 'tagname': l:tagname}]}, 'a')
-        call settagstack(l:winid, {'curidx': len(gettagstack(l:winid)['items']) + 1})
+        let l:tagstack = gettagstack(l:winid)
+
+        " If the current tagstack index is somewhere in the middle of the
+        " stack, we first truncate everything up to the end, to replicate
+        " native behavior of CTRL-]
+        if l:tagstack.curidx <= l:tagstack.length
+            " curidx is always at least 1
+            unlet l:tagstack.items[l:tagstack.curidx - 1:]
+        endif
+
+        call add(l:tagstack.items, {'from': l:old_location, 'tagname': l:tagname})
+        let l:tagstack.curidx += 1
+        call settagstack(l:winid, l:tagstack, 'r')
     endif
 endfunction
 
