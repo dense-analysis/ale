@@ -62,6 +62,8 @@ After:
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
+  call settagstack(win_getid(), { 'items': [] }, 'r')
+
   unlet! g:capability_checked
   unlet! g:InitCallback
   unlet! g:old_filename
