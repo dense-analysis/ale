@@ -2715,6 +2715,10 @@ ALEGoToDefinition                                           *ALEGoToDefinition*
   You can jump back to the position you were at before going to the definition
   of something with jump motions like CTRL-O. See |jump-motions|.
 
+  You should consider using the 'hidden' option in combination with this
+  command. Otherwise, Vim will refuse to leave the buffer you're jumping from
+  unless you have saved your edits.
+
   A plug mapping `<Plug>(ale_go_to_definition)` is defined for this command.
 
 
