@@ -62,7 +62,9 @@ After:
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
-  call settagstack(win_getid(), { 'items': [] }, 'r')
+  if exists('*settagstack')
+    call settagstack(win_getid(), { 'items': [] }, 'r')
+  endif
 
   unlet! g:capability_checked
   unlet! g:InitCallback
