@@ -260,6 +260,13 @@ function! ale#GetLocItemMessage(item, format_string) abort
     " Windows may insert carriage return line endings (^M), strip these characters.
     let l:msg = substitute(l:msg, '\r', '', 'g')
 
+    if has('win32')
+        let l:to = &encoding
+        let l:res = iconv(l:msg, 'default', l:to)
+        if l:res !=# '' && stridx(l:res, '??') == -1
+            let l:msg=l:res
+        endif
+    endif
     return l:msg
 endfunction
 
