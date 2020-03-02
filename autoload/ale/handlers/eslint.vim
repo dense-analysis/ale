@@ -46,10 +46,18 @@ function! ale#handlers#eslint#GetCommand(buffer) abort
     " By default, the project root is simply the CWD of the running process.
     " https://github.com/eslint/rfcs/blob/master/designs/2018-simplified-package-loading/README.md
     " https://github.com/dense-analysis/ale/issues/2787
-    " Identify project root from presence of node_modules dir.
-    " Note: If node_modules not present yet, can't load local deps anyway.
+    " Identify project root from presence of node_modules dir. If node_modules
+    " is not present, check if Yarn PnP is in use which allows `yarn run eslint`
+    " to work without a node_modules directory.
     let l:modules_dir = ale#path#FindNearestDirectory(a:buffer, 'node_modules')
-    let l:project_dir = !empty(l:modules_dir) ? fnamemodify(l:modules_dir, ':h:h') : ''
+
+    if !empty(l:modules_dir)
+        let l:project_dir = !empty(l:modules_dir) ? fnamemodify(l:modules_dir, ':h:h') : ''
+    else
+        let l:yarn_pnp = ale#path#FindNearestFile(a:buffer, '.pnp.js')
+        let l:project_dir = !empty(l:yarn_pnp) ? fnamemodify(l:yarn_pnp, ':h') : ''
+    endif
+
     let l:cd_command = !empty(l:project_dir) ? ale#path#CdString(l:project_dir) : ''
 
     return l:cd_command
