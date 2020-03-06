@@ -9,10 +9,12 @@ function! ale#handlers#ktlint#GetCommand(buffer) abort
     let l:executable = ale#Var(a:buffer, 'kotlin_ktlint_executable')
     let l:options = ale#Var(a:buffer, 'kotlin_ktlint_options')
     let l:rulesets = ale#handlers#ktlint#GetRulesets(a:buffer)
+    let l:editorconfig = ale#path#FindNearestFile(a:buffer, '.editorconfig')
 
     return ale#Escape(l:executable)
     \   . (empty(l:options) ? '' : ' ' . l:options)
     \   . (empty(l:rulesets) ? '' : ' ' . l:rulesets)
+    \   . (empty(l:editorconfig) ? '' : ' --editorconfig ' . ale#Escape(l:editorconfig))
     \   . ' %t'
 endfunction
 
