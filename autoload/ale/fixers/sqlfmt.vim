@@ -7,7 +7,6 @@ function! ale#fixers#sqlfmt#Fix(buffer) abort
 
     return {
     \   'command': ale#Escape(l:executable)
-    \       . ' -w'
     \       . (empty(l:options) ? '' : ' ' . l:options),
     \}
 endfunction
