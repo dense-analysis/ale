@@ -659,6 +659,7 @@ Notes:
 * YAML
   * `actionlint`
   * `circleci`!!
+  * `gitlablint`
   * `prettier`
   * `spectral`
   * `swaglint`
