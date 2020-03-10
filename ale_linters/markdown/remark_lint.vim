@@ -14,7 +14,7 @@ endfunction
 function! ale_linters#markdown#remark_lint#Handle(buffer, lines) abort
     " matches: '  1:4  warning  Incorrect list-item indent: add 1 space  list-item-indent  remark-lint'
     " matches: '  18:71-19:1  error  Missing new line after list item  list-item-spacing  remark-lint',
-    let l:pattern = '^ \+\(\d\+\):\(\d\+\)\(-\(\d\+\):\(\d\+\)\)\?  \(warning\|error\)  \(.\+\)$'
+    let l:pattern = '^ \+\(\d\+\):\(\d\+\)\(-\(\d\+\):\(\d\+\)\)\?  \(warning\|error\)  \(.\{-}\) \{2,}'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
