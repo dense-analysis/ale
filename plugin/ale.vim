@@ -109,6 +109,9 @@ let g:ale_set_signs = get(g:, 'ale_set_signs', has('signs'))
 " This flag can be set to 0 to disable setting error highlights.
 let g:ale_set_highlights = get(g:, 'ale_set_highlights', has('syntax'))
 
+" This List can be configured to exclude particular highlights.
+let g:ale_exclude_highlights = get(g:, 'ale_exclude_highlights', [])
+
 " This flag can be set to 0 to disable echoing when the cursor moves.
 let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
 

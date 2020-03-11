@@ -923,6 +923,21 @@ g:ale_enabled                                                   *g:ale_enabled*
   See |g:ale_pattern_options| for more information on that option.
 
 
+g:ale_exclude_highlights                             *g:ale_exclude_highlights*
+b:ale_exclude_highlights                             *b:ale_exclude_highlights*
+
+  Type: |List|
+  Default: `[]`
+
+  A list of regular expressions for matching against highlight messages to
+  remove. For example: >
+
+  " Do not highlight messages matching strings like these.
+  let b:ale_exclude_highlights = ['line too long', 'foo.*bar']
+<
+  See also: |g:ale_set_highlights|
+
+
 g:ale_fixers                                                     *g:ale_fixers*
                                                                  *b:ale_fixers*
 
@@ -1608,6 +1623,8 @@ g:ale_set_highlights                                     *g:ale_set_highlights*
   Vim can only highlight the characters up to the last column in a buffer for
   match highlights, whereas the line highlights when signs are enabled will
   run to the edge of the screen.
+
+  Highlights can be excluded with the |g:ale_exclude_highlights| option.
 
 
 g:ale_set_loclist                                           *g:ale_set_loclist*
