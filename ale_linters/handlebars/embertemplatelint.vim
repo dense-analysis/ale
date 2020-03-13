@@ -10,6 +10,22 @@ function! ale#handlers#embertemplatelint#GetExecutable(buffer) abort
     \])
 endfunction
 
+function! ale#handlebars#embertemplatelint#GetCommand(buffer, version) abort
+    " Reading from stdin was introduced in ember-template-lint@1.6.0
+    return ale#semver#GTE(a:version, [1, 6, 0])
+    \   ? '%e --json'
+    \   : '%e --json %t'
+endfunction
+
+function! ale#handlers#embertemplatelint#GetCommandWithVersionCheck(buffer) abort
+    return ale#semver#RunWithVersionCheck(
+    \       buffer,
+    \       ale#handlers#embertemplatelint#GetExecutable(buffer),
+    \       '%e --version',
+    \       function('ale#handlebars#embertemplatelint#GetCommand'),
+    \   )
+endfunction
+
 function! ale_linters#handlebars#embertemplatelint#Handle(buffer, lines) abort
     let l:output = []
     let l:json = ale#util#FuzzyJSONDecode(a:lines, {})
@@ -38,6 +54,6 @@ endfunction
 call ale#linter#Define('handlebars', {
 \   'name': 'ember-template-lint',
 \   'executable': function('ale#handlers#embertemplatelint#GetExecutable'),
-\   'command': '%e --json',
+\   'command': function('ale#handlers#embertemplatelint#GetCommandWithVersionCheck'),
 \   'callback': 'ale_linters#handlebars#embertemplatelint#Handle',
 \})
