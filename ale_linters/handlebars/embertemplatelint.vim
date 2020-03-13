@@ -4,25 +4,25 @@
 call ale#Set('handlebars_embertemplatelint_executable', 'ember-template-lint')
 call ale#Set('handlebars_embertemplatelint_use_global', get(g:, 'ale_use_global_executables', 0))
 
-function! ale#handlers#embertemplatelint#GetExecutable(buffer) abort
+function! ale_linters#handlebars#embertemplatelint#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'handlebars_embertemplatelint', [
     \   'node_modules/.bin/ember-template-lint',
     \])
 endfunction
 
-function! ale#handlebars#embertemplatelint#GetCommand(buffer, version) abort
+function! ale_linters#handlebars#embertemplatelint#GetCommand(buffer, version) abort
     " Reading from stdin was introduced in ember-template-lint@1.6.0
     return ale#semver#GTE(a:version, [1, 6, 0])
     \   ? '%e --json --filename %s'
     \   : '%e --json %t'
 endfunction
 
-function! ale#handlers#embertemplatelint#GetCommandWithVersionCheck(buffer) abort
+function! ale_linters#handlebars#embertemplatelint#GetCommandWithVersionCheck(buffer) abort
     return ale#semver#RunWithVersionCheck(
     \       a:buffer,
     \       ale_linters#handlebars#embertemplatelint#GetExecutable(a:buffer),
     \       '%e --version',
-    \       function('ale#handlebars#embertemplatelint#GetCommand'),
+    \       function('ale_linters#handlebars#embertemplatelint#GetCommand'),
     \   )
 endfunction
 
@@ -53,7 +53,7 @@ endfunction
 
 call ale#linter#Define('handlebars', {
 \   'name': 'ember-template-lint',
-\   'executable': function('ale#handlers#embertemplatelint#GetExecutable'),
-\   'command': function('ale#handlers#embertemplatelint#GetCommandWithVersionCheck'),
+\   'executable': function('ale_linters#handlebars#embertemplatelint#GetExecutable'),
+\   'command': function('ale_linters#handlebars#embertemplatelint#GetCommandWithVersionCheck'),
 \   'callback': 'ale_linters#handlebars#embertemplatelint#Handle',
 \})
