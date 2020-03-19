@@ -123,6 +123,11 @@ function! s:parseJSON(buffer, lines) abort
         \   'type': 'E',
         \})
 
+        if stridx(l:obj.text, "\n") >= 0
+            let l:obj.detail = l:obj.text
+            let l:obj.text = split(l:obj.detail, "\n")[0] . ' [...]'
+        endif
+
         if get(l:error, 'severity', 0) is# 1
             let l:obj.type = 'W'
         endif

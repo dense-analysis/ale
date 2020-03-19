@@ -54,6 +54,22 @@ Execute(The eslint handler should parse json correctly):
   \ '[{"filePath":"foo.js","messages":[{"ruleId":"no-unused-vars","severity":1,"message":"''variable'' is assigned a value but never used.","line":1,"column":7,"nodeType":"Identifier","endLine":1,"endColumn":15},{"ruleId":"semi","severity":1,"message":"Missing semicolon.","line":5,"column":15,"nodeType":"ExpressionStatement","fix":{"range":[46,46],"text":";"}},{"ruleId":"no-redeclare","severity":2,"message":"''variable'' is already defined.","line":7,"column":7,"nodeType":"Identifier","endLine":7,"endColumn":15}],"errorCount":1,"warningCount":3,"fixableErrorCount":0,"fixableWarningCount":1,"source":"const variable = {\n    a: 3\n};\n\nconsole.log(1)\n\nclass variable {\n}\n"}]'
   \ ])
 
+Execute(The eslint handler should parse multi-line json correctly):
+  call ale#test#SetFilename('foo.js')
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 5,
+  \     'col': 1,
+  \     'text': 'Parse error [...]',
+  \     'detail': "Parse error\nerror parsing",
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale#handlers#eslint#HandleJSON(bufnr(''), [
+  \ '[{"filePath":"foo.js","messages":[{"ruleId":null,"severity":2,"message":"Parse error\nerror parsing","line":5,"column":1}]}]'
+  \ ])
+
 Execute(The eslint handler should suppress deprecation warnings):
   call ale#test#SetFilename('foo.js')
   AssertEqual
