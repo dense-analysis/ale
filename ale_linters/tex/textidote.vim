@@ -2,17 +2,17 @@
 " <juanolon@gmail.com>
 " Description: support for textidote grammar and syntax checker
 
-call ale#Set('tex_textidote_executable', 'textidote')
-call ale#Set('tex_textidote_options', '--no-color --output singleline')
+call ale#Set('ale_tex_textidote_executable', 'textidote')
+call ale#Set('ale_tex_textidote_options', '--no-color --output singleline')
 " TODO get language from spell spelllang
-call ale#Set('tex_textidote_check_lang', '')
+call ale#Set('ale_tex_textidote_check_lang', '')
 
 
 function! ale_linters#tex#textidote#GetExecutable(buffer) abort
-    let l:exe = ale#Var(a:buffer, 'tex_textidote_executable')
-    let l:exe .= ' ' . ale#Var(a:buffer, 'tex_textidote_options')
+    let l:exe = ale#Var(a:buffer, 'ale_tex_textidote_executable')
+    let l:exe .= ' ' . ale#Var(a:buffer, 'ale_tex_textidote_options')
 
-    let l:check_lang = ale#Var(a:buffer, 'tex_textidote_check_lang')
+    let l:check_lang = ale#Var(a:buffer, 'ale_tex_textidote_check_lang')
     if !empty(l:check_lang)
         let l:exe .= ' --check ' . l:check_lang
     endif
@@ -39,7 +39,7 @@ endfunction
 call ale#linter#Define('tex', {
 \   'name': 'textidote',
 \   'output_stream': 'stdout',
-\   'executable': {b -> ale#Var(b, 'tex_textidote_executable')},
+\   'executable': {b -> ale#Var(b, 'ale_tex_textidote_executable')},
 \   'command': function('ale_linters#tex#textidote#GetExecutable'),
 \   'callback': 'ale_linters#tex#textidote#Handle',
 \})
