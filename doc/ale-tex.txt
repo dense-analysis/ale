@@ -73,7 +73,7 @@ g:ale_tex_texlab_options                              *g:ale_tex_texlab_options*
 
 
 ===============================================================================
-textidote                                                   *ale-tex-latexindent*
+textidote                                                   *ale-tex-textidote*
 
 g:ale_tex_textidote_executable                       *g:tex_textidote_executable*
                                                      *b:tex_textidote_executable*
