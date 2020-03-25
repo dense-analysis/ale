@@ -39,18 +39,19 @@ endfunction
 
 function! ale_linters#go#golangci_lint#Handler(buffer, lines) abort
     let l:dir = expand('#' . a:buffer . ':p:h')
+    let l:file = expand('#' . a:buffer)
     let l:output = []
 
     for l:match in ale_linters#go#golangci_lint#GetMatches(a:lines)
-        " l:match[1] will already be an absolute path, output from
-        " golangci_lint
-        call add(l:output, {
-        \   'filename': ale#path#GetAbsPath(l:dir, l:match[1]),
-        \   'lnum': l:match[2] + 0,
-        \   'col': l:match[3] + 0,
-        \   'type': 'E',
-        \   'text': l:match[4],
-        \})
+        if stridx(l:match[1], l:file) != -1
+            call add(l:output, {
+            \   'filename': ale#path#GetAbsPath(l:dir, fnamemodify(l:match[1], ':t')),
+            \   'lnum': l:match[2] + 0,
+            \   'col': l:match[3] + 0,
+            \   'type': 'E',
+            \   'text': l:match[4],
+            \})
+        endif
     endfor
 
     return l:output
