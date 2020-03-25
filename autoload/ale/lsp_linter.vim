@@ -41,6 +41,8 @@ function! s:HandleLSPDiagnostics(conn_id, response) abort
         return
     endif
 
+    call ale#engine#MarkLinterInactive(l:info, l:linter_name)
+
     if s:ShouldIgnore(l:buffer, l:linter_name)
         return
     endif
@@ -121,13 +123,13 @@ function! s:HandleLSPErrorMessage(linter_name, response) abort
     call add(g:ale_lsp_error_messages[a:linter_name], l:message)
 endfunction
 
-function! ale#lsp_linter#HandleLSPResponse(conn_id, response) abort
+function! ale#lsp_linter#HandleLSPResponse(info, conn_id, response) abort
     let l:method = get(a:response, 'method', '')
 
     if get(a:response, 'jsonrpc', '') is# '2.0' && has_key(a:response, 'error')
         let l:linter_name = get(s:lsp_linter_map, a:conn_id, '')
-
         call s:HandleLSPErrorMessage(l:linter_name, a:response)
+        call ale#engine#MarkLinterInactive(a:info, l:linter_name)
     elseif l:method is# 'textDocument/publishDiagnostics'
         call s:HandleLSPDiagnostics(a:conn_id, a:response)
     elseif l:method is# 'window/showMessage'
@@ -136,6 +138,8 @@ function! ale#lsp_linter#HandleLSPResponse(conn_id, response) abort
         \   g:ale_lsp_show_message_format,
         \   a:response.params
         \)
+        let l:linter_name = get(s:lsp_linter_map, a:conn_id, '')
+        call ale#engine#MarkLinterInactive(a:info, l:linter_name)
     elseif get(a:response, 'type', '') is# 'event'
     \&& get(a:response, 'event', '') is# 'semanticDiag'
         call s:HandleTSServerDiagnostics(a:response, 'semantic')
@@ -143,6 +147,7 @@ function! ale#lsp_linter#HandleLSPResponse(conn_id, response) abort
     \&& get(a:response, 'event', '') is# 'syntaxDiag'
         call s:HandleTSServerDiagnostics(a:response, 'syntax')
     endif
+    silent doautocmd <nomodeline> User ALELintPost
 endfunction
 
 function! ale#lsp_linter#GetOptions(buffer, linter) abort
@@ -242,6 +247,9 @@ function! ale#lsp_linter#OnInit(linter, details, Callback) abort
         call ale#lsp#NotifyForChanges(l:conn_id, l:buffer)
     endif
 
+    let l:info = get(g:ale_buffer_info, l:buffer)
+    call ale#engine#MarkLinterInactive(l:info, a:linter.name)
+
     call a:Callback(a:linter, a:details)
 endfunction
 
@@ -284,6 +292,10 @@ function! s:StartLSP(options, address, executable, command) abort
     \   'command': l:command,
     \   'project_root': l:root,
     \}
+
+    let l:info = get(g:ale_buffer_info, l:buffer)
+    call ale#engine#MarkLinterActive(l:info, l:linter)
+    silent doautocmd <nomodeline> User ALEJobStarted
 
     call ale#lsp#OnInit(l:conn_id, {->
     \   ale#lsp_linter#OnInit(l:linter, l:details, l:Callback)
@@ -384,7 +396,7 @@ function! s:CheckWithLSP(linter, details) abort
     let l:id = a:details.connection_id
 
     " Register a callback now for handling errors now.
-    let l:Callback = function('ale#lsp_linter#HandleLSPResponse')
+    let l:Callback = function('ale#lsp_linter#HandleLSPResponse',[l:info])
     call ale#lsp#RegisterCallback(l:id, l:Callback)
 
     " Remember the linter this connection is for.
@@ -393,12 +405,12 @@ function! s:CheckWithLSP(linter, details) abort
     if a:linter.lsp is# 'tsserver'
         let l:message = ale#lsp#tsserver_message#Geterr(l:buffer)
         let l:notified = ale#lsp#Send(l:id, l:message) != 0
-
-        if l:notified
-            call ale#engine#MarkLinterActive(l:info, a:linter)
-        endif
     else
-        let l:notified = ale#lsp#NotifyForChanges(l:id, l:buffer)
+        let l:notified = ale#lsp#NotifyForChanges(l:id, l:buffer) != 0
+    endif
+    if l:notified
+        call ale#engine#MarkLinterActive(l:info, a:linter)
+        silent doautocmd <nomodeline> User ALEJobStarted
     endif
 
     " If this was a file save event, also notify the server of that.
