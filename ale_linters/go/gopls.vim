@@ -11,24 +11,10 @@ function! ale_linters#go#gopls#GetCommand(buffer) abort
     \   . ale#Pad(ale#Var(a:buffer, 'go_gopls_options'))
 endfunction
 
-function! ale_linters#go#gopls#FindProjectRoot(buffer) abort
-    let l:go_modules_off = ale#Var(a:buffer, 'go_go111module') is# 'off'
-    let l:project_root = l:go_modules_off ?
-    \ '' : ale#path#FindNearestFile(a:buffer, 'go.mod')
-    let l:mods = ':h'
-
-    if empty(l:project_root)
-        let l:project_root = ale#path#FindNearestDirectory(a:buffer, '.git')
-        let l:mods = ':h:h'
-    endif
-
-    return !empty(l:project_root) ? fnamemodify(l:project_root, l:mods) : ''
-endfunction
-
 call ale#linter#Define('go', {
 \   'name': 'gopls',
 \   'lsp': 'stdio',
 \   'executable': {b -> ale#Var(b, 'go_gopls_executable')},
 \   'command': function('ale_linters#go#gopls#GetCommand'),
-\   'project_root': function('ale_linters#go#gopls#FindProjectRoot'),
+\   'project_root': function('ale#go#FindProjectRoot'),
 \})
