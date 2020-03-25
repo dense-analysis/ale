@@ -14,6 +14,10 @@ Before:
 After:
   Restore
 
+  if isdirectory(g:dir . '/go_path/go3/prj2/.git')
+    call delete(g:dir . '/go_path/go3/prj2/.git', 'd')
+  endif
+
   unlet! b:ale_completion_enabled
   unlet! b:ale_go_go111module
   unlet! g:sep
@@ -74,3 +78,23 @@ Execute(should set go-langserver for go app2):
   AssertLSPOptions {}
   AssertLSPConfig {}
   AssertLSPProject ale#path#Simplify(g:dir . '/go_paths/go2')
+
+Execute(should set go-langserver for go app3):
+  call ale#test#SetFilename('go_paths/go3/prj1/file.go')
+
+  AssertLSPLanguage 'go'
+  AssertLSPOptions {}
+  AssertLSPConfig {}
+  AssertLSPProject ale#path#Simplify(g:dir . '/go_paths/go3/prj1')
+
+Execute(should set go-langserver for go app4):
+  call ale#test#SetFilename('go_paths/go3/prj2/file.go')
+
+  if !isdirectory(g:dir . '/go_paths/go3/prj2')
+    call mkdir(g:dir . '/go_paths/go3/prj2/.git')
+  endif
+
+  AssertLSPLanguage 'go'
+  AssertLSPOptions {}
+  AssertLSPConfig {}
+  AssertLSPProject ale#path#Simplify(g:dir . '/go_paths/go3/prj2')
