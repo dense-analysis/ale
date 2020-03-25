@@ -7,6 +7,10 @@ Before:
 After:
   Restore
 
+  if isdirectory(g:dir . '/.git')
+    call delete(g:dir . '/.git', 'd')
+  endif
+
   unlet! b:ale_go_go111module
 
   call ale#assert#TearDownLinterTest()
@@ -51,4 +55,59 @@ Execute(The golangci-lint `lint_package` option should use the correct command):
 
   AssertLinter 'golangci-lint',
   \ ale#path#CdString(expand('%:p:h'))
-  \   . ale#Escape('golangci-lint') . ' run --enable-all'
+  \   . ale#Escape('golangci-lint') . ' run  --enable-all'
+
+Execute(The golangci-lint `lint_scope` option `file` value works as expected):
+  let b:ale_go_golangci_lint_scope = 'file'
+
+  AssertLinter 'golangci-lint',
+  \ ale#path#CdString(expand('%:p:h'))
+  \   . ale#Escape('golangci-lint')
+  \   . ' run ' . ale#Escape(expand('%' . ':t'))
+  \   . ' --enable-all'
+
+Execute(The golangci-lint `lint_scope` option `package` value works as expected):
+  let b:ale_go_golangci_lint_scope = 'package'
+
+  AssertLinter 'golangci-lint',
+  \ ale#path#CdString(expand('%:p:h'))
+  \   . ale#Escape('golangci-lint')
+  \   . ' run '
+  \   . ' --enable-all'
+
+Execute(The golangci-lint `lint_scope` option `project` uses 'go.mod' dir with modules on):
+  call ale#test#SetFilename('../go_files/test.go')
+
+  let b:ale_go_go111module = 'on'
+  let b:ale_go_golangci_lint_scope = 'project'
+
+  AssertLinter 'golangci-lint',
+  \ ale#path#CdString(expand('%:p:h'))
+  \   . ale#Env('GO111MODULE', 'on')
+  \   . ale#Escape('golangci-lint')
+  \   . ' run '
+  \   . ' --enable-all'
+
+Execute(The golangci-lint `lint_scope` option `project` uses '.git' dir with modules off):
+  call ale#test#SetFilename('../go_files/test.go')
+
+  let b:ale_go_go111module = 'off'
+  let b:ale_go_golangci_lint_scope = 'project'
+
+  let b:parent_dir = ale#path#Simplify(g:dir . '/..')
+  let b:git_dir = b:parent_dir . '/.git'
+
+  if !isdirectory(b:git_dir)
+    call mkdir(b:git_dir)
+  endif
+
+  AssertLinter 'golangci-lint',
+  \ ale#path#CdString(b:parent_dir)
+  \   . ale#Env('GO111MODULE', 'off')
+  \   . ale#Escape('golangci-lint')
+  \   . ' run '
+  \   . ' --enable-all'
+
+  call delete(b:git_dir, 'd')
+  unlet! b:parent_dir
+  unlet! b:git_dir

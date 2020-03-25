@@ -104,6 +104,19 @@ g:ale_go_golangci_lint_options                 *g:ale_go_golangci_lint_options*
   golangci-lint invocation.
 
 
+g:ale_go_golangci_lint_scope                     *g:ale_go_golangci_lint_scope*
+                                                 *b:ale_go_golangci_lint_scope*
+  Type: |String|
+  Default: `file`
+
+  One of `file`, `package` or `project`.
+
+  When set to `file`, the current file is checked. When set to `package`, the
+  whole Go package is checked. When set to `project`, the top-level project
+  directory is used either based on the presence of a go.mod file if
+  *g:ale_go_go111module* is set to `on`, or based on the presence of a .git
+  directory.
+
 g:ale_go_golangci_lint_package                 *g:ale_go_golangci_lint_package*
                                                *b:ale_go_golangci_lint_package*
   Type: |Number|
@@ -111,6 +124,9 @@ g:ale_go_golangci_lint_package                 *g:ale_go_golangci_lint_package*
 
   When set to `1`, the whole Go package will be checked instead of only the
   current file.
+
+  This flag is deprecated. For it to have any effect,
+  *g:ale_go_golangci_lint_scope* has to be set to the default value.
 
 
 ===============================================================================

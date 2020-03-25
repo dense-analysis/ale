@@ -3,25 +3,31 @@
 
 call ale#Set('go_golangci_lint_options', '--enable-all')
 call ale#Set('go_golangci_lint_executable', 'golangci-lint')
+call ale#Set('go_golangci_lint_scope', 'file')
 call ale#Set('go_golangci_lint_package', 0)
 
 function! ale_linters#go#golangci_lint#GetCommand(buffer) abort
-    let l:filename = expand('#' . a:buffer . ':t')
+    let l:filename = ''
     let l:options = ale#Var(a:buffer, 'go_golangci_lint_options')
+    let l:lint_scope = ale#Var(a:buffer, 'go_golangci_lint_scope')
     let l:lint_package = ale#Var(a:buffer, 'go_golangci_lint_package')
+    let l:cd_string = ale#path#BufferCdString(a:buffer)
 
-
-    if l:lint_package
-        return ale#path#BufferCdString(a:buffer)
-        \   . ale#go#EnvString(a:buffer)
-        \   . '%e run '
-        \   .  l:options
+    if l:lint_package && l:lint_scope is# 'file'
+        let l:lint_scope = 'package'
     endif
 
-    return ale#path#BufferCdString(a:buffer)
+    if l:lint_scope is# 'project'
+        let l:project_root = ale#go#FindProjectRoot(a:buffer)
+        let l:cd_string = ale#path#CdString(l:project_root)
+    elseif l:lint_scope is# 'file'
+        let l:filename = ale#Escape(expand('#' . a:buffer . ':t'))
+    endif
+
+    return l:cd_string
     \   . ale#go#EnvString(a:buffer)
     \   . '%e run '
-    \   . ale#Escape(l:filename)
+    \   . l:filename
     \   . ' ' . l:options
 endfunction
 
