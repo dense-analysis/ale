@@ -2664,6 +2664,7 @@ documented in additional help files.
   dafny...................................|ale-dafny-options|
     dafny.................................|ale-dafny-dafny|
   dart....................................|ale-dart-options|
+    analysis_server.......................|ale-dart-analysis_server|
     dartanalyzer..........................|ale-dart-dartanalyzer|
     dartfmt...............................|ale-dart-dartfmt|
   dhall...................................|ale-dhall-options|
