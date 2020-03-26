@@ -104,11 +104,13 @@ endfunction
 function! ale_linters#java#eclipselsp#Javaagent(buffer) abort
     let l:rets = []
     let l:raw = ale#Var(a:buffer, 'java_eclipselsp_javaagent')
+
     if empty(l:raw)
         return ''
     endif
 
     let l:jars = split(l:raw)
+
     for l:jar in l:jars
         call add(l:rets, ale#Escape('-javaagent:' . l:jar))
     endfor
