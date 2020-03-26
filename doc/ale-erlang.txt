@@ -34,7 +34,7 @@ g:ale_erlang_dialyzer_rebar3_profile     *g:ale_erlang_dialyzer_rebar3_profile*
 g:ale_erlang_dialyzer_options                   *g:ale_erlang_dialyzer_options*
                                                 *b:ale_erlang_dialyzer_options*
   Type: |String|
-  Default: `''`
+  Default: `'-Wunmatched_returns -Werror_handling -Wrace_conditions -Wunderspecs'`
 
   This variable controls additional parameters passed to `dialyzer`, such as
   `-Wunmatched_returns` or `-Wno_opaque`.
