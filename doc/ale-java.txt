@@ -222,8 +222,8 @@ g:ale_java_eclipselsp_workspace_path     *g:ale_java_eclipselsp_workspace_path*
   absolute path of the Eclipse workspace. If not set this value will be set to
   the parent folder of the project root.
 
-g:ale_java_eclipselsp_javaagent          *g:ale_java_eclipselsp_javaagent*
-                                         *b:ale_java_eclipselsp_javaagent*
+g:ale_java_eclipselsp_javaagent               *g:ale_java_eclipselsp_javaagent*
+                                              *b:ale_java_eclipselsp_javaagent*
 
   Type: |String|
   Default: `''`
