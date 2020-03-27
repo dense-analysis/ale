@@ -1,6 +1,6 @@
 Before:
   call ale#assert#SetUpLinterTest('elixir', 'credo')
-  call ale#test#SetFilename('elixir_paths/mix_project/lib/app.ex')
+  call ale#test#SetFilename('elixir_paths/umbrella_project/apps/app1/lib/app.ex')
 
 
 After:
@@ -12,17 +12,17 @@ Execute(Builds credo command with --strict mode when set to 1):
   let g:ale_elixir_credo_strict = 1
 
   AssertLinter 'mix',
-  \ ale#path#CdString(ale#path#Simplify(g:dir . '/elixir_paths/mix_project'))
+  \ ale#path#CdString(ale#path#Simplify(g:dir . '/elixir_paths/umbrella_project'))
   \ . 'mix help credo && mix credo --strict --format=flycheck --read-from-stdin %s'
 
 Execute(Builds credo command with suggest mode by default):
   AssertLinter 'mix',
-  \ ale#path#CdString(ale#path#Simplify(g:dir . '/elixir_paths/mix_project'))
+  \ ale#path#CdString(ale#path#Simplify(g:dir . '/elixir_paths/umbrella_project'))
   \ . 'mix help credo && mix credo suggest --format=flycheck --read-from-stdin %s'
 
 Execute(Builds credo command with suggest mode when set to 0):
   let g:ale_elixir_credo_strict = 0
 
   AssertLinter 'mix',
-  \ ale#path#CdString(ale#path#Simplify(g:dir . '/elixir_paths/mix_project'))
+  \ ale#path#CdString(ale#path#Simplify(g:dir . '/elixir_paths/umbrella_project'))
   \ . 'mix help credo && mix credo suggest --format=flycheck --read-from-stdin %s'
