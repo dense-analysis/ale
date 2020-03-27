@@ -358,7 +358,7 @@ function! ale#c#GetMakeCommand(buffer) abort
         let l:makefile_path = ale#path#FindNearestFile(a:buffer, 'Makefile')
 
         if !empty(l:makefile_path)
-            return 'cd '. fnamemodify(l:makefile_path, ':p:h') . ' && make -n'
+            return 'cd '. fnamemodify(l:makefile_path, ':p:h') . ' && make -Bn'
         endif
     endif
 
