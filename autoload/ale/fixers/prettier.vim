@@ -96,11 +96,19 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version) abort
 
     " 1.4.0 is the first version with --stdin-filepath
     if ale#semver#GTE(a:version, [1, 4, 0])
+        if ale#semver#GTE(a:version, [2, 0, 0])
+            " --stdin was removed at v2
+            " https://github.com/prettier/prettier/pull/7668
+            let l:stdin_flag = ''
+        else
+            let l:stdin_flag = ' --stdin'
+        endif
+
         return {
         \   'command': ale#path#BufferCdString(a:buffer)
         \       . ale#Escape(l:executable)
         \       . (!empty(l:options) ? ' ' . l:options : '')
-        \       . ' --stdin-filepath %s --stdin',
+        \       . ' --stdin-filepath %s' . l:stdin_flag
         \}
     endif
 
