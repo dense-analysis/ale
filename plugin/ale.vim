@@ -189,6 +189,8 @@ command! -bar ALEStopAllLSPs :call ale#lsp#reset#StopAllLSPs()
 " A command for linting manually.
 command! -bar ALELint :call ale#Queue(0, 'lint_file')
 
+" Define a command to get history of actions.
+command! -bar ALEHistory :call ale#debugging#History()
 " Define a command to get information about current filetype.
 command! -bar ALEInfo :call ale#debugging#Info()
 " The same, but copy output to your clipboard.

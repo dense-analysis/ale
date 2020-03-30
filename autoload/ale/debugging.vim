@@ -195,6 +195,10 @@ function! s:EchoLSPErrorMessages(all_linter_names) abort
     endfor
 endfunction
 
+function! ale#debugging#History() abort
+    call s:EchoCommandHistory()
+endfunction
+
 function! ale#debugging#Info() abort
     let l:filetype = &filetype
 
