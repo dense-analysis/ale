@@ -68,10 +68,58 @@ function! ale#c#ShellSplit(line) abort
     return l:args
 endfunction
 
+" Takes the path prefix and a list of cflags and expands @file arguments to
+" the contents of the file.
+"
+" @file arguments are command line arguments recognised by gcc and clang. For
+" instance, if @./path/to/file was given to gcc, it would load .path/to/file
+" and use the contents of that file as arguments.
+function! ale#c#ExpandAtArgs(path_prefix, raw_split_lines) abort
+    let l:out_lines = []
+
+    for l:option in a:raw_split_lines
+        if stridx(l:option, '@') == 0
+            " This is an argument specifying a location of a file containing other arguments
+            let l:path = join(split(l:option, '\zs')[1:], '')
+
+            " Make path absolute
+            if stridx(l:path, s:sep) != 0 && stridx(l:path, '/') != 0
+                let l:rel_path = substitute(l:path, '"', '', 'g')
+                let l:rel_path = substitute(l:rel_path, '''', '', 'g')
+                let l:path = a:path_prefix . s:sep . l:rel_path
+            endif
+
+            " Read the file and add all the arguments
+            try
+                let l:additional_args = readfile(l:path)
+            catch
+                continue " All we can really do is skip this argument
+            endtry
+
+            let l:file_lines = []
+
+            for l:line in l:additional_args
+                let l:file_lines += ale#c#ShellSplit(l:line)
+            endfor
+
+            " @file arguments can include other @file arguments, so we must
+            " recurse.
+            let l:out_lines += ale#c#ExpandAtArgs(a:path_prefix, l:file_lines)
+        else
+            " This is not an @file argument, so don't touch it.
+            let l:out_lines += [l:option]
+        endif
+    endfor
+
+    return l:out_lines
+endfunction
+
 function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
     let l:cflags_list = []
 
-    let l:split_lines = ale#c#ShellSplit(a:cflag_line)
+    let l:raw_split_lines = ale#c#ShellSplit(a:cflag_line)
+    " Expand @file arguments now before parsing
+    let l:split_lines = ale#c#ExpandAtArgs(a:path_prefix, l:raw_split_lines)
     let l:option_index = 0
 
     while l:option_index < len(l:split_lines)
