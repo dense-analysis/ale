@@ -1,0 +1,28 @@
+Before:
+  call ale#assert#SetUpLinterTest('agda', 'agda')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The agda callbacks should return the correct default values):
+
+  " Test with supported version.
+  GivenCommandOutput ['2.5.1']
+  AssertLinter 'agda',
+  \ "echo 'IOTCM \"%t\" None Indirect (Cmd_load \"%t\" [])'"
+  \ . ' | ' . ale#Escape('agda') . ' --interaction'
+
+  " Test with unsupported version.
+  call ale#semver#ResetVersionCache()
+  GivenCommandOutput ['2.5.0']
+  AssertLinter 'agda', 0
+
+Execute(The agda executable should be configurable and it should be escaped):
+
+  call ale#semver#ResetVersionCache()
+  GivenCommandOutput ['2.5.1']
+
+  let g:ale_agda_agda_executable = 'foo bar'
+  AssertLinter 'foo bar',
+  \ "echo 'IOTCM \"%t\" None Indirect (Cmd_load \"%t\" [])'"
+  \ . ' | ' . ale#Escape('foo bar') . ' --interaction'

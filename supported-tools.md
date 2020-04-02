@@ -24,6 +24,8 @@ formatting.
 * Ada
   * [gcc](https://gcc.gnu.org)
   * [gnatpp](https://docs.adacore.com/gnat_ugn-docs/html/gnat_ugn/gnat_ugn/gnat_utility_programs.html#the-gnat-pretty-printer-gnatpp) :floppy_disk:
+* Agda
+  * [agda](http://wiki.portal.chalmers.se/agda)
 * Ansible
   * [ansible-lint](https://github.com/willthames/ansible-lint)
 * API Blueprint

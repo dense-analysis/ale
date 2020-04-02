@@ -15,6 +15,8 @@ Notes:
 * Ada
   * `gcc`
   * `gnatpp`
+* Agda
+  * `agda`
 * Ansible
   * `ansible-lint`
 * API Blueprint

@@ -1,0 +1,233 @@
+Before:
+  runtime ale_linters/agda/agda.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The agda handler for Agda should parse input correctly when get an error message):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 102,
+  \     'col': 2,
+  \     'end_col': 2,
+  \     'type': 'E',
+  \     'text': '/path/to/test.agda:102,2: Parse error _×_<ERROR>  (A B : Set) : Set where    ⟨_...',
+  \   },
+  \ ],
+  \ ale_linters#agda#agda#Handle(0, [
+  \   "Agda2> (agda2-info-action \"*Error*\" \"/path/to/test.agda:102,2-2\\n/path/to/test.agda:102,2: Parse error\\n_×_<ERROR>\\n (A B : Set) : Set where\\n\\n  ⟨_...\" nil)",
+  \   "((last . 3) . (agda2-maybe-goto '(\"/path/to/test.agda\" . 2230)))",
+  \   "(agda2-highlight-load-and-delete-action \"/path/to/tmp\")",
+  \   "(agda2-status-action \"\")",
+  \ ])
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 177,
+  \     'col': 21,
+  \     'end_col': 21,
+  \     'type': 'E',
+  \     'text': '/path/to/test.agda:177,21: expected sequence of bound identifiers }<ERROR>      ; from = λ{ }     ; from∘...',
+  \   },
+  \ ],
+  \ ale_linters#agda#agda#Handle(0, [
+  \   "Agda2> (agda2-info-action \"*Error*\" \"/path/to/test.agda:177,21-21\\n/path/to/test.agda:177,21: expected sequence of bound identifiers\\n}<ERROR>\\n\\n    ; from = λ{ }\\n    ; from∘...\" nil)",
+  \   "((last . 3) . (agda2-maybe-goto '(\"/path/to/test.agda\" . 3635)))",
+  \   "(agda2-highlight-load-and-delete-action \"/path/to/tmp\")",
+  \   "(agda2-status-action \"\")",
+  \ ])
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 4,
+  \     'col': 6,
+  \     'end_col': 13,
+  \     'type': 'E',
+  \     'text': 'Multiple definitions of ℕ. Previous definition at /path/to/Nat.agda:8,6-9 when scope checking the declaration   data ℕ : Set',
+  \   },
+  \ ],
+  \ ale_linters#agda#agda#Handle(0, [
+  \   "Agda2>",
+  \   "(agda2-status-action \"\")",
+  \   "(agda2-info-action \"*Type-checking*\" \"\" nil)",
+  \   "(agda2-highlight-clear)",
+  \   "(agda2-info-action \"*Type-checking*\" \"Checking test (/path/to/test.agda).\\n\" t)",
+  \   "(agda2-info-action \"*Error*\" \"/path/to/test.agda:4,6-13\\nMultiple definitions of ℕ. Previous definition at\\n/path/to/Nat.agda:8,6-9\\nwhen scope checking the declaration\\n  data ℕ : Set\" nil)",
+  \   "((last . 3) . (agda2-maybe-goto '(\"/path/to/test.agda\" . 83)))",
+  \   "(agda2-highlight-load-and-delete-action \"/path/to/tmp\")",
+  \   "(agda2-status-action \"\")",
+  \   "Agda2>",
+  \ ])
+
+Execute(The agda handler for Agda should parse input correctly when get a warning message):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 159,
+  \     'col': 1,
+  \     'end_col': 163,
+  \     'type': 'W',
+  \     'text': 'The following names are declared but not accompanied by a definition: <-trans',
+  \   },
+  \ ],
+  \ ale_linters#agda#agda#Handle(0, [
+  \   "Agda2>",
+  \   "(agda2-status-action \"\")",
+  \   "(agda2-info-action \"*Type-checking*\" \"\" nil)",
+  \   "(agda2-highlight-clear)",
+  \   "(agda2-info-action \"*Type-checking*\" \"Checking relations (/path/to/test.agda).\\n\" t)",
+  \   "(agda2-status-action \"\")",
+  \   "(agda2-info-action \"*All Errors*\" \"/path/to/test.agda:159,1-163,10\\nThe following names are declared but not accompanied by a\\ndefinition: <-trans\\n\" nil)",
+  \   "((last . 1) . (agda2-goals-action '()))",
+  \   "Agda2>",
+  \ ])
+
+Execute(The agda handler for Agda should parse input correctly when get multiple messages):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 164,
+  \     'col': 1,
+  \     'end_col': 168,
+  \     'type': 'E',
+  \     'text': 'Multiple definitions of ≤-trans. Previous definition at /path/to/test.agda:43,1-8 when scope checking the declaration   ≤-trans : {m n p : ℕ} → m < n → n < p → m < p',
+  \   },
+  \   {
+  \     'lnum': 159,
+  \     'col': 1,
+  \     'end_col': 175,
+  \     'type': 'W',
+  \     'text': 'The following names are declared but not accompanied by a definition: <-trans, <-trans′',
+  \   },
+  \ ],
+  \ ale_linters#agda#agda#Handle(0, [
+  \   "Agda2>",
+  \   "(agda2-status-action \"\")",
+  \   "(agda2-info-action \"*Type-checking*\" \"\" nil)",
+  \   "(agda2-highlight-clear)",
+  \   "(agda2-info-action \"*Type-checking*\" \"Checking relations (/path/to/test.agda).\\n\" t)",
+  \   "(agda2-info-action \"*Error*\" \"———— Error —————————————————————————————————————————————————\\n/path/to/test.agda:164,1-168,10\\nMultiple definitions of ≤-trans. Previous definition at\\n/path/to/test.agda:43,1-8\\nwhen scope checking the declaration\\n  ≤-trans : {m n p : ℕ} → m < n → n < p → m < p\\n\\n———— Warning(s) ————————————————————————————————————————————\\n/path/to/test.agda:159,1-175,10\\nThe following names are declared but not accompanied by a\\ndefinition: <-trans, <-trans′\" nil)",
+  \   "((last . 3) . (agda2-maybe-goto '(\"/path/to/test.agda\" . 3499)))",
+  \   "(agda2-highlight-load-and-delete-action \"/path/to/tmp\")",
+  \   "(agda2-status-action \"\")",
+  \   "Agda2>",
+  \ ])
+
+Execute(The agda handler for Agda should parse input correctly when get goal messages):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 42,
+  \     'col': 45,
+  \     'end_col': 46,
+  \     'type': 'I',
+  \     'text': '',
+  \   },
+  \ ],
+  \ ale_linters#agda#agda#Handle(0, [
+  \   "Agda2>",
+  \   "(agda2-status-action \"\")",
+  \   "(agda2-info-action \"*Type-checking*\" \"\" nil)",
+  \   "(agda2-highlight-clear)",
+  \   "(agda2-info-action \"*Type-checking*\" \"Checking test (/path/to/test.agda).\\n\" t)",
+  \   "(agda2-status-action \"\")",
+  \   "(agda2-info-action \"*All Goals*\" \"_snd_23 : C  [ at /path/to/test.agda:42,45-46 ]\\n\" nil)",
+  \   "((last . 1) . (agda2-goals-action '()))",
+  \   "Agda2>",
+  \ ])
+
+  AssertEqual
+  \ [],
+  \ ale_linters#agda#agda#Handle(0, [
+  \   "Agda2>",
+  \   "(agda2-info-action \"*Type-checking*\" \"\" nil)",
+  \   "(agda2-highlight-clear)",
+  \   "(agda2-info-action \"*Type-checking*\" \"Checking irreflexive (/path/to/test.agda).\n\" t)",
+  \   "(agda2-status-action \"\")",
+  \   "(agda2-info-action \"*All Goals*\" \"?0 : ¬ n < n\n\" nil)",
+  \   "((last . 1) . (agda2-goals-action '(0)))",
+  \   "Agda2>",
+  \ ])
+
+Execute(The agda handler for Agda should parse input correctly when get goal and error messages):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 42,
+  \     'col': 45,
+  \     'end_col': 46,
+  \     'type': 'E',
+  \     'text': 'Failed to solve the following constraints:   _snd_23 (a = a) = c : C',
+  \   },
+  \ ],
+  \ ale_linters#agda#agda#Handle(0, [
+  \   "Agda2>",
+  \   "(agda2-status-action \"\")",
+  \   "(agda2-info-action \"*Type-checking*\" \"\" nil)",
+  \   "(agda2-highlight-clear)",
+  \   "(agda2-info-action \"*Type-checking*\" \"Checking test (/path/totest.agda).\\n\" t)",
+  \   "(agda2-status-action \"\")",
+  \   "(agda2-info-action \"*All Goals, Errors*\" \"_snd_23 : C  [ at /path/to/test.agda:42,45-46 ]\\n\\n———— Errors ————————————————————————————————————————————————\\nFailed to solve the following constraints:\\n  _snd_23 (a = a) = c : C\\n\" nil)",
+  \   "((last . 1) . (agda2-goals-action '()))",
+  \   "Agda2>",
+  \ ])
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 44,
+  \     'col': 14,
+  \     'end_col': 62,
+  \     'type': 'E',
+  \     'text': 'Unsolved constraints',
+  \   },
+  \   {
+  \     'lnum': 44,
+  \     'col': 14,
+  \     'end_col': 62,
+  \     'type': 'E',
+  \     'text': 'Unsolved constraints',
+  \   },
+  \   {
+  \     'lnum': 44,
+  \     'col': 14,
+  \     'end_col': 62,
+  \     'type': 'E',
+  \     'text': 'Unsolved constraints',
+  \   },
+  \   {
+  \     'lnum': 45,
+  \     'col': 16,
+  \     'end_col': 64,
+  \     'type': 'E',
+  \     'text': 'Unsolved constraints',
+  \   },
+  \   {
+  \     'lnum': 45,
+  \     'col': 16,
+  \     'end_col': 64,
+  \     'type': 'E',
+  \     'text': 'Unsolved constraints',
+  \   },
+  \   {
+  \     'lnum': 45,
+  \     'col': 16,
+  \     'end_col': 64,
+  \     'type': 'E',
+  \     'text': 'Unsolved constraints',
+  \   },
+  \ ],
+  \ ale_linters#agda#agda#Handle(0, [
+  \   "Agda2>",
+  \   "(agda2-status-action \"\")",
+  \   "(agda2-info-action \"*Type-checking*\" \"\" nil)",
+  \   "(agda2-highlight-clear)",
+  \   "(agda2-info-action \"*Type-checking*\" \"Checking test (/path/to/test.agda).\\n\" t)",
+  \   "(agda2-status-action \"\")",
+  \   "(agda2-info-action \"*All Goals, Errors*\" \"Sort _60  [ at /path/to/test.agda:44,14-62 ]\\n_61 : _60  [ at /path/to/test.agda:44,14-62 ]\\n_63 : _61  [ at /path/to/test.agda:44,14-62 ]\\nSort _66  [ at /path/to/test.agda:45,16-64 ]\\n_67 : _66  [ at /path/to/test.agda:45,16-64 ]\\n_69 : _67  [ at /path/to/test.agda:45,16-64 ]\\n\\n———— Errors ————————————————————————————————————————————————\\nUnsolved constraints\\n\" nil)",
+  \   "((last . 1) . (agda2-goals-action '()))",
+  \   "Agda2>",
+  \ ])
