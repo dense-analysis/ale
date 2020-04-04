@@ -50,10 +50,15 @@ function! ale#fixers#eslint#ApplyFixForVersion(buffer, version) abort
         return 0
     endif
 
+    let l:modules_dir = ale#path#FindNearestDirectory(a:buffer, 'node_modules')
+    let l:project_dir = !empty(l:modules_dir) ? fnamemodify(l:modules_dir, ':h:h') : ''
+    let l:cd_command = !empty(l:project_dir) ? ale#path#CdString(l:project_dir) : ''
+    let l:node_command = l:cd_command . ale#node#Executable(a:buffer, l:executable)
+
     " Use --fix-to-stdout with eslint_d
     if l:executable =~# 'eslint_d$' && ale#semver#GTE(a:version, [3, 19, 0])
         return {
-        \   'command': ale#node#Executable(a:buffer, l:executable)
+        \   'command': l:node_command
         \       . ale#Pad(l:options)
         \       . ' --stdin-filename %s --stdin --fix-to-stdout',
         \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
@@ -63,15 +68,18 @@ function! ale#fixers#eslint#ApplyFixForVersion(buffer, version) abort
     " 4.9.0 is the first version with --fix-dry-run
     if ale#semver#GTE(a:version, [4, 9, 0])
         return {
-        \   'command': ale#node#Executable(a:buffer, l:executable)
+        \   'command': l:node_command
         \       . ale#Pad(l:options)
         \       . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
         \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
         \}
     endif
 
+
+
     return {
-    \   'command': ale#node#Executable(a:buffer, l:executable)
+    \   'command': l:cd_command
+    \       . l:node_command
     \       . ale#Pad(l:options)
     \       . (!empty(l:config) ? ' -c ' . ale#Escape(l:config) : '')
     \       . ' --fix %t',
