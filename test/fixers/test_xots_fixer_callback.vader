@@ -1,13 +1,13 @@
 Before:
-  call ale#assert#SetUpFixerTest('javascript', 'xo')
+  call ale#assert#SetUpFixerTest('typescript', 'xo')
   runtime autoload/ale/handlers/xo.vim
-  set filetype=javascript
+  set filetype=typescript
 
 After:
   call ale#assert#TearDownFixerTest()
 
 Execute(The xo callback should return the correct default values):
-  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.js')
+  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.ts')
 
   AssertFixer
   \ {
@@ -18,8 +18,8 @@ Execute(The xo callback should return the correct default values):
   \ }
 
 Execute(The xo callback should include custom xo options):
-  let g:ale_javascript_xo_options = '--space'
-  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.js')
+  let g:ale_typescript_xo_options = '--space'
+  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.ts')
 
   AssertFixer
   \ {
