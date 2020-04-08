@@ -8,6 +8,7 @@ call ale#Set('typescript_xo_options', '')
 
 function! ale#handlers#xo#GetExecutable(buffer, type) abort
     return ale#node#FindExecutable(a:buffer, a:type . '_xo', [
+    \   'node_modules/xo/cli.js',
     \   'node_modules/.bin/xo',
     \])
 endfunction

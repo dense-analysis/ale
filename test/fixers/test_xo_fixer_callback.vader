@@ -1,5 +1,6 @@
 Before:
   call ale#assert#SetUpFixerTest('javascript', 'xo')
+  runtime autoload/ale/handlers/xo.vim
 
 After:
   call ale#assert#TearDownFixerTest()
