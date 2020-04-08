@@ -14,10 +14,12 @@ endfunction
 
 function! ale#fixers#xo#Fix(buffer) abort
     let l:executable = ale#fixers#xo#GetExecutable(a:buffer)
+    let l:options = ale#Var(a:buffer, 'javascript_xo_options')
 
     return {
     \   'command': ale#node#Executable(a:buffer, l:executable)
-    \       . ' --fix %t',
+    \       . ' --fix %t'
+    \       . ale#Pad(l:options),
     \   'read_temporary_file': 1,
     \}
 endfunction

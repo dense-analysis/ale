@@ -1,0 +1,29 @@
+Before:
+  call ale#assert#SetUpFixerTest('javascript', 'xo')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The xo callback should return the correct default values):
+  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.js')
+
+  AssertFixer
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/xo/cli.js'))
+  \     . ' --fix %t',
+  \ }
+
+Execute(The xo callback should include custom xo options):
+  let g:ale_javascript_xo_options = '--space'
+  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.js')
+
+  AssertFixer
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/xo/cli.js'))
+  \     . ' --fix %t'
+  \     . ' --space',
+  \ }
