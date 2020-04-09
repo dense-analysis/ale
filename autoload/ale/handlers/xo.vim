@@ -27,3 +27,9 @@ endfunction
 function! ale#handlers#xo#HandleJSON(buffer, lines) abort
     return ale#handlers#eslint#HandleJSON(a:buffer, a:lines)
 endfunction
+
+function! ale#handlers#xo#GetProjectRoot(buffer) abort
+    let l:package_path = ale#path#FindNearestFile(a:buffer, 'package.json')
+
+    return empty(l:package_path) ? '' : fnamemodify(l:package_path, ':p:h')
+endfunction

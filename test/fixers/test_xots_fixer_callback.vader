@@ -29,3 +29,18 @@ Execute(The xo callback should include custom xo options):
   \     . ' --fix %t'
   \     . ' --space',
   \ }
+
+Execute(--stdin should be used when xo is new enough):
+  let g:ale_typescript_xo_options = '--space'
+  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.ts')
+
+  GivenCommandOutput ['0.30.0']
+  AssertFixer
+  \ {
+  \   'command': ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files'))
+  \     . (has('win32') ? 'node.exe ' : '')
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/xo/cli.js'))
+  \     . ' --stdin --stdin-filename %s'
+  \     . ' --fix'
+  \     . ' --space',
+  \ }
