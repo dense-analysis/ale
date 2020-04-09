@@ -47,7 +47,7 @@ analyzer                                                    *ale-rust-analyzer*
 g:ale_rust_analyzer_executable                 *g:ale_rust_analyzer_executable*
                                                *b:ale_rust_analyzer_executable*
   Type: |String|
-  Default: `'ra_lsp_server'`
+  Default: `'rust-analyzer'`
 
   This variable can be modified to change the executable path for
   `rust-analyzer`.
