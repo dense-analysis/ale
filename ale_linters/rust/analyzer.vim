@@ -1,7 +1,7 @@
 " Author: Jon Gjengset <jon@thesquareplanet.com>
 " Description: The next generation language server for Rust
 
-call ale#Set('rust_analyzer_executable', 'ra_lsp_server')
+call ale#Set('rust_analyzer_executable', 'rust-analyzer')
 call ale#Set('rust_analyzer_config', {})
 
 function! ale_linters#rust#analyzer#GetCommand(buffer) abort
