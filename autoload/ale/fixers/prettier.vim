@@ -97,8 +97,7 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version) abort
     " 1.4.0 is the first version with --stdin-filepath
     if ale#semver#GTE(a:version, [1, 4, 0])
         return {
-        \   'command': ale#path#BufferCdString(a:buffer)
-        \       . ale#Escape(l:executable)
+        \   'command': ale#Escape(l:executable)
         \       . (!empty(l:options) ? ' ' . l:options : '')
         \       . ' --stdin-filepath %s --stdin',
         \}
