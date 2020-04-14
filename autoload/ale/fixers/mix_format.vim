@@ -9,10 +9,13 @@ function! ale#fixers#mix_format#GetExecutable(buffer) abort
 endfunction
 
 function! ale#fixers#mix_format#GetCommand(buffer) abort
+    let l:project_root = ale#handlers#elixir#FindMixUmbrellaRoot(a:buffer)
     let l:executable = ale#Escape(ale#fixers#mix_format#GetExecutable(a:buffer))
     let l:options = ale#Var(a:buffer, 'elixir_mix_format_options')
 
-    return l:executable . ' format'
+    return ale#path#CdString(l:project_root)
+    \   . l:executable
+    \   . ' format'
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' %t'
 endfunction
