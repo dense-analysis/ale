@@ -18,7 +18,7 @@ Execute(The mix_format callback should return the correct default values):
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
-  \   'command': 'cd ''.'' && '
+  \   'command': ale#path#CdString('.')
   \     . ale#Escape('xxxinvalid')
   \     . ' format %t',
   \ },
@@ -31,7 +31,7 @@ Execute(The mix_format callback should include the correct format options):
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
-  \   'command': 'cd ''.'' && '
+  \   'command': ale#path#CdString('.')
   \     . ale#Escape('xxxinvalid')
   \     . ' format invalid_options %t',
   \ },
