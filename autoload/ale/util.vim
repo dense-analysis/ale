@@ -91,17 +91,17 @@ endfunction
 " options['open_in'] can be:
 "   current-buffer (default)
 "   tab
-"   vertical-split
-"   horizontal-split
+"   split
+"   vsplit
 function! ale#util#Open(filename, line, column, options) abort
     let l:open_in = get(a:options, 'open_in', 'current-buffer')
     let l:args_to_open = '+' . a:line . ' ' . fnameescape(a:filename)
 
     if l:open_in is# 'tab'
         call ale#util#Execute('tabedit ' . l:args_to_open)
-    elseif l:open_in is# 'horizontal-split'
+    elseif l:open_in is# 'split'
         call ale#util#Execute('split ' . l:args_to_open)
-    elseif l:open_in is# 'vertical-split'
+    elseif l:open_in is# 'vsplit'
         call ale#util#Execute('vsplit ' . l:args_to_open)
     elseif bufnr(a:filename) isnot bufnr('')
         " Open another file only if we need to.

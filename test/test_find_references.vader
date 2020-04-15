@@ -2,6 +2,8 @@ Before:
   call ale#test#SetDirectory('/testplugin/test')
   call ale#test#SetFilename('dummy.txt')
 
+  Save g:ale_default_navigation
+
   let g:old_filename = expand('%:p')
   let g:Callback = ''
   let g:expr_list = []
@@ -12,6 +14,7 @@ Before:
   let g:capability_checked = ''
   let g:conn_id = v:null
   let g:InitCallback = v:null
+  let g:ale_default_navigation = 'buffer'
 
   runtime autoload/ale/lsp_linter.vim
   runtime autoload/ale/lsp.vim
@@ -63,6 +66,8 @@ Before:
   endfunction
 
 After:
+  Restore
+
   if g:conn_id isnot v:null
     call ale#lsp#RemoveConnectionWithID(g:conn_id)
   endif
@@ -152,6 +157,20 @@ Execute(Results should be shown for tsserver responses):
   \ g:item_list
   AssertEqual {}, ale#references#GetMap()
 
+  " We should be able to repeat selections with ALERepeatSelection
+  let g:ale_item_list = []
+
+  ALERepeatSelection
+
+  AssertEqual
+  \ [
+  \   {'filename': '/foo/bar/app.ts', 'column': 9, 'line': 9, 'match': 'import {doSomething} from ''./whatever'''},
+  \   {'filename': '/foo/bar/app.ts', 'column': 3, 'line': 804, 'match': 'doSomething()'},
+  \   {'filename': '/foo/bar/other/app.ts', 'column': 3, 'line': 51, 'match': 'doSomething()'},
+  \ ],
+  \ g:item_list
+  AssertEqual {}, ale#references#GetMap()
+
 Execute(The preview window should not be opened for empty tsserver responses):
   call ale#references#SetMap({3: {}})
   call ale#references#HandleTSServerResponse(1, {
@@ -195,7 +214,7 @@ Execute(tsserver reference requests should be sent):
   \   [0, 'ts@references', {'file': expand('%:p'), 'line': 2, 'offset': 5}]
   \ ],
   \ g:message_list
-  AssertEqual {'42': {'use_relative_paths': 0}}, ale#references#GetMap()
+  AssertEqual {'42': {'open_in': 'current-buffer', 'use_relative_paths': 0}}, ale#references#GetMap()
 
 Execute('-relative' argument should enable 'use_relative_paths' in HandleTSServerResponse):
   runtime ale_linters/typescript/tsserver.vim
@@ -205,7 +224,48 @@ Execute('-relative' argument should enable 'use_relative_paths' in HandleTSServe
 
   call g:InitCallback()
 
-  AssertEqual {'42': {'use_relative_paths': 1}}, ale#references#GetMap()
+  AssertEqual {'42': {'open_in': 'current-buffer', 'use_relative_paths': 1}}, ale#references#GetMap()
+
+Execute(`-tab` should display results in tabs):
+  runtime ale_linters/typescript/tsserver.vim
+  call setpos('.', [bufnr(''), 2, 5, 0])
+
+  ALEFindReferences -tab
+
+  call g:InitCallback()
+
+  AssertEqual {'42': {'open_in': 'tab', 'use_relative_paths': 0}}, ale#references#GetMap()
+
+Execute(The default navigation type should be used):
+  runtime ale_linters/typescript/tsserver.vim
+  call setpos('.', [bufnr(''), 2, 5, 0])
+
+  let g:ale_default_navigation = 'tab'
+  ALEFindReferences
+
+  call g:InitCallback()
+
+  AssertEqual {'42': {'open_in': 'tab', 'use_relative_paths': 0}}, ale#references#GetMap()
+
+Execute(`-split` should display results in splits):
+  runtime ale_linters/typescript/tsserver.vim
+  call setpos('.', [bufnr(''), 2, 5, 0])
+
+  ALEFindReferences -split
+
+  call g:InitCallback()
+
+  AssertEqual {'42': {'open_in': 'split', 'use_relative_paths': 0}}, ale#references#GetMap()
+
+Execute(`-vsplit` should display results in vsplits):
+  runtime ale_linters/typescript/tsserver.vim
+  call setpos('.', [bufnr(''), 2, 5, 0])
+
+  ALEFindReferences -vsplit
+
+  call g:InitCallback()
+
+  AssertEqual {'42': {'open_in': 'vsplit', 'use_relative_paths': 0}}, ale#references#GetMap()
 
 Given python(Some Python file):
   foo
@@ -302,7 +362,7 @@ Execute(LSP reference requests should be sent):
   \ ],
   \ g:message_list
 
-  AssertEqual {'42': {'use_relative_paths': 0}}, ale#references#GetMap()
+  AssertEqual {'42': {'open_in': 'current-buffer', 'use_relative_paths': 0}}, ale#references#GetMap()
 
 Execute('-relative' argument should enable 'use_relative_paths' in HandleLSPResponse):
   runtime ale_linters/python/pyls.vim
@@ -313,4 +373,4 @@ Execute('-relative' argument should enable 'use_relative_paths' in HandleLSPResp
 
   call g:InitCallback()
 
-  AssertEqual {'42': {'use_relative_paths': 1}}, ale#references#GetMap()
+  AssertEqual {'42': {'open_in': 'current-buffer', 'use_relative_paths': 1}}, ale#references#GetMap()
