@@ -18,7 +18,7 @@ g:ale_uncrustify_global_options                  *g:ale_uncrustify_global_option
   Default: `''`
 
   Options that are used for all languages. Language-specific options override
-  these (they are passed to Uncrustify before global options). Note: langauge
+  these (they are passed to Uncrustify before global options). Note: language
   options override any options in |g:ale_uncrustify_global_options|.
 
 
