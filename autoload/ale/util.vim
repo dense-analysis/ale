@@ -476,3 +476,44 @@ endfunction
 function! ale#util#Input(message, value) abort
     return input(a:message, a:value)
 endfunction
+
+function! ale#util#HasBuflineApi() abort
+    return exists('*deletebufline') && exists('*setbufline')
+endfunction
+
+" Sets buffer contents to lines
+function! ale#util#SetBufferContents(buffer, lines) abort
+    let l:has_bufline_api = ale#util#HasBuflineApi()
+
+    if !l:has_bufline_api && a:buffer isnot bufnr('')
+        return
+    endif
+
+    " If the file is in DOS mode, we have to remove carriage returns from
+    " the ends of lines before calling setline(), or we will see them
+    " twice.
+    let l:new_lines = getbufvar(a:buffer, '&fileformat') is# 'dos'
+    \   ? map(copy(a:lines), 'substitute(v:val, ''\r\+$'', '''', '''')')
+    \   : a:lines
+    let l:first_line_to_remove = len(l:new_lines) + 1
+
+    " Use a Vim API for setting lines in other buffers, if available.
+    if l:has_bufline_api
+        call setbufline(a:buffer, 1, l:new_lines)
+        call deletebufline(a:buffer, l:first_line_to_remove, '$')
+    " Fall back on setting lines the old way, for the current buffer.
+    else
+        let l:old_line_length = line('$')
+
+        if l:old_line_length >= l:first_line_to_remove
+            let l:save = winsaveview()
+            silent execute
+            \   l:first_line_to_remove . ',' . l:old_line_length . 'd_'
+            call winrestview(l:save)
+        endif
+
+        call setline(1, l:new_lines)
+    endif
+
+    return l:new_lines
+endfunction
