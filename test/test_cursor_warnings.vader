@@ -75,6 +75,17 @@ Before:
   \       'type': 'E',
   \       'text': 'lowercase error',
   \     },
+  \     {
+  \       'lnum': 3,
+  \       'col': 5,
+  \       'bufnr': bufnr('%'),
+  \       'vcol': 0,
+  \       'linter_name': 'fakecodelinter',
+  \       'nr': -1,
+  \       'type': 'E',
+  \       'code': 'E001',
+  \       'text': 'This error does not exist',
+  \     },
   \   ],
   \ },
   \}
@@ -236,6 +247,14 @@ Execute(The %code% and %ifcode% should be removed when there's no code):
   call ale#cursor#EchoCursorWarning()
 
   AssertEqual 'Some information', GetLastMessage()
+
+Execute(The %code% should be formatted correctly when other variables contain 'code'):
+  let g:ale_echo_msg_format = '%s (%linter%% code%)'
+
+  call cursor(3, 5)
+  call ale#cursor#EchoCursorWarning()
+
+  AssertEqual 'This error does not exist (fakecodelinter E001)', GetLastMessage()
 
 Execute(The buffer message format option should take precedence):
   let g:ale_echo_msg_format = '%(code) %%s'
