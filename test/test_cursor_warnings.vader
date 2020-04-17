@@ -237,6 +237,16 @@ Execute(The %code% and %ifcode% should be removed when there's no code):
 
   AssertEqual 'Some information', GetLastMessage()
 
+Execute(The %code% and %ifcode% should not replace the linter name):
+  let g:ale_echo_msg_format = '%s (pycodestyle% code%)'
+
+  call cursor(2, 9)
+  call ale#cursor#EchoCursorWarning()
+
+  AssertEqual
+  \ 'Infix operators must be spaced. (pycodestyle space-infix-ops)',
+  \ GetLastMessage()
+
 Execute(The buffer message format option should take precedence):
   let g:ale_echo_msg_format = '%(code) %%s'
   let b:ale_echo_msg_format = 'FOO %s'
