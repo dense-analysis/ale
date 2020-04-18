@@ -13,7 +13,7 @@ function! ale_linters#jsonnet#jsonnetfmt#GetCommand(buffer) abort
 endfunction
 
 
-function! ale_linters#jsonnet#jsonnetfmt#Handle(buffer, lines)
+function! ale_linters#jsonnet#jsonnetfmt#Handle(buffer, lines) abort
     " Matches patterns line the following:
     "
     " STATIC ERROR: foo.jsonnet:22:3-12: expected token OPERATOR but got (IDENTIFIER, "bar")
