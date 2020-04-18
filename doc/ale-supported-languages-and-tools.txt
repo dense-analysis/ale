@@ -231,7 +231,7 @@ Notes:
   * `jq`
   * `jsonlint`
   * `prettier`
-* JSONNET
+* Jsonnet
   * `jsonnetfmt`
 * Julia
   * `languageserver`
