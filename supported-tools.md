@@ -240,6 +240,8 @@ formatting.
   * [jq](https://stedolan.github.io/jq/)
   * [jsonlint](http://zaa.ch/jsonlint/)
   * [prettier](https://github.com/prettier/prettier)
+* Jsonnet
+  * [jsonnetfmt](https://jsonnet.org/learning/tools.html)
 * Julia
   * [languageserver](https://github.com/JuliaEditorSupport/LanguageServer.jl)
 * Kotlin

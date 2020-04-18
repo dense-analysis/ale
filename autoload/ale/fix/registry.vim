@@ -365,6 +365,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['html', 'htmldjango'],
 \       'description': 'Fix HTML files with html-beautify.',
 \   },
+\   'jsonnetfmt': {
+\       'function': 'ale#fixers#jsonnetfmt#Fix',
+\       'suggested_filetypes': ['jsonnet'],
+\       'description': 'Fix jsonnet files with jsonnetfmt',
+\   },
 \}
 
 " Reset the function registry to the default entries.

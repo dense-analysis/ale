@@ -2444,6 +2444,8 @@ documented in additional help files.
     jsonlint..............................|ale-json-jsonlint|
     jq....................................|ale-json-jq|
     prettier..............................|ale-json-prettier|
+  jsonnet.................................|ale-jsonnet-options|
+    jsonnetfmt............................|ale-jsonnet-jsonnetfmt|
   julia...................................|ale-julia-options|
     languageserver........................|ale-julia-languageserver|
   kotlin..................................|ale-kotlin-options|
