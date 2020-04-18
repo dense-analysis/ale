@@ -17,4 +17,4 @@ RUN apk --update add $PACKAGES && \
 RUN pip install vim-vint==0.3.15
 
 RUN git clone https://github.com/junegunn/vader.vim vader && \
-    cd vader && git checkout c6243dd81c98350df4dec608fa972df98fa2a3af
+    cd vader && git checkout 6fff477431ac3191c69a3a5e5f187925466e275a
