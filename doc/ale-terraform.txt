@@ -35,10 +35,8 @@ g:ale_terraform_terraform_executable     *g:ale_terraform_terraform_executable*
 ===============================================================================
 terraform-lsp                                     *ale-terraform-terraform-lsp*
 
-g:ale_terraform_langserver_executable
-                                    *g:ale_terraform_langserver_executable*
-                                    *b:ale_terraform_langserver_executable*
-
+g:ale_terraform_langserver_executable   *g:ale_terraform_langserver_executable*
+                                        *b:ale_terraform_langserver_executable*
   Type: |String|
   Default: `'terraform-lsp'`
 
