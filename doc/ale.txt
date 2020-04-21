@@ -2655,6 +2655,7 @@ documented in additional help files.
     vcom..................................|ale-vhdl-vcom|
     xvhdl.................................|ale-vhdl-xvhdl|
   vim.....................................|ale-vim-options|
+    vimls.................................|ale-vim-vimls|
     vint..................................|ale-vim-vint|
   vim help................................|ale-vim-help-options|
     write-good............................|ale-vim-help-write-good|
