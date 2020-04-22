@@ -143,6 +143,19 @@ function! ale#lsp#CreateMessageData(message) abort
     return [l:is_notification ? 0 : l:obj.id, l:data]
 endfunction
 
+function! ale#lsp#CreateResultMessageData(id, message) abort
+    let l:obj = {
+    \   'id': a:id,
+    \   'result': a:message,
+    \   'jsonrpc': '2.0',
+    \}
+
+    let l:body = json_encode(l:obj)
+    let l:data = 'Content-Length: ' . strlen(l:body) . "\r\n\r\n" . l:body
+
+    return l:data
+endfunction
+
 function! ale#lsp#ReadMessageData(data) abort
     let l:response_list = []
     let l:remainder = a:data
@@ -229,6 +242,13 @@ function! s:UpdateCapabilities(conn, capabilities) abort
     endif
 endfunction
 
+function! s:HandleConfig(conn_id, response) abort
+    if get(a:response, 'method', '') is# 'workspace/configuration'
+        let l:conn = get(s:connections, a:conn_id, {})
+        call ale#lsp#SendResult(a:conn_id, get(a:response, 'id'), [l:conn.config])
+    endif
+endfunction
+
 " Update a connection's configuration dictionary and notify LSP servers
 " of any changes since the last update. Returns 1 if a configuration
 " update was sent; otherwise 0 will be returned.
@@ -243,6 +263,8 @@ function! ale#lsp#UpdateConfig(conn_id, buffer, config) abort
     let l:message = ale#lsp#message#DidChangeConfiguration(a:buffer, a:config)
 
     call ale#lsp#Send(a:conn_id, l:message)
+    let l:Callback = function('s:HandleConfig')
+    call ale#lsp#RegisterCallback(l:conn.id, l:Callback)
 
     return 1
 endfunction
@@ -340,7 +362,7 @@ function! s:SendInitMessage(conn) abort
     \                   'dynamicRegistration': v:false,
     \               },
     \               'workspaceFolders': v:false,
-    \               'configuration': v:false,
+    \               'configuration': v:true,
     \           },
     \           'textDocument': {
     \               'synchronization': {
@@ -529,6 +551,22 @@ function! ale#lsp#Send(conn_id, message) abort
     call s:SendMessageData(l:conn, l:data)
 
     return l:id == 0 ? -1 : l:id
+endfunction
+
+" Send a result to an LSP server.
+function! ale#lsp#SendResult(conn_id, id, message) abort
+    let l:conn = get(s:connections, a:conn_id, {})
+
+    if empty(l:conn)
+        return
+    endif
+
+    if !l:conn.initialized
+        throw 'LSP server not initialized yet!'
+    endif
+
+    let l:data = ale#lsp#CreateResultMessageData(a:id, a:message)
+    call s:SendMessageData(l:conn, l:data)
 endfunction
 
 " Notify LSP servers or tsserver if a document is opened, if needed.
