@@ -76,7 +76,7 @@ let s:default_registry = {
 \   },
 \   'prettier': {
 \       'function': 'ale#fixers#prettier#Fix',
-\       'suggested_filetypes': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'json5', 'graphql', 'markdown', 'vue', 'html', 'yaml'],
+\       'suggested_filetypes': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'json5', 'graphql', 'markdown', 'vue', 'svelte', 'html', 'yaml'],
 \       'description': 'Apply prettier to a file.',
 \   },
 \   'prettier_eslint': {

@@ -67,6 +67,7 @@ function! ale#fixers#prettier#ApplyFixForVersion(buffer, version) abort
         \    'graphql': 'graphql',
         \    'markdown': 'markdown',
         \    'vue': 'vue',
+        \    'svelte': 'svelte',
         \    'yaml': 'yaml',
         \    'html': 'html',
         \}
