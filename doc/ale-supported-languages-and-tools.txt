@@ -35,6 +35,8 @@ Notes:
   * `shell` (-n flag)
   * `shellcheck`
   * `shfmt`
+* Bats
+  * `shellcheck`
 * BibTeX
   * `bibclean`
 * Bourne Shell
