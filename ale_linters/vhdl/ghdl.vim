@@ -13,7 +13,7 @@ function! ale_linters#vhdl#ghdl#Handle(buffer, lines) abort
     " Look for 'error' lines like the following:
     " dff_en.vhd:41:5:error: 'begin' is expected instead of 'if'
     " /path/to/file.vhdl:12:8: no declaration for "i0"
-    let l:pattern = '^[a-zA-Z0-9\-\.\_\/ ]\+:\(\d\+\):\(\d\+\):\(.*\)'
+    let l:pattern = '^[A-Z]\?:\?[a-zA-Z0-9\-\.\_\/\\ ]\+:\(\d\+\):\(\d\+\):\(.*\)'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
