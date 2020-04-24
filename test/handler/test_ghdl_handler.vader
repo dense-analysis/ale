@@ -23,4 +23,5 @@ Execute(The ghdl handler should parse lines correctly):
   \ ale_linters#vhdl#ghdl#Handle(bufnr(''), [
   \   "dff_en.vhd:41:5:error: 'begin' is expected instead of 'if'",
   \   '/path/to/file.vhdl:12:8: no declaration for "i0"',
+  \   'C:\Users\Jordi\Documents\GRLS_logic\GRLS_top.vhd:123:12: no declaration for "error_flag"',
   \ ])
