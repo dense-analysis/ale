@@ -5,44 +5,9 @@ ALE Bats Integration                                           *ale-bats-options
 ===============================================================================
 shellcheck                                                  *ale-bats-shellcheck*
 
-g:ale_bats_shellcheck_executable               *g:ale_bats_shellcheck_executable*
-                                               *b:ale_bats_shellcheck_executable*
-  Type: |String|
-  Default: `'shellcheck'`
+The `shellcheck` linter for Bats uses the sh options for `shellcheck`; see:
+|ale-sh-shellcheck|.
 
-  This variable sets executable used for shellcheck.
-
-
-g:ale_bats_shellcheck_options                     *g:ale_bats_shellcheck_options*
-                                                  *b:ale_bats_shellcheck_options*
-  Type: |String|
-  Default: `''`
-
-  With this variable we are able to pass extra arguments for shellcheck
-  for shellcheck invocation.
-
-  For example, if we want shellcheck to follow external sources (`see SC1091`)
-  we can set the variable as such:
->
-  let g:ale_bats_shellcheck_options = '-x'
-<
-
-
-g:ale_bats_shellcheck_change_directory   *g:ale_bats_shellcheck_change_directory*
-                                         *b:ale_bats_shellcheck_change_directory*
-  Type: |Number|
-  Default: `1`
-
-  If set to `1`, ALE will switch to the directory the shell file being
-  checked with `shellcheck` is in before checking it. This helps `shellcheck`
-  determine the path to sourced files more easily. This option can be turned
-  off if you want to control the directory `shellcheck` is executed from
-  yourself.
-
-
-    autocmd BufEnter PKGBUILD,.env
-    \   let b:ale_bats_shellcheck_exclusions = 'SC2034,SC2154,SC2164'
-<
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
