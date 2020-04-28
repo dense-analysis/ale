@@ -100,8 +100,8 @@ endfunction
 
 function! ale#handlers#shellcheck#GetCommand(buffer) abort
     return ale#semver#RunWithVersionCheck(a:buffer,
-\       ale#Var(a:buffer, 'sh_shellcheck_executable'),
-\       '%e --version',
-\       function('ale#handlers#shellcheck#GetCommandWithVersion'),
-\   )
+    \      ale#Var(a:buffer, 'sh_shellcheck_executable'),
+    \      '%e --version',
+    \      function('ale#handlers#shellcheck#GetCommandWithVersion'),
+    \)
 endfunction
