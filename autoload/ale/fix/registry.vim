@@ -48,6 +48,11 @@ let s:default_registry = {
 \       'description': 'Apply prettier-standard to a file.',
 \       'aliases': ['prettier-standard'],
 \   },
+\   'pandoc': {
+\       'function': 'ale#fixers#pandoc#Fix',
+\       'suggested_filetypes': ['markdown', 'dokuwiki', 'org', 'rst', 'vimwiki'],
+\       'description': 'Fix common plaintext files',
+\   },
 \   'elm-format': {
 \       'function': 'ale#fixers#elm_format#Fix',
 \       'suggested_filetypes': ['elm'],

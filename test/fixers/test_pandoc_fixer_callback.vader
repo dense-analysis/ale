@@ -1,0 +1,34 @@
+Before:
+  Save g:ale_pandoc_executable
+  Save g:ale_pandoc_options
+  Save g:ale_pandoc_use_gfm
+
+  call ale#assert#SetUpFixerTest('filetype', 'pandoc')
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The pandoc callback should return 'pandoc' as default command):
+  setlocal noexpandtab
+  Assert
+  \ ale#fixers#pandoc#Fix(bufnr('')).command =~# '^' . ale#Escape('pandoc'),
+  \ "Default command name is expected to be 'pandoc'"
+
+Execute(The pandoc callback should format markdown as gfm):
+  let g:ale_pandoc_executable = 'pandoc'
+  let g:ale_pandoc_options = ''
+  set filetype=markdown
+  AssertFixer {'command': ale#Escape('pandoc') . ' -f gfm -t gfm'}
+
+Execute(The pandoc callback should format markdown as is):
+  let g:ale_pandoc_executable = 'pandoc'
+  let g:ale_pandoc_options = ''
+  let g:ale_pandoc_use_gfm = 0
+  set filetype=markdown
+  AssertFixer {'command': ale#Escape('pandoc') . ' -f markdown -t markdown'}
+
+Execute(The pandoc executable and options should be configurable):
+  let g:ale_pandoc_executable = 'pppp'
+  let g:ale_pandoc_options = '--columns=88'
+  set filetype=dokuwiki
+
+  AssertFixer {'command': ale#Escape('pppp') . ' -f dokuwiki -t dokuwiki --columns=88'}
