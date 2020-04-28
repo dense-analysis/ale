@@ -2279,6 +2279,8 @@ documented in additional help files.
     gcc...................................|ale-asm-gcc|
   awk.....................................|ale-awk-options|
     gawk..................................|ale-awk-gawk|
+  bats....................................|ale-bats-options|
+    shellcheck............................|ale-bats-shellcheck|
   bib.....................................|ale-bib-options|
     bibclean..............................|ale-bib-bibclean|
   c.......................................|ale-c-options|
