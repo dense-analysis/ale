@@ -110,6 +110,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix Python files with yapf.',
 \   },
+\   'luafmt': {
+\       'function': 'ale#fixers#luafmt#Fix',
+\       'suggested_filetypes': ['lua'],
+\       'description': 'Fix Lua files with luafmt.',
+\   },
 \   'rubocop': {
 \       'function': 'ale#fixers#rubocop#Fix',
 \       'suggested_filetypes': ['ruby'],
