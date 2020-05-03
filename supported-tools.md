@@ -350,6 +350,7 @@ formatting.
 * Prolog
   * [swipl](https://github.com/SWI-Prolog/swipl-devel)
 * proto
+  * [clang-format](https://clang.llvm.org/docs/ClangFormat.html)
   * [protoc-gen-lint](https://github.com/ckaznocha/protoc-gen-lint)
 * Pug
   * [pug-lint](https://github.com/pugjs/pug-lint)

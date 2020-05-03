@@ -167,8 +167,8 @@ let s:default_registry = {
 \   },
 \   'clang-format': {
 \       'function': 'ale#fixers#clangformat#Fix',
-\       'suggested_filetypes': ['c', 'cpp', 'cuda'],
-\       'description': 'Fix C/C++ and cuda files with clang-format.',
+\       'suggested_filetypes': ['c', 'cpp', 'cuda', 'proto'],
+\       'description': 'Fix C/C++, cuda and proto files with clang-format.',
 \   },
 \   'cmakeformat': {
 \       'function': 'ale#fixers#cmakeformat#Fix',

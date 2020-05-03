@@ -2524,6 +2524,7 @@ documented in additional help files.
   prolog..................................|ale-prolog-options|
     swipl.................................|ale-prolog-swipl|
   proto...................................|ale-proto-options|
+    clang-format..........................|ale-proto-clangformat|
     protoc-gen-lint.......................|ale-proto-protoc-gen-lint|
   pug.....................................|ale-pug-options|
     puglint...............................|ale-pug-puglint|

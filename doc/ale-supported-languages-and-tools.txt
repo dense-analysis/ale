@@ -341,6 +341,7 @@ Notes:
 * Prolog
   * `swipl`
 * proto
+  * `clang-format`
   * `protoc-gen-lint`
 * Pug
   * `pug-lint`
