@@ -1,16 +1,5 @@
 " Author: w0rp <devw0rp@gmail.com>
-" Description: This file adds support for using the shellcheck linter with
-"   shell scripts.
-
-" This global variable can be set with a string of comma-separated error
-" codes to exclude from shellcheck. For example:
-"
-" let g:ale_sh_shellcheck_exclusions = 'SC2002,SC2004'
-call ale#Set('sh_shellcheck_exclusions', get(g:, 'ale_linters_sh_shellcheck_exclusions', ''))
-call ale#Set('sh_shellcheck_executable', 'shellcheck')
-call ale#Set('sh_shellcheck_dialect', 'auto')
-call ale#Set('sh_shellcheck_options', '')
-call ale#Set('sh_shellcheck_change_directory', 1)
+" Description: This file adds support for using the shellcheck linter
 
 function! ale#handlers#shellcheck#GetDialectArgument(buffer) abort
     let l:shell_type = ale#handlers#sh#GetShellType(a:buffer)
@@ -36,7 +25,7 @@ function! ale#handlers#shellcheck#GetDialectArgument(buffer) abort
     return ''
 endfunction
 
-function! ale#handlers#shellcheck#GetCommandWithVersion(buffer, version) abort
+function! ale#handlers#shellcheck#GetCommand(buffer, version) abort
     let l:options = ale#Var(a:buffer, 'sh_shellcheck_options')
     let l:exclude_option = ale#Var(a:buffer, 'sh_shellcheck_exclusions')
     let l:dialect = ale#Var(a:buffer, 'sh_shellcheck_dialect')
@@ -94,14 +83,25 @@ function! ale#handlers#shellcheck#Handle(buffer, lines) abort
     return l:output
 endfunction
 
-function! ale#handlers#shellcheck#GetExecutable(buffer) abort
-    return ale#Var(a:buffer, 'sh_shellcheck_executable')
-endfunction
+function! ale#handlers#shellcheck#DefineLinter(filetype) abort
+    " This global variable can be set with a string of comma-separated error
+    " codes to exclude from shellcheck. For example:
+    " let g:ale_sh_shellcheck_exclusions = 'SC2002,SC2004'
+    call ale#Set('sh_shellcheck_exclusions', get(g:, 'ale_linters_sh_shellcheck_exclusions', ''))
+    call ale#Set('sh_shellcheck_executable', 'shellcheck')
+    call ale#Set('sh_shellcheck_dialect', 'auto')
+    call ale#Set('sh_shellcheck_options', '')
+    call ale#Set('sh_shellcheck_change_directory', 1)
 
-function! ale#handlers#shellcheck#GetCommand(buffer) abort
-    return ale#semver#RunWithVersionCheck(a:buffer,
-    \      ale#Var(a:buffer, 'sh_shellcheck_executable'),
-    \      '%e --version',
-    \      function('ale#handlers#shellcheck#GetCommandWithVersion'),
-    \)
+    call ale#linter#Define(a:filetype, {
+    \   'name': 'shellcheck',
+    \   'executable': {buffer -> ale#Var(buffer, 'sh_shellcheck_executable')},
+    \   'command': {buffer -> ale#semver#RunWithVersionCheck(
+    \       buffer,
+    \       ale#Var(buffer, 'sh_shellcheck_executable'),
+    \       '%e --version',
+    \       function('ale#handlers#shellcheck#GetCommand'),
+    \   )},
+    \   'callback': 'ale#handlers#shellcheck#Handle',
+    \})
 endfunction
