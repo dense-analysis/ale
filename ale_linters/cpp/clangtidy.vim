@@ -19,11 +19,9 @@ function! ale_linters#cpp#clangtidy#GetCommand(buffer, output) abort
     let l:options = ''
 
     " Get the extra options if we couldn't find a build directory.
-    if empty(l:build_dir)
-        let l:options = ale#Var(a:buffer, 'cpp_clangtidy_options')
-        let l:cflags = ale#c#GetCFlags(a:buffer, a:output)
-        let l:options .= !empty(l:options) ? ale#Pad(l:cflags) : l:cflags
-    endif
+    let l:options = ale#Var(a:buffer, 'cpp_clangtidy_options')
+    let l:cflags = ale#c#GetCFlags(a:buffer, a:output)
+    let l:options .= !empty(l:options) ? ale#Pad(l:cflags) : l:cflags
 
     " Get the options to pass directly to clang-tidy
     let l:extra_options = ale#Var(a:buffer, 'cpp_clangtidy_extra_options')
