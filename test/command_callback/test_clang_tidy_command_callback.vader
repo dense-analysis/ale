@@ -47,7 +47,7 @@ Execute(The build directory should be configurable):
   \   . ' -checks=' . ale#Escape('*') . ' %s'
   \   . ' -p ' . ale#Escape('/foo/bar')
 
-Execute(The build directory setting should override the options):
+Execute(The build directory setting should coexist with the options):
   let b:ale_cpp_clangtidy_checks = ['*']
   let b:ale_c_build_dir = '/foo/bar'
   let b:ale_cpp_clangtidy_options = '-Wall'
@@ -55,7 +55,7 @@ Execute(The build directory setting should override the options):
   AssertLinter 'clang-tidy',
   \ ale#Escape('clang-tidy')
   \   . ' -checks=' . ale#Escape('*') . ' %s'
-  \   . ' -p ' . ale#Escape('/foo/bar')
+  \   . ' -p ' . ale#Escape('/foo/bar') . ' -- -Wall'
 
 Execute(The build directory should be ignored for header files):
   call ale#test#SetFilename('test.h')
