@@ -8,6 +8,7 @@ Before:
   Save b:ale_c_build_dir
   Save b:ale_c_build_dir_names
   Save b:ale_c_parse_compile_commands
+  Save b:ale_c_project_filenames
 
 After:
   call ale#assert#TearDownLinterTest()
@@ -44,6 +45,7 @@ Execute(The compile command database should be detected correctly):
   let b:ale_c_build_dir = ''
   let b:ale_c_build_dir_names = ['unusual_build_dir_name']
   let b:ale_c_parse_compile_commands = 1
+  let b:ale_c_project_filenames = ['.git/HEAD', 'configure', 'Makefile', 'CMakeLists.txt']
 
   AssertLinter 'clangd', ale#Escape('clangd')
   \  . ' -compile-commands-dir='

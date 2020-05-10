@@ -4,14 +4,14 @@ Before:
 
   Save g:ale_c_parse_compile_commands
   Save g:ale_c_parse_makefile
-  Save g:__ale_c_project_filenames
+  Save g:ale_c_project_filenames
 
-  let g:original_project_filenames = g:__ale_c_project_filenames
+  let g:original_project_filenames = g:ale_c_project_filenames
 
   " Remove the .git/HEAD dir for C import paths for these tests.
   " The tests run inside of a git repo.
-  let g:__ale_c_project_filenames = filter(
-  \ copy(g:__ale_c_project_filenames),
+  let g:ale_c_project_filenames = filter(
+  \ copy(g:ale_c_project_filenames),
   \ 'v:val isnot# ''.git/HEAD'''
   \)
 

@@ -5,8 +5,12 @@ call ale#Set('c_parse_makefile', 0)
 call ale#Set('c_parse_compile_commands', 0)
 let s:sep = has('win32') ? '\' : '/'
 
-" Set just so tests can override it.
-let g:__ale_c_project_filenames = ['.git/HEAD', 'configure', 'Makefile', 'CMakeLists.txt']
+let g:ale_c_project_filenames = get(g:, 'ale_c_project_filenames', [
+\   '.git/HEAD',
+\   'configure',
+\   'Makefile',
+\   'CMakeLists.txt',
+\])
 
 function! ale#c#GetBuildDirectory(buffer) abort
     " Don't include build directory for header files, as compile_commands.json
@@ -192,7 +196,7 @@ function! ale#c#FindProjectRoot(buffer) abort
 
     " Fall back on detecting the project root based on other filenames.
     if empty(l:root)
-        for l:project_filename in g:__ale_c_project_filenames
+        for l:project_filename in g:ale_c_project_filenames
             let l:full_path = ale#path#FindNearestFile(a:buffer, l:project_filename)
 
             if !empty(l:full_path)

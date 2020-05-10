@@ -59,6 +59,16 @@ g:ale_c_parse_makefile                                 *g:ale_c_parse_makefile*
   build flags to use for different files.
 
 
+g:ale_c_project_filenames                           *g:ale_c_project_filenames*
+                                                    *b:ale_c_project_filenames*
+  Type: |List|
+  Default: `['.git/HEAD', 'configure', 'Makefile', 'CMakeLists.txt']`
+
+  A list of file names to be used to find a C/C++ project root. If any file
+  from this list is found in the project root, ALE will treat the project as
+  a C/C++ project.
+
+
 ===============================================================================
 clang                                                             *ale-c-clang*
 

@@ -11,6 +11,7 @@ The following C options also apply to some C++ linters too.
 * |g:ale_c_build_dir|
 * |g:ale_c_parse_makefile|
 * |g:ale_c_parse_compile_commands|
+* |g:ale_c_project_filenames|
 
 
 ===============================================================================
