@@ -3,6 +3,8 @@
 
 " This flag dictates if ale open the configured loclist
 let g:ale_open_list = get(g:, 'ale_open_list', 0)
+" This flag dictates if ale follows errors in the configured loclist
+let g:ale_follow_list = get(g:, 'ale_follow_list', 1)
 " This flag dictates if ale keeps open loclist even if there is no error in loclist
 let g:ale_keep_list_window_open = get(g:, 'ale_keep_list_window_open', 0)
 " This flag dictates that quickfix windows should be opened vertically
@@ -230,4 +232,46 @@ function! s:CloseWindowIfNeeded(buffer) abort
     if l:did_close_any_list
         call s:RestoreViewIfNeeded(a:buffer)
     endif
+endfunction
+
+function! ale#list#Follow()
+
+   if ! g:ale_follow_list
+     return
+   endif
+
+   let curLine = line('.')
+   let loclist_visible = len(filter(getwininfo(), {i,v -> v.loclist}))
+   let quickfix_visible = len(filter(getwininfo(), {i,v -> v.quickfix}))
+
+   if (exists('b:lastLine') && b:lastLine == curLine)
+      return
+   endif
+
+   if (!quickfix_visible && !loclist_visible)
+      return
+  endif
+
+   let b:lastLine = line('.')
+
+   if g:ale_set_quickfix
+     let ent = len(filter(getqflist(), {i,v -> v.lnum <= curLine}))
+   else
+     let ent = len(filter(getloclist('.'), {i,v -> v.lnum <= curLine}))
+   endif
+
+   if ent < 1 || (exists('b:lastEntry') && b:lastEntry == ent)
+      return
+   endif
+
+   let b:lastEntry = ent
+   let pos = [ 0, curLine, col('.'), 0 ]
+
+   if g:ale_set_quickfix
+     exe 'cc '.ent
+   else
+     exe 'll '.ent
+   endif
+
+   call setpos('.', pos)
 endfunction

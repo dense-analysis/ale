@@ -147,6 +147,8 @@ function! ale#events#Init() abort
                 autocmd InsertLeave * if exists('*ale#engine#Cleanup') | call ale#virtualtext#ShowCursorWarning() | endif
             endif
 
+            autocmd CursorMoved <buffer> call ale#list#Follow()
+
             if g:ale_close_preview_on_insert
                 autocmd InsertEnter * if exists('*ale#preview#CloseIfTypeMatches') | call ale#preview#CloseIfTypeMatches('ale-preview') | endif
             endif

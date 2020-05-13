@@ -1499,6 +1499,16 @@ g:ale_open_list                                               *g:ale_open_list*
   augroup END
 <
 
+g:ale_follow_list                                             *g:ale_follow_list*
+                                                              *b:ale_follow_list*
+  Type: |Number|
+  Default: `1`
+
+  When this is set to 1, ALE will move the line in the loclist or quickfix
+  so it highlights the error/warning that corresponds to the current cursor
+  line in the buffer being linted.
+
+
 g:ale_pattern_options                                   *g:ale_pattern_options*
 
   Type: |Dictionary|
