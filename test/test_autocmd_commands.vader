@@ -85,6 +85,7 @@ Execute (All events should be set up when everything is on):
   \   'BufWritePost * call ale#events#SaveEvent(str2nr(expand(''<abuf>'')))',
   \   'CursorHold * if exists(''*ale#engine#Cleanup'') | call ale#cursor#EchoCursorWarningWithDelay() | endif',
   \   'CursorMoved * if exists(''*ale#engine#Cleanup'') | call ale#cursor#EchoCursorWarningWithDelay() | endif',
+  \   'CursorMoved <buffer> call ale#list#Follow()',
   \   'FileChangedShellPost * call ale#events#FileChangedEvent(str2nr(expand(''<abuf>'')))',
   \   'FileType * call ale#events#FileTypeEvent( str2nr(expand(''<abuf>'')), expand(''<amatch>''))',
   \   'InsertLeave * if ale#Var(str2nr(expand(''<abuf>'')), ''lint_on_insert_leave'') | call ale#Queue(0) | endif',

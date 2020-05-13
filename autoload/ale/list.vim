@@ -234,44 +234,43 @@ function! s:CloseWindowIfNeeded(buffer) abort
     endif
 endfunction
 
-function! ale#list#Follow()
+function! ale#list#Follow() abort
+    if !g:ale_follow_list
+        return
+    endif
 
-   if ! g:ale_follow_list
-     return
-   endif
+    let l:curLine = line('.')
+    let l:loclist_visible = len(filter(getwininfo(), {i,v -> v.loclist}))
+    let l:quickfix_visible = len(filter(getwininfo(), {i,v -> v.quickfix}))
 
-   let curLine = line('.')
-   let loclist_visible = len(filter(getwininfo(), {i,v -> v.loclist}))
-   let quickfix_visible = len(filter(getwininfo(), {i,v -> v.quickfix}))
+    if (exists('b:lastLine') && b:lastLine == l:curLine)
+        return
+    endif
 
-   if (exists('b:lastLine') && b:lastLine == curLine)
-      return
-   endif
+    if (!l:quickfix_visible && !l:loclist_visible)
+        return
+    endif
 
-   if (!quickfix_visible && !loclist_visible)
-      return
-  endif
+    let b:lastLine = line('.')
 
-   let b:lastLine = line('.')
+    if g:ale_set_quickfix
+        let l:ent = len(filter(getqflist(), {i,v -> v.lnum <= l:curLine}))
+    else
+        let l:ent = len(filter(getloclist('.'), {i,v -> v.lnum <= l:curLine}))
+    endif
 
-   if g:ale_set_quickfix
-     let ent = len(filter(getqflist(), {i,v -> v.lnum <= curLine}))
-   else
-     let ent = len(filter(getloclist('.'), {i,v -> v.lnum <= curLine}))
-   endif
+    if l:ent < 1 || (exists('b:lastEntry') && b:lastEntry == l:ent)
+        return
+    endif
 
-   if ent < 1 || (exists('b:lastEntry') && b:lastEntry == ent)
-      return
-   endif
+    let b:lastEntry = l:ent
+    let l:pos = [ 0, l:curLine, col('.'), 0 ]
 
-   let b:lastEntry = ent
-   let pos = [ 0, curLine, col('.'), 0 ]
+    if g:ale_set_quickfix
+        exe 'cc '.l:ent
+    else
+        exe 'll '.l:ent
+    endif
 
-   if g:ale_set_quickfix
-     exe 'cc '.ent
-   else
-     exe 'll '.ent
-   endif
-
-   call setpos('.', pos)
+    call setpos('.', l:pos)
 endfunction
