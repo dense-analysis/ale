@@ -8,7 +8,22 @@ cfn-python-lint                             *ale-cloudformation-cfn-python-lint*
 cfn-python-lint is a linter for AWS CloudFormation template file.
 
 https://github.com/awslabs/cfn-python-lint
+===============================================================================
+Getting it to work:                            *ale-cloudformation-activate*
 
+To get cloudformation linter to work on only CloudFormation files put 
+
+ au BufRead,BufNewFile *.template.yaml set filetype=yaml.cloudformation
+
+on `ftdetect/cloudformation.vim`
+
+and 
+
+let b:ale_linter_aliases = {'cloudformation': ['cloudformation', 'yaml']}
+
+on `after/ftplugin/yaml.vim`
+
+This will get both cloudformation and yaml linters on work on any file with `template.yaml` ext.
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
 
