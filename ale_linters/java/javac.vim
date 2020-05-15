@@ -81,9 +81,11 @@ function! ale_linters#java#javac#GetCommand(buffer, import_paths, meta) abort
     endif
 
     let l:sourcepath_item = ale#Var(a:buffer, 'java_javac_sourcepath')
+
     if !empty(l:sourcepath_item)
         for l:sourcepath in l:sourcepath_item
             let l:sp_path = ale#path#FindNearestDirectory(a:buffer, l:sourcepath)
+
             if !empty(l:sp_path)
                 call add(l:sp_dirs, l:sp_path)
             endif
