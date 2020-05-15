@@ -15,7 +15,27 @@ Install ibm-openapi-validator either globally or locally: >
   npm install ibm-openapi-validator -g  # global
   npm install ibm-openapi-validator     # local
 <
-Recommended plugin for openapi filetype detection:
+Configuration
+-------------------------------------------------------------------------------
+
+OpenAPI files can be written in YAML or JSON so in order for ALE plugins to
+work with these files we must set the buffer |filetype| to either |openapi.yaml|
+or |openapi.json| respectively. This causes ALE to lint the file with linters
+configured for openapi and yaml files or openapi and json files respectively.
+
+For example setting filetype to |openapi.yaml| on a buffer and the following
+|g:ale_linters| configuration will enable linting of openapi files using both
+|ibm-validator| and |yamlint|:
+
+>
+  let g:ale_linters = {
+    \   'yaml': ['yamllint'],
+    \   'openapi': ['ibm-validator']
+  \}
+<
+
+The following plugin will detect openapi files automatically and set the
+filetype to |openapi.yaml| or |openapi.json|:
 
   https://github.com/hsanson/vim-openapi
 
