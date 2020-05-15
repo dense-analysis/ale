@@ -67,6 +67,21 @@ g:ale_java_javac_options                             *g:ale_java_javac_options*
 
   This variable can be set to pass additional options to javac.
 
+g:ale_java_javac_sourcepath                       *g:ale_java_javac_sourcepath*
+                                                  *b:ale_java_javac_sourcepath*
+  Type: |List|
+  Default: `[]`
+
+  This variable can set multiple source code paths, the source code path is a
+  relative path (relative to the project root directory).
+
+  Example:
+  >
+    let g:ale_java_javac_sourcepath = [
+      \ 'build/generated/source/querydsl/main',
+      \ 'target/generated-sources/source/querydsl/main'
+    \ ]
+
 
 ===============================================================================
 google-java-format                                *ale-java-google-java-format*

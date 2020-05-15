@@ -6,6 +6,7 @@ let s:classpath_sep = has('unix') ? ':' : ';'
 call ale#Set('java_javac_executable', 'javac')
 call ale#Set('java_javac_options', '')
 call ale#Set('java_javac_classpath', '')
+call ale#Set('java_javac_sourcepath', [])
 
 function! ale_linters#java#javac#RunWithImportPaths(buffer) abort
     let l:command = ''
@@ -77,6 +78,16 @@ function! ale_linters#java#javac#GetCommand(buffer, import_paths, meta) abort
         if isdirectory(l:test_dir)
             call add(l:sp_dirs, l:test_dir)
         endif
+    endif
+
+    let l:sourcepath_item = ale#Var(a:buffer, 'java_javac_sourcepath')
+    if !empty(l:sourcepath_item)
+        for l:sourcepath in l:sourcepath_item
+            let l:sp_path = ale#path#FindNearestDirectory(a:buffer, l:sourcepath)
+            if !empty(l:sp_path)
+                call add(l:sp_dirs, l:sp_path)
+            endif
+        endfor
     endif
 
     if !empty(l:sp_dirs)
