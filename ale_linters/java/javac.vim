@@ -41,10 +41,15 @@ endfunction
 function! s:BuildClassPathOption(buffer, import_paths) abort
     " Filter out lines like [INFO], etc.
     let l:class_paths = filter(a:import_paths[:], 'v:val !~# ''[''')
-    call extend(
-    \   l:class_paths,
-    \   split(ale#Var(a:buffer, 'java_javac_classpath'), s:classpath_sep),
-    \)
+    let l:cls_path = ale#Var(a:buffer, 'java_javac_classpath')
+
+    if !empty(l:cls_path) && type(l:cls_path) is v:t_string
+        call extend(l:class_paths, split(l:cls_path, s:classpath_sep))
+    endif
+
+    if !empty(l:cls_path) && type(l:cls_path) is v:t_list
+        call extend(l:class_paths, l:cls_path)
+    endif
 
     return !empty(l:class_paths)
     \   ? '-cp ' . ale#Escape(join(l:class_paths, s:classpath_sep))

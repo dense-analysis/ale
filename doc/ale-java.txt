@@ -46,7 +46,7 @@ javac                                                          *ale-java-javac*
 
 g:ale_java_javac_classpath                         *g:ale_java_javac_classpath*
                                                    *b:ale_java_javac_classpath*
-  Type: |String|
+  Type: |String| or |List|
   Default: `''`
 
   This variable can be set to change the global classpath for Java.
