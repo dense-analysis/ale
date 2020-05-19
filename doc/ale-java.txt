@@ -70,7 +70,7 @@ g:ale_java_javac_options                             *g:ale_java_javac_options*
 g:ale_java_javac_sourcepath                       *g:ale_java_javac_sourcepath*
                                                   *b:ale_java_javac_sourcepath*
   Type: |String| or |List|
-  Default: `[]`
+  Default: `''`
 
 This variable can set multiple source code paths, the source code path is a
 relative path (relative to the project root directory).

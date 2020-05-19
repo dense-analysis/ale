@@ -6,7 +6,7 @@ let s:classpath_sep = has('unix') ? ':' : ';'
 call ale#Set('java_javac_executable', 'javac')
 call ale#Set('java_javac_options', '')
 call ale#Set('java_javac_classpath', '')
-call ale#Set('java_javac_sourcepath', [])
+call ale#Set('java_javac_sourcepath', '')
 
 function! ale_linters#java#javac#RunWithImportPaths(buffer) abort
     let l:command = ''
