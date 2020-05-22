@@ -31,3 +31,10 @@ Execute(FindMixUmbrellaRoot should detect the umbrella root directory via mix.ex
   AssertEqual
   \ ale#path#Simplify(g:dir . '/elixir_paths/umbrella_project'),
   \ ale#handlers#elixir#FindMixUmbrellaRoot(bufnr(''))
+
+Execute(FindMixUmbrellaRoot should detect the non-umbrella root directory via mix.exs):
+  silent execute 'file ' . fnameescape(g:dir . '/elixir_paths/mix_project/lib/app.ex')
+
+  AssertEqual
+  \ ale#path#Simplify(g:dir . '/elixir_paths/mix_project'),
+  \ ale#handlers#elixir#FindMixUmbrellaRoot(bufnr(''))
