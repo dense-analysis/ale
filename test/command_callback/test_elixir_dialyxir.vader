@@ -1,0 +1,23 @@
+Before:
+  call ale#assert#SetUpLinterTest('elixir', 'dialyxir')
+  call ale#test#SetFilename('elixir_paths/umbrella_project/apps/app1/lib/app.ex')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(When in an umbrella, runs the correct linter command):
+  AssertLinter 'mix',
+  \ ale#path#CdString(ale#path#Simplify(g:dir . '/elixir_paths/umbrella_project'))
+  \ . 'mix help dialyzer && mix dialyzer --format=short 2>&1'
+
+Before:
+  call ale#assert#SetUpLinterTest('elixir', 'dialyxir')
+  call ale#test#SetFilename('elixir_paths/mix_project/lib/app.ex')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(When in a non-umbrella app, runs the correct linter command):
+  AssertLinter 'mix',
+  \ ale#path#CdString(ale#path#Simplify(g:dir . '/elixir_paths/mix_project'))
+  \ . 'mix help dialyzer && mix dialyzer --format=short 2>&1'
