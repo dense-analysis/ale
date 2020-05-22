@@ -14,7 +14,7 @@ function! ale_linters#elixir#dialyxir#Handle(buffer, lines) abort
     " mix dialyzer paths are relative to each app in an umbrella or the
     " project root in a non-umbrella app
     let l:app_root = ale#handlers#elixir#FindMixProjectRoot(a:buffer)
-    let l:bufname = substitute(l:bufname, '^' . l:app_root . '/', '', '')
+    let l:bufname = substitute(l:bufname, '^' . l:app_root . '[/\\]', '', '')
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         if l:bufname == l:match[1]
