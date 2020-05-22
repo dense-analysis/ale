@@ -12,6 +12,7 @@ function! ale_linters#elixir#dialyxir#Handle(buffer, lines) abort
     let l:bufname = bufname(a:buffer)
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
+        " Use match() for umbrella app compatibility
         if match(l:bufname, l:match[1] . '$')
             call add(l:output, {
             \   'bufnr': a:buffer,
@@ -29,6 +30,7 @@ endfunction
 function! ale_linters#elixir#dialyxir#GetCommand(buffer) abort
     let l:project_root = ale#handlers#elixir#FindMixUmbrellaRoot(a:buffer)
 
+    " Pipe stderr to stdout because mix dialyxer prints on stderr
     return ale#path#CdString(l:project_root)
     \ . 'mix help dialyzer && mix dialyzer --format=short 2>&1'
 endfunction
