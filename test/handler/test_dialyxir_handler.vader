@@ -1,0 +1,49 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test/handler/elixir_paths/umbrella_project')
+  runtime ale_linters/elixir/dialyxir.vim
+
+After:
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(When in an umbrella app, the dialyxir handler should parse lines correctly):
+  call ale#test#SetFilename('apps/app1/lib/app1.ex')
+  AssertEqual
+  \ [
+  \   {
+  \     'bufnr': 3,
+  \     'lnum': 24,
+  \     'col': 0,
+  \     'text': 'Callback info about the MyBehaviour behaviour is not available (callback_info_missing)',
+  \     'type': 'W',
+  \   },
+  \ ],
+  \ ale_linters#elixir#dialyxir#Handle(bufnr(''), [
+  \   'This line should be ignored completely',
+  \   'lib/app1.ex:24:callback_info_missing Callback info about the MyBehaviour behaviour is not available',
+  \ ])
+
+Before:
+  call ale#test#SetDirectory('/testplugin/test/handler/elixir_paths/mix_project')
+  runtime ale_linters/elixir/dialyxir.vim
+
+After:
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(When in a non-umbrella app, the dialyxir handler should parse lines correctly):
+  call ale#test#SetFilename('lib/app.ex')
+  AssertEqual
+  \ [
+  \   {
+  \     'bufnr': 3,
+  \     'lnum': 24,
+  \     'col': 0,
+  \     'text': 'Callback info about the MyBehaviour behaviour is not available (callback_info_missing)',
+  \     'type': 'W',
+  \   },
+  \ ],
+  \ ale_linters#elixir#dialyxir#Handle(bufnr(''), [
+  \   'This line should be ignored completely',
+  \   'lib/app.ex:24:callback_info_missing Callback info about the MyBehaviour behaviour is not available',
+  \ ])
