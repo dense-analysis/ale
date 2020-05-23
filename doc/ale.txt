@@ -1094,12 +1094,13 @@ g:ale_lint_delay                                             *g:ale_lint_delay*
   |g:ale_lint_on_text_changed| variable set to `always`, `insert`, or `normal`.
 
 
-g:ale_lint_diff                                             *g:ale_lint_diff*
+g:ale_lint_diff                                               *g:ale_lint_diff*
 
   Type: |Number|
   Default: `0`
 
   When this option is set to `1`, ALE will lint buffers where `&diff` is set.
+
 
 g:ale_lint_on_enter                                       *g:ale_lint_on_enter*
 
