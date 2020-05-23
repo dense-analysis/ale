@@ -187,6 +187,52 @@ g:ale_cs_mcsc_assemblies                             *g:ale_cs_mcsc_assemblies*
     \]
 <
 
+
+===============================================================================
+omnisharp                                                    *ale-cs-omnisharp*
+
+  The `omnisharp` linter uses the OmniSharp .NET development platform based on
+  Roslyn workspaces. See https://github.com/OmniSharp/omnisharp-roslyn for its
+  installation instructions.
+
+
+g:ale_cs_omnisharp_mono_executable         *g:ale_cs_omnisharp_mono_executable*
+                                           *b:ale_cs_omnisharp_mono_executable*
+
+  Type: String
+  Default: `'mono'`
+
+  This variable controls the path to the mono executable, used to run
+  `OmniSharp.exe`. You should only have to set this if your `mono` binary is
+  not in your `PATH` or if you want to use another `mono` version other than
+  one in your path.
+
+
+g:ale_cs_omnisharp_executable                   *g:ale_cs_omnisharp_executable*
+                                                *b:ale_cs_omnisharp_executable*
+
+  Type: String
+  Default: `'OmniSharp.exe'`
+
+  This variable controls the path to `OmniSharp.exe` binary. You most likely
+  want to set this variable.
+
+  For example: >
+
+    let g:ale_cs_omnisharp_executable = '/usr/local/opt/omnisharp-mono/libexec/OmniSharp.exe'
+<
+
+
+g:ale_cs_omnisharp_options                         *g:ale_cs_omnisharp_options*
+                                                   *b:ale_cs_omnisharp_options*
+
+  Type: String
+  Default: `'-lsp'`
+
+  Use this variable to control the additional options that are passed to
+  `OmniSharp.exe`.
+
+
 ===============================================================================
 uncrustify                                                  *ale-cs-uncrustify*
 
