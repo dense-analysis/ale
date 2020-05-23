@@ -7,6 +7,7 @@ call ale#Set('cs_omnisharp_options', '-lsp')
 
 function! ale_linters#cs#omnisharp#GetProjectRoot(buffer) abort
     let l:omnisharp_json = ale#path#FindNearestFile(a:buffer, 'omnisharp.json')
+
     return !empty(l:omnisharp_json) ? fnamemodify(l:omnisharp_json, ':h') : ''
 endfunction
 
@@ -17,6 +18,7 @@ endfunction
 function! ale_linters#cs#omnisharp#GetCommand(buffer) abort
     let l:executable = ale#Var(a:buffer, 'cs_omnisharp_executable')
     let l:options = ale#Var(a:buffer, 'cs_omnisharp_options')
+
     return '%e ' . l:executable . ' ' . l:options
 endfunction
 
