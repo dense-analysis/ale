@@ -1,0 +1,23 @@
+Before:
+  call ale#assert#SetUpLinterTest('cs', 'omnisharp')
+
+After:
+  unlet! b:command_tail
+
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'mono', ale#Escape('mono') . ' OmniSharp.exe -lsp'
+
+Execute(The mono executable should be configurable):
+  let b:ale_cs_omnisharp_mono_executable = '/usr/bin/mono'
+  AssertLinter '/usr/bin/mono',
+  \ ale#Escape('/usr/bin/mono') . ' OmniSharp.exe -lsp'
+
+Execute(The omnisharp executable should be configurable):
+  let b:ale_cs_omnisharp_executable = '/opt/omnisharp/OmniSharp.exe'
+  AssertLinter 'mono', ale#Escape('mono') . ' /opt/omnisharp/OmniSharp.exe -lsp'
+
+Execute(The options should be configurable):
+  let b:ale_cs_omnisharp_options = '--something'
+  AssertLinter 'mono', ale#Escape('mono') . ' OmniSharp.exe --something'
