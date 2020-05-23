@@ -13,7 +13,7 @@ function! ale_linters#elixir#dialyxir#Handle(buffer, lines) abort
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         " Use match() for umbrella app compatibility
-        if match(l:bufname, l:match[1] . '$')
+        if match(l:bufname, l:match[1] . '$') >= 0
             call add(l:output, {
             \   'bufnr': a:buffer,
             \   'lnum': l:match[2] + 0,

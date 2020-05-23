@@ -45,5 +45,7 @@ Execute(When in a non-umbrella app, the dialyxir handler should parse lines corr
   \ ],
   \ ale_linters#elixir#dialyxir#Handle(bufnr(''), [
   \   'This line should be ignored completely',
+  \   ':0:unknown_function Function ExUnit.Callbacks.__merge__/3 does not exist.',
+  \   'lib/other_file.ex:10:callback_info_missing Callback info about the MyOtherBehaviour behaviour is not available.',
   \   'lib/app.ex:24:callback_info_missing Callback info about the MyBehaviour behaviour is not available',
   \ ])
