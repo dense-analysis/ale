@@ -9,11 +9,13 @@ function! ale_linters#elixir#dialyxir#Handle(buffer, lines) abort
     let l:pattern = '\v(.+):(\d+):([a-z_]+) (.+)$'
     let l:output = []
     let l:type = 'W'
-    let l:bufname = bufname(a:buffer)
+    let l:bufname_unix = substitute(bufname(a:buffer), '\\', '/', 'g')
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        " Use match() for umbrella app compatibility
-        if match(l:bufname, l:match[1] . '$') >= 0
+        " Use match() rather than == for umbrella app compatibility
+        let l:match_filename_unix = substitute(l:match[1], '\\', '/', 'g')
+
+        if match(l:bufname_unix, l:match_filename_unix . '$') >= 0
             call add(l:output, {
             \   'bufnr': a:buffer,
             \   'lnum': l:match[2] + 0,
