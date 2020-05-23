@@ -2323,6 +2323,7 @@ documented in additional help files.
     csc...................................|ale-cs-csc|
     mcs...................................|ale-cs-mcs|
     mcsc..................................|ale-cs-mcsc|
+    omnisharp.............................|ale-cs-omnisharp|
     uncrustify............................|ale-cs-uncrustify|
   css.....................................|ale-css-options|
     fecs..................................|ale-css-fecs|
