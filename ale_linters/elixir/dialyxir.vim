@@ -16,7 +16,7 @@ function! ale_linters#elixir#dialyxir#Handle(buffer, lines) abort
         let l:match_length = strlen(l:match[1])
         let l:bufname_tail = l:bufname[(-l:match_length):]
 
-        if l:match[1] ==# l:bufname_tail
+        if l:match[1] is# l:bufname_tail
             call add(l:output, {
             \   'bufnr': a:buffer,
             \   'lnum': l:match[2] + 0,
