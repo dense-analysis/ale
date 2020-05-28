@@ -481,6 +481,7 @@ Notes:
   * `uncrustify`
 * Verilog
   * `iverilog`
+  * `verible`
   * `verilator`
   * `vlog`
   * `xvlog`

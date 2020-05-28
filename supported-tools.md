@@ -490,6 +490,7 @@ formatting.
   * [uncrustify](https://github.com/uncrustify/uncrustify)
 * Verilog
   * [iverilog](https://github.com/steveicarus/iverilog)
+  * [verible](https://github.com/google/verible)
   * [verilator](http://www.veripool.org/projects/verilator/wiki/Intro)
   * [vlog](https://www.mentor.com/products/fv/questa/)
   * [xvlog](https://www.xilinx.com/products/design-tools/vivado.html)
