@@ -23,7 +23,7 @@ function! ale_linters#solidity#solc#Handle(buffer, lines) abort
 endfunction
 
 function! ale_linters#solidity#solc#GetCommand(buffer) abort
-    return 'solc' . ale#Pad(ale#Var(a:buffer, 'solidity_solc_options')) . ' %s'
+    return 'solc --old-reporter' . ale#Pad(ale#Var(a:buffer, 'solidity_solc_options')) . ' %s'
 endfunction
 
 call ale#linter#Define('solidity', {
