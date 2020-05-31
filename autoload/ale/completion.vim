@@ -533,6 +533,7 @@ function! ale#completion#ParseLSPCompletions(response) abort
 
         if has_key(l:item, 'additionalTextEdits')
             let l:text_changes = []
+
             for l:edit in l:item.additionalTextEdits
                 let l:range = l:edit.range
                 call add(l:text_changes, {
@@ -549,7 +550,7 @@ function! ale#completion#ParseLSPCompletions(response) abort
             endfor
 
             let l:changes = [{
-            \ 'fileName': expand('%:p'),
+            \ 'fileName': expand('#' . l:buffer . ':p'),
             \ 'textChanges': l:text_changes,
             \}]
             \

@@ -90,8 +90,9 @@ function! s:getChanges(workspace_edit) abort
         return a:workspace_edit.changes
     elseif has_key(a:workspace_edit, 'documentChanges')
         let l:document_changes = []
-        if type(a:workspace_edit.documentChanges) is v:t_dict &&
-        \ has_key(a:workspace_edit.documentChanges, 'edits')
+
+        if type(a:workspace_edit.documentChanges) is v:t_dict
+        \ && has_key(a:workspace_edit.documentChanges, 'edits')
             call add(l:document_changes, a:workspace_edit.documentChanges)
         elseif type(a:workspace_edit.documentChanges) is v:t_list
             let l:document_changes = a:workspace_edit.documentChanges
