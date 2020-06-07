@@ -32,7 +32,7 @@ Before:
 
   function! CollectSigns()
     redir => l:output
-      if has('nvim-0.4.2') || (v:version >= 801 && has('patch614'))
+      if has('nvim-0.4.2') || has('patch-8.1.614')
         silent exec 'sign place group=ale'
       else
         silent exec 'sign place'

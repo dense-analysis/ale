@@ -52,6 +52,15 @@ Execute(The mypy callbacks should detect virtualenv directories and switch to th
   \   . ' --show-column-numbers  '
   \   . '--shadow-file %s %t %s'
 
+Execute(The mypy callbacks should cd to directory containing mypy.ini if found):
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_mypy_ini_and_pytest_ini/tests/testsubfolder/my_tests.py')
+
+  AssertLinter 'mypy',
+  \   ale#path#CdString(ale#path#Simplify(g:dir . '/python_paths/with_mypy_ini_and_pytest_ini'))
+  \   . ale#Escape('mypy')
+  \   . ' --show-column-numbers  '
+  \   . '--shadow-file %s %t %s'
+
 Execute(You should able able to use the global mypy instead):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
   let g:ale_python_mypy_use_global = 1

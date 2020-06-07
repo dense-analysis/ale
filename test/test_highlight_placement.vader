@@ -7,6 +7,8 @@ Before:
   Save g:ale_set_loclist
   Save g:ale_set_quickfix
   Save g:ale_set_signs
+  Save g:ale_exclude_highlights
+  Save b:ale_exclude_highlights
 
   runtime autoload/ale/highlight.vim
 
@@ -20,6 +22,8 @@ Before:
   let g:ale_set_quickfix = 0
   let g:ale_set_loclist = 0
   let g:ale_echo_cursor = 0
+  let g:ale_exclude_highlights = []
+  let b:ale_exclude_highlights = []
 
   function! GenerateResults(buffer, output)
     return [
@@ -362,6 +366,23 @@ Execute(Highlights should always be cleared when the buffer highlight list is em
     \ [{'group': 'SomeOtherGroup', 'priority': 10, 'pos1': [1, 1, 1]}],
     \ GetMatchesWithoutIDs()
   endif
+
+Execute(Highlights should be hidden when excluded):
+  let b:ale_exclude_highlights = ['ig.*ore', 'nope']
+
+  call ale#highlight#SetHighlights(bufnr('%'), [
+  \ {'bufnr': bufnr('%'), 'type': 'E', 'lnum': 1, 'col': 1, 'text': 'hello'},
+  \ {'bufnr': bufnr('%'), 'type': 'E', 'lnum': 2, 'col': 1, 'text': 'ignore'},
+  \ {'bufnr': bufnr('%'), 'type': 'E', 'lnum': 3, 'col': 1, 'text': 'nope'},
+  \ {'bufnr': bufnr('%'), 'type': 'E', 'lnum': 4, 'col': 1, 'text': 'world'},
+  \])
+
+  AssertEqual
+  \ [
+  \   {'group': 'ALEError', 'priority': 10, 'pos1': [1, 1, 1]},
+  \   {'group': 'ALEError', 'priority': 10, 'pos1': [4, 1, 1]},
+  \ ],
+  \ GetMatchesWithoutIDs()
 
 Execute(Highlights should be cleared when ALE is disabled):
   let g:ale_enabled = 1
