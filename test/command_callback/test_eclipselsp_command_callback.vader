@@ -54,6 +54,7 @@ Execute(VersionCheck should return correct version):
 
 Execute(The eclipselsp callback should return the correct default value):
   let cmd = [ ale#Escape('java'),
+    \ '',
     \ '-Declipse.application=org.eclipse.jdt.ls.core.id1',
     \ '-Dosgi.bundles.defaultStartLevel=4',
     \ '-Declipse.product=org.eclipse.jdt.ls.core.product',
@@ -72,6 +73,7 @@ Execute(The eclipselsp callback should return the correct default value):
 Execute(The eclipselsp callback should allow custom executable):
   let b:ale_java_eclipselsp_executable='/bin/foobar'
   let cmd = [ ale#Escape('/bin/foobar'),
+    \ '',
     \ '-Declipse.application=org.eclipse.jdt.ls.core.id1',
     \ '-Dosgi.bundles.defaultStartLevel=4',
     \ '-Declipse.product=org.eclipse.jdt.ls.core.product',
@@ -87,9 +89,12 @@ Execute(The eclipselsp callback should allow custom executable):
     \]
   AssertLinter '/bin/foobar', join(cmd, ' ')
 
-Execute(The eclipselsp callback should allow custom configuration path):
+Execute(The eclipselsp callback should allow custom configuration path and javaagent):
   let b:ale_java_eclipselsp_config_path = '/home/config'
+  let b:ale_java_eclipselsp_javaagent = '/home/lombok.jar /home/lombok2.jar'
   let cmd = [ ale#Escape('java'),
+    \ ale#Escape('-javaagent:/home/lombok.jar'),
+    \ ale#Escape('-javaagent:/home/lombok2.jar'),
     \ '-Declipse.application=org.eclipse.jdt.ls.core.id1',
     \ '-Dosgi.bundles.defaultStartLevel=4',
     \ '-Declipse.product=org.eclipse.jdt.ls.core.product',

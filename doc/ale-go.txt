@@ -30,6 +30,16 @@ g:ale_go_go_executable                                    *g:ale_go_go_options*
   the `gomod` fixer.
 
 
+g:ale_go_go111module                                     *g:ale_go_go111module*
+                                                         *b:ale_go_go111module*
+  Type: |String|
+  Default: `''`
+
+  Override the value of the `$GO111MODULE` environment variable for
+  golang tools.
+
+
+
 ===============================================================================
 bingo                                                            *ale-go-bingo*
 
@@ -207,6 +217,25 @@ g:ale_go_govet_options                                 *g:ale_go_govet_options*
   Default: `''`
 
   This variable can be set to pass additional options to the go vet linter.
+
+
+===============================================================================
+revive                                                          *ale-go-revive*
+
+g:ale_go_revive_executable                         *g:ale_go_revive_executable*
+                                                   *b:ale_go_revive_executable*
+  Type: |String|
+  Default: `'revive'`
+
+  This variable can be set to change the revive executable path.
+
+
+g:ale_go_revive_options                               *g:ale_go_revive_options*
+                                                      *b:ale_go_revive_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to the revive
 
 
 ===============================================================================

@@ -1,13 +1,15 @@
 Before:
+  Save g:ale_go_go111module
+
   call ale#assert#SetUpLinterTest('go', 'gopls')
 
 After:
-  Restore
-
   if isdirectory(g:dir . '/.git')
     call delete(g:dir . '/.git', 'd')
   endif
 
+  unlet! b:ale_go_go111module
+  unlet! b:ale_go_go111module
   unlet! b:ale_completion_enabled
 
   call ale#assert#TearDownLinterTest()
@@ -34,6 +36,12 @@ Execute(should set gopls options):
   AssertLinter 'gopls',
   \ ale#Escape('gopls') . ' --mode stdio --trace'
 
+Execute(should support go environment variables):
+  let b:ale_go_go111module = 'off'
+
+  AssertLinter 'gopls',
+  \ ale#Env('GO111MODULE', 'off') . ale#Escape('gopls') . ' --mode stdio'
+
 Execute(Should return directory for 'go.mod' if found in parent directory):
   call ale#test#SetFilename('../go_files/test.go')
 
@@ -44,3 +52,20 @@ Execute(Should return nearest directory with '.git' if found in parent directory
   call mkdir(g:dir . '/.git')
 
   AssertLSPProject g:dir
+
+Execute(Should ignore 'go.mod' and return '.git' dir if modules off):
+  call ale#test#SetFilename('../go_files/test.go')
+
+  let b:ale_go_go111module = 'off'
+  let b:parent_dir = ale#path#Simplify(g:dir . '/..')
+  let b:git_dir = b:parent_dir . '/.git'
+
+  if !isdirectory(b:git_dir)
+    call mkdir(b:git_dir)
+  endif
+
+  AssertLSPProject b:parent_dir
+
+  call delete(b:git_dir, 'd')
+  unlet! b:parent_dir
+  unlet! b:git_dir

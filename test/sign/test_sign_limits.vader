@@ -30,7 +30,7 @@ After:
 
   delfunction SetNProblems
 
-  sign unplace *
+  call ale#sign#Clear()
 
 Execute(There should be no limit on signs with negative numbers):
   AssertEqual range(1, 42), SetNProblems(42)

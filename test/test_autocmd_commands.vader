@@ -188,6 +188,10 @@ Execute (ALECleanupGroup should include the right commands):
     \], CheckAutocmd('ALECleanupGroup')
   endif
 
+Execute(ALECompletionActions should always be set up):
+  AssertEqual [
+  \ 'CompleteDone * call ale#completion#HandleUserData(v:completed_item)',
+  \], CheckAutocmd('ALECompletionActions')
 
 Execute(Enabling completion should set up autocmd events correctly):
   let g:ale_completion_enabled = 0

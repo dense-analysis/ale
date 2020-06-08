@@ -17,7 +17,7 @@ Before:
   let g:ale_echo_cursor = 0
 
   call ale#linter#Reset()
-  sign unplace *
+  call ale#sign#Clear()
 
   function! GenerateResults(buffer, output)
     return [
@@ -68,12 +68,16 @@ Before:
 
   function! ParseSigns()
     redir => l:output
-      silent sign place
+      if has('nvim-0.4.2') || has('patch-8.1.614')
+        silent sign place group=ale
+      else
+        silent sign place
+      endif
     redir END
 
     return map(
     \ split(l:output, '\n')[2:],
-    \ 'matchlist(v:val, ''^.*=\(\d\+\).*=\(\d\+\).*=\(.*\)$'')[1:3]',
+    \ 'matchlist(v:val, ''' . ale#sign#ParsePattern() . ''')[1:3]',
     \)
   endfunction
 
@@ -92,7 +96,7 @@ After:
   delfunction GenerateResults
   delfunction ParseSigns
   call ale#linter#Reset()
-  sign unplace *
+  call ale#sign#Clear()
 
 Execute(ale#sign#GetSignName should return the right sign names):
   AssertEqual 'ALEErrorSign', ale#sign#GetSignName([{'type': 'E'}])
@@ -148,9 +152,15 @@ Execute(The current signs should be set for running a job):
   \ ParseSigns()
 
 Execute(Loclist items with sign_id values should be kept):
-  exec 'sign place 1000347 line=3 name=ALEErrorSign buffer=' . bufnr('')
-  exec 'sign place 1000348 line=15 name=ALEErrorSign buffer=' . bufnr('')
-  exec 'sign place 1000349 line=16 name=ALEWarningSign buffer=' . bufnr('')
+  if has('nvim-0.4.2') || has('patch-8.1.614')
+    exec 'sign place 1000347 group=ale line=3 name=ALEErrorSign buffer=' . bufnr('')
+    exec 'sign place 1000348 group=ale line=15 name=ALEErrorSign buffer=' . bufnr('')
+    exec 'sign place 1000349 group=ale line=16 name=ALEWarningSign buffer=' . bufnr('')
+  else
+    exec 'sign place 1000347 line=3 name=ALEErrorSign buffer=' . bufnr('')
+    exec 'sign place 1000348 line=15 name=ALEErrorSign buffer=' . bufnr('')
+    exec 'sign place 1000349 line=16 name=ALEWarningSign buffer=' . bufnr('')
+  endif
 
   let g:loclist = [
   \ {'bufnr': bufnr(''), 'lnum': 1, 'col': 1, 'type': 'E', 'text': 'a', 'sign_id': 1000348},
@@ -287,10 +297,17 @@ Execute(No exceptions should be thrown when setting signs for invalid buffers):
 Execute(Signs should be removed when lines have multiple sign IDs on them):
   " We can fail to remove signs if there are multiple signs on one line,
   " say after deleting lines in Vim, etc.
-  exec 'sign place 1000347 line=3 name=ALEErrorSign buffer=' . bufnr('')
-  exec 'sign place 1000348 line=3 name=ALEWarningSign buffer=' . bufnr('')
-  exec 'sign place 1000349 line=10 name=ALEErrorSign buffer=' . bufnr('')
-  exec 'sign place 1000350 line=10 name=ALEWarningSign buffer=' . bufnr('')
+  if has('nvim-0.4.2') || has('patch-8.1.614')
+    exec 'sign place 1000347 group=ale line=3 name=ALEErrorSign buffer=' . bufnr('')
+    exec 'sign place 1000348 group=ale line=3 name=ALEWarningSign buffer=' . bufnr('')
+    exec 'sign place 1000349 group=ale line=10 name=ALEErrorSign buffer=' . bufnr('')
+    exec 'sign place 1000350 group=ale line=10 name=ALEWarningSign buffer=' . bufnr('')
+  else
+    exec 'sign place 1000347 line=3 name=ALEErrorSign buffer=' . bufnr('')
+    exec 'sign place 1000348 line=3 name=ALEWarningSign buffer=' . bufnr('')
+    exec 'sign place 1000349 line=10 name=ALEErrorSign buffer=' . bufnr('')
+    exec 'sign place 1000350 line=10 name=ALEWarningSign buffer=' . bufnr('')
+  endif
 
   call ale#sign#SetSigns(bufnr(''), [])
   AssertEqual [], ParseSigns()

@@ -3,6 +3,10 @@ sudo: required
 services:
     - docker
 language: generic
+branches:
+  only:
+    - master
+    - /^v\d+\.\d+\.(x|\d+)$/
 env:
     - OPTIONS=--vim-80-only
     - OPTIONS=--vim-81-only

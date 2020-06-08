@@ -14,6 +14,16 @@ Execute(The default commands should be correct):
   \ ale#path#CdString(expand('%:p:h'))
   \   . 'go test -c -o /dev/null ./'
 
+Execute(Go environment variables should be supported):
+  let b:ale_go_go111module = 'on'
+
+  AssertLinter 'go',
+  \ ale#path#CdString(expand('%:p:h'))
+  \   . ale#Env('GO111MODULE', 'on')
+  \   . 'go test -c -o /dev/null ./'
+
+  unlet! b:ale_go_go111module
+
 Execute(Extra options should be supported):
   let g:ale_go_gobuild_options = '--foo-bar'
 
