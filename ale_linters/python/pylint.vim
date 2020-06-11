@@ -39,16 +39,21 @@ function! ale_linters#python#pylint#GetCommand(buffer) abort
     return l:cd_string
     \   . ale#Escape(l:executable) . l:exec_args
     \   . ' ' . ale#Var(a:buffer, 'python_pylint_options')
-    \   . ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'
     \   . ' %s'
+    \   . ' --from-stdin --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'
 endfunction
 
 function! ale_linters#python#pylint#Handle(buffer, lines) abort
+    let l:output = ale#python#HandleTraceback(a:lines, 10)
+
+    if !empty(l:output)
+        return l:output
+    endif
+
     " Matches patterns like the following:
     "
     " test.py:4:4: W0101 (unreachable) Unreachable code
     let l:pattern = '\v^[a-zA-Z]?:?[^:]+:(\d+):(\d+): ([[:alnum:]]+) \(([^(]*)\) (.*)$'
-    let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         "let l:failed = append(0, l:match)
@@ -71,13 +76,20 @@ function! ale_linters#python#pylint#Handle(buffer, lines) abort
             let l:code_out = l:match[4]
         endif
 
-        call add(l:output, {
+        "call add(l:output, {
+        let l:item = {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 1,
         \   'text': l:match[5],
         \   'code': l:code_out,
-        \   'type': l:code[:0] is# 'E' ? 'E' : 'W',
-        \})
+        \   'type': 'W',
+        \}
+
+        if l:code[:0] is# 'E'
+            let l:item.type = 'E'
+        endif
+
+        call add(l:output, l:item)
     endfor
 
     return l:output
@@ -88,5 +100,4 @@ call ale#linter#Define('python', {
 \   'executable': function('ale_linters#python#pylint#GetExecutable'),
 \   'command': function('ale_linters#python#pylint#GetCommand'),
 \   'callback': 'ale_linters#python#pylint#Handle',
-\   'lint_file': 1,
 \})
