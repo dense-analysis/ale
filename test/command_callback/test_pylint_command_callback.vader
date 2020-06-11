@@ -2,7 +2,7 @@ Before:
   call ale#assert#SetUpLinterTest('python', 'pylint')
 
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
-  let b:command_tail = ' --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n %s'
+  let b:command_tail = ' --from-stdin --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n %s'
 
 After:
   unlet! b:bin_dir
@@ -67,7 +67,7 @@ Execute(Setting executable to 'pipenv' appends 'run pylint'):
   AssertLinter 'path/to/pipenv',
   \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('path/to/pipenv') . ' run pylint'
-  \   . '  --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n %s'
+  \   . '  --from-stdin --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n %s'
 
 Execute(Pipenv is detected when python_pylint_auto_pipenv is set):
   let g:ale_python_pylint_auto_pipenv = 1
@@ -76,4 +76,4 @@ Execute(Pipenv is detected when python_pylint_auto_pipenv is set):
   AssertLinter 'pipenv',
   \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('pipenv') . ' run pylint'
-  \   . '  --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n %s'
+  \   . '  --from-stdin --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n %s'

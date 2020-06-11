@@ -39,8 +39,8 @@ function! ale_linters#python#pylint#GetCommand(buffer) abort
     return l:cd_string
     \   . ale#Escape(l:executable) . l:exec_args
     \   . ' ' . ale#Var(a:buffer, 'python_pylint_options')
-    \   . ' %s'
     \   . ' --from-stdin --output-format text --msg-template="{path}:{line}:{column}: {msg_id} ({symbol}) {msg}" --reports n'
+    \   . ' %s'
 endfunction
 
 function! ale_linters#python#pylint#Handle(buffer, lines) abort
