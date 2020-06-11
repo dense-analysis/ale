@@ -76,7 +76,6 @@ function! ale_linters#python#pylint#Handle(buffer, lines) abort
             let l:code_out = l:match[4]
         endif
 
-        "call add(l:output, {
         let l:item = {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 1,
