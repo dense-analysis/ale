@@ -496,6 +496,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['lua'],
 \       'description': 'Fix Lua files with luafmt.',
 \   },
+\   'dprint': {
+\       'function': 'ale#fixers#dprint#Fix',
+\       'suggested_filetypes': ['javascript', 'typescript', 'json', 'markdown'],
+\       'description': 'Pluggable and configurable code formatting platform',
+\   },
 \   'stylua': {
 \       'function': 'ale#fixers#stylua#Fix',
 \       'suggested_filetypes': ['lua'],

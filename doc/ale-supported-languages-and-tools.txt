@@ -267,6 +267,7 @@ Notes:
 * JavaScript
   * `cspell`
   * `deno`
+  * `dprint`
   * `eslint`
   * `fecs`
   * `flow`
@@ -586,6 +587,7 @@ Notes:
 * TypeScript
   * `cspell`
   * `deno`
+  * `dprint`
   * `eslint`
   * `fecs`
   * `prettier`

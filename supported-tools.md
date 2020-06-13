@@ -276,6 +276,7 @@ formatting.
 * JavaScript
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [deno](https://deno.land/)
+  * [dprint](https://dprint.dev/)
   * [eslint](http://eslint.org/)
   * [fecs](http://fecs.baidu.com/)
   * [flow](https://flowtype.org/)
@@ -595,6 +596,7 @@ formatting.
 * TypeScript
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [deno](https://deno.land/)
+  * [dprint](https://dprint.dev/)
   * [eslint](http://eslint.org/)
   * [fecs](http://fecs.baidu.com/)
   * [prettier](https://github.com/prettier/prettier)
