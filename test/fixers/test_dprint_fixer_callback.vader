@@ -1,0 +1,28 @@
+Before:
+  call ale#assert#SetUpFixerTest('typescript', 'dprint')
+
+After:
+  Restore
+  call ale#assert#TearDownFixerTest()
+
+Execute(The dprint callback should return the correct default values):
+  AssertFixer
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command':
+  \     ale#Escape('dprint')
+  \     . ' ' . ale#Escape('')
+  \     . ' %t',
+  \ }
+
+Execute(The dprint callback should include custom options):
+  let g:ale_typescript_dprint_options = '-c .dprintrc'
+
+  AssertFixer
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command':
+  \     ale#Escape('dprint')
+  \     . ' ' . ale#Escape('-c .dprintrc')
+  \     . ' %t',
+  \ }

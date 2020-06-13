@@ -224,6 +224,7 @@ Notes:
   * `PMD`
   * `uncrustify`
 * JavaScript
+  * `dprint`
   * `eslint`
   * `fecs`
   * `flow`
@@ -479,6 +480,7 @@ Notes:
 * Thrift
   * `thrift`
 * TypeScript
+  * `dprint`
   * `eslint`
   * `fecs`
   * `prettier`
