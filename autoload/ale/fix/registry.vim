@@ -380,6 +380,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['dhall'],
 \       'description': 'Fix Dhall files with dhall-format.',
 \   },
+\   'dprint': {
+\       'function': 'ale#fixers#dprint#Fix',
+\       'suggested_filetypes': ['javascript', 'typescript'],
+\       'description': 'Pluggable and configurable code formatting platform',
+\   },
 \}
 
 " Reset the function registry to the default entries.

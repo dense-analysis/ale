@@ -233,6 +233,7 @@ formatting.
   * [PMD](https://pmd.github.io/)
   * [uncrustify](https://github.com/uncrustify/uncrustify)
 * JavaScript
+  * [dprint](https://dprint.dev/)
   * [eslint](http://eslint.org/)
   * [fecs](http://fecs.baidu.com/)
   * [flow](https://flowtype.org/)
@@ -488,6 +489,7 @@ formatting.
 * Thrift
   * [thrift](http://thrift.apache.org/)
 * TypeScript
+  * [dprint](https://dprint.dev/)
   * [eslint](http://eslint.org/)
   * [fecs](http://fecs.baidu.com/)
   * [prettier](https://github.com/prettier/prettier)
