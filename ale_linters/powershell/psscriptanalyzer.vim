@@ -8,6 +8,7 @@ call ale#Set('powershell_psscriptanalyzer_exclusions', '')
 call ale#Set('powershell_psscriptanalyzer_executable', 'pwsh')
 call ale#Set('powershell_psscriptanalyzer_module',
 \ 'psscriptanalyzer')
+call ale#Set('powershell_psscriptanalyzer_options', '')
 
 function! ale_linters#powershell#psscriptanalyzer#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'powershell_psscriptanalyzer_executable')
@@ -20,8 +21,11 @@ function! ale_linters#powershell#psscriptanalyzer#GetCommand(buffer) abort
     \   a:buffer, 'powershell_psscriptanalyzer_exclusions')
     let l:module = ale#Var(
     \   a:buffer, 'powershell_psscriptanalyzer_module')
+    let l:options = ale#Var(
+    \   a:buffer, 'powershell_psscriptanalyzer_options')
     let l:script = ['Param($Script);
     \   Invoke-ScriptAnalyzer "$Script" '
+    \   . l:options . ' '
     \   . (!empty(l:exclude_option) ? '-Exclude ' . l:exclude_option : '')
     \   . '| ForEach-Object {
     \   $_.Line;
