@@ -478,6 +478,8 @@ formatting.
   * [write-good](https://github.com/btford/write-good) :warning:
 * Thrift
   * [thrift](http://thrift.apache.org/)
+* Tremor
+  * [tremor-language-server](https://github.com/wayfair-tremor/tremor-language-server) (see `:help ale-integration-tremor` for configuration instructions)
 * TypeScript
   * [eslint](http://eslint.org/)
   * [fecs](http://fecs.baidu.com/)

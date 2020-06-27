@@ -1,0 +1,40 @@
+===============================================================================
+ALE Tremor Integration                                     *ale-tremor-options*
+                                                       *ale-integration-tremor*
+
+===============================================================================
+Integration Information
+
+  To detect the filetypes for the tremor languages (pre-requisite for using
+  the language server integration), you need to install the tremor-vim plugin:
+  https://github.com/wayfair-tremor/tremor-vim
+
+  The tremor language server can be installed via:
+  `cargo install tremor-language-server`
+
+  For more details, see: https://www.tremor.rs/getting-started/tooling
+
+  Example vim configuration to use this integration:
+  `" support tremor filetypes (for tremor-script & tremor-query languages)`
+  `let g:ale_linters = {`
+  `\   'tremor': ['tremor-language-server'],`
+  `\   'trickle': ['tremor-language-server'],`
+  `\}`
+
+  For the linter name, 'tremor_language_server' or 'trill' also work (in
+  addition to'tremor-language-server').
+
+===============================================================================
+tremor-language-server                             *ale-tremor-language-server*
+
+g:ale_tremor_language_server_executable *g:ale_tremor_language_server_executable*
+                                      *b:ale_tremor_language_server_executable*
+  Type: |String|
+  Default: `'tremor-language-server'`
+
+  This variable can be modified to change the executable path for
+  `tremor-language-server`.
+
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

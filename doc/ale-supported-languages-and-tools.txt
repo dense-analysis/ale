@@ -469,6 +469,8 @@ Notes:
   * `write-good`
 * Thrift
   * `thrift`
+* Tremor
+  * `tremor-language-server` (see |ale-integration-tremor|)
 * TypeScript
   * `eslint`
   * `fecs`

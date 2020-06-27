@@ -2641,6 +2641,8 @@ documented in additional help files.
     write-good............................|ale-text-write-good|
   thrift..................................|ale-thrift-options|
     thrift................................|ale-thrift-thrift|
+  tremor..................................|ale-tremor-options|
+    tremor-language-server................|ale-tremor-language-server|
   typescript..............................|ale-typescript-options|
     eslint................................|ale-typescript-eslint|
     prettier..............................|ale-typescript-prettier|
