@@ -1,0 +1,27 @@
+Before:
+  call ale#assert#SetUpLinterTest('tremor', 'tremor_language_server')
+
+  Save &filetype
+  let &filetype = 'tremor'
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The language string should be correct):
+  AssertLSPLanguage 'tremor'
+
+Execute(The default executable path should be correct):
+  AssertLinter 'tremor-language-server',
+  \ ale#Escape('tremor-language-server') . ' --language tremor'
+
+Execute(The executable should be configurable):
+  let g:ale_tremor_language_server_executable = 'snotbadger'
+
+  AssertLinter 'snotbadger', ale#Escape('snotbadger') . ' --language tremor'
+
+Execute(The project root should be detected correctly):
+  AssertLSPProject g:dir
+
+  call ale#test#SetFilename('tremor-language-server-project/test.tremor')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/tremor-language-server-project')
