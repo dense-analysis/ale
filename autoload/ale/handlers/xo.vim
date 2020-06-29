@@ -29,7 +29,7 @@ function! ale#handlers#xo#HandleJSON(buffer, lines) abort
 endfunction
 
 function! ale#handlers#xo#GetProjectRoot(buffer) abort
-    let l:package_path = ale#path#FindNearestFile(a:buffer, 'package.json')
+    let l:modules_dir = ale#path#FindNearestDirectory(a:buffer, 'node_modules')
 
-    return empty(l:package_path) ? '' : fnamemodify(l:package_path, ':p:h')
+    return empty(l:modules_dir) ? '' : fnamemodify(l:modules_dir, ':h:h')
 endfunction
