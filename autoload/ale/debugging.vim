@@ -222,11 +222,16 @@ function! ale#debugging#Info() abort
     let l:fixers = uniq(sort(l:fixers[0] + l:fixers[1]))
     let l:fixers_string = join(map(copy(l:fixers), '"\n  " . v:val'), '')
 
+    let l:buffer = bufnr('%')
+    let l:fixers = ale#fix#GetCallbacks(l:buffer, 'save_file', [])
+    let l:enabled_fixers = map(l:fixers, 'string(v:val)[10:-3]')
+
     call s:Echo(' Current Filetype: ' . l:filetype)
     call s:Echo('Available Linters: ' . string(l:all_names))
     call s:EchoLinterAliases(l:all_linters)
     call s:Echo('  Enabled Linters: ' . string(l:enabled_names))
     call s:Echo(' Suggested Fixers: ' . l:fixers_string)
+    call s:Echo('  Enabled Fixers: ' . string(l:enabled_fixers))
     call s:Echo(' Linter Variables:')
     call s:Echo('')
     call s:EchoLinterVariables(l:variable_list)

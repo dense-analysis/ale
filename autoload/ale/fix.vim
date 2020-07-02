@@ -270,7 +270,7 @@ function! s:IgnoreFixers(callback_list, filetype, config) abort
     call filter(a:callback_list, 'index(l:ignore_list, v:val) < 0')
 endfunction
 
-function! s:GetCallbacks(buffer, fixing_flag, fixers) abort
+function! ale#fix#GetCallbacks(buffer, fixing_flag, fixers) abort
     if len(a:fixers)
         let l:callback_list = a:fixers
     elseif type(get(b:, 'ale_fixers')) is v:t_list
@@ -348,7 +348,7 @@ function! ale#fix#Fix(buffer, fixing_flag, ...) abort
     endif
 
     try
-        let l:callback_list = s:GetCallbacks(a:buffer, a:fixing_flag, a:000)
+        let l:callback_list = ale#fix#GetCallbacks(a:buffer, a:fixing_flag, a:000)
     catch /E700\|BADNAME/
         let l:function_name = join(split(split(v:exception, ':')[3]))
         let l:echo_message = printf(
