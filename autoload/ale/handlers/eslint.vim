@@ -1,6 +1,11 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Functions for working with eslint, for checking or fixing files.
 
+let s:executables = [
+\   'node_modules/.bin/eslint_d',
+\   'node_modules/eslint/bin/eslint.js',
+\   'node_modules/.bin/eslint',
+\]
 let s:sep = has('win32') ? '\' : '/'
 
 call ale#Set('javascript_eslint_options', '')
@@ -30,11 +35,7 @@ function! ale#handlers#eslint#FindConfig(buffer) abort
 endfunction
 
 function! ale#handlers#eslint#GetExecutable(buffer) abort
-    return ale#node#FindExecutable(a:buffer, 'javascript_eslint', [
-    \   'node_modules/.bin/eslint_d',
-    \   'node_modules/eslint/bin/eslint.js',
-    \   'node_modules/.bin/eslint',
-    \])
+    return ale#node#FindExecutable(a:buffer, 'javascript_eslint', s:executables)
 endfunction
 
 " Given a buffer, return a command prefix string which changes directory
@@ -44,10 +45,19 @@ function! ale#handlers#eslint#GetCdString(buffer) abort
     " By default, the project root is simply the CWD of the running process.
     " https://github.com/eslint/rfcs/blob/master/designs/2018-simplified-package-loading/README.md
     " https://github.com/dense-analysis/ale/issues/2787
-    " Identify project root from presence of node_modules dir.
+    "
+    " If eslint is installed in a directory which contains the buffer, assume
+    " it is the ESLint project root.  Otherwise, use nearest node_modules.
     " Note: If node_modules not present yet, can't load local deps anyway.
-    let l:modules_dir = ale#path#FindNearestDirectory(a:buffer, 'node_modules')
-    let l:project_dir = !empty(l:modules_dir) ? fnamemodify(l:modules_dir, ':h:h') : ''
+    let l:executable = ale#node#FindNearestExecutable(a:buffer, s:executables)
+
+    if !empty(l:executable)
+        let l:nmi = strridx(l:executable, 'node_modules')
+        let l:project_dir = l:executable[0:l:nmi - 2]
+    else
+        let l:modules_dir = ale#path#FindNearestDirectory(a:buffer, 'node_modules')
+        let l:project_dir = !empty(l:modules_dir) ? fnamemodify(l:modules_dir, ':h:h') : ''
+    endif
 
     return !empty(l:project_dir) ? ale#path#CdString(l:project_dir) : ''
 endfunction
