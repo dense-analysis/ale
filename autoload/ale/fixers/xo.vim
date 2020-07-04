@@ -28,11 +28,8 @@ function! ale#fixers#xo#ApplyFixForVersion(buffer, version, executable, options)
 
     " 0.30.0 is the first version with a working --stdin --fix
     if ale#semver#GTE(a:version, [0, 30, 0])
-        let l:project_root = ale#handlers#xo#GetProjectRoot(a:buffer)
-
         return {
-        \   'command': ale#path#CdString(l:project_root)
-        \       . l:executable
+        \   'command': l:executable
         \       . ' --stdin --stdin-filename %s'
         \       . ' --fix'
         \       . l:options,

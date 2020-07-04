@@ -27,9 +27,3 @@ endfunction
 function! ale#handlers#xo#HandleJSON(buffer, lines) abort
     return ale#handlers#eslint#HandleJSON(a:buffer, a:lines)
 endfunction
-
-function! ale#handlers#xo#GetProjectRoot(buffer) abort
-    let l:modules_dir = ale#path#FindNearestDirectory(a:buffer, 'node_modules')
-
-    return empty(l:modules_dir) ? '' : fnamemodify(l:modules_dir, ':h:h')
-endfunction

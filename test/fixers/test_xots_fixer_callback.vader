@@ -37,8 +37,7 @@ Execute(--stdin should be used when xo is new enough):
   GivenCommandOutput ['0.30.0']
   AssertFixer
   \ {
-  \   'command': ale#path#CdString(ale#path#Simplify(g:dir . '/../xo-test-files/monorepo'))
-  \     . (has('win32') ? 'node.exe ' : '')
+  \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../xo-test-files/monorepo/node_modules/xo/cli.js'))
   \     . ' --stdin --stdin-filename %s'
   \     . ' --fix'
