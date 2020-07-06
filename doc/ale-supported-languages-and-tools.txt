@@ -35,6 +35,8 @@ Notes:
   * `shell` (-n flag)
   * `shellcheck`
   * `shfmt`
+* Bats
+  * `shellcheck`
 * BibTeX
   * `bibclean`
 * Bourne Shell
@@ -162,6 +164,7 @@ Notes:
   * `gosimple`!!
   * `gotype`!!
   * `go vet`!!
+  * `revive`!!
   * `staticcheck`!!
 * GraphQL
   * `eslint`
@@ -408,6 +411,7 @@ Notes:
 * Rust
   * `cargo`!!
   * `rls`
+  * `rust-analyzer`
   * `rustc` (see |ale-integration-rust|)
   * `rustfmt`
 * Sass
@@ -485,6 +489,7 @@ Notes:
   * `vcom`
   * `xvhdl`
 * Vim
+  * `vimls`
   * `vint`
 * Vim help^
   * `alex`!!

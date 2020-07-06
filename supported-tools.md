@@ -44,6 +44,8 @@ formatting.
   * shell [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set)
   * [shellcheck](https://www.shellcheck.net/)
   * [shfmt](https://github.com/mvdan/sh)
+* Bats
+  * [shellcheck](https://www.shellcheck.net/)
 * BibTeX
   * [bibclean](http://ftp.math.utah.edu/pub/bibclean/)
 * Bourne Shell
@@ -171,6 +173,7 @@ formatting.
   * [gosimple](https://github.com/dominikh/go-tools/tree/master/cmd/gosimple) :warning: :floppy_disk:
   * [gotype](https://godoc.org/golang.org/x/tools/cmd/gotype) :warning: :floppy_disk:
   * [go vet](https://golang.org/cmd/vet/) :floppy_disk:
+  * [revive](https://github.com/mgechev/revive) :warning: :floppy_disk:
   * [staticcheck](https://github.com/dominikh/go-tools/tree/master/cmd/staticcheck) :warning: :floppy_disk:
 * GraphQL
   * [eslint](http://eslint.org/)
@@ -417,6 +420,7 @@ formatting.
 * Rust
   * [cargo](https://github.com/rust-lang/cargo) :floppy_disk: (see `:help ale-integration-rust` for configuration instructions)
   * [rls](https://github.com/rust-lang-nursery/rls) :warning:
+  * [rust-analyzer](https://github.com/rust-analyzer/rust-analyzer) :warning:
   * [rustc](https://www.rust-lang.org/) :warning:
   * [rustfmt](https://github.com/rust-lang-nursery/rustfmt)
 * Sass
@@ -494,6 +498,7 @@ formatting.
   * [vcom](https://www.mentor.com/products/fv/questa/)
   * [xvhdl](https://www.xilinx.com/products/design-tools/vivado.html)
 * Vim
+  * [vimls](https://github.com/iamcco/vim-language-server)
   * [vint](https://github.com/Kuniwak/vint)
 * Vim help
   * [alex](https://github.com/wooorm/alex) :warning: :floppy_disk:

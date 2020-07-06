@@ -163,7 +163,7 @@ function! ale#Queue(delay, ...) abort
     endif
 endfunction
 
-let s:current_ale_version = [2, 6, 0]
+let s:current_ale_version = [2, 7, 0]
 
 " A function used to check for ALE features in files outside of the project.
 function! ale#Has(feature) abort
@@ -258,9 +258,9 @@ function! ale#GetLocItemMessage(item, format_string) abort
 
     " Replace special markers with certain information.
     " \=l:variable is used to avoid escaping issues.
+    let l:msg = substitute(l:msg, '\v\%([^\%]*)code([^\%]*)\%', l:code_repl, 'g')
     let l:msg = substitute(l:msg, '\V%severity%', '\=l:severity', 'g')
     let l:msg = substitute(l:msg, '\V%linter%', '\=l:linter_name', 'g')
-    let l:msg = substitute(l:msg, '\v\%([^\%]*)code([^\%]*)\%', l:code_repl, 'g')
     " Replace %s with the text.
     let l:msg = substitute(l:msg, '\V%s', '\=a:item.text', 'g')
 
