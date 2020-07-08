@@ -49,3 +49,17 @@ Execute(The puppet handler should parse lines and column correctly):
   \   "Error: Could not parse for environment production: Syntax error at ':' at C:/puppet/modules/nginx/manifests/init.pp:54:9",
   \   "Error: Could not parse for environment production: Syntax error at 'parameter1' (file: /tmp/modules/mariadb/manifests/slave.pp, line: 45, column: 12)",
   \ ])
+
+Execute(The puppet handler should correctly parse errors that are reported before even trying to parse for an environment):
+  " Line Error
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 5,
+  \     'col': 11,
+  \     'text': "Illegal attempt to assign to 'a Name'. Not an assignable reference"
+  \   },
+  \ ],
+  \ ale_linters#puppet#puppet#Handle(255, [
+  \   "Error: Illegal attempt to assign to 'a Name'. Not an assignable reference (file: /tmp/modules/waffles/manifests/syrup.pp, line: 5, column: 11)",
+  \ ])
