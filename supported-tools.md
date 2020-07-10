@@ -53,6 +53,7 @@ formatting.
   * [shellcheck](https://www.shellcheck.net/)
   * [shfmt](https://github.com/mvdan/sh)
 * C
+  * [astyle](http://astyle.sourceforge.net/)
   * [ccls](https://github.com/MaskRay/ccls)
   * [clang](http://clang.llvm.org/)
   * [clangd](https://clang.llvm.org/extra/clangd.html)
