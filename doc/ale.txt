@@ -2284,6 +2284,7 @@ documented in additional help files.
   bib.....................................|ale-bib-options|
     bibclean..............................|ale-bib-bibclean|
   c.......................................|ale-c-options|
+    astyle................................|ale-c-astyle|
     clang.................................|ale-c-clang|
     clangd................................|ale-c-clangd|
     clang-format..........................|ale-c-clangformat|
