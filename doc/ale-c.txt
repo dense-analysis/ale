@@ -59,7 +59,6 @@ g:ale_c_parse_makefile                                 *g:ale_c_parse_makefile*
   build flags to use for different files.
 
 
-
 ===============================================================================
 astyle                                                           *ale-c-astyle*
 
