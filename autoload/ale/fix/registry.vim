@@ -162,8 +162,8 @@ let s:default_registry = {
 \   },
 \    'astyle': {
 \       'function': 'ale#fixers#astyle#Fix',
-\       'suggested_filetypes': ['c', 'cpp'],
-\       'description': 'Fix C/C++ with astyle.',
+\       'suggested_filetypes': ['c'],
+\       'description': 'Fix C with astyle.',
 \    },
 \   'clangtidy': {
 \       'function': 'ale#fixers#clangtidy#Fix',

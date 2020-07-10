@@ -1,5 +1,5 @@
 " Author: James Kim <jhlink@users.noreply.github.com>
-" Description: Fix C/C++ files with astyle.
+" Description: Fix C files with astyle.
 
 call ale#Set('c_astyle_executable', 'astyle')
 
