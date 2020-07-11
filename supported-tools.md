@@ -519,3 +519,5 @@ formatting.
   * [yamllint](https://yamllint.readthedocs.io/)
 * YANG
   * [yang-lsp](https://github.com/theia-ide/yang-lsp)
+* Zig
+  * [zls](https://github.com/zigtools/zls)
