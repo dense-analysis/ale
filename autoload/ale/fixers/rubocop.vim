@@ -5,17 +5,17 @@ call ale#Set('ruby_rubocop_executable', 'rubocop')
 " output. These are delimited by a "=======" string that we
 " look for to remove everything before it.
 function! ale#fixers#rubocop#PostProcess(buffer, output) abort
-  let l:line = 0
+    let l:line = 0
 
-  for output in a:output
-    let l:line = l:line + 1
+    for l:output in a:output
+        let l:line = l:line + 1
 
-    if output =~# "^=\\+$"
-      break
-    endif
-  endfor
+        if l:output =~# "^=\\+$"
+            break
+        endif
+    endfor
 
-  return a:output[l:line :]
+    return a:output[l:line :]
 endfunction
 
 function! ale#fixers#rubocop#GetCommand(buffer) abort
