@@ -327,7 +327,7 @@ let s:default_registry = {
 \   },
 \   'ktlint': {
 \       'function': 'ale#fixers#ktlint#Fix',
-\       'suggested_filetypes': ['kt'],
+\       'suggested_filetypes': ['kt', 'kotlin'],
 \       'description': 'Fix Kotlin files with ktlint.',
 \   },
 \   'styler': {
