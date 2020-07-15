@@ -63,3 +63,15 @@ Execute(The puppet handler should correctly parse errors that are reported befor
   \ ale_linters#puppet#puppet#Handle(255, [
   \   "Error: Illegal attempt to assign to 'a Name'. Not an assignable reference (file: /tmp/modules/waffles/manifests/syrup.pp, line: 5, column: 11)",
   \ ])
+Execute(The puppet handler should parse lines when end of input is the location):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 0,
+  \     'col': 0,
+  \     'text': "Syntax error at end of input"
+  \   },
+  \ ],
+  \ ale_linters#puppet#puppet#Handle(255, [
+  \   "Error: Could not parse for environment production: Syntax error at end of input (file: /tmp//modules/test/manifests/init.pp)",
+  \ ])
