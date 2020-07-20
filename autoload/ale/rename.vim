@@ -95,41 +95,65 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
         endif
 
         let l:workspace_edit = a:response.result
+        let l:changes = []
 
-        if !has_key(l:workspace_edit, 'changes') || empty(l:workspace_edit.changes)
+        if has_key(l:workspace_edit, 'changes') && !empty(l:workspace_edit.changes)
+            for l:file_name in keys(l:workspace_edit.changes)
+                let l:text_edits = l:workspace_edit.changes[l:file_name]
+                let l:text_changes = []
+
+                for l:edit in l:text_edits
+                    let l:range = l:edit.range
+                    let l:new_text = l:edit.newText
+
+                    call add(l:text_changes, {
+                    \ 'start': {
+                    \   'line': l:range.start.line + 1,
+                    \   'offset': l:range.start.character + 1,
+                    \ },
+                    \ 'end': {
+                    \   'line': l:range.end.line + 1,
+                    \   'offset': l:range.end.character + 1,
+                    \ },
+                    \ 'newText': l:new_text,
+                    \})
+                endfor
+
+                call add(l:changes, {
+                \   'fileName': ale#path#FromURI(l:file_name),
+                \   'textChanges': l:text_changes,
+                \})
+            endfor
+        elseif has_key(l:workspace_edit, 'documentChanges') && !empty(l:workspace_edit.documentChanges)
+            for l:documentChange in l:workspace_edit.documentChanges
+                let l:file_name = l:documentChange.textDocument.uri
+                let l:text_changes = []
+
+                for l:edit in l:documentChange.edits
+                    call add(l:text_changes, {
+                    \ 'start': {
+                    \   'line': l:edit.range.start.line + 1,
+                    \   'offset': l:edit.range.start.character + 1,
+                    \ },
+                    \ 'end': {
+                    \   'line': l:edit.range.end.line + 1,
+                    \   'offset': l:edit.range.end.character + 1,
+                    \ },
+                    \ 'newText': l:edit.newText,
+                    \})
+                endfor
+
+                call add(l:changes, {
+                \   'fileName': ale#path#FromURI(l:file_name),
+                \   'textChanges': l:text_changes,
+                \})
+            endfor
+        else
             call s:message('No changes received from server')
 
             return
         endif
 
-        let l:changes = []
-
-        for l:file_name in keys(l:workspace_edit.changes)
-            let l:text_edits = l:workspace_edit.changes[l:file_name]
-            let l:text_changes = []
-
-            for l:edit in l:text_edits
-                let l:range = l:edit.range
-                let l:new_text = l:edit.newText
-
-                call add(l:text_changes, {
-                \ 'start': {
-                \   'line': l:range.start.line + 1,
-                \   'offset': l:range.start.character + 1,
-                \ },
-                \ 'end': {
-                \   'line': l:range.end.line + 1,
-                \   'offset': l:range.end.character + 1,
-                \ },
-                \ 'newText': l:new_text,
-                \})
-            endfor
-
-            call add(l:changes, {
-            \   'fileName': ale#path#FromURI(l:file_name),
-            \   'textChanges': l:text_changes,
-            \})
-        endfor
 
         call ale#code_action#HandleCodeAction({
         \   'description': 'rename',
