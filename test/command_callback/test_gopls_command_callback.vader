@@ -15,7 +15,7 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(should set correct defaults):
-  AssertLinter 'gopls', ale#Escape('gopls') . ' --mode stdio'
+  AssertLinter 'gopls', ale#Escape('gopls') . ' -remote auto'
 
 Execute(should configure gopls callback executable):
   let b:ale_go_gopls_executable = 'boo'
@@ -31,16 +31,16 @@ Execute(should set gopls options):
   AssertLinter 'gopls',
   \ ale#Escape('gopls') . ''
 
-  let b:ale_go_gopls_options = '--mode stdio --trace'
+  let b:ale_go_gopls_options = '-remote auto --trace'
 
   AssertLinter 'gopls',
-  \ ale#Escape('gopls') . ' --mode stdio --trace'
+  \ ale#Escape('gopls') . ' -remote auto --trace'
 
 Execute(should support go environment variables):
   let b:ale_go_go111module = 'off'
 
   AssertLinter 'gopls',
-  \ ale#Env('GO111MODULE', 'off') . ale#Escape('gopls') . ' --mode stdio'
+  \ ale#Env('GO111MODULE', 'off') . ale#Escape('gopls') . ' -remote auto'
 
 Execute(Should return directory for 'go.mod' if found in parent directory):
   call ale#test#SetFilename('../go_files/test.go')

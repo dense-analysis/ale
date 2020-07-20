@@ -3,7 +3,7 @@
 " Description: https://github.com/saibing/gopls
 
 call ale#Set('go_gopls_executable', 'gopls')
-call ale#Set('go_gopls_options', '--mode stdio')
+call ale#Set('go_gopls_options', '-remote auto')
 
 function! ale_linters#go#gopls#GetCommand(buffer) abort
     return ale#go#EnvString(a:buffer)
