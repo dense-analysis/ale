@@ -21,9 +21,8 @@ Execute(The ktlint callback should return the correct default values):
   AssertEqual
   \ {
   \   'command': ale#Escape('xxxinvalid')
-  \     . ' %t'
+  \     . ' --stdin'
   \     . ' --format',
-  \   'read_temporary_file': 1,
   \ },
   \ ale#fixers#ktlint#Fix(bufnr(''))
 
@@ -37,8 +36,7 @@ Execute(The ktlint callback should include custom ktlint options):
   \   'command': ale#Escape('xxxinvalid')
   \     . ' ' . g:ale_kotlin_ktlint_options
   \     . ' --ruleset /path/to/custom/ruleset.jar'
-  \     . ' %t'
+  \     . ' --stdin'
   \     . ' --format',
-  \   'read_temporary_file': 1,
   \ },
   \ ale#fixers#ktlint#Fix(bufnr(''))
