@@ -2600,6 +2600,7 @@ documented in additional help files.
     sasslint..............................|ale-scss-sasslint|
     stylelint.............................|ale-scss-stylelint|
   sh......................................|ale-sh-options|
+    bashate...............................|ale-sh-bashate|
     sh-language-server....................|ale-sh-language-server|
     shell.................................|ale-sh-shell|
     shellcheck............................|ale-sh-shellcheck|
