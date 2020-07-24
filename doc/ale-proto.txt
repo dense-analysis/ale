@@ -1,5 +1,5 @@
 ===============================================================================
-ALE Proto Integration                                         *ale-proto-options*
+ALE Proto Integration                                       *ale-proto-options*
 
 
 ===============================================================================
@@ -15,7 +15,7 @@ To enable `.proto` file linting, update |g:ale_linters| as appropriate:
   let g:ale_linters = {'proto': ['protoc-gen-lint']}
 <
 ===============================================================================
-protoc-gen-lint                                      *ale-proto-protoc-gen-lint*
+protoc-gen-lint                                     *ale-proto-protoc-gen-lint*
 
   The linter is a plugin for the `protoc` binary. As long as the binary resides
   in the system path, `protoc` will find it.
