@@ -70,6 +70,25 @@ Execute(eslint.js executables should be run with node on Windows):
     \ ale#handlers#eslint#GetCommand(bufnr(''))
   endif
 
+Execute(eslint.js should be run from containing project with eslint):
+  call ale#test#SetFilename('eslint-test-files/react-app/subdir-with-package-json/testfile.js')
+
+  " We have to execute the file with node.
+  if has('win32')
+    AssertEqual
+    \ ale#path#CdString(ale#path#Simplify(g:dir . '/eslint-test-files/react-app'))
+    \   . ale#Escape('node.exe') . ' '
+    \   . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+    \   . ' -f json --stdin --stdin-filename %s',
+    \ ale#handlers#eslint#GetCommand(bufnr(''))
+  else
+    AssertEqual
+    \ ale#path#CdString(ale#path#Simplify(g:dir . '/eslint-test-files/react-app'))
+    \   . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
+    \   . ' -f json --stdin --stdin-filename %s',
+    \ ale#handlers#eslint#GetCommand(bufnr(''))
+  endif
+
 Execute(eslint.js executables can be run outside project dir):
   " Set filename above eslint-test-files (which contains node_modules)
   call ale#test#SetFilename('testfile.js')

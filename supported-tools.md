@@ -41,6 +41,7 @@ formatting.
 * Awk
   * [gawk](https://www.gnu.org/software/gawk/)
 * Bash
+  * [bashate](https://github.com/openstack/bashate)
   * [language-server](https://github.com/mads-hartmann/bash-language-server)
   * shell [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set)
   * [shellcheck](https://www.shellcheck.net/)
@@ -520,3 +521,5 @@ formatting.
   * [yamllint](https://yamllint.readthedocs.io/)
 * YANG
   * [yang-lsp](https://github.com/theia-ide/yang-lsp)
+* Zig
+  * [zls](https://github.com/zigtools/zls)
