@@ -31,6 +31,7 @@ Notes:
 * Awk
   * `gawk`
 * Bash
+  * `bashate`
   * `language-server`
   * `shell` (-n flag)
   * `shellcheck`
@@ -164,6 +165,7 @@ Notes:
   * `gosimple`!!
   * `gotype`!!
   * `go vet`!!
+  * `revive`!!
   * `staticcheck`!!
 * GraphQL
   * `eslint`
@@ -509,3 +511,5 @@ Notes:
   * `yamllint`
 * YANG
   * `yang-lsp`
+* Zig
+  * `zls`
