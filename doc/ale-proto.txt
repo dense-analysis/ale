@@ -31,7 +31,7 @@ g:ale_proto_protoc_gen_lint_options       *g:ale_proto_protoc_gen_lint_options*
 
 
 ===============================================================================
-clang-format                                              *ale-proto-clangformat*
+clang-format                                            *ale-proto-clangformat*
 
 See |ale-c-clangformat| for information about the available options.
 Note that the C options are also used for C++.
