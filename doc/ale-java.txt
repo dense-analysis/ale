@@ -172,7 +172,7 @@ The javalsp linter automatically detects external depenencies for Maven and
 Gradle projects. In case the javalsp fails to detect some of them, you can
 specify them setting a dictionary to |g:ale_java_javalsp_config| variable.
 >
-  let g:ale_java_javalsp_executable =
+  let g:ale_java_javalsp_config =
   \ {
   \   'java': {
   \     'externalDependencies': [
