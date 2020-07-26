@@ -21,3 +21,16 @@ Execute(The astyle callback should return the correct default values):
   \     . ' %t',
   \ },
   \ ale#fixers#astyle#Fix(bufnr(''))
+
+Execute(The astyle callback should support cpp files):
+  call ale#test#SetFilename('../cpp_files/dummy.cpp')
+  let g:ale_cpp_astyle_executable = 'xxxinvalid'
+  set filetype=cpp " The test fails without this
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' %t',
+  \ },
+  \ ale#fixers#astyle#Fix(bufnr(''))
