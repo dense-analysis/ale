@@ -62,6 +62,7 @@ Notes:
   * `mcsc`!!
   * `uncrustify`
 * C++ (filetype cpp)
+  * `astyle`
   * `ccls`
   * `clang`
   * `clangcheck`!!
