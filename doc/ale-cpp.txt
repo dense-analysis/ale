@@ -14,6 +14,17 @@ The following C options also apply to some C++ linters too.
 
 
 ===============================================================================
+astyle                                                         *ale-cpp-astyle*
+
+g:ale_cpp_astyle_executable                       *g:ale_cpp_astyle_executable*
+                                                  *b:ale_cpp_astyle_executable*
+  Type: |String|
+  Default: `'astyle'`
+
+  This variable can be changed to use a different executable for astyle.
+
+
+===============================================================================
 clang                                                           *ale-cpp-clang*
 
 g:ale_cpp_clang_executable                         *g:ale_cpp_clang_executable*
