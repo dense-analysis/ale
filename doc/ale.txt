@@ -2307,6 +2307,7 @@ documented in additional help files.
     cmakelint.............................|ale-cmake-cmakelint|
     cmake-format..........................|ale-cmake-cmakeformat|
   cpp.....................................|ale-cpp-options|
+    astyle................................|ale-cpp-astyle|
     clang.................................|ale-cpp-clang|
     clangd................................|ale-cpp-clangd|
     clangcheck............................|ale-cpp-clangcheck|
