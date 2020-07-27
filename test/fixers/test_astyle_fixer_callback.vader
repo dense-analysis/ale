@@ -20,7 +20,7 @@ Execute(The astyle callback should return the correct default values):
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_c_astyle_executable)
-  \     . ' --stdin=' . ale#Escape(targetfile)
+  \     . ' --stdin='
   \ },
   \ ale#fixers#astyle#Fix(bufnr(''))
 
@@ -32,7 +32,7 @@ Execute(The astyle callback should support cpp files):
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_cpp_astyle_executable)
-  \     . ' --stdin=' . ale#Escape(targetfile)
+  \     . ' --stdin='
   \ },
   \ ale#fixers#astyle#Fix(bufnr(''))
 
@@ -45,8 +45,8 @@ Execute(The astyle callback should support cpp files with option file set):
   AssertEqual
   \ {
   \   'command': ale#Escape('invalidpp')
-  \     . ' --stdin=' . ale#Escape(targetfile)
   \     . ' --project=' . g:ale_cpp_astyle_options
+  \     . ' --stdin='
   \ },
   \ ale#fixers#astyle#Fix(bufnr(''))
 
@@ -59,7 +59,7 @@ Execute(The astyle callback should return the correct default values with an opt
   AssertEqual
   \ {
   \   'command': ale#Escape('xxxinvalid')
-  \     . ' --stdin=' . ale#Escape(targetfile)
   \     . ' --project=' . g:ale_c_astyle_options
+  \     . ' --stdin='
   \ },
   \ ale#fixers#astyle#Fix(bufnr(''))

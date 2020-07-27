@@ -21,10 +21,11 @@ function! ale#fixers#astyle#Fix(buffer) abort
     let l:executable = ale#fixers#astyle#Var(a:buffer, 'executable')
     let l:filename = ale#Escape(bufname(a:buffer))
     let l:options = ale#fixers#astyle#Var(a:buffer, 'options')
-    let l:command = ' --stdin=' . l:filename
+    let l:command = ' --stdin='
 
     return {
-    \   'command': ale#Escape(l:executable) . l:command
+    \   'command': ale#Escape(l:executable)
     \     . (empty(l:options) ? '' : ' --project=' . l:options)
+    \     . l:command
     \}
 endfunction
