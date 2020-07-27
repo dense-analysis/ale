@@ -1,5 +1,6 @@
 Before:
   Save g:ale_c_astyle_executable
+  Save g:ale_c_astyle_options
 
   " Use an invalid global executable, so we don't match it.
   let g:ale_c_astyle_executable = 'xxxinvalid'
@@ -35,3 +36,30 @@ Execute(The astyle callback should support cpp files):
   \ },
   \ ale#fixers#astyle#Fix(bufnr(''))
 
+Execute(The astyle callback should support cpp files with option file set):
+  call ale#test#SetFilename('../cpp_files/dummy.cpp')
+  let g:ale_cpp_astyle_options = '.astylerc_cpp'
+  let targetfile = '/testplugin/test/cpp_files/dummy.cpp'
+  set filetype=cpp " The test fails without this
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('invalidpp')
+  \     . ' --stdin=' . ale#Escape(targetfile)
+  \     . ' --project=' . g:ale_cpp_astyle_options
+  \ },
+  \ ale#fixers#astyle#Fix(bufnr(''))
+
+
+Execute(The astyle callback should return the correct default values with an option file set):
+  call ale#test#SetFilename('../c_files/testfile.c')
+  let targetfile = '/testplugin/test/c_files/testfile.c'
+  let g:ale_c_astyle_options = '.astylerc'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' --stdin=' . ale#Escape(targetfile)
+  \     . ' --project=' . g:ale_c_astyle_options
+  \ },
+  \ ale#fixers#astyle#Fix(bufnr(''))
