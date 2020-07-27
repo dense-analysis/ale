@@ -3,6 +3,7 @@ Before:
 
   " Use an invalid global executable, so we don't match it.
   let g:ale_c_astyle_executable = 'xxxinvalid'
+  let g:ale_cpp_astyle_executable = 'invalidpp'
   
   call ale#test#SetDirectory('/testplugin/test/fixers')
 
@@ -13,24 +14,24 @@ After:
 
 Execute(The astyle callback should return the correct default values):
   call ale#test#SetFilename('../c_files/testfile.c')
+  let targetfile = '/testplugin/test/c_files/testfile.c'
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
-  \   'command': ale#Escape('xxxinvalid')
-  \     . ' %t',
+  \   'command': ale#Escape(g:ale_c_astyle_executable)
+  \     . ' --stdin=' . ale#Escape(targetfile)
   \ },
   \ ale#fixers#astyle#Fix(bufnr(''))
 
 Execute(The astyle callback should support cpp files):
   call ale#test#SetFilename('../cpp_files/dummy.cpp')
-  let g:ale_cpp_astyle_executable = 'xxxinvalid'
+  let targetfile = '/testplugin/test/cpp_files/dummy.cpp'
   set filetype=cpp " The test fails without this
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
-  \   'command': ale#Escape('xxxinvalid')
-  \     . ' %t',
+  \   'command': ale#Escape(g:ale_cpp_astyle_executable)
+  \     . ' --stdin=' . ale#Escape(targetfile)
   \ },
   \ ale#fixers#astyle#Fix(bufnr(''))
+

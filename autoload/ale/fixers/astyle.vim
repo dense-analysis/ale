@@ -18,10 +18,10 @@ endfunction
 
 function! ale#fixers#astyle#Fix(buffer) abort
     let l:executable = ale#fixers#astyle#Var(a:buffer, 'executable')
-    let l:command = ' %t'
+    let l:filename = ale#Escape(bufname(a:buffer))
+    let l:command = ' --stdin=' . l:filename
 
     return {
-    \   'command': ale#Escape(l:executable) . l:command,
-    \   'read_temporary_file': 1,
+    \   'command': ale#Escape(l:executable) . l:command
     \}
 endfunction
