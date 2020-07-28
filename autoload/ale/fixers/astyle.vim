@@ -4,11 +4,12 @@
 function! s:set_variables() abort
     for l:ft in ['c', 'cpp']
         call ale#Set(l:ft . '_astyle_executable', 'astyle')
-        call ale#Set(l:ft . '_astyle_options', '')
+        call ale#Set(l:ft . '_astyle_project_options', '')
     endfor
 endfunction
 
 call s:set_variables()
+
 
 function! ale#fixers#astyle#Var(buffer, name) abort
     let l:ft = getbufvar(str2nr(a:buffer), '&filetype')
@@ -20,7 +21,7 @@ endfunction
 function! ale#fixers#astyle#Fix(buffer) abort
     let l:executable = ale#fixers#astyle#Var(a:buffer, 'executable')
     let l:filename = ale#Escape(bufname(a:buffer))
-    let l:options = ale#fixers#astyle#Var(a:buffer, 'options')
+    let l:options = ale#fixers#astyle#Var(a:buffer, 'project_options')
     let l:command = ' --stdin='
 
     return {
