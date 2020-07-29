@@ -1,10 +1,13 @@
 Before:
   Save g:ale_c_astyle_executable
   Save g:ale_c_astyle_project_options
+  Save g:ale_cpp_astyle_project_options
 
   " Use an invalid global executable, so we don't match it.
   let g:ale_c_astyle_executable = 'xxxinvalid'
   let g:ale_cpp_astyle_executable = 'invalidpp'
+  let g:ale_c_astyle_project_options = ''
+  let g:ale_cpp_astyle_project_options = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
 
@@ -14,6 +17,8 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The astyle callback should return the correct default values):
+  " Because this file doesn't exist, no astylrc config
+  " exists near it. Therefore, project_options is empty.
   call ale#test#SetFilename('../c_files/testfile.c')
 
   AssertEqual
@@ -24,6 +29,8 @@ Execute(The astyle callback should return the correct default values):
   \ ale#fixers#astyle#Fix(bufnr(''))
 
 Execute(The astyle callback should support cpp files):
+  " Because this file doesn't exist, no astylrc config
+  " exists near it. Therefore, project_options is empty.
   call ale#test#SetFilename('../cpp_files/dummy.cpp')
   set filetype=cpp " The test fails without this
 
