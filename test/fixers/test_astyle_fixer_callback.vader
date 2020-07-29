@@ -49,7 +49,7 @@ Execute(The astyle callback should support cpp files with option file set):
 
 Execute(The astyle callback should return the correct default values with an option file set):
   call ale#test#SetFilename('../c_files/testfile.c')
-  let g:ale_c_astyle_project_options = '.astylerc'
+  let g:ale_c_astyle_project_options = '.astylerc_c'
 
   AssertEqual
   \ {
