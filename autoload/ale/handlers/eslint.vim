@@ -5,6 +5,7 @@ let s:executables = [
 \   'node_modules/.bin/eslint_d',
 \   'node_modules/eslint/bin/eslint.js',
 \   'node_modules/.bin/eslint',
+\   '.yarn/sdks/eslint/bin/eslint',
 \]
 let s:sep = has('win32') ? '\' : '/'
 
