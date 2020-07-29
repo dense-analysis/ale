@@ -45,6 +45,7 @@ Notes:
   * `shellcheck`
   * `shfmt`
 * C
+  * `astyle`
   * `ccls`
   * `clang`
   * `clangd`
@@ -62,6 +63,7 @@ Notes:
   * `mcsc`!!
   * `uncrustify`
 * C++ (filetype cpp)
+  * `astyle`
   * `ccls`
   * `clang`
   * `clangcheck`!!

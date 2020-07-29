@@ -54,6 +54,7 @@ formatting.
   * [shellcheck](https://www.shellcheck.net/)
   * [shfmt](https://github.com/mvdan/sh)
 * C
+  * [astyle](http://astyle.sourceforge.net/)
   * [ccls](https://github.com/MaskRay/ccls)
   * [clang](http://clang.llvm.org/)
   * [clangd](https://clang.llvm.org/extra/clangd.html)
@@ -71,6 +72,7 @@ formatting.
   * [mcsc](http://www.mono-project.com/docs/about-mono/languages/csharp/) :floppy_disk: see:`help ale-cs-mcsc` for details and configuration
   * [uncrustify](https://github.com/uncrustify/uncrustify)
 * C++ (filetype cpp)
+  * [astyle](http://astyle.sourceforge.net/)
   * [ccls](https://github.com/MaskRay/ccls)
   * [clang](http://clang.llvm.org/)
   * [clangcheck](http://clang.llvm.org/docs/ClangCheck.html) :floppy_disk:
