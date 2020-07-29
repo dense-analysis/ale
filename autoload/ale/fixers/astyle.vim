@@ -25,7 +25,7 @@ function! ale#fixers#astyle#FindProjectOptions(buffer) abort
     " If user has set project options variable then use it and skip any searching.
     " This would allow users to use project files named differently than .astylerc.
     if !empty(l:proj_options)
-         return l:proj_options
+        return l:proj_options
     endif
 
     " Try to find nearest .astylerc file.
