@@ -65,3 +65,14 @@ Execute(The astyle callback should return the correct default values with an opt
   \     . ' --stdin='
   \ },
   \ ale#fixers#astyle#Fix(bufnr(''))
+
+Execute(The astyle callback should find nearest default option file _astylrc):
+  call ale#test#SetFilename('../test_c_projects/makefile_project/subdir/file.c')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' --project=_astylerc'
+  \     . ' --stdin='
+  \ },
+  \ ale#fixers#astyle#Fix(bufnr(''))

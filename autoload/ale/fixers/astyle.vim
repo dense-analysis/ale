@@ -18,15 +18,42 @@ function! ale#fixers#astyle#Var(buffer, name) abort
     return ale#Var(a:buffer, l:ft . '_astyle_' . a:name)
 endfunction
 
+" Try to find a project options file.
+function! ale#fixers#astyle#FindProjectOptions(buffer) abort
+    let l:proj_options = ale#fixers#astyle#Var(a:buffer, 'project_options')
+
+    " If user has set project options variable then use it and skip any searching.
+    " This would allow users to use project files named differently than .astylerc.
+    if !empty(l:proj_options)
+         return l:proj_options
+    endif
+
+    " Try to find nearest .astylerc file.
+    let l:proj_options = fnamemodify(ale#path#FindNearestFile(a:buffer, '.astylerc'), ':t')
+
+    if !empty(l:proj_options)
+        return l:proj_options
+    endif
+
+    " Try to find nearest _astylerc file.
+    let l:proj_options = fnamemodify(ale#path#FindNearestFile(a:buffer, '_astylerc'), ':t')
+
+    if !empty(l:proj_options)
+        return l:proj_options
+    endif
+
+    " If no project options file is found return an empty string.
+    return ''
+endfunction
+
 function! ale#fixers#astyle#Fix(buffer) abort
     let l:executable = ale#fixers#astyle#Var(a:buffer, 'executable')
-    let l:filename = ale#Escape(bufname(a:buffer))
-    let l:options = ale#fixers#astyle#Var(a:buffer, 'project_options')
+    let l:proj_options = ale#fixers#astyle#FindProjectOptions(a:buffer)
     let l:command = ' --stdin='
 
     return {
     \   'command': ale#Escape(l:executable)
-    \     . (empty(l:options) ? '' : ' --project=' . l:options)
+    \     . (empty(l:proj_options) ? '' : ' --project=' . l:proj_options)
     \     . l:command
     \}
 endfunction
