@@ -4,21 +4,74 @@ Before:
 After:
   call ale#linter#Reset()
 
-Execute(The Markdownlint handler should parse output correctly):
+Execute(The Markdownlint handler should parse pre v0.19.0 output with single digit line correctly):
   AssertEqual
   \ [
   \   {
   \     'lnum': 1,
-  \     'text': '(MD002/first-header-h1) First header should be a top level header [Expected: h1; Actual: h2]',
-  \     'type': 'W'
-  \   },
-  \   {
-  \     'lnum': 298,
-  \     'text': '(MD033/no-inline-html) Inline HTML [Element: p]',
+  \     'code': 'MD013/line-length',
+  \     'text': 'Line length [Expected: 80; Actual: 114]',
   \     'type': 'W'
   \   }
   \ ],
   \ ale#handlers#markdownlint#Handle(0, [
-  \ 'README.md: 1: MD002/first-header-h1 First header should be a top level header [Expected: h1; Actual: h2]',
-  \ 'README.md: 298: MD033/no-inline-html Inline HTML [Element: p]'
+  \ 'README.md: 1: MD013/line-length Line length [Expected: 80; Actual: 114]'
+  \ ])
+
+Execute(The Markdownlint handler should parse pre v0.19.0 output with multi digit line correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 100,
+  \     'code': 'MD013/line-length',
+  \     'text': 'Line length [Expected: 80; Actual: 114]',
+  \     'type': 'W'
+  \   }
+  \ ],
+  \ ale#handlers#markdownlint#Handle(0, [
+  \ 'README.md: 100: MD013/line-length Line length [Expected: 80; Actual: 114]'
+  \ ])
+
+Execute(The Markdownlint handler should parse post v0.19.0 output with single digit line correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'code': 'MD013/line-length',
+  \     'text': 'Line length [Expected: 80; Actual: 114]',
+  \     'type': 'W'
+  \   }
+  \ ],
+  \ ale#handlers#markdownlint#Handle(0, [
+  \ 'README.md:1 MD013/line-length Line length [Expected: 80; Actual: 114]'
+  \ ])
+
+Execute(The Markdownlint handler should parse post v0.19.0 output with multi digit line correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 100,
+  \     'code': 'MD013/line-length',
+  \     'text': 'Line length [Expected: 80; Actual: 114]',
+  \     'type': 'W'
+  \   }
+  \ ],
+  \ ale#handlers#markdownlint#Handle(0, [
+  \ 'README.md:100 MD013/line-length Line length [Expected: 80; Actual: 114]'
+  \ ])
+
+
+Execute(The Markdownlint handler should parse post v0.22.0 output with column correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 10,
+  \     'col':  20,
+  \     'code': 'MD013/line-length',
+  \     'text': 'Line length [Expected: 80; Actual: 114]',
+  \     'type': 'W'
+  \   }
+  \ ],
+  \ ale#handlers#markdownlint#Handle(0, [
+  \ 'README.md:10:20 MD013/line-length Line length [Expected: 80; Actual: 114]'
   \ ])
