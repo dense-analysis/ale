@@ -81,3 +81,16 @@ Execute(The astyle callback should find nearest default option file _astylrc):
   \     . ' --stdin=' . ale#Escape(targetfile)
   \ },
   \ ale#fixers#astyle#Fix(bufnr(''))
+
+Execute(The astyle callback should find .astylrc in the same directory as src):
+  call ale#test#SetFilename('../test_cpp_project/dummy.cpp')
+  set filetype=cpp " The test fails without this
+  let targetfile = bufname(bufnr('%'))
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('invalidpp')
+  \     . ' --project=.astylerc'
+  \     . ' --stdin=' . ale#Escape(targetfile)
+  \ },
+  \ ale#fixers#astyle#Fix(bufnr(''))
