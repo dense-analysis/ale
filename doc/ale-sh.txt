@@ -22,7 +22,7 @@ g:ale_sh_bashate_options                             *g:ale_sh_bashate_options*
   example to ignore the indentation rule:
 
 >
-  let g:ale_sh_shellcheck_options = '-i E003'
+  let g:ale_sh_bashate_options = '-i E003'
 <
 
 ===============================================================================
