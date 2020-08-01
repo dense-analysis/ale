@@ -49,7 +49,7 @@ endfunction
 function! ale#fixers#astyle#Fix(buffer) abort
     let l:executable = ale#fixers#astyle#Var(a:buffer, 'executable')
     let l:proj_options = ale#fixers#astyle#FindProjectOptions(a:buffer)
-    let l:command = ' --stdin='
+    let l:command = ' --stdin=' . ale#Escape(expand('#' . a:buffer))
 
     return {
     \   'command': ale#Escape(l:executable)
