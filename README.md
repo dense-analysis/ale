@@ -231,6 +231,9 @@ ALE supports "hover" information for printing brief information about symbols at
 the cursor taken from Language Server Protocol linters and `tsserver` with the
 `ALEHover` command.
 
+Truncated information will be displayed when the cursor rests on a symbol by
+default, as long as there are no problems on the same line.
+
 The information can be displayed in a `balloon` tooltip in Vim or GVim by
 hovering your mouse over symbols. Mouse hovering is enabled by default in GVim,
 and needs to be configured for Vim 8.1+ in terminals.

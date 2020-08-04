@@ -516,6 +516,10 @@ at the cursor taken from LSP linters. The following commands are supported:
 
 |ALEHover| - Print information about the symbol at the cursor.
 
+Truncated information will be displayed when the cursor rests on a symbol by
+default, as long as there are no problems on the same line. You can disable
+this behavior by setting |g:ale_hover_cursor| to `0`.
+
 If |g:ale_set_balloons| is set to `1` and your version of Vim supports the
 |balloon_show()| function, then "hover" information also show up when you move
 the mouse over a symbol in a buffer. Diagnostic information will take priority
@@ -1048,9 +1052,27 @@ g:ale_history_log_output                             *g:ale_history_log_output*
   if you want to save on some memory usage.
 
 
+g:ale_hover_cursor                                         *g:ale_hover_cursor*
+
+  Type: |Number|
+  Default: `1`
+
+  If set to `1`, ALE will show truncated information in the echo line about
+  the symbol at the cursor automatically when the |CursorHold| event is fired.
+  The delay before requesting hover information is based on 'updatetime', as
+  with all |CursorHold| events.
+
+  If there's a problem on the line where the cursor is resting, ALE will not
+  show any hover information.
+
+  See |ale-hover| for more information on hover information.
+
+  This setting must be set to `1` before ALE is loaded for this behavior
+  to be enabled. See |ale-lint-settings-on-startup|.
+
+
 g:ale_hover_to_preview                                 *g:ale_hover_to_preview*
                                                        *b:ale_hover_to_preview*
-
   Type: |Number|
   Default: `0`
 
