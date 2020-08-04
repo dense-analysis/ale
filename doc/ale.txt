@@ -127,7 +127,7 @@ their relevant options.
 * By showing balloons for your mouse cursor        - |g:ale_set_balloons|
 
 Please consult the documentation for each option, which can reveal some other
-ways of tweaking the behaviour of each way of displaying problems. You can
+ways of tweaking the behavior of each way of displaying problems. You can
 disable or enable whichever options you prefer.
 
 Most settings can be configured for each buffer. (|b:| instead of |g:|),
@@ -2885,7 +2885,7 @@ ALELast                                                               *ALELast*
   the last or first warning or error in the file, respectively.
 
   `ALEPrevious` and `ALENext` take optional flags arguments to custom their
-  behaviour :
+  behavior :
   `-wrap` enable wrapping around the file
   `-error`, `-warning` and `-info` enable jumping to errors, warnings or infos
     respectively, ignoring anything else. They are mutually exclusive and if
@@ -3527,7 +3527,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
   contents of the buffer being checked. All occurrences of `%t` in command
   strings will reference the one temporary file. The temporary file will be
   created inside a temporary directory, and the entire temporary directory
-  will be automatically deleted, following the behaviour of
+  will be automatically deleted, following the behavior of
   |ale#command#ManageDirectory|. This option can be used for some linters which
   do not support reading from stdin.
 
@@ -3552,7 +3552,6 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
   be used to replace those characters to avoid formatting issues.
 
                                                   *ale-linter-loading-behavior*
-                                                 *ale-linter-loading-behaviour*
 
   Linters for ALE will be loaded by searching |runtimepath| in the following
   format: >

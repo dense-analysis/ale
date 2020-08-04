@@ -102,7 +102,7 @@ programs for checking the syntax and semantics of your programs. By default,
 linters will be re-run in the background to check your syntax when you open
 new buffers or as you make edits to your files.
 
-The behaviour of linting can be configured with a variety of options,
+The behavior of linting can be configured with a variety of options,
 documented in [the Vim help file](doc/ale.txt). For more information on the
 options ALE offers, consult `:help ale-options` for global options and `:help
 ale-integration-options` for options specified to particular linters.
@@ -738,7 +738,7 @@ while you type. ALE uses a timeout which is cancelled and reset every time you
 type, and this delay can be increased so linters are run less often. See
 `:help g:ale_lint_delay` for more information.
 
-If you don't wish to run linters while you type, you can disable that behaviour.
+If you don't wish to run linters while you type, you can disable that behavior.
 Set `g:ale_lint_on_text_changed` to `never`. You won't get as frequent error
 checking, but ALE shouldn't block your ability to edit a document after you save
 a file, so the asynchronous nature of the plugin will still be an advantage.
