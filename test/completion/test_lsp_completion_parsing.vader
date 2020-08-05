@@ -526,3 +526,73 @@ Execute(Should handle completion messages with the deprecated insertText attribu
   \     ],
   \   },
   \ })
+
+Execute(Should handle completion messages with additionalTextEdits):
+  AssertEqual
+  \ [
+  \   {
+  \     'word': 'next_callback',
+  \     'menu': 'PlayTimeCallback',
+  \     'info': '',
+  \     'kind': 'v',
+  \     'icase': 1,
+  \     'user_data': json_encode({
+  \       'codeActions': [
+  \         {
+  \           'description': 'completion',
+  \           'changes': [
+  \             {
+  \               'fileName': expand('#' . bufnr('') . ':p'),
+  \               'textChanges': [
+  \                 {
+  \                   'start': {
+  \                     'line': 11,
+  \                     'offset': 2,
+  \                   },
+  \                   'end': {
+  \                     'line': 13,
+  \                     'offset': 4,
+  \                   },
+  \                   'newText': 'from "module" import next_callback',
+  \                 },
+  \               ],
+  \             },
+  \           ],
+  \         },
+  \       ],
+  \     }),
+  \   },
+  \ ],
+  \ ale#completion#ParseLSPCompletions({
+  \   'id': 226,
+  \   'jsonrpc': '2.0',
+  \   'result': {
+  \     'isIncomplete': v:false,
+  \     'items': [
+  \       {
+  \         'detail': 'PlayTimeCallback',
+  \         'filterText': 'next_callback',
+  \         'insertText': 'next_callback',
+  \         'insertTextFormat': 1,
+  \         'kind': 6,
+  \         'label': ' next_callback',
+  \         'sortText': '3ee19999next_callback',
+  \         'additionalTextEdits': [
+  \           {
+  \             'range': {
+  \               'start': {
+  \                 'line': 10,
+  \                 'character': 1,
+  \               },
+  \               'end': {
+  \                 'line': 12,
+  \                 'character': 3,
+  \               },
+  \             },
+  \             'newText': 'from "module" import next_callback',
+  \           },
+  \         ],
+  \       },
+  \     ],
+  \   },
+  \ })

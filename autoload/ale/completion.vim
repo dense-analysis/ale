@@ -523,13 +523,46 @@ function! ale#completion#ParseLSPCompletions(response) abort
             let l:doc = l:doc.value
         endif
 
-        call add(l:results, {
+        let l:result = {
         \   'word': l:word,
         \   'kind': ale#completion#GetCompletionSymbols(get(l:item, 'kind', '')),
         \   'icase': 1,
         \   'menu': get(l:item, 'detail', ''),
         \   'info': (type(l:doc) is v:t_string ? l:doc : ''),
-        \})
+        \}
+
+        if has_key(l:item, 'additionalTextEdits')
+            let l:text_changes = []
+
+            for l:edit in l:item.additionalTextEdits
+                let l:range = l:edit.range
+                call add(l:text_changes, {
+                \ 'start': {
+                \   'line': l:range.start.line + 1,
+                \   'offset': l:range.start.character + 1,
+                \ },
+                \ 'end': {
+                \   'line': l:range.end.line + 1,
+                \   'offset': l:range.end.character + 1,
+                \ },
+                \ 'newText': l:edit.newText,
+                \})
+            endfor
+
+            let l:changes = [{
+            \ 'fileName': expand('#' . l:buffer . ':p'),
+            \ 'textChanges': l:text_changes,
+            \}]
+            \
+            let l:result.user_data = json_encode({
+            \   'codeActions': [{
+            \       'description': 'completion',
+            \       'changes': l:changes,
+            \   }],
+            \ })
+        endif
+
+        call add(l:results, l:result)
     endfor
 
     if has_key(l:info, 'prefix')
