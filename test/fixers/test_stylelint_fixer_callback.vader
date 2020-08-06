@@ -13,8 +13,7 @@ Execute(The stylelint callback should return the correct default values):
   \   'command': ale#path#CdString(expand('%:p:h'))
   \     . (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/stylelint/bin/stylelint.js'))
-  \     . ' %t'
-  \     . ' --fix',
+  \     . ' --fix --stdin --stdin-filename %s',
   \ }
 
 Execute(The stylelint callback should include custom stylelint options):
@@ -27,7 +26,5 @@ Execute(The stylelint callback should include custom stylelint options):
   \   'command': ale#path#CdString(expand('%:p:h'))
   \     . (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/stylelint/bin/stylelint.js'))
-  \     . ' %t'
-  \     . ' --cache'
-  \     . ' --fix',
+  \     . ' --cache --fix --stdin --stdin-filename %s',
   \ }
