@@ -106,7 +106,7 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
                 \&& ale#Var(l:options.buffer, 'set_balloons')
                     call balloon_show(l:str)
                 elseif get(l:options, 'truncated_echo', 0)
-                    call ale#cursor#TruncatedEcho(split(a:response.body.displayString, "\n")[0])
+                    call ale#cursor#TruncatedEcho(split(l:str, "\n")[0])
                 elseif g:ale_hover_to_preview
                     call ale#preview#Show(split(l:str, "\n"), {
                     \   'filetype': 'ale-preview.message',
