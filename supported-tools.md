@@ -492,6 +492,7 @@ formatting.
 * VALA
   * [uncrustify](https://github.com/uncrustify/uncrustify)
 * Verilog
+  * [hdl-checker](https://pypi.org/project/hdl-checker)
   * [iverilog](https://github.com/steveicarus/iverilog)
   * [verilator](http://www.veripool.org/projects/verilator/wiki/Intro)
   * [vlog](https://www.mentor.com/products/fv/questa/)

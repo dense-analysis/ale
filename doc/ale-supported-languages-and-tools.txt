@@ -483,6 +483,7 @@ Notes:
 * VALA
   * `uncrustify`
 * Verilog
+  * `hdl-checker`
   * `iverilog`
   * `verilator`
   * `vlog`
