@@ -91,11 +91,12 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
 
         if type(l:result) is v:t_dict
             " If the result is an object, then it's markup content.
-            let l:result = [l:result.value]
+            let l:result = has_key(l:result, 'value') ? [l:result.value] : []
         endif
 
         if type(l:result) is v:t_list
             " Replace objects with text values.
+            call filter(l:result, '!(type(v:val) is v:t_dict && !has_key(v:val, ''value''))')
             call map(l:result, 'type(v:val) is v:t_string ? v:val : v:val.value')
             let l:str = join(l:result, "\n")
             let l:str = substitute(l:str, '^\s*\(.\{-}\)\s*$', '\1', '')
