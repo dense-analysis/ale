@@ -4,6 +4,10 @@
 Before:
   call ale#assert#SetUpLinterTest('c', 'ccls')
 
+  Save b:ale_c_build_dir_names
+  Save b:ale_c_ccls_executable
+  Save b:ale_c_ccls_init_options
+
 After:
   call ale#assert#TearDownLinterTest()
 
@@ -47,3 +51,19 @@ Execute(The initialization options should be configurable):
   let b:ale_c_ccls_init_options = { 'cacheDirectory': '/tmp/ccls' }
 
   AssertLSPOptions { 'cacheDirectory': '/tmp/ccls' }
+
+Execute(The compile command database should be detected correctly):
+  call ale#test#SetFilename('ccls_paths/with_ccls/dummy.c')
+
+  AssertLSPOptions {}
+
+  call ale#test#SetFilename('ccls_paths/with_compile_commands_json/dummy.c')
+
+  AssertLSPOptions { 'compilationDatabaseDirectory':
+  \  ale#path#Simplify(g:dir . '/ccls_paths/with_compile_commands_json') }
+
+  call ale#test#SetFilename('ccls_paths/with_build_dir/dummy.c')
+  let b:ale_c_build_dir_names = ['unusual_build_dir_name']
+
+  AssertLSPOptions { 'compilationDatabaseDirectory':
+  \  ale#path#Simplify(g:dir . '/ccls_paths/with_build_dir/unusual_build_dir_name') }

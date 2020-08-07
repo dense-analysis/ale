@@ -127,7 +127,7 @@ their relevant options.
 * By showing balloons for your mouse cursor        - |g:ale_set_balloons|
 
 Please consult the documentation for each option, which can reveal some other
-ways of tweaking the behaviour of each way of displaying problems. You can
+ways of tweaking the behavior of each way of displaying problems. You can
 disable or enable whichever options you prefer.
 
 Most settings can be configured for each buffer. (|b:| instead of |g:|),
@@ -515,6 +515,10 @@ ALE supports "hover" information for printing brief information about symbols
 at the cursor taken from LSP linters. The following commands are supported:
 
 |ALEHover| - Print information about the symbol at the cursor.
+
+Truncated information will be displayed when the cursor rests on a symbol by
+default, as long as there are no problems on the same line. You can disable
+this behavior by setting |g:ale_hover_cursor| to `0`.
 
 If |g:ale_set_balloons| is set to `1` and your version of Vim supports the
 |balloon_show()| function, then "hover" information also show up when you move
@@ -1048,9 +1052,27 @@ g:ale_history_log_output                             *g:ale_history_log_output*
   if you want to save on some memory usage.
 
 
+g:ale_hover_cursor                                         *g:ale_hover_cursor*
+
+  Type: |Number|
+  Default: `1`
+
+  If set to `1`, ALE will show truncated information in the echo line about
+  the symbol at the cursor automatically when the |CursorHold| event is fired.
+  The delay before requesting hover information is based on 'updatetime', as
+  with all |CursorHold| events.
+
+  If there's a problem on the line where the cursor is resting, ALE will not
+  show any hover information.
+
+  See |ale-hover| for more information on hover information.
+
+  This setting must be set to `1` before ALE is loaded for this behavior
+  to be enabled. See |ale-lint-settings-on-startup|.
+
+
 g:ale_hover_to_preview                                 *g:ale_hover_to_preview*
                                                        *b:ale_hover_to_preview*
-
   Type: |Number|
   Default: `0`
 
@@ -1268,7 +1290,7 @@ g:ale_linters                                                   *g:ale_linters*
   \   'help': [],
   \   'perl': ['perlcritic'],
   \   'perl6': [],
-  \   'python': ['flake8', 'mypy', 'pylint'],
+  \   'python': ['flake8', 'mypy', 'pylint', 'pyright'],
   \   'rust': ['cargo'],
   \   'spec': [],
   \   'text': [],
@@ -2557,6 +2579,7 @@ documented in additional help files.
     pylint................................|ale-python-pylint|
     pyls..................................|ale-python-pyls|
     pyre..................................|ale-python-pyre|
+    pyright...............................|ale-python-pyright|
     reorder-python-imports................|ale-python-reorder_python_imports|
     vulture...............................|ale-python-vulture|
     yapf..................................|ale-python-yapf|
@@ -2654,12 +2677,14 @@ documented in additional help files.
   vala....................................|ale-vala-options|
     uncrustify............................|ale-vala-uncrustify|
   verilog/systemverilog...................|ale-verilog-options|
+    hdl-checker...........................|ale-verilog-hdl-checker|
     iverilog..............................|ale-verilog-iverilog|
     verilator.............................|ale-verilog-verilator|
     vlog..................................|ale-verilog-vlog|
     xvlog.................................|ale-verilog-xvlog|
   vhdl....................................|ale-vhdl-options|
     ghdl..................................|ale-vhdl-ghdl|
+    hdl-checker...........................|ale-vhdl-hdl-checker|
     vcom..................................|ale-vhdl-vcom|
     xvhdl.................................|ale-vhdl-xvhdl|
   vim.....................................|ale-vim-options|
@@ -2864,7 +2889,7 @@ ALELast                                                               *ALELast*
   the last or first warning or error in the file, respectively.
 
   `ALEPrevious` and `ALENext` take optional flags arguments to custom their
-  behaviour :
+  behavior :
   `-wrap` enable wrapping around the file
   `-error`, `-warning` and `-info` enable jumping to errors, warnings or infos
     respectively, ignoring anything else. They are mutually exclusive and if
@@ -3506,7 +3531,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
   contents of the buffer being checked. All occurrences of `%t` in command
   strings will reference the one temporary file. The temporary file will be
   created inside a temporary directory, and the entire temporary directory
-  will be automatically deleted, following the behaviour of
+  will be automatically deleted, following the behavior of
   |ale#command#ManageDirectory|. This option can be used for some linters which
   do not support reading from stdin.
 
@@ -3531,7 +3556,6 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
   be used to replace those characters to avoid formatting issues.
 
                                                   *ale-linter-loading-behavior*
-                                                 *ale-linter-loading-behaviour*
 
   Linters for ALE will be loaded by searching |runtimepath| in the following
   format: >

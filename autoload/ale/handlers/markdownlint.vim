@@ -2,7 +2,7 @@
 " Description: Adds support for markdownlint
 
 function! ale#handlers#markdownlint#Handle(buffer, lines) abort
-    let l:pattern=': \?\(\d\+\)\(:\(\d\+\)\?\)\? \(MD\d\{3}/[A-Za-z0-9-]\+\) \(.*\)$'
+    let l:pattern=': \?\(\d\+\)\(:\(\d\+\)\?\)\? \(MD\d\{3}/[A-Za-z0-9-/]\+\) \(.*\)$'
     let l:output=[]
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)

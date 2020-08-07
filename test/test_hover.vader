@@ -133,6 +133,12 @@ Execute(LSP hover responses with markup content should be handled):
   AssertEqual ['markup'], g:echo_list
   AssertEqual {}, ale#hover#GetMap()
 
+Execute(LSP hover responses with markup content missing values should be handled):
+  call HandleValidLSPResult({'contents': {'kind': 'something'}})
+
+  AssertEqual [], g:echo_list
+  AssertEqual {}, ale#hover#GetMap()
+
 Execute(LSP hover response with lists of strings should be handled):
   call HandleValidLSPResult({'contents': [
   \  "foo\n",
@@ -145,6 +151,7 @@ Execute(LSP hover response with lists of strings should be handled):
 Execute(LSP hover response with lists of strings and marked strings should be handled):
   call HandleValidLSPResult({'contents': [
   \  {'language': 'rust', 'value': 'foo'},
+  \  {'language': 'foobar'},
   \  "bar\n",
   \]})
 

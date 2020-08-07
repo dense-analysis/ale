@@ -49,6 +49,7 @@ Before:
   Save g:ale_lint_on_save
   Save g:ale_lint_on_text_changed
   Save g:ale_pattern_options_enabled
+  Save g:ale_hover_cursor
 
   " Turn everything on by defaul for these tests.
   let g:ale_completion_enabled = 1
@@ -61,6 +62,7 @@ Before:
   let g:ale_lint_on_save = 1
   let g:ale_lint_on_text_changed = 1
   let g:ale_pattern_options_enabled = 1
+  let g:ale_hover_cursor = 1
 
 After:
   delfunction CheckAutocmd
@@ -84,6 +86,7 @@ Execute (All events should be set up when everything is on):
   \   'BufWinEnter * call ale#events#LintOnEnter(str2nr(expand(''<abuf>'')))',
   \   'BufWritePost * call ale#events#SaveEvent(str2nr(expand(''<abuf>'')))',
   \   'CursorHold * if exists(''*ale#engine#Cleanup'') | call ale#cursor#EchoCursorWarningWithDelay() | endif',
+  \   'CursorHold if exists(''*ale#lsp#Send'') | call ale#hover#ShowTruncatedMessageAtCursor() | endif',
   \   'CursorMoved * if exists(''*ale#engine#Cleanup'') | call ale#cursor#EchoCursorWarningWithDelay() | endif',
   \   'FileChangedShellPost * call ale#events#FileChangedEvent(str2nr(expand(''<abuf>'')))',
   \   'FileType * call ale#events#FileTypeEvent( str2nr(expand(''<abuf>'')), expand(''<amatch>''))',
@@ -95,9 +98,9 @@ Execute (All events should be set up when everything is on):
   \ CheckAutocmd('ALEEvents')
 
 Execute (Only the required events should be bound even if various settings are off):
+  let g:ale_enabled = 1
   let g:ale_completion_enabled = 0
   let g:ale_echo_cursor = 0
-  let g:ale_enabled = 0
   let g:ale_fix_on_save = 0
   let g:ale_lint_on_enter = 0
   let g:ale_lint_on_filetype_changed = 0
@@ -105,12 +108,35 @@ Execute (Only the required events should be bound even if various settings are o
   let g:ale_lint_on_save = 0
   let g:ale_lint_on_text_changed = 0
   let g:ale_pattern_options_enabled = 0
+  let g:ale_hover_cursor = 0
 
   AssertEqual
   \ [
   \   'BufEnter * call ale#events#ReadOrEnterEvent(str2nr(expand(''<abuf>'')))',
   \   'BufReadPost * call ale#events#ReadOrEnterEvent(str2nr(expand(''<abuf>'')))',
   \   'BufWritePost * call ale#events#SaveEvent(str2nr(expand(''<abuf>'')))',
+  \ ],
+  \ CheckAutocmd('ALEEvents')
+
+Execute (The cursor hoever event should be enabled with g:ale_hover_cursor = 1):
+  let g:ale_enabled = 1
+  let g:ale_completion_enabled = 0
+  let g:ale_echo_cursor = 0
+  let g:ale_fix_on_save = 0
+  let g:ale_lint_on_enter = 0
+  let g:ale_lint_on_filetype_changed = 0
+  let g:ale_lint_on_insert_leave = 0
+  let g:ale_lint_on_save = 0
+  let g:ale_lint_on_text_changed = 0
+  let g:ale_pattern_options_enabled = 0
+  let g:ale_hover_cursor = 1
+
+  AssertEqual
+  \ [
+  \   'BufEnter * call ale#events#ReadOrEnterEvent(str2nr(expand(''<abuf>'')))',
+  \   'BufReadPost * call ale#events#ReadOrEnterEvent(str2nr(expand(''<abuf>'')))',
+  \   'BufWritePost * call ale#events#SaveEvent(str2nr(expand(''<abuf>'')))',
+  \   'CursorHold * if exists(''*ale#lsp#Send'') | call ale#hover#ShowTruncatedMessageAtCursor() | endif',
   \ ],
   \ CheckAutocmd('ALEEvents')
 

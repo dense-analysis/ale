@@ -327,6 +327,115 @@ Execute(Code actions from LSP should be handled):
   \ ],
   \ g:code_actions
 
+Execute(DocumentChanges from LSP should be handled):
+  call ale#rename#HandleLSPResponse(1, {
+  \ 'id': 3,
+  \ 'result': {
+  \   'documentChanges': [
+  \     {
+  \       'textDocument': {
+  \         'version': 1.0,
+  \         'uri': 'file:///foo/bar/file1.ts',
+  \       },
+  \       'edits': [
+  \         {
+  \           'range': {
+  \             'start': {
+  \               'line': 1,
+  \               'character': 2,
+  \             },
+  \             'end': {
+  \               'line': 3,
+  \               'character': 4,
+  \             },
+  \           },
+  \           'newText': 'bla123',
+  \         },
+  \       ],
+  \     },
+  \   ],
+  \ },
+  \})
+
+  AssertEqual
+  \ [
+  \   {
+  \     'description': 'rename',
+  \     'changes': [
+  \       {
+  \         'fileName': '/foo/bar/file1.ts',
+  \         'textChanges': [
+  \            {
+  \              'start': {
+  \                'line': 2,
+  \                'offset': 3,
+  \              },
+  \              'end': {
+  \                'line': 4,
+  \                'offset': 5,
+  \              },
+  \              'newText': 'bla123',
+  \            },
+  \         ],
+  \       },
+  \     ],
+  \   }
+  \ ],
+  \ g:code_actions
+
+Execute(Single DocumentChange from LSP should be handled):
+  call ale#rename#HandleLSPResponse(1, {
+  \ 'id': 3,
+  \ 'result': {
+  \   'documentChanges': {
+  \     'textDocument': {
+  \       'version': 1.0,
+  \       'uri': 'file:///foo/bar/file1.ts',
+  \     },
+  \     'edits': [
+  \       {
+  \         'range': {
+  \           'start': {
+  \             'line': 1,
+  \             'character': 2,
+  \           },
+  \           'end': {
+  \             'line': 3,
+  \             'character': 4,
+  \           },
+  \         },
+  \         'newText': 'bla123',
+  \       },
+  \     ],
+  \   },
+  \ },
+  \})
+
+  AssertEqual
+  \ [
+  \   {
+  \     'description': 'rename',
+  \     'changes': [
+  \       {
+  \         'fileName': '/foo/bar/file1.ts',
+  \         'textChanges': [
+  \            {
+  \              'start': {
+  \                'line': 2,
+  \                'offset': 3,
+  \              },
+  \              'end': {
+  \                'line': 4,
+  \                'offset': 5,
+  \              },
+  \              'newText': 'bla123',
+  \            },
+  \         ],
+  \       },
+  \     ],
+  \   }
+  \ ],
+  \ g:code_actions
 Execute(LSP should perform no action when no result):
   call ale#rename#HandleLSPResponse(1, {
   \ 'id': 3,

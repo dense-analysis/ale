@@ -373,6 +373,7 @@ Notes:
   * `pylint`!!
   * `pyls`
   * `pyre`
+  * `pyright`
   * `reorder-python-imports`
   * `vulture`!!
   * `yapf`
@@ -484,6 +485,7 @@ Notes:
 * VALA
   * `uncrustify`
 * Verilog
+  * `hdl-checker`
   * `iverilog`
   * `verilator`
   * `vlog`

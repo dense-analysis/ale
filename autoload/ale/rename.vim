@@ -83,6 +83,31 @@ function! ale#rename#HandleTSServerResponse(conn_id, response) abort
     \}, v:true)
 endfunction
 
+function! s:getChanges(workspace_edit) abort
+    let l:changes = {}
+
+    if has_key(a:workspace_edit, 'changes') && !empty(a:workspace_edit.changes)
+        return a:workspace_edit.changes
+    elseif has_key(a:workspace_edit, 'documentChanges')
+        let l:document_changes = []
+
+        if type(a:workspace_edit.documentChanges) is v:t_dict
+        \ && has_key(a:workspace_edit.documentChanges, 'edits')
+            call add(l:document_changes, a:workspace_edit.documentChanges)
+        elseif type(a:workspace_edit.documentChanges) is v:t_list
+            let l:document_changes = a:workspace_edit.documentChanges
+        endif
+
+        for l:text_document_edit in l:document_changes
+            let l:filename = l:text_document_edit.textDocument.uri
+            let l:edits = l:text_document_edit.edits
+            let l:changes[l:filename] = l:edits
+        endfor
+    endif
+
+    return l:changes
+endfunction
+
 function! ale#rename#HandleLSPResponse(conn_id, response) abort
     if has_key(a:response, 'id')
     \&& has_key(s:rename_map, a:response.id)
@@ -94,9 +119,9 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
             return
         endif
 
-        let l:workspace_edit = a:response.result
+        let l:changes_map = s:getChanges(a:response.result)
 
-        if !has_key(l:workspace_edit, 'changes') || empty(l:workspace_edit.changes)
+        if empty(l:changes_map)
             call s:message('No changes received from server')
 
             return
@@ -104,8 +129,8 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
 
         let l:changes = []
 
-        for l:file_name in keys(l:workspace_edit.changes)
-            let l:text_edits = l:workspace_edit.changes[l:file_name]
+        for l:file_name in keys(l:changes_map)
+            let l:text_edits = l:changes_map[l:file_name]
             let l:text_changes = []
 
             for l:edit in l:text_edits

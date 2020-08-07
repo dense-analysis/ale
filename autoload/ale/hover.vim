@@ -42,6 +42,8 @@ function! ale#hover#HandleTSServerResponse(conn_id, response) abort
             \&& exists('*balloon_show')
             \&& ale#Var(l:options.buffer, 'set_balloons')
                 call balloon_show(a:response.body.displayString)
+            elseif get(l:options, 'truncated_echo', 0)
+                call ale#cursor#TruncatedEcho(split(a:response.body.displayString, "\n")[0])
             elseif g:ale_hover_to_preview
                 call ale#preview#Show(split(a:response.body.displayString, "\n"), {
                 \   'filetype': 'ale-preview.message',
@@ -89,11 +91,12 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
 
         if type(l:result) is v:t_dict
             " If the result is an object, then it's markup content.
-            let l:result = [l:result.value]
+            let l:result = has_key(l:result, 'value') ? [l:result.value] : []
         endif
 
         if type(l:result) is v:t_list
             " Replace objects with text values.
+            call filter(l:result, '!(type(v:val) is v:t_dict && !has_key(v:val, ''value''))')
             call map(l:result, 'type(v:val) is v:t_string ? v:val : v:val.value')
             let l:str = join(l:result, "\n")
             let l:str = substitute(l:str, '^\s*\(.\{-}\)\s*$', '\1', '')
@@ -103,6 +106,8 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
                 \&& exists('*balloon_show')
                 \&& ale#Var(l:options.buffer, 'set_balloons')
                     call balloon_show(l:str)
+                elseif get(l:options, 'truncated_echo', 0)
+                    call ale#cursor#TruncatedEcho(split(l:str, "\n")[0])
                 elseif g:ale_hover_to_preview
                     call ale#preview#Show(split(l:str, "\n"), {
                     \   'filetype': 'ale-preview.message',
@@ -156,6 +161,7 @@ function! s:OnReady(line, column, opt, linter, lsp_details) abort
     \   'column': l:column,
     \   'hover_from_balloonexpr': get(a:opt, 'called_from_balloonexpr', 0),
     \   'show_documentation': get(a:opt, 'show_documentation', 0),
+    \   'truncated_echo': get(a:opt, 'truncated_echo', 0),
     \}
 endfunction
 
@@ -187,6 +193,16 @@ function! ale#hover#ShowAtCursor() abort
     let l:pos = getpos('.')
 
     call ale#hover#Show(l:buffer, l:pos[1], l:pos[2], {})
+endfunction
+
+function! ale#hover#ShowTruncatedMessageAtCursor() abort
+    let l:buffer = bufnr('')
+    let [l:info, l:loc] = ale#util#FindItemAtCursor(l:buffer)
+
+    if empty(l:loc)
+        let l:pos = getpos('.')
+        call ale#hover#Show(l:buffer, l:pos[1], l:pos[2], {'truncated_echo': 1})
+    endif
 endfunction
 
 " This function implements the :ALEDocumentation command.

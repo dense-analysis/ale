@@ -382,6 +382,7 @@ formatting.
   * [pylint](https://www.pylint.org/) :floppy_disk:
   * [pyls](https://github.com/palantir/python-language-server) :warning:
   * [pyre](https://github.com/facebook/pyre-check) :warning:
+  * [pyright](https://github.com/microsoft/pyright)
   * [reorder-python-imports](https://github.com/asottile/reorder_python_imports)
   * [vulture](https://github.com/jendrikseipp/vulture) :warning: :floppy_disk:
   * [yapf](https://github.com/google/yapf)
@@ -493,6 +494,7 @@ formatting.
 * VALA
   * [uncrustify](https://github.com/uncrustify/uncrustify)
 * Verilog
+  * [hdl-checker](https://pypi.org/project/hdl-checker)
   * [iverilog](https://github.com/steveicarus/iverilog)
   * [verilator](http://www.veripool.org/projects/verilator/wiki/Intro)
   * [vlog](https://www.mentor.com/products/fv/questa/)
