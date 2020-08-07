@@ -50,7 +50,7 @@ Execute(Should return directory for 'go.mod' if found in parent directory):
 Execute(Should return nearest directory with '.git' if found in parent directory):
   call ale#test#SetFilename('test.go')
 
-  if !isdirectory(b:git_dir)
+  if !isdirectory(g:dir . '/.git')
     call mkdir(g:dir . '/.git')
   endif
 
