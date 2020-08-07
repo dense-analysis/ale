@@ -1290,7 +1290,7 @@ g:ale_linters                                                   *g:ale_linters*
   \   'help': [],
   \   'perl': ['perlcritic'],
   \   'perl6': [],
-  \   'python': ['flake8', 'mypy', 'pylint'],
+  \   'python': ['flake8', 'mypy', 'pylint', 'pyright'],
   \   'rust': ['cargo'],
   \   'spec': [],
   \   'text': [],
@@ -2578,6 +2578,7 @@ documented in additional help files.
     pylint................................|ale-python-pylint|
     pyls..................................|ale-python-pyls|
     pyre..................................|ale-python-pyre|
+    pyright...............................|ale-python-pyright|
     reorder-python-imports................|ale-python-reorder_python_imports|
     vulture...............................|ale-python-vulture|
     yapf..................................|ale-python-yapf|
