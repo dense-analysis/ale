@@ -246,7 +246,7 @@ A plugin might integrate its own checks with ALE like so: >
 
   function! WorkDone(buffer, results) abort
     " Send results to ALE after they have been collected.
-    call ale#other_source#ShowResults(buffer, 'some-name', a:results)
+    call ale#other_source#ShowResults(a:buffer, 'some-name', a:results)
   endfunction
 <
 
