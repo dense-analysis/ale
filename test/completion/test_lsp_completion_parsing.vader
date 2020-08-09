@@ -1,4 +1,12 @@
+Before:
+  Save g:ale_completion_autoimport
+  Save g:ale_completion_max_suggestions
+
+  let g:ale_completion_max_suggestions = 50
+
 After:
+  Restore
+
   unlet! b:ale_completion_info
 
 Execute(Should handle Rust completion results correctly):
@@ -527,7 +535,9 @@ Execute(Should handle completion messages with the deprecated insertText attribu
   \   },
   \ })
 
-Execute(Should handle completion messages with additionalTextEdits):
+Execute(Should handle completion messages with additionalTextEdits when ale_completion_autoimport is turned on):
+  let g:ale_completion_autoimport = 1
+
   AssertEqual
   \ [
   \   {
@@ -563,6 +573,45 @@ Execute(Should handle completion messages with additionalTextEdits):
   \     }),
   \   },
   \ ],
+  \ ale#completion#ParseLSPCompletions({
+  \   'id': 226,
+  \   'jsonrpc': '2.0',
+  \   'result': {
+  \     'isIncomplete': v:false,
+  \     'items': [
+  \       {
+  \         'detail': 'PlayTimeCallback',
+  \         'filterText': 'next_callback',
+  \         'insertText': 'next_callback',
+  \         'insertTextFormat': 1,
+  \         'kind': 6,
+  \         'label': ' next_callback',
+  \         'sortText': '3ee19999next_callback',
+  \         'additionalTextEdits': [
+  \           {
+  \             'range': {
+  \               'start': {
+  \                 'line': 10,
+  \                 'character': 1,
+  \               },
+  \               'end': {
+  \                 'line': 12,
+  \                 'character': 3,
+  \               },
+  \             },
+  \             'newText': 'from "module" import next_callback',
+  \           },
+  \         ],
+  \       },
+  \     ],
+  \   },
+  \ })
+
+Execute(Should not handle completion messages with additionalTextEdits when ale_completion_autoimport is turned off):
+  let g:ale_completion_autoimport = 0
+
+  AssertEqual
+  \ [],
   \ ale#completion#ParseLSPCompletions({
   \   'id': 226,
   \   'jsonrpc': '2.0',

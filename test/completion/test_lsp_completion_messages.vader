@@ -121,7 +121,7 @@ Execute(The right message should be sent for the initial tsserver request):
   \  'line': 1,
   \  'offset': 3,
   \  'prefix': 'fo',
-  \  'includeExternalModuleExports': g:ale_completion_tsserver_autoimport,
+  \  'includeExternalModuleExports': g:ale_completion_autoimport,
   \ }]],
   \ g:message_list
   " We should set up the completion info correctly.

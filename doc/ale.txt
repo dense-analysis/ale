@@ -418,11 +418,12 @@ The |ALEComplete| command can be used to show completion suggestions manually,
 even when |g:ale_completion_enabled| is set to `0`. For manually requesting
 completion information with Deoplete, consult Deoplete's documentation.
 
-When working with TypeScript files, ALE by can support automatic imports
-from external modules. This behavior can be enabled by setting the
-|g:ale_completion_tsserver_autoimport| variable to `1`. ALE can also remove
-warnings from your completions by setting the
-|g:ale_completion_tsserver_remove_warnings| variable to 1.
+ALE by can support automatic imports from external modules. This behavior can
+be enabled by setting the |g:ale_completion_autoimport| variable to `1`.
+
+When working with TypeScript files, ALE can remove warnings from your
+completions by setting the |g:ale_completion_tsserver_remove_warnings|
+variable to 1.
 
                                                *ale-completion-completeopt-bug*
 
@@ -692,7 +693,7 @@ g:ale_completion_tsserver_remove_warnings *g:ale_completion_tsserver_remove_warn
   including those that are a warning. Warnings can be excluded from completed
   items by setting it to `1`.
 
-g:ale_completion_tsserver_autoimport     *g:ale_completion_tsserver_autoimport*
+g:ale_completion_autoimport                       *g:ale_completion_autoimport*
 
   Type: Number
   Default: `0`
