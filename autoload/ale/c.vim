@@ -1,7 +1,7 @@
 " Author: gagbo <gagbobada@gmail.com>, w0rp <devw0rp@gmail.com>, roel0 <postelmansroel@gmail.com>
 " Description: Functions for integrating with C-family linters.
 
-call ale#Set('c_parse_makefile', 1)
+call ale#Set('c_parse_makefile', 0)
 call ale#Set('c_parse_compile_commands', 1)
 let s:sep = has('win32') ? '\' : '/'
 

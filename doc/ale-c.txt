@@ -49,11 +49,17 @@ g:ale_c_parse_compile_commands                 *g:ale_c_parse_compile_commands*
 g:ale_c_parse_makefile                                 *g:ale_c_parse_makefile*
                                                        *b:ale_c_parse_makefile*
   Type: |Number|
-  Default: `1`
+  Default: `0`
 
   If set to `1`, ALE will run `make -n` to automatically determine flags to
   set for C or C++ compilers. This can make it easier to determine the correct
   build flags to use for different files.
+
+  WARNING: Running `make -n` automatically can execute arbitrary code, even
+  though it's supposed to be a dry run, so enable this option with care. You
+  might prefer to use the buffer-local version of the option instead with
+  |g:ale_pattern_options|, or you own code for checking which project you're
+  in.
 
   You might want to disable this option if `make -n` takes too long to run for
   projects you work on.
