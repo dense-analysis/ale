@@ -816,6 +816,13 @@ setting.  Consult the documentation for that setting for more information.
 `b:ale_linters` can be used to select which tools you want to run, say if you
 want to use only `gcc` for one project, and only `clang` for another.
 
+ALE will attempt to parse `make -n` when a `Makefile` is found or load the flags
+for files from `compile_commands.json` files. See `:help g:ale_c_parse_makefile`
+and `:help g:ale_c_parse_compile_commands` for more information. See Clang's
+documentation for [compile_commands.json files](https://clang.llvm.org/docs/JSONCompilationDatabase.html).
+You should strongly consider generating them in your builds, which is easy to
+do with CMake.
+
 You may also configure buffer-local settings for linters with project-specific
 vimrc files. [local_vimrc](https://github.com/LucHermitte/local_vimrc) can be
 used for executing local vimrc files which can be shared in your project.

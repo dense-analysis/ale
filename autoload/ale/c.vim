@@ -1,8 +1,8 @@
 " Author: gagbo <gagbobada@gmail.com>, w0rp <devw0rp@gmail.com>, roel0 <postelmansroel@gmail.com>
 " Description: Functions for integrating with C-family linters.
 
-call ale#Set('c_parse_makefile', 0)
-call ale#Set('c_parse_compile_commands', 0)
+call ale#Set('c_parse_makefile', 1)
+call ale#Set('c_parse_compile_commands', 1)
 let s:sep = has('win32') ? '\' : '/'
 
 " Set just so tests can override it.
@@ -334,16 +334,18 @@ endfunction
 function! ale#c#GetCFlags(buffer, output) abort
     let l:cflags = v:null
 
-    if ale#Var(a:buffer, 'c_parse_makefile') && !empty(a:output)
-        let l:cflags = ale#c#ParseCFlagsFromMakeOutput(a:buffer, a:output)
-    endif
-
     if ale#Var(a:buffer, 'c_parse_compile_commands')
         let [l:root, l:json_file] = ale#c#FindCompileCommands(a:buffer)
 
         if !empty(l:json_file)
             let l:cflags = ale#c#FlagsFromCompileCommands(a:buffer, l:json_file)
         endif
+    endif
+
+    if ale#Var(a:buffer, 'c_parse_makefile')
+    \&& !empty(a:output)
+    \&& !empty(l:cflags)
+        let l:cflags = ale#c#ParseCFlagsFromMakeOutput(a:buffer, a:output)
     endif
 
     if l:cflags is v:null
