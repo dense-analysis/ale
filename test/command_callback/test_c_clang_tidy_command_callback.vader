@@ -57,7 +57,7 @@ Execute(The build directory setting should override the options):
   \   . ' -checks=' . ale#Escape('*') . ' %s'
   \   . ' -p ' . ale#Escape('/foo/bar')
 
-Execute(The build directory should be ignored for header files):
+Execute(The build directory should be used for header files):
   call ale#test#SetFilename('test.h')
 
   let b:ale_c_clangtidy_checks = ['*']
@@ -66,12 +66,8 @@ Execute(The build directory should be ignored for header files):
 
   AssertLinter 'clang-tidy',
   \ ale#Escape('clang-tidy')
-  \   . ' -checks=' . ale#Escape('*') . ' %s -- -Wall'
-
-  call ale#test#SetFilename('test.h')
-
-  AssertLinter 'clang-tidy',
-  \ ale#Escape('clang-tidy') . ' -checks=' . ale#Escape('*') . ' %s -- -Wall'
+  \   . ' -checks=' . ale#Escape('*') . ' %s'
+  \   . ' -p ' . ale#Escape('/foo/bar')
 
 Execute(The executable should be configurable):
   let b:ale_c_clangtidy_checks = ['*']
