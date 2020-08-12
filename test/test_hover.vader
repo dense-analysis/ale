@@ -5,7 +5,7 @@ Before:
   let g:Callback = 0
   let g:message_list = []
   let g:item_list = []
-  let g:echo_list = []
+  let g:show_message_arg_list = []
 
   runtime autoload/ale/linter.vim
   runtime autoload/ale/lsp.vim
@@ -27,8 +27,8 @@ Before:
     return 42
   endfunction
 
-  function! ale#util#ShowMessage(string) abort
-      call add(g:echo_list, a:string)
+  function! ale#util#ShowMessage(string, ...) abort
+      call add(g:show_message_arg_list, [a:string] + a:000)
   endfunction
 
   function! HandleValidLSPResult(result) abort
@@ -58,7 +58,7 @@ After:
   unlet! g:Callback
   unlet! g:message_list
   unlet! b:ale_linters
-  unlet! g:echo_list
+  unlet! g:show_message_arg_list
 
   delfunction HandleValidLSPResult
 
@@ -112,31 +112,31 @@ Execute(tsserver quickinfo displayString values should be displayed):
   \ }
   \)
 
-  AssertEqual ['foo bar'], g:echo_list
+  AssertEqual [['foo bar']], g:show_message_arg_list
   AssertEqual {}, ale#hover#GetMap()
 
 Execute(LSP hover responses with just a string should be handled):
   call HandleValidLSPResult({'contents': 'foobar'})
 
-  AssertEqual ['foobar'], g:echo_list
+  AssertEqual [['foobar', {'commands': []}]], g:show_message_arg_list
   AssertEqual {}, ale#hover#GetMap()
 
 Execute(LSP hover null responses should be handled):
   call HandleValidLSPResult(v:null)
 
-  AssertEqual [], g:echo_list
+  AssertEqual [], g:show_message_arg_list
   AssertEqual {}, ale#hover#GetMap()
 
 Execute(LSP hover responses with markup content should be handled):
-  call HandleValidLSPResult({'contents': {'kind': 'something', 'value': 'markup'}})
+  call HandleValidLSPResult({'contents': {'kind': 'markdown', 'value': 'markup'}})
 
-  AssertEqual ['markup'], g:echo_list
+  AssertEqual [['markup', {'commands': []}]], g:show_message_arg_list
   AssertEqual {}, ale#hover#GetMap()
 
 Execute(LSP hover responses with markup content missing values should be handled):
-  call HandleValidLSPResult({'contents': {'kind': 'something'}})
+  call HandleValidLSPResult({'contents': {'kind': 'markdown'}})
 
-  AssertEqual [], g:echo_list
+  AssertEqual [], g:show_message_arg_list
   AssertEqual {}, ale#hover#GetMap()
 
 Execute(LSP hover response with lists of strings should be handled):
@@ -145,17 +145,27 @@ Execute(LSP hover response with lists of strings should be handled):
   \  "bar\n",
   \]})
 
-  AssertEqual ["foo\n\nbar\n"], g:echo_list
+  AssertEqual [["foo\n\nbar", {'commands': []}]], g:show_message_arg_list
   AssertEqual {}, ale#hover#GetMap()
 
 Execute(LSP hover response with lists of strings and marked strings should be handled):
   call HandleValidLSPResult({'contents': [
   \  {'language': 'rust', 'value': 'foo'},
-  \  {'language': 'foobar'},
   \  "bar\n",
   \]})
 
-  AssertEqual ["foo\nbar\n"], g:echo_list
+  AssertEqual [
+  \ [
+  \   "foo\n\nbar",
+  \   {
+  \     'commands': [
+  \       'unlet! b:current_syntax',
+  \       'syntax include @ALE_hover_rust syntax/rust.vim',
+  \       'syntax region ALE_hover_1 start=/\%1l/ end=/\%2l/ contains=@ALE_hover_rust',
+  \     ],
+  \   },
+  \ ],
+  \], g:show_message_arg_list
   AssertEqual {}, ale#hover#GetMap()
 
 Execute(tsserver responses for documentation requests should be handled):
