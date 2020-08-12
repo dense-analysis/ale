@@ -28,6 +28,7 @@ ALE will look for configuration files with the following filenames. >
   pytest.ini
   tox.ini
   mypy.ini
+  .dmypy.json
   pycodestyle.cfg
   .flake8
   .flake8rc

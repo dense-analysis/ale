@@ -7,6 +7,29 @@ call ale#Set('python_mypy_show_notes', 1)
 call ale#Set('python_mypy_options', '')
 call ale#Set('python_mypy_use_global', get(g:, 'ale_use_global_executables', 0))
 call ale#Set('python_mypy_auto_pipenv', 0)
+call ale#Set('python_mypy_run_even_with_dmypy', 0)
+
+function! ale_linters#python#mypy#upgadeToDmypyIfPossible(buffer) abort
+    if !ale#Var(a:buffer, 'python_mypy_run_even_with_dmypy')
+        return
+    endif
+
+    let l:enabled_linters = ale#linter#GetLintersLoaded()
+
+    " Check if dmypy is enabled
+    if exists('enabled_linters["python"]')
+        for l:linter in l:enabled_linters['python']
+            if l:linter['name'] is? 'dmypy'
+                " Check if there's a .dmypy.json file
+                for l:path in ale#path#Upwards(expand('#' . a:buffer . ':p:h'))
+                    if filereadable(l:path . '/.dmypy.json')
+                        " TODO: Ok, how do we abort running mypy now?
+                    endif
+                endfor
+            endif
+        endfor
+    endif
+endfunction
 
 function! ale_linters#python#mypy#GetExecutable(buffer) abort
     if (ale#Var(a:buffer, 'python_auto_pipenv') || ale#Var(a:buffer, 'python_mypy_auto_pipenv'))

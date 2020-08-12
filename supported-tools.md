@@ -373,6 +373,7 @@ formatting.
   * [flake8](http://flake8.pycqa.org/en/latest/)
   * [isort](https://github.com/timothycrosley/isort)
   * [mypy](http://mypy-lang.org/)
+  * [dmypy](https://mypy.readthedocs.io/en/stable/mypy_daemon.html)
   * [prospector](https://github.com/PyCQA/prospector) :warning:
   * [pycodestyle](https://github.com/PyCQA/pycodestyle) :warning:
   * [pydocstyle](https://www.pydocstyle.org/) :warning:
