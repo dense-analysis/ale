@@ -29,6 +29,51 @@ Execute(TypeScript completions responses should be parsed correctly):
   \ ],
   \})
 
+Execute(TypeScript completions responses should include warnings):
+  AssertEqual
+  \ [
+  \   {
+  \     'word': 'foo',
+  \     'source': '/path/to/foo.ts',
+  \   },
+  \   {
+  \     'word': 'bar',
+  \     'source': '',
+  \   },
+  \   {
+  \     'word': 'baz',
+  \     'source': '',
+  \   }
+  \ ],
+  \ ale#completion#ParseTSServerCompletions({
+  \ 'body': [
+  \   {'name': 'foo', 'source': '/path/to/foo.ts'},
+  \   {'name': 'bar', 'kind': 'warning'},
+  \   {'name': 'baz'},
+  \ ],
+  \})
+
+Execute(TypeScript completions responses should not include warnings if excluded):
+  let g:ale_completion_tsserver_remove_warnings = 1
+  AssertEqual
+  \ [
+  \   {
+  \     'word': 'foo',
+  \     'source': '/path/to/foo.ts',
+  \   },
+  \   {
+  \     'word': 'baz',
+  \     'source': '',
+  \   }
+  \ ],
+  \ ale#completion#ParseTSServerCompletions({
+  \ 'body': [
+  \   {'name': 'foo', 'source': '/path/to/foo.ts'},
+  \   {'name': 'bar', 'kind': 'warning'},
+  \   {'name': 'baz'},
+  \ ],
+  \})
+
 Execute(TypeScript completion details responses should be parsed correctly):
   AssertEqual
   \ [
@@ -38,7 +83,7 @@ Execute(TypeScript completion details responses should be parsed correctly):
   \     'info': '',
   \     'kind': 'v',
   \     'icase': 1,
-  \     'dup': g:ale_completion_tsserver_autoimport,
+  \     'dup': g:ale_completion_autoimport,
   \   },
   \   {
   \     'word': 'def',
@@ -46,7 +91,7 @@ Execute(TypeScript completion details responses should be parsed correctly):
   \     'info': 'foo bar baz',
   \     'kind': 'v',
   \     'icase': 1,
-  \     'dup': g:ale_completion_tsserver_autoimport,
+  \     'dup': g:ale_completion_autoimport,
   \   },
   \   {
   \     'word': 'ghi',
@@ -54,7 +99,7 @@ Execute(TypeScript completion details responses should be parsed correctly):
   \     'info': '',
   \     'kind': 'v',
   \     'icase': 1,
-  \     'dup': g:ale_completion_tsserver_autoimport,
+  \     'dup': g:ale_completion_autoimport,
   \   },
   \ ],
   \ ale#completion#ParseTSServerCompletionEntryDetails({
@@ -132,7 +177,7 @@ Execute(Entries without details should be included in the responses):
   \             'changes': [],
   \         }],
   \     }),
-  \     'dup': g:ale_completion_tsserver_autoimport,
+  \     'dup': g:ale_completion_autoimport,
   \   },
   \   {
   \     'word': 'def',
@@ -140,7 +185,7 @@ Execute(Entries without details should be included in the responses):
   \     'info': 'foo bar baz',
   \     'kind': 'v',
   \     'icase': 1,
-  \     'dup': g:ale_completion_tsserver_autoimport,
+  \     'dup': g:ale_completion_autoimport,
   \   },
   \   {
   \     'word': 'xyz',

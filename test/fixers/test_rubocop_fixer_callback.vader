@@ -56,6 +56,20 @@ Execute(The rubocop callback should include custom rubocop options):
   \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))
 
+Execute(The rubocop callback should use auto-correct-all option when set):
+  let g:ale_ruby_rubocop_auto_correct_all = 1
+  call ale#test#SetFilename('ruby_paths/with_config/dummy.rb')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
+  \     . ' --config ' . ale#Escape(ale#path#Simplify(g:dir . '/ruby_paths/with_config/.rubocop.yml'))
+  \     . ' --auto-correct-all --force-exclusion --stdin '
+  \     . ale#Escape(expand('#' . bufnr('') . ':p')),
+  \ },
+  \ ale#fixers#rubocop#Fix(bufnr(''))
+
 Execute(The rubocop post-processor should remove diagnostics content):
   AssertEqual
   \ [

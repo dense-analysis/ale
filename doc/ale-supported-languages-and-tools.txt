@@ -31,6 +31,7 @@ Notes:
 * Awk
   * `gawk`
 * Bash
+  * `bashate`
   * `language-server`
   * `shell` (-n flag)
   * `shellcheck`
@@ -44,6 +45,7 @@ Notes:
   * `shellcheck`
   * `shfmt`
 * C
+  * `astyle`
   * `ccls`
   * `clang`
   * `clangd`
@@ -61,6 +63,7 @@ Notes:
   * `mcsc`!!
   * `uncrustify`
 * C++ (filetype cpp)
+  * `astyle`
   * `ccls`
   * `clang`
   * `clangcheck`!!
@@ -369,6 +372,7 @@ Notes:
   * `pylint`!!
   * `pyls`
   * `pyre`
+  * `pyright`
   * `reorder-python-imports`
   * `vulture`!!
   * `yapf`
@@ -480,6 +484,7 @@ Notes:
 * VALA
   * `uncrustify`
 * Verilog
+  * `hdl-checker`
   * `iverilog`
   * `verilator`
   * `vlog`
@@ -510,3 +515,5 @@ Notes:
   * `yamllint`
 * YANG
   * `yang-lsp`
+* Zig
+  * `zls`

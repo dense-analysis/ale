@@ -49,7 +49,10 @@ Execute(Should return directory for 'go.mod' if found in parent directory):
 
 Execute(Should return nearest directory with '.git' if found in parent directory):
   call ale#test#SetFilename('test.go')
-  call mkdir(g:dir . '/.git')
+
+  if !isdirectory(g:dir . '/.git')
+    call mkdir(g:dir . '/.git')
+  endif
 
   AssertLSPProject g:dir
 

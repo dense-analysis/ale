@@ -121,6 +121,9 @@ let g:ale_cursor_detail = get(g:, 'ale_cursor_detail', 0)
 " This flag can be set to 1 to enable virtual text when the cursor moves.
 let g:ale_virtualtext_cursor = get(g:, 'ale_virtualtext_cursor', 0)
 
+" This flag can be set to 1 to enable LSP hover messages at the cursor.
+let g:ale_hover_cursor = get(g:, 'ale_hover_cursor', 1)
+
 " This flag can be set to 1 to automatically close the preview window upon
 " entering Insert Mode.
 let g:ale_close_preview_on_insert = get(g:, 'ale_close_preview_on_insert', 0)

@@ -16,7 +16,8 @@ onoremap <silent> <Plug>(ale_show_completion_menu) <Nop>
 let g:ale_completion_delay = get(g:, 'ale_completion_delay', 100)
 let g:ale_completion_excluded_words = get(g:, 'ale_completion_excluded_words', [])
 let g:ale_completion_max_suggestions = get(g:, 'ale_completion_max_suggestions', 50)
-let g:ale_completion_tsserver_autoimport = get(g:, 'ale_completion_tsserver_autoimport', 0)
+let g:ale_completion_autoimport = get(g:, 'ale_completion_autoimport', 0)
+let g:ale_completion_tsserver_remove_warnings = get(g:, 'ale_completion_tsserver_remove_warnings', 0)
 
 let s:timer_id = -1
 let s:last_done_pos = []
@@ -397,10 +398,14 @@ function! ale#completion#ParseTSServerCompletions(response) abort
     let l:names = []
 
     for l:suggestion in a:response.body
-        call add(l:names, {
-        \ 'word': l:suggestion.name,
-        \ 'source': get(l:suggestion, 'source', ''),
-        \})
+        let l:kind = get(l:suggestion, 'kind', '')
+
+        if g:ale_completion_tsserver_remove_warnings == 0 || l:kind isnot# 'warning'
+            call add(l:names, {
+            \ 'word': l:suggestion.name,
+            \ 'source': get(l:suggestion, 'source', ''),
+            \})
+        endif
     endfor
 
     return l:names
@@ -435,7 +440,7 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
         \   'kind': ale#completion#GetCompletionSymbols(l:suggestion.kind),
         \   'icase': 1,
         \   'menu': join(l:displayParts, ''),
-        \   'dup': g:ale_completion_tsserver_autoimport,
+        \   'dup': g:ale_completion_autoimport,
         \   'info': join(l:documentationParts, ''),
         \}
 
@@ -517,19 +522,58 @@ function! ale#completion#ParseLSPCompletions(response) abort
             continue
         endif
 
+        " Don't use LSP items with additional text edits when autoimport for
+        " completions is turned off.
+        if has_key(l:item, 'additionalTextEdits') && !g:ale_completion_autoimport
+            continue
+        endif
+
         let l:doc = get(l:item, 'documentation', '')
 
         if type(l:doc) is v:t_dict && has_key(l:doc, 'value')
             let l:doc = l:doc.value
         endif
 
-        call add(l:results, {
+        let l:result = {
         \   'word': l:word,
         \   'kind': ale#completion#GetCompletionSymbols(get(l:item, 'kind', '')),
         \   'icase': 1,
         \   'menu': get(l:item, 'detail', ''),
         \   'info': (type(l:doc) is v:t_string ? l:doc : ''),
-        \})
+        \}
+
+        if has_key(l:item, 'additionalTextEdits')
+            let l:text_changes = []
+
+            for l:edit in l:item.additionalTextEdits
+                let l:range = l:edit.range
+                call add(l:text_changes, {
+                \ 'start': {
+                \   'line': l:range.start.line + 1,
+                \   'offset': l:range.start.character + 1,
+                \ },
+                \ 'end': {
+                \   'line': l:range.end.line + 1,
+                \   'offset': l:range.end.character + 1,
+                \ },
+                \ 'newText': l:edit.newText,
+                \})
+            endfor
+
+            let l:changes = [{
+            \ 'fileName': expand('#' . l:buffer . ':p'),
+            \ 'textChanges': l:text_changes,
+            \}]
+            \
+            let l:result.user_data = json_encode({
+            \   'codeActions': [{
+            \       'description': 'completion',
+            \       'changes': l:changes,
+            \   }],
+            \ })
+        endif
+
+        call add(l:results, l:result)
     endfor
 
     if has_key(l:info, 'prefix')
@@ -628,12 +672,16 @@ function! s:OnReady(linter, lsp_details) abort
     call ale#lsp#RegisterCallback(l:id, l:Callback)
 
     if a:linter.lsp is# 'tsserver'
+        if get(g:, 'ale_completion_tsserver_autoimport') is 1
+            execute 'echom `g:ale_completion_tsserver_autoimport` is deprecated. Use `g:ale_completion_autoimport` instead.'''
+        endif
+
         let l:message = ale#lsp#tsserver_message#Completions(
         \   l:buffer,
         \   b:ale_completion_info.line,
         \   b:ale_completion_info.column,
         \   b:ale_completion_info.prefix,
-        \   g:ale_completion_tsserver_autoimport,
+        \   g:ale_completion_autoimport,
         \)
     else
         " Send a message saying the buffer has changed first, otherwise

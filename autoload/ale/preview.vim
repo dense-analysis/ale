@@ -31,6 +31,10 @@ function! ale#preview#Show(lines, ...) abort
     setlocal readonly
     let &l:filetype = get(l:options, 'filetype', 'ale-preview')
 
+    for l:command in get(l:options, 'commands', [])
+        call execute(l:command)
+    endfor
+
     if get(l:options, 'stay_here')
         wincmd p
     endif

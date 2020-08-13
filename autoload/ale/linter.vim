@@ -44,7 +44,7 @@ let s:default_ale_linters = {
 \   'help': [],
 \   'perl': ['perlcritic'],
 \   'perl6': [],
-\   'python': ['flake8', 'mypy', 'pylint'],
+\   'python': ['flake8', 'mypy', 'pylint', 'pyright'],
 \   'rust': ['cargo'],
 \   'spec': [],
 \   'text': [],
