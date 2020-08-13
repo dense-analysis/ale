@@ -303,6 +303,8 @@ function! ale#hover#Show(buffer, line, col, opt) abort
     endfor
 endfunction
 
+let s:last_pos = [0, 0, 0]
+
 " This function implements the :ALEHover command.
 function! ale#hover#ShowAtCursor() abort
     let l:buffer = bufnr('')
@@ -313,11 +315,20 @@ endfunction
 
 function! ale#hover#ShowTruncatedMessageAtCursor() abort
     let l:buffer = bufnr('')
-    let [l:info, l:loc] = ale#util#FindItemAtCursor(l:buffer)
+    let l:pos = getpos('.')[0:2]
 
-    if empty(l:loc)
-        let l:pos = getpos('.')
-        call ale#hover#Show(l:buffer, l:pos[1], l:pos[2], {'truncated_echo': 1})
+    if l:pos != s:last_pos
+        let s:last_pos = l:pos
+        let [l:info, l:loc] = ale#util#FindItemAtCursor(l:buffer)
+
+        if empty(l:loc)
+            call ale#hover#Show(
+            \   l:buffer,
+            \   l:pos[1],
+            \   l:pos[2],
+            \   {'truncated_echo': 1},
+            \)
+        endif
     endif
 endfunction
 
