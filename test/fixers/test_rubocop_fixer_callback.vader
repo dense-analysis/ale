@@ -62,7 +62,7 @@ Execute(The rubocop callback should use auto-correct-all option when set):
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
+  \   'process_with': 'ale#fixers#rubocop#PostProcess',
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
   \     . ' --config ' . ale#Escape(ale#path#Simplify(g:dir . '/ruby_paths/with_config/.rubocop.yml'))
   \     . ' --auto-correct-all --force-exclusion --stdin '
