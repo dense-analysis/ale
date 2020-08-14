@@ -262,6 +262,7 @@ Notes:
 * Lua
   * `luac`
   * `luacheck`
+  * `luafmt`
 * Mail
   * `alex`!!
   * `languagetool`!!

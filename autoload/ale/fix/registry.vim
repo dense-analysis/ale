@@ -370,6 +370,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['html', 'htmldjango'],
 \       'description': 'Fix HTML files with html-beautify.',
 \   },
+\   'luafmt': {
+\       'function': 'ale#fixers#luafmt#Fix',
+\       'suggested_filetypes': ['lua'],
+\       'description': 'Fix Lua files with luafmt.',
+\   },
 \}
 
 " Reset the function registry to the default entries.

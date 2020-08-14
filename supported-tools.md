@@ -271,6 +271,7 @@ formatting.
 * Lua
   * [luac](https://www.lua.org/manual/5.1/luac.html)
   * [luacheck](https://github.com/mpeterv/luacheck)
+  * [luafmt](https://github.com/trixnz/lua-fmt)
 * Mail
   * [alex](https://github.com/wooorm/alex) :floppy_disk:
   * [languagetool](https://languagetool.org/) :floppy_disk:

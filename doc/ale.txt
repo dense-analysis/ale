@@ -2501,6 +2501,7 @@ documented in additional help files.
   lua.....................................|ale-lua-options|
     luac..................................|ale-lua-luac|
     luacheck..............................|ale-lua-luacheck|
+    luafmt................................|ale-lua-luafmt|
   markdown................................|ale-markdown-options|
     mdl...................................|ale-markdown-mdl|
     prettier..............................|ale-markdown-prettier|
