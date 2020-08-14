@@ -1,4 +1,11 @@
+Before:
+  Save g:ale_completion_tsserver_remove_warnings
+
+  let g:ale_completion_tsserver_remove_warnings = 0
+
 After:
+  Restore
+
   unlet! b:ale_tsserver_completion_names
 
 Execute(TypeScript completions responses should be parsed correctly):
@@ -242,3 +249,54 @@ Execute(Entries without details should be included in the responses):
   \   },
   \ ],
   \})
+
+Execute(Default imports should be handled correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'word': 'abcd',
+  \     'menu': 'Import default ''abcd'' from module "./foo" (alias) const abcd: 3',
+  \     'info': '',
+  \     'kind': 't',
+  \     'icase': 1,
+  \     'user_data': json_encode({
+  \         'codeActions': [{
+  \             'description': 'Import default ''abcd'' from module "./foo"',
+  \             'changes': [],
+  \         }],
+  \     }),
+  \     'dup': g:ale_completion_autoimport,
+  \   },
+  \ ],
+  \ ale#completion#ParseTSServerCompletionEntryDetails({
+  \   'body': [
+  \     {
+  \       'name': 'default',
+  \       'kind': 'alias',
+  \       'displayParts': [
+  \         {'kind': 'punctuation', 'text': '('},
+  \         {'kind': 'text', 'text': 'alias'},
+  \         {'kind': 'punctuation', 'text': ')'},
+  \         {'kind': 'space', 'text': ' '},
+  \         {'kind': 'keyword', 'text': 'const'},
+  \         {'kind': 'space', 'text': ' '},
+  \         {'kind': 'localName', 'text': 'abcd'},
+  \         {'kind': 'punctuation', 'text': ':'},
+  \         {'kind': 'space', 'text': ' '},
+  \         {'kind': 'stringLiteral', 'text': '3'},
+  \         {'kind': 'lineBreak', 'text': '^@'},
+  \         {'kind': 'keyword', 'text': 'export'},
+  \         {'kind': 'space', 'text': ' '},
+  \         {'kind': 'keyword', 'text': 'default'},
+  \         {'kind': 'space', 'text': ' '},
+  \         {'kind': 'aliasName', 'text': 'abcd'}
+  \       ],
+  \       'codeActions': [
+  \         {
+  \           'description': 'Import default ''abcd'' from module "./foo"',
+  \           'changes': [],
+  \         },
+  \       ],
+  \     },
+  \   ],
+  \ })

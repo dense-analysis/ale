@@ -418,12 +418,22 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
 
     for l:suggestion in a:response.body
         let l:displayParts = []
+        let l:local_name = v:null
 
         for l:action in get(l:suggestion, 'codeActions', [])
             call add(l:displayParts, l:action.description . ' ')
         endfor
 
         for l:part in l:suggestion.displayParts
+            " Stop on stop on line breaks for the menu.
+            if get(l:part, 'kind') is# 'lineBreak'
+                break
+            endif
+
+            if get(l:part, 'kind') is# 'localName'
+                let l:local_name = l:part.text
+            endif
+
             call add(l:displayParts, l:part.text)
         endfor
 
@@ -436,7 +446,13 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
 
         " See :help complete-items
         let l:result = {
-        \   'word': l:suggestion.name,
+        \   'word': (
+        \       l:suggestion.name is# 'default'
+        \       && l:suggestion.kind is# 'alias'
+        \       && !empty(l:local_name)
+        \           ? l:local_name
+        \           : l:suggestion.name
+        \   ),
         \   'kind': ale#completion#GetCompletionSymbols(l:suggestion.kind),
         \   'icase': 1,
         \   'menu': join(l:displayParts, ''),
