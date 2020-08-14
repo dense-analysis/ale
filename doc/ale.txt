@@ -246,7 +246,7 @@ A plugin might integrate its own checks with ALE like so: >
 
   function! WorkDone(buffer, results) abort
     " Send results to ALE after they have been collected.
-    call ale#other_source#ShowResults(buffer, 'some-name', a:results)
+    call ale#other_source#ShowResults(a:buffer, 'some-name', a:results)
   endfunction
 <
 
@@ -418,9 +418,12 @@ The |ALEComplete| command can be used to show completion suggestions manually,
 even when |g:ale_completion_enabled| is set to `0`. For manually requesting
 completion information with Deoplete, consult Deoplete's documentation.
 
-When working with TypeScript files, ALE by can support automatic imports
-from external modules. This behavior can be enabled by setting the
-|g:ale_completion_tsserver_autoimport| variable to `1`.
+ALE by can support automatic imports from external modules. This behavior can
+be enabled by setting the |g:ale_completion_autoimport| variable to `1`.
+
+When working with TypeScript files, ALE can remove warnings from your
+completions by setting the |g:ale_completion_tsserver_remove_warnings|
+variable to 1.
 
                                                *ale-completion-completeopt-bug*
 
@@ -681,8 +684,16 @@ g:ale_completion_enabled                             *g:ale_completion_enabled*
 
   See |ale-completion|
 
+g:ale_completion_tsserver_remove_warnings *g:ale_completion_tsserver_remove_warnings*
 
-g:ale_completion_tsserver_autoimport     *g:ale_completion_tsserver_autoimport*
+  Type: Number
+  Default: `0`
+
+  When this option is set to `0`, ALE will return all completion items,
+  including those that are a warning. Warnings can be excluded from completed
+  items by setting it to `1`.
+
+g:ale_completion_autoimport                       *g:ale_completion_autoimport*
 
   Type: Number
   Default: `0`
@@ -1227,6 +1238,7 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
   \   'csh': 'sh',
   \   'javascriptreact': ['javascript', 'jsx'],
   \   'plaintex': 'tex',
+  \   'ps1': 'powershell',
   \   'rmarkdown': 'r',
   \   'rmd': 'r',
   \   'systemverilog': 'verilog',

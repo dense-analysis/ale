@@ -61,23 +61,24 @@ other content at [w0rp.com](https://w0rp.com).
 4. [Contributing](#contributing)
 5. [FAQ](#faq)
     1. [How do I disable particular linters?](#faq-disable-linters)
-    2. [How can I keep the sign gutter open?](#faq-keep-signs)
-    3. [How can I change the signs ALE uses?](#faq-change-signs)
-    4. [How can I change or disable the highlights ALE uses?](#faq-change-highlights)
-    5. [How can I show errors or warnings in my statusline?](#faq-statusline)
-    6. [How can I show errors or warnings in my lightline?](#faq-lightline)
-    7. [How can I change the format for echo messages?](#faq-echo-format)
-    8. [How can I execute some code when ALE starts or stops linting?](#faq-autocmd)
-    9. [How can I navigate between errors quickly?](#faq-navigation)
-    10. [How can I run linters only when I save files?](#faq-lint-on-save)
-    11. [How can I use the quickfix list instead of the loclist?](#faq-quickfix)
-    12. [How can I check JSX files with both stylelint and eslint?](#faq-jsx-stylelint-eslint)
-    13. [How can I check Vue files with ESLint?](#faq-vue-eslint)
-    14. [Will this plugin eat all of my laptop battery power?](#faq-my-battery-is-sad)
-    15. [How can I configure my C or C++ project?](#faq-c-configuration)
-    16. [How can I configure ALE differently for different buffers?](#faq-buffer-configuration)
-    17. [How can I configure the height of the list in which ALE displays errors?](#faq-list-window-height)
-    18. [How can I see what ALE has configured for the current file?](#faq-get-info)
+    2. [How can I see what ALE has configured for the current file?](#faq-get-info)
+    3. [How can I use ALE and coc.nvim together?](#faq-coc-nvim)
+    4. [How can I keep the sign gutter open?](#faq-keep-signs)
+    5. [How can I change the signs ALE uses?](#faq-change-signs)
+    6. [How can I change or disable the highlights ALE uses?](#faq-change-highlights)
+    7. [How can I show errors or warnings in my statusline?](#faq-statusline)
+    8. [How can I show errors or warnings in my lightline?](#faq-lightline)
+    9. [How can I change the format for echo messages?](#faq-echo-format)
+    10. [How can I execute some code when ALE starts or stops linting?](#faq-autocmd)
+    11. [How can I navigate between errors quickly?](#faq-navigation)
+    12. [How can I run linters only when I save files?](#faq-lint-on-save)
+    13. [How can I use the quickfix list instead of the loclist?](#faq-quickfix)
+    14. [How can I check JSX files with both stylelint and eslint?](#faq-jsx-stylelint-eslint)
+    15. [How can I check Vue files with ESLint?](#faq-vue-eslint)
+    16. [Will this plugin eat all of my laptop battery power?](#faq-my-battery-is-sad)
+    17. [How can I configure my C or C++ project?](#faq-c-configuration)
+    18. [How can I configure ALE differently for different buffers?](#faq-buffer-configuration)
+    19. [How can I configure the height of the list in which ALE displays errors?](#faq-list-window-height)
 
 <a name="supported-languages"></a>
 
@@ -193,12 +194,11 @@ completion manually with `<C-x><C-o>`.
 set omnifunc=ale#completion#OmniFunc
 ```
 
-When working with TypeScript files, ALE supports automatic imports from
-external modules. This behavior is disabled by default and can be enabled by
-setting:
+ALE supports automatic imports from external modules. This behavior is disabled
+by default and can be enabled by setting:
 
 ```vim
-let g:ale_completion_tsserver_autoimport = 1
+let g:ale_completion_autoimport = 1
 ```
 
 See `:help ale-completion` for more information.
@@ -416,9 +416,56 @@ This plugin will look for linters in the [`ale_linters`](ale_linters) directory.
 Each directory within corresponds to a particular filetype in Vim, and each file
 in each directory corresponds to the name of a particular linter.
 
+<a name="faq-get-info"></a>
+
+### 5.ii. How can I see what ALE has configured for the current file?
+
+Run the following to see what is currently configured:
+
+```vim
+:ALEInfo
+```
+
+<a name="faq-coc-nvim"></a>
+
+### 5.iii. How can I use ALE and coc.nvim together?
+
+[coc.nvim](https://github.com/neoclide/coc.nvim) is a popular Vim plugin written
+in TypeScript and dependent on the [npm](https://www.npmjs.com/) ecosystem for
+providing full IDE features to Vim. Both ALE and coc.nvim implement
+[Language Server Protocol](https://microsoft.github.io/language-server-protocol/)
+(LSP) clients for supporting diagnostics (linting with a live server), and other
+features like auto-completion, and others listed above.
+
+ALE is primarily focused on integrating with external programs through virtually
+any means, provided the plugin remains almost entirely written in Vim script.
+coc.nvim is primarily focused on bringing IDE features to Vim. If you want to
+run external programs on your files to check for errors, and also use the most
+advanced IDE features, you might want to use both plugins at the same time.
+
+The easiest way to get both plugins to work together is to configure coc.nvim to
+send diagnostics to ALE, so ALE controls how all problems are presented to you,
+and to disable all LSP features in ALE, so ALE doesn't try to provide LSP
+features already provided by coc.nvim, such as auto-completion.
+
+1. Open your coc.nvim configuration file with `:CocConfig` and add
+   `"diagnostic.displayByAle": true` to your settings.
+2. Add `let g:ale_disable_lsp = 1` to your vimrc file, before plugins are
+   loaded.
+
+You can also use `b:ale_disable_lsp` in your ftplugin files to enable or disable
+LSP features in ALE for different filetypes. After you configure coc.nvim and
+ALE this way, you can further configure how problems appear to you by using all
+of the settings mentioned in ALE's help file, including how often diagnostics
+are requested. See `:help ale-lint`.
+
+The integration between ALE and coc.nvim works using an API ALE offers for
+letting any other plugin integrate with ALE. If you are interested in writing a
+similar integration, see `:help ale-lint-other-sources`.
+
 <a name="faq-keep-signs"></a>
 
-### 5.ii. How can I keep the sign gutter open?
+### 5.iv. How can I keep the sign gutter open?
 
 You can keep the sign gutter open at all times by setting the
 `g:ale_sign_column_always` to 1
@@ -429,7 +476,7 @@ let g:ale_sign_column_always = 1
 
 <a name="faq-change-signs"></a>
 
-### 5.iii. How can I change the signs ALE uses?
+### 5.v. How can I change the signs ALE uses?
 
 Use these options to specify what text should be used for signs:
 
@@ -449,7 +496,7 @@ highlight clear ALEWarningSign
 
 <a name="faq-change-highlights"></a>
 
-### 5.iv. How can I change or disable the highlights ALE uses?
+### 5.vi. How can I change or disable the highlights ALE uses?
 
 ALE's highlights problems with highlight groups which link to `SpellBad`,
 `SpellCap`, `error`, and `todo` groups by default. The characters that are
@@ -475,7 +522,7 @@ See `:help ale-highlights` for more information.
 
 <a name="faq-statusline"></a>
 
-### 5.v. How can I show errors or warnings in my statusline?
+### 5.vii. How can I show errors or warnings in my statusline?
 
 [vim-airline](https://github.com/vim-airline/vim-airline) integrates with ALE
 for displaying error information in the status bar. If you want to see the
@@ -524,7 +571,7 @@ for more information.
 
 <a name="faq-lightline"></a>
 
-### 5.vi. How can I show errors or warnings in my lightline?
+### 5.viii. How can I show errors or warnings in my lightline?
 
 [lightline](https://github.com/itchyny/lightline.vim) does not have built-in
 support for ALE, nevertheless there is a plugin that adds this functionality: [maximbaz/lightline-ale](https://github.com/maximbaz/lightline-ale).
@@ -533,7 +580,7 @@ For more information, check out the sources of that plugin, `:help ale#statuslin
 
 <a name="faq-echo-format"></a>
 
-### 5.vii. How can I change the format for echo messages?
+### 5.ix. How can I change the format for echo messages?
 
 There are 3 global options that allow customizing the echoed message.
 
@@ -562,7 +609,7 @@ See `:help g:ale_echo_msg_format` for more information.
 
 <a name="faq-autocmd"></a>
 
-### 5.viii. How can I execute some code when ALE starts or stops linting?
+### 5.x. How can I execute some code when ALE starts or stops linting?
 
 ALE runs its own [autocmd](http://vimdoc.sourceforge.net/htmldoc/autocmd.html)
 events when a lint or fix cycle are started and stopped. There is also an event
@@ -585,7 +632,7 @@ augroup END
 
 <a name="faq-navigation"></a>
 
-### 5.ix. How can I navigate between errors quickly?
+### 5.xi. How can I navigate between errors quickly?
 
 ALE offers some commands with `<Plug>` keybinds for moving between warnings and
 errors quickly. You can map the keys Ctrl+j and Ctrl+k to moving between errors
@@ -601,7 +648,7 @@ For more information, consult the online documentation with
 
 <a name="faq-lint-on-save"></a>
 
-### 5.x. How can I run linters only when I save files?
+### 5.xii. How can I run linters only when I save files?
 
 ALE offers an option `g:ale_lint_on_save` for enabling running the linters
 when files are saved. This option is enabled by default. If you only
@@ -622,7 +669,7 @@ files, you can set `g:ale_lint_on_save` to `0`.
 
 <a name="faq-quickfix"></a>
 
-### 5.xi. How can I use the quickfix list instead of the loclist?
+### 5.xiii. How can I use the quickfix list instead of the loclist?
 
 The quickfix list can be enabled by turning the `g:ale_set_quickfix`
 option on. If you wish to also disable the loclist, you can disable
@@ -652,7 +699,7 @@ instead of the default horizontally.
 
 <a name="faq-jsx-stylelint-eslint"></a>
 
-### 5.xii. How can I check JSX files with both stylelint and eslint?
+### 5.xiv. How can I check JSX files with both stylelint and eslint?
 
 If you configure ALE options correctly in your vimrc file, and install
 the right tools, you can check JSX files with stylelint and eslint.
@@ -694,7 +741,7 @@ no linter will be run twice for the same file.
 
 <a name="faq-vue-eslint"></a>
 
-### 5.xiii. How can I check Vue files with ESLint?
+### 5.xv. How can I check Vue files with ESLint?
 
 To check Vue files with ESLint, your ESLint project configuration file must be
 configured to use the [Vue plugin](https://github.com/vuejs/eslint-plugin-vue).
@@ -725,7 +772,7 @@ let g:ale_linters = {'vue': ['eslint', 'vls']}
 
 <a name="faq-my-battery-is-sad"></a>
 
-### 5.xiv. Will this plugin eat all of my laptop battery power?
+### 5.xvi. Will this plugin eat all of my laptop battery power?
 
 ALE takes advantage of the power of various tools to check your code. This of
 course means that CPU time will be used to continuously check your code. If you
@@ -749,7 +796,7 @@ including the option `g:ale_lint_on_enter`, and you can run ALE manually with
 
 <a name="faq-c-configuration"></a>
 
-### 5.xv. How can I configure my C or C++ project?
+### 5.xvii. How can I configure my C or C++ project?
 
 The structure of C and C++ projects varies wildly from project to project, with
 many different build tools being used for building them, and many different
@@ -769,13 +816,24 @@ setting.  Consult the documentation for that setting for more information.
 `b:ale_linters` can be used to select which tools you want to run, say if you
 want to use only `gcc` for one project, and only `clang` for another.
 
+ALE will attempt to parse `compile_commands.json` files to discover compiler
+flags to use when linting code. See `:help g:ale_c_parse_compile_commands` for
+more information. See Clang's documentation for
+[compile_commands.json files](https://clang.llvm.org/docs/JSONCompilationDatabase.html).
+You should strongly consider generating them in your builds, which is easy to do
+with CMake.
+
+You can also configure ALE to automatically run `make -n` to run dry runs on
+`Makefile`s to discover compiler flags. This can execute arbitrary code, so the
+option is disabled by default. See `:help g:ale_c_parse_makefile`.
+
 You may also configure buffer-local settings for linters with project-specific
 vimrc files. [local_vimrc](https://github.com/LucHermitte/local_vimrc) can be
 used for executing local vimrc files which can be shared in your project.
 
 <a name="faq-buffer-configuration"></a>
 
-### 5.xvi. How can I configure ALE differently for different buffers?
+### 5.xviii. How can I configure ALE differently for different buffers?
 
 ALE offers various ways to configure which linters or fixers are run, and
 other settings. For the majority of ALE's settings, they can either be
@@ -811,21 +869,11 @@ Buffer-local variables for settings always override the global settings.
 
 <a name="faq-list-window-height"></a>
 
-### 5.xvii. How can I configure the height of the list in which ALE displays errors?
+### 5.xix. How can I configure the height of the list in which ALE displays errors?
 
 To set a default height for the error list, use the `g:ale_list_window_size` variable.
 
 ```vim
 " Show 5 lines of errors (default: 10)
 let g:ale_list_window_size = 5
-```
-
-<a name="faq-get-info"></a>
-
-### 5.xviii. How can I see what ALE has configured for the current file?
-
-Run the following to see what is currently configured:
-
-```vim
-:ALEInfo
 ```

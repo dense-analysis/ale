@@ -27,7 +27,7 @@ Execute(The tslint callback should return the correct default values):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape('tslint')
   \     . ' -c ' . ale#Escape('tslint.json')
-  \     . ' --fix %t',
+  \     . ' --outputAbsolutePaths --fix %t',
   \ },
   \ ale#fixers#tslint#Fix(bufnr(''))
 
@@ -40,6 +40,6 @@ Execute(The tslint callback should include custom tslint config option):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape('tslint')
   \     . ' -c ' . ale#Escape('.tslintrc')
-  \     . ' --fix %t',
+  \     . ' --outputAbsolutePaths --fix %t',
   \ },
   \ ale#fixers#tslint#Fix(bufnr(''))

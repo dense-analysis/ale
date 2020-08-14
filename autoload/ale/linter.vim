@@ -14,6 +14,7 @@ let s:default_ale_linter_aliases = {
 \   'csh': 'sh',
 \   'javascriptreact': ['javascript', 'jsx'],
 \   'plaintex': 'tex',
+\   'ps1': 'powershell',
 \   'rmarkdown': 'r',
 \   'rmd': 'r',
 \   'systemverilog': 'verilog',

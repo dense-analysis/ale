@@ -21,9 +21,10 @@ Execute(The rubocop callback should return the correct default values):
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
+  \   'process_with': 'ale#fixers#rubocop#PostProcess',
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
-  \     . ' --auto-correct --force-exclusion %t',
+  \     . ' --auto-correct --force-exclusion --stdin '
+  \     . ale#Escape(expand('#' . bufnr('') . ':p')),
   \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))
 
@@ -32,10 +33,11 @@ Execute(The rubocop callback should include configuration files):
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
+  \   'process_with': 'ale#fixers#rubocop#PostProcess',
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
   \     . ' --config ' . ale#Escape(ale#path#Simplify(g:dir . '/ruby_paths/with_config/.rubocop.yml'))
-  \     . ' --auto-correct --force-exclusion %t',
+  \     . ' --auto-correct --force-exclusion --stdin '
+  \     . ale#Escape(expand('#' . bufnr('') . ':p')),
   \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))
 
@@ -45,10 +47,64 @@ Execute(The rubocop callback should include custom rubocop options):
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
+  \   'process_with': 'ale#fixers#rubocop#PostProcess',
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
   \     . ' --config ' . ale#Escape(ale#path#Simplify(g:dir . '/ruby_paths/with_config/.rubocop.yml'))
   \     . ' --except Lint/Debugger'
-  \     . ' --auto-correct --force-exclusion %t',
+  \     . ' --auto-correct --force-exclusion --stdin '
+  \     . ale#Escape(expand('#' . bufnr('') . ':p')),
   \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))
+
+Execute(The rubocop callback should use auto-correct-all option when set):
+  let g:ale_ruby_rubocop_auto_correct_all = 1
+  call ale#test#SetFilename('ruby_paths/with_config/dummy.rb')
+
+  AssertEqual
+  \ {
+  \   'process_with': 'ale#fixers#rubocop#PostProcess',
+  \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
+  \     . ' --config ' . ale#Escape(ale#path#Simplify(g:dir . '/ruby_paths/with_config/.rubocop.yml'))
+  \     . ' --auto-correct-all --force-exclusion --stdin '
+  \     . ale#Escape(expand('#' . bufnr('') . ':p')),
+  \ },
+  \ ale#fixers#rubocop#Fix(bufnr(''))
+
+Execute(The rubocop post-processor should remove diagnostics content):
+  AssertEqual
+  \ [
+  \   'class MyModel < ApplicationRecord',
+  \   '  # rubocop:disable Rails/InverseOf',
+  \   '  has_one :something',
+  \   '  # rubocop:enable Rails/InverseOf',
+  \   'end',
+  \   '',
+  \   'array = [1, 2, 3,',
+  \   '         4, 5, 6]',
+  \   'array = [''run'',',
+  \   '         ''forrest'',',
+  \   '         ''run'']',
+  \ ],
+  \ ale#fixers#rubocop#PostProcess(bufnr(''), [
+  \   'Inspecting 1 file',
+  \   'C',
+  \   '',
+  \   'Offenses:',
+  \   'app/models/my_model.rb:8:3: C: [Corrected] Layout/ArrayAlignment: ',
+  \   '4, 5, 6]',
+  \   '^',
+  \   '',
+  \   '1 file inspected, 3 offenses detected, 3 offenses corrected',
+  \   '====================',
+  \   'class MyModel < ApplicationRecord',
+  \   '  # rubocop:disable Rails/InverseOf',
+  \   '  has_one :something',
+  \   '  # rubocop:enable Rails/InverseOf',
+  \   'end',
+  \   '',
+  \   'array = [1, 2, 3,',
+  \   '         4, 5, 6]',
+  \   'array = [''run'',',
+  \   '         ''forrest'',',
+  \   '         ''run'']',
+  \ ])

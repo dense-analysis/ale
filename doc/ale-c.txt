@@ -37,16 +37,13 @@ g:ale_c_build_dir                                           *g:ale_c_build_dir*
 g:ale_c_parse_compile_commands                 *g:ale_c_parse_compile_commands*
                                                *b:ale_c_parse_compile_commands*
   Type: |Number|
-  Default: `0`
+  Default: `1`
 
   If set to `1`, ALE will parse `compile_commands.json` files to automatically
   determine flags for C or C++ compilers. ALE will first search for the
   nearest `compile_commands.json` file, and then look for
   `compile_commands.json` files in the directories for
   |g:ale_c_build_dir_names|.
-
-  If |g:ale_c_parse_makefile| or |b:ale_c_parse_makefile| is set to `1`, the
-  output of `make -n` will be preferred over `compile_commands.json` files.
 
 
 g:ale_c_parse_makefile                                 *g:ale_c_parse_makefile*
@@ -57,6 +54,19 @@ g:ale_c_parse_makefile                                 *g:ale_c_parse_makefile*
   If set to `1`, ALE will run `make -n` to automatically determine flags to
   set for C or C++ compilers. This can make it easier to determine the correct
   build flags to use for different files.
+
+  WARNING: Running `make -n` automatically can execute arbitrary code, even
+  though it's supposed to be a dry run, so enable this option with care. You
+  might prefer to use the buffer-local version of the option instead with
+  |g:ale_pattern_options|, or you own code for checking which project you're
+  in.
+
+  You might want to disable this option if `make -n` takes too long to run for
+  projects you work on.
+
+  If |g:ale_c_parse_compile_commands| or |b:ale_c_parse_compile_commands| is
+  set to `1`, flags taken from `compile_commands.json` will be preferred over
+  `make -n` output.
 
 
 ===============================================================================

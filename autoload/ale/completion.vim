@@ -16,7 +16,8 @@ onoremap <silent> <Plug>(ale_show_completion_menu) <Nop>
 let g:ale_completion_delay = get(g:, 'ale_completion_delay', 100)
 let g:ale_completion_excluded_words = get(g:, 'ale_completion_excluded_words', [])
 let g:ale_completion_max_suggestions = get(g:, 'ale_completion_max_suggestions', 50)
-let g:ale_completion_tsserver_autoimport = get(g:, 'ale_completion_tsserver_autoimport', 0)
+let g:ale_completion_autoimport = get(g:, 'ale_completion_autoimport', 0)
+let g:ale_completion_tsserver_remove_warnings = get(g:, 'ale_completion_tsserver_remove_warnings', 0)
 
 let s:timer_id = -1
 let s:last_done_pos = []
@@ -397,10 +398,14 @@ function! ale#completion#ParseTSServerCompletions(response) abort
     let l:names = []
 
     for l:suggestion in a:response.body
-        call add(l:names, {
-        \ 'word': l:suggestion.name,
-        \ 'source': get(l:suggestion, 'source', ''),
-        \})
+        let l:kind = get(l:suggestion, 'kind', '')
+
+        if g:ale_completion_tsserver_remove_warnings == 0 || l:kind isnot# 'warning'
+            call add(l:names, {
+            \ 'word': l:suggestion.name,
+            \ 'source': get(l:suggestion, 'source', ''),
+            \})
+        endif
     endfor
 
     return l:names
@@ -413,12 +418,22 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
 
     for l:suggestion in a:response.body
         let l:displayParts = []
+        let l:local_name = v:null
 
         for l:action in get(l:suggestion, 'codeActions', [])
             call add(l:displayParts, l:action.description . ' ')
         endfor
 
         for l:part in l:suggestion.displayParts
+            " Stop on stop on line breaks for the menu.
+            if get(l:part, 'kind') is# 'lineBreak'
+                break
+            endif
+
+            if get(l:part, 'kind') is# 'localName'
+                let l:local_name = l:part.text
+            endif
+
             call add(l:displayParts, l:part.text)
         endfor
 
@@ -431,11 +446,17 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
 
         " See :help complete-items
         let l:result = {
-        \   'word': l:suggestion.name,
+        \   'word': (
+        \       l:suggestion.name is# 'default'
+        \       && l:suggestion.kind is# 'alias'
+        \       && !empty(l:local_name)
+        \           ? l:local_name
+        \           : l:suggestion.name
+        \   ),
         \   'kind': ale#completion#GetCompletionSymbols(l:suggestion.kind),
         \   'icase': 1,
         \   'menu': join(l:displayParts, ''),
-        \   'dup': g:ale_completion_tsserver_autoimport,
+        \   'dup': g:ale_completion_autoimport,
         \   'info': join(l:documentationParts, ''),
         \}
 
@@ -514,6 +535,12 @@ function! ale#completion#ParseLSPCompletions(response) abort
         let l:word = matchstr(l:text, '\v^[^(]+')
 
         if empty(l:word)
+            continue
+        endif
+
+        " Don't use LSP items with additional text edits when autoimport for
+        " completions is turned off.
+        if has_key(l:item, 'additionalTextEdits') && !g:ale_completion_autoimport
             continue
         endif
 
@@ -661,12 +688,16 @@ function! s:OnReady(linter, lsp_details) abort
     call ale#lsp#RegisterCallback(l:id, l:Callback)
 
     if a:linter.lsp is# 'tsserver'
+        if get(g:, 'ale_completion_tsserver_autoimport') is 1
+            execute 'echom `g:ale_completion_tsserver_autoimport` is deprecated. Use `g:ale_completion_autoimport` instead.'''
+        endif
+
         let l:message = ale#lsp#tsserver_message#Completions(
         \   l:buffer,
         \   b:ale_completion_info.line,
         \   b:ale_completion_info.column,
         \   b:ale_completion_info.prefix,
-        \   g:ale_completion_tsserver_autoimport,
+        \   g:ale_completion_autoimport,
         \)
     else
         " Send a message saying the buffer has changed first, otherwise
