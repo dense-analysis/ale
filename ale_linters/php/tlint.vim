@@ -47,11 +47,12 @@ function! ale_linters#php#tlint#Handle(buffer, lines) abort
     let l:pattern = '^\(\d\+\) \:'
     let l:temp_messages = []
 
-   for l:message in ale#util#GetMatches(a:lines, l:messages_pattern)
-       call add(l:temp_messages, l:message)
-   endfor
+    for l:message in ale#util#GetMatches(a:lines, l:messages_pattern)
+        call add(l:temp_messages, l:message)
+    endfor
 
     let l:loop_count = 0
+
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:num = l:match[1]
         let l:text = l:temp_messages[l:loop_count]
@@ -63,10 +64,12 @@ function! ale_linters#php#tlint#Handle(buffer, lines) abort
         \   'type': 'W',
         \   'sub_type': 'style',
         \})
-
-      let l:loop_count += 1
+        
+        let l:loop_count += 1
     endfor
+
     return l:output
+
 endfunction
 
 call ale#linter#Define('php', {
