@@ -10,7 +10,7 @@ call ale#Set('php_tlint_options', '')
 function! ale_linters#php#tlint#GetProjectRoot(buffer) abort
     let l:composer_path = ale#path#FindNearestFile(a:buffer, 'composer.json')
 
-    if (!empty(l:composer_path))
+    if !empty(l:composer_path)
         return fnamemodify(l:composer_path, ':h')
     endif
 
@@ -41,20 +41,20 @@ function! ale_linters#php#tlint#Handle(buffer, lines) abort
     " ! There should be 1 space around `.` concatenations, and additional lines should always start with a `.`
     " 22 : `        $something = 'a'.'name';`
     "
-    let l:loopCount = 0
-    let l:messagePattern = '^\! \(.*\)'
+    let l:loop_count = 0
+    let l:messages_pattern = '^\! \(.*\)'
     let l:output = []
     let l:pattern = '^\(\d\+\) \:'
-    let l:tempMessages = []
+    let l:temp_messages = []
 
-   for l:message in ale#util#GetMatches(a:lines, l:messagePattern)
-    call add(l:tempMessages, l:message) 
+   for l:message in ale#util#GetMatches(a:lines, l:messages_pattern)
+       call add(l:temp_messages, l:message)
    endfor
 
-    let l:loopCount = 0
+    let l:loop_count = 0
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:num = l:match[1]
-        let l:text = l:tempMessages[l:loopCount]
+        let l:text = l:temp_messages[l:loop_count]
 
         call add(l:output, {
         \   'lnum': l:num,
@@ -64,7 +64,7 @@ function! ale_linters#php#tlint#Handle(buffer, lines) abort
         \   'sub_type': 'style',
         \})
 
-      let l:loopCount += 1
+      let l:loop_count += 1
     endfor
     return l:output
 endfunction
