@@ -64,12 +64,11 @@ function! ale_linters#php#tlint#Handle(buffer, lines) abort
         \   'type': 'W',
         \   'sub_type': 'style',
         \})
-        
+
         let l:loop_count += 1
     endfor
 
     return l:output
-
 endfunction
 
 call ale#linter#Define('php', {
