@@ -147,6 +147,10 @@ function! ale#events#Init() abort
                 autocmd InsertLeave * if exists('*ale#engine#Cleanup') | call ale#virtualtext#ShowCursorWarning() | endif
             endif
 
+            if g:ale_hover_cursor
+                autocmd CursorHold * if exists('*ale#lsp#Send') | call ale#hover#ShowTruncatedMessageAtCursor() | endif
+            endif
+
             if g:ale_close_preview_on_insert
                 autocmd InsertEnter * if exists('*ale#preview#CloseIfTypeMatches') | call ale#preview#CloseIfTypeMatches('ale-preview') | endif
             endif

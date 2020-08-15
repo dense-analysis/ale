@@ -69,3 +69,49 @@ Execute(Unix file lines should be written as normal):
   AssertEqual
   \ ['first', 'second', 'third', ''],
   \ readfile(g:new_line_test_file, 'b')
+
+Execute(Newline at end of file should be preserved even when nofixeol):
+  call ale#test#SetFilename(g:new_line_test_file)
+
+  setlocal buftype=
+  noautocmd :w
+  noautocmd :e! ++ff=unix
+  set eol
+  set nofixeol
+
+  call ale#util#Writefile(bufnr(''), getline(1, '$'), g:new_line_test_file)
+
+  AssertEqual
+  \ ['first', 'second', 'third', ''],
+  \ readfile(g:new_line_test_file, 'b')
+
+Execute(Newline should not be appended on write when noeol and nofixeol):
+  call ale#test#SetFilename(g:new_line_test_file)
+
+  setlocal buftype=
+  noautocmd :w
+  noautocmd :e! ++ff=unix
+  set noeol
+  set nofixeol
+
+  call ale#util#Writefile(bufnr(''), getline(1, '$'), g:new_line_test_file)
+
+  AssertEqual
+  \ ['first', 'second', 'third'],
+  \ readfile(g:new_line_test_file, 'b')
+
+Execute(Newline should be appended on write when noeol and fixeol):
+  call ale#test#SetFilename(g:new_line_test_file)
+
+  setlocal buftype=
+  noautocmd :w
+  noautocmd :e! ++ff=unix
+  set noeol
+  set fixeol
+
+  call ale#util#Writefile(bufnr(''), getline(1, '$'), g:new_line_test_file)
+
+  AssertEqual
+  \ ['first', 'second', 'third', ''],
+  \ readfile(g:new_line_test_file, 'b')
+

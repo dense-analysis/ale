@@ -1,6 +1,8 @@
 Before:
   Save g:ale_python_mypy_ignore_invalid_syntax
+  Save g:ale_python_mypy_show_notes
 
+  unlet! g:ale_python_mypy_show_notes
   unlet! g:ale_python_mypy_ignore_invalid_syntax
 
   runtime ale_linters/python/mypy.vim
@@ -15,6 +17,8 @@ After:
 
 Execute(The mypy handler should parse lines correctly):
   call ale#test#SetFilename('__init__.py')
+
+  let g:ale_python_mypy_show_notes = 0
 
   AssertEqual
   \ [
@@ -67,6 +71,31 @@ Execute(The mypy handler should parse lines correctly):
   \ 'another_module/bar.py:14: note: In module imported here,',
   \ 'another_module/__init__.py:16: note: ... from here,',
   \ '__init__.py:72:1: warning: Some warning',
+  \ ])
+
+Execute(The mypy handler should show notes if enabled):
+  call ale#test#SetFilename('__init__.py')
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 72,
+  \     'col': 1,
+  \     'filename': ale#path#Simplify(g:dir . '/__init__.py'),
+  \     'type': 'I',
+  \     'text': 'A note',
+  \   },
+  \ ],
+  \ ale_linters#python#mypy#Handle(bufnr(''), [
+  \   '__init__.py:72:1: note: A note',
+  \ ])
+
+  let g:ale_python_mypy_show_notes = 0
+
+  AssertEqual
+  \ [],
+  \ ale_linters#python#mypy#Handle(bufnr(''), [
+  \   '__init__.py:72:1: note: A note',
   \ ])
 
 Execute(The mypy handler should handle Windows names with spaces):

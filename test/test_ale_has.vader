@@ -1,4 +1,6 @@
 Execute(Checks for versions below the current version should succeed):
+  AssertEqual 1, ale#Has('ale-2.7.0')
+  AssertEqual 1, ale#Has('ale-2.6.0')
   AssertEqual 1, ale#Has('ale-2.5.0')
   AssertEqual 1, ale#Has('ale-2.4.0')
   AssertEqual 1, ale#Has('ALE-2.2.1')

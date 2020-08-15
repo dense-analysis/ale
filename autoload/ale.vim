@@ -5,10 +5,17 @@
 " Strings used for severity in the echoed message
 let g:ale_echo_msg_error_str = get(g:, 'ale_echo_msg_error_str', 'Error')
 let g:ale_echo_msg_info_str = get(g:, 'ale_echo_msg_info_str', 'Info')
+let g:ale_echo_msg_log_str = get(g:, 'ale_echo_msg_log_str', 'Log')
 let g:ale_echo_msg_warning_str = get(g:, 'ale_echo_msg_warning_str', 'Warning')
 " Ignoring linters, for disabling some, or ignoring LSP diagnostics.
 let g:ale_linters_ignore = get(g:, 'ale_linters_ignore', {})
 let g:ale_disable_lsp = get(g:, 'ale_disable_lsp', 0)
+
+" LSP window/showMessage format
+let g:ale_lsp_show_message_format = get(g:, 'ale_lsp_show_message_format', '%severity%:%linter%: %s')
+" Valid values mimic LSP definitions (error, warning and information; log is
+" never shown)
+let g:ale_lsp_show_message_severity = get(g:, 'ale_lsp_show_message_severity', 'error')
 
 let s:lint_timer = -1
 let s:getcmdwintype_exists = exists('*getcmdwintype')
@@ -156,7 +163,7 @@ function! ale#Queue(delay, ...) abort
     endif
 endfunction
 
-let s:current_ale_version = [2, 5, 0]
+let s:current_ale_version = [2, 7, 0]
 
 " A function used to check for ALE features in files outside of the project.
 function! ale#Has(feature) abort
@@ -251,9 +258,9 @@ function! ale#GetLocItemMessage(item, format_string) abort
 
     " Replace special markers with certain information.
     " \=l:variable is used to avoid escaping issues.
+    let l:msg = substitute(l:msg, '\v\%([^\%]*)code([^\%]*)\%', l:code_repl, 'g')
     let l:msg = substitute(l:msg, '\V%severity%', '\=l:severity', 'g')
     let l:msg = substitute(l:msg, '\V%linter%', '\=l:linter_name', 'g')
-    let l:msg = substitute(l:msg, '\v\%([^\%]*)code([^\%]*)\%', l:code_repl, 'g')
     " Replace %s with the text.
     let l:msg = substitute(l:msg, '\V%s', '\=a:item.text', 'g')
 

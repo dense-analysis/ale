@@ -8,14 +8,19 @@ ale_module = imp.load_source(
 
 
 class VimMock(object):
-    def __init__(self, call_list, call_results):
+    def __init__(self, call_list, call_results, commands):
         self.__call_list = call_list
         self.__call_results = call_results
+
+        self.__commands = commands
 
     def call(self, function, *args):
         self.__call_list.append((function, args))
 
         return self.__call_results.get(function, 0)
+
+    def command(self, command):
+        self.__commands.append(command)
 
 
 class DeopleteSourceTest(unittest.TestCase):
@@ -24,8 +29,10 @@ class DeopleteSourceTest(unittest.TestCase):
 
         self.call_list = []
         self.call_results = {'ale#completion#CanProvideCompletions': 1}
+        self.commands = []
         self.source = ale_module.Source('vim')
-        self.source.vim = VimMock(self.call_list, self.call_results)
+        self.source.vim = VimMock(
+            self.call_list, self.call_results, self.commands)
 
     def test_attributes(self):
         """
@@ -48,6 +55,7 @@ class DeopleteSourceTest(unittest.TestCase):
                 'cpp': r'(\.|::|->)\w*$',
             },
             'is_bytepos': True,
+            'is_volatile': True,
             'mark': '[L]',
             'min_pattern_length': 1,
             'name': 'ale',
@@ -64,70 +72,28 @@ class DeopleteSourceTest(unittest.TestCase):
         ])
 
     def test_request_completion_results(self):
-        context = {'is_async': False}
+        context = {'event': 'TextChangedI', 'is_refresh': True}
 
         self.assertEqual(self.source.gather_candidates(context), [])
-        self.assertEqual(context, {'is_async': True})
         self.assertEqual(self.call_list, [
             ('ale#completion#CanProvideCompletions', ()),
-            ('ale#completion#GetCompletions', ('deoplete',)),
+        ])
+        self.assertEqual(self.commands, [
+            "call ale#completion#GetCompletions('ale-callback', " + \
+            "{'callback': {completions -> deoplete#auto_complete() }})"
         ])
 
     def test_request_completion_results_from_buffer_without_providers(self):
         self.call_results['ale#completion#CanProvideCompletions'] = 0
-        context = {'is_async': False}
+        context = {'event': 'TextChangedI', 'is_refresh': True}
 
         self.assertIsNone(self.source.gather_candidates(context), [])
-        self.assertEqual(context, {'is_async': False})
         self.assertEqual(self.call_list, [
             ('ale#completion#CanProvideCompletions', ()),
         ])
 
-    def test_refresh_completion_results(self):
-        context = {'is_async': False}
-
-        self.assertEqual(self.source.gather_candidates(context), [])
-        self.assertEqual(context, {'is_async': True})
-        self.assertEqual(self.call_list, [
-            ('ale#completion#CanProvideCompletions', ()),
-            ('ale#completion#GetCompletions', ('deoplete',)),
-        ])
-
-        context = {'is_async': True, 'is_refresh': True}
-
-        self.assertEqual(self.source.gather_candidates(context), [])
-        self.assertEqual(context, {'is_async': True, 'is_refresh': True})
-        self.assertEqual(self.call_list, [
-            ('ale#completion#CanProvideCompletions', ()),
-            ('ale#completion#GetCompletions', ('deoplete',)),
-            ('ale#completion#CanProvideCompletions', ()),
-            ('ale#completion#GetCompletions', ('deoplete',)),
-        ])
-
-    def test_poll_no_result(self):
-        context = {'is_async': True}
-        self.call_results['ale#completion#GetCompletionResult'] = None
-
-        self.assertEqual(self.source.gather_candidates(context), [])
-        self.assertEqual(context, {'is_async': True})
-        self.assertEqual(self.call_list, [
-            ('ale#completion#CanProvideCompletions', ()),
-            ('ale#completion#GetCompletionResult', ()),
-        ])
-
-    def test_poll_empty_result_ready(self):
-        context = {'is_async': True}
-        self.call_results['ale#completion#GetCompletionResult'] = []
-
-        self.assertEqual(self.source.gather_candidates(context), [])
-        self.assertEqual(context, {'is_async': False})
-        self.assertEqual(self.call_list, [
-            ('ale#completion#CanProvideCompletions', ()),
-            ('ale#completion#GetCompletionResult', ()),
-        ])
-
-    def test_poll_non_empty_result_ready(self):
-        context = {'is_async': True}
+    def test_async_event(self):
+        context = {'event': 'Async', 'is_refresh': True}
         self.call_results['ale#completion#GetCompletionResult'] = [
             {
                 'word': 'foobar',
@@ -147,7 +113,7 @@ class DeopleteSourceTest(unittest.TestCase):
                 'info': '',
             },
         ])
-        self.assertEqual(context, {'is_async': False})
+
         self.assertEqual(self.call_list, [
             ('ale#completion#CanProvideCompletions', ()),
             ('ale#completion#GetCompletionResult', ()),

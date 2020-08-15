@@ -21,6 +21,26 @@ g:ale_ruby_brakeman_options                       *g:ale_ruby_brakeman_options*
 
   The contents of this variable will be passed through to brakeman.
 
+===============================================================================
+debride                                                      *ale-ruby-debride*
+
+g:ale_ruby_debride_executable                   *g:ale_ruby_debride_executable*
+                                                *b:ale_ruby_debride_executable*
+  Type: String
+  Default: `'debride'`
+
+  Override the invoked debride binary. Set this to `'bundle'` to invoke
+  `'bundle` `exec` debride'.
+
+
+g:ale_ruby_debride_options                         *g:ale_ruby_debride_options*
+                                                   *b:ale_ruby_debride_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to modify flags given to debride.
+
+
 
 ===============================================================================
 rails_best_practices                            *ale-ruby-rails_best_practices*
@@ -91,7 +111,15 @@ g:ale_ruby_rubocop_options                         *g:ale_ruby_rubocop_options*
   Type: |String|
   Default: `''`
 
-  This variable can be change to modify flags given to rubocop.
+  This variable can be changed to modify flags given to rubocop.
+
+
+g:ale_ruby_rubocop_auto_correct_all       *g:ale_ruby_rubocop_auto_correct_all*
+                                          *b:ale_ruby_rubocop_auto_correct_all*
+  Type: Number
+  Default: `0`
+
+  This variable can be changed to make rubocop to correct all offenses (unsafe).
 
 
 ===============================================================================
@@ -146,14 +174,14 @@ g:ale_ruby_sorbet_options                           *g:ale_ruby_sorbet_options*
   Type: |String|
   Default: `''`
 
-  This variable can be change to modify flags given to sorbet.
+  This variable can be changed to modify flags given to sorbet.
 
 
 ===============================================================================
 standardrb                                                *ale-ruby-standardrb*
 
-g:ale_ruby_standardrb_executable              *g:ale_ruby_standardrb_executable*
-                                              *b:ale_ruby_standardrb_executable*
+g:ale_ruby_standardrb_executable             *g:ale_ruby_standardrb_executable*
+                                             *b:ale_ruby_standardrb_executable*
   Type: String
   Default: `'standardrb'`
 
@@ -166,7 +194,7 @@ g:ale_ruby_standardrb_options                   *g:ale_ruby_standardrb_options*
   Type: |String|
   Default: `''`
 
-  This variable can be change to modify flags given to standardrb.
+  This variable can be changed to modify flags given to standardrb.
 
 
 ===============================================================================

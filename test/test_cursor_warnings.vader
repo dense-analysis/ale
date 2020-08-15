@@ -15,7 +15,7 @@ Before:
   \       'col': 10,
   \       'bufnr': bufnr('%'),
   \       'vcol': 0,
-  \       'linter_name': 'eslint',
+  \       'linter_name': 'bettercode',
   \       'nr': -1,
   \       'type': 'W',
   \       'code': 'semi',
@@ -26,7 +26,7 @@ Before:
   \       'col': 10,
   \       'bufnr': bufnr('%'),
   \       'vcol': 0,
-  \       'linter_name': 'eslint',
+  \       'linter_name': 'bettercode',
   \       'nr': -1,
   \       'type': 'E',
   \       'code': 'semi',
@@ -38,7 +38,7 @@ Before:
   \       'col': 14,
   \       'bufnr': bufnr('%'),
   \       'vcol': 0,
-  \       'linter_name': 'eslint',
+  \       'linter_name': 'bettercode',
   \       'nr': -1,
   \       'type': 'I',
   \       'text': 'Some information',
@@ -48,7 +48,7 @@ Before:
   \       'col': 10,
   \       'bufnr': bufnr('%'),
   \       'vcol': 0,
-  \       'linter_name': 'eslint',
+  \       'linter_name': 'bettercode',
   \       'nr': -1,
   \       'type': 'W',
   \       'code': 'space-infix-ops',
@@ -59,7 +59,7 @@ Before:
   \       'col': 15,
   \       'bufnr': bufnr('%'),
   \       'vcol': 0,
-  \       'linter_name': 'eslint',
+  \       'linter_name': 'bettercode',
   \       'nr': -1,
   \       'type': 'E',
   \       'code': 'radix',
@@ -70,7 +70,7 @@ Before:
   \       'col': 1,
   \       'bufnr': bufnr('%'),
   \       'vcol': 0,
-  \       'linter_name': 'eslint',
+  \       'linter_name': 'bettercode',
   \       'nr': -1,
   \       'type': 'E',
   \       'text': 'lowercase error',
@@ -196,7 +196,7 @@ Execute(The linter name should be formatted into the message correctly):
   call ale#cursor#EchoCursorWarning()
 
   AssertEqual
-  \ 'eslint: Infix operators must be spaced.',
+  \ 'bettercode: Infix operators must be spaced.',
   \ GetLastMessage()
 
 Execute(The severity should be formatted into the message correctly):

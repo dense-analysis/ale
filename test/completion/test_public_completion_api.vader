@@ -37,6 +37,7 @@ Execute(ale#completion#GetCompletionPositionForDeoplete() should return the posi
   AssertEqual 4, ale#completion#GetCompletionPositionForDeoplete('foo bar')
 
 Execute(ale#completion#CanProvideCompletions should return 0 when no completion sources are available):
+  let b:ale_linters = ['flake8']
   AssertEqual 0, ale#completion#CanProvideCompletions()
 
 Execute(ale#completion#CanProvideCompletions should return 1 when at least one completion source is available):

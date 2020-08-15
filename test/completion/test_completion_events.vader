@@ -50,7 +50,8 @@ Before:
   let g:handle_code_action_called = 0
   function! MockHandleCodeAction() abort
     " delfunction! ale#code_action#HandleCodeAction
-    function! ale#code_action#HandleCodeAction(action) abort
+    function! ale#code_action#HandleCodeAction(action, should_save) abort
+      AssertEqual v:false, a:should_save
       let g:handle_code_action_called += 1
     endfunction
   endfunction
@@ -233,7 +234,7 @@ Execute(ale#completion#Show() should make the correct feedkeys() call for manual
   AssertEqual [["\<Plug>(ale_show_completion_menu)"]], g:feedkeys_calls
 
 Execute(ale#completion#Show() should not call feedkeys() for other sources):
-  let b:ale_completion_info = {'source': 'deoplete'}
+  let b:ale_completion_info = {'source': 'other-source'}
   call ale#completion#Show([{'word': 'x', 'kind': 'v', 'icase': 1}])
 
   sleep 1ms
@@ -334,7 +335,7 @@ Execute(b:ale_completion_info should be set up correctly when requesting complet
 Execute(b:ale_completion_info should be set up correctly for other sources):
   let b:ale_completion_result = []
   call setpos('.', [bufnr(''), 3, 14, 0])
-  call ale#completion#GetCompletions('deoplete')
+  call ale#completion#GetCompletions('ale-callback')
 
   AssertEqual
   \ {
@@ -344,7 +345,7 @@ Execute(b:ale_completion_info should be set up correctly for other sources):
   \   'line_length': 14,
   \   'line': 3,
   \   'prefix': 'ab',
-  \   'source': 'deoplete',
+  \   'source': 'ale-callback',
   \ },
   \ b:ale_completion_info
   Assert !exists('b:ale_completion_result')
@@ -430,6 +431,12 @@ Execute(HandleUserData should call ale#code_action#HandleCodeAction):
   \  'user_data': '{"codeActions": [{"description":"", "changes": []}]}'
   \})
   AssertEqual g:handle_code_action_called, 2
+
+  let b:ale_completion_info = {'source': 'ale-callback'}
+  call ale#completion#HandleUserData({
+  \  'user_data': '{"codeActions": [{"description":"", "changes": []}]}'
+  \})
+  AssertEqual g:handle_code_action_called, 3
 
 Execute(ale#code_action#HandleCodeAction should not be called when when source is not ALE):
   call MockHandleCodeAction()
