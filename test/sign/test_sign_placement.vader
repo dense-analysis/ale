@@ -6,7 +6,9 @@ Before:
   Save g:ale_set_loclist
   Save g:ale_set_quickfix
   Save g:ale_set_signs
+  Save g:ale_command_wrapper
 
+  let g:ale_command_wrapper = ''
   let g:ale_buffer_info = {}
   let g:ale_run_synchronously = 1
   let g:ale_set_signs = 1

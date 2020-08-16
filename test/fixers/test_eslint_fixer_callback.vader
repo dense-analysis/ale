@@ -1,6 +1,10 @@
 Before:
   call ale#assert#SetUpFixerTest('javascript', 'eslint')
+  Save g:ale_command_wrapper
+
   runtime autoload/ale/handlers/eslint.vim
+
+  let g:ale_command_wrapper = ''
 
 After:
   call ale#assert#TearDownFixerTest()

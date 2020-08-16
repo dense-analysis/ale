@@ -1,5 +1,8 @@
 Before:
   call ale#assert#SetUpFixerTest('javascript', 'prettier_eslint')
+  Save g:ale_command_wrapper
+
+  let g:ale_command_wrapper = ''
 
 After:
   call ale#assert#TearDownFixerTest()

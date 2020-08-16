@@ -5,12 +5,14 @@ Before:
   Save g:ale_fix_on_save
   Save g:ale_lint_on_save
   Save g:ale_echo_cursor
+  Save g:ale_command_wrapper
 
   silent! cd /testplugin/test/fix
 
   unlet! b:ale_lint_on_save
   let g:ale_enabled = 0
   let g:ale_echo_cursor = 0
+  let g:ale_command_wrapper = ''
   let g:ale_run_synchronously = 1
   let g:ale_set_lists_synchronously = 1
   let g:ale_fix_buffer_data = {}
