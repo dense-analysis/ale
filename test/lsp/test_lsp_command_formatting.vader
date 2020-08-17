@@ -1,5 +1,9 @@
 Before:
+  Save g:ale_command_wrapper
+
   runtime autoload/ale/lsp.vim
+
+  let g:ale_command_wrapper = ''
 
   let g:args = []
 
@@ -9,6 +13,8 @@ Before:
   endfunction
 
 After:
+  Restore
+
   unlet! g:args
 
   runtime autoload/ale/lsp.vim

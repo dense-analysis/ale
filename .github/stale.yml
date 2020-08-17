@@ -1,0 +1,16 @@
+---
+# This configuration closes stale PRs after 30 days.
+# Issues in ALE are never, ever stale. They are either resolved or not.
+only: pulls
+daysUntilStale: 28
+daysUntilClose: 2
+exemptLabels: []
+staleLabel: stale
+markComment: >
+  This pull request has been automatically marked as stale because it has not
+  been updated recently. Make sure to write tests and document your changes.
+  See `:help ale-dev` for information on writing tests.
+
+  If your pull request is good to merge, bother w0rp or another maintainer
+  again, and get them to merge it.
+closeComment: false

@@ -54,6 +54,11 @@ let s:default_registry = {
 \       'description': 'Apply elm-format to a file.',
 \       'aliases': ['format'],
 \   },
+\   'nimpretty': {
+\       'function': 'ale#fixers#nimpretty#Fix',
+\       'suggested_filetypes': ['nim'],
+\       'description': 'Apply nimpretty to a file.',
+\   },
 \   'eslint': {
 \       'function': 'ale#fixers#eslint#Fix',
 \       'suggested_filetypes': ['javascript', 'typescript'],
@@ -155,6 +160,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['php'],
 \       'description': 'Fix PHP files with php-cs-fixer.',
 \   },
+\    'astyle': {
+\       'function': 'ale#fixers#astyle#Fix',
+\       'suggested_filetypes': ['c', 'cpp'],
+\       'description': 'Fix C/C++ with astyle.',
+\    },
 \   'clangtidy': {
 \       'function': 'ale#fixers#clangtidy#Fix',
 \       'suggested_filetypes': ['c', 'cpp', 'objc'],
@@ -234,6 +244,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#stylish_haskell#Fix',
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'Refactor Haskell files with stylish-haskell.',
+\   },
+\   'purty': {
+\       'function': 'ale#fixers#purty#Fix',
+\       'suggested_filetypes': ['purescript'],
+\       'description': 'Format PureScript files with purty.',
 \   },
 \   'ocamlformat': {
 \       'function': 'ale#fixers#ocamlformat#Fix',
@@ -354,6 +369,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#remark_lint#Fix',
 \       'suggested_filetypes': ['markdown'],
 \       'description': 'Fix markdown files with remark-lint',
+\   },
+\   'html-beautify': {
+\       'function': 'ale#fixers#html_beautify#Fix',
+\       'suggested_filetypes': ['html', 'htmldjango'],
+\       'description': 'Fix HTML files with html-beautify.',
 \   },
 \}
 

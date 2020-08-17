@@ -2,20 +2,13 @@
 " Description: Functions for integrating with C-family linters.
 
 call ale#Set('c_parse_makefile', 0)
-call ale#Set('c_parse_compile_commands', 0)
+call ale#Set('c_parse_compile_commands', 1)
 let s:sep = has('win32') ? '\' : '/'
 
 " Set just so tests can override it.
 let g:__ale_c_project_filenames = ['.git/HEAD', 'configure', 'Makefile', 'CMakeLists.txt']
 
 function! ale#c#GetBuildDirectory(buffer) abort
-    " Don't include build directory for header files, as compile_commands.json
-    " files don't consider headers to be translation units, and provide no
-    " commands for compiling header files.
-    if expand('#' . a:buffer) =~# '\v\.(h|hpp)$'
-        return ''
-    endif
-
     let l:build_dir = ale#Var(a:buffer, 'c_build_dir')
 
     " c_build_dir has the priority if defined
@@ -334,16 +327,18 @@ endfunction
 function! ale#c#GetCFlags(buffer, output) abort
     let l:cflags = v:null
 
-    if ale#Var(a:buffer, 'c_parse_makefile') && !empty(a:output)
-        let l:cflags = ale#c#ParseCFlagsFromMakeOutput(a:buffer, a:output)
-    endif
-
     if ale#Var(a:buffer, 'c_parse_compile_commands')
         let [l:root, l:json_file] = ale#c#FindCompileCommands(a:buffer)
 
         if !empty(l:json_file)
             let l:cflags = ale#c#FlagsFromCompileCommands(a:buffer, l:json_file)
         endif
+    endif
+
+    if ale#Var(a:buffer, 'c_parse_makefile')
+    \&& !empty(a:output)
+    \&& !empty(l:cflags)
+        let l:cflags = ale#c#ParseCFlagsFromMakeOutput(a:buffer, a:output)
     endif
 
     if l:cflags is v:null

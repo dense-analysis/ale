@@ -31,10 +31,13 @@ Notes:
 * Awk
   * `gawk`
 * Bash
+  * `bashate`
   * `language-server`
   * `shell` (-n flag)
   * `shellcheck`
   * `shfmt`
+* Bats
+  * `shellcheck`
 * BibTeX
   * `bibclean`
 * Bourne Shell
@@ -42,6 +45,7 @@ Notes:
   * `shellcheck`
   * `shfmt`
 * C
+  * `astyle`
   * `ccls`
   * `clang`
   * `clangd`
@@ -59,6 +63,7 @@ Notes:
   * `mcsc`!!
   * `uncrustify`
 * C++ (filetype cpp)
+  * `astyle`
   * `ccls`
   * `clang`
   * `clangcheck`!!
@@ -162,6 +167,7 @@ Notes:
   * `gosimple`!!
   * `gotype`!!
   * `go vet`!!
+  * `revive`!!
   * `staticcheck`!!
 * GraphQL
   * `eslint`
@@ -194,6 +200,7 @@ Notes:
 * HTML
   * `alex`!!
   * `fecs`
+  * `html-beautify`
   * `HTMLHint`
   * `prettier`
   * `proselint`
@@ -282,6 +289,8 @@ Notes:
   * `nasm`!!
 * Nim
   * `nim check`!!
+  * `nimlsp`
+  * `nimpretty`
 * nix
   * `nix-instantiate`
   * `nixpkgs-fmt`
@@ -347,6 +356,7 @@ Notes:
   * `puppet-lint`
 * PureScript
   * `purescript-language-server`
+  * `purty`
 * Python
   * `autopep8`
   * `bandit`
@@ -362,6 +372,7 @@ Notes:
   * `pylint`!!
   * `pyls`
   * `pyre`
+  * `pyright`
   * `reorder-python-imports`
   * `vulture`!!
   * `yapf`
@@ -404,6 +415,7 @@ Notes:
 * Rust
   * `cargo`!!
   * `rls`
+  * `rust-analyzer`
   * `rustc` (see |ale-integration-rust|)
   * `rustfmt`
 * Sass
@@ -465,12 +477,14 @@ Notes:
   * `eslint`
   * `fecs`
   * `prettier`
+  * `standard`
   * `tslint`
   * `tsserver`
   * `typecheck`
 * VALA
   * `uncrustify`
 * Verilog
+  * `hdl-checker`
   * `iverilog`
   * `verilator`
   * `vlog`
@@ -480,6 +494,7 @@ Notes:
   * `vcom`
   * `xvhdl`
 * Vim
+  * `vimls`
   * `vint`
 * Vim help^
   * `alex`!!
@@ -500,3 +515,5 @@ Notes:
   * `yamllint`
 * YANG
   * `yang-lsp`
+* Zig
+  * `zls`

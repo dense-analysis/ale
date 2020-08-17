@@ -21,6 +21,7 @@ After:
   unlet! g:config_error_lines
 
 Execute(The eslint handler should parse json correctly):
+  call ale#test#SetFilename('foo.js')
   AssertEqual
   \ [
   \   {
@@ -51,6 +52,21 @@ Execute(The eslint handler should parse json correctly):
   \ ],
   \ ale#handlers#eslint#HandleJSON(bufnr(''), [
   \ '[{"filePath":"foo.js","messages":[{"ruleId":"no-unused-vars","severity":1,"message":"''variable'' is assigned a value but never used.","line":1,"column":7,"nodeType":"Identifier","endLine":1,"endColumn":15},{"ruleId":"semi","severity":1,"message":"Missing semicolon.","line":5,"column":15,"nodeType":"ExpressionStatement","fix":{"range":[46,46],"text":";"}},{"ruleId":"no-redeclare","severity":2,"message":"''variable'' is already defined.","line":7,"column":7,"nodeType":"Identifier","endLine":7,"endColumn":15}],"errorCount":1,"warningCount":3,"fixableErrorCount":0,"fixableWarningCount":1,"source":"const variable = {\n    a: 3\n};\n\nconsole.log(1)\n\nclass variable {\n}\n"}]'
+  \ ])
+
+Execute(The eslint handler should suppress deprecation warnings):
+  call ale#test#SetFilename('foo.js')
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'col': 9,
+  \     'text': 'Parsing error: Unexpected token Controller',
+  \     'type': 'E',
+  \   }
+  \ ],
+  \ ale#handlers#eslint#HandleJSON(bufnr(''), [
+  \ '[{"filePath":"foo.js","messages":[{"ruleId":null,"fatal":true,"severity":2 ,"message":"Parsing error: Unexpected token Controller","line":1,"column":9}],"errorCount":1,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount": 0,"source":"i:mport Controller from \"@ember/controller\";\nimport listViewControllerMixin from \"elearning/mixins/list-view-controller\";\nimport { inject as service } from \"@ember/service\";\n\nexport default Controller.extend(listViewControllerMixin(), {\n  modelName: \"notification\",\n  intl: service(),\n\n  flatpickrLocale: computed(\"intl.locale\", function() {\n    return this.intl.locale.firstObject.split(\"-\")[0];\n  })\n});\n"}]', '(node:616989) [ESLINT_LEGACY_OBJECT_REST_SPREAD] DeprecationWarning: The ''parserOptions.ecmaFeatures.experimentalObjectRestSpread'' option is deprecated. Use ''parser Options.ecmaVersion'' instead. (found in "node_modules/eslint-plugin-ember/lib/config/base.js")]'
   \ ])
 
 Execute(The eslint handler should print a message about a missing configuration file):
@@ -262,7 +278,7 @@ Execute(Suppressing missing configs shouldn't suppress module import errors):
   \ ale#handlers#eslint#HandleJSON(bufnr(''), g:config_error_lines[:])
 
 Execute(The eslint handler should hint about using typescript-eslint-parser):
-  silent! noautocmd file foo.ts
+  call ale#test#SetFilename('foo.ts')
 
   AssertEqual
   \ [
@@ -326,7 +342,7 @@ Execute(Failing to connect to eslint_d should be handled correctly):
   \ ])
 
 Execute(Disabling warnings about trailing spaces should work):
-  silent! noautocmd file foo.ts
+  call ale#test#SetFilename('foo.js')
 
   AssertEqual
   \ [

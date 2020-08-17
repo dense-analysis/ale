@@ -1,5 +1,6 @@
 ---
 name: Report a bug
+labels: bug
 about: Report a bug with ALE.
 
 ---

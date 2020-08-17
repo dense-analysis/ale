@@ -1,6 +1,10 @@
 Before:
   call ale#assert#SetUpFixerTest('javascript', 'eslint')
+  Save g:ale_command_wrapper
+
   runtime autoload/ale/handlers/eslint.vim
+
+  let g:ale_command_wrapper = ''
 
 After:
   call ale#assert#TearDownFixerTest()
@@ -13,7 +17,9 @@ Execute(The executable path should be correct):
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'command': (has('win32') ? 'node.exe ' : '')
+  \   'command':
+  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'))
+  \     . (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --fix %t',
@@ -150,7 +156,9 @@ Execute(The lower priority configuration file in a nested directory should be pr
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'command': (has('win32') ? 'node.exe ' : '')
+  \   'command':
+  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'))
+  \     . (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/subdir-with-config/.eslintrc'))
   \     . ' --fix %t',
@@ -164,7 +172,9 @@ Execute(--config in options should override configuration file detection for old
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'command': (has('win32') ? 'node.exe ' : '')
+  \   'command':
+  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'))
+  \     . (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' --config /foo.cfg'
   \     . ' --fix %t',
@@ -175,7 +185,9 @@ Execute(--config in options should override configuration file detection for old
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'command': (has('win32') ? 'node.exe ' : '')
+  \   'command':
+  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'))
+  \     . (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' -c /foo.cfg'
   \     . ' --fix %t',
@@ -187,7 +199,9 @@ Execute(package.json should be used as a last resort):
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'command': (has('win32') ? 'node.exe ' : '')
+  \   'command':
+  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'))
+  \     . (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --fix %t',
@@ -199,7 +213,8 @@ Execute(package.json should be used as a last resort):
   \ {
   \   'read_temporary_file': 1,
   \   'command':
-  \     ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/node_modules/.bin/eslint'))
+  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files'))
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/node_modules/.bin/eslint'))
   \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/package.json'))
   \     . ' --fix %t',
   \ }
@@ -214,7 +229,9 @@ Execute(The version check should be correct):
   \   . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \   . ' --version',
   \ {
-  \   'command': (has('win32') ? 'node.exe ' : '')
+  \   'command':
+  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'))
+  \     . (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
   \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
@@ -223,7 +240,9 @@ Execute(The version check should be correct):
 
   AssertFixer [
   \ {
-  \   'command': (has('win32') ? 'node.exe ' : '')
+  \   'command':
+  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'))
+  \     . (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
   \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
@@ -236,7 +255,9 @@ Execute(--fix-dry-run should be used for 4.9.0 and up):
   GivenCommandOutput ['4.9.0']
   AssertFixer
   \ {
-  \   'command': (has('win32') ? 'node.exe ' : '')
+  \   'command':
+  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'))
+  \     . (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
   \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
@@ -249,7 +270,8 @@ Execute(--fix-to-stdout should be used for eslint_d):
   \ {
   \   'read_temporary_file': 1,
   \   'command':
-  \     ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
+  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d'))
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
   \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/package.json'))
   \     . ' --fix %t',
   \ }
@@ -260,7 +282,8 @@ Execute(--fix-to-stdout should be used for eslint_d):
   AssertFixer
   \ {
   \   'command':
-  \     ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
+  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d'))
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
   \     . ' --stdin-filename %s --stdin --fix-to-stdout',
   \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
   \ }
@@ -270,7 +293,8 @@ Execute(--fix-to-stdout should be used for eslint_d):
   AssertFixer
   \ {
   \   'command':
-  \     ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
+  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d'))
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
   \     . ' --stdin-filename %s --stdin --fix-to-stdout',
   \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
   \ }

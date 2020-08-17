@@ -10,7 +10,9 @@ Before:
   Save g:ale_set_loclist
   Save g:ale_set_quickfix
   Save g:ale_set_signs
+  Save g:ale_command_wrapper
 
+  let g:ale_command_wrapper = ''
   let g:ale_buffer_info = {}
   let g:ale_run_synchronously = 1
   unlet! g:ale_run_synchronously_callbacks
@@ -32,7 +34,7 @@ Before:
 
   function! CollectSigns()
     redir => l:output
-      if has('nvim-0.4.0') || (v:version >= 801 && has('patch614'))
+      if has('nvim-0.4.2') || has('patch-8.1.614')
         silent exec 'sign place group=ale'
       else
         silent exec 'sign place'
