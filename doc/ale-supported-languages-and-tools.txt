@@ -453,6 +453,7 @@ Notes:
 * Swift
   * `sourcekit-lsp`
   * `swiftformat`
+  * `swift-format`
   * `swiftlint`
 * Tcl
   * `nagelfar`!!

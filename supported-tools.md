@@ -462,6 +462,7 @@ formatting.
 * Swift
   * [sourcekit-lsp](https://github.com/apple/sourcekit-lsp)
   * [swiftformat](https://github.com/nicklockwood/SwiftFormat)
+  * [swift-format](https://github.com/apple/swift-format)
   * [swiftlint](https://github.com/realm/SwiftLint)
 * Tcl
   * [nagelfar](http://nagelfar.sourceforge.net) :floppy_disk:
