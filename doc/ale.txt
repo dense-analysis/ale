@@ -2502,6 +2502,7 @@ documented in additional help files.
     luac..................................|ale-lua-luac|
     luacheck..............................|ale-lua-luacheck|
   markdown................................|ale-markdown-options|
+    markdownlint..........................|ale-markdown-markdownlint|
     mdl...................................|ale-markdown-mdl|
     prettier..............................|ale-markdown-prettier|
     remark-lint...........................|ale-markdown-remark-lint|
