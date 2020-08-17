@@ -365,6 +365,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['nix'],
 \       'description': 'A formatter for Nix code',
 \   },
+\   'remark-lint': {
+\       'function': 'ale#fixers#remark_lint#Fix',
+\       'suggested_filetypes': ['markdown'],
+\       'description': 'Fix markdown files with remark-lint',
+\   },
 \   'html-beautify': {
 \       'function': 'ale#fixers#html_beautify#Fix',
 \       'suggested_filetypes': ['html', 'htmldjango'],
