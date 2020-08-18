@@ -21,6 +21,7 @@ Notes:
   * `drafter`
 * AsciiDoc
   * `alex`!!
+  * `languagetool`!!
   * `proselint`
   * `redpen`
   * `textlint`

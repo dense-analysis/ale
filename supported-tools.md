@@ -30,6 +30,7 @@ formatting.
   * [drafter](https://github.com/apiaryio/drafter)
 * AsciiDoc
   * [alex](https://github.com/wooorm/alex) :floppy_disk:
+  * [languagetool](https://languagetool.org/) :floppy_disk:
   * [proselint](http://proselint.com/)
   * [redpen](http://redpen.cc/)
   * [textlint](https://textlint.github.io/)
