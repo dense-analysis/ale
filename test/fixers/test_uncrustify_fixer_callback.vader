@@ -14,7 +14,7 @@ After:
 
   call ale#test#RestoreDirectory()
 
-Execute(The clang-format callback should return the correct default values):
+Execute(The uncrustify callback should return the correct default values):
   call ale#test#SetFilename('c_paths/dummy.c')
 
   AssertEqual
