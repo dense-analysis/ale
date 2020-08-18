@@ -84,56 +84,6 @@ Before:
     return [{'lnum': 1, 'col': 1, 'text': 'xxx'}]
   endfunction
 
-  function! FirstChainCallback(buffer)
-    return {'command': 'echo echoline', 'chain_with': 'SecondChainCallback'}
-  endfunction
-
-  function! FirstChainCallbackSkipped(buffer)
-    let l:ChainWith = 'SecondChainCallback'
-
-    " Test with lambdas where support is available.
-    if has('lambda')
-      let l:ChainWith = {buffer, output -> SecondChainCallback(buffer, output)}
-    endif
-
-    return {'command': '', 'chain_with': l:ChainWith}
-  endfunction
-
-  function! FirstChainCallbackSecondSkipped(buffer)
-    return {'command': 'echo skipit', 'chain_with': 'SecondChainCallback'}
-  endfunction
-
-  function! SecondChainCallback(buffer, output)
-    let l:previous_line = empty(a:output)
-    \ ? 'emptydefault'
-    \ : join(split(a:output[0]))
-
-    if l:previous_line is# 'skipit'
-      return {'command': '', 'chain_with': 'ThirdChainCallback'}
-    endif
-
-    return {
-    \ 'command': 'echo ' . l:previous_line,
-    \ 'chain_with': 'ThirdChainCallback',
-    \}
-  endfunction
-
-  function! ThirdChainCallback(buffer, output, input)
-    let l:previous_line = empty(a:output)
-    \ ? 'thirddefault'
-    \ : join(split(a:output[0]))
-
-    return a:input + [l:previous_line]
-  endfunction
-
-  function! ChainWhereLastIsSkipped(buffer)
-    return {'command': 'echo echoline', 'chain_with': 'ChainEndSkipped'}
-  endfunction
-
-  function! ChainEndSkipped(buffer, output)
-    return {'command': ''}
-  endfunction
-
   " echo will output a single blank line, and we should ingore it.
   function! IgnoredEmptyOutput(buffer, output)
     return {'command': has('win32') ? 'echo(' : 'echo'}
@@ -208,13 +158,6 @@ After:
   delfunction RemoveLastLine
   delfunction RemoveLastLineOneArg
   delfunction TestCallback
-  delfunction FirstChainCallback
-  delfunction FirstChainCallbackSkipped
-  delfunction FirstChainCallbackSecondSkipped
-  delfunction SecondChainCallback
-  delfunction ThirdChainCallback
-  delfunction ChainWhereLastIsSkipped
-  delfunction ChainEndSkipped
   delfunction SetUpLinters
   delfunction GetLastMessage
   delfunction IgnoredEmptyOutput
@@ -815,57 +758,6 @@ Execute(ALE should tolerate valid fixers with minuses in the name):
   let g:ale_fixers.testft = ['prettier-standard']
   ALEFix
   call ale#test#FlushJobs()
-
-Execute(Test fixing with chained callbacks):
-  let g:ale_fixers.testft = ['FirstChainCallback']
-  ALEFix
-  call ale#test#FlushJobs()
-
-  " The buffer shouldn't be piped in for earlier commands in the chain.
-  AssertEqual
-  \ [
-  \   string(ale#job#PrepareCommand(bufnr(''), 'echo echoline')),
-  \   string(ale#job#PrepareCommand(bufnr(''), 'echo echoline')),
-  \ ],
-  \ map(ale#history#Get(bufnr(''))[-2:-1], 'string(v:val.command)')
-
-Expect(The echoed line should be added):
-  a
-  b
-  c
-  echoline
-
-Execute(Test fixing with chained callback where the first command is skipped):
-  let g:ale_fixers.testft = ['FirstChainCallbackSkipped']
-  ALEFix
-  call ale#test#FlushJobs()
-
-Expect(The default line should be added):
-  a
-  b
-  c
-  emptydefault
-
-Execute(Test fixing with chained callback where the second command is skipped):
-  let g:ale_fixers.testft = ['FirstChainCallbackSecondSkipped']
-  ALEFix
-  call ale#test#FlushJobs()
-
-Expect(The default line should be added):
-  a
-  b
-  c
-  thirddefault
-
-Execute(Test fixing with chained callback where the final callback is skipped):
-  let g:ale_fixers.testft = ['ChainWhereLastIsSkipped']
-  ALEFix
-  call ale#test#FlushJobs()
-
-Expect(The lines should be the same):
-  a
-  b
-  c
 
 Execute(Empty output should be ignored):
   let g:ale_fixers.testft = ['IgnoredEmptyOutput']

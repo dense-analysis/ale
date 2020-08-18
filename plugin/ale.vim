@@ -207,18 +207,8 @@ command! -bar ALEFixSuggest :call ale#fix#registry#Suggest(&filetype)
 " Go to definition for tsserver and LSP
 command! -bar -nargs=* ALEGoToDefinition :call ale#definition#GoToCommandHandler('', <f-args>)
 
-" Deprecated commands we have to keep for now.
-command! -bar ALEGoToDefinitionInTab :call ale#definition#GoTo({'open_in': 'tab', 'deprecated_command': 'ALEGoToDefinitionInTab'})
-command! -bar ALEGoToDefinitionInSplit :call ale#definition#GoTo({'open_in': 'split', 'deprecated_command': 'ALEGoToDefinitionInSplit'})
-command! -bar ALEGoToDefinitionInVSplit :call ale#definition#GoTo({'open_in': 'vsplit', 'deprecated_command': 'ALEGoToDefinitionInVSplit'})
-
 " Go to type definition for tsserver and LSP
 command! -bar -nargs=* ALEGoToTypeDefinition :call ale#definition#GoToCommandHandler('type', <f-args>)
-
-" Deprecated commands we have to keep for now.
-command! -bar ALEGoToTypeDefinitionInTab :call ale#definition#GoToType({'open_in': 'tab', 'deprecated_command': 'ALEGoToTypeDefinitionInTab'})
-command! -bar ALEGoToTypeDefinitionInSplit :call ale#definition#GoToType({'open_in': 'split', 'deprecated_command': 'ALEGoToTypeDefinitionInSplit'})
-command! -bar ALEGoToTypeDefinitionInVSplit :call ale#definition#GoToType({'open_in': 'vsplit', 'deprecated_command': 'ALEGoToTypeDefinitionInVSplit'})
 
 " Repeat a previous selection in the preview window
 command! -bar ALERepeatSelection :call ale#preview#RepeatSelection()
@@ -270,21 +260,19 @@ nnoremap <silent> <Plug>(ale_lint) :ALELint<Return>
 nnoremap <silent> <Plug>(ale_detail) :ALEDetail<Return>
 nnoremap <silent> <Plug>(ale_fix) :ALEFix<Return>
 nnoremap <silent> <Plug>(ale_go_to_definition) :ALEGoToDefinition<Return>
+nnoremap <silent> <Plug>(ale_go_to_definition_in_tab) :ALEGoToDefinition -tab<Return>
+nnoremap <silent> <Plug>(ale_go_to_definition_in_split) :ALEGoToDefinition -split<Return>
+nnoremap <silent> <Plug>(ale_go_to_definition_in_vsplit) :ALEGoToDefinition -vsplit<Return>
 nnoremap <silent> <Plug>(ale_go_to_type_definition) :ALEGoToTypeDefinition<Return>
+nnoremap <silent> <Plug>(ale_go_to_type_definition_in_tab) :ALEGoToTypeDefinition -tab<Return>
+nnoremap <silent> <Plug>(ale_go_to_type_definition_in_split) :ALEGoToTypeDefinition -split<Return>
+nnoremap <silent> <Plug>(ale_go_to_type_definition_in_vsplit) :ALEGoToTypeDefinitionIn -vsplit<Return>
 nnoremap <silent> <Plug>(ale_find_references) :ALEFindReferences<Return>
 nnoremap <silent> <Plug>(ale_hover) :ALEHover<Return>
 nnoremap <silent> <Plug>(ale_documentation) :ALEDocumentation<Return>
 inoremap <silent> <Plug>(ale_complete) <C-\><C-O>:ALEComplete<Return>
 nnoremap <silent> <Plug>(ale_rename) :ALERename<Return>
 nnoremap <silent> <Plug>(ale_repeat_selection) :ALERepeatSelection<Return>
-
-" Deprecated <Plug> mappings
-nnoremap <silent> <Plug>(ale_go_to_definition_in_tab) :ALEGoToDefinitionInTab<Return>
-nnoremap <silent> <Plug>(ale_go_to_definition_in_split) :ALEGoToDefinitionInSplit<Return>
-nnoremap <silent> <Plug>(ale_go_to_definition_in_vsplit) :ALEGoToDefinitionInVSplit<Return>
-nnoremap <silent> <Plug>(ale_go_to_type_definition_in_tab) :ALEGoToTypeDefinitionInTab<Return>
-nnoremap <silent> <Plug>(ale_go_to_type_definition_in_split) :ALEGoToTypeDefinitionInSplit<Return>
-nnoremap <silent> <Plug>(ale_go_to_type_definition_in_vsplit) :ALEGoToTypeDefinitionInVSplit<Return>
 
 " Set up autocmd groups now.
 call ale#events#Init()

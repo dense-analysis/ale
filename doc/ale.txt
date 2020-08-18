@@ -684,7 +684,9 @@ g:ale_completion_enabled                             *g:ale_completion_enabled*
 
   See |ale-completion|
 
-g:ale_completion_tsserver_remove_warnings *g:ale_completion_tsserver_remove_warnings*
+
+                                    *g:ale_completion_tsserver_remove_warnings*
+g:ale_completion_tsserver_remove_warnings
 
   Type: Number
   Default: `0`
@@ -692,6 +694,7 @@ g:ale_completion_tsserver_remove_warnings *g:ale_completion_tsserver_remove_warn
   When this option is set to `0`, ALE will return all completion items,
   including those that are a warning. Warnings can be excluded from completed
   items by setting it to `1`.
+
 
 g:ale_completion_autoimport                       *g:ale_completion_autoimport*
 
@@ -2809,7 +2812,13 @@ ALEGoToDefinition `<options>`                               *ALEGoToDefinition*
   command. Otherwise, Vim will refuse to leave the buffer you're jumping from
   unless you have saved your edits.
 
-  A plug mapping `<Plug>(ale_go_to_definition)` is defined for this command.
+  The following Plug mappings are defined for this command, which correspond
+  to the following commands.
+
+  `<Plug>(ale_go_to_definition)`           - `:ALEGoToDefinition`
+  `<Plug>(ale_go_to_definition_in_tab)`    - `:ALEGoToDefinition -tab`
+  `<Plug>(ale_go_to_definition_in_split)`  - `:ALEGoToDefinition -split`
+  `<Plug>(ale_go_to_definition_in_vsplit)` - `:ALEGoToDefinition -vsplit`
 
 
 ALEGoToTypeDefinition                                   *ALEGoToTypeDefinition*
@@ -2831,8 +2840,13 @@ ALEGoToTypeDefinition                                   *ALEGoToTypeDefinition*
   You can jump back to the position you were at before going to the definition
   of something with jump motions like CTRL-O. See |jump-motions|.
 
-  A plug mapping `<Plug>(ale_go_to_type_definition)` is defined for this
-  command.
+  The following Plug mappings are defined for this command, which correspond
+  to the following commands.
+
+  `<Plug>(ale_go_to_type_definition)`           - `:ALEGoToTypeDefinition`
+  `<Plug>(ale_go_to_type_definition_in_tab)`    - `:ALEGoToTypeDefinition -tab`
+  `<Plug>(ale_go_to_type_definition_in_split)`  - `:ALEGoToTypeDefinition -split`
+  `<Plug>(ale_go_to_type_definition_in_vsplit)` - `:ALEGoToTypeDefinition -vsplit`
 
 
 ALEHover                                                             *ALEHover*

@@ -90,7 +90,6 @@ function! s:HandleExit(job_info, buffer, job_output, data) abort
         let l:output = a:job_output
     endif
 
-    let l:ChainCallback = get(a:job_info, 'chain_with', v:null)
     let l:ProcessWith = get(a:job_info, 'process_with', v:null)
 
     " Post-process the output with a function if we have one.
@@ -102,27 +101,18 @@ function! s:HandleExit(job_info, buffer, job_output, data) abort
     " otherwise skip this job and use the input from before.
     "
     " We'll use the input from before for chained commands.
-    if l:ChainCallback is v:null && !empty(split(join(l:output)))
+    if !empty(split(join(l:output)))
         let l:input = l:output
     else
         let l:input = a:job_info.input
     endif
-
-    if l:ChainCallback isnot v:null && !get(g:, 'ale_ignore_2_4_warnings')
-        execute 'echom ''chain_with is deprecated. Use `let g:ale_ignore_2_4_warnings = 1` to disable this message.'''
-    endif
-
-    let l:next_index = l:ChainCallback is v:null
-    \   ? a:job_info.callback_index + 1
-    \   : a:job_info.callback_index
 
     call s:RunFixer({
     \   'buffer': a:buffer,
     \   'input': l:input,
     \   'output': l:output,
     \   'callback_list': a:job_info.callback_list,
-    \   'callback_index': l:next_index,
-    \   'chain_callback': l:ChainCallback,
+    \   'callback_index': a:job_info.callback_index + 1,
     \})
 endfunction
 
@@ -152,17 +142,14 @@ function! s:RunJob(result, options) abort
     endif
 
     let l:command = get(a:result, 'command', '')
-    let l:ChainWith = get(a:result, 'chain_with', v:null)
 
     if empty(l:command)
-        " If the command is empty, skip to the next item, or call the
-        " chain_with function.
+        " If the command is empty, skip to the next item.
         call s:RunFixer({
         \   'buffer': l:buffer,
         \   'input': l:input,
-        \   'callback_index': a:options.callback_index + (l:ChainWith is v:null),
+        \   'callback_index': a:options.callback_index,
         \   'callback_list': a:options.callback_list,
-        \   'chain_callback': l:ChainWith,
         \   'output': [],
         \})
 
@@ -170,8 +157,7 @@ function! s:RunJob(result, options) abort
     endif
 
     let l:read_temporary_file = get(a:result, 'read_temporary_file', 0)
-    " Default to piping the buffer for the last fixer in the chain.
-    let l:read_buffer = get(a:result, 'read_buffer', l:ChainWith is v:null)
+    let l:read_buffer = get(a:result, 'read_buffer', 1)
     let l:output_stream = get(a:result, 'output_stream', 'stdout')
 
     if l:read_temporary_file
@@ -180,7 +166,6 @@ function! s:RunJob(result, options) abort
 
     let l:Callback = function('s:HandleExit', [{
     \   'input': l:input,
-    \   'chain_with': l:ChainWith,
     \   'callback_index': a:options.callback_index,
     \   'callback_list': a:options.callback_list,
     \   'process_with': get(a:result, 'process_with', v:null),
