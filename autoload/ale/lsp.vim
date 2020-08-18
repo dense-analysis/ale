@@ -64,6 +64,9 @@ endfunction
 
 " Used only in tests.
 function! ale#lsp#GetConnections() abort
+    " This command will throw from the sandbox.
+    let &l:equalprg=&l:equalprg
+
     return s:connections
 endfunction
 
@@ -449,6 +452,7 @@ function! ale#lsp#StartProgram(conn_id, executable, command) abort
     endif
 
     if l:started && !l:conn.is_tsserver
+        let l:conn.initialized = 0
         call s:SendInitMessage(l:conn)
     endif
 
