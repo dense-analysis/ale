@@ -8,6 +8,14 @@ let s:sep = has('win32') ? '\' : '/'
 " Set just so tests can override it.
 let g:__ale_c_project_filenames = ['.git/HEAD', 'configure', 'Makefile', 'CMakeLists.txt']
 
+function! s:CanParseMakefile(buffer) abort
+    " Something somewhere seems to delete this setting in tests, so ensure we
+    " always have a default value.
+    call ale#Set('c_parse_makefile', 0)
+
+    return ale#Var(a:buffer, 'c_parse_makefile')
+endfunction
+
 function! ale#c#GetBuildDirectory(buffer) abort
     let l:build_dir = ale#Var(a:buffer, 'c_build_dir')
 
@@ -173,7 +181,7 @@ function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
 endfunction
 
 function! ale#c#ParseCFlagsFromMakeOutput(buffer, make_output) abort
-    if !get(g:, 'ale_c_parse_makefile', 0)
+    if !s:CanParseMakefile(a:buffer)
         return v:null
     endif
 
@@ -383,9 +391,7 @@ function! ale#c#GetCFlags(buffer, output) abort
         endif
     endif
 
-    if ale#Var(a:buffer, 'c_parse_makefile')
-    \&& !empty(a:output)
-    \&& !empty(l:cflags)
+    if s:CanParseMakefile(a:buffer) && !empty(a:output) && !empty(l:cflags)
         let l:cflags = ale#c#ParseCFlagsFromMakeOutput(a:buffer, a:output)
     endif
 
@@ -397,7 +403,7 @@ function! ale#c#GetCFlags(buffer, output) abort
 endfunction
 
 function! ale#c#GetMakeCommand(buffer) abort
-    if ale#Var(a:buffer, 'c_parse_makefile')
+    if s:CanParseMakefile(a:buffer)
         let l:makefile_path = ale#path#FindNearestFile(a:buffer, 'Makefile')
 
         if !empty(l:makefile_path)
