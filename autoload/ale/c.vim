@@ -173,7 +173,7 @@ function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
 endfunction
 
 function! ale#c#ParseCFlagsFromMakeOutput(buffer, make_output) abort
-    if !g:ale_c_parse_makefile
+    if !get(g:, 'ale_c_parse_makefile', 0)
         return v:null
     endif
 
