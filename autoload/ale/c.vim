@@ -159,7 +159,7 @@ function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
         elseif (stridx(l:option, '-W') == 0 && stridx(l:option, '-Wa,') != 0 && stridx(l:option, '-Wl,') != 0 && stridx(l:option, '-Wp,') != 0)
         \ || l:option is# '-w' || stridx(l:option, '-pedantic') == 0
         \ || l:option is# '-ansi' || stridx(l:option, '-std=') == 0
-        \ || (stridx(l:option, '-f') == 0 && stridx(l:option, '-fdump') != 0 && stridx(l:option, '-fdiagnostics') != 0 && stridx(l:option, '-fno-show-column') != 0)
+        \ || stridx(l:option, '-f') == 0 && l:option !~# '\v^-f(dump|diagnostics|no-show-column|stack-usage)'
         \ || stridx(l:option, '-O') == 0
         \ || l:option is# '-C' || l:option is# '-CC' || l:option is# '-trigraphs'
         \ || stridx(l:option, '-nostdinc') == 0 || stridx(l:option, '-iplugindir=') == 0
