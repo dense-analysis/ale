@@ -2322,16 +2322,15 @@ documented in additional help files.
     bibclean..............................|ale-bib-bibclean|
   c.......................................|ale-c-options|
     astyle................................|ale-c-astyle|
-    clang.................................|ale-c-clang|
+    cc....................................|ale-c-cc|
+    ccls..................................|ale-c-ccls|
     clangd................................|ale-c-clangd|
     clang-format..........................|ale-c-clangformat|
     clangtidy.............................|ale-c-clangtidy|
     cppcheck..............................|ale-c-cppcheck|
     cquery................................|ale-c-cquery|
     flawfinder............................|ale-c-flawfinder|
-    gcc...................................|ale-c-gcc|
     uncrustify............................|ale-c-uncrustify|
-    ccls..................................|ale-c-ccls|
   chef....................................|ale-chef-options|
     cookstyle.............................|ale-chef-cookstyle|
     foodcritic............................|ale-chef-foodcritic|
@@ -2345,9 +2344,10 @@ documented in additional help files.
     cmake-format..........................|ale-cmake-cmakeformat|
   cpp.....................................|ale-cpp-options|
     astyle................................|ale-cpp-astyle|
-    clang.................................|ale-cpp-clang|
-    clangd................................|ale-cpp-clangd|
+    cc....................................|ale-cpp-cc|
+    ccls..................................|ale-cpp-ccls|
     clangcheck............................|ale-cpp-clangcheck|
+    clangd................................|ale-cpp-clangd|
     clang-format..........................|ale-cpp-clangformat|
     clangtidy.............................|ale-cpp-clangtidy|
     clazy.................................|ale-cpp-clazy|
@@ -2355,9 +2355,7 @@ documented in additional help files.
     cpplint...............................|ale-cpp-cpplint|
     cquery................................|ale-cpp-cquery|
     flawfinder............................|ale-cpp-flawfinder|
-    gcc...................................|ale-cpp-gcc|
     uncrustify............................|ale-cpp-uncrustify|
-    ccls..................................|ale-cpp-ccls|
   c#......................................|ale-cs-options|
     csc...................................|ale-cs-csc|
     mcs...................................|ale-cs-mcs|

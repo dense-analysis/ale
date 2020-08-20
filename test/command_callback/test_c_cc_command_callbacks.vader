@@ -1,16 +1,25 @@
 Before:
   Save g:ale_c_parse_makefile
+  Save g:ale_history_enabled
+
+  let g:ale_c_parse_makefile = 0
+  let g:ale_history_enabled = 0
+
   let g:get_cflags_return_value = ''
+  let g:executable_map = {}
 
   runtime autoload/ale/c.vim
+  runtime autoload/ale/engine.vim
+
+  function! ale#engine#IsExecutable(buffer, executable) abort
+    return has_key(g:executable_map, a:executable)
+  endfunction
 
   function! ale#c#GetCFlags(buffer, output) abort
     return g:get_cflags_return_value
   endfunction
 
-  let g:ale_c_parse_makefile = 0
-
-  call ale#assert#SetUpLinterTest('c', 'gcc')
+  call ale#assert#SetUpLinterTest('c', 'cc')
 
   let b:command_tail = ' -S -x c'
   \   . ' -o ' . (has('win32') ? 'nul': '/dev/null')
@@ -19,16 +28,23 @@ Before:
 
 After:
   unlet! g:get_cflags_return_value
+  unlet! g:executable_map
   unlet! b:command_tail
 
   runtime autoload/ale/c.vim
+  runtime autoload/ale/engine.vim
 
   call ale#assert#TearDownLinterTest()
+
+Execute(clang should be used instead of gcc, if available):
+  let g:executable_map = {'clang': 1}
+
+  AssertLinter 'clang', [ale#Escape('clang') . b:command_tail]
 
 Execute(The executable should be configurable):
   AssertLinter 'gcc', [ale#Escape('gcc') . b:command_tail]
 
-  let b:ale_c_gcc_executable = 'foobar'
+  let b:ale_c_cc_executable = 'foobar'
 
   AssertLinter 'foobar', [ale#Escape('foobar') . b:command_tail]
 
