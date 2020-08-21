@@ -340,6 +340,7 @@ Execute(CFlags we want to pass):
   \ . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/incquote'))
   \ . ' -isystem ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/incsystem'))
   \ . ' -idirafter ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/incafter'))
+  \ . ' -iframework ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/incframework'))
   \ . ' -Dmacro=value -D macro2 -Bbdir -B bdir2'
   \ . ' -iprefix prefix -iwithprefix prefix2 -iwithprefixbefore prefix3'
   \ . ' -isysroot sysroot --sysroot=test --no-sysroot-suffix -imultilib multidir'
@@ -349,7 +350,7 @@ Execute(CFlags we want to pass):
   \ ale#c#ParseCFlags(
   \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
   \   'gcc'
-  \ . ' -Iinc -I include -iquote incquote -isystem incsystem -idirafter incafter'
+  \ . ' -Iinc -I include -iquote incquote -isystem incsystem -idirafter incafter -iframework incframework'
   \ . ' -Dmacro=value -D macro2 -Bbdir -B bdir2'
   \ . ' -iprefix prefix -iwithprefix prefix2 -iwithprefixbefore prefix3'
   \ . ' -isysroot sysroot --sysroot=test --no-sysroot-suffix -imultilib multidir'
@@ -364,5 +365,16 @@ Execute(CFlags we dont want to pass):
   \ ale#c#ParseCFlags(
   \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
   \   'gcc -Wl,option -Wa,option -Wp,option filename.c somelib.a '
-  \ . '-fdump-file=name -fdiagnostics-arg -fno-show-column'
+  \ . '-fdump-file=name -fdiagnostics-arg -fno-show-column -fstack-usage'
+  \ )
+
+Execute(Expanding @file in CFlags):
+  AssertEqual
+  \ '-DARGS1 -DARGS2 -O2',
+  \ ale#c#ParseCFlags(
+  \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
+  \   'gcc'
+  \   . ' -g'
+  \   . ' @./args'
+  \   . ' -O2',
   \ )

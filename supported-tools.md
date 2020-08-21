@@ -31,6 +31,7 @@ formatting.
   * [drafter](https://github.com/apiaryio/drafter)
 * AsciiDoc
   * [alex](https://github.com/wooorm/alex) :floppy_disk:
+  * [languagetool](https://languagetool.org/) :floppy_disk:
   * [proselint](http://proselint.com/)
   * [redpen](http://redpen.cc/)
   * [textlint](https://textlint.github.io/)
@@ -463,6 +464,7 @@ formatting.
 * Swift
   * [sourcekit-lsp](https://github.com/apple/sourcekit-lsp)
   * [swiftformat](https://github.com/nicklockwood/SwiftFormat)
+  * [swift-format](https://github.com/apple/swift-format)
   * [swiftlint](https://github.com/realm/SwiftLint)
 * Tcl
   * [nagelfar](http://nagelfar.sourceforge.net) :floppy_disk:

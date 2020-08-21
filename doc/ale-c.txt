@@ -1,6 +1,9 @@
 ===============================================================================
 ALE C Integration                                               *ale-c-options*
 
+For basic checking of problems with C files, ALE offers the `cc` linter, which
+runs either `clang`, or `gcc`. See |ale-c-cc|.
+
 
 ===============================================================================
 Global Options
@@ -11,12 +14,12 @@ g:ale_c_build_dir_names                               *g:ale_c_build_dir_names*
   Type: |List|
   Default: `['build', 'bin']`
 
-  A list of directory names to be used when searching upwards from cpp
-  files to discover compilation databases with. For directory named `'foo'`,
-  ALE will search for `'foo/compile_commands.json'` in all directories on and above
-  the directory containing the cpp file to find path to compilation database.
-  This feature is useful for the clang tools wrapped around LibTooling (namely
-  here, clang-tidy)
+  A list of directory names to be used when searching upwards from cpp files
+  to discover compilation databases with. For directory named `'foo'`, ALE
+  will search for `'foo/compile_commands.json'` in all directories on and
+  above the directory containing the cpp file to find path to compilation
+  database.  This feature is useful for the clang tools wrapped around
+  LibTooling (namely here, clang-tidy)
 
 
 g:ale_c_build_dir                                           *g:ale_c_build_dir*
@@ -94,22 +97,58 @@ g:ale_c_astyle_project_options                 *g:ale_c_astyle_project_options*
 
 
 ===============================================================================
-clang                                                             *ale-c-clang*
+cc                                                                   *ale-c-cc*
+                                                                    *ale-c-gcc*
+                                                                  *ale-c-clang*
 
-g:ale_c_clang_executable                             *g:ale_c_clang_executable*
-                                                     *b:ale_c_clang_executable*
+g:ale_c_cc_executable                                   *g:ale_c_cc_executable*
+                                                        *b:ale_c_cc_executable*
   Type: |String|
-  Default: `'clang'`
+  Default: `'<auto>'`
 
-  This variable can be changed to use a different executable for clang.
+  This variable can be changed to use a different executable for a C compiler.
+
+  ALE will try to use `clang` if Clang is available, otherwise ALE will
+  default to checking C code with `gcc`.
 
 
-g:ale_c_clang_options                                   *g:ale_c_clang_options*
-                                                        *b:ale_c_clang_options*
+g:ale_c_cc_options                                         *g:ale_c_cc_options*
+                                                           *b:ale_c_cc_options*
   Type: |String|
   Default: `'-std=c11 -Wall'`
 
-  This variable can be changed to modify flags given to clang.
+  This variable can be change to modify flags given to the C compiler.
+
+
+===============================================================================
+ccls                                                               *ale-c-ccls*
+
+g:ale_c_ccls_executable                               *g:ale_c_ccls_executable*
+                                                      *b:ale_c_ccls_executable*
+  Type: |String|
+  Default: `'ccls'`
+
+  This variable can be changed to use a different executable for ccls.
+
+
+g:ale_c_ccls_init_options                           *g:ale_c_ccls_init_options*
+                                                    *b:ale_c_ccls_init_options*
+  Type: |Dictionary|
+  Default: `{}`
+
+  This variable can be changed to customize ccls initialization options.
+  Example: >
+      {
+    \   'cacheDirectory': '/tmp/ccls',
+    \   'cacheFormat': 'binary',
+    \   'diagnostics': {
+    \     'onOpen': 0,
+    \     'opChange': 1000,
+    \   },
+    \ }
+<
+  Visit https://github.com/MaskRay/ccls/wiki/Initialization-options for all
+  available options and explanations.
 
 
 ===============================================================================
@@ -295,25 +334,6 @@ g:ale_c_flawfinder_error_severity           *g:ale_c_flawfinder_error_severity*
 
 
 ===============================================================================
-gcc                                                                 *ale-c-gcc*
-
-g:ale_c_gcc_executable                                 *g:ale_c_gcc_executable*
-                                                       *b:ale_c_gcc_executable*
-  Type: |String|
-  Default: `'gcc'`
-
-  This variable can be changed to use a different executable for gcc.
-
-
-g:ale_c_gcc_options                                       *g:ale_c_gcc_options*
-                                                          *b:ale_c_gcc_options*
-  Type: |String|
-  Default: `'-std=c11 -Wall'`
-
-  This variable can be change to modify flags given to gcc.
-
-
-===============================================================================
 uncrustify                                                   *ale-c-uncrustify*
 
 g:ale_c_uncrustify_executable                   *g:ale_c_uncrustify_executable*
@@ -330,37 +350,6 @@ g:ale_c_uncrustify_options                         *g:ale_c_uncrustify_options*
   Default: `''`
 
   This variable can be change to modify flags given to uncrustify.
-
-
-===============================================================================
-ccls                                                               *ale-c-ccls*
-
-g:ale_c_ccls_executable                               *g:ale_c_ccls_executable*
-                                                      *b:ale_c_ccls_executable*
-  Type: |String|
-  Default: `'ccls'`
-
-  This variable can be changed to use a different executable for ccls.
-
-
-g:ale_c_ccls_init_options                           *g:ale_c_ccls_init_options*
-                                                    *b:ale_c_ccls_init_options*
-  Type: |Dictionary|
-  Default: `{}`
-
-  This variable can be changed to customize ccls initialization options.
-  Example: >
-      {
-    \   'cacheDirectory': '/tmp/ccls',
-    \   'cacheFormat': 'binary',
-    \   'diagnostics': {
-    \     'onOpen': 0,
-    \     'opChange': 1000,
-    \   },
-    \ }
-<
-  Visit https://github.com/MaskRay/ccls/wiki/Initialization-options for all
-  available options and explanations.
 
 
 ===============================================================================

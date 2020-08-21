@@ -8,6 +8,18 @@ After:
 
   call ale#assert#TearDownLinterTest()
 
+Execute(Builds credo command with normal project):
+  AssertLinter 'mix',
+  \ ale#path#CdString(ale#path#Simplify(g:dir . '/elixir_paths/mix_project'))
+  \ . 'mix help credo && mix credo suggest --format=flycheck --read-from-stdin %s'
+
+Execute(Builds credo command with umbrella project):
+  call ale#test#SetFilename('elixir_paths/umbrella_project/apps/mix_project/lib/app.ex')
+
+  AssertLinter 'mix',
+  \ ale#path#CdString(ale#path#Simplify(g:dir . '/elixir_paths/umbrella_project'))
+  \ . 'mix help credo && mix credo suggest --format=flycheck --read-from-stdin %s'
+
 Execute(Builds credo command with --strict mode when set to 1):
   let g:ale_elixir_credo_strict = 1
 

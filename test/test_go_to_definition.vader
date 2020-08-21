@@ -514,7 +514,7 @@ Execute(LSP tab type definition requests should be sent):
   let b:ale_linters = ['pyls']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
-  ALEGoToTypeDefinitionInTab
+  ALEGoToTypeDefinition -tab
 
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)

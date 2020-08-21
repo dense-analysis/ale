@@ -8,6 +8,14 @@ let s:sep = has('win32') ? '\' : '/'
 " Set just so tests can override it.
 let g:__ale_c_project_filenames = ['.git/HEAD', 'configure', 'Makefile', 'CMakeLists.txt']
 
+function! s:CanParseMakefile(buffer) abort
+    " Something somewhere seems to delete this setting in tests, so ensure we
+    " always have a default value.
+    call ale#Set('c_parse_makefile', 0)
+
+    return ale#Var(a:buffer, 'c_parse_makefile')
+endfunction
+
 function! ale#c#GetBuildDirectory(buffer) abort
     let l:build_dir = ale#Var(a:buffer, 'c_build_dir')
 
@@ -61,10 +69,58 @@ function! ale#c#ShellSplit(line) abort
     return l:args
 endfunction
 
+" Takes the path prefix and a list of cflags and expands @file arguments to
+" the contents of the file.
+"
+" @file arguments are command line arguments recognised by gcc and clang. For
+" instance, if @./path/to/file was given to gcc, it would load .path/to/file
+" and use the contents of that file as arguments.
+function! ale#c#ExpandAtArgs(path_prefix, raw_split_lines) abort
+    let l:out_lines = []
+
+    for l:option in a:raw_split_lines
+        if stridx(l:option, '@') == 0
+            " This is an argument specifying a location of a file containing other arguments
+            let l:path = join(split(l:option, '\zs')[1:], '')
+
+            " Make path absolute
+            if stridx(l:path, s:sep) != 0 && stridx(l:path, '/') != 0
+                let l:rel_path = substitute(l:path, '"', '', 'g')
+                let l:rel_path = substitute(l:rel_path, '''', '', 'g')
+                let l:path = a:path_prefix . s:sep . l:rel_path
+            endif
+
+            " Read the file and add all the arguments
+            try
+                let l:additional_args = readfile(l:path)
+            catch
+                continue " All we can really do is skip this argument
+            endtry
+
+            let l:file_lines = []
+
+            for l:line in l:additional_args
+                let l:file_lines += ale#c#ShellSplit(l:line)
+            endfor
+
+            " @file arguments can include other @file arguments, so we must
+            " recurse.
+            let l:out_lines += ale#c#ExpandAtArgs(a:path_prefix, l:file_lines)
+        else
+            " This is not an @file argument, so don't touch it.
+            let l:out_lines += [l:option]
+        endif
+    endfor
+
+    return l:out_lines
+endfunction
+
 function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
     let l:cflags_list = []
 
-    let l:split_lines = ale#c#ShellSplit(a:cflag_line)
+    let l:raw_split_lines = ale#c#ShellSplit(a:cflag_line)
+    " Expand @file arguments now before parsing
+    let l:split_lines = ale#c#ExpandAtArgs(a:path_prefix, l:raw_split_lines)
     let l:option_index = 0
 
     while l:option_index < len(l:split_lines)
@@ -76,6 +132,7 @@ function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
         \ || stridx(l:option, '-iquote') == 0
         \ || stridx(l:option, '-isystem') == 0
         \ || stridx(l:option, '-idirafter') == 0
+        \ || stridx(l:option, '-iframework') == 0
             if stridx(l:option, '-I') == 0 && l:option isnot# '-I'
                 let l:arg = join(split(l:option, '\zs')[2:], '')
                 let l:option = '-I'
@@ -111,7 +168,7 @@ function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
         elseif (stridx(l:option, '-W') == 0 && stridx(l:option, '-Wa,') != 0 && stridx(l:option, '-Wl,') != 0 && stridx(l:option, '-Wp,') != 0)
         \ || l:option is# '-w' || stridx(l:option, '-pedantic') == 0
         \ || l:option is# '-ansi' || stridx(l:option, '-std=') == 0
-        \ || (stridx(l:option, '-f') == 0 && stridx(l:option, '-fdump') != 0 && stridx(l:option, '-fdiagnostics') != 0 && stridx(l:option, '-fno-show-column') != 0)
+        \ || stridx(l:option, '-f') == 0 && l:option !~# '\v^-f(dump|diagnostics|no-show-column|stack-usage)'
         \ || stridx(l:option, '-O') == 0
         \ || l:option is# '-C' || l:option is# '-CC' || l:option is# '-trigraphs'
         \ || stridx(l:option, '-nostdinc') == 0 || stridx(l:option, '-iplugindir=') == 0
@@ -125,7 +182,7 @@ function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
 endfunction
 
 function! ale#c#ParseCFlagsFromMakeOutput(buffer, make_output) abort
-    if !g:ale_c_parse_makefile
+    if !s:CanParseMakefile(a:buffer)
         return v:null
     endif
 
@@ -335,9 +392,7 @@ function! ale#c#GetCFlags(buffer, output) abort
         endif
     endif
 
-    if ale#Var(a:buffer, 'c_parse_makefile')
-    \&& !empty(a:output)
-    \&& !empty(l:cflags)
+    if s:CanParseMakefile(a:buffer) && !empty(a:output) && !empty(l:cflags)
         let l:cflags = ale#c#ParseCFlagsFromMakeOutput(a:buffer, a:output)
     endif
 
@@ -349,7 +404,7 @@ function! ale#c#GetCFlags(buffer, output) abort
 endfunction
 
 function! ale#c#GetMakeCommand(buffer) abort
-    if ale#Var(a:buffer, 'c_parse_makefile')
+    if s:CanParseMakefile(a:buffer)
         let l:makefile_path = ale#path#FindNearestFile(a:buffer, 'Makefile')
 
         if !empty(l:makefile_path)

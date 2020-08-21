@@ -40,7 +40,7 @@ Before:
   \ 'name': 'testlinter',
   \ 'executable': has('win32') ? 'cmd' : 'echo',
   \ 'callback': 'TestCallback',
-  \ 'command_callback': 'TestCommandCallback',
+  \ 'command': function('TestCommandCallback'),
   \})
   call ale#command#ClearData()
 

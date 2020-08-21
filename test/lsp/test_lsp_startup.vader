@@ -422,3 +422,13 @@ Execute(Deferred addresses should be handled correctly):
   Assert Start()
   call ale#test#FlushJobs()
   call AssertInitSuccess('foo', 'localhost:1234', 'foobar', '/foo/bar', '')
+
+Execute(Servers that have crashed should be restarted):
+  call ale#lsp#Register('foo', '/foo/bar', {})
+  call extend(ale#lsp#GetConnections()['foo:/foo/bar'], {'initialized': 1})
+
+  " Starting the program again should reset initialized to `0`.
+  call ale#lsp#StartProgram('foo:/foo/bar', 'foobar', 'foobar --start')
+
+  AssertEqual 0, ale#lsp#GetConnections()['foo:/foo/bar']['initialized']
+  AssertEqual ['initialize'], map(PopMessages(), 'v:val[''method'']')

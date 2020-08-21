@@ -684,7 +684,9 @@ g:ale_completion_enabled                             *g:ale_completion_enabled*
 
   See |ale-completion|
 
-g:ale_completion_tsserver_remove_warnings *g:ale_completion_tsserver_remove_warnings*
+
+                                    *g:ale_completion_tsserver_remove_warnings*
+g:ale_completion_tsserver_remove_warnings
 
   Type: Number
   Default: `0`
@@ -692,6 +694,7 @@ g:ale_completion_tsserver_remove_warnings *g:ale_completion_tsserver_remove_warn
   When this option is set to `0`, ALE will return all completion items,
   including those that are a warning. Warnings can be excluded from completed
   items by setting it to `1`.
+
 
 g:ale_completion_autoimport                       *g:ale_completion_autoimport*
 
@@ -2320,16 +2323,15 @@ documented in additional help files.
     bibclean..............................|ale-bib-bibclean|
   c.......................................|ale-c-options|
     astyle................................|ale-c-astyle|
-    clang.................................|ale-c-clang|
+    cc....................................|ale-c-cc|
+    ccls..................................|ale-c-ccls|
     clangd................................|ale-c-clangd|
     clang-format..........................|ale-c-clangformat|
     clangtidy.............................|ale-c-clangtidy|
     cppcheck..............................|ale-c-cppcheck|
     cquery................................|ale-c-cquery|
     flawfinder............................|ale-c-flawfinder|
-    gcc...................................|ale-c-gcc|
     uncrustify............................|ale-c-uncrustify|
-    ccls..................................|ale-c-ccls|
   chef....................................|ale-chef-options|
     cookstyle.............................|ale-chef-cookstyle|
     foodcritic............................|ale-chef-foodcritic|
@@ -2343,9 +2345,10 @@ documented in additional help files.
     cmake-format..........................|ale-cmake-cmakeformat|
   cpp.....................................|ale-cpp-options|
     astyle................................|ale-cpp-astyle|
-    clang.................................|ale-cpp-clang|
-    clangd................................|ale-cpp-clangd|
+    cc....................................|ale-cpp-cc|
+    ccls..................................|ale-cpp-ccls|
     clangcheck............................|ale-cpp-clangcheck|
+    clangd................................|ale-cpp-clangd|
     clang-format..........................|ale-cpp-clangformat|
     clangtidy.............................|ale-cpp-clangtidy|
     clazy.................................|ale-cpp-clazy|
@@ -2353,9 +2356,7 @@ documented in additional help files.
     cpplint...............................|ale-cpp-cpplint|
     cquery................................|ale-cpp-cquery|
     flawfinder............................|ale-cpp-flawfinder|
-    gcc...................................|ale-cpp-gcc|
     uncrustify............................|ale-cpp-uncrustify|
-    ccls..................................|ale-cpp-ccls|
   c#......................................|ale-cs-options|
     csc...................................|ale-cs-csc|
     mcs...................................|ale-cs-mcs|
@@ -2503,6 +2504,7 @@ documented in additional help files.
     luac..................................|ale-lua-luac|
     luacheck..............................|ale-lua-luacheck|
   markdown................................|ale-markdown-options|
+    markdownlint..........................|ale-markdown-markdownlint|
     mdl...................................|ale-markdown-mdl|
     prettier..............................|ale-markdown-prettier|
     remark-lint...........................|ale-markdown-remark-lint|
@@ -2809,7 +2811,13 @@ ALEGoToDefinition `<options>`                               *ALEGoToDefinition*
   command. Otherwise, Vim will refuse to leave the buffer you're jumping from
   unless you have saved your edits.
 
-  A plug mapping `<Plug>(ale_go_to_definition)` is defined for this command.
+  The following Plug mappings are defined for this command, which correspond
+  to the following commands.
+
+  `<Plug>(ale_go_to_definition)`           - `:ALEGoToDefinition`
+  `<Plug>(ale_go_to_definition_in_tab)`    - `:ALEGoToDefinition -tab`
+  `<Plug>(ale_go_to_definition_in_split)`  - `:ALEGoToDefinition -split`
+  `<Plug>(ale_go_to_definition_in_vsplit)` - `:ALEGoToDefinition -vsplit`
 
 
 ALEGoToTypeDefinition                                   *ALEGoToTypeDefinition*
@@ -2831,8 +2839,13 @@ ALEGoToTypeDefinition                                   *ALEGoToTypeDefinition*
   You can jump back to the position you were at before going to the definition
   of something with jump motions like CTRL-O. See |jump-motions|.
 
-  A plug mapping `<Plug>(ale_go_to_type_definition)` is defined for this
-  command.
+  The following Plug mappings are defined for this command, which correspond
+  to the following commands.
+
+  `<Plug>(ale_go_to_type_definition)`           - `:ALEGoToTypeDefinition`
+  `<Plug>(ale_go_to_type_definition_in_tab)`    - `:ALEGoToTypeDefinition -tab`
+  `<Plug>(ale_go_to_type_definition_in_split)`  - `:ALEGoToTypeDefinition -split`
+  `<Plug>(ale_go_to_type_definition_in_vsplit)` - `:ALEGoToTypeDefinition -vsplit`
 
 
 ALEHover                                                             *ALEHover*

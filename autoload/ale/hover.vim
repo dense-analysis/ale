@@ -264,7 +264,10 @@ function! s:OnReady(line, column, opt, linter, lsp_details) abort
         " hover position probably won't make sense.
         call ale#lsp#NotifyForChanges(l:id, l:buffer)
 
-        let l:column = min([a:column, len(getbufline(l:buffer, a:line)[0])])
+        let l:column = max([
+        \   min([a:column, len(getbufline(l:buffer, a:line)[0])]),
+        \   1,
+        \])
 
         let l:message = ale#lsp#message#Hover(l:buffer, a:line, l:column)
     endif

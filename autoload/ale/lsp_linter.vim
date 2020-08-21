@@ -227,7 +227,7 @@ function! ale#lsp_linter#OnInit(linter, details, Callback) abort
     let l:command = a:details.command
 
     let l:config = ale#lsp_linter#GetConfig(l:buffer, a:linter)
-    let l:language_id = ale#util#GetFunction(a:linter.language_callback)(l:buffer)
+    let l:language_id = ale#linter#GetLanguage(l:buffer, a:linter)
 
     call ale#lsp#UpdateConfig(l:conn_id, l:buffer, l:config)
 

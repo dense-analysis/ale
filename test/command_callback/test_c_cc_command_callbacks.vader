@@ -19,12 +19,12 @@ Before:
     return g:get_cflags_return_value
   endfunction
 
-  call ale#assert#SetUpLinterTest('cpp', 'cc')
+  call ale#assert#SetUpLinterTest('c', 'cc')
 
-  let b:command_tail = ' -S -x c++'
+  let b:command_tail = ' -S -x c'
   \   . ' -o ' . (has('win32') ? 'nul': '/dev/null')
   \   . ' -iquote ' . ale#Escape(getcwd())
-  \   . ' -std=c++14 -Wall -'
+  \   . ' -std=c11 -Wall -'
 
 After:
   unlet! g:get_cflags_return_value
@@ -36,20 +36,20 @@ After:
 
   call ale#assert#TearDownLinterTest()
 
-Execute(clang++ should be used instead of gcc, if available):
-  let g:executable_map = {'clang++': 1}
+Execute(clang should be used instead of gcc, if available):
+  let g:executable_map = {'clang': 1}
 
-  AssertLinter 'clang++', [ale#Escape('clang++') . b:command_tail]
+  AssertLinter 'clang', [ale#Escape('clang') . b:command_tail]
 
 Execute(The executable should be configurable):
   AssertLinter 'gcc', [ale#Escape('gcc') . b:command_tail]
 
-  let b:ale_cpp_cc_executable = 'foobar'
+  let b:ale_c_cc_executable = 'foobar'
 
   AssertLinter 'foobar', [ale#Escape('foobar') . b:command_tail]
 
 Execute(The -std flag should be replaced by parsed C flags):
-  let b:command_tail = substitute(b:command_tail, 'c++14', 'c++11 ', '')
-  let g:get_cflags_return_value = '-std=c++11'
+  let b:command_tail = substitute(b:command_tail, 'c11', 'c99 ', '')
+  let g:get_cflags_return_value = '-std=c99'
 
   AssertLinter 'gcc', ale#Escape('gcc') . b:command_tail
