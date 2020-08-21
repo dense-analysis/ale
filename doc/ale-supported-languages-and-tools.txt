@@ -238,6 +238,8 @@ Notes:
   * `jq`
   * `jsonlint`
   * `prettier`
+* JSON5
+  * `json5`
 * Julia
   * `languageserver`
 * Kotlin

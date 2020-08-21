@@ -1,0 +1,20 @@
+Before:
+  call ale#assert#SetUpLinterTest('json5', 'json5')
+  call ale#test#SetFilename('../json_files/testfile.json')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The json5 linter should return the correct default command):
+  GivenCommandOutput ['2.2.0']
+  AssertLinter 'json5', [
+  \ ale#Escape('json5') . ' --version',
+  \ ale#Escape('json5') . ' --validate',
+  \]
+
+Execute(The json5 linter returns nothing if version is too old):
+  GivenCommandOutput ['2.1.0']
+  AssertLinter 'json5', [
+  \ ale#Escape('json5') . ' --version',
+  \ ''
+  \]

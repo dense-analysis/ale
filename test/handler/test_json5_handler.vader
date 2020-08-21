@@ -1,0 +1,28 @@
+Before:
+  runtime ale_linters/json5/json5.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The json5 handler should handle basic errors):
+  AssertEqual
+  \ [
+  \   {
+  \    'type': 'E',
+  \    'bufnr': 347,
+  \    'lnum': 4,
+  \    'col': 3,
+  \    'text': "invalid character '\\\"'",
+  \   },
+  \   {
+  \    'type': 'E',
+  \    'bufnr': 347,
+  \    'lnum': 5,
+  \    'col': 90,
+  \    'text': 'Something else',
+  \   },
+  \ ],
+  \ ale_linters#json5#json5#Handle(347, [
+  \   "JSON5: invalid character '\\\"' at 4:3",
+  \   "JSON5: Something else at 5:90",
+  \ ])
