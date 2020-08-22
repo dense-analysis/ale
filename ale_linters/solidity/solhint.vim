@@ -1,4 +1,5 @@
-" Author: Franco Victorio - https://github.com/fvictorio
+" Authors: Franco Victorio - https://github.com/fvictorio, Henrique Barcelos
+" https://github.com/hbarcelos
 " Description: Report errors in Solidity code with solhint
 
 function! ale_linters#solidity#solhint#Handle(buffer, lines) abort
@@ -23,7 +24,7 @@ endfunction
 
 call ale#linter#Define('solidity', {
 \   'name': 'solhint',
-\   'executable': 'solhint',
-\   'command': 'solhint --formatter compact %t',
+\   'executable': function('ale#handlers#solhint#GetExecutable'),
+\   'command': function('ale#handlers#solhint#GetCommand'),
 \   'callback': 'ale_linters#solidity#solhint#Handle',
 \})
