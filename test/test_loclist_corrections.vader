@@ -13,13 +13,13 @@ After:
 Execute(FixLocList should map filenames):
   " Paths converted back into temporary filenames shouldn't be included.
   let g:ale_filename_mappings = {
-  \ 'linter2': [['/xxx', '/data']],
+  \ 'linter2': [['/xxx/', '/data/']],
   \ 'linter1': [
-  \   ['/bar', '/data/special'],
-  \   ['/foo', '/data'],
+  \   ['/bar/', '/data/special/'],
+  \   ['/foo/', '/data/'],
   \   [
-  \     ale#path#Simplify(fnamemodify(ale#util#Tempname(), ':h:h')),
-  \     '/x-tmp',
+  \     ale#path#Simplify(fnamemodify(ale#util#Tempname(), ':h:h')) . '/',
+  \     '/x-tmp/',
   \   ],
   \ ],
   \}
