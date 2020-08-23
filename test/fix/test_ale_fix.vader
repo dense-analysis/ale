@@ -221,7 +221,7 @@ Execute(Should apply filename mpapings):
   " that ALEFix applies filename mappings, end-to-end.
   let g:ale_filename_mappings = {
   \ 'echo_filename': [
-  \   [expand('%:p:h'), '/some/fake/path'],
+  \   [expand('%:p:h') . '/', '/some/fake/path/'],
   \ ],
   \}
 

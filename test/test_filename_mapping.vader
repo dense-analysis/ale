@@ -56,7 +56,7 @@ Execute(ale#filename_mapping#Map should map filenames):
   AssertEqual
   \ '/data/bar',
   \ ale#filename_mapping#Map('/foo//bar', [
-  \   ['/data', '/baz'],
-  \   ['/foo', '/data'],
-  \   ['/foo', '/xyz'],
+  \   ['/data/', '/baz/'],
+  \   ['/foo/', '/data/'],
+  \   ['/foo/', '/xyz/'],
   \ ])
