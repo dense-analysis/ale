@@ -256,6 +256,13 @@ function! s:RemapItemTypes(type_map, loclist) abort
 endfunction
 
 function! ale#engine#FixLocList(buffer, linter_name, from_other_source, loclist) abort
+    let l:mappings = ale#GetFilenameMappings(a:buffer, a:linter_name)
+
+    if !empty(l:mappings)
+        " We need to apply reverse filename mapping here.
+        let l:mappings = ale#filename_mapping#Invert(l:mappings)
+    endif
+
     let l:bufnr_map = {}
     let l:new_loclist = []
 
@@ -296,13 +303,19 @@ function! ale#engine#FixLocList(buffer, linter_name, from_other_source, loclist)
             let l:item.code = l:old_item.code
         endif
 
-        if has_key(l:old_item, 'filename')
-        \&& !ale#path#IsTempName(l:old_item.filename)
+        let l:old_name = get(l:old_item, 'filename', '')
+
+        " Map parsed from output to local filesystem files.
+        if !empty(l:old_name) && !empty(l:mappings)
+            let l:old_name = ale#filename_mapping#Map(l:old_name, l:mappings)
+        endif
+
+        if !empty(l:old_name) && !ale#path#IsTempName(l:old_name)
             " Use the filename given.
             " Temporary files are assumed to be for this buffer,
             " and the filename is not included then, because it looks bad
             " in the loclist window.
-            let l:filename = l:old_item.filename
+            let l:filename = l:old_name
             let l:item.filename = l:filename
 
             if has_key(l:old_item, 'bufnr')
@@ -415,6 +428,7 @@ function! s:RunJob(command, options) abort
     \   'executable': l:executable,
     \   'read_buffer': l:read_buffer,
     \   'log_output': 1,
+    \   'filename_mappings': ale#GetFilenameMappings(l:buffer, l:linter.name),
     \})
 
     " Only proceed if the job is being run.

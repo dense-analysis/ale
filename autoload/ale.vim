@@ -266,3 +266,23 @@ function! ale#GetLocItemMessage(item, format_string) abort
 
     return l:msg
 endfunction
+
+" Given a buffer and a linter or fixer name, return an Array of two-item
+" Arrays describing how to map filenames to and from the local to foreign file
+" systems.
+function! ale#GetFilenameMappings(buffer, name) abort
+    let l:linter_mappings = ale#Var(a:buffer, 'filename_mappings')
+
+    if type(l:linter_mappings) is v:t_list
+        return l:linter_mappings
+    endif
+
+    let l:name = a:name
+
+    if !has_key(l:linter_mappings, l:name)
+        " Use * as a default setting for all tools.
+        let l:name = '*'
+    endif
+
+    return get(l:linter_mappings, l:name, [])
+endfunction

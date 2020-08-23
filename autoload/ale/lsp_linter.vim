@@ -265,7 +265,14 @@ function! s:StartLSP(options, address, executable, command) abort
             call ale#lsp#MarkConnectionAsTsserver(l:conn_id)
         endif
 
-        let l:command = ale#command#FormatCommand(l:buffer, a:executable, a:command, 0, v:false)[1]
+        let l:command = ale#command#FormatCommand(
+        \   l:buffer,
+        \   a:executable,
+        \   a:command,
+        \   0,
+        \   v:false,
+        \   [],
+        \)[1]
         let l:command = ale#job#PrepareCommand(l:buffer, l:command)
         let l:ready = ale#lsp#StartProgram(l:conn_id, a:executable, l:command)
     endif

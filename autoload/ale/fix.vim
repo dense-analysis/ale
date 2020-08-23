@@ -1,4 +1,8 @@
+" Author: w0rp <devw0rp@gmail.com>
+" Description: Functions for fixing code with programs, or other means.
+
 call ale#Set('fix_on_save_ignore', {})
+call ale#Set('filename_mappings', {})
 
 " Apply fixes queued up for buffers which may be hidden.
 " Vim doesn't let you modify hidden buffers.
@@ -110,7 +114,6 @@ function! s:HandleExit(job_info, buffer, job_output, data) abort
     call s:RunFixer({
     \   'buffer': a:buffer,
     \   'input': l:input,
-    \   'output': l:output,
     \   'callback_list': a:job_info.callback_list,
     \   'callback_index': a:job_info.callback_index + 1,
     \})
@@ -125,6 +128,7 @@ function! s:RunJob(result, options) abort
 
     let l:buffer = a:options.buffer
     let l:input = a:options.input
+    let l:fixer_name = a:options.fixer_name
 
     if a:result is 0 || type(a:result) is v:t_list
         if type(a:result) is v:t_list
@@ -150,7 +154,6 @@ function! s:RunJob(result, options) abort
         \   'input': l:input,
         \   'callback_index': a:options.callback_index,
         \   'callback_list': a:options.callback_list,
-        \   'output': [],
         \})
 
         return
@@ -177,6 +180,7 @@ function! s:RunJob(result, options) abort
     \   'read_buffer': l:read_buffer,
     \   'input': l:input,
     \   'log_output': 0,
+    \   'filename_mappings': ale#GetFilenameMappings(l:buffer, l:fixer_name),
     \})
 
     if empty(l:run_result)
@@ -200,32 +204,22 @@ function! s:RunFixer(options) abort
         return
     endif
 
-    let l:ChainCallback = get(a:options, 'chain_callback', v:null)
-
-    let l:Function = l:ChainCallback isnot v:null
-    \   ? ale#util#GetFunction(l:ChainCallback)
-    \   : a:options.callback_list[l:index]
+    let [l:fixer_name, l:Function] = a:options.callback_list[l:index]
 
     " Record new jobs started as fixer jobs.
     call setbufvar(l:buffer, 'ale_job_type', 'fixer')
 
-    if l:ChainCallback isnot v:null
-        " Chained commands accept (buffer, output, [input])
-        let l:result = ale#util#FunctionArgCount(l:Function) == 2
-        \   ? call(l:Function, [l:buffer, a:options.output])
-        \   : call(l:Function, [l:buffer, a:options.output, copy(l:input)])
-    else
-        " Regular fixer commands accept (buffer, [input])
-        let l:result = ale#util#FunctionArgCount(l:Function) == 1
-        \   ? call(l:Function, [l:buffer])
-        \   : call(l:Function, [l:buffer, copy(l:input)])
-    endif
+    " Regular fixer commands accept (buffer, [input])
+    let l:result = ale#util#FunctionArgCount(l:Function) == 1
+    \   ? call(l:Function, [l:buffer])
+    \   : call(l:Function, [l:buffer, copy(l:input)])
 
     call s:RunJob(l:result, {
     \   'buffer': l:buffer,
     \   'input': l:input,
     \   'callback_list': a:options.callback_list,
     \   'callback_index': l:index,
+    \   'fixer_name': l:fixer_name,
     \})
 endfunction
 
@@ -293,16 +287,24 @@ function! s:GetCallbacks(buffer, fixing_flag, fixers) abort
     " Variables with capital characters are needed, or Vim will complain about
     " funcref variables.
     for l:Item in l:callback_list
+        " Try to capture the names of registered fixer names, so we can use
+        " them for filename mapping or other purposes later.
+        let l:fixer_name = v:null
+
         if type(l:Item) is v:t_string
             let l:Func = ale#fix#registry#GetFunc(l:Item)
 
             if !empty(l:Func)
+                let l:fixer_name = l:Item
                 let l:Item = l:Func
             endif
         endif
 
         try
-            call add(l:corrected_list, ale#util#GetFunction(l:Item))
+            call add(l:corrected_list, [
+            \   l:fixer_name,
+            \   ale#util#GetFunction(l:Item)
+            \])
         catch /E475/
             " Rethrow exceptions for failing to get a function so we can print
             " a friendly message about it.

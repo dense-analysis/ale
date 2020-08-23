@@ -133,11 +133,30 @@ function! ale#command#EscapeCommandPart(command_part) abort
     return substitute(a:command_part, '%', '%%', 'g')
 endfunction
 
+" Format a filename, converting it with filename mappings, if non-empty,
+" and escaping it for putting into a command string.
+function! s:FormatFilename(filename, mappings) abort
+    let l:filename = a:filename
+
+    if !empty(a:mappings)
+        let l:filename = ale#filename_mapping#Map(l:filename, a:mappings)
+    endif
+
+    return ale#Escape(l:filename)
+endfunction
+
 " Given a command string, replace every...
 " %s -> with the current filename
 " %t -> with the name of an unused file in a temporary directory
 " %% -> with a literal %
-function! ale#command#FormatCommand(buffer, executable, command, pipe_file_if_needed, input) abort
+function! ale#command#FormatCommand(
+\   buffer,
+\   executable,
+\   command,
+\   pipe_file_if_needed,
+\   input,
+\   filename_mappings,
+\) abort
     let l:temporary_file = ''
     let l:command = a:command
 
@@ -154,14 +173,14 @@ function! ale#command#FormatCommand(buffer, executable, command, pipe_file_if_ne
     " file.
     if l:command =~# '%s'
         let l:filename = fnamemodify(bufname(a:buffer), ':p')
-        let l:command = substitute(l:command, '%s', '\=ale#Escape(l:filename)', 'g')
+        let l:command = substitute(l:command, '%s', '\=s:FormatFilename(l:filename, a:filename_mappings)', 'g')
     endif
 
     if a:input isnot v:false && l:command =~# '%t'
         " Create a temporary filename, <temp_dir>/<original_basename>
         " The file itself will not be created by this function.
         let l:temporary_file = s:TemporaryFilename(a:buffer)
-        let l:command = substitute(l:command, '%t', '\=ale#Escape(l:temporary_file)', 'g')
+        let l:command = substitute(l:command, '%t', '\=s:FormatFilename(l:temporary_file, a:filename_mappings)', 'g')
     endif
 
     " Finish formatting so %% becomes %.
@@ -265,6 +284,7 @@ function! ale#command#Run(buffer, command, Callback, ...) abort
     \   a:command,
     \   get(l:options, 'read_buffer', 0),
     \   get(l:options, 'input', v:null),
+    \   get(l:options, 'filename_mappings', []),
     \)
     let l:command = ale#job#PrepareCommand(a:buffer, l:command)
     let l:job_options = {

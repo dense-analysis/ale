@@ -25,12 +25,12 @@ After:
 Execute(FormatCommand should do nothing to basic command strings):
   AssertEqual
   \ ['', 'awesome-linter do something', 0],
-  \ ale#command#FormatCommand(bufnr('%'), '', 'awesome-linter do something', 0, v:null)
+  \ ale#command#FormatCommand(bufnr('%'), '', 'awesome-linter do something', 0, v:null, [])
 
 Execute(FormatCommand should handle %%, and ignore other percents):
   AssertEqual
   \ ['', '% %%d %%f %x %', 0],
-  \ ale#command#FormatCommand(bufnr('%'), '', '%% %%%d %%%f %x %', 0, v:null)
+  \ ale#command#FormatCommand(bufnr('%'), '', '%% %%%d %%%f %x %', 0, v:null, [])
 
 Execute(FormatCommand should convert %s to the current filename):
   AssertEqual
@@ -39,10 +39,10 @@ Execute(FormatCommand should convert %s to the current filename):
   \   'foo ' . ale#Escape(expand('%:p')) . ' bar ' . ale#Escape(expand('%:p')),
   \   0,
   \ ],
-  \ ale#command#FormatCommand(bufnr('%'), '', 'foo %s bar %s', 0, v:null)
+  \ ale#command#FormatCommand(bufnr('%'), '', 'foo %s bar %s', 0, v:null, [])
 
 Execute(FormatCommand should convert %t to a new temporary filename):
-  let g:result = ale#command#FormatCommand(bufnr('%'), '', 'foo %t bar %t', 0, v:null)
+  let g:result = ale#command#FormatCommand(bufnr('%'), '', 'foo %t bar %t', 0, v:null, [])
 
   call CheckTempFile(g:result[0])
 
@@ -56,21 +56,21 @@ Execute(FormatCommand should convert %t to a new temporary filename):
   AssertEqual g:match[1], g:match[2]
 
 Execute(FormatCommand should not convert %t to a new temporary filename when the input is given as v:false):
-  let g:result = ale#command#FormatCommand(bufnr('%'), '', 'foo %t bar %t', 0, v:false)
+  let g:result = ale#command#FormatCommand(bufnr('%'), '', 'foo %t bar %t', 0, v:false, [])
 
   AssertEqual ['', 'foo %t bar %t', 0], g:result
 
 Execute(FormatCommand should signal that files are created when temporary files are needed):
   AssertEqual
   \ 1,
-  \ ale#command#FormatCommand(bufnr('%'), '', 'foo %t', 0, v:null)[2]
+  \ ale#command#FormatCommand(bufnr('%'), '', 'foo %t', 0, v:null, [])[2]
 
   AssertEqual
   \ 0,
-  \ ale#command#FormatCommand(bufnr('%'), '', 'foo %s', 0, v:null)[2]
+  \ ale#command#FormatCommand(bufnr('%'), '', 'foo %s', 0, v:null, [])[2]
 
 Execute(FormatCommand should let you combine %s and %t):
-  let g:result = ale#command#FormatCommand(bufnr('%'), '', 'foo %t bar %s', 0, v:null)
+  let g:result = ale#command#FormatCommand(bufnr('%'), '', 'foo %t bar %s', 0, v:null, [])
 
   call CheckTempFile(g:result[0])
 
@@ -87,30 +87,30 @@ Execute(FormatCommand should replace %e with the escaped executable):
   if has('win32')
     AssertEqual
     \ ['', 'foo foo', 0],
-    \ ale#command#FormatCommand(bufnr('%'), 'foo', '%e %e', 0, v:null)
+    \ ale#command#FormatCommand(bufnr('%'), 'foo', '%e %e', 0, v:null, [])
     AssertEqual
     \ ['', '"foo bar"', 0],
-    \ ale#command#FormatCommand(bufnr('%'), 'foo bar', '%e', 0, v:null)
+    \ ale#command#FormatCommand(bufnr('%'), 'foo bar', '%e', 0, v:null, [])
     AssertEqual
     \ ['', '%e %e', 0],
-    \ ale#command#FormatCommand(bufnr('%'), '', '%e %e', 0, v:null)
+    \ ale#command#FormatCommand(bufnr('%'), '', '%e %e', 0, v:null, [])
   else
     AssertEqual
     \ ['', '''foo'' ''foo''', 0],
-    \ ale#command#FormatCommand(bufnr('%'), 'foo', '%e %e', 0, v:null)
+    \ ale#command#FormatCommand(bufnr('%'), 'foo', '%e %e', 0, v:null, [])
     AssertEqual
     \ ['', '''foo bar''', 0],
-    \ ale#command#FormatCommand(bufnr('%'), 'foo bar', '%e', 0, v:null)
+    \ ale#command#FormatCommand(bufnr('%'), 'foo bar', '%e', 0, v:null, [])
     AssertEqual
     \ ['', '%e %e', 0],
-    \ ale#command#FormatCommand(bufnr('%'), '', '%e %e', 0, v:null)
+    \ ale#command#FormatCommand(bufnr('%'), '', '%e %e', 0, v:null, [])
   endif
 
 Execute(EscapeCommandPart should escape all percent signs):
   AssertEqual '%%s %%t %%%% %%s %%t %%%%', ale#engine#EscapeCommandPart('%s %t %% %s %t %%')
 
 Execute(EscapeCommandPart should pipe in temporary files appropriately):
-  let g:result = ale#command#FormatCommand(bufnr('%'), '', 'foo bar', 1, v:null)
+  let g:result = ale#command#FormatCommand(bufnr('%'), '', 'foo bar', 1, v:null, [])
 
   call CheckTempFile(g:result[0])
 
@@ -118,10 +118,24 @@ Execute(EscapeCommandPart should pipe in temporary files appropriately):
   Assert !empty(g:match), 'No match found! Result was: ' . g:result[1]
   AssertEqual ale#Escape(g:result[0]), g:match[1]
 
-  let g:result = ale#command#FormatCommand(bufnr('%'), '', 'foo bar %t', 1, v:null)
+  let g:result = ale#command#FormatCommand(bufnr('%'), '', 'foo bar %t', 1, v:null, [])
 
   call CheckTempFile(g:result[0])
 
   let g:match = matchlist(g:result[1], '\v^foo bar (.*)$')
   Assert !empty(g:match), 'No match found! Result was: ' . g:result[1]
   AssertEqual ale#Escape(g:result[0]), g:match[1]
+
+Execute(FormatCommand should apply filename mappings the current file):
+  let g:result = ale#command#FormatCommand(bufnr('%'), '', '%s', 1, v:null, [
+  \ [expand('%:p:h'), '/foo/bar'],
+  \])
+
+  Assert g:result[1] =~# '/foo/bar'
+
+Execute(FormatCommand should apply filename mappings to temporary files):
+  let g:result = ale#command#FormatCommand(bufnr('%'), '', '%t', 1, v:null, [
+  \ [fnamemodify(tempname(), ':h:h'), '/foo/bar']
+  \])
+
+  Assert g:result[1] =~# '/foo/bar'

@@ -79,6 +79,7 @@ other content at [w0rp.com](https://w0rp.com).
     17. [How can I configure my C or C++ project?](#faq-c-configuration)
     18. [How can I configure ALE differently for different buffers?](#faq-buffer-configuration)
     19. [How can I configure the height of the list in which ALE displays errors?](#faq-list-window-height)
+    20. [How can I run linters or fixers via Docker or a VM?](#faq-vm)
 
 <a name="supported-languages"></a>
 
@@ -877,3 +878,14 @@ To set a default height for the error list, use the `g:ale_list_window_size` var
 " Show 5 lines of errors (default: 10)
 let g:ale_list_window_size = 5
 ```
+
+<a name="faq-vm"></a>
+
+### 5.xx. How can I run linters or fixers via Docker or a VM?
+
+ALE supports running linters or fixers via Docker, virtual machines, or in
+combination with any remote machine with a different file system, so long as the
+tools are well-integrated with ALE, and ALE is properly configured to run the
+correct commands and map filename paths between different file systems. See
+`:help ale-lint-other-machines` for the full documentation on how to configure
+ALE to support this.

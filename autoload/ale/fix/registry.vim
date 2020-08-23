@@ -160,11 +160,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['php'],
 \       'description': 'Fix PHP files with php-cs-fixer.',
 \   },
-\    'astyle': {
+\   'astyle': {
 \       'function': 'ale#fixers#astyle#Fix',
 \       'suggested_filetypes': ['c', 'cpp'],
 \       'description': 'Fix C/C++ with astyle.',
-\    },
+\   },
 \   'clangtidy': {
 \       'function': 'ale#fixers#clangtidy#Fix',
 \       'suggested_filetypes': ['c', 'cpp', 'objc'],
