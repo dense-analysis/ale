@@ -229,11 +229,8 @@ Execute(Should apply filename mpapings):
   let g:ale_fixers.testft = ['echo_filename']
   ALEFix
   call ale#test#FlushJobs()
-
-  if has('win32')
-    " We have to correct the output on Windows.
-    call setline(1, substitute(getline(1), '\r', '', ''))
-  endif
+  " Remote trailing whitespace from the line.
+  call setline(1, substitute(getline(1), '[ \r]\+$', '', ''))
 
 Expect(The mapped filename should be printed):
   /some/fake/path/test.txt
