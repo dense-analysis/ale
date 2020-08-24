@@ -135,11 +135,17 @@ endfunction
 
 " Format a filename, converting it with filename mappings, if non-empty,
 " and escaping it for putting into a command string.
-function! s:FormatFilename(filename, mappings) abort
+"
+" The filename can be modified.
+function! s:FormatFilename(filename, mappings, modifiers) abort
     let l:filename = a:filename
 
     if !empty(a:mappings)
         let l:filename = ale#filename_mapping#Map(l:filename, a:mappings)
+    endif
+
+    if !empty(a:modifiers)
+        let l:filename = fnamemodify(l:filename, a:modifiers)
     endif
 
     return ale#Escape(l:filename)
@@ -155,7 +161,7 @@ function! ale#command#FormatCommand(
 \   command,
 \   pipe_file_if_needed,
 \   input,
-\   filename_mappings,
+\   mappings,
 \) abort
     let l:temporary_file = ''
     let l:command = a:command
@@ -173,14 +179,24 @@ function! ale#command#FormatCommand(
     " file.
     if l:command =~# '%s'
         let l:filename = fnamemodify(bufname(a:buffer), ':p')
-        let l:command = substitute(l:command, '%s', '\=s:FormatFilename(l:filename, a:filename_mappings)', 'g')
+        let l:command = substitute(
+        \   l:command,
+        \   '\v\%s(%(:h|:t|:r|:e)*)',
+        \   '\=s:FormatFilename(l:filename, a:mappings, submatch(1))',
+        \   'g'
+        \)
     endif
 
     if a:input isnot v:false && l:command =~# '%t'
         " Create a temporary filename, <temp_dir>/<original_basename>
         " The file itself will not be created by this function.
         let l:temporary_file = s:TemporaryFilename(a:buffer)
-        let l:command = substitute(l:command, '%t', '\=s:FormatFilename(l:temporary_file, a:filename_mappings)', 'g')
+        let l:command = substitute(
+        \   l:command,
+        \   '\v\%t(%(:h|:t|:r|:e)*)',
+        \   '\=s:FormatFilename(l:temporary_file, a:mappings, submatch(1))',
+        \   'g'
+        \)
     endif
 
     " Finish formatting so %% becomes %.

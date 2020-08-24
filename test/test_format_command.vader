@@ -126,16 +126,49 @@ Execute(EscapeCommandPart should pipe in temporary files appropriately):
   Assert !empty(g:match), 'No match found! Result was: ' . g:result[1]
   AssertEqual ale#Escape(g:result[0]), g:match[1]
 
+Execute(FormatCommand should apply filename modifiers to the current file):
+  AssertEqual
+  \ ale#Escape(expand('%:p:h'))
+  \   . ' ' . ale#Escape('dummy.txt')
+  \   . ' ' . ale#Escape(expand('%:p:h:t'))
+  \   . ' ' . ale#Escape('txt')
+  \   . ' ' . ale#Escape(expand('%:p:r')),
+  \ ale#command#FormatCommand(bufnr(''), '', '%s:h %s:t %s:h:t %s:e %s:r', 0, v:null, [])[1]
+
+Execute(FormatCommand should apply filename modifiers to the temporary file):
+  let g:result = ale#command#FormatCommand(bufnr(''), '', '%t:h %t:t %t:h:t %t:e %t:r', 0, v:null, [])
+
+  AssertEqual
+  \ ale#Escape(fnamemodify(g:result[0], ':h'))
+  \   . ' ' . ale#Escape('dummy.txt')
+  \   . ' ' . ale#Escape(fnamemodify(g:result[0], ':h:t'))
+  \   . ' ' . ale#Escape('txt')
+  \   . ' ' . ale#Escape(fnamemodify(g:result[0], ':r')),
+  \ g:result[1]
+
 Execute(FormatCommand should apply filename mappings the current file):
-  let g:result = ale#command#FormatCommand(bufnr('%'), '', '%s', 1, v:null, [
+  let g:result = ale#command#FormatCommand(bufnr('%'), '', '%s', 0, v:null, [
   \ [expand('%:p:h'), '/foo/bar'],
   \])
 
   Assert g:result[1] =~# '/foo/bar'
 
 Execute(FormatCommand should apply filename mappings to temporary files):
-  let g:result = ale#command#FormatCommand(bufnr('%'), '', '%t', 1, v:null, [
+  let g:result = ale#command#FormatCommand(bufnr('%'), '', '%t', 0, v:null, [
   \ [fnamemodify(tempname(), ':h:h'), '/foo/bar']
   \])
 
   Assert g:result[1] =~# '/foo/bar'
+
+Execute(FormatCommand should apply filename modifiers to mapped filenames):
+  let g:result = ale#command#FormatCommand(bufnr('%'), '', '%s:h', 0, v:null, [
+  \ [expand('%:p:h'), '/foo/bar'],
+  \])
+
+  AssertEqual ale#Escape('/foo/bar'), g:result[1]
+
+  let g:result = ale#command#FormatCommand(bufnr('%'), '', '%t:h:h:h', 0, v:null, [
+  \ [fnamemodify(tempname(), ':h:h'), '/foo/bar']
+  \])
+
+  AssertEqual ale#Escape('/foo/bar'), g:result[1]

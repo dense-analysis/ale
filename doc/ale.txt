@@ -342,6 +342,8 @@ are supported for running the commands.
                       file will be created, containing the lines from the file
                       after previous adjustment have been done.
 
+                      See |ale-command-format-strings| for formatting options.
+
   `read_temporary_file` When set to `1`, ALE will read the contents of the
                       temporary file created for `%t`. This option can be used
                       for commands which need to modify some file on disk in
@@ -3738,6 +3740,16 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
   The character sequence `%%` can be used to emit a literal `%` into a
   command, so literal character sequences `%s` and `%t` can be escaped by
   using `%%s` and `%%t` instead, etc.
+
+  Some |filename-modifiers| can be applied to `%s` and `%t`. Only `:h`, `:t`,
+  `:r`, and `:e` may be applied, other modifiers will be ignored. Filename
+  modifiers can be applied to the format markers by placing them after them.
+
+  For example: >
+  'command': '%s:h %s:e %s:h:t',
+<
+  Given a path `/foo/baz/bar.txt`, the above command string will generate
+  something akin to `'/foo/baz' 'txt' 'baz'`
 
   If a callback for a command generates part of a command string which might
   possibly contain `%%`, `%s`, `%t`, or `%e`, where the special formatting
