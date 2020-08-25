@@ -119,6 +119,8 @@ Notes:
   * `dartanalyzer`!!
   * `dartfmt`!!
   * `language_server`
+* Dhall
+  * `dhall-format`
 * Dockerfile
   * `dockerfile_lint`
   * `hadolint`
