@@ -452,7 +452,7 @@ Execute(ParseCFlags should handle parenthesis and quotes):
   \     . '-Dtest3=`(" ")` file3.o '
   \ )
 
-Execute(We should include flags with paths that we want):
+Execute(We should include several important flags):
   AssertEqual
   \ '-I ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/inc'))
   \ . ' -I ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/include'))
@@ -480,7 +480,7 @@ Execute(We should include flags with paths that we want):
   \ . ' -iplugindir=dir -march=native -w'
   \ )
 
-Execute(CFlags we dont want to pass):
+Execute(We should exclude other flags that cause problems):
   AssertEqual
   \ '',
   \ ale#c#ParseCFlags(
@@ -489,7 +489,7 @@ Execute(CFlags we dont want to pass):
   \ . '-fdump-file=name -fdiagnostics-arg -fno-show-column -fstack-usage'
   \ )
 
-Execute(Expanding @file in CFlags):
+Execute(We should expand @file in CFlags):
   AssertEqual
   \ '-DARGS1 -DARGS2 -O2',
   \ ale#c#ParseCFlags(
