@@ -452,14 +452,15 @@ Execute(ParseCFlags should handle parenthesis and quotes):
   \     . '-Dtest3=`(" ")` file3.o '
   \ )
 
-Execute(CFlags we want to pass):
+Execute(We should include flags with paths that we want):
   AssertEqual
-  \ '-I ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/inc'))
-  \ . ' -I ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/include'))
-  \ . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/incquote'))
-  \ . ' -isystem ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/incsystem'))
+  \ '-I ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/inc'))
+  \ . ' -I ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/include'))
+  \ . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/incquote'))
+  \ . ' -isystem ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/incsystem'))
   \ . ' -idirafter ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/incafter'))
-  \ . ' -iframework ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/incframework'))
+  \ . ' -iframework ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/incframework'))
+  \ . ' -include ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/foo bar'))
   \ . ' -Dmacro=value -D macro2 -Bbdir -B bdir2'
   \ . ' -iprefix prefix -iwithprefix prefix2 -iwithprefixbefore prefix3'
   \ . ' -isysroot sysroot --sysroot=test --no-sysroot-suffix -imultilib multidir'
@@ -470,6 +471,7 @@ Execute(CFlags we want to pass):
   \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
   \   'gcc'
   \ . ' -Iinc -I include -iquote incquote -isystem incsystem -idirafter incafter -iframework incframework'
+  \ . ' -include ''foo bar'''
   \ . ' -Dmacro=value -D macro2 -Bbdir -B bdir2'
   \ . ' -iprefix prefix -iwithprefix prefix2 -iwithprefixbefore prefix3'
   \ . ' -isysroot sysroot --sysroot=test --no-sysroot-suffix -imultilib multidir'
