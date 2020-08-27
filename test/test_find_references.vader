@@ -63,6 +63,8 @@ Before:
     let g:preview_called = 1
     let g:item_list = a:item_list
     let g:options = a:options
+
+    call ale#preview#SetLastSelection(a:item_list, a:options)
   endfunction
 
 After:
@@ -110,7 +112,16 @@ Given typescript(Some typescript file):
   bazxyzxyzxyz
 
 Execute(Results should be shown for tsserver responses):
-  call ale#references#SetMap({3: {}})
+  " We should remember these options when we repeat the selection.
+  call ale#references#SetMap(
+  \ {
+  \   3: {
+  \     'ignorethis': 'x',
+  \     'open_in': 'tab',
+  \     'use_relative_paths': 1,
+  \   }
+  \ }
+  \)
   call ale#references#HandleTSServerResponse(1, {
   \ 'command': 'references',
   \ 'request_seq': 3,
@@ -158,8 +169,7 @@ Execute(Results should be shown for tsserver responses):
   AssertEqual {}, ale#references#GetMap()
 
   " We should be able to repeat selections with ALERepeatSelection
-  let g:ale_item_list = []
-
+  let g:item_list = []
   ALERepeatSelection
 
   AssertEqual
@@ -170,6 +180,12 @@ Execute(Results should be shown for tsserver responses):
   \ ],
   \ g:item_list
   AssertEqual {}, ale#references#GetMap()
+  AssertEqual
+  \ {
+  \   'open_in': 'tab',
+  \   'use_relative_paths': 1,
+  \ },
+  \ g:options
 
 Execute(The preview window should not be opened for empty tsserver responses):
   call ale#references#SetMap({3: {}})
