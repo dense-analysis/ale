@@ -375,6 +375,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['html', 'htmldjango'],
 \       'description': 'Fix HTML files with html-beautify.',
 \   },
+\   'dhall': {
+\       'function': 'ale#fixers#dhall#Fix',
+\       'suggested_filetypes': ['dhall'],
+\       'description': 'Fix Dhall files with dhall-format.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
