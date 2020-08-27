@@ -861,7 +861,7 @@ g:ale_default_navigation                             *g:ale_default_navigation*
   Default: `'buffer'`
 
   The default method for navigating away from the current buffer to another
-  buffer, such as for |ALEFindReferences:|, or |ALEGoToDefinition|.
+  buffer, such as for |ALEFindReferences|, or |ALEGoToDefinition|.
 
 
 g:ale_disable_lsp                                           *g:ale_disable_lsp*
