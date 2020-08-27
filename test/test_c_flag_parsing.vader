@@ -26,7 +26,7 @@ Execute(The CFlags parser should be able to parse include directives):
   \ ale#c#ParseCFlagsFromMakeOutput(bufnr(''), ['gcc -Isubdir -c file.c'])
 
   AssertEqual
-  \ '-isystem ' . '/usr/include/dir',
+  \ '-isystem ' . ale#Escape('/usr/include/dir'),
   \ ale#c#ParseCFlagsFromMakeOutput(bufnr(''), ['gcc -isystem /usr/include/dir -c file.c'])
 
 Execute(ParseCFlags should ignore -c and -o):
@@ -161,7 +161,7 @@ Execute(ParseCompileCommandsFlags should parse some basic flags):
 
   " We should read the absolute path filename entry, not the other ones.
   AssertEqual
-  \ '-I ' . ale#path#Simplify('/usr/include/xmms2'),
+  \ '-I ' . ale#Escape(ale#path#Simplify('/usr/include/xmms2')),
   \ ale#c#ParseCompileCommandsFlags(
   \   bufnr(''),
   \   {
@@ -211,7 +211,7 @@ Execute(ParseCompileCommandsFlags should fall back to files with the same name):
 
   " We should prefer the basename file flags, not the base dirname flags.
   AssertEqual
-  \ '-I ' . ale#path#Simplify('/usr/include/xmms2'),
+  \ '-I ' . ale#Escape(ale#path#Simplify('/usr/include/xmms2')),
   \ ale#c#ParseCompileCommandsFlags(
   \   bufnr(''),
   \   {
@@ -243,7 +243,7 @@ Execute(ParseCompileCommandsFlags should parse flags for exact directory matches
 
   " We should ues the exact directory flags, not the file basename flags.
   AssertEqual
-  \ '-I ' . ale#path#Simplify('/usr/include/xmms2'),
+  \ '-I ' . ale#Escape(ale#path#Simplify('/usr/include/xmms2')),
   \ ale#c#ParseCompileCommandsFlags(
   \   bufnr(''),
   \   {
@@ -283,7 +283,7 @@ Execute(ParseCompileCommandsFlags should fall back to files in the same director
   silent noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
 
   AssertEqual
-  \ '-I ' . ale#path#Simplify('/usr/include/xmms2'),
+  \ '-I ' . ale#Escape(ale#path#Simplify('/usr/include/xmms2')),
   \ ale#c#ParseCompileCommandsFlags(
   \   bufnr(''),
   \   {},
@@ -322,7 +322,7 @@ Execute(ParseCompileCommandsFlags should take commands from matching .c files fo
   silent noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.h'))
 
   AssertEqual
-  \ '-I /usr/include/xmms2',
+  \ '-I ' . ale#Escape('/usr/include/xmms2'),
   \ ale#c#ParseCompileCommandsFlags(
   \   bufnr(''),
   \   {
@@ -343,7 +343,7 @@ Execute(ParseCompileCommandsFlags should take commands from matching .cpp files 
   silent noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.hpp'))
 
   AssertEqual
-  \ '-I /usr/include/xmms2',
+  \ '-I ' . ale#Escape('/usr/include/xmms2'),
   \ ale#c#ParseCompileCommandsFlags(
   \   bufnr(''),
   \   {
@@ -365,7 +365,7 @@ Execute(ParseCompileCommandsFlags should take commands from matching .cpp files 
   silent noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.h'))
 
   AssertEqual
-  \ '-I /usr/include/xmms2',
+  \ '-I ' . ale#Escape('/usr/include/xmms2'),
   \ ale#c#ParseCompileCommandsFlags(
   \   bufnr(''),
   \   {
@@ -462,9 +462,10 @@ Execute(We should include several important flags):
   \ . ' -idirafter ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/incafter'))
   \ . ' -iframework ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/incframework'))
   \ . ' -include ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/foo bar'))
-  \ . ' -Dmacro=value'
+  \ . ' -Dmacro="value"'
   \ . ' -DGoal=9'
   \ . ' -D macro2'
+  \ . ' -D macro3="value"'
   \ . ' -Bbdir'
   \ . ' -B bdir2'
   \ . ' -iprefix prefix -iwithprefix prefix2 -iwithprefixbefore prefix3'
@@ -490,10 +491,12 @@ Execute(We should include several important flags):
   \     'incframework',
   \     '-include',
   \     '''foo bar''',
-  \     '-Dmacro=value',
+  \     '-Dmacro="value"',
   \     '-DGoal=9',
   \     '-D',
   \     'macro2',
+  \     '-D',
+  \     'macro3="value"',
   \     '-Bbdir',
   \     '-B',
   \     'bdir2',
@@ -506,6 +509,88 @@ Execute(We should include several important flags):
   \     '-isysroot',
   \     'sysroot',
   \     '--sysroot=test',
+  \     '--no-sysroot-suffix',
+  \     '-imultilib',
+  \     'multidir',
+  \     '-Wsome-warning',
+  \     '-std=c89',
+  \     '-pedantic',
+  \     '-pedantic-errors',
+  \     '-ansi',
+  \     '-foption',
+  \     '-O2',
+  \     '-C',
+  \     '-CC',
+  \     '-trigraphs',
+  \     '-nostdinc',
+  \     '-nostdinc++',
+  \     '-iplugindir=dir',
+  \     '-march=native',
+  \     '-w',
+  \   ],
+  \ )
+
+Execute(We should quote the flags we need to quote):
+  AssertEqual
+  \ '-I ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/inc'))
+  \ . ' -I ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/include'))
+  \ . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/incquote'))
+  \ . ' -isystem ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/incsystem'))
+  \ . ' -idirafter ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/incafter'))
+  \ . ' -iframework ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/incframework'))
+  \ . ' -include ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/foo bar'))
+  \ . ' ' . ale#Escape('-Dmacro="value"')
+  \ . ' -DGoal=9'
+  \ . ' -D macro2'
+  \ . ' -D ' . ale#Escape('macro3="value"')
+  \ . ' -Bbdir'
+  \ . ' -B bdir2'
+  \ . ' -iprefix prefix -iwithprefix prefix2 -iwithprefixbefore prefix3'
+  \ . ' -isysroot sysroot --sysroot=test'
+  \ . ' ' . ale#Escape('--sysroot="quoted"')
+  \ . ' ' . ale#Escape('--sysroot=foo bar')
+  \ . ' --no-sysroot-suffix -imultilib multidir'
+  \ . ' -Wsome-warning -std=c89 -pedantic -pedantic-errors -ansi'
+  \ . ' -foption -O2 -C -CC -trigraphs -nostdinc -nostdinc++'
+  \ . ' -iplugindir=dir -march=native -w',
+  \ ale#c#ParseCFlags(
+  \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
+  \   1,
+  \   [
+  \     'gcc',
+  \     '-Iinc',
+  \     '-I',
+  \     'include',
+  \     '-iquote',
+  \     'incquote',
+  \     '-isystem',
+  \     'incsystem',
+  \     '-idirafter',
+  \     'incafter',
+  \     '-iframework',
+  \     'incframework',
+  \     '-include',
+  \     '''foo bar''',
+  \     '-Dmacro="value"',
+  \     '-DGoal=9',
+  \     '-D',
+  \     'macro2',
+  \     '-D',
+  \     'macro3="value"',
+  \     '-Bbdir',
+  \     '-B',
+  \     'bdir2',
+  \     '-iprefix',
+  \     'prefix',
+  \     '-iwithprefix',
+  \     'prefix2',
+  \     '-iwithprefixbefore',
+  \     'prefix3',
+  \     '-isysroot',
+  \     'sysroot',
+  \     '--sysroot=test',
+  \     '--sysroot="quoted"',
+  \     '--sysroot=foo bar',
   \     '--no-sysroot-suffix',
   \     '-imultilib',
   \     'multidir',

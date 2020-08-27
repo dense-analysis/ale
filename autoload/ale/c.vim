@@ -120,10 +120,23 @@ function! ale#c#ExpandAtArgs(path_prefix, raw_split_lines) abort
     return l:out_lines
 endfunction
 
+" Quote C/C++ a compiler argument, if needed.
+"
+" Quoting arguments might cause issues with some systems/compilers, so we only
+" quote them if we need to.
+function! ale#c#QuoteArg(arg) abort
+    if a:arg !~# '\v[#$&*()\\|[\]{};''"<>/?! ^%]'
+        return a:arg
+    endif
+
+    return ale#Escape(a:arg)
+endfunction
+
 function! ale#c#ParseCFlags(path_prefix, should_quote, raw_arguments) abort
     " Expand @file arguments now before parsing
     let l:arguments = ale#c#ExpandAtArgs(a:path_prefix, a:raw_arguments)
-    let l:arguments_to_use = []
+    " A list of [already_quoted, argument]
+    let l:items = []
     let l:option_index = 0
 
     while l:option_index < len(l:arguments)
@@ -149,26 +162,25 @@ function! ale#c#ParseCFlags(path_prefix, should_quote, raw_arguments) abort
             if !ale#path#IsAbsolute(l:arg)
                 let l:rel_path = substitute(l:arg, '"', '', 'g')
                 let l:rel_path = substitute(l:rel_path, '''', '', 'g')
-                let l:arg = ale#Escape(
-                \   ale#path#GetAbsPath(a:path_prefix, l:rel_path)
-                \)
+                let l:arg = ale#path#GetAbsPath(a:path_prefix, l:rel_path)
             endif
 
-            call add(l:arguments_to_use, l:option)
-            call add(l:arguments_to_use, l:arg)
+            call add(l:items, [1, l:option])
+            call add(l:items, [1, ale#Escape(l:arg)])
         " Options with arg that can be grouped with the option or separate
         elseif stridx(l:option, '-D') == 0 || stridx(l:option, '-B') == 0
-            call add(l:arguments_to_use, l:option)
-
             if l:option is# '-D' || l:option is# '-B'
-                call add(l:arguments_to_use, l:arguments[l:option_index])
+                call add(l:items, [1, l:option])
+                call add(l:items, [0, l:arguments[l:option_index]])
                 let l:option_index = l:option_index + 1
+            else
+                call add(l:items, [0, l:option])
             endif
         " Options that have an argument (always separate)
         elseif l:option is# '-iprefix' || stridx(l:option, '-iwithprefix') == 0
         \ || l:option is# '-isysroot' || l:option is# '-imultilib'
-            call add(l:arguments_to_use, l:option)
-            call add(l:arguments_to_use, l:arguments[l:option_index])
+            call add(l:items, [0, l:option])
+            call add(l:items, [0, l:arguments[l:option_index]])
             let l:option_index = l:option_index + 1
         " Options without argument
         elseif (stridx(l:option, '-W') == 0 && stridx(l:option, '-Wa,') != 0 && stridx(l:option, '-Wl,') != 0 && stridx(l:option, '-Wp,') != 0)
@@ -180,11 +192,19 @@ function! ale#c#ParseCFlags(path_prefix, should_quote, raw_arguments) abort
         \ || stridx(l:option, '-nostdinc') == 0 || stridx(l:option, '-iplugindir=') == 0
         \ || stridx(l:option, '--sysroot=') == 0 || l:option is# '--no-sysroot-suffix'
         \ || stridx(l:option, '-m') == 0
-            call add(l:arguments_to_use, l:option)
+            call add(l:items, [0, l:option])
         endif
     endwhile
 
-    return join(l:arguments_to_use, ' ')
+    if a:should_quote
+        " Quote C arguments that haven't already been quoted above.
+        " If and only if we've been asked to quote them.
+        call map(l:items, 'v:val[0] ? v:val[1] : ale#c#QuoteArg(v:val[1])')
+    else
+        call map(l:items, 'v:val[1]')
+    endif
+
+    return join(l:items, ' ')
 endfunction
 
 function! ale#c#ParseCFlagsFromMakeOutput(buffer, make_output) abort
