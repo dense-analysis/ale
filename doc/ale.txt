@@ -562,15 +562,9 @@ displayed.
 -------------------------------------------------------------------------------
 5.4 Find References                                       *ale-find-references*
 
-ALE supports finding references for symbols though any enabled LSP linters.
-ALE will display a preview window showing the places where a symbol is
-referenced in a codebase when a command is run. The following commands are
-supported:
-
-|ALEFindReferences| - Find references for the word under the cursor.
-
-Options:
-  `-relative`       Show file paths in the results relative to the working dir
+ALE supports finding references for symbols though any enabled LSP linters
+with the |ALEFindReferences| command. See the documentation for the command
+for a full list of options.
 
 -------------------------------------------------------------------------------
 5.5 Hovering                                                        *ale-hover*
@@ -613,13 +607,9 @@ Documentation for symbols at the cursor can be retrieved using the
 -------------------------------------------------------------------------------
 5.6 Symbol Search                                           *ale-symbol-search*
 
-ALE supports searching for workspace symbols via LSP linters. The following
-commands are supported:
-
-|ALESymbolSearch| - Search for symbols in the workspace.
-
-Options:
-  `-relative`     Show file paths in the results relative to the working dir
+ALE supports searching for workspace symbols via LSP linters with the
+|ALESymbolSearch| command. See the documentation for the command
+for a full list of options.
 
 ===============================================================================
 6. Global Options                                                 *ale-options*
@@ -2911,13 +2901,20 @@ ALEFindReferences                                           *ALEFindReferences*
   The default method used for navigating to a new location can be changed
   by modifying |g:ale_default_navigation|.
 
+  You can add `-relative` to the command to view results with relatives paths,
+  instead of absolute paths.
+
   The selection can be opened again with the |ALERepeatSelection| command.
 
   You can jump back to the position you were at before going to a reference of
   something with jump motions like CTRL-O. See |jump-motions|.
 
   A plug mapping `<Plug>(ale_find_references)` is defined for this command.
+  You can define additional plug mapping with any additional options you want
+  like so: >
 
+  nnoremap <silent> <Plug>(my_mapping) :ALEFindReferences -relative<Return>
+<
 
 ALEFix                                                                 *ALEFix*
 
@@ -3028,6 +3025,9 @@ ALESymbolSearch `<query>`                                     *ALESymbolSearch*
 
   The arguments provided to this command will be used as a search query for
   finding symbols in the workspace, such as functions, types, etc.
+
+  You can add `-relative` to the command to view results with relatives paths,
+  instead of absolute paths.
 
                                                                      *:ALELint*
 ALELint                                                               *ALELint*
