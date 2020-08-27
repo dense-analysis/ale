@@ -5,7 +5,15 @@ Before:
 
   let g:ale_c_parse_makefile = 1
 
+  function SplitAndParse(path_prefix, command) abort
+    let l:args = ale#c#ShellSplit(a:command)
+
+    return ale#c#ParseCFlags(a:path_prefix, 0, l:args)
+  endfunction
+
 After:
+  delfunction SplitAndParse
+
   Restore
 
   call ale#test#RestoreDirectory()
@@ -57,48 +65,21 @@ Execute(ParseCFlags should be able to parse flags with relative paths):
   \ '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir'))
   \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/kernel/include'))
   \   . ' -DTEST=`date +%s`',
-  \ ale#c#ParseCFlags(
+  \ SplitAndParse(
   \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
   \   'gcc -Isubdir  '
   \     .  '-I'. ale#path#Simplify('kernel/include')
   \     .  ' -DTEST=`date +%s` -c file.c'
   \ )
 
-Execute(ParseCFlags should be able to parse -Dgoal):
-  AssertEqual
-  \ '-Dgoal=9'
-  \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir'))
-  \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/kernel/include'))
-  \   . ' -DTEST=`date +%s`',
-  \ ale#c#ParseCFlags(
-  \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
-  \   'gcc -Dgoal=9 -Isubdir '
-  \     . '-I'. ale#path#Simplify('kernel/include')
-  \     . ' -DTEST=`date +%s` -c file.c'
-  \ )
-
-Execute(ParseCFlags should ignore -T and other arguments):
-  AssertEqual
-  \ '-Dgoal=9'
-  \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir'))
-  \   . ' ' . '--sysroot=subdir'
-  \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/kernel/include'))
-  \   . ' -DTEST=`date +%s`',
-  \ ale#c#ParseCFlags(
-  \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
-  \   'gcc -Dgoal=9 -Tlinkerfile.ld blabla -Isubdir --sysroot=subdir '
-  \     .  '-I'. ale#path#Simplify('kernel/include')
-  \     .  ' -DTEST=`date +%s` -c file.c'
-  \ )
-
-Execute(ParseCFlags should handle paths with spaces in double quotes):
+Execute(We should handle paths with spaces in double quotes):
   AssertEqual
   \ '-Dgoal=9'
   \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir'))
   \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/dir with spaces'))
   \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/kernel/include'))
   \   . ' -DTEST=`date +%s`',
-  \ ale#c#ParseCFlags(
+  \ SplitAndParse(
   \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
   \   'gcc -Dgoal=9 -Tlinkerfile.ld blabla -Isubdir '
   \     . '-I"dir with spaces"' . ' -I'. ale#path#Simplify('kernel/include')
@@ -112,7 +93,7 @@ Execute(ParseCFlags should handle paths with spaces in single quotes):
   \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/dir with spaces'))
   \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/kernel/include'))
   \   . ' -DTEST=`date +%s`',
-  \ ale#c#ParseCFlags(
+  \ SplitAndParse(
   \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
   \   'gcc -Dgoal=9 -Tlinkerfile.ld blabla -Isubdir '
   \     . '-I''dir with spaces''' . ' -I'. ale#path#Simplify('kernel/include')
@@ -127,7 +108,7 @@ Execute(ParseCFlags should handle paths with minuses):
   \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/dir-with-dash'))
   \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/kernel/include'))
   \   . ' -DTEST=`date +%s`',
-  \ ale#c#ParseCFlags(
+  \ SplitAndParse(
   \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
   \   'gcc -Dgoal=9 -Tlinkerfile.ld blabla -Isubdir '
   \     . '-I''dir with spaces''' . ' -Idir-with-dash'
@@ -135,7 +116,7 @@ Execute(ParseCFlags should handle paths with minuses):
   \     . ' -DTEST=`date +%s` -c file.c'
   \ )
 
-Execute(ParseCFlags should handle -D with minuses):
+Execute(We should handle -D with minuses):
   AssertEqual
   \ '-Dgoal=9'
   \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir'))
@@ -144,7 +125,7 @@ Execute(ParseCFlags should handle -D with minuses):
   \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/dir-with-dash'))
   \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/kernel/include'))
   \   . ' -DTEST=`date +%s`',
-  \ ale#c#ParseCFlags(
+  \ SplitAndParse(
   \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
   \   'gcc -Dgoal=9 -Tlinkerfile.ld blabla -Isubdir '
   \     . '-Dmacro-with-dash '
@@ -153,7 +134,7 @@ Execute(ParseCFlags should handle -D with minuses):
   \     . ' -DTEST=`date +%s` -c file.c'
   \ )
 
-Execute(ParseCFlags should handle flags at the end of the line):
+Execute(We should handle flags at the end of the line):
   AssertEqual
   \ '-Dgoal=9'
   \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir'))
@@ -161,7 +142,7 @@ Execute(ParseCFlags should handle flags at the end of the line):
   \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/dir with spaces'))
   \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/dir-with-dash'))
   \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/kernel/include')),
-  \ ale#c#ParseCFlags(
+  \ SplitAndParse(
   \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
   \   'gcc -Dgoal=9 -Tlinkerfile.ld blabla -Isubdir '
   \     . '-Dmacro-with-dash '
@@ -424,32 +405,52 @@ Execute(ParseCompileCommandsFlags should not take commands from .c files for .h 
   \   },
   \ )
 
-Execute(ParseCFlags should not merge flags):
+Execute(ShellSplit should not merge flags):
   AssertEqual
-  \ '-Dgoal=9'
-  \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/subdir'))
-  \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/dir with spaces'))
-  \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/dir-with-dash'))
-  \   . ' ' . '-I' . ' ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/kernel/include')),
-  \ ale#c#ParseCFlags(
-  \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
+  \ [
+  \   'gcc',
+  \   '-Dgoal=9',
+  \   '-Tlinkerfile.ld',
+  \   'blabla',
+  \   '-Isubdir',
+  \   'subdir/somedep1.o',
+  \   'subdir/somedep2.o',
+  \   '-I''dir with spaces''',
+  \   '-Idir-with-dash',
+  \   'subdir/somedep3.o',
+  \   'subdir/somedep4.o',
+  \   '-Ikernel/include',
+  \   'subdir/somedep5.o',
+  \   'subdir/somedep6.o',
+  \ ],
+  \ ale#c#ShellSplit(
   \   'gcc -Dgoal=9 -Tlinkerfile.ld blabla -Isubdir '
   \     . 'subdir/somedep1.o ' . 'subdir/somedep2.o '
   \     . '-I''dir with spaces''' . ' -Idir-with-dash '
   \     . 'subdir/somedep3.o ' . 'subdir/somedep4.o '
   \     . ' -I'. ale#path#Simplify('kernel/include') . ' '
-  \     . 'subdir/somedep5.o ' . 'subdir/somedep6.o '
+  \     . 'subdir/somedep5.o ' . 'subdir/somedep6.o'
   \ )
 
-Execute(ParseCFlags should handle parenthesis and quotes):
+Execute(ShellSplit should handle parenthesis and quotes):
   AssertEqual
-  \ '-Dgoal=9 -Dtest1="('' '')" -Dtest2=''(` `)'' -Dtest3=`(" ")`',
-  \ ale#c#ParseCFlags(
-  \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
+  \ [
+  \   'gcc',
+  \   '-Dgoal=9',
+  \   '-Tlinkerfile.ld',
+  \   'blabla',
+  \   '-Dtest1="('' '')"',
+  \   'file1.o',
+  \   '-Dtest2=''(` `)''',
+  \   'file2.o',
+  \   '-Dtest3=`(" ")`',
+  \   'file3.o',
+  \ ] ,
+  \ ale#c#ShellSplit(
   \   'gcc -Dgoal=9 -Tlinkerfile.ld blabla '
   \     . '-Dtest1="('' '')" file1.o '
   \     . '-Dtest2=''(` `)'' file2.o '
-  \     . '-Dtest3=`(" ")` file3.o '
+  \     . '-Dtest3=`(" ")` file3.o'
   \ )
 
 Execute(We should include several important flags):
@@ -461,7 +462,11 @@ Execute(We should include several important flags):
   \ . ' -idirafter ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/incafter'))
   \ . ' -iframework ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/incframework'))
   \ . ' -include ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/foo bar'))
-  \ . ' -Dmacro=value -D macro2 -Bbdir -B bdir2'
+  \ . ' -Dmacro=value'
+  \ . ' -DGoal=9'
+  \ . ' -D macro2'
+  \ . ' -Bbdir'
+  \ . ' -B bdir2'
   \ . ' -iprefix prefix -iwithprefix prefix2 -iwithprefixbefore prefix3'
   \ . ' -isysroot sysroot --sysroot=test --no-sysroot-suffix -imultilib multidir'
   \ . ' -Wsome-warning -std=c89 -pedantic -pedantic-errors -ansi'
@@ -469,15 +474,57 @@ Execute(We should include several important flags):
   \ . ' -iplugindir=dir -march=native -w',
   \ ale#c#ParseCFlags(
   \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
-  \   'gcc'
-  \ . ' -Iinc -I include -iquote incquote -isystem incsystem -idirafter incafter -iframework incframework'
-  \ . ' -include ''foo bar'''
-  \ . ' -Dmacro=value -D macro2 -Bbdir -B bdir2'
-  \ . ' -iprefix prefix -iwithprefix prefix2 -iwithprefixbefore prefix3'
-  \ . ' -isysroot sysroot --sysroot=test --no-sysroot-suffix -imultilib multidir'
-  \ . ' -Wsome-warning -std=c89 -pedantic -pedantic-errors -ansi'
-  \ . ' -foption -O2 -C -CC -trigraphs -nostdinc -nostdinc++'
-  \ . ' -iplugindir=dir -march=native -w'
+  \   0,
+  \   [
+  \     'gcc',
+  \     '-Iinc',
+  \     '-I',
+  \     'include',
+  \     '-iquote',
+  \     'incquote',
+  \     '-isystem',
+  \     'incsystem',
+  \     '-idirafter',
+  \     'incafter',
+  \     '-iframework',
+  \     'incframework',
+  \     '-include',
+  \     '''foo bar''',
+  \     '-Dmacro=value',
+  \     '-DGoal=9',
+  \     '-D',
+  \     'macro2',
+  \     '-Bbdir',
+  \     '-B',
+  \     'bdir2',
+  \     '-iprefix',
+  \     'prefix',
+  \     '-iwithprefix',
+  \     'prefix2',
+  \     '-iwithprefixbefore',
+  \     'prefix3',
+  \     '-isysroot',
+  \     'sysroot',
+  \     '--sysroot=test',
+  \     '--no-sysroot-suffix',
+  \     '-imultilib',
+  \     'multidir',
+  \     '-Wsome-warning',
+  \     '-std=c89',
+  \     '-pedantic',
+  \     '-pedantic-errors',
+  \     '-ansi',
+  \     '-foption',
+  \     '-O2',
+  \     '-C',
+  \     '-CC',
+  \     '-trigraphs',
+  \     '-nostdinc',
+  \     '-nostdinc++',
+  \     '-iplugindir=dir',
+  \     '-march=native',
+  \     '-w',
+  \   ],
   \ )
 
 Execute(We should exclude other flags that cause problems):
@@ -485,8 +532,21 @@ Execute(We should exclude other flags that cause problems):
   \ '',
   \ ale#c#ParseCFlags(
   \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
-  \   'gcc -Wl,option -Wa,option -Wp,option filename.c somelib.a '
-  \ . '-fdump-file=name -fdiagnostics-arg -fno-show-column -fstack-usage'
+  \   0,
+  \   [
+  \     'gcc',
+  \     '-Wl,option',
+  \     '-Wa,option',
+  \     '-Wp,option',
+  \     '-c',
+  \     'filename.c',
+  \     'somelib.a',
+  \     '-fdump-file=name',
+  \     '-fdiagnostics-arg',
+  \     '-fno-show-column',
+  \     '-fstack-usage',
+  \     '-Tlinkerfile.ld',
+  \   ],
   \ )
 
 Execute(We should expand @file in CFlags):
@@ -494,8 +554,11 @@ Execute(We should expand @file in CFlags):
   \ '-DARGS1 -DARGS2 -O2',
   \ ale#c#ParseCFlags(
   \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
-  \   'gcc'
-  \   . ' -g'
-  \   . ' @./args'
-  \   . ' -O2',
+  \   0,
+  \   [
+  \     'gcc',
+  \     '-g',
+  \     '@./args',
+  \     '-O2',
+  \   ],
   \ )
