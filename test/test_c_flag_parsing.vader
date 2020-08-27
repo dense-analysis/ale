@@ -178,44 +178,164 @@ Execute(ParseCompileCommandsFlags should tolerate empty values):
 Execute(ParseCompileCommandsFlags should parse some basic flags):
   silent noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
 
+  " We should read the absolute path filename entry, not the other ones.
   AssertEqual
   \ '-I ' . ale#path#Simplify('/usr/include/xmms2'),
-  \ ale#c#ParseCompileCommandsFlags(bufnr(''), { "xmms2-mpris.c": [
+  \ ale#c#ParseCompileCommandsFlags(
+  \   bufnr(''),
   \   {
-  \     'directory': ale#path#Simplify('/foo/bar/xmms2-mpris'),
-  \     'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/xmms2')
-  \       . '    -o CMakeFiles/xmms2-mpris.dir/src/xmms2-mpris.c.o'
-  \       . '   -c ' . ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
-  \     'file': ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
+  \     ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'): [
+  \       {
+  \         'directory': ale#path#Simplify('/foo/bar/xmms2-mpris'),
+  \         'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/xmms2')
+  \           . '    -o CMakeFiles/xmms2-mpris.dir/src/xmms2-mpris.c.o'
+  \           . '   -c ' . ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
+  \         'file': ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
+  \       },
+  \     ],
+  \     "xmms2-mpris.c": [
+  \       {
+  \         'directory': ale#path#Simplify('/foo/bar/xmms2-mpris'),
+  \         'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/ignoreme')
+  \           . '    -o CMakeFiles/xmms2-mpris.dir/src/xmms2-mpris.c.o'
+  \           . '   -c ' . ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
+  \         'file': ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
+  \       },
+  \     ],
   \   },
-  \ ] }, {})
+  \   {
+  \     ale#path#Simplify('/foo/bar/xmms2-mpris/src'): [
+  \       {
+  \         'directory': ale#path#Simplify('/foo/bar/xmms2-mpris/src'),
+  \         'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/ignoreme')
+  \           . '    -o CMakeFiles/xmms2-mpris.dir/src/xmms2-mpris.c.o'
+  \           . '   -c ' . ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
+  \         'file': 'other.c',
+  \       },
+  \     ],
+  \     "src": [
+  \       {
+  \         'directory': ale#path#Simplify('/foo/bar/xmms2-mpris'),
+  \         'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/ignoreme')
+  \           . '    -o CMakeFiles/xmms2-mpris.dir/src/xmms2-mpris.c.o'
+  \           . '   -c ' . ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
+  \         'file': ale#path#Simplify((has('win32') ? 'C:' : '') . '/foo/bar/xmms2-mpris/src/xmms2-other.c'),
+  \       },
+  \     ],
+  \   },
+  \ )
 
-Execute(ParseCompileCommandsFlags should tolerate items without commands):
+Execute(ParseCompileCommandsFlags should fall back to files with the same name):
   silent noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
 
+  " We should prefer the basename file flags, not the base dirname flags.
   AssertEqual
-  \ '',
-  \ ale#c#ParseCompileCommandsFlags(bufnr(''), { "xmms2-mpris.c": [
+  \ '-I ' . ale#path#Simplify('/usr/include/xmms2'),
+  \ ale#c#ParseCompileCommandsFlags(
+  \   bufnr(''),
   \   {
-  \     'directory': '/foo/bar/xmms2-mpris',
-  \     'file': '/foo/bar/xmms2-mpris/src/xmms2-mpris.c',
+  \     "xmms2-mpris.c": [
+  \       {
+  \         'directory': ale#path#Simplify('/foo/bar/xmms2-mpris'),
+  \         'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/xmms2')
+  \           . '    -o CMakeFiles/xmms2-mpris.dir/src/xmms2-mpris.c.o'
+  \           . '   -c ' . ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
+  \         'file': ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
+  \       },
+  \     ],
   \   },
-  \ ] }, {})
+  \   {
+  \     "src": [
+  \       {
+  \         'directory': ale#path#Simplify('/foo/bar/xmms2-mpris'),
+  \         'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/ignoreme')
+  \           . '    -o CMakeFiles/xmms2-mpris.dir/src/xmms2-mpris.c.o'
+  \           . '   -c ' . ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
+  \         'file': ale#path#Simplify((has('win32') ? 'C:' : '') . '/foo/bar/xmms2-mpris/src/xmms2-other.c'),
+  \       },
+  \     ],
+  \   },
+  \ )
+
+Execute(ParseCompileCommandsFlags should parse flags for exact directory matches):
+  silent noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
+
+  " We should ues the exact directory flags, not the file basename flags.
+  AssertEqual
+  \ '-I ' . ale#path#Simplify('/usr/include/xmms2'),
+  \ ale#c#ParseCompileCommandsFlags(
+  \   bufnr(''),
+  \   {
+  \     "xmms2-mpris.c": [
+  \       {
+  \         'directory': ale#path#Simplify('/foo/bar/xmms2-mpris'),
+  \         'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/ignoreme')
+  \           . '    -o CMakeFiles/xmms2-mpris.dir/src/xmms2-mpris.c.o'
+  \           . '   -c ' . ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
+  \         'file': ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
+  \       },
+  \     ],
+  \   },
+  \   {
+  \     ale#path#Simplify('/foo/bar/xmms2-mpris/src'): [
+  \       {
+  \         'directory': ale#path#Simplify('/foo/bar/xmms2-mpris/src'),
+  \         'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/xmms2')
+  \           . '    -o CMakeFiles/xmms2-mpris.dir/src/xmms2-mpris.c.o'
+  \           . '   -c ' . ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
+  \         'file': 'other.c',
+  \       },
+  \     ],
+  \     "src": [
+  \       {
+  \         'directory': ale#path#Simplify('/foo/bar/xmms2-mpris'),
+  \         'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/ignoreme')
+  \           . '    -o CMakeFiles/xmms2-mpris.dir/src/xmms2-mpris.c.o'
+  \           . '   -c ' . ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
+  \         'file': ale#path#Simplify((has('win32') ? 'C:' : '') . '/foo/bar/xmms2-mpris/src/xmms2-other.c'),
+  \       },
+  \     ],
+  \   },
+  \ )
 
 Execute(ParseCompileCommandsFlags should fall back to files in the same directory):
   silent noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
 
   AssertEqual
   \ '-I ' . ale#path#Simplify('/usr/include/xmms2'),
-  \ ale#c#ParseCompileCommandsFlags(bufnr(''), {}, { "src": [
+  \ ale#c#ParseCompileCommandsFlags(
+  \   bufnr(''),
+  \   {},
   \   {
-  \     'directory': ale#path#Simplify('/foo/bar/xmms2-mpris'),
-  \     'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/xmms2')
-  \       . '    -o CMakeFiles/xmms2-mpris.dir/src/xmms2-mpris.c.o'
-  \       . '   -c ' . ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
-  \     'file': ale#path#Simplify((has('win32') ? 'C:' : '') . '/foo/bar/xmms2-mpris/src/xmms2-other.c'),
+  \     "src": [
+  \       {
+  \         'directory': ale#path#Simplify('/foo/bar/xmms2-mpris'),
+  \         'command': '/usr/bin/cc  -I' . ale#path#Simplify('/usr/include/xmms2')
+  \           . '    -o CMakeFiles/xmms2-mpris.dir/src/xmms2-mpris.c.o'
+  \           . '   -c ' . ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'),
+  \         'file': ale#path#Simplify((has('win32') ? 'C:' : '') . '/foo/bar/xmms2-mpris/src/xmms2-other.c'),
+  \       },
+  \     ],
   \   },
-  \ ] })
+  \ )
+
+Execute(ParseCompileCommandsFlags should tolerate items without commands):
+  silent noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.c'))
+
+  AssertEqual
+  \ '',
+  \ ale#c#ParseCompileCommandsFlags(
+  \   bufnr(''),
+  \   {
+  \     "xmms2-mpris.c": [
+  \       {
+  \         'directory': '/foo/bar/xmms2-mpris',
+  \         'file': '/foo/bar/xmms2-mpris/src/xmms2-mpris.c',
+  \       },
+  \     ],
+  \   },
+  \   {},
+  \ )
 
 Execute(ParseCompileCommandsFlags should take commands from matching .c files for .h files):
   silent noautocmd execute 'file! ' . fnameescape(ale#path#Simplify('/foo/bar/xmms2-mpris/src/xmms2-mpris.h'))
@@ -235,8 +355,7 @@ Execute(ParseCompileCommandsFlags should take commands from matching .c files fo
   \       },
   \     ],
   \   },
-  \   {
-  \   },
+  \   {},
   \ )
 
 Execute(ParseCompileCommandsFlags should take commands from matching .cpp files for .hpp files):

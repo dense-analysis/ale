@@ -84,10 +84,10 @@ function! ale#c#ExpandAtArgs(path_prefix, raw_split_lines) abort
             let l:path = join(split(l:option, '\zs')[1:], '')
 
             " Make path absolute
-            if stridx(l:path, s:sep) != 0 && stridx(l:path, '/') != 0
+            if !ale#path#IsAbsolute(l:path)
                 let l:rel_path = substitute(l:path, '"', '', 'g')
                 let l:rel_path = substitute(l:rel_path, '''', '', 'g')
-                let l:path = a:path_prefix . s:sep . l:rel_path
+                let l:path = ale#path#GetAbsPath(a:path_prefix, l:rel_path)
             endif
 
             " Read the file and add all the arguments
@@ -142,10 +142,12 @@ function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
             endif
 
             " Fix relative paths if needed
-            if stridx(l:arg, s:sep) != 0 && stridx(l:arg, '/') != 0
+            if !ale#path#IsAbsolute(l:arg)
                 let l:rel_path = substitute(l:arg, '"', '', 'g')
                 let l:rel_path = substitute(l:rel_path, '''', '', 'g')
-                let l:arg = ale#Escape(a:path_prefix . s:sep . l:rel_path)
+                let l:arg = ale#Escape(
+                \   ale#path#GetAbsPath(a:path_prefix, l:rel_path)
+                \)
             endif
 
             call add(l:cflags_list, l:option)
@@ -268,6 +270,10 @@ if !exists('s:compile_commands_cache')
     let s:compile_commands_cache = {}
 endif
 
+function! ale#c#ResetCompileCommandsCache() abort
+    let s:compile_commands_cache = {}
+endfunction
+
 function! s:GetLookupFromCompileCommandsFile(compile_commands_file) abort
     let l:empty = [{}, {}]
 
@@ -298,9 +304,20 @@ function! s:GetLookupFromCompileCommandsFile(compile_commands_file) abort
     let l:dir_lookup = {}
 
     for l:entry in (type(l:raw_data) is v:t_list ? l:raw_data : [])
+        let l:filename = ale#path#GetAbsPath(l:entry.directory, l:entry.file)
+
+        " Store a key for lookups by the absolute path to the filename.
+        let l:file_lookup[l:filename] = get(l:file_lookup, l:filename, []) + [l:entry]
+
+        " Store a key for fuzzy lookups by the absolute path to the directory.
+        let l:dirname = fnamemodify(l:filename, ':h')
+        let l:dir_lookup[l:dirname] = get(l:dir_lookup, l:dirname, []) + [l:entry]
+
+        " Store a key for fuzzy lookups by just the basename of the file.
         let l:basename = tolower(fnamemodify(l:entry.file, ':t'))
         let l:file_lookup[l:basename] = get(l:file_lookup, l:basename, []) + [l:entry]
 
+        " Store a key for fuzzy lookups by just the basename of the directory.
         let l:dirbasename = tolower(fnamemodify(l:entry.directory, ':p:h:t'))
         let l:dir_lookup[l:dirbasename] = get(l:dir_lookup, l:dirbasename, []) + [l:entry]
     endfor
@@ -326,16 +343,40 @@ function! ale#c#GetCompileCommand(json_item) abort
 endfunction
 
 function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
+    let l:buffer_filename = ale#path#Simplify(expand('#' . a:buffer . ':p'))
+    let l:basename = tolower(fnamemodify(l:buffer_filename, ':t'))
+    " Look for any file in the same directory if we can't find an exact match.
+    let l:dir = fnamemodify(l:buffer_filename, ':h')
+
     " Search for an exact file match first.
-    let l:basename = tolower(expand('#' . a:buffer . ':t'))
-    let l:file_list = get(a:file_lookup, l:basename, [])
+    let l:file_list = get(a:file_lookup, l:buffer_filename, [])
+    " Try the absolute path to the directory second.
+    let l:dir_list = get(a:dir_lookup, l:dir, [])
+
+    if empty(l:file_list) && empty(l:dir_list)
+        " If we can't find matches with the path to the file, try a
+        " case-insensitive match for any similarly-named file.
+        let l:file_list = get(a:file_lookup, l:basename, [])
+
+        " If we can't find matches with the path to the directory, try a
+        " case-insensitive match for anything in similarly-named directory.
+        let l:dir_list = get(a:dir_lookup, tolower(fnamemodify(l:dir, ':t')), [])
+    endif
+
     " A source file matching the header filename.
     let l:source_file = ''
 
     if empty(l:file_list) && l:basename =~? '\.h$\|\.hpp$'
         for l:suffix in ['.c', '.cpp']
-            let l:key = fnamemodify(l:basename, ':r') . l:suffix
+            " Try to find a source file by an absolute path first.
+            let l:key = fnamemodify(l:buffer_filename, ':r') . l:suffix
             let l:file_list = get(a:file_lookup, l:key, [])
+
+            if empty(l:file_list)
+                " Look fuzzy matches on the basename second.
+                let l:key = fnamemodify(l:basename, ':r') . l:suffix
+                let l:file_list = get(a:file_lookup, l:key, [])
+            endif
 
             if !empty(l:file_list)
                 let l:source_file = l:key
@@ -345,27 +386,25 @@ function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
     endif
 
     for l:item in l:file_list
+        let l:filename = ale#path#GetAbsPath(l:item.directory, l:item.file)
+
         " Load the flags for this file, or for a source file matching the
         " header file.
         if (
-        \   bufnr(l:item.file) is a:buffer
+        \   bufnr(l:filename) is a:buffer
         \   || (
         \       !empty(l:source_file)
-        \       && l:item.file[-len(l:source_file):] is? l:source_file
+        \       && l:filename[-len(l:source_file):] is? l:source_file
         \   )
         \)
             return ale#c#ParseCFlags(l:item.directory, ale#c#GetCompileCommand(l:item))
         endif
     endfor
 
-    " Look for any file in the same directory if we can't find an exact match.
-    let l:dir = ale#path#Simplify(expand('#' . a:buffer . ':p:h'))
-
-    let l:dirbasename = tolower(expand('#' . a:buffer . ':p:h:t'))
-    let l:dir_list = get(a:dir_lookup, l:dirbasename, [])
-
     for l:item in l:dir_list
-        if ale#path#Simplify(fnamemodify(l:item.file, ':h')) is? l:dir
+        let l:filename = ale#path#GetAbsPath(l:item.directory, l:item.file)
+
+        if ale#path#Simplify(fnamemodify(l:filename, ':h')) is? l:dir
             return ale#c#ParseCFlags(l:item.directory, ale#c#GetCompileCommand(l:item))
         endif
     endfor
