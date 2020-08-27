@@ -356,8 +356,26 @@ function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
 
     " Search for an exact file match first.
     let l:file_list = get(a:file_lookup, l:buffer_filename, [])
+
+    " We may have to look for /foo/bar instead of C:\foo\bar
+    if empty(l:file_list) && has('win32')
+        let l:file_list = get(
+        \   a:file_lookup,
+        \   ale#path#RemoveDriveLetter(l:buffer_filename),
+        \   []
+        \)
+    endif
+
     " Try the absolute path to the directory second.
     let l:dir_list = get(a:dir_lookup, l:dir, [])
+
+    if empty(l:dir_list) && has('win32')
+        let l:dir_list = get(
+        \   a:dir_lookup,
+        \   ale#path#RemoveDriveLetter(l:dir),
+        \   []
+        \)
+    endif
 
     if empty(l:file_list) && empty(l:dir_list)
         " If we can't find matches with the path to the file, try a
@@ -377,6 +395,14 @@ function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
             " Try to find a source file by an absolute path first.
             let l:key = fnamemodify(l:buffer_filename, ':r') . l:suffix
             let l:file_list = get(a:file_lookup, l:key, [])
+
+            if empty(l:file_list) && has('win32')
+                let l:file_list = get(
+                \   a:file_lookup,
+                \   ale#path#RemoveDriveLetter(l:key),
+                \   []
+                \)
+            endif
 
             if empty(l:file_list)
                 " Look fuzzy matches on the basename second.
@@ -412,7 +438,8 @@ function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
     for l:item in l:dir_list
         let l:filename = ale#path#GetAbsPath(l:item.directory, l:item.file)
 
-        if ale#path#Simplify(fnamemodify(l:filename, ':h')) is? l:dir
+        if ale#path#RemoveDriveLetter(fnamemodify(l:filename, ':h'))
+        \  is? ale#path#RemoveDriveLetter(l:dir)
             let [l:should_quote, l:args] = s:GetArguments(l:item)
 
             return ale#c#ParseCFlags(l:item.directory, l:should_quote, l:args)

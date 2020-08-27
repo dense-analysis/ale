@@ -419,7 +419,7 @@ Execute(ShellSplit should not merge flags):
   \   '-Idir-with-dash',
   \   'subdir/somedep3.o',
   \   'subdir/somedep4.o',
-  \   '-Ikernel/include',
+  \   '-I' . ale#path#Simplify('kernel/include'),
   \   'subdir/somedep5.o',
   \   'subdir/somedep6.o',
   \ ],
