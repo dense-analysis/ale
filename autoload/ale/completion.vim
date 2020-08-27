@@ -496,18 +496,6 @@ function! ale#completion#NullFilter(buffer, item) abort
     return 1
 endfunction
 
-" Check if additional text edits make changes starting on lines other than the
-" one you're asking for completions on.
-function! s:TextEditsChangeOtherLines(line, text_edit_list) abort
-    for l:edit in a:text_edit_list
-        if l:edit.range.start.line + 1 isnot a:line
-            return 1
-        endif
-    endfor
-
-    return 0
-endfunction
-
 function! ale#completion#ParseLSPCompletions(response) abort
     let l:buffer = bufnr('')
     let l:info = get(b:, 'ale_completion_info', {})
@@ -552,9 +540,8 @@ function! ale#completion#ParseLSPCompletions(response) abort
 
         " Don't use LSP items with additional text edits when autoimport for
         " completions is turned off.
-        if has_key(l:item, 'additionalTextEdits')
+        if !empty(get(l:item, 'additionalTextEdits'))
         \&& !g:ale_completion_autoimport
-        \&& s:TextEditsChangeOtherLines(l:info.line, l:item.additionalTextEdits)
             continue
         endif
 
@@ -576,15 +563,6 @@ function! ale#completion#ParseLSPCompletions(response) abort
             let l:text_changes = []
 
             for l:edit in l:item.additionalTextEdits
-                " Don't apply additional text edits that are identical to the
-                " word we're going to insert anyway.
-                if l:edit.newText is# l:word
-                \&& l:edit.range.start.line + 1 is l:info.line
-                \&& l:edit.range.end.line + 1 is l:info.line
-                \&& l:edit.range.start.character is l:edit.range.end.character
-                    continue
-                endif
-
                 call add(l:text_changes, {
                 \ 'start': {
                 \   'line': l:edit.range.start.line + 1,
