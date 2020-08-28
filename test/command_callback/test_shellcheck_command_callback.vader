@@ -2,7 +2,7 @@ Before:
   call ale#assert#SetUpLinterTest('sh', 'shellcheck')
   call ale#test#SetFilename('test.sh')
 
-  let b:prefix = ale#path#CdString(ale#path#Simplify(g:dir))
+  let b:prefix = ale#path#BufferCdString(bufnr(''))
   let b:suffix = ' -f gcc -'
 
 After:
