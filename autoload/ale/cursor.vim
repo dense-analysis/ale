@@ -28,7 +28,7 @@ function! ale#cursor#TruncatedEcho(original_message) abort
         silent! setlocal shortmess+=T
 
         try
-            if g:ale_echo_cursor_popup
+            if g:ale_echo_cursor_popup && has('popupwin')
                 silent! exec "norm! :call popup_atcursor(l:message, {'border':[], 'moved': 'any'})\n"
             else
                 silent! exec "norm! :echomsg l:message\n"
@@ -42,7 +42,7 @@ function! ale#cursor#TruncatedEcho(original_message) abort
                 let l:message = l:message[:l:winwidth - 4] . '...'
             endif
 
-            if g:ale_echo_cursor_popup
+            if g:ale_echo_cursor_popup && has('popupwin')
                 call popup_atcursor(l:message, {'border':[], 'moved': 'any'})
             else
                 exec 'echomsg l:message'
