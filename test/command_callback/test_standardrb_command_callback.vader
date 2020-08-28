@@ -10,20 +10,17 @@ After:
 
 Execute(Executable should default to standardrb):
   AssertLinter 'standardrb', ale#Escape('standardrb')
-  \   . ' --format json --force-exclusion  --stdin '
-  \   . ale#Escape(ale#path#Simplify(g:dir . '/dummy.rb'))
+  \   . ' --format json --force-exclusion  --stdin %s'
 
 Execute(Should be able to set a custom executable):
   let g:ale_ruby_standardrb_executable = 'bin/standardrb'
 
   AssertLinter 'bin/standardrb' , ale#Escape('bin/standardrb')
-  \   . ' --format json --force-exclusion  --stdin '
-  \   . ale#Escape(ale#path#Simplify(g:dir . '/dummy.rb'))
+  \   . ' --format json --force-exclusion  --stdin %s'
 
 Execute(Setting bundle appends 'exec standardrb'):
   let g:ale_ruby_standardrb_executable = 'path to/bundle'
 
   AssertLinter 'path to/bundle', ale#Escape('path to/bundle')
   \   . ' exec standardrb'
-  \   . ' --format json --force-exclusion  --stdin '
-  \   . ale#Escape(ale#path#Simplify(g:dir . '/dummy.rb'))
+  \   . ' --format json --force-exclusion  --stdin %s'

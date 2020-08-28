@@ -43,7 +43,7 @@ Execute(The C cc linter should include 'include' directories for projects with a
   AssertLinter 'gcc',
   \ ale#Escape('gcc')
   \   . ' -S -x c -o ' . (has('win32') ? 'nul': '/dev/null')
-  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/makefile_project/subdir'))
+  \   . ' -iquote %s:h'
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/makefile_project/include'))
   \   . ' -'
 
@@ -55,7 +55,7 @@ Execute(The C cc linter should include 'include' directories for projects with a
   AssertLinter 'gcc',
   \ ale#Escape('gcc')
   \   . ' -S -x c -o ' . (has('win32') ? 'nul': '/dev/null')
-  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/configure_project/subdir'))
+  \   . ' -iquote %s:h'
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/configure_project/include'))
   \   . ' -'
 
@@ -67,7 +67,7 @@ Execute(The C cc linter should include root directories for projects with .h fil
   AssertLinter 'gcc',
   \ ale#Escape('gcc')
   \   . ' -S -x c -o ' . (has('win32') ? 'nul': '/dev/null')
-  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project/subdir'))
+  \   . ' -iquote %s:h'
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project'))
   \   . ' -'
 
@@ -79,7 +79,7 @@ Execute(The C cc linter should include root directories for projects with .hpp f
   AssertLinter 'gcc',
   \ ale#Escape('gcc')
   \   . ' -S -x c -o ' . (has('win32') ? 'nul': '/dev/null')
-  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/hpp_file_project/subdir'))
+  \   . ' -iquote %s:h'
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/hpp_file_project'))
   \   . ' -'
 
@@ -101,7 +101,7 @@ Execute(The C++ cc linter should include 'include' directories for projects with
   AssertLinter 'gcc',
   \   ale#Escape('gcc')
   \   . ' -S -x c++ -o ' . (has('win32') ? 'nul': '/dev/null')
-  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/makefile_project/subdir'))
+  \   . ' -iquote %s:h'
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/makefile_project/include'))
   \   . ' -'
 
@@ -113,7 +113,7 @@ Execute(The C++ cc linter should include 'include' directories for projects with
   AssertLinter 'gcc',
   \   ale#Escape('gcc')
   \   . ' -S -x c++ -o ' . (has('win32') ? 'nul': '/dev/null')
-  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/configure_project/subdir'))
+  \   . ' -iquote %s:h'
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/configure_project/include'))
   \   . ' -'
 
@@ -125,7 +125,7 @@ Execute(The C++ cc linter should include root directories for projects with .h f
   AssertLinter 'gcc',
   \   ale#Escape('gcc')
   \   . ' -S -x c++ -o ' . (has('win32') ? 'nul': '/dev/null')
-  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project/subdir'))
+  \   . ' -iquote %s:h'
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/h_file_project'))
   \   . ' -'
 
@@ -137,7 +137,7 @@ Execute(The C++ cc linter should include root directories for projects with .hpp
   AssertLinter 'gcc',
   \   ale#Escape('gcc')
   \   . ' -S -x c++ -o ' . (has('win32') ? 'nul': '/dev/null')
-  \   . ' -iquote ' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/hpp_file_project/subdir'))
+  \   . ' -iquote %s:h'
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir .  '/../test_c_projects/hpp_file_project'))
   \   . ' -'
 

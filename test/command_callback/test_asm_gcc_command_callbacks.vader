@@ -3,7 +3,7 @@ Before:
   call ale#test#SetFilename('test.cpp')
   let b:command_tail = ' -x assembler'
   \   . ' -o ' . (has('win32') ? 'nul': '/dev/null')
-  \   . '-iquote ' . ale#Escape(g:dir)
+  \   . '-iquote %s:h'
   \   . ' -Wall -'
 
 After:

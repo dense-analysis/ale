@@ -23,8 +23,7 @@ Execute(The rubocop callback should return the correct default values):
   \ {
   \   'process_with': 'ale#fixers#rubocop#PostProcess',
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
-  \     . ' --auto-correct --force-exclusion --stdin '
-  \     . ale#Escape(expand('#' . bufnr('') . ':p')),
+  \     . ' --auto-correct --force-exclusion --stdin %s',
   \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))
 
@@ -36,8 +35,7 @@ Execute(The rubocop callback should include configuration files):
   \   'process_with': 'ale#fixers#rubocop#PostProcess',
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
   \     . ' --config ' . ale#Escape(ale#path#Simplify(g:dir . '/ruby_paths/with_config/.rubocop.yml'))
-  \     . ' --auto-correct --force-exclusion --stdin '
-  \     . ale#Escape(expand('#' . bufnr('') . ':p')),
+  \     . ' --auto-correct --force-exclusion --stdin %s',
   \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))
 
@@ -51,8 +49,7 @@ Execute(The rubocop callback should include custom rubocop options):
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
   \     . ' --config ' . ale#Escape(ale#path#Simplify(g:dir . '/ruby_paths/with_config/.rubocop.yml'))
   \     . ' --except Lint/Debugger'
-  \     . ' --auto-correct --force-exclusion --stdin '
-  \     . ale#Escape(expand('#' . bufnr('') . ':p')),
+  \     . ' --auto-correct --force-exclusion --stdin %s',
   \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))
 
@@ -65,8 +62,7 @@ Execute(The rubocop callback should use auto-correct-all option when set):
   \   'process_with': 'ale#fixers#rubocop#PostProcess',
   \   'command': ale#Escape(g:ale_ruby_rubocop_executable)
   \     . ' --config ' . ale#Escape(ale#path#Simplify(g:dir . '/ruby_paths/with_config/.rubocop.yml'))
-  \     . ' --auto-correct-all --force-exclusion --stdin '
-  \     . ale#Escape(expand('#' . bufnr('') . ':p')),
+  \     . ' --auto-correct-all --force-exclusion --stdin %s'
   \ },
   \ ale#fixers#rubocop#Fix(bufnr(''))
 
