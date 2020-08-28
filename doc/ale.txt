@@ -1172,13 +1172,16 @@ g:ale_list_window_size                                 *g:ale_list_window_size*
 
 
 g:ale_lint_delay                                             *g:ale_lint_delay*
-
+                                                             *b:ale_lint_delay*
   Type: |Number|
   Default: `200`
 
   This variable controls the milliseconds delay after which the linters will
   be run after text is changed. This option is only meaningful with the
   |g:ale_lint_on_text_changed| variable set to `always`, `insert`, or `normal`.
+
+  A buffer-local option, `b:ale_lint_delay`, can be set to change the delay
+  for different buffers, such as in |ftplugin| files.
 
 
 g:ale_lint_on_enter                                       *g:ale_lint_on_enter*
