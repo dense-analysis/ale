@@ -26,6 +26,7 @@ endfunction
 
 call ale#linter#Define('sql', {
 \   'name': 'sqllint',
+\   'aliases': ['sql-lint'],
 \   'executable': 'sql-lint',
 \   'command': 'sql-lint',
 \   'callback': 'ale_linters#sql#sqllint#Handle',
