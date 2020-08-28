@@ -119,6 +119,9 @@ let g:ale_exclude_highlights = get(g:, 'ale_exclude_highlights', [])
 " This flag can be set to 0 to disable echoing when the cursor moves.
 let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
 
+" This flag can be set to 1 to use popup window for cursor echoing
+let g:ale_echo_cursor_popup = get(g:, 'ale_echo_cursor_popup', 0)
+
 " This flag can be set to 1 to automatically show errors in the preview window.
 let g:ale_cursor_detail = get(g:, 'ale_cursor_detail', 0)
 

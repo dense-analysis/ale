@@ -28,7 +28,11 @@ function! ale#cursor#TruncatedEcho(original_message) abort
         silent! setlocal shortmess+=T
 
         try
-            exec "norm! :echomsg l:message\n"
+            if g:ale_echo_cursor_popup
+                exec "norm! :call popup_atcursor(l:message, {'border':[], 'moved': 'any'})\n"
+            else
+                exec "norm! :echomsg l:message\n"
+            endif
         catch /^Vim\%((\a\+)\)\=:E523/
             " Fallback into manual truncate (#1987)
             let l:winwidth = winwidth(0)
@@ -38,7 +42,11 @@ function! ale#cursor#TruncatedEcho(original_message) abort
                 let l:message = l:message[:l:winwidth - 4] . '...'
             endif
 
-            exec 'echomsg l:message'
+            if g:ale_echo_cursor_popup
+                call popup_atcursor(l:message, {'border':[], 'moved': 'any'})
+            else
+                exec 'echomsg l:message'
+            endif
         catch /E481/
             " Do nothing if running from a visual selection.
         endtry

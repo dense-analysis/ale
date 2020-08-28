@@ -894,6 +894,14 @@ g:ale_echo_cursor                                           *g:ale_echo_cursor*
   Either this setting or |g:ale_cursor_detail| must be set to `1` before ALE
   is loaded for messages to be displayed. See |ale-lint-settings-on-startup|.
 
+g:ale_echo_cursor_popup                               *g:ale_echo_cursor_popup*
+
+  Type: |Number|
+  Default: `0`
+
+  When this option is set to `1`, messages displayed when a cursor is near a
+  warning or error will appear in a popup window instead of being echoed.
+
 
 g:ale_echo_delay                                             *g:ale_echo_delay*
                                                              *b:ale_echo_delay*
