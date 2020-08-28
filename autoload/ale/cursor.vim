@@ -29,9 +29,9 @@ function! ale#cursor#TruncatedEcho(original_message) abort
 
         try
             if g:ale_echo_cursor_popup
-                exec "norm! :call popup_atcursor(l:message, {'border':[], 'moved': 'any'})\n"
+                silent! exec "norm! :call popup_atcursor(l:message, {'border':[], 'moved': 'any'})\n"
             else
-                exec "norm! :echomsg l:message\n"
+                silent! exec "norm! :echomsg l:message\n"
             endif
         catch /^Vim\%((\a\+)\)\=:E523/
             " Fallback into manual truncate (#1987)
