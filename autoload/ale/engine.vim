@@ -4,6 +4,7 @@
 
 " Remapping of linter problems.
 let g:ale_type_map = get(g:, 'ale_type_map', {})
+let g:ale_filename_mappings = get(g:, 'ale_filename_mappings', {})
 
 if !has_key(s:, 'executable_cache_map')
     let s:executable_cache_map = {}

@@ -1,8 +1,8 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Functions for fixing code with programs, or other means.
 
-call ale#Set('fix_on_save_ignore', {})
-call ale#Set('filename_mappings', {})
+let g:ale_fix_on_save_ignore = get(g:, 'ale_fix_on_save_ignore', {})
+let g:ale_filename_mappings = get(g:, 'ale_filename_mappings', {})
 
 " Apply fixes queued up for buffers which may be hidden.
 " Vim doesn't let you modify hidden buffers.
