@@ -3038,8 +3038,8 @@ ALELint                                                               *ALELint*
   Run ALE once for the current buffer. This command can be used to run ALE
   manually, instead of automatically, if desired.
 
-  This command will also run linters where `lint_file` is set to `1`, or in
-  other words linters which check the file instead of the Vim buffer.
+  This command will also run linters where `lint_file` is evaluates to `1`,
+  meaning linters which check the file instead of the Vim buffer.
 
   A plug mapping `<Plug>(ale_lint)` is defined for this command.
 
@@ -3252,9 +3252,9 @@ ale#Queue(delay, [linting_flag, buffer_number])                   *ale#Queue()*
   The linters will always be run in the background. Calling this function
   again from the same buffer
 
-  An optional `linting_flag` argument can be given. If `linting_flag`
-  is `'lint_file'`, then linters where the `lint_file` option is set to `1` will be
-  run. Linters with `lint_file` set to `1` are not run by default.
+  An optional `linting_flag` argument can be given. If `linting_flag` is
+  `'lint_file'`, then linters where the `lint_file` option evaluates to `1`
+  will be run. Otherwise, those linters will not be run.
 
   An optional `buffer_number` argument can be given for specifying the buffer
   to check. The active buffer (`bufnr('')`) will be checked by default.
@@ -3588,24 +3588,30 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
                          if a command manually reads from a temporary file
                          instead, etc.
 
+                         This option behaves as if it was set to `0` when the
+                         `lint_file` option evaluates to `1`.
+
                                                                 *ale-lint-file*
-  `lint_file`              A |Number| (`0` or `1`) indicating whether a command
-                         should read the file instead of the Vim buffer. This
-                         option can be used for linters which must check the
-                         file on disk, and which cannot check a Vim buffer
-                         instead.
+  `lint_file`              A |Number| (`0` or `1`), or a |Funcref| for a function
+                         accepting a buffer number for computing either `0` or
+                         `1`, indicating whether a command should read the file
+                         instead of the Vim buffer. This option can be used
+                         for linters which must check the file on disk, and
+                         which cannot check a Vim buffer instead.
 
-                         Linters set with this option will not be run as a
-                         user types, per |g:ale_lint_on_text_changed|. Linters
-                         will instead be run only when events occur against
-                         the file on disk, including |g:ale_lint_on_enter|
-                         and |g:ale_lint_on_save|. Linters with this option
-                         set to `1` will also be run when linters are run
-                         manually, per |ALELintPost-autocmd|.
+                         The result can be computed with |ale#command#Run()|.
 
-                         When this option is set to `1`, `read_buffer` will
-                         be set automatically to `0`. The two options cannot
-                         be used together.
+                         Linters where the eventual value of this option
+                         evaluates to `1` will not be run as a user types, per
+                         |g:ale_lint_on_text_changed|. Linters will instead be
+                         run only when events occur against the file on disk,
+                         including |g:ale_lint_on_enter| and
+                         |g:ale_lint_on_save|. Linters where this option
+                         evaluates to `1` will also be run when the |ALELint|
+                         command is run.
+
+                         When this option is evaluates to `1`, ALE will behave
+                         as if `read_buffer` was set to `0`.
 
                                                               *ale-lsp-linters*
   `lsp`                    A |String| for defining LSP (Language Server Protocol)
