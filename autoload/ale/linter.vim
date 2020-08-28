@@ -32,7 +32,7 @@ let s:default_ale_linter_aliases = {
 "
 " No linters are used for plaintext files by default.
 "
-" Only cargo is enabled for Rust by default.
+" Only cargo and rls are enabled for Rust by default.
 " rpmlint is disabled by default because it can result in code execution.
 " hhast is disabled by default because it executes code in the project root.
 "
@@ -46,7 +46,7 @@ let s:default_ale_linters = {
 \   'perl': ['perlcritic'],
 \   'perl6': [],
 \   'python': ['flake8', 'mypy', 'pylint', 'pyright'],
-\   'rust': ['cargo'],
+\   'rust': ['cargo', 'rls'],
 \   'spec': [],
 \   'text': [],
 \   'vue': ['eslint', 'vls'],

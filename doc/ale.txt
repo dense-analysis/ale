@@ -1441,7 +1441,7 @@ g:ale_linters                                                   *g:ale_linters*
   \   'perl': ['perlcritic'],
   \   'perl6': [],
   \   'python': ['flake8', 'mypy', 'pylint', 'pyright'],
-  \   'rust': ['cargo'],
+  \   'rust': ['cargo', 'rls'],
   \   'spec': [],
   \   'text': [],
   \   'vue': ['eslint', 'vls'],
