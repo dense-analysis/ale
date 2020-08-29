@@ -383,3 +383,4 @@ endfunction
 augroup ALEBufferFixGroup
     autocmd!
     autocmd BufEnter * call ale#fix#ApplyQueuedFixes(str2nr(expand('<abuf>')))
+augroup END
