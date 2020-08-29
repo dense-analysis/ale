@@ -324,6 +324,12 @@ function! ale#completion#AutomaticOmniFunc(findstart, base) abort
     endif
 endfunction
 
+function! s:OpenCompletionMenu(...) abort
+    if !&l:paste
+        call ale#util#FeedKeys("\<Plug>(ale_show_completion_menu)")
+    endif
+endfunction
+
 function! ale#completion#Show(result) abort
     if ale#util#Mode() isnot# 'i'
         return
@@ -344,10 +350,7 @@ function! ale#completion#Show(result) abort
     let l:source = get(get(b:, 'ale_completion_info', {}), 'source', '')
 
     if l:source is# 'ale-automatic' || l:source is# 'ale-manual'
-        call timer_start(
-        \   0,
-        \   {-> ale#util#FeedKeys("\<Plug>(ale_show_completion_menu)")}
-        \)
+        call timer_start(0, function('s:OpenCompletionMenu'))
     endif
 
     if l:source is# 'ale-callback'

@@ -463,6 +463,9 @@ is loaded. The delay for completion can be configured with
 |g:ale_completion_delay|. This setting should not be enabled if you wish to
 use ALE as a completion source for other plugins.
 
+ALE automatic completion will not work when 'paste' is active. Only set
+'paste' when you are copy and pasting text into your buffers.
+
 ALE provides an 'omnifunc' function |ale#completion#OmniFunc| for triggering
 completion manually with CTRL-X CTRL-O. |i_CTRL-X_CTRL-O| >
 
@@ -728,6 +731,9 @@ g:ale_completion_enabled                             *g:ale_completion_enabled*
 
   This setting should not be enabled if you wish to use ALE as a completion
   source for other completion plugins.
+
+  ALE automatic completion will not work when 'paste' is active. Only set
+  'paste' when you are copy and pasting text into your buffers.
 
   A buffer-local version of this setting `b:ale_completion_enabled` can be set
   to `0` to disable ALE's automatic completion support for a single buffer.
