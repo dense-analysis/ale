@@ -5,7 +5,7 @@ scriptencoding utf-8
 " The omnicompletion menu is shown through a special Plug mapping which is
 " only valid in Insert mode. This way, feedkeys() won't send these keys if you
 " quit Insert mode quickly enough.
-inoremap <silent> <Plug>(ale_show_completion_menu) <C-x><C-o>
+inoremap <silent> <Plug>(ale_show_completion_menu) <C-x><C-o><C-p>
 " If we hit the key sequence in normal mode, then we won't show the menu, so
 " we should restore the old settings right away.
 nnoremap <silent> <Plug>(ale_show_completion_menu) :call ale#completion#RestoreCompletionOptions()<CR>
