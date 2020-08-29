@@ -8,6 +8,11 @@ let s:sep = has('win32') ? '\' : '/'
 " Set just so tests can override it.
 let g:__ale_c_project_filenames = ['.git/HEAD', 'configure', 'Makefile', 'CMakeLists.txt']
 
+let g:ale_c_build_dir_names = get(g:, 'ale_c_build_dir_names', [
+\   'build',
+\   'bin',
+\])
+
 function! s:CanParseMakefile(buffer) abort
     " Something somewhere seems to delete this setting in tests, so ensure we
     " always have a default value.
@@ -84,10 +89,10 @@ function! ale#c#ExpandAtArgs(path_prefix, raw_split_lines) abort
             let l:path = join(split(l:option, '\zs')[1:], '')
 
             " Make path absolute
-            if stridx(l:path, s:sep) != 0 && stridx(l:path, '/') != 0
+            if !ale#path#IsAbsolute(l:path)
                 let l:rel_path = substitute(l:path, '"', '', 'g')
                 let l:rel_path = substitute(l:rel_path, '''', '', 'g')
-                let l:path = a:path_prefix . s:sep . l:rel_path
+                let l:path = ale#path#GetAbsPath(a:path_prefix, l:rel_path)
             endif
 
             " Read the file and add all the arguments
@@ -115,16 +120,27 @@ function! ale#c#ExpandAtArgs(path_prefix, raw_split_lines) abort
     return l:out_lines
 endfunction
 
-function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
-    let l:cflags_list = []
+" Quote C/C++ a compiler argument, if needed.
+"
+" Quoting arguments might cause issues with some systems/compilers, so we only
+" quote them if we need to.
+function! ale#c#QuoteArg(arg) abort
+    if a:arg !~# '\v[#$&*()\\|[\]{};''"<>/?! ^%]'
+        return a:arg
+    endif
 
-    let l:raw_split_lines = ale#c#ShellSplit(a:cflag_line)
+    return ale#Escape(a:arg)
+endfunction
+
+function! ale#c#ParseCFlags(path_prefix, should_quote, raw_arguments) abort
     " Expand @file arguments now before parsing
-    let l:split_lines = ale#c#ExpandAtArgs(a:path_prefix, l:raw_split_lines)
+    let l:arguments = ale#c#ExpandAtArgs(a:path_prefix, a:raw_arguments)
+    " A list of [already_quoted, argument]
+    let l:items = []
     let l:option_index = 0
 
-    while l:option_index < len(l:split_lines)
-        let l:option = l:split_lines[l:option_index]
+    while l:option_index < len(l:arguments)
+        let l:option = l:arguments[l:option_index]
         let l:option_index = l:option_index + 1
 
         " Include options, that may need relative path fix
@@ -133,36 +149,38 @@ function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
         \ || stridx(l:option, '-isystem') == 0
         \ || stridx(l:option, '-idirafter') == 0
         \ || stridx(l:option, '-iframework') == 0
+        \ || stridx(l:option, '-include') == 0
             if stridx(l:option, '-I') == 0 && l:option isnot# '-I'
                 let l:arg = join(split(l:option, '\zs')[2:], '')
                 let l:option = '-I'
             else
-                let l:arg = l:split_lines[l:option_index]
+                let l:arg = l:arguments[l:option_index]
                 let l:option_index = l:option_index + 1
             endif
 
             " Fix relative paths if needed
-            if stridx(l:arg, s:sep) != 0 && stridx(l:arg, '/') != 0
+            if !ale#path#IsAbsolute(l:arg)
                 let l:rel_path = substitute(l:arg, '"', '', 'g')
                 let l:rel_path = substitute(l:rel_path, '''', '', 'g')
-                let l:arg = ale#Escape(a:path_prefix . s:sep . l:rel_path)
+                let l:arg = ale#path#GetAbsPath(a:path_prefix, l:rel_path)
             endif
 
-            call add(l:cflags_list, l:option)
-            call add(l:cflags_list, l:arg)
+            call add(l:items, [1, l:option])
+            call add(l:items, [1, ale#Escape(l:arg)])
         " Options with arg that can be grouped with the option or separate
         elseif stridx(l:option, '-D') == 0 || stridx(l:option, '-B') == 0
-            call add(l:cflags_list, l:option)
-
             if l:option is# '-D' || l:option is# '-B'
-                call add(l:cflags_list, l:split_lines[l:option_index])
+                call add(l:items, [1, l:option])
+                call add(l:items, [0, l:arguments[l:option_index]])
                 let l:option_index = l:option_index + 1
+            else
+                call add(l:items, [0, l:option])
             endif
         " Options that have an argument (always separate)
         elseif l:option is# '-iprefix' || stridx(l:option, '-iwithprefix') == 0
         \ || l:option is# '-isysroot' || l:option is# '-imultilib'
-            call add(l:cflags_list, l:option)
-            call add(l:cflags_list, l:split_lines[l:option_index])
+            call add(l:items, [0, l:option])
+            call add(l:items, [0, l:arguments[l:option_index]])
             let l:option_index = l:option_index + 1
         " Options without argument
         elseif (stridx(l:option, '-W') == 0 && stridx(l:option, '-Wa,') != 0 && stridx(l:option, '-Wl,') != 0 && stridx(l:option, '-Wp,') != 0)
@@ -174,11 +192,19 @@ function! ale#c#ParseCFlags(path_prefix, cflag_line) abort
         \ || stridx(l:option, '-nostdinc') == 0 || stridx(l:option, '-iplugindir=') == 0
         \ || stridx(l:option, '--sysroot=') == 0 || l:option is# '--no-sysroot-suffix'
         \ || stridx(l:option, '-m') == 0
-            call add(l:cflags_list, l:option)
+            call add(l:items, [0, l:option])
         endif
     endwhile
 
-    return join(l:cflags_list, ' ')
+    if a:should_quote
+        " Quote C arguments that haven't already been quoted above.
+        " If and only if we've been asked to quote them.
+        call map(l:items, 'v:val[0] ? v:val[1] : ale#c#QuoteArg(v:val[1])')
+    else
+        call map(l:items, 'v:val[1]')
+    endif
+
+    return join(l:items, ' ')
 endfunction
 
 function! ale#c#ParseCFlagsFromMakeOutput(buffer, make_output) abort
@@ -200,7 +226,7 @@ function! ale#c#ParseCFlagsFromMakeOutput(buffer, make_output) abort
     let l:makefile_path = ale#path#FindNearestFile(a:buffer, 'Makefile')
     let l:makefile_dir = fnamemodify(l:makefile_path, ':p:h')
 
-    return ale#c#ParseCFlags(l:makefile_dir, l:cflag_line)
+    return ale#c#ParseCFlags(l:makefile_dir, 0, ale#c#ShellSplit(l:cflag_line))
 endfunction
 
 " Given a buffer number, find the project directory containing
@@ -268,6 +294,10 @@ if !exists('s:compile_commands_cache')
     let s:compile_commands_cache = {}
 endif
 
+function! ale#c#ResetCompileCommandsCache() abort
+    let s:compile_commands_cache = {}
+endfunction
+
 function! s:GetLookupFromCompileCommandsFile(compile_commands_file) abort
     let l:empty = [{}, {}]
 
@@ -298,9 +328,20 @@ function! s:GetLookupFromCompileCommandsFile(compile_commands_file) abort
     let l:dir_lookup = {}
 
     for l:entry in (type(l:raw_data) is v:t_list ? l:raw_data : [])
+        let l:filename = ale#path#GetAbsPath(l:entry.directory, l:entry.file)
+
+        " Store a key for lookups by the absolute path to the filename.
+        let l:file_lookup[l:filename] = get(l:file_lookup, l:filename, []) + [l:entry]
+
+        " Store a key for fuzzy lookups by the absolute path to the directory.
+        let l:dirname = fnamemodify(l:filename, ':h')
+        let l:dir_lookup[l:dirname] = get(l:dir_lookup, l:dirname, []) + [l:entry]
+
+        " Store a key for fuzzy lookups by just the basename of the file.
         let l:basename = tolower(fnamemodify(l:entry.file, ':t'))
         let l:file_lookup[l:basename] = get(l:file_lookup, l:basename, []) + [l:entry]
 
+        " Store a key for fuzzy lookups by just the basename of the directory.
         let l:dirbasename = tolower(fnamemodify(l:entry.directory, ':p:h:t'))
         let l:dir_lookup[l:dirbasename] = get(l:dir_lookup, l:dirbasename, []) + [l:entry]
     endfor
@@ -315,27 +356,79 @@ function! s:GetLookupFromCompileCommandsFile(compile_commands_file) abort
     return l:empty
 endfunction
 
-function! ale#c#GetCompileCommand(json_item) abort
-    if has_key(a:json_item, 'command')
-        return a:json_item.command
-    elseif has_key(a:json_item, 'arguments')
-        return join(a:json_item.arguments, ' ')
+" Get [should_quote, arguments] from either 'command' or 'arguments'
+" 'arguments' should be quoted later, the split 'command' strings should not.
+function! s:GetArguments(json_item) abort
+    if has_key(a:json_item, 'arguments')
+        return [1, a:json_item.arguments]
+    elseif has_key(a:json_item, 'command')
+        return [0, ale#c#ShellSplit(a:json_item.command)]
     endif
 
-    return ''
+    return [0, []]
 endfunction
 
 function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
+    let l:buffer_filename = ale#path#Simplify(expand('#' . a:buffer . ':p'))
+    let l:basename = tolower(fnamemodify(l:buffer_filename, ':t'))
+    " Look for any file in the same directory if we can't find an exact match.
+    let l:dir = fnamemodify(l:buffer_filename, ':h')
+
     " Search for an exact file match first.
-    let l:basename = tolower(expand('#' . a:buffer . ':t'))
-    let l:file_list = get(a:file_lookup, l:basename, [])
+    let l:file_list = get(a:file_lookup, l:buffer_filename, [])
+
+    " We may have to look for /foo/bar instead of C:\foo\bar
+    if empty(l:file_list) && has('win32')
+        let l:file_list = get(
+        \   a:file_lookup,
+        \   ale#path#RemoveDriveLetter(l:buffer_filename),
+        \   []
+        \)
+    endif
+
+    " Try the absolute path to the directory second.
+    let l:dir_list = get(a:dir_lookup, l:dir, [])
+
+    if empty(l:dir_list) && has('win32')
+        let l:dir_list = get(
+        \   a:dir_lookup,
+        \   ale#path#RemoveDriveLetter(l:dir),
+        \   []
+        \)
+    endif
+
+    if empty(l:file_list) && empty(l:dir_list)
+        " If we can't find matches with the path to the file, try a
+        " case-insensitive match for any similarly-named file.
+        let l:file_list = get(a:file_lookup, l:basename, [])
+
+        " If we can't find matches with the path to the directory, try a
+        " case-insensitive match for anything in similarly-named directory.
+        let l:dir_list = get(a:dir_lookup, tolower(fnamemodify(l:dir, ':t')), [])
+    endif
+
     " A source file matching the header filename.
     let l:source_file = ''
 
     if empty(l:file_list) && l:basename =~? '\.h$\|\.hpp$'
         for l:suffix in ['.c', '.cpp']
-            let l:key = fnamemodify(l:basename, ':r') . l:suffix
+            " Try to find a source file by an absolute path first.
+            let l:key = fnamemodify(l:buffer_filename, ':r') . l:suffix
             let l:file_list = get(a:file_lookup, l:key, [])
+
+            if empty(l:file_list) && has('win32')
+                let l:file_list = get(
+                \   a:file_lookup,
+                \   ale#path#RemoveDriveLetter(l:key),
+                \   []
+                \)
+            endif
+
+            if empty(l:file_list)
+                " Look fuzzy matches on the basename second.
+                let l:key = fnamemodify(l:basename, ':r') . l:suffix
+                let l:file_list = get(a:file_lookup, l:key, [])
+            endif
 
             if !empty(l:file_list)
                 let l:source_file = l:key
@@ -345,28 +438,31 @@ function! ale#c#ParseCompileCommandsFlags(buffer, file_lookup, dir_lookup) abort
     endif
 
     for l:item in l:file_list
+        let l:filename = ale#path#GetAbsPath(l:item.directory, l:item.file)
+
         " Load the flags for this file, or for a source file matching the
         " header file.
         if (
-        \   bufnr(l:item.file) is a:buffer
+        \   bufnr(l:filename) is a:buffer
         \   || (
         \       !empty(l:source_file)
-        \       && l:item.file[-len(l:source_file):] is? l:source_file
+        \       && l:filename[-len(l:source_file):] is? l:source_file
         \   )
         \)
-            return ale#c#ParseCFlags(l:item.directory, ale#c#GetCompileCommand(l:item))
+            let [l:should_quote, l:args] = s:GetArguments(l:item)
+
+            return ale#c#ParseCFlags(l:item.directory, l:should_quote, l:args)
         endif
     endfor
 
-    " Look for any file in the same directory if we can't find an exact match.
-    let l:dir = ale#path#Simplify(expand('#' . a:buffer . ':p:h'))
-
-    let l:dirbasename = tolower(expand('#' . a:buffer . ':p:h:t'))
-    let l:dir_list = get(a:dir_lookup, l:dirbasename, [])
-
     for l:item in l:dir_list
-        if ale#path#Simplify(fnamemodify(l:item.file, ':h')) is? l:dir
-            return ale#c#ParseCFlags(l:item.directory, ale#c#GetCompileCommand(l:item))
+        let l:filename = ale#path#GetAbsPath(l:item.directory, l:item.file)
+
+        if ale#path#RemoveDriveLetter(fnamemodify(l:filename, ':h'))
+        \  is? ale#path#RemoveDriveLetter(l:dir)
+            let [l:should_quote, l:args] = s:GetArguments(l:item)
+
+            return ale#c#ParseCFlags(l:item.directory, l:should_quote, l:args)
         endif
     endfor
 
@@ -405,10 +501,10 @@ endfunction
 
 function! ale#c#GetMakeCommand(buffer) abort
     if s:CanParseMakefile(a:buffer)
-        let l:makefile_path = ale#path#FindNearestFile(a:buffer, 'Makefile')
+        let l:path = ale#path#FindNearestFile(a:buffer, 'Makefile')
 
-        if !empty(l:makefile_path)
-            return 'cd '. fnamemodify(l:makefile_path, ':p:h') . ' && make -n'
+        if !empty(l:path)
+            return ale#path#CdString(fnamemodify(l:path, ':h')) . 'make -n'
         endif
     endif
 
@@ -477,8 +573,3 @@ function! ale#c#IncludeOptions(include_paths) abort
 
     return join(l:option_list)
 endfunction
-
-let g:ale_c_build_dir_names = get(g:, 'ale_c_build_dir_names', [
-\   'build',
-\   'bin',
-\])

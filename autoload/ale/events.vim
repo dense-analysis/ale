@@ -105,11 +105,11 @@ function! ale#events#Init() abort
 
         if g:ale_enabled
             if l:text_changed is? 'always' || l:text_changed is# '1'
-                autocmd TextChanged,TextChangedI * call ale#Queue(g:ale_lint_delay)
+                autocmd TextChanged,TextChangedI * call ale#Queue(ale#Var(str2nr(expand('<abuf>')), 'lint_delay'))
             elseif l:text_changed is? 'normal'
-                autocmd TextChanged * call ale#Queue(g:ale_lint_delay)
+                autocmd TextChanged * call ale#Queue(ale#Var(str2nr(expand('<abuf>')), 'lint_delay'))
             elseif l:text_changed is? 'insert'
-                autocmd TextChangedI * call ale#Queue(g:ale_lint_delay)
+                autocmd TextChangedI * call ale#Queue(ale#Var(str2nr(expand('<abuf>')), 'lint_delay'))
             endif
 
             if g:ale_lint_on_enter

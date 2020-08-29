@@ -4,6 +4,7 @@
 
 " Remapping of linter problems.
 let g:ale_type_map = get(g:, 'ale_type_map', {})
+let g:ale_filename_mappings = get(g:, 'ale_filename_mappings', {})
 
 if !has_key(s:, 'executable_cache_map')
     let s:executable_cache_map = {}
@@ -256,6 +257,13 @@ function! s:RemapItemTypes(type_map, loclist) abort
 endfunction
 
 function! ale#engine#FixLocList(buffer, linter_name, from_other_source, loclist) abort
+    let l:mappings = ale#GetFilenameMappings(a:buffer, a:linter_name)
+
+    if !empty(l:mappings)
+        " We need to apply reverse filename mapping here.
+        let l:mappings = ale#filename_mapping#Invert(l:mappings)
+    endif
+
     let l:bufnr_map = {}
     let l:new_loclist = []
 
@@ -296,13 +304,19 @@ function! ale#engine#FixLocList(buffer, linter_name, from_other_source, loclist)
             let l:item.code = l:old_item.code
         endif
 
-        if has_key(l:old_item, 'filename')
-        \&& !ale#path#IsTempName(l:old_item.filename)
+        let l:old_name = get(l:old_item, 'filename', '')
+
+        " Map parsed from output to local filesystem files.
+        if !empty(l:old_name) && !empty(l:mappings)
+            let l:old_name = ale#filename_mapping#Map(l:old_name, l:mappings)
+        endif
+
+        if !empty(l:old_name) && !ale#path#IsTempName(l:old_name)
             " Use the filename given.
             " Temporary files are assumed to be for this buffer,
             " and the filename is not included then, because it looks bad
             " in the loclist window.
-            let l:filename = l:old_item.filename
+            let l:filename = l:old_name
             let l:item.filename = l:filename
 
             if has_key(l:old_item, 'bufnr')
@@ -403,7 +417,7 @@ function! s:RunJob(command, options) abort
     let l:buffer = a:options.buffer
     let l:linter = a:options.linter
     let l:output_stream = a:options.output_stream
-    let l:read_buffer = a:options.read_buffer
+    let l:read_buffer = a:options.read_buffer && !a:options.lint_file
     let l:info = g:ale_buffer_info[l:buffer]
 
     let l:Callback = function('s:HandleExit', [{
@@ -415,6 +429,7 @@ function! s:RunJob(command, options) abort
     \   'executable': l:executable,
     \   'read_buffer': l:read_buffer,
     \   'log_output': 1,
+    \   'filename_mappings': ale#GetFilenameMappings(l:buffer, l:linter.name),
     \})
 
     " Only proceed if the job is being run.
@@ -493,10 +508,15 @@ function! s:AddProblemsFromOtherBuffers(buffer, linters) abort
     endif
 endfunction
 
-function! s:RunIfExecutable(buffer, linter, executable) abort
+function! s:RunIfExecutable(buffer, linter, lint_file, executable) abort
     if ale#command#IsDeferred(a:executable)
         let a:executable.result_callback = {
-        \   executable -> s:RunIfExecutable(a:buffer, a:linter, executable)
+        \   executable -> s:RunIfExecutable(
+        \       a:buffer,
+        \       a:linter,
+        \       a:lint_file,
+        \       executable
+        \   )
         \}
 
         return 1
@@ -504,7 +524,7 @@ function! s:RunIfExecutable(buffer, linter, executable) abort
 
     if ale#engine#IsExecutable(a:buffer, a:executable)
         " Use different job types for file or linter jobs.
-        let l:job_type = a:linter.lint_file ? 'file_linter' : 'linter'
+        let l:job_type = a:lint_file ? 'file_linter' : 'linter'
         call setbufvar(a:buffer, 'ale_job_type', l:job_type)
 
         let l:command = ale#linter#GetCommand(a:buffer, a:linter)
@@ -514,6 +534,7 @@ function! s:RunIfExecutable(buffer, linter, executable) abort
         \   'linter': a:linter,
         \   'output_stream': get(a:linter, 'output_stream', 'stdout'),
         \   'read_buffer': a:linter.read_buffer,
+        \   'lint_file': a:lint_file,
         \}
 
         return s:RunJob(l:command, l:options)
@@ -525,33 +546,62 @@ endfunction
 " Run a linter for a buffer.
 "
 " Returns 1 if the linter was successfully run.
-function! s:RunLinter(buffer, linter) abort
+function! s:RunLinter(buffer, linter, lint_file) abort
     if !empty(a:linter.lsp)
         return ale#lsp_linter#CheckWithLSP(a:buffer, a:linter)
     else
         let l:executable = ale#linter#GetExecutable(a:buffer, a:linter)
 
-        return s:RunIfExecutable(a:buffer, a:linter, l:executable)
+        return s:RunIfExecutable(a:buffer, a:linter, a:lint_file, l:executable)
     endif
 
     return 0
 endfunction
 
-function! ale#engine#RunLinters(buffer, linters, should_lint_file) abort
-    " Initialise the buffer information if needed.
-    let l:new_buffer = ale#engine#InitBufferInfo(a:buffer)
-    call s:StopCurrentJobs(a:buffer, a:should_lint_file)
-    call s:RemoveProblemsForDisabledLinters(a:buffer, a:linters)
+function! s:GetLintFileValues(slots, Callback) abort
+    let l:deferred_list = []
+    let l:new_slots = []
 
-    " We can only clear the results if we aren't checking the buffer.
-    let l:can_clear_results = !ale#engine#IsCheckingBuffer(a:buffer)
+    for [l:lint_file, l:linter] in a:slots
+        while ale#command#IsDeferred(l:lint_file) && has_key(l:lint_file, 'value')
+            " If we've already computed the return value, use it.
+            let l:lint_file = l:lint_file.value
+        endwhile
 
-    silent doautocmd <nomodeline> User ALELintPre
+        if ale#command#IsDeferred(l:lint_file)
+            " If we are going to return the result later, wait for it.
+            call add(l:deferred_list, l:lint_file)
+        else
+            " If we have the value now, coerce it to 0 or 1.
+            let l:lint_file = l:lint_file is 1
+        endif
 
-    for l:linter in a:linters
+        call add(l:new_slots, [l:lint_file, l:linter])
+    endfor
+
+    if !empty(l:deferred_list)
+        for l:deferred in l:deferred_list
+            let l:deferred.result_callback =
+            \   {-> s:GetLintFileValues(l:new_slots, a:Callback)}
+        endfor
+    else
+        call a:Callback(l:new_slots)
+    endif
+endfunction
+
+function! s:RunLinters(
+\   buffer,
+\   slots,
+\   should_lint_file,
+\   new_buffer,
+\   can_clear_results
+\) abort
+    let l:can_clear_results = a:can_clear_results
+
+    for [l:lint_file, l:linter] in a:slots
         " Only run lint_file linters if we should.
-        if !l:linter.lint_file || a:should_lint_file
-            if s:RunLinter(a:buffer, l:linter)
+        if !l:lint_file || a:should_lint_file
+            if s:RunLinter(a:buffer, l:linter, l:lint_file)
                 " If a single linter ran, we shouldn't clear everything.
                 let l:can_clear_results = 0
             endif
@@ -566,9 +616,47 @@ function! ale#engine#RunLinters(buffer, linters, should_lint_file) abort
     " disabled, or ALE itself is disabled.
     if l:can_clear_results
         call ale#engine#SetResults(a:buffer, [])
-    elseif l:new_buffer
-        call s:AddProblemsFromOtherBuffers(a:buffer, a:linters)
+    elseif a:new_buffer
+        call s:AddProblemsFromOtherBuffers(
+        \   a:buffer,
+        \   map(copy(a:slots), 'v:val[1]')
+        \)
     endif
+endfunction
+
+function! ale#engine#RunLinters(buffer, linters, should_lint_file) abort
+    " Initialise the buffer information if needed.
+    let l:new_buffer = ale#engine#InitBufferInfo(a:buffer)
+    call s:StopCurrentJobs(a:buffer, a:should_lint_file)
+    call s:RemoveProblemsForDisabledLinters(a:buffer, a:linters)
+
+    " We can only clear the results if we aren't checking the buffer.
+    let l:can_clear_results = !ale#engine#IsCheckingBuffer(a:buffer)
+
+    silent doautocmd <nomodeline> User ALELintPre
+
+    " Handle `lint_file` callbacks first.
+    let l:linter_slots = []
+
+    for l:linter in a:linters
+        let l:LintFile = l:linter.lint_file
+
+        if type(l:LintFile) is v:t_func
+            let l:LintFile = l:LintFile(a:buffer)
+        endif
+
+        call add(l:linter_slots, [l:LintFile, l:linter])
+    endfor
+
+    call s:GetLintFileValues(l:linter_slots, {
+    \   new_slots -> s:RunLinters(
+    \       a:buffer,
+    \       new_slots,
+    \       a:should_lint_file,
+    \       l:new_buffer,
+    \       l:can_clear_results,
+    \   )
+    \})
 endfunction
 
 " Clean up a buffer.

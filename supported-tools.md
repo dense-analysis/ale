@@ -16,7 +16,7 @@ formatting.
 
 |      Key      |             Definition           |
 | ------------- | -------------------------------- |
-| :floppy_disk: | Only checked when saved to disk  |
+| :floppy_disk: | May only run on files on disk    |
 |   :warning:   | Disabled by default              |
 
 ---
@@ -129,6 +129,8 @@ formatting.
   * [dartanalyzer](https://github.com/dart-lang/sdk/tree/master/pkg/analyzer_cli) :floppy_disk:
   * [dartfmt](https://github.com/dart-lang/sdk/tree/master/utils/dartfmt)
   * [language_server](https://github.com/natebosch/dart_language_server)
+* Dhall
+  * [dhall-format](https://github.com/dhall-lang/dhall-lang)
 * Dockerfile
   * [dockerfile_lint](https://github.com/projectatomic/dockerfile_lint)
   * [hadolint](https://github.com/hadolint/hadolint)
@@ -457,6 +459,7 @@ formatting.
   * [sqlfmt](https://github.com/jackc/sqlfmt)
   * [sqlformat](https://github.com/andialbrecht/sqlparse)
   * [sqlint](https://github.com/purcell/sqlint)
+  * [sql-lint](https://github.com/joereynolds/sql-lint)
 * Stylus
   * [stylelint](https://github.com/stylelint/stylelint)
 * SugarSS

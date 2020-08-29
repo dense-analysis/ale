@@ -97,6 +97,10 @@ let g:ale_fix_on_save = get(g:, 'ale_fix_on_save', 0)
 " should be used instead.
 let g:ale_enabled = get(g:, 'ale_enabled', 1)
 
+" A Dictionary mapping linter or fixer names to Arrays of two-item Arrays
+" mapping filename paths from one system to another.
+let g:ale_filename_mappings = get(g:, 'ale_filename_mappings', {})
+
 " These flags dictates if ale uses the quickfix or the loclist (loclist is the
 " default, quickfix overrides loclist).
 let g:ale_set_loclist = get(g:, 'ale_set_loclist', 1)

@@ -540,7 +540,8 @@ function! ale#completion#ParseLSPCompletions(response) abort
 
         " Don't use LSP items with additional text edits when autoimport for
         " completions is turned off.
-        if has_key(l:item, 'additionalTextEdits') && !g:ale_completion_autoimport
+        if !empty(get(l:item, 'additionalTextEdits'))
+        \&& !g:ale_completion_autoimport
             continue
         endif
 
@@ -562,31 +563,32 @@ function! ale#completion#ParseLSPCompletions(response) abort
             let l:text_changes = []
 
             for l:edit in l:item.additionalTextEdits
-                let l:range = l:edit.range
                 call add(l:text_changes, {
                 \ 'start': {
-                \   'line': l:range.start.line + 1,
-                \   'offset': l:range.start.character + 1,
+                \   'line': l:edit.range.start.line + 1,
+                \   'offset': l:edit.range.start.character + 1,
                 \ },
                 \ 'end': {
-                \   'line': l:range.end.line + 1,
-                \   'offset': l:range.end.character + 1,
+                \   'line': l:edit.range.end.line + 1,
+                \   'offset': l:edit.range.end.character + 1,
                 \ },
                 \ 'newText': l:edit.newText,
                 \})
             endfor
 
-            let l:changes = [{
-            \ 'fileName': expand('#' . l:buffer . ':p'),
-            \ 'textChanges': l:text_changes,
-            \}]
-            \
-            let l:result.user_data = json_encode({
-            \   'codeActions': [{
-            \       'description': 'completion',
-            \       'changes': l:changes,
-            \   }],
-            \ })
+            if !empty(l:text_changes)
+                let l:result.user_data = json_encode({
+                \   'codeActions': [{
+                \       'description': 'completion',
+                \       'changes': [
+                \           {
+                \               'fileName': expand('#' . l:buffer . ':p'),
+                \               'textChanges': l:text_changes,
+                \           }
+                \       ],
+                \   }],
+                \})
+            endif
         endif
 
         call add(l:results, l:result)
@@ -900,6 +902,8 @@ function! ale#completion#Done() abort
 endfunction
 
 augroup ALECompletionActions
+    autocmd!
+
     autocmd CompleteDone * call ale#completion#HandleUserData(v:completed_item)
 augroup END
 

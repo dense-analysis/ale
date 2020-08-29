@@ -120,6 +120,8 @@ Notes:
   * `dartanalyzer`!!
   * `dartfmt`!!
   * `language_server`
+* Dhall
+  * `dhall-format`
 * Dockerfile
   * `dockerfile_lint`
   * `hadolint`
@@ -448,6 +450,7 @@ Notes:
   * `sqlfmt`
   * `sqlformat`
   * `sqlint`
+  * `sql-lint`
 * Stylus
   * `stylelint`
 * SugarSS

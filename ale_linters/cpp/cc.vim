@@ -38,7 +38,7 @@ function! ale_linters#cpp#cc#GetCommand(buffer, output) abort
     " -fsyntax-only doesn't catch everything.
     return '%e -S -x c++'
     \   . ' -o ' . g:ale#util#nul_file
-    \   . ' -iquote ' . ale#Escape(fnamemodify(bufname(a:buffer), ':p:h'))
+    \   . ' -iquote %s:h'
     \   . ale#Pad(l:cflags)
     \   . ale#Pad(l:ale_flags) . ' -'
 endfunction

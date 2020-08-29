@@ -29,8 +29,7 @@ function! ale#fixers#rubocop#GetCommand(buffer) abort
     \   . (!empty(l:config) ? ' --config ' . ale#Escape(l:config) : '')
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . (l:auto_correct_all ? ' --auto-correct-all' : ' --auto-correct')
-    \   . ' --force-exclusion --stdin '
-    \   . ale#Escape(expand('#' . a:buffer . ':p'))
+    \   . ' --force-exclusion --stdin %s'
 endfunction
 
 function! ale#fixers#rubocop#Fix(buffer) abort

@@ -609,6 +609,7 @@ Execute(Should handle completion messages with additionalTextEdits when ale_comp
 
 Execute(Should not handle completion messages with additionalTextEdits when ale_completion_autoimport is turned off):
   let g:ale_completion_autoimport = 0
+  let b:ale_completion_info = {'line': 30}
 
   AssertEqual
   \ [],
@@ -641,6 +642,39 @@ Execute(Should not handle completion messages with additionalTextEdits when ale_
   \             'newText': 'from "module" import next_callback',
   \           },
   \         ],
+  \       },
+  \     ],
+  \   },
+  \ })
+
+Execute(Should still handle completion messages with empty additionalTextEdits with ale_completion_autoimport turned off):
+  let g:ale_completion_autoimport = 0
+
+  AssertEqual
+  \ [
+  \   {
+  \     'word': 'next_callback',
+  \     'menu': 'PlayTimeCallback',
+  \     'info': '',
+  \     'kind': 'v',
+  \     'icase': 1,
+  \   }
+  \ ],
+  \ ale#completion#ParseLSPCompletions({
+  \   'id': 226,
+  \   'jsonrpc': '2.0',
+  \   'result': {
+  \     'isIncomplete': v:false,
+  \     'items': [
+  \       {
+  \         'detail': 'PlayTimeCallback',
+  \         'filterText': 'next_callback',
+  \         'insertText': 'next_callback',
+  \         'insertTextFormat': 1,
+  \         'kind': 6,
+  \         'label': ' next_callback',
+  \         'sortText': '3ee19999next_callback',
+  \         'additionalTextEdits': [],
   \       },
   \     ],
   \   },

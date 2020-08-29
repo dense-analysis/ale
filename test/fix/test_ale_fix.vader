@@ -6,6 +6,7 @@ Before:
   Save g:ale_lint_on_save
   Save g:ale_echo_cursor
   Save g:ale_command_wrapper
+  Save g:ale_filename_mappings
 
   silent! cd /testplugin/test/fix
 
@@ -19,6 +20,7 @@ Before:
   let g:ale_fixers = {
   \ 'testft': [],
   \}
+  let g:ale_filename_mappings = {}
 
   let g:pre_success = 0
   let g:post_success = 0
@@ -70,6 +72,10 @@ Before:
 
   function CatWithTempFile(buffer, lines) abort
     return {'command': 'cat %t <(echo d)'}
+  endfunction
+
+  function EchoFilename(buffer, lines) abort
+    return {'command': 'echo %s'}
   endfunction
 
   function RemoveLastLine(buffer, lines) abort
@@ -155,6 +161,7 @@ After:
   delfunction CatLineDeferred
   delfunction ReplaceWithTempFile
   delfunction CatWithTempFile
+  delfunction EchoFilename
   delfunction RemoveLastLine
   delfunction RemoveLastLineOneArg
   delfunction TestCallback
@@ -208,6 +215,25 @@ Expect(The first function should be used):
   ^a
   ^b
   ^c
+
+Execute(Should apply filename mpapings):
+  " The command echos %s, and we'll map the current path so we can check
+  " that ALEFix applies filename mappings, end-to-end.
+  let g:ale_filename_mappings = {
+  \ 'echo_filename': [
+  \   [expand('%:p:h') . '/', '/some/fake/path/'],
+  \ ],
+  \}
+
+  call ale#fix#registry#Add('echo_filename', 'EchoFilename', [], 'echo filename')
+  let g:ale_fixers.testft = ['echo_filename']
+  ALEFix
+  call ale#test#FlushJobs()
+  " Remote trailing whitespace from the line.
+  call setline(1, substitute(getline(1), '[ \r]\+$', '', ''))
+
+Expect(The mapped filename should be printed):
+  /some/fake/path/test.txt
 
 Execute(ALEFix should apply simple functions in a chain):
   let g:ale_fixers.testft = ['AddCarets', 'Capitalize']

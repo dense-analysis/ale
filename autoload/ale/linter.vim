@@ -32,7 +32,7 @@ let s:default_ale_linter_aliases = {
 "
 " No linters are used for plaintext files by default.
 "
-" Only cargo is enabled for Rust by default.
+" Only cargo and rls are enabled for Rust by default.
 " rpmlint is disabled by default because it can result in code execution.
 " hhast is disabled by default because it executes code in the project root.
 "
@@ -46,7 +46,7 @@ let s:default_ale_linters = {
 \   'perl': ['perlcritic'],
 \   'perl6': [],
 \   'python': ['flake8', 'mypy', 'pylint', 'pyright'],
-\   'rust': ['cargo'],
+\   'rust': ['cargo', 'rls'],
 \   'spec': [],
 \   'text': [],
 \   'vue': ['eslint', 'vls'],
@@ -211,19 +211,15 @@ function! ale#linter#PreProcess(filetype, linter) abort
     " file on disk.
     let l:obj.lint_file = get(a:linter, 'lint_file', 0)
 
-    if !s:IsBoolean(l:obj.lint_file)
-        throw '`lint_file` must be `0` or `1`'
+    if !s:IsBoolean(l:obj.lint_file) && type(l:obj.lint_file) isnot v:t_func
+        throw '`lint_file` must be `0`, `1`, or a Function'
     endif
 
     " An option indicating that the buffer should be read.
-    let l:obj.read_buffer = get(a:linter, 'read_buffer', !l:obj.lint_file)
+    let l:obj.read_buffer = get(a:linter, 'read_buffer', 1)
 
     if !s:IsBoolean(l:obj.read_buffer)
         throw '`read_buffer` must be `0` or `1`'
-    endif
-
-    if l:obj.lint_file && l:obj.read_buffer
-        throw 'Only one of `lint_file` or `read_buffer` can be `1`'
     endif
 
     let l:obj.aliases = get(a:linter, 'aliases', [])

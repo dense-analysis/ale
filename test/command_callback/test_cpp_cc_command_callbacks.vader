@@ -23,7 +23,7 @@ Before:
 
   let b:command_tail = ' -S -x c++'
   \   . ' -o ' . (has('win32') ? 'nul': '/dev/null')
-  \   . ' -iquote ' . ale#Escape(getcwd())
+  \   . ' -iquote %s:h'
   \   . ' -std=c++14 -Wall -'
 
 After:
