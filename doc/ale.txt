@@ -477,7 +477,7 @@ function in your |vimrc| file to force insert completion instead, like so: >
     endif
 
     " Exit and re-enter insert mode, and use insert completion
-    return "\<Esc>a\<C-n>"
+    return "\<C-c>a\<C-n>"
   endfunction
 
   inoremap <silent> <C-n> <C-R>=SmartInsertCompletion()<CR>
