@@ -279,3 +279,38 @@ Execute(The GCC handler should handle errors for inlined header functions):
   \ '     __open_too_many_args ();',
   \ '     ^~~~~~~~~~~~~~~~~~~~~~~',
   \ ])
+
+Execute(The GCC handler should handle macro expansion errors in current file):
+  AssertEqual
+  \ [
+  \   {
+  \    'lnum': 1,
+  \    'col': 19,
+  \    'type': 'E',
+  \    'text': 'error message',
+  \    'detail': "error message\n<stdin>:1:19: note: in expansion of macro 'TEST'",
+  \   },
+  \ ],
+  \ ale#handlers#gcc#HandleGCCFormatWithIncludes(347, [
+  \ '<command-line>: error: error message',
+  \ '<stdin>:1:19: note: in expansion of macro ‘TEST’',
+  \ '  1 | std::string str = TEST;',
+  \ '    |                   ^~~~',
+  \ ])
+
+Execute(The GCC handler should handle macro expansion errors in other files):
+  AssertEqual
+  \ [
+  \  {
+  \    'lnum': 0,
+  \    'type': 'E',
+  \    'text': 'Error found in macro expansion. See :ALEDetail',
+  \    'detail': "error message\ninc.h:1:19: note: in expansion of macro 'TEST'",
+  \  },
+  \ ],
+  \ ale#handlers#gcc#HandleGCCFormatWithIncludes(347, [
+  \ '<command-line>: error: error message',
+  \ 'inc.h:1:19: note: in expansion of macro ‘TEST’',
+  \ '  1 | std::string str = TEST;',
+  \ '    |                   ^~~~',
+  \ ])
