@@ -727,7 +727,7 @@ Expect(There should be only two lines):
   a
   b
 
-Execute(ALEFix should modify a buffer that is not modifiable, if it becomes modifable later):
+Execute(ALEFix should modify a buffer that is not modifiable, if it becomes modifiable later):
   let g:ale_fixers.testft = ['RemoveLastLineOneArg']
 
   set nomodifiable
