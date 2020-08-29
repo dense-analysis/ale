@@ -39,6 +39,7 @@ Execute(User provided options should be used):
 
 Execute(The project path should be correct for .git directories):
   call ale#test#SetFilename('psalm-project/test.php')
+  let g:matched = 0
 
   for g:i in range(4)
     if !isdirectory(g:dir . '/.git')
