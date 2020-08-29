@@ -35,7 +35,7 @@ Before:
     let g:ale_completion_delay = 0
 
     " Run this check a few times, as it can fail randomly.
-    for g:i in range(has('nvim-0.3') || has('win32') ? 5 : 1)
+    for l:i in range(has('nvim-0.3') || has('win32') ? 5 : 1)
       call ale#completion#Queue()
       sleep 1m
 
