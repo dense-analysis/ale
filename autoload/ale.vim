@@ -263,6 +263,8 @@ function! ale#GetLocItemMessage(item, format_string) abort
     let l:msg = substitute(l:msg, '\V%linter%', '\=l:linter_name', 'g')
     " Replace %s with the text.
     let l:msg = substitute(l:msg, '\V%s', '\=a:item.text', 'g')
+    " Windows may insert carriage return line endings (^M), strip these characters.
+    let l:msg = substitute(l:msg, '\r', '', 'g')
 
     return l:msg
 endfunction
