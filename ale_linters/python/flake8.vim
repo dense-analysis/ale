@@ -40,27 +40,23 @@ endfunction
 
 function! ale_linters#python#flake8#GetCdString(buffer) abort
     let l:change_directory = ale#Var(a:buffer, 'python_flake8_change_directory')
+    let l:cd_string = ''
 
-    " map legacy options to new ones
-    if l:change_directory is# 1
-        let l:change_directory = 'file'
-    elseif l:change_directory is# 0
-        let l:change_directory = 'off'
+    if l:change_directory is# 'project'
+        let l:project_root = ale#python#FindProjectRootIni(a:buffer)
+
+        if !empty(l:project_root)
+            let l:cd_string = ale#path#CdString(l:project_root)
+        endif
     endif
 
-    if l:change_directory is# 'file'
-        return ale#path#BufferCdString(a:buffer)
-    elseif l:change_directory is# 'off'
-        return ''
+    if (l:change_directory is# 'project' && empty(l:cd_string))
+    \|| l:change_directory is# 1
+    \|| l:change_directory is# 'file'
+        let l:cd_string = ale#path#BufferCdString(a:buffer)
     endif
 
-    let l:project_root = ale#python#FindProjectRootIni(a:buffer)
-
-    if !empty(l:project_root)
-        return ale#path#CdString(l:project_root)
-    endif
-
-    return ale#path#BufferCdString(a:buffer)
+    return l:cd_string
 endfunction
 
 function! ale_linters#python#flake8#GetCommand(buffer, version) abort

@@ -41,6 +41,19 @@ Execute(The option for disabling changing directories should work):
   \ ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
   \]
 
+  let g:ale_python_flake8_change_directory = 0
+
+  AssertLinter 'flake8', [
+  \ ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
+  \]
+
+  " Invalid options should be considered the same as turning the setting off.
+  let g:ale_python_flake8_change_directory = 'xxx'
+
+  AssertLinter 'flake8', [
+  \ ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
+  \]
+
 Execute(The option for changing directory to project root should work):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/namespace_package_tox/namespace/foo/bar.py')
 
@@ -56,6 +69,13 @@ Execute(The option for changing directory to file dir should work):
 
   AssertLinter 'flake8', [
   \ ale#Escape('flake8') . ' --version',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
+  \]
+
+  let g:ale_python_flake8_change_directory = 1
+
+  AssertLinter 'flake8', [
   \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
   \]
