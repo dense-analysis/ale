@@ -12,7 +12,7 @@ Execute(ember-template-lint executables runs the right command):
 
   AssertEqual
   \ ale_linters#handlebars#embertemplatelint#GetCommand(bufnr(''), [2, 0, 0]),
-  \ '%e --json --filename ' . @%
+  \ '%e --json --filename %s'
 
 Execute(old ember-template-lint executables runs the right command):
   call ale#test#SetFilename('ember-template-lint-test-files/app/template.hbs')
