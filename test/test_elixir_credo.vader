@@ -2,19 +2,21 @@ Before:
   call ale#test#SetDirectory('/testplugin/test')
 
   runtime ale_linters/elixir/credo.vim
+  let g:test_command_start = ale#path#CdString('.') . 'mix help credo && '
 
 After:
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
   let g:ale_elixir_credo_strict = 0
   let g:ale_elixir_credo_config_file = ''
+  let g:test_command_start = ''
 
 Execute(credo runs the right command):
   call ale#test#SetFilename('elixir-test-files/testfile.ex')
 
   AssertEqual
   \ ale_linters#elixir#credo#GetCommand(bufnr('')),
-  \ 'cd ''.'' && mix help credo && mix credo suggest --format=flycheck --read-from-stdin %s'
+  \ g:test_command_start . 'mix credo suggest --format=flycheck --read-from-stdin %s'
 
 Execute(credo runs the right command with the strict flag):
   let g:ale_elixir_credo_strict = 1
@@ -22,7 +24,7 @@ Execute(credo runs the right command with the strict flag):
 
   AssertEqual
   \ ale_linters#elixir#credo#GetCommand(bufnr('')),
-  \ 'cd ''.'' && mix help credo && mix credo --strict --format=flycheck --read-from-stdin %s'
+  \ g:test_command_start . 'mix credo --strict --format=flycheck --read-from-stdin %s'
 
 Execute(credo runs the right command with a custom config file):
   let g:ale_elixir_credo_config_file = '/home/user/custom_credo.exs'
@@ -30,4 +32,4 @@ Execute(credo runs the right command with a custom config file):
 
   AssertEqual
   \ ale_linters#elixir#credo#GetCommand(bufnr('')),
-  \ 'cd ''.'' && mix help credo && mix credo suggest --config-file /home/user/custom_credo.exs --format=flycheck --read-from-stdin %s'
+  \ g:test_command_start . 'mix credo suggest --config-file /home/user/custom_credo.exs --format=flycheck --read-from-stdin %s'
