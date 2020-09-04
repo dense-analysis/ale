@@ -505,13 +505,6 @@ function! ale#util#SetBufferContents(buffer, lines) abort
     \   : a:lines
     let l:first_line_to_remove = len(l:new_lines) + 1
 
-    " We'll temporarily make a buffer modifiable, to force edits.
-    let l:modifiable = getbufvar(a:buffer, '&modifiable')
-
-    if !l:modifiable
-        call setbufvar(a:buffer, '&modifiable', 1)
-    endif
-
     " Use a Vim API for setting lines in other buffers, if available.
     if l:has_bufline_api
         call setbufline(a:buffer, 1, l:new_lines)
@@ -528,10 +521,6 @@ function! ale#util#SetBufferContents(buffer, lines) abort
         endif
 
         call setline(1, l:new_lines)
-    endif
-
-    if !l:modifiable
-        call setbufvar(a:buffer, '&modifiable', 0)
     endif
 
     return l:new_lines

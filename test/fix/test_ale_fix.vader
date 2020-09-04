@@ -727,6 +727,19 @@ Expect(There should be only two lines):
   a
   b
 
+Execute(ALEFix should modify a buffer that is not modifiable, if it becomes modifiable later):
+  let g:ale_fixers.testft = ['RemoveLastLineOneArg']
+
+  set nomodifiable
+  ALEFix
+  call ale#test#FlushJobs()
+  set modifiable
+  call ale#fix#ApplyQueuedFixes(bufnr(''))
+
+Expect(There should be only two lines):
+  a
+  b
+
 Execute(b:ale_fix_on_save = 1 should override g:ale_fix_on_save = 0):
   let g:ale_fix_on_save = 0
   let b:ale_fix_on_save = 1

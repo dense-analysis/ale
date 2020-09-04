@@ -2,7 +2,9 @@
 " Description: Functions for integrating with C-family linters.
 
 call ale#Set('c_parse_makefile', 0)
+call ale#Set('c_always_make', has('unix') && !has('macunix'))
 call ale#Set('c_parse_compile_commands', 1)
+
 let s:sep = has('win32') ? '\' : '/'
 
 " Set just so tests can override it.
@@ -504,7 +506,10 @@ function! ale#c#GetMakeCommand(buffer) abort
         let l:path = ale#path#FindNearestFile(a:buffer, 'Makefile')
 
         if !empty(l:path)
-            return ale#path#CdString(fnamemodify(l:path, ':h')) . 'make -n'
+            let l:always_make = ale#Var(a:buffer, 'c_always_make')
+
+            return ale#path#CdString(fnamemodify(l:path, ':h'))
+            \   . 'make -n' . (l:always_make ? ' --always-make' : '')
         endif
     endif
 

@@ -169,13 +169,14 @@ flake8                                                      *ale-python-flake8*
 
 g:ale_python_flake8_change_directory     *g:ale_python_flake8_change_directory*
                                          *b:ale_python_flake8_change_directory*
-  Type: |Number|
-  Default: `1`
+  Type: |String|
+  Default: `project`
 
-  If set to `1`, ALE will switch to the directory the Python file being
-  checked with `flake8` is in before checking it. This helps `flake8` find
-  configuration files more easily. This option can be turned off if you want
-  to control the directory Python is executed from yourself.
+  If set to `project`, ALE will switch to the project root before checking file.
+  If set to `file`, ALE will switch to directory the Python file being
+  checked with `flake8` is in before checking it.
+  You can turn it off with `off` option if you want to control the directory
+  Python is executed from yourself.
 
 
 g:ale_python_flake8_executable                 *g:ale_python_flake8_executable*

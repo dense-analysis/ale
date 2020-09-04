@@ -463,12 +463,56 @@ is loaded. The delay for completion can be configured with
 |g:ale_completion_delay|. This setting should not be enabled if you wish to
 use ALE as a completion source for other plugins.
 
+ALE automatic completion will not work when 'paste' is active. Only set
+'paste' when you are copy and pasting text into your buffers.
+
+ALE automatic completion will interfere with default insert completion with
+`CTRL-N` and so on (|compl-vim|). You can write your own keybinds and a
+function in your |vimrc| file to force insert completion instead, like so: >
+
+  function! SmartInsertCompletion() abort
+    " Use the default CTRL-N in completion menus
+    if pumvisible()
+      return "\<C-n>"
+    endif
+
+    " Exit and re-enter insert mode, and use insert completion
+    return "\<C-c>a\<C-n>"
+  endfunction
+
+  inoremap <silent> <C-n> <C-R>=SmartInsertCompletion()<CR>
+<
 ALE provides an 'omnifunc' function |ale#completion#OmniFunc| for triggering
 completion manually with CTRL-X CTRL-O. |i_CTRL-X_CTRL-O| >
 
   " Use ALE's function for omnicompletion.
   set omnifunc=ale#completion#OmniFunc
 <
+                                                      *ale-completion-fallback*
+
+You can write your own completion function and fallback on other methods of
+completion by checking if there are no results that ALE can determine. For
+example, for Python code, you could fall back on the `python3complete`
+function. >
+
+  function! TestCompletionFunc(findstart, base) abort
+    let l:result = ale#completion#OmniFunc(a:findstart, a:base)
+
+    " Check if ALE couldn't find anything.
+    if (a:findstart && l:result is -3)
+    \|| (!a:findstart && empty(l:result))
+      " Defer to another omnifunc if ALE couldn't find anything.
+      return python3complete#Complete(a:findstart, a:base)
+    endif
+
+    return l:result
+  endfunction
+
+  set omnifunc=TestCompletionFunc
+<
+See |complete-functions| for documentation on how to write completion
+functions.
+
 ALE will only suggest so many possible matches for completion. The maximum
 number of items can be controlled with |g:ale_completion_max_suggestions|.
 
@@ -728,6 +772,9 @@ g:ale_completion_enabled                             *g:ale_completion_enabled*
 
   This setting should not be enabled if you wish to use ALE as a completion
   source for other completion plugins.
+
+  ALE automatic completion will not work when 'paste' is active. Only set
+  'paste' when you are copy and pasting text into your buffers.
 
   A buffer-local version of this setting `b:ale_completion_enabled` can be set
   to `0` to disable ALE's automatic completion support for a single buffer.

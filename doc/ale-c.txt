@@ -8,6 +8,17 @@ runs either `clang`, or `gcc`. See |ale-c-cc|.
 ===============================================================================
 Global Options
 
+g:ale_c_always_make                                       *g:ale_c_always_make*
+                                                          *b:ale_c_always_make*
+  Type: |Number|
+  Default: `has('unix') && !has('macunix')`
+
+  If set to `1`, use `--always-make` for `make`, which means that output will
+  always be parsed from `make` dry runs with GNU make. BSD `make` does not
+  support this option, so you probably want to turn this option off when using
+  a BSD variant.
+
+
 g:ale_c_build_dir_names                               *g:ale_c_build_dir_names*
                                                       *b:ale_c_build_dir_names*
 
@@ -57,6 +68,11 @@ g:ale_c_parse_makefile                                 *g:ale_c_parse_makefile*
   If set to `1`, ALE will run `make -n` to automatically determine flags to
   set for C or C++ compilers. This can make it easier to determine the correct
   build flags to use for different files.
+
+  NOTE: When using this option on BSD, you may need to set
+  |g:ale_c_always_make| to `0`, and `make -n` will not provide consistent
+  results if binaries have already been built, so use `make clean` when
+  editing your files.
 
   WARNING: Running `make -n` automatically can execute arbitrary code, even
   though it's supposed to be a dry run, so enable this option with care. You

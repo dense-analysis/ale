@@ -2,6 +2,9 @@ Before:
   call ale#assert#SetUpLinterTest('php', 'psalm')
 
 After:
+  unlet! g:i
+  unlet! g:matched
+
   if isdirectory(g:dir . '/.git')
     call delete(g:dir . '/.git', 'd')
   endif
@@ -22,19 +25,36 @@ Execute(Vendor executables should be detected):
   \   . '/psalm-project/vendor/bin/psalm'
   \ )) . ' --language-server'
 
+  let g:ale_php_psalm_use_global = 1
+
+  AssertLinter 'psalm',
+  \ ale#Escape('psalm') . ' --language-server'
+
 Execute(User provided options should be used):
-  let g:ale_psalm_langserver_options = '--my-user-provided-option my-value'
+  let g:ale_php_psalm_options = '--my-user-provided-option my-value'
 
   AssertLinter 'psalm',
   \ ale#Escape('psalm')
   \ . ' --language-server --my-user-provided-option my-value'
 
-
 Execute(The project path should be correct for .git directories):
   call ale#test#SetFilename('psalm-project/test.php')
+  let g:matched = 0
 
-  if !isdirectory(g:dir . '/.git')
-    call mkdir(g:dir . '/.git')
+  for g:i in range(4)
+    if !isdirectory(g:dir . '/.git')
+      call mkdir(g:dir . '/.git')
+    endif
+
+    try
+      AssertLSPProject g:dir
+    catch /.+/
+    endtry
+
+    let g:matched = 1
+    break
+  endfor
+
+  if !g:matched
+    AssertLSPProject g:dir
   endif
-
-  AssertLSPProject g:dir
