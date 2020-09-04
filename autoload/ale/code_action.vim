@@ -24,6 +24,42 @@ function! ale#code_action#HandleCodeAction(code_action, should_save) abort
     endfor
 endfunction
 
+function! s:ChangeCmp(left, right) abort
+    if a:left.start.line < a:right.start.line
+        return -1
+    endif
+
+    if a:left.start.line > a:right.start.line
+        return 1
+    endif
+
+    if a:left.start.offset < a:right.start.offset
+        return -1
+    endif
+
+    if a:left.start.offset > a:right.start.offset
+        return 1
+    endif
+
+    if a:left.end.line < a:right.end.line
+        return -1
+    endif
+
+    if a:left.end.line > a:right.end.line
+        return 1
+    endif
+
+    if a:left.end.offset < a:right.end.offset
+        return -1
+    endif
+
+    if a:left.end.offset > a:right.end.offset
+        return 1
+    endif
+
+    return 0
+endfunction
+
 function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
     let l:current_buffer = bufnr('')
     " The buffer is used to determine the fileformat, if available.
@@ -48,7 +84,8 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
     let l:column_offset = 0
     let l:last_end_line = 0
 
-    for l:code_edit in a:changes
+    " Changes have to be sorted so we apply them from top-to-bottom.
+    for l:code_edit in sort(copy(a:changes), function('s:ChangeCmp'))
         if l:code_edit.start.line isnot l:last_end_line
             let l:column_offset = 0
         endif
