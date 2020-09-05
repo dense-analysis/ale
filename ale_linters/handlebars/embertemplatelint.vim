@@ -19,11 +19,11 @@ endfunction
 
 function! ale_linters#handlebars#embertemplatelint#GetCommandWithVersionCheck(buffer) abort
     return ale#semver#RunWithVersionCheck(
-    \       a:buffer,
-    \       ale_linters#handlebars#embertemplatelint#GetExecutable(a:buffer),
-    \       '%e --version',
-    \       function('ale_linters#handlebars#embertemplatelint#GetCommand'),
-    \   )
+    \   a:buffer,
+    \   ale_linters#handlebars#embertemplatelint#GetExecutable(a:buffer),
+    \   '%e --version',
+    \   function('ale_linters#handlebars#embertemplatelint#GetCommand'),
+    \)
 endfunction
 
 function! ale_linters#handlebars#embertemplatelint#Handle(buffer, lines) abort
@@ -52,7 +52,8 @@ function! ale_linters#handlebars#embertemplatelint#Handle(buffer, lines) abort
 endfunction
 
 call ale#linter#Define('handlebars', {
-\   'name': 'ember-template-lint',
+\   'name': 'embertemplatelint',
+\   'aliases': ['ember-template-lint'],
 \   'executable': function('ale_linters#handlebars#embertemplatelint#GetExecutable'),
 \   'command': function('ale_linters#handlebars#embertemplatelint#GetCommandWithVersionCheck'),
 \   'callback': 'ale_linters#handlebars#embertemplatelint#Handle',
