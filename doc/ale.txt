@@ -526,6 +526,12 @@ completion information with Deoplete, consult Deoplete's documentation.
 ALE by can support automatic imports from external modules. This behavior can
 be enabled by setting the |g:ale_completion_autoimport| variable to `1`.
 
+You can manually request imports for symbols at the cursor with the
+|ALEImport| command. The word at the cursor must be an exact match for some
+potential completion result which includes additional text to insert into the
+current buffer, which ALE will assume is code for an import line. This command
+can be useful when your code already contains something you need to import.
+
 When working with TypeScript files, ALE can remove warnings from your
 completions by setting the |g:ale_completion_tsserver_remove_warnings|
 variable to 1.
@@ -3052,6 +3058,23 @@ ALEHover                                                             *ALEHover*
   A plug mapping `<Plug>(ale_hover)` is defined for this command.
 
 
+ALEImport                                                           *ALEImport*
+
+  Try to import a symbol using `tsserver` or a Language Server.
+
+  ALE will look for completions for the word at the cursor which contain
+  additional text edits that possible insert lines to import the symbol. The
+  first match with additional text edits will be used, and may add other code
+  to the current buffer other than import lines.
+
+  If linting is enabled, and |g:ale_lint_on_text_changed| is set to ever check
+  buffers when text is changed, the buffer will be checked again after changes
+  are made.
+
+  A Plug mapping `<Plug>(ale_import)` is defined for this command. This
+  mapping should only be bound for normal mode.
+
+
 ALEOrganizeImports                                         *ALEOrganizeImports*
 
   Organize imports using tsserver. Currently not implemented for LSPs.
@@ -3059,9 +3082,10 @@ ALEOrganizeImports                                         *ALEOrganizeImports*
 
 ALERename                                                           *ALERename*
 
-  Rename a symbol using TypeScript server or Language Server.
+  Rename a symbol using `tsserver` or a Language Server.
 
-  The user will be prompted for a new name.
+  The symbol where the cursor is resting will be the symbol renamed, and a
+  prompt will open to request a new name.
 
 
 ALERepeatSelection                                         *ALERepeatSelection*

@@ -188,7 +188,13 @@ function! ale#completion#GetTriggerCharacter(filetype, prefix) abort
     return ''
 endfunction
 
-function! ale#completion#Filter(buffer, filetype, suggestions, prefix) abort
+function! ale#completion#Filter(
+\   buffer,
+\   filetype,
+\   suggestions,
+\   prefix,
+\   exact_prefix_match,
+\) abort
     let l:excluded_words = ale#Var(a:buffer, 'completion_excluded_words')
 
     if empty(a:prefix)
@@ -215,10 +221,17 @@ function! ale#completion#Filter(buffer, filetype, suggestions, prefix) abort
                 " Dictionaries is accepted here.
                 let l:word = type(l:item) is v:t_string ? l:item : l:item.word
 
-                " Add suggestions if the suggestion starts with a
-                " case-insensitive match for the prefix.
-                if l:word[: len(a:prefix) - 1] is? a:prefix
-                    call add(l:filtered_suggestions, l:item)
+                if a:exact_prefix_match
+                    " Add suggestions if the word is an exact match.
+                    if l:word is# a:prefix
+                        call add(l:filtered_suggestions, l:item)
+                    endif
+                else
+                    " Add suggestions if the suggestion starts with a
+                    " case-insensitive match for the prefix.
+                    if l:word[: len(a:prefix) - 1] is? a:prefix
+                        call add(l:filtered_suggestions, l:item)
+                    endif
                 endif
             endfor
         endif
@@ -241,21 +254,17 @@ function! ale#completion#Filter(buffer, filetype, suggestions, prefix) abort
     return l:filtered_suggestions
 endfunction
 
-function! s:ReplaceCompletionOptions() abort
-    let l:source = get(get(b:, 'ale_completion_info', {}), 'source', '')
-
-    if l:source is# 'ale-automatic' || l:source is# 'ale-manual'
-        " Remember the old omnifunc value, if there is one.
-        " If we don't store an old one, we'll just never reset the option.
-        " This will stop some random exceptions from appearing.
-        if !exists('b:ale_old_omnifunc') && !empty(&l:omnifunc)
-            let b:ale_old_omnifunc = &l:omnifunc
-        endif
-
-        let &l:omnifunc = 'ale#completion#AutomaticOmniFunc'
+function! s:ReplaceCompletionOptions(source) abort
+    " Remember the old omnifunc value, if there is one.
+    " If we don't store an old one, we'll just never reset the option.
+    " This will stop some random exceptions from appearing.
+    if !exists('b:ale_old_omnifunc') && !empty(&l:omnifunc)
+        let b:ale_old_omnifunc = &l:omnifunc
     endif
 
-    if l:source is# 'ale-automatic'
+    let &l:omnifunc = 'ale#completion#AutomaticOmniFunc'
+
+    if a:source is# 'ale-automatic'
         if !exists('b:ale_old_completeopt')
             let b:ale_old_completeopt = &l:completeopt
         endif
@@ -318,7 +327,11 @@ function! ale#completion#AutomaticOmniFunc(findstart, base) abort
     else
         let l:result = ale#completion#GetCompletionResult()
 
-        call s:ReplaceCompletionOptions()
+        let l:source = get(get(b:, 'ale_completion_info', {}), 'source', '')
+
+        if l:source is# 'ale-automatic' || l:source is# 'ale-manual'
+            call s:ReplaceCompletionOptions(l:source)
+        endif
 
         return l:result isnot v:null ? l:result : []
     endif
@@ -331,30 +344,52 @@ function! s:OpenCompletionMenu(...) abort
 endfunction
 
 function! ale#completion#Show(result) abort
-    if ale#util#Mode() isnot# 'i'
+    let l:source = get(get(b:, 'ale_completion_info', {}), 'source', '')
+
+    if ale#util#Mode() isnot# 'i' && l:source isnot# 'ale-import'
         return
     endif
 
-    " Set the list in the buffer, temporarily replace omnifunc with our
-    " function, and then start omni-completion.
+    " Set the list in the buffer.
     let b:ale_completion_result = a:result
 
     " Don't try to open the completion menu if there's nothing to show.
     if empty(b:ale_completion_result)
+        if l:source is# 'ale-import'
+            " If we ran completion from :ALEImport,
+            " tell the user that nothing is going to happen.
+            call s:message('No possible imports found.')
+        endif
+
         return
     endif
 
     " Replace completion options shortly before opening the menu.
-    call s:ReplaceCompletionOptions()
-
-    let l:source = get(get(b:, 'ale_completion_info', {}), 'source', '')
-
     if l:source is# 'ale-automatic' || l:source is# 'ale-manual'
+        call s:ReplaceCompletionOptions(l:source)
+
         call timer_start(0, function('s:OpenCompletionMenu'))
     endif
 
     if l:source is# 'ale-callback'
         call b:CompleteCallback(b:ale_completion_result)
+    endif
+
+    if l:source is# 'ale-import'
+        call ale#completion#HandleUserData(b:ale_completion_result[0])
+
+        let l:text_changed = '' . g:ale_lint_on_text_changed
+
+        " Check the buffer again right away, if linting is enabled.
+        if g:ale_enabled
+        \&& (
+        \   l:text_changed is# '1'
+        \   || l:text_changed is# 'always'
+        \   || l:text_changed is# 'normal'
+        \   || l:text_changed is# 'insert'
+        \)
+            call ale#Queue(0, '')
+        endif
     endif
 endfunction
 
@@ -386,7 +421,10 @@ endfunction
 function! s:CompletionStillValid(request_id) abort
     let [l:line, l:column] = getpos('.')[1:2]
 
-    return ale#util#Mode() is# 'i'
+    return (
+    \   ale#util#Mode() is# 'i'
+    \   || b:ale_completion_info.source is# 'ale-import'
+    \)
     \&& has_key(b:, 'ale_completion_info')
     \&& b:ale_completion_info.request_id == a:request_id
     \&& b:ale_completion_info.line == l:line
@@ -394,6 +432,7 @@ function! s:CompletionStillValid(request_id) abort
     \   b:ale_completion_info.column == l:column
     \   || b:ale_completion_info.source is# 'ale-omnifunc'
     \   || b:ale_completion_info.source is# 'ale-callback'
+    \   || b:ale_completion_info.source is# 'ale-import'
     \)
 endfunction
 
@@ -418,6 +457,7 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
     let l:buffer = bufnr('')
     let l:results = []
     let l:names_with_details = []
+    let l:info = get(b:, 'ale_completion_info', {})
 
     for l:suggestion in a:response.body
         let l:displayParts = []
@@ -459,7 +499,8 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
         \   'kind': ale#completion#GetCompletionSymbols(l:suggestion.kind),
         \   'icase': 1,
         \   'menu': join(l:displayParts, ''),
-        \   'dup': g:ale_completion_autoimport,
+        \   'dup': get(l:info, 'additional_edits_only', 0)
+        \       ||  g:ale_completion_autoimport,
         \   'info': join(l:documentationParts, ''),
         \}
 
@@ -469,7 +510,12 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
             \ })
         endif
 
-        call add(l:results, l:result)
+        " Include this item if we'll accept any items,
+        " or if we only want items with additional edits, and this has them.
+        if !get(l:info, 'additional_edits_only', 0)
+        \|| has_key(l:result, 'user_data')
+            call add(l:results, l:result)
+        endif
     endfor
 
     let l:names = getbufvar(l:buffer, 'ale_tsserver_completion_names', [])
@@ -544,7 +590,10 @@ function! ale#completion#ParseLSPCompletions(response) abort
         " Don't use LSP items with additional text edits when autoimport for
         " completions is turned off.
         if !empty(get(l:item, 'additionalTextEdits'))
-        \&& !g:ale_completion_autoimport
+        \&& !(
+        \   get(l:info, 'additional_edits_only', 0)
+        \   || g:ale_completion_autoimport
+        \)
             continue
         endif
 
@@ -594,11 +643,22 @@ function! ale#completion#ParseLSPCompletions(response) abort
             endif
         endif
 
-        call add(l:results, l:result)
+        " Include this item if we'll accept any items,
+        " or if we only want items with additional edits, and this has them.
+        if !get(l:info, 'additional_edits_only', 0)
+        \|| has_key(l:result, 'user_data')
+            call add(l:results, l:result)
+        endif
     endfor
 
     if has_key(l:info, 'prefix')
-        let l:results = ale#completion#Filter(l:buffer, &filetype, l:results, l:info.prefix)
+        let l:results = ale#completion#Filter(
+        \   l:buffer,
+        \   &filetype,
+        \   l:results,
+        \   l:info.prefix,
+        \   get(l:info, 'additional_edits_only', 0),
+        \)
     endif
 
     return l:results[: g:ale_completion_max_suggestions - 1]
@@ -622,13 +682,18 @@ function! ale#completion#HandleTSServerResponse(conn_id, response) abort
         \   &filetype,
         \   ale#completion#ParseTSServerCompletions(a:response),
         \   b:ale_completion_info.prefix,
+        \   get(b:ale_completion_info, 'additional_edits_only', 0),
         \)[: g:ale_completion_max_suggestions - 1]
 
         " We need to remember some names for tsserver, as it doesn't send
         " details back for everything we send.
         call setbufvar(l:buffer, 'ale_tsserver_completion_names', l:names)
 
-        if !empty(l:names)
+        if empty(l:names)
+            " Response with no results now and skip making a redundant request
+            " for nothing.
+            call ale#completion#Show([])
+        else
             let l:identifiers = []
 
             for l:name in l:names
@@ -702,7 +767,8 @@ function! s:OnReady(linter, lsp_details) abort
         \   b:ale_completion_info.line,
         \   b:ale_completion_info.column,
         \   b:ale_completion_info.prefix,
-        \   g:ale_completion_autoimport,
+        \   get(b:ale_completion_info, 'additional_edits_only', 0)
+        \       || g:ale_completion_autoimport,
         \)
     else
         " Send a message saying the buffer has changed first, otherwise
@@ -761,9 +827,19 @@ function! ale#completion#GetCompletions(...) abort
         let b:CompleteCallback = l:CompleteCallback
     endif
 
-    let [l:line, l:column] = getpos('.')[1:2]
+    if has_key(l:options, 'line') && has_key(l:options, 'column')
+        " Use a provided line and column, if given.
+        let l:line = l:options.line
+        let l:column = l:options.column
+    else
+        let [l:line, l:column] = getpos('.')[1:2]
+    endif
 
-    let l:prefix = ale#completion#GetPrefix(&filetype, l:line, l:column)
+    if has_key(l:options, 'prefix')
+        let l:prefix = l:options.prefix
+    else
+        let l:prefix = ale#completion#GetPrefix(&filetype, l:line, l:column)
+    endif
 
     if l:source is# 'ale-automatic' && empty(l:prefix)
         return 0
@@ -782,6 +858,11 @@ function! ale#completion#GetCompletions(...) abort
     \}
     unlet! b:ale_completion_result
 
+    if has_key(l:options, 'additional_edits_only')
+        let b:ale_completion_info.additional_edits_only =
+        \   l:options.additional_edits_only
+    endif
+
     let l:buffer = bufnr('')
     let l:Callback = function('s:OnReady')
 
@@ -796,6 +877,37 @@ function! ale#completion#GetCompletions(...) abort
     endfor
 
     return l:started
+endfunction
+
+function! s:message(message) abort
+    call ale#util#Execute('echom ' . string(a:message))
+endfunction
+
+" This function implements the :ALEImport command.
+function! ale#completion#Import() abort
+    let l:word = expand('<cword>')
+
+    if empty(l:word)
+        call s:message('Nothing to complete at cursor!')
+
+        return
+    endif
+
+    let [l:line, l:column] = getpos('.')[1:2]
+    let l:column = searchpos('\V' . escape(l:word, '/\'), 'bn', l:line)[1]
+
+    if l:column isnot 0
+        let l:started = ale#completion#GetCompletions('ale-import', {
+        \   'line': l:line,
+        \   'column': l:column,
+        \   'prefix': l:word,
+        \   'additional_edits_only': 1,
+        \})
+
+        if !l:started
+            call s:message('No completion providers are available.')
+        endif
+    endif
 endfunction
 
 function! ale#completion#OmniFunc(findstart, base) abort
@@ -876,6 +988,7 @@ function! ale#completion#HandleUserData(completed_item) abort
     if l:source isnot# 'ale-automatic'
     \&& l:source isnot# 'ale-manual'
     \&& l:source isnot# 'ale-callback'
+    \&& l:source isnot# 'ale-import'
         return
     endif
 

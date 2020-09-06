@@ -229,7 +229,11 @@ command! -bar ALEDocumentation :call ale#hover#ShowDocumentationAtCursor()
 " Search for appearances of a symbol, such as a type name or function name.
 command! -nargs=1 ALESymbolSearch :call ale#symbol#Search(<q-args>)
 
+" Complete text with tsserver and LSP
 command! -bar ALEComplete :call ale#completion#GetCompletions('ale-manual')
+
+" Try to find completions for the current symbol that add additional text.
+command! -bar ALEImport :call ale#completion#Import()
 
 " Rename symbols using tsserver and LSP
 command! -bar ALERename :call ale#rename#Execute()
@@ -275,6 +279,7 @@ nnoremap <silent> <Plug>(ale_find_references) :ALEFindReferences<Return>
 nnoremap <silent> <Plug>(ale_hover) :ALEHover<Return>
 nnoremap <silent> <Plug>(ale_documentation) :ALEDocumentation<Return>
 inoremap <silent> <Plug>(ale_complete) <C-\><C-O>:ALEComplete<Return>
+nnoremap <silent> <Plug>(ale_import) :ALEImport<Return>
 nnoremap <silent> <Plug>(ale_rename) :ALERename<Return>
 nnoremap <silent> <Plug>(ale_repeat_selection) :ALERepeatSelection<Return>
 
