@@ -421,11 +421,11 @@ endfunction
 function! s:CompletionStillValid(request_id) abort
     let [l:line, l:column] = getpos('.')[1:2]
 
-    return (
+    return has_key(b:, 'ale_completion_info')
+    \&& (
     \   ale#util#Mode() is# 'i'
     \   || b:ale_completion_info.source is# 'ale-import'
     \)
-    \&& has_key(b:, 'ale_completion_info')
     \&& b:ale_completion_info.request_id == a:request_id
     \&& b:ale_completion_info.line == l:line
     \&& (
