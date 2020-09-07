@@ -2,4 +2,4 @@
 " Description: languagetool for asciidoc files, copied from markdown.
 
 
-call ale#handlers#languagetool#DefineLinter('asciidoctor')
+call ale#handlers#languagetool#DefineLinter('asciidoc')
