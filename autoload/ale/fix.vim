@@ -75,7 +75,10 @@ function! ale#fix#ApplyFixes(buffer, output) abort
 
         if l:data.lines_before != l:lines
             call remove(g:ale_fix_buffer_data, a:buffer)
-            execute 'echoerr ''The file was changed before fixing finished'''
+
+            if !l:data.ignore_file_changed_errors
+                execute 'echoerr ''The file was changed before fixing finished'''
+            endif
 
             return
         endif
@@ -329,6 +332,7 @@ function! ale#fix#InitBufferData(buffer, fixing_flag) abort
     \   'lines_before': getbufline(a:buffer, 1, '$'),
     \   'done': 0,
     \   'should_save': a:fixing_flag is# 'save_file',
+    \   'ignore_file_changed_errors': a:fixing_flag is# '!',
     \   'temporary_directory_list': [],
     \}
 endfunction
@@ -337,19 +341,23 @@ endfunction
 "
 " Returns 0 if no fixes can be applied, and 1 if fixing can be done.
 function! ale#fix#Fix(buffer, fixing_flag, ...) abort
-    if a:fixing_flag isnot# '' && a:fixing_flag isnot# 'save_file'
-        throw "fixing_flag must be either '' or 'save_file'"
+    if a:fixing_flag isnot# ''
+    \&& a:fixing_flag isnot# '!'
+    \&& a:fixing_flag isnot# 'save_file'
+        throw "fixing_flag must be '', '!', or 'save_file'"
     endif
 
     try
         let l:callback_list = s:GetCallbacks(a:buffer, a:fixing_flag, a:000)
     catch /E700\|BADNAME/
-        let l:function_name = join(split(split(v:exception, ':')[3]))
-        let l:echo_message = printf(
-        \   'There is no fixer named `%s`. Check :ALEFixSuggest',
-        \   l:function_name,
-        \)
-        execute 'echom l:echo_message'
+        if a:fixing_flag isnot# '!'
+            let l:function_name = join(split(split(v:exception, ':')[3]))
+            let l:echo_message = printf(
+            \   'There is no fixer named `%s`. Check :ALEFixSuggest',
+            \   l:function_name,
+            \)
+            execute 'echom l:echo_message'
+        endif
 
         return 0
     endtry

@@ -458,6 +458,10 @@ function! s:StopCurrentJobs(buffer, clear_lint_file_jobs) abort
     endif
 endfunction
 
+function! ale#engine#Stop(buffer) abort
+    call s:StopCurrentJobs(a:buffer, 1)
+endfunction
+
 function! s:RemoveProblemsForDisabledLinters(buffer, linters) abort
     " Figure out which linters are still enabled, and remove
     " problems for linters which are no longer enabled.

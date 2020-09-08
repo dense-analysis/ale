@@ -407,41 +407,75 @@ Execute(HandleUserData should call ale#code_action#HandleCodeAction):
   AssertEqual g:handle_code_action_called, 0
 
   call ale#completion#HandleUserData({
-  \  'user_data': ''
+  \ 'user_data': ''
   \})
   AssertEqual g:handle_code_action_called, 0
 
   call ale#completion#HandleUserData({
-  \  'user_data': '{}'
+  \ 'user_data': json_encode({}),
   \})
   AssertEqual g:handle_code_action_called, 0
 
   call ale#completion#HandleUserData({
-  \  'user_data': '{"codeActions": []}'
+  \ 'user_data': json_encode({
+  \   '_ale_completion_item': 1,
+  \   'code_actions': [],
+  \ }),
   \})
   AssertEqual g:handle_code_action_called, 0
 
   call ale#completion#HandleUserData({
-  \  'user_data': '{"codeActions": [{"description":"", "changes": []}]}'
+  \ 'user_data': json_encode({
+  \   '_ale_completion_item': 1,
+  \   'code_actions': [
+  \     {'description': '', 'changes': []},
+  \   ],
+  \ }),
   \})
   AssertEqual g:handle_code_action_called, 1
 
   let b:ale_completion_info = {'source': 'ale-automatic'}
   call ale#completion#HandleUserData({
-  \  'user_data': '{"codeActions": [{"description":"", "changes": []}]}'
+  \ 'user_data': json_encode({
+  \   '_ale_completion_item': 1,
+  \   'code_actions': [
+  \     {'description': '', 'changes': []},
+  \   ],
+  \ }),
   \})
   AssertEqual g:handle_code_action_called, 2
 
   let b:ale_completion_info = {'source': 'ale-callback'}
   call ale#completion#HandleUserData({
-  \  'user_data': '{"codeActions": [{"description":"", "changes": []}]}'
+  \ 'user_data': json_encode({
+  \   '_ale_completion_item': 1,
+  \   'code_actions': [
+  \     {'description': '', 'changes': []},
+  \   ],
+  \ }),
   \})
   AssertEqual g:handle_code_action_called, 3
+
+  let b:ale_completion_info = {'source': 'ale-omnifunc'}
+  call ale#completion#HandleUserData({
+  \ 'user_data': json_encode({
+  \   '_ale_completion_item': 1,
+  \   'code_actions': [
+  \     {'description': '', 'changes': []},
+  \   ],
+  \ }),
+  \})
+  AssertEqual g:handle_code_action_called, 4
 
 Execute(ale#code_action#HandleCodeAction should not be called when when source is not ALE):
   call MockHandleCodeAction()
   let b:ale_completion_info = {'source': 'syntastic'}
   call ale#completion#HandleUserData({
-  \  'user_data': '{"codeActions": [{"description":"", "changes": []}]}'
+  \ 'user_data': json_encode({
+  \   '_ale_completion_item': 1,
+  \   'code_actions': [
+  \     {'description': '', 'changes': []},
+  \   ],
+  \ }),
   \})
   AssertEqual g:handle_code_action_called, 0

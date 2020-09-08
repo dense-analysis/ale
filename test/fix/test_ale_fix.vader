@@ -196,6 +196,10 @@ After:
   " Clear the messages between tests.
   echomsg ''
 
+  if !exists('g:ale_command_wrapper')
+    let g:ale_command_wrapper = ''
+  endif
+
 Given testft (A file with three lines):
   a
   b
@@ -205,6 +209,13 @@ Execute(ALEFix should complain when there are no functions to call):
   ALEFix
   call ale#test#FlushJobs()
   AssertEqual 'No fixers have been defined. Try :ALEFixSuggest', GetLastMessage()
+
+Execute(ALEFix should not complain when the command is run with a bang):
+  echom 'none'
+
+  ALEFix!
+  call ale#test#FlushJobs()
+  AssertEqual 'none', GetLastMessage()
 
 Execute(ALEFix should apply simple functions):
   let g:ale_fixers.testft = ['AddCarets']
@@ -715,6 +726,19 @@ Execute(ale#fix#InitBufferData() should set up the correct data):
   \   'done': 0,
   \   'lines_before': ['a', 'b', 'c'],
   \   'should_save': 1,
+  \   'ignore_file_changed_errors': 0,
+  \ },
+  \}, g:ale_fix_buffer_data
+
+  call ale#fix#InitBufferData(bufnr(''), '!')
+
+  AssertEqual {
+  \ bufnr(''): {
+  \   'temporary_directory_list': [],
+  \   'done': 0,
+  \   'lines_before': ['a', 'b', 'c'],
+  \   'should_save': 0,
+  \   'ignore_file_changed_errors': 1,
   \ },
   \}, g:ale_fix_buffer_data
 

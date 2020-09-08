@@ -147,6 +147,8 @@ ALE offers several options for controlling which linters are run.
 * Disabling only a subset of linters.  - |g:ale_linters_ignore|
 * Disabling LSP linters and `tsserver`.  - |g:ale_disable_lsp|
 
+You can stop ALE any currently running linters with the |ALELintStop| command.
+Any existing problems will be kept.
 
 -------------------------------------------------------------------------------
 3.1 Linting On Other Machines                         *ale-lint-other-machines*
@@ -531,6 +533,9 @@ You can manually request imports for symbols at the cursor with the
 potential completion result which includes additional text to insert into the
 current buffer, which ALE will assume is code for an import line. This command
 can be useful when your code already contains something you need to import.
+
+You can execute other commands whenever ALE inserts some completion text with
+the |ALECompletePost| event.
 
 When working with TypeScript files, ALE can remove warnings from your
 completions by setting the |g:ale_completion_tsserver_remove_warnings|
@@ -2976,6 +2981,10 @@ ALEFix                                                                 *ALEFix*
 
   Fix problems with the current buffer. See |ale-fix| for more information.
 
+  If the command is run with a bang (`:ALEFix!`), all warnings will be
+  suppressed, including warnings about no fixers being defined, and warnings
+  about not being able to apply fixes to a file because it has been changed.
+
   A plug mapping `<Plug>(ale_fix)` is defined for this command.
 
 
@@ -3113,6 +3122,13 @@ ALELint                                                               *ALELint*
   meaning linters which check the file instead of the Vim buffer.
 
   A plug mapping `<Plug>(ale_lint)` is defined for this command.
+
+
+ALELintStop                                                       *ALELintStop*
+
+  Stop any currently running jobs for checking the current buffer.
+
+  Any problems from previous linter results will continue to be shown.
 
 
 ALEPrevious                                                       *ALEPrevious*
@@ -3979,6 +3995,23 @@ g:ale_want_results_buffer                           *g:ale_want_results_buffer*
   when the |ALEWantResults| event is signaled. This variable should be read to
   figure out which buffer other sources should lint.
 
+
+ALECompletePost                                       *ALECompletePost-autocmd*
+                                                              *ALECompletePost*
+
+  This |User| autocmd is triggered after ALE inserts an item on
+  |CompleteDone|. This event can be used to run commands after a buffer
+  is changed by ALE as the result of completion. For example, |ALEFix| can
+  be configured to run automatically when completion is done: >
+
+  augroup FixAfterComplete
+      autocmd!
+      " Run ALEFix when completion items are added.
+      autocmd User ALECompletePost ALEFix!
+      " If ALE starts fixing a file, stop linters running for now.
+      autocmd User ALEFixPre ALELintStop
+  augroup END
+<
 
 ALELintPre                                                 *ALELintPre-autocmd*
                                                                    *ALELintPre*
