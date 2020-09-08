@@ -1177,6 +1177,15 @@ g:ale_fix_on_save_ignore                             *g:ale_fix_on_save_ignore*
   let g:ale_fix_on_save_ignore = [g:AddBar]
 <
 
+g:ale_float_preview                                       *g:ale_float_preview*
+
+  Type: |Number|
+  Default: `1`
+
+  When set to `1`, and if |nvim_open_win| exists, opens preview windows in a
+  floating window instead.
+
+
 g:ale_history_enabled                                   *g:ale_history_enabled*
 
   Type: |Number|
