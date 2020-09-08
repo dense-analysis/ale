@@ -220,8 +220,6 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
             \&& exists('*balloon_show')
             \&& ale#Var(l:options.buffer, 'set_balloons')
                 call balloon_show(join(l:lines, "\n"))
-            elseif exists('*nvim_open_win')
-                call ale#nvim_floating#Show(l:lines)
             elseif get(l:options, 'truncated_echo', 0)
                 call ale#cursor#TruncatedEcho(l:lines[0])
             elseif g:ale_hover_to_preview
