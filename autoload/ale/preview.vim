@@ -55,8 +55,8 @@ endfunction
 " Precondition: exists('*nvim_open_win')
 function! ale#preview#ShowFloating(lines, ...) abort
     let l:options = get(a:000, 0, {})
-    let buf = nvim_create_buf(v:false, v:false)
-    let s:winid = nvim_open_win(buf, v:false, {
+    let l:buf = nvim_create_buf(v:false, v:false)
+    let s:winid = nvim_open_win(l:buf, v:false, {
     \ 'relative': 'cursor',
     \ 'row': 1,
     \ 'col': 0,
@@ -64,10 +64,10 @@ function! ale#preview#ShowFloating(lines, ...) abort
     \ 'height': 4,
     \ 'style': 'minimal'
     \ })
-    call nvim_buf_set_option(buf, 'buftype', 'acwrite')
-    call nvim_buf_set_option(buf, 'bufhidden', 'delete')
-    call nvim_buf_set_option(buf, 'swapfile', v:false)
-    call nvim_buf_set_option(buf, 'filetype', get(l:options, 'filetype', 'ale-preview'))
+    call nvim_buf_set_option(l:buf, 'buftype', 'acwrite')
+    call nvim_buf_set_option(l:buf, 'bufhidden', 'delete')
+    call nvim_buf_set_option(l:buf, 'swapfile', v:false)
+    call nvim_buf_set_option(l:buf, 'filetype', get(l:options, 'filetype', 'ale-preview'))
 
     " Execute commands in window context
     let l:parent_window = nvim_get_current_win()
@@ -86,14 +86,14 @@ function! ale#preview#ShowFloating(lines, ...) abort
         augroup END
     endif
 
-    let width = max(map(copy(a:lines), 'strdisplaywidth(v:val)'))
-    let height = min([len(a:lines), 10])
-    call nvim_win_set_width(s:winid, width)
-    call nvim_win_set_height(s:winid, height)
+    let l:width = max(map(copy(a:lines), 'strdisplaywidth(v:val)'))
+    let l:height = min([len(a:lines), 10])
+    call nvim_win_set_width(s:winid, l:width)
+    call nvim_win_set_height(s:winid, l:height)
 
     call nvim_buf_set_lines(winbufnr(s:winid), 0, -1, v:false, a:lines)
     call nvim_buf_set_option(winbufnr(s:winid), 'modified', v:false)
-    call nvim_buf_set_option(buf, 'modifiable', v:false)
+    call nvim_buf_set_option(l:buf, 'modifiable', v:false)
 endfunction
 
 function! s:close_floating() abort
