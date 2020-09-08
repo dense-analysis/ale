@@ -16,5 +16,5 @@ Execute(BufferCdString should output the correct command string):
   call ale#test#SetFilename('foo.txt')
 
   AssertEqual
-  \ has('unix') ? 'cd ' . ale#Escape(g:dir) . ' && ' : 'cd /d ' . ale#Escape(g:dir) . ' && ',
+  \ has('unix') ? 'cd %s:h && ' : 'cd /d %s:h && ',
   \ ale#path#BufferCdString(bufnr(''))

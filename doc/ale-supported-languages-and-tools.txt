@@ -21,6 +21,7 @@ Notes:
   * `drafter`
 * AsciiDoc
   * `alex`!!
+  * `languagetool`!!
   * `proselint`
   * `redpen`
   * `textlint`
@@ -47,7 +48,7 @@ Notes:
 * C
   * `astyle`
   * `ccls`
-  * `clang`
+  * `clang` (`cc`)
   * `clangd`
   * `clang-format`
   * `clangtidy`!!
@@ -55,7 +56,7 @@ Notes:
   * `cpplint`!!
   * `cquery`
   * `flawfinder`
-  * `gcc`
+  * `gcc` (`cc`)
   * `uncrustify`
 * C#
   * `csc`!!
@@ -65,7 +66,7 @@ Notes:
 * C++ (filetype cpp)
   * `astyle`
   * `ccls`
-  * `clang`
+  * `clang` (`cc`)
   * `clangcheck`!!
   * `clangd`
   * `clang-format`
@@ -75,7 +76,7 @@ Notes:
   * `cpplint`!!
   * `cquery`
   * `flawfinder`
-  * `gcc`
+  * `gcc` (`cc`)
   * `uncrustify`
 * Chef
   * `cookstyle`
@@ -118,6 +119,8 @@ Notes:
   * `dartanalyzer`!!
   * `dartfmt`!!
   * `language_server`
+* Dhall
+  * `dhall-format`
 * Dockerfile
   * `dockerfile_lint`
   * `hadolint`
@@ -446,6 +449,7 @@ Notes:
   * `sqlfmt`
   * `sqlformat`
   * `sqlint`
+  * `sql-lint`
 * Stylus
   * `stylelint`
 * SugarSS
@@ -453,6 +457,7 @@ Notes:
 * Swift
   * `sourcekit-lsp`
   * `swiftformat`
+  * `swift-format`
   * `swiftlint`
 * Tcl
   * `nagelfar`!!

@@ -1,3 +1,11 @@
+Before:
+  Save g:ale_javascript_eslint_suppress_eslintignore
+
+  let g:ale_javascript_eslint_suppress_eslintignore = 0
+
+After:
+  Restore
+
 Execute(The standard handler should parse lines correctly):
   AssertEqual
   \ [

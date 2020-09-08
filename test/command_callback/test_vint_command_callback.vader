@@ -1,7 +1,7 @@
 Before:
   call ale#assert#SetUpLinterTest('vim', 'vint')
   let b:command_tail = (has('nvim') ? ' --enable-neovim' : '')
-  \ . ' -f "{file_path}:{line_number}:{column_number}: {severity}: {description} (see {reference})" %t'
+  \ . ' -f "{file_path}:{line_number}:{column_number}: {severity}: {policy_name} - {description} (see {reference})" %t'
 
 After:
   unlet! b:bin_dir

@@ -175,11 +175,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['php'],
 \       'description': 'Fix PHP files with php-cs-fixer.',
 \   },
-\    'astyle': {
+\   'astyle': {
 \       'function': 'ale#fixers#astyle#Fix',
 \       'suggested_filetypes': ['c', 'cpp'],
 \       'description': 'Fix C/C++ with astyle.',
-\    },
+\   },
 \   'clangtidy': {
 \       'function': 'ale#fixers#clangtidy#Fix',
 \       'suggested_filetypes': ['c', 'cpp', 'objc'],
@@ -380,10 +380,20 @@ let s:default_registry = {
 \       'suggested_filetypes': ['nix'],
 \       'description': 'A formatter for Nix code',
 \   },
+\   'remark-lint': {
+\       'function': 'ale#fixers#remark_lint#Fix',
+\       'suggested_filetypes': ['markdown'],
+\       'description': 'Fix markdown files with remark-lint',
+\   },
 \   'html-beautify': {
 \       'function': 'ale#fixers#html_beautify#Fix',
 \       'suggested_filetypes': ['html', 'htmldjango'],
 \       'description': 'Fix HTML files with html-beautify.',
+\   },
+\   'dhall': {
+\       'function': 'ale#fixers#dhall#Fix',
+\       'suggested_filetypes': ['dhall'],
+\       'description': 'Fix Dhall files with dhall-format.',
 \   },
 \}
 

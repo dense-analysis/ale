@@ -92,8 +92,8 @@ Execute (All events should be set up when everything is on):
   \   'FileType * call ale#events#FileTypeEvent( str2nr(expand(''<abuf>'')), expand(''<amatch>''))',
   \   'InsertLeave * if ale#Var(str2nr(expand(''<abuf>'')), ''lint_on_insert_leave'') | call ale#Queue(0) | endif',
   \   'InsertLeave if exists(''*ale#engine#Cleanup'') | call ale#cursor#EchoCursorWarning() | endif',
-  \   'TextChanged * call ale#Queue(g:ale_lint_delay)',
-  \   'TextChangedI * call ale#Queue(g:ale_lint_delay)',
+  \   'TextChanged * call ale#Queue(ale#Var(str2nr(expand(''<abuf>'')), ''lint_delay''))',
+  \   'TextChangedI * call ale#Queue(ale#Var(str2nr(expand(''<abuf>'')), ''lint_delay''))',
   \ ],
   \ CheckAutocmd('ALEEvents')
 
@@ -145,8 +145,8 @@ Execute (g:ale_lint_on_text_changed = 1 bind both events):
 
   AssertEqual
   \ [
-  \   'TextChanged * call ale#Queue(g:ale_lint_delay)',
-  \   'TextChangedI * call ale#Queue(g:ale_lint_delay)',
+  \   'TextChanged * call ale#Queue(ale#Var(str2nr(expand(''<abuf>'')), ''lint_delay''))',
+  \   'TextChangedI * call ale#Queue(ale#Var(str2nr(expand(''<abuf>'')), ''lint_delay''))',
   \ ],
   \ filter(CheckAutocmd('ALEEvents'), 'v:val =~ ''^TextChanged''')
 
@@ -155,8 +155,8 @@ Execute (g:ale_lint_on_text_changed = 'always' should bind both events):
 
   AssertEqual
   \ [
-  \   'TextChanged * call ale#Queue(g:ale_lint_delay)',
-  \   'TextChangedI * call ale#Queue(g:ale_lint_delay)',
+  \   'TextChanged * call ale#Queue(ale#Var(str2nr(expand(''<abuf>'')), ''lint_delay''))',
+  \   'TextChangedI * call ale#Queue(ale#Var(str2nr(expand(''<abuf>'')), ''lint_delay''))',
   \ ],
   \ filter(CheckAutocmd('ALEEvents'), 'v:val =~ ''^TextChanged''')
 
@@ -165,7 +165,7 @@ Execute (g:ale_lint_on_text_changed = 'normal' should bind only TextChanged):
 
   AssertEqual
   \ [
-  \   'TextChanged * call ale#Queue(g:ale_lint_delay)',
+  \   'TextChanged * call ale#Queue(ale#Var(str2nr(expand(''<abuf>'')), ''lint_delay''))',
   \ ],
   \ filter(CheckAutocmd('ALEEvents'), 'v:val =~ ''^TextChanged''')
 
@@ -174,7 +174,7 @@ Execute (g:ale_lint_on_text_changed = 'insert' should bind only TextChangedI):
 
   AssertEqual
   \ [
-  \   'TextChangedI * call ale#Queue(g:ale_lint_delay)',
+  \   'TextChangedI * call ale#Queue(ale#Var(str2nr(expand(''<abuf>'')), ''lint_delay''))',
   \ ],
   \ filter(CheckAutocmd('ALEEvents'), 'v:val =~ ''^TextChanged''')
 

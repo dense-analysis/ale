@@ -5,7 +5,7 @@
 call ale#Set('vim_vint_show_style_issues', 1)
 call ale#Set('vim_vint_executable', 'vint')
 let s:enable_neovim = has('nvim') ? ' --enable-neovim' : ''
-let s:format = '-f "{file_path}:{line_number}:{column_number}: {severity}: {description} (see {reference})"'
+let s:format = '-f "{file_path}:{line_number}:{column_number}: {severity}: {policy_name} - {description} (see {reference})"'
 
 function! ale_linters#vim#vint#GetCommand(buffer, version) abort
     let l:can_use_no_color_flag = empty(a:version)
