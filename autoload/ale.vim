@@ -100,13 +100,7 @@ function! s:Lint(buffer, should_lint_file, timer_id) abort
     " Use the filetype from the buffer
     let l:filetype = getbufvar(a:buffer, '&filetype')
     let l:linters = ale#linter#Get(l:filetype)
-
-    " Apply ignore lists for linters only if needed.
-    let l:ignore_config = ale#Var(a:buffer, 'linters_ignore')
-    let l:disable_lsp = ale#Var(a:buffer, 'disable_lsp')
-    let l:linters = !empty(l:ignore_config) || l:disable_lsp
-    \   ? ale#engine#ignore#Exclude(l:filetype, l:linters, l:ignore_config, l:disable_lsp)
-    \   : l:linters
+    let l:linters = ale#linter#RemoveIgnored(a:buffer, l:filetype, l:linters)
 
     " Tell other sources that they can start checking the buffer now.
     let g:ale_want_results_buffer = a:buffer

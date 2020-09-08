@@ -394,6 +394,16 @@ function! ale#linter#Get(original_filetypes) abort
     return reverse(l:combined_linters)
 endfunction
 
+function! ale#linter#RemoveIgnored(buffer, filetype, linters) abort
+    " Apply ignore lists for linters only if needed.
+    let l:ignore_config = ale#Var(a:buffer, 'linters_ignore')
+    let l:disable_lsp = ale#Var(a:buffer, 'disable_lsp')
+
+    return !empty(l:ignore_config) || l:disable_lsp
+    \   ? ale#engine#ignore#Exclude(a:filetype, a:linters, l:ignore_config, l:disable_lsp)
+    \   : a:linters
+endfunction
+
 " Given a buffer and linter, get the executable String for the linter.
 function! ale#linter#GetExecutable(buffer, linter) abort
     let l:Executable = a:linter.executable
