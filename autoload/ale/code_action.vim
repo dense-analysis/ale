@@ -127,6 +127,7 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
         endif
 
         call extend(l:middle, l:insertions[1:])
+
         if l:end_line <= len(l:lines)
             " Only extend the last line if end_line is within the range of
             " lines.
@@ -140,6 +141,7 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
         else
             let l:end = []
         endif
+
         let l:lines = l:start + l:middle + l:end
 
         let l:current_line_offset = len(l:lines) - l:lines_before_change
