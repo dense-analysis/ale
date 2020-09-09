@@ -135,14 +135,7 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
         endif
 
         let l:lines_before_change = len(l:lines)
-
-        if l:end_line < len(l:lines)
-            let l:end = l:lines[l:end_line :]
-        else
-            let l:end = []
-        endif
-
-        let l:lines = l:start + l:middle + l:end
+        let l:lines = l:start + l:middle + l:lines[l:end_line :]
 
         let l:current_line_offset = len(l:lines) - l:lines_before_change
         let l:line_offset += l:current_line_offset
