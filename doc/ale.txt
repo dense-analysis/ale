@@ -179,8 +179,11 @@ script like so. >
 
   #!/usr/bin/env bash
 
-  exec docker run --rm -v "$(pwd):/data" cytopia/pylint "$@"
+  exec docker run -i --rm -v "$(pwd):/data" cytopia/pylint "$@"
 <
+
+You will run to run Docker commands with `-i` in order to read from stdin.
+
 With the above script in mind, you might configure ALE to lint your Python
 project with `pylint` by providing the path to the script to execute, and
 mappings which describe how to between the two file systems in your
