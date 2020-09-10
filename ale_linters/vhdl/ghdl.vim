@@ -27,7 +27,7 @@ function! ale_linters#vhdl#ghdl#Handle(buffer, lines) abort
     " :\(\d\+\) Capture number(line num) after first colon
     " :\(\d\+\) Capture number(column/row num) after second colon
     " : \(.\+\) Capture rest of message string
-    let l:pattern = '^\s*\u\=:\=[^:]\+:\(\d\+\):\(\d\+\):\s*\(.\+\)'
+    let l:pattern = '^\s*\u\=:\=[^:]\+:\(\d\+\):\(\d\+\):\(.*\)'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
