@@ -13,7 +13,21 @@ function! ale_linters#vhdl#ghdl#Handle(buffer, lines) abort
     " Look for 'error' lines like the following:
     " dff_en.vhd:41:5:error: 'begin' is expected instead of 'if'
     " /path/to/file.vhdl:12:8: no declaration for "i0"
-    let l:pattern = '^[a-zA-Z0-9\-\.\_\/ ]\+:\(\d\+\):\(\d\+\):\(.*\)'
+    " tb_me_top.vhd:37:10 warning: Instantiating module me_top with dangling input port 1 (rst_n) floating.
+    " tb_me_top.vhd:17:9 syntax error
+    " memory_single_port.vhd:2:10 syntax error
+    " C:\users\tb_me_top.vhd:17:6:20 error: Invalid module instantiation
+    "
+    " Regex descriptions:
+    " ^ start of line
+    " \s*      0 or more whitespaces
+    " \u\=     0 or 1 Uppercase letter (for Drive letter)
+    " :\=      0 or 1 colon (for Drive letter)
+    " [^:]\+   1 or more greedy any character EXCEPT colon
+    " :\(\d\+\) Capture number(line num) after first colon
+    " :\(\d\+\) Capture number(column/row num) after second colon
+    " : \(.\+\) Capture rest of message string
+    let l:pattern = '^\s*\u\=:\=[^:]\+:\(\d\+\):\(\d\+\): \(.\+\)'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
@@ -27,6 +41,7 @@ function! ale_linters#vhdl#ghdl#Handle(buffer, lines) abort
 
     return l:output
 endfunction
+
 
 call ale#linter#Define('vhdl', {
 \   'name': 'ghdl',

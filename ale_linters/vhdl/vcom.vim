@@ -15,13 +15,27 @@ function! ale_linters#vhdl#vcom#Handle(buffer, lines) abort
     "** Error: tb_file.vhd(73): (vcom-1136) Unknown identifier "aresetn".
     "** Error: tb_file.vhd(73): Bad resolution function (STD_LOGIC) for type (error).
     "** Error: tb_file.vhd(73): near ":": (vcom-1576) expecting ';' or ')'.
-    let l:pattern = '^**\s\(\w*\):[a-zA-Z0-9\-\.\_\/ ]\+(\(\d\+\)):\s\+\(.*\)'
+    "** Error: C:\Users\avander\AppData\Local\Temp\VICE0F.tmp\file.vhd(25): Unknown expanded name
+    "** Error (suppressible): C:\Users\avander\AppData\Local\Temp\VICE0F.tmp\file.vhd(25):
+    "                         (vcom-1195) Cannot find expanded name "work.Pkgpackage".
+    "
+    "Regex description:
+    "^          Start of line
+    "**         vcom message leader literal
+    "\s         single whitespace
+    "\([^:]\+\) Capture 1 or more greedy any character EXCEPT colon
+    ":\s        Colon and single whitespace
+    "[^(]\+     1 or more greedy any character EXCEPT open parentheses
+    "(\(\d\+\)) Capture line number in parentheses
+    ":\s\+      Colon and whitespace
+    "\(.*\)     Capture rest of message string
+    let l:pattern = '^**\s\([^:]\+\):\s[^(]\+(\(\d\+\)):\s\+\(.*\)'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
         \   'lnum': l:match[2] + 0,
-        \   'type': l:match[1] is? 'Error' ? 'E' : 'W',
+        \   'type': l:match[1] is? 'Warning' ? 'W' : 'E',
         \   'text': l:match[3],
         \})
     endfor
