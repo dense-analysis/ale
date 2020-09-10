@@ -1,0 +1,18 @@
+Before:
+  call ale#assert#SetUpLinterTest('solidity', 'solhint')
+  call ale#test#SetFilename('Example.sol')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default solhint command should be correct):
+  AssertLinter 'solhint',
+  \ ale#path#CdString(expand('%:p:h'))
+  \   . ale#Escape('solhint') . ' --formatter compact %s'
+
+Execute(The executable should be configurable and escaped):
+  let b:ale_solidity_solhint_executable = 'foo bar'
+
+  AssertLinter 'foo bar',
+  \ ale#path#CdString(expand('%:p:h'))
+  \   . ale#Escape('foo bar') . ' --formatter compact %s'

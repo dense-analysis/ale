@@ -4,6 +4,7 @@
 let s:executables = [
 \   'node_modules/.bin/solhint',
 \   'node_modules/solhint/solhint.js',
+\   'solhint',
 \]
 
 let s:sep = has('win32') ? '\' : '/'
