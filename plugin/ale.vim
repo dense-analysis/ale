@@ -195,6 +195,8 @@ command! -bar ALEStopAllLSPs :call ale#lsp#reset#StopAllLSPs()
 
 " A command for linting manually.
 command! -bar ALELint :call ale#Queue(0, 'lint_file')
+" Stop current jobs when linting.
+command! -bar ALELintStop :call ale#engine#Stop(bufnr(''))
 
 " Define a command to get information about current filetype.
 command! -bar ALEInfo :call ale#debugging#Info()
@@ -204,7 +206,7 @@ command! -bar ALEInfoToClipboard :call ale#debugging#InfoToClipboard()
 command! -bar -nargs=1 ALEInfoToFile :call ale#debugging#InfoToFile(<f-args>)
 
 " Fix problems in files.
-command! -bar -nargs=* -complete=customlist,ale#fix#registry#CompleteFixers ALEFix :call ale#fix#Fix(bufnr(''), '', <f-args>)
+command! -bar -bang -nargs=* -complete=customlist,ale#fix#registry#CompleteFixers ALEFix :call ale#fix#Fix(bufnr(''), '<bang>', <f-args>)
 " Suggest registered functions to use for fixing problems.
 command! -bar ALEFixSuggest :call ale#fix#registry#Suggest(&filetype)
 
@@ -229,7 +231,11 @@ command! -bar ALEDocumentation :call ale#hover#ShowDocumentationAtCursor()
 " Search for appearances of a symbol, such as a type name or function name.
 command! -nargs=1 ALESymbolSearch :call ale#symbol#Search(<q-args>)
 
+" Complete text with tsserver and LSP
 command! -bar ALEComplete :call ale#completion#GetCompletions('ale-manual')
+
+" Try to find completions for the current symbol that add additional text.
+command! -bar ALEImport :call ale#completion#Import()
 
 " Rename symbols using tsserver and LSP
 command! -bar ALERename :call ale#rename#Execute()
@@ -275,6 +281,7 @@ nnoremap <silent> <Plug>(ale_find_references) :ALEFindReferences<Return>
 nnoremap <silent> <Plug>(ale_hover) :ALEHover<Return>
 nnoremap <silent> <Plug>(ale_documentation) :ALEDocumentation<Return>
 inoremap <silent> <Plug>(ale_complete) <C-\><C-O>:ALEComplete<Return>
+nnoremap <silent> <Plug>(ale_import) :ALEImport<Return>
 nnoremap <silent> <Plug>(ale_rename) :ALERename<Return>
 nnoremap <silent> <Plug>(ale_repeat_selection) :ALERepeatSelection<Return>
 

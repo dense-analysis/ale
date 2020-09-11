@@ -34,7 +34,11 @@ endfunction
 function! s:HandleLSPDiagnostics(conn_id, response) abort
     let l:linter_name = s:lsp_linter_map[a:conn_id]
     let l:filename = ale#path#FromURI(a:response.params.uri)
-    let l:buffer = bufnr('^' . l:filename . '$')
+    let l:escaped_name = escape(
+    \   fnameescape(l:filename),
+    \   has('win32') ? '^' : '^,}]'
+    \)
+    let l:buffer = bufnr('^' . l:escaped_name . '$')
     let l:info = get(g:ale_buffer_info, l:buffer, {})
 
     if empty(l:info)
@@ -52,7 +56,11 @@ endfunction
 
 function! s:HandleTSServerDiagnostics(response, error_type) abort
     let l:linter_name = 'tsserver'
-    let l:buffer = bufnr('^' . a:response.body.file . '$')
+    let l:escaped_name = escape(
+    \   fnameescape(a:response.body.file),
+    \   has('win32') ? '^' : '^,}]'
+    \)
+    let l:buffer = bufnr('^' . l:escaped_name . '$')
     let l:info = get(g:ale_buffer_info, l:buffer, {})
 
     if empty(l:info)

@@ -444,7 +444,7 @@ function! s:RunJob(command, options) abort
     return 1
 endfunction
 
-function! s:StopCurrentJobs(buffer, clear_lint_file_jobs) abort
+function! s:StopCurrentJobs(buffer, clear_lint_file_jobs, linter_slots) abort
     let l:info = get(g:ale_buffer_info, a:buffer, {})
     call ale#command#StopJobs(a:buffer, 'linter')
 
@@ -453,9 +453,23 @@ function! s:StopCurrentJobs(buffer, clear_lint_file_jobs) abort
         call ale#command#StopJobs(a:buffer, 'file_linter')
         let l:info.active_linter_list = []
     else
+        let l:lint_file_map = {}
+
+        " Use a previously computed map of `lint_file` values to find
+        " linters that are used for linting files.
+        for [l:lint_file, l:linter] in a:linter_slots
+            if l:lint_file is 1
+                let l:lint_file_map[l:linter.name] = 1
+            endif
+        endfor
+
         " Keep jobs for linting files when we're only linting buffers.
-        call filter(l:info.active_linter_list, 'get(v:val, ''lint_file'')')
+        call filter(l:info.active_linter_list, 'get(l:lint_file_map, v:val.name)')
     endif
+endfunction
+
+function! ale#engine#Stop(buffer) abort
+    call s:StopCurrentJobs(a:buffer, 1, [])
 endfunction
 
 function! s:RemoveProblemsForDisabledLinters(buffer, linters) abort
@@ -558,6 +572,22 @@ function! s:RunLinter(buffer, linter, lint_file) abort
     return 0
 endfunction
 
+function! s:GetLintFileSlots(buffer, linters) abort
+    let l:linter_slots = []
+
+    for l:linter in a:linters
+        let l:LintFile = l:linter.lint_file
+
+        if type(l:LintFile) is v:t_func
+            let l:LintFile = l:LintFile(a:buffer)
+        endif
+
+        call add(l:linter_slots, [l:LintFile, l:linter])
+    endfor
+
+    return l:linter_slots
+endfunction
+
 function! s:GetLintFileValues(slots, Callback) abort
     let l:deferred_list = []
     let l:new_slots = []
@@ -591,12 +621,18 @@ endfunction
 
 function! s:RunLinters(
 \   buffer,
+\   linters,
 \   slots,
 \   should_lint_file,
 \   new_buffer,
-\   can_clear_results
 \) abort
-    let l:can_clear_results = a:can_clear_results
+    call s:StopCurrentJobs(a:buffer, a:should_lint_file, a:slots)
+    call s:RemoveProblemsForDisabledLinters(a:buffer, a:linters)
+
+    " We can only clear the results if we aren't checking the buffer.
+    let l:can_clear_results = !ale#engine#IsCheckingBuffer(a:buffer)
+
+    silent doautocmd <nomodeline> User ALELintPre
 
     for [l:lint_file, l:linter] in a:slots
         " Only run lint_file linters if we should.
@@ -627,36 +663,19 @@ endfunction
 function! ale#engine#RunLinters(buffer, linters, should_lint_file) abort
     " Initialise the buffer information if needed.
     let l:new_buffer = ale#engine#InitBufferInfo(a:buffer)
-    call s:StopCurrentJobs(a:buffer, a:should_lint_file)
-    call s:RemoveProblemsForDisabledLinters(a:buffer, a:linters)
 
-    " We can only clear the results if we aren't checking the buffer.
-    let l:can_clear_results = !ale#engine#IsCheckingBuffer(a:buffer)
-
-    silent doautocmd <nomodeline> User ALELintPre
-
-    " Handle `lint_file` callbacks first.
-    let l:linter_slots = []
-
-    for l:linter in a:linters
-        let l:LintFile = l:linter.lint_file
-
-        if type(l:LintFile) is v:t_func
-            let l:LintFile = l:LintFile(a:buffer)
-        endif
-
-        call add(l:linter_slots, [l:LintFile, l:linter])
-    endfor
-
-    call s:GetLintFileValues(l:linter_slots, {
-    \   new_slots -> s:RunLinters(
-    \       a:buffer,
-    \       new_slots,
-    \       a:should_lint_file,
-    \       l:new_buffer,
-    \       l:can_clear_results,
-    \   )
-    \})
+    call s:GetLintFileValues(
+    \   s:GetLintFileSlots(a:buffer, a:linters),
+    \   {
+    \       slots -> s:RunLinters(
+    \           a:buffer,
+    \           a:linters,
+    \           slots,
+    \           a:should_lint_file,
+    \           l:new_buffer,
+    \       )
+    \   }
+    \)
 endfunction
 
 " Clean up a buffer.

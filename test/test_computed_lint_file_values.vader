@@ -132,3 +132,19 @@ Execute(Linters where lint_file eventually evaluates to 1 shouldn't be run if we
   call ale#test#FlushJobs()
 
   AssertEqual [], ale#test#GetLoclistWithoutModule()
+
+Execute(Keeping computed lint_file jobs running should work):
+  AssertEqual 'testlinter2', ale#linter#Get('foobar')[1].name
+
+  call ale#engine#InitBufferInfo(bufnr(''))
+
+  call ale#engine#MarkLinterActive(
+  \ g:ale_buffer_info[bufnr('')],
+  \ ale#linter#Get('foobar')[1]
+  \)
+  call ale#engine#RunLinters(bufnr(''), ale#linter#Get('foobar'), 0)
+
+  Assert !empty(g:ale_buffer_info[bufnr('')].active_linter_list),
+  \ 'The active linter list was empty'
+  Assert ale#engine#IsCheckingBuffer(bufnr('')),
+  \ 'The IsCheckingBuffer function returned 0'

@@ -13,12 +13,17 @@ function! ale_linters#vim#vint#GetCommand(buffer, version) abort
 
     let l:warning_flag = ale#Var(a:buffer, 'vim_vint_show_style_issues') ? '-s' : '-w'
 
+    " Use the --stdin-display-name argument if supported, temp file otherwise.
+    let l:stdin_or_temp = ale#semver#GTE(a:version, [0, 4, 0])
+    \   ? ' --stdin-display-name %s -'
+    \   : ' %t'
+
     return '%e'
     \   . ' ' . l:warning_flag
     \   . (l:can_use_no_color_flag ? ' --no-color' : '')
     \   . s:enable_neovim
     \   . ' ' . s:format
-    \   . ' %t'
+    \   . l:stdin_or_temp
 endfunction
 
 let s:word_regex_list = [

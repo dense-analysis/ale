@@ -100,13 +100,7 @@ function! s:Lint(buffer, should_lint_file, timer_id) abort
     " Use the filetype from the buffer
     let l:filetype = getbufvar(a:buffer, '&filetype')
     let l:linters = ale#linter#Get(l:filetype)
-
-    " Apply ignore lists for linters only if needed.
-    let l:ignore_config = ale#Var(a:buffer, 'linters_ignore')
-    let l:disable_lsp = ale#Var(a:buffer, 'disable_lsp')
-    let l:linters = !empty(l:ignore_config) || l:disable_lsp
-    \   ? ale#engine#ignore#Exclude(l:filetype, l:linters, l:ignore_config, l:disable_lsp)
-    \   : l:linters
+    let l:linters = ale#linter#RemoveIgnored(a:buffer, l:filetype, l:linters)
 
     " Tell other sources that they can start checking the buffer now.
     let g:ale_want_results_buffer = a:buffer
@@ -163,7 +157,7 @@ function! ale#Queue(delay, ...) abort
     endif
 endfunction
 
-let s:current_ale_version = [2, 7, 0]
+let s:current_ale_version = [3, 0, 0]
 
 " A function used to check for ALE features in files outside of the project.
 function! ale#Has(feature) abort
