@@ -2704,6 +2704,7 @@ documented in additional help files.
   markdown................................|ale-markdown-options|
     markdownlint..........................|ale-markdown-markdownlint|
     mdl...................................|ale-markdown-mdl|
+    pandoc................................|ale-markdown-pandoc|
     prettier..............................|ale-markdown-prettier|
     remark-lint...........................|ale-markdown-remark-lint|
     textlint..............................|ale-markdown-textlint|
