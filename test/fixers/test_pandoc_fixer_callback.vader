@@ -1,0 +1,84 @@
+Before:
+  Save g:ale_markdown_pandoc_executable
+  Save g:ale_markdown_pandoc_input_flags
+  Save g:ale_markdown_pandoc_target_flags
+  Save g:ale_markdown_pandoc_options
+
+  let g:ale_markdown_pandoc_executable = '/path/to/pandoc'
+  let g:ale_markdown_pandoc_input_flags = []
+  let g:ale_markdown_pandoc_target_flags = []
+  let g:ale_markdown_pandoc_options = []
+
+After:
+  Restore
+
+Execute(The pandoc callback should return the correct default values):
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('/path/to/pandoc')
+  \     . ' -f markdown'
+  \     . ' -t markdown'
+  \     . ' -s '
+  \     . ale#Escape(bufname(bufnr('')))
+  \ },
+  \ ale#fixers#pandoc#Fix(bufnr(''))
+
+Execute(The pandoc callback should set the buffer name as file name):
+  call ale#test#SetFilename('../markdown_files/testfile.md')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('/path/to/pandoc')
+  \     . ' -f markdown'
+  \     . ' -t markdown'
+  \     . ' -s '
+  \     . ale#Escape(bufname(bufnr('')))
+  \ },
+  \ ale#fixers#pandoc#Fix(bufnr(''))
+
+  AssertNotEqual
+  \ stridx(
+  \   ale#fixers#pandoc#Fix(bufnr('')).command,
+  \   'testfile.md',
+  \ ),
+  \ -1
+
+Execute(The pandoc callback should include custom input_flags):
+  let g:ale_markdown_pandoc_input_flags = ['+abbreviation', '+autolink_bare_uris']
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('/path/to/pandoc')
+  \     . ' -f markdown+abbreviation+autolink_bare_uris'
+  \     . ' -t markdown'
+  \     . ' -s '
+  \     . ale#Escape(bufname(bufnr('')))
+  \ },
+  \ ale#fixers#pandoc#Fix(bufnr(''))
+
+Execute(The pandoc callback should include custom target_flags):
+  let g:ale_markdown_pandoc_target_flags = ['+raw_tex', '-native_spans']
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('/path/to/pandoc')
+  \     . ' -f markdown'
+  \     . ' -t markdown+raw_tex-native_spans'
+  \     . ' -s '
+  \     . ale#Escape(bufname(bufnr('')))
+  \ },
+  \ ale#fixers#pandoc#Fix(bufnr(''))
+
+Execute(The pandoc callback should include custom options):
+  let g:ale_markdown_pandoc_options = ['--wrap=auto', '--atx-headers']
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('/path/to/pandoc')
+  \     . ' -f markdown'
+  \     . ' -t markdown'
+  \     . ' -s'
+  \     . ' --wrap=auto --atx-headers '
+  \     . ale#Escape(bufname(bufnr('')))
+  \ },
+  \ ale#fixers#pandoc#Fix(bufnr(''))
