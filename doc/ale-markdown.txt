@@ -62,7 +62,7 @@ g:ale_markdown_pandoc_target_flags         *g:ale_markdown_pandoc_target_flags*
 
 g:ale_markdown_pandoc_options                   *g:ale_markdown_pandoc_options*
                                                 *b:ale_markdown_pandoc_options*
-  Type: List
+  Type: |List|
   Default: `[]`
 
   This variable can be set to pass additional options to pandoc.
