@@ -9,8 +9,12 @@ Before:
   let g:ale_markdown_pandoc_target_flags = []
   let g:ale_markdown_pandoc_options = []
 
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
 After:
   Restore
+
+  call ale#test#RestoreDirectory()
 
 Execute(The pandoc callback should return the correct default values):
   AssertEqual
