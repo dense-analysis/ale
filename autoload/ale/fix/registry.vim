@@ -74,6 +74,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Sort Python imports with isort.',
 \   },
+\   'pandoc': {
+\       'function': 'ale#fixers#pandoc#Fix',
+\       'suggested_filetypes': ['pandoc'],
+\       'description': 'Format pandoc markdown with pandoc.'
+\   },
 \   'prettier': {
 \       'function': 'ale#fixers#prettier#Fix',
 \       'suggested_filetypes': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'json5', 'graphql', 'markdown', 'vue', 'html', 'yaml'],
