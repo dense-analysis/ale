@@ -22,8 +22,7 @@ function! ale#fixers#pandoc#Fix(buffer) abort
     \   . ' -f markdown' . join(l:input_flags, '')
     \   . ' -t markdown' . join(l:target_flags, '')
     \   . ' -s '
-    \   . join(l:options, ' ')
-    \   . ' '
+    \   . (empty(l:options) ? '' : join(l:options, ' ') . ' ')
     \   . l:filename
 
     return {
