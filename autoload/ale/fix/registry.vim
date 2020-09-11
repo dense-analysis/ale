@@ -76,7 +76,7 @@ let s:default_registry = {
 \   },
 \   'pandoc': {
 \       'function': 'ale#fixers#pandoc#Fix',
-\       'suggested_filetypes': ['pandoc'],
+\       'suggested_filetypes': ['markdown'],
 \       'description': 'Format pandoc markdown with pandoc.'
 \   },
 \   'prettier': {
