@@ -606,11 +606,14 @@ function! ale#completion#ParseLSPCompletions(response) abort
             let l:doc = l:doc.value
         endif
 
+        " Collapse whitespaces and line breaks into a single space.
+        let l:detail = substitute(get(l:item, 'detail', ''), '\_s\+', ' ', 'g')
+
         let l:result = {
         \   'word': l:word,
         \   'kind': ale#completion#GetCompletionSymbols(get(l:item, 'kind', '')),
         \   'icase': 1,
-        \   'menu': get(l:item, 'detail', ''),
+        \   'menu': l:detail,
         \   'info': (type(l:doc) is v:t_string ? l:doc : ''),
         \}
         " This flag is used to tell if this completion came from ALE or not.
