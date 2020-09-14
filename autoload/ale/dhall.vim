@@ -1,4 +1,4 @@
-" Author: toastal <toastal@protonmail.com>
+" Author: Pat Brisbin <pbrisbin@gmail.com>, toastal <toastal@protonmail.com>
 " Description: Functions for working with Dhall’s executable
 
 call ale#Set('dhall_executable', 'dhall')
@@ -6,7 +6,10 @@ call ale#Set('dhall_use_global', get(g:, 'ale_use_global_executables', 0))
 call ale#Set('dhall_options', '')
 
 function! ale#dhall#GetExecutable(buffer) abort
-    return ale#Escape(ale#Var(a:buffer, 'dhall_executable'))
+    let l:executable = ale#Var(a:buffer, 'dhall_executable')
+
+    " Dhall is written in Haskell and commonly installed with Stack
+    return ale#handlers#haskell_stack#EscapeExecutable(l:executable, 'dhall')
 endfunction
 
 function! ale#dhall#GetExecutableWithOptions(buffer) abort

@@ -7,17 +7,13 @@ Before:
   let g:ale_dhall_options = '--ascii'
   let g:ale_dhall_freeze_options = '--all'
 
-  call ale#test#SetDirectory('/testplugin/test/dhall')
+  call ale#assert#SetUpFixerTest('dhall-freeze', 'dhall-freeze')
 
 After:
-  Restore
-
-  call ale#test#RestoreDirectory()
+  call ale#assert#TearDownFixerTest()
 
 Execute(The dhall-freeze callback should return the correct options):
-  call ale#test#SetFilename('../dhall_files/testfile.dhall')
-
-  AssertEqual
+  AssertFixer
   \ {
   \   'command': ale#Escape('odd-dhall')
   \     . ' --ascii'
@@ -25,5 +21,4 @@ Execute(The dhall-freeze callback should return the correct options):
   \     . ' --all'
   \     . ' --inplace %t',
   \   'read_temporary_file': 1,
-  \ },
-  \ ale#fixers#dhall_freeze#Freeze(bufnr(''))
+  \ }

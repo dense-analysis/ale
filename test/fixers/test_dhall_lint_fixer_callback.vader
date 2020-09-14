@@ -6,22 +6,17 @@ Before:
   let g:ale_dhall_executable = 'odd-dhall'
   let g:ale_dhall_options = '--ascii'
 
-  call ale#test#SetDirectory('/testplugin/test/dhall')
+  call ale#assert#SetUpFixerTest('dhall-lint', 'dhall-lint')
 
 After:
-  Restore
-
-  call ale#test#RestoreDirectory()
+  call ale#assert#TearDownFixerTest()
 
 Execute(The dhall-lint callback should return the correct options):
-  call ale#test#SetFilename('../dhall_files/testfile.dhall')
-
-  AssertEqual
+  AssertFixer
   \ {
   \   'command': ale#Escape('odd-dhall')
   \     . ' --ascii'
   \     . ' lint'
   \     . ' --inplace %t',
   \   'read_temporary_file': 1,
-  \ },
-  \ ale#fixers#dhall_lint#Fix(bufnr(''))
+  \ }
