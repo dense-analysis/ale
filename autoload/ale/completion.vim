@@ -503,17 +503,19 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
         \       ||  g:ale_completion_autoimport,
         \   'info': join(l:documentationParts, ''),
         \}
+        " This flag is used to tell if this completion came from ALE or not.
+        let l:user_data = {'_ale_completion_item': 1}
 
         if has_key(l:suggestion, 'codeActions')
-            let l:result.user_data = json_encode({
-            \   'codeActions': l:suggestion.codeActions,
-            \ })
+            let l:user_data.code_actions = l:suggestion.codeActions
         endif
+
+        let l:result.user_data = json_encode(l:user_data)
 
         " Include this item if we'll accept any items,
         " or if we only want items with additional edits, and this has them.
         if !get(l:info, 'additional_edits_only', 0)
-        \|| has_key(l:result, 'user_data')
+        \|| has_key(l:user_data, 'code_actions')
             call add(l:results, l:result)
         endif
     endfor
@@ -534,6 +536,7 @@ function! ale#completion#ParseTSServerCompletionEntryDetails(response) abort
             \   'icase': 1,
             \   'menu': '',
             \   'info': '',
+            \   'user_data': json_encode({'_ale_completion_item': 1}),
             \})
         endfor
     endif
@@ -610,6 +613,8 @@ function! ale#completion#ParseLSPCompletions(response) abort
         \   'menu': get(l:item, 'detail', ''),
         \   'info': (type(l:doc) is v:t_string ? l:doc : ''),
         \}
+        " This flag is used to tell if this completion came from ALE or not.
+        let l:user_data = {'_ale_completion_item': 1}
 
         if has_key(l:item, 'additionalTextEdits')
             let l:text_changes = []
@@ -629,24 +634,24 @@ function! ale#completion#ParseLSPCompletions(response) abort
             endfor
 
             if !empty(l:text_changes)
-                let l:result.user_data = json_encode({
-                \   'codeActions': [{
-                \       'description': 'completion',
-                \       'changes': [
-                \           {
-                \               'fileName': expand('#' . l:buffer . ':p'),
-                \               'textChanges': l:text_changes,
-                \           }
-                \       ],
-                \   }],
-                \})
+                let l:user_data.code_actions = [{
+                \   'description': 'completion',
+                \   'changes': [
+                \       {
+                \           'fileName': expand('#' . l:buffer . ':p'),
+                \           'textChanges': l:text_changes,
+                \       },
+                \   ],
+                \}]
             endif
         endif
+
+        let l:result.user_data = json_encode(l:user_data)
 
         " Include this item if we'll accept any items,
         " or if we only want items with additional edits, and this has them.
         if !get(l:info, 'additional_edits_only', 0)
-        \|| has_key(l:result, 'user_data')
+        \|| has_key(l:user_data, 'code_actions')
             call add(l:results, l:result)
         endif
     endfor
@@ -983,30 +988,29 @@ function! ale#completion#Queue() abort
 endfunction
 
 function! ale#completion#HandleUserData(completed_item) abort
-    let l:source = get(get(b:, 'ale_completion_info', {}), 'source', '')
-
-    if l:source isnot# 'ale-automatic'
-    \&& l:source isnot# 'ale-manual'
-    \&& l:source isnot# 'ale-callback'
-    \&& l:source isnot# 'ale-import'
-        return
-    endif
-
     let l:user_data_json = get(a:completed_item, 'user_data', '')
-
-    if empty(l:user_data_json)
-        return
-    endif
-
-    let l:user_data = json_decode(l:user_data_json)
+    let l:user_data = !empty(l:user_data_json)
+    \   ? json_decode(l:user_data_json)
+    \   : v:null
 
     if type(l:user_data) isnot v:t_dict
+    \|| get(l:user_data, '_ale_completion_item', 0) isnot 1
         return
     endif
 
-    for l:code_action in get(l:user_data, 'codeActions', [])
-        call ale#code_action#HandleCodeAction(l:code_action, v:false)
-    endfor
+    let l:source = get(get(b:, 'ale_completion_info', {}), 'source', '')
+
+    if l:source is# 'ale-automatic'
+    \|| l:source is# 'ale-manual'
+    \|| l:source is# 'ale-callback'
+    \|| l:source is# 'ale-import'
+    \|| l:source is# 'ale-omnifunc'
+        for l:code_action in get(l:user_data, 'code_actions', [])
+            call ale#code_action#HandleCodeAction(l:code_action, v:false)
+        endfor
+    endif
+
+    silent doautocmd <nomodeline> User ALECompletePost
 endfunction
 
 function! ale#completion#Done() abort

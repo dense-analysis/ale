@@ -195,6 +195,8 @@ command! -bar ALEStopAllLSPs :call ale#lsp#reset#StopAllLSPs()
 
 " A command for linting manually.
 command! -bar ALELint :call ale#Queue(0, 'lint_file')
+" Stop current jobs when linting.
+command! -bar ALELintStop :call ale#engine#Stop(bufnr(''))
 
 " Define a command to get information about current filetype.
 command! -bar ALEInfo :call ale#debugging#Info()
@@ -204,7 +206,7 @@ command! -bar ALEInfoToClipboard :call ale#debugging#InfoToClipboard()
 command! -bar -nargs=1 ALEInfoToFile :call ale#debugging#InfoToFile(<f-args>)
 
 " Fix problems in files.
-command! -bar -nargs=* -complete=customlist,ale#fix#registry#CompleteFixers ALEFix :call ale#fix#Fix(bufnr(''), '', <f-args>)
+command! -bar -bang -nargs=* -complete=customlist,ale#fix#registry#CompleteFixers ALEFix :call ale#fix#Fix(bufnr(''), '<bang>', <f-args>)
 " Suggest registered functions to use for fixing problems.
 command! -bar ALEFixSuggest :call ale#fix#registry#Suggest(&filetype)
 
