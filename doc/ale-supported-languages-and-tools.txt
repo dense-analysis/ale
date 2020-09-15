@@ -324,6 +324,7 @@ Notes:
 * Perl6
   * `perl6 -c`
 * PHP
+  * `intelephense`
   * `langserver`
   * `phan`
   * `phpcbf`
