@@ -10,7 +10,7 @@ Execute(The default executable path should be correct):
 
 Execute(The project path should be correct for .git directories):
   call ale#test#SetFilename('php-intelephense-project/with-git/test.php')
-  silent! call mkdir('php-intelephense-project/with-git/.git')
+  silent! call mkdir('php-intelephense-project/with-git/.git', 'p')
 
   AssertLSPProject ale#path#Simplify(g:dir . '/php-intelephense-project/with-git')
 
