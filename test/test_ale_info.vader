@@ -222,6 +222,7 @@ After:
 
   unlet! g:testlinter1
   unlet! g:testlinter2
+  unlet! b:ale_fixers
   unlet! b:ale_history
   unlet! b:ale_linters
   unlet! g:output
@@ -250,6 +251,7 @@ Execute (ALEInfo with no linters should return the right output):
   \   'Available Linters: []',
   \   '  Enabled Linters: []',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + g:variables_lines
@@ -273,6 +275,7 @@ Execute (ALEInfo should return buffer-local global ALE settings):
   \   'Available Linters: []',
   \   '  Enabled Linters: []',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + g:variables_lines
@@ -288,6 +291,7 @@ Execute (ALEInfo with no filetype should return the right output):
   \   'Available Linters: []',
   \   '  Enabled Linters: []',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + g:variables_lines
@@ -305,6 +309,7 @@ Execute (ALEInfo with a single linter should return the right output):
   \   'Available Linters: [''testlinter1'']',
   \   '  Enabled Linters: [''testlinter1'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + g:variables_lines
@@ -323,6 +328,7 @@ Execute (ALEInfo with two linters should return the right output):
   \   'Available Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + g:variables_lines
@@ -345,12 +351,77 @@ Execute (ALEInfo should calculate enabled linters correctly):
   \   'Available Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Enabled Linters: [''testlinter2'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + g:variables_lines
   \ + g:globals_lines
   \ + g:command_header
   \)
+
+Given testft (Empty buffer):
+Execute (ALEInfo should calculate enabled fixers correctly):
+  function! Myfix() abort
+  endfunction
+  call ale#fix#registry#Add('testfixer1', 'Myfix', ['testft'], 'Fix things the #1 way')
+  call ale#fix#registry#Add('testfixer2', 'Myfix', ['testft'], 'Fix things the #2 way')
+  let g:ale_fixers = {'testft': ['testfixer2']}
+
+  let g:globals_lines[index(g:globals_lines, 'let g:ale_fixers = {}')]
+  \ = 'let g:ale_fixers = {''testft'': [''testfixer2'']}'
+
+  call CheckInfo(
+  \ [
+  \   ' Current Filetype: testft',
+  \   'Available Linters: []',
+  \   '  Enabled Linters: []',
+  \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: [''testfixer2'']',
+  \ ]
+  \ + g:fixer_lines
+  \ + [
+  \  '  ''testfixer1'' - Fix things the #1 way',
+  \  '  ''testfixer2'' - Fix things the #2 way',
+  \ ]
+  \ + g:variables_lines
+  \ + g:globals_lines
+  \ + g:command_header
+  \)
+
+Given testft (Empty buffer):
+Execute (ALEInfo can display lambda fixers):
+  if has('lambda')
+    let b:ale_fixers = [
+    \   {buffer -> 0},
+    \   {buffer -> ale#command#Run(buffer, 'cat', {... -> 0})},
+    \]
+
+    call insert(
+    \   g:globals_lines,
+    \   'let b:ale_fixers = [function(''<lambda>1''), function(''<lambda>2'')]',
+    \   index(g:globals_lines, 'let g:ale_fixers = {}') + 1,
+    \)
+
+    call CheckInfo(
+    \ [
+    \   ' Current Filetype: testft',
+    \   'Available Linters: []',
+    \   '  Enabled Linters: []',
+    \   '  Ignored Linters: []',
+    \   '   Enabled Fixers: [''',
+    \   '   function <lambda>1(buffer, ...)',
+    \   '1  return 0',
+    \   '   endfunction'', ''',
+    \   '   function <lambda>2(buffer, ...)',
+    \   '1  return ale#command#Run(buffer, ''''cat'''', {... -> 0})',
+    \   '   endfunction'']',
+    \ ]
+    \ + g:fixer_lines
+    \ + g:variables_lines
+    \ + g:globals_lines
+    \ + g:command_header
+    \)
+  endif
 
 Given testft (Empty buffer):
 Execute (ALEInfo should only return linters for current filetype):
@@ -363,6 +434,7 @@ Execute (ALEInfo should only return linters for current filetype):
   \   'Available Linters: [''testlinter1'']',
   \   '  Enabled Linters: [''testlinter1'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + g:variables_lines
@@ -381,6 +453,7 @@ Execute (ALEInfo with compound filetypes should return linters for both of them)
   \   'Available Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + g:variables_lines
@@ -404,6 +477,7 @@ Execute (ALEInfo should return appropriately named global variables):
   \   'Available Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + [
@@ -436,6 +510,7 @@ Execute (ALEInfoToFile should write to a file correctly):
   \   'Available Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + [
@@ -464,6 +539,7 @@ Execute (ALEInfo should buffer-local linter variables):
   \   'Available Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + [
@@ -496,6 +572,7 @@ Execute (ALEInfo should output linter aliases):
   \   '''testlinter2'' -> [''testftalias3'', ''testftalias4'']',
   \   '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + [
@@ -524,6 +601,7 @@ Execute (ALEInfo should return command history):
   \   'Available Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + g:variables_lines
@@ -552,6 +630,7 @@ Execute (ALEInfo command history should print exit codes correctly):
   \   'Available Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + g:variables_lines
@@ -601,6 +680,7 @@ Execute (ALEInfo command history should print command output if logging is on):
   \   'Available Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + g:variables_lines
@@ -640,6 +720,7 @@ Execute (ALEInfo should include executable checks in the history):
   \   'Available Linters: [''testlinter1'']',
   \   '  Enabled Linters: [''testlinter1'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + g:variables_lines
@@ -670,6 +751,7 @@ Execute (The option for caching failing executable checks should work):
   \   'Available Linters: [''testlinter1'']',
   \   '  Enabled Linters: [''testlinter1'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + g:variables_lines
@@ -693,6 +775,7 @@ Execute (LSP errors for a linter should be outputted):
   \   'Available Linters: [''testlinter1'']',
   \   '  Enabled Linters: [''testlinter1'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + g:variables_lines
@@ -718,6 +801,7 @@ Execute (LSP errors for other linters shouldn't appear):
   \   'Available Linters: [''testlinter1'']',
   \   '  Enabled Linters: [''testlinter1'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + g:variables_lines
@@ -741,6 +825,7 @@ Execute (ALEInfo should include linter global options):
   \   'Available Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Enabled Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + g:variables_lines
@@ -767,6 +852,7 @@ Execute (ALEInfo should include linter global options for enabled linters):
   \   'Available Linters: [''testlinter1'', ''testlinter2'']',
   \   '  Enabled Linters: [''testlinter1'']',
   \   '  Ignored Linters: []',
+  \   '   Enabled Fixers: []',
   \ ]
   \ + g:fixer_lines
   \ + g:variables_lines

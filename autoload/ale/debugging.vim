@@ -197,6 +197,18 @@ function! s:EchoLSPErrorMessages(all_linter_names) abort
     endfor
 endfunction
 
+function! ale#debugging#FormatFixer(fixer) abort
+    let [l:name, l:Func] = a:fixer
+
+    if type(l:name) is v:t_string
+        return l:name
+    elseif type(l:Func) is v:t_func
+        return execute('function l:Func')
+    else
+        throw printf('Unexpected value. %s', a:fixer)
+    endif
+endfunction
+
 function! ale#debugging#Info() abort
     let l:buffer = bufnr('')
     let l:filetype = &filetype
@@ -225,6 +237,9 @@ function! ale#debugging#Info() abort
     let l:fixers = uniq(sort(l:fixers[0] + l:fixers[1]))
     let l:fixers_string = join(map(copy(l:fixers), '"\n  " . v:val'), '')
 
+    let l:enabled_fixers = deepcopy(ale#fix#Get(l:buffer, '', []))
+    let l:enabled_fixers = map(copy(l:enabled_fixers), 'ale#debugging#FormatFixer(v:val)')
+
     let l:non_ignored_names = map(
     \   copy(ale#linter#RemoveIgnored(l:buffer, l:filetype, l:enabled_linters)),
     \   'v:val[''name'']',
@@ -239,6 +254,7 @@ function! ale#debugging#Info() abort
     call s:EchoLinterAliases(l:all_linters)
     call s:Echo('  Enabled Linters: ' . string(l:enabled_names))
     call s:Echo('  Ignored Linters: ' . string(l:ignored_names))
+    call s:Echo('   Enabled Fixers: ' . string(l:enabled_fixers))
     call s:Echo(' Suggested Fixers: ' . l:fixers_string)
     call s:Echo(' Linter Variables:')
     call s:Echo('')
