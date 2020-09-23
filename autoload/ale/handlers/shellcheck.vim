@@ -22,10 +22,10 @@ function! ale#handlers#shellcheck#GetShellcheckDialectDirective(buffer) abort
 endfunction
 
 function! ale#handlers#shellcheck#GetDialectArgument(buffer) abort
-    let l:shell_type = ale#handlers#sh#GetShellType(a:buffer)
+    let l:shell_type = ale#handlers#shellcheck#GetShellcheckDialectDirective(a:buffer)
 
     if empty(l:shell_type)
-        let l:shell_type = ale#handlers#shellcheck#GetShellcheckDialectDirective(a:buffer)
+        let l:shell_type = ale#handlers#sh#GetShellType(a:buffer)
     endif
 
     if !empty(l:shell_type)
