@@ -10,6 +10,13 @@ function! ale#handlers#sh#GetShellType(buffer) abort
     if l:bang_line[:1] is# '#!'
         " Remove options like -e, etc.
         let l:command = substitute(l:bang_line, ' --\?[a-zA-Z0-9]\+', '', 'g')
+    " Otherwise, try to read a shellcheck diretive of the form:
+    " # shellcheck shell=<shell>
+    else
+        let l:matches = matchlist(l:bang_line, '\v^#\s*shellcheck\s+shell\s*\=\s*(\S+)')
+        if ! empty(l:matches)
+            let l:command = l:matches[1]
+        endif
     endif
 
     " If we couldn't find a hashbang, try the filetype
