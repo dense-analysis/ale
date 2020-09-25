@@ -36,6 +36,7 @@ let s:default_registry = {
 \       'function': 'ale#fixers#dhall_format#Fix',
 \       'suggested_filetypes': ['dhall'],
 \       'description': 'Standard code formatter for the Dhall language',
+\       'aliases': ['dhall'],
 \   },
 \   'dhall-freeze': {
 \       'function': 'ale#fixers#dhall_freeze#Freeze',
