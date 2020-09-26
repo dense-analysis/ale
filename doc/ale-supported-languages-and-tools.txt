@@ -383,6 +383,7 @@ Notes:
   * `qmlfmt`
   * `qmllint`
 * R
+  * `languageserver`
   * `lintr`
   * `styler`
 * Racket
