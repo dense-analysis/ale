@@ -392,6 +392,7 @@ formatting.
   * [qmlfmt](https://github.com/jesperhh/qmlfmt)
   * [qmllint](https://github.com/qt/qtdeclarative/tree/5.11/tools/qmllint)
 * R
+  * [languageserver](https://github.com/REditorSupport/languageserver)
   * [lintr](https://github.com/jimhester/lintr)
   * [styler](https://github.com/r-lib/styler)
 * Racket
