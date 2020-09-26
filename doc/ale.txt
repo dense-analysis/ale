@@ -2798,6 +2798,7 @@ documented in additional help files.
   qml.....................................|ale-qml-options|
     qmlfmt................................|ale-qml-qmlfmt|
   r.......................................|ale-r-options|
+    languageserver........................|ale-r-languageserver|
     lintr.................................|ale-r-lintr|
     styler................................|ale-r-styler|
   reasonml................................|ale-reasonml-options|
