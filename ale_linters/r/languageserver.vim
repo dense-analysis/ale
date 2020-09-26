@@ -6,17 +6,12 @@ call ale#Set('r_languageserver_options', {})
 
 function! ale_linters#r#languageserver#GetCommand(buffer) abort
     let l:cmd_string = ale#Var(a:buffer, 'r_languageserver_cmd')
-    return ale#path#BufferCdString(a:buffer)
-    \   . 'Rscript --vanilla -e '
-    \   . ale#Escape(l:cmd_string) . ' %t'
+
+    return 'Rscript --vanilla -e ' . ale#Escape(l:cmd_string)
 endfunction
 
 function! ale_linters#r#languageserver#GetProjectRoot(buffer) abort
     let l:project_root = ale#path#FindNearestFile(a:buffer, '.Rprofile')
-
-    if (empty(l:project_root))
-        let l:project_root = ale#path#FindNearestFile(a:buffer, '.lintr')
-    endif
 
     return !empty(l:project_root) ? fnamemodify(l:project_root, ':h') : fnamemodify(a:buffer, ':h')
 endfunction
