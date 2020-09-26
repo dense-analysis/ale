@@ -10,6 +10,10 @@ Execute(The default executable path should be correct):
 Execute(The project root should be detected correctly):
   AssertLSPProject '.'
 
+  call ale#test#SetFilename('r_paths/dummy/test.R')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/r_paths')
+
 Execute(Should accept configuration settings):
   AssertLSPConfig {}
 
