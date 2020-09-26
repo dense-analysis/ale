@@ -18,7 +18,7 @@ function! ale_linters#r#languageserver#GetProjectRoot(buffer) abort
         let l:project_root = ale#path#FindNearestFile(a:buffer, '.lintr')
     endif
 
-    return !empty(l:project_root) ? fnamemodify(l:project_root, ':h') : ''
+    return !empty(l:project_root) ? fnamemodify(l:project_root, ':h') : fnamemodify(a:buffer, ':h')
 endfunction
 
 call ale#linter#Define('r', {
