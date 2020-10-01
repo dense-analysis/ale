@@ -283,7 +283,6 @@ formatting.
   * [checkmake](https://github.com/mrtazz/checkmake)
 * Markdown
   * [alex](https://github.com/wooorm/alex) :floppy_disk:
-  * [languagetool](https://languagetool.org/) :floppy_disk:
   * [markdownlint](https://github.com/DavidAnson/markdownlint) :floppy_disk:
   * [mdl](https://github.com/mivok/markdownlint)
   * [prettier](https://github.com/prettier/prettier)
