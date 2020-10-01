@@ -274,7 +274,6 @@ Notes:
   * `checkmake`
 * Markdown
   * `alex`!!
-  * `languagetool`!!
   * `markdownlint`!!
   * `mdl`
   * `prettier`
