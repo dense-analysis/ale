@@ -35,6 +35,22 @@ Execute (The swipl handler should handle a warning / error of two lines):
   \   '        Singleton variables: [M]',
   \ ])
 
+Execute (The swipl handler should handle a warning / error of two lines in the new format):
+  call ale#test#SetFilename('test.pl')
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 9,
+  \     'col': 0,
+  \     'text': 'Singleton variables: [M]',
+  \     'type': 'W',
+  \   },
+  \ ],
+  \ ale_linters#prolog#swipl#Handle(bufnr(''), [
+  \   'Warning: /path/to/test.pl:9:',
+  \   'Warning:        Singleton variables: [M]',
+  \ ])
+
 Execute (The swipl handler should join three or more lines with '. '):
   call ale#test#SetFilename('test.pl')
   AssertEqual
