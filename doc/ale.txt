@@ -2873,6 +2873,7 @@ documented in additional help files.
     lacheck...............................|ale-tex-lacheck|
     latexindent...........................|ale-tex-latexindent|
     texlab................................|ale-tex-texlab|
+    textidote.............................|ale-tex-textidote|
   texinfo.................................|ale-texinfo-options|
     write-good............................|ale-texinfo-write-good|
   text....................................|ale-text-options|

@@ -72,6 +72,33 @@ g:ale_tex_texlab_options                              *g:ale_tex_texlab_options*
   This variable can be changed to modify flags given to texlab.
 
 
+===============================================================================
+textidote                                                   *ale-tex-textidote*
+
+g:ale_tex_textidote_executable                       *g:tex_textidote_executable*
+                                                     *b:tex_textidote_executable*
+  Type: |String|
+  Default: `'textidote'`
+
+  This variable can be changed to change the path to textidote.
+
+
+g:ale_tex_textidote_options                        *g:ale_tex_textidote_options*
+                                                   *b:ale_tex_textidote_options*
+  Type: |String|
+  Default: `'--no-color --output singleline'`
+
+  This variable can be changed to modify flags given to textidote.
+
+
+g:ale_tex_textidote_check_lang                  *g:ale_tex_textidote_check_lang*
+                                                *b:ale_tex_textidote_check_lang*
+  Type: |String|
+  Default: `''`
+
+  If this variable is not empty, the language checker will be used. For
+  supported languages, please refer to the Language Tool website.
+
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
