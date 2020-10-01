@@ -35,6 +35,7 @@ function! s:Subst(format, vars) abort
 endfunction
 
 let s:pattern = '\v^(ERROR|Warning)+%(:\s*[^:]+:(\d+)%(:(\d+))?)?:\s*(.*)$'
+
 function! ale_linters#prolog#swipl#Handle(buffer, lines) abort
     let l:output = []
     let l:i = 0
@@ -65,11 +66,13 @@ endfunction
 
 " This returns [<next line number>, <error message string>]
 function! s:GetErrMsg(i, lines, text) abort
-    let next_line = get(a:lines, a:i+1, '')
-    let matches = matchlist(next_line, s:pattern)
-    if !empty(matchlist) && empty(matches[2])
+    let l:next_line = get(a:lines, a:i+1, '')
+    let l:matches = matchlist(l:next_line, s:pattern)
+
+    if !empty(l:matches) && empty(l:matches[2])
         return s:GetContErrMsg(a:i+1, a:lines, a:text.matches[4])
     endif
+
     if a:text !~# '^\s*$'
         return [a:i + 1, a:text]
     endif
@@ -85,7 +88,7 @@ function! s:GetErrMsg(i, lines, text) abort
     return [l:i, join(l:text, '. ')]
 endfunction
 
-function! s:GetErrMsg(i, lines, text) abort
+function! s:GetContErrMsg(i, lines, text) abort
     if a:text !~# '^\s*$'
         return [a:i + 1, a:text]
     endif
@@ -94,11 +97,12 @@ function! s:GetErrMsg(i, lines, text) abort
     let l:text = []
 
     while l:i < len(a:lines) && a:lines[l:i] =~# s:pattern
-        let matches = matchlist(a:lines[l:i], s:pattern)
-        if !empty(matches[2])
+        let l:matches = matchlist(a:lines[l:i], s:pattern)
+
+        if !empty(l:matches[2])
             break
-        end
-        call add(l:text, s:Trim(matches[4]))
+        endif
+        call add(l:text, s:Trim(l:matches[4]))
         let l:i += 1
     endwhile
 
