@@ -80,25 +80,67 @@ g:ale_tex_textidote_executable                       *g:tex_textidote_executable
   Type: |String|
   Default: `'textidote'`
 
-  This variable can be changed to change the path to textidote.
+  This variable can be changed to modify the path to the textidote executable.
 
 
-g:ale_tex_textidote_options                        *g:ale_tex_textidote_options*
-                                                   *b:ale_tex_textidote_options*
-  Type: |String|
-  Default: `'--no-color --output singleline'`
-
-  This variable can be changed to modify flags given to textidote.
-
-
-g:ale_tex_textidote_check_lang                  *g:ale_tex_textidote_check_lang*
-                                                *b:ale_tex_textidote_check_lang*
+g:ale_tex_textidote_options                         *g:ale_tex_textidote_options*
+                                                    *b:ale_tex_textidote_options*
   Type: |String|
   Default: `''`
 
-  If this variable is not empty, the language checker will be used. For
-  supported languages, please refer to the Language Tool website.
+  This variable can be changed to modify flags given to textidote. In any
+  case, `--no-color` and `--output singleline` will be used by the linter,
+  because they are mandatory for the linter not work properly.
 
+  Note that project specific options may also be included in a `.textidote`
+  config file. See textidote documentation.
+
+
+g:ale_tex_textidote_check_lang                   *g:ale_tex_textidote_check_lang*
+                                                 *b:ale_tex_textidote_check_lang*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to set the language for the spellcheck.
+  By default, the first language in |spelllang| will be used.
+  `ale_tex_textidote_check_lang` will override |spelllang| if provided. For
+  supported languages, please refer to the Textidote documentation.
+
+  Note that the textidote language codes differ slightly from the languagetool
+  codes. The |spelllang| option will be translated to the correct format by
+  this linter, but `ale_tex_textidote_check_lang` will be passed to
+  textidote as-is. For unknown languages, textidote will throw an error.
+
+
+g:ale_tex_textidote_read_all                       *g:ale_tex_textidote_read_all*
+                                                   *b:ale_tex_textidote_read_all*
+  Type: |Number|
+  Default: `0`
+
+  This variable can be changed to manipulate the `--read-all` flag of
+  textidote. If set to `1`, the `--read-all` flag will be added to the
+  Textidote command.
+
+  Textidote will, by default, ignore any text that is NOT enclosed in a Latex
+  document environment. So when editing a sub-file that is included in a
+  parent Latex document via `input`, all or some text may fall through the
+  check.
+
+  A common use case could be to set this variable to `1` if editing an input
+  file of a parent Latex document, or use an |autocmd| to check if the file
+  contains a `\begin` tag of an environment and set it automatically.
+
+  Example for an |autocmd|:
+  
+  `autocmd BufNewFile,BufReadPost,BufWrite *.tex call <SID>prepare_textidote()`
+
+  `function! s:prepare_textidote() abort`
+      `let b:ale_tex_textidote_read_all =`
+      `\ search('\\begin{document}', 'cn') < 1 &&`
+      `\ stridx(@%, 'style.tex') == -1`
+      
+  `endfunction`
+  
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
