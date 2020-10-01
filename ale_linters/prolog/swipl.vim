@@ -103,6 +103,7 @@ function! s:GetContErrMsg(i, lines, text) abort
             break
         endif
         call add(l:text, s:Trim(l:matches[4]))
+
         let l:i += 1
     endwhile
 
