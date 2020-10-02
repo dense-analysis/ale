@@ -154,7 +154,7 @@ Any existing problems will be kept.
 3.1 Linting On Other Machines                         *ale-lint-other-machines*
 
 ALE offers support for running linters or fixers on files you are editing
-locally on other machines, so long as the other machine has access the file
+locally on other machines, so long as the other machine has access to the file
 you are editing. This could be a linter or fixer run inside of a Docker image,
 running in a virtual machine, running on a remote server, etc.
 
