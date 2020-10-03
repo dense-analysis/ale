@@ -21,6 +21,6 @@ function! ale#fixers#phpcbf#Fix(buffer) abort
     \   : ''
 
     return {
-    \   'command': ale#Escape(l:executable) . ' --stdin-path=%s ' . l:standard_option . ale#Pad(ale#Var(a:buffer, 'php_phpcs_options')) . ' -'
+    \   'command': ale#Escape(l:executable) . ' --stdin-path=%s ' . l:standard_option . ale#Pad(ale#Var(a:buffer, 'php_phpcbf_options')) . ' -'
     \}
 endfunction
