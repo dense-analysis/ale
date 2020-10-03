@@ -85,6 +85,14 @@ g:ale_php_phpcbf_use_global                       *g:ale_php_phpcbf_use_global*
   See |ale-integrations-local-executables|
 
 
+g:ale_php_phpcbf_options                              *g:ale_php_phpcbf_options*
+                                                      *b:ale_php_phpcbf_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to php-cbf
+
+
 ===============================================================================
 phpcs                                                           *ale-php-phpcs*
 
