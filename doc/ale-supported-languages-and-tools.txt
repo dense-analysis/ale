@@ -142,6 +142,8 @@ Notes:
 * Erlang
   * `erlc`
   * `SyntaxErl`
+* Erlang escript
+  * `escript`
 * Fish
   * `fish` (-n flag)
 * Fortran
