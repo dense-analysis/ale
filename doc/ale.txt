@@ -2591,6 +2591,8 @@ documented in additional help files.
     dialyzer..............................|ale-erlang-dialyzer|
     erlc..................................|ale-erlang-erlc|
     syntaxerl.............................|ale-erlang-syntaxerl|
+  erlang escript..........................|ale-erlang-escript-options|
+    escript...............................|ale-erlang-escript|
   eruby...................................|ale-eruby-options|
     ruumba................................|ale-eruby-ruumba|
   fish....................................|ale-fish-options|

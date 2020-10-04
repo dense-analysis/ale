@@ -1,0 +1,25 @@
+===============================================================================
+ALE Erlang escript Integration                     *ale-erlang-escript-options*
+
+
+===============================================================================
+escript                                                    *ale-erlang-escript*
+
+g:ale_erlang_escript_executable               g:ale_erlang_escript_executable
+                                              b:ale_erlang_escript_executable
+  Type: String
+  Default: 'escript'
+
+  Specify the escript executable with with variable.
+
+g:ale_erlang_escript_options                     g:ale_erlang_escript_options
+                                                 b:ale_erlang_escript_options
+  Type: String
+  Default: ''
+
+  This variable can be used to pass additional parameters to `escript`, such
+  as `-n` or `-i`.
+
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

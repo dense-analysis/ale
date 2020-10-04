@@ -151,6 +151,8 @@ formatting.
 * Erlang
   * [erlc](http://erlang.org/doc/man/erlc.html)
   * [SyntaxErl](https://github.com/ten0s/syntaxerl)
+* Erlang escript
+  * [escript](http://erlang.org/doc/man/escript.html)
 * Fish
   * fish [-n flag](https://linux.die.net/man/1/fish)
 * Fortran
