@@ -2,8 +2,9 @@
 " Description: Fixing Python imports with isort.
 
 call ale#Set('python_isort_executable', 'isort')
-call ale#Set('python_isort_options', '')
 call ale#Set('python_isort_use_global', get(g:, 'ale_use_global_executables', 0))
+call ale#Set('python_isort_options', '')
+call ale#Set('python_isort_auto_pipenv', 0)
 
 function! ale#fixers#isort#GetExecutable(buffer) abort
     if (ale#Var(a:buffer, 'python_auto_pipenv') || ale#Var(a:buffer, 'python_isort_auto_pipenv'))
