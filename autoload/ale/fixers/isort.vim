@@ -24,7 +24,7 @@ function! ale#fixers#isort#Fix(buffer) abort
     \   ? ' run isort'
     \   : ''
 
-    if !executable(l:executable)
+    if !executable(l:executable) && l:executable != 'pipenv'
         return 0
     endif
 
