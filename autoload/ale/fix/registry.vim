@@ -12,6 +12,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['help'],
 \       'description': 'Align help tags to the right margin',
 \   },
+\   'erl_fmt': {
+\       'function': 'ale#fixers#erl_fmt#Fix',
+\       'suggested_filetypes': ['erlang'],
+\       'description': 'Applies WhatsApp erlfmt to current buffer.',
+\   },
 \   'autopep8': {
 \       'function': 'ale#fixers#autopep8#Fix',
 \       'suggested_filetypes': ['python'],
