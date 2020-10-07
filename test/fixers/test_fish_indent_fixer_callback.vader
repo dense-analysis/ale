@@ -1,10 +1,10 @@
 Before:
-  Save g:ale_fish_fishindent_executable
-  Save g:ale_fish_fishindent_options
+  Save g:ale_fish_fish_indent_executable
+  Save g:ale_fish_fish_indent_options
 
   " Use an invalid global executable, so we don't match it.
-  let g:ale_fish_fishindent_executable = 'xxxinvalid'
-  let g:ale_fish_fishindent_options = ''
+  let g:ale_fish_fish_indent_executable = 'xxxinvalid'
+  let g:ale_fish_fish_indent_options = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
 
@@ -26,7 +26,7 @@ Execute(The fish_indent callback should return the correct default values):
   \ ale#fixers#fish_indent#Fix(bufnr(''))
 
 Execute(The fish_indent callback should include custom fish_indent options):
-  let g:ale_fish_fishindent_options = "-d"
+  let g:ale_fish_fish_indent_options = "-d"
   call ale#test#SetFilename('../fish_files/testfile.fish')
 
   AssertEqual
