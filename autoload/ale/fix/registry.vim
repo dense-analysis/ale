@@ -16,6 +16,10 @@ let s:default_registry = {
 \       'function': 'ale#fixers#autoimport#Fix',
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix import issues with autoimport.',
+\   'erlfmt': {
+\       'function': 'ale#fixers#erl_fmt#Fix',
+\       'suggested_filetypes': ['erlang'],
+\       'description': 'Applies WhatsApp erlfmt to current buffer.',
 \   },
 \   'autopep8': {
 \       'function': 'ale#fixers#autopep8#Fix',
