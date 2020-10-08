@@ -2642,6 +2642,7 @@ documented in additional help files.
     elvis.................................|ale-erlang-elvis|
     erlc..................................|ale-erlang-erlc|
     syntaxerl.............................|ale-erlang-syntaxerl|
+    erlfmt................................|ale-erlang-erlfmt|
   eruby...................................|ale-eruby-options|
     ruumba................................|ale-eruby-ruumba|
   fish....................................|ale-fish-options|
