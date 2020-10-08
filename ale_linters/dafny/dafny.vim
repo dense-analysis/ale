@@ -6,7 +6,7 @@ function! ale_linters#dafny#dafny#Handle(buffer, lines) abort
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         call add(l:output, {
-        \    'bufnr': a:buffer,
+        \    'filename': l:match[1],
         \    'col': l:match[3] + 0,
         \    'lnum': l:match[2] + 0,
         \    'text': l:match[5],
