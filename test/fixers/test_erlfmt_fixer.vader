@@ -19,7 +19,7 @@ Execute(The erlfmt callback should return the correct default values):
   \ {
   \   'read_temporary_file': 1,
   \   'command': ale#Escape('xxxinvalid')
-  \     . ' format %t',
+  \     . ' fmt %t',
   \ },
   \ ale#fixers#erlfmt#Fix(bufnr(''))
 
@@ -31,6 +31,6 @@ Execute(The erlfmt callback should include the correct format options):
   \ {
   \   'read_temporary_file': 1,
   \   'command': ale#Escape('xxxinvalid')
-  \     . ' format invalid_options %t',
+  \     . ' fmt invalid_options %t',
   \ },
   \ ale#fixers#erlfmt#Fix(bufnr(''))
