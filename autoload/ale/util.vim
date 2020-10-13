@@ -16,7 +16,9 @@ endfunction
 " Vim 8 does not support echoing long messages from asynchronous callbacks,
 " but NeoVim does. Small messages can be echoed in Vim 8, and larger messages
 " have to be shown in preview windows.
-function! ale#util#ShowMessage(string) abort
+function! ale#util#ShowMessage(string, ...) abort
+    let l:options = get(a:000, 0, {})
+
     if !has('nvim')
         call ale#preview#CloseIfTypeMatches('ale-preview.message')
     endif
@@ -25,10 +27,13 @@ function! ale#util#ShowMessage(string) abort
     if has('nvim') || (a:string !~? "\n" && len(a:string) < &columns)
         execute 'echo a:string'
     else
-        call ale#preview#Show(split(a:string, "\n"), {
-        \   'filetype': 'ale-preview.message',
-        \   'stay_here': 1,
-        \})
+        call ale#preview#Show(split(a:string, "\n"), extend(
+        \   {
+        \       'filetype': 'ale-preview.message',
+        \       'stay_here': 1,
+        \   },
+        \   l:options,
+        \))
     endif
 endfunction
 
@@ -418,7 +423,10 @@ function! ale#util#Writefile(buffer, lines, filename) abort
     \   ? map(copy(a:lines), 'substitute(v:val, ''\r*$'', ''\r'', '''')')
     \   : a:lines
 
-    call writefile(l:corrected_lines, a:filename, 'S') " no-custom-checks
+    " Set binary flag if buffer doesn't have eol and nofixeol to avoid appending newline
+    let l:flags = !getbufvar(a:buffer, '&eol') && exists('+fixeol') && !&fixeol ? 'bS' : 'S'
+
+    call writefile(l:corrected_lines, a:filename, l:flags) " no-custom-checks
 endfunction
 
 if !exists('s:patial_timers')

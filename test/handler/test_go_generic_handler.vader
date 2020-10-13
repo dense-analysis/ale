@@ -15,8 +15,24 @@ Execute(The golang handler should return the correct filenames):
   \     'type': 'E',
   \     'filename': ale#path#Simplify(expand('%:p:h') . '/other.go'),
   \   },
+  \   {
+  \     'lnum': 18,
+  \     'col': 0,
+  \     'text': 'random error',
+  \     'type': 'E',
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/go1.14.go'),
+  \   },
+  \   {
+  \     'lnum': 36,
+  \     'col': 2,
+  \     'text': 'another random error',
+  \     'type': 'E',
+  \     'filename': ale#path#Simplify(expand('%:p:h') . '/anothergo1.14.go'),
+  \   },
   \ ],
   \ ale#handlers#go#Handler(bufnr(''), [
   \   'test.go:27: some error',
   \   'other.go:27:5: some error with a column',
+  \   'vet: go1.14.go:18:0: random error',
+  \   'vet: anothergo1.14.go:36:2: another random error',
   \ ])

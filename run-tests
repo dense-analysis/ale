@@ -83,6 +83,13 @@ while [ $# -ne 0 ]; do
         run_neovim_03_tests=0
         shift
     ;;
+    --fast)
+        run_vim_80_tests=0
+        run_vim_81_tests=0
+        run_neovim_02_tests=0
+        run_neovim_03_tests=1
+        shift
+    ;;
     --help)
         echo 'Usage: ./run-tests [OPTION]... [FILE]...'
         echo
@@ -99,6 +106,7 @@ while [ $# -ne 0 ]; do
         echo '  --vim-80-only     Run tests only for Vim 8.0'
         echo '  --vim-81-only     Run tests only for Vim 8.1'
         echo '  --linters-only    Run only Vint and custom checks'
+        echo '  --fast            Run only the fastest Vim and custom checks'
         echo '  --help            Show this help text'
         echo '  --                Stop parsing options after this'
         exit 0

@@ -1,4 +1,8 @@
 Before:
+  Save g:ale_enabled
+
+  let g:ale_enabled = 0
+
   runtime autoload/ale/code_action.vim
   runtime autoload/ale/util.vim
 
@@ -35,6 +39,8 @@ Before:
   endfunction!
 
 After:
+  Restore
+
   " Close the extra buffers if we opened it.
   if bufnr(g:file1) != -1
     execute ':bp! | :bd! ' . bufnr(g:file1)
@@ -50,9 +56,10 @@ After:
     call delete(g:file2)
   endif
 
-  unlet g:file1
-  unlet g:file2
-  unlet g:test
+  unlet! g:file1
+  unlet! g:file2
+  unlet! g:test
+  unlet! g:changes
   delfunction WriteFileAndEdit
 
   runtime autoload/ale/code_action.vim
@@ -350,3 +357,36 @@ Execute(It should just modify file when should_save is set to v:false):
   \ '  value: string',
   \ '}',
   \], getline(1, '$')
+
+Given typescript(An example TypeScript file):
+  type Foo = {}
+
+  export interface ISomething {
+    fooLongName: Foo | null
+  }
+
+  export class SomethingElse implements ISomething {
+    // Bindings
+    fooLongName!: ISomething['fooLongName']
+  }
+
+Execute():
+  let g:changes = [
+  \ {'end': {'offset': 14, 'line': 4}, 'newText': 'foo', 'start': {'offset': 3, 'line': 4}},
+  \ {'end': {'offset': 40, 'line': 9}, 'newText': 'foo', 'start': {'offset': 29, 'line': 9}},
+  \ {'end': {'offset': 14, 'line': 9}, 'newText': 'foo', 'start': {'offset': 3, 'line': 9}},
+  \]
+
+  call ale#code_action#ApplyChanges(expand('%:p'), g:changes, 0)
+
+Expect(The changes should be applied correctly):
+  type Foo = {}
+
+  export interface ISomething {
+    foo: Foo | null
+  }
+
+  export class SomethingElse implements ISomething {
+    // Bindings
+    foo!: ISomething['foo']
+  }

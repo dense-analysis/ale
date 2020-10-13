@@ -19,6 +19,9 @@ init:
   # Stop git from changing newlines
   - git config --global core.autocrlf input
 
+# NOTE: If you change the Vim or Vader versions here, please also update the
+# instructions for running tests on Windows in ale-development.txt
+
 install:
   # Download and unpack Vim
   - ps: >-

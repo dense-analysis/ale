@@ -64,6 +64,9 @@ endfunction
 
 " Used only in tests.
 function! ale#lsp#GetConnections() abort
+    " This command will throw from the sandbox.
+    let &l:equalprg=&l:equalprg
+
     return s:connections
 endfunction
 
@@ -196,11 +199,23 @@ function! s:UpdateCapabilities(conn, capabilities) abort
         let a:conn.capabilities.hover = 1
     endif
 
+    if type(get(a:capabilities, 'hoverProvider')) is v:t_dict
+        let a:conn.capabilities.hover = 1
+    endif
+
     if get(a:capabilities, 'referencesProvider') is v:true
         let a:conn.capabilities.references = 1
     endif
 
+    if type(get(a:capabilities, 'referencesProvider')) is v:t_dict
+        let a:conn.capabilities.references = 1
+    endif
+
     if get(a:capabilities, 'renameProvider') is v:true
+        let a:conn.capabilities.rename = 1
+    endif
+
+    if type(get(a:capabilities, 'renameProvider')) is v:t_dict
         let a:conn.capabilities.rename = 1
     endif
 
@@ -220,11 +235,23 @@ function! s:UpdateCapabilities(conn, capabilities) abort
         let a:conn.capabilities.definition = 1
     endif
 
+    if type(get(a:capabilities, 'definitionProvider')) is v:t_dict
+        let a:conn.capabilities.definition = 1
+    endif
+
     if get(a:capabilities, 'typeDefinitionProvider') is v:true
         let a:conn.capabilities.typeDefinition = 1
     endif
 
+    if type(get(a:capabilities, 'typeDefinitionProvider')) is v:t_dict
+        let a:conn.capabilities.typeDefinition = 1
+    endif
+
     if get(a:capabilities, 'workspaceSymbolProvider') is v:true
+        let a:conn.capabilities.symbol_search = 1
+    endif
+
+    if type(get(a:capabilities, 'workspaceSymbolProvider')) is v:t_dict
         let a:conn.capabilities.symbol_search = 1
     endif
 endfunction
@@ -425,6 +452,7 @@ function! ale#lsp#StartProgram(conn_id, executable, command) abort
     endif
 
     if l:started && !l:conn.is_tsserver
+        let l:conn.initialized = 0
         call s:SendInitMessage(l:conn)
     endif
 

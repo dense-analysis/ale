@@ -11,11 +11,12 @@ After:
 
 Execute(The default gosimple command should be correct):
   AssertLinter 'gosimple',
-  \ ale#path#CdString(expand('%:p:h')) . ' gosimple .'
+  \ ale#path#BufferCdString(bufnr(''))
+  \ . ' gosimple .'
 
 Execute(The gosimple command should support Go environment variables):
   let b:ale_go_go111module = 'on'
 
   AssertLinter 'gosimple',
-  \ ale#path#CdString(expand('%:p:h')) . ' '
-  \ . ale#Env('GO111MODULE', 'on') . 'gosimple .'
+  \ ale#path#BufferCdString(bufnr(''))
+  \ . ' ' . ale#Env('GO111MODULE', 'on') . 'gosimple .'

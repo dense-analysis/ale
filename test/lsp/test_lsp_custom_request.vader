@@ -25,7 +25,6 @@ Before:
   \   'name': g:linter_name,
   \   'project_root': {b -> g:project_root},
   \   'aliases': [],
-  \   'language_callback': {b -> 'cpp'},
   \   'read_buffer': 1,
   \   'command': '%e'
   \ }]

@@ -34,18 +34,20 @@ Execute(The build directory should be configurable):
   \ ale#Escape('clazy-standalone')
   \   . ' -checks=' . ale#Escape('level1') . ' -p ' . ale#Escape('/foo/bar') . ' %s'
 
-Execute(The build directory should be ignored for header files):
+Execute(The build directory should be used for header files):
   call ale#test#SetFilename('test.h')
 
   let b:ale_c_build_dir = '/foo/bar'
 
   AssertLinter 'clazy-standalone',
-  \ ale#Escape('clazy-standalone') . ' -checks=' . ale#Escape('level1') . ' %s'
+  \ ale#Escape('clazy-standalone')
+  \   . ' -checks=' . ale#Escape('level1') . ' -p ' . ale#Escape('/foo/bar') . ' %s'
 
   call ale#test#SetFilename('test.hpp')
 
   AssertLinter 'clazy-standalone',
-  \ ale#Escape('clazy-standalone') . ' -checks=' . ale#Escape('level1') . ' %s'
+  \ ale#Escape('clazy-standalone')
+  \   . ' -checks=' . ale#Escape('level1') . ' -p ' . ale#Escape('/foo/bar') . ' %s'
 
 Execute(The executable should be configurable):
   let b:ale_cpp_clazy_executable = 'foobar'

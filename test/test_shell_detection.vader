@@ -98,6 +98,16 @@ Execute(The ksh dialect should be used for shellcheck if b:is_kornshell is 1):
 
   AssertEqual 'ksh', ale#handlers#shellcheck#GetDialectArgument(bufnr(''))
 
+Execute(The filetype should be used as the default shell type when there is no hashbang line):
+  set filetype=zsh
+  AssertEqual 'zsh', ale#handlers#sh#GetShellType(bufnr(''))
+
+  set filetype=tcsh
+  AssertEqual 'tcsh', ale#handlers#sh#GetShellType(bufnr(''))
+
+  set filetype=python
+  AssertEqual '', ale#handlers#sh#GetShellType(bufnr(''))
+
 Given(A file with /bin/ash):
   #!/bin/ash
 

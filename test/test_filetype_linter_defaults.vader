@@ -32,14 +32,14 @@ Execute(The defaults for the help filetype should be correct):
   AssertEqual [], GetLinterNames('help')
 
 Execute(The defaults for the python filetype should be correct):
-  AssertEqual ['flake8', 'mypy', 'pylint'], GetLinterNames('python')
+  AssertEqual ['flake8', 'mypy', 'pylint', 'pyright'], GetLinterNames('python')
 
   let g:ale_linters_explicit = 1
 
   AssertEqual [], GetLinterNames('python')
 
 Execute(The defaults for the rust filetype should be correct):
-  AssertEqual ['cargo'], GetLinterNames('rust')
+  AssertEqual ['cargo', 'rls'], GetLinterNames('rust')
 
   let g:ale_linters_explicit = 1
 

@@ -1,8 +1,10 @@
 Before:
+  Save g:ale_enabled
   Save g:ale_set_lists_synchronously
   Save g:ale_buffer_info
   Save &shell
 
+  let g:ale_enabled = 1
   let g:ale_buffer_info = {}
   let g:ale_set_lists_synchronously = 1
 

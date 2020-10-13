@@ -6,6 +6,6 @@ After:
 
 Execute(The linter should run from the directory of the file in the buffer):
   AssertLinter 'gqlint',
-  \ ale#path#CdString(expand('%:p:h'))
+  \ ale#path#BufferCdString(bufnr(''))
   \   . 'gqlint --reporter=simple'
   \   . ' %t'

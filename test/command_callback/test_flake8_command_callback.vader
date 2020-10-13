@@ -34,11 +34,50 @@ Execute(The flake8 callbacks should return the correct default values):
   \]
 
 Execute(The option for disabling changing directories should work):
-  let g:ale_python_flake8_change_directory = 0
+  let g:ale_python_flake8_change_directory = 'off'
 
   AssertLinter 'flake8', [
   \ ale#Escape('flake8') . ' --version',
   \ ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
+  \]
+
+  let g:ale_python_flake8_change_directory = 0
+
+  AssertLinter 'flake8', [
+  \ ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
+  \]
+
+  " Invalid options should be considered the same as turning the setting off.
+  let g:ale_python_flake8_change_directory = 'xxx'
+
+  AssertLinter 'flake8', [
+  \ ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
+  \]
+
+Execute(The option for changing directory to project root should work):
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/namespace_package_tox/namespace/foo/bar.py')
+
+  AssertLinter 'flake8', [
+  \ ale#Escape('flake8') . ' --version',
+  \ ale#path#CdString(ale#python#FindProjectRootIni(bufnr('')))
+  \   . ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
+  \]
+
+Execute(The option for changing directory to file dir should work):
+  let g:ale_python_flake8_change_directory = 'file'
+  silent execute 'file ' . fnameescape(g:dir . '/python_paths/namespace_package_tox/namespace/foo/bar.py')
+
+  AssertLinter 'flake8', [
+  \ ale#Escape('flake8') . ' --version',
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
+  \]
+
+  let g:ale_python_flake8_change_directory = 1
+
+  AssertLinter 'flake8', [
+  \ ale#path#BufferCdString(bufnr(''))
+  \   . ale#Escape('flake8') . ' --format=default --stdin-display-name %s -',
   \]
 
 Execute(The flake8 command callback should let you set options):
@@ -163,5 +202,5 @@ Execute(Pipenv is detected when python_flake8_auto_pipenv is set):
   call ale#test#SetFilename('../python_fixtures/pipenv/whatever.py')
 
   AssertLinter 'pipenv',
-  \ ale#path#BufferCdString(bufnr(''))
+  \ ale#path#CdString(ale#python#FindProjectRootIni(bufnr('')))
   \   . ale#Escape('pipenv') . ' run flake8 --format=default --stdin-display-name %s -'
