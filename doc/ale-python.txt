@@ -36,6 +36,8 @@ ALE will look for configuration files with the following filenames. >
   .pylintrc
   Pipfile
   Pipfile.lock
+  poetry.lock 
+  pyproject.toml
 <
 
 The first directory containing any of the files named above will be used.
