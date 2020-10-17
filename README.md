@@ -328,11 +328,13 @@ git clone https://github.com/dense-analysis/ale.git
 ### 3.iii. Installation with Vundle
 
 You can install this plugin using [Vundle](https://github.com/VundleVim/Vundle.vim)
-by using the path on GitHub for this repository.
+by adding the GitHub path for this repository to your `~/.vimrc`:
 
 ```vim
 Plugin 'dense-analysis/ale'
 ```
+
+Then run the command `:PluginInstall` in Vim.
 
 See the Vundle documentation for more information.
 
@@ -341,12 +343,15 @@ See the Vundle documentation for more information.
 ### 3.iiii. Installation with Vim-Plug
 
 You can install this plugin using [Vim-Plug](https://github.com/junegunn/vim-plug)
-by adding the GitHub path for this repository to your `~/.vimrc`
-and running `:PluginInstall`.
+by adding the GitHub path for this repository to your `~/.vimrc`:
 
 ```vim
 Plug 'dense-analysis/ale'
 ```
+
+Then run the command `:PlugInstall` in Vim.
+
+See the Vim-Plug documentation for more information.
 
 <a name="contributing"></a>
 
