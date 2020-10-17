@@ -342,7 +342,7 @@ See the Vundle documentation for more information.
 
 You can install this plugin using [Vim-Plug](https://github.com/junegunn/vim-plug)
 by adding the GitHub path for this repository to your `~/.vimrc`
-and running `:PlugInstall`.
+and running `:PluginInstall`.
 
 ```vim
 Plug 'dense-analysis/ale'
