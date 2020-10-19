@@ -122,7 +122,7 @@ let s:default_registry = {
 \   },
 \   'scalafmt': {
 \       'function': 'ale#fixers#scalafmt#Fix',
-\       'suggested_filetypes': ['scala'],
+\       'suggested_filetypes': ['sbt', 'scala'],
 \       'description': 'Fix Scala files using scalafmt',
 \   },
 \   'sorbet': {
