@@ -1,6 +1,8 @@
 " Author: Alistair Bill <@alibabzo>
 " Description: nix-instantiate linter for nix files
 
+call ale#Set('nix_instantiate_executable', 'nix-instantiate')
+
 function! ale_linters#nix#nix#Handle(buffer, lines) abort
     let l:pattern = '^\(.\+\): \(.\+\), at .*:\(\d\+\):\(\d\+\)$'
     let l:output = []
@@ -20,7 +22,7 @@ endfunction
 call ale#linter#Define('nix', {
 \   'name': 'nix',
 \   'output_stream': 'stderr',
-\   'executable': 'nix-instantiate',
-\   'command': 'nix-instantiate --parse -',
+\   'executable': {b -> ale#Var(b, 'nix_instantiate_executable')},
+\   'command': '%e --parse -',
 \   'callback': 'ale_linters#nix#nix#Handle',
 \})

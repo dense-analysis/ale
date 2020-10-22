@@ -3,10 +3,21 @@ ALE Nix Integration                                           *ale-nix-options*
 
 
 ===============================================================================
-nixpkgs-fmt                                                 *ale-nix-nixpkgs-fmt*
+nix                                                                   *ale-nix*
 
-g:ale_nix_nixpkgsfmt_executable                *g:ale_nix_nixpkgsfmt_executable*
-                                               *b:ale_nix_nixpkgsfmt_executable*
+g:ale_nix_instantiate_executable             *g:ale_nix_instantiate_executable*
+                                             *b:ale_nix_instantiate_executable*
+  Type: |String|
+  Default: `'nix-instantiate'`
+
+  This variable sets executable used for nix-instantiate expression parsing.
+
+
+===============================================================================
+nixpkgs-fmt                                               *ale-nix-nixpkgs-fmt*
+
+g:ale_nix_nixpkgsfmt_executable               *g:ale_nix_nixpkgsfmt_executable*
+                                              *b:ale_nix_nixpkgsfmt_executable*
   Type: |String|
   Default: `'nixpkgs-fmt'`
 
