@@ -361,6 +361,7 @@ Notes:
   * `purescript-language-server`
   * `purty`
 * Python
+  * `autoimport`
   * `autopep8`
   * `bandit`
   * `black`
