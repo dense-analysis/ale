@@ -159,6 +159,7 @@ function! ale#lsp_linter#HandleLSPResponse(conn_id, response) abort
         call s:HandleTSServerDiagnostics(a:response, 'syntax')
     elseif get(a:response, 'type', '') is# 'event'
     \&& get(a:response, 'event', '') is# 'suggestionDiag'
+    \&& get(g:, 'ale_lsp_suggestions', '1') == 1
         call s:HandleTSServerDiagnostics(a:response, 'suggestion')
     endif
 endfunction
