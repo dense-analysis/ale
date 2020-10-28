@@ -6,7 +6,7 @@ After:
 
 Execute(The default command should be correct.):
     let g:cmd = ale_linters#erlang#erlc#GetCommand(bufnr(''))
-    let g:regex = '^''\?erlc''\?\s\+-o\s\+[^\s]\+\s\+%t'
+    let g:regex = 'erlc.\+-o.\+%t'
     let g:matched = match(g:cmd, g:regex)
 
     " match returns -1 if not found
@@ -18,7 +18,7 @@ Execute(The default command should be correct.):
 Execute(The command should accept configured executable.):
     let b:ale_erlang_erlc_executable = '/usr/bin/erlc'
     let g:cmd = ale_linters#erlang#erlc#GetCommand(bufnr(''))
-    let g:regex = '^''\?/usr/bin/erlc''\?\s\+-o\s\+[^\s]\+\s\+%t'
+    let g:regex = '/usr/bin/erlc.\+-o.\+%t'
     let g:matched = match(g:cmd, g:regex)
 
     " match returns -1 if not found
@@ -30,7 +30,7 @@ Execute(The command should accept configured executable.):
 Execute(The command should accept configured options.):
     let b:ale_erlang_erlc_options = '-I include'
     let g:cmd = ale_linters#erlang#erlc#GetCommand(bufnr(''))
-    let g:regex = '^''\?erlc''\?\s\+-o\s\+[^\s]\+\s\+-I include\s\+%t'
+    let g:regex = 'erlc.\+-o.\+-I include.\+%t'
     let g:matched = match(g:cmd, g:regex)
 
     " match returns -1 if not found
