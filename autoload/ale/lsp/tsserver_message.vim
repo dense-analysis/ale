@@ -103,3 +103,16 @@ function! ale#lsp#tsserver_message#OrganizeImports(buffer) abort
     \   },
     \}]
 endfunction
+
+function! ale#lsp#tsserver_message#GetCodeFixes(buffer, line, column, end_line, end_column, error_codes) abort
+    " The lines and columns are 1-based.
+    " The errors codes must be a list of tsserver error codes to fix.
+    return [0, 'ts@getCodeFixes', {
+    \   'startLine': a:line,
+    \   'startOffset': a:column,
+    \   'endLine': a:end_line,
+    \   'endOffset': a:end_column + 1,
+    \   'file': expand('#' . a:buffer . ':p'),
+    \   'errorCodes': a:error_codes,
+    \}]
+endfunction

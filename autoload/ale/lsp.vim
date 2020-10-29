@@ -350,6 +350,7 @@ function! ale#lsp#MarkConnectionAsTsserver(conn_id) abort
     let l:conn.capabilities.definition = 1
     let l:conn.capabilities.symbol_search = 1
     let l:conn.capabilities.rename = 1
+    let l:conn.capabilities.code_actions = 1
 endfunction
 
 function! s:SendInitMessage(conn) abort
