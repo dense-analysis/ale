@@ -222,6 +222,8 @@ formatting.
   * [idris](http://www.idris-lang.org/)
 * Ink
   * [ink-language-server](https://github.com/ephread/ink-language-server)
+* Inko
+  * [inko](https://inko-lang.org/) :floppy_disk:
 * ISPC
   * [ispc](https://ispc.github.io/) :floppy_disk:
 * Java

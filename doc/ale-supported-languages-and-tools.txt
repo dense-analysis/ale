@@ -213,6 +213,8 @@ Notes:
   * `idris`
 * Ink
   * `ink-language-server`
+* Inko
+  * `inko` !!
 * ISPC
   * `ispc`!!
 * Java
