@@ -44,6 +44,7 @@ function! ale#lsp#Register(executable_or_address, project, init_options) abort
         \       'definition': 0,
         \       'typeDefinition': 0,
         \       'symbol_search': 0,
+        \       'code_actions': 0,
         \   },
         \}
     endif
