@@ -125,6 +125,19 @@ g:ale_haskell_hlint_options                       g:ale_haskell_hlint_options
 
 
 ===============================================================================
+ormolu                                                     *ale-haskell-ormolu*
+
+g:ale_haskell_ormolu_executable               *g:ale_haskell_ormolu_executable*
+                                              *b:ale_haskell_ormolu_executable*
+  Type: |String|
+  Default: `'ormolu'`
+
+  This variable can be changed to use a different executable for ormolu.
+
+
+
+
+===============================================================================
 stack-build                                           *ale-haskell-stack-build*
 
 g:ale_haskell_stack_build_options           *g:ale_haskell_stack_build_options*

@@ -230,6 +230,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'Fix Haskell files with brittany.',
 \   },
+\   'ormolu': {
+\       'function': 'ale#fixers#ormolu#Fix',
+\       'suggested_filetypes': ['haskell'],
+\       'description': 'Fix Haskell files with ormolu.',
+\   },
 \   'hindent': {
 \       'function': 'ale#fixers#hindent#Fix',
 \       'suggested_filetypes': ['haskell'],
