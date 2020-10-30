@@ -3106,6 +3106,15 @@ ALERename                                                           *ALERename*
   in those files will not be updated.
 
 
+ALECodeFix                                                         *ALECodeFix*
+
+  Code fix using `tsserver`.
+
+  The code fix will be attempted in location where the cursor is resting on
+  error that came from `tsserver`. If there are multiple code fixes suggested
+  then user will be asked to select one
+
+
 ALERepeatSelection                                         *ALERepeatSelection*
 
   Repeat the last selection displayed in the preview window.
