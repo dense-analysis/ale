@@ -29,14 +29,14 @@ function! ale#codefix#HandleTSServerResponse(conn_id, response) abort
         let l:code_fix_to_apply = 1
     else
         let l:codefix_no = 1
-        let l:codefixstring = ''
+        let l:codefixstring = "Code Fixes:\n"
 
         for l:codefix in a:response.body
             let l:codefixstring .= l:codefix_no . ") " . l:codefix.description . "\n"
             let l:codefix_no += 1
         endfor
 
-        let l:codefixstring .= 'Apply code fix: '
+        let l:codefixstring .= 'Type number and <Enter> (empty cancels): '
 
         let l:code_fix_to_apply = ale#util#Input(l:codefixstring, '')
         let l:code_fix_to_apply = str2nr(l:code_fix_to_apply)
@@ -51,7 +51,7 @@ function! ale#codefix#HandleTSServerResponse(conn_id, response) abort
     call ale#code_action#HandleCodeAction({
     \ 'description': 'codefix',
     \ 'changes': l:changes,
-    \}, v:false)
+    \}, {})
 endfunction
 
 function! s:OnReady(line, column, linter, lsp_details) abort
