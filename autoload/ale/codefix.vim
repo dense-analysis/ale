@@ -32,7 +32,7 @@ function! ale#codefix#HandleTSServerResponse(conn_id, response) abort
         let l:codefixstring = "Code Fixes:\n"
 
         for l:codefix in a:response.body
-            let l:codefixstring .= l:codefix_no . ") " . l:codefix.description . "\n"
+            let l:codefixstring .= l:codefix_no . ') ' . l:codefix.description . "\n"
             let l:codefix_no += 1
         endfor
 
