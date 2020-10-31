@@ -306,3 +306,37 @@ Execute(tsserver codefix requests should be sent):
   \   }]
   \ ],
   \ g:message_list
+
+
+Execute(tsserver codefix requests should be sent only for error with code):
+  call ale#linter#Reset()
+
+  runtime ale_linters/typescript/tsserver.vim
+  let g:ale_buffer_info = {bufnr(''): {'loclist': [{'lnum': 2, 'col': 5}, {'lnum': 2, 'col': 5, 'code': 2304}]}}
+  call setpos('.', [bufnr(''), 2, 5, 0])
+
+  ALECodeFix
+
+  " We shouldn't register the callback yet.
+  AssertEqual '''''', string(g:Callback)
+
+  AssertEqual type(function('type')), type(g:InitCallback)
+  call g:InitCallback()
+
+  AssertEqual 'code_actions', g:capability_checked
+  AssertEqual
+  \ 'function(''ale#codefix#HandleTSServerResponse'')',
+  \ string(g:Callback)
+  AssertEqual
+  \ [
+  \   ale#lsp#tsserver_message#Change(bufnr('')),
+  \   [0, 'ts@getCodeFixes', {
+  \     'startLine': 2,
+  \     'startOffset': 5,
+  \     'endLine': 2,
+  \     'endOffset': 6,
+  \     'file': expand('%:p'),
+  \     'errorCodes': [2304],
+  \   }]
+  \ ],
+  \ g:message_list

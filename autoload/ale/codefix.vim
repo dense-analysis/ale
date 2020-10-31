@@ -77,7 +77,7 @@ function! s:OnReady(line, column, linter, lsp_details) abort
     let l:nearest_error_diff = -1
 
     for l:error in get(g:ale_buffer_info[l:buffer], 'loclist', [])
-        if l:error.lnum == a:line
+        if has_key(l:error, 'code') && l:error.lnum == a:line
             let l:diff = abs(l:error.col - a:column)
 
             if l:nearest_error_diff == -1 || l:diff < l:nearest_error_diff
