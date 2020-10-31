@@ -51,6 +51,20 @@ function! ale#list#GetCombinedList() abort
     return l:list
 endfunction
 
+function! s:SortItems(i1, i2) abort
+  if a:i1.type ==# 'E' || a:i2.type ==# 'E'
+    if a:i1.type ==# 'E' && a:i2.type ==# 'E'
+      return a:i1.bufnr == a:i2.bufnr ? 0 : a:i1.bufnr > a:i2.bufnr ? 1 : -1
+    endif
+    if a:i1.type ==# 'E'
+      return -1
+    else
+      return 1
+    endif
+  endif
+  return a:i1.bufnr == a:i2.bufnr ? 0 : a:i1.bufnr > a:i2.bufnr ? 1 : -1
+endfunction
+
 function! s:FixList(buffer, list) abort
     let l:format = ale#Var(a:buffer, 'loclist_msg_format')
     let l:new_list = []
@@ -67,6 +81,8 @@ function! s:FixList(buffer, list) abort
 
         call add(l:new_list, l:fixed_item)
     endfor
+
+    call sort(l:new_list, 's:SortItems')
 
     return l:new_list
 endfunction
