@@ -1556,6 +1556,7 @@ g:ale_linters                                                   *g:ale_linters*
   following values: >
 
   {
+  \   'apkbuild': ['apkbuild_lint', 'secfixes_check'],
   \   'csh': ['shell'],
   \   'elixir': ['credo', 'dialyxir', 'dogma'],
   \   'go': ['gofmt', 'golint', 'go vet'],
