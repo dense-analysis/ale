@@ -1006,7 +1006,7 @@ function! ale#completion#HandleUserData(completed_item) abort
     \|| l:source is# 'ale-import'
     \|| l:source is# 'ale-omnifunc'
         for l:code_action in get(l:user_data, 'code_actions', [])
-            call ale#code_action#HandleCodeAction(l:code_action, v:false)
+            call ale#code_action#HandleCodeAction(l:code_action, {})
         endfor
     endif
 

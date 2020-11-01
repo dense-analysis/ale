@@ -85,7 +85,8 @@ Execute(It should modify and save multiple files):
   \ 'import D from "D"',
   \], g:file2, 'S')
 
-  call ale#code_action#HandleCodeAction({
+  call ale#code_action#HandleCodeAction(
+  \ {
   \   'changes': [{
   \      'fileName': g:file1,
   \      'textChanges': [{
@@ -122,8 +123,10 @@ Execute(It should modify and save multiple files):
   \       },
   \       'newText': "import {A, B} from 'module'\n\n",
   \     }]
-  \  }],
-  \}, v:true)
+  \   }],
+  \ },
+  \ {'should_save': 1},
+  \)
 
   AssertEqual [
   \ 'class Value {',
@@ -153,7 +156,8 @@ Execute(Beginning of file can be modified):
   \]
   call writefile(g:test.text, g:file1, 'S')
 
-  call ale#code_action#HandleCodeAction({
+  call ale#code_action#HandleCodeAction(
+  \ {
   \   'changes': [{
   \      'fileName': g:file1,
   \      'textChanges': [{
@@ -168,7 +172,9 @@ Execute(Beginning of file can be modified):
   \        'newText': "type A: string\ntype B: number\n",
   \      }],
   \   }]
-  \}, v:true)
+  \ },
+  \ {'should_save': 1},
+  \)
 
   AssertEqual [
   \  'type A: string',
@@ -184,22 +190,25 @@ Execute(End of file can be modified):
   \]
   call writefile(g:test.text, g:file1, 'S')
 
-  call ale#code_action#HandleCodeAction({
+  call ale#code_action#HandleCodeAction(
+  \ {
   \   'changes': [{
-  \      'fileName': g:file1,
-  \      'textChanges': [{
-  \        'start': {
-  \          'line': 4,
-  \          'offset': 1,
-  \        },
-  \        'end': {
-  \          'line': 4,
-  \          'offset': 1,
-  \        },
-  \        'newText': "type A: string\ntype B: number\n",
-  \      }],
+  \    'fileName': g:file1,
+  \    'textChanges': [{
+  \      'start': {
+  \        'line': 4,
+  \        'offset': 1,
+  \      },
+  \      'end': {
+  \        'line': 4,
+  \        'offset': 1,
+  \      },
+  \      'newText': "type A: string\ntype B: number\n",
+  \     }],
   \   }]
-  \}, v:true)
+  \ },
+  \ {'should_save': 1},
+  \)
 
   AssertEqual g:test.text + [
   \  'type A: string',
@@ -219,7 +228,8 @@ Execute(Current buffer contents will be reloaded):
   execute 'edit ' . g:file1
   let g:test.buffer = bufnr(g:file1)
 
-  call ale#code_action#HandleCodeAction({
+  call ale#code_action#HandleCodeAction(
+  \ {
   \   'changes': [{
   \      'fileName': g:file1,
   \      'textChanges': [{
@@ -234,7 +244,9 @@ Execute(Current buffer contents will be reloaded):
   \        'newText': "type A: string\ntype B: number\n",
   \      }],
   \   }]
-  \}, v:true)
+  \ },
+  \ {'should_save': 1},
+  \)
 
   AssertEqual [
   \  'type A: string',
@@ -256,11 +268,11 @@ Execute(Cursor will not move when it is before text change):
   let g:test.changes = g:test.create_change(2, 3, 2, 8, 'value2')
 
   call setpos('.', [0, 1, 1, 0])
-  call ale#code_action#HandleCodeAction(g:test.changes, v:true)
+  call ale#code_action#HandleCodeAction(g:test.changes, {'should_save': 1})
   AssertEqual [1, 1], getpos('.')[1:2]
 
   call setpos('.', [0, 2, 2, 0])
-  call ale#code_action#HandleCodeAction(g:test.changes, v:true)
+  call ale#code_action#HandleCodeAction(g:test.changes, {'should_save': 1})
   AssertEqual [2, 2], getpos('.')[1:2]
 
 # ====C====
@@ -271,7 +283,7 @@ Execute(Cursor column will move to the change end when cursor between start/end)
     call WriteFileAndEdit()
     call setpos('.', [0, 2, r, 0])
     AssertEqual '  value: string', getline('.')
-    call ale#code_action#HandleCodeAction(g:test.changes, v:true)
+    call ale#code_action#HandleCodeAction(g:test.changes, {'should_save': 1})
     AssertEqual '  value2: string', getline('.')
     AssertEqual [2, 9], getpos('.')[1:2]
   endfor
@@ -283,7 +295,9 @@ Execute(Cursor column will move back when new text is shorter):
   call setpos('.', [0, 2, 8, 0])
   AssertEqual '  value: string', getline('.')
   call ale#code_action#HandleCodeAction(
-  \ g:test.create_change(2, 3, 2, 8, 'val'), v:true)
+  \ g:test.create_change(2, 3, 2, 8, 'val'),
+  \ {'should_save': 1},
+  \)
   AssertEqual '  val: string', getline('.')
   AssertEqual [2, 6], getpos('.')[1:2]
 
@@ -295,7 +309,7 @@ Execute(Cursor column will move forward when new text is longer):
   call setpos('.', [0, 2, 8, 0])
   AssertEqual '  value: string', getline('.')
   call ale#code_action#HandleCodeAction(
-  \ g:test.create_change(2, 3, 2, 8, 'longValue'), v:true)
+  \ g:test.create_change(2, 3, 2, 8, 'longValue'), {'should_save': 1})
   AssertEqual '  longValue: string', getline('.')
   AssertEqual [2, 12], getpos('.')[1:2]
 
@@ -307,7 +321,7 @@ Execute(Cursor line will move when updates are happening on lines above):
   call setpos('.', [0, 3, 1, 0])
   AssertEqual '}', getline('.')
   call ale#code_action#HandleCodeAction(
-  \ g:test.create_change(1, 1, 2, 1, "test\ntest\n"), v:true)
+  \ g:test.create_change(1, 1, 2, 1, "test\ntest\n"), {'should_save': 1})
   AssertEqual '}', getline('.')
   AssertEqual [4, 1], getpos('.')[1:2]
 
@@ -319,7 +333,7 @@ Execute(Cursor line and column will move when change on lines above and just bef
   call setpos('.', [0, 2, 2, 0])
   AssertEqual '  value: string', getline('.')
   call ale#code_action#HandleCodeAction(
-  \ g:test.create_change(1, 1, 2, 1, "test\ntest\n123"), v:true)
+  \ g:test.create_change(1, 1, 2, 1, "test\ntest\n123"), {'should_save': 1})
   AssertEqual '123  value: string', getline('.')
   AssertEqual [3, 5], getpos('.')[1:2]
 
@@ -331,7 +345,7 @@ Execute(Cursor line and column will move at the end of changes):
   call setpos('.', [0, 2, 10, 0])
   AssertEqual '  value: string', getline('.')
   call ale#code_action#HandleCodeAction(
-  \ g:test.create_change(1, 1, 3, 1, "test\n"), v:true)
+  \ g:test.create_change(1, 1, 3, 1, "test\n"), {'should_save': 1})
   AssertEqual '}', getline('.')
   AssertEqual [2, 1], getpos('.')[1:2]
 
@@ -342,14 +356,14 @@ Execute(Cursor will not move when changes happening on lines >= cursor, but afte
   call setpos('.', [0, 2, 3, 0])
   AssertEqual '  value: string', getline('.')
   call ale#code_action#HandleCodeAction(
-  \ g:test.create_change(2, 10, 3, 1, "number\n"), v:true)
+  \ g:test.create_change(2, 10, 3, 1, "number\n"), {'should_save': 1})
   AssertEqual '  value: number', getline('.')
   AssertEqual [2, 3], getpos('.')[1:2]
 
 Execute(It should just modify file when should_save is set to v:false):
   call WriteFileAndEdit()
   let g:test.change = g:test.create_change(1, 1, 1, 1, "import { writeFile } from 'fs';\n")
-  call ale#code_action#HandleCodeAction(g:test.change, v:false)
+  call ale#code_action#HandleCodeAction(g:test.change, {})
   AssertEqual 1, getbufvar(bufnr(''), '&modified')
   AssertEqual [
   \ 'import { writeFile } from ''fs'';',

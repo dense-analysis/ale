@@ -65,8 +65,8 @@ Before:
     return g:server_started_value
   endfunction
 
-  function! ale#code_action#HandleCodeAction(code_action, should_save) abort
-    Assert !a:should_save
+  function! ale#code_action#HandleCodeAction(code_action, options) abort
+    Assert !get(a:options, 'should_save')
 
     call add(g:code_action_list, a:code_action)
   endfunction
