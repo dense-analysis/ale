@@ -19,6 +19,9 @@ Notes:
   * `ansible-lint`
 * API Blueprint
   * `drafter`
+* APKBUILD
+  * `apkbuild-lint`
+  * `secfixes-check`
 * AsciiDoc
   * `alex`!!
   * `languagetool`!!
