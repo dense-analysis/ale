@@ -2599,6 +2599,9 @@ documented in additional help files.
     gnatpp................................|ale-ada-gnatpp|
   ansible.................................|ale-ansible-options|
     ansible-lint..........................|ale-ansible-ansible-lint|
+  apkbuild................................|ale-apkbuild-options|
+    apkbuild-lint.........................|ale-apkbuild-apkbuild-lint|
+    secfixes-check........................|ale-apkbuild-secfixes-check|
   asciidoc................................|ale-asciidoc-options|
     write-good............................|ale-asciidoc-write-good|
     textlint..............................|ale-asciidoc-textlint|
