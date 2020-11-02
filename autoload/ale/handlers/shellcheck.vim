@@ -13,15 +13,6 @@ function! ale#handlers#shellcheck#GetDialectArgument(buffer) abort
         return l:shell_type
     endif
 
-    " If there's no hashbang, try using Vim's buffer variables.
-    if getbufvar(a:buffer, 'is_bash', 0)
-        return 'bash'
-    elseif getbufvar(a:buffer, 'is_sh', 0)
-        return 'sh'
-    elseif getbufvar(a:buffer, 'is_kornshell', 0)
-        return 'ksh'
-    endif
-
     return ''
 endfunction
 
