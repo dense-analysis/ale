@@ -1,6 +1,5 @@
 " Author: w0rp <devw0rp@gmail.com>
 
-" Get the shell type for a buffer, based on the hashbang line.
 function! ale#handlers#sh#GetShellType(buffer) abort
     let l:bang_line = get(getbufline(a:buffer, 1), 0, '')
 
