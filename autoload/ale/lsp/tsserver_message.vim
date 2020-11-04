@@ -116,3 +116,26 @@ function! ale#lsp#tsserver_message#GetCodeFixes(buffer, line, column, end_line, 
     \   'errorCodes': a:error_codes,
     \}]
 endfunction
+
+function! ale#lsp#tsserver_message#GetApplicableRefactors(buffer, line, column, end_line, end_column) abort
+    " The arguments for this request can also be just 'line' and 'offset'
+    return [0, 'ts@getApplicableRefactors', {
+    \   'startLine': a:line,
+    \   'startOffset': a:column,
+    \   'endLine': a:end_line,
+    \   'endOffset': a:end_column + 1,
+    \   'file': expand('#' . a:buffer . ':p'),
+    \}]
+endfunction
+
+function! ale#lsp#tsserver_message#GetEditsForRefactor(buffer, line, column, end_line, end_column, refactor, action) abort
+    return [0, 'ts@getEditsForRefactor', {
+    \   'startLine': a:line,
+    \   'startOffset': a:column,
+    \   'endLine': a:end_line,
+    \   'endOffset': a:end_column + 1,
+    \   'file': expand('#' . a:buffer . ':p'),
+    \   'refactor': a:refactor,
+    \   'action': a:action,
+    \}]
+endfunction

@@ -3108,11 +3108,14 @@ ALERename                                                           *ALERename*
 
 ALECodeAction                                                   *ALECodeAction*
 
-  Code fix using `tsserver`.
+  Code Actions support for `tsserver`.
 
-  The code fix will be attempted in location where the cursor is resting on
-  error that came from `tsserver`. If there are multiple code fixes suggested
-  then user will be asked to select one
+  There are two different kind of actions supported for `tsserver`. If run in
+  normal mode then code fix will be attempted if there is error in that line.
+  If there are multiple code fixes available use will be shown input to choose
+  one. In visual mode `tsserver` will be queries for applicable refactors
+  (e.g. extract to constant or extract to function) and user will be given
+  choice to select the one he/she likes.
 
 
 ALERepeatSelection                                         *ALERepeatSelection*
