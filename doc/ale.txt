@@ -3106,7 +3106,7 @@ ALERename                                                           *ALERename*
   in those files will not be updated.
 
 
-ALECodeFix                                                         *ALECodeFix*
+ALECodeAction                                                   *ALECodeAction*
 
   Code fix using `tsserver`.
 
