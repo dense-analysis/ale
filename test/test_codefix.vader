@@ -285,7 +285,8 @@ Execute(tsserver codefix requests should be sent):
   let g:ale_buffer_info = {bufnr(''): {'loclist': [{'lnum': 2, 'col': 5, 'code': 2304}]}}
   call setpos('.', [bufnr(''), 2, 5, 0])
 
-  execute "ALECodeAction"
+  " ALECodeAction
+  call ale#codefix#Execute(0)
 
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)
@@ -318,7 +319,8 @@ Execute(tsserver codefix requests should be sent only for error with code):
   let g:ale_buffer_info = {bufnr(''): {'loclist': [{'lnum': 2, 'col': 5}, {'lnum': 2, 'col': 5, 'code': 2304}]}}
   call setpos('.', [bufnr(''), 2, 5, 0])
 
-  execute "ALECodeAction"
+  " ALECodeAction
+  call ale#codefix#Execute(0)
 
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)
