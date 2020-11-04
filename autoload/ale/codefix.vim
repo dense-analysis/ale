@@ -29,7 +29,7 @@ function! ale#codefix#HandleTSServerResponse(conn_id, response) abort
 
     let l:location = remove(s:codefix_map, a:response.request_seq)
 
-    if get(a:response, 'command', '') is'getCodeFixes'
+    if get(a:response, 'command', '') is# 'getCodeFixes'
         if get(a:response, 'success', v:false) is v:false
             let l:message = get(a:response, 'message', 'unknown')
             call s:message('Error while getting code fixes. Reason: ' . l:message)
