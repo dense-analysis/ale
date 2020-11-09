@@ -220,6 +220,14 @@ function! s:UpdateCapabilities(conn, capabilities) abort
         let a:conn.capabilities.rename = 1
     endif
 
+    if get(a:capabilities, 'codeActionProvider') is v:true
+        let a:conn.capabilities.code_actions = 1
+    endif
+
+    if type(get(a:capabilities, 'codeActionProvider')) is v:t_dict
+        let a:conn.capabilities.code_actions = 1
+    endif
+
     if !empty(get(a:capabilities, 'completionProvider'))
         let a:conn.capabilities.completion = 1
     endif

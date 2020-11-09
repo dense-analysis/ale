@@ -172,3 +172,18 @@ function! ale#lsp#message#Rename(buffer, line, column, new_name) abort
     \   'newName': a:new_name,
     \}]
 endfunction
+
+function! ale#lsp#message#CodeAction(buffer, line, column, end_line, end_column) abort
+    return [0, 'textDocument/codeAction', {
+    \   'textDocument': {
+    \       'uri': ale#path#ToURI(expand('#' . a:buffer . ':p')),
+    \   },
+    \   'range': {
+    \       'start': {'line': a:line - 1, 'character': a:column - 1},
+    \       'end': {'line': a:end_line - 1, 'character': a:end_column - 1},
+    \   },
+    \   'context': {
+    \       'diagnostics': []
+    \   },
+    \}]
+endfunction

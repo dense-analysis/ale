@@ -144,14 +144,52 @@ function! ale#codefix#HandleTSServerResponse(conn_id, response) abort
     endif
 endfunction
 
+function! ale#codefix#HandleLSPResponse(conn_id, response) abort
+    if has_key(a:response, 'id')
+    \&& has_key(s:codefix_map, a:response.id)
+        let l:options = remove(s:codefix_map, a:response.id)
+
+        if !has_key(a:response, 'result') || type(a:response.result) != v:t_list
+            call s:message('No code actions received from server')
+
+            return
+        endif
+
+        let l:codeaction_no = 1
+        let l:codeactionstring = "Code Fixes:\n"
+
+        for l:codeaction in a:response.result
+            let l:codeactionstring .= l:codeaction_no . ') ' . l:codeaction.title . "\n"
+            let l:codeaction_no += 1
+        endfor
+
+        let l:codeactionstring .= 'Type number and <Enter> (empty cancels): '
+
+        let l:codeaction_to_apply = ale#util#Input(l:codeactionstring, '')
+        let l:codeaction_to_apply = str2nr(l:codeaction_to_apply)
+
+        if l:codeaction_to_apply == 0
+            return
+        endif
+
+        let l:changes_map = ale#code_action#GetChanges(a:response.result[l:codeaction_to_apply - 1].edit)
+
+        if empty(l:changes_map)
+            return
+        endif
+
+        let l:changes = ale#code_action#BuildChangesList(l:changes_map)
+
+        call ale#code_action#HandleCodeAction({
+        \ 'description': 'codeaction',
+        \ 'changes': l:changes,
+        \}, {})
+    endif
+endfunction
+
+
 function! s:OnReady(line, column, end_line, end_column, linter, lsp_details) abort
     let l:id = a:lsp_details.connection_id
-
-    if a:linter.lsp isnot# 'tsserver'
-        call s:message('ALECodeAction currently only works with tsserver')
-
-        return
-    endif
 
     if !ale#lsp#HasCapability(l:id, 'code_actions')
         return
@@ -159,26 +197,26 @@ function! s:OnReady(line, column, end_line, end_column, linter, lsp_details) abo
 
     let l:buffer = a:lsp_details.buffer
 
-    if a:line == a:end_line && a:column == a:end_column
-        if !has_key(g:ale_buffer_info, l:buffer)
-            return
-        endif
-
-        let l:nearest_error = v:null
-        let l:nearest_error_diff = -1
-
-        for l:error in get(g:ale_buffer_info[l:buffer], 'loclist', [])
-            if has_key(l:error, 'code') && l:error.lnum == a:line
-                let l:diff = abs(l:error.col - a:column)
-
-                if l:nearest_error_diff == -1 || l:diff < l:nearest_error_diff
-                    let l:nearest_error_diff = l:diff
-                    let l:nearest_error = l:error.code
-                endif
+    if a:linter.lsp is# 'tsserver'
+        if a:line == a:end_line && a:column == a:end_column
+            if !has_key(g:ale_buffer_info, l:buffer)
+                return
             endif
-        endfor
 
-        if a:linter.lsp is# 'tsserver'
+            let l:nearest_error = v:null
+            let l:nearest_error_diff = -1
+
+            for l:error in get(g:ale_buffer_info[l:buffer], 'loclist', [])
+                if has_key(l:error, 'code') && l:error.lnum == a:line
+                    let l:diff = abs(l:error.col - a:column)
+
+                    if l:nearest_error_diff == -1 || l:diff < l:nearest_error_diff
+                        let l:nearest_error_diff = l:diff
+                        let l:nearest_error = l:error.code
+                    endif
+                endif
+            endfor
+
             let l:message = ale#lsp#tsserver_message#GetCodeFixes(
             \   l:buffer,
             \   a:line,
@@ -187,9 +225,7 @@ function! s:OnReady(line, column, end_line, end_column, linter, lsp_details) abo
             \   a:column,
             \   [l:nearest_error],
             \)
-        endif
-    else
-        if a:linter.lsp is# 'tsserver'
+        else
             let l:message = ale#lsp#tsserver_message#GetApplicableRefactors(
             \   l:buffer,
             \   a:line,
@@ -198,9 +234,23 @@ function! s:OnReady(line, column, end_line, end_column, linter, lsp_details) abo
             \   a:end_column,
             \)
         endif
+    else
+        " Send a message saying the buffer has changed first, otherwise
+        " completions won't know what text is nearby.
+        call ale#lsp#NotifyForChanges(l:id, l:buffer)
+
+        let l:message = ale#lsp#message#CodeAction(
+        \   l:buffer,
+        \   a:line,
+        \   a:column,
+        \   a:end_line,
+        \   a:end_column,
+        \)
     endif
 
-    let l:Callback = function('ale#codefix#HandleTSServerResponse')
+    let l:Callback = a:linter.lsp is# 'tsserver'
+    \   ? function('ale#codefix#HandleTSServerResponse')
+    \   : function('ale#codefix#HandleLSPResponse')
 
     call ale#lsp#RegisterCallback(l:id, l:Callback)
 
@@ -226,14 +276,10 @@ function! s:ExecuteGetCodeFix(linter, range) abort
     else
         let [l:line, l:column] = getpos("'<")[1:2]
         let [l:end_line, l:end_column] = getpos("'>")[1:2]
-
-        let l:column = min([l:column, len(getline(l:line))])
-        let l:end_column = min([l:end_column, len(getline(l:end_line))])
     endif
 
-    if a:linter.lsp isnot# 'tsserver'
-        let l:column = min([l:column, len(getline(l:line))])
-    endif
+    let l:column = min([l:column, len(getline(l:line))])
+    let l:end_column = min([l:end_column, len(getline(l:end_line))])
 
     let l:Callback = function(
     \ 's:OnReady', [l:line, l:column, l:end_line, l:end_column])
