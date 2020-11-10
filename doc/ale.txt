@@ -3099,6 +3099,12 @@ ALERename                                                           *ALERename*
   The symbol where the cursor is resting will be the symbol renamed, and a
   prompt will open to request a new name.
 
+  ALE will refuse to complete a rename operation if there are files to modify
+  which have not yet been saved in Vim. If the command is run with a bang
+  (`:ALERename!`), all warnings will be suppressed, and files that are still
+  open in Vim and not saved will be ignored and left in a state where symbols
+  in those files will not be updated.
+
 
 ALERepeatSelection                                         *ALERepeatSelection*
 

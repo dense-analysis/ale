@@ -1,26 +1,33 @@
 " Author: Jerko Steiner <jerko.steiner@gmail.com>
 " Description: Code action support for LSP / tsserver
 
-function! ale#code_action#HandleCodeAction(code_action, should_save) abort
+function! ale#code_action#HandleCodeAction(code_action, options) abort
     let l:current_buffer = bufnr('')
     let l:changes = a:code_action.changes
+    let l:should_save = get(a:options, 'should_save')
+    let l:force_save = get(a:options, 'force_save')
+    let l:safe_changes = []
 
     for l:file_code_edit in l:changes
         let l:buf = bufnr(l:file_code_edit.fileName)
 
         if l:buf != -1 && l:buf != l:current_buffer && getbufvar(l:buf, '&mod')
-            call ale#util#Execute('echom ''Aborting action, file is unsaved''')
+            if !l:force_save
+                call ale#util#Execute('echom ''Aborting action, file is unsaved''')
 
-            return
+                return
+            endif
+        else
+            call add(l:safe_changes, l:file_code_edit)
         endif
     endfor
 
-    for l:file_code_edit in l:changes
+    for l:file_code_edit in l:safe_changes
         call ale#code_action#ApplyChanges(
-        \ l:file_code_edit.fileName,
-        \ l:file_code_edit.textChanges,
-        \ a:should_save,
-        \ )
+        \   l:file_code_edit.fileName,
+        \   l:file_code_edit.textChanges,
+        \   l:should_save,
+        \)
     endfor
 endfunction
 

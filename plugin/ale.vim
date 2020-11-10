@@ -238,7 +238,7 @@ command! -bar ALEComplete :call ale#completion#GetCompletions('ale-manual')
 command! -bar ALEImport :call ale#completion#Import()
 
 " Rename symbols using tsserver and LSP
-command! -bar ALERename :call ale#rename#Execute()
+command! -bar -bang ALERename :call ale#rename#Execute({'force_save': '<bang>' is# '!'})
 
 " Organize import statements using tsserver
 command! -bar ALEOrganizeImports :call ale#organize_imports#Execute()
