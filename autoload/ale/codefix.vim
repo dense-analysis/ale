@@ -194,6 +194,7 @@ function! ale#codefix#HandleLSPResponse(conn_id, response) abort
         let l:item = a:response.result[l:codeaction_to_apply - 1]
 
         if has_key(l:item, 'command')
+        \ && type(l:item.command) == v:t_dict
             let l:command = l:item.command
             let l:message = ale#lsp#message#ExecuteCommand(
             \ l:command.command,
