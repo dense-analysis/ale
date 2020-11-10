@@ -149,7 +149,9 @@ function! ale#codefix#HandleLSPResponse(conn_id, response) abort
     \&& has_key(s:codefix_map, a:response.id)
         let l:options = remove(s:codefix_map, a:response.id)
 
-        if !has_key(a:response, 'result') || type(a:response.result) != v:t_list
+        if !has_key(a:response, 'result')
+        \ || type(a:response.result) != v:t_list
+        \ || len(a:response.result) == 0
             call s:message('No code actions received from server')
 
             return
