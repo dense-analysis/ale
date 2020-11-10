@@ -145,9 +145,26 @@ function! ale#codefix#HandleTSServerResponse(conn_id, response) abort
 endfunction
 
 function! ale#codefix#HandleLSPResponse(conn_id, response) abort
-    if has_key(a:response, 'id')
+    if has_key(a:response, 'method')
+    \ && a:response.method == 'workspace/applyEdit'
+    \ && has_key(a:response, 'params')
+        let l:params = a:response.params
+
+        let l:changes_map = ale#code_action#GetChanges(l:params.edit)
+
+        if empty(l:changes_map)
+            return
+        endif
+
+        let l:changes = ale#code_action#BuildChangesList(l:changes_map)
+
+        call ale#code_action#HandleCodeAction({
+        \ 'description': 'applyEdit',
+        \ 'changes': l:changes,
+        \}, {})
+    elseif has_key(a:response, 'id')
     \&& has_key(s:codefix_map, a:response.id)
-        let l:options = remove(s:codefix_map, a:response.id)
+        let l:location = remove(s:codefix_map, a:response.id)
 
         if !has_key(a:response, 'result')
         \ || type(a:response.result) != v:t_list
@@ -174,18 +191,30 @@ function! ale#codefix#HandleLSPResponse(conn_id, response) abort
             return
         endif
 
-        let l:changes_map = ale#code_action#GetChanges(a:response.result[l:codeaction_to_apply - 1].edit)
+        let l:item = a:response.result[l:codeaction_to_apply - 1]
 
-        if empty(l:changes_map)
-            return
+        if has_key(l:item, 'command')
+            let l:command = l:item.command
+            let l:message = ale#lsp#message#ExecuteCommand(
+            \ l:command.command,
+            \ l:command.arguments,
+            \)
+
+            let l:request_id = ale#lsp#Send(l:location.connection_id, l:message)
+        elseif has_key(l:item, 'edit')
+            let l:changes_map = ale#code_action#GetChanges(l:item.edit)
+
+            if empty(l:changes_map)
+                return
+            endif
+
+            let l:changes = ale#code_action#BuildChangesList(l:changes_map)
+
+            call ale#code_action#HandleCodeAction({
+            \ 'description': 'codeaction',
+            \ 'changes': l:changes,
+            \}, {})
         endif
-
-        let l:changes = ale#code_action#BuildChangesList(l:changes_map)
-
-        call ale#code_action#HandleCodeAction({
-        \ 'description': 'codeaction',
-        \ 'changes': l:changes,
-        \}, {})
     endif
 endfunction
 

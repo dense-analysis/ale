@@ -187,3 +187,10 @@ function! ale#lsp#message#CodeAction(buffer, line, column, end_line, end_column)
     \   },
     \}]
 endfunction
+
+function! ale#lsp#message#ExecuteCommand(command, arguments) abort
+    return [0, 'workspace/executeCommand', {
+    \   'command': a:command,
+    \   'arguments': a:arguments,
+    \}]
+endfunction
