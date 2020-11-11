@@ -125,6 +125,12 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
             let l:start = l:lines[: l:line - 2]
         endif
 
+        " Special case when text must be added after new line
+        if l:column > len(l:lines[l:line - 1])
+            call extend(l:start, [l:lines[l:line - 1]])
+            let l:column = 1
+        endif
+
         if l:column is 1
             " We need to handle column 1 specially, because we can't slice an
             " empty string ending on index 0.
