@@ -33,35 +33,35 @@ endfunction
 
 function! s:ChangeCmp(left, right) abort
     if a:left.start.line < a:right.start.line
-        return -1
+        return 1
     endif
 
     if a:left.start.line > a:right.start.line
-        return 1
+        return -1
     endif
 
     if a:left.start.offset < a:right.start.offset
-        return -1
+        return 1
     endif
 
     if a:left.start.offset > a:right.start.offset
-        return 1
+        return -1
     endif
 
     if a:left.end.line < a:right.end.line
-        return -1
+        return 1
     endif
 
     if a:left.end.line > a:right.end.line
-        return 1
-    endif
-
-    if a:left.end.offset < a:right.end.offset
         return -1
     endif
 
-    if a:left.end.offset > a:right.end.offset
+    if a:left.end.offset < a:right.end.offset
         return 1
+    endif
+
+    if a:left.end.offset > a:right.end.offset
+        return -1
     endif
 
     return 0
@@ -85,28 +85,13 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
         let l:pos = [1, 1]
     endif
 
-    " We have to keep track of how many lines we have added, and offset
-    " changes accordingly.
-    let l:line_offset = 0
-    let l:column_offset = 0
-    let l:last_end_line = 0
-
-    " Changes have to be sorted so we apply them from top-to-bottom.
+    " Changes have to be sorted so we apply them from bottom-to-top
     for l:code_edit in sort(copy(a:changes), function('s:ChangeCmp'))
-        if l:code_edit.start.line isnot l:last_end_line
-            let l:column_offset = 0
-        endif
-
-        let l:line = l:code_edit.start.line + l:line_offset
-        let l:column = l:code_edit.start.offset + l:column_offset
-        let l:end_line = l:code_edit.end.line + l:line_offset
-        let l:end_column = l:code_edit.end.offset + l:column_offset
+        let l:line = l:code_edit.start.line
+        let l:column = l:code_edit.start.offset
+        let l:end_line = l:code_edit.end.line
+        let l:end_column = l:code_edit.end.offset
         let l:text = l:code_edit.newText
-
-        let l:cur_line = l:pos[0]
-        let l:cur_column = l:pos[1]
-
-        let l:last_end_line = l:end_line
 
         " Adjust the ends according to previous edits.
         if l:end_line > len(l:lines)
@@ -146,7 +131,6 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
         let l:lines = l:start + l:middle + l:lines[l:end_line :]
 
         let l:current_line_offset = len(l:lines) - l:lines_before_change
-        let l:line_offset += l:current_line_offset
         let l:column_offset = len(l:middle[-1]) - l:end_line_len
 
         let l:pos = s:UpdateCursor(l:pos,
