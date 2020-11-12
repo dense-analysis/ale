@@ -202,8 +202,14 @@ function! ale#codefix#HandleLSPResponse(conn_id, response) abort
             \)
 
             let l:request_id = ale#lsp#Send(l:location.connection_id, l:message)
-        elseif has_key(l:item, 'edit')
-            let l:changes_map = ale#code_action#GetChanges(l:item.edit)
+        elseif has_key(l:item, 'edit') || has_key(l:item, 'arguments')
+            if has_key(l:item, 'edit')
+                let l:topass = l:item.edit
+            else
+                let l:topass = l:item.arguments[0]
+            endif
+
+            let l:changes_map = ale#code_action#GetChanges(l:topass)
 
             if empty(l:changes_map)
                 return
@@ -271,13 +277,56 @@ function! s:OnReady(line, column, end_line, end_column, linter, lsp_details) abo
         " completions won't know what text is nearby.
         call ale#lsp#NotifyForChanges(l:id, l:buffer)
 
-        let l:message = ale#lsp#message#CodeAction(
-        \   l:buffer,
-        \   a:line,
-        \   a:column,
-        \   a:end_line,
-        \   a:end_column,
-        \)
+        if a:line == a:end_line && a:column == a:end_column
+            if !has_key(g:ale_buffer_info, l:buffer)
+                return
+            endif
+
+            let l:nearest_error = v:null
+            let l:nearest_error_diff = -1
+
+            for l:error in get(g:ale_buffer_info[l:buffer], 'loclist', [])
+                if has_key(l:error, 'code') && l:error.lnum == a:line
+                    let l:diff = abs(l:error.col - a:column)
+
+                    if l:nearest_error_diff == -1 || l:diff < l:nearest_error_diff
+                        let l:nearest_error_diff = l:diff
+                        let l:nearest_error = l:error
+                    endif
+                endif
+            endfor
+
+            let l:diagnostics = []
+
+            if l:nearest_error isnot v:null
+                let l:diagnostics = [{
+                \ 'code': l:nearest_error.code,
+                \ 'message': l:nearest_error.text,
+                \ 'range': {
+                \     'start': { 'line': l:nearest_error.lnum - 1, 'character': l:nearest_error.col - 1 },
+                \     'end': { 'line': l:nearest_error.end_lnum - 1, 'character': l:nearest_error.end_col - 1 }
+                \}
+                \}]
+            endif
+
+            let l:message = ale#lsp#message#CodeAction(
+            \   l:buffer,
+            \   a:line,
+            \   a:column,
+            \   a:end_line,
+            \   a:end_column,
+            \   l:diagnostics,
+            \)
+        else
+            let l:message = ale#lsp#message#CodeAction(
+            \   l:buffer,
+            \   a:line,
+            \   a:column,
+            \   a:end_line,
+            \   a:end_column,
+            \   [],
+            \)
+        endif
     endif
 
     let l:Callback = a:linter.lsp is# 'tsserver'
