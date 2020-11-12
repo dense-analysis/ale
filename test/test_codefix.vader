@@ -460,3 +460,89 @@ Execute(getEditsForRefactor should print error on failure):
 "   \   }]
 "   \ ],
 "   \ g:message_list
+
+
+Given python(Some python file):
+  def main():
+      a = 1
+      b = a + 2
+
+Execute(LSP code action requests should be sent):
+  call ale#linter#Reset()
+
+  runtime ale_linters/python/jedils.vim
+  let g:ale_buffer_info = {bufnr(''): {'loclist': [{'lnum': 2, 'col': 5, 'end_lnum': 2, 'end_col': 6, 'code': 2304, 'text': 'oops'}]}}
+  call setpos('.', [bufnr(''), 2, 5, 0])
+
+  " ALECodeAction
+  call ale#codefix#Execute(0)
+
+  " We shouldn't register the callback yet.
+  AssertEqual '''''', string(g:Callback)
+
+  AssertEqual type(function('type')), type(g:InitCallback)
+  call g:InitCallback()
+
+  AssertEqual 'code_actions', g:capability_checked
+  AssertEqual
+  \ 'function(''ale#codefix#HandleLSPResponse'')',
+  \ string(g:Callback)
+  AssertEqual
+  \ [
+  \   [1, 'workspace/didChangeConfiguration', {'settings': {'python': {}}}],
+  \   [1, 'textDocument/didChange', {
+  \     'contentChanges': [{'text': "def main():\n    a = 1\n    b = a + 2\n"}],
+  \     'textDocument': {
+  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'version': g:ale_lsp_next_version_id - 1,
+  \     },
+  \   }],
+  \   [0, 'textDocument/codeAction', {
+  \     'context': {
+  \       'diagnostics': [{'range': {'end': {'character': 5, 'line': 1}, 'start': {'character': 4, 'line': 1}}, 'code': 2304, 'message': 'oops'}]
+  \     },
+  \     'range': {'end': {'character': 5, 'line': 1}, 'start': {'character': 4, 'line': 1}},
+  \     'textDocument': {'uri': ale#path#ToURI(expand('%:p'))}
+  \   }]
+  \ ],
+  \ g:message_list
+
+Execute(LSP code action requests should be sent only for error with code):
+  call ale#linter#Reset()
+
+  runtime ale_linters/python/jedils.vim
+  let g:ale_buffer_info = {bufnr(''): {'loclist': [{'lnum': 2, 'col': 5, 'end_lnum': 2, 'end_col': 6, 'code': 2304, 'text': 'oops'}]}}
+  call setpos('.', [bufnr(''), 2, 5, 0])
+
+  " ALECodeAction
+  call ale#codefix#Execute(0)
+
+  " We shouldn't register the callback yet.
+  AssertEqual '''''', string(g:Callback)
+
+  AssertEqual type(function('type')), type(g:InitCallback)
+  call g:InitCallback()
+
+  AssertEqual 'code_actions', g:capability_checked
+  AssertEqual
+  \ 'function(''ale#codefix#HandleLSPResponse'')',
+  \ string(g:Callback)
+  AssertEqual
+  \ [
+  \   [1, 'workspace/didChangeConfiguration', {'settings': {'python': {}}}],
+  \   [1, 'textDocument/didChange', {
+  \     'contentChanges': [{'text': "def main():\n    a = 1\n    b = a + 2\n"}],
+  \     'textDocument': {
+  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'version': g:ale_lsp_next_version_id - 1,
+  \     },
+  \   }],
+  \   [0, 'textDocument/codeAction', {
+  \     'context': {
+  \       'diagnostics': [{'range': {'end': {'character': 5, 'line': 1}, 'start': {'character': 4, 'line': 1}}, 'code': 2304, 'message': 'oops'}]
+  \     },
+  \     'range': {'end': {'character': 5, 'line': 1}, 'start': {'character': 4, 'line': 1}},
+  \     'textDocument': {'uri': ale#path#ToURI(expand('%:p'))}
+  \   }]
+  \ ],
+  \ g:message_list
