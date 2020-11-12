@@ -180,7 +180,7 @@ function! ale#lsp#message#CodeAction(buffer, line, column, end_line, end_column)
     \   },
     \   'range': {
     \       'start': {'line': a:line - 1, 'character': a:column - 1},
-    \       'end': {'line': a:end_line - 1, 'character': a:end_column - 1},
+    \       'end': {'line': a:end_line - 1, 'character': a:end_column},
     \   },
     \   'context': {
     \       'diagnostics': []
