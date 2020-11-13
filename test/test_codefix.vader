@@ -461,11 +461,45 @@ Execute(getEditsForRefactor should print error on failure):
 "   \ ],
 "   \ g:message_list
 
+Execute(Failed LSP responses should be handled correctly):
+  call ale#codefix#HandleLSPResponse(
+  \ 1,
+  \ {'method': 'workspace/applyEdit', 'request_seq': 3}
+  \)
+  AssertEqual g:handle_code_action_called, 0
 
 Given python(Some python file):
   def main():
       a = 1
       b = a + 2
+
+Execute("workspace/applyEdit" from LSP should be handled):
+  call ale#codefix#SetMap({3: {}})
+  call ale#codefix#HandleLSPResponse(1,
+  \ {'id': 0, 'jsonrpc': '2.0', 'method': 'workspace/applyEdit', 'params': {'edit': {'changes': {'file:///foo/bar/file.ts': [{'range': {'end': {'character': 27, 'line': 7}, 'start': {'character': 27, 'line': 7}}, 'newText': ', Config'}, {'range': {'end': {'character': 12, 'line': 96}, 'start': {'character': 2, 'line': 94}}, 'newText': 'await newFunction(redis, imageKey, cover, config);'}, {'range': {'end': {'character': 2, 'line': 99}, 'start': {'character': 2, 'line': 99}}, 'newText': '^@async function newFunction(redis: IRedis, imageKey: string, cover: Buffer, config: Config) {^@    try {^@        await redis.set(imageKey, cover, ''ex'', parseInt(config.coverKeyTTL, 10));^@    }^@    catch { }^@}^@'}]}}}})
+
+  AssertEqual g:handle_code_action_called, 1
+  AssertEqual
+  \ [{'description': 'applyEdit', 'changes': [{'fileName': '/foo/bar/file.ts', 'textChanges': [{'end': {'offset': 28, 'line': 8}, 'newText': ', Config', 'start': {'offset': 28, 'line': 8}}, {'end': {'offset': 13, 'line': 97}, 'newText': 'await newFunction(redis, imageKey, cover, config);', 'start': {'offset': 3, 'line': 95}}, {'end': {'offset': 3, 'line': 100}, 'newText': '^@async function newFunction(redis: IRedis, imageKey: string, cover: Buffer, config: Config) {^@    try {^@        await redis.set(imageKey, cover, ''ex'', parseInt(config.coverKeyTTL, 10));^@    }^@    catch { }^@}^@', 'start': {'offset': 3, 'line': 100}}]}]}],
+  \ g:code_actions
+
+Execute(getCodeFixes from tsserver should be handled with user input if there are more than one action):
+  call ale#codefix#SetMap({2: {}})
+  call ale#codefix#HandleLSPResponse(1,
+  \ {'id': 2, 'jsonrpc': '2.0', 'result': [{'diagnostics': v:null, 'edit': {'changes': v:null, 'documentChanges': [{'edits': [{'range': {'end': {'character': 4, 'line': 2}, 'start': {'character': 4, 'line': 1}}, 'newText': ''}, {'range': {'end': {'character': 9, 'line': 2}, 'start': {'character': 8, 'line': 2}}, 'newText': '(1)'}], 'textDocument': {'uri': 'file:///foo/bar/test.py', 'version': v:null}}]}, 'kind': 'refactor.inline', 'title': 'Inline variable', 'command': v:null}, {'diagnostics': v:null, 'edit': {'changes': v:null, 'documentChanges': [{'edits': [{'range': {'end': {'character': 0, 'line': 0}, 'start': {'character': 0, 'line': 0}}, 'newText': 'def func_bomdjnxh():^@    a = 1return a^@^@^@'}, {'range': {'end': {'character': 9, 'line': 1}, 'start': {'character': 8, 'line': 1}}, 'newText': 'func_bomdjnxh()^@'}], 'textDocument': {'uri': 'file:///foo/bar/test.py', 'version': v:null}}]}, 'kind': 'refactor.extract', 'title': 'Extract expression into function ''func_bomdjnxh''', 'command': v:null}]})
+
+  AssertEqual g:handle_code_action_called, 1
+  AssertEqual
+  \ [{'description': 'codeaction', 'changes': [{'fileName': '/foo/bar/test.py', 'textChanges': [{'end': {'offset': 1, 'line': 1}, 'newText': 'def func_bomdjnxh():^@    a = 1return a^@^@^@', 'start': {'offset': 1, 'line': 1}}, {'end': {'offset': 10, 'line': 2}, 'newText': 'func_bomdjnxh()^@', 'start': {'offset': 9, 'line': 2}}]}]}],
+  \ g:code_actions
+
+Execute(Prints message when LSP code action returns no results):
+  call ale#codefix#SetMap({3: {}})
+  call ale#codefix#HandleLSPResponse(1,
+  \ {'id': 3, 'jsonrpc': '2.0', 'result': []})
+
+  AssertEqual g:handle_code_action_called, 0
+  AssertEqual ['echom ''No code actions received from server'''], g:expr_list
 
 Execute(LSP code action requests should be sent):
   call ale#linter#Reset()
