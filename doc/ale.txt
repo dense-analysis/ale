@@ -3106,6 +3106,18 @@ ALERename                                                           *ALERename*
   in those files will not be updated.
 
 
+ALECodeAction                                                   *ALECodeAction*
+
+  Code Actions support for `tsserver`.
+
+  There are two different kind of actions supported for `tsserver`. If run in
+  normal mode then code fix will be attempted if there is error in that line.
+  If there are multiple code fixes available use will be shown input to choose
+  one. In visual mode `tsserver` will be queries for applicable refactors
+  (e.g. extract to constant or extract to function) and user will be given
+  choice to select the one he/she likes.
+
+
 ALERepeatSelection                                         *ALERepeatSelection*
 
   Repeat the last selection displayed in the preview window.

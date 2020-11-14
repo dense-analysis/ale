@@ -617,6 +617,7 @@ function! ale#completion#ParseLSPCompletions(response) abort
         let l:user_data = {'_ale_completion_item': 1}
 
         if has_key(l:item, 'additionalTextEdits')
+        \ && l:item.additionalTextEdits isnot v:null
             let l:text_changes = []
 
             for l:edit in l:item.additionalTextEdits
