@@ -457,9 +457,9 @@ Notes:
 * SugarSS
   * `stylelint`
 * Swift
+  * Apple `swift-format`
   * `sourcekit-lsp`
   * `swiftformat`
-  * `swift-format`
   * `swiftlint`
 * Tcl
   * `nagelfar`!!

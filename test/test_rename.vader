@@ -57,9 +57,9 @@ Before:
     call add(g:expr_list, a:expr)
   endfunction
 
-  function! ale#code_action#HandleCodeAction(code_action, should_save) abort
+  function! ale#code_action#HandleCodeAction(code_action, options) abort
     let g:handle_code_action_called = 1
-    AssertEqual v:true, a:should_save
+    Assert get(a:options, 'should_save')
     call add(g:code_actions, a:code_action)
   endfunction
 
@@ -269,7 +269,7 @@ Execute(tsserver rename requests should be sent):
   \   }]
   \ ],
   \ g:message_list
-  AssertEqual {'42': {'old_name': 'somelongerline', 'new_name': 'a-new-name'}},
+  AssertEqual {'42': {'old_name': 'somelongerline', 'new_name': 'a-new-name', 'force_save': 0}},
   \ ale#rename#GetMap()
 
 Given python(Some Python file):
@@ -470,7 +470,7 @@ Execute(LSP rename requests should be sent):
   let b:ale_linters = ['pyls']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
-  ALERename
+  ALERename!
 
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)
@@ -500,5 +500,5 @@ Execute(LSP rename requests should be sent):
   \ ],
   \ g:message_list
 
-  AssertEqual {'42': {'old_name': 'foo', 'new_name': 'a-new-name'}},
+  AssertEqual {'42': {'old_name': 'foo', 'new_name': 'a-new-name', 'force_save': 1}},
   \ ale#rename#GetMap()
