@@ -33,35 +33,35 @@ endfunction
 
 function! s:ChangeCmp(left, right) abort
     if a:left.start.line < a:right.start.line
-        return 1
+        return -1
     endif
 
     if a:left.start.line > a:right.start.line
-        return -1
+        return 1
     endif
 
     if a:left.start.offset < a:right.start.offset
-        return 1
+        return -1
     endif
 
     if a:left.start.offset > a:right.start.offset
-        return -1
+        return 1
     endif
 
     if a:left.end.line < a:right.end.line
-        return 1
+        return -1
     endif
 
     if a:left.end.line > a:right.end.line
-        return -1
-    endif
-
-    if a:left.end.offset < a:right.end.offset
         return 1
     endif
 
-    if a:left.end.offset > a:right.end.offset
+    if a:left.end.offset < a:right.end.offset
         return -1
+    endif
+
+    if a:left.end.offset > a:right.end.offset
+        return 1
     endif
 
     return 0
@@ -86,7 +86,7 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
     endif
 
     " Changes have to be sorted so we apply them from bottom-to-top
-    for l:code_edit in sort(copy(a:changes), function('s:ChangeCmp'))
+    for l:code_edit in reverse(sort(copy(a:changes), function('s:ChangeCmp')))
         let l:line = l:code_edit.start.line
         let l:column = l:code_edit.start.offset
         let l:end_line = l:code_edit.end.line
