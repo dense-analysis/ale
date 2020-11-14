@@ -240,6 +240,7 @@ command! -bar ALEImport :call ale#completion#Import()
 " Rename symbols using tsserver and LSP
 command! -bar -bang ALERename :call ale#rename#Execute({'force_save': '<bang>' is# '!'})
 
+" Apply code actions to a range.
 command! -bar -range ALECodeAction :call ale#codefix#Execute(<range>)
 
 " Organize import statements using tsserver
