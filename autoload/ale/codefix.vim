@@ -146,7 +146,7 @@ endfunction
 
 function! ale#codefix#HandleLSPResponse(conn_id, response) abort
     if has_key(a:response, 'method')
-    \ && a:response.method == 'workspace/applyEdit'
+    \ && a:response.method is# 'workspace/applyEdit'
     \ && has_key(a:response, 'params')
         let l:params = a:response.params
 
