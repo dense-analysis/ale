@@ -304,7 +304,7 @@ function! s:OnReady(line, column, end_line, end_column, linter, lsp_details) abo
                 \ 'message': l:nearest_error.text,
                 \ 'range': {
                 \     'start': { 'line': l:nearest_error.lnum - 1, 'character': l:nearest_error.col - 1 },
-                \     'end': { 'line': l:nearest_error.end_lnum - 1, 'character': l:nearest_error.end_col - 1 }
+                \     'end': { 'line': l:nearest_error.end_lnum - 1, 'character': l:nearest_error.end_col }
                 \}
                 \}]
             endif
