@@ -240,6 +240,9 @@ command! -bar ALEImport :call ale#completion#Import()
 " Rename symbols using tsserver and LSP
 command! -bar -bang ALERename :call ale#rename#Execute({'force_save': '<bang>' is# '!'})
 
+" Apply code actions to a range.
+command! -bar -range ALECodeAction :call ale#codefix#Execute(<range>)
+
 " Organize import statements using tsserver
 command! -bar ALEOrganizeImports :call ale#organize_imports#Execute()
 
@@ -283,6 +286,7 @@ nnoremap <silent> <Plug>(ale_documentation) :ALEDocumentation<Return>
 inoremap <silent> <Plug>(ale_complete) <C-\><C-O>:ALEComplete<Return>
 nnoremap <silent> <Plug>(ale_import) :ALEImport<Return>
 nnoremap <silent> <Plug>(ale_rename) :ALERename<Return>
+nnoremap <silent> <Plug>(ale_code_action) :ALECodeAction<Return>
 nnoremap <silent> <Plug>(ale_repeat_selection) :ALERepeatSelection<Return>
 
 " Set up autocmd groups now.

@@ -53,6 +53,7 @@ other content at [w0rp.com](https://w0rp.com).
     5. [Find References](#usage-find-references)
     6. [Hovering](#usage-hover)
     7. [Symbol Search](#usage-symbol-search)
+    8. [Refactoring: Rename, Actions](#usage-refactoring)
 3. [Installation](#installation)
     1. [Installation with Vim package management](#standard-installation)
     2. [Installation with Pathogen](#installation-with-pathogen)
@@ -252,6 +253,18 @@ Search queries can be performed to find functions, types, and more which are
 similar to a given query string.
 
 See `:help ale-symbol-search` for more information.
+
+<a name="usage-refactoring"></a>
+
+### 2.viii Refactoring: Rename, Actions
+
+ALE supports renaming symbols in symbols in code such as variables or class
+names with the `ALERename` command.
+
+`ALECodeAction` will execute actions on the cursor or applied to a visual
+range selection, such as automatically fixing errors.
+
+See `:help ale-refactor` for more information.
 
 <a name="installation"></a>
 

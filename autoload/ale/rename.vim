@@ -90,31 +90,6 @@ function! ale#rename#HandleTSServerResponse(conn_id, response) abort
     \)
 endfunction
 
-function! s:getChanges(workspace_edit) abort
-    let l:changes = {}
-
-    if has_key(a:workspace_edit, 'changes') && !empty(a:workspace_edit.changes)
-        return a:workspace_edit.changes
-    elseif has_key(a:workspace_edit, 'documentChanges')
-        let l:document_changes = []
-
-        if type(a:workspace_edit.documentChanges) is v:t_dict
-        \ && has_key(a:workspace_edit.documentChanges, 'edits')
-            call add(l:document_changes, a:workspace_edit.documentChanges)
-        elseif type(a:workspace_edit.documentChanges) is v:t_list
-            let l:document_changes = a:workspace_edit.documentChanges
-        endif
-
-        for l:text_document_edit in l:document_changes
-            let l:filename = l:text_document_edit.textDocument.uri
-            let l:edits = l:text_document_edit.edits
-            let l:changes[l:filename] = l:edits
-        endfor
-    endif
-
-    return l:changes
-endfunction
-
 function! ale#rename#HandleLSPResponse(conn_id, response) abort
     if has_key(a:response, 'id')
     \&& has_key(s:rename_map, a:response.id)
@@ -126,7 +101,7 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
             return
         endif
 
-        let l:changes_map = s:getChanges(a:response.result)
+        let l:changes_map = ale#code_action#GetChanges(a:response.result)
 
         if empty(l:changes_map)
             call s:message('No changes received from server')
@@ -134,34 +109,7 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
             return
         endif
 
-        let l:changes = []
-
-        for l:file_name in keys(l:changes_map)
-            let l:text_edits = l:changes_map[l:file_name]
-            let l:text_changes = []
-
-            for l:edit in l:text_edits
-                let l:range = l:edit.range
-                let l:new_text = l:edit.newText
-
-                call add(l:text_changes, {
-                \ 'start': {
-                \   'line': l:range.start.line + 1,
-                \   'offset': l:range.start.character + 1,
-                \ },
-                \ 'end': {
-                \   'line': l:range.end.line + 1,
-                \   'offset': l:range.end.character + 1,
-                \ },
-                \ 'newText': l:new_text,
-                \})
-            endfor
-
-            call add(l:changes, {
-            \   'fileName': ale#path#FromURI(l:file_name),
-            \   'textChanges': l:text_changes,
-            \})
-        endfor
+        let l:changes = ale#code_action#BuildChangesList(l:changes_map)
 
         call ale#code_action#HandleCodeAction(
         \   {

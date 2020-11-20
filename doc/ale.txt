@@ -20,6 +20,7 @@ CONTENTS                                                         *ale-contents*
     5.4 Find References...................|ale-find-references|
     5.5 Hovering..........................|ale-hover|
     5.6 Symbol Search.....................|ale-symbol-search|
+    5.7 Refactoring: Rename, Actions......|ale-refactor|
   6. Global Options.......................|ale-options|
     6.1 Highlights........................|ale-highlights|
   7. Linter/Fixer Options.................|ale-integration-options|
@@ -668,6 +669,16 @@ Documentation for symbols at the cursor can be retrieved using the
 ALE supports searching for workspace symbols via LSP linters with the
 |ALESymbolSearch| command. See the documentation for the command
 for a full list of options.
+
+-------------------------------------------------------------------------------
+5.7 Refactoring: Rename, Actions                                 *ale-refactor*
+
+ALE supports renaming symbols in symbols in code such as variables or class
+names with the |ALERename| command.
+
+|ALECodeAction| will execute actions on the cursor or applied to a visual
+range selection, such as automatically fixing errors.
+
 
 ===============================================================================
 6. Global Options                                                 *ale-options*
@@ -3105,6 +3116,18 @@ ALERename                                                           *ALERename*
   (`:ALERename!`), all warnings will be suppressed, and files that are still
   open in Vim and not saved will be ignored and left in a state where symbols
   in those files will not be updated.
+
+
+ALECodeAction                                                   *ALECodeAction*
+
+  Apply a code action via LSP servers or `tsserver`.
+
+  If there is an error present on a line that can be fixed, ALE will
+  automatically fix a line, unless there are multiple possible code fixes to
+  apply.
+
+  This command can be run in visual mode apply actions, such as applicable
+  refactors. A menu will be shown to select code action to apply.
 
 
 ALERepeatSelection                                         *ALERepeatSelection*
