@@ -65,10 +65,10 @@ g:ale_erlang_syntaxerl_executable           *g:ale_erlang_syntaxerl_executable*
   This variable can be changed to specify the syntaxerl executable.
 
 -------------------------------------------------------------------------------
-erlfmt                                                     *ale-erlang-erlfmt*
+erlfmt                                                      *ale-erlang-erlfmt*
 
-g:ale_rebar3_executable                    *g:ale_rebar3_executable*
-                                           *b:ale_rebar3_executable*
+g:ale_rebar3_executable                               *g:ale_rebar3_executable*
+                                                      *b:ale_rebar3_executable*
   Type: |String|
   Default: `'rebar3'`
 

@@ -1,9 +1,9 @@
 Before:
   Save g:ale_rebar3_executable
-  Save g:ale_erl_fmt_options
+  Save g:ale_erlfmt_options
 
   let g:ale_rebar3_executable = 'xxxinvalid'
-  let g:ale_erl_fmt_options = ''
+  let g:ale_erlfmt_options = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
 
@@ -12,7 +12,7 @@ After:
 
   call ale#test#RestoreDirectory()
 
-Execute(The erl_fmt callback should return the correct default values):
+Execute(The erlfmt callback should return the correct default values):
   call ale#test#SetFilename('../erlang-test-files/testfile.erl')
 
   AssertEqual
@@ -21,10 +21,10 @@ Execute(The erl_fmt callback should return the correct default values):
   \   'command': ale#Escape('xxxinvalid')
   \     . ' format %t',
   \ },
-  \ ale#fixers#erl_fmt#Fix(bufnr(''))
+  \ ale#fixers#erlfmt#Fix(bufnr(''))
 
-Execute(The erl_fmt callback should include the correct format options):
-  let g:ale_erl_fmt_options = 'invalid_options'
+Execute(The erlfmt callback should include the correct format options):
+  let g:ale_erlfmt_options = 'invalid_options'
   call ale#test#SetFilename('../erlang-test-files/testfile.erl')
 
   AssertEqual
@@ -33,4 +33,4 @@ Execute(The erl_fmt callback should include the correct format options):
   \   'command': ale#Escape('xxxinvalid')
   \     . ' format invalid_options %t',
   \ },
-  \ ale#fixers#erl_fmt#Fix(bufnr(''))
+  \ ale#fixers#erlfmt#Fix(bufnr(''))
