@@ -1,0 +1,24 @@
+Before:
+  Save g:ale_verilog_verible_options
+  let g:ale_verilog_verible_options = ''
+
+After:
+  Restore
+  call ale#linter#Reset()
+
+Execute(Set Verilog verible linter additional options to `--ruleset=all`):
+  runtime! ale_linters/verilog/verible.vim
+
+  " Additional args for the linter
+  let g:ale_verilog_verible_options = '--ruleset=all'
+
+  call ale#Queue(0)
+
+  let g:run_cmd = ale_linters#verilog#verible#GetCommand(bufnr(''))
+  let g:matched = match(g:run_cmd, '\s' . g:ale_verilog_verible_options . '\s')
+
+  " match returns -1 if not found
+  AssertNotEqual
+  \   g:matched ,
+  \   -1 ,
+  \  'Additionnal arguments not found in the run command'

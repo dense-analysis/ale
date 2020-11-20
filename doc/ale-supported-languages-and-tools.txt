@@ -491,6 +491,7 @@ Notes:
 * Verilog
   * `hdl-checker`
   * `iverilog`
+  * `verible`
   * `verilator`
   * `vlog`
   * `xvlog`
