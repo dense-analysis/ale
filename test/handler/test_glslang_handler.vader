@@ -1,3 +1,6 @@
+Before:
+  runtime ale_linters/glsl/glslang.vim
+
 Execute(The glsl glslang handler should parse lines correctly):
   AssertEqual
   \ [

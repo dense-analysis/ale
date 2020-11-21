@@ -12,7 +12,7 @@ After:
 
 Execute(The vulture command callback should lint file directory by default):
   AssertLinter 'vulture',
-  \ ale#path#BufferCdString(bufnr(''))
+  \ ale#path#CdString(expand('#' . bufnr('') . ':p:h'))
   \   . ale#Escape('vulture') . '  .'
 
 Execute(The vulture command callback should lint project root, when present):
@@ -31,14 +31,14 @@ Execute(The vulture executable should be configurable, and escaped properly):
   let g:ale_python_vulture_executable = 'executable with spaces'
 
   AssertLinter 'executable with spaces',
-  \ ale#path#BufferCdString(bufnr(''))
+  \ ale#path#CdString(expand('#' . bufnr('') . ':p:h'))
   \   . ale#Escape('executable with spaces') . '  .'
 
 Execute(The vulture command callback should let you set options):
   let g:ale_python_vulture_options = '--some-option'
 
   AssertLinter 'vulture',
-  \ ale#path#BufferCdString(bufnr(''))
+  \ ale#path#CdString(expand('#' . bufnr('') . ':p:h'))
   \   . ale#Escape('vulture') . ' --some-option .'
 
 Execute(The vulture command callback should detect virtualenv directories and switch to the project root):
@@ -64,5 +64,5 @@ Execute(Setting executable to 'pipenv' appends 'run vulture'):
   let g:ale_python_vulture_executable = 'path/to/pipenv'
 
   AssertLinter 'path/to/pipenv',
-  \ ale#path#BufferCdString(bufnr(''))
+  \ ale#path#CdString(expand('#' . bufnr('') . ':p:h'))
   \   . ale#Escape('path/to/pipenv') . ' run vulture' . '  .'

@@ -11,7 +11,8 @@ After:
 
 Execute(The default gotype command should be correct):
   AssertLinter 'gotype',
-  \ ale#path#CdString(expand('%:p:h')) . ' gotype -e .'
+  \ ale#path#BufferCdString(bufnr(''))
+  \ . ' gotype -e .'
 
 Execute(The gotype callback should ignore test files):
   call ale#test#SetFilename('bla_test.go')
@@ -22,6 +23,6 @@ Execute(The gotype callback should support Go environment variables):
   let b:ale_go_go111module = 'on'
 
   AssertLinter 'gotype',
-  \ ale#path#CdString(expand('%:p:h')) . ' '
-  \ . ale#Env('GO111MODULE', 'on')
+  \ ale#path#BufferCdString(bufnr(''))
+  \ . ' ' . ale#Env('GO111MODULE', 'on')
   \ . 'gotype -e .'

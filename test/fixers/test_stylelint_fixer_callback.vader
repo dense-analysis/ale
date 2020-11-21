@@ -1,4 +1,8 @@
 Before:
+  Save g:ale_stylelint_options
+
+  let g:ale_stylelint_options = ''
+
   call ale#assert#SetUpFixerTest('css', 'stylelint')
 
 After:
@@ -10,7 +14,7 @@ Execute(The stylelint callback should return the correct default values):
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'command': ale#path#CdString(expand('%:p:h'))
+  \   'command': ale#path#BufferCdString(bufnr(''))
   \     . (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/stylelint/bin/stylelint.js'))
   \     . ' %t'
@@ -24,7 +28,7 @@ Execute(The stylelint callback should include custom stylelint options):
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'command': ale#path#CdString(expand('%:p:h'))
+  \   'command': ale#path#BufferCdString(bufnr(''))
   \     . (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/stylelint/bin/stylelint.js'))
   \     . ' %t'

@@ -189,42 +189,55 @@ g:ale_php_psalm_executable                         *g:ale_php_psalm_executable*
 
   This variable sets the executable used for psalm.
 
-g:ale_psalm_langserver_options                 *g:ale_psalm_langserver_options*
-                                               *b:ale_psalm_langserver_options*
+
+g:ale_php_psalm_options                               *g:ale_php_psalm_options*
+                                                      *b:ale_php_psalm_options*
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to psalm.
 
-===============================================================================
-php-cs-fixer                                              *ale-php-php-cs-fixer*
 
-g:ale_php_cs_fixer_executable                    *g:ale_php_cs_fixer_executable*
-                                                 *b:ale_php_cs_fixer_executable*
+g:ale_php_psalm_use_global                         *g:ale_php_psalm_use_global*
+                                                   *b:ale_php_psalm_use_global*
+  Type: |Boolean|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
+php-cs-fixer                                             *ale-php-php-cs-fixer*
+
+g:ale_php_cs_fixer_executable                   *g:ale_php_cs_fixer_executable*
+                                                *b:ale_php_cs_fixer_executable*
   Type: |String|
   Default: `'php-cs-fixer'`
 
   This variable sets executable used for php-cs-fixer.
 
-g:ale_php_cs_fixer_use_global                    *g:ale_php_cs_fixer_use_global*
-                                                 *b:ale_php_cs_fixer_use_global*
-  Type: |Boolean|
-  Default: `get(g:, 'ale_use_global_executables', 0)`
 
-  This variable force globally installed fixer.
-
-g:ale_php_cs_fixer_options                          *g:ale_php_cs_fixer_options*
-                                                    *b:ale_php_cs_fixer_options*
+g:ale_php_cs_fixer_options                         *g:ale_php_cs_fixer_options*
+                                                   *b:ale_php_cs_fixer_options*
   Type: |String|
   Default: `''`
 
   This variable can be set to pass additional options to php-cs-fixer.
 
-===============================================================================
-php                                                                *ale-php-php*
 
-g:ale_php_php_executable                              *g:ale_php_php_executable*
-                                                      *b:ale_php_php_executable*
+g:ale_php_cs_fixer_use_global                   *g:ale_php_cs_fixer_use_global*
+                                                *b:ale_php_cs_fixer_use_global*
+  Type: |Boolean|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
+php                                                               *ale-php-php*
+
+g:ale_php_php_executable                             *g:ale_php_php_executable*
+                                                     *b:ale_php_php_executable*
   Type: |String|
   Default: `'php'`
 

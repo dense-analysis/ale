@@ -90,6 +90,7 @@ Execute(TypeScript completion details responses should be parsed correctly):
   \     'info': '',
   \     'kind': 'v',
   \     'icase': 1,
+  \     'user_data': json_encode({'_ale_completion_item': 1}),
   \     'dup': g:ale_completion_autoimport,
   \   },
   \   {
@@ -98,6 +99,7 @@ Execute(TypeScript completion details responses should be parsed correctly):
   \     'info': 'foo bar baz',
   \     'kind': 'v',
   \     'icase': 1,
+  \     'user_data': json_encode({'_ale_completion_item': 1}),
   \     'dup': g:ale_completion_autoimport,
   \   },
   \   {
@@ -106,6 +108,7 @@ Execute(TypeScript completion details responses should be parsed correctly):
   \     'info': '',
   \     'kind': 'v',
   \     'icase': 1,
+  \     'user_data': json_encode({'_ale_completion_item': 1}),
   \     'dup': g:ale_completion_autoimport,
   \   },
   \ ],
@@ -179,7 +182,8 @@ Execute(Entries without details should be included in the responses):
   \     'kind': 'v',
   \     'icase': 1,
   \     'user_data': json_encode({
-  \         'codeActions': [{
+  \         '_ale_completion_item': 1,
+  \         'code_actions': [{
   \             'description': 'import { def } from "./Foo";',
   \             'changes': [],
   \         }],
@@ -192,6 +196,7 @@ Execute(Entries without details should be included in the responses):
   \     'info': 'foo bar baz',
   \     'kind': 'v',
   \     'icase': 1,
+  \     'user_data': json_encode({'_ale_completion_item': 1}),
   \     'dup': g:ale_completion_autoimport,
   \   },
   \   {
@@ -199,6 +204,7 @@ Execute(Entries without details should be included in the responses):
   \     'menu': '',
   \     'info': '',
   \     'kind': 'v',
+  \     'user_data': json_encode({'_ale_completion_item': 1}),
   \     'icase': 1,
   \   },
   \ ],
@@ -260,7 +266,8 @@ Execute(Default imports should be handled correctly):
   \     'kind': 't',
   \     'icase': 1,
   \     'user_data': json_encode({
-  \         'codeActions': [{
+  \         '_ale_completion_item': 1,
+  \         'code_actions': [{
   \             'description': 'Import default ''abcd'' from module "./foo"',
   \             'changes': [],
   \         }],
