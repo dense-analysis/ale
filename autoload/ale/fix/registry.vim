@@ -385,6 +385,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['dhall'],
 \       'description': 'Fix Dhall files with dhall-format.',
 \   },
+\   'ormolu': {
+\       'function': 'ale#fixers#ormolu#Fix',
+\       'suggested_filetypes': ['haskell'],
+\       'description': 'A formatter for Haskell source code.',
+\   },
 \}
 
 " Reset the function registry to the default entries.
