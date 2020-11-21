@@ -2,7 +2,7 @@
 " Description: Implementation of the Language Server Protocol for R.
 
 call ale#Set('r_languageserver_cmd', 'languageserver::run()')
-call ale#Set('r_languageserver_options', {})
+call ale#Set('r_languageserver_config', {})
 
 function! ale_linters#r#languageserver#GetCommand(buffer) abort
     let l:cmd_string = ale#Var(a:buffer, 'r_languageserver_cmd')
@@ -19,7 +19,7 @@ endfunction
 call ale#linter#Define('r', {
 \   'name': 'languageserver',
 \   'lsp': 'stdio',
-\   'lsp_config': {b -> ale#Var(b, 'r_languageserver_options')},
+\   'lsp_config': {b -> ale#Var(b, 'r_languageserver_config')},
 \   'executable': 'Rscript',
 \   'command': function('ale_linters#r#languageserver#GetCommand'),
 \   'project_root': function('ale_linters#r#languageserver#GetProjectRoot')

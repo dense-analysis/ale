@@ -16,8 +16,8 @@ g:ale_r_languageserver_cmd                         *g:ale_r_languageserver_cmd*
   See the languageserver documentation for more options.
 
 
-g:ale_r_languageserver_options                 *g:ale_r_languageserver_options*
-                                               *b:ale_r_languageserver_options*
+g:ale_r_languageserver_config                   *g:ale_r_languageserver_config*
+                                                *b:ale_r_languageserver_config*
   Type: |Dictionary|
   Default: `{}`
 
@@ -45,7 +45,7 @@ g:ale_r_lintr_lint_package                         *g:ale_r_lintr_lint_package*
   Default: `0`
 
   When set to `1`, the file will be checked with `lintr::lint_package` instead
-  of `lintr::lint`. This prevents erroneous namespace warnings when linting 
+  of `lintr::lint`. This prevents erroneous namespace warnings when linting
   package files.
 
 
@@ -59,8 +59,8 @@ g:ale_r_styler_options                                 *g:ale_r_styler_options*
 
   This option can be configured to change the options for styler.
 
-  The value of this option will be used as the `style` argument for the 
-  `styler::style_file` options. Consult the styler documentation 
+  The value of this option will be used as the `style` argument for the
+  `styler::style_file` options. Consult the styler documentation
   for more information.
 
 

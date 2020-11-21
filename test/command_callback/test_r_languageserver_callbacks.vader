@@ -17,6 +17,6 @@ Execute(The project root should be detected correctly):
 Execute(Should accept configuration settings):
   AssertLSPConfig {}
 
-  let b:ale_r_languageserver_options = {'r': {'lsp': {'debug': 'true', 'diagnostics': 'true'}}}
+  let b:ale_r_languageserver_config = {'r': {'lsp': {'debug': 'true', 'diagnostics': 'true'}}}
 
   AssertLSPConfig {'r': {'lsp': {'debug': 'true', 'diagnostics': 'true'}}}
