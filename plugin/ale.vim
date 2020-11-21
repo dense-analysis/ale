@@ -158,12 +158,19 @@ let g:ale_python_auto_pipenv = get(g:, 'ale_python_auto_pipenv', 0)
 " This variable can be overridden to set the GO111MODULE environment variable.
 let g:ale_go_go111module = get(g:, 'ale_go_go111module', '')
 
+" If 1, enable a popup menu for commands.
+let g:ale_popup_menu_enabled = get(g:, 'ale_popup_menu_enabled', has('gui'))
+
 if g:ale_set_balloons
     call ale#balloon#Enable()
 endif
 
 if g:ale_completion_enabled
     call ale#completion#Enable()
+endif
+
+if g:ale_popup_menu_enabled
+    call ale#code_action#EnablePopUpMenu()
 endif
 
 " Define commands for moving through warnings and errors.

@@ -673,13 +673,31 @@ for a full list of options.
 -------------------------------------------------------------------------------
 5.7 Refactoring: Rename, Actions                                 *ale-refactor*
 
-ALE supports renaming symbols in symbols in code such as variables or class
-names with the |ALERename| command.
+ALE supports renaming symbols in code such as variables or class names with
+the |ALERename| command.
 
 |ALECodeAction| will execute actions on the cursor or applied to a visual
 range selection, such as automatically fixing errors.
 
+Actions will appear in the right click mouse menu by default for GUI versions
+of Vim, unless disabled by setting |g:ale_popup_menu_enabled| to `0`.
 
+Make sure to set your Vim to move the cursor position whenever you right
+click, and enable the mouse menu: >
+
+  set mouse=a
+  set mousemodel=popup_setpos
+<
+You may wish to remove some other menu items you don't want to see: >
+
+  silent! aunmenu PopUp.Select\ Word
+  silent! aunmenu PopUp.Select\ Sentence
+  silent! aunmenu PopUp.Select\ Paragraph
+  silent! aunmenu PopUp.Select\ Line
+  silent! aunmenu PopUp.Select\ Block
+  silent! aunmenu PopUp.Select\ Blockwise
+  silent! aunmenu PopUp.Select\ All
+<
 ===============================================================================
 6. Global Options                                                 *ale-options*
 
@@ -1782,6 +1800,19 @@ g:ale_pattern_options_enabled                   *g:ale_pattern_options_enabled*
 
   This option can be used for disabling pattern options. If set to `0`, ALE
   will not set buffer variables per |g:ale_pattern_options|.
+
+
+g:ale_popup_menu_enabled                             *g:ale_popup_menu_enabled*
+
+  Type: |Number|
+  Default: `has('gui')`
+
+  When this option is set to `1`, ALE will show code actions and rename
+  capabilities in the right click mouse menu when there's a LSP server or
+  tsserver available. See |ale-refactor|.
+
+  This setting must be set to `1` before ALE is loaded for this behavior
+  to be enabled. See |ale-lint-settings-on-startup|.
 
 
 g:ale_rename_tsserver_find_in_comments *g:ale_rename_tsserver_find_in_comments*

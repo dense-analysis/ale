@@ -263,3 +263,105 @@ function! ale#code_action#BuildChangesList(changes_map) abort
 
     return l:changes
 endfunction
+
+function! s:EscapeMenuName(text) abort
+    return substitute(a:text, '\\\| \|\.\|&', '\\\0', 'g')
+endfunction
+
+function! s:UpdateMenu(data, menu_items) abort
+    silent! aunmenu PopUp.Refactor\.\.\.
+
+    if empty(a:data)
+        return
+    endif
+
+    for [l:type, l:item] in a:menu_items
+        let l:name = l:type is# 'tsserver' ? l:item.name : l:item.title
+        let l:func_name = l:type is# 'tsserver'
+        \   ? 'ale#codefix#ApplyTSServerCodeAction'
+        \   : 'ale#codefix#ApplyLSPCodeAction'
+
+        execute printf(
+        \   'anoremenu <silent> PopUp.&Refactor\.\.\..%s'
+        \       . ' :call %s(%s, %s)<CR>',
+        \   s:EscapeMenuName(l:name),
+        \   l:func_name,
+        \   string(a:data),
+        \   string(l:item),
+        \)
+    endfor
+
+    if empty(a:menu_items)
+        silent! anoremenu PopUp.Refactor\.\.\..(None) :silent
+    endif
+endfunction
+
+function! s:GetCodeActions(linter, options) abort
+    let l:buffer = bufnr('')
+    let [l:line, l:column] = getpos('.')[1:2]
+    let l:column = min([l:column, len(getline(l:line))])
+
+    let l:location = {
+    \   'buffer': l:buffer,
+    \   'line': l:line,
+    \   'column': l:column,
+    \   'end_line': l:line,
+    \   'end_column': l:column,
+    \}
+    let l:Callback = function('s:OnReady', [l:location, a:options])
+    call ale#lsp_linter#StartLSP(l:buffer, a:linter, l:Callback)
+endfunction
+
+function! ale#code_action#GetCodeActions(options) abort
+    silent! aunmenu PopUp.Rename
+    silent! aunmenu PopUp.Refactor\.\.\.
+
+    " Only display the menu items if there's an LSP server.
+    let l:has_lsp = 0
+
+    for l:linter in ale#linter#Get(&filetype)
+        if !empty(l:linter.lsp)
+            let l:has_lsp = 1
+
+            break
+        endif
+    endfor
+
+    if l:has_lsp
+        if !empty(expand('<cword>'))
+            silent! anoremenu <silent> PopUp.Rename :ALERename<CR>
+        endif
+
+        silent! anoremenu <silent> PopUp.Refactor\.\.\..(None) :silent<CR>
+
+        call ale#codefix#Execute(
+        \   mode() is# 'v' || mode() is# "\<C-V>",
+        \   function('s:UpdateMenu')
+        \)
+    endif
+endfunction
+
+function! s:Setup(enabled) abort
+    augroup ALECodeActionsGroup
+        autocmd!
+
+        if a:enabled
+            autocmd MenuPopup * :call ale#code_action#GetCodeActions({})
+        endif
+    augroup END
+
+    if !a:enabled
+        silent! augroup! ALECodeActionsGroup
+
+        silent! aunmenu PopUp.Rename
+        silent! aunmenu PopUp.Refactor\.\.\.
+    endif
+endfunction
+
+function! ale#code_action#EnablePopUpMenu() abort
+    call s:Setup(1)
+endfunction
+
+function! ale#code_action#DisablePopUpMenu() abort
+    call s:Setup(0)
+endfunction
