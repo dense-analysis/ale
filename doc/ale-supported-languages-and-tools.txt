@@ -337,6 +337,7 @@ Notes:
   * `phpmd`
   * `phpstan`
   * `psalm`!!
+  * `tlint`
 * PO
   * `alex`!!
   * `msgfmt`

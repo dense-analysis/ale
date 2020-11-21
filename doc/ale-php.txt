@@ -251,6 +251,34 @@ g:ale_php_php_executable                             *g:ale_php_php_executable*
 
   This variable sets the executable used for php.
 
+
+===============================================================================
+tlint                                                           *ale-php-tlint*
+
+g:ale_php_tlint_executable                         *g:ale_php_tlint_executable*
+                                                   *b:ale_php_tlint_executable*
+  Type: |String|
+  Default: `'tlint'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_php_tlint_use_global                         *g:ale_php_tlint_use_global*
+                                                   *b:ale_php_tlint_use_global*
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_php_tlint_options                               *g:ale_php_tlint_options*
+                                                      *b:ale_php_tlint_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to tlint
+
+
 ===============================================================================
 intelephense                                             *ale-php-intelephense*
 
@@ -277,6 +305,7 @@ g:ale_php_intelephense_use_global           *g:ale_php_intelephense_use_global*
 
   See: |ale-integrations-local-executables|
 
+
 g:ale_php_intelephense_config                   *g:ale_php_intelephense_config*
                                                 *b:ale_php_intelephense_config*
   Type: |Dictionary|
@@ -285,6 +314,7 @@ g:ale_php_intelephense_config                   *g:ale_php_intelephense_config*
   The initialization options config specified by Intelephense. Refer to the
   installation docs provided by intelephense (github.com/bmewburn/intelephense
   -docs).
+
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
