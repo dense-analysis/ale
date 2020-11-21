@@ -40,6 +40,7 @@ Execute(Should handle Rust completion results correctly):
   \   {'word': 'from', 'menu': 'fn from(s: &''a str) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
   \   {'word': 'from', 'menu': 'fn from(s: Box<str>) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
   \   {'word': 'from', 'menu': 'fn from(s: Cow<''a, str>) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'to_vec', 'menu': 'pub fn to_vec(&self) -> Vec<T> where T: Clone,', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
   \],
   \ ale#completion#ParseLSPCompletions({
   \   "jsonrpc":"2.0",
@@ -184,6 +185,11 @@ Execute(Should handle Rust completion results correctly):
   \       "label":"from",
   \       "kind":3,
   \       "detail":"fn from(s: Cow<'a, str>) -> String"
+  \     },
+  \     {
+  \       "label":"to_vec",
+  \       "kind":3,
+  \       "detail":"pub fn to_vec(&self) -> Vec<T>\nwhere\n        T: Clone,"
   \     }
   \   ]
   \ })
