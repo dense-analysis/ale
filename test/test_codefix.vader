@@ -508,7 +508,7 @@ Execute(LSP code action requests should be sent):
   \ [
   \   [0, 'textDocument/codeAction', {
   \     'context': {
-  \       'diagnostics': [{'range': {'end': {'character': 5, 'line': 1}, 'start': {'character': 4, 'line': 1}}, 'code': 2304, 'message': 'oops'}]
+  \       'diagnostics': [{'range': {'end': {'character': 6, 'line': 1}, 'start': {'character': 4, 'line': 1}}, 'code': 2304, 'message': 'oops'}]
   \     },
   \     'range': {'end': {'character': 5, 'line': 1}, 'start': {'character': 4, 'line': 1}},
   \     'textDocument': {'uri': ale#path#ToURI(expand('%:p'))}
@@ -540,7 +540,7 @@ Execute(LSP code action requests should be sent only for error with code):
   \ [
   \   [0, 'textDocument/codeAction', {
   \     'context': {
-  \       'diagnostics': [{'range': {'end': {'character': 5, 'line': 1}, 'start': {'character': 4, 'line': 1}}, 'code': 2304, 'message': 'oops'}]
+  \       'diagnostics': [{'range': {'end': {'character': 6, 'line': 1}, 'start': {'character': 4, 'line': 1}}, 'code': 2304, 'message': 'oops'}]
   \     },
   \     'range': {'end': {'character': 5, 'line': 1}, 'start': {'character': 4, 'line': 1}},
   \     'textDocument': {'uri': ale#path#ToURI(expand('%:p'))}

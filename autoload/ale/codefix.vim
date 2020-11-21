@@ -379,7 +379,7 @@ function! s:OnReady(
             \           },
             \           'end': {
             \               'line': l:nearest_error.end_lnum - 1,
-            \               'character': l:nearest_error.end_col - 1,
+            \               'character': l:nearest_error.end_col,
             \           },
             \       },
             \   },
