@@ -1840,7 +1840,7 @@ g:ale_rename_tsserver_find_in_strings   *g:ale_rename_tsserver_find_in_strings*
 g:ale_set_balloons                                         *g:ale_set_balloons*
                                                            *b:ale_set_balloons*
 
-  Type: |Number|
+  Type: |Number| or |String|
   Default: `has('balloon_eval') && has('gui_running')`
 
   When this option is set to `1`, balloon messages will be displayed for
@@ -1850,6 +1850,13 @@ g:ale_set_balloons                                         *g:ale_set_balloons*
   there are no problems to show, and one of the linters is an LSP linter
   supporting "Hover" information, per |ale-hover|, then brief information
   about the symbol under the cursor will be displayed in a balloon.
+
+  This option can be set to `'hover'` to only enable balloons for hover
+  message, so diagnostics are never shown in balloons. You may wish to
+  configure use this setting only in GUI Vim like so: >
+
+  let g:ale_set_balloons = has('gui_running') ? 'hover' : 0
+<
 
   Balloons can be enabled for terminal versions of Vim that support balloons,
   but some versions of Vim will produce strange mouse behavior when balloons

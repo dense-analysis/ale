@@ -161,7 +161,7 @@ let g:ale_go_go111module = get(g:, 'ale_go_go111module', '')
 " If 1, enable a popup menu for commands.
 let g:ale_popup_menu_enabled = get(g:, 'ale_popup_menu_enabled', has('gui'))
 
-if g:ale_set_balloons
+if g:ale_set_balloons is 1 || g:ale_set_balloons is# 'hover'
     call ale#balloon#Enable()
 endif
 
