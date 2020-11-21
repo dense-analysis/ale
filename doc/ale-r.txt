@@ -3,6 +3,29 @@ ALE R Integration                                               *ale-r-options*
 
 
 ===============================================================================
+languageserver                                           *ale-r-languageserver*
+
+g:ale_r_languageserver_cmd                         *g:ale_r_languageserver_cmd*
+                                                   *b:ale_r_languageserver_cmd*
+  Type: |String|
+  Default: `'languageserver::run()'`
+
+  This option can be configured to change the execution command for
+  languageserver.
+
+  See the languageserver documentation for more options.
+
+
+g:ale_r_languageserver_options                 *g:ale_r_languageserver_options*
+                                               *b:ale_r_languageserver_options*
+  Type: |Dictionary|
+  Default: `{}`
+
+  This option can be configured to change settings for languageserver. See the
+  languageserver documentation for more information.
+
+
+===============================================================================
 lintr                                                             *ale-r-lintr*
 
 g:ale_r_lintr_options                                   *g:ale_r_lintr_options*
