@@ -1,9 +1,10 @@
 ---
-# This configuration closes stale PRs after 30 days.
+# This configuration closes stale PRs after 28 + 7 days.
+# That's 4 weeks until stale bot complains, and a week until it closes a PR.
 # Issues in ALE are never, ever stale. They are either resolved or not.
 only: pulls
 daysUntilStale: 28
-daysUntilClose: 2
+daysUntilClose: 7
 exemptLabels: []
 staleLabel: stale
 markComment: >

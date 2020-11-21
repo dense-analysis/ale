@@ -36,7 +36,7 @@ After:
   call setqflist([])
 
 Execute(Formatting with codes should work for the loclist):
-  call AddItem({'text': 'nocode'})
+  call AddItem({'text': "nocode\r"})
   call ale#list#SetLists(bufnr(''), g:loclist)
 
   AssertEqual
@@ -79,7 +79,7 @@ Execute(Formatting with codes should work for the quickfix list):
   let g:ale_set_loclist = 0
   let g:ale_set_quickfix = 1
 
-  call AddItem({'text': 'nocode'})
+  call AddItem({'text': "nocode\r"})
   call ale#list#SetLists(bufnr(''), g:loclist)
 
   AssertEqual

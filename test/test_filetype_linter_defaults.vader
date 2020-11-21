@@ -39,7 +39,7 @@ Execute(The defaults for the python filetype should be correct):
   AssertEqual [], GetLinterNames('python')
 
 Execute(The defaults for the rust filetype should be correct):
-  AssertEqual ['cargo'], GetLinterNames('rust')
+  AssertEqual ['cargo', 'rls'], GetLinterNames('rust')
 
   let g:ale_linters_explicit = 1
 
