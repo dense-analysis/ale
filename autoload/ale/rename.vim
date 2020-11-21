@@ -85,7 +85,6 @@ function! ale#rename#HandleTSServerResponse(conn_id, response) abort
     \   },
     \   {
     \       'should_save': 1,
-    \       'force_save': get(l:options, 'force_save'),
     \   },
     \)
 endfunction
@@ -118,7 +117,6 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
         \   },
         \   {
         \       'should_save': 1,
-        \       'force_save': get(l:options, 'force_save'),
         \   },
         \)
     endif
@@ -177,7 +175,7 @@ function! s:ExecuteRename(linter, options) abort
     call ale#lsp_linter#StartLSP(l:buffer, a:linter, l:Callback)
 endfunction
 
-function! ale#rename#Execute(options) abort
+function! ale#rename#Execute() abort
     let l:lsp_linters = []
 
     for l:linter in ale#linter#Get(&filetype)
@@ -205,7 +203,6 @@ function! ale#rename#Execute(options) abort
         call s:ExecuteRename(l:lsp_linter, {
         \   'old_name': l:old_name,
         \   'new_name': l:new_name,
-        \   'force_save': get(a:options, 'force_save') is 1,
         \})
     endfor
 endfunction

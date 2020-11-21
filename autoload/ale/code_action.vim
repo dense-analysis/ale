@@ -1,28 +1,24 @@
 " Author: Jerko Steiner <jerko.steiner@gmail.com>
 " Description: Code action support for LSP / tsserver
 
+function! ale#code_action#ReloadBuffer() abort
+    let l:buffer = bufnr('')
+
+    execute 'augroup ALECodeActionReloadGroup' . l:buffer
+        autocmd!
+    augroup END
+
+    silent! execute 'augroup! ALECodeActionReloadGroup' . l:buffer
+
+    call ale#util#Execute(':e!')
+endfunction
+
 function! ale#code_action#HandleCodeAction(code_action, options) abort
     let l:current_buffer = bufnr('')
     let l:changes = a:code_action.changes
     let l:should_save = get(a:options, 'should_save')
-    let l:force_save = get(a:options, 'force_save')
-    let l:safe_changes = []
 
     for l:file_code_edit in l:changes
-        let l:buf = bufnr(l:file_code_edit.fileName)
-
-        if l:buf != -1 && l:buf != l:current_buffer && getbufvar(l:buf, '&mod')
-            if !l:force_save
-                call ale#util#Execute('echom ''Aborting action, file is unsaved''')
-
-                return
-            endif
-        else
-            call add(l:safe_changes, l:file_code_edit)
-        endif
-    endfor
-
-    for l:file_code_edit in l:safe_changes
         call ale#code_action#ApplyChanges(
         \   l:file_code_edit.fileName,
         \   l:file_code_edit.textChanges,
@@ -160,6 +156,20 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
         endif
 
         call setpos('.', [0, l:pos[0], l:pos[1], 0])
+    endif
+
+    if a:should_save && l:buffer > 0 && !l:is_current_buffer
+        " Set up a one-time use event that will delete itself to reload the
+        " buffer next time it's entered to view the changes made to it.
+        execute 'augroup ALECodeActionReloadGroup' . l:buffer
+            autocmd!
+
+            execute printf(
+            \   'autocmd BufEnter <buffer=%d>'
+            \       . ' call ale#code_action#ReloadBuffer()',
+            \   l:buffer
+            \)
+        augroup END
     endif
 endfunction
 
