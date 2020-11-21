@@ -159,7 +159,7 @@ let g:ale_python_auto_pipenv = get(g:, 'ale_python_auto_pipenv', 0)
 let g:ale_go_go111module = get(g:, 'ale_go_go111module', '')
 
 " If 1, enable a popup menu for commands.
-let g:ale_popup_menu_enabled = get(g:, 'ale_popup_menu_enabled', has('gui'))
+let g:ale_popup_menu_enabled = get(g:, 'ale_popup_menu_enabled', has('gui_running'))
 
 if g:ale_set_balloons is 1 || g:ale_set_balloons is# 'hover'
     call ale#balloon#Enable()
