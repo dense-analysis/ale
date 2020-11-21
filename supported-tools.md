@@ -149,6 +149,7 @@ formatting.
   * [erubis](https://github.com/kwatch/erubis)
   * [ruumba](https://github.com/ericqweinstein/ruumba)
 * Erlang
+  * [elvis](https://github.com/inaka/elvis) :floppy_disk:
   * [erlc](http://erlang.org/doc/man/erlc.html)
   * [SyntaxErl](https://github.com/ten0s/syntaxerl)
 * Fish

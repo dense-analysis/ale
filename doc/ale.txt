@@ -2631,6 +2631,7 @@ documented in additional help files.
     elm-make..............................|ale-elm-elm-make|
   erlang..................................|ale-erlang-options|
     dialyzer..............................|ale-erlang-dialyzer|
+    elvis.................................|ale-erlang-elvis|
     erlc..................................|ale-erlang-erlc|
     syntaxerl.............................|ale-erlang-syntaxerl|
   eruby...................................|ale-eruby-options|
