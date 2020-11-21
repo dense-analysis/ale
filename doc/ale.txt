@@ -1694,6 +1694,7 @@ g:ale_lsp_root                                                 *g:ale_lsp_root*
   If neither variable yields a result, a linter-specific function is invoked to
   detect a project root. If this, too, yields no result, the linter is disabled.
 
+
 g:ale_max_buffer_history_size                   *g:ale_max_buffer_history_size*
 
   Type: |Number|
