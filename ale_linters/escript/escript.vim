@@ -1,5 +1,5 @@
 scriptencoding utf-8
-" Author: Moritz Röhirch - https://github.com/m-ildefons
+" Author: Moritz Röhrich - https://github.com/m-ildefons
 
 let g:ale_erlang_escript_executable = get(g:, 'ale_erlang_escript_executable', 'escript')
 let g:ale_erlang_escript_options = get(g:, 'ale_erlang_escript_options', '')

@@ -1,0 +1,41 @@
+Before:
+  runtime ale_linters/escript/escript.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The escript handler should handle error messages.):
+  AssertEqual
+  \[
+  \  {
+  \      'lnum': '0',
+  \      'bufnr': 3,
+  \      'col': 0,
+  \      'text': 'function main/1 undefined',
+  \      'type': 'E'
+  \  }
+  \],
+  \ ale_linters#escript#escript#Handle(bufnr(''), ['test.erl:0: function main/1 undefined'])
+
+Execute(The escript handler should handle warning messages.):
+  AssertEqual
+  \[
+  \  {
+  \      'lnum': '5',
+  \      'bufnr': 3,
+  \      'col': 0,
+  \      'text': "variable 'Argv' is unused",
+  \      'type': 'W'
+  \  }
+  \],
+  \ ale_linters#escript#escript#Handle(bufnr(''), ["test.erl:5: Warning: variable 'Argv' is unused"])
+
+Execute(The escript handler should handle empty files.):
+  AssertEqual
+  \[],
+  \ ale_linters#escript#escript#Handle(bufnr(''), [])
+
+Execute(The escript handler should handle empty lines.):
+  AssertEqual
+  \[],
+  \ ale_linters#escript#escript#Handle(bufnr(''), [''])
