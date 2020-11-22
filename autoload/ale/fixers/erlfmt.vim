@@ -12,7 +12,7 @@ function! ale#fixers#erlfmt#GetCommand(buffer) abort
     let l:executable = ale#Escape(ale#fixers#erlfmt#GetExecutable(a:buffer))
     let l:options = ale#Var(a:buffer, 'erlfmt_options')
 
-    return l:executable . ' format'
+    return l:executable . ' fmt'
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' %t'
 endfunction
