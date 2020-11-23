@@ -48,11 +48,11 @@ endfunction
 function! ale_linters#elixir#credo#GetConfigFile() abort
     let l:config_file = get(g:, 'ale_elixir_credo_config_file', '')
 
-    if len(l:config_file) == 0
+    if empty(l:config_file)
         return ''
-    else
-        return ' --config-file ' . l:config_file
     endif
+
+    return ' --config-file ' . l:config_file
 endfunction
 
 function! ale_linters#elixir#credo#GetCommand(buffer) abort
