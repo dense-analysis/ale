@@ -2971,6 +2971,7 @@ documented in additional help files.
   yaml....................................|ale-yaml-options|
     prettier..............................|ale-yaml-prettier|
     swaglint..............................|ale-yaml-swaglint|
+    yamlfix...............................|ale-yaml-yamlfix|
     yamllint..............................|ale-yaml-yamllint|
   yang....................................|ale-yang-options|
     yang-lsp..............................|ale-yang-lsp|

@@ -533,6 +533,7 @@ formatting.
 * YAML
   * [prettier](https://github.com/prettier/prettier)
   * [swaglint](https://github.com/byCedric/swaglint)
+  * [yamlfix](https://lyz-code.github.io/yamlfix)
   * [yamllint](https://yamllint.readthedocs.io/)
 * YANG
   * [yang-lsp](https://github.com/theia-ide/yang-lsp)
