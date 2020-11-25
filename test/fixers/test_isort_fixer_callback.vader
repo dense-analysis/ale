@@ -56,5 +56,5 @@ Execute(Pipenv is detected when python_isort_auto_pipenv is set):
   call ale#test#SetFilename('/testplugin/test/python_fixtures/pipenv/whatever.py')
 
   AssertEqual
-  \ {'command': 'cd %s:h && ' . ale#Escape('pipenv') . ' run isort -'},
+  \ {'command': ale#path#BufferCdString(bufnr('')) . ale#Escape('pipenv') . ' run isort -'},
   \ ale#fixers#isort#Fix(bufnr(''))
