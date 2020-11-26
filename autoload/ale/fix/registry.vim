@@ -112,7 +112,7 @@ let s:default_registry = {
 \   },
 \   'yamlfix': {
 \       'function': 'ale#fixers#yamlfix#Fix',
-\       'suggested_filetypes': ['python'],
+\       'suggested_filetypes': ['yaml'],
 \       'description': 'Fix yaml files with yamlfix.',
 \   },
 \   'yapf': {
