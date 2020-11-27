@@ -269,7 +269,7 @@ Execute(tsserver rename requests should be sent):
   \   }]
   \ ],
   \ g:message_list
-  AssertEqual {'42': {'old_name': 'somelongerline', 'new_name': 'a-new-name', 'force_save': 0}},
+  AssertEqual {'42': {'old_name': 'somelongerline', 'new_name': 'a-new-name'}},
   \ ale#rename#GetMap()
 
 Given python(Some Python file):
@@ -470,7 +470,7 @@ Execute(LSP rename requests should be sent):
   let b:ale_linters = ['pyls']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
-  ALERename!
+  ALERename
 
   " We shouldn't register the callback yet.
   AssertEqual '''''', string(g:Callback)
@@ -500,5 +500,5 @@ Execute(LSP rename requests should be sent):
   \ ],
   \ g:message_list
 
-  AssertEqual {'42': {'old_name': 'foo', 'new_name': 'a-new-name', 'force_save': 1}},
+  AssertEqual {'42': {'old_name': 'foo', 'new_name': 'a-new-name'}},
   \ ale#rename#GetMap()

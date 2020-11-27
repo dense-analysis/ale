@@ -1,28 +1,24 @@
 " Author: Jerko Steiner <jerko.steiner@gmail.com>
 " Description: Code action support for LSP / tsserver
 
+function! ale#code_action#ReloadBuffer() abort
+    let l:buffer = bufnr('')
+
+    execute 'augroup ALECodeActionReloadGroup' . l:buffer
+        autocmd!
+    augroup END
+
+    silent! execute 'augroup! ALECodeActionReloadGroup' . l:buffer
+
+    call ale#util#Execute(':e!')
+endfunction
+
 function! ale#code_action#HandleCodeAction(code_action, options) abort
     let l:current_buffer = bufnr('')
     let l:changes = a:code_action.changes
     let l:should_save = get(a:options, 'should_save')
-    let l:force_save = get(a:options, 'force_save')
-    let l:safe_changes = []
 
     for l:file_code_edit in l:changes
-        let l:buf = bufnr(l:file_code_edit.fileName)
-
-        if l:buf != -1 && l:buf != l:current_buffer && getbufvar(l:buf, '&mod')
-            if !l:force_save
-                call ale#util#Execute('echom ''Aborting action, file is unsaved''')
-
-                return
-            endif
-        else
-            call add(l:safe_changes, l:file_code_edit)
-        endif
-    endfor
-
-    for l:file_code_edit in l:safe_changes
         call ale#code_action#ApplyChanges(
         \   l:file_code_edit.fileName,
         \   l:file_code_edit.textChanges,
@@ -125,7 +121,12 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
         endif
 
         call extend(l:middle, l:insertions[1:])
-        let l:middle[-1] .= l:lines[l:end_line - 1][l:end_column - 1 :]
+
+        if l:end_line <= len(l:lines)
+            " Only extend the last line if end_line is within the range of
+            " lines.
+            let l:middle[-1] .= l:lines[l:end_line - 1][l:end_column - 1 :]
+        endif
 
         let l:lines_before_change = len(l:lines)
         let l:lines = l:start + l:middle + l:lines[l:end_line :]
@@ -155,6 +156,20 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
         endif
 
         call setpos('.', [0, l:pos[0], l:pos[1], 0])
+    endif
+
+    if a:should_save && l:buffer > 0 && !l:is_current_buffer
+        " Set up a one-time use event that will delete itself to reload the
+        " buffer next time it's entered to view the changes made to it.
+        execute 'augroup ALECodeActionReloadGroup' . l:buffer
+            autocmd!
+
+            execute printf(
+            \   'autocmd BufEnter <buffer=%d>'
+            \       . ' call ale#code_action#ReloadBuffer()',
+            \   l:buffer
+            \)
+        augroup END
     endif
 endfunction
 
@@ -262,4 +277,106 @@ function! ale#code_action#BuildChangesList(changes_map) abort
     endfor
 
     return l:changes
+endfunction
+
+function! s:EscapeMenuName(text) abort
+    return substitute(a:text, '\\\| \|\.\|&', '\\\0', 'g')
+endfunction
+
+function! s:UpdateMenu(data, menu_items) abort
+    silent! aunmenu PopUp.Refactor\.\.\.
+
+    if empty(a:data)
+        return
+    endif
+
+    for [l:type, l:item] in a:menu_items
+        let l:name = l:type is# 'tsserver' ? l:item.name : l:item.title
+        let l:func_name = l:type is# 'tsserver'
+        \   ? 'ale#codefix#ApplyTSServerCodeAction'
+        \   : 'ale#codefix#ApplyLSPCodeAction'
+
+        execute printf(
+        \   'anoremenu <silent> PopUp.&Refactor\.\.\..%s'
+        \       . ' :call %s(%s, %s)<CR>',
+        \   s:EscapeMenuName(l:name),
+        \   l:func_name,
+        \   string(a:data),
+        \   string(l:item),
+        \)
+    endfor
+
+    if empty(a:menu_items)
+        silent! anoremenu PopUp.Refactor\.\.\..(None) :silent
+    endif
+endfunction
+
+function! s:GetCodeActions(linter, options) abort
+    let l:buffer = bufnr('')
+    let [l:line, l:column] = getpos('.')[1:2]
+    let l:column = min([l:column, len(getline(l:line))])
+
+    let l:location = {
+    \   'buffer': l:buffer,
+    \   'line': l:line,
+    \   'column': l:column,
+    \   'end_line': l:line,
+    \   'end_column': l:column,
+    \}
+    let l:Callback = function('s:OnReady', [l:location, a:options])
+    call ale#lsp_linter#StartLSP(l:buffer, a:linter, l:Callback)
+endfunction
+
+function! ale#code_action#GetCodeActions(options) abort
+    silent! aunmenu PopUp.Rename
+    silent! aunmenu PopUp.Refactor\.\.\.
+
+    " Only display the menu items if there's an LSP server.
+    let l:has_lsp = 0
+
+    for l:linter in ale#linter#Get(&filetype)
+        if !empty(l:linter.lsp)
+            let l:has_lsp = 1
+
+            break
+        endif
+    endfor
+
+    if l:has_lsp
+        if !empty(expand('<cword>'))
+            silent! anoremenu <silent> PopUp.Rename :ALERename<CR>
+        endif
+
+        silent! anoremenu <silent> PopUp.Refactor\.\.\..(None) :silent<CR>
+
+        call ale#codefix#Execute(
+        \   mode() is# 'v' || mode() is# "\<C-V>",
+        \   function('s:UpdateMenu')
+        \)
+    endif
+endfunction
+
+function! s:Setup(enabled) abort
+    augroup ALECodeActionsGroup
+        autocmd!
+
+        if a:enabled
+            autocmd MenuPopup * :call ale#code_action#GetCodeActions({})
+        endif
+    augroup END
+
+    if !a:enabled
+        silent! augroup! ALECodeActionsGroup
+
+        silent! aunmenu PopUp.Rename
+        silent! aunmenu PopUp.Refactor\.\.\.
+    endif
+endfunction
+
+function! ale#code_action#EnablePopUpMenu() abort
+    call s:Setup(1)
+endfunction
+
+function! ale#code_action#DisablePopUpMenu() abort
+    call s:Setup(0)
 endfunction

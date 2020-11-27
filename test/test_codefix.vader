@@ -105,11 +105,9 @@ Execute(Failed codefix responses should be handled correctly):
   \)
   AssertEqual g:handle_code_action_called, 0
 
-
-
 Given typescript(Some typescript file):
   foo
-  somelongerline
+  somelongerline ()
   bazxyzxyzxyz
 
 Execute(getCodeFixes from tsserver should be handled):
@@ -283,7 +281,7 @@ Execute(tsserver codefix requests should be sent):
 
   runtime ale_linters/typescript/tsserver.vim
   let g:ale_buffer_info = {bufnr(''): {'loclist': [{'lnum': 2, 'col': 5, 'code': 2304}]}}
-  call setpos('.', [bufnr(''), 2, 5, 0])
+  call setpos('.', [bufnr(''), 2, 16, 0])
 
   " ALECodeAction
   call ale#codefix#Execute(0)
@@ -303,9 +301,9 @@ Execute(tsserver codefix requests should be sent):
   \   ale#lsp#tsserver_message#Change(bufnr('')),
   \   [0, 'ts@getCodeFixes', {
   \     'startLine': 2,
-  \     'startOffset': 5,
+  \     'startOffset': 16,
   \     'endLine': 2,
-  \     'endOffset': 6,
+  \     'endOffset': 17,
   \     'file': expand('%:p'),
   \     'errorCodes': [2304],
   \   }]
@@ -316,8 +314,8 @@ Execute(tsserver codefix requests should be sent only for error with code):
   call ale#linter#Reset()
 
   runtime ale_linters/typescript/tsserver.vim
-  let g:ale_buffer_info = {bufnr(''): {'loclist': [{'lnum': 2, 'col': 5}, {'lnum': 2, 'col': 5, 'code': 2304}]}}
-  call setpos('.', [bufnr(''), 2, 5, 0])
+  let g:ale_buffer_info = {bufnr(''): {'loclist': [{'lnum': 2, 'col': 16}, {'lnum': 2, 'col': 16, 'code': 2304}]}}
+  call setpos('.', [bufnr(''), 2, 16, 0])
 
   " ALECodeAction
   call ale#codefix#Execute(0)
@@ -337,9 +335,9 @@ Execute(tsserver codefix requests should be sent only for error with code):
   \   ale#lsp#tsserver_message#Change(bufnr('')),
   \   [0, 'ts@getCodeFixes', {
   \     'startLine': 2,
-  \     'startOffset': 5,
+  \     'startOffset': 16,
   \     'endLine': 2,
-  \     'endOffset': 6,
+  \     'endOffset': 17,
   \     'file': expand('%:p'),
   \     'errorCodes': [2304],
   \   }]
@@ -423,43 +421,6 @@ Execute(getEditsForRefactor should print error on failure):
   \)
 
   AssertEqual ['echom ''Error while getting edits for refactor. Reason: oops'''], g:expr_list
-
-" TODO: I can't figure out how to run ALECodeAction on range
-" in test function. Therefore I can't write properly working
-" test. If somebody knows how to do that help is appreciated.
-"
-" Execute(tsserver getApplicableRefactors requests should be sent):
-"   call ale#linter#Reset()
-"
-"   runtime ale_linters/typescript/tsserver.vim
-"   let g:ale_buffer_info = {bufnr(''): {'loclist': []}}
-"   call setpos('.', [bufnr(''), 2, 5, 0])
-"   normal "v$"
-"
-"   execute "ALECodeAction"
-"
-"   " We shouldn't register the callback yet.
-"   AssertEqual '''''', string(g:Callback)
-"
-"   AssertEqual type(function('type')), type(g:InitCallback)
-"   call g:InitCallback()
-"
-"   AssertEqual 'code_actions', g:capability_checked
-"   AssertEqual
-"   \ 'function(''ale#codefix#HandleTSServerResponse'')',
-"   \ string(g:Callback)
-"   AssertEqual
-"   \ [
-"   \   ale#lsp#tsserver_message#Change(bufnr('')),
-"   \   [0, 'ts@getApplicableRefactors', {
-"   \     'startLine': 2,
-"   \     'startOffset': 5,
-"   \     'endLine': 2,
-"   \     'endOffset': 15,
-"   \     'file': expand('%:p'),
-"   \   }]
-"   \ ],
-"   \ g:message_list
 
 Execute(Failed LSP responses should be handled correctly):
   call ale#codefix#HandleLSPResponse(
@@ -545,23 +506,15 @@ Execute(LSP code action requests should be sent):
   \ string(g:Callback)
   AssertEqual
   \ [
-  \   [1, 'workspace/didChangeConfiguration', {'settings': {'python': {}}}],
-  \   [1, 'textDocument/didChange', {
-  \     'contentChanges': [{'text': "def main():\n    a = 1\n    b = a + 2\n"}],
-  \     'textDocument': {
-  \         'uri': ale#path#ToURI(expand('%:p')),
-  \         'version': g:ale_lsp_next_version_id - 1,
-  \     },
-  \   }],
   \   [0, 'textDocument/codeAction', {
   \     'context': {
-  \       'diagnostics': [{'range': {'end': {'character': 5, 'line': 1}, 'start': {'character': 4, 'line': 1}}, 'code': 2304, 'message': 'oops'}]
+  \       'diagnostics': [{'range': {'end': {'character': 6, 'line': 1}, 'start': {'character': 4, 'line': 1}}, 'code': 2304, 'message': 'oops'}]
   \     },
   \     'range': {'end': {'character': 5, 'line': 1}, 'start': {'character': 4, 'line': 1}},
   \     'textDocument': {'uri': ale#path#ToURI(expand('%:p'))}
   \   }]
   \ ],
-  \ g:message_list
+  \ g:message_list[-1:]
 
 Execute(LSP code action requests should be sent only for error with code):
   call ale#linter#Reset()
@@ -585,20 +538,12 @@ Execute(LSP code action requests should be sent only for error with code):
   \ string(g:Callback)
   AssertEqual
   \ [
-  \   [1, 'workspace/didChangeConfiguration', {'settings': {'python': {}}}],
-  \   [1, 'textDocument/didChange', {
-  \     'contentChanges': [{'text': "def main():\n    a = 1\n    b = a + 2\n"}],
-  \     'textDocument': {
-  \         'uri': ale#path#ToURI(expand('%:p')),
-  \         'version': g:ale_lsp_next_version_id - 1,
-  \     },
-  \   }],
   \   [0, 'textDocument/codeAction', {
   \     'context': {
-  \       'diagnostics': [{'range': {'end': {'character': 5, 'line': 1}, 'start': {'character': 4, 'line': 1}}, 'code': 2304, 'message': 'oops'}]
+  \       'diagnostics': [{'range': {'end': {'character': 6, 'line': 1}, 'start': {'character': 4, 'line': 1}}, 'code': 2304, 'message': 'oops'}]
   \     },
   \     'range': {'end': {'character': 5, 'line': 1}, 'start': {'character': 4, 'line': 1}},
   \     'textDocument': {'uri': ale#path#ToURI(expand('%:p'))}
   \   }]
   \ ],
-  \ g:message_list
+  \ g:message_list[-1:]
