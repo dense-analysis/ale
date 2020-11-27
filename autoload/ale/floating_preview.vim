@@ -10,16 +10,16 @@ function! ale#floating_preview#Show(lines, ...) abort
       return
     endif
 
+    " Remove the close autocmd so it doesn't happen mid update
+    augroup NvimFloating
+        autocmd!
+    augroup END
+
     let l:options = get(a:000, 0, {})
     " Only create a new window if we need it
-    if !exists('w:preview')
+    if !exists('w:preview') || index(nvim_list_wins(), w:preview['id']) is# -1
         call s:Create(l:options)
     else
-        " Remove the close autocmd so it doesn't happen mid update
-        augroup NvimFloating
-            autocmd!
-        augroup END
-
         call nvim_buf_set_option(w:preview['buffer'], 'modifiable', v:true)
     endif
 
