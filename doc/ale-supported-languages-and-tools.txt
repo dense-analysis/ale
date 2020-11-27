@@ -524,6 +524,7 @@ Notes:
 * YAML
   * `prettier`
   * `swaglint`
+  * `yamlfix`
   * `yamllint`
 * YANG
   * `yang-lsp`

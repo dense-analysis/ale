@@ -110,6 +110,11 @@ let s:default_registry = {
 \       'suggested_filetypes': [],
 \       'description': 'Remove all trailing whitespace characters at the end of every line.',
 \   },
+\   'yamlfix': {
+\       'function': 'ale#fixers#yamlfix#Fix',
+\       'suggested_filetypes': ['yaml'],
+\       'description': 'Fix yaml files with yamlfix.',
+\   },
 \   'yapf': {
 \       'function': 'ale#fixers#yapf#Fix',
 \       'suggested_filetypes': ['python'],
