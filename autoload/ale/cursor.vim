@@ -139,11 +139,15 @@ function! s:ShowCursorDetailForItem(loc, options) abort
     let s:last_detailed_line = line('.')
     let l:message = get(a:loc, 'detail', a:loc.text)
     let l:lines = split(l:message, "\n")
-    call ale#preview#Show(l:lines, {'stay_here': l:stay_here})
+    if g:ale_floating_preview || g:ale_detail_to_floating_preview
+        call ale#floating_preview#Show(l:lines)
+    else
+        call ale#preview#Show(l:lines, {'stay_here': l:stay_here})
 
-    " Clear the echo message if we manually displayed details.
-    if !l:stay_here
-        execute 'echo'
+        " Clear the echo message if we manually displayed details.
+        if !l:stay_here
+            execute 'echo'
+        endif
     endif
 endfunction
 

@@ -25,85 +25,27 @@ endfunction
 function! ale#preview#Show(lines, ...) abort
     let l:options = get(a:000, 0, {})
 
-    if g:ale_float_preview && exists('*nvim_open_win')
-        call ale#preview#ShowFloating(a:lines, l:options)
-    else
-        silent pedit ALEPreviewWindow
-        wincmd P
+    silent pedit ALEPreviewWindow
+    wincmd P
 
-        setlocal modifiable
-        setlocal noreadonly
-        setlocal nobuflisted
-        setlocal buftype=nofile
-        setlocal bufhidden=wipe
-        :%d
-        call setline(1, a:lines)
-        setlocal nomodifiable
-        setlocal readonly
-        let &l:filetype = get(l:options, 'filetype', 'ale-preview')
-
-        for l:command in get(l:options, 'commands', [])
-            call execute(l:command)
-        endfor
-
-        if get(l:options, 'stay_here')
-            wincmd p
-        endif
-    endif
-endfunction
-
-" Precondition: exists('*nvim_open_win')
-function! ale#preview#ShowFloating(lines, ...) abort
-    let l:options = get(a:000, 0, {})
-    let l:buf = nvim_create_buf(v:false, v:false)
-    let s:winid = nvim_open_win(l:buf, v:false, {
-    \ 'relative': 'cursor',
-    \ 'row': 1,
-    \ 'col': 0,
-    \ 'width': 42,
-    \ 'height': 4,
-    \ 'style': 'minimal'
-    \ })
-    call nvim_buf_set_option(l:buf, 'buftype', 'acwrite')
-    call nvim_buf_set_option(l:buf, 'bufhidden', 'delete')
-    call nvim_buf_set_option(l:buf, 'swapfile', v:false)
-    call nvim_buf_set_option(l:buf, 'filetype', get(l:options, 'filetype', 'ale-preview'))
-
-    " Execute commands in window context
-    let l:parent_window = nvim_get_current_win()
-    call nvim_set_current_win(s:winid)
+    setlocal modifiable
+    setlocal noreadonly
+    setlocal nobuflisted
+    setlocal buftype=nofile
+    setlocal bufhidden=wipe
+    :%d
+    call setline(1, a:lines)
+    setlocal nomodifiable
+    setlocal readonly
+    let &l:filetype = get(l:options, 'filetype', 'ale-preview')
 
     for l:command in get(l:options, 'commands', [])
         call execute(l:command)
     endfor
 
-    " Return to parent context if stay_here not set
     if get(l:options, 'stay_here')
-        call nvim_set_current_win(l:parent_window)
-
-        augroup NvimFloating
-            autocmd CursorMoved <buffer> ++once call s:close_floating()
-        augroup END
+        wincmd p
     endif
-
-    let l:width = max(map(copy(a:lines), 'strdisplaywidth(v:val)'))
-    let l:height = min([len(a:lines), 10])
-    call nvim_win_set_width(s:winid, l:width)
-    call nvim_win_set_height(s:winid, l:height)
-
-    call nvim_buf_set_lines(winbufnr(s:winid), 0, -1, v:false, a:lines)
-    call nvim_buf_set_option(winbufnr(s:winid), 'modified', v:false)
-    call nvim_buf_set_option(l:buf, 'modifiable', v:false)
-endfunction
-
-function! s:close_floating() abort
-    call setbufvar(winbufnr(s:winid), '&modified', 0)
-
-    if win_id2win(s:winid) > 0
-        execute win_id2win(s:winid).'wincmd c'
-    endif
-
-    let s:winid = 0
 endfunction
 
 " Close the preview window if the filetype matches the given one.
