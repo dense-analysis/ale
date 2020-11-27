@@ -6,8 +6,9 @@
 
 function! ale#floating_preview#Show(lines, ...) abort
     if !exists('*nvim_open_win')
-      execute 'echom ''Floating windows not supported in this vim instance.'''
-      return
+        execute 'echom ''Floating windows not supported in this vim instance.'''
+
+        return
     endif
 
     " Remove the close autocmd so it doesn't happen mid update
@@ -16,14 +17,13 @@ function! ale#floating_preview#Show(lines, ...) abort
     augroup END
 
     let l:options = get(a:000, 0, {})
+
     " Only create a new window if we need it
     if !exists('w:preview') || index(nvim_list_wins(), w:preview['id']) is# -1
         call s:Create(l:options)
     else
         call nvim_buf_set_option(w:preview['buffer'], 'modifiable', v:true)
     endif
-
-    echom join(items(w:preview), ', ')
 
     " Execute commands in window context
     let l:parent_window = nvim_get_current_win()
@@ -39,6 +39,7 @@ function! ale#floating_preview#Show(lines, ...) abort
     " Return to parent context on move
     augroup NvimFloating
         autocmd!
+
         if g:ale_close_preview_on_insert
             autocmd CursorMoved,TabLeave,WinLeave,InsertEnter <buffer> ++once call s:Close()
         else
@@ -75,7 +76,6 @@ function! s:Create(options) abort
 endfunction
 
 function! s:Close() abort
-    echom 'calling close'
     if !exists('w:preview')
         return
     endif
