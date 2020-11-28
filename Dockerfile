@@ -10,6 +10,8 @@ ENV PACKAGES="\
     git \
     python \
     py-pip \
+    grep \
+    sed \
 "
 RUN apk --update add $PACKAGES && \
     rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
