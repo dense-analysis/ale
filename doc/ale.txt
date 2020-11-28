@@ -2956,11 +2956,11 @@ documented in additional help files.
     hdl-checker...........................|ale-vhdl-hdl-checker|
     vcom..................................|ale-vhdl-vcom|
     xvhdl.................................|ale-vhdl-xvhdl|
+  vim help................................|ale-vim-help-options|
+    write-good............................|ale-vim-help-write-good|
   vim.....................................|ale-vim-options|
     vimls.................................|ale-vim-vimls|
     vint..................................|ale-vim-vint|
-  vim help................................|ale-vim-help-options|
-    write-good............................|ale-vim-help-write-good|
   vue.....................................|ale-vue-options|
     prettier..............................|ale-vue-prettier|
     vls...................................|ale-vue-vls|
