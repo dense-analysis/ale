@@ -46,7 +46,9 @@ echo '========================================'
 echo 'Differences follow:'
 echo
 
-test/script/check-supported-tools-tables || exit_code=$?
+set -o pipefail
+docker run "${docker_flags[@]}" test/script/check-supported-tools-tables || exit_code=$?
+set +o pipefail
 
 echo '========================================'
 echo 'Look for badly aligned doc tags'
