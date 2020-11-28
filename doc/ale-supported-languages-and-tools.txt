@@ -49,8 +49,8 @@ Notes:
   * `astyle`
   * `ccls`
   * `clang` (`cc`)
-  * `clangd`
   * `clang-format`
+  * `clangd`
   * `clangtidy`!!
   * `cppcheck`
   * `cpplint`!!
@@ -67,9 +67,9 @@ Notes:
   * `astyle`
   * `ccls`
   * `clang` (`cc`)
+  * `clang-format`
   * `clangcheck`!!
   * `clangd`
-  * `clang-format`
   * `clangtidy`!!
   * `clazy`!!
   * `cppcheck`
@@ -140,9 +140,9 @@ Notes:
   * `erubis`
   * `ruumba`
 * Erlang
+  * `SyntaxErl`
   * `elvis`!!
   * `erlc`
-  * `SyntaxErl`
 * Fish
   * `fish` (-n flag)
 * Fortran
@@ -160,17 +160,17 @@ Notes:
 * Go
   * `bingo`
   * `go build`!!
+  * `go mod`!!
+  * `go vet`!!
   * `gofmt`
   * `goimports`
   * `golangci-lint`!!
   * `golangserver`
   * `golint`
   * `gometalinter`!!
-  * `go mod`!!
   * `gopls`
   * `gosimple`!!
   * `gotype`!!
-  * `go vet`!!
   * `revive`!!
   * `staticcheck`!!
 * GraphQL
@@ -203,10 +203,10 @@ Notes:
 * HCL
   * `terraform-fmt`
 * HTML
+  * `HTMLHint`
   * `alex`!!
   * `fecs`
   * `html-beautify`
-  * `HTMLHint`
   * `prettier`
   * `proselint`
   * `tidy`
@@ -218,12 +218,12 @@ Notes:
 * ISPC
   * `ispc`!!
 * Java
+  * `PMD`
   * `checkstyle`
   * `eclipselsp`
   * `google-java-format`
   * `javac`
   * `javalsp`
-  * `PMD`
   * `uncrustify`
 * JavaScript
   * `eslint`
@@ -330,10 +330,10 @@ Notes:
   * `intelephense`
   * `langserver`
   * `phan`
+  * `php -l`
+  * `php-cs-fixer`
   * `phpcbf`
   * `phpcs`
-  * `php-cs-fixer`
-  * `php -l`
   * `phpmd`
   * `phpstan`
   * `psalm`!!
@@ -394,6 +394,8 @@ Notes:
   * `styler`
 * Racket
   * `raco`
+* Re:VIEW
+  * `redpen`
 * ReasonML
   * `merlin`
   * `ols`
@@ -407,8 +409,6 @@ Notes:
   * `textlint`
   * `vale`
   * `write-good`
-* Re:VIEW
-  * `redpen`
 * RPM spec
   * `rpmlint`
 * Ruby
@@ -453,10 +453,10 @@ Notes:
   * `solium`
 * SQL
   * `pgformatter`
+  * `sql-lint`
   * `sqlfmt`
   * `sqlformat`
   * `sqlint`
-  * `sql-lint`
 * Stylus
   * `stylelint`
 * SugarSS

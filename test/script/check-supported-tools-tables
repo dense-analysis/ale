@@ -15,14 +15,13 @@ while read -r; do
     if [[ "$REPLY" =~ ^! ]]; then
         language="${REPLY/!/}"
     else
-        # shellcheck disable=SC2001
         echo "$language - $REPLY"
     fi
 done < <(
     grep '^\*\|^  *\*' doc/ale-supported-languages-and-tools.txt \
     | sed -e '1,2d' \
     | sed 's/^\* */!/' \
-    | sed -E 's/^ *\* *|!!|\^|(.*)|`//g' \
+    | sed -E 's/^ *\* *|!!|\^|\(.*\)|`//g' \
     | sed 's/ *$//'
 ) > "$doc_file"
 
@@ -30,7 +29,6 @@ while read -r; do
     if [[ "$REPLY" =~ ^! ]]; then
         language="${REPLY/!/}"
     else
-        # shellcheck disable=SC2001
         echo "$language - $REPLY"
     fi
 done < <(
