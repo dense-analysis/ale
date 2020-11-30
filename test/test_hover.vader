@@ -101,7 +101,7 @@ Execute(tsserver quickinfo responses will null missing bodies should be handled)
   AssertEqual {}, ale#hover#GetMap()
 
 Execute(tsserver quickinfo displayString values should be displayed):
-  call ale#hover#SetMap({3: {}})
+  call ale#hover#SetMap({3: {'buffer': bufnr('')}})
   call ale#hover#HandleTSServerResponse(
   \ 1,
   \ {
@@ -169,7 +169,7 @@ Execute(LSP hover response with lists of strings and marked strings should be ha
   AssertEqual {}, ale#hover#GetMap()
 
 Execute(tsserver responses for documentation requests should be handled):
-  call ale#hover#SetMap({3: {'show_documentation': 1}})
+  call ale#hover#SetMap({3: {'show_documentation': 1, 'buffer': bufnr('')}})
 
   call ale#hover#HandleTSServerResponse(
   \ 1,

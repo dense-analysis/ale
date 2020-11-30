@@ -486,7 +486,7 @@ function! ale#util#Input(message, value) abort
 endfunction
 
 function! ale#util#HasBuflineApi() abort
-    return exists('*deletebufline') && exists('*setbufline')
+    return exists('*deletebufline') && exists('*appendbufline') && exists('*getpos') && exists('*setpos')
 endfunction
 
 " Sets buffer contents to lines
@@ -507,8 +507,11 @@ function! ale#util#SetBufferContents(buffer, lines) abort
 
     " Use a Vim API for setting lines in other buffers, if available.
     if l:has_bufline_api
-        call setbufline(a:buffer, 1, l:new_lines)
-        call deletebufline(a:buffer, l:first_line_to_remove, '$')
+        let l:save_cursor = getpos('.')
+        call deletebufline(a:buffer, 1, '$')
+        call appendbufline(a:buffer, 1, l:new_lines)
+        call deletebufline(a:buffer, 1, 1)
+        call setpos('.', l:save_cursor)
     " Fall back on setting lines the old way, for the current buffer.
     else
         let l:old_line_length = line('$')

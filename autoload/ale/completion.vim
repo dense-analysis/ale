@@ -606,17 +606,21 @@ function! ale#completion#ParseLSPCompletions(response) abort
             let l:doc = l:doc.value
         endif
 
+        " Collapse whitespaces and line breaks into a single space.
+        let l:detail = substitute(get(l:item, 'detail', ''), '\_s\+', ' ', 'g')
+
         let l:result = {
         \   'word': l:word,
         \   'kind': ale#completion#GetCompletionSymbols(get(l:item, 'kind', '')),
         \   'icase': 1,
-        \   'menu': get(l:item, 'detail', ''),
+        \   'menu': l:detail,
         \   'info': (type(l:doc) is v:t_string ? l:doc : ''),
         \}
         " This flag is used to tell if this completion came from ALE or not.
         let l:user_data = {'_ale_completion_item': 1}
 
         if has_key(l:item, 'additionalTextEdits')
+        \ && l:item.additionalTextEdits isnot v:null
             let l:text_changes = []
 
             for l:edit in l:item.additionalTextEdits
@@ -1006,7 +1010,7 @@ function! ale#completion#HandleUserData(completed_item) abort
     \|| l:source is# 'ale-import'
     \|| l:source is# 'ale-omnifunc'
         for l:code_action in get(l:user_data, 'code_actions', [])
-            call ale#code_action#HandleCodeAction(l:code_action, v:false)
+            call ale#code_action#HandleCodeAction(l:code_action, {})
         endfor
     endif
 

@@ -24,6 +24,8 @@ function! ale#hover#HandleTSServerResponse(conn_id, response) abort
 
         if get(a:response, 'success', v:false) is v:true
         \&& get(a:response, 'body', v:null) isnot v:null
+            let l:set_balloons = ale#Var(l:options.buffer, 'set_balloons')
+
             " If we pass the show_documentation flag, we should show the full
             " documentation, and always in the preview window.
             if get(l:options, 'show_documentation', 0)
@@ -40,7 +42,7 @@ function! ale#hover#HandleTSServerResponse(conn_id, response) abort
                 endif
             elseif get(l:options, 'hover_from_balloonexpr', 0)
             \&& exists('*balloon_show')
-            \&& ale#Var(l:options.buffer, 'set_balloons')
+            \&& (l:set_balloons is 1 || l:set_balloons is# 'hover')
                 call balloon_show(a:response.body.displayString)
             elseif get(l:options, 'truncated_echo', 0)
                 call ale#cursor#TruncatedEcho(split(a:response.body.displayString, "\n")[0])
@@ -216,9 +218,11 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
         let [l:commands, l:lines] = ale#hover#ParseLSPResult(l:result.contents)
 
         if !empty(l:lines)
+            let l:set_balloons = ale#Var(l:options.buffer, 'set_balloons')
+
             if get(l:options, 'hover_from_balloonexpr', 0)
             \&& exists('*balloon_show')
-            \&& ale#Var(l:options.buffer, 'set_balloons')
+            \&& (l:set_balloons is 1 || l:set_balloons is# 'hover')
                 call balloon_show(join(l:lines, "\n"))
             elseif get(l:options, 'truncated_echo', 0)
                 call ale#cursor#TruncatedEcho(l:lines[0])

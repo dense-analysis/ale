@@ -42,6 +42,32 @@ The first directory containing any of the files named above will be used.
 
 
 ===============================================================================
+autoimport                                              *ale-python-autoimport*
+
+g:ale_python_autoimport_executable             *g:ale_python_autoimport_executable*
+                                             *b:ale_python_autoimport_executable*
+  Type: |String|
+  Default: `'autoimport'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_python_autoimport_options                   *g:ale_python_autoimport_options*
+                                                *b:ale_python_autoimport_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass extra options to autoimport.
+
+
+g:ale_python_autoimport_use_global             *g:ale_python_autoimport_use_global*
+                                             *b:ale_python_autoimport_use_global*
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+===============================================================================
 autopep8                                                  *ale-python-autopep8*
 
 g:ale_python_autopep8_executable             *g:ale_python_autopep8_executable*
@@ -687,7 +713,7 @@ g:ale_python_pyre_auto_pipenv                   *g:ale_python_pyre_auto_pipenv*
 ===============================================================================
 pyright                                                    *ale-python-pyright*
 
-The `pyrlight` linter requires a recent version of `pyright` which includes
+The `pyright` linter requires a recent version of `pyright` which includes
 the `pyright-langserver` executable. You can install `pyright` on your system
 through `npm` with `sudo npm install -g pyright` or similar.
 

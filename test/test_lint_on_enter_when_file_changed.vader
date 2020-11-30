@@ -35,7 +35,7 @@ After:
 Execute(The file changed event function should set b:ale_file_changed):
   let g:ale_lint_on_enter = 0
 
-  if has('gui')
+  if has('gui_running')
     new
   else
     e test

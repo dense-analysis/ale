@@ -149,6 +149,7 @@ formatting.
   * [erubis](https://github.com/kwatch/erubis)
   * [ruumba](https://github.com/ericqweinstein/ruumba)
 * Erlang
+  * [elvis](https://github.com/inaka/elvis) :floppy_disk:
   * [erlc](http://erlang.org/doc/man/erlc.html)
   * [SyntaxErl](https://github.com/ten0s/syntaxerl)
 * Fish
@@ -204,6 +205,7 @@ formatting.
   * [hie](https://github.com/haskell/haskell-ide-engine)
   * [hindent](https://hackage.haskell.org/package/hindent)
   * [hlint](https://hackage.haskell.org/package/hlint)
+  * [ormolu](https://github.com/tweag/ormolu)
   * [stack-build](https://haskellstack.org/) :floppy_disk:
   * [stack-ghc](https://haskellstack.org/)
   * [stylish-haskell](https://github.com/jaspervdj/stylish-haskell)
@@ -274,6 +276,7 @@ formatting.
 * Lua
   * [luac](https://www.lua.org/manual/5.1/luac.html)
   * [luacheck](https://github.com/mpeterv/luacheck)
+  * [luafmt](https://github.com/trixnz/lua-fmt)
 * Mail
   * [alex](https://github.com/wooorm/alex) :floppy_disk:
   * [languagetool](https://languagetool.org/) :floppy_disk:
@@ -333,6 +336,7 @@ formatting.
 * Perl6
   * [perl6 -c](https://perl6.org) :warning:
 * PHP
+  * [intelephense](https://github.com/bmewburn/intelephense-docs)
   * [langserver](https://github.com/felixfbecker/php-language-server)
   * [phan](https://github.com/phan/phan) see `:help ale-php-phan` to instructions
   * [phpcbf](https://github.com/squizlabs/PHP_CodeSniffer)
@@ -342,6 +346,7 @@ formatting.
   * [phpmd](https://phpmd.org)
   * [phpstan](https://github.com/phpstan/phpstan)
   * [psalm](https://getpsalm.org) :floppy_disk:
+  * [tlint](https://github.com/tightenco/tlint)
 * PO
   * [alex](https://github.com/wooorm/alex) :floppy_disk:
   * [msgfmt](https://www.gnu.org/software/gettext/manual/html_node/msgfmt-Invocation.html)
@@ -370,6 +375,7 @@ formatting.
   * [purescript-language-server](https://github.com/nwolverson/purescript-language-server)
   * [purty](https://gitlab.com/joneshf/purty)
 * Python
+  * [autoimport](https://lyz-code.github.io/autoimport/)
   * [autopep8](https://github.com/hhatto/autopep8)
   * [bandit](https://github.com/PyCQA/bandit) :warning:
   * [black](https://github.com/ambv/black)
@@ -392,6 +398,7 @@ formatting.
   * [qmlfmt](https://github.com/jesperhh/qmlfmt)
   * [qmllint](https://github.com/qt/qtdeclarative/tree/5.11/tools/qmllint)
 * R
+  * [languageserver](https://github.com/REditorSupport/languageserver)
   * [lintr](https://github.com/jimhester/lintr)
   * [styler](https://github.com/r-lib/styler)
 * Racket
@@ -464,9 +471,9 @@ formatting.
 * SugarSS
   * [stylelint](https://github.com/stylelint/stylelint)
 * Swift
+  * [Apple swift-format](https://github.com/apple/swift-format)
   * [sourcekit-lsp](https://github.com/apple/sourcekit-lsp)
   * [swiftformat](https://github.com/nicklockwood/SwiftFormat)
-  * [swift-format](https://github.com/apple/swift-format)
   * [swiftlint](https://github.com/realm/SwiftLint)
 * Tcl
   * [nagelfar](http://nagelfar.sourceforge.net) :floppy_disk:
@@ -526,6 +533,7 @@ formatting.
 * YAML
   * [prettier](https://github.com/prettier/prettier)
   * [swaglint](https://github.com/byCedric/swaglint)
+  * [yamlfix](https://lyz-code.github.io/yamlfix)
   * [yamllint](https://yamllint.readthedocs.io/)
 * YANG
   * [yang-lsp](https://github.com/theia-ide/yang-lsp)

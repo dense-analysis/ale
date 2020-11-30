@@ -53,6 +53,7 @@ other content at [w0rp.com](https://w0rp.com).
     5. [Find References](#usage-find-references)
     6. [Hovering](#usage-hover)
     7. [Symbol Search](#usage-symbol-search)
+    8. [Refactoring: Rename, Actions](#usage-refactoring)
 3. [Installation](#installation)
     1. [Installation with Vim package management](#standard-installation)
     2. [Installation with Pathogen](#installation-with-pathogen)
@@ -253,6 +254,18 @@ similar to a given query string.
 
 See `:help ale-symbol-search` for more information.
 
+<a name="usage-refactoring"></a>
+
+### 2.viii Refactoring: Rename, Actions
+
+ALE supports renaming symbols in symbols in code such as variables or class
+names with the `ALERename` command.
+
+`ALECodeAction` will execute actions on the cursor or applied to a visual
+range selection, such as automatically fixing errors.
+
+See `:help ale-refactor` for more information.
+
 <a name="installation"></a>
 
 ## 3. Installation
@@ -328,11 +341,13 @@ git clone https://github.com/dense-analysis/ale.git
 ### 3.iii. Installation with Vundle
 
 You can install this plugin using [Vundle](https://github.com/VundleVim/Vundle.vim)
-by using the path on GitHub for this repository.
+by adding the GitHub path for this repository to your `~/.vimrc`:
 
 ```vim
 Plugin 'dense-analysis/ale'
 ```
+
+Then run the command `:PluginInstall` in Vim.
 
 See the Vundle documentation for more information.
 
@@ -341,12 +356,15 @@ See the Vundle documentation for more information.
 ### 3.iiii. Installation with Vim-Plug
 
 You can install this plugin using [Vim-Plug](https://github.com/junegunn/vim-plug)
-by adding the GitHub path for this repository to your `~/.vimrc`
-and running `:PlugInstall`.
+by adding the GitHub path for this repository to your `~/.vimrc`:
 
 ```vim
 Plug 'dense-analysis/ale'
 ```
+
+Then run the command `:PlugInstall` in Vim.
+
+See the Vim-Plug documentation for more information.
 
 <a name="contributing"></a>
 
