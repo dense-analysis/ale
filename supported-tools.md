@@ -212,6 +212,7 @@ formatting.
   * [hie](https://github.com/haskell/haskell-ide-engine)
   * [hindent](https://hackage.haskell.org/package/hindent)
   * [hlint](https://hackage.haskell.org/package/hlint)
+  * [hls](https://github.com/haskell/haskell-language-server)
   * [ormolu](https://github.com/tweag/ormolu)
   * [stack-build](https://haskellstack.org/) :floppy_disk:
   * [stack-ghc](https://haskellstack.org/)

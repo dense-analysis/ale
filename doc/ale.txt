@@ -2741,6 +2741,7 @@ documented in additional help files.
     hfmt..................................|ale-haskell-hfmt|
     hindent...............................|ale-haskell-hindent|
     hlint.................................|ale-haskell-hlint|
+    hls...................................|ale-haskell-hls|
     stack-build...........................|ale-haskell-stack-build|
     stack-ghc.............................|ale-haskell-stack-ghc|
     stylish-haskell.......................|ale-haskell-stylish-haskell|

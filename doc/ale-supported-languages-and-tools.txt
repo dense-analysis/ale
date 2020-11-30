@@ -203,6 +203,7 @@ Notes:
   * `hie`
   * `hindent`
   * `hlint`
+  * `hls`
   * `ormolu`
   * `stack-build`!!
   * `stack-ghc`
