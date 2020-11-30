@@ -102,6 +102,7 @@ function! s:GetContErrMsg(i, lines, text) abort
         if !empty(l:matches[2])
             break
         endif
+
         call add(l:text, s:Trim(l:matches[4]))
 
         let l:i += 1
