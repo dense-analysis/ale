@@ -2571,6 +2571,8 @@ documented in additional help files.
     dfmt..................................|ale-d-dfmt|
     dls...................................|ale-d-dls|
     uncrustify............................|ale-d-uncrustify|
+  dafny...................................|ale-dafny-options|
+    dafny.................................|ale-dafny-dafny|
   dart....................................|ale-dart-options|
     dartanalyzer..........................|ale-dart-dartanalyzer|
     dartfmt...............................|ale-dart-dartfmt|
