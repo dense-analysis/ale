@@ -32,7 +32,7 @@ function! ale#hover#HandleTSServerResponse(conn_id, response) abort
                 let l:documentation = get(a:response.body, 'documentation', '')
 
                 " displayString is not included here, because it can be very
-                " noisy and run on for many lines for complex types. A less
+                " noisy and run on many lines for complex types. A less
                 " verbose alternative may be nice in future.
                 if !empty(l:documentation)
                     call ale#preview#Show(split(l:documentation, "\n"), {
