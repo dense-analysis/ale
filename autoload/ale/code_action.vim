@@ -96,21 +96,34 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
 
         let l:insertions = split(l:text, '\n', 1)
 
-        " Special case when text must be added after new line
-        if l:column > len(l:lines[l:line - 1]) + 1
-            let l:line += 1
-            let l:column = 1
+        " Fix invalid columns
+        let l:column = l:column > 0 ? l:column : 1
+        let l:end_column = l:end_column > 0 ? l:end_column : 1
+
+        " Clamp start to BOF
+        if l:line < 1
+            let [l:line, l:column] = [1, 1]
         endif
 
-        " Adjust end if we moved start past end
+        " Clamp start to EOF
+        if l:line > len(l:lines) || l:line == len(l:lines) && l:column > len(l:lines[-1]) + 1
+            let [l:line, l:column] = [len(l:lines), len(l:lines[-1]) + 1]
+        " Special case when start is after EOL
+        elseif l:line < len(l:lines) && l:column > len(l:lines[l:line - 1]) + 1
+            let [l:line, l:column] = [l:line + 1, 1]
+        endif
+
+        " Adjust end: clamp if invalid and/or adjust if we moved start
         if l:end_line < l:line || l:end_line == l:line && l:end_column < l:column
             let [l:end_line, l:end_column] = [l:line, l:column]
         endif
 
-        " Special case when end is after new line
-        if l:end_column > len(l:lines[l:end_line - 1]) + 1
-            let l:end_line += 1
-            let l:end_column = 1
+        " Clamp end to EOF
+        if l:end_line > len(l:lines) || l:end_line == len(l:lines) && l:end_column > len(l:lines[-1]) + 1
+            let [l:end_line, l:end_column] = [len(l:lines), len(l:lines[-1]) + 1]
+        " Special case when end is after EOL
+        elseif l:end_line < len(l:lines) && l:end_column > len(l:lines[l:end_line - 1]) + 1
+            let [l:end_line, l:end_column] = [l:end_line + 1, 1]
         endif
 
         " Careful, [:-1] is not an empty list
@@ -119,14 +132,9 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
 
         let l:middle[-1] .= l:insertions[0]
         let l:middle     += l:insertions[1:]
+        let l:middle[-1] .= l:lines[l:end_line - 1][l:end_column - 1 :]
 
-        if l:end_line <= len(l:lines)
-            " Only extend the last line if end_line is within the range of
-            " lines.
-            let l:middle[-1] .= l:lines[l:end_line - 1][l:end_column - 1 :]
-        endif
-
-        let l:end_line_len = l:end_line > len(l:lines) ? 0 : len(l:lines[l:end_line - 1])
+        let l:end_line_len = len(l:lines[l:end_line - 1])
         let l:lines_before_change = len(l:lines)
         let l:lines = l:start + l:middle + l:lines[l:end_line :]
 
