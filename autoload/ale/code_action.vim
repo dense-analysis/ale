@@ -134,10 +134,18 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
         let l:current_line_offset = len(l:lines) - l:lines_before_change
         let l:column_offset = len(l:middle[-1]) - l:end_line_len
 
-        let l:pos = s:UpdateCursor(l:pos,
-        \ [l:line, l:column],
-        \ [l:end_line, l:end_column],
-        \ [l:current_line_offset, l:column_offset])
+        " Keep cursor where it was (if outside of changes) or move it after
+        " the changed text (if inside), but don't touch it when the change
+        " spans the entire buffer, in which case we have no clue and it's
+        " better to not do anything.
+        if l:line isnot 1 || l:column isnot 1
+        \|| l:end_line < l:lines_before_change
+        \|| l:end_line == l:lines_before_change && l:end_column <= l:end_line_len
+            let l:pos = s:UpdateCursor(l:pos,
+            \ [l:line, l:column],
+            \ [l:end_line, l:end_column],
+            \ [l:current_line_offset, l:column_offset])
+        endif
     endfor
 
     if l:lines[-1] is# ''
