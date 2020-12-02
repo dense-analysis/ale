@@ -1,13 +1,10 @@
 Before:
   Save g:ale_enabled
-
   let g:ale_enabled = 0
 
   " Enable fix end-of-line as tests below expect that
+  Save &fixeol
   set fixeol
-
-  runtime autoload/ale/code_action.vim
-  runtime autoload/ale/util.vim
 
   let g:file1 = tempname()
   let g:file2 = tempname()
@@ -42,8 +39,6 @@ Before:
   endfunction!
 
 After:
-  Restore
-
   " Close the extra buffers if we opened it.
   if bufnr(g:file1) != -1
     execute ':bp! | :bd! ' . bufnr(g:file1)
@@ -65,8 +60,7 @@ After:
   unlet! g:changes
   delfunction WriteFileAndEdit
 
-  runtime autoload/ale/code_action.vim
-  runtime autoload/ale/util.vim
+  Restore
 
 
 Execute(It should modify and save multiple files):
