@@ -1,7 +1,7 @@
 " Author: OJFord <dev@ojford.com>
-" Description: terraform-lsp integration for ALE (cf. https://github.com/juliosueiras/terraform-lsp)
+" Description: terraform-ls integration for ALE (cf. https://github.com/hashicorp/terraform-ls)
 
-call ale#Set('terraform_langserver_executable', 'terraform-lsp')
+call ale#Set('terraform_langserver_executable', 'terraform-ls')
 call ale#Set('terraform_langserver_options', '')
 
 function! ale_linters#terraform#terraform_lsp#GetCommand(buffer) abort

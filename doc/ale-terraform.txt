@@ -38,9 +38,15 @@ terraform-lsp                                     *ale-terraform-terraform-lsp*
 g:ale_terraform_langserver_executable   *g:ale_terraform_langserver_executable*
                                         *b:ale_terraform_langserver_executable*
   Type: |String|
-  Default: `'terraform-lsp'`
+  Default: `'terraform-ls'`
 
-  This variable can be changed to use a different executable for terraform-lsp.
+  This variable can be changed to use a different executable for the language
+  server. For example, there is also a more featureful, unstable, alternative:
+  https://github.com/juliosueiras/terraform-lsp
+
+  but which requires a specific terraform version in each release. For more
+  information, see Hashicorp's comment:
+  https://github.com/hashicorp/terraform-ls#terraform-ls-vs-terraform-lsp
 
 
 g:ale_terraform_langserver_options         *g:ale_terraform_langserver_options*
