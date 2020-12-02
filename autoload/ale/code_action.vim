@@ -89,38 +89,20 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
         let l:end_column = l:code_edit.end.offset
         let l:text = l:code_edit.newText
 
-        " Adjust the ends according to previous edits.
-        if l:end_line > len(l:lines)
-            let l:end_line_len = 0
-        else
-            let l:end_line_len = len(l:lines[l:end_line - 1])
-        endif
-
         let l:insertions = split(l:text, '\n', 1)
-
-        if l:line is 1
-            " Same logic as for column below. Vimscript's slice [:-1] will not
-            " be an empty list.
-            let l:start = []
-        else
-            let l:start = l:lines[: l:line - 2]
-        endif
 
         " Special case when text must be added after new line
         if l:column > len(l:lines[l:line - 1])
-            call extend(l:start, [l:lines[l:line - 1]])
+            let l:line += 1
             let l:column = 1
         endif
 
-        if l:column is 1
-            " We need to handle column 1 specially, because we can't slice an
-            " empty string ending on index 0.
-            let l:middle = [l:insertions[0]]
-        else
-            let l:middle = [l:lines[l:line - 1][: l:column - 2] . l:insertions[0]]
-        endif
+        " Careful, [:-1] is not an empty list
+        let l:start = l:line is 1 ? [] : l:lines[: l:line - 2]
+        let l:middle = l:column is 1 ? [''] : [l:lines[l:line - 1][: l:column - 2]]
 
-        call extend(l:middle, l:insertions[1:])
+        let l:middle[-1] .= l:insertions[0]
+        let l:middle     += l:insertions[1:]
 
         if l:end_line <= len(l:lines)
             " Only extend the last line if end_line is within the range of
@@ -128,6 +110,7 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
             let l:middle[-1] .= l:lines[l:end_line - 1][l:end_column - 1 :]
         endif
 
+        let l:end_line_len = l:end_line > len(l:lines) ? 0 : len(l:lines[l:end_line - 1])
         let l:lines_before_change = len(l:lines)
         let l:lines = l:start + l:middle + l:lines[l:end_line :]
 
