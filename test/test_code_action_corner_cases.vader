@@ -25,6 +25,10 @@ Before:
     return {'line': a:line, 'offset': a:offset}
   endfunction!
 
+  function! MkInsert(pos, newText) abort
+    return {'start': a:pos, 'end': a:pos, 'newText': a:newText}
+  endfunction!
+
   function! MkDelete(start, end) abort
     return {'start': a:start, 'end': a:end, 'newText': ''}
   endfunction!
@@ -44,6 +48,7 @@ After:
 
   delfunction TestChanges
   delfunction MkPos
+  delfunction MkInsert
   delfunction MkDelete
 
   Restore
@@ -68,8 +73,72 @@ Execute(Respect fixeol):
     AssertEqual "eol\n",   TestChanges("eol\n", [], g:mode)
   endfor
 
-Execute(Del eol at eof):
+Execute(Add/del eol at eof):
   for g:mode in ['save', 'file', 'buffer']
     Log g:mode
-    AssertEqual "deleol", TestChanges("deleolx\n", [MkDelete(MkPos(1, 7), MkPos(2, 1))], g:mode)
+    AssertEqual "addeol\n", TestChanges("addeol",   [MkInsert(MkPos(1, 7), "\n")], g:mode)
+    AssertEqual "deleol",   TestChanges("deleol\n", [MkDelete(MkPos(1, 7), MkPos(1, 8))], g:mode)
+  endfor
+
+Execute(One character insertions to first line):
+  for g:mode in ['save', 'file', 'buffer']
+    Log g:mode
+    AssertEqual "xabc\ndef2\nghi\n", TestChanges("abc\ndef2\nghi\n", [MkInsert(MkPos(1, 1), "x")], g:mode)
+    AssertEqual "axbc\ndef3\nghi\n", TestChanges("abc\ndef3\nghi\n", [MkInsert(MkPos(1, 2), "x")], g:mode)
+    AssertEqual "abcx\ndef4\nghi\n", TestChanges("abc\ndef4\nghi\n", [MkInsert(MkPos(1, 4), "x")], g:mode)
+    AssertEqual "abc\nxdef5\nghi\n", TestChanges("abc\ndef5\nghi\n", [MkInsert(MkPos(1, 5), "x")], g:mode)
+    AssertEqual "abc\nxdef6\nghi\n", TestChanges("abc\ndef6\nghi\n", [MkInsert(MkPos(1, 6), "x")], g:mode)
+  endfor
+
+Execute(One character + newline insertions to first line):
+  for g:mode in ['save', 'file', 'buffer']
+    Log g:mode
+    AssertEqual "x\nabc\ndef2\nghi\n", TestChanges("abc\ndef2\nghi\n", [MkInsert(MkPos(1, 1), "x\n")], g:mode)
+    AssertEqual "ax\nbc\ndef3\nghi\n", TestChanges("abc\ndef3\nghi\n", [MkInsert(MkPos(1, 2), "x\n")], g:mode)
+    AssertEqual "abcx\n\ndef4\nghi\n", TestChanges("abc\ndef4\nghi\n", [MkInsert(MkPos(1, 4), "x\n")], g:mode)
+    AssertEqual "abc\nx\ndef5\nghi\n", TestChanges("abc\ndef5\nghi\n", [MkInsert(MkPos(1, 5), "x\n")], g:mode)
+    AssertEqual "abc\nx\ndef6\nghi\n", TestChanges("abc\ndef6\nghi\n", [MkInsert(MkPos(1, 6), "x\n")], g:mode)
+  endfor
+
+Execute(One character insertions near end):
+  for g:mode in ['save', 'file', 'buffer']
+    Log g:mode
+    AssertEqual "abc\ndef1\nghxi\n", TestChanges("abc\ndef1\nghi\n", [MkInsert(MkPos(3, 3), "x")], g:mode)
+    AssertEqual "abc\ndef2\nghix\n", TestChanges("abc\ndef2\nghi\n", [MkInsert(MkPos(3, 4), "x")], g:mode)
+    AssertEqual "abc\ndef3\nghi\nx", TestChanges("abc\ndef3\nghi\n", [MkInsert(MkPos(3, 5), "x")], g:mode)
+    AssertEqual "abc\ndef4\nghi\nx", TestChanges("abc\ndef4\nghi\n", [MkInsert(MkPos(3, 6), "x")], g:mode)
+    AssertEqual "abc\ndef5\nghi\nx", TestChanges("abc\ndef5\nghi\n", [MkInsert(MkPos(4, 1), "x")], g:mode)
+  endfor
+
+Execute(One character + newline insertions near end):
+  for g:mode in ['save', 'file', 'buffer']
+    Log g:mode
+    AssertEqual "abc\ndef1\nghx\ni\n", TestChanges("abc\ndef1\nghi\n", [MkInsert(MkPos(3, 3), "x\n")], g:mode)
+    AssertEqual "abc\ndef2\nghix\n\n", TestChanges("abc\ndef2\nghi\n", [MkInsert(MkPos(3, 4), "x\n")], g:mode)
+    AssertEqual "abc\ndef3\nghi\nx\n", TestChanges("abc\ndef3\nghi\n", [MkInsert(MkPos(3, 5), "x\n")], g:mode)
+    AssertEqual "abc\ndef4\nghi\nx\n", TestChanges("abc\ndef4\nghi\n", [MkInsert(MkPos(3, 6), "x\n")], g:mode)
+    AssertEqual "abc\ndef5\nghi\nx\n", TestChanges("abc\ndef5\nghi\n", [MkInsert(MkPos(4, 1), "x\n")], g:mode)
+  endfor
+
+Execute(Newline insertions near end):
+  for g:mode in ['save', 'file', 'buffer']
+    Log g:mode
+    AssertEqual "abc\ndef1\ngh\ni\n", TestChanges("abc\ndef1\nghi\n", [MkInsert(MkPos(3, 3), "\n")], g:mode)
+    AssertEqual "abc\ndef2\nghi\n\n", TestChanges("abc\ndef2\nghi\n", [MkInsert(MkPos(3, 4), "\n")], g:mode)
+    AssertEqual "abc\ndef3\nghi\n\n", TestChanges("abc\ndef3\nghi\n", [MkInsert(MkPos(3, 5), "\n")], g:mode)
+    AssertEqual "abc\ndef4\nghi\n\n", TestChanges("abc\ndef4\nghi\n", [MkInsert(MkPos(3, 6), "\n")], g:mode)
+    AssertEqual "abc\ndef5\nghi\n\n", TestChanges("abc\ndef5\nghi\n", [MkInsert(MkPos(4, 1), "\n")], g:mode)
+  endfor
+
+Execute(Single char deletions):
+  for g:mode in ['save', 'file', 'buffer']
+    Log g:mode
+    AssertEqual "bc\ndef1\nghi\n",  TestChanges("abc\ndef1\nghi\n", [MkDelete(MkPos(1, 1), MkPos(1, 2))], g:mode)
+    AssertEqual "ab\ndef2\nghi\n",  TestChanges("abc\ndef2\nghi\n", [MkDelete(MkPos(1, 3), MkPos(1, 4))], g:mode)
+    AssertEqual "abcdef3\nghi\n",   TestChanges("abc\ndef3\nghi\n", [MkDelete(MkPos(1, 4), MkPos(1, 5))], g:mode)
+    AssertEqual "abcdef4\nghi\n",   TestChanges("abc\ndef4\nghi\n", [MkDelete(MkPos(1, 4), MkPos(1, 6))], g:mode)
+    AssertEqual "abc\ndef5\ngh\n",  TestChanges("abc\ndef5\nghi\n", [MkDelete(MkPos(3, 3), MkPos(3, 4))], g:mode)
+    AssertEqual "abc\ndef6\nghi",   TestChanges("abc\ndef6\nghi\n", [MkDelete(MkPos(3, 4), MkPos(3, 5))], g:mode)
+    AssertEqual "abc\ndef7\nghi",   TestChanges("abc\ndef7\nghi\n", [MkDelete(MkPos(3, 4), MkPos(3, 6))], g:mode)
+    AssertEqual "abc\ndef8\nghi\n", TestChanges("abc\ndef8\nghi\n", [MkDelete(MkPos(4, 1), MkPos(4, 2))], g:mode)
   endfor

@@ -97,9 +97,20 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
         let l:insertions = split(l:text, '\n', 1)
 
         " Special case when text must be added after new line
-        if l:column > len(l:lines[l:line - 1])
+        if l:column > len(l:lines[l:line - 1]) + 1
             let l:line += 1
             let l:column = 1
+        endif
+
+        " Adjust end if we moved start past end
+        if l:end_line < l:line || l:end_line == l:line && l:end_column < l:column
+            let [l:end_line, l:end_column] = [l:line, l:column]
+        endif
+
+        " Special case when end is after new line
+        if l:end_column > len(l:lines[l:end_line - 1]) + 1
+            let l:end_line += 1
+            let l:end_column = 1
         endif
 
         " Careful, [:-1] is not an empty list

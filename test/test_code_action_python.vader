@@ -7,7 +7,7 @@ Execute():
   let g:changes = [
   \ {'end': {'offset': 7, 'line': 1}, 'newText': 'func_qtffgsv', 'start': {'offset': 5, 'line': 1}},
   \ {'end': {'offset': 9, 'line': 1}, 'newText': '', 'start': {'offset': 8, 'line': 1}},
-  \ {'end': {'offset': 1, 'line': 4}, 'newText': "    return c\n\n\ndef main():\n    c = func_qtffgsvi()\n", 'start': {'offset': 15, 'line': 3}}
+  \ {'end': {'offset': 15, 'line': 3}, 'newText': "    return c\n\n\ndef main():\n    c = func_qtffgsvi()\n", 'start': {'offset': 15, 'line': 3}}
   \]
 
   call ale#code_action#ApplyChanges(expand('%:p'), g:changes, 0)
@@ -35,9 +35,9 @@ Given python(Second python example):
 
 Execute():
   let g:changes = [
-  \ {'end': {'offset': 16, 'line': 2}, 'newText': "\n\ndef func_ivlpdpao(f):\n    exif = exifread.process_file(f)\n    dt = str(exif['Image DateTime'])\n    date = dt[:10].replace(':', '-')\n    return date\n", 'start': {'offset': 16, 'line': 2}},
+  \ {'end': {'offset': 16, 'line': 2}, 'newText': "\n\n\ndef func_ivlpdpao(f):\n    exif = exifread.process_file(f)\n    dt = str(exif['Image DateTime'])\n    date = dt[:10].replace(':', '-')\n    return date\n", 'start': {'offset': 16, 'line': 2}},
   \ {'end': {'offset': 32, 'line': 6}, 'newText': 'date = func', 'start': {'offset': 9, 'line': 6}},
-  \ {'end': {'offset': 1, 'line': 9}, 'newText': "ivlpdpao(f)\n", 'start': {'offset': 33, 'line': 6}}
+  \ {'end': {'offset': 42, 'line': 8}, 'newText': "ivlpdpao(f)\n", 'start': {'offset': 33, 'line': 6}}
   \]
 
   call ale#code_action#ApplyChanges(expand('%:p'), g:changes, 0)
