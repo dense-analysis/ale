@@ -1,0 +1,75 @@
+Before:
+  Save &fixeol
+  set nofixeol
+
+  Save &fileformats
+  set fileformats=unix
+
+  " two files, one accessed through a buffer, the other using write/readfile only
+  let g:files = [tempname(), tempname()]
+
+  function! TestChanges(contents, changes, mode) abort
+    let l:file = g:files[a:mode is 'file' ? 0 : 1]
+    call writefile(split(a:contents, '\n', 1), l:file, 'bS')
+    if a:mode isnot 'file'
+      execute 'edit ' . l:file
+    endif
+    call ale#code_action#ApplyChanges(l:file, a:changes, a:mode isnot 'buffer')
+    if a:mode is 'buffer'
+      execute 'write ' . l:file
+    endif
+    return join(readfile(l:file, 'b'), "\n")
+  endfunction!
+
+  function! MkPos(line, offset) abort
+    return {'line': a:line, 'offset': a:offset}
+  endfunction!
+
+  function! MkDelete(start, end) abort
+    return {'start': a:start, 'end': a:end, 'newText': ''}
+  endfunction!
+
+After:
+  for g:file in g:files
+    if bufnr(g:file) != -1
+      execute ':bp! | :bd! ' . bufnr(g:file)
+    endif
+    if filereadable(g:file)
+      call delete(g:file)
+    endif
+  endfor
+  unlet! g:files g:file
+
+  unlet! g:mode
+
+  delfunction TestChanges
+  delfunction MkPos
+  delfunction MkDelete
+
+  Restore
+
+Execute(Preserve (no)eol at eof):
+  for g:mode in ['save', 'file', 'buffer']
+    Log g:mode
+    AssertEqual "noeol",    TestChanges("noeol",    [], g:mode)
+    AssertEqual "eol\n",    TestChanges("eol\n",    [], g:mode)
+    AssertEqual "eols\n\n", TestChanges("eols\n\n", [], g:mode)
+  endfor
+
+  " there doesn't seem to be a way to tell if a buffer is empty or contains one
+  " empty line :-(
+  AssertEqual "", TestChanges("", [], 'file')
+
+Execute(Respect fixeol):
+  set fixeol
+  for g:mode in ['save', 'file', 'buffer']
+    Log g:mode
+    AssertEqual "noeol\n", TestChanges("noeol", [], g:mode)
+    AssertEqual "eol\n",   TestChanges("eol\n", [], g:mode)
+  endfor
+
+Execute(Del eol at eof):
+  for g:mode in ['save', 'file', 'buffer']
+    Log g:mode
+    AssertEqual "deleol", TestChanges("deleolx\n", [MkDelete(MkPos(1, 7), MkPos(2, 1))], g:mode)
+  endfor

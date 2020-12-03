@@ -2,10 +2,6 @@ Before:
   Save g:ale_enabled
   let g:ale_enabled = 0
 
-  " Enable fix end-of-line as tests below expect that
-  Save &fixeol
-  set fixeol
-
   let g:file1 = tempname()
   let g:file2 = tempname()
   let g:test = {}

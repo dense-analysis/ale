@@ -71,6 +71,11 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
 
     if l:buffer > 0
         let l:lines = getbufline(l:buffer, 1, '$')
+
+        " Add empty line if there's trailing newline, like readfile() does.
+        if getbufvar(l:buffer, '&eol')
+            let l:lines += ['']
+        endif
     else
         let l:lines = readfile(a:filename, 'b')
     endif
@@ -131,11 +136,21 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
         endif
     endfor
 
-    if l:lines[-1] is# ''
+    if l:buffer > 0
+        " Make sure ale#util#{Writefile,SetBufferContents} add trailing
+        " newline if and only if it should be added.
+        if l:lines[-1] is# '' && getbufvar(l:buffer, '&eol')
+            call remove(l:lines, -1)
+        else
+            call setbufvar(l:buffer, '&eol', 0)
+        endif
+    elseif exists('+fixeol') && &fixeol && l:lines[-1] is# ''
+        " Not in buffer, ale#util#Writefile can't check &eol and always adds
+        " newline if &fixeol: remove to prevent double trailing newline.
         call remove(l:lines, -1)
     endif
 
-    if a:should_save
+    if a:should_save || l:buffer < 0
         call ale#util#Writefile(l:buffer, l:lines, a:filename)
     else
         call ale#util#SetBufferContents(l:buffer, l:lines)
