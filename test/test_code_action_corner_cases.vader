@@ -1,3 +1,32 @@
+" Tests for various corner cases of applying code changes from LSP.
+"
+" These can be verified against the reference vscode implementation using the
+" following javascript program:
+"
+"   const { TextDocument } = require('vscode-languageserver-textdocument');
+"   const { TextEdit, Position, Range } = require('vscode-languageserver-types');
+"   function MkPos(line, offset) { return Position.create(line - 1, offset - 1); }
+"   function MkInsert(pos, newText) { return TextEdit.insert(pos, newText); }
+"   function MkDelete(start, end) { return TextEdit.del(Range.create(start, end)); }
+"   function TestChanges(s, es) {
+"     return TextDocument.applyEdits(TextDocument.create(null, null, null, s), es);
+"   }
+"
+"   const fs = require("fs");
+"   const assert = require('assert').strict;
+"   const testRegex = /(?<!vscode skip.*)AssertEqual\s+("[^"]*"),\s*TestChanges\(("[^"]*"),\s*(\[[^\]]*\])/g;
+"   const data = fs.readFileSync(0, "utf-8");
+"   const tests = data.matchAll(testRegex);
+"   for (const test of tests) {
+"     console.log(test[0]);
+"     assert.equal(eval(test[1]), TestChanges(eval(test[2]), eval(test[3])));
+"   }
+"
+" Save it to test_code_action_corner_cases.js and invoke it using:
+"
+"   $ npm install vscode-languageserver-{textdocument,types}
+"   $ node test_code_action_corner_cases.js <test_code_action_corner_cases.vader
+
 Before:
   Save &fixeol
   set nofixeol
@@ -69,8 +98,8 @@ Execute(Respect fixeol):
   set fixeol
   for g:mode in ['save', 'file', 'buffer']
     Log g:mode
-    AssertEqual "noeol\n", TestChanges("noeol", [], g:mode)
-    AssertEqual "eol\n",   TestChanges("eol\n", [], g:mode)
+    silent echo "vscode skip" | AssertEqual "noeol\n", TestChanges("noeol", [], g:mode)
+    silent echo "vscode skip" | AssertEqual "eol\n",   TestChanges("eol\n", [], g:mode)
   endfor
 
 Execute(Add/del eol at eof):
