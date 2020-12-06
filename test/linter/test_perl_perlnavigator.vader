@@ -1,0 +1,78 @@
+" Author: rymdbar <https://rymdbar.x20.se/>
+
+Before:
+  call ale#assert#SetUpLinterTest('perl', 'perlnavigator')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default Perl command callback should be correct):
+  AssertLinter 'perlnavigator',
+  \ ale#Escape('perlnavigator') . ' --stdio'
+
+Execute(Overriding the executable should work):
+  let b:ale_perl_perlnavigator_executable = 'plnav'
+
+  AssertLinter 'plnav', ale#Escape('plnav') . ' --stdio'
+  unlet b:ale_perl_perlnavigator_executable
+
+Execute(The project root should be detected correctly in from build files):
+  for mod in ['extutils-makemaker', 'module-build', 'dist-zilla']
+    call ale#test#SetFilename('../test-files/perl/' . mod . '/subdir/empty.pl')
+
+    AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/perl/' . mod)
+  endfor
+
+Execute(The project root should be globally configurable):
+  for mod in ['extutils-makemaker', 'module-build', 'dist-zilla']
+    call ale#test#SetFilename('../test-files/perl/'. mod . '/subdir/empty.pl')
+    " Configuring g:ale_root using a Dictionary works.
+    let g:ale_root.perlnavigator =
+    \ ale#path#Simplify(g:dir . '/../test-files/perl')
+
+    AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/perl')
+    unlet g:ale_root.perlnavigator
+    " As tracked by <https://github.com/dense-analysis/ale/issues/5002>, there
+    " is a bug with g:ale_root which is thus missing here.
+  endfor
+
+Execute(The project root should be per buffer configurable):
+  for mod in ['extutils-makemaker', 'module-build', 'dist-zilla']
+    call ale#test#SetFilename('../test-files/perl/'. mod . '/subdir/empty.pl')
+    " Configuring b:ale_root using a String works.
+    let b:ale_root = ale#path#Simplify(g:dir . '/../test-files/perl')
+
+    AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/perl')
+    unlet b:ale_root
+
+    " Configuring b:ale_root using a Dictionary works.
+    let b:ale_root = {
+    \ 'perlnavigator': ale#path#Simplify(g:dir . '/../test-files/perl')
+    \ }
+
+    AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/perl')
+    unlet b:ale_root.perlnavigator
+  endfor
+
+Execute(The LSP values should be set correctly):
+
+  AssertLSPLanguage 'perl'
+
+  AssertLSPOptions {}
+
+  AssertLSPConfig {}
+
+Execute(Should accept configuration settings):
+  let b:ale_perl_perlnavigator_config = {
+  \   'perlnavigator': {
+  \     'perlcriticEnabled': 1,
+  \     'perlcriticProfile': '$workspaceFolder/.perlcriticrc',
+  \   },
+  \ }
+
+  AssertLSPConfig {
+  \   'perlnavigator': {
+  \     'perlcriticEnabled': 1,
+  \     'perlcriticProfile': '$workspaceFolder/.perlcriticrc',
+  \   },
+  \ }
