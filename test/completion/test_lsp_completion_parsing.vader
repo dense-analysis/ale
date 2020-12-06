@@ -10,37 +10,39 @@ After:
   unlet! b:ale_completion_info
 
 Execute(Should handle Rust completion results correctly):
+  let g:ale_completion_autoimport = 0
+
   AssertEqual
   \ [
-  \   {'word': 'new', 'menu': 'pub fn new() -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'with_capacity', 'menu': 'pub fn with_capacity(capacity: usize) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'from_utf8', 'menu': 'pub fn from_utf8(vec: Vec<u8>) -> Result<String, FromUtf8Error>', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'from_utf8_lossy', 'menu': 'pub fn from_utf8_lossy<''a>(v: &''a [u8]) -> Cow<''a, str>', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'from_utf16', 'menu': 'pub fn from_utf16(v: &[u16]) -> Result<String, FromUtf16Error>', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'from_utf16_lossy', 'menu': 'pub fn from_utf16_lossy(v: &[u16]) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'from_raw_parts', 'menu': 'pub unsafe fn from_raw_parts(buf: *mut u8, length: usize, capacity: usize) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'from_utf8_unchecked', 'menu': 'pub unsafe fn from_utf8_unchecked(bytes: Vec<u8>) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'from_iter', 'menu': 'fn from_iter<I: IntoIterator<Item = char>>(iter: I) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'from_iter', 'menu': 'fn from_iter<I: IntoIterator<Item = &''a char>>(iter: I) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'from_iter', 'menu': 'fn from_iter<I: IntoIterator<Item = &''a str>>(iter: I) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'from_iter', 'menu': 'fn from_iter<I: IntoIterator<Item = String>>(iter: I) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'from_iter', 'menu': 'fn from_iter<I: IntoIterator<Item = Cow<''a, str>>>(iter: I) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'Searcher', 'menu': 'type Searcher = <&''b str as Pattern<''a>>::Searcher;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'default', 'menu': 'fn default() -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'Output', 'menu': 'type Output = String;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'Output', 'menu': 'type Output = str;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'Output', 'menu': 'type Output = str;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'Output', 'menu': 'type Output = str;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'Output', 'menu': 'type Output = str;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'Output', 'menu': 'type Output = str;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'Output', 'menu': 'type Output = str;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'Target', 'menu': 'type Target = str;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'Err', 'menu': 'type Err = ParseError;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'from_str', 'menu': 'fn from_str(s: &str) -> Result<String, ParseError>', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'from', 'menu': 'fn from(s: &''a str) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'from', 'menu': 'fn from(s: Box<str>) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'from', 'menu': 'fn from(s: Cow<''a, str>) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'to_vec', 'menu': 'pub fn to_vec(&self) -> Vec<T> where T: Clone,', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'new', 'dup': 0, 'menu': 'pub fn new() -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'with_capacity', 'dup': 0, 'menu': 'pub fn with_capacity(capacity: usize) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'from_utf8', 'dup': 0, 'menu': 'pub fn from_utf8(vec: Vec<u8>) -> Result<String, FromUtf8Error>', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'from_utf8_lossy', 'dup': 0, 'menu': 'pub fn from_utf8_lossy<''a>(v: &''a [u8]) -> Cow<''a, str>', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'from_utf16', 'dup': 0, 'menu': 'pub fn from_utf16(v: &[u16]) -> Result<String, FromUtf16Error>', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'from_utf16_lossy', 'dup': 0, 'menu': 'pub fn from_utf16_lossy(v: &[u16]) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'from_raw_parts', 'dup': 0, 'menu': 'pub unsafe fn from_raw_parts(buf: *mut u8, length: usize, capacity: usize) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'from_utf8_unchecked', 'dup': 0, 'menu': 'pub unsafe fn from_utf8_unchecked(bytes: Vec<u8>) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'from_iter', 'dup': 0, 'menu': 'fn from_iter<I: IntoIterator<Item = char>>(iter: I) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'from_iter', 'dup': 0, 'menu': 'fn from_iter<I: IntoIterator<Item = &''a char>>(iter: I) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'from_iter', 'dup': 0, 'menu': 'fn from_iter<I: IntoIterator<Item = &''a str>>(iter: I) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'from_iter', 'dup': 0, 'menu': 'fn from_iter<I: IntoIterator<Item = String>>(iter: I) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'from_iter', 'dup': 0, 'menu': 'fn from_iter<I: IntoIterator<Item = Cow<''a, str>>>(iter: I) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'Searcher', 'dup': 0, 'menu': 'type Searcher = <&''b str as Pattern<''a>>::Searcher;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'default', 'dup': 0, 'menu': 'fn default() -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'Output', 'dup': 0, 'menu': 'type Output = String;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'Output', 'dup': 0, 'menu': 'type Output = str;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'Output', 'dup': 0, 'menu': 'type Output = str;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'Output', 'dup': 0, 'menu': 'type Output = str;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'Output', 'dup': 0, 'menu': 'type Output = str;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'Output', 'dup': 0, 'menu': 'type Output = str;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'Output', 'dup': 0, 'menu': 'type Output = str;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'Target', 'dup': 0, 'menu': 'type Target = str;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'Err', 'dup': 0, 'menu': 'type Err = ParseError;', 'info': '', 'kind': 't', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'from_str', 'dup': 0, 'menu': 'fn from_str(s: &str) -> Result<String, ParseError>', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'from', 'dup': 0, 'menu': 'fn from(s: &''a str) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'from', 'dup': 0, 'menu': 'fn from(s: Box<str>) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'from', 'dup': 0, 'menu': 'fn from(s: Cow<''a, str>) -> String', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'to_vec', 'dup': 0, 'menu': 'pub fn to_vec(&self) -> Vec<T> where T: Clone,', 'info': '', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
   \],
   \ ale#completion#ParseLSPCompletions({
   \   "jsonrpc":"2.0",
@@ -195,13 +197,14 @@ Execute(Should handle Rust completion results correctly):
   \ })
 
 Execute(Should handle Python completion results correctly):
+  let g:ale_completion_autoimport = 0
   let b:ale_completion_info = {
   \ 'completion_filter': 'ale#completion#python#CompletionItemFilter',
   \}
 
   AssertEqual
   \ [
-  \   {'word': 'what', 'menu': 'example-python-project.bar.Bar', 'info': "what()\n\n", 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'what', 'dup': 0, 'menu': 'example-python-project.bar.Bar', 'info': "what()\n\n", 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
   \ ],
   \ ale#completion#ParseLSPCompletions({
   \    "jsonrpc":"2.0",
@@ -406,6 +409,8 @@ Execute(Should handle Python completion results correctly):
   \ })
 
 Execute(Should handle extra Python completion results correctly):
+  let g:ale_completion_autoimport = 0
+
   let b:ale_completion_info = {
   \ 'completion_filter': 'ale#completion#python#CompletionItemFilter',
   \ 'prefix': 'mig',
@@ -413,8 +418,8 @@ Execute(Should handle extra Python completion results correctly):
 
   AssertEqual
   \ [
-  \   {'word': 'migrations', 'menu': 'xxx', 'info': 'migrations', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
-  \   {'word': 'MigEngine', 'menu': 'xxx', 'info': 'mig engine', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'migrations', 'dup': 0, 'menu': 'xxx', 'info': 'migrations', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'MigEngine', 'dup': 0, 'menu': 'xxx', 'info': 'mig engine', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
   \ ],
   \ ale#completion#ParseLSPCompletions({
   \   'jsonrpc': '2.0',
@@ -445,9 +450,11 @@ Execute(Should handle extra Python completion results correctly):
   \ })
 
 Execute(Should handle missing keys):
+  let g:ale_completion_autoimport = 0
+
   AssertEqual
   \ [
-  \   {'word': 'x', 'menu': '', 'info': '', 'kind': 'v', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'x', 'dup': 0, 'menu': '', 'info': '', 'kind': 'v', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
   \ ],
   \ ale#completion#ParseLSPCompletions({
   \   'jsonrpc': '2.0',
@@ -463,9 +470,11 @@ Execute(Should handle missing keys):
   \ })
 
 Execute(Should handle documentation in the markdown format):
+  let g:ale_completion_autoimport = 0
+
   AssertEqual
   \ [
-  \   {'word': 'migrations', 'menu': 'xxx', 'info': 'Markdown documentation', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'migrations', 'dup': 0, 'menu': 'xxx', 'info': 'Markdown documentation', 'kind': 'f', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
   \ ],
   \ ale#completion#ParseLSPCompletions({
   \   'jsonrpc': '2.0',
@@ -487,9 +496,11 @@ Execute(Should handle documentation in the markdown format):
   \ })
 
 Execute(Should handle completion messages with textEdit objects):
+  let g:ale_completion_autoimport = 0
+
   AssertEqual
   \ [
-  \   {'word': 'next_callback', 'menu': 'PlayTimeCallback', 'info': '', 'kind': 'v', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'next_callback', 'dup': 0, 'menu': 'PlayTimeCallback', 'info': '', 'kind': 'v', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
   \ ],
   \ ale#completion#ParseLSPCompletions({
   \   'id': 226,
@@ -518,9 +529,11 @@ Execute(Should handle completion messages with textEdit objects):
   \ })
 
 Execute(Should handle completion messages with the deprecated insertText attribute):
+  let g:ale_completion_autoimport = 0
+
   AssertEqual
   \ [
-  \   {'word': 'next_callback', 'menu': 'PlayTimeCallback', 'info': '', 'kind': 'v', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \   {'word': 'next_callback', 'dup': 0, 'menu': 'PlayTimeCallback', 'info': '', 'kind': 'v', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
   \ ],
   \ ale#completion#ParseLSPCompletions({
   \   'id': 226,
@@ -548,6 +561,7 @@ Execute(Should handle completion messages with additionalTextEdits when ale_comp
   \ [
   \   {
   \     'word': 'next_callback',
+  \     'dup': 1,
   \     'menu': 'PlayTimeCallback',
   \     'info': '',
   \     'kind': 'v',
@@ -661,6 +675,7 @@ Execute(Should still handle completion messages with empty additionalTextEdits w
   \ [
   \   {
   \     'word': 'next_callback',
+  \     'dup': 0,
   \     'menu': 'PlayTimeCallback',
   \     'info': '',
   \     'kind': 'v',
