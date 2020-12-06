@@ -3756,6 +3756,7 @@ documented in additional help files.
     perl..................................|ale-perl-perl|
     perl language server..................|ale-perl-languageserver|
     perlcritic............................|ale-perl-perlcritic|
+    perlnavigator.........................|ale-perl-perlnavigator|
     perltidy..............................|ale-perl-perltidy|
   perl6...................................|ale-perl6-options|
     perl6.................................|ale-perl6-perl6|

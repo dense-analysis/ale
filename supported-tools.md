@@ -489,6 +489,7 @@ formatting.
   * [languageserver](https://metacpan.org/pod/Perl::LanguageServer)
   * [perl -c](https://perl.org/) :warning:
   * [perl-critic](https://metacpan.org/pod/Perl::Critic)
+  * [languagenavigator](https://github.com/bscan/PerlNavigator)
   * [perltidy](https://metacpan.org/pod/distribution/Perl-Tidy/bin/perltidy)
 * Perl6
   * [perl6 -c](https://perl6.org) :warning:
