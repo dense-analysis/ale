@@ -8,7 +8,7 @@ function! ale_linters#dart#analysis_server#GetProjectRoot(buffer) abort
     " support for pubspec.yml
     let l:pubspec = ale#path#FindNearestFile(a:buffer, 'pubspec.yaml')
 
-    return !empty(l:pubspec) ? fnamemodify(l:pubspec, ':h:h') : ''
+    return !empty(l:pubspec) ? fnamemodify(l:pubspec, ':h:h') : '.'
 endfunction
 
 function! ale_linters#dart#analysis_server#GetCommand(buffer) abort
