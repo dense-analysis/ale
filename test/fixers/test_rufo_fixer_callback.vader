@@ -3,6 +3,7 @@ Before:
 
   " Use an invalid global executable, so we don't match it.
   let g:ale_ruby_rufo_executable = 'xxxinvalid'
+  let g:ale_ruby_rufo_options = ''
 
   call ale#test#SetDirectory('/testplugin/test/command_callback')
   let g:dir = getcwd()
@@ -17,7 +18,15 @@ Execute(The rufo command should contain `bundle exec` when executable is `bundle
   call ale#test#SetFilename('ruby_paths/dummy.rb')
 
   AssertEqual
-  \ ale#Escape('bundle') . ' exec rufo %t',
+  \ ale#Escape('bundle') . ' exec rufo   %t',
+  \ ale#fixers#rufo#GetCommand(bufnr(''))
+
+Execute(The rufo callback should include custom rufo options):
+  let g:ale_ruby_rufo_options = '--filename=.rufo'
+  call ale#test#SetFilename('ruby_paths/dummy.rb')
+
+  AssertEqual
+  \ '''xxxinvalid'' --filename=.rufo  %t',
   \ ale#fixers#rufo#GetCommand(bufnr(''))
 
 Execute(The rufo callback should return the correct default values):
@@ -26,6 +35,6 @@ Execute(The rufo callback should return the correct default values):
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
-  \   'command': ale#Escape('xxxinvalid') . ' %t'
+  \   'command': ale#Escape('xxxinvalid') . '   %t'
   \ },
   \ ale#fixers#rufo#Fix(bufnr(''))

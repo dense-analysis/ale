@@ -5,11 +5,12 @@ call ale#Set('ruby_rufo_executable', 'rufo')
 
 function! ale#fixers#rufo#GetCommand(buffer) abort
     let l:executable = ale#Var(a:buffer, 'ruby_rufo_executable')
+    let l:options = ale#Var(a:buffer, 'ruby_rufo_options')
     let l:exec_args = l:executable =~? 'bundle$'
     \   ? ' exec rufo'
     \   : ''
 
-    return ale#Escape(l:executable) . l:exec_args . ' %t'
+    return ale#Escape(l:executable) . l:exec_args . ' ' . l:options . ' ' . '%t'
 endfunction
 
 function! ale#fixers#rufo#Fix(buffer) abort
