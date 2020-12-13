@@ -546,6 +546,7 @@ formatting.
   * [xmllint](http://xmlsoft.org/xmllint.html)
 * YAML
   * [prettier](https://github.com/prettier/prettier)
+  * [spectral](https://github.com/stoplightio/spectral)
   * [swaglint](https://github.com/byCedric/swaglint)
   * [yamlfix](https://lyz-code.github.io/yamlfix)
   * [yamllint](https://yamllint.readthedocs.io/)

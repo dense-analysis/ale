@@ -3028,6 +3028,7 @@ documented in additional help files.
     xmllint...............................|ale-xml-xmllint|
   yaml....................................|ale-yaml-options|
     prettier..............................|ale-yaml-prettier|
+    spectral..............................|ale-yaml-spectral|
     swaglint..............................|ale-yaml-swaglint|
     yamlfix...............................|ale-yaml-yamlfix|
     yamllint..............................|ale-yaml-yamllint|

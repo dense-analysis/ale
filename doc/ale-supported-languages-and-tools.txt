@@ -537,6 +537,7 @@ Notes:
   * `xmllint`
 * YAML
   * `prettier`
+  * `spectral`
   * `swaglint`
   * `yamlfix`
   * `yamllint`
