@@ -437,6 +437,8 @@ formatting.
   * [rust-analyzer](https://github.com/rust-analyzer/rust-analyzer) :warning:
   * [rustc](https://www.rust-lang.org/) :warning:
   * [rustfmt](https://github.com/rust-lang-nursery/rustfmt)
+* Salt
+  * [salt-lint](https://github.com/warpnet/salt-lint)
 * Sass
   * [sass-lint](https://www.npmjs.com/package/sass-lint)
   * [stylelint](https://github.com/stylelint/stylelint)
