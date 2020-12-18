@@ -12,6 +12,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['help'],
 \       'description': 'Align help tags to the right margin',
 \   },
+\   'autoimport': {
+\       'function': 'ale#fixers#autoimport#Fix',
+\       'suggested_filetypes': ['python'],
+\       'description': 'Fix import issues with autoimport.',
+\   },
 \   'autopep8': {
 \       'function': 'ale#fixers#autopep8#Fix',
 \       'suggested_filetypes': ['python'],
@@ -104,6 +109,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#generic#TrimWhitespace',
 \       'suggested_filetypes': [],
 \       'description': 'Remove all trailing whitespace characters at the end of every line.',
+\   },
+\   'yamlfix': {
+\       'function': 'ale#fixers#yamlfix#Fix',
+\       'suggested_filetypes': ['yaml'],
+\       'description': 'Fix yaml files with yamlfix.',
 \   },
 \   'yapf': {
 \       'function': 'ale#fixers#yapf#Fix',
@@ -375,10 +385,20 @@ let s:default_registry = {
 \       'suggested_filetypes': ['html', 'htmldjango'],
 \       'description': 'Fix HTML files with html-beautify.',
 \   },
+\   'luafmt': {
+\       'function': 'ale#fixers#luafmt#Fix',
+\       'suggested_filetypes': ['lua'],
+\       'description': 'Fix Lua files with luafmt.',
+\   },
 \   'dhall': {
 \       'function': 'ale#fixers#dhall#Fix',
 \       'suggested_filetypes': ['dhall'],
 \       'description': 'Fix Dhall files with dhall-format.',
+\   },
+\   'ormolu': {
+\       'function': 'ale#fixers#ormolu#Fix',
+\       'suggested_filetypes': ['haskell'],
+\       'description': 'A formatter for Haskell source code.',
 \   },
 \}
 

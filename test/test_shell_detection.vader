@@ -127,3 +127,51 @@ Execute(The dash dialect should be used for the shell and the base function):
 
 Execute(dash should be used for shellcheck):
   AssertEqual 'dash', ale#handlers#shellcheck#GetDialectArgument(bufnr(''))
+
+Given(A file with a Bash shellcheck shell directive):
+  # shellcheck shell=bash
+
+Execute(bash dialect should be detected appropriately):
+  AssertEqual 'bash', ale#handlers#shellcheck#GetDialectArgument(bufnr(''))
+
+Given(A file with a sh shellcheck shell directive):
+  #shellcheck   shell=sh
+
+Execute(sh dialect should be detected appropriately):
+  AssertEqual 'sh', ale#handlers#shellcheck#GetDialectArgument(bufnr(''))
+
+Given(A file with a tcsh shellcheck shell directive):
+  #   shellcheck   shell=tcsh
+
+Execute(tcsh dialect should be detected appropriately):
+  AssertEqual 'tcsh', ale#handlers#shellcheck#GetDialectArgument(bufnr(''))
+
+Given(A file with a zsh shellcheck shell directive):
+  #   shellcheck shell=zsh
+
+Execute(zsh dialect should be detected appropriately):
+  AssertEqual 'zsh', ale#handlers#shellcheck#GetDialectArgument(bufnr(''))
+
+Given(A file with a csh shellcheck shell directive):
+  # shellcheck shell=csh
+
+Execute(zsh dialect should be detected appropriately):
+  AssertEqual 'csh', ale#handlers#shellcheck#GetDialectArgument(bufnr(''))
+
+Given(A file with a ksh shellcheck shell directive):
+  # shellcheck shell=ksh
+
+Execute(ksh dialect should be detected appropriately):
+  AssertEqual 'ksh', ale#handlers#shellcheck#GetDialectArgument(bufnr(''))
+
+Given(A file with a dash shellcheck shell directive):
+  # shellcheck shell=dash
+
+Execute(dash dialect should be detected appropriately):
+  AssertEqual 'dash', ale#handlers#shellcheck#GetDialectArgument(bufnr(''))
+
+Given(A file with a ash shellcheck shell directive):
+  # shellcheck shell=ash
+
+Execute(dash dialect should be detected for ash that shellcheck does not support):
+  AssertEqual 'dash', ale#handlers#shellcheck#GetDialectArgument(bufnr(''))

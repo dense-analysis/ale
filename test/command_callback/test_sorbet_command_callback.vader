@@ -5,6 +5,7 @@ Before:
 
   let g:ale_ruby_sorbet_executable = 'srb'
   let g:ale_ruby_sorbet_options = ''
+  let g:ale_ruby_sorbet_enable_watchman = 0
 
 After:
   call ale#assert#TearDownLinterTest()
@@ -12,6 +13,12 @@ After:
 Execute(Executable should default to srb):
   AssertLinter 'srb', ale#Escape('srb')
   \   . ' tc --lsp --disable-watchman'
+
+Execute(Able to enable watchman):
+  let g:ale_ruby_sorbet_enable_watchman = 1
+
+  AssertLinter 'srb', ale#Escape('srb')
+  \   . ' tc --lsp'
 
 Execute(Should be able to set a custom executable):
   let g:ale_ruby_sorbet_executable = 'bin/srb'
