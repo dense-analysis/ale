@@ -3,6 +3,9 @@ Before:
 
   let g:ale_enabled = 0
 
+  " Enable fix end-of-line as tests below expect that
+  set fixeol
+
   runtime autoload/ale/code_action.vim
   runtime autoload/ale/util.vim
 
@@ -211,6 +214,7 @@ Execute(End of file can be modified):
   \)
 
   AssertEqual g:test.text + [
+  \  '',
   \  'type A: string',
   \  'type B: number',
   \  '',
