@@ -43,6 +43,8 @@ Notes:
   * `shfmt`
 * Bats
   * `shellcheck`
+* Bazel
+  * `buildifier`
 * BibTeX
   * `bibclean`
 * Bourne Shell

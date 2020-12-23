@@ -52,6 +52,8 @@ formatting.
   * [shfmt](https://github.com/mvdan/sh)
 * Bats
   * [shellcheck](https://www.shellcheck.net/)
+* Bazel
+  * [buildifier](https://github.com/bazelbuild/buildtools)
 * BibTeX
   * [bibclean](http://ftp.math.utah.edu/pub/bibclean/)
 * Bourne Shell
