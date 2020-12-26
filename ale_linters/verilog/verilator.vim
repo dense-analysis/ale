@@ -7,7 +7,9 @@ if !exists('g:ale_verilog_verilator_options')
 endif
 
 function! ale_linters#verilog#verilator#GetCommand(buffer) abort
+    " the path to the current file is systematically added to the search path
     return 'verilator --lint-only -Wall -Wno-DECLFILENAME '
+    \   . '-I%s:h '
     \   . ale#Var(a:buffer, 'verilog_verilator_options') .' '
     \   . '%t'
 endfunction
