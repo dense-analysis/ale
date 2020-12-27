@@ -1,0 +1,20 @@
+===============================================================================
+ALE Dhall Integration                                       *ale-dhall-options*
+
+
+g:ale_dhall_format_executable                   *g:ale_dhall_format_executable*
+                                                *b:ale_dhall_format_executable*
+  Type: |String|
+  Default: `'dhall'`
+
+  See |ale-integrations-local-executables|
+
+g:ale_dhall_format_ascii                             *g:ale_dhall_format_ascii*
+                                                     *b:ale_dhall_format_ascii*
+  Type: |Boolean|
+  Default: 0
+
+  Tells dhall to format using ascii instead of unicode. Set variable to 1 to
+  enable --ascii when formatting.
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

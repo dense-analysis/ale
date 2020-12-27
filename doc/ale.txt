@@ -2624,6 +2624,7 @@ documented in additional help files.
   dart....................................|ale-dart-options|
     dartanalyzer..........................|ale-dart-dartanalyzer|
     dartfmt...............................|ale-dart-dartfmt|
+  dhall...................................|ale-dhall-options|
   dockerfile..............................|ale-dockerfile-options|
     dockerfile_lint.......................|ale-dockerfile-dockerfile_lint|
     hadolint..............................|ale-dockerfile-hadolint|

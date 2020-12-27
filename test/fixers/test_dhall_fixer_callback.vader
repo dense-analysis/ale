@@ -9,3 +9,10 @@ Execute(The default command should be correct):
   \ { 'read_temporary_file': 1,
   \   'command': ale#Escape('dhall') . ' format --inplace %t'
   \ }
+
+Execute(Ascii flag is passed to fixer when dhall_format_ascii is set):
+  let g:ale_dhall_format_ascii = 1
+  AssertFixer
+  \ { 'read_temporary_file': 1,
+  \   'command': ale#Escape('dhall') . ' format --inplace %t --ascii'
+  \ }
