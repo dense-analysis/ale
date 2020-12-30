@@ -137,7 +137,8 @@ function! s:ShowCursorDetailForItem(loc, options) abort
     let l:stay_here = get(a:options, 'stay_here', 0)
 
     let s:last_detailed_line = line('.')
-    let l:message = get(a:loc, 'detail', a:loc.text)
+    let l:format = ale#Var(bufnr(''), 'echo_msg_format')
+    let l:message = ale#GetLocItemMessage(a:loc, l:format)
     let l:lines = split(l:message, "\n")
     call ale#preview#Show(l:lines, {'stay_here': l:stay_here})
 
