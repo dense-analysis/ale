@@ -408,6 +408,8 @@ formatting.
   * [ols](https://github.com/freebroccolo/ocaml-language-server)
   * [reason-language-server](https://github.com/jaredly/reason-language-server)
   * [refmt](https://github.com/reasonml/reason-cli)
+* Rego
+  * [opa](https://github.com/open-policy-agent/opa)
 * reStructuredText
   * [alex](https://github.com/wooorm/alex) :floppy_disk:
   * [proselint](http://proselint.com/)

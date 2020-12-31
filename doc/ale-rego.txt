@@ -1,0 +1,23 @@
+===============================================================================
+ALE Rego Integration                                         *ale-rego-options*
+
+===============================================================================
+opa                                                              *ale-rego-opa*
+
+g:ale_rego_opa_executable                           *g:ale_rego_opa_executable*
+                                                    *b:ale_rego_opa_executable*
+  Type: |String|
+  Default:  'opa'
+
+  This variable can be modified to change the executable path for `opa`.
+
+g:ale_rego_opa_options                                 *g:ale_rego_opa_options*
+                                                       *b:ale_rego_opa_options*
+  Type: |String|
+  Default:  ''
+
+  This variable is useful when you want to add some extra options which
+  `opa fmt` supports
+
+===============================================================================
+  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

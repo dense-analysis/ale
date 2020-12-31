@@ -1,0 +1,36 @@
+Before:
+   Save g:ale_rego_regofmt_executable
+   Save g:ale_rego_regofmt_options
+
+   " Use an invalid global executable, so we don't match it.
+   let g:ale_rego_regofmt_executable = 'xxxinvalid'
+   let g:ale_rego_regofmt_options = ''
+
+   call ale#test#SetDirectory('/testplugin/test/fixers')
+
+ After:
+   Restore
+
+   call ale#test#RestoreDirectory()
+
+ Execute(The regofmt callback should return the correct default values):
+   call ale#test#SetFilename('../rego_files/testfile.rego')
+
+   AssertEqual
+   \ {
+   \   'command': ale#Escape('xxxinvalid')
+   \     . ' -l -w'
+   \ },
+   \ ale#fixers#regofmt#Fix(bufnr(''))
+
+ Execute(The regofmt callback should include custom regofmt options):
+   let g:ale_rego_regofmt_options = "-r '(a) -> a'"
+   call ale#test#SetFilename('../rego_files/testfile.rego')
+
+   AssertEqual
+   \ {
+   \   'command': ale#Escape('xxxinvalid')
+   \     . ' -l -w'
+   \     . ' ' . g:ale_rego_regofmt_options
+   \ },
+   \ ale#fixers#regofmt#Fix(bufnr(''))

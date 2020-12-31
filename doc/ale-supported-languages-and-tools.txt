@@ -399,6 +399,8 @@ Notes:
   * `ols`
   * `reason-language-server`
   * `refmt`
+* Rego
+  * `opa`
 * reStructuredText
   * `alex`!!
   * `proselint`
