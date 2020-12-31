@@ -1195,6 +1195,8 @@ g:ale_floating_preview                                       *g:ale_floating_pre
   Default: `1`
 
   When set to `1`, Neovim will use a floating window for ale's preview window.
+  This is equivalent to setting |g:ale_hover_to_floating_preview| and
+  |g:ale_detail_to_floating_preview| to `1`.
 
 
 g:ale_history_enabled                                   *g:ale_history_enabled*
