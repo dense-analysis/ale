@@ -228,8 +228,8 @@ A minimal configuration for a language server linter might look so. >
   \   'project_root': '/path/to/root_of_project',
   \})
 <
-For language servers that use a TCP socket connection, you should define the
-address to connect to instead. >
+For language servers that use a TCP or named pipe socket connection, you
+should define the address to connect to instead. >
 
   call ale#linter#Define('filetype_here', {
   \   'name': 'any_name_you_want',
@@ -3852,7 +3852,7 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
 
                          When this argument is set to `'socket'`, then the
                          linter will be defined as an LSP linter via a TCP
-                         socket connection. `address` must be set.
+                         or named pipe socket connection. `address` must be set.
 
                          ALE will not start a server automatically.
 
@@ -3877,7 +3877,10 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
 
   `address`                A |String| representing an address to connect to,
                          or a |Funcref| accepting a buffer number and
-                         returning the |String|.
+                         returning the |String|. If the value contains a
+                         colon, it is interpreted as referring to a TCP
+                         socket; otherwise it is interpreted as the path of a
+                         named pipe.
 
                          The result can be computed with |ale#command#Run()|.
 
