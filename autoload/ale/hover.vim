@@ -47,7 +47,7 @@ function! ale#hover#HandleTSServerResponse(conn_id, response) abort
             elseif get(l:options, 'truncated_echo', 0)
                 call ale#cursor#TruncatedEcho(split(a:response.body.displayString, "\n")[0])
             elseif g:ale_hover_to_floating_preview || g:ale_floating_preview
-                call ale#float_preview#Show(split(a:response.body.displayString, "\n"), {
+                call ale#floating_preview#Show(split(a:response.body.displayString, "\n"), {
                 \   'filetype': 'ale-preview.message',
                 \})
             elseif g:ale_hover_to_preview
