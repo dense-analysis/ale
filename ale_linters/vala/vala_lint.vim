@@ -9,35 +9,32 @@ function! ale_linters#vala#vala_lint#Handle(buffer, lines) abort
     let l:pattern = '^\s*\(\d\+\)\.\(\d\+\)\s\+\(\w\+\)\s\+\(.\+\)\s\([A-Za-z0-9_\-]\+\)'
     let l:output = []
 
-    call add(l:output, {
-    \   'lnum': 12,
-    \   'col': 30,
-    \   'text': 'bad',
-    \   'type': 'E',
-    \   'code': 'testcode',
-    \})
+    for l:line in a:lines
+        " remove color escape sequences since vala-lint doesn't support
+        " output without colors
+        let l:cleaned_line = substitute(l:line, '\x1b\[[0-9;]*m', '', 'g')
+        execute 'echo l:line'
+        execute 'echo l:cleaned_line'
+        let l:match = matchlist(l:cleaned, l:pattern)
 
-    "for l:line in a:lines
-    "    let l:match = matchlist(l:line, l:pattern)
+        if len(l:match) == 0
+            continue
+        endif
 
-    "    if len(l:match) == 0
-    "        continue
-    "    endif
+        let l:lnum = l:match[1] + 0
+        let l:column = l:match[2] + 0
+        let l:type = 'E'
+        let l:text = substitute(l:match[4], '^\s*\(.\{-}\)\s*$', '\1', '')
+        let l:code = l:match[5]
 
-    "    let l:line = l:match[1] + 0
-    "    let l:column = l:match[2] + 0
-    "    let l:type = 'E'
-    "    let l:text = substitute(l:match[4], '^\s*\(.\{-}\)\s*$', '\1', '')
-    "    let l:code = l:match[5]
-
-    "    call add(l:output, {
-    "    \   'lnum': l:line,
-    "    \   'col': l:column,
-    "    \   'text': l:text,
-    "    \   'type': l:type,
-    "    \   'code': l:code,
-    "    \})
-    "endfor
+        call add(l:output, {
+        \   'lnum': l:lnum,
+        \   'col': l:column,
+        \   'text': l:text,
+        \   'type': l:type,
+        \   'code': l:code,
+        \})
+    endfor
 
     return l:output
 endfunction
