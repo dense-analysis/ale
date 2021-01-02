@@ -15,7 +15,7 @@ function! ale_linters#vala#vala_lint#Handle(buffer, lines) abort
         let l:cleaned_line = substitute(l:line, '\x1b\[[0-9;]*m', '', 'g')
         execute 'echo l:line'
         execute 'echo l:cleaned_line'
-        let l:match = matchlist(l:cleaned, l:pattern)
+        let l:match = matchlist(l:cleaned_line, l:pattern)
 
         if len(l:match) == 0
             continue
