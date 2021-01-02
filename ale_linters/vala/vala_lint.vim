@@ -36,7 +36,7 @@ endfunction
 
 call ale#linter#Define('vala', {
 \   'name': 'vala-lint',
-\   'output_stream': 'both',
+\   'output_stream': 'stdout',
 \   'executable': 'io.elementary.vala-lint',
 \   'command': function('ale_linters#vala#vala_lint#GetCommand'),
 \   'callback': 'ale_linters#vala#vala_lint#Handle',
