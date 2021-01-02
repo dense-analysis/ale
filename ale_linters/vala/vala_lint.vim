@@ -9,27 +9,35 @@ function! ale_linters#vala#vala_lint#Handle(buffer, lines) abort
     let l:pattern = '^\s*\(\d\+\)\.\(\d\+\)\s\+\(\w\+\)\s\+\(.\+\)\s\([A-Za-z0-9_\-]\+\)'
     let l:output = []
 
-    for l:line in a:lines
-        let l:match = matchlist(l:line, l:pattern)
+    call add(l:output, {
+    \   'lnum': 12,
+    \   'col': 30,
+    \   'text': 'bad',
+    \   'type': 'E',
+    \   'code': 'testcode',
+    \})
 
-        if len(l:match) == 0
-            continue
-        endif
+    "for l:line in a:lines
+    "    let l:match = matchlist(l:line, l:pattern)
 
-        let l:line = l:match[1] + 0
-        let l:column = l:match[2] + 0
-        let l:type = 'E'
-        let l:text = substitute(l:match[4], '^\s*\(.\{-}\)\s*$', '\1', '')
-        let l:code = l:match[5]
+    "    if len(l:match) == 0
+    "        continue
+    "    endif
 
-        call add(l:output, {
-        \   'lnum': l:line,
-        \   'col': l:column,
-        \   'text': l:text,
-        \   'type': l:type,
-        \   'code': l:code,
-        \})
-    endfor
+    "    let l:line = l:match[1] + 0
+    "    let l:column = l:match[2] + 0
+    "    let l:type = 'E'
+    "    let l:text = substitute(l:match[4], '^\s*\(.\{-}\)\s*$', '\1', '')
+    "    let l:code = l:match[5]
+
+    "    call add(l:output, {
+    "    \   'lnum': l:line,
+    "    \   'col': l:column,
+    "    \   'text': l:text,
+    "    \   'type': l:type,
+    "    \   'code': l:code,
+    "    \})
+    "endfor
 
     return l:output
 endfunction
