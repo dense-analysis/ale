@@ -2,7 +2,7 @@
 " Description: A linter for Vala using Vala-Lint.
 
 function! ale_linters#vala#vala_lint#GetCommand(buffer) abort
-    return 'io.elementary.vala-lint'
+    return 'io.elementary.vala-lint %s'
 endfunction
 
 function! ale_linters#vala#vala_lint#Handle(buffer, lines) abort
