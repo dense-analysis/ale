@@ -1,0 +1,37 @@
+Before:
+  runtime ale_linters/vala/vala_lint.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The Vala-Lint handler should parse lines correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 18,
+  \     'col': 18,
+  \     'text': 'Expected space before paren',
+  \     'code': 'space-before-paren',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 64,
+  \     'col': 37,
+  \     'text': 'Expected space before paren',
+  \     'code': 'space-before-paren',
+  \     'type': 'E',
+  \   },
+  \   {
+  \     'lnum': 73,
+  \     'col': 37,
+  \     'text': 'Expected space before paren',
+  \     'code': 'space-before-paren',
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale_linters#vala#vala_lint#Handle(bufnr(''), [
+  \   'Application.vala',
+  \   '   18.18    error   Expected space before paren                     space-before-paren',
+  \   '   64.37    error   Expected space before paren                     space-before-paren',
+  \   '   73.37    error   Expected space before paren                     space-before-paren',
+  \ ])
