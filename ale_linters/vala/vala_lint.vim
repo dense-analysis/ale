@@ -1,8 +1,8 @@
 " Author: Atsuya Takagi <asoftonight@gmail.com>
 " Description: A linter for Vala using Vala-Lint.
 
-let g:ale_vala_vala_lint_enable_config = get(g:, 'ale_vala_vala_lint_enable_config', 0)
-let g:ale_vala_vala_lint_config_filename = get(g:, 'ale_vala_vala_lint_config_filename', 'vala-lint.conf')
+call ale#Set('vala_vala_lint_enable_config', 0)
+call ale#Set('vala_vala_lint_config_filename', 'vala-lint.conf')
 
 function! ale_linters#vala#vala_lint#GetCommand(buffer) abort
     let l:command = 'io.elementary.vala-lint '
