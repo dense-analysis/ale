@@ -2,7 +2,14 @@
 " Description: A linter for Vala using Vala-Lint.
 
 function! ale_linters#vala#vala_lint#GetCommand(buffer) abort
-    return 'io.elementary.vala-lint %s'
+    let l:command = 'io.elementary.vala-lint '
+
+    let l:config_path = ale#path#FindNearestFile(a:buffer, 'vala-lint.conf')
+    if !empty(l:config_path)
+        let l:command .= '-c ' . l:config_path . ' '
+    endif
+
+    return l:command . '%s'
 endfunction
 
 function! ale_linters#vala#vala_lint#Handle(buffer, lines) abort
