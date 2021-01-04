@@ -9,4 +9,23 @@ See |ale-c-uncrustify| for information about the available options.
 
 
 ===============================================================================
+Vala-Lint                                                  *ale-vala-vala-lint*
+
+g:ale_vala_vala_lint_enable_config             *g:vala_vala_lint_enable_config*
+                                               *b:vala_vala_lint_enable_config*
+  Type: |Number|
+  Default: `'0'`
+
+  This variable can be set to enable or diable the use of Vala-Lint config file.
+
+
+g:vala_vala_lint_config_filename             *g:vala_vala_lint_config_filename*
+                                             *b:vala_vala_lint_config_filename*
+  Type: |String|
+  Default: `'vala-lint.conf'`
+
+  This variable can be set to specify a Vala-Lint config filename.
+
+
+===============================================================================
 vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
