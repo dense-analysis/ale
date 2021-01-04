@@ -56,6 +56,15 @@ g:ale_php_phan_use_client                           *g:ale_php_phan_use_client*
   This variable can be set to 1 to use the phan_client with phan daemon mode
   instead of the phan standalone.
 
+g:ale_php_phan_client_socket_path           *g:ale_php_phan_client_socket_path*
+                                            *b:ale_php_phan_client_socket_path*
+  Type: |String|
+  Default: `get(g:, 'ale_php_phan_client_socket_path', '')`
+
+  This variable can be set to the socket file pathto use the phan_client with
+  phan daemon mode and socket instead of the phan_client with TCP.
+
+
 ===============================================================================
 phpcbf                                                         *ale-php-phpcbf*
 

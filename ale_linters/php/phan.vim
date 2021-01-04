@@ -1,4 +1,4 @@
-" Author: diegoholiveira <https://github.com/diegoholiveira>, haginaga <https://github.com/haginaga>
+" Author: diegoholiveira <https://github.com/diegoholiveira>, haginaga <https://github.com/haginaga>, Daniel Siepmann <https://daniel-siepmann.de>
 " Description: static analyzer for PHP
 
 " Define the minimum severity
@@ -6,6 +6,7 @@ let g:ale_php_phan_minimum_severity = get(g:, 'ale_php_phan_minimum_severity', 0
 
 let g:ale_php_phan_executable = get(g:, 'ale_php_phan_executable', 'phan')
 let g:ale_php_phan_use_client = get(g:, 'ale_php_phan_use_client', 0)
+let g:ale_php_phan_client_socket_path = get(g:, 'ale_php_phan_client_socket_path', '')
 
 function! ale_linters#php#phan#GetExecutable(buffer) abort
     let l:executable = ale#Var(a:buffer, 'php_phan_executable')
@@ -19,8 +20,7 @@ endfunction
 
 function! ale_linters#php#phan#GetCommand(buffer) abort
     if ale#Var(a:buffer, 'php_phan_use_client') == 1
-        let l:args = '-l '
-        \   . ' %s'
+        let l:args = ale_linters#php#phan#GetClientCommand(a:buffer)
     else
         let l:args = '-y '
         \   . ale#Var(a:buffer, 'php_phan_minimum_severity')
@@ -30,6 +30,18 @@ function! ale_linters#php#phan#GetCommand(buffer) abort
     let l:executable = ale_linters#php#phan#GetExecutable(a:buffer)
 
     return ale#Escape(l:executable) . ' ' . l:args
+endfunction
+
+function! ale_linters#php#phan#GetClientCommand(buffer) abort
+    let l:args = '-l %s'
+
+    if ale#Var(a:buffer, 'php_phan_client_socket_path') is# ''
+        return l:args
+    endif
+
+    return l:args
+    \      . ' --daemonize-socket'
+    \      . ' ' . g:ale_php_phan_client_socket_path
 endfunction
 
 function! ale_linters#php#phan#Handle(buffer, lines) abort
