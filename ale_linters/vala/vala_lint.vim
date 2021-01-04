@@ -1,12 +1,18 @@
 " Author: Atsuya Takagi <asoftonight@gmail.com>
 " Description: A linter for Vala using Vala-Lint.
 
+let g:ale_vala_vala_lint_enable_config = get(g:, 'ale_vala_vala_lint_enable_config', 0)
+let g:ale_vala_vala_lint_config_filename = get(g:, 'ale_vala_vala_lint_config_filename', 'vala-lint.conf')
+
 function! ale_linters#vala#vala_lint#GetCommand(buffer) abort
     let l:command = 'io.elementary.vala-lint '
 
-    let l:config_path = ale#path#FindNearestFile(a:buffer, 'vala-lint.conf')
-    if !empty(l:config_path)
-        let l:command .= '-c ' . l:config_path . ' '
+    if ale#Var(a:buffer, 'vala_vala_lint_enable_config')
+        let l:config_filename = ale#Var(a:buffer, 'vala_vala_lint_config_filename')
+        let l:config_path = ale#path#FindNearestFile(a:buffer, l:config_filename)
+        if !empty(l:config_path)
+            let l:command .= '-c ' . l:config_path . ' '
+        endif
     endif
 
     return l:command . '%s'
