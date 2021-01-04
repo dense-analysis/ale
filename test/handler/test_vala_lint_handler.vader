@@ -19,7 +19,7 @@ Execute(The Vala-Lint handler should parse lines correctly):
   \     'col': 37,
   \     'text': 'Expected space before paren',
   \     'code': 'space-before-paren',
-  \     'type': 'E',
+  \     'type': 'W',
   \   },
   \   {
   \     'lnum': 73,
@@ -32,6 +32,23 @@ Execute(The Vala-Lint handler should parse lines correctly):
   \ ale_linters#vala#vala_lint#Handle(bufnr(''), [
   \   'Application.vala',
   \   '   18.18    error   Expected space before paren                     space-before-paren',
-  \   '   64.37    error   Expected space before paren                     space-before-paren',
+  \   '   64.37    warn    Expected space before paren                     space-before-paren',
+  \   '   73.37    error   Expected space before paren                     space-before-paren',
+  \ ])
+
+Execute(The Vala-Lint handler should ignore unknown error types):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 73,
+  \     'col': 37,
+  \     'text': 'Expected space before paren',
+  \     'code': 'space-before-paren',
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale_linters#vala#vala_lint#Handle(bufnr(''), [
+  \   'Application.vala',
+  \   '   18.18    test    Expected space before paren                     space-before-paren',
   \   '   73.37    error   Expected space before paren                     space-before-paren',
   \ ])
