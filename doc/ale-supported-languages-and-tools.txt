@@ -501,6 +501,7 @@ Notes:
   * `typecheck`
 * VALA
   * `uncrustify`
+  * `vala-lint`!!
 * Verilog
   * `hdl-checker`
   * `iverilog`
