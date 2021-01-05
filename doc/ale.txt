@@ -2882,6 +2882,8 @@ documented in additional help files.
     rls...................................|ale-rust-rls|
     rustc.................................|ale-rust-rustc|
     rustfmt...............................|ale-rust-rustfmt|
+  salt....................................|ale-salt-options|
+    salt-lint.............................|ale-salt-salt-lint|
   sass....................................|ale-sass-options|
     sasslint..............................|ale-sass-sasslint|
     stylelint.............................|ale-sass-stylelint|
