@@ -10,6 +10,7 @@ function! ale_linters#vala#vala_lint#GetCommand(buffer) abort
     if ale#Var(a:buffer, 'vala_vala_lint_enable_config')
         let l:config_filename = ale#Var(a:buffer, 'vala_vala_lint_config_filename')
         let l:config_path = ale#path#FindNearestFile(a:buffer, l:config_filename)
+
         if !empty(l:config_path)
             let l:command .= '-c ' . l:config_path . ' '
         endif
