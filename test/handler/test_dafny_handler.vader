@@ -8,14 +8,14 @@ Execute(The Dafny handler should parse output correctly):
   AssertEqual
   \ [
   \   {
-  \     'bufnr': 0,
+  \     'filename': 'File.dfy',
   \     'col': 45,
   \     'lnum': 123,
   \     'text': 'A precondition for this call might not hold.',
   \     'type': 'E'
   \   },
   \   {
-  \     'bufnr': 0,
+  \     'filename': 'File.dfy',
   \     'col': 90,
   \     'lnum': 678,
   \     'text': 'This is the precondition that might not hold.',
