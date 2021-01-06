@@ -43,7 +43,7 @@ Execute(spectral handler should parse lines correctly):
   \     'type': 'E'
   \   },
   \ ],
-  \ ale_linters#yaml#spectral#Handle(bufnr(''), [
+  \ ale#handlers#spectral#HandleSpectralOutput(bufnr(''), [
   \   'openapi.yml:1:1 warning oas3-api-servers "OpenAPI `servers` must be present and non-empty array."',
   \   'openapi.yml:1:1 error oas3-schema "Object should have required property `paths`."',
   \   'openapi.yml:1:1 warning openapi-tags "OpenAPI object should have non-empty `tags` array."',
