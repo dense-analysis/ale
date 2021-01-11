@@ -54,7 +54,6 @@ Execute(Should use user-specified project root):
   \   'unstable': v:false
   \}
 
-
 Execute(Check Deno LSP command):
   AssertLinter 'deno', [
   \ ale#Escape('deno') . ' lsp',

@@ -507,6 +507,7 @@ formatting.
   * [thrift](http://thrift.apache.org/)
 * TypeScript
   * [eslint](http://eslint.org/)
+  * [deno](https://deno.land/)
   * [fecs](http://fecs.baidu.com/)
   * [prettier](https://github.com/prettier/prettier)
   * [standard](http://standardjs.com/)

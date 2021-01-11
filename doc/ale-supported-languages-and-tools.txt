@@ -498,6 +498,7 @@ Notes:
   * `thrift`
 * TypeScript
   * `eslint`
+  * `deno`
   * `fecs`
   * `prettier`
   * `standard`

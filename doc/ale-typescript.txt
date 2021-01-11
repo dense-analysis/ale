@@ -11,6 +11,39 @@ options for `eslint` too. See: |ale-javascript-eslint|.
 
 
 ===============================================================================
+deno                                                      *ale-typescript-deno*
+
+Starting from version 1.6.0, Deno comes with its own language server. Earlier
+versions are not supported.
+
+g:ale_deno_executable                                   *g:ale_deno_executable*
+                                                        *b:ale_deno_executable*
+  Type: |String|
+  Default: `'deno'`
+
+
+g:ale_deno_lsp_project_root                       *g:ale_deno_lsp_project_root*
+                                                  *b:ale_deno_lsp_project_root*
+  Type: |String|
+  Default: `''`
+
+  If this variable is left unset, ALE will try to find the project root by
+  executing the following steps in the given order:
+
+  1. Find an ancestor directory containing a tsconfig.json.
+  2. Find an ancestory irectory containing a .git folder.
+  3. Use the directory of the current buffer (if the buffer was opened from
+     a file).
+
+g:ale_deno_unstable                                       *g:ale_deno_unstable*
+                                                          *b:ale_deno_unstable*
+  Type: |Number|
+  Default: `0`
+
+  Enable or disable unstable Deno features and APIs.
+
+
+===============================================================================
 prettier                                              *ale-typescript-prettier*
 
 See |ale-javascript-prettier| for information about the available options.
