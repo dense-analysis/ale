@@ -1192,7 +1192,7 @@ g:ale_fix_on_save_ignore                             *g:ale_fix_on_save_ignore*
 g:ale_floating_preview                                       *g:ale_floating_preview*
 
   Type: |Number|
-  Default: `1`
+  Default: `0`
 
   When set to `1`, Neovim will use a floating window for ale's preview window.
   This is equivalent to setting |g:ale_hover_to_floating_preview| and
