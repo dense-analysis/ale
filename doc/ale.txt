@@ -1531,6 +1531,7 @@ g:ale_linters                                                   *g:ale_linters*
   \   'go': ['gofmt', 'golint', 'go vet'],
   \   'hack': ['hack'],
   \   'help': [],
+  \   'inko': ['inko'],
   \   'perl': ['perlcritic'],
   \   'perl6': [],
   \   'python': ['flake8', 'mypy', 'pylint', 'pyright'],
@@ -2708,6 +2709,8 @@ documented in additional help files.
     idris.................................|ale-idris-idris|
   ink.....................................|ale-ink-options|
     ink-language-server...................|ale-ink-language-server|
+  inko....................................|ale-inko-options|
+    inko..................................|ale-inko-inko|
   ispc....................................|ale-ispc-options|
     ispc..................................|ale-ispc-ispc|
   java....................................|ale-java-options|
