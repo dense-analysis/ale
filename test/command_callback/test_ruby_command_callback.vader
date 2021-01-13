@@ -5,9 +5,9 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default command should be correct):
-  AssertLinter 'ruby', ale#Escape('ruby') . ' -w -c -T1 %t'
+  AssertLinter 'ruby', ale#Escape('ruby') . ' -w -c %t'
 
 Execute(The executable should be configurable):
   let g:ale_ruby_ruby_executable = 'foobar'
 
-  AssertLinter 'foobar', ale#Escape('foobar') . ' -w -c -T1 %t'
+  AssertLinter 'foobar', ale#Escape('foobar') . ' -w -c %t'
