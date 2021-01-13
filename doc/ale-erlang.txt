@@ -46,6 +46,14 @@ g:ale_erlang_elvis_executable                   *g:ale_erlang_elvis_executable*
 -------------------------------------------------------------------------------
 erlc                                                          *ale-erlang-erlc*
 
+g:ale_erlang_erlc_executable                     *g:ale_erlang_erlc_executable*
+                                                 *b:ale_erlang_erlc_executable*
+  Type: |String|
+  Default: `'erlc'`
+
+  This variable can be changed to specify the erlc executable.
+
+
 g:ale_erlang_erlc_options                           *g:ale_erlang_erlc_options*
                                                     *b:ale_erlang_erlc_options*
   Type: |String|
