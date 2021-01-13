@@ -12,7 +12,7 @@ function! ale#floating_preview#Show(lines, ...) abort
     endif
 
     " Remove the close autocmd so it doesn't happen mid update
-    augroup NvimFloating
+    augroup ale_floating_preview_window
         autocmd!
     augroup END
 
@@ -37,7 +37,7 @@ function! ale#floating_preview#Show(lines, ...) abort
     call nvim_set_current_win(l:parent_window)
 
     " Return to parent context on move
-    augroup NvimFloating
+    augroup ale_floating_preview_window
         autocmd!
 
         if g:ale_close_preview_on_insert
