@@ -24,6 +24,8 @@ manner with the `:ALEFix` feature, supporting tools in many languages, like
 ALE acts as a "language client" to support a variety of Language Server Protocol
 features, including:
 
+ignore me
+
 * Diagnostics (via Language Server Protocol linters)
 * Go To Definition (`:ALEGoToDefinition`)
 * Completion (Built in completion support, or with Deoplete)
