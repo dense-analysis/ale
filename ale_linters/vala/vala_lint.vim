@@ -1,7 +1,6 @@
 " Author: Atsuya Takagi <asoftonight@gmail.com>
 " Description: A linter for Vala using Vala-Lint.
 
-call ale#Set('vala_vala_lint_enable_config', 0)
 call ale#Set('vala_vala_lint_config_filename', 'vala-lint.conf')
 call ale#Set('vala_vala_lint_executable', 'io.elementary.vala-lint')
 
@@ -12,16 +11,14 @@ endfunction
 function! ale_linters#vala#vala_lint#GetCommand(buffer) abort
     let l:command = ale_linters#vala#vala_lint#GetExecutable(a:buffer)
 
-    if ale#Var(a:buffer, 'vala_vala_lint_enable_config')
-        let l:config_filename = ale#Var(a:buffer, 'vala_vala_lint_config_filename')
-        let l:config_path = ale#path#FindNearestFile(a:buffer, l:config_filename)
+    let l:config_filename = ale#Var(a:buffer, 'vala_vala_lint_config_filename')
+    let l:config_path = ale#path#FindNearestFile(a:buffer, l:config_filename)
 
-        if !empty(l:config_path)
-            let l:command .= '-c ' . l:config_path . ' '
-        endif
+    if !empty(l:config_path)
+        let l:command .= ' -c ' . l:config_path
     endif
 
-    return l:command . '%s'
+    return l:command . ' %s'
 endfunction
 
 function! ale_linters#vala#vala_lint#Handle(buffer, lines) abort
