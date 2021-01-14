@@ -3,9 +3,14 @@
 
 call ale#Set('vala_vala_lint_enable_config', 0)
 call ale#Set('vala_vala_lint_config_filename', 'vala-lint.conf')
+call ale#Set('vala_vala_lint_executable', 'io.elementary.vala-lint')
+
+function! ale_linters#vala#vala_lint#GetExecutable(buffer) abort
+    return ale#Var(a:buffer, 'vala_vala_lint_executable')
+endfunction
 
 function! ale_linters#vala#vala_lint#GetCommand(buffer) abort
-    let l:command = 'io.elementary.vala-lint '
+    let l:command = ale_linters#vala#vala_lint#GetExecutable(a:buffer)
 
     if ale#Var(a:buffer, 'vala_vala_lint_enable_config')
         let l:config_filename = ale#Var(a:buffer, 'vala_vala_lint_config_filename')
@@ -57,7 +62,7 @@ endfunction
 call ale#linter#Define('vala', {
 \   'name': 'vala-lint',
 \   'output_stream': 'stdout',
-\   'executable': 'io.elementary.vala-lint',
+\   'executable': function('ale_linters#vala#vala_lint#GetExecutable'),
 \   'command': function('ale_linters#vala#vala_lint#GetCommand'),
 \   'callback': 'ale_linters#vala#vala_lint#Handle',
 \   'lint_file': 1,
