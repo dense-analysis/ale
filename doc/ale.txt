@@ -646,6 +646,9 @@ problem will be displayed in a balloon instead of hover information.
 Hover information can be displayed in the preview window instead by setting
 |g:ale_hover_to_preview| to `1`.
 
+When using Neovim, if |g:ale_hover_to_floating_preview| or |g:ale_floating_preview|
+is set to 1, the hover information will show in a floating window.
+
 For Vim 8.1+ terminals, mouse hovering is disabled by default. Enabling
 |balloonexpr| commands in terminals can cause scrolling issues in terminals,
 so ALE will not attempt to show balloons unless |g:ale_set_balloons| is set to
@@ -954,6 +957,15 @@ g:ale_default_navigation                             *g:ale_default_navigation*
   buffer, such as for |ALEFindReferences|, or |ALEGoToDefinition|.
 
 
+g:ale_detail_to_floating_preview                            *g:ale_detail_to_floating_preview*
+                                                            *b:ale_detail_to_floating_preview*
+  Type: |Number|
+  Default: `0`
+
+  When this option is set to `1`, Neovim will use a floating window for
+  ALEDetail output.
+
+
 g:ale_disable_lsp                                           *g:ale_disable_lsp*
                                                             *b:ale_disable_lsp*
 
@@ -1177,6 +1189,16 @@ g:ale_fix_on_save_ignore                             *g:ale_fix_on_save_ignore*
   let g:ale_fix_on_save_ignore = [g:AddBar]
 <
 
+g:ale_floating_preview                                       *g:ale_floating_preview*
+
+  Type: |Number|
+  Default: `0`
+
+  When set to `1`, Neovim will use a floating window for ale's preview window.
+  This is equivalent to setting |g:ale_hover_to_floating_preview| and
+  |g:ale_detail_to_floating_preview| to `1`.
+
+
 g:ale_history_enabled                                   *g:ale_history_enabled*
 
   Type: |Number|
@@ -1233,6 +1255,14 @@ g:ale_hover_to_preview                                 *g:ale_hover_to_preview*
 
   If set to `1`, hover messages will be displayed in the preview window,
   instead of in balloons or the message line.
+
+
+g:ale_hover_to_floating_preview                       *g:ale_hover_to_floating_preview*
+                                                      *b:ale_hover_to_floating_preview*
+  Type: |Number|
+  Default: `0`
+
+  If set to `1`, Neovim will use floating windows for hover messages.
 
 
 g:ale_keep_list_window_open                       *g:ale_keep_list_window_open*
