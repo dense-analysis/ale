@@ -9,8 +9,8 @@ set -u
 # options, or read the output below.
 #
 
-image=akevinclark/ale
-current_image_id=8e1802ca34b5
+image=w0rp/ale
+current_image_id=1c04720f5d17
 
 # Used in all test scripts for running the selected Docker image.
 DOCKER_RUN_IMAGE="$image"
