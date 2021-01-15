@@ -53,9 +53,21 @@ check_errors() {
     regex="$1"
     message="$2"
     include_arg=''
+    exclude_arg=''
 
     if [ $# -gt 2 ]; then
         include_arg="--include $3"
+    fi
+
+    if [ $# -gt 3 ]; then
+        shift
+        shift
+        shift
+
+        while (( "$#" )); do
+          exclude_arg="$exclude_arg --exclude $1"
+          shift
+        done
     fi
 
     for directory in "${directories[@]}"; do
@@ -63,7 +75,7 @@ check_errors() {
         while read -r; do
             RETURN_CODE=1
             echo "$REPLY $message"
-        done < <(grep -H -n "$regex" $include_arg "$directory"/**/*.vim \
+        done < <(grep -H -n "$regex" $include_arg $exclude_arg "$directory"/**/*.vim \
             | grep -v 'no-custom-checks' \
             | grep -o '^[^:]\+:[0-9]\+' \
             | sed 's:^\./::')
@@ -92,7 +104,7 @@ if (( FIX_ERRORS )); then
     done
 fi
 
-# The arguments are: regex, explanation, [filename_filter]
+# The arguments are: regex, explanation, [filename_filter], [list, of, exclusions]
 check_errors \
     '^function.*) *$' \
     'Function without abort keyword (See :help except-compat)'
@@ -114,7 +126,10 @@ check_errors '==?' "Use 'is?' instead of '==?'. 0 ==? 'foobar' is true"
 check_errors '!=#' "Use 'isnot#' instead of '!=#'. 0 !=# 'foobar' is false"
 check_errors '!=?' "Use 'isnot?' instead of '!=?'. 0 !=? 'foobar' is false"
 check_errors '^ *:\?echo' "Stray echo line. Use \`execute echo\` if you want to echo something"
-check_errors $'name.:.*\'[a-z_]*[^a-z_0-9][a-z_0-9]*\',$' 'Use snake_case names for linters' '*/ale_linters/*'
+# Exclusions for grandfathered-in exceptions
+exclusions="clojure/clj_kondo.vim elixir/elixir_ls.vim go/golangci_lint.vim swift/swiftformat.vim"
+# shellcheck disable=SC2086
+check_errors $'name.:.*\'[a-z_]*[^a-z_0-9][a-z_0-9]*\',$' 'Use snake_case names for linters' '*/ale_linters/*' $exclusions
 # Checks for improving type checks.
 check_errors $'\\(==.\\?\\|is\\) type([\'"]\+)' "Use 'is v:t_string' instead"
 check_errors '\(==.\?\|is\) type([0-9]\+)' "Use 'is v:t_number' instead"

@@ -13,7 +13,7 @@ echo 'Custom warnings/errors follow:'
 echo
 
 set -o pipefail
-docker run -a stdout "${docker_flags[@]}" test/script/custom-linting-rules . || exit_code=$?
+docker run "${docker_flags[@]}" test/script/custom-linting-rules . || exit_code=$?
 set +o pipefail
 echo
 
@@ -23,7 +23,10 @@ echo '========================================'
 echo 'Duplicate tags follow:'
 echo
 
-grep --exclude=tags -roh '\*.*\*$' doc | sort | uniq -d || exit_code=$?
+set -o pipefail
+docker run "${docker_flags[@]}" test/script/check-duplicate-tags . || exit_code=$?
+set +o pipefail
+echo
 
 echo '========================================'
 echo 'Checking for invalid tag references'
@@ -31,14 +34,9 @@ echo '========================================'
 echo 'Invalid tag references tags follow:'
 echo
 
-tag_regex='[gb]\?:\?\(ale\|ALE\)[a-zA-Z_\-]\+'
-
-# Grep for tags and references, and complain if we find a reference without
-# a tag for the reference. Only our tags will be included.
-diff -u \
-    <(grep --exclude=tags -roh "\\*$tag_regex\\*" doc | sort -u | sed 's/*//g') \
-    <(grep --exclude=tags -roh "|$tag_regex|" doc | sort -u | sed 's/|//g') \
-    | grep '^+[^+]' && exit_code=1
+set -o pipefail
+docker run "${docker_flags[@]}" test/script/check-tag-references || exit_code=$?
+set +o pipefail
 
 echo '========================================'
 echo 'diff supported-tools.md and doc/ale-supported-languages-and-tools.txt tables'
@@ -46,7 +44,9 @@ echo '========================================'
 echo 'Differences follow:'
 echo
 
-test/script/check-supported-tools-tables || exit_code=$?
+set -o pipefail
+docker run "${docker_flags[@]}" test/script/check-supported-tools-tables || exit_code=$?
+set +o pipefail
 
 echo '========================================'
 echo 'Look for badly aligned doc tags'
@@ -54,18 +54,18 @@ echo '========================================'
 echo 'Badly aligned tags follow:'
 echo
 
-# Documentation tags need to be aligned to the right margin, so look for
-# tags which aren't at the right margin.
-grep ' \*[^*]\+\*$' doc/ -r \
-    | awk '{ sep = index($0, ":"); if (length(substr($0, sep + 1 )) < 79) { print } }' \
-    | grep . && exit_code=1
+set -o pipefail
+docker run "${docker_flags[@]}" test/script/check-tag-alignment || exit_code=$?
+set +o pipefail
 
 echo '========================================'
 echo 'Look for table of contents issues'
 echo '========================================'
 echo
 
-test/script/check-toc || exit_code=$?
+set -o pipefail
+docker run "${docker_flags[@]}" test/script/check-toc || exit_code=$?
+set +o pipefail
 
 echo '========================================'
 echo 'Check Python code'

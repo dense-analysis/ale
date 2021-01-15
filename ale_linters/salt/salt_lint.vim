@@ -25,7 +25,8 @@ function! ale_linters#salt#salt_lint#Handle(buffer, lines) abort
 endfunction
 
 call ale#linter#Define('salt', {
-\   'name': 'salt-lint',
+\   'name': 'salt_lint',
+\   'aliases': ['salt-lint'],
 \   'executable': {b -> ale#Var(b, 'salt_salt_lint_executable')},
 \   'command': function('ale_linters#salt#salt_lint#GetCommand'),
 \   'callback': 'ale_linters#salt#salt_lint#Handle'
