@@ -307,6 +307,19 @@ Execute(ale#lsp#tsserver_message#Definition() should return correct messages):
   \ ],
   \ ale#lsp#tsserver_message#Definition(bufnr(''), 347, 12)
 
+Execute(ale#lsp#tsserver_message#TypeDefinition() should return correct messages):
+  AssertEqual
+  \ [
+  \   0,
+  \   'ts@typeDefinition',
+  \   {
+  \     'file': ale#path#Simplify(g:dir . '/foo/bar.ts'),
+  \     'line': 347,
+  \     'offset': 12,
+  \   }
+  \ ],
+  \ ale#lsp#tsserver_message#TypeDefinition(bufnr(''), 347, 12)
+
 Execute(ale#lsp#tsserver_message#References() should return correct messages):
   AssertEqual
   \ [
