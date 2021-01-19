@@ -1,0 +1,37 @@
+---
+name: CI
+on:
+  push:
+    branches:
+      - master
+      - /^v\d+\.\d+\.(x|\d+)$/
+  pull_request:
+    branches:
+      - master
+jobs:
+  test_ale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: docker/build-push-action@v2
+        with:
+          repository: w0rp/ale
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: w0rp/ale:latest
+      - uses: addnab/docker-run-action@v1
+        with:
+          image: w0rp/ale:latest
+          run: ./run-tests -v --vim-80-only
+      - uses: addnab/docker-run-action@v1
+        with:
+          image: w0rp/ale:latest
+          run: ./run-tests -v --vim-81-only
+      - uses: addnab/docker-run-action@v1
+        with:
+          image: w0rp/ale:latest
+          run: ./run-tests -v --neovim-only
+      - uses: addnab/docker-run-action@v1
+        with:
+          image: w0rp/ale:latest
+          run: ./run-tests -v --linters-only
