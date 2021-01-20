@@ -1,8 +1,9 @@
 Before:
   call ale#assert#SetUpLinterTest('javascript', 'xo')
-  call ale#test#SetFilename('testfile.js')
+  call ale#test#SetFilename('testfile.jsx')
   unlet! b:executable
 
+  set filetype=javascriptreact
   runtime autoload/ale/handlers/xo.vim
 
 After:

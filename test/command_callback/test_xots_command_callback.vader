@@ -1,8 +1,9 @@
 Before:
   call ale#assert#SetUpLinterTest('typescript', 'xo')
-  call ale#test#SetFilename('testfile.ts')
+  call ale#test#SetFilename('testfile.tsx')
   unlet! b:executable
 
+  set filetype=typescriptreact
   runtime autoload/ale/handlers/xo.vim
 
 After:
