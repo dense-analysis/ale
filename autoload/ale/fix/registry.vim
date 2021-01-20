@@ -37,6 +37,27 @@ let s:default_registry = {
 \       'suggested_filetypes': ['d'],
 \       'description': 'Fix D files with dfmt.',
 \   },
+\   'dhall': {
+\       'function': 'ale#fixers#dhall#Fix',
+\       'suggested_filetypes': ['dhall'],
+\       'description': 'Fix Dhall files with dhall-format.',
+\   },
+\   'dhall-format': {
+\       'function': 'ale#fixers#dhall_format#Fix',
+\       'suggested_filetypes': ['dhall'],
+\       'description': 'Standard code formatter for the Dhall language',
+\       'aliases': ['dhall'],
+\   },
+\   'dhall-freeze': {
+\       'function': 'ale#fixers#dhall_freeze#Freeze',
+\       'suggested_filetypes': ['dhall'],
+\       'description': 'Add integrity checks to remote import statements of an expression for the Dhall language',
+\   },
+\   'dhall-lint': {
+\       'function': 'ale#fixers#dhall_lint#Fix',
+\       'suggested_filetypes': ['dhall'],
+\       'description': 'Standard code formatter for the Dhall language and removing dead code',
+\   },
 \   'fecs': {
 \       'function': 'ale#fixers#fecs#Fix',
 \       'suggested_filetypes': ['javascript', 'css', 'html'],
@@ -390,16 +411,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['lua'],
 \       'description': 'Fix Lua files with luafmt.',
 \   },
-\   'dhall': {
-\       'function': 'ale#fixers#dhall#Fix',
-\       'suggested_filetypes': ['dhall'],
-\       'description': 'Fix Dhall files with dhall-format.',
-\   },
 \   'ormolu': {
 \       'function': 'ale#fixers#ormolu#Fix',
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'A formatter for Haskell source code.',
-\   },
+\   }
 \}
 
 " Reset the function registry to the default entries.

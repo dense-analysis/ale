@@ -121,6 +121,8 @@ Notes:
   * `language_server`
 * Dhall
   * `dhall-format`
+  * `dhall-freeze`
+  * `dhall-lint`
 * Dockerfile
   * `dockerfile_lint`
   * `hadolint`
