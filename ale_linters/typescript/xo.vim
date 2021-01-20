@@ -1,6 +1,6 @@
 call ale#linter#Define('typescript', {
 \   'name': 'xo',
-\   'executable': {b -> ale#handlers#xo#GetExecutable(b)},
-\   'command': {b -> ale#handlers#xo#GetLintCommand(b)},
+\   'executable': function('ale#handlers#xo#GetExecutable'),
+\   'command': function('ale#handlers#xo#GetLintCommand'),
 \   'callback': 'ale#handlers#xo#HandleJSON',
 \})
