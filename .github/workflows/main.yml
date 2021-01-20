@@ -11,7 +11,15 @@ on:
 jobs:
   test_ale:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test:
+          - "--vim-80-only"
+          - "--vim-81-only"
+          - "--neovim-only"
+          - "--linters-only"
     steps:
+      - uses: actions/checkout@v2
       - uses: docker/build-push-action@v2
         with:
           repository: w0rp/ale
@@ -22,16 +30,4 @@ jobs:
       - uses: addnab/docker-run-action@v1
         with:
           image: w0rp/ale:latest
-          run: ./run-tests -v --vim-80-only
-      - uses: addnab/docker-run-action@v1
-        with:
-          image: w0rp/ale:latest
-          run: ./run-tests -v --vim-81-only
-      - uses: addnab/docker-run-action@v1
-        with:
-          image: w0rp/ale:latest
-          run: ./run-tests -v --neovim-only
-      - uses: addnab/docker-run-action@v1
-        with:
-          image: w0rp/ale:latest
-          run: ./run-tests -v --linters-only
+          run: ./run-tests -v ${{ matrix.test }}
