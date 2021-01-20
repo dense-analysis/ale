@@ -7,14 +7,7 @@ call ale#Set('typescript_xo_use_global', get(g:, 'ale_use_global_executables', 0
 call ale#Set('typescript_xo_options', '')
 
 function! ale#handlers#xo#GetExecutable(buffer) abort
-    let l:filetype = getbufvar(a:buffer, '&filetype')
-    let l:type = ''
-
-    if l:filetype =~# 'javascript'
-        let l:type = 'javascript'
-    elseif l:filetype =~# 'typescript'
-        let l:type = 'typescript'
-    endif
+    let l:type = ale#handlers#xo#GetType(a:buffer)
 
     return ale#node#FindExecutable(a:buffer, l:type . '_xo', [
     \   'node_modules/xo/cli.js',
@@ -29,14 +22,7 @@ function! ale#handlers#xo#GetLintCommand(buffer) abort
 endfunction
 
 function! ale#handlers#xo#GetOptions(buffer) abort
-    let l:filetype = getbufvar(a:buffer, '&filetype')
-    let l:type = ''
-
-    if l:filetype =~# 'javascript'
-        let l:type = 'javascript'
-    elseif l:filetype =~# 'typescript'
-        let l:type = 'typescript'
-    endif
+    let l:type = ale#handlers#xo#GetType(a:buffer)
 
     return ale#Var(a:buffer, l:type . '_xo_options')
 endfunction
@@ -44,4 +30,15 @@ endfunction
 " xo uses eslint and the output format is the same
 function! ale#handlers#xo#HandleJSON(buffer, lines) abort
     return ale#handlers#eslint#HandleJSON(a:buffer, a:lines)
+endfunction
+
+function! ale#handlers#xo#GetType(buffer) abort
+    let l:filetype = getbufvar(a:buffer, '&filetype')
+    let l:type = 'javascript'
+
+    if l:filetype =~# 'typescript'
+        let l:type = 'typescript'
+    endif
+
+    return l:type
 endfunction
