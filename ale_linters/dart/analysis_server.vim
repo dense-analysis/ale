@@ -1,4 +1,4 @@
-" Author: Nelson Yeung <nelsyeung@icloud.com>
+" Author: Nelson Yeung <nelsyeung@gmail.com>
 " Description: Check Dart files with dart analysis server LSP
 
 call ale#Set('dart_analysis_server_executable', 'dart')
