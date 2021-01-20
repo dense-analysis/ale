@@ -66,13 +66,6 @@ endfunction
 
 " This returns [<next line number>, <error message string>]
 function! s:GetErrMsg(i, lines, text) abort
-    let l:next_line = get(a:lines, a:i+1, '')
-    let l:matches = matchlist(l:next_line, s:pattern)
-
-    if !empty(l:matches) && empty(l:matches[2])
-        return s:GetContErrMsg(a:i+1, a:lines, a:text.matches[4])
-    endif
-
     if a:text !~# '^\s*$'
         return [a:i + 1, a:text]
     endif
@@ -80,31 +73,17 @@ function! s:GetErrMsg(i, lines, text) abort
     let l:i = a:i + 1
     let l:text = []
 
-    while l:i < len(a:lines) && a:lines[l:i] =~# '^\s'
-        call add(l:text, s:Trim(a:lines[l:i]))
-        let l:i += 1
-    endwhile
+    let l:pattern = '\v^(ERROR|Warning)?:?(.*)$'
 
-    return [l:i, join(l:text, '. ')]
-endfunction
+    while l:i < len(a:lines)
+        let l:match = matchlist(a:lines[l:i], l:pattern)
 
-function! s:GetContErrMsg(i, lines, text) abort
-    if a:text !~# '^\s*$'
-        return [a:i + 1, a:text]
-    endif
-
-    let l:i = a:i + 1
-    let l:text = []
-
-    while l:i < len(a:lines) && a:lines[l:i] =~# s:pattern
-        let l:matches = matchlist(a:lines[l:i], s:pattern)
-
-        if !empty(l:matches[2])
+        if empty(l:match) || empty(l:match[2])
+            let l:i += 1
             break
         endif
 
-        call add(l:text, s:Trim(l:matches[4]))
-
+        call add(l:text, s:Trim(l:match[2]))
         let l:i += 1
     endwhile
 
