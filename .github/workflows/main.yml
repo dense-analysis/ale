@@ -18,7 +18,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run tests
-        uses: addnab/docker-run-action@v1
-        with:
-          image: w0rp/ale:latest
-          run: ./run-tests -v ${{ matrix.test }}
+        run: ./run-tests -v ${{ matrix.test }}
