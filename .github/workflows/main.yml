@@ -18,4 +18,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run tests
-        run: ./run-tests -v ${{ matrix.test }}
+        run: ./run-tests -v ${{ matrix.vim-version }}
