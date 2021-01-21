@@ -17,14 +17,6 @@ jobs:
           - '--linters-only'
     steps:
       - uses: actions/checkout@v2
-      - name: Build test docker image
-        uses: docker/build-push-action@v2
-        with:
-          repository: w0rp/ale
-          context: .
-          file: ./Dockerfile
-          push: false
-          tags: w0rp/ale:latest
       - name: Run tests
         uses: addnab/docker-run-action@v1
         with:
