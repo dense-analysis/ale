@@ -2,6 +2,8 @@ name: CI
 on:
   push:
     branches: [ master ]
+    tags:
+      - /^v\d+\.\d+\.(x|\d+)$/
   pull_request:
     branches: [ master ]
 
