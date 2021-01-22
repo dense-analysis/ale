@@ -21,3 +21,59 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run tests
         run: ./run-tests -v ${{ matrix.vim-version }}
+  test_win:
+    runs-on: windows-2019
+    steps:
+      - name: Cache vim and vader
+        uses: actions/cache@v2
+        with:
+          path: |
+            C:\vim
+          key: ${{ runner.os }}
+      - uses: actions/checkout@v2
+        with:
+          path: 'testplugin'
+      - name: Clone Vader and check out the commit we want
+        uses: actions/checkout@v2
+        with:
+          repository: 'junegunn/vader.vim'
+          ref: 'c6243dd81c98350df4dec608fa972df98fa2a3af'
+          path: 'vader'
+      - name: Copy ale and vader repos to C:\
+        # actions/checkout@v2 only allows cloning to directories relative to
+        # GITHUB_WORKSPACE, therefore we copy the cloned repos to C:\ where
+        # ALE expects them to be.
+        run: |
+          if (-Not (Test-Path C:\vader))
+          {
+            md -path C:\vader
+          }
+          Copy-Item -Path ${env:GITHUB_WORKSPACE}\vader\* -Destination `
+            C:\vader -recurse -Force
+          if (-Not (Test-Path C:\testplugin))
+          {
+            md -path C:\testplugin
+          }
+          Copy-Item -Path ${env:GITHUB_WORKSPACE}\testplugin\* -Destination `
+            C:\testplugin -recurse -Force
+        shell: powershell
+      - name: Download and unpack Vim
+        # NOTE: If you change the Vim or Vader versions here, please also update
+        # the instructions for running tests on Windows in ale-development.txt
+        run: |
+          if (!(Test-Path -Path C:\vim)){
+            Add-Type -A System.IO.Compression.FileSystem
+            Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586w32.zip `
+              -OutFile C:\vim.zip
+            [IO.Compression.ZipFile]::ExtractToDirectory('C:\vim.zip', 'C:\vim')
+            Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586rt.zip `
+              -OutFile C:\rt.zip
+            [IO.Compression.ZipFile]::ExtractToDirectory('C:\rt.zip', 'C:\vim')
+          }
+        shell: powershell
+      - name: Run tests
+        run: |
+          cd C:\testplugin
+          C:\vim\vim\vim80\vim.exe -u test\vimrc `
+            "+Vader! test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader"
+        shell: cmd
