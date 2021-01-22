@@ -514,6 +514,7 @@ formatting.
   * typecheck
 * VALA
   * [uncrustify](https://github.com/uncrustify/uncrustify)
+  * [vala_lint](https://github.com/vala-lang/vala-lint) :floppy_disk:
 * Verilog
   * [hdl-checker](https://pypi.org/project/hdl-checker)
   * [iverilog](https://github.com/steveicarus/iverilog)
