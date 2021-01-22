@@ -57,7 +57,7 @@ function! ale_linters#vala#vala_lint#Handle(buffer, lines) abort
 endfunction
 
 call ale#linter#Define('vala', {
-\   'name': 'vala-lint',
+\   'name': 'vala_lint',
 \   'output_stream': 'stdout',
 \   'executable': function('ale_linters#vala#vala_lint#GetExecutable'),
 \   'command': function('ale_linters#vala#vala_lint#GetCommand'),
