@@ -313,6 +313,7 @@ formatting.
 * nix
   * [nix-instantiate](http://nixos.org/nix/manual/#sec-nix-instantiate)
   * [nixpkgs-fmt](https://github.com/nix-community/nixpkgs-fmt)
+  * [rnix-lsp](https://github.com/nix-community/rnix-lsp)
 * nroff
   * [alex](https://github.com/wooorm/alex) :floppy_disk:
   * [proselint](http://proselint.com/)

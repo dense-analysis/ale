@@ -304,6 +304,7 @@ Notes:
 * nix
   * `nix-instantiate`
   * `nixpkgs-fmt`
+  * `rnix-lsp`
 * nroff
   * `alex`!!
   * `proselint`
