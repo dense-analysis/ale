@@ -3,7 +3,7 @@ Before:
 
   let g:ale_warn_about_trailing_whitespace = 1
 
-  runtime! ale_linters/yaml/yamllint.vim
+  runtime! ale/handlers/yamllint.vim
 
 After:
   Restore
@@ -29,7 +29,7 @@ Execute(Problems should be parsed correctly for yamllint):
   \     'text': 'syntax error: expected the node content, but found ''<stream end>''',
   \   },
   \ ],
-  \ ale_linters#yaml#yamllint#Handle(bufnr(''), [
+  \ ale#handlers#yamllint#Handle(bufnr(''), [
   \   'something.yaml:1:1: [warning] missing document start "---" (document-start)',
   \   'something.yml:2:1: [error] syntax error: expected the node content, but found ''<stream end>''',
   \ ])
@@ -45,7 +45,7 @@ Execute(The yamllint handler should respect ale_warn_about_trailing_whitespace):
   \     'code': 'trailing-spaces',
   \   },
   \ ],
-  \ ale_linters#yaml#yamllint#Handle(bufnr(''), [
+  \ ale#handlers#yamllint#Handle(bufnr(''), [
   \   'something.yml:5:18: [error] trailing spaces (trailing-spaces)',
   \ ])
 
@@ -54,6 +54,6 @@ Execute(The yamllint handler should respect ale_warn_about_trailing_whitespace):
   AssertEqual
   \ [
   \ ],
-  \ ale_linters#yaml#yamllint#Handle(bufnr(''), [
+  \ ale#handlers#yamllint#Handle(bufnr(''), [
   \   'something.yml:5:18: [error] trailing spaces (trailing-spaces)',
   \ ])
