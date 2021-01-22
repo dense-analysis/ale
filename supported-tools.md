@@ -125,6 +125,7 @@ formatting.
 * Dafny
   * [dafny](https://rise4fun.com/Dafny) :floppy_disk:
 * Dart
+  * [analysis_server](https://github.com/dart-lang/sdk/tree/master/pkg/analysis_server)
   * [dartanalyzer](https://github.com/dart-lang/sdk/tree/master/pkg/analyzer_cli) :floppy_disk:
   * [dartfmt](https://github.com/dart-lang/sdk/tree/master/utils/dartfmt)
   * [language_server](https://github.com/natebosch/dart_language_server)
