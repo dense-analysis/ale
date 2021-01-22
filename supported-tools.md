@@ -332,7 +332,7 @@ formatting.
   * [ocp-indent](https://github.com/OCamlPro/ocp-indent)
   * [ols](https://github.com/freebroccolo/ocaml-language-server)
 * OpenApi
-  * [ibm-validator](https://github.com/IBM/openapi-validator)
+  * [ibm_validator](https://github.com/IBM/openapi-validator)
   * [prettier](https://github.com/prettier/prettier)
   * [yamllint](https://yamllint.readthedocs.io/)
 * Pawn

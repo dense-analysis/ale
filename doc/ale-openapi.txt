@@ -2,7 +2,7 @@
 ALE OpenApi Integration                                     *ale-openapi-options*
 
 ===============================================================================
-ibm-validator                                        *ale-openapi-ibm-validator*
+ibm_validator                                        *ale-openapi-ibm-validator*
 
 Website: https://github.com/IBM/openapi-validator
 
@@ -25,12 +25,12 @@ configured for openapi and yaml files or openapi and json files respectively.
 
 For example setting filetype to |openapi.yaml| on a buffer and the following
 |g:ale_linters| configuration will enable linting of openapi files using both
-|ibm-validator| and |yamlint|:
+|ibm_validator| and |yamlint|:
 
 >
   let g:ale_linters = {
     \   'yaml': ['yamllint'],
-    \   'openapi': ['ibm-validator']
+    \   'openapi': ['ibm_validator']
   \}
 <
 

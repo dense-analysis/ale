@@ -51,7 +51,7 @@ function! ale_linters#openapi#ibm_validator#Handle(buffer, lines) abort
 endfunction
 
 call ale#linter#Define('openapi', {
-\   'name': 'ibm-validator',
+\   'name': 'ibm_validator',
 \   'executable': {b -> ale#Var(b, 'openapi_ibm_validator_executable')},
 \   'command': function('ale_linters#openapi#ibm_validator#GetCommand'),
 \   'callback': 'ale_linters#openapi#ibm_validator#Handle',

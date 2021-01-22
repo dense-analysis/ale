@@ -323,7 +323,7 @@ Notes:
   * `ocp-indent`
   * `ols`
 * OpenApi
-  * `ibm-validator`
+  * `ibm_validator`
   * `prettier`
   * `yamllint`
 * Pawn
