@@ -3,14 +3,6 @@ ALE TypeScript Integration                             *ale-typescript-options*
 
 
 ===============================================================================
-eslint                                                  *ale-typescript-eslint*
-
-Because of how TypeScript compiles code to JavaScript and how interrelated
-the two languages are, the `eslint` linter for TypeScript uses the JavaScript
-options for `eslint` too. See: |ale-javascript-eslint|.
-
-
-===============================================================================
 deno                                                      *ale-typescript-deno*
 
 Starting from version 1.6.0, Deno comes with its own language server. Earlier
@@ -41,6 +33,14 @@ g:ale_deno_unstable                                       *g:ale_deno_unstable*
   Default: `0`
 
   Enable or disable unstable Deno features and APIs.
+
+
+===============================================================================
+eslint                                                  *ale-typescript-eslint*
+
+Because of how TypeScript compiles code to JavaScript and how interrelated
+the two languages are, the `eslint` linter for TypeScript uses the JavaScript
+options for `eslint` too. See: |ale-javascript-eslint|.
 
 
 ===============================================================================

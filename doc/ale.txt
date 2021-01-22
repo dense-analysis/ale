@@ -2993,6 +2993,7 @@ documented in additional help files.
   thrift..................................|ale-thrift-options|
     thrift................................|ale-thrift-thrift|
   typescript..............................|ale-typescript-options|
+    deno..................................|ale-typescript-deno|
     eslint................................|ale-typescript-eslint|
     prettier..............................|ale-typescript-prettier|
     standard..............................|ale-typescript-standard|

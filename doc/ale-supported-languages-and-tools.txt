@@ -497,8 +497,8 @@ Notes:
 * Thrift
   * `thrift`
 * TypeScript
-  * `eslint`
   * `deno`
+  * `eslint`
   * `fecs`
   * `prettier`
   * `standard`
