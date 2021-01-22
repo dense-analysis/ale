@@ -131,6 +131,8 @@ formatting.
   * [language_server](https://github.com/natebosch/dart_language_server)
 * Dhall
   * [dhall-format](https://github.com/dhall-lang/dhall-lang)
+  * [dhall-freeze](https://github.com/dhall-lang/dhall-lang)
+  * [dhall-lint](https://github.com/dhall-lang/dhall-lang)
 * Dockerfile
   * [dockerfile_lint](https://github.com/projectatomic/dockerfile_lint)
   * [hadolint](https://github.com/hadolint/hadolint)

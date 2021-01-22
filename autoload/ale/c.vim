@@ -152,6 +152,7 @@ function! ale#c#ParseCFlags(path_prefix, should_quote, raw_arguments) abort
         \ || stridx(l:option, '-idirafter') == 0
         \ || stridx(l:option, '-iframework') == 0
         \ || stridx(l:option, '-include') == 0
+        \ || stridx(l:option, '-imacros') == 0
             if stridx(l:option, '-I') == 0 && l:option isnot# '-I'
                 let l:arg = join(split(l:option, '\zs')[2:], '')
                 let l:option = '-I'
