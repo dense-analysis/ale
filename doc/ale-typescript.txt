@@ -139,4 +139,31 @@ g:ale_typescript_tsserver_use_global     *g:ale_typescript_tsserver_use_global*
 
 
 ===============================================================================
+xo                                                          *ale-typescript-xo*
+
+g:ale_typescript_xo_executable                 *g:ale_typescript_xo_executable*
+                                               *b:ale_typescript_xo_executable*
+  Type: |String|
+  Default: `'xo'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_typescript_xo_options                       *g:ale_typescript_xo_options*
+                                                  *b:ale_typescript_xo_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to xo.
+
+
+g:ale_typescript_xo_use_global                 *g:ale_typescript_xo_use_global*
+                                               *b:ale_typescript_xo_use_global*
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:

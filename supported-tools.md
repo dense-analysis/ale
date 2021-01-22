@@ -126,6 +126,7 @@ formatting.
 * Dafny
   * [dafny](https://rise4fun.com/Dafny) :floppy_disk:
 * Dart
+  * [analysis_server](https://github.com/dart-lang/sdk/tree/master/pkg/analysis_server)
   * [dartanalyzer](https://github.com/dart-lang/sdk/tree/master/pkg/analyzer_cli) :floppy_disk:
   * [dartfmt](https://github.com/dart-lang/sdk/tree/master/utils/dartfmt)
   * [language_server](https://github.com/natebosch/dart_language_server)
@@ -332,6 +333,10 @@ formatting.
   * [ocamlformat](https://github.com/ocaml-ppx/ocamlformat)
   * [ocp-indent](https://github.com/OCamlPro/ocp-indent)
   * [ols](https://github.com/freebroccolo/ocaml-language-server)
+* OpenApi
+  * [ibm_validator](https://github.com/IBM/openapi-validator)
+  * [prettier](https://github.com/prettier/prettier)
+  * [yamllint](https://yamllint.readthedocs.io/)
 * Pawn
   * [uncrustify](https://github.com/uncrustify/uncrustify)
 * Perl
@@ -511,6 +516,7 @@ formatting.
   * typecheck
 * VALA
   * [uncrustify](https://github.com/uncrustify/uncrustify)
+  * [vala_lint](https://github.com/vala-lang/vala-lint) :floppy_disk:
 * Verilog
   * [hdl-checker](https://pypi.org/project/hdl-checker)
   * [iverilog](https://github.com/steveicarus/iverilog)

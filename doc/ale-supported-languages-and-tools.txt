@@ -117,6 +117,7 @@ Notes:
 * Dafny
   * `dafny`!!
 * Dart
+  * `analysis_server`
   * `dartanalyzer`!!
   * `dartfmt`!!
   * `language_server`
@@ -323,6 +324,10 @@ Notes:
   * `ocamlformat`
   * `ocp-indent`
   * `ols`
+* OpenApi
+  * `ibm_validator`
+  * `prettier`
+  * `yamllint`
 * Pawn
   * `uncrustify`
 * Perl
@@ -502,6 +507,7 @@ Notes:
   * `typecheck`
 * VALA
   * `uncrustify`
+  * `vala_lint`!!
 * Verilog
   * `hdl-checker`
   * `iverilog`

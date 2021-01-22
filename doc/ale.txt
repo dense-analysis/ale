@@ -2665,6 +2665,7 @@ documented in additional help files.
   dafny...................................|ale-dafny-options|
     dafny.................................|ale-dafny-dafny|
   dart....................................|ale-dart-options|
+    analysis_server.......................|ale-dart-analysis_server|
     dartanalyzer..........................|ale-dart-dartanalyzer|
     dartfmt...............................|ale-dart-dartfmt|
   dhall...................................|ale-dhall-options|
@@ -2836,6 +2837,10 @@ documented in additional help files.
     ols...................................|ale-ocaml-ols|
     ocamlformat...........................|ale-ocaml-ocamlformat|
     ocp-indent............................|ale-ocaml-ocp-indent|
+  openapi.................................|ale-openapi-options|
+    ibm_validator.........................|ale-openapi-ibm-validator|
+    prettier..............................|ale-openapi-prettier|
+    yamllint..............................|ale-openapi-yamllint|
   pawn....................................|ale-pawn-options|
     uncrustify............................|ale-pawn-uncrustify|
   perl....................................|ale-perl-options|
@@ -2994,6 +2999,7 @@ documented in additional help files.
     standard..............................|ale-typescript-standard|
     tslint................................|ale-typescript-tslint|
     tsserver..............................|ale-typescript-tsserver|
+    xo....................................|ale-typescript-xo|
   vala....................................|ale-vala-options|
     uncrustify............................|ale-vala-uncrustify|
   verilog/systemverilog...................|ale-verilog-options|
