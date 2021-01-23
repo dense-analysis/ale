@@ -70,3 +70,10 @@ Execute(The defaults for the verilog filetype should be correct):
 Execute(Default aliases for React should be defined):
   AssertEqual ['javascript', 'jsx'], ale#linter#ResolveFiletype('javascriptreact')
   AssertEqual ['typescript', 'tsx'], ale#linter#ResolveFiletype('typescriptreact')
+
+Execute(The defaults for the apkbuild filetype should be correct):
+  AssertEqual ['apkbuild_lint', 'secfixes_check'], GetLinterNames('apkbuild')
+
+  let g:ale_linters_explicit = 1
+
+  AssertEqual [], GetLinterNames('apkbuild')

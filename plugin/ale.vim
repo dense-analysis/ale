@@ -138,6 +138,15 @@ let g:ale_set_balloons = get(g:, 'ale_set_balloons', has('balloon_eval') && has(
 " Use preview window for hover messages.
 let g:ale_hover_to_preview = get(g:, 'ale_hover_to_preview', 0)
 
+" Float preview windows in Neovim
+let g:ale_floating_preview = get(g:, 'ale_floating_preview', 0)
+
+" Hovers use floating windows in Neovim
+let g:ale_hover_to_floating_preview = get(g:, 'ale_hover_to_floating_preview', 0)
+
+" Detail uses floating windows in Neovim
+let g:ale_detail_to_floating_preview = get(g:, 'ale_detail_to_floating_preview', 0)
+
 " This flag can be set to 0 to disable warnings for trailing whitespace
 let g:ale_warn_about_trailing_whitespace = get(g:, 'ale_warn_about_trailing_whitespace', 1)
 " This flag can be set to 0 to disable warnings for trailing blank lines

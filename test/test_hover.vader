@@ -7,9 +7,25 @@ Before:
   let g:item_list = []
   let g:show_message_arg_list = []
 
+  let g:ale_floating_preview = 0
+  let g:ale_hover_to_floating_preview = 0
+  let g:ale_detail_to_floating_preview = 0
+
   runtime autoload/ale/linter.vim
   runtime autoload/ale/lsp.vim
+  runtime autoload/ale/lsp_linter.vim
   runtime autoload/ale/util.vim
+  runtime autoload/ale/floating_preview.vim
+  runtime autoload/ale/hover.vim
+
+  let g:floated_lines = []
+  let g:floating_preview_show_called = 0
+
+  " Stub out so we can track the call
+  function! ale#floating_preview#Show(lines, ...) abort
+    let g:floating_preview_show_called = 1
+    let g:floated_lines = a:lines
+  endfunction
 
   function! ale#lsp_linter#StartLSP(buffer, linter, callback) abort
     let g:Callback = a:callback
@@ -50,6 +66,7 @@ Before:
     \)
   endfunction
 
+
 After:
   call ale#hover#SetMap({})
   call ale#test#RestoreDirectory()
@@ -65,6 +82,7 @@ After:
   runtime autoload/ale/lsp_linter.vim
   runtime autoload/ale/lsp.vim
   runtime autoload/ale/util.vim
+  runtime autoload/ale/floating_preview.vim
 
 Given python(Some Python file):
   foo
@@ -168,6 +186,28 @@ Execute(LSP hover response with lists of strings and marked strings should be ha
   \], g:show_message_arg_list
   AssertEqual {}, ale#hover#GetMap()
 
+Execute(LSP hover with ale_floating_preview should float):
+  let g:ale_floating_preview = 1
+
+  call HandleValidLSPResult({'contents': "the message\ncontinuing"})
+
+  AssertEqual 1, g:floating_preview_show_called
+  AssertEqual ["the message", "continuing"], g:floated_lines
+
+Execute(LSP hover ale_hover_to_floating_preview should float):
+  let g:ale_hover_to_floating_preview = 1
+
+  call HandleValidLSPResult({'contents': "the message\ncontinuing"})
+
+  AssertEqual 1, g:floating_preview_show_called
+  AssertEqual ["the message", "continuing"], g:floated_lines
+
+
+Execute(LSP hover by default should not float):
+  call HandleValidLSPResult({'contents': "the message\ncontinuing"})
+
+  AssertEqual 0, g:floating_preview_show_called
+
 Execute(tsserver responses for documentation requests should be handled):
   call ale#hover#SetMap({3: {'show_documentation': 1, 'buffer': bufnr('')}})
 
@@ -187,3 +227,46 @@ Execute(tsserver responses for documentation requests should be handled):
   " The preview window should show the text.
   AssertEqual ['foo is a very good method'], ale#test#GetPreviewWindowText()
   silent! pclose
+
+Execute(hover with show_documentation should be in the preview window, not floating):
+  let g:ale_hover_to_floating_preview = 1
+  let g:ale_floating_preview = 1
+
+  call ale#hover#SetMap({3: {'show_documentation': 1, 'buffer': bufnr('')}})
+
+  call ale#hover#HandleTSServerResponse(
+  \ 1,
+  \ {
+  \   'command': 'quickinfo',
+  \   'request_seq': 3,
+  \   'success': v:true,
+  \   'body': {
+  \     'documentation': 'foo is a very good method',
+  \     'displayString': 'foo bar ',
+  \   },
+  \ }
+  \)
+
+  let expected = ["Every statement should end with a semicolon", "second line"]
+
+  AssertEqual 0, g:floating_preview_show_called
+
+Execute(TSServer hover without show_documentation and ale_floating_preview should float):
+  let g:ale_floating_preview = 1
+
+  call ale#hover#SetMap({3: {'buffer': bufnr('')}})
+
+  call ale#hover#HandleTSServerResponse(
+  \ 1,
+  \ {
+  \   'command': 'quickinfo',
+  \   'request_seq': 3,
+  \   'success': v:true,
+  \   'body': {
+  \     'displayString': "the message\ncontinuing",
+  \   },
+  \ }
+  \)
+
+  AssertEqual 1, g:floating_preview_show_called
+  AssertEqual ["the message", "continuing"], g:floated_lines

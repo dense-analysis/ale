@@ -32,10 +32,36 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix PEP8 issues with black.',
 \   },
+\   'deno': {
+\       'function': 'ale#fixers#deno#Fix',
+\       'suggested_filetypes': ['typescript'],
+\       'description': 'Fix TypeScript using deno fmt.',
+\   },
 \   'dfmt': {
 \       'function': 'ale#fixers#dfmt#Fix',
 \       'suggested_filetypes': ['d'],
 \       'description': 'Fix D files with dfmt.',
+\   },
+\   'dhall': {
+\       'function': 'ale#fixers#dhall#Fix',
+\       'suggested_filetypes': ['dhall'],
+\       'description': 'Fix Dhall files with dhall-format.',
+\   },
+\   'dhall-format': {
+\       'function': 'ale#fixers#dhall_format#Fix',
+\       'suggested_filetypes': ['dhall'],
+\       'description': 'Standard code formatter for the Dhall language',
+\       'aliases': ['dhall'],
+\   },
+\   'dhall-freeze': {
+\       'function': 'ale#fixers#dhall_freeze#Freeze',
+\       'suggested_filetypes': ['dhall'],
+\       'description': 'Add integrity checks to remote import statements of an expression for the Dhall language',
+\   },
+\   'dhall-lint': {
+\       'function': 'ale#fixers#dhall_lint#Fix',
+\       'suggested_filetypes': ['dhall'],
+\       'description': 'Standard code formatter for the Dhall language and removing dead code',
 \   },
 \   'fecs': {
 \       'function': 'ale#fixers#fecs#Fix',
@@ -81,7 +107,7 @@ let s:default_registry = {
 \   },
 \   'prettier': {
 \       'function': 'ale#fixers#prettier#Fix',
-\       'suggested_filetypes': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'json5', 'graphql', 'markdown', 'vue', 'html', 'yaml'],
+\       'suggested_filetypes': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'json5', 'graphql', 'markdown', 'vue', 'html', 'yaml', 'openapi'],
 \       'description': 'Apply prettier to a file.',
 \   },
 \   'prettier_eslint': {
@@ -132,7 +158,7 @@ let s:default_registry = {
 \   },
 \   'scalafmt': {
 \       'function': 'ale#fixers#scalafmt#Fix',
-\       'suggested_filetypes': ['scala'],
+\       'suggested_filetypes': ['sbt', 'scala'],
 \       'description': 'Fix Scala files using scalafmt',
 \   },
 \   'sorbet': {
@@ -342,7 +368,7 @@ let s:default_registry = {
 \   },
 \   'ktlint': {
 \       'function': 'ale#fixers#ktlint#Fix',
-\       'suggested_filetypes': ['kt'],
+\       'suggested_filetypes': ['kt', 'kotlin'],
 \       'description': 'Fix Kotlin files with ktlint.',
 \   },
 \   'styler': {
@@ -390,16 +416,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['lua'],
 \       'description': 'Fix Lua files with luafmt.',
 \   },
-\   'dhall': {
-\       'function': 'ale#fixers#dhall#Fix',
-\       'suggested_filetypes': ['dhall'],
-\       'description': 'Fix Dhall files with dhall-format.',
-\   },
 \   'ormolu': {
 \       'function': 'ale#fixers#ormolu#Fix',
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'A formatter for Haskell source code.',
-\   },
+\   }
 \}
 
 " Reset the function registry to the default entries.

@@ -482,6 +482,7 @@ Execute(We should include several important flags):
   \ . ' -idirafter ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/incafter'))
   \ . ' -iframework ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/incframework'))
   \ . ' -include ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/foo bar'))
+  \ . ' -imacros ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/incmacros'))
   \ . ' -Dmacro="value"'
   \ . ' -DGoal=9'
   \ . ' -D macro2'
@@ -511,6 +512,8 @@ Execute(We should include several important flags):
   \     'incframework',
   \     '-include',
   \     '''foo bar''',
+  \     '-imacros',
+  \     'incmacros',
   \     '-Dmacro="value"',
   \     '-DGoal=9',
   \     '-D',
@@ -559,6 +562,7 @@ Execute(We should quote the flags we need to quote):
   \ . ' -idirafter ' . ale#Escape(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project/incafter'))
   \ . ' -iframework ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/incframework'))
   \ . ' -include ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/foo bar'))
+  \ . ' -imacros ' . ale#Escape(ale#path#Simplify(g:dir . '/test_c_projects/makefile_project/incmacros'))
   \ . ' ' . ale#Escape('-Dmacro="value"')
   \ . ' -DGoal=9'
   \ . ' -D macro2'
@@ -591,6 +595,8 @@ Execute(We should quote the flags we need to quote):
   \     'incframework',
   \     '-include',
   \     '''foo bar''',
+  \     '-imacros',
+  \     'incmacros',
   \     '-Dmacro="value"',
   \     '-DGoal=9',
   \     '-D',

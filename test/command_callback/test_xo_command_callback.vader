@@ -1,7 +1,10 @@
 Before:
-  call ale#assert#SetUpLinterTest('typescript', 'xo')
-  call ale#test#SetFilename('testfile.ts')
+  call ale#assert#SetUpLinterTest('javascript', 'xo')
+  call ale#test#SetFilename('testfile.jsx')
   unlet! b:executable
+
+  set filetype=javascriptreact
+  runtime autoload/ale/handlers/xo.vim
 
 After:
   call ale#assert#TearDownLinterTest()
@@ -10,11 +13,11 @@ Execute(The XO executable should be called):
   AssertLinter 'xo', ale#Escape('xo') . ' --reporter json --stdin --stdin-filename %s'
 
 Execute(The XO executable should be configurable):
-  let b:ale_typescript_xo_executable = 'foobar'
+  let b:ale_javascript_xo_executable = 'foobar'
 
   AssertLinter 'foobar', ale#Escape('foobar') . ' --reporter json --stdin --stdin-filename %s'
 
 Execute(The XO options should be configurable):
-  let b:ale_typescript_xo_options = '--wat'
+  let b:ale_javascript_xo_options = '--wat'
 
   AssertLinter 'xo', ale#Escape('xo') . ' --wat --reporter json --stdin --stdin-filename %s'
