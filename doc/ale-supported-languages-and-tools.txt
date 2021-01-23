@@ -248,6 +248,7 @@ Notes:
   * `jq`
   * `jsonlint`
   * `prettier`
+  * `spectral`
 * Julia
   * `languageserver`
 * Kotlin
@@ -537,6 +538,7 @@ Notes:
   * `xmllint`
 * YAML
   * `prettier`
+  * `spectral`
   * `swaglint`
   * `yamlfix`
   * `yamllint`

@@ -2785,6 +2785,7 @@ documented in additional help files.
     jsonlint..............................|ale-json-jsonlint|
     jq....................................|ale-json-jq|
     prettier..............................|ale-json-prettier|
+    spectral..............................|ale-json-spectral|
   julia...................................|ale-julia-options|
     languageserver........................|ale-julia-languageserver|
   kotlin..................................|ale-kotlin-options|
@@ -3028,6 +3029,7 @@ documented in additional help files.
     xmllint...............................|ale-xml-xmllint|
   yaml....................................|ale-yaml-options|
     prettier..............................|ale-yaml-prettier|
+    spectral..............................|ale-yaml-spectral|
     swaglint..............................|ale-yaml-swaglint|
     yamlfix...............................|ale-yaml-yamlfix|
     yamllint..............................|ale-yaml-yamllint|
