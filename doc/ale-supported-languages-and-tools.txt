@@ -13,6 +13,7 @@ Notes:
 `!!` These linters check only files on disk. See |ale-lint-file-linters|
 
 * Ada
+  * `ada_language_server`
   * `gcc`
   * `gnatpp`
 * Ansible
