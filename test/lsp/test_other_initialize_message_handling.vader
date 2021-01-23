@@ -23,6 +23,7 @@ Before:
   \   'completion_trigger_characters': [],
   \   'definition': 0,
   \   'symbol_search': 0,
+  \   'code_actions': 0,
   \ },
   \}
 
@@ -102,6 +103,7 @@ Execute(Capabilities should bet set up correctly):
   \   'definition': 1,
   \   'symbol_search': 1,
   \   'rename': 1,
+  \   'code_actions': 1,
   \ },
   \ b:conn.capabilities
   AssertEqual [[1, 'initialized', {}]], g:message_list
@@ -125,7 +127,7 @@ Execute(Disabled capabilities should be recognised correctly):
   \     'referencesProvider': v:false,
   \     'textDocumentSync': 2,
   \     'documentFormattingProvider': v:true,
-  \     'codeActionProvider': v:true,
+  \     'codeActionProvider': v:false,
   \     'signatureHelpProvider': {
   \       'triggerCharacters': ['(', ','],
   \     },
@@ -146,6 +148,7 @@ Execute(Disabled capabilities should be recognised correctly):
   \   'definition': 0,
   \   'symbol_search': 0,
   \   'rename': 0,
+  \   'code_actions': 0,
   \ },
   \ b:conn.capabilities
   AssertEqual [[1, 'initialized', {}]], g:message_list
@@ -197,6 +200,7 @@ Execute(Capabilities should be enabled when send as Dictionaries):
   \   'typeDefinition': 1,
   \   'symbol_search': 1,
   \   'rename': 1,
+  \   'code_actions': 1,
   \ },
   \ b:conn.capabilities
   AssertEqual [[1, 'initialized', {}]], g:message_list

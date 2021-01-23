@@ -138,6 +138,15 @@ let g:ale_set_balloons = get(g:, 'ale_set_balloons', has('balloon_eval') && has(
 " Use preview window for hover messages.
 let g:ale_hover_to_preview = get(g:, 'ale_hover_to_preview', 0)
 
+" Float preview windows in Neovim
+let g:ale_floating_preview = get(g:, 'ale_floating_preview', 0)
+
+" Hovers use floating windows in Neovim
+let g:ale_hover_to_floating_preview = get(g:, 'ale_hover_to_floating_preview', 0)
+
+" Detail uses floating windows in Neovim
+let g:ale_detail_to_floating_preview = get(g:, 'ale_detail_to_floating_preview', 0)
+
 " This flag can be set to 0 to disable warnings for trailing whitespace
 let g:ale_warn_about_trailing_whitespace = get(g:, 'ale_warn_about_trailing_whitespace', 1)
 " This flag can be set to 0 to disable warnings for trailing blank lines
@@ -158,12 +167,19 @@ let g:ale_python_auto_pipenv = get(g:, 'ale_python_auto_pipenv', 0)
 " This variable can be overridden to set the GO111MODULE environment variable.
 let g:ale_go_go111module = get(g:, 'ale_go_go111module', '')
 
-if g:ale_set_balloons
+" If 1, enable a popup menu for commands.
+let g:ale_popup_menu_enabled = get(g:, 'ale_popup_menu_enabled', has('gui_running'))
+
+if g:ale_set_balloons is 1 || g:ale_set_balloons is# 'hover'
     call ale#balloon#Enable()
 endif
 
 if g:ale_completion_enabled
     call ale#completion#Enable()
+endif
+
+if g:ale_popup_menu_enabled
+    call ale#code_action#EnablePopUpMenu()
 endif
 
 " Define commands for moving through warnings and errors.
@@ -238,7 +254,10 @@ command! -bar ALEComplete :call ale#completion#GetCompletions('ale-manual')
 command! -bar ALEImport :call ale#completion#Import()
 
 " Rename symbols using tsserver and LSP
-command! -bar -bang ALERename :call ale#rename#Execute({'force_save': '<bang>' is# '!'})
+command! -bar -bang ALERename :call ale#rename#Execute()
+
+" Apply code actions to a range.
+command! -bar -range ALECodeAction :call ale#codefix#Execute(<range>)
 
 " Organize import statements using tsserver
 command! -bar ALEOrganizeImports :call ale#organize_imports#Execute()
@@ -283,6 +302,7 @@ nnoremap <silent> <Plug>(ale_documentation) :ALEDocumentation<Return>
 inoremap <silent> <Plug>(ale_complete) <C-\><C-O>:ALEComplete<Return>
 nnoremap <silent> <Plug>(ale_import) :ALEImport<Return>
 nnoremap <silent> <Plug>(ale_rename) :ALERename<Return>
+nnoremap <silent> <Plug>(ale_code_action) :ALECodeAction<Return>
 nnoremap <silent> <Plug>(ale_repeat_selection) :ALERepeatSelection<Return>
 
 " Set up autocmd groups now.

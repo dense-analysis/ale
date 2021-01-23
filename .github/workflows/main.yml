@@ -1,0 +1,23 @@
+name: CI
+on:
+  push:
+    branches: [ master ]
+    tags:
+      - /^v\d+\.\d+\.(x|\d+)$/
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test_ale:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        vim-version:
+          - '--vim-80-only'
+          - '--vim-81-only'
+          - '--neovim-only'
+          - '--linters-only'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run tests
+        run: ./run-tests -v ${{ matrix.vim-version }}

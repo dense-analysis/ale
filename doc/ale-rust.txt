@@ -22,12 +22,12 @@ Integration Information
   3. rls -- If you have `rls` installed, you might prefer using this linter
      over cargo. rls implements the Language Server Protocol for incremental
      compilation of Rust code, and can check Rust files while you type. `rls`
-     requires Rust files to contained in Cargo projects.
+     requires Rust files to be contained in Cargo projects.
   4. analyzer -- If you have rust-analyzer installed, you might prefer using
      this linter over cargo and rls. rust-analyzer also implements the
      Language Server Protocol for incremental compilation of Rust code, and is
      the next iteration of rls. rust-analyzer, like rls, requires Rust files
-     to contained in Cargo projects.
+     to be contained in Cargo projects.
   5. rustfmt -- If you have `rustfmt` installed, you can use it as a fixer to
      consistently reformat your Rust code.
 
