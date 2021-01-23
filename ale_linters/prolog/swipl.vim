@@ -34,14 +34,14 @@ function! s:Subst(format, vars) abort
     return substitute(a:format, '%\(.\)', '\=get(l:vars, submatch(1), "")', 'g')
 endfunction
 
-let s:pattern = '\v^(ERROR|Warning)+%(:\s*[^:]+:(\d+)%(:(\d+))?)?:\s*(.*)$'
-
 function! ale_linters#prolog#swipl#Handle(buffer, lines) abort
     let l:output = []
     let l:i = 0
 
+    let l:pattern = '\v^(ERROR|Warning)+%(:\s*[^:]+:(\d+)%(:(\d+))?)?:\s*(.*)$'
+
     while l:i < len(a:lines)
-        let l:match = matchlist(a:lines[l:i], s:pattern)
+        let l:match = matchlist(a:lines[l:i], l:pattern)
 
         if empty(l:match)
             let l:i += 1
