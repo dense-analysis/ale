@@ -22,7 +22,7 @@ Execute(The Dafny handler should parse output correctly):
   \     'type': 'W'
   \   },
   \   {
-  \     'bufnr': 0,
+  \     'filename': 'File.dfy',
   \     'col': 45,
   \     'lnum': 123,
   \     'text': "Verification of 'Impl$$_22_Proof.__default.PutKeepsMapsFull' timed out after 2 seconds",
