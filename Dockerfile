@@ -21,3 +21,7 @@ RUN apk --update add $PACKAGES && \
 RUN pip install vim-vint==0.3.15
 
 RUN git clone https://github.com/junegunn/vader.vim vader
+
+ARG GIT_VERSION
+LABEL Version=${GIT_VERSION}
+LABEL Name=w0rp/ale

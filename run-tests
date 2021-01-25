@@ -13,6 +13,7 @@ image=w0rp/ale
 
 # Create docker image tag based on Dockerfile contents
 image_tag=$(md5sum Dockerfile | cut -d' ' -f1)
+git_version=$(git describe --always --tags)
 
 # Used in all test scripts for running the selected Docker image.
 DOCKER_RUN_IMAGE="$image"
@@ -200,7 +201,7 @@ then
     docker tag "w0rp/ale:${image_tag}" "w0rp/ale:latest"
   else
     echo "Building run image w0rp/ale:${image_tag}"
-    docker build -t "w0rp/ale:${image_tag}" .
+    docker build --build-arg GIT_VERSION="$git_version" -t "w0rp/ale:${image_tag}" .
     docker tag "w0rp/ale:${image_tag}" "w0rp/ale:latest"
   fi
 else
