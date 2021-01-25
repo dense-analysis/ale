@@ -10,7 +10,7 @@ set -u
 #
 
 image=w0rp/ale
-current_image_id=1c04720f5d17
+current_image_id=b2c5422958d4
 
 # Used in all test scripts for running the selected Docker image.
 DOCKER_RUN_IMAGE="$image"
@@ -22,8 +22,10 @@ verbose_flag=''
 quiet_flag=''
 run_neovim_02_tests=1
 run_neovim_03_tests=1
+run_neovim_04_tests=1
 run_vim_80_tests=1
 run_vim_81_tests=1
+run_vim_82_tests=1
 run_linters=1
 
 while [ $# -ne 0 ]; do
@@ -39,55 +41,87 @@ while [ $# -ne 0 ]; do
     --neovim-only)
         run_vim_80_tests=0
         run_vim_81_tests=0
+        run_vim_82_tests=0
         run_linters=0
         shift
     ;;
     --neovim-02-only)
         run_neovim_03_tests=0
+        run_neovim_04_tests=0
         run_vim_80_tests=0
         run_vim_81_tests=0
+        run_vim_82_tests=0
         run_linters=0
         shift
     ;;
     --neovim-03-only)
         run_neovim_02_tests=0
+        run_neovim_04_tests=0
         run_vim_80_tests=0
         run_vim_81_tests=0
+        run_vim_82_tests=0
+        run_linters=0
+        shift
+    ;;
+    --neovim-04-only)
+        run_neovim_02_tests=0
+        run_neovim_03_tests=0
+        run_vim_80_tests=0
+        run_vim_81_tests=0
+        run_vim_82_tests=0
         run_linters=0
         shift
     ;;
     --vim-only)
         run_neovim_02_tests=0
         run_neovim_03_tests=0
+        run_neovim_04_tests=0
         run_linters=0
         shift
     ;;
     --vim-80-only)
         run_neovim_02_tests=0
         run_neovim_03_tests=0
+        run_neovim_04_tests=0
         run_vim_81_tests=0
+        run_vim_82_tests=0
         run_linters=0
         shift
     ;;
     --vim-81-only)
         run_neovim_02_tests=0
         run_neovim_03_tests=0
+        run_neovim_04_tests=0
         run_vim_80_tests=0
+        run_vim_82_tests=0
+        run_linters=0
+        shift
+    ;;
+    --vim-82-only)
+        run_neovim_02_tests=0
+        run_neovim_03_tests=0
+        run_neovim_04_tests=0
+        run_vim_80_tests=0
+        run_vim_81_tests=0
         run_linters=0
         shift
     ;;
     --linters-only)
         run_vim_80_tests=0
         run_vim_81_tests=0
+        run_vim_82_tests=0
         run_neovim_02_tests=0
         run_neovim_03_tests=0
+        run_neovim_04_tests=0
         shift
     ;;
     --fast)
         run_vim_80_tests=0
         run_vim_81_tests=0
+        run_vim_82_tests=0
         run_neovim_02_tests=0
-        run_neovim_03_tests=1
+        run_neovim_03_tests=0
+        run_neovim_04_tests=1
         shift
     ;;
     --help)
@@ -99,12 +133,14 @@ while [ $# -ne 0 ]; do
         echo 'Options:'
         echo '  -v                Enable verbose output'
         echo '  -q                Hide output for successful tests'
-        echo '  --neovim-only     Run tests only for NeoVim 0.2 and 0.3'
+        echo '  --neovim-only     Run tests only for NeoVim'
         echo '  --neovim-02-only  Run tests only for NeoVim 0.2'
         echo '  --neovim-03-only  Run tests only for NeoVim 0.3'
-        echo '  --vim-only        Run tests only for Vim 8.0 and 8.1'
+        echo '  --neovim-04-only  Run tests only for NeoVim 0.4'
+        echo '  --vim-only        Run tests only for Vim'
         echo '  --vim-80-only     Run tests only for Vim 8.0'
         echo '  --vim-81-only     Run tests only for Vim 8.1'
+        echo '  --vim-82-only     Run tests only for Vim 8.2'
         echo '  --linters-only    Run only Vint and custom checks'
         echo '  --fast            Run only the fastest Vim and custom checks'
         echo '  --help            Show this help text'
@@ -175,8 +211,10 @@ trap cancel_tests INT TERM
 for vim in $(docker run --rm "$DOCKER_RUN_IMAGE" ls /vim-build/bin | grep '^neovim\|^vim' ); do
     if ( [[ $vim =~ ^vim-v8.0 ]] && ((run_vim_80_tests)) ) \
     || ( [[ $vim =~ ^vim-v8.1 ]] && ((run_vim_81_tests)) ) \
+    || ( [[ $vim =~ ^vim-v8.2 ]] && ((run_vim_82_tests)) ) \
     || ( [[ $vim =~ ^neovim-v0.2 ]] && ((run_neovim_02_tests)) ) \
-    || ( [[ $vim =~ ^neovim-v0.3 ]] && ((run_neovim_03_tests)) ); then
+    || ( [[ $vim =~ ^neovim-v0.3 ]] && ((run_neovim_03_tests)) ) \
+    || ( [[ $vim =~ ^neovim-v0.4 ]] && ((run_neovim_04_tests)) ); then
         echo "Starting Vim: $vim..."
         file_number=$((file_number+1))
         test/script/run-vader-tests $quiet_flag $verbose_flag "$vim" "$tests" \
