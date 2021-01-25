@@ -10,7 +10,9 @@ set -u
 #
 
 image=w0rp/ale
-current_image_id=b2c5422958d4
+
+# Create docker image tag based on Dockerfile contents
+image_tag=$(md5sum Dockerfile | cut -d' ' -f1)
 
 # Used in all test scripts for running the selected Docker image.
 DOCKER_RUN_IMAGE="$image"
@@ -36,6 +38,16 @@ while [ $# -ne 0 ]; do
     ;;
     -q)
         quiet_flag='-q'
+        shift
+    ;;
+    --build-image)
+        run_vim_80_tests=0
+        run_vim_81_tests=0
+        run_vim_82_tests=0
+        run_neovim_02_tests=0
+        run_neovim_03_tests=0
+        run_neovim_04_tests=0
+        run_linters=0
         shift
     ;;
     --neovim-only)
@@ -133,6 +145,7 @@ while [ $# -ne 0 ]; do
         echo 'Options:'
         echo '  -v                Enable verbose output'
         echo '  -q                Hide output for successful tests'
+        echo '  --build-image     Run docker image build only.'
         echo '  --neovim-only     Run tests only for NeoVim'
         echo '  --neovim-02-only  Run tests only for NeoVim 0.2'
         echo '  --neovim-03-only  Run tests only for NeoVim 0.3'
@@ -174,8 +187,25 @@ fi
 # Delete .swp files in the test directory, which cause Vim 8 to hang.
 find test -name '*.swp' -delete
 
-docker images -q w0rp/ale | grep "^$current_image_id" > /dev/null \
-    || docker pull "$image"
+# Check if docker un image is available locally
+has_image=$(docker images ls --filter reference="w0rp/ale:${image_tag}" --quiet | wc -l)
+
+if [ "$has_image" -eq 0 ]
+then
+  # Check if image exists on Docker hub
+  if docker manifest inspect "w0rp/ale:${image_tag}" &> /dev/null
+  then
+    echo "Downloading run image w0rp/ale:${image_tag}"
+    docker pull "w0rp/ale:${image_tag}"
+    docker tag "w0rp/ale:${image_tag}" "w0rp/ale:latest"
+  else
+    echo "Building run image w0rp/ale:${image_tag}"
+    docker build -t "w0rp/ale:${image_tag}" .
+    docker tag "w0rp/ale:${image_tag}" "w0rp/ale:latest"
+  fi
+else
+  echo "Docker run image w0rp/ale:${image_tag} ready"
+fi
 
 output_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
 

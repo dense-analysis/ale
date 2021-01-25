@@ -8,7 +8,14 @@ on:
     branches: [ master ]
 
 jobs:
+  build_image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build docker run image
+        run: ./run-tests --build-image
   test_ale:
+    needs: build_image
     runs-on: ubuntu-latest
     strategy:
       matrix:
