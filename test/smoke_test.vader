@@ -64,9 +64,9 @@ Execute(Linters should run with the default options):
   \   'valid': 1,
   \ }]
 
-  " Try the test a few times over in NeoVim 0.3 or Windows,
+  " Try the test a few times over in NeoVim 0.3 or Windows or Vim 8.2,
   " where tests fail randomly.
-  for g:i in range(has('nvim-0.3') || has('win32') ? 5 : 1)
+  for g:i in range(has('nvim-0.3') || has('win32') || has('patch-8.2.2401') ? 5 : 1)
     call ale#Queue(0, '')
     call ale#test#WaitForJobs(2000)
 
@@ -165,9 +165,9 @@ Execute(Previous errors should be removed when linters change):
   \ 'valid': 1,
   \}]
 
-  " Try the test a few times over in NeoVim 0.3 or Windows,
+  " Try the test a few times over in NeoVim 0.3 or VIm 8.2 or Windows,
   " where tests fail randomly.
-  for g:i in range(has('nvim-0.3') || has('win32') ? 5 : 1)
+  for g:i in range(has('nvim-0.3') || has('win32') || has('patch-8.2.2401') ? 5 : 1)
     call ale#Queue(0, '')
     call ale#test#WaitForJobs(2000)
 
