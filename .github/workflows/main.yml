@@ -13,6 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build docker run image
+        shell: bash
+        env:
+          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+          DOCKER_HUB_PASS: ${{ secrets.DOCKER_HUB_PASS }}
         run: ./run-tests --build-image
   test_ale:
     needs: build_image

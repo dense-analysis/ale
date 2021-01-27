@@ -9,7 +9,7 @@ set -u
 # options, or read the output below.
 #
 
-image=w0rp/ale
+image=denseanalysis/ale
 
 # Create docker image tag based on Dockerfile contents
 image_tag=$(md5sum Dockerfile | cut -d' ' -f1)
@@ -151,24 +151,35 @@ fi
 find test -name '*.swp' -delete
 
 # Check if docker un image is available locally
-has_image=$(docker images ls --filter reference="w0rp/ale:${image_tag}" --quiet | wc -l)
+has_image=$(docker images ls --filter reference="${image}:${image_tag}" --quiet | wc -l)
 
 if [ "$has_image" -eq 0 ]
 then
-  # Check if image exists on Docker hub
-  if docker manifest inspect "w0rp/ale:${image_tag}" &> /dev/null
+
+  echo "Downloading run image ${image}:${image_tag}"
+  docker pull "${image}:${image_tag}" &> /dev/null
+
+  if [ $? -eq 1 ]
   then
-    echo "Downloading run image w0rp/ale:${image_tag}"
-    docker pull "w0rp/ale:${image_tag}"
-    docker tag "w0rp/ale:${image_tag}" "w0rp/ale:latest"
-  else
-    echo "Building run image w0rp/ale:${image_tag}"
-    docker build --build-arg GIT_VERSION="$git_version" -t "w0rp/ale:${image_tag}" .
-    docker tag "w0rp/ale:${image_tag}" "w0rp/ale:latest"
+    echo "Could not pull image ${image}:${image_tag}"
+    echo "Building run image ${image}:${image_tag}"
+    docker build --build-arg GIT_VERSION="$git_version" -t "${image}:${image_tag}" .
+    docker tag "${image}:${image_tag}" "${image}:latest"
+
+    if [[ -z "${DOCKER_HUB_USER:-}" || -z "${DOCKER_HUB_PASS:-}" ]]
+    then
+      echo "Docker Hub credentials not set, skip push"
+    else
+      echo "Push ${image}:${image_tag} to Docker Hub"
+      echo "$DOCKER_HUB_PASS" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+      docker push "${image}:${image_tag}"
+    fi
   fi
 else
-  echo "Docker run image w0rp/ale:${image_tag} ready"
+  echo "Docker run image ${image}:${image_tag} ready"
 fi
+
+docker tag "${image}:${image_tag}" "${image}:latest"
 
 output_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
 
