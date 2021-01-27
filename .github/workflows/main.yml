@@ -21,10 +21,8 @@ jobs:
       matrix:
         vim-version:
           - '--vim-80-only'
-          - '--vim-81-only'
           - '--vim-82-only'
           - '--neovim-02-only'
-          - '--neovim-03-only'
           - '--neovim-04-only'
           - '--linters-only'
     steps:
