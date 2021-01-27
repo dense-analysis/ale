@@ -1,11 +1,12 @@
+---
 name: CI
-on:
+on:  # yamllint disable-line rule:truthy
   push:
-    branches: [ master ]
+    branches: [ master ]  # yamllint disable-line rule:brackets
     tags:
       - /^v\d+\.\d+\.(x|\d+)$/
   pull_request:
-    branches: [ master ]
+    branches: [ master ]  # yamllint disable-line rule:brackets
 
 jobs:
   build_image:
