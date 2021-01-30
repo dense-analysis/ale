@@ -15,14 +15,14 @@ Execute(The output should be correct):
   \   {
   \     'lnum': 17,
   \     'col': 13,
-  \     'filename': '/testplugin/test/terraform_files/providers.tf',
+  \     'filename': ale#path#Simplify(g:dir . '/providers.tf'),
   \     'type': 'W',
   \     'text': 'Terraform 0.13 and earlier allowed provider version',
   \   },
   \   {
   \     'lnum': 0,
   \     'col': 0,
-  \     'filename': '/testplugin/test/terraform_files/providers.tf',
+  \     'filename': ale#path#Simplify(g:dir . '/providers.tf'),
   \     'type': 'E',
   \     'text': 'Plugin reinitialization required. Please run "terraform"',
   \   }
