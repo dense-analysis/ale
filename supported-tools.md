@@ -495,7 +495,10 @@ formatting.
 * Tcl
   * [nagelfar](http://nagelfar.sourceforge.net) :floppy_disk:
 * Terraform
-  * [fmt](https://github.com/hashicorp/terraform)
+  * [terraform](https://github.com/hashicorp/terraform)
+  * [terraform-fmt-fixer](https://github.com/hashicorp/terraform)
+  * [terraform-ls](https://github.com/hashicorp/terraform-ls)
+  * [terraform-lsp](https://github.com/juliosueiras/terraform-lsp)
   * [tflint](https://github.com/wata727/tflint)
 * Texinfo
   * [alex](https://github.com/wooorm/alex) :floppy_disk:
