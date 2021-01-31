@@ -1853,6 +1853,8 @@ g:ale_popup_menu_enabled                             *g:ale_popup_menu_enabled*
   capabilities in the right click mouse menu when there's a LSP server or
   tsserver available. See |ale-refactor|.
 
+  This feature is only supported in GUI versions of Vim.
+
   This setting must be set to `1` before ALE is loaded for this behavior
   to be enabled. See |ale-lint-settings-on-startup|.
 
