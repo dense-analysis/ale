@@ -1,0 +1,49 @@
+Before:
+  runtime ale_linters/dockerfile/hadolint.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The hadolint handler should handle an empty string response):
+  AssertEqual
+  \ [],
+  \ ale_linters#dockerfile#hadolint#Handle(bufnr(''), [])
+
+Execute(The hadolint handler should handle a normal example):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'col': 0,
+  \     'type': 'W',
+  \     'text': "Always tag the version of an image explicitly",
+  \     'detail': "DL3006 ( https://github.com/hadolint/hadolint/wiki/DL3006 )\n\nAlways tag the version of an image explicitly",
+  \   },
+#  \   {
+#  \     'lnum': 2,
+#  \     'col': 0,
+#  \     'type': 'E',
+#  \     'text': "MAINTAINER is deprecated",
+#  \     'detail': "DL4000 ( https://github.com/hadolint/hadolint/wiki/DL4000 )\n\nMAINTAINER is deprecated",
+#  \   },
+#  \   {
+#  \     'lnum': 4,
+#  \     'col': 0,
+#  \     'type': 'W',
+#  \     'text': "Specify version with `yum install -y <package>-<version>`.",
+#  \     'detail': "DL3033 ( https://github.com/hadolint/hadolint/wiki/DL3033 )\n\nSpecify version with `yum install -y <package>-<version>`.",
+#  \   },
+#  \   {
+#  \     'lnum': 12,
+#  \     'col': 0,
+#  \     'type': 'W',
+#  \     'text': "In POSIX sh, brace expansion is undefined.",
+#  \     'detail': "SC2039 ( https://github.com/koalaman/shellcheck/wiki/SC2039 )\n\nIn POSIX sh, brace expansion is undefined.",
+#  \   },
+  \ ],
+  \ ale_linters#dockerfile#hadolint#Handle(bufnr(''), [
+  \ '/dev/stdin:1 DL3006 warning: Always tag the version of an image explicitly',
+#  \ '/dev/stdin:2 DL4000 error: MAINTAINER is deprecated',
+#  \ '/dev/stdin:4 DL3033 warning: Specify version with `yum install -y <package>-<version>`.',
+#  \ '/dev/stdin:12 SC2039 warning: In POSIX sh, brace expansion is undefined.'
+  \ ])
