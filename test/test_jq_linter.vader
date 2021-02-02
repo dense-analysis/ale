@@ -1,6 +1,9 @@
 Before:
   runtime ale_linters/json/jq.vim
 
+After:
+  call ale#linter#Reset()
+
 Execute (Should parse error correctly):
   AssertEqual
   \ [

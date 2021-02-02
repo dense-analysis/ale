@@ -5,7 +5,7 @@ call ale#Set('json_jq_executable', 'jq')
 function! ale_linters#json#jq#GetCommand(buffer) abort
     let l:executable = ale#Var(a:buffer, 'json_jq_executable')
 
-    return ale#Var(a:buffer, 'json_jq_executable')
+    return ale#Escape(l:executable)
 endfunction
 
 function! ale_linters#json#jq#Handle(buffer, lines) abort
