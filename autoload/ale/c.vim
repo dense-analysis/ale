@@ -491,7 +491,7 @@ function! ale#c#GetCFlags(buffer, output) abort
         endif
     endif
 
-    if s:CanParseMakefile(a:buffer) && !empty(a:output) && !empty(l:cflags)
+    if empty(l:cflags) && s:CanParseMakefile(a:buffer) && !empty(a:output)
         let l:cflags = ale#c#ParseCFlagsFromMakeOutput(a:buffer, a:output)
     endif
 
