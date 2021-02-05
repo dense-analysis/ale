@@ -152,6 +152,7 @@ Notes:
   * `erlc`
 * Fish
   * `fish` (-n flag)
+  * `fish_indent`
 * Fortran
   * `gcc`
   * `language_server`
