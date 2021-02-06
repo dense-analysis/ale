@@ -506,6 +506,10 @@ function! ale#c#GetMakeCommand(buffer) abort
     if s:CanParseMakefile(a:buffer)
         let l:path = ale#path#FindNearestFile(a:buffer, 'Makefile')
 
+        if empty(l:path)
+            let l:path = ale#path#FindNearestFile(a:buffer, 'GNUmakefile')
+        endif
+
         if !empty(l:path)
             let l:always_make = ale#Var(a:buffer, 'c_always_make')
 
