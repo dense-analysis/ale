@@ -10,7 +10,12 @@ function! ale_linters#cpp#cppcheck#GetCommand(buffer) abort
     let l:buffer_path_include = empty(l:compile_commands_option)
     \   ? ale#handlers#cppcheck#GetBufferPathIncludeOptions(a:buffer)
     \   : ''
-    let l:template = ' --template=''{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}'''
+
+    if has('win32') || has('win16') || has('win95') || has('win64')
+        let l:template = ' --template=^"{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}^"'
+    else
+        let l:template = ' --template=''{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}'''
+    endif
 
     return l:cd_command
     \   . '%e -q --language=c++'
