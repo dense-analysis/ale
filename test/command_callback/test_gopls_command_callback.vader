@@ -36,6 +36,9 @@ Execute(should set gopls options):
   AssertLinter 'gopls',
   \ ale#Escape('gopls') . ' --mode stdio --trace'
 
+  let b:ale_go_gopls_init_options = {'ui.diagnostic.analyses': {'composites': v:false}}
+  AssertLSPOptions {'ui.diagnostic.analyses': {'composites': v:false}}
+
 Execute(should support go environment variables):
   let b:ale_go_go111module = 'off'
 
