@@ -1,8 +1,10 @@
 Before:
   Save g:ale_buffer_info
   Save g:ale_disable_lsp
+  Save g:ale_lsp_suggestions
 
   let g:ale_disable_lsp = 0
+  let g:ale_lsp_suggestions = 1
   unlet! b:ale_disable_lsp
 
   function! CreateError(type, message) abort
@@ -143,6 +145,14 @@ Execute(Subsequent empty lists should be ignored - suggestion):
   let g:ale_buffer_info[bufnr('')].suggestion_loclist = []
 
   call ale#lsp_linter#HandleLSPResponse(1, CreateError('suggestionDiag', ''))
+
+  Assert !g:ale_handle_loclist_called
+
+Execute(You should be able to disable suggestions):
+  let g:ale_lsp_suggestions = 0
+  let g:ale_buffer_info[bufnr('')].suggestion_loclist = []
+
+  call ale#lsp_linter#HandleLSPResponse(1, CreateError('suggestionDiag', 'x'))
 
   Assert !g:ale_handle_loclist_called
 
