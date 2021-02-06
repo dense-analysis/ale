@@ -1,6 +1,6 @@
 Before:
   call ale#assert#SetUpLinterTest('c', 'cppcheck')
-  let b:command_tail = ' -q --language=c --template=''{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}'' --enable=style -I' . ale#Escape(ale#path#Simplify(g:dir)) .' %t'
+  let b:command_tail = ' -q --language=c --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}') . ' --enable=style -I' . ale#Escape(ale#path#Simplify(g:dir)) .' %t'
 
 After:
   " Remove a test file we might open for some tests.
@@ -26,7 +26,7 @@ Execute(cppcheck for C should detect compile_commands.json files):
   \ ale#path#CdString(ale#path#Simplify(g:dir . '/cppcheck_paths/one'))
   \   . ale#Escape('cppcheck')
   \   . ' -q --language=c'
-  \   . ' --template=''{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}'''
+  \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --project=' . ale#Escape('compile_commands.json')
   \   . ' --enable=style %t'
 
@@ -37,7 +37,7 @@ Execute(cppcheck for C should detect compile_commands.json files in build direct
   \ ale#path#CdString(ale#path#Simplify(g:dir . '/cppcheck_paths/with_build_dir'))
   \   . ale#Escape('cppcheck')
   \   . ' -q --language=c'
-  \   . ' --template=''{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}'''
+  \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --project=' . ale#Escape(ale#path#Simplify('build/compile_commands.json'))
   \   . ' --enable=style %t'
 
@@ -47,7 +47,7 @@ Execute(cppcheck for C should include file dir if compile_commands.json file is 
   AssertLinter 'cppcheck',
   \   ale#Escape('cppcheck')
   \   . ' -q --language=c'
-  \   . ' --template=''{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}'''
+  \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --enable=style'
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir . '/cppcheck_paths'))
   \   . ' %t'
@@ -62,7 +62,7 @@ Execute(cppcheck for C should ignore compile_commands.json file if buffer is mod
   \   ale#path#CdString(ale#path#Simplify(g:dir . '/cppcheck_paths/one'))
   \   . ale#Escape('cppcheck')
   \   . ' -q --language=c'
-  \   . ' --template=''{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}'''
+  \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --enable=style'
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir . '/cppcheck_paths/one'))
   \   . ' %t'
