@@ -90,6 +90,9 @@ let g:ale_lint_on_filetype_changed = get(g:, 'ale_lint_on_filetype_changed', 1)
 " This Dictionary configures the default LSP roots for various linters.
 let g:ale_lsp_root = get(g:, 'ale_lsp_root', {})
 
+" If set to 1, hints and suggestion from LSP servers and tsserver will be shown.
+let g:ale_lsp_suggestions = get(g:, 'ale_lsp_suggestions', 0)
+
 " This flag can be set to 1 to enable automatically fixing files on save.
 let g:ale_fix_on_save = get(g:, 'ale_fix_on_save', 0)
 
