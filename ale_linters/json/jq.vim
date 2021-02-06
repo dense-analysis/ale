@@ -1,9 +1,7 @@
 " Author: jD91mZM2 <me@krake.one>
 
-call ale#Set('json_jq_executable', 'jq')
-
 function! ale_linters#json#jq#GetCommand(buffer) abort
-    let l:executable = ale#Var(a:buffer, 'json_jq_executable')
+    let l:executable = ale#fixers#jq#GetExecutable(a:buffer)
 
     return ale#Escape(l:executable)
 endfunction
@@ -27,7 +25,7 @@ endfunction
 
 call ale#linter#Define('json', {
 \   'name': 'jq',
-\   'executable': { b -> ale#Var(b, 'json_jq_executable') },
+\   'executable': function('ale#fixers#jq#GetExecutable'),
 \   'output_stream': 'stderr',
 \   'command': function('ale_linters#json#jq#GetCommand'),
 \   'callback': 'ale_linters#json#jq#Handle',
