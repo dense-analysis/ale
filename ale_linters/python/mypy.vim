@@ -47,8 +47,8 @@ function! ale_linters#python#mypy#GetCommand(buffer) abort
     " we can know with certainty the base path for the 'filename' keys below.
     return ale#path#CdString(l:dir)
     \   . ale#Escape(l:executable) . l:exec_args
+    \   . ' ' . ale#Var(a:buffer, 'python_mypy_options')
     \   . ' --show-column-numbers '
-    \   . ale#Var(a:buffer, 'python_mypy_options')
     \   . ' --shadow-file %s %t %s'
 endfunction
 
