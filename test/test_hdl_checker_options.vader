@@ -1,15 +1,23 @@
 Before:
   call ale#assert#SetUpLinterTest('vhdl', 'hdl_checker')
 
+  Save g:ale_hdl_checker_executable
   Save g:ale_hdl_checker_config_file
   Save g:ale_hdl_checker_options
 
   let g:default_config_file = has('unix') ? '.hdl_checker.config' : '_hdl_checker.config'
 
+  runtime autoload/ale/handlers/hdl_checker.vim
+
 After:
   Restore
+
   call ale#assert#TearDownLinterTest()
+
   unlet! g:default_config_file
+  unlet! g:call_count
+
+  runtime autoload/ale/handlers/hdl_checker.vim
 
 Execute(Get default initialization dict):
   AssertEqual
