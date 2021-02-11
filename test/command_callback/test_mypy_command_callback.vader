@@ -13,24 +13,25 @@ After:
 Execute(The mypy callbacks should return the correct default values):
   AssertLinter 'mypy',
   \ ale#path#CdString(g:dir) . ale#Escape('mypy')
-  \   . ' --show-column-numbers  '
-  \   . '--shadow-file %s %t %s'
+  \   . ' --show-column-numbers'
+  \   . ' --shadow-file %s %t %s'
 
 Execute(The mypy executable should be configurable, and escaped properly):
   let g:ale_python_mypy_executable = 'executable with spaces'
 
   AssertLinter 'executable with spaces',
   \ ale#path#CdString(g:dir) . ale#Escape('executable with spaces')
-  \   . ' --show-column-numbers  '
-  \   . '--shadow-file %s %t %s'
+  \   . ' --show-column-numbers'
+  \   . ' --shadow-file %s %t %s'
 
 Execute(The mypy command callback should let you set options):
   let g:ale_python_mypy_options = '--some-option'
 
   AssertLinter 'mypy',
   \ ale#path#CdString(g:dir) . ale#Escape('mypy')
-  \   . ' --show-column-numbers --some-option '
-  \   . '--shadow-file %s %t %s'
+  \   . ' --some-option'
+  \   . ' --show-column-numbers'
+  \   . ' --shadow-file %s %t %s'
 
 Execute(The mypy command should switch directories to the detected project root):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/no_virtualenv/subdir/foo/bar.py')
@@ -38,8 +39,8 @@ Execute(The mypy command should switch directories to the detected project root)
   AssertLinter 'mypy',
   \ ale#path#CdString(ale#path#Simplify(g:dir . '/python_paths/no_virtualenv/subdir'))
   \   . ale#Escape('mypy')
-  \   . ' --show-column-numbers  '
-  \   . '--shadow-file %s %t %s'
+  \   . ' --show-column-numbers'
+  \   . ' --shadow-file %s %t %s'
 
 Execute(The mypy callbacks should detect virtualenv directories and switch to the project root):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
@@ -49,8 +50,8 @@ Execute(The mypy callbacks should detect virtualenv directories and switch to th
   AssertLinter b:executable,
   \   ale#path#CdString(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/subdir'))
   \   . ale#Escape(b:executable)
-  \   . ' --show-column-numbers  '
-  \   . '--shadow-file %s %t %s'
+  \   . ' --show-column-numbers'
+  \   . ' --shadow-file %s %t %s'
 
 Execute(The mypy callbacks should cd to directory containing mypy.ini if found):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_mypy_ini_and_pytest_ini/tests/testsubfolder/my_tests.py')
@@ -58,8 +59,8 @@ Execute(The mypy callbacks should cd to directory containing mypy.ini if found):
   AssertLinter 'mypy',
   \   ale#path#CdString(ale#path#Simplify(g:dir . '/python_paths/with_mypy_ini_and_pytest_ini'))
   \   . ale#Escape('mypy')
-  \   . ' --show-column-numbers  '
-  \   . '--shadow-file %s %t %s'
+  \   . ' --show-column-numbers'
+  \   . ' --shadow-file %s %t %s'
 
 Execute(You should able able to use the global mypy instead):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
@@ -68,8 +69,8 @@ Execute(You should able able to use the global mypy instead):
   AssertLinter 'mypy',
   \   ale#path#CdString(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/subdir'))
   \   . ale#Escape('mypy')
-  \   . ' --show-column-numbers  '
-  \   . '--shadow-file %s %t %s'
+  \   . ' --show-column-numbers'
+  \   . ' --shadow-file %s %t %s'
 
 Execute(Setting executable to 'pipenv' appends 'run mypy'):
   let g:ale_python_mypy_executable = 'path/to/pipenv'
@@ -77,7 +78,7 @@ Execute(Setting executable to 'pipenv' appends 'run mypy'):
   AssertLinter 'path/to/pipenv',
   \ ale#path#CdString(expand('#' . bufnr('') . ':p:h'))
   \   . ale#Escape('path/to/pipenv') . ' run mypy'
-  \   . ' --show-column-numbers  --shadow-file %s %t %s'
+  \   . ' --show-column-numbers --shadow-file %s %t %s'
 
 Execute(Pipenv is detected when python_mypy_auto_pipenv is set):
   let g:ale_python_mypy_auto_pipenv = 1
@@ -85,4 +86,4 @@ Execute(Pipenv is detected when python_mypy_auto_pipenv is set):
 
   AssertLinter 'pipenv',
   \ ale#path#CdString(expand('#' . bufnr('') . ':p:h'))
-  \   . ale#Escape('pipenv') . ' run mypy --show-column-numbers  --shadow-file %s %t %s'
+  \   . ale#Escape('pipenv') . ' run mypy --show-column-numbers --shadow-file %s %t %s'
