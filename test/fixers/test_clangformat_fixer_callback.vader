@@ -52,7 +52,7 @@ Execute(The clangformat callback should include style options as well):
   \ ale#fixers#clangformat#Fix(bufnr(''))
 
 Execute(The clangformat callback should use local file instead of style options):
-  call ale#test#SetFilename('c_paths/with_clangformat/dummy.c')
+  call ale#test#SetFilename('clangformat_paths/with_clangformat/dummy.c')
   let g:ale_c_clangformat_options = '--some-option'
   let g:ale_c_clangformat_style_option = '{BasedOnStyle: Microsoft, ColumnLimit:80,}'
   let g:ale_c_clangformat_use_local_file = 1
