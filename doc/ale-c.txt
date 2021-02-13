@@ -221,7 +221,7 @@ g:ale_c_clangformat_style_option             *g:ale_c_clangformat_style_option*
     \ AllowShortBlocksOnASingleLine:       Always,
     \ AllowShortFunctionsOnASingleLine:    Inline,
     \ }
-
+<
   If you set this variable, ensure you don't modify -style in
   |g:ale_c_clangformat_options|, as this will cause clang-format to error.
 
@@ -232,8 +232,12 @@ g:ale_c_clangformat_use_local_file         *g:ale_c_clangformat_use_local_file*
   Default: `0`
 
   This variable can be changed to modify whether to use a local .clang-format
-  file if it is found. This will override any style options configured via
-  |g:ale_c_clangformat_style_option|.
+  file. If the file is found, the flag '-style=file' is passed to clang-format
+  and any options configured via |g:ale_c_clangformat_style_option| are not
+  passed.
+
+  If this option is enabled but no .clang-format file is found, default back to
+  |g:ale_c_clangformat_style_option|, if it set.
 
   If you set this variable, ensure you don't modify -style in
   |g:ale_c_clangformat_options|, as this will cause clang-format to error.
