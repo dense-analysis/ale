@@ -9,6 +9,17 @@ function! ale_linters#cpp#cc#GetExecutable(buffer) abort
 
     " Default to either clang++ or gcc.
     if l:executable is# '<auto>'
+        let [l:root, l:json_file] = ale#c#FindCompileCommands(a:buffer)
+        if !empty(l:json_file)
+          let l:res = system('grep g++ '.l:json_file)
+          if l:res =~# 'clang++'
+            let l:executable = 'clang++'
+          else
+            let l:executable = 'g++'
+          endif
+          return l:executable
+        endif
+
         if ale#engine#IsExecutable(a:buffer, 'clang++')
             let l:executable = 'clang++'
         else
