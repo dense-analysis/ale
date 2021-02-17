@@ -431,6 +431,7 @@ Notes:
 * Ruby
   * `brakeman`
   * `debride`
+  * `prettier`
   * `rails_best_practices`!!
   * `reek`
   * `rubocop`

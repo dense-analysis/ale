@@ -269,6 +269,20 @@ Execute(Should set --parser based on filetype, HTML):
   \     . ' --stdin-filepath %s --stdin',
   \ }
 
+Execute(Should set --parser based on filetype, Ruby):
+  call ale#test#SetFilename('../prettier-test-files/testfile')
+
+  set filetype=ruby
+
+  GivenCommandOutput ['1.6.0']
+  AssertFixer
+  \ {
+  \   'command': ale#path#CdString(expand('%:p:h'))
+  \     . ale#Escape(g:ale_javascript_prettier_executable)
+  \     . ' --parser ruby'
+  \     . ' --stdin-filepath %s --stdin',
+  \ }
+
 Execute(Should set --parser based on first filetype of multiple filetypes):
   call ale#test#SetFilename('../prettier-test-files/testfile')
 
