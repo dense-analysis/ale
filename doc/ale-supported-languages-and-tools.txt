@@ -329,6 +329,7 @@ Notes:
 * OCaml
   * `merlin` (see |ale-ocaml-merlin|)
   * `ocamlformat`
+  * `ocamllsp`
   * `ocp-indent`
   * `ols`
 * OpenApi

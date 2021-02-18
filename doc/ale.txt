@@ -2843,6 +2843,7 @@ documented in additional help files.
     uncrustify............................|ale-objcpp-uncrustify|
   ocaml...................................|ale-ocaml-options|
     merlin................................|ale-ocaml-merlin|
+    ocamllsp..............................|ale-ocaml-ocamllsp|
     ols...................................|ale-ocaml-ols|
     ocamlformat...........................|ale-ocaml-ocamlformat|
     ocp-indent............................|ale-ocaml-ocp-indent|

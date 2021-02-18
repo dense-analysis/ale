@@ -338,6 +338,7 @@ formatting.
 * OCaml
   * [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-ocaml-merlin` for configuration instructions
   * [ocamlformat](https://github.com/ocaml-ppx/ocamlformat)
+  * [ocamllsp](https://github.com/ocaml/ocaml-lsp)
   * [ocp-indent](https://github.com/OCamlPro/ocp-indent)
   * [ols](https://github.com/freebroccolo/ocaml-language-server)
 * OpenApi
