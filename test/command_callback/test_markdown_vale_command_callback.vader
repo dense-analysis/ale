@@ -9,7 +9,7 @@ Before:
 After:
   call ale#assert#TearDownLinterTest()
 
-Execute(Executable should default to rubocop):
+Execute(Executable should default to vale):
   AssertLinter 'vale', ale#Escape('vale')
   \   . ' --output=JSON  %t'
 
