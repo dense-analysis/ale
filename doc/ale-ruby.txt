@@ -41,6 +41,11 @@ g:ale_ruby_debride_options                         *g:ale_ruby_debride_options*
   This variable can be changed to modify flags given to debride.
 
 
+===============================================================================
+prettier                                                    *ale-ruby-prettier*
+
+See |ale-javascript-prettier| for information about the available options.
+
 
 ===============================================================================
 rails_best_practices                            *ale-ruby-rails_best_practices*
