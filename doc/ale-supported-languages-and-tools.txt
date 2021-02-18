@@ -330,6 +330,7 @@ Notes:
   * `merlin` (see |ale-ocaml-merlin|)
   * `ocamlformat`
   * `ocp-indent`
+  * `ocamllsp`
   * `ols`
 * OpenApi
   * `ibm_validator`

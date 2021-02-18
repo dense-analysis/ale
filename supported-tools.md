@@ -339,6 +339,7 @@ formatting.
   * [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-ocaml-merlin` for configuration instructions
   * [ocamlformat](https://github.com/ocaml-ppx/ocamlformat)
   * [ocp-indent](https://github.com/OCamlPro/ocp-indent)
+  * [ocamllsp](https://github.com/ocaml/ocaml-lsp)
   * [ols](https://github.com/freebroccolo/ocaml-language-server)
 * OpenApi
   * [ibm_validator](https://github.com/IBM/openapi-validator)
