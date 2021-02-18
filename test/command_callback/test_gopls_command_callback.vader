@@ -36,6 +36,9 @@ Execute(should set gopls options):
   AssertLinter 'gopls',
   \ ale#Escape('gopls') . ' --mode stdio --trace'
 
+  let b:ale_go_gopls_init_options = {'ui.diagnostic.analyses': {'composites': v:false}}
+  AssertLSPOptions {'ui.diagnostic.analyses': {'composites': v:false}}
+
 Execute(should support go environment variables):
   let b:ale_go_go111module = 'off'
 
@@ -49,7 +52,10 @@ Execute(Should return directory for 'go.mod' if found in parent directory):
 
 Execute(Should return nearest directory with '.git' if found in parent directory):
   call ale#test#SetFilename('test.go')
-  call mkdir(g:dir . '/.git')
+
+  if !isdirectory(g:dir . '/.git')
+    call mkdir(g:dir . '/.git')
+  endif
 
   AssertLSPProject g:dir
 

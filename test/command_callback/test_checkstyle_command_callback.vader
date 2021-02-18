@@ -20,11 +20,11 @@ Execute(The checkstyle executable should be configurable):
   \ . ' %s'
 
 Execute(Custom options should be supported):
-  let b:ale_java_checkstyle_options = '--foobar'
+  let b:ale_java_checkstyle_options = '--foobar -cp -classpath /path/to/checkstyle-8.7-all.jar'
 
   AssertLinter 'checkstyle',
   \ ale#Escape('checkstyle')
-  \ . ' --foobar'
+  \ . ' --foobar -cp -classpath /path/to/checkstyle-8.7-all.jar'
   \ . ' -c ' . ale#Escape('/google_checks.xml')
   \ . ' %s'
 

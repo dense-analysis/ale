@@ -1,6 +1,49 @@
+Before:
+  Save g:ale_filename_mappings
+
+  let g:ale_filename_mappings = {}
+
 After:
   unlet! b:temp_name
   unlet! b:other_bufnr
+
+  Restore
+
+
+Execute(FixLocList should map filenames):
+  " Paths converted back into temporary filenames shouldn't be included.
+  let g:ale_filename_mappings = {
+  \ 'linter2': [['/xxx/', '/data/']],
+  \ 'linter1': [
+  \   ['/bar/', '/data/special/'],
+  \   ['/foo/', '/data/'],
+  \   [
+  \     ale#path#Simplify(fnamemodify(ale#util#Tempname(), ':h:h')) . '/',
+  \     '/x-tmp/',
+  \   ],
+  \ ],
+  \}
+
+  AssertEqual
+  \ [
+  \   '/foo/file.txt',
+  \   v:null,
+  \   '/bar/file.txt',
+  \ ],
+  \ map(
+  \   ale#engine#FixLocList(
+  \     bufnr('%'),
+  \     'linter1',
+  \     0,
+  \     [
+  \       {'text': 'x', 'lnum': 1, 'filename': '/data/file.txt'},
+  \       {'text': 'x', 'lnum': 1, 'filename': '/x-tmp/file.txt'},
+  \       {'text': 'x', 'lnum': 1, 'filename': '/data/special/file.txt'},
+  \     ],
+  \   ),
+  \   'get(v:val, ''filename'', v:null)',
+  \ )
+
 
 Given foo (Some file with lines to count):
   foo12345678
@@ -37,7 +80,7 @@ Execute(FixLocList should set all the default values correctly):
   \     'nr': -1,
   \     'linter_name': 'foobar',
   \   },
-  \],
+  \ ],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
@@ -58,7 +101,7 @@ Execute(FixLocList should use the values we supply):
   \     'nr': 42,
   \     'linter_name': 'foobar',
   \   },
-  \],
+  \ ],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
@@ -87,7 +130,7 @@ Execute(FixLocList should set items with lines beyond the end to the last line):
   \     'nr': -1,
   \     'linter_name': 'foobar',
   \   },
-  \],
+  \ ],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
@@ -108,7 +151,7 @@ Execute(FixLocList should move line 0 to line 1):
   \     'nr': -1,
   \     'linter_name': 'foobar',
   \   },
-  \],
+  \ ],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
@@ -130,7 +173,7 @@ Execute(FixLocList should convert line and column numbers correctly):
   \     'nr': -1,
   \     'linter_name': 'foobar',
   \   },
-  \],
+  \ ],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
@@ -164,7 +207,7 @@ Execute(FixLocList should pass on end_col values):
   \     'nr': -1,
   \     'linter_name': 'foobar',
   \   },
-  \],
+  \ ],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
@@ -202,7 +245,7 @@ Execute(FixLocList should pass on end_lnum values):
   \     'nr': -1,
   \     'linter_name': 'foobar',
   \   },
-  \],
+  \ ],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
@@ -227,7 +270,7 @@ Execute(FixLocList should allow subtypes to be set):
   \     'nr': -1,
   \     'linter_name': 'foobar',
   \   },
-  \],
+  \ ],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
@@ -289,7 +332,7 @@ Execute(FixLocList should accept filenames):
   \     'nr': -1,
   \     'linter_name': 'foobar',
   \   },
-  \],
+  \ ],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
@@ -327,7 +370,7 @@ Execute(FixLocList should interpret temporary filenames as being the current buf
   \     'nr': -1,
   \     'linter_name': 'foobar',
   \   },
-  \],
+  \ ],
   \ ale#engine#FixLocList(
   \   bufnr(''),
   \   'foobar',
@@ -352,7 +395,7 @@ Execute(The error code should be passed on):
   \     'linter_name': 'foobar',
   \     'code': 'some-code'
   \   },
-  \],
+  \ ],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
@@ -385,7 +428,7 @@ Execute(FixLocList should mark problems as coming from other sources if requeste
   \     'linter_name': 'foobar',
   \     'from_other_source': 1,
   \   },
-  \],
+  \ ],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',
@@ -407,7 +450,7 @@ Execute(character positions should be converted to byte positions):
   \   {'lnum': 1, 'bufnr': bufnr(''), 'col': 7, 'end_col': 13, 'end_lnum': 1, 'linter_name': 'foobar', 'nr': -1, 'type': 'E', 'vcol': 0, 'text': 'a'},
   \   {'lnum': 1, 'bufnr': bufnr(''), 'col': 7, 'end_col': 17, 'end_lnum': 2, 'linter_name': 'foobar', 'nr': -1, 'type': 'E', 'vcol': 0, 'text': 'a'},
   \   {'lnum': 2, 'bufnr': bufnr(''), 'col': 17, 'linter_name': 'foobar', 'nr': -1, 'type': 'E', 'vcol': 0, 'text': 'a'},
-  \],
+  \ ],
   \ ale#engine#FixLocList(
   \   bufnr('%'),
   \   'foobar',

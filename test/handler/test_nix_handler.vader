@@ -8,6 +8,29 @@ Execute(The nix handler should parse nix-instantiate error messages correctly):
   AssertEqual
   \ [
   \   {
+  \     'lnum': 6,
+  \     'col': 3,
+  \     'type': 'E',
+  \     'text': "syntax error, unexpected ']', expecting ';'",
+  \   },
+  \   {
+  \     'lnum': 3,
+  \     'col': 5,
+  \     'type': 'E',
+  \     'text': "undefined variable 'foo'",
+  \   },
+  \
+  \ ],
+  \ ale_linters#nix#nix#Handle(bufnr(''), [
+  \   "@nix {\"line\":6,\"column\":3,\"raw_msg\":\"syntax error, unexpected ']', expecting ';'\"}",
+  \   "@nix {\"line\":3,\"column\":5,\"raw_msg\":\"undefined variable 'foo'\"}",
+  \   "@nix {\"unrelated\":\"message\"}"
+  \ ])
+
+Execute(The nix handler should parse message from old nix-instantiate correctly):
+  AssertEqual
+  \ [
+  \   {
   \     'lnum': 23,
   \     'col': 14,
   \     'text': 'error: syntax error, unexpected IN',

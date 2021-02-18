@@ -45,15 +45,15 @@ Execute(The start position should be returned when results can be requested):
   AssertEqual 11, ale#completion#OmniFunc(1, '')
 
 Execute(The omnifunc function should return async results):
-  " Neovim 0.2.0 struggles at running these tests.
-  if !has('nvim') || has('nvim-0.3.0')
+  " Neovim 0.2.0 and 0.4.4 struggles at running these tests.
+  if !has('nvim')
     call timer_start(0, function('SetCompletionResult'))
 
     AssertEqual ['foo'], ale#completion#OmniFunc(0, '')
   endif
 
 Execute(The omnifunc function should parse and return async responses):
-  if !has('nvim') || has('nvim-0.3.0')
+  if !has('nvim')
     call timer_start(0, function('SetCompletionResponse'))
 
     AssertEqual ['foo'], ale#completion#OmniFunc(0, '')

@@ -22,7 +22,7 @@ Execute(The shellcheck handler should handle basic errors or warnings):
   \     'code': 'SC1068',
   \   },
   \ ],
-  \ ale_linters#sh#shellcheck#Handle(bufnr(''), [
+  \ ale#handlers#shellcheck#Handle(bufnr(''), [
   \   '-:2:1: warning: In POSIX sh, ''let'' is not supported. [SC2039]',
   \   '-:2:3: error: Don''t put spaces around the = in assignments. [SC1068]',
   \ ])
@@ -38,6 +38,6 @@ Execute(The shellcheck handler should handle notes):
   \     'code': 'SC2086',
   \   },
   \ ],
-  \ ale_linters#sh#shellcheck#Handle(bufnr(''), [
+  \ ale#handlers#shellcheck#Handle(bufnr(''), [
   \   '-:3:3: note: Double quote to prevent globbing and word splitting. [SC2086]',
   \ ])

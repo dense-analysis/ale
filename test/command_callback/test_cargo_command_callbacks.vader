@@ -169,10 +169,11 @@ Execute(Build supports all cargo flags):
   let g:ale_rust_cargo_check_tests = 1
   let g:ale_rust_cargo_check_examples = 1
   let b:ale_rust_cargo_default_feature_behavior = 'all'
+  let b:ale_rust_cargo_target_dir = 'target/ale'
 
   AssertLinter 'cargo', [
   \ ale#Escape('cargo') . ' --version',
-  \ 'cargo build --all-targets --examples --tests --frozen --message-format=json -q --all-features',
+  \ 'cargo build --all-targets --examples --tests --target-dir ' . ale#Escape('target/ale') . ' --frozen --message-format=json -q --all-features',
   \]
 
 Execute(Clippy supports all cargo flags):
@@ -182,10 +183,11 @@ Execute(Clippy supports all cargo flags):
   let g:ale_rust_cargo_check_examples = 1
   let b:ale_rust_cargo_default_feature_behavior = 'all'
   let b:ale_rust_cargo_clippy_options = '-D warnings'
+  let b:ale_rust_cargo_target_dir = 'target/ale'
 
   AssertLinter 'cargo', [
   \ ale#Escape('cargo') . ' --version',
-  \ 'cargo clippy --all-targets --examples --tests --frozen --message-format=json -q --all-features -- -D warnings',
+  \ 'cargo clippy --all-targets --examples --tests --target-dir ' . ale#Escape('target/ale') . ' --frozen --message-format=json -q --all-features -- -D warnings',
   \]
 
 Execute(cargo-check does not refer ale_rust_cargo_clippy_options):
@@ -196,4 +198,22 @@ Execute(cargo-check does not refer ale_rust_cargo_clippy_options):
   AssertLinter 'cargo', [
   \ ale#Escape('cargo') . ' --version',
   \ 'cargo check --frozen --message-format=json -q',
+  \]
+
+Execute(`cargo --target-dir` should be used when the version is new enough and it is set):
+  let b:ale_rust_cargo_target_dir = 'target/ale'
+
+  GivenCommandOutput ['cargo 0.17.0 (3423351a5 2017-10-06)']
+  AssertLinter 'cargo', [
+  \ ale#Escape('cargo') . ' --version',
+  \ 'cargo check --target-dir ' . ale#Escape('target/ale') . g:suffix,
+  \]
+
+Execute(`cargo --target-dir` should not be used when the version is not new enough and it is set):
+  let b:ale_rust_cargo_target_dir = 'target/ale'
+
+  GivenCommandOutput ['cargo 0.16.0 (3423351a5 2017-10-06)']
+  AssertLinter 'cargo', [
+  \ ale#Escape('cargo') . ' --version',
+  \ 'cargo build' . g:suffix,
   \]

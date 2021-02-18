@@ -1,0 +1,29 @@
+Before:
+  call ale#assert#SetUpLinterTest('ocaml', 'ocamllsp')
+
+  Save &filetype
+  let &filetype = 'ocaml'
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The language string should be correct):
+  AssertLSPLanguage 'ocaml'
+
+Execute(The project root should be detected correctly):
+  AssertLSPProject ''
+
+  call ale#test#SetFilename('ocamllsp_paths/file.ml')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/ocamllsp_paths')
+
+Execute(The executable should be run using opam exec by default):
+  call ale#test#SetFilename('ocamllsp_paths/file.ml')
+
+  AssertLinter 'ocamllsp', 'opam config exec -- ocamllsp'
+
+Execute(The executable should be run directly if use_opam flag is disabled):
+  let g:ale_ocaml_ocamllsp_use_opam = 0
+  call ale#test#SetFilename('ocamllsp_paths/file.ml')
+
+  AssertLinter 'ocamllsp', 'ocamllsp'

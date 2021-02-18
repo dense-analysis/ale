@@ -13,7 +13,7 @@ After:
 
 Execute(The golangci-lint defaults should be correct):
   AssertLinter 'golangci-lint',
-  \ ale#path#CdString(expand('%:p:h'))
+  \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('golangci-lint')
   \   . ' run ' . ale#Escape(expand('%' . ':t'))
   \   . ' --enable-all'
@@ -22,7 +22,7 @@ Execute(The golangci-lint callback should use a configured executable):
   let b:ale_go_golangci_lint_executable = 'something else'
 
   AssertLinter 'something else',
-  \ ale#path#CdString(expand('%:p:h'))
+  \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('something else')
   \   . ' run ' . ale#Escape(expand('%' . ':t'))
   \   . ' --enable-all'
@@ -31,7 +31,7 @@ Execute(The golangci-lint callback should use configured options):
   let b:ale_go_golangci_lint_options = '--foobar'
 
   AssertLinter 'golangci-lint',
-  \ ale#path#CdString(expand('%:p:h'))
+  \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('golangci-lint')
   \   . ' run ' . ale#Escape(expand('%' . ':t'))
   \   . ' --foobar'
@@ -40,7 +40,7 @@ Execute(The golangci-lint callback should support environment variables):
   let b:ale_go_go111module = 'on'
 
   AssertLinter 'golangci-lint',
-  \ ale#path#CdString(expand('%:p:h'))
+  \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Env('GO111MODULE', 'on')
   \   . ale#Escape('golangci-lint')
   \   . ' run ' . ale#Escape(expand('%' . ':t'))
@@ -50,5 +50,5 @@ Execute(The golangci-lint `lint_package` option should use the correct command):
   let b:ale_go_golangci_lint_package = 1
 
   AssertLinter 'golangci-lint',
-  \ ale#path#CdString(expand('%:p:h'))
+  \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Escape('golangci-lint') . ' run --enable-all'

@@ -1,5 +1,6 @@
 Before:
   call ale#assert#SetUpLinterTest('javascript', 'fecs')
+  runtime autoload/ale/handlers/fecs.vim
 
 After:
   call ale#assert#TearDownLinterTest()

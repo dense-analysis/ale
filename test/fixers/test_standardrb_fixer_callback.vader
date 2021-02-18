@@ -21,9 +21,9 @@ Execute(The standardrb callback should return the correct default values):
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
+  \   'process_with': 'ale#fixers#rubocop#PostProcess',
   \   'command': ale#Escape(g:ale_ruby_standardrb_executable)
-  \     . ' --fix --force-exclusion %t',
+  \     . ' --fix --force-exclusion --stdin %s',
   \ },
   \ ale#fixers#standardrb#Fix(bufnr(''))
 
@@ -32,10 +32,10 @@ Execute(The standardrb callback should include configuration files):
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
+  \   'process_with': 'ale#fixers#rubocop#PostProcess',
   \   'command': ale#Escape(g:ale_ruby_standardrb_executable)
   \     . ' --config ' . ale#Escape(ale#path#Simplify(g:dir . '/ruby_paths/with_config/.standard.yml'))
-  \     . ' --fix --force-exclusion %t',
+  \     . ' --fix --force-exclusion --stdin %s',
   \ },
   \ ale#fixers#standardrb#Fix(bufnr(''))
 
@@ -45,10 +45,10 @@ Execute(The standardrb callback should include custom rubocop options):
 
   AssertEqual
   \ {
-  \   'read_temporary_file': 1,
+  \   'process_with': 'ale#fixers#rubocop#PostProcess',
   \   'command': ale#Escape(g:ale_ruby_standardrb_executable)
   \     . ' --config ' . ale#Escape(ale#path#Simplify(g:dir . '/ruby_paths/with_config/.standard.yml'))
   \     . ' --except Lint/Debugger'
-  \     . ' --fix --force-exclusion %t',
+  \     . ' --fix --force-exclusion --stdin %s',
   \ },
   \ ale#fixers#standardrb#Fix(bufnr(''))

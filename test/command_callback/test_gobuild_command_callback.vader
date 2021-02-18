@@ -11,14 +11,14 @@ After:
 
 Execute(The default commands should be correct):
   AssertLinter 'go',
-  \ ale#path#CdString(expand('%:p:h'))
+  \ ale#path#BufferCdString(bufnr(''))
   \   . 'go test -c -o /dev/null ./'
 
 Execute(Go environment variables should be supported):
   let b:ale_go_go111module = 'on'
 
   AssertLinter 'go',
-  \ ale#path#CdString(expand('%:p:h'))
+  \ ale#path#BufferCdString(bufnr(''))
   \   . ale#Env('GO111MODULE', 'on')
   \   . 'go test -c -o /dev/null ./'
 
@@ -28,7 +28,7 @@ Execute(Extra options should be supported):
   let g:ale_go_gobuild_options = '--foo-bar'
 
   AssertLinter 'go',
-  \ ale#path#CdString(expand('%:p:h'))
+  \ ale#path#BufferCdString(bufnr(''))
   \   . 'go test --foo-bar -c -o /dev/null ./'
 
   let g:ale_go_gobuild_options = ''
@@ -37,5 +37,5 @@ Execute(The executable should be configurable):
   let g:ale_go_go_executable = 'foobar'
 
   AssertLinter 'foobar',
-  \ ale#path#CdString(expand('%:p:h'))
+  \ ale#path#BufferCdString(bufnr(''))
   \   . 'foobar test -c -o /dev/null ./'

@@ -23,6 +23,7 @@ Before:
   \   'completion_trigger_characters': [],
   \   'definition': 0,
   \   'symbol_search': 0,
+  \   'code_actions': 0,
   \ },
   \}
 
@@ -102,6 +103,7 @@ Execute(Capabilities should bet set up correctly):
   \   'definition': 1,
   \   'symbol_search': 1,
   \   'rename': 1,
+  \   'code_actions': 1,
   \ },
   \ b:conn.capabilities
   AssertEqual [[1, 'initialized', {}]], g:message_list
@@ -125,13 +127,13 @@ Execute(Disabled capabilities should be recognised correctly):
   \     'referencesProvider': v:false,
   \     'textDocumentSync': 2,
   \     'documentFormattingProvider': v:true,
-  \     'codeActionProvider': v:true,
+  \     'codeActionProvider': v:false,
   \     'signatureHelpProvider': {
   \       'triggerCharacters': ['(', ','],
   \     },
   \     'definitionProvider': v:false,
   \     'experimental': {},
-  \     'documentHighlightProvider': v:true
+  \     'documentHighlightProvider': v:true,
   \   },
   \ },
   \})
@@ -146,6 +148,59 @@ Execute(Disabled capabilities should be recognised correctly):
   \   'definition': 0,
   \   'symbol_search': 0,
   \   'rename': 0,
+  \   'code_actions': 0,
+  \ },
+  \ b:conn.capabilities
+  AssertEqual [[1, 'initialized', {}]], g:message_list
+
+Execute(Capabilities should be enabled when send as Dictionaries):
+  call ale#lsp#HandleInitResponse(b:conn, {
+  \ 'jsonrpc': '2.0',
+  \ 'id': 1,
+  \ 'result': {
+  \   'capabilities': {
+  \     'renameProvider': {},
+  \     'executeCommandProvider': {
+  \       'commands': [],
+  \     },
+  \     'hoverProvider': {},
+  \     'documentSymbolProvider': v:true,
+  \     'documentRangeFormattingProvider': v:true,
+  \     'codeLensProvider': {
+  \       'resolveProvider': v:false
+  \     },
+  \     'completionProvider': {
+  \       'triggerCharacters': ['.'],
+  \       'resolveProvider': v:false
+  \     },
+  \     'referencesProvider': {},
+  \     'textDocumentSync': 2,
+  \     'documentFormattingProvider': v:true,
+  \     'codeActionProvider': v:true,
+  \     'signatureHelpProvider': {
+  \       'triggerCharacters': ['(', ','],
+  \     },
+  \     'definitionProvider': {},
+  \     'typeDefinitionProvider': {},
+  \     'experimental': {},
+  \     'documentHighlightProvider': v:true,
+  \     'workspaceSymbolProvider': {}
+  \   },
+  \ },
+  \})
+
+  AssertEqual 1, b:conn.initialized
+  AssertEqual
+  \ {
+  \   'completion_trigger_characters': ['.'],
+  \   'completion': 1,
+  \   'references': 1,
+  \   'hover': 1,
+  \   'definition': 1,
+  \   'typeDefinition': 1,
+  \   'symbol_search': 1,
+  \   'rename': 1,
+  \   'code_actions': 1,
   \ },
   \ b:conn.capabilities
   AssertEqual [[1, 'initialized', {}]], g:message_list

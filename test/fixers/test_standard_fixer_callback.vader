@@ -15,7 +15,7 @@ Execute(The executable path should be correct):
   \   'read_temporary_file': 1,
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/standard/bin/cmd.js'))
-  \     . ' --fix %t',
+  \     . ' --fix --stdin < %s > %t',
   \ },
   \ ale#fixers#standard#Fix(bufnr(''))
 
@@ -26,6 +26,6 @@ Execute(Custom options should be supported):
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
-  \   'command': ale#Escape('standard') . ' --foo-bar --fix %t',
+  \   'command': ale#Escape('standard') . ' --foo-bar --fix --stdin < %s > %t',
   \ },
   \ ale#fixers#standard#Fix(bufnr(''))
