@@ -2695,6 +2695,7 @@ documented in additional help files.
     dialyzer..............................|ale-erlang-dialyzer|
     elvis.................................|ale-erlang-elvis|
     erlc..................................|ale-erlang-erlc|
+    erlfmt................................|ale-erlang-erlfmt|
     syntaxerl.............................|ale-erlang-syntaxerl|
   eruby...................................|ale-eruby-options|
     ruumba................................|ale-eruby-ruumba|
