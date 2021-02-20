@@ -113,6 +113,7 @@ formatting.
   * [cucumber](https://cucumber.io/)
 * CUDA
   * [nvcc](http://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html)
+  * [clangd](https://clang.llvm.org/extra/clangd.html)
 * Cypher
   * [cypher-lint](https://github.com/cleishm/libcypher-parser)
 * Cython (pyrex filetype)
