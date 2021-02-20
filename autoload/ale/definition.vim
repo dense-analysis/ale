@@ -104,9 +104,6 @@ function! s:OnReady(line, column, options, capability, linter, lsp_details) abor
             \   a:line,
             \   a:column
             \)
-        else
-            " XXX: log here?
-            return
         endif
     else
         " Send a message saying the buffer has changed first, or the
