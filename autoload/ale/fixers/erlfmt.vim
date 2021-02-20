@@ -14,6 +14,7 @@ function! ale#fixers#erlfmt#Fix(buffer) abort
     let l:executable = ale#fixers#erlfmt#GetExecutable(a:buffer)
 
     let l:command = ale#Escape(l:executable) . (empty(l:options) ? '' : ' ' . l:options) . ' %s'
+
     return {
     \   'command': l:command
     \}
