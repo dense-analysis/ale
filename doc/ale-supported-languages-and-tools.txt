@@ -150,6 +150,8 @@ Notes:
   * `SyntaxErl`
   * `elvis`!!
   * `erlc`
+  * `erlfmt`
+  * `dialyzer`
 * Fish
   * `fish` (-n flag)
   * `fish_indent`
