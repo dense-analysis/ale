@@ -8,10 +8,10 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The ansible_lint command callback should return default string):
-  AssertLinter 'ansible-lint', ale#Escape('ansible-lint') . ' -p %t'
+  AssertLinter 'ansible-lint', ale#Escape('ansible-lint') . ' -p -x yaml'
 
 Execute(The ansible_lint executable should be configurable):
   let g:ale_ansible_ansible_lint_executable = '~/.local/bin/ansible-lint'
 
   AssertLinter '~/.local/bin/ansible-lint',
-  \ ale#Escape('~/.local/bin/ansible-lint') . ' -p %t'
+  \ ale#Escape('~/.local/bin/ansible-lint') . ' -p -x yaml'

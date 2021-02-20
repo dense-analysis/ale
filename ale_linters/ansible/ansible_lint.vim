@@ -18,28 +18,16 @@ function! ale_linters#ansible#ansible_lint#Handle(buffer, lines) abort
         endif
     endfor
 
-    " Matches patterns line the following:
-    "
-    " test.yml:35: [EANSIBLE0002] Trailing whitespace
-    let l:pattern = '\v^([a-zA-Z]?:?[^:]+):(\d+):?(\d+)?: \[?([[:alnum:]]+)\]? (.*)$'
+    let l:pattern = '\v^([^:]+):(\d+):%((\d+):)? ([-[:alnum:]]+) (.*)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        let l:code = l:match[4]
-
-        if l:code is# 'EANSIBLE0002'
-        \&& !ale#Var(a:buffer, 'warn_about_trailing_whitespace')
-            " Skip warnings for trailing whitespace if the option is off.
-            continue
-        endif
-
         if ale#path#IsBufferPath(a:buffer, l:match[1])
             call add(l:output, {
             \   'lnum': l:match[2] + 0,
             \   'col': l:match[3] + 0,
             \   'text': l:match[5],
-            \   'code': l:code,
-            \   'type': l:code[:0] is# 'E' ? 'E' : 'W',
+            \   'code': l:match[4],
             \})
         endif
     endfor
@@ -51,6 +39,6 @@ call ale#linter#Define('ansible', {
 \   'name': 'ansible_lint',
 \   'aliases': ['ansible', 'ansible-lint'],
 \   'executable': function('ale_linters#ansible#ansible_lint#GetExecutable'),
-\   'command': '%e -p %t',
+\   'command': '%e -p -x yaml',
 \   'callback': 'ale_linters#ansible#ansible_lint#Handle',
 \})
