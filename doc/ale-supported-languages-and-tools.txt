@@ -103,8 +103,8 @@ Notes:
 * Cucumber
   * `cucumber`
 * CUDA
-  * `nvcc`!!
   * `clangd`
+  * `nvcc`!!
 * Cypher
   * `cypher-lint`
 * Cython (pyrex filetype)

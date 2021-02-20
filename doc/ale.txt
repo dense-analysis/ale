@@ -2616,6 +2616,7 @@ documented in additional help files.
     stylelint.............................|ale-css-stylelint|
   cuda....................................|ale-cuda-options|
     nvcc..................................|ale-cuda-nvcc|
+    clangd................................|ale-cuda-clangd|
     clang-format..........................|ale-cuda-clangformat|
   d.......................................|ale-d-options|
     dfmt..................................|ale-d-dfmt|
