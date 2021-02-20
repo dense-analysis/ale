@@ -35,7 +35,7 @@ Given python(Second python example):
 
 Execute():
   let g:changes = [
-  \ {'end': {'offset': 16, 'line': 2}, 'newText': "\n\ndef func_ivlpdpao(f):\n    exif = exifread.process_file(f)\n    dt = str(exif['Image DateTime'])\n    date = dt[:10].replace(':', '-')\n    return date\n", 'start': {'offset': 16, 'line': 2}},
+  \ {'end': {'offset': 16, 'line': 2}, 'newText': "\n\n\ndef func_ivlpdpao(f):\n    exif = exifread.process_file(f)\n    dt = str(exif['Image DateTime'])\n    date = dt[:10].replace(':', '-')\n    return date\n", 'start': {'offset': 16, 'line': 2}},
   \ {'end': {'offset': 32, 'line': 6}, 'newText': 'date = func', 'start': {'offset': 9, 'line': 6}},
   \ {'end': {'offset': 42, 'line': 8}, 'newText': "ivlpdpao(f)\n", 'start': {'offset': 33, 'line': 6}}
   \]
