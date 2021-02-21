@@ -907,3 +907,21 @@ tools are well-integrated with ALE, and ALE is properly configured to run the
 correct commands and map filename paths between different file systems. See
 `:help ale-lint-other-machines` for the full documentation on how to configure
 ALE to support this.
+
+### 5.xxi. How can I change the borders for floating preview windows?
+
+The borders for floating preview is enabled by default. You could use the
+`g:ale_floating_window_border` to control.
+
+You could disable the border with an empty list.
+
+```vim
+let g:ale_floating_window_border = []
+```
+
+If the terminal supports unicode, you may use the setting to beauty the
+floating window.
+
+```vim
+let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰']
+```

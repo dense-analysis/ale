@@ -647,7 +647,8 @@ Hover information can be displayed in the preview window instead by setting
 |g:ale_hover_to_preview| to `1`.
 
 When using Neovim, if |g:ale_hover_to_floating_preview| or |g:ale_floating_preview|
-is set to 1, the hover information will show in a floating window.
+is set to 1, the hover information will show in a floating window. And 
+|g:ale_floating_window_border| for the border setting.
 
 For Vim 8.1+ terminals, mouse hovering is disabled by default. Enabling
 |balloonexpr| commands in terminals can cause scrolling issues in terminals,
@@ -1197,6 +1198,19 @@ g:ale_floating_preview                                       *g:ale_floating_pre
   When set to `1`, Neovim will use a floating window for ale's preview window.
   This is equivalent to setting |g:ale_hover_to_floating_preview| and
   |g:ale_detail_to_floating_preview| to `1`.
+
+
+g:ale_floating_window_border                       *g:ale_floating_window_border*
+
+  Type: |List|
+  Default: `['|', '-', '+', '+', '+', '+']`
+
+  When set to `[]`, the border rendering is disabled. The elements in the list
+  present the values for horizontal, top, top-left, top-right, bottom-right 
+  and bottom-left.
+
+  If the terminal suuports unicode, you may set the value with
+  ` ['│', '─', '╭', '╮', '╯', '╰']` for a beautiful looking.
 
 
 g:ale_history_enabled                                   *g:ale_history_enabled*
