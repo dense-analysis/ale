@@ -32,6 +32,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix PEP8 issues with black.',
 \   },
+\   'buildifier': {
+\       'function': 'ale#fixers#buildifier#Fix',
+\       'suggested_filetypes': ['bzl'],
+\       'description': 'Format BUILD and .bzl files with buildifier.',
+\   },
 \   'deno': {
 \       'function': 'ale#fixers#deno#Fix',
 \       'suggested_filetypes': ['typescript'],

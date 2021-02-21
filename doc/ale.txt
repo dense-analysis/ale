@@ -2614,6 +2614,8 @@ documented in additional help files.
     gawk..................................|ale-awk-gawk|
   bats....................................|ale-bats-options|
     shellcheck............................|ale-bats-shellcheck|
+  bazel...................................|ale-bazel-options|
+    buildifier............................|ale-bazel-buildifier|
   bib.....................................|ale-bib-options|
     bibclean..............................|ale-bib-bibclean|
   c.......................................|ale-c-options|
