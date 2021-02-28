@@ -150,8 +150,10 @@ Notes:
   * `ruumba`
 * Erlang
   * `SyntaxErl`
+  * `dialyzer`
   * `elvis`!!
   * `erlc`
+  * `erlfmt`
 * Fish
   * `fish` (-n flag)
   * `fish_indent`
