@@ -62,7 +62,7 @@ function! s:PrepareWindowContent(lines) abort
     let l:width = max(map(copy(a:lines), 'strdisplaywidth(v:val)'))
     let l:height = min([len(a:lines), l:max_height])
 
-    if empty(g:ale_floating_window_border) == 1
+    if empty(g:ale_floating_window_border)
         return [a:lines, l:width, l:height]
     endif
 
