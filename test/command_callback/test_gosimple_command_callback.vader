@@ -10,13 +10,10 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default gosimple command should be correct):
-  AssertLinter 'gosimple',
-  \ ale#path#BufferCdString(bufnr(''))
-  \ . ' gosimple .'
+  AssertLinterCwd '%s:h'
+  AssertLinter 'gosimple', 'gosimple .'
 
 Execute(The gosimple command should support Go environment variables):
   let b:ale_go_go111module = 'on'
 
-  AssertLinter 'gosimple',
-  \ ale#path#BufferCdString(bufnr(''))
-  \ . ' ' . ale#Env('GO111MODULE', 'on') . 'gosimple .'
+  AssertLinter 'gosimple', ale#Env('GO111MODULE', 'on') . 'gosimple .'

@@ -1,23 +1,13 @@
 Before:
-  Save g:ale_haskell_cabal_ghc_options
-
-  unlet! g:ale_haskell_cabal_ghc_options
-  unlet! b:ale_haskell_cabal_ghc_options
-
-  runtime ale_linters/haskell/cabal_ghc.vim
+  call ale#assert#SetUpLinterTest('haskell', 'cabal_ghc')
 
 After:
-  Restore
-  unlet! b:ale_haskell_cabal_ghc_options
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The options should be used in the command):
-  AssertEqual
-  \ ale#path#BufferCdString(bufnr('')) . 'cabal exec -- ghc -fno-code -v0 %t',
-  \ ale_linters#haskell#cabal_ghc#GetCommand(bufnr(''))
+  AssertLinterCwd '%s:h'
+  AssertLinter 'cabal', 'cabal exec -- ghc -fno-code -v0 %t'
 
   let b:ale_haskell_cabal_ghc_options = 'foobar'
 
-  AssertEqual
-  \ ale#path#BufferCdString(bufnr('')) . 'cabal exec -- ghc foobar %t',
-  \ ale_linters#haskell#cabal_ghc#GetCommand(bufnr(''))
+  AssertLinter 'cabal', 'cabal exec -- ghc foobar %t'

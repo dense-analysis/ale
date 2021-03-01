@@ -26,24 +26,30 @@ Execute(The make command should be correct):
   call ale#test#SetFilename('test_c_projects/makefile_project/subdir/file.c')
 
   AssertEqual
-  \ ale#path#CdString(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'))
-  \   . 'make -n --always-make',
+  \ [
+  \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
+  \   'make -n --always-make',
+  \ ],
   \ ale#c#GetMakeCommand(bufnr(''))
 
   " You should be able to disable --always-make for a buffer.
   let b:ale_c_always_make = 0
 
   AssertEqual
-  \ ale#path#CdString(ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'))
-  \   . 'make -n',
+  \ [
+  \   ale#path#Simplify(g:dir. '/test_c_projects/makefile_project'),
+  \   'make -n',
+  \ ],
   \ ale#c#GetMakeCommand(bufnr(''))
 
 Execute(Should recognize GNUmakefile as a makefile):
   call ale#test#SetFilename('test_c_projects/gnumakefile_project/file.c')
 
   AssertEqual
-  \ ale#path#CdString(ale#path#Simplify(g:dir. '/test_c_projects/gnumakefile_project'))
-  \   . 'make -n --always-make',
+  \ [
+  \   ale#path#Simplify(g:dir. '/test_c_projects/gnumakefile_project'),
+  \   'make -n --always-make',
+  \ ],
   \ ale#c#GetMakeCommand(bufnr(''))
 
 Execute(The CFlags parser should be able to parse include directives):

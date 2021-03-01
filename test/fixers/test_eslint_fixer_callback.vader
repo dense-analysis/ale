@@ -17,9 +17,8 @@ Execute(The executable path should be correct):
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'command':
-  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'))
-  \     . (has('win32') ? 'node.exe ' : '')
+  \   'cwd': ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'),
+  \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --fix %t',
@@ -36,6 +35,7 @@ Execute(The ESLint fixer should use a config file option if set for old versions
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
+  \   'cwd': '',
   \   'command': ale#Escape('eslint') . ' -c /foo.cfg --fix %t',
   \ }
 
@@ -44,6 +44,7 @@ Execute(The ESLint fixer should use a config file option if set for old versions
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
+  \   'cwd': '',
   \   'command': ale#Escape('eslint') . ' --bar -c /foo.cfg --fix %t',
   \ }
 
@@ -52,6 +53,7 @@ Execute(The ESLint fixer should use a config file option if set for old versions
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
+  \   'cwd': '',
   \   'command': ale#Escape('eslint') . ' --config /foo.cfg --fix %t',
   \ }
 
@@ -60,6 +62,7 @@ Execute(The ESLint fixer should use a config file option if set for old versions
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
+  \   'cwd': '',
   \   'command': ale#Escape('eslint') . ' --bar --config /foo.cfg --fix %t',
   \ }
 
@@ -72,6 +75,7 @@ Execute(The ESLint fixer should use a -c file option if set for eslint_d):
   AssertFixer
   \ {
   \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
+  \   'cwd': '',
   \   'command': ale#Escape('/bin/eslint_d')
   \     . ' -c /foo.cfg'
   \     . ' --stdin-filename %s --stdin --fix-to-stdout'
@@ -82,6 +86,7 @@ Execute(The ESLint fixer should use a -c file option if set for eslint_d):
   AssertFixer
   \ {
   \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
+  \   'cwd': '',
   \   'command': ale#Escape('/bin/eslint_d')
   \     . ' --bar -c /foo.cfg'
   \     . ' --stdin-filename %s --stdin --fix-to-stdout'
@@ -92,6 +97,7 @@ Execute(The ESLint fixer should use a -c file option if set for eslint_d):
   AssertFixer
   \ {
   \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
+  \   'cwd': '',
   \   'command': ale#Escape('/bin/eslint_d')
   \     . ' --config /foo.cfg'
   \     . ' --stdin-filename %s --stdin --fix-to-stdout'
@@ -102,6 +108,7 @@ Execute(The ESLint fixer should use a -c file option if set for eslint_d):
   AssertFixer
   \ {
   \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
+  \   'cwd': '',
   \   'command': ale#Escape('/bin/eslint_d')
   \     . ' --bar --config /foo.cfg'
   \     . ' --stdin-filename %s --stdin --fix-to-stdout'
@@ -115,6 +122,7 @@ Execute(The ESLint fixer should use a config file option if set for new versions
   AssertFixer
   \ {
   \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
+  \   'cwd': '',
   \   'command': ale#Escape('eslint')
   \     . ' -c /foo.cfg'
   \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json'
@@ -125,6 +133,7 @@ Execute(The ESLint fixer should use a config file option if set for new versions
   AssertFixer
   \ {
   \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
+  \   'cwd': '',
   \   'command': ale#Escape('eslint')
   \     . ' --bar -c /foo.cfg'
   \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json'
@@ -135,6 +144,7 @@ Execute(The ESLint fixer should use a config file option if set for new versions
   AssertFixer
   \ {
   \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
+  \   'cwd': '',
   \   'command': ale#Escape('eslint')
   \     . ' --config /foo.cfg'
   \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json'
@@ -145,6 +155,7 @@ Execute(The ESLint fixer should use a config file option if set for new versions
   AssertFixer
   \ {
   \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
+  \   'cwd': '',
   \   'command': ale#Escape('eslint')
   \     . ' --bar --config /foo.cfg'
   \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json'
@@ -156,9 +167,8 @@ Execute(The lower priority configuration file in a nested directory should be pr
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'command':
-  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'))
-  \     . (has('win32') ? 'node.exe ' : '')
+  \   'cwd': ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'),
+  \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/subdir-with-config/.eslintrc'))
   \     . ' --fix %t',
@@ -172,9 +182,8 @@ Execute(--config in options should override configuration file detection for old
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'command':
-  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'))
-  \     . (has('win32') ? 'node.exe ' : '')
+  \   'cwd': ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'),
+  \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' --config /foo.cfg'
   \     . ' --fix %t',
@@ -185,9 +194,8 @@ Execute(--config in options should override configuration file detection for old
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'command':
-  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'))
-  \     . (has('win32') ? 'node.exe ' : '')
+  \   'cwd': ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'),
+  \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' -c /foo.cfg'
   \     . ' --fix %t',
@@ -199,9 +207,8 @@ Execute(package.json should be used as a last resort):
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'command':
-  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'))
-  \     . (has('win32') ? 'node.exe ' : '')
+  \   'cwd': ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'),
+  \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --fix %t',
@@ -212,9 +219,8 @@ Execute(package.json should be used as a last resort):
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'command':
-  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files'))
-  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/node_modules/.bin/eslint'))
+  \   'cwd': ale#path#Simplify(g:dir . '/../eslint-test-files'),
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/node_modules/.bin/eslint'))
   \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/package.json'))
   \     . ' --fix %t',
   \ }
@@ -229,9 +235,8 @@ Execute(The version check should be correct):
   \   . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \   . ' --version',
   \ {
-  \   'command':
-  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'))
-  \     . (has('win32') ? 'node.exe ' : '')
+  \   'cwd': ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'),
+  \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
   \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
@@ -240,9 +245,8 @@ Execute(The version check should be correct):
 
   AssertFixer [
   \ {
-  \   'command':
-  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'))
-  \     . (has('win32') ? 'node.exe ' : '')
+  \   'cwd': ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'),
+  \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
   \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
@@ -255,9 +259,8 @@ Execute(--fix-dry-run should be used for 4.9.0 and up):
   GivenCommandOutput ['4.9.0']
   AssertFixer
   \ {
-  \   'command':
-  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'))
-  \     . (has('win32') ? 'node.exe ' : '')
+  \   'cwd': ale#path#Simplify(g:dir . '/../eslint-test-files/react-app'),
+  \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/eslint/bin/eslint.js'))
   \     . ' --stdin-filename %s --stdin --fix-dry-run --format=json',
   \   'process_with': 'ale#fixers#eslint#ProcessFixDryRunOutput',
@@ -269,9 +272,8 @@ Execute(--fix-to-stdout should be used for eslint_d):
   AssertFixer
   \ {
   \   'read_temporary_file': 1,
-  \   'command':
-  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d'))
-  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
+  \   'cwd': ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d'),
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
   \     . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/package.json'))
   \     . ' --fix %t',
   \ }
@@ -281,9 +283,8 @@ Execute(--fix-to-stdout should be used for eslint_d):
   GivenCommandOutput ['v3.19.0 (eslint_d v4.2.0)']
   AssertFixer
   \ {
-  \   'command':
-  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d'))
-  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
+  \   'cwd': ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d'),
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
   \     . ' --stdin-filename %s --stdin --fix-to-stdout',
   \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
   \ }
@@ -292,9 +293,8 @@ Execute(--fix-to-stdout should be used for eslint_d):
   GivenCommandOutput ['4.9.0']
   AssertFixer
   \ {
-  \   'command':
-  \     ale#path#CdString(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d'))
-  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
+  \   'cwd': ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d'),
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/app-with-eslint-d/node_modules/.bin/eslint_d'))
   \     . ' --stdin-filename %s --stdin --fix-to-stdout',
   \   'process_with': 'ale#fixers#eslint#ProcessEslintDOutput',
   \ }

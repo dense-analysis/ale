@@ -118,20 +118,23 @@ Execute(--all-features should be used when g:ale_rust_cargo_default_feature_beha
   GivenCommandOutput ['cargo 0.22.0 (3423351a5 2017-10-06)']
   AssertLinter 'cargo', [ale#Escape('cargo') . ' --version', 'cargo check --frozen --message-format=json -q --all-features']
 
-Execute(When a crate belongs to a workspace we should cd into the crate):
+Execute(Cargo should run from the crate directory when set to avoid the workspace):
   let g:ale_rust_cargo_avoid_whole_workspace = 1
   call ale#test#SetFilename('cargo_workspace_paths/subpath/test.rs')
 
+  AssertLinterCwd ale#path#Simplify(g:dir . '/cargo_workspace_paths/subpath')
+  call ale#semver#ResetVersionCache()
   AssertLinter 'cargo', [
   \ ale#Escape('cargo') . ' --version',
-  \ 'cd ' . ale#Escape(ale#path#Simplify(g:dir . '/cargo_workspace_paths/subpath')) . ' && '
-  \   . 'cargo check --frozen --message-format=json -q',
+  \ 'cargo check --frozen --message-format=json -q',
   \]
 
-Execute(When a crate belongs to a workspace we chdir into the crate, unless we disabled it):
+Execute(Cargo should not run from the crate directory when not set to avoid the workspace):
   let g:ale_rust_cargo_avoid_whole_workspace = 0
   call ale#test#SetFilename('cargo_workspace_paths/subpath/test.rs')
 
+  AssertLinterCwd ''
+  call ale#semver#ResetVersionCache()
   AssertLinter 'cargo', [
   \ ale#Escape('cargo') . ' --version',
   \ 'cargo check --frozen --message-format=json -q',

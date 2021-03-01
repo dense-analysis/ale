@@ -5,7 +5,5 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The linter should run from the directory of the file in the buffer):
-  AssertLinter 'gqlint',
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . 'gqlint --reporter=simple'
-  \   . ' %t'
+  AssertLinterCwd '%s:h'
+  AssertLinter 'gqlint', 'gqlint --reporter=simple %t'

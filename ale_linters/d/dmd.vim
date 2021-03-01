@@ -1,35 +1,37 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: "dmd for D files"
 
-function! ale_linters#d#dmd#GetDUBCommand(buffer) abort
+function! s:GetDUBCommand(buffer) abort
     " If we can't run dub, then skip this command.
     if !executable('dub')
         " Returning an empty string skips to the DMD command.
-        return ''
+        let l:config = ale#d#FindDUBConfig(a:buffer)
+
+        " To support older dub versions, we just change the directory to the
+        " directory where we found the dub config, and then run `dub describe`
+        " from that directory.
+        if !empty(l:config)
+            return [fnamemodify(l:config, ':h'), 'dub describe --import-paths']
+        endif
     endif
 
-    let l:dub_file = ale#d#FindDUBConfig(a:buffer)
-
-    if empty(l:dub_file)
-        return ''
-    endif
-
-    " To support older dub versions, we just change the directory to
-    " the directory where we found the dub config, and then run `dub describe`
-    " from that directory.
-    return 'cd ' . ale#Escape(fnamemodify(l:dub_file, ':h'))
-    \   . ' && dub describe --import-paths'
+    return ['', '']
 endfunction
 
 function! ale_linters#d#dmd#RunDUBCommand(buffer) abort
-    let l:command = ale_linters#d#dmd#GetDUBCommand(a:buffer)
+    let [l:cwd, l:command] = s:GetDUBCommand(a:buffer)
 
     if empty(l:command)
         " If we can't run DUB, just run DMD.
         return ale_linters#d#dmd#DMDCommand(a:buffer, [], {})
     endif
 
-    return ale#command#Run(a:buffer, l:command, function('ale_linters#d#dmd#DMDCommand'))
+    return ale#command#Run(
+    \   a:buffer,
+    \   l:command,
+    \   function('ale_linters#d#dmd#DMDCommand'),
+    \   {'cwd': l:cwd},
+    \)
 endfunction
 
 function! ale_linters#d#dmd#DMDCommand(buffer, dub_output, meta) abort

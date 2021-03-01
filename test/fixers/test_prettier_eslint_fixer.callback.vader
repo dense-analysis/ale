@@ -73,8 +73,8 @@ Execute(The new --stdin-filepath option should be used when the version is new e
   GivenCommandOutput ['4.4.0']
   AssertFixer
   \ {
-  \   'command': ale#path#BufferCdString(bufnr(''))
-  \     . ale#Escape('prettier-eslint')
+  \   'cwd': '%s:h',
+  \   'command': ale#Escape('prettier-eslint')
   \     . ' --eslint-config-path ' . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/.eslintrc.js'))
   \     . ' --stdin-filepath %s --stdin',
   \ }
@@ -83,15 +83,15 @@ Execute(The version number should be cached):
   GivenCommandOutput ['4.4.0']
   AssertFixer
   \ {
-  \   'command': ale#path#BufferCdString(bufnr(''))
-  \     . ale#Escape('prettier-eslint')
+  \   'cwd': '%s:h',
+  \   'command': ale#Escape('prettier-eslint')
   \     . ' --stdin-filepath %s --stdin',
   \ }
 
   GivenCommandOutput []
   AssertFixer
   \ {
-  \   'command': ale#path#BufferCdString(bufnr(''))
-  \     . ale#Escape('prettier-eslint')
+  \   'cwd': '%s:h',
+  \   'command': ale#Escape('prettier-eslint')
   \     . ' --stdin-filepath %s --stdin',
   \ }

@@ -25,9 +25,11 @@ Execute(Should use 'mvnw' in classpath command if available):
   call ale#test#SetFilename('maven-test-files/maven-java-project/module1/src/main/java/dummy1.java')
 
   AssertEqual
-  \ ale#path#CdString(ale#path#Simplify(g:dir . '/maven-test-files/maven-java-project/module1'))
-  \ . ale#path#Simplify(g:dir . '/maven-test-files/maven-java-project/module1/' . g:expected_wrapper)
-  \ . ' dependency:build-classpath',
+  \ [
+  \   ale#path#Simplify(g:dir . '/maven-test-files/maven-java-project/module1'),
+  \   ale#Escape(ale#path#Simplify(g:dir . '/maven-test-files/maven-java-project/module1/' . g:expected_wrapper))
+  \   . ' dependency:build-classpath',
+  \ ],
   \ ale#maven#BuildClasspathCommand(bufnr(''))
 
 Execute(Should use 'mvn' in classpath command if it is executable and 'mvnw' is unavailable):
@@ -36,13 +38,16 @@ Execute(Should use 'mvn' in classpath command if it is executable and 'mvnw' is 
   \ . ale#path#Simplify(g:dir . '/maven-test-files')
 
   AssertEqual
-  \ ale#path#CdString(ale#path#Simplify(g:dir . '/maven-test-files/maven-java-project/module2'))
-  \ . 'mvn dependency:build-classpath',
+  \ [
+  \   ale#path#Simplify(g:dir . '/maven-test-files/maven-java-project/module2'),
+  \   ale#Escape('mvn')
+  \   . ' dependency:build-classpath',
+  \ ],
   \ ale#maven#BuildClasspathCommand(bufnr(''))
 
 Execute(Should return empty string if maven cannot be executed):
   call ale#test#SetFilename('maven-test-files/non-maven-project/src/main/java/dummy.java')
 
   AssertEqual
-  \ '',
+  \ ['', ''],
   \ ale#maven#BuildClasspathCommand(bufnr(''))

@@ -3,8 +3,7 @@ Before:
   call ale#test#SetFilename('dummy.java')
 
   let g:cp_sep = has('unix') ? ':' : ';'
-  let g:prefix = ale#path#BufferCdString(bufnr(''))
-  \ . ale#Escape('javac') . ' -Xlint'
+  let g:prefix = ale#Escape('javac') . ' -Xlint'
 
   function! GetCommand(previous_output) abort
     let l:command = ale_linters#java#javac#GetCommand(
@@ -29,6 +28,7 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The javac callback should return the correct default value):
+  AssertLinterCwd '%s:h'
   AssertLinter 'javac', g:prefix . ' -d ' . ale#Escape('TEMP_DIR') . ' %t'
 
 Execute(The javac callback should use string type g:ale_java_javac_classpath correctly):
@@ -51,8 +51,7 @@ Execute(The executable should be configurable):
   let g:ale_java_javac_executable = 'foobar'
 
   AssertLinter 'foobar',
-  \ ale#path#BufferCdString(bufnr(''))
-  \ . ale#Escape('foobar') . ' -Xlint'
+  \ ale#Escape('foobar') . ' -Xlint'
   \ . ' -d ' . ale#Escape('TEMP_DIR') . ' %t'
 
 Execute(The javac callback should include discovered classpaths):
@@ -197,8 +196,7 @@ Execute(The javac callback should combine discovered sourcepath and manual ones)
   let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [], {})
 
   AssertEqual
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('javac') . ' -Xlint'
+  \ ale#Escape('javac') . ' -Xlint'
   \   . ' -sourcepath ' . ale#Escape(join([
   \     ale#path#Simplify(g:dir . '/java_paths/src/main/java/'),
   \     ale#path#Simplify(g:dir . '/java_paths/build/gen/main/'),
@@ -211,8 +209,7 @@ Execute(The javac callback should combine discovered sourcepath and manual ones)
   let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [], {})
 
   AssertEqual
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('javac') . ' -Xlint'
+  \ ale#Escape('javac') . ' -Xlint'
   \   . ' -sourcepath ' . ale#Escape(join([
   \     ale#path#Simplify(g:dir . '/java_paths/src/main/java/'),
   \     ale#path#Simplify(g:dir . '/java_paths/build/gen/main/'),
@@ -225,8 +222,7 @@ Execute(The javac callback should combine discovered sourcepath and manual ones)
   let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [], {})
 
   AssertEqual
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('javac') . ' -Xlint'
+  \ ale#Escape('javac') . ' -Xlint'
   \   . ' -sourcepath ' . ale#Escape(join([
   \     ale#path#Simplify(g:dir . '/java_paths/src/main/java/'),
   \     ale#path#Simplify(g:dir . '/java_paths/build/gen/main/')
@@ -241,8 +237,7 @@ Execute(The javac callback should combine discovered sourcepath and manual ones)
   let b:command = ale_linters#java#javac#GetCommand(bufnr(''), [], {})
 
   AssertEqual
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('javac') . ' -Xlint'
+  \ ale#Escape('javac') . ' -Xlint'
   \   . ' -sourcepath ' . ale#Escape(join([
   \     ale#path#Simplify(g:dir . '/java_paths/src/main/java/'),
   \     ale#path#Simplify(g:dir . '/java_paths/build/gen/main/'),
@@ -257,8 +252,7 @@ Execute(The javac callback should detect source directories):
   call ale#engine#InitBufferInfo(bufnr(''))
 
   AssertLinter 'javac',
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('javac') . ' -Xlint'
+  \ ale#Escape('javac') . ' -Xlint'
   \   . ' -sourcepath ' . ale#Escape(
   \     ale#path#Simplify(g:dir . '/java_paths/src/main/java/')
   \   )
@@ -277,8 +271,7 @@ Execute(The javac callback should combine detected source directories and classp
   \], {})
 
   AssertEqual
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('javac') . ' -Xlint'
+  \ ale#Escape('javac') . ' -Xlint'
   \   . ' -cp ' . ale#Escape(join(['/foo/bar.jar', '/xyz/abc.jar'], g:cp_sep))
   \   . ' -sourcepath ' . ale#Escape(
   \     ale#path#Simplify(g:dir . '/java_paths/src/main/java/')
@@ -300,8 +293,7 @@ Execute(The javac callback should include src/test/java for test paths):
   call ale#engine#InitBufferInfo(bufnr(''))
 
   AssertLinter 'javac',
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('javac') . ' -Xlint'
+  \ ale#Escape('javac') . ' -Xlint'
   \   . ' -sourcepath ' . ale#Escape(join([
   \     ale#path#Simplify(g:dir . '/java_paths/src/main/java/'),
   \     ale#path#Simplify(g:dir . '/java_paths/src/test/java/'),
@@ -314,8 +306,7 @@ Execute(The javac callback should include src/main/jaxb when available):
   call ale#engine#InitBufferInfo(bufnr(''))
 
   AssertLinter 'javac',
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('javac') . ' -Xlint'
+  \ ale#Escape('javac') . ' -Xlint'
   \   . ' -sourcepath ' . ale#Escape(join([
   \     ale#path#Simplify(g:dir . '/java_paths_with_jaxb/src/main/java/'),
   \     ale#path#Simplify(g:dir . '/java_paths_with_jaxb/src/main/jaxb/'),
@@ -328,8 +319,7 @@ Execute(The javac callback should add -sourcepath even if src/java/main doesn't 
   call ale#engine#InitBufferInfo(bufnr(''))
 
   AssertLinter 'javac',
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('javac') . ' -Xlint'
+  \ ale#Escape('javac') . ' -Xlint'
   \   . ' -sourcepath ' . ale#Escape(join([
   \     ale#path#Simplify(g:dir . '/java_paths_no_main/src/test/java/'),
   \   ], g:cp_sep))

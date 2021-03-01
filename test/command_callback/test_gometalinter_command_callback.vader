@@ -12,9 +12,9 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The gometalinter defaults should be correct):
+  AssertLinterCwd '%s:h',
   AssertLinter 'gometalinter',
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('gometalinter')
+  \ ale#Escape('gometalinter')
   \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(expand('%' . ':t')))
   \   . ' .'
 
@@ -22,8 +22,7 @@ Execute(The gometalinter callback should use a configured executable):
   let b:ale_go_gometalinter_executable = 'something else'
 
   AssertLinter 'something else',
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('something else')
+  \ ale#Escape('something else')
   \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(expand('%' . ':t')))
   \   . ' .'
 
@@ -31,8 +30,7 @@ Execute(The gometalinter callback should use configured options):
   let b:ale_go_gometalinter_options = '--foobar'
 
   AssertLinter 'gometalinter',
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('gometalinter')
+  \ ale#Escape('gometalinter')
   \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(expand('%' . ':t')))
   \   . ' --foobar' . ' .'
 
@@ -40,8 +38,7 @@ Execute(The gometalinter should use configured environment variables):
   let b:ale_go_go111module = 'off'
 
   AssertLinter 'gometalinter',
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Env('GO111MODULE', 'off')
+  \ ale#Env('GO111MODULE', 'off')
   \   . ale#Escape('gometalinter')
   \   . ' --include=' . ale#Escape(ale#util#EscapePCRE(expand('%' . ':t')))
   \   . ' .'
@@ -49,6 +46,4 @@ Execute(The gometalinter should use configured environment variables):
 Execute(The gometalinter `lint_package` option should use the correct command):
   let b:ale_go_gometalinter_lint_package = 1
 
-  AssertLinter 'gometalinter',
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('gometalinter') . ' .'
+  AssertLinter 'gometalinter', ale#Escape('gometalinter') . ' .'

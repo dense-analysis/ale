@@ -28,8 +28,8 @@ Execute(The autoimport callback should return the correct default values):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
   \ {
-  \   'command': ale#path#BufferCdString(bufnr(''))
-  \     . ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/autoimport')) . ' -',
+  \   'cwd': '%s:h',
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/autoimport')) . ' -',
   \ },
   \ ale#fixers#autoimport#Fix(bufnr(''))
 
@@ -43,8 +43,8 @@ Execute(The autoimport callback should respect custom options):
   silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
   \ {
-  \   'command': ale#path#BufferCdString(bufnr(''))
-  \     . ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/autoimport'))
+  \   'cwd': '%s:h',
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/autoimport'))
   \     . ' --multi-line=3 --trailing-comma -',
   \ },
   \ ale#fixers#autoimport#Fix(bufnr(''))

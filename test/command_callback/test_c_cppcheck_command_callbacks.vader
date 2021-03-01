@@ -17,14 +17,14 @@ Execute(The executable should be configurable):
 
   let b:ale_c_cppcheck_executable = 'foobar'
 
+  AssertLinterCwd ''
   AssertLinter 'foobar', ale#Escape('foobar') . b:command_tail
 
 Execute(cppcheck for C should detect compile_commands.json files):
   call ale#test#SetFilename('cppcheck_paths/one/foo.c')
 
-  AssertLinter 'cppcheck',
-  \ ale#path#CdString(ale#path#Simplify(g:dir . '/cppcheck_paths/one'))
-  \   . ale#Escape('cppcheck')
+  AssertLinterCwd ale#path#Simplify(g:dir . '/cppcheck_paths/one')
+  AssertLinter 'cppcheck', ale#Escape('cppcheck')
   \   . ' -q --language=c'
   \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --project=' . ale#Escape('compile_commands.json')
@@ -33,9 +33,8 @@ Execute(cppcheck for C should detect compile_commands.json files):
 Execute(cppcheck for C should detect compile_commands.json files in build directories):
   call ale#test#SetFilename('cppcheck_paths/with_build_dir/foo.cpp')
 
-  AssertLinter 'cppcheck',
-  \ ale#path#CdString(ale#path#Simplify(g:dir . '/cppcheck_paths/with_build_dir'))
-  \   . ale#Escape('cppcheck')
+  AssertLinterCwd ale#path#Simplify(g:dir . '/cppcheck_paths/with_build_dir')
+  AssertLinter 'cppcheck', ale#Escape('cppcheck')
   \   . ' -q --language=c'
   \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --project=' . ale#Escape(ale#path#Simplify('build/compile_commands.json'))
@@ -58,9 +57,8 @@ Execute(cppcheck for C should ignore compile_commands.json file if buffer is mod
   set buftype=
   set modified
 
-  AssertLinter 'cppcheck',
-  \   ale#path#CdString(ale#path#Simplify(g:dir . '/cppcheck_paths/one'))
-  \   . ale#Escape('cppcheck')
+  AssertLinterCwd ale#path#Simplify(g:dir . '/cppcheck_paths/one')
+  AssertLinter 'cppcheck', ale#Escape('cppcheck')
   \   . ' -q --language=c'
   \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --enable=style'

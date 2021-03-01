@@ -56,11 +56,7 @@ function! ale_linters#elixir#credo#GetConfigFile() abort
 endfunction
 
 function! ale_linters#elixir#credo#GetCommand(buffer) abort
-    let l:project_root = ale#handlers#elixir#FindMixUmbrellaRoot(a:buffer)
-    let l:mode = ale_linters#elixir#credo#GetMode()
-
-    return ale#path#CdString(l:project_root)
-    \ . 'mix help credo && '
+    return 'mix help credo && '
     \ . 'mix credo ' . ale_linters#elixir#credo#GetMode()
     \ . ale_linters#elixir#credo#GetConfigFile()
     \ . ' --format=flycheck --read-from-stdin %s'
@@ -69,6 +65,7 @@ endfunction
 call ale#linter#Define('elixir', {
 \   'name': 'credo',
 \   'executable': 'mix',
+\   'cwd': function('ale#handlers#elixir#FindMixUmbrellaRoot'),
 \   'command': function('ale_linters#elixir#credo#GetCommand'),
 \   'callback': 'ale_linters#elixir#credo#Handle',
 \})

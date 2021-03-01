@@ -342,6 +342,12 @@ the buffers being checked.
 When a |Dictionary| is returned for an |ALEFix| callback, the following keys
 are supported for running the commands.
 
+  `cwd`                 An optional |String| for setting the working directory
+                      for the command.
+
+                      If not set, or `v:null`, the `cwd` of the last command
+                      that spawn this one will be used.
+
   `command`             A |String| for the command to run. This key is required.
 
                       When `%t` is included in a command string, a temporary
@@ -3578,6 +3584,12 @@ ale#command#Run(buffer, command, callback, [options])       *ale#command#Run()*
 <
   The following `options` can be provided.
 
+    `cwd`               - An optional |String| for setting the working directory
+                        for the command, just as per |ale#linter#Define|.
+
+                        If not set, or `v:null`, the `cwd` of the last command
+                        that spawned this one will be used.
+
     `output_stream`     - Either `'stdout'`, `'stderr'`, `'both'`, or
                         `'none`' for selecting which output streams to read
                         lines from.
@@ -3803,9 +3815,32 @@ ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
 
                          The result can be computed with |ale#command#Run()|.
 
+                         The command string can be formatted with format
+                         markers. See |ale-command-format-strings|.
+
                          This command will be fed the lines from the buffer to
                          check, and will produce the lines of output given to
                          the `callback`.
+
+  `cwd`                    An optional |String| for setting the working
+                         directory for the command, or a |Funcref| for a
+                         function to call for computing the command, accepting
+                         a buffer number. The working directory can be
+                         specified as a format string for determining the path
+                         dynamically. See |ale-command-format-strings|.
+
+                         To set the working directory to the directory
+                         containing the file you're checking, you should
+                         probably use `'%s:h'` as the option value.
+
+                         If this option is absent or the string is empty, the
+                         `command` will be run with no determined working
+                         directory in particular.
+
+                         The directory specified with this option will be used
+                         as the default working directory for all commands run
+                         in a chain with |ale#command#Run()|, unless otherwise
+                         specified.
 
   `output_stream`          A |String| for the output stream the lines of output
                          should be read from for the command which is run. The

@@ -13,22 +13,20 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default command should be correct):
-  AssertLinter 'go', ale#path#BufferCdString(bufnr('')) . ' go vet  .'
+  AssertLinter 'go', 'go vet  .'
 
 Execute(Extra options should be supported):
   let g:ale_go_govet_options = '--foo-bar'
 
-  AssertLinter 'go', ale#path#BufferCdString(bufnr('')) . ' go vet  --foo-bar .'
+  AssertLinterCwd '%s:h'
+  AssertLinter 'go', 'go vet  --foo-bar .'
 
 Execute(The executable should be configurable):
   let g:ale_go_go_executable = 'foobar'
 
-  AssertLinter 'foobar', ale#path#BufferCdString(bufnr('')) . ' foobar vet  .'
+  AssertLinter 'foobar', 'foobar vet  .'
 
 Execute(Go environment variables should be supported):
   let b:ale_go_go111module = 'on'
 
-  AssertLinter 'go',
-  \ ale#path#BufferCdString(bufnr('')) . ' '
-  \ . ale#Env('GO111MODULE', 'on')
-  \ . 'go vet  .'
+  AssertLinter 'go', ale#Env('GO111MODULE', 'on') . 'go vet  .'

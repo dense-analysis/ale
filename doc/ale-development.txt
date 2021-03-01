@@ -311,6 +311,7 @@ The full list of commands that will be temporarily defined for linter tests
 given the above setup are as follows.
 
 `GivenCommandOutput [...]`         - Define output for ale#command#Run.
+`AssertLinterCwd cwd`              - Check the `cwd` for the linter.
 `AssertLinter executable, command` - Check the executable and command.
 `AssertLinterNotExecuted`          - Check that linters will not be executed.
 `AssertLSPLanguage language`       - Check the language given to an LSP server.
@@ -357,6 +358,7 @@ The full list of commands that will be temporarily defined for fixer tests
 given the above setup are as follows.
 
 `GivenCommandOutput [...]`         - Define output for ale#command#Run.
+`AssertFixerCwd cwd`               - Check the `cwd` for the fixer.
 `AssertFixer results`              - Check the fixer results
 `AssertFixerNotExecuted`           - Check that fixers will not be executed.
 

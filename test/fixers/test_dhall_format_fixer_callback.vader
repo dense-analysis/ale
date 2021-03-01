@@ -6,7 +6,7 @@ Before:
   let g:ale_dhall_executable = 'odd-dhall'
   let g:ale_dhall_options = '--ascii'
 
-  call ale#assert#SetUpFixerTest('dhall-format', 'dhall-format')
+  call ale#assert#SetUpFixerTest('dhall', 'dhall-format')
 
 After:
   call ale#assert#TearDownFixerTest()

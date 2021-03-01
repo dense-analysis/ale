@@ -6,22 +6,18 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default tslint command should be correct):
-  AssertLinter 'tslint',
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('tslint') . ' --format json %t'
+  AssertLinterCwd '%s:h'
+  AssertLinter 'tslint', ale#Escape('tslint') . ' --format json %t'
 
 Execute(The rules directory option should be included if set):
   let b:ale_typescript_tslint_rules_dir = '/foo/bar'
 
   AssertLinter 'tslint',
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('tslint') . ' --format json'
+  \ ale#Escape('tslint') . ' --format json'
   \   . ' -r ' . ale#Escape('/foo/bar')
   \   . ' %t'
 
 Execute(The executable should be configurable and escaped):
   let b:ale_typescript_tslint_executable = 'foo bar'
 
-  AssertLinter 'foo bar',
-  \ ale#path#BufferCdString(bufnr(''))
-  \   . ale#Escape('foo bar') . ' --format json %t'
+  AssertLinter 'foo bar', ale#Escape('foo bar') . ' --format json %t'

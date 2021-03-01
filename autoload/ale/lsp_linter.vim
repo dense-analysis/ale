@@ -290,6 +290,7 @@ function! s:StartLSP(options, address, executable, command) abort
         \   a:command,
         \   0,
         \   v:false,
+        \   v:null,
         \   [],
         \)[1]
         let l:command = ale#job#PrepareCommand(l:buffer, l:command)
