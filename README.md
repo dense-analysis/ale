@@ -81,6 +81,7 @@ other content at [w0rp.com](https://w0rp.com).
     18. [How can I configure ALE differently for different buffers?](#faq-buffer-configuration)
     19. [How can I configure the height of the list in which ALE displays errors?](#faq-list-window-height)
     20. [How can I run linters or fixers via Docker or a VM?](#faq-vm)
+    21. [How can I change the borders for floating preview windows?](#faq-window-borders)
 
 <a name="supported-languages"></a>
 
@@ -908,6 +909,8 @@ correct commands and map filename paths between different file systems. See
 `:help ale-lint-other-machines` for the full documentation on how to configure
 ALE to support this.
 
+<a name="faq-window-borders"></a>
+
 ### 5.xxi. How can I change the borders for floating preview windows?
 
 Borders for floating preview windows are enabled by default. You can use the
@@ -919,7 +922,8 @@ You could disable the border with an empty list.
 let g:ale_floating_window_border = []
 ```
 
-If the terminal supports Unicode, you might try setting the value like below, to make it look nicer.
+If the terminal supports Unicode, you might try setting the value like below, to
+make it look nicer.
 
 ```vim
 let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰']
