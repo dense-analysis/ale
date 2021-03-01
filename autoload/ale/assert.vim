@@ -265,11 +265,11 @@ function! ale#assert#SetUpLinterTest(filetype, name) abort
     call ale#linter#Reset()
     call ale#linter#PreventLoading(a:filetype)
 
-    Save g:ale_lsp_root
-    let g:ale_lsp_root = {}
+    Save g:ale_root
+    let g:ale_root = {}
 
-    Save b:ale_lsp_root
-    unlet! b:ale_lsp_root
+    Save b:ale_root
+    unlet! b:ale_root
 
     call ale#assert#ResetVariables(a:filetype, a:name)
 

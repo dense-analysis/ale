@@ -30,13 +30,13 @@ Before:
   Save g:ale_list_window_size
   Save g:ale_loclist_msg_format
   Save g:ale_lsp_error_messages
-  Save g:ale_lsp_root
   Save g:ale_max_buffer_history_size
   Save g:ale_max_signs
   Save g:ale_maximum_file_size
   Save g:ale_open_list
   Save g:ale_pattern_options
   Save g:ale_pattern_options_enabled
+  Save g:ale_root
   Save g:ale_set_balloons
   Save g:ale_set_highlights
   Save g:ale_set_loclist
@@ -88,13 +88,13 @@ Before:
   let g:ale_list_window_size = 10
   let g:ale_loclist_msg_format = '%code: %%s'
   let g:ale_lsp_error_messages = {}
-  let g:ale_lsp_root = {}
   let g:ale_max_buffer_history_size = 20
   let g:ale_max_signs = -1
   let g:ale_maximum_file_size = 0
   let g:ale_open_list = 0
   let g:ale_pattern_options = {}
   let g:ale_pattern_options_enabled = 0
+  let g:ale_root = {}
   let g:ale_set_balloons = 0
   let g:ale_set_highlights = 1
   let g:ale_set_loclist = 1
@@ -167,13 +167,13 @@ Before:
   \  'let g:ale_list_vertical = 0',
   \  'let g:ale_list_window_size = 10',
   \  'let g:ale_loclist_msg_format = ''%code: %%s''',
-  \  'let g:ale_lsp_root = {}',
   \  'let g:ale_max_buffer_history_size = 20',
   \  'let g:ale_max_signs = -1',
   \  'let g:ale_maximum_file_size = 0',
   \  'let g:ale_open_list = 0',
   \  'let g:ale_pattern_options = {}',
   \  'let g:ale_pattern_options_enabled = 0',
+  \  'let g:ale_root = {}',
   \  'let g:ale_set_balloons = 0',
   \  'let g:ale_set_highlights = 1',
   \  'let g:ale_set_loclist = 1',

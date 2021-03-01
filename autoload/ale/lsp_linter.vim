@@ -201,7 +201,11 @@ function! ale#lsp_linter#GetConfig(buffer, linter) abort
 endfunction
 
 function! ale#lsp_linter#FindProjectRoot(buffer, linter) abort
-    let l:buffer_ale_root = getbufvar(a:buffer, 'ale_lsp_root', {})
+    let l:buffer_ale_root = getbufvar(
+    \   a:buffer,
+    \   'ale_root',
+    \   getbufvar(a:buffer, 'ale_lsp_root', {})
+    \)
 
     if type(l:buffer_ale_root) is v:t_string
         return l:buffer_ale_root
@@ -218,9 +222,15 @@ function! ale#lsp_linter#FindProjectRoot(buffer, linter) abort
         endif
     endif
 
+    let l:global_root = g:ale_root
+
+    if empty(g:ale_root) && exists('g:ale_lsp_root')
+        let l:global_root = g:ale_lsp_root
+    endif
+
     " Try to get a global setting for the root
-    if has_key(g:ale_lsp_root, a:linter.name)
-        let l:Root = g:ale_lsp_root[a:linter.name]
+    if has_key(l:global_root, a:linter.name)
+        let l:Root = l:global_root[a:linter.name]
 
         if type(l:Root) is v:t_func
             return l:Root(a:buffer)

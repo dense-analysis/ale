@@ -963,8 +963,8 @@ g:ale_default_navigation                             *g:ale_default_navigation*
   buffer, such as for |ALEFindReferences|, or |ALEGoToDefinition|.
 
 
-g:ale_detail_to_floating_preview                            *g:ale_detail_to_floating_preview*
-                                                            *b:ale_detail_to_floating_preview*
+g:ale_detail_to_floating_preview             *g:ale_detail_to_floating_preview*
+                                             *b:ale_detail_to_floating_preview*
   Type: |Number|
   Default: `0`
 
@@ -1195,7 +1195,7 @@ g:ale_fix_on_save_ignore                             *g:ale_fix_on_save_ignore*
   let g:ale_fix_on_save_ignore = [g:AddBar]
 <
 
-g:ale_floating_preview                                       *g:ale_floating_preview*
+g:ale_floating_preview                                 *g:ale_floating_preview*
 
   Type: |Number|
   Default: `0`
@@ -1263,8 +1263,8 @@ g:ale_hover_to_preview                                 *g:ale_hover_to_preview*
   instead of in balloons or the message line.
 
 
-g:ale_hover_to_floating_preview                       *g:ale_hover_to_floating_preview*
-                                                      *b:ale_hover_to_floating_preview*
+g:ale_hover_to_floating_preview               *g:ale_hover_to_floating_preview*
+                                              *b:ale_hover_to_floating_preview*
   Type: |Number|
   Default: `0`
 
@@ -1724,24 +1724,6 @@ g:ale_lsp_suggestions                                   *g:ale_lsp_suggestions*
   addition to warnings and errors.
 
 
-g:ale_lsp_root                                                 *g:ale_lsp_root*
-                                                               *b:ale_lsp_root*
-
-  Type: |Dictionary| or |String|
-  Default: {}
-
-  This option is used to determine the project root for the LSP linter. If the
-  value is a |Dictionary|, it maps a linter to either a string containing the
-  project root or a |Funcref| to call to look up the root. The funcref is
-  provided the buffer number as its argument.
-
-  The buffer-specific variable may additionally be a string containing the
-  project root itself.
-
-  If neither variable yields a result, a linter-specific function is invoked to
-  detect a project root. If this, too, yields no result, the linter is disabled.
-
-
 g:ale_max_buffer_history_size                   *g:ale_max_buffer_history_size*
 
   Type: |Number|
@@ -1884,6 +1866,25 @@ g:ale_rename_tsserver_find_in_strings   *g:ale_rename_tsserver_find_in_strings*
   If enabled, this option will tell tsserver to find and replace text in
   strings when calling |ALERename|. It can be enabled by settings the value to
   `1`.
+
+
+g:ale_root                                                         *g:ale_root*
+                                                                   *b:ale_root*
+
+  Type: |Dictionary| or |String|
+  Default: {}
+
+  This option is used to determine the project root for a linter. If the value
+  is a |Dictionary|, it maps a linter to either a |String| containing the
+  project root or a |Funcref| to call to look up the root. The |Funcref| is
+  provided the buffer number as its argument.
+
+  The buffer-specific variable may additionally be a string containing the
+  project root itself.
+
+  If neither variable yields a result, a linter-specific function is invoked to
+  detect a project root. If this, too, yields no result, and the linter is an
+  LSP linter, it will not run.
 
 
 g:ale_set_balloons                                         *g:ale_set_balloons*

@@ -87,9 +87,6 @@ let g:ale_lint_on_save = get(g:, 'ale_lint_on_save', 1)
 " This flag can be set to 1 to enable linting when the filetype is changed.
 let g:ale_lint_on_filetype_changed = get(g:, 'ale_lint_on_filetype_changed', 1)
 
-" This Dictionary configures the default LSP roots for various linters.
-let g:ale_lsp_root = get(g:, 'ale_lsp_root', {})
-
 " If set to 1, hints and suggestion from LSP servers and tsserver will be shown.
 let g:ale_lsp_suggestions = get(g:, 'ale_lsp_suggestions', 0)
 
@@ -103,6 +100,9 @@ let g:ale_enabled = get(g:, 'ale_enabled', 1)
 " A Dictionary mapping linter or fixer names to Arrays of two-item Arrays
 " mapping filename paths from one system to another.
 let g:ale_filename_mappings = get(g:, 'ale_filename_mappings', {})
+
+" This Dictionary configures the default project roots for various linters.
+let g:ale_root = get(g:, 'ale_root', {})
 
 " These flags dictates if ale uses the quickfix or the loclist (loclist is the
 " default, quickfix overrides loclist).
