@@ -1205,9 +1205,9 @@ g:ale_floating_window_border                       *g:ale_floating_window_border
   Type: |List|
   Default: `['|', '-', '+', '+', '+', '+']`
 
-  When set to `[]`, the border rendering is disabled. The elements in the list
-  present the values for horizontal, top, top-left, top-right, bottom-right 
-  and bottom-left.
+  When set to `[]`, window borders are disabled. The elements in the list
+  set the horizontal, top, top-left, top-right, bottom-right 
+  and bottom-left border characters, respectively.
 
   If the terminal suuports unicode, you may set the value with
   ` ['│', '─', '╭', '╮', '╯', '╰']` for a beautiful looking.
