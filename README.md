@@ -919,8 +919,7 @@ You could disable the border with an empty list.
 let g:ale_floating_window_border = []
 ```
 
-If the terminal supports unicode, you may use the setting to beauty the
-floating window.
+If the terminal supports Unicode, you might try setting the value like below, to make it look nicer.
 
 ```vim
 let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰']
