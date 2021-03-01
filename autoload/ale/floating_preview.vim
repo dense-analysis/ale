@@ -47,14 +47,51 @@ function! ale#floating_preview#Show(lines, ...) abort
         endif
     augroup END
 
-    let l:width = max(map(copy(a:lines), 'strdisplaywidth(v:val)'))
-    let l:height = min([len(a:lines), 10])
+    let [l:lines, l:width, l:height] = s:PrepareWindowContent(a:lines)
+
     call nvim_win_set_width(w:preview['id'], l:width)
     call nvim_win_set_height(w:preview['id'], l:height)
-
-    call nvim_buf_set_lines(w:preview['buffer'], 0, -1, v:false, a:lines)
+    call nvim_buf_set_lines(w:preview['buffer'], 0, -1, v:false, l:lines)
     call nvim_buf_set_option(w:preview['buffer'], 'modified', v:false)
     call nvim_buf_set_option(w:preview['buffer'], 'modifiable', v:false)
+endfunction
+
+function! s:PrepareWindowContent(lines) abort
+    let l:max_height = 10
+
+    let l:width = max(map(copy(a:lines), 'strdisplaywidth(v:val)'))
+    let l:height = min([len(a:lines), l:max_height])
+
+    if empty(g:ale_floating_window_border)
+        return [a:lines, l:width, l:height]
+    endif
+
+    " Add the size of borders
+    let l:width += 2
+    let l:height += 2
+
+    let l:hor          = g:ale_floating_window_border[0]
+    let l:top          = g:ale_floating_window_border[1]
+    let l:top_left     = g:ale_floating_window_border[2]
+    let l:top_right    = g:ale_floating_window_border[3]
+    let l:bottom_right = g:ale_floating_window_border[4]
+    let l:bottom_left  = g:ale_floating_window_border[5]
+
+    let l:lines = [l:top_left . repeat(l:top, l:width - 2) . l:top_right]
+
+    for l:line in a:lines
+        let l:line_width = strchars(l:line)
+        let l:lines = add(l:lines, l:hor . l:line . repeat(' ', l:width - l:line_width - 2). l:hor)
+    endfor
+
+    " Truncate the lines
+    if len(l:lines) > l:max_height + 1
+        let l:lines = l:lines[0:l:max_height]
+    endif
+
+    let l:lines = add(l:lines, l:bottom_left . repeat(l:top, l:width - 2) . l:bottom_right)
+
+    return [l:lines, l:width, l:height]
 endfunction
 
 function! s:Create(options) abort
@@ -88,4 +125,3 @@ function! s:Close() abort
 
     unlet w:preview
 endfunction
-
