@@ -77,7 +77,7 @@ function! s:PrepareWindowContent(lines) abort
     let l:bottom_right = g:ale_floating_window_border[4]
     let l:bottom_left  = g:ale_floating_window_border[5]
 
-    let l:lines = add([], l:top_left . repeat(l:top, l:width - 2) . l:top_right)
+    let l:lines = [l:top_left . repeat(l:top, l:width - 2) . l:top_right]
 
     for s:line in a:lines
         let l:line_width = strchars(s:line)
