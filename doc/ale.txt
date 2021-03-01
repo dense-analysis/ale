@@ -1209,8 +1209,8 @@ g:ale_floating_window_border                       *g:ale_floating_window_border
   set the horizontal, top, top-left, top-right, bottom-right 
   and bottom-left border characters, respectively.
 
-  If the terminal suuports unicode, you may set the value with
-  ` ['│', '─', '╭', '╮', '╯', '╰']` for a beautiful looking.
+  If the terminal supports Unicode, you might try setting the value to
+  ` ['│', '─', '╭', '╮', '╯', '╰']`, to make it look nicer.
 
 
 g:ale_history_enabled                                   *g:ale_history_enabled*
