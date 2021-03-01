@@ -910,8 +910,8 @@ ALE to support this.
 
 ### 5.xxi. How can I change the borders for floating preview windows?
 
-The borders for floating preview is enabled by default. You could use the
-`g:ale_floating_window_border` to control.
+Borders for floating preview windows are enabled by default. You can use the
+`g:ale_floating_window_border` setting to configure them.
 
 You could disable the border with an empty list.
 
