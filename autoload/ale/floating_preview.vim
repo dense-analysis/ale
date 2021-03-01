@@ -79,9 +79,9 @@ function! s:PrepareWindowContent(lines) abort
 
     let l:lines = [l:top_left . repeat(l:top, l:width - 2) . l:top_right]
 
-    for s:line in a:lines
-        let l:line_width = strchars(s:line)
-        let l:lines = add(l:lines, l:hor . s:line . repeat(' ', l:width - l:line_width - 2). l:hor)
+    for l:line in a:lines
+        let l:line_width = strchars(l:line)
+        let l:lines = add(l:lines, l:hor . l:line . repeat(' ', l:width - l:line_width - 2). l:hor)
     endfor
 
     " Truncate the lines
