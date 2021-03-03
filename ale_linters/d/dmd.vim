@@ -3,7 +3,7 @@
 
 function! s:GetDUBCommand(buffer) abort
     " If we can't run dub, then skip this command.
-    if !executable('dub')
+    if executable('dub')
         " Returning an empty string skips to the DMD command.
         let l:config = ale#d#FindDUBConfig(a:buffer)
 
