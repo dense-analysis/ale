@@ -20,6 +20,10 @@ function! ale_linters#terraform#terraform#GetType(severity) abort
     return 'E'
 endfunction
 
+function! ale_linters#terraform#terraform#GetDetail(error) abort
+    return get(a:error, 'detail', get(a:error, 'summary', ''))
+endfunction
+
 function! ale_linters#terraform#terraform#Handle(buffer, lines) abort
     let l:output = []
 
@@ -33,7 +37,7 @@ function! ale_linters#terraform#terraform#Handle(buffer, lines) abort
             \   'filename': ale#path#GetAbsPath(l:dir, l:error['range']['filename']),
             \   'lnum': l:error['range']['start']['line'],
             \   'col': l:error['range']['start']['column'],
-            \   'text': l:error['detail'],
+            \   'text': ale_linters#terraform#terraform#GetDetail(l:error),
             \   'type': ale_linters#terraform#terraform#GetType(l:error['severity']),
             \})
         else
@@ -41,7 +45,7 @@ function! ale_linters#terraform#terraform#Handle(buffer, lines) abort
             \   'filename': l:file,
             \   'lnum': 0,
             \   'col': 0,
-            \   'text': l:error['detail'],
+            \   'text': ale_linters#terraform#terraform#GetDetail(l:error),
             \   'type': ale_linters#terraform#terraform#GetType(l:error['severity']),
             \})
         endif

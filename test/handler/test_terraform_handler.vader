@@ -59,3 +59,41 @@ Execute(The output should be correct):
   \ '  ]',
   \ '}',
   \ ])
+
+Execute(Should use summary if detail not available):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 91,
+  \     'col': 41,
+  \     'filename': ale#path#Simplify(g:dir . '/main.tf'),
+  \     'type': 'E',
+  \     'text': 'storage_os_disk: required field is not set',
+  \   }
+  \ ],
+  \ ale_linters#terraform#terraform#Handle(bufnr(''), [
+  \ '{',
+  \ '  "valid": false,',
+  \ '  "error_count": 1,',
+  \ '  "warning_count": 0,',
+  \ '  "diagnostics": [',
+  \ '    {',
+  \ '      "severity": "error",',
+  \ '      "summary": "storage_os_disk: required field is not set",',
+  \ '      "range": {',
+  \ '        "filename": "main.tf",',
+  \ '        "start": {',
+  \ '          "line": 91,',
+  \ '          "column": 41,',
+  \ '          "byte": 2381',
+  \ '        },',
+  \ '        "end": {',
+  \ '          "line": 91,',
+  \ '          "column": 41,',
+  \ '          "byte": 2381',
+  \ '        }',
+  \ '      }',
+  \ '    }',
+  \ '  ]',
+  \ '}'
+  \ ])
