@@ -7,7 +7,7 @@ call ale#Set('tex_texlab_options', '')
 function! ale_linters#tex#texlab#GetProjectRoot(buffer) abort
     let l:project_root = ale#path#FindNearestDirectory(a:buffer, '.git')
 
-    return !empty(l:project_root) ? fnamemodify(l:project_root, ':h') : fnamemodify(a:buffer, ':h')
+    return !empty(l:project_root) ? fnamemodify(l:project_root, ':h') : ''
 endfunction
 
 function! ale_linters#tex#texlab#GetCommand(buffer) abort
