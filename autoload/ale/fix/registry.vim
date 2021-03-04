@@ -440,6 +440,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#ptop#Fix',
 \       'suggested_filetypes': ['pascal'],
 \       'description': 'Fix Pascal files with ptop.',
+\   },
+\   'vfmt': {
+\       'function': 'ale#fixers#vfmt#Fix',
+\       'suggested_filetypes': ['v'],
+\       'description': 'A formatter for V source code.',
 \   }
 \}
 
