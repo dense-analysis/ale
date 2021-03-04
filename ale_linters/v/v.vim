@@ -12,6 +12,7 @@ function! ale_linters#v#v#GetCommand(buffer) abort
     \   . ' .'
     \   . (!empty(l:options) ? ' ' . l:options : '')
     \   . ' -o /tmp/vim-ale-v'
+
     return l:command
 endfunction
 
@@ -42,17 +43,19 @@ function! ale_linters#v#v#Handler(buffer, lines) abort
     "    21 |         height: win_height
     "    22 |         title: 'Counter'
     let l:current = {}
+
     for l:line in a:lines
         " matches basic error description
         let l:match = matchlist(l:line,
-            \ '\([^:]\+\):\([^:]\+\):\([^:]\+\): \([^:]\+\): \(.*\)')
+        \ '\([^:]\+\):\([^:]\+\):\([^:]\+\): \([^:]\+\): \(.*\)')
+
         if !empty(l:match)
             let l:current = {
             \   'filename': ale#path#GetAbsPath(l:dir, l:match[1]),
             \   'lnum': l:match[2] + 0,
             \   'col': l:match[3] + 0,
             \   'text': l:match[5],
-            \   'type': l:match[4] is 'error' ? 'E' : 'W',
+            \   'type': l:match[4] is# 'error' ? 'E' : 'W',
             \}
             call add(l:output, l:current)
             continue
@@ -60,6 +63,7 @@ function! ale_linters#v#v#Handler(buffer, lines) abort
 
         " try to get information about the ending column
         let l:tildematch = matchstr(l:line, '\~\+')
+
         if !empty(l:tildematch)
             let l:current['end_col'] = l:current['col'] + len(l:tildematch)
         endif
