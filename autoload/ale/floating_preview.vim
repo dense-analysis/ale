@@ -79,7 +79,10 @@ function! s:PrepareWindowContent(lines) abort
 
     let l:lines = [l:top_left . repeat(l:top, l:width - 2) . l:top_right]
 
+    let l:tabs = repeat(' ', &tabstop)
+
     for l:line in a:lines
+        let l:line = substitute(l:line, '\t', l:tabs, 'g')
         let l:line_width = strchars(l:line)
         let l:lines = add(l:lines, l:hor . l:line . repeat(' ', l:width - l:line_width - 2). l:hor)
     endfor
