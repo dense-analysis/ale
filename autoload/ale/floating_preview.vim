@@ -57,10 +57,8 @@ function! ale#floating_preview#Show(lines, ...) abort
 endfunction
 
 function! s:PrepareWindowContent(lines) abort
-    let l:max_height = 10
-
     let l:width = max(map(copy(a:lines), 'strdisplaywidth(v:val)'))
-    let l:height = min([len(a:lines), l:max_height])
+    let l:height = min([len(a:lines), g:ale_floating_preview_maxheight])
 
     if empty(g:ale_floating_window_border)
         return [a:lines, l:width, l:height]
@@ -88,8 +86,8 @@ function! s:PrepareWindowContent(lines) abort
     endfor
 
     " Truncate the lines
-    if len(l:lines) > l:max_height + 1
-        let l:lines = l:lines[0:l:max_height]
+    if len(l:lines) > g:ale_floating_preview_maxheight + 1
+        let l:lines = l:lines[0:g:ale_floating_preview_maxheight]
     endif
 
     let l:lines = add(l:lines, l:bottom_left . repeat(l:top, l:width - 2) . l:bottom_right)

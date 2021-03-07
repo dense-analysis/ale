@@ -155,6 +155,9 @@ let g:ale_detail_to_floating_preview = get(g:, 'ale_detail_to_floating_preview',
 " bottom-right and bottom-left
 let g:ale_floating_window_border = get(g:, 'ale_floating_window_border', ['|', '-', '+', '+', '+', '+'])
 
+" Max height for floating window in Neovim
+let g:ale_floating_preview_maxheight = get(g:, 'ale_floating_preview_maxheight', 10)
+
 " This flag can be set to 0 to disable warnings for trailing whitespace
 let g:ale_warn_about_trailing_whitespace = get(g:, 'ale_warn_about_trailing_whitespace', 1)
 " This flag can be set to 0 to disable warnings for trailing blank lines
