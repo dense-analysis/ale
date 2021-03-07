@@ -688,6 +688,21 @@ g:ale_python_pyls_config                             *g:ale_python_pyls_config*
       \ }
 <
 
+g:ale_python_pyls_options                       *g:ale_python_pyls_options*
+                                                  *b:ale_python_pyls_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to add command-line arguments to the pyls
+  invocation.
+
+  For example, an alternative way to run the pyls server would be:
+  let g:ale_python_pyls_executable = 'python3'
+  let g:ale_python_pyls_options = '-m pyls'
+
+  after making sure it's installed for the appropriate Python versions (e.g.
+  `python3 -m pip install --user pyls`).
+
 ===============================================================================
 pyre                                                          *ale-python-pyre*
 
