@@ -1,13 +1,14 @@
 " Author: Ricardo Liang <ricardoliang@gmail.com>
+" Author: ourigen <ourigen [at] pm.me>
 " Description: Texlab language server (Rust rewrite)
 
 call ale#Set('tex_texlab_executable', 'texlab')
 call ale#Set('tex_texlab_options', '')
 
 function! ale_linters#tex#texlab#GetProjectRoot(buffer) abort
-    let l:project_root = ale#path#FindNearestDirectory(a:buffer, '.git')
+    let l:git_path = ale#path#FindNearestDirectory(a:buffer, '.git')
 
-    return !empty(l:project_root) ? fnamemodify(l:project_root, ':h') : ''
+    return !empty(l:git_path) ? fnamemodify(l:git_path, ':h:h') : ''
 endfunction
 
 function! ale_linters#tex#texlab#GetCommand(buffer) abort
