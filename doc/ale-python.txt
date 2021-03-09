@@ -688,8 +688,8 @@ g:ale_python_pyls_config                             *g:ale_python_pyls_config*
       \ }
 <
 
-g:ale_python_pyls_options                       *g:ale_python_pyls_options*
-                                                  *b:ale_python_pyls_options*
+g:ale_python_pyls_options                           *g:ale_python_pyls_options*
+                                                    *b:ale_python_pyls_options*
   Type: |String|
   Default: `''`
 
