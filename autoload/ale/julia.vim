@@ -5,6 +5,10 @@
 let s:__ale_julia_project_filenames = ['REQUIRE', 'Manifest.toml', 'Project.toml']
 
 function! ale#julia#FindProjectRoot(buffer) abort
+    if $JULIA_PROJECT isnot# ''
+        return $JULIA_PROJECT
+    endif
+
     for l:project_filename in s:__ale_julia_project_filenames
         let l:full_path = ale#path#FindNearestFile(a:buffer, l:project_filename)
 

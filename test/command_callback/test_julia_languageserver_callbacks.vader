@@ -11,7 +11,7 @@ After:
 Execute(The default executable path should be correct):
   AssertLinter 'julia',
   \ ale#Escape('julia') .
-  \' --project=@. --startup-file=no --history-file=no -e ' .
+  \' ' . ale#Escape('--project=@.') . ' --startup-file=no --history-file=no -e ' .
   \ ale#Escape('using LanguageServer; using Pkg; import StaticLint; import SymbolServer; server = LanguageServer.LanguageServerInstance(isdefined(Base, :stdin) ? stdin : STDIN, isdefined(Base, :stdout) ? stdout : STDOUT, dirname(Pkg.Types.Context().env.project_file)); server.runlinter = true; run(server);')
 
 Execute(The executable should be configurable):
@@ -19,7 +19,7 @@ Execute(The executable should be configurable):
 
   AssertLinter 'julia-new',
   \ ale#Escape('julia-new') .
-  \' --project=@. --startup-file=no --history-file=no -e ' .
+  \' ' . ale#Escape('--project=@.') . ' --startup-file=no --history-file=no -e ' .
   \ ale#Escape('using LanguageServer; using Pkg; import StaticLint; import SymbolServer; server = LanguageServer.LanguageServerInstance(isdefined(Base, :stdin) ? stdin : STDIN, isdefined(Base, :stdout) ? stdout : STDOUT, dirname(Pkg.Types.Context().env.project_file)); server.runlinter = true; run(server);')
 
 Execute(The project root should be detected correctly):
