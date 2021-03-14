@@ -2777,12 +2777,13 @@ documented in additional help files.
   hcl.....................................|ale-hcl-options|
     terraform-fmt.........................|ale-hcl-terraform-fmt|
   html....................................|ale-html-options|
+    angular...............................|ale-html-angular|
     fecs..................................|ale-html-fecs|
     html-beautify.........................|ale-html-beautify|
     htmlhint..............................|ale-html-htmlhint|
-    tidy..................................|ale-html-tidy|
     prettier..............................|ale-html-prettier|
     stylelint.............................|ale-html-stylelint|
+    tidy..................................|ale-html-tidy|
     write-good............................|ale-html-write-good|
   idris...................................|ale-idris-options|
     idris.................................|ale-idris-idris|

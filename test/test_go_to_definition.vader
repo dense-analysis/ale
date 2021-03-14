@@ -343,6 +343,29 @@ Execute(Other files should be jumped to for LSP definition responses):
   AssertEqual [3, 8], getpos('.')[1:2]
   AssertEqual {}, ale#definition#GetMap()
 
+Execute(Newer LocationLink items should be supported):
+  call ale#definition#SetMap({3: {'open_in': 'current-buffer'}})
+  call ale#definition#HandleLSPResponse(
+  \ 1,
+  \ {
+  \   'id': 3,
+  \   'result': {
+  \     'targetUri': ale#path#ToURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \     'targetRange': {
+  \       'start': {'line': 2, 'character': 7},
+  \     },
+  \   },
+  \ }
+  \)
+
+  AssertEqual
+  \ [
+  \   'edit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \ ],
+  \ g:expr_list
+  AssertEqual [3, 8], getpos('.')[1:2]
+  AssertEqual {}, ale#definition#GetMap()
+
 Execute(Locations inside the same file should be jumped to without using :edit):
   call ale#definition#SetMap({3: {'open_in': 'current-buffer'}})
   call ale#definition#HandleLSPResponse(

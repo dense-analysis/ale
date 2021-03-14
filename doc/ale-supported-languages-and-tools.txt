@@ -216,10 +216,11 @@ Notes:
 * HCL
   * `terraform-fmt`
 * HTML
-  * `HTMLHint`
   * `alex`!!
+  * `angular`
   * `fecs`
   * `html-beautify`
+  * `htmlhint`
   * `prettier`
   * `proselint`
   * `tidy`
