@@ -3010,6 +3010,8 @@ documented in additional help files.
     stylelint.............................|ale-sugarss-stylelint|
   swift...................................|ale-swift-options|
     sourcekitlsp..........................|ale-swift-sourcekitlsp|
+  systemd.................................|ale-systemd-options|
+    systemd-analyze.......................|ale-systemd-analyze|
   tcl.....................................|ale-tcl-options|
     nagelfar..............................|ale-tcl-nagelfar|
   terraform...............................|ale-terraform-options|
