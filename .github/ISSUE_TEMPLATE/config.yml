@@ -1,0 +1,6 @@
+---
+blank_issues_enabled: false
+contact_links:
+  - name: Ask for Help
+    url: https://github.com/dense-analysis/ale/discussions/new?category=q-a-ask-for-help-with-problems
+    about: Ask for Help in ALE Discussions
