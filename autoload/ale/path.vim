@@ -116,7 +116,7 @@ function! ale#path#Dirname(path) abort
     endif
 
     " For /foo/bar/ we need :h:h to get /foo
-    if a:path[-1:] is# '/'
+    if a:path[-1:] is# '/' || (has('win32') && a:path[-1:] is# '\')
         return fnamemodify(a:path, ':h:h')
     endif
 
