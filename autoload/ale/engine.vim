@@ -648,6 +648,11 @@ function! s:RunLinters(
     " We can only clear the results if we aren't checking the buffer.
     let l:can_clear_results = !ale#engine#IsCheckingBuffer(a:buffer)
 
+    " Tell other sources that they can start checking the buffer now.
+    let g:ale_want_results_buffer = a:buffer
+    silent doautocmd <nomodeline> User ALEWantResults
+    unlet! g:ale_want_results_buffer
+
     silent doautocmd <nomodeline> User ALELintPre
 
     for [l:lint_file, l:linter] in a:slots

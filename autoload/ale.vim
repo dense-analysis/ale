@@ -102,13 +102,13 @@ function! s:Lint(buffer, should_lint_file, timer_id) abort
     let l:linters = ale#linter#Get(l:filetype)
     let l:linters = ale#linter#RemoveIgnored(a:buffer, l:filetype, l:linters)
 
-    " Tell other sources that they can start checking the buffer now.
-    let g:ale_want_results_buffer = a:buffer
-    silent doautocmd <nomodeline> User ALEWantResults
-    unlet! g:ale_want_results_buffer
-
     " Don't set up buffer data and so on if there are no linters to run.
     if !has_key(g:ale_buffer_info, a:buffer) && empty(l:linters)
+        " Tell other sources that they can start checking the buffer now.
+        let g:ale_want_results_buffer = a:buffer
+        silent doautocmd <nomodeline> User ALEWantResults
+        unlet! g:ale_want_results_buffer
+
         return
     endif
 
