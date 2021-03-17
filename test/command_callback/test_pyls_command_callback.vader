@@ -17,6 +17,11 @@ Execute(The pyls executable should be configurable):
 
   AssertLinter '~/.local/bin/pyls' , ale#Escape('~/.local/bin/pyls')
 
+Execute(The pyls command callback should let you set options):
+  let g:ale_python_pyls_options = '--some-option'
+
+  AssertLinter 'pyls', ale#Escape('pyls') . ' --some-option'
+
 Execute(The pyls executable should be run from the virtualenv path):
   call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
 
