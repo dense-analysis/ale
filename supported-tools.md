@@ -306,6 +306,7 @@ formatting.
   * [languagetool](https://languagetool.org/) :floppy_disk:
   * [markdownlint](https://github.com/DavidAnson/markdownlint) :floppy_disk:
   * [mdl](https://github.com/mivok/markdownlint)
+  * [pandoc](https://pandoc.org)
   * [prettier](https://github.com/prettier/prettier)
   * [proselint](http://proselint.com/)
   * [redpen](http://redpen.cc/)

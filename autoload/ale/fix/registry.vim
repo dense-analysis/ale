@@ -311,6 +311,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['reason'],
 \       'description': 'Fix ReasonML files with refmt.',
 \   },
+\   'pandoc': {
+\       'function': 'ale#fixers#pandoc#Fix',
+\       'suggested_filetypes': ['markdown'],
+\       'description': 'Fix markdown files with pandoc.',
+\   },
 \   'shfmt': {
 \       'function': 'ale#fixers#shfmt#Fix',
 \       'suggested_filetypes': ['sh'],
