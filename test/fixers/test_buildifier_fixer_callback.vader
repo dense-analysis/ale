@@ -11,7 +11,9 @@ Execute(The buildifier callback should return the correct default values):
   AssertFixer
   \ {
   \   'command': ale#Escape(g:ale_bazel_buildifier_executable)
-  \     . ' -mode fix -lint fix -type workspace -'
+  \     . ' -mode fix -lint fix -path '
+  \     . ale#Escape(ale#test#GetFilename('../test-files/bazel/WORKSPACE'))
+  \     . ' -'
   \ }
 
 Execute(The buildifier callback should include any additional options):
@@ -21,23 +23,7 @@ Execute(The buildifier callback should include any additional options):
   AssertFixer
   \ {
   \   'command': ale#Escape(g:ale_bazel_buildifier_executable)
-  \     . ' -mode fix -lint fix -type workspace --some-option -',
-  \ }
-
-Execute(The buildifier callback should recognize BUILD files):
-  call ale#test#SetFilename('../test-files/bazel/BUILD')
-
-  AssertFixer
-  \ {
-  \   'command': ale#Escape(g:ale_bazel_buildifier_executable)
-  \     . ' -mode fix -lint fix -type build -'
-  \ }
-
-Execute(The buildifier callback should recognize .bzl files):
-  call ale#test#SetFilename('../test-files/bazel/defs.bzl')
-
-  AssertFixer
-  \ {
-  \   'command': ale#Escape(g:ale_bazel_buildifier_executable)
-  \     . ' -mode fix -lint fix -type bzl -'
+  \     . ' -mode fix -lint fix -path '
+  \     . ale#Escape(ale#test#GetFilename('../test-files/bazel/WORKSPACE'))
+  \     . ' --some-option -'
   \ }
