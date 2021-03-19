@@ -126,6 +126,8 @@ Notes:
   * `dartanalyzer`!!
   * `dartfmt`!!
   * `language_server`
+* desktop
+  * `desktop-file-validate`
 * Dhall
   * `dhall-format`
   * `dhall-freeze`

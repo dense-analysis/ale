@@ -2697,6 +2697,8 @@ documented in additional help files.
     analysis_server.......................|ale-dart-analysis_server|
     dartanalyzer..........................|ale-dart-dartanalyzer|
     dartfmt...............................|ale-dart-dartfmt|
+  desktop.................................|ale-desktop-options|
+    desktop-file-validate.................|ale-desktop-desktop-file-validate|
   dhall...................................|ale-dhall-options|
     dhall-format..........................|ale-dhall-format|
     dhall-freeze..........................|ale-dhall-freeze|
