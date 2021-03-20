@@ -109,6 +109,7 @@ Notes:
 * Cucumber
   * `cucumber`
 * CUDA
+  * `clangd`
   * `nvcc`!!
 * Cypher
   * `cypher-lint`
