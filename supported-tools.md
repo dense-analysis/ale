@@ -498,6 +498,9 @@ formatting.
   * [stylelint](https://github.com/stylelint/stylelint)
 * SugarSS
   * [stylelint](https://github.com/stylelint/stylelint)
+* Svelte
+  * [prettier](https://github.com/prettier/prettier)
+  * [svelteserver](https://github.com/sveltejs/language-tools/tree/master/packages/language-server)
 * Swift
   * [Apple swift-format](https://github.com/apple/swift-format)
   * [sourcekit-lsp](https://github.com/apple/sourcekit-lsp)

@@ -1438,6 +1438,7 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
   \   'ps1': 'powershell',
   \   'rmarkdown': 'r',
   \   'rmd': 'r',
+  \   'svelte': ['svelte', 'javascript'],
   \   'systemverilog': 'verilog',
   \   'typescriptreact': ['typescript', 'tsx'],
   \   'verilog_systemverilog': ['verilog_systemverilog', 'verilog'],
@@ -1588,6 +1589,7 @@ g:ale_linters                                                   *g:ale_linters*
   \   'python': ['flake8', 'mypy', 'pylint', 'pyright'],
   \   'rust': ['cargo', 'rls'],
   \   'spec': [],
+  \   'svelte': ['eslint', 'svelteserver'],
   \   'text': [],
   \   'vue': ['eslint', 'vls'],
   \   'zsh': ['shell'],
@@ -3010,6 +3012,9 @@ documented in additional help files.
     stylelint.............................|ale-stylus-stylelint|
   sugarss.................................|ale-sugarss-options|
     stylelint.............................|ale-sugarss-stylelint|
+  svelte..................................|ale-svelte-options|
+    prettier..............................|ale-svelte-prettier|
+    svelteserver..........................|ale-svelte-svelteserver|
   swift...................................|ale-swift-options|
     sourcekitlsp..........................|ale-swift-sourcekitlsp|
   systemd.................................|ale-systemd-options|
