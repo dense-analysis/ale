@@ -9,7 +9,7 @@ See |ale-javascript-prettier| for information about the available options.
 
 
 ===============================================================================
-svelteserver                                          ale-svelte-svelteserver
+svelteserver                                          *ale-svelte-svelteserver*
 
 g:ale_svelte_svelteserver_executable     *g:ale_svelte_svelteserver_executable*
                                          *b:ale_svelte_svelteserver_executable*
