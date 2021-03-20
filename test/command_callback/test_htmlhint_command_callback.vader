@@ -1,12 +1,12 @@
 Before:
   call ale#assert#SetUpLinterTest('html', 'htmlhint')
-  call ale#test#SetFilename('htmlhint_paths/test.html')
+  call ale#test#SetFilename('../test-files/htmlhint/test.html')
 
   let g:node_executable = ale#path#Simplify(
-  \ g:dir . '/htmlhint_paths/node_modules/.bin/htmlhint'
+  \ g:dir . '/../test-files/htmlhint/node_modules/.bin/htmlhint'
   \)
   let g:config_path = ale#path#Simplify(
-  \ g:dir . '/htmlhint_paths/with_config/.htmlhintrc'
+  \ g:dir . '/../test-files/htmlhint/with_config/.htmlhintrc'
   \)
 
 After:
@@ -33,7 +33,7 @@ Execute(--format=unix should be removed from the options if added):
   \ ale#Escape(g:node_executable) . ' --format=unix %t'
 
 Execute(The configuration file should be automatically detected):
-  call ale#test#SetFilename('htmlhint_paths/with_config/test.html')
+  call ale#test#SetFilename('../test-files/htmlhint/with_config/test.html')
 
   AssertLinter g:node_executable,
   \ ale#Escape(g:node_executable)
@@ -42,7 +42,7 @@ Execute(The configuration file should be automatically detected):
 
 " This is so old configurations which might include the config will work.
 Execute(The configuration file should be configurable through the options variable):
-  call ale#test#SetFilename('htmlhint_paths/with_config/test.html')
+  call ale#test#SetFilename('../test-files/htmlhint/with_config/test.html')
   let g:ale_html_htmlhint_options = '--config=/foo/bar/.htmlhintrc'
 
   AssertLinter g:node_executable,

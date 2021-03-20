@@ -25,7 +25,7 @@ Execute(should configure bingo callback executable):
   AssertLinter 'boo', ale#Escape('boo')
 
 Execute(should set bingo options):
-  call ale#test#SetFilename('go_paths/go1/prj1/file.go')
+  call ale#test#SetFilename('../test-files/go/go1/prj1/file.go')
   " let b:ale_completion_enabled = 1
   let b:ale_go_bingo_options = ''
 
@@ -38,7 +38,7 @@ Execute(should set bingo options):
   \ ale#Escape('bingo') . ' --mode stdio --trace'
 
 Execute(should support Go environment variables):
-  call ale#test#SetFilename('go_paths/go1/prj1/file.go')
+  call ale#test#SetFilename('../test-files/go/go1/prj1/file.go')
   let b:ale_go_go111module = 'on'
 
   AssertLinter 'bingo',
@@ -46,9 +46,9 @@ Execute(should support Go environment variables):
 
 
 Execute(Should return directory for 'go.mod' if found in parent directory):
-  call ale#test#SetFilename('../go_files/test.go')
+  call ale#test#SetFilename('../test-files/go/test.go')
 
-  AssertLSPProject ale#path#Simplify(g:dir . '/../go_files')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/go')
 
 Execute(Should return nearest directory with '.git' if found in parent directory):
   call ale#test#SetFilename('test.go')
@@ -57,7 +57,7 @@ Execute(Should return nearest directory with '.git' if found in parent directory
   AssertLSPProject g:dir
 
 Execute(Should ignore 'go.mod' and return '.git' dir if modules off):
-  call ale#test#SetFilename('../go_files/test.go')
+  call ale#test#SetFilename('../test-files/go/test.go')
 
   let b:ale_go_go111module = 'off'
   let b:parent_dir = ale#path#Simplify(g:dir . '/..')

@@ -7,11 +7,11 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(bin/cmd.js paths should be preferred):
-  call ale#test#SetFilename('standard-test-files/with-cmd/testfile.js')
+  call ale#test#SetFilename('../test-files/standard/with-cmd/testfile.js')
 
   let b:executable = ale#path#Simplify(
   \   g:dir
-  \   . '/standard-test-files/with-cmd/node_modules/standard/bin/cmd.js'
+  \   . '/../test-files/standard/with-cmd/node_modules/standard/bin/cmd.js'
   \)
 
   AssertLinter b:executable,
@@ -20,11 +20,11 @@ Execute(bin/cmd.js paths should be preferred):
   \   . ' --stdin %s'
 
 Execute(.bin directories should be used too):
-  call ale#test#SetFilename('standard-test-files/with-bin/testfile.js')
+  call ale#test#SetFilename('../test-files/standard/with-bin/testfile.js')
 
   let b:executable = ale#path#Simplify(
   \   g:dir
-  \   . '/standard-test-files/with-bin/node_modules/.bin/standard'
+  \   . '/../test-files/standard/with-bin/node_modules/.bin/standard'
   \)
 
   AssertLinter b:executable, ale#Escape(b:executable) . ' --stdin %s'

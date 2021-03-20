@@ -1,6 +1,6 @@
 Before:
   call ale#assert#SetUpLinterTest('inko', 'inko')
-  call ale#test#SetFilename('inko_paths/test.inko')
+  call ale#test#SetFilename('../test-files/inko/test.inko')
 
 After:
   call ale#assert#TearDownLinterTest()
@@ -10,11 +10,11 @@ Execute(The default executable path should be correct):
 
 Execute(The inko callback should include tests/ for test paths):
   call ale#engine#Cleanup(bufnr(''))
-  noautocmd e! inko_paths/tests/test/test_foo.inko
+  noautocmd e! ../test-files/inko/tests/test/test_foo.inko
   call ale#engine#InitBufferInfo(bufnr(''))
 
   AssertLinter 'inko',
   \ ale#Escape('inko')
   \   . ' build --check --format=json --include '
-  \   . ale#Escape(ale#path#Simplify(g:dir . '/inko_paths/tests/'))
+  \   . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/inko/tests/'))
   \   . ' %s'

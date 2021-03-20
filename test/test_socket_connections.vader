@@ -30,13 +30,13 @@ Before:
     let g:port = 10347
     let g:pid_tcp = str2nr(system(
     \ 'python'
-    \ . ' ' . ale#Escape(g:dir . '/dumb_tcp_server.py')
+    \ . ' ' . ale#Escape(g:dir . '/script/dumb_tcp_server.py')
     \ . ' ' . g:port
     \))
-    let g:pipe_path = 'tmp_named_pipe'
+    let g:pipe_path = tempname()
     let g:pid_pipe = str2nr(system(
     \ 'python'
-    \ . ' ' . ale#Escape(g:dir . '/dumb_named_pipe_server.py')
+    \ . ' ' . ale#Escape(g:dir . '/script/dumb_named_pipe_server.py')
     \ . ' ' . g:pipe_path
     \))
   endif
@@ -104,7 +104,7 @@ Execute(Sending and receiving connections to tcp sockets should work):
   endif
 
 Execute(Sending and receiving connections to named pipe sockets should work):
-  if g:can_run_socket_tests && has('nvim')
+  if g:can_run_socket_tests && has('nvim-0.4')
     let g:channel_id = ale#socket#Open(
     \ g:pipe_path,
     \ {'callback': function('TestCallback')}
@@ -131,9 +131,9 @@ Execute(Sending and receiving connections to named pipe sockets should work):
   endif
 
   " NeoVim versions which can't connect to sockets should just fail.
-  if has('nvim') && !exists('*chanclose')
+  if has('nvim-0.4') && !exists('*chanclose')
     AssertEqual -1, ale#socket#Open(
-    \ 'tmp_named_pipe',
+    \ g:pipe_path,
     \ {'callback': function('function')}
     \)
   endif

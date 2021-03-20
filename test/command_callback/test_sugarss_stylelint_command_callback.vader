@@ -7,11 +7,11 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(node_modules directories should be discovered):
-  call ale#test#SetFilename('stylelint_paths/nested/testfile.sss')
+  call ale#test#SetFilename('../test-files/stylelint/nested/testfile.sss')
 
   let b:executable = ale#path#Simplify(
   \   g:dir
-  \   . '/stylelint_paths/node_modules/.bin/stylelint'
+  \   . '/../test-files/stylelint/node_modules/.bin/stylelint'
   \)
 
   AssertLinter b:executable, ale#Escape(b:executable) . '  --syntax=sugarss --stdin-filename %s'
@@ -20,7 +20,7 @@ Execute(The global override should work):
   let b:ale_sugarss_stylelint_executable = 'foobar'
   let b:ale_sugarss_stylelint_use_global = 1
 
-  call ale#test#SetFilename('stylelint_paths/nested/testfile.sss')
+  call ale#test#SetFilename('../test-files/stylelint/nested/testfile.sss')
 
   AssertLinter 'foobar', ale#Escape('foobar') . '  --syntax=sugarss --stdin-filename %s'
 

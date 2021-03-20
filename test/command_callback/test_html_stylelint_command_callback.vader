@@ -28,11 +28,11 @@ After:
   call ale#linter#Reset()
 
 Execute(node_modules directories should be discovered):
-  call ale#test#SetFilename('stylelint_paths/nested/testfile.html')
+  call ale#test#SetFilename('../test-files/stylelint/nested/testfile.html')
 
   let b:executable = ale#path#Simplify(
   \   g:dir
-  \   . '/stylelint_paths/node_modules/.bin/stylelint'
+  \   . '/../test-files/stylelint/node_modules/.bin/stylelint'
   \)
 
   AssertEqual b:executable, ale_linters#html#stylelint#GetExecutable(bufnr(''))
@@ -44,7 +44,7 @@ Execute(The global override should work):
   let b:ale_html_stylelint_executable = 'foobar'
   let b:ale_html_stylelint_use_global = 1
 
-  call ale#test#SetFilename('stylelint_paths/nested/testfile.html')
+  call ale#test#SetFilename('../test-files/stylelint/nested/testfile.html')
 
   AssertEqual 'foobar', ale_linters#html#stylelint#GetExecutable(bufnr(''))
   AssertEqual

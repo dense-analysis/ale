@@ -7,9 +7,9 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The local phpcs executable should be used):
-  call ale#test#SetFilename('../phpcs-test-files/project-with-phpcs/foo/test.php')
+  call ale#test#SetFilename('../test-files/phpcs/project-with-phpcs/foo/test.php')
 
-  let g:executable = ale#path#Simplify(g:dir . '/../phpcs-test-files/project-with-phpcs/vendor/bin/phpcs')
+  let g:executable = ale#path#Simplify(g:dir . '/../test-files/phpcs/project-with-phpcs/vendor/bin/phpcs')
 
   AssertLinterCwd '%s:h'
   AssertLinter g:executable, ale#Escape(g:executable)
@@ -18,13 +18,13 @@ Execute(The local phpcs executable should be used):
 Execute(use_global should override local executable detection):
   let g:ale_php_phpcs_use_global = 1
 
-  call ale#test#SetFilename('../phpcs-test-files/project-with-phpcs/foo/test.php')
+  call ale#test#SetFilename('../test-files/phpcs/project-with-phpcs/foo/test.php')
 
   AssertLinter 'phpcs', ale#Escape('phpcs')
   \ . ' -s --report=emacs --stdin-path=%s'
 
 Execute(Projects without local executables should use the global one):
-  call ale#test#SetFilename('../phpcs-test-files/project-without-phpcs/foo/test.php')
+  call ale#test#SetFilename('../test-files/phpcs/project-without-phpcs/foo/test.php')
 
   AssertLinter 'phpcs', ale#Escape('phpcs')
   \ . ' -s --report=emacs --stdin-path=%s'

@@ -24,20 +24,20 @@ Execute(The gitlint command callback should let you set options):
   AssertLinter 'gitlint', ale#Escape('gitlint') . ' --some-option lint'
 
 Execute(The gitlint callbacks shouldn't detect virtualenv directories where they don't exist):
-  call ale#test#SetFilename('python_paths/no_virtualenv/subdir/foo/COMMIT_EDITMSG')
+  call ale#test#SetFilename('../test-files/python/no_virtualenv/subdir/foo/COMMIT_EDITMSG')
 
   AssertLinter 'gitlint', ale#Escape('gitlint') . ' lint'
 
 Execute(The gitlint callbacks should detect virtualenv directories):
-  call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/COMMIT_EDITMSG')
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/COMMIT_EDITMSG')
   let b:executable = ale#path#Simplify(
-  \ g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/gitlint'
+  \ g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/gitlint'
   \)
 
   AssertLinter b:executable, ale#Escape(b:executable) . ' lint'
 
 Execute(You should able able to use the global gitlint instead):
-  call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/COMMIT_EDITMSG')
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/COMMIT_EDITMSG')
   let g:ale_gitcommit_gitlint_use_global = 1
 
   AssertLinter 'gitlint', ale#Escape('gitlint') . ' lint'

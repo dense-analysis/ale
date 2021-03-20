@@ -14,7 +14,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The fish_indent callback should return the correct default values):
-  call ale#test#SetFilename('../fish_files/testfile.fish')
+  call ale#test#SetFilename('../test-files/fish/testfile.fish')
 
   AssertEqual
   \ {
@@ -27,7 +27,7 @@ Execute(The fish_indent callback should return the correct default values):
 
 Execute(The fish_indent callback should include custom fish_indent options):
   let g:ale_fish_fish_indent_options = "-d"
-  call ale#test#SetFilename('../fish_files/testfile.fish')
+  call ale#test#SetFilename('../test-files/fish/testfile.fish')
 
   AssertEqual
   \ {

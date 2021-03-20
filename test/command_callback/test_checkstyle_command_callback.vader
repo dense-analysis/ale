@@ -29,11 +29,11 @@ Execute(Custom options should be supported):
   \ . ' %s'
 
 Execute(configuration files set in _config should be supported):
-  let b:ale_java_checkstyle_config = ale#path#Simplify(g:dir . '/checkstyle_paths/other_config.xml')
+  let b:ale_java_checkstyle_config = ale#path#Simplify(g:dir . '/../test-files/checkstyle/other_config.xml')
 
   AssertLinter 'checkstyle',
   \ ale#Escape('checkstyle')
-  \ . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/checkstyle_paths/other_config.xml'))
+  \ . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/checkstyle/other_config.xml'))
   \ . ' %s'
 
 Execute(configuration files set in _options should be preferred over _config):
@@ -47,7 +47,7 @@ Execute(configuration files set in _options should be preferred over _config):
   AssertLinter 'checkstyle', ale#Escape('checkstyle') . ' -x -c /bar.xml %s'
 
 Execute(google_checks.xml should be used by default):
-  call ale#test#SetFilename('checkstyle_paths/test.java')
+  call ale#test#SetFilename('../test-files/checkstyle/test.java')
 
   AssertLinter 'checkstyle',
   \ ale#Escape('checkstyle')
@@ -55,18 +55,18 @@ Execute(google_checks.xml should be used by default):
   \ . ' %s'
 
 Execute(Other relative paths should be supported):
-  let b:ale_java_checkstyle_config = 'checkstyle_paths/other_config.xml'
+  let b:ale_java_checkstyle_config = '../test-files/checkstyle/other_config.xml'
 
   AssertLinter 'checkstyle',
   \ ale#Escape('checkstyle')
-  \ . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/checkstyle_paths/other_config.xml'))
+  \ . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/checkstyle/other_config.xml'))
   \ . ' %s'
 
-  call ale#test#SetFilename('checkstyle_paths/test.java')
+  call ale#test#SetFilename('../test-files/checkstyle/test.java')
 
   let b:ale_java_checkstyle_config = 'other_config.xml'
 
   AssertLinter 'checkstyle',
   \ ale#Escape('checkstyle')
-  \ . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/checkstyle_paths/other_config.xml'))
+  \ . ' -c ' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/checkstyle/other_config.xml'))
   \ . ' %s'

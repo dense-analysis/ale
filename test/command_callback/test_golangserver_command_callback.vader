@@ -7,9 +7,9 @@ Before:
   let g:sep = has('win32') ? ';' : ':'
 
   call ale#assert#SetUpLinterTest('go', 'langserver')
-  let $GOPATH = ale#path#Simplify(g:dir . '/go_paths/go1')
+  let $GOPATH = ale#path#Simplify(g:dir . '/../test-files/go/go1')
   \ . g:sep
-  \ . ale#path#Simplify(g:dir . '/go_paths/go2')
+  \ . ale#path#Simplify(g:dir . '/../test-files/go/go2')
 
 After:
   Restore
@@ -29,7 +29,7 @@ Execute(should configure go-langserver callback executable):
   AssertLinter 'boo', ale#Escape('boo')
 
 Execute(should set go-langserver options):
-  call ale#test#SetFilename('go_paths/go1/prj1/file.go')
+  call ale#test#SetFilename('../test-files/go/go1/prj1/file.go')
   let b:ale_completion_enabled = 1
   let b:ale_go_langserver_options = ''
 
@@ -42,7 +42,7 @@ Execute(should set go-langserver options):
   \ ale#Escape('go-langserver') . ' -gocodecompletion -trace'
 
 Execute(should ignore go-langserver -gocodecompletion option):
-  call ale#test#SetFilename('go_paths/go1/prj1/file.go')
+  call ale#test#SetFilename('../test-files/go/go1/prj1/file.go')
 
   let b:ale_go_langserver_options = '-trace -gocodecompletion'
   let b:ale_completion_enabled = 1
@@ -61,16 +61,16 @@ Execute(should support Go environment variables):
   \ ale#Env('GO111MODULE', 'on') . ale#Escape('go-langserver')
 
 Execute(should set go-langserver for go app1):
-  call ale#test#SetFilename('go_paths/go1/prj1/file.go')
+  call ale#test#SetFilename('../test-files/go/go1/prj1/file.go')
 
   AssertLSPLanguage 'go'
   AssertLSPConfig {}
-  AssertLSPProject ale#path#Simplify(g:dir . '/go_paths/go1')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/go/go1')
 
 Execute(should set go-langserver for go app2):
-  call ale#test#SetFilename('go_paths/go2/prj1/file.go')
+  call ale#test#SetFilename('../test-files/go/go2/prj1/file.go')
 
   AssertLSPLanguage 'go'
   AssertLSPOptions {}
   AssertLSPConfig {}
-  AssertLSPProject ale#path#Simplify(g:dir . '/go_paths/go2')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/go/go2')

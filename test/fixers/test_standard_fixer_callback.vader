@@ -8,13 +8,13 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The executable path should be correct):
-  call ale#test#SetFilename('../eslint-test-files/react-app/subdir/testfile.js')
+  call ale#test#SetFilename('../test-files/eslint/react-app/subdir/testfile.js')
 
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
   \   'command': (has('win32') ? 'node.exe ' : '')
-  \     . ale#Escape(ale#path#Simplify(g:dir . '/../eslint-test-files/react-app/node_modules/standard/bin/cmd.js'))
+  \     . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/node_modules/standard/bin/cmd.js'))
   \     . ' --fix --stdin < %s > %t',
   \ },
   \ ale#fixers#standard#Fix(bufnr(''))

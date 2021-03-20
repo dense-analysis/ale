@@ -25,6 +25,6 @@ Execute(The executable should be configurable):
 Execute(The project root should be detected correctly):
   AssertLSPProject ''
 
-  call ale#test#SetFilename('julia-languageserver-project/test.jl')
+  call ale#test#SetFilename('../test-files/julia/test.jl')
 
-  AssertLSPProject ale#path#Simplify(g:dir . '/julia-languageserver-project')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/julia')

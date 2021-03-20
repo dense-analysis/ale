@@ -1,12 +1,18 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test')
+
+After:
+  call ale#test#RestoreDirectory()
+
 Execute(ale#python#PipenvPresent is true when a pipenv environment is present):
-  call ale#test#SetFilename('/testplugin/test/python_fixtures/pipenv/whatever.py')
+  call ale#test#SetFilename('test-files/python/pipenv/whatever.py')
 
   AssertEqual
   \  ale#python#PipenvPresent(bufnr('%')),
   \  1
 
 Execute(ale#python#PipenvPresent is false true when no pipenv environment is present):
-  call ale#test#SetFilename('/testplugin/test/python_fixtures/no_pipenv/whatever.py')
+  call ale#test#SetFilename('test-files/python/no_pipenv/whatever.py')
 
   AssertEqual
   \  ale#python#PipenvPresent(bufnr('%')),

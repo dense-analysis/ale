@@ -9,18 +9,18 @@ Execute(The project root should be detected correctly using compile_commands.jso
 
   AssertLSPProject ''
 
-  call ale#test#SetFilename('cquery_paths/dummy.c')
+  call ale#test#SetFilename('../test-files/cquery/dummy.c')
 
-  AssertLSPProject ale#path#Simplify(g:dir . '/cquery_paths')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/cquery')
 
 Execute(The project root should be detected correctly using .cquery file):
   call ale#test#SetFilename(tempname() . '/dummy.c')
 
   AssertLSPProject ''
 
-  call ale#test#SetFilename('cquery_paths/with_cquery/dummy.c')
+  call ale#test#SetFilename('../test-files/cquery/with_cquery/dummy.c')
 
-  AssertLSPProject ale#path#Simplify(g:dir . '/cquery_paths/with_cquery')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/cquery/with_cquery')
 
 Execute(The executable should be configurable):
   AssertLinter 'cquery', ale#Escape('cquery')

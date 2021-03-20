@@ -21,9 +21,9 @@ Execute(The yaml swaglint command callback should allow a global installation to
   \ ale#Escape('/usr/local/bin/swaglint') . ' -r compact --stdin'
 
 Execute(The yaml swaglint command callback should allow a local installation to be used):
-  call ale#test#SetFilename('swaglint_paths/docs/swagger.yaml')
+  call ale#test#SetFilename('../test-files/swaglint/docs/swagger.yaml')
 
   AssertLinter
-  \ ale#path#Simplify(g:dir . '/swaglint_paths/node_modules/.bin/swaglint'),
-  \ ale#Escape(ale#path#Simplify(g:dir . '/swaglint_paths/node_modules/.bin/swaglint'))
+  \ ale#path#Simplify(g:dir . '/../test-files/swaglint/node_modules/.bin/swaglint'),
+  \ ale#Escape(ale#path#Simplify(g:dir . '/../test-files/swaglint/node_modules/.bin/swaglint'))
   \   . ' -r compact --stdin'

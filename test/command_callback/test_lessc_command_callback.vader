@@ -10,29 +10,29 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(node_modules directories should be discovered):
-  call ale#test#SetFilename('lessc_paths/nested/testfile.less')
+  call ale#test#SetFilename('../test-files/lessc/nested/testfile.less')
 
   let b:executable = ale#path#Simplify(
   \   g:dir
-  \   . '/lessc_paths/node_modules/.bin/lessc'
+  \   . '/../test-files/lessc/node_modules/.bin/lessc'
   \)
 
   AssertLinter b:executable, ale#Escape(b:executable)
   \ . ' --no-color --lint'
   \ . ' --include-path='
-  \ . ale#Escape(ale#path#Simplify(g:dir . '/lessc_paths/nested'))
+  \ . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/lessc/nested'))
   \ . ' -'
 
 Execute(The global override should work):
   let b:ale_less_lessc_executable = 'foobar'
   let b:ale_less_lessc_use_global = 1
 
-  call ale#test#SetFilename('lessc_paths/nested/testfile.less')
+  call ale#test#SetFilename('../test-files/lessc/nested/testfile.less')
 
   AssertLinter 'foobar', ale#Escape('foobar')
   \ . ' --no-color --lint'
   \ . ' --include-path='
-  \ . ale#Escape(ale#path#Simplify(g:dir . '/lessc_paths/nested'))
+  \ . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/lessc/nested'))
   \ . ' -'
 
 Execute(Extra options should be configurable):

@@ -1,10 +1,10 @@
 Before:
   call ale#assert#SetUpLinterTest('ruby', 'rails_best_practices')
-  call ale#test#SetFilename('../ruby_fixtures/valid_rails_app/db/test.rb')
+  call ale#test#SetFilename('../test-files/ruby/valid_rails_app/db/test.rb')
 
   let b:args = '--silent -f json'
   \ . ' --output-file ' . (has('win32') ? '%t' : '/dev/stdout')
-  let b:app_path = ale#path#Simplify(g:dir . '/../ruby_fixtures/valid_rails_app')
+  let b:app_path = ale#path#Simplify(g:dir . '/../test-files/ruby/valid_rails_app')
   let b:suffix = has('win32') ? '; type %t' : ''
 
 After:
@@ -37,6 +37,6 @@ Execute(Setting bundle appends 'exec rails_best_practices'):
   \   . b:suffix
 
 Execute(Command callback should be empty when not in a valid Rails app):
-  call ale#test#SetFilename('../ruby_fixtures/not_a_rails_app/test.rb')
+  call ale#test#SetFilename('../test-files/ruby/not_a_rails_app/test.rb')
 
   AssertLinter 'rails_best_practices', ''

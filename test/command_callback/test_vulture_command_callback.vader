@@ -15,9 +15,9 @@ Execute(The vulture command callback should lint file directory by default):
   AssertLinter 'vulture', ale#Escape('vulture') . '  .'
 
 Execute(The vulture command callback should lint project root, when present):
-  call ale#test#SetFilename('python_paths/no_virtualenv/subdir/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/no_virtualenv/subdir/foo/bar.py')
 
-  AssertLinterCwd ale#path#Simplify(g:dir . '/python_paths/no_virtualenv/subdir')
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/python/no_virtualenv/subdir')
   AssertLinter 'vulture', ale#Escape('vulture') . '  .'
 
 Execute(The option for disabling change directory works and only lints file):
@@ -37,17 +37,17 @@ Execute(The vulture command callback should let you set options):
   AssertLinter 'vulture', ale#Escape('vulture') . ' --some-option .'
 
 Execute(The vulture command callback should detect virtualenv directories and switch to the project root):
-  call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
 
   let b:executable = ale#path#Simplify(
-  \ g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/vulture'
+  \ g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/vulture'
   \)
 
-  AssertLinterCwd ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/subdir')
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/subdir')
   AssertLinter b:executable, ale#Escape(b:executable) . '  .'
 
 Execute(You should able able to use the global vulture instead):
-  call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
   let g:ale_python_vulture_use_global = 1
 
   AssertLinter 'vulture', ale#Escape('vulture') . '  .'

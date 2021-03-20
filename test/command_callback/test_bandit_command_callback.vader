@@ -40,7 +40,7 @@ Execute(Setting executable to 'pipenv' appends 'run bandit'):
 
 Execute(Pipenv is detected when python_bandit_auto_pipenv is set):
   let g:ale_python_bandit_auto_pipenv = 1
-  call ale#test#SetFilename('/testplugin/test/python_fixtures/pipenv/whatever.py')
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
 
   AssertLinter 'pipenv',
   \ ale#Escape('pipenv')
@@ -49,10 +49,10 @@ Execute(Pipenv is detected when python_bandit_auto_pipenv is set):
   \ . ' -'
 
 Execute(The bandit command callback should add .bandit by default):
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_bandit/namespace/foo/bar.py')
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_bandit/namespace/foo/bar.py')
 
   let b:config_path = ale#path#Simplify(
-  \ g:dir . '/python_paths/with_bandit/.bandit'
+  \ g:dir . '/../test-files/python/with_bandit/.bandit'
   \)
 
   AssertLinter 'bandit',
@@ -62,7 +62,7 @@ Execute(The bandit command callback should add .bandit by default):
   \ . ' -'
 
 Execute(The bandit command callback should support not using .bandit):
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_bandit/subdir/foo/bar.py')
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_bandit/subdir/foo/bar.py')
   let g:ale_python_bandit_use_config = 0
 
   AssertLinter 'bandit',

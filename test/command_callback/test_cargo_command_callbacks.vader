@@ -1,8 +1,8 @@
 Before:
   call ale#assert#SetUpLinterTest('rust', 'cargo')
-  call ale#test#SetFilename('cargo_paths/test.rs')
+  call ale#test#SetFilename('../test-files/cargo/test.rs')
 
-  let g:cd = 'cd ' . ale#Escape(ale#path#Simplify(g:dir . '/cargo_paths')) . ' && '
+  let g:cd = 'cd ' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/cargo')) . ' && '
   let g:suffix = ' --frozen --message-format=json -q'
   let g:ale_rust_cargo_avoid_whole_workspace = 0
 
@@ -120,9 +120,9 @@ Execute(--all-features should be used when g:ale_rust_cargo_default_feature_beha
 
 Execute(Cargo should run from the crate directory when set to avoid the workspace):
   let g:ale_rust_cargo_avoid_whole_workspace = 1
-  call ale#test#SetFilename('cargo_workspace_paths/subpath/test.rs')
+  call ale#test#SetFilename('../test-files/cargo/workspace_paths/subpath/test.rs')
 
-  AssertLinterCwd ale#path#Simplify(g:dir . '/cargo_workspace_paths/subpath')
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/cargo/workspace_paths/subpath')
   call ale#semver#ResetVersionCache()
   AssertLinter 'cargo', [
   \ ale#Escape('cargo') . ' --version',
@@ -131,7 +131,7 @@ Execute(Cargo should run from the crate directory when set to avoid the workspac
 
 Execute(Cargo should not run from the crate directory when not set to avoid the workspace):
   let g:ale_rust_cargo_avoid_whole_workspace = 0
-  call ale#test#SetFilename('cargo_workspace_paths/subpath/test.rs')
+  call ale#test#SetFilename('../test-files/cargo/workspace_paths/subpath/test.rs')
 
   AssertLinterCwd ''
   call ale#semver#ResetVersionCache()

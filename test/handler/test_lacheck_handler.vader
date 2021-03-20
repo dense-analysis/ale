@@ -8,7 +8,7 @@ After:
 
 Execute(The lacheck handler should parse lines correctly):
 
-  call ale#test#SetFilename('command_callback/tex_paths/sample1.tex')
+  call ale#test#SetFilename('command_callback/../test-files/tex/sample1.tex')
 
   AssertEqual
   \ [

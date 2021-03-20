@@ -2,7 +2,7 @@ Before:
   Save g:ale_go_go111module
 
   call ale#assert#SetUpLinterTest('go', 'gosimple')
-  call ale#test#SetFilename('../go_files/testfile2.go')
+  call ale#test#SetFilename('../test-files/go/testfile2.go')
 
 After:
   unlet! b:ale_go_go111module

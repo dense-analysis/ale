@@ -188,6 +188,10 @@ Look at existing tests in the codebase for examples of how to write tests.
 Refer to the Vader documentation for general information on how to write Vader
 tests: https://github.com/junegunn/vader.vim
 
+If you need to add any supporting files for tests, such as empty files present
+to test searching upwards through paths for configuration files, they can be
+added to the `test/test-files` directory.
+
 See |ale-development-linter-tests| for more information on how to write linter
 tests.
 

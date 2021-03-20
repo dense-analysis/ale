@@ -9,12 +9,12 @@ Execute(should set correct defaults):
   AssertLinter 'ink-language-server', ale#Escape('ink-language-server') . ' --stdio'
 
 Execute(should set correct LSP values):
-  call ale#test#SetFilename('ink_paths/story/main.ink')
+  call ale#test#SetFilename('../test-files/ink/story/main.ink')
 
   AssertLSPLanguage 'ink'
   AssertLSPOptions {}
   AssertLSPConfig {}
-  AssertLSPProject ale#path#Simplify(g:dir . '/ink_paths/story')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/ink/story')
 
 Execute(should accept configuration settings):
   AssertLSPConfig {}

@@ -6,7 +6,7 @@ After:
   call ale#assert#TearDownFixerTest()
 
 Execute(The buildifier callback should return the correct default values):
-  call ale#test#SetFilename('bazel_paths/WORKSPACE')
+  call ale#test#SetFilename('../test-files/bazel/WORKSPACE')
 
   AssertFixer
   \ {
@@ -15,7 +15,7 @@ Execute(The buildifier callback should return the correct default values):
   \ }
 
 Execute(The buildifier callback should include any additional options):
-  call ale#test#SetFilename('bazel_paths/WORKSPACE')
+  call ale#test#SetFilename('../test-files/bazel/WORKSPACE')
   let g:ale_bazel_buildifier_options = '--some-option'
 
   AssertFixer
@@ -25,7 +25,7 @@ Execute(The buildifier callback should include any additional options):
   \ }
 
 Execute(The buildifier callback should recognize BUILD files):
-  call ale#test#SetFilename('bazel_paths/BUILD')
+  call ale#test#SetFilename('../test-files/bazel/BUILD')
 
   AssertFixer
   \ {
@@ -34,7 +34,7 @@ Execute(The buildifier callback should recognize BUILD files):
   \ }
 
 Execute(The buildifier callback should recognize .bzl files):
-  call ale#test#SetFilename('bazel_paths/defs.bzl')
+  call ale#test#SetFilename('../test-files/bazel/defs.bzl')
 
   AssertFixer
   \ {

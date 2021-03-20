@@ -16,7 +16,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The ktlint callback should return the correct default values):
-  call ale#test#SetFilename('../kotlin_files/testfile.kt')
+  call ale#test#SetFilename('../test-files/kotlin/testfile.kt')
 
   AssertEqual
   \ {
@@ -29,7 +29,7 @@ Execute(The ktlint callback should return the correct default values):
 Execute(The ktlint callback should include custom ktlint options):
   let g:ale_kotlin_ktlint_options = "--android"
   let g:ale_kotlin_ktlint_rulesets = ['/path/to/custom/ruleset.jar']
-  call ale#test#SetFilename('../kotlin_files/testfile.kt')
+  call ale#test#SetFilename('../test-files/kotlin/testfile.kt')
 
   AssertEqual
   \ {

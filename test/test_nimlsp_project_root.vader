@@ -12,7 +12,7 @@ After:
 
 
 Execute(Detect root of nim project with .git/ correctly):
-  call ale#test#SetFilename('nim-test-files/with-git/src/source.nim')
+  call ale#test#SetFilename('test-files/nim/with-git/src/source.nim')
   call mkdir(g:dir . '/.git')
   AssertEqual
   \ ale#path#Simplify(g:dir),

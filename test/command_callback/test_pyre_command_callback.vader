@@ -17,16 +17,16 @@ Execute(The pyre executable should be configurable):
   \ ale#Escape('~/.local/bin/pyre') . ' persistent'
 
 Execute(The pyre executable should be run from the virtualenv path):
-  call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
 
   let b:executable = ale#path#Simplify(
-  \ g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/pyre'
+  \ g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/pyre'
   \)
 
   AssertLinter b:executable, ale#Escape(b:executable) . ' persistent'
 
 Execute(You should be able to override the pyre virtualenv lookup):
-  call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
 
   let g:ale_python_pyre_use_global = 1
 
@@ -40,7 +40,7 @@ Execute(Setting executable to 'pipenv' appends 'run pyre'):
 
 Execute(Pipenv is detected when python_pyre_auto_pipenv is set):
   let g:ale_python_pyre_auto_pipenv = 1
-  call ale#test#SetFilename('/testplugin/test/python_fixtures/pipenv/whatever.py')
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
 
   AssertLinter 'pipenv',
   \ ale#Escape('pipenv') . ' run pyre persistent'

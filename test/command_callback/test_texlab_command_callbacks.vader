@@ -14,10 +14,10 @@ Execute(The default executable path should be correct):
   AssertLinter 'texlab', ale#Escape('texlab')
 
 Execute(The project root should be detected correctly):
-  call ale#test#SetFilename('tex_paths/sample1.tex')
-  silent! call mkdir('tex_paths/.git')
+  call ale#test#SetFilename('../test-files/tex/sample1.tex')
+  silent! call mkdir('../test-files/tex/.git')
   
-  AssertLSPProject ale#path#Simplify(g:dir . '/tex_paths')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/tex')
 
 Execute(The executable should be configurable):
   let b:ale_tex_texlab_executable = 'foobar'

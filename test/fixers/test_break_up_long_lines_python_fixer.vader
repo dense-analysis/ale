@@ -22,7 +22,7 @@ Execute(Long lines with basic function calls should be broken up correctly):
   \ ])
 
 Execute(Longer lines should be permitted if a configuration file allows it):
-  call ale#test#SetFilename('long-line-project/foo/bar.py')
+  call ale#test#SetFilename('../test-files/long-line/foo/bar.py')
 
   AssertEqual
   \ [

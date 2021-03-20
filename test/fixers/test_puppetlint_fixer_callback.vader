@@ -17,7 +17,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The puppetlint callback should return the correct default values):
-  silent execute 'file ' . fnameescape(g:dir . '/puppet_paths/dummy.pp')
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/puppet/dummy.pp')
 
   AssertEqual
   \ {'read_temporary_file': 1,

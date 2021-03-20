@@ -7,11 +7,11 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(should default to source, bin/sass-lint.js):
-  call ale#test#SetFilename('sasslint-test-files/with-source/test.sass')
+  call ale#test#SetFilename('../test-files/sasslint/with-source/test.sass')
 
   let b:executable = ale#path#Simplify(
   \   g:dir
-  \   . '/sasslint-test-files/with-source/node_modules/sass-lint/bin/sass-lint.js'
+  \   . '/../test-files/sasslint/with-source/node_modules/sass-lint/bin/sass-lint.js'
   \)
 
   AssertLinter b:executable,
@@ -20,11 +20,11 @@ Execute(should default to source, bin/sass-lint.js):
   \   . ' -v -q -f compact %t'
 
 Execute(should fallback to bin, .bin/sass-lint):
-  call ale#test#SetFilename('sasslint-test-files/with-bin/test.sass')
+  call ale#test#SetFilename('../test-files/sasslint/with-bin/test.sass')
 
   let b:executable = ale#path#Simplify(
   \   g:dir
-  \   . '/sasslint-test-files/with-bin/node_modules/.bin/sass-lint'
+  \   . '/../test-files/sasslint/with-bin/node_modules/.bin/sass-lint'
   \)
 
   AssertLinter b:executable, ale#Escape(b:executable) . ' -v -q -f compact %t'

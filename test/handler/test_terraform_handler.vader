@@ -1,7 +1,7 @@
 Before:
   " Load the file which defines the linter.
   runtime ale_linters/terraform/terraform.vim
-  call ale#test#SetDirectory('/testplugin/test/terraform_files')
+  call ale#test#SetDirectory('/testplugin/test/test-files/terraform')
   call ale#test#SetFilename('providers.tf')
 
 After:

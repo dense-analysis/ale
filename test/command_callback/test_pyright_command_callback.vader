@@ -31,17 +31,17 @@ Execute(The default configuration should be mostly empty):
   AssertLSPConfig {'python': {}}
 
 Execute(virtualenv paths should be set in configuration by default):
-  call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
 
   AssertLSPConfig {
   \ 'python': {
-  \   'pythonPath': ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/python'),
-  \   'venvPath': ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env'),
+  \   'pythonPath': ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/python'),
+  \   'venvPath': ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env'),
   \ },
   \}
 
 Execute(The pythonPath should be set based on whatever the ovveride for the venvPath is set to):
-  call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
 
   " This overrides the default detection of the path.
   let b:ale_python_pyright_config = {
@@ -58,7 +58,7 @@ Execute(The pythonPath should be set based on whatever the ovveride for the venv
   \}
 
 Execute(You should be able to override pythonPath when venvPath is detected):
-  call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
 
   " This overrides the default detection of the path.
   let b:ale_python_pyright_config = {
@@ -70,12 +70,12 @@ Execute(You should be able to override pythonPath when venvPath is detected):
   AssertLSPConfig {
   \ 'python': {
   \   'pythonPath': '/bin/python',
-  \   'venvPath': ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env'),
+  \   'venvPath': ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env'),
   \ },
   \}
 
 Execute(You should be able to override both pythonPath and venvPath):
-  call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
 
   " This overrides the default detection of the path.
   let b:ale_python_pyright_config = {
@@ -93,7 +93,7 @@ Execute(You should be able to override both pythonPath and venvPath):
   \}
 
 Execute(You should be able to define other settings):
-  call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
 
   let b:ale_python_pyright_config = {
   \ 'python': {
@@ -107,8 +107,8 @@ Execute(You should be able to define other settings):
   AssertLSPConfig {
   \ 'python': {
   \   'analysis': {'logLevel': 'warning'},
-  \   'pythonPath': ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/python'),
-  \   'venvPath': ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env'),
+  \   'pythonPath': ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/python'),
+  \   'venvPath': ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env'),
   \ },
   \ 'pyright': {
   \   'disableLanguageServices': v:true,

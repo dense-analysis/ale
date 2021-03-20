@@ -32,7 +32,7 @@ Execute(Should return current directory if it contains .terraform directory):
   AssertLSPProject g:dir
 
 Execute(Should return nearest directory with .terraform if found in parent directory):
-  call ale#test#SetFilename('../terraform_files/main.tf')
+  call ale#test#SetFilename('../test-files/terraform/main.tf')
 
   let b:parent_dir = ale#path#Simplify(g:dir . '/..')
   let b:tf_dir = b:parent_dir . '/.terraform'

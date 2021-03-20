@@ -10,9 +10,9 @@ Execute(The default executable path should be correct):
 Execute(The project root should be detected correctly):
   AssertLSPProject ''
 
-  call ale#test#SetFilename('fortran-fortls-project/test.F90')
+  call ale#test#SetFilename('../test-files/fortls-project/test.F90')
 
-  AssertLSPProject ale#path#Simplify(g:dir . '/fortran-fortls-project')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/fortls-project')
 
 Execute(The language should be correct):
   AssertLSPLanguage 'fortran'

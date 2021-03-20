@@ -10,6 +10,6 @@ Execute(The default executable path should be correct):
 Execute(The project root should be detected correctly):
   AssertLSPProject ''
 
-  call ale#test#SetFilename('zig-zls-project/main.zig')
+  call ale#test#SetFilename('../test-files/zig/main.zig')
 
-  AssertLSPProject ale#path#Simplify(g:dir . '/zig-zls-project')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/zig')

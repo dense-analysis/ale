@@ -16,6 +16,6 @@ Execute(There should be no default project root):
   AssertLSPProject ''
 
 Execute(The project root should be detected using bsconfig.json):
-  call ale#test#SetFilename('reason_ls_paths/test.ml')
+  call ale#test#SetFilename('../test-files/reasonml/test.ml')
 
-  AssertLSPProject ale#path#Simplify(g:dir . '/reason_ls_paths')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/reasonml')

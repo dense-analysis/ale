@@ -50,20 +50,20 @@ Execute(Customize executable):
   \ ale#handlers#hdl_checker#GetCommand(bufnr(''))
 
 Execute(Get project root based on .git):
-  call ale#test#SetFilename('hdl_server/with_git/files/foo.vhd')
+  call ale#test#SetFilename('../test-files/hdl_server/with_git/files/foo.vhd')
   " Create .git file
-  silent! call mkdir(g:dir . '/hdl_server/with_git/.git')
-  AssertNotEqual '', glob(g:dir . '/hdl_server/with_git/.git')
+  silent! call mkdir(g:dir . '/../test-files/hdl_server/with_git/.git')
+  AssertNotEqual '', glob(g:dir . '/../test-files/hdl_server/with_git/.git')
 
   AssertEqual
-  \ ale#path#Simplify(g:dir . '/hdl_server/with_git'),
+  \ ale#path#Simplify(g:dir . '/../test-files/hdl_server/with_git'),
   \ ale#handlers#hdl_checker#GetProjectRoot(bufnr(''))
 
 Execute(Get project root based on config file):
-  call ale#test#SetFilename('hdl_server/with_config_file/foo.vhd')
+  call ale#test#SetFilename('../test-files/hdl_server/with_config_file/foo.vhd')
 
   AssertEqual
-  \ ale#path#Simplify(g:dir . '/hdl_server/with_config_file'),
+  \ ale#path#Simplify(g:dir . '/../test-files/hdl_server/with_config_file'),
   \ ale#handlers#hdl_checker#GetProjectRoot(bufnr(''))
 
 Execute(Return no project root if neither .git or config file are found):
@@ -75,7 +75,7 @@ Execute(Return no project root if neither .git or config file are found):
     return 0
   endfunction
 
-  call ale#test#SetFilename('hdl_server/foo.vhd')
+  call ale#test#SetFilename('../test-files/hdl_server/foo.vhd')
 
   AssertEqual
   \ '',

@@ -1,6 +1,6 @@
 Before:
   call ale#assert#SetUpLinterTest('elixir', 'mix')
-  call ale#test#SetFilename('elixir_paths/mix_project/lib/app.ex')
+  call ale#test#SetFilename('../test-files/elixir/mix_project/lib/app.ex')
   let g:env_prefix = ale#Env('MIX_BUILD_PATH', 'TEMP_DIR')
 
 After:
@@ -9,11 +9,11 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default mix command should be correct):
-  AssertLinterCwd ale#path#Simplify(g:dir . '/elixir_paths/mix_project')
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/elixir/mix_project')
   AssertLinter 'mix', g:env_prefix . 'mix compile %s'
 
 Execute(Build mix commands with an umbrella root):
-  call ale#test#SetFilename('elixir_paths/umbrella_project/apps/mix_project/lib/app.ex')
+  call ale#test#SetFilename('../test-files/elixir/umbrella_project/apps/mix_project/lib/app.ex')
 
-  AssertLinterCwd ale#path#Simplify(g:dir . '/elixir_paths/umbrella_project')
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/elixir/umbrella_project')
   AssertLinter 'mix', g:env_prefix . 'mix compile %s'

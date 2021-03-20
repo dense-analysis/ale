@@ -23,9 +23,9 @@ Execute(The yaml spectral command callback should allow a global installation to
   \   . ' lint --ignore-unknown-format -q -f text %t'
 
 Execute(The yaml spectral command callback should allow a local installation to be used):
-  call ale#test#SetFilename('spectral_paths/openapi.yaml')
+  call ale#test#SetFilename('../test-files/spectral/openapi.yaml')
 
   AssertLinter
-  \ ale#path#Simplify(g:dir . '/spectral_paths/node_modules/.bin/spectral'),
-  \ ale#Escape(ale#path#Simplify(g:dir . '/spectral_paths/node_modules/.bin/spectral'))
+  \ ale#path#Simplify(g:dir . '/../test-files/spectral/node_modules/.bin/spectral'),
+  \ ale#Escape(ale#path#Simplify(g:dir . '/../test-files/spectral/node_modules/.bin/spectral'))
   \   . ' lint --ignore-unknown-format -q -f text %t'

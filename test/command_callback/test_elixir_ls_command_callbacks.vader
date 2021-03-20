@@ -21,12 +21,12 @@ Execute(should configure elixir-ls release location):
   endif
 
 Execute(should set correct LSP values):
-  call ale#test#SetFilename('elixir_paths/umbrella_project/apps/app1/lib/app.ex')
+  call ale#test#SetFilename('../test-files/elixir/umbrella_project/apps/app1/lib/app.ex')
 
   AssertLSPLanguage 'elixir'
   AssertLSPOptions {}
   AssertLSPConfig {}
-  AssertLSPProject ale#path#Simplify(g:dir . '/elixir_paths/umbrella_project')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/elixir/umbrella_project')
 
 Execute(should accept configuration settings):
   AssertLSPConfig {}

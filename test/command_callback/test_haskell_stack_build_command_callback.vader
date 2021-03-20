@@ -8,6 +8,6 @@ Execute(The linter should not be executed when there's no stack.yaml file):
   AssertLinterNotExecuted
 
 Execute(The linter should be executed when there is a stack.yaml file):
-  call ale#test#SetFilename('stack_build_paths/test.hs')
+  call ale#test#SetFilename('../test-files/stack/test.hs')
 
   AssertLinter 'stack', 'stack build --fast'

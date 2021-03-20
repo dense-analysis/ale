@@ -5,12 +5,12 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default executable path should be correct):
-  call ale#test#SetFilename('../swift-test-files/swift-package-project/src/folder/dummy.swift')
+  call ale#test#SetFilename('../test-files/swift/swift-package-project/src/folder/dummy.swift')
 
   AssertLinter 'sourcekit-lsp', ale#Escape('sourcekit-lsp')
 
 Execute(Should let users configure a global executable and override local paths):
-  call ale#test#SetFilename('../swift-test-files/swift-package-project/src/folder/dummy.swift')
+  call ale#test#SetFilename('../test-files/swift/swift-package-project/src/folder/dummy.swift')
 
   let g:ale_sourcekit_lsp_executable = '/path/to/custom/sourcekitlsp'
 

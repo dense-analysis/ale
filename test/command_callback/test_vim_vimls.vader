@@ -15,17 +15,17 @@ Execute(should set correct defaults):
   AssertLinter 'vim-language-server', ale#Escape('vim-language-server') . ' --stdio'
 
 Execute(should set correct LSP values):
-  call ale#test#SetFilename('vim_fixtures/path_with_autoload/test.vim')
+  call ale#test#SetFilename('../test-files/vim/path_with_autoload/test.vim')
   AssertLSPLanguage 'vim'
   AssertLSPOptions {}
   AssertLSPConfig {}
-  AssertLSPProject ale#path#Simplify(g:dir . '/vim_fixtures/path_with_autoload')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/vim/path_with_autoload')
 
 Execute(should set correct project for .git/):
   let b:parent_dir = ale#path#Simplify(g:dir . '/..')
   let b:git_dir = b:parent_dir . '/.git'
 
-  call ale#test#SetFilename('vim_fixtures/test.vim')
+  call ale#test#SetFilename('../test-files/vim/test.vim')
 
   if !isdirectory(b:git_dir)
     call mkdir(b:git_dir)
@@ -37,9 +37,9 @@ Execute(should set correct project for .git/):
   unlet! b:git_dir
 
 Execute(should set correct project for plugin/):
-  call ale#test#SetFilename('vim_fixtures/path_with_plugin/test.vim')
+  call ale#test#SetFilename('../test-files/vim/path_with_plugin/test.vim')
 
-  AssertLSPProject ale#path#Simplify(g:dir . '/vim_fixtures/path_with_plugin')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/vim/path_with_plugin')
 
 Execute(should accept configuration settings):
   AssertLSPConfig {}
@@ -48,24 +48,24 @@ Execute(should accept configuration settings):
   AssertLSPConfig {'vim': {'foobar': v:true}}
 
 Execute(should set correct project for .vimrc):
-  call ale#test#SetFilename('vim_fixtures/path_with_vimrc/.vimrc')
+  call ale#test#SetFilename('../test-files/vim/path_with_vimrc/.vimrc')
 
-  AssertLSPProject ale#path#Simplify(g:dir . '/vim_fixtures/path_with_vimrc')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/vim/path_with_vimrc')
 
 Execute(should set correct project for init.vim):
-  call ale#test#SetFilename('vim_fixtures/path_with_initvim/init.vim')
+  call ale#test#SetFilename('../test-files/vim/path_with_initvim/init.vim')
 
-  AssertLSPProject ale#path#Simplify(g:dir . '/vim_fixtures/path_with_initvim')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/vim/path_with_initvim')
 
 Execute(should use the local executable when available):
-  call ale#test#SetFilename('vim_fixtures/file.vim')
+  call ale#test#SetFilename('../test-files/vim/file.vim')
 
-  AssertLinter ale#path#Simplify(g:dir . '/vim_fixtures/node_modules/.bin/vim-language-server'),
-  \ ale#Escape(ale#path#Simplify(g:dir . '/vim_fixtures/node_modules/.bin/vim-language-server')) . ' --stdio'
+  AssertLinter ale#path#Simplify(g:dir . '/../test-files/vim/node_modules/.bin/vim-language-server'),
+  \ ale#Escape(ale#path#Simplify(g:dir . '/../test-files/vim/node_modules/.bin/vim-language-server')) . ' --stdio'
 
 Execute(should let the global executable to be used):
   let g:ale_vim_vimls_use_global = 1
-  call ale#test#SetFilename('vim_fixtures/file.vim')
+  call ale#test#SetFilename('../test-files/vim/file.vim')
 
   AssertLinter 'vim-language-server',
   \ ale#Escape('vim-language-server') . ' --stdio'

@@ -19,10 +19,10 @@ Execute(Overriding options should work):
   AssertLinter 'fnord', ale#Escape('fnord') . ' --whatever -f json %t'
 
 Execute(Configuration files should be found):
-  call ale#test#SetFilename('../tflint-test-files/foo/bar.tf')
+  call ale#test#SetFilename('../test-files/tflint/foo/bar.tf')
 
   AssertLinter 'tflint',
   \ ale#Escape('tflint')
   \   . ' --config '
-  \   . ale#Escape(ale#path#Simplify(g:dir . '/../tflint-test-files/foo/.tflint.hcl'))
+  \   . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/tflint/foo/.tflint.hcl'))
   \   . ' -f json %t'

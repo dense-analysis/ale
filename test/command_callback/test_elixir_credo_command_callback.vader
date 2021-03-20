@@ -1,6 +1,6 @@
 Before:
   call ale#assert#SetUpLinterTest('elixir', 'credo')
-  call ale#test#SetFilename('elixir_paths/mix_project/lib/app.ex')
+  call ale#test#SetFilename('../test-files/elixir/mix_project/lib/app.ex')
 
 
 After:
@@ -9,14 +9,14 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(Builds credo command with normal project):
-  AssertLinterCwd ale#path#Simplify(g:dir . '/elixir_paths/mix_project')
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/elixir/mix_project')
   AssertLinter 'mix',
   \ 'mix help credo && mix credo suggest --format=flycheck --read-from-stdin %s'
 
 Execute(Builds credo command with umbrella project):
-  call ale#test#SetFilename('elixir_paths/umbrella_project/apps/mix_project/lib/app.ex')
+  call ale#test#SetFilename('../test-files/elixir/umbrella_project/apps/mix_project/lib/app.ex')
 
-  AssertLinterCwd ale#path#Simplify(g:dir . '/elixir_paths/umbrella_project')
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/elixir/umbrella_project')
   AssertLinter 'mix',
   \ 'mix help credo && mix credo suggest --format=flycheck --read-from-stdin %s'
 

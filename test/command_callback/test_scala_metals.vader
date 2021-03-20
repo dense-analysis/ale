@@ -7,13 +7,13 @@ Before:
 After:
   call ale#assert#TearDownLinterTest()
 Execute(should set metals for sbt project with build.sbt):
-  call ale#test#SetFilename('../scala_fixtures/valid_sbt_project/Main.scala')
+  call ale#test#SetFilename('../test-files/scala/valid_sbt_project/Main.scala')
   AssertLSPLanguage 'scala'
   AssertLSPOptions {}
   AssertLSPConfig {}
-  AssertLSPProject ale#path#Simplify(g:dir . 'command_callback/../scala_fixtures/valid_sbt_project')
+  AssertLSPProject ale#path#Simplify(g:dir . 'command_callback/../test-files/scala/valid_sbt_project')
 Execute(should not set metals for sbt project without build.sbt):
-  call ale#test#SetFilename('../scala_fixtures/invalid_sbt_project/Main.scala')
+  call ale#test#SetFilename('../test-files/scala/invalid_sbt_project/Main.scala')
   AssertLSPLanguage 'scala'
   AssertLSPOptions {}
   AssertLSPConfig {}

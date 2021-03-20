@@ -10,9 +10,9 @@ Execute(The default executable path should be correct):
 Execute(The project root should be detected correctly):
   AssertLSPProject ''
 
-  call ale#test#SetFilename('rust-rls-project/test.rs')
+  call ale#test#SetFilename('../test-files/rust/test.rs')
 
-  AssertLSPProject ale#path#Simplify(g:dir . '/rust-rls-project')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/rust')
 
 Execute(Should accept configuration settings):
   AssertLSPConfig {}

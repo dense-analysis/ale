@@ -8,22 +8,22 @@ Execute(should set correct defaults):
   AssertLinter 'purescript-language-server', ale#Escape('purescript-language-server') . ' --stdio'
 
 Execute(should set correct LSP values):
-  call ale#test#SetFilename('purescript_paths/spago/Foo.purs')
+  call ale#test#SetFilename('../test-files/purescript/spago/Foo.purs')
 
   AssertLSPLanguage 'purescript'
   AssertLSPOptions {}
   AssertLSPConfig {}
-  AssertLSPProject ale#path#Simplify(g:dir . '/purescript_paths/spago')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/purescript/spago')
 
 Execute(should set correct project for bower):
-  call ale#test#SetFilename('purescript_paths/bower/Foo.purs')
+  call ale#test#SetFilename('../test-files/purescript/bower/Foo.purs')
 
-  AssertLSPProject ale#path#Simplify(g:dir . '/purescript_paths/bower')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/purescript/bower')
 
 Execute(should set correct project for psc-package):
-  call ale#test#SetFilename('purescript_paths/psc-package/Foo.purs')
+  call ale#test#SetFilename('../test-files/purescript/psc-package/Foo.purs')
 
-  AssertLSPProject ale#path#Simplify(g:dir . '/purescript_paths/psc-package')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/purescript/psc-package')
 
 Execute(should accept configuration settings):
   AssertLSPConfig {}
