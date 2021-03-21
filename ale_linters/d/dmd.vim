@@ -51,10 +51,10 @@ function! ale_linters#d#dmd#DMDCommand(buffer, dub_output, meta) abort
     " DUB output each path or version on a single line.
     " Each list is separated by a blank line.
     " Empty list are represented by a blank line (followed and/or
-    " preceded by the separation blank lines)
+    " preceded by a separation blank line)
     for l:line in a:dub_output
-        " line still has end of line char
-        let l:line = trim(l:line)
+        " line still has end of line char on windows
+        let l:line = substitute(l:line, '[\r\n]*$', '', '')
 
         if !empty(l:line)
             if l:list_ind == 1
