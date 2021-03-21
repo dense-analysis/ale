@@ -1,8 +1,6 @@
 Before:
   call ale#assert#SetUpFixerTest('python', 'black')
 
-  silent cd ..
-  silent cd command_callback
   let g:dir = getcwd()
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
 

@@ -7,9 +7,6 @@ Before:
   let g:ale_ruby_standardrb_options = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
 
 After:
   Restore

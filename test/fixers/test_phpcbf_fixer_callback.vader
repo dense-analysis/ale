@@ -9,9 +9,6 @@ Before:
   let g:ale_php_phpcbf_use_global = 0
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
 
 After:
   Restore
@@ -75,9 +72,6 @@ Before:
   let g:ale_php_phpcbf_use_global = 0
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
 
 After:
   Restore

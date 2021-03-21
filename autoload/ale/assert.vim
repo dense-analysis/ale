@@ -293,7 +293,7 @@ function! ale#assert#SetUpLinterTest(filetype, name) abort
     execute 'runtime ale_linters/' . a:filetype . '/' . a:name . '.vim'
 
     if !exists('g:dir')
-        call ale#test#SetDirectory('/testplugin/test/command_callback')
+        call ale#test#SetDirectory('/testplugin/test/linter')
     endif
 
     call ale#assert#SetUpLinterTestCommands()

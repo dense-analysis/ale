@@ -4,10 +4,6 @@ Before:
 
   let g:ale_command_wrapper = ''
 
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
-
 After:
   call ale#assert#TearDownFixerTest()
 

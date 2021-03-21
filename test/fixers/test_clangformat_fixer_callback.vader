@@ -7,8 +7,6 @@ Before:
   let g:ale_c_clangformat_executable = 'xxxinvalid'
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  silent cd ..
-  silent cd command_callback
   let g:dir = getcwd()
 
 After:

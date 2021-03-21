@@ -8,10 +8,7 @@ Before:
   unlet! b:ale_typescript_tslint_config_path
 
   call ale#handlers#tslint#InitVariables()
-
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
-  silent cd ..
-  silent cd command_callback
+  call ale#test#SetDirectory('/testplugin/test/fixers')
 
 After:
   Restore

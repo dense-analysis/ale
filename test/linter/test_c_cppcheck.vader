@@ -3,12 +3,6 @@ Before:
   let b:command_tail = ' -q --language=c --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}') . ' --enable=style -I' . ale#Escape(ale#path#Simplify(g:dir)) .' %t'
 
 After:
-  " Remove a test file we might open for some tests.
-  if &buftype != 'nofile'
-    :q!
-    set buftype=nofile
-  endif
-
   unlet! b:command_tail
   call ale#assert#TearDownLinterTest()
 
@@ -49,18 +43,4 @@ Execute(cppcheck for C should include file dir if compile_commands.json file is 
   \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --enable=style'
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/cppcheck'))
-  \   . ' %t'
-
-Execute(cppcheck for C should ignore compile_commands.json file if buffer is modified):
-  call ale#test#SetFilename('../test-files/cppcheck/one/foo.c')
-
-  set buftype=
-  set modified
-
-  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/cppcheck/one')
-  AssertLinter 'cppcheck', ale#Escape('cppcheck')
-  \   . ' -q --language=c'
-  \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
-  \   . ' --enable=style'
-  \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/cppcheck/one'))
   \   . ' %t'

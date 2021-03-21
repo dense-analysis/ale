@@ -9,7 +9,7 @@ Before:
   unlet! g:ale_html_stylelint_use_global
   unlet! g:ale_html_stylelint_options
 
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
+  call ale#test#SetDirectory('/testplugin/test/linter')
   call ale#test#SetFilename('testfile.html')
 
   runtime ale_linters/html/stylelint.vim

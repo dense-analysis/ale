@@ -1,10 +1,6 @@
 Before:
   call ale#assert#SetUpFixerTest('javascript', 'prettier_standard')
 
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
-
 After:
   call ale#assert#TearDownFixerTest()
 

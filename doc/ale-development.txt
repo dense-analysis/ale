@@ -181,7 +181,7 @@ Generally write tests for any changes you make. The following types of tests
 are recommended for the following types of code.
 
 * New/edited error handler callbacks -> Write tests in `test/handler`
-* New/edited command callbacks       -> Write tests in `test/command_callback`
+* New/edited linter definition       -> Write tests in `test/linter`
 * New/edited fixer functions         -> Write tests in `test/fixers`
 
 Look at existing tests in the codebase for examples of how to write tests.
@@ -278,8 +278,8 @@ be written like so. >
   \ '1:Something went wrong',
   \ ]
 <
-Tests for what ALE runs should go in the `test/command_callback` directory,
-and should be written like so. >
+Tests for what ALE runs should go in the `test/linter` directory, and should
+be written like so. >
 
   Before:
     " Load the linter and set up a series of commands, reset linter variables,
