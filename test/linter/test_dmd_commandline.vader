@@ -71,3 +71,26 @@ Execute(DMD command line should be correct):
   \ '',
   \ 'SomeFeature',
   \ ], {})
+
+Execute(DMD command line should be correct with CR):
+  " on windows, the function is called with carriage return
+  AssertEqual
+  \ 'dmd ' .
+  \ '-I' . ale#Escape('source') . ' ' .
+  \ '-I' . ale#Escape('C:\prefix\include\d') . ' ' .
+  \ '-I' . ale#Escape('C:\Users\user\AppData\Local\Dub\packages\pkg-0.0.1\pkg\src') . ' ' .
+  \ ' ' .
+  \ ' ' .
+  \ ' ' .
+  \ '-o- -wi -vcolumns -c %t',
+  \ ale_linters#d#dmd#DMDCommand(bufnr(''), [
+  \ "source\r",
+  \ "C:\\prefix\\include\\d\r",
+  \ "C:\\Users\\user\\AppData\\Local\\Dub\\packages\\pkg-0.0.1\\pkg\\src\r",
+  \ "\r",
+  \ "\r",
+  \ "\r",
+  \ "\r",
+  \ "\r",
+  \ "\r",
+  \ ], {})
