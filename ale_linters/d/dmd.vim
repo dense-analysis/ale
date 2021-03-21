@@ -52,16 +52,18 @@ function! ale_linters#d#dmd#Handle(buffer, lines) abort
     " Matches patterns lines like the following:
     " /tmp/tmp.qclsa7qLP7/file.d(1): Error: function declaration without return type. (Note that constructors are always named 'this')
     " /tmp/tmp.G1L5xIizvB.d(8,8): Error: module weak_reference is in file 'dstruct/weak_reference.d' which cannot be read
-    let l:pattern = '^[^(]\+(\([0-9]\+\)\,\?\([0-9]*\)): \([^:]\+\): \(.\+\)'
+    let l:pattern = '\v^(\f+)\((\d+)(,(\d+))?\): (\w+): (.+)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        call add(l:output, {
-        \   'lnum': l:match[1],
-        \   'col': l:match[2],
-        \   'type': l:match[3] is# 'Warning' ? 'W' : 'E',
-        \   'text': l:match[4],
-        \})
+        if ale#path#IsBufferPath(a:buffer, l:match[1])
+            call add(l:output, {
+            \   'lnum': l:match[2],
+            \   'col': l:match[4],
+            \   'type': l:match[5] is# 'Warning' || l:match[5] is# 'Deprecation' ? 'W' : 'E',
+            \   'text': l:match[6],
+            \})
+        endif
     endfor
 
     return l:output
