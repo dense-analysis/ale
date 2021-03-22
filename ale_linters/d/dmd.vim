@@ -11,7 +11,12 @@ function! s:GetDUBCommand(buffer) abort
         " directory where we found the dub config, and then run `dub describe`
         " from that directory.
         if !empty(l:config)
-            return [fnamemodify(l:config, ':h'), 'dub describe --import-paths']
+            return [fnamemodify(l:config, ':h'), 'dub describe --data-list
+            \ --data=import-paths
+            \ --data=string-import-paths
+            \ --data=versions
+            \ --data=debug-versions
+            \']
         endif
     endif
 
@@ -36,16 +41,46 @@ endfunction
 
 function! ale_linters#d#dmd#DMDCommand(buffer, dub_output, meta) abort
     let l:import_list = []
+    let l:str_import_list = []
+    let l:versions_list = []
+    let l:deb_versions_list = []
+    let l:list_ind = 1
+    let l:seen_line = 0
 
-    " Build a list of import paths generated from DUB, if available.
+    " Build a list of options generated from DUB, if available.
+    " DUB output each path or version on a single line.
+    " Each list is separated by a blank line.
+    " Empty list are represented by a blank line (followed and/or
+    " preceded by a separation blank line)
     for l:line in a:dub_output
+        " line still has end of line char on windows
+        let l:line = substitute(l:line, '[\r\n]*$', '', '')
+
         if !empty(l:line)
-            " The arguments must be '-Ifilename', not '-I filename'
-            call add(l:import_list, '-I' . ale#Escape(l:line))
+            if l:list_ind == 1
+                call add(l:import_list, '-I' . ale#Escape(l:line))
+            elseif l:list_ind == 2
+                call add(l:str_import_list, '-J' . ale#Escape(l:line))
+            elseif l:list_ind == 3
+                call add(l:versions_list, '-version=' . ale#Escape(l:line))
+            elseif l:list_ind == 4
+                call add(l:deb_versions_list, '-debug=' . ale#Escape(l:line))
+            endif
+
+            let l:seen_line = 1
+        elseif !l:seen_line
+            " if list is empty must skip one empty line
+            let l:seen_line = 1
+        else
+            let l:seen_line = 0
+            let l:list_ind += 1
         endif
     endfor
 
-    return 'dmd '. join(l:import_list) . ' -o- -wi -vcolumns -c %t'
+    return 'dmd ' . join(l:import_list) . ' ' .
+    \   join(l:str_import_list) . ' ' .
+    \   join(l:versions_list) . ' ' .
+    \   join(l:deb_versions_list) . ' -o- -wi -vcolumns -c %t'
 endfunction
 
 function! ale_linters#d#dmd#Handle(buffer, lines) abort
