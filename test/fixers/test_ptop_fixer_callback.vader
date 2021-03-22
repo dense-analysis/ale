@@ -22,7 +22,7 @@ Execute(The ptop callback should return the correct default values):
   \   'command': ale#Escape('xxxinvalid')
   \     . ' %t %t',
   \ },
-  \ ale#fixers#dfmt#Fix(bufnr(''))
+  \ ale#fixers#ptop#Fix(bufnr(''))
 
 Execute(The ptop callback should include custom ptop options):
   let g:ale_pascal_ptop_options = "-i 2"
@@ -35,4 +35,4 @@ Execute(The ptop callback should include custom ptop options):
   \     . ' ' . g:ale_pascal_ptop_options
   \     . ' %t %t',
   \ },
-  \ ale#fixers#dfmt#Fix(bufnr(''))
+  \ ale#fixers#ptop#Fix(bufnr(''))
