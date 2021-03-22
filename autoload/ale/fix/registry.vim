@@ -430,6 +430,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#ormolu#Fix',
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'A formatter for Haskell source code.',
+\   },
+\   'ptop': {
+\       'function': 'ale#fixers#ptop#Fix',
+\       'suggested_filetypes': ['pascal'],
+\       'description': 'Fix Pascal files with ptop.',
 \   }
 \}
 
