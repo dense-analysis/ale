@@ -328,6 +328,7 @@ formatting.
   * nimpretty
 * nix
   * [nix-instantiate](http://nixos.org/nix/manual/#sec-nix-instantiate)
+  * [nixfmt](https://github.com/serokell/nixfmt)
   * [nixpkgs-fmt](https://github.com/nix-community/nixpkgs-fmt)
   * [rnix-lsp](https://github.com/nix-community/rnix-lsp)
 * nroff

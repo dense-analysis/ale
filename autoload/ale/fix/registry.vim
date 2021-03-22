@@ -406,6 +406,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['ada'],
 \       'description': 'Format Ada files with gnatpp.',
 \   },
+\   'nixfmt': {
+\       'function': 'ale#fixers#nixfmt#Fix',
+\       'suggested_filetypes': ['nix'],
+\       'description': 'A nix formatter written in Haskell.',
+\   },
 \   'nixpkgs-fmt': {
 \       'function': 'ale#fixers#nixpkgsfmt#Fix',
 \       'suggested_filetypes': ['nix'],
