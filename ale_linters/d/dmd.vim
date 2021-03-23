@@ -54,16 +54,19 @@ function! ale_linters#d#dmd#Handle(buffer, lines) abort
     " /tmp/tmp.G1L5xIizvB.d(8,8): Error: module weak_reference is in file 'dstruct/weak_reference.d' which cannot be read
     let l:pattern = '\v^(\f+)\((\d+)(,(\d+))?\): (\w+): (.+)$'
     let l:output = []
+    let l:dir = expand('#' . a:buffer . ':p:h')
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
-        if ale#path#IsBufferPath(a:buffer, l:match[1])
-            call add(l:output, {
-            \   'lnum': l:match[2],
-            \   'col': l:match[4],
-            \   'type': l:match[5] is# 'Warning' || l:match[5] is# 'Deprecation' ? 'W' : 'E',
-            \   'text': l:match[6],
-            \})
-        endif
+        " If dmd was invoked with relative path, match[1] is relative, otherwise it is absolute.
+        " As we invoke dmd with the buffer path (in /tmp), this will generally be absolute already
+        let l:fname = ale#path#GetAbsPath(l:dir, l:match[1])
+        call add(l:output, {
+        \   'filename': l:fname,
+        \   'lnum': l:match[2],
+        \   'col': l:match[4],
+        \   'type': l:match[5] is# 'Warning' || l:match[5] is# 'Deprecation' ? 'W' : 'E',
+        \   'text': l:match[6],
+        \})
     endfor
 
     return l:output
