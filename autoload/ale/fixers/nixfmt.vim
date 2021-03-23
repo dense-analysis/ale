@@ -10,7 +10,6 @@ function! ale#fixers#nixfmt#Fix(buffer) abort
     let l:options = ale#Var(a:buffer, 'nix_nixfmt_options')
 
     return {
-    \   'command': ale#Escape(l:executable)
-    \       . (empty(l:options) ? '': ' ' . l:options),
+    \   'command': ale#Escape(l:executable) . ale#Pad(l:options),
     \}
 endfunction
