@@ -344,6 +344,8 @@ Notes:
   * `ibm_validator`
   * `prettier`
   * `yamllint`
+* Pascal
+  * `ptop`
 * Pawn
   * `uncrustify`
 * Perl

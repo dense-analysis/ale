@@ -353,6 +353,8 @@ formatting.
   * [ibm_validator](https://github.com/IBM/openapi-validator)
   * [prettier](https://github.com/prettier/prettier)
   * [yamllint](https://yamllint.readthedocs.io/)
+* Pascal
+  * [ptop](https://www.freepascal.org/tools/ptop.var)
 * Pawn
   * [uncrustify](https://github.com/uncrustify/uncrustify)
 * Perl

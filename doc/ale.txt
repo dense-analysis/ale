@@ -2881,6 +2881,8 @@ documented in additional help files.
     ibm_validator.........................|ale-openapi-ibm-validator|
     prettier..............................|ale-openapi-prettier|
     yamllint..............................|ale-openapi-yamllint|
+  pascal..................................|ale-pascal-options|
+    ptop..................................|ale-pascal-ptop|
   pawn....................................|ale-pawn-options|
     uncrustify............................|ale-pawn-uncrustify|
   perl....................................|ale-perl-options|
