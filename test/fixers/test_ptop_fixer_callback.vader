@@ -20,7 +20,7 @@ Execute(The ptop callback should return the correct default values):
   \ {
   \   'read_temporary_file': 1,
   \   'command': ale#Escape('xxxinvalid')
-  \     . ' %t %t',
+  \     . ' %s %t',
   \ },
   \ ale#fixers#ptop#Fix(bufnr(''))
 
@@ -33,6 +33,6 @@ Execute(The ptop callback should include custom ptop options):
   \   'read_temporary_file': 1,
   \   'command': ale#Escape('xxxinvalid')
   \     . ' ' . g:ale_pascal_ptop_options
-  \     . ' %t %t',
+  \     . ' %s %t',
   \ },
   \ ale#fixers#ptop#Fix(bufnr(''))

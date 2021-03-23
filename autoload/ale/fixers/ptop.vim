@@ -11,7 +11,7 @@ function! ale#fixers#ptop#Fix(buffer) abort
     return {
     \   'command': ale#Escape(l:executable)
     \       . (empty(l:options) ? '' : ' ' . l:options)
-    \       . ' %t %t',
+    \       . ' %s %t',
     \   'read_temporary_file': 1,
     \}
 endfunction
