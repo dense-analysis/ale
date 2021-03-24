@@ -9,19 +9,19 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The elm-format command should have default params):
-  call ale#test#SetFilename('../elm-test-files/src/subdir/testfile.elm')
+  call ale#test#SetFilename('../test-files/elm/src/subdir/testfile.elm')
 
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
   \   'command':
-  \     ale#Escape(ale#path#Simplify(g:dir . '/../elm-test-files/node_modules/.bin/elm-format'))
+  \     ale#Escape(ale#path#Simplify(g:dir . '/../test-files/elm/node_modules/.bin/elm-format'))
   \     . ' %t --yes',
   \ },
   \ ale#fixers#elm_format#Fix(bufnr(''))
 
 Execute(The elm-format command should manage use_global = 1 param):
-  call ale#test#SetFilename('../elm-test-files/src/subdir/testfile.elm')
+  call ale#test#SetFilename('../test-files/elm/src/subdir/testfile.elm')
   let b:ale_elm_format_use_global = 1
 
   AssertEqual
@@ -34,7 +34,7 @@ Execute(The elm-format command should manage use_global = 1 param):
   \ ale#fixers#elm_format#Fix(bufnr(''))
 
 Execute(The elm-format command should manage executable param):
-  call ale#test#SetFilename('../elm-test-files/src/subdir/testfile.elm')
+  call ale#test#SetFilename('../test-files/elm/src/subdir/testfile.elm')
   let b:ale_elm_format_use_global = 1
   let b:ale_elm_format_executable = 'elmformat'
 
@@ -48,27 +48,27 @@ Execute(The elm-format command should manage executable param):
   \ ale#fixers#elm_format#Fix(bufnr(''))
 
 Execute(The elm-format command should manage empty options):
-  call ale#test#SetFilename('../elm-test-files/src/subdir/testfile.elm')
+  call ale#test#SetFilename('../test-files/elm/src/subdir/testfile.elm')
   let b:ale_elm_format_options = ''
 
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
   \   'command':
-  \     ale#Escape(ale#path#Simplify(g:dir . '/../elm-test-files/node_modules/.bin/elm-format'))
+  \     ale#Escape(ale#path#Simplify(g:dir . '/../test-files/elm/node_modules/.bin/elm-format'))
   \     . ' %t',
   \ },
   \ ale#fixers#elm_format#Fix(bufnr(''))
 
 Execute(The elm-format command should manage custom options):
-  call ale#test#SetFilename('../elm-test-files/src/subdir/testfile.elm')
+  call ale#test#SetFilename('../test-files/elm/src/subdir/testfile.elm')
   let b:ale_elm_format_options = '--param1 --param2'
 
   AssertEqual
   \ {
   \   'read_temporary_file': 1,
   \   'command':
-  \     ale#Escape(ale#path#Simplify(g:dir . '/../elm-test-files/node_modules/.bin/elm-format'))
+  \     ale#Escape(ale#path#Simplify(g:dir . '/../test-files/elm/node_modules/.bin/elm-format'))
   \     . ' %t --param1 --param2',
   \ },
   \ ale#fixers#elm_format#Fix(bufnr(''))

@@ -1,0 +1,57 @@
+Before:
+  call ale#assert#SetUpLinterTest('python', 'pyls')
+
+  let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
+
+After:
+  unlet! b:bin_dir
+  unlet! b:executable
+
+  call ale#assert#TearDownLinterTest()
+
+Execute(The pyls command callback should return default string):
+  AssertLinter 'pyls', ale#Escape('pyls')
+
+Execute(The pyls executable should be configurable):
+  let g:ale_python_pyls_executable = '~/.local/bin/pyls'
+
+  AssertLinter '~/.local/bin/pyls' , ale#Escape('~/.local/bin/pyls')
+
+Execute(The pyls command callback should let you set options):
+  let g:ale_python_pyls_options = '--some-option'
+
+  AssertLinter 'pyls', ale#Escape('pyls') . ' --some-option'
+
+Execute(The pyls executable should be run from the virtualenv path):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  let b:executable = ale#path#Simplify(
+  \ g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/pyls'
+  \)
+
+  AssertEqual ale#Escape(b:executable),
+  \ ale_linters#python#pyls#GetCommand(bufnr(''))
+
+Execute(You should be able to override the pyls virtualenv lookup):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  let g:ale_python_pyls_use_global = 1
+
+  AssertLinter 'pyls', ale#Escape('pyls')
+
+Execute(Setting executable to 'pipenv' appends 'run pyls'):
+  let g:ale_python_pyls_executable = 'path/to/pipenv'
+
+  AssertLinter 'path/to/pipenv', ale#Escape('path/to/pipenv') . ' run pyls'
+
+Execute(Pipenv is detected when python_pyls_auto_pipenv is set):
+  let g:ale_python_pyls_auto_pipenv = 1
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
+
+  AssertLinter 'pipenv',
+  \ ale#Escape('pipenv') . ' run pyls'
+
+Execute(Should accept configuration settings):
+  AssertLSPConfig {}
+  let b:ale_python_pyls_config = {'pyls': {'plugins': {'preload': {'enabled': v:false}}}}
+  AssertLSPConfig {'pyls': {'plugins': {'preload': {'enabled': v:false}}}}

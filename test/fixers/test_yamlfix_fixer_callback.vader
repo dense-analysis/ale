@@ -1,10 +1,6 @@
 Before:
   call ale#assert#SetUpFixerTest('yaml', 'yamlfix')
 
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
-
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
 
 After:
@@ -16,22 +12,22 @@ Execute(The yamlfix callback should return the correct default values):
   \ 0,
   \ ale#fixers#yamlfix#Fix(bufnr(''))
 
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.yaml')
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.yaml')
   AssertEqual
   \ {
   \   'cwd': '%s:h',
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/yamlfix')) . ' -',
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/yamlfix')) . ' -',
   \ },
   \ ale#fixers#yamlfix#Fix(bufnr(''))
 
 Execute(The yamlfix callback should respect custom options):
   let g:ale_yaml_yamlfix_options = '--multi-line=3 --trailing-comma'
 
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.yaml')
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.yaml')
   AssertEqual
   \ {
   \   'cwd': '%s:h',
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/yamlfix'))
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/yamlfix'))
   \     . ' --multi-line=3 --trailing-comma -',
   \ },
   \ ale#fixers#yamlfix#Fix(bufnr(''))

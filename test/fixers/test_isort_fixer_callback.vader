@@ -1,9 +1,6 @@
 Before:
   call ale#assert#SetUpFixerTest('python', 'isort')
 
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
 
 After:
@@ -17,11 +14,11 @@ Execute(The isort callback should return the correct default values):
   \ 0,
   \ ale#fixers#isort#Fix(bufnr(''))
 
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
   \ {
   \   'cwd': '%s:h',
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/isort')) . ' -',
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/isort')) . ' -',
   \ },
   \ ale#fixers#isort#Fix(bufnr(''))
 
@@ -32,11 +29,11 @@ Execute(The isort callback should respect custom options):
   \ 0,
   \ ale#fixers#isort#Fix(bufnr(''))
 
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
   \ {
   \   'cwd': '%s:h',
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/isort'))
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/isort'))
   \     . ' --multi-line=3 --trailing-comma -',
   \ },
   \ ale#fixers#isort#Fix(bufnr(''))
@@ -44,7 +41,7 @@ Execute(The isort callback should respect custom options):
 Execute(Pipenv is detected when python_isort_auto_pipenv is set):
   let g:ale_python_isort_auto_pipenv = 1
 
-  call ale#test#SetFilename('../python_fixtures/pipenv/whatever.py')
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
 
   AssertEqual
   \ {

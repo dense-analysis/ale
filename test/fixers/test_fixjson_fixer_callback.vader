@@ -20,7 +20,7 @@ Execute(The fixjson callback should return the correct default command):
   \ ale#fixers#fixjson#Fix(bufnr(''))
 
 Execute(The fixjson callback should set the buffer name as file name):
-  call ale#test#SetFilename('../json_files/testfile.json')
+  call ale#test#SetFilename('../test-files/json/testfile.json')
 
   AssertEqual
   \ {

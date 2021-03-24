@@ -72,6 +72,21 @@ Execute (ale#util#GetMatches should accept a string for a single pattern):
   \   '^.*:\(\d\+\):\(\d\+\): \(.\+\) \[\(.\+\)\]$'
   \ )
 
+Execute (ale#util#MapMatches should map matches):
+  AssertEqual
+  \ [
+  \   '/path/to/some-filename.js:47:14: Missing trailing comma. [Warning/comma-dangle]',
+  \   '/path/to/some-filename.js:56:41: Missing semicolon. [Error/semi]',
+  \ ],
+  \ ale#util#MapMatches(
+  \   [
+  \     '/path/to/some-filename.js:47:14: Missing trailing comma. [Warning/comma-dangle]',
+  \     '/path/to/some-filename.js:56:41: Missing semicolon. [Error/semi]',
+  \   ],
+  \   '^.*:\(\d\+\):\(\d\+\): \(.\+\) \[\(.\+\)\]$',
+  \   {match -> match[0]}
+  \ )
+
 Execute (ale#util#GetMatches should accept a single line as a string):
   AssertEqual
   \ [

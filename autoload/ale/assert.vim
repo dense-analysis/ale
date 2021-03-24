@@ -169,8 +169,21 @@ function! ale#assert#LinterNotExecuted() abort
     let l:buffer = bufnr('')
     let l:linter = s:GetLinter()
     let l:executable = ale#linter#GetExecutable(l:buffer, l:linter)
+    let l:executed = 1
 
-    Assert empty(l:executable), "The linter will be executed when it shouldn't be"
+    if !empty(l:executable)
+        let l:command = ale#linter#GetCommand(l:buffer, l:linter)
+
+        if type(l:command) is v:t_list
+            let l:command = l:command[-1]
+        endif
+
+        let l:executed = !empty(l:command)
+    else
+        let l:executed = 0
+    endif
+
+    Assert !l:executed, "The linter will be executed when it shouldn't be"
 endfunction
 
 function! ale#assert#LSPOptions(expected_options) abort
@@ -280,7 +293,7 @@ function! ale#assert#SetUpLinterTest(filetype, name) abort
     execute 'runtime ale_linters/' . a:filetype . '/' . a:name . '.vim'
 
     if !exists('g:dir')
-        call ale#test#SetDirectory('/testplugin/test/command_callback')
+        call ale#test#SetDirectory('/testplugin/test/linter')
     endif
 
     call ale#assert#SetUpLinterTestCommands()

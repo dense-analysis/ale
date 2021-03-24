@@ -8,7 +8,7 @@ Before:
   let g:ale_go_goimports_options = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  call ale#test#SetFilename('../go_files/testfile.go')
+  call ale#test#SetFilename('../test-files/go/testfile.go')
 
 After:
   Restore

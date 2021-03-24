@@ -8,7 +8,7 @@ After:
   call ale#linter#Reset()
 
 Execute(The brakeman handler should parse JSON correctly):
-  call ale#test#SetFilename('../ruby_fixtures/valid_rails_app/app/models/thing.rb')
+  call ale#test#SetFilename('../test-files/ruby/valid_rails_app/app/models/thing.rb')
 
   AssertEqual
   \  [

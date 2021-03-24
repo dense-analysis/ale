@@ -1,15 +1,11 @@
 Before:
   call ale#assert#SetUpFixerTest('javascript', 'prettier_standard')
 
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
-
 After:
   call ale#assert#TearDownFixerTest()
 
 Execute(The prettier callback should return the correct default values):
-  call ale#test#SetFilename('../prettier-test-files/testfile.js')
+  call ale#test#SetFilename('../test-files/prettier/testfile.js')
 
   AssertFixer
   \ {

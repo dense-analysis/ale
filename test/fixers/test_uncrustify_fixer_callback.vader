@@ -5,9 +5,6 @@ Before:
   let g:ale_c_uncrustify_executable = 'xxxinvalid'
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
 
 After:
   Restore
@@ -15,7 +12,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The clang-format callback should return the correct default values):
-  call ale#test#SetFilename('c_paths/dummy.c')
+  call ale#test#SetFilename('../test-files/c/dummy.c')
 
   AssertEqual
   \ {
@@ -25,7 +22,7 @@ Execute(The clang-format callback should return the correct default values):
   \ ale#fixers#uncrustify#Fix(bufnr(''))
 
 Execute(The uncrustify callback should include any additional options):
-  call ale#test#SetFilename('c_paths/dummy.c')
+  call ale#test#SetFilename('../test-files/c/dummy.c')
   let b:ale_c_uncrustify_options = '--some-option'
 
   AssertEqual

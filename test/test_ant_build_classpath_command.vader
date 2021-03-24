@@ -3,7 +3,7 @@ Before:
   runtime ale_linters/java/javac.vim
 
   Save $PATH
-  let $PATH = ale#path#Simplify(g:dir . '/ant-test-files/bin')
+  let $PATH = ale#path#Simplify(g:dir . '/test-files/ant/bin')
 
 After:
   Restore
@@ -12,16 +12,16 @@ After:
   call ale#linter#Reset()
 
 Execute(Should return `cd '[dir]' && 'ant' classpath -S -q`):
-  call ale#test#SetFilename('ant-test-files/ant-project/Main.java')
+  call ale#test#SetFilename('test-files/ant/ant-project/Main.java')
 
   AssertEqual
   \ [
-  \   ale#path#Simplify(g:dir . '/ant-test-files/ant-project'),
+  \   ale#path#Simplify(g:dir . '/test-files/ant/ant-project'),
   \   ale#Escape('ant') . ' classpath' . ' -S' . ' -q',
   \ ],
   \ ale#ant#BuildClasspathCommand(bufnr(''))
 
 Execute(Should return empty string if ant cannot be executed):
-  call ale#test#SetFilename('ant-test-files/not-an-ant-project/Main.java')
+  call ale#test#SetFilename('test-files/ant/not-an-ant-project/Main.java')
 
   AssertEqual ['', ''], ale#ant#BuildClasspathCommand(bufnr(''))

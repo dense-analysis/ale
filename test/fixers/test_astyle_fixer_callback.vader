@@ -71,7 +71,7 @@ Execute(The astyle callback should return the correct default values with a spec
   \ ale#fixers#astyle#Fix(bufnr(''))
 
 Execute(The astyle callback should find nearest default option file _astylrc):
-  call ale#test#SetFilename('../test_c_projects/makefile_project/subdir/file.c')
+  call ale#test#SetFilename('../test-files/c/makefile_project/subdir/file.c')
   let targetfile = bufname(bufnr('%'))
 
   AssertEqual
@@ -83,7 +83,7 @@ Execute(The astyle callback should find nearest default option file _astylrc):
   \ ale#fixers#astyle#Fix(bufnr(''))
 
 Execute(The astyle callback should find .astylrc in the same directory as src):
-  call ale#test#SetFilename('../test_cpp_project/dummy.cpp')
+  call ale#test#SetFilename('../test-files/cpp/dummy.cpp')
   set filetype=cpp " The test fails without this
   let targetfile = bufname(bufnr('%'))
 

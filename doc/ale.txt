@@ -1438,6 +1438,7 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
   \   'ps1': 'powershell',
   \   'rmarkdown': 'r',
   \   'rmd': 'r',
+  \   'svelte': ['svelte', 'javascript'],
   \   'systemverilog': 'verilog',
   \   'typescriptreact': ['typescript', 'tsx'],
   \   'verilog_systemverilog': ['verilog_systemverilog', 'verilog'],
@@ -1588,6 +1589,7 @@ g:ale_linters                                                   *g:ale_linters*
   \   'python': ['flake8', 'mypy', 'pylint', 'pyright'],
   \   'rust': ['cargo', 'rls'],
   \   'spec': [],
+  \   'svelte': ['eslint', 'svelteserver'],
   \   'text': [],
   \   'vue': ['eslint', 'vls'],
   \   'zsh': ['shell'],
@@ -2686,6 +2688,7 @@ documented in additional help files.
     stylelint.............................|ale-css-stylelint|
   cuda....................................|ale-cuda-options|
     nvcc..................................|ale-cuda-nvcc|
+    clangd................................|ale-cuda-clangd|
     clang-format..........................|ale-cuda-clangformat|
   d.......................................|ale-d-options|
     dfmt..................................|ale-d-dfmt|
@@ -2697,6 +2700,8 @@ documented in additional help files.
     analysis_server.......................|ale-dart-analysis_server|
     dartanalyzer..........................|ale-dart-dartanalyzer|
     dartfmt...............................|ale-dart-dartfmt|
+  desktop.................................|ale-desktop-options|
+    desktop-file-validate.................|ale-desktop-desktop-file-validate|
   dhall...................................|ale-dhall-options|
     dhall-format..........................|ale-dhall-format|
     dhall-freeze..........................|ale-dhall-freeze|
@@ -2777,12 +2782,13 @@ documented in additional help files.
   hcl.....................................|ale-hcl-options|
     terraform-fmt.........................|ale-hcl-terraform-fmt|
   html....................................|ale-html-options|
+    angular...............................|ale-html-angular|
     fecs..................................|ale-html-fecs|
     html-beautify.........................|ale-html-beautify|
     htmlhint..............................|ale-html-htmlhint|
-    tidy..................................|ale-html-tidy|
     prettier..............................|ale-html-prettier|
     stylelint.............................|ale-html-stylelint|
+    tidy..................................|ale-html-tidy|
     write-good............................|ale-html-write-good|
   idris...................................|ale-idris-options|
     idris.................................|ale-idris-idris|
@@ -2853,6 +2859,7 @@ documented in additional help files.
     nimlsp................................|ale-nim-nimlsp|
     nimpretty.............................|ale-nim-nimpretty|
   nix.....................................|ale-nix-options|
+    nixfmt................................|ale-nix-nixfmt|
     nixpkgs-fmt...........................|ale-nix-nixpkgs-fmt|
   nroff...................................|ale-nroff-options|
     write-good............................|ale-nroff-write-good|
@@ -2875,6 +2882,8 @@ documented in additional help files.
     ibm_validator.........................|ale-openapi-ibm-validator|
     prettier..............................|ale-openapi-prettier|
     yamllint..............................|ale-openapi-yamllint|
+  pascal..................................|ale-pascal-options|
+    ptop..................................|ale-pascal-ptop|
   pawn....................................|ale-pawn-options|
     uncrustify............................|ale-pawn-uncrustify|
   perl....................................|ale-perl-options|
@@ -3007,8 +3016,13 @@ documented in additional help files.
     stylelint.............................|ale-stylus-stylelint|
   sugarss.................................|ale-sugarss-options|
     stylelint.............................|ale-sugarss-stylelint|
+  svelte..................................|ale-svelte-options|
+    prettier..............................|ale-svelte-prettier|
+    svelteserver..........................|ale-svelte-svelteserver|
   swift...................................|ale-swift-options|
     sourcekitlsp..........................|ale-swift-sourcekitlsp|
+  systemd.................................|ale-systemd-options|
+    systemd-analyze.......................|ale-systemd-analyze|
   tcl.....................................|ale-tcl-options|
     nagelfar..............................|ale-tcl-nagelfar|
   terraform...............................|ale-terraform-options|

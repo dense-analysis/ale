@@ -5,7 +5,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(Detect root of Python project with .flake8 correctly):
-  call ale#test#SetFilename('python-test-files/python-package-project/package-name/module.py')
+  call ale#test#SetFilename('test-files/python/python-package-project/package-name/module.py')
   AssertEqual
-  \ ale#path#Simplify(g:dir . '/python-test-files/python-package-project'),
+  \ ale#path#Simplify(g:dir . '/test-files/python/python-package-project'),
   \ ale#python#FindProjectRoot(bufnr(''))

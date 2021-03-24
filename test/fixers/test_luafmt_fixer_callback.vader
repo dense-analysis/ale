@@ -14,7 +14,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The luafmt callback should return the correct default values):
-  call ale#test#SetFilename('../lua_files/testfile.lua')
+  call ale#test#SetFilename('../test-files/lua/testfile.lua')
 
   AssertEqual
   \ {
@@ -24,7 +24,7 @@ Execute(The luafmt callback should return the correct default values):
 
 Execute(The luafmt callback should include custom luafmt options):
   let g:ale_lua_luafmt_options = "--skip-children"
-  call ale#test#SetFilename('../lua_files/testfile.lua')
+  call ale#test#SetFilename('../test-files/lua/testfile.lua')
 
   AssertEqual
   \ {

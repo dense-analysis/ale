@@ -1,8 +1,6 @@
 Before:
   call ale#assert#SetUpFixerTest('python', 'black')
 
-  silent cd ..
-  silent cd command_callback
   let g:dir = getcwd()
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
 
@@ -13,36 +11,36 @@ After:
   unlet! b:bin_dir
 
 Execute(The black callback should return the correct default values):
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
   \ {
   \   'cwd': '%s:h',
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/black')) . ' -'},
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/black')) . ' -'},
   \ ale#fixers#black#Fix(bufnr(''))
 
 Execute(The black callback should include options):
   let g:ale_python_black_options = '--some-option'
   let g:ale_python_black_change_directory = 0
 
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
-  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/black')) . ' --some-option -' },
+  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/black')) . ' --some-option -' },
   \ ale#fixers#black#Fix(bufnr(''))
 
 Execute(The black callback should include --pyi for .pyi files):
   let g:ale_python_black_change_directory = 0
 
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.pyi')
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.pyi')
 
   AssertEqual
-  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/black')) . ' --pyi -' },
+  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/black')) . ' --pyi -' },
   \ ale#fixers#black#Fix(bufnr(''))
 
 Execute(Pipenv is detected when python_black_auto_pipenv is set):
   let g:ale_python_black_auto_pipenv = 1
   let g:ale_python_black_change_directory = 0
 
-  call ale#test#SetFilename('../python_fixtures/pipenv/whatever.py')
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
 
   AssertEqual
   \ {'command': ale#Escape('pipenv') . ' run black -'},

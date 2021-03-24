@@ -5,9 +5,6 @@ Before:
   let g:ale_python_yapf_executable = 'xxxinvalid'
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
 
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
 
@@ -23,20 +20,20 @@ Execute(The yapf callback should return the correct default values):
   \ 0,
   \ ale#fixers#yapf#Fix(bufnr(''))
 
-  call ale#test#SetFilename('python_paths/with_virtualenv/subdir/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
 
   AssertEqual
-  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/yapf'))},
+  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/yapf'))},
   \ ale#fixers#yapf#Fix(bufnr(''))
   \
 Execute(The yapf should include the .style.yapf file if present):
-  call ale#test#SetFilename('python_paths/with_virtualenv/dir_with_yapf_config/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/dir_with_yapf_config/foo/bar.py')
 
   AssertEqual
   \ {
   \   'command':
-  \     ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/yapf'))
+  \     ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/yapf'))
   \     . ' --no-local-style'
-  \     . ' --style ' . ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/dir_with_yapf_config/.style.yapf')),
+  \     . ' --style ' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/dir_with_yapf_config/.style.yapf')),
   \ },
   \ ale#fixers#yapf#Fix(bufnr(''))

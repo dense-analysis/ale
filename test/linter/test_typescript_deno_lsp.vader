@@ -1,0 +1,43 @@
+Before:
+  let g:ale_deno_unstable = 0
+  let g:ale_deno_executable = 'deno'
+  let g:ale_deno_lsp_project_root = ''
+
+  runtime autoload/ale/handlers/deno.vim
+  call ale#assert#SetUpLinterTest('typescript', 'deno')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(Should set deno lsp for TypeScript projects using stable Deno API):
+  AssertLSPOptions {
+  \   'enable': v:true,
+  \   'lint': v:true,
+  \   'unstable': v:false
+  \}
+
+Execute(Should set deno lsp using unstable Deno API if enabled by user):
+  let g:ale_deno_unstable = 1
+
+  AssertLSPOptions {
+  \   'enable': v:true,
+  \   'lint': v:true,
+  \   'unstable': v:true
+  \}
+
+Execute(Should find project root containing tsconfig.json):
+  call ale#test#SetFilename('../test-files/typescript/test.ts')
+
+  AssertLSPLanguage 'typescript'
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/typescript')
+
+Execute(Should use user-specified project root):
+  let g:ale_deno_lsp_project_root = '/'
+
+  call ale#test#SetFilename('../test-files/typescript/test.ts')
+
+  AssertLSPLanguage 'typescript'
+  AssertLSPProject '/'
+
+Execute(Check Deno LSP command):
+  AssertLinter 'deno', ale#Escape('deno') . ' lsp'

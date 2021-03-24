@@ -4,15 +4,11 @@ Before:
 
   let g:ale_command_wrapper = ''
 
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
-
 After:
   call ale#assert#TearDownFixerTest()
 
 Execute(The prettier callback should return the correct default values):
-  call ale#test#SetFilename('../prettier-test-files/testfile.js')
+  call ale#test#SetFilename('../test-files/prettier/testfile.js')
 
   AssertFixer
   \ {
@@ -24,7 +20,7 @@ Execute(The prettier callback should return the correct default values):
 
 Execute(The --config option should not be set automatically):
   let g:ale_javascript_prettier_use_local_config = 1
-  call ale#test#SetFilename('../prettier-test-files/with_config/testfile.js')
+  call ale#test#SetFilename('../test-files/prettier/with_config/testfile.js')
 
   AssertFixer
   \ {
@@ -36,7 +32,7 @@ Execute(The --config option should not be set automatically):
 
 Execute(The prettier callback should include custom prettier options):
   let g:ale_javascript_prettier_options = '--no-semi'
-  call ale#test#SetFilename('../prettier-test-files/with_config/testfile.js')
+  call ale#test#SetFilename('../test-files/prettier/with_config/testfile.js')
 
   AssertFixer
   \ {
@@ -48,7 +44,7 @@ Execute(The prettier callback should include custom prettier options):
   \ }
 
 Execute(The version check should be correct):
-  call ale#test#SetFilename('../prettier-test-files/testfile.js')
+  call ale#test#SetFilename('../test-files/prettier/testfile.js')
 
   AssertFixer [
   \ ale#Escape('prettier') . ' --version',
@@ -57,7 +53,7 @@ Execute(The version check should be correct):
 
 Execute(--stdin-filepath should be used when prettier is new enough):
   let g:ale_javascript_prettier_options = '--no-semi'
-  call ale#test#SetFilename('../prettier-test-files/with_config/testfile.js')
+  call ale#test#SetFilename('../test-files/prettier/with_config/testfile.js')
 
   GivenCommandOutput ['1.6.0']
   AssertFixer
@@ -69,7 +65,7 @@ Execute(--stdin-filepath should be used when prettier is new enough):
   \ }
 
 Execute(The version number should be cached):
-  call ale#test#SetFilename('../prettier-test-files/with_config/testfile.js')
+  call ale#test#SetFilename('../test-files/prettier/with_config/testfile.js')
 
   GivenCommandOutput ['1.6.0']
   AssertFixer
@@ -88,7 +84,7 @@ Execute(The version number should be cached):
   \ }
 
 Execute(Should set --parser to `babylon` by default, < 1.16.0):
-  call ale#test#SetFilename('../prettier-test-files/testfile')
+  call ale#test#SetFilename('../test-files/prettier/testfile')
 
   set filetype=javascript
 
@@ -102,7 +98,7 @@ Execute(Should set --parser to `babylon` by default, < 1.16.0):
   \ }
 
 Execute(Should set --parser to `babel` by default, >= 1.16.0):
-  call ale#test#SetFilename('../prettier-test-files/testfile')
+  call ale#test#SetFilename('../test-files/prettier/testfile')
 
   set filetype=javascript
 
@@ -116,7 +112,7 @@ Execute(Should set --parser to `babel` by default, >= 1.16.0):
   \ }
 
 Execute(Should set --parser based on filetype, TypeScript):
-  call ale#test#SetFilename('../prettier-test-files/testfile')
+  call ale#test#SetFilename('../test-files/prettier/testfile')
 
   set filetype=typescript
 
@@ -130,7 +126,7 @@ Execute(Should set --parser based on filetype, TypeScript):
   \ }
 
 Execute(Should set --parser based on filetype, CSS):
-  call ale#test#SetFilename('../prettier-test-files/testfile')
+  call ale#test#SetFilename('../test-files/prettier/testfile')
 
   set filetype=css
 
@@ -144,7 +140,7 @@ Execute(Should set --parser based on filetype, CSS):
   \ }
 
 Execute(Should set --parser based on filetype, LESS):
-  call ale#test#SetFilename('../prettier-test-files/testfile')
+  call ale#test#SetFilename('../test-files/prettier/testfile')
 
   set filetype=less
 
@@ -158,7 +154,7 @@ Execute(Should set --parser based on filetype, LESS):
   \ }
 
 Execute(Should set --parser based on filetype, SCSS):
-  call ale#test#SetFilename('../prettier-test-files/testfile')
+  call ale#test#SetFilename('../test-files/prettier/testfile')
 
   set filetype=scss
 
@@ -172,7 +168,7 @@ Execute(Should set --parser based on filetype, SCSS):
   \ }
 
 Execute(Should set --parser based on filetype, JSON):
-  call ale#test#SetFilename('../prettier-test-files/testfile')
+  call ale#test#SetFilename('../test-files/prettier/testfile')
 
   set filetype=json
 
@@ -186,7 +182,7 @@ Execute(Should set --parser based on filetype, JSON):
   \ }
 
 Execute(Should set --parser based on filetype, JSON5):
-  call ale#test#SetFilename('../prettier-test-files/testfile')
+  call ale#test#SetFilename('../test-files/prettier/testfile')
 
   set filetype=json5
 
@@ -200,7 +196,7 @@ Execute(Should set --parser based on filetype, JSON5):
   \ }
 
 Execute(Should set --parser based on filetype, GraphQL):
-  call ale#test#SetFilename('../prettier-test-files/testfile')
+  call ale#test#SetFilename('../test-files/prettier/testfile')
 
   set filetype=graphql
 
@@ -214,7 +210,7 @@ Execute(Should set --parser based on filetype, GraphQL):
   \ }
 
 Execute(Should set --parser based on filetype, Markdown):
-  call ale#test#SetFilename('../prettier-test-files/testfile')
+  call ale#test#SetFilename('../test-files/prettier/testfile')
 
   set filetype=markdown
 
@@ -228,7 +224,7 @@ Execute(Should set --parser based on filetype, Markdown):
   \ }
 
 Execute(Should set --parser based on filetype, Vue):
-  call ale#test#SetFilename('../prettier-test-files/testfile')
+  call ale#test#SetFilename('../test-files/prettier/testfile')
 
   set filetype=vue
 
@@ -242,7 +238,7 @@ Execute(Should set --parser based on filetype, Vue):
   \ }
 
 Execute(Should set --parser based on filetype, YAML):
-  call ale#test#SetFilename('../prettier-test-files/testfile')
+  call ale#test#SetFilename('../test-files/prettier/testfile')
 
   set filetype=yaml
 
@@ -256,7 +252,7 @@ Execute(Should set --parser based on filetype, YAML):
   \ }
 
 Execute(Should set --parser based on filetype, HTML):
-  call ale#test#SetFilename('../prettier-test-files/testfile')
+  call ale#test#SetFilename('../test-files/prettier/testfile')
 
   set filetype=html
 
@@ -270,7 +266,7 @@ Execute(Should set --parser based on filetype, HTML):
   \ }
 
 Execute(Should set --parser based on filetype, Ruby):
-  call ale#test#SetFilename('../prettier-test-files/testfile')
+  call ale#test#SetFilename('../test-files/prettier/testfile')
 
   set filetype=ruby
 
@@ -284,7 +280,7 @@ Execute(Should set --parser based on filetype, Ruby):
   \ }
 
 Execute(Should set --parser based on first filetype of multiple filetypes):
-  call ale#test#SetFilename('../prettier-test-files/testfile')
+  call ale#test#SetFilename('../test-files/prettier/testfile')
 
   set filetype=css.scss
 
@@ -298,7 +294,7 @@ Execute(Should set --parser based on first filetype of multiple filetypes):
   \ }
 
 Execute(Should set --parser for experimental language, Handlebars):
-  call ale#test#SetFilename('../prettier-test-files/testfile.hbs')
+  call ale#test#SetFilename('../test-files/prettier/testfile.hbs')
 
   set filetype=html.handlebars
 
@@ -312,7 +308,7 @@ Execute(Should set --parser for experimental language, Handlebars):
   \ }
 
 Execute(Changes to directory where .prettierignore is found):
-  call ale#test#SetFilename('../prettier-test-files/with_prettierignore/src/testfile.js')
+  call ale#test#SetFilename('../test-files/prettier/with_prettierignore/src/testfile.js')
 
   GivenCommandOutput ['1.6.0']
   AssertFixer

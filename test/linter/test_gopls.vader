@@ -1,0 +1,77 @@
+Before:
+  Save g:ale_go_go111module
+
+  call ale#assert#SetUpLinterTest('go', 'gopls')
+
+After:
+  if isdirectory(g:dir . '/.git')
+    call delete(g:dir . '/.git', 'd')
+  endif
+
+  unlet! b:ale_go_go111module
+  unlet! b:ale_go_go111module
+  unlet! b:ale_completion_enabled
+
+  call ale#assert#TearDownLinterTest()
+
+Execute(should set correct defaults):
+  AssertLinter 'gopls', ale#Escape('gopls') . ' --mode stdio'
+
+Execute(should configure gopls callback executable):
+  let b:ale_go_gopls_executable = 'boo'
+  let b:ale_go_gopls_options = ''
+
+  AssertLinter 'boo', ale#Escape('boo')
+
+Execute(should set gopls options):
+  call ale#test#SetFilename('../test-files/go/go1/prj1/file.go')
+  " let b:ale_completion_enabled = 1
+  let b:ale_go_gopls_options = ''
+
+  AssertLinter 'gopls',
+  \ ale#Escape('gopls') . ''
+
+  let b:ale_go_gopls_options = '--mode stdio --trace'
+
+  AssertLinter 'gopls',
+  \ ale#Escape('gopls') . ' --mode stdio --trace'
+
+  let b:ale_go_gopls_init_options = {'ui.diagnostic.analyses': {'composites': v:false}}
+  AssertLSPOptions {'ui.diagnostic.analyses': {'composites': v:false}}
+
+Execute(should support go environment variables):
+  let b:ale_go_go111module = 'off'
+
+  AssertLinter 'gopls',
+  \ ale#Env('GO111MODULE', 'off') . ale#Escape('gopls') . ' --mode stdio'
+
+Execute(Should return directory for 'go.mod' if found in parent directory):
+  call ale#test#SetFilename('../test-files/go/test.go')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/go')
+
+Execute(Should return nearest directory with '.git' if found in parent directory):
+  call ale#test#SetFilename('test.go')
+
+  if !isdirectory(g:dir . '/.git')
+    call mkdir(g:dir . '/.git')
+  endif
+
+  AssertLSPProject g:dir
+
+Execute(Should ignore 'go.mod' and return '.git' dir if modules off):
+  call ale#test#SetFilename('../test-files/go/test.go')
+
+  let b:ale_go_go111module = 'off'
+  let b:parent_dir = ale#path#Simplify(g:dir . '/..')
+  let b:git_dir = b:parent_dir . '/.git'
+
+  if !isdirectory(b:git_dir)
+    call mkdir(b:git_dir)
+  endif
+
+  AssertLSPProject b:parent_dir
+
+  call delete(b:git_dir, 'd')
+  unlet! b:parent_dir
+  unlet! b:git_dir
