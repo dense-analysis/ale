@@ -319,6 +319,7 @@ Notes:
   * `nimpretty`
 * nix
   * `nix-instantiate`
+  * `nixfmt`
   * `nixpkgs-fmt`
   * `rnix-lsp`
 * nroff
