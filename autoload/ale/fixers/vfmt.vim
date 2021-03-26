@@ -8,7 +8,6 @@ function! ale#fixers#vfmt#Fix(buffer) abort
     let l:options = ale#Var(a:buffer, 'v_vfmt_options')
 
     return {
-    \   'command': ale#Escape(l:executable) . ' fmt'
-    \       . (empty(l:options) ? '' : ' ' . l:options)
+    \   'command': ale#Escape(l:executable) . ' fmt' . ale#Pad(l:options)
     \}
 endfunction

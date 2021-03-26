@@ -9,9 +9,8 @@ function! ale_linters#v#v#GetCommand(buffer) abort
 
     " Run v in local directory with relative path
     let l:command = ale#Var(a:buffer, 'v_v_executable')
-    \   . (!empty(l:options) ? ' ' . l:options : '')
-    \   . ' .'
-    \   . ' -o /tmp/vim-ale-v'
+    \   . ale#Pad(l:options)
+    \   . ' .' . ' -o /tmp/vim-ale-v'
 
     return l:command
 endfunction
