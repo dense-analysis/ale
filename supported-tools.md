@@ -543,6 +543,9 @@ formatting.
   * [tslint](https://github.com/palantir/tslint)
   * [tsserver](https://github.com/Microsoft/TypeScript/wiki/Standalone-Server-%28tsserver%29)
   * typecheck
+* V
+  * [v](https://github.com/vlang/v/)
+  * [vfmt](https://github.com/vlang/v/)
 * VALA
   * [uncrustify](https://github.com/uncrustify/uncrustify)
   * [vala_lint](https://github.com/vala-lang/vala-lint) :floppy_disk:
