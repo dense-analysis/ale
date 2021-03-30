@@ -4,6 +4,7 @@
 call ale#Set('go_golangci_lint_options', '--enable-all')
 call ale#Set('go_golangci_lint_executable', 'golangci-lint')
 call ale#Set('go_golangci_lint_package', 0)
+call ale#Set('go_golangci_lint_show_current_only', 0)
 
 function! ale_linters#go#golangci_lint#GetCommand(buffer) abort
     let l:filename = expand('#' . a:buffer . ':t')
@@ -30,10 +31,17 @@ function! ale_linters#go#golangci_lint#GetMatches(lines) abort
 endfunction
 
 function! ale_linters#go#golangci_lint#Handler(buffer, lines) abort
+    let l:filename = expand('#' . a:buffer . ':t')
     let l:dir = expand('#' . a:buffer . ':p:h')
     let l:output = []
+    let l:current_only = ale#Var(a:buffer, 'go_golangci_lint_show_current_only')
 
     for l:match in ale_linters#go#golangci_lint#GetMatches(a:lines)
+        " skip lint message of other files
+        if l:current_only && l:match[1] != l:filename
+            continue
+        endif
+
         " l:match[1] will already be an absolute path, output from
         " golangci_lint
         call add(l:output, {

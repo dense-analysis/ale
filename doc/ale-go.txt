@@ -112,6 +112,12 @@ g:ale_go_golangci_lint_package                 *g:ale_go_golangci_lint_package*
   When set to `1`, the whole Go package will be checked instead of only the
   current file.
 
+g:ale_go_golangci_lint_show_current_only       *g:ale_go_golangci_lint_show_current_only*
+                                               *b:ale_go_golangci_lint_show_current_only*
+  Type: |Number|
+  Default: `0`
+
+  When set to `1`, only show lint result of the current file
 
 ===============================================================================
 golangserver                                              *ale-go-golangserver*
