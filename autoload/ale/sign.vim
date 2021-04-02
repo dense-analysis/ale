@@ -354,10 +354,17 @@ function! ale#sign#GetSignCommands(buffer, was_sign_set, sign_map) abort
     let l:command_list = []
     let l:is_dummy_sign_set = a:was_sign_set
 
+    " Neovim 0.5 changed the way the sign column behaves.
+    " See this commit for more details:
+    " https://github.com/neovim/neovim/commit/88ae03bcdb8992fd91a3efdb61dbd7e2aa395eff
+    if has('nvim-0.5') && g:ale_sign_column_always &&
+    \  ! getbufvar(a:buffer, 'ale_nvim_05_sign_fixed', v:false)
+        setlocal signcolumn=yes:1
+        let b:ale_nvim_05_sign_fixed=v:true
     " Set the dummy sign if we need to.
     " The dummy sign is needed to keep the sign column open while we add
     " and remove signs.
-    if !l:is_dummy_sign_set && (!empty(a:sign_map) || g:ale_sign_column_always)
+    elseif !l:is_dummy_sign_set && (!empty(a:sign_map) || g:ale_sign_column_always)
         call add(l:command_list, 'sign place '
         \   .  g:ale_sign_offset
         \   . s:GroupCmd()
