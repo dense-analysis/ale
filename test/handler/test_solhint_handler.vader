@@ -50,7 +50,7 @@ Execute(The solhint handler should parse linter error messages correctly):
   \     'type': 'E',
   \   },
   \ ],
-  \ ale_linters#solidity#solhint#Handle(bufnr(''), [
+  \ ale#handlers#solhint#Handle(bufnr(''), [
   \   'contracts/Bounty.sol: line 1, col 17, Warning - Compiler version must be fixed (compiler-fixed)',
   \   'contracts/Bounty.sol: line 4, col 8, Error - Use double quotes for string literals (quotes)',
   \   'contracts/Bounty.sol: line 5, col 8, Error - Use double quotes for string literals (quotes)',
@@ -78,7 +78,7 @@ Execute(The solhint handler should parse syntax error messages correctly):
   \     'type': 'E',
   \   },
   \ ],
-  \ ale_linters#solidity#solhint#Handle(bufnr(''), [
+  \ ale#handlers#solhint#Handle(bufnr(''), [
   \   "contracts/Bounty.sol: line 30, col 4, Error - Parse error: missing ';' at 'uint248'",
   \   "contracts/Bounty.sol: line 203, col 4, Error - Parse error: no viable alternative at input '_loserStakeMultiplier}'",
   \ ])
