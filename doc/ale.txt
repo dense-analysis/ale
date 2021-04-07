@@ -3021,6 +3021,7 @@ documented in additional help files.
     prettier..............................|ale-svelte-prettier|
     svelteserver..........................|ale-svelte-svelteserver|
   swift...................................|ale-swift-options|
+    apple-swift-format....................|ale-swift-apple-swift-format|
     sourcekitlsp..........................|ale-swift-sourcekitlsp|
   systemd.................................|ale-systemd-options|
     systemd-analyze.......................|ale-systemd-analyze|

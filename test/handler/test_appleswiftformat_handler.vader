@@ -1,10 +1,10 @@
 Before:
-  runtime ale_linters/swift/swiftformat.vim
+  runtime ale_linters/swift/appleswiftformat.vim
 
 After:
   call ale#linter#Reset()
 
-Execute(The swiftformat handler should parse lines correctly):
+Execute(The appleswiftformat handler should parse lines correctly):
   AssertEqual
   \ [
   \   {
@@ -22,7 +22,7 @@ Execute(The swiftformat handler should parse lines correctly):
   \     'text': 'remove 1 space'
   \   },
   \ ],
-  \ ale_linters#swift#swiftformat#Handle(bufnr(''), [
-  \   'Sources/main.swift:4:21: warning: [DoNotUseSemicolons]: remove '';'' and move the next statement to the new line',
-  \   'Sources/main.swift:3:12: warning: [Spacing]: remove 1 space',
+  \ ale_linters#swift#appleswiftformat#Handle(bufnr(''), [
+  \   'Sources/main.swift:4:21: warning: [DoNotUseSemicolons] remove '';'' and move the next statement to the new line',
+  \   'Sources/main.swift:3:12: warning: [Spacing] remove 1 space',
   \ ])
