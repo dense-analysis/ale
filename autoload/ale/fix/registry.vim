@@ -191,6 +191,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['swift'],
 \       'description': 'Apply SwiftFormat to a file.',
 \   },
+\   'apple-swift-format': {
+\       'function': 'ale#fixers#appleswiftformat#Fix',
+\       'suggested_filetypes': ['swift'],
+\       'description': 'Apply apple/swift-format to a file.',
+\   },
 \   'phpcbf': {
 \       'function': 'ale#fixers#phpcbf#Fix',
 \       'suggested_filetypes': ['php'],
