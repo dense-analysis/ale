@@ -53,7 +53,7 @@ function! ale#handlers#eslint#GetCwd(buffer) abort
 
     if !empty(l:executable)
         let l:nmi = strridx(l:executable, 'node_modules')
-        let l:project_dir = l:executable[0:l:nmi - 2]
+        let l:project_dir = !empty(l:nmi + 1) ? l:executable[0:l:nmi - 2] : ''
     else
         let l:modules_dir = ale#path#FindNearestDirectory(a:buffer, 'node_modules')
         let l:project_dir = !empty(l:modules_dir) ? fnamemodify(l:modules_dir, ':h:h') : ''
