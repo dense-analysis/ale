@@ -394,6 +394,7 @@ formatting.
   * [swipl](https://github.com/SWI-Prolog/swipl-devel)
 * proto
   * [protoc-gen-lint](https://github.com/ckaznocha/protoc-gen-lint)
+  * [protolint](https://github.com/yoheimuta/protolint)
 * Pug
   * [pug-lint](https://github.com/pugjs/pug-lint)
 * Puppet

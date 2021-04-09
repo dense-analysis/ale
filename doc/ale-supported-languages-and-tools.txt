@@ -385,6 +385,7 @@ Notes:
   * `swipl`
 * proto
   * `protoc-gen-lint`
+  * `protolint`
 * Pug
   * `pug-lint`
 * Puppet

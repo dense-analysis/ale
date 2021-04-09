@@ -346,6 +346,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['json'],
 \       'description': 'Fix JSON files with jq.',
 \   },
+\   'protolint': {
+\       'function': 'ale#fixers#protolint#Fix',
+\       'suggested_filetypes': ['proto'],
+\       'description': 'Fix Protocol Buffer files with protolint.',
+\   },
 \   'perltidy': {
 \       'function': 'ale#fixers#perltidy#Fix',
 \       'suggested_filetypes': ['perl'],

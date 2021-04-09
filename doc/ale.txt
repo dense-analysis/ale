@@ -2918,6 +2918,7 @@ documented in additional help files.
     swipl.................................|ale-prolog-swipl|
   proto...................................|ale-proto-options|
     protoc-gen-lint.......................|ale-proto-protoc-gen-lint|
+    protolint.............................|ale-proto-protolint|
   pug.....................................|ale-pug-options|
     puglint...............................|ale-pug-puglint|
   puppet..................................|ale-puppet-options|
