@@ -55,14 +55,14 @@ function! ale#handlers#eslint#GetCwd(buffer) abort
         let l:modules_index = strridx(l:executable, 'node_modules')
         let l:modules_root = l:modules_index > -1 ? l:executable[0:l:modules_index - 2] : ''
 
-        let l:sdks_index = strridx(l:executable, '.yarn/sdks')
+        let l:sdks_index = strridx(l:executable, ale#path#Simplify('.yarn/sdks'))
         let l:sdks_root = l:sdks_index > -1 ? l:executable[0:l:sdks_index - 2] : ''
     else
         let l:modules_dir = ale#path#FindNearestDirectory(a:buffer, 'node_modules')
         let l:modules_root = !empty(l:modules_dir) ? fnamemodify(l:modules_dir, ':h:h') : ''
 
-        let l:sdks_dir = ale#path#FindNearestDirectory(a:buffer, '.yarn/sdks')
-        let l:sdks_root = !empty(l:sdks_dir) ? fnamemodify(l:sdks_dir, ':h:h') : ''
+        let l:sdks_dir = ale#path#FindNearestDirectory(a:buffer, ale#path#Simplify('.yarn/sdks'))
+        let l:sdks_root = !empty(l:sdks_dir) ? fnamemodify(l:sdks_dir, ':h:h:h') : ''
     endif
 
     return strlen(l:modules_root) > strlen(l:sdks_root) ? l:modules_root : l:sdks_root
