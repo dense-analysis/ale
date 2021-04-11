@@ -310,6 +310,8 @@ A plugin might integrate its own checks with ALE like so: >
     call ale#other_source#ShowResults(a:buffer, 'some-name', a:results)
   endfunction
 <
+The |g:ale_other_source_text_line_separator| is used as the replacement for
+the new-line characters in the incomming linting messages.
 
 ===============================================================================
 4. Fixing Problems                                                    *ale-fix*
@@ -1810,6 +1812,16 @@ g:ale_open_list                                               *g:ale_open_list*
     autocmd QuitPre * if empty(&buftype) | lclose | endif
   augroup END
 <
+
+g:ale_other_source_text_line_separator     *g:other_source_text_line_separator*
+
+  Type: |String|
+  Default: `': '`
+
+  Substitution string used to replace the new-line character in linting
+  messages incomming from |ale-lint-other-sources|. The format of the string
+  corresponds to that of {sub} parameteer used by |substitute()| function.
+
 
 g:ale_pattern_options                                   *g:ale_pattern_options*
 

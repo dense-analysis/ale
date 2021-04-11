@@ -285,9 +285,12 @@ function! ale#engine#FixLocList(buffer, linter_name, from_other_source, loclist)
         "
         " The linter_name will be set on the errors so it can be used in
         " output, filtering, etc..
+        if !exists('g:ale_other_source_text_line_separator')
+            let g:ale_other_source_text_line_separator = ': '
+        endif
         let l:item = {
         \   'bufnr': a:buffer,
-        \   'text': l:old_item.text,
+        \   'text': substitute(l:old_item.text, '\n', g:ale_other_source_text_line_separator, 'g'),
         \   'lnum': str2nr(l:old_item.lnum),
         \   'col': str2nr(get(l:old_item, 'col', 0)),
         \   'vcol': 0,
