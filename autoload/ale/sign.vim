@@ -171,10 +171,8 @@ endfunction
 
 " Read sign data for a buffer to a list of lines.
 function! ale#sign#ReadSigns(buffer) abort
-    redir => l:output
-        silent execute 'sign place ' . s:GroupCmd() . s:PriorityCmd()
-        \ . ' buffer=' . a:buffer
-    redir end
+    let l:output = execute('sign place ' . s:GroupCmd() . s:PriorityCmd()
+    \ . ' buffer=' . a:buffer, 'silent')
 
     return split(l:output, "\n")
 endfunction
