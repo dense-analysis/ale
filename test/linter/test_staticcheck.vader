@@ -1,0 +1,35 @@
+Before:
+  Save g:ale_go_go111module
+
+  call ale#assert#SetUpLinterTest('go', 'staticcheck')
+  call ale#test#SetFilename('test.go')
+
+After:
+  unlet! b:ale_go_go111module
+
+  call ale#assert#TearDownLinterTest()
+
+Execute(The staticcheck callback should return the right defaults):
+  AssertLinterCwd '%s:h'
+  AssertLinter 'staticcheck', 'staticcheck %s:t'
+
+Execute(The staticcheck callback should use configured options):
+  let b:ale_go_staticcheck_options = '-test'
+
+  AssertLinter 'staticcheck', 'staticcheck -test %s:t'
+
+Execute(The staticcheck `lint_package` option should use the correct command):
+  let b:ale_go_staticcheck_lint_package = 1
+
+  AssertLinterCwd '%s:h'
+  AssertLinter 'staticcheck', 'staticcheck .'
+
+Execute(The staticcheck callback should use the `GO111MODULE` option if set):
+  let b:ale_go_go111module = 'off'
+
+  AssertLinter 'staticcheck', ale#Env('GO111MODULE', 'off') . 'staticcheck %s:t'
+
+  " Test with lint_package option set
+  let b:ale_go_staticcheck_lint_package = 1
+
+  AssertLinter 'staticcheck', ale#Env('GO111MODULE', 'off') . 'staticcheck .'

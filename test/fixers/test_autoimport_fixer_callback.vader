@@ -7,9 +7,6 @@ Before:
   let g:ale_python_autoimport_options = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
 
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
 
@@ -25,11 +22,11 @@ Execute(The autoimport callback should return the correct default values):
   \ 0,
   \ ale#fixers#autoimport#Fix(bufnr(''))
 
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
   \ {
-  \   'command': ale#path#BufferCdString(bufnr(''))
-  \     . ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/autoimport')) . ' -',
+  \   'cwd': '%s:h',
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/autoimport')) . ' -',
   \ },
   \ ale#fixers#autoimport#Fix(bufnr(''))
 
@@ -40,11 +37,11 @@ Execute(The autoimport callback should respect custom options):
   \ 0,
   \ ale#fixers#autoimport#Fix(bufnr(''))
 
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
   \ {
-  \   'command': ale#path#BufferCdString(bufnr(''))
-  \     . ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/autoimport'))
+  \   'cwd': '%s:h',
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/autoimport'))
   \     . ' --multi-line=3 --trailing-comma -',
   \ },
   \ ale#fixers#autoimport#Fix(bufnr(''))

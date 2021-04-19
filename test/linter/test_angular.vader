@@ -1,0 +1,44 @@
+Before:
+  call ale#assert#SetUpLinterTest('html', 'angular')
+  let g:paths = {}
+
+After:
+  call ale#assert#TearDownLinterTest()
+  unlet g:paths
+
+Execute(The Angular LSP connection shouldn't be created outside of Angular projects):
+  AssertLSPLanguage 'html'
+  AssertLSPConfig {}
+  AssertLSPProject ''
+  AssertLinterNotExecuted
+
+Execute(The default command for Angular should be correct):
+  call ale#test#SetFilename('../test-files/angular/test.html')
+  let g:paths = {
+  \ 'ngserver': ale#test#GetFilename('../test-files/angular/node_modules/@angular/language-server/bin/ngserver'),
+  \ 'service': ale#test#GetFilename('../test-files/angular/node_modules/@angular/language-service'),
+  \ 'typescript': ale#test#GetFilename('../test-files/angular/node_modules/typescript'),
+  \}
+
+  AssertLSPLanguage 'html'
+  AssertLSPProject ale#test#GetFilename('../test-files/angular')
+  AssertLinter g:paths.ngserver, ale#Escape(g:paths.ngserver)
+  \   . ' --ngProbeLocations ' . ale#Escape(g:paths.service)
+  \   . ' --tsProbeLocations ' . ale#Escape(g:paths.typescript)
+  \   . ' --stdio'
+
+Execute(It should be possible to use the global ngserver):
+  let b:ale_html_angular_use_global = 1
+
+  call ale#test#SetFilename('../test-files/angular/test.html')
+  let g:paths = {
+  \ 'service': ale#test#GetFilename('../test-files/angular/node_modules/@angular/language-service'),
+  \ 'typescript': ale#test#GetFilename('../test-files/angular/node_modules/typescript'),
+  \}
+
+  AssertLSPLanguage 'html'
+  AssertLSPProject ale#test#GetFilename('../test-files/angular')
+  AssertLinter 'ngserver', ale#Escape('ngserver')
+  \   . ' --ngProbeLocations ' . ale#Escape(g:paths.service)
+  \   . ' --tsProbeLocations ' . ale#Escape(g:paths.typescript)
+  \   . ' --stdio'

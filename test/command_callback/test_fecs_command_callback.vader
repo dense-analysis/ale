@@ -1,8 +1,0 @@
-Before:
-  call ale#assert#SetUpLinterTest('javascript', 'fecs')
-
-After:
-  call ale#assert#TearDownLinterTest()
-
-Execute(The default command should be correct):
-  AssertLinter 'fecs', ale#Escape('fecs') . ' check --colors=false --rule=true %t'

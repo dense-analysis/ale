@@ -5,7 +5,7 @@ Before:
   let g:ale_javascript_importjs_executable = 'xxxinvalid'
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  call ale#test#SetFilename('../javascript_files/test.js')
+  call ale#test#SetFilename('../test-files/javascript/test.js')
 
 After:
   Restore

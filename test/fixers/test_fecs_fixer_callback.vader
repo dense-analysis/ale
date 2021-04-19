@@ -6,10 +6,8 @@ After:
   call ale#assert#TearDownFixerTest()
 
 Execute(The fecs fixer should respect to g:ale_javascript_fecs_executable):
-  let g:ale_javascript_fecs_executable = 'fecs_paths/fecs'
+  let g:ale_javascript_fecs_executable = '../test-files/fecs/fecs'
   let g:ale_javascript_fecs_use_global = 1
-  silent cd ../command_callback
-  let g:dir = getcwd()
 
   AssertEqual
   \ {

@@ -242,6 +242,30 @@ Execute(tsserver definition requests should be sent):
   \ g:message_list
   AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
 
+Execute(tsserver type definition requests should be sent):
+  runtime ale_linters/typescript/tsserver.vim
+  call setpos('.', [bufnr(''), 2, 5, 0])
+
+  ALEGoToTypeDefinition
+
+  " We shouldn't register the callback yet.
+  AssertEqual '''''', string(g:Callback)
+
+  AssertEqual type(function('type')), type(g:InitCallback)
+  call g:InitCallback()
+
+  AssertEqual 'typeDefinition', g:capability_checked
+  AssertEqual
+  \ 'function(''ale#definition#HandleTSServerResponse'')',
+  \ string(g:Callback)
+  AssertEqual
+  \ [
+  \   ale#lsp#tsserver_message#Change(bufnr('')),
+  \   [0, 'ts@typeDefinition', {'file': expand('%:p'), 'line': 2, 'offset': 5}]
+  \ ],
+  \ g:message_list
+  AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
+
 Execute(tsserver tab definition requests should be sent):
   runtime ale_linters/typescript/tsserver.vim
   call setpos('.', [bufnr(''), 2, 5, 0])
@@ -305,6 +329,29 @@ Execute(Other files should be jumped to for LSP definition responses):
   \   'result': {
   \     'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \     'range': {
+  \       'start': {'line': 2, 'character': 7},
+  \     },
+  \   },
+  \ }
+  \)
+
+  AssertEqual
+  \ [
+  \   'edit +3 ' . fnameescape(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \ ],
+  \ g:expr_list
+  AssertEqual [3, 8], getpos('.')[1:2]
+  AssertEqual {}, ale#definition#GetMap()
+
+Execute(Newer LocationLink items should be supported):
+  call ale#definition#SetMap({3: {'open_in': 'current-buffer'}})
+  call ale#definition#HandleLSPResponse(
+  \ 1,
+  \ {
+  \   'id': 3,
+  \   'result': {
+  \     'targetUri': ale#path#ToURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \     'targetRange': {
   \       'start': {'line': 2, 'character': 7},
   \     },
   \   },

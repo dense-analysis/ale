@@ -7,8 +7,6 @@ Before:
   let g:ale_python_autopep8_options = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  silent cd ..
-  silent cd command_callback
   let g:dir = getcwd()
 
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
@@ -25,15 +23,15 @@ Execute(The autopep8 callback should return the correct default values):
   \ 0,
   \ ale#fixers#autopep8#Fix(bufnr(''))
 
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
-  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/autopep8')) . ' -'},
+  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/autopep8')) . ' -'},
   \ ale#fixers#autopep8#Fix(bufnr(''))
 
 Execute(The autopep8 callback should include options):
   let g:ale_python_autopep8_options = '--some-option'
 
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
-  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/' . b:bin_dir . '/autopep8')) . ' --some-option -' },
+  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/autopep8')) . ' --some-option -' },
   \ ale#fixers#autopep8#Fix(bufnr(''))

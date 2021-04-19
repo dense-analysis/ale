@@ -3,27 +3,25 @@ Before:
   runtime ale_linters/java/javac.vim
 
   Save $PATH
-  let $PATH = ale#path#Simplify(g:dir . '/ant-test-files/bin')
-
-  let g:valid_project = 'ant-test-files/ant-project'
-  let g:invalid_project = 'ant-test-files/non-ant-project'
-  let g:command_tail = ' classpath' . ' -S' . ' -q'
+  let $PATH = ale#path#Simplify(g:dir . '/test-files/ant/bin')
 
 After:
   Restore
-
-  unlet! g:command_tail
-  unlet! g:valid_project
-  unlet! g:invalid_project
 
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 
 Execute(Should return `cd '[dir]' && 'ant' classpath -S -q`):
-  call ale#test#SetFilename(valid_project . '/Main.java')
+  call ale#test#SetFilename('test-files/ant/ant-project/Main.java')
 
   AssertEqual
-  \ ale#path#CdString(ale#path#Simplify(g:dir . '/ant-test-files/ant-project'))
-  \   . ale#Escape('ant')
-  \   . g:command_tail,
+  \ [
+  \   ale#path#Simplify(g:dir . '/test-files/ant/ant-project'),
+  \   ale#Escape('ant') . ' classpath' . ' -S' . ' -q',
+  \ ],
   \ ale#ant#BuildClasspathCommand(bufnr(''))
+
+Execute(Should return empty string if ant cannot be executed):
+  call ale#test#SetFilename('test-files/ant/not-an-ant-project/Main.java')
+
+  AssertEqual ['', ''], ale#ant#BuildClasspathCommand(bufnr(''))

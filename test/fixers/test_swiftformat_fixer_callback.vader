@@ -5,9 +5,6 @@ Before:
   let g:ale_swift_swiftformat_executable = 'xxxinvalid'
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
 
 After:
   Restore
@@ -15,7 +12,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The swiftformat callback should return the correct default values):
-  call ale#test#SetFilename('swift_paths/dummy.swift')
+  call ale#test#SetFilename('../test-files/swift/dummy.swift')
 
   AssertEqual
   \ {
@@ -26,7 +23,7 @@ Execute(The swiftformat callback should return the correct default values):
   \ ale#fixers#swiftformat#Fix(bufnr(''))
 
 Execute(The swiftformat callback should include any additional options):
-  call ale#test#SetFilename('swift_paths/dummy.swift')
+  call ale#test#SetFilename('../test-files/swift/dummy.swift')
   let g:ale_swift_swiftformat_options = '--some-option'
 
   AssertEqual

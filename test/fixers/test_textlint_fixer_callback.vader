@@ -16,7 +16,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The textlint callback should return the correct default values):
-  call ale#test#SetFilename('../markdown_files/testfile.md')
+  call ale#test#SetFilename('../test-files/markdown/testfile.md')
 
   AssertEqual
   \ {
@@ -29,7 +29,7 @@ Execute(The textlint callback should return the correct default values):
 
 Execute(The textlint callback should include custom textlint options):
   let g:ale_textlint_options = "--quiet"
-  call ale#test#SetFilename('../markdown_files/testfile.md')
+  call ale#test#SetFilename('../test-files/markdown/testfile.md')
 
   AssertEqual
   \ {

@@ -1,0 +1,66 @@
+Before:
+  call ale#assert#SetUpLinterTest('cpp', 'cppcheck')
+  let b:command_tail = ' -q --language=c++ --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}') . ' --enable=style -I' . ale#Escape(ale#path#Simplify(g:dir)) .' %t'
+
+After:
+  " Remove a test file we might open for some tests.
+  if &buftype != 'nofile'
+    :q!
+    set buftype=nofile
+  endif
+
+  unlet! b:command_tail
+  call ale#assert#TearDownLinterTest()
+
+Execute(The executable should be configurable):
+  AssertLinter 'cppcheck', ale#Escape('cppcheck') . b:command_tail
+
+  let b:ale_cpp_cppcheck_executable = 'foobar'
+
+  AssertLinterCwd ''
+  AssertLinter 'foobar', ale#Escape('foobar') . b:command_tail
+
+Execute(cppcheck for C++ should detect compile_commands.json files):
+  call ale#test#SetFilename('../test-files/cppcheck/one/foo.cpp')
+
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/cppcheck/one')
+  AssertLinter 'cppcheck', ale#Escape('cppcheck')
+  \   . ' -q --language=c++'
+  \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
+  \   . ' --project=' . ale#Escape('compile_commands.json')
+  \   . ' --enable=style %t'
+
+Execute(cppcheck for C++ should detect compile_commands.json files in build directories):
+  call ale#test#SetFilename('../test-files/cppcheck/with_build_dir/foo.cpp')
+
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/cppcheck/with_build_dir')
+  AssertLinter 'cppcheck', ale#Escape('cppcheck')
+  \   . ' -q --language=c++'
+  \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
+  \   . ' --project=' . ale#Escape(ale#path#Simplify('build/compile_commands.json'))
+  \   . ' --enable=style %t'
+
+Execute(cppcheck for C++ should include file dir if compile_commands.json file is not found):
+  call ale#test#SetFilename('../test-files/cppcheck/foo.cpp')
+
+  AssertLinter 'cppcheck',
+  \   ale#Escape('cppcheck')
+  \   . ' -q --language=c++'
+  \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
+  \   . ' --enable=style'
+  \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/cppcheck'))
+  \   . ' %t'
+
+Execute(cppcheck for C++ should ignore compile_commands.json file if buffer is modified):
+  call ale#test#SetFilename('../test-files/cppcheck/one/foo.cpp')
+
+  set buftype=
+  set modified
+
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/cppcheck/one')
+  AssertLinter 'cppcheck', ale#Escape('cppcheck')
+  \   . ' -q --language=c++'
+  \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
+  \   . ' --enable=style'
+  \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/cppcheck/one'))
+  \   . ' %t'

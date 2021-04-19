@@ -11,6 +11,10 @@ Before:
   let g:feedkeys_calls = []
   let g:fake_mode = 'i'
 
+  let b:ale_linters = {
+  \ 'typescript': ['tsserver'],
+  \}
+
   let &l:completeopt = 'menu,menuone,preview,noselect,noinsert'
 
   runtime autoload/ale/util.vim
@@ -69,6 +73,7 @@ After:
   unlet! b:ale_completion_info
   unlet! b:ale_completion_result
   unlet! b:ale_complete_done_time
+  unlet! b:ale_linters
 
   delfunction CheckCompletionCalled
   delfunction ale#code_action#HandleCodeAction

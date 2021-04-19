@@ -7,10 +7,12 @@ Before:
   Save g:ale_run_synchronously
   Save g:ale_set_lists_synchronously
   Save g:ale_buffer_info
+  Save g:ale_sign_offset
 
   " We want to check that sign IDs are set for this test.
   let g:ale_set_signs = 1
   let g:ale_set_loclist = 1
+  let g:ale_sign_offset = 2000000
   " Disable features we don't need for these tests.
   let g:ale_set_quickfix = 0
   let g:ale_set_highlights = 0
@@ -77,7 +79,7 @@ Execute(The loclist should be updated after linting is done):
   \     'type': 'W',
   \     'col': 10,
   \     'text': 'Infix operators must be spaced. [Warning/space-infix-ops]',
-  \     'sign_id': 1000001,
+  \     'sign_id': 2000001,
   \   },
   \   {
   \     'lnum': 2,
@@ -88,7 +90,7 @@ Execute(The loclist should be updated after linting is done):
   \     'type': 'E',
   \     'col': 10,
   \     'text': 'Missing semicolon. [Error/semi]',
-  \     'sign_id': 1000002,
+  \     'sign_id': 2000002,
   \   }
   \ ],
   \ get(get(g:ale_buffer_info, bufnr('%'), {}), 'loclist', [])

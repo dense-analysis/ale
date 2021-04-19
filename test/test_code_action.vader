@@ -1,13 +1,6 @@
 Before:
   Save g:ale_enabled
-
   let g:ale_enabled = 0
-
-  " Enable fix end-of-line as tests below expect that
-  set fixeol
-
-  runtime autoload/ale/code_action.vim
-  runtime autoload/ale/util.vim
 
   let g:file1 = tempname()
   let g:file2 = tempname()
@@ -42,8 +35,6 @@ Before:
   endfunction!
 
 After:
-  Restore
-
   " Close the extra buffers if we opened it.
   if bufnr(g:file1) != -1
     execute ':bp! | :bd! ' . bufnr(g:file1)
@@ -65,8 +56,7 @@ After:
   unlet! g:changes
   delfunction WriteFileAndEdit
 
-  runtime autoload/ale/code_action.vim
-  runtime autoload/ale/util.vim
+  Restore
 
 
 Execute(It should modify and save multiple files):
@@ -214,7 +204,6 @@ Execute(End of file can be modified):
   \)
 
   AssertEqual g:test.text + [
-  \  '',
   \  'type A: string',
   \  'type B: number',
   \  '',
@@ -362,6 +351,15 @@ Execute(Cursor will not move when changes happening on lines >= cursor, but afte
   call ale#code_action#HandleCodeAction(
   \ g:test.create_change(2, 10, 3, 1, "number\n"), {'should_save': 1})
   AssertEqual '  value: number', getline('.')
+  AssertEqual [2, 3], getpos('.')[1:2]
+
+Execute(Cursor will not move when change covers entire file):
+  call WriteFileAndEdit()
+  call setpos('.', [0, 2, 3, 0])
+  call ale#code_action#HandleCodeAction(
+  \ g:test.create_change(1, 1, len(g:test.text) + 1, 1,
+  \   join(g:test.text + ['x'], "\n")),
+  \ {'should_save': 1})
   AssertEqual [2, 3], getpos('.')[1:2]
 
 Execute(It should just modify file when should_save is set to v:false):

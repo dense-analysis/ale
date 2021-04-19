@@ -7,21 +7,21 @@ After:
   call ale#linter#Reset()
 
 Execute(Should return directory for 'mvnw' if found in parent directory):
-  call ale#test#SetFilename('maven-test-files/maven-java-project/module1/src/main/java/dummy1.java')
+  call ale#test#SetFilename('test-files/maven/maven-java-project/module1/src/main/java/dummy1.java')
 
   AssertEqual
-  \ ale#path#Simplify(g:dir . '/maven-test-files/maven-java-project/module1'),
+  \ ale#path#Simplify(g:dir . '/test-files/maven/maven-java-project/module1'),
   \ ale#maven#FindProjectRoot(bufnr(''))
 
 Execute(Should return directory for 'pom.xml' if found in parent directory):
-  call ale#test#SetFilename('maven-test-files/maven-java-project/module2/src/main/java/dummy2.java')
+  call ale#test#SetFilename('test-files/maven/maven-java-project/module2/src/main/java/dummy2.java')
 
   AssertEqual
-  \ ale#path#Simplify(g:dir . '/maven-test-files/maven-java-project/module2'),
+  \ ale#path#Simplify(g:dir . '/test-files/maven/maven-java-project/module2'),
   \ ale#maven#FindProjectRoot(bufnr(''))
 
 Execute(Should return empty string if maven files are not found in parent directory):
-  call ale#test#SetFilename('maven-test-files/non-maven-project/src/main/java/dummy.java')
+  call ale#test#SetFilename('test-files/maven/non-maven-project/src/main/java/dummy.java')
 
   AssertEqual
   \ '',

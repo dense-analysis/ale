@@ -30,7 +30,7 @@ Execute(Additional options should be used when set):
   \ }
 
 Execute(--eslint-config-path should be set for 4.2.0 and up):
-  call ale#test#SetFilename('eslint-test-files/react-app/foo/bar.js')
+  call ale#test#SetFilename('../test-files/eslint/react-app/foo/bar.js')
 
   GivenCommandOutput ['4.2.0']
   AssertFixer
@@ -39,12 +39,12 @@ Execute(--eslint-config-path should be set for 4.2.0 and up):
   \   'command':
   \     ale#Escape('prettier-eslint')
   \     . ' %t'
-  \     . ' --eslint-config-path ' . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/.eslintrc.js'))
+  \     . ' --eslint-config-path ' . ale#Escape(ale#test#GetFilename('../test-files/eslint/react-app/.eslintrc.js'))
   \     . ' --write'
   \ }
 
 Execute(--eslint-config-path shouldn't be used for older versions):
-  call ale#test#SetFilename('eslint-test-files/react-app/foo/bar.js')
+  call ale#test#SetFilename('../test-files/eslint/react-app/foo/bar.js')
 
   AssertFixer
   \ {
@@ -68,14 +68,14 @@ Execute(The version check should be correct):
   \]
 
 Execute(The new --stdin-filepath option should be used when the version is new enough):
-  call ale#test#SetFilename('eslint-test-files/react-app/foo/bar.js')
+  call ale#test#SetFilename('../test-files/eslint/react-app/foo/bar.js')
 
   GivenCommandOutput ['4.4.0']
   AssertFixer
   \ {
-  \   'command': ale#path#BufferCdString(bufnr(''))
-  \     . ale#Escape('prettier-eslint')
-  \     . ' --eslint-config-path ' . ale#Escape(ale#path#Simplify(g:dir . '/eslint-test-files/react-app/.eslintrc.js'))
+  \   'cwd': '%s:h',
+  \   'command': ale#Escape('prettier-eslint')
+  \     . ' --eslint-config-path ' . ale#Escape(ale#test#GetFilename('../test-files/eslint/react-app/.eslintrc.js'))
   \     . ' --stdin-filepath %s --stdin',
   \ }
 
@@ -83,15 +83,15 @@ Execute(The version number should be cached):
   GivenCommandOutput ['4.4.0']
   AssertFixer
   \ {
-  \   'command': ale#path#BufferCdString(bufnr(''))
-  \     . ale#Escape('prettier-eslint')
+  \   'cwd': '%s:h',
+  \   'command': ale#Escape('prettier-eslint')
   \     . ' --stdin-filepath %s --stdin',
   \ }
 
   GivenCommandOutput []
   AssertFixer
   \ {
-  \   'command': ale#path#BufferCdString(bufnr(''))
-  \     . ale#Escape('prettier-eslint')
+  \   'cwd': '%s:h',
+  \   'command': ale#Escape('prettier-eslint')
   \     . ' --stdin-filepath %s --stdin',
   \ }

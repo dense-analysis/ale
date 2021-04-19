@@ -23,16 +23,16 @@ After:
   call ale#linter#Reset()
 
 Execute(Should return 'mvnw' if found in parent directory):
-  call ale#test#SetFilename('maven-test-files/maven-java-project/module1/src/main/java/dummy1.java')
+  call ale#test#SetFilename('test-files/maven/maven-java-project/module1/src/main/java/dummy1.java')
 
   AssertEqual
-  \ ale#path#Simplify(g:dir . '/maven-test-files/maven-java-project/module1/' . g:expected_wrapper),
+  \ ale#path#Simplify(g:dir . '/test-files/maven/maven-java-project/module1/' . g:expected_wrapper),
   \ ale#maven#FindExecutable(bufnr(''))
 
 Execute(Should return 'mvn' if 'mvnw' not found in parent directory):
-  call ale#test#SetFilename('maven-test-files/maven-java-project/module2/src/main/java/dummy2.java')
+  call ale#test#SetFilename('test-files/maven/maven-java-project/module2/src/main/java/dummy2.java')
   let $PATH .= (has('win32') ? ';' : ':')
-  \ . ale#path#Simplify(g:dir . '/maven-test-files')
+  \ . ale#path#Simplify(g:dir . '/test-files/maven')
 
   AssertEqual
   \ 'mvn',

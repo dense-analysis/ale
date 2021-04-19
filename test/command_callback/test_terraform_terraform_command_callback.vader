@@ -1,9 +1,0 @@
-" Based upon :help ale-development
-Before:
-  call ale#assert#SetUpLinterTest('terraform', 'terraform')
-
-After:
-  call ale#assert#TearDownLinterTest()
-
-Execute(The default command should be correct):
-  AssertLinter 'terraform', ale#Escape('terraform') . ' fmt -no-color --check=true -'

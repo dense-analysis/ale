@@ -8,10 +8,7 @@ Before:
   unlet! b:ale_typescript_tslint_config_path
 
   call ale#handlers#tslint#InitVariables()
-
-  call ale#test#SetDirectory('/testplugin/test/command_callback')
-  silent cd ..
-  silent cd command_callback
+  call ale#test#SetDirectory('/testplugin/test/fixers')
 
 After:
   Restore
@@ -20,7 +17,7 @@ After:
 
 Execute(The tslint callback should return the correct default values):
   let g:ale_typescript_tslint_config_path = 'tslint.json'
-  call ale#test#SetFilename('../prettier-test-files/testfile.ts')
+  call ale#test#SetFilename('../test-files/prettier/testfile.ts')
 
   AssertEqual
   \ {
@@ -33,7 +30,7 @@ Execute(The tslint callback should return the correct default values):
 
 Execute(The tslint callback should include custom tslint config option):
   let g:ale_typescript_tslint_config_path = '.tslintrc'
-  call ale#test#SetFilename('../prettier-test-files/testfile.ts')
+  call ale#test#SetFilename('../test-files/prettier/testfile.ts')
 
   AssertEqual
   \ {

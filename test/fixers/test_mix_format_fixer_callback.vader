@@ -13,7 +13,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The mix_format callback should return the correct default values):
-  call ale#test#SetFilename('../elixir-test-files/testfile.ex')
+  call ale#test#SetFilename('../test-files/elixir/testfile.ex')
 
   AssertEqual
   \ {
@@ -25,7 +25,7 @@ Execute(The mix_format callback should return the correct default values):
 
 Execute(The mix_format callback should include the correct format options):
   let g:ale_elixir_mix_format_options = 'invalid_options'
-  call ale#test#SetFilename('../elixir-test-files/testfile.ex')
+  call ale#test#SetFilename('../test-files/elixir/testfile.ex')
 
   AssertEqual
   \ {

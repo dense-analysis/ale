@@ -1,9 +1,9 @@
 Before:
-  Save g:ale_lsp_root
-  Save b:ale_lsp_root
+  Save g:ale_root
+  Save b:ale_root
 
-  let g:ale_lsp_root = {}
-  unlet! b:ale_lsp_root
+  let g:ale_root = {}
+  unlet! b:ale_root
 
   let g:linter = {}
 
@@ -87,6 +87,34 @@ Execute (PreProcess should allow command to be a callback):
   \ 'callback': 'SomeFunction',
   \ 'executable': 'echo',
   \ 'command': function('type'),
+  \})
+
+Execute (PreProcess should throw when cwd is not a string):
+  AssertThrows call ale#linter#PreProcess('testft', {
+  \ 'name': 'foo',
+  \ 'callback': 'SomeFunction',
+  \ 'executable': 'echo',
+  \ 'cwd': [],
+  \ 'command': 'echo',
+  \})
+  AssertEqual '`cwd` must be a String or Function if defined', g:vader_exception
+
+Execute (PreProcess should allow cwd to be a callback):
+  call ale#linter#PreProcess('testft', {
+  \ 'name': 'foo',
+  \ 'callback': 'SomeFunction',
+  \ 'executable': 'echo',
+  \ 'cwd': function('type'),
+  \ 'command': 'echo',
+  \})
+
+Execute (PreProcess should allow cwd to be a string):
+  call ale#linter#PreProcess('testft', {
+  \ 'name': 'foo',
+  \ 'callback': 'SomeFunction',
+  \ 'executable': 'echo',
+  \ 'cwd': '/foo/bar',
+  \ 'command': 'echo',
   \})
 
 Execute (PreProcess should when the output stream isn't a valid string):
@@ -305,7 +333,7 @@ Execute(PreProcess should complain about invalid language values):
   \}
 
   AssertThrows call ale#linter#PreProcess('testft', g:linter)
-  AssertEqual '`language` must be a String or Funcref if defined', g:vader_exception
+  AssertEqual '`language` must be a String or Function if defined', g:vader_exception
 
 Execute(PreProcess should use the filetype as the language string by default):
   let g:linter = {

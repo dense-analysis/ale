@@ -17,8 +17,6 @@ Before:
   let g:ale_c_build_dir = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  silent cd ../command_callback
-  let g:dir = getcwd()
 
 After:
   Restore
@@ -26,7 +24,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The clangtidy callback should return the correct default values):
-  call ale#test#SetFilename('c_paths/dummy.c')
+  call ale#test#SetFilename('../test-files/c/dummy.c')
 
   AssertEqual
   \ {
@@ -37,7 +35,7 @@ Execute(The clangtidy callback should return the correct default values):
   \ ale#fixers#clangtidy#Fix(bufnr(''))
 
 Execute(The clangtidy callback should include any additional options):
-  call ale#test#SetFilename('c_paths/dummy.c')
+  call ale#test#SetFilename('../test-files/c/dummy.c')
   let g:ale_c_clangtidy_extra_options = '--some-option'
 
   AssertEqual

@@ -1,10 +1,6 @@
 Before:
   call ale#assert#SetUpFixerTest('html', 'html-beautify', 'beautify')
 
-  call ale#test#SetDirectory('/testplugin/test/fixers')
-  silent cd ..
-  silent cd command_callback
-
 After:
   Restore
 

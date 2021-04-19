@@ -7,9 +7,6 @@ Before:
   let g:ale_python_reorder_python_imports_options = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
 
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
 
@@ -25,10 +22,10 @@ Execute(The reorder_python_imports callback should return the correct default va
   \ 0,
   \ ale#fixers#reorder_python_imports#Fix(bufnr(''))
 
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
   \ {
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/'
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/'
   \     . b:bin_dir . '/reorder-python-imports')) . ' -',
   \ },
   \ ale#fixers#reorder_python_imports#Fix(bufnr(''))
@@ -40,10 +37,10 @@ Execute(The reorder_python_imports callback should respect custom options):
   \ 0,
   \ ale#fixers#reorder_python_imports#Fix(bufnr(''))
 
-  silent execute 'file ' . fnameescape(g:dir . '/python_paths/with_virtualenv/subdir/foo/bar.py')
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
   \ {
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/python_paths/with_virtualenv/env/'
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/'
   \     . b:bin_dir . '/reorder-python-imports')) . ' --py3-plus -',
   \ },
   \ ale#fixers#reorder_python_imports#Fix(bufnr(''))

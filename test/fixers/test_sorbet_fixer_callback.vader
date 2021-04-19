@@ -1,4 +1,3 @@
-
 Before:
   Save g:ale_ruby_sorbet_executable
   Save g:ale_ruby_sorbet_options
@@ -8,9 +7,6 @@ Before:
   let g:ale_ruby_sorbet_options = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
 
 After:
   Restore
@@ -18,7 +14,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The sorbet callback should return the correct default values):
-  call ale#test#SetFilename('ruby_paths/dummy.rb')
+  call ale#test#SetFilename('../test-files/ruby/dummy.rb')
 
   AssertEqual
   \ {
@@ -30,7 +26,7 @@ Execute(The sorbet callback should return the correct default values):
 
 Execute(The sorbet callback should include custom sorbet options):
   let g:ale_ruby_sorbet_options = '--enable-experimental-lsp-hover'
-  call ale#test#SetFilename('ruby_paths/with_config/dummy.rb')
+  call ale#test#SetFilename('../test-files/ruby/with_config/dummy.rb')
 
   AssertEqual
   \ {

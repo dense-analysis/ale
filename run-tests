@@ -9,8 +9,11 @@ set -u
 # options, or read the output below.
 #
 
-image=w0rp/ale
-current_image_id=f58c7bf8900f
+image=denseanalysis/ale
+
+# Create docker image tag based on Dockerfile contents
+image_tag=$(md5sum Dockerfile | cut -d' ' -f1)
+git_version=$(git describe --always --tags)
 
 # Used in all test scripts for running the selected Docker image.
 DOCKER_RUN_IMAGE="$image"
@@ -21,9 +24,9 @@ tests='test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader'
 verbose_flag=''
 quiet_flag=''
 run_neovim_02_tests=1
-run_neovim_03_tests=1
+run_neovim_04_tests=1
 run_vim_80_tests=1
-run_vim_81_tests=1
+run_vim_82_tests=1
 run_linters=1
 
 while [ $# -ne 0 ]; do
@@ -36,58 +39,66 @@ while [ $# -ne 0 ]; do
         quiet_flag='-q'
         shift
     ;;
+    --build-image)
+        run_vim_80_tests=0
+        run_vim_82_tests=0
+        run_neovim_02_tests=0
+        run_neovim_04_tests=0
+        run_linters=0
+        shift
+    ;;
     --neovim-only)
         run_vim_80_tests=0
-        run_vim_81_tests=0
+        run_vim_82_tests=0
         run_linters=0
         shift
     ;;
     --neovim-02-only)
-        run_neovim_03_tests=0
+        run_neovim_04_tests=0
         run_vim_80_tests=0
-        run_vim_81_tests=0
+        run_vim_82_tests=0
         run_linters=0
         shift
     ;;
-    --neovim-03-only)
+    --neovim-04-only)
         run_neovim_02_tests=0
         run_vim_80_tests=0
-        run_vim_81_tests=0
+        run_vim_82_tests=0
         run_linters=0
         shift
     ;;
     --vim-only)
         run_neovim_02_tests=0
-        run_neovim_03_tests=0
+        run_neovim_04_tests=0
         run_linters=0
         shift
     ;;
     --vim-80-only)
         run_neovim_02_tests=0
-        run_neovim_03_tests=0
-        run_vim_81_tests=0
+        run_neovim_04_tests=0
+        run_vim_82_tests=0
         run_linters=0
         shift
     ;;
-    --vim-81-only)
+    --vim-82-only)
         run_neovim_02_tests=0
-        run_neovim_03_tests=0
+        run_neovim_04_tests=0
         run_vim_80_tests=0
         run_linters=0
         shift
     ;;
     --linters-only)
         run_vim_80_tests=0
-        run_vim_81_tests=0
+        run_vim_82_tests=0
         run_neovim_02_tests=0
-        run_neovim_03_tests=0
+        run_neovim_04_tests=0
         shift
     ;;
     --fast)
         run_vim_80_tests=0
-        run_vim_81_tests=0
+        run_vim_82_tests=0
         run_neovim_02_tests=0
-        run_neovim_03_tests=1
+        run_neovim_04_tests=1
         shift
     ;;
     --help)
@@ -99,12 +110,13 @@ while [ $# -ne 0 ]; do
         echo 'Options:'
         echo '  -v                Enable verbose output'
         echo '  -q                Hide output for successful tests'
-        echo '  --neovim-only     Run tests only for NeoVim 0.2 and 0.3'
+        echo '  --build-image     Run docker image build only.'
+        echo '  --neovim-only     Run tests only for NeoVim'
         echo '  --neovim-02-only  Run tests only for NeoVim 0.2'
-        echo '  --neovim-03-only  Run tests only for NeoVim 0.3'
-        echo '  --vim-only        Run tests only for Vim 8.0 and 8.1'
+        echo '  --neovim-04-only  Run tests only for NeoVim 0.4'
+        echo '  --vim-only        Run tests only for Vim'
         echo '  --vim-80-only     Run tests only for Vim 8.0'
-        echo '  --vim-81-only     Run tests only for Vim 8.1'
+        echo '  --vim-82-only     Run tests only for Vim 8.2'
         echo '  --linters-only    Run only Vint and custom checks'
         echo '  --fast            Run only the fastest Vim and custom checks'
         echo '  --help            Show this help text'
@@ -138,8 +150,36 @@ fi
 # Delete .swp files in the test directory, which cause Vim 8 to hang.
 find test -name '*.swp' -delete
 
-docker images -q w0rp/ale | grep "^$current_image_id" > /dev/null \
-    || docker pull "$image"
+# Check if docker un image is available locally
+has_image=$(docker images ls --filter reference="${image}:${image_tag}" --quiet | wc -l)
+
+if [ "$has_image" -eq 0 ]
+then
+
+  echo "Downloading run image ${image}:${image_tag}"
+  docker pull "${image}:${image_tag}" &> /dev/null
+
+  if [ $? -eq 1 ]
+  then
+    echo "Could not pull image ${image}:${image_tag}"
+    echo "Building run image ${image}:${image_tag}"
+    docker build --build-arg GIT_VERSION="$git_version" -t "${image}:${image_tag}" .
+    docker tag "${image}:${image_tag}" "${image}:latest"
+
+    if [[ -z "${DOCKER_HUB_USER:-}" || -z "${DOCKER_HUB_PASS:-}" ]]
+    then
+      echo "Docker Hub credentials not set, skip push"
+    else
+      echo "Push ${image}:${image_tag} to Docker Hub"
+      echo "$DOCKER_HUB_PASS" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+      docker push "${image}:${image_tag}"
+    fi
+  fi
+else
+  echo "Docker run image ${image}:${image_tag} ready"
+fi
+
+docker tag "${image}:${image_tag}" "${image}:latest"
 
 output_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
 
@@ -174,9 +214,9 @@ trap cancel_tests INT TERM
 
 for vim in $(docker run --rm "$DOCKER_RUN_IMAGE" ls /vim-build/bin | grep '^neovim\|^vim' ); do
     if ( [[ $vim =~ ^vim-v8.0 ]] && ((run_vim_80_tests)) ) \
-    || ( [[ $vim =~ ^vim-v8.1 ]] && ((run_vim_81_tests)) ) \
+    || ( [[ $vim =~ ^vim-v8.2 ]] && ((run_vim_82_tests)) ) \
     || ( [[ $vim =~ ^neovim-v0.2 ]] && ((run_neovim_02_tests)) ) \
-    || ( [[ $vim =~ ^neovim-v0.3 ]] && ((run_neovim_03_tests)) ); then
+    || ( [[ $vim =~ ^neovim-v0.4 ]] && ((run_neovim_04_tests)) ); then
         echo "Starting Vim: $vim..."
         file_number=$((file_number+1))
         test/script/run-vader-tests $quiet_flag $verbose_flag "$vim" "$tests" \

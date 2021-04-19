@@ -1,4 +1,4 @@
-# Asynchronous Lint Engine [![Travis CI Build Status](https://travis-ci.com/dense-analysis/ale.svg?branch=master)](https://travis-ci.com/dense-analysis/ale) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/r0ef1xu8xjmik58d/branch/master?svg=true)](https://ci.appveyor.com/project/dense-analysis/ale) [![Join the chat at https://gitter.im/vim-ale/Lobby](https://badges.gitter.im/vim-ale/Lobby.svg)](https://gitter.im/vim-ale/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# Asynchronous Lint Engine [![GitHub Build Status](https://github.com/dense-analysis/ale/workflows/CI/badge.svg)](https://github.com/dense-analysis/ale/actions?query=event%3Apush+workflow%3ACI+branch%3Amaster++) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/r0ef1xu8xjmik58d/branch/master?svg=true)](https://ci.appveyor.com/project/dense-analysis/ale) [![Join the chat at https://gitter.im/vim-ale/Lobby](https://badges.gitter.im/vim-ale/Lobby.svg)](https://gitter.im/vim-ale/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
 ![ALE Logo by Mark Grealish - https://www.bhalash.com/](https://user-images.githubusercontent.com/3518142/59195920-2c339500-8b85-11e9-9c22-f6b7f69637b8.jpg)
@@ -81,6 +81,7 @@ other content at [w0rp.com](https://w0rp.com).
     18. [How can I configure ALE differently for different buffers?](#faq-buffer-configuration)
     19. [How can I configure the height of the list in which ALE displays errors?](#faq-list-window-height)
     20. [How can I run linters or fixers via Docker or a VM?](#faq-vm)
+    21. [How can I change the borders for floating preview windows?](#faq-window-borders)
 
 <a name="supported-languages"></a>
 
@@ -907,3 +908,23 @@ tools are well-integrated with ALE, and ALE is properly configured to run the
 correct commands and map filename paths between different file systems. See
 `:help ale-lint-other-machines` for the full documentation on how to configure
 ALE to support this.
+
+<a name="faq-window-borders"></a>
+
+### 5.xxi. How can I change the borders for floating preview windows?
+
+Borders for floating preview windows are enabled by default. You can use the
+`g:ale_floating_window_border` setting to configure them.
+
+You could disable the border with an empty list.
+
+```vim
+let g:ale_floating_window_border = []
+```
+
+If the terminal supports Unicode, you might try setting the value like below, to
+make it look nicer.
+
+```vim
+let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰']
+```

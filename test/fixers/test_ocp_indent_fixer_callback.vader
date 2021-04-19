@@ -14,7 +14,7 @@ After:
   call ale#test#RestoreDirectory()
 
 Execute(The ocp_indent callback should return the correct default values):
-  call ale#test#SetFilename('../ocaml-test-files/ocp_inden_testfile.re')
+  call ale#test#SetFilename('../test-files/ocaml/ocp_inden_testfile.re')
 
   AssertEqual
   \ {
@@ -24,7 +24,7 @@ Execute(The ocp_indent callback should return the correct default values):
 
 Execute(The ocp_indent callback should include custom ocp_indent options):
   let g:ale_ocaml_ocp_indent_config = "base=4, type=4"
-  call ale#test#SetFilename('../ocaml-test-files/ocp_inden_testfile.re')
+  call ale#test#SetFilename('../test-files/ocaml/ocp_inden_testfile.re')
 
   AssertEqual
   \ {

@@ -1,13 +1,9 @@
 Before:
   Save g:ale_html_tidy_executable
 
-  let g:ale_html_tidy_executable = 'tidy_paths/tidy'
+  let g:ale_html_tidy_executable = '../test-files/tidy/tidy'
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
-
-  silent cd ..
-  silent cd command_callback
-  let g:dir = getcwd()
 
 After:
   Restore
@@ -23,7 +19,7 @@ Execute(The tidy callback should return 0 if tidy not found):
 Execute(The tidy callback should return the correct default command):
   AssertEqual
   \ {
-  \   'command': ale#Escape('tidy_paths/tidy')
+  \   'command': ale#Escape('../test-files/tidy/tidy')
   \     . ' -q --tidy-mark no --show-errors 0 --show-warnings 0'
   \ },
   \ ale#fixers#tidy#Fix(bufnr(''))

@@ -1,0 +1,20 @@
+Before:
+  call ale#assert#SetUpLinterTest('rust', 'analyzer')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default executable path should be correct):
+  AssertLinter 'rust-analyzer', ale#Escape('rust-analyzer')
+
+Execute(The project root should be detected correctly):
+  AssertLSPProject ''
+
+  call ale#test#SetFilename('../test-files/rust/test.rs')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/rust')
+
+Execute(Should accept configuration settings):
+  AssertLSPConfig {}
+  let b:ale_rust_analyzer_config = {'diagnostics': {'disabled': ['unresolved-import']}}
+  AssertLSPOptions {'diagnostics': {'disabled': ['unresolved-import']}}

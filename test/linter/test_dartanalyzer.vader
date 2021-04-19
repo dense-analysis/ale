@@ -1,0 +1,20 @@
+Before:
+  call ale#assert#SetUpLinterTest('dart', 'dartanalyzer')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command and executable should be correct):
+  AssertLinter 'dartanalyzer', ale#Escape('dartanalyzer') . ' %s'
+
+Execute(The executable should be configurable):
+  let g:ale_dart_dartanalyzer_executable = 'foobar'
+
+  AssertLinter 'foobar', ale#Escape('foobar') . ' %s'
+
+Execute(The .packages file should be set if detected):
+  call ale#test#SetFilename('../test-files/dart/foo')
+
+  AssertLinter 'dartanalyzer', ale#Escape('dartanalyzer')
+  \   . ' --packages ' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/dart/.packages'))
+  \ . ' %s'
