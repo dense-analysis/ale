@@ -26,7 +26,7 @@ Execute(The stylelint callback should include custom stylelint options):
 
   AssertFixer
   \ {
-  \   'read_temporary_file': 1,
+  \   'read_temporary_file': 0,
   \   'cwd': '%s:h',
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/node_modules/stylelint/bin/stylelint.js'))
