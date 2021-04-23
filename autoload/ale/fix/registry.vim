@@ -156,6 +156,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['ruby'],
 \       'description': 'Fix ruby files with rubocop --auto-correct.',
 \   },
+\   'cookstyle': {
+\       'function': 'ale#fixers#cookstyle#Fix',
+\       'suggested_filetypes': ['chef'],
+\       'description': 'Fix chef files with cookstyle --auto-correct.',
+\   },
 \   'rufo': {
 \       'function': 'ale#fixers#rufo#Fix',
 \       'suggested_filetypes': ['ruby'],
