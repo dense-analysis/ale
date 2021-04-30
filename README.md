@@ -82,6 +82,7 @@ other content at [w0rp.com](https://w0rp.com).
     19. [How can I configure the height of the list in which ALE displays errors?](#faq-list-window-height)
     20. [How can I run linters or fixers via Docker or a VM?](#faq-vm)
     21. [How can I change the borders for floating preview windows?](#faq-window-borders)
+    22. [How can I use ALE and vim-lsp together?](#faq-vim-lsp)
 
 <a name="supported-languages"></a>
 
@@ -928,3 +929,24 @@ make it look nicer.
 ```vim
 let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰']
 ```
+
+<a name="faq-vim-lsp"></a>
+
+### 5.xxii. How can I use ALE and vim-lsp together?
+
+[vim-lsp](https://github.com/prabirshrestha/vim-lsp) is a popular plugin as
+implementation of Language Server Protocol (LSP) client for Vim. It provides
+all the LSP features including auto completion, diagnostics, go to definitions,
+etc.
+
+ALE also provides LSP support for diagnostics. When you use both ALE and
+vim-lsp, one option is disabling ALE's LSP support by
+`let g:ale_disable_lsp = 1`. However ALE provides integration of external
+programs. Showing errors from language servers by vim-lsp and showing errors
+from other external programs by ALE are confusing and problematic.
+
+[vim-lsp-ale](https://github.com/rhysd/vim-lsp-ale) is a bridge plugin to solve
+the problem when using both ALE and vim-lsp. With the plugin, diagnostics are
+provided by vim-lsp and ALE can handle all the errors. Please read
+[vim-lsp-ale's documentation](https://github.com/rhysd/vim-lsp-ale/blob/master/doc/vim-lsp-ale.txt)
+for more details.
