@@ -10,7 +10,7 @@ Execute(The yosys handler should parse lines correctly):
   \   {
   \     'lnum': 1,
   \     'type': 'E',
-  \     'text': internal error',
+  \     'text': 'internal error',
   \   },
   \   {
   \     'lnum': 3,
