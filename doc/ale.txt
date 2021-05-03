@@ -3065,6 +3065,7 @@ documented in additional help files.
     verilator.............................|ale-verilog-verilator|
     vlog..................................|ale-verilog-vlog|
     xvlog.................................|ale-verilog-xvlog|
+    yosys.................................|ale-verilog-yosys|
   vhdl....................................|ale-vhdl-options|
     ghdl..................................|ale-vhdl-ghdl|
     hdl-checker...........................|ale-vhdl-hdl-checker|
