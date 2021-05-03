@@ -8,15 +8,15 @@ Execute(The yosys handler should parse lines correctly):
   AssertEqual
   \ [
   \   {
-  \     'lnum': 1,
-  \     'type': 'E',
-  \     'text': 'internal error',
-  \   },
-  \   {
   \     'lnum': 3,
   \     'type': 'E',
   \     'text': 'syntax error, unexpected TOK_ID',
   \     'filename': 'file.v'
+  \   },
+  \   {
+  \     'lnum': 1,
+  \     'type': 'E',
+  \     'text': 'internal error',
   \   },
   \ ],
   \ ale_linters#verilog#yosys#Handle(bufnr(''), [
