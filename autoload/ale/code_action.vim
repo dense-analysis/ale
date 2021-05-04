@@ -247,6 +247,10 @@ function! s:UpdateCursor(cursor, start, end, offset) abort
 endfunction
 
 function! ale#code_action#GetChanges(workspace_edit) abort
+    if a:workspace_edit is v:null
+        return {}
+    endif
+
     let l:changes = {}
 
     if has_key(a:workspace_edit, 'changes') && !empty(a:workspace_edit.changes)
