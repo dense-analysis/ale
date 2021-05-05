@@ -2,30 +2,18 @@
 " Description: rflint linting for robot framework files
 
 call ale#Set('robot_rflint_executable', 'rflint')
-call ale#Set('robot_rflint_use_global', get(g:, 'ale_use_global_executables', 0))
-call ale#Set('robot_rflint_auto_pipenv', 0)
 
 function! ale_linters#robot#rflint#GetExecutable(buffer) abort
-    if (ale#Var(a:buffer, 'python_auto_pipenv') || ale#Var(a:buffer, 'robot_rflint_auto_pipenv'))
-    \ && ale#python#PipenvPresent(a:buffer)
-        return 'pipenv'
-    endif
-
-    return ale#python#FindExecutable(a:buffer, 'robot_rflint', ['rflint'])
+    return ale#Var(a:buffer, 'robot_rflint_executable')
 endfunction
 
 function! ale_linters#robot#rflint#GetCommand(buffer) abort
     let l:executable = ale_linters#robot#rflint#GetExecutable(a:buffer)
-    let l:flags = '--no-filenames --format'
+    let l:flags = '--format'
     \ . ' "{filename}:{severity}:{linenumber}:{char}:{rulename}:{message}"'
-
-    let l:exec_args = l:executable =~? 'pipenv$'
-    \   ? 'run rflint '
-    \   : ''
 
     return l:executable
     \   . ' '
-    \   . l:exec_args
     \   . l:flags
     \   . ' %s'
 endfunction
@@ -55,3 +43,4 @@ call ale#linter#Define('robot', {
 \   'command': function('ale_linters#robot#rflint#GetCommand'),
 \   'callback': 'ale_linters#robot#rflint#Handle',
 \})
+

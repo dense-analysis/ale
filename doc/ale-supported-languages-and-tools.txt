@@ -439,6 +439,8 @@ Notes:
   * `textlint`
   * `vale`
   * `write-good`
+* Robot
+  * `rflint`
 * RPM spec
   * `rpmlint`
 * Ruby
