@@ -35,7 +35,10 @@ function! ale_linters#haskell#hls#GetProjectRoot(buffer) abort
         \   ale#path#Upwards(expand('#' . a:buffer . ':p:h'))[:-2],
         \   ','
         \)
-        let l:project_file = globpath(l:paths, '*.cabal')
+        let l:cabal_files = globpath(l:paths, '*.cabal')
+        if !empty(l:cabal_files)
+            let l:project_file = split(l:cabal_files, "\n")[0]
+        endif
     endif
 
     " If we still can't find one, use the current file.
