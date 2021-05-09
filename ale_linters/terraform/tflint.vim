@@ -91,7 +91,7 @@ function! ale_linters#terraform#tflint#GetCommand(buffer) abort
         let l:cmd .= ' ' . l:opts
     endif
 
-    let l:cmd .= ' -f json %t'
+    let l:cmd .= ' -f json'
 
     return l:cmd
 endfunction
