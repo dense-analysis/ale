@@ -464,10 +464,10 @@ formatting.
   * [standardrb](https://github.com/testdouble/standard)
 * Rust
   * [cargo](https://github.com/rust-lang/cargo) :floppy_disk: (see `:help ale-integration-rust` for configuration instructions)
-  * [rls](https://github.com/rust-lang-nursery/rls) :warning:
+  * [rls](https://github.com/rust-lang/rls) :warning:
   * [rust-analyzer](https://github.com/rust-analyzer/rust-analyzer) :warning:
   * [rustc](https://www.rust-lang.org/) :warning:
-  * [rustfmt](https://github.com/rust-lang-nursery/rustfmt)
+  * [rustfmt](https://github.com/rust-lang/rustfmt)
 * Salt
   * [salt-lint](https://github.com/warpnet/salt-lint)
 * Sass

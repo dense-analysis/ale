@@ -155,7 +155,7 @@ g:ale_rust_cargo_use_clippy
   `cargo build` as linter.
   For details of `cargo clippy`, please visit the following link:
 
-  https://github.com/rust-lang-nursery/rust-clippy
+  https://github.com/rust-lang/rust-clippy
 
   Since `cargo clippy` is optional toolchain, it's safer to check whether
   `cargo-clippy` is executable as follows:
