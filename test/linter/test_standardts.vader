@@ -1,43 +1,44 @@
 Before:
   call ale#assert#SetUpLinterTest('typescript', 'standard')
-  call ale#test#SetFilename('testfile.js')
+  call ale#test#SetFilename('testfile.ts')
   unlet! b:executable
 
 After:
   call ale#assert#TearDownLinterTest()
 
 Execute(bin/cmd.js paths should be preferred):
-  call ale#test#SetFilename('../test-files/standard/with-cmd/testfile.js')
+  call ale#test#SetFilename('../test-files/standard/with-cmd/testfile.ts')
 
   let b:executable = ale#path#Simplify(
   \   g:dir
-  \   . '/../test-files/standard/with-cmd/node_modules/standard/bin/cmd.js'
+  \   . '/../test-files/standard/with-cmd/node_modules/ts-standard/bin/cmd.js'
   \)
 
   AssertLinter b:executable,
   \ (has('win32') ? 'node.exe ' : '')
   \   . ale#Escape(b:executable)
-  \   . ' --stdin %s'
+  \   . ' --stdin'
+  \   . ' --stdin-filename %s'
 
 Execute(.bin directories should be used too):
-  call ale#test#SetFilename('../test-files/standard/with-bin/testfile.js')
+  call ale#test#SetFilename('../test-files/standard/with-bin/testfile.ts')
 
   let b:executable = ale#path#Simplify(
   \   g:dir
-  \   . '/../test-files/standard/with-bin/node_modules/.bin/standard'
+  \   . '/../test-files/standard/with-bin/node_modules/.bin/ts-standard'
   \)
 
-  AssertLinter b:executable, ale#Escape(b:executable) . ' --stdin %s'
+  AssertLinter b:executable, ale#Escape(b:executable) . ' --stdin --stdin-filename %s'
 
 Execute(The global executable should be used otherwise):
-  AssertLinter 'standard', ale#Escape('standard') . ' --stdin %s'
+  AssertLinter 'ts-standard', ale#Escape('ts-standard') . ' --stdin --stdin-filename %s'
 
 Execute(The global executable should be configurable):
   let b:ale_typescript_standard_executable = 'foobar'
 
-  AssertLinter 'foobar', ale#Escape('foobar') . ' --stdin %s'
+  AssertLinter 'foobar', ale#Escape('foobar') . ' --stdin --stdin-filename %s'
 
 Execute(The options should be configurable):
   let b:ale_typescript_standard_options = '--wat'
 
-  AssertLinter 'standard', ale#Escape('standard') . ' --wat --stdin %s'
+  AssertLinter 'ts-standard', ale#Escape('ts-standard') . ' --wat --stdin --stdin-filename %s'
