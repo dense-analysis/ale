@@ -1,15 +1,14 @@
 " Author: Ahmed El Gabri <@ahmedelgabri>
 " Description: standardjs for typescript files
 
-call ale#Set('typescript_standard_executable', 'standard')
+call ale#Set('typescript_standard_executable', 'ts-standard')
 call ale#Set('typescript_standard_use_global', get(g:, 'ale_use_global_executables', 0))
 call ale#Set('typescript_standard_options', '')
 
 function! ale_linters#typescript#standard#GetExecutable(buffer) abort
     return ale#node#FindExecutable(a:buffer, 'typescript_standard', [
-    \   'node_modules/standardx/bin/cmd.js',
-    \   'node_modules/standard/bin/cmd.js',
-    \   'node_modules/.bin/standard',
+    \   'node_modules/ts-standard/bin/cmd.js',
+    \   'node_modules/.bin/ts-standard',
     \])
 endfunction
 
@@ -19,7 +18,8 @@ function! ale_linters#typescript#standard#GetCommand(buffer) abort
 
     return ale#node#Executable(a:buffer, l:executable)
     \   . (!empty(l:options) ? ' ' . l:options : '')
-    \   . ' --stdin %s'
+    \   . ' --stdin'
+    \   . ' --stdin-filename %s'
 endfunction
 
 " standard uses eslint and the output format is the same

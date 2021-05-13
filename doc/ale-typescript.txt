@@ -55,7 +55,7 @@ standard                                              *ale-typescript-standard*
 g:ale_typescript_standard_executable     *g:ale_typescript_standard_executable*
                                          *b:ale_typescript_standard_executable*
   Type: |String|
-  Default: `'standard'`
+  Default: `'ts-standard'`
 
   See |ale-integrations-local-executables|
 
