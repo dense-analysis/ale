@@ -1,6 +1,6 @@
 " Author: Michel Lang <michellang@gmail.com>, w0rp <devw0rp@gmail.com>,
 "         Fenner Macrae <fmacrae.dev@gmail.com>,
-"         ourigen <ourigen [at] pm.me>
+"         ourigen <https://github.com/ourigen>
 " Description: This file adds support for checking R code with lintr.
 
 let g:ale_r_lintr_options = get(g:, 'ale_r_lintr_options', 'with_defaults()')
