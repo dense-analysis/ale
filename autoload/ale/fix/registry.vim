@@ -191,6 +191,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['swift'],
 \       'description': 'Apply SwiftFormat to a file.',
 \   },
+\   'apple-swift-format': {
+\       'function': 'ale#fixers#appleswiftformat#Fix',
+\       'suggested_filetypes': ['swift'],
+\       'description': 'Apply apple/swift-format to a file.',
+\   },
 \   'phpcbf': {
 \       'function': 'ale#fixers#phpcbf#Fix',
 \       'suggested_filetypes': ['php'],
@@ -341,6 +346,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['json'],
 \       'description': 'Fix JSON files with jq.',
 \   },
+\   'protolint': {
+\       'function': 'ale#fixers#protolint#Fix',
+\       'suggested_filetypes': ['proto'],
+\       'description': 'Fix Protocol Buffer files with protolint.',
+\   },
 \   'perltidy': {
 \       'function': 'ale#fixers#perltidy#Fix',
 \       'suggested_filetypes': ['perl'],
@@ -440,6 +450,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#ptop#Fix',
 \       'suggested_filetypes': ['pascal'],
 \       'description': 'Fix Pascal files with ptop.',
+\   },
+\   'vfmt': {
+\       'function': 'ale#fixers#vfmt#Fix',
+\       'suggested_filetypes': ['v'],
+\       'description': 'A formatter for V source code.',
 \   }
 \}
 

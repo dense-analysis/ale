@@ -394,6 +394,7 @@ formatting.
   * [swipl](https://github.com/SWI-Prolog/swipl-devel)
 * proto
   * [protoc-gen-lint](https://github.com/ckaznocha/protoc-gen-lint)
+  * [protolint](https://github.com/yoheimuta/protolint)
 * Pug
   * [pug-lint](https://github.com/pugjs/pug-lint)
 * Puppet
@@ -543,6 +544,9 @@ formatting.
   * [tslint](https://github.com/palantir/tslint)
   * [tsserver](https://github.com/Microsoft/TypeScript/wiki/Standalone-Server-%28tsserver%29)
   * typecheck
+* V
+  * [v](https://github.com/vlang/v/)
+  * [vfmt](https://github.com/vlang/v/)
 * VALA
   * [uncrustify](https://github.com/uncrustify/uncrustify)
   * [vala_lint](https://github.com/vala-lang/vala-lint) :floppy_disk:

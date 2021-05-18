@@ -19,9 +19,8 @@ function! ale#fixers#stylelint#Fix(buffer) abort
     return {
     \   'cwd': '%s:h',
     \   'command': ale#node#Executable(a:buffer, l:executable)
-    \       . ' %t'
     \       . ale#Pad(l:options)
-    \       . ' --fix',
-    \   'read_temporary_file': 1,
+    \       . ' --fix --stdin --stdin-filename %s',
+    \   'read_temporary_file': 0,
     \}
 endfunction

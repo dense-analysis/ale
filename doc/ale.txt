@@ -1593,6 +1593,7 @@ g:ale_linters                                                   *g:ale_linters*
   \   'text': [],
   \   'vue': ['eslint', 'vls'],
   \   'zsh': ['shell'],
+  \   'v': ['v'],
   \}
 <
   This option can be used to enable only a particular set of linters for a
@@ -2917,6 +2918,7 @@ documented in additional help files.
     swipl.................................|ale-prolog-swipl|
   proto...................................|ale-proto-options|
     protoc-gen-lint.......................|ale-proto-protoc-gen-lint|
+    protolint.............................|ale-proto-protolint|
   pug.....................................|ale-pug-options|
     puglint...............................|ale-pug-puglint|
   puppet..................................|ale-puppet-options|
@@ -3020,6 +3022,7 @@ documented in additional help files.
     prettier..............................|ale-svelte-prettier|
     svelteserver..........................|ale-svelte-svelteserver|
   swift...................................|ale-swift-options|
+    apple-swift-format....................|ale-swift-apple-swift-format|
     sourcekitlsp..........................|ale-swift-sourcekitlsp|
   systemd.................................|ale-systemd-options|
     systemd-analyze.......................|ale-systemd-analyze|
@@ -3051,6 +3054,9 @@ documented in additional help files.
     tslint................................|ale-typescript-tslint|
     tsserver..............................|ale-typescript-tsserver|
     xo....................................|ale-typescript-xo|
+  v.......................................|ale-v-options|
+    v.....................................|ale-v-v|
+    vfmt..................................|ale-v-vfmt|
   vala....................................|ale-vala-options|
     uncrustify............................|ale-vala-uncrustify|
   verilog/systemverilog...................|ale-verilog-options|

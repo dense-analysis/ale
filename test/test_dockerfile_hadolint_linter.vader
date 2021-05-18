@@ -55,7 +55,7 @@ Execute(command is correct when using docker):
   let b:ale_dockerfile_hadolint_use_docker = 'always'
 
   AssertEqual
-  \ "docker run --rm -i hadolint/hadolint",
+  \ "docker run --rm -i hadolint/hadolint hadolint --no-color -",
   \ ale_linters#dockerfile#hadolint#GetCommand(bufnr(''))
 
 
@@ -63,7 +63,7 @@ Execute(command is correct when not docker):
   let b:ale_dockerfile_hadolint_use_docker = 'never'
 
   AssertEqual
-  \ "hadolint -",
+  \ "hadolint --no-color -",
   \ ale_linters#dockerfile#hadolint#GetCommand(bufnr(''))
 
 Execute(test warnings from hadolint):

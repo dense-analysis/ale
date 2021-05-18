@@ -385,6 +385,7 @@ Notes:
   * `swipl`
 * proto
   * `protoc-gen-lint`
+  * `protolint`
 * Pug
   * `pug-lint`
 * Puppet
@@ -534,6 +535,9 @@ Notes:
   * `tslint`
   * `tsserver`
   * `typecheck`
+* V
+  * `v`
+  * `vfmt`
 * VALA
   * `uncrustify`
   * `vala_lint`!!
