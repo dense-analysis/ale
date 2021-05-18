@@ -1,4 +1,5 @@
 " Author: Eric Zhao <21zhaoe@protonmail.com>
+" Author: ourigen <https://github.com/ourigen>
 " Description: Implementation of the Language Server Protocol for R.
 
 call ale#Set('r_languageserver_cmd', 'languageserver::run()')
