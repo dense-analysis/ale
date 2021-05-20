@@ -9,14 +9,12 @@ Execute(Should delete all whitespace at the end of different lines except a doub
   \ [
   \   'def foo():',
   \   '    some_variable = this_is_a_longer_function(',
-  \   'first_argument,',
+  \   'first_argument,',  
   \   ' second_argument,',
   \   ' third_with_function_call(',
   \   'foo,',
   \   ' bar,',
   \   '))',
-  \   'fourth_argument_with_double_trailing_whitespace,',
-  \   'fifth_argument_with_three_trailing_whitespace,',
   \ ],
   \ ale#fixers#generic#TrimWhitespace(bufnr(''), [
   \   'def foo():',     
@@ -27,6 +25,4 @@ Execute(Should delete all whitespace at the end of different lines except a doub
   \   'foo,', 
   \   ' bar,',   
   \   '))',              
-  \   'fourth_argument_with_double_trailing_whitespace,',  
-  \   'fifth_argument_with_three_trailing_whitespace,',
   \ ])
