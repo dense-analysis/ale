@@ -1,6 +1,3 @@
-" Verible verilog linter from Google (https://github.com/google/verible). 
-" Maintained by Aman Mehra (https://github.com/amanvm)
-
 if !exists('g:ale_verilog_verible_options')
     let g:ale_verilog_verible_options = ''
 endif
@@ -25,19 +22,20 @@ function! ale_linters#verilog#verible#Handle(buffer, lines) abort
     "       filename.sv:7:13: Explicitly define static or automatic lifetime for non-class functions [Style: function-task-explicit-lifetime] [explicit-function-lifetime]
     "   Syntax errors
     "       filename.v:39:4: syntax error, rejected "endcase" (syntax-error).
-    let l:pattern = '\([A-z0-9_\-\/ ]\+\.v\|[A-z0-9_\-\/ ]\+\.sv\):\(\d\+\):\d\+:\(.*\s\+\)\([Style:.*\|(syntax-error.*\)'
+    let l:pattern = '\([A-z0-9_\-\/ ]\+\.v\|[A-z0-9_\-\/ ]\+\.sv\):\(\d\+\):\(\d\+\):\(.*\s\+\)\([Style:.*\|(syntax-error.*\)'
     let l:output = []
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
         let l:file = l:match[1]
-        let l:line = l:match[2]
-        let l:text = l:match[3]
-        let l:type = l:match[4]
+        let l:lnum = l:match[2]
+        let l:col = l:match[3]
+        let l:text = l:match[4]
+        let l:type = l:match[5]
         if l:type =~# '^[Style.*'
-            call add(l:output, {'lnum': l:line,'text': l:text,'type': 'W'})
+            call add(l:output, {'lnum': l:lnum,'col':l:col,'text': l:text . l:type,'type': 'W'})
         elseif l:type =~# '^(syntax-error.*'
-            call add(l:output, {'lnum': l:line,'text': l:text,'type': 'E'})
+            call add(l:output, {'lnum': l:lnum,'col':l:col,'text': l:text . l:type ,'type': 'E'})
         else
-            call add(l:output, {'lnum': l:line,'text': l:text,'type': 'I'})
+            call add(l:output, {'lnum': l:lnum,'col':l:col,'text': l:text . l:type,'type': 'I'})
         end
     endfor
 
