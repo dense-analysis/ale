@@ -1,3 +1,6 @@
+" Verible verilog linter from Google (https://github.com/google/verible)
+" Maintained by Aman Mehra (https://github.com/amanvm)
+
 if !exists('g:ale_verilog_verible_options')
     let g:ale_verilog_verible_options = ''
 endif
