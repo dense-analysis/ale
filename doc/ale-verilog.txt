@@ -75,7 +75,8 @@ g:ale_verilog_verible_options                   *g:ale_verilog_verible_options*
 
   This variable can be changed to modify '>>verible-verilog-lint' command arguments
 
-  Check all the options at verible's [github page](https://github.com/google/verible/tree/master/verilog/tools/lint)
+  Check all the options at verible's github page:
+  https://github.com/google/verible/tree/master/verilog/tools/lint
 
 ===============================================================================
 verilator                                               *ale-verilog-verilator*
