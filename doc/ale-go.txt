@@ -20,8 +20,8 @@ the benefit of running a number of linters, more than ALE would by default,
 while ensuring it doesn't run any linters known to be slow or resource
 intensive.
 
-g:ale_go_go_executable                                    *g:ale_go_go_options*
-                                                          *b:ale_go_go_options*
+g:ale_go_go_executable                                 *g:ale_go_go_executable*
+                                                       *b:ale_go_go_executable*
 
   Type: |String|
   Default: `'go'`
@@ -289,6 +289,18 @@ g:ale_go_revive_options                               *g:ale_go_revive_options*
 ===============================================================================
 staticcheck                                                *ale-go-staticcheck*
 
+g:ale_go_staticcheck_executable               *g:ale_go_staticcheck_executable*
+                                              *b:ale_go_staticcheck_executable*
+  Type: |String|
+  Default: `'staticcheck'`
+
+  See |ale-integrations-local-executables|
+
+  ALE will search for `staticcheck` in locally installed directories first by
+  default, and fall back on a globally installed `staticcheck` if it can't be
+  found otherwise.
+
+
 g:ale_go_staticcheck_options                     *g:ale_go_staticcheck_options*
                                                  *b:ale_go_staticcheck_options*
   Type: |String|
@@ -305,6 +317,14 @@ g:ale_go_staticcheck_lint_package           *g:ale_go_staticcheck_lint_package*
 
   When set to `1`, the whole Go package will be checked instead of only the
   current file.
+
+
+g:ale_go_staticcheck_use_global               *g:ale_go_staticcheck_use_global*
+                                              *b:ale_go_staticcheck_use_global*
+  Type: |String|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
 
 
 ===============================================================================
