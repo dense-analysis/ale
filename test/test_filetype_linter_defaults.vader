@@ -22,7 +22,7 @@ Execute(The defaults for the csh filetype should be correct):
   AssertEqual [], GetLinterNames('csh')
 
 Execute(The defaults for the go filetype should be correct):
-  AssertEqual ['gofmt', 'golint', 'govet'], GetLinterNames('go')
+  AssertEqual ['gofmt', 'golint', 'gopls', 'govet'], GetLinterNames('go')
 
   let g:ale_linters_explicit = 1
 
