@@ -121,7 +121,7 @@ g:ale_verilog_xvlog_options                       *g:ale_verilog_xvlog_options*
 yosys                                                       *ale-verilog-yosys*
 
 g:ale_verilog_yosys_executable                 *g:ale_verilog_yosys_executable*
-                                               *b:ale_verilog_xvlog_executable*
+                                               *b:ale_verilog_yosys_executable*
   Type: |String|
   Default: `'yosys'`
 
