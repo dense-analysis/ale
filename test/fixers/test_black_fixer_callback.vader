@@ -36,6 +36,16 @@ Execute(The black callback should include --pyi for .pyi files):
   \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/black')) . ' --pyi -' },
   \ ale#fixers#black#Fix(bufnr(''))
 
+Execute(The black callback should not concatenate options):
+  let g:ale_python_black_options = '--some-option'
+  let g:ale_python_black_change_directory = 0
+
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.pyi')
+
+  AssertEqual
+  \ {'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/black')) . ' --some-option --pyi -' },
+  \ ale#fixers#black#Fix(bufnr(''))
+
 Execute(Pipenv is detected when python_black_auto_pipenv is set):
   let g:ale_python_black_auto_pipenv = 1
   let g:ale_python_black_change_directory = 0
