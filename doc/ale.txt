@@ -2007,7 +2007,7 @@ g:ale_set_quickfix                                         *g:ale_set_quickfix*
   This feature should not be used in combination with tools for searching for
   matches and commands like |:cfdo|, as ALE will replace the quickfix list
   pretty frequently. If you wish to use such tools, you should populate the
-  loclist instead.
+  loclist or use |ALEPopulateQuickfix| instead.
 
 
 g:ale_set_signs                                               *g:ale_set_signs*
@@ -3318,6 +3318,20 @@ ALELintStop                                                       *ALELintStop*
 
   Any problems from previous linter results will continue to be shown.
 
+
+ALEPopulateQuickfix                                       *ALEPopulateQuickfix*
+ALEPopulateLocList                                         *ALEPopulateLocList*
+
+  Manually populate the |quickfix| or |location-list| and show the
+  corresponding list. Useful when you have other uses for both the |quickfix|
+  and |location-list| and don't want them automatically populated. Be sure to
+  disable auto populating: >
+
+    let g:ale_set_quickfix = 0
+    let g:ale_set_loclist = 0
+<
+  With these settings, ALE will still run checking and display it with signs,
+  highlighting, and other output described in |ale-lint-file-linters|.
 
 ALEPrevious                                                       *ALEPrevious*
 ALEPreviousWrap                                               *ALEPreviousWrap*
