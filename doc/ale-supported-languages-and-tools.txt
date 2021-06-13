@@ -124,6 +124,7 @@ Notes:
   * `dafny`!!
 * Dart
   * `analysis_server`
+  * `dart-format`!!
   * `dartanalyzer`!!
   * `dartfmt`!!
   * `language_server`

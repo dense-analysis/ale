@@ -58,6 +58,37 @@ g:ale_dart_dartanalyzer_executable         *g:ale_dart_dartanalyzer_executable*
 
   This variable can be set to change the path to dartanalyzer.
 
+===============================================================================
+dart-format                                                   *ale-dart-format*
+
+Installation
+-------------------------------------------------------------------------------
+
+Installing Dart should probably ensure that `dart` is in your `$PATH`.
+
+In case it is not, try to set the executable option to its absolute path. : >
+  " Set the executable path for dart to the absolute path to it.
+  let g:ale_dart_format_executable = '/usr/lib/dart/bin/dart'
+ >
+
+Options
+-------------------------------------------------------------------------------
+
+g:ale_dart_format_executable                     *g:ale_dart_format_executable*
+                                                 *b:ale_dart_format_executable*
+  Type: |String|
+  Default: `'dart'`
+
+  This variable can be set to specify an absolute path to the
+  format executable (or to specify an alternate executable).
+
+
+g:ale_dart_format_options                           *g:ale_dart_format_options*
+                                                    *b:ale_dart_format_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to the dart format fixer.
 
 ===============================================================================
 dartfmt                                                      *ale-dart-dartfmt*
