@@ -3734,6 +3734,21 @@ ale#fix#registry#Add(name, func, filetypes, desc, [aliases])
   ALE will search for fixers in the registry first by `name`, then by their
   `aliases`.
 
+  For example to register a custom fixer for `luafmt`: >
+
+  function! FormatLua(buffer) abort
+    return {
+    \   'command': 'luafmt --stdin'
+    \}
+  endfunction
+
+  execute ale#fix#registry#Add('luafmt', 'FormatLua', ['lua'], 'luafmt for lua')
+
+  " You can now use it in g:ale_fixers
+  let g:ale_fixers = {
+    \ 'lua': ['luafmt']
+  }
+<
 
 ale#linter#Define(filetype, linter)                       *ale#linter#Define()*
 
