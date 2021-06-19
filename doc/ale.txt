@@ -3083,6 +3083,7 @@ documented in additional help files.
   xml.....................................|ale-xml-options|
     xmllint...............................|ale-xml-xmllint|
   yaml....................................|ale-yaml-options|
+    circleci..............................|ale-yaml-circleci|
     prettier..............................|ale-yaml-prettier|
     spectral..............................|ale-yaml-spectral|
     swaglint..............................|ale-yaml-swaglint|
