@@ -172,7 +172,7 @@ Execute(ale#completion#Show() should remember the completeopt setting and replac
   call ale#completion#Show([{'word': 'x', 'kind': 'v', 'icase': 1}])
 
   AssertEqual 'menu', b:ale_old_completeopt
-  AssertEqual 'menu,menuone,noselect,noinsert', &l:completeopt
+  AssertEqual 'menu,menuone,noinsert', &l:completeopt
 
   AssertEqual [], g:feedkeys_calls
   sleep 1ms
@@ -185,7 +185,7 @@ Execute(ale#completion#Show() should set the preview option if it's set):
   call ale#completion#Show([{'word': 'x', 'kind': 'v', 'icase': 1}])
 
   AssertEqual 'menu,preview', b:ale_old_completeopt
-  AssertEqual 'menu,menuone,preview,noselect,noinsert', &l:completeopt
+  AssertEqual 'menu,menuone,noinsert,preview', &l:completeopt
 
   AssertEqual [], g:feedkeys_calls
   sleep 1ms
@@ -205,13 +205,13 @@ Execute(ale#completion#Show() should not replace the completeopt setting for man
   AssertEqual [["\<Plug>(ale_show_completion_menu)"]], g:feedkeys_calls
 
 Execute(ale#completion#AutomaticOmniFunc() should also remember the completeopt setting and replace it):
-  let &l:completeopt = 'menu'
+  let &l:completeopt = 'menu,noselect'
 
   let b:ale_completion_info = {'source': 'ale-automatic'}
   call ale#completion#AutomaticOmniFunc(0, '')
 
-  AssertEqual 'menu', b:ale_old_completeopt
-  AssertEqual 'menu,menuone,noselect,noinsert', &l:completeopt
+  AssertEqual 'menu,noselect', b:ale_old_completeopt
+  AssertEqual 'menu,menuone,noinsert,noselect', &l:completeopt
 
 Execute(ale#completion#AutomaticOmniFunc() should set the preview option if it's set):
   let &l:completeopt = 'menu,preview'
@@ -220,7 +220,7 @@ Execute(ale#completion#AutomaticOmniFunc() should set the preview option if it's
   call ale#completion#AutomaticOmniFunc(0, '')
 
   AssertEqual 'menu,preview', b:ale_old_completeopt
-  AssertEqual 'menu,menuone,preview,noselect,noinsert', &l:completeopt
+  AssertEqual 'menu,menuone,noinsert,preview', &l:completeopt
 
 Execute(ale#completion#Show() should make the correct feedkeys() call for automatic completion):
   let b:ale_completion_info = {'source': 'ale-automatic'}
