@@ -495,8 +495,8 @@ Execute(We should include several important flags):
   \ . ' -isystem ' . ale#Escape(ale#path#Simplify(g:dir . '/test-files/c/makefile_project/incsystem'))
   \ . ' -idirafter ' . ale#Escape(ale#path#Simplify(g:dir. '/test-files/c/makefile_project/incafter'))
   \ . ' -iframework ' . ale#Escape(ale#path#Simplify(g:dir . '/test-files/c/makefile_project/incframework'))
-  \ . ' -include ' . ale#Escape(ale#path#Simplify(g:dir . '/test-files/c/makefile_project/foo bar'))
-  \ . ' -imacros ' . ale#Escape(ale#path#Simplify(g:dir . '/test-files/c/makefile_project/incmacros'))
+  \ . ' -include file.h'
+  \ . ' -imacros macros.h'
   \ . ' -Dmacro="value"'
   \ . ' -DGoal=9'
   \ . ' -D macro2'
@@ -525,9 +525,9 @@ Execute(We should include several important flags):
   \     '-iframework',
   \     'incframework',
   \     '-include',
-  \     '''foo bar''',
+  \     'file.h',
   \     '-imacros',
-  \     'incmacros',
+  \     'macros.h',
   \     '-Dmacro="value"',
   \     '-DGoal=9',
   \     '-D',
@@ -575,8 +575,8 @@ Execute(We should quote the flags we need to quote):
   \ . ' -isystem ' . ale#Escape(ale#path#Simplify(g:dir . '/test-files/c/makefile_project/incsystem'))
   \ . ' -idirafter ' . ale#Escape(ale#path#Simplify(g:dir. '/test-files/c/makefile_project/incafter'))
   \ . ' -iframework ' . ale#Escape(ale#path#Simplify(g:dir . '/test-files/c/makefile_project/incframework'))
-  \ . ' -include ' . ale#Escape(ale#path#Simplify(g:dir . '/test-files/c/makefile_project/foo bar'))
-  \ . ' -imacros ' . ale#Escape(ale#path#Simplify(g:dir . '/test-files/c/makefile_project/incmacros'))
+  \ . ' -include file.h'
+  \ . ' -imacros macros.h'
   \ . ' ' . ale#Escape('-Dmacro="value"')
   \ . ' -DGoal=9'
   \ . ' -D macro2'
@@ -608,9 +608,9 @@ Execute(We should quote the flags we need to quote):
   \     '-iframework',
   \     'incframework',
   \     '-include',
-  \     '''foo bar''',
+  \     'file.h',
   \     '-imacros',
-  \     'incmacros',
+  \     'macros.h',
   \     '-Dmacro="value"',
   \     '-DGoal=9',
   \     '-D',
