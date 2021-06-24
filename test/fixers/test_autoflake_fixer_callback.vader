@@ -26,7 +26,7 @@ Execute(The autoflake callback should return the correct default values):
   silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
   \ {
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/atoflake'))
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/autoflake'))
   \     . ' --in-place '
   \     . ' %t',
   \   'read_temporary_file': 1,
