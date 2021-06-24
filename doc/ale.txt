@@ -2931,6 +2931,7 @@ documented in additional help files.
     cython................................|ale-pyrex-cython|
   python..................................|ale-python-options|
     autoimport............................|ale-python-autoimport|
+    autoflake.............................|ale-python-autoflake|
     autopep8..............................|ale-python-autopep8|
     bandit................................|ale-python-bandit|
     black.................................|ale-python-black|
