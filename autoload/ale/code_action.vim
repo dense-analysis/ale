@@ -67,9 +67,13 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
     let l:current_buffer = bufnr('')
     " The buffer is used to determine the fileformat, if available.
     let l:buffer = bufnr(a:filename)
-    let l:is_current_buffer = l:buffer > 0 && l:buffer == l:current_buffer
+    " Buffer might be unlisted after calling :bd on it, we want to behave
+    " as if these buffers don't exist because they cannot be read from or
+    " modified anymore..
+    let l:is_opened = l:buffer > 0 && buflisted(l:buffer)
+    let l:is_current_buffer = l:is_opened && l:buffer == l:current_buffer
 
-    if l:buffer > 0
+    if l:is_opened
         let l:lines = getbufline(l:buffer, 1, '$')
 
         " Add empty line if there's trailing newline, like readfile() does.
@@ -155,7 +159,7 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
         endif
     endfor
 
-    if l:buffer > 0
+    if l:is_opened
         " Make sure ale#util#{Writefile,SetBufferContents} add trailing
         " newline if and only if it should be added.
         if l:lines[-1] is# '' && getbufvar(l:buffer, '&eol')
@@ -183,7 +187,7 @@ function! ale#code_action#ApplyChanges(filename, changes, should_save) abort
         call setpos('.', [0, l:pos[0], l:pos[1], 0])
     endif
 
-    if a:should_save && l:buffer > 0 && !l:is_current_buffer
+    if a:should_save && l:is_opened && !l:is_current_buffer
         " Set up a one-time use event that will delete itself to reload the
         " buffer next time it's entered to view the changes made to it.
         execute 'augroup ALECodeActionReloadGroup' . l:buffer

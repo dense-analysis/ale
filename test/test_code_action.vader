@@ -36,10 +36,10 @@ Before:
 
 After:
   " Close the extra buffers if we opened it.
-  if bufnr(g:file1) != -1
+  if bufnr(g:file1) != -1 && buflisted(bufnr(g:file1))
     execute ':bp! | :bd! ' . bufnr(g:file1)
   endif
-  if bufnr(g:file2) != -1
+  if bufnr(g:file2) != -1 && buflisted(bufnr(g:file2))
     execute ':bp! | :bd! ' . bufnr(g:file2)
   endif
 
@@ -251,6 +251,45 @@ Execute(Current buffer contents will be reloaded):
   \  'type B: number',
   \] + g:test.text, getbufline(g:test.buffer, 1, '$')
 
+
+Execute(Unlisted buffer contents will be modified correctly):
+  let g:test.text = [
+  \ 'class Name {',
+  \ '  value: string',
+  \ '}',
+  \]
+  call writefile(g:test.text, g:file1, 'S')
+
+  execute 'edit ' . g:file1
+  let g:test.buffer = bufnr(g:file1)
+
+  execute 'bd'
+  AssertEqual bufnr(g:file1), g:test.buffer
+
+  call ale#code_action#HandleCodeAction(
+  \ {
+  \   'changes': [{
+  \      'fileName': g:file1,
+  \      'textChanges': [{
+  \        'start': {
+  \          'line': 1,
+  \          'offset': 1,
+  \        },
+  \        'end': {
+  \          'line': 1,
+  \          'offset': 1,
+  \        },
+  \        'newText': "type A: string\ntype B: number\n",
+  \      }],
+  \   }]
+  \ },
+  \ {'should_save': 1},
+  \)
+
+  AssertEqual [
+  \  'type A: string',
+  \  'type B: number',
+  \] + g:test.text + [''], readfile(g:file1, 'b')
 
 # Tests for cursor repositioning. In comments `=` designates change range, and
 # `C` cursor position
