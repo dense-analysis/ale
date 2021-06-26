@@ -28,6 +28,11 @@
 "   $ node test_code_action_corner_cases.js <test_code_action_corner_cases.vader
 
 Before:
+  runtime autoload/ale/lsp.vim
+
+  function! ale#lsp#NotifyForChanges(conn_id, buffer) abort
+  endfunction
+
   Save &fixeol
   set nofixeol
 
@@ -43,7 +48,9 @@ Before:
     if a:mode isnot 'file'
       execute 'edit ' . l:file
     endif
-    call ale#code_action#ApplyChanges(l:file, a:changes, a:mode isnot 'buffer')
+    call ale#code_action#ApplyChanges(l:file, a:changes, {
+    \ 'should_save': a:mode isnot 'buffer',
+    \})
     if a:mode is 'buffer'
       execute 'write ' . l:file
     endif
@@ -92,7 +99,7 @@ Execute(Preserve (no)eol at eof):
 
   " there doesn't seem to be a way to tell if a buffer is empty or contains one
   " empty line :-(
-  AssertEqual "", TestChanges("", [], 'file')
+  AssertEqual "\n", TestChanges("", [], 'file')
 
 Execute(Respect fixeol):
   set fixeol
