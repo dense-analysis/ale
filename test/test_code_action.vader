@@ -83,6 +83,8 @@ After:
   unlet! g:changes
   delfunction WriteFileAndEdit
 
+  runtime autoload/ale/lsp.vim
+
   Restore
 
 
