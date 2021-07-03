@@ -441,6 +441,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['lua'],
 \       'description': 'Fix Lua files with luafmt.',
 \   },
+\   'stylua': {
+\       'function': 'ale#fixers#stylua#Fix',
+\       'suggested_filetypes': ['lua'],
+\       'description': 'Fix Lua files with stylua.',
+\   },
 \   'ormolu': {
 \       'function': 'ale#fixers#ormolu#Fix',
 \       'suggested_filetypes': ['haskell'],

@@ -288,6 +288,7 @@ Notes:
   * `luac`
   * `luacheck`
   * `luafmt`
+  * `stylua`
 * Mail
   * `alex`!!
   * `languagetool`!!
