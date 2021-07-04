@@ -58,6 +58,16 @@ Execute(Configuration file exists in current directory):
   \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat raw %s'
   \ ]
 
+Execute(Configuration dist file exists in current directory):
+  call writefile(['parameters:', '  level: 7'], './phpstan.neon.dist')
+  let g:ale_php_phpstan_level = ''
+  let g:ale_php_phpstan_configuration = ''
+
+  AssertLinter 'phpstan', [
+  \ ale#Escape('phpstan') . ' --version',
+  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat raw %s'
+  \ ]
+
 Execute(Configuration file exists in current directory, but force phpstan level):
   call writefile(['parameters:', '  level: 7'], './phpstan.neon')
   let g:ale_php_phpstan_configuration = ''
