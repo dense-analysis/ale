@@ -301,6 +301,7 @@ Notes:
   * `languagetool`!!
   * `markdownlint`!!
   * `mdl`
+  * `pandoc`
   * `prettier`
   * `proselint`
   * `redpen`
