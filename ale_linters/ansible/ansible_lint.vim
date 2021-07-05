@@ -73,7 +73,7 @@ endfunction
 
 function! ale_linters#ansible#ansible_lint#GetCommand(buffer, version) abort
     let l:commands = {
-    \   '>=5.0.0': '%e --parseable-severity -x yaml',
+    \   '>=5.0.0': '%e --parseable-severity -x yaml -',
     \   '<5.0.0': '%e -p %t'
     \}
     let l:command = ale#semver#GTE(a:version, [5, 0]) ? l:commands['>=5.0.0'] : l:commands['<5.0.0']

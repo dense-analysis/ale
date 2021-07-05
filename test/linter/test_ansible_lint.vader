@@ -13,7 +13,7 @@ Execute(The ansible_lint version <5.0.0 command callback should return default s
 
 Execute(The ansible_lint version >=5.0.0 command callback should return default string):
   GivenCommandOutput ['v5.1.2']
-  AssertLinter 'ansible-lint', ale#Escape('ansible-lint') . ' --parseable-severity -x yaml'
+  AssertLinter 'ansible-lint', ale#Escape('ansible-lint') . ' --parseable-severity -x yaml -'
 
 Execute(The ansible_lint executable should be configurable):
   let g:ale_ansible_ansible_lint_executable = '~/.local/bin/ansible-lint'
