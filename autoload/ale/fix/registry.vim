@@ -441,6 +441,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['html', 'htmldjango'],
 \       'description': 'Fix HTML files with html-beautify.',
 \   },
+\   'lua-format': {
+\       'function': 'ale#fixers#lua_format#Fix',
+\       'suggested_filetypes': ['lua'],
+\       'description': 'Fix Lua files with lua-format.',
+\   },
 \   'luafmt': {
 \       'function': 'ale#fixers#luafmt#Fix',
 \       'suggested_filetypes': ['lua'],

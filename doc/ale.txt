@@ -2840,6 +2840,7 @@ documented in additional help files.
   llvm....................................|ale-llvm-options|
     llc...................................|ale-llvm-llc|
   lua.....................................|ale-lua-options|
+    lua-format............................|ale-lua-lua-format|
     luac..................................|ale-lua-luac|
     luacheck..............................|ale-lua-luacheck|
     luafmt................................|ale-lua-luafmt|

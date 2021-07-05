@@ -294,6 +294,7 @@ formatting.
 * LLVM
   * [llc](https://llvm.org/docs/CommandGuide/llc.html)
 * Lua
+  * [lua-format](https://github.com/Koihik/LuaFormatter)
   * [luac](https://www.lua.org/manual/5.1/luac.html)
   * [luacheck](https://github.com/mpeterv/luacheck)
   * [luafmt](https://github.com/trixnz/lua-fmt)
