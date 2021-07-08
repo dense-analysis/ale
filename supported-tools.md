@@ -437,6 +437,7 @@ formatting.
   * [styler](https://github.com/r-lib/styler)
 * Racket
   * [raco](https://docs.racket-lang.org/raco/)
+  * [racket-langserver](https://github.com/jeapostrophe/racket-langserver/tree/master)
 * Re:VIEW
   * [redpen](http://redpen.cc/)
 * ReasonML

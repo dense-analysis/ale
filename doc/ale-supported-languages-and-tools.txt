@@ -428,6 +428,7 @@ Notes:
   * `styler`
 * Racket
   * `raco`
+  * `racket-langserver`
 * Re:VIEW
   * `redpen`
 * ReasonML
