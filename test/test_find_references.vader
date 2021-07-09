@@ -344,8 +344,8 @@ Execute(LSP reference responses with a null result should be handled):
   AssertEqual ['echom ''No references found.'''], g:expr_list
 
 Execute(LSP reference requests should be sent):
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
   ALEFindReferences
@@ -381,8 +381,8 @@ Execute(LSP reference requests should be sent):
   AssertEqual {'42': {'open_in': 'current-buffer', 'use_relative_paths': 0}}, ale#references#GetMap()
 
 Execute('-relative' argument should enable 'use_relative_paths' in HandleLSPResponse):
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
   ALEFindReferences -relative

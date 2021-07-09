@@ -420,7 +420,7 @@ formatting.
   * [pyflakes](https://github.com/PyCQA/pyflakes)
   * [pylama](https://github.com/klen/pylama) :floppy_disk:
   * [pylint](https://www.pylint.org/) :floppy_disk:
-  * [pyls](https://github.com/palantir/python-language-server) :warning:
+  * [pylsp](https://github.com/python-lsp/python-lsp-server) :warning:
   * [pyre](https://github.com/facebook/pyre-check) :warning:
   * [pyright](https://github.com/microsoft/pyright)
   * [reorder-python-imports](https://github.com/asottile/reorder_python_imports)

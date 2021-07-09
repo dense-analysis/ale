@@ -152,8 +152,8 @@ Given python(Some Python file):
   bazxyzxyzxyz
 
 Execute(LSP symbol requests should be sent):
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
   ALESymbolSearch foo bar
@@ -178,8 +178,8 @@ Execute(LSP symbol requests should be sent):
   AssertEqual {'42': {'buffer': bufnr(''), 'use_relative_paths': 0}}, ale#symbol#GetMap()
 
 Execute('-relative' argument should enable 'use_relative_paths' in HandleLSPResponse):
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
   ALESymbolSearch -relative foo bar
