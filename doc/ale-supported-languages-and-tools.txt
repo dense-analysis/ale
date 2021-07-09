@@ -285,6 +285,7 @@ Notes:
 * LLVM
   * `llc`
 * Lua
+  * `lua-format`
   * `luac`
   * `luacheck`
   * `luafmt`
