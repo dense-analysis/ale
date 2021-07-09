@@ -36,7 +36,7 @@ ALE will look for configuration files with the following filenames. >
   .pylintrc
   Pipfile
   Pipfile.lock
-  poetry.lock 
+  poetry.lock
   pyproject.toml
 <
 
@@ -638,31 +638,31 @@ g:ale_python_pylint_use_msg_id                 *g:ale_python_pylint_use_msg_id*
 
 
 ===============================================================================
-pyls                                                          *ale-python-pyls*
+pylsp                                                          *ale-python-pylsp*
 
-`pyls` will be run from a detected project root, per |ale-python-root|.
+`pylsp` will be run from a detected project root, per |ale-python-root|.
 
 
-g:ale_python_pyls_executable                     *g:ale_python_pyls_executable*
-                                                 *b:ale_python_pyls_executable*
+g:ale_python_pylsp_executable                     *g:ale_python_pylsp_executable*
+                                                 *b:ale_python_pylsp_executable*
   Type: |String|
-  Default: `'pyls'`
+  Default: `'pylsp'`
 
   See |ale-integrations-local-executables|
 
-  Set this to `'pipenv'` to invoke `'pipenv` `run` `pyls'`.
+  Set this to `'pipenv'` to invoke `'pipenv` `run` `pylsp'`.
 
 
-g:ale_python_pyls_use_global                     *g:ale_python_pyls_use_global*
-                                                 *b:ale_python_pyls_use_global*
+g:ale_python_pylsp_use_global                     *g:ale_python_pylsp_use_global*
+                                                 *b:ale_python_pylsp_use_global*
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
 
 
-g:ale_python_pyls_auto_pipenv                   *g:ale_python_pyls_auto_pipenv*
-                                                *b:ale_python_pyls_auto_pipenv*
+g:ale_python_pylsp_auto_pipenv                   *g:ale_python_pylsp_auto_pipenv*
+                                                *b:ale_python_pylsp_auto_pipenv*
   Type: |Number|
   Default: `0`
 
@@ -670,15 +670,15 @@ g:ale_python_pyls_auto_pipenv                   *g:ale_python_pyls_auto_pipenv*
   if true. This is overridden by a manually-set executable.
 
 
-g:ale_python_pyls_config                             *g:ale_python_pyls_config*
-                                                     *b:ale_python_pyls_config*
+g:ale_python_pylsp_config                             *g:ale_python_pylsp_config*
+                                                     *b:ale_python_pylsp_config*
   Type: |Dictionary|
   Default: `{}`
 
-  Dictionary with configuration settings for pyls. For example, to disable
+  Dictionary with configuration settings for pylsp. For example, to disable
   the pycodestyle linter: >
         {
-      \   'pyls': {
+      \   'pylsp': {
       \     'plugins': {
       \       'pycodestyle': {
       \         'enabled': v:false
@@ -688,24 +688,24 @@ g:ale_python_pyls_config                             *g:ale_python_pyls_config*
       \ }
 <
 
-g:ale_python_pyls_options                           *g:ale_python_pyls_options*
-                                                    *b:ale_python_pyls_options*
+g:ale_python_pylsp_options                           *g:ale_python_pylsp_options*
+                                                    *b:ale_python_pylsp_options*
   Type: |String|
   Default: `''`
 
-  This variable can be changed to add command-line arguments to the pyls
-  invocation. Note that this is not the same thing as ale_python_pyls_config,
-  which allows configuration of how pyls functions; this is intended to
-  provide flexibility in how the pyls command is invoked.
+  This variable can be changed to add command-line arguments to the pylsp
+  invocation. Note that this is not the same thing as ale_python_pylsp_config,
+  which allows configuration of how pylsp functions; this is intended to
+  provide flexibility in how the pylsp command is invoked.
 
-  For example, if you had installed `pyls` but your `pyls` executable was not
-  on your `PATH` for some reason, an alternative way to run the pyls server
+  For example, if you had installed `pylsp` but your `pylsp` executable was not
+  on your `PATH` for some reason, an alternative way to run the pylsp server
   would be:
-  let g:ale_python_pyls_executable = 'python3'
-  let g:ale_python_pyls_options = '-m pyls'
+  let g:ale_python_pylsp_executable = 'python3'
+  let g:ale_python_pylsp_options = '-m pylsp'
 
-  An example stragety for installing `pyls`:
-    `python3 -m pip install --user pyls`
+  An example stragety for installing `pylsp`:
+    `python3 -m pip install --user pylsp`
 
 ===============================================================================
 pyre                                                          *ale-python-pyre*

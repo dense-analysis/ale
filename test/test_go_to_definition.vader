@@ -449,8 +449,8 @@ Execute(Definition responses with null response should be handled):
   AssertEqual [], g:expr_list
 
 Execute(LSP definition requests should be sent):
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
   ALEGoToDefinition
@@ -485,8 +485,8 @@ Execute(LSP definition requests should be sent):
   AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
 
 Execute(LSP type definition requests should be sent):
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
   ALEGoToTypeDefinition
@@ -521,8 +521,8 @@ Execute(LSP type definition requests should be sent):
   AssertEqual {'42': {'open_in': 'current-buffer'}}, ale#definition#GetMap()
 
 Execute(LSP tab definition requests should be sent):
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
   ALEGoToDefinition -tab
@@ -557,8 +557,8 @@ Execute(LSP tab definition requests should be sent):
   AssertEqual {'42': {'open_in': 'tab'}}, ale#definition#GetMap()
 
 Execute(LSP tab type definition requests should be sent):
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
   ALEGoToTypeDefinition -tab

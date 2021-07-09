@@ -2945,7 +2945,7 @@ documented in additional help files.
     pyflakes..............................|ale-python-pyflakes|
     pylama................................|ale-python-pylama|
     pylint................................|ale-python-pylint|
-    pyls..................................|ale-python-pyls|
+    pylsp.................................|ale-python-pylsp|
     pyre..................................|ale-python-pyre|
     pyright...............................|ale-python-pyright|
     reorder-python-imports................|ale-python-reorder_python_imports|

@@ -466,8 +466,8 @@ Execute(LSP should perform no action when changes is empty):
 
 Execute(LSP rename requests should be sent):
   call ale#rename#SetMap({})
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
   ALERename

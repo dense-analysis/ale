@@ -391,11 +391,11 @@ Execute(LSP diagnostics responses on project root should not populate loclist):
   \ ale#test#GetLoclistWithoutModule()
 
 Execute(LSP errors should mark linters no longer active):
-  let b:ale_linters = ['pyls']
-  runtime ale_linters/python/pyls.vim
+  let b:ale_linters = ['pylsp']
+  runtime ale_linters/python/pylsp.vim
   call ale#test#SetFilename('filename.py')
   call ale#engine#InitBufferInfo(bufnr(''))
-  call ale#lsp_linter#SetLSPLinterMap({1: 'pyls'})
+  call ale#lsp_linter#SetLSPLinterMap({1: 'pylsp'})
 
   let g:ale_buffer_info[bufnr('')].active_linter_list = ale#linter#Get('python')
   Assert !empty(g:ale_buffer_info[bufnr('')].active_linter_list)

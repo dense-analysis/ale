@@ -411,7 +411,7 @@ Notes:
   * `pyflakes`
   * `pylama`!!
   * `pylint`!!
-  * `pyls`
+  * `pylsp`
   * `pyre`
   * `pyright`
   * `reorder-python-imports`
