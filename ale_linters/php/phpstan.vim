@@ -32,8 +32,8 @@ function! ale_linters#php#phpstan#GetCommand(buffer, version) abort
     \   : ''
 
     let l:error_format = ale#semver#GTE(a:version, [0, 10, 3])
-    \   ? ' --error-format raw'
-    \   : ' --errorFormat raw'
+    \   ? ' --error-format json'
+    \   : ' --errorFormat json'
 
     return '%e analyze --no-progress'
     \   . l:error_format
@@ -44,17 +44,17 @@ function! ale_linters#php#phpstan#GetCommand(buffer, version) abort
 endfunction
 
 function! ale_linters#php#phpstan#Handle(buffer, lines) abort
-    " Matches against lines like the following:
-    "
-    " filename.php:15:message
-    " C:\folder\filename.php:15:message
-    let l:pattern = '^\([a-zA-Z]:\)\?[^:]\+:\(\d\+\):\(.*\)$'
+    let l:res = ale#util#FuzzyJSONDecode(a:lines, {'files': []})
     let l:output = []
 
-    for l:match in ale#util#GetMatches(a:lines, l:pattern)
+    if type(l:res.files) is v:t_list
+        return l:output
+    endif
+
+    for l:err in l:res.files[expand('#' . a:buffer .':p')].messages
         call add(l:output, {
-        \   'lnum': l:match[2] + 0,
-        \   'text': l:match[3],
+        \   'lnum': l:err.line,
+        \   'text': l:err.message,
         \   'type': 'E',
         \})
     endfor
