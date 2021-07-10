@@ -6,6 +6,7 @@ let g:ale_php_phpstan_executable = get(g:, 'ale_php_phpstan_executable', 'phpsta
 let g:ale_php_phpstan_level = get(g:, 'ale_php_phpstan_level', '')
 let g:ale_php_phpstan_configuration = get(g:, 'ale_php_phpstan_configuration', '')
 let g:ale_php_phpstan_autoload = get(g:, 'ale_php_phpstan_autoload', '')
+call ale#Set('php_phpstan_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! ale_linters#php#phpstan#GetCommand(buffer, version) abort
     let l:configuration = ale#Var(a:buffer, 'php_phpstan_configuration')
@@ -64,10 +65,16 @@ endfunction
 
 call ale#linter#Define('php', {
 \   'name': 'phpstan',
-\   'executable': {b -> ale#Var(b, 'php_phpstan_executable')},
+\   'executable': {buffer -> ale#path#FindExecutable(buffer, 'php_phpstan', [
+\       'vendor/bin/phpstan',
+\       'phpstan'
+\   ])},
 \   'command': {buffer -> ale#semver#RunWithVersionCheck(
 \       buffer,
-\       ale#Var(buffer, 'php_phpstan_executable'),
+\       ale#path#FindExecutable(buffer, 'php_phpstan', [
+\           'vendor/bin/phpstan',
+\           'phpstan'
+\       ]),
 \       '%e --version',
 \       function('ale_linters#php#phpstan#GetCommand'),
 \   )},

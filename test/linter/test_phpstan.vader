@@ -21,6 +21,26 @@ After:
   unlet! g:old_dir
   call ale#assert#TearDownLinterTest()
 
+Execute(The local phpstan executable should be used):
+  call mkdir('vendor/bin', 'p', 0750)
+  call writefile([''], 'vendor/bin/phpstan')
+  call ale#test#SetFilename('phpstan-test-files/foo/test.php')
+
+  let g:executable = ale#path#Simplify(g:dir . '/vendor/bin/phpstan')
+
+  AssertLinter g:executable,
+  \ ale#Escape(g:executable) . ' analyze --no-progress --errorFormat json -l ' . ale#Escape('4') . ' %s'
+
+Execute(use_global should override local executable detection):
+  let g:ale_php_phpstan_use_global = 1
+
+  call mkdir('vendor/bin', 'p', 0750)
+  call writefile([''], 'vendor/bin/phpstan')
+  call ale#test#SetFilename('phpstan-test-files/foo/test.php')
+
+  AssertLinter 'phpstan',
+  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json -l ' . ale#Escape('4') . ' %s'
+
 Execute(Custom executables should be used for the executable and command):
   let g:ale_php_phpstan_executable = 'phpstan_test'
 
@@ -65,7 +85,7 @@ Execute(Configuration dist file exists in current directory):
 
   AssertLinter 'phpstan', [
   \ ale#Escape('phpstan') . ' --version',
-  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat raw %s'
+  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json %s'
   \ ]
 
 Execute(Configuration file exists in current directory, but force phpstan level):
