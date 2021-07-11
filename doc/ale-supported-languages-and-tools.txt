@@ -550,6 +550,7 @@ Notes:
   * `verilator`
   * `vlog`
   * `xvlog`
+  * `yosys`
 * VHDL
   * `ghdl`
   * `vcom`
