@@ -124,11 +124,16 @@ function! ale#path#IsAbsolute(filename) abort
 endfunction
 
 let s:temp_dir = ale#path#Simplify(fnamemodify(ale#util#Tempname(), ':h:h'))
+let s:resolved_temp_dir = resolve(s:temp_dir)
 
 " Given a filename, return 1 if the file represents some temporary file
-" created by Vim.
+" created by Vim. If the temporary location is symlinked (e.g. macOS), some
+" linters may report the resolved version of the path, so both are checked.
 function! ale#path#IsTempName(filename) abort
-    return ale#path#Simplify(a:filename)[:len(s:temp_dir) - 1] is# s:temp_dir
+    let l:filename = ale#path#Simplify(a:filename)
+
+    return l:filename[:len(s:temp_dir) - 1] is# s:temp_dir
+    \|| l:filename[:len(s:resolved_temp_dir) - 1] is# s:resolved_temp_dir
 endfunction
 
 " Given a base directory, which must not have a trailing slash, and a
