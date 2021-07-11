@@ -396,8 +396,8 @@ Notes:
   * `purescript-language-server`
   * `purty`
 * Python
-  * `autoimport`
   * `autoflake`!!
+  * `autoimport`
   * `autopep8`
   * `bandit`
   * `black`
