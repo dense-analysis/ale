@@ -303,18 +303,23 @@ let s:default_registry = {
 \   },
 \   'ocamlformat': {
 \       'function': 'ale#fixers#ocamlformat#Fix',
-\       'suggested_filetypes': ['ocaml'],
+\       'suggested_filetypes': ['ocaml', 'ocamlinterface'],
 \       'description': 'Fix OCaml files with ocamlformat.',
 \   },
 \   'ocp-indent': {
 \       'function': 'ale#fixers#ocp_indent#Fix',
-\       'suggested_filetypes': ['ocaml'],
+\       'suggested_filetypes': ['ocaml', 'ocamlinterface'],
 \       'description': 'Fix OCaml files with ocp-indent.',
 \   },
 \   'refmt': {
 \       'function': 'ale#fixers#refmt#Fix',
 \       'suggested_filetypes': ['reason'],
 \       'description': 'Fix ReasonML files with refmt.',
+\   },
+\   'pandoc': {
+\       'function': 'ale#fixers#pandoc#Fix',
+\       'suggested_filetypes': ['markdown'],
+\       'description': 'Fix markdown files with pandoc.',
 \   },
 \   'shfmt': {
 \       'function': 'ale#fixers#shfmt#Fix',
@@ -436,10 +441,20 @@ let s:default_registry = {
 \       'suggested_filetypes': ['html', 'htmldjango'],
 \       'description': 'Fix HTML files with html-beautify.',
 \   },
+\   'lua-format': {
+\       'function': 'ale#fixers#lua_format#Fix',
+\       'suggested_filetypes': ['lua'],
+\       'description': 'Fix Lua files with lua-format.',
+\   },
 \   'luafmt': {
 \       'function': 'ale#fixers#luafmt#Fix',
 \       'suggested_filetypes': ['lua'],
 \       'description': 'Fix Lua files with luafmt.',
+\   },
+\   'stylua': {
+\       'function': 'ale#fixers#stylua#Fix',
+\       'suggested_filetypes': ['lua'],
+\       'description': 'Fix Lua files with stylua.',
 \   },
 \   'ormolu': {
 \       'function': 'ale#fixers#ormolu#Fix',

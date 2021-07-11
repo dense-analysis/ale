@@ -156,8 +156,8 @@ Given python(Some Python file):
 
 Execute(Should result in error message):
   call ale#linter#Reset()
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
 
   ALEOrganizeImports
 

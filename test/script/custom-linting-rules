@@ -126,6 +126,7 @@ check_errors '==?' "Use 'is?' instead of '==?'. 0 ==? 'foobar' is true"
 check_errors '!=#' "Use 'isnot#' instead of '!=#'. 0 !=# 'foobar' is false"
 check_errors '!=?' "Use 'isnot?' instead of '!=?'. 0 !=? 'foobar' is false"
 check_errors '^ *:\?echo' "Stray echo line. Use \`execute echo\` if you want to echo something"
+check_errors '^ *:\?redir' 'User execute() instead of redir'
 # Exclusions for grandfathered-in exceptions
 exclusions="clojure/clj_kondo.vim elixir/elixir_ls.vim go/golangci_lint.vim swift/swiftformat.vim"
 # shellcheck disable=SC2086

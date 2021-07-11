@@ -66,11 +66,20 @@ Execute(eslint.js executables should be run with node on Windows):
   \ (has('win32') ? ale#Escape('node.exe') . ' ' : '')
   \ . ale#Escape(b:executable) . b:args
 
-Execute(eslint.js should be run from a containing project with eslint):
+Execute(eslint.js should be run from a containing project with node_modules):
   call ale#test#SetFilename('../test-files/eslint/react-app/subdir-with-package-json/testfile.js')
 
   let b:executable = ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/node_modules/eslint/bin/eslint.js')
   AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/eslint/react-app')
+  AssertLinter b:executable,
+  \ (has('win32') ? ale#Escape('node.exe') . ' ' : '')
+  \ . ale#Escape(b:executable) . b:args
+
+Execute(eslint.js should be run from a containing project with .yarn/sdks):
+  call ale#test#SetFilename('../test-files/eslint/yarn2-app/subdir/testfile.js')
+
+  let b:executable = ale#path#Simplify(g:dir . '/../test-files/eslint/yarn2-app/.yarn/sdks/eslint/bin/eslint.js')
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/eslint/yarn2-app')
   AssertLinter b:executable,
   \ (has('win32') ? ale#Escape('node.exe') . ' ' : '')
   \ . ale#Escape(b:executable) . b:args

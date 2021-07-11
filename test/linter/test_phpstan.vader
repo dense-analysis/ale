@@ -21,31 +21,51 @@ After:
   unlet! g:old_dir
   call ale#assert#TearDownLinterTest()
 
+Execute(The local phpstan executable should be used):
+  call mkdir('vendor/bin', 'p', 0750)
+  call writefile([''], 'vendor/bin/phpstan')
+  call ale#test#SetFilename('phpstan-test-files/foo/test.php')
+
+  let g:executable = ale#path#Simplify(g:dir . '/vendor/bin/phpstan')
+
+  AssertLinter g:executable,
+  \ ale#Escape(g:executable) . ' analyze --no-progress --errorFormat json -l ' . ale#Escape('4') . ' %s'
+
+Execute(use_global should override local executable detection):
+  let g:ale_php_phpstan_use_global = 1
+
+  call mkdir('vendor/bin', 'p', 0750)
+  call writefile([''], 'vendor/bin/phpstan')
+  call ale#test#SetFilename('phpstan-test-files/foo/test.php')
+
+  AssertLinter 'phpstan',
+  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json -l ' . ale#Escape('4') . ' %s'
+
 Execute(Custom executables should be used for the executable and command):
   let g:ale_php_phpstan_executable = 'phpstan_test'
 
   AssertLinter 'phpstan_test',
-  \ ale#Escape('phpstan_test') . ' analyze --no-progress --errorFormat raw -l ' . ale#Escape('4') . ' %s'
+  \ ale#Escape('phpstan_test') . ' analyze --no-progress --errorFormat json -l ' . ale#Escape('4') . ' %s'
 
 Execute(project with level set to 3):
   call ale#test#SetFilename('phpstan-test-files/foo/test.php')
   let g:ale_php_phpstan_level = 3
 
   AssertLinter 'phpstan',
-  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat raw -l ' . ale#Escape('3') . ' %s'
+  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json -l ' . ale#Escape('3') . ' %s'
 
 Execute(Custom phpstan configuration file):
   let g:ale_php_phpstan_configuration = 'phpstan_config'
 
   AssertLinter 'phpstan',
-  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat raw -c ' . ale#Escape('phpstan_config') . ' -l ' . ale#Escape('4') . ' %s'
+  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json -c ' . ale#Escape('phpstan_config') . ' -l ' . ale#Escape('4') . ' %s'
 
 Execute(Choose the right format for error format param):
   GivenCommandOutput ['0.10.3']
 
   AssertLinter 'phpstan', [
   \ ale#Escape('phpstan') . ' --version',
-  \ ale#Escape('phpstan') . ' analyze --no-progress --error-format raw -l ' . ale#Escape('4') . ' %s'
+  \ ale#Escape('phpstan') . ' analyze --no-progress --error-format json -l ' . ale#Escape('4') . ' %s'
   \ ]
 
 Execute(Configuration file exists in current directory):
@@ -55,7 +75,17 @@ Execute(Configuration file exists in current directory):
 
   AssertLinter 'phpstan', [
   \ ale#Escape('phpstan') . ' --version',
-  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat raw %s'
+  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json %s'
+  \ ]
+
+Execute(Configuration dist file exists in current directory):
+  call writefile(['parameters:', '  level: 7'], './phpstan.neon.dist')
+  let g:ale_php_phpstan_level = ''
+  let g:ale_php_phpstan_configuration = ''
+
+  AssertLinter 'phpstan', [
+  \ ale#Escape('phpstan') . ' --version',
+  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json %s'
   \ ]
 
 Execute(Configuration file exists in current directory, but force phpstan level):
@@ -65,7 +95,7 @@ Execute(Configuration file exists in current directory, but force phpstan level)
 
   AssertLinter 'phpstan', [
   \ ale#Escape('phpstan') . ' --version',
-  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat raw -l ' . ale#Escape('7') . ' %s'
+  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json -l ' . ale#Escape('7') . ' %s'
   \ ]
 
 Execute(Configuration file exists in current directory, but force phpstan configuration):
@@ -75,11 +105,11 @@ Execute(Configuration file exists in current directory, but force phpstan config
 
   AssertLinter 'phpstan', [
   \ ale#Escape('phpstan') . ' --version',
-  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat raw -c ' . ale#Escape('phpstan.custom.neon') . ' %s'
+  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json -c ' . ale#Escape('phpstan.custom.neon') . ' %s'
   \ ]
 
 Execute(Autoload parameter is added to the command):
   let g:ale_php_phpstan_autoload = 'autoload.php'
 
   AssertLinter 'phpstan',
-  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat raw -a ' . ale#Escape('autoload.php') . ' -l ' . ale#Escape('4') . ' %s'
+  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json -a ' . ale#Escape('autoload.php') . ' -l ' . ale#Escape('4') . ' %s'

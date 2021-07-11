@@ -8,6 +8,7 @@ Execute(The raco handler should handle errors for the current file correctly):
   AssertEqual
   \ [
   \   {
+  \     'filename': 'foo.rkt',
   \     'lnum': 4,
   \     'col': 1,
   \     'type': 'E',

@@ -41,7 +41,7 @@ Execute(ale#completion#CanProvideCompletions should return 0 when no completion 
   AssertEqual 0, ale#completion#CanProvideCompletions()
 
 Execute(ale#completion#CanProvideCompletions should return 1 when at least one completion source is available):
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
 
   AssertEqual 1, ale#completion#CanProvideCompletions()

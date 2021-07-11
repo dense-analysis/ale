@@ -285,9 +285,11 @@ Notes:
 * LLVM
   * `llc`
 * Lua
+  * `lua-format`
   * `luac`
   * `luacheck`
   * `luafmt`
+  * `stylua`
 * Mail
   * `alex`!!
   * `languagetool`!!
@@ -300,6 +302,7 @@ Notes:
   * `languagetool`!!
   * `markdownlint`!!
   * `mdl`
+  * `pandoc`
   * `prettier`
   * `proselint`
   * `redpen`
@@ -409,7 +412,7 @@ Notes:
   * `pyflakes`
   * `pylama`!!
   * `pylint`!!
-  * `pyls`
+  * `pylsp`
   * `pyre`
   * `pyright`
   * `reorder-python-imports`
@@ -568,6 +571,7 @@ Notes:
 * XML
   * `xmllint`
 * YAML
+  * `circleci`!!
   * `prettier`
   * `spectral`
   * `swaglint`

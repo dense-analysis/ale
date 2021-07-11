@@ -205,8 +205,8 @@ Given python(Some Python file):
   bazxyzxyzxyz
 
 Execute(The right message should be sent for the initial LSP request):
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   " The cursor position needs to match what was saved before.
   call setpos('.', [bufnr(''), 1, 5, 0])
 
@@ -226,7 +226,7 @@ Execute(The right message should be sent for the initial LSP request):
   \ string(g:Callback)
   " We should send the right message.
   " The character index needs to be at most the index of the last character on
-  " the line, or integration with pyls will be broken.
+  " the line, or integration with pylsp will be broken.
   "
   " We need to send the message for changing the document first.
   AssertEqual
