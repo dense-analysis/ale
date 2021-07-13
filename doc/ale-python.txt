@@ -44,6 +44,33 @@ The first directory containing any of the files named above will be used.
 
 
 ===============================================================================
+autoflake                                                *ale-python-autoflake*
+
+g:ale_python_autoflake_executable           *g:ale_python_autoflake_executable*
+                                            *b:ale_python_autoflake_executable*
+  Type: |String|
+  Default: `'autoflake'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_python_autoflake_options                 *g:ale_python_autoflake_options*
+                                               *b:ale_python_autoflake_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass extra options to autoflake.
+
+
+g:ale_python_autoflake_use_global           *g:ale_python_autoflake_use_global*
+                                            *b:ale_python_autoflake_use_global*
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
 autoimport                                              *ale-python-autoimport*
 
 g:ale_python_autoimport_executable             *g:ale_python_autoimport_executable*
@@ -68,6 +95,7 @@ g:ale_python_autoimport_use_global             *g:ale_python_autoimport_use_glob
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
+
 
 ===============================================================================
 autopep8                                                  *ale-python-autopep8*

@@ -2933,6 +2933,7 @@ documented in additional help files.
   pyrex (cython)..........................|ale-pyrex-options|
     cython................................|ale-pyrex-cython|
   python..................................|ale-python-options|
+    autoflake.............................|ale-python-autoflake|
     autoimport............................|ale-python-autoimport|
     autopep8..............................|ale-python-autopep8|
     bandit................................|ale-python-bandit|
