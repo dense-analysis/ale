@@ -427,8 +427,8 @@ Notes:
   * `lintr`
   * `styler`
 * Racket
-  * `raco`
   * `racket-langserver`
+  * `raco`
 * Re:VIEW
   * `redpen`
 * ReasonML
