@@ -149,25 +149,25 @@ endfunction
 
 function! s:VimCreate(options) abort
     let l:popup_id = popup_create([], {
-                \ 'line': 'cursor+1',
-                \ 'col': 'cursor',
-                \ 'drag': v:true,
-                \ 'resize': v:true,
-                \ 'close': 'button',
-                \ 'padding': [0, 1, 0, 1],
-                \ 'border': [],
-                \ 'borderchars': empty(g:ale_floating_window_border) ? [' '] : [
-                \   g:ale_floating_window_border[1],
-                \   g:ale_floating_window_border[0],
-                \   g:ale_floating_window_border[1],
-                \   g:ale_floating_window_border[0],
-                \   g:ale_floating_window_border[2],
-                \   g:ale_floating_window_border[3],
-                \   g:ale_floating_window_border[4],
-                \   g:ale_floating_window_border[5],
-                \ ],
-                \ 'moved': 'any',
-                \ })
+    \    'line': 'cursor+1',
+    \    'col': 'cursor',
+    \    'drag': v:true,
+    \    'resize': v:true,
+    \    'close': 'button',
+    \    'padding': [0, 1, 0, 1],
+    \    'border': [],
+    \    'borderchars': empty(g:ale_floating_window_border) ? [' '] : [
+    \        g:ale_floating_window_border[1],
+    \        g:ale_floating_window_border[0],
+    \        g:ale_floating_window_border[1],
+    \        g:ale_floating_window_border[0],
+    \        g:ale_floating_window_border[2],
+    \        g:ale_floating_window_border[3],
+    \        g:ale_floating_window_border[4],
+    \        g:ale_floating_window_border[5],
+    \    ],
+    \    'moved': 'any',
+    \    })
     call setbufvar(winbufnr(l:popup_id), '&filetype', get(a:options, 'filetype', 'ale-preview'))
     let w:preview = {'id': l:popup_id}
 endfunction
