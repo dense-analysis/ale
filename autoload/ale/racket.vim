@@ -1,4 +1,4 @@
-function ale#racket#FindProjectRoot(buffer) abort
+function! ale#racket#FindProjectRoot(buffer) abort
     let l:cwd = expand('#' . a:buffer . ':p:h')
     let l:highest_init = l:cwd
 
