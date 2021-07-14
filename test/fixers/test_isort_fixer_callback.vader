@@ -18,7 +18,7 @@ Execute(The isort callback should return the correct default values):
   AssertEqual
   \ {
   \   'cwd': '%s:h',
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/isort')) . ' -',
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/isort')) . ' --filename %s' . ' -',
   \ },
   \ ale#fixers#isort#Fix(bufnr(''))
 
@@ -34,7 +34,7 @@ Execute(The isort callback should respect custom options):
   \ {
   \   'cwd': '%s:h',
   \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/isort'))
-  \     . ' --multi-line=3 --trailing-comma -',
+  \     . ' --filename %s' . ' --multi-line=3 --trailing-comma -',
   \ },
   \ ale#fixers#isort#Fix(bufnr(''))
 
@@ -46,6 +46,6 @@ Execute(Pipenv is detected when python_isort_auto_pipenv is set):
   AssertEqual
   \ {
   \   'cwd': '%s:h',
-  \   'command': ale#Escape('pipenv') . ' run isort -'
+  \   'command': ale#Escape('pipenv') . ' run isort' . ' --filename %s' . ' -'
   \ },
   \ ale#fixers#isort#Fix(bufnr(''))
