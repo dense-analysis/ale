@@ -381,6 +381,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['dart'],
 \       'description': 'Fix Dart files with dartfmt.',
 \   },
+\   'dart-format': {
+\       'function': 'ale#fixers#dart_format#Fix',
+\       'suggested_filetypes': ['dart'],
+\       'description': 'Fix Dart files with dart format.',
+\   },
 \   'xmllint': {
 \       'function': 'ale#fixers#xmllint#Fix',
 \       'suggested_filetypes': ['xml'],
