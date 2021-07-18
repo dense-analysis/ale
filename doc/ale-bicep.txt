@@ -2,7 +2,7 @@
 " Description: Bicep Language Server integration (https://github.com/Azure/bicep)
 
 ===============================================================================
-ALE Bicep Integration                                     *ale-elixir-options*
+ALE Bicep Integration                                     *ale-bicep-options*
 
 
 ===============================================================================
