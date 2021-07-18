@@ -4,7 +4,7 @@
 
 call ale#Set('deno_executable', 'deno')
 call ale#Set('deno_unstable', 0)
-call ale#Set('deno_importMap', '')
+call ale#Set('deno_importMap', 'import_map.json')
 call ale#Set('deno_lsp_project_root', '')
 
 function! ale#handlers#deno#GetExecutable(buffer) abort
@@ -59,7 +59,7 @@ function! ale#handlers#deno#GetInitializationOptions(buffer) abort
     \   'enable': v:true,
     \   'lint': v:true,
     \   'unstable': v:false,
-    \   'importMap': '',
+    \   'importMap': 'import_map.json',
     \   }
 
     if ale#Var(a:buffer, 'deno_unstable')
@@ -67,7 +67,6 @@ function! ale#handlers#deno#GetInitializationOptions(buffer) abort
     endif
 
     if ale#Var(a:buffer, 'deno_importMap') isnot# ''
-        let l:importMap = ale#Var(a:buffer, 'deno_importMap')
         let l:options.importMap = ale#path#FindNearestFile(a:buffer, ale#Var(a:buffer, 'deno_importMap'))
     endif
 
