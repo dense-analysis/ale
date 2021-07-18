@@ -7,7 +7,7 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(command callback should return default string):
-  AssertLinter 'racket', ale#Escape('racket -l racket-langserver')
+  AssertLinter 'racket', ale#Escape('racket').' -l racket-langserver'
 
 Execute(should set racket-langserver for deep module 3):
   call ale#test#SetFilename('../test-files/racket/many-inits/a/b/c/foo.rkt')
@@ -42,4 +42,4 @@ Execute(should set racket-langserver for non-package module or script):
   AssertLSPLanguage 'racket'
   AssertLSPOptions {}
   AssertLSPConfig {}
-  AssertLSPProject ale#test#GetFilename('../test-files/racket/simple-script/')
+  AssertLSPProject ale#test#GetFilename('../test-files/racket/simple-script')
