@@ -59,7 +59,7 @@ function! ale#handlers#deno#GetInitializationOptions(buffer) abort
     \   'enable': v:true,
     \   'lint': v:true,
     \   'unstable': v:false,
-    \   'importMap': 'import_map.json',
+    \   'importMap': ale#path#FindNearestFile(a:buffer, 'import_map.json'),
     \   }
 
     if ale#Var(a:buffer, 'deno_unstable')
