@@ -35,7 +35,7 @@ Execute(Should set the default importMap filepath):
   \   'enable': v:true,
   \   'lint': v:true,
   \   'unstable': v:false,
-  \   'importMap': ale#path#Simplify(g:dir . '/../test-files/typescript') . '/import_map.json'
+  \   'importMap': ale#path#Simplify(g:dir . '/../test-files/typescript/import_map.json')
   \}
 
 Execute(Should set the importMap filepath from user defined importMap):
@@ -46,7 +46,7 @@ Execute(Should set the importMap filepath from user defined importMap):
   \   'enable': v:true,
   \   'lint': v:true,
   \   'unstable': v:false,
-  \   'importMap': ale#path#Simplify(g:dir . '/../test-files/typescript') . '/custom_import_map.json'
+  \   'importMap': ale#path#Simplify(g:dir . '/../test-files/typescript/custom_import_map.json')
   \}
 
 Execute(Should set the importMap filepath from user defined importMap with unstable API):
@@ -58,7 +58,7 @@ Execute(Should set the importMap filepath from user defined importMap with unsta
   \   'enable': v:true,
   \   'lint': v:true,
   \   'unstable': v:true,
-  \   'importMap': ale#path#Simplify(g:dir . '/../test-files/typescript') . '/custom_import_map.json'
+  \   'importMap': ale#path#Simplify(g:dir . '/../test-files/typescript/custom_import_map.json')
   \}
 
 Execute(Should find project root containing tsconfig.json):
