@@ -51,10 +51,16 @@ function! ale#references#HandleLSPResponse(conn_id, response) abort
         let l:result = get(a:response, 'result', [])
         let l:item_list = []
 
+        let l:mappings = ale#GetFilenameMappings(bufnr(''), "elixir-ls")
+        let l:mappings = ale#filename_mapping#Invert(l:mappings)
+
         if type(l:result) is v:t_list
             for l:response_item in l:result
+                let l:filename = ale#path#FromURI(l:response_item.uri)
+                let l:filename = ale#filename_mapping#Map(l:filename, l:mappings)
+
                 call add(l:item_list, {
-                \ 'filename': ale#path#FromURI(l:response_item.uri),
+                \ 'filename': l:filename,
                 \ 'line': l:response_item.range.start.line + 1,
                 \ 'column': l:response_item.range.start.character + 1,
                 \})
