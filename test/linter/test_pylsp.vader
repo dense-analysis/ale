@@ -51,6 +51,18 @@ Execute(Pipenv is detected when python_pylsp_auto_pipenv is set):
   AssertLinter 'pipenv',
   \ ale#Escape('pipenv') . ' run pylsp'
 
+Execute(Setting executable to 'poetry' appends 'run pylsp'):
+  let g:ale_python_pylsp_executable = 'path/to/poetry'
+
+  AssertLinter 'path/to/poetry', ale#Escape('path/to/poetry') . ' run pylsp'
+
+Execute(poetry is detected when python_pylsp_auto_poetry is set):
+  let g:ale_python_pylsp_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinter 'poetry',
+  \ ale#Escape('poetry') . ' run pylsp'
+
 Execute(Should accept configuration settings):
   AssertLSPConfig {}
   let b:ale_python_pylsp_config = {'pylsp': {'plugins': {'preload': {'enabled': v:false}}}}

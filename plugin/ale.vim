@@ -172,6 +172,9 @@ let g:ale_completion_enabled = get(g:, 'ale_completion_enabled', 0)
 " Enable automatic detection of pipenv for Python linters.
 let g:ale_python_auto_pipenv = get(g:, 'ale_python_auto_pipenv', 0)
 
+" Enable automatic detection of poetry for Python linters.
+let g:ale_python_auto_poetry = get(g:, 'ale_python_auto_poetry', 0)
+
 " This variable can be overridden to set the GO111MODULE environment variable.
 let g:ale_go_go111module = get(g:, 'ale_go_go111module', '')
 

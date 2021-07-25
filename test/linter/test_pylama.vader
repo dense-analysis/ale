@@ -74,3 +74,15 @@ Execute(Pipenv is detected when python_pylama_auto_pipenv is set):
   call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
 
   AssertLinter 'pipenv', ale#Escape('pipenv') . ' run pylama' . b:command_tail
+
+Execute(Setting executable to 'poetry' appends 'run pylama'):
+  let g:ale_python_pylama_executable = 'path/to/poetry'
+
+  AssertLinter 'path/to/poetry',
+  \ ale#Escape('path/to/poetry') . ' run pylama' . b:command_tail
+
+Execute(poetry is detected when python_pylama_auto_poetry is set):
+  let g:ale_python_pylama_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinter 'poetry', ale#Escape('poetry') . ' run pylama' . b:command_tail
