@@ -2702,7 +2702,6 @@ documented in additional help files.
     analysis_server.......................|ale-dart-analysis_server|
     dart-analyze..........................|ale-dart-analyze|
     dart-format...........................|ale-dart-format|
-    dartanalyzer..........................|ale-dart-dartanalyzer|
     dartfmt...............................|ale-dart-dartfmt|
   desktop.................................|ale-desktop-options|
     desktop-file-validate.................|ale-desktop-desktop-file-validate|
