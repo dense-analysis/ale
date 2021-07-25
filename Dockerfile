@@ -1,8 +1,4 @@
-FROM tweekmonster/vim-testbed:latest
-
-# Enable bundled treesitter needed to build NeoVim v0.5.0
-# https://github.com/Vimjas/vim-testbed/issues/77
-RUN sed -i 's/DEPS_CMAKE_FLAGS="-DUSE_BUNDLED=OFF"/DEPS_CMAKE_FLAGS="-DUSE_BUNDLED=OFF -DUSE_BUNDLED_TS=ON"/g' /sbin/install_vim
+FROM testbed/vim:20
 
 RUN install_vim -tag v8.0.0027 -build \
                 -tag v8.2.2401 -build \
@@ -13,8 +9,9 @@ RUN install_vim -tag v8.0.0027 -build \
 ENV PACKAGES="\
     bash \
     git \
-    python \
-    py-pip \
+    python2 \
+    python3 \
+    py3-pip \
     grep \
     sed \
 "
