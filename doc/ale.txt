@@ -3111,7 +3111,7 @@ ALEComplete                                                       *ALEComplete*
   Manually trigger LSP autocomplete and show the menu. Works only when called
   from insert mode. >
 
-    inoremap <silent> <C-Space> <C-\><C-O>:AleComplete<CR>
+    inoremap <silent> <C-Space> <C-\><C-O>:ALEComplete<CR>
 <
   A plug mapping `<Plug>(ale_complete)` is defined for this command. >
 
