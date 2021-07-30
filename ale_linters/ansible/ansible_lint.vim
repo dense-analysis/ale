@@ -91,6 +91,7 @@ call ale#linter#Define('ansible', {
 \       '%e --version',
 \       function('ale_linters#ansible#ansible_lint#GetCommand'),
 \   )},
+\   'lint_file': 1,
 \   'callback': {buffer, lines -> ale#semver#RunWithVersionCheck(
 \       buffer,
 \       ale_linters#ansible#ansible_lint#GetExecutable(buffer),
