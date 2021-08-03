@@ -270,7 +270,7 @@ formatting.
 * JSON
   * [fixjson](https://github.com/rhysd/fixjson)
   * [jq](https://stedolan.github.io/jq/)
-  * [jsonlint](http://zaa.ch/jsonlint/)
+  * [jsonlint](https://github.com/zaach/jsonlint)
   * [prettier](https://github.com/prettier/prettier)
   * [spectral](https://github.com/stoplightio/spectral)
 * Julia
