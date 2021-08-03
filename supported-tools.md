@@ -542,6 +542,7 @@ formatting.
   * [write-good](https://github.com/btford/write-good) :warning:
 * Thrift
   * [thrift](http://thrift.apache.org/)
+  * [thriftcheck](https://github.com/pinterest/thriftcheck)
 * TypeScript
   * [deno](https://deno.land/)
   * [eslint](http://eslint.org/)
