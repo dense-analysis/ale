@@ -3053,6 +3053,7 @@ documented in additional help files.
     write-good............................|ale-text-write-good|
   thrift..................................|ale-thrift-options|
     thrift................................|ale-thrift-thrift|
+    thriftcheck...........................|ale-thrift-thriftcheck|
   typescript..............................|ale-typescript-options|
     deno..................................|ale-typescript-deno|
     eslint................................|ale-typescript-eslint|
