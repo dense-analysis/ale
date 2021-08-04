@@ -12,7 +12,11 @@ set -u
 image=denseanalysis/ale
 
 # Create docker image tag based on Dockerfile contents
-image_tag=$(md5sum Dockerfile | cut -d' ' -f1)
+if [ -n "$(command -v md5)" ]; then
+    image_tag=$(md5 -q Dockerfile)
+else
+    image_tag=$(md5sum Dockerfile | cut -d' ' -f1)
+fi
 git_version=$(git describe --always --tags)
 
 # Used in all test scripts for running the selected Docker image.
