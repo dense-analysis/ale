@@ -1,4 +1,4 @@
-*ale.txt*	Plugin to lint and fix files asynchronously
+*ale.txt* Plugin to lint and fix files asynchronously
 *ale*
 
 ALE - Asynchronous Lint Engine
@@ -2751,6 +2751,7 @@ documented in additional help files.
     golangci-lint.........................|ale-go-golangci-lint|
     golangserver..........................|ale-go-golangserver|
     golint................................|ale-go-golint|
+    golines...............................|ale-go-golines|
     gometalinter..........................|ale-go-gometalinter|
     gopls.................................|ale-go-gopls|
     govet.................................|ale-go-govet|
