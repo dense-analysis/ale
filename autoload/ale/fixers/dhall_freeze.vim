@@ -1,5 +1,5 @@
 " Author: toastal <toastal@protonmail.com>
-" Description: Dhall’s package freezing
+" Description: Dhall's package freezing
 
 call ale#Set('dhall_freeze_options', '')
 
