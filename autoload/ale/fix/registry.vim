@@ -301,6 +301,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'Refactor Haskell files with stylish-haskell.',
 \   },
+\   'purs-tidy': {
+\       'function': 'ale#fixers#purs_tidy#Fix',
+\       'suggested_filetypes': ['purescript'],
+\       'description': 'Format PureScript files with purs-tidy.',
+\   },
 \   'purty': {
 \       'function': 'ale#fixers#purty#Fix',
 \       'suggested_filetypes': ['purescript'],
