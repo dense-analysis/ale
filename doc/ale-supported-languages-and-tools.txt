@@ -183,8 +183,8 @@ Notes:
   * `goimports`
   * `golangci-lint`!!
   * `golangserver`
-  * `golint`
 	* golines
+  * `golint`
   * `gometalinter`!!
   * `gopls`
   * `gosimple`!!

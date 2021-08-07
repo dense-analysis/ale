@@ -192,8 +192,8 @@ formatting.
   * [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports) :warning:
   * [golangci-lint](https://github.com/golangci/golangci-lint) :warning: :floppy_disk:
   * [golangserver](https://github.com/sourcegraph/go-langserver) :warning:
-  * [golint](https://godoc.org/github.com/golang/lint)
   * [golines](https://github.com/segmentio/golines)
+  * [golint](https://godoc.org/github.com/golang/lint)
   * [gometalinter](https://github.com/alecthomas/gometalinter) :warning: :floppy_disk:
   * [gopls](https://github.com/golang/go/wiki/gopls)
   * [gosimple](https://github.com/dominikh/go-tools/tree/master/cmd/gosimple) :warning: :floppy_disk:

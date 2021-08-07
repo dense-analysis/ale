@@ -2750,8 +2750,8 @@ documented in additional help files.
     gofmt.................................|ale-go-gofmt|
     golangci-lint.........................|ale-go-golangci-lint|
     golangserver..........................|ale-go-golangserver|
-    golint................................|ale-go-golint|
     golines...............................|ale-go-golines|
+    golint................................|ale-go-golint|
     gometalinter..........................|ale-go-gometalinter|
     gopls.................................|ale-go-gopls|
     govet.................................|ale-go-govet|
