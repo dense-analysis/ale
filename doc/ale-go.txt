@@ -134,7 +134,7 @@ g:ale_go_langserver_options                       *g:ale_go_langserver_options*
   by the |g:ale_completion_enabled| variable.
 
 ===============================================================================
-golines                                                          *ale-go-lines*
+golines                                                        *ale-go-golines*
 
 g:ale_go_golines_executable                         *g:ale_go_lines_executable*
                                                     *b:ale_go_lines_executable*
