@@ -132,6 +132,7 @@ while [ $# -ne 0 ]; do
         echo '  --neovim-only     Run tests only for NeoVim'
         echo '  --neovim-02-only  Run tests only for NeoVim 0.2'
         echo '  --neovim-04-only  Run tests only for NeoVim 0.4'
+        echo '  --neovim-05-only  Run tests only for NeoVim 0.5'
         echo '  --vim-only        Run tests only for Vim'
         echo '  --vim-80-only     Run tests only for Vim 8.0'
         echo '  --vim-82-only     Run tests only for Vim 8.2'
