@@ -1,4 +1,4 @@
-" Author: toastal <toastal@protonmail.com>
+" Author: toastal <toastal@posteo.net>
 " Description: Dhall's package freezing
 
 call ale#Set('dhall_freeze_options', '')

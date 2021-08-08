@@ -1,4 +1,4 @@
-" Author: toastal <toastal@protonmail.com>
+" Author: toastal <toastal@posteo.net>
 " Description: Dhall’s built-in linter/formatter
 
 function! ale#fixers#dhall_lint#Fix(buffer) abort

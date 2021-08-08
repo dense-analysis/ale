@@ -408,6 +408,7 @@ formatting.
   * [puppet-lint](https://puppet-lint.com)
 * PureScript
   * [purescript-language-server](https://github.com/nwolverson/purescript-language-server)
+  * [purs-tidy](https://github.com/natefaubion/purescript-tidy)
   * [purty](https://gitlab.com/joneshf/purty)
 * Python
   * [autoflake](https://github.com/myint/autoflake)
