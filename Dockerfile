@@ -18,7 +18,7 @@ ENV PACKAGES="\
 RUN apk --update add $PACKAGES && \
     rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
 
-RUN pip install vim-vint==0.3.15
+RUN pip install vim-vint==0.3.21
 
 RUN git clone https://github.com/junegunn/vader.vim vader && \
     cd vader && git checkout c6243dd81c98350df4dec608fa972df98fa2a3af

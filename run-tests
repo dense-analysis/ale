@@ -17,7 +17,7 @@ fi
 git_version=$(git describe --always --tags)
 
 # Used in all test scripts for running the selected Docker image.
-DOCKER_RUN_IMAGE="$image"
+DOCKER_RUN_IMAGE="$image:$image_tag"
 export DOCKER_RUN_IMAGE
 
 tests='test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader'

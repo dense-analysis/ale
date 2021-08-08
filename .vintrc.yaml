@@ -1,0 +1,5 @@
+policies:
+  # Disable a violation that is thrown randomly for reasons I still
+  # do not understand.
+  ProhibitMissingScriptEncoding:
+    enabled: false
