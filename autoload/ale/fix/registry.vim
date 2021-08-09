@@ -246,6 +246,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['go'],
 \       'description': 'Fix Go files imports with goimports.',
 \   },
+\   'golines': {
+\       'function': 'ale#fixers#golines#Fix',
+\       'suggested_filetypes': ['go'],
+\        'description': 'Fix Go file long lines with golines',
+\   },
 \   'gomod': {
 \       'function': 'ale#fixers#gomod#Fix',
 \       'suggested_filetypes': ['gomod'],
