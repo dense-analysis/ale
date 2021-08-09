@@ -15,8 +15,6 @@ Execute(The dhall-lint callback should return the correct options):
   AssertFixer
   \ {
   \   'command': ale#Escape('odd-dhall')
-  \     . ' --ascii'
-  \     . ' lint'
-  \     . ' --inplace %t',
-  \   'read_temporary_file': 1,
+  \       . ' --ascii'
+  \       . ' lint'
   \ }
