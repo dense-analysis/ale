@@ -16,9 +16,7 @@ Execute(The dhall-freeze callback should return the correct options):
   AssertFixer
   \ {
   \   'command': ale#Escape('odd-dhall')
-  \     . ' --ascii'
-  \     . ' freeze'
-  \     . ' --all'
-  \     . ' --inplace %t',
-  \   'read_temporary_file': 1,
+  \       . ' --ascii'
+  \       . ' freeze'
+  \       . ' --all'
   \ }
