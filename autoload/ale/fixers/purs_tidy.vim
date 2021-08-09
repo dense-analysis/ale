@@ -18,9 +18,7 @@ function! ale#fixers#purs_tidy#Fix(buffer) abort
 
     return {
     \   'command': ale#Escape(l:executable)
+    \       . ' format'
     \       . ale#Pad(l:options)
-    \       . ' %s',
-    \   'read_temporary_file': 0,
     \}
 endfunction
-

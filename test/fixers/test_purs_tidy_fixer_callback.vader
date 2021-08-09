@@ -15,7 +15,6 @@ Execute(The purs-tidy callback should return the correct custom options):
   AssertFixer
   \ {
   \   'command': ale#Escape('odd-purs-tidy')
+  \     . ' format'
   \     . ' --indent 3'
-  \     . ' %s',
-  \   'read_temporary_file': 0,
   \ }
