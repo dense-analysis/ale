@@ -274,6 +274,11 @@ formatting.
   * [jsonlint](https://github.com/zaach/jsonlint)
   * [prettier](https://github.com/prettier/prettier)
   * [spectral](https://github.com/stoplightio/spectral)
+  * [eslint](http://eslint.org/)
+* JSONC
+  * [eslint](http://eslint.org/)
+* JSON5
+  * [eslint](http://eslint.org/)
 * Julia
   * [languageserver](https://github.com/JuliaEditorSupport/LanguageServer.jl)
 * Kotlin

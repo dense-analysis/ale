@@ -2829,6 +2829,11 @@ documented in additional help files.
     jq....................................|ale-json-jq|
     prettier..............................|ale-json-prettier|
     spectral..............................|ale-json-spectral|
+    eslint................................|ale-json-eslint|
+  jsonc..................................|ale-jsonc-options|
+    eslint................................|ale-jsonc-eslint|
+  json5..................................|ale-json5-options|
+    eslint................................|ale-json5-eslint|
   julia...................................|ale-julia-options|
     languageserver........................|ale-julia-languageserver|
   kotlin..................................|ale-kotlin-options|

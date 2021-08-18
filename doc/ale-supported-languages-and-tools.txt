@@ -265,6 +265,11 @@ Notes:
   * `jsonlint`
   * `prettier`
   * `spectral`
+  * `eslint`
+* JSONC
+  * `eslint`
+* JSON5
+  * `eslint`
 * Julia
   * `languageserver`
 * Kotlin

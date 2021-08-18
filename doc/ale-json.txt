@@ -134,4 +134,13 @@ g:ale_json_spectral_use_global                 *g:ale_json_spectral_use_global*
 
 
 ===============================================================================
+eslint                                                        *ale-json-eslint*
+
+The `eslint` linter for JSON uses the JavaScript options for `eslint`; see:
+|ale-javascript-eslint|.
+
+You will need the JSONC ESLint plugin installed for this to work.
+
+Website: https://ota-meshi.github.io/eslint-plugin-jsonc/
+===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
