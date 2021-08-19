@@ -2824,16 +2824,16 @@ documented in additional help files.
     standard..............................|ale-javascript-standard|
     xo....................................|ale-javascript-xo|
   json....................................|ale-json-options|
+    eslint................................|ale-json-eslint|
     fixjson...............................|ale-json-fixjson|
     jsonlint..............................|ale-json-jsonlint|
     jq....................................|ale-json-jq|
     prettier..............................|ale-json-prettier|
     spectral..............................|ale-json-spectral|
-    eslint................................|ale-json-eslint|
-  jsonc..................................|ale-jsonc-options|
-    eslint................................|ale-jsonc-eslint|
   json5..................................|ale-json5-options|
     eslint................................|ale-json5-eslint|
+  jsonc..................................|ale-jsonc-options|
+    eslint................................|ale-jsonc-eslint|
   julia...................................|ale-julia-options|
     languageserver........................|ale-julia-languageserver|
   kotlin..................................|ale-kotlin-options|

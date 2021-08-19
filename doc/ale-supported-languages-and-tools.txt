@@ -260,15 +260,15 @@ Notes:
   * `tsserver`
   * `xo`
 * JSON
+  * `eslint`
   * `fixjson`
   * `jq`
   * `jsonlint`
   * `prettier`
   * `spectral`
+* JSON5
   * `eslint`
 * JSONC
-  * `eslint`
-* JSON5
   * `eslint`
 * Julia
   * `languageserver`
