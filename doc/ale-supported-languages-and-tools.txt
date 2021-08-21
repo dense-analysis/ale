@@ -260,11 +260,16 @@ Notes:
   * `tsserver`
   * `xo`
 * JSON
+  * `eslint`
   * `fixjson`
   * `jq`
   * `jsonlint`
   * `prettier`
   * `spectral`
+* JSON5
+  * `eslint`
+* JSONC
+  * `eslint`
 * Julia
   * `languageserver`
 * Kotlin
