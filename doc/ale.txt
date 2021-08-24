@@ -2681,6 +2681,7 @@ documented in additional help files.
     uncrustify............................|ale-cpp-uncrustify|
   c#......................................|ale-cs-options|
     csc...................................|ale-cs-csc|
+    dotnet-format.........................|ale-cs-dotnet-format|
     mcs...................................|ale-cs-mcs|
     mcsc..................................|ale-cs-mcsc|
     uncrustify............................|ale-cs-uncrustify|
