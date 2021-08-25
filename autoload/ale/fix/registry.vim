@@ -396,6 +396,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['dart'],
 \       'description': 'Fix Dart files with dart format.',
 \   },
+\   'dotnet-format': {
+\       'function': 'ale#fixers#dotnet_format#Fix',
+\       'suggested_filetypes': ['cs'],
+\       'description': 'Fix C# files with dotnet format.',
+\   },
 \   'xmllint': {
 \       'function': 'ale#fixers#xmllint#Fix',
 \       'suggested_filetypes': ['xml'],
