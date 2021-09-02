@@ -444,16 +444,6 @@ Execute("workspace/applyEdit" from LSP should be handled):
   \ [{'description': 'applyEdit', 'changes': [{'fileName': '/foo/bar/file.ts', 'textChanges': [{'end': {'offset': 28, 'line': 8}, 'newText': ', Config', 'start': {'offset': 28, 'line': 8}}, {'end': {'offset': 13, 'line': 97}, 'newText': 'await newFunction(redis, imageKey, cover, config);', 'start': {'offset': 3, 'line': 95}}, {'end': {'offset': 3, 'line': 100}, 'newText': '^@async function newFunction(redis: IRedis, imageKey: string, cover: Buffer, config: Config) {^@    try {^@        await redis.set(imageKey, cover, ''ex'', parseInt(config.coverKeyTTL, 10));^@    }^@    catch { }^@}^@', 'start': {'offset': 3, 'line': 100}}]}]}],
   \ g:code_actions
 
-Execute(Code Actions from LSP should be handled with user input if there are more than one action):
-  call ale#codefix#SetMap({2: {}})
-  call ale#codefix#HandleLSPResponse(1,
-  \ {'id': 2, 'jsonrpc': '2.0', 'result': [{'title': 'fake for testing'}, {'arguments': [{'documentChanges': [{'edits': [{'range': {'end': {'character': 31, 'line': 2}, 'start': {'character': 31, 'line': 2}}, 'newText': ', createVideo'}], 'textDocument': {'uri': 'file:///foo/bar/file.ts', 'version': 1}}]}], 'title': 'Add ''createVideo'' to existing import declaration from "./video"', 'command': '_typescript.applyWorkspaceEdit'}]})
-
-  AssertEqual g:handle_code_action_called, 1
-  AssertEqual
-  \ [{'description': 'codeaction', 'changes': [{'fileName': '/foo/bar/file.ts', 'textChanges': [{'end': {'offset': 32, 'line': 3}, 'newText': ', createVideo', 'start': {'offset': 32, 'line': 3}}]}]}],
-  \ g:code_actions
-
 Execute(Code Actions from LSP should be handled when returned with documentChanges):
   call ale#codefix#SetMap({2: {}})
   call ale#codefix#HandleLSPResponse(1,
@@ -464,7 +454,7 @@ Execute(Code Actions from LSP should be handled when returned with documentChang
   \ [{'description': 'codeaction', 'changes': [{'fileName': '/foo/bar/test.py', 'textChanges': [{'end': {'offset': 1, 'line': 1}, 'newText': 'def func_bomdjnxh():^@    a = 1return a^@^@^@', 'start': {'offset': 1, 'line': 1}}, {'end': {'offset': 10, 'line': 2}, 'newText': 'func_bomdjnxh()^@', 'start': {'offset': 9, 'line': 2}}]}]}],
   \ g:code_actions
 
-Execute(LSP Code Actions handles command responses):
+Execute(LSP Code Actions handles CodeAction responses):
   call ale#codefix#SetMap({3: {
   \ 'connection_id': 0,
   \}})
@@ -475,6 +465,16 @@ Execute(LSP Code Actions handles command responses):
   \ [[0, 'workspace/executeCommand', {'arguments': [{'file': '/foo/bar/file.ts', 'action': 'function_scope_1', 'endOffset': 0, 'refactor': 'Extract Symbol', 'endLine': 68, 'startLine': 65, 'startOffset': 1}], 'command': '_typescript.applyRefactoring'}]],
   \ g:message_list
 
+Execute(LSP Code Actions handles Command responses):
+  call ale#codefix#SetMap({2: {
+  \ 'connection_id': 2,
+  \}})
+  call ale#codefix#HandleLSPResponse(1,
+  \ {'id': 2, 'jsonrpc': '2.0', 'result': [{'title': 'fake for testing'}, {'arguments': [{'documentChanges': [{'edits': [{'range': {'end': {'character': 31, 'line': 2}, 'start': {'character': 31, 'line': 2}}, 'newText': ', createVideo'}], 'textDocument': {'uri': 'file:///foo/bar/file.ts', 'version': 1}}]}], 'title': 'Add ''createVideo'' to existing import declaration from "./video"', 'command': '_typescript.applyWorkspaceEdit'}]})
+
+  AssertEqual
+  \ [[0, 'workspace/executeCommand', {'arguments': [{'documentChanges': [{'edits': [{'range': {'end': {'character': 31, 'line': 2}, 'start': {'character': 31, 'line': 2}}, 'newText': ', createVideo'}], 'textDocument': {'uri': 'file:///foo/bar/file.ts', 'version': 1}}]}], 'command': '_typescript.applyWorkspaceEdit'}]],
+  \ g:message_list
 
 Execute(Prints message when LSP code action returns no results):
   call ale#codefix#SetMap({3: {}})
