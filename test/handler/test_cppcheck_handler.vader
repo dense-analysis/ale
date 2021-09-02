@@ -35,6 +35,34 @@ Execute(Basic errors should be handled by cppcheck):
   \ '         ^',
   \ ])
 
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 974,
+  \     'col' : 1,
+  \     'type': 'E',
+  \     'sub_type': '',
+  \     'text': 'inconclusive Array ''n[3]'' accessed at index 3, which is out of bounds.',
+  \     'code': 'arrayIndexOutOfBounds'
+  \   },
+  \   {
+  \     'lnum': 1185,
+  \     'col' : 1,
+  \     'type': 'W',
+  \     'sub_type': 'style',
+  \     'text': 'The scope of the variable ''indxStr'' can be reduced.',
+  \     'code': 'variableScope'
+  \   },
+  \ ],
+  \ ale#handlers#cppcheck#HandleCppCheckFormat(bufnr(''), [
+  \ 'test.cpp:974:{column}: error:inconclusive Array ''n[3]'' accessed at index 3, which is out of bounds. [arrayIndexOutOfBounds]\',
+  \ '    n[3]=3;',
+  \ '     ^',
+  \ 'test.cpp:1185:{column}: style:{inconclusive:inconclusive} The scope of the variable ''indxStr'' can be reduced. [variableScope]\',
+  \ '    char indxStr[16];',
+  \ '         ^',
+  \ ])
+
 Execute(Problems from other files should be ignored by cppcheck):
   call ale#test#SetFilename('test.cpp')
 
