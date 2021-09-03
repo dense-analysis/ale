@@ -45,7 +45,10 @@ function! ale#hover#HandleTSServerResponse(conn_id, response) abort
             \&& (l:set_balloons is 1 || l:set_balloons is# 'hover')
                 call balloon_show(a:response.body.displayString)
             elseif get(l:options, 'truncated_echo', 0)
-                call ale#cursor#TruncatedEcho(split(a:response.body.displayString, "\n")[0])
+                let l:echo = split(a:response.body.displayString, "\n")
+                if len(l:echo) > 0
+                    call ale#cursor#TruncatedEcho(l:echo[0])
+                endif
             elseif g:ale_hover_to_floating_preview || g:ale_floating_preview
                 call ale#floating_preview#Show(split(a:response.body.displayString, "\n"), {
                 \   'filetype': 'ale-preview.message',
