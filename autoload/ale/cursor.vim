@@ -27,7 +27,7 @@ function! ale#cursor#TruncatedEcho(original_message) abort
         silent! setlocal shortmess+=T
 
         try
-            exec "norm! :echomsg l:message\n"
+            echon l:message
         catch /^Vim\%((\a\+)\)\=:E523/
             " Fallback into manual truncate (#1987)
             let l:winwidth = winwidth(0)
@@ -37,7 +37,7 @@ function! ale#cursor#TruncatedEcho(original_message) abort
                 let l:message = l:message[:l:winwidth - 4] . '...'
             endif
 
-            exec 'echomsg l:message'
+            echon l:message
         catch /E481/
             " Do nothing if running from a visual selection.
         endtry
@@ -87,7 +87,7 @@ function! ale#cursor#EchoCursorWarning(...) abort
         elseif get(l:info, 'echoed')
             " We'll only clear the echoed message when moving off errors once,
             " so we don't continually clear the echo line.
-            execute 'echo'
+            echon
             let l:info.echoed = 0
         endif
     endif
@@ -150,7 +150,7 @@ function! s:ShowCursorDetailForItem(loc, options) abort
 
         " Clear the echo message if we manually displayed details.
         if !l:stay_here
-            execute 'echo'
+            echon
         endif
     endif
 endfunction
