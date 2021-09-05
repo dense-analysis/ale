@@ -87,7 +87,7 @@ function! ale#cursor#EchoCursorWarning(...) abort
         elseif get(l:info, 'echoed')
             " We'll only clear the echoed message when moving off errors once,
             " so we don't continually clear the echo line.
-            echon
+            execute 'echo'
             let l:info.echoed = 0
         endif
     endif
@@ -150,7 +150,7 @@ function! s:ShowCursorDetailForItem(loc, options) abort
 
         " Clear the echo message if we manually displayed details.
         if !l:stay_here
-            echon
+            execute 'echo'
         endif
     endif
 endfunction
