@@ -4308,6 +4308,13 @@ ALEJobStarted                                           *ALEJobStarted-autocmd*
   |ale#engine#IsCheckingBuffer()| over |ALELintPre-autocmd|, which is actually
   triggered before any linters are executed.
 
+ALELSPStarted                                           *ALELSPStarted-autocmd*
+                                                                *ALELSPStarted*
+
+  This |User| autocommand is trigged immediately after an LSP connection is
+  successfully initialized. This provides a way to perform any additional
+  initialization work, such as setting up buffer-level mappings.
+
 
 ALEWantResults                                         *ALEWantResults-autocmd*
                                                                *ALEWantResults*
