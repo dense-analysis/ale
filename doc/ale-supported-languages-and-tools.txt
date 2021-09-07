@@ -37,6 +37,7 @@ Notes:
   * `gawk`
 * Bash
   * `bashate`
+  * checkbashisms
   * `language-server`
   * `shell` (-n flag)
   * `shellcheck`
@@ -48,6 +49,7 @@ Notes:
 * BibTeX
   * `bibclean`
 * Bourne Shell
+  * checkbashisms
   * `shell` (-n flag)
   * `shellcheck`
   * `shfmt`

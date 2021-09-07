@@ -3013,6 +3013,7 @@ documented in additional help files.
     stylelint.............................|ale-scss-stylelint|
   sh......................................|ale-sh-options|
     bashate...............................|ale-sh-bashate|
+    checkbashisms.........................|ale-sh-checkbashisms|
     sh-language-server....................|ale-sh-language-server|
     shell.................................|ale-sh-shell|
     shellcheck............................|ale-sh-shellcheck|

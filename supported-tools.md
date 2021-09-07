@@ -46,6 +46,7 @@ formatting.
   * [gawk](https://www.gnu.org/software/gawk/)
 * Bash
   * [bashate](https://github.com/openstack/bashate)
+  * [checkbashisms](https://launchpad.net/ubuntu/+source/devscripts/)
   * [language-server](https://github.com/mads-hartmann/bash-language-server)
   * shell [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set)
   * [shellcheck](https://www.shellcheck.net/)
@@ -57,6 +58,7 @@ formatting.
 * BibTeX
   * [bibclean](http://ftp.math.utah.edu/pub/bibclean/)
 * Bourne Shell
+  * [checkbashisms](https://launchpad.net/ubuntu/+source/devscripts/)
   * shell [-n flag](http://linux.die.net/man/1/sh)
   * [shellcheck](https://www.shellcheck.net/)
   * [shfmt](https://github.com/mvdan/sh)

@@ -1,0 +1,17 @@
+Before:
+  call ale#assert#SetUpLinterTest('sh', 'checkbashisms')
+  call ale#test#SetFilename('test.sh')
+
+  let b:suffix = ' -fx -'
+
+After:
+  unlet! b:suffix
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default checkbashisms command should be correct):
+  AssertLinter 'checkbashisms', ale#Escape('checkbashisms') . b:suffix
+
+Execute(The checkbashisms command should accept options):
+  let b:ale_sh_checkbashisms_options = '-xp'
+
+  AssertLinter 'checkbashisms', ale#Escape('checkbashisms') . ' -xp -'

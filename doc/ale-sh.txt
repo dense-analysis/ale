@@ -26,6 +26,29 @@ g:ale_sh_bashate_options                             *g:ale_sh_bashate_options*
 <
 
 ===============================================================================
+checkbashisms                                            *ale-sh-checkbashisms*
+
+g:ale_sh_checkbashisms_executable           *g:ale_sh_checkbashisms_executable*
+                                            *b:ale_sh_checkbashisms_executable*
+  Type: |String|
+  Default: `'checkbashisms'`
+
+  This variable sets executable used for checkbashisms.
+
+
+g:ale_sh_checkbashisms_options                 *g:ale_sh_checkbashisms_options*
+                                               *b:ale_sh_checkbashisms_options*
+  Type: |String|
+  Default: `'-fx'`
+
+  With this variable we are able to pass extra arguments for checkbashisms.
+  For example to enable stricter POSIX-compliance checks:
+
+>
+  let g:ale_sh_checkbashisms_options = '-fxp'
+<
+
+===============================================================================
 sh-language-server                                     *ale-sh-language-server*
 
 g:ale_sh_language_server_executable        *g:ale_sh_language_server_executable*

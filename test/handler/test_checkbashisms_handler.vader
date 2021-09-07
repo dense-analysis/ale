@@ -1,0 +1,30 @@
+Before:
+  runtime ale_linters/sh/checkbashisms.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The checkbashisms handler should handle basic errors or warnings):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 2,
+  \     'type': 'W',
+  \     'text': 'possible bashism: ''command'' with option other than -p',
+  \   },
+  \   {
+  \     'lnum': 2,
+  \     'type': 'E',
+  \     'text': 'unclosed parentheses',
+  \   },
+  \   {
+  \     'lnum': 0,
+  \     'type': 'E',
+  \     'text': 'cannot open script for reading: insufficient permissions',
+  \   },
+  \ ],
+  \ ale#handlers#checkbashisms#Handle(bufnr(''), [
+  \   'possible bashism in script.sh line 2 (''command'' with option other than -p):',
+  \   'error: script.sh: unclosed parentheses, opened in line 2',
+  \   'cannot open script test.sh for reading: insufficient permissions',
+  \ ])
