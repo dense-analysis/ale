@@ -23,6 +23,6 @@ Execute(The thriftcheck handler should handle basic warnings and errors):
   \   },
   \ ],
   \ ale_linters#thrift#thriftcheck#Handle(1, [
-  \   'file.thrift:1:1:error: "py" namespace must match "^idl\\." (namespace.pattern)',
-  \   'file.thrift:3:5:warning: 64-bit integer constant -2147483649 may not work in all languages (int.64bit)',
+  \   'file.thrift:1:1: error: "py" namespace must match "^idl\\." (namespace.pattern)',
+  \   'file.thrift:3:5: warning: 64-bit integer constant -2147483649 may not work in all languages (int.64bit)',
   \ ])
