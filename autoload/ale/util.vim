@@ -408,10 +408,6 @@ function! ale#util#FuzzyJSONDecode(data, default) abort
         return a:default
     endif
 
-    if type(a:data) is v:t_dict
-        return a:data
-    endif
-
     let l:str = type(a:data) is v:t_string ? a:data : join(a:data, '')
 
     try
