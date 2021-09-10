@@ -10,10 +10,6 @@ After:
   unlet! b:bin_dir
 
 Execute(The isort callback should return the correct default values):
-  AssertEqual
-  \ 0,
-  \ ale#fixers#isort#Fix(bufnr(''))
-
   silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
   \ {
@@ -24,10 +20,6 @@ Execute(The isort callback should return the correct default values):
 
 Execute(The isort callback should respect custom options):
   let g:ale_python_isort_options = '--multi-line=3 --trailing-comma'
-
-  AssertEqual
-  \ 0,
-  \ ale#fixers#isort#Fix(bufnr(''))
 
   silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
   AssertEqual
@@ -47,5 +39,17 @@ Execute(Pipenv is detected when python_isort_auto_pipenv is set):
   \ {
   \   'cwd': '%s:h',
   \   'command': ale#Escape('pipenv') . ' run isort' . ' --filename %s' . ' -'
+  \ },
+  \ ale#fixers#isort#Fix(bufnr(''))
+
+Execute(Poetry is detected when python_isort_auto_poetry is set):
+  let g:ale_python_isort_auto_poetry = 1
+
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertEqual
+  \ {
+  \   'cwd': '%s:h',
+  \   'command': ale#Escape('poetry') . ' run isort' . ' --filename %s' . ' -'
   \ },
   \ ale#fixers#isort#Fix(bufnr(''))
