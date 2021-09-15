@@ -28,12 +28,14 @@ function! ale#cursor#TruncatedEcho(original_message) abort
 
         try
             let l:winwidth = winwidth(0)
+
             " echon will not display the message if it exceeds the width of
             " the window
             if l:winwidth < strdisplaywidth(l:message)
                 " Truncate message longer than window width with trailing '...'
                 let l:message = l:message[:l:winwidth - 5] . '...'
             endif
+
             echon l:message
         catch /^Vim\%((\a\+)\)\=:E523/
             " Fallback into manual truncate (#1987)
