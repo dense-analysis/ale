@@ -280,7 +280,7 @@ Execute(tsserver codefix requests should be sent):
   call ale#linter#Reset()
 
   runtime ale_linters/typescript/tsserver.vim
-  let g:ale_buffer_info = {bufnr(''): {'loclist': [{'lnum': 2, 'col': 5, 'code': 2304}]}}
+  let g:ale_buffer_info = {bufnr(''): {'loclist': [{'lnum': 2, 'col': 5, 'code': 2304, 'linter_name': 'tsserver'}]}}
   call setpos('.', [bufnr(''), 2, 16, 0])
 
   " ALECodeAction
@@ -314,7 +314,7 @@ Execute(tsserver codefix requests should be sent only for error with code):
   call ale#linter#Reset()
 
   runtime ale_linters/typescript/tsserver.vim
-  let g:ale_buffer_info = {bufnr(''): {'loclist': [{'lnum': 2, 'col': 16}, {'lnum': 2, 'col': 16, 'code': 2304}]}}
+  let g:ale_buffer_info = {bufnr(''): {'loclist': [{'lnum': 2, 'col': 16, 'linter_name': 'tsserver'}, {'lnum': 2, 'col': 16, 'code': 2304, 'linter_name': 'tsserver'}]}}
   call setpos('.', [bufnr(''), 2, 16, 0])
 
   " ALECodeAction

@@ -299,7 +299,7 @@ function! ale#codefix#HandleLSPResponse(conn_id, response) abort
     endif
 endfunction
 
-function! s:FindError(buffer, line, column, end_line, end_column) abort
+function! s:FindError(buffer, line, column, end_line, end_column, linter_name) abort
     let l:nearest_error = v:null
 
     if a:line == a:end_line
@@ -308,7 +308,9 @@ function! s:FindError(buffer, line, column, end_line, end_column) abort
         let l:nearest_error_diff = -1
 
         for l:error in get(g:ale_buffer_info[a:buffer], 'loclist', [])
-            if has_key(l:error, 'code') && l:error.lnum == a:line
+            if has_key(l:error, 'code')
+            \  && (a:linter_name is v:null || l:error.linter_name is# a:linter_name)
+            \  && l:error.lnum == a:line
                 let l:diff = abs(l:error.col - a:column)
 
                 if l:nearest_error_diff == -1 || l:diff < l:nearest_error_diff
@@ -341,7 +343,7 @@ function! s:OnReady(
 
     if a:linter.lsp is# 'tsserver'
         let l:nearest_error =
-        \   s:FindError(l:buffer, a:line, a:column, a:end_line, a:end_column)
+        \   s:FindError(l:buffer, a:line, a:column, a:end_line, a:end_column, a:linter.lsp)
 
         if l:nearest_error isnot v:null
             let l:message = ale#lsp#tsserver_message#GetCodeFixes(
@@ -368,7 +370,7 @@ function! s:OnReady(
 
         let l:diagnostics = []
         let l:nearest_error =
-        \   s:FindError(l:buffer, a:line, a:column, a:end_line, a:end_column)
+        \   s:FindError(l:buffer, a:line, a:column, a:end_line, a:end_column, v:null)
 
         if l:nearest_error isnot v:null
             let l:diagnostics = [
