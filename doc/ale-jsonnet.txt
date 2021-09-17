@@ -22,7 +22,7 @@ g:ale_jsonnet_jsonnetfmt_options             *g:ale_jsonnet_jsonnetfmt_options*
 
 
 ===============================================================================
-jsonnet-lint                                        *ale-jsonnet-jsonnet-lint*
+jsonnet-lint                                         *ale-jsonnet-jsonnet-lint*
 
 g:ale_jsonnet_jsonnet_lint_executable   *g:ale_jsonnet_jsonnet_lint_executable*
                                         *b:ale_jsonnet_jsonnet_lint_executable*
