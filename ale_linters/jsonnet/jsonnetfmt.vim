@@ -1,4 +1,4 @@
-" Author: Trevor Whitney <trevorjwhitney@gmail.com>
+" Authors: Trevor Whitney <trevorjwhitney@gmail.com> and Takuya Kosugiyama <re@itkq.jp>
 " Description: jsonnetfmt for jsonnet files
 
 call ale#Set('jsonnet_jsonnetfmt_executable', 'jsonnetfmt')
