@@ -280,6 +280,10 @@ formatting.
   * [eslint](http://eslint.org/)
 * JSONC
   * [eslint](http://eslint.org/)
+  * [jsonnet-lint](https://jsonnet.org/learning/tools.html)
+* Jsonnet
+  * [jsonnetfmt](https://jsonnet.org/learning/tools.html)
+  * [jsonnet-lint](https://jsonnet.org/learning/tools.html)
 * Julia
   * [languageserver](https://github.com/JuliaEditorSupport/LanguageServer.jl)
 * Kotlin

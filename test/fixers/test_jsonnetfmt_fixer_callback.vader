@@ -1,0 +1,41 @@
+Before:
+  Save g:ale_jsonnet_jsonnetfmt_executable
+  Save g:ale_jsonnet_jsonnetfmt_options
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_jsonnet_jsonnetfmt_executable = 'xxxinvalid'
+  let g:ale_jsonnet_jsonnetfmt_options = ''
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The jsonnetfmt callback should return the correct default values):
+  call ale#test#SetFilename('../jsonnet_files/testfile.jsonnet')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' -i'
+  \     . ' %t',
+  \ },
+  \ ale#fixers#jsonnetfmt#Fix(bufnr(''))
+
+Execute(The jsonnetfmt callback should include custom options):
+  let g:ale_jsonnet_jsonnetfmt_options = '--pad-arrays'
+
+  call ale#test#SetFilename('../jsonnet_files/testfile.jsonnet')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' -i'
+  \     . ' ' . g:ale_jsonnet_jsonnetfmt_options
+  \     . ' %t',
+  \ },
+  \ ale#fixers#jsonnetfmt#Fix(bufnr(''))
