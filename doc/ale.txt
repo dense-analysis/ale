@@ -2837,7 +2837,7 @@ documented in additional help files.
     eslint................................|ale-json5-eslint|
   jsonnet.................................|ale-jsonnet-options|
     jsonnetfmt............................|ale-jsonnet-jsonnetfmt|
-    jsonnet-lint..........................ale-jsonnet-jsonnet-lint
+    jsonnet-lint..........................|ale-jsonnet-jsonnet-lint|
   julia...................................|ale-julia-options|
     languageserver........................|ale-julia-languageserver|
   kotlin..................................|ale-kotlin-options|
