@@ -18,7 +18,7 @@ function! ale_linters#jsonnet#jsonnetfmt#Handle(buffer, lines) abort
     "
     " STATIC ERROR: foo.jsonnet:22:3-12: expected token OPERATOR but got (IDENTIFIER, "bar")
     " STATIC ERROR: hoge.jsonnet:20:3: unexpected: "}" while parsing terminal
-    let l:pattern = '^[^:]*:\(\d\+\):\(\d\+\)\(-\d\+\)* \(.*\)'
+    let l:pattern = '^STATIC ERROR:[^:]*:\(\d\+\):\(\d\+\):*\(-\d\+\)* \(.*\)'
     let l:output = []
 
     for l:line in a:lines
@@ -34,7 +34,7 @@ function! ale_linters#jsonnet#jsonnetfmt#Handle(buffer, lines) abort
         \   'lnum': l:match[1] + 0,
         \   'vcol': 0,
         \   'col': l:match[2] + 0,
-        \   'text': l:match[3],
+        \   'text': l:match[4],
         \   'type': 'E',
         \   'nr': -1,
         \})
