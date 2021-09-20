@@ -8,7 +8,7 @@ function! ale_linters#jsonnet#jsonnet_lint#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'jsonnet_jsonnet_lint_options')
 
     return '%e'
-    \   . (!empty(l:options) ? ' ' . l:options : '')
+    \   . ale#Pad(l:options)
     \   . ' %t'
 endfunction
 

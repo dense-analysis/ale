@@ -7,35 +7,32 @@ Before:
   let g:ale_jsonnet_jsonnetfmt_options = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
+  call ale#assert#SetUpFixerTest('jsonnet', 'jsonnetfmt')
 
 After:
-  Restore
-
   call ale#test#RestoreDirectory()
+  call ale#assert#TearDownFixerTest()
 
 Execute(The jsonnetfmt callback should return the correct default values):
   call ale#test#SetFilename('../jsonnet_files/testfile.jsonnet')
 
-  AssertEqual
-  \ {
+  AssertFixer {
   \   'read_temporary_file': 1,
-  \   'command': ale#Escape('xxxinvalid')
+  \   'command': ale#Escape(g:ale_jsonnet_jsonnetfmt_executable)
   \     . ' -i'
   \     . ' %t',
-  \ },
-  \ ale#fixers#jsonnetfmt#Fix(bufnr(''))
+  \}
 
 Execute(The jsonnetfmt callback should include custom options):
   let g:ale_jsonnet_jsonnetfmt_options = '--pad-arrays'
 
   call ale#test#SetFilename('../jsonnet_files/testfile.jsonnet')
 
-  AssertEqual
-  \ {
+  AssertFixer {
   \   'read_temporary_file': 1,
-  \   'command': ale#Escape('xxxinvalid')
+  \   'command': ale#Escape(g:ale_jsonnet_jsonnetfmt_executable)
   \     . ' -i'
   \     . ' ' . g:ale_jsonnet_jsonnetfmt_options
   \     . ' %t',
-  \ },
-  \ ale#fixers#jsonnetfmt#Fix(bufnr(''))
+  \}
+
