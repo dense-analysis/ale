@@ -271,6 +271,9 @@ Notes:
   * `eslint`
 * JSONC
   * `eslint`
+* Jsonnet
+  * `jsonnet-lint`
+  * `jsonnetfmt`
 * Julia
   * `languageserver`
 * Kotlin

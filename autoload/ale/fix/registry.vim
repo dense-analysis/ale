@@ -486,6 +486,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'A formatter for Haskell source code.',
 \   },
+\   'jsonnetfmt': {
+\       'function': 'ale#fixers#jsonnetfmt#Fix',
+\       'suggested_filetypes': ['jsonnet'],
+\       'description': 'Fix jsonnet files with jsonnetfmt',
+\   },
 \   'ptop': {
 \       'function': 'ale#fixers#ptop#Fix',
 \       'suggested_filetypes': ['pascal'],

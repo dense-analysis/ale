@@ -2833,6 +2833,9 @@ documented in additional help files.
     spectral..............................|ale-json-spectral|
   jsonc...................................|ale-jsonc-options|
     eslint................................|ale-jsonc-eslint|
+  jsonnet.................................|ale-jsonnet-options|
+    jsonnetfmt............................|ale-jsonnet-jsonnetfmt|
+    jsonnet-lint..........................|ale-jsonnet-jsonnet-lint|
   json5...................................|ale-json5-options|
     eslint................................|ale-json5-eslint|
   julia...................................|ale-julia-options|
