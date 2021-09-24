@@ -194,6 +194,18 @@ endfunction
 
 function! ale#codefix#ApplyLSPCodeAction(data, item) abort
     if has_key(a:item, 'command')
+    \&& type(a:item.command) == v:t_string
+        let l:message = ale#lsp#message#ExecuteCommand(
+        \   a:item.command,
+        \   a:item.arguments,
+        \)
+
+        call ale#lsp#Send(a:data.connection_id, l:message)
+
+        return
+    endif
+
+    if has_key(a:item, 'command')
     \&& type(a:item.command) == v:t_dict
         let l:command = a:item.command
         let l:message = ale#lsp#message#ExecuteCommand(
@@ -202,14 +214,8 @@ function! ale#codefix#ApplyLSPCodeAction(data, item) abort
         \)
 
         let l:request_id = ale#lsp#Send(a:data.connection_id, l:message)
-    elseif has_key(a:item, 'edit') || has_key(a:item, 'arguments')
-        if has_key(a:item, 'edit')
-            let l:topass = a:item.edit
-        else
-            let l:topass = a:item.arguments[0]
-        endif
-
-        let l:changes_map = ale#code_action#GetChanges(l:topass)
+    elseif has_key(a:item, 'edit')
+        let l:changes_map = ale#code_action#GetChanges(a:item.edit)
 
         if empty(l:changes_map)
             return
