@@ -445,14 +445,15 @@ Execute("workspace/applyEdit" from LSP should be handled):
   \ g:code_actions
 
 Execute(Code Actions from LSP should be handled with user input if there are more than one action):
-  call ale#codefix#SetMap({2: {}})
+  call ale#codefix#SetMap({2: {
+  \ 'connection_id': 0,
+  \}})
   call ale#codefix#HandleLSPResponse(1,
   \ {'id': 2, 'jsonrpc': '2.0', 'result': [{'title': 'fake for testing'}, {'arguments': [{'documentChanges': [{'edits': [{'range': {'end': {'character': 31, 'line': 2}, 'start': {'character': 31, 'line': 2}}, 'newText': ', createVideo'}], 'textDocument': {'uri': 'file:///foo/bar/file.ts', 'version': 1}}]}], 'title': 'Add ''createVideo'' to existing import declaration from "./video"', 'command': '_typescript.applyWorkspaceEdit'}]})
 
-  AssertEqual g:handle_code_action_called, 1
   AssertEqual
-  \ [{'description': 'codeaction', 'changes': [{'fileName': '/foo/bar/file.ts', 'textChanges': [{'end': {'offset': 32, 'line': 3}, 'newText': ', createVideo', 'start': {'offset': 32, 'line': 3}}]}]}],
-  \ g:code_actions
+  \ [[0, 'workspace/executeCommand', {'arguments': [{'documentChanges': [{'edits': [{'range': {'end': {'character': 31, 'line': 2}, 'start': {'character': 31, 'line': 2}}, 'newText': ', createVideo'}], 'textDocument': {'uri': 'file:///foo/bar/file.ts', 'version': 1}}]}], 'command': '_typescript.applyWorkspaceEdit'}]],
+  \ g:message_list
 
 Execute(Code Actions from LSP should be handled when returned with documentChanges):
   call ale#codefix#SetMap({2: {}})
