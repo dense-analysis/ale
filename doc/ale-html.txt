@@ -149,6 +149,18 @@ g:ale_html_tidy_options                               *g:ale_html_tidy_options*
   The recognized file encodings are as follows: ascii, big5, cp1252 (win1252),
   cp850 (ibm858), cp932 (shiftjis), iso-2022-jp (iso-2022), latin1, macroman
   (mac), sjis (shiftjis), utf-16le, utf-16, utf-8
+  
+
+g:ale_html_tidy_fixer_options                   *g:ale_html_tidy_fixer_options*
+                                                *b:ale_html_tidy_fixer_options*
+  Type: |String|
+  Default: `''`
+
+  The fixer as a different behavior then it has its own options. The options
+  always passed to tidy are :
+  '-q --tidy-mark no --show-errors 0 --show-warnings 0'
+  So if you want, for example, your html file to be indented you have to set
+  the options to '-i'. 
 
 
 g:ale_html_tidy_use_global                             *g:html_tidy_use_global*
