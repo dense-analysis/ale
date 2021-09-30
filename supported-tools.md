@@ -428,6 +428,7 @@ formatting.
   * [bandit](https://github.com/PyCQA/bandit) :warning:
   * [black](https://github.com/ambv/black)
   * [flake8](http://flake8.pycqa.org/en/latest/)
+  * [flakehell](https://github.com/flakehell/flakehell)
   * [isort](https://github.com/timothycrosley/isort)
   * [mypy](http://mypy-lang.org/)
   * [prospector](https://github.com/PyCQA/prospector) :warning: :floppy_disk:
