@@ -4,6 +4,7 @@
 call ale#Set('python_black_executable', 'black')
 call ale#Set('python_black_use_global', get(g:, 'ale_use_global_executables', 0))
 call ale#Set('python_black_options', '')
+call ale#Set('python_black_use_config', 0)
 call ale#Set('python_black_auto_pipenv', 0)
 call ale#Set('python_black_auto_poetry', 0)
 call ale#Set('python_black_change_directory', 1)
@@ -22,6 +23,20 @@ function! ale#fixers#black#GetExecutable(buffer) abort
     return ale#python#FindExecutable(a:buffer, 'python_black', ['black'])
 endfunction
 
+function! s:add_options(buffer, cmd) abort
+    let l:options = ale#Var(a:buffer, 'python_black_options')
+
+    if !empty(l:options)
+        call add(a:cmd, l:options)
+    endif
+endfunction
+
+function! s:add_config(cmd, config) abort
+    if !empty(a:config)
+        call add(a:cmd, '--config ' . ale#Escape(a:config))
+    endif
+endfunction
+
 function! ale#fixers#black#Fix(buffer) abort
     let l:executable = ale#fixers#black#GetExecutable(a:buffer)
     let l:cmd = [ale#Escape(l:executable)]
@@ -30,11 +45,18 @@ function! ale#fixers#black#Fix(buffer) abort
         call extend(l:cmd, ['run', 'black'])
     endif
 
-    let l:options = ale#Var(a:buffer, 'python_black_options')
+    let l:use_config = ale#Var(a:buffer, 'python_black_use_config')
+    let l:config = ale#path#FindNearestFile(a:buffer, 'pyproject.toml')
 
-    if !empty(l:options)
-        call add(l:cmd, l:options)
+    if l:use_config == 1 && !empty(l:config)
+        call s:add_options(a:buffer, l:cmd)
+        call s:add_config(l:cmd, l:config)
+    elseif l:use_config == 2 && !empty(l:config)
+        call s:add_config(l:cmd, l:config)
+    else
+        call s:add_options(a:buffer, l:cmd)
     endif
+
 
     if expand('#' . a:buffer . ':e') is? 'pyi'
         call add(l:cmd, '--pyi')
