@@ -213,6 +213,19 @@ g:ale_python_black_options                         *g:ale_python_black_options*
   This variable can be set to pass extra options to black.
 
 
+g:ale_python_black_use_config                   *g:ale_python_black_use_config*
+                                                *b:ale_python_black_use_config*
+  Type: |Number|
+  Default: `0`
+
+  Search for the closest config file (pyproject.toml).
+  if 0 then use only the options (see above g:ale_python_black_options)
+  if 1 then use both config and options
+  if 2 then use only the config
+  if the config file is not found, it will use the options no matter the
+  value set.
+
+
 g:ale_python_black_use_global                   *g:ale_python_black_use_global*
                                                 *b:ale_python_black_use_global*
   Type: |Number|
