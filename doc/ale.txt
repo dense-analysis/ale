@@ -2811,6 +2811,7 @@ documented in additional help files.
     eclipselsp............................|ale-java-eclipselsp|
     uncrustify............................|ale-java-uncrustify|
   javascript..............................|ale-javascript-options|
+    deno..................................|ale-javascript-deno|
     eslint................................|ale-javascript-eslint|
     fecs..................................|ale-javascript-fecs|
     flow..................................|ale-javascript-flow|
