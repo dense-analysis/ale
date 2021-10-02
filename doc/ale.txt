@@ -2953,6 +2953,7 @@ documented in additional help files.
     bandit................................|ale-python-bandit|
     black.................................|ale-python-black|
     flake8................................|ale-python-flake8|
+    flakehell.............................|ale-python-flakehell|
     isort.................................|ale-python-isort|
     mypy..................................|ale-python-mypy|
     prospector............................|ale-python-prospector|

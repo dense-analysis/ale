@@ -419,6 +419,7 @@ Notes:
   * `bandit`
   * `black`
   * `flake8`
+  * `flakehell`
   * `isort`
   * `mypy`
   * `prospector`!!
