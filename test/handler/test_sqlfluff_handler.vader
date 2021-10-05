@@ -14,8 +14,8 @@ Execute (The output should be correct):
   \   {
   \     'lnum': 39,
   \     'col': 64,
-  \     'type': 'L014',
-  \     'text': 'Unquoted identifiers must be consistently capitalised'
+  \     'type': 'E',
+  \     'text': 'L014: Unquoted identifiers must be consistently capitalised'
   \   },
   \ ],
   \ ale_linters#sql#sqlfluff#Handle(bufnr(''), [

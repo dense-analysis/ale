@@ -15,8 +15,8 @@ function! ale_linters#sql#sqlfluff#Handle(buffer, lines) abort
         call add(l:output, {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
-        \   'type': l:match[3],
-        \   'text': l:match[4],
+        \   'type': 'E',
+        \   'text':  l:match[3] . ': ' . l:match[4],
         \})
     endfor
 
