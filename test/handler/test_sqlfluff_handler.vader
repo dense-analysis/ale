@@ -1,0 +1,23 @@
+Before:
+    " Load the file which defines the linter.
+  runtime ale_linters/sql/sqlfluff.vim
+
+After:
+    " Unload all linters again.
+  call ale#linter#Reset()
+
+Execute (The output should be correct):
+
+  " Test that the right loclist items are parsed from the handler.
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 39,
+  \     'col': 64,
+  \     'type': 'L014',
+  \     'text': 'Unquoted identifiers must be consistently capitalised'
+  \   },
+  \ ],
+  \ ale_linters#sql#sqlfluff#Handle(bufnr(''), [
+  \  'L:  39 | P:  64 | L014 | Unquoted identifiers must be consistently capitalised'
+  \ ])
