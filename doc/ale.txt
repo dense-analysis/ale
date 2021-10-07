@@ -2730,6 +2730,7 @@ documented in additional help files.
     syntaxerl.............................|ale-erlang-syntaxerl|
   eruby...................................|ale-eruby-options|
     ruumba................................|ale-eruby-ruumba|
+    erblint...............................|ale-eruby-erblint|
   fish....................................|ale-fish-options|
     fish_indent...........................|ale-fish-fish_indent|
   fortran.................................|ale-fortran-options|

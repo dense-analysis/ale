@@ -7,6 +7,7 @@ There are four linters for `eruby` files:
 - `erubis`
 - `erubi`
 - `ruumba`
+- `erblint`
 
 `erb` is in the Ruby standard library and is mostly universal. `erubis` is the
 default parser in Rails between 3.0 and 5.1. `erubi` is the default in Rails
@@ -31,6 +32,26 @@ g:ale_eruby_ruumba_options                          *g:ale_ruby_ruumba_options*
   Default: `''`
 
   This variable can be change to modify flags given to ruumba.
+
+
+===============================================================================
+erblint                                                     *ale-eruby-erblint*
+
+g:ale_eruby_erblint_executable                 *g:ale_eruby_erblint_executable*
+                                               *b:ale_eruby_erblint_executable*
+  Type: |String|
+  Default: `'erblint'`
+
+  Override the invoked erblint binary. This is useful for running erblint
+  from binstubs or a bundle.
+
+
+g:ale_eruby_erblint_options                        *g:ale_ruby_erblint_options*
+                                                   *b:ale_ruby_erblint_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be change to modify flags given to erblint.
 
 
 ===============================================================================
