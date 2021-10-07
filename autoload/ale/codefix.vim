@@ -202,6 +202,14 @@ function! ale#codefix#ApplyLSPCodeAction(data, item) abort
         \)
 
         let l:request_id = ale#lsp#Send(a:data.connection_id, l:message)
+    elseif has_key(a:item, 'command') && has_key(a:item, 'arguments')
+    \&& type(a:item.command) == v:t_string
+        let l:message = ale#lsp#message#ExecuteCommand(
+        \   a:item.command,
+        \   a:item.arguments,
+        \)
+
+        let l:request_id = ale#lsp#Send(a:data.connection_id, l:message)
     elseif has_key(a:item, 'edit') || has_key(a:item, 'arguments')
         if has_key(a:item, 'edit')
             let l:topass = a:item.edit
