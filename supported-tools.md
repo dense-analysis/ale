@@ -160,10 +160,10 @@ formatting.
   * [elm-make](https://github.com/elm/compiler)
 * Erb
   * [erb](https://apidock.com/ruby/ERB)
+  * [erblint](https://github.com/Shopify/erb-lint)
   * [erubi](https://github.com/jeremyevans/erubi)
   * [erubis](https://github.com/kwatch/erubis)
   * [ruumba](https://github.com/ericqweinstein/ruumba)
-  * [erblint](https://github.com/Shopify/erb-lint)
 * Erlang
   * [SyntaxErl](https://github.com/ten0s/syntaxerl)
   * [dialyzer](http://erlang.org/doc/man/dialyzer.html) :floppy_disk:

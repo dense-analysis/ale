@@ -151,6 +151,7 @@ Notes:
   * `elm-make`
 * Erb
   * `erb`
+  * `erblint`
   * `erubi`
   * `erubis`
   * `ruumba`
