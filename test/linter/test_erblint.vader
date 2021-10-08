@@ -3,7 +3,7 @@ Before:
   call ale#test#SetFilename('dummy.html.erb')
 
   let g:ale_eruby_erblint_executable = 'erblint'
-  let g:ale_eruby_erblintt_options = ''
+  let g:ale_eruby_erblint_options = ''
 
 After:
   call ale#assert#TearDownLinterTest()
