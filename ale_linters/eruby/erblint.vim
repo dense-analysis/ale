@@ -1,5 +1,5 @@
 " Author: Roeland Moors - https://github.com/roelandmoors
-" based on the ale ruumba linter
+" based on the ale ruumba and robocop linters
 " Description: ERB Lint, support for https://github.com/Shopify/erb-lint
 
 call ale#Set('eruby_erblint_executable', 'erblint')
