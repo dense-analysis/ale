@@ -53,14 +53,14 @@ Execute(The erblint handler should parse lines correctly):
   \     '{"metadata":{"erb_lint_version":"0.1.1","ruby_engine":"ruby","ruby_version":"3.0.2","ruby_patchlevel":"107","ruby_platform":"arm64-darwin20"},"files":[{"path":"demo.html.erb","offenses":[{"linter":"ExtraNewline","message":"Extra blank line detected.","location":{"start_line":3,"start_column":0,"last_line":4,"last_column":0,"length":1}},{"linter":"FinalNewline","message":"Remove multiple trailing newline at the end of the file.","location":{"start_line":6,"start_column":0,"last_line":8,"last_column":0,"length":2}},{"linter":"SpaceAroundErbTag","message":"Use 1 space after `<%=` instead of 2 spaces.","location":{"start_line":4,"start_column":9,"last_line":4,"last_column":11,"length":2}},{"linter":"SpaceAroundErbTag","message":"Use 1 space before `%>` instead of 2 spaces.","location":{"start_line":4,"start_column":9,"last_line":4,"last_column":11,"length":2}},{"linter":"TrailingWhitespace","message":"Extra whitespace detected at end of line.","location":{"start_line":5,"start_column":6,"last_line":5,"last_column":10,"length":4}}]}],"summary":{"offenses":5,"inspected_files":1,"corrected":0}}'
   \ ])
 
-Execute(The rubocop handler should handle when files are checked and no offenses are found):
+Execute(The erblint handler should handle when files are checked and no offenses are found):
   AssertEqual
   \ [],
   \ ale_linters#eruby#erblint#Handle(347, [
   \     '{"metadata":{"erb_lint_version":"0.1.1","ruby_engine":"ruby","ruby_version":"3.0.2","ruby_patchlevel":"107","ruby_platform":"arm64-darwin20"},"files":[{"path":"demo.html.erb","offenses":[]}],"summary":{"offenses":0,"inspected_files":1,"corrected":0}}'
   \ ])
 
-Execute(The rubocop handler should handle output without any errors):
+Execute(The erblint handler should handle output without any errors):
   AssertEqual
   \ [],
   \ ale_linters#eruby#erblint#Handle(347, ['{}'])

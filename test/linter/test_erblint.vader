@@ -2,8 +2,8 @@ Before:
   call ale#assert#SetUpLinterTest('eruby', 'erblint')
   call ale#test#SetFilename('dummy.html.erb')
 
-  let g:ale_eruby_ruumba_executable = 'erblint'
-  let g:ale_eruby_ruumba_options = ''
+  let g:ale_eruby_erblint_executable = 'erblint'
+  let g:ale_eruby_erblintt_options = ''
 
 After:
   call ale#assert#TearDownLinterTest()
