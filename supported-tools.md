@@ -160,6 +160,7 @@ formatting.
   * [elm-make](https://github.com/elm/compiler)
 * Erb
   * [erb](https://apidock.com/ruby/ERB)
+  * [erblint](https://github.com/Shopify/erb-lint)
   * [erubi](https://github.com/jeremyevans/erubi)
   * [erubis](https://github.com/kwatch/erubis)
   * [ruumba](https://github.com/ericqweinstein/ruumba)

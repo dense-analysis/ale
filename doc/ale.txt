@@ -2729,6 +2729,7 @@ documented in additional help files.
     erlfmt................................|ale-erlang-erlfmt|
     syntaxerl.............................|ale-erlang-syntaxerl|
   eruby...................................|ale-eruby-options|
+    erblint...............................|ale-eruby-erblint|
     ruumba................................|ale-eruby-ruumba|
   fish....................................|ale-fish-options|
     fish_indent...........................|ale-fish-fish_indent|
