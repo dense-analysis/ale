@@ -1,7 +1,7 @@
 Execute (Testing on EOF error):
   AssertEqual [
   \ {
-  \   'bufnr': 42,
+  \   'filename': 'a.sml',
   \   'lnum': 2,
   \   'col': 15,
   \   'type': 'E',
@@ -18,14 +18,14 @@ Execute (Testing on EOF error):
 Execute (Testing if the handler can handle multiple errors on the same line):
   AssertEqual [
   \ {
-  \   'bufnr': 42,
+  \   'filename': 'a.sml',
   \   'lnum': 1,
   \   'col': 5,
   \   'type': 'E',
   \   'text': "Error: can't find function arguments in clause",
   \ },
   \ {
-  \   'bufnr': 42,
+  \   'filename': 'a.sml',
   \   'lnum': 1,
   \   'col': 12,
   \   'type': 'E',
@@ -44,14 +44,14 @@ Execute (Testing if the handler can handle multiple errors on the same line):
 Execute (Testing rarer errors):
   AssertEqual [
   \ {
-  \   'bufnr': 42,
+  \   'filename': 'a.sml',
   \   'lnum': 5,
   \   'col': 18,
   \   'type': 'E',
   \   'text': "Error: syntax error found at ID",
   \ },
   \ {
-  \   'bufnr': 42,
+  \   'filename': 'a.sml',
   \   'lnum': 7,
   \   'col': 0,
   \   'type': 'E',
@@ -70,7 +70,7 @@ Execute (Testing rarer errors):
 Execute (Testing a warning):
   AssertEqual [
   \ {
-  \   'bufnr': 42,
+  \   'filename': 'a.sml',
   \   'lnum': 4,
   \   'col': 4,
   \   'type': 'W',

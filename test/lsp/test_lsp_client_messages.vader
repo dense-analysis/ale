@@ -88,7 +88,22 @@ Execute(ale#lsp#message#DidSave() should return correct messages):
   \     },
   \   }
   \ ],
-  \ ale#lsp#message#DidSave(bufnr(''))
+  \ ale#lsp#message#DidSave(bufnr(''), v:false)
+
+Execute(ale#lsp#message#DidSave() should return correct message with includeText capability):
+  AssertEqual
+  \ [
+  \   1,
+  \   'textDocument/didSave',
+  \   {
+  \     'textDocument': {
+  \         'uri': ale#path#ToURI(g:dir . '/foo/bar.ts'),
+  \         'version': 1,
+  \     },
+  \     'text': ale#util#GetBufferContents(bufnr('')),
+  \   }
+  \ ],
+  \ ale#lsp#message#DidSave(bufnr(''), v:true)
 
 Execute(ale#lsp#message#DidClose() should return correct messages):
   AssertEqual

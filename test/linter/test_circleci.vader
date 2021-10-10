@@ -10,4 +10,4 @@ Execute(The linter should not run for every YAML file):
 Execute(The linter should for YAML files in a .circleci directory):
   call ale#test#SetFilename('../test-files/.circleci/config.yml')
 
-  AssertLinter 'circleci', 'circleci config validate - < %s'
+  AssertLinter 'circleci', 'circleci --skip-update-check config validate - < %s'

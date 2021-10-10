@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-set -u
-
 # Author: w0rp <devw0rp@gmail.com>
 #
 # This script runs tests for the ALE project. Run `./run-tests --help` for
@@ -12,11 +9,15 @@ set -u
 image=denseanalysis/ale
 
 # Create docker image tag based on Dockerfile contents
-image_tag=$(md5sum Dockerfile | cut -d' ' -f1)
+if [ -n "$(command -v md5)" ]; then
+    image_tag=$(md5 -q Dockerfile)
+else
+    image_tag=$(md5sum Dockerfile | cut -d' ' -f1)
+fi
 git_version=$(git describe --always --tags)
 
 # Used in all test scripts for running the selected Docker image.
-DOCKER_RUN_IMAGE="$image"
+DOCKER_RUN_IMAGE="$image:$image_tag"
 export DOCKER_RUN_IMAGE
 
 tests='test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader'
@@ -25,6 +26,7 @@ verbose_flag=''
 quiet_flag=''
 run_neovim_02_tests=1
 run_neovim_04_tests=1
+run_neovim_05_tests=1
 run_vim_80_tests=1
 run_vim_82_tests=1
 run_linters=1
@@ -44,6 +46,7 @@ while [ $# -ne 0 ]; do
         run_vim_82_tests=0
         run_neovim_02_tests=0
         run_neovim_04_tests=0
+        run_neovim_05_tests=0
         run_linters=0
         shift
     ;;
@@ -55,6 +58,7 @@ while [ $# -ne 0 ]; do
     ;;
     --neovim-02-only)
         run_neovim_04_tests=0
+        run_neovim_05_tests=0
         run_vim_80_tests=0
         run_vim_82_tests=0
         run_linters=0
@@ -62,6 +66,15 @@ while [ $# -ne 0 ]; do
     ;;
     --neovim-04-only)
         run_neovim_02_tests=0
+        run_neovim_05_tests=0
+        run_vim_80_tests=0
+        run_vim_82_tests=0
+        run_linters=0
+        shift
+    ;;
+    --neovim-05-only)
+        run_neovim_02_tests=0
+        run_neovim_04_tests=0
         run_vim_80_tests=0
         run_vim_82_tests=0
         run_linters=0
@@ -70,12 +83,14 @@ while [ $# -ne 0 ]; do
     --vim-only)
         run_neovim_02_tests=0
         run_neovim_04_tests=0
+        run_neovim_05_tests=0
         run_linters=0
         shift
     ;;
     --vim-80-only)
         run_neovim_02_tests=0
         run_neovim_04_tests=0
+        run_neovim_05_tests=0
         run_vim_82_tests=0
         run_linters=0
         shift
@@ -83,6 +98,7 @@ while [ $# -ne 0 ]; do
     --vim-82-only)
         run_neovim_02_tests=0
         run_neovim_04_tests=0
+        run_neovim_05_tests=0
         run_vim_80_tests=0
         run_linters=0
         shift
@@ -92,13 +108,15 @@ while [ $# -ne 0 ]; do
         run_vim_82_tests=0
         run_neovim_02_tests=0
         run_neovim_04_tests=0
+        run_neovim_05_tests=0
         shift
     ;;
     --fast)
         run_vim_80_tests=0
         run_vim_82_tests=0
         run_neovim_02_tests=0
-        run_neovim_04_tests=1
+        run_neovim_04_tests=0
+        run_neovim_05_tests=1
         shift
     ;;
     --help)
@@ -114,6 +132,7 @@ while [ $# -ne 0 ]; do
         echo '  --neovim-only     Run tests only for NeoVim'
         echo '  --neovim-02-only  Run tests only for NeoVim 0.2'
         echo '  --neovim-04-only  Run tests only for NeoVim 0.4'
+        echo '  --neovim-05-only  Run tests only for NeoVim 0.5'
         echo '  --vim-only        Run tests only for Vim'
         echo '  --vim-80-only     Run tests only for Vim 8.0'
         echo '  --vim-82-only     Run tests only for Vim 8.2'
@@ -179,6 +198,9 @@ else
   echo "Docker run image ${image}:${image_tag} ready"
 fi
 
+set -e
+set -u
+
 docker tag "${image}:${image_tag}" "${image}:latest"
 
 output_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
@@ -216,7 +238,8 @@ for vim in $(docker run --rm "$DOCKER_RUN_IMAGE" ls /vim-build/bin | grep '^neov
     if ( [[ $vim =~ ^vim-v8.0 ]] && ((run_vim_80_tests)) ) \
     || ( [[ $vim =~ ^vim-v8.2 ]] && ((run_vim_82_tests)) ) \
     || ( [[ $vim =~ ^neovim-v0.2 ]] && ((run_neovim_02_tests)) ) \
-    || ( [[ $vim =~ ^neovim-v0.4 ]] && ((run_neovim_04_tests)) ); then
+    || ( [[ $vim =~ ^neovim-v0.4 ]] && ((run_neovim_04_tests)) ) \
+    || ( [[ $vim =~ ^neovim-v0.5 ]] && ((run_neovim_05_tests)) ); then
         echo "Starting Vim: $vim..."
         file_number=$((file_number+1))
         test/script/run-vader-tests $quiet_flag $verbose_flag "$vim" "$tests" \

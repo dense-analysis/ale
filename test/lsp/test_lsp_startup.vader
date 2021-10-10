@@ -14,6 +14,7 @@ Before:
   let g:job_map = {}
   let g:emulate_job_failure = 0
   let g:next_job_id = 1
+  let g:lsp_started = 0
 
   let g:socket_map = {}
   let g:emulate_socket_failure = 0
@@ -102,17 +103,17 @@ Before:
     call ale#lsp#HandleMessage(l:conn_id, l:data)
   endfunction
 
-  function! Start() abort
+  function! Start(buffer) abort
     let l:linter = values(ale#linter#GetLintersLoaded())[0][0]
 
     return ale#lsp_linter#StartLSP(
-    \ bufnr(''),
+    \ a:buffer,
     \ l:linter,
     \ {linter, details -> add(g:calls, [linter.name, details])},
     \)
   endfunction
 
-  function! AssertInitSuccess(linter_name, conn_prefix, language, root, command) abort
+  function! AssertInitSuccess(linter_name, conn_prefix, language, root, command, buffer) abort
     let l:messages = PopMessages()
 
     if a:linter_name is# 'tsserver'
@@ -121,7 +122,7 @@ Before:
       \   {
       \     'seq': v:null,
       \     'arguments': {
-      \       'file': expand('%:p'),
+      \       'file': expand('#' . a:buffer . ':p'),
       \     },
       \     'type': 'request',
       \     'command': 'open',
@@ -252,7 +253,7 @@ Before:
       \     'jsonrpc': '2.0',
       \     'params': {
       \       'textDocument': {
-      \         'uri': ale#path#ToURI(expand('%:p')),
+      \         'uri': ale#path#ToURI(expand('#' . a:buffer . ':p')),
       \         'version': ale#lsp#message#GetNextVersionID() - 1,
       \         'languageId': a:language,
       \         'text': "\n",
@@ -270,8 +271,8 @@ Before:
     \     {
     \       'connection_id': a:conn_prefix . ':' . a:root,
     \       'project_root': a:root,
-    \       'buffer': bufnr(''),
-    \       'command': !empty(a:command) ? ale#job#PrepareCommand(bufnr(''), a:command) : '',
+    \       'buffer': a:buffer,
+    \       'command': !empty(a:command) ? ale#job#PrepareCommand(a:buffer, a:command) : '',
     \     },
     \   ],
     \ ],
@@ -297,6 +298,7 @@ After:
   unlet! g:job_map
   unlet! g:emulate_job_failure
   unlet! g:next_job_id
+  unlet! g:lsp_started
 
   unlet! g:socket_map
   unlet! g:emulate_socket_failure
@@ -304,6 +306,12 @@ After:
 
   unlet! g:message_buffer
   unlet! g:calls
+
+  augroup VaderTest
+    autocmd!
+  augroup END
+
+  augroup! VaderTest
 
   delfunction PopMessages
   delfunction Start
@@ -317,15 +325,15 @@ After:
 Execute(tsserver should be started correctly):
   runtime ale_linters/typescript/tsserver.vim
 
-  Assert Start()
-  call AssertInitSuccess('tsserver', 'tsserver', '', '', ale#Escape('tsserver'))
+  Assert Start(bufnr(''))
+  call AssertInitSuccess('tsserver', 'tsserver', '', '', ale#Escape('tsserver'), bufnr(''))
 
 Execute(tsserver failures should be handled appropriately):
   runtime ale_linters/typescript/tsserver.vim
 
   let g:emulate_job_failure = 1
 
-  Assert !Start()
+  Assert !Start(bufnr(''))
   call AssertInitFailure()
 
 Execute(LSP jobs should start correctly):
@@ -338,8 +346,8 @@ Execute(LSP jobs should start correctly):
   \   'initialization_options': {},
   \})
 
-  Assert Start()
-  call AssertInitSuccess('foo', 'foo', 'foobar', '/foo/bar', 'foo')
+  Assert Start(bufnr(''))
+  call AssertInitSuccess('foo', 'foo', 'foobar', '/foo/bar', 'foo', bufnr(''))
 
 Execute(LSP job failures should be handled):
   call ale#linter#Define('foobar', {
@@ -353,7 +361,7 @@ Execute(LSP job failures should be handled):
 
   let g:emulate_job_failure = 1
 
-  Assert !Start()
+  Assert !Start(bufnr(''))
   call AssertInitFailure()
 
 Execute(LSP TCP connections should start correctly):
@@ -365,8 +373,8 @@ Execute(LSP TCP connections should start correctly):
   \   'initialization_options': {},
   \})
 
-  Assert Start()
-  call AssertInitSuccess('foo', 'foo', 'foobar', '/foo/bar', '')
+  Assert Start(bufnr(''))
+  call AssertInitSuccess('foo', 'foo', 'foobar', '/foo/bar', '', bufnr(''))
 
 Execute(LSP TCP connection failures should be handled):
   call ale#linter#Define('foobar', {
@@ -379,7 +387,7 @@ Execute(LSP TCP connection failures should be handled):
 
   let g:emulate_socket_failure = 1
 
-  Assert !Start()
+  Assert !Start(bufnr(''))
   call AssertInitFailure()
 
 Execute(Deferred executables should be handled correctly):
@@ -392,9 +400,9 @@ Execute(Deferred executables should be handled correctly):
   \   'initialization_options': {},
   \})
 
-  Assert Start()
+  Assert Start(bufnr(''))
   call ale#test#FlushJobs()
-  call AssertInitSuccess('foo', 'foo', 'foobar', '/foo/bar', ale#Escape('foo') . ' -c')
+  call AssertInitSuccess('foo', 'foo', 'foobar', '/foo/bar', ale#Escape('foo') . ' -c', bufnr(''))
 
 Execute(Deferred commands should be handled correctly):
   call ale#linter#Define('foobar', {
@@ -406,9 +414,9 @@ Execute(Deferred commands should be handled correctly):
   \   'initialization_options': {},
   \})
 
-  Assert Start()
+  Assert Start(bufnr(''))
   call ale#test#FlushJobs()
-  call AssertInitSuccess('foo', 'foo', 'foobar', '/foo/bar', ale#Escape('foo') . ' -c')
+  call AssertInitSuccess('foo', 'foo', 'foobar', '/foo/bar', ale#Escape('foo') . ' -c', bufnr(''))
 
 Execute(Deferred addresses should be handled correctly):
   call ale#linter#Define('foobar', {
@@ -419,9 +427,9 @@ Execute(Deferred addresses should be handled correctly):
   \   'initialization_options': {},
   \})
 
-  Assert Start()
+  Assert Start(bufnr(''))
   call ale#test#FlushJobs()
-  call AssertInitSuccess('foo', 'localhost:1234', 'foobar', '/foo/bar', '')
+  call AssertInitSuccess('foo', 'localhost:1234', 'foobar', '/foo/bar', '', bufnr(''))
 
 Execute(Servers that have crashed should be restarted):
   call ale#lsp#Register('foo', '/foo/bar', {})
@@ -432,3 +440,44 @@ Execute(Servers that have crashed should be restarted):
 
   AssertEqual 0, ale#lsp#GetConnections()['foo:/foo/bar']['initialized']
   AssertEqual ['initialize'], map(PopMessages(), 'v:val[''method'']')
+
+Execute(Current LSP buffer should receive ALELSPStarted):
+  call ale#linter#Define('foobar', {
+  \   'name': 'foo',
+  \   'lsp': 'socket',
+  \   'address': 'foo',
+  \   'project_root': '/foo/bar',
+  \   'initialization_options': {},
+  \})
+
+  augroup VaderTest
+    autocmd!
+    autocmd User ALELSPStarted let g:lsp_started = 1
+  augroup END
+
+  Assert Start(bufnr(''))
+  call AssertInitSuccess('foo', 'foo', 'foobar', '/foo/bar', '', bufnr(''))
+  AssertEqual g:lsp_started, 1
+
+Execute(Target LSP buffer should receive ALELSPStarted):
+  call ale#linter#Define('foobar', {
+  \   'name': 'foo',
+  \   'lsp': 'socket',
+  \   'address': 'foo',
+  \   'project_root': '/foo/bar',
+  \   'initialization_options': {},
+  \})
+
+  augroup VaderTest
+    autocmd!
+    autocmd User ALELSPStarted let g:lsp_started = 1
+  augroup END
+
+  let buffer = bufnr('')
+
+  enew!
+  Assert Start(buffer)
+  call AssertInitSuccess('foo', 'foo', 'foobar', '/foo/bar', '', buffer)
+  execute 'buffer' . buffer
+
+  AssertEqual g:lsp_started, 1

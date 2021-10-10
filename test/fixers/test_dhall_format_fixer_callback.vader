@@ -17,8 +17,6 @@ Execute(The dhall-format callback should return the correct options):
   AssertFixer
   \ {
   \   'command': ale#Escape('odd-dhall')
-  \     . ' --ascii'
-  \     . ' format'
-  \     . ' --inplace %t',
-  \   'read_temporary_file': 1,
+  \       . ' --ascii'
+  \       . ' format'
   \ }
