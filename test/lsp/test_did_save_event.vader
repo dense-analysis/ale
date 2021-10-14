@@ -99,6 +99,30 @@ Execute(Server should be notified on save):
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}],
   \   }],
+  \ ],
+  \ g:message_list
+
+Execute(Server should be notified on save with didSave is supported by server):
+
+  " Replace has capability function to simulate didSave server capability
+  function! ale#lsp#HasCapability(conn_id, capability) abort
+      if a:capability == 'did_save'
+          return 1
+      endif
+      return 0
+  endfunction
+
+  call ale#events#SaveEvent(bufnr(''))
+
+  AssertEqual
+  \ [
+  \   [1, 'textDocument/didChange', {
+  \     'textDocument': {
+  \       'uri': ale#path#ToURI(expand('%:p')),
+  \       'version': g:ale_lsp_next_version_id - 1,
+  \     },
+  \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}],
+  \   }],
   \   [1, 'textDocument/didSave', {
   \     'textDocument': {
   \       'uri': ale#path#ToURI(expand('%:p')),
