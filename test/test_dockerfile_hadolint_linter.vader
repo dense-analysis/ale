@@ -68,14 +68,14 @@ Execute(command is correct when not docker):
 
 Execute(test warnings from hadolint):
   AssertEqual
-  \ [{'lnum': 10, 'col': 0, 'type': 'W', 'text': 'DL3007: Using latest is prone to errors', 'detail': "DL3007 ( https://github.com/hadolint/hadolint/wiki/DL3007 )\n\nUsing latest is prone to errors"}],
+  \ [{'lnum': 10, 'col': 0, 'type': 'W', 'code': 'DL3007', 'text': 'DL3007: Using latest is prone to errors', 'detail': "DL3007 ( https://github.com/hadolint/hadolint/wiki/DL3007 )\n\nUsing latest is prone to errors"}],
   \ ale_linters#dockerfile#hadolint#Handle(bufnr(''), [
   \ '-:10 DL3007 warning: Using latest is prone to errors',
   \ ])
 
 Execute(test warnings from shellcheck):
   AssertEqual
-  \ [{'lnum': 3, 'col': 0, 'type': 'W', 'text': 'SC2154: bar is referenced but not assigned.', 'detail': "SC2154 ( https://github.com/koalaman/shellcheck/wiki/SC2154 )\n\nbar is referenced but not assigned."}],
+  \ [{'lnum': 3, 'col': 0, 'type': 'W', 'code': 'SC2154', 'text': 'SC2154: bar is referenced but not assigned.', 'detail': "SC2154 ( https://github.com/koalaman/shellcheck/wiki/SC2154 )\n\nbar is referenced but not assigned."}],
   \ ale_linters#dockerfile#hadolint#Handle(bufnr(''), [
   \ '-:3 SC2154 warning: bar is referenced but not assigned.',
   \ ])
