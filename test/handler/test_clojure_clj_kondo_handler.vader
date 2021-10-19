@@ -73,3 +73,17 @@ Execute(the clojure clj-kondo handler should be able to handle windows files):
   \ ale_linters#clojure#clj_kondo#HandleCljKondoFormat(0, [
   \   'C:\my\operating\system\is\silly\core.clj:123:44: error: Unexpected )',
   \ ])
+
+Execute(the clojure clj-kondo handler should be able to lines without row/col):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 0,
+  \     'col': 0,
+  \     'type': 'E',
+  \     'text': 'error: Unexpected )',
+  \   },
+  \ ],
+  \ ale_linters#clojure#clj_kondo#HandleCljKondoFormat(0, [
+  \   'test.clj::: error: Unexpected )',
+  \ ])
