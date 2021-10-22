@@ -5,13 +5,10 @@ call ale#Set('avra_avra_executable', 'avra')
 call ale#Set('avra_avra_options', '')
 
 function! ale_linters#avra#avra#GetCommand(buffer) abort
-    let l:separator = has('win32') ? '\' : '/'
-    let l:output_null = has('win32') ? 'NUL' : '/dev/null'
-
     return '%e'
     \   . ' %t'
     \   . ale#Pad(ale#Var(a:buffer, 'avra_avra_options'))
-    \   . ' -o ' . l:output_null
+    \   . ' -o ' . g:ale#util#nul_file
 endfunction
 
 function! ale_linters#avra#avra#Handle(buffer, lines) abort
