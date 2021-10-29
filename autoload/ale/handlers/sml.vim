@@ -63,7 +63,7 @@ function! ale#handlers#sml#Handle(buffer, lines) abort
         let l:match2 = matchlist(l:line, l:pattern2)
 
         if len(l:match2) != 0
-            if l:match2[1] =~# '^\(- = \)\?stdIn$'
+            if l:match2[1] =~# 'stdIn$'
                 let l:loc = {'bufnr': a:buffer}
             else
                 let l:loc = {'filename': l:match2[1]}
@@ -81,7 +81,7 @@ function! ale#handlers#sml#Handle(buffer, lines) abort
         let l:match = matchlist(l:line, l:pattern)
 
         if len(l:match) != 0
-            if l:match[1] =~# '^\(- = \)\?stdIn$'
+            if l:match[1] =~# 'stdIn$'
                 let l:loc = {'bufnr': a:buffer}
             else
                 let l:loc = {'filename': l:match[1]}
