@@ -10,6 +10,7 @@ Before:
   Save g:ale_exclude_highlights
   Save b:ale_exclude_highlights
 
+  runtime autoload/ale/virtualtext.vim
   runtime autoload/ale/highlight.vim
 
   let g:ale_run_synchronously = 1
@@ -98,6 +99,10 @@ Before:
     endif
   endfunction
 
+  function! GetLinkedGroup(grp) abort
+    return synIDattr(synIDtrans(hlID(a:grp)), 'name')
+  endfunction
+
   call ale#linter#Define('testft', {
   \ 'name': 'x',
   \ 'executable': has('win32') ? 'cmd': 'echo',
@@ -119,6 +124,9 @@ After:
   call ale#linter#Reset()
   call clearmatches()
   call ale#sign#Clear()
+  if has('textprop') && has('popupwin')
+    call prop_type_delete('ale')
+  endif
   highlight clear SomeOtherGroup
 
   runtime autoload/ale/highlight.vim
@@ -128,6 +136,15 @@ Given testft(A Javscript file with warnings/errors):
   bar
   baz wat
   line four
+
+" Autoloading virtualtext.vim first should still properly initialize hl-groups
+Execute(Loading virtualtext first does not break highlight groups):
+  AssertEqual
+  \ "SpellBad",
+  \ GetLinkedGroup("ALEError")
+  AssertEqual
+  \ "SpellCap",
+  \ GetLinkedGroup("ALEWarning")
 
 Execute(Highlights should be set when a linter runs):
   ALELint
