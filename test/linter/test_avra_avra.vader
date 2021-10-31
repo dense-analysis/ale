@@ -2,7 +2,7 @@ Before:
   call ale#assert#SetUpLinterTest('avra', 'avra')
 
   let b:command_tail = ' %t -o ' . g:ale#util#nul_file
-  let b:command_tail_opt = ' --max_errors 20 %t -o ' . g:ale#util#nul_file
+  let b:command_tail_opt = ' %t --max_errors 20 -o ' . g:ale#util#nul_file
 
 After:
   unlet! b:command_tail
@@ -21,7 +21,7 @@ Execute(The options should be configurable):
   let b:ale_avra_avra_options = '--max_errors 20'
 
   AssertLinter 'avra', ale#Escape('avra')
-  \ . ' --max_errors 20 %t -o ' . g:ale#util#nul_file
+  \ . ' %t --max_errors 20 -o ' . g:ale#util#nul_file
 
 Execute(The options should be used in command):
   let b:ale_avra_avra_options = '--max_errors 20'
