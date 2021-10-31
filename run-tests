@@ -170,7 +170,7 @@ fi
 find test -name '*.swp' -delete
 
 # Check if docker un image is available locally
-has_image=$(docker images ls --filter reference="${image}:${image_tag}" --quiet | wc -l)
+has_image=$(docker images --quiet "${image}:${image_tag}" | wc -l)
 
 if [ "$has_image" -eq 0 ]
 then
