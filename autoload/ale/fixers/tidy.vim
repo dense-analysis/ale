@@ -4,6 +4,8 @@
 call ale#Set('html_tidy_executable', 'tidy')
 call ale#Set('html_tidy_use_global', get(g:, 'ale_use_global_executables', 0))
 
+let g:ale_html_tidy_options = get(g:, 'ale_html_tidy_options', '-q -e -language en')
+
 function! ale#fixers#tidy#Fix(buffer) abort
     let l:executable = ale#path#FindExecutable(
     \   a:buffer,
@@ -21,6 +23,6 @@ function! ale#fixers#tidy#Fix(buffer) abort
     \   : ' -q --tidy-mark no --show-errors 0 --show-warnings 0'
 
     return {
-    \   'command': ale#Escape(l:executable) . l:config_options,
+    \   'command': ale#Escape(l:executable) . l:config_options . ale#Var(a:buffer, 'html_tidy_options'),
     \}
 endfunction
