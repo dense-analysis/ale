@@ -339,6 +339,7 @@ Notes:
   * `nixfmt`
   * `nixpkgs-fmt`
   * `rnix-lsp`
+  * `statix`
 * nroff
   * `alex`!!
   * `proselint`
