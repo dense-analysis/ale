@@ -1,5 +1,5 @@
 Before:
-  call ale#assert#SetupFixerTest('go', 'gofumpt')
+  call ale#assert#SetUpFixerTest('go', 'gofumpt')
 
 After:
   call ale#assert#TearDownFixerTest()
