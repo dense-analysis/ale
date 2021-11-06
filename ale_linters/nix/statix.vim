@@ -13,7 +13,7 @@ endfunction
 
 call ale#linter#Define('nix', {
 \   'name': 'statix',
-\   'output_stream': 'stderr',
+\   'output_stream': 'stdout',
 \   'executable': {b -> ale#Var(b, 'nix_statix_check_executable')},
 \   'command': function('ale_linters#nix#statix#GetCommand'),
 \   'callback': 'ale#handlers#statix#Handle',
