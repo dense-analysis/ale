@@ -348,8 +348,8 @@ formatting.
   * [nix-instantiate](http://nixos.org/nix/manual/#sec-nix-instantiate)
   * [nixfmt](https://github.com/serokell/nixfmt)
   * [nixpkgs-fmt](https://github.com/nix-community/nixpkgs-fmt)
-  * [statix](https://github.com/nerdypepper/statix)
   * [rnix-lsp](https://github.com/nix-community/rnix-lsp)
+  * [statix](https://github.com/nerdypepper/statix)
 * nroff
   * [alex](https://github.com/wooorm/alex) :floppy_disk:
   * [proselint](http://proselint.com/)
