@@ -1,0 +1,19 @@
+Before:
+  call ale#assert#SetUpLinterTest('nix', 'statix')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The statix command should be correct):
+  AssertLinter 'statix', ale#Escape('statixi') . 'check -o errfmt -- %t'
+
+Execute(Additional statix options should be configurable):
+  let b:ale_nix_statix_options = '--foobar'
+
+  AssertLinter 'statix',
+  \ ale#Escape('statix') . 'check -o errfmt --foobar -- %t'
+
+Execute(The statix command should be configurable):
+  let b:ale_nix_statix_executable = 'foo/bar'
+
+  AssertLinter 'foo/bar', ale#Escape('foo/bar') . 'check -o errfmt -- %t'
