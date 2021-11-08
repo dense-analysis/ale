@@ -13,6 +13,5 @@ function! ale#fixers#statix#Fix(buffer) abort
     \       . ale#Pad('fix')
     \       . ale#Pad('--stdin')
     \       . ale#Pad(l:options),
-    \   'read_temporary_file': 0,
     \}
 endfunction
