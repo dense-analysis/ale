@@ -844,6 +844,14 @@ more information. See Clang's documentation for
 You should strongly consider generating them in your builds, which is easy to do
 with CMake.
 
+It might become complicated, if you want to use build containers. The purpose
+of build containers is to have reproduce-able builds by a well defined tool
+chain (compiler, linker, build tool, ...), which is installed in the container.
+Usually, the source-code directory is mounted into the container.
+
+Thus, for indexing header files, path mappings from the container's paths to the
+host's paths are necessary. This is possible with [ccls](https://github.com/MaskRay/ccls/), see [Project Setup](https://github.com/MaskRay/ccls/wiki/Project-Setup).
+
 You can also configure ALE to automatically run `make -n` to run dry runs on
 `Makefile`s to discover compiler flags. This can execute arbitrary code, so the
 option is disabled by default. See `:help g:ale_c_parse_makefile`.
