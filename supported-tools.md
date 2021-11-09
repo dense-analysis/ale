@@ -191,6 +191,7 @@ formatting.
   * [go mod](https://golang.org/cmd/go/) :warning: :floppy_disk:
   * [go vet](https://golang.org/cmd/vet/) :floppy_disk:
   * [gofmt](https://golang.org/cmd/gofmt/)
+  * [gofumpt](https://github.com/mvdan/gofumpt)
   * [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports) :warning:
   * [golangci-lint](https://github.com/golangci/golangci-lint) :warning: :floppy_disk:
   * [golangserver](https://github.com/sourcegraph/go-langserver) :warning:

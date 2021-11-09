@@ -81,6 +81,24 @@ g:ale_go_gofmt_options                                 *g:ale_go_gofmt_options*
 
 
 ===============================================================================
+gofumpt                                                        *ale-go-gofumpt*
+
+g:ale_go_gofumpt_executable                       *g:ale_go_gofumpt_executable*
+                                                  *b:ale_go_gofumpt_executable*
+  Type: |String|
+  Default: `'gofumpt'`
+
+  Executable to run to use as the gofumpt fixer.
+
+g:ale_go_gofumpt_options                             *g:ale_go_gofumpt_options*
+                                                     *b:ale_go_gofumpt_options*
+  Type: |String|
+  Default: `''`
+
+  Options to pass to the gofumpt fixer.
+
+
+===============================================================================
 golangci-lint                                            *ale-go-golangci-lint*
 
 `golangci-lint` is a `lint_file` linter, which only lints files that are
@@ -148,7 +166,7 @@ g:ale_go_golines_options                             *g:ale_go_golines_options*
   Type: |String|
   Default: ''
 
-  Additional options passed to the golines command. By default golines has 
+  Additional options passed to the golines command. By default golines has
   --max-length=100 (lines above 100 characters will be wrapped)
 
 ===============================================================================

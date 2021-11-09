@@ -182,6 +182,7 @@ Notes:
   * `go mod`!!
   * `go vet`!!
   * `gofmt`
+  * `gofumpt`
   * `goimports`
   * `golangci-lint`!!
   * `golangserver`
