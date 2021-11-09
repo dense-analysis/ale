@@ -12,5 +12,5 @@ Execute(The statix handler should handle statix output):
   \   },
   \ ],
   \ ale#handlers#statix#Handle(bufnr(''),
-  \   'flake.nix>46:13:W:3:This assignment is better written with `inherit`'
+  \   '<stdin>>46:13:W:3:This assignment is better written with `inherit`'
   \)
