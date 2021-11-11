@@ -191,6 +191,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['ruby'],
 \       'description': 'Fix ruby files with standardrb --fix',
 \   },
+\   'statix': {
+\       'function': 'ale#fixers#statix#Fix',
+\       'suggested_filetypes': ['nix'],
+\       'description': 'Fix common Nix antipatterns with statix fix',
+\   },
 \   'stylelint': {
 \       'function': 'ale#fixers#stylelint#Fix',
 \       'suggested_filetypes': ['css', 'sass', 'scss', 'sugarss', 'stylus'],

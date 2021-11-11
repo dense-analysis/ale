@@ -2879,6 +2879,7 @@ documented in additional help files.
   nix.....................................|ale-nix-options|
     nixfmt................................|ale-nix-nixfmt|
     nixpkgs-fmt...........................|ale-nix-nixpkgs-fmt|
+    statix................................|ale-nix-statix|
   nroff...................................|ale-nroff-options|
     write-good............................|ale-nroff-write-good|
   objc....................................|ale-objc-options|
