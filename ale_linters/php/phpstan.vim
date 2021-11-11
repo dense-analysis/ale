@@ -1,4 +1,4 @@
-" Author: medains <https://github.com/medains>, ardis <https://github.com/ardisdreelath>
+" Author: medains <https://github.com/medains>, ardis <https://github.com/ardisdreelath>, Arizard <https://github.com/Arizard>
 " Description: phpstan for PHP files
 
 " Set to change the ruleset
