@@ -6,7 +6,7 @@ let g:ale_php_phpstan_executable = get(g:, 'ale_php_phpstan_executable', 'phpsta
 let g:ale_php_phpstan_level = get(g:, 'ale_php_phpstan_level', '')
 let g:ale_php_phpstan_configuration = get(g:, 'ale_php_phpstan_configuration', '')
 let g:ale_php_phpstan_autoload = get(g:, 'ale_php_phpstan_autoload', '')
-let g:ale_php_phpstan_memory_limit = get(g:, 'ale_php_phpstan_memory_limit', '128M')
+let g:ale_php_phpstan_memory_limit = get(g:, 'ale_php_phpstan_memory_limit', '')
 call ale#Set('php_phpstan_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! ale_linters#php#phpstan#GetCommand(buffer, version) abort
