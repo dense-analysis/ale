@@ -13,7 +13,7 @@ endfunction
 
 function! ale_linters#avra#avra#Handle(buffer, lines) abort
     " Note that we treat 'fatal' as errors.
-    let l:pattern = '^.\+(\(\d\+\)) : \(.\+\)   : \(.\+\)$'
+    let l:pattern = '^.\+(\(\d\+\))\s\+:\s\+\(.\+\):\s\+\(.\+\)$'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
