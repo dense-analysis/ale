@@ -187,6 +187,15 @@ g:ale_php_phpstan_autoload                         *g:ale_php_phpstan_autoload*
   This variable sets path to phpstan autoload file.
 
 
+g:ale_php_phpstan_memory-limit                 *g:ale_php_phpstan_memory-limit*
+                                               *b:ale_php_phpstan_memory-limit*
+  Type: |String|
+  Default: `'128M'`
+
+  This variable sets the memory limit for phpstan analysis. This is a string
+  in the same format as `php.ini` accepts, e.g. `128M`, `1G`.
+
+
 ===============================================================================
 psalm                                                           *ale-php-psalm*
 
