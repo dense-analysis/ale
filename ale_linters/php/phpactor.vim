@@ -1,8 +1,6 @@
 " Author: Arizard <https://github.com/Arizard>
 " Description: PHPactor integration for ALE
 
-call ale#Set('php_phpactor_executable', 'phpactor')
-
 " Copied from langserver.vim
 function! ale_linters#php#phpactor#GetProjectRoot(buffer) abort
     let l:composer_path = ale#path#FindNearestFile(a:buffer, 'composer.json')
