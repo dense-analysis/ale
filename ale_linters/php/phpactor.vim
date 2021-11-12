@@ -1,5 +1,7 @@
-" Author: Arizard <https://github.com/Arizard
+" Author: Arizard <https://github.com/Arizard>
 " Description: PHPactor integration for ALE
+
+call ale#Set('php_phpactor_executable', 'phpactor')
 
 function! ale_linters#php#phpactor#GetProjectRoot(buffer) abort
     let l:composer_path = ale#path#FindNearestFile(a:buffer, 'composer.json')
@@ -13,11 +15,12 @@ function! ale_linters#php#phpactor#GetProjectRoot(buffer) abort
     return !empty(l:git_path) ? fnamemodify(l:git_path, ':h:h') : ''
 endfunction
 
+execute 'echo' 'hello world'
+
 call ale#linter#Define('php', {
 \   'name': 'phpactor',
 \   'lsp': 'stdio',
 \   'executable': 'phpactor',
-\   'command': '%e language-server'
+\   'command': '%e language-server',
 \   'project_root': function('ale_linters#php#phpactor#GetProjectRoot'),
 \})
-
