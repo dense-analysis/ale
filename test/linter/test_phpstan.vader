@@ -113,3 +113,9 @@ Execute(Autoload parameter is added to the command):
 
   AssertLinter 'phpstan',
   \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json -a ' . ale#Escape('autoload.php') . ' -l ' . ale#Escape('4') . ' %s'
+
+Execute(Memory limit parameter is added to the command):
+  let g:ale_php_phpstan_memory_limit = '500M'
+
+  AssertLinter 'phpstan',
+  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json -l ' . ale#Escape('4') . ' --memory-limit ' . ale#Escape('500M') . ' %s'
