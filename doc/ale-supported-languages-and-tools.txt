@@ -24,7 +24,7 @@ Notes:
   * `apkbuild-lint`
   * `secfixes-check`
 * AsciiDoc
-  * `alex`!!
+  * `alex`
   * `languagetool`!!
   * `proselint`
   * `redpen`
@@ -227,7 +227,7 @@ Notes:
 * HCL
   * `terraform-fmt`
 * HTML
-  * `alex`!!
+  * `alex`
   * `angular`
   * `fecs`
   * `html-beautify`
@@ -286,7 +286,7 @@ Notes:
   * `ktlint`
   * `languageserver`
 * LaTeX (tex)
-  * `alex`!!
+  * `alex`
   * `chktex`
   * `lacheck`
   * `proselint`
@@ -308,14 +308,14 @@ Notes:
   * `luafmt`
   * `stylua`
 * Mail
-  * `alex`!!
+  * `alex`
   * `languagetool`!!
   * `proselint`
   * `vale`
 * Make
   * `checkmake`
 * Markdown
-  * `alex`!!
+  * `alex`
   * `languagetool`!!
   * `markdownlint`!!
   * `mdl`
@@ -344,7 +344,7 @@ Notes:
   * `rnix-lsp`
   * `statix`
 * nroff
-  * `alex`!!
+  * `alex`
   * `proselint`
   * `write-good`
 * Objective-C
@@ -389,12 +389,12 @@ Notes:
   * `psalm`!!
   * `tlint`
 * PO
-  * `alex`!!
+  * `alex`
   * `msgfmt`
   * `proselint`
   * `write-good`
 * Pod
-  * `alex`!!
+  * `alex`
   * `proselint`
   * `write-good`
 * Pony
@@ -457,7 +457,7 @@ Notes:
   * `reason-language-server`
   * `refmt`
 * reStructuredText
-  * `alex`!!
+  * `alex`
   * `proselint`
   * `redpen`
   * `rstcheck`
@@ -540,11 +540,11 @@ Notes:
   * `terraform-lsp`
   * `tflint`
 * Texinfo
-  * `alex`!!
+  * `alex`
   * `proselint`
   * `write-good`
 * Text^
-  * `alex`!!
+  * `alex`
   * `languagetool`!!
   * `proselint`
   * `redpen`
@@ -584,14 +584,14 @@ Notes:
   * `vimls`
   * `vint`
 * Vim help^
-  * `alex`!!
+  * `alex`
   * `proselint`
   * `write-good`
 * Vue
   * `prettier`
   * `vls`
 * XHTML
-  * `alex`!!
+  * `alex`
   * `proselint`
   * `write-good`
 * XML
