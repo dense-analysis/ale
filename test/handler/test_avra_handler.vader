@@ -10,15 +10,15 @@ Execute(The avra handler should parse errors correctly):
   \   {
   \     'lnum': 3,
   \     'text': "Unknown device: atmega3228p",
-  \     'type': 'E',
+  \     'type': 'E'
   \   },
   \   {
   \     'lnum': 12,
   \     'text': "Unknown directive: .EQ",
-  \     'type': 'E',
-  \   },
+  \     'type': 'E'
+  \   }
   \ ],
   \ ale_linters#avra#avra#Handle(bufnr(''), [
-  \   "main.asm(3) : Error   : Unknown device: atmega3228p"
+  \   "main.asm(3) : Error   : Unknown device: atmega3228p",
   \   "main.asm(12) : Error   : Unknown directive: .EQ"
   \ ])
