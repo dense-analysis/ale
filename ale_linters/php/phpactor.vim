@@ -15,8 +15,6 @@ function! ale_linters#php#phpactor#GetProjectRoot(buffer) abort
     return !empty(l:git_path) ? fnamemodify(l:git_path, ':h:h') : ''
 endfunction
 
-execute 'echo' 'hello world'
-
 call ale#linter#Define('php', {
 \   'name': 'phpactor',
 \   'lsp': 'stdio',
