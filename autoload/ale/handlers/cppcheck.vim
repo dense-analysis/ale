@@ -50,7 +50,12 @@ function! ale#handlers#cppcheck#HandleCppCheckFormat(buffer, lines) abort
     "test.cpp:974:{column}: error:{inconclusive:inconclusive} Array 'n[3]' accessed at index 3, which is out of bounds. [arrayIndexOutOfBounds]\
     "    n[3]=3;
     "     ^
-    let l:pattern = '\v(\f+):(\d+):(\d+|\{column\}): (\w+):(\{inconclusive:inconclusive\})? ?(.*) \[(\w+)\]\'
+    "
+    "" OR if using the misra addon:
+    "test.c:1:16: style: misra violation (use --rule-texts=<file> to get proper output) [misra-c2012-2.7]\'
+    "void test( int parm ) {}
+    "               ^
+    let l:pattern = '\v(\f+):(\d+):(\d+|\{column\}): (\w+):(\{inconclusive:inconclusive\})? ?(.*) \[(%(\w[-.]?)+)\]\'
     let l:output = []
 
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
