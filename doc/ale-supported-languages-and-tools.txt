@@ -33,6 +33,8 @@ Notes:
   * `write-good`
 * ASM
   * `gcc`
+* AVRA
+  * `avra`
 * Awk
   * `gawk`
 * Bash
