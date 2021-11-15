@@ -28,6 +28,7 @@ Execute(cppcheck for C++ should detect compile_commands.json files):
   \   . ' -q --language=c++'
   \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --project=' . ale#Escape('compile_commands.json')
+  \   . ' --file-filter=' . ale#Escape(ale#path#Simplify('/testplugin/test/test-files/cppcheck/one/foo.cpp'))
   \   . ' --enable=style %t'
 
 Execute(cppcheck for C++ should detect compile_commands.json files in build directories):
@@ -38,6 +39,7 @@ Execute(cppcheck for C++ should detect compile_commands.json files in build dire
   \   . ' -q --language=c++'
   \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --project=' . ale#Escape(ale#path#Simplify('build/compile_commands.json'))
+  \   . ' --file-filter=' . ale#Escape(ale#path#Simplify('/testplugin/test/test-files/cppcheck/with_build_dir/foo.cpp'))
   \   . ' --enable=style %t'
 
 Execute(cppcheck for C++ should include file dir if compile_commands.json file is not found):

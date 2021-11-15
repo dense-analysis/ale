@@ -35,8 +35,10 @@ function! ale#handlers#cppcheck#GetCompileCommandsOptions(buffer) abort
     " then use the file to set up import paths, etc.
     let [l:dir, l:json_path] = ale#c#FindCompileCommands(a:buffer)
 
+    " By default, cppcheck processes every config in compile_commands.json.
+    " Use --file-filter to limit to just the buffer file.
     return !empty(l:json_path)
-    \   ? '--project=' . ale#Escape(l:json_path[len(l:dir) + 1: ])
+    \   ? '--project=' . ale#Escape(l:json_path[len(l:dir) + 1: ]) . ' --file-filter=' . ale#Escape(bufname(a:buffer))
     \   : ''
 endfunction
 
