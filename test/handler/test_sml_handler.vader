@@ -85,3 +85,35 @@ Execute (Testing a warning):
   \ "val f = fn : int -> int",
   \ "-",
   \])
+
+Execute (Testing stdIn):
+  AssertEqual [
+  \ {
+  \   'bufnr': 42,
+  \   'lnum': 1,
+  \   'col': 5,
+  \   'type': 'E',
+  \   'text': "Error: operator and operand don't agree [overload conflict]",
+  \ },
+  \ {
+  \   'bufnr': 42,
+  \   'lnum': 2,
+  \   'col': 4,
+  \   'type': 'E',
+  \   'text': "Error: operator and operand don't agree [overload conflict]",
+  \ },
+  \],
+  \ ale#handlers#sml#Handle(42, [
+  \ "Standard ML of New Jersey v110.79 [built: Sat Oct 26 12:27:04 2019]",
+  \ "- = stdIn:1.6-1.21 Error: operator and operand don't agree [overload conflict]",
+  \ "  operator domain: [+ ty] * [+ ty]",
+  \ "  operand:         string * [int ty]",
+  \ "  in expression:",
+  \ '    "abc" + 123',
+  \ "stdIn:2.5-2.20 Error: operator and operand don't agree [overload conflict]",
+  \ "  operator domain: [+ ty] * [+ ty]",
+  \ "  operand:         [+ ty] * string",
+  \ "  in expression:",
+  \ '    890 + "xyz"',
+  \ "-",
+  \])
