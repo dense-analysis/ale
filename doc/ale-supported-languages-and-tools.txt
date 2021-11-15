@@ -379,7 +379,7 @@ Notes:
   * `phan`
   * `php -l`
   * `php-cs-fixer`
-  * phpactor
+  * `phpactor`
   * `phpcbf`
   * `phpcs`
   * `phpmd`
