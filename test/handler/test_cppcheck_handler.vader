@@ -63,6 +63,23 @@ Execute(Basic errors should be handled by cppcheck):
   \ '         ^',
   \ ])
 
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'col' : 16,
+  \     'type': 'W',
+  \     'sub_type': 'style',
+  \     'text': 'misra violation (use --rule-texts=<file> to get proper output)',
+  \     'code': 'misra-c2012-2.7'
+  \   },
+  \ ],
+  \ ale#handlers#cppcheck#HandleCppCheckFormat(bufnr(''), [
+  \ 'test.cpp:1:16: style: misra violation (use --rule-texts=<file> to get proper output) [misra-c2012-2.7]\',
+  \ 'void test( int parm ) {}',
+  \ '               ^',
+  \ ])
+
 Execute(Problems from other files should be ignored by cppcheck):
   call ale#test#SetFilename('test.cpp')
 
