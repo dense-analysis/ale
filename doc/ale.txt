@@ -2633,6 +2633,8 @@ documented in additional help files.
     textlint..............................|ale-asciidoc-textlint|
   asm.....................................|ale-asm-options|
     gcc...................................|ale-asm-gcc|
+  avra....................................|ale-avra-options|
+    avra..................................|ale-avra-avra|
   awk.....................................|ale-awk-options|
     gawk..................................|ale-awk-gawk|
   bats....................................|ale-bats-options|

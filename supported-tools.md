@@ -42,6 +42,8 @@ formatting.
   * [write-good](https://github.com/btford/write-good)
 * ASM
   * [gcc](https://gcc.gnu.org)
+* AVRA
+  * [avra](https://github.com/Ro5bert/avra)
 * Awk
   * [gawk](https://www.gnu.org/software/gawk/)
 * Bash
