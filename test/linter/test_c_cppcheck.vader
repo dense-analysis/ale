@@ -41,7 +41,7 @@ Execute(cppcheck for C should detect compile_commands.json files in build direct
   \   . ' --enable=style %t'
 
 Execute(cppcheck for C should include file dir if compile_commands.json file is not found):
-  call ale#test#SetFilename('../test-files/cppcheck/foo.cpp')
+  call ale#test#SetFilename('../test-files/cppcheck/foo.c')
 
   AssertLinter 'cppcheck',
   \   ale#Escape('cppcheck')
