@@ -588,6 +588,7 @@ Notes:
 * Vue
   * `prettier`
   * `vls`
+  * `volar`
 * XHTML
   * `alex`!!
   * `proselint`

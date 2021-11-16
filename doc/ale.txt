@@ -3103,6 +3103,7 @@ documented in additional help files.
   vue.....................................|ale-vue-options|
     prettier..............................|ale-vue-prettier|
     vls...................................|ale-vue-vls|
+    volar.................................|ale-vue-volar|
   xhtml...................................|ale-xhtml-options|
     write-good............................|ale-xhtml-write-good|
   xml.....................................|ale-xml-options|
