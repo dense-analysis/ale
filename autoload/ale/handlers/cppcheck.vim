@@ -24,6 +24,7 @@ function! ale#handlers#cppcheck#GetCompileCommandsOptions(buffer) abort
     " now, for headers. Also, suppress FPs; cppcheck is not meant to
     " process lone header files.
     let b:file_extension = fnamemodify(bufname(a:buffer), ':e')
+
     if b:file_extension is# 'h' || b:file_extension is# 'hpp'
         return ale#handlers#cppcheck#GetBufferPathIncludeOptions(a:buffer)
         \   . ' --suppress=unusedStructMember'
