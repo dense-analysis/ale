@@ -10,6 +10,7 @@ After:
   endif
 
   unlet! b:command_tail
+  unlet! b:relative_path_filename
   call ale#assert#TearDownLinterTest()
 
 Execute(The executable should be configurable):
@@ -55,6 +56,18 @@ Execute(cppcheck for C++ should include file dir if compile_commands.json file i
   \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --enable=style'
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/cppcheck'))
+  \   . ' %t'
+
+Execute(cppcheck for C++ header should include file dir and not use compile_commands.json):
+  call ale#test#SetFilename('../test-files/cppcheck/one/foo.hpp')
+
+  AssertLinter 'cppcheck',
+  \   ale#Escape('cppcheck')
+  \   . ' -q --language=c++'
+  \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
+  \   . '  -I' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/cppcheck/one'))
+  \   . ' --suppress=unusedStructMember'
+  \   . ' --enable=style'
   \   . ' %t'
 
 Execute(cppcheck for C++ should ignore compile_commands.json file if buffer is modified):

@@ -51,3 +51,15 @@ Execute(cppcheck for C should include file dir if compile_commands.json file is 
   \   . ' --enable=style'
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/cppcheck'))
   \   . ' %t'
+
+Execute(cppcheck for C header should include file dir and not use compile_commands.json):
+  call ale#test#SetFilename('../test-files/cppcheck/one/foo.h')
+
+  AssertLinter 'cppcheck',
+  \   ale#Escape('cppcheck')
+  \   . ' -q --language=c'
+  \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
+  \   . '  -I' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/cppcheck/one'))
+  \   . ' --suppress=unusedStructMember'
+  \   . ' --enable=style'
+  \   . ' %t'

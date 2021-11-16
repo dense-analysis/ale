@@ -19,6 +19,16 @@ function! ale#handlers#cppcheck#GetBufferPathIncludeOptions(buffer) abort
 endfunction
 
 function! ale#handlers#cppcheck#GetCompileCommandsOptions(buffer) abort
+    " The compile_commands.json doesn't apply to headers and cppheck will
+    " bail out if it cannot find a file matching the filter, below. Skip out
+    " now, for headers. Also, suppress FPs; cppcheck is not meant to
+    " process lone header files.
+    let b:file_extension = fnamemodify(bufname(a:buffer), ':e')
+    if b:file_extension is# 'h' || b:file_extension is# 'hpp'
+        return ale#handlers#cppcheck#GetBufferPathIncludeOptions(a:buffer)
+        \   . ' --suppress=unusedStructMember'
+    endif
+
     " If the current buffer is modified, using compile_commands.json does no
     " good, so include the file's directory instead. It's not quite as good as
     " using --project, but is at least equivalent to running cppcheck on this
