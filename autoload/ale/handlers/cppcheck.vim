@@ -23,7 +23,8 @@ function! ale#handlers#cppcheck#GetCompileCommandsOptions(buffer) abort
     " bail out if it cannot find a file matching the filter, below. Skip out
     " now, for headers. Also, suppress FPs; cppcheck is not meant to
     " process lone header files.
-    let b:file_extension = fnamemodify(bufname(a:buffer), ':e')
+    let b:buffer_name = bufname(a:buffer)
+    let b:file_extension = fnamemodify(b:buffer_name, ':e')
 
     if b:file_extension is# 'h' || b:file_extension is# 'hpp'
         return ale#handlers#cppcheck#GetBufferPathIncludeOptions(a:buffer)
@@ -45,11 +46,13 @@ function! ale#handlers#cppcheck#GetCompileCommandsOptions(buffer) abort
     " If we find it, we'll `cd` to where the compile_commands.json file is,
     " then use the file to set up import paths, etc.
     let [l:dir, l:json_path] = ale#c#FindCompileCommands(a:buffer)
+    let b:root_index = len(l:dir) + 1
+    let b:buffer_file= bufname(a:buffer)
 
     " By default, cppcheck processes every config in compile_commands.json.
     " Use --file-filter to limit to just the buffer file.
     return !empty(l:json_path)
-    \   ? '--project=' . ale#Escape(l:json_path[len(l:dir) + 1: ]) . ' --file-filter=' . ale#Escape(bufname(a:buffer))
+    \   ? '--project=' . ale#Escape(l:json_path[b:root_index: ]) . ' --file-filter=' . ale#Escape(b:buffer_file[b:root_index:])
     \   : ''
 endfunction
 
