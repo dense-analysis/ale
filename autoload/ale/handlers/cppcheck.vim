@@ -19,6 +19,18 @@ function! ale#handlers#cppcheck#GetBufferPathIncludeOptions(buffer) abort
 endfunction
 
 function! ale#handlers#cppcheck#GetCompileCommandsOptions(buffer) abort
+    " The compile_commands.json doesn't apply to headers and cppheck will
+    " bail out if it cannot find a file matching the filter, below. Skip out
+    " now, for headers. Also, suppress FPs; cppcheck is not meant to
+    " process lone header files.
+    let b:buffer_name = bufname(a:buffer)
+    let b:file_extension = fnamemodify(b:buffer_name, ':e')
+
+    if b:file_extension is# 'h' || b:file_extension is# 'hpp'
+        return ale#handlers#cppcheck#GetBufferPathIncludeOptions(a:buffer)
+        \   . ' --suppress=unusedStructMember'
+    endif
+
     " If the current buffer is modified, using compile_commands.json does no
     " good, so include the file's directory instead. It's not quite as good as
     " using --project, but is at least equivalent to running cppcheck on this
@@ -34,9 +46,13 @@ function! ale#handlers#cppcheck#GetCompileCommandsOptions(buffer) abort
     " If we find it, we'll `cd` to where the compile_commands.json file is,
     " then use the file to set up import paths, etc.
     let [l:dir, l:json_path] = ale#c#FindCompileCommands(a:buffer)
+    let b:root_index = len(l:dir) + 1
+    let b:buffer_file= bufname(a:buffer)
 
+    " By default, cppcheck processes every config in compile_commands.json.
+    " Use --file-filter to limit to just the buffer file.
     return !empty(l:json_path)
-    \   ? '--project=' . ale#Escape(l:json_path[len(l:dir) + 1: ])
+    \   ? '--project=' . ale#Escape(l:json_path[b:root_index: ]) . ' --file-filter=' . ale#Escape(b:buffer_file[b:root_index:])
     \   : ''
 endfunction
 
