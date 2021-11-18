@@ -391,6 +391,7 @@ formatting.
   * [phan](https://github.com/phan/phan) see `:help ale-php-phan` to instructions
   * [php -l](https://secure.php.net/)
   * [php-cs-fixer](http://cs.sensiolabs.org/)
+  * [phpactor](https://github.com/phpactor/phpactor)
   * [phpcbf](https://github.com/squizlabs/PHP_CodeSniffer)
   * [phpcs](https://github.com/squizlabs/PHP_CodeSniffer)
   * [phpmd](https://phpmd.org)
