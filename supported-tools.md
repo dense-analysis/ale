@@ -33,7 +33,7 @@ formatting.
   * [apkbuild-lint](https://gitlab.alpinelinux.org/Leo/atools)
   * [secfixes-check](https://gitlab.alpinelinux.org/Leo/atools)
 * AsciiDoc
-  * [alex](https://github.com/wooorm/alex) :floppy_disk:
+  * [alex](https://github.com/get-alex/alex)
   * [languagetool](https://languagetool.org/) :floppy_disk:
   * [proselint](http://proselint.com/)
   * [redpen](http://redpen.cc/)
@@ -236,7 +236,7 @@ formatting.
 * HCL
   * [terraform-fmt](https://github.com/hashicorp/terraform)
 * HTML
-  * [alex](https://github.com/wooorm/alex) :floppy_disk:
+  * [alex](https://github.com/get-alex/alex)
   * [angular](https://www.npmjs.com/package/@angular/language-server)
   * [fecs](http://fecs.baidu.com/)
   * [html-beautify](https://beautifier.io/)
@@ -295,7 +295,7 @@ formatting.
   * [ktlint](https://ktlint.github.io)
   * [languageserver](https://github.com/fwcd/KotlinLanguageServer) see `:help ale-integration-kotlin` for configuration instructions
 * LaTeX
-  * [alex](https://github.com/wooorm/alex) :floppy_disk:
+  * [alex](https://github.com/get-alex/alex)
   * [chktex](http://www.nongnu.org/chktex/)
   * [lacheck](https://www.ctan.org/pkg/lacheck)
   * [proselint](http://proselint.com/)
@@ -317,14 +317,14 @@ formatting.
   * [luafmt](https://github.com/trixnz/lua-fmt)
   * [stylua](https://github.com/johnnymorganz/stylua)
 * Mail
-  * [alex](https://github.com/wooorm/alex) :floppy_disk:
+  * [alex](https://github.com/get-alex/alex)
   * [languagetool](https://languagetool.org/) :floppy_disk:
   * [proselint](http://proselint.com/)
   * [vale](https://github.com/ValeLint/vale)
 * Make
   * [checkmake](https://github.com/mrtazz/checkmake)
 * Markdown
-  * [alex](https://github.com/wooorm/alex) :floppy_disk:
+  * [alex](https://github.com/get-alex/alex)
   * [languagetool](https://languagetool.org/) :floppy_disk:
   * [markdownlint](https://github.com/DavidAnson/markdownlint) :floppy_disk:
   * [mdl](https://github.com/mivok/markdownlint)
@@ -353,7 +353,7 @@ formatting.
   * [rnix-lsp](https://github.com/nix-community/rnix-lsp)
   * [statix](https://github.com/nerdypepper/statix)
 * nroff
-  * [alex](https://github.com/wooorm/alex) :floppy_disk:
+  * [alex](https://github.com/get-alex/alex)
   * [proselint](http://proselint.com/)
   * [write-good](https://github.com/btford/write-good)
 * Objective-C
@@ -399,12 +399,12 @@ formatting.
   * [psalm](https://getpsalm.org) :floppy_disk:
   * [tlint](https://github.com/tightenco/tlint)
 * PO
-  * [alex](https://github.com/wooorm/alex) :floppy_disk:
+  * [alex](https://github.com/get-alex/alex)
   * [msgfmt](https://www.gnu.org/software/gettext/manual/html_node/msgfmt-Invocation.html)
   * [proselint](http://proselint.com/)
   * [write-good](https://github.com/btford/write-good)
 * Pod
-  * [alex](https://github.com/wooorm/alex) :floppy_disk:
+  * [alex](https://github.com/get-alex/alex)
   * [proselint](http://proselint.com/)
   * [write-good](https://github.com/btford/write-good)
 * Pony
@@ -467,7 +467,7 @@ formatting.
   * [reason-language-server](https://github.com/jaredly/reason-language-server)
   * [refmt](https://github.com/reasonml/reason-cli)
 * reStructuredText
-  * [alex](https://github.com/wooorm/alex) :floppy_disk:
+  * [alex](https://github.com/get-alex/alex)
   * [proselint](http://proselint.com/)
   * [redpen](http://redpen.cc/)
   * [rstcheck](https://github.com/myint/rstcheck)
@@ -550,11 +550,11 @@ formatting.
   * [terraform-lsp](https://github.com/juliosueiras/terraform-lsp)
   * [tflint](https://github.com/wata727/tflint)
 * Texinfo
-  * [alex](https://github.com/wooorm/alex) :floppy_disk:
+  * [alex](https://github.com/get-alex/alex)
   * [proselint](http://proselint.com/)
   * [write-good](https://github.com/btford/write-good)
 * Text
-  * [alex](https://github.com/wooorm/alex) :warning: :floppy_disk:
+  * [alex](https://github.com/get-alex/alex) :warning:
   * [languagetool](https://languagetool.org/) :floppy_disk:
   * [proselint](http://proselint.com/) :warning:
   * [redpen](http://redpen.cc/) :warning:
@@ -594,14 +594,14 @@ formatting.
   * [vimls](https://github.com/iamcco/vim-language-server)
   * [vint](https://github.com/Kuniwak/vint)
 * Vim help
-  * [alex](https://github.com/wooorm/alex) :warning: :floppy_disk:
+  * [alex](https://github.com/get-alex/alex) :warning:
   * [proselint](http://proselint.com/) :warning:
   * [write-good](https://github.com/btford/write-good) :warning:
 * Vue
   * [prettier](https://github.com/prettier/prettier)
   * [vls](https://github.com/vuejs/vetur/tree/master/server)
 * XHTML
-  * [alex](https://github.com/wooorm/alex) :floppy_disk:
+  * [alex](https://github.com/get-alex/alex)
   * [proselint](http://proselint.com/)
   * [write-good](https://github.com/btford/write-good)
 * XML
