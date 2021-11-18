@@ -25,9 +25,10 @@ CONTENTS                                                         *ale-contents*
     6.1 Highlights........................|ale-highlights|
   7. Linter/Fixer Options.................|ale-integration-options|
     7.1 Options for alex..................|ale-alex-options|
-    7.2 Options for languagetool..........|ale-languagetool-options|
-    7.3 Options for write-good............|ale-write-good-options|
-    7.4 Other Linter/Fixer Options........|ale-other-integration-options|
+    7.2 Options for cspell................|ale-cspell-options|
+    7.3 Options for languagetool..........|ale-languagetool-options|
+    7.4 Options for write-good............|ale-write-good-options|
+    7.5 Other Linter/Fixer Options........|ale-other-integration-options|
   8. Commands/Keybinds....................|ale-commands|
   9. API..................................|ale-api|
   10. Special Thanks......................|ale-special-thanks|
@@ -2564,7 +2565,37 @@ g:ale_alex_use_global                                   *g:ale_alex_use_global*
 
 
 -------------------------------------------------------------------------------
-7.2. Options for languagetool                        *ale-languagetool-options*
+7.2. Options for cspell                                    *ale-cspell-options*
+
+The options for `cspell` are shared between all filetypes, so options can be
+configured only once.
+
+g:ale_cspell_executable                               *g:ale_cspell_executable*
+                                                      *b:ale_cspell_executable*
+  Type: |String|
+  Default: `'cspell'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_cspell_options                                     *g:ale_cspell_options*
+                                                         *b:ale_cspell_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to `cspell`.
+
+
+g:ale_cspell_use_global                               *g:ale_cspell_use_global*
+                                                      *b:ale_cspell_use_global*
+  Type: |Number|
+  Default: `get(g: 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+
+-------------------------------------------------------------------------------
+7.3. Options for languagetool                        *ale-languagetool-options*
 
 g:ale_languagetool_executable                   *g:ale_languagetool_executable*
                                                 *b:ale_languagetool_executable*
@@ -2584,7 +2615,7 @@ g:ale_languagetool_options                         *g:ale_languagetool_options*
 
 
 -------------------------------------------------------------------------------
-7.3. Options for write-good                            *ale-write-good-options*
+7.4. Options for write-good                            *ale-write-good-options*
 
 The options for `write-good` are shared between all filetypes, so options can
 be configured once.
@@ -2614,12 +2645,13 @@ g:ale_writegood_use_global                         *g:ale_writegood_use_global*
 
 
 -------------------------------------------------------------------------------
-7.4. Other Linter/Fixer Options                 *ale-other-integration-options*
+7.5. Other Linter/Fixer Options                 *ale-other-integration-options*
 
 ALE supports a very wide variety of tools. Other linter or fixer options are
 documented in additional help files.
 
   ada.....................................|ale-ada-options|
+    cspell................................|ale-ada-cspell|
     gcc...................................|ale-ada-gcc|
     gnatpp................................|ale-ada-gnatpp|
     ada-language-server...................|ale-ada-language-server|
@@ -2629,6 +2661,7 @@ documented in additional help files.
     apkbuild-lint.........................|ale-apkbuild-apkbuild-lint|
     secfixes-check........................|ale-apkbuild-secfixes-check|
   asciidoc................................|ale-asciidoc-options|
+    cspell................................|ale-asciidoc-cspell|
     write-good............................|ale-asciidoc-write-good|
     textlint..............................|ale-asciidoc-textlint|
   asm.....................................|ale-asm-options|
@@ -2652,6 +2685,7 @@ documented in additional help files.
     clangtidy.............................|ale-c-clangtidy|
     cppcheck..............................|ale-c-cppcheck|
     cquery................................|ale-c-cquery|
+    cspell................................|ale-c-cspell|
     flawfinder............................|ale-c-flawfinder|
     uncrustify............................|ale-c-uncrustify|
   chef....................................|ale-chef-options|
@@ -2677,15 +2711,18 @@ documented in additional help files.
     cppcheck..............................|ale-cpp-cppcheck|
     cpplint...............................|ale-cpp-cpplint|
     cquery................................|ale-cpp-cquery|
+    cspell................................|ale-cpp-cspell|
     flawfinder............................|ale-cpp-flawfinder|
     uncrustify............................|ale-cpp-uncrustify|
   c#......................................|ale-cs-options|
     csc...................................|ale-cs-csc|
+    cspell................................|ale-cs-cspell|
     dotnet-format.........................|ale-cs-dotnet-format|
     mcs...................................|ale-cs-mcs|
     mcsc..................................|ale-cs-mcsc|
     uncrustify............................|ale-cs-uncrustify|
   css.....................................|ale-css-options|
+    cspell................................|ale-css-cspell|
     fecs..................................|ale-css-fecs|
     prettier..............................|ale-css-prettier|
     stylelint.............................|ale-css-stylelint|
@@ -2720,6 +2757,7 @@ documented in additional help files.
     dialyxir..............................|ale-elixir-dialyxir|
     elixir-ls.............................|ale-elixir-elixir-ls|
     credo.................................|ale-elixir-credo|
+    cspell................................|ale-elixir-cspell|
   elm.....................................|ale-elm-options|
     elm-format............................|ale-elm-elm-format|
     elm-ls................................|ale-elm-elm-ls|
@@ -2748,6 +2786,7 @@ documented in additional help files.
     glslls................................|ale-glsl-glslls|
   go......................................|ale-go-options|
     bingo.................................|ale-go-bingo|
+    cspell................................|ale-go-cspell|
     gobuild...............................|ale-go-gobuild|
     gofmt.................................|ale-go-gofmt|
     gofumpt...............................|ale-go-gofumpt|
@@ -2773,6 +2812,7 @@ documented in additional help files.
     ember-template-lint...................|ale-handlebars-embertemplatelint|
   haskell.................................|ale-haskell-options|
     brittany..............................|ale-haskell-brittany|
+    cspell................................|ale-haskell-cspell|
     floskell..............................|ale-haskell-floskell|
     ghc...................................|ale-haskell-ghc|
     ghc-mod...............................|ale-haskell-ghc-mod|
@@ -2789,8 +2829,11 @@ documented in additional help files.
     ormolu................................|ale-haskell-ormolu|
   hcl.....................................|ale-hcl-options|
     terraform-fmt.........................|ale-hcl-terraform-fmt|
+  help....................................|ale-help-options|
+    cspell................................|ale-help-cspell|
   html....................................|ale-html-options|
     angular...............................|ale-html-angular|
+    cspell................................|ale-html-cspell|
     fecs..................................|ale-html-fecs|
     html-beautify.........................|ale-html-beautify|
     htmlhint..............................|ale-html-htmlhint|
@@ -2808,6 +2851,7 @@ documented in additional help files.
     ispc..................................|ale-ispc-ispc|
   java....................................|ale-java-options|
     checkstyle............................|ale-java-checkstyle|
+    cspell................................|ale-java-cspell|
     javac.................................|ale-java-javac|
     google-java-format....................|ale-java-google-java-format|
     pmd...................................|ale-java-pmd|
@@ -2815,6 +2859,7 @@ documented in additional help files.
     eclipselsp............................|ale-java-eclipselsp|
     uncrustify............................|ale-java-uncrustify|
   javascript..............................|ale-javascript-options|
+    cspell................................|ale-javascript-cspell|
     deno..................................|ale-javascript-deno|
     eslint................................|ale-javascript-eslint|
     fecs..................................|ale-javascript-fecs|
@@ -2828,6 +2873,7 @@ documented in additional help files.
     standard..............................|ale-javascript-standard|
     xo....................................|ale-javascript-xo|
   json....................................|ale-json-options|
+    cspell................................|ale-json-cspell|
     eslint................................|ale-json-eslint|
     fixjson...............................|ale-json-fixjson|
     jsonlint..............................|ale-json-jsonlint|
@@ -2848,6 +2894,7 @@ documented in additional help files.
     ktlint................................|ale-kotlin-ktlint|
     languageserver........................|ale-kotlin-languageserver|
   latex...................................|ale-latex-options|
+    cspell................................|ale-latex-cspell|
     write-good............................|ale-latex-write-good|
     textlint..............................|ale-latex-textlint|
   less....................................|ale-less-options|
@@ -2857,12 +2904,14 @@ documented in additional help files.
   llvm....................................|ale-llvm-options|
     llc...................................|ale-llvm-llc|
   lua.....................................|ale-lua-options|
+    cspell................................|ale-lua-cspell|
     lua-format............................|ale-lua-lua-format|
     luac..................................|ale-lua-luac|
     luacheck..............................|ale-lua-luacheck|
     luafmt................................|ale-lua-luafmt|
     stylua................................|ale-lua-stylua|
   markdown................................|ale-markdown-options|
+    cspell................................|ale-markdown-cspell|
     markdownlint..........................|ale-markdown-markdownlint|
     mdl...................................|ale-markdown-mdl|
     pandoc................................|ale-markdown-pandoc|
@@ -2914,6 +2963,7 @@ documented in additional help files.
   perl6...................................|ale-perl6-options|
     perl6.................................|ale-perl6-perl6|
   php.....................................|ale-php-options|
+    cspell................................|ale-php-cspell|
     langserver............................|ale-php-langserver|
     phan..................................|ale-php-phan|
     phpcbf................................|ale-php-phpcbf|
@@ -2931,9 +2981,10 @@ documented in additional help files.
     write-good............................|ale-pod-write-good|
   pony....................................|ale-pony-options|
     ponyc.................................|ale-pony-ponyc|
-  powershell............................|ale-powershell-options|
-    powershell..........................|ale-powershell-powershell|
-    psscriptanalyzer....................|ale-powershell-psscriptanalyzer|
+  powershell..............................|ale-powershell-options|
+    cspell................................|ale-powershell-cspell|
+    powershell............................|ale-powershell-powershell|
+    psscriptanalyzer......................|ale-powershell-psscriptanalyzer|
   prolog..................................|ale-prolog-options|
     swipl.................................|ale-prolog-swipl|
   proto...................................|ale-proto-options|
@@ -2957,6 +3008,7 @@ documented in additional help files.
     autopep8..............................|ale-python-autopep8|
     bandit................................|ale-python-bandit|
     black.................................|ale-python-black|
+    cspell................................|ale-python-cspell|
     flake8................................|ale-python-flake8|
     flakehell.............................|ale-python-flakehell|
     isort.................................|ale-python-isort|
@@ -2985,12 +3037,14 @@ documented in additional help files.
     reason-language-server................|ale-reasonml-language-server|
     refmt.................................|ale-reasonml-refmt|
   restructuredtext........................|ale-restructuredtext-options|
+    cspell................................|ale-restructuredtext-cspell|
     textlint..............................|ale-restructuredtext-textlint|
     write-good............................|ale-restructuredtext-write-good|
   robot...................................|ale-robot-options|
     rflint................................|ale-robot-rflint|
   ruby....................................|ale-ruby-options|
     brakeman..............................|ale-ruby-brakeman|
+    cspell................................|ale-ruby-cspell|
     debride...............................|ale-ruby-debride|
     prettier..............................|ale-ruby-prettier|
     rails_best_practices..................|ale-ruby-rails_best_practices|
@@ -3004,6 +3058,7 @@ documented in additional help files.
   rust....................................|ale-rust-options|
     analyzer..............................|ale-rust-analyzer|
     cargo.................................|ale-rust-cargo|
+    cspell................................|ale-rust-cspell|
     rls...................................|ale-rust-rls|
     rustc.................................|ale-rust-rustc|
     rustfmt...............................|ale-rust-rustfmt|
@@ -3013,6 +3068,7 @@ documented in additional help files.
     sasslint..............................|ale-sass-sasslint|
     stylelint.............................|ale-sass-stylelint|
   scala...................................|ale-scala-options|
+    cspell................................|ale-scala-cspell|
     metals................................|ale-scala-metals|
     sbtserver.............................|ale-scala-sbtserver|
     scalafmt..............................|ale-scala-scalafmt|
@@ -3023,6 +3079,7 @@ documented in additional help files.
     stylelint.............................|ale-scss-stylelint|
   sh......................................|ale-sh-options|
     bashate...............................|ale-sh-bashate|
+    cspell................................|ale-sh-cspell|
     sh-language-server....................|ale-sh-language-server|
     shell.................................|ale-sh-shell|
     shellcheck............................|ale-sh-shellcheck|
@@ -3048,6 +3105,7 @@ documented in additional help files.
     svelteserver..........................|ale-svelte-svelteserver|
   swift...................................|ale-swift-options|
     apple-swift-format....................|ale-swift-apple-swift-format|
+    cspell................................|ale-swift-cspell|
     sourcekitlsp..........................|ale-swift-sourcekitlsp|
   systemd.................................|ale-systemd-options|
     systemd-analyze.......................|ale-systemd-analyze|
@@ -3061,18 +3119,22 @@ documented in additional help files.
     tflint................................|ale-terraform-tflint|
   tex.....................................|ale-tex-options|
     chktex................................|ale-tex-chktex|
+    cspell................................|ale-tex-cspell|
     lacheck...............................|ale-tex-lacheck|
     latexindent...........................|ale-tex-latexindent|
     texlab................................|ale-tex-texlab|
   texinfo.................................|ale-texinfo-options|
+    cspell................................|ale-texinfo-cspell|
     write-good............................|ale-texinfo-write-good|
   text....................................|ale-text-options|
+    cspell................................|ale-text-cspell|
     textlint..............................|ale-text-textlint|
     write-good............................|ale-text-write-good|
   thrift..................................|ale-thrift-options|
     thrift................................|ale-thrift-thrift|
     thriftcheck...........................|ale-thrift-thriftcheck|
   typescript..............................|ale-typescript-options|
+    cspell................................|ale-typescript-cspell|
     deno..................................|ale-typescript-deno|
     eslint................................|ale-typescript-eslint|
     prettier..............................|ale-typescript-prettier|
@@ -3103,9 +3165,11 @@ documented in additional help files.
     vimls.................................|ale-vim-vimls|
     vint..................................|ale-vim-vint|
   vue.....................................|ale-vue-options|
+    cspell................................|ale-vue-cspell|
     prettier..............................|ale-vue-prettier|
     vls...................................|ale-vue-vls|
   xhtml...................................|ale-xhtml-options|
+    cspell................................|ale-xhtml-cspell|
     write-good............................|ale-xhtml-write-good|
   xml.....................................|ale-xml-options|
     xmllint...............................|ale-xml-xmllint|

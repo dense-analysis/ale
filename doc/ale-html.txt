@@ -29,6 +29,11 @@ g:ale_html_angular_use_global                   *g:ale_html_angular_use_global*
 
 
 ===============================================================================
+cspell                                                        *ale-html-cspell*
+
+See |ale-cspell-options|
+
+===============================================================================
 fecs                                                            *ale-html-fecs*
 
 `fecs` options for HTML are the same as the options for JavaScript, and both

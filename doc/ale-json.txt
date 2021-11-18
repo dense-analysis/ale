@@ -3,6 +3,12 @@ ALE JSON Integration                                         *ale-json-options*
 
 
 ===============================================================================
+cspell                                                        *ale-json-cspell*
+
+See |ale-cspell-options|
+
+
+===============================================================================
 eslint                                                        *ale-json-eslint*
 
 The `eslint` linter for JSON uses the JavaScript options for `eslint`; see:
