@@ -3,6 +3,12 @@ ALE CSS Integration                                           *ale-css-options*
 
 
 ===============================================================================
+cspell                                                         *ale-css-cspell*
+
+See |ale-cspell-options|
+
+
+===============================================================================
 fecs                                                             *ale-css-fecs*
 
 `fecs` options for CSS is the same as the options for JavaScript, and both of

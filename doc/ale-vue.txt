@@ -3,6 +3,12 @@ ALE Vue Integration                                           *ale-vue-options*
 
 
 ===============================================================================
+cspell                                                         *ale-vue-cspell*
+
+See |ale-cspell-options|
+
+
+===============================================================================
 prettier                                                     *ale-vue-prettier*
 
 See |ale-javascript-prettier| for information about the available options.
