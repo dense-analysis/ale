@@ -25,9 +25,10 @@ CONTENTS                                                         *ale-contents*
     6.1 Highlights........................|ale-highlights|
   7. Linter/Fixer Options.................|ale-integration-options|
     7.1 Options for alex..................|ale-alex-options|
-    7.2 Options for languagetool..........|ale-languagetool-options|
-    7.3 Options for write-good............|ale-write-good-options|
-    7.4 Other Linter/Fixer Options........|ale-other-integration-options|
+    7.2 Options for cspell................|ale-cspell-options|
+    7.3 Options for languagetool..........|ale-languagetool-options|
+    7.4 Options for write-good............|ale-write-good-options|
+    7.5 Other Linter/Fixer Options........|ale-other-integration-options|
   8. Commands/Keybinds....................|ale-commands|
   9. API..................................|ale-api|
   10. Special Thanks......................|ale-special-thanks|
@@ -2564,7 +2565,36 @@ g:ale_alex_use_global                                   *g:ale_alex_use_global*
 
 
 -------------------------------------------------------------------------------
-7.2. Options for languagetool                        *ale-languagetool-options*
+7.2. Options for cspell                                    *ale-cspell-options*
+
+The options for `cspell` are shared between all filetypes, so options can be
+configured only once.
+
+g:ale_cspell_executable                               *g:ale_cspell_executable*
+                                                      *b:ale_cspell_executable*
+  Type: |String|
+  Default: `'cspell'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_cspell_options                                     *g:ale_cspell_options*
+                                                         *b:ale_cspell_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to writegood.
+
+g:ale_cspell_use_global                               *g:ale_cspell_use_global*
+                                                      *b:ale_cspell_use_global*
+  Type: |Number|
+  Default: `get(g: 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+
+-------------------------------------------------------------------------------
+7.3. Options for languagetool                        *ale-languagetool-options*
 
 g:ale_languagetool_executable                   *g:ale_languagetool_executable*
                                                 *b:ale_languagetool_executable*
@@ -2584,7 +2614,7 @@ g:ale_languagetool_options                         *g:ale_languagetool_options*
 
 
 -------------------------------------------------------------------------------
-7.3. Options for write-good                            *ale-write-good-options*
+7.4. Options for write-good                            *ale-write-good-options*
 
 The options for `write-good` are shared between all filetypes, so options can
 be configured once.
@@ -2614,7 +2644,7 @@ g:ale_writegood_use_global                         *g:ale_writegood_use_global*
 
 
 -------------------------------------------------------------------------------
-7.4. Other Linter/Fixer Options                 *ale-other-integration-options*
+7.5. Other Linter/Fixer Options                 *ale-other-integration-options*
 
 ALE supports a very wide variety of tools. Other linter or fixer options are
 documented in additional help files.
