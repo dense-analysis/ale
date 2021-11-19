@@ -1,0 +1,65 @@
+Before:
+  Save g:ale_c_parse_makefile
+  let g:ale_c_parse_makefile = 0
+
+  call ale#assert#SetUpLinterTest('cpp', 'oclint')
+  call ale#test#SetFilename('test.cpp')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The oclint command default should be correct):
+  AssertLinter 'oclint',
+  \ ale#Escape('oclint') . ' %s'
+
+Execute(You should be able to manually set compiler flags for oclint):
+  let b:ale_cpp_oclint_compileflags = '-Wall'
+
+  AssertLinter 'oclint',
+  \ ale#Escape('oclint') . ' %s -- -Wall'
+
+Execute(You should be able to set options for oclint):
+  let b:ale_cpp_oclint_options = '-disable-rule LongMethod'
+
+  AssertLinter 'oclint',
+  \ ale#Escape('oclint') . ' -disable-rule LongMethod %s'
+
+Execute(The build directory should be configurable):
+  let b:ale_c_build_dir = '/foo/bar'
+
+  AssertLinter 'oclint',
+  \ ale#Escape('oclint')
+  \   . ' -p=' . ale#Escape('/foo/bar')
+  \   . ' %s'
+
+Execute(The build directory setting should override the compile flags):
+  let b:ale_c_build_dir = '/foo/bar'
+  let b:ale_cpp_oclint_compileflags = '-Wall'
+
+  AssertLinter 'oclint',
+  \ ale#Escape('oclint')
+  \   . ' -p=' . ale#Escape('/foo/bar')
+  \   . ' %s'
+
+Execute(The build directory should be used for header files):
+  call ale#test#SetFilename('test.h')
+
+  let b:ale_c_build_dir = '/foo/bar'
+
+  AssertLinter 'oclint',
+  \ ale#Escape('oclint')
+  \   . ' -p=' . ale#Escape('/foo/bar')
+  \   . ' %s'
+
+  call ale#test#SetFilename('test.hpp')
+
+  AssertLinter 'oclint',
+  \ ale#Escape('oclint')
+  \   . ' -p=' . ale#Escape('/foo/bar')
+  \   . ' %s'
+
+Execute(The executable should be configurable):
+  let b:ale_cpp_oclint_executable = 'foobar'
+
+  AssertLinter 'foobar',
+  \ ale#Escape('foobar') . ' %s'

@@ -2687,6 +2687,7 @@ documented in additional help files.
     cquery................................|ale-c-cquery|
     cspell................................|ale-c-cspell|
     flawfinder............................|ale-c-flawfinder|
+    oclint................................|ale-c-oclint|
     uncrustify............................|ale-c-uncrustify|
   chef....................................|ale-chef-options|
     cookstyle.............................|ale-chef-cookstyle|
@@ -2713,6 +2714,7 @@ documented in additional help files.
     cquery................................|ale-cpp-cquery|
     cspell................................|ale-cpp-cspell|
     flawfinder............................|ale-cpp-flawfinder|
+    oclint................................|ale-cpp-oclint|
     uncrustify............................|ale-cpp-uncrustify|
   c#......................................|ale-cs-options|
     csc...................................|ale-cs-csc|

@@ -394,6 +394,34 @@ g:ale_c_flawfinder_error_severity           *g:ale_c_flawfinder_error_severity*
 
 
 ===============================================================================
+oclint                                                           *ale-c-oclint*
+
+g:ale_c_oclint_executable                           *g:ale_c_oclint_executable*
+                                                    *b:ale_c_oclint_executable*
+  Type: |String|
+  Default: `'oclint'`
+
+  This variable can be changed to use a different executable for oclint.
+
+
+g:ale_c_oclint_options                                 *g:ale_c_oclint_options*
+                                                       *b:ale_c_oclint_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to modify options given to oclint.
+
+
+g:ale_c_oclint_compileflags                       *g:ale_c_oclint_compileflags*
+                                                  *b:ale_c_oclint_compileflags*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to pass extra compileflags to oclint. This
+  variable will be ignored if a 'compile_commands.json' file is used.
+
+
+===============================================================================
 uncrustify                                                   *ale-c-uncrustify*
 
 g:ale_c_uncrustify_executable                   *g:ale_c_uncrustify_executable*

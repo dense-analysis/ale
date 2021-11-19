@@ -69,6 +69,7 @@ Notes:
   * `cspell`
   * `flawfinder`
   * `gcc` (`cc`)
+  * `oclint`
   * `uncrustify`
 * C#
   * `csc`!!
@@ -92,6 +93,7 @@ Notes:
   * `cspell`
   * `flawfinder`
   * `gcc` (`cc`)
+  * `oclint`
   * `uncrustify`
 * Chef
   * `cookstyle`

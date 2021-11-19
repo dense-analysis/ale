@@ -342,6 +342,34 @@ g:ale_cpp_flawfinder_options                             *g:ale-cpp-flawfinder*
 
 
 ===============================================================================
+oclint                                                         *ale-cpp-oclint*
+
+g:ale_cpp_oclint_executable                       *g:ale_cpp_oclint_executable*
+                                                  *b:ale_cpp_oclint_executable*
+  Type: |String|
+  Default: `'oclint'`
+
+  This variable can be changed to use a different executable for oclint.
+
+
+g:ale_cpp_oclint_options                             *g:ale_cpp_oclint_options*
+                                                     *b:ale_cpp_oclint_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to modify options given to oclint.
+
+
+g:ale_cpp_oclint_compileflags                   *g:ale_cpp_oclint_compileflags*
+                                                *b:ale_cpp_oclint_compileflags*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to pass extra compileflags to oclint. This
+  variable will be ignored if a 'compile_commands.json' file is used.
+
+
+===============================================================================
 uncrustify                                                 *ale-cpp-uncrustify*
 
 See |ale-c-uncrustify| for information about the available options.
