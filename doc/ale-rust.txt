@@ -145,8 +145,7 @@ g:ale_rust_cargo_avoid_whole_workspace *g:ale_rust_cargo_avoid_whole_workspace*
   in the crate's directory. Otherwise, behave as usual.
 
 
-g:ale_rust_cargo_use_clippy
-                                                  *g:ale_rust_cargo_use_clippy*
+g:ale_rust_cargo_use_clippy                       *g:ale_rust_cargo_use_clippy*
                                                   *b:ale_rust_cargo_use_clippy*
   Type: |Number|
   Default: `0`
@@ -163,8 +162,7 @@ g:ale_rust_cargo_use_clippy
     let g:ale_rust_cargo_use_clippy = executable('cargo-clippy')
 <
 
-g:ale_rust_cargo_clippy_options
-                                              *g:ale_rust_cargo_clippy_options*
+g:ale_rust_cargo_clippy_options               *g:ale_rust_cargo_clippy_options*
                                               *b:ale_rust_cargo_clippy_options*
 
   Type: |String|
@@ -175,8 +173,7 @@ g:ale_rust_cargo_clippy_options
   only `cargo clippy` supports (e.g. `--deny`).
 
 
-g:ale_rust_cargo_target_dir
-                                                  *g:ale_rust_cargo_target_dir*
+g:ale_rust_cargo_target_dir                       *g:ale_rust_cargo_target_dir*
                                                   *b:ale_rust_cargo_target_dir*
 
   Type: |String|
@@ -185,6 +182,12 @@ g:ale_rust_cargo_target_dir
   Use a custom target directory when running the commands for ALE. This can
   help to avoid "waiting for file lock on build directory" messages when
   running `cargo` commands manually while ALE is performing its checks.
+
+
+===============================================================================
+cspell                                                        *ale-rust-cspell*
+
+See |ale-cspell-options|
 
 
 ===============================================================================

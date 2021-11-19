@@ -28,6 +28,7 @@ Execute(cppcheck for C++ should detect compile_commands.json files):
   \   . ' -q --language=c++'
   \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --project=' . ale#Escape('compile_commands.json')
+  \   . ' --file-filter=' . ale#Escape('foo.cpp')
   \   . ' --enable=style %t'
 
 Execute(cppcheck for C++ should detect compile_commands.json files in build directories):
@@ -38,6 +39,7 @@ Execute(cppcheck for C++ should detect compile_commands.json files in build dire
   \   . ' -q --language=c++'
   \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --project=' . ale#Escape(ale#path#Simplify('build/compile_commands.json'))
+  \   . ' --file-filter=' . ale#Escape('foo.cpp')
   \   . ' --enable=style %t'
 
 Execute(cppcheck for C++ should include file dir if compile_commands.json file is not found):
@@ -49,6 +51,18 @@ Execute(cppcheck for C++ should include file dir if compile_commands.json file i
   \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
   \   . ' --enable=style'
   \   . ' -I' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/cppcheck'))
+  \   . ' %t'
+
+Execute(cppcheck for C++ header should include file dir and not use compile_commands.json):
+  call ale#test#SetFilename('../test-files/cppcheck/one/foo.hpp')
+
+  AssertLinter 'cppcheck',
+  \   ale#Escape('cppcheck')
+  \   . ' -q --language=c++'
+  \   . ' --template=' . ale#Escape('{file}:{line}:{column}: {severity}:{inconclusive:inconclusive:} {message} [{id}]\\n{code}')
+  \   . '  -I' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/cppcheck/one'))
+  \   . ' --suppress=unusedStructMember'
+  \   . ' --enable=style'
   \   . ' %t'
 
 Execute(cppcheck for C++ should ignore compile_commands.json file if buffer is modified):

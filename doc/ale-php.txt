@@ -1,6 +1,13 @@
 ===============================================================================
 ALE PHP Integration                                           *ale-php-options*
 
+
+===============================================================================
+cspell                                                         *ale-php-cspell*
+
+See |ale-cspell-options|
+
+
 ===============================================================================
 langserver                                                 *ale-php-langserver*
 
@@ -41,12 +48,14 @@ g:ale_php_phan_minimum_severity               *g:ale_php_phan_minimum_severity*
 
   This variable defines the minimum severity level.
 
+
 g:ale_php_phan_executable                           *g:ale_php_phan_executable*
                                                     *b:ale_php_phan_executable*
   Type: |String|
   Default: `'phan'`
 
   This variable sets executable used for phan or phan_client.
+
 
 g:ale_php_phan_use_client                           *g:ale_php_phan_use_client*
                                                     *b:ale_php_phan_use_client*
@@ -55,6 +64,7 @@ g:ale_php_phan_use_client                           *g:ale_php_phan_use_client*
 
   This variable can be set to 1 to use the phan_client with phan daemon mode
   instead of the phan standalone.
+
 
 ===============================================================================
 phpcbf                                                         *ale-php-phpcbf*
@@ -128,6 +138,7 @@ g:ale_php_phpcs_options                               *g:ale_php_phpcs_options*
   Default: `''`
 
   This variable can be set to pass additional options to php-cs
+
 
 ===============================================================================
 phpmd                                                           *ale-php-phpmd*

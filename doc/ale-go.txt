@@ -39,7 +39,6 @@ g:ale_go_go111module                                     *g:ale_go_go111module*
   golang tools.
 
 
-
 ===============================================================================
 bingo                                                            *ale-go-bingo*
 
@@ -56,6 +55,11 @@ g:ale_go_bingo_options                                 *g:ale_go_bingo_options*
   Type: |String|
   Default: `''`
 
+
+===============================================================================
+cspell                                                          *ale-go-cspell*
+
+See |ale-cspell-options|
 
 ===============================================================================
 gobuild                                                        *ale-go-gobuild*
@@ -151,6 +155,7 @@ g:ale_go_langserver_options                       *g:ale_go_langserver_options*
   `-gocodecompletion` option is ignored because it is handled automatically
   by the |g:ale_completion_enabled| variable.
 
+
 ===============================================================================
 golines                                                        *ale-go-golines*
 
@@ -168,6 +173,7 @@ g:ale_go_golines_options                             *g:ale_go_golines_options*
 
   Additional options passed to the golines command. By default golines has
   --max-length=100 (lines above 100 characters will be wrapped)
+
 
 ===============================================================================
 golint                                                          *ale-go-golint*
