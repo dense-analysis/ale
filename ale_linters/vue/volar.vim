@@ -46,9 +46,17 @@ call ale#Set('vue_volar_init_options', {
 \})
 
 function! ale_linters#vue#volar#GetProjectRoot(buffer) abort
-    let l:package_path = ale#path#FindNearestFile(a:buffer, 'package.json')
+    let l:project_roots = ['package.json', 'vite.config.js', '.git', bufname(a:buffer)]
 
-    return !empty(l:package_path) ? fnamemodify(l:package_path, ':h') : ''
+    for l:project_root in l:project_roots
+        let l:nearest_filepath = ale#path#FindNearestFile(a:buffer, l:project_root)
+
+        if !empty(l:nearest_filepath)
+            return fnamemodify(l:nearest_filepath, ':h')
+        endif
+    endfor
+
+    return ''
 endfunction
 
 function! ale_linters#vue#volar#GetInitializationOptions(buffer) abort
