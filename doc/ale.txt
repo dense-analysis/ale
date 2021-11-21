@@ -3168,6 +3168,7 @@ documented in additional help files.
     cspell................................|ale-vue-cspell|
     prettier..............................|ale-vue-prettier|
     vls...................................|ale-vue-vls|
+    volar.................................|ale-vue-volar|
   xhtml...................................|ale-xhtml-options|
     cspell................................|ale-xhtml-cspell|
     write-good............................|ale-xhtml-write-good|

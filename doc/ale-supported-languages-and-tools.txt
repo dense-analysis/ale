@@ -620,6 +620,7 @@ Notes:
   * `cspell`
   * `prettier`
   * `vls`
+  * `volar`
 * XHTML
   * `alex`
   * `cspell`
