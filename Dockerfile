@@ -4,7 +4,8 @@ RUN install_vim -tag v8.0.0027 -build \
                 -tag v8.2.2401 -build \
                 -tag neovim:v0.2.0 -build \
                 -tag neovim:v0.4.4 -build \
-                -tag neovim:v0.5.0 -build
+                -tag neovim:v0.5.0 -build \
+                -tag neovim:v0.6.0 -build
 
 ENV PACKAGES="\
     bash \
