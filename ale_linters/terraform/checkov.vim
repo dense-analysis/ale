@@ -2,14 +2,14 @@
 " Description: use checkov for providing warnings via ale
 
 call ale#Set('terraform_checkov_executable', 'checkov')
-call ale#Set('terraform_checkov_options', '-o json --quiet')
+call ale#Set('terraform_checkov_options', '')
 
 function! ale_linters#terraform#checkov#GetExecutable(buffer) abort
     return ale#Var(a:buffer, 'terraform_checkov_executable')
 endfunction
 
 function! ale_linters#terraform#checkov#GetCommand(buffer) abort
-    return '%e ' . '-f %t ' . ale#Var(a:buffer, 'terraform_checkov_options')
+    return '%e ' . '-f %t -o json --quiet ' . ale#Var(a:buffer, 'terraform_checkov_options')
 endfunction
 
 function! ale_linters#terraform#checkov#Handle(buffer, lines) abort
