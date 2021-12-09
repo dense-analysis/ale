@@ -15,20 +15,9 @@ endfunction
 function! ale_linters#terraform#checkov#Handle(buffer, lines) abort
     let l:output = []
 
-    try
-        let l:results = get(ale#util#FuzzyJSONDecode(a:lines, {}), 'results', [])
-    catch
-        return []
-    endtry
+    let l:results = get(get(ale#util#FuzzyJSONDecode(a:lines, {}), 'results', []), 'failed_checks', [])
 
-    "if no problems are found by checkov, it will provide some statistics
-    "as the JSON format is different then, l:results will then be an empty list
-    "handle this by returning an empty list in this case
-    if empty(l:results)
-        return []
-    endif
-
-    for l:violation in l:results['failed_checks']
+    for l:violation in l:results
         call add(l:output, {
         \   'filename': l:violation['file_path'],
         \   'lnum': l:violation['file_line_range'][0],
