@@ -3112,6 +3112,7 @@ documented in additional help files.
   tcl.....................................|ale-tcl-options|
     nagelfar..............................|ale-tcl-nagelfar|
   terraform...............................|ale-terraform-options|
+    checkov...............................|ale-terraform-checkov|
     terraform-fmt-fixer...................|ale-terraform-fmt-fixer|
     terraform.............................|ale-terraform-terraform|
     terraform-ls..........................|ale-terraform-terraform-ls|
