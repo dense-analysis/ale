@@ -560,6 +560,7 @@ Notes:
 * Tcl
   * `nagelfar`!!
 * Terraform
+  * `checkov`
   * `terraform`
   * `terraform-fmt-fixer`
   * `terraform-ls`

@@ -569,6 +569,7 @@ formatting.
 * Tcl
   * [nagelfar](http://nagelfar.sourceforge.net) :floppy_disk:
 * Terraform
+  * [checkov](https://github.com/bridgecrewio/checkov)
   * [terraform](https://github.com/hashicorp/terraform)
   * [terraform-fmt-fixer](https://github.com/hashicorp/terraform)
   * [terraform-ls](https://github.com/hashicorp/terraform-ls)
