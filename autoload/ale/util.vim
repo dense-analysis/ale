@@ -491,8 +491,8 @@ function! ale#util#FindItemAtCursor(buffer) abort
     return [l:info, l:loc]
 endfunction
 
-function! ale#util#Input(message, value) abort
-    return input(a:message, a:value)
+function! ale#util#Input(message, value, completion) abort
+    return input(a:message, a:value, a:completion)
 endfunction
 
 function! ale#util#HasBuflineApi() abort

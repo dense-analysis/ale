@@ -101,6 +101,14 @@ function! ale#lsp#tsserver_message#Rename(
     \}]
 endfunction
 
+function! ale#lsp#tsserver_message#GetEditsForFileRename(
+\ oldFilePath, newFilePath) abort
+    return [0, 'ts@getEditsForFileRename', {
+    \   'oldFilePath': a:oldFilePath,
+    \   'newFilePath': a:newFilePath,
+    \}]
+endfunction
+
 function! ale#lsp#tsserver_message#OrganizeImports(buffer) abort
     return [0, 'ts@organizeImports', {
     \   'scope': {
