@@ -97,13 +97,13 @@ function! ale#filerename#Execute() abort
     let l:lsp_linters = []
 
     for l:linter in ale#linter#Get(&filetype)
-        if !empty(l:linter.lsp)
+        if l:linter.lsp == 'tsserver'
             call add(l:lsp_linters, l:linter)
         endif
     endfor
 
     if empty(l:lsp_linters)
-        call s:message('No active LSPs')
+        call s:message('No active tsserver LSPs')
 
         return
     endif
@@ -111,6 +111,12 @@ function! ale#filerename#Execute() abort
     let l:buffer = bufnr('')
     let l:old_name = expand('#' . l:buffer . ':p')
     let l:new_name = ale#util#Input('New file name: ', l:old_name, 'file')
+
+    if l:old_name is# l:new_name
+        call s:message('New file name matches old file name')
+
+        return
+    endif
 
     if empty(l:new_name)
         call s:message('New name cannot be empty!')

@@ -38,6 +38,7 @@ function! ale#lsp#Register(executable_or_address, project, init_options) abort
         \   'capabilities': {
         \       'hover': 0,
         \       'rename': 0,
+        \       'filerename': 0,
         \       'references': 0,
         \       'completion': 0,
         \       'completion_trigger_characters': [],
