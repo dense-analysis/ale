@@ -97,7 +97,7 @@ function! ale#filerename#Execute() abort
     let l:lsp_linters = []
 
     for l:linter in ale#linter#Get(&filetype)
-        if l:linter.lsp == 'tsserver'
+        if l:linter.lsp is# 'tsserver'
             call add(l:lsp_linters, l:linter)
         endif
     endfor
