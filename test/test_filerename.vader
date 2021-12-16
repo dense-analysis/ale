@@ -63,7 +63,7 @@ Before:
     call add(g:code_actions, a:code_action)
   endfunction
 
-  function! ale#util#Input(message, value, comletion) abort
+  function! ale#util#Input(message, value, completion) abort
     return 'a-new-name'
   endfunction
 
