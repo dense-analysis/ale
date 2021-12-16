@@ -38,6 +38,7 @@ function! ale#lsp#Register(executable_or_address, project, init_options) abort
         \   'capabilities': {
         \       'hover': 0,
         \       'rename': 0,
+        \       'filerename': 0,
         \       'references': 0,
         \       'completion': 0,
         \       'completion_trigger_characters': [],
@@ -380,6 +381,7 @@ function! ale#lsp#MarkConnectionAsTsserver(conn_id) abort
     let l:conn.capabilities.typeDefinition = 1
     let l:conn.capabilities.symbol_search = 1
     let l:conn.capabilities.rename = 1
+    let l:conn.capabilities.filerename = 1
     let l:conn.capabilities.code_actions = 1
 endfunction
 

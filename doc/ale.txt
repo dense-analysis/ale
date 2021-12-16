@@ -686,6 +686,8 @@ for a full list of options.
 ALE supports renaming symbols in code such as variables or class names with
 the |ALERename| command.
 
+`ALEFileRename` will rename file and fix import paths (tsserver only).
+
 |ALECodeAction| will execute actions on the cursor or applied to a visual
 range selection, such as automatically fixing errors.
 
@@ -3368,6 +3370,9 @@ ALERename                                                           *ALERename*
   The symbol where the cursor is resting will be the symbol renamed, and a
   prompt will open to request a new name.
 
+ALEFileRename                                                   *ALEFileRename*
+
+  Rename a file and fix imports using `tsserver`.
 
 ALECodeAction                                                   *ALECodeAction*
 
