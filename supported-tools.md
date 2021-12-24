@@ -160,7 +160,7 @@ formatting.
   * [hadolint](https://github.com/hadolint/hadolint)
 * Elixir
   * [credo](https://github.com/rrrene/credo)
-  * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell) :warning:
   * [dialyxir](https://github.com/jeremyjh/dialyxir)
   * [dogma](https://github.com/lpil/dogma) :floppy_disk:
   * [elixir-ls](https://github.com/elixir-lsp/elixir-ls) :warning:
@@ -198,7 +198,7 @@ formatting.
   * [glslls](https://github.com/svenstaro/glsl-language-server)
 * Go
   * [bingo](https://github.com/saibing/bingo) :warning:
-  * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell) :warning:
   * [go build](https://golang.org/cmd/go/) :warning: :floppy_disk:
   * [go mod](https://golang.org/cmd/go/) :warning: :floppy_disk:
   * [go vet](https://golang.org/cmd/vet/) :floppy_disk:
