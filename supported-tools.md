@@ -290,18 +290,18 @@ formatting.
   * [tsserver](https://github.com/Microsoft/TypeScript/wiki/Standalone-Server-%28tsserver%29)
   * [xo](https://github.com/sindresorhus/xo)
 * JSON
-  * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell) :warning:
   * [dprint](https://dprint.dev)
-  * [eslint](http://eslint.org/)
+  * [eslint](http://eslint.org/) :warning:
   * [fixjson](https://github.com/rhysd/fixjson)
-  * [jq](https://stedolan.github.io/jq/)
+  * [jq](https://stedolan.github.io/jq/) :warning:
   * [jsonlint](https://github.com/zaach/jsonlint)
   * [prettier](https://github.com/prettier/prettier)
   * [spectral](https://github.com/stoplightio/spectral)
 * JSON5
-  * [eslint](http://eslint.org/)
+  * [eslint](http://eslint.org/) :warning:
 * JSONC
-  * [eslint](http://eslint.org/)
+  * [eslint](http://eslint.org/) :warning:
 * Jsonnet
   * [jsonnet-lint](https://jsonnet.org/learning/tools.html)
   * [jsonnetfmt](https://jsonnet.org/learning/tools.html)
