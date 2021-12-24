@@ -17,7 +17,7 @@ Execute(The clang-format callback should return the correct default values):
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_c_uncrustify_executable)
-  \       . ' --no-backup'
+  \       . ' --no-backup -l C'
   \ },
   \ ale#fixers#uncrustify#Fix(bufnr(''))
 
@@ -28,6 +28,81 @@ Execute(The uncrustify callback should include any additional options):
   AssertEqual
   \ {
   \   'command': ale#Escape(g:ale_c_uncrustify_executable)
-  \     . ' --no-backup --some-option',
+  \     . ' --no-backup -l C --some-option',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+Execute(The uncrustify callback should set proper language):
+  unlet b:ale_c_uncrustify_options
+
+  set filetype=c
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_c_uncrustify_executable)
+  \     . ' --no-backup -l C',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+  set filetype=cpp
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_c_uncrustify_executable)
+  \     . ' --no-backup -l CPP',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+  set filetype=cs
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_c_uncrustify_executable)
+  \     . ' --no-backup -l CS',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+  set filetype=objc
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_c_uncrustify_executable)
+  \     . ' --no-backup -l OC',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+  set filetype=objcpp
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_c_uncrustify_executable)
+  \     . ' --no-backup -l OC+',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+  set filetype=d
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_c_uncrustify_executable)
+  \     . ' --no-backup -l D',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+  set filetype=java
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_c_uncrustify_executable)
+  \     . ' --no-backup -l JAVA',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+  set filetype=vala
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_c_uncrustify_executable)
+  \     . ' --no-backup -l VALA',
+  \ },
+  \ ale#fixers#uncrustify#Fix(bufnr(''))
+
+  set filetype=p
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_c_uncrustify_executable)
+  \     . ' --no-backup -l PAWN',
   \ },
   \ ale#fixers#uncrustify#Fix(bufnr(''))
