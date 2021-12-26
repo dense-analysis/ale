@@ -5,6 +5,7 @@
 call ale#Set('deno_executable', 'deno')
 call ale#Set('deno_unstable', 0)
 call ale#Set('deno_importMap', 'import_map.json')
+call ale#Set('deno_config', 'deno.json')
 call ale#Set('deno_lsp_project_root', '')
 
 function! ale#handlers#deno#GetExecutable(buffer) abort
@@ -29,6 +30,7 @@ function! ale#handlers#deno#GetProjectRoot(buffer) abort
     endif
 
     let l:possible_project_roots = [
+    \   'deno.json',
     \   'tsconfig.json',
     \   '.git',
     \   bufname(a:buffer),
@@ -60,6 +62,7 @@ function! ale#handlers#deno#GetInitializationOptions(buffer) abort
     \   'lint': v:true,
     \   'unstable': v:false,
     \   'importMap': ale#path#FindNearestFile(a:buffer, 'import_map.json'),
+    \   'config': ale#path#FindNearestFile(a:buffer, 'deno.json')
     \   }
 
     if ale#Var(a:buffer, 'deno_unstable')
@@ -68,6 +71,10 @@ function! ale#handlers#deno#GetInitializationOptions(buffer) abort
 
     if ale#Var(a:buffer, 'deno_importMap') isnot# ''
         let l:options.importMap = ale#path#FindNearestFile(a:buffer, ale#Var(a:buffer, 'deno_importMap'))
+    endif
+
+    if ale#Var(a:buffer, 'deno_config') isnot# ''
+        let l:options.config = ale#path#FindNearestFile(a:buffer, ale#Var(a:buffer, 'deno_config'))
     endif
 
     return l:options
