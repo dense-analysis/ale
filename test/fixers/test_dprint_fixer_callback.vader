@@ -28,7 +28,9 @@ Execute(The dprint callback should include config):
   AssertFixer {
   \   'command': ale#Escape('dprint')
   \     . ' fmt '
-  \     . ' -c ' . ale#Escape('/testplugin/test/test-files/dprint/dprint.json') . ' --stdin %s'
+  \     . ' -c '
+  \     . ale#Escape((has('win32') ? 'C:\testplugin\test\test-files\dprint\dprint.json' : '/testplugin/test/test-files/dprint/dprint.json'))
+  \     . ' --stdin %s'
   \ }
 
 Execute(The dprint callback should include custom options):
