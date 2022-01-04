@@ -2,7 +2,7 @@
 " Description: cmakelint for cmake files
 
 let g:ale_cmake_cmakelint_executable =
-\   get(g:, 'ale_cmake_cmakelint_executable', 'cmakelint')
+\   get(g:, 'ale_cmake_cmakelint_executable', 'cmake-lint')
 
 let g:ale_cmake_cmakelint_options =
 \   get(g:, 'ale_cmake_cmakelint_options', '')
