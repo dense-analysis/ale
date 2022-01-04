@@ -36,6 +36,12 @@ Check the docs over at |ale-typescript-deno|.
 
 
 ===============================================================================
+dprint                                                  *ale-javascript-dprint*
+
+See |ale-dprint-options| and https://dprint.dev/plugins/typescript
+
+
+===============================================================================
 eslint                                                  *ale-javascript-eslint*
 
 g:ale_javascript_eslint_executable         *g:ale_javascript_eslint_executable*

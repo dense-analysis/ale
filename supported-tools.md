@@ -156,6 +156,7 @@ formatting.
   * [dhall-lint](https://github.com/dhall-lang/dhall-lang)
 * Dockerfile
   * [dockerfile_lint](https://github.com/projectatomic/dockerfile_lint)
+  * [dprint](https://dprint.dev)
   * [hadolint](https://github.com/hadolint/hadolint)
 * Elixir
   * [credo](https://github.com/rrrene/credo)
@@ -276,6 +277,7 @@ formatting.
 * JavaScript
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [deno](https://deno.land/)
+  * [dprint](https://dprint.dev/)
   * [eslint](http://eslint.org/)
   * [fecs](http://fecs.baidu.com/)
   * [flow](https://flowtype.org/)
@@ -289,6 +291,7 @@ formatting.
   * [xo](https://github.com/sindresorhus/xo)
 * JSON
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [dprint](https://dprint.dev)
   * [eslint](http://eslint.org/)
   * [fixjson](https://github.com/rhysd/fixjson)
   * [jq](https://stedolan.github.io/jq/)
@@ -546,6 +549,7 @@ formatting.
   * [solhint](https://github.com/protofire/solhint)
   * [solium](https://github.com/duaraghav8/Solium)
 * SQL
+  * [dprint](https://dprint.dev)
   * [pgformatter](https://github.com/darold/pgFormatter)
   * [sql-lint](https://github.com/joereynolds/sql-lint)
   * [sqlfmt](https://github.com/jackc/sqlfmt)
@@ -592,9 +596,12 @@ formatting.
 * Thrift
   * [thrift](http://thrift.apache.org/)
   * [thriftcheck](https://github.com/pinterest/thriftcheck)
+* TOML
+  * [dprint](https://dprint.dev)
 * TypeScript
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [deno](https://deno.land/)
+  * [dprint](https://dprint.dev/)
   * [eslint](http://eslint.org/)
   * [fecs](http://fecs.baidu.com/)
   * [prettier](https://github.com/prettier/prettier)
