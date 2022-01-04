@@ -9,6 +9,12 @@ See |ale-cspell-options|
 
 
 ===============================================================================
+dprint                                                    *ale-markdown-dprint*
+
+See |ale-dprint-options| and https://dprint.dev/plugins/markdown
+
+
+===============================================================================
 markdownlint                                        *ale-markdown-markdownlint*
 
 g:ale_markdown_markdownlint_options       *g:ale_markdown_markdownlint_options*

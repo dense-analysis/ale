@@ -2597,7 +2597,50 @@ g:ale_cspell_use_global                               *g:ale_cspell_use_global*
 
 
 -------------------------------------------------------------------------------
-7.3. Options for languagetool                        *ale-languagetool-options*
+7.3. Options for dprint                                    *ale-dprint-options*
+
+`dprint` is a fixer for many file types, including: (java|type)script,
+json(c?), markdown, and more. See https://dprint.dev/plugins for an up-to-date
+list of supported plugins and their configuration options.
+
+g:ale_dprint_executable                               *g:ale_dprint_executable*
+                                                      *b:ale_dprint_executable*
+  Type: |String|
+  Default: `'dprint'`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_dprint_config                                       *g:ale_dprint_config*
+                                                          *b:ale_dprint_config*
+  Type: |String|
+  Default: `'dprint.json'`
+
+  This variable can be changed to provide a config file to `dprint`. The
+  default is the nearest `dprint.json` searching upward from the current
+  buffer.
+
+  See https://dprint.dev/config and https://plugins.dprint.dev
+
+
+g:ale_dprint_options                                     *g:ale_dprint_options*
+                                                         *b:ale_dprint_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to `dprint`.
+
+
+g:ale_dprint_use_global                               *g:ale_dprint_use_global*
+                                                      *b:ale_dprint_use_global*
+  Type: |Number|
+  Default: `get(g: 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+
+-------------------------------------------------------------------------------
+7.4. Options for languagetool                        *ale-languagetool-options*
 
 g:ale_languagetool_executable                   *g:ale_languagetool_executable*
                                                 *b:ale_languagetool_executable*
@@ -2617,7 +2660,7 @@ g:ale_languagetool_options                         *g:ale_languagetool_options*
 
 
 -------------------------------------------------------------------------------
-7.4. Options for write-good                            *ale-write-good-options*
+7.5. Options for write-good                            *ale-write-good-options*
 
 The options for `write-good` are shared between all filetypes, so options can
 be configured once.
@@ -2647,7 +2690,7 @@ g:ale_writegood_use_global                         *g:ale_writegood_use_global*
 
 
 -------------------------------------------------------------------------------
-7.5. Other Linter/Fixer Options                 *ale-other-integration-options*
+7.6. Other Linter/Fixer Options                 *ale-other-integration-options*
 
 ALE supports a very wide variety of tools. Other linter or fixer options are
 documented in additional help files.
@@ -2752,6 +2795,7 @@ documented in additional help files.
     dhall-lint............................|ale-dhall-lint|
   dockerfile..............................|ale-dockerfile-options|
     dockerfile_lint.......................|ale-dockerfile-dockerfile_lint|
+    dprint................................|ale-dockerfile-dprint|
     hadolint..............................|ale-dockerfile-hadolint|
   elixir..................................|ale-elixir-options|
     mix...................................|ale-elixir-mix|
@@ -2863,6 +2907,7 @@ documented in additional help files.
   javascript..............................|ale-javascript-options|
     cspell................................|ale-javascript-cspell|
     deno..................................|ale-javascript-deno|
+    dprint................................|ale-javascript-dprint|
     eslint................................|ale-javascript-eslint|
     fecs..................................|ale-javascript-fecs|
     flow..................................|ale-javascript-flow|
@@ -2876,6 +2921,7 @@ documented in additional help files.
     xo....................................|ale-javascript-xo|
   json....................................|ale-json-options|
     cspell................................|ale-json-cspell|
+    dprint................................|ale-json-dprint|
     eslint................................|ale-json-eslint|
     fixjson...............................|ale-json-fixjson|
     jsonlint..............................|ale-json-jsonlint|
@@ -2914,6 +2960,7 @@ documented in additional help files.
     stylua................................|ale-lua-stylua|
   markdown................................|ale-markdown-options|
     cspell................................|ale-markdown-cspell|
+    dprint................................|ale-markdown-dprint|
     markdownlint..........................|ale-markdown-markdownlint|
     mdl...................................|ale-markdown-mdl|
     pandoc................................|ale-markdown-pandoc|
@@ -3095,6 +3142,7 @@ documented in additional help files.
   spec....................................|ale-spec-options|
     rpmlint...............................|ale-spec-rpmlint|
   sql.....................................|ale-sql-options|
+    dprint................................|ale-sql-dprint|
     pgformatter...........................|ale-sql-pgformatter|
     sqlfmt................................|ale-sql-sqlfmt|
     sqlformat.............................|ale-sql-sqlformat|
@@ -3136,9 +3184,12 @@ documented in additional help files.
   thrift..................................|ale-thrift-options|
     thrift................................|ale-thrift-thrift|
     thriftcheck...........................|ale-thrift-thriftcheck|
+  toml....................................|ale-toml-options|
+    dprint................................|ale-toml-dprint|
   typescript..............................|ale-typescript-options|
     cspell................................|ale-typescript-cspell|
     deno..................................|ale-typescript-deno|
+    dprint................................|ale-typescript-dprint|
     eslint................................|ale-typescript-eslint|
     prettier..............................|ale-typescript-prettier|
     standard..............................|ale-typescript-standard|

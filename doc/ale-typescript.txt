@@ -51,6 +51,12 @@ g:ale_deno_importMap                                     *g:ale_deno_importMap*
 
 
 ===============================================================================
+dprint                                                  *ale-typescript-dprint*
+
+See |ale-dprint-options| and https://dprint.dev/plugins/typescript
+
+
+===============================================================================
 eslint                                                  *ale-typescript-eslint*
 
 Because of how TypeScript compiles code to JavaScript and how interrelated

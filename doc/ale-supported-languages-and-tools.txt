@@ -147,6 +147,7 @@ Notes:
   * `dhall-lint`
 * Dockerfile
   * `dockerfile_lint`
+  * `dprint`
   * `hadolint`
 * Elixir
   * `credo`
@@ -281,6 +282,7 @@ Notes:
   * `xo`
 * JSON
   * `cspell`
+  * `dprint`
   * `eslint`
   * `fixjson`
   * `jq`
@@ -538,6 +540,7 @@ Notes:
   * `solhint`
   * `solium`
 * SQL
+  * `dprint`
   * `pgformatter`
   * `sql-lint`
   * `sqlfmt`
@@ -584,6 +587,8 @@ Notes:
 * Thrift
   * `thrift`
   * `thriftcheck`
+* TOML
+  * `dprint`
 * TypeScript
   * `cspell`
   * `deno`
