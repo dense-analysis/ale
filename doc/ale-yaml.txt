@@ -106,6 +106,59 @@ g:ale_yaml_swaglint_use_global                 *g:ale_yaml_swaglint_use_global*
 
 
 ===============================================================================
+yaml-language-server                                 *ale-yaml-language-server*
+
+Website: https://github.com/redhat-developer/yaml-language-server
+
+
+Installation
+-------------------------------------------------------------------------------
+
+Install yaml-language-server either globally or locally: >
+
+  npm install yaml-language-server -g  # global
+  npm install yaml-language-server     # local
+
+
+Options
+-------------------------------------------------------------------------------
+
+g:ale_yaml_ls_executable                             *g:ale_yaml_ls_executable*
+                                                     *b:ale_yaml_ls_executable*
+  Type: |String|
+  Default: `'yaml-language-server'`
+
+  This variable can be set to change the path to yaml-language-server.
+
+
+g:ale_yaml_ls_config                                     *g:ale_yaml_ls_config*
+                                                         *b:ale_yaml_ls_config*
+  Type: |Dictionary|
+  Default: `{}`
+
+  Dictionary containing configuration settings that will be passed to the
+  language server.  For example, to enable schema store: >
+      {
+    \   'yaml': {
+    \     'schemaStore': {
+    \         'enable': v:true,
+    \     },
+    \   },
+    \ }
+<
+  Consult the yaml-language-server documentation for more information about
+  settings.
+
+
+g:ale_yaml_ls_use_global                             *g:ale_yaml_ls_use_global*
+                                                     *b:ale_yaml_ls_use_global*
+  Type: |String|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
 yamlfix                                                      *ale-yaml-yamlfix*
 
 Website: https://lyz-code.github.io/yamlfix
