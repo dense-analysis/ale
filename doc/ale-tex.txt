@@ -77,7 +77,7 @@ g:ale_tex_texlab_options                             *g:ale_tex_texlab_options*
 
 g:ale_tex_texlab_config                               *g:ale_tex_texlab_config*
                                                       *b:ale_tex_texlab_config*
-  Type: |String|
+  Type: |Dictionary|
   Default: `{}`
 
   Dictionary containing LSP configuration settings used to initialize texlab
