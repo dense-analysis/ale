@@ -136,7 +136,6 @@ Notes:
   * `analysis_server`
   * `dart-analyze`!!
   * `dart-format`!!
-  * `dartanalyzer`!!
   * `dartfmt`!!
   * `language_server`
 * desktop

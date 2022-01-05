@@ -144,9 +144,8 @@ formatting.
 * Dart
   * [analysis_server](https://github.com/dart-lang/sdk/tree/master/pkg/analysis_server)
   * [dart-analyze](https://github.com/dart-lang/sdk/tree/master/pkg/analyzer_cli) :floppy_disk:
-  * [dart-format](https://github.com/dart-lang/sdk/tree/master/utils/dartfmt) :floppy_disk:
-  * [dartanalyzer](https://github.com/dart-lang/sdk/tree/master/pkg/analyzer_cli) :floppy_disk:
-  * [dartfmt](https://github.com/dart-lang/sdk/tree/master/utils/dartfmt) :floppy_disk:
+  * [dart-format](https://github.com/dart-lang/sdk/tree/master/utils/dartfmt)
+  * [dartfmt](https://github.com/dart-lang/sdk/tree/master/utils/dartfmt)
   * [language_server](https://github.com/natebosch/dart_language_server)
 * desktop
   * [desktop-file-validate](https://www.freedesktop.org/wiki/Software/desktop-file-utils/)
