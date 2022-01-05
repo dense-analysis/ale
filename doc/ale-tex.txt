@@ -73,8 +73,23 @@ g:ale_tex_texlab_options                             *g:ale_tex_texlab_options*
   Type: |String|
   Default: `''`
 
-  This variable can be changed to modify flags given to texlab.
+  This variable can be changed to modify flags given to texlab command.
 
+g:ale_tex_texlab_config                               *g:ale_tex_texlab_config*
+                                                      *b:ale_tex_texlab_config*
+  Type: |Dictionary|
+  Default: `{}`
+
+  Dictionary containing LSP configuration settings used to initialize texlab
+  language server. Refer to texlab documentation for possible settings:
+
+    https://github.com/latex-lsp/texlab/blob/master/docs/options.md
+
+  For example to set build onSave initialization setting:
+
+>
+  let g:ale_tex_texlab_config = {"build":{"onSave":v:true}}
+<
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
