@@ -640,6 +640,7 @@ Notes:
   * `prettier`
   * `spectral`
   * `swaglint`
+  * `yaml-language-server`
   * `yamlfix`
   * `yamllint`
 * YANG

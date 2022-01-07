@@ -3232,6 +3232,7 @@ documented in additional help files.
     prettier..............................|ale-yaml-prettier|
     spectral..............................|ale-yaml-spectral|
     swaglint..............................|ale-yaml-swaglint|
+    yaml-language-server..................|ale-yaml-language-server|
     yamlfix...............................|ale-yaml-yamlfix|
     yamllint..............................|ale-yaml-yamllint|
   yang....................................|ale-yang-options|

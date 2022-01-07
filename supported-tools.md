@@ -649,6 +649,7 @@ formatting.
   * [prettier](https://github.com/prettier/prettier)
   * [spectral](https://github.com/stoplightio/spectral)
   * [swaglint](https://github.com/byCedric/swaglint)
+  * [yaml-language-server](https://github.com/redhat-developer/yaml-language-server)
   * [yamlfix](https://lyz-code.github.io/yamlfix)
   * [yamllint](https://yamllint.readthedocs.io/)
 * YANG
