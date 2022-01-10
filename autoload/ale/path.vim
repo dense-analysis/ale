@@ -219,6 +219,10 @@ endfunction
 " relatives paths will not be prefixed with the protocol.
 " For Windows paths, the `:` in C:\ etc. will not be percent-encoded.
 function! ale#path#ToURI(path) abort
+    if a:path[:5] is? 'jdt://'
+        return a:path
+    endif
+
     let l:has_drive_letter = a:path[1:2] is# ':\'
 
     return substitute(
@@ -232,6 +236,14 @@ function! ale#path#ToURI(path) abort
 endfunction
 
 function! ale#path#FromURI(uri) abort
+    if a:uri[:5] is? 'jdt://'
+        let l:uri_parts = split(a:uri, '=')
+        let l:uri_parts[1] = substitute(l:uri_parts[1], '/', '%2F', 'g')
+        let l:uri = l:uri_parts[0] . '=' . l:uri_parts[1]
+
+        return l:uri
+    endif
+
     if a:uri[:6] is? 'file://'
         let l:encoded_path = a:uri[7:]
     elseif a:uri[:4] is? 'file:'
