@@ -94,6 +94,10 @@ function! ale#definition#HandleLSPResponse(conn_id, response) abort
                     break
                 endif
 
+                if !empty(getbufvar(bufnr(''), 'ale_lsp_root', ''))
+                    break
+                endif
+
                 " Display java file from jar library as part of current project.
                 set filetype=java
 
