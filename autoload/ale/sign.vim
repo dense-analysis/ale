@@ -50,19 +50,22 @@ if !hlexists('ALESignColumnWithErrors')
 endif
 
 function! ale#sign#SetUpDefaultColumnWithoutErrorsHighlight() abort
-    let l:verbose = &verbose
-    set verbose=0
-    let l:output = execute('highlight SignColumn', 'silent')
-    let &verbose = l:verbose
+    try
+        let l:verbose = &verbose
+        set verbose=0
+        let l:output = execute('highlight SignColumn', 'silent')
+        let &verbose = l:verbose
 
-    let l:highlight_syntax = join(split(l:output)[2:])
-    let l:match = matchlist(l:highlight_syntax, '\vlinks to (.+)$')
+        let l:highlight_syntax = join(split(l:output)[2:])
+        let l:match = matchlist(l:highlight_syntax, '\vlinks to (.+)$')
 
-    if !empty(l:match)
-        execute 'highlight link ALESignColumnWithoutErrors ' . l:match[1]
-    elseif l:highlight_syntax isnot# 'cleared'
-        execute 'highlight ALESignColumnWithoutErrors ' . l:highlight_syntax
-    endif
+        if !empty(l:match)
+            execute 'highlight link ALESignColumnWithoutErrors ' . l:match[1]
+        elseif l:highlight_syntax isnot# 'cleared'
+            execute 'highlight ALESignColumnWithoutErrors ' . l:highlight_syntax
+        endif
+    catch
+    endtry
 endfunction
 
 if !hlexists('ALESignColumnWithoutErrors')
