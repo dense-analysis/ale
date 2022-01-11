@@ -116,8 +116,11 @@ function! ale#definition#HandleLSPResponse(conn_id, response) abort
                 endwhile
 
                 let l:contents = s:result['result']
+
                 call setline(1, split(l:contents, '\n'))
-                call ale#util#Open(l:filename, l:line, l:column, l:options)
+                call cursor(l:line, l:column)
+                normal! zz
+
                 setlocal buftype=nofile nomod readonly
             endif
 
