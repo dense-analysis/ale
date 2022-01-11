@@ -109,7 +109,7 @@ function! ale#definition#HandleLSPResponse(conn_id, response) abort
                 \   bufnr(''),
                 \   'eclipselsp',
                 \   [0, 'java/classFileContents', {'uri': l:filename}],
-                \       function('s:handle_class_file_contents'))
+                \       function('s:HandleClassFileContents'))
 
                 while s:cb_status isnot# 'complete'
                     sleep 10m
