@@ -79,53 +79,40 @@ function! ale#definition#HandleLSPResponse(conn_id, response) abort
             endif
 
             call ale#definition#UpdateTagStack()
-            call ale#util#Open(l:filename, l:line, l:column, l:options)
 
             if l:filename[:5] is? 'jdt://'
                 let l:found = v:false
-
                 for l:linter in ale#linter#Get('java')
                     if l:linter.name is# 'eclipselsp'
                         let l:found = v:true
                     endif
                 endfor
-
                 if ! l:found
                     break
                 endif
 
-                if !empty(getbufvar(bufnr(''), 'ale_lsp_root', ''))
-                    break
-                endif
-
-                " Display java file from jar library as part of current project.
-                set filetype=java
-
-                let b:ale_lsp_root = a:conn_id[stridx(a:conn_id, ':')+1:]
-                let s:cb_status = 'pending'
-
-                function! s:HandleClassFileContents(result) abort
-                    let s:cb_status = 'complete'
-                    let s:result = a:result
+                function! s:OpenJdtLink(conn_id, uri, line, column, options, result) abort
+                    " Display java file from jar library as part of current project.
+                    let l:contents = a:result['result']
+                    call ale#util#Open(a:uri, a:line, a:column, a:options)
+                    if !empty(getbufvar(bufnr(''), 'ale_lsp_root', ''))
+                        return
+                    endif
+                    let b:ale_lsp_root = a:conn_id[stridx(a:conn_id, ':')+1:]
+                    set filetype=java
+                    call setline(1, split(l:contents, '\n'))
+                    call cursor(a:line, a:column)
+                    normal! zz
+                    setlocal buftype=nofile nomod readonly
                 endfunction
 
                 call ale#lsp_linter#SendRequest(
                 \   bufnr(''),
                 \   'eclipselsp',
                 \   [0, 'java/classFileContents', {'uri': l:filename}],
-                \       function('s:HandleClassFileContents'))
-
-                while s:cb_status isnot# 'complete'
-                    sleep 10m
-                endwhile
-
-                let l:contents = s:result['result']
-
-                call setline(1, split(l:contents, '\n'))
-                call cursor(l:line, l:column)
-                normal! zz
-
-                setlocal buftype=nofile nomod readonly
+                \       function('s:OpenJdtLink', [a:conn_id, l:filename, l:line, l:column, l:options]))
+            else
+                call ale#util#Open(l:filename, l:line, l:column, l:options)
             endif
 
             break
