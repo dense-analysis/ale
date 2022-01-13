@@ -109,7 +109,7 @@ function! ale#definition#HandleLSPResponse(conn_id, response) abort
                 call ale#lsp_linter#SendRequest(
                 \   bufnr(''),
                 \   'eclipselsp',
-                \   [0, 'java/classFileContents', {'uri': l:filename}],
+                \   [0, 'java/classFileContents', {'uri': ale#path#ToURI(l:filename)}],
                 \       function('s:OpenJdtLink', [a:conn_id, l:filename, l:line, l:column, l:options]))
             else
                 call ale#util#Open(l:filename, l:line, l:column, l:options)
