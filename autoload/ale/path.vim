@@ -245,7 +245,7 @@ function! ale#path#FromURI(uri) abort
         let l:auth_path = a:uri[6:stridx(a:uri, '?')-1]
         let l:query = a:uri[stridx(a:uri, '?')+1:]
 
-        " not allow ["*:<>?|] in authority and path sections
+        " do not allow ["*:<>?|] in authority and path sections
         let l:auth_path = substitute(l:auth_path, '\(["*:<>?|]\)', '\=printf("%%%x", char2nr(submatch(1)))', 'g')
         " do not allow ["*:<>|?\/] in query section
         let l:query = substitute(l:query, '\(["*:<>?|\\/]\)', '\=printf("%%%x", char2nr(submatch(1)))', 'g')
