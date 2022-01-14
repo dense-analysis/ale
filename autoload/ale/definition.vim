@@ -68,50 +68,36 @@ function! ale#definition#HandleLSPResponse(conn_id, response) abort
         for l:item in l:result
             if has_key(l:item, 'targetUri')
                 " LocationLink items use targetUri
-                let l:filename = ale#path#FromURI(l:item.targetUri)
+                let l:uri = l:item.targetUri
                 let l:line = l:item.targetRange.start.line + 1
                 let l:column = l:item.targetRange.start.character + 1
             else
                 " LocationLink items use uri
-                let l:filename = ale#path#FromURI(l:item.uri)
+                let l:uri = l:item.uri
                 let l:line = l:item.range.start.line + 1
                 let l:column = l:item.range.start.character + 1
             endif
 
             call ale#definition#UpdateTagStack()
 
-            if l:filename[:5] is? 'jdt://'
-                let l:found = v:false
-                for l:linter in ale#linter#Get('java')
-                    if l:linter.name is# 'eclipselsp'
-                        let l:found = v:true
+            let l:root = a:conn_id[stridx(a:conn_id, ':')+1:]
+            let found_uri_handler = v:false
+            for l:linter in ale#linter#Get(&filetype)
+                if !empty(l:linter.lsp)
+                    if exists('l:linter.uri_handlers') && !empty(l:linter.uri_handlers)
+                        for l:scheme in keys(l:linter.uri_handlers)
+                            if l:uri =~# '^'.l:scheme.'://'
+                                call l:linter.uri_handlers[scheme](l:root, l:line, l:column, l:options, l:uri)
+                                let l:found_uri_handler = v:true
+                                break
+                            endif
+                        endfor
                     endif
-                endfor
-                if ! l:found
-                    break
                 endif
+            endfor
 
-                function! s:OpenJdtLink(conn_id, uri, line, column, options, result) abort
-                    " Display java file from jar library as part of current project.
-                    let l:contents = a:result['result']
-                    call ale#util#Open(a:uri, a:line, a:column, a:options)
-                    if !empty(getbufvar(bufnr(''), 'ale_lsp_root', ''))
-                        return
-                    endif
-                    let b:ale_lsp_root = a:conn_id[stridx(a:conn_id, ':')+1:]
-                    set filetype=java
-                    call setline(1, split(l:contents, '\n'))
-                    call cursor(a:line, a:column)
-                    normal! zz
-                    setlocal buftype=nofile nomod readonly
-                endfunction
-
-                call ale#lsp_linter#SendRequest(
-                \   bufnr(''),
-                \   'eclipselsp',
-                \   [0, 'java/classFileContents', {'uri': ale#path#ToURI(l:filename)}],
-                \       function('s:OpenJdtLink', [a:conn_id, l:filename, l:line, l:column, l:options]))
-            else
+            if !found_uri_handler
+                let l:filename = ale#path#FromURI(l:uri)
                 call ale#util#Open(l:filename, l:line, l:column, l:options)
             endif
 

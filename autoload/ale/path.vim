@@ -219,12 +219,6 @@ endfunction
 " relatives paths will not be prefixed with the protocol.
 " For Windows paths, the `:` in C:\ etc. will not be percent-encoded.
 function! ale#path#ToURI(path) abort
-    if a:path[:5] is? 'jdt://'
-        let l:path = substitute(a:path, '%3f', '?', 'g')
-
-        return l:path
-    endif
-
     let l:has_drive_letter = a:path[1:2] is# ':\'
 
     return substitute(
@@ -238,23 +232,6 @@ function! ale#path#ToURI(path) abort
 endfunction
 
 function! ale#path#FromURI(uri) abort
-    if a:uri[:5] is? 'jdt://'
-        let l:uri = ale#uri#Decode(a:uri)
-
-        let l:scheme = a:uri[:5]
-        let l:auth_path = a:uri[6:stridx(a:uri, '?')-1]
-        let l:query = a:uri[stridx(a:uri, '?')+1:]
-
-        " do not allow ["*:<>?|] in authority and path sections
-        let l:auth_path = substitute(l:auth_path, '\(["*:<>?|]\)', '\=printf("%%%x", char2nr(submatch(1)))', 'g')
-        " do not allow ["*:<>|?\/] in query section
-        let l:query = substitute(l:query, '\(["*:<>?|\\/]\)', '\=printf("%%%x", char2nr(submatch(1)))', 'g')
-
-        let l:uri = l:scheme . l:auth_path . '%3f' . l:query
-
-        return l:uri
-    endif
-
     if a:uri[:6] is? 'file://'
         let l:encoded_path = a:uri[7:]
     elseif a:uri[:4] is? 'file:'

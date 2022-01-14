@@ -185,6 +185,67 @@ function! ale_linters#java#eclipselsp#RunWithVersionCheck(buffer) abort
     \)
 endfunction
 
+function! s:JDTToPath(uri) abort
+    let l:uri = ale#uri#Decode(a:uri)
+
+    let l:scheme = a:uri[:5]
+    let l:auth_path = a:uri[6:stridx(a:uri, '?')-1]
+    let l:query = a:uri[stridx(a:uri, '?')+1:]
+
+    " do not allow ["*:<>?|] in authority and path sections
+    let l:auth_path = substitute(l:auth_path, '\(["*:<>?|]\)', '\=printf("%%%x", char2nr(submatch(1)))', 'g')
+    " do not allow ["*:<>|?\/] in query section
+    let l:query = substitute(l:query, '\(["*:<>?|\\/]\)', '\=printf("%%%x", char2nr(submatch(1)))', 'g')
+
+    let l:path = l:scheme . l:auth_path . '%3f' . l:query
+
+    return l:path
+endfunction
+
+function! s:PathToJDT(path) abort
+    let l:uri = substitute(a:path, '%3f', '?', 'g')
+
+    return l:uri
+endfunction
+
+function! s:OpenJDTLink(root, filename, line, column, options, result) abort
+    " Display java file from jar library as part of current project.
+    if has_key(a:result, 'error')
+        echoerr a:result.error.message
+        return
+    endif
+
+    let l:contents = a:result['result']
+
+    if type(l:contents) ==# type(v:null)
+        echoerr 'File content not found'
+    endif
+
+    call ale#util#Open(a:filename, a:line, a:column, a:options)
+
+    if !empty(getbufvar(bufnr(''), 'ale_lsp_root', ''))
+        return
+    endif
+
+    let b:ale_lsp_root = a:root
+    set filetype=java
+    call setline(1, split(l:contents, '\n'))
+    call cursor(a:line, a:column)
+    normal! zz
+
+    setlocal buftype=nofile nomodified nomodifiable readonly
+endfunction
+
+function! ale_linters#java#eclipselsp#HandleJdt(root, line, column, options, uri)
+    " load new buffer with contents of 'l:uri'
+    let l:filename = s:JDTToPath(a:uri)
+    call ale#lsp_linter#SendRequest(
+                \   bufnr(''),
+                \   'eclipselsp',
+                \   [0, 'java/classFileContents', {'uri': s:PathToJDT(l:filename)}],
+                \       function('s:OpenJDTLink', [a:root, l:filename, a:line, a:column, a:options]))
+endfunction
+
 call ale#linter#Define('java', {
 \   'name': 'eclipselsp',
 \   'lsp': 'stdio',
@@ -192,6 +253,9 @@ call ale#linter#Define('java', {
 \   'command': function('ale_linters#java#eclipselsp#RunWithVersionCheck'),
 \   'language': 'java',
 \   'project_root': function('ale#java#FindProjectRoot'),
+\   'uri_handlers': {
+\       'jdt': function('ale_linters#java#eclipselsp#HandleJdt')
+\   },
 \   'initialization_options': {
 \     'extendedClientCapabilities': {
 \       'classFileContentsSupport': v:true
