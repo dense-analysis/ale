@@ -15,6 +15,15 @@ Execute(The local phpcs executable should be used):
   AssertLinter g:executable, ale#Escape(g:executable)
   \ . ' -s --report=emacs --stdin-path=%s'
 
+Execute(The local phpcs executable should be used):
+  call ale#test#SetFilename('../test-files/phpcs/project-with-phpcs-by-phive/foo/test.php')
+
+  let g:executable = ale#path#Simplify(g:dir . '/../test-files/phpcs/project-with-phpcs-by-phive/tools/phpcs')
+
+  AssertLinterCwd '%s:h'
+  AssertLinter g:executable, ale#Escape(g:executable)
+  \ . ' -s --report=emacs --stdin-path=%s'
+
 Execute(use_global should override local executable detection):
   let g:ale_php_phpcs_use_global = 1
 
