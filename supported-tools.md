@@ -114,6 +114,7 @@ formatting.
   * [cfn-python-lint](https://github.com/awslabs/cfn-python-lint)
 * CMake
   * [cmake-format](https://github.com/cheshirekow/cmake_format)
+  * [cmake-lint](https://github.com/cheshirekow/cmake_format)
   * [cmakelint](https://github.com/richq/cmake-lint)
 * CoffeeScript
   * [coffee](http://coffeescript.org/)

@@ -2752,6 +2752,7 @@ documented in additional help files.
     cfn-python-lint.......................|ale-cloudformation-cfn-python-lint|
   cmake...................................|ale-cmake-options|
     cmakelint.............................|ale-cmake-cmakelint|
+    cmake-lint............................|ale-cmake-cmake-lint|
     cmake-format..........................|ale-cmake-cmakeformat|
   cpp.....................................|ale-cpp-options|
     astyle................................|ale-cpp-astyle|
