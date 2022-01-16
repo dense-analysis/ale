@@ -46,6 +46,7 @@ call ale#linter#Define('php', {
 \   'name': 'phpcs',
 \   'executable': {b -> ale#path#FindExecutable(b, 'php_phpcs', [
 \       'vendor/bin/phpcs',
+\       'tools/phpcs',
 \       'phpcs'
 \   ])},
 \   'cwd': '%s:h',
