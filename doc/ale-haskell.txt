@@ -142,6 +142,20 @@ g:ale_haskell_hls_executable                     *g:ale_haskell_hls_executable*
   language server.
 
 
+g:ale_haskell_hls_config                             *g:ale_haskell_hls_config*
+                                                     *b:ale_haskell_hls_config*
+  Type: |Dictionary|
+  Default: `{}`
+
+  Dictionary with configuration settings for HLS. For example, to see more
+  completions:
+>
+  let g:ale_haskell_hls_config = {'haskell': {'maxCompletions': 250}}
+<
+  Refer to HLS documentation for possible settings:
+  https://haskell-language-server.readthedocs.io/en/latest/configuration.html#language-specific-server-options
+
+
 ===============================================================================
 stack-build                                           *ale-haskell-stack-build*
 
