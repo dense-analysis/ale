@@ -185,7 +185,7 @@ function! ale_linters#java#eclipselsp#RunWithVersionCheck(buffer) abort
     \)
 endfunction
 
-function! s:JDTToPath(uri) abort
+function! ale_linters#java#eclipselsp#JDTToPath(uri) abort
     let l:uri = ale#uri#Decode(a:uri)
 
     let l:scheme = a:uri[:5]
@@ -202,14 +202,66 @@ function! s:JDTToPath(uri) abort
     return l:path
 endfunction
 
-function! s:PathToJDT(path) abort
+function! ale_linters#java#eclipselsp#PathToJDT(path) abort
     let l:uri = substitute(a:path, '%3f', '?', 'g')
 
     return l:uri
 endfunction
 
 function! s:OpenJDTLink(root, filename, line, column, options, result) abort
-    " Display java file from jar library as part of current project.
+    if has_key(a:result, 'error')
+        echoerr a:result.error.message
+        return
+    endif
+
+    let l:contents = a:result['result']
+    if type(l:contents) ==# type(v:null)
+        echoerr 'File content not found'
+    endif
+
+    " disable autocmd when opening buffer
+    autocmd! ale_eclipselsp_jdt
+    call ale#util#Open(a:filename, a:line, a:column, a:options)
+    autocmd ale_eclipselsp_jdt BufNewFile,BufReadPre jdt://** call ale_linters#java#eclipselsp#OpenJDTLink(expand('<amatch>'))
+
+    if !empty(getbufvar(bufnr(''), 'ale_lsp_root', ''))
+        return
+    endif
+
+    let b:ale_lsp_root = a:root
+    set filetype=java
+
+    call setline(1, split(l:contents, '\n'))
+    call cursor(a:line, a:column)
+    normal! zz
+
+    setlocal buftype=nofile nomodified nomodifiable readonly
+endfunction
+
+" Load new buffer with jdt:// contents and jump to line and column.
+function! ale_linters#java#eclipselsp#OpenJDTLink(encoded_uri, line, column, options, conn_id) abort
+    let l:found_eclipselsp = v:false
+    for l:linter in ale#linter#Get('java')
+        if l:linter.name is# 'eclipselsp'
+            let l:found_eclipselsp = v:true
+        endif
+    endfor
+    if !l:found_eclipselsp
+        throw 'eclipselsp not running'
+    endif
+
+    let l:root = a:conn_id[stridx(a:conn_id, ':')+1:]
+    let l:filename = a:encoded_uri
+    call ale#lsp_linter#SendRequest(
+                \   bufnr(''),
+                \   'eclipselsp',
+                \   [0, 'java/classFileContents', {
+                \       'uri': ale#path#ToURI(l:filename)
+                \   }],
+                \   function('s:OpenJDTLink', [l:root, l:filename, a:line, a:column, a:options]))
+endfunction
+
+function! s:ReadClassFileContents(filename, result) abort
     if has_key(a:result, 'error')
         echoerr a:result.error.message
         return
@@ -221,30 +273,45 @@ function! s:OpenJDTLink(root, filename, line, column, options, result) abort
         echoerr 'File content not found'
     endif
 
-    call ale#util#Open(a:filename, a:line, a:column, a:options)
-
-    if !empty(getbufvar(bufnr(''), 'ale_lsp_root', ''))
-        return
-    endif
-
-    let b:ale_lsp_root = a:root
-    set filetype=java
     call setline(1, split(l:contents, '\n'))
-    call cursor(a:line, a:column)
-    normal! zz
 
     setlocal buftype=nofile nomodified nomodifiable readonly
 endfunction
 
-function! ale_linters#java#eclipselsp#HandleJdt(root, line, column, options, uri)
-    " load new buffer with contents of 'l:uri'
-    let l:filename = s:JDTToPath(a:uri)
+" Read jdt:// contents, as part of current project, into current buffer.
+function! ale_linters#java#eclipselsp#ReadJDTLink(encoded_uri) abort
+    if !empty(getbufvar(bufnr(''), 'ale_lsp_root', ''))
+        return
+    endif
+
+    let l:linter_map = ale#lsp_linter#GetLinterMap()
+    for l:conn_id in keys(l:linter_map)
+        if l:linter_map[l:conn_id] ==# 'eclipselsp'
+            let l:root = l:conn_id[stridx(l:conn_id, ':')+1:]
+        endif
+    endfor
+    if l:root is# v:null
+        throw 'eclipselsp not running'
+    endif
+
+    " set modifiable
+    let l:filename = a:encoded_uri
+    let b:ale_lsp_root = l:root
+    set filetype=java
+
     call ale#lsp_linter#SendRequest(
                 \   bufnr(''),
                 \   'eclipselsp',
-                \   [0, 'java/classFileContents', {'uri': s:PathToJDT(l:filename)}],
-                \       function('s:OpenJDTLink', [a:root, l:filename, a:line, a:column, a:options]))
+                \   [0, 'java/classFileContents', {
+                \       'uri': ale#path#ToURI(l:filename)
+                \   }],
+                \   function('s:ReadClassFileContents', [l:filename]))
 endfunction
+
+augroup ale_eclipselsp_jdt
+    au!
+    au BufNewFile,BufReadPre jdt://** call ale_linters#java#eclipselsp#ReadJDTLink(expand('<amatch>'))
+augroup END
 
 call ale#linter#Define('java', {
 \   'name': 'eclipselsp',
@@ -254,7 +321,11 @@ call ale#linter#Define('java', {
 \   'language': 'java',
 \   'project_root': function('ale#java#FindProjectRoot'),
 \   'uri_handlers': {
-\       'jdt': function('ale_linters#java#eclipselsp#HandleJdt')
+\       'jdt': {
+\           'OpenURILink': function('ale_linters#java#eclipselsp#OpenJDTLink'),
+\           'PathFromURI': function('ale_linters#java#eclipselsp#JDTToPath'),
+\           'PathToURI': function('ale_linters#java#eclipselsp#PathToJDT')
+\       }
 \   },
 \   'initialization_options': {
 \     'extendedClientCapabilities': {

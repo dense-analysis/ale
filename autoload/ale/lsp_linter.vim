@@ -8,6 +8,10 @@ if !has_key(s:, 'lsp_linter_map')
     let s:lsp_linter_map = {}
 endif
 
+function! ale#lsp_linter#GetLinterMap()
+    return s:lsp_linter_map
+endfunction
+
 " A Dictionary to track one-shot handlers for custom LSP requests
 let s:custom_handlers_map = get(s:, 'custom_handlers_map', {})
 

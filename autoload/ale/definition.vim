@@ -80,24 +80,11 @@ function! ale#definition#HandleLSPResponse(conn_id, response) abort
 
             call ale#definition#UpdateTagStack()
 
-            let l:root = a:conn_id[stridx(a:conn_id, ':')+1:]
-            let found_uri_handler = v:false
-            for l:linter in ale#linter#Get(&filetype)
-                if !empty(l:linter.lsp)
-                    if exists('l:linter.uri_handlers') && !empty(l:linter.uri_handlers)
-                        for l:scheme in keys(l:linter.uri_handlers)
-                            if l:uri =~# '^'.l:scheme.'://'
-                                call l:linter.uri_handlers[scheme](l:root, l:line, l:column, l:options, l:uri)
-                                let l:found_uri_handler = v:true
-                                break
-                            endif
-                        endfor
-                    endif
-                endif
-            endfor
-
-            if !found_uri_handler
-                let l:filename = ale#path#FromURI(l:uri)
+            let l:filename = ale#path#FromURI(l:uri)
+            let l:uri_handler = ale#util#GetURIHandler(l:filename)
+            if l:uri_handler isnot# v:null
+                call l:uri_handler.OpenURILink(l:filename, l:line, l:column, l:options, a:conn_id)
+            else
                 call ale#util#Open(l:filename, l:line, l:column, l:options)
             endif
 
