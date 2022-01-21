@@ -2721,6 +2721,8 @@ documented in additional help files.
     buildifier............................|ale-bazel-buildifier|
   bib.....................................|ale-bib-options|
     bibclean..............................|ale-bib-bibclean|
+  bitbake.................................|ale-bitbake-options|
+    oelint-adv............................|ale-bitbake-oelint_adv|
   c.......................................|ale-c-options|
     astyle................................|ale-c-astyle|
     cc....................................|ale-c-cc|
