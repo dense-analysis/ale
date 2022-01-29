@@ -628,6 +628,8 @@ Notes:
   * `prettier`
   * `vls`
   * `volar`
+* WGSL
+  * `naga`
 * XHTML
   * `alex`
   * `cspell`

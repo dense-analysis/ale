@@ -637,6 +637,8 @@ formatting.
   * [prettier](https://github.com/prettier/prettier)
   * [vls](https://github.com/vuejs/vetur/tree/master/server)
   * [volar](https://github.com/johnsoncodehk/volar)
+* WGSL
+  * [naga](https://github.com/gfx-rs/naga)
 * XHTML
   * [alex](https://github.com/get-alex/alex)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
