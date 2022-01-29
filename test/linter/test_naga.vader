@@ -1,0 +1,28 @@
+Before:
+  call ale#assert#SetUpLinterTest('wgsl', 'naga')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The naga command should be customizable):
+  let g:ale_wgsl_naga_executable = '/path/to/naga'
+  AssertLinter '/path/to/naga',
+  \ ale#Escape('/path/to/naga') . ' --stdin-file-path %s'
+
+Execute(Error handler should parse error message and position from input):
+  let example_output = [
+  \   "error: expected global item ('struct', 'let', 'var', 'type', ';', 'fn') or the end of the file, found '['",
+  \   "  ┌─ wgsl:5:1",
+  \   "  │",
+  \   "5 │ [[group(1), binding(0)]]",
+  \   "  │ ^ expected global item ('struct', 'let', 'var', 'type', ';', 'fn') or the end of the file",
+  \   "Could not parse WGSL",
+  \ ]
+  let actual = ale_linters#wgsl#naga#HandleErrors(0, example_output)
+  let expected = [{
+  \   "text": "expected global item ('struct', 'let', 'var', 'type', ';', 'fn') or the end of the file, found '['",
+  \   "lnum": 5,
+  \   "col": 1,
+  \   "type": "E",
+  \ }]
+  AssertEqual actual, expected
