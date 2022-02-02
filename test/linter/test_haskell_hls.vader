@@ -25,3 +25,8 @@ Execute(The executable should be configurable):
   let g:ale_haskell_hls_executable = 'foobar'
 
   AssertLinter 'foobar', ale#Escape('foobar') . ' --lsp'
+
+Execute(Should accept configuration settings):
+  AssertLSPConfig {}
+  let b:ale_haskell_hls_config = {'haskell': {'maxCompletions': 250}}
+  AssertLSPConfig {'haskell': {'maxCompletions': 250}}
