@@ -1793,6 +1793,9 @@ g:ale_open_list                                               *g:ale_open_list*
   loclist (|lopen|) or for the quickfix list instead if |g:ale_set_quickfix|
   is `1`. (|copen|)
 
+  When set to any higher numberical value, ALE will only open the window when
+  the number of warnings or errors are at least that many.
+
   When set to `'on_save'`, ALE will only open the loclist after buffers have
   been saved. The list will be opened some time after buffers are saved and
   any linter for a buffer returns results.
