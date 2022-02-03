@@ -34,7 +34,6 @@ Before:
   Save &fileformats
   set fileformats=unix
 
-  " two files, one accessed through a buffer, the other using write/readfile only
   let g:file = tempname()
 
   function! TestChanges(contents, changes) abort

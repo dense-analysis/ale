@@ -46,27 +46,13 @@ Before:
   endfunction!
 
 After:
-  let g:expected_notified_changes = []
-
   " Close the extra buffers if we opened it.
   if bufnr(g:file1) != -1 && buflisted(bufnr(g:file1))
-    call add(g:expected_notified_changes, {
-    \ 'conn_id': 'test_conn',
-    \ 'buffer': bufnr(g:file1),
-    \})
-
     execute ':bp! | :bd! ' . bufnr(g:file1)
   endif
   if bufnr(g:file2) != -1 && buflisted(bufnr(g:file2))
-    call add(g:expected_notified_changes, {
-    \ 'conn_id': 'test_conn',
-    \ 'buffer': bufnr(g:file2),
-    \})
-
     execute ':bp! | :bd! ' . bufnr(g:file2)
   endif
-
-  AssertEqual g:expected_notified_changes, g:notified_changes
 
   if filereadable(g:file1)
     call delete(g:file1)
@@ -76,7 +62,7 @@ After:
   endif
 
   unlet! g:notified_changes
-  unlet! g:expected_notified_changes
+  " unlet! g:expected_notified_changes
   unlet! g:file1
   unlet! g:file2
   unlet! g:test
@@ -169,6 +155,14 @@ Execute(It should modify and save multiple files):
   \ '',
   \], readfile(g:file2, 'b')
 
+  AssertEqual [{
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(g:file1),
+  \}, {
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(g:file2),
+  \}], g:notified_changes
+
 Execute(Beginning of file can be modified):
   let g:test.text = [
   \ 'class Name {',
@@ -201,6 +195,11 @@ Execute(Beginning of file can be modified):
   \  'type A: string',
   \  'type B: number',
   \] + g:test.text + [''], readfile(g:file1, 'b')
+
+  AssertEqual [{
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(g:file1),
+  \}], g:notified_changes
 
 
 Execute(End of file can be modified):
@@ -236,6 +235,11 @@ Execute(End of file can be modified):
   \  'type B: number',
   \  '',
   \], readfile(g:file1, 'b')
+
+  AssertEqual [{
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(g:file1),
+  \}], g:notified_changes
 
 
 Execute(Current buffer contents will be reloaded):
@@ -279,6 +283,11 @@ Execute(Current buffer contents will be reloaded):
   \  'type B: number',
   \] + g:test.text, getbufline(g:test.buffer, 1, '$')
 
+  AssertEqual [{
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(g:file1),
+  \}], g:notified_changes
+
 
 Execute(Unlisted buffer contents will be modified correctly):
   let g:test.text = [
@@ -319,6 +328,11 @@ Execute(Unlisted buffer contents will be modified correctly):
   \  'type B: number',
   \] + g:test.text + [''], readfile(g:file1, 'b')
 
+  AssertEqual [{
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(g:file1),
+  \}], g:notified_changes
+
 # Tests for cursor repositioning. In comments `=` designates change range, and
 # `C` cursor position
 
@@ -334,8 +348,10 @@ Execute(Cursor will not move when it is before text change):
   \})
   AssertEqual [1, 1], getpos('.')[1:2]
 
-  " make tests at the end work
-  let g:notified_changes = []
+  AssertEqual [{
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(''),
+  \}], g:notified_changes
 
   call setpos('.', [0, 2, 2, 0])
   call ale#code_action#HandleCodeAction(g:test.changes, {
@@ -344,14 +360,19 @@ Execute(Cursor will not move when it is before text change):
   \})
   AssertEqual [2, 2], getpos('.')[1:2]
 
+  AssertEqual [{
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(''),
+  \}, {
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(''),
+  \}], g:notified_changes
+
 # ====C====
 Execute(Cursor column will move to the change end when cursor between start/end):
   let g:test.changes = g:test.create_change(2, 3, 2, 8, 'value2')
 
   for r in range(3, 8)
-    " make tests at the end work
-    let g:notified_changes = []
-
     call WriteFileAndEdit()
     call setpos('.', [0, 2, r, 0])
     AssertEqual '  value: string', getline('.')
@@ -362,6 +383,26 @@ Execute(Cursor column will move to the change end when cursor between start/end)
     AssertEqual '  value2: string', getline('.')
     AssertEqual [2, 9], getpos('.')[1:2]
   endfor
+
+  AssertEqual [{
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(''),
+  \}, {
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(''),
+  \}, {
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(''),
+  \}, {
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(''),
+  \}, {
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(''),
+  \}, {
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(''),
+  \}], g:notified_changes
 
 
 # ====C
@@ -377,6 +418,11 @@ Execute(Cursor column will move back when new text is shorter):
   \ })
   AssertEqual '  val: string', getline('.')
   AssertEqual [2, 6], getpos('.')[1:2]
+
+  AssertEqual [{
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(''),
+  \}], g:notified_changes
 
 
 # ==== C
@@ -394,6 +440,11 @@ Execute(Cursor column will move forward when new text is longer):
   AssertEqual '  longValue: string', getline('.')
   AssertEqual [2, 12], getpos('.')[1:2]
 
+  AssertEqual [{
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(''),
+  \}], g:notified_changes
+
 # =========
 # =
 # C
@@ -409,6 +460,11 @@ Execute(Cursor line will move when updates are happening on lines above):
   \ })
   AssertEqual '}', getline('.')
   AssertEqual [4, 1], getpos('.')[1:2]
+
+  AssertEqual [{
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(''),
+  \}], g:notified_changes
 
 
 # =========
@@ -426,6 +482,11 @@ Execute(Cursor line and column will move when change on lines above and just bef
   AssertEqual '123  value: string', getline('.')
   AssertEqual [3, 5], getpos('.')[1:2]
 
+  AssertEqual [{
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(''),
+  \}], g:notified_changes
+
 # =========
 # ======C==
 # =
@@ -442,6 +503,11 @@ Execute(Cursor line and column will move at the end of changes):
   AssertEqual '}', getline('.')
   AssertEqual [2, 1], getpos('.')[1:2]
 
+  AssertEqual [{
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(''),
+  \}], g:notified_changes
+
 #      C ==
 # ===
 Execute(Cursor will not move when changes happening on lines >= cursor, but after cursor):
@@ -457,6 +523,11 @@ Execute(Cursor will not move when changes happening on lines >= cursor, but afte
   AssertEqual '  value: number', getline('.')
   AssertEqual [2, 3], getpos('.')[1:2]
 
+  AssertEqual [{
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(''),
+  \}], g:notified_changes
+
 Execute(Cursor will not move when change covers entire file):
   call WriteFileAndEdit()
   call setpos('.', [0, 2, 3, 0])
@@ -468,6 +539,11 @@ Execute(Cursor will not move when change covers entire file):
   \   'conn_id': 'test_conn',
   \ })
   AssertEqual [2, 3], getpos('.')[1:2]
+
+  AssertEqual [{
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(''),
+  \}], g:notified_changes
 
 Execute(It should just modify file when should_save is set to v:false):
   call WriteFileAndEdit()
@@ -482,6 +558,11 @@ Execute(It should just modify file when should_save is set to v:false):
   \ '  value: string',
   \ '}',
   \], getline(1, '$')
+
+  AssertEqual [{
+  \ 'conn_id': 'test_conn',
+  \ 'buffer': bufnr(''),
+  \}], g:notified_changes
 
 Given typescript(An example TypeScript file):
   type Foo = {}
@@ -510,8 +591,6 @@ Execute():
   \ 'conn_id': 'test_conn',
   \ 'buffer': bufnr(''),
   \}], g:notified_changes
-
-  let g:notified_changes = []
 
 Expect(The changes should be applied correctly):
   type Foo = {}
