@@ -364,12 +364,16 @@ are supported for running the commands.
 
   `process_with`        An optional callback for post-processing.
 
-                      The callback must accept two arguments,
-                      `(buffer, output)`, which can be used for converting
-                      the output from a command into lines to replace the
-                      buffer's contents with.
+                      The callback must accept arguments `(bufnr, output)`:
+                      the buffer number undergoing fixing and the fixer's
+                      output as a |List| of |String|s. It must return a |List|
+                      of |String|s that will be the new contents of the
+                      buffer.
 
-                      A |List| of |String|s must be returned.
+                      This callback is useful to remove excess lines from the
+                      command's output or apply additional changes to the
+                      output.
+
 
   `read_buffer`         An optional key for disabling reading the buffer.
 
