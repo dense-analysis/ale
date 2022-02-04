@@ -3222,6 +3222,8 @@ documented in additional help files.
     prettier..............................|ale-vue-prettier|
     vls...................................|ale-vue-vls|
     volar.................................|ale-vue-volar|
+  wgsl....................................|ale-wgsl-options|
+    naga..................................|ale-wgsl-naga|
   xhtml...................................|ale-xhtml-options|
     cspell................................|ale-xhtml-cspell|
     write-good............................|ale-xhtml-write-good|
