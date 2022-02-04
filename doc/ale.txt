@@ -3280,15 +3280,16 @@ ALEFindReferences                                           *ALEFindReferences*
 
   The locations opened in different ways using the following variations.
 
-  `:ALEFindReferences -tab`    - Open the location in a new tab.
-  `:ALEFindReferences -split`  - Open the location in a horizontal split.
-  `:ALEFindReferences -vsplit` - Open the location in a vertical split.
+  `:ALEFindReferences -tab`       - Open the location in a new tab.
+  `:ALEFindReferences -split`     - Open the location in a horizontal split.
+  `:ALEFindReferences -vsplit`    - Open the location in a vertical split.
+  `:ALEFindReferences -quickfix`  - Put the locations into quickfix list.
 
   The default method used for navigating to a new location can be changed
   by modifying |g:ale_default_navigation|.
 
   You can add `-relative` to the command to view results with relatives paths,
-  instead of absolute paths.
+  instead of absolute paths. This option has no effect if `-quickfix` is used.
 
   The selection can be opened again with the |ALERepeatSelection| command.
 
