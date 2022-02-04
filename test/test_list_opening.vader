@@ -97,6 +97,34 @@ Execute(The quickfix window should open for just the loclist):
   call ale#list#SetLists(bufnr('%'), [])
   Assert !ale#list#IsQuickfixOpen()
 
+Execute(The quickfix window should open on the correct threshold):
+  " The window should open for a value lower than number of entries.
+  let g:ale_open_list = len(g:loclist) - 1
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+  Assert ale#list#IsQuickfixOpen()
+
+  " Clear the list to be ready for a new value.
+  call ale#list#SetLists(bufnr('%'), [])
+  Assert !ale#list#IsQuickfixOpen()
+
+  " It should also open for a value equal to the number of entries.
+  let g:ale_open_list = len(g:loclist)
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+  Assert ale#list#IsQuickfixOpen()
+
+  " Clear the list again, preparing for a final value.
+  call ale#list#SetLists(bufnr('%'), [])
+  Assert !ale#list#IsQuickfixOpen()
+
+  " Window should not open for values higher than number of loclist entries.
+  let g:ale_open_list = len(g:loclist) + 1
+  call ale#list#SetLists(bufnr('%'), g:loclist)
+  Assert !ale#list#IsQuickfixOpen()
+
+  " Clear the list just to clean up.
+  call ale#list#SetLists(bufnr('%'), [])
+  Assert !ale#list#IsQuickfixOpen()
+
 Execute(The quickfix window height should be correct for the loclist):
   let g:ale_open_list = 1
   let g:ale_list_window_size = 7
