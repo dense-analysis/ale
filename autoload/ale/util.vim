@@ -92,15 +92,78 @@ function! ale#util#GetFunction(string_or_ref) abort
     return a:string_or_ref
 endfunction
 
+function! s:ReadClassFileContents(filename, line, column, options, result) abort
+  if has_key(a:result, 'error')
+    echoerr a:result.error.message
+    return
+  endif
+
+  let l:contents = a:result['result']
+
+  if type(l:contents) ==# type(v:null)
+    echoerr 'JDT File contents not found'
+    return
+  endif
+
+  let a:options['readonly'] = v:true
+  let a:options['contents'] = split(l:contents, '\n')
+
+  call ale#util#Open(a:filename, a:line, a:column, a:options)
+endfunction
+
+" Convert JDT URIs like these:
+"
+"   jdt://contents/joda-time-2.9.6.jar/org.joda.time/LocalDate.class?...
+"
+" into this:
+"
+"   contents/joda-time-2.9.6.jar/org/joda/time/LocalDate.java
+"
+function! s:JDTUriToPath(uri) abort
+  let l:uri = a:uri[6:stridx(a:uri, '?')-1]
+  let l:parts = split(l:uri, '/')
+  let l:parts[2] = substitute(l:parts[2], '\.', '/', 'g')
+  let l:parts[3] = substitute(l:parts[3], '\.class', '.java', '')
+  return join(l:parts, '/')
+endfunction
+
+function! ale#util#OpenEncodedJDT(uri) abort
+  let l:uri = substitute(a:uri, '\', '%5C', 'g')
+  let l:uri = substitute(l:uri, '<', '%3C', 'g')
+  call ale#util#OpenJDT(l:uri, 1, 1, { 'open_in': 'current-buffer' })
+endfunction
+
+function! ale#util#OpenJDT(uri, line, column, options) abort
+  let l:filename = ale#path#FromURI(s:JDTUriToPath(a:uri))
+  setlocal filetype=java
+
+  call ale#lsp_linter#SendRequest(
+        \  bufnr(''),
+        \  'eclipselsp',
+        \  [0, 'java/classFileContents', {
+        \    'uri': a:uri,
+        \  }],
+        \  function('s:ReadClassFileContents',
+        \  [l:filename, a:line, a:column, a:options]))
+endfunction
+
 " Open the file (at the given line).
 " options['open_in'] can be:
 "   current-buffer (default)
 "   tab
 "   split
 "   vsplit
+"
+" options['readonly'] when present opens file in readonly
+" nomodifiable mode.
+"
+" options['contents'] when present replace the buffer contents with
+" it.
 function! ale#util#Open(filename, line, column, options) abort
     let l:open_in = get(a:options, 'open_in', 'current-buffer')
-    let l:args_to_open = '+' . a:line . ' ' . fnameescape(a:filename)
+    let l:contents = get(a:options, 'contents', [])
+    let l:readonly = get(a:options, 'readonly', v:false)
+    let l:args_to_open = fnameescape(a:filename)
 
     if l:open_in is# 'tab'
         call ale#util#Execute('tabedit ' . l:args_to_open)
@@ -113,6 +176,14 @@ function! ale#util#Open(filename, line, column, options) abort
         call ale#util#Execute('edit ' . l:args_to_open)
     else
         normal! m`
+    endif
+
+    if !empty(l:contents)
+      call setline(1, l:contents)
+    endif
+
+    if l:readonly
+      setlocal buftype=nofile nomodifiable readonly nomodified
     endif
 
     call cursor(a:line, a:column)

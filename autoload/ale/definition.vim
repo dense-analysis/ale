@@ -68,18 +68,23 @@ function! ale#definition#HandleLSPResponse(conn_id, response) abort
         for l:item in l:result
             if has_key(l:item, 'targetUri')
                 " LocationLink items use targetUri
-                let l:filename = ale#path#FromURI(l:item.targetUri)
+                let l:uri = l:item.targetUri
                 let l:line = l:item.targetRange.start.line + 1
                 let l:column = l:item.targetRange.start.character + 1
             else
                 " LocationLink items use uri
-                let l:filename = ale#path#FromURI(l:item.uri)
+                let l:uri = l:item.uri
                 let l:line = l:item.range.start.line + 1
                 let l:column = l:item.range.start.character + 1
             endif
 
             call ale#definition#UpdateTagStack()
-            call ale#util#Open(l:filename, l:line, l:column, l:options)
+
+            if l:uri[:5] is? 'jdt://'
+              call ale#util#OpenJDT(l:uri, l:line, l:column, l:options)
+            else
+              call ale#util#Open(ale#path#FromURI(l:uri), l:line, l:column, l:options)
+            endif
             break
         endfor
     endif
