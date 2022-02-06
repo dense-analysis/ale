@@ -115,7 +115,7 @@ formatting.
 * CMake
   * [cmake-format](https://github.com/cheshirekow/cmake_format)
   * [cmake-lint](https://github.com/cheshirekow/cmake_format)
-  * [cmakelint](https://github.com/richq/cmake-lint)
+  * [cmakelint](https://github.com/cmake-lint/cmake-lint)
 * CoffeeScript
   * [coffee](http://coffeescript.org/)
   * [coffeelint](https://www.npmjs.com/package/coffeelint)
