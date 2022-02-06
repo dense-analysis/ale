@@ -61,6 +61,8 @@ formatting.
   * [buildifier](https://github.com/bazelbuild/buildtools)
 * BibTeX
   * [bibclean](http://ftp.math.utah.edu/pub/bibclean/)
+* BitBake
+  * [oelint-adv](https://github.com/priv-kweihmann/oelint-adv)
 * Bourne Shell
   * shell [-n flag](http://linux.die.net/man/1/sh)
   * [shellcheck](https://www.shellcheck.net/)
