@@ -17,6 +17,7 @@ function! ale#rename#ClearLSPData() abort
     let s:rename_map = {}
 endfunction
 
+let g:ale_rename_save = get(g:, 'ale_rename_save', 1)
 let g:ale_rename_tsserver_find_in_comments = get(g:, 'ale_rename_tsserver_find_in_comments')
 let g:ale_rename_tsserver_find_in_strings = get(g:, 'ale_rename_tsserver_find_in_strings')
 
@@ -85,6 +86,7 @@ function! ale#rename#HandleTSServerResponse(conn_id, response) abort
     \   },
     \   {
     \       'conn_id': a:conn_id,
+    \       'should_save': g:ale_rename_save,
     \   },
     \)
 endfunction
@@ -117,6 +119,7 @@ function! ale#rename#HandleLSPResponse(conn_id, response) abort
         \   },
         \   {
         \       'conn_id': a:conn_id,
+        \       'should_save': g:ale_rename_save,
         \   },
         \)
     endif

@@ -1813,7 +1813,19 @@ g:ale_open_list                                               *g:ale_open_list*
     autocmd!
     autocmd QuitPre * if empty(&buftype) | lclose | endif
   augroup END
+
 <
+g:ale_organize_imports_save                       *g:ale_organize_imports_save*
+
+  Type: |Number|
+  Default: `1`
+
+  When enabled this option will automatically save all modified files after
+  the |ALEOrganizeImports| operation is complete. It can be disabled by
+  setting it to `0`, but this might cause issues for users who have `set
+  nohidden` option set, so for best experience be sure to use `set hidden`
+  before disabling this option.
+
 
 g:ale_pattern_options                                   *g:ale_pattern_options*
 
@@ -1866,6 +1878,18 @@ g:ale_popup_menu_enabled                             *g:ale_popup_menu_enabled*
 
   This setting must be set to `1` before ALE is loaded for this behavior
   to be enabled. See |ale-lint-settings-on-startup|.
+
+
+g:ale_rename_save                                           *g:ale_rename_save*
+
+  Type: |Number|
+  Default: `1`
+
+  When enabled this option will automatically save all modified files after
+  the |ALERename| operation is complete. It can be disabled by setting it to
+  `0`, but this might cause issues for users who have `set nohidden` option
+  set, so for best experience be sure to use `set hidden` before disabling
+  this option.
 
 
 g:ale_rename_tsserver_find_in_comments *g:ale_rename_tsserver_find_in_comments*

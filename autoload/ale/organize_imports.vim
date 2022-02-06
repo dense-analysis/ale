@@ -1,6 +1,8 @@
 " Author: Jerko Steiner <jerko.steiner@gmail.com>
 " Description: Organize imports support for tsserver
-"
+
+let g:ale_organize_imports_save = get(g:, 'ale_organize_imports_save', 1)
+
 function! ale#organize_imports#HandleTSServerResponse(conn_id, response) abort
     if get(a:response, 'command', '') isnot# 'organizeImports'
         return
@@ -19,6 +21,7 @@ function! ale#organize_imports#HandleTSServerResponse(conn_id, response) abort
     \   },
     \   {
     \       'conn_id': a:conn_id,
+    \       'should_save': g:ale_organize_imports_save,
     \   },
     \)
 endfunction
