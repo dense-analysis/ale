@@ -93,22 +93,24 @@ function! ale#util#GetFunction(string_or_ref) abort
 endfunction
 
 function! s:ReadClassFileContents(filename, line, column, options, result) abort
-  if has_key(a:result, 'error')
-    echoerr a:result.error.message
-    return
-  endif
+    if has_key(a:result, 'error')
+        exe 'echoerr a:result.error.message'
 
-  let l:contents = a:result['result']
+        return
+    endif
 
-  if type(l:contents) ==# type(v:null)
-    echoerr 'JDT File contents not found'
-    return
-  endif
+    let l:contents = a:result['result']
 
-  let a:options['readonly'] = v:true
-  let a:options['contents'] = split(l:contents, '\n')
+    if type(l:contents) is# type(v:null)
+        exe 'echoerr "JDT File contents not found"'
 
-  call ale#util#Open(a:filename, a:line, a:column, a:options)
+        return
+    endif
+
+    let a:options['readonly'] = v:true
+    let a:options['contents'] = split(l:contents, '\n')
+
+    call ale#util#Open(a:filename, a:line, a:column, a:options)
 endfunction
 
 " Convert JDT URIs like these:
@@ -120,36 +122,38 @@ endfunction
 "   contents/joda-time-2.9.6.jar/org/joda/time/LocalDate.java
 "
 function! s:JDTUriToPath(uri) abort
-  let l:uri = a:uri[6:stridx(a:uri, '?')-1]
-  let l:parts = split(l:uri, '/')
-  let l:parts[2] = substitute(l:parts[2], '\.', '/', 'g')
-  let l:parts[3] = substitute(l:parts[3], '\.class', '.java', '')
-  return join(l:parts, '/')
+    let l:uri = a:uri[6:stridx(a:uri, '?')-1]
+    let l:parts = split(l:uri, '/')
+    let l:parts[2] = substitute(l:parts[2], '\.', '/', 'g')
+    let l:parts[3] = substitute(l:parts[3], '\.class', '.java', '')
+
+    return join(l:parts, '/')
 endfunction
 
 function! ale#util#OpenEncodedJDT(uri) abort
-  let l:uri = substitute(a:uri, '\', '%5C', 'g')
-  let l:uri = substitute(l:uri, '<', '%3C', 'g')
-  call ale#util#OpenJDT(l:uri, 1, 1, { 'open_in': 'current-buffer' })
+    let l:uri = substitute(a:uri, '\', '%5C', 'g')
+    let l:uri = substitute(l:uri, '<', '%3C', 'g')
+    call ale#util#OpenJDT(l:uri, 1, 1, { 'open_in': 'current-buffer' })
 endfunction
 
 function! ale#util#OpenJDT(uri, line, column, options) abort
-  let l:filename = ale#path#FromURI(s:JDTUriToPath(a:uri))
+    let l:filename = ale#path#FromURI(s:JDTUriToPath(a:uri))
 
-  " Check if file has already been open. Skip contacting LSP server if it is.
-  if bufnr(l:filename) >= 0
-    call ale#util#Open(l:filename, a:line, a:column, a:options)
-    return
-  endif
+    " Check if file has already been open. Skip contacting LSP server if it is.
+    if bufnr(l:filename) >= 0
+        call ale#util#Open(l:filename, a:line, a:column, a:options)
 
-  call ale#lsp_linter#SendRequest(
-        \  bufnr(''),
-        \  'eclipselsp',
-        \  [0, 'java/classFileContents', {
-        \    'uri': a:uri,
-        \  }],
-        \  function('s:ReadClassFileContents',
-        \  [l:filename, a:line, a:column, a:options]))
+        return
+    endif
+
+    call ale#lsp_linter#SendRequest(
+    \    bufnr(''),
+    \    'eclipselsp',
+    \    [0, 'java/classFileContents', {
+    \        'uri': a:uri,
+    \    }],
+    \    function('s:ReadClassFileContents',
+    \    [l:filename, a:line, a:column, a:options]))
 endfunction
 
 " Open the file (at the given line).
@@ -184,11 +188,11 @@ function! ale#util#Open(filename, line, column, options) abort
     endif
 
     if !empty(l:contents)
-      call setline(1, l:contents)
+        call setline(1, l:contents)
     endif
 
     if l:readonly
-      setlocal buftype=nofile nomodifiable readonly nomodified
+        setlocal buftype=nofile nomodifiable readonly nomodified
     endif
 
     call cursor(a:line, a:column)

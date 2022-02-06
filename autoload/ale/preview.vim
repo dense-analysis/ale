@@ -121,21 +121,21 @@ function! s:Open(open_in) abort
     :q!
 
     if l:item.filename[:5] is? 'jdt://'
-      let l:uri = substitute(l:item.filename, '\', '%5C', 'g')
-      let l:uri = substitute(l:uri, '<', '%3C', 'g')
-      call ale#util#OpenJDT(
-      \   l:uri,
-      \   l:item.line,
-      \   l:item.column,
-      \   {'open_in': a:open_in},
-      \)
+        let l:uri = substitute(l:item.filename, '\', '%5C', 'g')
+        let l:uri = substitute(l:uri, '<', '%3C', 'g')
+        call ale#util#OpenJDT(
+        \   l:uri,
+        \   l:item.line,
+        \   l:item.column,
+        \   {'open_in': a:open_in},
+        \)
     else
-      call ale#util#Open(
-      \   l:item.filename,
-      \   l:item.line,
-      \   l:item.column,
-      \   {'open_in': a:open_in},
-      \)
+        call ale#util#Open(
+        \   l:item.filename,
+        \   l:item.line,
+        \   l:item.column,
+        \   {'open_in': a:open_in},
+        \)
     endif
 endfunction
 

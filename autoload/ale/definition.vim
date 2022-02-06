@@ -81,10 +81,11 @@ function! ale#definition#HandleLSPResponse(conn_id, response) abort
             call ale#definition#UpdateTagStack()
 
             if l:uri[:5] is? 'jdt://'
-              call ale#util#OpenJDT(l:uri, l:line, l:column, l:options)
+                call ale#util#OpenJDT(l:uri, l:line, l:column, l:options)
             else
-              call ale#util#Open(ale#path#FromURI(l:uri), l:line, l:column, l:options)
+                call ale#util#Open(ale#path#FromURI(l:uri), l:line, l:column, l:options)
             endif
+
             break
         endfor
     endif
