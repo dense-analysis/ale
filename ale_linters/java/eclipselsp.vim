@@ -198,3 +198,8 @@ call ale#linter#Define('java', {
 \     }
 \   },
 \})
+
+" augroup ALEJdt
+"   au!
+"   au BufNewFile,BufReadPre jdt://** call ale#util#OpenEncodedJDT(expand('<amatch>'))
+" augroup END

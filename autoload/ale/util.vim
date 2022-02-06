@@ -135,7 +135,12 @@ endfunction
 
 function! ale#util#OpenJDT(uri, line, column, options) abort
   let l:filename = ale#path#FromURI(s:JDTUriToPath(a:uri))
-  setlocal filetype=java
+
+  " Check if file has already been open. Skip contacting LSP server if it is.
+  if bufnr(l:filename) >= 0
+    call ale#util#Open(l:filename, a:line, a:column, a:options)
+    return
+  endif
 
   call ale#lsp_linter#SendRequest(
         \  bufnr(''),
