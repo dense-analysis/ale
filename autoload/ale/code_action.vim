@@ -171,7 +171,7 @@ function! ale#code_action#ApplyChanges(filename, changes, options) abort
 
     call setpos('.', [0, l:pos[0], l:pos[1], 0])
 
-    if l:orig_buffer != l:buffer
+    if l:orig_buffer != l:buffer && bufexists(l:orig_buffer)
         call ale#util#Execute('buf ' . string(l:orig_buffer))
     endif
 endfunction
