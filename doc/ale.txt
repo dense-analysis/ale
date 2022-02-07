@@ -3081,6 +3081,7 @@ documented in additional help files.
     pyre..................................|ale-python-pyre|
     pyright...............................|ale-python-pyright|
     reorder-python-imports................|ale-python-reorder_python_imports|
+    unimport..............................|ale-python-unimport|
     vulture...............................|ale-python-vulture|
     yapf..................................|ale-python-yapf|
   qml.....................................|ale-qml-options|

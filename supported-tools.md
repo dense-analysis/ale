@@ -472,6 +472,7 @@ formatting.
   * [pyre](https://github.com/facebook/pyre-check) :warning:
   * [pyright](https://github.com/microsoft/pyright)
   * [reorder-python-imports](https://github.com/asottile/reorder_python_imports)
+  * [unimport](https://github.com/hakancelik96/unimport)
   * [vulture](https://github.com/jendrikseipp/vulture) :warning: :floppy_disk:
   * [yapf](https://github.com/google/yapf)
 * QML

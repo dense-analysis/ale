@@ -463,6 +463,7 @@ Notes:
   * `pyre`
   * `pyright`
   * `reorder-python-imports`
+  * `unimport`
   * `vulture`!!
   * `yapf`
 * QML
