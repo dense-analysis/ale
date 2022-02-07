@@ -3421,9 +3421,9 @@ ALERename                                                           *ALERename*
   The symbol where the cursor is resting will be the symbol renamed, and a
   prompt will open to request a new name.
 
-  The rename operation will save all modified buffers when `&hidden` is false,
-  because leaving unsaved buffers in the background is not allowed when hidden
-  buffers are disabled. See `:help hidden` for more details.
+  The rename operation will save all modified buffers when `set nohidden` is
+  set, because that disables leaving unsaved buffers in the background. See
+  `:help hidden` for more details.
 
 ALEFileRename                                                   *ALEFileRename*
 
