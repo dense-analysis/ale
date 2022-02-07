@@ -169,6 +169,9 @@ let g:ale_history_enabled = get(g:, 'ale_history_enabled', 1)
 " A flag for storing the full output of commands in the history.
 let g:ale_history_log_output = get(g:, 'ale_history_log_output', 1)
 
+" A flag for indicating error on linter failure.
+let g:ale_error_on_lint_fail = get(g:, 'ale_error_on_lint_fail', 0)
+
 " Enable automatic completion with LSP servers and tsserver
 let g:ale_completion_enabled = get(g:, 'ale_completion_enabled', 0)
 

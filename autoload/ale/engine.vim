@@ -553,6 +553,18 @@ function! s:AddProblemsFromOtherBuffers(buffer, linters) abort
     endif
 endfunction
 
+function! s:AddLinterError(buffer, linter) abort
+    let l:output = []
+    call add(l:output, {
+        \ 'lnum': 1,
+        \ 'end_lnum': ale#util#GetLineCount(a:buffer),
+        \ 'text': 'Linter failure (' . a:linter . ')',
+        \ 'detail': 'Failed to execute ' . a:linter,
+        \ 'type': 'E'}
+    \ )
+    call ale#other_source#ShowResults(bufnr(''), 'ale-vim', l:output)
+endfunction
+
 function! s:RunIfExecutable(buffer, linter, lint_file, executable) abort
     if ale#command#IsDeferred(a:executable)
         let a:executable.result_callback = {
@@ -597,6 +609,10 @@ function! s:RunIfExecutable(buffer, linter, lint_file, executable) abort
         \}
 
         return s:RunJob(l:command, l:options)
+    else
+        if ale#Var(a:buffer, 'error_on_lint_fail')
+            call s:AddLinterError(a:buffer, a:executable)
+        endif
     endif
 
     return 0
