@@ -1090,7 +1090,7 @@ g:ale_python_unimport_auto_poetry           *g:ale_python_unimport_auto_poetry*
   if true. This is overridden by a manually-set executable.
 
 
-g:ale_python_unimport_executable                  *g:ale_python_mypy_executable*
+g:ale_python_unimport_executable              *g:ale_python_unimport_executable*
                                               *b:ale_python_unimport_executable*
   Type: |String|
   Default: `'unimport'`
