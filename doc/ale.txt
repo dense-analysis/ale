@@ -1820,8 +1820,8 @@ g:ale_open_list                                               *g:ale_open_list*
     autocmd!
     autocmd QuitPre * if empty(&buftype) | lclose | endif
   augroup END
-<
 
+<
 g:ale_pattern_options                                   *g:ale_pattern_options*
 
   Type: |Dictionary|
@@ -3434,6 +3434,10 @@ ALERename                                                           *ALERename*
 
   The symbol where the cursor is resting will be the symbol renamed, and a
   prompt will open to request a new name.
+
+  The rename operation will save all modified buffers when `set nohidden` is
+  set, because that disables leaving unsaved buffers in the background. See
+  `:help hidden` for more details.
 
 ALEFileRename                                                   *ALEFileRename*
 
