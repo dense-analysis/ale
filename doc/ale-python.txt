@@ -1090,7 +1090,7 @@ g:ale_python_unimport_auto_poetry           *g:ale_python_unimport_auto_poetry*
   if true. This is overridden by a manually-set executable.
 
 
-g:ale_python_unimport_executable                  *g:ale_python_mypy_executable*
+g:ale_python_unimport_executable              *g:ale_python_unimport_executable*
                                               *b:ale_python_unimport_executable*
   Type: |String|
   Default: `'unimport'`
@@ -1101,7 +1101,7 @@ g:ale_python_unimport_executable                  *g:ale_python_mypy_executable*
   Set this to `'poetry'` to invoke `'poetry` `run` `unimport'`.
 
 
-g:ale_python_unimport_options                        *g:ale_python_mypy_options*
+g:ale_python_unimport_options                    *g:ale_python_unimport_options*
                                                  *b:ale_python_unimport_options*
   Type: |String|
   Default: `''`
@@ -1110,7 +1110,7 @@ g:ale_python_unimport_options                        *g:ale_python_mypy_options*
   invocation.
 
 
-g:ale_python_unimport_use_global                  *g:ale_python_mypy_use_global*
+g:ale_python_unimport_use_global              *g:ale_python_unimport_use_global*
                                               *b:ale_python_unimport_use_global*
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
