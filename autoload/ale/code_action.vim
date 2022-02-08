@@ -72,7 +72,7 @@ function! ale#code_action#ApplyChanges(filename, changes, options) abort
     let l:buffer = bufnr(a:filename)
 
     if l:buffer != l:orig_buffer
-        call ale#util#Execute('edit ' . a:filename)
+        call ale#util#Execute('silent edit ' . a:filename)
         let l:buffer = bufnr('')
     endif
 
@@ -166,13 +166,13 @@ function! ale#code_action#ApplyChanges(filename, changes, options) abort
     call ale#lsp#NotifyForChanges(l:conn_id, l:buffer)
 
     if l:should_save
-        call ale#util#Execute(':w!')
+        call ale#util#Execute('silent w!')
     endif
 
     call setpos('.', [0, l:pos[0], l:pos[1], 0])
 
     if l:orig_buffer != l:buffer && bufexists(l:orig_buffer)
-        call ale#util#Execute('buf ' . string(l:orig_buffer))
+        call ale#util#Execute('silent buf ' . string(l:orig_buffer))
     endif
 endfunction
 
