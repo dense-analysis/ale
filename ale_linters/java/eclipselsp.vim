@@ -222,7 +222,7 @@ function! s:OpenJDTLink(root, filename, line, column, options, result) abort
     " disable autocmd when opening buffer
     autocmd! ale_eclipselsp_jdt
     call ale#util#Open(a:filename, a:line, a:column, a:options)
-    autocmd ale_eclipselsp_jdt BufNewFile,BufReadPre jdt://** call ale_linters#java#eclipselsp#OpenJDTLink(expand('<amatch>'))
+    autocmd ale_eclipselsp_jdt BufNewFile,BufReadPre jdt://** call ale_linters#java#eclipselsp#ReadJDTLink(expand('<amatch>'))
 
     if !empty(getbufvar(bufnr(''), 'ale_lsp_root', ''))
         return
