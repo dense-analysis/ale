@@ -149,6 +149,7 @@ Execute(The C++ ClangTidy handler should include json folders for projects with 
   \ ale#Escape('clang-tidy')
   \   . ' %s '
   \   . '-p ' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/c/json_project/build'))
+  \   . ' -- -I' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/c/json_project/include'))
 
 Execute(The C++ ClangTidy handler should include 'include' directories for projects with a Makefile):
   call ale#assert#SetUpLinterTest('cpp', 'clangtidy')
