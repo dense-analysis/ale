@@ -185,11 +185,6 @@ function! ale_linters#java#eclipselsp#RunWithVersionCheck(buffer) abort
     \)
 endfunction
 
-augroup ale_eclipselsp_jdt
-    au!
-    au BufNewFile,BufReadPre jdt://** call ale#util#ReadJDTLink(expand('<amatch>'))
-augroup END
-
 call ale#linter#Define('java', {
 \   'name': 'eclipselsp',
 \   'lsp': 'stdio',

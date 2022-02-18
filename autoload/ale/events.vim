@@ -156,4 +156,10 @@ function! ale#events#Init() abort
             endif
         endif
     augroup END
+
+    augroup AleURISchemes
+        autocmd!
+
+        autocmd BufNewFile,BufReadPre jdt://** call ale#util#ReadJDTLink(expand('<amatch>'))
+    augroup END
 endfunction
