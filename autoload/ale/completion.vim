@@ -596,16 +596,6 @@ function! ale#completion#ParseLSPCompletions(response) abort
             continue
         endif
 
-        " Don't use LSP items with additional text edits when autoimport for
-        " completions is turned off.
-        if !empty(get(l:item, 'additionalTextEdits'))
-        \&& !(
-        \   get(l:info, 'additional_edits_only', 0)
-        \   || g:ale_completion_autoimport
-        \)
-            continue
-        endif
-
         let l:doc = get(l:item, 'documentation', '')
 
         if type(l:doc) is v:t_dict && has_key(l:doc, 'value')
@@ -629,6 +619,7 @@ function! ale#completion#ParseLSPCompletions(response) abort
 
         if has_key(l:item, 'additionalTextEdits')
         \ && l:item.additionalTextEdits isnot v:null
+        \ && (get(l:info, 'additional_edits_only', 0) || g:ale_completion_autoimport)
             let l:text_changes = []
 
             for l:edit in l:item.additionalTextEdits
