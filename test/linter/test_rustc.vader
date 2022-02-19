@@ -5,7 +5,7 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default command should be correct):
-  AssertLinter 'rustc', 'rustc --error-format=json -Z no-codegen -'
+  AssertLinter 'rustc', 'rustc --error-format=json --emit=mir -o /dev/null -'
 
 Execute(The options should be configurable):
   let b:ale_rust_rustc_options = '--foo'
@@ -15,7 +15,7 @@ Execute(The options should be configurable):
 Execute(Some default paths should be included when the project is a Cargo project):
   call ale#test#SetFilename('../test-files/cargo/test.rs')
 
-  AssertLinter 'rustc', 'rustc --error-format=json -Z no-codegen'
+  AssertLinter 'rustc', 'rustc --error-format=json --emit=mir -o /dev/null'
   \   . ' -L ' . ale#Escape(ale#path#GetAbsPath(g:dir,  '../test-files/cargo/target/debug/deps'))
   \   . ' -L ' . ale#Escape(ale#path#GetAbsPath(g:dir, '../test-files/cargo/target/release/deps'))
   \   . ' -'
