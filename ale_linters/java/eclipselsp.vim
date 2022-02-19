@@ -192,13 +192,6 @@ call ale#linter#Define('java', {
 \   'command': function('ale_linters#java#eclipselsp#RunWithVersionCheck'),
 \   'language': 'java',
 \   'project_root': function('ale#java#FindProjectRoot'),
-\   'uri_handlers': {
-\       'jdt': {
-\           'OpenURILink': function('ale#util#OpenJDTLink'),
-\           'PathFromURI': function('ale#util#JDTToPath'),
-\           'PathToURI': function('ale#util#PathToJDT')
-\       }
-\   },
 \   'initialization_options': {
 \     'extendedClientCapabilities': {
 \       'classFileContentsSupport': v:true

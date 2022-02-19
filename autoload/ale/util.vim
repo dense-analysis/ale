@@ -544,16 +544,18 @@ function! ale#util#GetBufferContents(buffer) abort
     return join(getbufline(a:buffer, 1, '$'), '\n') . '\n'
 endfunction
 
+let s:uri_handlers = {
+\   'jdt': {
+\       'OpenURILink': function('ale#util#OpenJDTLink'),
+\       'PathFromURI': function('ale#util#JDTToPath'),
+\       'PathToURI': function('ale#util#PathToJDT')
+\   }
+\}
+
 function! ale#util#GetURIHandler(uri)
-    for l:linter in ale#linter#Get(&filetype)
-        if !empty(l:linter.lsp)
-            if exists('l:linter.uri_handlers') && !empty(l:linter.uri_handlers)
-                for l:scheme in keys(l:linter.uri_handlers)
-                    if a:uri =~# '^'.l:scheme.'://'
-                        return l:linter.uri_handlers[scheme]
-                    endif
-                endfor
-            endif
+    for l:scheme in keys(s:uri_handlers)
+        if a:uri =~# '^'.l:scheme.'://'
+            return s:uri_handlers[scheme]
         endif
     endfor
     return v:null
