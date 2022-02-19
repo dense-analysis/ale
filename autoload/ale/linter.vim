@@ -217,15 +217,6 @@ function! ale#linter#PreProcess(filetype, linter) abort
 
             let l:obj.lsp_config = a:linter.lsp_config
         endif
-
-        if has_key(a:linter, 'uri_handlers')
-            let l:obj.uri_handlers = a:linter.uri_handlers
-
-            if type(l:obj.uri_handlers) isnot v:t_dict
-            \&& type(l:obj.uri_handlers) isnot v:t_func
-                throw '`uri_handlers` must be a Dictionary or Function if defined'
-            endif
-        endif
     endif
 
     let l:obj.output_stream = get(a:linter, 'output_stream', 'stdout')
