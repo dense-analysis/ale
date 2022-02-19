@@ -633,7 +633,17 @@ Execute(Should not handle completion messages with additionalTextEdits when ale_
   let b:ale_completion_info = {'line': 30}
 
   AssertEqual
-  \ [],
+  \ [
+  \   {
+  \     'word': 'next_callback',
+  \     'dup': 0,
+  \     'menu': 'PlayTimeCallback',
+  \     'info': '',
+  \     'kind': 'v',
+  \     'icase': 1,
+  \     'user_data': json_encode({'_ale_completion_item': 1}),
+  \   }
+  \ ],
   \ ale#completion#ParseLSPCompletions({
   \   'id': 226,
   \   'jsonrpc': '2.0',
