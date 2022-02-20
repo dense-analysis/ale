@@ -552,7 +552,7 @@ let s:uri_handlers = {
 \   }
 \}
 
-function! ale#util#GetURIHandler(uri)
+function! ale#util#GetURIHandler(uri) abort
     for l:scheme in keys(s:uri_handlers)
         if a:uri =~# '^'.l:scheme.'://'
             return s:uri_handlers[scheme]

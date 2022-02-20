@@ -8,7 +8,7 @@ if !has_key(s:, 'lsp_linter_map')
     let s:lsp_linter_map = {}
 endif
 
-function! ale#lsp_linter#GetLinterMap()
+function! ale#lsp_linter#GetLinterMap() abort
     return s:lsp_linter_map
 endfunction
 
