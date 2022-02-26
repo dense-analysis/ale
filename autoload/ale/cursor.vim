@@ -16,6 +16,9 @@ function! ale#cursor#TruncatedEcho(original_message) abort
     let l:message = substitute(l:message, "\t", ' ', 'g')
     " Remove any newlines in the message.
     let l:message = substitute(l:message, "\n", '', 'g')
+    " Convert indentation groups into single spaces for better legibility when
+    " put on a single line
+    let l:message = substitute(l:message, ' \+', ' ', 'g')
 
     " We need to remember the setting for shortmess and reset it again.
     let l:shortmess_options = &l:shortmess
