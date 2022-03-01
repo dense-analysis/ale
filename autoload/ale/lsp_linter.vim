@@ -8,12 +8,24 @@ if !has_key(s:, 'lsp_linter_map')
     let s:lsp_linter_map = {}
 endif
 
-function! ale#lsp_linter#GetLinterMap() abort
+" A Dictionary to track one-shot handlers for custom LSP requests
+let s:custom_handlers_map = get(s:, 'custom_handlers_map', {})
+
+" Clear LSP linter data for the linting engine.
+function! ale#lsp_linter#ClearLSPData() abort
+    let s:lsp_linter_map = {}
+    let s:custom_handlers_map = {}
+endfunction
+
+" Only for internal use.
+function! ale#lsp_linter#GetLSPLinterMap() abort
     return s:lsp_linter_map
 endfunction
 
-" A Dictionary to track one-shot handlers for custom LSP requests
-let s:custom_handlers_map = get(s:, 'custom_handlers_map', {})
+" Just for tests.
+function! ale#lsp_linter#SetLSPLinterMap(replacement_map) abort
+    let s:lsp_linter_map = a:replacement_map
+endfunction
 
 " Check if diagnostics for a particular linter should be ignored.
 function! s:ShouldIgnore(buffer, linter_name) abort
@@ -479,17 +491,6 @@ endfunction
 
 function! ale#lsp_linter#CheckWithLSP(buffer, linter) abort
     return ale#lsp_linter#StartLSP(a:buffer, a:linter, function('s:CheckWithLSP'))
-endfunction
-
-" Clear LSP linter data for the linting engine.
-function! ale#lsp_linter#ClearLSPData() abort
-    let s:lsp_linter_map = {}
-    let s:custom_handlers_map = {}
-endfunction
-
-" Just for tests.
-function! ale#lsp_linter#SetLSPLinterMap(replacement_map) abort
-    let s:lsp_linter_map = a:replacement_map
 endfunction
 
 function! s:HandleLSPResponseToCustomRequests(conn_id, response) abort
