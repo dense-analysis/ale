@@ -287,6 +287,12 @@ number of the buffer that ALE wants to check.
 sources should perform their checks on a buffer in the background
 asynchronously, so they don't interrupt editing.
 
+|ale#other_source#ShowResults()| must not be called synchronously before
+ALE's engine executes its code after the |ALEWantResults| event runs. If
+there are immediate results to provide to ALE, a 0 millisecond timer with
+|timer_start()| can be set instead up to call |ale#other_source#ShowResults()|
+after ALE has first executed its engine code for its own sources.
+
 A plugin might integrate its own checks with ALE like so: >
 
   augroup SomeGroupName
