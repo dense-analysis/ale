@@ -1,7 +1,7 @@
 " Author: yoshi1123 <yoshi1@tutanota.com>
 " Description: Functions for working with jdt:// URIs.
 
-function! s:OpenJDTLink(root, filename, line, column, options, result) abort
+function! s:OpenJDTLink(root, uri, line, column, options, result) abort
     if has_key(a:result, 'error')
         echoerr a:result.error.message
         return
@@ -14,7 +14,7 @@ function! s:OpenJDTLink(root, filename, line, column, options, result) abort
 
     " disable autocmd when opening buffer
     autocmd! AleURISchemes
-    call ale#util#Open(a:filename, a:line, a:column, a:options)
+    call ale#util#Open(a:uri, a:line, a:column, a:options)
     autocmd AleURISchemes BufNewFile,BufReadPre jdt://** call ale#uri#jdt#ReadJDTLink(expand('<amatch>'))
 
     if !empty(getbufvar(bufnr(''), 'ale_lsp_root', ''))
@@ -44,17 +44,17 @@ function! ale#uri#jdt#OpenJDTLink(encoded_uri, line, column, options, conn_id) a
     endif
 
     let l:root = a:conn_id[stridx(a:conn_id, ':')+1:]
-    let l:filename = a:encoded_uri
+    let l:uri = a:encoded_uri
     call ale#lsp_linter#SendRequest(
                 \   bufnr(''),
                 \   'eclipselsp',
                 \   [0, 'java/classFileContents', {
-                \       'uri': ale#util#ToURI(l:filename)
+                \       'uri': ale#util#ToURI(l:uri)
                 \   }],
-                \   function('s:OpenJDTLink', [l:root, l:filename, a:line, a:column, a:options]))
+                \   function('s:OpenJDTLink', [l:root, l:uri, a:line, a:column, a:options]))
 endfunction
 
-function! s:ReadClassFileContents(filename, result) abort
+function! s:ReadClassFileContents(uri, result) abort
     if has_key(a:result, 'error')
         echoerr a:result.error.message
         return
@@ -87,7 +87,7 @@ function! ale#uri#jdt#ReadJDTLink(encoded_uri) abort
         throw 'eclipselsp not running'
     endif
 
-    let l:filename = a:encoded_uri
+    let l:uri = a:encoded_uri
     let b:ale_lsp_root = l:root
     set filetype=java
 
@@ -95,7 +95,7 @@ function! ale#uri#jdt#ReadJDTLink(encoded_uri) abort
                 \   bufnr(''),
                 \   'eclipselsp',
                 \   [0, 'java/classFileContents', {
-                \       'uri': ale#util#ToURI(l:filename)
+                \       'uri': ale#util#ToURI(l:uri)
                 \   }],
-                \   function('s:ReadClassFileContents', [l:filename]))
+                \   function('s:ReadClassFileContents', [l:uri]))
 endfunction
