@@ -49,7 +49,7 @@ endfunction
 
 function! s:HandleLSPDiagnostics(conn_id, response) abort
     let l:linter_name = s:lsp_linter_map[a:conn_id]
-    let l:filename = ale#path#FromURI(a:response.params.uri)
+    let l:filename = ale#util#ToResource(a:response.params.uri)
     let l:escaped_name = escape(
     \   fnameescape(l:filename),
     \   has('win32') ? '^' : '^,}]'

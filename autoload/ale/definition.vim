@@ -80,12 +80,12 @@ function! ale#definition#HandleLSPResponse(conn_id, response) abort
 
             call ale#definition#UpdateTagStack()
 
-            let l:filename = ale#path#FromURI(l:uri)
-            let l:uri_handler = ale#util#GetURIHandler(l:filename)
-            if l:uri_handler isnot# v:null
-                call l:uri_handler.OpenURILink(l:filename, l:line, l:column, l:options, a:conn_id)
-            else
+            let l:uri_handler = ale#uri#GetURIHandler(l:uri)
+            if l:uri_handler is# v:null
+                let l:filename = ale#path#FromFileURI(l:uri)
                 call ale#util#Open(l:filename, l:line, l:column, l:options)
+            else
+                call l:uri_handler.OpenURILink(l:uri, l:line, l:column, l:options, a:conn_id)
             endif
 
             break
