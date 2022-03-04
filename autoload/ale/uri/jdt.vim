@@ -11,7 +11,7 @@ function! s:OpenJDTLink(root, uri, line, column, options, result) abort
     let l:contents = a:result['result']
 
     if type(l:contents) is# type(v:null)
-        echoerr 'File content not found'
+        execute 'echoerr ''File content not found'''
     endif
 
     " disable autocmd when opening buffer
