@@ -160,6 +160,6 @@ function! ale#events#Init() abort
     augroup AleURISchemes
         autocmd!
 
-        autocmd BufNewFile,BufReadPre jdt://** call ale#util#ReadJDTLink(expand('<amatch>'))
+        autocmd BufNewFile,BufReadPre jdt://** call ale#uri#jdt#ReadJDTLink(expand('<amatch>'))
     augroup END
 endfunction
