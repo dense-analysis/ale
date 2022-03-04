@@ -546,6 +546,7 @@ endfunction
 
 function! ale#util#ToURI(resource) abort
     let l:uri_handler = ale#uri#GetURIHandler(a:resource)
+
     if l:uri_handler is# v:null
         " resource is a filesystem path
         let l:uri = ale#path#ToFileURI(a:resource)
@@ -553,6 +554,7 @@ function! ale#util#ToURI(resource) abort
         " resource is a URI
         let l:uri = a:resource
     endif
+
     return l:uri
 endfunction
 
