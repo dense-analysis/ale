@@ -368,7 +368,7 @@ Execute(ALEImport should request imports correctly for language servers):
   AssertEqual
   \ [
   \   [0, 'textDocument/completion', {
-  \     'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \     'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
   \     'position': {'character': 6, 'line': 1}
   \   }],
   \ ],
@@ -514,7 +514,7 @@ Execute(ALEImport should tell the user when no completions were found from a lan
   AssertEqual
   \ [
   \   [0, 'textDocument/completion', {
-  \     'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \     'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
   \     'position': {'character': 6, 'line': 1}
   \   }],
   \ ],

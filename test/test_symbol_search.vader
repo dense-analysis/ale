@@ -94,7 +94,7 @@ Execute(LSP symbol responses should be handled):
   \     {
   \       'name': 'foo',
   \       'location': {
-  \         'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \         'uri': ale#path#ToFileURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \         'range': {
   \           'start': {'line': 2, 'character': 7},
   \         },
@@ -103,7 +103,7 @@ Execute(LSP symbol responses should be handled):
   \     {
   \       'name': 'foobar',
   \       'location': {
-  \         'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/other_file')),
+  \         'uri': ale#path#ToFileURI(ale#path#Simplify(g:dir . '/other_file')),
   \         'range': {
   \           'start': {'line': 7, 'character': 15},
   \         },

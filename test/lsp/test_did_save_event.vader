@@ -94,7 +94,7 @@ Execute(Server should be notified on save):
   \ [
   \   [1, 'textDocument/didChange', {
   \     'textDocument': {
-  \       'uri': ale#path#ToURI(expand('%:p')),
+  \       'uri': ale#path#ToFileURI(expand('%:p')),
   \       'version': g:ale_lsp_next_version_id - 1,
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}],
@@ -118,14 +118,14 @@ Execute(Server should be notified on save with didSave is supported by server):
   \ [
   \   [1, 'textDocument/didChange', {
   \     'textDocument': {
-  \       'uri': ale#path#ToURI(expand('%:p')),
+  \       'uri': ale#path#ToFileURI(expand('%:p')),
   \       'version': g:ale_lsp_next_version_id - 1,
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}],
   \   }],
   \   [1, 'textDocument/didSave', {
   \     'textDocument': {
-  \       'uri': ale#path#ToURI(expand('%:p')),
+  \       'uri': ale#path#ToFileURI(expand('%:p')),
   \     },
   \   }],
   \ ],
@@ -138,7 +138,7 @@ Execute(Server should be notified on change):
   \ [
   \   [1, 'textDocument/didChange', {
   \     'textDocument': {
-  \       'uri': ale#path#ToURI(expand('%:p')),
+  \       'uri': ale#path#ToFileURI(expand('%:p')),
   \       'version': g:ale_lsp_next_version_id - 1,
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}],

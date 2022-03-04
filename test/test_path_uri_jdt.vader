@@ -1,8 +1,0 @@
-Execute(ale#path#FromURI should percent escape ["*:<>|?\/], for ntfs, in the query for jdt://):
-  AssertEqual 'jdt://foo/bar/baz.jar/package.name.Type.class%3f=proj%2f%5c%2ffoo%5c%2fba%22%2a%3a%3c%3e%5c%7cr%5c%2fbaz.jar%3cpackage.name(Type.class', ale#util#JDTToPath('jdt://foo/bar/baz.jar/package.name.Type.class?=proj/\/foo\/ba"*:<>\|r\/baz.jar<package.name(Type.class')
-
-Execute(ale#path#FromURI should percent escape ["*:<>|?], for ntfs, in the auth/path?query for jdt://):
-  AssertEqual 'jdt://foo/ba%22%2a%3a%3c%3e\%7cr/baz.jar/package.name.Type.class%3f=proj%2f%5c%2ffoo%5c%2fba%22%2a%3a%3c%3e%5c%7cr%5c%2fbaz.jar%3cpackage.name(Type.class', ale#util#JDTToPath('jdt://foo/ba"*:<>\|r/baz.jar/package.name.Type.class?=proj/\/foo\/ba"*:<>\|r\/baz.jar<package.name(Type.class')
-
-Execute(ale#path#ToURI should only percent unescape [?], for ntfs, for jdt://):
-  AssertEqual 'jdt://foo/bar/baz.jar/package.name.Type.class?=proj%2f%5c%2ffoo%5c%2fba%22%2a%3a%3c%3e%5c%7cr%5c%2fbaz.jar%3cpackage.name(Type.class', ale#util#PathToJDT('jdt://foo/bar/baz.jar/package.name.Type.class%3f=proj%2f%5c%2ffoo%5c%2fba%22%2a%3a%3c%3e%5c%7cr%5c%2fbaz.jar%3cpackage.name(Type.class')
