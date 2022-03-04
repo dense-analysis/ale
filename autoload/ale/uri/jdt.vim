@@ -97,10 +97,9 @@ function! ale#uri#jdt#ReadJDTLink(encoded_uri) abort
     set filetype=java
 
     call ale#lsp_linter#SendRequest(
-                \   bufnr(''),
-                \   'eclipselsp',
-                \   [0, 'java/classFileContents', {
-                \       'uri': ale#util#ToURI(l:uri)
-                \   }],
-                \   function('s:ReadClassFileContents', [l:uri]))
+    \   bufnr(''),
+    \   'eclipselsp',
+    \   [0, 'java/classFileContents', {'uri': ale#util#ToURI(l:uri)}],
+    \   function('s:ReadClassFileContents', [l:uri])
+    \)
 endfunction
