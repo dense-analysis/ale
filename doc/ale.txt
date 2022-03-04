@@ -287,6 +287,12 @@ number of the buffer that ALE wants to check.
 sources should perform their checks on a buffer in the background
 asynchronously, so they don't interrupt editing.
 
+|ale#other_source#ShowResults()| must not be called synchronously before
+ALE's engine executes its code after the |ALEWantResults| event runs. If
+there are immediate results to provide to ALE, a 0 millisecond timer with
+|timer_start()| can be set instead up to call |ale#other_source#ShowResults()|
+after ALE has first executed its engine code for its own sources.
+
 A plugin might integrate its own checks with ALE like so: >
 
   augroup SomeGroupName
@@ -364,12 +370,16 @@ are supported for running the commands.
 
   `process_with`        An optional callback for post-processing.
 
-                      The callback must accept two arguments,
-                      `(buffer, output)`, which can be used for converting
-                      the output from a command into lines to replace the
-                      buffer's contents with.
+                      The callback must accept arguments `(bufnr, output)`:
+                      the buffer number undergoing fixing and the fixer's
+                      output as a |List| of |String|s. It must return a |List|
+                      of |String|s that will be the new contents of the
+                      buffer.
 
-                      A |List| of |String|s must be returned.
+                      This callback is useful to remove excess lines from the
+                      command's output or apply additional changes to the
+                      output.
+
 
   `read_buffer`         An optional key for disabling reading the buffer.
 
@@ -1793,6 +1803,9 @@ g:ale_open_list                                               *g:ale_open_list*
   loclist (|lopen|) or for the quickfix list instead if |g:ale_set_quickfix|
   is `1`. (|copen|)
 
+  When set to any higher numberical value, ALE will only open the window when
+  the number of warnings or errors are at least that many.
+
   When set to `'on_save'`, ALE will only open the loclist after buffers have
   been saved. The list will be opened some time after buffers are saved and
   any linter for a buffer returns results.
@@ -1813,8 +1826,8 @@ g:ale_open_list                                               *g:ale_open_list*
     autocmd!
     autocmd QuitPre * if empty(&buftype) | lclose | endif
   augroup END
-<
 
+<
 g:ale_pattern_options                                   *g:ale_pattern_options*
 
   Type: |Dictionary|
@@ -2011,7 +2024,7 @@ g:ale_set_quickfix                                         *g:ale_set_quickfix*
   This feature should not be used in combination with tools for searching for
   matches and commands like |:cfdo|, as ALE will replace the quickfix list
   pretty frequently. If you wish to use such tools, you should populate the
-  loclist instead.
+  loclist or use |ALEPopulateQuickfix| instead.
 
 
 g:ale_set_signs                                               *g:ale_set_signs*
@@ -2721,6 +2734,8 @@ documented in additional help files.
     buildifier............................|ale-bazel-buildifier|
   bib.....................................|ale-bib-options|
     bibclean..............................|ale-bib-bibclean|
+  bitbake.................................|ale-bitbake-options|
+    oelint-adv............................|ale-bitbake-oelint_adv|
   c.......................................|ale-c-options|
     astyle................................|ale-c-astyle|
     cc....................................|ale-c-cc|
@@ -2743,6 +2758,7 @@ documented in additional help files.
     cfn-python-lint.......................|ale-cloudformation-cfn-python-lint|
   cmake...................................|ale-cmake-options|
     cmakelint.............................|ale-cmake-cmakelint|
+    cmake-lint............................|ale-cmake-cmake-lint|
     cmake-format..........................|ale-cmake-cmakeformat|
   cpp.....................................|ale-cpp-options|
     astyle................................|ale-cpp-astyle|
@@ -3071,6 +3087,7 @@ documented in additional help files.
     pyre..................................|ale-python-pyre|
     pyright...............................|ale-python-pyright|
     reorder-python-imports................|ale-python-reorder_python_imports|
+    unimport..............................|ale-python-unimport|
     vulture...............................|ale-python-vulture|
     yapf..................................|ale-python-yapf|
   qml.....................................|ale-qml-options|
@@ -3222,6 +3239,8 @@ documented in additional help files.
     prettier..............................|ale-vue-prettier|
     vls...................................|ale-vue-vls|
     volar.................................|ale-vue-volar|
+  wgsl....................................|ale-wgsl-options|
+    naga..................................|ale-wgsl-naga|
   xhtml...................................|ale-xhtml-options|
     cspell................................|ale-xhtml-cspell|
     write-good............................|ale-xhtml-write-good|
@@ -3280,15 +3299,16 @@ ALEFindReferences                                           *ALEFindReferences*
 
   The locations opened in different ways using the following variations.
 
-  `:ALEFindReferences -tab`    - Open the location in a new tab.
-  `:ALEFindReferences -split`  - Open the location in a horizontal split.
-  `:ALEFindReferences -vsplit` - Open the location in a vertical split.
+  `:ALEFindReferences -tab`       - Open the location in a new tab.
+  `:ALEFindReferences -split`     - Open the location in a horizontal split.
+  `:ALEFindReferences -vsplit`    - Open the location in a vertical split.
+  `:ALEFindReferences -quickfix`  - Put the locations into quickfix list.
 
   The default method used for navigating to a new location can be changed
   by modifying |g:ale_default_navigation|.
 
   You can add `-relative` to the command to view results with relatives paths,
-  instead of absolute paths.
+  instead of absolute paths. This option has no effect if `-quickfix` is used.
 
   The selection can be opened again with the |ALERepeatSelection| command.
 
@@ -3421,6 +3441,10 @@ ALERename                                                           *ALERename*
   The symbol where the cursor is resting will be the symbol renamed, and a
   prompt will open to request a new name.
 
+  The rename operation will save all modified buffers when `set nohidden` is
+  set, because that disables leaving unsaved buffers in the background. See
+  `:help hidden` for more details.
+
 ALEFileRename                                                   *ALEFileRename*
 
   Rename a file and fix imports using `tsserver`.
@@ -3470,6 +3494,20 @@ ALELintStop                                                       *ALELintStop*
 
   Any problems from previous linter results will continue to be shown.
 
+
+ALEPopulateQuickfix                                       *ALEPopulateQuickfix*
+ALEPopulateLocList                                         *ALEPopulateLocList*
+
+  Manually populate the |quickfix| or |location-list| and show the
+  corresponding list. Useful when you have other uses for both the |quickfix|
+  and |location-list| and don't want them automatically populated. Be sure to
+  disable auto populating: >
+
+    let g:ale_set_quickfix = 0
+    let g:ale_set_loclist = 0
+<
+  With these settings, ALE will still run checking and display it with signs,
+  highlighting, and other output described in |ale-lint-file-linters|.
 
 ALEPrevious                                                       *ALEPrevious*
 ALEPreviousWrap                                               *ALEPreviousWrap*

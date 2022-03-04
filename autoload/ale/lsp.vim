@@ -467,6 +467,7 @@ function! ale#lsp#StartProgram(conn_id, executable, command) abort
         let l:options = {
         \   'mode': 'raw',
         \   'out_cb': {_, message -> ale#lsp#HandleMessage(a:conn_id, message)},
+        \   'exit_cb': { -> ale#lsp#Stop(a:conn_id) },
         \}
 
         if has('win32')

@@ -61,6 +61,8 @@ formatting.
   * [buildifier](https://github.com/bazelbuild/buildtools)
 * BibTeX
   * [bibclean](http://ftp.math.utah.edu/pub/bibclean/)
+* BitBake
+  * [oelint-adv](https://github.com/priv-kweihmann/oelint-adv)
 * Bourne Shell
   * shell [-n flag](http://linux.die.net/man/1/sh)
   * [shellcheck](https://www.shellcheck.net/)
@@ -112,7 +114,8 @@ formatting.
   * [cfn-python-lint](https://github.com/awslabs/cfn-python-lint)
 * CMake
   * [cmake-format](https://github.com/cheshirekow/cmake_format)
-  * [cmakelint](https://github.com/richq/cmake-lint)
+  * [cmake-lint](https://github.com/cheshirekow/cmake_format)
+  * [cmakelint](https://github.com/cmake-lint/cmake-lint)
 * CoffeeScript
   * [coffee](http://coffeescript.org/)
   * [coffeelint](https://www.npmjs.com/package/coffeelint)
@@ -453,7 +456,7 @@ formatting.
   * [autoimport](https://lyz-code.github.io/autoimport/)
   * [autopep8](https://github.com/hhatto/autopep8)
   * [bandit](https://github.com/PyCQA/bandit) :warning:
-  * [black](https://github.com/ambv/black)
+  * [black](https://github.com/psf/black)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [flake8](http://flake8.pycqa.org/en/latest/)
   * [flakehell](https://github.com/flakehell/flakehell)
@@ -469,6 +472,7 @@ formatting.
   * [pyre](https://github.com/facebook/pyre-check) :warning:
   * [pyright](https://github.com/microsoft/pyright)
   * [reorder-python-imports](https://github.com/asottile/reorder_python_imports)
+  * [unimport](https://github.com/hakancelik96/unimport)
   * [vulture](https://github.com/jendrikseipp/vulture) :warning: :floppy_disk:
   * [yapf](https://github.com/google/yapf)
 * QML
@@ -637,6 +641,8 @@ formatting.
   * [prettier](https://github.com/prettier/prettier)
   * [vls](https://github.com/vuejs/vetur/tree/master/server)
   * [volar](https://github.com/johnsoncodehk/volar)
+* WGSL
+  * [naga](https://github.com/gfx-rs/naga)
 * XHTML
   * [alex](https://github.com/get-alex/alex)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)

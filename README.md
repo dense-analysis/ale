@@ -386,7 +386,7 @@ If you are interested in the general direction of the project, check out the
 a Roadmap for the future, and more.
 
 If you'd liked to discuss the project more directly, check out the `#vim-ale` channel
-on Freenode. Web chat is available [here](https://webchat.freenode.net/?channels=vim-ale).
+on Libera Chat. Web chat is available [here](https://web.libera.chat/#vim-ale).
 
 <a name="faq"></a>
 

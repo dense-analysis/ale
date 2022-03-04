@@ -391,8 +391,8 @@ function! s:OnReady(
             \               'character': l:nearest_error.col - 1,
             \           },
             \           'end': {
-            \               'line': l:nearest_error.end_lnum - 1,
-            \               'character': l:nearest_error.end_col,
+            \               'line': get(l:nearest_error, 'end_lnum', 1) - 1,
+            \               'character': get(l:nearest_error, 'end_col', 0)
             \           },
             \       },
             \   },

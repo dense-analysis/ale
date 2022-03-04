@@ -1067,6 +1067,58 @@ g:ale_python_reorder_python_imports_use_global
 
 
 ===============================================================================
+unimport                                                  *ale-python-unimport*
+
+`unimport` will be run from a detected project root, per |ale-python-root|.
+
+
+g:ale_python_unimport_auto_pipenv           *g:ale_python_unimport_auto_pipenv*
+                                            *b:ale_python_unimport_auto_pipenv*
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a pipenv, and set the executable to `pipenv`
+  if true. This is overridden by a manually-set executable.
+
+
+g:ale_python_unimport_auto_poetry           *g:ale_python_unimport_auto_poetry*
+                                            *b:ale_python_unimport_auto_poetry*
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a poetry, and set the executable to `poetry`
+  if true. This is overridden by a manually-set executable.
+
+
+g:ale_python_unimport_executable              *g:ale_python_unimport_executable*
+                                              *b:ale_python_unimport_executable*
+  Type: |String|
+  Default: `'unimport'`
+
+  See |ale-integrations-local-executables|
+
+  Set this to `'pipenv'` to invoke `'pipenv` `run` `unimport'`.
+  Set this to `'poetry'` to invoke `'poetry` `run` `unimport'`.
+
+
+g:ale_python_unimport_options                    *g:ale_python_unimport_options*
+                                                 *b:ale_python_unimport_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to add command-line arguments to the unimport
+  invocation.
+
+
+g:ale_python_unimport_use_global              *g:ale_python_unimport_use_global*
+                                              *b:ale_python_unimport_use_global*
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+
+===============================================================================
 vulture                                                    *ale-python-vulture*
 
 g:ale_python_vulture_change_directory   *g:ale_python_vulture_change_directory*
