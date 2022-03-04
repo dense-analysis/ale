@@ -66,7 +66,7 @@ function! s:ReadClassFileContents(uri, result) abort
 
     let l:contents = a:result['result']
 
-    if type(l:contents) ==# type(v:null)
+    if type(l:contents) is# type(v:null)
         execute 'echoerr ''File content not found'''
     endif
 
