@@ -38,5 +38,6 @@ function! ale#uri#GetURIHandler(uri) abort
             return s:uri_handlers[scheme]
         endif
     endfor
+
     return v:null
 endfunction
