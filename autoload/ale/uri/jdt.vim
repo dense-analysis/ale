@@ -84,7 +84,7 @@ function! ale#uri#jdt#ReadJDTLink(encoded_uri) abort
     let l:linter_map = ale#lsp_linter#GetLSPLinterMap()
 
     for l:conn_id in keys(l:linter_map)
-        if l:linter_map[l:conn_id] ==# 'eclipselsp'
+        if l:linter_map[l:conn_id] is# 'eclipselsp'
             let l:root = l:conn_id[stridx(l:conn_id, ':')+1:]
         endif
     endfor
