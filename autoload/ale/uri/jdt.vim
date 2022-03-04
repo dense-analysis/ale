@@ -49,12 +49,11 @@ function! ale#uri#jdt#OpenJDTLink(encoded_uri, line, column, options, conn_id) a
     let l:root = a:conn_id[stridx(a:conn_id, ':')+1:]
     let l:uri = a:encoded_uri
     call ale#lsp_linter#SendRequest(
-                \   bufnr(''),
-                \   'eclipselsp',
-                \   [0, 'java/classFileContents', {
-                \       'uri': ale#util#ToURI(l:uri)
-                \   }],
-                \   function('s:OpenJDTLink', [l:root, l:uri, a:line, a:column, a:options]))
+    \   bufnr(''),
+    \   'eclipselsp',
+    \   [0, 'java/classFileContents', {'uri': ale#util#ToURI(l:uri)}],
+    \   function('s:OpenJDTLink', [l:root, l:uri, a:line, a:column, a:options])
+    \)
 endfunction
 
 function! s:ReadClassFileContents(uri, result) abort
