@@ -66,13 +66,13 @@ endfunction
 function! ale#references#FormatLSPResponseItem(response_item, options) abort
     if get(a:options, 'open_in') is# 'quickfix'
         return {
-        \ 'filename': ale#path#FromURI(a:response_item.uri),
+        \ 'filename': ale#util#ToResource(a:response_item.uri),
         \ 'lnum': a:response_item.range.start.line + 1,
         \ 'col': a:response_item.range.start.character + 1,
         \}
     else
         return {
-        \ 'filename': ale#path#FromURI(a:response_item.uri),
+        \ 'filename': ale#util#ToResource(a:response_item.uri),
         \ 'line': a:response_item.range.start.line + 1,
         \ 'column': a:response_item.range.start.character + 1,
         \}

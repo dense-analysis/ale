@@ -278,7 +278,7 @@ function! ale#code_action#BuildChangesList(changes_map) abort
         endfor
 
         call add(l:changes, {
-        \   'fileName': ale#path#FromURI(l:file_name),
+        \   'fileName': ale#util#ToResource(l:file_name),
         \   'textChanges': l:text_changes,
         \})
     endfor

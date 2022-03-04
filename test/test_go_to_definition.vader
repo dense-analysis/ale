@@ -327,7 +327,7 @@ Execute(Other files should be jumped to for LSP definition responses):
   \ {
   \   'id': 3,
   \   'result': {
-  \     'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \     'uri': ale#path#ToFileURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \     'range': {
   \       'start': {'line': 2, 'character': 7},
   \     },
@@ -350,7 +350,7 @@ Execute(Newer LocationLink items should be supported):
   \ {
   \   'id': 3,
   \   'result': {
-  \     'targetUri': ale#path#ToURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \     'targetUri': ale#path#ToFileURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \     'targetRange': {
   \       'start': {'line': 2, 'character': 7},
   \     },
@@ -373,7 +373,7 @@ Execute(Locations inside the same file should be jumped to without using :edit):
   \ {
   \   'id': 3,
   \   'result': {
-  \     'uri': ale#path#ToURI(ale#path#Simplify(expand('%:p'))),
+  \     'uri': ale#path#ToFileURI(ale#path#Simplify(expand('%:p'))),
   \     'range': {
   \       'start': {'line': 2, 'character': 7},
   \     },
@@ -395,7 +395,7 @@ Execute(Other files should be jumped to in tabs for LSP definition responses):
   \ {
   \   'id': 3,
   \   'result': {
-  \     'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \     'uri': ale#path#ToFileURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \     'range': {
   \       'start': {'line': 2, 'character': 7},
   \     },
@@ -419,13 +419,13 @@ Execute(Definition responses with lists should be handled):
   \   'id': 3,
   \   'result': [
   \     {
-  \       'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \       'uri': ale#path#ToFileURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \       'range': {
   \         'start': {'line': 2, 'character': 7},
   \       },
   \     },
   \     {
-  \       'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/other_file')),
+  \       'uri': ale#path#ToFileURI(ale#path#Simplify(g:dir . '/other_file')),
   \       'range': {
   \         'start': {'line': 20, 'character': 3},
   \       },
@@ -470,13 +470,13 @@ Execute(LSP definition requests should be sent):
   \ [
   \   [1, 'textDocument/didChange', {
   \     'textDocument': {
-  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'uri': ale#path#ToFileURI(expand('%:p')),
   \         'version': g:ale_lsp_next_version_id - 1,
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
   \   }],
   \   [0, 'textDocument/definition', {
-  \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \   'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
   \   'position': {'line': 0, 'character': 2},
   \   }],
   \ ],
@@ -506,13 +506,13 @@ Execute(LSP type definition requests should be sent):
   \ [
   \   [1, 'textDocument/didChange', {
   \     'textDocument': {
-  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'uri': ale#path#ToFileURI(expand('%:p')),
   \         'version': g:ale_lsp_next_version_id - 1,
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
   \   }],
   \   [0, 'textDocument/typeDefinition', {
-  \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \   'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
   \   'position': {'line': 0, 'character': 2},
   \   }],
   \ ],
@@ -542,13 +542,13 @@ Execute(LSP tab definition requests should be sent):
   \ [
   \   [1, 'textDocument/didChange', {
   \     'textDocument': {
-  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'uri': ale#path#ToFileURI(expand('%:p')),
   \         'version': g:ale_lsp_next_version_id - 1,
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
   \   }],
   \   [0, 'textDocument/definition', {
-  \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \   'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
   \   'position': {'line': 0, 'character': 2},
   \   }],
   \ ],
@@ -578,13 +578,13 @@ Execute(LSP tab type definition requests should be sent):
   \ [
   \   [1, 'textDocument/didChange', {
   \     'textDocument': {
-  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'uri': ale#path#ToFileURI(expand('%:p')),
   \         'version': g:ale_lsp_next_version_id - 1,
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
   \   }],
   \   [0, 'textDocument/typeDefinition', {
-  \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \   'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
   \   'position': {'line': 0, 'character': 2},
   \   }],
   \ ],

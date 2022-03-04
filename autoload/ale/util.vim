@@ -543,3 +543,31 @@ endfunction
 function! ale#util#GetBufferContents(buffer) abort
     return join(getbufline(a:buffer, 1, '$'), '\n') . '\n'
 endfunction
+
+function! ale#util#ToURI(resource) abort
+    let l:uri_handler = ale#uri#GetURIHandler(a:resource)
+
+    if l:uri_handler is# v:null
+        " resource is a filesystem path
+        let l:uri = ale#path#ToFileURI(a:resource)
+    else
+        " resource is a URI
+        let l:uri = a:resource
+    endif
+
+    return l:uri
+endfunction
+
+function! ale#util#ToResource(uri) abort
+    let l:uri_handler = ale#uri#GetURIHandler(a:uri)
+
+    if l:uri_handler is# v:null
+        " resource is a filesystem path
+        let l:resource = ale#path#FromFileURI(a:uri)
+    else
+        " resource is a URI
+        let l:resource = a:uri
+    endif
+
+    return l:resource
+endfunction

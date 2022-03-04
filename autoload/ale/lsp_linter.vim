@@ -11,6 +11,22 @@ endif
 " A Dictionary to track one-shot handlers for custom LSP requests
 let s:custom_handlers_map = get(s:, 'custom_handlers_map', {})
 
+" Clear LSP linter data for the linting engine.
+function! ale#lsp_linter#ClearLSPData() abort
+    let s:lsp_linter_map = {}
+    let s:custom_handlers_map = {}
+endfunction
+
+" Only for internal use.
+function! ale#lsp_linter#GetLSPLinterMap() abort
+    return s:lsp_linter_map
+endfunction
+
+" Just for tests.
+function! ale#lsp_linter#SetLSPLinterMap(replacement_map) abort
+    let s:lsp_linter_map = a:replacement_map
+endfunction
+
 " Check if diagnostics for a particular linter should be ignored.
 function! s:ShouldIgnore(buffer, linter_name) abort
     " Ignore all diagnostics if LSP integration is disabled.
@@ -33,7 +49,7 @@ endfunction
 
 function! s:HandleLSPDiagnostics(conn_id, response) abort
     let l:linter_name = s:lsp_linter_map[a:conn_id]
-    let l:filename = ale#path#FromURI(a:response.params.uri)
+    let l:filename = ale#util#ToResource(a:response.params.uri)
     let l:escaped_name = escape(
     \   fnameescape(l:filename),
     \   has('win32') ? '^' : '^,}]'
@@ -475,17 +491,6 @@ endfunction
 
 function! ale#lsp_linter#CheckWithLSP(buffer, linter) abort
     return ale#lsp_linter#StartLSP(a:buffer, a:linter, function('s:CheckWithLSP'))
-endfunction
-
-" Clear LSP linter data for the linting engine.
-function! ale#lsp_linter#ClearLSPData() abort
-    let s:lsp_linter_map = {}
-    let s:custom_handlers_map = {}
-endfunction
-
-" Just for tests.
-function! ale#lsp_linter#SetLSPLinterMap(replacement_map) abort
-    let s:lsp_linter_map = a:replacement_map
 endfunction
 
 function! s:HandleLSPResponseToCustomRequests(conn_id, response) abort
