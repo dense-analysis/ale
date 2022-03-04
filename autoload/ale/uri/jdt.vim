@@ -8,6 +8,7 @@ function! s:OpenJDTLink(root, uri, line, column, options, result) abort
     endif
 
     let l:contents = a:result['result']
+
     if type(l:contents) ==# type(v:null)
         echoerr 'File content not found'
     endif
