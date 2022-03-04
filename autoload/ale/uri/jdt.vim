@@ -80,11 +80,13 @@ function! ale#uri#jdt#ReadJDTLink(encoded_uri) abort
     endif
 
     let l:linter_map = ale#lsp_linter#GetLSPLinterMap()
+
     for l:conn_id in keys(l:linter_map)
         if l:linter_map[l:conn_id] ==# 'eclipselsp'
             let l:root = l:conn_id[stridx(l:conn_id, ':')+1:]
         endif
     endfor
+
     if l:root is# v:null
         throw 'eclipselsp not running'
     endif
