@@ -16,7 +16,7 @@ onoremap <silent> <Plug>(ale_show_completion_menu) <Nop>
 let g:ale_completion_delay = get(g:, 'ale_completion_delay', 100)
 let g:ale_completion_excluded_words = get(g:, 'ale_completion_excluded_words', [])
 let g:ale_completion_max_suggestions = get(g:, 'ale_completion_max_suggestions', 50)
-let g:ale_completion_autoimport = get(g:, 'ale_completion_autoimport', 0)
+let g:ale_completion_autoimport = get(g:, 'ale_completion_autoimport', 1)
 let g:ale_completion_tsserver_remove_warnings = get(g:, 'ale_completion_tsserver_remove_warnings', 0)
 
 let s:timer_id = -1
