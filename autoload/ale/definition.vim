@@ -81,6 +81,7 @@ function! ale#definition#HandleLSPResponse(conn_id, response) abort
             call ale#definition#UpdateTagStack()
 
             let l:uri_handler = ale#uri#GetURIHandler(l:uri)
+
             if l:uri_handler is# v:null
                 let l:filename = ale#path#FromFileURI(l:uri)
                 call ale#util#Open(l:filename, l:line, l:column, l:options)
