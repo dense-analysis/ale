@@ -4,6 +4,7 @@
 function! s:OpenJDTLink(root, uri, line, column, options, result) abort
     if has_key(a:result, 'error')
         execute 'echoerr a:result.error.message'
+
         return
     endif
 
