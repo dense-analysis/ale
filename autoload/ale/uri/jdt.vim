@@ -35,11 +35,13 @@ endfunction
 " Load new buffer with jdt:// contents and jump to line and column.
 function! ale#uri#jdt#OpenJDTLink(encoded_uri, line, column, options, conn_id) abort
     let l:found_eclipselsp = v:false
+
     for l:linter in ale#linter#Get('java')
         if l:linter.name is# 'eclipselsp'
             let l:found_eclipselsp = v:true
         endif
     endfor
+
     if !l:found_eclipselsp
         throw 'eclipselsp not running'
     endif
