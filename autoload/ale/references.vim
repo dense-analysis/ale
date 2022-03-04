@@ -72,7 +72,7 @@ function! ale#references#FormatLSPResponseItem(response_item, options) abort
         \}
     else
         return {
-        \ 'filename': ale#util#ToResource(l:response_item.uri),
+        \ 'filename': ale#util#ToResource(a:response_item.uri),
         \ 'line': a:response_item.range.start.line + 1,
         \ 'column': a:response_item.range.start.character + 1,
         \}
