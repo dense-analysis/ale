@@ -58,7 +58,7 @@ endfunction
 
 function! s:ReadClassFileContents(uri, result) abort
     if has_key(a:result, 'error')
-        echoerr a:result.error.message
+        execute 'echoerr a:result.error.message'
 
         return
     endif
