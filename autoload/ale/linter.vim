@@ -54,7 +54,7 @@ let s:default_ale_linters = {
 \   'rust': ['cargo', 'rls'],
 \   'spec': [],
 \   'text': [],
-\   'vue': ['vls', 'eslint'],
+\   'vue': ['eslint', 'vls'],
 \   'zsh': ['shell'],
 \   'v': ['v'],
 \}

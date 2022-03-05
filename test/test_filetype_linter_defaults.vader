@@ -6,7 +6,7 @@ Before:
   let g:ale_linters = {}
 
   function! GetLinterNames(filetype) abort
-    return map(ale#linter#Get(a:filetype), 'v:val.name')
+    return sort(map(ale#linter#Get(a:filetype), 'v:val.name'))
   endfunction
 
 After:
@@ -103,7 +103,7 @@ Execute(The defaults for the text filetype should be correct):
   AssertEqual [], GetLinterNames('text')
 
 Execute(The defaults for the vue filetype should be correct):
-  AssertEqual ['vls', 'eslint'], GetLinterNames('vue')
+  AssertEqual ['eslint', 'vls'], GetLinterNames('vue')
 
   let g:ale_linters_explicit = 1
 
