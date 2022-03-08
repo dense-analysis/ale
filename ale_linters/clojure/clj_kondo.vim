@@ -8,7 +8,7 @@ function! ale_linters#clojure#clj_kondo#GetCommand(buffer) abort
 
     let l:command = 'clj-kondo'
     \   . ale#Pad(l:options)
-    \   . ' --lint %t'
+    \   . ' --lint %s'
 
     return l:command
 endfunction
