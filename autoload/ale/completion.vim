@@ -911,7 +911,8 @@ function! ale#completion#Import() abort
     endif
 
     let [l:line, l:column] = getpos('.')[1:2]
-    let l:column = searchpos('\V' . escape(l:word, '/\'), 'bn', l:line)[1]
+    let l:column = searchpos('\V' . escape(l:word, '/\'), 'bnc', l:line)[1]
+    let l:column = l:column + len(l:word) - 1
 
     if l:column isnot 0
         let l:started = ale#completion#GetCompletions('ale-import', {
