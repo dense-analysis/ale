@@ -110,25 +110,26 @@ function! ale_linters#python#pylama#Handle(buffer, version, lines) abort
 
         for l:error in l:errors
             call add(l:output, {
-                        \   'lnum': l:error['lnum'],
-                        \   'col': l:error['col'],
-                        \   'code': l:error['number'],
-                        \   'type': get(l:pylint_type_to_ale_type, l:error['etype'], 'W'),
-                        \   'sub_type': get(l:pylint_type_to_ale_sub_type, l:error['etype'], ''),
-                        \   'text': printf('%s [%s]', l:error['message'], l:error['source']),
-                        \})
+            \   'lnum': l:error['lnum'],
+            \   'col': l:error['col'],
+            \   'code': l:error['number'],
+            \   'type': get(l:pylint_type_to_ale_type, l:error['etype'], 'W'),
+            \   'sub_type': get(l:pylint_type_to_ale_sub_type, l:error['etype'], ''),
+            \   'text': printf('%s [%s]', l:error['message'], l:error['source']),
+            \})
         endfor
     else
         let l:pattern = '\v^.{-}:([0-9]+):([0-9]+): +%(([A-Z][0-9]+):? +)?(.*)$'
+
         for l:match in ale#util#GetMatches(a:lines, l:pattern)
             call add(l:output, {
-                        \   'lnum': str2nr(l:match[1]),
-                        \   'col': str2nr(l:match[2]),
-                        \   'code': l:match[3],
-                        \   'type': get(l:pylint_type_to_ale_type, l:match[3][0], 'W'),
-                        \   'sub_type': get(l:pylint_type_to_ale_sub_type, l:match[3][0], ''),
-                        \   'text': l:match[4],
-                        \})
+            \   'lnum': str2nr(l:match[1]),
+            \   'col': str2nr(l:match[2]),
+            \   'code': l:match[3],
+            \   'type': get(l:pylint_type_to_ale_type, l:match[3][0], 'W'),
+            \   'sub_type': get(l:pylint_type_to_ale_sub_type, l:match[3][0], ''),
+            \   'text': l:match[4],
+            \})
         endfor
     endif
 
