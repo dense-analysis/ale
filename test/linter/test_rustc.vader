@@ -13,9 +13,9 @@ Execute(The options should be configurable):
   AssertLinter 'rustc', 'rustc --error-format=json --foo -'
 
 Execute(Some default paths should be included when the project is a Cargo project):
-  call ale#test#SetFilename('../test-files/cargo/test.rs')
+  call ale#test#SetFilename('../test-files/rust/cargo/testfile.rs')
 
   AssertLinter 'rustc', 'rustc --error-format=json --emit=mir -o /dev/null'
-  \   . ' -L ' . ale#Escape(ale#path#GetAbsPath(g:dir,  '../test-files/cargo/target/debug/deps'))
-  \   . ' -L ' . ale#Escape(ale#path#GetAbsPath(g:dir, '../test-files/cargo/target/release/deps'))
+  \   . ' -L ' . ale#Escape(ale#path#GetAbsPath(g:dir,  '../test-files/rust/cargo/target/debug/deps'))
+  \   . ' -L ' . ale#Escape(ale#path#GetAbsPath(g:dir, '../test-files/rust/cargo/target/release/deps'))
   \   . ' -'

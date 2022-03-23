@@ -26,8 +26,10 @@ Integration Information
   4. analyzer -- If you have rust-analyzer installed, you might prefer using
      this linter over cargo and rls. rust-analyzer also implements the
      Language Server Protocol for incremental compilation of Rust code, and is
-     the next iteration of rls. rust-analyzer, like rls, requires Rust files
-     to be contained in Cargo projects.
+     the next iteration of rls. rust-analyzer either requires Rust files to be
+     contained in Cargo projects or requires the project to be described in
+     the rust-project.json format:
+     https://rust-analyzer.github.io/manual.html#non-cargo-based-projects
   5. rustfmt -- If you have `rustfmt` installed, you can use it as a fixer to
      consistently reformat your Rust code.
 
