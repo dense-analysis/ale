@@ -354,7 +354,7 @@ g:ale_go_staticcheck_options                     *g:ale_go_staticcheck_options*
 g:ale_go_staticcheck_lint_package           *g:ale_go_staticcheck_lint_package*
                                             *b:ale_go_staticcheck_lint_package*
   Type: |Number|
-  Default: `0`
+  Default: `1`
 
   When set to `1`, the whole Go package will be checked instead of only the
   current file.
