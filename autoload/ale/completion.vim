@@ -370,32 +370,31 @@ function! ale#completion#Show(result) abort
         return
     endif
 
-    " Replace completion options shortly before opening the menu.
-    if l:source is# 'ale-automatic' || l:source is# 'ale-manual'
-        call s:ReplaceCompletionOptions(l:source)
-
-        call timer_start(0, function('s:OpenCompletionMenu'))
-    endif
-
-    if l:source is# 'ale-callback'
-        call b:CompleteCallback(b:ale_completion_result)
-    endif
-
-    if l:source is# 'ale-import'
+    if l:source is# 'ale-import' && len(b:ale_completion_result) == 1
         call ale#completion#HandleUserData(b:ale_completion_result[0])
 
         let l:text_changed = '' . g:ale_lint_on_text_changed
 
         " Check the buffer again right away, if linting is enabled.
         if g:ale_enabled
-        \&& (
-        \   l:text_changed is# '1'
-        \   || l:text_changed is# 'always'
-        \   || l:text_changed is# 'normal'
-        \   || l:text_changed is# 'insert'
-        \)
+                    \&& (
+                    \   l:text_changed is# '1'
+                    \   || l:text_changed is# 'always'
+                    \   || l:text_changed is# 'normal'
+                    \   || l:text_changed is# 'insert'
+                    \)
             call ale#Queue(0, '')
         endif
+    elseif l:source is# 'ale-automatic' || l:source is# 'ale-manual' || l:source is# 'ale-import'
+        if l:source is# 'ale-import'
+            call feedkeys('ea', 'n')
+        endif
+
+        " Replace completion options shortly before opening the menu.
+        call s:ReplaceCompletionOptions(l:source)
+        call timer_start(0, function('s:OpenCompletionMenu'))
+    elseif l:source is# 'ale-callback'
+        call b:CompleteCallback(b:ale_completion_result)
     endif
 endfunction
 
