@@ -37,6 +37,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix PEP8 issues with black.',
 \   },
+\   'buf-format': {
+\       'function': 'ale#fixers#buf_format#Fix',
+\       'suggested_filetypes': ['proto'],
+\       'description': 'Fix .proto files with buf format.',
+\   },
 \   'buildifier': {
 \       'function': 'ale#fixers#buildifier#Fix',
 \       'suggested_filetypes': ['bzl'],

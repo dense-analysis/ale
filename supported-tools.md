@@ -439,6 +439,7 @@ formatting.
 * Prolog
   * [swipl](https://github.com/SWI-Prolog/swipl-devel)
 * proto
+  * [buf-format](https://github.com/bufbuild/buf) :floppy_disk:
   * [buf-lint](https://github.com/bufbuild/buf) :floppy_disk:
   * [protoc-gen-lint](https://github.com/ckaznocha/protoc-gen-lint) :floppy_disk:
   * [protolint](https://github.com/yoheimuta/protolint) :floppy_disk:

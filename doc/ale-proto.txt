@@ -13,8 +13,22 @@ To enable `.proto` file linting, update |g:ale_linters| as appropriate:
 To enable `.proto` file fixing, update |g:ale_fixers| as appropriate:
 >
   " Enable linter for .proto files
-  let b:ale_fixers = {'proto': ['protolint']}
+  let b:ale_fixers = {'proto': ['buf-format', 'protolint']}
 <
+===============================================================================
+buf-format                                                *ale-proto-buf-format*
+
+  The formatter uses `buf`, a fully-featured Protobuf compiler that doesn't depend
+  on `protoc`. Make sure the `buf` binary is available in the system path, or
+  set ale_proto_buf_format_executable.
+
+g:ale_proto_buf_format_executable           *g:ale_proto_buf_format_executable*
+
+  Type: |String|
+  Default: 'buf'
+
+  This variable can be changed to modify the executable used for buf.
+
 ===============================================================================
 buf-lint                                                    *ale-proto-buf-lint*
 
