@@ -6,7 +6,7 @@ call ale#Set('r_styler_options', 'tidyverse_style()')
 
 function! ale#fixers#styler#Fix(buffer) abort
     return {
-    \   'command': 'Rscript -e '
+    \   'command': 'Rscript --no-save --no-restore --no-site-file --no-init-file -e '
     \       . '"suppressPackageStartupMessages(library(styler));'
     \       . 'style_file(commandArgs(TRUE), transformers = '
     \       . ale#Var(a:buffer, 'r_styler_options') . ')"'
