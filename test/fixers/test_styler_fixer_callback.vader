@@ -11,7 +11,7 @@ Execute(The styler callback should include custom styler options):
 
   AssertEqual
   \ {
-  \   'command': 'Rscript --vanilla -e '
+  \   'command': 'Rscript --no-save --no-restore --no-site-file --no-init-file -e '
   \       . '"suppressPackageStartupMessages(library(styler));'
   \       . 'style_file(commandArgs(TRUE), transformers = '
   \       . 'a_custom_option)"'
