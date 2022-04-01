@@ -192,7 +192,7 @@ let g:ale_send_to_neovim_diagnostics = get(g:, 'ale_send_to_neovim_diagnostics',
 
 if g:ale_send_to_neovim_diagnostics && !has('nvim-0.6')
     " no-custom-checks
-    echoerr("Cannot set g:ale_send_to_neovim_diagnostics to 1 unless you are running Neovim 0.6+.")
+    echoerr('Cannot set g:ale_send_to_neovim_diagnostics to 1 unless you are running Neovim 0.6+.')
 endif
 
 if g:ale_set_balloons is 1 || g:ale_set_balloons is# 'hover'
