@@ -32,6 +32,7 @@ Execute(Vendor executables should be detected):
 
 Execute(User provided options should be used):
   let g:ale_php_psalm_options = '--my-user-provided-option my-value'
+  call ale#test#SetFilename('../test-files/dummy')
 
   AssertLinter 'psalm',
   \ ale#Escape('psalm')

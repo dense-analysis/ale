@@ -79,18 +79,18 @@ Execute(ALEPopulateQuickfix should have results):
       sleep 1ms
     endif
 
-    if ale#test#GetLoclistWithoutModule() == g:expected_loclist
+    if ale#test#GetLoclistWithoutNewerKeys() == g:expected_loclist
       break
     endif
   endfor
 
 
-  AssertEqual [], ale#test#GetLoclistWithoutModule()
-  AssertEqual [], ale#test#GetQflistWithoutModule()
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys()
+  AssertEqual [], ale#test#GetQflistWithoutNewerKeys()
 
   ALEPopulateLocList
   AssertNotEqual 0, get(getloclist(0, {'winid':0}), 'winid', 0)
-  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutNewerKeys()
 
   ALEPopulateQuickfix
-  AssertEqual g:expected_loclist, ale#test#GetQflistWithoutModule()
+  AssertEqual g:expected_loclist, ale#test#GetQflistWithoutNewerKeys()

@@ -48,7 +48,7 @@ Execute(The option for disabling changing directories should work):
   \]
 
 Execute(The option for changing directory to project root should work):
-  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/namespace_package_tox/namespace/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/namespace_package_tox/namespace/foo/bar.py')
 
   AssertLinterCwd ale#python#FindProjectRootIni(bufnr(''))
   call ale#semver#ResetVersionCache()
@@ -59,7 +59,7 @@ Execute(The option for changing directory to project root should work):
 
 Execute(The option for changing directory to file dir should work):
   let g:ale_python_flakehell_change_directory = 'file'
-  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/namespace_package_tox/namespace/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/namespace_package_tox/namespace/foo/bar.py')
 
   AssertLinter 'flakehell', [
   \ ale#Escape('flakehell') . ' --version',
@@ -84,6 +84,7 @@ Execute(The flakehell command callback should let you set options):
 
 Execute(You should be able to set a custom executable and it should be escaped):
   let g:ale_python_flakehell_executable = 'executable with spaces'
+  call ale#test#SetFilename('../test-files/dummy')
 
   AssertLinterCwd ['%s:h', '%s:h']
   call ale#semver#ResetVersionCache()
@@ -96,7 +97,7 @@ Execute(You should be able to set a custom executable and it should be escaped):
   \]
 
 Execute(The flakehell callbacks should detect virtualenv directories):
-  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
 
   let b:executable = ale#path#Simplify(
   \ g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/flakehell'
@@ -111,35 +112,35 @@ Execute(The flakehell callbacks should detect virtualenv directories):
   \]
 
 Execute(The FindProjectRoot should detect the project root directory for namespace package via Manifest.in):
-  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/namespace_package_manifest/namespace/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/namespace_package_manifest/namespace/foo/bar.py')
 
   AssertEqual
   \ ale#path#Simplify(g:dir . '/../test-files/python/namespace_package_manifest'),
   \ ale#python#FindProjectRoot(bufnr(''))
 
 Execute(The FindProjectRoot should detect the project root directory for namespace package via setup.cf):
-  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/namespace_package_setup/namespace/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/namespace_package_setup/namespace/foo/bar.py')
 
   AssertEqual
   \ ale#path#Simplify(g:dir . '/../test-files/python/namespace_package_setup'),
   \ ale#python#FindProjectRoot(bufnr(''))
 
 Execute(The FindProjectRoot should detect the project root directory for namespace package via pytest.ini):
-  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/namespace_package_pytest/namespace/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/namespace_package_pytest/namespace/foo/bar.py')
 
   AssertEqual
   \ ale#path#Simplify(g:dir . '/../test-files/python/namespace_package_pytest'),
   \ ale#python#FindProjectRoot(bufnr(''))
 
 Execute(The FindProjectRoot should detect the project root directory for namespace package via tox.ini):
-  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/namespace_package_tox/namespace/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/namespace_package_tox/namespace/foo/bar.py')
 
   AssertEqual
   \ ale#path#Simplify(g:dir . '/../test-files/python/namespace_package_tox'),
   \ ale#python#FindProjectRoot(bufnr(''))
 
 Execute(The FindProjectRoot should detect the project root directory for non-namespace package):
-  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/no_virtualenv/subdir/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/no_virtualenv/subdir/foo/bar.py')
 
   AssertEqual
   \ ale#path#Simplify(g:dir . '/../test-files/python/no_virtualenv/subdir'),
@@ -147,7 +148,7 @@ Execute(The FindProjectRoot should detect the project root directory for non-nam
 
 " Some users currently run flakehell this way, so we should support it.
 Execute(Using `python -m flakehell` should be supported for running flakehell):
-  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py')
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
 
   let g:ale_python_flakehell_executable = 'python'
   let g:ale_python_flakehell_options = '--some-option'

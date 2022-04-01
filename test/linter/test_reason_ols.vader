@@ -37,5 +37,6 @@ Execute(The gloabl executable should always be used when use_global is set):
 
 Execute(The executable should be configurable):
   let g:ale_reason_ols_executable = 'foobar'
+  call ale#test#SetFilename('../test-files/dummy')
 
   AssertLinter 'foobar', ale#Escape('foobar') . ' --stdio'

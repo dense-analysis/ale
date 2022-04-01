@@ -34,16 +34,24 @@ Before:
   Save &fileformats
   set fileformats=unix
 
-  let g:file = tempname()
-
   function! TestChanges(contents, changes) abort
-    call writefile(split(a:contents, '\n', 1), g:file, 'bS')
+    let l:file = tempname()
 
-    call ale#code_action#ApplyChanges(g:file, a:changes, {
-    \ 'should_save': 1,
-    \})
+    try
+      call writefile(split(a:contents, '\n', 1), l:file, 'bs')
 
-    return join(readfile(g:file, 'b'), "\n")
+      call ale#code_action#ApplyChanges(l:file, a:changes, {
+      \ 'should_save': 1,
+      \})
+
+      let l:result = join(readfile(l:file, 'b'), "\n")
+    finally
+      if filereadable(l:file)
+        call delete(l:file)
+      endif
+    endtry
+
+    return l:result
   endfunction!
 
   function! MkPos(line, offset) abort
@@ -59,16 +67,6 @@ Before:
   endfunction!
 
 After:
-  if bufnr(g:file) != -1
-    execute ':bp! | :bd! ' . bufnr(g:file)
-  endif
-
-  if filereadable(g:file)
-    call delete(g:file)
-  endif
-
-  unlet! g:file
-
   delfunction TestChanges
   delfunction MkPos
   delfunction MkInsert

@@ -25,6 +25,8 @@ Execute(The global override should work):
   AssertLinter 'foobar', ale#Escape('foobar') . '  --stdin-filename %s'
 
 Execute(Extra options should be configurable):
+  call ale#test#SetFilename('../test-files/dummy')
+
   let b:ale_scss_stylelint_options = '--configFile ''/absolute/path/to/file'''
 
   AssertLinter 'stylelint',

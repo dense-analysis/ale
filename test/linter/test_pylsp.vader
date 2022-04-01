@@ -41,6 +41,7 @@ Execute(You should be able to override the pylsp virtualenv lookup):
 
 Execute(Setting executable to 'pipenv' appends 'run pylsp'):
   let g:ale_python_pylsp_executable = 'path/to/pipenv'
+  call ale#test#SetFilename('../test-files/dummy')
 
   AssertLinter 'path/to/pipenv', ale#Escape('path/to/pipenv') . ' run pylsp'
 

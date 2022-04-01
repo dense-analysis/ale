@@ -5,7 +5,7 @@ Before:
 After:
   " Remove a test file we might open for some tests.
   if &buftype != 'nofile'
-    :q!
+    set nomodified
     set buftype=nofile
   endif
 

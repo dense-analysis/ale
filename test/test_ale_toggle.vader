@@ -120,7 +120,7 @@ Execute(ALEToggle should reset everything and then run again):
   call ale#test#FlushJobs()
 
   " First check that everything is there...
-  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutNewerKeys()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
 
   " Only check the legacy matches if not using the new NeoVIM API.
@@ -138,7 +138,7 @@ Execute(ALEToggle should reset everything and then run again):
 
   " Everything should be cleared.
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
-  AssertEqual [], ale#test#GetLoclistWithoutModule(), 'The loclist was not cleared'
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys(), 'The loclist was not cleared'
   AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
 
   if !g:has_nvim_highlight
@@ -151,7 +151,7 @@ Execute(ALEToggle should reset everything and then run again):
   ALEToggle
   call ale#test#FlushJobs()
 
-  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutNewerKeys()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
 
   if !g:has_nvim_highlight
@@ -211,18 +211,18 @@ Execute(ALEDisable should reset everything and stay disabled):
   ALELint
   call ale#test#FlushJobs()
 
-  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutNewerKeys()
 
   ALEDisable
   call ale#test#FlushJobs()
 
-  AssertEqual [], ale#test#GetLoclistWithoutModule()
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys()
   AssertEqual 0, g:ale_enabled
 
   ALEDisable
   call ale#test#FlushJobs()
 
-  AssertEqual [], ale#test#GetLoclistWithoutModule()
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys()
   AssertEqual 0, g:ale_enabled
 
 Execute(ALEEnable should enable ALE and lint again):
@@ -231,7 +231,7 @@ Execute(ALEEnable should enable ALE and lint again):
   ALEEnable
   call ale#test#FlushJobs()
 
-  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutNewerKeys()
   AssertEqual 1, g:ale_enabled
 
 Execute(ALEReset should reset everything for a buffer):
@@ -241,7 +241,7 @@ Execute(ALEReset should reset everything for a buffer):
   call ale#test#FlushJobs()
 
   " First check that everything is there...
-  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutNewerKeys()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
 
   if !g:has_nvim_highlight
@@ -258,7 +258,7 @@ Execute(ALEReset should reset everything for a buffer):
 
   " Everything should be cleared.
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
-  AssertEqual [], ale#test#GetLoclistWithoutModule(), 'The loclist was not cleared'
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys(), 'The loclist was not cleared'
   AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
 
   if !g:has_nvim_highlight
@@ -274,7 +274,7 @@ Execute(ALEToggleBuffer should reset everything and then run again):
   call ale#test#FlushJobs()
 
   " First check that everything is there...
-  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutNewerKeys()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
 
   if !g:has_nvim_highlight
@@ -290,7 +290,7 @@ Execute(ALEToggleBuffer should reset everything and then run again):
 
   " Everything should be cleared.
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
-  AssertEqual [], ale#test#GetLoclistWithoutModule(), 'The loclist was not cleared'
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys(), 'The loclist was not cleared'
   AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
 
   if !g:has_nvim_highlight
@@ -301,7 +301,7 @@ Execute(ALEToggleBuffer should reset everything and then run again):
   ALEToggleBuffer
   call ale#test#FlushJobs()
 
-  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutNewerKeys()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
 
   if !g:has_nvim_highlight
@@ -317,12 +317,12 @@ Execute(ALEDisableBuffer should reset everything and stay disabled):
   ALELint
   call ale#test#FlushJobs()
 
-  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutNewerKeys()
 
   ALEDisableBuffer
   call ale#test#FlushJobs()
 
-  AssertEqual [], ale#test#GetLoclistWithoutModule()
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys()
   AssertEqual 0, b:ale_enabled
 
 Execute(ALEEnableBuffer should enable ALE and lint again):
@@ -331,7 +331,7 @@ Execute(ALEEnableBuffer should enable ALE and lint again):
   ALEEnableBuffer
   call ale#test#FlushJobs()
 
-  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutNewerKeys()
   AssertEqual 1, b:ale_enabled
 
 Execute(ALEEnableBuffer should complain when ALE is disabled globally):
@@ -342,7 +342,7 @@ Execute(ALEEnableBuffer should complain when ALE is disabled globally):
     ALEEnableBuffer
   redir END
 
-  AssertEqual [], ale#test#GetLoclistWithoutModule()
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys()
   AssertEqual 0, b:ale_enabled
   AssertEqual 0, g:ale_enabled
   AssertEqual
@@ -356,7 +356,7 @@ Execute(ALEResetBuffer should reset everything for a buffer):
   call ale#test#FlushJobs()
 
   " First check that everything is there...
-  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutNewerKeys()
   AssertEqual [0, [[2, 1000001, 'ALEErrorSign']]], ale#sign#FindCurrentSigns(bufnr('%'))
 
   if !g:has_nvim_highlight
@@ -373,7 +373,7 @@ Execute(ALEResetBuffer should reset everything for a buffer):
 
   " Everything should be cleared.
   Assert !has_key(g:ale_buffer_info, bufnr('')), 'The g:ale_buffer_info Dictionary was not removed'
-  AssertEqual [], ale#test#GetLoclistWithoutModule(), 'The loclist was not cleared'
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys(), 'The loclist was not cleared'
   AssertEqual [0, []], ale#sign#FindCurrentSigns(bufnr('%')), 'The signs were not cleared'
 
   if !g:has_nvim_highlight

@@ -37,13 +37,18 @@ done
 vim="$1"
 tests="$2"
 
-# Neovim 0.6+ requires headless argument to load Vader tests.
+echo "$vim"
+
 case $vim in
+    neovim-v0.2*)
+        headless=''
+    ;;
+    # Neovim 0.6+ requires headless argument to load Vader tests.
     neovim*)
-        headless="--headless"
+        headless='--headless'
     ;;
     *)
-        headless=""
+        headless=''
     ;;
 esac
 

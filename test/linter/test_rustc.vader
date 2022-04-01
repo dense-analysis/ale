@@ -5,9 +5,13 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default command should be correct):
+  call ale#test#SetFilename('../test-files/dummy')
+
   AssertLinter 'rustc', 'rustc --error-format=json --emit=mir -o /dev/null -'
 
 Execute(The options should be configurable):
+  call ale#test#SetFilename('../test-files/dummy')
+
   let b:ale_rust_rustc_options = '--foo'
 
   AssertLinter 'rustc', 'rustc --error-format=json --foo -'
