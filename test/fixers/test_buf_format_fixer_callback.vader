@@ -16,6 +16,6 @@ Execute(The buf-format callback should return the correct default values):
 
   AssertEqual
   \ {
-  \   'command': ale#Escape('xxxinvalid') . ' format  %t',
+  \   'command': ale#Escape('xxxinvalid') . ' format %t',
   \ },
   \ ale#fixers#buf_format#Fix(bufnr(''))
