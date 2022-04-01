@@ -16,6 +16,9 @@ function! ale#cursor#TruncatedEcho(original_message) abort
     let l:message = substitute(l:message, "\t", ' ', 'g')
     " Remove any newlines in the message.
     let l:message = substitute(l:message, "\n", '', 'g')
+    " Convert indentation groups into single spaces for better legibility when
+    " put on a single line
+    let l:message = substitute(l:message, ' \+', ' ', 'g')
 
     " We need to remember the setting for shortmess and reset it again.
     let l:shortmess_options = &l:shortmess
@@ -27,7 +30,14 @@ function! ale#cursor#TruncatedEcho(original_message) abort
         silent! setlocal shortmess+=T
 
         try
-            exec "norm! :echomsg l:message\n"
+            " echon will not display the message if it exceeds the width of
+            " the window
+            if &columns < strdisplaywidth(l:message)
+                " Truncate message longer than window width with trailing '...'
+                let l:message = l:message[:&columns - 5] . '...'
+            endif
+
+            echon l:message
         catch /^Vim\%((\a\+)\)\=:E523/
             " Fallback into manual truncate (#1987)
             let l:winwidth = winwidth(0)
