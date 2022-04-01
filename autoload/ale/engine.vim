@@ -242,13 +242,15 @@ endfunction
 
 function! ale#engine#SendResultsToNeovimDiagnostics(buffer, loclist)
     if !has('nvim-0.6')
-        " We will warn the user on startup if they set
+        " We will warn the user on startup as well if they try to set
         " g:ale_send_to_neovim_diagnostics outside of a Neovim context.
         return
     endif
 
-    let SendDiagnostics = luaeval("require('diagnostics').sendAleResultsToDiagnostics")
-    call SendDiagnostics(a:buffer, a:loclist)
+    " Keep the Lua surface area really small in the VimL part of ALE,
+    " and just require the diagnostics.lua module on demand.
+    let l:SendDiagnostics = luaeval("require('diagnostics').sendAleResultsToDiagnostics")
+    call l:SendDiagnostics(a:buffer, a:loclist)
 endfunction
 
 function! s:RemapItemTypes(type_map, loclist) abort
