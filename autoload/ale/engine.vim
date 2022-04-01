@@ -184,14 +184,22 @@ endfunction
 function! ale#engine#SetResults(buffer, loclist) abort
     let l:linting_is_done = !ale#engine#IsCheckingBuffer(a:buffer)
 
-    " Set signs first. This could potentially fix some line numbers.
-    " The List could be sorted again here by SetSigns.
-    if g:ale_set_signs
-        call ale#sign#SetSigns(a:buffer, a:loclist)
-    endif
+    if g:ale_send_to_neovim_diagnostics
+        call ale#engine#SendResultsToNeovimDiagnostics(a:buffer, a:loclist)
+    else
+        " Set signs first. This could potentially fix some line numbers.
+        " The List could be sorted again here by SetSigns.
+        if g:ale_set_signs
+            call ale#sign#SetSigns(a:buffer, a:loclist)
+        endif
 
-    if g:ale_set_quickfix || g:ale_set_loclist
-        call ale#list#SetLists(a:buffer, a:loclist)
+        if g:ale_set_quickfix || g:ale_set_loclist
+            call ale#list#SetLists(a:buffer, a:loclist)
+        endif
+
+        if g:ale_set_highlights
+            call ale#highlight#SetHighlights(a:buffer, a:loclist)
+        endif
     endif
 
     if exists('*ale#statusline#Update')
@@ -199,21 +207,19 @@ function! ale#engine#SetResults(buffer, loclist) abort
         call ale#statusline#Update(a:buffer, a:loclist)
     endif
 
-    if g:ale_set_highlights
-        call ale#highlight#SetHighlights(a:buffer, a:loclist)
-    endif
-
     if l:linting_is_done
-        if g:ale_echo_cursor
-            " Try and echo the warning now.
-            " This will only do something meaningful if we're in normal mode.
-            call ale#cursor#EchoCursorWarning()
-        endif
+        if !g:ale_send_to_neovim_diagnostics
+            if g:ale_echo_cursor
+                " Try and echo the warning now.
+                " This will only do something meaningful if we're in normal mode.
+                call ale#cursor#EchoCursorWarning()
+            endif
 
-        if g:ale_virtualtext_cursor
-            " Try and show the warning now.
-            " This will only do something meaningful if we're in normal mode.
-            call ale#virtualtext#ShowCursorWarning()
+            if g:ale_virtualtext_cursor
+                " Try and show the warning now.
+                " This will only do something meaningful if we're in normal mode.
+                call ale#virtualtext#ShowCursorWarning()
+            endif
         endif
 
         " Reset the save event marker, used for opening windows, etc.
@@ -232,6 +238,17 @@ function! ale#engine#SetResults(buffer, loclist) abort
         " Call user autocommands. This allows users to hook into ALE's lint cycle.
         silent doautocmd <nomodeline> User ALELintPost
     endif
+endfunction
+
+function! ale#engine#SendResultsToNeovimDiagnostics(buffer, loclist)
+    if !has('nvim-0.6')
+        " We will warn the user on startup if they set
+        " g:ale_send_to_neovim_diagnostics outside of a Neovim context.
+        return
+    endif
+
+    let SendDiagnostics = luaeval("require('diagnostics').sendAleResultsToDiagnostics")
+    call SendDiagnostics(a:buffer, a:loclist)
 endfunction
 
 function! s:RemapItemTypes(type_map, loclist) abort

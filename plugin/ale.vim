@@ -186,6 +186,14 @@ let g:ale_deno_executable = get(g:, 'ale_deno_executable', 'deno')
 " If 1, enable a popup menu for commands.
 let g:ale_popup_menu_enabled = get(g:, 'ale_popup_menu_enabled', has('gui_running'))
 
+" If 1, disables ALE's built in error display. Instead, all errors are piped
+" to Neovim's diagnostics API.
+let g:ale_send_to_neovim_diagnostics = get(g:, 'ale_send_to_neovim_diagnostics', 0)
+
+if g:ale_send_to_neovim_diagnostics && !has('nvim-0.6')
+    echoerr("Cannot set g:ale_send_to_neovim_diagnostics to 1 unless you are running Neovim 0.6+.")
+endif
+
 if g:ale_set_balloons is 1 || g:ale_set_balloons is# 'hover'
     call ale#balloon#Enable()
 endif

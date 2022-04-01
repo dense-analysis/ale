@@ -1938,6 +1938,22 @@ g:ale_root                                                         *g:ale_root*
   LSP linter, it will not run.
 
 
+g:ale_send_to_neovim_diagnostics             *g:ale_send_to_neovim_diagnostics*
+
+  Type: Number
+  Default: 0
+
+  If enabled, this option will disable ALE's standard UI, and instead send
+  all linter output to Neovim's diagnostics API. This allows you to collect
+  errors from nvim-lsp, ALE, and anything else that uses diagnostics all in
+  one place.
+
+  To enable this option, set the value to 1.
+
+  This option requires Neovim 0.6+, as that version introduces the diagnostics
+  API.
+
+
 g:ale_set_balloons                                         *g:ale_set_balloons*
                                                            *b:ale_set_balloons*
 
