@@ -25,7 +25,8 @@ function! ale#util#ShowMessage(string, ...) abort
 
     " We have to assume the user is using a monospace font.
     if has('nvim') || (a:string !~? "\n" && len(a:string) < &columns)
-        execute 'echo a:string'
+        " no-custom-checks
+        echo a:string
     else
         call ale#preview#Show(split(a:string, "\n"), extend(
         \   {

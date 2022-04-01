@@ -98,8 +98,8 @@ should also follow some additional rules designed to prevent mistakes. Some of
 these are reported with ALE's `custom-linting-rules` script. See
 |ale-development-tests|.
 
-* Don't leave stray `:echo` lines in code. Use `execute 'echo' ...` if you must
-  echo something.
+* Don't leave stray `:echo` lines in code. Write `" no-custom-checks` above
+  the line if you must echo something.
 * For strings use |is#| instead of |==#|, `is?` instead of `==?`, `isnot#`
   instead of `!=#`, and `isnot?` instead of `!=?`. This is because `'x' ==# 0`
   returns 1, while `'x' is# 0` returns 0, so you will experience fewer issues

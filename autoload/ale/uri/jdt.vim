@@ -3,7 +3,8 @@
 
 function! s:OpenJDTLink(root, uri, line, column, options, result) abort
     if has_key(a:result, 'error')
-        execute 'echoerr a:result.error.message'
+        " no-custom-checks
+        echoerr a:result.error.message
 
         return
     endif
@@ -11,7 +12,8 @@ function! s:OpenJDTLink(root, uri, line, column, options, result) abort
     let l:contents = a:result['result']
 
     if type(l:contents) is# type(v:null)
-        execute 'echoerr ''File content not found'''
+        " no-custom-checks
+        echoerr 'File content not found'
     endif
 
     " disable autocmd when opening buffer
@@ -59,7 +61,8 @@ endfunction
 
 function! s:ReadClassFileContents(uri, result) abort
     if has_key(a:result, 'error')
-        execute 'echoerr a:result.error.message'
+        " no-custom-checks
+        echoerr a:result.error.message
 
         return
     endif
@@ -67,7 +70,8 @@ function! s:ReadClassFileContents(uri, result) abort
     let l:contents = a:result['result']
 
     if type(l:contents) is# type(v:null)
-        execute 'echoerr ''File content not found'''
+        " no-custom-checks
+        echoerr 'File content not found'
     endif
 
     call setline(1, split(l:contents, '\n'))

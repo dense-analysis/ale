@@ -776,7 +776,8 @@ function! s:OnReady(linter, lsp_details) abort
 
     if a:linter.lsp is# 'tsserver'
         if get(g:, 'ale_completion_tsserver_autoimport') is 1
-            execute 'echom `g:ale_completion_tsserver_autoimport` is deprecated. Use `g:ale_completion_autoimport` instead.'''
+            " no-custom-checks
+            echom '`g:ale_completion_tsserver_autoimport` is deprecated. Use `g:ale_completion_autoimport` instead.'
         endif
 
         let l:message = ale#lsp#tsserver_message#Completions(

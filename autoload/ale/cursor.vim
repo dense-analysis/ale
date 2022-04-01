@@ -10,6 +10,12 @@ let g:ale_echo_msg_format = get(g:, 'ale_echo_msg_format', '%code: %%s')
 
 let s:cursor_timer = -1
 
+" A wrapper for echon so we can test messages we echo in Vader tests.
+function! ale#cursor#Echon(message) abort
+    " no-custom-checks
+    echon a:message
+endfunction
+
 function! ale#cursor#TruncatedEcho(original_message) abort
     let l:message = a:original_message
     " Change tabs to spaces.
@@ -37,7 +43,7 @@ function! ale#cursor#TruncatedEcho(original_message) abort
                 let l:message = l:message[:&columns - 5] . '...'
             endif
 
-            echon l:message
+            call ale#cursor#Echon(l:message)
         catch /^Vim\%((\a\+)\)\=:E523/
             " Fallback into manual truncate (#1987)
             let l:winwidth = winwidth(0)
@@ -97,7 +103,9 @@ function! ale#cursor#EchoCursorWarning(...) abort
         elseif get(l:info, 'echoed')
             " We'll only clear the echoed message when moving off errors once,
             " so we don't continually clear the echo line.
-            execute 'echo'
+            "
+            " no-custom-checks
+            echo
             let l:info.echoed = 0
         endif
     endif
@@ -160,7 +168,8 @@ function! s:ShowCursorDetailForItem(loc, options) abort
 
         " Clear the echo message if we manually displayed details.
         if !l:stay_here
-            execute 'echo'
+            " no-custom-checks
+            echo
         endif
     endif
 endfunction

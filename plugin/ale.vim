@@ -24,8 +24,10 @@ endif
 if !s:has_features
     " Only output a warning if editing some special files.
     if index(['', 'gitcommit'], &filetype) == -1
-        execute 'echoerr ''ALE requires NeoVim >= 0.2.0 or Vim 8 with +timers +job +channel'''
-        execute 'echoerr ''Please update your editor appropriately.'''
+        " no-custom-checks
+        echoerr 'ALE requires NeoVim >= 0.2.0 or Vim 8 with +timers +job +channel'
+        " no-custom-checks
+        echoerr 'Please update your editor appropriately.'
     endif
 
     " Stop here, as it won't work.
