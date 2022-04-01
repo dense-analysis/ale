@@ -25,8 +25,7 @@ tests='test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader'
 verbose_flag=''
 quiet_flag=''
 run_neovim_02_tests=1
-run_neovim_04_tests=1
-run_neovim_05_tests=1
+run_neovim_06_tests=1
 run_vim_80_tests=1
 run_vim_82_tests=1
 run_linters=1
@@ -45,8 +44,7 @@ while [ $# -ne 0 ]; do
         run_vim_80_tests=0
         run_vim_82_tests=0
         run_neovim_02_tests=0
-        run_neovim_04_tests=0
-        run_neovim_05_tests=0
+        run_neovim_06_tests=0
         run_linters=0
         shift
     ;;
@@ -57,24 +55,14 @@ while [ $# -ne 0 ]; do
         shift
     ;;
     --neovim-02-only)
-        run_neovim_04_tests=0
-        run_neovim_05_tests=0
+        run_neovim_06_tests=0
         run_vim_80_tests=0
         run_vim_82_tests=0
         run_linters=0
         shift
     ;;
-    --neovim-04-only)
+    --neovim-06-only)
         run_neovim_02_tests=0
-        run_neovim_05_tests=0
-        run_vim_80_tests=0
-        run_vim_82_tests=0
-        run_linters=0
-        shift
-    ;;
-    --neovim-05-only)
-        run_neovim_02_tests=0
-        run_neovim_04_tests=0
         run_vim_80_tests=0
         run_vim_82_tests=0
         run_linters=0
@@ -82,23 +70,20 @@ while [ $# -ne 0 ]; do
     ;;
     --vim-only)
         run_neovim_02_tests=0
-        run_neovim_04_tests=0
-        run_neovim_05_tests=0
+        run_neovim_06_tests=0
         run_linters=0
         shift
     ;;
     --vim-80-only)
         run_neovim_02_tests=0
-        run_neovim_04_tests=0
-        run_neovim_05_tests=0
+        run_neovim_06_tests=0
         run_vim_82_tests=0
         run_linters=0
         shift
     ;;
     --vim-82-only)
         run_neovim_02_tests=0
-        run_neovim_04_tests=0
-        run_neovim_05_tests=0
+        run_neovim_06_tests=0
         run_vim_80_tests=0
         run_linters=0
         shift
@@ -107,16 +92,14 @@ while [ $# -ne 0 ]; do
         run_vim_80_tests=0
         run_vim_82_tests=0
         run_neovim_02_tests=0
-        run_neovim_04_tests=0
-        run_neovim_05_tests=0
+        run_neovim_06_tests=0
         shift
     ;;
     --fast)
         run_vim_80_tests=0
         run_vim_82_tests=0
         run_neovim_02_tests=0
-        run_neovim_04_tests=0
-        run_neovim_05_tests=1
+        run_neovim_06_tests=1
         shift
     ;;
     --help)
@@ -131,8 +114,7 @@ while [ $# -ne 0 ]; do
         echo '  --build-image     Run docker image build only.'
         echo '  --neovim-only     Run tests only for NeoVim'
         echo '  --neovim-02-only  Run tests only for NeoVim 0.2'
-        echo '  --neovim-04-only  Run tests only for NeoVim 0.4'
-        echo '  --neovim-05-only  Run tests only for NeoVim 0.5'
+        echo '  --neovim-06-only  Run tests only for NeoVim 0.6'
         echo '  --vim-only        Run tests only for Vim'
         echo '  --vim-80-only     Run tests only for Vim 8.0'
         echo '  --vim-82-only     Run tests only for Vim 8.2'
@@ -238,8 +220,7 @@ for vim in $(docker run --rm "$DOCKER_RUN_IMAGE" ls /vim-build/bin | grep '^neov
     if ( [[ $vim =~ ^vim-v8.0 ]] && ((run_vim_80_tests)) ) \
     || ( [[ $vim =~ ^vim-v8.2 ]] && ((run_vim_82_tests)) ) \
     || ( [[ $vim =~ ^neovim-v0.2 ]] && ((run_neovim_02_tests)) ) \
-    || ( [[ $vim =~ ^neovim-v0.4 ]] && ((run_neovim_04_tests)) ) \
-    || ( [[ $vim =~ ^neovim-v0.5 ]] && ((run_neovim_05_tests)) ); then
+    || ( [[ $vim =~ ^neovim-v0.6 ]] && ((run_neovim_06_tests)) ); then
         echo "Starting Vim: $vim..."
         file_number=$((file_number+1))
         test/script/run-vader-tests $quiet_flag $verbose_flag "$vim" "$tests" \

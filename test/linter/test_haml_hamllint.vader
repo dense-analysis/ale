@@ -38,4 +38,6 @@ Execute(The command should include a .rubocop.yml and a .haml-lint if both are f
 
 Execute(The executable can be overridden):
   let b:ale_haml_hamllint_executable = 'bin/haml-lint'
+  call ale#test#SetFilename('../test-files/dummy')
+
   AssertLinter 'bin/haml-lint', 'bin/haml-lint %t'

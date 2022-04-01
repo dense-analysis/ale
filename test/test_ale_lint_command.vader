@@ -68,10 +68,10 @@ Execute(ALELint should run the linters):
       sleep 1ms
     endif
 
-    if ale#test#GetLoclistWithoutModule() == g:expected_loclist
+    if ale#test#GetLoclistWithoutNewerKeys() == g:expected_loclist
       break
     endif
   endfor
 
   " Check the loclist
-  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutModule()
+  AssertEqual g:expected_loclist, ale#test#GetLoclistWithoutNewerKeys()

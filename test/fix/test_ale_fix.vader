@@ -499,7 +499,7 @@ Execute(ALEFix should fix files on the save event):
     \   'nr': -1,
     \   'pattern': '',
     \   'valid': 1,
-    \}], ale#test#GetLoclistWithoutModule()
+    \}], ale#test#GetLoclistWithoutNewerKeys()
   endif
 
 Expect(The buffer should be modified):
@@ -547,7 +547,7 @@ Execute(ALEFix should run the linters with b:ale_lint_on_save = 1):
     \   'nr': -1,
     \   'pattern': '',
     \   'valid': 1,
-    \}], ale#test#GetLoclistWithoutModule()
+    \}], ale#test#GetLoclistWithoutNewerKeys()
   endif
 
 Expect(The buffer should be modified):
@@ -579,7 +579,7 @@ Execute(ALEFix should not fix files on :wq):
   Assert &modified, 'The was not marked as ''modified'''
 
   " We should not run the linter.
-  AssertEqual [], ale#test#GetLoclistWithoutModule()
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys()
 
 Expect(The buffer should not be modified):
   a
@@ -619,7 +619,7 @@ Execute(ALEFix should still lint with no linters to be applied):
     \   'nr': -1,
     \   'pattern': '',
     \   'valid': 1,
-    \}], ale#test#GetLoclistWithoutModule()
+    \}], ale#test#GetLoclistWithoutNewerKeys()
   endif
 
 Expect(The buffer should be the same):
@@ -655,7 +655,7 @@ Execute(ALEFix should still lint when nothing was fixed on save):
     \   'nr': -1,
     \   'pattern': '',
     \   'valid': 1,
-    \}], ale#test#GetLoclistWithoutModule()
+    \}], ale#test#GetLoclistWithoutNewerKeys()
   endif
 
 Expect(The buffer should be the same):
@@ -679,7 +679,7 @@ Execute(ALEFix should not lint the buffer on save if linting on save is disabled
 
   Assert !filereadable(g:test_filename), 'The file should not have been saved'
 
-  AssertEqual [], ale#test#GetLoclistWithoutModule()
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys()
 
 Expect(The buffer should be the same):
   a
@@ -702,7 +702,7 @@ Execute(ALEFix should not lint the buffer on save if linting on save is disabled
 
   Assert !filereadable(g:test_filename), 'The file should not have been saved'
 
-  AssertEqual [], ale#test#GetLoclistWithoutModule()
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys()
 
 Expect(The buffer should be the same):
   a

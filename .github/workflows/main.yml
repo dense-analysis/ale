@@ -29,8 +29,7 @@ jobs:
           - '--vim-80-only'
           - '--vim-82-only'
           - '--neovim-02-only'
-          - '--neovim-04-only'
-          - '--neovim-05-only'
+          - '--neovim-06-only'
           - '--linters-only'
     steps:
       - uses: actions/checkout@v2

@@ -5,6 +5,8 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default executable path should be correct):
+  call ale#test#SetFilename('../test-files/dummy')
+
   AssertLinter 'php-language-server.php',
   \ 'php ' . ale#Escape('php-language-server.php')
 
