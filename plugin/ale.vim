@@ -191,6 +191,7 @@ let g:ale_popup_menu_enabled = get(g:, 'ale_popup_menu_enabled', has('gui_runnin
 let g:ale_send_to_neovim_diagnostics = get(g:, 'ale_send_to_neovim_diagnostics', 0)
 
 if g:ale_send_to_neovim_diagnostics && !has('nvim-0.6')
+    " no-custom-checks
     echoerr("Cannot set g:ale_send_to_neovim_diagnostics to 1 unless you are running Neovim 0.6+.")
 endif
 
