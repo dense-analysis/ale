@@ -119,8 +119,8 @@ function! ale#path#IsAbsolute(filename) abort
         return 1
     endif
 
-    " Check for /foo and C:\foo, etc.
-    return a:filename[:0] is# '/' || a:filename[1:2] is# ':\'
+    " Check for /foo, C:\foo and C:/foo, etc.
+    return a:filename[:0] is# '/' || a:filename[1:2] is# ':\' || a:filename[1:2] is# ':/'
 endfunction
 
 let s:temp_dir = ale#path#Simplify(fnamemodify(ale#util#Tempname(), ':h:h'))
