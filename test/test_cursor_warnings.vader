@@ -89,7 +89,7 @@ Before:
 
   let g:last_message = ''
 
-  function! ale#cursor#Echon(message) abort
+  function! ale#cursor#Echom(message) abort
     let g:last_message = a:message
   endfunction
 
