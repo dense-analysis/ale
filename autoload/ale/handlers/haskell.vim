@@ -19,7 +19,7 @@ let s:temp_regex_prefix =
 \   . substitute(s:temp_dir, '\\', '\\\\', 'g')
 \   . '\.\{-}'
 
-function! s:panic_output(lines) abort
+function! s:PanicOutput(lines) abort
     return [{
     \   'lnum': 1,
     \   'col': 1,
@@ -49,7 +49,7 @@ function! ale#handlers#haskell#HandleGHCFormat(buffer, lines) abort
     let l:panic_end = match(a:lines,'Please report this as a GHC bug:')
 
     if l:panic_position >= 0
-        return s:panic_output(a:lines[l:panic_position : l:panic_end])
+        return s:PanicOutput(a:lines[l:panic_position : l:panic_end])
     endif
 
     " Group the lines into smaller lists.
