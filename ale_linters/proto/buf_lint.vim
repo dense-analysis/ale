@@ -13,7 +13,8 @@ function! ale_linters#proto#buf_lint#GetCommand(buffer) abort
 endfunction
 
 call ale#linter#Define('proto', {
-\   'name': 'buf-lint',
+\   'name': 'buf_lint',
+\   'aliases': ['buf-lint'],
 \   'lint_file': 1,
 \   'output_stream': 'stdout',
 \   'executable': {b -> ale#Var(b, 'proto_buf_lint_executable')},
