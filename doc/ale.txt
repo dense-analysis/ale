@@ -2093,6 +2093,7 @@ g:ale_sign_priority                                       *g:ale_sign_priority*
 
 
 g:ale_shell                                                       *g:ale_shell*
+                                                                  *b:ale_shell*
 
   Type: |String|
   Default: not set
@@ -2110,6 +2111,7 @@ g:ale_shell                                                       *g:ale_shell*
 
 
 g:ale_shell_arguments                                   *g:ale_shell_arguments*
+                                                        *b:ale_shell_arguments*
 
   Type: |String|
   Default: not set
