@@ -430,6 +430,8 @@ Notes:
 * Prolog
   * `swipl`
 * proto
+  * `buf-format`!!
+  * `buf-lint`!!
   * `protoc-gen-lint`!!
   * `protolint`!!
 * Pug

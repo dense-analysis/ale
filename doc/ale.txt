@@ -3060,6 +3060,8 @@ documented in additional help files.
   prolog..................................|ale-prolog-options|
     swipl.................................|ale-prolog-swipl|
   proto...................................|ale-proto-options|
+    buf-format............................|ale-proto-buf-format|
+    buf-lint..............................|ale-proto-buf-lint|
     protoc-gen-lint.......................|ale-proto-protoc-gen-lint|
     protolint.............................|ale-proto-protolint|
   pug.....................................|ale-pug-options|
