@@ -252,6 +252,9 @@ command! -bar -nargs=* ALEGoToDefinition :call ale#definition#GoToCommandHandler
 " Go to type definition for tsserver and LSP
 command! -bar -nargs=* ALEGoToTypeDefinition :call ale#definition#GoToCommandHandler('type', <f-args>)
 
+" Go to implementation for tsserver and LSP
+command! -bar -nargs=* ALEGoToImplementation :call ale#definition#GoToCommandHandler('implementation', <f-args>)
+
 " Repeat a previous selection in the preview window
 command! -bar ALERepeatSelection :call ale#preview#RepeatSelection()
 
@@ -319,6 +322,9 @@ nnoremap <silent> <Plug>(ale_go_to_type_definition) :ALEGoToTypeDefinition<Retur
 nnoremap <silent> <Plug>(ale_go_to_type_definition_in_tab) :ALEGoToTypeDefinition -tab<Return>
 nnoremap <silent> <Plug>(ale_go_to_type_definition_in_split) :ALEGoToTypeDefinition -split<Return>
 nnoremap <silent> <Plug>(ale_go_to_type_definition_in_vsplit) :ALEGoToTypeDefinitionIn -vsplit<Return>
+nnoremap <silent> <Plug>(ale_go_to_implementation_in_tab) :ALEGoToImplementation -tab<Return>
+nnoremap <silent> <Plug>(ale_go_to_implementation_in_split) :ALEGoToImplementation -split<Return>
+nnoremap <silent> <Plug>(ale_go_to_implementation_in_vsplit) :ALEGoToImplementation -vsplit<Return>
 nnoremap <silent> <Plug>(ale_find_references) :ALEFindReferences<Return>
 nnoremap <silent> <Plug>(ale_hover) :ALEHover<Return>
 nnoremap <silent> <Plug>(ale_documentation) :ALEDocumentation<Return>
