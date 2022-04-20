@@ -182,6 +182,7 @@ Execute(Capabilities should be enabled when send as Dictionaries):
   \     },
   \     'definitionProvider': {},
   \     'typeDefinitionProvider': {},
+  \     'implementationProvider': {},
   \     'experimental': {},
   \     'documentHighlightProvider': v:true,
   \     'workspaceSymbolProvider': {}
@@ -198,6 +199,7 @@ Execute(Capabilities should be enabled when send as Dictionaries):
   \   'hover': 1,
   \   'definition': 1,
   \   'typeDefinition': 1,
+  \   'implementation': 1,
   \   'symbol_search': 1,
   \   'rename': 1,
   \   'code_actions': 1,
