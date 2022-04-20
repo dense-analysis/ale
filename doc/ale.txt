@@ -17,10 +17,11 @@ CONTENTS                                                         *ale-contents*
     5.1 Completion........................|ale-completion|
     5.2 Go To Definition..................|ale-go-to-definition|
     5.3 Go To Type Definition.............|ale-go-to-type-definition|
-    5.4 Find References...................|ale-find-references|
-    5.5 Hovering..........................|ale-hover|
-    5.6 Symbol Search.....................|ale-symbol-search|
-    5.7 Refactoring: Rename, Actions......|ale-refactor|
+    5.4 Go To Implementation..............|ale-go-to-type-implementation|
+    5.5 Find References...................|ale-find-references|
+    5.6 Hovering..........................|ale-hover|
+    5.7 Symbol Search.....................|ale-symbol-search|
+    5.8 Refactoring: Rename, Actions......|ale-refactor|
   6. Global Options.......................|ale-options|
     6.1 Highlights........................|ale-highlights|
   7. Linter/Fixer Options.................|ale-integration-options|
@@ -637,14 +638,23 @@ documentation for the command for configuring how the location will be
 displayed.
 
 -------------------------------------------------------------------------------
-5.4 Find References                                       *ale-find-references*
+5.4 Go To Implementation                             *ale-go-to-implementation*
+
+ALE supports jumping to the files and locations where symbols are implemented
+through any enabled LSP linters. The locations ALE will jump to depend on the
+information returned by LSP servers. The |ALEGoToImplementation| command will
+jump to the implementation of symbols under the cursor. See the documentation 
+for the command for configuring how the location will be displayed.
+
+-------------------------------------------------------------------------------
+5.5 Find References                                       *ale-find-references*
 
 ALE supports finding references for symbols though any enabled LSP linters
 with the |ALEFindReferences| command. See the documentation for the command
 for a full list of options.
 
 -------------------------------------------------------------------------------
-5.5 Hovering                                                        *ale-hover*
+5.6 Hovering                                                        *ale-hover*
 
 ALE supports "hover" information for printing brief information about symbols
 at the cursor taken from LSP linters. The following commands are supported:
@@ -686,14 +696,14 @@ Documentation for symbols at the cursor can be retrieved using the
 |ALEDocumentation| command. This command is only available for `tsserver`.
 
 -------------------------------------------------------------------------------
-5.6 Symbol Search                                           *ale-symbol-search*
+5.7 Symbol Search                                           *ale-symbol-search*
 
 ALE supports searching for workspace symbols via LSP linters with the
 |ALESymbolSearch| command. See the documentation for the command
 for a full list of options.
 
 -------------------------------------------------------------------------------
-5.7 Refactoring: Rename, Actions                                 *ale-refactor*
+5.8 Refactoring: Rename, Actions                                 *ale-refactor*
 
 ALE supports renaming symbols in code such as variables or class names with
 the |ALERename| command.
@@ -3407,6 +3417,33 @@ ALEGoToTypeDefinition                                   *ALEGoToTypeDefinition*
   `<Plug>(ale_go_to_type_definition_in_tab)`    - `:ALEGoToTypeDefinition -tab`
   `<Plug>(ale_go_to_type_definition_in_split)`  - `:ALEGoToTypeDefinition -split`
   `<Plug>(ale_go_to_type_definition_in_vsplit)` - `:ALEGoToTypeDefinition -vsplit`
+
+
+ALEGoToImplementation                                   *ALEGoToImplementation*
+
+  This works similar to |ALEGoToDefinition| but instead jumps to the
+  implementation of symbol under the cursor. ALE will jump to a definition if 
+  an LSP server provides a location to jump to. Otherwise, ALE will do nothing.
+
+  The locations opened in different ways using the following variations.
+
+  `:ALEGoToImplementation -tab`    - Open the location in a new tab.
+  `:ALEGoToImplementation -split`  - Open the location in a horizontal split.
+  `:ALEGoToImplementation -vsplit` - Open the location in a vertical split.
+
+  The default method used for navigating to a new location can be changed
+  by modifying |g:ale_default_navigation|.
+
+  You can jump back to the position you were at before going to the definition
+  of something with jump motions like CTRL-O. See |jump-motions|.
+
+  The following Plug mappings are defined for this command, which correspond
+  to the following commands.
+
+  `<Plug>(ale_go_to_implementation)`           - `:ALEGoToImplementation`
+  `<Plug>(ale_go_to_implementation_in_tab)`    - `:ALEGoToImplementation -tab`
+  `<Plug>(ale_go_to_implementation_in_split)`  - `:ALEGoToImplementation -split`
+  `<Plug>(ale_go_to_implementation_in_vsplit)` - `:ALEGoToImplementation -vsplit`
 
 
 ALEHover                                                             *ALEHover*
