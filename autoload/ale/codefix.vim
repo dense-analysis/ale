@@ -458,6 +458,7 @@ function! s:ExecuteGetCodeFix(linter, range, MenuCallback) abort
     endif
 
     let l:column = min([l:column, len(getline(l:line))])
+    let l:column = max([l:column, 1])
     let l:end_column = min([l:end_column, len(getline(l:end_line))])
 
     let l:Callback = function(
