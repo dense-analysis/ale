@@ -444,10 +444,10 @@ function! s:SendInitMessage(conn) abort
     \               'codeAction': {
     \                   'dynamicRegistration': v:false,
     \                   'codeActionLiteralSupport': {
-    \						'codeActionKind': {
-    \							'valueSet': []
-    \						}
-    \					}
+    \                        'codeActionKind': {
+    \                            'valueSet': []
+    \                        }
+    \                    }
     \               },
     \               'rename': {
     \                   'dynamicRegistration': v:false,
