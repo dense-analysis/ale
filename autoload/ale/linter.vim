@@ -45,7 +45,7 @@ let s:default_ale_linters = {
 \   'hack': ['hack'],
 \   'help': [],
 \   'inko': ['inko'],
-\   'json': ['jsonlint', 'spectral'],
+\   'json': ['jsonlint', 'spectral', 'vscodejson'],
 \   'json5': [],
 \   'jsonc': [],
 \   'perl': ['perlcritic'],
