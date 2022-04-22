@@ -22,6 +22,7 @@ endfunction
 
 function! ale_linters#terraform#terraform#GetDetail(error) abort
     let l:detail = get(a:error, 'detail', '')
+    
     if strlen(l:detail) > 0
         return l:detail
     else
