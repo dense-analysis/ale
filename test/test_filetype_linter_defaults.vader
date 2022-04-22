@@ -60,7 +60,7 @@ Execute(The defaults for the inko filetype should be correct):
   AssertEqual [], GetLinterNames('inko')
 
 Execute(The defaults for the json filetype should be correct):
-  AssertEqual ['jsonlint', 'spectral'], GetLinterNames('json')
+  AssertEqual ['jsonlint', 'spectral', 'vscodejson'], GetLinterNames('json')
 
   let g:ale_linters_explicit = 1
 
