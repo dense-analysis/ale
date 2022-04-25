@@ -291,7 +291,7 @@ Notes:
   * `jsonlint`
   * `prettier`
   * `spectral`
-  * `vscodejson`
+  * `VSCode JSON language server`
 * JSON5
   * `eslint`
 * JSONC
