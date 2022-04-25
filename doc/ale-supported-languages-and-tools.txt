@@ -283,7 +283,6 @@ Notes:
   * `tsserver`
   * `xo`
 * JSON
-  * VSCode JSON language server
   * `cspell`
   * `dprint`
   * `eslint`
@@ -292,6 +291,7 @@ Notes:
   * `jsonlint`
   * `prettier`
   * `spectral`
+  * `vscodejson`
 * JSON5
   * `eslint`
 * JSONC
