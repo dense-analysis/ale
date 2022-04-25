@@ -2,7 +2,9 @@
 " Description: VSCode json languageserver
 
 function! ale_linters#json#vscodejson#GetProjectRoot(buffer) abort
-    return fnamemodify(bufname(a:buffer), ':h')
+    let l:git_path = ale#path#FindNearestDirectory(a:buffer, '.git')
+
+    return !empty(l:git_path) ? fnamemodify(l:git_path, ':h:h') : ''
 endfunction
 
 call ale#linter#Define('json', {
