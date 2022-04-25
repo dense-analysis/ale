@@ -300,6 +300,7 @@ formatting.
   * [jsonlint](https://github.com/zaach/jsonlint)
   * [prettier](https://github.com/prettier/prettier)
   * [spectral](https://github.com/stoplightio/spectral)
+  * [VSCode JSON language server](https://www.npmjs.com/package/vscode-json-languageserver)
 * JSON5
   * [eslint](http://eslint.org/) :warning:
 * JSONC
