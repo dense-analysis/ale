@@ -77,6 +77,25 @@ g:ale_lua_luafmt_options                             *g:ale_lua_luafmt_options*
 
 
 ===============================================================================
+selene                                                         *ale-lua-selene*
+
+g:ale_lua_selene_executable                       *g:ale_lua_selene_executable*
+                                                  *b:ale_lua_selene_executable*
+  Type: |String|
+  Default: `'selene'`
+
+  This variable can be set to use a different executable for selene.
+
+
+g:ale_lua_selene_options                             *g:ale_lua_selene_options*
+                                                     *b:ale_lua_selene_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to selene.
+
+
+===============================================================================
 stylua                                                         *ale-lua-stylua*
 
 g:ale_lua_stylua_executable                       *g:ale_lua_stylua_executable*
