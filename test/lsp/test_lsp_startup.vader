@@ -194,6 +194,11 @@ Before:
       \           },
       \           'codeAction': {
       \             'dynamicRegistration': v:false,
+      \             'codeActionLiteralSupport': {
+      \                  'codeActionKind': {
+      \                      'valueSet': []
+      \                  }
+      \              }
       \           },
       \           'rename': {
       \             'dynamicRegistration': v:false,
