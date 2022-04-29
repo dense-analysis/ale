@@ -734,37 +734,3 @@ Execute(Should still handle completion messages with empty additionalTextEdits w
   \     ],
   \   },
   \ })
-
-Execute(Should take label only from snippet completions):
-  let g:ale_completion_autoimport = 0
-
-  AssertEqual
-  \ [
-  \   {
-  \     'word': 'lastName',
-  \     'dup': 0,
-  \     'menu': '',
-  \     'info': 'The person''s last name.',
-  \     'kind': 'm',
-  \     'icase': 1,
-  \     'user_data': json_encode({'_ale_completion_item': 1}),
-  \   }
-  \ ],
-  \ ale#completion#ParseLSPCompletions({
-  \   'id': 5,
-  \   'jsonrpc': '2.0',
-  \   'result': {
-  \     'isIncomplete': v:false,
-  \     'items': [
-  \       {
-  \         'label': 'lastName',
-  \         'documentation': 'The person''s last name.',
-  \         'kind': 10,
-  \         'filterText': '"lastName"',
-  \         'insertText': '"lastName": "$1",',
-  \         'textEdit': {'range': {'end': {'character': 5, 'line': 3}, 'start': {'character': 2, 'line': 3}}, 'newText': '"lastName": "$1",'},
-  \         'insertTextFormat': 2
-  \       }
-  \     ]
-  \   }
-  \ })
