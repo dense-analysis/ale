@@ -121,6 +121,12 @@ function! s:OnReady(line, column, options, capability, linter, lsp_details) abor
             \   a:line,
             \   a:column
             \)
+        elseif a:capability is# 'implementation'
+            let l:message = ale#lsp#tsserver_message#Implementation(
+            \   l:buffer,
+            \   a:line,
+            \   a:column
+            \)
         endif
     else
         " Send a message saying the buffer has changed first, or the
@@ -134,6 +140,8 @@ function! s:OnReady(line, column, options, capability, linter, lsp_details) abor
             let l:message = ale#lsp#message#Definition(l:buffer, a:line, a:column)
         elseif a:capability is# 'typeDefinition'
             let l:message = ale#lsp#message#TypeDefinition(l:buffer, a:line, a:column)
+        elseif a:capability is# 'implementation'
+            let l:message = ale#lsp#message#Implementation(l:buffer, a:line, a:column)
         else
             " XXX: log here?
             return
@@ -175,6 +183,14 @@ function! ale#definition#GoToType(options) abort
     endfor
 endfunction
 
+function! ale#definition#GoToImpl(options) abort
+    for l:linter in ale#linter#Get(&filetype)
+        if !empty(l:linter.lsp)
+            call s:GoToLSPDefinition(l:linter, a:options, 'implementation')
+        endif
+    endfor
+endfunction
+
 function! ale#definition#GoToCommandHandler(command, ...) abort
     let l:options = {}
 
@@ -200,6 +216,8 @@ function! ale#definition#GoToCommandHandler(command, ...) abort
 
     if a:command is# 'type'
         call ale#definition#GoToType(l:options)
+    elseif a:command is# 'implementation'
+        call ale#definition#GoToImpl(l:options)
     else
         call ale#definition#GoTo(l:options)
     endif

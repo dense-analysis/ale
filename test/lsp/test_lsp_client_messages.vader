@@ -175,6 +175,20 @@ Execute(ale#lsp#message#TypeDefinition() should return correct messages):
   \ ],
   \ ale#lsp#message#TypeDefinition(bufnr(''), 12, 34)
 
+Execute(ale#lsp#message#Implementation() should return correct messages):
+  AssertEqual
+  \ [
+  \   0,
+  \   'textDocument/implementation',
+  \   {
+  \     'textDocument': {
+  \         'uri': ale#path#ToFileURI(g:dir . '/foo/bar.ts'),
+  \     },
+  \     'position': {'line': 11, 'character': 33},
+  \   }
+  \ ],
+  \ ale#lsp#message#Implementation(bufnr(''), 12, 34)
+
 Execute(ale#lsp#message#References() should return correct messages):
   AssertEqual
   \ [
@@ -334,6 +348,19 @@ Execute(ale#lsp#tsserver_message#TypeDefinition() should return correct messages
   \   }
   \ ],
   \ ale#lsp#tsserver_message#TypeDefinition(bufnr(''), 347, 12)
+
+Execute(ale#lsp#tsserver_message#Implementation() should return correct messages):
+  AssertEqual
+  \ [
+  \   0,
+  \   'ts@implementation',
+  \   {
+  \     'file': ale#path#Simplify(g:dir . '/foo/bar.ts'),
+  \     'line': 347,
+  \     'offset': 12,
+  \   }
+  \ ],
+  \ ale#lsp#tsserver_message#Implementation(bufnr(''), 347, 12)
 
 Execute(ale#lsp#tsserver_message#References() should return correct messages):
   AssertEqual
