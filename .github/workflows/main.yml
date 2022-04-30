@@ -36,27 +36,46 @@ jobs:
       - name: Run tests
         run: ./run-tests -v ${{ matrix.vim-version }}
   test_win:
+    env:
+      vim_version: 80-586
+      vader_commit: 6fff477431ac3191c69a3a5e5f187925466e275a
     runs-on: windows-2019
     steps:
-      - name: Cache vim and vader
-        uses: actions/cache@v2
+      ##### setup vim #####
+      - name: Cache vim
+        id: vim-cache
+        uses: actions/cache@v3
         with:
-          path: |
-            C:\vim
-          key: ${{ runner.os }}
-      - uses: actions/checkout@v2
+          path: C:\vim
+          key: ${{ runner.os }}-${{ env.vim_version }}
+      - name: Download and unpack Vim
+        if: steps.vim-cache.outputs.cache-hit != 'true'
+        run: |
+          Add-Type -A System.IO.Compression.FileSystem
+          Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim${{ env.vim_version }}w32.zip `
+            -OutFile C:\vim.zip
+          [IO.Compression.ZipFile]::ExtractToDirectory('C:\vim.zip', 'C:\vim')
+          Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim${{ env.vim_version }}rt.zip `
+            -OutFile C:\rt.zip
+          [IO.Compression.ZipFile]::ExtractToDirectory('C:\rt.zip', 'C:\vim')
+        shell: powershell
+
+      ##### setup vader #####
+      - name: Cache vader
+        id: vader-cache
+        uses: actions/cache@v3
         with:
-          path: 'testplugin'
+          path: C:\vader
+          key: ${{ runner.os }}-${{ env.vader_commit }} 
       - name: Clone Vader and check out the commit we want
         uses: actions/checkout@v2
+        if: steps.vader-cache.outputs.cache-hit != 'true'
         with:
           repository: 'junegunn/vader.vim'
-          ref: 'c6243dd81c98350df4dec608fa972df98fa2a3af'
+          ref: ${{ env.vader_commit }}
           path: 'vader'
-      - name: Copy ale and vader repos to C:\
-        # actions/checkout@v2 only allows cloning to directories relative to
-        # GITHUB_WORKSPACE, therefore we copy the cloned repos to C:\ where
-        # ALE expects them to be.
+      - name: copy vader to required location
+        if: steps.vader-cache.outputs.cache-hit != 'true'
         run: |
           if (-Not (Test-Path C:\vader))
           {
@@ -64,6 +83,14 @@ jobs:
           }
           Copy-Item -Path ${env:GITHUB_WORKSPACE}\vader\* -Destination `
             C:\vader -recurse -Force
+        shell: powershell
+
+      ##### finally test the plugin #####
+      - uses: actions/checkout@v2
+        with:
+          path: 'testplugin'
+      - name: copy test plugin to required location
+        run: |
           if (-Not (Test-Path C:\testplugin))
           {
             md -path C:\testplugin
@@ -71,22 +98,8 @@ jobs:
           Copy-Item -Path ${env:GITHUB_WORKSPACE}\testplugin\* -Destination `
             C:\testplugin -recurse -Force
         shell: powershell
-      - name: Download and unpack Vim
-        # NOTE: If you change the Vim or Vader versions here, please also update
-        # the instructions for running tests on Windows in ale-development.txt
-        run: |
-          if (!(Test-Path -Path C:\vim)){
-            Add-Type -A System.IO.Compression.FileSystem
-            Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586w32.zip `
-              -OutFile C:\vim.zip
-            [IO.Compression.ZipFile]::ExtractToDirectory('C:\vim.zip', 'C:\vim')
-            Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586rt.zip `
-              -OutFile C:\rt.zip
-            [IO.Compression.ZipFile]::ExtractToDirectory('C:\rt.zip', 'C:\vim')
-          }
-        shell: powershell
       - name: Run tests
         run: |
-          cd C:\testplugin
           C:\vim\vim\vim80\vim.exe -u test\vimrc "+Vader! test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader"
-        shell: cmd
+        shell: cmd 
+        timeout-minutes: 5
