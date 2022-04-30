@@ -292,6 +292,7 @@ formatting.
   * [tsserver](https://github.com/Microsoft/TypeScript/wiki/Standalone-Server-%28tsserver%29)
   * [xo](https://github.com/sindresorhus/xo)
 * JSON
+  * [VSCode JSON language server](https://www.npmjs.com/package/vscode-json-languageserver)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell) :warning:
   * [dprint](https://dprint.dev)
   * [eslint](http://eslint.org/) :warning:

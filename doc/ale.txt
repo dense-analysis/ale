@@ -1613,6 +1613,7 @@ g:ale_linters                                                   *g:ale_linters*
   \   'help': [],
   \   'inko': ['inko'],
   \   'json': ['jsonlint', 'spectral'],
+  \   'json': ['jsonlint', 'spectral', 'vscodejson'],
   \   'json5': [],
   \   'jsonc': [],
   \   'perl': ['perlcritic'],
@@ -2961,6 +2962,7 @@ documented in additional help files.
     jq....................................|ale-json-jq|
     prettier..............................|ale-json-prettier|
     spectral..............................|ale-json-spectral|
+    vscodejson............................|ale-json-vscode|
   jsonc...................................|ale-jsonc-options|
     eslint................................|ale-jsonc-eslint|
   jsonnet.................................|ale-jsonnet-options|
