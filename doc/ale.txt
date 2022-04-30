@@ -2980,6 +2980,7 @@ documented in additional help files.
     luac..................................|ale-lua-luac|
     luacheck..............................|ale-lua-luacheck|
     luafmt................................|ale-lua-luafmt|
+    selene................................|ale-lua-selene|
     stylua................................|ale-lua-stylua|
   markdown................................|ale-markdown-options|
     cspell................................|ale-markdown-cspell|
