@@ -103,4 +103,4 @@ jobs:
           C:\vim\vim\vim80\vim.exe -V9 -u test\vimrc "+Vader! test/*.vader test/*/*.vader test/*/*/*.vader"
         shell: cmd 
         working-directory: C:\testplugin\
-        timeout-minutes: 5
+        timeout-minutes: 20
