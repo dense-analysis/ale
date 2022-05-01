@@ -66,7 +66,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: C:\vader
-          key: ${{ runner.os }}-${{ env.vader_commit }} 
+          key: ${{ runner.os }}-${{ env.vader_commit }}
       - name: Clone Vader and check out the commit we want
         uses: actions/checkout@v2
         if: steps.vader-cache.outputs.cache-hit != 'true'
@@ -100,7 +100,7 @@ jobs:
         shell: powershell
       - name: Run tests
         run: |
-          C:\vim\vim\vim80\vim.exe -u test\vimrc "+Vader! test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader"
+          C:\vim\vim\vim80\vim.exe -V9 -u test\vimrc "+Vader! test/*.vader test/*/*.vader test/*/*/*.vader"
         shell: cmd 
         working-directory: C:\testplugin\
         timeout-minutes: 5
