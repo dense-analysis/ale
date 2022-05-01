@@ -3,6 +3,28 @@ ALE YAML Integration                                         *ale-yaml-options*
 
 
 ===============================================================================
+actionlint                                                *ale-yaml-actionlint*
+
+Website: https://github.com/rhysd/actionlint
+
+
+Installation
+-------------------------------------------------------------------------------
+
+See installation guide: https://github.com/rhysd/actionlint#quick-start
+
+Options
+-------------------------------------------------------------------------------
+
+g:ale_yaml_actionlint_executable             *g:ale_yaml_actionlint_executable*
+                                             *b:ale_yaml_actionlint_executable*
+  Type: |String|
+  Default: `'actionlint'`
+
+  This variable can be set to change the path to actionlint.
+
+
+===============================================================================
 circleci                                                    *ale-yaml-circleci*
 
 Website: https://circleci.com/docs/2.0/local-cli

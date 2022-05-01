@@ -646,6 +646,7 @@ Notes:
 * XML
   * `xmllint`
 * YAML
+  * `actionlint`
   * `circleci`!!
   * `prettier`
   * `spectral`
