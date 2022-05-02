@@ -123,6 +123,7 @@ formatting.
   * [ameba](https://github.com/veelenga/ameba) :floppy_disk:
   * [crystal](https://crystal-lang.org/) :floppy_disk:
 * CSS
+  * [VSCode CSS language server](https://github.com/hrsh7th/vscode-langservers-extracted)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [csslint](http://csslint.net/)
   * [fecs](http://fecs.baidu.com/)
@@ -249,6 +250,7 @@ formatting.
 * HCL
   * [terraform-fmt](https://github.com/hashicorp/terraform)
 * HTML
+  * [VSCode HTML language server](https://github.com/hrsh7th/vscode-langservers-extracted)
   * [alex](https://github.com/get-alex/alex)
   * [angular](https://www.npmjs.com/package/@angular/language-server)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
@@ -292,7 +294,7 @@ formatting.
   * [tsserver](https://github.com/Microsoft/TypeScript/wiki/Standalone-Server-%28tsserver%29)
   * [xo](https://github.com/sindresorhus/xo)
 * JSON
-  * [VSCode JSON language server](https://www.npmjs.com/package/vscode-json-languageserver)
+  * [VSCode JSON language server](https://github.com/hrsh7th/vscode-langservers-extracted)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell) :warning:
   * [dprint](https://dprint.dev)
   * [eslint](http://eslint.org/) :warning:

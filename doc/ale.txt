@@ -643,7 +643,7 @@ displayed.
 ALE supports jumping to the files and locations where symbols are implemented
 through any enabled LSP linters. The locations ALE will jump to depend on the
 information returned by LSP servers. The |ALEGoToImplementation| command will
-jump to the implementation of symbols under the cursor. See the documentation 
+jump to the implementation of symbols under the cursor. See the documentation
 for the command for configuring how the location will be displayed.
 
 -------------------------------------------------------------------------------
@@ -2806,6 +2806,7 @@ documented in additional help files.
     fecs..................................|ale-css-fecs|
     prettier..............................|ale-css-prettier|
     stylelint.............................|ale-css-stylelint|
+    vscodecss.............................|ale-css-vscode|
   cuda....................................|ale-cuda-options|
     nvcc..................................|ale-cuda-nvcc|
     clangd................................|ale-cuda-clangd|
@@ -2920,6 +2921,7 @@ documented in additional help files.
     prettier..............................|ale-html-prettier|
     stylelint.............................|ale-html-stylelint|
     tidy..................................|ale-html-tidy|
+    vscodehtml............................|ale-html-vscode|
     write-good............................|ale-html-write-good|
   idris...................................|ale-idris-options|
     idris.................................|ale-idris-idris|
@@ -3425,7 +3427,7 @@ ALEGoToTypeDefinition                                   *ALEGoToTypeDefinition*
 ALEGoToImplementation                                   *ALEGoToImplementation*
 
   This works similar to |ALEGoToDefinition| but instead jumps to the
-  implementation of symbol under the cursor. ALE will jump to a definition if 
+  implementation of symbol under the cursor. ALE will jump to a definition if
   an LSP server provides a location to jump to. Otherwise, ALE will do nothing.
 
   The locations opened in different ways using the following variations.
