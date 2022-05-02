@@ -165,6 +165,19 @@ g:ale_html_tidy_use_global                             *g:html_tidy_use_global*
 
 
 ===============================================================================
+vscodehtml                                                    *ale-html-vscode*
+
+Website: https://github.com/hrsh7th/vscode-langservers-extracted
+
+Installation
+-------------------------------------------------------------------------------
+
+Install VSCode html language server either globally or locally: >
+
+  npm install -g vscode-langservers-extracted
+<
+
+===============================================================================
 write-good                                                *ale-html-write-good*
 
 See |ale-write-good-options|

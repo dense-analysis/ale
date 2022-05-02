@@ -156,14 +156,14 @@ g:ale_json_spectral_use_global                 *g:ale_json_spectral_use_global*
 ===============================================================================
 vscodejson                                                    *ale-json-vscode*
 
-Website: https://www.npmjs.com/package/vscode-json-languageserver
+Website: https://github.com/hrsh7th/vscode-langservers-extracted
 
 Installation
 -------------------------------------------------------------------------------
 
 Install VSCode json language server either globally or locally: >
 
-  npm install -g vscode-json-languageserver
+  npm install -g vscode-langservers-extracted
 <
 
 ===============================================================================

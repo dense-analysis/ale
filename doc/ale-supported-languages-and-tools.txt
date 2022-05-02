@@ -114,6 +114,7 @@ Notes:
   * `ameba`!!
   * `crystal`!!
 * CSS
+  * `VSCode CSS language server`
   * `cspell`
   * `csslint`
   * `fecs`
@@ -240,6 +241,7 @@ Notes:
 * HCL
   * `terraform-fmt`
 * HTML
+  * `VSCode HTML language server`
   * `alex`
   * `angular`
   * `cspell`
