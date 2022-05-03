@@ -57,6 +57,7 @@ let s:default_ale_linters = {
 \   'vue': ['eslint', 'vls'],
 \   'zsh': ['shell'],
 \   'v': ['v'],
+\   'yaml': ['spectral', 'yaml-language-server', 'yamllint'],
 \}
 
 " Testing/debugging helper to unload all linters.
