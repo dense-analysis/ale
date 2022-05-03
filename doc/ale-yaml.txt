@@ -13,12 +13,13 @@ Installation
 
 See installation guide: https://github.com/rhysd/actionlint#quick-start
 
-This linter is disabled by default and must be enabled byt setting `g:ale_linters`.
+This linter is disabled by default and must be enabled by setting `g:ale_linters`.
 To enable it only for Github Action YAML files a configuration like this is
 better:
 
 >
- au BufRead,BufNewFile */.github/*/*.y.?ml let b:ale_linters = {'yaml': ['actionlint']}
+ au BufRead,BufNewFile */.github/*/*.y{,a}ml
+                                \ let b:ale_linters = {'yaml': ['actionlint']}
 <
 
 Options
