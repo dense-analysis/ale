@@ -3272,6 +3272,7 @@ documented in additional help files.
   xml.....................................|ale-xml-options|
     xmllint...............................|ale-xml-xmllint|
   yaml....................................|ale-yaml-options|
+    actionlint............................|ale-yaml-actionlint|
     circleci..............................|ale-yaml-circleci|
     prettier..............................|ale-yaml-prettier|
     spectral..............................|ale-yaml-spectral|
