@@ -3,7 +3,7 @@ call ale#Set('lua_selene_options', '')
 
 function! ale_linters#lua#selene#GetCommand(buffer) abort
     return '%e' . ale#Pad(ale#Var(a:buffer, 'lua_selene_options'))
-    \   . ' --display-style=json %s'
+    \   . ' --display-style=json -'
 endfunction
 
 function! ale_linters#lua#selene#Handle(buffer, lines) abort
@@ -43,5 +43,4 @@ call ale#linter#Define('lua', {
 \   'executable': {b -> ale#Var(b, 'lua_selene_executable')},
 \   'command': function('ale_linters#lua#selene#GetCommand'),
 \   'callback': 'ale_linters#lua#selene#Handle',
-\   'lint_file': 1,
 \})
