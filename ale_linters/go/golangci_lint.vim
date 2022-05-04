@@ -34,7 +34,7 @@ function! ale_linters#go#golangci_lint#Handler(buffer, lines) abort
     let l:output = []
 
     for l:match in ale_linters#go#golangci_lint#GetMatches(a:lines)
-        if l:match[5] ==# 'typecheck'
+        if l:match[5] is# 'typecheck'
             let l:msg_type = 'E'
         else
             let l:msg_type = 'W'
