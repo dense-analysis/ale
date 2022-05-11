@@ -401,6 +401,8 @@ formatting.
   * [ibm_validator](https://github.com/IBM/openapi-validator)
   * [prettier](https://github.com/prettier/prettier)
   * [yamllint](https://yamllint.readthedocs.io/)
+* Packer (HCL)
+  * [packer-fmt-fixer](https://github.com/hashicorp/packer)
 * Pascal
   * [ptop](https://www.freepascal.org/tools/ptop.var)
 * Pawn

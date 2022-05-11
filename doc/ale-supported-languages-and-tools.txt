@@ -392,6 +392,8 @@ Notes:
   * `ibm_validator`
   * `prettier`
   * `yamllint`
+* Packer
+  * `packer-fmt-fixer`
 * Pascal
   * `ptop`
 * Pawn
