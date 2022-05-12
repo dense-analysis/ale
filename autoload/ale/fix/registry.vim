@@ -530,6 +530,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#vfmt#Fix',
 \       'suggested_filetypes': ['v'],
 \       'description': 'A formatter for V source code.',
+\   },
+\   'zigfmt': {
+\       'function': 'ale#fixers#zigfmt#Fix',
+\       'suggested_filetypes': ['zig'],
+\       'description': 'Official formatter for Zig',
 \   }
 \}
 

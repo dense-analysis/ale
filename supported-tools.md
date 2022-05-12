@@ -671,3 +671,4 @@ formatting.
   * [zeek](http://zeek.org) :floppy_disk:
 * Zig
   * [zls](https://github.com/zigtools/zls)
+  * [zig fmt](https://github.com/ziglang/zig)
