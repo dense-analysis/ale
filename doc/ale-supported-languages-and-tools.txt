@@ -484,6 +484,7 @@ Notes:
   * `raco`
 * Rego
   * `opafmt`
+  * `opacheck`
 * Re:VIEW
   * `redpen`
 * ReasonML

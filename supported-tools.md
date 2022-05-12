@@ -493,6 +493,7 @@ formatting.
   * [raco](https://docs.racket-lang.org/raco/)
 * Rego
   * [opafmt](https://www.openpolicyagent.org/docs/latest/cli/#opa-fmt)
+  * [opacheck](https://www.openpolicyagent.org/docs/latest/cli/#opa-check)
 * Re:VIEW
   * [redpen](http://redpen.cc/)
 * ReasonML
