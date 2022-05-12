@@ -482,6 +482,8 @@ Notes:
 * Racket
   * `racket-langserver`
   * `raco`
+* Rego
+  * `opafmt`
 * Re:VIEW
   * `redpen`
 * ReasonML

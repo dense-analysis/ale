@@ -3126,6 +3126,8 @@ documented in additional help files.
     ols...................................|ale-reasonml-ols|
     reason-language-server................|ale-reasonml-language-server|
     refmt.................................|ale-reasonml-refmt|
+  rego....................................|ale-rego-options|
+    opafmt................................|ale-opa-fmt-fixer|
   restructuredtext........................|ale-restructuredtext-options|
     cspell................................|ale-restructuredtext-cspell|
     textlint..............................|ale-restructuredtext-textlint|

@@ -491,6 +491,8 @@ formatting.
 * Racket
   * [racket-langserver](https://github.com/jeapostrophe/racket-langserver/tree/master)
   * [raco](https://docs.racket-lang.org/raco/)
+* Rego
+  * [opafmt](https://www.openpolicyagent.org/docs/latest/cli/#opa-fmt)
 * Re:VIEW
   * [redpen](http://redpen.cc/)
 * ReasonML
