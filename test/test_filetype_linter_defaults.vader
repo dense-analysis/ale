@@ -125,6 +125,13 @@ Execute(The defaults for the verilog filetype should be correct):
 
   AssertEqual [], GetLinterNames('verilog')
 
+Execute(The defaults for the vader filetype should be correct):
+  AssertEqual ['vimls'], GetLinterNames('vader')
+
+  let g:ale_linters_explicit = 1
+
+  AssertEqual [], GetLinterNames('vader')
+
 Execute(Default aliases for React should be defined):
   AssertEqual ['javascript', 'jsx'], ale#linter#ResolveFiletype('javascriptreact')
   AssertEqual ['typescript', 'tsx'], ale#linter#ResolveFiletype('typescriptreact')

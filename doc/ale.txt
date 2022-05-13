@@ -1466,9 +1466,9 @@ g:ale_linter_aliases                                     *g:ale_linter_aliases*
   \   'ps1': 'powershell',
   \   'rmarkdown': 'r',
   \   'rmd': 'r',
-  \   'svelte': ['svelte', 'javascript'],
   \   'systemverilog': 'verilog',
   \   'typescriptreact': ['typescript', 'tsx'],
+  \   'vader': ['vim', 'vader'],
   \   'verilog_systemverilog': ['verilog_systemverilog', 'verilog'],
   \   'vimwiki': 'markdown',
   \   'vue': ['vue', 'javascript'],
@@ -1622,9 +1622,11 @@ g:ale_linters                                                   *g:ale_linters*
   \   'rust': ['cargo', 'rls'],
   \   'spec': [],
   \   'text': [],
+  \   'vader': ['vimls'],
   \   'vue': ['eslint', 'vls'],
   \   'zsh': ['shell'],
   \   'v': ['v'],
+  \   'yaml': ['spectral', 'yaml-language-server', 'yamllint'],
   \}
 <
   This option can be used to enable only a particular set of linters for a
