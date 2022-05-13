@@ -482,9 +482,6 @@ Notes:
 * Racket
   * `racket-langserver`
   * `raco`
-* Rego
-  * `opafmt`
-  * `opacheck`
 * Re:VIEW
   * `redpen`
 * ReasonML
@@ -492,6 +489,9 @@ Notes:
   * `ols`
   * `reason-language-server`
   * `refmt`
+* Rego
+  * `opacheck`
+  * `opafmt`
 * reStructuredText
   * `alex`
   * `cspell`
