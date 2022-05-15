@@ -248,6 +248,7 @@ formatting.
   * [stack-ghc](https://haskellstack.org/)
   * [stylish-haskell](https://github.com/jaspervdj/stylish-haskell)
 * HCL
+  * [packer-fmt](https://github.com/hashicorp/packer)
   * [terraform-fmt](https://github.com/hashicorp/terraform)
 * HTML
   * [VSCode HTML language server](https://github.com/hrsh7th/vscode-langservers-extracted)

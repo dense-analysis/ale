@@ -2909,6 +2909,7 @@ documented in additional help files.
     hie...................................|ale-haskell-hie|
     ormolu................................|ale-haskell-ormolu|
   hcl.....................................|ale-hcl-options|
+    packer-fmt............................|ale-hcl-packer-fmt|
     terraform-fmt.........................|ale-hcl-terraform-fmt|
   help....................................|ale-help-options|
     cspell................................|ale-help-cspell|
