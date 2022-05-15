@@ -11,7 +11,7 @@ Execute(The zig callback should return the correct default values):
   \}
 
 Execute(The zig callback should allow custom zig executables):
-  let g:ale_zig_zig_executable = 'foo/bar'
+  let g:ale_zig_zigfmt_executable = 'foo/bar'
 
   AssertFixer {
   \    'command': ale#Escape('foo/bar') . ' fmt %t',

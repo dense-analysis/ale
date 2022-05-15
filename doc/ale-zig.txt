@@ -7,8 +7,12 @@ Integration Information
 
   Currently, the only supported linter for zig is zls.
 
-g:ale_zig_zig_executable                             *g:ale_zig_zig_executable*
-                                                     *b:ale_zig_zig_executable*
+
+===============================================================================
+zigfmt                                                        *ale-zig-zigfmt*
+
+g:ale_zig_zigfmt_executable                      *g:ale_zig_zigfmt_executable*
+                                                 *b:ale_zig_zigfmt_executable*
   Type: |String|
   Default: `'zig'`
 
