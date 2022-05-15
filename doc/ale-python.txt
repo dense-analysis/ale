@@ -39,6 +39,7 @@ ALE will look for configuration files with the following filenames. >
   tox.ini
   .pyre_configuration.local
   mypy.ini
+  .mypy.ini
   pycodestyle.cfg
   .flake8
   .flake8rc
