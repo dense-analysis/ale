@@ -438,7 +438,7 @@ let s:default_registry = {
 \   },
 \   'packer': {
 \       'function': 'ale#fixers#packer#Fix',
-\       'suggested_filetypes': ['hcl'],
+\       'suggested_filetypes': ['hcl', 'packer'],
 \       'description': 'Fix Packer HCL files with packer fmt.',
 \   },
 \   'crystal': {
