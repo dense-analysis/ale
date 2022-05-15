@@ -1,4 +1,4 @@
-" Description: pylint for python files
+" Description: opa check for rego files
 
 call ale#Set('rego_opacheck_executable', 'opa')
 call ale#Set('rego_opacheck_options', '')

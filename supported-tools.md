@@ -499,6 +499,7 @@ formatting.
   * [reason-language-server](https://github.com/jaredly/reason-language-server)
   * [refmt](https://github.com/reasonml/reason-cli)
 * Rego
+  * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [opacheck](https://www.openpolicyagent.org/docs/latest/cli/#opa-check)
   * [opafmt](https://www.openpolicyagent.org/docs/latest/cli/#opa-fmt)
 * reStructuredText

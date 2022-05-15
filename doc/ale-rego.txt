@@ -3,6 +3,12 @@ ALE Rego Integration                                         *ale-rego-options*
 
 
 ===============================================================================
+cspell                                                        *ale-rego-cspell*
+
+See |ale-cspell-options|
+
+
+===============================================================================
 opacheck                                                   *ale-rego-opa-check*
 
 g:ale_rego_opacheck_executable                     *g:rego_opacheck_executable*
@@ -20,6 +26,7 @@ g:rego_opacheck_options                               *g:rego_opacheck_options*
   Default: `''`
 
   This variable can be changed to pass custom CLI flags to opa check.
+
 
 ===============================================================================
 opafmt                                                 *ale-rego-opa-fmt-fixer*
