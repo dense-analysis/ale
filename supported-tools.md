@@ -75,7 +75,7 @@ formatting.
   * [clangd](https://clang.llvm.org/extra/clangd.html)
   * [clangtidy](http://clang.llvm.org/extra/clang-tidy/) :floppy_disk:
   * [cppcheck](http://cppcheck.sourceforge.net)
-  * [cpplint](https://github.com/google/styleguide/tree/gh-pages/cpplint)
+  * [cpplint](https://github.com/cpplint/cpplint)
   * [cquery](https://github.com/cquery-project/cquery)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [flawfinder](https://www.dwheeler.com/flawfinder/)
