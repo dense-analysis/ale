@@ -436,6 +436,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['hcl', 'terraform'],
 \       'description': 'Fix tf and hcl files with terraform fmt.',
 \   },
+\   'packer': {
+\       'function': 'ale#fixers#packer#Fix',
+\       'suggested_filetypes': ['hcl', 'packer'],
+\       'description': 'Fix Packer HCL files with packer fmt.',
+\   },
 \   'crystal': {
 \       'function': 'ale#fixers#crystal#Fix',
 \       'suggested_filetypes': ['cr'],

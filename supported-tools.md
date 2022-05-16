@@ -248,6 +248,7 @@ formatting.
   * [stack-ghc](https://haskellstack.org/)
   * [stylish-haskell](https://github.com/jaspervdj/stylish-haskell)
 * HCL
+  * [packer-fmt](https://github.com/hashicorp/packer)
   * [terraform-fmt](https://github.com/hashicorp/terraform)
 * HTML
   * [VSCode HTML language server](https://github.com/hrsh7th/vscode-langservers-extracted)
@@ -401,6 +402,8 @@ formatting.
   * [ibm_validator](https://github.com/IBM/openapi-validator)
   * [prettier](https://github.com/prettier/prettier)
   * [yamllint](https://yamllint.readthedocs.io/)
+* Packer (HCL)
+  * [packer-fmt-fixer](https://github.com/hashicorp/packer)
 * Pascal
   * [ptop](https://www.freepascal.org/tools/ptop.var)
 * Pawn

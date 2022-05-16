@@ -239,6 +239,7 @@ Notes:
   * `stack-ghc`
   * `stylish-haskell`
 * HCL
+  * `packer-fmt`
   * `terraform-fmt`
 * HTML
   * `VSCode HTML language server`
@@ -392,6 +393,8 @@ Notes:
   * `ibm_validator`
   * `prettier`
   * `yamllint`
+* Packer
+  * `packer-fmt-fixer`
 * Pascal
   * `ptop`
 * Pawn
