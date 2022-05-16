@@ -9,10 +9,10 @@ Integration Information
 
 
 ===============================================================================
-zigfmt                                                        *ale-zig-zigfmt*
+zigfmt                                                         *ale-zig-zigfmt*
 
-g:ale_zig_zigfmt_executable                      *g:ale_zig_zigfmt_executable*
-                                                 *b:ale_zig_zigfmt_executable*
+g:ale_zig_zigfmt_executable                       *g:ale_zig_zigfmt_executable*
+                                                  *b:ale_zig_zigfmt_executable*
   Type: |String|
   Default: `'zig'`
 
