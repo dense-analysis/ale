@@ -526,6 +526,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['pascal'],
 \       'description': 'Fix Pascal files with ptop.',
 \   },
+\   'opafmt': {
+\       'function': 'ale#fixers#opafmt#Fix',
+\       'suggested_filetypes': ['rego'],
+\       'description': 'Fix rego files with opa fmt.',
+\   },
 \   'vfmt': {
 \       'function': 'ale#fixers#vfmt#Fix',
 \       'suggested_filetypes': ['v'],

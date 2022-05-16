@@ -498,6 +498,10 @@ formatting.
   * [ols](https://github.com/freebroccolo/ocaml-language-server)
   * [reason-language-server](https://github.com/jaredly/reason-language-server)
   * [refmt](https://github.com/reasonml/reason-cli)
+* Rego
+  * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [opacheck](https://www.openpolicyagent.org/docs/latest/cli/#opa-check)
+  * [opafmt](https://www.openpolicyagent.org/docs/latest/cli/#opa-fmt)
 * reStructuredText
   * [alex](https://github.com/get-alex/alex)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)

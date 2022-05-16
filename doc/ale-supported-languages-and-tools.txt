@@ -489,6 +489,10 @@ Notes:
   * `ols`
   * `reason-language-server`
   * `refmt`
+* Rego
+  * `cspell`
+  * `opacheck`
+  * `opafmt`
 * reStructuredText
   * `alex`
   * `cspell`
