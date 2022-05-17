@@ -3051,6 +3051,8 @@ documented in additional help files.
     ibm_validator.........................|ale-openapi-ibm-validator|
     prettier..............................|ale-openapi-prettier|
     yamllint..............................|ale-openapi-yamllint|
+  openscad................................|ale-openscad-options|
+    sca2d.................................|ale-openscad-sca2d|
   packer..................................|ale-packer-options|
     packer-fmt-fixer......................|ale-packer-fmt-fixer|
   pascal..................................|ale-pascal-options|

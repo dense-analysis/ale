@@ -396,6 +396,8 @@ Notes:
   * `ibm_validator`
   * `prettier`
   * `yamllint`
+* OpenSCAD
+  * `SCA2D`
 * Packer
   * `packer-fmt-fixer`
 * Pascal
