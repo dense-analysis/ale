@@ -106,18 +106,31 @@ function! s:NvimPrepareWindowContent(lines) abort
     let l:width += 2
     let l:height += 2
 
-    let l:hor          = g:ale_floating_window_border[0]
-    let l:top          = g:ale_floating_window_border[1]
-    let l:top_left     = g:ale_floating_window_border[2]
-    let l:top_right    = g:ale_floating_window_border[3]
-    let l:bottom_right = g:ale_floating_window_border[4]
-    let l:bottom_left  = g:ale_floating_window_border[5]
+    if len(g:ale_floating_window_border) == 6
+        let l:left         = g:ale_floating_window_border[0]
+        let l:right        = l:left
+        let l:top          = g:ale_floating_window_border[1]
+        let l:bottom       = l:top
+        let l:top_left     = g:ale_floating_window_border[2]
+        let l:top_right    = g:ale_floating_window_border[3]
+        let l:bottom_right = g:ale_floating_window_border[4]
+        let l:bottom_left  = g:ale_floating_window_border[5]
+    else
+        let l:top          = g:ale_floating_window_border[0]
+        let l:right        = g:ale_floating_window_border[1]
+        let l:bottom       = g:ale_floating_window_border[2]
+        let l:left         = g:ale_floating_window_border[3]
+        let l:top_left     = g:ale_floating_window_border[4]
+        let l:top_right    = g:ale_floating_window_border[5]
+        let l:bottom_right = g:ale_floating_window_border[6]
+        let l:bottom_left  = g:ale_floating_window_border[7]
+    endif
 
     let l:lines = [l:top_left . repeat(l:top, l:width - 2) . l:top_right]
 
     for l:line in a:lines
         let l:line_width = strchars(l:line)
-        let l:lines = add(l:lines, l:hor . l:line . repeat(' ', l:width - l:line_width - 2). l:hor)
+        let l:lines = add(l:lines, l:left . l:line . repeat(' ', l:width - l:line_width - 2). l:right)
     endfor
 
     " Truncate the lines
@@ -125,7 +138,7 @@ function! s:NvimPrepareWindowContent(lines) abort
         let l:lines = l:lines[0:l:max_height]
     endif
 
-    let l:lines = add(l:lines, l:bottom_left . repeat(l:top, l:width - 2) . l:bottom_right)
+    let l:lines = add(l:lines, l:bottom_left . repeat(l:bottom, l:width - 2) . l:bottom_right)
 
     return [l:lines, l:width, l:height]
 endfunction
@@ -157,7 +170,10 @@ function! s:VimCreate(options) abort
     \    'close': 'button',
     \    'padding': [0, 1, 0, 1],
     \    'border': [],
-    \    'borderchars': empty(g:ale_floating_window_border) ? [' '] : [
+    \    'borderchars':
+    \         empty(g:ale_floating_window_border) ? [' '] :
+    \         len(g:ale_floating_window_border) != 6 ? g:ale_floating_window_border :
+    \    [
     \        g:ale_floating_window_border[1],
     \        g:ale_floating_window_border[0],
     \        g:ale_floating_window_border[1],
