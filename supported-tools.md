@@ -475,6 +475,7 @@ formatting.
   * [pycodestyle](https://github.com/PyCQA/pycodestyle) :warning:
   * [pydocstyle](https://www.pydocstyle.org/) :warning:
   * [pyflakes](https://github.com/PyCQA/pyflakes)
+  * [pyflyby](https://github.com/deshaw/pyflyby) :warning:
   * [pylama](https://github.com/klen/pylama) :floppy_disk:
   * [pylint](https://www.pylint.org/) :floppy_disk:
   * [pylsp](https://github.com/python-lsp/python-lsp-server) :warning:
