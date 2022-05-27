@@ -931,7 +931,7 @@ If the terminal supports Unicode, you might try setting the value like below, to
 make it look nicer.
 
 ```vim
-let g:ale_floating_window_border = ['─', '│', '─', '│', '╭', '╮', '╯', '╰']
+let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰', '│', '─']
 ```
 
 Since vim's default uses nice unicode characters when possible, you can trick

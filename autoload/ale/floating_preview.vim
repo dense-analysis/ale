@@ -106,25 +106,14 @@ function! s:NvimPrepareWindowContent(lines) abort
     let l:width += 2
     let l:height += 2
 
-    if len(g:ale_floating_window_border) == 6
-        let l:left         = g:ale_floating_window_border[0]
-        let l:right        = l:left
-        let l:top          = g:ale_floating_window_border[1]
-        let l:bottom       = l:top
-        let l:top_left     = g:ale_floating_window_border[2]
-        let l:top_right    = g:ale_floating_window_border[3]
-        let l:bottom_right = g:ale_floating_window_border[4]
-        let l:bottom_left  = g:ale_floating_window_border[5]
-    else
-        let l:top          = g:ale_floating_window_border[0]
-        let l:right        = g:ale_floating_window_border[1]
-        let l:bottom       = g:ale_floating_window_border[2]
-        let l:left         = g:ale_floating_window_border[3]
-        let l:top_left     = g:ale_floating_window_border[4]
-        let l:top_right    = g:ale_floating_window_border[5]
-        let l:bottom_right = g:ale_floating_window_border[6]
-        let l:bottom_left  = g:ale_floating_window_border[7]
-    endif
+    let l:left         = get(g:ale_floating_window_border, 0, '|')
+    let l:top          = get(g:ale_floating_window_border, 1, '-')
+    let l:top_left     = get(g:ale_floating_window_border, 2, '+')
+    let l:top_right    = get(g:ale_floating_window_border, 3, '+')
+    let l:bottom_right = get(g:ale_floating_window_border, 4, '+')
+    let l:bottom_left  = get(g:ale_floating_window_border, 5, '+')
+    let l:right        = get(g:ale_floating_window_border, 6, l:left)
+    let l:bottom       = get(g:ale_floating_window_border, 7, l:top)
 
     let l:lines = [l:top_left . repeat(l:top, l:width - 2) . l:top_right]
 
@@ -170,18 +159,15 @@ function! s:VimCreate(options) abort
     \    'close': 'button',
     \    'padding': [0, 1, 0, 1],
     \    'border': [],
-    \    'borderchars':
-    \         empty(g:ale_floating_window_border) ? [' '] :
-    \         len(g:ale_floating_window_border) != 6 ? g:ale_floating_window_border :
-    \    [
-    \        g:ale_floating_window_border[1],
-    \        g:ale_floating_window_border[0],
-    \        g:ale_floating_window_border[1],
-    \        g:ale_floating_window_border[0],
-    \        g:ale_floating_window_border[2],
-    \        g:ale_floating_window_border[3],
-    \        g:ale_floating_window_border[4],
-    \        g:ale_floating_window_border[5],
+    \    'borderchars': empty(g:ale_floating_window_border) ? [' '] : [
+    \        get(g:ale_floating_window_border, 1, '-'),
+    \        get(g:ale_floating_window_border, 6, '|'),
+    \        get(g:ale_floating_window_border, 7, '-'),
+    \        get(g:ale_floating_window_border, 0, '|'),
+    \        get(g:ale_floating_window_border, 2, '+'),
+    \        get(g:ale_floating_window_border, 3, '+'),
+    \        get(g:ale_floating_window_border, 4, '+'),
+    \        get(g:ale_floating_window_border, 5, '+'),
     \    ],
     \    'moved': 'any',
     \    })
