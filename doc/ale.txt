@@ -676,7 +676,8 @@ Hover information can be displayed in the preview window instead by setting
 
 When using Neovim or Vim with |popupwin|, if |g:ale_hover_to_floating_preview|
 or |g:ale_floating_preview| is set to 1, the hover information will show in a
-floating window. And |g:ale_floating_window_border| for the border setting.
+floating window. The borders of the floating preview window can be customized
+by setting |g:ale_floating_window_border|.
 
 For Vim 8.1+ terminals, mouse hovering is disabled by default. Enabling
 |balloonexpr| commands in terminals can cause scrolling issues in terminals,
@@ -1236,14 +1237,19 @@ g:ale_floating_preview                                 *g:ale_floating_preview*
 g:ale_floating_window_border                       *g:ale_floating_window_border*
 
   Type: |List|
-  Default: `['|', '-', '+', '+', '+', '+']`
+  Default: `['|', '-', '+', '+', '+', '+', '|', '-']`
 
   When set to `[]`, window borders are disabled. The elements in the list set
-  the horizontal, top, top-left, top-right, bottom-right and bottom-left
-  border characters, respectively.
+	the the characters for the left side, top, top-left corner, top-right
+	corner, bottom-right corner, bottom-left corner, right side, and bottom of
+	the floating window, respectively.
 
   If the terminal supports Unicode, you might try setting the value to
-  ` ['│', '─', '╭', '╮', '╯', '╰']`, to make it look nicer.
+  ` ['│', '─', '╭', '╮', '╯', '╰', '│', '─']`, to make it look nicer.
+
+  NOTE: For compatibility with previous versions, if the list does not have
+	elements for the right side and bottom, the left side and top will be used
+	instead.
 
 
 g:ale_history_enabled                                   *g:ale_history_enabled*

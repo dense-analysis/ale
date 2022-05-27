@@ -931,14 +931,14 @@ If the terminal supports Unicode, you might try setting the value like below, to
 make it look nicer.
 
 ```vim
-let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰']
+let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰', '│', '─']
 ```
 
 Since vim's default uses nice unicode characters when possible, you can trick
 ale into using that default with
 
 ```vim
-let g:ale_floating_window_border = repeat([''], 6)
+let g:ale_floating_window_border = repeat([''], 8)
 ```
 
 <a name="faq-vim-lsp"></a>
