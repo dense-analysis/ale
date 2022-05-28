@@ -130,7 +130,7 @@ Execute(tsserver quickinfo displayString values should be displayed):
   \ }
   \)
 
-  AssertEqual [['foo bar']], g:show_message_arg_list
+  AssertEqual [['foo bar', {'commands': []}]], g:show_message_arg_list
   AssertEqual {}, ale#hover#GetMap()
 
 Execute(LSP hover responses with just a string should be handled):

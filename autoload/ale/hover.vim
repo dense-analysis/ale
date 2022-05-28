@@ -20,7 +20,7 @@ endfunction
 function! ale#hover#FloatCallback(info) abort
     call ale#floating_preview#Show(a:info.lines, {
     \   'filetype': 'ale-preview.message',
-    \   'commands': a:info.commands,
+    \   'commands': get(a:info, 'commands', []),
     \})
 endfunction
 
@@ -28,13 +28,13 @@ function! ale#hover#PreviewCallback(info) abort
     call ale#preview#Show(a:info.lines, {
     \   'filetype': 'ale-preview.message',
     \   'stay_here': 1,
-    \   'commands': a:info.commands,
+    \   'commands': get(a:info, 'commands', []),
     \})
 endfunction
 
 function! ale#hover#MessageCallback(info) abort
     call ale#util#ShowMessage(join(a:info.lines, "\n"), {
-    \   'commands': a:info.commands,
+    \   'commands': get(a:info, 'commands', []),
     \})
 endfunction
 
