@@ -17,6 +17,58 @@ function! ale#hover#ClearLSPData() abort
     let s:hover_map = {}
 endfunction
 
+function! ale#hover#FloatCallback(info) abort
+    call ale#floating_preview#Show(a:info.lines, {
+    \   'filetype': 'ale-preview.message',
+    \   'commands': a:info.commands,
+    \})
+endfunction
+
+function! ale#hover#PreviewCallback(info) abort
+    call ale#preview#Show(a:info.lines, {
+    \   'filetype': 'ale-preview.message',
+    \   'stay_here': 1,
+    \   'commands': a:info.commands,
+    \})
+endfunction
+
+function! ale#hover#MessageCallback(info) abort
+    call ale#util#ShowMessage(join(a:info.lines, "\n"), {
+    \   'commands': a:info.commands,
+    \})
+endfunction
+
+function! ale#hover#DefaultCallback(info) abort
+    if g:ale_hover_to_floating_preview || g:ale_floating_preview
+        call ale#hover#FloatCallback(a:info)
+    elseif g:ale_hover_to_preview
+        call ale#hover#PreviewCallback(a:info)
+    else
+        call ale#hover#MessageCallback(a:info)
+    endif
+endfunction
+
+function! ale#hover#DefaultCursorCallback(info) abort
+    if type(a:info.lines[0]) is# v:t_list
+        call ale#cursor#TruncatedEcho(join(a:info.lines[0], '\n'))
+    else
+        call ale#cursor#TruncatedEcho(a:info.lines[0])
+    endif
+endfunction
+
+let s:hover_callback = function('ale#hover#DefaultCallback')
+let s:cursor_callback = function('ale#hover#DefaultCursorCallback')
+
+" Sets the callback FuncRef for explicit ALEHover calls
+function! ale#hover#SetCallback(fn) abort
+    let s:hover_callback = a:fn
+endfunction
+
+" Sets the callback FuncRef for g:ale_hover_cursor
+function! ale#hover#SetCursorCallback(fn) abort
+    let s:cursor_callback = a:fn
+endfunction
+
 function! ale#hover#HandleTSServerResponse(conn_id, response) abort
     if get(a:response, 'command', '') is# 'quickinfo'
     \&& has_key(s:hover_map, a:response.request_seq)
@@ -46,19 +98,14 @@ function! ale#hover#HandleTSServerResponse(conn_id, response) abort
                 call balloon_show(a:response.body.displayString)
             elseif get(l:options, 'truncated_echo', 0)
                 if !empty(a:response.body.displayString)
-                    call ale#cursor#TruncatedEcho(a:response.body.displayString)
+                    call s:cursor_callback(#{
+                    \ lines: split(a:response.body.displayString, "\n"),
+                    \ })
                 endif
-            elseif g:ale_hover_to_floating_preview || g:ale_floating_preview
-                call ale#floating_preview#Show(split(a:response.body.displayString, "\n"), {
-                \   'filetype': 'ale-preview.message',
-                \})
-            elseif g:ale_hover_to_preview
-                call ale#preview#Show(split(a:response.body.displayString, "\n"), {
-                \   'filetype': 'ale-preview.message',
-                \   'stay_here': 1,
-                \})
             else
-                call ale#util#ShowMessage(a:response.body.displayString)
+                call s:hover_callback(#{
+                \ lines: split(a:response.body.displayString, "\n"),
+                \ })
             endif
         endif
     endif
@@ -231,25 +278,14 @@ function! ale#hover#HandleLSPResponse(conn_id, response) abort
             \&& (l:set_balloons is 1 || l:set_balloons is# 'hover')
                 call balloon_show(join(l:lines, "\n"))
             elseif get(l:options, 'truncated_echo', 0)
-                if type(l:lines[0]) is# v:t_list
-                    call ale#cursor#TruncatedEcho(join(l:lines[0], '\n'))
-                else
-                    call ale#cursor#TruncatedEcho(l:lines[0])
-                endif
-            elseif g:ale_hover_to_floating_preview || g:ale_floating_preview
-                call ale#floating_preview#Show(l:lines, {
-                \   'filetype': 'ale-preview.message',
-                \   'commands': l:commands,
-                \})
-            elseif g:ale_hover_to_preview
-                call ale#preview#Show(l:lines, {
-                \   'filetype': 'ale-preview.message',
-                \   'stay_here': 1,
-                \   'commands': l:commands,
+                call s:cursor_callback(#{
+                \ lines: l:lines,
+                \ commands: l:commands
                 \})
             else
-                call ale#util#ShowMessage(join(l:lines, "\n"), {
-                \   'commands': l:commands,
+                call s:hover_callback(#{
+                \ lines: l:lines,
+                \ commands: l:commands
                 \})
             endif
         endif
