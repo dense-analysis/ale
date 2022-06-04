@@ -268,8 +268,8 @@ g:ale_python_flake8_change_directory     *g:ale_python_flake8_change_directory*
   Default: `'project'`
 
   If set to `project`, ALE will switch to the project root before checking file.
-  If set to `file`, ALE will switch to directory the Python file being
-  checked with `flake8` is in before checking it.
+  If set to `file`, ALE will first switch to the directory containing the
+  Python file being checked with `flake8` before checking it.
   You can turn it off with `off` option if you want to control the directory
   Python is executed from yourself.
 
