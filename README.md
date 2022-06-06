@@ -359,7 +359,7 @@ See the Vundle documentation for more information.
 
 <a name="installation-with-vim-plug"></a>
 
-### 3.iiii. Installation with Vim-Plug
+### 3.iv. Installation with Vim-Plug
 
 You can install this plugin using [Vim-Plug](https://github.com/junegunn/vim-plug)
 by adding the GitHub path for this repository to your `~/.vimrc`:
