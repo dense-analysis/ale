@@ -386,8 +386,8 @@ If you are interested in the general direction of the project, check out the
 [wiki home page](https://github.com/dense-analysis/ale/wiki). The wiki includes
 a Roadmap for the future, and more.
 
-If you'd liked to discuss the project more directly, check out the `#vim-ale` channel
-on Libera Chat. Web chat is available [here](https://web.libera.chat/#vim-ale).
+If you'd liked to discuss ALE and more check out the Dense Analysis Discord
+server here: https://discord.gg/5zFD6pQxDk
 
 <a name="faq"></a>
 
