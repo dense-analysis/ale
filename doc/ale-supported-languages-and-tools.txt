@@ -466,6 +466,7 @@ Notes:
   * `pycodestyle`
   * `pydocstyle`
   * `pyflakes`
+  * `pyflyby`
   * `pylama`!!
   * `pylint`!!
   * `pylsp`

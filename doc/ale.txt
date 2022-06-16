@@ -3117,6 +3117,7 @@ documented in additional help files.
     pycodestyle...........................|ale-python-pycodestyle|
     pydocstyle............................|ale-python-pydocstyle|
     pyflakes..............................|ale-python-pyflakes|
+    pyflyby...............................|ale-python-pyflyby|
     pylama................................|ale-python-pylama|
     pylint................................|ale-python-pylint|
     pylsp.................................|ale-python-pylsp|

@@ -136,6 +136,11 @@ let s:default_registry = {
 \       'description': 'Apply prettier-eslint to a file.',
 \       'aliases': ['prettier-eslint'],
 \   },
+\   'pyflyby': {
+\       'function': 'ale#fixers#pyflyby#Fix',
+\       'suggested_filetypes': ['python'],
+\       'description': 'Tidy Python imports with pyflyby.',
+\   },
 \   'importjs': {
 \       'function': 'ale#fixers#importjs#Fix',
 \       'suggested_filetypes': ['javascript'],
