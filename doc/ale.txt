@@ -3071,6 +3071,7 @@ documented in additional help files.
     psalm.................................|ale-php-psalm|
     php-cs-fixer..........................|ale-php-php-cs-fixer|
     php...................................|ale-php-php|
+    pint..................................|ale-php-pint|
     tlint.................................|ale-php-tlint|
     intelephense..........................|ale-php-intelephense|
   po......................................|ale-po-options|

@@ -417,6 +417,7 @@ Notes:
   * `phpcs`
   * `phpmd`
   * `phpstan`
+  * `pint`
   * `psalm`!!
   * `tlint`
 * PO

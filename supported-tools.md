@@ -426,6 +426,7 @@ formatting.
   * [phpcs](https://github.com/squizlabs/PHP_CodeSniffer)
   * [phpmd](https://phpmd.org)
   * [phpstan](https://github.com/phpstan/phpstan)
+  * [pint](https://github.com/laravel/pint) :beer:
   * [psalm](https://getpsalm.org) :floppy_disk:
   * [tlint](https://github.com/tightenco/tlint)
 * PO
