@@ -26,6 +26,7 @@ Execute(The global override should work):
 
 Execute(Extra options should be configurable):
   let b:ale_less_stylelint_options = '--whatever'
+  call ale#test#SetFilename('../test-files/dummy')
 
   AssertLinter 'stylelint',
   \ ale#Escape('stylelint') . ' --whatever --stdin-filename %s'

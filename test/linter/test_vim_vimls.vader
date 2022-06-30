@@ -70,7 +70,8 @@ Execute(should let the global executable to be used):
   AssertLinter 'vim-language-server',
   \ ale#Escape('vim-language-server') . ' --stdio'
 
-Execute(should let the executable to be configured):
+Execute(should allow the executable to be configured):
   let g:ale_vim_vimls_executable = 'foobar'
+  call ale#test#SetFilename('../test-files/dummy')
 
   AssertLinter 'foobar', ale#Escape('foobar') . ' --stdio'

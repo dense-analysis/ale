@@ -62,7 +62,7 @@ Execute(The file changed event function should lint the current buffer when it h
   \   'nr': -1,
   \   'pattern': '',
   \   'valid': 1,
-  \ }], ale#test#GetLoclistWithoutModule()
+  \ }], ale#test#GetLoclistWithoutNewerKeys()
 
 Execute(The buffer should be checked after entering it after the file has changed):
   let b:ale_file_changed = 1
@@ -81,4 +81,4 @@ Execute(The buffer should be checked after entering it after the file has change
   \   'nr': -1,
   \   'pattern': '',
   \   'valid': 1,
-  \ }], ale#test#GetLoclistWithoutModule()
+  \ }], ale#test#GetLoclistWithoutNewerKeys()

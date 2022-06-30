@@ -271,7 +271,7 @@ Execute(Buffer ignore lists should be applied for LSP linters):
   \ 'jsonrpc': '2.0',
   \ 'method': 'textDocument/publishDiagnostics',
   \ 'params': {
-  \   'uri': ale#path#ToURI(expand('%:p')),
+  \   'uri': ale#path#ToFileURI(expand('%:p')),
   \   'diagnostics': [
   \     {
   \       'severity': 1,
@@ -366,7 +366,7 @@ Execute(ale_disable_lsp should be applied for LSP linters):
   \ 'jsonrpc': '2.0',
   \ 'method': 'textDocument/publishDiagnostics',
   \ 'params': {
-  \   'uri': ale#path#ToURI(expand('%:p')),
+  \   'uri': ale#path#ToFileURI(expand('%:p')),
   \   'diagnostics': [
   \     {
   \       'severity': 1,

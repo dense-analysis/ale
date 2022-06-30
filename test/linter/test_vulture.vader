@@ -56,3 +56,7 @@ Execute(Setting executable to 'pipenv' appends 'run vulture'):
   let g:ale_python_vulture_executable = 'path/to/pipenv'
 
   AssertLinter 'path/to/pipenv', ale#Escape('path/to/pipenv') . ' run vulture' . '  .'
+Execute(Setting executable to 'poetry' appends 'run vulture'):
+  let g:ale_python_vulture_executable = 'path/to/poetry'
+
+  AssertLinter 'path/to/poetry', ale#Escape('path/to/poetry') . ' run vulture' . '  .'

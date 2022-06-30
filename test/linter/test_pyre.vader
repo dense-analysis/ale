@@ -34,6 +34,7 @@ Execute(You should be able to override the pyre virtualenv lookup):
 
 Execute(Setting executable to 'pipenv' appends 'run pyre'):
   let g:ale_python_pyre_executable = 'path/to/pipenv'
+  call ale#test#SetFilename('../test-files/dummy')
 
   AssertLinter 'path/to/pipenv',
   \ ale#Escape('path/to/pipenv') . ' run pyre persistent'
@@ -44,3 +45,23 @@ Execute(Pipenv is detected when python_pyre_auto_pipenv is set):
 
   AssertLinter 'pipenv',
   \ ale#Escape('pipenv') . ' run pyre persistent'
+
+Execute(Setting executable to 'poetry' appends 'run pyre'):
+  let g:ale_python_pyre_executable = 'path/to/poetry'
+
+  AssertLinter 'path/to/poetry',
+  \ ale#Escape('path/to/poetry') . ' run pyre persistent'
+
+Execute(Poetry is detected when python_pyre_auto_poetry is set):
+  let g:ale_python_pyre_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinter 'poetry',
+  \ ale#Escape('poetry') . ' run pyre persistent'
+
+Execute(The FindProjectRoot should detect the project root directory for namespace package via .pyre_configuration.local):
+  silent execute 'file ' . fnameescape(g:dir . '/../test-files/python/pyre_configuration_dir/foo/bar.py')
+
+  AssertEqual
+  \ ale#path#Simplify(g:dir . '/../test-files/python/pyre_configuration_dir'),
+  \ ale#python#FindProjectRoot(bufnr(''))

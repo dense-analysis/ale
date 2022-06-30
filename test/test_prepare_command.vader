@@ -4,6 +4,12 @@ Before:
   Save g:ale_shell
   Save g:ale_shell_arguments
 
+  Save b:ale_shell
+  Save b:ale_shell_arguments
+
+  unlet! b:ale_shell
+  unlet! b:ale_shell_arguments
+
   unlet! g:ale_shell
   unlet! g:ale_shell_arguments
 
@@ -61,7 +67,7 @@ Execute(cmd /s/c as a string should be used on Windows):
     AssertEqual 'cmd /s/c "foobar"', ale#job#PrepareCommand(bufnr(''), 'foobar')
   endif
 
-Execute(Setting ale_shell should cause ale#job#PrepareCommand to use set shell):
+Execute(Setting g:ale_shell should cause ale#job#PrepareCommand to use set shell):
   let g:ale_shell = '/foo/bar'
 
   if has('win32')
@@ -71,5 +77,20 @@ Execute(Setting ale_shell should cause ale#job#PrepareCommand to use set shell):
   endif
 
   let g:ale_shell_arguments = '-x'
+
+  AssertEqual ['/foo/bar', '-x', 'foobar'], ale#job#PrepareCommand(bufnr(''), "foobar")
+
+Execute(Setting b:ale_shell should cause ale#job#PrepareCommand to use set shell):
+  let g:ale_shell = '/wrong/foo/bar'
+  let b:ale_shell = '/foo/bar'
+
+  if has('win32')
+    AssertEqual ['/foo/bar', '/c', 'foobar'], ale#job#PrepareCommand(bufnr(''), "foobar")
+  else
+    AssertEqual ['/foo/bar', '-c', 'foobar'], ale#job#PrepareCommand(bufnr(''), "foobar")
+  endif
+
+  let g:ale_shell_arguments = '--verbose -x'
+  let b:ale_shell_arguments = '-x'
 
   AssertEqual ['/foo/bar', '-x', 'foobar'], ale#job#PrepareCommand(bufnr(''), "foobar")

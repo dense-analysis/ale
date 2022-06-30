@@ -528,6 +528,38 @@ Execute(Should handle completion messages with textEdit objects):
   \   },
   \ })
 
+Execute(Should handle completion messages with textEdit objects and no insertTextFormat key):
+  let g:ale_completion_autoimport = 0
+
+  AssertEqual
+  \ [
+  \   {'word': 'next_callback', 'dup': 0, 'menu': 'PlayTimeCallback', 'info': '', 'kind': 'v', 'icase': 1, 'user_data': json_encode({'_ale_completion_item': 1})},
+  \ ],
+  \ ale#completion#ParseLSPCompletions({
+  \   'id': 226,
+  \   'jsonrpc': '2.0',
+  \   'result': {
+  \     'isIncomplete': v:false,
+  \     'items': [
+  \       {
+  \         'detail': 'PlayTimeCallback',
+  \         'filterText': 'next_callback',
+  \         'insertText': 'ignoreme',
+  \         'kind': 6,
+  \         'label': ' next_callback',
+  \         'sortText': '3ee19999next_callback',
+  \         'textEdit': {
+  \           'newText': 'next_callback',
+  \           'range': {
+  \             'end': {'character': 13, 'line': 12},
+  \             'start': {'character': 4, 'line': 12},
+  \           },
+  \         },
+  \       },
+  \     ],
+  \   },
+  \ })
+
 Execute(Should handle completion messages with the deprecated insertText attribute):
   let g:ale_completion_autoimport = 0
 

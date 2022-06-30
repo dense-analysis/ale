@@ -77,6 +77,42 @@ function! ale#path#ResolveLocalPath(buffer, search_string, global_fallback) abor
     return l:path
 endfunction
 
+" Given a buffer number, a base variable name, and a list of paths to search
+" for in ancestor directories, detect the executable path for a program.
+function! ale#path#FindNearestExecutable(buffer, path_list) abort
+    for l:path in a:path_list
+        if ale#path#IsAbsolute(l:path)
+            let l:executable = filereadable(l:path) ? l:path : ''
+        else
+            let l:executable = ale#path#FindNearestFile(a:buffer, l:path)
+        endif
+
+        if !empty(l:executable)
+            return l:executable
+        endif
+    endfor
+
+    return ''
+endfunction
+
+" Given a buffer number, a base variable name, and a list of paths to search
+" for in ancestor directories, detect the executable path for a program.
+"
+" The use_global and executable options for the relevant program will be used.
+function! ale#path#FindExecutable(buffer, base_var_name, path_list) abort
+    if ale#Var(a:buffer, a:base_var_name . '_use_global')
+        return ale#Var(a:buffer, a:base_var_name . '_executable')
+    endif
+
+    let l:nearest = ale#path#FindNearestExecutable(a:buffer, a:path_list)
+
+    if !empty(l:nearest)
+        return l:nearest
+    endif
+
+    return ale#Var(a:buffer, a:base_var_name . '_executable')
+endfunction
+
 " Return 1 if a path is an absolute path.
 function! ale#path#IsAbsolute(filename) abort
     if has('win32') && a:filename[:0] is# '\'
@@ -182,7 +218,7 @@ endfunction
 " Convert a filesystem path to a file:// URI
 " relatives paths will not be prefixed with the protocol.
 " For Windows paths, the `:` in C:\ etc. will not be percent-encoded.
-function! ale#path#ToURI(path) abort
+function! ale#path#ToFileURI(path) abort
     let l:has_drive_letter = a:path[1:2] is# ':\'
 
     return substitute(
@@ -195,7 +231,7 @@ function! ale#path#ToURI(path) abort
     \)
 endfunction
 
-function! ale#path#FromURI(uri) abort
+function! ale#path#FromFileURI(uri) abort
     if a:uri[:6] is? 'file://'
         let l:encoded_path = a:uri[7:]
     elseif a:uri[:4] is? 'file:'

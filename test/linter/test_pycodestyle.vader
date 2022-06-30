@@ -31,3 +31,16 @@ Execute(Pipenv is detected when python_pycodestyle_auto_pipenv is set):
 
   AssertLinter 'pipenv',
   \ ale#Escape('pipenv') . ' run pycodestyle  -'
+
+Execute(Setting executable to 'poetry' appends 'run pycodestyle'):
+  let g:ale_python_pycodestyle_executable = 'path/to/poetry'
+
+  AssertLinter 'path/to/poetry',
+  \ ale#Escape('path/to/poetry') . ' run pycodestyle  -'
+
+Execute(Poetry is detected when python_pycodestyle_auto_poetry is set):
+  let g:ale_python_pycodestyle_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinter 'poetry',
+  \ ale#Escape('poetry') . ' run pycodestyle  -'

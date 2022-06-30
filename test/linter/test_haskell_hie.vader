@@ -17,9 +17,9 @@ Execute(The default executable should be correct):
 Execute(The project root should be detected correctly):
   AssertLSPProject g:dir
 
-  call ale#test#SetFilename('hie_paths/file.hs')
+  call ale#test#SetFilename('../test-files/hie_paths/file.hs')
 
-  AssertLSPProject ale#path#Simplify(g:dir . '/hie_paths')
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/hie_paths')
 
 Execute(The executable should be configurable):
   let g:ale_haskell_hie_executable = 'foobar'

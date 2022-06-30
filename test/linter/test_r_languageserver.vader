@@ -5,7 +5,7 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default executable path should be correct):
-  AssertLinter 'Rscript', 'Rscript --vanilla -e ' . ale#Escape('languageserver::run()')
+  AssertLinter 'Rscript', 'Rscript --no-save --no-restore --no-site-file --no-init-file -e ' . ale#Escape('languageserver::run()')
 
 Execute(The project root should be detected correctly):
   AssertLSPProject '.'

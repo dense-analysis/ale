@@ -59,7 +59,7 @@ Before:
 
   function! ale#code_action#HandleCodeAction(code_action, options) abort
     let g:handle_code_action_called = 1
-    Assert get(a:options, 'should_save')
+    AssertEqual !&hidden, get(a:options, 'should_save', 0)
     call add(g:code_actions, a:code_action)
   endfunction
 
@@ -466,8 +466,8 @@ Execute(LSP should perform no action when changes is empty):
 
 Execute(LSP rename requests should be sent):
   call ale#rename#SetMap({})
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
   ALERename
@@ -487,13 +487,13 @@ Execute(LSP rename requests should be sent):
   \ [
   \   [1, 'textDocument/didChange', {
   \     'textDocument': {
-  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'uri': ale#path#ToFileURI(expand('%:p')),
   \         'version': g:ale_lsp_next_version_id - 1,
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
   \   }],
   \   [0, 'textDocument/rename', {
-  \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \   'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
   \   'position': {'line': 0, 'character': 2},
   \   'newName': 'a-new-name',
   \   }],

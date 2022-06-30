@@ -62,7 +62,8 @@ let s:global_variable_list = [
 \]
 
 function! s:Echo(message) abort
-    execute 'echo a:message'
+    " no-custom-checks
+    echo a:message
 endfunction
 
 function! s:GetLinterVariables(filetype, exclude_linter_names) abort
@@ -259,9 +260,7 @@ function! ale#debugging#InfoToClipboard() abort
         return
     endif
 
-    redir => l:output
-        silent call ale#debugging#Info()
-    redir END
+    let l:output = execute('call ale#debugging#Info()')
 
     let @+ = l:output
     call s:Echo('ALEInfo copied to your clipboard')
@@ -270,9 +269,7 @@ endfunction
 function! ale#debugging#InfoToFile(filename) abort
     let l:expanded_filename = expand(a:filename)
 
-    redir => l:output
-        silent call ale#debugging#Info()
-    redir END
+    let l:output = execute('call ale#debugging#Info()')
 
     call writefile(split(l:output, "\n"), l:expanded_filename)
     call s:Echo('ALEInfo written to ' . l:expanded_filename)

@@ -85,14 +85,12 @@ Before:
   let g:ale_set_highlights = 0
   let g:ale_echo_cursor = 1
 
-  function GetLastMessage()
-    redir => l:output
-      silent mess
-    redir END
+  runtime autoload/ale/cursor.vim
 
-    let l:lines = split(l:output, "\n")
+  let g:last_message = ''
 
-    return empty(l:lines) ? '' : l:lines[-1]
+  function! ale#cursor#Echom(message) abort
+    let g:last_message = a:message
   endfunction
 
   call ale#linter#Reset()
@@ -100,6 +98,10 @@ Before:
 
 After:
   Restore
+
+  unlet! g:last_message
+
+  runtime autoload/ale/cursor.vim
 
   call cursor(1, 1)
 
@@ -111,8 +113,6 @@ After:
 
   unlet! g:output
   unlet! b:ale_loclist_msg_format
-
-  delfunction GetLastMessage
 
   " Clearing the messages breaks tests on NeoVim for some reason, but all
   " we need to do for these tests is just make it so the last message isn't
@@ -135,19 +135,19 @@ Execute(Messages should be shown for the correct lines):
   call cursor(1, 1)
   call ale#cursor#EchoCursorWarning()
 
-  AssertEqual 'semi: Missing semicolon.', GetLastMessage()
+  AssertEqual 'semi: Missing semicolon.', g:last_message
 
 Execute(Messages should be shown for earlier columns):
   call cursor(2, 1)
   call ale#cursor#EchoCursorWarning()
 
-  AssertEqual 'space-infix-ops: Infix operators must be spaced.', GetLastMessage()
+  AssertEqual 'space-infix-ops: Infix operators must be spaced.', g:last_message
 
 Execute(Messages should be shown for later columns):
   call cursor(2, 16)
   call ale#cursor#EchoCursorWarning()
 
-  AssertEqual 'radix: Missing radix parameter', GetLastMessage()
+  AssertEqual 'radix: Missing radix parameter', g:last_message
 
 Execute(The message at the cursor should be shown when linting ends):
   call cursor(1, 1)
@@ -156,13 +156,13 @@ Execute(The message at the cursor should be shown when linting ends):
   \ g:ale_buffer_info[bufnr('%')].loclist,
   \)
 
-  AssertEqual 'semi: Missing semicolon.', GetLastMessage()
+  AssertEqual 'semi: Missing semicolon.', g:last_message
 
 Execute(The message at the cursor should be shown on InsertLeave):
   call cursor(2, 9)
   doautocmd InsertLeave
 
-  AssertEqual 'space-infix-ops: Infix operators must be spaced.', GetLastMessage()
+  AssertEqual 'space-infix-ops: Infix operators must be spaced.', g:last_message
 
 Execute(ALEDetail should print 'detail' attributes):
   call cursor(1, 1)
@@ -187,7 +187,7 @@ Execute(ALEDetail should not capitlise cursor messages):
   call cursor(3, 1)
   call ale#cursor#EchoCursorWarning()
 
-  AssertEqual 'lowercase error', GetLastMessage()
+  AssertEqual 'lowercase error', g:last_message
 
 Execute(The linter name should be formatted into the message correctly):
   let g:ale_echo_msg_format = '%linter%: %s'
@@ -197,7 +197,7 @@ Execute(The linter name should be formatted into the message correctly):
 
   AssertEqual
   \ 'bettercode: Infix operators must be spaced.',
-  \ GetLastMessage()
+  \ g:last_message
 
 Execute(The severity should be formatted into the message correctly):
   let g:ale_echo_msg_format = '%severity%: %s'
@@ -207,17 +207,17 @@ Execute(The severity should be formatted into the message correctly):
 
   AssertEqual
   \ 'Warning: Infix operators must be spaced.',
-  \ GetLastMessage()
+  \ g:last_message
 
   call cursor(1, 10)
   call ale#cursor#EchoCursorWarning()
 
-  AssertEqual 'Error: Missing semicolon.', GetLastMessage()
+  AssertEqual 'Error: Missing semicolon.', g:last_message
 
   call cursor(1, 14)
   call ale#cursor#EchoCursorWarning()
 
-  AssertEqual 'Info: Some information', GetLastMessage()
+  AssertEqual 'Info: Some information', g:last_message
 
 Execute(The %code% and %ifcode% should show the code and some text):
   let g:ale_echo_msg_format = '%(code) %%s'
@@ -227,7 +227,7 @@ Execute(The %code% and %ifcode% should show the code and some text):
 
   AssertEqual
   \ '(space-infix-ops) Infix operators must be spaced.',
-  \ GetLastMessage()
+  \ g:last_message
 
 Execute(The %code% and %ifcode% should be removed when there's no code):
   let g:ale_echo_msg_format = '%(code) %%s'
@@ -235,7 +235,7 @@ Execute(The %code% and %ifcode% should be removed when there's no code):
   call cursor(1, 14)
   call ale#cursor#EchoCursorWarning()
 
-  AssertEqual 'Some information', GetLastMessage()
+  AssertEqual 'Some information', g:last_message
 
 Execute(The buffer message format option should take precedence):
   let g:ale_echo_msg_format = '%(code) %%s'
@@ -244,13 +244,13 @@ Execute(The buffer message format option should take precedence):
   call cursor(1, 14)
   call ale#cursor#EchoCursorWarning()
 
-  AssertEqual 'FOO Some information', GetLastMessage()
+  AssertEqual 'FOO Some information', g:last_message
 
 Execute(The cursor message shouldn't be echoed if the option is off):
   let g:ale_echo_cursor = 0
-  echom 'foo'
+  let g:last_message = 'foo'
 
   call cursor(1, 1)
   call ale#cursor#EchoCursorWarning()
 
-  AssertEqual 'foo', GetLastMessage()
+  AssertEqual 'foo', g:last_message

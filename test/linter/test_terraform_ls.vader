@@ -2,10 +2,6 @@ Before:
   call ale#assert#SetUpLinterTest('terraform', 'terraform_ls')
 
 After:
-  if isdirectory(g:dir . '/.terraform')
-    call delete(g:dir . '/.terraform', 'd')
-  endif
-
   unlet! b:ale_terraform_terraform_executable
   unlet! b:ale_terraform_ls_executable
   unlet! b:ale_terraform_ls_options
@@ -40,22 +36,7 @@ Execute(Should set custom options):
   AssertLinter 'terraform-ls',
   \ ale#Escape('terraform-ls') . ' serve --bar'
 
-Execute(Should return current directory if it contains .terraform directory):
-  call mkdir(g:dir . '/.terraform')
-  AssertLSPProject g:dir
-
 Execute(Should return nearest directory with .terraform if found in parent directory):
   call ale#test#SetFilename('../test-files/terraform/main.tf')
 
-  let b:parent_dir = ale#path#Simplify(g:dir . '/..')
-  let b:tf_dir = b:parent_dir . '/.terraform'
-
-  if !isdirectory(b:tf_dir)
-    call mkdir(b:tf_dir)
-  endif
-
-  AssertLSPProject b:parent_dir
-
-  call delete(b:tf_dir, 'd')
-  unlet!b:parent_dir
-  unlet!b:tf_dir
+  AssertLSPProject ale#test#GetFilename('../test-files/terraform')

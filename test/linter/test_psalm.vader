@@ -32,7 +32,13 @@ Execute(Vendor executables should be detected):
 
 Execute(User provided options should be used):
   let g:ale_php_psalm_options = '--my-user-provided-option my-value'
+  call ale#test#SetFilename('../test-files/dummy')
 
   AssertLinter 'psalm',
   \ ale#Escape('psalm')
   \ . ' --language-server --my-user-provided-option my-value'
+
+Execute(The project path should be correct for composer.json file):
+  call ale#test#SetFilename('../test-files/php/with-composer/test.php')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/php/with-composer')

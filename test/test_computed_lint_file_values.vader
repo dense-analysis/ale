@@ -125,13 +125,13 @@ Execute(lint_file results where the result is eventually computed should be run)
   \     'valid': 1,
   \   },
   \ ],
-  \ ale#test#GetLoclistWithoutModule()
+  \ ale#test#GetLoclistWithoutNewerKeys()
 
 Execute(Linters where lint_file eventually evaluates to 1 shouldn't be run if we don't want to run them):
   call ale#Queue(0, '')
   call ale#test#FlushJobs()
 
-  AssertEqual [], ale#test#GetLoclistWithoutModule()
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys()
 
 Execute(Keeping computed lint_file jobs running should work):
   AssertEqual 'testlinter2', ale#linter#Get('foobar')[1].name

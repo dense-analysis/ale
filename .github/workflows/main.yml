@@ -4,7 +4,8 @@ on:  # yamllint disable-line rule:truthy
   push:
     branches: [ master ]  # yamllint disable-line rule:brackets
     tags:
-      - /^v\d+\.\d+\.(x|\d+)$/
+      - v[0-9]+.[0-9]+.x
+      - v[0-9]+.[0-9]+.[0-9]+
   pull_request:
     branches: [ master ]  # yamllint disable-line rule:brackets
 
@@ -28,7 +29,7 @@ jobs:
           - '--vim-80-only'
           - '--vim-82-only'
           - '--neovim-02-only'
-          - '--neovim-04-only'
+          - '--neovim-07-only'
           - '--linters-only'
     steps:
       - uses: actions/checkout@v2

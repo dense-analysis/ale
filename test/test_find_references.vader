@@ -187,6 +187,57 @@ Execute(Results should be shown for tsserver responses):
   \ },
   \ g:options
 
+Execute(Results should be put to quickfix for tsserver responses):
+  call ale#references#SetMap(
+  \ {
+  \   3: {
+  \     'ignorethis': 'x',
+  \     'open_in': 'quickfix',
+  \   }
+  \ }
+  \)
+  call ale#references#HandleTSServerResponse(1, {
+  \ 'command': 'references',
+  \ 'request_seq': 3,
+  \ 'success': v:true,
+  \ 'body': {
+  \   'symbolStartOffset': 9,
+  \   'refs': [
+  \     {
+  \       'file': '/foo/bar/app.ts',
+  \       'isWriteAccess': v:true,
+  \       'lineText': 'import {doSomething} from ''./whatever''',
+  \       'end': {'offset': 24, 'line': 9},
+  \       'start': {'offset': 9, 'line': 9},
+  \       'isDefinition': v:true,
+  \     },
+  \     {
+  \       'file': '/foo/bar/app.ts',
+  \       'isWriteAccess': v:false,
+  \       'lineText': '  doSomething()',
+  \       'end': {'offset': 18, 'line': 804},
+  \       'start': {'offset': 3, 'line': 804},
+  \       'isDefinition': v:false,
+  \     },
+  \     {
+  \       'file': '/foo/bar/other/app.ts',
+  \       'isWriteAccess': v:false,
+  \       'lineText': '  doSomething()',
+  \       'end': {'offset': 18, 'line': 51},
+  \       'start': {'offset': 3, 'line': 51},
+  \       'isDefinition': v:false,
+  \     },
+  \   ],
+  \   'symbolDisplayString': 'import doSomething',
+  \   'symbolName': 'doSomething()',
+  \ },
+  \})
+
+  AssertEqual
+  \ 3,
+  \ len(getqflist())
+  AssertEqual {}, ale#references#GetMap()
+
 Execute(The preview window should not be opened for empty tsserver responses):
   call ale#references#SetMap({3: {}})
   call ale#references#HandleTSServerResponse(1, {
@@ -283,6 +334,16 @@ Execute(`-vsplit` should display results in vsplits):
 
   AssertEqual {'42': {'open_in': 'vsplit', 'use_relative_paths': 0}}, ale#references#GetMap()
 
+Execute(`-quickfix` should display results in quickfix):
+  runtime ale_linters/typescript/tsserver.vim
+  call setpos('.', [bufnr(''), 2, 5, 0])
+
+  ALEFindReferences -quickfix
+
+  call g:InitCallback()
+
+  AssertEqual {'42': {'open_in': 'quickfix', 'use_relative_paths': 0}}, ale#references#GetMap()
+
 Given python(Some Python file):
   foo
   somelongerline
@@ -296,13 +357,13 @@ Execute(LSP reference responses should be handled):
   \   'id': 3,
   \   'result': [
   \     {
-  \       'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \       'uri': ale#path#ToFileURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
   \       'range': {
   \         'start': {'line': 2, 'character': 7},
   \       },
   \     },
   \     {
-  \       'uri': ale#path#ToURI(ale#path#Simplify(g:dir . '/other_file')),
+  \       'uri': ale#path#ToFileURI(ale#path#Simplify(g:dir . '/other_file')),
   \       'range': {
   \         'start': {'line': 7, 'character': 15},
   \       },
@@ -327,6 +388,33 @@ Execute(LSP reference responses should be handled):
   \ g:item_list
   AssertEqual {}, ale#references#GetMap()
 
+Execute(LSP reference responses should be put to quickfix):
+  call ale#references#SetMap({3: { 'open_in': 'quickfix' }})
+  call ale#references#HandleLSPResponse(
+  \ 1,
+  \ {
+  \   'id': 3,
+  \   'result': [
+  \     {
+  \       'uri': ale#path#ToFileURI(ale#path#Simplify(g:dir . '/completion_dummy_file')),
+  \       'range': {
+  \         'start': {'line': 2, 'character': 7},
+  \       },
+  \     },
+  \     {
+  \       'uri': ale#path#ToFileURI(ale#path#Simplify(g:dir . '/other_file')),
+  \       'range': {
+  \         'start': {'line': 7, 'character': 15},
+  \       },
+  \     },
+  \   ],
+  \ }
+  \)
+
+  AssertEqual
+  \ 2,
+  \ len(getqflist())
+
 Execute(Preview windows should not be opened for empty LSP reference responses):
   call ale#references#SetMap({3: {}})
   call ale#references#HandleLSPResponse(1, {'id': 3, 'result': []})
@@ -344,8 +432,8 @@ Execute(LSP reference responses with a null result should be handled):
   AssertEqual ['echom ''No references found.'''], g:expr_list
 
 Execute(LSP reference requests should be sent):
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
   ALEFindReferences
@@ -365,13 +453,13 @@ Execute(LSP reference requests should be sent):
   \ [
   \   [1, 'textDocument/didChange', {
   \     'textDocument': {
-  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'uri': ale#path#ToFileURI(expand('%:p')),
   \         'version': g:ale_lsp_next_version_id - 1,
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
   \   }],
   \   [0, 'textDocument/references', {
-  \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \   'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
   \   'position': {'line': 0, 'character': 2},
   \   'context': {'includeDeclaration': v:false},
   \   }],
@@ -381,8 +469,8 @@ Execute(LSP reference requests should be sent):
   AssertEqual {'42': {'open_in': 'current-buffer', 'use_relative_paths': 0}}, ale#references#GetMap()
 
 Execute('-relative' argument should enable 'use_relative_paths' in HandleLSPResponse):
-  runtime ale_linters/python/pyls.vim
-  let b:ale_linters = ['pyls']
+  runtime ale_linters/python/pylsp.vim
+  let b:ale_linters = ['pylsp']
   call setpos('.', [bufnr(''), 1, 5, 0])
 
   ALEFindReferences -relative

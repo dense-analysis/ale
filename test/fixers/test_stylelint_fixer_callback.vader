@@ -13,12 +13,11 @@ Execute(The stylelint callback should return the correct default values):
 
   AssertFixer
   \ {
-  \   'read_temporary_file': 1,
+  \   'read_temporary_file': 0,
   \   'cwd': '%s:h',
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/node_modules/stylelint/bin/stylelint.js'))
-  \     . ' %t'
-  \     . ' --fix',
+  \     . ' --fix --stdin --stdin-filename %s',
   \ }
 
 Execute(The stylelint callback should include custom stylelint options):
@@ -27,11 +26,9 @@ Execute(The stylelint callback should include custom stylelint options):
 
   AssertFixer
   \ {
-  \   'read_temporary_file': 1,
+  \   'read_temporary_file': 0,
   \   'cwd': '%s:h',
   \   'command': (has('win32') ? 'node.exe ' : '')
   \     . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/eslint/react-app/node_modules/stylelint/bin/stylelint.js'))
-  \     . ' %t'
-  \     . ' --cache'
-  \     . ' --fix',
+  \     . ' --cache --fix --stdin --stdin-filename %s',
   \ }
