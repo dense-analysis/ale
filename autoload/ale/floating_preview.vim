@@ -178,11 +178,6 @@ function! s:VimCreate(options) abort
         let l:popup_opts = function(g:ale_floating_popup_opts)()
     endif
 
-    " assign highlight group if provided
-    if has_key(a:options, 'hl_group')
-        let l:popup_opts['highlight'] = a:options['hl_group']
-    endif
-
     let l:popup_id = popup_create([], l:popup_opts)
     call setbufvar(winbufnr(l:popup_id), '&filetype', get(a:options, 'filetype', 'ale-preview'))
     let w:preview = {'id': l:popup_id}
