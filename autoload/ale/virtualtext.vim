@@ -9,17 +9,11 @@ let s:cursor_timer = -1
 let s:last_pos = [0, 0, 0]
 let s:has_virt_text = 0
 
-" Allow disabling textprop usage to allow for more popup positioning control
-let s:use_textprop = get(g:, 'ale_virtualtext_textprop', 1)
-
 if has('nvim-0.3.2')
     let s:ns_id = nvim_create_namespace('ale')
     let s:has_virt_text = 1
 elseif has('textprop') && has('popupwin')
-    if s:use_textprop
-        call prop_type_add('ale', {})
-    endif
-
+    call prop_type_add('ale', {})
     let s:last_popup = -1
     let s:has_virt_text = 1
 endif
@@ -35,59 +29,40 @@ function! ale#virtualtext#Clear() abort
         call nvim_buf_clear_highlight(l:buffer, s:ns_id, 0, -1)
     else
         if s:last_popup != -1
-            if s:use_textprop
-                call prop_remove({'type': 'ale'})
-            endif
-
+            call prop_remove({'type': 'ale'})
             call popup_close(s:last_popup)
             let s:last_popup = -1
         endif
     endif
 endfunction
 
-function! ale#virtualtext#DefaultPopupOpts(...) abort
-    return {
-    \ 'line': -1,
-    \ 'padding': [0, 0, 0, 1],
-    \ 'mask': [[1, 1, 1, 1]],
-    \ 'fixed': 1,
-    \ 'wrap': 0,
-    \ 'zindex': 2,
-    \}
-endfunction
-
-function! ale#virtualtext#ShowMessage(loc, hl_group) abort
+function! ale#virtualtext#ShowMessage(message, hl_group) abort
     if !s:has_virt_text
         return
     endif
 
+    let l:line = line('.')
+    let l:buffer = bufnr('')
     let l:prefix = get(g:, 'ale_virtualtext_prefix', '> ')
-    let a:loc.text = a:loc.text
-
-    if get(g:, 'ale_virtualtext_oneline', 1)
-        let a:loc.text = substitute(a:loc.text, '\n', ' ', 'g')
-    endif
-
-    let l:msg = l:prefix . trim(ale#GetLocItemMessage(a:loc, get(g:, 'ale_virtualtext_msg_format', '%s')))
+    let l:msg = l:prefix.trim(substitute(a:message, '\n', ' ', 'g'))
 
     if has('nvim')
-        call nvim_buf_set_virtual_text(a:loc.bufnr, s:ns_id, a:loc.lnum-1, [[l:msg, a:hl_group]], {})
+        call nvim_buf_set_virtual_text(l:buffer, s:ns_id, l:line-1, [[l:msg, a:hl_group]], {})
     else
-        let l:popup_opts = get(g:, 'ale_virtualtext_popup_opts', 'ale#virtualtext#DefaultPopupOpts')
-        let l:opts = function(l:popup_opts)(a:loc)
-
-        " make sure the highlight group exists
-        let l:opts['highlight'] = a:hl_group
-
-        " set the textprop for the current line (if enabled)
-        if s:use_textprop
-            let l:opts['textprop'] = 'ale'
-            let l:col = get(g:, 'ale_virtualtext_textprop_col', col('$'))
-
-            call prop_add(a:loc.lnum, l:col, {'type': 'ale'})
-        endif
-
-        let s:last_popup = popup_create(l:msg, l:opts)
+        let l:left_pad = col('$')
+        call prop_add(l:line, l:left_pad, {
+        \ 'type': 'ale',
+        \})
+        let s:last_popup = popup_create(l:msg, {
+        \ 'line': -1,
+        \ 'padding': [0, 0, 0, 1],
+        \ 'mask': [[1, 1, 1, 1]],
+        \ 'textprop': 'ale',
+        \ 'highlight': a:hl_group,
+        \ 'fixed': 1,
+        \ 'wrap': 0,
+        \ 'zindex': 2
+        \})
     endif
 endfunction
 
@@ -118,6 +93,7 @@ function! ale#virtualtext#ShowCursorWarning(...) abort
     call ale#virtualtext#Clear()
 
     if !empty(l:loc)
+        let l:msg = l:loc.text
         let l:hl_group = 'ALEVirtualTextInfo'
         let l:type = get(l:loc, 'type', 'E')
 
@@ -135,7 +111,7 @@ function! ale#virtualtext#ShowCursorWarning(...) abort
             endif
         endif
 
-        call ale#virtualtext#ShowMessage(l:loc, l:hl_group)
+        call ale#virtualtext#ShowMessage(l:msg, l:hl_group)
     endif
 endfunction
 

@@ -155,7 +155,30 @@ function! s:ShowCursorDetailForItem(loc, options) abort
     let l:lines = split(l:message, "\n")
 
     if g:ale_floating_preview || g:ale_detail_to_floating_preview
-        call ale#floating_preview#Show(l:lines)
+        let l:opts = {}
+
+        " get loc highlight group
+        if get(g:, 'ale_floating_preview_hightlight', 0)
+            let l:hl_group = 'ALEFloatingPreviewInfo'
+            let l:type = get(a:loc, 'type', 'E')
+            if l:type is# 'E'
+                if get(a:loc, 'sub_type', '') is# 'style'
+                    let l:hl_group = 'ALEFloatingPreviewStyleError'
+                else
+                    let l:hl_group = 'ALEFloatingPreviewError'
+                endif
+            elseif l:type is# 'W'
+                if get(a:loc, 'sub_type', '') is# 'style'
+                    let l:hl_group = 'ALEFloatingPreviewStyleWarning'
+                else
+                    let l:hl_group = 'ALEFloatingPreviewWarning'
+                endif
+            endif
+
+            let l:opts['hl_group'] = l:hl_group
+        endif
+
+        call ale#floating_preview#Show(l:lines, l:opts)
     else
         call ale#preview#Show(l:lines, {'stay_here': l:stay_here})
 

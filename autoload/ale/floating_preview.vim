@@ -151,7 +151,8 @@ function! s:NvimCreate(options) abort
 endfunction
 
 function! s:VimCreate(options) abort
-    let l:popup_id = popup_create([], {
+    " default options
+    let l:popup_opts = {
     \    'line': 'cursor+1',
     \    'col': 'cursor',
     \    'drag': v:true,
@@ -170,7 +171,19 @@ function! s:VimCreate(options) abort
     \        get(g:ale_floating_window_border, 5, '+'),
     \    ],
     \    'moved': 'any',
-    \    })
+    \    }
+
+    " allow custom popup opts
+    if exists('g:ale_floating_popup_opts')
+        let l:popup_opts = function(g:ale_floating_popup_opts)()
+    endif
+
+    " assign highlight group if provided
+    if has_key(a:options, 'hl_group')
+        let l:popup_opts['highlight'] = a:options['hl_group']
+    endif
+
+    let l:popup_id = popup_create([], l:popup_opts)
     call setbufvar(winbufnr(l:popup_id), '&filetype', get(a:options, 'filetype', 'ale-preview'))
     let w:preview = {'id': l:popup_id}
 endfunction
