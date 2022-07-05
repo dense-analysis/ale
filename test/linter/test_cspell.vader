@@ -60,6 +60,8 @@ Execute(Should let users configure a global executable and override local paths)
   \  . ' lint --no-color --no-progress --no-summary -- stdin'
 
 Execute(Additional cspell options should be configurable):
+  call ale#test#SetFilename('../test-files/dummy')
+
   let g:ale_cspell_options = '--foobar'
 
   AssertLinter

@@ -1,0 +1,38 @@
+Before:
+  call ale#assert#SetUpFixerTest('python', 'pyflyby')
+
+  let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+  unlet! b:bin_dir
+
+Execute(The pyflyby callback should return the correct default values):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  AssertFixer
+  \ {
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/tidy-imports')),
+  \ }
+
+Execute(Pipenv is detected when python_pyflyby_auto_pipenv is set):
+  let g:ale_python_pyflyby_auto_pipenv = 1
+
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
+
+  AssertFixer
+  \ {
+  \   'command': ale#Escape('pipenv') . ' run tidy-imports'
+  \ }
+
+Execute(Poetry is detected when python_pyflyby_auto_poetry is set):
+  let g:ale_python_pyflyby_auto_poetry = 1
+
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  GivenCommandOutput ['VERSION 5.7.0']
+  AssertFixer
+  \ {
+  \   'command': ale#Escape('poetry') . ' run tidy-imports'
+  \ }

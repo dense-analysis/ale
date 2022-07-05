@@ -17,12 +17,15 @@ Execute(The toolchain should be ommitted if not given):
 
   AssertLinter 'rls', ale#Escape('rls')
 
-Execute(The project root should be detected correctly):
+Execute(The project root should be detected correctly for cargo projects):
+  call ale#test#SetFilename('../test-files/rust/cargo/testfile.rs')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/rust/cargo')
+
+Execute(The project root should be empty when no project files can be detected):
+  call ale#test#SetFilename('../test-files/dummy')
+
   AssertLSPProject ''
-
-  call ale#test#SetFilename('../test-files/rust/test.rs')
-
-  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/rust')
 
 Execute(Should accept configuration settings):
   AssertLSPConfig {}

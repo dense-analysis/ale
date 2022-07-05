@@ -1,10 +1,9 @@
 FROM testbed/vim:20
 
 RUN install_vim -tag v8.0.0027 -build \
-                -tag v8.2.2401 -build \
+                -tag v8.2.4693 -build \
                 -tag neovim:v0.2.0 -build \
-                -tag neovim:v0.4.4 -build \
-                -tag neovim:v0.5.0 -build
+                -tag neovim:v0.7.0 -build
 
 ENV PACKAGES="\
     bash \
@@ -25,4 +24,4 @@ RUN git clone https://github.com/junegunn/vader.vim vader && \
 
 ARG GIT_VERSION
 LABEL Version=${GIT_VERSION}
-LABEL Name=w0rp/ale
+LABEL Name=denseanalysis/ale

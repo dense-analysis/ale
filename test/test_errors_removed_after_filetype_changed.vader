@@ -58,7 +58,7 @@ Execute(Error should be removed when the filetype changes to something else we c
   call ale#test#FlushJobs()
   sleep 1ms
 
-  AssertEqual 1, len(ale#test#GetLoclistWithoutModule())
+  AssertEqual 1, len(ale#test#GetLoclistWithoutNewerKeys())
 
   noautocmd let &filetype = 'foobar2'
 
@@ -67,7 +67,7 @@ Execute(Error should be removed when the filetype changes to something else we c
   sleep 1ms
 
   " We should get some items from the second filetype.
-  AssertEqual 1, len(ale#test#GetLoclistWithoutModule())
+  AssertEqual 1, len(ale#test#GetLoclistWithoutNewerKeys())
 
   noautocmd let &filetype = 'xxx'
 
@@ -75,4 +75,4 @@ Execute(Error should be removed when the filetype changes to something else we c
   call ale#test#FlushJobs()
   sleep 1ms
 
-  AssertEqual 0, len(ale#test#GetLoclistWithoutModule())
+  AssertEqual 0, len(ale#test#GetLoclistWithoutNewerKeys())

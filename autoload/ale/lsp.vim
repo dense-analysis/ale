@@ -44,6 +44,7 @@ function! ale#lsp#Register(executable_or_address, project, init_options) abort
         \       'completion_trigger_characters': [],
         \       'definition': 0,
         \       'typeDefinition': 0,
+        \       'implementation': 0,
         \       'symbol_search': 0,
         \       'code_actions': 0,
         \       'did_save': 0,
@@ -259,6 +260,14 @@ function! s:UpdateCapabilities(conn, capabilities) abort
         let a:conn.capabilities.typeDefinition = 1
     endif
 
+    if get(a:capabilities, 'implementationProvider') is v:true
+        let a:conn.capabilities.implementation = 1
+    endif
+
+    if type(get(a:capabilities, 'implementationProvider')) is v:t_dict
+        let a:conn.capabilities.implementation = 1
+    endif
+
     if get(a:capabilities, 'workspaceSymbolProvider') is v:true
         let a:conn.capabilities.symbol_search = 1
     endif
@@ -379,6 +388,7 @@ function! ale#lsp#MarkConnectionAsTsserver(conn_id) abort
     let l:conn.capabilities.completion_trigger_characters = ['.']
     let l:conn.capabilities.definition = 1
     let l:conn.capabilities.typeDefinition = 1
+    let l:conn.capabilities.implementation = 1
     let l:conn.capabilities.symbol_search = 1
     let l:conn.capabilities.rename = 1
     let l:conn.capabilities.filerename = 1
@@ -438,11 +448,20 @@ function! s:SendInitMessage(conn) abort
     \               'typeDefinition': {
     \                   'dynamicRegistration': v:false,
     \               },
+    \               'implementation': {
+    \                   'dynamicRegistration': v:false,
+    \                   'linkSupport': v:false,
+    \               },
     \               'publishDiagnostics': {
     \                   'relatedInformation': v:true,
     \               },
     \               'codeAction': {
     \                   'dynamicRegistration': v:false,
+    \                   'codeActionLiteralSupport': {
+    \                        'codeActionKind': {
+    \                            'valueSet': []
+    \                        }
+    \                    }
     \               },
     \               'rename': {
     \                   'dynamicRegistration': v:false,
@@ -467,6 +486,7 @@ function! ale#lsp#StartProgram(conn_id, executable, command) abort
         let l:options = {
         \   'mode': 'raw',
         \   'out_cb': {_, message -> ale#lsp#HandleMessage(a:conn_id, message)},
+        \   'exit_cb': { -> ale#lsp#Stop(a:conn_id) },
         \}
 
         if has('win32')

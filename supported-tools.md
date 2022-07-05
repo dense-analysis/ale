@@ -75,7 +75,7 @@ formatting.
   * [clangd](https://clang.llvm.org/extra/clangd.html)
   * [clangtidy](http://clang.llvm.org/extra/clang-tidy/) :floppy_disk:
   * [cppcheck](http://cppcheck.sourceforge.net)
-  * [cpplint](https://github.com/google/styleguide/tree/gh-pages/cpplint)
+  * [cpplint](https://github.com/cpplint/cpplint)
   * [cquery](https://github.com/cquery-project/cquery)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [flawfinder](https://www.dwheeler.com/flawfinder/)
@@ -123,6 +123,7 @@ formatting.
   * [ameba](https://github.com/veelenga/ameba) :floppy_disk:
   * [crystal](https://crystal-lang.org/) :floppy_disk:
 * CSS
+  * [VSCode CSS language server](https://github.com/hrsh7th/vscode-langservers-extracted)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [csslint](http://csslint.net/)
   * [fecs](http://fecs.baidu.com/)
@@ -247,8 +248,10 @@ formatting.
   * [stack-ghc](https://haskellstack.org/)
   * [stylish-haskell](https://github.com/jaspervdj/stylish-haskell)
 * HCL
+  * [packer-fmt](https://github.com/hashicorp/packer)
   * [terraform-fmt](https://github.com/hashicorp/terraform)
 * HTML
+  * [VSCode HTML language server](https://github.com/hrsh7th/vscode-langservers-extracted)
   * [alex](https://github.com/get-alex/alex)
   * [angular](https://www.npmjs.com/package/@angular/language-server)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
@@ -292,6 +295,7 @@ formatting.
   * [tsserver](https://github.com/Microsoft/TypeScript/wiki/Standalone-Server-%28tsserver%29)
   * [xo](https://github.com/sindresorhus/xo)
 * JSON
+  * [VSCode JSON language server](https://github.com/hrsh7th/vscode-langservers-extracted)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell) :warning:
   * [dprint](https://dprint.dev)
   * [eslint](http://eslint.org/) :warning:
@@ -336,6 +340,7 @@ formatting.
   * [luac](https://www.lua.org/manual/5.1/luac.html)
   * [luacheck](https://github.com/mpeterv/luacheck)
   * [luafmt](https://github.com/trixnz/lua-fmt)
+  * [selene](https://github.com/Kampfkarren/selene)
   * [stylua](https://github.com/johnnymorganz/stylua)
 * Mail
   * [alex](https://github.com/get-alex/alex)
@@ -397,6 +402,8 @@ formatting.
   * [ibm_validator](https://github.com/IBM/openapi-validator)
   * [prettier](https://github.com/prettier/prettier)
   * [yamllint](https://yamllint.readthedocs.io/)
+* Packer (HCL)
+  * [packer-fmt-fixer](https://github.com/hashicorp/packer)
 * Pascal
   * [ptop](https://www.freepascal.org/tools/ptop.var)
 * Pawn
@@ -439,6 +446,8 @@ formatting.
 * Prolog
   * [swipl](https://github.com/SWI-Prolog/swipl-devel)
 * proto
+  * [buf-format](https://github.com/bufbuild/buf) :floppy_disk:
+  * [buf-lint](https://github.com/bufbuild/buf) :floppy_disk:
   * [protoc-gen-lint](https://github.com/ckaznocha/protoc-gen-lint) :floppy_disk:
   * [protolint](https://github.com/yoheimuta/protolint) :floppy_disk:
 * Pug
@@ -466,6 +475,7 @@ formatting.
   * [pycodestyle](https://github.com/PyCQA/pycodestyle) :warning:
   * [pydocstyle](https://www.pydocstyle.org/) :warning:
   * [pyflakes](https://github.com/PyCQA/pyflakes)
+  * [pyflyby](https://github.com/deshaw/pyflyby) :warning:
   * [pylama](https://github.com/klen/pylama) :floppy_disk:
   * [pylint](https://www.pylint.org/) :floppy_disk:
   * [pylsp](https://github.com/python-lsp/python-lsp-server) :warning:
@@ -492,6 +502,10 @@ formatting.
   * [ols](https://github.com/freebroccolo/ocaml-language-server)
   * [reason-language-server](https://github.com/jaredly/reason-language-server)
   * [refmt](https://github.com/reasonml/reason-cli)
+* Rego
+  * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [opacheck](https://www.openpolicyagent.org/docs/latest/cli/#opa-check)
+  * [opafmt](https://www.openpolicyagent.org/docs/latest/cli/#opa-fmt)
 * reStructuredText
   * [alex](https://github.com/get-alex/alex)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
@@ -651,10 +665,11 @@ formatting.
 * XML
   * [xmllint](http://xmlsoft.org/xmllint.html)
 * YAML
-  * [circleci](https://circleci.com/docs/2.0/local-cli) :floppy_disk:
+  * [actionlint](https://github.com/rhysd/actionlint) :warning:
+  * [circleci](https://circleci.com/docs/2.0/local-cli) :floppy_disk: :warning:
   * [prettier](https://github.com/prettier/prettier)
   * [spectral](https://github.com/stoplightio/spectral)
-  * [swaglint](https://github.com/byCedric/swaglint)
+  * [swaglint](https://github.com/byCedric/swaglint) :warning:
   * [yaml-language-server](https://github.com/redhat-developer/yaml-language-server)
   * [yamlfix](https://lyz-code.github.io/yamlfix)
   * [yamllint](https://yamllint.readthedocs.io/)
@@ -663,4 +678,5 @@ formatting.
 * Zeek
   * [zeek](http://zeek.org) :floppy_disk:
 * Zig
+  * [zigfmt](https://github.com/ziglang/zig)
   * [zls](https://github.com/zigtools/zls)

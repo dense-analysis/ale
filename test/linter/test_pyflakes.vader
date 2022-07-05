@@ -34,6 +34,7 @@ Execute(You should be able to override the pyflakes virtualenv lookup):
 
 Execute(Setting executable to 'pipenv' appends 'run pyflakes'):
   let g:ale_python_pyflakes_executable = 'path/to/pipenv'
+  call ale#test#SetFilename('../test-files/dummy')
 
   AssertLinter 'path/to/pipenv',
   \ ale#Escape('path/to/pipenv') . ' run pyflakes %t',

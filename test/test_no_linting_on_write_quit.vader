@@ -60,7 +60,7 @@ Execute(No linting should be done on :wq or :x):
   call ale#events#SaveEvent(bufnr(''))
   call ale#test#FlushJobs()
 
-  AssertEqual 1, len(ale#test#GetLoclistWithoutModule())
+  AssertEqual 1, len(ale#test#GetLoclistWithoutNewerKeys())
 
   " Now try doing it again, but where we run the quit event first.
   call setloclist(0, [])
@@ -68,7 +68,7 @@ Execute(No linting should be done on :wq or :x):
   call ale#events#SaveEvent(bufnr(''))
   call ale#test#FlushJobs()
 
-  AssertEqual [], ale#test#GetLoclistWithoutModule()
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys()
 
 Execute(No linting should be for :w after :q fails):
   let g:ale_lint_on_save = 1
@@ -83,7 +83,7 @@ Execute(No linting should be for :w after :q fails):
   call ale#events#SaveEvent(bufnr(''))
   call ale#test#FlushJobs()
 
-  AssertEqual 1, len(ale#test#GetLoclistWithoutModule())
+  AssertEqual 1, len(ale#test#GetLoclistWithoutNewerKeys())
 
 Execute(No linting should be done on :wq or :x after fixing files):
   let g:ale_lint_on_save = 1
@@ -92,7 +92,7 @@ Execute(No linting should be done on :wq or :x after fixing files):
   call ale#events#SaveEvent(bufnr(''))
   call ale#test#FlushJobs()
 
-  AssertEqual 1, len(ale#test#GetLoclistWithoutModule())
+  AssertEqual 1, len(ale#test#GetLoclistWithoutNewerKeys())
 
   " Now try doing it again, but where we run the quit event first.
   call setloclist(0, [])
@@ -100,7 +100,7 @@ Execute(No linting should be done on :wq or :x after fixing files):
   call ale#events#SaveEvent(bufnr(''))
   call ale#test#FlushJobs()
 
-  AssertEqual [], ale#test#GetLoclistWithoutModule()
+  AssertEqual [], ale#test#GetLoclistWithoutNewerKeys()
 
 Execute(Linting should be done after :q fails and fixing files):
   let g:ale_lint_on_save = 1
@@ -115,4 +115,4 @@ Execute(Linting should be done after :q fails and fixing files):
   call ale#events#SaveEvent(bufnr(''))
   call ale#test#FlushJobs()
 
-  AssertEqual 1, len(ale#test#GetLoclistWithoutModule())
+  AssertEqual 1, len(ale#test#GetLoclistWithoutNewerKeys())

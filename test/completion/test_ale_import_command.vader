@@ -187,7 +187,7 @@ Execute(ALEImport should request imports correctly for tsserver):
   \   'conn_id': 0,
   \   'request_id': 0,
   \   'source': 'ale-import',
-  \   'column': 11,
+  \   'column': 21,
   \   'line': 2,
   \   'line_length': 21,
   \   'prefix': 'missingword',
@@ -206,7 +206,7 @@ Execute(ALEImport should request imports correctly for tsserver):
   \   'conn_id': 347,
   \   'request_id': 1,
   \   'source': 'ale-import',
-  \   'column': 11,
+  \   'column': 21,
   \   'line': 2,
   \   'line_length': 21,
   \   'prefix': 'missingword',
@@ -229,14 +229,14 @@ Execute(ALEImport should request imports correctly for tsserver):
   \   [0, 'ts@completions', {
   \     'file': expand('%:p'),
   \     'includeExternalModuleExports': 1,
-  \     'offset': 11,
+  \     'offset': 21,
   \     'line': 2,
   \     'prefix': 'missingword',
   \   }],
   \   [0, 'ts@completionEntryDetails', {
   \     'file': expand('%:p'),
   \     'entryNames': [{'name': 'missingword'}],
-  \     'offset': 11,
+  \     'offset': 21,
   \     'line': 2,
   \   }]
   \ ],
@@ -282,7 +282,7 @@ Execute(ALEImport should tell the user when no completions were found from tsser
   \   'conn_id': 0,
   \   'request_id': 0,
   \   'source': 'ale-import',
-  \   'column': 11,
+  \   'column': 21,
   \   'line': 2,
   \   'line_length': 21,
   \   'prefix': 'missingword',
@@ -301,7 +301,7 @@ Execute(ALEImport should tell the user when no completions were found from tsser
   \   'conn_id': 347,
   \   'request_id': 1,
   \   'source': 'ale-import',
-  \   'column': 11,
+  \   'column': 21,
   \   'line': 2,
   \   'line_length': 21,
   \   'prefix': 'missingword',
@@ -336,7 +336,7 @@ Execute(ALEImport should request imports correctly for language servers):
   \   'conn_id': 0,
   \   'request_id': 0,
   \   'source': 'ale-import',
-  \   'column': 7,
+  \   'column': 17,
   \   'line': 2,
   \   'line_length': 17,
   \   'prefix': 'missingword',
@@ -355,7 +355,7 @@ Execute(ALEImport should request imports correctly for language servers):
   \   'conn_id': 347,
   \   'request_id': 1,
   \   'source': 'ale-import',
-  \   'column': 7,
+  \   'column': 17,
   \   'line': 2,
   \   'line_length': 17,
   \   'prefix': 'missingword',
@@ -368,8 +368,8 @@ Execute(ALEImport should request imports correctly for language servers):
   AssertEqual
   \ [
   \   [0, 'textDocument/completion', {
-  \     'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
-  \     'position': {'character': 6, 'line': 1}
+  \     'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
+  \     'position': {'character': 16, 'line': 1}
   \   }],
   \ ],
   \ g:sent_message_list
@@ -482,7 +482,7 @@ Execute(ALEImport should tell the user when no completions were found from a lan
   \   'conn_id': 0,
   \   'request_id': 0,
   \   'source': 'ale-import',
-  \   'column': 7,
+  \   'column': 17,
   \   'line': 2,
   \   'line_length': 17,
   \   'prefix': 'missingword',
@@ -501,7 +501,7 @@ Execute(ALEImport should tell the user when no completions were found from a lan
   \   'conn_id': 347,
   \   'request_id': 1,
   \   'source': 'ale-import',
-  \   'column': 7,
+  \   'column': 17,
   \   'line': 2,
   \   'line_length': 17,
   \   'prefix': 'missingword',
@@ -514,8 +514,8 @@ Execute(ALEImport should tell the user when no completions were found from a lan
   AssertEqual
   \ [
   \   [0, 'textDocument/completion', {
-  \     'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
-  \     'position': {'character': 6, 'line': 1}
+  \     'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
+  \     'position': {'character': 16, 'line': 1}
   \   }],
   \ ],
   \ g:sent_message_list

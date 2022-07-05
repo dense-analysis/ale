@@ -24,8 +24,10 @@ endif
 if !s:has_features
     " Only output a warning if editing some special files.
     if index(['', 'gitcommit'], &filetype) == -1
-        execute 'echoerr ''ALE requires NeoVim >= 0.2.0 or Vim 8 with +timers +job +channel'''
-        execute 'echoerr ''Please update your editor appropriately.'''
+        " no-custom-checks
+        echoerr 'ALE requires NeoVim >= 0.2.0 or Vim 8 with +timers +job +channel'
+        " no-custom-checks
+        echoerr 'Please update your editor appropriately.'
     endif
 
     " Stop here, as it won't work.
@@ -150,10 +152,11 @@ let g:ale_hover_to_floating_preview = get(g:, 'ale_hover_to_floating_preview', 0
 " Detail uses floating windows in Neovim
 let g:ale_detail_to_floating_preview = get(g:, 'ale_detail_to_floating_preview', 0)
 
-" Border setting for floating preview windows in Neovim
-" The element in the list presents - horizontal, top, top-left, top-right,
-" bottom-right and bottom-left
-let g:ale_floating_window_border = get(g:, 'ale_floating_window_border', ['|', '-', '+', '+', '+', '+'])
+" Border setting for floating preview windows
+" The elements in the list set the characters for the left, top, top-left,
+" top-right, bottom-right, bottom-left, right, and bottom of the border
+" respectively
+let g:ale_floating_window_border = get(g:, 'ale_floating_window_border', ['|', '-', '+', '+', '+', '+', '|', '-'])
 
 " This flag can be set to 0 to disable warnings for trailing whitespace
 let g:ale_warn_about_trailing_whitespace = get(g:, 'ale_warn_about_trailing_whitespace', 1)
@@ -250,6 +253,9 @@ command! -bar -nargs=* ALEGoToDefinition :call ale#definition#GoToCommandHandler
 " Go to type definition for tsserver and LSP
 command! -bar -nargs=* ALEGoToTypeDefinition :call ale#definition#GoToCommandHandler('type', <f-args>)
 
+" Go to implementation for tsserver and LSP
+command! -bar -nargs=* ALEGoToImplementation :call ale#definition#GoToCommandHandler('implementation', <f-args>)
+
 " Repeat a previous selection in the preview window
 command! -bar ALERepeatSelection :call ale#preview#RepeatSelection()
 
@@ -317,6 +323,9 @@ nnoremap <silent> <Plug>(ale_go_to_type_definition) :ALEGoToTypeDefinition<Retur
 nnoremap <silent> <Plug>(ale_go_to_type_definition_in_tab) :ALEGoToTypeDefinition -tab<Return>
 nnoremap <silent> <Plug>(ale_go_to_type_definition_in_split) :ALEGoToTypeDefinition -split<Return>
 nnoremap <silent> <Plug>(ale_go_to_type_definition_in_vsplit) :ALEGoToTypeDefinitionIn -vsplit<Return>
+nnoremap <silent> <Plug>(ale_go_to_implementation_in_tab) :ALEGoToImplementation -tab<Return>
+nnoremap <silent> <Plug>(ale_go_to_implementation_in_split) :ALEGoToImplementation -split<Return>
+nnoremap <silent> <Plug>(ale_go_to_implementation_in_vsplit) :ALEGoToImplementation -vsplit<Return>
 nnoremap <silent> <Plug>(ale_find_references) :ALEFindReferences<Return>
 nnoremap <silent> <Plug>(ale_hover) :ALEHover<Return>
 nnoremap <silent> <Plug>(ale_documentation) :ALEDocumentation<Return>

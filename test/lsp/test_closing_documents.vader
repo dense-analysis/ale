@@ -63,7 +63,7 @@ Execute(A message should be sent if the document was opened):
   \ [
   \   ['command:/foo', 1, 'textDocument/didOpen', {
   \     'textDocument': {
-  \       'uri': ale#path#ToURI(expand('%:p')),
+  \       'uri': ale#path#ToFileURI(expand('%:p')),
   \       'version': g:ale_lsp_next_version_id - 1,
   \       'languageId': 'lang',
   \       'text': "\n",
@@ -71,7 +71,7 @@ Execute(A message should be sent if the document was opened):
   \   }],
   \   ['command:/foo', 1, 'textDocument/didClose', {
   \     'textDocument': {
-  \       'uri': ale#path#ToURI(expand('%:p')),
+  \       'uri': ale#path#ToFileURI(expand('%:p')),
   \     },
   \   }],
   \ ],
@@ -106,7 +106,7 @@ Execute(Re-opening and closing the documents should work):
   \ [
   \   ['command:/foo', 1, 'textDocument/didOpen', {
   \     'textDocument': {
-  \       'uri': ale#path#ToURI(expand('%:p')),
+  \       'uri': ale#path#ToFileURI(expand('%:p')),
   \       'version': g:ale_lsp_next_version_id - 2,
   \       'languageId': 'lang',
   \       'text': "\n",
@@ -114,12 +114,12 @@ Execute(Re-opening and closing the documents should work):
   \   }],
   \   ['command:/foo', 1, 'textDocument/didClose', {
   \     'textDocument': {
-  \       'uri': ale#path#ToURI(expand('%:p')),
+  \       'uri': ale#path#ToFileURI(expand('%:p')),
   \     },
   \   }],
   \   ['command:/foo', 1, 'textDocument/didOpen', {
   \     'textDocument': {
-  \       'uri': ale#path#ToURI(expand('%:p')),
+  \       'uri': ale#path#ToFileURI(expand('%:p')),
   \       'version': g:ale_lsp_next_version_id - 1,
   \       'languageId': 'lang',
   \       'text': "\n",
@@ -127,7 +127,7 @@ Execute(Re-opening and closing the documents should work):
   \   }],
   \   ['command:/foo', 1, 'textDocument/didClose', {
   \     'textDocument': {
-  \       'uri': ale#path#ToURI(expand('%:p')),
+  \       'uri': ale#path#ToFileURI(expand('%:p')),
   \     },
   \   }],
   \ ],
@@ -148,7 +148,7 @@ Execute(Messages for closing documents should be sent to each server):
   \ [
   \   ['command:/foo', 1, 'textDocument/didOpen', {
   \     'textDocument': {
-  \       'uri': ale#path#ToURI(expand('%:p')),
+  \       'uri': ale#path#ToFileURI(expand('%:p')),
   \       'version': g:ale_lsp_next_version_id - 2,
   \       'languageId': 'lang',
   \       'text': "\n",
@@ -156,7 +156,7 @@ Execute(Messages for closing documents should be sent to each server):
   \   }],
   \   ['command:/bar', 1, 'textDocument/didOpen', {
   \     'textDocument': {
-  \       'uri': ale#path#ToURI(expand('%:p')),
+  \       'uri': ale#path#ToFileURI(expand('%:p')),
   \       'version': g:ale_lsp_next_version_id - 1,
   \       'languageId': 'lang',
   \       'text': "\n",
@@ -164,12 +164,12 @@ Execute(Messages for closing documents should be sent to each server):
   \   }],
   \   ['command:/bar', 1, 'textDocument/didClose', {
   \     'textDocument': {
-  \       'uri': ale#path#ToURI(expand('%:p')),
+  \       'uri': ale#path#ToFileURI(expand('%:p')),
   \     },
   \   }],
   \   ['command:/foo', 1, 'textDocument/didClose', {
   \     'textDocument': {
-  \       'uri': ale#path#ToURI(expand('%:p')),
+  \       'uri': ale#path#ToFileURI(expand('%:p')),
   \     },
   \   }],
   \ ],

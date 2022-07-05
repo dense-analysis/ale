@@ -36,6 +36,22 @@ done
 
 vim="$1"
 tests="$2"
+
+echo "$vim"
+
+case $vim in
+    neovim-v0.2*)
+        headless=''
+    ;;
+    # Neovim 0.6+ requires headless argument to load Vader tests.
+    neovim*)
+        headless='--headless'
+    ;;
+    *)
+        headless=''
+    ;;
+esac
+
 # This file will be used to track if tests ran or not.
 # We can't use a variable, because we need to set a value in a sub-shell.
 run_file="$(mktemp -t tests_ran.XXXXXXXX)"
@@ -132,7 +148,7 @@ while [ "$tries" -lt 5 ]; do
     exit_code=0
     set -o pipefail
     docker run -a stderr -e VADER_OUTPUT_FILE=/dev/stderr "${docker_flags[@]}" \
-        "/vim-build/bin/$vim" -u test/vimrc \
+        "/vim-build/bin/$vim" -u test/vimrc ${headless} \
         "+Vader! $tests" 2>&1 | filter-vader-output | color-vader-output || exit_code=$?
     set +o pipefail
 

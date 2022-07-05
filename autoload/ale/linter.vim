@@ -19,6 +19,7 @@ let s:default_ale_linter_aliases = {
 \   'rmd': 'r',
 \   'systemverilog': 'verilog',
 \   'typescriptreact': ['typescript', 'tsx'],
+\   'vader': ['vim', 'vader'],
 \   'verilog_systemverilog': ['verilog_systemverilog', 'verilog'],
 \   'vimwiki': 'markdown',
 \   'vue': ['vue', 'javascript'],
@@ -45,7 +46,7 @@ let s:default_ale_linters = {
 \   'hack': ['hack'],
 \   'help': [],
 \   'inko': ['inko'],
-\   'json': ['jsonlint', 'spectral'],
+\   'json': ['jsonlint', 'spectral', 'vscodejson'],
 \   'json5': [],
 \   'jsonc': [],
 \   'perl': ['perlcritic'],
@@ -54,9 +55,11 @@ let s:default_ale_linters = {
 \   'rust': ['cargo', 'rls'],
 \   'spec': [],
 \   'text': [],
-\   'vue': ['vls', 'eslint'],
+\   'vader': ['vimls'],
+\   'vue': ['eslint', 'vls'],
 \   'zsh': ['shell'],
 \   'v': ['v'],
+\   'yaml': ['spectral', 'yaml-language-server', 'yamllint'],
 \}
 
 " Testing/debugging helper to unload all linters.

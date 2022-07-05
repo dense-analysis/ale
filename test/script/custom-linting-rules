@@ -73,6 +73,17 @@ check_errors() {
     for directory in "${directories[@]}"; do
         # shellcheck disable=SC2086
         while read -r; do
+            line=$(cut -d ":" -f2 <<< "$REPLY")
+
+            if ((line > 1)); then
+                line=$((line - 1))
+                file=$(cut -d ":" -f1 <<< "$REPLY")
+
+                if sed -n "${line},${line}p" $file | grep -q '^ *" *no-custom-checks$'; then
+                    continue
+                fi
+            fi
+
             RETURN_CODE=1
             echo "$REPLY $message"
         done < <(grep -H -n "$regex" $include_arg $exclude_arg "$directory"/**/*.vim \
@@ -125,7 +136,7 @@ check_errors '==#' "Use 'is#' instead of '==#'. 0 ==# 'foobar' is true"
 check_errors '==?' "Use 'is?' instead of '==?'. 0 ==? 'foobar' is true"
 check_errors '!=#' "Use 'isnot#' instead of '!=#'. 0 !=# 'foobar' is false"
 check_errors '!=?' "Use 'isnot?' instead of '!=?'. 0 !=? 'foobar' is false"
-check_errors '^ *:\?echo' "Stray echo line. Use \`execute echo\` if you want to echo something"
+check_errors '^ *:\?echo' "Stray echo line. Ignore with \" no-custom-checks if needed"
 check_errors '^ *:\?redir' 'User execute() instead of redir'
 # Exclusions for grandfathered-in exceptions
 exclusions="clojure/clj_kondo.vim elixir/elixir_ls.vim go/golangci_lint.vim swift/swiftformat.vim"

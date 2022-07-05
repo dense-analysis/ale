@@ -114,6 +114,7 @@ Notes:
   * `ameba`!!
   * `crystal`!!
 * CSS
+  * `VSCode CSS language server`
   * `cspell`
   * `csslint`
   * `fecs`
@@ -238,8 +239,10 @@ Notes:
   * `stack-ghc`
   * `stylish-haskell`
 * HCL
+  * `packer-fmt`
   * `terraform-fmt`
 * HTML
+  * `VSCode HTML language server`
   * `alex`
   * `angular`
   * `cspell`
@@ -283,6 +286,7 @@ Notes:
   * `tsserver`
   * `xo`
 * JSON
+  * `VSCode JSON language server`
   * `cspell`
   * `dprint`
   * `eslint`
@@ -327,6 +331,7 @@ Notes:
   * `luac`
   * `luacheck`
   * `luafmt`
+  * `selene`
   * `stylua`
 * Mail
   * `alex`
@@ -388,6 +393,8 @@ Notes:
   * `ibm_validator`
   * `prettier`
   * `yamllint`
+* Packer
+  * `packer-fmt-fixer`
 * Pascal
   * `ptop`
 * Pawn
@@ -430,6 +437,8 @@ Notes:
 * Prolog
   * `swipl`
 * proto
+  * `buf-format`!!
+  * `buf-lint`!!
   * `protoc-gen-lint`!!
   * `protolint`!!
 * Pug
@@ -457,6 +466,7 @@ Notes:
   * `pycodestyle`
   * `pydocstyle`
   * `pyflakes`
+  * `pyflyby`
   * `pylama`!!
   * `pylint`!!
   * `pylsp`
@@ -483,6 +493,10 @@ Notes:
   * `ols`
   * `reason-language-server`
   * `refmt`
+* Rego
+  * `cspell`
+  * `opacheck`
+  * `opafmt`
 * reStructuredText
   * `alex`
   * `cspell`
@@ -642,6 +656,7 @@ Notes:
 * XML
   * `xmllint`
 * YAML
+  * `actionlint`
   * `circleci`!!
   * `prettier`
   * `spectral`
@@ -654,6 +669,7 @@ Notes:
 * Zeek
   * `zeek`!!
 * Zig
+  * `zigfmt`
   * `zls`
 
 ===============================================================================

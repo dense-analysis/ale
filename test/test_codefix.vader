@@ -511,7 +511,7 @@ Execute(LSP code action requests should be sent):
   \       'diagnostics': [{'range': {'end': {'character': 6, 'line': 1}, 'start': {'character': 4, 'line': 1}}, 'code': 2304, 'message': 'oops'}]
   \     },
   \     'range': {'end': {'character': 5, 'line': 1}, 'start': {'character': 4, 'line': 1}},
-  \     'textDocument': {'uri': ale#path#ToURI(expand('%:p'))}
+  \     'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))}
   \   }]
   \ ],
   \ g:message_list[-1:]
@@ -543,7 +543,7 @@ Execute(LSP code action requests should be sent only for error with code):
   \       'diagnostics': [{'range': {'end': {'character': 6, 'line': 1}, 'start': {'character': 4, 'line': 1}}, 'code': 2304, 'message': 'oops'}]
   \     },
   \     'range': {'end': {'character': 5, 'line': 1}, 'start': {'character': 4, 'line': 1}},
-  \     'textDocument': {'uri': ale#path#ToURI(expand('%:p'))}
+  \     'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))}
   \   }]
   \ ],
   \ g:message_list[-1:]

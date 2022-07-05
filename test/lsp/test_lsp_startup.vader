@@ -138,7 +138,7 @@ Before:
       \     'id': 1,
       \     'params': {
       \       'initializationOptions': {},
-      \       'rootUri': ale#path#ToURI(a:root),
+      \       'rootUri': ale#path#ToFileURI(a:root),
       \       'rootPath': a:root,
       \       'processId': getpid(),
       \       'capabilities': {
@@ -189,11 +189,20 @@ Before:
       \           'typeDefinition': {
       \             'dynamicRegistration': v:false,
       \           },
+      \           'implementation': {
+      \             'dynamicRegistration': v:false,
+      \             'linkSupport': v:false,
+      \           },
       \           'publishDiagnostics': {
       \             'relatedInformation': v:true,
       \           },
       \           'codeAction': {
       \             'dynamicRegistration': v:false,
+      \             'codeActionLiteralSupport': {
+      \                  'codeActionKind': {
+      \                      'valueSet': []
+      \                  }
+      \              }
       \           },
       \           'rename': {
       \             'dynamicRegistration': v:false,
@@ -253,7 +262,7 @@ Before:
       \     'jsonrpc': '2.0',
       \     'params': {
       \       'textDocument': {
-      \         'uri': ale#path#ToURI(expand('#' . a:buffer . ':p')),
+      \         'uri': ale#path#ToFileURI(expand('#' . a:buffer . ':p')),
       \         'version': ale#lsp#message#GetNextVersionID() - 1,
       \         'languageId': a:language,
       \         'text': "\n",

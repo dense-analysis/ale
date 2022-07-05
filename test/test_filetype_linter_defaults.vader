@@ -6,7 +6,7 @@ Before:
   let g:ale_linters = {}
 
   function! GetLinterNames(filetype) abort
-    return map(ale#linter#Get(a:filetype), 'v:val.name')
+    return sort(map(ale#linter#Get(a:filetype), 'v:val.name'))
   endfunction
 
 After:
@@ -60,7 +60,7 @@ Execute(The defaults for the inko filetype should be correct):
   AssertEqual [], GetLinterNames('inko')
 
 Execute(The defaults for the json filetype should be correct):
-  AssertEqual ['jsonlint', 'spectral'], GetLinterNames('json')
+  AssertEqual ['jsonlint', 'spectral', 'vscodejson'], GetLinterNames('json')
 
   let g:ale_linters_explicit = 1
 
@@ -103,7 +103,7 @@ Execute(The defaults for the text filetype should be correct):
   AssertEqual [], GetLinterNames('text')
 
 Execute(The defaults for the vue filetype should be correct):
-  AssertEqual ['vls', 'eslint'], GetLinterNames('vue')
+  AssertEqual ['eslint', 'vls'], GetLinterNames('vue')
 
   let g:ale_linters_explicit = 1
 
@@ -124,6 +124,13 @@ Execute(The defaults for the verilog filetype should be correct):
   let g:ale_linters_explicit = 1
 
   AssertEqual [], GetLinterNames('verilog')
+
+Execute(The defaults for the vader filetype should be correct):
+  AssertEqual ['vimls'], GetLinterNames('vader')
+
+  let g:ale_linters_explicit = 1
+
+  AssertEqual [], GetLinterNames('vader')
 
 Execute(Default aliases for React should be defined):
   AssertEqual ['javascript', 'jsx'], ale#linter#ResolveFiletype('javascriptreact')

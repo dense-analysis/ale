@@ -108,7 +108,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   \     'pattern': '',
   \   },
   \ ],
-  \ ale#test#GetLoclistWithoutModule()
+  \ ale#test#GetLoclistWithoutNewerKeys()
 
   " After we get empty syntax errors, we should clear them.
   call ale#lsp_linter#HandleLSPResponse(1, {
@@ -125,7 +125,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   AssertEqual
   \ [
   \ ],
-  \ ale#test#GetLoclistWithoutModule()
+  \ ale#test#GetLoclistWithoutNewerKeys()
 
   " Syntax errors on the project root should not populate the LocList.
   call ale#lsp_linter#HandleLSPResponse(1, {
@@ -154,7 +154,7 @@ Execute(tsserver syntax error responses should be handled correctly):
   AssertEqual
   \ [
   \ ],
-  \ ale#test#GetLoclistWithoutModule()
+  \ ale#test#GetLoclistWithoutNewerKeys()
 
 Execute(tsserver semantic error responses should be handled correctly):
   runtime ale_linters/typescript/tsserver.vim
@@ -222,7 +222,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   \     'pattern': '',
   \   },
   \ ],
-  \ ale#test#GetLoclistWithoutModule()
+  \ ale#test#GetLoclistWithoutNewerKeys()
 
   " After we get empty syntax errors, we should clear them.
   call ale#lsp_linter#HandleLSPResponse(1, {
@@ -239,7 +239,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   AssertEqual
   \ [
   \ ],
-  \ ale#test#GetLoclistWithoutModule()
+  \ ale#test#GetLoclistWithoutNewerKeys()
 
   " Semantic errors on the project root should not populate the LocList.
   call ale#lsp_linter#HandleLSPResponse(1, {
@@ -268,7 +268,7 @@ Execute(tsserver semantic error responses should be handled correctly):
   AssertEqual
   \ [
   \ ],
-  \ ale#test#GetLoclistWithoutModule()
+  \ ale#test#GetLoclistWithoutNewerKeys()
 
 Execute(tsserver errors should mark tsserver no longer active):
   let b:ale_linters = ['tsserver']
@@ -314,7 +314,7 @@ Execute(LSP diagnostics responses should be handled correctly):
   \ 'jsonrpc':'2.0',
   \ 'method':'textDocument/publishDiagnostics',
   \ 'params': {
-  \     'uri': ale#path#ToURI(expand('%:p')),
+  \     'uri': ale#path#ToFileURI(expand('%:p')),
   \     'diagnostics': [
   \        {
   \          'range': {
@@ -350,7 +350,7 @@ Execute(LSP diagnostics responses should be handled correctly):
   \     'text': 'Missing JRE 1-8'
   \    }
   \ ],
-  \ ale#test#GetLoclistWithoutModule()
+  \ ale#test#GetLoclistWithoutNewerKeys()
 
 Execute(LSP diagnostics responses on project root should not populate loclist):
   let b:ale_linters = ['eclipselsp']
@@ -388,7 +388,7 @@ Execute(LSP diagnostics responses on project root should not populate loclist):
   AssertEqual
   \ [
   \ ],
-  \ ale#test#GetLoclistWithoutModule()
+  \ ale#test#GetLoclistWithoutNewerKeys()
 
 Execute(LSP errors should mark linters no longer active):
   let b:ale_linters = ['pylsp']
@@ -403,7 +403,7 @@ Execute(LSP errors should mark linters no longer active):
   call ale#lsp_linter#HandleLSPResponse(1, {
   \ 'method': 'textDocument/publishDiagnostics',
   \ 'params': {
-  \   'uri': ale#path#ToURI(g:dir . '/filename.py'),
+  \   'uri': ale#path#ToFileURI(g:dir . '/filename.py'),
   \   'diagnostics': [],
   \ },
   \})

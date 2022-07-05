@@ -26,8 +26,10 @@ Integration Information
   4. analyzer -- If you have rust-analyzer installed, you might prefer using
      this linter over cargo and rls. rust-analyzer also implements the
      Language Server Protocol for incremental compilation of Rust code, and is
-     the next iteration of rls. rust-analyzer, like rls, requires Rust files
-     to be contained in Cargo projects.
+     the next iteration of rls. rust-analyzer either requires Rust files to be
+     contained in Cargo projects or requires the project to be described in
+     the rust-project.json format:
+     https://rust-analyzer.github.io/manual.html#non-cargo-based-projects
   5. rustfmt -- If you have `rustfmt` installed, you can use it as a fixer to
      consistently reformat your Rust code.
 
@@ -38,7 +40,7 @@ Integration Information
   let g:ale_linters = {'rust': ['rustc', 'rls']}
 <
 
-  Also note that rustc 1.12. or later is needed.
+  Also note that rustc 1.18. or later is needed.
 
 
 ===============================================================================
@@ -237,13 +239,13 @@ rustc                                                          *ale-rust-rustc*
 g:ale_rust_rustc_options                             *g:ale_rust_rustc_options*
                                                      *b:ale_rust_rustc_options*
   Type: |String|
-  Default: `'-Z no-codegen'`
+  Default: `'--emit=mir -o /dev/null'`
 
   The variable can be used to change the options passed to `rustc`.
 
-  `-Z no-codegen` should only work with nightly builds of Rust. Be careful when
-  setting the options, as running `rustc` could execute code or generate
-  binary files.
+  Users of nightly builds of Rust might want to use `-Z no-codegen` instead.
+  Be careful when setting the options, as running `rustc` could execute code
+  or generate binary files.
 
 
 g:ale_rust_ignore_error_codes                   *g:ale_rust_ignore_error_codes*

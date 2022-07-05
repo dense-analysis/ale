@@ -487,13 +487,13 @@ Execute(LSP rename requests should be sent):
   \ [
   \   [1, 'textDocument/didChange', {
   \     'textDocument': {
-  \         'uri': ale#path#ToURI(expand('%:p')),
+  \         'uri': ale#path#ToFileURI(expand('%:p')),
   \         'version': g:ale_lsp_next_version_id - 1,
   \     },
   \     'contentChanges': [{'text': join(getline(1, '$'), "\n") . "\n"}]
   \   }],
   \   [0, 'textDocument/rename', {
-  \   'textDocument': {'uri': ale#path#ToURI(expand('%:p'))},
+  \   'textDocument': {'uri': ale#path#ToFileURI(expand('%:p'))},
   \   'position': {'line': 0, 'character': 2},
   \   'newName': 'a-new-name',
   \   }],
