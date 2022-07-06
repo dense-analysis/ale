@@ -174,8 +174,8 @@ function! s:VimCreate(options) abort
     \    }
 
     " allow custom popup opts
-    if exists('g:ale_floating_popup_opts')
-        let l:popup_opts = function(g:ale_floating_popup_opts)()
+    if exists('g:ale_floating_preview_popup_opts')
+        let l:popup_opts = function(g:ale_floating_preview_popup_opts)()
     endif
 
     let l:popup_id = popup_create([], l:popup_opts)
