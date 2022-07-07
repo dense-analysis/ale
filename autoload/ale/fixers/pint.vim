@@ -1,12 +1,12 @@
 " Author: Michael Dyrynda <michael@dyrynda.com.au>
 " Description: Fixing files with Laravel Pint.
 
-call ale#Set('pint_executable', 'pint')
-call ale#Set('pint_use_global', get(g:, 'ale_use_global_executables', 0))
-call ale#Set('pint_options', '')
+call ale#Set('php_pint_executable', 'pint')
+call ale#Set('php_pint_use_global', get(g:, 'ale_use_global_executables', 0))
+call ale#Set('php_pint_options', '')
 
 function! ale#fixers#pint#GetExecutable(buffer) abort
-    return ale#path#FindExecutable(a:buffer, 'pint', [
+    return ale#path#FindExecutable(a:buffer, 'php_pint', [
     \   'vendor/bin/pint',
     \   'pint'
     \])
@@ -17,7 +17,7 @@ function! ale#fixers#pint#Fix(buffer) abort
 
     return {
     \   'command': ale#Escape(l:executable)
-    \       . ' ' . ale#Var(a:buffer, 'pint_options')
+    \       . ' ' . ale#Var(a:buffer, 'php_pint_options')
     \       . ' %t',
     \   'read_temporary_file': 1,
     \}
