@@ -231,6 +231,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['php'],
 \       'description': 'Fix PHP files with php-cs-fixer.',
 \   },
+\   'pint': {
+\       'function': 'ale#fixers#pint#Fix',
+\       'suggested_filetypes': ['php'],
+\       'description': 'Fix PHP files with Laravel Pint.',
+\   },
 \   'astyle': {
 \       'function': 'ale#fixers#astyle#Fix',
 \       'suggested_filetypes': ['c', 'cpp'],

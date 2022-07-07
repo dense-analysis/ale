@@ -1,0 +1,62 @@
+Before: 
+  Save g:ale_php_pint_executable
+  Save g:ale_php_pint_options
+  let g:ale_php_pint_executable = 'pint'
+  let g:ale_php_pint_options = ''
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+
+Execute(project with pint should use local by default):
+  call ale#test#SetFilename('../test-files/php/project-with-pint/test.php')
+
+  AssertEqual
+  \ ale#path#Simplify(g:dir . '/../test-files/php/project-with-pint/vendor/bin/pint'),
+  \ ale#fixers#pint#GetExecutable(bufnr(''))
+
+Execute(use-global should override local detection):
+  let g:ale_php_pint_use_global = 1
+  call ale#test#SetFilename('../test-files/php/project-with-pint/test.php')
+
+  AssertEqual
+  \ 'pint',
+  \ ale#fixers#pint#GetExecutable(bufnr(''))
+
+Execute(project without pint should use global):
+  call ale#test#SetFilename('../test-files/php/project-without-pint/test.php')
+
+  AssertEqual
+  \ 'pint',
+  \ ale#fixers#pint#GetExecutable(bufnr(''))
+
+
+
+
+Execute(The pint callback should return the correct default values):
+  call ale#test#SetFilename('../test-files/php/project-without-pint/foo/test.php')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape('pint')
+  \      . ' ' . g:ale_php_pint_options
+  \      . ' %t'
+  \ },
+  \ ale#fixers#pint#Fix(bufnr(''))
+
+Execute(The pint callback should include custom pint options):
+  let g:ale_php_pint_options = '--test'
+  call ale#test#SetFilename('../test-files/php/project-without-pint/test.php')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape(g:ale_php_pint_executable)
+  \     . ' --test %t',
+  \   'read_temporary_file': 1,
+  \ },
+  \ ale#fixers#pint#Fix(bufnr(''))

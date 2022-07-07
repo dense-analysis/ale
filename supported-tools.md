@@ -420,12 +420,13 @@ formatting.
   * [langserver](https://github.com/felixfbecker/php-language-server)
   * [phan](https://github.com/phan/phan) see `:help ale-php-phan` to instructions
   * [php -l](https://secure.php.net/)
-  * [php-cs-fixer](http://cs.sensiolabs.org/)
+  * [php-cs-fixer](https://cs.symfony.com)
   * [phpactor](https://github.com/phpactor/phpactor)
   * [phpcbf](https://github.com/squizlabs/PHP_CodeSniffer)
   * [phpcs](https://github.com/squizlabs/PHP_CodeSniffer)
   * [phpmd](https://phpmd.org)
   * [phpstan](https://github.com/phpstan/phpstan)
+  * [pint](https://github.com/laravel/pint) :beer:
   * [psalm](https://getpsalm.org) :floppy_disk:
   * [tlint](https://github.com/tightenco/tlint)
 * PO
