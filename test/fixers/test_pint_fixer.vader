@@ -1,7 +1,7 @@
 Before:
   Save g:ale_pint_executable
   Save g:ale_pint_options
-  let g:ale_pint_executable = 'php-cs-fixer'
+  let g:ale_pint_executable = 'pint'
   let g:ale_pint_options = ''
 
   call ale#test#SetDirectory('/testplugin/test/fixers')
