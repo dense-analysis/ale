@@ -1,6 +1,7 @@
 " Author: Jan-Grimo Sobez <jan-grimo.sobez@phys.chem.ethz.ch>
 " Author: Kevin Clark <kevin.clark@gmail.com>
 " Author: D. Ben Knoble <ben.knoble+github@gmail.com>
+" Author: Shaun Duncan <shaun.duncan@gmail.com>
 " Description: Floating preview window for showing whatever information in.
 
 " Precondition: exists('*nvim_open_win') || has('popupwin')

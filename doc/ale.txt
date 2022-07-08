@@ -1234,6 +1234,17 @@ g:ale_floating_preview                                 *g:ale_floating_preview*
   |g:ale_detail_to_floating_preview| to `1`.
 
 
+g:ale_floating_preview_popup_opts             *g:ale_floating_preview_popup_opts*
+
+  Type: |String|
+  Default: `''`
+
+  The string name of a function that will be called when |g:ale_floating_preview| is
+  enabled to get options to pass to |popup_create|. This function should return a
+  |Dictionary| compatible with |popup_create|. If none is supplied, default options
+  are used.
+
+
 g:ale_floating_window_border                       *g:ale_floating_window_border*
 
   Type: |List|
