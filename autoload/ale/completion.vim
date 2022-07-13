@@ -6,7 +6,6 @@ scriptencoding utf-8
 " only valid in Insert mode. This way, feedkeys() won't send these keys if you
 " quit Insert mode quickly enough.
 inoremap <silent> <Plug>(ale_show_completion_menu) <C-x><C-o><C-p>
-inoremap <silent> <Plug>(ale_stop_completion_menu) <C-x><C-z>
 " If we hit the key sequence in normal mode, then we won't show the menu, so
 " we should restore the old settings right away.
 nnoremap <silent> <Plug>(ale_show_completion_menu) :call ale#completion#RestoreCompletionOptions()<CR>
@@ -981,14 +980,6 @@ function! ale#completion#StopTimer() abort
     let s:timer_id = -1
 endfunction
 
-" Close the previous completion menu (if any), so that the newer autocompletion
-" candidates will show up
-function! s:closePreviousCompletionMenu() abort
-    if exists('*complete_info') && !empty(complete_info(['mode']))
-        call ale#util#FeedKeys("\<Plug>(ale_stop_completion_menu)")
-    endif
-endfunction
-
 function! ale#completion#Queue() abort
     if !get(b:, 'ale_completion_enabled', g:ale_completion_enabled)
         return
@@ -1009,8 +1000,6 @@ function! ale#completion#Queue() abort
     endif
 
     call ale#completion#StopTimer()
-
-    call s:closePreviousCompletionMenu()
 
     let s:timer_id = timer_start(g:ale_completion_delay, function('s:TimerHandler'))
 endfunction
