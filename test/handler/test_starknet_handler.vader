@@ -1,0 +1,36 @@
+Before:
+  runtime ale_linters/cairo/starknet.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The starknet handler should handle error messages correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 3,
+  \     'col': 6,
+  \     'text': 'Could not find module "starkware.cairo.commo.cairo_builtins". Searched in the following paths:',
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale_linters#cairo#starknet#Handle(bufnr(''), [
+  \   'contract.cairo:3:6: Could not find module "starkware.cairo.commo.cairo_builtins". Searched in the following paths:',
+  \   'from starkware.cairo.commo.cairo_builtins import HashBuiltin',
+  \   '     ^**********************************^',
+  \ ])
+
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 21,
+  \     'col': 2,
+  \     'text': 'Unsupported decorator: "vie".',
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale_linters#cairo#starknet#Handle(bufnr(''), [
+  \   'contract.cairo:21:2: Unsupported decorator: "vie".',
+  \   '@vie',
+  \   ' ^*^',
+  \ ])

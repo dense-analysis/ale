@@ -1,0 +1,13 @@
+Before:
+  call ale#assert#SetUpLinterTest('cairo', 'starknet')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'starknet-compile', 'starknet-compile %s'
+
+Execute(Extra options should be supported):
+  let g:ale_cairo_starknet_options = '--config'
+
+  AssertLinter 'starknet-compile', 'starknet-compile --config %s'
