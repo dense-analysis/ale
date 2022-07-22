@@ -95,6 +95,8 @@ Notes:
   * `flawfinder`
   * `gcc` (`cc`)
   * `uncrustify`
+* Cairo
+  * `starknet`
 * Chef
   * `cookstyle`
   * `foodcritic`!!
