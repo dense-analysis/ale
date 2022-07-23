@@ -386,6 +386,7 @@ Notes:
   * `clangd`
   * `uncrustify`
 * OCaml
+  * `dune`
   * `merlin` (see |ale-ocaml-merlin|)
   * `ocamlformat`
   * `ocamllsp`
