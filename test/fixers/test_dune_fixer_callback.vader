@@ -1,0 +1,36 @@
+Before:
+  Save g:ale_ocaml_dune_executable
+  Save g:ale_ocaml_dune_options
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_ocaml_dune_executable = 'xxxinvalid'
+  let g:ale_ocaml_dune_options = ''
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The dune callback should return the correct default values):
+  call ale#test#SetFilename('../test-files/ocaml/testfile.re')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' format',
+  \ },
+  \ ale#fixers#dune#Fix(bufnr(''))
+
+Execute(The dune callback should include custom dune options):
+  let g:ale_ocaml_dune_options = "--random-option"
+  call ale#test#SetFilename('../test-files/ocaml/testfile.re')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' format'
+  \     . ' ' . g:ale_ocaml_dune_options,
+  \ },
+  \ ale#fixers#dune#Fix(bufnr(''))
