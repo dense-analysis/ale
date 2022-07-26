@@ -395,6 +395,7 @@ formatting.
   * [clangd](https://clang.llvm.org/extra/clangd.html)
   * [uncrustify](https://github.com/uncrustify/uncrustify)
 * OCaml
+  * [dune](https://dune.build/)
   * [merlin](https://github.com/the-lambda-church/merlin) see `:help ale-ocaml-merlin` for configuration instructions
   * [ocamlformat](https://github.com/ocaml-ppx/ocamlformat)
   * [ocamllsp](https://github.com/ocaml/ocaml-lsp)
