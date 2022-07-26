@@ -3041,6 +3041,7 @@ documented in additional help files.
     clangd................................|ale-objcpp-clangd|
     uncrustify............................|ale-objcpp-uncrustify|
   ocaml...................................|ale-ocaml-options|
+    dune..................................|ale-ocaml-dune|
     merlin................................|ale-ocaml-merlin|
     ocamllsp..............................|ale-ocaml-ocamllsp|
     ols...................................|ale-ocaml-ols|
