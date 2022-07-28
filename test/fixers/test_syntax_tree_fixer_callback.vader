@@ -1,0 +1,37 @@
+Before:
+  Save g:ale_ruby_syntax_tree_executable
+  Save g:ale_ruby_syntax_tree_options
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_ruby_syntax_tree_executable = 'xxxinvalid'
+  let g:ale_ruby_syntax_tree_options = ''
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The syntax_tree callback should return the correct default values):
+  call ale#test#SetFilename('../test-files/ruby/dummy.rb')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape(g:ale_ruby_syntax_tree_executable)
+  \     . ' write %t',
+  \ },
+  \ ale#fixers#syntax_tree#Fix(bufnr(''))
+
+Execute(The syntax_tree callback should include custom options):
+  let g:ale_ruby_syntax_tree_options = '--print-width=100 --plugins=plugin/trailing_comma'
+  call ale#test#SetFilename('../test-files/ruby/with_config/dummy.rb')
+
+  AssertEqual
+  \ {
+  \   'read_temporary_file': 1,
+  \   'command': ale#Escape(g:ale_ruby_syntax_tree_executable)
+  \     . ' write --print-width=100 --plugins=plugin/trailing_comma %t',
+  \ },
+  \ ale#fixers#syntax_tree#Fix(bufnr(''))

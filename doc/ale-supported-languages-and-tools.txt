@@ -527,6 +527,7 @@ Notes:
   * `solargraph`
   * `sorbet`
   * `standardrb`
+  * `syntax_tree`
 * Rust
   * `cargo`!!
   * `cspell`
