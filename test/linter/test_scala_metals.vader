@@ -7,15 +7,52 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(should set metals for sbt project with build.sbt):
-  call ale#test#SetFilename('../test-files/scala/valid_sbt_project/Main.scala')
+  call ale#test#SetFilename('../test-files/scala/valid_sbt_project/src/main/scala/Main.scala')
   AssertLSPLanguage 'scala'
   AssertLSPOptions {}
   AssertLSPConfig {}
   AssertLSPProject ale#test#GetFilename('../test-files/scala/valid_sbt_project')
 
-Execute(should not set metals for sbt project without build.sbt):
-  call ale#test#SetFilename('../test-files/scala/invalid_sbt_project/Main.scala')
+Execute(should set metals for mill project with build.sc):
+  call ale#test#SetFilename('../test-files/scala/valid_mill_project/src/main/scala/Main.scala')
   AssertLSPLanguage 'scala'
   AssertLSPOptions {}
   AssertLSPConfig {}
-  AssertLSPProject ''
+  AssertLSPProject ale#test#GetFilename('../test-files/scala/valid_mill_project')
+
+Execute(should set metals for gradle project with build.gradle):
+  call ale#test#SetFilename('../test-files/scala/valid_gradle_project/src/main/scala/Main.scala')
+  AssertLSPLanguage 'scala'
+  AssertLSPOptions {}
+  AssertLSPConfig {}
+  AssertLSPProject ale#test#GetFilename('../test-files/scala/valid_gradle_project')
+
+Execute(should set metals for maven project with pom.xml):
+  call ale#test#SetFilename('../test-files/scala/valid_maven_project/src/main/scala/Main.scala')
+  AssertLSPLanguage 'scala'
+  AssertLSPOptions {}
+  AssertLSPConfig {}
+  AssertLSPProject ale#test#GetFilename('../test-files/scala/valid_maven_project')
+
+Execute(should set metals for git project with .git):
+  call ale#test#SetFilename('../test-files/scala/valid_git_project/src/main/scala/Main.scala')
+  AssertLSPLanguage 'scala'
+  AssertLSPOptions {}
+  AssertLSPConfig {}
+  AssertLSPProject ale#test#GetFilename('../..')
+
+Before:
+  Save g:ale_scala_metals_project_root_dirs
+  call ale#assert#SetUpLinterTest('scala', 'metals')
+  let g:ale_scala_metals_project_root_dirs = []
+
+After:
+  Restore
+  call ale#assert#TearDownLinterTest()
+
+Execute(should set metals for a simple scala project):
+  call ale#test#SetFilename('../test-files/scala/valid_scala_project/src/main/scala/Main.scala')
+  AssertLSPLanguage 'scala'
+  AssertLSPOptions {}
+  AssertLSPConfig {}
+  AssertLSPProject ale#test#GetFilename('../test-files/scala/valid_scala_project/src/main/scala')

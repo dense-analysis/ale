@@ -11,8 +11,8 @@ See |ale-cspell-options|
 ===============================================================================
 metals                                                       *ale-scala-metals*
 
-`metals` requires either an SBT project, a Mill project, or a running Bloop
-server.
+`metals` requires either an SBT project, a Mill project, a Gradle project, a
+Maven project, a git/hg repository, or just a Scala file.
 
 
 g:ale_scala_metals_executable                    *g:ale_scala_metals_executable*
@@ -29,9 +29,26 @@ g:ale_scala_metals_project_root                *g:ale_scala_metals_project_root*
   Default: `''`
 
   By default the project root is found by searching upwards for `build.sbt`,
-  `build.sc`, `.bloop` or `.metals`.
+  `build.sc`, `build.grade`, `pom.xml`, or `.git`.
   If the project root is elsewhere, you can override the project root
   directory.
+
+
+g:ale_scala_metals_project_root_dirs      *g:ale_scala_metals_project_root_dirs*
+                                          *b:ale_scala_metals_project_root_dirs*
+  Type: |List|
+  Default: `['.git', '.hg']`
+
+  The list of directory names to look for to aid determination of the project
+  root.
+
+
+g:ale_scala_metals_project_root_files    *g:ale_scala_metals_project_root_files*
+                                         *b:ale_scala_metals_project_root_files*
+  Type: |List|
+  Default: `['build.sbt', 'build.sc', 'build.gradle', 'pom.xml']`
+
+  The list of file names to look for to aid determination of the project root.
 
 
 ===============================================================================
