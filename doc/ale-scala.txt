@@ -18,7 +18,7 @@ Maven project, a git/hg repository, or just a Scala file.
 g:ale_scala_metals_executable                    *g:ale_scala_metals_executable*
                                                  *b:ale_scala_metals_executable*
   Type: |String|
-  Default: `'metals-vim'`
+  Default: `'metals'`
 
   Override the invoked `metals` binary.
 
