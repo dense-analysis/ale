@@ -405,6 +405,8 @@ formatting.
   * [ibm_validator](https://github.com/IBM/openapi-validator)
   * [prettier](https://github.com/prettier/prettier)
   * [yamllint](https://yamllint.readthedocs.io/)
+* OpenSCAD
+  * [SCA2D](https://gitlab.com/bath_open_instrumentation_group/sca2d) :floppy_disk:
 * Packer (HCL)
   * [packer-fmt-fixer](https://github.com/hashicorp/packer)
 * Pascal
