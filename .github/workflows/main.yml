@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix:
         vim-version:
-          - '--vim-82-only'
+          - '--vim-80-only'
           - '--vim-90-only'
           - '--neovim-02-only'
           - '--neovim-07-only'

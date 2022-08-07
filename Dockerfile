@@ -1,6 +1,6 @@
 FROM testbed/vim:20
 
-RUN install_vim -tag v8.2.4693 -build \
+RUN install_vim -tag v8.0.0027 -build \
                 -tag v9.0.0133 -build \
                 -tag neovim:v0.2.0 -build \
                 -tag neovim:v0.7.0 -build
