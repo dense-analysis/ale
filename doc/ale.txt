@@ -3167,6 +3167,7 @@ documented in additional help files.
     solargraph............................|ale-ruby-solargraph|
     sorbet................................|ale-ruby-sorbet|
     standardrb............................|ale-ruby-standardrb|
+    syntax_tree...........................|ale-ruby-syntax_tree|
   rust....................................|ale-rust-options|
     analyzer..............................|ale-rust-analyzer|
     cargo.................................|ale-rust-cargo|
