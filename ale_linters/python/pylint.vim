@@ -93,6 +93,15 @@ function! ale_linters#python#pylint#Handle(buffer, lines) abort
         if l:code[:0] is# 'E'
             let l:item.type = 'E'
         endif
+        
+        if l:code[:0] is# 'C'
+            let l:item.type = 'W'
+            let l:item.subtype = 'style'
+        endif
+
+        if l:code[:0] is# 'R'
+            let l:item.type = 'I'
+        endif
 
         call add(l:output, l:item)
     endfor
