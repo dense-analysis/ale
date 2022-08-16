@@ -340,7 +340,7 @@ function! ale#hover#ShowTruncatedMessageAtCursor() abort
     let l:pos = getpos('.')[0:2]
 
     if !getbufvar(l:buffer, 'ale_enabled', 1)
-      return
+        return
     endif
 
     if l:pos != s:last_pos
