@@ -40,7 +40,9 @@ Are you having trouble configuring ALE? Try asking for help on [Stack Exchange](
 2. Then this happened.
 
 ### :ALEInfo
-
-<!-- Paste the output of :ALEInfo here. Try :ALEInfoToClipboard -->
-<!-- Make sure to run :ALEInfo from the buffer where the bug occurred. -->
-<!-- Read the output. You might figure out what went wrong yourself. -->
+<details>
+  <summary>Expand</summary>
+  <!-- Paste the output of :ALEInfo here. Try :ALEInfoToClipboard -->
+  <!-- Make sure to run :ALEInfo from the buffer where the bug occurred. -->
+  <!-- Read the output. You might figure out what went wrong yourself. -->
+</details>
