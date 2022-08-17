@@ -134,15 +134,18 @@ function! s:NvimPrepareWindowContent(lines) abort
 endfunction
 
 function! s:NvimCreate(options) abort
+    let l:popup_opts = extend({
+        \ 'relative': 'cursor',
+        \ 'row': 1,
+        \ 'col': 0,
+        \ 'width': 42,
+        \ 'height': 4,
+        \ 'style': 'minimal'
+    \ }, s:GetPopupOpts())
+
     let l:buffer = nvim_create_buf(v:false, v:false)
-    let l:winid = nvim_open_win(l:buffer, v:false, {
-    \ 'relative': 'cursor',
-    \ 'row': 1,
-    \ 'col': 0,
-    \ 'width': 42,
-    \ 'height': 4,
-    \ 'style': 'minimal'
-    \ })
+    let l:winid = nvim_open_win(l:buffer, v:false, l:popup_opts)
+
     call nvim_buf_set_option(l:buffer, 'buftype', 'acwrite')
     call nvim_buf_set_option(l:buffer, 'bufhidden', 'delete')
     call nvim_buf_set_option(l:buffer, 'swapfile', v:false)
@@ -153,7 +156,7 @@ endfunction
 
 function! s:VimCreate(options) abort
     " default options
-    let l:popup_opts = {
+    let l:popup_opts = extend({
     \    'line': 'cursor+1',
     \    'col': 'cursor',
     \    'drag': v:true,
@@ -172,12 +175,7 @@ function! s:VimCreate(options) abort
     \        get(g:ale_floating_window_border, 5, '+'),
     \    ],
     \    'moved': 'any',
-    \    }
-
-    " allow custom popup opts
-    if exists('g:ale_floating_preview_popup_opts')
-        let l:popup_opts = function(g:ale_floating_preview_popup_opts)()
-    endif
+    \ }, s:GetPopupOpts())
 
     let l:popup_id = popup_create([], l:popup_opts)
     call setbufvar(winbufnr(l:popup_id), '&filetype', get(a:options, 'filetype', 'ale-preview'))
@@ -212,4 +210,18 @@ function! s:VimClose() abort
 
     call popup_close(w:preview['id'])
     unlet w:preview
+endfunction
+
+" get either the results of a function callback or dictionary for popup overrides
+function! s:GetPopupOpts() abort
+    if exists('g:ale_floating_preview_popup_opts')
+        let l:ref = g:ale_floating_preview_popup_opts
+        if type(l:ref) is# v:t_dict
+            return l:ref
+        elseif exists('*'.l:ref)
+            return function(l:ref)()
+        endif
+    endif
+
+    return {}
 endfunction
