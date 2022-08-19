@@ -218,8 +218,11 @@ function! s:GetPopupOpts() abort
         let l:ref = g:ale_floating_preview_popup_opts
         if type(l:ref) is# v:t_dict
             return l:ref
-        elseif exists('*'.l:ref)
-            return function(l:ref)()
+        elseif type(l:ref) is# v:t_string
+            try
+                return function(l:ref)()
+            catch /E700/
+            endtry
         endif
     endif
 
