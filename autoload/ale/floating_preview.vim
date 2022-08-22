@@ -135,12 +135,12 @@ endfunction
 
 function! s:NvimCreate(options) abort
     let l:popup_opts = extend({
-        \ 'relative': 'cursor',
-        \ 'row': 1,
-        \ 'col': 0,
-        \ 'width': 42,
-        \ 'height': 4,
-        \ 'style': 'minimal'
+    \    'relative': 'cursor',
+    \    'row': 1,
+    \    'col': 0,
+    \    'width': 42,
+    \    'height': 4,
+    \    'style': 'minimal'
     \ }, s:GetPopupOpts())
 
     let l:buffer = nvim_create_buf(v:false, v:false)
@@ -216,6 +216,7 @@ endfunction
 function! s:GetPopupOpts() abort
     if exists('g:ale_floating_preview_popup_opts')
         let l:ref = g:ale_floating_preview_popup_opts
+
         if type(l:ref) is# v:t_dict
             return l:ref
         elseif type(l:ref) is# v:t_string
