@@ -5,7 +5,7 @@
 call ale#Set('fortran_gcc_use_free_form', 1)
 call ale#Set('fortran_gcc_executable', 'gcc')
 " Set this option to change the GCC options for warnings for Fortran.
-call ale#Set('fortran_gcc_options', '-Wall')
+call ale#Set('fortran_gcc_options', '-J/tmp/ -Wall')
 
 function! ale_linters#fortran#gcc#Handle(buffer, lines) abort
     " We have to match a starting line and a later ending line together,
