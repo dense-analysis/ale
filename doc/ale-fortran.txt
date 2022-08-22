@@ -17,7 +17,7 @@ g:ale_fortran_gcc_executable                     *g:ale_fortran_gcc_executable*
 g:ale_fortran_gcc_options                           *g:ale_fortran_gcc_options*
                                                     *b:ale_fortran_gcc_options*
   Type: |String|
-  Default: `'-Wall'`
+  Default: `'-J/tmp/ -Wall'`
 
   This variable can be changed to modify flags given to gcc.
 
