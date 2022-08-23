@@ -1234,6 +1234,29 @@ g:ale_floating_preview                                 *g:ale_floating_preview*
   |g:ale_detail_to_floating_preview| to `1`.
 
 
+g:ale_floating_preview_popup_opts             *g:ale_floating_preview_popup_opts*
+
+  Type: |String| or |Dictionary|
+  Default: `''`
+
+  Either a dictionary of options or the string name of a function that returns a
+  dictionary of options. This will be used as an argument to |popup_create| for
+  Vim users or |nvim_open_win| for NeoVim users. Note that in either case, the
+  resulting dictionary is merged with ALE defaults rather than expliciting overriding
+  them. This only takes effect if |g:ale_floating_preview| is enabled.
+
+  NOTE: for Vim users see |popup_create-arguments|, for NeoVim users see
+  |nvim_open_win| for argument details
+
+  For example, to enhance popups with a title: >
+
+  function! CustomOpts() abort {
+    let [l:info, l:loc] = ale#util#FindItemAtCursor(bufnr(''))
+    return {'title': ' ALE: ' . (l:loc.linter_name) . ' '}
+  endfunction
+<
+
+
 g:ale_floating_window_border                       *g:ale_floating_window_border*
 
   Type: |List|
