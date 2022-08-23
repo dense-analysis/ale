@@ -15,13 +15,12 @@ if has('nvim-0.3.2')
     let s:has_virt_text = 1
 elseif has('textprop') && has('popupwin')
     let s:has_virt_text = 1
-    let s:emulate_virt = !has('patch-9.0.0214')
+    let s:emulate_virt = !has('patch-9.0.0297')
+    let s:hl_list = []
 
     if s:emulate_virt
         call prop_type_add('ale', {})
         let s:last_virt = -1
-    else
-        let s:last_virt = 1
     endif
 endif
 
@@ -39,9 +38,8 @@ function! ale#virtualtext#Clear() abort
             call prop_remove({'type': 'ale'})
             call popup_close(s:last_virt)
             let s:last_virt = -1
-        elseif !s:emulate_virt && s:last_virt != 1
-            call prop_remove({'id': s:last_virt})
-            let s:last_virt = 1
+        elseif !empty(s:hl_list)
+            call prop_remove({'types': s:hl_list, 'all': 1})
         endif
     endif
 endfunction
@@ -77,10 +75,11 @@ function! ale#virtualtext#ShowMessage(message, hl_group) abort
         let type = prop_type_get(a:hl_group)
 
         if type == {}
+            call add(s:hl_list, a:hl_group)
             call prop_type_add(a:hl_group, {'highlight': a:hl_group})
         endif
 
-        let s:last_virt = prop_add(l:line, 0, {
+        call prop_add(l:line, 0, {
         \ 'type': a:hl_group,
         \ 'text': ' ' . l:msg
         \})
