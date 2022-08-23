@@ -24,41 +24,40 @@ elseif has('textprop') && has('popupwin')
     endif
 endif
 
-function! ale#virtualtext#Clear() abort
+function! ale#virtualtext#Clear(buf) abort
     if !s:has_virt_text
         return
     endif
 
-    let l:buffer = bufnr('')
-
     if has('nvim')
-        call nvim_buf_clear_highlight(l:buffer, s:ns_id, 0, -1)
+        call nvim_buf_clear_namespace(a:buf, s:ns_id, 0, -1)
     else
         if s:emulate_virt && s:last_virt != -1
             call prop_remove({'type': 'ale'})
             call popup_close(s:last_virt)
             let s:last_virt = -1
         elseif !empty(s:hl_list)
-            call prop_remove({'types': s:hl_list, 'all': 1})
+            call prop_remove({
+            \ 'types': s:hl_list,
+            \ 'all': 1,
+            \ 'bufnr': a:buf})
         endif
     endif
 endfunction
 
-function! ale#virtualtext#ShowMessage(message, hl_group) abort
-    if !s:has_virt_text
+function! ale#virtualtext#ShowMessage(message, hl_group, buf, line) abort
+    if !s:has_virt_text || !bufexists(str2nr(a:buf))
         return
     endif
 
-    let l:line = line('.')
-    let l:buffer = bufnr('')
     let l:prefix = get(g:, 'ale_virtualtext_prefix', '> ')
     let l:msg = l:prefix.trim(substitute(a:message, '\n', ' ', 'g'))
 
     if has('nvim')
-        call nvim_buf_set_virtual_text(l:buffer, s:ns_id, l:line-1, [[l:msg, a:hl_group]], {})
+        call nvim_buf_set_virtual_text(a:buf, s:ns_id, a:line-1, [[l:msg, a:hl_group]], {})
     elseif s:emulate_virt
         let l:left_pad = col('$')
-        call prop_add(l:line, l:left_pad, {
+        call prop_add(a:line, l:left_pad, {
         \ 'type': 'ale',
         \})
         let s:last_virt = popup_create(l:msg, {
@@ -79,9 +78,10 @@ function! ale#virtualtext#ShowMessage(message, hl_group) abort
             call prop_type_add(a:hl_group, {'highlight': a:hl_group})
         endif
 
-        call prop_add(l:line, 0, {
+        call prop_add(a:line, 0, {
         \ 'type': a:hl_group,
-        \ 'text': ' ' . l:msg
+        \ 'text': ' ' . l:msg,
+        \ 'bufnr': a:buf
         \})
     endif
 endfunction
@@ -93,8 +93,26 @@ function! s:StopCursorTimer() abort
     endif
 endfunction
 
+function! ale#virtualtext#GetHlGroup(type, style) abort
+    if a:type is# 'E'
+        if a:style is# 'style'
+            return 'ALEVirtualTextStyleError'
+        else
+            return 'ALEVirtualTextError'
+        endif
+    elseif a:type is# 'W'
+        if a:style is# 'style'
+            return 'ALEVirtualTextStyleWarning'
+        else
+            return 'ALEVirtualTextWarning'
+        endif
+    else
+        return 'ALEVirtualTextInfo'
+    endif
+endfunction
+
 function! ale#virtualtext#ShowCursorWarning(...) abort
-    if !g:ale_virtualtext_cursor
+    if g:ale_virtualtext_cursor != 1
         return
     endif
 
@@ -110,35 +128,21 @@ function! ale#virtualtext#ShowCursorWarning(...) abort
 
     let [l:info, l:loc] = ale#util#FindItemAtCursor(l:buffer)
 
-    call ale#virtualtext#Clear()
+    call ale#virtualtext#Clear(l:buffer)
 
     if !empty(l:loc)
         let l:msg = l:loc.text
-        let l:hl_group = 'ALEVirtualTextInfo'
         let l:type = get(l:loc, 'type', 'E')
-
-        if l:type is# 'E'
-            if get(l:loc, 'sub_type', '') is# 'style'
-                let l:hl_group = 'ALEVirtualTextStyleError'
-            else
-                let l:hl_group = 'ALEVirtualTextError'
-            endif
-        elseif l:type is# 'W'
-            if get(l:loc, 'sub_type', '') is# 'style'
-                let l:hl_group = 'ALEVirtualTextStyleWarning'
-            else
-                let l:hl_group = 'ALEVirtualTextWarning'
-            endif
-        endif
-
-        call ale#virtualtext#ShowMessage(l:msg, l:hl_group)
+        let l:style = get(l:loc, 'sub_type', '')
+        let l:hl_group = ale#virtualtext#GetHlGroup(l:type, l:style)
+        call ale#virtualtext#ShowMessage(l:msg, l:hl_group, l:buffer, line('.'))
     endif
 endfunction
 
 function! ale#virtualtext#ShowCursorWarningWithDelay() abort
     let l:buffer = bufnr('')
 
-    if !g:ale_virtualtext_cursor
+    if g:ale_virtualtext_cursor != 1
         return
     endif
 
@@ -165,3 +169,19 @@ function! ale#virtualtext#ShowCursorWarningWithDelay() abort
     endif
 endfunction
 
+function! ale#virtualtext#SetTexts(buf, loclist) abort
+    if !has('nvim') && s:emulate_virt
+        return
+    endif
+
+    call ale#virtualtext#Clear(a:buf)
+
+    for l in a:loclist
+        if l['bufnr'] != a:buf
+            continue
+        endif
+
+        let hl = ale#virtualtext#GetHlGroup(l['type'], get(l, 'sub_type', ''))
+        call ale#virtualtext#ShowMessage(l['text'], hl, a:buf, l['lnum'])
+    endfor
+endfunction
