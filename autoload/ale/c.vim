@@ -286,6 +286,13 @@ function! ale#c#FindProjectRoot(buffer) abort
         endfor
     endif
 
+    " Fall back on buffer dirname.
+    if empty(l:root)
+        let l:path = fnamemodify(bufname(a:buffer), ':p:h')
+
+        return l:path
+    endif
+
     return l:root
 endfunction
 
