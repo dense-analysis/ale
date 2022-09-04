@@ -142,6 +142,8 @@ function! s:OnReady(line, column, options, capability, linter, lsp_details) abor
             let l:message = ale#lsp#message#TypeDefinition(l:buffer, a:line, a:column)
         elseif a:capability is# 'implementation'
             let l:message = ale#lsp#message#Implementation(l:buffer, a:line, a:column)
+        elseif a:capability is# 'declaration'
+            let l:message = ale#lsp#message#Declaration(l:buffer, a:line, a:column)
         else
             " XXX: log here?
             return
@@ -191,6 +193,14 @@ function! ale#definition#GoToImpl(options) abort
     endfor
 endfunction
 
+function! ale#definition#GoToDecl(options) abort
+    for l:linter in ale#linter#Get(&filetype)
+        if !empty(l:linter.lsp)
+            call s:GoToLSPDefinition(l:linter, a:options, 'declaration')
+        endif
+    endfor
+endfunction
+
 function! ale#definition#GoToCommandHandler(command, ...) abort
     let l:options = {}
 
@@ -218,6 +228,8 @@ function! ale#definition#GoToCommandHandler(command, ...) abort
         call ale#definition#GoToType(l:options)
     elseif a:command is# 'implementation'
         call ale#definition#GoToImpl(l:options)
+    elseif a:command is# 'declaration'
+        call ale#definition#GoToDecl(l:options)
     else
         call ale#definition#GoTo(l:options)
     endif

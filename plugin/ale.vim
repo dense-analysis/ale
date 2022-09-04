@@ -256,6 +256,9 @@ command! -bar -nargs=* ALEGoToTypeDefinition :call ale#definition#GoToCommandHan
 " Go to implementation for tsserver and LSP
 command! -bar -nargs=* ALEGoToImplementation :call ale#definition#GoToCommandHandler('implementation', <f-args>)
 
+" Go to declaration for tsserver and LSP
+command! -bar -nargs=* ALEGoToDeclaration :call ale#definition#GoToCommandHandler('declaration', <f-args>)
+
 " Repeat a previous selection in the preview window
 command! -bar ALERepeatSelection :call ale#preview#RepeatSelection()
 
@@ -327,6 +330,10 @@ nnoremap <silent> <Plug>(ale_go_to_implementation) :ALEGoToImplementation<Return
 nnoremap <silent> <Plug>(ale_go_to_implementation_in_tab) :ALEGoToImplementation -tab<Return>
 nnoremap <silent> <Plug>(ale_go_to_implementation_in_split) :ALEGoToImplementation -split<Return>
 nnoremap <silent> <Plug>(ale_go_to_implementation_in_vsplit) :ALEGoToImplementation -vsplit<Return>
+nnoremap <silent> <Plug>(ale_go_to_declaration) :ALEGoToDeclaration<Return>
+nnoremap <silent> <Plug>(ale_go_to_declaration_in_tab) :ALEGoToDeclaration -tab<Return>
+nnoremap <silent> <Plug>(ale_go_to_declaration_in_split) :ALEGoToDeclaration -split<Return>
+nnoremap <silent> <Plug>(ale_go_to_declaration_in_vsplit) :ALEGoToDeclaration -vsplit<Return>
 nnoremap <silent> <Plug>(ale_find_references) :ALEFindReferences<Return>
 nnoremap <silent> <Plug>(ale_hover) :ALEHover<Return>
 nnoremap <silent> <Plug>(ale_documentation) :ALEDocumentation<Return>

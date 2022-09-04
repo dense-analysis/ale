@@ -45,6 +45,7 @@ function! ale#lsp#Register(executable_or_address, project, init_options) abort
         \       'definition': 0,
         \       'typeDefinition': 0,
         \       'implementation': 0,
+        \       'declaration': 0,
         \       'symbol_search': 0,
         \       'code_actions': 0,
         \       'did_save': 0,
@@ -268,6 +269,14 @@ function! s:UpdateCapabilities(conn, capabilities) abort
         let a:conn.capabilities.implementation = 1
     endif
 
+    if get(a:capabilities, 'declarationProvider') is v:true
+        let a:conn.capabilities.declaration = 1
+    endif
+
+    if type(get(a:capabilities, 'declarationProvider')) is v:t_dict
+        let a:conn.capabilities.declaration = 1
+    endif
+
     if get(a:capabilities, 'workspaceSymbolProvider') is v:true
         let a:conn.capabilities.symbol_search = 1
     endif
@@ -389,6 +398,7 @@ function! ale#lsp#MarkConnectionAsTsserver(conn_id) abort
     let l:conn.capabilities.definition = 1
     let l:conn.capabilities.typeDefinition = 1
     let l:conn.capabilities.implementation = 1
+    let l:conn.capabilities.declaration = 1
     let l:conn.capabilities.symbol_search = 1
     let l:conn.capabilities.rename = 1
     let l:conn.capabilities.filerename = 1
@@ -449,6 +459,10 @@ function! s:SendInitMessage(conn) abort
     \                   'dynamicRegistration': v:false,
     \               },
     \               'implementation': {
+    \                   'dynamicRegistration': v:false,
+    \                   'linkSupport': v:false,
+    \               },
+    \               'declaration': {
     \                   'dynamicRegistration': v:false,
     \                   'linkSupport': v:false,
     \               },
