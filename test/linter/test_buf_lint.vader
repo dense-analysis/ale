@@ -11,7 +11,7 @@ Execute(The default command should be correct):
   \ . ' lint'
   \ . ' %s#include_package_files=true'
 
-Execute(The callback should include any additional options):
+Execute(The callback should include any additional config):
   let b:ale_proto_buf_lint_executable = '/tmp/buf'
   let b:ale_proto_buf_lint_config = '/tmp/buf.yaml'
 
@@ -19,4 +19,14 @@ Execute(The callback should include any additional options):
   \ ale#Escape('/tmp/buf')
   \ . ' lint'
   \ . ' --config=' . ale#Escape('/tmp/buf.yaml')
+  \ . ' %s#include_package_files=true'
+
+Execute(The callback should include additional options):
+  let b:ale_proto_buf_lint_executable = '/tmp/buf'
+  let b:ale_proto_buf_lint_options = '--disable-symlinks'
+
+  AssertLinter '/tmp/buf',
+  \ ale#Escape('/tmp/buf')
+  \ . ' lint'
+  \ . ' --disable-symlinks'
   \ . ' %s#include_package_files=true'
