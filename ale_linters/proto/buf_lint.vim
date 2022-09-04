@@ -22,5 +22,5 @@ call ale#linter#Define('proto', {
 \   'output_stream': 'stdout',
 \   'executable': {b -> ale#Var(b, 'proto_buf_lint_executable')},
 \   'command': function('ale_linters#proto#buf_lint#GetCommand'),
-\   'callback': 'ale#handlers#unix#HandleAsError',
+\   'callback': 'ale#handlers#go#Handler',
 \})
