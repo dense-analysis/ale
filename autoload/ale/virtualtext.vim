@@ -39,7 +39,7 @@ function! ale#virtualtext#Clear() abort
             call prop_remove({'type': 'ale'})
             call popup_close(s:last_virt)
             let s:last_virt = -1
-        elseif s:last_virt != 1
+        elseif !s:emulate_virt && s:last_virt != 1
             call prop_remove({'id': s:last_virt})
             let s:last_virt = 1
         endif
