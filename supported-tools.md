@@ -674,6 +674,7 @@ formatting.
 * YAML
   * [actionlint](https://github.com/rhysd/actionlint) :warning:
   * [circleci](https://circleci.com/docs/2.0/local-cli) :floppy_disk: :warning:
+  * [gitlablint](https://github.com/elijah-roberts/gitlab-lint)
   * [prettier](https://github.com/prettier/prettier)
   * [spectral](https://github.com/stoplightio/spectral)
   * [swaglint](https://github.com/byCedric/swaglint) :warning:
