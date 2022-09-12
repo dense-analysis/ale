@@ -61,6 +61,8 @@ formatting.
   * [buildifier](https://github.com/bazelbuild/buildtools)
 * BibTeX
   * [bibclean](http://ftp.math.utah.edu/pub/bibclean/)
+* Bicep
+  * [bicep](https://github.com/Azure/bicep)
 * BitBake
   * [oelint-adv](https://github.com/priv-kweihmann/oelint-adv)
 * Bourne Shell
