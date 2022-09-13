@@ -5,7 +5,7 @@ let g:ale_bicep_bicep_executable =
 \   get(g:, 'ale_bicep_bicep_executable', 'bicep')
 
 let g:ale_bicep_bicep_options =
-\   get(g:, 'ale_bicep_bicep_options', 'build --outfile /dev/null')
+\   get(g:, 'ale_bicep_bicep_options', '')
 
 function! ale_linters#bicep#bicep#Executable(buffer) abort
     return ale#Var(a:buffer, 'bicep_bicep_executable')
@@ -15,7 +15,18 @@ function! ale_linters#bicep#bicep#Command(buffer) abort
     let l:executable = ale_linters#bicep#bicep#Executable(a:buffer)
     let l:options = ale#Var(a:buffer, 'bicep_bicep_options')
 
-    return ale#Escape(l:executable) . ' ' . l:options . ' %t'
+    if has('win32')
+        let l:nullfile = 'NUL'
+    else
+        let l:nullfile = '/dev/null'
+    endif
+
+    return ale#Escape(l:executable)
+    \   . ' build --outfile '
+    \   . l:nullfile
+    \   . ' '
+    \   . l:options
+    \   . ' %t'
 endfunction
 
 function! ale_linters#bicep#bicep#Handle(buffer, lines) abort
