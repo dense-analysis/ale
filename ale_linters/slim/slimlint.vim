@@ -1,6 +1,8 @@
 " Author: Markus Doits - https://github.com/doits
 " Description: slim-lint for Slim files
 
+call ale#Set('ruby_slim_executable', 'slimlint')
+
 function! ale_linters#slim#slimlint#GetCommand(buffer) abort
     let l:command = 'slim-lint %t'
 
@@ -49,7 +51,7 @@ endfunction
 
 call ale#linter#Define('slim', {
 \   'name': 'slimlint',
-\   'executable': 'slim-lint',
+\   'executable': {b -> ale#Var(b, 'ruby_slim_executable')},
 \   'command': function('ale_linters#slim#slimlint#GetCommand'),
 \   'callback': 'ale_linters#slim#slimlint#Handle'
 \})
