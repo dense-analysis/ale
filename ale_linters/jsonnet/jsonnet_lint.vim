@@ -19,7 +19,7 @@ function! ale_linters#jsonnet#jsonnet_lint#Handle(buffer, lines) abort
     " ERROR: foo.jsonnet:22:3-12 expected token OPERATOR but got (IDENTIFIER, "bar")
     " ERROR: hoge.jsonnet:20:3 unexpected: "}" while parsing terminal
     " ERROR: main.jsonnet:212:1-14 Expected , or ; but got (IDENTIFIER, "older_cluster")
-    let l:pattern = '^ERROR: [^:]*:\(\d\+\):\(\d\+\)\(-\d\+\)* \(.*\)'
+    let l:pattern = '^[^:]*:\(\d\+\):\(\d\+\)\(-\d\+\)* \(.*\)'
     let l:output = []
 
     for l:line in a:lines
