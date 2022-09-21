@@ -62,7 +62,7 @@ formatting.
 * BibTeX
   * [bibclean](http://ftp.math.utah.edu/pub/bibclean/)
 * Bicep
-  * [bicep](https://github.com/Azure/bicep)
+  * [bicep](https://github.com/Azure/bicep) :floppy_disk:
 * BitBake
   * [oelint-adv](https://github.com/priv-kweihmann/oelint-adv)
 * Bourne Shell
