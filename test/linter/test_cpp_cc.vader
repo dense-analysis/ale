@@ -53,3 +53,19 @@ Execute(The -std flag should be replaced by parsed C flags):
   let g:get_cflags_return_value = '-std=c++11'
 
   AssertLinter 'gcc', ale#Escape('gcc') . b:command_tail
+
+Execute(The header files should use -x c++-header):
+  let b:command_tail = substitute(b:command_tail, '-x c++', '-x c++-header', '')
+
+  call ale#test#SetFilename('../test-files/c/hpp_file_project/test.hpp')
+
+  AssertLinter 'gcc', ale#Escape('gcc') . b:command_tail
+
+Execute(The header file extensions should be configurable):
+  let b:command_tail = substitute(b:command_tail, '-x c++', '-x c++-header', '')
+
+  call ale#assert#SetUpLinterTest('cpp', 'cc')
+  let b:ale_cpp_cc_header_exts = ['json']
+  call ale#test#SetFilename('../test-files/c/json_project/build/compile_commands.json')
+
+  AssertLinter 'gcc', ale#Escape('gcc') . b:command_tail

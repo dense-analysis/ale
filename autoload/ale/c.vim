@@ -585,3 +585,14 @@ function! ale#c#IncludeOptions(include_paths) abort
 
     return join(l:option_list)
 endfunction
+
+" Get the language flag depending on if the file is a header or not.
+function! ale#c#GetLanguageFlag(buffer, header_exts, linter_lang) abort
+    let l:buf_ext = expand('#' . a:buffer . ':e')
+
+    if index(a:header_exts, l:buf_ext) >= 0
+        return a:linter_lang . '-header'
+    endif
+
+    return a:linter_lang
+endfunction
