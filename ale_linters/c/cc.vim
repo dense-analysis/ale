@@ -3,6 +3,7 @@
 
 call ale#Set('c_cc_executable', '<auto>')
 call ale#Set('c_cc_options', '-std=c11 -Wall')
+call ale#Set('c_cc_header_exts', ['h'])
 
 function! ale_linters#c#cc#GetExecutable(buffer) abort
     let l:executable = ale#Var(a:buffer, 'c_cc_executable')
@@ -22,6 +23,8 @@ endfunction
 function! ale_linters#c#cc#GetCommand(buffer, output) abort
     let l:cflags = ale#c#GetCFlags(a:buffer, a:output)
     let l:ale_flags = ale#Var(a:buffer, 'c_cc_options')
+    let l:header_exts = ale#Var(a:buffer, 'c_cc_header_exts')
+    let l:lang_flag = ale#c#GetLanguageFlag(a:buffer, l:header_exts, 'c')
 
     if l:cflags =~# '-std='
         let l:ale_flags = substitute(
@@ -36,7 +39,7 @@ function! ale_linters#c#cc#GetCommand(buffer, output) abort
     "
     " `-o /dev/null` or `-o null` is needed to catch all errors,
     " -fsyntax-only doesn't catch everything.
-    return '%e -S -x c'
+    return '%e -S -x ' . l:lang_flag
     \   . ' -o ' . g:ale#util#nul_file
     \   . ' -iquote %s:h'
     \   . ale#Pad(l:cflags)

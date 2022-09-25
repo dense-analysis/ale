@@ -136,6 +136,17 @@ g:ale_c_cc_options                                         *g:ale_c_cc_options*
   This variable can be change to modify flags given to the C compiler.
 
 
+g:ale_c_cc_header_exts                                 *g:ale_c_cc_header_exts*
+                                                       *b:ale_c_cc_header_exts*
+  Type: |List|
+  Default: `['h']`
+
+  This variable can be change to modify the list of extensions of the files
+  considered as header files.
+
+  ALE will use `'-x c-header'` instead of `'-x c'` for header files.
+
+
 ===============================================================================
 ccls                                                               *ale-c-ccls*
 
