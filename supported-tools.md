@@ -127,13 +127,13 @@ formatting.
   * [ameba](https://github.com/veelenga/ameba) :floppy_disk:
   * [crystal](https://crystal-lang.org/) :floppy_disk:
 * CSS
-  * [css-beautify](https://github.com/beautify-web/js-beautify)
+  * [VSCode CSS language server](https://github.com/hrsh7th/vscode-langservers-extracted)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [css-beautify](https://github.com/beautify-web/js-beautify)
   * [csslint](http://csslint.net/)
   * [fecs](http://fecs.baidu.com/)
   * [prettier](https://github.com/prettier/prettier)
   * [stylelint](https://github.com/stylelint/stylelint)
-  * [VSCode CSS language server](https://github.com/hrsh7th/vscode-langservers-extracted)
 * Cucumber
   * [cucumber](https://cucumber.io/)
 * CUDA

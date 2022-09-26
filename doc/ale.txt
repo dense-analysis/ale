@@ -2840,8 +2840,8 @@ documented in additional help files.
     mcsc..................................|ale-cs-mcsc|
     uncrustify............................|ale-cs-uncrustify|
   css.....................................|ale-css-options|
-    css-beautify..........................|ale-css-css-beautify|
     cspell................................|ale-css-cspell|
+    css-beautify..........................|ale-css-css-beautify|
     fecs..................................|ale-css-fecs|
     prettier..............................|ale-css-prettier|
     stylelint.............................|ale-css-stylelint|
