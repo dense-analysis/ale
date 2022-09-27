@@ -528,7 +528,7 @@ let s:default_registry = {
 \   },
 \   'dprint': {
 \       'function': 'ale#fixers#dprint#Fix',
-\       'suggested_filetypes': ['javascript', 'typescript', 'json', 'markdown'],
+\       'suggested_filetypes': ['dockerfile', 'javascript', 'json', 'markdown', 'toml', 'typescript'],
 \       'description': 'Pluggable and configurable code formatting platform',
 \   },
 \   'stylua': {
