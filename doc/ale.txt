@@ -2841,6 +2841,7 @@ documented in additional help files.
     uncrustify............................|ale-cs-uncrustify|
   css.....................................|ale-css-options|
     cspell................................|ale-css-cspell|
+    css-beautify..........................|ale-css-css-beautify|
     fecs..................................|ale-css-fecs|
     prettier..............................|ale-css-prettier|
     stylelint.............................|ale-css-stylelint|
