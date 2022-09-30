@@ -120,7 +120,7 @@ Notes:
 * CSS
   * `VSCode CSS language server`
   * `cspell`
-  * css-beautify
+  * `css-beautify`
   * `csslint`
   * `fecs`
   * `prettier`
