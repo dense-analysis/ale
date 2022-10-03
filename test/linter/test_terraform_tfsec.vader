@@ -1,0 +1,38 @@
+Before:
+  call ale#assert#SetUpLinterTest('terraform', 'tfsec')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'tfsec', ale#Escape('tfsec') . ' --format json'
+
+Execute(The default executable should be configurable):
+  let b:ale_terraform_tfsec_executable = '/usr/bin/tfsec'
+
+  AssertLinter '/usr/bin/tfsec', ale#Escape('/usr/bin/tfsec') . ' --format json'
+
+Execute(Overriding options should work):
+  let g:ale_terraform_tfsec_executable = '/usr/local/bin/tfsec'
+  let g:ale_terraform_tfsec_options = '--minimum-severity MEDIUM'
+
+  AssertLinter '/usr/local/bin/tfsec',
+  \ ale#Escape('/usr/local/bin/tfsec') . ' --minimum-severity MEDIUM --format json'
+
+Execute(Configuration yml file should be found):
+  call ale#test#SetFilename('../test-files/tfsec/yml/main.tf')
+
+  AssertLinter 'tfsec',
+  \ ale#Escape('tfsec')
+  \   . ' --config-file '
+  \   . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/tfsec/yml/.tfsec/config.yml'))
+  \   . ' --format json'
+
+Execute(Configuration json file should be found):
+  call ale#test#SetFilename('../test-files/tfsec/json/main.tf')
+
+  AssertLinter 'tfsec',
+  \ ale#Escape('tfsec')
+  \   . ' --config-file '
+  \   . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/tfsec/json/.tfsec/config.json'))
+  \   . ' --format json'
