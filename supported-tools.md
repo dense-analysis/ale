@@ -606,6 +606,7 @@ formatting.
   * [terraform-ls](https://github.com/hashicorp/terraform-ls)
   * [terraform-lsp](https://github.com/juliosueiras/terraform-lsp)
   * [tflint](https://github.com/wata727/tflint)
+  * [tfsec](https://github.com/aquasecurity/tfsec)
 * Texinfo
   * [alex](https://github.com/get-alex/alex)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
