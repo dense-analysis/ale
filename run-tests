@@ -27,7 +27,7 @@ quiet_flag=''
 run_neovim_02_tests=1
 run_neovim_07_tests=1
 run_vim_80_tests=1
-run_vim_82_tests=1
+run_vim_90_tests=1
 run_linters=1
 
 while [ $# -ne 0 ]; do
@@ -42,7 +42,7 @@ while [ $# -ne 0 ]; do
     ;;
     --build-image)
         run_vim_80_tests=0
-        run_vim_82_tests=0
+        run_vim_90_tests=0
         run_neovim_02_tests=0
         run_neovim_07_tests=0
         run_linters=0
@@ -50,21 +50,21 @@ while [ $# -ne 0 ]; do
     ;;
     --neovim-only)
         run_vim_80_tests=0
-        run_vim_82_tests=0
+        run_vim_90_tests=0
         run_linters=0
         shift
     ;;
     --neovim-02-only)
         run_neovim_07_tests=0
         run_vim_80_tests=0
-        run_vim_82_tests=0
+        run_vim_90_tests=0
         run_linters=0
         shift
     ;;
     --neovim-07-only)
         run_neovim_02_tests=0
         run_vim_80_tests=0
-        run_vim_82_tests=0
+        run_vim_90_tests=0
         run_linters=0
         shift
     ;;
@@ -77,11 +77,10 @@ while [ $# -ne 0 ]; do
     --vim-80-only)
         run_neovim_02_tests=0
         run_neovim_07_tests=0
-        run_vim_82_tests=0
         run_linters=0
         shift
     ;;
-    --vim-82-only)
+    --vim-90-only)
         run_neovim_02_tests=0
         run_neovim_07_tests=0
         run_vim_80_tests=0
@@ -90,14 +89,14 @@ while [ $# -ne 0 ]; do
     ;;
     --linters-only)
         run_vim_80_tests=0
-        run_vim_82_tests=0
+        run_vim_90_tests=0
         run_neovim_02_tests=0
         run_neovim_07_tests=0
         shift
     ;;
     --fast)
         run_vim_80_tests=0
-        run_vim_82_tests=0
+        run_vim_90_tests=0
         run_neovim_02_tests=0
         run_neovim_07_tests=1
         shift
@@ -116,8 +115,8 @@ while [ $# -ne 0 ]; do
         echo '  --neovim-02-only  Run tests only for NeoVim 0.2'
         echo '  --neovim-07-only  Run tests only for NeoVim 0.7'
         echo '  --vim-only        Run tests only for Vim'
-        echo '  --vim-80-only     Run tests only for Vim 8.0'
-        echo '  --vim-82-only     Run tests only for Vim 8.2'
+        echo '  --vim-80-only     Run tests only for Vim 8.2'
+        echo '  --vim-90-only     Run tests only for Vim 9.0'
         echo '  --linters-only    Run only Vint and custom checks'
         echo '  --fast            Run only the fastest Vim and custom checks'
         echo '  --help            Show this help text'
@@ -218,7 +217,7 @@ trap cancel_tests INT TERM
 
 for vim in $(docker run --rm "$DOCKER_RUN_IMAGE" ls /vim-build/bin | grep '^neovim\|^vim' ); do
     if ( [[ $vim =~ ^vim-v8.0 ]] && ((run_vim_80_tests)) ) \
-    || ( [[ $vim =~ ^vim-v8.2 ]] && ((run_vim_82_tests)) ) \
+    || ( [[ $vim =~ ^vim-v9.0 ]] && ((run_vim_90_tests)) ) \
     || ( [[ $vim =~ ^neovim-v0.2 ]] && ((run_neovim_02_tests)) ) \
     || ( [[ $vim =~ ^neovim-v0.7 ]] && ((run_neovim_07_tests)) ); then
         echo "Starting Vim: $vim..."
