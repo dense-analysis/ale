@@ -125,8 +125,8 @@ g:ale_terraform_tfsec_executable             *g:ale_terraform_tfsec_executable*
 
   This variable can be changed to use a different executable for tfsec.
 
-g:ale_terraform_tfsec_options                *g:ale_terraform_tfsec_executable*
-                                             *b:ale_terraform_tfsec_executable*
+g:ale_terraform_tfsec_options                   *g:ale_terraform_tfsec_options*
+                                                *b:ale_terraform_tfsec_options*
 
   Type: |String|
   Default: `''`
