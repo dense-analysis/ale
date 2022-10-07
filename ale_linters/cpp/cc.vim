@@ -3,6 +3,7 @@
 
 call ale#Set('cpp_cc_executable', '<auto>')
 call ale#Set('cpp_cc_options', '-std=c++14 -Wall')
+call ale#Set('cpp_cc_use_header_lang_flag', -1)
 call ale#Set('cpp_cc_header_exts', ['h', 'hpp'])
 
 function! ale_linters#cpp#cc#GetExecutable(buffer) abort
@@ -23,8 +24,6 @@ endfunction
 function! ale_linters#cpp#cc#GetCommand(buffer, output) abort
     let l:cflags = ale#c#GetCFlags(a:buffer, a:output)
     let l:ale_flags = ale#Var(a:buffer, 'cpp_cc_options')
-    let l:header_exts = ale#Var(a:buffer, 'cpp_cc_header_exts')
-    let l:lang_flag = ale#c#GetLanguageFlag(a:buffer, l:header_exts, 'c++')
 
     if l:cflags =~# '-std='
         let l:ale_flags = substitute(
@@ -33,6 +32,18 @@ function! ale_linters#cpp#cc#GetCommand(buffer, output) abort
         \   '',
         \   'g')
     endif
+
+    " Select the correct language flag depending on the executable, options
+    " and file extension
+    let l:executable = ale_linters#cpp#cc#GetExecutable(a:buffer)
+    let l:use_header_lang_flag = ale#Var(a:buffer, 'cpp_cc_use_header_lang_flag')
+    let l:header_exts = ale#Var(a:buffer, 'cpp_cc_header_exts')
+    let l:lang_flag = ale#c#GetLanguageFlag(
+    \   a:buffer,
+    \   l:executable,
+    \   l:use_header_lang_flag,
+    \   l:header_exts,
+    \   'c++')
 
     " -iquote with the directory the file is in makes #include work for
     "  headers in the same directory.

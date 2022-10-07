@@ -586,13 +586,37 @@ function! ale#c#IncludeOptions(include_paths) abort
     return join(l:option_list)
 endfunction
 
-" Get the language flag depending on if the file is a header or not.
-function! ale#c#GetLanguageFlag(buffer, header_exts, linter_lang) abort
-    let l:buf_ext = expand('#' . a:buffer . ':e')
-
-    if index(a:header_exts, l:buf_ext) >= 0
-        return a:linter_lang . '-header'
+" Get the language flag depending on on the executable, options and
+" file extension
+function! ale#c#GetLanguageFlag(
+\   buffer,
+\   executable,
+\   use_header_lang_flag,
+\   header_exts,
+\   linter_lang_flag
+\) abort
+    " Use only '-header' if the executable is 'clang' by default
+    if a:use_header_lang_flag == -1
+        let l:use_header_lang_flag = a:executable =~# 'clang'
+    else
+        let l:use_header_lang_flag = a:use_header_lang_flag
     endif
 
-    return a:linter_lang
+    " If we don't use the header language flag, return the default linter
+    " language flag
+    if !l:use_header_lang_flag
+        return a:linter_lang_flag
+    endif
+
+    " Get the buffer file extension
+    let l:buf_ext = expand('#' . a:buffer . ':e')
+
+    " If the buffer file is an header according to its extension, use
+    " the linter language flag + '-header', ex: 'c-header'
+    if index(a:header_exts, l:buf_ext) >= 0
+        return a:linter_lang_flag . '-header'
+    endif
+
+    " Else, use the default linter language flag
+    return a:linter_lang_flag
 endfunction

@@ -54,18 +54,41 @@ Execute(The -std flag should be replaced by parsed C flags):
 
   AssertLinter 'gcc', ale#Escape('gcc') . b:command_tail
 
-Execute(The header files should use -x c++-header):
+Execute(gcc should not use -x c++-header with header files by default):
+  call ale#test#SetFilename('../test-files/c/hpp_file_project/test.hpp')
+
+  AssertLinter 'gcc', ale#Escape('gcc') . b:command_tail
+
+Execute(clang++ should use -x c++-header with header files by default):
+  let g:executable_map = {'clang++': 1}
+  let b:command_tail = substitute(b:command_tail, '-x c++', '-x c++-header', '')
+
+  call ale#test#SetFilename('../test-files/c/hpp_file_project/test.hpp')
+
+  AssertLinter 'clang++', ale#Escape('clang++') . b:command_tail
+
+Execute(gcc should use -x c-header with header files if configured to do so):
+  let b:ale_cpp_cc_use_header_lang_flag = 1
   let b:command_tail = substitute(b:command_tail, '-x c++', '-x c++-header', '')
 
   call ale#test#SetFilename('../test-files/c/hpp_file_project/test.hpp')
 
   AssertLinter 'gcc', ale#Escape('gcc') . b:command_tail
 
+Execute(clang should not use -x c-header with header files if configured to do so):
+  let g:executable_map = {'clang++': 1}
+  let b:ale_cpp_cc_use_header_lang_flag = 0
+
+  call ale#test#SetFilename('../test-files/c/hpp_file_project/test.hpp')
+
+  AssertLinter 'clang++', ale#Escape('clang++') . b:command_tail
+
 Execute(The header file extensions should be configurable):
+  let g:executable_map = {'clang++': 1}
   let b:command_tail = substitute(b:command_tail, '-x c++', '-x c++-header', '')
 
   call ale#assert#SetUpLinterTest('cpp', 'cc')
   let b:ale_cpp_cc_header_exts = ['json']
   call ale#test#SetFilename('../test-files/c/json_project/build/compile_commands.json')
 
-  AssertLinter 'gcc', ale#Escape('gcc') . b:command_tail
+  AssertLinter 'clang++', ale#Escape('clang++') . b:command_tail
