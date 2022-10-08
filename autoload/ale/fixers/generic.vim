@@ -23,3 +23,22 @@ function! ale#fixers#generic#TrimWhitespace(buffer, lines) abort
 
     return l:lines_new
 endfunction
+
+"Remove all duplicate blank lines
+function! ale#fixers#generic#RemoveDuplicateBlankLines(buffer, lines) abort
+    let l:end_index = len(a:lines) - 1
+    let l:lines_new = a:lines
+
+    while l:end_index > 0
+        if empty(l:lines_new[l:end_index]) && empty(l:lines_new[l:end_index - 1])
+            if l:end_index == 1
+                call remove(l:lines_new, l:end_index - 1, l:end_index)
+            else
+                call remove(l:lines_new, l:end_index)
+            endif
+        endif
+        let l:end_index -=1
+    endwhile
+    
+    return l:lines_new
+endfunction

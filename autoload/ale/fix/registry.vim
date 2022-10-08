@@ -166,6 +166,11 @@ let s:default_registry = {
 \       'suggested_filetypes': [],
 \       'description': 'Remove all blank lines at the end of a file.',
 \   },
+\   'remove_duplicate_lines': {
+\       'function': 'ale#fixers#generic#RemoveDuplicateBlankLines',
+\       'suggested_filetypes': [],
+\       'description': 'Remove all duplicate blank lines in the file.',
+\   },
 \   'trim_whitespace': {
 \       'function': 'ale#fixers#generic#TrimWhitespace',
 \       'suggested_filetypes': [],
