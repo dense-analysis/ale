@@ -22,6 +22,7 @@ function! ale#fixers#autoimport#Fix(buffer) abort
     \   'cwd': '%s:h',
     \   'command': ale#Escape(l:executable)
     \       . (!empty(l:options) ? ' ' . l:options : '')
-    \       . ' -',
+    \       . ' %t',
+    \   'read_temporary_file': 1,
     \}
 endfunction

@@ -26,7 +26,8 @@ Execute(The autoimport callback should return the correct default values):
   AssertEqual
   \ {
   \   'cwd': '%s:h',
-  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/autoimport')) . ' -',
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/autoimport')) . ' %t',
+  \   'read_temporary_file': 1,
   \ },
   \ ale#fixers#autoimport#Fix(bufnr(''))
 
@@ -42,6 +43,7 @@ Execute(The autoimport callback should respect custom options):
   \ {
   \   'cwd': '%s:h',
   \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/autoimport'))
-  \     . ' --multi-line=3 --trailing-comma -',
+  \     . ' --multi-line=3 --trailing-comma %t',
+  \   'read_temporary_file': 1,
   \ },
   \ ale#fixers#autoimport#Fix(bufnr(''))
