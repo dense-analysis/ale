@@ -3159,6 +3159,7 @@ documented in additional help files.
     pyre..................................|ale-python-pyre|
     pyright...............................|ale-python-pyright|
     reorder-python-imports................|ale-python-reorder_python_imports|
+    ruff..................................|ale-python-ruff|
     unimport..............................|ale-python-unimport|
     vulture...............................|ale-python-vulture|
     yapf..................................|ale-python-yapf|

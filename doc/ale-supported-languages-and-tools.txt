@@ -482,6 +482,7 @@ Notes:
   * `pyre`
   * `pyright`
   * `reorder-python-imports`
+  * ruff
   * `unimport`
   * `vulture`!!
   * `yapf`
