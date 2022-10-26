@@ -1,4 +1,4 @@
-FROM testbed/vim:20
+FROM testbed/vim:24
 
 RUN install_vim -tag v8.0.0027 -build \
                 -tag v9.0.0133 -build \
