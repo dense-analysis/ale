@@ -750,7 +750,7 @@ g:airline#extensions#ale#enabled             *g:airline#extensions#ale#enabled*
 g:ale_cache_executable_check_failures   *g:ale_cache_executable_check_failures*
 
   Type: |Number|
-  Default: undefined
+  Default: not set
 
   When set to `1`, ALE will cache failing executable checks for linters. By
   default, only executable checks which succeed will be cached.
@@ -1836,7 +1836,7 @@ g:ale_max_signs                                               *g:ale_max_signs*
 g:ale_maximum_file_size                               *g:ale_maximum_file_size*
                                                       *b:ale_maximum_file_size*
   Type: |Number|
-  Default: undefined
+  Default: not set
 
   A maximum file size in bytes for ALE to check. If set to any positive
   number, ALE will skip checking files larger than the given size.
@@ -1879,7 +1879,7 @@ g:ale_open_list                                               *g:ale_open_list*
 g:ale_pattern_options                                   *g:ale_pattern_options*
 
   Type: |Dictionary|
-  Default: undefined
+  Default: not set
 
   This option maps regular expression patterns to |Dictionary| values for
   buffer variables. This option can be set to automatically configure
@@ -1908,7 +1908,7 @@ g:ale_pattern_options                                   *g:ale_pattern_options*
 g:ale_pattern_options_enabled                   *g:ale_pattern_options_enabled*
 
   Type: |Number|
-  Default: undefined
+  Default: not set
 
   This option can be used for disabling pattern options. If set to `0`, ALE
   will not set buffer variables per |g:ale_pattern_options|.
@@ -2006,7 +2006,7 @@ g:ale_set_balloons                                         *g:ale_set_balloons*
 g:ale_set_balloons_legacy_echo                 *g:ale_set_balloons_legacy_echo*
                                                *b:ale_set_balloons_legacy_echo*
   Type: |Number|
-  Default: undefined
+  Default: not set
 
   If set to `1`, moving your mouse over documents in Vim will make ALE ask
   `tsserver` or `LSP` servers for information about the symbol where the mouse
