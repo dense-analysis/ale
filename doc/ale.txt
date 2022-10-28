@@ -4558,7 +4558,7 @@ ALEFixPost                                                 *ALEFixPost-autocmd*
   These |User| autocommands are triggered before and after every lint or fix
   cycle. They can be used to update statuslines, send notifications, etc.
   The autocmd commands are run with |:silent|, so |:unsilent| is required for
-  echoing messges.
+  echoing messages.
 
   For example to change the color of the statusline while the linter is
   running:
@@ -4591,7 +4591,7 @@ ALEJobStarted                                           *ALEJobStarted-autocmd*
 ALELSPStarted                                           *ALELSPStarted-autocmd*
                                                                 *ALELSPStarted*
 
-  This |User| autocommand is trigged immediately after an LSP connection is
+  This |User| autocommand is triggered immediately after an LSP connection is
   successfully initialized. This provides a way to perform any additional
   initialization work, such as setting up buffer-level mappings.
 

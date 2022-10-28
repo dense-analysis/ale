@@ -29,7 +29,7 @@ Execute(The local executable from .bin should be used if available):
   \ ale#Escape(ale#path#Simplify(g:dir . '/../test-files/remark_lint/with_bin_path/node_modules/.bin/remark'))
   \   . ' --no-stdout --no-color'
 
-Execute(The global executable should be uesd if the option is set):
+Execute(The global executable should be used if the option is set):
   let b:ale_markdown_remark_lint_use_global = 1
   call ale#test#SetFilename('../test-files/remark_lint/with_bin_path/foo.md')
 

@@ -90,7 +90,7 @@ Before:
     return [{'lnum': 1, 'col': 1, 'text': 'xxx'}]
   endfunction
 
-  " echo will output a single blank line, and we should ingore it.
+  " echo will output a single blank line, and we should ignore it.
   function! IgnoredEmptyOutput(buffer, output)
     return {'command': has('win32') ? 'echo(' : 'echo'}
   endfunction

@@ -4,7 +4,7 @@ Before:
 After:
   call ale#linter#Reset()
 
-Execute(The tfsec handler should handle empty outout):
+Execute(The tfsec handler should handle empty output):
   AssertEqual
   \ [],
   \ ale_linters#terraform#tfsec#Handle(bufnr(''), ['{"results": null}'])

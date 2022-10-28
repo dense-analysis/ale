@@ -7,16 +7,16 @@ Execute(The ghc handler should handle hdevtools output):
   \     'lnum': 147,
   \     'type': 'W',
   \     'col': 62,
-  \     'text': '• Couldnt match type ‘a -> T.Text’ with ‘T.Text’ Expected type: [T.Text]',
+  \     'text': "• Couldn't match type ‘a -> T.Text’ with ‘T.Text’ Expected type: [T.Text]",
   \     'detail': join([
-  \       '• Couldnt match type ‘a -> T.Text’ with ‘T.Text’',
+  \       "• Couldn't match type ‘a -> T.Text’ with ‘T.Text’",
   \       '  Expected type: [T.Text]',
   \     ], "\n"),
   \   },
   \ ],
   \ ale#handlers#haskell#HandleGHCFormat(bufnr(''), [
   \ 'foo.hs:147:62: warning:',
-  \ '• Couldnt match type ‘a -> T.Text’ with ‘T.Text’',
+  \ "• Couldn't match type ‘a -> T.Text’ with ‘T.Text’",
   \ '  Expected type: [T.Text]',
   \ ])
 

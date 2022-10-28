@@ -979,7 +979,7 @@ g:ale_python_pylsp_options                           *g:ale_python_pylsp_options
   let g:ale_python_pylsp_executable = 'python3'
   let g:ale_python_pylsp_options = '-m pylsp'
 
-  An example stragety for installing `pylsp`:
+  An example strategy for installing `pylsp`:
     `python3 -m pip install --user pylsp`
 
 

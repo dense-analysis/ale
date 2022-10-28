@@ -63,7 +63,7 @@ Execute(The openscad handler should handle sca2d output):
   \ '   - 	* HASH',
   \ '   - 	* INTERSECTION_FOR',
   \ '   - ',
-  \ 'If you belive this is a bug in SCA2D please report it to us.',
+  \ 'If you believe this is a bug in SCA2D please report it to us.',
   \ '',
   \ '',
   \ 'SCA2D message summary',

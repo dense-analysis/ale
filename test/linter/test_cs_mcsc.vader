@@ -13,13 +13,13 @@ Execute(The options should be be used in the command):
 
   AssertLinter 'mcs', 'mcs -unsafe -pkg:dotnet -out:TEMP -t:module -recurse:' . ale#Escape('*.cs')
 
-Execute(The souce path should be be used in the command):
+Execute(The source path should be be used in the command):
   let g:ale_cs_mcsc_source = '../foo/bar'
 
   AssertLinterCwd '../foo/bar'
   AssertLinter 'mcs', 'mcs -unsafe -out:TEMP -t:module -recurse:' . ale#Escape('*.cs')
 
-Execute(The list of search pathes for assemblies should be be used in the command if not empty):
+Execute(The list of search paths for assemblies should be be used in the command if not empty):
   let g:ale_cs_mcsc_assembly_path = ['/usr/lib/mono', '../foo/bar']
 
   AssertLinter 'mcs', 'mcs -unsafe'

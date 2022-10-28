@@ -285,7 +285,7 @@ Execute(The tslint handler should not report no-implicit-dependencies errors):
   \ }])])
 
 Execute(The tslint handler should set filename keys for temporary files):
-  " The temporay filename below is hacked into being a relative path so we can
+  " The temporary filename below is hacked into being a relative path so we can
   " test that we resolve the temporary filename first.
   let b:relative_to_root = substitute(expand('%:p'), '\v[^/\\]*([/\\])[^/\\]*', '../', 'g')
   let b:tempname_suffix = substitute(tempname(), '^\v([A-Z]:)?[/\\]', '', '')

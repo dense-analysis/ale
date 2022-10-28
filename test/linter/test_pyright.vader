@@ -40,7 +40,7 @@ Execute(virtualenv paths should be set in configuration by default):
   \ },
   \}
 
-Execute(The pythonPath should be set based on whatever the ovveride for the venvPath is set to):
+Execute(The pythonPath should be set based on whatever the override for the venvPath is set to):
   call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
 
   " This overrides the default detection of the path.
