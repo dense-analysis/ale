@@ -24,7 +24,7 @@ g:ale_java_checkstyle_executable             *g:ale_java_checkstyle_executable*
                                              *b:ale_java_checkstyle_executable*
 
   Type: |String|
-  Default: 'checkstyle'
+  Default: `'checkstyle'`
 
   This variable can be changed to modify the executable used for checkstyle.
 
@@ -124,8 +124,8 @@ pmd                                                              *ale-java-pmd*
 g:ale_java_pmd_options                                 *g:ale_java_pmd_options*
                                                        *b:ale_java_pmd_options*
 
-  Type: String
-  Default: '-R category/java/bestpractices'
+  Type: |String|
+  Default: `'-R category/java/bestpractices'`
 
   This variable can be changed to modify flags given to PMD. Do not specify -f
   and -d. They are added automatically.
