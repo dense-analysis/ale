@@ -1,0 +1,48 @@
+Before:
+  let b:files = '../test-files/erlang'
+  call ale#assert#SetUpLinterTest('erlang', 'erlang_ls')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default command should be correct):
+  AssertLinter 'erlang_ls',
+  \ ale#Escape('erlang_ls') . ' --log-level=' . ale#Escape('info')
+
+Execute(Executable should be configurable):
+  let b:ale_erlang_erlang_ls_executable = '/path/to/erlang_ls'
+
+  AssertLinter '/path/to/erlang_ls',
+  \ ale#Escape('/path/to/erlang_ls') . ' --log-level=' . ale#Escape('info')
+
+Execute(Log level should be configurable):
+  let b:ale_erlang_erlang_ls_log_level = 'debug'
+
+  AssertLinter 'erlang_ls',
+  \ ale#Escape('erlang_ls') . ' --log-level=' . ale#Escape('debug')
+
+Execute(Log directory should be configurable):
+  let b:ale_erlang_erlang_ls_log_dir = '/path/to/logs'
+
+  AssertLinter 'erlang_ls',
+  \ ale#Escape('erlang_ls')
+  \ . ' --log-dir=' . ale#Escape('/path/to/logs')
+  \ . ' --log-level=' . ale#Escape('info')
+
+Execute(Project root should be detected using erlang_ls.config):
+  call ale#test#SetFilename(b:files . '/app_with_erlang_ls_config/src/app.erl')
+  AssertLSPProject ale#test#GetFilename(b:files . '/app_with_erlang_ls_config')
+
+  call ale#test#SetFilename(b:files . '/app_with_erlang_ls_config/_build/default/lib/dep/src/dep.erl')
+  AssertLSPProject ale#test#GetFilename(b:files . '/app_with_erlang_ls_config')
+
+Execute(Root of Rebar3 project should be detected):
+  call ale#test#SetFilename(b:files . '/app/src/app.erl')
+  AssertLSPProject ale#test#GetFilename(b:files . '/app')
+
+  call ale#test#SetFilename(b:files . '/app/_build/default/lib/dep/src/dep.erl')
+  AssertLSPProject ale#test#GetFilename(b:files . '/app')
+
+Execute(Root of kerl managed Erlang/OTP installation should be detected):
+  call ale#test#SetFilename(b:files . '/kerl_otp_root/lib/stdlib-4.1.1/array.erl')
+  AssertLSPProject ale#test#GetFilename(b:files . '/kerl_otp_root')
