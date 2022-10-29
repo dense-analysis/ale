@@ -55,7 +55,7 @@ Execute(StartChecking should mark a buffer as being actively checked):
 
   Assert ale#engine#IsCheckingBuffer(bufnr(''))
 
-Execute(ShowResults sould make a buffer inactive):
+Execute(ShowResults should make a buffer inactive):
   call ale#other_source#StartChecking(bufnr(''), 'other-source-linter')
   call ale#other_source#StartChecking(bufnr(''), 'second-other-source-linter')
 

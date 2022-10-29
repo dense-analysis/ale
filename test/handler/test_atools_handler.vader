@@ -26,7 +26,7 @@ Execute(The atools handler should handle basic errors or warings):
   \ ])
 
 " Regardless of the severity, if the certainty is [P]ossible and not [C]ertain
-" or if regardless of the Certainity the Severity is not [I]mportant or [S]erious
+" or if regardless of the Certainty the Severity is not [I]mportant or [S]erious
 " then it must be a [W]arning
 Execute(If we are not Certain or Importantly Serious, be a Warning):
   AssertEqual

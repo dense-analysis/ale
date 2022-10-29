@@ -12,7 +12,7 @@ Execute(The toolchain should be configurable):
 
   AssertLinter 'rls', ale#Escape('rls') . ' +' . ale#Escape('stable')
 
-Execute(The toolchain should be ommitted if not given):
+Execute(The toolchain should be omitted if not given):
   let g:ale_rust_rls_toolchain = ''
 
   AssertLinter 'rls', ale#Escape('rls')

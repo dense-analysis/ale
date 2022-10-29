@@ -178,7 +178,7 @@ Execute(FormatCommand should apply regular cwd paths):
   \ 'cd ' . (has('unix') ? '' : '/d ') . ale#Escape('/foo /bar') . ' && abc',
   \ ale#command#FormatCommand(bufnr('%'), '', 'abc', 0, v:null, '/foo /bar', [])[1]
   \
-Execute(FormatCommand should apply cwd subsitution and formatting):
+Execute(FormatCommand should apply cwd substitution and formatting):
   call ale#test#SetFilename('foo.txt')
 
   AssertEqual

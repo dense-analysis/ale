@@ -173,7 +173,7 @@ g:ale_java_javalsp_config                           *g:ale_java_javalsp_config*
   Type: |Dictionary|
   Default: `{}`
 
-The javalsp linter automatically detects external depenencies for Maven and
+The javalsp linter automatically detects external dependencies for Maven and
 Gradle projects. In case the javalsp fails to detect some of them, you can
 specify them setting a dictionary to |g:ale_java_javalsp_config| variable.
 >

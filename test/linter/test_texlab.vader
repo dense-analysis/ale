@@ -29,7 +29,7 @@ Execute(The options should be configurable):
 
   AssertLinter 'texlab', ale#Escape('texlab') . ' ' . b:ale_tex_texlab_options
 
-Execute(Should accpet configuration settings):
+Execute(Should accept configuration settings):
   AssertLSPConfig {}
   let b:ale_tex_texlab_config = {'build':{'onSave':v:true}}
   AssertLSPConfig {'build':{'onSave':v:true}}
