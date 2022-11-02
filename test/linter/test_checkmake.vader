@@ -1,0 +1,39 @@
+Before:
+  Save g:ale_make_checkmake_config
+
+  let g:ale_make_checkmake_config = ''
+
+  call ale#assert#SetUpLinterTest('make', 'checkmake')
+
+  " NOTE: the format string must be manually matched that set in the plugin
+  let b:format = '"{{.LineNumber}}:{{.Rule}}:{{.Violation}}{{\"\r\n\"}}"'
+
+After:
+  Restore
+
+  unlet! b:command_tail
+  unlet! b:ale_make_checkmake_config
+
+  call ale#assert#TearDownLinterTest()
+
+Execute(checkmake should run with default format option):
+  let b:command_tail = ' --format=' . b:format . ' %s'
+
+  AssertLinter 'checkmake', 'checkmake' . b:command_tail
+
+Execute(checkmake command should take the config option if it is non-empty):
+  let g:ale_make_checkmake_config = '/path to/checkmake.ini'
+  let b:command_tail = ' --format=' . b:format
+  \ . ' --config="' . g:ale_make_checkmake_config . '"'
+  \ . ' %s'
+
+  AssertLinter 'checkmake', 'checkmake' . b:command_tail
+
+Execute(the local buffer config option takes precedence over global option):
+  let g:ale_make_checkmake_config = '/path/to/checkmake.ini'
+  let b:ale_make_checkmake_config = '/another/checkmake.ini'
+  let b:command_tail = ' --format=' . b:format
+  \ . ' --config="' . b:ale_make_checkmake_config . '"'
+  \ . ' %s'
+
+  AssertLinter 'checkmake', 'checkmake' . b:command_tail

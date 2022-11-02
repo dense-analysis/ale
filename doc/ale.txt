@@ -3037,6 +3037,8 @@ documented in additional help files.
     luafmt................................|ale-lua-luafmt|
     selene................................|ale-lua-selene|
     stylua................................|ale-lua-stylua|
+  make....................................|ale-make-options|
+    checkmake.............................|ale-make-checkmake|
   markdown................................|ale-markdown-options|
     cspell................................|ale-markdown-cspell|
     dprint................................|ale-markdown-dprint|
