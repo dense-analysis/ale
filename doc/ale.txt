@@ -2767,6 +2767,7 @@ documented in additional help files.
     gnatpp................................|ale-ada-gnatpp|
     ada-language-server...................|ale-ada-language-server|
   ansible.................................|ale-ansible-options|
+    ansible-language-server...............|ale-ansible-language-server|
     ansible-lint..........................|ale-ansible-ansible-lint|
   apkbuild................................|ale-apkbuild-options|
     apkbuild-lint.........................|ale-apkbuild-apkbuild-lint|

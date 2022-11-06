@@ -1,0 +1,18 @@
+Before:
+  call ale#assert#SetUpLinterTest('ansible', 'ansible_language_server')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The ansible language server command callback should return default string):
+  AssertLinter 'ansible-language-server', ale#Escape('ansible-language-server') . ' --stdio'
+
+Execute(The ansible language server executable should be configurable):
+  let g:ale_ansible_language_server_executable = '~/.local/bin/als'
+
+  AssertLinter '~/.local/bin/als' , ale#Escape('~/.local/bin/als') . ' --stdio'
+
+Execute(Should accept configuration settings):
+  AssertLSPConfig {}
+  let b:ale_ansible_language_server_config = {'ansible-language-server': {'ansible': {'completion': {'provideRedirectModules': v:false}}}}
+  AssertLSPConfig {'ansible-language-server': {'ansible': {'completion': {'provideRedirectModules': v:false}}}}
