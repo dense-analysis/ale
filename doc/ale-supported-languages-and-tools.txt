@@ -497,7 +497,7 @@ Notes:
 * Racket
   * `racket-langserver`
   * `raco`
-  * raco_fmt
+  * `raco_fmt`
 * Re:VIEW
   * `redpen`
 * ReasonML
