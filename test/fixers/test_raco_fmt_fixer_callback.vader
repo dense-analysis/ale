@@ -1,0 +1,17 @@
+Before:
+  call ale#assert#SetUpFixerTest('racket', 'raco_fmt')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The raco_fmt callback should return the correct default values):
+  call ale#test#SetFilename('../test-files/racket/simple-script/foo.rkt')
+
+  AssertFixer {'command': ale#Escape('raco') . ' fmt'}
+
+Execute(The raco_fmt callback should include custom raco_fmt options):
+  let g:ale_racket_raco_fmt_options = "--width 100"
+  call ale#test#SetFilename('../test-files/racket/simple-script/foo.rkt')
+
+  AssertFixer {'command': ale#Escape('raco') . ' fmt ' . g:ale_racket_raco_fmt_options}
+
