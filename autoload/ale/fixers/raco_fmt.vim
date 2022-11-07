@@ -9,7 +9,7 @@ function! ale#fixers#raco_fmt#Fix(buffer) abort
     let l:options = ale#Var(a:buffer, 'racket_raco_fmt_options')
 
     return {
-    \   'command': ale#Escape(l:executable) . ' fmt %t'
+    \   'command': ale#Escape(l:executable) . ' fmt'
     \       . (empty(l:options) ? '' : ' ' . l:options),
     \}
 endfunction
