@@ -3169,6 +3169,7 @@ documented in additional help files.
     isort.................................|ale-python-isort|
     mypy..................................|ale-python-mypy|
     prospector............................|ale-python-prospector|
+    pycln.................................|ale-python-pycln|
     pycodestyle...........................|ale-python-pycodestyle|
     pydocstyle............................|ale-python-pydocstyle|
     pyflakes..............................|ale-python-pyflakes|
