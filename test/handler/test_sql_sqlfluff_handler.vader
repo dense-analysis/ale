@@ -1,0 +1,39 @@
+Before:
+  runtime ale_linters/sql/sqlfluff.vim
+
+After:
+  Restore
+
+  call ale#linter#Reset()
+
+Execute(The sqlfluff handler should handle basic warnings):
+  AssertEqual
+  \ [
+  \   {
+  \     'filename': 'schema.sql',
+  \     'lnum': 1,
+  \     'col': 8,
+  \     'type': 'W',
+  \     'code': 'L010',
+  \     'text': 'Keywords must be consistently upper case.',
+  \   },
+  \   {
+  \     'filename': 'schema.sql',
+  \     'lnum': 13,
+  \     'col': 2,
+  \     'type': 'W',
+  \     'code': 'L003',
+  \     'text': 'Expected 1 indentation, found 0 [compared to line 12]',
+  \   },
+  \   {
+  \     'filename': 'schema.sql',
+  \     'lnum': 16,
+  \     'col': 1,
+  \     'type': 'W',
+  \     'code': 'L009',
+  \     'text': 'Files must end with a single trailing newline.',
+  \   },
+  \ ],
+  \ ale_linters#sql#sqlfluff#Handle(1, [
+  \    '[{"filepath": "schema.sql", "violations": [{"line_no": 1, "line_pos": 8, "code": "L010", "description": "Keywords must be consistently upper case."}, {"line_no": 13, "line_pos": 2, "code": "L003", "description": "Expected 1 indentation, found 0 [compared to line 12]"}, {"line_no": 16, "line_pos": 1, "code": "L009", "description": "Files must end with a single trailing newline."}]}]',
+  \ ])

@@ -573,6 +573,7 @@ Notes:
   * `dprint`
   * `pgformatter`
   * `sql-lint`
+  * `sqlfluff`
   * `sqlfmt`
   * `sqlformat`
   * `sqlint`
