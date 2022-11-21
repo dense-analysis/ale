@@ -37,7 +37,13 @@ endfunction
 
 function! ale_linters#sql#sqlfluff#Handle(buffer, lines) abort
     let l:output = []
-    let l:json = ale#util#FuzzyJSONDecode(a:lines, {})[0]
+    let l:json_lines = ale#util#FuzzyJSONDecode(a:lines, [])
+
+    if empty(l:json_lines)
+        return l:output
+    endif
+
+    let l:json = l:json_lines[0]
 
     " if there's no warning, 'result' is `null`.
     if empty(get(l:json, 'violations'))
