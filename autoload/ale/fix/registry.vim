@@ -386,6 +386,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['sh'],
 \       'description': 'Fix sh files with shfmt.',
 \   },
+\   'sqlfluff': {
+\       'function': 'ale#fixers#sqlfluff#Fix',
+\       'suggested_filetypes': ['sql'],
+\       'description': 'Fix SQL files with sqlfluff.',
+\   },
 \   'sqlfmt': {
 \       'function': 'ale#fixers#sqlfmt#Fix',
 \       'suggested_filetypes': ['sql'],
