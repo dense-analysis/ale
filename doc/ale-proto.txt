@@ -9,13 +9,15 @@ To enable `.proto` file linting, update |g:ale_linters| as appropriate:
 >
   " Enable linter for .proto files
   let g:ale_linters = {'proto': ['buf-lint', 'protoc-gen-lint', 'protolint']}
+<
 
 To enable `.proto` file fixing, update |g:ale_fixers| as appropriate:
 >
   " Enable linter for .proto files
   let b:ale_fixers = {'proto': ['buf-format', 'protolint']}
-
 <
+
+
 ===============================================================================
 buf-format                                                *ale-proto-buf-format*
 
