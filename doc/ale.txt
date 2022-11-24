@@ -2848,8 +2848,8 @@ documented in additional help files.
     stylelint.............................|ale-css-stylelint|
     vscodecss.............................|ale-css-vscode|
   cuda....................................|ale-cuda-options|
-    clangd................................|ale-cuda-clangd|
     clang-format..........................|ale-cuda-clangformat|
+    clangd................................|ale-cuda-clangd|
     nvcc..................................|ale-cuda-nvcc|
   d.......................................|ale-d-options|
     dfmt..................................|ale-d-dfmt|
@@ -3068,11 +3068,11 @@ documented in additional help files.
   nroff...................................|ale-nroff-options|
     write-good............................|ale-nroff-write-good|
   objc....................................|ale-objc-options|
+    ccls..................................|ale-objc-ccls|
     clang.................................|ale-objc-clang|
-    clang-format..........................|ale-objc-clang-format|
+    clang-format..........................|ale-objc-clangformat|
     clangd................................|ale-objc-clangd|
     uncrustify............................|ale-objc-uncrustify|
-    ccls..................................|ale-objc-ccls|
   objcpp..................................|ale-objcpp-options|
     clang.................................|ale-objcpp-clang|
     clangd................................|ale-objcpp-clangd|
