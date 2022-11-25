@@ -76,6 +76,7 @@ Notes:
   * `gcc` (`cc`)
   * `uncrustify`
 * C#
+  * `clang-format`
   * `csc`!!
   * `cspell`
   * `dotnet-format`
@@ -129,6 +130,7 @@ Notes:
 * Cucumber
   * `cucumber`
 * CUDA
+  * `clang-format`
   * `clangd`
   * `nvcc`!!
 * Cypher
@@ -271,6 +273,7 @@ Notes:
 * Java
   * `PMD`
   * `checkstyle`!!
+  * `clang-format`
   * `cspell`
   * `eclipselsp`
   * `google-java-format`
@@ -278,6 +281,7 @@ Notes:
   * `javalsp`
   * `uncrustify`
 * JavaScript
+  * `clang-format`
   * `cspell`
   * `deno`
   * `dprint`
@@ -294,6 +298,7 @@ Notes:
   * `xo`
 * JSON
   * `VSCode JSON language server`
+  * `clang-format`
   * `cspell`
   * `dprint`
   * `eslint`
@@ -384,6 +389,7 @@ Notes:
 * Objective-C
   * `ccls`
   * `clang`
+  * `clang-format`
   * `clangd`
   * `uncrustify`
 * Objective-C++
@@ -450,6 +456,7 @@ Notes:
 * proto
   * `buf-format`!!
   * `buf-lint`!!
+  * `clang-format`
   * `protoc-gen-lint`!!
   * `protolint`!!
 * Pug
