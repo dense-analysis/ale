@@ -18,6 +18,7 @@ Notes:
   * `gcc`
   * `gnatpp`
 * Ansible
+  * `ansible-language-server`
   * `ansible-lint`!!
 * API Blueprint
   * `drafter`
