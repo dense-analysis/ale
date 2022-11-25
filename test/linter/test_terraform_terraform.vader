@@ -9,7 +9,7 @@ Execute(The default command should be correct):
   AssertLinter 'terraform',
   \ ale#Escape('terraform') . ' validate -no-color -json '
 
-Execute(The default command should be overriden):
+Execute(The default command should be overridden):
   let b:ale_terraform_terraform_executable = '/bin/other/terraform'
   AssertLinter '/bin/other/terraform',
   \ ale#Escape('/bin/other/terraform') . ' validate -no-color -json '

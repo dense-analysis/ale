@@ -7,6 +7,11 @@ After:
 Execute(The default command should be correct):
   AssertLinter 'markdownlint', ale#Escape('markdownlint') . ' %s'
 
+Execute(The executable should be configurable):
+  let g:ale_markdown_markdownlint_executable = 'foo bar'
+
+  AssertLinter 'foo bar', ale#Escape('foo bar') . ' %s'
+
 Execute(The options should be configurable):
   let g:ale_markdown_markdownlint_options = '--config ~/custom/.markdownlintrc'
 

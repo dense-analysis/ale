@@ -1,0 +1,52 @@
+Before:
+  runtime ale_linters/terraform/tfsec.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The tfsec handler should handle empty output):
+  AssertEqual
+  \ [],
+  \ ale_linters#terraform#tfsec#Handle(bufnr(''), ['{"results": null}'])
+
+Execute(The tfsec handler should parse results correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'filename': '/test/main.tf',
+  \     'lnum': 10,
+  \     'end_lnum': 12,
+  \     'text': "IAM policy document uses sensitive action 'iam:PassRole' on wildcarded resource '*'",
+  \     'code': 'aws-iam-no-policy-wildcards',
+  \     'type': 'W',
+  \   },
+  \],
+  \ ale_linters#terraform#tfsec#Handle(bufnr(''), json_encode(
+  \ {
+  \   "results": [
+  \     {
+  \       "rule_id": "AVD-AWS-0057",
+  \       "long_id": "aws-iam-no-policy-wildcards",
+  \       "rule_description": "IAM policy should avoid use of wildcards and instead apply the principle of least privilege",
+  \       "rule_provider": "aws",
+  \       "rule_service": "iam",
+  \       "impact": "Overly permissive policies may grant access to sensitive resources",
+  \       "resolution": "Specify the exact permissions required, and to which resources they should apply instead of using wildcards.",
+  \       "links": [
+  \         "https://aquasecurity.github.io/tfsec/v1.28.0/checks/aws/iam/no-policy-wildcards/",
+  \         "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document"
+  \       ],
+  \       "description": "IAM policy document uses sensitive action 'iam:PassRole' on wildcarded resource '*'",
+  \       "severity": "HIGH",
+  \       "warning": v:false,
+  \       "status": 0,
+  \       "resource": "data.aws_iam_policy_document.default",
+  \       "location": {
+  \          "filename": "/test/main.tf",
+  \          "start_line": 10,
+  \          "end_line": 12
+  \       }
+  \     }
+  \   ]
+  \ }
+  \))

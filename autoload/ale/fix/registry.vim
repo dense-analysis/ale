@@ -386,6 +386,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['sh'],
 \       'description': 'Fix sh files with shfmt.',
 \   },
+\   'sqlfluff': {
+\       'function': 'ale#fixers#sqlfluff#Fix',
+\       'suggested_filetypes': ['sql'],
+\       'description': 'Fix SQL files with sqlfluff.',
+\   },
 \   'sqlfmt': {
 \       'function': 'ale#fixers#sqlfmt#Fix',
 \       'suggested_filetypes': ['sql'],
@@ -570,6 +575,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#zigfmt#Fix',
 \       'suggested_filetypes': ['zig'],
 \       'description': 'Official formatter for Zig',
+\   },
+\   'raco_fmt': {
+\       'function': 'ale#fixers#raco_fmt#Fix',
+\       'suggested_filetypes': ['racket'],
+\       'description': 'Fix Racket files with raco fmt.',
 \   }
 \}
 

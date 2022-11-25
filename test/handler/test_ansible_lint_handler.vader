@@ -23,7 +23,7 @@ Execute(The ansible-lint handler for version group <5 should handle basic errors
   \ fnamemodify(tempname(), ':h') . '/test_playbook.yml:35: [EANSIBLE0002] Trailing whitespace',
   \ ])
 
-Execute(The ansible-lint handler for version group <5 should supress trailing whitespace output when the option is used):
+Execute(The ansible-lint handler for version group <5 should suppress trailing whitespace output when the option is used):
   let b:ale_warn_about_trailing_whitespace = 0
 
   AssertEqual

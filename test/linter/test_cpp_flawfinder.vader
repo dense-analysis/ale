@@ -20,7 +20,7 @@ Execute(Additional flawfinder options should be configurable):
   AssertLinter 'flawfinder',
   \ ale#Escape('flawfinder') . ' -CDQS --foobar --minlevel=1 %t'
 
-Execute(The flawfinder exectable should be configurable):
+Execute(The flawfinder executable should be configurable):
   let b:ale_cpp_flawfinder_executable = 'foo/bar'
 
   AssertLinter 'foo/bar', ale#Escape('foo/bar') . ' -CDQS --minlevel=1 %t'

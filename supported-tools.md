@@ -187,6 +187,7 @@ formatting.
   * [SyntaxErl](https://github.com/ten0s/syntaxerl)
   * [dialyzer](http://erlang.org/doc/man/dialyzer.html) :floppy_disk:
   * [elvis](https://github.com/inaka/elvis) :floppy_disk:
+  * [erlang_ls](https://github.com/erlang-ls/erlang_ls)
   * [erlc](http://erlang.org/doc/man/erlc.html)
   * [erlfmt](https://github.com/WhatsApp/erlfmt)
 * Fish
@@ -491,6 +492,7 @@ formatting.
   * [pyre](https://github.com/facebook/pyre-check) :warning:
   * [pyright](https://github.com/microsoft/pyright)
   * [reorder-python-imports](https://github.com/asottile/reorder_python_imports)
+  * [ruff](https://github.com/charliermarsh/ruff)
   * [unimport](https://github.com/hakancelik96/unimport)
   * [vulture](https://github.com/jendrikseipp/vulture) :warning: :floppy_disk:
   * [yapf](https://github.com/google/yapf)
@@ -504,6 +506,7 @@ formatting.
 * Racket
   * [racket-langserver](https://github.com/jeapostrophe/racket-langserver/tree/master)
   * [raco](https://docs.racket-lang.org/raco/)
+  * [raco_fmt](https://docs.racket-lang.org/fmt/)
 * Re:VIEW
   * [redpen](http://redpen.cc/)
 * ReasonML
@@ -579,6 +582,7 @@ formatting.
   * [dprint](https://dprint.dev)
   * [pgformatter](https://github.com/darold/pgFormatter)
   * [sql-lint](https://github.com/joereynolds/sql-lint)
+  * [sqlfluff](https://github.com/sqlfluff/sqlfluff)
   * [sqlfmt](https://github.com/jackc/sqlfmt)
   * [sqlformat](https://github.com/andialbrecht/sqlparse)
   * [sqlint](https://github.com/purcell/sqlint)
@@ -606,6 +610,7 @@ formatting.
   * [terraform-ls](https://github.com/hashicorp/terraform-ls)
   * [terraform-lsp](https://github.com/juliosueiras/terraform-lsp)
   * [tflint](https://github.com/wata727/tflint)
+  * [tfsec](https://github.com/aquasecurity/tfsec)
 * Texinfo
   * [alex](https://github.com/get-alex/alex)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)

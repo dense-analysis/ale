@@ -19,7 +19,7 @@ Execute(The default command should be correct):
   AssertLinter g:node_executable,
   \ ale#Escape(g:node_executable) . ' --format=unix %t'
 
-Execute(The global executable should be uesd if the option is set):
+Execute(The global executable should be used if the option is set):
   let g:ale_html_htmlhint_executable = 'foo'
   let g:ale_html_htmlhint_use_global = 1
 
