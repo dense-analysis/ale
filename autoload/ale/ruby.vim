@@ -35,7 +35,7 @@ function! ale#ruby#FindProjectRoot(buffer) abort
         \   ':h'
         \)
 
-        if l:dir isnot# '.' && isdirectory(l:dir)
+        if isdirectory(l:dir)
             return l:dir
         endif
     endfor
