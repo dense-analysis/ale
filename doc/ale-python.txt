@@ -1086,6 +1086,67 @@ g:ale_python_pyright_config                       *g:ale_python_pyright_config*
 <
 
 ===============================================================================
+refurb                                                        *ale-python-refurb*
+
+g:ale_python_refurb_change_directory       *g:ale_python_refurb_change_directory*
+                                           *b:ale_python_refurb_change_directory*
+  Type: |Number|
+  Default: `1`
+
+  If set to `1`, `refurb` will be run from a detected project root, per
+  |ale-python-root|. if set to `0` or no project root detected,
+  `refurb` will be run from the buffer's directory.
+
+
+g:ale_python_refurb_executable                   *g:ale_python_refurb_executable*
+                                                 *b:ale_python_refurb_executable*
+  Type: |String|
+  Default: `'refurb'`
+
+  See |ale-integrations-local-executables|
+
+  Set this to `'pipenv'` to invoke `'pipenv` `run` `refurb'`.
+  Set this to `'poetry'` to invoke `'poetry` `run` `refurb'`.
+
+
+g:ale_python_refurb_options                         *g:ale_python_refurb_options*
+                                                    *b:ale_python_refurb_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to add command-line arguments to the refurb
+  invocation.
+
+  For example, to select/enable and/or disable some error codes,
+  you may want to set >
+  let g:ale_python_refurb_options = '--ignore 100'
+g:ale_python_refurb_use_global                   *g:ale_python_refurb_use_global*
+                                                 *b:ale_python_refurb_use_global*
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_python_refurb_auto_pipenv                 *g:ale_python_refurb_auto_pipenv*
+                                                *b:ale_python_refurb_auto_pipenv*
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a pipenv, and set the executable to `pipenv`
+  if true. This is overridden by a manually-set executable.
+
+
+g:ale_python_refurb_auto_poetry                 *g:ale_python_refurb_auto_poetry*
+                                                *b:ale_python_refurb_auto_poetry*
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a poetry, and set the executable to `poetry`
+  if true. This is overridden by a manually-set executable.
+
+
+===============================================================================
 reorder-python-imports                      *ale-python-reorder_python_imports*
 
 g:ale_python_reorder_python_imports_executable
