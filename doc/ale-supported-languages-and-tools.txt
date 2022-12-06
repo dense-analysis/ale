@@ -490,6 +490,7 @@ Notes:
   * `pylsp`
   * `pyre`
   * `pyright`
+  * `refurb`
   * `reorder-python-imports`
   * ruff
   * `unimport`

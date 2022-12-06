@@ -3168,6 +3168,7 @@ documented in additional help files.
     pylsp.................................|ale-python-pylsp|
     pyre..................................|ale-python-pyre|
     pyright...............................|ale-python-pyright|
+    refurb................................|ale-python-refurb|
     reorder-python-imports................|ale-python-reorder_python_imports|
     ruff..................................|ale-python-ruff|
     unimport..............................|ale-python-unimport|
