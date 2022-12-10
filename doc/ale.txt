@@ -3180,6 +3180,9 @@ documented in additional help files.
     languageserver........................|ale-r-languageserver|
     lintr.................................|ale-r-lintr|
     styler................................|ale-r-styler|
+  racket..................................|ale-racket-options|
+    racket_langserver.....................|ale-racket-langserver|
+    raco_fmt..............................|ale-racket-raco-fmt|
   reasonml................................|ale-reasonml-options|
     merlin................................|ale-reasonml-merlin|
     ols...................................|ale-reasonml-ols|
