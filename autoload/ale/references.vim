@@ -67,19 +67,42 @@ function! ale#references#HandleTSServerResponse(conn_id, response) abort
 endfunction
 
 function! ale#references#FormatLSPResponseItem(response_item, options) abort
+    let l:line= a:response_item.range.start.line
+    let l:col = a:response_item.range.start.character
+    let l:filename = ale#util#ToResource(a:response_item.uri)
+
+    try
+        let l:line_text = readfile(l:filename)[l:line]
+    catch
+        " cannot read file, this happens in tests
+    endtry
+
+
+    let l:ret = { 'filename': l:filename }
+
     if get(a:options, 'open_in') is# 'quickfix'
-        return {
-        \ 'filename': ale#util#ToResource(a:response_item.uri),
+        let l:ret = {
+        \ 'filename': l:filename,
         \ 'lnum': a:response_item.range.start.line + 1,
         \ 'col': a:response_item.range.start.character + 1,
         \}
+
+        if exists('l:line_text')
+            let l:ret['text'] = l:line_text
+        endif
     else
-        return {
-        \ 'filename': ale#util#ToResource(a:response_item.uri),
-        \ 'line': a:response_item.range.start.line + 1,
-        \ 'column': a:response_item.range.start.character + 1,
+        let l:ret ={
+        \ 'filename': l:filename,
+        \ 'line': l:line + 1,
+        \ 'column': l:col + 1,
         \}
+
+        if exists('l:line_text')
+            let l:ret['match'] = l:line_text
+        endif
     endif
+
+    return l:ret
 endfunction
 
 function! ale#references#HandleLSPResponse(conn_id, response) abort
