@@ -580,6 +580,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#raco_fmt#Fix',
 \       'suggested_filetypes': ['racket'],
 \       'description': 'Fix Racket files with raco fmt.',
+\   },
+\   'ruff': {
+\       'function': 'ale#fixers#ruff#Fix',
+\       'suggested_filetypes': ['python'],
+\       'description': 'Fix python files with ruff.',
 \   }
 \}
 

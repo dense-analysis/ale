@@ -1,0 +1,122 @@
+Before:
+  call ale#assert#SetUpFixerTest('python', 'ruff')
+
+  let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+  unlet! g:dir
+  unlet! b:bin_dir
+
+Execute(The ruff callback should return the correct default values):
+  let file_path = g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py'
+
+  silent execute 'file ' . fnameescape(file_path)
+
+  let fname = ale#Escape(ale#path#Simplify(file_path))
+
+  " --fix does not support stdin until 0.0.72
+  GivenCommandOutput ['ruff 0.0.72']
+  AssertFixer
+  \ {
+  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/subdir'),
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/ruff')) . ' --stdin-filename ' . fname  . ' --fix -',
+  \ }
+
+Execute(The ruff callback should not use stdin for older versions (< 0.0.72)):
+  let file_path = g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py'
+
+  silent execute 'file ' . fnameescape(file_path)
+
+  let fname = ale#Escape(ale#path#Simplify(file_path))
+
+  " --fix does not support stdin until 0.0.72
+  GivenCommandOutput ['ruff 0.0.71']
+  AssertFixer
+  \ {
+  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/subdir'),
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/ruff')) . ' --stdin-filename ' . fname . ' --fix %s',
+  \ }
+
+Execute(The ruff callback should not change directory if the option is set to 0):
+  let g:ale_python_ruff_change_directory = 0
+
+  let file_path = g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py'
+
+  silent execute 'file ' . fnameescape(file_path)
+
+  let fname = ale#Escape(ale#path#Simplify(file_path))
+
+  " --fix does not support stdin until 0.0.72
+  GivenCommandOutput ['ruff 0.0.72']
+  AssertFixer
+  \ {
+  \   'cwd': '%s:h',
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/ruff')) . ' --stdin-filename ' . fname . ' --fix -',
+  \ }
+
+Execute(The ruff callback should respect custom options):
+  let g:ale_python_ruff_options = '--ignore F401 -q'
+
+  let file_path = g:dir . '/../test-files/python/with_virtualenv/subdir/foo/bar.py'
+
+  silent execute 'file ' . fnameescape(file_path)
+
+  let fname = ale#Escape(ale#path#Simplify(file_path))
+
+  GivenCommandOutput ['ruff 0.0.72']
+  AssertFixer
+  \ {
+  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/subdir'),
+  \   'command': ale#Escape(ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/ruff'))
+  \     . ' --ignore F401 -q --stdin-filename '. fname . ' --fix -',
+  \ }
+
+Execute(Pipenv is detected when python_ruff_auto_pipenv is set):
+  let g:ale_python_ruff_auto_pipenv = 1
+  let g:ale_python_ruff_change_directory = 0
+
+  let file_path = '../test-files/python/pipenv/whatever.py'
+
+  call ale#test#SetFilename(file_path)
+
+  let fname = ale#Escape(ale#path#Simplify(g:dir . '/'. file_path))
+
+  GivenCommandOutput ['ruff 0.0.72']
+  AssertFixer
+  \ {
+  \   'cwd': '%s:h',
+  \   'command': ale#Escape('pipenv') . ' run ruff --stdin-filename ' . fname . ' --fix -'
+  \ }
+
+Execute(Poetry is detected when python_ruff_auto_poetry is set):
+  let g:ale_python_ruff_auto_poetry = 1
+  let g:ale_python_ruff_change_directory = 0
+
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  let fname = ale#Escape(ale#path#Simplify(g:dir .'/../test-files/python/poetry/whatever.py'))
+
+  GivenCommandOutput ['ruff 0.0.72']
+  AssertFixer
+  \ {
+  \   'cwd': '%s:h',
+  \   'command': ale#Escape('poetry') . ' run ruff --stdin-filename ' . fname . ' --fix -'
+  \ }
+
+Execute(Poetry is detected when python_ruff_auto_poetry is set, and cwd respects change_directory option):
+  let g:ale_python_ruff_auto_poetry = 1
+  let g:ale_python_ruff_change_directory = 1
+
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  let fname = ale#Escape(ale#path#Simplify(g:dir .'/../test-files/python/poetry/whatever.py'))
+
+  GivenCommandOutput ['ruff 0.0.72']
+  AssertFixer
+  \ {
+  \   'cwd': ale#path#Simplify(g:dir . '/../test-files/python/poetry'),
+  \   'command': ale#Escape('poetry') . ' run ruff --stdin-filename ' . fname . ' --fix -'
+  \ }
+
