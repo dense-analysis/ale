@@ -85,6 +85,16 @@ Execute(The nix command should add 'log-format' option for nix version 2.9):
   \ 'nix-instantiate --log-format internal-json --parse -',
   \ ale_linters#nix#nix#Command('', ['nix-instantiate (Nix) 2.9.0pre20211206_ignored'], '')
 
+Execute(The nix command should add 'log-format' option for nix version 2.10):
+  AssertEqual
+  \ 'nix-instantiate --log-format internal-json --parse -',
+  \ ale_linters#nix#nix#Command('', ['nix-instantiate (Nix) 2.10.0pre20221221_ignored'], '')
+
+Execute(The nix command should add 'log-format' option for nix version 2.20):
+  AssertEqual
+  \ 'nix-instantiate --log-format internal-json --parse -',
+  \ ale_linters#nix#nix#Command('', ['nix-instantiate (Nix) 2.20.0pre20221221_ignored'], '')
+
 Execute(The nix command should add 'log-format' option for nix version 3.0):
   AssertEqual
   \ 'nix-instantiate --log-format internal-json --parse -',
