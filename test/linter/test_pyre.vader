@@ -8,6 +8,8 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The pyre command callback should return default string):
+  call ale#test#SetFilename('./foo.py')
+
   AssertLinter 'pyre',  ale#Escape('pyre') . ' persistent'
 
 Execute(The pyre executable should be configurable):

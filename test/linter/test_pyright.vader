@@ -10,6 +10,8 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The command callback should return the correct default string):
+  call ale#test#SetFilename('./foo.py')
+
   AssertLinter
   \ 'pyright-langserver',
   \ ale#Escape('pyright-langserver') . ' --stdio'
@@ -29,6 +31,12 @@ Execute(The default configuration should be mostly empty):
   let b:ale_python_pyright_config = {}
 
   AssertLSPConfig {'python': {}}
+
+Execute(The cwd and project root should be detected correctly):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  AssertLinterCwd ale#test#GetFilename('../test-files/python/with_virtualenv/subdir')
+  AssertLSPProject ale#test#GetFilename('../test-files/python/with_virtualenv/subdir')
 
 Execute(virtualenv paths should be set in configuration by default):
   call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
