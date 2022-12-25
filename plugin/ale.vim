@@ -127,8 +127,8 @@ let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
 " This flag can be set to 1 to automatically show errors in the preview window.
 let g:ale_cursor_detail = get(g:, 'ale_cursor_detail', 0)
 
-" This flag can be set to 1 to enable virtual text when the cursor moves.
-let g:ale_virtualtext_cursor = get(g:, 'ale_virtualtext_cursor', 0)
+" This flag can be changed to disable/enable virtual text.
+let g:ale_virtualtext_cursor = get(g:, 'ale_virtualtext_cursor', 'disabled')
 
 " This flag can be set to 1 to enable LSP hover messages at the cursor.
 let g:ale_hover_cursor = get(g:, 'ale_hover_cursor', 1)

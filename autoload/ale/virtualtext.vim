@@ -112,7 +112,7 @@ function! ale#virtualtext#GetHlGroup(type, style) abort
 endfunction
 
 function! ale#virtualtext#ShowCursorWarning(...) abort
-    if g:ale_virtualtext_cursor != 1
+    if g:ale_virtualtext_cursor isnot# 'current' && g:ale_virtualtext_cursor != 1
         return
     endif
 
@@ -142,7 +142,7 @@ endfunction
 function! ale#virtualtext#ShowCursorWarningWithDelay() abort
     let l:buffer = bufnr('')
 
-    if g:ale_virtualtext_cursor != 1
+    if g:ale_virtualtext_cursor isnot# 'current' && g:ale_virtualtext_cursor != 1
         return
     endif
 

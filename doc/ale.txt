@@ -2290,16 +2290,14 @@ g:ale_use_global_executables                     *g:ale_use_global_executables*
 g:ale_virtualtext_cursor                             *g:ale_virtualtext_cursor*
 
   Type: |Number|
-  Default: `0`
+  Default: `'disabled'`
 
-  When this option is set to `1`, a message will be shown when a cursor is
-  near a warning or error. ALE will attempt to find the warning or error at a
-  column nearest to the cursor when the cursor is resting on a line which
-  contains a warning or error. This option can be set to `0` to disable this
-  behavior.
-  When this option is set to `2`, then all warnings will be shown for the
-  whole buffer, regardless of if the cursor is currently positioned in that
-  line.
+  This option controls how ALE will display problems using |virtual-text|.
+  The following values can be used.
+
+  `'all'`, `'2'`, or `2`         - Show problems for all lines.
+  `'current'`, `'1'`, or `1`     - Show problems for the current line.
+  `'disabled'`, `'0'`, or `0`    - Do not show problems with virtual-text.
 
   Messages are only displayed after a short delay. See |g:ale_virtualtext_delay|.
 

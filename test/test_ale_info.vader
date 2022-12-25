@@ -111,7 +111,7 @@ Before:
   let g:ale_statusline_format = ['%d error(s)', '%d warning(s)', 'OK']
   let g:ale_type_map = {}
   let g:ale_use_global_executables = v:null
-  let g:ale_virtualtext_cursor = 0
+  let g:ale_virtualtext_cursor = 'disabled'
   let g:ale_warn_about_trailing_blank_lines = 1
   let g:ale_warn_about_trailing_whitespace = 1
 
@@ -190,7 +190,7 @@ Before:
   \  'let g:ale_statusline_format = [''%d error(s)'', ''%d warning(s)'', ''OK'']',
   \  'let g:ale_type_map = {}',
   \  'let g:ale_use_global_executables = v:null',
-  \  'let g:ale_virtualtext_cursor = 0',
+  \  'let g:ale_virtualtext_cursor = ''disabled''',
   \  'let g:ale_warn_about_trailing_blank_lines = 1',
   \  'let g:ale_warn_about_trailing_whitespace = 1',
   \]
