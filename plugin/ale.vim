@@ -128,7 +128,7 @@ let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
 let g:ale_cursor_detail = get(g:, 'ale_cursor_detail', 0)
 
 " This flag can be changed to disable/enable virtual text.
-let g:ale_virtualtext_cursor = get(g:, 'ale_virtualtext_cursor', 'disabled')
+let g:ale_virtualtext_cursor = get(g:, 'ale_virtualtext_cursor', (has('nvim-0.3.2') || has('patch-9.0.0297') && has('textprop') && has('popupwin')) ? 'all' : 'disabled')
 
 " This flag can be set to 1 to enable LSP hover messages at the cursor.
 let g:ale_hover_cursor = get(g:, 'ale_hover_cursor', 1)

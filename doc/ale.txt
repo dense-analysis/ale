@@ -2290,7 +2290,7 @@ g:ale_use_global_executables                     *g:ale_use_global_executables*
 g:ale_virtualtext_cursor                             *g:ale_virtualtext_cursor*
 
   Type: |Number|
-  Default: `'disabled'`
+  Default: `'all'` (if supported, otherwise `'disabled'`)
 
   This option controls how ALE will display problems using |virtual-text|.
   The following values can be used.
