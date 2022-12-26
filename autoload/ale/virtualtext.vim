@@ -5,22 +5,25 @@ scriptencoding utf-8
 
 " Controls the milliseconds delay before showing a message.
 let g:ale_virtualtext_delay = get(g:, 'ale_virtualtext_delay', 10)
-let s:cursor_timer = -1
-let s:last_pos = [0, 0, 0]
-let s:has_virt_text = 0
-let s:emulate_virt = 0
+let s:cursor_timer = get(s:, 'cursor_timer', -1)
+let s:last_pos = get(s:, 'last_pos', [0, 0, 0])
+let s:hl_list = get(s:, 'hl_list', [])
 
-if has('nvim-0.3.2')
-    let s:ns_id = nvim_create_namespace('ale')
-    let s:has_virt_text = 1
-elseif has('textprop') && has('popupwin')
-    let s:has_virt_text = 1
-    let s:emulate_virt = !has('patch-9.0.0297')
-    let s:hl_list = []
+if !has_key(s:, 'has_virt_text')
+    let s:has_virt_text = 0
+    let s:emulate_virt = 0
+    let s:last_virt = -1
 
-    if s:emulate_virt
-        call prop_type_add('ale', {})
-        let s:last_virt = -1
+    if has('nvim-0.3.2')
+        let s:ns_id = nvim_create_namespace('ale')
+        let s:has_virt_text = 1
+    elseif has('textprop') && has('popupwin')
+        let s:has_virt_text = 1
+        let s:emulate_virt = !has('patch-9.0.0297')
+
+        if s:emulate_virt
+            call prop_type_add('ale', {})
+        endif
     endif
 endif
 
@@ -71,11 +74,15 @@ function! ale#virtualtext#ShowMessage(message, hl_group, buf, line) abort
         \ 'zindex': 2
         \})
     else
-        let type = prop_type_get(a:hl_group)
+        let l:type = prop_type_get(a:hl_group)
 
-        if type == {}
-            call add(s:hl_list, a:hl_group)
+        if l:type == {}
             call prop_type_add(a:hl_group, {'highlight': a:hl_group})
+        endif
+
+        " Add highlight groups to the list so we can clear them later.
+        if index(s:hl_list, a:hl_group) == -1
+            call add(s:hl_list, a:hl_group)
         endif
 
         call prop_add(a:line, 0, {
@@ -93,22 +100,24 @@ function! s:StopCursorTimer() abort
     endif
 endfunction
 
-function! ale#virtualtext#GetHlGroup(type, style) abort
+function! ale#virtualtext#GetHlGroup(type, sub_type) abort
     if a:type is# 'E'
-        if a:style is# 'style'
+        if a:sub_type is# 'style'
             return 'ALEVirtualTextStyleError'
-        else
-            return 'ALEVirtualTextError'
         endif
-    elseif a:type is# 'W'
-        if a:style is# 'style'
-            return 'ALEVirtualTextStyleWarning'
-        else
-            return 'ALEVirtualTextWarning'
-        endif
-    else
-        return 'ALEVirtualTextInfo'
+
+        return 'ALEVirtualTextError'
     endif
+
+    if a:type is# 'W'
+        if a:sub_type is# 'style'
+            return 'ALEVirtualTextStyleWarning'
+        endif
+
+        return 'ALEVirtualTextWarning'
+    endif
+
+    return 'ALEVirtualTextInfo'
 endfunction
 
 function! ale#virtualtext#ShowCursorWarning(...) abort
@@ -181,7 +190,7 @@ function! ale#virtualtext#SetTexts(buf, loclist) abort
             continue
         endif
 
-        let hl = ale#virtualtext#GetHlGroup(l['type'], get(l, 'sub_type', ''))
-        call ale#virtualtext#ShowMessage(l['text'], hl, a:buf, l['lnum'])
+        let l:hl = ale#virtualtext#GetHlGroup(l['type'], get(l, 'sub_type', ''))
+        call ale#virtualtext#ShowMessage(l['text'], l:hl, a:buf, l['lnum'])
     endfor
 endfunction
