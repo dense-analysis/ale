@@ -124,7 +124,7 @@ function! ale#virtualtext#ShowMessage(buffer, item) abort
         return
     endif
 
-    let l:line = a:item.lnum
+    let l:line = max([1, a:item.lnum])
     let l:hl_group = ale#virtualtext#GetGroup(a:item)
 
     " Get a language-appropriate comment character, or default to '#'.
