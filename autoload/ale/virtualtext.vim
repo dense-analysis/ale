@@ -73,14 +73,15 @@ function! ale#virtualtext#ShowMessage(message, hl_group, buf, line) abort
         return
     endif
 
+    let l:line = max([1, a:line])
     let l:prefix = get(g:, 'ale_virtualtext_prefix', '> ')
     let l:msg = l:prefix.trim(substitute(a:message, '\n', ' ', 'g'))
 
     if has('nvim')
-        call nvim_buf_set_virtual_text(a:buf, s:ns_id, a:line-1, [[l:msg, a:hl_group]], {})
+        call nvim_buf_set_virtual_text(a:buf, s:ns_id, l:line-1, [[l:msg, a:hl_group]], {})
     elseif s:emulate_virt
         let l:left_pad = col('$')
-        call prop_add(a:line, l:left_pad, {
+        call prop_add(l:line, l:left_pad, {
         \ 'type': 'ale',
         \})
         let s:last_virt = popup_create(l:msg, {
@@ -105,7 +106,7 @@ function! ale#virtualtext#ShowMessage(message, hl_group, buf, line) abort
             call add(s:hl_list, a:hl_group)
         endif
 
-        call prop_add(a:line, 0, {
+        call prop_add(l:line, 0, {
         \ 'type': a:hl_group,
         \ 'text': ' ' . l:msg,
         \ 'bufnr': a:buf
