@@ -2508,7 +2508,7 @@ ALEStyleWarningSignLineNr                           *ALEStyleWarningSignLineNr*
 
 ALEVirtualTextError                                       *ALEVirtualTextError*
 
-  Default: `highlight link ALEVirtualTextError ALEError`
+  Default: `highlight link ALEVirtualTextError SpellBad`
 
   The highlight for virtualtext errors. See |g:ale_virtualtext_cursor|.
 
@@ -2536,7 +2536,7 @@ ALEVirtualTextStyleWarning                         *ALEVirtualTextStyleWarning*
 
 ALEVirtualTextWarning                                   *ALEVirtualTextWarning*
 
-  Default: `highlight link ALEVirtualTextWarning ALEWarning`
+  Default: `highlight link ALEVirtualTextWarning SpellCap`
 
   The highlight for virtualtext errors. See |g:ale_virtualtext_cursor|.
 
