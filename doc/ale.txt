@@ -1063,7 +1063,8 @@ g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
     `%s`           - replaced with the text for the problem
     `%...code...% `- replaced with the error code
     `%linter%`     - replaced with the name of the linter
-    `%severity%`   - replaced with the severity of the problem
+    `%severity%`   - replaced with the severity of the problem (e.g. `Error`)
+    `%type%`       - replaced with the type of the problem (e.g. `E`)
 
   The strings for `%severity%` can be configured with the following options.
 
@@ -2314,7 +2315,6 @@ g:ale_virtualtext_cursor                             *g:ale_virtualtext_cursor*
 
 g:ale_virtualtext_delay                               *g:ale_virtualtext_delay*
                                                       *b:ale_virtualtext_delay*
-
   Type: |Number|
   Default: `10`
 
@@ -2326,11 +2326,23 @@ g:ale_virtualtext_delay                               *g:ale_virtualtext_delay*
 
 
 g:ale_virtualtext_prefix                             *g:ale_virtualtext_prefix*
-
+                                                     *b:ale_virtualtext_prefix*
   Type: |String|
-  Default: `'> '`
+  Default: `'%comment% %type%: '`
 
   Prefix to be used with |g:ale_virtualtext_cursor|.
+
+  This setting can be changed in each buffer with `b:ale_virtualtext_prefix`.
+
+  All of the same format markers used for |g:ale_echo_msg_format| can be used
+  for defining the prefix, including some additional sequences of characters.
+
+    `%comment%` - replaced with comment characters in the current language
+
+  ALE will read the comment characters from |&commentstring|, reading only the
+  part before `%s`, with whitespace trimmed. If comment syntax cannot be
+  pulled from |&commentstring|, ALE will default to `'#'`.
+
 
 g:ale_virtualenv_dir_names                         *g:ale_virtualenv_dir_names*
                                                    *b:ale_virtualenv_dir_names*
@@ -2508,7 +2520,7 @@ ALEStyleWarningSignLineNr                           *ALEStyleWarningSignLineNr*
 
 ALEVirtualTextError                                       *ALEVirtualTextError*
 
-  Default: `highlight link ALEVirtualTextError SpellBad`
+  Default: `highlight link ALEVirtualTextError Comment`
 
   The highlight for virtualtext errors. See |g:ale_virtualtext_cursor|.
 
@@ -2536,7 +2548,7 @@ ALEVirtualTextStyleWarning                         *ALEVirtualTextStyleWarning*
 
 ALEVirtualTextWarning                                   *ALEVirtualTextWarning*
 
-  Default: `highlight link ALEVirtualTextWarning SpellCap`
+  Default: `highlight link ALEVirtualTextWarning Comment`
 
   The highlight for virtualtext errors. See |g:ale_virtualtext_cursor|.
 

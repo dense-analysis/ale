@@ -129,7 +129,7 @@ After:
 Given javascript(A Javscript file with warnings/errors):
   var x = 3 + 12345678
   var x = 5*2 + parseInt("10");
-  // comment
+  //" comment
 
 Execute(Messages should be shown for the correct lines):
   call cursor(1, 1)
@@ -218,6 +218,26 @@ Execute(The severity should be formatted into the message correctly):
   call ale#cursor#EchoCursorWarning()
 
   AssertEqual 'Info: Some information', g:last_message
+
+Execute(The type should be formatted into the message correctly):
+  let g:ale_echo_msg_format = '%type%: %s'
+
+  call cursor(2, 9)
+  call ale#cursor#EchoCursorWarning()
+
+  AssertEqual
+  \ 'W: Infix operators must be spaced.',
+  \ g:last_message
+
+  call cursor(1, 10)
+  call ale#cursor#EchoCursorWarning()
+
+  AssertEqual 'E: Missing semicolon.', g:last_message
+
+  call cursor(1, 14)
+  call ale#cursor#EchoCursorWarning()
+
+  AssertEqual 'I: Some information', g:last_message
 
 Execute(The %code% and %ifcode% should show the code and some text):
   let g:ale_echo_msg_format = '%(code) %%s'

@@ -254,6 +254,7 @@ function! ale#GetLocItemMessage(item, format_string) abort
     " \=l:variable is used to avoid escaping issues.
     let l:msg = substitute(l:msg, '\v\%([^\%]*)code([^\%]*)\%', l:code_repl, 'g')
     let l:msg = substitute(l:msg, '\V%severity%', '\=l:severity', 'g')
+    let l:msg = substitute(l:msg, '\V%type%', '\=l:type', 'g')
     let l:msg = substitute(l:msg, '\V%linter%', '\=l:linter_name', 'g')
     " Replace %s with the text.
     let l:msg = substitute(l:msg, '\V%s', '\=a:item.text', 'g')

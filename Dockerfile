@@ -1,7 +1,7 @@
 FROM testbed/vim:24
 
 RUN install_vim -tag v8.0.0027 -build \
-                -tag v9.0.0133 -build \
+                -tag v9.0.0297 -build \
                 -tag neovim:v0.2.0 -build \
                 -tag neovim:v0.8.0 -build
 
