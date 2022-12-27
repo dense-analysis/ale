@@ -3,6 +3,26 @@ scriptencoding utf-8
 " Author: Luan Santos <cfcluan@gmail.com>
 " Description: Shows lint message for the current line as virtualtext, if any
 
+if !hlexists('ALEVirtualTextError')
+    highlight link ALEVirtualTextError SpellBad
+endif
+
+if !hlexists('ALEVirtualTextStyleError')
+    highlight link ALEVirtualTextStyleError ALEVirtualTextError
+endif
+
+if !hlexists('ALEVirtualTextWarning')
+    highlight link ALEVirtualTextWarning SpellCap
+endif
+
+if !hlexists('ALEVirtualTextStyleWarning')
+    highlight link ALEVirtualTextStyleWarning ALEVirtualTextWarning
+endif
+
+if !hlexists('ALEVirtualTextInfo')
+    highlight link ALEVirtualTextInfo ALEVirtualTextWarning
+endif
+
 " Controls the milliseconds delay before showing a message.
 let g:ale_virtualtext_delay = get(g:, 'ale_virtualtext_delay', 10)
 let s:cursor_timer = -1
