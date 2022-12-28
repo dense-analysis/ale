@@ -2788,6 +2788,7 @@ documented in additional help files.
     textlint..............................|ale-asciidoc-textlint|
   asm.....................................|ale-asm-options|
     gcc...................................|ale-asm-gcc|
+    llvm-mc...............................|ale-asm-llvm_mc|
   avra....................................|ale-avra-options|
     avra..................................|ale-avra-avra|
   awk.....................................|ale-awk-options|
