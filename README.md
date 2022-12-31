@@ -7,7 +7,7 @@ ALE (Asynchronous Lint Engine) is a plugin providing linting (syntax checking
 and semantic errors) in NeoVim 0.2.0+ and Vim 8 while you edit your text files,
 and acts as a Vim [Language Server Protocol](https://langserver.org/) client.
 
-<img src="https://user-images.githubusercontent.com/3518142/59195938-3a81b100-8b85-11e9-8e8d-6a601b1db908.gif" alt="A linting example with the darkspectrum color scheme in GVim." title="A linting example with the darkspectrum color scheme in GVim.">
+<video autoplay="true" muted="true" loop="true" controls="false" src="https://user-images.githubusercontent.com/3518142/210141215-8f2ff760-6a87-4704-a11e-c109b8e9ec41.mp4" title="An example showing what ALE can do."></video>
 
 ALE makes use of NeoVim and Vim 8 job control functions and timers to
 run linters on the contents of text buffers and return errors as
