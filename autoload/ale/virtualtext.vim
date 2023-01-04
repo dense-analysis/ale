@@ -169,7 +169,8 @@ function! ale#virtualtext#ShowMessage(buffer, item) abort
             call add(s:hl_list, l:hl_group)
         endif
 
-        call prop_add(l:line, 0, {
+        " We ignore all errors from prop_add.
+        silent! call prop_add(l:line, 0, {
         \   'type': l:hl_group,
         \   'text': ' ' . l:msg,
         \   'bufnr': a:buffer,
