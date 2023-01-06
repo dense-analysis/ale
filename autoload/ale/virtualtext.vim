@@ -75,7 +75,7 @@ function! ale#virtualtext#GetComment(buffer) abort
 endfunction
 
 function! ale#virtualtext#Clear(buffer) abort
-    if !s:has_virt_text
+    if !s:has_virt_text || !bufexists(str2nr(a:buffer))
         return
     endif
 
