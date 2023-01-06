@@ -48,7 +48,7 @@ if !has_key(s:, 'has_virt_text')
 endif
 
 function! ale#virtualtext#Clear(buf) abort
-    if !s:has_virt_text
+    if !s:has_virt_text || !bufexists(str2nr(a:buf))
         return
     endif
 
