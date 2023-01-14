@@ -5,8 +5,12 @@ Before:
 
   " Create a temporary directory and work within it, otherwise these tests
   " cannot be run in parallel.
-  let g:dir = tempname()
+  let g:parent_dir = tempname()
+  let g:dir = ale#path#Simplify(g:parent_dir . '/src')
+
+  call mkdir(g:parent_dir, '', 0750)
   call mkdir(g:dir, '', 0750)
+
   silent! execute 'cd ' . fnameescape(g:dir)
   silent! noautocmd execute 'file ' . fnameescape(ale#path#Simplify(g:dir . '/test.php'))
 
@@ -30,6 +34,7 @@ Execute(The local phpstan executable should be used):
 
   AssertLinter g:executable,
   \ ale#Escape(g:executable) . ' analyze --no-progress --errorFormat json -l ' . ale#Escape('4') . ' %s'
+  AssertLinterCwd v:null
 
 Execute(use_global should override local executable detection):
   let g:ale_php_phpstan_use_global = 1
@@ -77,6 +82,7 @@ Execute(Configuration file exists in current directory):
   \ ale#Escape('phpstan') . ' --version',
   \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json %s'
   \ ]
+  AssertLinterCwd g:dir
 
 Execute(Configuration dist file exists in current directory):
   call writefile(['parameters:', '  level: 7'], './phpstan.neon.dist')
@@ -87,6 +93,7 @@ Execute(Configuration dist file exists in current directory):
   \ ale#Escape('phpstan') . ' --version',
   \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json %s'
   \ ]
+  AssertLinterCwd g:dir
 
 Execute(Configuration file exists in current directory, but force phpstan level):
   call writefile(['parameters:', '  level: 7'], './phpstan.neon')
@@ -119,3 +126,10 @@ Execute(Memory limit parameter is added to the command):
 
   AssertLinter 'phpstan',
   \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json -l ' . ale#Escape('4') . ' --memory-limit ' . ale#Escape('500M') . ' %s'
+
+Execute(Directory is changed to that of the configuration file):
+  call writefile([], '../phpstan.neon')
+
+  AssertLinterCwd g:parent_dir
+  AssertLinter 'phpstan',
+  \ ale#Escape('phpstan') . ' analyze --no-progress --errorFormat json %s'
