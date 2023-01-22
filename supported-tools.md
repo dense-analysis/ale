@@ -263,6 +263,7 @@ formatting.
   * [VSCode HTML language server](https://github.com/hrsh7th/vscode-langservers-extracted)
   * [alex](https://github.com/get-alex/alex)
   * [angular](https://www.npmjs.com/package/@angular/language-server)
+  * [eslint](https://github.com/BenoitZugmeyer/eslint-plugin-html)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [fecs](http://fecs.baidu.com/)
   * [html-beautify](https://beautifier.io/)
