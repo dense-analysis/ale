@@ -6,7 +6,7 @@ Before:
   call ale#assert#SetUpLinterTest('python', 'ruff')
 
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
-  let b:command_tail = ' --format text -'
+  let b:command_tail = ' --format text --stdin-filename %s -'
 
   GivenCommandOutput ['ruff 0.0.83']
 
@@ -26,7 +26,7 @@ Execute(ruff should run with the file path of buffer in old versions):
   GivenCommandOutput ['ruff 0.0.68']
 
   AssertLinterCwd expand('%:p:h')
-  AssertLinter 'ruff', ale#Escape('ruff') . b:command_tail[:-3] . ' %s'
+  AssertLinter 'ruff', ale#Escape('ruff') . b:command_tail[:-23] . ' %s'
 
 Execute(ruff should run with the stdin in new enough versions):
   GivenCommandOutput ['ruff 0.0.83']
@@ -79,7 +79,7 @@ Execute(Setting executable to 'pipenv' appends 'run ruff'):
   let g:ale_python_ruff_use_global = 1
 
   AssertLinter 'path/to/pipenv', ale#Escape('path/to/pipenv') . ' run ruff'
-  \   . ' --format text -'
+  \   . b:command_tail
 
 Execute(Pipenv is detected when python_ruff_auto_pipenv is set):
   let g:ale_python_ruff_auto_pipenv = 1
@@ -87,14 +87,14 @@ Execute(Pipenv is detected when python_ruff_auto_pipenv is set):
 
   AssertLinterCwd expand('%:p:h')
   AssertLinter 'pipenv', ale#Escape('pipenv') . ' run ruff'
-  \   . ' --format text -'
+  \   . b:command_tail
 
 Execute(Setting executable to 'poetry' appends 'run ruff'):
   let g:ale_python_ruff_executable = 'path/to/poetry'
   let g:ale_python_ruff_use_global = 1
 
   AssertLinter 'path/to/poetry', ale#Escape('path/to/poetry') . ' run ruff'
-  \   . ' --format text -'
+  \   . b:command_tail
 
 Execute(poetry is detected when python_ruff_auto_poetry is set):
   let g:ale_python_ruff_auto_poetry = 1
@@ -102,4 +102,4 @@ Execute(poetry is detected when python_ruff_auto_poetry is set):
 
   AssertLinterCwd expand('%:p:h')
   AssertLinter 'poetry', ale#Escape('poetry') . ' run ruff'
-  \   . ' --format text -'
+  \   . b:command_tail
