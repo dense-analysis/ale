@@ -585,6 +585,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#ruff#Fix',
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix python files with ruff.',
+\   },
+\   'pycln': {
+\       'function': 'ale#fixers#pycln#Fix',
+\       'suggested_filetypes': ['python'],
+\       'description': 'remove unused python import statements',
 \   }
 \}
 

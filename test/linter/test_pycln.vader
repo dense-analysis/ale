@@ -1,0 +1,124 @@
+Before:
+  Save g:ale_python_auto_pipenv
+
+  let g:ale_python_auto_pipenv = 0
+
+  call ale#assert#SetUpLinterTest('python', 'pycln')
+
+  let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
+  let b:cmd_tail = ' --check -'
+
+  GivenCommandOutput ['pycln, version 1.3.0']
+
+After:
+  unlet! b:bin_dir
+  unlet! b:executable
+  unlet! b:cmd_tail
+
+  call ale#assert#TearDownLinterTest()
+
+Execute(The pycln callbacks should return the correct default values):
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'pycln', ale#Escape('pycln') . b:cmd_tail
+
+Execute(pycln should run with the file path of buffer in old versions):
+  " version `1.3.0` supports liniting input from stdin
+  GivenCommandOutput ['pycln, version 1.2.99']
+
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'pycln', ale#Escape('pycln') . b:cmd_tail[:-3] . ' %s'
+
+Execute(pycln should run with the stdin in new enough versions):
+  GivenCommandOutput ['pycln, version 1.3.0']
+
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'pycln', ale#Escape('pycln') . b:cmd_tail[:-3] . ' -'
+  " AssertLinter 'pycln', ale#Escape('pycln') . b:cmd_tail[:-3] . '--check -'
+
+Execute(The option for disabling changing directories should work):
+  let g:ale_python_pycln_change_directory = 0
+
+  AssertLinterCwd ''
+  AssertLinter 'pycln', ale#Escape('pycln') . b:cmd_tail
+
+Execute(The pycln executable should be configurable, and escaped properly):
+  let g:ale_python_pycln_executable = 'executable with spaces'
+
+  AssertLinter 'executable with spaces', ale#Escape('executable with spaces') . b:cmd_tail
+
+Execute(The pycln command callback should let you set options):
+  let g:ale_python_pycln_options = '--some-flag'
+  AssertLinter 'pycln', ale#Escape('pycln') . ' --some-flag' . b:cmd_tail
+
+  let g:ale_python_pycln_options = '--some-option value'
+  AssertLinter 'pycln', ale#Escape('pycln') . ' --some-option value' . b:cmd_tail
+
+Execute(The pycln callbacks shouldn't detect virtualenv directories where they don't exist):
+  call ale#test#SetFilename('../test-files/python/no_virtualenv/subdir/foo/bar.py')
+
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/python/no_virtualenv/subdir')
+  AssertLinter 'pycln', ale#Escape('pycln') . b:cmd_tail
+
+Execute(The pycln callbacks should detect virtualenv directories):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+  let b:executable = ale#path#Simplify(
+  \ g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/pycln'
+  \)
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/subdir')
+  AssertLinter b:executable, ale#Escape(b:executable) . b:cmd_tail
+
+Execute(You should able able to use the global pycln instead):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+  let g:ale_python_pycln_use_global = 1
+
+  AssertLinterCwd ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/subdir')
+  AssertLinter 'pycln', ale#Escape('pycln') . b:cmd_tail
+
+Execute(Setting executable to 'pipenv' appends 'run pycln'):
+  let g:ale_python_pycln_executable = 'path/to/pipenv'
+  let g:ale_python_pycln_use_global = 1
+
+  AssertLinter 'path/to/pipenv', ale#Escape('path/to/pipenv') . ' run pycln'
+  \   . b:cmd_tail
+
+Execute(Pipenv is detected when python_pycln_auto_pipenv is set):
+  let g:ale_python_pycln_auto_pipenv = 1
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
+
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'pipenv', ale#Escape('pipenv') . ' run pycln'
+  \   . b:cmd_tail
+
+Execute(Setting executable to 'poetry' appends 'run pycln'):
+  let g:ale_python_pycln_executable = 'path/to/poetry'
+  let g:ale_python_pycln_use_global = 1
+
+  AssertLinter 'path/to/poetry', ale#Escape('path/to/poetry') . ' run pycln'
+  \   . b:cmd_tail
+
+Execute(poetry is detected when python_pycln_auto_poetry is set):
+  let g:ale_python_pycln_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'poetry', ale#Escape('poetry') . ' run pycln'
+  \   . b:cmd_tail
+
+Execute(configuration files set in _config should be supported):
+  let g:ale_python_pycln_config_file = ale#path#Simplify(g:dir . '/../test-files/pycln/other_config.xml')
+
+  AssertLinter 'pycln',
+  \ ale#Escape('pycln')
+  \ . ' --config ' . ale#Escape(ale#path#Simplify(g:dir . '/../test-files/pycln/other_config.xml'))
+  \ . b:cmd_tail
+
+Execute(configuration file set in _options overrides _config):
+  let g:ale_python_pycln_config_file = '/foo.xml'
+  let g:ale_python_pycln_options = '--config /bar.xml'
+
+  AssertLinter 'pycln', ale#Escape('pycln') . ' --config /bar.xml' . b:cmd_tail
+
+  let b:ale_python_pycln_options = '-x --config /bar.xml'
+
+  AssertLinter 'pycln', ale#Escape('pycln') . ' -x --config /bar.xml' . b:cmd_tail
+

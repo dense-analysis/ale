@@ -481,6 +481,7 @@ Notes:
   * `isort`
   * `mypy`
   * `prospector`!!
+  * `pycln`
   * `pycodestyle`
   * `pydocstyle`
   * `pyflakes`

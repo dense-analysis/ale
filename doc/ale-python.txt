@@ -581,6 +581,78 @@ g:ale_python_prospector_auto_poetry       *g:ale_python_prospector_auto_poetry*
 
 
 ===============================================================================
+pycln                                                        *ale-python-pycln*
+
+g:ale_python_pycln_change_directory       *g:ale_python_pycln_change_directory*
+                                          *b:ale_python_pycln_change_directory*
+  Type: |Number|
+  Default: `1`
+
+  If set to `1`, `pycln` will be run from a detected project root, per
+  |ale-python-root|. if set to `0` or no project root detected,
+  `pycln` will be run from the buffer's directory.
+
+
+g:ale_python_pycln_executable                   *g:ale_python_pycln_executable*
+                                                *b:ale_python_pycln_executable*
+  Type: |String|
+  Default: `'pycln'`
+
+  See |ale-integrations-local-executables|
+
+  Set this to `'pipenv'` to invoke `'pipenv` `run` `pycln'`.
+  Set this to `'poetry'` to invoke `'poetry` `run` `pycln'`.
+
+
+g:ale_python_pycln_options                         *g:ale_python_pycln_options*
+                                                   *b:ale_python_pycln_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be changed to add command-line arguments to the pycln
+  invocation.
+
+  For example, to select/enable and/or disable some error codes,
+  you may want to set >
+  let g:ale_python_pycln_options = '--expand-stars'
+
+
+g:ale_python_pycln_config_file                 *g:ale_python_pycln_config_file*
+                                               *b:ale_python_pycln_config_file*
+  Type: |String|
+  Default: `''`
+
+  Use this variable to set the configuration file.
+  If `'--config' ` is found in the |g:ale_python_pycln_options|, then that
+  option value will override the value in this variable.
+
+g:ale_python_pycln_use_global                   *g:ale_python_pycln_use_global*
+                                                *b:ale_python_pycln_use_global*
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
+
+
+g:ale_python_pycln_auto_pipenv                 *g:ale_python_pycln_auto_pipenv*
+                                               *b:ale_python_pycln_auto_pipenv*
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a pipenv, and set the executable to `pipenv`
+  if true. This is overridden by a manually-set executable.
+
+
+g:ale_python_pycln_auto_poetry                 *g:ale_python_pycln_auto_poetry*
+                                               *b:ale_python_pycln_auto_poetry*
+  Type: |Number|
+  Default: `0`
+
+  Detect whether the file is inside a poetry, and set the executable to `poetry`
+  if true. This is overridden by a manually-set executable.
+
+
+===============================================================================
 pycodestyle                                            *ale-python-pycodestyle*
 
 g:ale_python_pycodestyle_executable       *g:ale_python_pycodestyle_executable*
