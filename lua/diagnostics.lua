@@ -7,7 +7,7 @@ local ale_type_to_diagnostic_severity = {
 }
 
 module.sendAleResultsToDiagnostics = function(buffer, loclist)
-  diagnostics = {}
+  local diagnostics = {}
 
   -- Convert all the ALE loclist items to the shape that Neovim's diagnostic
   -- API is expecting.
@@ -36,10 +36,13 @@ module.sendAleResultsToDiagnostics = function(buffer, loclist)
     )
   end
 
+  local virtualtext_enabled_set = {['all'] = true, ['2'] = true, [2] = true, ['current'] = true, ['1'] = true, [1] = true}
+
   vim.diagnostic.set(
     vim.api.nvim_create_namespace('ale'),
     buffer,
-    diagnostics
+    diagnostics,
+    { virtual_text = virtualtext_enabled_set[vim.g.ale_virtualtext_cursor] ~= nil}
   )
 end
 

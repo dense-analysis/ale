@@ -118,11 +118,7 @@ function! ale#virtualtext#ShowCursorWarning(...) abort
 
     let l:buffer = bufnr('')
 
-    if mode(1) isnot# 'n'
-        return
-    endif
-
-    if ale#ShouldDoNothing(l:buffer)
+    if mode(1) isnot# 'n' || g:ale_use_diagnostics_api || ale#ShouldDoNothing(l:buffer)
         return
     endif
 
@@ -146,11 +142,11 @@ function! ale#virtualtext#ShowCursorWarningWithDelay() abort
         return
     endif
 
-    if mode(1) isnot# 'n'
+    call s:StopCursorTimer()
+
+    if mode(1) isnot# 'n' || g:ale_use_diagnostics_api
         return
     endif
-
-    call s:StopCursorTimer()
 
     let l:pos = getpos('.')[0:2]
 
