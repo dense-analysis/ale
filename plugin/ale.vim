@@ -189,11 +189,11 @@ let g:ale_popup_menu_enabled = get(g:, 'ale_popup_menu_enabled', has('gui_runnin
 
 " If 1, disables ALE's built in error display. Instead, all errors are piped
 " to the diagnostics API.
-let g:ale_use_diagnostics_api = get(g:, 'ale_use_diagnostics_api', 0)
+let g:ale_use_neovim_diagnostics_api = get(g:, 'ale_use_neovim_diagnostics_api', 0)
 
-if g:ale_use_diagnostics_api && !has('nvim-0.6')
+if g:ale_use_neovim_diagnostics_api && !has('nvim-0.6')
     " no-custom-checks
-    echoerr('Setting g:ale_use_diagnostics_api to 1 requires Neovim 0.6+.')
+    echoerr('Setting g:ale_use_neovim_diagnostics_api to 1 requires Neovim 0.6+.')
 endif
 
 if g:ale_set_balloons is 1 || g:ale_set_balloons is# 'hover'

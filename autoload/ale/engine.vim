@@ -184,7 +184,7 @@ endfunction
 function! ale#engine#SetResults(buffer, loclist) abort
     let l:linting_is_done = !ale#engine#IsCheckingBuffer(a:buffer)
 
-    if g:ale_use_diagnostics_api
+    if g:ale_use_neovim_diagnostics_api
         call ale#engine#SendResultsToNeovimDiagnostics(a:buffer, a:loclist)
     endif
 
@@ -194,11 +194,11 @@ function! ale#engine#SetResults(buffer, loclist) abort
 
     " Set signs first. This could potentially fix some line numbers.
     " The List could be sorted again here by SetSigns.
-    if !g:ale_use_diagnostics_api && g:ale_set_signs
+    if !g:ale_use_neovim_diagnostics_api && g:ale_set_signs
         call ale#sign#SetSigns(a:buffer, a:loclist)
     endif
 
-    if !g:ale_use_diagnostics_api && g:ale_set_highlights
+    if !g:ale_use_neovim_diagnostics_api && g:ale_set_highlights
         call ale#highlight#SetHighlights(a:buffer, a:loclist)
     endif
 
@@ -207,7 +207,7 @@ function! ale#engine#SetResults(buffer, loclist) abort
         call ale#statusline#Update(a:buffer, a:loclist)
     endif
 
-    if !g:ale_use_diagnostics_api
+    if !g:ale_use_neovim_diagnostics_api
         if g:ale_virtualtext_cursor == 2
             call ale#virtualtext#SetTexts(a:buffer, a:loclist)
         endif
@@ -220,7 +220,7 @@ function! ale#engine#SetResults(buffer, loclist) abort
             call ale#cursor#EchoCursorWarning()
         endif
 
-        if !g:ale_use_diagnostics_api
+        if !g:ale_use_neovim_diagnostics_api
             if g:ale_virtualtext_cursor == 1
                 " Try and show the warning now.
                 " This will only do something meaningful if we're in normal mode.
@@ -249,7 +249,7 @@ endfunction
 function! ale#engine#SendResultsToNeovimDiagnostics(buffer, loclist) abort
     if !has('nvim-0.6')
         " We will warn the user on startup as well if they try to set
-        " g:ale_use_diagnostics_api outside of a Neovim context.
+        " g:ale_use_neovim_diagnostics_api outside of a Neovim context.
         return
     endif
 

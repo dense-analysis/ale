@@ -118,7 +118,9 @@ function! ale#virtualtext#ShowCursorWarning(...) abort
 
     let l:buffer = bufnr('')
 
-    if mode(1) isnot# 'n' || g:ale_use_diagnostics_api || ale#ShouldDoNothing(l:buffer)
+    if mode(1) isnot# 'n'
+    \|| g:ale_use_neovim_diagnostics_api
+    \|| ale#ShouldDoNothing(l:buffer)
         return
     endif
 
@@ -144,7 +146,8 @@ function! ale#virtualtext#ShowCursorWarningWithDelay() abort
 
     call s:StopCursorTimer()
 
-    if mode(1) isnot# 'n' || g:ale_use_diagnostics_api
+    if mode(1) isnot# 'n'
+    \|| g:ale_use_neovim_diagnostics_api
         return
     endif
 
