@@ -52,6 +52,7 @@ Before:
   Save g:ale_sign_highlight_linenrs
   Save g:ale_statusline_format
   Save g:ale_type_map
+  Save g:ale_use_neovim_diagnostics_api
   Save g:ale_use_global_executables
   Save g:ale_virtualtext_cursor
   Save g:ale_warn_about_trailing_blank_lines
@@ -110,6 +111,7 @@ Before:
   let g:ale_sign_highlight_linenrs = 0
   let g:ale_statusline_format = ['%d error(s)', '%d warning(s)', 'OK']
   let g:ale_type_map = {}
+  let g:ale_use_neovim_diagnostics_api = 0
   let g:ale_use_global_executables = v:null
   let g:ale_virtualtext_cursor = 'disabled'
   let g:ale_warn_about_trailing_blank_lines = 1
@@ -189,6 +191,7 @@ Before:
   \  'let g:ale_sign_highlight_linenrs = 0',
   \  'let g:ale_statusline_format = [''%d error(s)'', ''%d warning(s)'', ''OK'']',
   \  'let g:ale_type_map = {}',
+  \  'let g:ale_use_neovim_diagnostics_api = 0',
   \  'let g:ale_use_global_executables = v:null',
   \  'let g:ale_virtualtext_cursor = ''disabled''',
   \  'let g:ale_warn_about_trailing_blank_lines = 1',

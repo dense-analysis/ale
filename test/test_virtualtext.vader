@@ -4,6 +4,7 @@ Before:
   Save g:ale_virtualtext_delay
   Save g:ale_virtualtext_prefix
   Save b:ale_virtualtext_prefix
+  Save g:ale_use_neovim_diagnostics_api
 
   call ale#virtualtext#ResetDataForTests()
 
@@ -36,6 +37,7 @@ Before:
   \   ],
   \ },
   \}
+  let g:ale_use_neovim_diagnostics_api = 0
 
 After:
   Restore
@@ -176,4 +178,17 @@ Execute(We should set errors across all lines):
       AssertEqual ['ALEVirtualTextWarning', 'ALEVirtualTextWarning'],
       \ map(prop_list(2), {_, v -> v.type})
     endif
+  endif
+
+Execute(We should not set cursor messages when Neovim diagnostics are enabled):
+  let g:ale_use_neovim_diagnostics_api = 1
+
+  if has('patch-9.0.0297') || has('nvim-0.8.0')
+    let g:ale_virtualtext_cursor = 'current'
+    call cursor(1, 1)
+    call ale#virtualtext#ShowCursorWarningWithDelay()
+    " Tick the timer.
+    sleep 1ms
+
+    AssertEqual '', ale#virtualtext#GetLastMessageForTests()
   endif

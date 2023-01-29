@@ -11,6 +11,7 @@ Before:
   Save g:ale_set_quickfix
   Save g:ale_set_signs
   Save g:ale_command_wrapper
+  Save g:ale_use_neovim_diagnostics_api
 
   let g:ale_command_wrapper = ''
   let g:ale_buffer_info = {}
@@ -22,6 +23,7 @@ Before:
   let g:ale_set_loclist = 0
   let g:ale_set_highlights = 0
   let g:ale_echo_cursor = 0
+  let g:ale_use_neovim_diagnostics_api = 0
 
   call ale#sign#Clear()
 
@@ -74,3 +76,10 @@ Execute(The signs should be updated after linting is done):
   call ale#test#FlushJobs()
 
   AssertEqual [['1', 'ALEWarningSign'], ['2', 'ALEErrorSign']], CollectSigns()
+
+Execute(Signs should not be set when diagnostics API integration is enabled):
+  let g:ale_use_neovim_diagnostics_api = 1
+  ALELint
+  call ale#test#FlushJobs()
+
+  AssertEqual [], CollectSigns()

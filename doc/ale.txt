@@ -121,6 +121,7 @@ circumstances.
 ALE will report problems with your code in the following ways, listed with
 their relevant options.
 
+* Via the Neovim diagnostics API (Off by default)  - |g:ale_use_neovim_diagnostics_api|
 * By updating loclist. (On by default)             - |g:ale_set_loclist|
 * By updating quickfix. (Off by default)           - |g:ale_set_quickfix|
 * By setting error highlights.                     - |g:ale_set_highlights|
@@ -1235,7 +1236,7 @@ g:ale_floating_preview                                 *g:ale_floating_preview*
   |g:ale_detail_to_floating_preview| to `1`.
 
 
-g:ale_floating_preview_popup_opts             *g:ale_floating_preview_popup_opts*
+g:ale_floating_preview_popup_opts           *g:ale_floating_preview_popup_opts*
 
   Type: |String| or |Dictionary|
   Default: `''`
@@ -1258,7 +1259,7 @@ g:ale_floating_preview_popup_opts             *g:ale_floating_preview_popup_opts
 <
 
 
-g:ale_floating_window_border                       *g:ale_floating_window_border*
+g:ale_floating_window_border                     *g:ale_floating_window_border*
 
   Type: |List|
   Default: `['|', '-', '+', '+', '+', '+', '|', '-']`
@@ -2286,6 +2287,26 @@ g:ale_use_global_executables                     *g:ale_use_global_executables*
 
   See |ale-integrations-local-executables| for more information on those
   options.
+
+
+g:ale_use_neovim_diagnostics_api             *g:ale_use_neovim_diagnostics_api*
+
+  Type: |Number|
+  Default: `0`
+
+  If enabled, this option will disable ALE's standard UI, and instead send
+  all linter output to Neovim's diagnostics API. This allows you to collect
+  errors from nvim-lsp, ALE, and anything else that uses diagnostics all in
+  one place. The following options are ignored when using the diagnostics API:
+
+    - |g:ale_set_highlights|
+    - |g:ale_set_signs|
+    - |g:ale_virtualtext_cursor|
+
+  To enable this option, set the value to `1`.
+
+  This option requires Neovim 0.6+, as that version introduces the diagnostics
+  API.
 
 
 g:ale_virtualtext_cursor                             *g:ale_virtualtext_cursor*
