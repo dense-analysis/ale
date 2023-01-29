@@ -1981,8 +1981,6 @@ g:ale_use_diagnostics_api                           *g:ale_use_diagnostics_api*
   one place. The following options are ignored when using the diagnostics API:
 
     - |g:ale_set_highlights|
-    - |g:ale_set_loclist|
-    - |g:ale_set_quickfix|
     - |g:ale_set_signs|
     - |g:ale_virtualtext_cursor|
 
