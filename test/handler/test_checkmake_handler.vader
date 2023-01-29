@@ -18,6 +18,6 @@ Execute(Parsing checkmake errors should work):
   \   }
   \ ],
   \ ale_linters#make#checkmake#Handle(42, [
-  \   'This shouldnt match',
+  \   "This shouldn't match",
   \   '1:woops:an error has occurred',
   \ ])

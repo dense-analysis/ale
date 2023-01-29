@@ -51,7 +51,7 @@ Before:
   Save g:ale_pattern_options_enabled
   Save g:ale_hover_cursor
 
-  " Turn everything on by defaul for these tests.
+  " Turn everything on by default for these tests.
   let g:ale_completion_enabled = 1
   let g:ale_echo_cursor = 1
   let g:ale_enabled = 1
@@ -118,7 +118,7 @@ Execute (Only the required events should be bound even if various settings are o
   \ ],
   \ CheckAutocmd('ALEEvents')
 
-Execute (The cursor hoever event should be enabled with g:ale_hover_cursor = 1):
+Execute (The cursor hover event should be enabled with g:ale_hover_cursor = 1):
   let g:ale_enabled = 1
   let g:ale_completion_enabled = 0
   let g:ale_echo_cursor = 0

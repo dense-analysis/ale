@@ -23,7 +23,7 @@ Execute(The ansible-lint handler for version group <5 should handle basic errors
   \ fnamemodify(tempname(), ':h') . '/test_playbook.yml:35: [EANSIBLE0002] Trailing whitespace',
   \ ])
 
-Execute(The ansible-lint handler for version group <5 should supress trailing whitespace output when the option is used):
+Execute(The ansible-lint handler for version group <5 should suppress trailing whitespace output when the option is used):
   let b:ale_warn_about_trailing_whitespace = 0
 
   AssertEqual
@@ -93,3 +93,9 @@ Execute (The ansible-lint handler should ignore errors from other files):
   \ ale_linters#ansible#ansible_lint#Handle(bufnr(''), [5, 1, 2], [
   \   '/foo/bar/roles/test_playbook.yml:6: [command-instead-of-module] [VERY_LOW] curl used in place of get_url or uri module',
   \ ])
+
+Execute (The ansible-lint handler should work with empty input):
+  AssertEqual
+  \ [
+  \ ],
+  \ ale_linters#ansible#ansible_lint#Handle(bufnr(''), [6, 0, 0], [])

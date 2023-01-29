@@ -22,6 +22,19 @@ function! ale_linters#python#pylsp#GetExecutable(buffer) abort
     return ale#python#FindExecutable(a:buffer, 'python_pylsp', ['pylsp'])
 endfunction
 
+" Force the cwd of the server to be the same as the project root to
+" fix issues with treating local files matching first or third party library
+" names being imported incorrectly.
+function! ale_linters#python#pylsp#GetCwd(buffer) abort
+    let l:fake_linter = {
+    \   'name': 'pylsp',
+    \   'project_root': function('ale#python#FindProjectRoot'),
+    \}
+    let l:root = ale#lsp_linter#FindProjectRoot(a:buffer, l:fake_linter)
+
+    return !empty(l:root) ? l:root : v:null
+endfunction
+
 function! ale_linters#python#pylsp#GetCommand(buffer) abort
     let l:executable = ale_linters#python#pylsp#GetExecutable(a:buffer)
 
@@ -36,6 +49,7 @@ call ale#linter#Define('python', {
 \   'name': 'pylsp',
 \   'lsp': 'stdio',
 \   'executable': function('ale_linters#python#pylsp#GetExecutable'),
+\   'cwd': function('ale_linters#python#pylsp#GetCwd'),
 \   'command': function('ale_linters#python#pylsp#GetCommand'),
 \   'project_root': function('ale#python#FindProjectRoot'),
 \   'completion_filter': 'ale#completion#python#CompletionItemFilter',

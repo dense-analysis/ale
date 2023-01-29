@@ -261,7 +261,7 @@ Execute(Only ALE highlights should be restored when buffers are restored):
     \ sort(GetMatchesWithoutIDs(), {m1, m2 -> m1.group < m2.group ? -1 : 1})
   endif
 
-Execute(Higlight end columns should set an appropriate size):
+Execute(Highlight end columns should set an appropriate size):
   call ale#highlight#SetHighlights(bufnr('%'), [
   \ {'bufnr': bufnr('%'), 'type': 'E', 'lnum': 3, 'col': 2, 'end_col': 5},
   \ {'bufnr': bufnr('%'), 'type': 'W', 'lnum': 4, 'col': 1, 'end_col': 5},
@@ -274,7 +274,7 @@ Execute(Higlight end columns should set an appropriate size):
   \ ],
   \ GetMatchesWithoutIDs()
 
-Execute(Higlight end columns should set an appropriate size):
+Execute(Highlight end columns should set an appropriate size):
   call ale#highlight#SetHighlights(bufnr('%'), [
   \ {'bufnr': bufnr('%') - 1, 'type': 'E', 'lnum': 1, 'col': 1},
   \ {'bufnr': bufnr('%'), 'type': 'E', 'lnum': 1, 'col': 1},
@@ -424,7 +424,7 @@ Execute(Highlights should be cleared when ALE is disabled):
 
 Execute(Line highlights should be set when signs are disabled):
   " This will mess with your settings, but it needs to be tested.
-  " We need to match highlights case-insenstive when removing them.
+  " We need to match highlights case-insensitively when removing them.
   hi link aleerrorline spellbad
 
   let g:ale_set_signs = 0

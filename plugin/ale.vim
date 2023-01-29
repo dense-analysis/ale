@@ -127,8 +127,8 @@ let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
 " This flag can be set to 1 to automatically show errors in the preview window.
 let g:ale_cursor_detail = get(g:, 'ale_cursor_detail', 0)
 
-" This flag can be set to 1 to enable virtual text when the cursor moves.
-let g:ale_virtualtext_cursor = get(g:, 'ale_virtualtext_cursor', 0)
+" This flag can be changed to disable/enable virtual text.
+let g:ale_virtualtext_cursor = get(g:, 'ale_virtualtext_cursor', (has('nvim-0.3.2') || has('patch-9.0.0297') && has('textprop') && has('popupwin')) ? 'all' : 'disabled')
 
 " This flag can be set to 1 to enable LSP hover messages at the cursor.
 let g:ale_hover_cursor = get(g:, 'ale_hover_cursor', 1)
@@ -332,6 +332,7 @@ nnoremap <silent> <Plug>(ale_go_to_type_definition) :ALEGoToTypeDefinition<Retur
 nnoremap <silent> <Plug>(ale_go_to_type_definition_in_tab) :ALEGoToTypeDefinition -tab<Return>
 nnoremap <silent> <Plug>(ale_go_to_type_definition_in_split) :ALEGoToTypeDefinition -split<Return>
 nnoremap <silent> <Plug>(ale_go_to_type_definition_in_vsplit) :ALEGoToTypeDefinition -vsplit<Return>
+nnoremap <silent> <Plug>(ale_go_to_implementation) :ALEGoToImplementation<Return>
 nnoremap <silent> <Plug>(ale_go_to_implementation_in_tab) :ALEGoToImplementation -tab<Return>
 nnoremap <silent> <Plug>(ale_go_to_implementation_in_split) :ALEGoToImplementation -split<Return>
 nnoremap <silent> <Plug>(ale_go_to_implementation_in_vsplit) :ALEGoToImplementation -vsplit<Return>

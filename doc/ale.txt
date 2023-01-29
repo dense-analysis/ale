@@ -751,7 +751,7 @@ g:airline#extensions#ale#enabled             *g:airline#extensions#ale#enabled*
 g:ale_cache_executable_check_failures   *g:ale_cache_executable_check_failures*
 
   Type: |Number|
-  Default: undefined
+  Default: not set
 
   When set to `1`, ALE will cache failing executable checks for linters. By
   default, only executable checks which succeed will be cached.
@@ -865,7 +865,7 @@ g:ale_completion_enabled                             *g:ale_completion_enabled*
                                     *g:ale_completion_tsserver_remove_warnings*
 g:ale_completion_tsserver_remove_warnings
 
-  Type: Number
+  Type: |Number|
   Default: `0`
 
   When this option is set to `0`, ALE will return all completion items,
@@ -875,7 +875,7 @@ g:ale_completion_tsserver_remove_warnings
 
 g:ale_completion_autoimport                       *g:ale_completion_autoimport*
 
-  Type: Number
+  Type: |Number|
   Default: `1`
 
   When this option is set to `1`, ALE will try to automatically import
@@ -1064,7 +1064,8 @@ g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
     `%s`           - replaced with the text for the problem
     `%...code...% `- replaced with the error code
     `%linter%`     - replaced with the name of the linter
-    `%severity%`   - replaced with the severity of the problem
+    `%severity%`   - replaced with the severity of the problem (e.g. `Error`)
+    `%type%`       - replaced with the type of the problem (e.g. `E`)
 
   The strings for `%severity%` can be configured with the following options.
 
@@ -1648,7 +1649,7 @@ g:ale_linters                                                   *g:ale_linters*
   \   'jsonc': [],
   \   'perl': ['perlcritic'],
   \   'perl6': [],
-  \   'python': ['flake8', 'mypy', 'pylint', 'pyright'],
+  \   'python': ['flake8', 'mypy', 'pylint', 'pyright', 'ruff'],
   \   'rust': ['cargo', 'rls'],
   \   'spec': [],
   \   'text': [],
@@ -1837,7 +1838,7 @@ g:ale_max_signs                                               *g:ale_max_signs*
 g:ale_maximum_file_size                               *g:ale_maximum_file_size*
                                                       *b:ale_maximum_file_size*
   Type: |Number|
-  Default: undefined
+  Default: not set
 
   A maximum file size in bytes for ALE to check. If set to any positive
   number, ALE will skip checking files larger than the given size.
@@ -1880,7 +1881,7 @@ g:ale_open_list                                               *g:ale_open_list*
 g:ale_pattern_options                                   *g:ale_pattern_options*
 
   Type: |Dictionary|
-  Default: undefined
+  Default: not set
 
   This option maps regular expression patterns to |Dictionary| values for
   buffer variables. This option can be set to automatically configure
@@ -1909,7 +1910,7 @@ g:ale_pattern_options                                   *g:ale_pattern_options*
 g:ale_pattern_options_enabled                   *g:ale_pattern_options_enabled*
 
   Type: |Number|
-  Default: undefined
+  Default: not set
 
   This option can be used for disabling pattern options. If set to `0`, ALE
   will not set buffer variables per |g:ale_pattern_options|.
@@ -1955,7 +1956,7 @@ g:ale_root                                                         *g:ale_root*
                                                                    *b:ale_root*
 
   Type: |Dictionary| or |String|
-  Default: {}
+  Default: `{}`
 
   This option is used to determine the project root for a linter. If the value
   is a |Dictionary|, it maps a linter to either a |String| containing the
@@ -2007,7 +2008,7 @@ g:ale_set_balloons                                         *g:ale_set_balloons*
 g:ale_set_balloons_legacy_echo                 *g:ale_set_balloons_legacy_echo*
                                                *b:ale_set_balloons_legacy_echo*
   Type: |Number|
-  Default: undefined
+  Default: not set
 
   If set to `1`, moving your mouse over documents in Vim will make ALE ask
   `tsserver` or `LSP` servers for information about the symbol where the mouse
@@ -2241,10 +2242,10 @@ g:ale_sign_highlight_linenrs                     *g:ale_sign_highlight_linenrs*
 
 g:ale_update_tagstack                                   *g:ale_update_tagstack*
                                                         *b:ale_update_tagstack*
- Type: |Number|
- Default: `1`
+  Type: |Number|
+  Default: `1`
 
- This option can be set to disable updating Vim's |tagstack| automatically.
+  This option can be set to disable updating Vim's |tagstack| automatically.
 
 
 g:ale_type_map                                                 *g:ale_type_map*
@@ -2311,16 +2312,14 @@ g:ale_use_neovim_diagnostics_api             *g:ale_use_neovim_diagnostics_api*
 g:ale_virtualtext_cursor                             *g:ale_virtualtext_cursor*
 
   Type: |Number|
-  Default: `0`
+  Default: `'all'` (if supported, otherwise `'disabled'`)
 
-  When this option is set to `1`, a message will be shown when a cursor is
-  near a warning or error. ALE will attempt to find the warning or error at a
-  column nearest to the cursor when the cursor is resting on a line which
-  contains a warning or error. This option can be set to `0` to disable this
-  behavior.
-  When this option is set to `2`, then all warnings will be shown for the
-  whole buffer, regardless of if the cursor is currently positioned in that
-  line.
+  This option controls how ALE will display problems using |virtual-text|.
+  The following values can be used.
+
+  `'all'`, `'2'`, or `2`         - Show problems for all lines.
+  `'current'`, `'1'`, or `1`     - Show problems for the current line.
+  `'disabled'`, `'0'`, or `0`    - Do not show problems with virtual-text.
 
   Messages are only displayed after a short delay. See |g:ale_virtualtext_delay|.
 
@@ -2337,7 +2336,6 @@ g:ale_virtualtext_cursor                             *g:ale_virtualtext_cursor*
 
 g:ale_virtualtext_delay                               *g:ale_virtualtext_delay*
                                                       *b:ale_virtualtext_delay*
-
   Type: |Number|
   Default: `10`
 
@@ -2349,11 +2347,23 @@ g:ale_virtualtext_delay                               *g:ale_virtualtext_delay*
 
 
 g:ale_virtualtext_prefix                             *g:ale_virtualtext_prefix*
-
+                                                     *b:ale_virtualtext_prefix*
   Type: |String|
-  Default: `'> '`
+  Default: `'%comment% %type%: '`
 
   Prefix to be used with |g:ale_virtualtext_cursor|.
+
+  This setting can be changed in each buffer with `b:ale_virtualtext_prefix`.
+
+  All of the same format markers used for |g:ale_echo_msg_format| can be used
+  for defining the prefix, including some additional sequences of characters.
+
+    `%comment%` - replaced with comment characters in the current language
+
+  ALE will read the comment characters from |&commentstring|, reading only the
+  part before `%s`, with whitespace trimmed. If comment syntax cannot be
+  pulled from |&commentstring|, ALE will default to `'#'`.
+
 
 g:ale_virtualenv_dir_names                         *g:ale_virtualenv_dir_names*
                                                    *b:ale_virtualenv_dir_names*
@@ -2531,7 +2541,7 @@ ALEStyleWarningSignLineNr                           *ALEStyleWarningSignLineNr*
 
 ALEVirtualTextError                                       *ALEVirtualTextError*
 
-  Default: `highlight link ALEVirtualTextError ALEError`
+  Default: `highlight link ALEVirtualTextError Comment`
 
   The highlight for virtualtext errors. See |g:ale_virtualtext_cursor|.
 
@@ -2559,7 +2569,7 @@ ALEVirtualTextStyleWarning                         *ALEVirtualTextStyleWarning*
 
 ALEVirtualTextWarning                                   *ALEVirtualTextWarning*
 
-  Default: `highlight link ALEVirtualTextWarning ALEWarning`
+  Default: `highlight link ALEVirtualTextWarning Comment`
 
   The highlight for virtualtext errors. See |g:ale_virtualtext_cursor|.
 
@@ -2788,6 +2798,7 @@ documented in additional help files.
     gnatpp................................|ale-ada-gnatpp|
     ada-language-server...................|ale-ada-language-server|
   ansible.................................|ale-ansible-options|
+    ansible-language-server...............|ale-ansible-language-server|
     ansible-lint..........................|ale-ansible-ansible-lint|
   apkbuild................................|ale-apkbuild-options|
     apkbuild-lint.........................|ale-apkbuild-apkbuild-lint|
@@ -2854,6 +2865,7 @@ documented in additional help files.
     flawfinder............................|ale-cpp-flawfinder|
     uncrustify............................|ale-cpp-uncrustify|
   c#......................................|ale-cs-options|
+    clang-format..........................|ale-cs-clangformat|
     csc...................................|ale-cs-csc|
     cspell................................|ale-cs-cspell|
     dotnet-format.........................|ale-cs-dotnet-format|
@@ -2868,9 +2880,9 @@ documented in additional help files.
     stylelint.............................|ale-css-stylelint|
     vscodecss.............................|ale-css-vscode|
   cuda....................................|ale-cuda-options|
-    nvcc..................................|ale-cuda-nvcc|
-    clangd................................|ale-cuda-clangd|
     clang-format..........................|ale-cuda-clangformat|
+    clangd................................|ale-cuda-clangd|
+    nvcc..................................|ale-cuda-nvcc|
   d.......................................|ale-d-options|
     dfmt..................................|ale-d-dfmt|
     dls...................................|ale-d-dls|
@@ -2906,6 +2918,7 @@ documented in additional help files.
   erlang..................................|ale-erlang-options|
     dialyzer..............................|ale-erlang-dialyzer|
     elvis.................................|ale-erlang-elvis|
+    erlang_ls.............................|ale-erlang-erlang_ls|
     erlc..................................|ale-erlang-erlc|
     erlfmt................................|ale-erlang-erlfmt|
     syntaxerl.............................|ale-erlang-syntaxerl|
@@ -2994,6 +3007,7 @@ documented in additional help files.
     ispc..................................|ale-ispc-ispc|
   java....................................|ale-java-options|
     checkstyle............................|ale-java-checkstyle|
+    clang-format..........................|ale-java-clangformat|
     cspell................................|ale-java-cspell|
     javac.................................|ale-java-javac|
     google-java-format....................|ale-java-google-java-format|
@@ -3002,6 +3016,7 @@ documented in additional help files.
     eclipselsp............................|ale-java-eclipselsp|
     uncrustify............................|ale-java-uncrustify|
   javascript..............................|ale-javascript-options|
+    clang-format..........................|ale-javascript-clangformat|
     cspell................................|ale-javascript-cspell|
     deno..................................|ale-javascript-deno|
     dprint................................|ale-javascript-dprint|
@@ -3017,6 +3032,7 @@ documented in additional help files.
     standard..............................|ale-javascript-standard|
     xo....................................|ale-javascript-xo|
   json....................................|ale-json-options|
+    clang-format..........................|ale-json-clangformat|
     cspell................................|ale-json-cspell|
     dprint................................|ale-json-dprint|
     eslint................................|ale-json-eslint|
@@ -3057,6 +3073,8 @@ documented in additional help files.
     luafmt................................|ale-lua-luafmt|
     selene................................|ale-lua-selene|
     stylua................................|ale-lua-stylua|
+  make....................................|ale-make-options|
+    checkmake.............................|ale-make-checkmake|
   markdown................................|ale-markdown-options|
     cspell................................|ale-markdown-cspell|
     dprint................................|ale-markdown-dprint|
@@ -3082,10 +3100,11 @@ documented in additional help files.
   nroff...................................|ale-nroff-options|
     write-good............................|ale-nroff-write-good|
   objc....................................|ale-objc-options|
+    ccls..................................|ale-objc-ccls|
     clang.................................|ale-objc-clang|
+    clang-format..........................|ale-objc-clangformat|
     clangd................................|ale-objc-clangd|
     uncrustify............................|ale-objc-uncrustify|
-    ccls..................................|ale-objc-ccls|
   objcpp..................................|ale-objcpp-options|
     clang.................................|ale-objcpp-clang|
     clangd................................|ale-objcpp-clangd|
@@ -3144,6 +3163,7 @@ documented in additional help files.
   proto...................................|ale-proto-options|
     buf-format............................|ale-proto-buf-format|
     buf-lint..............................|ale-proto-buf-lint|
+    clang-format..........................|ale-proto-clangformat|
     protoc-gen-lint.......................|ale-proto-protoc-gen-lint|
     protolint.............................|ale-proto-protolint|
   pug.....................................|ale-pug-options|
@@ -3170,6 +3190,7 @@ documented in additional help files.
     isort.................................|ale-python-isort|
     mypy..................................|ale-python-mypy|
     prospector............................|ale-python-prospector|
+    pycln.................................|ale-python-pycln|
     pycodestyle...........................|ale-python-pycodestyle|
     pydocstyle............................|ale-python-pydocstyle|
     pyflakes..............................|ale-python-pyflakes|
@@ -3179,7 +3200,9 @@ documented in additional help files.
     pylsp.................................|ale-python-pylsp|
     pyre..................................|ale-python-pyre|
     pyright...............................|ale-python-pyright|
+    refurb................................|ale-python-refurb|
     reorder-python-imports................|ale-python-reorder_python_imports|
+    ruff..................................|ale-python-ruff|
     unimport..............................|ale-python-unimport|
     vulture...............................|ale-python-vulture|
     yapf..................................|ale-python-yapf|
@@ -3189,6 +3212,9 @@ documented in additional help files.
     languageserver........................|ale-r-languageserver|
     lintr.................................|ale-r-lintr|
     styler................................|ale-r-styler|
+  racket..................................|ale-racket-options|
+    racket_langserver.....................|ale-racket-langserver|
+    raco_fmt..............................|ale-racket-raco-fmt|
   reasonml................................|ale-reasonml-options|
     merlin................................|ale-reasonml-merlin|
     ols...................................|ale-reasonml-ols|
@@ -3258,6 +3284,7 @@ documented in additional help files.
   sql.....................................|ale-sql-options|
     dprint................................|ale-sql-dprint|
     pgformatter...........................|ale-sql-pgformatter|
+    sqlfluff..............................|ale-sql-sqlfluff|
     sqlfmt................................|ale-sql-sqlfmt|
     sqlformat.............................|ale-sql-sqlformat|
   stylus..................................|ale-stylus-options|
@@ -4579,7 +4606,7 @@ ALEFixPost                                                 *ALEFixPost-autocmd*
   These |User| autocommands are triggered before and after every lint or fix
   cycle. They can be used to update statuslines, send notifications, etc.
   The autocmd commands are run with |:silent|, so |:unsilent| is required for
-  echoing messges.
+  echoing messages.
 
   For example to change the color of the statusline while the linter is
   running:
@@ -4612,7 +4639,7 @@ ALEJobStarted                                           *ALEJobStarted-autocmd*
 ALELSPStarted                                           *ALELSPStarted-autocmd*
                                                                 *ALELSPStarted*
 
-  This |User| autocommand is trigged immediately after an LSP connection is
+  This |User| autocommand is triggered immediately after an LSP connection is
   successfully initialized. This provides a way to perform any additional
   initialization work, such as setting up buffer-level mappings.
 

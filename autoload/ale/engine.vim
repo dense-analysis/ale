@@ -208,9 +208,8 @@ function! ale#engine#SetResults(buffer, loclist) abort
     endif
 
     if !g:ale_use_neovim_diagnostics_api
-        if g:ale_virtualtext_cursor == 2
-            call ale#virtualtext#SetTexts(a:buffer, a:loclist)
-        endif
+    \&& (g:ale_virtualtext_cursor is# 'all' || g:ale_virtualtext_cursor == 2)
+        call ale#virtualtext#SetTexts(a:buffer, a:loclist)
     endif
 
     if l:linting_is_done
@@ -221,11 +220,10 @@ function! ale#engine#SetResults(buffer, loclist) abort
         endif
 
         if !g:ale_use_neovim_diagnostics_api
-            if g:ale_virtualtext_cursor == 1
-                " Try and show the warning now.
-                " This will only do something meaningful if we're in normal mode.
-                call ale#virtualtext#ShowCursorWarning()
-            endif
+        \&& (g:ale_virtualtext_cursor is# 'current' || g:ale_virtualtext_cursor == 1)
+            " Try and show the warning now.
+            " This will only do something meaningful if we're in normal mode.
+            call ale#virtualtext#ShowCursorWarning()
         endif
 
         " Reset the save event marker, used for opening windows, etc.

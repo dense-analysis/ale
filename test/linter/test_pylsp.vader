@@ -10,6 +10,8 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The pylsp command callback should return default string):
+  call ale#test#SetFilename('./foo.py')
+
   AssertLinter 'pylsp', ale#Escape('pylsp')
 
 Execute(The pylsp executable should be configurable):
@@ -21,6 +23,12 @@ Execute(The pylsp command callback should let you set options):
   let g:ale_python_pylsp_options = '--some-option'
 
   AssertLinter 'pylsp', ale#Escape('pylsp') . ' --some-option'
+
+Execute(The cwd and project root should be detected correctly):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  AssertLinterCwd ale#test#GetFilename('../test-files/python/with_virtualenv/subdir')
+  AssertLSPProject ale#test#GetFilename('../test-files/python/with_virtualenv/subdir')
 
 Execute(The pylsp executable should be run from the virtualenv path):
   call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')

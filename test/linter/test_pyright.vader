@@ -10,6 +10,8 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The command callback should return the correct default string):
+  call ale#test#SetFilename('./foo.py')
+
   AssertLinter
   \ 'pyright-langserver',
   \ ale#Escape('pyright-langserver') . ' --stdio'
@@ -30,6 +32,12 @@ Execute(The default configuration should be mostly empty):
 
   AssertLSPConfig {'python': {}}
 
+Execute(The cwd and project root should be detected correctly):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  AssertLinterCwd ale#test#GetFilename('../test-files/python/with_virtualenv/subdir')
+  AssertLSPProject ale#test#GetFilename('../test-files/python/with_virtualenv/subdir')
+
 Execute(virtualenv paths should be set in configuration by default):
   call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
 
@@ -40,7 +48,7 @@ Execute(virtualenv paths should be set in configuration by default):
   \ },
   \}
 
-Execute(The pythonPath should be set based on whatever the ovveride for the venvPath is set to):
+Execute(The pythonPath should be set based on whatever the override for the venvPath is set to):
   call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
 
   " This overrides the default detection of the path.

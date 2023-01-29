@@ -19,6 +19,7 @@ After:
   Restore
   silent! unlet b:ale_dockerfile_hadolint_use_docker
   silent! unlet b:ale_dockerfile_hadolint_docker_image
+  silent! unlet b:ale_dockerfile_hadolint_options
 
 
 Execute(linter honors ..._use_docker correctly):
@@ -55,15 +56,30 @@ Execute(command is correct when using docker):
   let b:ale_dockerfile_hadolint_use_docker = 'always'
 
   AssertEqual
-  \ "docker run --rm -i hadolint/hadolint hadolint --no-color -",
+  \ "docker run --rm -i hadolint/hadolint hadolint  --no-color -",
   \ ale_linters#dockerfile#hadolint#GetCommand(bufnr(''))
 
+Execute(command is correct when using docker and supplying options):
+  let b:ale_dockerfile_hadolint_use_docker = 'always'
+  let b:ale_dockerfile_hadolint_options = '--ignore DL3006'
+
+  AssertEqual
+  \ "docker run --rm -i hadolint/hadolint hadolint --ignore DL3006 --no-color -",
+  \ ale_linters#dockerfile#hadolint#GetCommand(bufnr(''))
 
 Execute(command is correct when not docker):
   let b:ale_dockerfile_hadolint_use_docker = 'never'
 
   AssertEqual
-  \ "hadolint --no-color -",
+  \ "hadolint  --no-color -",
+  \ ale_linters#dockerfile#hadolint#GetCommand(bufnr(''))
+
+Execute(command is correct when not docker and supplying options):
+  let b:ale_dockerfile_hadolint_use_docker = 'never'
+  let b:ale_dockerfile_hadolint_options = '--ignore DL3006'
+
+  AssertEqual
+  \ "hadolint --ignore DL3006 --no-color -",
   \ ale_linters#dockerfile#hadolint#GetCommand(bufnr(''))
 
 Execute(test warnings from hadolint):

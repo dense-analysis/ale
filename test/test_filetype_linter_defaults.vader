@@ -83,7 +83,7 @@ Execute(The defaults for the perl6 filetype should be correct):
   AssertEqual [], GetLinterNames('perl6')
 
 Execute(The defaults for the python filetype should be correct):
-  AssertEqual ['flake8', 'mypy', 'pylint', 'pyright'], GetLinterNames('python')
+  AssertEqual ['flake8', 'mypy', 'pylint', 'pyright', 'ruff'], GetLinterNames('python')
 
   let g:ale_linters_explicit = 1
 
