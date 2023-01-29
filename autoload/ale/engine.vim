@@ -188,23 +188,23 @@ function! ale#engine#SetResults(buffer, loclist) abort
         call ale#engine#SendResultsToNeovimDiagnostics(a:buffer, a:loclist)
     endif
 
-    if g:ale_set_quickfix || g:ale_set_loclist
-        call ale#list#SetLists(a:buffer, a:loclist)
-    endif
-
     " Set signs first. This could potentially fix some line numbers.
     " The List could be sorted again here by SetSigns.
     if !g:ale_use_neovim_diagnostics_api && g:ale_set_signs
         call ale#sign#SetSigns(a:buffer, a:loclist)
     endif
 
-    if !g:ale_use_neovim_diagnostics_api && g:ale_set_highlights
-        call ale#highlight#SetHighlights(a:buffer, a:loclist)
+    if g:ale_set_quickfix || g:ale_set_loclist
+        call ale#list#SetLists(a:buffer, a:loclist)
     endif
 
     if exists('*ale#statusline#Update')
         " Don't load/run if not already loaded.
         call ale#statusline#Update(a:buffer, a:loclist)
+    endif
+
+    if !g:ale_use_neovim_diagnostics_api && g:ale_set_highlights
+        call ale#highlight#SetHighlights(a:buffer, a:loclist)
     endif
 
     if !g:ale_use_neovim_diagnostics_api
