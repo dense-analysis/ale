@@ -3,6 +3,24 @@ ALE Nix Integration                                           *ale-nix-options*
 
 
 ===============================================================================
+alejandra                                                   *ale-nix-alejandra*
+
+g:ale_nix_alejandra_executable                 *g:ale_nix_alejandra_executable*
+                                               *b:ale_nix_alejandra_executable*
+  Type: |String|
+  Default: `'alejandra'`
+
+  This variable sets the executable used for alejandra.
+
+g:ale_nix_alejandra_options                       *g:ale_nix_alejandra_options*
+                                                  *b:ale_nix_alejandra_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to the alejandra fixer.
+
+
+===============================================================================
 nixfmt                                                         *ale-nix-nixfmt*
 
 g:ale_nix_nixfmt_executable                       *g:ale_nix_nixfmt_executable*

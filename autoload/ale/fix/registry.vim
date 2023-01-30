@@ -7,6 +7,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Add blank lines before control statements.',
 \   },
+\   'alejandra': {
+\       'function': 'ale#fixers#alejandra#Fix',
+\       'suggested_filetypes': ['nix'],
+\       'description': 'The Uncompromising Nix Code Formatter',
+\   },
 \   'align_help_tags': {
 \       'function': 'ale#fixers#help#AlignTags',
 \       'suggested_filetypes': ['help'],

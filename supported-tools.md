@@ -386,6 +386,7 @@ formatting.
   * [nimlsp](https://github.com/PMunch/nimlsp)
   * nimpretty
 * nix
+  * [alejandra](https://github.com/kamadorueda/alejandra)
   * [nix-instantiate](http://nixos.org/nix/manual/#sec-nix-instantiate)
   * [nixfmt](https://github.com/serokell/nixfmt)
   * [nixpkgs-fmt](https://github.com/nix-community/nixpkgs-fmt)
