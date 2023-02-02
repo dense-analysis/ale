@@ -255,6 +255,7 @@ Notes:
   * `alex`
   * `angular`
   * `cspell`
+  * `eslint`
   * `fecs`
   * `html-beautify`
   * `htmlhint`
