@@ -3,12 +3,16 @@ function! ale#handlers#deadnix#Handle(buffer, lines) abort
 
     for l:line in a:lines
         try
-            let l:results = json_decode(l:line)['results']
+            let l:file = ale#util#FuzzyJSONDecode(l:line, v:null)
         catch
             continue
         endtry
 
-        for l:error in l:results
+        if type(l:file) isnot v:t_dict
+            continue
+        endif
+
+        for l:error in l:file['results']
             try
                 let l:ale_error = {
                 \   'lnum': l:error['line'],
