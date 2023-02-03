@@ -2323,7 +2323,7 @@ g:ale_virtualtext_cursor                             *g:ale_virtualtext_cursor*
 
   Messages are only displayed after a short delay. See |g:ale_virtualtext_delay|.
 
-  Messages can be prefixed prefixed with a string. See |g:ale_virtualtext_prefix|.
+  Messages can be prefixed with a string. See |g:ale_virtualtext_prefix|.
 
   ALE will use the following highlight groups for problems:
 
