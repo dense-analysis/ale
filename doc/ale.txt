@@ -3097,6 +3097,7 @@ documented in additional help files.
     nixfmt................................|ale-nix-nixfmt|
     nixpkgs-fmt...........................|ale-nix-nixpkgs-fmt|
     statix................................|ale-nix-statix|
+    deadnix...............................|ale-nix-deadnix|
   nroff...................................|ale-nroff-options|
     write-good............................|ale-nroff-write-good|
   objc....................................|ale-objc-options|
