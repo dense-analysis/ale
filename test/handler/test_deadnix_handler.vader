@@ -21,3 +21,7 @@ Execute(The deadnix handler should handle deadnix output):
   \   },
   \ ],
   \ ale#handlers#deadnix#Handle(bufnr(''), output)
+
+  AssertEqual [], ale#handlers#deadnix#Handle(bufnr(''), [''])
+  AssertEqual [], ale#handlers#deadnix#Handle(bufnr(''), ['not json'])
+  AssertEqual [], ale#handlers#deadnix#Handle(bufnr(''), ['{"results":[{}]}'])

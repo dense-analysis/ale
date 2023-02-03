@@ -3,19 +3,25 @@ function! ale#handlers#deadnix#Handle(buffer, lines) abort
 
     for l:line in a:lines
         try
-            let l:file = json_decode(l:line)
+            let l:results = json_decode(l:line)['results']
         catch
             continue
         endtry
 
-        for l:error in l:file['results']
-            call add(l:output, {
-            \   'lnum': l:error['line'],
-            \   'col': l:error['column'],
-            \   'end_col': l:error['endColumn'],
-            \   'text': l:error['message'],
-            \   'type': 'W',
-            \})
+        for l:error in l:results
+            try
+                let l:ale_error = {
+                \   'lnum': l:error['line'],
+                \   'col': l:error['column'],
+                \   'end_col': l:error['endColumn'],
+                \   'text': l:error['message'],
+                \   'type': 'W',
+                \}
+            catch
+                continue
+            endtry
+
+            call add(l:output, l:ale_error)
         endfor
     endfor
 
