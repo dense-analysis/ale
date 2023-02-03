@@ -2,7 +2,7 @@ call ale#Set('nix_deadnix_executable', 'deadnix')
 call ale#Set('nix_deadnix_options', '')
 
 function! ale_linters#nix#deadnix#GetCommand(buffer) abort
-    return '%e -o json' . ale#Pad(ale#Var(a:buffer, 'nix_deadnix_options')) . ale#Pad('-- %t')
+    return '%e -o json' . ale#Pad(ale#Var(a:buffer, 'nix_deadnix_options')) . ' -- %t'
 endfunction
 
 call ale#linter#Define('nix', {
