@@ -17,7 +17,7 @@ CONTENTS                                                         *ale-contents*
     5.1 Completion........................|ale-completion|
     5.2 Go To Definition..................|ale-go-to-definition|
     5.3 Go To Type Definition.............|ale-go-to-type-definition|
-    5.4 Go To Implementation..............|ale-go-to-type-implementation|
+    5.4 Go To Implementation..............|ale-go-to-implementation|
     5.5 Find References...................|ale-find-references|
     5.6 Hovering..........................|ale-hover|
     5.7 Symbol Search.....................|ale-symbol-search|
