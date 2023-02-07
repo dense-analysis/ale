@@ -378,6 +378,7 @@ Notes:
   * `nimlsp`
   * `nimpretty`
 * nix
+  * `alejandra`
   * `nix-instantiate`
   * `nixfmt`
   * `nixpkgs-fmt`
