@@ -100,11 +100,11 @@ endfunction
 " a string of them to prefix linter commands with.
 function! ale#python#AutoVirtualenvEnvString(buffer) abort
     let l:venv_dir = ale#python#FindVirtualenv(a:buffer)
-    let l:sep = has('win32') ? ';' : ':'
+    let l:pathsep = has('win32') ? ';' : ':'
 
     if !empty(l:venv_dir)
         let l:vars = [
-        \   ['PATH', ale#path#Simplify(l:venv_dir . '/bin') . l:sep . $PATH],
+        \   ['PATH', l:venv_dir . s:sep . s:bin_dir . l:pathsep . $PATH],
         \]
 
         " We don't need a space between var as ale#Env adds one.
