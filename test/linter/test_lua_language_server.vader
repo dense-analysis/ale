@@ -1,0 +1,16 @@
+Before:
+  call ale#assert#SetUpLinterTest('lua', 'lua_language_server')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default lua-language-server settings should be correct):
+  AssertLinter 'lua-language-server', ale#Escape('lua-language-server')
+  AssertLSPConfig {}
+
+Execute(lua-language-server should be configurable):
+  let b:ale_lua_language_server_executable = 'billy'
+  let b:ale_lua_language_server_config = {'x': 'y'}
+
+  AssertLinter 'billy', ale#Escape('billy')
+  AssertLSPConfig {'x': 'y'}

@@ -3068,6 +3068,7 @@ documented in additional help files.
   lua.....................................|ale-lua-options|
     cspell................................|ale-lua-cspell|
     lua-format............................|ale-lua-lua-format|
+    lua-language-server...................|ale-lua-lua-language-server|
     luac..................................|ale-lua-luac|
     luacheck..............................|ale-lua-luacheck|
     luafmt................................|ale-lua-luafmt|
