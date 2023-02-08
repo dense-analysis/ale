@@ -1,10 +1,13 @@
 Before:
   call ale#assert#SetUpLinterTest('python', 'pyright')
+  Save b:ale_python_auto_virtualenv
 
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
 
 After:
   unlet! b:bin_dir
+  unlet! b:venv_bin
+  unlet! b:sep
   unlet! b:executable
 
   call ale#assert#TearDownLinterTest()
@@ -131,6 +134,17 @@ Execute(The pyright callbacks should detect virtualenv directories):
   \)
 
   AssertLinter b:executable, ale#Escape(b:executable) . ' --stdio'
+
+Execute(virtualenv vars should be used when ale_python_auto_virtualenv = 1):
+  let b:ale_python_auto_virtualenv = 1
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  let b:venv_bin = ale#path#Simplify(g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir)
+  let b:sep = has('win32') ? ';' : ':'
+  let b:executable = ale#path#Simplify(b:venv_bin . '/pyright-langserver')
+
+  AssertLinter b:executable, ale#Env('PATH', b:venv_bin . b:sep . $PATH)
+  \   . ale#Escape(b:executable) . ' --stdio'
 
 Execute(Setting executable to 'pipenv' should append 'run pyright'):
   call ale#test#SetFilename('../test-files')

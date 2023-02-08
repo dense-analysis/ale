@@ -20,6 +20,17 @@ g:ale_python_auto_poetry                             *g:ale_python_auto_poetry*
   if true. This is overridden by a manually-set executable.
 
 
+g:ale_python_auto_virtualenv                     *g:ale_python_auto_virtualenv*
+                                                 *b:ale_python_auto_virtualenv*
+  Type: |Number|
+  Default: `0`
+
+  If set to `1`, ALE will automatically set environment variables for commands
+  such as `PATH` to attempt to make the experience of running Python linters
+  via virtualenv easier, without the need for another plugin or some
+  specialised setup.
+
+
 ===============================================================================
 ALE Python Project Root Behavior                              *ale-python-root*
 
@@ -88,24 +99,24 @@ g:ale_python_autoflake_use_global           *g:ale_python_autoflake_use_global*
 ===============================================================================
 autoimport                                              *ale-python-autoimport*
 
-g:ale_python_autoimport_executable             *g:ale_python_autoimport_executable*
-                                             *b:ale_python_autoimport_executable*
+g:ale_python_autoimport_executable         *g:ale_python_autoimport_executable*
+                                           *b:ale_python_autoimport_executable*
   Type: |String|
   Default: `'autoimport'`
 
   See |ale-integrations-local-executables|
 
 
-g:ale_python_autoimport_options                   *g:ale_python_autoimport_options*
-                                                *b:ale_python_autoimport_options*
+g:ale_python_autoimport_options               *g:ale_python_autoimport_options*
+                                              *b:ale_python_autoimport_options*
   Type: |String|
   Default: `''`
 
   This variable can be set to pass extra options to autoimport.
 
 
-g:ale_python_autoimport_use_global             *g:ale_python_autoimport_use_global*
-                                             *b:ale_python_autoimport_use_global*
+g:ale_python_autoimport_use_global         *g:ale_python_autoimport_use_global*
+                                           *b:ale_python_autoimport_use_global*
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -338,7 +349,7 @@ g:ale_python_flake8_auto_poetry               *g:ale_python_flake8_auto_poetry*
 flakehell                                                *ale-python-flakehell*
 
 g:ale_python_flakehell_change_directory*g:ale_python_flakehell_change_directory*
-                                       *b:ale_python_flakehell_change_directory*
+                                      *b:ale_python_flakehell_change_directory*
   Type: |String|
   Default: `project`
 
@@ -349,8 +360,8 @@ g:ale_python_flakehell_change_directory*g:ale_python_flakehell_change_directory*
   Python is executed from yourself.
 
 
-g:ale_python_flakehell_executable            *g:ale_python_flakehell_executable*
-                                             *b:ale_python_flakehell_executable*
+g:ale_python_flakehell_executable           *g:ale_python_flakehell_executable*
+                                            *b:ale_python_flakehell_executable*
   Type: |String|
   Default: `'flakehell'`
 
@@ -360,8 +371,8 @@ g:ale_python_flakehell_executable            *g:ale_python_flakehell_executable*
   invoke `'python` `-m` `flakehell'`.
 
 
-g:ale_python_flakehell_options                  *g:ale_python_flakehell_options*
-                                                *b:ale_python_flakehell_options*
+g:ale_python_flakehell_options                 *g:ale_python_flakehell_options*
+                                               *b:ale_python_flakehell_options*
   Type: |String|
   Default: `''`
 
@@ -369,8 +380,8 @@ g:ale_python_flakehell_options                  *g:ale_python_flakehell_options*
   lint invocation.
 
 
-g:ale_python_flakehell_use_global            *g:ale_python_flakehell_use_global*
-                                             *b:ale_python_flakehell_use_global*
+g:ale_python_flakehell_use_global           *g:ale_python_flakehell_use_global*
+                                            *b:ale_python_flakehell_use_global*
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
@@ -381,8 +392,8 @@ g:ale_python_flakehell_use_global            *g:ale_python_flakehell_use_global*
   Both variables can be set with `b:` buffer variables instead.
 
 
-g:ale_python_flakehell_auto_pipenv          *g:ale_python_flakehell_auto_pipenv*
-                                            *b:ale_python_flakehell_auto_pipenv*
+g:ale_python_flakehell_auto_pipenv         *g:ale_python_flakehell_auto_pipenv*
+                                           *b:ale_python_flakehell_auto_pipenv*
   Type: |Number|
   Default: `0`
 
@@ -975,13 +986,13 @@ g:ale_python_pylint_use_msg_id                 *g:ale_python_pylint_use_msg_id*
 
 
 ===============================================================================
-pylsp                                                          *ale-python-pylsp*
+pylsp                                                        *ale-python-pylsp*
 
 `pylsp` will be run from a detected project root, per |ale-python-root|.
 
 
-g:ale_python_pylsp_executable                     *g:ale_python_pylsp_executable*
-                                                 *b:ale_python_pylsp_executable*
+g:ale_python_pylsp_executable                   *g:ale_python_pylsp_executable*
+                                                *b:ale_python_pylsp_executable*
   Type: |String|
   Default: `'pylsp'`
 
@@ -991,16 +1002,16 @@ g:ale_python_pylsp_executable                     *g:ale_python_pylsp_executable
   Set this to `'poetry'` to invoke `'poetry` `run` `pyls'`.
 
 
-g:ale_python_pylsp_use_global                     *g:ale_python_pylsp_use_global*
-                                                 *b:ale_python_pylsp_use_global*
+g:ale_python_pylsp_use_global                   *g:ale_python_pylsp_use_global*
+                                                *b:ale_python_pylsp_use_global*
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
 
 
-g:ale_python_pylsp_auto_pipenv                   *g:ale_python_pylsp_auto_pipenv*
-                                                *b:ale_python_pylsp_auto_pipenv*
+g:ale_python_pylsp_auto_pipenv                 *g:ale_python_pylsp_auto_pipenv*
+                                               *b:ale_python_pylsp_auto_pipenv*
   Type: |Number|
   Default: `0`
 
@@ -1008,8 +1019,8 @@ g:ale_python_pylsp_auto_pipenv                   *g:ale_python_pylsp_auto_pipenv
   if true. This is overridden by a manually-set executable.
 
 
-g:ale_python_pylsp_auto_poetry                   *g:ale_python_pylsp_auto_poetry*
-                                                *b:ale_python_pylsp_auto_poetry*
+g:ale_python_pylsp_auto_poetry                 *g:ale_python_pylsp_auto_poetry*
+                                               *b:ale_python_pylsp_auto_poetry*
   Type: |Number|
   Default: `0`
 
@@ -1017,8 +1028,8 @@ g:ale_python_pylsp_auto_poetry                   *g:ale_python_pylsp_auto_poetry
   if true. This is overridden by a manually-set executable.
 
 
-g:ale_python_pylsp_config                             *g:ale_python_pylsp_config*
-                                                     *b:ale_python_pylsp_config*
+g:ale_python_pylsp_config                           *g:ale_python_pylsp_config*
+                                                    *b:ale_python_pylsp_config*
   Type: |Dictionary|
   Default: `{}`
 
@@ -1035,8 +1046,8 @@ g:ale_python_pylsp_config                             *g:ale_python_pylsp_config
       \ }
 <
 
-g:ale_python_pylsp_options                           *g:ale_python_pylsp_options*
-                                                    *b:ale_python_pylsp_options*
+g:ale_python_pylsp_options                         *g:ale_python_pylsp_options*
+                                                   *b:ale_python_pylsp_options*
   Type: |String|
   Default: `''`
 
@@ -1158,10 +1169,10 @@ g:ale_python_pyright_config                       *g:ale_python_pyright_config*
 <
 
 ===============================================================================
-refurb                                                        *ale-python-refurb*
+refurb                                                      *ale-python-refurb*
 
-g:ale_python_refurb_change_directory       *g:ale_python_refurb_change_directory*
-                                           *b:ale_python_refurb_change_directory*
+g:ale_python_refurb_change_directory     *g:ale_python_refurb_change_directory*
+                                         *b:ale_python_refurb_change_directory*
   Type: |Number|
   Default: `1`
 
@@ -1170,8 +1181,8 @@ g:ale_python_refurb_change_directory       *g:ale_python_refurb_change_directory
   `refurb` will be run from the buffer's directory.
 
 
-g:ale_python_refurb_executable                   *g:ale_python_refurb_executable*
-                                                 *b:ale_python_refurb_executable*
+g:ale_python_refurb_executable                 *g:ale_python_refurb_executable*
+                                               *b:ale_python_refurb_executable*
   Type: |String|
   Default: `'refurb'`
 
@@ -1181,8 +1192,8 @@ g:ale_python_refurb_executable                   *g:ale_python_refurb_executable
   Set this to `'poetry'` to invoke `'poetry` `run` `refurb'`.
 
 
-g:ale_python_refurb_options                         *g:ale_python_refurb_options*
-                                                    *b:ale_python_refurb_options*
+g:ale_python_refurb_options                       *g:ale_python_refurb_options*
+                                                  *b:ale_python_refurb_options*
   Type: |String|
   Default: `''`
 
@@ -1192,16 +1203,16 @@ g:ale_python_refurb_options                         *g:ale_python_refurb_options
   For example, to select/enable and/or disable some error codes,
   you may want to set >
   let g:ale_python_refurb_options = '--ignore 100'
-g:ale_python_refurb_use_global                   *g:ale_python_refurb_use_global*
-                                                 *b:ale_python_refurb_use_global*
+g:ale_python_refurb_use_global                 *g:ale_python_refurb_use_global*
+                                               *b:ale_python_refurb_use_global*
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 
   See |ale-integrations-local-executables|
 
 
-g:ale_python_refurb_auto_pipenv                 *g:ale_python_refurb_auto_pipenv*
-                                                *b:ale_python_refurb_auto_pipenv*
+g:ale_python_refurb_auto_pipenv               *g:ale_python_refurb_auto_pipenv*
+                                              *b:ale_python_refurb_auto_pipenv*
   Type: |Number|
   Default: `0`
 
@@ -1209,8 +1220,8 @@ g:ale_python_refurb_auto_pipenv                 *g:ale_python_refurb_auto_pipenv
   if true. This is overridden by a manually-set executable.
 
 
-g:ale_python_refurb_auto_poetry                 *g:ale_python_refurb_auto_poetry*
-                                                *b:ale_python_refurb_auto_poetry*
+g:ale_python_refurb_auto_poetry               *g:ale_python_refurb_auto_poetry*
+                                              *b:ale_python_refurb_auto_poetry*
   Type: |Number|
   Default: `0`
 
@@ -1335,8 +1346,8 @@ g:ale_python_unimport_auto_poetry           *g:ale_python_unimport_auto_poetry*
   if true. This is overridden by a manually-set executable.
 
 
-g:ale_python_unimport_executable              *g:ale_python_unimport_executable*
-                                              *b:ale_python_unimport_executable*
+g:ale_python_unimport_executable             *g:ale_python_unimport_executable*
+                                             *b:ale_python_unimport_executable*
   Type: |String|
   Default: `'unimport'`
 
@@ -1346,8 +1357,8 @@ g:ale_python_unimport_executable              *g:ale_python_unimport_executable*
   Set this to `'poetry'` to invoke `'poetry` `run` `unimport'`.
 
 
-g:ale_python_unimport_options                    *g:ale_python_unimport_options*
-                                                 *b:ale_python_unimport_options*
+g:ale_python_unimport_options                   *g:ale_python_unimport_options*
+                                                *b:ale_python_unimport_options*
   Type: |String|
   Default: `''`
 
@@ -1355,8 +1366,8 @@ g:ale_python_unimport_options                    *g:ale_python_unimport_options*
   invocation.
 
 
-g:ale_python_unimport_use_global              *g:ale_python_unimport_use_global*
-                                              *b:ale_python_unimport_use_global*
+g:ale_python_unimport_use_global             *g:ale_python_unimport_use_global*
+                                             *b:ale_python_unimport_use_global*
   Type: |Number|
   Default: `get(g:, 'ale_use_global_executables', 0)`
 

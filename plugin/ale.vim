@@ -178,6 +178,10 @@ let g:ale_python_auto_pipenv = get(g:, 'ale_python_auto_pipenv', 0)
 " Enable automatic detection of poetry for Python linters.
 let g:ale_python_auto_poetry = get(g:, 'ale_python_auto_poetry', 0)
 
+" Enable automatic adjustment of environment variables for Python linters.
+" The variables are set based on ALE's virtualenv detection.
+let g:ale_python_auto_virtualenv = get(g:, 'ale_python_auto_virtualenv', 0)
+
 " This variable can be overridden to set the GO111MODULE environment variable.
 let g:ale_go_go111module = get(g:, 'ale_go_go111module', '')
 

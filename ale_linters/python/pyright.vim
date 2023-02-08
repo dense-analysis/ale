@@ -64,12 +64,16 @@ endfunction
 
 function! ale_linters#python#pyright#GetCommand(buffer) abort
     let l:executable = ale_linters#python#pyright#GetExecutable(a:buffer)
-
     let l:exec_args = l:executable =~? 'pipenv\|poetry$'
     \   ? ' run pyright'
     \   : ''
+    let l:env_string = ''
 
-    return ale#Escape(l:executable) . l:exec_args . ' --stdio'
+    if ale#Var(a:buffer, 'python_auto_virtualenv')
+        let l:env_string = ale#python#AutoVirtualenvEnvString(a:buffer)
+    endif
+
+    return l:env_string . ale#Escape(l:executable) . l:exec_args . ' --stdio'
 endfunction
 
 call ale#linter#Define('python', {

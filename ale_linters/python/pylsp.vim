@@ -37,12 +37,16 @@ endfunction
 
 function! ale_linters#python#pylsp#GetCommand(buffer) abort
     let l:executable = ale_linters#python#pylsp#GetExecutable(a:buffer)
-
     let l:exec_args = l:executable =~? 'pipenv\|poetry$'
     \   ? ' run pylsp'
     \   : ''
+    let l:env_string = ''
 
-    return ale#Escape(l:executable) . l:exec_args . ale#Pad(ale#Var(a:buffer, 'python_pylsp_options'))
+    if ale#Var(a:buffer, 'python_auto_virtualenv')
+        let l:env_string = ale#python#AutoVirtualenvEnvString(a:buffer)
+    endif
+
+    return l:env_string . ale#Escape(l:executable) . l:exec_args . ale#Pad(ale#Var(a:buffer, 'python_pylsp_options'))
 endfunction
 
 call ale#linter#Define('python', {

@@ -1,4 +1,4 @@
-" Author: w0rp <devw0rp@gmail.com>
+" Author: w0rp <dev@w0rp.com>
 " Description: Functions for integrating with Python linters.
 
 call ale#Set('python_auto_pipenv', '0')
@@ -94,6 +94,24 @@ function! ale#python#FindVirtualenv(buffer) abort
     endfor
 
     return $VIRTUAL_ENV
+endfunction
+
+" Automatically determine virtualenv environment variables and build
+" a string of them to prefix linter commands with.
+function! ale#python#AutoVirtualenvEnvString(buffer) abort
+    let l:venv_dir = ale#python#FindVirtualenv(a:buffer)
+    let l:sep = has('win32') ? ';' : ':'
+
+    if !empty(l:venv_dir)
+        let l:vars = [
+        \   ['PATH', ale#path#Simplify(l:venv_dir . '/bin') . l:sep . $PATH],
+        \]
+
+        " We don't need a space between var as ale#Env adds one.
+        return join(map(l:vars, 'ale#Env(v:val[0], v:val[1])'), '')
+    endif
+
+    return ''
 endfunction
 
 " Given a buffer number and a command name, find the path to the executable.
