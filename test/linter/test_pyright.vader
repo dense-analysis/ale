@@ -122,3 +122,44 @@ Execute(You should be able to define other settings):
   \   'disableLanguageServices': v:true,
   \ },
   \}
+
+Execute(The pyright callbacks should detect virtualenv directories):
+  call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')
+
+  let b:executable = ale#path#Simplify(
+  \ g:dir . '/../test-files/python/with_virtualenv/env/' . b:bin_dir . '/pyright-langserver'
+  \)
+
+  AssertLinter b:executable, ale#Escape(b:executable) . ' --stdio'
+
+Execute(Setting executable to 'pipenv' should append 'run pyright'):
+  call ale#test#SetFilename('../test-files')
+
+  let g:ale_python_pyright_executable = 'path/to/pipenv'
+
+  GivenCommandOutput []
+  AssertLinter 'path/to/pipenv',
+  \ ale#Escape('path/to/pipenv') . ' run pyright --stdio'
+
+Execute(Pipenv is detected when python_pyright_auto_pipenv is set):
+  let g:ale_python_pyright_auto_pipenv = 1
+  call ale#test#SetFilename('../test-files/python/pipenv/whatever.py')
+
+  AssertLinterCwd ale#python#FindProjectRootIni(bufnr(''))
+  AssertLinter 'pipenv',
+  \ ale#Escape('pipenv') . ' run pyright --stdio'
+
+Execute(Setting executable to 'poetry' should append 'run pyright'):
+  let g:ale_python_pyright_executable = 'path/to/poetry'
+
+  GivenCommandOutput []
+  AssertLinter 'path/to/poetry',
+  \ ale#Escape('path/to/poetry') . ' run pyright --stdio'
+
+Execute(poetry is detected when python_pyright_auto_poetry is set):
+  let g:ale_python_pyright_auto_poetry = 1
+  call ale#test#SetFilename('../test-files/python/poetry/whatever.py')
+
+  AssertLinterCwd ale#python#FindProjectRootIni(bufnr(''))
+  AssertLinter 'poetry',
+  \ ale#Escape('poetry') . ' run pyright --stdio'
