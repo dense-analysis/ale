@@ -36,6 +36,7 @@ Notes:
   * `write-good`
 * ASM
   * `gcc`
+  * `llvm-mc`
 * AVRA
   * `avra`
 * Awk
