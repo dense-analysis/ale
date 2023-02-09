@@ -165,7 +165,7 @@ Before:
       \             'completionItem': {
       \               'snippetSupport': v:false,
       \               'commitCharactersSupport': v:false,
-      \               'documentationFormat': ['plaintext'],
+      \               'documentationFormat': ['plaintext', 'markdown'],
       \               'deprecatedSupport': v:false,
       \               'preselectSupport': v:false,
       \             },
@@ -173,7 +173,7 @@ Before:
       \           },
       \           'hover': {
       \             'dynamicRegistration': v:false,
-      \             'contentFormat': ['plaintext'],
+      \             'contentFormat': ['plaintext', 'markdown'],
       \           },
       \           'references': {
       \             'dynamicRegistration': v:false,
