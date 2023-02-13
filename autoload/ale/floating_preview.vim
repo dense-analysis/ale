@@ -103,6 +103,9 @@ function! s:NvimPrepareWindowContent(lines) abort
 endfunction
 
 function! s:NvimCreate(options) abort
+    let l:left = get(g:ale_floating_window_border, 0, '|')
+    let l:top = get(g:ale_floating_window_border, 1, '-')
+
     let l:popup_opts = extend({
     \    'relative': 'cursor',
     \    'row': 1,
@@ -112,13 +115,13 @@ function! s:NvimCreate(options) abort
     \    'style': 'minimal',
     \    'border': empty(g:ale_floating_window_border) ? 'none' : [
     \        get(g:ale_floating_window_border, 2, '+'),
-    \        get(g:ale_floating_window_border, 1, '-'),
+    \        l:top,
     \        get(g:ale_floating_window_border, 3, '+'),
-    \        get(g:ale_floating_window_border, 6, '|'),
+    \        get(g:ale_floating_window_border, 6, l:left),
     \        get(g:ale_floating_window_border, 4, '+'),
-    \        get(g:ale_floating_window_border, 7, '-'),
+    \        get(g:ale_floating_window_border, 7, l:top),
     \        get(g:ale_floating_window_border, 5, '+'),
-    \        get(g:ale_floating_window_border, 0, '|'),
+    \        l:left,
     \    ],
     \ }, s:GetPopupOpts())
 
