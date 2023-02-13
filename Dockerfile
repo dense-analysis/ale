@@ -1,4 +1,6 @@
-FROM testbed/vim:24
+ARG TESTBED_VIM_VERSION=24
+
+FROM testbed/vim:${TESTBED_VIM_VERSION}
 
 RUN install_vim -tag v8.0.0027 -build \
                 -tag v9.0.0297 -build \
