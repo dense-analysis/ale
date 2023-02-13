@@ -166,24 +166,22 @@ download_image() {
   docker pull "${image}:${image_tag}" &> /dev/null
 }
 
-if [ "$has_image" -eq 0 ] && ! download_image
-then
+if [ "$has_image" -eq 0 ] && ! download_image; then
   echo "Building run image ${image}:${image_tag}"
 
   build_args=( --build-arg GIT_VERSION="$git_version" )
 
   if [[ $arch != x86_64 ]]; then
     echo "Building testbed/vim:24 for $arch"
-	testbed_vim_ref=902917c4caa50db2f2e80009b839605602f9f014
+    testbed_vim_ref=902917c4caa50db2f2e80009b839605602f9f014
     docker build -t "testbed/vim:$testbed_vim_ref" "https://github.com/Vimjas/vim-testbed.git#$testbed_vim_ref"
-	build_args+=( --build-arg TESTBED_VIM_VERSION="$testbed_vim_ref" )
+    build_args+=( --build-arg TESTBED_VIM_VERSION="$testbed_vim_ref" )
   fi
 
   docker build "${build_args[@]}" -t "${image}:${image_tag}" .
   docker tag "${image}:${image_tag}" "${image}:latest"
 
-  if [[ -z "${DOCKER_HUB_USER:-}" || -z "${DOCKER_HUB_PASS:-}" ]]
-  then
+  if [[ -z "${DOCKER_HUB_USER:-}" || -z "${DOCKER_HUB_PASS:-}" ]]; then
     echo "Docker Hub credentials not set, skip push"
   else
     echo "Push ${image}:${image_tag} to Docker Hub"
