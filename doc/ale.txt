@@ -1252,10 +1252,12 @@ g:ale_floating_preview_popup_opts           *g:ale_floating_preview_popup_opts*
 
   For example, to enhance popups with a title: >
 
-  function! CustomOpts() abort {
+  function! CustomOpts() abort
     let [l:info, l:loc] = ale#util#FindItemAtCursor(bufnr(''))
     return {'title': ' ALE: ' . (l:loc.linter_name) . ' '}
   endfunction
+
+  let g:ale_floating_preview_popup_opts = 'g:CustomOpts'
 <
 
 
