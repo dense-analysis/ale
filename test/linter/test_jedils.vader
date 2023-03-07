@@ -31,8 +31,9 @@ Execute(virtualenv vars should be used when ale_python_auto_virtualenv = 1):
   let b:sep = has('win32') ? ';' : ':'
   let b:executable = ale#path#Simplify(b:venv_bin . '/jedi-language-server')
 
-  AssertLinter b:executable, ale#Env('PATH', b:venv_bin . b:sep . $PATH)
+  AssertLinter b:executable, ale#python#AutoVirtualenvEnvString(bufnr(''))
   \   . ale#Escape(b:executable)
+  Assert !empty(ale#python#AutoVirtualenvEnvString(bufnr('')))
 
 Execute(You should be able to override the jedi-language-server virtualenv lookup):
   call ale#test#SetFilename('../test-files/python/with_virtualenv/subdir/foo/bar.py')

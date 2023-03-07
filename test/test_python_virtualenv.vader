@@ -10,3 +10,14 @@ Execute(ale#python#FindVirtualenv falls back to $VIRTUAL_ENV when no directories
   \  ale#python#FindVirtualenv(bufnr('%')),
   \  '/opt/example/',
   \  'Expected VIRTUAL_ENV environment variable to be used, but it was not'
+
+Execute(ale#python#AutoVirtualenvEnvString should return the correct values):
+  if has('win32')
+    AssertEqual
+    \ 'set PATH=/opt/example/;%PATH% && ',
+    \ ale#python#AutoVirtualenvEnvString(bufnr(''))
+  else
+    AssertEqual
+    \ 'PATH=''/opt/example/''":$PATH" ',
+    \ ale#python#AutoVirtualenvEnvString(bufnr(''))
+  endif

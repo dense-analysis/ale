@@ -144,8 +144,9 @@ Execute(virtualenv vars should be used when ale_python_auto_virtualenv = 1):
   let b:sep = has('win32') ? ';' : ':'
   let b:executable = ale#path#Simplify(b:venv_bin . '/pyright-langserver')
 
-  AssertLinter b:executable, ale#Env('PATH', b:venv_bin . b:sep . $PATH)
+  AssertLinter b:executable, ale#python#AutoVirtualenvEnvString(bufnr(''))
   \   . ale#Escape(b:executable) . ' --stdio'
+  Assert !empty(ale#python#AutoVirtualenvEnvString(bufnr('')))
 
 Execute(Setting executable to 'pipenv' should append 'run pyright'):
   call ale#test#SetFilename('../test-files')
