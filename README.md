@@ -228,16 +228,6 @@ See `:help ale-refactor` for more information.
 
 ## Installation
 
-To install this plugin, you should use one of the following methods.
-For Windows users, replace usage of the Unix `~/.vim` directory with
-`%USERPROFILE%\vimfiles`, or another directory if you have configured
-Vim differently. On Windows, your `~/.vimrc` file will be similarly
-stored in `%USERPROFILE%\_vimrc`.
-
-<a name="standard-installation"></a>
-
-### Installation
-
 Add ALE to your runtime path in the usual ways.
 
 If you have trouble reading `:help ale`, try the following.
