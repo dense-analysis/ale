@@ -1,0 +1,19 @@
+Before:
+  call ale#assert#SetUpLinterTest('nix', 'deadnix')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The deadnix command should be correct):
+  AssertLinter 'deadnix', ale#Escape('deadnix') . ' -o json -- %t'
+
+Execute(Additional deadnix options should be configurable):
+  let g:ale_nix_deadnix_options = '--foobar'
+
+  AssertLinter 'deadnix',
+  \ ale#Escape('deadnix') . ' -o json --foobar -- %t'
+
+Execute(The deadnix command should be configurable):
+  let g:ale_nix_deadnix_executable = 'foo/bar'
+
+  AssertLinter 'foo/bar', ale#Escape('foo/bar') . ' -o json -- %t'
