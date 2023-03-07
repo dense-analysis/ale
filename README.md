@@ -352,7 +352,7 @@ This plugin will look for linters in the [`ale_linters`](ale_linters) directory.
 Each directory within corresponds to a particular filetype in Vim, and each file
 in each directory corresponds to the name of a particular linter.
 
-### How do I disable are particular warning or error?
+### How do I disable a particular warning or error?
 
 Warnings and errors should be configured in project configuration files for the
 relevant tools. ALE supports disabling only warnings relating to trailing
