@@ -36,6 +36,42 @@ g:ale_perl_perl_options
 
 
 ===============================================================================
+perl language server                                  *ale-perl-languageserver*
+
+perl_perl_executable
+g:ale_perl_perl_executable
+  Type: |String|
+  Default: `'perl'`
+
+  The language server will use the same variable as |ale-perl-perl| to launch
+  the perl executable with the Perl::LanguageServer module.
+
+                                       *ale-options.perl_languageserver_config*
+                                             *g:ale_perl_languageserver_config*
+                                             *b:ale_perl_languageserver_config*
+perl_languageserver_config
+g:ale_perl_languageserver_config
+  Type: |Dictionary|
+  Default: `'{}'`
+
+  This variable can be changed to customize the lsp_config (sent as a
+  workspace/didChangeConfiguration command).
+  For example: >
+
+  let g:ale_perl_languageserver_config = {
+  \   'perl': {
+  \       'fileFilter': [''],
+  \       'logLevel': 2,
+  \       'logFile': '/tmp/plls-log.txt',
+  \       'perlInc': ['/usr/share/perl5/', '/usr/local/share/perl5/' ],
+  \   },
+  \}
+<
+  For all available options and explanations, visit
+  https://metacpan.org/pod/Perl::LanguageServer#Extension-Settings
+
+
+===============================================================================
 perlcritic                                                *ale-perl-perlcritic*
 
                                        *ale-options.perl_perlcritic_executable*
