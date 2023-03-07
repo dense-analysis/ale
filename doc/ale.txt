@@ -3749,6 +3749,7 @@ documented in additional help files.
     uncrustify............................|ale-pawn-uncrustify|
   perl....................................|ale-perl-options|
     perl..................................|ale-perl-perl|
+    perl language server..................|ale-perl-languageserver|
     perlcritic............................|ale-perl-perlcritic|
     perltidy..............................|ale-perl-perltidy|
   perl6...................................|ale-perl6-options|
