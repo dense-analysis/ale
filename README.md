@@ -287,6 +287,11 @@ Plug 'dense-analysis/ale'
 Plugin 'dense-analysis/ale'
 ```
 
+#### [Pathogen](https://github.com/tpope/vim-pathogen)
+```vim
+git clone https://github.com/dense-analysis/ale ~/.vim/bundle/ale
+```
+
 ## Contributing
 
 If you would like to see support for more languages and tools, please
