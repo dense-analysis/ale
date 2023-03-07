@@ -258,13 +258,13 @@ mkdir -p ~/vimfiles/pack/git-plugins/start
 git clone --depth 1 https://github.com/dense-analysis/ale.git ~/vimfiles/pack/git-plugins/start/ale
 ```
 
-### [vim-plug](https://github.com/junegunn/vim-plug)
+#### [vim-plug](https://github.com/junegunn/vim-plug)
 
 ```vim
 Plug 'dense-analysis/ale'
 ```
 
-### [Vundle](https://github.com/VundleVim/Vundle.vim)
+#### [Vundle](https://github.com/VundleVim/Vundle.vim)
 
 ```vim
 Plugin 'dense-analysis/ale'
