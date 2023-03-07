@@ -42,6 +42,23 @@ email at [dev@w0rp.com](mailto:dev@w0rp.com?subject=Helping%20with%20ALE).
 If you enjoy this plugin, feel free to contribute or check out the author's
 other content at [w0rp.com](https://w0rp.com).
 
+## Why ALE?
+
+ALE has been around for many years, and there are many ways to run asynchronous
+linting and fixing of code in Vim. ALE offers the following.
+
+* No dependencies for ALE itself
+* Lightweight plugin architecture (No JavaScript or Python required)
+* Low memory footprint
+* Runs virtually everywhere, including remote shells, and in `git commit`
+* Out of the box support for running particular linters and language servers
+* Near-zero configuration with custom code for better defaults
+* Highly customizable and well-documented (`:help ale-options`)
+* Breaking changes for the plugin are extremely rare
+* Support for older Vim and Neovim versions
+* Windows support
+* Well-integrated with other plugins
+
 ## Supported Languages and Tools
 
 ALE supports a wide variety of languages and tools. See the
@@ -335,6 +352,21 @@ This plugin will look for linters in the [`ale_linters`](ale_linters) directory.
 Each directory within corresponds to a particular filetype in Vim, and each file
 in each directory corresponds to the name of a particular linter.
 
+### How do I disable are particular warning or error?
+
+Warnings and errors should be configured in project configuration files for the
+relevant tools. ALE supports disabling only warnings relating to trailing
+whitespace, which Vim users often fix automatically.
+
+```vim
+" Disable whitespace warnings
+let g:ale_warn_about_trailing_whitespace = 0
+```
+
+Users generally should not ignore warnings or errors in projects by changing
+settings in their own editor. Instead, configure tools appropriately so any
+other user of the same project will see the same problems.
+
 <a name="faq-get-info"></a>
 
 ### How can I see what ALE has configured for the current file?
@@ -345,57 +377,26 @@ Run the following to see what is currently configured:
 :ALEInfo
 ```
 
-<a name="faq-coc-nvim"></a>
+### How can I disable virtual text appearing at ends of lines?
 
-### How can I use ALE and coc.nvim together?
-
-[coc.nvim](https://github.com/neoclide/coc.nvim) is a popular Vim plugin written
-in TypeScript and dependent on the [npm](https://www.npmjs.com/) ecosystem for
-providing full IDE features to Vim. Both ALE and coc.nvim implement
-[Language Server Protocol](https://microsoft.github.io/language-server-protocol/)
-(LSP) clients for supporting diagnostics (linting with a live server), and other
-features like auto-completion, and others listed above.
-
-ALE is primarily focused on integrating with external programs through virtually
-any means, provided the plugin remains almost entirely written in Vim script.
-coc.nvim is primarily focused on bringing IDE features to Vim. If you want to
-run external programs on your files to check for errors, and also use the most
-advanced IDE features, you might want to use both plugins at the same time.
-
-The easiest way to get both plugins to work together is to configure coc.nvim to
-send diagnostics to ALE, so ALE controls how all problems are presented to you,
-and to disable all LSP features in ALE, so ALE doesn't try to provide LSP
-features already provided by coc.nvim, such as auto-completion.
-
-1. Open your coc.nvim configuration file with `:CocConfig` and add
-   `"diagnostic.displayByAle": true` to your settings.
-2. Add `let g:ale_disable_lsp = 1` to your vimrc file, before plugins are
-   loaded.
-
-You can also use `b:ale_disable_lsp` in your ftplugin files to enable or disable
-LSP features in ALE for different filetypes. After you configure coc.nvim and
-ALE this way, you can further configure how problems appear to you by using all
-of the settings mentioned in ALE's help file, including how often diagnostics
-are requested. See `:help ale-lint`.
-
-The integration between ALE and coc.nvim works using an API ALE offers for
-letting any other plugin integrate with ALE. If you are interested in writing a
-similar integration, see `:help ale-lint-other-sources`.
-
-<a name="faq-keep-signs"></a>
-
-### How can I keep the sign gutter open?
-
-You can keep the sign gutter open at all times by setting the
-`g:ale_sign_column_always` to 1
+By default, ALE displays errors and warnings with virtual text. The problems ALE
+shows appear with comment-like syntax after every problem found. You can set ALE
+to only show problems where the cursor currently lies like so.
 
 ```vim
-let g:ale_sign_column_always = 1
+let g:ale_virtualtext_cursor = 'current'
 ```
 
+If you want to disable virtual text completely, apply the following.
+
+```vim
+let g:ale_virtualtext_cursor = 'disabled'
+```
+
+<a name="faq-keep-signs"></a>
 <a name="faq-change-signs"></a>
 
-### How can I change the signs ALE uses?
+### How can I customise signs?
 
 Use these options to specify what text should be used for signs:
 
@@ -411,6 +412,12 @@ These colors can be customised, or even removed completely:
 ```vim
 highlight clear ALEErrorSign
 highlight clear ALEWarningSign
+```
+
+You can configure the sign gutter open at all times, if you wish.
+
+```vim
+let g:ale_sign_column_always = 1
 ```
 
 <a name="faq-change-highlights"></a>
@@ -439,9 +446,51 @@ highlight ALEWarning ctermbg=DarkMagenta
 
 See `:help ale-highlights` for more information.
 
-<a name="faq-statusline"></a>
+<a name="faq-echo-format"></a>
 
-### How can I show errors or warnings in my statusline?
+### How can I change the format for echo messages?
+
+There are 3 global options that allow customizing the echoed message.
+
+- `g:ale_echo_msg_format` where:
+    * `%s` is the error message itself
+    * `%...code...%` is an optional error code, and most characters can be
+      written between the `%` characters.
+    * `%linter%` is the linter name
+    * `%severity%` is the severity type
+- `g:ale_echo_msg_error_str` is the string used for error severity.
+- `g:ale_echo_msg_warning_str` is the string used for warning severity.
+
+So for example this:
+
+```vim
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+```
+
+Will give you:
+
+![Echoed message](https://user-images.githubusercontent.com/3518142/59195927-348bd000-8b85-11e9-88b6-508a094f1548.png)
+
+See `:help g:ale_echo_msg_format` for more information.
+
+<a name="faq-statusline"></a>
+<a name="faq-lightline"></a>
+
+### How can I customise the statusline?
+
+#### lightline
+
+[lightline](https://github.com/itchyny/lightline.vim) does not have built-in
+support for ALE, nevertheless there is a plugin that adds this functionality:
+[maximbaz/lightline-ale](https://github.com/maximbaz/lightline-ale).
+
+For more information, check out the sources of that plugin,
+`:help ale#statusline#Count()` and
+[lightline documentation](https://github.com/itchyny/lightline.vim#advanced-configuration).
+
+#### vim-airline
 
 [vim-airline](https://github.com/vim-airline/vim-airline) integrates with ALE
 for displaying error information in the status bar. If you want to see the
@@ -453,9 +502,10 @@ The airline extension can be enabled by adding the following to your vimrc:
 let g:airline#extensions#ale#enabled = 1
 ```
 
-If you don't want to use vim-airline, you can implement your own statusline
-function without adding any other plugins. ALE provides some functions to
-assist in this endeavour, including:
+#### Custom statusline
+
+You can implement your own statusline function without adding any other plugins.
+ALE provides some functions to assist in this endeavour, including:
 
 * `ale#statusline#Count`: Which returns the number of problems found by ALE
   for a specified buffer.
@@ -488,43 +538,122 @@ set statusline=%{LinterStatus()}
 See `:help ale#statusline#Count()` or `:help ale#statusline#FirstProblem()`
 for more information.
 
-<a name="faq-lightline"></a>
+<a name="faq-window-borders"></a>
 
-### How can I show errors or warnings in my lightline?
+### How can I change the borders for floating preview windows?
 
-[lightline](https://github.com/itchyny/lightline.vim) does not have built-in
-support for ALE, nevertheless there is a plugin that adds this functionality: [maximbaz/lightline-ale](https://github.com/maximbaz/lightline-ale).
+Borders for floating preview windows are enabled by default. You can use the
+`g:ale_floating_window_border` setting to configure them.
 
-For more information, check out the sources of that plugin, `:help ale#statusline#Count()` and [lightline documentation](https://github.com/itchyny/lightline.vim#advanced-configuration).
-
-<a name="faq-echo-format"></a>
-
-### How can I change the format for echo messages?
-
-There are 3 global options that allow customizing the echoed message.
-
-- `g:ale_echo_msg_format` where:
-    * `%s` is the error message itself
-    * `%...code...%` is an optional error code, and most characters can be
-      written between the `%` characters.
-    * `%linter%` is the linter name
-    * `%severity%` is the severity type
-- `g:ale_echo_msg_error_str` is the string used for error severity.
-- `g:ale_echo_msg_warning_str` is the string used for warning severity.
-
-So for example this:
+You could disable the border with an empty list.
 
 ```vim
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_floating_window_border = []
 ```
 
-Will give you:
+If the terminal supports Unicode, you might try setting the value like below, to
+make it look nicer.
 
-![Echoed message](https://user-images.githubusercontent.com/3518142/59195927-348bd000-8b85-11e9-88b6-508a094f1548.png)
+```vim
+let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰', '│', '─']
+```
 
-See `:help g:ale_echo_msg_format` for more information.
+Since vim's default uses nice Unicode characters when possible, you can trick
+ale into using that default with
+
+```vim
+let g:ale_floating_window_border = repeat([''], 8)
+```
+
+<a name="faq-my-battery-is-sad"></a>
+
+### Will this plugin eat all of my laptop battery power?
+
+ALE takes advantage of the power of various tools to check your code. This of
+course means that CPU time will be used to continuously check your code. If you
+are concerned about the CPU time ALE will spend, which will of course imply
+some cost to battery life, you can adjust your settings to make your CPU do
+less work.
+
+First, consider increasing the delay before which ALE will run any linters
+while you type. ALE uses a timeout which is cancelled and reset every time you
+type, and this delay can be increased so linters are run less often. See
+`:help g:ale_lint_delay` for more information.
+
+If you don't wish to run linters while you type, you can disable that behavior.
+Set `g:ale_lint_on_text_changed` to `never`. You won't get as frequent error
+checking, but ALE shouldn't block your ability to edit a document after you save
+a file, so the asynchronous nature of the plugin will still be an advantage.
+
+If you are still concerned, you can turn the automatic linting off altogether,
+including the option `g:ale_lint_on_enter`, and you can run ALE manually with
+`:ALELint`.
+
+<a name="faq-coc-nvim"></a>
+<a name="faq-vim-lsp"></a>
+
+### How can I use ALE with other LSP clients?
+
+ALE offers an API for letting any other plugin integrate with ALE. If you are
+interested in writing an integration, see `:help ale-lint-other-sources`.
+
+If you are running ALE in combination with another LSP client, you may wish
+to disable ALE's LSP functionality entirely. You can add a setting to your
+vimrc/init.vim to do so.
+
+```vim
+let g:ale_disable_lsp = 1
+```
+
+You can also use `b:ale_disable_lsp` in your ftplugin files to enable or disable
+LSP features in ALE for different filetypes.
+
+#### Neovim Diagnostics
+
+If you are running Neovim 0.6 or later, you can make ALE display errors and
+warnings via the Neovim diagnostics API.
+
+```vim
+let g:ale_use_neovim_diagnostics_api = 1
+```
+
+<!-- We could expand this section to say a little more. -->
+
+#### coc.nvim
+
+[coc.nvim](https://github.com/neoclide/coc.nvim) is a popular Vim plugin written
+in TypeScript and dependent on the [npm](https://www.npmjs.com/) ecosystem for
+providing full IDE features to Vim. Both ALE and coc.nvim implement
+[Language Server Protocol](https://microsoft.github.io/language-server-protocol/)
+(LSP) clients for supporting diagnostics (linting with a live server), and other
+features like auto-completion, and others listed above.
+
+ALE is primarily focused on integrating with external programs through virtually
+any means, provided the plugin remains almost entirely written in Vim script.
+coc.nvim is primarily focused on bringing IDE features to Vim. If you want to
+run external programs on your files to check for errors, and also use the most
+advanced IDE features, you might want to use both plugins at the same time.
+
+The easiest way to get both plugins to work together is to configure coc.nvim to
+send diagnostics to ALE, so ALE controls how all problems are presented to you,
+and to disable all LSP features in ALE, so ALE doesn't try to provide LSP
+features already provided by coc.nvim, such as auto-completion.
+
+Open your coc.nvim configuration file with `:CocConfig` and add
+`"diagnostic.displayByAle": true` to your settings.
+
+#### vim-lsp
+
+[vim-lsp](https://github.com/prabirshrestha/vim-lsp) is a popular plugin as
+implementation of Language Server Protocol (LSP) client for Vim. It provides
+all the LSP features including auto completion, diagnostics, go to definitions,
+etc.
+
+[vim-lsp-ale](https://github.com/rhysd/vim-lsp-ale) is a bridge plugin to solve
+the problem when using both ALE and vim-lsp. With the plugin, diagnostics are
+provided by vim-lsp and ALE can handle all the errors. Please read
+[vim-lsp-ale's documentation](https://github.com/rhysd/vim-lsp-ale/blob/master/doc/vim-lsp-ale.txt)
+for more details.
 
 <a name="faq-autocmd"></a>
 
@@ -569,10 +698,9 @@ For more information, consult the online documentation with
 
 ### How can I run linters only when I save files?
 
-ALE offers an option `g:ale_lint_on_save` for enabling running the linters
-when files are saved. This option is enabled by default. If you only
-wish to run linters when files are saved, you can turn the other
-options off.
+ALE offers an option `g:ale_lint_on_save` for enabling running the linters when
+files are saved. This option is enabled by default. If you only wish to run
+linters when files are saved, you can turn the other options off.
 
 ```vim
 " Write this in your vimrc file
@@ -583,16 +711,16 @@ let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_enter = 0
 ```
 
-If for whatever reason you don't wish to run linters again when you save
-files, you can set `g:ale_lint_on_save` to `0`.
+If for whatever reason you don't wish to run linters again when you save files,
+you can set `g:ale_lint_on_save` to `0`.
 
 <a name="faq-quickfix"></a>
 
 ### How can I use the quickfix list instead of the loclist?
 
-The quickfix list can be enabled by turning the `g:ale_set_quickfix`
-option on. If you wish to also disable the loclist, you can disable
-the `g:ale_set_loclist` option.
+The quickfix list can be enabled by turning the `g:ale_set_quickfix` option on.
+If you wish to also disable the loclist, you can disable the `g:ale_set_loclist`
+option.
 
 ```vim
 " Write this in your vimrc file
@@ -600,10 +728,10 @@ let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 1
 ```
 
-If you wish to show Vim windows for the loclist or quickfix items
-when a file contains warnings or errors, `g:ale_open_list` can be
-set to `1`. `g:ale_keep_list_window_open` can be set to `1`
-if you wish to keep the window open even after errors disappear.
+If you wish to show Vim windows for the loclist or quickfix items when a file
+contains warnings or errors, `g:ale_open_list` can be set to `1`.
+`g:ale_keep_list_window_open` can be set to `1` if you wish to keep the window
+open even after errors disappear.
 
 ```vim
 let g:ale_open_list = 1
@@ -616,12 +744,11 @@ let g:ale_keep_list_window_open = 1
 You can also set `let g:ale_list_vertical = 1` to open the windows vertically
 instead of the default horizontally.
 
+### Why isn't ALE checking my filetype?
+
 <a name="faq-jsx-stylelint-eslint"></a>
 
-### How can I check JSX files with both stylelint and eslint?
-
-If you configure ALE options correctly in your vimrc file, and install
-the right tools, you can check JSX files with stylelint and eslint.
+#### stylelint for JSX
 
 First, install eslint and install stylelint with
 [stylelint-processor-styled-components](https://github.com/styled-components/stylelint-processor-styled-components).
@@ -660,7 +787,7 @@ no linter will be run twice for the same file.
 
 <a name="faq-vue-eslint"></a>
 
-### How can I check Vue files with ESLint?
+#### Checking Vue with ESLint
 
 To check Vue files with ESLint, your ESLint project configuration file must be
 configured to use the [Vue plugin](https://github.com/vuejs/eslint-plugin-vue).
@@ -688,30 +815,6 @@ you can configure them from your vimrc file instead.
 let g:ale_linter_aliases = {'vue': ['vue', 'javascript']}
 let g:ale_linters = {'vue': ['eslint', 'vls']}
 ```
-
-<a name="faq-my-battery-is-sad"></a>
-
-### Will this plugin eat all of my laptop battery power?
-
-ALE takes advantage of the power of various tools to check your code. This of
-course means that CPU time will be used to continuously check your code. If you
-are concerned about the CPU time ALE will spend, which will of course imply
-some cost to battery life, you can adjust your settings to make your CPU do
-less work.
-
-First, consider increasing the delay before which ALE will run any linters
-while you type. ALE uses a timeout which is cancelled and reset every time you
-type, and this delay can be increased so linters are run less often. See
-`:help g:ale_lint_delay` for more information.
-
-If you don't wish to run linters while you type, you can disable that behavior.
-Set `g:ale_lint_on_text_changed` to `never`. You won't get as frequent error
-checking, but ALE shouldn't block your ability to edit a document after you save
-a file, so the asynchronous nature of the plugin will still be an advantage.
-
-If you are still concerned, you can turn the automatic linting off altogether,
-including the option `g:ale_lint_on_enter`, and you can run ALE manually with
-`:ALELint`.
 
 <a name="faq-c-configuration"></a>
 
@@ -746,57 +849,6 @@ You can also configure ALE to automatically run `make -n` to run dry runs on
 `Makefile`s to discover compiler flags. This can execute arbitrary code, so the
 option is disabled by default. See `:help g:ale_c_parse_makefile`.
 
-You may also configure buffer-local settings for linters with project-specific
-vimrc files. [local_vimrc](https://github.com/LucHermitte/local_vimrc) can be
-used for executing local vimrc files which can be shared in your project.
-
-<a name="faq-buffer-configuration"></a>
-
-### How can I configure ALE differently for different buffers?
-
-ALE offers various ways to configure which linters or fixers are run, and
-other settings. For the majority of ALE's settings, they can either be
-configured globally with a `g:` variable prefix, or for a specific buffer
-with a `b:` variable prefix. For example, you can configure a Python ftplugin
-file like so.
-
-```vim
-" In ~/.vim/ftplugin/python.vim
-
-" Check Python files with flake8 and pylint.
-let b:ale_linters = ['flake8', 'pylint']
-" Fix Python files with autopep8 and yapf.
-let b:ale_fixers = ['autopep8', 'yapf']
-" Disable warnings about trailing whitespace for Python files.
-let b:ale_warn_about_trailing_whitespace = 0
-```
-
-For configuring files based on regular expression patterns matched against the
-absolute path to a file, you can use `g:ale_pattern_options`.
-
-```vim
-" Do not lint or fix minified files.
-let g:ale_pattern_options = {
-\ '\.min\.js$': {'ale_linters': [], 'ale_fixers': []},
-\ '\.min\.css$': {'ale_linters': [], 'ale_fixers': []},
-\}
-" If you configure g:ale_pattern_options outside of vimrc, you need this.
-let g:ale_pattern_options_enabled = 1
-```
-
-Buffer-local variables for settings always override the global settings.
-
-<a name="faq-list-window-height"></a>
-
-### How can I configure the height of the list in which ALE displays errors?
-
-To set a default height for the error list, use the `g:ale_list_window_size` variable.
-
-```vim
-" Show 5 lines of errors (default: 10)
-let g:ale_list_window_size = 5
-```
-
 <a name="faq-vm"></a>
 
 ### How can I run linters or fixers via Docker or a VM?
@@ -807,51 +859,3 @@ tools are well-integrated with ALE, and ALE is properly configured to run the
 correct commands and map filename paths between different file systems. See
 `:help ale-lint-other-machines` for the full documentation on how to configure
 ALE to support this.
-
-<a name="faq-window-borders"></a>
-
-### How can I change the borders for floating preview windows?
-
-Borders for floating preview windows are enabled by default. You can use the
-`g:ale_floating_window_border` setting to configure them.
-
-You could disable the border with an empty list.
-
-```vim
-let g:ale_floating_window_border = []
-```
-
-If the terminal supports Unicode, you might try setting the value like below, to
-make it look nicer.
-
-```vim
-let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰', '│', '─']
-```
-
-Since vim's default uses nice unicode characters when possible, you can trick
-ale into using that default with
-
-```vim
-let g:ale_floating_window_border = repeat([''], 8)
-```
-
-<a name="faq-vim-lsp"></a>
-
-### How can I use ALE and vim-lsp together?
-
-[vim-lsp](https://github.com/prabirshrestha/vim-lsp) is a popular plugin as
-implementation of Language Server Protocol (LSP) client for Vim. It provides
-all the LSP features including auto completion, diagnostics, go to definitions,
-etc.
-
-ALE also provides LSP support for diagnostics. When you use both ALE and
-vim-lsp, one option is disabling ALE's LSP support by
-`let g:ale_disable_lsp = 1`. However ALE provides integration of external
-programs. Showing errors from language servers by vim-lsp and showing errors
-from other external programs by ALE are confusing and problematic.
-
-[vim-lsp-ale](https://github.com/rhysd/vim-lsp-ale) is a bridge plugin to solve
-the problem when using both ALE and vim-lsp. With the plugin, diagnostics are
-provided by vim-lsp and ALE can handle all the errors. Please read
-[vim-lsp-ale's documentation](https://github.com/rhysd/vim-lsp-ale/blob/master/doc/vim-lsp-ale.txt)
-for more details.
