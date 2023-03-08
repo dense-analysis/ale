@@ -556,12 +556,12 @@ endfunction
 function! s:AddLinterError(buffer, linter) abort
     let l:output = []
     call add(l:output, {
-        \ 'lnum': 1,
-        \ 'end_lnum': ale#util#GetLineCount(a:buffer),
-        \ 'text': 'Linter failure (' . a:linter . ')',
-        \ 'detail': 'Failed to execute ' . a:linter,
-        \ 'type': 'E'}
-    \ )
+    \     'lnum': 1,
+    \     'end_lnum': ale#util#GetLineCount(a:buffer),
+    \     'text': 'Linter failure (' . a:linter . ')',
+    \     'detail': 'Failed to execute ' . a:linter,
+    \     'type': 'E'}
+    \)
     call ale#other_source#ShowResults(bufnr(''), 'ale-vim', l:output)
 endfunction
 
