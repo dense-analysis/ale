@@ -36,7 +36,7 @@ module.sendAleResultsToDiagnostics = function(buffer, loclist)
     )
   end
 
-  local virtualtext_enabled_set = {['all'] = true, ['2'] = true, ['current'] = true, ['1'] = true}
+  local virtualtext_enabled_set = {['all'] = true, ['2'] = true, [2] = true, ['current'] = true, ['1'] = true, [1] = true}
 
   vim.diagnostic.set(
     vim.api.nvim_create_namespace('ale'),
