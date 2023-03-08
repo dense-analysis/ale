@@ -253,3 +253,39 @@ function! ale#virtualtext#SetTexts(buffer, loclist) abort
         endif
     endfor
 endfunction
+
+if get(g:, 'ale_private_testing_mode', 0)
+    function! ale#virtualtext#IsSupported() abort
+        return s:has_virt_text
+    endfunction
+
+    function! ale#virtualtext#IsEmulated() abort
+        return s:emulate_virt
+    endfunction
+
+    function! ale#virtualtext#CountTexts(buffer) abort
+        if !s:has_virt_text
+            return 0
+        elseif s:emulate_virt
+            return s:last_virt != -1
+        elseif has('nvim')
+            if exists('*nvim_buf_get_extmarks')
+                return len(nvim_buf_get_extmarks(
+                \   a:buffer,
+                \   s:ns_id,
+                \   0,
+                \   -1,
+                \   {'details': 0}
+                \))
+            else
+                throw 'Cannot determine the number of virtual texts'
+            endif
+        else
+            return len(prop_list(1, {
+            \   'bufnr': a:buffer,
+            \   'types': s:hl_list,
+            \   'end_lnum': -1
+            \}))
+        endif
+    endfunction
+endif
