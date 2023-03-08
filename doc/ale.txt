@@ -2367,6 +2367,40 @@ g:ale_virtualtext_prefix                             *g:ale_virtualtext_prefix*
   pulled from |&commentstring|, ALE will default to `'#'`.
 
 
+g:ale_virtualtext_column                             *g:ale_virtualtext_column*
+                                                     *b:ale_virtualtext_column*
+g:ale_virtualtext_maxcolumn                       *g:ale_virtualtext_maxcolumn*
+                                                  *b:ale_virtualtext_maxcolumn*
+  Type: |String| or |Number|
+  Default: `0`
+
+  Virtualtext column range, from `column` to `maxcolumn`.  If a line is
+  `column` or less characters long, the virtualtext message is shifted right
+  to `column`.
+
+  Where the line is greater than `column` characters long, but less than
+  `maxcolumn`, the virtualtext message is placed at the end of the line.
+
+  Where the line is greater than `maxcolumn` the virtualtext message is
+  omitted.
+
+  A |Number| greater than `0` is used as the fixed column position, however
+  a |String| ending in `%` represents a percentage of the window width.
+  When `column` is set to zero, column positioning is disabled, when `maxcolumn`
+  is set to zero, no maximum line length is enforced.
+
+g:ale_virtualtext_single                             *g:ale_virtualtext_single*
+                                                     *b:ale_virtualtext_single*
+  Type: |Number|
+  Default: `0`
+
+  Enable or disable concatenation of multiple virtualtext messages on a single
+  line.  By default, if a line has multiple errors or warnings, each will be
+  appended in turn.
+
+  With `single` set to a non-zero value, only the first message appears.
+  (No attempt is made to prefer message types such as errors over warnings)
+
 g:ale_virtualenv_dir_names                         *g:ale_virtualenv_dir_names*
                                                    *b:ale_virtualenv_dir_names*
 
