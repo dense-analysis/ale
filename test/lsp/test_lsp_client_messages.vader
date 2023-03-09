@@ -36,6 +36,9 @@ Given typescript(A TypeScript file with 3 lines):
   bar()
   baz()
 
+Execute(ale#util#GetBufferContents() should return correctly formatted newlines):
+  AssertEqual "foo()\nbar()\nbaz()\n", ale#util#GetBufferContents(bufnr(''))
+
 Execute(ale#lsp#message#DidOpen() should return correct messages):
   let g:ale_lsp_next_version_id = 12
   AssertEqual
