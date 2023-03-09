@@ -2996,6 +2996,7 @@ documented in additional help files.
     html-beautify.........................|ale-html-beautify|
     htmlhint..............................|ale-html-htmlhint|
     prettier..............................|ale-html-prettier|
+    rustywind.............................|ale-html-rustywind|
     stylelint.............................|ale-html-stylelint|
     tidy..................................|ale-html-tidy|
     vscodehtml............................|ale-html-vscode|

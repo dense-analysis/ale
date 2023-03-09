@@ -1,0 +1,36 @@
+Before:
+  Save g:ale_html_rustywind_executable
+  Save g:ale_html_rustywind_options
+
+  " Use an invalid global executable, so we don't match it.
+  let g:ale_html_rustywind_executable = 'xxxinvalid'
+  let g:ale_html_rustywind_options = ''
+
+  call ale#test#SetDirectory('/testplugin/test/fixers')
+
+After:
+  Restore
+
+  call ale#test#RestoreDirectory()
+
+Execute(The rustywind callback should return the correct default values):
+  call ale#test#SetFilename('../test-files/rustywind/test.html')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' --stdin',
+  \ },
+  \ ale#fixers#rustywind#Fix(bufnr(''))
+
+Execute(The rustywind callback should include custom rustywind options):
+  let g:ale_html_rustywind_options = "--custom-regex some-regex"
+  call ale#test#SetFilename('../test-files/rustywind/test.html')
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('xxxinvalid')
+  \     . ' ' . g:ale_html_rustywind_options
+  \     . ' --stdin',
+  \ },
+  \ ale#fixers#rustywind#Fix(bufnr(''))
