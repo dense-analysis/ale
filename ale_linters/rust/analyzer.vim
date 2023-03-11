@@ -3,6 +3,7 @@
 
 call ale#Set('rust_analyzer_executable', 'rust-analyzer')
 call ale#Set('rust_analyzer_config', {})
+call ale#Set('rust_analyzer_use_local_config', 0)
 
 function! ale_linters#rust#analyzer#GetCommand(buffer) abort
     return '%e'
@@ -26,10 +27,28 @@ function! ale_linters#rust#analyzer#GetProjectRoot(buffer) abort
     return ''
 endfunction
 
+function! ale_linters#rust#analyzer#GetConfig(buffer) abort
+    let l:config = ale#Var(a:buffer, 'rust_analyzer_config')
+
+    if ale#Var(a:buffer, 'rust_analyzer_use_local_config')
+        let l:config_local_path = ale#path#FindNearestFile(a:buffer, 'analyzer.json')
+
+        if !empty(l:config_local_path)
+            try
+                let l:config_local = json_decode(join(readfile(l:config_local_path)))
+                let l:config =  extend(l:config, l:config_local)
+            catch
+            endtry
+        endif
+    endif
+
+    return l:config
+endfunction
+
 call ale#linter#Define('rust', {
 \   'name': 'analyzer',
 \   'lsp': 'stdio',
-\   'initialization_options': {b -> ale#Var(b, 'rust_analyzer_config')},
+\   'initialization_options': function('ale_linters#rust#analyzer#GetConfig'),
 \   'executable': {b -> ale#Var(b, 'rust_analyzer_executable')},
 \   'command': function('ale_linters#rust#analyzer#GetCommand'),
 \   'project_root': function('ale_linters#rust#analyzer#GetProjectRoot'),
