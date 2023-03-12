@@ -26,3 +26,10 @@ Execute(Should accept configuration settings):
   AssertLSPConfig {}
   let b:ale_rust_analyzer_config = {'diagnostics': {'disabled': ['unresolved-import']}}
   AssertLSPOptions {'diagnostics': {'disabled': ['unresolved-import']}}
+
+Execute(Should override configuration settings with analyzer.json):
+  AssertLSPConfig {}
+  call ale#test#SetFilename('../test-files/rust/analyzer/analyzer.json')
+  let b:ale_rust_analyzer_config = {'diagnostics': {'disabled': ['unresolved-import']}}
+  let b:ale_rust_analyzer_use_local_config = 1
+  AssertLSPOptions {'diagnostics': {'disabled': []}, 'server': {'extraEnv': {'RUSTUP_TOOLCHAIN': 'nightly'}, }, }

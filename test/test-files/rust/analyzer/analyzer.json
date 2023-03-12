@@ -1,0 +1,10 @@
+{
+  "diagnostics": {
+    "disabled": []
+  },
+  "server": {
+    "extraEnv": {
+      "RUSTUP_TOOLCHAIN": "nightly"
+    }
+  }
+}
