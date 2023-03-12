@@ -60,7 +60,7 @@ g:ale_rust_analyzer_config                         *g:ale_rust_analyzer_config*
   Type: |Dictionary|
   Default: `{}`
 
-  Dictionary with configuration settings for |rust-analyzer|.
+  Dictionary with configuration settings for `rust-analyzer`.
 
 
 g:ale_rust_analyzer_use_local_config     *g:ale_rust_analyzer_use_local_config*
@@ -68,9 +68,9 @@ g:ale_rust_analyzer_use_local_config     *g:ale_rust_analyzer_use_local_config*
   Type: |Number|
   Default: `0`
 
-  When set to 1, search for closest "analyzer.json" for |rust-analyzer|.
-  If found, use it to extend *g:ale_rust_analyzer_config,* it is usefull handle
-  automatically config by project.
+  When set to 1, search for the closest config `analyzer.json` for
+  `rust-analyzer`. If found, use it to extend *g:ale_rust_analyzer_config*.
+  It is usefull for using automatically a different config by project.
 
 
 ===============================================================================
