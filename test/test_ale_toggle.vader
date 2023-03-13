@@ -6,6 +6,7 @@ Before:
   Save g:ale_pattern_options
   Save g:ale_pattern_options_enabled
   Save g:ale_set_balloons
+  Save g:ale_virtualtext_cursor
 
   let g:ale_set_signs = 1
   let g:ale_set_lists_synchronously = 1
@@ -74,6 +75,57 @@ Before:
     return l:results
   endfunction
 
+  function! TestVirtualtext(buffer, disabled, current, all)
+    if ale#virtualtext#IsSupported()
+      let g:ale_virtualtext_cursor = a:current
+
+      ALEDisable
+      call setpos('.', [0, 1, 1, 0])
+      ALEEnable
+      call ale#test#FlushJobs()
+      AssertEqual 0, ale#virtualtext#CountTexts(a:buffer),
+      \ 'There should be no virtual texts when g:ale_virtualtext_cursor is '
+      \ . string(a:current) . ' and the cursor is on line 1'
+
+      ALEDisable
+      call setpos('.', [0, 2, 1, 0])
+      ALEEnable
+      call ale#test#FlushJobs()
+      AssertEqual 1, ale#virtualtext#CountTexts(a:buffer),
+      \ 'There should be one virtual text when g:ale_virtualtext_cursor is '
+      \ . string(a:current) . ' and the cursor is on line 2'
+
+      ALEDisable
+      AssertEqual 0, ale#virtualtext#CountTexts(a:buffer),
+      \ 'The virtual texts should be cleared when ALE is disabled'
+
+      let g:ale_virtualtext_cursor = a:disabled
+
+      ALEEnable
+      call ale#test#FlushJobs()
+      AssertEqual 0, ale#virtualtext#CountTexts(a:buffer),
+      \ 'There should be no virtual texts when g:ale_virtualtext_cursor is '
+      \ . string(a:disabled)
+
+      if !ale#virtualtext#IsEmulated()
+        let g:ale_virtualtext_cursor = a:all
+
+        ALEDisable
+        call setpos('.', [0, 1, 1, 0])
+        ALEEnable
+        call ale#test#FlushJobs()
+        AssertEqual 1, ale#virtualtext#CountTexts(a:buffer),
+        \ 'There should be one virtual text (from line 2) when '
+        \ . 'g:ale_virtualtext_cursor is '. string(a:all) . ' and the cursor '
+        \ . 'is on line 1'
+
+        ALEDisable
+        AssertEqual 0, ale#virtualtext#CountTexts(a:buffer),
+        \ 'The virtual texts should be cleared when ALE is disabled'
+      endif
+    endif
+  endfunction
+
   call ale#linter#Define('foobar', {
   \ 'name': 'testlinter',
   \ 'callback': 'ToggleTestCallback',
@@ -103,6 +155,7 @@ After:
 
   delfunction ToggleTestCallback
   delfunction ParseAuGroups
+  delfunction TestVirtualtext
 
   call setloclist(0, [])
   call ale#sign#Clear()
@@ -442,3 +495,12 @@ Execute(Enabling ALE should enable balloons if the setting is on):
 
     AssertEqual 'ale#balloon#Expr()', &balloonexpr
   endif
+
+Execute(Enabling ALE should enable virtual text if the setting is on (strings)):
+  call TestVirtualtext(bufnr(''), 'disabled', 'current', 'all')
+
+Execute(Enabling ALE should enable virtual text if the setting is on (numbers)):
+  call TestVirtualtext(bufnr(''), 0, 1, 2)
+
+Execute(Enabling ALE should enable virtual text if the setting is on (numeric strings)):
+  call TestVirtualtext(bufnr(''), '0', '1', '2')
