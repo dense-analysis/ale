@@ -138,12 +138,20 @@ function! ale#virtualtext#ShowMessage(buffer, item) abort
     let s:last_message = l:msg
 
     if has('nvim')
-        call nvim_buf_set_virtual_text(
-        \   a:buffer,
-        \   s:ns_id, l:line - 1,
-        \   [[l:msg, l:hl_group]],
-        \   {}
-        \)
+        if exists('*nvim_buf_set_extmark')
+            call nvim_buf_set_extmark(
+            \   a:buffer,
+            \   s:ns_id, l:line - 1, 0,
+            \   {'virt_text': [[l:msg, l:hl_group]]}
+            \)
+        else
+            call nvim_buf_set_virtual_text(
+            \   a:buffer,
+            \   s:ns_id, l:line - 1,
+            \   [[l:msg, l:hl_group]],
+            \   {}
+            \)
+        endif
     elseif s:emulate_virt
         let l:left_pad = col('$')
         call prop_add(l:line, l:left_pad, {'type': 'ale'})
