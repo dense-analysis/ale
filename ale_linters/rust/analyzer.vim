@@ -28,7 +28,7 @@ function! ale_linters#rust#analyzer#GetProjectRoot(buffer) abort
 endfunction
 
 function! ale_linters#rust#analyzer#GetConfig(buffer) abort
-    let l:config = ale#Var(a:buffer, 'rust_analyzer_config')
+    let l:config = copy(ale#Var(a:buffer, 'rust_analyzer_config'))
 
     if ale#Var(a:buffer, 'rust_analyzer_use_local_config')
         let l:config_local_path = ale#path#FindNearestFile(a:buffer, 'analyzer.json')
