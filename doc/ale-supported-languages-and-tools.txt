@@ -262,6 +262,7 @@ Notes:
   * `htmlhint`
   * `prettier`
   * `proselint`
+  * `rustywind`
   * `tidy`
   * `write-good`
 * Idris
