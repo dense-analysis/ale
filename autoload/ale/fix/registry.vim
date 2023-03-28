@@ -605,6 +605,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#rustywind#Fix',
 \       'suggested_filetypes': ['html'],
 \       'description': 'Sort Tailwind CSS classes',
+\   },
+\   'npm-groovy-lint': {
+\       'function': 'ale#fixers#npmgroovylint#Fix',
+\       'suggested_filetypes': ['groovy'],
+\       'description': 'Fix Groovy files with npm-groovy-fix.',
 \   }
 \}
 
