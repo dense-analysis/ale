@@ -28,6 +28,11 @@ let g:ale_virtualtext_prefix =
 " Controls the milliseconds delay before showing a message.
 let g:ale_virtualtext_delay = get(g:, 'ale_virtualtext_delay', 10)
 
+" Controls the positioning of virtualtext
+let g:ale_virtualtext_column = get(g:, 'ale_virtualtext_column', 0)
+let g:ale_virtualtext_maxcolumn = get(g:, 'ale_virtualtext_maxcolumn', 0)
+let g:ale_virtualtext_single = get(g:,'ale_virtualtext_single',0)
+
 let s:cursor_timer = get(s:, 'cursor_timer', -1)
 let s:last_pos = get(s:, 'last_pos', [0, 0, 0])
 let s:hl_list = get(s:, 'hl_list', [])
@@ -119,6 +124,35 @@ function! ale#virtualtext#GetGroup(item) abort
     return 'ALEVirtualTextInfo'
 endfunction
 
+function! ale#virtualtext#GetColumnPadding(buffer, line) abort
+    let l:mincol = ale#Var(a:buffer, 'virtualtext_column')
+    let l:maxcol = ale#Var(a:buffer, 'virtualtext_maxcolumn')
+    let l:win = bufwinnr(a:buffer)
+
+    if l:mincol[len(l:mincol)-1] is# '%'
+        let l:mincol = (winwidth(l:win) * l:mincol) / 100
+    endif
+
+    if l:maxcol[len(l:maxcol)-1] is# '%'
+        let l:maxcol = (winwidth(l:win) * l:maxcol) / 100
+    endif
+
+    " Calculate padding for virtualtext alignment
+    if l:mincol > 0 || l:maxcol > 0
+        let l:line_width = strdisplaywidth(getline(a:line))
+
+        if l:line_width < l:mincol
+            return l:mincol - l:line_width
+        elseif l:maxcol > 0 && l:line_width >= l:maxcol
+            " Stop processing if virtualtext would start beyond maxcol
+            return -1
+        endif
+    endif
+
+    " no padding.
+    return 0
+endfunction
+
 function! ale#virtualtext#ShowMessage(buffer, item) abort
     if !s:has_virt_text || !bufexists(str2nr(a:buffer))
         return
@@ -133,9 +167,15 @@ function! ale#virtualtext#ShowMessage(buffer, item) abort
     let l:prefix = ale#GetLocItemMessage(a:item, l:prefix)
     let l:prefix = substitute(l:prefix, '\V%comment%', '\=l:comment', 'g')
     let l:msg = l:prefix . substitute(a:item.text, '\n', ' ', 'g')
+    let l:col_pad = ale#virtualtext#GetColumnPadding(a:buffer, l:line)
 
     " Store the last message we're going to set so we can read it in tests.
     let s:last_message = l:msg
+
+    " Discard virtualtext if padding is negative.
+    if l:col_pad < 0
+        return
+    endif
 
     if has('nvim')
         call nvim_buf_set_virtual_text(
@@ -174,6 +214,7 @@ function! ale#virtualtext#ShowMessage(buffer, item) abort
         \   'type': l:hl_group,
         \   'text': ' ' . l:msg,
         \   'bufnr': a:buffer,
+        \   'text_padding_left': l:col_pad,
         \})
     endif
 endfunction
@@ -239,9 +280,17 @@ function! ale#virtualtext#SetTexts(buffer, loclist) abort
 
     call ale#virtualtext#Clear(a:buffer)
 
+    let l:filter = ale#Var(a:buffer,'virtualtext_single')
+    let l:seen = {}
+
     for l:item in a:loclist
         if l:item.bufnr == a:buffer
-            call ale#virtualtext#ShowMessage(a:buffer, l:item)
+            let l:line = max([1, l:item.lnum])
+
+            if !has_key(l:seen,l:line) || l:filter == 0
+                call ale#virtualtext#ShowMessage(a:buffer, l:item)
+                let l:seen[l:line] = 1
+            endif
         endif
     endfor
 endfunction
