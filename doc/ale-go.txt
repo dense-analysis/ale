@@ -120,7 +120,7 @@ g:ale_go_golangci_lint_executable           *g:ale_go_golangci_lint_executable*
 g:ale_go_golangci_lint_options                 *g:ale_go_golangci_lint_options*
                                                *b:ale_go_golangci_lint_options*
   Type: |String|
-  Default: `'--enable-all'`
+  Default: `''`
 
   This variable can be changed to alter the command-line arguments to the
   golangci-lint invocation.
