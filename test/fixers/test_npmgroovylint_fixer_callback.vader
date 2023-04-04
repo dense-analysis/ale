@@ -1,0 +1,23 @@
+Before:
+  Save b:ale_groovy_npmgroovylint_fix_options
+
+  call ale#assert#SetUpFixerTest('groovy', 'npm-groovy-lint')
+
+After:
+  Restore
+
+  call ale#assert#TearDownFixerTest()
+
+Execute(The callback should return the correct default values):
+  AssertFixer {
+  \  'read_temporary_file': 1,
+  \  'command': ale#Escape('npm-groovy-lint') . ' --fix %t',
+  \ }
+
+Execute(The callback should include custom options):
+  let b:ale_groovy_npmgroovylint_fix_options = '--format'
+
+  AssertFixer {
+  \  'read_temporary_file': 1,
+  \  'command': ale#Escape('npm-groovy-lint') . ' --format %t',
+  \ }

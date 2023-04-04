@@ -43,6 +43,7 @@ let s:default_ale_linters = {
 \   'csh': ['shell'],
 \   'elixir': ['credo', 'dialyxir', 'dogma'],
 \   'go': ['gofmt', 'golint', 'gopls', 'govet'],
+\   'groovy': ['npm-groovy-lint'],
 \   'hack': ['hack'],
 \   'help': [],
 \   'inko': ['inko'],
