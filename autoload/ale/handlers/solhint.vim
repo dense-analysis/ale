@@ -18,29 +18,30 @@ function! ale#handlers#solhint#Handle(buffer, lines) abort
     " /path/to/file/file.sol: line 1, col 10, Error - 'addOne' is defined but never used. (no-unused-vars)
     let l:output = []
 
-    let l:lint_pattern = '\v^[^:]+: line (\d+), col (\d+), (Error|Warning) - (.*) \((.*)\)$'
+    " let l:lint_pattern = '\v^[^:]+: line (\d+), col (\d+), (Error|Warning) - (.*) \((.*)\)$'
+    let l:lint_pattern = '\v^[^:]+:(\d+):(\d+): %(Parse error: )@<!\ze(.*)\s+\[(Error|Warning)\/([^\]]+)\]$'
 
     for l:match in ale#util#GetMatches(a:lines, l:lint_pattern)
-        let l:isError = l:match[3] is? 'error'
+        let l:isError = l:match[4] is? 'error'
         call add(l:output, {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
-        \   'text': l:match[4],
+        \   'text': l:match[3],
         \   'code': l:match[5],
         \   'type': l:isError ? 'E' : 'W',
         \})
     endfor
 
-    let l:syntax_pattern = '\v^[^:]+: line (\d+), col (\d+), (Error|Warning) - (Parse error): (.*)$'
+    " let l:syntax_pattern = '\v^[^:]+: line (\d+), col (\d+), (Error|Warning) - (Parse error): (.*)$'
+    let l:syntax_pattern = '\v^[^:]+:(\d+):(\d+): Parse error: (.*)\s+\[Error\]$'
 
     for l:match in ale#util#GetMatches(a:lines, l:syntax_pattern)
-        let l:isError = l:match[3] is? 'error'
         call add(l:output, {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
-        \   'text': l:match[5],
-        \   'code': l:match[4],
-        \   'type': l:isError ? 'E' : 'W',
+        \   'text': l:match[3],
+        \   'code': 'Parse error',
+        \   'type': 'E',
         \})
     endfor
 
@@ -94,5 +95,5 @@ function! ale#handlers#solhint#GetCommand(buffer) abort
 
     return ale#node#Executable(a:buffer, l:executable)
     \   . (!empty(l:options) ? ' ' . l:options : '')
-    \   . ' --formatter compact %s'
+    \   . ' --formatter unix %s'
 endfunction

@@ -2,7 +2,7 @@ Before:
   call ale#assert#SetUpLinterTest('solidity', 'solhint')
   runtime autoload/ale/handlers/solhint.vim
 
-  let b:args = ' --formatter compact %s'
+  let b:args = ' --formatter unix %s'
 
 After:
   unlet! b:args
