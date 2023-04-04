@@ -86,6 +86,30 @@ Execute (The ansible-lint handler for version group >=5 should handle names with
   \ fnamemodify(tempname(), ':h') . "/test playbook.yml:3:148: [syntax-check] [VERY_HIGH] 'var' is not a valid attribute for a Play",
   \ ])
 
+Execute (The ansible-lint handler should work with issues with positions and lines members):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 6,
+  \     'col': 7,
+  \     'code': 'major',
+  \     'type': 'W',
+  \     'text': "syntax-check[specific]",
+  \     'detail': 'fakedesc',
+  \   },
+  \   {
+  \     'lnum': 6,
+  \     'col': 0,
+  \     'code': 'major',
+  \     'type': 'W',
+  \     'text': 'fqcn[action-core]',
+  \     'detail': 'fakedesc2'
+  \   }
+  \ ],
+  \ ale_linters#ansible#ansible_lint#Handle(bufnr(''), [6, 11, 0], [
+  \   "[{\"type\":\"issue\",\"check_name\":\"syntax-check[specific]\",\"categories\":[\"core\",\"unskippable\"],\"url\":\"https://ansible-lint.readthedocs.io/rules/syntax-check/\",\"severity\":\"major\",\"description\":\"fakedesc\",\"fingerprint\":\"4\",\"location\":{\"path\":\"test playbook.yml\",\"positions\":{\"begin\":{\"line\":6,\"column\":7}}}},{\"type\":\"issue\",\"check_name\":\"fqcn[action-core]\",\"categories\":[\"formatting\"],\"url\":\"https://ansible-lint.readthedocs.io/rules/fqcn/\",\"severity\":\"major\",\"description\":\"fakedesc2\",\"fingerprint\":\"f\",\"location\":{\"path\":\"test playbook.yml\",\"lines\":{\"begin\":6}},\"content\":{\"body\":\"Use `ansible.builtin.command` or `ansible.legacy.command` instead.\"}}]"
+  \ ])
+
 Execute (The ansible-lint handler should ignore errors from other files):
   AssertEqual
   \ [
