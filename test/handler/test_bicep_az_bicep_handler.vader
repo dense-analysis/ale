@@ -1,12 +1,12 @@
 Before:
-  runtime ale_linters/bicep/bicep.vim
+  runtime ale_linters/bicep/az_bicep.vim
 
 After:
   Restore
 
   call ale#linter#Reset()
 
-Execute(The bicep handler should handle basic warnings):
+Execute(The az_bicep handler should handle basic warnings):
   AssertEqual
   \ [
   \   {
