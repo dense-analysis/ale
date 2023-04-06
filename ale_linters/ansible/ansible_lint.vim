@@ -34,8 +34,9 @@ function! ale_linters#ansible#ansible_lint#Handle(buffer, version, lines) abort
                 else
                     let l:coord_keyname = 'lines'
                 endif
+
                 let l:column_member = printf(
-                \    "l:issue.location.%s.begin.column", l:coord_keyname
+                \    'l:issue.location.%s.begin.column', l:coord_keyname
                 \)
 
                 call add(l:output, {
