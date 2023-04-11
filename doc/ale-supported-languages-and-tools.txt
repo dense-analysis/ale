@@ -245,6 +245,7 @@ Notes:
   * `hlint`
   * `hls`
   * `ormolu`
+  * `fourmolu`
   * `stack-build`!!
   * `stack-ghc`
   * `stylish-haskell`

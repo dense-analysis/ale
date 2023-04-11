@@ -1,0 +1,29 @@
+Before:
+  Save g:ale_haskell_fourmolu_executable
+  Save g:ale_haskell_fourmolu_options
+
+After:
+  Restore
+
+Execute(The fourmolu callback should return the correct default values):
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('fourmolu')
+  \     . ' --stdin-input-file '
+  \     . ale#Escape(@%)
+  \ },
+  \ ale#fixers#fourmolu#Fix(bufnr(''))
+
+Execute(The fourmolu executable and options should be configurable):
+  let g:ale_haskell_fourmolu_executable = '/path/to/fourmolu'
+  let g:ale_haskell_fourmolu_options = '-h'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('/path/to/fourmolu')
+  \     . ' -h'
+  \     . ' --stdin-input-file '
+  \     . ale#Escape(@%)
+  \ },
+  \ ale#fixers#fourmolu#Fix(bufnr(''))
+

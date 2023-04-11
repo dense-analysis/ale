@@ -254,6 +254,7 @@ formatting.
   * [hlint](https://hackage.haskell.org/package/hlint)
   * [hls](https://github.com/haskell/haskell-language-server)
   * [ormolu](https://github.com/tweag/ormolu)
+  * [fourmolu](https://github.com/fourmolu/fourmolu)
   * [stack-build](https://haskellstack.org/) :floppy_disk:
   * [stack-ghc](https://haskellstack.org/)
   * [stylish-haskell](https://github.com/jaspervdj/stylish-haskell)
