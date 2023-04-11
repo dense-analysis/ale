@@ -16,7 +16,7 @@ g:ale_bicep_bicep_executable                      *g:ale_bicep_bicep_executable*
 g:ale_bicep_bicep_options                            *g:ale_bicep_bicep_options*
                                                      *b:ale_bicep_bicep_options*
   Type: |String|
-  Default: `'build --outfile /dev/null'`
+  Default: `''`
 
   This variable can be set to pass additional options to bicep.
 
@@ -35,7 +35,7 @@ g:ale_bicep_az_bicep_executable                *g:ale_bicep_az_bicep_executable*
 g:ale_bicep_az_bicep_options                      *g:ale_bicep_az_bicep_options*
                                                   *b:ale_bicep_az_bicep_options*
   Type: |String|
-  Default: `'bicep build --stdout --file '`
+  Default: `''`
 
   This variable can be set to pass additional options to az_bicep.
 
