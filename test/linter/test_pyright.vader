@@ -148,14 +148,14 @@ Execute(virtualenv vars should be used when ale_python_auto_virtualenv = 1):
   \   . ale#Escape(b:executable) . ' --stdio'
   Assert !empty(ale#python#AutoVirtualenvEnvString(bufnr('')))
 
-Execute(Setting executable to 'pipenv' should append 'run pyright'):
+Execute(Setting executable to 'pipenv' should append 'run pyright-langserver'):
   call ale#test#SetFilename('../test-files')
 
   let g:ale_python_pyright_executable = 'path/to/pipenv'
 
   GivenCommandOutput []
   AssertLinter 'path/to/pipenv',
-  \ ale#Escape('path/to/pipenv') . ' run pyright --stdio'
+  \ ale#Escape('path/to/pipenv') . ' run pyright-langserver --stdio'
 
 Execute(Pipenv is detected when python_pyright_auto_pipenv is set):
   let g:ale_python_pyright_auto_pipenv = 1
@@ -163,14 +163,14 @@ Execute(Pipenv is detected when python_pyright_auto_pipenv is set):
 
   AssertLinterCwd ale#python#FindProjectRootIni(bufnr(''))
   AssertLinter 'pipenv',
-  \ ale#Escape('pipenv') . ' run pyright --stdio'
+  \ ale#Escape('pipenv') . ' run pyright-langserver --stdio'
 
-Execute(Setting executable to 'poetry' should append 'run pyright'):
+Execute(Setting executable to 'poetry' should append 'run pyright-langserver'):
   let g:ale_python_pyright_executable = 'path/to/poetry'
 
   GivenCommandOutput []
   AssertLinter 'path/to/poetry',
-  \ ale#Escape('path/to/poetry') . ' run pyright --stdio'
+  \ ale#Escape('path/to/poetry') . ' run pyright-langserver --stdio'
 
 Execute(poetry is detected when python_pyright_auto_poetry is set):
   let g:ale_python_pyright_auto_poetry = 1
@@ -178,4 +178,4 @@ Execute(poetry is detected when python_pyright_auto_poetry is set):
 
   AssertLinterCwd ale#python#FindProjectRootIni(bufnr(''))
   AssertLinter 'poetry',
-  \ ale#Escape('poetry') . ' run pyright --stdio'
+  \ ale#Escape('poetry') . ' run pyright-langserver --stdio'
