@@ -245,6 +245,7 @@ formatting.
   * [cabal-ghc](https://www.haskell.org/cabal/)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [floskell](https://github.com/ennocramer/floskell)
+  * [fourmolu](https://github.com/fourmolu/fourmolu)
   * [ghc](https://www.haskell.org/ghc/)
   * [ghc-mod](https://github.com/DanielG/ghc-mod)
   * [hdevtools](https://hackage.haskell.org/package/hdevtools)
@@ -254,7 +255,6 @@ formatting.
   * [hlint](https://hackage.haskell.org/package/hlint)
   * [hls](https://github.com/haskell/haskell-language-server)
   * [ormolu](https://github.com/tweag/ormolu)
-  * [fourmolu](https://github.com/fourmolu/fourmolu)
   * [stack-build](https://haskellstack.org/) :floppy_disk:
   * [stack-ghc](https://haskellstack.org/)
   * [stylish-haskell](https://github.com/jaspervdj/stylish-haskell)
