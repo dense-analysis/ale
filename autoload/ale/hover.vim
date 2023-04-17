@@ -108,7 +108,7 @@ function! ale#hover#ParseLSPResult(contents) abort
                     let l:match = matchlist(l:line, '^```\(.*\)$')
 
                     if !empty(l:match)
-                        let l:fence_language = l:match[1]
+                        let l:fence_language = trim(l:match[1])
 
                         if !empty(l:marked_list)
                             call add(l:fence_lines, '')
