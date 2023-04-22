@@ -561,6 +561,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['haskell'],
 \       'description': 'A formatter for Haskell source code.',
 \   },
+\   'fourmolu': {
+\       'function': 'ale#fixers#fourmolu#Fix',
+\       'suggested_filetypes': ['haskell'],
+\       'description': 'A formatter for Haskell source code.',
+\   },
 \   'jsonnetfmt': {
 \       'function': 'ale#fixers#jsonnetfmt#Fix',
 \       'suggested_filetypes': ['jsonnet'],

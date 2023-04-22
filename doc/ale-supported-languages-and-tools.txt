@@ -236,6 +236,7 @@ Notes:
   * `cabal-ghc`
   * `cspell`
   * `floskell`
+  * `fourmolu`
   * `ghc`
   * `ghc-mod`
   * `hdevtools`

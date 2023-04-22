@@ -245,6 +245,7 @@ formatting.
   * [cabal-ghc](https://www.haskell.org/cabal/)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [floskell](https://github.com/ennocramer/floskell)
+  * [fourmolu](https://github.com/fourmolu/fourmolu)
   * [ghc](https://www.haskell.org/ghc/)
   * [ghc-mod](https://github.com/DanielG/ghc-mod)
   * [hdevtools](https://hackage.haskell.org/package/hdevtools)

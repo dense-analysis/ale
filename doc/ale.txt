@@ -3019,6 +3019,7 @@ documented in additional help files.
     stylish-haskell.......................|ale-haskell-stylish-haskell|
     hie...................................|ale-haskell-hie|
     ormolu................................|ale-haskell-ormolu|
+    fourmolu..............................|ale-haskell-fourmolu|
   hcl.....................................|ale-hcl-options|
     packer-fmt............................|ale-hcl-packer-fmt|
     terraform-fmt.........................|ale-hcl-terraform-fmt|
