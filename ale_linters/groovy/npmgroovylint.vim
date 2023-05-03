@@ -14,7 +14,7 @@ endfunction
 
 function! ale_linters#groovy#npmgroovylint#Handle(buffer, lines) abort
     let l:output = []
-    let l:json = json_decode(join(a:lines, ''))
+    let l:json = ale#util#FuzzyJSONDecode(a:lines, {})
 
     for [l:filename, l:file] in items(get(l:json, 'files', {}))
         for l:error in get(l:file, 'errors', [])
