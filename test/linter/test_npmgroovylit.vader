@@ -1,0 +1,20 @@
+Before:
+  Save b:ale_groovy_npmgroovylint_options
+
+  call ale#assert#SetUpLinterTest('groovy', 'npmgroovylint')
+  call ale#test#SetFilename('test.groovy')
+
+After:
+  Restore
+
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default npm-groovy-lint command should be correct):
+  AssertLinter 'npm-groovy-lint',
+  \ ale#Escape('npm-groovy-lint') . ' --failon none --output json --loglevel warning %t'
+
+Execute(Default options should be configurable):
+  let b:ale_groovy_npmgroovylint_options = '--loglevel info'
+
+  AssertLinter 'npm-groovy-lint',
+  \ ale#Escape('npm-groovy-lint') . ' --failon none --output json --loglevel info %t'

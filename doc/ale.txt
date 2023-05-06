@@ -1642,6 +1642,7 @@ g:ale_linters                                                   *g:ale_linters*
   \   'csh': ['shell'],
   \   'elixir': ['credo', 'dialyxir', 'dogma'],
   \   'go': ['gofmt', 'golint', 'gopls', 'govet'],
+  \   'groovy': ['npm-groovy-lint'],
   \   'hack': ['hack'],
   \   'help': [],
   \   'inko': ['inko'],
@@ -2995,6 +2996,8 @@ documented in additional help files.
     eslint................................|ale-graphql-eslint|
     gqlint................................|ale-graphql-gqlint|
     prettier..............................|ale-graphql-prettier|
+  groovy..................................|ale-groovy-options|
+    npm-groovy-lint.......................|ale-groovy-npm-groovy-lint|
   hack....................................|ale-hack-options|
     hack..................................|ale-hack-hack|
     hackfmt...............................|ale-hack-hackfmt|
