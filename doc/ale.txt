@@ -2943,6 +2943,7 @@ documented in additional help files.
     dockerfile_lint.......................|ale-dockerfile-dockerfile_lint|
     dprint................................|ale-dockerfile-dprint|
     hadolint..............................|ale-dockerfile-hadolint|
+    dockerlinter..........................|ale-dockerfile-dockerlinter|
   elixir..................................|ale-elixir-options|
     mix...................................|ale-elixir-mix|
     mix_format............................|ale-elixir-mix-format|

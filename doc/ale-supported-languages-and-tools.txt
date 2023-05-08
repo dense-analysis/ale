@@ -161,6 +161,7 @@ Notes:
   * `dockerfile_lint`
   * `dprint`
   * `hadolint`
+  * `dockerlinter`
 * Elixir
   * `credo`
   * `cspell`

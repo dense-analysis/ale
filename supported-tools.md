@@ -170,6 +170,7 @@ formatting.
   * [dockerfile_lint](https://github.com/projectatomic/dockerfile_lint)
   * [dprint](https://dprint.dev)
   * [hadolint](https://github.com/hadolint/hadolint)
+  * [dockerlinter](https://github.com/buddy-works/dockerfile-linter)
 * Elixir
   * [credo](https://github.com/rrrene/credo)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell) :warning:
