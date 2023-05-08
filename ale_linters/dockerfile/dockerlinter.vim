@@ -35,7 +35,11 @@ function! ale_linters#dockerfile#dockerlinter#Handle(buffer, lines) abort
         let l:detail = l:message
         let l:code = l:object['code']
 
-        let l:link = 'https://github.com/buddy-works/dockerfile-linter/blob/master/Rules.md#' . l:code
+        if l:code =~# '^SC'
+            let l:link = 'https://www.shellcheck.net/wiki/' . l:code
+        else
+            let l:link = 'https://github.com/buddy-works/dockerfile-linter/blob/master/Rules.md#' . l:code
+        endif
 
         let l:detail = l:message . "\n\n" . l:link
 
