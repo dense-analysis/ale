@@ -159,9 +159,9 @@ Notes:
   * `dhall-lint`
 * Dockerfile
   * `dockerfile_lint`
+  * `dockerlinter`
   * `dprint`
   * `hadolint`
-  * `dockerlinter`
 * Elixir
   * `credo`
   * `cspell`
