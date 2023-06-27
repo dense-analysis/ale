@@ -1,0 +1,26 @@
+Before:
+  runtime ale_linters/bzl/buildifier.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The buildifier handler should parse lines correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 26,
+  \     'col': 1,
+  \     'type': 'E',
+  \     'text': 'syntax error near'';'' and move the next statement to the new line',
+  \   },
+  \   {
+  \     'lnum': 7,
+  \     'col': 0,
+  \     'type': 'W',
+  \     'text': 'unused-variable: Variable "foo" is unused. Please remove it. (https://github.com/bazelbuild/buildtools/blob/master/WARNINGS.md#unused-variable)'
+  \   },
+  \ ],
+  \ ale_linters#bzl#buildifier#Handle(bufnr(''), [
+  \   'swiftformat/toolchains/assets.bzl:26:1: syntax error near'';'' and move the next statement to the new line',
+  \   'swiftformat/toolchains/assets.bzl:7: unused-variable: Variable "foo" is unused. Please remove it. (https://github.com/bazelbuild/buildtools/blob/master/WARNINGS.md#unused-variable)',
+  \ ])
