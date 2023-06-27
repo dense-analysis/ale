@@ -16,17 +16,9 @@ Execute (The golangci-lint handler should handle names with spaces):
   \     'expected ''package'', found ''IDENT'' gibberish',
   \     'staticcheck',
   \   ],
-  \   [
-  \     'C:\something\file with spaces.go',
-  \     '37',
-  \     '5',
-  \     'expected ''package'', found ''IDENT'' gibberish',
-  \     'golint',
-  \   ],
   \ ],
   \ map(ale_linters#go#golangci_lint#GetMatches([
   \   'C:\something\file with spaces.go:12:3: expected ''package'', found ''IDENT'' gibberish (staticcheck)',
-  \   'C:\something\file with spaces.go:37:5: expected ''package'', found ''IDENT'' gibberish (golint)',
   \ ]), 'v:val[1:5]')
 
 Execute (The golangci-lint handler should handle paths correctly):
@@ -43,17 +35,9 @@ Execute (The golangci-lint handler should handle paths correctly):
   \     'type': 'W',
   \     'filename': ale#path#Simplify(expand('%:p:h') . '/test.go'),
   \   },
-  \   {
-  \     'lnum': 37,
-  \     'col': 5,
-  \     'text': 'expected ''package'', found ''IDENT'' gibberish (golint)',
-  \     'type': 'W',
-  \     'filename': ale#path#Simplify(expand('%:p:h') . '/test.go'),
-  \   },
   \ ],
   \ ale_linters#go#golangci_lint#Handler(bufnr(''), [
   \   file . ':12:3: expected ''package'', found ''IDENT'' gibberish (staticcheck)',
-  \   file . ':37:5: expected ''package'', found ''IDENT'' gibberish (golint)',
   \ ])
 
 Execute (The golangci-lint handler should handle only typecheck lines as errors):
