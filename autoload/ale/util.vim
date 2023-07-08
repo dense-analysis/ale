@@ -522,7 +522,12 @@ function! ale#util#SetBufferContents(buffer, lines) abort
 
     " Use a Vim API for setting lines in other buffers, if available.
     if l:has_bufline_api
-        call setbufline(a:buffer, 1, l:new_lines)
+        if has('nvim')
+            call nvim_buf_set_lines(a:buffer, 0, l:first_line_to_remove, 0, l:new_lines)
+        else
+            call setbufline(a:buffer, 1, l:new_lines)
+        endif
+
         call deletebufline(a:buffer, l:first_line_to_remove, '$')
     " Fall back on setting lines the old way, for the current buffer.
     else
