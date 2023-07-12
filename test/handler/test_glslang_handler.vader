@@ -22,3 +22,27 @@ Execute(The glsl glslang handler should parse lines correctly):
   \ 'WARNING: 0:121: ''switch'' : last case/default label not followed by statements',
   \ 'ERROR: 2 compilation errors.  No code generated.',
   \ ])
+
+Execute(The glsl glslang handler should parse lines with options -V or -G correctly):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 7,
+  \     'col': 0,
+  \     'type': 'E',
+  \     'text': '''non-opaque uniforms outside a block'' : not allowed when using GLSL for Vulkan',
+  \   },
+  \   {
+  \     'lnum': 14,
+  \     'col': 0,
+  \     'type': 'W',
+  \     'text': '''__shininess'' : identifiers containing consecutive underscores ("__") are reserved',
+  \   },
+  \ ],
+  \ ale_linters#glsl#glslang#Handle(bufnr(''), [
+  \ 'shader.vert',
+  \ 'ERROR: shader.vert:7: ''non-opaque uniforms outside a block'' : not allowed when using GLSL for Vulkan',
+  \ 'WARNING: shader.vert:14: ''__shininess'' : identifiers containing consecutive underscores ("__") are reserved',
+  \ 'ERROR: 1 compilation errors.  No code generated.',
+  \ 'SPIR-V is not generated for failed compile or link',
+  \ ])
