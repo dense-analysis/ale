@@ -33,9 +33,12 @@ endfunction
 function! ale_linters#vue#volar#GetInitializationOptions(buffer) abort
     let l:tsserver_path = ale#path#FindNearestDirectory(a:buffer, 'node_modules/typescript/lib')
 
-    if l:tsserver_path == ''
+    if l:tsserver_path is# ''
+        " no-custom-checks
         echohl WarningMsg
+        " no-custom-checks
         echom '[volar] Must have typescript installed in project, please install via `npm install -D typescript`.'
+        " no-custom-checks
         echohl None
     endif
 
