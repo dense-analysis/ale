@@ -21,7 +21,7 @@ Execute(Assert proper tsserverlibrary for Volar LSP):
     call ale#test#SetFilename('../test-files/volar/src/App.vue')
 
     let g:init_opts = ale_linters#vue#volar#GetInitializationOptions(bufnr(''))
-    let g:tsserver_path = init_opts.typescript.serverPath
-    let g:actual_path = ale#path#Simplify(g:dir . '/../test-files/volar/node_modules/typescript/lib/tsserverlibrary.js')
+    let g:tsserver_path = init_opts.typescript.tsdk
+    let g:actual_path = ale#path#Simplify(g:dir . '/../test-files/volar/node_modules/typescript/lib/')
 
     AssertEqual g:tsserver_path, g:actual_path
