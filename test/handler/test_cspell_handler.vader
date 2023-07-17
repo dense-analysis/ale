@@ -2,12 +2,13 @@ Execute(The cspell handler should handle cspell output):
   AssertEqual
   \ [
   \   {
-  \     'lnum': 721,
-  \     'col': 18,
+  \     'lnum': 3,
+  \     'col': 128,
+  \     'end_col': 133,
   \     'type': 'W',
-  \     'text': 'Unknown word (stylelint)',
+  \     'text': 'Unknown word (Neovim)',
   \   },
   \ ],
   \ ale#handlers#cspell#Handle(bufnr(''),
-  \   '/:721:18 - Unknown word (stylelint)'
+  \   '/:3:128 - Unknown word (Neovim)'
   \)
