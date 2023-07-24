@@ -2963,6 +2963,7 @@ documented in additional help files.
     erlfmt................................|ale-erlang-erlfmt|
     syntaxerl.............................|ale-erlang-syntaxerl|
   eruby...................................|ale-eruby-options|
+    erb-formatter.........................|ale-eruby-erbformatter|
     erblint...............................|ale-eruby-erblint|
     ruumba................................|ale-eruby-ruumba|
   fish....................................|ale-fish-options|

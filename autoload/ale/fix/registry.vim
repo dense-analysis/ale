@@ -615,6 +615,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#npmgroovylint#Fix',
 \       'suggested_filetypes': ['groovy'],
 \       'description': 'Fix Groovy files with npm-groovy-fix.',
+\   },
+\   'erb-formatter': {
+\       'function': 'ale#fixers#erbformatter#Fix',
+\       'suggested_filetypes': ['eruby'],
+\       'description': 'Apply erb-formatter -w to eruby/erb files.',
 \   }
 \}
 

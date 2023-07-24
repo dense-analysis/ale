@@ -1,0 +1,19 @@
+Before:
+  call ale#assert#SetUpFixerTest('eruby', 'erb-formatter')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The erb-formatter callback should return the correct default values):
+  AssertFixer {
+  \    'command': ale#Escape('erb-formatter') . ' -w %t',
+  \    'read_temporary_file': 1,
+  \}
+
+Execute(The erb-formatter callback should allow custom erb-formatter executables):
+  let g:ale_eruby_erbformatter_executable = 'foo/bar'
+
+  AssertFixer {
+  \    'command': ale#Escape('foo/bar') . ' -w %t',
+  \    'read_temporary_file': 1,
+  \}
