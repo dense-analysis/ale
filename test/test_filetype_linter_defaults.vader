@@ -36,7 +36,7 @@ Execute(The defaults for the elixir filetype should be correct):
   AssertEqual [], GetLinterNames('elixir')
 
 Execute(The defaults for the go filetype should be correct):
-  AssertEqual ['gofmt', 'gopls', 'govet'], GetLinterNames('go')
+  AssertEqual ['gofmt', 'golangci-lint', 'gopls', 'govet'], GetLinterNames('go')
 
   let g:ale_linters_explicit = 1
 
