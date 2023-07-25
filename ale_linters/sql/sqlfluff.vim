@@ -7,6 +7,9 @@ let g:ale_sql_sqlfluff_executable =
 let g:ale_sql_sqlfluff_options =
 \   get(g:, 'ale_sql_sqlfluff_options', '')
 
+let g:ale_sql_sqlfluff_config_file =
+\   get(g:, 'ale_sql_sqlfluff_config_file', '.sqlfluff')
+
 function! ale_linters#sql#sqlfluff#Executable(buffer) abort
     return ale#Var(a:buffer, 'sql_sqlfluff_executable')
 endfunction
@@ -19,7 +22,7 @@ function! ale_linters#sql#sqlfluff#Command(buffer) abort
     \    ale#Escape(l:executable)
     \    . ' lint'
 
-    let l:config_file = ale#path#FindNearestFile(a:buffer, '.sqlfluff')
+    let l:config_file = ale#path#FindNearestFile(a:buffer, ale#Var(a:buffer, 'sql_sqlfluff_config_file'))
 
     if !empty(l:config_file)
         let l:cmd .= ' --config ' . ale#Escape(l:config_file)
