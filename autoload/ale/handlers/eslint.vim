@@ -47,6 +47,8 @@ function! ale#handlers#eslint#GetCwd(buffer) abort
 
     if l:cwd isnot# '.'
         return l:cwd
+    else
+        return ''
     endif
 endfunction
 
