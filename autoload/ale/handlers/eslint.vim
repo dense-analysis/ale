@@ -43,9 +43,11 @@ endfunction
 " Given a buffer, return an appropriate working directory for ESLint.
 function! ale#handlers#eslint#GetCwd(buffer) abort
     " find the nearest eslint config file to the given buffer
-    let l:nearest_config = ale#handlers#eslint#FindConfig(a:buffer)
+    let l:cwd = fnamemodify(ale#handlers#eslint#FindConfig(a:buffer), ':h')
 
-    return fnamemodify(l:nearest_config, ':p:h')
+    if l:cwd isnot# '.'
+        return l:cwd
+    endif
 endfunction
 
 function! ale#handlers#eslint#GetCommand(buffer) abort
