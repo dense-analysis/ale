@@ -10,12 +10,14 @@ endfunction
 function! ale_linters#markdown#marksman#GetProjectRoot(buffer) abort
     " Find nearest .marksman.toml
     let l:marksman_toml = ale#path#FindNearestFile(a:buffer, '.marksman.toml')
+
     if !empty(l:marksman_toml)
         return fnamemodify(l:marksman_toml, ':h')
     endif
 
     " Find nearest .git/ directory
-    let l:project_root = finddir('.git/..', expand('%:p:h')..';')
+    let l:project_root = finddir('.git/..', expand('#' . a:buffer . '...').';')
+
     if !empty(l:project_root)
         return l:project_root
     endif

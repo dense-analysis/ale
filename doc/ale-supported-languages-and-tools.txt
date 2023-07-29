@@ -364,6 +364,7 @@ Notes:
   * `cspell`
   * `languagetool`!!
   * `markdownlint`!!
+  * marksman
   * `mdl`
   * `pandoc`
   * `prettier`
