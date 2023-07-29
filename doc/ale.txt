@@ -3123,6 +3123,7 @@ documented in additional help files.
     cspell................................|ale-markdown-cspell|
     dprint................................|ale-markdown-dprint|
     markdownlint..........................|ale-markdown-markdownlint|
+    marksman..............................|ale-markdown-marksman|
     mdl...................................|ale-markdown-mdl|
     pandoc................................|ale-markdown-pandoc|
     prettier..............................|ale-markdown-prettier|
