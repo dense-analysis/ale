@@ -2,7 +2,6 @@
 " Description: Write Markdown with code assist and intelligence in the comfort of your favourite editor.
 
 call ale#Set('markdown_marksman_executable', 'marksman')
-call ale#Set('markdown_marksman_init_options', {})
 
 function! ale_linters#markdown#marksman#GetCommand(buffer) abort
     return '%e server'

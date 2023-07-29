@@ -15,6 +15,17 @@ See |ale-dprint-options| and https://dprint.dev/plugins/markdown
 
 
 ===============================================================================
+marksman                                                *ale-markdown-marksman*
+
+g:ale_markdown_marksman_executable         *g:ale_markdown_marksman_executable*
+                                           *b:ale_markdown_marksman_executable*
+  Type: |String|
+  Default: `'marksman'`
+
+  Override the invoked `marksman` binary.
+
+
+===============================================================================
 markdownlint                                        *ale-markdown-markdownlint*
 
 g:ale_markdown_markdownlint_executable *g:ale_markdown_markdownlint_executable*
