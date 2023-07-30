@@ -5,4 +5,4 @@ After:
   call ale#assert#TearDownLinterTest()
 
 Execute(The default command should be correct):
-  AssertLinter 'marksman', ale#Escape('marksman') . ' %s'
+  AssertLinter 'marksman', ale#Escape('marksman') . ' server'
