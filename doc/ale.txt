@@ -2409,7 +2409,7 @@ g:ale_virtualenv_dir_names                         *g:ale_virtualenv_dir_names*
   Default: `['.env', '.venv', 'env', 've-py3', 've', 'virtualenv', 'venv']`
 
   A list of directory names to be used when searching upwards from Python
-  files to discover virtulenv directories with.
+  files to discover virtualenv directories with.
 
   For directory named `'foo'`, ALE will search for `'foo/bin/activate'`
   (`foo\Scripts\activate\` on Windows) in all directories on and above the
