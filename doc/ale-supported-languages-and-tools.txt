@@ -169,6 +169,7 @@ Notes:
   * `dogma`!!
   * `elixir-ls`
   * `mix`!!
+  * `lexical`
 * Elm
   * `elm-format`
   * `elm-ls`

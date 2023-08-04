@@ -2951,6 +2951,7 @@ documented in additional help files.
     elixir-ls.............................|ale-elixir-elixir-ls|
     credo.................................|ale-elixir-credo|
     cspell................................|ale-elixir-cspell|
+    lexical...............................|ale-elixir-lexical|
   elm.....................................|ale-elm-options|
     elm-format............................|ale-elm-elm-format|
     elm-ls................................|ale-elm-elm-ls|
