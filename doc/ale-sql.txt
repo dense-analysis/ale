@@ -44,8 +44,8 @@ g:ale_sql_sqlfluff_options                         *g:ale_sql_sqlfluff_options*
 
   This variable can be set to pass additional options to the sqlfluff linter.
 
-g:ale_sql_sqlfluff_config_file                *g:ale_sql_sqlfluff_config_file*
-                                              *b:ale_sql_sqlfluff_config_file*
+g:ale_sql_sqlfluff_config_file                 *g:ale_sql_sqlfluff_config_file*
+                                               *b:ale_sql_sqlfluff_config_file*
   Type: |String|
   Default: `'.sqlfluff'`
 
