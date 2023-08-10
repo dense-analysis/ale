@@ -26,7 +26,7 @@ function! ale_linters#terraform#snyk#Handle(buffer, lines) abort
                 call add(l:output, {
                 \   'filename': l:result.targetFilePath,
                 \   'lnum': l:iac_issues.lineNumber,
-                \   'text': l:iac_issues.iacDescription.issue,
+                \   'text': l:iac_issues.iacDescription.issue . ale#Pad('.') . ale#Pad(l:iac_issues.iacDescription.impact) . ale#Pad('.') . ale#Pad(l:iac_issues.iacDescription.resolve),
                 \   'code': l:iac_issues.publicId,
                 \   'type': l:type,
                 \})
