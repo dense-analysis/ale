@@ -2,10 +2,18 @@
 " Description: Linter for GitHub Workflows
 
 call ale#Set('yaml_actionlint_executable', 'actionlint')
-call ale#Set('yaml_actionlint_options', '-no-color -oneline')
+call ale#Set('yaml_actionlint_options', '')
 
 function! ale_linters#yaml#actionlint#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'yaml_actionlint_options')
+
+    if l:options !~# '-no-color'
+        let l:options .= ale#Pad('-no-color')
+    endif
+
+    if l:options !~# '-oneline'
+        let l:options .= ale#Pad('-oneline')
+    endif
 
     return '%e' . ale#Pad(l:options)
 endfunction
