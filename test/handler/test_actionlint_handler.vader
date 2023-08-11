@@ -40,4 +40,4 @@ Execute(Options should be added to command):
 
   AssertEqual
   \   '%e -shellcheck= -pyflakes= -no-color -oneline',
-  \ ale#handlers#actionlint#GetCommand(bufnr(''))
+  \ ale_linters#yaml#actionlint#GetCommand(bufnr(''))

@@ -15,7 +15,7 @@ function! ale_linters#yaml#actionlint#GetCommand(buffer) abort
         let l:options .= ale#Pad('-oneline')
     endif
 
-    return '%e' . ale#Pad(l:options)
+    return '%e' . l:options
 endfunction
 
 function! ale_linters#yaml#actionlint#Handle(buffer, lines) abort
