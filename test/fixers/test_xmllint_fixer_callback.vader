@@ -12,6 +12,16 @@ Before:
 After:
   Restore
 
+Execute(The xmllint callback should return the correct default command with unpersisted buffer):
+  new
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('/path/to/xmllint')
+  \     . ' --format %t'
+  \ },
+  \ ale#fixers#xmllint#Fix(bufnr(''))
+
 Execute(The xmllint callback should return the correct default command):
   AssertEqual
   \ {
