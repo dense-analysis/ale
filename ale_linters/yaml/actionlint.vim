@@ -6,16 +6,6 @@ call ale#Set('yaml_actionlint_options', '-no-color -oneline')
 function! ale_linters#yaml#actionlint#GetCommand(buffer) abort
     let l:options = ale#Var(a:buffer, 'yaml_actionlint_options')
 
-    " " automatically add --no-color option if not defined
-    " if l:options !~# '--no-color'
-    "     let l:options .= ' --no-color'
-    " endif
-
-    " " automatically add --oneline option if not defined
-    " if l:options !~# '--oneline'
-    "     let l:options .= ' --oneline'
-    " endif
-
     return '%e' . ale#Pad(l:options)
 endfunction
 
@@ -35,6 +25,7 @@ function! ale_linters#yaml#actionlint#Handle(buffer, lines) abort
         \}
 
         call add(l:output, l:item)
+
     endfor
 
     return l:output
