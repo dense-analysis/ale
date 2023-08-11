@@ -36,7 +36,7 @@ g:ale_yaml_actionlint_options                   *g:ale_yaml_actionlint_options*
                                                 *b:ale_yaml_actionlint_options*
 
   Type: |String|
-  Default: `''`
+  Default: `'-no-color -oneline'`
 
   This variable can be set to add extra options to actionlint executable.
 
