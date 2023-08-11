@@ -32,7 +32,7 @@ Execute(Command should always have -no-color and -oneline options):
   let g:ale_yaml_actionlint_options = ''
 
   AssertEqual
-  \   '%e -no-color -oneline',
+  \   '%e  -no-color -oneline',
   \ ale_linters#yaml#actionlint#GetCommand(bufnr(''))
 
 Execute(Options should be added to command):
