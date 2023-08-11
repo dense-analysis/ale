@@ -25,11 +25,11 @@ function! ale_linters#yaml#actionlint#Handle(buffer, lines) abort
         \}
 
         call add(l:output, l:item)
-
     endfor
 
     return l:output
 endfunction
+
 call ale#linter#Define('yaml', {
 \   'name': 'actionlint',
 \   'executable': {b -> ale#Var(b, 'yaml_actionlint_executable')},
