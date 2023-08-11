@@ -1,4 +1,5 @@
-" Author: bretello <bretello@distruzione.org>
+" Author: Peter Benjamin <petermbenjamin@gmail.com>
+" Description: Linter for GitHub Workflows
 
 call ale#Set('yaml_actionlint_executable', 'actionlint')
 call ale#Set('yaml_actionlint_options', '-no-color -oneline')
