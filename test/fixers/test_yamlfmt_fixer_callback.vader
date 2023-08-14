@@ -1,0 +1,12 @@
+Before:
+  call ale#assert#SetUpFixerTest('yaml', 'yamlfmt')
+
+After:
+  Restore
+
+  call ale#assert#TearDownFixerTest()
+
+Execute(The yamlfmt callback should return the correct default command):
+  AssertEqual
+  \ {'command': ale#Escape('yamlfmt') . '  -in'},
+  \ ale#fixers#yamlfmt#Fix(bufnr(''))
