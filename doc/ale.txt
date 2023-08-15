@@ -3427,6 +3427,7 @@ documented in additional help files.
     swaglint..............................|ale-yaml-swaglint|
     yaml-language-server..................|ale-yaml-language-server|
     yamlfix...............................|ale-yaml-yamlfix|
+    yamlfmt...............................|ale-yaml-yamlfmt|
     yamllint..............................|ale-yaml-yamllint|
     gitlablint............................|ale-yaml-gitlablint|
   yang....................................|ale-yang-options|
