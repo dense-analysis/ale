@@ -9,6 +9,12 @@ See |ale-cspell-options|
 
 
 ===============================================================================
+gitleaks                                                     *ale-php-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 langserver                                                 *ale-php-langserver*
 
 g:ale_php_langserver_executable               *g:ale_php_langserver_executable*

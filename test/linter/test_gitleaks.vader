@@ -1,0 +1,37 @@
+Before:
+  call ale#assert#SetUpLinterTest('tex', 'gitleaks')
+
+  " We have to manually do our own variable reset because SetUpLinterTest calls
+  "  ale#assert#ResetVariables, which specifically only resets variables that
+  "  begin with ale_<filetype>_, per https://github.com/dense-analysis/ale/blob/76c2293e68a6cad3b192062743d25b8daa082205/autoload/ale/assert.vim#L256
+  "
+  " Took a lot of debugging and reading both junegunn/vader.vim and most ALE
+  "  files to find this behavior
+
+  Save g:ale_gitleaks_executable
+  Save g:ale_gitleaks_options
+
+  unlet! g:ale_gitleaks_executable
+  unlet! g:ale_gitleaks_options
+
+  let g:ale_gitleaks_executable = 'gitleaks'
+  let g:ale_gitleaks_options = ''
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The correct executable should be used):
+  AssertLinter
+  \  'gitleaks',
+  \  ale#Escape('gitleaks')
+  \  . ' detect --no-git --no-color --no-banner --redact --verbose --source=%s'
+
+Execute(Additional gitleaks options should be configurable):
+  call ale#test#SetFilename('../test-files/dummy')
+
+  let g:ale_gitleaks_options = '--foobar'
+
+  AssertLinter
+  \  'gitleaks',
+  \  ale#Escape('gitleaks')
+  \  . ' detect --no-git --no-color --no-banner --redact --verbose --source=%s --foobar'

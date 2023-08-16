@@ -205,6 +205,12 @@ See |ale-cspell-options|
 
 
 ===============================================================================
+gitleaks                                                    *ale-rust-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 rls                                                              *ale-rust-rls*
 
 g:ale_rust_rls_executable                           *g:ale_rust_rls_executable*

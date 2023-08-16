@@ -429,6 +429,12 @@ g:ale_c_flawfinder_error_severity           *g:ale_c_flawfinder_error_severity*
 
 
 ===============================================================================
+gitleaks                                                       *ale-c-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 uncrustify                                                   *ale-c-uncrustify*
 
 g:ale_c_uncrustify_executable                   *g:ale_c_uncrustify_executable*

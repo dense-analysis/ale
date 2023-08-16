@@ -78,6 +78,12 @@ g:ale_json_fixjson_use_global                   *g:ale_json_fixjson_use_global*
 
 
 ===============================================================================
+gitleaks                                                    *ale-json-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 jsonlint                                                    *ale-json-jsonlint*
 
 g:ale_json_jsonlint_executable                 *g:ale_json_jsonlint_executable*

@@ -28,6 +28,12 @@ See |ale-cspell-options|
 
 
 ===============================================================================
+gitleaks                                                     *ale-tex-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 lacheck                                                       *ale-tex-lacheck*
 
 g:ale_lacheck_executable                             *g:ale_lacheck_executable*

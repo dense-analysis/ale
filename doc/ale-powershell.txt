@@ -9,6 +9,12 @@ See |ale-cspell-options|
 
 
 ===============================================================================
+gitleaks                                              *ale-powershell-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 powershell                                          *ale-powershell-powershell*
 
 g:ale_powershell_powershell_executable *g:ale_powershell_powershell_executable*

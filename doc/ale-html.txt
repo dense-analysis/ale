@@ -33,6 +33,7 @@ cspell                                                        *ale-html-cspell*
 
 See |ale-cspell-options|
 
+
 ===============================================================================
 fecs                                                            *ale-html-fecs*
 
@@ -40,6 +41,12 @@ fecs                                                            *ale-html-fecs*
 of them read `./.fecsrc` as the default configuration file.
 
 See: |ale-javascript-fecs|.
+
+
+===============================================================================
+gitleaks                                                    *ale-html-gitleaks*
+
+See |ale-gitleaks-options|
 
 
 ===============================================================================

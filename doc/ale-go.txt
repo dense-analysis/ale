@@ -56,6 +56,13 @@ cspell                                                          *ale-go-cspell*
 
 See |ale-cspell-options|
 
+
+===============================================================================
+gitleaks                                                      *ale-go-gitleaks*
+
+See |ale-gitleaks-options|
+
+
 ===============================================================================
 gobuild                                                        *ale-go-gobuild*
 

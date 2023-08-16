@@ -9,6 +9,12 @@ See |ale-cspell-options|
 
 
 ===============================================================================
+gitleaks                                                   *ale-xhtml-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 write-good                                               *ale-xhtml-write-good*
 
 See |ale-write-good-options|

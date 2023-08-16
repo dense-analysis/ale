@@ -70,6 +70,12 @@ servers.
 
 
 ===============================================================================
+gitleaks                                                    *ale-yaml-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 prettier                                                    *ale-yaml-prettier*
 
 Website: https://github.com/prettier/prettier

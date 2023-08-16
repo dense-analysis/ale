@@ -9,6 +9,12 @@ Integration Information
 
 
 ===============================================================================
+gitleaks                                                     *ale-zig-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 zigfmt                                                         *ale-zig-zigfmt*
 
 g:ale_zig_zigfmt_executable                       *g:ale_zig_zigfmt_executable*

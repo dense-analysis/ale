@@ -1267,16 +1267,16 @@ g:ale_floating_window_border                     *g:ale_floating_window_border*
   Default: `['|', '-', '+', '+', '+', '+', '|', '-']`
 
   When set to `[]`, window borders are disabled. The elements in the list set
-	the the characters for the left side, top, top-left corner, top-right
-	corner, bottom-right corner, bottom-left corner, right side, and bottom of
-	the floating window, respectively.
+  the the characters for the left side, top, top-left corner, top-right
+  corner, bottom-right corner, bottom-left corner, right side, and bottom of
+  the floating window, respectively.
 
   If the terminal supports Unicode, you might try setting the value to
   ` ['│', '─', '╭', '╮', '╯', '╰', '│', '─']`, to make it look nicer.
 
   NOTE: For compatibility with previous versions, if the list does not have
-	elements for the right side and bottom, the left side and top will be used
-	instead.
+  elements for the right side and bottom, the left side and top will be used
+  instead.
 
 
 g:ale_history_enabled                                   *g:ale_history_enabled*
@@ -2774,7 +2774,27 @@ g:ale_dprint_use_global                               *g:ale_dprint_use_global*
 
 
 -------------------------------------------------------------------------------
-7.4. Options for languagetool                        *ale-languagetool-options*
+7.4. Options for gitleaks                                *ale-gitleaks-options*
+
+The options for `gitleaks` are shared between all filetypes, so options can be
+configured only once.
+
+g:ale_gitleaks_executable                           *g:ale_gitleaks_executable*
+                                                    *b:ale_gitleaks_executable*
+  Type: |String|
+  Default: `'gitleaks'`
+
+
+g:ale_gitleaks_options                                 *g:ale_gitleaks_options*
+                                                       *b:ale_gitleaks_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to `gitleaks`.
+
+
+-------------------------------------------------------------------------------
+7.5. Options for languagetool                        *ale-languagetool-options*
 
 g:ale_languagetool_executable                   *g:ale_languagetool_executable*
                                                 *b:ale_languagetool_executable*
@@ -2794,7 +2814,7 @@ g:ale_languagetool_options                         *g:ale_languagetool_options*
 
 
 -------------------------------------------------------------------------------
-7.5. Options for write-good                            *ale-write-good-options*
+7.6. Options for write-good                            *ale-write-good-options*
 
 The options for `write-good` are shared between all filetypes, so options can
 be configured once.
@@ -2824,7 +2844,7 @@ g:ale_writegood_use_global                         *g:ale_writegood_use_global*
 
 
 -------------------------------------------------------------------------------
-7.6. Other Linter/Fixer Options                 *ale-other-integration-options*
+7.7. Other Linter/Fixer Options                 *ale-other-integration-options*
 
 ALE supports a very wide variety of tools. Other linter or fixer options are
 documented in additional help files.
@@ -2832,9 +2852,11 @@ documented in additional help files.
   ada.....................................|ale-ada-options|
     cspell................................|ale-ada-cspell|
     gcc...................................|ale-ada-gcc|
+    gitleaks..............................|ale-ada-gitleaks|
     gnatpp................................|ale-ada-gnatpp|
     ada-language-server...................|ale-ada-language-server|
   ansible.................................|ale-ansible-options|
+    gitleaks..............................|ale-ansible-gitleaks|
     ansible-language-server...............|ale-ansible-language-server|
     ansible-lint..........................|ale-ansible-ansible-lint|
   apkbuild................................|ale-apkbuild-options|
@@ -2842,6 +2864,7 @@ documented in additional help files.
     secfixes-check........................|ale-apkbuild-secfixes-check|
   asciidoc................................|ale-asciidoc-options|
     cspell................................|ale-asciidoc-cspell|
+    gitleaks..............................|ale-asciidoc-gitleaks|
     write-good............................|ale-asciidoc-write-good|
     textlint..............................|ale-asciidoc-textlint|
   asm.....................................|ale-asm-options|
@@ -2873,6 +2896,7 @@ documented in additional help files.
     cquery................................|ale-c-cquery|
     cspell................................|ale-c-cspell|
     flawfinder............................|ale-c-flawfinder|
+    gitleaks..............................|ale-c-gitleaks|
     uncrustify............................|ale-c-uncrustify|
   cairo...................................|ale-cairo-options|
     starknet..............................|ale-cairo-starknet|
@@ -2902,12 +2926,14 @@ documented in additional help files.
     cquery................................|ale-cpp-cquery|
     cspell................................|ale-cpp-cspell|
     flawfinder............................|ale-cpp-flawfinder|
+    gitleaks..............................|ale-cpp-gitleaks|
     uncrustify............................|ale-cpp-uncrustify|
   c#......................................|ale-cs-options|
     clang-format..........................|ale-cs-clangformat|
     csc...................................|ale-cs-csc|
     cspell................................|ale-cs-cspell|
     dotnet-format.........................|ale-cs-dotnet-format|
+    gitleaks..............................|ale-cs-gitleaks|
     mcs...................................|ale-cs-mcs|
     mcsc..................................|ale-cs-mcsc|
     uncrustify............................|ale-cs-uncrustify|
@@ -2943,14 +2969,16 @@ documented in additional help files.
     dockerfile_lint.......................|ale-dockerfile-dockerfile_lint|
     dockerlinter..........................|ale-dockerfile-dockerlinter|
     dprint................................|ale-dockerfile-dprint|
+    gitleaks..............................|ale-dockerfile-gitleaks|
     hadolint..............................|ale-dockerfile-hadolint|
   elixir..................................|ale-elixir-options|
-    mix...................................|ale-elixir-mix|
-    mix_format............................|ale-elixir-mix-format|
-    dialyxir..............................|ale-elixir-dialyxir|
-    elixir-ls.............................|ale-elixir-elixir-ls|
     credo.................................|ale-elixir-credo|
     cspell................................|ale-elixir-cspell|
+    dialyxir..............................|ale-elixir-dialyxir|
+    elixir-ls.............................|ale-elixir-elixir-ls|
+    gitleaks..............................|ale-elixir-gitleaks|
+    mix...................................|ale-elixir-mix|
+    mix_format............................|ale-elixir-mix-format|
   elm.....................................|ale-elm-options|
     elm-format............................|ale-elm-elm-format|
     elm-ls................................|ale-elm-elm-ls|
@@ -2982,6 +3010,7 @@ documented in additional help files.
   go......................................|ale-go-options|
     bingo.................................|ale-go-bingo|
     cspell................................|ale-go-cspell|
+    gitleaks..............................|ale-go-gitleaks|
     gobuild...............................|ale-go-gobuild|
     gofmt.................................|ale-go-gofmt|
     gofumpt...............................|ale-go-gofumpt|
@@ -3007,22 +3036,23 @@ documented in additional help files.
     ember-template-lint...................|ale-handlebars-embertemplatelint|
   haskell.................................|ale-haskell-options|
     brittany..............................|ale-haskell-brittany|
+    cabal-ghc.............................|ale-haskell-cabal-ghc|
     cspell................................|ale-haskell-cspell|
     floskell..............................|ale-haskell-floskell|
+    fourmolu..............................|ale-haskell-fourmolu|
     ghc...................................|ale-haskell-ghc|
     ghc-mod...............................|ale-haskell-ghc-mod|
-    cabal-ghc.............................|ale-haskell-cabal-ghc|
+    gitleaks..............................|ale-haskell-gitleaks|
     hdevtools.............................|ale-haskell-hdevtools|
     hfmt..................................|ale-haskell-hfmt|
+    hie...................................|ale-haskell-hie|
     hindent...............................|ale-haskell-hindent|
     hlint.................................|ale-haskell-hlint|
     hls...................................|ale-haskell-hls|
+    ormolu................................|ale-haskell-ormolu|
     stack-build...........................|ale-haskell-stack-build|
     stack-ghc.............................|ale-haskell-stack-ghc|
     stylish-haskell.......................|ale-haskell-stylish-haskell|
-    hie...................................|ale-haskell-hie|
-    ormolu................................|ale-haskell-ormolu|
-    fourmolu..............................|ale-haskell-fourmolu|
   hcl.....................................|ale-hcl-options|
     packer-fmt............................|ale-hcl-packer-fmt|
     terraform-fmt.........................|ale-hcl-terraform-fmt|
@@ -3032,6 +3062,7 @@ documented in additional help files.
     angular...............................|ale-html-angular|
     cspell................................|ale-html-cspell|
     fecs..................................|ale-html-fecs|
+    gitleaks..............................|ale-html-gitleaks|
     html-beautify.........................|ale-html-beautify|
     htmlhint..............................|ale-html-htmlhint|
     prettier..............................|ale-html-prettier|
@@ -3052,11 +3083,12 @@ documented in additional help files.
     checkstyle............................|ale-java-checkstyle|
     clang-format..........................|ale-java-clangformat|
     cspell................................|ale-java-cspell|
-    javac.................................|ale-java-javac|
-    google-java-format....................|ale-java-google-java-format|
-    pmd...................................|ale-java-pmd|
-    javalsp...............................|ale-java-javalsp|
     eclipselsp............................|ale-java-eclipselsp|
+    gitleaks..............................|ale-java-gitleaks|
+    google-java-format....................|ale-java-google-java-format|
+    javac.................................|ale-java-javac|
+    javalsp...............................|ale-java-javalsp|
+    pmd...................................|ale-java-pmd|
     uncrustify............................|ale-java-uncrustify|
   javascript..............................|ale-javascript-options|
     clang-format..........................|ale-javascript-clangformat|
@@ -3066,6 +3098,7 @@ documented in additional help files.
     eslint................................|ale-javascript-eslint|
     fecs..................................|ale-javascript-fecs|
     flow..................................|ale-javascript-flow|
+    gitleaks..............................|ale-javascript-gitleaks|
     importjs..............................|ale-javascript-importjs|
     jscs..................................|ale-javascript-jscs|
     jshint................................|ale-javascript-jshint|
@@ -3080,6 +3113,7 @@ documented in additional help files.
     dprint................................|ale-json-dprint|
     eslint................................|ale-json-eslint|
     fixjson...............................|ale-json-fixjson|
+    gitleaks..............................|ale-json-gitleaks|
     jsonlint..............................|ale-json-jsonlint|
     jq....................................|ale-json-jq|
     prettier..............................|ale-json-prettier|
@@ -3110,6 +3144,7 @@ documented in additional help files.
     llc...................................|ale-llvm-llc|
   lua.....................................|ale-lua-options|
     cspell................................|ale-lua-cspell|
+    gitleaks..............................|ale-lua-gitleaks|
     lua-format............................|ale-lua-lua-format|
     lua-language-server...................|ale-lua-lua-language-server|
     luac..................................|ale-lua-luac|
@@ -3122,6 +3157,7 @@ documented in additional help files.
   markdown................................|ale-markdown-options|
     cspell................................|ale-markdown-cspell|
     dprint................................|ale-markdown-dprint|
+    gitleaks..............................|ale-markdown-gitleaks|
     markdownlint..........................|ale-markdown-markdownlint|
     marksman..............................|ale-markdown-marksman|
     mdl...................................|ale-markdown-mdl|
@@ -3183,6 +3219,7 @@ documented in additional help files.
     perl6.................................|ale-perl6-perl6|
   php.....................................|ale-php-options|
     cspell................................|ale-php-cspell|
+    gitleaks..............................|ale-php-gitleaks|
     langserver............................|ale-php-langserver|
     phan..................................|ale-php-phan|
     phpcbf................................|ale-php-phpcbf|
@@ -3203,6 +3240,7 @@ documented in additional help files.
     ponyc.................................|ale-pony-ponyc|
   powershell..............................|ale-powershell-options|
     cspell................................|ale-powershell-cspell|
+    gitleaks..............................|ale-powershell-gitleaks|
     powershell............................|ale-powershell-powershell|
     psscriptanalyzer......................|ale-powershell-psscriptanalyzer|
   prolog..................................|ale-prolog-options|
@@ -3234,6 +3272,7 @@ documented in additional help files.
     cspell................................|ale-python-cspell|
     flake8................................|ale-python-flake8|
     flakehell.............................|ale-python-flakehell|
+    gitleaks..............................|ale-python-gitleaks|
     isort.................................|ale-python-isort|
     mypy..................................|ale-python-mypy|
     prospector............................|ale-python-prospector|
@@ -3269,10 +3308,12 @@ documented in additional help files.
     refmt.................................|ale-reasonml-refmt|
   rego....................................|ale-rego-options|
     cspell................................|ale-rego-cspell|
+    gitleaks..............................|ale-rego-gitleaks|
     opacheck..............................|ale-rego-opa-check|
     opafmt................................|ale-rego-opa-fmt-fixer|
   restructuredtext........................|ale-restructuredtext-options|
     cspell................................|ale-restructuredtext-cspell|
+    gitleaks..............................|ale-restructuredtext-gitleaks|
     textlint..............................|ale-restructuredtext-textlint|
     write-good............................|ale-restructuredtext-write-good|
   robot...................................|ale-robot-options|
@@ -3281,6 +3322,7 @@ documented in additional help files.
     brakeman..............................|ale-ruby-brakeman|
     cspell................................|ale-ruby-cspell|
     debride...............................|ale-ruby-debride|
+    gitleaks..............................|ale-ruby-gitleaks|
     prettier..............................|ale-ruby-prettier|
     rails_best_practices..................|ale-ruby-rails_best_practices|
     reek..................................|ale-ruby-reek|
@@ -3295,6 +3337,7 @@ documented in additional help files.
     analyzer..............................|ale-rust-analyzer|
     cargo.................................|ale-rust-cargo|
     cspell................................|ale-rust-cspell|
+    gitleaks..............................|ale-rust-gitleaks|
     rls...................................|ale-rust-rls|
     rustc.................................|ale-rust-rustc|
     rustfmt...............................|ale-rust-rustfmt|
@@ -3305,6 +3348,7 @@ documented in additional help files.
     stylelint.............................|ale-sass-stylelint|
   scala...................................|ale-scala-options|
     cspell................................|ale-scala-cspell|
+    gitleaks..............................|ale-scala-gitleaks|
     metals................................|ale-scala-metals|
     sbtserver.............................|ale-scala-sbtserver|
     scalafmt..............................|ale-scala-scalafmt|
@@ -3316,6 +3360,7 @@ documented in additional help files.
   sh......................................|ale-sh-options|
     bashate...............................|ale-sh-bashate|
     cspell................................|ale-sh-cspell|
+    gitleaks..............................|ale-sh-gitleaks|
     sh-language-server....................|ale-sh-language-server|
     shell.................................|ale-sh-shell|
     shellcheck............................|ale-sh-shellcheck|
@@ -3330,6 +3375,7 @@ documented in additional help files.
     rpmlint...............................|ale-spec-rpmlint|
   sql.....................................|ale-sql-options|
     dprint................................|ale-sql-dprint|
+    gitleaks..............................|ale-sql-gitleaks|
     pgformatter...........................|ale-sql-pgformatter|
     sqlfluff..............................|ale-sql-sqlfluff|
     sqlfmt................................|ale-sql-sqlfmt|
@@ -3344,6 +3390,7 @@ documented in additional help files.
   swift...................................|ale-swift-options|
     apple-swift-format....................|ale-swift-apple-swift-format|
     cspell................................|ale-swift-cspell|
+    gitleaks..............................|ale-swift-gitleaks|
     sourcekitlsp..........................|ale-swift-sourcekitlsp|
   systemd.................................|ale-systemd-options|
     systemd-analyze.......................|ale-systemd-analyze|
@@ -3351,6 +3398,7 @@ documented in additional help files.
     nagelfar..............................|ale-tcl-nagelfar|
   terraform...............................|ale-terraform-options|
     checkov...............................|ale-terraform-checkov|
+    gitleaks..............................|ale-terraform-gitleaks|
     terraform-fmt-fixer...................|ale-terraform-fmt-fixer|
     terraform.............................|ale-terraform-terraform|
     terraform-ls..........................|ale-terraform-terraform-ls|
@@ -3360,14 +3408,17 @@ documented in additional help files.
   tex.....................................|ale-tex-options|
     chktex................................|ale-tex-chktex|
     cspell................................|ale-tex-cspell|
+    gitleaks..............................|ale-tex-gitleaks|
     lacheck...............................|ale-tex-lacheck|
     latexindent...........................|ale-tex-latexindent|
     texlab................................|ale-tex-texlab|
   texinfo.................................|ale-texinfo-options|
     cspell................................|ale-texinfo-cspell|
+    gitleaks..............................|ale-texinfo-gitleaks|
     write-good............................|ale-texinfo-write-good|
   text....................................|ale-text-options|
     cspell................................|ale-text-cspell|
+    gitleaks..............................|ale-text-gitleaks|
     textlint..............................|ale-text-textlint|
     write-good............................|ale-text-write-good|
   thrift..................................|ale-thrift-options|
@@ -3380,6 +3431,7 @@ documented in additional help files.
     deno..................................|ale-typescript-deno|
     dprint................................|ale-typescript-dprint|
     eslint................................|ale-typescript-eslint|
+    gitleaks..............................|ale-typescript-gitleaks|
     prettier..............................|ale-typescript-prettier|
     standard..............................|ale-typescript-standard|
     tslint................................|ale-typescript-tslint|
@@ -3405,10 +3457,12 @@ documented in additional help files.
   vim help................................|ale-vim-help-options|
     write-good............................|ale-vim-help-write-good|
   vim.....................................|ale-vim-options|
+    gitleaks..............................|ale-vim-gitleaks|
     vimls.................................|ale-vim-vimls|
     vint..................................|ale-vim-vint|
   vue.....................................|ale-vue-options|
     cspell................................|ale-vue-cspell|
+    gitleaks..............................|ale-vue-gitleaks|
     prettier..............................|ale-vue-prettier|
     vls...................................|ale-vue-vls|
     volar.................................|ale-vue-volar|
@@ -3416,12 +3470,14 @@ documented in additional help files.
     naga..................................|ale-wgsl-naga|
   xhtml...................................|ale-xhtml-options|
     cspell................................|ale-xhtml-cspell|
+    gitleaks..............................|ale-xhtml-gitleaks|
     write-good............................|ale-xhtml-write-good|
   xml.....................................|ale-xml-options|
     xmllint...............................|ale-xml-xmllint|
   yaml....................................|ale-yaml-options|
     actionlint............................|ale-yaml-actionlint|
     circleci..............................|ale-yaml-circleci|
+    gitleaks..............................|ale-yaml-gitleaks|
     prettier..............................|ale-yaml-prettier|
     spectral..............................|ale-yaml-spectral|
     swaglint..............................|ale-yaml-swaglint|
@@ -3435,6 +3491,7 @@ documented in additional help files.
   zeek....................................|ale-zeek-options|
     zeek..................................|ale-zeek-zeek|
   zig.....................................|ale-zig-options|
+    gitleaks..............................|ale-zig-gitleaks|
     zigfmt................................|ale-zig-zigfmt|
     zls...................................|ale-zig-zls|
 

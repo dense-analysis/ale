@@ -9,6 +9,12 @@ See |ale-cspell-options|
 
 
 ===============================================================================
+gitleaks                                        *ale-restructuredtext-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 textlint                                        *ale-restructuredtext-textlint*
 
 To use textlint at reStructuredText, please install `textlint-plugin-rst`.

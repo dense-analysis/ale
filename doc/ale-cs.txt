@@ -137,6 +137,12 @@ g:ale_cs_dotnet_format_options                 *g:ale_cs_dotnet_format_options*
 
 
 ===============================================================================
+gitleaks                                                      *ale-cs-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 mcs                                                                *ale-cs-mcs*
 
   The `mcs` linter looks only for syntax errors while you type. See

@@ -57,6 +57,12 @@ See |ale-dprint-options| and https://dprint.dev/plugins/dockerfile
 
 
 ===============================================================================
+gitleaks                                              *ale-dockerfile-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 hadolint                                              *ale-dockerfile-hadolint*
 
   hadolint can be found at: https://github.com/hadolint/hadolint

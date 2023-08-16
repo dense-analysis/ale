@@ -2,11 +2,17 @@
 ALE Ansible Integration                                   *ale-ansible-options*
 
 ===============================================================================
-ansible-language-server                             *ale-ansible-language-server*
+gitleaks                                                 *ale-ansible-gitleaks*
+
+See |ale-gitleaks-options|
 
 
-g:ale_ansible_language_server_executable          *g:ale_ansible_language_server*
-                                                  *b:ale_ansible_language_server*
+===============================================================================
+ansible-language-server                           *ale-ansible-language-server*
+
+
+g:ale_ansible_language_server_executable        *g:ale_ansible_language_server*
+                                                *b:ale_ansible_language_server*
 
   Type: |String|
   Default: 'ansible-language-server'
@@ -14,8 +20,8 @@ g:ale_ansible_language_server_executable          *g:ale_ansible_language_server
   Variable can be used to modify the executable used for ansible language server.
 
 
-g:ale_ansible_language_server_config        *g:ale_ansible_language_server_config*
-                                            *b:ale_ansible_language_server_config*
+g:ale_ansible_language_server_config      *g:ale_ansible_language_server_config*
+                                          *b:ale_ansible_language_server_config*
 
   Type: |Dictionary|
   Default: '{}'

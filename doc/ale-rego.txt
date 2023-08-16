@@ -9,6 +9,12 @@ See |ale-cspell-options|
 
 
 ===============================================================================
+gitleaks                                                    *ale-rego-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 opacheck                                                   *ale-rego-opa-check*
 
 g:ale_rego_opacheck_executable                     *g:rego_opacheck_executable*
