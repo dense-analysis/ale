@@ -8,11 +8,13 @@ call ale#Set('xml_xmllint_indentsize', 2)
 function! ale#fixers#xmllint#Fix(buffer) abort
     let l:executable = ale#Escape(ale#Var(a:buffer, 'xml_xmllint_executable'))
     let l:filename = bufname(a:buffer)
+
     if empty(l:filename)
         let l:filename = '%t'
     else
         let l:filename = ale#Escape(l:filename)
     endif
+
     let l:command = l:executable . ' --format ' . l:filename
 
     let l:indent = ale#Var(a:buffer, 'xml_xmllint_indentsize')
