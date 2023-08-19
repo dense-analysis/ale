@@ -556,6 +556,7 @@ formatting.
   * [brakeman](http://brakemanscanner.org/) :floppy_disk:
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [debride](https://github.com/seattlerb/debride)
+  * [packwerk](https://github.com/Shopify/packwerk) :floppy_disk:
   * [prettier](https://github.com/prettier/plugin-ruby)
   * [rails_best_practices](https://github.com/flyerhzm/rails_best_practices) :floppy_disk:
   * [reek](https://github.com/troessner/reek)
