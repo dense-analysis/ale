@@ -109,8 +109,8 @@ lexical                                                    *ale-elixir-lexical*
 
 Lexical (https://github.com/lexical-lsp/lexical)
 
-g:ale_elixir_lexical_release                   *g:ale_elixir_lexical_release*
-                                               *b:ale_elixir_lexical_release*
+g:ale_elixir_lexical_release                     *g:ale_elixir_lexical_release*
+                                                 *b:ale_elixir_lexical_release*
   Type: |String|
   Default: `'lexical'`
 
