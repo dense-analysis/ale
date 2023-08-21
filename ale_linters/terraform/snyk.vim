@@ -10,7 +10,7 @@ let s:separator = has('win32') ? '\' : '/'
 
 function! ale_linters#terraform#snyk#Handle(buffer, lines) abort
     let l:output = []
-    let l:json = ale#util#FuzzyJSONDecode(a:lines, {})
+    let l:json = ale#util#FuzzyJSONDecode(a:lines, [])
 
     for l:result in l:json
         if l:result.ok is# v:false
