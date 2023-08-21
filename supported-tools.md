@@ -25,10 +25,12 @@ formatting.
   * [ada_language_server](https://github.com/AdaCore/ada_language_server)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [gcc](https://gcc.gnu.org)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [gnatpp](https://docs.adacore.com/gnat_ugn-docs/html/gnat_ugn/gnat_ugn/gnat_utility_programs.html#the-gnat-pretty-printer-gnatpp) :floppy_disk:
 * Ansible
   * [ansible-language-server](https://github.com/ansible/ansible-language-server/)
   * [ansible-lint](https://github.com/willthames/ansible-lint) :floppy_disk:
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
 * API Blueprint
   * [drafter](https://github.com/apiaryio/drafter)
 * APKBUILD
@@ -37,6 +39,7 @@ formatting.
 * AsciiDoc
   * [alex](https://github.com/get-alex/alex)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [languagetool](https://languagetool.org/) :floppy_disk:
   * [proselint](http://proselint.com/)
   * [redpen](http://redpen.cc/)
@@ -53,8 +56,9 @@ formatting.
 * Bash
   * [bashate](https://github.com/openstack/bashate)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [language-server](https://github.com/mads-hartmann/bash-language-server)
-  * shell [-n flag](https://www.gnu.org/software/bash/manual/bash.html#index-set)
+  * [shell](https://www.gnu.org/software/bash/manual/bash.html#index-set) -n flag
   * [shellcheck](https://www.shellcheck.net/)
   * [shfmt](https://github.com/mvdan/sh)
 * Bats
@@ -84,12 +88,14 @@ formatting.
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [flawfinder](https://www.dwheeler.com/flawfinder/)
   * [gcc](https://gcc.gnu.org/)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [uncrustify](https://github.com/uncrustify/uncrustify)
 * C#
   * [clang-format](https://clang.llvm.org/docs/ClangFormat.html)
   * [csc](http://www.mono-project.com/docs/about-mono/languages/csharp/) :floppy_disk: see:`help ale-cs-csc` for details and configuration
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [dotnet-format](https://github.com/dotnet/format)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [mcs](http://www.mono-project.com/docs/about-mono/languages/csharp/) see:`help ale-cs-mcs` for details
   * [mcsc](http://www.mono-project.com/docs/about-mono/languages/csharp/) :floppy_disk: see:`help ale-cs-mcsc` for details and configuration
   * [uncrustify](https://github.com/uncrustify/uncrustify)
@@ -108,6 +114,7 @@ formatting.
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [flawfinder](https://www.dwheeler.com/flawfinder/)
   * [gcc](https://gcc.gnu.org/)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [uncrustify](https://github.com/uncrustify/uncrustify)
 * Cairo
   * [starknet](https://starknet.io/docs)
@@ -170,6 +177,7 @@ formatting.
   * [dockerfile_lint](https://github.com/projectatomic/dockerfile_lint)
   * [dockerlinter](https://github.com/buddy-works/dockerfile-linter)
   * [dprint](https://dprint.dev)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [hadolint](https://github.com/hadolint/hadolint)
 * Elixir
   * [credo](https://github.com/rrrene/credo)
@@ -177,6 +185,7 @@ formatting.
   * [dialyxir](https://github.com/jeremyjh/dialyxir)
   * [dogma](https://github.com/lpil/dogma) :floppy_disk:
   * [elixir-ls](https://github.com/elixir-lsp/elixir-ls) :warning:
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [mix](https://hexdocs.pm/mix/Mix.html) :warning: :floppy_disk:
 * Elm
   * [elm-format](https://github.com/avh4/elm-format)
@@ -214,6 +223,7 @@ formatting.
 * Go
   * [bingo](https://github.com/saibing/bingo) :warning:
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell) :warning:
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [go build](https://golang.org/cmd/go/) :warning: :floppy_disk:
   * [go mod](https://golang.org/cmd/go/) :warning: :floppy_disk:
   * [go vet](https://golang.org/cmd/vet/) :floppy_disk:
@@ -250,6 +260,7 @@ formatting.
   * [fourmolu](https://github.com/fourmolu/fourmolu)
   * [ghc](https://www.haskell.org/ghc/)
   * [ghc-mod](https://github.com/DanielG/ghc-mod)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [hdevtools](https://hackage.haskell.org/package/hdevtools)
   * [hfmt](https://github.com/danstiner/hfmt)
   * [hie](https://github.com/haskell/haskell-ide-engine)
@@ -270,6 +281,7 @@ formatting.
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [eslint](https://github.com/BenoitZugmeyer/eslint-plugin-html)
   * [fecs](http://fecs.baidu.com/)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [html-beautify](https://beautifier.io/)
   * [htmlhint](http://htmlhint.com/)
   * [prettier](https://github.com/prettier/prettier)
@@ -291,6 +303,7 @@ formatting.
   * [clang-format](https://clang.llvm.org/docs/ClangFormat.html)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [eclipselsp](https://github.com/eclipse/eclipse.jdt.ls)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [google-java-format](https://github.com/google/google-java-format)
   * [javac](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
   * [javalsp](https://github.com/georgewfraser/vscode-javac)
@@ -303,6 +316,7 @@ formatting.
   * [eslint](http://eslint.org/)
   * [fecs](http://fecs.baidu.com/)
   * [flow](https://flowtype.org/)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [jscs](https://jscs-dev.github.io/)
   * [jshint](http://jshint.com/)
   * [prettier](https://github.com/prettier/prettier)
@@ -318,6 +332,7 @@ formatting.
   * [dprint](https://dprint.dev)
   * [eslint](http://eslint.org/) :warning:
   * [fixjson](https://github.com/rhysd/fixjson)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [jq](https://stedolan.github.io/jq/) :warning:
   * [jsonlint](https://github.com/zaach/jsonlint)
   * [prettier](https://github.com/prettier/prettier)
@@ -339,6 +354,7 @@ formatting.
   * [alex](https://github.com/get-alex/alex)
   * [chktex](http://www.nongnu.org/chktex/)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [lacheck](https://www.ctan.org/pkg/lacheck)
   * [proselint](http://proselint.com/)
   * [redpen](http://redpen.cc/)
@@ -354,6 +370,7 @@ formatting.
   * [llc](https://llvm.org/docs/CommandGuide/llc.html)
 * Lua
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [lua-format](https://github.com/Koihik/LuaFormatter)
   * [lua-language-server](https://github.com/LuaLS/lua-language-server)
   * [luac](https://www.lua.org/manual/5.1/luac.html)
@@ -371,6 +388,7 @@ formatting.
 * Markdown
   * [alex](https://github.com/get-alex/alex)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [languagetool](https://languagetool.org/) :floppy_disk:
   * [markdownlint](https://github.com/DavidAnson/markdownlint) :floppy_disk:
   * [marksman](https://github.com/artempyanykh/marksman)
@@ -442,6 +460,7 @@ formatting.
   * [perl6 -c](https://perl6.org) :warning:
 * PHP
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [intelephense](https://github.com/bmewburn/intelephense-docs)
   * [langserver](https://github.com/felixfbecker/php-language-server)
   * [phan](https://github.com/phan/phan) see `:help ale-php-phan` to instructions
@@ -468,6 +487,7 @@ formatting.
   * [ponyc](https://github.com/ponylang/ponyc)
 * PowerShell
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [powershell](https://github.com/PowerShell/PowerShell)
   * [psscriptanalyzer](https://github.com/PowerShell/PSScriptAnalyzer)
 * Prolog
@@ -497,6 +517,7 @@ formatting.
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [flake8](http://flake8.pycqa.org/en/latest/)
   * [flakehell](https://github.com/flakehell/flakehell)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [isort](https://github.com/timothycrosley/isort)
   * [mypy](http://mypy-lang.org/)
   * [prospector](https://github.com/PyCQA/prospector) :warning: :floppy_disk:
@@ -536,11 +557,13 @@ formatting.
   * [refmt](https://github.com/reasonml/reason-cli)
 * Rego
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [opacheck](https://www.openpolicyagent.org/docs/latest/cli/#opa-check)
   * [opafmt](https://www.openpolicyagent.org/docs/latest/cli/#opa-fmt)
 * reStructuredText
   * [alex](https://github.com/get-alex/alex)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [proselint](http://proselint.com/)
   * [redpen](http://redpen.cc/)
   * [rstcheck](https://github.com/myint/rstcheck)
@@ -555,6 +578,7 @@ formatting.
   * [brakeman](http://brakemanscanner.org/) :floppy_disk:
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [debride](https://github.com/seattlerb/debride)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [prettier](https://github.com/prettier/plugin-ruby)
   * [rails_best_practices](https://github.com/flyerhzm/rails_best_practices) :floppy_disk:
   * [reek](https://github.com/troessner/reek)
@@ -568,6 +592,7 @@ formatting.
 * Rust
   * [cargo](https://github.com/rust-lang/cargo) :floppy_disk: (see `:help ale-integration-rust` for configuration instructions)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [rls](https://github.com/rust-lang-nursery/rls) :warning:
   * [rust-analyzer](https://github.com/rust-analyzer/rust-analyzer) :warning:
   * [rustc](https://www.rust-lang.org/) :warning:
@@ -580,6 +605,7 @@ formatting.
 * Scala
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [fsc](https://www.scala-lang.org/old/sites/default/files/linuxsoft_archives/docu/files/tools/fsc.html)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [metals](https://scalameta.org/metals/)
   * [sbtserver](https://www.scala-sbt.org/1.x/docs/sbt-server.html)
   * [scalac](http://scala-lang.org)
@@ -600,6 +626,7 @@ formatting.
   * [solium](https://github.com/duaraghav8/Solium)
 * SQL
   * [dprint](https://dprint.dev)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [pgformatter](https://github.com/darold/pgFormatter)
   * [sql-lint](https://github.com/joereynolds/sql-lint)
   * [sqlfluff](https://github.com/sqlfluff/sqlfluff)
@@ -616,6 +643,7 @@ formatting.
 * Swift
   * [Apple swift-format](https://github.com/apple/swift-format)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [sourcekit-lsp](https://github.com/apple/sourcekit-lsp)
   * [swiftformat](https://github.com/nicklockwood/SwiftFormat)
   * [swiftlint](https://github.com/realm/SwiftLint)
@@ -625,6 +653,7 @@ formatting.
   * [nagelfar](http://nagelfar.sourceforge.net) :floppy_disk:
 * Terraform
   * [checkov](https://github.com/bridgecrewio/checkov)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [terraform](https://github.com/hashicorp/terraform)
   * [terraform-fmt-fixer](https://github.com/hashicorp/terraform)
   * [terraform-ls](https://github.com/hashicorp/terraform-ls)
@@ -634,11 +663,13 @@ formatting.
 * Texinfo
   * [alex](https://github.com/get-alex/alex)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [proselint](http://proselint.com/)
   * [write-good](https://github.com/btford/write-good)
 * Text
   * [alex](https://github.com/get-alex/alex) :warning:
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [languagetool](https://languagetool.org/) :floppy_disk:
   * [proselint](http://proselint.com/) :warning:
   * [redpen](http://redpen.cc/) :warning:
@@ -656,6 +687,7 @@ formatting.
   * [dprint](https://dprint.dev/)
   * [eslint](http://eslint.org/)
   * [fecs](http://fecs.baidu.com/)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [prettier](https://github.com/prettier/prettier)
   * [standard](http://standardjs.com/)
   * [tslint](https://github.com/palantir/tslint)
@@ -679,6 +711,7 @@ formatting.
   * [vcom](https://www.mentor.com/products/fv/questa/)
   * [xvhdl](https://www.xilinx.com/products/design-tools/vivado.html)
 * Vim
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [vimls](https://github.com/iamcco/vim-language-server)
   * [vint](https://github.com/Kuniwak/vint)
 * Vim help
@@ -687,6 +720,7 @@ formatting.
   * [write-good](https://github.com/btford/write-good) :warning:
 * Vue
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [prettier](https://github.com/prettier/prettier)
   * [vls](https://github.com/vuejs/vetur/tree/master/server)
   * [volar](https://github.com/johnsoncodehk/volar)
@@ -695,6 +729,7 @@ formatting.
 * XHTML
   * [alex](https://github.com/get-alex/alex)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [proselint](http://proselint.com/)
   * [write-good](https://github.com/btford/write-good)
 * XML
@@ -703,6 +738,7 @@ formatting.
   * [actionlint](https://github.com/rhysd/actionlint) :warning:
   * [circleci](https://circleci.com/docs/2.0/local-cli) :floppy_disk: :warning:
   * [gitlablint](https://github.com/elijah-roberts/gitlab-lint)
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [prettier](https://github.com/prettier/prettier)
   * [spectral](https://github.com/stoplightio/spectral)
   * [swaglint](https://github.com/byCedric/swaglint) :warning:
@@ -715,5 +751,6 @@ formatting.
 * Zeek
   * [zeek](http://zeek.org) :floppy_disk:
 * Zig
+  * [gitleaks](https://github.com/gitleaks/gitleaks) :floppy_disk:
   * [zigfmt](https://github.com/ziglang/zig)
   * [zls](https://github.com/zigtools/zls)

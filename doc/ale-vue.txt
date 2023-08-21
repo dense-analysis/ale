@@ -9,6 +9,12 @@ See |ale-cspell-options|
 
 
 ===============================================================================
+gitleaks                                                     *ale-vue-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 prettier                                                     *ale-vue-prettier*
 
 See |ale-javascript-prettier| for information about the available options.

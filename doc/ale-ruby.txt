@@ -49,6 +49,12 @@ g:ale_ruby_debride_options                         *g:ale_ruby_debride_options*
 
 
 ===============================================================================
+gitleaks                                                    *ale-ruby-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 prettier                                                    *ale-ruby-prettier*
 
 See |ale-javascript-prettier| for information about the available options.

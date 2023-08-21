@@ -9,6 +9,12 @@ See |ale-cspell-options|
 
 
 ===============================================================================
+gitleaks                                                     *ale-lua-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 lua-format                                                 *ale-lua-lua-format*
 
 g:ale_lua_lua_format_executable               *g:ale_lua_lua_format_executable*

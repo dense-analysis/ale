@@ -411,6 +411,12 @@ g:ale_python_flakehell_auto_poetry         *g:ale_python_flakehell_auto_poetry*
 
 
 ===============================================================================
+gitleaks                                                  *ale-python-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 isort                                                        *ale-python-isort*
 
 g:ale_python_isort_executable                   *g:ale_python_isort_executable*

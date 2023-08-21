@@ -49,6 +49,12 @@ See |ale-cspell-options|
 
 
 ===============================================================================
+gitleaks                                                   *ale-swift-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 sourcekitlsp                                           *ale-swift-sourcekitlsp*
 
 To enable the SourceKit-LSP you need to install and build the executable as

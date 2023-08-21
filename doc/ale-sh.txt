@@ -32,6 +32,12 @@ See |ale-cspell-options|
 
 
 ===============================================================================
+gitleaks                                                      *ale-sh-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 sh-language-server                                     *ale-sh-language-server*
 
 g:ale_sh_language_server_executable        *g:ale_sh_language_server_executable*

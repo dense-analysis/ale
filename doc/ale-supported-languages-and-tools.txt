@@ -16,10 +16,12 @@ Notes:
   * `ada_language_server`
   * `cspell`
   * `gcc`
+  * `gitleaks`!!
   * `gnatpp`
 * Ansible
   * `ansible-language-server`
   * `ansible-lint`!!
+  * `gitleaks`!!
 * API Blueprint
   * `drafter`
 * APKBUILD
@@ -28,6 +30,7 @@ Notes:
 * AsciiDoc
   * `alex`
   * `cspell`
+  * `gitleaks`!!
   * `languagetool`!!
   * `proselint`
   * `redpen`
@@ -44,6 +47,7 @@ Notes:
 * Bash
   * `bashate`
   * `cspell`
+  * `gitleaks`!!
   * `language-server`
   * `shell` (-n flag)
   * `shellcheck`
@@ -75,12 +79,14 @@ Notes:
   * `cspell`
   * `flawfinder`
   * `gcc` (`cc`)
+  * `gitleaks`!!
   * `uncrustify`
 * C#
   * `clang-format`
   * `csc`!!
   * `cspell`
   * `dotnet-format`
+  * `gitleaks`!!
   * `mcs`
   * `mcsc`!!
   * `uncrustify`
@@ -99,6 +105,7 @@ Notes:
   * `cspell`
   * `flawfinder`
   * `gcc` (`cc`)
+  * `gitleaks`!!
   * `uncrustify`
 * Cairo
   * `starknet`
@@ -161,6 +168,7 @@ Notes:
   * `dockerfile_lint`
   * `dockerlinter`
   * `dprint`
+  * `gitleaks`!!
   * `hadolint`
 * Elixir
   * `credo`
@@ -168,6 +176,7 @@ Notes:
   * `dialyxir`
   * `dogma`!!
   * `elixir-ls`
+  * `gitleaks`!!
   * `mix`!!
 * Elm
   * `elm-format`
@@ -205,6 +214,7 @@ Notes:
 * Go
   * `bingo`
   * `cspell`
+  * `gitleaks`!!
   * `go build`!!
   * `go mod`!!
   * `go vet`!!
@@ -241,6 +251,7 @@ Notes:
   * `fourmolu`
   * `ghc`
   * `ghc-mod`
+  * `gitleaks`!!
   * `hdevtools`
   * `hfmt`
   * `hie`
@@ -261,6 +272,7 @@ Notes:
   * `cspell`
   * `eslint`
   * `fecs`
+  * `gitleaks`!!
   * `html-beautify`
   * `htmlhint`
   * `prettier`
@@ -282,6 +294,7 @@ Notes:
   * `clang-format`
   * `cspell`
   * `eclipselsp`
+  * `gitleaks`!!
   * `google-java-format`
   * `javac`
   * `javalsp`
@@ -294,6 +307,7 @@ Notes:
   * `eslint`
   * `fecs`
   * `flow`
+  * `gitleaks`!!
   * `jscs`
   * `jshint`
   * `prettier`
@@ -309,6 +323,7 @@ Notes:
   * `dprint`
   * `eslint`
   * `fixjson`
+  * `gitleaks`!!
   * `jq`
   * `jsonlint`
   * `prettier`
@@ -330,6 +345,7 @@ Notes:
   * `alex`
   * `chktex`
   * `cspell`
+  * `gitleaks`!!
   * `lacheck`
   * `proselint`
   * `redpen`
@@ -345,6 +361,7 @@ Notes:
   * `llc`
 * Lua
   * `cspell`
+  * `gitleaks`!!
   * `lua-format`
   * `lua-language-server`
   * `luac`
@@ -362,6 +379,7 @@ Notes:
 * Markdown
   * `alex`
   * `cspell`
+  * `gitleaks`!!
   * `languagetool`!!
   * `markdownlint`!!
   * `marksman`
@@ -433,6 +451,7 @@ Notes:
   * `perl6 -c`
 * PHP
   * `cspell`
+  * `gitleaks`!!
   * `intelephense`
   * `langserver`
   * `phan`
@@ -459,6 +478,7 @@ Notes:
   * `ponyc`
 * PowerShell
   * `cspell`
+  * `gitleaks`!!
   * `powershell`
   * `psscriptanalyzer`
 * Prolog
@@ -488,6 +508,7 @@ Notes:
   * `cspell`
   * `flake8`
   * `flakehell`
+  * `gitleaks`!!
   * `isort`
   * `mypy`
   * `prospector`!!
@@ -527,11 +548,13 @@ Notes:
   * `refmt`
 * Rego
   * `cspell`
+  * `gitleaks`!!
   * `opacheck`
   * `opafmt`
 * reStructuredText
   * `alex`
   * `cspell`
+  * `gitleaks`!!
   * `proselint`
   * `redpen`
   * `rstcheck`
@@ -546,6 +569,7 @@ Notes:
   * `brakeman`!!
   * `cspell`
   * `debride`
+  * `gitleaks`!!
   * `prettier`
   * `rails_best_practices`!!
   * `reek`
@@ -559,6 +583,7 @@ Notes:
 * Rust
   * `cargo`!!
   * `cspell`
+  * `gitleaks`!!
   * `rls`
   * `rust-analyzer`
   * `rustc` (see |ale-integration-rust|)
@@ -571,6 +596,7 @@ Notes:
 * Scala
   * `cspell`
   * `fsc`
+  * `gitleaks`!!
   * `metals`
   * `sbtserver`
   * `scalac`
@@ -591,6 +617,7 @@ Notes:
   * `solium`
 * SQL
   * `dprint`
+  * `gitleaks`!!
   * `pgformatter`
   * `sql-lint`
   * `sqlfluff`
@@ -607,6 +634,7 @@ Notes:
 * Swift
   * Apple `swift-format`
   * `cspell`
+  * `gitleaks`!!
   * `sourcekit-lsp`
   * `swiftformat`
   * `swiftlint`
@@ -616,6 +644,7 @@ Notes:
   * `nagelfar`!!
 * Terraform
   * `checkov`
+  * `gitleaks`!!
   * `terraform`
   * `terraform-fmt-fixer`
   * `terraform-ls`
@@ -625,11 +654,13 @@ Notes:
 * Texinfo
   * `alex`
   * `cspell`
+  * `gitleaks`!!
   * `proselint`
   * `write-good`
 * Text^
   * `alex`
   * `cspell`
+  * `gitleaks`!!
   * `languagetool`!!
   * `proselint`
   * `redpen`
@@ -647,6 +678,7 @@ Notes:
   * `dprint`
   * `eslint`
   * `fecs`
+  * `gitleaks`!!
   * `prettier`
   * `standard`
   * `tslint`
@@ -670,6 +702,7 @@ Notes:
   * `vcom`
   * `xvhdl`
 * Vim
+  * `gitleaks`!!
   * `vimls`
   * `vint`
 * Vim help^
@@ -678,6 +711,7 @@ Notes:
   * `write-good`
 * Vue
   * `cspell`
+  * `gitleaks`!!
   * `prettier`
   * `vls`
   * `volar`
@@ -686,6 +720,7 @@ Notes:
 * XHTML
   * `alex`
   * `cspell`
+  * `gitleaks`!!
   * `proselint`
   * `write-good`
 * XML
@@ -694,6 +729,7 @@ Notes:
   * `actionlint`
   * `circleci`!!
   * `gitlablint`
+  * `gitleaks`!!
   * `prettier`
   * `spectral`
   * `swaglint`
@@ -706,6 +742,7 @@ Notes:
 * Zeek
   * `zeek`!!
 * Zig
+  * `gitleaks`!!
   * `zigfmt`
   * `zls`
 

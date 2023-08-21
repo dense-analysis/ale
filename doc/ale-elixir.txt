@@ -3,32 +3,31 @@ ALE Elixir Integration                                     *ale-elixir-options*
 
 
 ===============================================================================
-mix                                                            *ale-elixir-mix*
+credo                                                        *ale-elixir-credo*
 
-The `mix` linter is disabled by default, as it can be too expensive to run.
-See `:help g:ale_linters`
+Credo (https://github.com/rrrene/credo)
 
+g:ale_elixir_credo_strict                           *g:ale_elixir_credo_strict*
 
-g:ale_elixir_mix_options                             *g:ale_elixir_mix_options*
-                                                     *b:ale_elixir_mix_options*
-  Type: |String|
-  Default: `'mix'`
+  Type: |Integer|
+  Default: `0`
 
-
-  This variable can be changed to specify the mix executable.
+  Tells credo to run in strict mode or suggest mode.  Set variable to 1 to
+  enable --strict mode.
 
 
-===============================================================================
-mix_format                                              *ale-elixir-mix-format*
+g:ale_elixir_credo_config_file                 *g:ale_elixir_credo_config_file*
 
-g:ale_elixir_mix_format_options               *g:ale_elixir_mix_format_options*
-                                              *b:ale_elixir_mix_format_options*
   Type: |String|
   Default: `''`
 
+  Tells credo to use a custom configuration file.
 
-  This variable can be changed to specify the mix options passed to the
-  mix_format fixer
+
+===============================================================================
+cspell                                                      *ale-elixir-cspell*
+
+See |ale-cspell-options|
 
 
 ===============================================================================
@@ -77,31 +76,38 @@ g:ale_elixir_elixir_ls_config                   *g:ale_elixir_elixir_ls_config*
 
 
 ===============================================================================
-credo                                                        *ale-elixir-credo*
+gitleaks                                                  *ale-elixir-gitleaks*
 
-Credo (https://github.com/rrrene/credo)
-
-g:ale_elixir_credo_strict                           *g:ale_elixir_credo_strict*
-
-  Type: |Integer|
-  Default: `0`
-
-  Tells credo to run in strict mode or suggest mode.  Set variable to 1 to
-  enable --strict mode.
-
-
-g:ale_elixir_credo_config_file                 *g:ale_elixir_credo_config_file*
-
-  Type: |String|
-  Default: `''`
-
-  Tells credo to use a custom configuration file.
+See |ale-gitleaks-options|
 
 
 ===============================================================================
-cspell                                                      *ale-elixir-cspell*
+mix                                                            *ale-elixir-mix*
 
-See |ale-cspell-options|
+The `mix` linter is disabled by default, as it can be too expensive to run.
+See `:help g:ale_linters`
+
+
+g:ale_elixir_mix_options                             *g:ale_elixir_mix_options*
+                                                     *b:ale_elixir_mix_options*
+  Type: |String|
+  Default: `'mix'`
+
+
+  This variable can be changed to specify the mix executable.
+
+
+===============================================================================
+mix_format                                              *ale-elixir-mix-format*
+
+g:ale_elixir_mix_format_options               *g:ale_elixir_mix_format_options*
+                                              *b:ale_elixir_mix_format_options*
+  Type: |String|
+  Default: `''`
+
+
+  This variable can be changed to specify the mix options passed to the
+  mix_format fixer
 
 
 ===============================================================================

@@ -65,6 +65,12 @@ options for `eslint` too. See: |ale-javascript-eslint|.
 
 
 ===============================================================================
+gitleaks                                              *ale-typescript-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 prettier                                              *ale-typescript-prettier*
 
 See |ale-javascript-prettier| for information about the available options.

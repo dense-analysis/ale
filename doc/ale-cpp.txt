@@ -392,6 +392,12 @@ g:ale_cpp_flawfinder_options                             *g:ale-cpp-flawfinder*
 
 
 ===============================================================================
+gitleaks                                                     *ale-cpp-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 uncrustify                                                 *ale-cpp-uncrustify*
 
 See |ale-c-uncrustify| for information about the available options.

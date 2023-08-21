@@ -1,0 +1,12 @@
+Execute(The gitleaks handler should handle gitleaks output):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 1,
+  \     'type': 'E',
+  \     'text': 'generic-api-key',
+  \   },
+  \ ],
+  \ ale#handlers#gitleaks#Handle(bufnr(''),
+  \   'Fingerprint: /:generic-api-key:1'
+  \)

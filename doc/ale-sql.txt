@@ -10,6 +10,12 @@ and https://github.com/dprint/dprint-plugin-sql/releases
 
 
 ===============================================================================
+gitleaks                                                     *ale-sql-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 pgformatter                                               *ale-sql-pgformatter*
 
 g:ale_sql_pgformatter_executable             *g:ale_sql_pgformatter_executable*

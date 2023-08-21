@@ -21,6 +21,13 @@ g:ale_terraform_checkov_options               *g:ale_terraform_checkov_options*
 
   This variable can be changed to set additional options for checkov.
 
+
+===============================================================================
+gitleaks                                               *ale-terraform-gitleaks*
+
+See |ale-gitleaks-options|
+
+
 ===============================================================================
 terraform-fmt-fixer                                   *ale-terraform-fmt-fixer*
 
@@ -135,4 +142,3 @@ g:ale_terraform_tfsec_options                   *g:ale_terraform_tfsec_options*
 
 ===============================================================================
   vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
-

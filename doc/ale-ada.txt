@@ -7,6 +7,7 @@ cspell                                                         *ale-ada-cspell*
 
 See |ale-cspell-options|
 
+
 ===============================================================================
 gcc                                                               *ale-ada-gcc*
 
@@ -24,6 +25,12 @@ g:ale_ada_gcc_options                                   *g:ale_ada_gcc_options*
   Default: `'-gnatwa -gnatq'`
 
   This variable can be set to pass additional options to gcc.
+
+
+===============================================================================
+gitleaks                                                     *ale-ada-gitleaks*
+
+See |ale-gitleaks-options|
 
 
 ===============================================================================

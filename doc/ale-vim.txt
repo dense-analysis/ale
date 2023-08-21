@@ -3,6 +3,12 @@ ALE Vim Integration                                           *ale-vim-options*
 
 
 ===============================================================================
+gitleaks                                                     *ale-vim-gitleaks*
+
+See |ale-gitleaks-options|
+
+
+===============================================================================
 vimls                                                           *ale-vim-vimls*
 
   The `vim-language-server` is the engine that powers VimL editor support
