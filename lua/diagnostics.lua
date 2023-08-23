@@ -12,7 +12,7 @@ module.sendAleResultsToDiagnostics = function(buffer, loclist)
   -- Convert all the ALE loclist items to the shape that Neovim's diagnostic
   -- API is expecting.
   for _, location in ipairs(loclist) do
-    if location.bufnr == nil or location.bufnr == buffer then
+    if location.bufnr == buffer then
       table.insert(
         diagnostics,
         -- All line numbers from ALE are 1-indexed, but all line numbers
