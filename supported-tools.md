@@ -595,10 +595,10 @@ formatting.
 * SML
   * [smlnj](http://www.smlnj.org/)
 * Solidity
+  * [forge](https://github.com/foundry-rs/forge)
   * [solc](https://solidity.readthedocs.io/)
   * [solhint](https://github.com/protofire/solhint)
   * [solium](https://github.com/duaraghav8/Solium)
-  * [forge](https://github.com/foundry-rs/forge)
 * SQL
   * [dprint](https://dprint.dev)
   * [pgformatter](https://github.com/darold/pgFormatter)
