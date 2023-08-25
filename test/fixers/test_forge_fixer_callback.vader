@@ -1,0 +1,15 @@
+Before:
+  Save g:ale_solidity_forge_executable
+
+After:
+  Restore
+
+Execute(The forge fmt callback should return the correct default values):
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('forge')
+  \     . ' fmt %t',
+  \   'read_temporary_file': 1,
+  \ },
+  \ ale#fixers#forge#Fix(bufnr(''))
+
