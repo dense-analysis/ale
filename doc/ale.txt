@@ -3326,6 +3326,7 @@ documented in additional help files.
     solc..................................|ale-solidity-solc|
     solhint...............................|ale-solidity-solhint|
     solium................................|ale-solidity-solium|
+    forge.................................|ale-solidity-forge|
   spec....................................|ale-spec-options|
     rpmlint...............................|ale-spec-rpmlint|
   sql.....................................|ale-sql-options|
