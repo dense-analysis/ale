@@ -10,7 +10,7 @@ endfunction
 call ale#linter#Define('json', {
 \   'name': 'vscodejson',
 \   'lsp': 'stdio',
-\   'executable': 'vscode-json-language-server',
+\   'executable': 'vscode-json-languageserver',
 \   'command': '%e --stdio',
 \   'project_root': function('ale_linters#json#vscodejson#GetProjectRoot'),
 \})
