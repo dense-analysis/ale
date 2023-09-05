@@ -19,7 +19,7 @@ function! ale#organize_imports#HandleTSServerResponse(conn_id, response) abort
     \   },
     \   {
     \       'conn_id': a:conn_id,
-    \       'should_save': !&hidden,
+    \       'should_save': g:ale_save_hidden || !&hidden,
     \   },
     \)
 endfunction

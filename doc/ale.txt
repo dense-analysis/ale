@@ -1260,7 +1260,6 @@ g:ale_floating_preview_popup_opts           *g:ale_floating_preview_popup_opts*
   let g:ale_floating_preview_popup_opts = 'g:CustomOpts'
 <
 
-
 g:ale_floating_window_border                     *g:ale_floating_window_border*
 
   Type: |List|
@@ -1972,6 +1971,16 @@ g:ale_root                                                         *g:ale_root*
   If neither variable yields a result, a linter-specific function is invoked to
   detect a project root. If this, too, yields no result, and the linter is an
   LSP linter, it will not run.
+
+
+g:ale_save_hidden                                           *g:ale_save_hidden*
+
+  Type: |Number|
+  Default: `0`
+
+  When set to `1`, save buffers when 'hidden' is set when applying code
+  actions or rename operations, such as through |ALERename| or
+  |ALEOrganizeImports|.
 
 
 g:ale_set_balloons                                         *g:ale_set_balloons*
@@ -3646,13 +3655,14 @@ ALERename                                                           *ALERename*
   The symbol where the cursor is resting will be the symbol renamed, and a
   prompt will open to request a new name.
 
-  The rename operation will save all modified buffers when `set nohidden` is
-  set, because that disables leaving unsaved buffers in the background. See
-  `:help hidden` for more details.
+  The rename operation will not save modified buffers when 'hidden' is on
+  unless |g:ale_save_hidden| is `1`.
+
 
 ALEFileRename                                                   *ALEFileRename*
 
   Rename a file and fix imports using `tsserver`.
+
 
 ALECodeAction                                                   *ALECodeAction*
 
