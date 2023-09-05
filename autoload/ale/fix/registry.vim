@@ -286,6 +286,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['fish'],
 \       'description': 'Format fish scripts using fish_indent.',
 \   },
+\   'forge': {
+\       'function': 'ale#fixers#forge#Fix',
+\       'suggested_filetypes': ['solidity'],
+\       'description': 'Fix Solidity files with forge fmt.',
+\   },
 \   'gofmt': {
 \       'function': 'ale#fixers#gofmt#Fix',
 \       'suggested_filetypes': ['go'],
