@@ -53,7 +53,7 @@ let s:default_ale_linters = {
 \   'perl': ['perlcritic'],
 \   'perl6': [],
 \   'python': ['flake8', 'mypy', 'pylint', 'pyright', 'ruff'],
-\   'rust': ['cargo', 'rls'],
+\   'rust': ['analyzer', 'cargo'],
 \   'spec': [],
 \   'text': [],
 \   'vader': ['vimls'],
