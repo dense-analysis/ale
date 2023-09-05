@@ -1,6 +1,8 @@
 " Author: w0rp <devw0rp@gmail.com>
 " Description: This file implements debugging information for ALE
 
+let g:ale_info_default_mode = get(g:, 'ale_info_default_mode', 'preview')
+
 let s:global_variable_list = [
 \    'ale_cache_executable_check_failures',
 \    'ale_change_sign_column_color',
@@ -18,6 +20,7 @@ let s:global_variable_list = [
 \    'ale_fix_on_save',
 \    'ale_fixers',
 \    'ale_history_enabled',
+\    'ale_info_default_mode',
 \    'ale_history_log_output',
 \    'ale_keep_list_window_open',
 \    'ale_lint_delay',
@@ -199,7 +202,10 @@ function! s:EchoLSPErrorMessages(all_linter_names) abort
     endfor
 endfunction
 
-function! ale#debugging#Info() abort
+function! ale#debugging#Info(...) abort
+    let l:options = (a:0 > 0) ? a:1 : {}
+    let l:show_preview_info = get(l:options, 'preview')
+
     let l:buffer = bufnr('')
     let l:filetype = &filetype
 
@@ -241,13 +247,31 @@ function! ale#debugging#Info() abort
     call s:EchoLinterAliases(l:all_linters)
     call s:Echo('  Enabled Linters: ' . string(l:enabled_names))
     call s:Echo('  Ignored Linters: ' . string(l:ignored_names))
-    call s:Echo(' Suggested Fixers: ' . l:fixers_string)
-    call s:Echo(' Linter Variables:')
-    call s:Echo('')
-    call s:EchoLinterVariables(l:variable_list)
+    call s:Echo(' Suggested Fixers:' . l:fixers_string)
+    " We use this line with only a space to know where to end highlights.
+    call s:Echo(' ')
+
+    " Only show Linter Variables directive if there are any.
+    if !empty(l:variable_list)
+        call s:Echo(' Linter Variables:')
+
+        if l:show_preview_info
+            call s:Echo('" Press Space to read :help for a setting')
+        endif
+
+        call s:EchoLinterVariables(l:variable_list)
+        " We use this line with only a space to know where to end highlights.
+        call s:Echo(' ')
+    endif
+
     call s:Echo(' Global Variables:')
-    call s:Echo('')
+
+    if l:show_preview_info
+        call s:Echo('" Press Space to read :help for a setting')
+    endif
+
     call s:EchoGlobalVariables()
+    call s:Echo(' ')
     call s:EchoLSPErrorMessages(l:all_names)
     call s:Echo('  Command History:')
     call s:Echo('')
@@ -274,4 +298,42 @@ function! ale#debugging#InfoToFile(filename) abort
 
     call writefile(split(l:output, "\n"), l:expanded_filename)
     call s:Echo('ALEInfo written to ' . l:expanded_filename)
+endfunction
+
+function! ale#debugging#InfoToPreview() abort
+    let l:output = execute('call ale#debugging#Info({''preview'': 1})')
+
+    call ale#preview#Show(split(l:output, "\n"), {
+    \   'filetype': 'ale-info',
+    \})
+endfunction
+
+function! ale#debugging#InfoCommand(...) abort
+    if len(a:000) > 1
+        " no-custom-checks
+        echom 'Invalid ALEInfo arguments!'
+
+        return
+    endif
+
+    " Get 'echo' from '-echo', if there's an argument.
+    let l:mode = get(a:000, '')[1:]
+
+    if empty(l:mode)
+        let l:mode = ale#Var(bufnr(''), 'info_default_mode')
+    endif
+
+    if l:mode is# 'echo'
+        call ale#debugging#Info()
+    elseif l:mode is# 'clip' || l:mode is# 'clipboard'
+        call ale#debugging#InfoToClipboard()
+    else
+        call ale#debugging#InfoToPreview()
+    endif
+endfunction
+
+function! ale#debugging#InfoToClipboardDeprecatedCommand() abort
+    " no-custom-checks
+    echom 'ALEInfoToClipboard is deprecated. Use ALEInfo -clipboard instead.'
+    call ale#debugging#InfoToClipboard()
 endfunction

@@ -252,9 +252,9 @@ command! -bar ALEPopulateQuickfix :call ale#list#ForcePopulateErrorList(1)
 command! -bar ALEPopulateLocList  :call ale#list#ForcePopulateErrorList(0)
 
 " Define a command to get information about current filetype.
-command! -bar ALEInfo :call ale#debugging#Info()
-" The same, but copy output to your clipboard.
-command! -bar ALEInfoToClipboard :call ale#debugging#InfoToClipboard()
+command! -bar -nargs=* ALEInfo :call ale#debugging#InfoCommand(<f-args>)
+" Deprecated and scheduled for removal in 4.0.0.
+command! -bar ALEInfoToClipboard :call ale#debugging#InfoToClipboardDeprecatedCommand()
 " Copy ALE information to a file.
 command! -bar -nargs=1 ALEInfoToFile :call ale#debugging#InfoToFile(<f-args>)
 
@@ -352,6 +352,10 @@ nnoremap <silent> <Plug>(ale_rename) :ALERename<Return>
 nnoremap <silent> <Plug>(ale_filerename) :ALEFileRename<Return>
 nnoremap <silent> <Plug>(ale_code_action) :ALECodeAction<Return>
 nnoremap <silent> <Plug>(ale_repeat_selection) :ALERepeatSelection<Return>
+nnoremap <silent> <Plug>(ale_info) :ALEInfo<Return>
+nnoremap <silent> <Plug>(ale_info_echo) :ALEInfo -echo<Return>
+nnoremap <silent> <Plug>(ale_info_clipboard) :ALEInfo -clipboard<Return>
+nnoremap <silent> <Plug>(ale_info_preview) :ALEInfo -preview<Return>
 
 " Set up autocmd groups now.
 call ale#events#Init()

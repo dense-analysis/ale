@@ -16,6 +16,7 @@ Before:
   Save g:ale_fixers
   Save g:ale_history_enabled
   Save g:ale_history_log_output
+  Save g:ale_info_default_mode
   Save g:ale_keep_list_window_open
   Save g:ale_lint_delay
   Save g:ale_lint_on_enter
@@ -76,6 +77,8 @@ Before:
   let g:ale_fix_on_save = 0
   let g:ale_history_enabled = 1
   let g:ale_history_log_output = 1
+  " This needs to be set to echo for this series of tests.
+  let g:ale_info_default_mode = 'echo'
   let g:ale_keep_list_window_open = 0
   let g:ale_lint_delay = 200
   let g:ale_lint_on_enter = 1
@@ -128,74 +131,72 @@ Before:
   let g:ale_linter_aliases = {}
   let g:ale_buffer_info = {}
   let g:fixer_lines = [
-  \ ' Suggested Fixers: ',
+  \ ' Suggested Fixers:',
   \ '  ''foo'' - Fix things the foo way',
-  \]
-  let g:variables_lines = [
-  \ ' Linter Variables:',
-  \ '',
+  \ ' ',
   \]
   let g:globals_lines = [
-  \  ' Global Variables:',
-  \  '',
-  \  'let g:ale_cache_executable_check_failures = 0',
-  \  'let g:ale_change_sign_column_color = 0',
-  \  'let g:ale_command_wrapper = ''''',
-  \  'let g:ale_completion_delay = 100',
-  \  'let g:ale_completion_enabled = 0',
-  \  'let g:ale_completion_max_suggestions = 50',
-  \  'let g:ale_disable_lsp = 0',
-  \  'let g:ale_echo_cursor = 1',
-  \  'let g:ale_echo_msg_error_str = ''Error''',
-  \  'let g:ale_echo_msg_format = ''%code: %%s''',
-  \  'let g:ale_echo_msg_info_str = ''Info''',
-  \  'let g:ale_echo_msg_warning_str = ''Warning''',
-  \  'let g:ale_enabled = 1',
-  \  'let g:ale_fix_on_save = 0',
-  \  'let g:ale_fixers = {}',
-  \  'let g:ale_history_enabled = 1',
-  \  'let g:ale_history_log_output = 1',
-  \  'let g:ale_keep_list_window_open = 0',
-  \  'let g:ale_lint_delay = 200',
-  \  'let g:ale_lint_on_enter = 1',
-  \  'let g:ale_lint_on_filetype_changed = 1',
-  \  'let g:ale_lint_on_insert_leave = 1',
-  \  'let g:ale_lint_on_save = 1',
-  \  'let g:ale_lint_on_text_changed = ''normal''',
-  \  'let g:ale_linter_aliases = {}',
-  \  'let g:ale_linters = {}',
-  \  'let g:ale_linters_explicit = 0',
-  \  'let g:ale_linters_ignore = {''python'': [''pyright'']}',
-  \  'let g:ale_list_vertical = 0',
-  \  'let g:ale_list_window_size = 10',
-  \  'let g:ale_loclist_msg_format = ''%code: %%s''',
-  \  'let g:ale_max_buffer_history_size = 20',
-  \  'let g:ale_max_signs = -1',
-  \  'let g:ale_maximum_file_size = 0',
-  \  'let g:ale_open_list = 0',
-  \  'let g:ale_pattern_options = {}',
-  \  'let g:ale_pattern_options_enabled = 0',
-  \  'let g:ale_root = {}',
-  \  'let g:ale_set_balloons = 0',
-  \  'let g:ale_set_highlights = 1',
-  \  'let g:ale_set_loclist = 1',
-  \  'let g:ale_set_quickfix = 0',
-  \  'let g:ale_set_signs = 1',
-  \  'let g:ale_sign_column_always = 0',
-  \  'let g:ale_sign_error = ''>>''',
-  \  'let g:ale_sign_info = ''--''',
-  \  'let g:ale_sign_offset = 1000000',
-  \  'let g:ale_sign_style_error = ''>>''',
-  \  'let g:ale_sign_style_warning = ''--''',
-  \  'let g:ale_sign_warning = ''--''',
-  \  'let g:ale_sign_highlight_linenrs = 0',
-  \  'let g:ale_statusline_format = [''%d error(s)'', ''%d warning(s)'', ''OK'']',
-  \  'let g:ale_type_map = {}',
-  \  'let g:ale_use_neovim_diagnostics_api = 0',
-  \  'let g:ale_use_global_executables = v:null',
-  \  'let g:ale_virtualtext_cursor = ''disabled''',
-  \  'let g:ale_warn_about_trailing_blank_lines = 1',
-  \  'let g:ale_warn_about_trailing_whitespace = 1',
+  \ ' Global Variables:',
+  \ 'let g:ale_cache_executable_check_failures = 0',
+  \ 'let g:ale_change_sign_column_color = 0',
+  \ 'let g:ale_command_wrapper = ''''',
+  \ 'let g:ale_completion_delay = 100',
+  \ 'let g:ale_completion_enabled = 0',
+  \ 'let g:ale_completion_max_suggestions = 50',
+  \ 'let g:ale_disable_lsp = 0',
+  \ 'let g:ale_echo_cursor = 1',
+  \ 'let g:ale_echo_msg_error_str = ''Error''',
+  \ 'let g:ale_echo_msg_format = ''%code: %%s''',
+  \ 'let g:ale_echo_msg_info_str = ''Info''',
+  \ 'let g:ale_echo_msg_warning_str = ''Warning''',
+  \ 'let g:ale_enabled = 1',
+  \ 'let g:ale_fix_on_save = 0',
+  \ 'let g:ale_fixers = {}',
+  \ 'let g:ale_history_enabled = 1',
+  \ 'let g:ale_info_default_mode = ''echo''',
+  \ 'let g:ale_history_log_output = 1',
+  \ 'let g:ale_keep_list_window_open = 0',
+  \ 'let g:ale_lint_delay = 200',
+  \ 'let g:ale_lint_on_enter = 1',
+  \ 'let g:ale_lint_on_filetype_changed = 1',
+  \ 'let g:ale_lint_on_insert_leave = 1',
+  \ 'let g:ale_lint_on_save = 1',
+  \ 'let g:ale_lint_on_text_changed = ''normal''',
+  \ 'let g:ale_linter_aliases = {}',
+  \ 'let g:ale_linters = {}',
+  \ 'let g:ale_linters_explicit = 0',
+  \ 'let g:ale_linters_ignore = {''python'': [''pyright'']}',
+  \ 'let g:ale_list_vertical = 0',
+  \ 'let g:ale_list_window_size = 10',
+  \ 'let g:ale_loclist_msg_format = ''%code: %%s''',
+  \ 'let g:ale_max_buffer_history_size = 20',
+  \ 'let g:ale_max_signs = -1',
+  \ 'let g:ale_maximum_file_size = 0',
+  \ 'let g:ale_open_list = 0',
+  \ 'let g:ale_pattern_options = {}',
+  \ 'let g:ale_pattern_options_enabled = 0',
+  \ 'let g:ale_root = {}',
+  \ 'let g:ale_set_balloons = 0',
+  \ 'let g:ale_set_highlights = 1',
+  \ 'let g:ale_set_loclist = 1',
+  \ 'let g:ale_set_quickfix = 0',
+  \ 'let g:ale_set_signs = 1',
+  \ 'let g:ale_sign_column_always = 0',
+  \ 'let g:ale_sign_error = ''>>''',
+  \ 'let g:ale_sign_info = ''--''',
+  \ 'let g:ale_sign_offset = 1000000',
+  \ 'let g:ale_sign_style_error = ''>>''',
+  \ 'let g:ale_sign_style_warning = ''--''',
+  \ 'let g:ale_sign_warning = ''--''',
+  \ 'let g:ale_sign_highlight_linenrs = 0',
+  \ 'let g:ale_statusline_format = [''%d error(s)'', ''%d warning(s)'', ''OK'']',
+  \ 'let g:ale_type_map = {}',
+  \ 'let g:ale_use_neovim_diagnostics_api = 0',
+  \ 'let g:ale_use_global_executables = v:null',
+  \ 'let g:ale_virtualtext_cursor = ''disabled''',
+  \ 'let g:ale_warn_about_trailing_blank_lines = 1',
+  \ 'let g:ale_warn_about_trailing_whitespace = 1',
+  \ ' ',
   \]
   let g:command_header = [
   \ '  Command History:',
@@ -255,7 +256,6 @@ Execute (ALEInfo with no linters should return the right output):
   \   '  Ignored Linters: []',
   \ ]
   \ + g:fixer_lines
-  \ + g:variables_lines
   \ + g:globals_lines
   \ + g:command_header
   \)
@@ -278,7 +278,6 @@ Execute (ALEInfo should return buffer-local global ALE settings):
   \   '  Ignored Linters: []',
   \ ]
   \ + g:fixer_lines
-  \ + g:variables_lines
   \ + g:globals_lines
   \ + g:command_header
   \)
@@ -293,7 +292,6 @@ Execute (ALEInfo with no filetype should return the right output):
   \   '  Ignored Linters: []',
   \ ]
   \ + g:fixer_lines
-  \ + g:variables_lines
   \ + g:globals_lines
   \ + g:command_header
   \)
@@ -310,7 +308,6 @@ Execute (ALEInfo with a single linter should return the right output):
   \   '  Ignored Linters: []',
   \ ]
   \ + g:fixer_lines
-  \ + g:variables_lines
   \ + g:globals_lines
   \ + g:command_header
   \)
@@ -328,7 +325,6 @@ Execute (ALEInfo with two linters should return the right output):
   \   '  Ignored Linters: []',
   \ ]
   \ + g:fixer_lines
-  \ + g:variables_lines
   \ + g:globals_lines
   \ + g:command_header
   \)
@@ -350,7 +346,6 @@ Execute (ALEInfo should calculate enabled linters correctly):
   \   '  Ignored Linters: []',
   \ ]
   \ + g:fixer_lines
-  \ + g:variables_lines
   \ + g:globals_lines
   \ + g:command_header
   \)
@@ -368,7 +363,6 @@ Execute (ALEInfo should only return linters for current filetype):
   \   '  Ignored Linters: []',
   \ ]
   \ + g:fixer_lines
-  \ + g:variables_lines
   \ + g:globals_lines
   \ + g:command_header
   \)
@@ -386,7 +380,6 @@ Execute (ALEInfo with compound filetypes should return linters for both of them)
   \   '  Ignored Linters: []',
   \ ]
   \ + g:fixer_lines
-  \ + g:variables_lines
   \ + g:globals_lines
   \ + g:command_header
   \)
@@ -411,11 +404,11 @@ Execute (ALEInfo should return appropriately named global variables):
   \ + g:fixer_lines
   \ + [
   \   ' Linter Variables:',
-  \   '',
   \   'let g:ale_testft2_testlinter2_bar = {''x'': ''y''}',
   \   'let g:ale_testft2_testlinter2_foo = 123',
   \   'let g:ale_testft_testlinter1_bar = [''abc'']',
   \   'let g:ale_testft_testlinter1_foo = ''abc''',
+  \   ' ',
   \ ]
   \ + g:globals_lines
   \ + g:command_header
@@ -443,11 +436,11 @@ Execute (ALEInfoToFile should write to a file correctly):
   \ + g:fixer_lines
   \ + [
   \   ' Linter Variables:',
-  \   '',
   \   'let g:ale_testft2_testlinter2_bar = {''x'': ''y''}',
   \   'let g:ale_testft2_testlinter2_foo = 123',
   \   'let g:ale_testft_testlinter1_bar = [''abc'']',
   \   'let g:ale_testft_testlinter1_foo = ''abc''',
+  \   ' ',
   \ ]
   \ + g:globals_lines
   \ + g:command_header,
@@ -471,9 +464,9 @@ Execute (ALEInfo should buffer-local linter variables):
   \ + g:fixer_lines
   \ + [
   \   ' Linter Variables:',
-  \   '',
   \   'let g:ale_testft2_testlinter2_foo = 123',
   \   'let b:ale_testft2_testlinter2_foo = 456',
+  \   ' ',
   \ ]
   \ + g:globals_lines
   \ + g:command_header
@@ -503,9 +496,9 @@ Execute (ALEInfo should output linter aliases):
   \ + g:fixer_lines
   \ + [
   \   ' Linter Variables:',
-  \   '',
   \   'let g:ale_testft2_testlinter2_foo = 123',
   \   'let b:ale_testft2_testlinter2_foo = 456',
+  \   ' ',
   \ ]
   \ + g:globals_lines
   \ + g:command_header
@@ -529,7 +522,6 @@ Execute (ALEInfo should return command history):
   \   '  Ignored Linters: []',
   \ ]
   \ + g:fixer_lines
-  \ + g:variables_lines
   \ + g:globals_lines
   \ + g:command_header
   \ + [
@@ -557,7 +549,6 @@ Execute (ALEInfo command history should print exit codes correctly):
   \   '  Ignored Linters: []',
   \ ]
   \ + g:fixer_lines
-  \ + g:variables_lines
   \ + g:globals_lines
   \ + g:command_header
   \ + [
@@ -606,7 +597,6 @@ Execute (ALEInfo command history should print command output if logging is on):
   \   '  Ignored Linters: []',
   \ ]
   \ + g:fixer_lines
-  \ + g:variables_lines
   \ + g:globals_lines
   \ + g:command_header
   \ + [
@@ -645,7 +635,6 @@ Execute (ALEInfo should include executable checks in the history):
   \   '  Ignored Linters: []',
   \ ]
   \ + g:fixer_lines
-  \ + g:variables_lines
   \ + g:globals_lines
   \ + g:command_header
   \ + [
@@ -658,7 +647,10 @@ Execute (ALEInfo should include executable checks in the history):
 
 Execute (The option for caching failing executable checks should work):
   let g:ale_cache_executable_check_failures = 1
-  let g:globals_lines[2] = 'let g:ale_cache_executable_check_failures = 1'
+  " Replace output for the variable we have to modify above.
+  call map(g:globals_lines, {
+  \  _, val -> val =~ 'ale_cache_executable_check_failures' ? 'let g:ale_cache_executable_check_failures = 1' : val
+  \})
 
   call ale#linter#Define('testft', g:testlinter1)
 
@@ -675,7 +667,6 @@ Execute (The option for caching failing executable checks should work):
   \   '  Ignored Linters: []',
   \ ]
   \ + g:fixer_lines
-  \ + g:variables_lines
   \ + g:globals_lines
   \ + g:command_header
   \ + [
@@ -698,7 +689,6 @@ Execute (LSP errors for a linter should be outputted):
   \   '  Ignored Linters: []',
   \ ]
   \ + g:fixer_lines
-  \ + g:variables_lines
   \ + g:globals_lines
   \ + [
   \   ' LSP Error Messages:',
@@ -723,7 +713,6 @@ Execute (LSP errors for other linters shouldn't appear):
   \   '  Ignored Linters: []',
   \ ]
   \ + g:fixer_lines
-  \ + g:variables_lines
   \ + g:globals_lines
   \ + g:command_header
   \)
@@ -736,7 +725,11 @@ Execute (ALEInfo should include linter global options):
   " eg: like g:c_build_dir_names
   let g:ale_testft_build_dir_names = ['build', 'bin']
 
-  call add(g:variables_lines, 'let g:ale_testft_build_dir_names = [''build'', ''bin'']')
+  let g:variables_lines = [
+  \ ' Linter Variables:',
+  \ 'let g:ale_testft_build_dir_names = [''build'', ''bin'']',
+  \ ' ',
+  \]
 
   call CheckInfo(
   \ [
@@ -772,7 +765,6 @@ Execute (ALEInfo should include linter global options for enabled linters):
   \   '  Ignored Linters: []',
   \ ]
   \ + g:fixer_lines
-  \ + g:variables_lines
   \ + g:globals_lines
   \ + g:command_header
   \)

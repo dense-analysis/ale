@@ -42,7 +42,7 @@ Are you having trouble configuring ALE? Try asking for help on [Stack Exchange](
 ### :ALEInfo
 <details>
   <summary>Expand</summary>
-  <!-- Paste the output of :ALEInfo here. Try :ALEInfoToClipboard -->
+  <!-- Paste the output of :ALEInfo here. Try :ALEInfo -clipboard -->
   <!-- Make sure to run :ALEInfo from the buffer where the bug occurred. -->
   <!-- Read the output. You might figure out what went wrong yourself. -->
 </details>

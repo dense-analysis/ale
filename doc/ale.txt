@@ -1345,6 +1345,15 @@ g:ale_hover_to_floating_preview               *g:ale_hover_to_floating_preview*
   hover messages.
 
 
+g:ale_info_default_mode                               *g:ale_info_default_mode*
+                                                      *b:ale_info_default_mode*
+  Type: |String|
+  Default: `'preview'`
+
+  Changes the default mode used for |ALEInfo|. See documentation for |ALEInfo|
+  for more information.
+
+
 g:ale_keep_list_window_open                       *g:ale_keep_list_window_open*
                                                   *b:ale_keep_list_window_open*
   Type: |Number|
@@ -3836,7 +3845,7 @@ ALEDetail                                                           *ALEDetail*
 
                                                                      *:ALEInfo*
 ALEInfo                                                               *ALEInfo*
-ALEInfoToClipboard                                         *ALEInfoToClipboard*
+                                                                *ALEInfoToFile*
 
   Print runtime information about ALE, including the values of global and
   buffer-local settings for ALE, the linters that are enabled, the commands
@@ -3848,8 +3857,17 @@ ALEInfoToClipboard                                         *ALEInfoToClipboard*
   |g:ale_history_log_output| to `1` to enable logging of output for commands.
   ALE will only log the output captured for parsing problems, etc.
 
-  The command `:ALEInfoToClipboard` can be used to output ALEInfo directly to
-  your clipboard. This might not work on every machine.
+  You can pass options to the command to control how ALE displays the
+  information, such as `:ALEInfo -echo`, etc. >
+
+  -preview             Show the info in a preview window.
+  -clip OR -clipboard  Copy the information to your clipboard.
+  -echo                echo all of the information with :echo
+<
+  The default mode can be configured with |g:ale_info_default_mode|.
+
+  When shown in a preview window, syntax highlights can be defined for the
+  `ale-info` filetype.
 
   `:ALEInfoToFile` will write the ALE runtime information to a given filename.
   The filename works just like |:w|.
