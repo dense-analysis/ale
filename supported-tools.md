@@ -177,8 +177,8 @@ formatting.
   * [dialyxir](https://github.com/jeremyjh/dialyxir)
   * [dogma](https://github.com/lpil/dogma) :floppy_disk:
   * [elixir-ls](https://github.com/elixir-lsp/elixir-ls) :warning:
-  * [mix](https://hexdocs.pm/mix/Mix.html) :warning: :floppy_disk:
   * [lexical](https://github.com/lexical-lsp/lexical) :warning:
+  * [mix](https://hexdocs.pm/mix/Mix.html) :warning: :floppy_disk:
 * Elm
   * [elm-format](https://github.com/avh4/elm-format)
   * [elm-ls](https://github.com/elm-tooling/elm-language-server)

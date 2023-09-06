@@ -168,8 +168,8 @@ Notes:
   * `dialyxir`
   * `dogma`!!
   * `elixir-ls`
-  * `mix`!!
   * `lexical`
+  * `mix`!!
 * Elm
   * `elm-format`
   * `elm-ls`
