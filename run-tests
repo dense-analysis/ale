@@ -24,7 +24,7 @@ tests='test/*.vader test/*/*.vader test/*/*/*.vader'
 # These flags are forwarded to the script for running Vader tests.
 verbose_flag=''
 quiet_flag=''
-run_neovim_02_tests=1
+run_neovim_06_tests=1
 run_neovim_08_tests=1
 run_vim_80_tests=1
 run_vim_90_tests=1
@@ -43,7 +43,7 @@ while [ $# -ne 0 ]; do
     --build-image)
         run_vim_80_tests=0
         run_vim_90_tests=0
-        run_neovim_02_tests=0
+        run_neovim_06_tests=0
         run_neovim_08_tests=0
         run_linters=0
         shift
@@ -54,7 +54,7 @@ while [ $# -ne 0 ]; do
         run_linters=0
         shift
     ;;
-    --neovim-02-only)
+    --neovim-06-only)
         run_neovim_08_tests=0
         run_vim_80_tests=0
         run_vim_90_tests=0
@@ -62,27 +62,27 @@ while [ $# -ne 0 ]; do
         shift
     ;;
     --neovim-08-only)
-        run_neovim_02_tests=0
+        run_neovim_06_tests=0
         run_vim_80_tests=0
         run_vim_90_tests=0
         run_linters=0
         shift
     ;;
     --vim-only)
-        run_neovim_02_tests=0
+        run_neovim_06_tests=0
         run_neovim_08_tests=0
         run_linters=0
         shift
     ;;
     --vim-80-only)
-        run_neovim_02_tests=0
+        run_neovim_06_tests=0
         run_neovim_08_tests=0
         run_vim_90_tests=0
         run_linters=0
         shift
     ;;
     --vim-90-only)
-        run_neovim_02_tests=0
+        run_neovim_06_tests=0
         run_neovim_08_tests=0
         run_vim_80_tests=0
         run_linters=0
@@ -91,14 +91,14 @@ while [ $# -ne 0 ]; do
     --linters-only)
         run_vim_80_tests=0
         run_vim_90_tests=0
-        run_neovim_02_tests=0
+        run_neovim_06_tests=0
         run_neovim_08_tests=0
         shift
     ;;
     --fast)
         run_vim_80_tests=0
         run_vim_90_tests=0
-        run_neovim_02_tests=0
+        run_neovim_06_tests=0
         run_neovim_08_tests=1
         shift
     ;;
@@ -113,7 +113,7 @@ while [ $# -ne 0 ]; do
         echo '  -q                Hide output for successful tests'
         echo '  --build-image     Run docker image build only.'
         echo '  --neovim-only     Run tests only for NeoVim'
-        echo '  --neovim-02-only  Run tests only for NeoVim 0.2'
+        echo '  --neovim-06-only  Run tests only for NeoVim 0.2'
         echo '  --neovim-08-only  Run tests only for NeoVim 0.8'
         echo '  --vim-only        Run tests only for Vim'
         echo '  --vim-80-only     Run tests only for Vim 8.2'
@@ -228,7 +228,7 @@ trap cancel_tests INT TERM
 for vim in $(docker run --rm "$DOCKER_RUN_IMAGE" ls /vim-build/bin | grep '^neovim\|^vim' ); do
     if ( [[ $vim =~ ^vim-v8.0 ]] && ((run_vim_80_tests)) ) \
     || ( [[ $vim =~ ^vim-v9.0 ]] && ((run_vim_90_tests)) ) \
-    || ( [[ $vim =~ ^neovim-v0.2 ]] && ((run_neovim_02_tests)) ) \
+    || ( [[ $vim =~ ^neovim-v0.6 ]] && ((run_neovim_06_tests)) ) \
     || ( [[ $vim =~ ^neovim-v0.8 ]] && ((run_neovim_08_tests)) ); then
         echo "Starting Vim: $vim..."
         file_number=$((file_number+1))
