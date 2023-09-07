@@ -10,6 +10,20 @@ branches:
     - master
     - /v\d+\.\d+\.(x|\d+)/
 
+# Skip running Windows tests if we only change files that can't impact
+# Windows tests.
+skip_commits:
+  files:
+    - '.github/**/*'
+    - .gitattributes
+    - Dockerfile
+    - README.md
+    - doc/*
+    - lua/*
+    - run-tests
+    - supported-tools.md
+    - syntax/*
+
 # Cache the vim and vader directories between builds.
 cache:
   - C:\vim -> .appveyor.yml
