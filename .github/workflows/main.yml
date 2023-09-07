@@ -13,7 +13,7 @@ jobs:
   build_image:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Build docker run image
         shell: bash
         env:
@@ -32,7 +32,7 @@ jobs:
           - '--neovim-08-only'
           - '--linters-only'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Run tests
         run: ./run-tests -v ${{ matrix.vim-version }}
   test_ale_windows:
@@ -41,8 +41,9 @@ jobs:
       - name: Configure Git
         # Stop git from changing newlines
         run: git config --global core.autocrlf input
-      - uses: actions/checkout@v2
-        path: C:\testplugin
+      - uses: actions/checkout@v4
+        with:
+          path: C:\testplugin
       - name: Try to Restore Vim
         id: cache-vim
         uses: actions/cache@v3
@@ -69,7 +70,7 @@ jobs:
           path: C:\vader
           key: ${{ runner.os }}-vader
       - name: Install Vader
-        if: steps.cache-vim-vader.outputs.cache-hit != 'true'
+        if: steps.cache-vader.outputs.cache-hit != 'true'
         shell: pwsh
         run:
           if (!(Test-Path -Path C:\vader)){
