@@ -42,45 +42,42 @@ jobs:
         # Stop git from changing newlines
         run: git config --global core.autocrlf input
       - uses: actions/checkout@v4
-        with:
-          path: C:\testplugin
       - name: Try to Restore Vim
         id: cache-vim
         uses: actions/cache@v3
         with:
-          path: C:\vim
+          path: vim
           key: ${{ runner.os }}-vim
       - name: Install Vim
         if: steps.cache-vim.outputs.cache-hit != 'true'
         shell: pwsh
         run: >-
-          if (!(Test-Path -Path C:\vim)){
+          if (!(Test-Path -Path vim)){
             Add-Type -A System.IO.Compression.FileSystem
             Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586w32.zip `
-              -OutFile C:\vim.zip
-            [IO.Compression.ZipFile]::ExtractToDirectory('C:\vim.zip', 'C:\vim')
+              -OutFile vim.zip
+            [IO.Compression.ZipFile]::ExtractToDirectory('vim.zip', 'vim')
             Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586rt.zip `
-              -OutFile C:\rt.zip
-            [IO.Compression.ZipFile]::ExtractToDirectory('C:\rt.zip', 'C:\vim')
+              -OutFile rt.zip
+            [IO.Compression.ZipFile]::ExtractToDirectory('rt.zip', 'vim')
           }
       - name: Try to Restore Vader
         id: cache-vader
         uses: actions/cache@v3
         with:
-          path: C:\vader
+          path: vader
           key: ${{ runner.os }}-vader
       - name: Install Vader
         if: steps.cache-vader.outputs.cache-hit != 'true'
         shell: pwsh
         run:
-          if (!(Test-Path -Path C:\vader)){
-            git clone https://github.com/junegunn/vader.vim C:\vader 2> $null
-            cd C:\vader
+          if (!(Test-Path -Path vader)){
+            git clone https://github.com/junegunn/vader.vim vader 2> $null
+            cd vader
             git checkout -qf c6243dd81c98350df4dec608fa972df98fa2a3af 2> $null
           }
       - name: Run tests
         # yamllint disable rule:line-length
         run: |
-          cd C:\testplugin
-          C:\vim\vim\vim80\vim.exe -u test\vimrc "+Vader! test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader"
+          vim\vim\vim80\vim.exe -u test\vimrc "+Vader! test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader"
         # yamllint enable rule:line-length
