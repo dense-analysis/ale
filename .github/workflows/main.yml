@@ -72,9 +72,9 @@ jobs:
         shell: pwsh
         run:
           if (!(Test-Path -Path vader)){
-            git clone https://github.com/junegunn/vader.vim vader 2> $null
+            git clone https://github.com/junegunn/vader.vim vader
             cd vader
-            git checkout -qf c6243dd81c98350df4dec608fa972df98fa2a3af 2> $null
+            git checkout -qf c6243dd81c98350df4dec608fa972df98fa2a3af
           }
       - name: Run tests
         # yamllint disable rule:line-length
