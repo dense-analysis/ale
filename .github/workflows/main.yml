@@ -54,10 +54,10 @@ jobs:
         run: >-
           if (!(Test-Path -Path vim)){
             Add-Type -A System.IO.Compression.FileSystem
-            Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586w32.zip `
+            Invoke-WebRequest http://ftp.vim.org/pub/vim/pc/vim80-586w32.zip `
               -OutFile vim.zip
             [IO.Compression.ZipFile]::ExtractToDirectory('vim.zip', 'vim')
-            Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586rt.zip `
+            Invoke-WebRequest http://ftp.vim.org/pub/vim/pc/vim80-586rt.zip `
               -OutFile rt.zip
             [IO.Compression.ZipFile]::ExtractToDirectory('rt.zip', 'vim')
           }
