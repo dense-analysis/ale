@@ -70,11 +70,11 @@ jobs:
       - name: Install Vader
         if: steps.cache-vader.outputs.cache-hit != 'true'
         shell: pwsh
-        run:
+        run: >-
           if (!(Test-Path -Path vader)){
-            git clone https://github.com/junegunn/vader.vim vader
+            git clone https://github.com/junegunn/vader.vim vader 2> $null
             cd vader
-            git checkout -qf c6243dd81c98350df4dec608fa972df98fa2a3af
+            git checkout -qf c6243dd81c98350df4dec608fa972df98fa2a3af 2> $null
           }
       - name: Run tests
         # yamllint disable rule:line-length
