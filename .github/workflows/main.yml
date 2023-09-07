@@ -36,13 +36,13 @@ jobs:
       - name: Run tests
         run: ./run-tests -v ${{ matrix.vim-version }}
   test_ale_windows:
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
       - name: Configure Git
         # Stop git from changing newlines
         run: git config --global core.autocrlf input
       - uses: actions/checkout@v4
-      - name: Try to Restore Vim
+      - name: Cache Vim
         id: cache-vim
         uses: actions/cache@v3
         with:
@@ -67,7 +67,7 @@ jobs:
         with:
           path: vader
           key: ${{ runner.os }}-vader
-      - name: Install Vader
+      - name: Cache Vader
         if: steps.cache-vader.outputs.cache-hit != 'true'
         shell: pwsh
         run: >-
