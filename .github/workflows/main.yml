@@ -35,3 +35,51 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run tests
         run: ./run-tests -v ${{ matrix.vim-version }}
+  test_ale_windows:
+    runs-on: windows-latest
+    steps:
+      - name: Configure Git
+        # Stop git from changing newlines
+        run: git config --global core.autocrlf input
+      - uses: actions/checkout@v2
+        path: C:\testplugin
+      - name: Try to Restore Vim
+        id: cache-vim
+        uses: actions/cache@v3
+        with:
+          path: C:\vim
+          key: ${{ runner.os }}-vim
+      - name: Install Vim
+        if: steps.cache-vim.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: >-
+          if (!(Test-Path -Path C:\vim)){
+            Add-Type -A System.IO.Compression.FileSystem
+            Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586w32.zip `
+              -OutFile C:\vim.zip
+            [IO.Compression.ZipFile]::ExtractToDirectory('C:\vim.zip', 'C:\vim')
+            Invoke-WebRequest ftp://ftp.vim.org/pub/vim/pc/vim80-586rt.zip `
+              -OutFile C:\rt.zip
+            [IO.Compression.ZipFile]::ExtractToDirectory('C:\rt.zip', 'C:\vim')
+          }
+      - name: Try to Restore Vader
+        id: cache-vader
+        uses: actions/cache@v3
+        with:
+          path: C:\vader
+          key: ${{ runner.os }}-vader
+      - name: Install Vader
+        if: steps.cache-vim-vader.outputs.cache-hit != 'true'
+        shell: pwsh
+        run:
+          if (!(Test-Path -Path C:\vader)){
+            git clone https://github.com/junegunn/vader.vim C:\vader 2> $null
+            cd C:\vader
+            git checkout -qf c6243dd81c98350df4dec608fa972df98fa2a3af 2> $null
+          }
+      - name: Run tests
+        # yamllint disable rule:line-length
+        run: |
+          cd C:\testplugin
+          C:\vim\vim\vim80\vim.exe -u test\vimrc "+Vader! test/*.vader test/*/*.vader test/*/*/*.vader test/*/*/*.vader"
+        # yamllint enable rule:line-length
