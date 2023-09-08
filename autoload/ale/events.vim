@@ -92,10 +92,18 @@ function! ale#events#FileChangedEvent(buffer) abort
     endif
 endfunction
 
-function! ale#events#EmulateInsertLeave(timer) abort
+" A timer for emulating InsertLeave.
+"
+" We only need a single timer, and we'll lint the last buffer we entered
+" insert mode on.
+if !exists('s:insert_leave_timer')
+    let s:insert_leave_timer = -1
+endif
+
+function! ale#events#EmulateInsertLeave(buffer) abort
     if mode() is# 'n'
-        call timer_stop(a:timer)
-        call ale#Queue(0)
+        call timer_stop(s:insert_leave_timer)
+        call ale#Queue(0, '', a:buffer)
     endif
 endfunction
 
@@ -108,20 +116,19 @@ function! ale#events#InsertEnterEvent(buffer) abort
     " can emulate its behavior.
     if ale#Var(a:buffer, 'lint_on_insert_leave')
     \&& maparg("\<C-c>", 'i') isnot# '<Esc>'
-        call timer_stop(getbufvar(a:buffer, 'ale_insert_leave_timer', -1))
-        let l:timer  = timer_start(
+        call timer_stop(s:insert_leave_timer)
+        let s:insert_leave_timer = timer_start(
         \   100,
-        \   function('ale#events#EmulateInsertLeave'),
+        \   {-> ale#events#EmulateInsertLeave(a:buffer) },
         \   {'repeat': -1}
         \)
-        call setbufvar(a:buffer, 'ale_insert_leave_timer', l:timer)
     endif
 endfunction
 
 function! ale#events#InsertLeaveEvent(buffer) abort
     if ale#Var(a:buffer, 'lint_on_insert_leave')
         " Kill the InsertLeave emulation if the event fired.
-        call timer_stop(getbufvar(a:buffer, 'ale_insert_leave_timer', -1))
+        call timer_stop(s:insert_leave_timer)
         call ale#Queue(0)
     endif
 
