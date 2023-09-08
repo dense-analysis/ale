@@ -2106,6 +2106,10 @@ g:ale_set_signs                                               *g:ale_set_signs*
   When this option is set to `1`, the |sign| column will be populated with
   signs marking where problems appear in the file.
 
+  When |g:ale_use_neovim_diagnostics_api| is `1`, the only other setting that
+  will be respected for signs is |g:ale_sign_priority|. No other settings,
+  highlights, text, or behaviors will apply.
+
   ALE will use the following highlight groups for problems:
 
   |ALEErrorSign|        - Items with `'type': 'E'`

@@ -6,6 +6,18 @@ local ale_type_to_diagnostic_severity = {
   I = vim.diagnostic.severity.INFO
 }
 
+-- Equivalent to ale#Var, only we can't error on missing global keys.
+module.aleVar = function(buffer, key)
+  key = "ale_" .. key
+  local exists, value = pcall(vim.api.nvim_buf_get_var, buffer, key)
+
+  if exists then
+    return value
+  end
+
+  return vim.g[key]
+end
+
 module.sendAleResultsToDiagnostics = function(buffer, loclist)
   local diagnostics = {}
 
@@ -38,13 +50,30 @@ module.sendAleResultsToDiagnostics = function(buffer, loclist)
     end
   end
 
-  local virtualtext_enabled_set = {['all'] = true, ['2'] = true, [2] = true, ['current'] = true, ['1'] = true, [1] = true}
+  local virtualtext_enabled_set = {
+    ['all'] = true,
+    ['2'] = true,
+    [2] = true,
+    ['current'] = true,
+    ['1'] = true,
+    [1] = true,
+  }
+
+  local signs = module.aleVar(buffer, 'set_signs') == 1
+
+  if signs then
+    -- If signs are enabled, set the priority for them.
+    signs = {priority = vim.g.ale_sign_priority }
+  end
 
   vim.diagnostic.set(
     vim.api.nvim_create_namespace('ale'),
     buffer,
     diagnostics,
-    { virtual_text = virtualtext_enabled_set[vim.g.ale_virtualtext_cursor] ~= nil}
+    {
+        virtual_text = virtualtext_enabled_set[vim.g.ale_virtualtext_cursor] ~= nil,
+        signs = signs,
+    }
   )
 end
 
