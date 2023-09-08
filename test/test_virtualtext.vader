@@ -129,7 +129,7 @@ Execute(We should find a virtualtext error on line 2):
   endif
 
 Execute(We should be able to change the virtualtext prefix globally):
-  let g:ale_virtualtext_prefix = '> '
+  let g:ale_virtualtext_prefix = '%severity%: '
 
   if has('patch-9.0.0297') || has('nvim-0.8.0')
     let g:ale_virtualtext_cursor = 'current'
@@ -138,7 +138,7 @@ Execute(We should be able to change the virtualtext prefix globally):
     " Tick the timer.
     sleep 1ms
 
-    AssertEqual '> Line 1 error', ale#virtualtext#GetLastMessageForTests()
+    AssertEqual 'Error: Line 1 error', ale#virtualtext#GetLastMessageForTests()
   endif
 
 Execute(We should be able to change the virtualtext prefix per-buffer):
@@ -152,19 +152,6 @@ Execute(We should be able to change the virtualtext prefix per-buffer):
     sleep 1ms
 
     AssertEqual 'B> Line 1 error', ale#virtualtext#GetLastMessageForTests()
-  endif
-
-Execute(We should be format in other data from the loclist items):
-  let g:ale_virtualtext_prefix = '%severity%: '
-
-  if has('patch-9.0.0297') || has('nvim-0.8.0')
-    let g:ale_virtualtext_cursor = 'current'
-    call cursor(1, 1)
-    call ale#virtualtext#ShowCursorWarningWithDelay()
-    " Tick the timer.
-    sleep 1ms
-
-    AssertEqual 'Error: Line 1 error', ale#virtualtext#GetLastMessageForTests()
   endif
 
 Execute(We should set errors across all lines):

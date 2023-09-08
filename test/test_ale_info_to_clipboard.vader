@@ -1,7 +1,7 @@
 After:
   unlet! g:output
 
-Execute(ALEInfo -clipboard should that clipboard support is required):
+Execute(ALEInfo -clipboard should tell the user that clipboard support is required):
   " When run in the Docker image, there's no clipboard support, so this test
   " will actually run.
   if !has('clipboard')

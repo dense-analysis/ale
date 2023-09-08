@@ -27,7 +27,7 @@ After:
   unlet! g:ale_run_synchronously_callbacks
 
 Given foobar (Some imaginary filetype):
-Execute(It should be possible to compute an executable to check based on the result of commands):
+Execute(It should be possible to compute a command based on the result of other commands):
   AssertLinter has('win32') ? 'cmd' : 'echo', 'foo'
 
   ALELint
@@ -37,7 +37,7 @@ Execute(It should be possible to compute an executable to check based on the res
   \ 1,
   \ len(filter(copy(b:ale_history), 'string(v:val.command) =~# ''foo'''))
 
-Execute(It handle the deferred command failing):
+Execute(We should handle the deferered command failing):
   let g:ale_emulate_job_failure = 1
 
   AssertLinter has('win32') ? 'cmd' : 'echo', 0

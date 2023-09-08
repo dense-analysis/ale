@@ -154,7 +154,7 @@ Given python(Some Python file):
   somelongerline
   bazxyzxyzxyz
 
-Execute(Should result in error message):
+Execute(Should result in error message for LSP):
   call ale#linter#Reset()
   runtime ale_linters/python/pylsp.vim
   let b:ale_linters = ['pylsp']

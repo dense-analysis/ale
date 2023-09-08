@@ -33,7 +33,7 @@ Execute(It should be possible to compute an executable to check based on the res
   \ [{'status': 0, 'job_id': 'executable', 'command': 'foo'}],
   \ filter(copy(b:ale_history), 'v:val.job_id is# ''executable''')
 
-Execute(It handle the deferred command failing):
+Execute(We should handle the deferered executable command failing):
   let g:ale_emulate_job_failure = 1
 
   AssertLinter 0, 'echo'

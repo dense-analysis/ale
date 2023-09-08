@@ -39,7 +39,8 @@ Before:
       silent mess
     redir END
 
-    let l:lines = split(l:output, "\n")
+    " Filter out messages that could come from saving this test file.
+    let l:lines = filter(split(l:output, "\n"), 'v:val !~ ''written\|No line''')
 
     return empty(l:lines) ? '' : l:lines[-1]
   endfunction
@@ -65,14 +66,9 @@ Execute(Linting shouldn't happen when ALE is disabled globally):
   call ale#Queue(0)
 
   AssertEqual {}, g:ale_buffer_info
-
-Execute(Linting shouldn't happen when the file is too large with a global options):
-  let g:ale_maximum_file_size = 12
-  let g:ale_buffer_info = {}
-
-  call ale#Queue(0)
-
-  AssertEqual {}, g:ale_buffer_info
+  call SetUpCursorData()
+  call ale#cursor#EchoCursorWarning()
+  AssertEqual '', GetLastMessage()
 
 Execute(Linting shouldn't happen when ALE is disabled locally):
   let b:ale_enabled = 0
@@ -81,39 +77,29 @@ Execute(Linting shouldn't happen when ALE is disabled locally):
   call ale#Queue(0)
 
   AssertEqual {}, g:ale_buffer_info
+  call SetUpCursorData()
+  call ale#cursor#EchoCursorWarning()
+  AssertEqual '', GetLastMessage()
 
-Execute(Linting shouldn't happen when the file is too large with a local options):
+Execute(Linting shouldn't happen when the file is too large with global options):
+  let g:ale_maximum_file_size = 12
+  let g:ale_buffer_info = {}
+
+  call ale#Queue(0)
+
+  AssertEqual {}, g:ale_buffer_info
+  " We shouldn't show cursor warnings.
+  call SetUpCursorData()
+  call ale#cursor#EchoCursorWarning()
+  AssertEqual '', GetLastMessage()
+
+Execute(Linting shouldn't happen when the file is too large with local options):
   let b:ale_maximum_file_size = 12
   let g:ale_buffer_info = {}
 
   call ale#Queue(0)
 
   AssertEqual {}, g:ale_buffer_info
-
-Execute(Cursor warnings shouldn't be echoed when ALE is disabled globally):
-  let g:ale_enabled = 0
-
-  call SetUpCursorData()
-  call ale#cursor#EchoCursorWarning()
-  AssertEqual '', GetLastMessage()
-
-Execute(Cursor warnings shouldn't be echoed when the file is too large with global options):
-  let g:ale_maximum_file_size = 12
-
-  call SetUpCursorData()
-  call ale#cursor#EchoCursorWarning()
-  AssertEqual '', GetLastMessage()
-
-Execute(Cursor warnings shouldn't be echoed when ALE is disabled locally):
-  let b:ale_enabled = 0
-
-  call SetUpCursorData()
-  call ale#cursor#EchoCursorWarning()
-  AssertEqual '', GetLastMessage()
-
-Execute(Cursor warnings shouldn't be echoed when the file is too large with local options):
-  let b:ale_maximum_file_size = 12
-
   call SetUpCursorData()
   call ale#cursor#EchoCursorWarning()
   AssertEqual '', GetLastMessage()

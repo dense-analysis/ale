@@ -201,16 +201,6 @@ Execute(Code actions from tsserver should be handled):
   \ ],
   \ g:code_actions
 
-Execute(HandleTSServerResponse does nothing when no data in rename_map):
-  call ale#rename#HandleTSServerResponse(1, {
-  \ 'command': 'rename',
-  \ 'request_seq': -9,
-  \ 'success': v:true,
-  \ 'body': {}
-  \})
-
-  AssertEqual g:handle_code_action_called, 0
-
 Execute(Prints a tsserver error message when unsuccessful):
   call ale#rename#HandleTSServerResponse(1, {
   \ 'command': 'rename',
@@ -223,7 +213,7 @@ Execute(Prints a tsserver error message when unsuccessful):
   AssertEqual ['echom ''Error renaming "oldName" to: "aNewName". ' .
   \ 'Reason: This symbol cannot be renamed'''], g:expr_list
 
-Execute(Does nothing when no changes):
+Execute(HandleTSServerResponse does nothing when no changes):
   call ale#rename#HandleTSServerResponse(1, {
   \ 'command': 'rename',
   \ 'request_seq': 3,

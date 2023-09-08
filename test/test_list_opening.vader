@@ -246,13 +246,7 @@ Execute(The quickfix window should be horizontal for the quickfix with appropria
 
   AssertEqual 0, GetQuickfixIsVertical(8)
 
-Execute(The buffer ale_open_list option should be respected):
-  let b:ale_open_list = 1
-
-  call ale#list#SetLists(bufnr('%'), g:loclist)
-  Assert ale#list#IsQuickfixOpen()
-
-Execute(The buffer ale_keep_list_window_open option should be respected):
+Execute(buffer-local options should be respected):
   let b:ale_open_list = 1
   let b:ale_keep_list_window_open = 1
 
