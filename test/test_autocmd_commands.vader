@@ -50,6 +50,7 @@ Before:
   Save g:ale_lint_on_text_changed
   Save g:ale_pattern_options_enabled
   Save g:ale_hover_cursor
+  Save g:ale_close_preview_on_insert
 
   " Turn everything on by default for these tests.
   let g:ale_completion_enabled = 1
@@ -63,6 +64,7 @@ Before:
   let g:ale_lint_on_text_changed = 1
   let g:ale_pattern_options_enabled = 1
   let g:ale_hover_cursor = 1
+  let g:ale_close_preview_on_insert = 0
 
 After:
   delfunction CheckAutocmd
@@ -79,6 +81,7 @@ After:
 Execute (All events should be set up when everything is on):
   let g:ale_echo_cursor = 1
 
+  " The InsertEnter event is only added when a mapping is not set.
   AssertEqual
   \ [
   \   'BufEnter * call ale#events#ReadOrEnterEvent(str2nr(expand(''<abuf>'')))',
@@ -90,8 +93,12 @@ Execute (All events should be set up when everything is on):
   \   'CursorMoved * if exists(''*ale#engine#Cleanup'') | call ale#cursor#EchoCursorWarningWithDelay() | endif',
   \   'FileChangedShellPost * call ale#events#FileChangedEvent(str2nr(expand(''<abuf>'')))',
   \   'FileType * call ale#events#FileTypeEvent( str2nr(expand(''<abuf>'')), expand(''<amatch>''))',
-  \   'InsertLeave * if ale#Var(str2nr(expand(''<abuf>'')), ''lint_on_insert_leave'') | call ale#Queue(0) | endif',
-  \   'InsertLeave if exists(''*ale#engine#Cleanup'') | call ale#cursor#EchoCursorWarning() | endif',
+  \ ] + (
+  \   maparg("\<C-c>", 'i') isnot# '<Esc>'
+  \     ? ['InsertEnter * call ale#events#InsertEnterEvent(str2nr(expand(''<abuf>'')))']
+  \     : []
+  \ ) + [
+  \   'InsertLeave * call ale#events#InsertLeaveEvent(str2nr(expand(''<abuf>'')))',
   \   'TextChanged * call ale#Queue(ale#Var(str2nr(expand(''<abuf>'')), ''lint_delay''))',
   \   'TextChangedI * call ale#Queue(ale#Var(str2nr(expand(''<abuf>'')), ''lint_delay''))',
   \ ],
@@ -182,9 +189,19 @@ Execute (g:ale_lint_on_insert_leave = 1 should bind InsertLeave):
   let g:ale_lint_on_insert_leave = 1
   let g:ale_echo_cursor = 0
 
+  " CI at least should run this check.
+  " There isn't an easy way to save an restore a mapping during running the test.
+  if maparg("\<C-c>", 'i') isnot# '<Esc>'
+    AssertEqual
+    \ [
+    \   'InsertEnter * call ale#events#InsertEnterEvent(str2nr(expand(''<abuf>'')))',
+    \ ],
+    \ filter(CheckAutocmd('ALEEvents'), 'v:val =~ ''^InsertEnter''')
+  endif
+
   AssertEqual
   \ [
-  \   'InsertLeave * if ale#Var(str2nr(expand(''<abuf>'')), ''lint_on_insert_leave'') | call ale#Queue(0) | endif',
+  \   'InsertLeave * call ale#events#InsertLeaveEvent(str2nr(expand(''<abuf>'')))',
   \ ],
   \ filter(CheckAutocmd('ALEEvents'), 'v:val =~ ''^InsertLeave''')
 
@@ -236,3 +253,13 @@ Execute(Disabling completion should remove autocmd events correctly):
 
   AssertEqual [], CheckAutocmd('ALECompletionGroup')
   AssertEqual 0, g:ale_completion_enabled
+
+Execute(ALE should try to close the preview window on InsertEnter):
+  let g:ale_lint_on_insert_leave = 0
+  let g:ale_close_preview_on_insert = 1
+
+  AssertEqual
+  \ [
+  \   'InsertEnter * call ale#events#InsertEnterEvent(str2nr(expand(''<abuf>'')))',
+  \ ],
+  \ filter(CheckAutocmd('ALEEvents'), 'v:val =~ ''^InsertEnter''')

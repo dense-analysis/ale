@@ -92,6 +92,55 @@ function! ale#events#FileChangedEvent(buffer) abort
     endif
 endfunction
 
+function! ale#events#EmulateInsertLeave(timer) abort
+    if mode() is# 'n'
+        call timer_stop(a:timer)
+        call ale#Queue(0)
+    endif
+endfunction
+
+function! ale#events#InsertEnterEvent(buffer) abort
+    if g:ale_close_preview_on_insert && exists('*ale#preview#CloseIfTypeMatches')
+        call ale#preview#CloseIfTypeMatches('ale-preview')
+    endif
+
+    " Start a repeating timer if the use might not trigger InsertLeave, so we
+    " can emulate its behavior.
+    if ale#Var(a:buffer, 'lint_on_insert_leave')
+    \&& maparg("\<C-c>", 'i') isnot# '<Esc>'
+        call timer_stop(getbufvar(a:buffer, 'ale_insert_leave_timer', -1))
+        let l:timer  = timer_start(
+        \   100,
+        \   function('ale#events#EmulateInsertLeave'),
+        \   {'repeat': -1}
+        \)
+        call setbufvar(a:buffer, 'ale_insert_leave_timer', l:timer)
+    endif
+endfunction
+
+function! ale#events#InsertLeaveEvent(buffer) abort
+    if ale#Var(a:buffer, 'lint_on_insert_leave')
+        " Kill the InsertLeave emulation if the event fired.
+        call timer_stop(getbufvar(a:buffer, 'ale_insert_leave_timer', -1))
+        call ale#Queue(0)
+    endif
+
+    " Look for a warning to echo as soon as we leave Insert mode.
+    " The script's position variable used when moving the cursor will
+    " not be changed here.
+    "
+    " We don't echo this message in emulated insert leave mode, as the user
+    " may want less work to happen on pressing <C-c> versus <Esc>
+    if exists('*ale#engine#Cleanup')
+        call ale#cursor#EchoCursorWarning()
+
+        if g:ale_virtualtext_cursor is# 'current' || g:ale_virtualtext_cursor is# 1 || g:ale_virtualtext_cursor is# '1'
+            " Show a virtualtext message if enabled.
+            call ale#virtualtext#ShowCursorWarning()
+        endif
+    endif
+endfunction
+
 function! ale#events#Init() abort
     " This value used to be a Boolean as a Number, and is now a String.
     let l:text_changed = '' . g:ale_lint_on_text_changed
@@ -127,32 +176,39 @@ function! ale#events#Init() abort
                 \)
             endif
 
-            if g:ale_lint_on_insert_leave
-                autocmd InsertLeave * if ale#Var(str2nr(expand('<abuf>')), 'lint_on_insert_leave') | call ale#Queue(0) | endif
+            " Add an InsertEnter event if we need to close the preview window
+            " on entering insert mode, or if we want to run ALE on leaving
+            " insert mode and <C-c> is not the same as <Esc>.
+            "
+            " We will emulate leaving insert mode for users that might not
+            " trigger InsertLeave.
+            if g:ale_close_preview_on_insert
+            \|| (g:ale_lint_on_insert_leave && maparg("\<C-c>", 'i') isnot# '<Esc>')
+                autocmd InsertEnter * call ale#events#InsertEnterEvent(str2nr(expand('<abuf>')))
             endif
 
+            let l:add_insert_leave_event = g:ale_lint_on_insert_leave
+
             if g:ale_echo_cursor || g:ale_cursor_detail
+                " We need to make the message display on InsertLeave
+                let l:add_insert_leave_event = 1
+
                 autocmd CursorMoved,CursorHold * if exists('*ale#engine#Cleanup') | call ale#cursor#EchoCursorWarningWithDelay() | endif
-                " Look for a warning to echo as soon as we leave Insert mode.
-                " The script's position variable used when moving the cursor will
-                " not be changed here.
-                autocmd InsertLeave * if exists('*ale#engine#Cleanup') | call ale#cursor#EchoCursorWarning() | endif
             endif
 
             if g:ale_virtualtext_cursor is# 'current' || g:ale_virtualtext_cursor is# 1 || g:ale_virtualtext_cursor is# '1'
+                " We need to make the message display on InsertLeave
+                let l:add_insert_leave_event = 1
+
                 autocmd CursorMoved,CursorHold * if exists('*ale#engine#Cleanup') | call ale#virtualtext#ShowCursorWarningWithDelay() | endif
-                " Look for a warning to echo as soon as we leave Insert mode.
-                " The script's position variable used when moving the cursor will
-                " not be changed here.
-                autocmd InsertLeave * if exists('*ale#engine#Cleanup') | call ale#virtualtext#ShowCursorWarning() | endif
+            endif
+
+            if l:add_insert_leave_event
+                autocmd InsertLeave * call ale#events#InsertLeaveEvent(str2nr(expand('<abuf>')))
             endif
 
             if g:ale_hover_cursor
                 autocmd CursorHold * if exists('*ale#lsp#Send') | call ale#hover#ShowTruncatedMessageAtCursor() | endif
-            endif
-
-            if g:ale_close_preview_on_insert
-                autocmd InsertEnter * if exists('*ale#preview#CloseIfTypeMatches') | call ale#preview#CloseIfTypeMatches('ale-preview') | endif
             endif
         endif
     augroup END
