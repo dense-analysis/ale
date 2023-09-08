@@ -41,6 +41,8 @@ module.sendAleResultsToDiagnostics = function(buffer, loclist)
           end_col = location.end_col,
           -- Which severity: error, warning, or info?
           severity = ale_type_to_diagnostic_severity[location.type] or "E",
+          -- An error code
+          code = location.code,
           -- The error message
           message = location.text,
           -- e.g. "rubocop"
