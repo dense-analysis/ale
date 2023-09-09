@@ -1,0 +1,27 @@
+Before:
+    let g:executable_map = {}
+
+    runtime autoload/ale/engine.vim
+
+    function! ale#engine#IsExecutable(buffer, executable) abort
+        return has_key(g:executable_map, a:executable)
+    endfunction
+
+    call ale#assert#SetUpLinterTest('json', 'vscodejson')
+
+    let b:command_tail = '--stdio'
+
+After:
+    unlet! g:executable_map
+
+    runtime autoload/ale/engine.vim
+
+    call ale#assert#TearDownLinterTest()
+
+Execute(The default executable name should be correct):
+    let g:executable_map = {'vscode-json-languageserver': 1}
+    AssertLinter 'vscode-json-languageserver', [ale#Escape('vscode-json-languageserver') . b:command_tail]
+
+Execute(Executable name should be configurable):
+    let b:ale_json_vscodejson_executable = 'foo'
+    AssertLinter 'foo', [ale#Escape('foo') . b:command_tail]
