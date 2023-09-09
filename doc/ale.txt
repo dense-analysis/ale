@@ -121,7 +121,7 @@ circumstances.
 ALE will report problems with your code in the following ways, listed with
 their relevant options.
 
-* Via the Neovim diagnostics API (Off by default)  - |g:ale_use_neovim_diagnostics_api|
+* Via Neovim diagnostics (On in Neovim 0.6+)       - |g:ale_use_neovim_diagnostics_api|
 * By updating loclist. (On by default)             - |g:ale_set_loclist|
 * By updating quickfix. (Off by default)           - |g:ale_set_quickfix|
 * By setting error highlights.                     - |g:ale_set_highlights|
@@ -816,7 +816,6 @@ g:ale_command_wrapper                                   *g:ale_command_wrapper*
     " Has the same effect as the above.
     let g:ale_command_wrapper = 'nice -n5 %*'
 <
-
   For passing all of the arguments for a command as one argument to a wrapper,
   `%@` can be used instead. >
 
@@ -841,7 +840,6 @@ g:ale_completion_delay                                 *g:ale_completion_delay*
 
 g:ale_completion_enabled                             *g:ale_completion_enabled*
                                                      *b:ale_completion_enabled*
-
   Type: |Number|
   Default: `0`
 
@@ -907,7 +905,7 @@ g:ale_completion_excluded_words               *g:ale_completion_excluded_words*
 g:ale_completion_symbols                             *g:ale_completion_symbols*
 
   Type: |Dictionary|
-
+  Default: See `autoload/ale/completion.vim`
 
   A mapping from completion types to symbols for completions. See
   |ale-symbols| for more information.
@@ -986,7 +984,6 @@ g:ale_cursor_detail                                       *g:ale_cursor_detail*
 
 g:ale_default_navigation                             *g:ale_default_navigation*
                                                      *b:ale_default_navigation*
-
   Type: |String|
   Default: `'buffer'`
 
@@ -1005,7 +1002,6 @@ g:ale_detail_to_floating_preview             *g:ale_detail_to_floating_preview*
 
 g:ale_disable_lsp                                           *g:ale_disable_lsp*
                                                             *b:ale_disable_lsp*
-
   Type: |Number|
   Default: `0`
 
@@ -1056,7 +1052,6 @@ g:ale_echo_msg_error_str                             *g:ale_echo_msg_error_str*
 
 g:ale_echo_msg_format                                   *g:ale_echo_msg_format*
                                                         *b:ale_echo_msg_format*
-
   Type: |String|
   Default: `'%code: %%s'`
 
@@ -1129,7 +1124,6 @@ g:ale_enabled                                                   *g:ale_enabled*
   " Disable linting for all minified JS files.
   let g:ale_pattern_options = {'\.min.js$': {'ale_enabled': 0}}
 <
-
   See |g:ale_pattern_options| for more information on that option.
 
 
@@ -1137,6 +1131,8 @@ g:ale_exclude_highlights                             *g:ale_exclude_highlights*
                                                      *b:ale_exclude_highlights*
   Type: |List|
   Default: `[]`
+
+  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
 
   A list of regular expressions for matching against highlight messages to
   remove. For example: >
@@ -1828,6 +1824,8 @@ g:ale_max_signs                                               *g:ale_max_signs*
   Type: |Number|
   Default: `-1`
 
+  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+
   When set to any positive integer, ALE will not render any more than the
   given number of signs for any one buffer.
 
@@ -2036,6 +2034,11 @@ g:ale_set_highlights                                     *g:ale_set_highlights*
   Type: |Number|
   Default: `has('syntax')`
 
+  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+  In addition, ALE's highlight groups will not be used when setting
+  highlights through Neovim's diagnostics API. See |diagnostic-highlights| for
+  how to configure Neovim diagnostic highlighting.
+
   When this option is set to `1`, highlights will be set for problems.
 
   ALE will use the following highlight groups for problems:
@@ -2097,8 +2100,10 @@ g:ale_set_signs                                               *g:ale_set_signs*
   signs marking where problems appear in the file.
 
   When |g:ale_use_neovim_diagnostics_api| is `1`, the only other setting that
-  will be respected for signs is |g:ale_sign_priority|. No other settings,
-  highlights, text, or behaviors will apply.
+  will be respected for signs is |g:ale_sign_priority|. ALE's highlight groups
+  will and other sign settings will not apply when setting signs through
+  Neovim's diagnostics API. See |diagnostic-signs| for how to configure signs
+  in Neovim.
 
   ALE will use the following highlight groups for problems:
 
@@ -2183,6 +2188,8 @@ g:ale_sign_column_always                             *g:ale_sign_column_always*
   Type: |Number|
   Default: `0`
 
+  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+
   By default, the sign gutter will disappear when all warnings and errors have
   been fixed for a file. When this option is set to `1`, the sign column will
   remain open. This can be preferable if you don't want the text in your file
@@ -2194,6 +2201,8 @@ g:ale_sign_error                                             *g:ale_sign_error*
   Type: |String|
   Default: `'>>'`
 
+  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+
   The sign for errors in the sign gutter.
 
 
@@ -2201,6 +2210,8 @@ g:ale_sign_info                                               *g:ale_sign_info*
 
   Type: |String|
   Default: `g:ale_sign_warning`
+
+  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
 
   The sign for "info" markers in the sign gutter.
 
@@ -2210,6 +2221,8 @@ g:ale_sign_style_error                                 *g:ale_sign_style_error*
   Type: |String|
   Default: `g:ale_sign_error`
 
+  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+
   The sign for style errors in the sign gutter.
 
 
@@ -2218,6 +2231,8 @@ g:ale_sign_style_warning                             *g:ale_sign_style_warning*
   Type: |String|
   Default: `g:ale_sign_warning`
 
+  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+
   The sign for style warnings in the sign gutter.
 
 
@@ -2225,6 +2240,8 @@ g:ale_sign_offset                                           *g:ale_sign_offset*
 
   Type: |Number|
   Default: `1000000`
+
+  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
 
   This variable controls offset from which numeric IDs will be generated for
   new signs. Signs cannot share the same ID values, so when two Vim plugins
@@ -2240,6 +2257,8 @@ g:ale_sign_warning                                         *g:ale_sign_warning*
   Type: |String|
   Default: `'--'`
 
+  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+
   The sign for warnings in the sign gutter.
 
 
@@ -2247,6 +2266,8 @@ g:ale_sign_highlight_linenrs                     *g:ale_sign_highlight_linenrs*
 
   Type: |Number|
   Default: `0`
+
+  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
 
   When set to `1`, this option enables highlighting problems on the 'number'
   column in Vim versions that support `numhl` highlights. This option must be
@@ -2305,16 +2326,13 @@ g:ale_use_global_executables                     *g:ale_use_global_executables*
 g:ale_use_neovim_diagnostics_api             *g:ale_use_neovim_diagnostics_api*
 
   Type: |Number|
-  Default: `0`
+  Default: `has('nvim-0.6')`
 
   If enabled, this option will disable ALE's standard UI, and instead send
   all linter output to Neovim's diagnostics API. This allows you to collect
   errors from nvim-lsp, ALE, and anything else that uses diagnostics all in
-  one place. The following options are ignored when using the diagnostics API:
-
-    - |g:ale_set_highlights|
-    - |g:ale_set_signs|
-    - |g:ale_virtualtext_cursor|
+  one place. Many options for configuring how problems appear on the screen
+  will not apply when the API is enabled.
 
   To enable this option, set the value to `1`.
 
@@ -2334,11 +2352,17 @@ g:ale_virtualtext_cursor                             *g:ale_virtualtext_cursor*
   `'current'`, `'1'`, or `1`     - Show problems for the current line.
   `'disabled'`, `'0'`, or `0`    - Do not show problems with virtual-text.
 
+  When |g:ale_use_neovim_diagnostics_api| is `1`, `'current'` will behave the
+  same as `'all'`.
+
   Messages are only displayed after a short delay. See |g:ale_virtualtext_delay|.
 
-  Messages can be prefixed with a string. See |g:ale_virtualtext_prefix|.
+  Messages can be prefixed with a string if not using Neovim's diagnostics
+  API. See |g:ale_virtualtext_prefix|.
 
-  ALE will use the following highlight groups for problems:
+  If and only if not displaying problems via Neovim's diagnostics API,
+  highlights for configuring ALE's virtualtext messages can be configured with
+  custom highlight groups:
 
   |ALEVirtualTextError|        - Items with `'type': 'E'`
   |ALEVirtualTextWarning|      - Items with `'type': 'W'`
@@ -2352,6 +2376,8 @@ g:ale_virtualtext_delay                               *g:ale_virtualtext_delay*
   Type: |Number|
   Default: `10`
 
+  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+
   Given any integer, this option controls the number of milliseconds before
   ALE will show a message for a problem near the cursor.
 
@@ -2363,6 +2389,8 @@ g:ale_virtualtext_prefix                             *g:ale_virtualtext_prefix*
                                                      *b:ale_virtualtext_prefix*
   Type: |String|
   Default: `'%comment% %type%: '`
+
+  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
 
   Prefix to be used with |g:ale_virtualtext_cursor|.
 
@@ -2385,6 +2413,8 @@ g:ale_virtualtext_maxcolumn                       *g:ale_virtualtext_maxcolumn*
   Type: |String| or |Number|
   Default: `0`
 
+  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
+
   Virtualtext column range, from `column` to `maxcolumn`.  If a line is
   `column` or less characters long, the virtualtext message is shifted right
   to `column`.
@@ -2405,6 +2435,8 @@ g:ale_virtualtext_single                             *g:ale_virtualtext_single*
                                                      *b:ale_virtualtext_single*
   Type: |Number|
   Default: `0`
+
+  This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
 
   Enable or disable concatenation of multiple virtualtext messages on a single
   line.  By default, if a line has multiple errors or warnings, each will be

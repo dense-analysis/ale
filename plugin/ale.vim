@@ -197,7 +197,7 @@ let g:ale_save_hidden = get(g:, 'ale_save_hidden', 0)
 
 " If 1, disables ALE's built in error display. Instead, all errors are piped
 " to the diagnostics API.
-let g:ale_use_neovim_diagnostics_api = get(g:, 'ale_use_neovim_diagnostics_api', 0)
+let g:ale_use_neovim_diagnostics_api = get(g:, 'ale_use_neovim_diagnostics_api', has('nvim-0.6'))
 
 if g:ale_use_neovim_diagnostics_api && !has('nvim-0.6')
     " no-custom-checks
