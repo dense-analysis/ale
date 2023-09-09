@@ -10,7 +10,7 @@ function! ale_linters#json#vscodejson#GetExecutable(buffer) abort
         if ale#engine#IsExecutable(a:buffer, 'vscode-json-languageserver')
             let l:executable = 'vscode-json-languageserver'
         else
-            let l:executable = 'vscode-json-language-server')
+            let l:executable = 'vscode-json-language-server'
         endif
     endif
 
