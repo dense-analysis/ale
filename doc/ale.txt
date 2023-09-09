@@ -2199,7 +2199,7 @@ g:ale_sign_column_always                             *g:ale_sign_column_always*
 g:ale_sign_error                                             *g:ale_sign_error*
 
   Type: |String|
-  Default: `'>>'`
+  Default: `'E'`
 
   This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
 
@@ -2209,7 +2209,7 @@ g:ale_sign_error                                             *g:ale_sign_error*
 g:ale_sign_info                                               *g:ale_sign_info*
 
   Type: |String|
-  Default: `g:ale_sign_warning`
+  Default: `'I'`
 
   This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
 
@@ -2255,7 +2255,7 @@ g:ale_sign_offset                                           *g:ale_sign_offset*
 g:ale_sign_warning                                         *g:ale_sign_warning*
 
   Type: |String|
-  Default: `'--'`
+  Default: `'W'`
 
   This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
 
