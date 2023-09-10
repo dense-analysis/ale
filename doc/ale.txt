@@ -2443,9 +2443,9 @@ g:ale_virtualtext_single                             *g:ale_virtualtext_single*
   appended in turn.
 
   With `single` set to a non-zero value, only the first problem on a line will
-  be printed with virtual text. The problem at the left-most position on a
-  line will be printed. If two problems exist at the same position, the most
-  severe problem will be printed.
+  be printed with virtual text. The most severe problem on a line will be
+  printed. If two problems exist on a line of equal severity, the problem at
+  the left-most position will be printed.
 
 
 g:ale_virtualenv_dir_names                         *g:ale_virtualenv_dir_names*
