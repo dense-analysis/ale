@@ -31,7 +31,8 @@ let g:ale_virtualtext_delay = get(g:, 'ale_virtualtext_delay', 10)
 " Controls the positioning of virtualtext
 let g:ale_virtualtext_column = get(g:, 'ale_virtualtext_column', 0)
 let g:ale_virtualtext_maxcolumn = get(g:, 'ale_virtualtext_maxcolumn', 0)
-let g:ale_virtualtext_single = get(g:,'ale_virtualtext_single',0)
+" If 1, only show the first problem with virtualtext.
+let g:ale_virtualtext_single = get(g:, 'ale_virtualtext_single', 1)
 
 let s:cursor_timer = get(s:, 'cursor_timer', -1)
 let s:last_pos = get(s:, 'last_pos', [0, 0, 0])

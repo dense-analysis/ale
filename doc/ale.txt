@@ -2434,16 +2434,18 @@ g:ale_virtualtext_maxcolumn                       *g:ale_virtualtext_maxcolumn*
 g:ale_virtualtext_single                             *g:ale_virtualtext_single*
                                                      *b:ale_virtualtext_single*
   Type: |Number|
-  Default: `0`
+  Default: `1`
 
   This setting has no effect when |g:ale_use_neovim_diagnostics_api| is `1`.
 
-  Enable or disable concatenation of multiple virtualtext messages on a single
-  line.  By default, if a line has multiple errors or warnings, each will be
+  Enable or disable concatenation of multiple virtual text messages on a single
+  line. By default, if a line has multiple errors or warnings, each will be
   appended in turn.
 
-  With `single` set to a non-zero value, only the first message appears.
-  (No attempt is made to prefer message types such as errors over warnings)
+  With `single` set to a non-zero value, only the first problem on a line will
+  be printed with virtual text. The problem at the left-most position on a
+  line will be printed. If two problems exist at the same position, the most
+  severe problem will be printed.
 
 
 g:ale_virtualenv_dir_names                         *g:ale_virtualenv_dir_names*
