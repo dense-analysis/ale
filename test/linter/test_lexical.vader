@@ -1,0 +1,28 @@
+Before:
+  call ale#assert#SetUpLinterTest('elixir', 'lexical')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(should set correct defaults):
+  if has('win32')
+    AssertLinter 'lexical\start_lexical.bat', 'lexical\start_lexical.bat'
+  else
+    AssertLinter 'lexical/start_lexical.sh', 'lexical/start_lexical.sh'
+  endif
+
+Execute(should configure lexical release location):
+  let b:ale_elixir_lexical_release = 'boo'
+
+  if has('win32')
+    AssertLinter 'boo\start_lexical.bat', 'boo\start_lexical.bat'
+  else
+    AssertLinter 'boo/start_lexical.sh', 'boo/start_lexical.sh'
+  endif
+
+Execute(should set correct LSP values):
+  call ale#test#SetFilename('../test-files/elixir/umbrella_project/apps/app1/lib/app.ex')
+
+  AssertLSPLanguage 'elixir'
+  AssertLSPOptions {}
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/elixir/umbrella_project')
