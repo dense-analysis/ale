@@ -1,0 +1,29 @@
+Before:
+  call ale#test#SetDirectory('/testplugin/test/handler')
+  cd ..
+
+  runtime ale_linters/ruby/packwerk.vim
+
+After:
+  call ale#test#RestoreDirectory()
+  call ale#linter#Reset()
+
+Execute(The packwerk handler should parse lines correctly):
+  call ale#test#SetFilename('test-files/ruby/valid_rails_app/app/models/thing.rb')
+
+  AssertEqual
+  \ [
+  \     {
+  \         'lnum': 36,
+  \         'col': 100,
+  \         'text': 'Dependency violation: ::Edi::Source belongs to ''edi'', but ''billing'' does not specify a dependency on ''edi''.',
+  \     }
+  \ ],
+  \ ale_linters#ruby#packwerk#Handle(bufnr(''), [
+  \   '[36m/Users/JaneDoe/src/github.com/sample-project/billing/app/jobs/document_processing_job.rb[m:36:100',
+  \   'Dependency violation: ::Edi::Source belongs to ''edi'', but ''billing'' does not specify a dependency on ''edi''.',
+  \   'Are we missing an abstraction?',
+  \   'Is the code making the reference, and the referenced constant, in the right packages?',
+  \   '',
+  \   'Inference details: ''Edi::Source'' refers to ::Edi::Source which seems to be defined in edi/app/models/edi/source.rb.',
+  \ ])

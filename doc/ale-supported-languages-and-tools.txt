@@ -547,6 +547,7 @@ Notes:
   * `brakeman`!!
   * `cspell`
   * `debride`
+  * `packwerk`!!
   * `prettier`
   * `rails_best_practices`!!
   * `reek`
