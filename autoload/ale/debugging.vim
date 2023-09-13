@@ -201,6 +201,35 @@ function! s:EchoLSPErrorMessages(all_linter_names) abort
     endfor
 endfunction
 
+function! s:GetIgnoredLinters(buffer, enabled_linters) abort
+    let l:filetype = &filetype
+    let l:ignore_config = ale#Var(a:buffer, 'linters_ignore')
+    let l:disable_lsp = ale#Var(a:buffer, 'disable_lsp')
+
+    if (
+    \   !empty(l:ignore_config)
+    \   || l:disable_lsp is 1
+    \   || l:disable_lsp is v:true
+    \   || (l:disable_lsp is# 'auto' && get(g:, 'lspconfig', 0))
+    \)
+        let l:non_ignored = ale#engine#ignore#Exclude(
+        \   l:filetype,
+        \   a:enabled_linters,
+        \   l:ignore_config,
+        \   l:disable_lsp,
+        \)
+    else
+        let l:non_ignored = copy(a:enabled_linters)
+    endif
+
+    call map(l:non_ignored, 'v:val.name')
+
+    return filter(
+    \   copy(a:enabled_linters),
+    \   'index(l:non_ignored, v:val.name) < 0'
+    \)
+endfunction
+
 function! ale#debugging#Info(...) abort
     let l:options = (a:0 > 0) ? a:1 : {}
     let l:show_preview_info = get(l:options, 'preview')
@@ -208,7 +237,6 @@ function! ale#debugging#Info(...) abort
     let l:buffer = bufnr('')
     let l:filetype = &filetype
 
-    " We get the list of enabled linters for free by the above function.
     let l:enabled_linters = deepcopy(ale#linter#Get(l:filetype))
 
     " But have to build the list of available linters ourselves.
@@ -232,13 +260,10 @@ function! ale#debugging#Info(...) abort
     let l:fixers = uniq(sort(l:fixers[0] + l:fixers[1]))
     let l:fixers_string = join(map(copy(l:fixers), '"\n  " . v:val'), '')
 
-    let l:non_ignored_names = map(
-    \   copy(ale#linter#RemoveIgnored(l:buffer, l:filetype, l:enabled_linters)),
-    \   'v:val[''name'']',
-    \)
-    let l:ignored_names = filter(
-    \   copy(l:enabled_names),
-    \   'index(l:non_ignored_names, v:val) < 0'
+    " Get the names of ignored linters.
+    let l:ignored_names = map(
+    \   s:GetIgnoredLinters(l:buffer, l:enabled_linters),
+    \   'v:val.name'
     \)
 
     call s:Echo(' Current Filetype: ' . l:filetype)

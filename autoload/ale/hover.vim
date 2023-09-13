@@ -329,10 +329,9 @@ function! ale#hover#Show(buffer, line, col, opt) abort
     let l:show_documentation = get(a:opt, 'show_documentation', 0)
     let l:Callback = function('s:OnReady', [a:line, a:col, a:opt])
 
-    for l:linter in ale#linter#Get(getbufvar(a:buffer, '&filetype'))
+    for l:linter in ale#lsp_linter#GetEnabled(a:buffer)
         " Only tsserver supports documentation requests at the moment.
-        if !empty(l:linter.lsp)
-        \&& (!l:show_documentation || l:linter.lsp is# 'tsserver')
+        if !l:show_documentation || l:linter.lsp is# 'tsserver'
             call ale#lsp_linter#StartLSP(a:buffer, l:linter, l:Callback)
         endif
     endfor

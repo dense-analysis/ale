@@ -1002,11 +1002,16 @@ g:ale_detail_to_floating_preview             *g:ale_detail_to_floating_preview*
 
 g:ale_disable_lsp                                           *g:ale_disable_lsp*
                                                             *b:ale_disable_lsp*
-  Type: |Number|
-  Default: `0`
+  Type: |Number| OR |String|
+  Default: `'auto'`
 
-  When this option is set to `1`, ALE ignores all linters powered by LSP,
-  and also `tsserver`.
+  When this option is set to `'auto'`, ALE will automatically disable linters
+  that it detects as having already been configured with the nvim-lspconfig
+  plugin. When this option is set to `1`, ALE ignores all linters powered by
+  LSP, and also `tsserver`.
+
+  Any linters that are disabled will also not be usable for LSP functionality
+  other than just linting.
 
   Please see also |ale-lsp|.
 

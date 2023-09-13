@@ -15,6 +15,8 @@ function! ale#lsp#reset#StopAllLSPs() abort
         for l:buffer_string in keys(g:ale_buffer_info)
             let l:buffer = str2nr(l:buffer_string)
 
+            " Non-ignored and disabled linters are included here so we can
+            " clear results for them after we ignore or disable them.
             for l:linter in ale#linter#Get(getbufvar(l:buffer, '&filetype'))
                 if !empty(l:linter.lsp)
                     call ale#engine#HandleLoclist(l:linter.name, l:buffer, [], 0)

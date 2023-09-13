@@ -302,7 +302,7 @@ Execute(LSP diagnostics responses should be handled correctly):
   endif
 
   call ale#engine#InitBufferInfo(bufnr(''))
-  call ale#lsp_linter#SetLSPLinterMap({'1': 'eclipselsp'})
+  call ale#lsp_linter#SetLSPLinterMap({'1': {'name': 'eclipselsp', 'aliases': [], 'lsp': 'stdio'}})
 
   if has('win32')
     AssertEqual 'filename,[]^$.ts', expand('%:p:t')
@@ -357,7 +357,7 @@ Execute(LSP diagnostics responses on project root should not populate loclist):
   runtime ale_linters/java/eclipselsp.vim
   call ale#test#SetFilename('filename.java')
   call ale#engine#InitBufferInfo(bufnr(''))
-  call ale#lsp_linter#SetLSPLinterMap({'1': 'eclipselsp'})
+  call ale#lsp_linter#SetLSPLinterMap({'1': {'name': 'eclipselsp', 'aliases': [], 'lsp': 'stdio'}})
 
   call ale#lsp_linter#HandleLSPResponse(1, {
   \ 'jsonrpc':'2.0',
@@ -395,7 +395,7 @@ Execute(LSP errors should mark linters no longer active):
   runtime ale_linters/python/pylsp.vim
   call ale#test#SetFilename('filename.py')
   call ale#engine#InitBufferInfo(bufnr(''))
-  call ale#lsp_linter#SetLSPLinterMap({1: 'pylsp'})
+  call ale#lsp_linter#SetLSPLinterMap({'1': {'name': 'pylsp', 'aliases': [], 'lsp': 'stdio'}})
 
   let g:ale_buffer_info[bufnr('')].active_linter_list = ale#linter#Get('python')
   Assert !empty(g:ale_buffer_info[bufnr('')].active_linter_list)
@@ -411,7 +411,7 @@ Execute(LSP errors should mark linters no longer active):
   AssertEqual [], g:ale_buffer_info[bufnr('')].active_linter_list
 
 Execute(LSP errors should be logged in the history):
-  call ale#lsp_linter#SetLSPLinterMap({'347': 'foobar'})
+  call ale#lsp_linter#SetLSPLinterMap({'347': {'name': 'foobar', 'aliases': [], 'lsp': 'stdio'}})
   call ale#lsp_linter#HandleLSPResponse(347, {
   \ 'jsonrpc': '2.0',
   \ 'error': {

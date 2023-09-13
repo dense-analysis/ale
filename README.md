@@ -603,9 +603,19 @@ including the option `g:ale_lint_on_enter`, and you can run ALE manually with
 ALE offers an API for letting any other plugin integrate with ALE. If you are
 interested in writing an integration, see `:help ale-lint-other-sources`.
 
-If you are running ALE in combination with another LSP client, you may wish
-to disable ALE's LSP functionality entirely. You can add a setting to your
-vimrc/init.vim to do so.
+If you're running ALE in Neovim with
+[nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) for configuring
+particular language servers. ALE will automatically disable its LSP
+functionality for any language servers configured with nvim-lspconfig by
+default. The following setting is applied by default:
+
+```vim
+let g:ale_disable_lsp = 'auto'
+```
+
+If you are running ALE in combination with another LSP client, you may wish to
+disable ALE's LSP functionality entirely. You can change the setting to `1` to
+always disable all LSP functionality.
 
 ```vim
 let g:ale_disable_lsp = 1

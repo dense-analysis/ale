@@ -60,6 +60,10 @@ let g:ale_filetype_blacklist = [
 let g:ale_linters = get(g:, 'ale_linters', {})
 " This option can be changed to only enable explicitly selected linters.
 let g:ale_linters_explicit = get(g:, 'ale_linters_explicit', 0)
+" Ignoring linters, for disabling some, or ignoring LSP diagnostics.
+let g:ale_linters_ignore = get(g:, 'ale_linters_ignore', {})
+" Disabling all language server functionality.
+let g:ale_disable_lsp = get(g:, 'ale_disable_lsp', 'auto')
 
 " This Dictionary configures which functions will be used for fixing problems.
 let g:ale_fixers = get(g:, 'ale_fixers', {})

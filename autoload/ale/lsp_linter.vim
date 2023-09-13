@@ -27,28 +27,62 @@ function! ale#lsp_linter#SetLSPLinterMap(replacement_map) abort
     let s:lsp_linter_map = a:replacement_map
 endfunction
 
-" Check if diagnostics for a particular linter should be ignored.
-function! s:ShouldIgnore(buffer, linter_name) abort
-    " Ignore all diagnostics if LSP integration is disabled.
-    if ale#Var(a:buffer, 'disable_lsp')
-        return 1
-    endif
-
-    let l:config = ale#Var(a:buffer, 'linters_ignore')
-
-    " Don't load code for ignoring diagnostics if there's nothing to ignore.
-    if empty(l:config)
-        return 0
-    endif
-
+" Get all enabled LSP linters.
+" This list still includes linters ignored with `ale_linters_ignore`.
+"
+" `ale_linters_ignore` is designed to allow language servers to be used for
+" their functionality while ignoring the diagnostics they return.
+function! ale#lsp_linter#GetEnabled(buffer) abort
     let l:filetype = getbufvar(a:buffer, '&filetype')
-    let l:ignore_list = ale#engine#ignore#GetList(l:filetype, l:config)
+    " Only LSP linters are included here.
+    let l:linters = filter(ale#linter#Get(l:filetype), '!empty(v:val.lsp)')
+    let l:disable_lsp = ale#Var(a:buffer, 'disable_lsp')
 
-    return index(l:ignore_list, a:linter_name) >= 0
+    " Only load code for ignoring linters if we need it.
+    if (
+    \   l:disable_lsp is 1
+    \   || l:disable_lsp is v:true
+    \   || (l:disable_lsp is# 'auto' && get(g:, 'lspconfig', 0))
+    \)
+        let l:linters = ale#engine#ignore#Exclude(
+        \   l:filetype,
+        \   l:linters,
+        \   [],
+        \   l:disable_lsp,
+        \)
+    endif
+
+    return l:linters
+endfunction
+
+" Check if diagnostics for a particular linter should be ignored.
+function! s:ShouldIgnoreDiagnostics(buffer, linter) abort
+    let l:config = ale#Var(a:buffer, 'linters_ignore')
+    let l:disable_lsp = ale#Var(a:buffer, 'disable_lsp')
+
+    " Only load code for ignoring linters if we need it.
+    if (
+    \   !empty(l:config)
+    \   || l:disable_lsp is 1
+    \   || l:disable_lsp is v:true
+    \   || (l:disable_lsp is# 'auto' && get(g:, 'lspconfig', 0))
+    \)
+        " Re-use the ignore implementation just for this linter.
+        return empty(
+        \   ale#engine#ignore#Exclude(
+        \       getbufvar(a:buffer, '&filetype'),
+        \       [a:linter],
+        \       l:config,
+        \       l:disable_lsp,
+        \   )
+        \)
+    endif
+
+    return 0
 endfunction
 
 function! s:HandleLSPDiagnostics(conn_id, response) abort
-    let l:linter_name = s:lsp_linter_map[a:conn_id]
+    let l:linter = s:lsp_linter_map[a:conn_id]
     let l:filename = ale#util#ToResource(a:response.params.uri)
     let l:escaped_name = escape(
     \   fnameescape(l:filename),
@@ -61,17 +95,22 @@ function! s:HandleLSPDiagnostics(conn_id, response) abort
         return
     endif
 
-    if s:ShouldIgnore(l:buffer, l:linter_name)
+    if s:ShouldIgnoreDiagnostics(l:buffer, l:linter)
         return
     endif
 
     let l:loclist = ale#lsp#response#ReadDiagnostics(a:response)
 
-    call ale#engine#HandleLoclist(l:linter_name, l:buffer, l:loclist, 0)
+    call ale#engine#HandleLoclist(l:linter.name, l:buffer, l:loclist, 0)
 endfunction
 
 function! s:HandleTSServerDiagnostics(response, error_type) abort
-    let l:linter_name = 'tsserver'
+    " Re-create a fake linter object for tsserver.
+    let l:linter = {
+    \   'name': 'tsserver',
+    \   'aliases': [],
+    \   'lsp': 'tsserver',
+    \}
     let l:escaped_name = escape(
     \   fnameescape(a:response.body.file),
     \   has('win32') ? '^' : '^,}]'
@@ -83,9 +122,9 @@ function! s:HandleTSServerDiagnostics(response, error_type) abort
         return
     endif
 
-    call ale#engine#MarkLinterInactive(l:info, l:linter_name)
+    call ale#engine#MarkLinterInactive(l:info, l:linter.name)
 
-    if s:ShouldIgnore(l:buffer, l:linter_name)
+    if s:ShouldIgnoreDiagnostics(l:buffer, l:linter)
         return
     endif
 
@@ -123,15 +162,15 @@ function! s:HandleTSServerDiagnostics(response, error_type) abort
     \   + get(l:info, 'suggestion_loclist', [])
     \   + get(l:info, 'syntax_loclist', [])
 
-    call ale#engine#HandleLoclist(l:linter_name, l:buffer, l:loclist, 0)
+    call ale#engine#HandleLoclist(l:linter.name, l:buffer, l:loclist, 0)
 endfunction
 
-function! s:HandleLSPErrorMessage(linter_name, response) abort
+function! s:HandleLSPErrorMessage(linter, response) abort
     if !g:ale_history_enabled || !g:ale_history_log_output
         return
     endif
 
-    if empty(a:linter_name)
+    if empty(a:linter)
         return
     endif
 
@@ -141,7 +180,7 @@ function! s:HandleLSPErrorMessage(linter_name, response) abort
         return
     endif
 
-    call ale#lsp_linter#AddErrorMessage(a:linter_name, l:message)
+    call ale#lsp_linter#AddErrorMessage(a:linter.name, l:message)
 endfunction
 
 function! ale#lsp_linter#AddErrorMessage(linter_name, message) abort
@@ -160,14 +199,14 @@ function! ale#lsp_linter#HandleLSPResponse(conn_id, response) abort
     let l:method = get(a:response, 'method', '')
 
     if get(a:response, 'jsonrpc', '') is# '2.0' && has_key(a:response, 'error')
-        let l:linter_name = get(s:lsp_linter_map, a:conn_id, '')
+        let l:linter = get(s:lsp_linter_map, a:conn_id, {})
 
-        call s:HandleLSPErrorMessage(l:linter_name, a:response)
+        call s:HandleLSPErrorMessage(l:linter, a:response)
     elseif l:method is# 'textDocument/publishDiagnostics'
         call s:HandleLSPDiagnostics(a:conn_id, a:response)
     elseif l:method is# 'window/showMessage'
         call ale#lsp_window#HandleShowMessage(
-        \   s:lsp_linter_map[a:conn_id],
+        \   s:lsp_linter_map[a:conn_id].name,
         \   g:ale_lsp_show_message_format,
         \   a:response.params
         \)
@@ -472,7 +511,7 @@ function! s:CheckWithLSP(linter, details) abort
     call ale#lsp#RegisterCallback(l:id, l:Callback)
 
     " Remember the linter this connection is for.
-    let s:lsp_linter_map[l:id] = a:linter.name
+    let s:lsp_linter_map[l:id] = a:linter
 
     if a:linter.lsp is# 'tsserver'
         let l:message = ale#lsp#tsserver_message#Geterr(l:buffer)

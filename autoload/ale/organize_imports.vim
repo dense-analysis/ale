@@ -57,9 +57,7 @@ function! s:OrganizeImports(linter) abort
 endfunction
 
 function! ale#organize_imports#Execute() abort
-    for l:linter in ale#linter#Get(&filetype)
-        if !empty(l:linter.lsp)
-            call s:OrganizeImports(l:linter)
-        endif
+    for l:linter in ale#lsp_linter#GetEnabled(bufnr(''))
+        call s:OrganizeImports(l:linter)
     endfor
 endfunction

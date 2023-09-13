@@ -1,5 +1,5 @@
 Before:
-  call ale#assert#SetUpLinterTest('ansible', 'ansible_language_server')
+  call ale#assert#SetUpLinterTest('ansible', 'language_server')
 
 After:
   call ale#assert#TearDownLinterTest()

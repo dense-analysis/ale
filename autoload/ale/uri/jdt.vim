@@ -39,6 +39,8 @@ endfunction
 function! ale#uri#jdt#OpenJDTLink(encoded_uri, line, column, options, conn_id) abort
     let l:found_eclipselsp = v:false
 
+    " We should only arrive here from a 'go to definition' request, so we'll
+    " assume the eclipselsp linter is enabled.
     for l:linter in ale#linter#Get('java')
         if l:linter.name is# 'eclipselsp'
             let l:found_eclipselsp = v:true
@@ -87,8 +89,8 @@ function! ale#uri#jdt#ReadJDTLink(encoded_uri) abort
 
     let l:linter_map = ale#lsp_linter#GetLSPLinterMap()
 
-    for l:conn_id in keys(l:linter_map)
-        if l:linter_map[l:conn_id] is# 'eclipselsp'
+    for [l:conn_id, l:linter] in items(l:linter_map)
+        if l:linter.name is# 'eclipselsp'
             let l:root = l:conn_id[stridx(l:conn_id, ':')+1:]
         endif
     endfor

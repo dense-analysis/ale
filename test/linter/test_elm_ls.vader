@@ -1,5 +1,5 @@
 Before:
-  call ale#assert#SetUpLinterTest('elm', 'elm_ls')
+  call ale#assert#SetUpLinterTest('elm', 'ls')
 
 After:
   call ale#assert#TearDownLinterTest()
