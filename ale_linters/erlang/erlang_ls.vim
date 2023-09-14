@@ -24,8 +24,10 @@ function! s:FindProjectRoot(buffer) abort
     let l:markers = [
     \   '_checkouts/',
     \   '_build/',
+    \   'deps/',
     \   'erlang_ls.config',
     \   'rebar.lock',
+    \   'erlang.mk',
     \]
 
     " This is a way to find Erlang/OTP root (the one that is managed
