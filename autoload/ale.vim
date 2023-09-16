@@ -222,7 +222,7 @@ endfunction
 " valid for cmd on Windows, or most shells on Unix.
 function! ale#Env(variable_name, value) abort
     if has('win32')
-        return 'set ' . a:variable_name . '=' . ale#Escape(a:value) . ' && '
+        return 'set ' . ale#Escape(a:variable_name . '=' . a:value) . ' && '
     endif
 
     return a:variable_name . '=' . ale#Escape(a:value) . ' '
