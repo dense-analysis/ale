@@ -32,12 +32,12 @@ Execute(ale#lsp#message#Exit() should return correct messages):
   AssertEqual [1, 'exit'], ale#lsp#message#Exit(),
 
 Given typescript(A TypeScript file with 3 lines):
-  foo()
-  bar()
-  baz()
+  Foo()
+  Bar()
+  Baz()
 
 Execute(ale#util#GetBufferContents() should return correctly formatted newlines):
-  AssertEqual "foo()\nbar()\nbaz()\n", ale#util#GetBufferContents(bufnr(''))
+  AssertEqual "Foo()\nBar()\nBaz()\n", ale#util#GetBufferContents(bufnr(''))
 
 Execute(ale#lsp#message#DidOpen() should return correct messages):
   let g:ale_lsp_next_version_id = 12
@@ -50,7 +50,7 @@ Execute(ale#lsp#message#DidOpen() should return correct messages):
   \         'uri': ale#path#ToFileURI(g:dir . '/foo/bar.ts'),
   \         'languageId': 'typescript',
   \         'version': 12,
-  \         'text': "foo()\nbar()\nbaz()\n",
+  \         'text': "Foo()\nBar()\nBaz()\n",
   \     },
   \   }
   \ ],
@@ -68,7 +68,7 @@ Execute(ale#lsp#message#DidChange() should return correct messages):
   \         'uri': ale#path#ToFileURI(g:dir . '/foo/bar.ts'),
   \         'version': 34,
   \     },
-  \     'contentChanges': [{'text': "foo()\nbar()\nbaz()\n"}],
+  \     'contentChanges': [{'text': "Foo()\nBar()\nBaz()\n"}],
   \   }
   \ ],
   \ ale#lsp#message#DidChange(bufnr(''))
@@ -281,7 +281,7 @@ Execute(ale#lsp#tsserver_message#Change() should return correct messages):
   \     'offset': 1,
   \     'endLine': 1073741824,
   \     'endOffset': 1,
-  \     'insertString': "foo()\nbar()\nbaz()\n",
+  \     'insertString': "Foo()\nBar()\nBaz()\n",
   \   }
   \ ],
   \ ale#lsp#tsserver_message#Change(bufnr(''))

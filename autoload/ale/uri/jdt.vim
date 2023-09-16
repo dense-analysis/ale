@@ -21,11 +21,11 @@ function! s:OpenJDTLink(root, uri, line, column, options, result) abort
     call ale#util#Open(a:uri, a:line, a:column, a:options)
     autocmd AleURISchemes BufNewFile,BufReadPre jdt://** call ale#uri#jdt#ReadJDTLink(expand('<amatch>'))
 
-    if !empty(getbufvar(bufnr(''), 'ale_lsp_root', ''))
+    if !empty(getbufvar(bufnr(''), 'ale_root', ''))
         return
     endif
 
-    let b:ale_lsp_root = a:root
+    let b:ale_root = a:root
     set filetype=java
 
     call setline(1, split(l:contents, '\n'))
@@ -83,7 +83,7 @@ endfunction
 
 " Read jdt:// contents, as part of current project, into current buffer.
 function! ale#uri#jdt#ReadJDTLink(encoded_uri) abort
-    if !empty(getbufvar(bufnr(''), 'ale_lsp_root', ''))
+    if !empty(getbufvar(bufnr(''), 'ale_root', ''))
         return
     endif
 
@@ -100,7 +100,7 @@ function! ale#uri#jdt#ReadJDTLink(encoded_uri) abort
     endif
 
     let l:uri = a:encoded_uri
-    let b:ale_lsp_root = l:root
+    let b:ale_root = l:root
     set filetype=java
 
     call ale#lsp_linter#SendRequest(

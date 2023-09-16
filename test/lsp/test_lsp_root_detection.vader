@@ -1,10 +1,7 @@
 Before:
-  Save g:ale_lsp_root
   Save g:ale_root
-  Save b:ale_lsp_root
   Save b:ale_root
 
-  unlet! g:ale_lsp_root
   let g:ale_root = {}
 
   call ale#assert#SetUpLinterTest('c', 'clangd')
@@ -38,12 +35,6 @@ Execute(The buffer-specific variable can have funcrefs):
 
   AssertLSPProject 'abc123'
 
-Execute(The buffer-specific variable can be the old ale_lsp_root setting):
-  let b:ale_lsp_root = '/some/path'
-  call ale#test#SetFilename('other-file.c')
-
-  AssertLSPProject '/some/path'
-
 Execute(The global variable can be a dictionary):
   let g:ale_root = {'clangd': '/some/path', 'golangserver': '/other/path'}
   call ale#test#SetFilename('other-file.c')
@@ -66,20 +57,6 @@ Execute(The buffer-specific variable overrides the global variable):
 Execute(The global variable is queried if the buffer-specific has no value):
   let b:ale_root = {'golangserver': '/other/path'}
   let g:ale_root = {'clangd': '/some/path', 'golangserver': '/elsewhere'}
-  call ale#test#SetFilename('other-file.c')
-
-  AssertLSPProject '/some/path'
-
-Execute(The global variable can be the old ale_lsp_root setting):
-  let g:ale_root = {}
-  let g:ale_lsp_root = {'clangd': '/some/path', 'golangserver': '/other/path'}
-  call ale#test#SetFilename('other-file.c')
-
-  AssertLSPProject '/some/path'
-
-Execute(A non-empty ale_root setting should replace the old ale_lsp_root):
-  let g:ale_root = {'clangd': '/some/path', 'golangserver': '/other/path'}
-  let g:ale_lsp_root = {'clangd': '/xxx', 'golangserver': '/xxx'}
   call ale#test#SetFilename('other-file.c')
 
   AssertLSPProject '/some/path'
