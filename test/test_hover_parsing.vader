@@ -172,6 +172,29 @@ Execute(Simple markdown formatting should be handled):
   \   'formatted \_ line \_',
   \ ], "\n"))
 
+Execute(Fences padded with spaces should be handled):
+  AssertEqual
+  \ [
+  \   [
+  \     'unlet! b:current_syntax',
+  \     'syntax include @ALE_hover_python syntax/python.vim',
+  \     'syntax region ALE_hover_1 start=/\%1l/ end=/\%3l/ contains=@ALE_hover_python',
+  \   ],
+  \   [
+  \     'def foo():',
+  \     '    pass',
+  \     '',
+  \     'formatted _ line _',
+  \   ],
+  \ ],
+  \ ale#hover#ParseLSPResult(join([
+  \   '``` python ',
+  \   'def foo():',
+  \   '    pass',
+  \   '```',
+  \   'formatted \_ line \_',
+  \ ], "\n"))
+
 Execute(Non-existent syntax files shouldn't be loaded):
   AssertEqual
   \ [
