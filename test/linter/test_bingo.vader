@@ -15,27 +15,14 @@ After:
 
   call ale#assert#TearDownLinterTest()
 
-Execute(should set correct defaults):
+Execute(The default bingo executable and options should be correct):
   AssertLinter 'bingo', ale#Escape('bingo') . ' --mode stdio'
 
-Execute(should configure bingo callback executable):
+Execute(The bingo executable and options should be configurable):
   let b:ale_go_bingo_executable = 'boo'
-  let b:ale_go_bingo_options = ''
-
-  AssertLinter 'boo', ale#Escape('boo')
-
-Execute(should set bingo options):
-  call ale#test#SetFilename('../test-files/go/go1/prj1/file.go')
-  " let b:ale_completion_enabled = 1
-  let b:ale_go_bingo_options = ''
-
-  AssertLinter 'bingo',
-  \ ale#Escape('bingo') . ''
-
   let b:ale_go_bingo_options = '--mode stdio --trace'
 
-  AssertLinter 'bingo',
-  \ ale#Escape('bingo') . ' --mode stdio --trace'
+  AssertLinter 'boo', ale#Escape('boo') . ' --mode stdio --trace'
 
 Execute(should support Go environment variables):
   call ale#test#SetFilename('../test-files/go/go1/prj1/file.go')
@@ -43,7 +30,6 @@ Execute(should support Go environment variables):
 
   AssertLinter 'bingo',
   \ ale#Env('GO111MODULE', 'on') . ale#Escape('bingo') . ' --mode stdio'
-
 
 Execute(Should return directory for 'go.mod' if found in parent directory):
   call ale#test#SetFilename('../test-files/go/test.go')

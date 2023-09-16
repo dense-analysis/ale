@@ -30,4 +30,3 @@ Execute(Warning and error messages should be handled correctly):
   \   'test.robot:W:1:2:RequireSuiteDocumentation:No suite documentation',
   \   'test.robot:E:3:4:RequireTestDocumentation:No testcase documentation'
   \])
-

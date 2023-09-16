@@ -1,9 +1,6 @@
 Before:
   call ale#assert#SetUpLinterTest('haskell', 'hie')
 
-  Save &filetype
-  let &filetype = 'haskell'
-
 After:
   call ale#assert#TearDownLinterTest()
 
@@ -11,8 +8,7 @@ Execute(The language string should be correct):
   AssertLSPLanguage 'haskell'
 
 Execute(The default executable should be correct):
-  AssertLinter 'hie',
-  \ ale#Escape('hie') . ' --lsp'
+  AssertLinter 'hie', ale#Escape('hie') . ' --lsp'
 
 Execute(The project root should be detected correctly):
   AssertLSPProject g:dir

@@ -2,8 +2,6 @@ Before:
   runtime ale_linters/bicep/az_bicep.vim
 
 After:
-  Restore
-
   call ale#linter#Reset()
 
 Execute(The az_bicep handler should handle basic warnings):

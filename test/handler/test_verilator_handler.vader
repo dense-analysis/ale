@@ -4,7 +4,6 @@ Before:
 After:
   call ale#linter#Reset()
 
-
 Execute (The verilator handler should parse legacy messages with only line numbers):
   AssertEqual
   \ [
@@ -25,7 +24,6 @@ Execute (The verilator handler should parse legacy messages with only line numbe
   \ '%Error: foo.v:3: syntax error, unexpected IDENTIFIER',
   \ '%Warning-BLKSEQ: bar.v:10: Blocking assignments (=) in sequential (flop or latch) block; suggest delayed assignments (<=).',
   \ ])
-
 
 Execute (The verilator handler should parse new format messages with line and column numbers):
   AssertEqual
@@ -49,4 +47,3 @@ Execute (The verilator handler should parse new format messages with line and co
   \ '%Error: bar.v:3:1: syntax error, unexpected endmodule, expecting ;',
   \ '%Warning-UNUSED: foo.v:4:6: Signal is not used: r',
   \ ])
-

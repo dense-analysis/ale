@@ -4,19 +4,12 @@ Before:
 After:
   call ale#assert#TearDownLinterTest()
 
-Execute(The default command should be correct):
+Execute(The default sqlfluff command should be correct):
   AssertLinter 'sqlfluff',
   \    ale#Escape('sqlfluff')
   \    . ' lint --dialect ansi --format json  %t'
 
-Execute(The executable should be configurable):
-  let g:ale_sql_sqlfluff_executable = 'foobar'
-
-  AssertLinter 'foobar',
-  \    ale#Escape('foobar')
-  \    . ' lint --dialect ansi --format json  %t'
-
-Execute(Overriding options should work):
+Execute(The sqlfluff executable and command should be configurable):
   let g:ale_sql_sqlfluff_executable = 'foobar'
   let g:ale_sql_sqlfluff_options = '--whatever'
 

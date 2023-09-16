@@ -2,11 +2,9 @@ Before:
   runtime ale_linters/make/checkmake.vim
 
 After:
-  call  ale#linter#Reset()
+  call ale#linter#Reset()
 
 Execute(Parsing checkmake errors should work):
-  silent file Makefile
-
   AssertEqual
   \ [
   \   {

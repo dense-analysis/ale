@@ -18,7 +18,6 @@ Before:
   unlet! b:ale_textlint_options
 
 After:
-  unlet! b:command_tail
   unlet! b:ale_textlint_executable
   unlet! b:ale_textlint_use_global
   unlet! b:ale_textlint_options
@@ -29,17 +28,12 @@ Execute(The default command should be correct):
   AssertLinter 'textlint',
   \ ale#Escape('textlint') . ' -f json --stdin --stdin-filename %s'
 
-Execute(The executable should be configurable):
+Execute(The executable and options should be configurable):
   let b:ale_textlint_executable = 'foobar'
-
-  AssertLinter 'foobar',
-  \ ale#Escape('foobar') . ' -f json --stdin --stdin-filename %s'
-
-Execute(The options should be configurable):
   let b:ale_textlint_options = '--something'
 
-  AssertLinter 'textlint',
-  \ ale#Escape('textlint') . ' --something -f json --stdin --stdin-filename %s'
+  AssertLinter 'foobar',
+  \ ale#Escape('foobar') . ' --something -f json --stdin --stdin-filename %s'
 
 Execute(The local executable from .bin should be used if available):
   call ale#test#SetFilename('../test-files/textlint/with_bin_path/foo.txt')

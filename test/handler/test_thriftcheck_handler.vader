@@ -1,8 +1,8 @@
 Before:
-    runtime ale_linters/thrift/thriftcheck.vim
+  runtime ale_linters/thrift/thriftcheck.vim
 
 After:
-    call ale#linter#Reset()
+  call ale#linter#Reset()
 
 Execute(The thriftcheck handler should handle basic warnings and errors):
   AssertEqual

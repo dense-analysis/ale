@@ -2,8 +2,6 @@ Before:
   runtime ale_linters/cmake/cmake_lint.vim
 
 After:
-  Restore
-
   call ale#linter#Reset()
 
 Execute(The cmake_lint handler should handle basic warnings):

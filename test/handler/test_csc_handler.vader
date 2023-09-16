@@ -9,7 +9,7 @@ Before:
   runtime ale_linters/cs/csc.vim
 
 After:
-  unlet! g:ale_cs_csc_source
+  Restore
 
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()

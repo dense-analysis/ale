@@ -8,33 +8,28 @@ After:
 
   call ale#assert#TearDownLinterTest()
 
-Execute(Should send correct LSP language):
+Execute(The terraform-ls language should be correct):
   AssertLSPLanguage 'terraform'
 
-Execute(Should load default executable):
-  AssertLinter 'terraform-ls',
-  \ ale#Escape('terraform-ls') . ' serve'
+Execute(The default terraform-ls command should be correct):
+  AssertLinter 'terraform-ls', ale#Escape('terraform-ls') . ' serve'
 
-Execute(Should configure custom executable):
+Execute(The terrarform-ls executable and options should be configurable):
   let b:ale_terraform_ls_executable = 'foo'
-  AssertLinter 'foo',
-  \ ale#Escape('foo') . ' serve'
+  let b:ale_terraform_ls_options = '--bar'
 
-Execute(Should ignore non-absolute custom terraform executable):
+  AssertLinter 'foo', ale#Escape('foo') . ' serve --bar'
+
+Execute(Should ignore non-absolute path custom terraform executables):
   let b:ale_terraform_terraform_executable = 'terraform'
-  AssertLinter 'terraform-ls',
-  \ ale#Escape('terraform-ls') . ' serve'
+
+  AssertLinter 'terraform-ls', ale#Escape('terraform-ls') . ' serve'
 
 Execute(Should set absolute custom terraform executable):
   let b:ale_terraform_terraform_executable = '/bin/terraform'
+
   AssertLinter 'terraform-ls',
   \ ale#Escape('terraform-ls') . ' serve -tf-exec /bin/terraform'
-
-Execute(Should set custom options):
-  let b:ale_terraform_ls_options = '--bar'
-
-  AssertLinter 'terraform-ls',
-  \ ale#Escape('terraform-ls') . ' serve --bar'
 
 Execute(Should return nearest directory with .terraform if found in parent directory):
   call ale#test#SetFilename('../test-files/terraform/main.tf')

@@ -4,12 +4,12 @@ Before:
 
   let b:ale_java_eclipselsp_path = '/home/user/eclipse.dst.ls'
 
-  let b:cfg = ale#path#Simplify(g:dir . '/../config_linux')
-
   if has('win32')
     let b:cfg = ale#path#Simplify(g:dir . '/../config_win')
   elseif has('macunix')
     let b:cfg = ale#path#Simplify(g:dir . '/../config_mac')
+  else
+    let b:cfg = ale#path#Simplify(g:dir . '/../config_linux')
   endif
 
 After:

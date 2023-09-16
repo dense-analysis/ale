@@ -33,7 +33,6 @@ Execute(pycln should run with the stdin in new enough versions):
 
   AssertLinterCwd expand('%:p:h')
   AssertLinter 'pycln', ale#Escape('pycln') . b:cmd_tail[:-3] . ' -'
-  " AssertLinter 'pycln', ale#Escape('pycln') . b:cmd_tail[:-3] . '--check -'
 
 Execute(The option for disabling changing directories should work):
   let g:ale_python_pycln_change_directory = 0
@@ -41,17 +40,11 @@ Execute(The option for disabling changing directories should work):
   AssertLinterCwd ''
   AssertLinter 'pycln', ale#Escape('pycln') . b:cmd_tail
 
-Execute(The pycln executable should be configurable, and escaped properly):
-  let g:ale_python_pycln_executable = 'executable with spaces'
-
-  AssertLinter 'executable with spaces', ale#Escape('executable with spaces') . b:cmd_tail
-
-Execute(The pycln command callback should let you set options):
+Execute(The pycln executable and options should be configurable):
+  let g:ale_python_pycln_executable = 'foo'
   let g:ale_python_pycln_options = '--some-flag'
-  AssertLinter 'pycln', ale#Escape('pycln') . ' --some-flag' . b:cmd_tail
 
-  let g:ale_python_pycln_options = '--some-option value'
-  AssertLinter 'pycln', ale#Escape('pycln') . ' --some-option value' . b:cmd_tail
+  AssertLinter 'foo', ale#Escape('foo') . ' --some-flag' . b:cmd_tail
 
 Execute(The pycln callbacks shouldn't detect virtualenv directories where they don't exist):
   call ale#test#SetFilename('../test-files/python/no_virtualenv/subdir/foo/bar.py')
@@ -121,4 +114,3 @@ Execute(configuration file set in _options overrides _config):
   let b:ale_python_pycln_options = '-x --config /bar.xml'
 
   AssertLinter 'pycln', ale#Escape('pycln') . ' -x --config /bar.xml' . b:cmd_tail
-

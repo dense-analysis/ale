@@ -1,3 +1,11 @@
+Before:
+  Save g:ale_rust_ignore_secondary_spans
+
+  let g:ale_rust_ignore_secondary_spans = 0
+
+After:
+  Restore
+
 Execute(The Rust handler should handle rustc output):
   call ale#test#SetFilename('src/playpen.rs')
 
@@ -340,7 +348,6 @@ Execute(The Rust handler should find correct files):
 Execute(The Rust handler should remove secondary spans if set):
   call ale#test#SetFilename('src/noerrors/mod.rs')
 
-  let g:ale_rust_ignore_secondary_spans = 0
   AssertEqual
   \ [
   \   {
@@ -416,6 +423,7 @@ Execute(The Rust handler should remove secondary spans if set):
   \ ])
 
   let g:ale_rust_ignore_secondary_spans = 1
+
   AssertEqual
   \ [
   \   {

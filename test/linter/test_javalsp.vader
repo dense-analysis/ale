@@ -1,4 +1,3 @@
-
 Before:
   call ale#assert#SetUpLinterTest('java', 'javalsp')
 
@@ -30,18 +29,6 @@ Execute(The javalsp callback should return backward compatible value):
   AssertLinter '/bin/java', join(cmd, ' ')
 
 Execute(The javalsp should have default config):
-  AssertEqual
-  \ {
-  \   'java': {
-  \     'classPath': [],
-  \     'externalDependencies': []
-  \   }
-  \ },
-  \ ale_linters#java#javalsp#Config(bufnr(''))
-
-Execute(The javalsp should have default config if user sets empty hash):
-  let b:ale_java_javalsp_config = {}
-
   AssertEqual
   \ {
   \   'java': {

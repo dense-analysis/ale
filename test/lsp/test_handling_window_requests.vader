@@ -19,11 +19,12 @@ After:
 
 Execute(ale#lsp_window#HandleShowMessage() should only show errors when severity is set to "error"):
   let g:ale_lsp_show_message_severity = 'error'
-  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':1,'message':'an error'})
+  " We should escape the quotes from this message.
+  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':1,'message':'an ''error'''})
   call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':2,'message':'a warning'})
   call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':3,'message':'an info'})
   call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':4,'message':'a log'})
-  AssertEqual ['Error:some_linter: an error'], g:expr_list
+  AssertEqual ['Error:some_linter: an ''error'''], g:expr_list
 
 Execute(ale#lsp_window#HandleShowMessage() should only show errors and warnings when severity is set to "warning"):
   let g:ale_lsp_show_message_severity = 'warning'
@@ -88,7 +89,3 @@ Execute(ale#lsp_window#HandleShowMessage() should use "warning" when severity is
   \ 'Error:some_linter: an error',
   \ 'Warning:some_linter: a warning'],
   \ g:expr_list
-
-Execute(ale#lsp_window#HandleShowMessage() should escape quotes on messages):
-  call ale#lsp_window#HandleShowMessage(g:linter_name, g:format, {'type':3,'message':"this is an 'info'"})
-  AssertEqual ['Info:some_linter: this is an ''info'''], g:expr_list

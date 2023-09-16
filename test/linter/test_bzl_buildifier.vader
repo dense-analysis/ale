@@ -4,7 +4,6 @@ Before:
 After:
   call ale#assert#TearDownLinterTest()
 
-
 Execute(Should use default command when bazel_buildifier_options are not set):
   call ale#test#SetDirectory('/testplugin/test/test-files/bzl/bazel-package')
   call ale#test#SetFilename('BUILD.bazel')

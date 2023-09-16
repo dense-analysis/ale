@@ -33,4 +33,3 @@ Execute(The luac handler should parse lines correctly):
   \   'luac /file/path/here.lua:3: unexpected symbol near ''-''',
   \   'luac /file/path/here.lua:5: ''='' expected near '')''',
   \ ])
-

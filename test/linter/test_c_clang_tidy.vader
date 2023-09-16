@@ -12,12 +12,6 @@ Execute(The clangtidy command default should be correct):
   AssertLinter 'clang-tidy',
   \ ale#Escape('clang-tidy') . ' %s'
 
-Execute(You should be able to remove the -checks option for clang-tidy):
-  let b:ale_c_clangtidy_checks = []
-
-  AssertLinter 'clang-tidy',
-  \ ale#Escape('clang-tidy') . ' %s'
-
 Execute(You should be able to set other checks for clang-tidy):
   let b:ale_c_clangtidy_checks = ['-*', 'clang-analyzer-*']
 

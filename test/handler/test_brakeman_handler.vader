@@ -74,7 +74,7 @@ Execute(The brakeman handler should parse JSON correctly when there is no output
   \ [],
   \ ale_linters#ruby#brakeman#Handle(347, [
   \ ])
-  \
+
 Execute(The brakeman handler should handle garbage output):
   AssertEqual
   \ [],

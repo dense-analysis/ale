@@ -43,8 +43,6 @@ Execute (The golangci-lint handler should handle paths correctly):
 Execute (The golangci-lint handler should handle only typecheck lines as errors):
   call ale#test#SetFilename('app/main.go')
 
-  let file = ale#path#GetAbsPath(expand('%:p:h'), 'test.go')
-
   AssertEqual
   \ [
   \   {
@@ -63,6 +61,6 @@ Execute (The golangci-lint handler should handle only typecheck lines as errors)
   \   }
   \ ],
   \ ale_linters#go#golangci_lint#Handler(bufnr(''), [
-  \   file . ':30:5: variable ''err'' is not used (typecheck)',
-  \   file . ':505:75: Magic number: 404, in <argument> detected (gomnd)',
+  \   ale#path#GetAbsPath(expand('%:p:h'), 'test.go') . ':30:5: variable ''err'' is not used (typecheck)',
+  \   ale#path#GetAbsPath(expand('%:p:h'), 'test.go') . ':505:75: Magic number: 404, in <argument> detected (gomnd)',
   \ ])

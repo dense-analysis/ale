@@ -12,21 +12,17 @@ After:
 
   call ale#assert#TearDownLinterTest()
 
-Execute(The default command should be correct):
-  AssertLinter 'go', 'go vet  .'
+Execute(The default go vet command should be correct):
+  AssertLinter 'go', ale#Escape('go') . ' vet .'
+  AssertLinterCwd '%s:h'
 
-Execute(Extra options should be supported):
+Execute(The go vet command and options should be configurable):
+  let g:ale_go_go_executable = 'foobar'
   let g:ale_go_govet_options = '--foo-bar'
 
-  AssertLinterCwd '%s:h'
-  AssertLinter 'go', 'go vet  --foo-bar .'
-
-Execute(The executable should be configurable):
-  let g:ale_go_go_executable = 'foobar'
-
-  AssertLinter 'foobar', 'foobar vet  .'
+  AssertLinter 'foobar', ale#Escape('foobar') . ' vet --foo-bar .'
 
 Execute(Go environment variables should be supported):
   let b:ale_go_go111module = 'on'
 
-  AssertLinter 'go', ale#Env('GO111MODULE', 'on') . 'go vet  .'
+  AssertLinter 'go', ale#Env('GO111MODULE', 'on') . ale#Escape('go') . ' vet .'

@@ -2,7 +2,6 @@ Before:
   runtime! ale_linters/yaml/gitlablint.vim
 
 After:
-  Restore
   call ale#linter#Reset()
 
 Execute(Problems should be parsed correctly for gitlablint):

@@ -5,7 +5,6 @@ After:
   call ale#linter#Reset()
 
 Execute(gawk syntax errors should be parsed correctly):
-
   AssertEqual
   \ [
   \   {

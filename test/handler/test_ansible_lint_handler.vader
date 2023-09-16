@@ -1,11 +1,14 @@
 Before:
+  Save b:ale_warn_about_trailing_whitespace
+
   runtime ale_linters/ansible/ansible_lint.vim
   call ale#test#SetFilename('test_playbook.yml')
 
   let b:ale_warn_about_trailing_whitespace = 1
 
 After:
-  unlet! b:ale_warn_about_trailing_whitespace
+  Restore
+
   call ale#linter#Reset()
 
 Execute(The ansible-lint handler for version group <5 should handle basic errors):

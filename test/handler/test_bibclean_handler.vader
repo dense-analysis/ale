@@ -5,7 +5,6 @@ After:
   call ale#linter#Reset()
 
 Execute(The bibclean handler should parse lines from bibclean <= v2.11.4 correctly):
-
   AssertEqual
   \ [
   \   {
@@ -46,7 +45,6 @@ Execute(The bibclean handler should parse lines from bibclean <= v2.11.4 correct
   \ ])
 
 Execute(The bibclean handler should parse lines of bibclean > v2.11.4 correctly):
-  
   AssertEqual
   \ [
   \   {

@@ -2,8 +2,6 @@ Before:
   runtime ale_linters/sql/sqlfluff.vim
 
 After:
-  Restore
-
   call ale#linter#Reset()
 
 Execute(The sqlfluff handler should handle basic warnings):

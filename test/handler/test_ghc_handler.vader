@@ -1,3 +1,6 @@
+After:
+  unlet! g:detail
+
 Execute(The ghc handler should handle hdevtools output):
   call ale#test#SetFilename('foo.hs')
 

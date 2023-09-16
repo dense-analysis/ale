@@ -4,8 +4,6 @@ Before:
   runtime ale_linters/php/phpstan.vim
 
 After:
-  Restore
-
   call ale#test#RestoreDirectory()
   call ale#linter#Reset()
 

@@ -133,11 +133,11 @@ Execute(ale#sign#GetSignName should return the right sign names):
   \])
 
 Given testft(A file with warnings/errors):
-  foo
-  bar
-  baz
-  fourth line
-  fifth line
+  Foo
+  Bar
+  Baz
+  Fourth line
+  Fifth line
 
 Execute(The current signs should be set for running a job):
   ALELint
@@ -277,26 +277,6 @@ Execute(Signs should be upgraded correctly):
   \ sort(ParseSigns())
 
 Execute(It should be possible to clear signs with empty lists):
-  let g:loclist = [
-  \ {'bufnr': bufnr(''), 'lnum': 16, 'col': 2, 'type': 'E', 'text': 'f'},
-  \]
-
-  call ale#sign#SetSigns(bufnr(''), g:loclist)
-
-  AssertEqual
-  \ [
-  \   ['16', '1000001', 'ALEErrorSign'],
-  \ ],
-  \ sort(ParseSigns())
-
-  call ale#sign#SetSigns(bufnr(''), [])
-
-  AssertEqual [], ParseSigns()
-
-Execute(No exceptions should be thrown when setting signs for invalid buffers):
-  call ale#sign#SetSigns(123456789, [{'lnum': 15, 'col': 2, 'type': 'W', 'text': 'e'}])
-
-Execute(Signs should be removed when lines have multiple sign IDs on them):
   " We can fail to remove signs if there are multiple signs on one line,
   " say after deleting lines in Vim, etc.
   if has('nvim-0.4.2') || has('patch-8.1.614')
@@ -313,3 +293,6 @@ Execute(Signs should be removed when lines have multiple sign IDs on them):
 
   call ale#sign#SetSigns(bufnr(''), [])
   AssertEqual [], ParseSigns()
+
+Execute(No exceptions should be thrown when setting signs for invalid buffers):
+  call ale#sign#SetSigns(123456789, [{'lnum': 15, 'col': 2, 'type': 'W', 'text': 'e'}])

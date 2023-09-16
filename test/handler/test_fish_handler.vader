@@ -1,8 +1,8 @@
 Before:
-    runtime ale_linters/fish/fish.vim
+  runtime ale_linters/fish/fish.vim
 
 After:
-    call ale#linter#Reset()
+  call ale#linter#Reset()
 
 Execute(The fish handler should handle basic warnings and syntax errors):
   AssertEqual

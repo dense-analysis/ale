@@ -3,31 +3,24 @@ Before:
 
   call ale#assert#SetUpLinterTest('go', 'gobuild')
 
-  GivenCommandOutput ['/foo/bar', '/foo/baz']
-
 After:
-  Restore
   call ale#assert#TearDownLinterTest()
 
-Execute(The default command should be correct):
+Execute(The default go test command should be correct):
   AssertLinterCwd '%s:h'
-  AssertLinter 'go', 'go test -c -o /dev/null ./'
+  AssertLinter 'go', ale#Escape('go') . ' test -c -o /dev/null ./'
 
 Execute(Go environment variables should be supported):
   let b:ale_go_go111module = 'on'
 
-  AssertLinter 'go', ale#Env('GO111MODULE', 'on') . 'go test -c -o /dev/null ./'
+  AssertLinter 'go', ale#Env('GO111MODULE', 'on')
+  \ . ale#Escape('go') . ' test -c -o /dev/null ./'
 
   unlet! b:ale_go_go111module
 
-Execute(Extra options should be supported):
+Execute(The go test executable and options should be configurable):
+  let g:ale_go_go_executable = 'foobar'
   let g:ale_go_gobuild_options = '--foo-bar'
 
-  AssertLinter 'go', 'go test --foo-bar -c -o /dev/null ./'
-
-  let g:ale_go_gobuild_options = ''
-
-Execute(The executable should be configurable):
-  let g:ale_go_go_executable = 'foobar'
-
-  AssertLinter 'foobar', 'foobar test -c -o /dev/null ./'
+  AssertLinter 'foobar', ale#Escape('foobar')
+  \ . ' test --foo-bar -c -o /dev/null ./'

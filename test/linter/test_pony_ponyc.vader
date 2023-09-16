@@ -4,9 +4,11 @@ Before:
 After:
   call ale#assert#TearDownLinterTest()
 
-Execute(The options should be used in the command):
+Execute(The default ponyc command should be correct):
   AssertLinter 'ponyc', ale#Escape('ponyc') . ' --pass paint'
 
-  let b:ale_pony_ponyc_options = 'foobar'
+Execute(The pony executable and options should be configurable):
+  let b:ale_pony_ponyc_executable = 'foobar'
+  let b:ale_pony_ponyc_options = '--some-option'
 
-  AssertLinter 'ponyc', ale#Escape('ponyc') . ' foobar'
+  AssertLinter 'foobar', ale#Escape('foobar') . ' --some-option'

@@ -1,8 +1,4 @@
 Execute(The deadnix handler should handle deadnix output):
-  let output = [
-  \'{"file":"./flake.nix","results":[{"column":5,"endColumn":9,"line":23,"message":"Unused lambda pattern: self"},{"column":2,"endColumn":6,"line":1,"message":"Unused lambda pattern: pkgs"}]}'
-  \]
-
   AssertEqual
   \ [
   \   {
@@ -20,7 +16,9 @@ Execute(The deadnix handler should handle deadnix output):
   \     'type': 'W',
   \   },
   \ ],
-  \ ale#handlers#deadnix#Handle(bufnr(''), output)
+  \ ale#handlers#deadnix#Handle(bufnr(''), [
+  \   '{"file":"./flake.nix","results":[{"column":5,"endColumn":9,"line":23,"message":"Unused lambda pattern: self"},{"column":2,"endColumn":6,"line":1,"message":"Unused lambda pattern: pkgs"}]}'
+  \ ])
 
   AssertEqual [], ale#handlers#deadnix#Handle(bufnr(''), [''])
   AssertEqual [], ale#handlers#deadnix#Handle(bufnr(''), ['not json'])

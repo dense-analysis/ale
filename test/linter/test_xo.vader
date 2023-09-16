@@ -9,15 +9,12 @@ Before:
 After:
   call ale#assert#TearDownLinterTest()
 
-Execute(The XO executable should be called):
+Execute(The default xo command should be correct):
   AssertLinter 'xo', ale#Escape('xo') . ' --reporter json --stdin --stdin-filename %s'
 
-Execute(The XO executable should be configurable):
+Execute(The xo executable and command should be configurable):
   let b:ale_javascript_xo_executable = 'foobar'
-
-  AssertLinter 'foobar', ale#Escape('foobar') . ' --reporter json --stdin --stdin-filename %s'
-
-Execute(The XO options should be configurable):
   let b:ale_javascript_xo_options = '--wat'
 
-  AssertLinter 'xo', ale#Escape('xo') . ' --wat --reporter json --stdin --stdin-filename %s'
+  AssertLinter 'foobar', ale#Escape('foobar')
+  \ . ' --wat --reporter json --stdin --stdin-filename %s'

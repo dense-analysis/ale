@@ -10,8 +10,6 @@ After:
 
   call ale#linter#Reset()
 
-  silent file something_else.py
-
 Execute(Basic prospector errors should be handle):
   AssertEqual
   \ [

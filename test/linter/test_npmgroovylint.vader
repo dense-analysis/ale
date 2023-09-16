@@ -5,8 +5,6 @@ Before:
   call ale#test#SetFilename('test.groovy')
 
 After:
-  Restore
-
   call ale#assert#TearDownLinterTest()
 
 Execute(The default npm-groovy-lint command should be correct):

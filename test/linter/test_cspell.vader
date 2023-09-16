@@ -68,4 +68,3 @@ Execute(Additional cspell options should be configurable):
   \  'cspell',
   \  ale#Escape('cspell')
   \  . ' lint --no-color --no-progress --no-summary --foobar -- stdin'
-

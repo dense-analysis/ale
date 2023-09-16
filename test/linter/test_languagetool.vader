@@ -1,8 +1,14 @@
 Before:
-    call ale#assert#SetUpLinterTest('text', 'languagetool')
+  Save g:ale_languagetool_executable
+  Save g:ale_languagetool_options
+
+  let g:ale_languagetool_executable = 'languagetool'
+  let g:ale_languagetool_options = '--autoDetect'
+
+  call ale#assert#SetUpLinterTest('text', 'languagetool')
 
 After:
-    call ale#assert#TearDownLinterTest()
+  call ale#assert#TearDownLinterTest()
 
 Execute(The default command should be correct):
   AssertLinter 'languagetool', ale#Escape('languagetool')
@@ -10,13 +16,7 @@ Execute(The default command should be correct):
 
 Execute(Should be able to set a custom executable):
   let g:ale_languagetool_executable = 'foobar'
-
-  AssertLinter 'foobar' , ale#Escape('foobar')
-  \ . ' --autoDetect %s'
-
-Execute(Should be able to include custom languagetool options):
   let g:ale_languagetool_options = '--language en'
 
-  " is now 'foobar' based on above global
-  AssertLinter 'foobar', ale#Escape('foobar')
+  AssertLinter 'foobar' , ale#Escape('foobar')
   \ . ' --language en %s'

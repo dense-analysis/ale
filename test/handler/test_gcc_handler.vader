@@ -1,11 +1,7 @@
 Execute(The GCC handler should ignore other lines of output):
   AssertEqual
   \ [],
-  \ ale#handlers#gcc#HandleGCCFormatWithIncludes(347, [
-  \   'foo',
-  \   'bar',
-  \   'baz',
-  \ ])
+  \ ale#handlers#gcc#HandleGCCFormatWithIncludes(347, ['foo', 'bar', 'baz'])
 
 Execute(GCC errors from included files should be parsed correctly):
   AssertEqual

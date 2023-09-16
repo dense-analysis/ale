@@ -2,7 +2,6 @@ Before:
   runtime ale_linters/eruby/erblint.vim
 
 After:
-  unlet! g:lines
   call ale#linter#Reset()
 
 Execute(The erblint handler should parse lines correctly):
@@ -61,10 +60,5 @@ Execute(The erblint handler should handle when files are checked and no offenses
   \ ])
 
 Execute(The erblint handler should handle output without any errors):
-  AssertEqual
-  \ [],
-  \ ale_linters#eruby#erblint#Handle(347, ['{}'])
-
-  AssertEqual
-  \ [],
-  \ ale_linters#eruby#erblint#Handle(347, [])
+  AssertEqual [], ale_linters#eruby#erblint#Handle(347, ['{}'])
+  AssertEqual [], ale_linters#eruby#erblint#Handle(347, [])
