@@ -455,6 +455,11 @@ If you want to use another plugin for LSP features and tsserver, you can use
 the |g:ale_disable_lsp| setting to disable ALE's own LSP integrations, or
 ignore particular linters with |g:ale_linters_ignore|.
 
+If for any reason you want to stop a language server ALE starts, such as when
+a project configuration has significantly changed, or new files have been
+added the language server isn't aware of, use either |ALEStopLSP| or
+|ALEStopAllLSPs| to stop the server until ALE automatically starts it again.
+
 -------------------------------------------------------------------------------
 5.1 Completion                                                 *ale-completion*
 
@@ -3929,6 +3934,17 @@ ALEStopAllLSPs                                                 *ALEStopAllLSPs*
   delete all of the problems found for them, updating every linted buffer.
 
   This command can be used when LSP clients mess up and need to be restarted.
+
+
+ALEStopLSP `linter_name`                                           *ALEStopLSP*
+
+  `ALEStopLSP` will stop a specific language server with a given linter name.
+  Completion is supported for currently running language servers. All language
+  servers with the given name will be stopped across all buffers for all
+  projects.
+
+  If the command is run with a bang (`:ALEStopLSP!`), all warnings will be
+  suppressed.
 
 
 ===============================================================================

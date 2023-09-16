@@ -8,13 +8,9 @@ if !has_key(s:, 'lsp_linter_map')
     let s:lsp_linter_map = {}
 endif
 
-" A Dictionary to track one-shot handlers for custom LSP requests
-let s:custom_handlers_map = get(s:, 'custom_handlers_map', {})
-
 " Clear LSP linter data for the linting engine.
 function! ale#lsp_linter#ClearLSPData() abort
     let s:lsp_linter_map = {}
-    let s:custom_handlers_map = {}
 endfunction
 
 " Only for internal use.
@@ -82,7 +78,12 @@ function! s:ShouldIgnoreDiagnostics(buffer, linter) abort
 endfunction
 
 function! s:HandleLSPDiagnostics(conn_id, response) abort
-    let l:linter = s:lsp_linter_map[a:conn_id]
+    let l:linter = get(s:lsp_linter_map, a:conn_id)
+
+    if empty(l:linter)
+        return
+    endif
+
     let l:filename = ale#util#ToResource(a:response.params.uri)
     let l:escaped_name = escape(
     \   fnameescape(l:filename),
@@ -540,9 +541,14 @@ endfunction
 
 function! s:HandleLSPResponseToCustomRequests(conn_id, response) abort
     if has_key(a:response, 'id')
-    \&& has_key(s:custom_handlers_map, a:response.id)
-        let l:Handler = remove(s:custom_handlers_map, a:response.id)
-        call l:Handler(a:response)
+        " Get the custom handlers Dictionary from the linter map.
+        let l:linter = get(s:lsp_linter_map, a:conn_id, {})
+        let l:custom_handlers = get(l:linter, 'custom_handlers', {})
+
+        if has_key(l:custom_handlers, a:response.id)
+            let l:Handler = remove(l:custom_handlers, a:response.id)
+            call l:Handler(a:response)
+        endif
     endif
 endfunction
 
@@ -553,7 +559,17 @@ function! s:OnReadyForCustomRequests(args, linter, lsp_details) abort
     if l:request_id > 0 && has_key(a:args, 'handler')
         let l:Callback = function('s:HandleLSPResponseToCustomRequests')
         call ale#lsp#RegisterCallback(l:id, l:Callback)
-        let s:custom_handlers_map[l:request_id] = a:args.handler
+
+        " Remember the linter this connection is for.
+        let s:lsp_linter_map[l:id] = a:linter
+
+        " Add custom_handlers to the linter Dictionary.
+        if !has_key(a:linter, 'custom_handlers')
+            let a:linter.custom_handlers = {}
+        endif
+
+        " Put the handler function in the map to call later.
+        let a:linter.custom_handlers[l:request_id] = a:args.handler
     endif
 endfunction
 

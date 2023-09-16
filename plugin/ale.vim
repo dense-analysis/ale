@@ -246,6 +246,8 @@ command! -bar ALEDisableBuffer :call ale#toggle#DisableBuffer(bufnr(''))
 command! -bar ALEResetBuffer :call ale#toggle#ResetBuffer(bufnr(''))
 " A command to stop all LSP-like clients, including tsserver.
 command! -bar ALEStopAllLSPs :call ale#lsp#reset#StopAllLSPs()
+" A command to stop a specific language server, or tsseserver.
+command! -bar -bang -nargs=1 -complete=customlist,ale#lsp#reset#Complete ALEStopLSP :call ale#lsp#reset#StopLSP(<f-args>, '<bang>')
 
 " A command for linting manually.
 command! -bar ALELint :call ale#Queue(0, 'lint_file')
