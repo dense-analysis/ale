@@ -30,3 +30,13 @@ Execute(Should accept configuration settings):
   AssertLSPConfig {}
   let b:ale_haskell_hls_config = {'haskell': {'maxCompletions': 250}}
   AssertLSPConfig {'haskell': {'maxCompletions': 250}}
+
+Execute(We should detect the root with cabal.project files, preferred over *.cabal files):
+  call ale#test#SetFilename('../test-files/haskell/haskell-packages-project/package-a/src/folder/dummy.hs')
+
+  AssertLSPProject ale#test#GetFilename('../test-files/haskell/haskell-packages-project')
+
+Execute(We should a project root with *.cabal files):
+  call ale#test#SetFilename('../test-files/haskell/haskell-simple-package/package-a/src/folder/dummy.hs')
+
+  AssertLSPProject ale#test#GetFilename('../test-files/haskell/haskell-simple-package/package-a')
