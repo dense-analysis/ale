@@ -1,8 +1,7 @@
 Before:
   call ale#assert#SetUpLinterTest('solidity', 'solhint')
-  runtime autoload/ale/handlers/solhint.vim
 
-  let b:args = ' --formatter compact %s'
+  let b:args = ' --formatter unix %s'
 
 After:
   unlet! b:args
@@ -17,7 +16,6 @@ Execute(The options should be configurable):
   let g:ale_solidity_solhint_options = '--foobar'
 
   AssertLinter 'solhint', ale#Escape('solhint') . ' --foobar' . b:args
-
 
 Execute(solhint should be run from a containing project with solhint executable):
   call ale#test#SetFilename('../test-files/solhint/Contract.sol')

@@ -50,15 +50,14 @@ Execute(The solhint handler should parse linter error messages correctly):
   \     'type': 'E',
   \   },
   \ ],
-  \ ale#handlers#solhint#Handle(bufnr(''), [
-  \   'contracts/Bounty.sol: line 1, col 17, Warning - Compiler version must be fixed (compiler-fixed)',
-  \   'contracts/Bounty.sol: line 4, col 8, Error - Use double quotes for string literals (quotes)',
-  \   'contracts/Bounty.sol: line 5, col 8, Error - Use double quotes for string literals (quotes)',
-  \   'contracts/Bounty.sol: line 13, col 3, Error - Expected indentation of 4 spaces but found 2 (indent)',
-  \   'contracts/Bounty.sol: line 14, col 3, Error - Expected indentation of 4 spaces but found 2 (indent)',
-  \   'contracts/Bounty.sol: line 47, col 3, Error - Function order is incorrect, public function can not go after internal function. (func-order)',
+  \ ale_linters#solidity#solhint#Handle(bufnr(''), [
+  \   'contracts/Bounty.sol:1:17: Compiler version must be fixed [Warning/compiler-fixed]',
+  \   'contracts/Bounty.sol:4:8: Use double quotes for string literals [Error/quotes]',
+  \   'contracts/Bounty.sol:5:8: Use double quotes for string literals [Error/quotes]',
+  \   'contracts/Bounty.sol:13:3: Expected indentation of 4 spaces but found 2 [Error/indent]',
+  \   'contracts/Bounty.sol:14:3: Expected indentation of 4 spaces but found 2 [Error/indent]',
+  \   'contracts/Bounty.sol:47:3: Function order is incorrect, public function can not go after internal function. [Error/func-order]',
   \ ])
-
 
 Execute(The solhint handler should parse syntax error messages correctly):
   AssertEqual
@@ -78,7 +77,7 @@ Execute(The solhint handler should parse syntax error messages correctly):
   \     'type': 'E',
   \   },
   \ ],
-  \ ale#handlers#solhint#Handle(bufnr(''), [
-  \   "contracts/Bounty.sol: line 30, col 4, Error - Parse error: missing ';' at 'uint248'",
-  \   "contracts/Bounty.sol: line 203, col 4, Error - Parse error: no viable alternative at input '_loserStakeMultiplier}'",
+  \ ale_linters#solidity#solhint#Handle(bufnr(''), [
+  \   "contracts/Bounty.sol:30:4: Parse error: missing ';' at 'uint248' [Error]",
+  \   "contracts/Bounty.sol:203:4: Parse error: no viable alternative at input '_loserStakeMultiplier}' [Error]",
   \ ])
