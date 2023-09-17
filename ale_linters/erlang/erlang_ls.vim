@@ -21,7 +21,12 @@ function! s:GetCommand(buffer) abort
 endfunction
 
 function! s:FindProjectRoot(buffer) abort
-    let l:markers = ['_build/', 'erlang_ls.config', 'rebar.lock']
+    let l:markers = [
+    \   '_checkouts/',
+    \   '_build/',
+    \   'erlang_ls.config',
+    \   'rebar.lock',
+    \]
 
     " This is a way to find Erlang/OTP root (the one that is managed
     " by kerl or asdf).  Useful if :ALEGoToDefinition takes us there.

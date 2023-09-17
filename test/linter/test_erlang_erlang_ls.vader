@@ -48,6 +48,9 @@ Execute(Root of Rebar3 project should be detected):
   call ale#test#SetFilename(b:root . '/_build/default/lib/dep/src/dep.erl')
   AssertLSPProject ale#test#GetFilename(b:root)
 
+  call ale#test#SetFilename(b:root . '/_checkouts/dep/src/dep.erl')
+  AssertLSPProject ale#test#GetFilename(b:root)
+
 Execute(Root of kerl managed Erlang/OTP installation should be detected):
   let b:root = '../test-files/erlang/kerl_otp_root'
 
