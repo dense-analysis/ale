@@ -611,6 +611,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['python'],
 \       'description': 'Fix python files with ruff.',
 \   },
+\   'ruff_format': {
+\       'function': 'ale#fixers#ruff_format#Fix',
+\       'suggested_filetypes': ['python'],
+\       'description': 'Format python files with ruff.',
+\   },
 \   'pycln': {
 \       'function': 'ale#fixers#pycln#Fix',
 \       'suggested_filetypes': ['python'],
