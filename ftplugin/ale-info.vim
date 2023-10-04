@@ -14,3 +14,9 @@ endfunction
 
 " Press space to open :help for an ALE Variable
 nnoremap <buffer> <silent> <space> :call ALEInfoOpenHelp()<CR>
+
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', 'execute')
+let b:undo_ftplugin .= ' | setlocal synmaxcol<'
+let b:undo_ftplugin .= ' | execute "silent! unmap <buffer> q"'
+let b:undo_ftplugin .= ' | execute "silent! nunmap <buffer> <space>"'
+let b:undo_ftplugin .= ' | delfunction! ALEInfoOpenHelp'
