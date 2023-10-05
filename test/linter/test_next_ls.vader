@@ -1,0 +1,22 @@
+Before:
+  call ale#assert#SetUpLinterTest('elixir', 'next_ls')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(should set correct defaults):
+  AssertLinter 'nextls', '''nextls'' --stdio'
+
+Execute(should set next_ls options):
+  let b:ale_elixir_next_ls_executable = 'boo'
+  let b:ale_elixir_next_ls_options = '--spooky'
+
+  AssertLinter 'boo', '''boo'' --spooky'
+
+Execute(should set correct LSP values):
+  call ale#test#SetFilename('../test-files/elixir/umbrella_project/apps/app1/lib/app.ex')
+
+  AssertLSPLanguage 'elixir'
+  AssertLSPOptions {}
+  AssertLSPConfig {}
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/elixir/umbrella_project')
