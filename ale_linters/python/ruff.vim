@@ -48,7 +48,7 @@ function! ale_linters#python#ruff#GetCommand(buffer, version) abort
     " NOTE: ruff version `0.0.69` supports liniting input from stdin
     return ale#Escape(l:executable) . l:exec_args
     \   . ale#Pad(ale#Var(a:buffer, 'python_ruff_options'))
-    \   . ' --format text'
+    \   . ' --output-format text'
     \   .  (ale#semver#GTE(a:version, [0, 0, 69]) ? ' --stdin-filename %s -' : ' %s')
 endfunction
 
