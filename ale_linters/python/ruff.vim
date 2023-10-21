@@ -46,7 +46,7 @@ function! ale_linters#python#ruff#GetCommand(buffer, version) abort
     \   : ''
 
     " NOTE: ruff version `0.0.69` supports liniting input from stdin
-    " NOTE: ruff version `0.1.0` deprecates `--format text` 
+    " NOTE: ruff version `0.1.0` deprecates `--format text`
     return ale#Escape(l:executable) . l:exec_args
     \   . ale#Pad(ale#Var(a:buffer, 'python_ruff_options'))
     \   . (ale#semver#GTE(a:version, [0, 1, 0]) ? ' --output-format text' : ' --format text')

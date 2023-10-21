@@ -6,7 +6,7 @@ Before:
   call ale#assert#SetUpLinterTest('python', 'ruff')
 
   let b:bin_dir = has('win32') ? 'Scripts' : 'bin'
-  let b:command_tail = ' --output-format text --stdin-filename %s -'
+  let b:command_tail = ' --format text --stdin-filename %s -'
 
   GivenCommandOutput ['ruff 0.0.83']
 
@@ -28,12 +28,18 @@ Execute(ruff should run with the file path of buffer in old versions):
   AssertLinterCwd expand('%:p:h')
   AssertLinter 'ruff', ale#Escape('ruff') . b:command_tail[:-23] . ' %s'
 
+Execute(ruff should run with the --output-format flag in new versions):
+  GivenCommandOutput ['ruff 0.1.0']
+
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'ruff', ale#Escape('ruff') . ' --output-format text --stdin-filename %s -'
+
 Execute(ruff should run with the stdin in new enough versions):
   GivenCommandOutput ['ruff 0.0.83']
 
   AssertLinterCwd expand('%:p:h')
   AssertLinter 'ruff', ale#Escape('ruff') . b:command_tail[:-3] . ' -'
-  " AssertLinter 'ruff', ale#Escape('ruff') . b:command_tail[:-3] . '--output-format text -'
+  " AssertLinter 'ruff', ale#Escape('ruff') . b:command_tail[:-3] . '--format text -'
 
 Execute(The option for disabling changing directories should work):
   let g:ale_python_ruff_change_directory = 0
