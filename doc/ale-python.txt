@@ -1323,7 +1323,7 @@ g:ale_python_ruff_auto_poetry                   *g:ale_python_ruff_auto_poetry*
 
 
 ===============================================================================
-ruff-format                                            *ale-python-fuff-format*
+ruff-format                                            *ale-python-ruff-format*
 
 g:ale_python_ruff_format_change_directory
                                     *g:ale_python_ruff_format_change_directory*

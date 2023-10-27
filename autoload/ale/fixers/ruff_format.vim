@@ -52,14 +52,14 @@ function! ale#fixers#ruff_format#Fix(buffer) abort
 
     let l:options = ale#Var(a:buffer, 'python_ruff_format_options')
 
-    if !empty(l:options)
-        call add(l:cmd, l:options)
-    endif
-
     " when --stdin-filename present, ruff will use it for proj root resolution
     " https://github.com/charliermarsh/ruff/pull/1281
     let l:fname = expand('#' . a:buffer . '...')
     call add(l:cmd, 'format')
+
+    if !empty(l:options)
+        call add(l:cmd, l:options)
+    endif
 
     call add(l:cmd, '--stdin-filename '.ale#Escape(ale#path#Simplify(l:fname)))
 
