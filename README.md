@@ -233,7 +233,7 @@ See `:help ale-symbol-search` for more information.
 
 ### Refactoring: Rename, Actions
 
-ALE supports renaming symbols in symbols in code such as variables or class
+ALE supports renaming symbols in code such as variables or class
 names with the `ALERename` command.
 
 `ALEFileRename` will rename file and fix import paths (tsserver
