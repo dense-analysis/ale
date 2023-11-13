@@ -28,6 +28,12 @@ Execute(ruff should run with the file path of buffer in old versions):
   AssertLinterCwd expand('%:p:h')
   AssertLinter 'ruff', ale#Escape('ruff') . b:command_tail[:-23] . ' %s'
 
+Execute(ruff should run with the --output-format flag in new versions):
+  GivenCommandOutput ['ruff 0.1.0']
+
+  AssertLinterCwd expand('%:p:h')
+  AssertLinter 'ruff', ale#Escape('ruff') . ' --output-format text --stdin-filename %s -'
+
 Execute(ruff should run with the stdin in new enough versions):
   GivenCommandOutput ['ruff 0.0.83']
 
