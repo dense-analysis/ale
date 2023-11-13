@@ -514,6 +514,7 @@ formatting.
   * [refurb](https://github.com/dosisod/refurb) :floppy_disk:
   * [reorder-python-imports](https://github.com/asottile/reorder_python_imports)
   * [ruff](https://github.com/charliermarsh/ruff)
+  * [ruff-format](https://docs.astral.sh/ruff/formatter/)
   * [unimport](https://github.com/hakancelik96/unimport)
   * [vulture](https://github.com/jendrikseipp/vulture) :warning: :floppy_disk:
   * [yapf](https://github.com/google/yapf)
