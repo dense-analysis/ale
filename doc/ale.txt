@@ -3303,6 +3303,7 @@ documented in additional help files.
     refurb................................|ale-python-refurb|
     reorder-python-imports................|ale-python-reorder_python_imports|
     ruff..................................|ale-python-ruff|
+    ruff-format...........................|ale-python-ruff-format|
     unimport..............................|ale-python-unimport|
     vulture...............................|ale-python-vulture|
     yapf..................................|ale-python-yapf|

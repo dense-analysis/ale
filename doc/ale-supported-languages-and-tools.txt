@@ -505,6 +505,7 @@ Notes:
   * `refurb`
   * `reorder-python-imports`
   * ruff
+  * ruff-format
   * `unimport`
   * `vulture`!!
   * `yapf`
