@@ -13,12 +13,12 @@ Execute(The ormolu callback should return the correct default values):
   \ ale#fixers#ormolu#Fix(bufnr(''))
 
 Execute(The ormolu executable and options should be configurable):
-  let g:ale_nix_nixpkgsfmt_executable = '/path/to/ormolu'
-  let g:ale_nix_nixpkgsfmt_options = '-h'
+  let g:ale_haskell_ormolu_executable = '/path/to/ormolu'
+  let g:ale_haskell_ormolu_options = '-h'
 
   AssertEqual
   \ {
   \   'command': ale#Escape('/path/to/ormolu')
   \     . ' -h',
   \ },
-  \ ale#fixers#nixpkgsfmt#Fix(bufnr(''))
+  \ ale#fixers#ormolu#Fix(bufnr(''))
