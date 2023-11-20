@@ -373,8 +373,8 @@ formatting.
   * [alex](https://github.com/get-alex/alex)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [languagetool](https://languagetool.org/) :floppy_disk:
-  * https://github.com/DavidAnson/markdownlint :floppy_disk:
-  * https://github.com/markdownlint/markdownlint
+  * [DavidAnson/markdownlint](https://github.com/DavidAnson/markdownlint) :floppy_disk:
+  * [markdownlint/markdownlint](https://github.com/markdownlint/markdownlint)
   * [marksman](https://github.com/artempyanykh/marksman)
   * [pandoc](https://pandoc.org)
   * [prettier](https://github.com/prettier/prettier)
