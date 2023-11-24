@@ -2918,6 +2918,7 @@ documented in additional help files.
     astyle................................|ale-c-astyle|
     cc....................................|ale-c-cc|
     ccls..................................|ale-c-ccls|
+    clangcheck............................|ale-c-clangcheck|
     clangd................................|ale-c-clangd|
     clang-format..........................|ale-c-clangformat|
     clangtidy.............................|ale-c-clangtidy|
