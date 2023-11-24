@@ -16,6 +16,8 @@ function! ale_linters#tex#chktex#GetCommand(buffer) abort
     let l:command = ale#Var(a:buffer, 'tex_chktex_executable')
     " Avoid bug when used without -p (last warning has gibberish for a filename)
     let l:command .= ' -v0 -p stdin -q'
+    " Avoid bug of reporting wrong column when using tabs (issue #723)
+    let l:command .= ' -s TabSize=1'
 
     if !empty(l:chktex_config)
         let l:command .= ' -l ' . ale#Escape(l:chktex_config)
