@@ -381,6 +381,8 @@ Notes:
   * `mmc`!!
 * NASM
   * `nasm`!!
+* Nickel
+  * `nickel_format`
 * Nim
   * `nim check`!!
   * `nimlsp`

@@ -1,0 +1,27 @@
+Before:
+  Save g:ale_nickel_nickel_format_executable
+  Save g:ale_nickel_nickel_format_options
+  Save &l:expandtab
+  Save &l:shiftwidth
+  Save &l:tabstop
+
+After:
+  Restore
+
+Execute(The nickel_format callback should return 'nickel format' as default command):
+  setlocal noexpandtab
+  Assert
+  \ ale#fixers#nickel_format#Fix(bufnr('')).command =~# '^' . ale#Escape('nickel') . ' format',
+  \ "Default command name is expected to be 'nickel format'"
+
+Execute(The nickel executable and options should be configurable):
+  let g:ale_nickel_nickel_format_executable = 'foobar'
+  let g:ale_nickel_nickel_format_options = '--some-option'
+
+  AssertEqual
+  \ {
+  \   'command': ale#Escape('foobar')
+  \     . ' format'
+  \     . ' --some-option',
+  \ },
+  \ ale#fixers#nickel_format#Fix(bufnr(''))
