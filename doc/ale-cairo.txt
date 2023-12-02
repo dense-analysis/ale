@@ -17,8 +17,8 @@ g:ale_cairo_starknet_executable               *g:ale_cairo_starknet_executable*
 ===============================================================================
 scarb                                                         *ale-cairo-scarb*
 
-g:ale_cairo_scarb_executable                  *g:ale_cairo_scarb_executable*
-                                              *b:ale_cairo_scarb_executable*
+g:ale_cairo_scarb_executable                     *g:ale_cairo_scarb_executable*
+                                                 *b:ale_cairo_scarb_executable*
 
   Default: `scarb-build`
 
