@@ -13,3 +13,15 @@ g:ale_cairo_starknet_executable               *g:ale_cairo_starknet_executable*
   Overrides the starknet-compile binary after installing the cairo-language.
 
   For more information read 'https://starknet.io/docs/quickstart.html'
+
+===============================================================================
+scarb                                                         *ale-cairo-scarb*
+
+g:ale_cairo_scarb_executable                  *g:ale_cairo_scarb_executable*
+                                              *b:ale_cairo_scarb_executable*
+
+  Default: `scarb-build`
+
+  Uses scarb to compile Cairo projects.
+
+  For more information read 'https://docs.swmansion.com/scarb/'
