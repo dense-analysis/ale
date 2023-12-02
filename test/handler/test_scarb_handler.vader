@@ -1,0 +1,20 @@
+Before:
+  runtime ale_linters/cairo/scarb.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(Check scarb output parsing):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 40,
+  \     'col': 48,
+  \     'text': 'Skipped tokens. Expected: Const/Module/Use/FreeFunction/ExternFunction/ExternType/Trait/Impl/Struct/Enum/TypeAlias/InlineMacro or an attribute.',
+  \     'type': 'E',
+  \   },
+  \ ],
+  \ ale#handlers#cairo#HandleCairoErrors(bufnr(''), [
+  \   'error: Skipped tokens. Expected: Const/Module/Use/FreeFunction/ExternFunction/ExternType/Trait/Impl/Struct/Enum/TypeAlias/InlineMacro or an attribute.',
+  \   '  --> /path/to/file.cairo:40:48',
+  \ ])
