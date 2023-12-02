@@ -1,5 +1,4 @@
-" Author: swan_of_bodom <swan_of_bodom@hotmail.com>,
-"
+" Author: 0xhyoga <0xhyoga@gmx.com>,
 " Description: This file implements handlers specific to Cairo
 "
 function! ale#handlers#cairo#HandleCairoErrors(buffer, lines) abort
