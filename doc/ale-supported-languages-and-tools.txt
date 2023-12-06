@@ -572,6 +572,7 @@ Notes:
   * `solargraph`
   * `sorbet`
   * `standardrb`
+  * `steep`
   * `syntax_tree`
 * Rust
   * `cargo`!!

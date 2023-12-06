@@ -580,6 +580,7 @@ formatting.
   * [rufo](https://github.com/ruby-formatter/rufo)
   * [solargraph](https://solargraph.org)
   * [sorbet](https://github.com/sorbet/sorbet)
+  * [steep](https://github.com/soutaro/steep)
   * [standardrb](https://github.com/testdouble/standard)
   * [syntax_tree](https://github.com/ruby-syntax-tree/syntax_tree)
 * Rust
