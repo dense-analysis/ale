@@ -17,13 +17,34 @@ function! ale_linters#ruby#steep#FindRoot(buffer) abort
     return ''
 endfunction
 
+" Rename path relative to root
+function! ale_linters#ruby#steep#RelativeToRoot(buffer, path) abort
+    return substitute(a:path, ale_linters#ruby#steep#FindRoot(a:buffer) . '/', '', '')
+endfunction
+
 function! ale_linters#ruby#steep#GetCommand(buffer) abort
     let l:executable = ale#Var(a:buffer, 'ruby_steep_executable')
+
+    " steep check needs to apply some config from the file path so:
+    " - steep check can't use stdin (no path)
+    " - steep check can't use %t (path outside of project)
+    " => we can only use %s
+
+    " somehow :ALEInfo shows that ALE still appends '< %t' to the command
+    " => luckily steep check ignores stdin
+
+    " somehow steep has a problem with absolute path to file but a path
+    " relative to Steepfile directory works:
+    " see https://github.com/soutaro/steep/pull/975
+    " => change to Steepfile directory and remove leading path
+
+    let l:buffer_filename = fnamemodify(bufname(a:buffer), ':p')
+    let l:buffer_filename = fnameescape(l:buffer_filename)
 
     return ale#ruby#EscapeExecutable(l:executable, 'steep')
     \   . ' check '
     \   . ale#Var(a:buffer, 'ruby_steep_options')
-    \   . ' %s'
+    \   . ' ''' . ale_linters#ruby#steep#RelativeToRoot(a:buffer, l:buffer_filename) . ''''
 endfunction
 
 function! ale_linters#ruby#steep#GetType(severity) abort
