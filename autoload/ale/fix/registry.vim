@@ -635,7 +635,12 @@ let s:default_registry = {
 \       'function': 'ale#fixers#erbformatter#Fix',
 \       'suggested_filetypes': ['eruby'],
 \       'description': 'Apply erb-formatter -w to eruby/erb files.',
-\   }
+\   },
+\   'nickel_format': {
+\       'function': 'ale#fixers#nickel_format#Fix',
+\       'suggested_filetypes': ['nickel'],
+\       'description': 'Fix nickel files with nickel format',
+\   },
 \}
 
 " Reset the function registry to the default entries.

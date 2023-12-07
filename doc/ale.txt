@@ -3188,6 +3188,8 @@ documented in additional help files.
     mmc...................................|ale-mercury-mmc|
   nasm....................................|ale-nasm-options|
     nasm..................................|ale-nasm-nasm|
+  nickel..................................|ale-nickel-options|
+    nickel_format.........................|ale-nickel-nickel-format|
   nim.....................................|ale-nim-options|
     nimcheck..............................|ale-nim-nimcheck|
     nimlsp................................|ale-nim-nimlsp|
