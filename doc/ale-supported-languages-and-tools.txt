@@ -67,6 +67,7 @@ Notes:
   * `ccls`
   * `clang` (`cc`)
   * `clang-format`
+  * `clangcheck`!!
   * `clangd`
   * `clangtidy`!!
   * `cppcheck`
