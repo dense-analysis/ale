@@ -292,6 +292,7 @@ Notes:
   * `javalsp`
   * `uncrustify`
 * JavaScript
+  * `biome`
   * `clang-format`
   * `cspell`
   * `deno`
@@ -653,6 +654,7 @@ Notes:
 * TOML
   * `dprint`
 * TypeScript
+  * `biome`
   * `cspell`
   * `deno`
   * `dprint`
