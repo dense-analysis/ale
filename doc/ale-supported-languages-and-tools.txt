@@ -102,6 +102,7 @@ Notes:
   * `gcc` (`cc`)
   * `uncrustify`
 * Cairo
+  * `scarb`!!
   * `starknet`
 * Chef
   * `cookstyle`
