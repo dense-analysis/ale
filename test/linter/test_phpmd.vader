@@ -9,4 +9,4 @@ Execute(Custom executables should be used for the executable and command):
 
   AssertLinter 'phpmd_test',
   \ ale#Escape('phpmd_test')
-  \ . ' %s text cleancode,codesize,controversial,design,naming,unusedcode --ignore-violations-on-exit %t'
+  \ . ' %t text cleancode,codesize,controversial,design,naming,unusedcode --ignore-violations-on-exit'
