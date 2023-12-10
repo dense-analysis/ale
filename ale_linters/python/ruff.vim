@@ -65,7 +65,7 @@ function! ale_linters#python#ruff#Handle(buffer, lines) abort
         \   'end_col': l:item.end_location.column - 1,
         \   'code': l:item.code,
         \   'text': l:item.message,
-        \   'type': l:item.code =~ '\vE\d+' ? 'E' : 'W',
+        \   'type': l:item.code =~? '\vE\d+' ? 'E' : 'W',
         \})
     endfor
 
