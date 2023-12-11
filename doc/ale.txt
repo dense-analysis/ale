@@ -3350,6 +3350,7 @@ documented in additional help files.
     sorbet................................|ale-ruby-sorbet|
     standardrb............................|ale-ruby-standardrb|
     syntax_tree...........................|ale-ruby-syntax_tree|
+    rubyfmt...............................|ale-ruby-rubyfmt|
   rust....................................|ale-rust-options|
     analyzer..............................|ale-rust-analyzer|
     cargo.................................|ale-rust-cargo|
