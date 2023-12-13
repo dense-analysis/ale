@@ -1,0 +1,16 @@
+Before:
+  call ale#assert#SetUpLinterTest('odin', 'ols')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default executable path should be correct):
+  AssertLinter 'ols', ale#Escape('ols')
+
+Execute(The LSP values should be set correctly):
+  call ale#test#SetFilename('../test-files/odin/main.odin')
+
+  AssertLSPLanguage 'odin'
+  AssertLSPOptions {}
+  AssertLSPConfig {}
+  AssertLSPProject '.'

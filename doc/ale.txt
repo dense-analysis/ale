@@ -3220,6 +3220,8 @@ documented in additional help files.
     ols...................................|ale-ocaml-ols|
     ocamlformat...........................|ale-ocaml-ocamlformat|
     ocp-indent............................|ale-ocaml-ocp-indent|
+  odin....................................|ale-odin-options|
+    ols...................................|ale-odin-ols|
   openapi.................................|ale-openapi-options|
     ibm_validator.........................|ale-openapi-ibm-validator|
     prettier..............................|ale-openapi-prettier|

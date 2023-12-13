@@ -418,6 +418,8 @@ Notes:
   * `ocamllsp`
   * `ocp-indent`
   * `ols`
+* Odin
+  * `ols`
 * OpenApi
   * `ibm_validator`
   * `prettier`
