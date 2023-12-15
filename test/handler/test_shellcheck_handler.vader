@@ -13,6 +13,7 @@ Execute(The shellcheck handler should handle basic errors or warnings <0.7.0):
   \     'type': 'W',
   \     'text': 'In POSIX sh, ''let'' is not supported.',
   \     'code': 'SC2039',
+  \     'detail': 'In POSIX sh, ''let'' is not supported.' . "\n\nFor more information:\n  https://www.shellcheck.net/wiki/" . 'SC2039',
   \   },
   \   {
   \     'lnum': 2,
@@ -20,6 +21,7 @@ Execute(The shellcheck handler should handle basic errors or warnings <0.7.0):
   \     'type': 'E',
   \     'text': 'Don''t put spaces around the = in assignments.',
   \     'code': 'SC1068',
+  \     'detail': 'Don''t put spaces around the = in assignments.' . "\n\nFor more information:\n  https://www.shellcheck.net/wiki/" . 'SC1068',
   \   },
   \ ],
   \ ale#handlers#shellcheck#Handle(bufnr(''), [0, 6, 0], [
@@ -36,6 +38,7 @@ Execute(The shellcheck handler should handle notes <0.7.0):
   \     'type': 'I',
   \     'text': 'Double quote to prevent globbing and word splitting.',
   \     'code': 'SC2086',
+  \     'detail': 'Double quote to prevent globbing and word splitting.' . "\n\nFor more information:\n  https://www.shellcheck.net/wiki/" . 'SC2086',
   \   },
   \ ],
   \ ale#handlers#shellcheck#Handle(bufnr(''), [0, 6, 0], [
