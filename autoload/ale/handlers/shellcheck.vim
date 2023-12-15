@@ -92,6 +92,7 @@ function! s:HandleShellcheckJSON(buffer, lines) abort
         \   'type': l:type,
         \   'text': l:error['message'],
         \   'code': 'SC' . l:error['code'],
+        \   'detail': l:error['message'] . "\n\nFor more information:\n  https://www.shellcheck.net/wiki/SC" . l:error['code'],
         \}
 
         if has_key(l:error, 'column')
