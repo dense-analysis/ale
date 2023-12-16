@@ -1,11 +1,8 @@
 " Author: Andrew Balmos - <andrew@balmos.org>
 " Description: chktex for LaTeX files
 
-let g:ale_tex_chktex_executable =
-\   get(g:, 'ale_tex_chktex_executable', 'chktex')
-
-let g:ale_tex_chktex_options =
-\   get(g:, 'ale_tex_chktex_options', '-I')
+call ale#Set('tex_chktex_executable', 'chktex')
+call ale#Set('tex_chktex_options', '-I')
 
 function! ale_linters#tex#chktex#GetCommand(buffer) abort
     " Check for optional .chktexrc
@@ -50,7 +47,7 @@ endfunction
 
 call ale#linter#Define('tex', {
 \   'name': 'chktex',
-\   'executable': 'chktex',
+\   'executable': {b -> ale#Var(b, 'tex_chktex_executable')},
 \   'command': function('ale_linters#tex#chktex#GetCommand'),
 \   'callback': 'ale_linters#tex#chktex#Handle'
 \})
