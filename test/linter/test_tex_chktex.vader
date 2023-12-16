@@ -4,17 +4,19 @@ Before:
 After:
   call ale#assert#TearDownLinterTest()
 
-Execute(Executable should default to chktex):
+Execute(The default command should be correct):
   AssertLinter 'chktex',
   \ ale#Escape('chktex')
-  \   . ' -v0 -p stdin -q -s TabSize=1 -I'
+  \   . ' -v0 -p stdin -q -s TabSize=1'
+  \   . ' -I'
 
 Execute(The executable should be configurable):
   let g:ale_tex_chktex_executable = 'bin/foo'
 
   AssertLinter 'bin/foo',
   \ ale#Escape('bin/foo')
-  \   . ' -v0 -p stdin -q -s TabSize=1 -I'
+  \   . ' -v0 -p stdin -q -s TabSize=1'
+  \   . ' -I'
 
 Execute(The options should be configurable):
   let b:ale_tex_chktex_options = '--something'
