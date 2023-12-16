@@ -1,0 +1,25 @@
+Before:
+  call ale#assert#SetUpLinterTest('tex', 'chktex')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(Executable should default to chktex):
+  AssertLinter 'chktex',
+  \ ale#Escape('chktex')
+  \   . ' -v0 -p stdin -q -s TabSize=1 -I'
+
+Execute(The executable should be configurable):
+  let g:ale_tex_chktex_executable = 'bin/foo'
+
+  AssertLinter 'bin/foo',
+  \ ale#Escape('bin/foo')
+  \   . ' -v0 -p stdin -q -s TabSize=1 -I'
+
+Execute(The options should be configurable):
+  let b:ale_tex_chktex_options = '--something'
+
+  AssertLinter 'chktex',
+  \ ale#Escape('chktex')
+  \   . ' -v0 -p stdin -q -s TabSize=1'
+  \   . ' --something'
