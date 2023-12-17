@@ -47,3 +47,118 @@ Execute(Output with some errors should be parsed correctly):
   \     ]}}
   \ },
   \)])
+
+Execute(Valid file mapped output with some errors should be parsed correctly):
+  call ale#test#SetFilename('phpstan-test-files/foo/test.php')
+  let g:ale_filename_mappings = {
+  \  'phpstan': [
+  \    [g:dir . '/phpstan-test-files/foo', '/var/www' ],
+  \  ],
+  \}
+
+  AssertEqual
+  \ [
+  \   {
+  \       'lnum': 250,
+  \       'text': 'Call to function is_null() with mixed will always evaluate to false.',
+  \       'type': 'E'
+  \   },
+  \   {
+  \       'lnum': 18,
+  \       'text': 'Instantiated class security not found.',
+  \       'type': 'E'
+  \   },
+  \   {
+  \       'lnum': 275,
+  \       'text': 'Ternary operator condition is always true.',
+  \       'type': 'E'
+  \   }
+  \ ],
+  \ ale_linters#php#phpstan#Handle(bufnr(''), [
+  \   json_encode({
+  \     "totals":{"errors": 0, "file_errors": 3},
+  \     "files":{"/var/www/test.php":{"errors":3,"messages":[
+  \       {
+  \         "message": "Call to function is_null() with mixed will always evaluate to false.",
+  \         "line": 250,
+  \         "ignorable": v:true
+  \       },
+  \       {
+  \         "message": "Instantiated class security not found.",
+  \         "line": 18,
+  \         "ignorable": v:true,
+  \         "tip": "Learn more at https://phpstan.org/user-guide/discovering-symbols"
+  \       },
+  \       {
+  \         "message": "Ternary operator condition is always true.",
+  \         "line": 275,
+  \         "ignorable": v:true,
+  \         "identifier": "deadCode.ternaryConstantCondition"
+  \       }
+  \     ]}},
+  \     "errors": []
+  \   })
+  \ ])
+
+Execute(Invalid file mapped output, with some errors throws an exception):
+  call ale#test#SetFilename('phpstan-test-files/foo/test.php')
+  let g:ale_filename_mappings = {
+  \  'phpstan': [
+  \    [expand('%:p') . '/phpstan-test-files/foo', '/var/www' ],
+  \  ],
+  \}
+
+  AssertThrows call vader#assert#equal(
+  \ [
+  \   {
+  \       'lnum': 250,
+  \       'text': 'Call to function is_null() with mixed will always evaluate to false.',
+  \       'type': 'E'
+  \   },
+  \   {
+  \       'lnum': 18,
+  \       'text': 'Instantiated class security not found.',
+  \       'type': 'E'
+  \   },
+  \   {
+  \       'lnum': 275,
+  \       'text': 'Ternary operator condition is always true.',
+  \       'type': 'E'
+  \   }
+  \ ],
+  \ ale_linters#php#phpstan#Handle(bufnr(''), [
+  \   json_encode({
+  \     "totals":{"errors": 0, "file_errors": 3},
+  \     "files":{"/var/www/test.php":{"errors":3,"messages":[
+  \       {
+  \         "message": "Call to function is_null() with mixed will always evaluate to false.",
+  \         "line": 250,
+  \         "ignorable": v:true
+  \       },
+  \       {
+  \         "message": "Instantiated class security not found.",
+  \         "line": 18,
+  \         "ignorable": v:true,
+  \         "tip": "Learn more at https://phpstan.org/user-guide/discovering-symbols"
+  \       },
+  \       {
+  \         "message": "Ternary operator condition is always true.",
+  \         "line": 275,
+  \         "ignorable": v:true,
+  \         "identifier": "deadCode.ternaryConstantCondition"
+  \       }
+  \     ]}},
+  \     "errors": []
+  \   })
+  \ ])
+  \)
+
+  if has('nvim') == v:false && v:version == 800
+    AssertEqual
+    \  g:vader_exception,
+    \  'Vim(for):E716: Key not present in Dictionary: /testplugin/test/phpstan-test-files/foo/test.php'
+  else
+    AssertEqual
+    \  g:vader_exception,
+    \  'Vim(for):E716: Key not present in Dictionary: "/testplugin/test/phpstan-test-files/foo/test.php"'
+  endif
