@@ -57,7 +57,11 @@ function! ale_linters#php#phpstan#Handle(buffer, lines) abort
         return l:output
     endif
 
-    for l:err in l:res.files[expand('#' . a:buffer .':p')].messages
+    let l:file_mappings = ale#GetFilenameMappings(a:buffer, 'phpstan')
+
+    for l:err in l:res.files[
+    \   ale_linters#php#phpstan#Mapping(a:buffer, l:file_mappings)
+    \].messages
         call add(l:output, {
         \   'lnum': l:err.line,
         \   'text': l:err.message,
@@ -66,6 +70,19 @@ function! ale_linters#php#phpstan#Handle(buffer, lines) abort
     endfor
 
     return l:output
+endfunction
+
+function! ale_linters#php#phpstan#Mapping(buffer, file_mappings) abort
+    if empty(a:file_mappings)
+        let l:result = expand('#' . a:buffer .':p')
+    else
+        let l:result = ale#filename_mapping#Map(
+        \    expand('#' . a:buffer .':p'),
+        \   a:file_mappings
+        \)
+    endif
+
+    return l:result
 endfunction
 
 function! ale_linters#php#phpstan#GetCwd(buffer) abort
