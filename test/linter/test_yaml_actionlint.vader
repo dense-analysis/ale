@@ -1,9 +1,8 @@
 Before:
-  runtime! ale/handlers/actionlint.vim
+  call ale#assert#SetUpLinterTest('yaml', 'actionlint')
 
 After:
-  unlet! g:ale_yaml_actionlint_options
-  call ale#linter#Reset()
+  call ale#assert#TearDownLinterTest()
 
 Execute(Problems should be parsed correctly for actionlint):
   AssertEqual
@@ -26,6 +25,21 @@ Execute(Problems should be parsed correctly for actionlint):
   \ ale_linters#yaml#actionlint#Handle(bufnr(''), [
   \   '.codecov.yaml:2:1: "jobs" section is missing in workflow [syntax-check]',
   \   'workflow_call_event.yaml:56:23: property "unknown_input" is not defined in object type {input7: bool; input0: any; input1: any; input2: string; input3: any; input4: any; input5: number; input6: number} [expression]',
+  \ ])
+
+Execute(Shellcheck issues should be reported at the line they appear):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 19,
+  \     'col': 9,
+  \     'type': 'E',
+  \     'text': 'Double quote to prevent globbing and word splitting',
+  \     'code': 'shellcheck SC2086',
+  \   },
+  \ ],
+  \ ale_linters#yaml#actionlint#Handle(bufnr(''), [
+  \   'validate.yml:19:9: shellcheck reported issue in this script: SC2086:info:1:15: Double quote to prevent globbing and word splitting [shellcheck]'
   \ ])
 
 Execute(Command should always have -no-color and -oneline options):
