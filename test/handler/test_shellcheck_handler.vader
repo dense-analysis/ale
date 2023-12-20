@@ -4,7 +4,7 @@ Before:
 After:
   call ale#linter#Reset()
 
-Execute(The shellcheck handler should handle basic errors or warnings):
+Execute(The shellcheck handler should handle basic errors or warnings <0.7.0):
   AssertEqual
   \ [
   \   {
@@ -22,12 +22,12 @@ Execute(The shellcheck handler should handle basic errors or warnings):
   \     'code': 'SC1068',
   \   },
   \ ],
-  \ ale#handlers#shellcheck#Handle(bufnr(''), [
+  \ ale#handlers#shellcheck#Handle(bufnr(''), [0, 6, 0], [
   \   '-:2:1: warning: In POSIX sh, ''let'' is not supported. [SC2039]',
   \   '-:2:3: error: Don''t put spaces around the = in assignments. [SC1068]',
   \ ])
 
-Execute(The shellcheck handler should handle notes):
+Execute(The shellcheck handler should handle notes <0.7.0):
   AssertEqual
   \ [
   \   {
@@ -38,6 +38,108 @@ Execute(The shellcheck handler should handle notes):
   \     'code': 'SC2086',
   \   },
   \ ],
-  \ ale#handlers#shellcheck#Handle(bufnr(''), [
+  \ ale#handlers#shellcheck#Handle(bufnr(''), [0, 6, 0], [
   \   '-:3:3: note: Double quote to prevent globbing and word splitting. [SC2086]',
+  \ ])
+
+Execute(The shellcheck handler should handle basic errors or warnings >=0.7.0):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 2,
+  \     'end_lnum': 3,
+  \     'col': 1,
+  \     'end_col': 1,
+  \     'type': 'W',
+  \     'text': 'In POSIX sh, ''let'' is not supported.',
+  \     'code': 'SC2039',
+  \   },
+  \   {
+  \     'lnum': 2,
+  \     'end_lnum': 3,
+  \     'col': 3,
+  \     'end_col': 3,
+  \     'type': 'E',
+  \     'text': 'Don''t put spaces around the = in assignments.',
+  \     'code': 'SC1068',
+  \   },
+  \ ],
+  \ ale#handlers#shellcheck#Handle(bufnr(''), [0, 7, 0], [
+  \   '{
+  \     "comments": [
+  \       {
+  \         "file":"-",
+  \         "line":2,
+  \         "endLine":3,
+  \         "column":1,
+  \         "endColumn":2,
+  \         "level":"warning",
+  \         "code":2039,
+  \         "message":"In POSIX sh, ''let'' is not supported.",
+  \         "fix": null
+  \       },
+  \       {
+  \         "file":"-",
+  \         "line":2,
+  \         "endLine":3,
+  \         "column":3,
+  \         "endColumn":4,
+  \         "level":"error",
+  \         "code":1068,
+  \         "message":"Don''t put spaces around the = in assignments.",
+  \         "fix": null
+  \       }
+  \     ]
+  \   }'
+  \ ])
+
+Execute(The shellcheck handler should handle info and style >=0.7.0):
+  AssertEqual
+  \ [
+  \   {
+  \     'lnum': 3,
+  \     'end_lnum': 5,
+  \     'col': 3,
+  \     'end_col': 4,
+  \     'type': 'I',
+  \     'text': 'Double quote to prevent globbing and word splitting.',
+  \     'code': 'SC2086',
+  \   },
+  \   {
+  \     'lnum': 13,
+  \     'end_lnum': 13,
+  \     'col': 17,
+  \     'end_col': 27,
+  \     'type': 'I',
+  \     'text': '$/${} is unnecessary on arithmetic variables.',
+  \     'code': 'SC2004',
+  \   }
+  \ ],
+  \ ale#handlers#shellcheck#Handle(bufnr(''), [0, 7, 0], [
+  \   '{
+  \     "comments": [
+  \       {
+  \         "file": "-",
+  \         "line": 3,
+  \         "endLine": 5,
+  \         "column": 3,
+  \         "endColumn": 5,
+  \         "level": "info",
+  \         "code": 2086,
+  \         "message": "Double quote to prevent globbing and word splitting.",
+  \         "fix": null
+  \       },
+  \       {
+  \         "file": "-",
+  \         "line": 13,
+  \         "endLine": 13,
+  \         "column": 17,
+  \         "endColumn": 28,
+  \         "level": "style",
+  \         "code": 2004,
+  \         "message": "$/${} is unnecessary on arithmetic variables.",
+  \         "fix": null
+  \       }
+  \     ]
+  \   }'
   \ ])
