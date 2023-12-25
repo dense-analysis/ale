@@ -12,7 +12,7 @@ endfunction
 
 call ale#linter#Define('zig', {
 \   'name': 'zls',
-\   'lsp': 'stdio',
+\   'lsp': 'zls',
 \   'lsp_config': {b -> ale#Var(b, 'zig_zls_config')},
 \   'executable': {b -> ale#Var(b, 'zig_zls_executable')},
 \   'command': '%e',
