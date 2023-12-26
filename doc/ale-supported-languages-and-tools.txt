@@ -203,6 +203,7 @@ Notes:
 * Git Commit Messages
   * `gitlint`
 * Gleam
+  * `gleam_format`
   * `gleamlsp`
 * GLSL
   * `glslang`

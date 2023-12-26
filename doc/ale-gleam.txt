@@ -2,10 +2,17 @@
 ALE Gleam Integration                                       *ale-gleam-options*
                                                         *ale-integration-gleam*
 
-===============================================================================
-Integration Information
 
-  Currently, the only supported linter for gleam is gleamlsp.
+===============================================================================
+gleam_format                                           *ale-gleam-gleam_format*
+
+g:ale_gleam_gleam_format_executable       *g:ale_gleam_gleam_format_executable*
+                                          *b:ale_gleam_gleam_format_executable*
+  Type: |String|
+  Default: `'gleam'`
+
+  This variable can be modified to change the executable path for
+  `gleam format`.
 
 
 ===============================================================================
