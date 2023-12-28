@@ -20,6 +20,8 @@ Before:
   let g:ale_cspell_use_global = 0
   let g:ale_cspell_options = ''
 
+  set filetype=tex
+
 After:
   call ale#assert#TearDownLinterTest()
 
@@ -27,7 +29,7 @@ Execute(The global executable should be used when the local one cannot be found)
   AssertLinter
   \  'cspell',
   \  ale#Escape('cspell')
-  \  . ' lint --no-color --no-progress --no-summary -- stdin'
+  \  . ' lint --no-color --no-progress --no-summary --language-id="tex" -- stdin'
 
 Execute(Should use the node_modules/.bin executable if available):
   call ale#test#SetFilename('../test-files/cspell/node-modules/test.tex')
@@ -37,7 +39,7 @@ Execute(Should use the node_modules/.bin executable if available):
   \    . '/../test-files/cspell/node-modules/node_modules/.bin/cspell'),
   \  ale#Escape(ale#path#Simplify(g:dir
   \    . '/../test-files/cspell/node-modules/node_modules/.bin/cspell'))
-  \  . ' lint --no-color --no-progress --no-summary -- stdin'
+  \  . ' lint --no-color --no-progress --no-summary --language-id="tex" -- stdin'
 
 Execute(Should use the node_modules/cspell executable if available):
   call ale#test#SetFilename('../test-files/cspell/node-modules-2/test.tex')
@@ -48,7 +50,7 @@ Execute(Should use the node_modules/cspell executable if available):
   \  (has('win32') ? 'node.exe ': '')
   \  . ale#Escape(ale#path#Simplify(g:dir
   \    . '/../test-files/cspell/node-modules-2/node_modules/cspell/bin.js'))
-  \  . ' lint --no-color --no-progress --no-summary -- stdin'
+  \  . ' lint --no-color --no-progress --no-summary --language-id="tex" -- stdin'
 
 Execute(Should let users configure a global executable and override local paths):
   let g:ale_cspell_executable = '/path/to/custom/cspell'
@@ -57,7 +59,7 @@ Execute(Should let users configure a global executable and override local paths)
   AssertLinter
   \  '/path/to/custom/cspell',
   \  ale#Escape('/path/to/custom/cspell')
-  \  . ' lint --no-color --no-progress --no-summary -- stdin'
+  \  . ' lint --no-color --no-progress --no-summary --language-id="tex" -- stdin'
 
 Execute(Additional cspell options should be configurable):
   call ale#test#SetFilename('../test-files/dummy')
@@ -67,4 +69,12 @@ Execute(Additional cspell options should be configurable):
   AssertLinter
   \  'cspell',
   \  ale#Escape('cspell')
-  \  . ' lint --no-color --no-progress --no-summary --foobar -- stdin'
+  \  . ' lint --no-color --no-progress --no-summary --language-id="tex" --foobar -- stdin'
+
+Execute(The language id should not specified when filetype is empty):
+  set filetype=
+
+  AssertLinter
+  \  'cspell',
+  \  ale#Escape('cspell')
+  \  . ' lint --no-color --no-progress --no-summary -- stdin'
