@@ -1,16 +1,13 @@
 " Author: Adrian Zalewski <aazalewski@hotmail.com>
 " Description: Ember-template-lint for checking Handlebars files
 
-call ale#Set('handlebars_embertemplatelint_executable', 'ember-template-lint')
-call ale#Set('handlebars_embertemplatelint_use_global', get(g:, 'ale_use_global_executables', 0))
-
-function! ale_linters#javascript#embertemplatelint#GetExecutable(buffer) abort
+function! ale#handlers#embertemplatelint#GetExecutable(buffer) abort
     return ale#path#FindExecutable(a:buffer, 'handlebars_embertemplatelint', [
     \   'node_modules/.bin/ember-template-lint',
     \])
 endfunction
 
-function! ale_linters#javascript#embertemplatelint#GetCommand(buffer, version) abort
+function! ale#handlers#embertemplatelint#GetCommand(buffer, version) abort
     if ale#semver#GTE(a:version, [4, 0, 0])
         " --json was removed in favor of --format=json in ember-template-lint@4.0.0
         return '%e --format=json --filename %s'
@@ -19,16 +16,16 @@ function! ale_linters#javascript#embertemplatelint#GetCommand(buffer, version) a
     return '%e --json --filename %s'
 endfunction
 
-function! ale_linters#javascript#embertemplatelint#GetCommandWithVersionCheck(buffer) abort
+function! ale#handlers#embertemplatelint#GetCommandWithVersionCheck(buffer) abort
     return ale#semver#RunWithVersionCheck(
     \   a:buffer,
-    \   ale_linters#javascript#embertemplatelint#GetExecutable(a:buffer),
+    \   ale#handlers#embertemplatelint#GetExecutable(a:buffer),
     \   '%e --version',
-    \   function('ale_linters#javascript#embertemplatelint#GetCommand'),
+    \   function('ale#handlers#embertemplatelint#GetCommand'),
     \)
 endfunction
 
-function! ale_linters#javascript#embertemplatelint#Handle(buffer, lines) abort
+function! ale#handlers#embertemplatelint#Handle(buffer, lines) abort
     let l:output = []
     let l:json = ale#util#FuzzyJSONDecode(a:lines, {})
 
@@ -53,11 +50,17 @@ function! ale_linters#javascript#embertemplatelint#Handle(buffer, lines) abort
     return l:output
 endfunction
 
-call ale#linter#Define('javascript', {
-\   'name': 'embertemplatelint',
-\   'aliases': ['ember-template-lint'],
-\   'executable': function('ale_linters#javascript#embertemplatelint#GetExecutable'),
-\   'command': function('ale_linters#javascript#embertemplatelint#GetCommandWithVersionCheck'),
-\   'callback': 'ale_linters#javascript#embertemplatelint#Handle',
-\})
+function! ale#handlers#embertemplatelint#DefineLinter(filetype) abort
+    call ale#Set('handlebars_embertemplatelint_executable', 'ember-template-lint')
+    call ale#Set('handlebars_embertemplatelint_use_global', get(g:, 'ale_use_global_executables', 0))
+
+    call ale#linter#Define(a:filetype, {
+    \   'name': 'embertemplatelint',
+    \   'aliases': ['ember-template-lint'],
+    \   'executable': function('ale#handlers#embertemplatelint#GetExecutable'),
+    \   'command': function('ale#handlers#embertemplatelint#GetCommandWithVersionCheck'),
+    \   'callback': 'ale#handlers#embertemplatelint#Handle',
+    \})
+endfunction
+
 
