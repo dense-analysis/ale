@@ -7,7 +7,7 @@ function! ale#fixers#ormolu#GetExecutable(buffer) abort
     return ale#handlers#haskell_stack#EscapeExecutable(l:executable, 'ormolu')
 endfunction
 
-function! ale#fixers#ormolu#Fix(buffer) abort
+function! ale#fixers#ormolu#ApplyFixForVersion(buffer, version) abort
     let l:executable = ale#fixers#ormolu#GetExecutable(a:buffer)
     let l:options = ale#Var(a:buffer, 'haskell_ormolu_options')
 
@@ -22,4 +22,13 @@ function! ale#fixers#ormolu#Fix(buffer) abort
     \       . (empty(l:options) ? '' : ' ' . l:options)
     \       . l:args
     \}
+endfunction
+
+function! ale#fixers#ormolu#Fix(buffer) abort
+    return ale#semver#RunWithVersionCheck(
+    \   a:buffer,
+    \   ale#fixers#ormolu#GetExecutable(a:buffer),
+    \   '%e --version',
+    \   function('ale#fixers#ormolu#ApplyFixForVersion'),
+    \)
 endfunction
