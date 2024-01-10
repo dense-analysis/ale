@@ -11,10 +11,15 @@ function! ale#fixers#ormolu#Fix(buffer) abort
     let l:executable = ale#fixers#ormolu#GetExecutable(a:buffer)
     let l:options = ale#Var(a:buffer, 'haskell_ormolu_options')
 
+    if ale#semver#GTE(a:version, [0, 3, 0])
+        let l:args = ' --stdin-input-file %s'
+    else
+        let l:args = ' %s'
+    endif
+
     return {
     \   'command': l:executable
     \       . (empty(l:options) ? '' : ' ' . l:options)
-    \       . ' --stdin-input-file '
-    \       . ale#Escape(@%),
+    \       . l:args
     \}
 endfunction
