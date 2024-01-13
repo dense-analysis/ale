@@ -74,10 +74,10 @@ endfunction
 
 function! ale_linters#php#phpstan#Mapping(buffer, file_mappings) abort
     if empty(a:file_mappings)
-        let l:result = expand('#' . a:buffer .':p')
+        let l:result = ale#path#Simplify(expand('#' . a:buffer .':p'))
     else
         let l:result = ale#filename_mapping#Map(
-        \    expand('#' . a:buffer .':p'),
+        \   ale#path#Simplify(expand('#' . a:buffer .':p')),
         \   a:file_mappings
         \)
     endif
