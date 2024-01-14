@@ -3031,6 +3031,8 @@ documented in additional help files.
     fusion-lint...........................|ale-fuse-fusionlint|
   git commit..............................|ale-gitcommit-options|
     gitlint...............................|ale-gitcommit-gitlint|
+  gleam...................................|ale-gleam-options|
+    gleamlsp..............................|ale-gleam-gleamlsp|
   glsl....................................|ale-glsl-options|
     glslang...............................|ale-glsl-glslang|
     glslls................................|ale-glsl-glslls|

@@ -202,6 +202,8 @@ Notes:
   * `fusion-lint`
 * Git Commit Messages
   * `gitlint`
+* Gleam
+  * `gleamlsp`
 * GLSL
   * `glslang`
   * `glslls`

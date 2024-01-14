@@ -1,0 +1,15 @@
+Before:
+  call ale#assert#SetUpLinterTest('gleam', 'gleamlsp')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default executable path should be correct):
+  AssertLinter 'gleam', ale#Escape('gleam') . ' lsp'
+
+Execute(The project root should be detected correctly):
+  AssertLSPProject ''
+
+  call ale#test#SetFilename('../test-files/gleam/gleam.toml')
+
+  AssertLSPProject ale#path#Simplify(g:dir . '/../test-files/gleam')
