@@ -21,15 +21,27 @@ endfunction
 function! ale_linters#yaml#actionlint#Handle(buffer, lines) abort
     " Matches patterns line the following:
     ".github/workflows/main.yml:19:0: could not parse as YAML: yaml: line 19: mapping values are not allowed in this context [yaml-syntax]
-    let l:pattern = '\v^.*:(\d+):(\d+): (.+) \[(.+)\]$'
+    let l:pattern = '\v^.{-}:(\d+):(\d+): (.+) \[(.+)\]$'
     let l:output = []
 
+
     for l:match in ale#util#GetMatches(a:lines, l:pattern)
+        let l:code = l:match[4]
+        let l:text = l:match[3]
+
+        " Handle sub-linter errors like the following:
+        "validate.yml:19:9: shellcheck reported issue in this script: SC2086:info:1:15: Double quote to prevent globbing and word splitting [shellcheck]
+        if l:code is# 'shellcheck'
+            let l:shellcheck_match = matchlist(l:text, '\v^.+: (SC\d{4}):.+:\d+:\d+: (.+)$')
+            let l:text = l:shellcheck_match[2]
+            let l:code = 'shellcheck ' . l:shellcheck_match[1]
+        endif
+
         let l:item = {
         \   'lnum': l:match[1] + 0,
         \   'col': l:match[2] + 0,
-        \   'text': l:match[3],
-        \   'code': l:match[4],
+        \   'text': l:text,
+        \   'code': l:code,
         \   'type': 'E',
         \}
 
