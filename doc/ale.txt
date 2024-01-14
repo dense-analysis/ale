@@ -3116,6 +3116,7 @@ documented in additional help files.
     eclipselsp............................|ale-java-eclipselsp|
     uncrustify............................|ale-java-uncrustify|
   javascript..............................|ale-javascript-options|
+    biome.................................|ale-javascript-biome|
     clang-format..........................|ale-javascript-clangformat|
     cspell................................|ale-javascript-cspell|
     deno..................................|ale-javascript-deno|
@@ -3439,6 +3440,7 @@ documented in additional help files.
   toml....................................|ale-toml-options|
     dprint................................|ale-toml-dprint|
   typescript..............................|ale-typescript-options|
+    biome.................................|ale-typescript-biome|
     cspell................................|ale-typescript-cspell|
     deno..................................|ale-typescript-deno|
     dprint................................|ale-typescript-dprint|

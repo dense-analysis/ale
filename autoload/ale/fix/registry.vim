@@ -37,6 +37,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['bib'],
 \       'description': 'Format bib files using bibclean.',
 \   },
+\   'biome': {
+\       'function': 'ale#fixers#biome#Fix',
+\       'suggested_filetypes': ['javascript', 'typescript'],
+\       'description': 'Fix JavaScript and TypeScript using biome.',
+\   },
 \   'black': {
 \       'function': 'ale#fixers#black#Fix',
 \       'suggested_filetypes': ['python'],

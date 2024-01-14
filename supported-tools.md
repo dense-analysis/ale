@@ -301,6 +301,7 @@ formatting.
   * [javalsp](https://github.com/georgewfraser/vscode-javac)
   * [uncrustify](https://github.com/uncrustify/uncrustify)
 * JavaScript
+  * [biome](https://biomejs.dev/)
   * [clang-format](https://clang.llvm.org/docs/ClangFormat.html)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [deno](https://deno.land/)
@@ -662,6 +663,7 @@ formatting.
 * TOML
   * [dprint](https://dprint.dev)
 * TypeScript
+  * [biome](https://biomejs.dev/)
   * [cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell)
   * [deno](https://deno.land/)
   * [dprint](https://dprint.dev/)
