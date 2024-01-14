@@ -1,29 +1,27 @@
 " Author: Andrew Balmos - <andrew@balmos.org>
 " Description: chktex for LaTeX files
 
-let g:ale_tex_chktex_executable =
-\   get(g:, 'ale_tex_chktex_executable', 'chktex')
-
-let g:ale_tex_chktex_options =
-\   get(g:, 'ale_tex_chktex_options', '-I')
+call ale#Set('tex_chktex_executable', 'chktex')
+call ale#Set('tex_chktex_options', '-I')
 
 function! ale_linters#tex#chktex#GetCommand(buffer) abort
-    " Check for optional .chktexrc
-    let l:chktex_config = ale#path#FindNearestFile(
-    \   a:buffer,
-    \   '.chktexrc')
+    let l:options = ''
 
-    let l:command = ale#Var(a:buffer, 'tex_chktex_executable')
     " Avoid bug when used without -p (last warning has gibberish for a filename)
-    let l:command .= ' -v0 -p stdin -q'
+    let l:options .= ' -v0 -p stdin -q'
+    " Avoid bug of reporting wrong column when using tabs (issue #723)
+    let l:options .= ' -s TabSize=1'
+
+    " Check for optional .chktexrc
+    let l:chktex_config = ale#path#FindNearestFile(a:buffer, '.chktexrc')
 
     if !empty(l:chktex_config)
-        let l:command .= ' -l ' . ale#Escape(l:chktex_config)
+        let l:options .= ' -l ' . ale#Escape(l:chktex_config)
     endif
 
-    let l:command .= ' ' . ale#Var(a:buffer, 'tex_chktex_options')
+    let l:options .= ' ' . ale#Var(a:buffer, 'tex_chktex_options')
 
-    return l:command
+    return '%e' . l:options
 endfunction
 
 function! ale_linters#tex#chktex#Handle(buffer, lines) abort
@@ -48,7 +46,7 @@ endfunction
 
 call ale#linter#Define('tex', {
 \   'name': 'chktex',
-\   'executable': 'chktex',
+\   'executable': {b -> ale#Var(b, 'tex_chktex_executable')},
 \   'command': function('ale_linters#tex#chktex#GetCommand'),
 \   'callback': 'ale_linters#tex#chktex#Handle'
 \})
