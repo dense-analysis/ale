@@ -3,12 +3,6 @@ ALE TypeScript Integration                             *ale-typescript-options*
 
 
 ===============================================================================
-biome                                                    *ale-typescript-biome*
-
-See |ale-javascript-biome|
-
-
-===============================================================================
 cspell                                                  *ale-typescript-cspell*
 
 See |ale-cspell-options|
