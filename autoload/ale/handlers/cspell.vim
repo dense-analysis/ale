@@ -14,9 +14,13 @@ endfunction
 function! ale#handlers#cspell#GetCommand(buffer) abort
     let l:executable = ale#handlers#cspell#GetExecutable(a:buffer)
     let l:options = ale#Var(a:buffer, 'cspell_options')
+    let l:filetype = getbufvar(a:buffer, '&filetype')
+
+    let l:language_id_option = empty(l:filetype) ? '' : '--language-id="' . l:filetype . '"'
 
     return ale#node#Executable(a:buffer, l:executable)
     \   . ' lint --no-color --no-progress --no-summary'
+    \   . ale#Pad(l:language_id_option)
     \   . ale#Pad(l:options)
     \   . ' -- stdin'
 endfunction
