@@ -57,32 +57,17 @@ function! ale_linters#php#phpstan#Handle(buffer, lines) abort
         return l:output
     endif
 
-    let l:file_mappings = ale#GetFilenameMappings(a:buffer, 'phpstan')
-
-    for l:err in l:res.files[
-    \   ale_linters#php#phpstan#Mapping(a:buffer, l:file_mappings)
-    \].messages
-        call add(l:output, {
-        \   'lnum': l:err.line,
-        \   'text': l:err.message,
-        \   'type': 'E',
-        \})
+    for l:key in keys(l:res.files)
+        for l:err in l:res.files[l:key].messages
+            call add(l:output, {
+            \   'lnum': l:err.line,
+            \   'text': l:err.message,
+            \   'type': 'E',
+            \})
+        endfor
     endfor
 
     return l:output
-endfunction
-
-function! ale_linters#php#phpstan#Mapping(buffer, file_mappings) abort
-    if empty(a:file_mappings)
-        let l:result = ale#path#Simplify(expand('#' . a:buffer .':p'))
-    else
-        let l:result = ale#filename_mapping#Map(
-        \   ale#path#Simplify(expand('#' . a:buffer .':p')),
-        \   a:file_mappings
-        \)
-    endif
-
-    return l:result
 endfunction
 
 function! ale_linters#php#phpstan#GetCwd(buffer) abort
