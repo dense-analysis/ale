@@ -3032,6 +3032,7 @@ documented in additional help files.
   git commit..............................|ale-gitcommit-options|
     gitlint...............................|ale-gitcommit-gitlint|
   gleam...................................|ale-gleam-options|
+    gleam_format..........................|ale-gleam-gleam_format|
     gleamlsp..............................|ale-gleam-gleamlsp|
   glsl....................................|ale-glsl-options|
     glslang...............................|ale-glsl-glslang|

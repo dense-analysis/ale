@@ -212,6 +212,7 @@ formatting.
 * Git Commit Messages
   * [gitlint](https://github.com/jorisroovers/gitlint)
 * Gleam
+  * [gleam_format](https://github.com/gleam-lang/gleam)
   * [gleamlsp](https://github.com/gleam-lang/gleam)
 * GLSL
   * [glslang](https://github.com/KhronosGroup/glslang)

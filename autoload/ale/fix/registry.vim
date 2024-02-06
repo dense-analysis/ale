@@ -291,6 +291,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['solidity'],
 \       'description': 'Fix Solidity files with forge fmt.',
 \   },
+\   'gleam_format': {
+\       'function': 'ale#fixers#gleam_format#Fix',
+\       'suggested_filetypes': ['gleam'],
+\       'description': 'Fix Gleam files with gleam format.',
+\   },
 \   'gofmt': {
 \       'function': 'ale#fixers#gofmt#Fix',
 \       'suggested_filetypes': ['go'],
