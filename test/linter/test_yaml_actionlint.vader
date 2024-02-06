@@ -42,16 +42,16 @@ Execute(Shellcheck issues should be reported at the line they appear):
   \   'validate.yml:19:9: shellcheck reported issue in this script: SC2086:info:1:15: Double quote to prevent globbing and word splitting [shellcheck]'
   \ ])
 
-Execute(Command should always have -no-color and -oneline options):
+Execute(Command should always have -no-color, -oneline and - options):
   let g:ale_yaml_actionlint_options = ''
 
   AssertEqual
-  \   '%e  -no-color -oneline',
+  \   '%e  -no-color -oneline - ',
   \ ale_linters#yaml#actionlint#GetCommand(bufnr(''))
 
 Execute(Options should be added to command):
   let g:ale_yaml_actionlint_options = '-shellcheck= -pyflakes='
 
   AssertEqual
-  \   '%e -shellcheck= -pyflakes= -no-color -oneline',
+  \   '%e -shellcheck= -pyflakes= -no-color -oneline - ',
   \ ale_linters#yaml#actionlint#GetCommand(bufnr(''))
