@@ -3440,6 +3440,7 @@ documented in additional help files.
     thriftcheck...........................|ale-thrift-thriftcheck|
   toml....................................|ale-toml-options|
     dprint................................|ale-toml-dprint|
+    taplo.................................|ale-toml-taplo|
   typescript..............................|ale-typescript-options|
     biome.................................|ale-typescript-biome|
     cspell................................|ale-typescript-cspell|
