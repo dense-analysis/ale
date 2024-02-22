@@ -140,6 +140,7 @@ function! s:HandleShellcheckGCC(buffer, lines) abort
         \   'type': l:type,
         \   'text': l:match[5],
         \   'code': l:match[6],
+        \   'detail': l:match[5] . "\n\nFor more information:\n  https://www.shellcheck.net/wiki/" . l:match[6],
         \}
 
         if !empty(l:match[3])
