@@ -15,6 +15,22 @@ Execute(A string with a code fence should be handled):
   AssertEqual
   \ [
   \   [
+  \   ],
+  \   [
+  \     'def foo():',
+  \     '    pass',
+  \   ],
+  \ ],
+  \ ale#hover#ParseLSPResult(join([
+  \   '```',
+  \   'def foo():',
+  \   '    pass',
+  \   '```',
+  \ ], "\n"))
+
+  AssertEqual
+  \ [
+  \   [
   \     'unlet! b:current_syntax',
   \     'syntax include @ALE_hover_python syntax/python.vim',
   \     'syntax region ALE_hover_1 start=/\%1l/ end=/\%3l/ contains=@ALE_hover_python',
