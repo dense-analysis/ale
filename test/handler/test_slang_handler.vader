@@ -1,0 +1,26 @@
+Before:
+  runtime ale_linters/verilog/slang.vim
+
+After:
+  call ale#linter#Reset()
+
+Execute(The slang handler should parse lines correctly):
+  AssertEqual
+  \ [
+  \    {
+  \      'lnum': 11,
+  \      'col': 1,
+  \      'type': 'W',
+  \      'text': 'extra '';'' has no effect [-Wempty-member]',
+  \    },
+  \    {
+  \      'lnum': 24,
+  \      'col': 12,
+  \      'type': 'E',
+  \      'text': 'cannot mix continuous and procedural assignments to variable ''data_o''',
+  \    },
+  \ ],
+  \ ale_linters#verilog#slang#Handle(bufnr(''), [
+  \ 'foo.sv:11:1: warning: extra '';'' has no effect [-Wempty-member]',
+  \ 'foo.sv:24:12: error: cannot mix continuous and procedural assignments to variable ''data_o''',
+  \ ])
