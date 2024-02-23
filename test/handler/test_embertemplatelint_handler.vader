@@ -1,6 +1,6 @@
 " Author: Adrian Zalewski <aazalewski@hotmail.com>
 Before:
-  runtime ale_linters/handlebars/embertemplatelint.vim
+  runtime autoload/ale/handlers/embertemplatelint.vim
 
 After:
   call ale#linter#Reset()
@@ -44,7 +44,7 @@ Execute(The ember-template-lint handler should parse lines correctly):
   \     'type': 'W',
   \   },
   \ ],
-  \ ale_linters#handlebars#embertemplatelint#Handle(347, input_lines)
+  \ ale#handlers#embertemplatelint#Handle(347, input_lines)
 
 Execute(The ember-template-lint handler should handle template parsing error correctly):
   let input_lines = split('{
@@ -70,12 +70,12 @@ Execute(The ember-template-lint handler should handle template parsing error cor
   \     'type': 'E',
   \   },
   \ ],
-  \ ale_linters#handlebars#embertemplatelint#Handle(347, input_lines)
+  \ ale#handlers#embertemplatelint#Handle(347, input_lines)
 
 Execute(The ember-template-lint handler should handle no lint errors/warnings):
   AssertEqual
   \ [],
-  \ ale_linters#handlebars#embertemplatelint#Handle(347, [])
+  \ ale#handlers#embertemplatelint#Handle(347, [])
   AssertEqual
   \ [],
-  \ ale_linters#handlebars#embertemplatelint#Handle(347, ['{}'])
+  \ ale#handlers#embertemplatelint#Handle(347, ['{}'])
