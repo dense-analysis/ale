@@ -656,6 +656,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['javascript', 'typescript'],
 \       'description': 'Apply biome (ex. rome) check to a file.',
 \   },
+\   'taplo': {
+\       'function': 'ale#fixers#taplo#Fix',
+\       'suggested_filetypes': ['toml'],
+\       'description': 'Fix TOML files using taplo.',
+\   },
 \}
 
 " Reset the function registry to the default entries.

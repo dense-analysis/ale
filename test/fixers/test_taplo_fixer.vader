@@ -1,0 +1,12 @@
+Before:
+  Save g:ale_taplo_executable
+
+After:
+  Restore
+
+Execute(The taplo fixer should use the options you set):
+  let g:ale_taplo_executable = 'foo'
+
+  AssertEqual
+  \ {'command': ale#Escape('foo') . ' format -'},
+  \ ale#fixers#taplo#Fix(bufnr(''))
