@@ -10,7 +10,7 @@ function! ale_linters#tex#chktex#GetCommand(buffer) abort
     " Avoid bug when used without -p (last warning has gibberish for a filename)
     let l:options .= ' -v0 -p stdin -q'
     " Avoid bug of reporting wrong column when using tabs (issue #723)
-    let l:options .= ' -s TabSize=1'
+    let l:options .= ' -S TabSize=1'
 
     " Check for optional .chktexrc
     let l:chktex_config = ale#path#FindNearestFile(a:buffer, '.chktexrc')
