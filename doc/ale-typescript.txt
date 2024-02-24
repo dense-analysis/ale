@@ -5,7 +5,26 @@ ALE TypeScript Integration                             *ale-typescript-options*
 ===============================================================================
 biome                                                    *ale-typescript-biome*
 
-See |ale-javascript-biome|
+g:ale_biome_executable                                 *g:ale_biome_executable*
+                                                       *b:ale_biome_executable*
+  Type: |String|
+  Default: `'biome'`
+
+
+g:ale_biome_options                                       *g:ale_biome_options*
+                                                          *b:ale_biome_options*
+  Type: |String|
+  Default: `''`
+
+  This variable can be set to pass additional options to biome.
+
+
+g:ale_biome_use_global                                 *g:ale_biome_use_global*
+                                                       *b:ale_biome_use_global*
+  Type: |Number|
+  Default: `get(g:, 'ale_use_global_executables', 0)`
+
+  See |ale-integrations-local-executables|
 
 
 ===============================================================================

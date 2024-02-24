@@ -1,0 +1,14 @@
+Before:
+  call ale#assert#SetUpLinterTest('typescript', 'biome')
+  call ale#test#SetFilename('test.ts')
+
+After:
+  call ale#assert#TearDownLinterTest()
+
+Execute(The default biome command should be correct):
+  AssertLinter 'biome', ale#Escape('biome') . ' lsp-proxy'
+
+Execute(The biome command should accept options):
+  let b:ale_biome_options = '--foobar'
+
+  AssertLinter 'biome', ale#Escape('biome') . ' lsp-proxy --foobar'
