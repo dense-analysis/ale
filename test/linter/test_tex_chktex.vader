@@ -7,7 +7,7 @@ After:
 Execute(The default command should be correct):
   AssertLinter 'chktex',
   \ ale#Escape('chktex')
-  \   . ' -v0 -p stdin -q -s TabSize=1'
+  \   . ' -v0 -p stdin -q'
   \   . ' -I'
 
 Execute(The executable should be configurable):
@@ -15,7 +15,7 @@ Execute(The executable should be configurable):
 
   AssertLinter 'bin/foo',
   \ ale#Escape('bin/foo')
-  \   . ' -v0 -p stdin -q -s TabSize=1'
+  \   . ' -v0 -p stdin -q'
   \   . ' -I'
 
 Execute(The options should be configurable):
@@ -23,5 +23,5 @@ Execute(The options should be configurable):
 
   AssertLinter 'chktex',
   \ ale#Escape('chktex')
-  \   . ' -v0 -p stdin -q -s TabSize=1'
+  \   . ' -v0 -p stdin -q'
   \   . ' --something'
