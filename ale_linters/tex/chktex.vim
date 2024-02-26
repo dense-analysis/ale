@@ -4,14 +4,18 @@
 call ale#Set('tex_chktex_executable', 'chktex')
 call ale#Set('tex_chktex_options', '-I')
 
-function! ale_linters#tex#chktex#GetCommand(buffer) abort
+function! ale_linters#tex#chktex#GetExecutable(buffer) abort
+    return ale#Var(a:buffer, 'tex_chktex_executable')
+endfunction
+
+function! ale_linters#tex#chktex#GetCommand(buffer, version) abort
     let l:options = ''
 
     " Avoid bug when used without -p (last warning has gibberish for a filename)
     let l:options .= ' -v0 -p stdin -q'
 
     " Avoid bug of reporting wrong column when using tabs (issue #723)
-    if system('chktex -S') !~? 'invalid option'
+    if ale#semver#GTE(a:version, [1, 7, 7])
         let l:options .= ' -S TabSize=1'
     endif
 
@@ -49,7 +53,12 @@ endfunction
 
 call ale#linter#Define('tex', {
 \   'name': 'chktex',
-\   'executable': {b -> ale#Var(b, 'tex_chktex_executable')},
-\   'command': function('ale_linters#tex#chktex#GetCommand'),
+\   'executable': function('ale_linters#tex#chktex#GetExecutable'),
+\   'command': {buffer -> ale#semver#RunWithVersionCheck(
+\       buffer,
+\       ale_linters#tex#chktex#GetExecutable(buffer),
+\       '%e --version',
+\       function('ale_linters#tex#chktex#GetCommand'),
+\   )},
 \   'callback': 'ale_linters#tex#chktex#Handle'
 \})
