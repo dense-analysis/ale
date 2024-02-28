@@ -14,25 +14,22 @@ After:
 Execute(The golangci-lint defaults should be correct):
   AssertLinterCwd '%s:h',
   AssertLinter 'golangci-lint',
-  \ ale#Escape('golangci-lint')
-  \   . ' run ' . ale#Escape(expand('%' . ':t'))
-  \   . ' '
+  \ ale#Escape('golangci-lint') . ' run '
 
 Execute(The golangci-lint callback should use a configured executable):
   let b:ale_go_golangci_lint_executable = 'something else'
 
   AssertLinter 'something else',
   \ ale#Escape('something else')
-  \   . ' run ' . ale#Escape(expand('%' . ':t'))
-  \   . ' '
+  \   . ' run '
 
 Execute(The golangci-lint callback should use configured options):
   let b:ale_go_golangci_lint_options = '--foobar'
 
   AssertLinter 'golangci-lint',
   \ ale#Escape('golangci-lint')
-  \   . ' run ' . ale#Escape(expand('%' . ':t'))
-  \   . ' --foobar'
+  \   . ' run '
+  \   . '--foobar'
 
 Execute(The golangci-lint callback should support environment variables):
   let b:ale_go_go111module = 'on'
@@ -40,11 +37,11 @@ Execute(The golangci-lint callback should support environment variables):
   AssertLinter 'golangci-lint',
   \ ale#Env('GO111MODULE', 'on')
   \   . ale#Escape('golangci-lint')
-  \   . ' run ' . ale#Escape(expand('%' . ':t'))
-  \   . ' '
+  \   . ' run '
 
 Execute(The golangci-lint `lint_package` option should use the correct command):
-  let b:ale_go_golangci_lint_package = 1
-
+  let b:ale_go_golangci_lint_package = 0
   AssertLinter 'golangci-lint',
-  \ ale#Escape('golangci-lint') . ' run '
+  \ ale#Escape('golangci-lint')
+  \   . ' run ' . ale#Escape(expand('%' . ':t'))
+  \   . ' '
