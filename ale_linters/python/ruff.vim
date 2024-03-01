@@ -45,6 +45,10 @@ function! ale_linters#python#ruff#GetCommand(buffer, version) abort
     \   ? ' run ruff'
     \   : ''
 
+    " NOTE: ruff 0.3.0 deprecates `ruff <path>` in favor of `ruff check <path>`
+    let l:exec_args = l:exec_args
+    \   . (ale#semver#GTE(a:version, [0, 3, 0]) ? ' check' : '')
+
     " NOTE: ruff version `0.0.69` supports liniting input from stdin
     " NOTE: ruff version `0.1.0` deprecates `--format text`
     return ale#Escape(l:executable) . l:exec_args . ' -q'
