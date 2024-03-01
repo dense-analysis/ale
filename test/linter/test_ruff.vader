@@ -42,6 +42,13 @@ Execute(ruff should run with the stdin in new enough versions):
   AssertLinter 'ruff', b:command_head . b:command_tail[:-3] . ' -'
   " AssertLinter 'ruff', b:command_head . b:command_tail[:-3] . '--format json-lines -'
 
+Execute(ruff should run with the check subcmd in versions >= 0.3.0):
+  GivenCommandOutput ['ruff 0.3.0']
+
+  AssertLinterCwd expand('%:p:h')
+  let b:cmd_head = ale#Escape('ruff') . ' check -q'
+  AssertLinter 'ruff', b:cmd_head . ' --output-format json-lines --stdin-filename %s -'
+
 Execute(The option for disabling changing directories should work):
   let g:ale_python_ruff_change_directory = 0
 
