@@ -1,0 +1,15 @@
+Before:
+  call ale#assert#SetUpFixerTest('typescript', 'biome')
+
+After:
+  call ale#assert#TearDownFixerTest()
+
+Execute(The default biome command should be correct):
+  call ale#test#SetFilename('../test-files/typescript/test.ts')
+
+  AssertFixer
+  \ {
+  \   'command': ale#Escape('biome')
+  \     . ' format --stdin-file-path=%s'
+  \ }
+
