@@ -3,7 +3,7 @@ function! ale#fixers#biome#Fix(buffer) abort
     let l:options = ale#Var(a:buffer, 'biome_options')
 
     return {
-    \   'command': '%e format'
+    \   'command': ale#Escape(l:executable) . ' format'
     \       . (!empty(l:options) ? ' ' . l:options : '')
     \       . ' --stdin-file-path=%s',
     \}
