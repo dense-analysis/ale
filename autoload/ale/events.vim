@@ -142,7 +142,7 @@ function! ale#events#InsertLeaveEvent(buffer) abort
     endif
 
     if ale#Var(a:buffer, 'lint_on_insert_leave')
-        call ale#Queue(ale#Var(a:buffer, 'lint_delay'), '', a:buffer)
+        call ale#Queue(0, '', a:buffer)
     endif
 
     " Look for a warning to echo as soon as we leave Insert mode.
