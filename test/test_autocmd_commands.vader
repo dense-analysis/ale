@@ -94,11 +94,17 @@ Execute (All events should be set up when everything is on):
   \   'FileChangedShellPost * call ale#events#FileChangedEvent(str2nr(expand(''<abuf>'')))',
   \   'FileType * call ale#events#FileTypeEvent( str2nr(expand(''<abuf>'')), expand(''<amatch>''))',
   \ ] + (
-  \   maparg("\<C-c>", 'i') isnot# '<Esc>'
-  \     ? ['InsertEnter * call ale#events#InsertEnterEvent(str2nr(expand(''<abuf>'')))']
+  \   maparg("\<C-c>", 'i') isnot# '<Esc>' && !exists('##ModeChanged')
+  \     ? [
+  \         'InsertEnter * call ale#events#InsertEnterEvent(str2nr(expand(''<abuf>'')))',
+  \         'InsertLeave * call ale#events#InsertLeaveEvent(str2nr(expand(''<abuf>'')))',
+  \       ]
+  \     : []
+  \ ) + (
+  \   exists('##ModeChanged')
+  \     ? ['ModeChanged i*:* call ale#events#InsertLeaveEvent(str2nr(expand(''<abuf>'')))']
   \     : []
   \ ) + [
-  \   'InsertLeave * call ale#events#InsertLeaveEvent(str2nr(expand(''<abuf>'')))',
   \   'TextChanged * call ale#Queue(ale#Var(str2nr(expand(''<abuf>'')), ''lint_delay''))',
   \   'TextChangedI * call ale#Queue(ale#Var(str2nr(expand(''<abuf>'')), ''lint_delay''))',
   \ ],
@@ -185,25 +191,40 @@ Execute (g:ale_lint_on_text_changed = 'insert' should bind only TextChangedI):
   \ ],
   \ filter(CheckAutocmd('ALEEvents'), 'v:val =~ ''^TextChanged''')
 
-Execute (g:ale_lint_on_insert_leave = 1 should bind InsertLeave):
+Execute (g:ale_lint_on_insert_leave = 1 should bind InsertLeave or ModeChanged if available):
   let g:ale_lint_on_insert_leave = 1
   let g:ale_echo_cursor = 0
 
   " CI at least should run this check.
   " There isn't an easy way to save an restore a mapping during running the test.
-  if maparg("\<C-c>", 'i') isnot# '<Esc>'
+  if maparg("\<C-c>", 'i') isnot# '<Esc>' && !exists('##ModeChanged')
     AssertEqual
     \ [
     \   'InsertEnter * call ale#events#InsertEnterEvent(str2nr(expand(''<abuf>'')))',
     \ ],
     \ filter(CheckAutocmd('ALEEvents'), 'v:val =~ ''^InsertEnter''')
+  else
+    " If the ModeChanged event is available, starting the timer in InsertEnter is not necessary.
+    AssertEqual
+    \ [
+    \ ],
+    \ filter(CheckAutocmd('ALEEvents'), 'v:val =~ ''^InsertEnter''')
   endif
 
-  AssertEqual
-  \ [
-  \   'InsertLeave * call ale#events#InsertLeaveEvent(str2nr(expand(''<abuf>'')))',
-  \ ],
-  \ filter(CheckAutocmd('ALEEvents'), 'v:val =~ ''^InsertLeave''')
+  if !exists('##ModeChanged')
+    " If the ModeChanged event is not available, bind InsertLeave.
+    AssertEqual
+    \ [
+    \   'InsertLeave * call ale#events#InsertLeaveEvent(str2nr(expand(''<abuf>'')))',
+    \ ],
+    \ filter(CheckAutocmd('ALEEvents'), 'v:val =~ ''^InsertLeave''')
+  else
+    AssertEqual
+    \ [
+    \   'ModeChanged i*:* call ale#events#InsertLeaveEvent(str2nr(expand(''<abuf>'')))',
+    \ ],
+    \ filter(CheckAutocmd('ALEEvents'), 'v:val =~ ''^ModeChanged''')
+  endif
 
 Execute (g:ale_lint_on_filetype_changed = 1 should bind the FileType event):
   let g:ale_lint_on_filetype_changed = 1
